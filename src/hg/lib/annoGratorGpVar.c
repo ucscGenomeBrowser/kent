@@ -577,6 +577,7 @@ genePredToCds(pred, &cds);
 struct dnaSeq *txSeq = genePredToGenomicSequence(pred, sSelf->assembly, self->lm);
 int chromSize = 0;  // unused
 struct psl *psl = genePredToPsl(pred, chromSize, txSeq->size);
+pslRemoveFrameShifts(psl);
 vpExpandIndelGaps(psl, self->gSeqWin, txSeq);
 struct dnaSeq *protSeq = NULL;
 if (cds.end > cds.start)

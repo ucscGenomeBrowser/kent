@@ -14,8 +14,8 @@ struct gffLine
     char *seq;      /* Name of sequence. */
     char *source;   /* Program that made this line.  Not allocated here. */
     char *feature;  /* Type field. (Intron, CDS, etc). Not allocated here. */
-    int start;      /* Start of feature in sequence. Starts with 0, not 1 */
-    int end;        /* End of feature in sequence. End is not included. */
+    long start;      /* Start of feature in sequence. Starts with 0, not 1 */
+    long end;        /* End of feature in sequence. End is not included. */
     double score;   /* Score. */
     char strand;    /* Strand of sequence feature is on. + or - or .*/
     char frame;     /* Frame feature is in. 1, 2, 3, or . */
@@ -43,8 +43,8 @@ struct gffGroup
     char *seq;      /* Name of sequence. Not allocated here. */
     char *source;      /* Name of source program. Not allocated here. */
     /* The next three fields are only valid after call to gffGroupLines() */
-    int start;      /* Start of feature in sequence. Starts with 0, not 1 */
-    int end;        /* End of feature in sequence. End is not included. */
+    long start;      /* Start of feature in sequence. Starts with 0, not 1 */
+    long end;        /* End of feature in sequence. End is not included. */
     char strand;    /* Strand of sequence. */
     struct gffLine *lineList;  /* List of lines in group. */
     };

@@ -1,0 +1,64 @@
+#!/usr/bin/bash
+# first argument is the db, e.g. mm10
+set -e # stop on error
+set -o pipefail # stop on errors even in pipes
+
+if [ "$1" = "" ] ; then
+        echo usage: doClinvarLift '[db] - create clinvarLift track with human SNVs lifted to db'
+        exit 1
+fi
+
+db=$1
+outDir=/hive/data/genomes/$db/bed/clinvarLift
+
+echo making directory $outDir
+mkdir -p $outDir
+cd $outDir
+echo Dumping clinvar
+bigBedToBed /hive/data/outside/otto/clinvar/clinvarMain.hg38.bb stdout > clinvar.bed
+# drop the long ones, they are unlikely to be useful
+cat clinvar.bed | tawk '($3-$2<10)' > clinvarLift.bed
+
+# need to do this twice so make a function
+function addPosAndSeq () {
+        # add the position and sequence to the bed file as fields 13 and 14
+        # arguments: inputfile db outputfile
+        echo Adding position and sequences to $1, for db $2, output into $3
+        cat $1 | cut -f1-3 | tawk '{$4=$1":"($2+1)"-"$3;print;}'> tmp.bed4
+        twoBitToFa -bed=tmp.bed4 /hive/data/genomes/$2/$2.2bit tmp.fa
+        faToTab tmp.fa stdout | tawk '{$2=toupper($2); print}' > tmp.faTab
+        cut -f1-12 $1 > tmp.part1
+        cut -f13- $1 > tmp.part2
+        paste tmp.part1 tmp.faTab tmp.part2 > $3
+        rm -f tmp.part1 tmp.faTab tmp.bed4 tmp.part2
+}
+
+addPosAndSeq clinvarLift.bed hg38 clinvarLift.withPos.bed
+
+# uppercase first letter of db
+dbUp="$(tr '[:lower:]' '[:upper:]' <<< ${db:0:1})${db:1}"
+liftOver clinvarLift.withPos.bed /gbdb/hg38/liftOver/hg38To$dbUp.over.chain.gz clinvarLift.$db.bed /dev/null -bedPlus=12 -tab -multiple
+addPosAndSeq clinvarLift.$db.bed $db clinvarLift.$db.seq.bed
+# remove column 13, the position in $db, as we have that already.
+# also remove features that are too long
+cut clinvarLift.$db.seq.bed -f1-12,14- | tawk '($3-$2<10)' | sort -k1,1 -k2,2n -S10G > clinvarLift.$db.bed 
+cp ~/kent/src/hg/lib/clinvarLift.as ./
+sed -i s/DB/$db/g ./clinvarLift.as
+bedToBigBed clinvarLift.$db.bed -tab -as=clinvarLift.as /hive/data/genomes/$db/chrom.sizes clinvarLift.bb -type=bed12+
+if [ ! -e /gbdb/$db/bbi/clinvarLift.bb ]; then
+    ln -s `pwd`/clinvarLift.bb /gbdb/$db/bbi/clinvarLift.bb
+fi
+echo clinvarLift job for $db done.
+echo Suggested makeDoc entry:
+echo '##########################################################################'
+echo clinvar lift '('DONE, `date`, $USER')'
+echo featureBits hg38 clinvarLift.bed
+featureBits hg38 clinvarLift.bed
+echo wc -l clinvarLift.bed
+wc -l clinvarLift.bed
+echo featureBits $db clinvarLift.$db.bed
+featureBits $db clinvarLift.$db.bed
+echo wc -l clinvarLift.$db.bed
+wc -l clinvarLift.$db.bed
+echo '##########################################################################'
+

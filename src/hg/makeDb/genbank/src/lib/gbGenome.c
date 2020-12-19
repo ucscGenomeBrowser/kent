@@ -40,7 +40,7 @@ static char *sacCerNames[] = {"Saccharomyces cerevisiae", NULL};
 static char *panPanNames[] = {"Pan paniscus", NULL};
 static char *panTroNames[] = {"Pan troglodytes", "Pan troglodytes troglodytes", 
                               "Pan troglodytes verus", NULL};
-static char *gorGorNames[] = {"Gorilla gorilla", "Gorilla gorilla gorilla", "Gorilla gorilla uellensis", "Gorilla gorilla diehli", "Gorilla gorilla graueri", "Gorilla berengi", NULL};
+static char *gorGorNames[] = {"Gorilla", "Gorilla gorilla", "Gorilla gorilla gorilla", "Gorilla gorilla uellensis", "Gorilla gorilla diehli", "Gorilla gorilla graueri", "Gorilla berengi", NULL};
 static char *papAnuNames[] = {"Papio anubis", "Papio anubis anubis", "Papio hamadryas", "Papio hamadryas hamadryas", NULL};
 static char *papHamNames[] = {"Papio hamadryas", "Papio hamadryas hamadryas", "Papio anubis", NULL};
 static char *ponAbeNames[] = {"Pongo abelii", "Pongo pygmaeus",
@@ -175,6 +175,8 @@ static char *hbvNames[] = {"Hepatitis B virus", "Hepatitis B virus subtype adw",
 static char *hpvNames[] = {"Human papillomavirus", "Human papillomavirus type 16", "Human papillomavirus type 18", "Human papillomavirus type 197", "Human papillomavirus type 38", "Human papillomavirus type 45", "Human papillomavirus type 58", "Human papillomavirus type 68", "Human papillomavirus type 6b", NULL};
 static char *staAurNames[] = {"Staphylococcus", "Staphylococcus aureus", "Staphylococcus aureus subsp. aureus NCTC 8325", "Staphylococcus aureus subsp. aureus RN4220", "Staphylococcus epidermidis", "Staphylococcus lentus", "Staphylococcus lugdunensis", "Staphylococcus phage phi-42", "Staphylococcus pseudintermedius", NULL};
 static char *cotJapNames[] = {"Coturnix japonica", NULL};
+static char *enhLutNames[] = {"Enhydra lutris", "Enhydra lutris nereis", "Enhydra lutris kenyoni", NULL};
+static char *wuhCorNames[] = {"Severe acute respiratory syndrome coronavirus 2", "Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1", "Wuhan seafood market pneumonia virus", "Severe acute respiratory syndrome-related coronavirus", NULL};
 
 static char *endNames[] = {NULL};
 
@@ -328,6 +330,9 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"CHM", hgNames},
     {"braNey", hgNames},
     {"regenRn", rnNames},
+    {"regenCho", criGriNames},
+    {"enhLut", enhLutNames},
+    {"wuhCor", wuhCorNames},
     {NULL, endNames}
 };
 

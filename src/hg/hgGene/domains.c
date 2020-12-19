@@ -167,7 +167,7 @@ if (list != NULL)
 	, swissProtAcc);
     sr = sqlGetResult(spConn, query);
     hPrintf("<TABLE><TR>\n");
-    hPrintf("<A href=\"../goldenPath/help/chimera.html\" TARGET=_blank>Chimera help</A>\n");
+    hPrintf("<A href=\"http://mupit.icm.jhu.edu/MuPIT_Interactive/Help.html\" TARGET=_blank>MuPIT help</A>\n");
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	if (++column > maxColumn)

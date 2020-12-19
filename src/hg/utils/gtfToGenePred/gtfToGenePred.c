@@ -103,7 +103,7 @@ if (clIncludeVersion && (proteinId != NULL) && (proteinVersion != NULL))
 else
     safecpy(proteinIdToUse, sizeof(proteinIdToUse), emptyForNull(proteinId));
 
-fprintf(infoFh, "%s\t%s\t%s\t%s\t%d\t%d\t%c\t%s\t%s\t%s\t%s\t%s\n",
+fprintf(infoFh, "%s\t%s\t%s\t%s\t%ld\t%ld\t%c\t%s\t%s\t%s\t%s\t%s\n",
         transcriptIdToUse, geneIdToUse, group->source,
         group->seq, group->start, group->end, group->strand,
         proteinIdToUse, emptyForNull(geneName), emptyForNull(transcriptName),

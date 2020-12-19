@@ -32,6 +32,10 @@ boolean isBigBed(char *database, char *table, struct trackDb *parent,
 /* Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed. */
 {
 struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+
+// if "table" is explicitly listed, we're going to use that instead of any bigDataUrl
+if (tdb && hashLookup(tdb->settingsHash, "table"))
+    return FALSE;
 if (tdb)
     return tdbIsBigBed(tdb);
 else
@@ -128,11 +132,16 @@ struct bigBedInterval *ivList = NULL, *iv;
 ivList = bigBedIntervalQuery(bbi, region->chrom, region->start, region->end, 0, bbLm);
 char *row[bbi->fieldCount];
 char startBuf[16], endBuf[16];
+struct hash *idHash = NULL;
+if (bbi->fieldCount >= 4)
+    idHash = identifierHash(database, table);
 for (iv = ivList; iv != NULL; iv = iv->next)
     {
     bigBedIntervalToRow(iv, region->chrom, startBuf, endBuf, row, bbi->fieldCount);
     if (asFilterOnRow(filter, row))
         {
+        if ((idHash != NULL) && (hashLookup(idHash, row[3]) == NULL))
+            continue;
 	struct bed *bed = bedLoadN(row, bbi->definedFieldCount);
 	struct bed *lmBed = lmCloneBed(bed, bedLm);
 	slAddHead(pBedList, lmBed);
@@ -223,30 +232,68 @@ if (anyFilter())
 	}
     }
 
-/* Loop through outputting each region */
-struct region *region, *regionList = getRegions();
-for (region = regionList; region != NULL; region = region->next)
+struct bptFile *bpt = NULL;
+int fieldIx;
+
+if (idHash && isRegionWholeGenome())
+    bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
+
+char *row[bbi->fieldCount];
+char startBuf[16], endBuf[16];
+if (bpt) // if we have an index it means we're whole genome and don't need to filter based on regions
     {
+    struct slName *nameList = hashSlNameFromHash(idHash);
+    int count = slCount(nameList);
+    char *names[count];
+    int ii;
+    for (ii=0; ii < count; ii++)
+    {
+        names[ii] = nameList->name;
+        nameList = nameList->next;
+    }
+
     struct lm *lm = lmInit(0);
-    struct bigBedInterval *iv, *ivList = bigBedIntervalQuery(bbi, region->chrom,
-    	region->start, region->end, 0, lm);
-    char *row[bbi->fieldCount];
-    char startBuf[16], endBuf[16];
-    for (iv = ivList; iv != NULL; iv = iv->next)
+    struct bigBedInterval *ivList = bigBedMultiNameQuery(bbi, bpt, fieldIx, names, count, lm);
+    char chromBuf[4096];
+    struct bigBedInterval *interval, *prevInterval = NULL;
+    for (interval = ivList; interval != NULL; prevInterval = interval, interval = interval->next)
+        {       
+        bigBedIntervalToRowLookupChrom(interval, prevInterval, bbi, chromBuf, sizeof chromBuf, startBuf, endBuf, row, bbi->fieldCount);
+        if (asFilterOnRow(filter, row))
+            {
+            int i;
+            fprintf(f, "%s", row[columnArray[0]]);
+            for (i=1; i<fieldCount; ++i)
+                fprintf(f, "\t%s", row[columnArray[i]]);
+            fprintf(f, "\n");
+            }
+        }
+    }
+else 
+    {
+    /* Loop through outputting each region */
+    struct region *region, *regionList = getRegions();
+    for (region = regionList; region != NULL; region = region->next)
         {
-	bigBedIntervalToRow(iv, region->chrom, startBuf, endBuf, row, bbi->fieldCount);
-	if (asFilterOnRow(filter, row))
-	    {
-	    if ((idHash != NULL) && (hashLookup(idHash, row[3]) == NULL))
-		continue;
-	    int i;
-	    fprintf(f, "%s", row[columnArray[0]]);
-	    for (i=1; i<fieldCount; ++i)
-		fprintf(f, "\t%s", row[columnArray[i]]);
-	    fprintf(f, "\n");
-	    }
-	}
-    lmCleanup(&lm);
+        struct lm *lm = lmInit(0);
+        struct bigBedInterval *iv, *ivList = bigBedIntervalQuery(bbi, region->chrom,
+            region->start, region->end, 0, lm);
+        for (iv = ivList; iv != NULL; iv = iv->next)
+            {
+            bigBedIntervalToRow(iv, region->chrom, startBuf, endBuf, row, bbi->fieldCount);
+            if (asFilterOnRow(filter, row))
+                {
+                if ((idHash != NULL) && (hashLookup(idHash, row[3]) == NULL))
+                    continue;
+                int i;
+                fprintf(f, "%s", row[columnArray[0]]);
+                for (i=1; i<fieldCount; ++i)
+                    fprintf(f, "\t%s", row[columnArray[i]]);
+                fprintf(f, "\n");
+                }
+            }
+        lmCleanup(&lm);
+        }
     }
 
 /* Clean up and exit. */

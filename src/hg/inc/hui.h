@@ -154,8 +154,9 @@ char *hTrackUiForTrack(char *trackName);
 
 // trackDb setting and cart/cgi var
 #define SUBTRACK_HIDE_EMPTY       "hideEmptySubtracks"
-// trackDb setting
 #define SUBTRACK_HIDE_EMPTY_LABEL "hideEmptySubtracksLabel"
+#define SUBTRACK_HIDE_EMPTY_MULTIBED_URL       "hideEmptySubtracksMultiBedUrl"
+#define SUBTRACK_HIDE_EMPTY_SOURCES_URL        "hideEmptySubtracksSourcesUrl"
 
 void netUi(struct trackDb *tdb);
 
@@ -752,6 +753,9 @@ void indelEnabled(struct cart *cart, struct trackDb *tdb, float basesPerPixel,
 /* Query cart & trackDb to determine what indel display (if any) is enabled. Set
  * basesPerPixel to -1.0 to disable check for zoom level.  */
 
+void bamAddBaseAndIndelSettings(struct trackDb *tdb);
+/* Unless already set in tdb, add settings to enable base-level differences and indel display. */
+
 /*** Some Stuff for the base position (ruler) controls ***/
 
 #define ZOOM_1PT5X      "1.5x"
@@ -979,6 +983,20 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 /* If the parentTdb has an ENCODE controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
 
+boolean compositeHideEmptySubtracksSetting(struct trackDb *tdb, boolean *retDefault,
+                                        char **retMultiBedFile, char **retSubtrackIdFile);
+/* Parse hideEmptySubtracks settings
+ * Format:  hideEmptySubtracks on|off
+ *      Optional index files for performance:
+ *          hideEmptySubtracksMultiBedUrl multiBed.bigBed 
+ *          hideEmptySubtracksSourceUrl subtrackIds.tab
+ * MultiBed.bed is a bed3Sources bigBed, generated with UCSC tool trackDbIndexBb
+ *              (for single view subtracks, can use bedtools multiinter
+ *              post-processed by UCSC multiBed.pl tool)
+ *      subtrackIds.tab is a tab-sep file: id subtrackName
+ *
+ * Return TRUE if setting is present.  retDefault is TRUE if set to 'on', o/w FALSE
+*/
 
 boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
                                         char **retMultiBedFile, char **retSubtrackIdFile);
@@ -1120,6 +1138,15 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 
 void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix);
 /* Put up a choice for labels. */
+
+#define MERGESPAN_TDB_SETTING "mergeSpannedItems"
+// also used in hgTracks.js!
+#define MERGESPAN_CART_SETTING "doMergeItems"
+void mergeSpanCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix);
+/* If this track offers a merge spanned items option, put up the cfg for it, which
+ * is just a checkbox with a small explanation. Comparing tdb->track to prefix
+ * ensures we don't offer this control at the composite level, as this is a
+ * subtrack only config */
 
 #define NO_SCORE_FILTER  "noScoreFilter"
 #define  SCORE_FILTER      "scoreFilter"
@@ -1508,6 +1535,9 @@ char *replaceInUrl(char *url, char *idInUrl, struct cart *cart, char *db, char *
                         int winStart, int winEnd, char *track, boolean encode, struct slPair *fields) ;
 /* replace $$ in url with idInUrl. Supports many other wildchards, and custom fields $<field> */
 
+char *replaceFieldInPattern(char *pattern, int fieldCount, char **fieldNames, char **fieldVals);
+/* Replace $fieldName in pattern with value.  Used in trackDb mouseOver setting */
+
 struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as);
 /* Build up a hash of a list of fields in an AS file. */
 
@@ -1523,5 +1553,16 @@ void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *
 /* add a checkbox for the user to select a component of a label (e.g. ID, name, other info).
  * NOTE: This does not have a track name argument, so the correct tdb must be passed in:
  * if setting is at composite level, then pass in composite tdb, likewise for view. */
+
+int defaultFieldLocation(char *field);
+/* Sometimes we get bigBed filters with field names that are not in the AS file.  
+ * Try to guess what the user means. */
+
+void printInfoIcon(char *mouseover);
+/* Print info icon (i) with explanatory text on mouseover
+ * Uses jquery icon set, with style customized to GB in jquery-ui.css */
+
+void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart);
+/* Maybe print a "related track" section */
 
 #endif /* HUI_H */

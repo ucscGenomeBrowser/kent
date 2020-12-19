@@ -1,3 +1,9 @@
+// make div1 visible and hide div2, used to show two different intro texts
+// in the public/my hubs tab and the hub develop tab
+function toggleTwoDivs(div1, div2) {
+    div1.style.display = "block";
+    div2.style.display = "none";
+}
 
 // hover effect to highlight table rows
 $(function() {

@@ -4,7 +4,6 @@ longLabel Comparison of Micro-C and In situ Hi-C protocols in H1-hESC and HFFc6
 compositeTrack on
 group regulation
 type hic
-pennantIcon New red ../goldenPath/newsarch.html#102519 Hi-C data released Oct. 25, 2019
 
 track h1hescMicroC
 shortLabel H1-hESC Micro-C

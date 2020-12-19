@@ -1,0 +1,102 @@
+track cons7way
+compositeTrack on
+shortLabel 7-way Mammal
+longLabel Multiz Alignment & Conservation (7 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+
+    track cons7wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons7way
+
+        track multiz7way
+        subTrack cons7wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 7 Mammals
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz7waySummary
+        frames multiz7wayFrames
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault regenCho1
+        speciesGroups Mammal
+        sGroup_Mammal criGriChoV2 criGriChoV1 criGri1 rn6 mm10 hg38
+        itemFirstCharCase noChange
+        treeImage phylo/regenCho1_7way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons7wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons7way
+    viewLimits -3:0.5
+    viewLimitsMax -4.37:0.97
+
+        track phyloP7way
+        subTrack cons7wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel 7 Mammals Cons
+        longLabel 7 mammal Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -4.37 0.97
+        maxHeightPixels 100:50:11
+        viewLimits -2.88:0.967
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons7wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons7way
+
+        track phastCons7way
+        subTrack cons7wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel 7 Mammals Cons
+        longLabel 7 mammals conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons7wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons7way
+
+        track phastConsElements7way
+        subTrack cons7wayViewelements on
+        subGroups view=elements
+        shortLabel 7 Mammals El
+        longLabel 7 mammals Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

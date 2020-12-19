@@ -1,0 +1,6 @@
+hub Bird genome assemblies
+shortLabel Bird assemblies
+longLabel Bird genome assemblies
+genomesFile genomes.txt
+email hclawson@ucsc.edu
+descriptionUrl index.html

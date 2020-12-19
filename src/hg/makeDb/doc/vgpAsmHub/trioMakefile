@@ -1,0 +1,27 @@
+
+## makefile definitions for a VGP subset of genomes with user supplied
+## data tracks
+
+destDir=/hive/data/genomes/asmHubs/VGP
+srcDir=${HOME}/kent/src/hg/makeDb/doc/vgpAsmHub
+orderList=$(CURDIR)/vgp.trio.orderList.tsv
+
+indexName=vgpTrio
+testIndexName=testVgpTrio
+statsName=vgpTrioStats
+testStatsName=testVgpTrioStats
+dataName=vgpTrioData
+testDataName=testVgpTrioData
+genomesTxt=trioGenomes
+hubFile=trioHub
+testHubFile=testTrioHub
+hubTxtFile=vgpTrioHub.txt
+
+# these names trigger special behavior in the index page creation scripts:
+Name=VGP
+name=VGP
+
+# GCA_012275265.1_bMelUnd1.mat	budgerigar
+defaultAssembly=GCA_012275265.1
+
+include ../asmHubs/asmHubs.mk

@@ -1,0 +1,6 @@
+hub VGP
+shortLabel VGP primary
+longLabel Vertebrate Genomes Project primary assemblies
+genomesFile genomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl index.html

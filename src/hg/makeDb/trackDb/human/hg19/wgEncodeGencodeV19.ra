@@ -6,7 +6,7 @@
 ##
 track wgEncodeGencodeV19
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE Genes V19
 longLabel Gene Annotations from GENCODE Version 19
 group genes

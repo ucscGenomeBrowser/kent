@@ -15,9 +15,11 @@
 #include "linefile.h"
 #include "base64.h"
 #include "cheapcgi.h"
+#include "htmlPage.h"
 #include "https.h"
 #include "sqlNum.h"
 #include "obscure.h"
+#include "errCatch.h"
 
 /* Brought errno in to get more useful error messages */
 extern int errno;
@@ -186,7 +188,7 @@ return 0; // OK
 }
 
 
-static int netConnectWithTimeout(char *hostName, int port, long msTimeout)
+int netConnectWithTimeout(char *hostName, int port, long msTimeout)
 /* In order to avoid a very long default timeout (several minutes) for hosts that will
 * not answer the port, we are forced to connect non-blocking.
 * After the connection has been established, we return to blocking mode.
@@ -271,8 +273,48 @@ if (!isdigit(portName[0]))
 return netMustConnect(hostName, atoi(portName));
 }
 
+int netAcceptingSocket4Only(int port, int queueSize)
+/* Create an IPV4 socket that can accept connections from 
+ * only IPV4 clients on the current machine. Useful for systems with ipv6 disabled. */
+{
+struct sockaddr_in serverAddr;
+int sd;
 
-int netAcceptingSocket(int port, int queueSize)
+netBlockBrokenPipes();
+
+// ipv4 listening socket accepts ipv4 connections.
+if ((sd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    {
+    errAbort("socket() failed");
+    }
+
+// Allow local address reuse when server is restarted without waiting.
+int on = -1;
+if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, (char *)&on,sizeof(on)) < 0)
+    {
+    errAbort("setsockopt(SO_REUSEADDR) failed");
+    }
+
+ZeroVar(&serverAddr);
+serverAddr.sin_family = AF_INET;
+serverAddr.sin_port = htons(port);
+serverAddr.sin_addr.s_addr = INADDR_ANY;
+
+if (bind(sd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0)
+    {
+    errAbort("Couldn't bind socket to %d: %s", port, strerror(errno));
+    }
+
+if (listen(sd, queueSize) < 0)
+    {
+    errAbort("listen() failed");
+    }
+
+return sd;
+}
+
+
+int netAcceptingSocket6n4(int port, int queueSize)
 /* Create an IPV6 socket that can accept connections from 
  * both IPV4 and IPV6 clients on the current machine. */
 {
@@ -319,6 +361,32 @@ if (listen(sd, queueSize) < 0)
 return sd;
 }
 
+
+int netAcceptingSocket(int port, int queueSize)
+/* Create an IPV6 socket that can accept connections from 
+ * both IPV4 and IPV6 clients on the current machine.
+ * OR Failover to making IPv4 Only socket if IPv6 is disabled. */
+{
+int sd = -1;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    sd = netAcceptingSocket6n4(port, queueSize);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    // if ipv6 is disabled, fall back to trying ipv4 only listen socket
+    warn("%s", errCatch->message->string);
+    warn("Retrying listen socket using ipv4 only.");
+    sd = netAcceptingSocket4Only(port, queueSize);
+    }
+errCatchFree(&errCatch);
+if (sd == -1)
+  errAbort("unable to open listening socket");
+return sd;
+}
+
 int netAccept(int sd)
 /* Accept incoming connection from socket descriptor. */
 {
@@ -332,8 +400,6 @@ int netAcceptFrom(int acceptor, struct cidr *subnet)
  * returned from internetParseSubnetCidr. 
  * Subnet may be NULL. */
 {
-struct sockaddr_storage theirAddr;
-ZeroVar(&theirAddr);
 for (;;)
     {
     int sd = accept(acceptor, NULL, NULL);
@@ -343,9 +409,27 @@ for (;;)
 	    return sd;
 	else
 	    {
+	    socklen_t len;
+	    struct sockaddr_storage addr;
+	    char ipStr[INET6_ADDRSTRLEN];
+
+	    len = sizeof addr;
+	    getpeername(sd, (struct sockaddr*)&addr, &len);
+
+            getAddrAsString6n4(&addr, ipStr, sizeof ipStr);
+
+	    if (!strchr(ipStr, ':'))   // convert ipv4 to ipv6-mapped
+		{
+		// prepend "::ffff:" to ipStr
+	        char temp[INET6_ADDRSTRLEN];
+		safef(temp, sizeof temp, "::ffff:%s", ipStr);
+		safecpy(ipStr, sizeof ipStr, temp);
+		}
+	    // convert back to ipv6 address.
 	    struct sockaddr_in6 clientAddr;
-	    unsigned int addrLen=sizeof(clientAddr);
-	    getpeername(sd, (struct sockaddr *)&clientAddr, &addrLen);
+	    internetIpStringToIp6(ipStr, &clientAddr.sin6_addr);
+
+            // see if it is in the allowed subnet
 	    if (internetIpInSubnetCidr(&clientAddr.sin6_addr, subnet))
 		{
 		return sd;
@@ -1463,10 +1547,10 @@ boolean netSkipHttpHeaderLinesWithRedirect(int sd, char *url, char **redirectedU
  * This is meant to be able work even with a re-passable stream handle,
  * e.g. can pass it to the pipes routines, which means we can't
  * attach a linefile since filling its buffer reads in more than just the http header.
- * Handles 300, 301, 302, 303, 307, 308 http redirects by setting *redirectedUrl to
+ * Handles 301, 302, 307, 308 http redirects by setting *redirectedUrl to
  * the new location. */
 {
-char buf[2000];
+char buf[8192];
 char *line = buf;
 int maxbuf = sizeof(buf);
 int i=0;
@@ -1710,20 +1794,31 @@ while (TRUE)
 	    warn("code 30x redirects: exceeded limit of 5 redirects, %s", newUrl);
 	    success = FALSE;
 	    }
-	else if (!startsWith("http://",newUrl) 
-              && !startsWith("https://",newUrl))
-	    {
-	    warn("redirected to non-http(s): %s", newUrl);
-	    success = FALSE;
-	    }
 	else 
 	    {
-	    newUrl = transferParamsToRedirectedUrl(url, newUrl);		
-	    sd = netUrlOpen(newUrl);
-	    if (sd < 0)
+	    // path may be relative
+	    if (!hasProtocol(newUrl))
 		{
-		warn("Couldn't open %s", newUrl);
+		char *newUrl2 = expandUrlOnBase(url, newUrl);
+		freeMem(newUrl);
+		newUrl = newUrl2;
+		}
+	    if (!startsWith("http://",newUrl) 
+              && !startsWith("https://",newUrl))
+		{
+		warn("redirected to non-http(s): %s", newUrl);
 		success = FALSE;
+		}
+	    else
+		{
+		// transfer password and byteranges if any
+		newUrl = transferParamsToRedirectedUrl(url, newUrl);
+		sd = netUrlOpen(newUrl);
+		if (sd < 0)
+		    {
+		    warn("Couldn't open %s", newUrl);
+		    success = FALSE;
+		    }
 		}
 	    }
 	}

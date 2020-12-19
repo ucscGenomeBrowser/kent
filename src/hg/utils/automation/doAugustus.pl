@@ -307,6 +307,13 @@ find ./run.augustus/gtf -type f | grep ".gtf.gz\$" \\
             > \$db.augustus.gtf
 gtfToGenePred -genePredExt -infoOut=\$db.info \$db.augustus.gtf \$db.augustus.gp
 genePredCheck $dbCheck \$db.augustus.gp
+genePredToBed \$db.augustus.gp stdout \\
+    | bedToExons stdin stdout | bedSingleCover.pl stdin > \$db.exons.bed
+export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$db.exons.bed`
+export asmSizeNoGaps=`grep sequences ../../\$db.faSize.txt | awk '{print \$5}'`
+export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSizeNoGaps" "\$perCent" > fb.\$db.augustus.txt
+rm -f \$db.exons.bed
 genePredToBigGenePred \$db.augustus.gp stdout | sort -k1,1 -k2,2n > \$db.augustus.bgp
 bedToBigBed -type=bed12+8 -tab -as=$ENV{'HOME'}/kent/src/hg/lib/bigGenePred.as \$db.augustus.bgp partition/\$db.chrom.sizes \$db.augustus.bb
 getRnaPred -genePredExt -keepMasking -genomeSeqs=$maskedSeq \$db \$db.augustus.gp all \$db.augustusGene.rna.fa

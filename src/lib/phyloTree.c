@@ -22,7 +22,9 @@ return tree;
 
 struct phyloTree *phyloOpenTree(char *fileName)
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = lineFileUdcMayOpen(fileName, TRUE);
+if (lf == NULL)
+    errAbort("phyloOpenTree: Can't open '%s'", fileName);
 struct phyloTree *tree = phyloReadTree(lf);
 
 lineFileClose(&lf);
@@ -112,7 +114,12 @@ if(ptr > start)
 if (*ptr == ':')
     {
     ptr++;
-    sscanf(ptr, "%lg", &pName->length);
+    char *lStart = ptr;
+    while (isdigit(*ptr) || *ptr == '.' || *ptr == 'e' || *ptr == 'E' || *ptr == '+' || *ptr == '-')
+        ptr++;
+    int lSize = ptr - lStart;
+    if (lSize)
+        pName->length = strtod(lStart, NULL);
     while ((*ptr != '[') && (*ptr != ')') && (*ptr != ',') && (*ptr != ';'))
 	ptr++;
     }
@@ -184,7 +191,7 @@ if (*ptr == '(')
     node->ident = parseIdent(&ptr);
     }
 else 
-    if ((*ptr == ':') || (isalpha(*ptr))|| (isdigit(*ptr)) 
+    if ((*ptr == ':') || (isalpha(*ptr))|| (isdigit(*ptr)) || (*ptr == '_')
 	 || (*ptr == '\'') || (*ptr == '.')) 
 	node->ident = parseIdent(&ptr);
 else
@@ -487,5 +494,19 @@ if (tree->numEdges == 0)
 for (ii=0; ii < tree->numEdges; ii++)
     count += phyloCountLeaves(tree->edges[ii]);
 
+return count;
+}
+
+int phyloCountInternalNodes(struct phyloTree *node)
+/* Return the number of internal nodes (not leaf nodes) in tree. */
+{
+int count = 0;
+if (node->numEdges > 0)
+    {
+    count = 1;
+    int ii;
+    for (ii = 0;  ii < node->numEdges;  ii++)
+        count += phyloCountInternalNodes(node->edges[ii]);
+    }
 return count;
 }

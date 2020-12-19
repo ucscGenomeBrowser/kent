@@ -1,0 +1,10 @@
+GCA_001524155.4_NA19240_prelim_3.0	Yoruban, Nigeria	https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=NA19240
+GCA_002077035.3_NA12878_prelim_3.0	Utah/Mormon, USA	https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=NA12878
+GCA_002180035.3_HG00514_prelim_3.0	Southern Han Chinese, China	https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=HG00514
+GCA_002208065.1_HG00733_prelim_1.0	Puerto Rican, Puerto Rico	https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=HG00733
+GCA_002209525.2_HG01352_prelim_2.1	Columbian, Colombia	https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=HG01352
+GCA_002872155.1_NA19434_prelim_1.0	Luhya, Kenya	https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=NA19434
+GCA_003070785.1_HG02059_prelim_1.0	Vietnamese, Vietnam	https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=HG02059
+GCA_003086635.1_HG03486_prelim_1.0	Mende, Sierra Leone	https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=HG03486
+GCA_003574075.1_HG02818_prelim_1.0	Gambia, Gambia	https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=HG02818
+GCA_003601015.1_HG03807_prelim_1.0	Bengali, Bangladesh	https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=HG03807

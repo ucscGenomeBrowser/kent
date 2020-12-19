@@ -1,4 +1,3 @@
-alias	chrom	source
 1	chr1	assembly
 CM000663.1	chr1	genbank
 NC_000001.10	chr1	refseq
@@ -690,6 +689,9 @@ HG50_PATCH	chr9_kb663605_fix	assembly
 KB663605.1	chr9_kb663605_fix	genbank
 NW_004504301.1	chr9_kb663605_fix	refseq
 NC_001807.4	chrM	genbank
+J01415.2	chrMT	genbank
+MT	chrMT	assembly
+NC_012920.1	chrMT	refseq
 GL000211.1	chrUn_gl000211	genbank
 HSCHRUN_RANDOM_CTG1	chrUn_gl000211	assembly
 NT_113961.1	chrUn_gl000211	refseq

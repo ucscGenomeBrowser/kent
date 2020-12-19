@@ -173,6 +173,20 @@ AllocVar(b);
 hts_itr_t *iter = sam_itr_querys(idx, header, position);
 if (iter == NULL && startsWith("chr", position))
     iter = sam_itr_querys(idx, header, position + strlen("chr"));
+// Special case to support SARS-CoV-2: If header uses a RefSeq or GenBank accession instead of
+// our "NC_045512v2", go with that.
+if (iter == NULL && header->n_targets == 1 && startsWith("NC_045512v2", position) &&
+    (startsWith("NC_045512", header->target_name[0]) ||
+     startsWith("MN908947", header->target_name[0])))
+    {
+    char *colon = strrchr(position, ':');
+    char customPos[512];
+    if (colon)
+        safef(customPos, sizeof customPos, "%s%s", header->target_name[0], colon);
+    else
+        safecpy(customPos, sizeof customPos, header->target_name[0]);
+    iter = sam_itr_querys(idx, header, customPos);
+    }
 
 if (iter == NULL)
     return;
@@ -546,6 +560,52 @@ newBam->data = cloneMem((void *)bam->data, bam->data_len*sizeof(bam->data[0]));
 return newBam;
 }
 
+static inline int typeSize(int x)
+/* Return size of basic BAM types. */
+{
+if (x == 'C' || x == 'c' || x == 'A') return 1;
+else if (x == 'S' || x == 's') return 2;
+else if (x == 'I' || x == 'i' || x == 'f' || x == 'F') return 4;
+else return 0;
+}      
+
+static void printType(uint8_t type, uint8_t **str)
+/* Print out a string that has a value of the given type. */
+{
+uint8_t *s = *str;
+if (type == 'A') { printf("%c", *s); ++s; }
+else if (type == 'C') { printf("%u", *s); ++s; }
+else if (type == 'c') { printf("%d", *(int8_t*)s); ++s; }
+else if (type == 'S') { printf("%u", *(uint16_t*)s); s += 2; }
+else if (type == 's') { printf("%d", *(int16_t*)s); s += 2; }
+else if (type == 'I') { printf("%u", *(uint32_t*)s); s += 4; }
+else if (type == 'i') { printf("%d", *(int32_t*)s); s += 4; }
+else if (type == 'f') { printf("%g", *(float*)s); s += 4; }
+else if (type == 'd') { printf("%lg", *(double*)s); s += 8; }
+else if (type == 'B')
+    {
+    uint8_t subType =  *s++;
+    int count =  *(int32_t*)s;
+    s += 4;
+
+    int ii;
+    for (ii=0; ii < count; ii++)
+        {
+        printType(subType, &s);
+        if (ii < count - 1)
+            printf(",");
+        }
+    }
+else if (type == 'Z' || type == 'H')
+    {
+    htmTextOut(stdout, (char *)s);
+    s += strlen((char *)s) + 1;
+    }
+else
+    errAbort("missing BAM type %c", type);
+*str = s;
+}
+
 void bamShowTags(const bam1_t *bam)
 /* Print out tags in HTML: bold key, no type indicator for brevity. */
 {
@@ -557,20 +617,7 @@ while (s < bam->data + bam->data_len)
     key[0] = s[0]; key[1] = s[1];
     s += 2; type = *s; ++s;
     printf(" <B>%c%c</B>:", key[0], key[1]);
-    if (type == 'A') { printf("%c", *s); ++s; }
-    else if (type == 'C') { printf("%u", *s); ++s; }
-    else if (type == 'c') { printf("%d", *(int8_t*)s); ++s; }
-    else if (type == 'S') { printf("%u", *(uint16_t*)s); s += 2; }
-    else if (type == 's') { printf("%d", *(int16_t*)s); s += 2; }
-    else if (type == 'I') { printf("%u", *(uint32_t*)s); s += 4; }
-    else if (type == 'i') { printf("%d", *(int32_t*)s); s += 4; }
-    else if (type == 'f') { printf("%g", *(float*)s); s += 4; }
-    else if (type == 'd') { printf("%lg", *(double*)s); s += 8; }
-    else if (type == 'Z' || type == 'H')
-	{
-	htmTextOut(stdout, (char *)s);
-	s += strlen((char *)s) + 1;
-	}
+    printType(type, &s);
     }
 putc('\n', stdout);
 }
@@ -615,6 +662,11 @@ while (s < bam->data + bam->data_len)
 	else if (type == 'S' || type == 's') { s += 2; }
 	else if (type == 'I' || type == 'i' || type == 'f') { s += 4; }
 	else if (type == 'd') { s += 8; }
+	else if (type == 'B') 
+            {
+            // 5 is for type byte and a following int32
+            s += 5 + typeSize(*(s)) * (*(int32_t*)((s)+1));
+            }
 	else if (type == 'Z' || type == 'H')
 	    {
 	    while (*s++);

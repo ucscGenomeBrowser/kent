@@ -1,0 +1,4 @@
+Found 3 problems:
+Error: 'araTha1' twoBitPath does not exist or is not accessible: 'https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/noTwoBitPath.2bit'
+warning: 'araTha1' groups file does not exist or is not accessible: 'input/badLocalPath.txt'
+warning: 'araTha1' htmlPath file does not exist or is not accessible: 'http://bad.url.path'

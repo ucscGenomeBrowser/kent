@@ -1,0 +1,104 @@
+<h2>Description</h2>
+
+<p>
+This track shows human clinically relevant variants from the 
+<a href="https://www.ncbi.nlm.nih.gov/clinvar/" target="_blank">ClinVar database</a>,
+mapped from hg38 to the $db genome. The mapping uses UCSC's whole-genome alignments and the 
+tool <a href="https://genome.ucsc.edu/cgi-bin/hgLiftOver" target=_blank>LiftOver</a>. 
+The annotations are somewhat speculative, 
+as LiftOver is not meant to be used for cross-organism mapping. Among others, 
+LiftOver has no notion of phylogenetic trees or protein orthology, so the 
+exact protein to which they are mapped may not be the annotated ortholog.
+In areas with protein repeats it may have been mapped to the wrong exon. When the 
+genome nucleotide in $db is different from hg38, the corresponding position 
+could be several basepairs away. Generally, the more different the gene, the harder the
+mapping. Before planning assays on these data, a manual alignment and annotation 
+of the human and $db nucleotide or amino acid sequences is recommended.
+
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Genomic locations of ClinVar variants are labeled with the human ClinVar variant
+descriptions. For example, the label "C&gt;G" usually means that in human, the cDNA 
+nucleotide change is from C&gt;T. On a transcript on the reverse strand, the human
+genome nucleotide on the forward strand would be G. In $db, the genome may not
+be G at this position. Zoom in to see the nucleotide in $db, or click the
+variant to show the human position and nucleotide and the $db nucleotide.</p>
+
+<p>All ClinVar information related to each is variant is shown on that
+variant's details page.  Hold the mouse over a feature
+to show the clinical significance of a variant in humans.
+</p>
+
+<p>Only short variants with a length &lt; 10 bp on the human genome were
+lifted. A few variants that after lifting result in $db annotations longer than
+30bp were filtered out, too. This can happen in repetitive regions that are
+hard to align.</p>
+
+<p>
+Annotations are shaded by clinical annotation:
+<b><font color="red">red for pathogenic</font></b>,
+<B><font color="#888">dark grey for uncertain significance or not provided</font></b> and
+<B><font color="green">green for benign</font></b>.
+</p>
+
+<p>
+The score of the variants is the number of "stars" in ClinVar. On the track configuration 
+page (above), you can filter the track to show only variants with more than a certain 
+number of stars. For more information on the star rating, see the 
+<a href="https://www.ncbi.nlm.nih.gov/clinvar/docs/review_status/"
+target="_blank">ClinVar documentation</a>.
+</p>
+
+<h2>Data updates</h2>
+ClinVar is updated every month, but these mappings are not updated yet on a regular schedule.
+Please contact us if you are interested in regular updates.
+</p>
+
+<H2>Data access</H2>
+<p>
+The raw data can be explored interactively with the 
+<a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/" target="_blank">our download server</a>.
+The files for this track are called <tt>clinvarLift.bb</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, e.g. 
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/clinvarLift.bb -chrom=chr1 -start=0 -end=100000000 stdout</tt></p>
+</p>
+
+<h2>Methods</h2>
+
+<p>
+The hg38 ClinvarMain track was annotated with nucleotides and positions, lifted to $db,
+filtered again for variants &lt; 30bp
+and annotated with nucleotides again. The output was converted to the 
+<a href="../goldenPath/help/bigBed.html">bigBed</a> format.
+The program that performs the mapping is available on
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/utils/doClinvarLift"
+target="_blank">Github</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to NCBI for making the ClinVar data available on their FTP site as a tab-separated file.
+</p>
+
+<h2>References</h2>
+<p>
+Landrum MJ, Lee JM, Benson M, Brown G, Chao C, Chitipiralla S, Gu B, Hart J, Hoffman D, Hoover J
+<em>et al</em>.
+<a href="https://academic.oup.com/nar/article/44/D1/D862/2502702/ClinVar-public-archive-of-interpretations-of" target="_blank">
+ClinVar: public archive of interpretations of clinically relevant variants</a>.
+<em>Nucleic Acids Res</em>. 2016 Jan 4;44(D1):D862-8.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26582918" target="_blank">26582918</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4702865/" target="_blank">PMC4702865</a>
+</p>

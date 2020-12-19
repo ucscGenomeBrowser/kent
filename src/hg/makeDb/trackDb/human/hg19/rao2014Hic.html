@@ -1,10 +1,35 @@
-<p>
 <h2>Description</h2>
-These tracks provide heatmaps of chromatin folding data from in situ Hi-C experiments on
-the following seven cell lines: GM12878, K562, IMR90, HMEC, NHEK, HUVEC, and KBM7 (Rao <em>et
-al</em>., 2014). Two other cell lines were also part of this project, but are not included in this
-track: CH12-LX (mouse B-lymphoblasts) and HeLa (the Henrietta Lacks tumor cell line).
-</p><p>
+<p>These tracks provide heatmaps of chromatin folding data from in situ Hi-C experiments on
+the seven cell lines (<a 
+href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(14)01497-4" 
+target="_blank">Rao <em>et al</em>., 2014</a>). Two other cell lines were 
+also part of this project, but are not included in this track: CH12-LX (mouse B-lymphoblasts)
+and HeLa (the Henrietta Lacks tumor cell line). Below are the seven types of cells sequenced 
+with a short description:</p>
+<table>
+<tr>
+ <td>GM12878</td>
+ <td>B-Lymphocyte Cells</td></tr>
+<tr>
+ <td>HMEC</td>
+ <td>Mammary Epithelial Cells</td></tr>
+<tr>
+ <td>HUVEC</td>
+ <td>Umbilical Endothelial Cells</td></tr>
+<tr>
+ <td>IMR90</td>
+ <td>Fetal Lung Cells</td></tr>
+<tr>
+ <td>K562</td>
+ <td>Immortalised Leukemia Cells</td></tr>
+<tr>
+ <td>KBM7</td>
+ <td>Immortalised Leukemia Cells</td></tr>
+<tr>
+ <td>NHEK</td>
+ <td>Epidermal Keratinocyte Cells</td></tr>
+</table>
+<p>
 The data indicate how many interactions were detected between regions of the genome. A high score
 between two regions suggests that they are probably in close proximity in 3D space within the
 nucleus of a cell. In the track display, this is shown by a more intense color in the heatmap.
@@ -66,8 +91,8 @@ saturation can be set manually by un-checking the &quot;Auto-scale&quot; box. Wh
 The resolution for each track is measured in base pairs and represents the size of the bins into
 which proximity data are gathered. The list of available resolutions ranges from 1kb to 10Mb. There
 is also an &quot;Auto&quot; setting, which attempts to use the coarsest resolution that still
-displays at least 500 bins in the current window.
-</p><p>
+displays at least 500 bins in the current window.</p>
+<p>
 <h2>Methods</h2>
 The protocol described in this paper, in situ Hi-C, is a refinement of an earlier method
 originally called Hi-C and now referred to as dilution Hi-C. Both methods involve cross-linking DNA
@@ -88,6 +113,7 @@ display using the <a href="https://github.com/aidenlab/straw" target="_blank">St
 the <a href="https://aidenlab.org/" target="_blank">Aiden lab</a> at <a href="https://www.bcm.edu"
 target="_blank">Baylor College of Medicine</a>.
 </p><p>
+
 <h2>Data Access</h2>
 The data for this track can be explored interactively with the Table Browser in the
 <a href="../goldenPath/help/interact.html">interact</a> format.  Direct access to the
@@ -103,6 +129,7 @@ GSE63525_IMR90_combined.hic, and GSE63525_KBM7_combined.hic. Details on working 
 can be found at <a href="https://www.aidenlab.org/documentation.html"
 target="_blank">https://www.aidenlab.org/documentation.html</a>.
 </p><p>
+
 <h2>References</h2>
 Knight P, Ruiz D.
 <a href="https://doi.org/10.1093/imanum/drs019" target="_blank">

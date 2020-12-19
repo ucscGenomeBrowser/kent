@@ -1,0 +1,6 @@
+hub Vertebrate genome assemblies
+shortLabel Vertebrate assemblies
+longLabel Vertebrate genome assemblies
+genomesFile genomes.txt
+email hclawson@ucsc.edu
+descriptionUrl index.html

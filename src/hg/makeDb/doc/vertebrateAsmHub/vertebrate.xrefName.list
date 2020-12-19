@@ -1,0 +1,26 @@
+103695	2017-02-28	central bearded dragon	Pogona vitticeps	SAMEA2300447	PRJEB5206	GCF_900067755.1	pvi1.1	male	haploid	vertebrate_other	Pogona_vitticeps	GCF_900067755.1_pvi1.1
+103944	2016-01-22	snakes	Protobothrops mucrosquamatus	SAMD00043515	PRJDB4386	GCF_001527695.2	P.Mucros_1.0	n/a	haploid	vertebrate_other	Protobothrops_mucrosquamatus	GCF_001527695.2_P.Mucros_1.0
+125878	2015-03-17	frogs & toads	Nanorana parkeri	SAMN02720813	PRJNA243398	GCF_000935625.1	ASM93562v1	female	haploid	vertebrate_other	Nanorana_parkeri	GCF_000935625.1_ASM93562v1
+13735	2012-07-24	Chinese soft-shelled turtle	Pelodiscus sinensis	SAMN02981371	PRJNA68233	GCF_000230535.1	PelSin_1.0	female	haploid	vertebrate_other	Pelodiscus_sinensis	GCF_000230535.1_PelSin_1.0
+1415580	2019-06-22	caecilians	Microcaecilia unicolor	SAMEA104387962	PRJEB32737	GCF_901765095.1	aMicUni1.1	n/a	haploid	vertebrate_other	Microcaecilia_unicolor	GCF_901765095.1_aMicUni1.1
+146911	2015-11-25	lizards	Gekko japonicus	SAMN04157958	PRJNA298277	GCF_001447785.1	Gekko_japonicus_V1.1	male	haploid	vertebrate_other	Gekko_japonicus	GCF_001447785.1_Gekko_japonicus_V1.1
+176946	2013-09-15	Burmese python	Python bivittatus	SAMN02981298	PRJNA61243	GCF_000186305.1	Python_molurus_bivittatus-5.0.2	female	haploid	vertebrate_other	Python_bivittatus	GCF_000186305.1_Python_molurus_bivittatus-5.0.2
+1825980	2019-07-25	Goodes thornscrub tortoise	Gopherus evgoodei	SAMN03496275	PRJNA489103	GCF_007399415.2	rGopEvg1_v1.p	n/a	haploid	vertebrate_other	Gopherus_evgoodei	GCF_007399415.2_rGopEvg1_v1.p
+194408	2019-06-02	two-lined caecilian	Rhinatrema bivittatum	SAMEA104387956	PRJEB32111	GCF_901001135.1	aRhiBiv1.1	n/a	haploid	vertebrate_other	Rhinatrema_bivittatum	GCF_901001135.1_aRhiBiv1.1
+259920	2017-03-03	whale shark	Rhincodon typus	SAMN04562461	PRJNA255419	GCF_001642345.1	ASM164234v2	male	haploid	vertebrate_other	Rhincodon_typus	GCF_001642345.1_ASM164234v2
+27687	2019-03-26	reedfish	Erpetoichthys calabaricus	SAMEA104026374	PRJEB31579	GCF_900747795.1	fErpCal1.1	n/a	haploid	vertebrate_other	Erpetoichthys_calabaricus	GCF_900747795.1_fErpCal1.1
+28377	2011-01-10	green anole	Anolis carolinensis	SAMN02981230	PRJNA18787	GCF_000090745.1	AnoCar2.0	n/a	haploid	vertebrate_other	Anolis_carolinensis	GCF_000090745.1_AnoCar2.0
+35019	2015-06-26	snakes	Thamnophis sirtalis	SAMN03759628	PRJNA189551	GCF_001077635.1	Thamnophis_sirtalis-6.0	female	haploid	vertebrate_other	Thamnophis_sirtalis	GCF_001077635.1_Thamnophis_sirtalis-6.0
+38654	2013-08-29	Chinese alligator	Alligator sinensis	SAMN02981559	PRJNA215016	GCF_000455745.1	ASM45574v1	female	haploid	vertebrate_other	Alligator_sinensis	GCF_000455745.1_ASM45574v1
+64176	2019-03-07	common wall lizard	Podarcis muralis	SAMN10820182	PRJNA515813	GCF_004329235.1	PodMur_1.0	male	haploid	vertebrate_other	Podarcis_muralis	GCF_004329235.1_PodMur_1.0
+7868	2013-12-11	elephant shark	Callorhinchus milii	SAMN00000800	PRJNA18361	GCF_000165045.1	Callorhinchus_milii-6.1.3	male	haploid	vertebrate_other	Callorhinchus_milii	GCF_000165045.1_Callorhinchus_milii-6.1.3
+7897	2011-09-12	coelacanth	Latimeria chalumnae	SAMN00138723	PRJNA56111	GCF_000225785.1	LatCha1	n/a	haploid	vertebrate_other	Latimeria_chalumnae	GCF_000225785.1_LatCha1
+7918	2012-01-13	spotted gar	Lepisosteus oculatus	SAMN00706774	PRJNA68247	GCF_000242695.1	LepOcu1	female	haploid	vertebrate_other	Lepisosteus_oculatus	GCF_000242695.1_LepOcu1
+8355	2016-08-09	African clawed frog	Xenopus laevis	SAMN04518361	PRJNA313213	GCF_001663975.1	Xenopus_laevis_v2	female	haploid	vertebrate_other	Xenopus_laevis	GCF_001663975.1_Xenopus_laevis_v2
+8364	2019-11-14	tropical clawed frog	Xenopus tropicalis	SAMN13041969	PRJNA577946	GCF_000004195.4	UCB_Xtro_10.0	female	haploid	vertebrate_other	Xenopus_tropicalis	GCF_000004195.4_UCB_Xtro_10.0
+8469	2013-03-18	Green sea turtle	Chelonia mydas	SAMN02981410	PRJNA104937	GCF_000344595.1	CheMyd_1.0	n/a	haploid	vertebrate_other	Chelonia_mydas	GCF_000344595.1_CheMyd_1.0
+8496	2016-03-28	American alligator	Alligator mississippiensis	SAMN02981418	PRJNA159843	GCF_000281125.3	ASM28112v4	n/a	haploid	vertebrate_other	Alligator_mississippiensis	GCF_000281125.3_ASM28112v4
+8502	2016-09-13	Australian saltwater crocodile	Crocodylus porosus	SAMN03102602	PRJNA163131	GCF_001723895.1	CroPor_comp1	male	haploid	vertebrate_other	Crocodylus_porosus	GCF_001723895.1_CroPor_comp1
+8663	2018-09-24	mainland tiger snake	Notechis scutatus	SAMEA4800209	PRJEB27871	GCF_900518725.1	TS10Xv2-PRI	n/a	haploid	vertebrate_other	Notechis_scutatus	GCF_900518725.1_TS10Xv2-PRI
+8673	2018-09-24	eastern brown snake	Pseudonaja textilis	SAMEA4800208	PRJEB27869	GCF_900518735.1	EBS10Xv2-PRI	n/a	haploid	vertebrate_other	Pseudonaja_textilis	GCF_900518735.1_EBS10Xv2-PRI
+94835	2016-09-13	Gharial	Gavialis gangeticus	SAMN03102901	PRJNA172383	GCF_001723915.1	GavGan_comp1	female	haploid	vertebrate_other	Gavialis_gangeticus	GCF_001723915.1_GavGan_comp1

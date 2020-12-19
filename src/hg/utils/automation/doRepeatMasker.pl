@@ -27,6 +27,9 @@ use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
+    $opt_ncbiRmsk
+    $opt_dupList
+    $opt_liftSpec
     $opt_species
     $opt_unmaskedSeq
     $opt_customLib
@@ -51,6 +54,12 @@ my $stepper = new HgStepManager(
 my $dbHost = 'hgwdev';
 my $unmaskedSeq = "\$db.unmasked.2bit";
 my $defaultSpecies = 'scientificName from dbDb';
+my $ncbiRmsk = "";	# path to NCBI *_rm.out.gz file to use NCBI result
+                        # for repeat masking result
+                        # in the assembly as calculated by NCBI
+my $dupList = "";	# path to download/asmId.remove.dups.list for NCBI
+my $liftSpec = "";	# lift file from NCBI coordinates to UCSC coordinates
+                        # usually required with ncbiRmsk
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -71,6 +80,12 @@ options:
     -species sp           Use sp (which can be quoted genus and species, or
                           a common name that RepeatMasker recognizes.
                           Default: $defaultSpecies.
+    -ncbiRmsk path/file_rm.out.gz - Use the repeat masker result supplied in
+                          the assembly as calculated by NCBI
+    -dupList .../download/asmId.remove.dups.list - to remove duplicates from
+			  NCBI repeat masker file
+    -liftSpec path/file.lift - Use this lift file to lift the NCBI coordinates
+                          to UCSC coordinates, usually used with ncbiRmsk
     -unmaskedSeq seq.2bit Use seq.2bit as the unmasked input sequence instead
                           of default ($unmaskedSeq).
     -customLib lib.fa     Use custom repeat library instead of RepeatMaskers\'s.
@@ -119,6 +134,9 @@ sub checkOptions {
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
 		      'species=s',
+		      'ncbiRmsk=s',
+		      'dupList=s',
+		      'liftSpec=s',
 		      'unmaskedSeq=s',
 		      'customLib=s',
                       'useRMBlastn',
@@ -139,7 +157,17 @@ sub checkOptions {
 #########################################################################
 # * step: cluster [bigClusterHub]
 sub doCluster {
+  return if ($ncbiRmsk);
   my $runDir = "$buildDir/run.cluster";
+  if ( -d "$runDir" ) {
+       if ( -s "$runDir/run.time" ) {
+         &HgAutomate::verbose(1,
+	  "\ncluster step previously completed\n");
+         return;
+       } else {
+         die "\nERROR: cluster step may not be completed properly\n";
+       }
+  }
   &HgAutomate::mustMkdir($runDir);
 
   my $paraHub = $opt_bigClusterHub ? $opt_bigClusterHub :
@@ -289,34 +317,49 @@ and runs it on the cluster with the most available bandwidth.";
   $bossScript->add(<<_EOF_
 chmod a+x dummyRun.csh
 chmod a+x RMRun.csh
-./dummyRun.csh
 
 # Record RM version used:
+printf "The repeat files provided for this assembly were generated using RepeatMasker.\\
+  Smit, AFA, Hubley, R & Green, P.,\\
+  RepeatMasker Open-4.0.\\
+  1996-2010 <http://www.repeatmasker.org>.\\
+\\
+VERSION:\\n" > ../versionInfo.txt
+
+./dummyRun.csh | grep -v "dev/null" >> ../versionInfo.txt
+
+$RepeatMasker -v >> ../versionInfo.txt
+grep RELEASE $RepeatMaskerPath/Libraries/RepeatMaskerLib.embl >> ../versionInfo.txt
+printf "# RepeatMasker engine: %s\\n" "${RepeatMaskerEngine}" >> ../versionInfo.txt
+
 ls -ld $RepeatMaskerPath $RepeatMasker
-grep 'version of RepeatMasker\$' $RepeatMasker
+$RepeatMasker -v
 grep RELEASE $RepeatMaskerPath/Libraries/RepeatMaskerLib.embl
 echo "# RepeatMasker engine: $RepeatMaskerEngine"
 _EOF_
   );
   if ($opt_useRMBlastn) {
     $bossScript->add(<<_EOF_
+printf "# using rmblastn:\\n" >> ../versionInfo.txt
 echo "# useRMBlastn: rmblastn:"
-grep RMBLAST_DIR $RepeatMaskerPath/RepeatMaskerConfig.pm | awk '{print \$NF}'
+grep RMBLAST_DIR $RepeatMaskerPath/RepeatMaskerConfig.pm | grep rmblastn-2 | awk '{print \$NF}' >> ../versionInfo.txt
 _EOF_
     );
   }
   if ($opt_useHMMER) {
     $bossScript->add(<<_EOF_
+printf "# using Dfam library and HMMER3:\\n" >> ../versionInfo.txt
 echo "# useHMMER: Dfam library: "
 ls -ld $RepeatMaskerPath/Libraries/Dfam.hmm
-grep Release: $RepeatMaskerPath/Libraries/Dfam.hmm
+grep Release: $RepeatMaskerPath/Libraries/Dfam.hmm >> ../versionInfo.txt
 echo "# useHMMER: HMMER3: "
-grep -m 1 ^HMMER3 $RepeatMaskerPath/Libraries/Dfam.hmm
+grep -m 1 ^HMMER3 $RepeatMaskerPath/Libraries/Dfam.hmm >> ../versionInfo.txt
 _EOF_
     );
   }
   if (length($repeatLib) > 0) {
     $bossScript->add(<<_EOF_
+printf "# RepeatMasker library options: %s\\n" "${repeatLib}" >> ../versionInfo.txt
 echo "# RepeatMasker library options: '$repeatLib'"
 _EOF_
     );
@@ -351,6 +394,9 @@ _EOF_
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 
+printf "\\nPARAMETERS:\\
+$RepeatMasker $RepeatMaskerEngine -align $repeatLib\\n" >> ../versionInfo.txt
+
 $gensub2 $partDir/partitions.lst single gsub jobList
 $binPara $parasolRAM make jobList
 $binPara check
@@ -372,9 +418,19 @@ _EOF_
 # * step: cat [fileServer]
 sub doCat {
   my $runDir = "$buildDir";
-  &HgAutomate::checkExistsUnlessDebug('cluster', 'cat',
+  if (! -s "${ncbiRmsk}" ) {
+      &HgAutomate::checkExistsUnlessDebug('cluster', 'cat',
 				      "$buildDir/run.cluster/run.time");
-
+  }
+  if ( -s "$runDir/doCat.bash" ) {
+     if ( ! (-s "$runDir/$db.sorted.fa.out.gz" || -s "$runDir/$db.sorted.fa.out" ) ) {
+         die "\nERROR: cat step may not be completed properly\n";
+     } else {
+         &HgAutomate::verbose(1,
+	  "\ncat step previously completed\n");
+         return;
+     }
+  }
   my $whatItDoes =
 "It concatenates .out files from cluster run into a single $db.sorted.fa.out.\n" .
 "liftUp (with no lift specs) is used to concatenate .out files because it\n" .
@@ -384,15 +440,70 @@ sub doCat {
   my $bossScript = newBash HgRemoteScript("$runDir/doCat.bash", $fileServer,
 				      $runDir, $whatItDoes);
 
-  # Use symbolic link created in cluster step:
-  my $partDir = "$buildDir/RMPart";
-  my $indent = "";
-  my $path = "";
-  my $levels = $opt_debug ? 1 : `cat $partDir/levels`;
-  chomp $levels;
   $bossScript->add("# Debug mode -- don't know the real number of levels\n")
     if ($opt_debug);
 
+  if ($ncbiRmsk) {
+    my $zippedSource = 0;	# asssume not a gz zipped file
+    $zippedSource = 1 if ($ncbiRmsk =~ m/.gz$/);
+    my $liftOpts = "";
+    if (-s "${liftSpec}" ) {
+      $liftOpts = "| liftUp -type=.out stdout $liftSpec warn stdin";
+    }
+    $bossScript->add(<<_EOF_
+export db="${db}"
+export ncbiRmOutFile="${ncbiRmsk}"
+cat /dev/null > "\${db}.sorted.fa.out"
+_EOF_
+    );
+    if (! -s "${liftSpec}" ) {
+    printf STDERR "# WARNING: no liftSpec given with ncbiRmsk file, probably will need one ?\n";
+    $bossScript->add(<<_EOF_
+#########
+# WARNING: no liftSpec given with ncbiRmsk file, probably will need one ?
+#########
+
+printf "   SW  perc perc perc  query      position in query           matching       repeat              position in  repeat
+score  div. del. ins.  sequence    begin     end    (left)    repeat         class/family         begin  end (left)   ID
+
+" >> "\${db}.sorted.fa.out"
+_EOF_
+    );
+    }
+    if ($zippedSource) {
+      if ( -s "${dupList}" ) {
+        $bossScript->add(<<_EOF_
+zcat "\${ncbiRmOutFile}" | tail -n +4 | sort -k5,5 -k6,6n $liftOpts \\
+   | grep -v -f ${dupList} >> "\${db}.sorted.fa.out"
+_EOF_
+        );
+      } else {
+        $bossScript->add(<<_EOF_
+zcat "\${ncbiRmOutFile}" | tail -n +4 | sort -k5,5 -k6,6n $liftOpts >> "\${db}.sorted.fa.out"
+_EOF_
+        );
+      }
+    } else {
+      if ( -s "${dupList}" ) {
+        $bossScript->add(<<_EOF_
+tail -n +4 "\${ncbiRmOutFile}" sort -k5,5 -k6,6n $liftOpts \\
+    | grep -v -f ${dupList} >> "\${db}.sorted.fa.out"
+_EOF_
+        );
+      } else {
+        $bossScript->add(<<_EOF_
+tail -n +4 "\${ncbiRmOutFile}" sort -k5,5 -k6,6n $liftOpts >> "\${db}.sorted.fa.out"
+_EOF_
+        );
+      }
+    }
+  } else {	# not using the NCBI supplied file, use local cluster run result
+  my $partDir = "$buildDir/RMPart";
+  my $levels = $opt_debug ? 1 : `cat $partDir/levels`;
+  chomp $levels;
+  # Use symbolic link created in cluster step:
+  my $indent = "";
+  my $path = "";
   # Make the appropriate number of nested foreach's to match the number
   # of levels from the partitioning.  If $levels is 1, no foreach required.
   for (my $l = $levels - 2;  $l >= 0;  $l--) {
@@ -423,11 +534,12 @@ head -3 $db.fa.out > $db.sorted.fa.out
 tail -n +4 $db.fa.out | sort -k5,5 -k6,6n >> $db.sorted.fa.out
 _EOF_
   );
+  }
   $bossScript->add(<<_EOF_
 
 # Use the ID column to join up fragments of interrupted repeats for the
 # Nested Repeats track.  Try to avoid the Undefined id errors.
-($Bin/extractNestedRepeats.pl $db.fa.out 2> nestRep.err || true) | sort -k1,1 -k2,2n > $db.nestedRepeats.bed
+($Bin/extractNestedRepeats.pl $db.sorted.fa.out 2> nestRep.err || true) | sort -k1,1 -k2,2n > $db.nestedRepeats.bed
 if [ -s "nestRep.err" ]; then
   export lineCount=`(grep "Undefined id, line" nestRep.err || true) | cut -d' ' -f6 | wc -l`
    if [ "\${lineCount}" -gt 0 ]; then
@@ -546,15 +658,19 @@ _EOF_
 
   if ($opt_updateTable) {
   $bossScript->add(<<_EOF_
-sed -e 's/nestedRepeats/nestedRepeatsUpdate/g' \$HOME/kent/src/hg/lib/nestedRepeats.sql > nestedRepeatsUpdate.sql
-hgLoadBed \$db nestedRepeats$updateTable \$db.nestedRepeats.bed \\
-  -sqlTable=nestedRepeatsUpdate.sql
+if [ -s \$db.nestedRepeats.bed ]; then
+  sed -e 's/nestedRepeats/nestedRepeatsUpdate/g' \$HOME/kent/src/hg/lib/nestedRepeats.sql > nestedRepeatsUpdate.sql
+  hgLoadBed \$db nestedRepeats$updateTable \$db.nestedRepeats.bed \\
+    -sqlTable=nestedRepeatsUpdate.sql
+fi
 _EOF_
   );
   } else {
   $bossScript->add(<<_EOF_
-hgLoadBed \$db nestedRepeats \$db.nestedRepeats.bed \\
-  -sqlTable=\$HOME/kent/src/hg/lib/nestedRepeats.sql
+if [ -s \$db.nestedRepeats.bed ]; then
+  hgLoadBed \$db nestedRepeats \$db.nestedRepeats.bed \\
+    -sqlTable=\$HOME/kent/src/hg/lib/nestedRepeats.sql
+fi
 _EOF_
   );
   }
@@ -592,17 +708,17 @@ sub doCleanup {
   my $runDir = "$buildDir";
   my $whatItDoes = "It cleans up or compresses intermediate files.";
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
+  my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-if (-e $db.fa.align) then
+if [ -e "$db.fa.align" ]; then
   gzip $db.fa.align
-endif
+fi
 rm -fr RMPart/*
 rm -fr RMPart
-if ( -d /hive/data/genomes/$db/RMPart ) then
+if [ -d "/hive/data/genomes/$db/RMPart" ]; then
    rmdir /hive/data/genomes/$db/RMPart
-endif
+fi
 _EOF_
   );
   $bossScript->execute();
@@ -632,6 +748,9 @@ $unmaskedSeq = $opt_unmaskedSeq ? $opt_unmaskedSeq :
 my $seqCount = `twoBitInfo $unmaskedSeq stdout | wc -l`;
 $chromBased = ($seqCount <= $HgAutomate::splitThreshold) && $opt_splitTables;
 $updateTable = $opt_updateTable ? "Update" : "";
+$ncbiRmsk = $opt_ncbiRmsk ? $opt_ncbiRmsk : "";
+$dupList = $opt_dupList ? $opt_dupList : "";
+$liftSpec = $opt_liftSpec ? $opt_liftSpec : "";
 
 # Do everything.
 $stepper->execute();

@@ -459,6 +459,21 @@ else
 return retVal;
 }
 
+boolean extFileExists(char *path)
+/* Check that a remote URL actually exists, path may be a URL or a local path relative to hub.txt */
+{
+// if the file is local check that it exists:
+if (!hasProtocol(path) && udcExists(path))
+    return TRUE;
+else
+    {
+    // netLineFileSilentOpen will handle 301 redirects and the like
+    if (netLineFileSilentOpen(path) != NULL)
+        return TRUE;
+    }
+return FALSE;
+}
+
 char *makeFolderObjectString(char *id, char *text, char *parent, char *title, boolean children, boolean openFolder)
 /* Construct a folder item for one of the jstree arrays */
 {
@@ -466,7 +481,7 @@ struct dyString *folderString = dyStringNew(0);
 dyStringPrintf(folderString, "{icon: '../../images/folderC.png', id: '%s', "
     "text:\"%s\", parent:'%s',"
     "li_attr:{title:'%s'}, children:%s, state: {opened: %s}}",
-    id, text, parent, title, children ? "true" : "false", openFolder ? "true" : "false");
+    htmlEncode(id), text, htmlEncode(parent), title, children ? "true" : "false", openFolder ? "true" : "false");
 return dyStringCannibalize(&folderString);
 }
 
@@ -477,57 +492,69 @@ char *makeChildObjectString(char *id, char *title, char *shortLabel, char *longL
 struct dyString *item = dyStringNew(0);
 dyStringPrintf(item, "{icon: 'fa fa-plus', id:'%s', li_attr:{class: 'hubError', title: '%s', "
         "shortLabel: '%s', longLabel: '%s', color: '%s', name:'%s'}, "
-        "text:\"%s\", parent: '%s', state: {opened: true}}",
-        id, title, shortLabel, longLabel, color, name, text, parent);
+        "text:'%s', parent: '%s', state: {opened: true}}",
+        htmlEncode(id), title, shortLabel, longLabel, color, name, replaceChars(text, "'", "\\'"), htmlEncode(parent));
 return dyStringCannibalize(&item);
 }
 
-void hubErr(struct dyString *errors, char *message, struct trackHub *hub)
+void hubErr(struct dyString *errors, char *message, struct trackHub *hub, boolean doHtml)
 /* Construct the right javascript for the jstree for a top level hub.txt error. */
 {
-char *sl;
-char *strippedMessage = NULL;
-static int count = 0; // force a unique id for the jstree object
-char id[512];
-//TODO: Choose better default labels
-if (hub && hub->shortLabel != NULL)
-    {
-    sl = hub->shortLabel;
-    }
+if (!doHtml)
+    dyStringPrintf(errors, "%s", message);
 else
-    sl = "Hub Error";
-if (message)
-    strippedMessage = cloneString(message);
-stripChar(strippedMessage, '\n');
-safef(id, sizeof(id), "%s%d", sl, count);
+    {
+    char *sl;
+    char *strippedMessage = NULL;
+    static int count = 0; // force a unique id for the jstree object
+    char id[512];
+    //TODO: Choose better default labels
+    if (hub && hub->shortLabel != NULL)
+        {
+        sl = hub->shortLabel;
+        }
+    else
+        sl = "Hub Error";
+    if (message)
+        strippedMessage = cloneString(message);
+    stripChar(strippedMessage, '\n');
+    safef(id, sizeof(id), "%s%d", sl, count);
 
-// make the error message
-dyStringPrintf(errors, "trackData['%s'] = [%s];\n", sl,
-    makeChildObjectString(id, "Hub Error", sl, sl, "#550073", sl, strippedMessage, sl));
+    // make the error message
+    dyStringPrintf(errors, "trackData['%s'] = [%s];\n", htmlEncode(sl),
+        makeChildObjectString(id, "Hub Error", htmlEncode(sl), htmlEncode(sl), "#550073", htmlEncode(sl), strippedMessage, sl));
 
-// display it by default
-dyStringPrintf(errors, "trackData['#'] = [%s];\n",
-    makeFolderObjectString(sl, "Error getting hub or genomes configuration", "#", "Click to open node", TRUE, TRUE));
-count++;
+    count++;
+    }
 }
 
 void genomeErr(struct dyString *errors, char *message, struct trackHub *hub,
-    struct trackHubGenome *genome)
+    struct trackHubGenome *genome, boolean doHtml)
 /* Construct the right javascript for the jstree for a top-level genomes.txt error or
  * error opening a trackDb.txt file */
 {
-static int count = 0; // forces unique ID's which the jstree object needs
-char id[512];
-char *strippedMessage = NULL;
-char *genomeName = trackHubSkipHubName(genome->name);
-if (message)
-    strippedMessage = cloneString(message);
-stripChar(strippedMessage, '\n');
-safef(id, sizeof(id), "%s%d", genomeName, count);
-
-dyStringPrintf(errors, "trackData['%s'] = [%s", genomeName,
-    makeChildObjectString(id, "Error Getting TrackDb", genomeName, genomeName, "#550073", genomeName, strippedMessage, genomeName));
-count++;
+if (!doHtml)
+    dyStringPrintf(errors, "%s", message);
+else
+    {
+    static int count = 0; // forces unique ID's which the jstree object needs
+    char id[512];
+    char *errorMessages[16];
+    char *strippedMessage = NULL;
+    char *genomeName = trackHubSkipHubName(genome->name);
+    if (message)
+        strippedMessage = cloneString(message);
+    // multiple errors may be in a single message, chop by newline and make a node in the tree for each message
+    int numMessages = chopByChar(strippedMessage, '\n', errorMessages, sizeof(errorMessages));
+    int i = 0;
+    dyStringPrintf(errors, "trackData['%s'] = [", genomeName);
+    for (; i < numMessages && isNotEmpty(errorMessages[i]); i++)
+        {
+        safef(id, sizeof(id), "%s%d", genomeName, count);
+        dyStringPrintf(errors, "%s,", makeChildObjectString(id, "Genome Error", genomeName, genomeName, "#550073", genomeName, errorMessages[i], genomeName));
+        count++;
+        }
+    }
 }
 
 void trackDbErr(struct dyString *errors, char *message, struct trackHubGenome *genome, struct trackDb *tdb, boolean doHtml)
@@ -540,20 +567,35 @@ if (!doHtml)
 else
     {
     char *strippedMessage = NULL;
+    char *splitMessages[16]; // SUBGROUP_MAX=9 but add a few extra just in case
     char parentOrTrackString[512];
     char id[512];
     static int count = 0; // forces unique ID's which the jstree object needs
+    int numMessages = 0;
+    int i = 0;
 
+    // if a subtrack is missing multiple subgroups, then message will contain
+    // at least two newline separated errors, both should be printed separately:
     if (message)
+        {
         strippedMessage = cloneString(message);
+        while (lastChar(strippedMessage) == '\n')
+            trimLastChar(strippedMessage);
+        numMessages = chopByChar(strippedMessage, '\n', splitMessages, sizeof(splitMessages));
+        }
 
-    stripChar(strippedMessage, '\n');
-    safef(id, sizeof(id), "%s%d", trackHubSkipHubName(tdb->track), count);
-    safef(parentOrTrackString, sizeof(parentOrTrackString), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
-    dyStringPrintf(errors, "%s,",
-            makeChildObjectString(id, "TrackDb Error", tdb->shortLabel, tdb->longLabel,
-            "#550073", trackHubSkipHubName(tdb->track), strippedMessage, parentOrTrackString));
-    count++;
+    for (; i < numMessages; i++)
+        {
+        if (isNotEmpty(splitMessages[i]))
+            {
+            safef(id, sizeof(id), "%s%d", trackHubSkipHubName(tdb->track), count);
+            safef(parentOrTrackString, sizeof(parentOrTrackString), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
+            dyStringPrintf(errors, "%s,",
+                    makeChildObjectString(id, "TrackDb Error", tdb->shortLabel, tdb->longLabel,
+                    "#550073", trackHubSkipHubName(tdb->track), splitMessages[i], parentOrTrackString));
+            count++;
+            }
+        }
     }
 }
 
@@ -590,10 +632,7 @@ if (errCatchStart(errCatch))
     // membersForAllSubGroupsGet() warns about the parent stanza, turn it into an errAbort
     if (errCatch->gotWarning)
         {
-        char *temp = cloneString(errCatch->message->string);
-        stripChar(temp, '\n');
-        dyStringClear(errCatch->message);
-        errAbort("%s", temp);
+        errAbort("%s", errCatch->message->string);
         }
 
     if (membersForAll && checkEmptyMembersForAll(membersForAll, tdb->parent))
@@ -773,13 +812,17 @@ if (errCatchStart(errCatch))
 
     if (options->checkFiles)
         hubCheckBigDataUrl(hub, genome, tdb);
+    trackHubAddDescription(genome->trackDbFile, tdb);
+    if (!tdb->html)
+        warn("warning: missing description page for track: '%s'", tdb->track);
     }
 errCatchEnd(errCatch);
-if (errCatch->gotError)
+if (errCatch->gotError || errCatch->gotWarning)
     {
-    trackDbErrorCount += 1;
     retVal = 1;
     trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
+    if (errCatch->gotError)
+        trackDbErrorCount += 1;
     }
 errCatchFree(&errCatch);
 
@@ -819,32 +862,37 @@ boolean openedGenome = FALSE;
 
 if (errCatchStart(errCatch))
     {
+    if (genome->twoBitPath != NULL)
+        {
+        // check that twoBitPath is a valid file, warn instead of errAbort so we can continue checking
+        // the genome stanza
+        char *twoBit = genome->twoBitPath;
+        if (!extFileExists(twoBit))
+            warn("Error: '%s' twoBitPath does not exist or is not accessible: '%s'", genome->name, twoBit);
+
+        // groups and htmlPath are optional settings, again only warn if they are malformed
+        char *groupsFile = genome->groups;
+        if (groupsFile != NULL && !extFileExists(groupsFile))
+            warn("warning: '%s' groups file does not exist or is not accessible: '%s'", genome->name, groupsFile);
+
+        char *htmlPath = hashFindVal(genome->settingsHash, "htmlPath");
+        if (htmlPath == NULL)
+            warn("warning: missing htmlPath setting for assembly hub '%s'", genome->name);
+        else if (!extFileExists(htmlPath))
+            warn("warning: '%s' htmlPath file does not exist or is not accessible: '%s'", genome->name, htmlPath);
+        }
     tdbList = trackHubTracksForGenome(hub, genome);
     tdbList = trackDbLinkUpGenerations(tdbList);
     tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
     trackHubPolishTrackNames(hub, tdbList);
     }
 errCatchEnd(errCatch);
-if (errCatch->gotError)
+if (errCatch->gotError || errCatch->gotWarning)
     {
     openedGenome = TRUE;
-    genomeErrorCount += 1;
-    if (options->htmlOut)
-        {
-        genomeErr(errors, errCatch->message->string, hub, genome);
-        }
-    else
-        dyStringPrintf(errors, "%s", errCatch->message->string);
-    }
-if (errCatch->gotWarning && !errCatch->gotError)
-    {
-    openedGenome = TRUE;
-    if (options->htmlOut)
-        {
-        genomeErr(errors, errCatch->message->string, hub, genome);
-        }
-    else
-        dyStringPrintf(errors, "%s", errCatch->message->string);
+    genomeErr(errors, errCatch->message->string, hub, genome, options->htmlOut);
+    if (errCatch->gotError || errCatch->gotWarning)
+        genomeErrorCount += 1;
     }
 errCatchFree(&errCatch);
 
@@ -900,38 +948,61 @@ int trackHubCheck(char *hubUrl, struct trackHubCheckOptions *options, struct dyS
 {
 struct errCatch *errCatch = errCatchNew();
 struct trackHub *hub = NULL;
+struct dyString *hubErrors = dyStringNew(0);
 int retVal = 0;
 
 if (errCatchStart(errCatch))
     {
     hub = trackHubOpen(hubUrl, "");
+    char *descUrl = hub->descriptionUrl;
+    if (descUrl == NULL)
+        warn("warning: missing hub overview descripton page (descriptionUrl setting)");
+    else if (!extFileExists(descUrl))
+        warn("warning: %s descriptionUrl setting does not exist", hub->descriptionUrl);
     }
 errCatchEnd(errCatch);
-if (errCatch->gotError)
+if (errCatch->gotError || errCatch->gotWarning)
     {
     retVal = 1;
+    hubErr(hubErrors, errCatch->message->string, hub, options->htmlOut);
+
     if (options->htmlOut)
         {
-        hubErr(errors, errCatch->message->string, hub);
+        if (hub && hub->shortLabel)
+            {
+            dyStringPrintf(errors, "trackData['#'] = [%s,",
+                makeFolderObjectString(hub->shortLabel, "Hub Errors", "#",
+                    "Click to open node", TRUE, TRUE));
+            }
+        else
+            {
+            dyStringPrintf(errors, "trackData['#'] = [%s,",
+                makeFolderObjectString("Hub Error", "Hub Errors", "#",
+                    "Click to open node", TRUE, TRUE));
+            }
         }
-    else
-        dyStringPrintf(errors, "%s\n", errCatch->message->string);
     }
-if (errCatch->gotWarning && !errCatch->gotError)
-    dyStringPrintf(errors, "%s", errCatch->message->string);
 errCatchFree(&errCatch);
 
 if (hub == NULL)
+    {
+    // the reason we couldn't close the array in the previous block is because
+    // there may be non-fatal errors and we still want to keep trying to check
+    // the genomes settings, which need to be children of the root '#' node.
+    // Here we are at a fatal error so we can close the array and return
+    if (options->htmlOut)
+        dyStringPrintf(errors, "];\n%s", dyStringCannibalize(&hubErrors));
+    else
+        dyStringPrintf(errors, "%s", dyStringCannibalize(&hubErrors));
     return 1;
+    }
+if (options->htmlOut && retVal != 1)
+    dyStringPrintf(errors, "trackData['#'] = [");
 
 if (options->checkSettings)
     retVal |= hubSettingsCheckInit(hub, options, errors);
 
 struct trackHubGenome *genome;
-
-if (options->htmlOut)
-    dyStringPrintf(errors, "trackData['#'] = [");
-
 int numGenomeErrors = 0;
 char genomeTitleString[128];
 struct dyString *genomeErrors = dyStringNew(0);
@@ -950,7 +1021,10 @@ for (genome = hub->genomeList; genome != NULL; genome = genome->next)
     retVal |= numGenomeErrors;
     }
 if (options->htmlOut)
+    {
     dyStringPrintf(errors, "];\n");
+    }
+dyStringPrintf(errors, "%s", dyStringCannibalize(&hubErrors));
 dyStringPrintf(errors, "%s", dyStringCannibalize(&genomeErrors));
 trackHubClose(&hub);
 return retVal;

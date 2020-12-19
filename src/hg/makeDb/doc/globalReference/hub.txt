@@ -1,0 +1,7 @@
+hub Global Reference Genomes
+shortLabel Human Global Reference Genomes
+longLabel Human Global Reference Genome assembly hub
+genomesFile genomes.txt
+email hclawson@ucsc.edu
+descriptionUrl index.html
+

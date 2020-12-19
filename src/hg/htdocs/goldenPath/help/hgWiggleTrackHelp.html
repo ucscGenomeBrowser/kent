@@ -6,8 +6,6 @@
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <!-- Graph-Based Track Help Page -->
-
-<a name="Topic5"></a><br>
 <h1>Configuring graph-based tracks</h1> 
 <p> 
 Genome Browser graph-based tracks may be configured in a variety of ways to highlight different 
@@ -49,7 +47,18 @@ zero&quot; to &quot;ON&quot;.</p>
   target="_blank">link</a> to interact with the original &quot;auto-scale to data view&quot on
   the left, and to contrast the results with the new &quot;group auto-scale&quot; click this
   <a href="/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.groupAutoScale"
-  target="_blank">link</a>.</li>
+  target="_blank">link</a>.
+  <li>Note that the &quot;group auto-scale&quot setting is meant to be turned on and off at the
+  composite group track set level, but you can toggle individual tracks. For instance,
+  click the second &quot;group auto-scale&quot; session
+  <a href="/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.groupAutoScale"
+  target="_blank">link</a> that has all tracks adjusted to
+  the highest value (67215 for IMR9 cell TAP + 1). If you right-click that individual highest track
+  and instead of configuring the track set, select to configure only the subtrack IMR9 cell TAP + 1
+  from &quot;group auto-scale&quot; to &quot;auto-scale to data view&quot and select OK
+  and then refresh your browser window (or click one of the &quot;refresh&quot; buttons on the
+  screen) you will see all the tracks adjust to the next-highest track within all tracks
+  still tagged to display &quot;group auto-scale&quot (39320 for IMR9 cell + 1).</li>
 </ul>
 <p> 
 <strong>Vertical viewing range (boxed in red)</strong>: The min and max values specify the vertical portion of 

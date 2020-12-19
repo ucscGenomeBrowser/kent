@@ -9,6 +9,8 @@
 #include "trackHub.h"
 #include "errCatch.h"
 #include "ra.h"
+#include "hui.h"
+#include "pipeline.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -19,12 +21,14 @@ errAbort(
   "   hubClone http://url/to/hub.txt\n"
   "options:\n"
   "   -udcDir=/dir/to/udcCache   Path to udc directory\n"
+  "   -download                  Download data files in addition to the hub configuration files\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"udcDir", OPTION_STRING},
+   {"download", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -106,10 +110,12 @@ fprintf(out, "\n");
 hashElFreeList(&helList);
 }
 
-void printTrackDbStanza(struct hash *stanza, FILE *out, char *baseUrl)
+
+void printTrackDbStanza(struct hash *stanza, FILE *out, char *baseUrl, char *downloadDir)
 /* print a trackDb stanza but with relative references replaced by remote links */
 {
 struct hashEl *hel, *helList = hashElListHash(stanza);
+struct dyString *fname = dyStringNew(0);
 fprintf(out, "%s %s\n", "track", (char *)hashFindVal(stanza, "track"));
 for (hel = helList; hel != NULL; hel = hel->next)
     {
@@ -125,7 +131,37 @@ for (hel = helList; hel != NULL; hel = hel->next)
             sameString(hel->name, "searchTrix") ||
             sameString(hel->name, "html")
             )
-            fprintf(out, "%s %s\n", hel->name, trackHubRelativeUrl(baseUrl, hel->val));
+            {
+            char *urlToData = trackHubRelativeUrl(baseUrl, hel->val);
+            if (isNotEmpty(downloadDir))
+                {
+                dyStringClear(fname);
+                char *relName = strrchr(hel->val,'/');
+                if (relName != NULL)
+                    {
+                    relName = relName + 1;
+                    dyStringPrintf(fname, "%s%s", downloadDir, relName);
+                    }
+                else
+                    {
+                    relName = hel->val;
+                    dyStringPrintf(fname, "%s%s", downloadDir, (char *)hel->val);
+                    }
+                fprintf(out, "%s %s\n", hel->name, relName);
+                char *cmd[] = {"wget", "-q", "-O", dyStringContents(fname), urlToData, NULL};
+
+                // use pipelineNoAbort so the loop continues if a url is typo'd or something,
+                // but still warn the user
+                struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+                int ret = pipelineWait(pl);
+                if (ret != 0)
+                    {
+                    warn("wget failed for url: %s", urlToData);
+                    }
+                }
+            else
+                fprintf(out, "%s %s\n", hel->name, urlToData);
+            }
         else
             fprintf(out, "%s %s\n", hel->name, (char *)hel->val);
         }
@@ -145,7 +181,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
 fprintf(out,"\n");
 }
 
-void printOneFile(char *url, FILE *f, boolean oneFile)
+void printOneFile(char *url, FILE *f, boolean oneFile, char *downloadDir)
 /* printOneFile: pass a stanza to appropriate printer */
 {
 struct lineFile *lf;
@@ -165,7 +201,7 @@ while ((stanza = raNextRecord(lf)) != NULL)
         }
     else if (hashLookup(stanza, "track"))
         {
-        printTrackDbStanza(stanza, f, url);
+        printTrackDbStanza(stanza, f, url, downloadDir);
         }
     else
         {
@@ -174,7 +210,7 @@ while ((stanza = raNextRecord(lf)) != NULL)
         if (includeFile != NULL)
             {
             char *newUrl = trackHubRelativeUrl(url, includeFile->val);
-            printOneFile(newUrl, f, oneFile);
+            printOneFile(newUrl, f, oneFile, downloadDir);
             }
         else
             printGenericStanza(stanza, f, url);
@@ -212,16 +248,16 @@ if (stringIn("/", copy))
 return mustOpen(path, "w");
 }
 
-void createWriteAndCloseFile(char *fileName, char *url, boolean useOneFile)
+void createWriteAndCloseFile(char *fileName, char *url, boolean useOneFile, char *downloadDir)
 /* Wrapper around a couple lines */
 {
 FILE *f;
 f = createPathAndFile(fileName);
-printOneFile(url, f, useOneFile);
+printOneFile(url, f, useOneFile, downloadDir);
 carefulClose(&f);
 }
 
-void hubClone(char *hubUrl)
+void hubClone(char *hubUrl, boolean download)
 /* hubClone - Clone the hub text files to a local copy, fixing up bigDataUrls 
  * to remote locations if necessary. */
 {
@@ -232,6 +268,7 @@ char *genomesUrl, *genomesDir, *genomesFileName;
 char *tdbFileName, *tdbFilePath;
 char *path; 
 FILE *f;
+struct dyString *downloadDir = dyStringNew(0);
 boolean oneFile = FALSE;
 
 hubBasePath = cloneString(hubUrl);
@@ -252,7 +289,11 @@ if (trackHubSetting(hub, "useOneFile"))
     makeDirs(hubName);
     path = catTwoStrings(hubName, catTwoStrings("/", hubFileName));
     f = mustOpen(path, "w");
-    printOneFile(hubUrl, f, oneFile);
+    if (download)
+        {
+        dyStringPrintf(downloadDir, "%s/", hubName);
+        }
+    printOneFile(hubUrl, f, oneFile, dyStringContents(downloadDir));
     carefulClose(&f);
     }
 else
@@ -262,14 +303,14 @@ else
         errAbort("error opening %s file", hub->genomesFile);
 
     path = catTwoStrings(hubName, catTwoStrings("/", hubFileName));
-    createWriteAndCloseFile(path, hubUrl, oneFile);
+    createWriteAndCloseFile(path, hubUrl, oneFile, dyStringContents(downloadDir));
 
     genomesUrl = trackHubRelativeUrl(hub->url, hub->genomesFile);
     genomesFileName = catTwoStrings(hubName, catTwoStrings("/", hub->genomesFile));
     char *genomePath = cloneString(genomesFileName);
     chopSuffixAt(genomePath, '/'); // used later for making the right directory structure
 
-    createWriteAndCloseFile(genomesFileName, genomesUrl, oneFile);
+    createWriteAndCloseFile(genomesFileName, genomesUrl, oneFile, dyStringContents(downloadDir));
 
     for (; genome != NULL; genome = genome->next)
         {
@@ -278,9 +319,14 @@ else
 
         // make correct directory strucutre
         genomesDir = catTwoStrings(genomePath, catTwoStrings("/", genome->name));
+        if (download)
+            {
+            dyStringClear(downloadDir);
+            dyStringPrintf(downloadDir, "%s/%s/", hubName, genome->name);
+            }
         tdbFileName = strrchr(genome->trackDbFile, '/') + 1;
         tdbFilePath = catTwoStrings(genomesDir, catTwoStrings("/", tdbFileName));
-        createWriteAndCloseFile(tdbFilePath, genome->trackDbFile, oneFile);
+        createWriteAndCloseFile(tdbFilePath, genome->trackDbFile, oneFile, dyStringContents(downloadDir));
         }
     }
 }
@@ -289,9 +335,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc < 2)
     usage();
+setUdcCacheDir();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
-hubClone(argv[1]);
+hubClone(argv[1], optionExists("download"));
 return 0;
 }

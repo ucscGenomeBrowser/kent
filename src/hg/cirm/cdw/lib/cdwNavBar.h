@@ -8,7 +8,6 @@
 "          <a class=\"dropdown-item white-link\" href=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseTracks\">Tracks</a>\n"
 "          <a class=\"dropdown-item white-link\" href=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseLabs\">Labs</a>\n"
 "          <a class=\"dropdown-item white-link\" href=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseDataSets\">Data sets</a>\n"
-"          <a class=\"dropdown-item white-link\" href=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFormats\">Formats</a>\n"
 "        </div>\n"
 "      </li>\n"
 "      <li class=\"dropdown\">\n"

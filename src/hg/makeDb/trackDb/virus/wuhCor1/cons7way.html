@@ -1,0 +1,289 @@
+<H2>Description</H2>
+<p>
+This track shows multiple alignments of 7 human coronavirus sequences,
+aligned to the $Organism NCBI reference sequence SARS-CoV-2 for 
+<a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512" target="_blank">NC_045512.2</a>,
+genome assembly GCF_009858895.2_ASM985889v3.
+
+The multiple alignments were generated using Multiz and
+other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
+target="_blank">Penn State Bioinformatics</a>
+comparative genomics alignment pipeline.
+</p>
+
+<p>
+In the track display, the sequences are labeled using common names.
+Note the table below to relate these common names to the NCBI assembly
+accession identifier.
+</p>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+Pairwise alignments of each species to the $Organism genome are
+displayed as a series of colored blocks indicating the functional effect of polymorphisms (in pack
+mode), or as a wiggle (in full mode) that indicates alignment quality.
+In dense display mode, percent identity of the whole alignments is shown in grayscale using
+darker values to indicate higher levels of identity.
+<P>
+In pack mode, regions that align with 100% identity are not shown.   When there is not 100% percent
+identity, blocks of four colors are drawn.
+<ul>
+<li><span style="color: #ff0000; font-weight: bold;">Red</span> blocks are
+drawn when a polymorphism in a coding region results in a <strong>change in the amino</strong>
+acid that is generated.</li>
+<li><span style="color: #00cc00; font-weight: bold;">Green</span> blocks are
+drawn when a polymorphism in a coding region results in <strong>no change to the amino
+acid</strong> that is generated.</li>
+<li><span style="color: #0000ff; font-weight: bold;">Blue</span> blocks are
+drawn when a polymorphism is <strong>outside a coding region</strong>.</li>
+<li><span style="color: #cccc33; font-weight: bold;">Pale yellow</span> blocks
+are drawn when there are <strong>no aligning bases</strong> to that region in the reference
+genome.</li>
+</ul>
+<P>
+Checkboxes on the track configuration page allow selection of the
+species to include in the pairwise display.
+Configuration buttons are available to select all of the species
+(<EM>+</EM>), deselect all of the species (<EM>-</EM>), or
+use the default settings (<EM>Reset to defaults</EM>).
+<P>
+For text nucleotide alignments, click on
+the alignment tracks. To view detailed information about the alignments at a specific
+position, zoom to a small region or click the 'base' button to see amino acid alignments.</P>
+
+<H3>Base Level</H3>
+<P>
+When zoomed-in to the base-level display, the track shows the amino acid
+composition of each alignment.
+The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $Organism sequence at those
+alignment positions relative to the longest non-$Organism sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</P>
+<P>
+Codon translation can be turned off in base-level display mode if desired. 
+You can select the species for translation from the pull-down menu in the Codon
+Translation configuration section at the top of the page. Then, select one of
+the following modes:
+<UL>
+<LI>
+<B>No codon translation:</B> The gene annotation is not used; the bases are
+displayed without translation.
+<LI>
+<B>Use default species reading frames for translation:</B> The annotations from
+the genome displayed in the <EM>Default species to establish reading frame</EM>
+pull-down menu are used to translate all the aligned species present in the
+alignment.
+<LI>
+<B>Use reading frames for species if available, otherwise no translation:</B>
+Codon translation is performed only for those species where the region is
+annotated as protein coding.
+<LI><B>Use reading frames for species if available, otherwise use default species:</B>
+Codon translation is done on those species that are annotated as being protein
+coding over the aligned region using species-specific annotation; the remaining
+species are translated using the default species annotation.
+</UL></P>
+
+<H2>Methods</H2>
+<P>
+Pairwise alignments with the reference sequence were generated for
+each sequence using LASTZ version 1.04.03.
+Parameters used for each LASTZ alignment:
+<pre>
+# hsp_threshold      = 3000
+# gapped_threshold   = 3000 = L
+# x_drop             = 910
+# y_drop             = 9400 = Y
+# gap_open_penalty   = 400
+# gap_extend_penalty = 30
+#        A    C    G    T
+#   A   91 -114  -31 -123
+#   C -114  100 -125  -31
+#   G  -31 -125  100 -114
+#   T -123  -31 -114   91
+# seed=1110100110010101111 w/2 transitions
+# step=1
+</pre>
+Pairwise alignments were then linked into chains using a dynamic programming
+algorithm that finds maximally scoring chains of gapless subsections
+of the alignments organized in a kd-tree.  Parameters used in
+the chaining (axtChain) step:
+<pre>
+-minScore=1000 -linearGap=loose</pre></p>
+<P>
+High-scoring chains were then placed along the genome, with
+gaps filled by lower-scoring chains, to produce an alignment net.
+</P>
+<table class='sortable' border='1'>
+<thead><tr><th>count</th>
+<th>sample<br>date</th>
+<th>accession</th>
+<th>phylogenetic<br>distance</th>
+<th>descriptive name</th>
+</thead><tbody>
+<tr><td>1</td><td>2019-12-30</td><td><a href='https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2' target=_blank>NC_045512.2</a></td><td>0.000000</td><td>SARS-CoV-2 (2019)</td></tr>
+<tr><td>2</td><td>2003-04</td><td><a href='https://www.ncbi.nlm.nih.gov/nuccore/NC_004718.3' target=_blank>NC_004718.3</a></td><td>0.885159</td><td>SARS-CoV-1 (Tor2)</td></tr>
+<tr><td>3</td><td>2012-06-13</td><td><a href='https://www.ncbi.nlm.nih.gov/nuccore/NC_019843.3' target=_blank>NC_019843.3</a></td><td>2.434930</td><td>MERS Middle East respiratory syndrome CoV</td></tr>
+<tr><td>4</td><td>2004-03</td><td><a href='https://www.ncbi.nlm.nih.gov/nuccore/NC_006213.1' target=_blank>NC_006213.1</a></td><td>2.589639</td><td>Human CoV OC43 strain ATCC VR-759</td></tr>
+<tr><td>5</td><td>2004-04</td><td><a href='https://www.ncbi.nlm.nih.gov/nuccore/NC_006577.2' target=_blank>NC_006577.2</a></td><td>2.649716</td><td>Human CoV HKU1</td></tr>
+<tr><td>6</td><td>2000-09</td><td><a href='https://www.ncbi.nlm.nih.gov/nuccore/NC_002645.1' target=_blank>NC_002645.1</a></td><td>2.983896</td><td>Human CoV 229E</td></tr>
+<tr><td>7</td><td>2004-03</td><td><a href='https://www.ncbi.nlm.nih.gov/nuccore/NC_005831.2' target=_blank>NC_005831.2</a></td><td>3.009141</td><td>Human Coronavirus NL63</td></tr>
+</tbody></table>
+<P>
+The multiple alignment was constructed from the resulting
+pairwise alignments progressively aligned using
+<a href='http://www.bx.psu.edu/miller_lab/'
+target=_blank>MultiZ/autoMZ</a>.
+The phylogenetic tree was calculated on 31mer frequency similarity
+and neighbor joining that distance matrix with the
+<a href='http://evolution.genetics.washington.edu/phylip.html'
+target=_blank>PHYLIP</a> toolset command:
+<a href='http://evolution.genetics.washington.edu/phylip/progs.data.dist.html'
+target=_blank>neighbor</a>.  The reference sequence NC_045512v2 is at the
+top of the tree:
+<pre>
+((((SARS_CoV_2 SARS_CoV_1) MERS) (OC43 HKU1)) (CoV229E NL63))
+</pre>
+Framing tables from the genes were constructed to enable
+visualization of codons in the multiple alignment display.</P>
+<h2>Data Access</h2>
+<p>
+Downloads for data in this track are available:
+<ul>
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/multiz7way/">Multiz alignments</a>
+(MAF format), and phylogenetic trees</li>
+</ul></p>
+
+
+<H2>Credits</H2>
+<P> This track was created using the following programs:
+<UL>
+<LI> Alignment tools: LASTZ (formerly Blastz) and MultiZ by Minmei Hou, 
+Scott Schwartz, Robert Harris, and Webb Miller of the 
+<A HREF="http://www.bx.psu.edu/miller_lab/"
+TARGET=_blank>Penn State Bioinformatics Group</A>
+<LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
+other programs in PHAST by
+<a href="http://siepellab.labsites.cshl.edu/"
+target="_blank">Adam Siepel</a> at Cold Spring Harbor Laboratory (original development
+done at the Haussler lab at UCSC).
+<LI> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
+<LI> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
+by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
+<LI> Tree image generator: phyloPng by Galt Barber, UCSC
+<LI> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle
+display), and Brian Raney (gap annotation and codon framing) at UCSC
+</UL>
+</P>
+
+<h2>References</h2>
+
+<p>
+Gire SK, Goba A, Andersen KG, Sealfon RS, Park DJ, Kanneh L, Jalloh S, Momoh M,
+Fullah M, Dudas G <em>et al.</em>
+<a href="https://science.sciencemag.org/content/345/6202/1369"
+target="_blank">Genomic surveillance elucidates Ebola virus origin and transmission
+during the 2014 outbreak</a>.
+<em>Science</em> 2014 Sep 12;345(6202):1369-72.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25214632" target="_blank">25214632</a>;
+<a href="https://science.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1"
+target="_blank">Supplemental Materials and Methods</a>
+</p>
+
+<h3>Phylo-HMMs, phastCons, and phyloP:</h3>
+<p>
+Felsenstein J, Churchill GA.
+<a href="https://academic.oup.com/mbe/article/13/1/93/1055515"
+target="_blank">A Hidden Markov Model approach to
+variation among sites in rate of evolution</a>.
+<em>Mol Biol Evol</em>. 1996 Jan;13(1):93-104.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/8583911" target="_blank">8583911</a>
+</p>
+
+<p>
+Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
+<a href="https://genome.cshlp.org/content/20/1/110.long" target="_blank">
+Detection of nonneutral substitution rates on mammalian phylogenies</a>.
+<em>Genome Res</em>. 2010 Jan;20(1):110-21.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19858363" target="_blank">19858363</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2798823/" target="_blank">PMC2798823</a>
+</p>
+
+<p>
+Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
+Clawson H, Spieth J, Hillier LW, Richards S, <em>et al.</em>
+<a href="https://genome.cshlp.org/content/15/8/1034"
+target="_blank">Evolutionarily conserved elements in vertebrate, insect, worm,
+and yeast genomes</a>.
+<em>Genome Res</em>. 2005 Aug;15(8):1034-50.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16024819" target="_blank">16024819</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1182216/" target="_blank">PMC1182216</a>
+</p>
+
+<p>
+Siepel A, Haussler D.
+<a href="http://compgen.cshl.edu/~acs/phylohmm.pdf"
+target="_blank">Phylogenetic Hidden Markov Models</a>.
+In: Nielsen R, editor. Statistical Methods in Molecular Evolution.
+New York: Springer; 2005. pp. 325-351.
+</p>
+
+<p>
+Yang Z.
+<a href="https://www.genetics.org/content/139/2/993"
+target="_blank">A space-time process model for the evolution of DNA
+sequences</a>.
+<em>Genetics</em>. 1995 Feb;139(2):993-1005.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/7713447" target="_blank">7713447</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1206396/" target="_blank">PMC1206396</a>
+</p>
+
+<h3>Chain/Net:</h3>
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="https://www.pnas.org/content/100/20/11484"
+target="_blank">Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
+</p>
+
+<h3>Multiz:</h3>
+<p>
+Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
+Baertsch R, Rosenbloom K, Clawson H, Green ED, <em>et al.</em>
+<a href="https://genome.cshlp.org/content/14/4/708.abstract"
+target="_blank">Aligning multiple genomic sequences with the threaded blockset aligner</a>.
+<em>Genome Res</em>. 2004 Apr;14(4):708-15.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15060014" target="_blank">15060014</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC383317/" target="_blank">PMC383317</a>
+</p>
+
+<h3>LASTZ (formerly Blastz):</h3>
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
+target="_blank">Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002:115-26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+</p>
+
+<p>
+Harris RS.
+<a href="http://www.bx.psu.edu/~rsharris/rsharris_phd_thesis_2007.pdf"
+target="_blank">Improved pairwise alignment of genomic DNA</a>.
+<em>Ph.D. Thesis</em>. Pennsylvania State University, USA. 2007.
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W.
+<a href="https://genome.cshlp.org/content/13/1/103.abstract"
+target="_blank">Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
+</p>

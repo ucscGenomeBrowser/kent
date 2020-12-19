@@ -1920,7 +1920,7 @@ char varName[256];
 safef(varName, sizeof(varName), "%s.label", tdb->track);
 printf("<br><b>Label:</b> ");
 labelMakeCheckBox(cart, tdb, "gene", "gene symbol", TRUE);
-labelMakeCheckBox(cart, tdb, "acc", "accession", FALSE);
+labelMakeCheckBox(cart, tdb, "acc", "accession", TRUE);
 struct sqlConnection *conn = hAllocConn(database);
 boolean omimAvail = sqlQuickNum(conn,
                                 NOSQLINJ"select 1 from ncbiRefSeqLink where omimId != 0 limit 1");
@@ -3088,6 +3088,87 @@ if (jsonGlobalsHash == NULL)
 jsonObjectAdd(jsonGlobalsHash, name, ele);
 }
 
+void showSupertrackInfo(struct trackDb *tdb)
+{
+// A bit of context when we're in hierarchy: parent description and sibling track list
+
+if (!tdb->parent)
+    return;
+
+// show super-track info
+struct trackDb *tdbParent = tdb->parent;
+
+printf("<b>Track collection: "
+           "<img height=12 src='../images/ab_up.gif'>"
+            "<a href='%s?%s=%s&c=%s&g=%s'>%s </b></a>",
+            hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+            chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
+printf("<p>");
+
+if (tdbParent->html)
+    {
+    // collapsed panel for Description
+    printf("<p><table>");  // required by jsCollapsible
+    jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
+                                            "medium");
+    char *html = replaceChars(tdbParent->html, "<H", "<h");
+    html = replaceChars(html, "</H", "</h");
+
+    // remove Description header
+    html = replaceChars(html, "<h2>Description</h2>", "");
+    html = replaceChars(html, "<h3>Description</h3>", "");
+    html = replaceChars(html, "<h1>Description</h1>", "");
+
+    // remove everything after Description text
+    char *end = stringIn("<h2>", html);
+    if (!end)
+        end = stringIn("<h1>", html);
+    if (!end)
+        end = stringIn("<h3>", html);
+    if (end)
+        *end = '\0';
+    printf("%s", html);
+    printf("<p><i>To view the full description, click "
+                "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</i></a>\n",
+                        hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                        chromosome, cgiEncode(tdbParent->track));
+    jsEndCollapsibleSection();
+    printf("</table>"); // required by jsCollapsible
+    }
+
+// collapsed panel for list of other tracks in the supertrack
+
+char listTitle[1000];
+safef(listTitle, sizeof listTitle, "All tracks in this collection (%d)", 
+                    slCount(tdbParent->children));
+printf("<table>");  // required by jsCollapsible
+jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superMembers", listTitle, FALSE, "medium");
+printf("<table cellpadding='2' style='margin-left: 50px';>");
+struct slRef *childRef;
+tdbRefSortPrioritiesFromCart(cart, &tdbParent->children);
+for (childRef = tdbParent->children; childRef != NULL; childRef = childRef->next)
+    {
+    struct trackDb *sibTdb = childRef->val;
+    if (sameString(sibTdb->track, tdb->track))
+        {
+        printf("<tr><td><b>%s</b></td>\n", sibTdb->shortLabel);
+        printf("<td>%s</td></tr>\n", sibTdb->longLabel);
+        continue;
+        }
+    printf("<tr>");
+    printf("<td><a href='%s?%s=%s&c=%s&g=%s'>%s</a>&nbsp;</td>", 
+                tdbIsDownloadsOnly(sibTdb) ? hgFileUiName(): hTrackUiForTrack(sibTdb->track),
+                cartSessionVarName(), cartSessionId(cart), chromosome, cgiEncode(sibTdb->track), 
+                sibTdb->shortLabel);
+    printf("<td>%s</td></tr>\n", sibTdb->longLabel);
+    }
+printf("</table>");
+jsEndCollapsibleSection();
+printf("</table>"); // required by jsCollapsible
+printf("<hr>");
+printf("</p>");
+}
+
 void trackUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Put up track-specific user interface. */
 {
@@ -3099,6 +3180,7 @@ if (!ajax)
     jsIncludeFile("utils.js",NULL);
     webIncludeResourceFile("spectrum.min.css");
     jsIncludeFile("spectrum.min.js",NULL);
+    jsIncludeFile("jquery.tablednd.js", NULL);
     jsonObjectAddGlobal("track", newJsonString(tdb->track));
     jsonObjectAddGlobal("db", newJsonString(database));
     }
@@ -3118,7 +3200,10 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     {
     //struct trackDb *tdbParent = tdbFillInAncestry(cartString(cart, "db"),tdb);
     if (tdb->html != NULL && tdb->html[0] != 0)
+        {
+        printRelatedTracks(database,trackHash,tdb,cart);
         puts(tdb->html);
+        }
     else
         {
         struct trackDb *tdbParent = tdb->parent;
@@ -3129,6 +3214,7 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
             {
             printf("<h2 style='color:%s'>Retrieved from %s Track...</h2>\n",
                    COLOR_DARKGREEN,tdbParent->shortLabel);
+            printRelatedTracks(database,trackHash,tdb,cart);
             puts(tdbParent->html);
             }
         else
@@ -3146,6 +3232,8 @@ if (tdbIsContainer(tdb))
     else if (!ajax) // Overkill on !ajax, because ajax shouldn't be called for a composite
         cartTdbTreeReshapeIfNeeded(cart,tdb);
     }
+
+/* track configuration form */
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
@@ -3194,24 +3282,17 @@ else
                "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
     // set large title font size, but less so for long labels to minimize wrap
     printf("<B style='font-size:%d%%;'>%s%s</B>\n", strlen(tdb->longLabel) > 30 ? 133 : 200,
-                tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+                tdb->longLabel, tdbIsSuper(tdb) ? " tracks" : "");
 
     }
+
+
 /* Print link for parent track */
 if (!ajax)
     {
-    if (tdb->parent)
+    if (!tdb->parent)
         {
-        char *encodedMapName = cgiEncode(tdb->parent->track);
-        printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
-               "(<A HREF=\"%s?%s=%s&c=%s&g=%s\" title='Link to parent track'>"
-               "<IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
-               hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-               chromosome, encodedMapName, tdb->parent->shortLabel);
-        freeMem(encodedMapName);
-        }
-    else
-        {
+        // show group info
         struct grp *grp, *grps = hLoadGrps(database);
         for (grp = grps; grp != NULL; grp = grp->next)
             {
@@ -3229,8 +3310,12 @@ if (!ajax)
             }
         grpFreeList(&grps);
         }
+
     }
 puts("<BR><BR>");
+
+if (tdbIsSuperTrackChild(tdb))
+    showSupertrackInfo(tdb);
 
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
@@ -3348,7 +3433,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
         enum browserType browser = cgiBrowser();
         if (browser == btIE || browser == btFF)
             downArrow = "&darr;";
-        printf("&nbsp;&nbsp;<A HREF='#DISPLAY_SUBTRACKS' TITLE='Jump to subtracks section of "
+        printf("&nbsp;&nbsp;<A HREF='#DISPLAY_SUBTRACKS' TITLE='Jump to subtrack list section of "
                "page'>Subtracks%s</A>", downArrow);
         printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
                "Description%s</A>", downArrow);
@@ -3392,6 +3477,7 @@ if (!ct)
     {
     /* Print data version setting, if any */
     cgiDown(0.7);
+    printRelatedTracks(database,trackHash,tdb,cart);
     printDataVersion(database, tdb);
 
     /* Print lift information from trackDb, if any */
@@ -3529,8 +3615,6 @@ if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
    }
-char *title = (tdbIsSuper(tdb) ? "Super-track Settings" :
-               tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html
@@ -3542,7 +3626,24 @@ if(cartOptionalString(cart, "ajax"))
     }
 else
     {
-    cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);
+    char title[1000];
+    if (tdb->parent)
+        {
+        safef(title, sizeof title, 
+                        // TODO: replace in-line styling with class
+                "<span style='background-color: #c3d4f4; "
+                    "padding-left: 10px; padding-right: 10px;"
+                    "margin-right: 10px; margin-left: -8px;'>"
+                       "%s</span> %s", 
+                tdb->parent->shortLabel, tdb->shortLabel);
+        }
+    else
+        safef(title, sizeof title, "%s", tdb->shortLabel);
+    char *titleEnd = (tdbIsSuper(tdb) ? "Tracks" :
+               tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
+    htmlNoEscape();     // allow HTML tags to format title blue bar (using short label)
+    cartWebStart(cart, database, "%s %s", title, titleEnd);
+    htmlDoEscape();
     trackUi(tdb, tdbList, ct, FALSE);
     printf("<BR>\n");
     jsonPrintGlobals();

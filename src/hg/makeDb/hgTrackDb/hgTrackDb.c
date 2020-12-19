@@ -458,7 +458,8 @@ char* val = (char*)el->val;
 /* Only some attribute support variable substitution, at least for now
  * Just leak memory when doing substitution.
  */
-if (sameString(el->name, "bigDataUrl") || sameString(el->name, "searchTrix"))
+if (sameString(el->name, "bigDataUrl") || sameString(el->name, "searchTrix") ||
+    sameString(el->name, "xrefDataUrl"))
     {
     val = replaceChars(val, "$D", database);
     }
@@ -871,6 +872,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	    }
 	}
 
+    sqlUpdate(conn, NOSQLINJ "flush tables");
     sqlDisconnect(&conn);
     verbose(1, "Loaded database %s\n", database);
     }

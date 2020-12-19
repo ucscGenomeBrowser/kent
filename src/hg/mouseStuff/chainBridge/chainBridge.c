@@ -25,6 +25,8 @@ errAbort(
   "usage:\n"
   "   chainBridge in.chain target.2bit query.2bit out.chain\n"
   "options:\n"
+  "   -diffTolerance=D  Don't try to extend when a 2-sided gap's longer side is Dx\n"
+  "                     longer than its shorter side (default: %0.1f, i.e. %d%% longer)\n"
   "   -maxGap=N  Maximum size of double-sided gap to try to bridge (default: %d)\n"
   "              Note: there is no size limit for exact sequence matches\n"
   "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file\n"
@@ -33,13 +35,14 @@ errAbort(
   "              medium is mouse/human linear gap costs.\n"
   "              Or specify a piecewise linearGap tab delimited file.\n"
   "              (default: loose)\n"
-  , maxGapSize
+  , diffTolerance, (int)(diffTolerance * 100), maxGapSize
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] =
 {
+    { "diffTolerance", OPTION_DOUBLE },
     { "maxGap", OPTION_INT },
     { "scoreScheme", OPTION_STRING },
     { "linearGap", OPTION_STRING },
@@ -262,6 +265,114 @@ if (blk->tEnd > blk->tStart && blk->qEnd > blk->qStart)
     slAddHead(pBlockList, blk);
 }
 
+static int countNonGap(char *s)
+/* Return the number of non-gap characters in s. */
+{
+int nonGap = 0;
+while (*s != '\0')
+    if (*s++ != '-')
+        nonGap++;
+return nonGap;
+}
+
+static void fillInFromBlocks(struct chain *chainNew, struct chain *chainOld, struct cBlock *blocks)
+/* Fill in chainNew using seq data from chainOld and coord data from blocks (don't free anything). */
+{
+ZeroVar(chainNew);
+struct cBlock *lastBlk = blocks;
+while (lastBlk->next)
+    lastBlk = lastBlk->next;
+chainNew->blockList = blocks;
+chainNew->tName = chainOld->tName;
+chainNew->tSize = chainOld->tSize;
+chainNew->tStart = blocks->tStart;
+chainNew->tEnd = lastBlk->tEnd;
+chainNew->qName = chainOld->qName;
+chainNew->qSize = chainOld->qSize;
+chainNew->qStrand = chainOld->qStrand;
+chainNew->qStart = blocks->qStart;
+chainNew->qEnd = lastBlk->qEnd;
+chainNew->id = chainOld->id;
+}
+
+static struct cBlock *extendThroughGap(struct chain *chain, struct cBlock *blk,
+                                       struct chromStrandSeq *tCss, struct chromStrandSeq *qCss)
+/* Use bandExt (both forward and reverse) to extend the alignment through the gap after blk,
+ * if possible.  Return alignment block(s) for best attempt. */
+{
+struct cBlock *extBlocks = NULL;
+// Provide a little context for bandExt input sequences:
+int overlap = 5;
+// Alignment parameters for bandExt:
+boolean global = FALSE;
+int bandExtForward = 1, bandExtReverse = -1;
+int maxInsert = maxGapSize/10;
+int symAlloc = 2 * maxGapSize;
+// Get gap sequence and coords for alignment.
+struct dnaSeq *tSeq = chromStrandSeqGetDnaSeq(tCss, chain->tName, '+');
+struct dnaSeq *qSeq = chromStrandSeqGetDnaSeq(qCss, chain->qName, chain->qStrand);
+int tGapStart = blk->tEnd, tGapEnd = blk->next->tStart;
+int qGapStart = blk->qEnd, qGapEnd = blk->next->qStart;
+int tAliStart = tGapStart - overlap, tAliEnd = tGapEnd + overlap;
+int qAliStart = qGapStart - overlap, qAliEnd = qGapEnd + overlap;
+if (tAliStart < 0 || tAliEnd > chain->tSize || qAliStart < 0 || qAliEnd > chain->qSize)
+    errAbort("chainBridgeOne: program error, need more sophisticated overlap arithmetic");
+// Align both forward and reverse since bandExt won't find a good match way at the other end
+// past a long gap (it's meant for seeded alignments).
+char tSymF[symAlloc+1], qSymF[symAlloc+1], tSymR[symAlloc+1], qSymR[symAlloc+1];
+int symCountF = 0, symCountR = 0;
+struct cBlock *extBlocksF = NULL, *extBlocksR = NULL;
+if (bandExt(global, scoreScheme, maxInsert, tSeq->dna + tAliStart, tAliEnd - tAliStart,
+            qSeq->dna + qAliStart, qAliEnd - qAliStart,
+            bandExtForward, symAlloc, &symCountF, tSymF, qSymF, NULL, NULL))
+    extBlocksF = cBlocksFromAliSym(symCountF, qSymF, tSymF, qAliStart, tAliStart);
+if (bandExt(global, scoreScheme, maxInsert, tSeq->dna + tAliStart, tAliEnd - tAliStart,
+            qSeq->dna + qAliStart, qAliEnd - qAliStart,
+            bandExtReverse, symAlloc, &symCountR, tSymR, qSymR, NULL, NULL))
+    {
+    // tSymR and qSymR are anchored at the end, not the start, of aligned sequences.
+    int tSymStart = tAliEnd - countNonGap(tSymR);
+    int qSymStart = qAliEnd - countNonGap(qSymR);
+    extBlocksR = cBlocksFromAliSym(symCountR, qSymR, tSymR, qSymStart, tSymStart);
+    }
+if (extBlocksF == NULL || (extBlocksF->next == NULL && extBlocksF->tEnd == tGapStart))
+    {
+    extBlocks = extBlocksR;
+    slFreeList(&extBlocksF);
+    }
+else if (extBlocksR == NULL || (extBlocksR->next == NULL && extBlocksR->tStart == tGapEnd))
+    {
+    extBlocks = extBlocksF;
+    slFreeList(&extBlocksR);
+    }
+else
+    {
+    // Something was found in both directions.  Treat both as chains; compare bounds and scores.
+    struct chain chainF, chainR;
+    fillInFromBlocks(&chainF, chain, extBlocksF);
+    fillInFromBlocks(&chainR, chain, extBlocksR);
+    if (chainR.tStart >= chainF.tEnd && chainR.qStart >= chainF.qEnd)
+        extBlocks = slCat(extBlocksF, extBlocksR);
+    else
+        {
+        // Could look for a crossover point but nah - just use the higher scoring chain.
+        chainF.score = chainCalcScore(&chainF, scoreScheme, gapCalc, qSeq, tSeq);
+        chainR.score = chainCalcScore(&chainR, scoreScheme, gapCalc, qSeq, tSeq);
+        if (chainF.score >= chainR.score)
+            {
+            extBlocks = extBlocksF;
+            slFreeList(&extBlocksR);
+            }
+        else
+            {
+            extBlocks = extBlocksR;
+            slFreeList(&extBlocksF);
+            }
+        }
+    }
+return extBlocks;
+}
+
 static void chainBridgeOne(struct chain *chain,
                            struct chromStrandSeq *tCss, struct chromStrandSeq *qCss, FILE *outF)
 /* Iterate through gaps; merge blocks separated by double-sided gaps with identical sequence
@@ -270,14 +381,6 @@ static void chainBridgeOne(struct chain *chain,
 {
 if (chain == NULL || chain->blockList == NULL || chain->blockList->next == NULL)
     return;
-// Provide a little context for bandExt input sequences:
-int overlap = 5;
-// Alignment parameters for bandExt:
-boolean global = FALSE;
-int dir = 1;  // +1 for forward, -1 for reverse
-int maxInsert = maxGapSize/10;
-int symAlloc = 2 * maxGapSize;
-int symCount = 0;
 boolean changed = FALSE;
 struct cBlock *newBlockList = NULL;
 struct cBlock *blk = chain->blockList, *nextBlk = blk->next;
@@ -287,63 +390,49 @@ for ( ; blk != NULL; blk = nextBlk)
     changed |= tryTrivialExtend(chain, blk, tCss, qCss, &nextBlk);
     if (canExtend(blk))
         {
-        char *tChrom = chromStrandSeqGetSeq(tCss, chain->tName, '+');
-        char *qChrom = chromStrandSeqGetSeq(qCss, chain->qName, chain->qStrand);
-        int tGapStart = blk->tEnd, tGapEnd = blk->next->tStart;
-        int qGapStart = blk->qEnd, qGapEnd = blk->next->qStart;
-        int tAliStart = tGapStart - overlap, tAliEnd = tGapEnd + overlap;
-        int qAliStart = qGapStart - overlap, qAliEnd = qGapEnd + overlap;
-        if (tAliStart < 0 || tAliEnd > chain->tSize || qAliStart < 0 || qAliEnd > chain->qSize)
-            errAbort("chainBridgeOne: program error, need more sophisticated overlap arithmetic");
-        char tSym[symAlloc+1], qSym[symAlloc+1];
-        if (bandExt(global, scoreScheme, maxInsert, tChrom + tAliStart, tAliEnd - tAliStart,
-                    qChrom + qAliStart, qAliEnd - qAliStart,
-                    dir, symAlloc, &symCount, tSym, qSym, NULL, NULL))
+        struct cBlock *extBlocks = extendThroughGap(chain, blk, tCss, qCss);
+        if (maybeMergeBlocks(blk, extBlocks))
             {
-            struct cBlock *extBlocks = cBlocksFromAliSym(symCount, qSym, tSym,
-                                                         qAliStart, tAliStart);
-            if (maybeMergeBlocks(blk, extBlocks))
+            // The first extended block merged with blk; if there was only one ext block,
+            // can we also merge in nextBlk?
+            freeMem(slPopHead(&extBlocks));
+            if (!extBlocks && maybeMergeBlocks(blk, nextBlk))
                 {
-                // The first extended block merged with blk; if there was only one ext block,
-                // can we also merge in nextBlk?
-                freeMem(slPopHead(&extBlocks));
-                if (!extBlocks && maybeMergeBlocks(blk, nextBlk))
-                    {
-                    // A single extBlock completely bridged the gap between blk and nextBlk.
-                    // Splice out nextBlk and repeat with blk.
-                    blk->next = nextBlk->next;
-                    freeMem(nextBlk);
-                    nextBlk = blk;
-                    continue;
-                    }
+                // A single extBlock completely bridged the gap between blk and nextBlk.
+                // Splice out nextBlk and repeat with blk.
+                blk->next = nextBlk->next;
+                freeMem(nextBlk);
+                nextBlk = blk;
+                changed = TRUE;
+                continue;
                 }
-            // Done with blk.
-            trimAndAddBlock(&newBlockList, blk);
-            if (extBlocks)
-                {
-                // Add additional extBlocks before the final extBlock
-                while (extBlocks->next)
-                    trimAndAddBlock(&newBlockList, slPopHead(&extBlocks));
-                if (maybeMergeBlocks(extBlocks, nextBlk))
-                    {
-                    // The final extended block merged with nextBlk; splice out nextBlk
-                    // and repeat with final extended block.
-                    extBlocks->next = nextBlk->next;
-                    freeMem(nextBlk);
-                    nextBlk = extBlocks;
-                    }
-                else
-                    {
-                    // The final extended block didn't merge with nextBlk.  Done with final
-                    // extended block, on to nextBlk.
-                    trimAndAddBlock(&newBlockList, extBlocks);
-                    }
-                }
-            changed = TRUE;
-            continue;
             }
+        // Done with blk.
+        trimAndAddBlock(&newBlockList, blk);
+        if (extBlocks)
+            {
+            // Add additional extBlocks before the final extBlock
+            while (extBlocks->next)
+                trimAndAddBlock(&newBlockList, slPopHead(&extBlocks));
+            if (maybeMergeBlocks(extBlocks, nextBlk))
+                {
+                // The final extended block merged with nextBlk; splice out nextBlk
+                // and repeat with final extended block.
+                extBlocks->next = nextBlk->next;
+                freeMem(nextBlk);
+                nextBlk = extBlocks;
+                }
+            else
+                {
+                // The final extended block didn't merge with nextBlk.  Done with final
+                // extended block, on to nextBlk.
+                trimAndAddBlock(&newBlockList, extBlocks);
+                }
+            }
+        changed = TRUE;
         }
-    trimAndAddBlock(&newBlockList, blk);
+    else
+        trimAndAddBlock(&newBlockList, blk);
     }
 slReverse(&newBlockList);
 chain->blockList = newBlockList;
@@ -385,6 +474,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
+diffTolerance = optionDouble("diffTolerance", diffTolerance);
 maxGapSize = optionInt("maxGap", maxGapSize);
 char *gapFileName = optionVal("linearGap", NULL);
 if (isNotEmpty(gapFileName))

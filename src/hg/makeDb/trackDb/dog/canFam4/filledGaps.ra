@@ -1,0 +1,8 @@
+
+track filledGaps
+shortLabel Gaps filled
+longLabel gaps from canFam3 filled by canFam4 assembly
+group map
+visibility hide
+color 24,120,24
+type bed 3 .

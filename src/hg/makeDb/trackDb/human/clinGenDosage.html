@@ -1,0 +1,133 @@
+<H2>Description</H2>
+<p>
+
+<div class="warn-note" style="border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;">
+<p><span style="font-weight: bold; color: #c70000;">NOTE:</span><br>
+<b>These data are for research purposes only. While the ClinGen data are 
+open to the public, users seeking information about a personal medical or 
+genetic condition are urged to consult with a qualified physician for 
+diagnosis and for answers to personal medical questions.
+</p>
+<p> 
+UCSC presents these data for use by qualified professionals, and even 
+such professionals should use caution in interpreting the significance of 
+information found here. No single data point should be taken at face 
+value and such data should always be used in conjunction with as much 
+corroborating data as possible. No treatment protocols should be 
+developed or patient advice given on the basis of these data without 
+careful consideration of all possible sources of information.
+</p>
+<p> 
+No attempt to identify individual patients should 
+be undertaken. No one is authorized to attempt to identify patients 
+by any means.
+</p> 
+</b>
+</div>
+
+<p>
+The <b>ClinGen Dosage Sensitivity</b> dataset shows evidence supporting or refuting 
+<b>haploinsufficiency (loss)</b> and <b>triplosensitivity (gain)</b> as mechanisms for disease at 
+gene-level and larger genomic regions.
+</p>
+<p>
+A <b>rating system</b> is used to classify the <b>evidence</b> supporting or refuting dosage 
+sensitivity for individual genes and regions, which takes in consideration the following criteria: 
+number of causative mutations reported, patterns of inheritance, consistency of phenotype, evidence 
+from large-scale case-control studies, mutational mechanisms, data from public genome variation 
+databases, and expert consensus opinion.
+</p>
+<p> 
+The system is intended to be of a "dynamic nature", with regions being reevaluated periodically to 
+incorporate emerging evidence. The evidence collected is displayed within a publicly available 
+<a target="_blank" href="https://search.clinicalgenome.org/kb/gene-dosage">database</a>. Evidence 
+that haploinsufficiency or triplosensitivity of a gene is associated with a specific 
+phenotype will aid in the interpretive assessment of CNVs including that gene.
+</p>
+<p> 
+There are two subtracks in this track set:
+<ul>
+<li><b>ClinGen Haploinsufficiency:</b> genes/regions associations to haploinsufficiency</li>
+<li><b>ClinGen Triplosensitivity:</b> genes/regions associations to triplosensitivity</li>
+</ul>
+</p>
+<p>
+<h2>Display Conventions and Configuration</h2>
+<p>
+<b>Scores</b> are used to classify the evidence of the supporting dosage sensitivity map:
+<dl>
+<dd><b>0</b> - no evidence available</dd>
+<dd><b>1</b> - little evidence for dosage pathogenicity</dd>
+<dd><b>2</b> - some evidence for dosage pathogenicity</dd>
+<dd><b>3</b> - sufficient evidence for dosage pathogenicity</dd>
+<dd><b>30</b> - gene associated with autosomal recessive phenotype</dd>
+<dd><b>40</b> - dosage sensitivity unlikely</dd>
+</dl>
+</p>
+<p>
+For more information on the use of the scores see the ClinGen 
+<a target="_blank" href="https://clinicalgenome.org/tools/cnv-webinar/faq/">FAQs</a>.
+Items are shaded according to dosage sensitivity type. <b><font color="red">red</font></b> for haploinsufficiency,
+<b><font color="blue">blue</font></b> for triplosensitivity, <B><font color="#8649c4">violet</font></b> 
+for associations with autosomal recessive phenotypes, and <B><font color="#a8a8a8">grey</font></b> 
+for genes/regions that have not been evaluated yet or no evidence is available. A light to dark 
+gradient color is used according to the degree of supporting evidence. 
+</p>
+<p>
+Mouseover on items shows the supporting evidence of dosage sensitivity and respective scores. All 
+tracks can be filtered according to the supporting evidence of dosage sensitivity.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>,
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis, the data may 
+be queried from our REST API. Please refer to our 
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our <a href="../FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a> for more
+information.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thank you to ClinGen and NCBI, especially Erin Rooney Riggs for technical coordination and 
+consultation, and to Christopher Lee, Anna Benet-Pages, and Maximilian Haeussler of the Genome 
+Browser team for engineering the track display.
+</p>
+
+<h2>References</h2>
+
+<p>
+Rehm HL, Berg JS, Brooks LD, Bustamante CD, Evans JP, Landrum MJ, Ledbetter DH, Maglott DR, Martin
+CL, Nussbaum RL <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/26014595" target="_blank">
+ClinGen--the Clinical Genome Resource</a>.
+<em>N Engl J Med</em>. 2015 Jun 4;372(23):2235-42.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26014595" target="_blank">26014595</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4474187/" target="_blank">PMC4474187</a>
+</p>
+
+ <p>
+Riggs ER, Church DM, Hanson K, Horner VL, Kaminsky EB, Kuhn RM, Wain KE, Williams ES, Aradhya S,
+Kearney HM <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/22097934" target="_blank">
+Towards an evidence-based process for the clinical interpretation of copy number variation</a>.
+<em>Clin Genet</em>. 2012 May;81(5):403-12.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22097934" target="_blank">22097934</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5008023/" target="_blank">PMC5008023</a>
+</p>
+
+<p>
+Strande NT, Riggs ER, Buchanan AH, Ceyhan-Birsoy O, DiStefano M, Dwight SS, Goldstein J, Ghosh R,
+Seifert BA, Sneddon TP <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/28552198" target="_blank">
+Evaluating the Clinical Validity of Gene-Disease Associations: An Evidence-Based Framework Developed
+by the Clinical Genome Resource</a>.
+<em>Am J Hum Genet</em>. 2017 Jun 1;100(6):895-906.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28552198" target="_blank">28552198</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5473734/" target="_blank">PMC5473734</a>
+</p>
+
+
+
+

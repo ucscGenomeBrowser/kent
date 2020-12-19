@@ -78,6 +78,7 @@ UTILS_APPLIST = \
 	paraSync \
 	pslLiftSubrangeBlat \
 	pslPosTarget \
+	pslRemoveFrameShifts \
 	pslScore \
 	pslToPslx \
 	randomLines \
@@ -100,13 +101,13 @@ UTILS_APPLIST = \
 	timing \
 	toLower \
 	toUpper \
+        trackDbIndexBb \
 	twoBitDup \
 	twoBitInfo \
 	twoBitToFa \
 	wigCorrelate \
 	wigToBigWig \
 	wordLine \
-	chromToUcsc
 
 # list of utilities to build of interest only at UCSC
 
@@ -144,9 +145,10 @@ UCSC_APPS = \
 	udcCleanup \
 	undupFa \
 	upper \
+	vcfFilter \
 	venn \
 	verticalSplitSqlTable \
-	weedLines \
+	weedLines
 
 
 # list of scripts to install
@@ -154,10 +156,13 @@ UCSC_APPS = \
 USER_APP_SCRIPTS = \
 	bedJoinTabOffset.py \
 	expMatrixToBarchartBed \
+	barChartMaxLimit \
 	ucscApiClient \
 	tdbRename \
 	tdbSort \
-	webSync
+	webSync \
+	chromToUcsc \
+	bigHeat
 
 SCRIPT_FILES = \
 	agpToLift \
@@ -195,6 +200,9 @@ SCRIPT_FILES = \
 	doLocusName \
 	cancerMafToBigBed \
 	pq \
+	bedAppendPaperInfo \
+	googleSheetToBigBed \
+	doClinvarLift \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build

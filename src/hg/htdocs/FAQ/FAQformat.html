@@ -25,6 +25,7 @@
       <li><a href="#format9.3">bigMaf table format</a></li>
       <li><a href="#format9.4">bigChain table format</a></li>
       <li><a href="#format9.5">bigNarrowPeak table format</a></li>
+      <li><a href="#format9.6">bigLolly table format</a></li>
       <li><a href="#format6.1">bigWig format</a></li>
       <li><a href="../goldenPath/help/chain.html">Chain format</a></li>
     </ul>
@@ -466,7 +467,7 @@ Here is a brief description of the GFF fields:</p>
   <strong>score</strong> - A score between 0 and 1000. If the track line <em>useScore</em> attribute
   is set to 1 for this annotation data set, the <em>score</em> value will determine the level of 
   gray in which this feature is displayed (higher numbers = darker gray). If there is no score 
-  value, enter &quot:.&quot:.        
+  value, enter &quot.&quot.        
   <li>
   <strong>strand</strong> - Valid entries include &quot;+&quot;, &quot;-&quot;, or &quot;.&quot; 
   (for don't know/don't care).</li>        
@@ -1189,6 +1190,14 @@ format supported using the <a href="FAQformat.html#format1.5">bigBed</a> format,
 efficiently accessed over a network.</p> 
 <p>
 Click <a href="../goldenPath/help/bigNarrowPeak.html">here</a> for more information on the bigNarrowPeak
+format.</p>
+
+<a name="format9.6"></a>
+<h2>bigLolly format</h2>
+<p>
+bigLolly is a format used to draw a lollipop chart.  The data format is a standard bigBed format where by default the score is used to decide how high to draw the lollipop.   There are also trackDb options to specify which fields to use for the height and width of the lollipop, as well as to draw lines on the graph.
+<p>
+Click <a href="../goldenPath/help/bigLolly.html">here</a> for more information on the bigLolly
 format.</p>
 
 <a name="format10"></a>

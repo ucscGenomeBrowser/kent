@@ -1,6 +1,7 @@
 <h2>Description</h2>
 
-<div class="warn-note" style="border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;">
+<div class="warn-note" style="border: 2px solid #9e5900; padding: 5px 20px;
+                              background-color: #ffe9cc;">
 <p><span style="font-weight: bold; color: #c70000;">NOTE:</span><br> 
 LOVD is intended for use primarily by physicians and other
 professionals concerned with genetic disorders, by genetics researchers, and
@@ -33,8 +34,8 @@ to the details page on the particular LOVD server reporting this variant.
 </p>
 
 <p>
-Since Nov 2019, similar to the ClinVar track, the data is split into two subtracks, for variants with a length of
-&lt;= 100bp and &gt;100bp, respectively.
+Since Apr 2020, similar to the ClinVar track, the data is split into two subtracks, for variants
+with a length of &lt; 50 bp and &gt;= 50 bp, respectively.
 </p>
 
 <p>
@@ -46,34 +47,40 @@ curators are spread over the whole world. Most LOVD databases report at least
 some of their content back to Leiden to allow global cross-database search, which
 is, among others, exported to this UCSC Genome Browser track every month.
 </p>
-<p>A few LOVD databases are entirely missing from this track. Reasons include configuration issues and 
-intentionally blocked data search. During the last check in June 2015, the following databases did not export any variants:
-http://www.ucl.ac.uk/ldlr/Current/,
-http://brca.iarc.fr/LOVD/,
-http://bioinf4.fcm.unicamp.br/LOVD/,
-http://vitigene.igib.res.in,
-http://fishmap2.igib.res.in/mirlovd/,
-http://www.medgen.mcgill.ca/nndi/,
-http://sysbio.org.cn/,
-http://genome.igib.res.in/PGx/,
-http://www-huge.uni-regensburg.de/BEST1_database/,
-http://genome.igib.res.in/tblovd/,
-https://ab-openlab.csir.res.in/mitolsdb/,
-http://genome.igib.res.in/snolovd/,
-http://www.genomed.org/lovd2/,
-http://skingenetics.igib.res.in/,
-http://mitodyn.org/. Curators who want to share data in their database so it is present in this track can find more details in the <a href="http://www.lovd.nl/3.0/faq#FAQ18">LOVD FAQ</a></p>
+<p>
+A few LOVD databases are entirely missing from this track. Reasons include configuration issues and
+intentionally blocked data search. During the last check in November 2019, the following databases
+did not export any variants:
+<ul>
+  <li>
+    <a href="http://www.ucl.ac.uk/ldlr/Current/"
+    target="_blank">http://www.ucl.ac.uk/ldlr/Current/</a></li>
+  <li>
+    <a href="http://sysbio.org.cn/en/index.php" target="_blank">http://sysbio.org.cn/</a></li>
+  <li>
+    <a href="https://ab-openlab.csir.res.in/mitolsdb/home.php"
+    target="_blank">https://ab-openlab.csir.res.in/mitolsdb/</a></li>
+</ul>
+
+Curators who want to share data in their database so it is present in this track can find more
+details in the <a href="http://www.lovd.nl/3.0/faq#FAQ18" target="_blank">LOVD FAQ</a>.</p>
 
 
 <h2>Batch queries</h2>
 <p>The LOVD data is not available for download or for batch queries in the Table Browser. 
 However, it is available for programmatic access via the <a href="https://ga4gh.org/#/beacon">Global
 Alliance Beacon API</a>, a web service that accepts queries in the form
-(genome, chromosome, position, allele) and returns "true" or "false" depending on whether there
-is information about this allele in the database. For more details see our 
-<a href="hgBeacon">Beacon Server</a>. </p>
-<p>To find all LOVD databases that contain variants of a given gene, you can get a list of databases by constructing a url in the format geneSymbol.lovd.nl, for example, <a href="https://grenada.lumc.nl/LSDB_list/lsdbs/TP53">tp53.lovd.nl</a>. You can then use the LOVD API to retrieve more detailed information from a particular database. See the <a href="http://www.lovd.nl/3.0/faq#FAQ15">LOVD FAQ</a>. 
-</p>
+(genome, chromosome, position, allele) and returns &quot;true&quot; or &quot;false&quot; depending
+on whether there is information about this allele in the database. For more details see our 
+<a href="hgBeacon" target="_blank">Beacon Server</a>.</p>
+
+<p>
+To find all LOVD databases that contain variants of a given gene, you can get a list of databases by
+constructing a url in the format geneSymbol.lovd.nl, for example,
+<a href="https://grenada.lumc.nl/LSDB_list/lsdbs/TP53" target="_blank">tp53.lovd.nl</a>. You can
+then use the LOVD API to retrieve more detailed information from a particular database. See the
+<a href="http://www.lovd.nl/3.0/faq#FAQ15">LOVD FAQ</a>.</p>
+
 <h2>Display Conventions and Configuration</h2>
 
 <p>
@@ -85,13 +92,21 @@ mutated from G to A at position 172.
 </p>
 
 <p>
-Since October 2017, the functional effect for variants is shown on the
-details page, if annotated. The possible
-values are: notClassified, functionAffected, notThisDisease, notAnyDisease,
-functionProbablyAffected, functionProbablyNotAffected, functionNotAffected
-unknown. LOVD does not use the term "pathogenic", please see the <a
-href="http://varnomen.hgvs.org/bg-material/basics/">HGVS Terminology page</a> for more details.
-</p>
+Since October 2017, the functional effect for variants is shown on the details page, if annotated.
+The possible values are:
+<ul>
+  <li>notClassified</li>
+  <li>functionAffected</li>
+  <li>notThisDisease</li>
+  <li>notAnyDisease</li>
+  <li>functionProbablyAffected</li>
+  <li>functionProbablyNotAffected</li>
+  <li>functionNotAffected</li>
+  <li>unknown</li>
+</ul>
+LOVD does not use the term &quot;pathogenic&quot;, please see the <a
+href="http://varnomen.hgvs.org/bg-material/basics/" target="_blank">HGVS Terminology page</a> for
+more details.</p>
 
 <p>
 All other information is shown on the respective LOVD variation page, accessible via the
@@ -107,9 +122,8 @@ The mappings displayed in this track were provided by LOVD.
 <h2>Credits</h2>
 
 <p>
-Thanks to the LOVD team, Ivo Fokkema, Peter Taschner, Johan den Dunnen, and all LOVD curators who gave permission to 
-show their data.
-</p>
+Thanks to the LOVD team, Ivo Fokkema, Peter Taschner, Johan den Dunnen, and all LOVD curators who
+gave permission to show their data.</p>
 
 <h2>References</h2>
 

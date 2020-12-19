@@ -6,6 +6,7 @@
 # urgent databases
 hg38
 hg19
+mm39
 mm10
 rn6
 # 
@@ -201,6 +202,7 @@ taeGut1
 tarSyr1
 tetNig1
 vicPac1
+wuhCor1
 xenTro7
 xenTro3
 xenTro2

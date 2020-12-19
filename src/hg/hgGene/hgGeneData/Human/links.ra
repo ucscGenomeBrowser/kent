@@ -104,12 +104,13 @@ idSql select Id from geneNetworkId, knownToRefSeq where Id = value and name='%s'
 url http://www.genenetwork.org/webqtl/WebQTL.py?cmd=sch&refseq=%s&species=human
 priority 10
 
-name stanfordSource
-shortLabel Stanford SOURCE
-tables kgXref
-idSql select mRNA from kgXref where kgID = '%s'
-url http://smd.stanford.edu/cgi-bin/source/sourceResult?organism=Hs&option=Number&criteria=%s&choice=Gene
-priority 10
+# stopped working in late 2020
+#name stanfordSource
+#shortLabel Stanford SOURCE
+#tables kgXref
+#idSql select mRNA from kgXref where kgID = '%s'
+#url http://smd.stanford.edu/cgi-bin/source/sourceResult?organism=Hs&option=Number&criteria=%s&choice=Gene
+#priority 10
 
 name nextProt
 shortLabel neXtProt
@@ -139,3 +140,11 @@ idSql SELECT ggSymbol.geneSymbol FROM hgFixed.ggSymbol, kgXref where (kgXref.gen
 url hgGeneGraph?gene=%s
 hgsid on
 priority 2
+
+name myGene2
+shortLabel myGene2
+tables knownToMyGene2
+idSql select value from knownToMyGene2 where name = '%s'
+url https://mygene2.org/MyGene2/variantsbygene?gene=%s
+priority 10
+

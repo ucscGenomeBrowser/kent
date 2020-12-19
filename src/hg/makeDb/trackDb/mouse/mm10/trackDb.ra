@@ -371,12 +371,10 @@ group varRep
 type vcfTabix
 visibility hide
 priority 11.5
-hapClusterHeight 78
-hapClusterEnabled off
+hapClusterHeight 360
+hapClusterEnabled on
+hapClusterMethod fileOrder
 maxWindowToDraw 1000000
-
-track crisprAllTargets override
-pennantIcon New red ../goldenPath/newsarch.html#110519 Released Nov. 5, 2019
 
 track nestedRepeats override
 group varRep
@@ -419,7 +417,6 @@ visibility hide
 urlLabel EPDnew link:
 bedNameLabel Promoter ID
 exonArrows on
-pennantIcon New red
 
     track epdNewPromoter
     shortLabel EPDnew v6

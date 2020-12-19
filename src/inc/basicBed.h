@@ -321,4 +321,9 @@ boolean asCompareObjAgainstStandardBed(struct asObject *asYours, int numColumnsT
 void loadAndValidateBed(char *row[], int wordCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt);
 /* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject. */
 
+void loadAndValidateBedExt(char *row[], int bedFieldCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt,  boolean allow1bpOverlap);
+/* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject. Possibly allow one base overlap in exons */
+
+int itemRgbColumn(char *column9);
+/* Convert color specification to internal format. */
 #endif /* BASICBED_H */

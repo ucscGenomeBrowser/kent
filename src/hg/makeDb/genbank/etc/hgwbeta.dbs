@@ -6,6 +6,7 @@
 # urgent databases
 hg38
 hg19
+mm39
 mm10
 rn6
 # 
@@ -28,7 +29,7 @@ caePb2
 caeRem3
 calJac3
 calMil1
-canFam3
+canFam5
 cavPor3
 cb3
 ce11
@@ -79,6 +80,7 @@ musFur1
 myoLuc2
 nanPar1
 nasLar1
+neoSch1
 nomLeu3
 ochPri3
 oreNil2
@@ -87,7 +89,7 @@ oryCun2
 oryLat2
 otoGar3
 oviAri4
-panPan2
+panPan3
 panTro6
 papAnu4
 papHam1
@@ -130,6 +132,8 @@ bosTau2
 caePb1
 caeRem2
 calJac1
+canFam4
+canFam3
 canFam2
 canFam1
 cb1
@@ -185,6 +189,7 @@ ochPri2
 ornAna1
 oviAri3
 oviAri1
+panPan2
 panPan1
 panTro5
 panTro4
@@ -211,6 +216,7 @@ taeGut1
 tarSyr1
 tetNig1
 vicPac1
+wuhCor1
 xenTro7
 xenTro3
 xenTro2

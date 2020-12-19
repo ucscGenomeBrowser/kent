@@ -18,9 +18,10 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         parent refSeqComposite off
         color 12,12,120
         shortLabel RefSeq All
-        longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, NP_* or YP_*)
+        longLabel NCBI RefSeq genes, curated and predicted (NM_*, XM_*, NR_*, XR_*, NP_*, YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
+        baseColorDefault genomicCodons
         priority 1
 
         track ncbiRefSeqCurated
@@ -30,6 +31,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
+        baseColorDefault genomicCodons
         priority 2
 
         track ncbiRefSeqPredicted
@@ -39,13 +41,14 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
+        baseColorDefault genomicCodons
         priority 3
 
         track ncbiRefSeqOther
         color 32,32,32
         parent refSeqComposite off
         shortLabel RefSeq Other
-        longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
+        longLabel NCBI RefSeq Other Annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
         priority 4
         searchIndex name
         searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
@@ -85,25 +88,6 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb
         itemRgb on
 
-        track ncbiRefSeqHgmd
-        parent refSeqComposite off
-        priority 7
-        type genePred
-        shortLabel RefSeq HGMD
-        longLabel Only NCBI RefSeq manually annotated transcripts with at least one HGMD clinical variant
-        trackHandler ncbiRefSeq
-        idXref ncbiRefSeqLink mrnaAcc name
-        color 20,20,160
-        baseColorUseCds given
-
-        track ncbiRefSeqMane
-        parent refSeqComposite off
-        priority 8
-        type genePred
-        shortLabel RefSeq MANE
-        longLabel RefSeq selected representative transcript for each gene, MANE 0.5
-        trackHandler ncbiRefSeq
-
         track refGene override
         parent refSeqComposite off
         shortLabel UCSC RefSeq
@@ -112,7 +96,21 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         type genePred refPep refMrna
         idXref hgFixed.refLink mrnaAcc name
         dataVersion 
+        priority 7
+        baseColorUseCds given
+        baseColorDefault genomicCodons
+
+        track ncbiRefSeqHgmd
+        parent refSeqComposite off
         priority 9
+        type genePred
+        shortLabel RefSeq HGMD
+        longLabel NCBI RefSeq HGMD subset: transcripts with clinical variants in HGMD
+        trackHandler ncbiRefSeq
+        idXref ncbiRefSeqLink mrnaAcc name
+        color 20,20,160
+        baseColorUseCds given
+        baseColorDefault genomicCodons
 
 searchName ncbiRefSeqCuratedName2
 searchTable ncbiRefSeqCurated

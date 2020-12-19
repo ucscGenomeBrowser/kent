@@ -1,0 +1,119 @@
+#!/usr/bin/env python2
+
+import logging, sys, optparse
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+
+from unidecode import unidecode # not installed? Install with "pip install unidecode" possibly followed by --user
+
+sys.path.append("/hive/data/inside/pubs/tools/lib/")
+from pubStore import lookupArticleByPmid
+#from pubMap import makeRefString
+from pubGeneric import dictToRefString, firstAuthor
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("usage: %prog [options] inBed pmidColumnIdx outBed - add information on a PMID, journal, author, abstract, to a BED file that has a PMID column. pmidColumnIdx is 0-based.")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("", "--db", dest="db", action="store",
+            help="directory where articles.db is stored. Used /dev/shm to speed up lookups by 100x."
+                "Default will use 'medline' relative to ~/.pubConf directory.", default="medline")
+    parser.add_option("", "--pmidIdx", dest="pmidColIdx", action="store", type="int",
+            help="field with PMID, default is last field", default=-1)
+    parser.add_option("", "--geneIdx", dest="geneIdx", action="store", type="int",
+            help="field with gene, default is no gene field", default=None)
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+
+def shortenString(s, maxLen=255, onlyFirst=False):
+    """ if string is longer than 255 chars, take first 125+'...'+last 125 chars """
+    if len(s) > maxLen:
+        if onlyFirst:
+            s = s[:maxLen] + "..."
+        else:
+            s = s[:((maxLen/2)-3)]+"..."+s[-(maxLen/2):]
+    return s
+
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    inBedFname, outBedFname = args
+    pmidColIdx = int(options.pmidColIdx)
+    geneIdx = options.geneIdx
+
+    ofh = open(outBedFname, "w")
+
+    artCache = {}
+    gene = None
+
+    lCount = 0
+    for line in open(inBedFname):
+        line = line.decode("latin1")
+        if lCount % 1000 == 0:
+            print("%d rows written" % lCount)
+            ofh.flush()
+        lCount += 1
+
+        row = line.rstrip("\n").split("\t")
+        pmid = row[pmidColIdx]
+
+        if geneIdx:
+            gene = row[geneIdx]
+
+        if pmid in artCache:
+            artInfo = artCache[pmid] # saves a little time
+        else:
+            artInfo = lookupArticleByPmid([options.db], pmid)
+            artCache[pmid] = artInfo
+
+        ref = dictToRefString(artInfo)
+
+        # The UCSC browser only handles latin1, but the name field can only contain ASCII
+        row[3] = unidecode(row[3])
+        lineStart = "\t".join(row)
+        lineStart = lineStart.encode("latin1")
+
+        newRow = []
+        newRow.append(shortenString(artInfo["title"], maxLen=10000))
+        newRow.append(shortenString(artInfo["authors"]))
+        newRow.append(ref)
+        newRow.append(artInfo["doi"])
+        newRow.append(shortenString(artInfo["abstract"], maxLen=10000))
+
+        if gene:
+            prefix = gene+ ":"+row[3]
+        else:
+            prefix = row[3]
+
+        mouseOver = prefix + " in: "+firstAuthor(artInfo["authors"])+ " "+ str(artInfo["year"]) + " - " + \
+            shortenString(artInfo["title"], maxLen=150, onlyFirst=True)
+        newRow.append(mouseOver)
+
+        newLine = u"\t".join(newRow)
+        try:
+            newLine = newLine.encode("latin1")
+        except UnicodeEncodeError:
+            newLine = unidecode(newLine) # if we cannot encode it in latin1, use the hand-built translation tables
+
+        fullLine = lineStart+"\t"+newLine
+
+        ofh.write(fullLine)
+        ofh.write("\n")
+
+main()

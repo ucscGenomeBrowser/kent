@@ -1,10 +1,10 @@
-# Regulation group: Enhancer/Gene map from ENCODE 3 (Ren Lab) with EPDNew promoters
+# Regulation group: Enhancer-Gene map from ENCODE 3 (Ren Lab) with EPDNew promoters
 
 track encode3RenEnhancerEpdNewPromoter
 html encode3RenEnhancerGene
 compositeTrack on
-shortLabel ENC+EPD Enhc/Gene
-longLabel Enhancer/gene map from ENCODE 3 (UCSD/Ren) with promoters from EPDnew
+shortLabel ENC+EPD Enhc-Gene
+longLabel Enhancer-gene map from ENCODE 3 (UCSD/Ren) with promoters from EPDnew
 subGroup1 view View a_enhancer=Enhancers b_promoter=Promoters c_interaction=Interactions d_cluster=Interaction_Clusters
 subGroup2 set Set a_REP=Replicated b_ALL=All
 sortOrder set=+ view=+
@@ -12,7 +12,6 @@ dimensions dimX=set dimY=view
 type bed 3
 visibility hide
 group regulation
-pennantIcon New red ../goldenPath/newsarch.html#110119 Track Released Nov. 1, 2019
 wgEncode 1
 
     track egPromoterView
@@ -28,14 +27,14 @@ wgEncode 1
 
         track egPromoterRep
         shortLabel Promoters Rep
-        longLabel EPDnew promoters in replicated enhancer/gene associations from ENCODE 3 (UCSD/Ren)
+        longLabel EPDnew promoters in replicated enhancer-gene associations from ENCODE 3 (UCSD/Ren)
         bigDataUrl /gbdb/mm10/encode3/encode3RenInteractEpdPromoterRep.bb
         parent egPromoterView
         subGroups set=a_REP view=b_promoter
 
         track egPromoterAll
         shortLabel Promoters All
-        longLabel EPDnew promoters in all enhancer/gene associations from ENCODE 3 (UCSD/Ren)
+        longLabel EPDnew promoters in all enhancer-gene associations from ENCODE 3 (UCSD/Ren)
         bigDataUrl /gbdb/mm10/encode3/encode3RenInteractEpdPromoterAll.bb
         parent egPromoterView off
         subGroups set=b_ALL view=b_promoter
@@ -50,14 +49,14 @@ wgEncode 1
 
         track egEnhancerRep
         shortLabel Enhancers Rep
-        longLabel Replicated enhancers in enhancer/gene map from ENCODE 3 (UCSD/Ren)
+        longLabel Replicated enhancers in enhancer-gene map from ENCODE 3 (UCSD/Ren)
         bigDataUrl /gbdb/mm10/encode3/encode3RenInteractEnhancerRep.bb
         parent egEnhancerView
         subGroups set=a_REP view=a_enhancer
 
         track egEnhancerAll
         shortLabel Enhancers All
-        longLabel All enhancers in enhancer/gene map from ENCODE 3 (UCSD/Ren)
+        longLabel All enhancers in enhancer-gene map from ENCODE 3 (UCSD/Ren)
         bigDataUrl /gbdb/mm10/encode3/encode3RenInteractEnhancerAll.bb
         parent egEnhancerView off
         subGroups set=b_ALL view=a_enhancer

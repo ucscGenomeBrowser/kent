@@ -1,0 +1,64 @@
+track ncbiGeneBGP
+shortLabel NCBI Genes
+longLabel NCBI Genes from NC_045512.2
+group genes
+visibility hide
+priority 1
+color 12,12,120
+type bigGenePred 
+bigDataUrl /gbdb/wuhCor1/bbi/ncbi/genes.bb
+labelFields geneName2,geneName,geneId,product
+baseColorUseCds given
+exonNumbers off
+baseColorDefault genomicCodons
+urls product=https://www.ncbi.nlm.nih.gov/protein/$$ geneId=https://www.ncbi.nlm.nih.gov/gene/$$
+#urlLabel NCBI Refseq protein
+mouseOverField note
+searchIndex name
+searchTrix /gbdb/wuhCor1/ncbiSearch.ix
+
+track ncbiProducts
+shortLabel NCBI Proteins
+longLabel NCBI Proteins: annotated mature peptide products
+group genes
+visibility hide
+priority 1
+color 12,12,120
+type bigGenePred 
+bigDataUrl /gbdb/wuhCor1/bbi/ncbi/peptides.bb
+labelFields geneName,product
+baseColorUseCds given
+exonNumbers off
+baseColorDefault genomicCodons
+urls product=https://www.ncbi.nlm.nih.gov/protein/$$ geneId=https://www.ncbi.nlm.nih.gov/gene/$$
+#urlLabel NCBI Refseq protein
+mouseOverField note
+searchIndex name
+searchTrix /gbdb/wuhCor1/ncbiProducts.ix
+
+track ncbiOther
+shortLabel NCBI Other
+longLabel NCBI Other Annotations (not related to proteins)
+group genes
+visibility hide
+priority 1
+color 12,12,120
+type bigBed 12 + 
+bigDataUrl /gbdb/wuhCor1/bbi/ncbi/other.bb
+#labelFields geneName2,geneName,geneId,product
+exonNumbers off
+urls product=https://www.ncbi.nlm.nih.gov/protein/$$ geneId=https://www.ncbi.nlm.nih.gov/gene/$$
+#urlLabel NCBI Refseq protein
+mouseOverField note
+
+searchTable ncbiProducts
+searchType bigBed
+searchMethod fuzzy
+searchDescription NCBI Proteins
+searchPriority 1.3
+
+searchTable ncbiGeneBGP
+searchType bigBed
+searchMethod fuzzy
+searchDescription NCBI Genes
+searchPriority 1.3

@@ -268,6 +268,9 @@ struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query);
 void sqlFreeResult(struct sqlResult **pRes);
 /* Free up a result. */
 
+int sqlCountRows(struct sqlResult *sr);
+/* on a sqlResult that was obtained with sqlStoreResult, return number of rows */
+
 int sqlCountColumns(struct sqlResult *sr);
 /* Count the number of columns in result. */
 

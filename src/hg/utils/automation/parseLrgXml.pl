@@ -11,16 +11,21 @@ use XML::LibXML;
 use Data::Dumper; #print Data::Dumper->Dump([$dom], [qw(dom)]);
 
 my $assemblyPrefix = shift @ARGV;
+my $workdir = shift @ARGV;
+if (not defined $workdir) { $workdir = "./";}
 
 sub usage {
   my ($status) = @_;
   my $base = $0;
   $base =~ s/^(.*\/)?//;
   print STDERR "
-usage: $base assemblyPrefix
+usage: $base assemblyPrefix pathToFiles
     Parses LRG_*.xml files in current directory into BED (LRG regions)
     and genePred+Cdna+Pep (transcripts in LRG coordinates.)
     assemblyPrefix is something like \"GRCh37\" to match GRCh37.p5 etc.
+
+    If pathToFiles is present, look for pathToFiles/LRG_*.xml files. pathToFiles
+    defaults to the current working directory.
 
 ";
   exit $status;
@@ -37,15 +42,29 @@ my %gbAccToHg19Alt = ( gl000250 => 'chr6_apd_hap1',
                        gl000258 => 'chr17_ctg5_hap1',
                      );
 
-sub findAssemblyMappings {
+sub findAccession($$$$) {
+  my ($annotationSets, $fixedId, $transType, $nodeId) = @_;
+  my $transcript = "";
+  foreach my $s (@$annotationSets) {
+    my $type = $s->findvalue('@type');
+    if ($type eq $transType) {
+    my @transcripts = $s->findnodes($nodeId . '[@fixed_id="' . $fixedId . '"]');
+       foreach my $p (@transcripts) {
+	  $transcript = $p->findvalue('@accession');
+       }
+    }
+  }
+  return $transcript;
+} # findAccession()
+
+sub findAssemblyMappings($$) {
   # Return the dom node(s) of the <mapping> for the desired assembly (disregarding GRC patch suffix)
-  my ($dom, $assemblyPrefix) = @_;
+  my ($assemblyPrefix, $annotationSets) = @_;
   my @mappings = ();
-  my @annotationSets = $dom->findnodes("/lrg/updatable_annotation/annotation_set");
-  # There are usually several annotation sets; the one with source/name "LRG" has
+# There are usually several annotation sets; the one with source/name "LRG" has
   # the reference assembly mapping that we're looking for;
   my $lrgMapping;
-  foreach my $s (@annotationSets) {
+  foreach my $s (@$annotationSets) {
     my $name = $s->findvalue("source/name");
     if ($name eq "LRG") {
       my @mappingNodes = $s->findnodes("mapping");
@@ -78,7 +97,8 @@ sub parseOneLrg {
   my ($xmlIn, $bedF, $gpF, $cdnaF, $pepF) = @_;
   my $dom = XML::LibXML->load_xml( location => $xmlIn );
 
-  my @refMappings = findAssemblyMappings($dom, $assemblyPrefix);
+  my @annotationSets = $dom->findnodes("/lrg/updatable_annotation/annotation_set");
+  my @refMappings = findAssemblyMappings($assemblyPrefix, \@annotationSets);
   if (@refMappings == 0) {
     die "LRG mapping for $assemblyPrefix not found in $xmlIn.";
   }
@@ -211,12 +231,15 @@ sub parseOneLrg {
   } # each refMapping
 
   # Now convert fixed transcript annotation to genePredExt and fasta for mrna and protein.
+
   my @fixedTs = $dom->findnodes('/lrg/fixed_annotation/transcript');
   foreach my $t (@fixedTs) {
     my $txStart = $t->findvalue('coordinates/@start') - 1;
     my $txEnd = $t->findvalue('coordinates/@end');
     my $txStrand = ($t->findvalue('coordinates/@strand') < 0) ? '-' : '+';
     my $tN = $t->findvalue('@name');
+    my $ncbiTranscript = findAccession(\@annotationSets, $tN, "ncbi", "features/gene/transcript");
+    my $ensemblTranscript = findAccession(\@annotationSets, $tN, "ensembl", "features/gene/transcript");
     my $txName = $lrgName . $tN;
     # There may be multiple coding regions for different transcripts (or no coding regions
     # for non-coding gene loci).  LRG_321.xml has an interesting assortment of coding regions,
@@ -225,6 +248,8 @@ sub parseOneLrg {
     # first given.
     my ($cdsStart, $cdsEnd);
     my $pN = $tN;  $pN =~ s/^t/p/ || die;
+    my $ncbiProtein = findAccession(\@annotationSets, $pN, "ncbi", "features/gene/transcript/protein_product");
+    my $ensemblProtein = findAccession(\@annotationSets, $pN, "ensembl", "features/gene/transcript/protein_product");
     my @codingRegions = $t->findnodes('coding_region[translation/@name="' . $pN . '"]');
     if (@codingRegions == 0) {
       @codingRegions = $t->findnodes('coding_region');
@@ -266,8 +291,9 @@ sub parseOneLrg {
     }
     my $cmpl = ($cdsStart != $cdsEnd) ? "cmpl" : "none";
     print $gpF join("\t", $txName, $lrgName, $txStrand, $txStart, $txEnd, $cdsStart, $cdsEnd,
-		    scalar(@exonStarts), join(",", @exonStarts).",", join(",", @exonEnds).",",
-		    0, $hgncSymbol, $cmpl, $cmpl, join(",", @exonFrames).",") . "\n";
+	scalar(@exonStarts), join(",", @exonStarts).",", join(",", @exonEnds).",",
+	0, $hgncSymbol, $cmpl, $cmpl, join(",", @exonFrames).",",
+    $ncbiTranscript, $ensemblTranscript, $ncbiProtein, $ensemblProtein) . "\n";
 
     print $cdnaF "$txName\t" . $t->findvalue('cdna/sequence') . "\n";
 
@@ -285,9 +311,9 @@ if (! $assemblyPrefix) {
   usage(1);
 }
 
-my @xmlFiles = <LRG_*.xml>;
+my @xmlFiles = <"$workdir/LRG_*.xml">;
 if (@xmlFiles == 0) {
-  warn "No LRG_*.xml files found in current directory -- need to cd somewhere?\n";
+  warn "No LRG_*.xml files found in $workdir -- need to cd somewhere?\n";
 }
 
 open(my $bedF, "| sort -k1,1 -k2n,2n >lrg.bed")

@@ -64,8 +64,8 @@ while (lineFileNextReal(lf, &term))
     struct vcfRow *row = hgvsToVcfRow(db, term, doLeftShift, dyError);
     if (row)
         slAddHead(&rowList, row);
-    else
-        fprintf(f, "# %s\n", dyStringContents(dyError));
+    else // comments cannot come after the VCF header, so ensure errors report to stderr
+        fprintf(stderr, "# %s\n", dyStringContents(dyError));
     }
 // Reverse so that when multiple terms map to a position, they are more or less in the
 // same order that we saw in the input.

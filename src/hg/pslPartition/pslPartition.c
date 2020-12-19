@@ -4,7 +4,7 @@
  * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "options.h"
-#include "pipeline.h"
+#include "partitionSort.h"
 #include "psl.h"
 #include "dystring.h"
 #include "portable.h"
@@ -16,17 +16,18 @@ static struct optionSpec optionSpecs[] =
     {"outLevels", OPTION_INT},
     {"partSize", OPTION_INT},
     {"dropContained", OPTION_BOOLEAN},
+    {"parallel", OPTION_INT},
     {NULL, 0}
 };
 static int gOutLevels = 0;
 static int gPartSize = 20000;
 static boolean gDropContained = FALSE;
+static int gParallel = 0;
 
-static void usage(char *msg)
+static void usage()
 /* Explain usage and exit. */
 {
-errAbort("Error: %s\n"
-  "pslPartition - split PSL files into non-overlapping sets\n"
+errAbort("pslPartition - split PSL files into non-overlapping sets\n"
   "usage:\n"
   "   pslPartition [options] pslFile outDir\n"
   "\n"
@@ -45,7 +46,8 @@ errAbort("Error: %s\n"
   "   overlapping PSLs.\n"
   "  -dropContained - drop PSLs that are completely contained in a block of\n"
   "   another PSL.\n"
-  "\n", msg);
+  "  -parallel=n - use this many cores for parallel sorting\n"
+  "\n");
 }
 
 struct pslInput
@@ -56,31 +58,12 @@ struct pslInput
     struct psl *pending;     /* next psl to read, if not NULL */
 };
 
-static struct pipeline *openPslSortPipe(char *pslFile)
-/* open pipeline that sorts psl */
-{
-static char *zcatCmd[] = {"zcat", NULL};
-static char *bzcatCmd[] = {"zcat", NULL};
-static char *sortCmd[] = {"sort", "-k", "14,14", "-k", "16,16n", "-k", "17,17nr", NULL};
-int iCmd = 0;
-char **cmds[3];
-
-if (endsWith(pslFile, ".gz") || endsWith(pslFile, ".Z"))
-    cmds[iCmd++] = zcatCmd;
-else if (endsWith(pslFile, ".bz2"))
-    cmds[iCmd++] = bzcatCmd;
-cmds[iCmd++] = sortCmd;
-cmds[iCmd++] = NULL;
-
-return pipelineOpen(cmds, pipelineRead, pslFile, NULL);
-}
-
 static struct pslInput *pslInputNew(char *pslFile)
 /* create object to read PSLs */
 {
 struct pslInput *pi;
 AllocVar(pi);
-pi->pl = openPslSortPipe(pslFile);
+pi->pl = partitionSortOpenPipeline(pslFile, 13, 15, 16, gParallel);
 pi->lf = pipelineLineFile(pi->pl);
 return pi;
 }
@@ -287,10 +270,11 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
-    usage("wrong # args");
+    usage();
 gOutLevels = optionInt("outLevels", gOutLevels);
 gPartSize = optionInt("partSize", gPartSize);
 gDropContained = optionExists("dropContained");
+gParallel = optionInt("parallel", gParallel);
 pslPartition(argv[1], argv[2]);
 return 0;
 }

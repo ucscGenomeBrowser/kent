@@ -107,8 +107,8 @@ target="_blank">here</a> to view this track in the Genome Browser.</p>
 <p>
 <strong><em>Example #2:</em></strong>
 Here is an example of an annotation file that defines 2 separate annotation tracks in BED format. 
-The first track displays blue one-base tick marks every 10000 bases on chr 22. The second track 
-displays red 100-base features alternating with blank space in the same region of chr 22. 
+The first track displays blue one-base tick marks every 10000 bases on chr22. The second track 
+displays red 100-base features alternating with blank space in the same region of chr22. 
 <pre><code>browser position chr22:20100000-20140000
 track name=spacer description="Blue ticks every 10000 bases" color=0,0,255,
 #chrom chromStart chromEnd
@@ -603,7 +603,7 @@ The following track line attribute=value pairs are defined in the Genome Browser
   <strong>group=<<em>group</em>></strong> - Defines the annotation track group in which the custom 
   track will display in the Genome Browser window. By default, <em>group</em> is set to 
   &quot;user&quot;, which causes custom tracks to display at the top of the track listing in the 
-  group &quot;Custom Tracks".  The value for &quot;group&quot; <strong>must</strong> be the 
+  group &quot;Custom Tracks&quot;.  The value for &quot;group&quot; <strong>must</strong> be the
   &quot;name&quot; of one of the predefined track groups. To get a list of allowable group names for
   an assembly, go to the table browser and select &quot;group: All Tables&quot; &quot;table: 
   grp&quot; and &quot;get output&quot; where entries in the &quot;name&quot; column may be used
@@ -647,6 +647,16 @@ The following track line attribute=value pairs are defined in the Genome Browser
   <a href="../help/bigWig.html" target="_blank">bigWig</a> or
   <a href="../help/vcf.html" target="_blank">VCF</a> tracks. This is a required attribute for those 
   track types. There is no default for this attribute.</li>
+  <li>
+  <strong>doWiggle=<<em>on</em>></strong> - The doWiggle setting enables BAM custom tracks
+  to be displayed as bar graphs where the height is proportional to the number of reads mapped
+  to each genomic position. This display is described as a density graph and is best viewed with
+  the track set to full and scaling set to auto-scale. See the Track Database Definition
+  <a href="../help/trackDb/trackDbHub.html#doWiggle" target="_blank">doWiggle entry</a>
+  for more information about the use in hubs and the
+  <a href="../help/hgBamTrackHelp" target="_blank">configuring BAM tracks</a> and the
+  <a href="../help/hgWiggleTrackHelp.html" target="_blank">configuring graph-based tracks</a>
+  help pages to learn how to further change the display.</li>
 </ul>
 <p>
 Here is an example of a properly formatted track line using the bigBed format, with accompanying 
@@ -660,41 +670,41 @@ track type=bigBed name="bigBed Example One" description="A bigBed file" bigDataU
 To make your Genome Browser annotation track viewable by people on other machines or at other sites,
 follow the steps below.</p>
 <p>
-<strong>Step 1.</strong> Put your formatted annotation file on your web site. Be sure that the file 
+<strong>Step 1.</strong> Put your formatted annotation file on your web site. Be sure that the file
 permissions allow it to be read by others.</p>
 <p>
-<strong>Step 2.</strong> Construct a URL that will link this annotation file to the Genome Browser. 
-The URL must contain 3 pieces of information specific to your annotation data:</p> 
+<strong>Step 2.</strong> Construct a URL that will link this annotation file to the Genome Browser.
+The URL must contain 3 pieces of information specific to your annotation data:</p>
 <ul>
   <li>
-  The species or genome assembly on which your annotation data is based. To automatically display 
-  the most recent assembly for a given organism, set the <em>org</em> parameter: <em>e.g.</em> 
-  <code>org=human</code>. To specify a particular genome assembly for an organism, use the 
-  <em>db</em> parameter, <code>db=database_name</code>, where <em>database_name</em> is the UCSC 
-  code for the genome assembly. For a list of these codes, see the Genome Browser 
-  <a href="/FAQ/FAQreleases.html#release1" target="_blank">FAQ</a>. Examples of this include: 
-  db=hg16 (Human July 2003 assembly), db=mm6 (Mouse Mar. 2005 assembly).</li>
+  The species or genome assembly on which your annotation data is based. To automatically display
+  the most recent assembly for a given organism, set the <em>org</em> parameter: <em>e.g.</em>
+  <code>org=human</code>. To specify a particular genome assembly for an organism, use the
+  <em>db</em> parameter, <code>db=&lt;databaseName&gt;</code>, where <em>databaseName</em> is the UCSC
+  code for the genome assembly. For a list of these codes, see the Genome Browser
+  <a href="/FAQ/FAQreleases.html#release1" target="_blank">FAQ</a>. Examples of this include:
+  db=hg38 (Human Dec. 2013 assembly = GRCh38), db=mm10 (Mouse Dec. 2011 assembly = GRCm38).</li>
   <li>Additionally, particular genome assemblies, including assemblies in assembly hubs, can be specified using
-  the <em>genome</em> parameter, <code>genome=database_name</code>, which acts in the same manner as
+  the <em>genome</em> parameter, <code>genome=&lt;databaseName&gt;</code>, which acts in the same manner as
   the <em>db</em> parameter. Here is an example using the house mouse (<i>Mus musculus</i>, 129S1_SvImJ)
   assembly hub:
   <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?genome=129S1_SvImJ&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt"
   target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?genome=129S1_SvImJ&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt</a></li>
   <li>
-  The genome position to which the Genome Browser should initially open. This information is of the 
-  form <code>position=chr_position</code>, where <em>chr_position</em> is a chromosome number, with 
-  or without a set of coordinates. Examples of this include: position=chr22, 
+  The genome position to which the Genome Browser should initially open. This information is of the
+  form <code>position=&lt;chrPosition&gt;</code>, where <em>chrPosition</em> is a chromosome number, with
+  or without a set of coordinates. Examples of this include: position=chr22,
   position=chr22:15916196-31832390.</li>
   <li>
-  The URL of the annotation file on your web site. This information is of the form 
-  <code>hgt.customText=URL</code>, where <em>URL</em> points to the annotation file on your website.
-  An example of an annotation file URL is <a href="test.bed" 
-  target="_blank">http://genome.ucsc.edu/goldenPath/help/test.bed</a>.</li>  
+  The URL of the annotation file on your web site. This information is of the form
+  <code>hgt.customText=&lt;url&gt;</code>, where <em>url</em> points to the annotation file on your website.
+  An example of an annotation file URL is <a href="test.bed"
+  target="_blank">http://genome.ucsc.edu/goldenPath/help/test.bed</a>.</li>
 </ul>
 
 <a name="optParams"></a>
 <p>
-You can add other optional parameters to the URL: (Note: Display may vary if you have conflicting 
+You can add other optional parameters to the URL: (Note: Display may vary if you have conflicting
 cart variables, for example having both hide all and highlight features.)
 <ul>
   <li>
@@ -702,7 +712,7 @@ cart variables, for example having both hide all and highlight features.)
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&guidelines=off" 
   target="_blank">example link</a> to switch off blue guidelines</li>
   <li>
-  <code>hgFind.matches=listOfNames</code> - highlight features given their names - 
+  <code>hgFind.matches=&lt;listOfNames&gt;</code> - highlight features given their names -
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hgFind.matches=uc010naf.1,uc011mcz.1" 
   target="_blank">example link</a> to highlight two transcripts of the ABO gene</li>
   <li>
@@ -727,7 +737,7 @@ cart variables, for example having both hide all and highlight features.)
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hideTracks=1&cytoBand=pack" 
   target="_blank">example link</a> to show only the Chromosome Bands track and nothing else</li>
   <li>
-  <code>highlight=&lt;DB&gt;.&lt;CHROM&gt;:&lt;START&gt;-&lt;END&gt;#&lt;COLOR&gt;|...</code> - 
+  <code>highlight=&lt;db&gt;.&lt;chrom&gt;:&lt;chromStart&gt;-&lt;chromEnd&gt;#&lt;color&gt;|...</code> - 
   highlight one or more regions in a given color on the image. Note that the arguments have to be 
   URL-encoded for Internet browsers, so &quot;:&quot; becomes &quot;%3A&quot;, &quot;#&quot;
   becomes &quot;%23&quot; and &quot;|&quot; becomes &quot;%7&quot;C. - 
@@ -738,7 +748,7 @@ cart variables, for example having both hide all and highlight features.)
   tracks, and track hubs - <a href="../../cgi-bin/hgTracks?db=hg19&ignoreCookie=1" 
   target="_blank">example link</a> to show the default tracks and positions for hg19</li>
   <li>
-  <code>oligoMatch=pack&amp;hgt.oligoMatch=DNASEQ</code> - switch on the Short Match track and 
+  <code>oligoMatch=pack&amp;hgt.oligoMatch=&lt;dnaSeq&gt;</code> - switch on the Short Match track and 
   highlight a matching sequence - 
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&oligoMatch=pack&hgt.oligoMatch=TATAWAR" 
   target="_blank">example link</a> to highlight the TATAWAR motif in the ABO locus</li>
@@ -759,6 +769,12 @@ cart variables, for example having both hide all and highlight features.)
   custom tracks you must use their unique assigned name and identifier number 
   <code>ct_name_####</code>, only with the full custom track name will this feature work: 
   <code>ct_name_####=full</code></li>
+  <li>
+  <code>&lt;trackName&gt;.heightPer=&lt;number&gt;</code> - sets the height of the a bigWig track
+  in pixels - <a 
+  href="../../cgi-bin/hgTracks?db=hg38&ignoreCookie=1&hideTracks=1&mappability=full&umap24Quantitative.heightPer=100"
+  target="_blank">example link</a> to set umap bigWig track height to 100 pixels
+  </li>
   <li>
   <code>&lt;trackName&gt;_hideKids=1</code> - hides a specific super track's individual tracks - <a
   href="../../cgi-bin/hgTracks?db=hg19&wgEncodeReg_hideKids=1&ignoreCookie=1" target="_blank">
@@ -787,18 +803,18 @@ target="_blank">http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=c
 <p>
 Combine the above pieces of information into a URL of the following format (the information
 specific to your annotation file is highlighted):</p>
-<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?org=<font color="000099"><em>organism_name</em></font>&amp;position=<font color="000099"><em>chr_position</em></font>&amp;hgt.customText=<font color="000099"><em>URL</em></font></code></pre>
+<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?org=<font color="000099"><em>&lt;organismName&gt;</em></font>&amp;position=<font color="000099"><em>&lt;chrPosition&gt;</em></font>&amp;hgt.customText=<font color="000099"><em>&lt;url&gt;</em></font></code></pre>
 <p>
 <strong><em>Example #5:</em></strong><br>
-The following URL will open up the Genome Browser window to display chr 22 of the latest human
+The following URL will open up the Genome Browser window to display chr22 of the latest human
 genome assembly and will show the annotation track pointed to by the URL
 http://genome.ucsc.edu/goldenPath/help/test.bed:
 <pre><code
 <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed"
 target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed</a></code></pre>
 <p>
-<strong>Step 3.</strong> Provide the URL to others. To upload a custom annotation track pointed to
-by a URL into the Genome Browser, paste the URL into the large text edit box on the Add Custom
+<strong>Step 3.</strong> Provide the URL to others. To upload a custom annotation track from a 
+URL into the Genome Browser, paste the URL into the large text edit box on the Add Custom
 Tracks page, then click the Submit button.</p>
 <p>
 If you'd like to share your annotation track with a broader audience, send the URL for your
@@ -952,7 +968,7 @@ If you do not receive this output, you may be able to resolve the problem throug
 following actions:</p>
 <ul>
   <li>
-  Store the files on a real webserver, e.g. at your University. Check with the
+  Store the files on a real web server, e.g. at your University. Check with the
   systems administrators about the configuration of the server. This will often
   solve the problem.</li>
   <li>
@@ -964,7 +980,7 @@ following actions:</p>
 <strong><em>Problem:</em></strong> I used to host files on Dropbox which used to accept byte-range 
 requests, but I can't get my data to display. Why?<br>
 <strong><em>Solution:</em></strong> As described in the previous question, Dropbox is a backup provider
-and not a real webserver and as such does not support hosting indexed files, even though it used to
+and not a real web server and as such does not support hosting indexed files, even though it used to
 work to some extent. Dropbox recently removed their Public Folder feature, which means all links
 to files hosted there are inaccessible to the browser. For more information, please refer to  <a 
 href="https://www.dropbox.com/help/files-folders/public-folder" target="_blank">this announcement

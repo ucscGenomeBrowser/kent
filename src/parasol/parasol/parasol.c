@@ -30,7 +30,7 @@ if (!sameString(userName, "root"))
 void usage()
 /* Explain usage and exit. */
 {
-errAbort(
+errAbort("parasol - parallel job management system for a compute cluster\n\n"
   "Parasol version %s\n"
   "Parasol is the name given to the overall system for managing jobs on\n"
   "a computer cluster and to this specific command.  This command is\n"

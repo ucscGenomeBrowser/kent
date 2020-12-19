@@ -64,7 +64,6 @@ hti->isPos= TRUE;
 safecpy(hti->chromField, sizeof(hti->chromField), "chrom");
 safecpy(hti->startField, sizeof(hti->startField), "chromStart");
 safecpy(hti->endField, sizeof(hti->endField), "chromEnd");
-safecpy(hti->scoreField, sizeof(hti->scoreField), "value");
 hti->type = cloneString("hic");
 return hti;
 }
@@ -407,7 +406,7 @@ if (filename == NULL)
     warn("Missing bigDataUrl setting for track %s", tdb->shortLabel);
     return;
     }
-char *errMsg = hicLoadHeader(filename, &meta, NULL);
+char *errMsg = hicLoadHeader(filename, &meta, database);
 if (errMsg != NULL)
     {
     warn("Error fetching header for track %s: %s", tdb->shortLabel, errMsg);

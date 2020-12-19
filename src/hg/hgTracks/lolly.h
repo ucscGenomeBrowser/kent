@@ -11,11 +11,11 @@
 struct lollyCartOptions
     {
     int origHeight, height;
-    double upperLimit, lowerLimit;
     double minY, maxY;
     enum wiggleScaleOptEnum autoScale;
-    int radius;
+    int radius;    // percentage of height to use for lollipop circle
     int typeWordCount;
     char **typeWords;
+    boolean noStems;
     };
 #endif 

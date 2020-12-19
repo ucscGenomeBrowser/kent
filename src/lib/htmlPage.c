@@ -657,6 +657,15 @@ for (;;)
 		if (gotEnd)
 		    break;
 		}
+            if (sameWord(tagName, "script")) /* Script tag - skip over javascript contents */
+                {
+                s = strcasestr(s, "</script>");
+                if (s == NULL)
+                    {
+                    warn("End of file in script tag");
+                    break;
+                    }
+                }
 	    }
 	}
     }

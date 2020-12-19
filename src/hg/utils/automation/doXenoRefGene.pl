@@ -38,9 +38,8 @@ my $workhorse = 'hgwdev';
 my $dbHost = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
-my $mrnas = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
+my $mrnas = "/hive/data/genomes/asmHubs/xenoRefSeq";
 my $noDbGenePredCheck = 1;    # default yes, use -db for genePredCheck
-my $mrnas = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
 my $augustusDir = "/hive/data/outside/augustus/augustus-3.3.1";
 my $augustusConfig="$augustusDir/config";
 
@@ -135,11 +134,35 @@ sub doSplitTarget {
   my $bossScript = newBash HgRemoteScript("$runDir/doSplitTarget.bash", $workhorse,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
+export asmId="$db"
+export maskedSeq="$maskedSeq"
+export queryCount=`cat "$mrnas/query.list" | wc -l`
+# aim for 100,000 cluster job batch size
+export targetPartCount=`echo \$queryCount | awk '{printf "%d", 1 + (100000 / \$1)}'`
+twoBitInfo \$maskedSeq stdout | sort -k2,2nr > \$asmId.chrom.sizes
+export targetParts=`cat \$asmId.chrom.sizes | wc -l`
+export maxChunk=`head -1 \$asmId.chrom.sizes | awk '{printf "%d", 1.1*\$(NF)}'`
+export seqLimit=`echo \$targetParts \$targetPartCount | awk '{printf "%d", 1 + (\$1 / \$2)}'`
+export totalJobs=`echo \$queryCount \$targetPartCount | awk '{printf "%d", \$1 * \$2}'`
+printf "# batch job count will be: \%d\\n", \$totalJobs
+rm -fr targetList
+~/kent/src/hg/utils/automation/partitionSequence.pl -concise \\
+   -lstDir=targetList \$maxChunk 0 \$maskedSeq \$asmId.chrom.sizes \$seqLimit
+rm -fr target
 mkdir target
-twoBitToFa $maskedSeq stdout | faSplit byname stdin target/
+ls targetList/*.lst | while read partSpec
+do
+  export part=`basename \$partSpec | sed -e 's/.lst/.fa/;'`
+  export faFile="target/\$part"
+  rm -f \$faFile
+  touch \$faFile
+  cat \$partSpec | while read seq
+  do
+    twoBitToFa \$seq stdout
+  done > \$faFile
+done
 gzip target/*.fa
 ls target | sed -e 's/.fa.gz//;' > target.list
-faSize -detailed target/*.fa.gz | sort -k2,2nr > $db.chrom.sizes
 _EOF_
   );
 
@@ -237,7 +260,7 @@ pslCDnaFilter -minId=0.35 -minCover=0.25  -globalNearBest=0.0100 -minQSize=20 \\
     \$db.all.psl \$db.xenoRefGene.psl
 
 pslCheck -targetSizes=\$db.chrom.sizes \\
-  -querySizes=/hive/data/genomes/asmHubs/VGP/xenoRefSeq/xenoRefMrna.sizes \\
+  -querySizes=$mrnas/xenoRefMrna.sizes \\
      \$db.xenoRefGene.psl
 _EOF_
   );
@@ -267,20 +290,29 @@ sub doMakeGp {
 
   $bossScript->add(<<_EOF_
 export db=$db
-grep NR_ \$db.xenoRefGene.psl > NR.psl
-grep NM_ \$db.xenoRefGene.psl > NM.psl
-mrnaToGene -cdsDb=hgFixed NM.psl NM.gp
-mrnaToGene -noCds NR.psl NR.gp
-cat NM.gp NR.gp | genePredSingleCover stdin \$db.xenoRefGene.gp
-genePredCheck -db=\$db -chromSizes=\$db.chrom.sizes \$db.xenoRefGene.gp
-genePredToBigGenePred -geneNames=$mrnas/geneOrgXref.txt \$db.xenoRefGene.gp \\
-   stdout | sort -k1,1 -k2,2n > \$db.bgpInput
-sed -e 's#Alternative/human readable gene name#species of origin of the mRNA#; s#Name or ID of item, ideally both human readable and unique#RefSeq accession id#; s#Primary identifier for gene#gene name#;' \\
-  \$HOME/kent/src/hg/lib/bigGenePred.as > xenoRefGene.as
-bedToBigBed -extraIndex=name,geneName -type=bed12+8 -tab -as=xenoRefGene.as \\
-   \$db.bgpInput \$db.chrom.sizes \$db.xenoRefGene.bb
-\$HOME/kent/src/hg/utils/automation/xenoRefGeneIx.pl \$db.bgpInput | sort -u > \$db.ix.txt
-ixIxx \$db.ix.txt \$db.xenoRefGene.ix \$db.xenoRefGene.ixx
+if [ -s "\$db.xenoRefGene.psl" ]; then
+  grep NR_ \$db.xenoRefGene.psl > NR.psl
+  grep NM_ \$db.xenoRefGene.psl > NM.psl
+  mrnaToGene -cdsDb=hgFixed NM.psl NM.gp
+  mrnaToGene -noCds NR.psl NR.gp
+  cat NM.gp NR.gp | genePredSingleCover stdin \$db.xenoRefGene.gp
+  genePredCheck -db=\$db -chromSizes=\$db.chrom.sizes \$db.xenoRefGene.gp
+  genePredToBed \$db.xenoRefGene.gp stdout \\
+    | bedToExons stdin stdout | bedSingleCover.pl stdin > \$db.exons.bed
+  export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$db.exons.bed`
+  export asmSizeNoGaps=`grep sequences ../../\$db.faSize.txt | awk '{print \$5}'`
+  export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+  printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSizeNoGaps" "\$perCent" > fb.\$db.xenoRefGene.txt
+  rm -f \$db.exons.bed
+  genePredToBigGenePred -geneNames=$mrnas/geneOrgXref.txt \$db.xenoRefGene.gp \\
+     stdout | sort -k1,1 -k2,2n > \$db.bgpInput
+  sed -e 's#Alternative/human readable gene name#species of origin of the mRNA#; s#Name or ID of item, ideally both human readable and unique#RefSeq accession id#; s#Primary identifier for gene#gene name#;' \\
+    \$HOME/kent/src/hg/lib/bigGenePred.as > xenoRefGene.as
+  bedToBigBed -extraIndex=name,geneName -type=bed12+8 -tab -as=xenoRefGene.as \\
+     \$db.bgpInput \$db.chrom.sizes \$db.xenoRefGene.bb
+  \$HOME/kent/src/hg/utils/automation/xenoRefGeneIx.pl \$db.bgpInput | sort -u > \$db.ix.txt
+  ixIxx \$db.ix.txt \$db.xenoRefGene.ix \$db.xenoRefGene.ixx
+fi
 _EOF_
   );
   $bossScript->execute();
@@ -309,11 +341,25 @@ rm -f $buildDir/NM.gp
 rm -f $buildDir/NR.gp
 rm -f $buildDir/NM.psl
 rm -f $buildDir/NR.psl
-gzip $buildDir/\$db.bgpInput &
-gzip $buildDir/\$db.ix.txt &
-gzip $buildDir/\$db.all.psl &
-gzip $buildDir/\$db.xenoRefGene.psl &
+if [ -s "$buildDir/\$db.bgpInput" ]; then
+  gzip $buildDir/\$db.bgpInput &
+fi
+if [ -s "$buildDir/\$db.ix.txt" ]; then
+  gzip $buildDir/\$db.ix.txt &
+fi
+if [ -s "$buildDir/\$db.all.psl" ]; then
+  gzip $buildDir/\$db.all.psl &
+else
+  rm -f $buildDir/\$db.all.psl
+fi
+if [ -s "$buildDir/\$db.xenoRefGene.psl" ]; then
+  gzip $buildDir/\$db.xenoRefGene.psl &
+else
+  rm -f $buildDir/\$db.xenoRefGene.psl
+fi
+if [ -s "$buildDir/\$db.xenoRefGene.gp" ]; then
 gzip $buildDir/\$db.xenoRefGene.gp
+fi
 wait
 _EOF_
   );

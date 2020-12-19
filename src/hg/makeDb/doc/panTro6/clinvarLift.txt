@@ -1,0 +1,10 @@
+doClinvarLift, done, Wed Mar 4 03:39:07 PST 2020, max
+featureBits hg38 clinvarLift.bed
+627459 bases of 3095998939 (0.020%) in intersection
+wc -l clinvarLift.bed
+616417 clinvarLift.bed
+featureBits panTro6 clinvarLift.panTro6.bed
+623566 bases of 3018592990 (0.021%) in intersection
+wc -l clinvarLift.panTro6.bed
+612297 clinvarLift.panTro6.bed
+===========================================

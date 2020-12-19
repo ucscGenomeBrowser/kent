@@ -83,6 +83,17 @@ if (*end == '\0')
 return FALSE;
 }
 
+char *htmlColorToCode(unsigned value)
+/* Return the HTML color code for a particular unsigned RGB value */
+{
+    char colorCode[8];
+    safef(colorCode, sizeof(colorCode), "#%.2X%.2X%.2X",
+            (value >> 16) & 0xff,
+            (value >> 8) & 0xff,
+            value & 0xff);
+    return cloneString(colorCode);
+}
+
 boolean htmlColorExists(char *name)
 /* Determine if color name is one of the defined HTML basic set */
 {
@@ -98,4 +109,12 @@ void htmlColorToRGB(unsigned value, int *r, int *g, int *b)
         *g = (value >> 8) & 0xff;
     if (b != NULL)
         *b = value & 0xff;
+}
+
+void htmlColorFromRGB(unsigned *value, int r, int g, int b)
+/* Convert separate R, G, and B components into a single unsigned RGB value */
+{
+    *value = b & 0xff;
+    *value |= (g & 0xff) << 8;
+    *value |= (r & 0xff) << 16;
 }

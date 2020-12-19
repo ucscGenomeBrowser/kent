@@ -1,0 +1,41 @@
+<h2>Description</h2>
+<p>
+The NCBI Gene track for the 13 Jan 2020
+  <em>SARS-CoV-2 virus</em>/GCF_009858895.2 genome assembly is
+constructed from the NCBI nuccore entry for <b>NC_045512.2 </b>
+<a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2"
+target="_blank">https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2
+</a>
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the 
+<a href="hgTables">Table Browser</a>, or the 
+<a href="hgIntegrator">Data Integrator</a>. 
+For automated analysis, the genome annotation is stored in 
+a bigBed file that can be downloaded from 
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/">the download server</a>. 
+
+Annotations can
+be converted to ASCII text by our tool bigBedToBed which can be compiled from 
+the source code or downloaded as a precompiled binary for your system. 
+Instructions for downloading source code and binaries can be found on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">utilities page</a>.
+The tool can also be used to obtain features within a given range, 
+for example:
+</p>
+<code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/ncbiGene.bb -chrom=NC_045512v2 -start=0 -end=29902 stdout</code>
+
+<p>
+Please refer to our 
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+ for questions, or our 
+<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+
+<h2>Credits</h2>
+<p>
+This track was created by Max Haeussler and Brian Raney at UCSC, with help from Daniel Schmelter
+and many others. Thanks to NCBI and the US National Institutes of Health
+for making all data available for download.</p>

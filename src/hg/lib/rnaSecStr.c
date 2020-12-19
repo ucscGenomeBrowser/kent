@@ -14,7 +14,25 @@
 
 struct rnaSecStr *rnaSecStrLoad(char **row)
 /* Load a rnaSecStr from row fetched with select * from rnaSecStr
- * from database.  Dispose of this with rnaSecStrFree(). */
+ * from database. Ignores conf column if present.  Dispose of this with rnaSecStrFree(). */
+{
+struct rnaSecStr *ret;
+
+AllocVar(ret);
+ret->size = sqlUnsigned(row[6]);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+strcpy(ret->strand, row[5]);
+ret->secStr = cloneString(row[7]);
+return ret;
+}
+
+struct rnaSecStr *rnaSecStrLoadConf(char **row)
+/* Load a rnaSecStr from row fetched with select * from rnaSecStr
+ * from database. Loads conf column.  Dispose of this with rnaSecStrFree(). */
 {
 struct rnaSecStr *ret;
 

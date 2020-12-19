@@ -306,8 +306,10 @@ cgiMakeHiddenVar(buf, "0");
 void gtexPortalLink(char *geneId)
 /* print URL to GTEX portal gene expression page using Ensembl Gene Id*/
 {
+char *ensGene = cloneString(geneId);
+chopSuffix(ensGene);
 printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>"
-        "View at GTEx portal</a>\n", geneId);
+        "View at GTEx portal</a>\n", ensGene);
 }
 
 void gtexBodyMapLink()
@@ -381,7 +383,8 @@ safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_VIEW_LIMIT);
 int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_VIEW_LIMIT_DEFAULT);
 cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
 char *version = gtexVersion(tdb->table);
-printf("<span class='%s'>  RPKM (range 0-%d)</span>\n", buf, round(gtexMaxMedianScore(version)));
+printf("<span class='%s'>  %s (range 0-%d)</span>\n", buf, gtexExprUnit(version),
+                                round(gtexMaxMedianScore(version)));
 }
 
 void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *track, char *title, boolean boxed)

@@ -513,7 +513,7 @@ hashMayRemove(tdb->settingsHash, "useScore");
 if (tdb->priority != def->priority)
     fprintf(f, "\t%s='%.3f'", "priority", tdb->priority);
 hashMayRemove(tdb->settingsHash, "priority");
-if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != def->colorB)
+if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != def->colorB || sameOk(tdb->type, "hic"))
     fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
 hashMayRemove(tdb->settingsHash, "color");
 if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG
@@ -667,6 +667,8 @@ if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed") || endsWith(fileN
 if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig") ||  
             endsWith(fileName, ".bigwig") || endsWith(fileName, ".bwig"))
     return cloneString("bigWig");
+if (endsWith(fileName, ".inter.bb") || endsWith(fileName, ".inter.bigBed"))
+   return cloneString("bigInteract");
 if (endsWith(fileName, ".bam") || endsWith(fileName, ".cram"))
     return cloneString("bam");
 if (endsWith(fileName, ".vcf.gz"))
@@ -866,6 +868,8 @@ if (isNotEmpty(customText))
 	err = customTrackUnavailableErrsFromList(newCts);
 	if (err)
 	    newCts = NULL;  /* do not save the unhappy remote cts*/
+        if (isNotEmpty(errCatch->message->string))
+            err = catTwoStrings(emptyForNull(err), errCatch->message->string);
 	}
     errCatchFree(&errCatch);
     }

@@ -1,0 +1,45 @@
+track liftHg19
+shortLabel Hg19 Mapping
+longLabel Hg19 Mappings: UCSC LiftOver and NCBI ReMap
+group map
+visibility hide
+type chain
+compositeTrack on
+
+        track liftOverHg19
+        shortLabel UCSC liftOver to hg19
+        longLabel UCSC liftOver alignments to hg19
+        priority 1
+        type chain hg38
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg19
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg19
+
+        track chainHg19ReMap
+        shortLabel NCBI ReMap hg19
+        longLabel NCBI ReMap alignments to hg19/GRCh37
+        priority 2
+        type chain hg19
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg19
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg19
+
+        track chainHg19ReMapAxtChain
+        shortLabel ReMap + axtChain hg19
+        longLabel NCBI ReMap alignments to hg19/GRCh37, joined by axtChain
+        priority 3
+        type chain hg19
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg19
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg19
+
+

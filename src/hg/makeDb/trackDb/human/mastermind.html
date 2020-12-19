@@ -76,6 +76,30 @@ a minimum number of articles for each kind of evidence.
 
 </p>
 
+<H2>Data access</H2>
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from scripts through our 
+<a href="https://api.genome.ucsc.edu">API</a>, the track name is "mastermind".
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/" target="_blank">our download server</a>.
+The file for this track is called <tt>mastermind.bb</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool
+can also be used to obtain only features within a given range, e.g. 
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/mastermind.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+</p>
+
+<p>
+Previous versions of this track can be found on our <a href="http://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/mastermind">archive download server</a>.
+</p>
+
 <h2>Methods</h2>
 
 <p>The Mastermind Cited Variants file was <a target=_blank href="https://www.genomenon.com/cvr/">downloaded</a>,

@@ -24,4 +24,4 @@ searchPriority 8
 
 # include chainNetPrimate.ra
 
-include ../../refSeqComposite.ra alpha
+include ../../refSeqComposite.ra

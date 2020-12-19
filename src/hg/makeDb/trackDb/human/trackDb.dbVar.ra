@@ -1,0 +1,133 @@
+track dbVarSv
+superTrack on
+group varRep
+html dbVarCurated
+shortLabel dbVar Common Struct Var
+longLabel NCBI Curated Common Structural Variants from dbVar
+pennantIcon New red ../goldenPath/newsarch.html#100520 "Released Oct. 5, 2020"
+
+    track dbVar_common
+    superTrack  dbVarSv pack
+    group varRep
+    compositeTrack on
+    visibility pack
+    itemRgb on
+    type bigBed 9 + .
+    html dbVarCommon
+    shortLabel dbVar Common SV
+    longLabel NCBI dbVar Curated Common Structural Variants
+    mouseOverField label
+    searchIndex name
+    filterLabel.type Variant Type
+    filterValues.type alu deletion,copy number gain,copy number loss,copy number variation,deletion,duplication,herv deletion,line1 deletion,sva deletion
+    filterLabel.length Variant Size
+    filterValues.length Under 10KB,10KB to 100KB,100KB to 1MB,Over 1MB
+
+        track dbVar_common_gnomad
+        parent dbVar_common on
+        shortLabel dbVar Curated gnomAD SVs
+        longLabel NCBI dbVar Curated Common SVs: all populations from gnomAD
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_gnomad.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+
+        track dbVar_common_1000g
+        parent dbVar_common on
+        shortLabel dbVar Curated 1000 Genomes SVs
+        longLabel NCBI dbVar Curated Common SVs: all populations from 1000 Genomes
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_1000g.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+
+        track dbVar_common_decipher
+        parent dbVar_common on
+        shortLabel dbVar Curated DECIPHER SVs
+        longLabel NCBI dbVar Curated Common SVs: all populations from DECIPHER
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_decipher.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+
+        track dbVar_common_african
+        parent dbVar_common on
+        shortLabel dbVar Curated African SVs
+        longLabel NCBI dbVar Curated Common SVs: African
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_african.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+
+        track dbVar_common_european
+        parent dbVar_common on
+        shortLabel dbVar Curated European SVs
+        longLabel NCBI dbVar Curated Common SVs: European
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_european.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+
+        track dbVar_common_global
+        parent dbVar_common on
+        shortLabel dbVar Curated All Populations
+        longLabel NCBI dbVar Curated Common SVs: all populations
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_global.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+
+    track dbVar_conflict
+    superTrack dbVarSv pack
+    compositeTrack on
+    visibility pack
+    itemRgb on
+    type bigBed 9 + .
+    html dbVarConflict
+    shortLabel dbVar Conflict SV
+    longLabel NCBI dbVar Curated Conflict Variants
+    mouseOverField label
+    searchIndex name
+    filterLabel.overlap Variant Overlap
+    filterValues.overlap 10 to 25,25 to 50,50 to 75,75 to 90,90 to 100
+    filterLabel.type Variant Type
+    filterValues.type alu deletion,copy number gain,copy number loss,copy number variation,deletion,duplication,herv deletion,line1 deletion,sva deletion
+    filterLabel.length Variant Length
+    filterValues.length Under 10KB,10KB to 100KB,100KB to 1MB,Over 1MB
+
+        track dbVar_conflict_pathogenic
+        parent dbVar_conflict on
+        shortLabel dbVar Curated Conflict SVs
+        longLabel NCBI dbVar Curated Common SVs: Conflicts with Pathogenic
+        bigDataUrl /gbdb/$D/bbi/dbVar/conflict_pathogenic.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+
+searchTable dbVar_common_gnomad
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_common_1000g
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_common_decipher
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_common_european
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_common_african
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_common_global
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_conflict_pathogenic
+searchMethod exact
+searchType bigBed

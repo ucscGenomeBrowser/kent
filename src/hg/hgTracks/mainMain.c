@@ -52,6 +52,7 @@ oldVars = hashNew(10);
 
 if (cgiVarExists("hgt.redirectTool"))
     {
+    // user has selected one of the tools in View > In external tools: Do not plot, just redirect.
     printf("Content-type: text/html\n\n");
     errAbortSetDoContentType(FALSE);
     cart = cartForSession(hUserCookie(), NULL, NULL);
@@ -59,6 +60,9 @@ if (cgiVarExists("hgt.redirectTool"))
     }
 else
     cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
+
+// TODO: better place for this ?
+puts("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css\">\n");
 
 if (measureTiming)
     measureTime("Time to write and close cart");

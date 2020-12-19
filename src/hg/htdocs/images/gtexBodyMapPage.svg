@@ -421,7 +421,7 @@
 			<line class="st19" x1="236" y1="713.1" x2="250.7" y2="717.1"/>
 			<line class="st19" x1="234.6" y1="714.7" x2="249.2" y2="718.7"/>
 		</g>
-		<text id="xformedfibroblasts_Text_Hi" transform="matrix(1 0 0 1 196.8315 748.1289)"><tspan x="0" y="0" class="st21 st22 st23">Transformed</tspan><tspan x="4.7" y="15" class="st21 st22 st23">fibroblasts</tspan></text>
+		<text id="xformedfibroblasts_Text_Hi" transform="matrix(1 0 0 1 196.8315 748.1289)"><tspan x="10.0" y="0" class="st21 st22 st23">Cultured</tspan><tspan x="4.7" y="15" class="st21 st22 st23">fibroblasts</tspan></text>
 	</g>
 	<g id="xformedlymphocytes_GROUP">
 		<g id="xformedlymphocytes_Pic_Lo" class="st9">

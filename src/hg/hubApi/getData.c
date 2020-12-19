@@ -284,10 +284,10 @@ if (isEmpty(chrom))
 	if (hti && hti->isSplit) /* when split, make up split chr name */
 	    {
 	    safef(fullTableName, sizeof(fullTableName), "%s_%s", ci->chrom, hti->rootName);
-	    sqlDyStringPrintf(query, "select * from %s", fullTableName);
+	    sqlDyStringPrintf(query, "select * from %s where chrom='%s'", fullTableName, ci->chrom);
 	    }
 	else
-	    sqlDyStringPrintf(query, "select * from %s", splitSqlTable);
+	    sqlDyStringPrintf(query, "select * from %s where chrom='%s'", splitSqlTable, ci->chrom);
 	if (tdb && isWiggleDataTable(tdb->type))
             itemsDone += wigTableDataOutput(jw, db, splitSqlTable, chrom,
 		start, end, itemsDone);
@@ -783,9 +783,9 @@ if (chromSeqFileExists(db, chrom))
 
     if (isEmpty(start) || isEmpty(end))
 	if (chromSize > MAX_DNA_LENGTH)
-	    apiErrAbort(err400, err400Msg, "DNA sequence request %d too large, limit: %u for endpoint '/getData/sequence?genome=%s;chrom=%s'", chromSize, MAX_DNA_LENGTH, db, chrom);
+	    apiErrAbort(err400, err400Msg, "DNA sequence request %u (size of %s) too large, limit: %u for endpoint '/getData/sequence?genome=%s;chrom=%s'", chromSize, chrom, MAX_DNA_LENGTH, db, chrom);
 	else
-	    seq = hChromSeqMixed(db, chrom, 0, 0);
+	    seq = hChromSeqMixed(db, chrom, 0, chromSize);
     else
 	if ( (sqlSigned(end) - sqlSigned(start)) > MAX_DNA_LENGTH)
 	    apiErrAbort(err400, err400Msg, "DNA sequence request %d too large, limit: %u for endpoint '/getData/sequence?genome=%s;chrom=%s;start=%s;end=%s'", sqlSigned(end) - sqlSigned(start), MAX_DNA_LENGTH, db, chrom, start, end);

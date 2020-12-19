@@ -5,6 +5,9 @@ set -eEu -o pipefail
 
 export db=$1
 
+#SQLDIR=~/kent/src/hg/lib
+SQLDIR=/hive/data/outside/otto/omim/sql/
+
 ############################################################
 # Load genemap and genemap2 table
 
@@ -15,7 +18,7 @@ grep -v '^#' genemap.txt | tawk \
 
 # quick hack - sometimes month or day are missing, and mysql complains
 tawk '$2 == "" {$2 = 0}; $3 == "" {$3 = 0}; {print $0}' genemap.tab |
-hgLoadSqlTab -verbose=0 -warn $db omimGeneMapNew ~/kent/src/hg/lib/omimGeneMap.sql stdin
+hgLoadSqlTab -verbose=0 -warn $db omimGeneMapNew $SQLDIR/omimGeneMap.sql stdin
 
 # genemap2 contains chromosome coordinates but we map to refGene so forget about them
 grep -v '^#' genemap2.txt | tawk \
@@ -34,7 +37,7 @@ grep -v '^#' genemap2.txt | tawk \
         }
     }
     ' > genemap2.tab
-hgLoadSqlTab -verbose=0 -warn $db omimGeneMap2New ~/kent/src/hg/lib/omimGeneMap2.sql genemap2.tab
+hgLoadSqlTab -verbose=0 -warn $db omimGeneMap2New $SQLDIR/omimGeneMap2.sql genemap2.tab
 
 
 ############################################################
@@ -47,7 +50,7 @@ grep -v '^#' mim2gene.txt | tawk '$2 ~ "gene/phenotype" \
 
 # quick hack - frequently there's no gene ID and mysql complains
 tawk '$3 == "" {$3 = 0}; {print $0}' mim2gene.updated.txt |
-hgLoadSqlTab -verbose=0 -warn $db omim2geneNew ~/kent/src/hg/lib/omim2gene.sql stdin
+hgLoadSqlTab -verbose=0 -warn $db omim2geneNew $SQLDIR/omim2gene.sql stdin
 
 # Not sure what this file is created for.  Can probably remove this?
 tawk '{print $1, $3, $2}' mim2gene.updated.txt > mim2gene.tab
@@ -62,19 +65,11 @@ hgLoadBed -verbose=0 $db omimGene2New omimGene2.tab
 
 ../../doOmimGeneSymbols $db stdout | sort -u > omimGeneSymbol.tab
 
-hgLoadSqlTab -verbose=0 -warn $db omimGeneSymbolNew ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab
+hgLoadSqlTab -verbose=0 -warn $db omimGeneSymbolNew $SQLDIR/omimGeneSymbol.sql omimGeneSymbol.tab
 
-# old version
-#./doOmimPhenotype.pl -gene-map-file=genemap.txt >omimPhenotype.tab
-./doOmimPhenotype.pl --gene-map-file=genemap2.txt > omimPhenotype.tab
+./doOmimPhenotypeNew genemap2.txt omimPhenotypeNew.tab
 
-# quick hack - sometimes phenotype ID is blank and mysql complains
-tawk '$3 == "" {$3 = 0}; {print $0}' omimPhenotype.tab |
-hgLoadSqlTab -verbose=0 -warn $db omimPhenotypeNew ~/kent/src/hg/lib/omimPhenotype.sql stdin
-
-hgsql $db -e 'update omimPhenotypeNew set omimPhenoMapKey = -1 where omimPhenoMapKey=0'
-hgsql $db -e 'update omimPhenotypeNew set phenotypeId = -1 where phenotypeId=0'
-
+hgLoadSqlTab -verbose=0 -warn $db omimPhenotypeNew $SQLDIR/omimPhenotype.sql omimPhenotypeNew.tab
 
 ##############################################################
 # build the omimAvSnp track
@@ -91,35 +86,32 @@ grep -v '^#' ../allelicVariants.txt | tawk \
   repl=$4; if (sub(/,/, OFS, repl) == 0) repl=repl OFS repl; $4=$4 OFS repl; \
   print $0}' > omimAv.tab
 
-hgLoadSqlTab -verbose=0 -warn $db omimAvNew ~/kent/src/hg/lib/omimAv.sql omimAv.tab
+hgLoadSqlTab -verbose=0 -warn $db omimAvNew $SQLDIR/omimAv.sql omimAv.tab
 
 # Remove whitespace; really this should probably be done with the initial processing,
 # but this works.
 hgsql $db -e 'update omimAvNew set repl2 = rtrim(ltrim(repl2))'
 
+tawk '{print $1, $8}' omimAv.tab | perl -ne 'chomp; m/^(\S+)/; $avId = $1; while (m/(rs\d+)(,|$)/g) {print "$avId\t$1\n"}' > omimAvLinkTmp.tab
 if [ "$db" == "hg18" ]
 then
-#  hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp130 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
   snpTbl="snp130";
+  hgsql $db -Ne 'drop table if exists omimAvLinkTmp'
+  hgsql $db -Ne 'create table omimAvLinkTmp (avId text not null, dbSnpId text not null, index(dbSnpId(10)))'
+  hgsql $db -Ne 'load data local infile "omimAvLinkTmp.tab" into table omimAvLinkTmp'
+  hgsql $db -N -e "select chrom, chromStart, chromEnd, avId from omimAvLinkTmp l, $snpTbl s where s.name = l.dbSnpId" | bedSort stdin omimAvSnp.tab
+  hgsql $db -Ne 'drop table omimAvLinkTmp'
 elif [ "$db" == "hg19" ]
 then
-#  hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp151 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
-  snpTbl="snp151";
+  sort -k2 omimAvLinkTmp.tab | join -t$'\t' -1 4 -2 2 ../../../hg19.dbSnp153.bed4 - | cut -f2- > omimAvSnp.tab
 elif [ "$db" == "hg38" ]
 then
-#  hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp151 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
-  snpTbl="snp151";
+  sort -k2 omimAvLinkTmp.tab | join -t$'\t' -1 4 -2 2 ../../../hg38.dbSnp153.bed4 - | cut -f2- > omimAvSnp.tab
 else
   echo "Error in buildOmimTracks.csh: unable to construct omimAvSnp for $db.  Do not know which SNP table to use."
   exit 255;
 fi
 
-tawk '{print $1, $8}' omimAv.tab | perl -ne 'chomp; m/^(\S+)/; $avId = $1; while (m/(rs\d+)(,|$)/g) {print "$avId\t$1\n"}' > omimAvLinkTmp.tab
-hgsql $db -Ne 'drop table if exists omimAvLinkTmp'
-hgsql $db -Ne 'create table omimAvLinkTmp (avId text not null, dbSnpId text not null, index(dbSnpId(10)))'
-hgsql $db -Ne 'load data local infile "omimAvLinkTmp.tab" into table omimAvLinkTmp'
-hgsql $db -N -e "select chrom, chromStart, chromEnd, avId from omimAvLinkTmp l, $snpTbl s where s.name = l.dbSnpId" | bedSort stdin omimAvSnp.tab
-hgsql $db -Ne 'drop table omimAvLinkTmp'
 
 hgLoadBed -verbose=0 -allowStartEqualEnd  $db omimAvSnpNew omimAvSnp.tab
 cd ..

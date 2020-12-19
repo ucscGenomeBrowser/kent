@@ -1,0 +1,397 @@
+#!/usr/bin/env python
+"""
+Given a track name, a trackDb.ra composite of bigBeds, and a chrom.sizes
+file, will create index files needed to optimize hideEmptySubtracks setting.
+Will also build track associations between tracks sharing metadata, which
+will cause them to display together whenever the primary bigBed track is present.
+Depending on size and quantity of files, can take over 60 minutes.
+
+This script has three dependancies: bigBedToBed, bedToBigBed, and bedtools. The first two are
+UCSC Genome Browser utilities which can be downloaded to the current directory with the 
+following commands:
+
+1) wget http://hgdownload.soe.ucsc.edu/admin/exe/<system>.x86_64/<tool>
+
+where: 
+<system> is macOSX or linux
+<tool> is bedToBigBed and bigBedToBed
+
+2) chmod +x <tool>
+
+bedtools can be found here: https://bedtools.readthedocs.io
+    
+These dependancies can be in the path, in the local directory the script is run from, or 
+specified using the optional flags.
+
+    
+Example run:
+    trackDbIndexBb mm10HMMdata mm10HMMdata.ra mm10chrom.sizes
+    trackDbIndexBb hg19peaks hg19peaks.ra hg19chrom.sizes -o ./hg19peaks/output -p /user/bin
+"""
+import subprocess, os, shutil, tempfile, atexit, argparse, sys
+from distutils.spawn import find_executable
+from collections import OrderedDict 
+
+# ==== functions =====
+def parseArgs():
+    """
+    Parse the command line arguments.
+    """
+    parser = argparse.ArgumentParser(description = __doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    optional = parser._action_groups.pop()
+    required = parser.add_argument_group('required arguments')
+    
+    required.add_argument ("trackName",
+        help = "Track name for top level coposite which contains the bigBed tracks.")
+    required.add_argument ("raFile",
+        help = "Relative or absolute path to trackDb.ra file containing the " + \
+            "composite track with bigDataUrls.")
+    required.add_argument ("chromSizes",
+        help = "Chrom.sizes for database which the track belongs to. Needed " + \
+            "to build final bigBed file.")
+    # Optional arguments
+    optional.add_argument ("-o", "--out", dest = "outDir", default = ".",
+        help = "Optional: Output directory for files. Default current directory.")
+    optional.add_argument ("-p", "--pathTools", dest = "toolsPath", default = ".",
+        help = "Optional: Path to directory where bedtools/bedToBigBed/bigBedToBed " + \
+            "can be found")
+    optional.add_argument ("-n", "--noDelete", dest = "noDelete", default = False, action = "store_true",
+        help = "Optional: Do not delete intermediary multibed.bed file. This option will " + \
+            "result in both the multibed.bb and multibed.bed files in the output directory.")
+    optional.add_argument ("-m", "--metaDataVar", dest = "metaDataVar", default = "subGroups",
+        help = "Optional: Used when there are associated tracks to be displayed " + \
+            "alongside the primary BB track. Such as peak tracks with related " + \
+            "signals. To relate the tracks, trackDbIndexBb expects all except " + \
+            "one of the metaData variables to match among associated tracks. " + \
+            "By default, trackDbIndexBb attempts to make association between tracks by " + \
+            "using the metaData in the 'subGroups' trackDb parameter. Use this " + \
+            "flag to change it to a different association, often 'metaData' is " + \
+            "also used.") 
+    optional.add_argument ("-s", "--subGroupRemove", dest = "subGroupRemove", default = "view",
+        help = "Optional: Used when there are associated tracks to be displayed " + \
+            "alongside the primary BB track. Such as peak tracks with related " + \
+            "signals. To relate the tracks, trackDbIndexBb expects all except one " + \
+            "of the metaData variables to match among associated tracks. This " + \
+            "metaData often looks likes: 'view=Peaks mark=A6_H3K36me3' for the .bb " + \
+            "track, and 'view=Signal mark=A6_H3K36me3' for the .bw track. In this " + \
+            "case, you would want to exclude the 'view' varaible to make histone " + \
+            "mark associations (A6_H3K36me3). This flag can be used to pass a " + \
+            "different exclusionary variable than the default 'view'") 
+
+    if (len(sys.argv) == 1):
+        parser.print_usage()
+        # Print concise help message and usage statement when no arguments passed.
+        print("\nGiven a track name, a trackDb.ra composite of bigBeds, and a chrom.sizes\n" + \
+        "file, will create index files needed to optimize hideEmptySubtracks setting.\n" + \
+        "Depending on size and quantity of files, can take over 60 minutes.\n\n" + \
+        "For a more verbose help message, run with help flag: trackDbIndexBb -h\n\n" + \
+        "Example run:\n" + \
+        "    trackDbIndexBb mm10HMMdata mm10HMMdata.ra mm10chrom.sizes\n" + \
+        "    trackDbIndexBb hg19peaks hg19peaks.ra hg19chrom.sizes -o ./hg19peaks/output -p /user/bin" + \
+        "-o ./hg19peaks/output -p /user/bin\n\n" + \
+        "required arguments:\n" + \
+        "  trackName             Track name for top level coposite which contains the\n" + \
+        "                        bigBed tracks.\n" + \
+        "  raFile                Relative or absolute path to trackDb.ra file\n" + \
+        "                        containing the composite track with bigDataUrls.\n" + \
+        "  chromSizes            Chrom.sizes for database which the track belongs to.\n" + \
+        "                        Needed to build final bigBed file.\n")
+        exit(0)
+
+    parser._action_groups.append(optional)
+    options = parser.parse_args()
+
+    return  options
+
+def saveTrackBigDataUrl(bigDataUrls,track,field,raStanza):
+    """
+    Initialize an ordered Dictionary for a track entry that matches
+    queried track, and save the bigDataUrl
+    """
+    bigDataUrls[track] = OrderedDict()
+    bigDataUrls[track][field] = raStanza[track][field][0]
+    return(bigDataUrls)
+
+def saveParentTrackRecord(raStanza,track,compositeNames,field,bigDataUrls):
+    """
+    Mark down parent tracks associated with target track and save bigDataUrls.
+    """
+    if raStanza[track]['parent'] not in compositeNames:
+        compositeNames.append(raStanza[track]['parent'][0])
+    if 'type' in raStanza[track].keys() and field in raStanza[track].keys():
+        if 'bigBed' in raStanza[track]['type']:
+            saveTrackBigDataUrl(bigDataUrls,track,field,raStanza)
+
+    elif 'bigDataUrl' in raStanza[track].keys():
+        if 'bigBed' in raStanza[raStanza[track]['parent'][0]]['type']:
+            saveTrackBigDataUrl(bigDataUrls,track,field,raStanza)
+    return(bigDataUrls,compositeNames)
+
+def finishCurrentRecord(trackName,track,raStanza,field,bigDataUrls,compositeNames):
+    """
+    To be executed when a trackDb stanza has finished being parsed. Looks to see if
+    the track name matches the target track, if not checks parent, then parent's parent.
+    If matches are found, invokes saveParentTrackRecord().
+    """
+    if trackName == track:
+        if 'type' in raStanza[track].keys() and field in raStanza[track].keys():
+            if 'bigBed' in raStanza[track]['type'] and trackName in raStanza[track]['track']:
+                saveTrackBigDataUrl(bigDataUrls,track,field,raStanza)
+    # See if desired track is parent of current record                
+    elif 'parent' in raStanza[track].keys():
+        if trackName in raStanza[track]['parent']:
+            saveParentTrackRecord(raStanza,track,compositeNames,field,bigDataUrls)
+        # See if desired track is parent's parent of current record                            
+        elif 'parent' in raStanza[raStanza[track]['parent'][0]].keys():
+            if raStanza[raStanza[raStanza[track]['parent'][0]]['parent'][0]]['track'] == trackName:
+                saveParentTrackRecord(raStanza,track,compositeNames,field,bigDataUrls)
+    return(bigDataUrls,compositeNames)
+
+def startNewRecord(line,raStanza):
+    """
+    Invokes when a new trackDb stanza is encountered. Strips lines, and initializes
+    an ordered dictionary to contain the stanza variables.
+    """
+    line = line.lstrip().split(" ")
+    track = line[1] 
+    raStanza[track] = OrderedDict()
+    raStanza[track]['track'] = track
+    return(line,track,raStanza)
+
+def buildTrackAssociations(bigDataUrls,metaDataVar,raStanza,subGroupsRemove,compositeNames):
+    """
+    Iterate through all saved bigDataUrls, which should represent only entries that match
+    the target track, then look for track associations through the chosen metaDataVar
+    variable. This is done by extracting the metaDataVar variable, then iterating through
+    it removing any entries that match subGroupsRemove. If associations are made, add the
+    association to the track's bigDataUrls dictionary entry under relatedTracks.
+    """
+    for track in bigDataUrls.keys():
+        if metaDataVar in raStanza[track]:
+            subGroups = raStanza[track][metaDataVar]
+            for Groups in subGroups:
+                if Groups.startswith(subGroupsRemove):
+                    subGroups.remove(Groups)
+            for trackTitle in raStanza.keys():
+                if trackTitle == track:
+                    continue
+                elif 'parent' in raStanza[trackTitle].keys():
+                    if raStanza[trackTitle]['parent'][0] in compositeNames:
+                        if metaDataVar in raStanza[trackTitle].keys():
+                            if all(meta in raStanza[trackTitle][metaDataVar] for meta in subGroups):
+                                if 'relatedTracks' not in bigDataUrls[track].keys():
+                                    bigDataUrls[track]['relatedTracks'] = [trackTitle]
+                                else:
+                                    bigDataUrls[track]['relatedTracks'].append(trackTitle)
+    return(bigDataUrls)
+
+def raInfoExtract(raFile,field,subGroupsRemove,trackName,metaDataVar):
+    """
+    Primary function that parses the trackDb.ra file. Iterates by line, creating a 
+    new dictionary key for each track stanza, and saving the parameters. This is done
+    for all stanzas, and not just the one that match desired track name, in order
+    to build parent/child associations, and also to match any additional metaDataVar
+    track associations.
+    """
+    bigDataUrls = OrderedDict()
+    # List to hold all possible parent names part of composite
+    compositeNames = ['trackName']
+    with open(raFile,'r') as file:
+        raStanza = OrderedDict()
+        for line in file:
+            line = line.rstrip()
+            # Ignore headers
+            if line.startswith('#'):
+                continue
+            elif line in [""," "]:
+                if raStanza == {}:
+                    continue
+                # Finish current record
+                else: 
+                    finishCurrentRecord(trackName,track,raStanza,field,bigDataUrls,compositeNames) 
+            # Start new track record
+            elif line.lstrip().startswith("track"):
+                    newRecord = startNewRecord(line,raStanza)
+                    line, track = newRecord[0], newRecord[1]
+            elif raStanza == {}: # Support for useOneFile on
+                continue
+            # Save all trackDb parameters for record
+            else:
+                line = line.lstrip().split(" ")
+                raStanza[track][line[0]] = line[1:]
+            
+    buildTrackAssociations(bigDataUrls,metaDataVar,raStanza,subGroupsRemove,compositeNames)
+    return(bigDataUrls)
+
+def tryDelete(file):
+    """
+    Check if file exists, then delete.
+    """
+    if os.path.isfile(file):
+        os.remove(file)
+
+def handle_exit(tempFiles,trackName,outDir):
+    """
+    Clean up function to be run when the script exits out. Deletes all files created.
+    """
+    if tempFiles != []:
+        for tempFile in tempFiles:
+            tryDelete(tempFile)
+    tryDelete('bed3Sources.as')
+    tryDelete('{outDir}/{trackName}.multiBed.bed'.format(trackName=trackName,outDir=outDir))
+        
+def createBed3as():
+    """
+    Make bed3 .as file.
+    """
+    with open('bed3Sources.as','w') as file:
+        file.write('''table bed3Sources
+"BED3+2 with a count and list of sources for combined data"
+    (
+    string chrom;      "Reference sequence chromosome or scaffold"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    uint sourceCount;  "Number of sources"
+    uint[sourceCount] sourceIds; "Source ids"
+    )''')
+        
+def createMultiBedSourcesFile(trackName,outDir,raInfo):
+    """
+    Builds sources file with any additional associations. Iterates through all parsed
+    trackDb entries, and looks for presence of relatedTracks. If not found, make
+    single entry of track with no additional associations. If found, create entry
+    of track with all associated tracks separated by a tab.
+    """
+    with open('{outDir}/{trackName}.multiBedSources.tab'.format(trackName=trackName,outDir=outDir),'w') as file:
+        n=0
+        for trackNames in raInfo.keys():
+            n+=1
+            if 'relatedTracks' not in raInfo[trackNames].keys():
+                file.write('{trackNumber}\t{trackName}\n'.format(trackNumber=n,trackName=trackNames))
+            else:
+                file.write('{trackNumber}\t{trackName}\t{relatedTracks}\n'.format(trackNumber=n,\
+                    trackName=trackNames, relatedTracks='\t'.join(raInfo[trackNames]['relatedTracks'])))
+
+def checkTools(toolsPath,tool):
+    """
+    Looks for tools. Runs for bedtools, bedToBigBed, and bigBedToBed. Checks for the tools
+    in the current directory, in path, and a few variations. Returns specific error message
+    if tools not found.
+    """
+    bedToolsErrorMessage = "bedtools not found in path or local directory. If it is " + \
+    "not installed, it can be found here: https://bedtools.readthedocs.io\n\If it is " + \
+    "installed but not in path, the directory where bedtools can be found can be " + \
+    "specified with the \-b /path/to/dir flag.\nE.g. trackDbIndexBb -b /bin/bedtools"
+    kentUtilErrorMessage = "bedToBigBed/bigBedToBed not found in path or local " + \
+    "directory.\n\The program help message includes commands to download the " + \
+    "utilities. \They can be found here: http://hgdownload.soe.ucsc.edu/admin/exe/"
+    
+    if find_executable(tool) is not None:
+        return tool
+    elif find_executable(toolsPath) is not None and tool in find_executable(toolsPath):
+        return toolsPath
+    elif find_executable("{toolsPath}/{tool}".format(toolsPath=toolsPath,tool=tool)) is not None:
+        toolPath = "{toolsPath}/{tool}".format(toolsPath=toolsPath,tool=tool)
+        return toolPath 
+    elif find_executable("./{tool}".format(tool=tool)) is not None:
+        toolPath = "./{tool}".format(tool=tool)
+        return toolPath  
+    else:
+        if tool == 'bedtools':
+            print(bedToolsErrorMessage)
+        else:
+            print(kentUtilErrorMessage)
+        sys.exit(0)
+        
+def trackDbIndexBb(trackName, trackDbRaFile, chromSizes, outDir, toolsPath, subGroupsRemove, metaDataVar, noDelete):
+    """
+    Created multibed and sources file to be used with hideEmptySubtracks trackDb setting.
+    Checks for existence of necessary tools (bedtools, bigBedToBed, bedToBigBed), then 
+    creates an ordered dictionary of all information in the trackDb.ra file. Makes a list
+    of the BB bigDataUrls, then converts them all to bed as temp files. Then runs bed tools
+    to create a multibed of all the temp bed files. Creates a .as file, then converts the
+    multibed to BB. Creates the sources file by assigning 1-n to each of the track names,
+    and adding any related associated tracks separated by a tab. Finally clean up all
+    created files and print a completion message.
+    """ 
+    # Set up exit handler to delete files and check where dependencies are located
+    tempFiles = []
+    atexit.register(handle_exit,tempFiles,trackName,outDir)
+    
+    bedtools = checkTools(toolsPath,'bedtools')
+    bigBedToBed = checkTools(toolsPath,'bigBedToBed')
+    bedToBigBed = checkTools(toolsPath,'bedToBigBed')
+
+    raInfo = raInfoExtract(trackDbRaFile,'bigDataUrl',subGroupsRemove,trackName,metaDataVar)
+
+    bbFiles = []
+    for trackNames in raInfo.keys():
+        bbFiles.append(raInfo[trackNames]['bigDataUrl'])
+
+    # Covert all BB to bed and sort
+    FNULL = open(os.devnull, 'w') 
+    for bb in bbFiles:
+        tfName = tempfile.mktemp()
+        tempFiles.append(tfName)
+        try:
+            subprocess.check_call("{bigBedToBed} {bigBedFile} {tfName}".format(bigBedToBed=bigBedToBed,\
+                                                                           bigBedFile=bb,tfName=tfName), 
+                             shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
+        except:
+            relPath = "/".join(trackDbRaFile.split('/')[0:len(trackDbRaFile.split('/'))-1])+"/"
+            subprocess.check_call("{bigBedToBed} {relPath}{bigBedFile} {tfName}".format(bigBedToBed=bigBedToBed,\
+                                                                   relPath=relPath,bigBedFile=bb,tfName=tfName), 
+                             shell=True,stderr=subprocess.STDOUT)
+    FNULL.close()
+
+    # Make multiBed intersection of where all tracks have data
+    subprocess.check_call("{bedtools} multiinter -i {tempFiles} |\
+cut -f 1-5 > {outDir}/{trackName}.multiBed.bed".format(bedtools=bedtools,tempFiles=' '.join(tempFiles),\
+                                                       outDir=outDir,trackName=trackName), 
+               shell=True)
+        
+    # Make BB .as file, and convert multiBed to BB
+    createBed3as()
+    subprocess.check_call("{bedToBigBed} -as=bed3Sources.as -type=bed3+2 \
+{outDir}/{trackName}.multiBed.bed {chromSizes} {outDir}/{trackName}.multiBed.bb".format(bedToBigBed=bedToBigBed,\
+                                                       trackName=trackName,chromSizes=chromSizes,outDir=outDir), 
+               shell=True)
+
+    #Create index source file associating all tracks to a number
+    createMultiBedSourcesFile(trackName,outDir,raInfo)
+    
+    #Clean up and print completion
+    for tempFile in tempFiles:
+        tryDelete(tempFile)
+    
+    if noDelete is False:
+    	tryDelete('{outDir}/{trackName}.multiBed.bed'.format(trackName=trackName,outDir=outDir))
+    
+    tryDelete('bed3Sources.as')
+
+    print("Files successfully created:\n{outDir}/{trackName}.multiBed.bb\n{outDir}" + \
+          "/{trackName}.multiBedSources.tab\n\nPlace the files in their final " + \
+          "directory and add the following line to the top trackDb stanza" + \
+          ":".format(outDir=outDir,trackName=trackName))
+    print("hideEmptySubtracks on\n" + \
+          "hideEmptySubtracksMultiBedUrl $myPath/{trackName}.multiBed.bb\n" + \
+          "hideEmptySubtracksSourcesUrl $myPath/{trackName}.multiBedSources.tab".format(trackName=trackName))  
+        
+def main():
+    """
+    Initialized options and calls other functions.
+    """
+    options = parseArgs()
+
+    trackName = options.trackName
+    trackDbRaFile = options.raFile
+    chromSizes = options.chromSizes
+    outDir = options.outDir
+    toolsPath  = options.toolsPath
+    subGroupsRemove = options.subGroupRemove
+    metaDataVar = options.metaDataVar
+    noDelete = options.noDelete
+
+    trackDbIndexBb(trackName, trackDbRaFile, chromSizes, outDir, toolsPath, subGroupsRemove, metaDataVar, noDelete)
+    
+main()

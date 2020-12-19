@@ -55,6 +55,158 @@ slFreeList(themes);
 hPrintf("</TD>");
 }
 
+char *freeTypeFontNames[] = {
+"AvantGarde-Book",
+"AvantGarde-Demi",
+"AvantGarde-BookOblique",
+"AvantGarde-DemiOblique",
+"Helvetica",
+"Helvetica-Bold",
+"Helvetica-Oblique",
+"Helvetica-BoldOblique",
+"Helvetica-Narrow",
+"Helvetica-Narrow-Bold",
+"Helvetica-Narrow-Oblique",
+"Helvetica-Narrow-BoldOblique",
+"Times-Roman",
+"Times-Bold",
+"Times-Italic",
+"Times-BoldItalic",
+"Courier",
+"Courier-Bold",
+"Courier-Oblique",
+"Courier-BoldOblique",
+"ZapfChancery-MediumItalic",
+};
+
+char *freeTypeFontFiles[] = {
+"a010013l.pfb",
+"a010015l.pfb",
+"a010033l.pfb",
+"a010035l.pfb",
+"n019003l.pfb",
+"n019004l.pfb",
+"n019023l.pfb",
+"n019024l.pfb",
+"n019043l.pfb",
+"n019044l.pfb",
+"n019063l.pfb",
+"n019064l.pfb",
+"n021003l.pfb",
+"n021004l.pfb",
+"n021023l.pfb",
+"n021024l.pfb",
+"n022003l.pfb",
+"n022004l.pfb",
+"n022023l.pfb",
+"n022024l.pfb",
+"z003034l.pfb",
+};
+
+char *emptyStyles[] = {
+"Normal"
+};
+
+void maybeNewFonts(struct hvGfx *hvg)
+/* Check to see if we want to use the alternate font engine (FreeType2). */
+{
+if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+    {
+    if (sameString(tl.textFont, "Bitmap"))
+        return;
+
+    char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
+    char buffer[4096];
+
+    int ii;
+    for(ii=0; ii < ArraySize(freeTypeFontNames); ii++)
+        if (sameString(freeTypeFontNames[ii], tl.textFont))
+            break;
+    char *fontFile = freeTypeFontFiles[ii];
+    char *fontName = freeTypeFontNames[ii];
+    safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
+    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
+    }
+}
+
+static void textFontDropDown()
+/* Create drop down for font size. */
+{
+/* get current values for font and style */
+char *currentFontName = cloneString(tl.textFont);
+char *currentStyle = strchr(currentFontName, '-');
+if (currentStyle)
+    *currentStyle++ = 0;
+else
+    currentStyle = "Normal";
+
+char *faceNames[sizeof(freeTypeFontNames)];
+int ii;
+int numFonts = 0;
+struct dyString *dy = dyStringNew(1024);
+dyStringPrintf(dy, "  fontStyles = [];\n");
+
+int numStyle = 0;
+char *lastName = NULL;
+
+faceNames[numFonts++] = "Bitmap";
+dyStringPrintf(dy, "  fontStyles['Bitmap'] = ['Normal'];");
+
+for (ii=0; ii < ArraySize(freeTypeFontNames); ii++)
+    {
+    char *fontName = cloneString(freeTypeFontNames[ii]);
+    char *style = strchr(fontName, '-');
+
+    if (style)
+        *style++ = 0;
+
+    if ((lastName == NULL) || differentString(lastName, fontName))
+        {
+        faceNames[numFonts] = fontName;
+        if (lastName != NULL)
+            dyStringPrintf(dy, "  ];\n");
+
+        dyStringPrintf(dy, "  fontStyles['%s'] = [", fontName);
+        numStyle = 0;
+        numFonts++;
+        }
+
+    if (style == NULL)
+        style = cloneString("Normal");
+    if (numStyle)
+        dyStringPrintf(dy, ",");
+    dyStringPrintf(dy, "'%s'", style);
+    numStyle++;
+
+    lastName = fontName;
+    }
+    dyStringPrintf(dy, "  ];\n");
+
+dyStringPrintf(dy, "$(\"[name='%s']\").change(function()\n", textFontVar);
+dyStringPrintf(dy, "{\n");
+dyStringPrintf(dy, "  $(\"[name='textStyle']\").empty();");
+dyStringPrintf(dy, "  val= $(this).find(':selected').val(); \n");
+dyStringPrintf(dy, "  if (fontStyles[val].length == 1) {\n");
+dyStringPrintf(dy, "    $(\"[id='textStyleDrop']\").hide();$(\"[id='textStyleName']\").hide();\n");
+dyStringPrintf(dy, "    $(\"[name='textStyle']\").val('Normal');\n");
+dyStringPrintf(dy, "  } else {\n");
+dyStringPrintf(dy, "    $(\"[id='textStyleDrop']\").show();$(\"[id='textStyleName']\").show();\n");
+dyStringPrintf(dy, "  }\n");
+dyStringPrintf(dy, "  for(ii=0; ii < fontStyles[val].length; ii++) { $(\"[name='textStyle']\").append( new Option(fontStyles[val][ii],fontStyles[val][ii],))};\n");
+dyStringPrintf(dy, "});\n");
+dyStringPrintf(dy, "$(\"[name='textFont']\").change();\n");
+dyStringPrintf(dy, "$(\"[name='textStyle']\").val('%s');\n", currentStyle);
+jsInline(dy->string);
+
+hDropList(textFontVar, faceNames, numFonts, currentFontName);
+}
+
+static void textStyleDropDown()
+/* Create drop down for font size. */
+{
+hDropList(textStyleVar, emptyStyles, ArraySize(emptyStyles), emptyStyles[0]);
+}
+
 static void textSizeDropDown()
 /* Create drop down for font size. */
 {
@@ -429,7 +581,7 @@ hPrintf("<TD>pixels</TR>");
 
 hPrintf("<TR><TD>label area width:");
 hPrintf("<TD style=\"text-align: right\">");
-hIntVar("hgt.labelWidth", leftLabelWidthChars, 2);
+hIntVar(leftLabelWidthVar, tl.leftLabelWidthChars, 2);
 hPrintf("<TD>characters<TD></TR>");
 
 hPrintf("<TR><TD>text size:");
@@ -450,6 +602,19 @@ if (trackLayoutInclFontExtras())
     hPrintf("</TD>");
     }
 hPrintf("</TR>");
+
+if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+    {
+    hPrintf("<TR><TD>font:");
+    hPrintf("<TD style=\"text-align: right\">");
+    textFontDropDown();
+    hPrintf("</TD></TR>");
+    hPrintf("<TR><TD id='textStyleName'>style:");
+    hPrintf("<TD style=\"text-align: right\" id='textStyleDrop' >");
+    textStyleDropDown();
+    hPrintf("</TR>");
+    hPrintf("</TR>");
+    }
 
 themeDropDown(cart);
 

@@ -194,18 +194,10 @@ static void explainCoordSystem()
  * reduce the frequency with which they find this "bug" on their own and
  * we have to explain it on the genome list. */
 {
-if (!hIsGsidServer())
-    {
-    puts("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
-     "1-based.  See explanation \n"
-     "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
-         "here</A>.</I>");
-    }
-else
-    {
-    puts("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
-         "1-based.\n</I>");
-    }
+puts("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
+ "1-based.  See explanation \n"
+ "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
+     "here</A>.</I>");
 }
 
 

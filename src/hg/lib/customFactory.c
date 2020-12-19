@@ -36,11 +36,13 @@
 #include "bigBed.h"
 #include "hgBam.h"
 #include "vcf.h"
+#include "vcfUi.h"
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "regexHelper.h"
 #include "chromInfo.h"
+#include "grp.h"
 #include "trackHub.h"
 #include "bedTabix.h"
 #include "barChartBed.h"
@@ -82,6 +84,17 @@ if (line != NULL && startsWithWord("track", line))
     line = NULL;
     }
 return line;
+}
+
+static char *customFactoryCheckChromNameAliasDb(char *genomeDb, char *word, struct lineFile *lf)
+/* Abort if word is not a valid sequence name for genomeDb.  If word is a recognizable alias
+ * or case-sensitive variant of a valid sequence, suggest that to the user. */
+{
+static char *aliasName = NULL;
+aliasName = hgOfficialChromName(genomeDb, word);
+if (! aliasName)
+    lineFileAbort(lf, "'%s' is not a valid sequence name in %s", word, genomeDb);
+return aliasName;
 }
 
 void customFactoryCheckChromNameDb(char *genomeDb, char *word, struct lineFile *lf)
@@ -248,6 +261,7 @@ if (! officialChrom)
         dyStringPrintf(reason, "'%s' is not a valid sequence name in %s", row[0], db);
     return FALSE;
     }
+#ifdef OBSOLETE_TO_BE_REMOVED
 else if (differentString(row[0], officialChrom))
     {
     if (reason)
@@ -256,6 +270,7 @@ else if (differentString(row[0], officialChrom))
     freeMem(officialChrom);
     return FALSE;
     }
+#endif
 freeMem(officialChrom);
 if (! isAllDigits(row[1]))
     {
@@ -457,13 +472,13 @@ return bed;
 }
 
 static struct bed *customTrackBedOld(char *db, char *row[13], int wordCount,
-	struct hash *chromHash, struct lineFile *lf)
+	struct hash *chromHash, struct lineFile *lf, char *aliasName)
 /* Convert a row of strings to a bed. */
 {
 struct bed * bed;
 int count;
 AllocVar(bed);
-bed->chrom = hashStoreName(chromHash, row[0]);
+bed->chrom = hashStoreName(chromHash, aliasName);
 customFactoryCheckChromNameDb(db, bed->chrom, lf);
 
 bed->chromStart = lineFileNeedNum(lf, row, 1);
@@ -599,6 +614,7 @@ static struct customTrack *bedLoader(struct customFactory *fac,
 char *line;
 char *db = ctGenomeOrCurrent(track);
 char *lastChrom = NULL;
+char *aliasName = NULL;
 int chromSize = -1;
 boolean newCustomTrackValidate = sameOk(cfgOption("newCustomTrackValidate"), "on");
 while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
@@ -611,8 +627,8 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     /* since rows are often sorted, we can reduce repetitive checking */
     if (differentStringNullOk(row[0], lastChrom))
 	{
-	customFactoryCheckChromNameDb(db, row[0], lf);
-	chromSize = hChromSize(db, row[0]);
+	aliasName = customFactoryCheckChromNameAliasDb(db, row[0], lf);
+	chromSize = hChromSize(db, aliasName);
 	freez(&lastChrom);
 	lastChrom = cloneString(row[0]);
 	}
@@ -623,11 +639,11 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     if (newCustomTrackValidate)
 	{
 	bed = customTrackBed(row, wordCount, chromSize, lf);
-	bed->chrom = hashStoreName(chromHash, row[0]);
+	bed->chrom = hashStoreName(chromHash, aliasName);
 	}
     else
 	{
-	bed = customTrackBedOld(db, row, wordCount, chromHash, lf);
+	bed = customTrackBedOld(db, row, wordCount, chromHash, lf, aliasName);
 	}
 
     slAddHead(&track->bedList, bed);
@@ -2722,6 +2738,14 @@ static struct customFactory bigWigFactory =
 
 /*** Big Bed Factory - for big client-side BED tracks ***/
 
+static boolean bigLollyRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigLolly track */
+{
+return (sameType(type, "bigLolly"));
+}
+
 static boolean bigMafRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2937,6 +2961,15 @@ static struct customFactory bigMafFactory =
     bigBedLoader,
     };
 
+static struct customFactory bigLollyFactory =
+/* Factory for bigLolly tracks */
+    {
+    NULL,
+    "bigLolly",
+    bigLollyRecognizer,
+    bigBedLoader,
+    };
+
 static struct customFactory bigPslFactory =
 /* Factory for bigPsl tracks */
     {
@@ -3061,7 +3094,7 @@ static boolean vcfTabixRecognizer(struct customFactory *fac, struct customPp *cp
 				  struct customTrack *track)
 /* Return TRUE if looks like we're handling a vcfTabix track */
 {
-return (sameType(type, "vcfTabix"));
+return (sameType(type, "vcfTabix") || sameType(type, "vcfPhasedTrio"));
 }
 
 static struct customTrack *vcfTabixLoader(struct customFactory *fac, struct hash *chromHash,
@@ -3078,6 +3111,14 @@ struct dyString *dyErr = dyStringNew(0);
 checkAllowedBigDataUrlProtocols(bigDataUrl);
 if (bigDataIndexUrl)
     checkAllowedBigDataUrlProtocols(bigDataIndexUrl);
+
+boolean isVcfPhasedTrio = sameString(hashFindVal(settings,"type"),"vcfPhasedTrio");
+if (isVcfPhasedTrio)
+    {
+    char *reqSampleName = hashFindVal(settings, VCF_PHASED_CHILD_SAMPLE_SETTING);
+    if (reqSampleName == NULL)
+        errAbort("Missing required setting '%s' from track line", VCF_PHASED_CHILD_SAMPLE_SETTING);
+    }
 
 if (doExtraChecking)
     {
@@ -3101,7 +3142,10 @@ if (doExtraChecking)
     }
 if (isNotEmpty(dyErr->string))
     track->networkErrMsg = dyStringCannibalize(&dyErr);
-track->dbTrackType = cloneString("vcfTabix");
+if (isVcfPhasedTrio)
+    track->dbTrackType = cloneString("vcfPhasedTrio");
+else
+    track->dbTrackType = cloneString("vcfTabix");
 return track;
 }
 
@@ -3408,9 +3452,11 @@ if (hasUnprintable(line, 6))
 	{
 	if (endsWith(fileName, ".bam"))
 	    type = "bam";
-	else if (endsWith(fileName, ".bb"))
+	else if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed"))
 	    type = "bigBed";
-	else if (endsWith(fileName, ".bw"))
+	else if (endsWith(fileName, ".inter.bb") || endsWith(fileName, ".inter.bigBed"))
+	    type = "bigInteract";
+	else if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig"))
 	    type = "bigWig";
 	}
     char *docUrl = NULL;
@@ -3426,7 +3472,11 @@ if (hasUnprintable(line, 6))
     if (docUrl)
 	errAbort("It appears that you are directly uploading binary data of type %s%s.  "
 		 "Custom tracks of this type require the files to be accessible by "
-		 "public http/https/ftp, and file URLs must be passed as the bigDataUrl "
+		 "public http/https/ftp. Our <a href='../goldenPath/help/hgTrackHubHelp.html#Hosting' target=_blank>track hub documentation</a> "
+                 "lists third-party services where you can "
+                 "store custom track or track hub files. "
+                 "Once the files are available on the internet, file URLs can be entered as-is, one per line, "
+                 "or via the bigDataUrl "
 		 "setting on a &quot;track&quot; line.  "
 		 "See <A HREF='%s' TARGET=_BLANK>%s custom track documentation</A> for "
 		 "more information and examples.",
@@ -3505,6 +3555,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &interactFactory);
     slAddTail(&factoryList, &bigInteractFactory);
     slAddTail(&factoryList, &hicFactory);
+    slAddTail(&factoryList, &bigLollyFactory);
     }
 }
 
@@ -3548,6 +3599,24 @@ static void stripJavascript(char **pString)
 char *tmp = *pString;
 *pString = jsStripJavascript(tmp);
 freeMem(tmp);
+}
+
+static boolean checkGroup(char *db, char *group)
+/* Check if group is valid in db (if mysql, in grp table; if hub, in groups file or default) */
+{
+static struct hash *dbToGroups = NULL;
+if (dbToGroups == NULL)
+    dbToGroups = hashNew(0);
+struct hash *groups = hashFindVal(dbToGroups, db);
+if (groups == NULL)
+    {
+    groups = hashNew(0);
+    hashAdd(dbToGroups, db, groups);
+    struct grp *groupList = hLoadGrps(db), *grp;
+    for (grp = groupList;  grp != NULL;  grp = grp->next)
+        hashAddInt(groups, grp->name, TRUE);
+    }
+return hashIntValDefault(groups, group, FALSE);
 }
 
 static void customTrackUpdateFromSettings(struct customTrack *track,
@@ -3678,7 +3747,7 @@ if ((val = hashFindVal(hash, "visibility")) != NULL)
 	{
 	tdb->visibility = atoi(val);
 	if (tdb->visibility > tvSquish)
-	    errAbort("line %d of custom input: Expecting visibility 0 to 4 got %s", lineIx, val);
+	    errAbort("Line %d of custom input: Expecting visibility 0 to 4 got %s. ", lineIx, val);
 	}
     else
         {
@@ -3686,7 +3755,22 @@ if ((val = hashFindVal(hash, "visibility")) != NULL)
 	}
     }
 if ((val = hashFindVal(hash, "group")) != NULL)
-    tdb->grp = val;
+    {
+    if (checkGroup(genomeDb, val))
+        tdb->grp = val;
+    else
+        {
+        boolean isHub = trackHubDatabase(genomeDb);
+        char *groupSource = isHub ? "the hub's groups.txt file" : "the table 'grp'";
+        warn("Line %d of custom input: group '%s' is not valid. "
+            "Either remove the group setting or use a group named in %s.",
+             lineIx, val, groupSource);
+        if (isHub)
+            hashRemove(hash, "group");
+        else
+            hashReplace(hash, "group", "user");
+        }
+    }
 if ((val = hashFindVal(hash, "useScore")) != NULL)
     tdb->useScore = !sameString(val, "0");
 if ((val = hashFindVal(hash, "priority")) != NULL)
@@ -4233,7 +4317,12 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    if (dbTrack && oneTrack->dbTrackType != NULL)
 		ctAddToSettings(track, "dbTrackType", oneTrack->dbTrackType);
             if (!trackDbSetting(track->tdb, "inputType"))
-                ctAddToSettings(track, "inputType", fac->name);
+                {
+                if (sameString(oneTrack->tdb->type, "vcfPhasedTrio"))
+                    ctAddToSettings(track, "inputType", "vcfPhasedTrio");
+                else
+                    ctAddToSettings(track, "inputType", fac->name);
+                }
             if (dataUrl)
 		ctAddToSettings(track, "dataUrl", dataUrl);
             if (!ctGenome(track) && ctDb)

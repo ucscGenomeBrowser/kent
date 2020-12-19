@@ -251,6 +251,23 @@ if (spdiBList && spdiBList->next)
 return TRUE;
 }
 
+static void spdiBedListAssertSameRef(struct spdiBed *spdiBList)
+/* Sanity check -- raise assertion if spdiBList elements do not all have the same seq, pos, del. */
+{
+if (spdiBList && spdiBList->next)
+    {
+    assert(spdiBList->chromEnd == spdiBList->chromStart + strlen(spdiBList->del));
+    struct spdiBed *spdiB;
+    for (spdiB = spdiBList->next;  spdiB != NULL;  spdiB = spdiB->next)
+        {
+        assert(spdiB->chrom == spdiBList->chrom || sameString(spdiB->chrom, spdiBList->chrom));
+        assert(spdiB->chromStart == spdiBList->chromStart);
+        assert(spdiB->chromEnd == spdiBList->chromEnd);
+        assert(spdiB->del == spdiBList->del || sameString(spdiB->del, spdiBList->del));
+        }
+    }
+}
+
 static enum bigDbSnpClass varTypeToClass(char *varType)
 /* Convert JSON variant_type to bigDbSnp enum form. */
 {
@@ -529,14 +546,16 @@ if (seqWin == NULL)
             }
         }
     }
+if (seqWin == NULL)
+    errAbort("No twoBit file and chrom found in refSeqToUcsc file for seq '%s'", nc);
 return seqWin;
 }
 
 static boolean maybeExpandRange(struct spdiBed *spdiBTrim, struct seqWindow *seqWin,
-                                struct spdiBed *spdiB, struct alObs *obs, struct lm *lm)
+                                struct spdiBed *spdiB, struct lm *lm)
 /* If spdiBTrim is a pure insertion or deletion within a repetitive region,
- * then expand spdiB (and obs if non-NULL) to the full repetitive range and return TRUE.
- * Trim spdiBTrim to minimal representation (see maybeTrimSpdi) before calling this. */
+ * then expand spdiB to the full repetitive range and return TRUE.
+ * spdiBTrim is assumed to already have minimal representation (see trimSpdi). */
 {
 boolean changed = FALSE;
 uint refTrimStart = spdiBTrim->chromStart;
@@ -572,8 +591,6 @@ if (indelShiftIsApplicable(refTrimLen, altTrimLen))
         int newAltLen = leftShifted + altTrimLen + rightShifted;
         spdiB->ins = lmAlloc(lm, newAltLen+1);
         safef(spdiB->ins, newAltLen+1, "%s%s%s", refLeft, altTrim, refRight);
-        if (obs)
-            obs->allele = spdiB->ins;
         spdiB->chromStart = leftStart;
         spdiB->chromEnd = rightEnd;
         }
@@ -581,63 +598,18 @@ if (indelShiftIsApplicable(refTrimLen, altTrimLen))
 return changed;
 }
 
-static void checkSpdisAfterExpansion(struct spdiBed *spdiBList, struct alObs *obsList)
-/* Check spdiBList and obsList for inconsistencies; if the reference allele spdiB+obs missed out
- * on the expansion then expand them. */
+static void checkObsVsSpdi(struct alObs *obsList, struct spdiBed *spdiBList)
+/* assert that obsList and spdiBList have same length and each obs->allele is the same as the
+ * corresponding spdiB->ins. */
 {
-boolean alreadyExpandedRefAllele = FALSE;
+assert(slCount(spdiBList) == slCount(obsList));
 struct spdiBed *spdiB;
 struct alObs *obs;
 for (spdiB = spdiBList, obs = obsList;
      spdiB != NULL;
      spdiB = spdiB->next, obs = obs->next)
     {
-    if (strlen(spdiB->del) != spdiB->chromEnd - spdiB->chromStart)
-        errAbort("Inconsistent freq spdi coords & del: %s|%d|%d %s/%s",
-                 spdiB->chrom, spdiB->chromStart, spdiB->chromEnd, spdiB->del, spdiB->ins);
-    if (spdiB != spdiBList)
-        {
-        if (differentString(spdiB->chrom, spdiBList->chrom))
-            errAbort("Differing freq spdiB chrom: '%s' vs. '%s'",
-                     spdiB->chrom, spdiBList->chrom);
-        if (differentString(spdiB->del, spdiBList->del))
-            {
-            // Ref allele can't be shifted, so expand it to alt's shifted range... but only once,
-            // so we'll catch differences between alt alleles' expanded ranges.
-            struct spdiBed *spdiBRef = NULL, *spdiBAlt = NULL;
-            struct alObs *obsRef = NULL;
-            if (sameString(spdiBList->del, spdiBList->ins))
-                {
-                spdiBRef = spdiBList;
-                spdiBAlt = spdiB;
-                obsRef = obsList;
-                }
-            else if (sameString(spdiB->del, spdiB->ins))
-                {
-                spdiBRef = spdiB;
-                spdiBAlt = spdiBList;
-                obsRef = obs;
-                }
-            if (spdiBRef != NULL && !alreadyExpandedRefAllele)
-                {
-                // Copy spdiBAlt's expanded coords and del into spdiBRef
-                spdiBRef->chromStart = spdiBAlt->chromStart;
-                spdiBRef->chromEnd = spdiBAlt->chromEnd;
-                spdiBRef->del = spdiBAlt->del;
-                // The reference allele's ins is the same as its del, and the corresponding
-                // obs->allele must match it.
-                spdiBRef->ins = spdiBRef->del;
-                obsRef->allele = spdiBRef->ins;
-                alreadyExpandedRefAllele = TRUE;
-                }
-            else
-                errAbort("Differing freq spdiB: %s|%d|%d %s/%s vs %s|%d|%d %s/%s",
-                         spdiBList->chrom, spdiBList->chromStart, spdiBList->chromEnd,
-                         spdiBList->del, spdiBList->ins,
-                         spdiB->chrom, spdiB->chromStart, spdiB->chromEnd,
-                         spdiB->del, spdiB->ins);
-            }
-        }
+    assert(sameString(obs->allele, spdiB->ins));
     }
 }
 
@@ -653,111 +625,105 @@ trimRefAlt(spdiBTrim->del, spdiBTrim->ins, &spdiBTrim->chromStart, &spdiBTrim->c
 return spdiBTrim;
 }
 
-static boolean spdiListTrimLeftBase(struct spdiBed *spdiList, struct lm *lm)
-/* If all alleles in spdiList begin with the same base at the same pos, then modify them
- * all to start one base to the right and trim the left base from all alleles.
- * errAbort if the don't all have the same pos and del. */
+static void spdiBedListNormalizeRange(struct spdiBed *spdiBList, struct seqWindow *seqWin,
+                                      struct lm *lm)
+/* If members of spdiBList have inconsistent chromStart/chromEnd/del then expand chromStart,
+ * chromEnd, del and ins to cover the full range of all elements in list.  Ref allele is
+ * not included when finding range -- it is reset using an alt's final del. */
 {
-if (spdiList && spdiList->next)
+if (spdiBList && spdiBList->next)
     {
-    boolean doTrim = TRUE;
-    char *del = spdiList->del;
-    char leftBase = del[0];
-    uint start = spdiList->chromStart;
-    struct spdiBed *spdi;
-    for (spdi = spdiList;  spdi != NULL;  spdi = spdi->next)
+    struct spdiBed *spdiBRef = NULL, *spdiBAlt = NULL;
+    char *firstChrom = NULL;
+    int minChromStart = BIGNUM;
+    int maxChromEnd = 0;
+    boolean inconsistent = FALSE;
+    struct spdiBed *spdiB;
+    for (spdiB = spdiBList;  spdiB != NULL;  spdiB = spdiB->next)
         {
-        if (spdi->chromStart != start)
-            errAbort("spdiListTrimLeftBase: items have different starts (%s:%u, %s:%u)",
-                     spdiList->chrom, start, spdi->chrom, spdi->chromStart);
-        if (differentString(spdi->del, del))
-            errAbort("spdiListTrimLeftBase: items have different del (%s, %s)", del, spdi->del);
-        if (spdi->del[0] == 0 || spdi->ins[0] == 0 ||
-            spdi->ins[0] != leftBase)
+        if (firstChrom == NULL)
+            firstChrom = spdiB->chrom;
+        else if (differentString(spdiB->chrom, firstChrom))
+            errAbort("spdiBedListNormalizeRange: inconsistent chrom '%s' vs. '%s'",
+                     firstChrom, spdiB->chrom);
+        if (spdiB->del == spdiB->ins || sameString(spdiB->del, spdiB->ins))
             {
-            doTrim = FALSE;
-            break;
+            if (spdiBRef != NULL)
+                errAbort("spdiBedListNormalizeRange: multiple ref allele SPDIs not supported.");
+            spdiBRef = spdiB;
+            }
+        else
+            {
+            if (spdiBAlt == NULL)
+                spdiBAlt = spdiB;
+            else if (spdiB->chromStart != spdiBAlt->chromStart ||
+                     spdiB->chromEnd != spdiBAlt->chromEnd)
+                inconsistent = TRUE;
+            else if (! (spdiB->del == spdiBAlt->del || sameString(spdiB->del, spdiBAlt->del)))
+                errAbort("spdiBedListNormalizeRange: same coords %s|%d|%d, different del "
+                         "'%s' / '%s'",
+                         spdiB->chrom, spdiB->chromStart, spdiB->chromEnd,
+                         spdiB->del, spdiBAlt->del);
+            if (spdiB->chromStart < minChromStart)
+                minChromStart = spdiB->chromStart;
+            if (spdiB->chromEnd > maxChromEnd)
+                maxChromEnd = spdiB->chromEnd;
             }
         }
-    if (doTrim)
+    if (inconsistent)
         {
-        for (spdi = spdiList;  spdi != NULL;  spdi = spdi->next)
+        int newDelLen = maxChromEnd - minChromStart;
+        char *newDel = lmAlloc(lm, newDelLen+1);
+        seqWindowCopy(seqWin, minChromStart, newDelLen, newDel, newDelLen+1);
+        for (spdiB = spdiBList;  spdiB != NULL;  spdiB = spdiB->next)
             {
-            spdi->chromStart++;
-            // Allocate new strings because the spdi->del pointer can be shared all over.
-            spdi->del = lmCloneString(lm, spdi->del+1);
-            spdi->ins = lmCloneString(lm, spdi->ins+1);
+            // Skip ref allele for now, it is updated at end.
+            if (sameString(spdiB->del, spdiB->ins))
+                continue;
+            // If needed, expand chromStart/chromEnd and add bases from the reference to the
+            // left and/or right of del and ins.
+            int padLeft = spdiB->chromStart - minChromStart;
+            int padRight = maxChromEnd - spdiB->chromEnd;
+            if (padLeft > 0 || padRight > 0)
+                {
+                spdiB->chromStart = minChromStart;
+                spdiB->chromEnd = maxChromEnd;
+                spdiB->del = newDel;
+                // Concatenate left padding, old ins value, and right padding to make new ins.
+                int oldInsLen = strlen(spdiB->ins);
+                int newInsLen = padLeft + oldInsLen + padRight;
+                char *newIns = lmAlloc(lm, newInsLen+1);
+                safencpy(newIns, newInsLen+1, newDel, padLeft);
+                safencpy(newIns+padLeft, newInsLen+1-padLeft, spdiB->ins, oldInsLen);
+                safencpy(newIns+padLeft+oldInsLen, newInsLen+1-padLeft-oldInsLen,
+                         newDel+newDelLen-padRight, padRight);
+                spdiB->ins = newIns;
+                }
             }
         }
-    return doTrim;
+    // Now that alts are settled, fix ref allele.
+    if (spdiBRef && spdiBAlt &&
+        (spdiBRef->chromStart != spdiBAlt->chromStart || spdiBRef->chromEnd != spdiBAlt->chromEnd))
+        {
+        spdiBRef->chromStart = spdiBAlt->chromStart;
+        spdiBRef->chromEnd = spdiBAlt->chromEnd;
+        spdiBRef->del = spdiBRef->ins = spdiBAlt->del;
+        }
     }
-return FALSE;
 }
 
-static boolean spdiListTrimRightBase(struct spdiBed *spdiList, struct lm *lm)
-/* If all alleles in spdiList end with the same base, then trim the right base from all alleles.
- * errAbort if not all at same pos. */
+static void setObsToSpdi(struct alObs *obsList, struct spdiBed *spdiBList)
+/* Set alleles in obsList to match ins in spdiBList. */
 {
-if (spdiList && spdiList->next)
+assert(slCount(spdiBList) == slCount(obsList));
+struct spdiBed *spdiB;
+struct alObs *obs;
+for (spdiB = spdiBList, obs = obsList;
+     spdiB != NULL;
+     spdiB = spdiB->next, obs = obs->next)
     {
-    boolean doTrim = TRUE;
-    char *del = spdiList->del;
-    char rightBase = lastChar(del);
-    uint start = spdiList->chromStart;
-    struct spdiBed *spdi;
-    for (spdi = spdiList;  spdi != NULL;  spdi = spdi->next)
-        {
-        if (spdi->chromStart != start)
-            errAbort("spdiListTrimRightBase: items have different starts (%s:%u, %s:%u)",
-                     spdiList->chrom, start, spdi->chrom, spdi->chromStart);
-        if (differentString(spdi->del, del))
-            errAbort("spdiListTrimRightBase: items have different del (%s, %s)", del, spdi->del);
-        if (spdi->del[0] == 0 || spdi->ins[0] == 0 ||
-            lastChar(spdi->ins) != rightBase)
-            {
-            doTrim = FALSE;
-            break;
-            }
-        }
-    if (doTrim)
-        {
-        for (spdi = spdiList;  spdi != NULL;  spdi = spdi->next)
-            {
-            spdi->chromEnd--;
-            // Modify clones because the spdi->del pointer can be shared all over.
-            spdi->del = lmCloneString(lm, spdi->del);
-            spdi->ins = lmCloneString(lm, spdi->ins);
-            trimLastChar(spdi->del);
-            trimLastChar(spdi->ins);
-            }
-        }
-    return doTrim;
+    obs->allele = spdiB->ins;
     }
-return FALSE;
-}
-
-static boolean trimVcfSpdiList(struct spdiBed *spdiList, struct alObs *obsList, struct lm *lm)
-/* SPDIs from VCF indel allele frequency submissions often still have the extra left base... and
- * sometimes they have an extra right base.  Detect and trim those cases. */
-{
-boolean changed = FALSE;
-while (spdiListTrimLeftBase(spdiList, lm))
-    changed = TRUE;
-while (spdiListTrimRightBase(spdiList, lm))
-    changed = TRUE;
-if (changed)
-    {
-    struct spdiBed *spdi;
-    struct alObs *obs;
-    // Propagate changes to obsList
-    for (spdi = spdiList, obs = obsList;
-         spdi != NULL;
-         spdi = spdi->next, obs = obs->next)
-        {
-        obs->allele = spdi->ins;
-        }
-    }
-return changed;
 }
 
 static void spdiNormalizeFreq(struct sharedProps *props, struct hash *ncToTwoBitChrom,
@@ -771,40 +737,43 @@ static void spdiNormalizeFreq(struct sharedProps *props, struct hash *ncToTwoBit
 int sIx;
 for (sIx = 0;  sIx < props->freqSourceCount;  sIx++)
     {
-    struct spdiBed *spdiB, *spdiBList = props->freqSourceSpdis[sIx];
-    struct alObs *obs, *obsList = props->freqSourceObs[sIx];
-    // Sanity check that spdiBList and obsList are consistent before we start tweaking:
-    assert(slCount(spdiBList) == slCount(obsList));
-    for (spdiB = spdiBList, obs = obsList;
-         spdiB != NULL;
-         spdiB = spdiB->next, obs = obs->next)
+    struct spdiBed *spdiBList = props->freqSourceSpdis[sIx];
+    if (spdiBList != NULL)
         {
-        assert(sameString(obs->allele, spdiB->ins));
-        }
-    boolean changed = trimVcfSpdiList(spdiBList, obsList, lm);
-    // For each allele, see if it can be slid around.
-    for (spdiB = spdiBList, obs = obsList;
-         spdiB != NULL;
-         spdiB = spdiB->next, obs = obs->next)
-        {
-        assert(sameString(obs->allele, spdiB->ins));
-        // If spdiB->del can be expanded, then expand both ref and alt in spdiB and obs accordingly.
-        if (isEmpty(spdiB->del) || isEmpty(spdiB->ins) ||
-            stringIn(spdiB->del, spdiB->ins) || stringIn(spdiB->ins, spdiB->del))
+        spdiBedListAssertSameRef(spdiBList);
+        struct seqWindow *seqWin = getChromSeq(ncToSeqWin, spdiBList->chrom, ncToTwoBitChrom);
+        struct alObs *obsList = props->freqSourceObs[sIx];
+        // Sanity check that spdiBList and obsList are consistent before we start tweaking:
+        checkObsVsSpdi(obsList, spdiBList);
+        boolean changed = FALSE;
+        struct spdiBed *spdiB;
+        for (spdiB = spdiBList;  spdiB != NULL;  spdiB = spdiB->next)
             {
-            // First trim ref and alt to their minimal version for indelShift to work with.
-            // There may be nothing to trim because they're usually minimal already and
-            // stringIn catches false positive like A/TAAC, and that's fine.
+            // The reference allele (del == ins) can't be shifted in a meaningful way --
+            // skip it for now and see how the alt alleles (the actual changes) might be shifted.
+            if (sameString(spdiB->del, spdiB->ins))
+                continue;
             struct spdiBed *spdiBTrim = trimSpdi(spdiB, lm);
-            // If possible, expand the minimal representation to full SPDI range.
-            struct seqWindow *seqWin = getChromSeq(ncToSeqWin, spdiB->chrom, ncToTwoBitChrom);
-            if (seqWin == NULL)
-                errAbort("No twoBit file and chrom found for freq seq '%s'", spdiB->chrom);
-            changed |= maybeExpandRange(spdiBTrim, seqWin, spdiB, obs, lm);
+            if (maybeExpandRange(spdiBTrim, seqWin, spdiB, lm))
+                changed = TRUE;
+            else if (spdiBTrim->chromStart != spdiB->chromStart ||
+                     spdiBTrim->chromEnd != spdiB->chromEnd)
+                {
+                // Use the trimmed version
+                changed = TRUE;
+                spdiB->chromStart = spdiBTrim->chromStart;
+                spdiB->chromEnd = spdiBTrim->chromEnd;
+                spdiB->del = spdiBTrim->del;
+                spdiB->ins = spdiBTrim->ins;
+                }
             }
+        if (changed)
+            {
+            spdiBedListNormalizeRange(spdiBList, seqWin, lm);
+            setObsToSpdi(obsList, spdiBList);
+            }
+        spdiBedListAssertSameRef(spdiBList);
         }
-    if (changed)
-        checkSpdisAfterExpansion(spdiBList, obsList);
     }
 }
 
@@ -1117,7 +1086,7 @@ for (i = 0;  i < bds->altCount;  i++)
         struct spdiBed *spdiB = spdiBedNewLm(bds->chrom, bds->chromStart, bds->ref, alt, lm);
         struct spdiBed *spdiBTrim = trimSpdi(spdiB, lm);
 
-        maybeExpandRange(spdiBTrim, seqWin, spdiB, NULL, lm);
+        maybeExpandRange(spdiBTrim, seqWin, spdiB, lm);
         if (spdiB->chromStart != bds->chromStart || spdiB->chromEnd != bds->chromEnd)
             errAbort("Range of %s (%s|%d|%d ref='%s', alt='%s') "
                      "could be expanded to %s|%d|%d\n",

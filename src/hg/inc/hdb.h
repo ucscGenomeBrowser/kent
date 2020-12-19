@@ -190,6 +190,10 @@ boolean hgIsOfficialChromName(char *db, char *name);
 /* Determine if name is exact (case-sensitive) match with
  * a chromosome in the current assembly */
 
+boolean hgPdbOk(char *database);
+/* Return TRUE if hgPdbOk is on in dbDb
+ * on this database. */
+
 boolean hgNearOk(char *database);
 /* Return TRUE if ok to put up familyBrowser (hgNear)
  * on this database. */
@@ -1049,4 +1053,16 @@ char *hRefSeqAccForChrom(char *db, char *chrom);
 /* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.
  * db must never change. */
 
+char *abbreviateRefSeqSummary(char *summary);
+/* strip off the uninformative parts from the RefSeq Summary text: the repetitive note
+ * about the publication subset and the Evidence-Data-Notes */
+
+boolean isMito(char *chrom);
+/* Return True if chrom is chrM or chrMT */
+
+char *hdbDefaultKnownDb(char *db);
+/* Get the default knownGene database from the defaultKnown table. */
+
+char *hdbGetMasterGeneTrack(char *knownDb);
+/* Get the native gene track for a knownGene database. */
 #endif /* HDB_H */

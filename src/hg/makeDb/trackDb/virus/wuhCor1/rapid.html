@@ -1,0 +1,62 @@
+<h2>Description</h2>
+
+<p> This track shows the primers for the 
+<a href="https://www.biorxiv.org/content/10.1101/2020.05.28.122648v2" target="_blank">RAPID</a> 
+SARS-CoV-2 sequencing protocol. The primers enable amplification of the genome of SARS-COV2. 
+This approach uses multiplexed 1200 base pair (bp) tiled amplicons. Briefly, two PCR 
+reactions are performed for each SARS-CoV-2 positive patient sample to be sequenced. 
+One PCR reaction contains thirty primers that generate the odd numbered 
+amplicons (&quot;Pool 1&quot;), while the second PCR reaction contains twenty eight primers 
+that generate the even numbered amplicons (&quot;Pool 2&quot;). After PCR, the two amplicon 
+pools are combined and can be used for a range of downstream sequencing approaches. Primers 
+were all designed using <a href=" http://primal.zibraproject.org/" target="_blank">Primal Scheme
+</a> and described in <a href="https://www.nature.com/articles/nprot.2017.066">
+Nature Protocols 2017</a>. This primer set results in amplicons that exhibit lower levels of 
+variation in coverage compared to other commonly used primer sets.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Genomic locations of primers are highlighted. A click on them shows the primer pool. 
+This is one of the few tracks that may be best displayed in "full" mode.</p>
+
+<h2>Methods</h2>
+<p>
+RAPID primer sequences were downloaded from the
+<a href="https://docs.google.com/spreadsheets/d/1M5I_C56ZC8_2Ycgm9EFieVlVNqxsP7dXAnGoBZy3nDo
+/edit#gid=755704891" target="_blank">Google Spreadsheet</a> and converted to bigBed. More 
+details are available in the paper referenced below or in the 
+supplemental files on <a href="https://zenodo.org/record/3897530#.XwM3ApMzZ0v">Zenodo</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables">Table Browser</a> or combined with other datasets in the
+<a href="hgIntegrator">Data Integrator</a> tool.
+For automated analysis, the genome annotation is stored in
+a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/rapid.bb">the download server</a>.</p>
+<p>
+Annotations can
+be converted from binary to ASCII text by our command-line tool bigBedToBed.
+Instructions for downloading this command can be found on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">utilities page</a>.
+The tool can also be used to obtain features within a given range without downloading the file,
+for example:</p>
+<code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/rapid.bb -chrom=NC_045512v2 -start=0 -end=29902 stdout</code>
+<p>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+
+<h2>References</h2>
+<p>
+Nikki E. Freed, Marketa Vlkova, Muhammad B. Faisal, Olin K. Silander
+<a href="https://www.biorxiv.org/content/10.1101/2020.05.28.122648v2" 
+target="_blank">Rapid and Inexpensive Whole-Genome Sequencing of SARS-CoV2 using 
+1200 bp Tiled Amplicons and Oxford Nanopore Rapid Barcoding</a>. 
+<em>bioRxiv </em></p>
+</body></html>

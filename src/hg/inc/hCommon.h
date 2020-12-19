@@ -84,18 +84,6 @@ int chromToInt(char *s);
 /* converts a chrom name chrXX into an integer from 1 to 54.
  *  X = 23 Y = 24 Un = 25 M = 26 random = chr + 26;*/
 
-boolean hIsGisaidServer();
-/* Is this the GISAID-customized server? Change for config variable
- * gisaid.server=yes */
-
-boolean hIsGsidServer();
-/* Is this the GSID-customized server? Change for config variable
- * gsid.server=yes */
-
-boolean hIsCgbServer();
-/* Is this a cancer genome browser server? Change for config variable
- * cgb.server=yes */
-
 void hTableStart();
 /* Output a table with solid borders. */
 

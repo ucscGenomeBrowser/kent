@@ -1,0 +1,6 @@
+hub Plants genome assemblies
+shortLabel plants
+longLabel Plant genome assemblies
+genomesFile genomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl index.html

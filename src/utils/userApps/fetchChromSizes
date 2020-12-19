@@ -4,7 +4,7 @@
 #	mysql, wget or ftp
 
 usage() {
-    printf "usage: fetchChromSizes <db> > <db>.chrom.sizes
+    printf "fetchChromSizes - script to grab chrom.sizes from UCSC via either of: mysql, wget or ftp\n\nusage: fetchChromSizes <db> > <db>.chrom.sizes
     used to fetch chrom.sizes information from UCSC for the given <db>
 <db> - name of UCSC database, e.g.: hg38, hg18, mm9, etc ...
 

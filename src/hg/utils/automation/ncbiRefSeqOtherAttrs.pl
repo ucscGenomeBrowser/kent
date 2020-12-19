@@ -83,11 +83,12 @@ open(my $ATTRS, $attrsFile) || die "Can't open attributes file '$attrsFile': $!\
 while (<$ATTRS>) {
   chomp;
   my ($id, $attr, $val) = split("\t");
+  $id =~ s/ /_/g;
   if ($attr eq 'Dbxref') {
     # Dbxref is one attribute, but split it up into multiple output columns for URL generation
     my @xrefs = split(',', $val);
     foreach my $xref (@xrefs) {
-      foreach my $source qw(GeneID MIM HGNC MGI miRBase WormBase XenBase BGD RGD SGD ZFIN FLYBASE) {
+      foreach my $source ( qw(GeneID MIM HGNC MGI miRBase WormBase XenBase BGD RGD SGD ZFIN FLYBASE) ) {
         if ($xref =~ s/^$source://) {
           my $ix = $attrToIx{$source};
           $itemAttrs{$id}->[$ix] = $xref if (! defined $itemAttrs{$id}->[$ix]);
@@ -96,6 +97,7 @@ while (<$ATTRS>) {
       }
     }
   } elsif ($attr eq 'Parent') {
+    $val =~ s/ /_/g;
     $idToParent{$id} = $val;
   } else {
     my $ix = $attrToIx{$attr};
@@ -165,7 +167,7 @@ while (<$BED>) {
   my $id = $bedCols[3];
   my $extraCols = $itemAttrs{$id};
   if (! defined $extraCols) {
-    $id = geneToId{$id};
+    $id = $geneToId{$id};
     $extraCols = $itemAttrs{$id};
   }
   die "No attributes for bed name '$bedCols[3]' (id '$id')" unless defined $extraCols;

@@ -14,6 +14,12 @@ set machine="rr"
 set table=""
 set field=""
 set dumpfile=""
+set fieldval=0
+set fields = ( 'Name' 'Engine' 'Version' 'Row_format' 'Rows' \
+   'Avg_row_length' 'Data_length' 'Max_data_length' 'Index_length' \
+   'Data_free' 'Auto_increment' 'Create_time' 'Update_time' \
+   'Check_time' 'Create_options' 'Comment' )
+
 
 if ( $#argv < 3 || $#argv > 4 ) then
   echo
@@ -47,6 +53,7 @@ if ( $#argv == 4 ) then
   endif
 endif
 
+# get file for non-real-time queries (used for rr later)
 set dumpfile=`getRRdumpfile.csh $db $machine`
 if ( $status ) then
   echo
@@ -64,22 +71,24 @@ if ( $status ) then
   exit 1
 endif
 
-# check if $field is legit
-head -1 $dumpfile | grep -iw "$field" > /dev/null
-if ( $status ) then
+# set variable to index of field in STATUS dump
+set i=0
+while ( $i < `echo $#fields | awk '{print $1+1}'` )
+  echo $fields[$i] | grep -w $field > /dev/null
+  if ( $status ) then
+    set i=`echo $i | awk '{print $1+1}'`
+  else
+    set fieldval=$i
+    set i=$#fields
+  endif
+end
+
+if ( $fieldval == 0 ) then
   echo
   echo "  $field -- no such field in TABLE STATUS output"
-  echo "  for $db.$table.  try one of the following"
-  echo
-  head -1 $dumpfile | sed -e "s/\t/\n/g" 
   echo
   exit 1
 endif
-
-
-# set variable to index of field in STATUS dump
-set fieldval=`head -1 $dumpfile | sed -e "s/\t/\n/g" | grep -iwn "$field" \
-      | gawk -F":" '{print $1}'`
 
 # print the field for the desired table
 cat $dumpfile | grep -w "^$table" | sed -e "s/\t/\n/g" | sed -n "${fieldval}p" 

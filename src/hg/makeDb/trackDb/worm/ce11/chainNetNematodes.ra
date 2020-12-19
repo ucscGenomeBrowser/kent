@@ -30,7 +30,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s000 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain C_nigoni
         otherDb C_nigoni
 
@@ -38,7 +38,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s001 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain caeRem4
         otherDb caeRem4
 
@@ -46,7 +46,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s002 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain C_briggsae
         otherDb C_briggsae
 
@@ -54,7 +54,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s003 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain C_sp26_LS_2015
         otherDb C_sp26_LS_2015
 
@@ -62,7 +62,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s004 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain caePb3
         otherDb caePb3
 
@@ -70,7 +70,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s005 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain C_latens
         otherDb C_latens
 
@@ -78,7 +78,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s006 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain caeSp111
         otherDb caeSp111
 
@@ -86,7 +86,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s007 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain C_sp34_TK_2017
         otherDb C_sp34_TK_2017
 
@@ -94,7 +94,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s008 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain C_sp40_LS_2015
         otherDb C_sp40_LS_2015
 
@@ -102,7 +102,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s009 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain caeJap4
         otherDb caeJap4
 
@@ -110,7 +110,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s010 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain C_sp39_LS_2015
         otherDb C_sp39_LS_2015
 
@@ -118,7 +118,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s011 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain C_sp38_MB_2015
         otherDb C_sp38_MB_2015
 
@@ -126,7 +126,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s012 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain C_sp31_LS_2015
         otherDb C_sp31_LS_2015
 
@@ -134,7 +134,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s013 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain caeSp51
         otherDb caeSp51
 
@@ -142,7 +142,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s014 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain caeAng2
         otherDb caeAng2
 
@@ -150,7 +150,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s015 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain cb4
         otherDb cb4
 
@@ -158,7 +158,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s016 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain C_sp32_LS_2015
         otherDb C_sp32_LS_2015
 
@@ -166,7 +166,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s017 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Diploscapter_coronatus
         otherDb Diploscapter_coronatus
 
@@ -174,7 +174,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s018 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Diploscapter_pachys
         otherDb Diploscapter_pachys
 
@@ -182,7 +182,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s019 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain C_sp21_LS_2015
         otherDb C_sp21_LS_2015
 
@@ -190,7 +190,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s020 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Ancylostoma_caninum
         otherDb Ancylostoma_caninum
 
@@ -198,7 +198,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s021 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Oscheius_tipulae
         otherDb Oscheius_tipulae
 
@@ -206,7 +206,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s022 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain ancCey1
         otherDb ancCey1
 
@@ -214,7 +214,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s023 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Parapristionchus_giblindavisi
         otherDb Parapristionchus_giblindavisi
 
@@ -222,7 +222,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s024 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Necator_americanus
         otherDb Necator_americanus
 
@@ -230,7 +230,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s025 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Oscheius_TEL_2014
         otherDb Oscheius_TEL_2014
 
@@ -238,7 +238,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s026 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Ancylostoma_duodenale
         otherDb Ancylostoma_duodenale
 
@@ -246,7 +246,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s027 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Oesophagostomum_dentatum
         otherDb Oesophagostomum_dentatum
 
@@ -254,7 +254,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s028 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Pristionchus_arcanus
         otherDb Pristionchus_arcanus
 
@@ -262,7 +262,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s029 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Pristionchus_pacificus
         otherDb Pristionchus_pacificus
 
@@ -270,7 +270,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s030 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Pristionchus_maxplancki
         otherDb Pristionchus_maxplancki
 
@@ -278,7 +278,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s031 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Pristionchus_entomophagus
         otherDb Pristionchus_entomophagus
 
@@ -286,7 +286,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s032 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Pristionchus_exspectatus
         otherDb Pristionchus_exspectatus
 
@@ -294,7 +294,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s033 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain hetBac1
         otherDb hetBac1
 
@@ -302,7 +302,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s034 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain necAme1
         otherDb necAme1
 
@@ -310,7 +310,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s035 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Oscheius_MCB
         otherDb Oscheius_MCB
 
@@ -318,7 +318,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s036 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain priPac3
         otherDb priPac3
 
@@ -326,7 +326,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s037 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain priExs1
         otherDb priExs1
 
@@ -334,7 +334,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s038 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Onchocerca_volvulus
         otherDb Onchocerca_volvulus
 
@@ -342,7 +342,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s039 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Wuchereria_bancrofti
         otherDb Wuchereria_bancrofti
 
@@ -350,7 +350,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s040 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Dirofilaria_immitis
         otherDb Dirofilaria_immitis
 
@@ -358,7 +358,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s041 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Brugia_pahangi
         otherDb Brugia_pahangi
 
@@ -366,7 +366,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s042 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Onchocerca_ochengi
         otherDb Onchocerca_ochengi
 
@@ -374,7 +374,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s043 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Brugia_malayi
         otherDb Brugia_malayi
 
@@ -382,7 +382,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s044 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Loa_loa
         otherDb Loa_loa
 
@@ -390,7 +390,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s045 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Setaria_digitata
         otherDb Setaria_digitata
 
@@ -398,7 +398,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s046 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Onchocerca_flexuosa
         otherDb Onchocerca_flexuosa
 
@@ -406,7 +406,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s047 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Setaria_equina
         otherDb Setaria_equina
 
@@ -414,7 +414,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s048 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Ascaris_suum
         otherDb Ascaris_suum
 
@@ -422,7 +422,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s049 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Parascaris_univalens
         otherDb Parascaris_univalens
 
@@ -430,7 +430,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s050 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Toxocara_canis
         otherDb Toxocara_canis
 
@@ -438,7 +438,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s051 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain ascSuu1
         otherDb ascSuu1
 
@@ -446,7 +446,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s052 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain oncVol1
         otherDb oncVol1
 
@@ -454,7 +454,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s053 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bruMal2
         otherDb bruMal2
 
@@ -462,7 +462,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s054 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain loaLoa1
         otherDb loaLoa1
 
@@ -470,7 +470,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s055 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain dirImm1
         otherDb dirImm1
 
@@ -478,7 +478,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s056 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Elaeophora_elaphi
         otherDb Elaeophora_elaphi
 
@@ -486,7 +486,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s057 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain strRat2
         otherDb strRat2
 
@@ -494,7 +494,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s058 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain strRat1
         otherDb strRat1
 
@@ -502,7 +502,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s059 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Strongyloides_stercoralis
         otherDb Strongyloides_stercoralis
 
@@ -510,7 +510,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s060 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Strongyloides_venezuelensis
         otherDb Strongyloides_venezuelensis
 
@@ -518,7 +518,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s061 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Meloidogyne_arenaria
         otherDb Meloidogyne_arenaria
 
@@ -526,7 +526,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s062 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Strongyloides_papillosus
         otherDb Strongyloides_papillosus
 
@@ -534,7 +534,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s063 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Parastrongyloides_trichosuri
         otherDb Parastrongyloides_trichosuri
 
@@ -542,7 +542,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s064 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Meloidogyne_incognita
         otherDb Meloidogyne_incognita
 
@@ -550,7 +550,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s065 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Meloidogyne_javanica
         otherDb Meloidogyne_javanica
 
@@ -558,7 +558,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s066 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Acrobeloides_nanus
         otherDb Acrobeloides_nanus
 
@@ -566,7 +566,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s067 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Rhabditophanes_KR3021
         otherDb Rhabditophanes_KR3021
 
@@ -574,7 +574,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s068 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Meloidogyne_graminicola
         otherDb Meloidogyne_graminicola
 
@@ -582,7 +582,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s069 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Rotylenchulus_reniformis
         otherDb Rotylenchulus_reniformis
 
@@ -590,7 +590,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s070 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Ditylenchus_destructor
         otherDb Ditylenchus_destructor
 
@@ -598,7 +598,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s071 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Bursaphelenchus_xylophilus
         otherDb Bursaphelenchus_xylophilus
 
@@ -606,7 +606,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s072 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Steinernema_monticolum
         otherDb Steinernema_monticolum
 
@@ -614,7 +614,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s073 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Meloidogyne_floridensis
         otherDb Meloidogyne_floridensis
 
@@ -622,7 +622,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s074 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Steinernema_carpocapsae
         otherDb Steinernema_carpocapsae
 
@@ -630,7 +630,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s075 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Steinernema_scapterisci
         otherDb Steinernema_scapterisci
 
@@ -638,7 +638,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s076 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Steinernema_feltiae
         otherDb Steinernema_feltiae
 
@@ -646,7 +646,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s077 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Subanguina_moxae
         otherDb Subanguina_moxae
 
@@ -654,7 +654,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s078 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Globodera_ellingtonae
         otherDb Globodera_ellingtonae
 
@@ -662,7 +662,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s079 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Globodera_rostochiensis
         otherDb Globodera_rostochiensis
 
@@ -670,7 +670,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s080 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Steinernema_glaseri
         otherDb Steinernema_glaseri
 
@@ -678,7 +678,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s081 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Globodera_pallida
         otherDb Globodera_pallida
 
@@ -686,7 +686,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s082 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Heterodera_glycines
         otherDb Heterodera_glycines
 
@@ -694,7 +694,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s083 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain panRed1
         otherDb panRed1
 
@@ -702,7 +702,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s084 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain burXyl1
         otherDb burXyl1
 
@@ -710,7 +710,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s085 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain melHap1
         otherDb melHap1
 
@@ -718,7 +718,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s086 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain melInc2
         otherDb melInc2
 
@@ -726,7 +726,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s087 clade=c03
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Dictyocaulus_viviparus
         otherDb Dictyocaulus_viviparus
 
@@ -734,7 +734,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s088 clade=c03
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Nippostrongylus_brasiliensis
         otherDb Nippostrongylus_brasiliensis
 
@@ -742,7 +742,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s089 clade=c03
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Heligmosomoides_polygyrus_bakeri
         otherDb Heligmosomoides_polygyrus_bakeri
 
@@ -750,7 +750,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s090 clade=c03
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Teladorsagia_circumcincta
         otherDb Teladorsagia_circumcincta
 
@@ -758,7 +758,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s091 clade=c03
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Haemonchus_contortus
         otherDb Haemonchus_contortus
 
@@ -766,7 +766,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s092 clade=c03
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Angiostrongylus_cantonensis
         otherDb Angiostrongylus_cantonensis
 
@@ -774,7 +774,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s093 clade=c03
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain haeCon2
         otherDb haeCon2
 
@@ -782,7 +782,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s094 clade=c04
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Plectus_sambesii
         otherDb Plectus_sambesii
 
@@ -790,7 +790,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s095 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_murrelli
         otherDb Trichinella_murrelli
 
@@ -798,7 +798,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s096 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_zimbabwensis
         otherDb Trichinella_zimbabwensis
 
@@ -806,7 +806,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s097 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_pseudospiralis
         otherDb Trichinella_pseudospiralis
 
@@ -814,7 +814,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s098 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_papuae
         otherDb Trichinella_papuae
 
@@ -822,7 +822,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s099 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_T6
         otherDb Trichinella_T6
 
@@ -830,7 +830,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s100 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_britovi
         otherDb Trichinella_britovi
 
@@ -838,7 +838,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s101 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_T8
         otherDb Trichinella_T8
 
@@ -846,7 +846,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s102 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_T9
         otherDb Trichinella_T9
 
@@ -854,7 +854,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s103 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_patagoniensis
         otherDb Trichinella_patagoniensis
 
@@ -862,7 +862,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s104 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_nelsoni
         otherDb Trichinella_nelsoni
 
@@ -870,7 +870,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s105 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_nativa
         otherDb Trichinella_nativa
 
@@ -878,7 +878,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s106 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichinella_spiralis
         otherDb Trichinella_spiralis
 
@@ -886,7 +886,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s107 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Romanomermis_culicivorax
         otherDb Romanomermis_culicivorax
 
@@ -894,7 +894,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s108 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichuris_trichiura
         otherDb Trichuris_trichiura
 
@@ -902,7 +902,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s109 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Trichuris_muris
         otherDb Trichuris_muris
 
@@ -910,7 +910,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s110 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain triSui1
         otherDb triSui1
 
@@ -918,7 +918,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s111 clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain triSpi1
         otherDb triSpi1
 
@@ -926,7 +926,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s112 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Schmidtea_mediterranea
         otherDb Schmidtea_mediterranea
 
@@ -934,7 +934,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s113 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Girardia_tigrina
         otherDb Girardia_tigrina
 
@@ -942,7 +942,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s114 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Dugesia_japonica
         otherDb Dugesia_japonica
 
@@ -950,7 +950,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s115 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Macrostomum_lignano
         otherDb Macrostomum_lignano
 
@@ -958,7 +958,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s116 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Schistosoma_mansoni
         otherDb Schistosoma_mansoni
 
@@ -966,7 +966,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s117 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Schistosoma_haematobium
         otherDb Schistosoma_haematobium
 
@@ -974,7 +974,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s118 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Schistosoma_japonicum
         otherDb Schistosoma_japonicum
 
@@ -982,7 +982,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s119 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Gyrodactylus_salaris
         otherDb Gyrodactylus_salaris
 
@@ -990,7 +990,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s120 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Hymenolepis_microstoma
         otherDb Hymenolepis_microstoma
 
@@ -998,7 +998,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s121 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Fasciola_hepatica
         otherDb Fasciola_hepatica
 
@@ -1006,7 +1006,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s122 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Taenia_multiceps
         otherDb Taenia_multiceps
 
@@ -1014,7 +1014,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s123 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Fasciola_gigantica
         otherDb Fasciola_gigantica
 
@@ -1022,7 +1022,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s124 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Taenia_saginata
         otherDb Taenia_saginata
 
@@ -1030,7 +1030,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s125 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Clonorchis_sinensis
         otherDb Clonorchis_sinensis
 
@@ -1038,7 +1038,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s126 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Opisthorchis_viverrini
         otherDb Opisthorchis_viverrini
 
@@ -1046,7 +1046,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s127 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Echinococcus_multilocularis
         otherDb Echinococcus_multilocularis
 
@@ -1054,7 +1054,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s128 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Taenia_asiatica
         otherDb Taenia_asiatica
 
@@ -1062,7 +1062,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s129 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Echinococcus_canadensis
         otherDb Echinococcus_canadensis
 
@@ -1070,7 +1070,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s130 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Taenia_solium
         otherDb Taenia_solium
 
@@ -1078,7 +1078,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s131 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Echinococcus_granulosus
         otherDb Echinococcus_granulosus
 
@@ -1086,7 +1086,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s132 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Spirometra_erinaceieuropaei
         otherDb Spirometra_erinaceieuropaei
 
@@ -1094,7 +1094,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewchain off
         subGroups view=chain species=s133 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain Dicrocoelium_dendriticum
         otherDb Dicrocoelium_dendriticum
 
@@ -1116,7 +1116,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s001 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign caeRem4 chainCaeRem4
         otherDb caeRem4
 
@@ -1124,7 +1124,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s004 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign caePb3 chainCaePb3
         otherDb caePb3
 
@@ -1132,7 +1132,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s006 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign caeSp111 chainCaeSp111
         otherDb caeSp111
 
@@ -1140,7 +1140,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s009 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign caeJap4 chainCaeJap4
         otherDb caeJap4
 
@@ -1148,7 +1148,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s013 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign caeSp51 chainCaeSp51
         otherDb caeSp51
 
@@ -1156,7 +1156,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s014 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign caeAng2 chainCaeAng2
         otherDb caeAng2
 
@@ -1164,7 +1164,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s015 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign cb4 chainCb4
         otherDb cb4
 
@@ -1172,7 +1172,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s022 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ancCey1 chainAncCey1
         otherDb ancCey1
 
@@ -1180,7 +1180,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s033 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign hetBac1 chainHetBac1
         otherDb hetBac1
 
@@ -1188,7 +1188,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s034 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign necAme1 chainNecAme1
         otherDb necAme1
 
@@ -1196,7 +1196,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s036 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign priPac3 chainPriPac3
         otherDb priPac3
 
@@ -1204,7 +1204,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s037 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign priExs1 chainPriExs1
         otherDb priExs1
 
@@ -1212,7 +1212,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s051 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ascSuu1 chainAscSuu1
         otherDb ascSuu1
 
@@ -1220,7 +1220,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s052 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oncVol1 chainOncVol1
         otherDb oncVol1
 
@@ -1228,7 +1228,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s053 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bruMal2 chainBruMal2
         otherDb bruMal2
 
@@ -1236,7 +1236,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s054 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign loaLoa1 chainLoaLoa1
         otherDb loaLoa1
 
@@ -1244,7 +1244,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s055 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign dirImm1 chainDirImm1
         otherDb dirImm1
 
@@ -1252,7 +1252,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s057 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign strRat2 chainStrRat2
         otherDb strRat2
 
@@ -1260,7 +1260,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s058 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign strRat1 chainStrRat1
         otherDb strRat1
 
@@ -1268,7 +1268,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s083 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign panRed1 chainPanRed1
         otherDb panRed1
 
@@ -1276,7 +1276,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s084 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign burXyl1 chainBurXyl1
         otherDb burXyl1
 
@@ -1284,7 +1284,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s085 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign melHap1 chainMelHap1
         otherDb melHap1
 
@@ -1292,7 +1292,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s086 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign melInc2 chainMelInc2
         otherDb melInc2
 
@@ -1300,7 +1300,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s093 clade=c03
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign haeCon2 chainHaeCon2
         otherDb haeCon2
 
@@ -1308,7 +1308,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s110 clade=c05
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign triSui1 chainTriSui1
         otherDb triSui1
 
@@ -1316,7 +1316,7 @@ html chainNetNematodes
         subTrack nematodesChainNetViewnet off
         subGroups view=net species=s111 clade=c05
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign triSpi1 chainTriSpi1
         otherDb triSpi1
 

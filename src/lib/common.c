@@ -1409,6 +1409,21 @@ for (;;)
     }
 }
 
+int differentWordNullOk(char *s1, char *s2)
+/* Returns 0 if two strings (either of which may be NULL)
+ * are the same, ignoring case.  Otherwise returns the
+ * difference between the first non-matching characters. */
+{
+if (s1 == s2)
+    return FALSE;
+else if (s1 == NULL)
+    return -1;
+else if (s2 == NULL)
+    return 1;
+else
+    return differentWord(s1,s2);
+}
+
 int differentStringNullOk(char *a, char *b)
 /* Returns 0 if two strings (either of which may be NULL)
  * are the same.  Otherwise it returns a positive or negative
@@ -3781,3 +3796,12 @@ else
    return FALSE;
 }
 
+char *shorterDouble(double value)
+/* Work around a "bug" in %g output that goes into scientific notation too early. */
+{
+static char g15buffer[4096];
+
+sprintf(g15buffer, "%.15g", value);
+
+return cloneString(g15buffer);
+}

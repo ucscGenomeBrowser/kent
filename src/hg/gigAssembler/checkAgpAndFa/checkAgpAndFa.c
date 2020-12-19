@@ -32,8 +32,7 @@ Explain usage and exit.
 */
 {
     fflush(stdout);
-    errAbort(
-      "\ncheckAgpAndFa - takes a .agp file and .fa file and ensures that they are in synch\n"
+    errAbort("checkAgpAndFa - takes a .agp file and .fa file and ensures that they are in synch\n"
       "usage:\n\n"
       "   checkAgpAndFa in.agp in.fa\n\n"
       "options:\n"

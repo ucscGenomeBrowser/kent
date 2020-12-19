@@ -333,13 +333,13 @@ static void bigBedClick(char *fileName, struct trackDb *tdb,
                      char *item, int start, int end, int bedSize)
 /* Handle click in generic bigBed track. */
 {
-boolean showUrl = FALSE;
 char *chrom = cartString(cart, "c");
 
 /* Open BigWig file and get interval list. */
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct lm *lm = lmInit(0);
 int ivStart = start, ivEnd = end;
+char *itemForUrl = item;
 if (start == end)
     {
     // item is an insertion; expand the search range from 0 bases to 2 so we catch it:
@@ -352,7 +352,6 @@ struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 
 if (bedSize == 0)
     {
     bedSize = bbi->definedFieldCount;
-    showUrl = TRUE;
     }
 
 char *scoreFilter = cartOrTdbString(cart, tdb, "scoreFilter", NULL);
@@ -388,6 +387,23 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     char *fields[bedSize+seq1Seq2Fields];
     char startBuf[16], endBuf[16];
     char *rest = cloneString(bb->rest);
+    char *restFields[256];
+    int restCount = 0;
+    int restBedFields = 0;
+    char **extraFields = NULL;
+    int extraFieldCount = 0;
+    struct slPair *extraFieldPairs = NULL;
+    if (isNotEmpty(rest))
+        {
+        restCount = chopTabs(rest, restFields);
+        restBedFields = bedSize - 3;
+        if (restCount > restBedFields)
+            {
+            extraFields = (restFields + restBedFields);
+            extraFieldCount = restCount - restBedFields;
+            extraFieldPairs = getExtraFields(tdb, extraFields, extraFieldCount);
+            }
+        }
     int bbFieldCount = bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields,
                                            bedSize+seq1Seq2Fields);
     if (bbFieldCount != bedSize+seq1Seq2Fields)
@@ -398,25 +414,24 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct bed *bed = bedLoadN(fields, bedSize);
     if (bedSize >= 6 && scoreFilter && bed->score < minScore)
 	continue;
-    if (showUrl && (bedSize >= 4))
-        printCustomUrl(tdb, item, TRUE);
+
+    // if there are extra fields, load them up because we may want to use them in URL:
+    itemForUrl = getIdInUrl(tdb, item);
+    printCustomUrlWithFields(tdb, bed->name, bed->name, item == itemForUrl, extraFieldPairs);
+    if (itemForUrl)
+        printIframe(tdb, itemForUrl);
+
     bedPrintPos(bed, bedSize, tdb);
 
     // display seq1 and seq2
     if (seq1Seq2 && bedSize+seq1Seq2Fields == 8)
         printf("<table><tr><th>Sequence 1</th><th>Sequence 2</th></tr>"
 	       "<tr><td> %s </td><td> %s </td></tr></table>", fields[6], fields[7]);
-    else if (isNotEmpty(rest))
+    else if (restCount > 0)
 	{
-	char *restFields[256];
-	int restCount = chopTabs(rest, restFields);
-	int restBedFields = bedSize - 3;
 	if (restCount > restBedFields)
 	    {
-            char **extraFields = (restFields + restBedFields);
-            int extraFieldCount = restCount - restBedFields;
             int printCount = extraFieldsPrint(tdb,NULL,extraFields, extraFieldCount);
-            struct slPair* extraFieldPairs = getExtraFields(tdb, extraFields, extraFieldCount);
             printAllExternalExtraFields(tdb, extraFieldPairs);
 
             if (printCount == 0)

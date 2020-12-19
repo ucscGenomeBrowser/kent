@@ -5,10 +5,17 @@ This track shows the genomic positions of variants in the
 <a href="http://bejerano.stanford.edu/AVADA/" target="_blank">AVADA database</a>. 
 AVADA is a database of variants built by a machine learning software
 that analyzes full text research articles to find the gene mentions in the text that 
-look like they are most relevant for genetic diagnosis, finds variant descriptions
-and uses the genes to map the variants to the genome. For details see the 
+look like they are most relevant for monogenic (non-cancer) genetic diagnosis, finds variant 
+descriptions and uses the genes to map the variants to the genome. For details see the 
 <a target=_blank href="https://doi.org/10.1038/s41436-019-0643-6">AVADA paper</a>.
 </p>
+<p>As the data is automatically extracted from full-text publications, it includes 
+some false positives. In the original study, out of 200 randomly selected articles,
+only 99 were considered relevant after manual curation. Ideally, the track is used
+in combination with variants found in human patients, to find relevant literature, 
+or with Genome Browser tracks of variant databases that curated a single study 
+for each variant, like our tracks for HGMD or LOVD.
+<p>
 
 <h2>Display Conventions and Configuration</h2>
 
@@ -17,7 +24,8 @@ Genomic locations of a variants are labeled with the variant description
 in the original next. This is not a normalized HGVS string, but the original
 text as the authors of the study described it.
 The Pubmed ID, gene and transcript for each variant are shown on the
-variant's details page.
+variant's details page, as well as the PubMed title, authors and abstract. 
+Mouse over the variants to show the gene, variant, first author, year and title.
 </p>
 
 <H2>Data access</H2>
@@ -30,20 +38,20 @@ based on the chromosome positions, use the <a href="../cgi-bin/hgIntegrator">Dat
 For automated download and analysis, the genome annotation is stored in a bigBed file that
 can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/" target="_blank">our download server</a>.
-The files for this track are called <tt>clinVarMain.bb</tt> and <tt>clinVarCnv.bb</tt>. Individual
+The file for this track is called <tt>avada.bb</tt>. Individual
 regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool
 can also be used to obtain only features within a given range, e.g. 
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/clinvar/clinvarMain.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/avada.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
 </p>
 
-<p>
-For automated access, this track like all others, is also available via our <a href="https://api.genome.ucsc.edu">API</a>.
-However, for bulk processing in pipelines, downloading the data and/or using bigBed files as described above is usually faster.
-</p>
+<p> For automated access, this track like all others, is also available via our
+<a href="../goldenPath/help/api.html">API</a>.  However, for bulk processing in
+pipelines, downloading the data and/or using bigBed files as described above is
+usually faster.  </p>
 
 <h2>Methods</h2>
 
@@ -51,8 +59,10 @@ However, for bulk processing in pipelines, downloading the data and/or using big
 The AVADA VCF file was reformatted at UCSC to the <a href="../goldenPath/help/bigBed.html">bigBed</a> format.
 The program that performs the conversion is available on
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/avada"
-target="_blank">Github</a>.
-</p>
+target="_blank">Github</a>. The paper reference information was added from
+MEDLINE and is used Courtesy of the U.S. National Library of Medicine, according 
+to its <a href="https://www.nlm.nih.gov/databases/download/terms_and_conditions_pubmed.html" target=_blank>
+Terms and Conditions</a>.</p>
 
 <h2>Credits</h2>
 <p>
@@ -61,8 +71,7 @@ Thanks to Gill Bejerano and Johannes Birgmeier for making the data available.
 
 <h2>References</h2>
 <p>
-Johannes Birgmeier, Cole A. Deisseroth, Laura E. Hayward, Luisa M. T. Galhardo, Andrew P. Tierno, Karthik A. Jagadeesh, Peter D. Stenson, David N. Cooper, Jonathan A. Bernstein, Maximilian Haeussler, and Gill Bejerano:
-<em>et al</em>.
+Johannes Birgmeier, Cole A. Deisseroth, Laura E. Hayward, Luisa M. T. Galhardo, Andrew P. Tierno, Karthik A. Jagadeesh, Peter D. Stenson, David N. Cooper, Jonathan A. Bernstein, Maximilian Haeussler, and Gill Bejerano.
 <a href="https://doi.org/10.1038/s41436-019-0643-6" target="_blank">
 AVADA: Towards Automated Pathogenic Variant Evidence Retrieval Directly from the Full Text Literature. </a>.
 <em>Genetics in Medicine</em>. 2019.

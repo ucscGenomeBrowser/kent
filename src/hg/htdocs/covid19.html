@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="COVID-19 Resources at UCSC" -->
+<!--#set var="ROOT" value="." -->
+
+<!--#include virtual="$ROOT/inc/gbPageStart.html"-->
+
+<h1>COVID-19 Pandemic Resources at UCSC 
+<span> <font size=-1 style="padding-left: 10px; padding-right: 10px; margin-left: 15px;">
+<a href="#news">Updated: November 13, 2020</a></font></span></h1>
+
+<div class="row">
+    <div class="col-md-6">
+<p>
+The SARS-CoV-2 coronavirus emerged in December 2019 as a novel human pathogen causing
+a severe acute respiratory syndrome (COVID-19). The disease
+spread rapidly worldwide and was
+<A TARGET="_BLANK" 
+    HREF="https://www.who.int/dg/speeches/detail/who-director-general-s-opening-remarks-at-the-media-briefing-on-covid-19---11-march-2020">
+declared a pandemic by the World Health Organization</a>
+on March 11, 2020.
+</p>
+<p>
+Genome sequencing of thousands of viral samples has helped researchers study mechanisms of 
+infection, transmission and response of the human immune system. 
+Since the beginning of SARS-CoV-2 circulation in humans, the viral genome has been accummulating
+mutations.  Compared to other RNA viruses its mutation rate is low, but enough variants are known 
+to determine how samples cluster into groups and how they are related (see COVID-19 transmission map).
+</p>
+<p>
+We at the
+<a target="_blank" href="https://ucscgenomics.soe.ucsc.edu/">UC Santa Cruz Genomics Institute</a>
+are responding to the urgency of supporting biomedical research aimed at 
+developing treatments and a vaccine for this devastating illness by fast-tracking 
+visualization of genome sequences and analyses in the
+<a target="_blank" href="/cgi-bin/hgGateway?db=wuhCor1">UCSC Genome Browser for SARS-Cov-2</a>.
+Moreover, we are incorporating relevant biomedical datasets such as single-cell lung gene 
+expression into the 
+<a target="_blank" href="/singlecell.html">UCSC Cell Browser</a>, and are creating data tracks
+of
+<a target="_blank" href="#covidHgiGwas">COVID-19 annotations in our Human Genome Browsers</a>
+as datasets become publicly available.  These annotations can further understanding of the
+human genetic determinants of infection susceptibility, disease severity, and outcomes. 
+</p>
+<p>
+A manuscript describing 
+<a href="https://www.nature.com/articles/s41588-020-0700-8" target="_blank">
+The UCSC SARS-CoV-2 Genome Browser</a>, was published in the September 9 issue of <em>Nature Genetics</em>.
+</p>
+    </div>
+
+    <div class="col-md-6">
+        <img class="text-center" alt="COVID-19 transmission as of May 30, 2020, from Nextstrain" 
+            src="/images/covid19/covid19-transmission.may30_2020.nextstrain.png"
+                style="margin-bottom: 5px !important">
+                    <div style="text-align: right; line-height: 1">
+                        <font SIZE=-1><em>COVID-19 transmission as of May 30, 2020</em><BR>
+                        </font>
+                        <font SIZE=-2>
+                          <A HREF="https://nextstrain.org"
+                          TARGET=_blank>Latest situation report from Nextstrain.org</a>
+                        </font>
+                    </div>
+    </div>
+</div>
+
+<style>
+img {
+    width: 100%;
+    margin: 15px 0 !important;
+}
+</style>
+
+<div class="row">
+
+    <!-- Genome browser -->
+    <div class="col-md-6">
+        <h2>UCSC Genome Browser view of SARS-CoV-2 genomic datasets</h2>
+            <a href="/cgi-bin/hgTracks?db=wuhCor1" target="_blank">
+                <img src="/images/sarsCov2SpikeProteinsSession.png"></a>
+      <br>
+        Video tutorial: Using the <a href = http://bit.ly/ucscVid20 
+        target = _blank>coronavirus browser</a>.
+    </div>
+
+    <!-- Cell browser -->
+    <div class="col-md-6">
+        <h2>COVID-19 and Lung gene expression data in the UCSC Cell Browser:</h2>
+            <p>COVID-19 Datasets:
+            <ul>
+              <li><a href="https://covid19-balf.cells.ucsc.edu"
+              target="_blank">Bronchoalveolar Immune Cells in COVID-19</a>
+              <li><a href="https://covid-airways.cells.ucsc.edu"
+              target="_blank">COVID-19 Airways</a>
+              <li><a href="https://covid19-influenza-response.cells.ucsc.edu"
+              target="_blank">COVID-19 and Influenza Immunophenotyping</a>
+              <li><a href="https://covid19atlas.cells.ucsc.edu" target="_blank">COVID-19 Cell Atlas</a>
+              <li><a href="https://scarface.cells.ucsc.edu"
+              target="_blank">COVID-19 SARS-CoV-2 and coronavirus-associated
+              receptors and factors (SCARFs)</a>
+              <li><a href="https://hca-lungmap-integrated.cells.ucsc.edu"
+              target="_blank">HCA-LungMAP COVID-19 Integrated Analysis</a>
+            </ul>
+            <p><a href="https://cells.ucsc.edu/?bp=lung"
+            target="blank">Other Lung datasets in the Cell Browser</a>
+    </div>
+</div>
+
+<div class="row">
+<a name="usher"></a>
+    <div class="col-md-12">
+      <h2>UShER for real-time genomic contact tracing</h2>
+    </div>
+    <div class="col-md-6">
+      <p>
+        <img align="left" alt="UShER logo"
+             src="/images/covid19/usher_logo.png"
+             style="border: none; width: 12em;">
+        In addition to the Genome Browser, we offer a
+        <a href="/cgi-bin/hgPhyloPlace" target=_blank>web interface</a> to
+        <a href="https://github.com/yatisht/usher" target=_blank>Ultrafast Sample placement
+          on Existing tRees (UShER)</a>
+        <a href="https://www.biorxiv.org/content/10.1101/2020.09.26.314971v1"
+           target=_blank>(Turakhia et al.)</a>,
+        a tool for identifying the relationships among a user's newly sequenced viral genomes
+        and all known SARS-CoV-2 virus genomes. UShER identifies relationships between viral
+        genomes by adding them to an existing phylogenetic tree of similar sequences that
+        visually depicts the evolutionary relationships among the genome sequences.
+        This approach empowers &quot;genomic contact tracing&quot;.
+        That is, UShER tells you whether virus genomes are closely related and therefore
+        possibly from the same source, or if they are distantly related and the infections
+        come from distinct sources.
+        When newly sequenced virus genomes are added to a comprehensive tree of previously
+        sequenced genomes, contact tracers are often able to determine where in the world
+        those genomes came from.
+        UShER is the only available method that can do this in &quot;real time&quot;.
+        Our tool places genomes onto a comprehensive global phylogeny of more than 80,000
+        virus genomes in less than one second.
+      </p>
+    </div>
+    <div class="col-md-6">
+        <a href="/images/covid19/UShER_example.png">
+        <img class="text-center" alt="Example output of UShER"
+            src="/images/covid19/UShER_example.png"
+                style="margin-bottom: 5px !important">
+        </a>
+        <div style="text-align: right; line-height: 1">
+          <font SIZE=-1><em>Example UShER results displayed using
+            <a href="https://nextstrain.org/" target=_blank>Nextstrain</a>.
+            Sequences representing a hypothetical outbreak are yellow;
+            previously sampled sequences are blue.  Branches are labeled
+            by nucleotide mutations.</em><BR>
+          </font>
+        </div>
+    </div>
+</div>
+
+<h2 id="news">News</h2>
+<ul>
+<li>
+<b>October 21, 2020</b>:
+<a target="_blank" href="goldenPath/newsarch.html#102120">
+New gene models, immunology, pathogenicity, and conservation annotation tracks</a>
+have been released. Click the above link to directly access track description pages
+for specific track titles such as PhyloCSF Genes, Weizman ORFs, icSHAPE RNA Structure,
+Validated epitopes from IEDB, and various Phylogenetic Tree tracks.
+</li>
+<li id="covidHgiGwas">
+<b>September 22, 2020</b>: 
+First COVID-19-related annotation track on UCSC human genome browser: 
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=covidHgiGwas" target="_blank">
+COVID-19 GWAS</a>: GWAS meta-analyses of studies contributed by multiple partners world-wide (18 in
+this release), as part of the
+<a target="_blank" href="https://www.covid19hg.org">COVID-19 Host Genetics Initiative</a>,  
+a collaborative effort to facilitate the generation, analysis and sharing of COVID-19 host genetics research.
+</li>
+<li>
+<b>September 9, 2020</b>: 
+The manuscript describing the
+<a href="https://www.nature.com/articles/s41588-020-0700-8" target="_blank">
+The UCSC SARS-CoV-2 Genome Browser</a>, is now published in <em>Nature Genetics</em>.
+</li>
+<li>
+<b>August 7, 2020</b>: 
+<a target="_blank" href="/goldenPath/newsarch.html#080720">
+Eight new annotation tracks</a>, presenting information about 
+duplication regions, sequencing, gene identities, plasmid constructs, protein contact sites, 
+and variant distribution.</li>
+<li>
+<b>July 7, 2020</b>: 
+Annotation tracks released: <a target="_blank" 
+href="/goldenPath/newsarch.html#070720">
+PhyloCSF (Codon Substitution Frequency), Microdeletions, and Human CoV</a>
+(multiple alignment of SARS-CoV-2, SARS-CoV-1, MERS, and three other human-infecting coronaviruses)
+</li>
+<li><b>May 29, 2020</b>: Public track hub 
+<a target="_blank" 
+href="http://ftp.ebi.ac.uk/pub/databases/gencode/covid19_trackhub/COVID19_Hub.html">
+GENCODE annotation of COVID-19 associated genes</a> released.
+View in <a target="_blank" 
+href="/cgi-bin/hgTracks?hubUrl=http://ftp.ebi.ac.uk/pub/databases/gencode/covid19_trackhub/hub.txt&genome=hg38&position=lastDbPos" >
+browser</a>. </li>
+
+<li><a target="_blank" href="goldenPath/newsarch.html#051220">Video:
+Coronavirus Browser SARS CoV-2</a></li>
+<li><a target="_blank" href="goldenPath/newsarch.html#050420">May
+data release for SARS-CoV-2 genome browser</a></li>
+<li><a target="_blank" href="goldenPath/newsarch.html#040320">April
+data release for SARS-CoV-2 genome browser</a></li>
+<li><b>February 7, 2020: </b><a target="_blank" 
+href="https://www.soe.ucsc.edu/news/coronavirus-genome-posted-ucsc-genome-browser">
+Released initial SARS-CoV-2 genome browser</a></li>
+</ul>
+
+<h2 id="related">Related publications and data resources</h2>
+
+<ul>
+
+<li> Preprints of research manuscripts:
+    <a href="https://connect.biorxiv.org/relate/content/181" 
+        target="_blank">BioRxiv/MedRxiv COVID-19 Collection</a> (all freely available)</li>
+<li><a target="_blank" href="https://pages.semanticscholar.org/coronavirus-research">COVID-19 Open Research Dataset</a> of scholarly literature</li>
+
+<li>
+GISAID 
+<a target="_blank" href="https://gisaid.org">the main repository of SARS-CoV-2 sequences</a> 
+</li>
+
+<li>
+NIH Office of Data Science Strategy
+<a target="_blank" href="https://datascience.nih.gov/covid-19-open-access-resources">Open-Access Data and Computational Resources to Address COVID-19</a>
+</li>
+
+<li>
+European Molecular Biology Laboratory/European Bioinformatics Institute (EMBL-EBI) and partners:
+<a target="_blank" href="https://www.covid19dataportal.org/">
+COVID-19 Data Portal</a>
+</li>
+
+<li>
+China National Center for Bioinformation: 
+<a target="_blank" href="https://bigd.big.ac.cn/ncov?lang=en">
+2019 Novel Coronavirus Resource</a>
+</li>
+
+<li>
+CDC 
+<a target="_blank" href="https://github.com/CDCgov/SARS-CoV-2_Sequencing">
+SARS-CoV-2 Sequencing Resources</a> on GitHub
+</li>
+
+<li> Nextstrain open-source tracking of pathogen evolution:
+    <a target="_blank" href="https://nextstrain.org/ncov">SARS-Cov2 browser</a> (strain tree, geographical mapping)</li>
+
+<li> NCBI sequence database search, publication list, and genome display:
+    <a href="https://www.ncbi.nlm.nih.gov/genbank/sars-cov-2-seqs/" target="_blank"</a>NCBI SARS-CoV-2 Sequences</a></li>
+<li>Virus Pathogen Resource:
+    <a target="_blank" href="https://www.viprbrc.org/brc/home.spg?decorator=corona_ncov">VIPR SARS-CoV-2 resource</a> (tools for sequence and structure analysis, comparative genomics and phenotype studies)</li>
+
+<li>CDC: <a target="_blank" href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/cases-in-us.html">Cases
+in U.S.</a>, updated daily.  </li>
+<li>CDC data as <a href =
+"https://bit.ly/coronaPerCapita" target = _blank><em>per capita</em>
+map</a> of the states.
+</li>
+
+<li>Johns Hopkins University: <a target="_blank" href="https://coronavirus.jhu.edu/map.html">
+Coronavirus Resource Center</a></li>
+
+<li>
+CitizenScience.org:
+<a target="_blank" href="https://www.citizenscience.org/covid-19/" >
+COVID-19 citizen science and crowdsourcing projects</a>
+</li>
+
+<li>Wikipedia: <a target="_blank" href="https://en.wikipedia.org/wiki/Severe_acute_respiratory_syndrome_coronavirus_2">Severe acute respiratory syndrome coronavirus 2</a></li>
+
+<li>
+Nature News graphical guide to vaccine designs:
+<a target="_blank" href="https://www.nature.com/articles/d41586-020-01221-y">
+The Race for Coronavirus Vaccines</a>
+</li>
+
+<li>
+<a target="_blank" href="https://www.nytimes.com/interactive/2020/04/03/science/coronavirus-genome-bad-news-wrapped-in-protein.html">
+Inside the Coronavirus Genome</a>, and
+<a target="_blank" href="https://www.nytimes.com/interactive/2020/04/30/science/coronavirus-mutations.html">
+How Coronavirus Mutates and Spreads</a>, The New York Times
+</li>
+
+</ul>
+
+<h2 id="funding">Funding</h2>
+<p>
+The <a target="_blank" href="..">
+UCSC Genome Browser</a>
+is a publicly available web resource serving the research community since July 2000.
+Both the Genome Browser and UCSC Cell Browser are funded by the
+<a target="_blank" href="https://www.genome.gov/">NIH National Human Genome Research Institute</a>.
+In addition to this funding, the COVID-19 projects here are funded by generous supporters including:
+several anonymous donors; Pat and Roland Rebele; Eric and Wendy Schmidt by recommendation of the
+<a target="_blank" href="https://schmidtfutures.com/">Schmidt Futures</a> program;
+the Center for Information Technology Research in the Interest of Society
+(<a target="_blank" href="https://citris-uc.org/">CITRIS</a>); and
+the University of California Office of the President (<a target="_blank"
+href="https://www.universityofcalifornia.edu/uc-system/office-of-the-president">UCOP</a>).
+To contribute, click <a target="_blank"
+href="https://secure.ucsc.edu/s/1069/bp18/interior.aspx?sid=1069&gid=1001&pgid=780&cid=1749&dids=645">
+here</a>.
+</p>
+
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html"-->
+
+
+

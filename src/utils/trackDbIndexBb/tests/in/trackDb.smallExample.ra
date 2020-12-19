@@ -1,0 +1,126 @@
+track uniformDnase
+noInherit on
+type bed 3
+longLabel ENCODE DNase-seq Peaks and Signal of Open Chromatin based on Uniform processing pipeline
+priority 4
+dragAndDrop subTracks
+dimensions dimX=lab dimY=cellType dimA=tier
+compositeTrack on
+pennantIcon encodeThumbnail.jpg http://genome.ucsc.edu/ENCODE/ "ENCODE Project"
+subGroup4 lab Lab Duke=Duke UW=UW UWDuke=UW-Duke
+subGroup3 view View Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1-hESC K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2 HUVEC=HUVEC T8988T=8988T A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AoAF=AoAF AoSMC=AoSMC BE2C=BE2_C BJ=BJ Caco2=Caco-2 CD20=CD20+ CD34Mobilized=CD34+_Mobilized Chorion=Chorion CLL=CLL CMK=CMK Fibrobl=Fibrobl FibroP=FibroP Gliobla=Gliobla GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H7hESC=H7-hESC H9ES=H9ES HAh=HA-h HAsp=HA-sp HAc=HAc HAEpiC=HAEpiC HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HConF=HConF HCPEpiC=HCPEpiC HCT116=HCT-116 HEEpiC=HEEpiC Hepatocytes=Hepatocytes HFF=HFF HFFMyc=HFF-Myc HGF=HGF HIPEpiC=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECdAd=HMVEC-dAd HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLBl=HMVEC-LBl HMVECLLy=HMVEC-LLy HNPCEpiC=HNPCEpiC HPAEC=HPAEC HPAF=HPAF HPDE6E6E7=HPDE6-E6E7 HPdLF=HPdLF HPF=HPF HRCEpiC=HRCEpiC HRE=HRE HRGEC=HRGEC HRPEpiC=HRPEpiC HSMM=HSMM HSMMemb=HSMM_emb HSMMtube=HSMMtube HTR8svn=HTR8svn Huh7=Huh-7 Huh75=Huh-7.5 HVMF=HVMF iPS=iPS Ishikawa=Ishikawa Jurkat=Jurkat K562=K562 LNCaP=LNCaP MCF7=MCF-7 Medullo=Medullo Melano=Melano MonocytesCD14RO01746=Monocytes-CD14+_RO01746 Myometr=Myometr NB4=NB4 NHA=NH-A NHDFAd=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2D1=NT2-D1 Osteobl=Osteobl PANC1=PANC-1 PanIsletD=PanIsletD PanIslets=PanIslets pHTE=pHTE PrEC=PrEC ProgFib=ProgFib RPTEC=RPTEC RWPE1=RWPE1 SAEC=SAEC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA SkMC=SkMC Stellate=Stellate T47D=T-47D Th0=Th0 Th1=Th1 Th2=Th2 Urothelia=Urothelia WERIRb1=WERI-Rb-1 WI38=WI-38
+filterComposite dimA
+visibility dense
+shortLabel ENCODE DNase-seq
+subGroup1 tier Tier t1=1 t2=2 t3=3
+sortOrder view=+ tier=+ cellType=+ lab=+
+hideEmptySubtracks on
+hideEmptySubtracksMultiBedUrl uniformDnase.multiBed.bb 
+hideEmptySubtracksSourcesUrl uniformDnase.multiBedSources.tab
+
+	track uniformDnasePeaks
+	type bigBed 6 +
+	parent uniformDnase
+	view Peaks
+	shortLabel ENCODE DNase-seq Peaks
+	visibility dense
+
+		track wgEncodeUWDukeDnaseGM12878FdrPeaks
+		type bigBed 6 +
+		longLabel GM12878 DNaseI FDR 1% Uniform Peak Calls from UW-Duke
+		color 8,104,172
+		parent uniformDnasePeaks on
+		bigDataUrl wgEncodeUWDukeDnaseGM12878.fdr01peaks.hg19.bb
+		subGroups view=Peaks tier=t1 cellType=GM12878 lab=UWDuke
+		metadata cell=GM12878
+		shortLabel GM12878
+
+	        track wgEncodeUWDukeDnaseH1hESCFdrPeaks
+	        type bigBed 6 +
+	        longLabel H1-hESC DNaseI FDR 1% Uniform Peak Calls from UW-Duke
+	        color 8,104,172
+	        parent uniformDnasePeaks off
+	        bigDataUrl wgEncodeUWDukeDnaseH1hESC.fdr01peaks.hg19.bb
+	        subGroups view=Peaks tier=t1 cellType=H1hESC lab=UWDuke
+	        metadata cell=H1-hESC
+	        shortLabel H1-hESC
+
+	        track wgEncodeUWDukeDnaseK562FdrPeaks
+	        type bigBed 6 +
+	        longLabel K562 DNaseI FDR 1% Uniform Peak Calls from UW-Duke
+	        color 8,104,172
+	        parent uniformDnasePeaks on
+	        bigDataUrl wgEncodeUWDukeDnaseK562.fdr01peaks.hg19.bb
+	        subGroups view=Peaks tier=t1 cellType=K562 lab=UWDuke
+	        metadata cell=K562
+	        shortLabel K562
+
+	track uniformDnaseSignal
+	type bigWig
+	parent uniformDnase
+	view Signal
+	maxHeightPixels 64:32:16
+	shortLabel ENCODE DNase-seq Signal
+	visibility dense
+	autoscale off
+
+	        track wgEncodeDukeDnaseGM12878FdrSignal
+	        type bigWig
+	        longLabel GM12878 DNaseI signals from Duke
+	        color 8,104,172
+	        parent uniformDnaseSignal on
+	        bigDataUrl wgEncodeOpenChromDnaseGm12878Aln_5Reps.norm5.rawsignal.bw
+	        subGroups view=Signal tier=t1 cellType=GM12878 lab=Duke
+	        metadata cell=GM12878 lab=Duke
+	        shortLabel GM12878 Duke
+
+	        track wgEncodeUWDnaseGM12878FdrSignal
+	        type bigWig
+	        longLabel GM12878 DNaseI signals from UW
+	        color 8,104,172
+	        parent uniformDnaseSignal on
+	        bigDataUrl wgEncodeUwDnaseGm12878Aln_2Reps.norm5.rawsignal.bw
+	        subGroups view=Signal tier=t1 cellType=GM12878 lab=UW
+	        metadata cell=GM12878 lab=UW
+	        shortLabel GM12878 UW
+
+	        track wgEncodeDukeDnaseH1hESCFdrSignal
+	        type bigWig
+	        longLabel H1-hESC DNaseI signals from Duke
+	        color 8,104,172
+	        parent uniformDnaseSignal off
+	        bigDataUrl wgEncodeOpenChromDnaseH1hescAln_2Reps.norm5.rawsignal.bw
+	        subGroups view=Signal tier=t1 cellType=H1hESC lab=Duke
+	        metadata cell=H1-hESC lab=Duke
+	        shortLabel H1-hESC Duke
+
+	        track wgEncodeUWDnaseH1hESCFdrSignal
+	        type bigWig
+	        longLabel H1-hESC DNaseI signals from UW
+	        color 8,104,172
+	        parent uniformDnaseSignal off
+	        bigDataUrl wgEncodeUwDnaseH1hescAln_1Reps.norm5.rawsignal.bw
+	        subGroups view=Signal tier=t1 cellType=H1hESC lab=UW
+	        metadata cell=H1-hESC lab=UW
+	        shortLabel H1-hESC UW
+
+	        track wgEncodeDukeDnaseK562FdrSignal
+	        type bigWig
+	        longLabel K562 DNaseI signals from Duke
+                color 8,104,172
+                parent uniformDnaseSignal on
+                bigDataUrl wgEncodeOpenChromDnaseK562Aln_2Reps.norm5.rawsignal.bw
+                subGroups view=Signal tier=t1 cellType=K562 lab=Duke
+                metadata cell=K562 lab=Duke
+                shortLabel K562 Duke
+
+                track wgEncodeUWDnaseK562FdrSignal
+                type bigWig
+                longLabel K562 DNaseI signals from UW
+                color 8,104,172
+                parent uniformDnaseSignal on
+                bigDataUrl wgEncodeUwDnaseK562Aln_2Reps.norm5.rawsignal.bw
+                subGroups view=Signal tier=t1 cellType=K562 lab=UW
+                metadata cell=K562 lab=UW
+                shortLabel K562 UW

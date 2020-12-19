@@ -1,0 +1,417 @@
+track cpgIslandSuperTrack
+type bigBed
+shortLabel cpgIsland SuperTrack Container
+longLabel cpgIsland SuperTrack Container
+superTrack on
+
+    track cpgIslandExt_
+    type bigBed 4 +
+    parent cpgIslandSuperTrack
+    longLabel CpG Islands (Islands < 300 Bases are Light Green)
+    color 0,100,0
+    altColor 128,228,128
+    bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.cpgIslandExt.bb
+    priority 90
+    html http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/trackDescriptions/cpgIslandExt
+    group regulation
+    shortLabel CpG Islands
+    visibility pack
+
+#track cpgIslandIncorrect
+#type bigBed
+#shortLabel trackWithNoParent
+#longLabel trackWithNoParent
+#bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.cpgIslandExt.bb
+#parent missingParent
+
+track cpgIslandViewContainer
+compositeTrack on
+shortLabel trackWithViewContainer
+longLabel trackWithViewContainer
+subGroup1 view Views A=a
+type bed
+
+    track viewStanza
+    parent cpgIslandViewContainer
+    shortLabel viewStanza
+    longLabel viewStanza
+    view a
+    type bigBed
+        
+        track viewTrack
+        shortLabel viewTrack
+        longLabel viewTrack
+        bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.cpgIslandExt.bb
+        subGroups A=a
+        parent viewStanza
+        type bigBed
+
+#track cpgIslandWrongParent
+#type bigBed
+#shortLabel trackWrongParent
+#longLabel trackWrongParent
+#bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.cpgIslandExt.bb
+
+    #track cpgIslandBadChild
+    #type bigBed
+    #shortLabel trackWithWrongParent
+    #longLabel trackWithWrongParent
+    #bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.cpgIslandExt.bb
+    #parent cpgIslandWrongParent
+
+track repeatMasker_
+noInherit on
+type bed 6 .
+longLabel Repeating Elements by RepeatMasker
+priority 149.1
+compositeTrack on
+html http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/trackDescriptions/repeatMasker
+group varRep
+shortLabel RepeatMasker
+#correct:
+#subGroup1 view Views SuperEnhancers=ROSE
+#dimensions dimX=view
+#sortOrder view=+
+#incorrect:
+subGroup1 source Source EnsRegBuild=Regulatory_Build TFBS=Transcription_Factor_Binding_Site_Peaks_Summary
+subGroup2 blank Blank Tag1=Val1
+#dimensions dimY=source 
+sortOrder source=+
+visibility dense
+
+    track repeatMaskerSINE_
+    #correct:
+    #subGroups view=SuperEnhancers
+    #incorrect:
+    subGroups source=EnsRegBuild noGroup=badGroup
+    type bigBed 6 +
+    longLabel SINE Repeating Elements by RepeatMasker
+    parent repeatMasker_
+    bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.rmsk.SINE.bb
+    priority 1
+    maxWindowToDraw 10000000
+    spectrum on
+    shortLabel SINE
+    colorByStrand 50,50,150 150,50,50
+
+    track repeatMaskerSINE2
+    #correct:
+    #subGroups view=SuperEnhancers
+    #incorrect:
+    subGroups source=TFBS
+    type bigBed 6 +
+    longLabel SINE2 Repeating Elements by RepeatMasker
+    parent repeatMasker_
+    bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.rmsk.SINE.bb
+    priority 1
+    maxWindowToDraw 10000000
+    spectrum on
+    shortLabel SINE2
+    colorByStrand 50,50,150 150,50,50
+
+#track emptyContainer
+#compositeTrack on
+#shortLabel missingChildren
+#longLabel missingChildren
+#type bigWig
+
+track SuperEnhancersBadSubgroups
+superTrack on
+shortLabel SuperenhancersBadSubgroups
+longLabel Superenhancers
+
+    track SuperEnhancersBadSubgroupsComposite
+    compositeTrack on
+    #bigDataUrl http://should.not.have/one.bb
+    parent SuperEnhancersBadSubgroups
+    shortLabel SuperEnhancersBadSubgroupsComp
+    longLabel SuperEnhancersBadSubgroupsComp
+    subGroup1 view Views SuperEnhancers=ROSE
+    dimensions dimensionX=view
+    sortOrder view=+
+    dividers view
+    dragAndDrop on
+    visibility dense
+    type bigBed 3 +
+
+        track state1
+        shortLabel state1shortLabel
+        longLabel state1LongLabel
+        #subGroups view=SuperEnhancers
+        view ROSE
+        type bigBed 3 +
+        visibility hide
+        bigDataUrl http://genome-test.gi.ucsc.edu/~chmalee/hubValidate/plants/cshl2013/araTha1/CS13-12383_25state_dense_Gateway_SuperEnhancers.bigBed
+        color 255,197,77
+        parent SuperEnhancersBadSubgroupsComposite on
+
+        track state2
+        shortLabel state2shortLabel
+        longLabel state2longLabel
+        view ROSE
+        #subGroups view=SuperEnhancers
+        type bigBed 3 +
+        visibility hide
+        bigDataUrl  http://genome-test.gi.ucsc.edu/~chmalee/hubValidate/plants/cshl2013/araTha1/CS13-12690_25state_dense_Gateway_SuperEnhancers.bigBed
+        color 255,197,77
+        parent SuperEnhancersBadSubgroupsComposite on
+
+track SuperEnhancersComposite2
+compositeTrack on
+#parent SuperEnhancersSuperTrackWithTwoSubgroups
+shortLabel SuperEnhancersTwoSubsComp
+longLabel SuperEnhancersTwoSubsComp
+subGroup1 view Views SuperEnhancers=ROSE
+subGroup2 tag Tags SuperEnhancers=ROSE
+dimensions dimensionX=view dimensionY=tag
+sortOrder view=+ tag=+
+dividers view
+dragAndDrop on
+visibility dense
+type bigBed 4 .
+configurable on
+
+    track state3
+    configurable on
+    shortLabel state3NoSubgroups
+    longLabel state3NoSubgroups
+    #subGroups view=SuperEnhancers tag=SuperEnhancers
+    subGroups badTag=wrongName
+    view ROSE
+    type bigBed 4 .
+    visibility hide
+    bigDataUrl http://genome-test.gi.ucsc.edu/~chmalee/hubValidate/plants/cshl2013/araTha1/CS13-12383_25state_dense_Gateway_SuperEnhancers.bigBed
+    color 255,197,77
+    parent SuperEnhancersComposite2 on
+
+    track state4
+    shortLabel state4OneSubgroupMembership
+    longLabel state4OneSubgorupMembership
+    view ROSE
+    subGroups view=SuperEnhancers
+    type bigBed 4 .
+    visibility hide
+    bigDataUrl http://genome-test.gi.ucsc.edu/~chmalee/hubValidate/plants/cshl2013/araTha1/CS13-12690_25state_dense_Gateway_SuperEnhancers.bigBed
+    color 255,197,77
+    parent SuperEnhancersComposite2 on
+    configurable on
+
+
+
+track H2A.Z_MultiWig_ImputedComp
+container multiWig
+shortLabel H2A.Z_Summary
+longLabel Summary Overlay for all Imputed H2A.Z Signal Tracks (21 Samples)
+type bigWig
+
+    track macs2signal_impute_CS13-12383_H2A.Z_M
+    type bigWig
+    shortLabel impute_CS13-12383_H2A.Z_M
+    longLabel impute_CS13-12383_H2A.Z_M
+    bigDataUrl https://bad.url.txt/missing.bb
+    #bigDataUrl http://cotneylab.cam.uchc.edu/~jcotney/CRANIOFACIAL_HUB/hg19/impute_CS13-12383_H2A.Z.pval.signal.bigWig
+    parent H2A.Z_MultiWig_ImputedComp on
+
+track SuperTrackOfMultiWigsView
+superTrack on
+shortLabel supMultiWigView
+longLabel supMultiWigView
+#type bigBed
+
+    track comp1
+    compositeTrack on
+    parent SuperTrackOfMultiWigsView
+    subGroup1 view Views A=a B=b
+    type bigWig
+    shortLabel comp1
+    longLabel comp1
+
+        track comp1View1
+        parent comp1
+        shortLabel comp1View1
+        longLabel comp1View1
+        type bigWig
+        view a
+
+            track comp1Wig1
+            bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+            type bigWig
+            subGroups view=A
+            parent comp1View1
+
+            track comp1Wig2
+            bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+            type bigWig
+            subGroups view=A
+            parent comp1View1
+
+        track comp1View2
+        parent comp1
+        shortLabel comp1View2
+        longLabel comp1View2
+        type bigWig
+        view b
+
+            track comp1Wig3
+            bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+            type bigWig
+            subGroups view=B
+            parent comp1View2
+
+            track comp1Wig4
+            bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+            type bigWig
+            subGroups view=B
+            parent comp1View2
+
+    track comp2
+    compositeTrack on
+    shortLabel comp2
+    longLabel comp2
+    subGroup1 view Views A=a B=b
+    type bigWig
+    parent SuperTrackOfMultiWigsView
+
+        track comp2View1
+        view a
+        shortLabel comp2View1
+        longLabel comp2View1
+        parent comp2
+        type bigWig
+    
+            track comp2Wig1
+            bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+            type bigWig
+            subGroups view=A
+            parent comp2View1
+
+            track comp2Wig2
+            bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+            type bigWig
+            subGroups view=A
+            parent comp2View1
+
+        track comp2View2
+        view b
+        shortLabel comp2View1
+        longLabel comp2View1
+        parent comp2
+        type bigWig
+
+            track comp2Wig3
+            bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+            type bigWig
+            subGroups view=B
+            parent comp2View2
+
+            track comp2Wig4
+            bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+            type bigWig
+            subGroups view=B
+            parent comp2View2
+
+track BuildOverview
+noInherit on
+type bigBed 9
+longLabel Ensembl Regulatory Build overviews
+priority 1
+dragAndDrop subTracks
+compositeTrack on
+html http://ftp.ensembl.org/pub/papers/regulation/mm10/overview/index
+visibility squish
+shortLabel Build Overview
+#subGroup1 source Source dimY=source dimensions Regulatory_Build=EnsRegBuild Transcription_Factor_Binding_Site_Peaks_Summary=TFBS
+#correct
+subGroup1 source Source Regulatory_Build=EnsRegBuild Transcription_Factor_Binding_Site_Peaks_Summary=TFBS
+#dimensions Regulatory_Build=EnsRegBuild Transcription_Factor_Binding_Site_Peaks_Summary=TFBS
+sortOrder source=+
+
+    track RegBuildOverview
+    type bigBed 9
+    longLabel Ensembl Regulatory label of regional function
+    parent BuildOverview on
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.genscan.bb
+    # wrong:
+    #subGroups source=EnsRegBuild
+    # correct
+    #subGroups source=Regulatory_Build
+    itemRgb on
+    priority 1
+    shortLabel Regulatory Build
+    visibility squish
+
+    track TFBSSummary
+    type bigWig
+    longLabel Summary of Transcription Factor Binding Site peaks from all cell types
+    viewLimits 0:1
+    color 209,157,0
+    parent BuildOverview on
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+    subGroups source=Transcription_Factor_Binding_Site_Peaks_Summary
+    priority 3
+    maxHeightPixels 128:64:16
+    shortLabel TFBS Summary
+    visibility full
+    autoscale off
+
+track MissingSubs
+compositeTrack on
+subGroup1 sub1 Sub1 tagA=valA tagB=valB
+subGroup2 sub2 Sub2 tagC=valC tagD=valD
+type bigBed 9
+shortLabel TwoSubgroupDefs
+longLabel Two Subgroup Definitions
+
+    track track1
+    shortLabel missingSub1
+    longLabel Missing Subgroup1
+    type bigBed 9
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.genscan.bb
+    parent MissingSubs
+    subGroups sub1=tagA sub2=tagD
+
+    track track2
+    shortLabel missingSub2
+    longLabel Missing Subgroup2
+    type bigBed 9
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.genscan.bb
+    parent MissingSubs
+    subGroups sub2=tagD
+
+
+track multiWigExample
+container multiWig
+shortLabel multiWigExample
+longLabel example Container MultiWig
+type bigWig
+autoScale on
+
+    track multiWigSubtrack1
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+    parent multiWigExample
+    shortLabel wig1
+    longLabel wig1
+
+    track multiWigSubtrack2
+    parent multiWigExample
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+    shortLabel wig2
+    longLabel wig2
+
+    track multiWigSubtrack3
+    parent multiWigExample
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+    shortLabel wig3
+    longLabel wig3
+
+    track multiWigSubtrack4
+    parent multiWigExample
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+    shortLabel wig4
+    longLabel wig4
+
+    track multiWigSubtrack5
+    parent multiWigExample
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+    shortLabel wig5
+    longLabel wig5

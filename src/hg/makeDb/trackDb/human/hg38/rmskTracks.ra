@@ -25,6 +25,15 @@ altColor 128,228,128
     canPack off
     spectrum on
 
+    track rmskHmmer2020
+    superTrack rmskTracks full
+    shortLabel RM HMMER 2020
+    longLabel updated 2020 Repeating Elements by RepeatMasker - HMMER alignment engine
+    type rmsk
+    maxWindowToDraw 10000000
+    canPack off
+    spectrum on
+
     track rmskHmmer
     superTrack rmskTracks full
     shortLabel RM HMMER

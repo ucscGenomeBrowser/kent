@@ -199,7 +199,7 @@
 
 
 ##############################################################################
-# dbSnp153: dbSNP build 153 (DONE 11/18/19 angie)
+# dbSnp153: dbSNP build 153 (DONE 11/25/19 angie)
 
     topDir=/hive/data/outside/dbSNP/153
     mkdir -p $topDir/json
@@ -334,12 +334,13 @@
     # 11/7/19: and again after finding that some cases of freqNotRefAlt are VCF normalization probs
     # 11/8/19: and again after adding badCoords.bed and warnings output files
     # 11/15/19: and again after adding ucscNotes freqIncomplete, freqNotMapped
+    # 11/24/19: and again: support for alt alleles with different expansion ranges (rs782394990)
     topDir=/hive/data/outside/dbSNP/153
     freqSourceOrder=1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
     # Run doBigDbSnp.pl (first with -debug to make runDir):
     $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder -debug
-# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-15
-    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-15
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-24
+    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-24
     # Link to ../bigDbSnp.2019-08-07/split, -continue convert to avoid re-splitting (the slowest part of the process):
     rmdir split
     ln -s ../bigDbSnp.2019-08-07/split split
@@ -347,37 +348,86 @@
       -buildDir=`pwd` -continue convert -stop install \
       >& do.log &
     tail -f do.log
-# *** All done !  (through the 'install' step)  Elapsed time: 545m26s
-# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-15
+# *** All done !  (through the 'install' step)  Elapsed time: 579m31s
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-24
 
-    # count up how many variants have freq counts for each project
+    wc -l dbSnp153Errors.tab
+#0 dbSnp153Errors.tab
+    # Yay!  Now we don't need to document any dropped variants.  :)
+    awk '{print $1, $2, $3;}' dbSnp153Warnings.tab  | sort | uniq -c
+#   5339 Frequency report not
+#   3852 Incomplete freq data
+#  65257 Mismatching SPDI del
+# 197684 Mismatching SPDI pos
+
+    # Statistics:
+    bigBedInfo -extraIndex hg19.dbSnp153.bb
+#extraIndexCount: 1
+#    name (field 3) with 683142960 items
+#itemCount: 683,142,960
+#chromCount: 297
+#basesCovered: 823,963,745
+#meanDepth (of bases covered): 1.279107
+#minDepth: 1.000000
+#maxDepth: 321.000000
+#std of depth: 1.993272
+    bigBedInfo -extraIndex hg38.dbSnp153.bb
+#extraIndexCount: 1
+#    name (field 3) with 702599342 items
+#itemCount: 702,599,342
+#chromCount: 575
+#basesCovered: 845,712,321
+#meanDepth (of bases covered): 1.279667
+#minDepth: 1.000000
+#maxDepth: 321.000000
+#std of depth: 1.990520
+    bigBedInfo -extraIndex hg19.dbSnp153BadCoords.bb
+#    name (field 3) with 121484 items
+#itemCount: 121,484
+#chromCount: 191
+#basesCovered: 750,840
+#meanDepth (of bases covered): 2.603311
+#minDepth: 1.000000
+#maxDepth: 150.000000
+#std of depth: 4.266904
+    bigBedInfo -extraIndex hg38.dbSnp153BadCoords.bb
+#extraIndexCount: 1
+#    name (field 3) with 149475 items
+#itemCount: 149,475
+#chromCount: 418
+#basesCovered: 986,919
+#meanDepth (of bases covered): 2.867679
+#minDepth: 1.000000
+#maxDepth: 119.000000
+#std of depth: 4.568874
+
+    # count up how many variants (mappings) have freq counts for each project
     cut -f 4 dbSnp153Details.tab \
-    | perl -wne 'chomp; next unless $_; @w = split ",";
-        if ($w[0]) { print "1000Genomes\n" }
-        if ($w[1]) { print "GnomAD_exomes\n"; }
-        if ($w[2]) { print "TOPMED\n" }
-        if ($w[3]) { print "ExAC\n" }
-        if ($w[4]) { print "PAGE_STUDY\n" }
-        if ($w[5]) { print "GnomAD\n" }
-        if ($w[6]) { print "GoESP\n" }
-        if ($w[7]) { print "Estonian\n" }
-        if ($w[8]) { print "ALSPAC\n" }
-        if ($w[9]) { print "TWINSUK\n" }
-        if ($w[10]) { print "NorthernSweden\n" }
-        if ($w[11]) { print "Vietnamese\n" }' \
-    | sort | uniq -c | sort -nr
-#437625009 TOPMED
-#211192420 GnomAD
-#84744375 1000Genomes
-#44888383 TWINSUK
-#44888383 ALSPAC
-#31397940 Estonian
-#16351632 NorthernSweden
-#12283940 GnomAD_exomes
-#10004052 Vietnamese
-#8854128 ExAC
-#1973841 GoESP
-#1323033 PAGE_STUDY
+    | perl -we '
+        my @freqSourceOrder = ("1000Genomes", "GnomAD_exomes", "TOPMED", "ExAC", "PAGE_STUDY",
+            "GnomAD", "GoESP", "Estonian", "ALSPAC", "TWINSUK", "NorthernSweden", "Vietnamese");
+        my @counts = ();
+        while (<>) {
+            chomp; next unless $_; @w = split ",";
+            for (my $i = 0;  $i < @w;  $i++) {
+                if ($w[$i]) { $counts[$i]++; }
+            }
+        }
+        for (my $i = 0;  $i < @freqSourceOrder;  $i++) {
+            print sprintf("%10d %s", $counts[$i] || 0, $freqSourceOrder[$i]) . "\n";
+        }'
+# 437625304 TOPMED
+# 211192464 GnomAD
+#  84744519 1000Genomes
+#  44888412 TWINSUK
+#  44888412 ALSPAC
+#  31397949 Estonian
+#  16351704 NorthernSweden
+#  12283947 GnomAD_exomes
+#  10004068 Vietnamese
+#   8854135 ExAC
+#   1973844 GoESP
+#   1323049 PAGE_STUDY
 
     # count up how many instances of each type of ucscNote:
     time cut -f 15 hg19.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
@@ -387,24 +437,24 @@
 #   143864 clinvarBenign
 #     7932 clinvarConflicting
 #    96242 clinvarPathogenic
-#   114686 clusterError
-# 12184520 commonAll
-# 20541189 commonSome
+#   114826 clusterError
+# 12184521 commonAll
+# 20541190 commonSome
 #  1377831 diffMajor
 #     3922 freqIncomplete
 #     7656 freqIsAmbiguous
 #     2685 freqNotMapped
-#    17693 freqNotRefAlt
+#    17694 freqNotRefAlt
 #   562180 multiMap
-#   114094 otherMapErr
-#107015340 overlapDiffClass
-# 16915237 overlapSameClass
+#   114095 otherMapErr
+#107015341 overlapDiffClass
+# 16915239 overlapSameClass
 #662601770 rareAll
 #670958439 rareSome
 #      101 refIsAmbiguous
-#  3272115 refIsMinor
-#   136546 refIsRare
-#    37831 refIsSingleton
+#  3272116 refIsMinor
+#   136547 refIsRare
+#    37832 refIsSingleton
 #        4 refMismatch
 #  3813702 revStrand
 #real    34m57.796s
@@ -413,7 +463,7 @@
 
     # Check count of rs's with at least one bad mapping:
     grep otherMapErr hg19.dbSnp153.checked.bigDbSnp | cut -f 4 | sort -u | wc -l
-#55453
+#55454
 
     time cut -f 15 hg38.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
 #    10888 altIsAmbiguous
@@ -423,23 +473,23 @@
 #     7950 clinvarConflicting
 #    95262 clinvarPathogenic
 #   128306 clusterError
-# 12438654 commonAll
-# 20902943 commonSome
+# 12438655 commonAll
+# 20902944 commonSome
 #  1399109 diffMajor
 #     4673 freqIncomplete
 #     7756 freqIsAmbiguous
 #     6590 freqNotMapped
-#    32169 freqNotRefAlt
+#    32170 freqNotRefAlt
 #   132123 multiMap
 #   204219 otherMapErr
-#110007681 overlapDiffClass
-# 17291287 overlapSameClass
+#110007682 overlapDiffClass
+# 17291289 overlapSameClass
 #681696398 rareAll
 #690160687 rareSome
 #      111 refIsAmbiguous
-#  3360434 refIsMinor
-#   160826 refIsRare
-#    50926 refIsSingleton
+#  3360435 refIsMinor
+#   160827 refIsRare
+#    50927 refIsSingleton
 #       33 refMismatch
 #  4532511 revStrand
 #real    36m36.972s
@@ -448,7 +498,7 @@
 
     # Check count of rs's with at least one bad mapping:
     grep otherMapErr hg38.dbSnp153.checked.bigDbSnp | cut -f 4 | sort -u | wc -l
-#86258
+#86636
 
 
 ##############################################################################

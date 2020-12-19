@@ -54,6 +54,8 @@ var suggestBox = {
 
     initialized: false,
 
+    lastMouseDown : null,
+
     init: function(db, assemblySupportsGeneSuggest, selectCallback, clickCallback) {
         // selectCallback(item): called when the user selects a new genomic position from the list
         // clickCallback(position): called when the user clicks on positionDisplay
@@ -102,9 +104,9 @@ var suggestBox = {
                     }
                 },
                 select: function(event, ui) {
-                    selectCallback(ui.item);
                     lastSelected = ui.item.value;
                     suggestBox.updateFindMatches(ui.item.internalId);
+                    selectCallback(ui.item);
                     // jQuery('body').css('cursor', 'wait');
                     // document.TrackHeaderForm.submit();
                 }
@@ -128,7 +130,15 @@ var suggestBox = {
                 suggestBox.clearFindMatches();
             }
         });
-        $("#positionDisplay").click(function(event) {
+
+        $("#positionDisplay").mousedown(function(event) {
+            // this let's the user click on the genomic position (e.g. if they want to edit it)
+            lastMouseDown = event.offsetX;
+        });
+
+        $("#positionDisplay").mouseup(function(event) {
+            if (event.offsetX !== lastMouseDown)
+                return; 
             // this let's the user click on the genomic position (e.g. if they want to edit it)
             clickCallback($(this).text());
             $('#positionInput').val($(this).text());

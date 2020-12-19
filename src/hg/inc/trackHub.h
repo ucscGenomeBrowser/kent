@@ -129,6 +129,19 @@ int trackHubChromCount(char *database);
 struct slName *trackHubAllChromNames(char *database);
 /* Return a list of all the chrom names in this assembly hub database. */
 
+char *trackHubChromSizes(char *database);
+/* see if this assembly hub has a chrom.sizes file, return url if present
+ * returns NULL when not present
+ */
+
+char *trackHubAliasFile(char *database);
+/* see if this assembly hub has an alias file, return url if present
+ * returns NULL when not present
+ */
+
+struct hash *trackHubAllChromAlias(char *database);
+/* Return a hash of chroms with alias names from alias file if present */
+
 struct chromInfo *trackHubAllChromInfo(char *database);
 /* Return a chromInfo structure for all the chroms in this database. */
 
@@ -194,5 +207,10 @@ void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
     struct trackDb *tdb);
 /* Check remote file exists and is of correct type. Wrap this in error catcher */
 
+struct dbDb *trackHubGetPcrServers();
+/* Look through attached trackHubs to see which of them have "isPcr" line in them. */
+
+boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort);
+/* Get the isPcr params from a trackHub genome. */
 #endif /* TRACKHUB_H */
 

@@ -832,8 +832,8 @@ static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *g
  * code the other way. Options are from genePredFromGxfOpts */
 {
 struct genePred *gp;
-int stopCodonStart = -1, stopCodonEnd = -1;
-int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
+long stopCodonStart = -1, stopCodonEnd = -1;
+long cdsStart = -1, cdsEnd = -1;
 int exonCount = 0;
 boolean haveStartCodon = FALSE, haveStopCodon = FALSE;
 struct gffLine *gl;
@@ -859,9 +859,9 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
     if (isCds(gl->feature))
         {
 	exonishLine = TRUE;
-	if (gl->start < cdsStart)
+	if ((cdsStart < 0) || (gl->start < cdsStart))
             cdsStart = gl->start;
-	if (gl->end > cdsEnd)
+	if ((cdsEnd < 0) || (gl->end > cdsEnd))
             cdsEnd = gl->end;
 	}
     if (exonishLine)
@@ -1828,19 +1828,6 @@ if (gp->optFields & genePredExonFramesFld)
     reverseInts(gp->exonFrames, gp->exonCount);
 }
 
-int genePredCdsSize(struct genePred *gp)
-/* compute the number of bases of CDS */
-{
-int iExon, start, end, cdsBases = 0;
-
-for (iExon = 0; iExon < gp->exonCount; iExon++)
-    {
-    if (genePredCdsExon(gp, iExon, &start, &end))
-        cdsBases += (end - start);
-    }
-return cdsBases;
-}
-
 struct genePred *genePredNew(char *name, char *chrom, char strand,
                              unsigned txStart, unsigned txEnd,
                              unsigned cdsStart, unsigned cdsEnd,
@@ -2388,7 +2375,7 @@ static char* translateCds(char* chrom, char* cds, unsigned options)
 {
 int cdsLen = strlen(cds);
 char *prot = needMem((cdsLen/3)+1);
-boolean isChrM = sameString(chrom, "chrM");
+boolean isChrM = isMito(chrom);
 int iCds, iProt;
 for (iCds = 0, iProt = 0; iCds < cdsLen; iCds+=3, iProt++)
     prot[iProt] = translateCodon(isChrM, cds+iCds, (iCds == cdsLen-3), options);

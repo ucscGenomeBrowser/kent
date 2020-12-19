@@ -1,0 +1,8 @@
+
+track miRNA
+shortLabel miRNA
+longLabel miRNA GSD1.0 miRDeep2
+group rna
+visibility hide
+color 178,34,34
+type bed 9 +

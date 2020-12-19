@@ -20231,72 +20231,6 @@ time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
     #	/gbdb/hg19/liftOver/hg19ToHg17.over.chain.gz
     # and try out the conversion on genome-test from hg19 to hg17
 
-############################################################################
-2012-11-11: import and UCSC GENCODE group process of GENCODE V14 (markd)
-    # Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
-    # (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
-    # GENCODE mitochondrial sequences are lifted to UCSC chrM.
-
-    # download files
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV14/release
-    cd /hive/data/genomes/hg19/bed/gencodeV14/
-
-    # download gencode release
-    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/release_14
-    mv ftp.sanger.ac.uk/pub/gencode/release_14 .
-    rm -rf ftp.sanger.ac.uk/
-
-    # silly sanity check:
-    cd release_14
-    for f in *.gz *.tgz ; do zcat $f >/dev/null ; done
-
-    # untar main distribution
-    tar -zxf gencode14_GRCh37.tgz
-
-    cd /hive/data/genomes/hg19/bed/gencodeV14
-
-    # obtain transcription support level analysis from UCSC GENCODE group (markd/rachel)
-    mkdir -p data
-    cp /cluster/home/markd/compbio/ccds/branches/transSupV14.1/modules/gencodeTransSupport/exprs/classDev/runs/2012-11-11/results/gencode.v14.transcriptionSupportLevel.{tab,tsv} data/
-
-    # create Makefile from previous one.  This time, we need to get
-    # if from the ENCODE DCC area.
-    cp /hive/groups/encode/dcc/data/gencodeV13/Makefile .
-    # edit to set version:
-    ver = 14
-
-    # on code in the CCDS subversion tree:
-    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
-    # and markd's python library (it will be moved to the hausslerlab
-    # repository soon)
-    # may need to update
-        ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
-    # to add new biotypes, use this command to verify and update as needed
-    # be sure to do a make in ccds2/modules/gencode
-    make checkAttrs
-
-    # build and load tables
-    (time nice make -j 10) >&build.out&
-
-    # compare tables from previous release to see if number chnaged made
-    # sense.
-        make cmpRelease
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsV14 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp human/hg19/wgEncodeGencodeV13.ra human/hg19/wgEncodeGencodeV14.ra
-    cp human/hg19/wgEncodeGencodeV13.html human/hg19/wgEncodeGencodeV14.html
-    # edit these plus human/hg19/trackDb.wgEncode.ra
-
-    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
-    ### track handler for this version of gencode:
-    registerTrackHandlerOnFamily("wgEncodeGencodeV14", gencodeGeneMethods);
-
 #########################################################################
 # QPCR PRIMERS (DONE - 2012-12-10 - Chin)
 # The track name is changed to "qPCR Primers"
@@ -20680,69 +20614,6 @@ TMPDIR=/scratch/tmp
     hgLoadBed -nobin hg19 gad gad.tab
 #Read 9156 elements of size 4 from gad.tab
 
-##############################################################################
-2013-04-08: import of UCSC GENCODE group processing of GENCODE V15 (markd)
-    # Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
-    # (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
-    # GENCODE mitochondrial sequences are lifted to UCSC chrM.
-
-    # download files
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV15
-    cd /hive/data/genomes/hg19/bed/gencodeV15
-
-    # download gencode release
-    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/release_15
-    mv ftp.sanger.ac.uk/pub/gencode/release_15 .
-    rm -rf ftp.sanger.ac.uk/
-
-    # silly sanity check:
-    for f in release_15/*.gz release_15/*.tgz ; do zcat $f >/dev/null ; done
-
-    # untar main distribution
-    cd release_15
-    tar -zxf gencode15_GRCh37.tgz
-
-    cd /hive/data/genomes/hg19/bed/gencodeV15
-
-    # obtain transcription support level analysis from UCSC GENCODE group (markd/rachel)
-    mkdir -p data
-    cp /cluster/home/markd/compbio/ccds/branches/transSupV15.1/modules/gencodeTransSupport/exprs/classDev/runs/2013-03-28/results/gencode.v15.transcriptionSupportLevel.{tab,tsv} data/
-
-    # create Makefile from previous one.
-    cp ../gencodeV14/Makefile .
-    # edit to set version:
-    ver = 15
-
-    # on code in the CCDS subversion tree:
-    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
-    # and markd's python library may need to update
-        ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
-    # to add new biotypes, use this command to verify and update as needed
-    # be sure to do a make in ccds2/modules/gencode
-    make checkAttrs
-
-    # build and load tables
-    (time nice make -j 10) >&build.out&
-
-    # compare tables from previous release to see if number chnaged made
-    # sense.
-        make cmpRelease
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsV15 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp human/hg19/wgEncodeGencodeV14.ra human/hg19/wgEncodeGencodeV15.ra
-    cp human/hg19/wgEncodeGencodeV14.html human/hg19/wgEncodeGencodeV15.html
-    # edit these plus human/hg19/trackDb.wgEncode.ra
-
-    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
-    ### track handler for this version of gencode:
-    registerTrackHandler("wgEncodeGencodeV15", gencodeGeneMethods);
-
 #########################################################################
 # UPDATE COSMIC TRACK - v64 (DONE - 2013-04-17 - Hiram)
     # take a look at:
@@ -21096,80 +20967,6 @@ retroFinder/trunk/src/pipeline/ucscStep6.sh DEF
 # to add the version number and date.
 # Scripts copied ucscRetroAli5.psl, ucscRetroInfo5.bed and ucscRetroCds5.tab
 # to /hive/data/genomes/hg19/bed/retro/
-
-############################################################################
-2013-06-02: import of UCSC GENCODE group processing of GENCODE V16 (markd)
-    # Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
-    # (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
-    # GENCODE mitochondrial sequences are lifted to UCSC chrM.
-    # Thus is the first release to include haplotype regions
-
-    # download files
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV16/data
-    cd /hive/data/genomes/hg19/bed/gencodeV16
-
-    # download gencode release
-    cd data
-    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/release_16
-    mv ftp.sanger.ac.uk/pub/gencode/release_16 .
-    rm -rf ftp.sanger.ac.uk/
-
-    cd /hive/data/genomes/hg19/bed/gencodeV16
-
-    # obtain transcription support level analysis from UCSC GENCODE group (markd/rachel)
-    mkdir -p data
-    cp /cluster/home/markd/compbio/ccds/branches/transSupV16.1/modules/gencodeTransSupport/exprs/classDev/runs/2013-06-16/results/gencode.v16.transcriptionSupportLevel.{tab,tsv} data/
-
-    # create Makefile from previous one.
-    cp ../gencodeV15/Makefile .
-    # edit to set version:
-    ver = 16
-
-    # on code in the CCDS subversion tree:
-    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
-    # and markd's python library may need to update
-        ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
-    # to add new biotypes, use this command to verify and update as needed
-    # be sure to do a make in ccds2/modules/gencode
-    make checkAttrs
-
-    # build and load tables
-    (time nice make -j 10) >&build.out&
-
-    # compare tables from previous release to see if number chnaged made
-    # sense.
-        make cmpRelease
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsV16 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp human/hg19/wgEncodeGencodeV15.ra human/hg19/wgEncodeGencodeV16.ra
-    cp human/hg19/wgEncodeGencodeV15.html human/hg19/wgEncodeGencodeV16.html
-
-    # edit these plus human/hg19/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeV16.ra in reverse order with previous
-    #   tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous -0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-
-    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
-    ### track handler for this version of gencode:
-    registerTrackHandler("wgEncodeGencodeV16", gencodeGeneMethods);
-
-    # sanity check number of rows in each table
-    make cmpRelease
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    for tbl in $(hgsql -Ne 'show tables like "wgEncodeGencode%V16"' hg19) ; do runJoiner.csh hg19 $tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >&check/joiner.out
 
 ############################################################################
 # LASTZ Tenrec EchTel2 (DONE - 2013-06-12 - Hiram)
@@ -21592,80 +21389,6 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/vicPac2/bed
     ln -s blastz.hg19.swap lastz.hg19
-
-##############################################################################
-2013-06-19: import of UCSC GENCODE group processing of GENCODE V17 (markd)
-    # Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
-    # (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
-    # GENCODE mitochondrial sequences are lifted to UCSC chrM.
-    # Thus is the first release to include haplotype regions
-
-    # download files
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV17/data
-    cd /hive/data/genomes/hg19/bed/gencodeV17
-
-    # download gencode release
-    cd data
-    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/release_17
-    mv ftp.sanger.ac.uk/pub/gencode/release_17 .
-    rm -rf ftp.sanger.ac.uk/
-
-    cd /hive/data/genomes/hg19/bed/gencodeV17
-
-    # obtain transcription support level analysis from UCSC GENCODE group (markd/rachel)
-    mkdir -p data
-    cp /cluster/home/markd/compbio/ccds/branches/transSupV17.1/modules/gencodeTransSupport/exprs/classDev/runs/2013-06-19/results/gencode.v17.transcriptionSupportLevel.{tab,tsv} data/
-
-    # create Makefile from previous one.
-    cp ../gencodeV16/Makefile .
-    # edit to set version:
-    ver = 17
-
-    # on code in the CCDS subversion tree:
-    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
-    # and markd's python library may need to update
-        ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
-    # to add new biotypes, use this command to verify and update as needed
-    # be sure to do a make in ccds2/modules/gencode
-    make checkAttrs
-
-    # build and load tables
-    (time nice make -j 10) >&build.out&
-
-    # compare tables from previous release to see if number chnaged made
-    # sense.
-        make cmpRelease
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsV17 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp human/hg19/wgEncodeGencodeV16.ra human/hg19/wgEncodeGencodeV17.ra
-    cp human/hg19/wgEncodeGencodeV16.html human/hg19/wgEncodeGencodeV17.html
-
-    # edit these plus human/hg19/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeV17.ra in reverse order with previous
-    #   tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous -0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-
-    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
-    ### track handler for this version of gencode:
-    registerTrackHandler("wgEncodeGencodeV17", gencodeGeneMethods);
-
-    # sanity check number of rows in each table
-    make cmpRelease
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    for tbl in $(hgsql -Ne 'show tables like "wgEncodeGencode%V17"' hg19) ; do runJoiner.csh hg19 $tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >&check/joiner.out
 
 ##############################################################################
 # LASTZ White-throated sparrow ZonAlb1 (DONE - 2013-06-26 - Hiram)
@@ -29220,60 +28943,6 @@ hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
 
     # verify the convert link on the browser is now active from hg19 to hg38
 
-#############################################################################
-2013-12-13: import of UCSC GENCODE group processing of GENCODE V19 (markd)
-    # download files
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV19/data
-    cd /hive/data/genomes/hg19/bed/gencodeV19
-
-    # download gencode release
-    cd data
-    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/release_19
-    mv ftp.sanger.ac.uk/pub/gencode/release_19 .
-    rm -rf ftp.sanger.ac.uk/
-
-    cd /hive/data/genomes/hg19/bed/gencodeV19
-    # create Makefile from previous one.
-    cp ../gencodeV18/Makefile .
-
-    # build and load tables
-    (time nice make -j 10) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsV19 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp human/hg19/wgEncodeGencodeV18.ra human/hg19/wgEncodeGencodeV19.ra
-    cp human/hg19/wgEncodeGencodeV18.html human/hg19/wgEncodeGencodeV19.html
-
-    # edit these plus human/hg19/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeV19.ra in reverse order with previous
-    #   tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous -0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
-    ### track handler for this version of gencode:
-    registerTrackHandler("wgEncodeGencodeV19", gencodeGeneMethods);
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    cd /hive/data/genomes/hg19/bed/gencodeV19
-    for tbl in $(hgsql -Ne 'show tables like "wgEncodeGencode%V19"' hg19) ; do runJoiner.csh hg19 $tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >&check/joiner.out
-
 ##############################################################################
 # hg19 <-> hg38 difference tracks (DONE - 2013-12-28 - Hiram)
     # note: the procedure for this is in the hg38.txt file under
@@ -30790,12 +30459,16 @@ cd /hive/data/outside/gtex/V6
 
 # Load gene models (Gencode V19 transcript union from GTEx)
 gunzip gencode.v19.genes.patched_contigs.gtf.gz
+
+# NOTE FOR NEXT TIME: hg19 now has chrMT, so leave "chrMT" as-is instead of changing to chrM.
+# optional: liftOver from chrMT (NC_012920) coords to chrM (NC_001807).
+
 awk '$1 !~ /^#/ {print "chr"$0}' gencode.v19.genes.patched_contigs.gtf | sed 's/chrMT/chrM/' | \
-        gtfToGenePred stdin gencodeV19.hg19.genePred
-hgLoadGenePred hg19 gtexGeneModelV6 gencodeV19.hg19.genePred -infoOut=gtexGeneModelInfoV6.tab
+        gtfToGenePred stdin gencodeV19.hg19.genePred -infoOut=gtexGeneModelInfoV6.tab
+hgLoadGenePred hg19 gtexGeneModelV6 gencodeV19.hg19.genePred
 
 # Get transcript for each gene
-A#tail -n +2 gtexGeneModelInfoV6.tab | awk '{printf("%s\t%s\n", $1, $9)}' > gtexGeneTranscriptsV6.tab
+#tail -n +2 gtexGeneModelInfoV6.tab | awk '{printf("%s\t%s\n", $1, $9)}' > gtexGeneTranscriptsV6.tab
 #hgLoadSqlTab hgFixed gtexTranscriptV6 ~/kent/src/hg/lib/gtexTranscript.sql gtexGeneTranscriptsV6.tab
 
 # Load BED table
@@ -31436,48 +31109,6 @@ hgBbiDbLink hg19 patBulk /gbdb/hg19/bbi/patBulk.bb
 hgBbiDbLink hg19 patNonBulk /gbdb/hg19/bbi/patNonBulk.bb
 
 #########################################################################
-2016-03-02: import of UCSC GENCODE group processing of GENCODE V24lift37 (markd)
-    # download files
-    mkdir -p /hive/data/genomes/hg19/bed/V24lift37
-    cd /hive/data/genomes/hg19/bed/V24lift37
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
-    # release and transcript support versions
-
-
-    # download, build and load tables
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense (results in gencode-cmp.tsv)
-        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.  Follow instructiuons in ra file to ensure
-    ## filters are correct.
-    cd kent/src/hg/makeDb/trackDb
-    cp human/hg38/wgEncodeGencodeV24.ra human/hg19/wgEncodeGencodeV24lift37.ra
-    cp human/hg38/wgEncodeGencodeV24.html human/hg19/wgEncodeGencodeV24lift37.html
-
-    # edit these plus human/hg38/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeV24.ra tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    cd /hive/data/genomes/hg19/bed/gencodeV24lift37
-    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-#########################################################################
 # killer whale/orcOrc1 Lastz run  (WORKING - 2016-06-03 - Hiram)
     # note: incorrect date on this directory name, should be 2016-06-03
 
@@ -31882,34 +31513,6 @@ EOF
       >>& do.log & tail -f do.log
 # *** All done!
 
-#########################################################################
-2017-04-16: import of UCSC GENCODE group processing of GENCODE V26lift37 (markd)
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV26lift37
-    pushd /hive/data/genomes/hg19/bed/gencodeV26lift37
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 26lift37 88 'March 2017'
-
-    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
-    make DBS=hg19
-
-    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit  all.joiner to add ~/tmp/gencodeV26lift37.joiner
-    # verify with:
-    pushd /hive/data/genomes/hg19/bed/gencodeV26lift37
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # commit all
 #########################################################################
 # COSMIC v81 DONE Chris Eisenhart 2017-05-11
 # Make a new COSCMIC track for hg19
@@ -32323,34 +31926,6 @@ ln -s /hive/data/outside/cosmic/hg19/v82/cosMutHg19V82.bb .
 ##############################################################################
 # snpedia (DONE - 2017-09-06 - Max)
 # see ../hg38/snpedia.txt
-##############################################################################
-2017-09-14: import of UCSC GENCODE group processing of GENCODE V27lift37 (markd)
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV27lift37
-    pushd /hive/data/genomes/hg19/bed/gencodeV27lift37
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 27lift37 90 'August 2017'
-
-    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
-    make DBS=hg19
-
-    # edit  all.joiner to add ~/tmp/gencodeV27lift37.joiner
-    # verify with:
-    pushd /hive/data/genomes/hg19/bed/gencodeV27lift37
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # commit all
 #########################################################################
 # LASTZ human/hg19 Gorilla/gorGor5 - (DONE - 2017-11-08 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzGorGor5.2017-11-08
@@ -32573,58 +32148,37 @@ csh $bin/getxEqtlLoadTissues.csh UCSC_output >&! loadTissuesV2.log &
 # and color conventions.
 
 ###########################################################################
+# HGMD (updated 12/10/19 max)
 # HGMD (updated 01/25/18 max)
-# got hgmd 2017 from Frank Schacherer Frank.Schacherer@qiagen.com and Rupert Yip Rupert.Yip@qiagen.com
+# HGMD (updated 12/12/20 max)
+# got hgmd from Frank Schacherer Frank.Schacherer@qiagen.com and Rupert Yip Rupert.Yip@qiagen.com
 # see also the file hg38/hgmd.txt
+year=2020
 cd /hive/data/genomes/hg19/bed/hgmd
-cat /hive/data/outside/hgmd/2017.4-hgmd-public.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-1; end=$4+1; col="100,100,100"} else if ($5=="D") {start=$4-1; end=$4; col="170,170,170"} else {start=$4-1; end=$4; col="0,0,0"}; print "chr"$3,start,end,$2":"$1,0,".",start,end,col,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
+cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg19.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-1; end=$4+1; col="100,100,100"} else if ($5=="D") {start=$4-1; end=$4; col="170,170,170"} else {start=$4-1; end=$4; col="0,0,0"}; print "chr"$3,start,end,$2":"$1,0,".",start,end,col,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
 bedToBigBed hgmd.bed /hive/data/genomes/hg19/chrom.sizes hgmd.bb -type=bed9+ -as=hgmd.as -tab
 ln -s /hive/data/genomes/hg19/bed/hgmd/hgmd.bb /gbdb/hg19/bbi/hgmd.bb
 hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
 # Forgot, finally done Oct 24: also updated hgBeacon
 bigBedToBed /gbdb/hg19/bbi/hgmd.bb /tmp/temp.bed
-/usr/local/apache/cgi-bin/hgBeacon -f hgmd temp.bed hgmd
+python2 /usr/local/apache/cgi-bin/hgBeacon -f hgmd /tmp/temp.bed hgmd
 # Forgot, finally done June 26: updated GBIB as qateam
 scp /gbdb/hg19/bbi/hgmd.bb hgdownload:/usr/local/apache/gbib/prot/
+# next restrict RefSeq down to HGMD subset 
 
-###########################################################################
-2018-03-08: update UCSC GENCODE V19 to include protein id (for VAI)
+# addition of HGMD-restricted subset, Max, Jan 29 2019, updated Dec 10 2019
+cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-10-27/
+year=2019
+# change in 2019: ignore the version numbers, otherwise only 1815 transcripts left, big update by HGMD in 2019
+# adding "." so NM_123 doesn't match NM_123123
+cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | cut -d. -f1 | sort -u | awk '{print $1"."}' > hgmdTranscripts.txt
+cat process/hg19.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
+hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
+$ wc -l hgmd.curated.gp 
+7965 hgmd.curated.gp in 2019
+8971 hgmd.curated.gp in 2020
 
-cd /hive/data/genomes/hg19/bed/gencodeV19/
-# move tables that need to be rebuilt
-mkdir -p prev/pre-proteinId
-mv tables/wgEncodeGencodeAttrsV19.tab tables/wgEncodeGencodeTagV19.tab prev/pre-proteinId/
-mv loaded/wgEncodeGencodeAttrsV19.tab.loaded loaded/wgEncodeGencodeTagV19.tab.loaded prev/pre-proteinId/
-
-
-# V19 didn't have protein ids in GTF, need to get from ensembl database
- cd ~/hive/tmp
- ftp://ftp.ensembl.org/pub/release-74/mysql/homo_sapiens_core_74_37/homo_sapiens_core_74_37.sql.gz
- ftp://ftp.ensembl.org/pub/release-74/mysql/homo_sapiens_core_74_37/transcript.txt.gz
- ftp://ftp.ensembl.org/pub/release-74/mysql/homo_sapiens_core_74_37/translation.txt.gz
-
- # load small subset
- hgsql -e 'create database markd_ens'
- zcat homo_sapiens_core_74_37.sql.gz |hgsql markd_ens
- gunzip trans*
- hgsqlimport markd_ens $(pwd)/transcript.txt $(pwd)/translation.txt
- # add proteinId column to wgEncodeGencodeAttrsV19
- hgsql
- CREATE table markd_ens.trans_prot
- SELECT concat(trans.stable_id, ".", CAST(trans.version AS CHAR)) transcriptId,
-        concat(prot.stable_id,  ".", CAST(prot.version AS CHAR)) proteinId
-     FROM markd_ens.transcript trans, markd_ens.translation prot
-     WHERE prot.transcript_id = trans.transcript_id;
-  CREATE INDEX transcriptId ON markd_ens.trans_prot(transcriptId);
-  UPDATE hg19.wgEncodeGencodeAttrsV19 as attr
-  INNER JOIN markd_ens.trans_prot as tp  ON attr.transcriptId = tp.transcriptId
-  SET attr.proteinId = tp.proteinId;
-  SELECT count(*) FROM wgEncodeGencodeAttrsV19 WHERE transcriptClass="coding" AND proteinId = "";
-  -> 0 !!! got them all
-  DROP DATABASE markd_ens;
-
-# 2018-03-19: update search to include protein id
-edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
+# now continue the process at ../hg38/hgmd.txt
 
 #############################################################################
 # LASTZ human/hg19 vs. pig/susScr11 - (DONE - 2018-04-02 - Hiram)
@@ -32705,42 +32259,6 @@ TMPDIR=/dev/shm
 
     cat fb.susScr11.chainRBest.Hg19.txt
     # 1342604720 bases of 2472073034 (54.311%) in intersection
-
-#########################################################################
-2018-04-17: import of UCSC GENCODE group processing of GENCODE V28lift37 (markd)
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV28lift37
-    pushd /hive/data/genomes/hg19/bed/gencodeV28lift37
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 28lift37 92 'Apr 2018'
-
-    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
-    make DBS=hg19
-
-    # edit  all.joiner to add ~/tmp/gencodeV28lift37.joiner
-    # verify with:
-    pushd /hive/data/genomes/hg19/bed/gencodeV28lift37
-    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # commit all
-
-    # 2018-05-01 markd
-    # fix bug in wgEncodeGencodeEntrezGeneV28lift37 with change in gencodeLoad.mk.  Reload the table.
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV28lift37
-    rm tables/wgEncodeGencodeEntrezGeneV28lift37.tab 
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.3.out&
-                                                                                 
 
 #########################################################################
 # DBSNP B151 / SNP151 (DONE 4/16/18 angie)
@@ -33121,43 +32639,6 @@ EOF
     # real    5896m44.643s
 
 ##############################################################################
-2018-11-09: import of UCSC GENCODE group processing of GENCODE V29lift37 (markd)
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV29lift37
-    pushd /hive/data/genomes/hg19/bed/gencodeV29lift37
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # Contained invalid biotype for one transcript (ENST00000649475.1_1), fix for now
-    cd data/release_29lift37
-    mv gencode.v29lift37.annotation.gff3.gz  gencode.v29lift37.annotation.orig.gff3.gz 
-    zcat gencode.v29lift37.annotation.orig.gff3.gz | sed -e 's/lincrna/lincRNA/g' | gzip -c>  gencode.v29lift37.annotation.gff3.gz
-    cd ../..
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.2.out&
-
-    
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 29lift37 94 'Oct 2018'
-
-    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
-    make DBS=hg19
-
-    # edit  all.joiner to add ~/tmp/gencodeV29lift37.joiner
-    # verify with:
-    pushd /hive/data/genomes/hg19/bed/gencodeV29lift37
-    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # commit all
-
-##############################################################################
 # LASTZ human/hg19 vs. chimp/panTro6 - (DONE - 2018-12-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPanTro6.2018-12-14
     cd /hive/data/genomes/hg19/bed/lastzPanTro6.2018-12-14
@@ -33323,12 +32804,6 @@ TMPDIR=/dev/shm
     cat fb.ponAbe3.chainRBest.Hg19.txt
     # 2641865423 bases of 3043444524 (86.805%) in intersection
 
-##############################################################################
-# addition of HGMD-restricted subset, Max, Jan 29 2019
-cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2018-10-01/
-cat /hive/data/outside/hgmd/2018.4-hgmd-public_hg38.tsv | cut -f7 | sort -u > hgmdTranscripts.txt
-zcat process/hg19.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
-hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
 #############################################################################
 # genomenom mastermind track, Max, Feb 2019
 cd /hive/data/genomes/hg19/bed/mastermind/
@@ -33336,39 +32811,10 @@ wget 'https://mastermind.genomenon.com/cvr/download?format=csv' -O - > mastermin
 unzip mastermind.2018.11.26.csv.zip
 mv mastermind_cited_variants_reference-2018.11.26-csv/ 2018-11-26
 hgsql hg19 -NB -e 'select alias, chrom from chromAlias where source = "refseq";' > chromAlias.tab
-python ~/kent/src/hg/makeDb/mastermind/mastermindToBed.py 2018-11-26/mastermind_cited_variants_reference-2018.11.26.csv 
+python ~/kent/src/hg/makeDb/mastermind/mastermindToBed.py 2018-11-26/mastermind_cited_variants_reference-2018.11.26.csv
 bedSort mastermind.bed mastermind.bed
 bedToBigBed -type=bed9+ -as=~/kent/src/hg/makeDb/mastermind/mastermind.as -tab mastermind.bed /hive/data/genomes/hg19/chrom.sizes  mastermind.bb
 ln -s `pwd`/mastermind.bb /gbdb/hg19/bbi/mastermind.bb
-#############################################################################
-2019-04-08: import of UCSC GENCODE group processing of GENCODE V30lift37 (markd)
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV30lift37
-    pushd /hive/data/genomes/hg19/bed/gencodeV30lift37
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 30lift37 96 'Apr 2019'
-
-    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
-    make DBS=hg19
-
-    # edit  all.joiner to add ~/tmp/gencodeV30lift37.joiner
-    # verify with:
-    pushd /hive/data/genomes/hg19/bed/gencodeV30lift37
-    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # commit all
-
 ##############################################################################
 # DGV GOLD (DATABASE OF GENOMIC VARIANTS GOLD STANDARD) (DONE 5/06/19 ChrisL)
 # Redmine #23371
@@ -33478,70 +32924,6 @@ EOF
     mkdir -p /gbdb/hg19/dgv
     ln -s `pwd`/dgvGold.bb /gbdb/hg19/dgv/
 
-#############################################################################
-2019-07-05: import of UCSC GENCODE group processing of GENCODE V31lift37 (markd)
-    # Replaced import of pre-release
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV31lift37
-    pushd /hive/data/genomes/hg19/bed/gencodeV31lift37
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 31lift37 97 'June 2019'
-
-    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
-    make DBS=hg19
-
-    # edit  all.joiner to add ~/tmp/gencodeV31lift37.joiner
-    # verify with:
-    pushd /hive/data/genomes/hg19/bed/gencodeV31lift37
-    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # commit all
-
-##############################################################################
-2019-09-03: import of UCSC GENCODE group processing of GENCODE V32lift37 (markd)
-    # PRE-RELEASE
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV32lift37
-    pushd /hive/data/genomes/hg19/bed/gencodeV32lift37
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 32lift37 98 'Sept 2019'
-
-    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
-    make DBS=hg19
-
-    # edit  all.joiner to add ~/tmp/gencodeV32lift37.joiner
-    # verify with:
-    pushd /hive/data/genomes/hg19/bed/gencodeV32lift37
-    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # commit all
-
-2019-08-30: repeat above for final release
-    mv /hive/data/genomes/hg19/bed/gencodeV32lift37 /hive/data/genomes/hg19/bed/gencodeV32lift37pre
-    # redo do above imports
-
 ##############################################################################
 # LASTZ human/hg19 Tree chimp/rheMac10 - (DONE - 2019-07-09 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzRheMac10.2019-07-09
@@ -33618,11 +33000,17 @@ TMPDIR=/dev/shm
     # 2423781773 bases of 2936892733 (82.529%) in intersection
 
 #########################################################################
-# 2019-09-17: AVADA fulltext variants, Max
+# 2019-12-02: AVADA fulltext variants, Max
 cd /hive/data/genomes/hg19/bed/avada
 wget http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz
 python ~/kent/src/hg/makeDb/avada/toBed.py > avada.bed
-bedToBigBed avada.bed /hive/data/genomes/hg19/chrom.sizes -as=${HOME}/kent/src/hg/makeDb/avada/avada.as -tab avada.bb -type=bed9+
+cat avada.bed | sort -k10 > avada.s.bed
+cp /hive/data/inside/pubs/text/medline/articles.db /dev/shm/max/
+bedAppendPaperInfo avada.s.bed avadaPapers.bed  --db /dev/shm/max --geneIdx=9
+bedSort avadaPapers.bed avadaPapers.bed
+cat avadaPapers.bed | uniq > avadaPapers.u.bed
+bedToBigBed avadaPapers.u.bed /hive/data/genomes/hg19/chrom.sizes -as=${HOME}/kent/src/hg/makeDb/avada/avada.as  -tab avada.bb -type=bed9+   
+rm /dev/shm/max/articles.db
 cd /gbdb/hg19/bbi
 ln -s /hive/data/genomes/hg19/bed/avada/avada.bb
 
@@ -33652,3 +33040,900 @@ wget "http://webdata.illumina.com.s3-website-us-east-1.amazonaws.com/downloads/p
 unzip *.zip
 awk 'BEGIN {FS=","; OFS="\t"} { print "chr" $10, $11-1, $11, $2,0, $21,$4}' *.csv | sort -k1,1 -k2,2n | bedClip stdin /cluster/data/hg19/chrom.sizes gda.bed
 hgLoadSqlTab hg19 snpArrayIlluminaGDA gda.sql gda.bed
+
+#########################################################################
+# ncbiRefSeq.p13 update (DONE - 2019-11-21 - Hiram)
+
+    mkdir /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2019-11-21
+    cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2019-11-21
+
+    # running step wise just to be careful
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.25_GRCh37.p13 hg19) > download.log 2>&1
+    # real    2m27.137s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.25_GRCh37.p13 hg19) > process.log 2>&1
+    # real    2m9.450s
+
+    ### BEFORE loading this updated table
+    cat fb.ncbiRefSeq.hg19.txt
+    #  85414465 bases of 2991694177 (2.855%) in intersection
+
+    featureBits -enrichment hg19 refGene ncbiRefSeq
+ # refGene 3.002%, ncbiRefSeq 2.855%, both 2.690%, cover 89.59%, enrich 31.38x
+
+    featureBits -enrichment hg19 ncbiRefSeq refGene
+ # ncbiRefSeq 2.855%, refGene 3.002%, both 2.690%, cover 94.21%, enrich 31.38x
+
+    featureBits -enrichment hg19 ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 2.855%, refGene 3.002%, both 2.690%, cover 94.21%, enrich 31.38x
+
+    featureBits -enrichment hg19 refGene ncbiRefSeqCurated
+ # refGene 3.002%, ncbiRefSeqCurated 2.855%, both 2.690%, cover 89.59%, enrich 31.38x
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.25_GRCh37.p13 hg19) > load.log 2>&1
+    # real    0m21.982s
+
+    ### AFTER loading this updated table
+    cat fb.ncbiRefSeq.hg19.txt
+    # 93708953 bases of 2991694177 (3.132%) in intersection
+
+    featureBits -enrichment hg19 refGene ncbiRefSeq
+ # refGene 3.002%, ncbiRefSeq 3.132%, both 2.983%, cover 99.35%, enrich 31.72x
+
+    featureBits -enrichment hg19 ncbiRefSeq refGene
+ # ncbiRefSeq 3.132%, refGene 3.002%, both 2.983%, cover 95.23%, enrich 31.72x
+
+    featureBits -enrichment hg19 ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 3.132%, refGene 3.002%, both 2.983%, cover 95.23%, enrich 31.72x
+
+    featureBits -enrichment hg19 refGene ncbiRefSeqCurated
+ # refGene 3.002%, ncbiRefSeqCurated 3.132%, both 2.983%, cover 99.35%, enrich 31.72x
+
+#########################################################################
+# CADD (DONE - 2019-12-05 - Max)
+wget https://krishna.gs.washington.edu/download/CADD/bigWig/CADD_GRCh37-v1.4.bw -O /hive/data/genomes/hg19/bed/cadd/CADD-v1.4.bw
+ln -s /hive/data/genomes/hg19/bed/cadd/CADD-v1.4.bw /gbdb/hg19/bbi/CADD-v1.4.bw
+#########################################################################
+
+#########################################################################
+# gnomAD 2 pLI and other loss of function metrics (DONE - 2019-12-10 - Chris)
+
+### hg19 gnomad v2.1.1 gene/transcript constraint data ###
+cd /hive/data/outside/gnomAD.2/
+mkdir constraint
+cd constraint
+
+# use gsutil to copy files:
+gsutil cp gs://gnomad-public/release/2.1.1/constraint/*.txt.bgz .
+Copying gs://gnomad-public/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz...
+Copying gs://gnomad-public/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_transcript.txt.bgz...
+Copying gs://gnomad-public/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.downsamplings.txt.bgz...
+| [3 files][205.6 MiB/205.6 MiB]
+Operation completed over 3 objects/205.6 MiB.
+
+transcriptFile=gnomad.v2.1.1.lof_metrics.by_transcript.txt.bgz
+geneFile=gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz
+
+hgsql -Ne "select name from wgEncodeGencodeCompV19" hg19 | tr '.' '\t' | cut -f1 > hg19.gencodeV19.transcripts
+cut -f11 pliByGene.bed | sort > pliByGene.transcripts
+cut -f11 pliByTranscripts.bed | sort > pliByTranscripts.transcripts
+wc -l *.transcripts
+# 189020 hg19.gencodeV19.transcripts
+#  19704 pliByGene.transcripts
+#  80950 pliByTranscripts.transcripts
+# 289674 total
+
+# check that v19 has all the transcripts:
+comm -12 hg19.gencodeV19.transcripts pliByGene.transcripts | wc -l
+19704
+comm -12 hg19.gencodeV19.transcripts pliByTranscripts.transcripts | wc -l
+80950
+rm hg19.gencodeV19.transcripts
+
+# ok safe to use v19 exon boundaries, just need to drop the version numbers:
+hgsql -Ne "select * from wgEncodeGencodeCompV19" hg19 | cut -f2- | genePredToBed | sed -Ee 's/\.[0-9]+//' | sort -k4 > hg19.gencodeCompV19.bed12
+
+gzip -cd $geneFile | tail -n +2 \
+    | tawk '{print $75,$76,$77,$64,$65,$1,$2,$3,$4,$5,$33,$12,$13,$14,$32,$17,$20,$21,$24,$25,$26,$27,$28,$29,$30}' \
+    | sort -k7 | join -t $'\t' -1 4 -2 7 hg19.gencodeCompV19.bed12 - \
+    | ~/kent/src/hg/makeDb/gnomad/combine.awk -v doTranscripts=false 2>genes.chromMismatches \
+    | sort -k1,1 -k2,2n > pliByGene.bed
+
+gzip -cd $transcriptFile | tail -n +2 \
+    | tawk '{print $76,$77,$78,$65,$66,$1,$2,$4,$5,$6,$34,$13,$14,$15,$33,$18,$21,$22,$25,$26,$27,$28,$29,$30,$31}' \
+    | sort -k7 | join -t $'\t' -1 4 -2 7 hg19.gencodeCompV19.bed12 - \
+    | ~/kent/src/hg/makeDb/gnomad/combine.awk -v doTranscripts=true 2>transcripts.chromMismatches \
+    | sort -k1,1 -k2,2n > pliByTranscript.bed
+
+# make .as file:
+#  table pliMetrics
+#  "bed12+5 for displaying gnomAD haploinsufficiency prediction scores"
+#      (
+#      string chrom;      "Reference sequence chromosome or scaffold"
+#      uint   chromStart; "Start position in chromosome"
+#      uint   chromEnd;   "End position in chromosome"
+#      string name;       "ENST or ENSG Name"
+#      uint   score;      "pLI score between 0-1000"
+#      char[1] strand;    "strand of transcript"
+#      uint thickStart;   "Start of where display is thick"
+#      uint thickEnd;     "End of where display should be thick"
+#      uint itemRgb;    "Color of item"
+#      int blockCount;   "Number of exons"
+#      int[blockCount] blockSizes;  "Size of each exon"
+#      int[blockCount] blockStarts; "0-based start position of each exon"
+#      string _mouseOver;  "Mouseover label"
+#      string geneName;   "Associated Gene symbol"
+#      string synonymous; "Synonymous metrics"
+#      string missense;   "Missense metrics"
+#      string pLoF;       "Predicted Loss of Function metrics
+#      )
+
+sizes=/hive/data/genomes/hg19/chrom.sizes
+bedToBigBed -type=bed12+5 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByGene.bed $sizes pliByGene.bb
+bedToBigBed -type=bed12+5 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByTranscript.bed $sizes pliByTranscript.bb
+cd /gbdb/hg19/gnomAD/pLI/
+ln -s /hive/data/outside/gnomAD.2/constraint/pliByGene.bb
+ln -s /hive/data/outside/gnomAD.2/constraint/pliByTranscript.bb
+##############################################################################
+2020-01-13: Add size filter to dgvMerged and dgvSupporting track (ChrisL)
+cd /hive/data/genomes/hg19/bed/dgv/160810
+zcat dgvMerged.bed.gz | tawk '{print $0, $3-$2}' > dgvMergedWithSize.bed
+zcat dgvSupporting.bed.gz | tawk '{print $0, $3-$2}' > dgvSupportingWithSize.bed
+cat dgvPlusSize.as
+# table dgvPlus
+# "Database of Genomic Variants incorporating dbVar, July 2013 and later"
+#     (
+#     string chrom;       "Reference sequence chromosome or scaffold"
+#     uint   chromStart;  "Start position in chromosome"
+#     uint   chromEnd;    "End position in chromosome"
+#     string name;        "ID of merged variant or supporting variant"
+#     uint   score;       "Score from 0-1000 (placeholder for BED 9+ format)"
+#     char[1] strand;     "+ or - (placeholder for BED 9+ format)"
+#     uint thickStart;    "Same as chromStart (placeholder for BED 9+ format)"
+#     uint thickEnd;      "Same as chromStart (placeholder for BED 9+ format)"
+#     uint itemRgb;   "Item R,G,B color."
+#     string varType;     "Type of variation"
+#     string reference;   "Literature reference for the study that included this variant"
+#     uint pubMedId;      "For linking to pubMed abstract of reference"
+#     lstring method;     "Brief description of method"
+#     lstring platform;    "Sequencing platform (if specified)"
+#     string mergedVariants; "If this is a supporting variant, ID of merged variant"
+#     lstring supportingVariants; "If this is a merged variant, IDs of supporting variants"
+#     uint sampleSize;    "Number of samples in study"
+#     uint observedGains; "Number of samples with copy number gains"
+#     uint observedLosses; "Number of samples with copy number losses"
+#     lstring cohortDescription; "Description of sample population for the study"
+#     lstring genes;      "Genes overlapping this variant"
+#     lstring samples;    "Sample IDs if available"
+#     uint _size;         "Genomic Size of variant"
+#     )
+bedToBigBed -tab -as=dgvPlusSize.as -type=bed9+14 dgvMergedWithSize.bed  /hive/data/genomes/hg19/chrom.sizes dgvMerged.bb
+# pass1 - making usageList (24 chroms): 1054 millis
+# pass2 - checking and writing primary data (392583 records, 23 fields): 8495 millis
+bedToBigBed -tab -as=dgvPlusSize.as -type=bed9+14 dgvSupportingWithSize.bed  /hive/data/genomes/hg19/chrom.sizes dgvSupporting.bb
+# pass1 - making usageList (25 chroms): 2577 millis
+# pass2 - checking and writing primary data (6668715 records, 23 fields): 27271 millis
+cd /gbdb/hg19/dgv/
+ln -s /hive/data/genomes/hg19/bed/dgv/160810/dgvMerged.bb
+ln -s /hive/data/genomes/hg19/bed/dgv/160810/dgvSupporting.bb
+##############################################################################
+# gnomAD Missense Constraint Scores track - Jan 15 2020 - ChrisL
+
+    cd /hive/data/outside/gnomAD.2/constraint/
+    mkdir missense
+
+    gsutil cat gs://gnomad-public/legacy/exacv1_downloads/release1/regional_missense_constraint/README_fordist_mpc_values > README.txt
+
+    # so the v2 files are what we want since they are most recent:
+    gsutil cp gs://gnomad-public/legacy/exacv1_downloads/release1/regional_missense_constraint/fordist_constraint_official_mpc_values_v2.txt.* .
+
+    # this is not what we want, at least not for what should be a bigBed, although this would make a nice bigWig file?
+    chrom	pos	ref	alt	gene_name	ENST	ENSG	CCDS	Consequence	HGVSc	HGVSp	Amino_acids	context	SIFT	PolyPhen	obs_exp	mis_badness	fitted_score	MPC
+    1	69094	G	A	OR4F5	ENST00000335137	ENSG00000186092	CCDS30547.1	missense_variant	ENST00000335137.3:c.4G>A	ENSP00000334393.3:p.Val2Met	V/M	GGT	deleterious(0.01)	possibly_damaging(0.828)	0.115421521859	0.359925753267	0.689727513402	2.7340307082
+
+    # After reading the paper: https://www.biorxiv.org/content/10.1101/148353v1.full
+    # it looks like what I want is in supp table 4, which is an excel sheet ugh
+    wget https://www.biorxiv.org/highwire/filestream/44323/field_highwire_adjunct_files/2/148353-3.xlsx
+    xlsx2csv -a -d 'tab' 148353-3.xlsx 148353-3
+    ls 148353-3
+    # Info.csv  Table_S4.csv
+
+    # Table_S4.csv is where it's at:
+    # head -2 148353-3/Table_S4.csv
+    transcript  gene    chr amino_acids genomic_start   genomic_end obs_mis exp_mis obs_exp chisq_diff_null region_name
+    ENST00000337907.3   RERE    1   1-507   8716356 8424825 97  197.9807    0.489947    51.505535   RERE_1
+    ENST00000337907.3	RERE	1	508-1567	8424824	8415147	355	438.045275	0.810419	15.743847	RERE_2
+
+    # now I need to get this into exons somehow
+    hgsql -Ne "select * from wgEncodeGencodeCompV19" | cut -f2- | genePredToBed > hg19.gencodeV19.txt
+    bedToPsl /hive/data/genomes/hg19/chrom.sizes hg19.gencodeV19.txt v19.psl
+    # pslMap would work here but since I don't know how to make a psl for RERE:1-507 I can't supply
+    # the input psl that pslMap needs. thus I'll need a new util
+
+    # first trim the utrs from v19:
+    ~/kent/src/hg/makeDb/gnomad/trimUtrs.py hg19.gencodeV19.txt trimmedUtrs.txt
+    # 99448 transcript added to transcript dict
+    # are these correct?
+    bedToExons trimmedUtrs.txt my.gencode.exonsOnly
+    bedToExons -cdsOnly hg19.gencodeV19.txt gencode.exonsOnly
+    # the awk removes the non-coding transcripts
+    diff <(cut -f1-4 gencode.exonsOnly | tawk '{if ($3 != $2) print}' | sort -k4) <(cut -f1-4 trimmedUtrs.txt | sort -k4)
+    # no diffs so we're good
+
+    # now chop up exons according to the amino acids:
+    ~/kent/src/hg/makeDb/gnomad/aaToGenomic.py trimmedUtrs.txt 148353-3/Table_S4.csv > aaToBed.out
+    # make autoSql file, regular bed12 plus one for the gene name and one for the chi square value
+    # table missenseConstraint
+    # "Parts of transcripts shaded according to how well that region of the transcript tolerates missense variation."
+    #     (
+    #     string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    #     uint   chromStart; "Start position in chromosome"
+    #     uint   chromEnd;   "End position in chromosome"
+    #     string name;       "Name of item"
+    #     uint   score;      "Score from 0-1000"
+    #     char[1] strand;    "+ or -"
+    #     uint thickStart;   "Start of where display should be thick (start codon)"
+    #     uint thickEnd;     "End of where display should be thick (stop codon)"
+    #     uint reserved;     "RGB color of item"
+    #     int blockCount;    "Number of blocks"
+    #     int[blockCount] blockSizes; "Comma separated list of block sizes"
+    #     int[blockCount] chromStarts; "Start positions relative to chromStart"
+    #     string geneName;     "Name of corresponding gene"
+    #     int observed;      "Number of observed missense variants"
+    #     float expected;      "Number of expected missense variants"
+    #     float obs_exp;      "Observed/expected score"
+    #     float chisq;       "Chi-Squared Difference"
+    #     string _mouseOver; "MouseOver label"
+    #     )
+
+    # now we can make the bigBed:
+    ./aaToGenomic.py trimmedUtrs.txt 148353-3/Table_S4.csv | sort -k1,1 -k2,2n > missenseConstrained.bed
+    bedToBigBed -tab -type=bed12+6 -as=missenseBed.as missenseConstrained.bed /hive/data/genomes/hg19/chrom.sizes missenseConstrained.bb
+    # pass1 - making usageList (24 chroms): 5 millis
+    # pass2 - checking and writing primary data (6507 records, 17 fields): 134 millis
+    # only a few genes:
+    cut -f13 missenseConstrained.bed | sort | uniq | wc -l
+    # 2700
+    ln -s /gbdb/hg19/gnomAD/missenseConstrained.bb missenseConstrained.bb
+
+##############################################################################
+# adding RefSeq Select to NCBIRefSeq, Max, Feb 17 2020
+cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2019-11-21
+zcat download/*_genomic.gff.gz | egrep 'tag=(RefSeq|MANE) Select'  | cut -f9- | tr ';' '\n' | grep Name= | grep -v NP_ | cut -d= -f2 | sort -u > refseqSelectTranscripts.txt
+cat process/hg19.curated.gp | fgrep -f refseqSelectTranscripts.txt - > refseqSelect.curated.gp
+hgLoadGenePred -genePredExt hg19 ncbiRefSeqSelect refseqSelect.curated.gp
+wc -l refseqSelect.curated.gp
+21436 refseqSelect.curated.gp
+##############################################################################
+# doseSensitivity (WORKING - 2020-02-06, Ana, Hiram)
+
+  mkdir /hive/data/genomes/hg19/bed/doseSensitivity
+  cd /hive/data/genomes/hg19/bed/doseSensitivity
+
+  ftp original files from ClinGen:
+
+  ftp://ftp.ncbi.nlm.nih.giv/pub/dbVar/clingen/
+
+  wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/clingen/ClinGen_haploinsufficiency_gene_GRCh37.bed
+
+  wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/clingen/ClinGen_triplosensitivity_gene_GRCh37.bed
+
+
+-rw-rw-rw- 1 202784 Jan 28 16:21 ClinGen_gene_curation_list_GRCh37.tsv
+-rw-rw-rw- 1  45142 Jan 28 16:21 ClinGen_haploinsufficiency_gene_GRCh37.bed
+-rw-rw-rw- 1  48750 Jan 28 16:22 ClinGen_triplosensitivity_gene_GRCh37.bed
+
+  # create perl script for processing: toUcsc.pl
+
+###########################################################################
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+  printf STDERR "usage: ./toUcsc.pl originalFile.bed > newFile.bed\n";
+  exit 255;
+}
+
+my @mouseOver;
+
+$mouseOver[0] = "not yet evaluated";
+$mouseOver[1] = "no evidence for dosage pathogenicity";
+$mouseOver[2] = "little evidence for dosage pathogenicity";
+$mouseOver[3] = "some evidence for dosage pathogenicity";
+$mouseOver[4] = "sufficient evidence for dosage pathogenicity";
+$mouseOver[5] = "gene associated with autosomal recessive phenotype";
+$mouseOver[6] = "haploinsufficiency unlikely";
+
+my $inFile = shift;
+
+open (FH, "grep -v track $inFile|") or die "can not read $inFile";
+while (my $line = <FH>) {
+  chomp $line;
+# printf STDERR "# %s\n", $line if ($line =~ m/Not/);
+  my @a = split('\s+', $line, 5);
+  my $selectMouseOver = 0;
+  my $color = "0,255,0";
+  my $score = $a[4];
+  if ($a[4] =~ m/Not/) {
+    $color = "128,128,128";
+    $score = 0;
+    $selectMouseOver = 0;
+  } elsif (0 == $a[4]) {
+    $color = "252,79,89";
+    $selectMouseOver = 1;
+  } elsif (1 == $a[4]) {
+    $color = "209,45,51";
+    $selectMouseOver = 2;
+  } elsif (2 == $a[4]) {
+    $color = "160,48,51";
+    $selectMouseOver = 3;
+  } elsif (3 == $a[4]) {
+    $color = "109,51,43";
+    $selectMouseOver = 4;
+  } elsif (30 == $a[4]) {
+    $color = "109,51,43";
+    $selectMouseOver = 5;
+  } elsif (40 == $a[4]) {
+    $color = "0,0,255";
+    $selectMouseOver = 6;
+  } else {
+    printf STDERR "%s\n", $line;
+    die "unrecognized column 5 value ?";
+  }
+  printf "%s\t%d\t%d\t%s\t%d\t+\t%d\t%d\t%s\t%s\t%d - %s\n",
+    $a[0], $a[1], $a[2], $a[3], $score, $a[1], $a[2], $color, $a[4], $score, $mouseOver[$selectMouseOver];
+}
+close (FH);
+###########################################################################
+
+  # convert the original 'bed 5' data to bed 9+2 with perl script:
+
+  ./toUcsc.pl ClinGen_haploinsufficiency_gene_GRCh37.bed \
+         | sort -k1,1 -k2,2n > haploInsufficiency.bed
+  ./toUcsc.pl ClinGen_triplosensitivity_gene_GRCh37.bed \
+         | sort -k1,1 -k2,2n > triploSensitivity.bed
+
+  # convert bed to bigBed:
+  # using the dosSensitivity.as file:
+
+table doseSensitivity
+"ClinGen dosage sensitivity bed 9 plus original dosageScore"
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint itemRgb;      "color indicates dosage score"
+    string dosageScore; "dosage score from ClinGen"
+    string mouseOver;  "description for the score meaning"
+    )
+
+
+  bedToBigBed -tab -type=bed9+2 -as=doseSensitivity.as \
+     haploInsufficiency.bed ../../chrom.sizes haploInsufficiency.bb
+  bedToBigBed -tab -type=bed9+2 -as=doseSensitivity.as \
+     triploSensitivity.bed ../../chrom.sizes triploSensitivity.bb
+
+  # measure data in bigBed files:
+  bigBedInfo haploInsufficiency.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 11
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 1,396
+# primaryDataSize: 42,693
+# primaryIndexSize: 6,388
+# zoomLevels: 6
+# chromCount: 24
+# basesCovered: 160,842,763
+# meanDepth (of bases covered): 1.001796
+# minDepth: 1.000000
+# maxDepth: 2.000000
+# std of depth: 0.042340
+
+  bigBedInfo triploSensitivity.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 11
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 1,396
+# primaryDataSize: 39,932
+# primaryIndexSize: 6,388
+# zoomLevels: 6
+# chromCount: 24
+# basesCovered: 160,842,763
+# meanDepth (of bases covered): 1.001796
+# minDepth: 1.000000
+# maxDepth: 2.000000
+# std of depth: 0.042340
+
+
+  # symlinks to /gbdb/hg19:
+
+  ln -s `pwd`/haploInsufficiency.bb \
+     /gbdb/hg19/doseSensitivity/clinGenHaploInsufficiency.bb
+  ln -s `pwd`/triploSensitivity.bb \
+     /data/hg19/doseSensitivity/clinGenTriploSensitivity.bb
+
+  # trackDb composite perhaps in ClinVar CNVs composite
+
+##############################################################################
+# NCBI ReMap alignments (DONE 2020-02-11 Angie)
+# RM 24449
+    mkdir /hive/data/genomes/hg19/bed/chainHg38ReMap
+    cd /hive/data/genomes/hg19/bed/chainHg38ReMap
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/remap/Homo_sapiens/current/GCF_000001405.25_GRCh37.p13/GCF_000001405.39_GRCh38.p13/GCF_000001405.25-GCF_000001405.39.gff
+    # We will need to substitute all the RefSeq chrom and contig IDs with our own names.
+    # The same alt contig can appear in both assemblies with the same name, so replace
+    # hg38 names at the beginning of the line and hg19 names after "Target=".
+    hgsql hg38 -NBe 'select alias, chrom from chromAlias where find_in_set("refseq", source)' \
+    | sed -re 's/\./\\./;' \
+    | awk '{print "s/^" $1 "\\b/" $2 "/;";}' \
+      > hg19.hg38.chromAlias.sed
+    hgsql hg19 -NBe 'select alias, chrom from chromAlias where find_in_set("refseq", source)' \
+    | sed -re 's/\./\\./;' \
+    | awk '{print "s/Target=" $1 "\\b/Target=" $2 "/;";}' \
+      >> hg19.hg38.chromAlias.sed
+    sed -f hg19.hg38.chromAlias.sed GCF_000001405.25-GCF_000001405.39.gff \
+    | gff3ToPsl -dropQ /hive/data/genomes/{hg38,hg19}/chrom.sizes stdin stdout \
+    | pslPosTarget stdin stdout \
+    | sort -k14,14 -k16n,16n > remap.hg19.hg38.psl
+    # Convert to chain for browser display.  Some of the remap chains have minScore < 1000 and
+    # by default would be dropped by chainScore... use -minScore=0 to prevent that.
+    time pslToChain remap.hg19.hg38.psl stdout \
+    | chainScore -minScore=0 stdin /hive/data/genomes/{hg19/hg19.2bit,hg38/hg38.2bit} \
+        remap.hg19.hg38.chain
+#real    5m55.241s
+    hgLoadChain hg19 -tIndex chainHg38ReMap remap.hg19.hg38.chain
+#Loading 5315 chains into hg19.chainHg38ReMap
+    # Chaining the ReMap alignments makes it a lot easier to see when separate alignments
+    # to the same sequence are in the same order and orientation.
+    time axtChain -psl -linearGap=medium -verbose=0 remap.hg19.hg38.psl \
+      /hive/data/genomes/hg19/hg19.2bit /hive/data/genomes/hg38/hg38.2bit \
+      remap.axtChain.hg19.hg38.chain
+#real    1m41.773s
+    hgLoadChain hg19 -tIndex chainHg38ReMapAxtChain remap.axtChain.hg19.hg38.chain
+#Loading 2141 chains into hg19.chainHg38ReMapAxtChain
+
+
+##############################################################################
+# gnomAD Structural Variants v2.1 - ChrisL
+# Redmine #24179
+
+    cd /hive/data/outside/gnomAD.2/
+    mkdir structuralVariants
+
+    gsutil cp gs://gnomad-public/papers/2019-sv/gnomad_v2.1_sv.*.bed* .
+    gsutil cp gs://gnomad-public/papers/2019-sv/gnomad_v2.1_sv.*.vcf* .
+
+    for f in *.bed.gz; do out=${f/.bed.gz/}; zcat $f | tail -n +2 | cut -f1-4,18-28,31,32,36-38,41-42 | tawk '{$1="chr"$1; print $0}'> $out.bed4Plus; done
+    # variant types:
+    zcat gnomad_v2.1_sv.sites.bed.gz | cut -f32 | sort | uniq -c       
+      52604 BND y
+       4778 CPX x 
+          8 CTX y
+     169635 DEL x 
+      49571 DUP x 
+     109025 INS x 
+        748 INV x 
+       1108 MCNV x
+          1 SVTYPE
+
+    # add colors based on gnomad website and get in to proper bed9+
+    for f in *.bed4Plus; do out=${f/.bed4Plus/}; bedClip -truncate $f $chromSizes stdout | ./gnomadSvToUcsc.awk | sort -k1,1 -k2,2n > $out.bed9Plus; done
+
+    chromSizes=/hive/data/genomes/hg19/chrom.sizes
+    for f in *.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+19 -as=gnomadSv.as -extraIndex=name $f $chromSizes $out.bb; done
+    mkdir -p /gbdb/hg19/gnomAD/structuralVariants/ 
+    cd /gbdb/hg19/gnomAD/structuralVariants/
+    cp -s /hive/data/outside/gnomAD.2/structuralVariants/*.bb .
+
+##############################################################################
+# NCBI regions that are problematic for sequencing, Mon Nov 18 05:06:17 PST 2019, Max
+
+mkdir /hive/data/genomes/hg19/bed/specialRegions/orig
+cd /hive/data/genomes/hg19/bed/specialRegions/orig
+# download and convert to Excel
+wget ftp://ftp.ncbi.nlm.nih.gov/variation/get-rm/highly_homologous_genes/Table_S1_List1_NGS_Dead_Zone_exon_level.xlsx
+wget ftp://ftp.ncbi.nlm.nih.gov/variation/get-rm/highly_homologous_genes/Table_S2_List2_NGS_Problem_List_High_Stringency_exon_level.xlsx
+wget ftp://ftp.ncbi.nlm.nih.gov/variation/get-rm/highly_homologous_genes/Table_S3_List3_NGS_Problem_List_Low_Stringency_exon_level.xlsx
+wget ftp://ftp.ncbi.nlm.nih.gov/variation/get-rm/highly_homologous_genes/Table_S4_List4_Sanger_Dead_Zone_exon_level.xlsx
+in2csv Table_S1_List1_NGS_Dead_Zone_exon_level.xlsx | csvformat -T > Table_S1_List1_NGS_Dead_Zone_exon_level.tsv
+in2csv  Table_S2_List2_NGS_Problem_List_High_Stringency_exon_level.xlsx | csvformat -T > Table_S2_List2_NGS_Problem_List_High_Stringency_exon_level.tsv
+in2csv Table_S3_List3_NGS_Problem_List_Low_Stringency_exon_level.xlsx | csvformat -T > Table_S3_List3_NGS_Problem_List_Low_Stringency_exon_level.tsv
+in2csv Table_S4_List4_Sanger_Dead_Zone_exon_level.xlsx | csvformat -T > Table_S4_List4_Sanger_Dead_Zone_exon_level.tsv
+
+cd ..
+# tabToBed is from https://github.com/maximilianh/maxtools
+tabToBed orig/Table_S1_List1_NGS_Dead_Zone_exon_level.tsv bed/deadZone.bed as/deadZone.as -t bed3+
+bedToBigBed -tab bed/deadZone.bed /hive/data/genomes/hg19/chrom.sizes bb/deadZone.bb -tab -type=bed3+ -as=as/deadZone.as
+
+tabToBed orig/Table_S2_List2_NGS_Problem_List_High_Stringency_exon_level.tsv bed/ngsProblemHigh.bed as/ngsProblemHigh.as -t bed3+
+bedToBigBed -tab bed/ngsProblemHigh.bed /hive/data/genomes/hg19/chrom.sizes bb/ngsProblemHigh.bb -tab -type=bed3+ -as=as/ngsProblemHigh.as
+
+tabToBed orig/Table_S3_List3_NGS_Problem_List_Low_Stringency_exon_level.tsv bed/ngsProblemLow.bed as/ngsProblemLow.as -t bed3+
+bedToBigBed -tab bed/ngsProblemLow.bed /hive/data/genomes/hg19/chrom.sizes bb/ngsProblemLow.bb -tab -type=bed3+ -as=as/ngsProblemLow.as
+
+tabToBed orig/Table_S4_List4_Sanger_Dead_Zone_exon_level.tsv bed/sangerDeadZone.bed as/sangerDeadZone.as -t bed3+
+bedToBigBed -tab bed/sangerDeadZone.bed /hive/data/genomes/hg19/chrom.sizes bb/sangerDeadZone.bb -tab -type=bed3+ -as=as/sangerDeadZone.as
+
+# the GIAB BED filter files
+cd orig
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterABQD.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterAlign.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterConflicting.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterCov.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterHapNoVar.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterMap.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterSSE.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterlt2Datasets.bed.gz
+gunzip *.gz
+cd ..
+for i in orig/*.bed; do out=`echo $i | sed -e 's|orig/VQSRv2.18_||g'`; out=`basename $out .bed`; echo $out; chromToUcsc -a hg19.chromAlias.tsv -i $i -o bed/$out.bed; done
+for i in bed/filter*.bed; do echo $i; bedSort $i $i; bedToBigBed $i /hive/data/genomes/hg19/chrom.sizes bb/`basename $i .bed`.bed -type=bed3; done
+cd /gbdb/hg19/bbi/special;
+for i in /hive/data/genomes/hg19/bed/specialRegions/bb/filter*.bb;  do ln -s $i; done
+bedSort orig/hg19-blacklist.v2.bed orig/hg19-blacklist.v2.bed 
+bedToBigBed orig/hg19-blacklist.v2.bed /hive/data/genomes/hg19/chrom.sizes  bb/encBlacklist.bb -tab
+
+#############################################################################
+# GTEx V8 (April 2020) Kate
+# Create BED from hgFixed tables (see doc/gtex)
+
+cd /hive/data/outside/gtex/V8/rnaSeq
+
+# Lift GTEx LDACC gene models (GENCODE V26 isoforms collapsed to single gene model)
+from hg38 annotation by GTEx LDACC
+
+set chain = /hive/data/genomes/hg38/bed/liftOver/hg38ToHg19.over.chain.gz
+liftOver -genePred gencodeV26.hg38.genePred $chain gencodeV26.hg19.lifted.genePred \
+                gencodeV26.hg19.unmapped
+# 1300 gencodeV26.hg19.unmapped
+# (was 925 in V6 lift hg19 to hg38)
+
+# TODO: Consider transmap
+
+hgLoadGenePred hg19 gtexGeneModelV8 gencodeV26.hg19.lifted.genePred
+
+# Load BED table
+cd /hive/data/genomes/hg19/bed/gtex
+mkdir -p V8
+cd V8
+
+set gencode = V26lift37
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
+        hg19 -noLoad -gtexVersion=V8 -gencodeVersion=$gencode gtexGeneV8 -verbose=2 >&! log.txt &
+
+# Max score: 267400.000000
+
+wc -l gtexGeneV8.tab
+#54481 gtexGeneV8.tab
+
+# 1070 genes not found in GencodeAttrs table
+# e.g. 
+Can't find geneId ENSG00000278267 in wgEncodeGencodeAttrsV26lift37
+#from Ensembl page for MIR6859-1:
+#Stable ID ENSG00000278267 not present in GRCh37.
+
+# 650 genes not found in modelHash
+# e.g. 
+Can't find gene ENSG00000279928.2 in modelHash
+# From Ensembl
+Gene: FO538757.1 ENSG00000279928
+There is no ungapped mapping of this gene onto the GRCh37 assembly.
+Stable ID ENSG00000279928 not present in GRCh37.
+
+#Max score: 219385.906250
+wc -l gtexGeneV8.tab
+# 54481 gtexGeneV8.tab
+# 55393 gtexGeneV6.tab
+
+# Add scores (see hg38/gtex.txt for background)
+
+set bedScore = ~/kent/src/utils/bedScore/bedScore
+$bedScore -col=10 -minScore=0 -log -method=encode gtexGeneV8.tab gtexGeneBedV8.bed
+textHistogram -real -autoScale=14 -log -col=5 gtexGeneBedV8.bed
+0.000000 ************************************************************ 20189
+71.428643 **************************************************** 5512
+142.857286 **************************************************** 5401
+214.285929 *************************************************** 4587
+285.714571 *************************************************** 4399
+357.143214 *************************************************** 4672
+428.571857 **************************************************** 5390
+500.000500 ************************************************* 3073
+571.429143 ***************************************** 904
+642.857786 ********************************* 248
+714.286429 *************************** 80
+785.715071 ************** 10
+857.143714 ******** 4
+928.572357 *************** 12
+
+# table looks OK, load it
+set lib = ~/kent/src/hg/lib
+hgLoadBed hg19 -noBin -tab -type=bed6+4 \
+        -as=$lib/gtexGeneBed.as -sqlTable=$lib/gtexGeneBed.sql -renameSqlTable \
+                gtexGeneV8 gtexGeneBedV8.bed
+# Read 54481 elements of size 10 from gtexGeneBedV8.bed
+
+# TODO: Add to gene sorter
+
+#############################################################################
+# Build ncbiRefSeqGenomicDiff (DONE - 2020-06-10 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/ncbiRefSeqAnomalies.p13
+    cd /hive/data/genomes/hg19/bed/ncbiRefSeqAnomalies.p13
+
+    db=hg19
+    pre=ncbiRefSeqGenomicDiff
+    buildDir=/hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-01-21
+    asmId=GCF_000001405.25_GRCh37.p13
+
+    time (zcat $buildDir/process/$asmId.rna.cds.gz \
+        | egrep '[0-9]+\.\.[0-9]+' \
+        | pslMismatchGapToBed -cdsFile=stdin -db=$db -ignoreQNamePrefix=X \
+            $buildDir/process/$asmId.$db.psl.gz \
+            /hive/data/genomes/$db/$db.2bit \
+            $buildDir/$db.rna.fa \
+            $pre)
+
+# pslMismatchGapToBed: NM_001365372.1 gapIx 9 shifted right 74 bases, but next block size is only 38; report to NCBI
+# pslMismatchGapToBed: NM_001288811.1 gapIx 1 shifted left 6 bases, but previous block size is only 5; report to NCBI
+
+#  real    0m21.265s
+
+ bedToBigBed -type=bed9+ -tab -as=$HOME/kent/src/hg/lib/txAliDiff.as $pre.bed \
+        /hive/data/genomes/$db/chrom.sizes $pre.bb
+# pass1 - making usageList (180 chroms): 77 millis
+# pass2 - checking and writing primary data (27362 records, 20 fields): 234 millis
+    ln -sf `pwd`/$pre.bb /gbdb/hg19/ncbiRefSeq/$pre.bb
+
+#############################################################################
+# clinvarSubLolly track  DONE BRANEY 12/14/2020
+mkdir /cluster/data/hg19/bed/clinvarSubLolly
+cd /cluster/data/hg19/bed/clinvarSubLolly
+bigBedToBed /gbdb/hg19/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$2+1,$4}' | sort  -S 40g > sort.main.bed
+hgsql hg19 -Ne "select varId,clinSign,scv from clinvarSub" | sort  -S 40g  > clinvarSubSub.txt
+
+join -t $'\t' sort.main.bed clinvarSubSub.txt | tawk '{print $2,$3,$4,$5,$6,$1, $7}' | sort -S 40g -k1,1 -k2,2n -k5,5 | tawk -f makeFranklin   | tawk -f assignColors > tmp1
+# add the line break after v409
+#tawk '{print $1":"$2 + 1"-"$3" <br>Variants (submissions):"$11}' tmp1 > tmp2
+tawk '{print $1":"$2 + 1"-"$3" Variants (submissions):"$11}' tmp1 > tmp2
+paste tmp1 tmp2 > bigBedInput.bed
+
+bedToBigBed -as=$HOME/kent/src/hg/lib/clinvarSubLolly.as -type=bed9+5 -tab bigBedInput.bed /cluster/data/hg19/chrom.sizes clinvarSubLolly.bb
+mkdir -p /gbdb/hg19/clinvarSubLolly
+ln -s `pwd`/clinvarSubLolly.bb /gbdb/hg19/clinvarSubLolly/clinvarSubLolly.bb
+
+bigBedToBed /gbdb/hg19/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$2+1,$4,$13,$15,$18,$19}' | sort  -S 40g > sort.main.bed
+hgsql hg19 -Ne "select * from clinvarSub" | sort  -S 40g  > clinvarSubSub.txt
+join -t $'\t' sort.main.bed clinvarSubSub.txt | tawk '{print $2,$3,$4,$5,0,"+",0,0,"0,0,0",$6,$20,$8, $9,$1,$10,$7,$11,$12,$13,$14,$15,$16,$17,$18,$19,$21}' | sort -S 40g -k1,1 -k2,2n | tawk -f assignScore > bigBedInput.bed
+
+bedToBigBed -as=clinvarSubBB.as -type=bed9+11 -tab bigBedInput.bed /cluster/data/hg19/chrom.sizes clinvarSub.bb
+ln -s `pwd`/clinvarSub.bb /gbdb/hg19/clinvarSubLolly/clinvarSub.bb
+
+
+#############################################################################
+# Trios for Genome In a Bottle - DONE 08/04/2020 ChrisL
+# see ~/kent/src/hg/makeDb/giab/make.txt
+
+#############################################################################
+# COVID GWAS from  COVID-19 Host Genetics Initiative  Sep 2020  Kate
+# see ~kent/src/hg/makeDb/doc/covid/covidHgiGwas.txt
+
+#############################################################################
+# gnomAD PEXT scores
+
+# PEXT data:
+# The baselevel is the sum of the expression value for all transcripts touching that base
+# The annotation-level is the sum of the expression of transcripts on which a variant has a
+# given annotation
+
+# download the pext data:
+wget https://storage.googleapis.com/gnomad-public/papers/2019-tx-annotation/pre_computed/all.possible.snvs.tx_annotated.GTEx.v7.021520.tsv.bgz
+wget https://storage.googleapis.com/gnomad-public/papers/2019-tx-annotation/gnomad_browser/all.baselevel.021620.tsv.bgz
+
+# these files are humongous even with compression:
+ls -lh all.*
+-rw-rw-r-- 1 chmalee genecats 307M Apr  8 21:54 all.baselevel.021620.tsv.bgz
+-rw-rw-r-- 1 chmalee genecats 6.7G Feb 14  2020 all.possible.snvs.tx_annotated.GTEx.v7.021520.tsv.bgz
+
+# how large are these files?
+time zcat all.base* | wc -l
+35305149
+
+real    1m11.964s
+user    1m8.725s
+sys 0m10.385s
+
+# this is theoretically all coding bases in gencode v19, split by tissue then run buildPext.py to
+# make one bigWig per tissue:
+mkdir run
+seq 4 57 | parallel -j10 'zcat all.baselevel.021620.tsv.bgz | cut -f1-3,{} | gzip -c > run/tissue{}.pext.gz'
+
+# overlapping exons in coding regions causes problems, don't output any scores
+# for those regions
+seq 4 57 | parallel --joblog run.log -j20 './buildPext.py run/tissue{}.pext.gz -o split'
+tail -n +2 run.log | cut -f4 | awk '{sum += $1}END{print sum/NR}'
+452.034
+
+# Turn into bigWigs:
+find split/ -name "*.bed" | parallel -j15 'sort -k1,1 -k2,2n {} | cut -f1-3,5 > {.}.bedGraph'
+find split/ -name "*.bedGraph" | parallel -j15 'bedGraphToBigWig {} /hive/data/genomes/hg19/chrom.sizes {.}.bw'
+mkdir -p /gbdb/hg19/gnomAD/pext
+ln -s `pwd`/split/*.bw /gbdb/hg19/gnomAD/pext/
+
+#############################################################################
+# update 2020-10-27 (DONE - Hiram - 2020-10-27)
+
+  mkdir /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-10-27
+  cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-10-27
+
+  time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=hgwdev -workhorse=hgwdev \
+      GCF_000001405.25_GRCh37.p13 hg19) > do.log 2>&1 &
+  # real    6m47.005s
+
+  cat fb.ncbiRefSeq.hg19.txt
+  # 93720294 bases of 2991710746 (3.133%) in intersection
+
+#############################################################################
+# Covid-19 rare mutations, Max, Fri Oct 30 08:40:34 PDT 2020
+# received table from qzhang02@rockefeller.edu, wrote to UCSC.txt
+cd /hive/data/genomes/hg19/bed/covidMuts/
+dos2unix UCSC.txt
+cat UCSC.txt | tawk '{$1="chr"$1; chrom=$1; start=$2; rsId=$3; ref=$4; alt=$5; zygo=$6; gene=$7; genotype=$8; inh=$9; end=$2+length(ref); print chrom, start, end, ref">"alt, "0", ".", start, end, "0,0,0", "1", length(ref), "0", ref, alt, rsId, zygo, gene, genotype, inh;}' | grep -v chrchr > covidMuts.bed
+bedSort covidMuts.bed covidMuts.bed
+bedToBigBed -tab covidMuts.bed ../../chrom.sizes covidMuts.bb -as=../../hg19/bed/covidMuts/covidMuts.as -type=bed12+
+#############################################################################
+
+#############################################################################
+# gnomAD v2.1.1 update, ChrisL 12-2-2020
+#############################################################################
+# See /hive/data/inside/gnomAD/v2.1.1/run.sh for more information, listed
+# here are the important steps:
+WORKDIR=/hive/data/inside/gnomAD/v2.1.1/
+cd $WORKDIR
+db="hg19"
+cd $db
+
+time parallel -j15 --joblog exomes.run.log --plus "vcfToBed -fields=${fields} {} exomes/{/..}.bed" ::: /hive/data/outside/gnomAD.2/v2.1.1/exomes/*.bgz
+# real    16m42.939s
+# user    172m26.966s
+# sys 1m41.186s
+
+# now turn into a single bed
+time cat hg19/exomes/*.bed | ./gnomadVcfBedToBigBed stdin stdout | sort -k1,1 -k2,2n > gnomad.v2.1.1.exomes.bed
+# real    21m44.331s
+# user    20m24.018s
+# sys 3m5.405s
+time bedToBigBed -type=bed9+50 -tab -as=exomes.as gnomad.v2.1.1.exomes.bed /hive/data/genomes/hg19/chrom.sizes exomes.bb
+# pass1 - making usageList (24 chroms): 11485 millis
+# pass2 - checking and writing primary data (17209972 records, 57 fields): 339555 millis
+#
+# real    6m45.792s
+# user    6m7.880s
+# sys 0m11.924s
+
+# same for genomes
+cd $db
+time parallel -j15 --joblog genomes.run.log --plus "vcfToBed -fields=${fields} {} genomes/{/..}.bed" ::: /hive/data/outside/gnomAD.2/v2.1.1/genomes/*.bgz
+# real  134m40.184s
+# user    1559m44.664s
+# sys 12m0.858s
+cd ..
+time cat hg19/genomes/*.bed | ./gnomadVcfBedToBigBed stdin stdout | sort -k1,1 -k2,2n > gnomad.v2.1.1.genomes.bed
+# real    199m48.619s
+# user    186m49.769s
+# sys 29m12.841s
+
+# now South Asian variants in the genomes file, change type:
+time bedToBigBed -type=bed9+47 -tab -as=genomes.as gnomad.v2.1.1.genomes.bed /hive/data/genomes/hg19/chrom.sizes genomes.bb
+# pass1 - making usageList (23 chroms): 165336 millis
+# pass2 - checking and writing primary data (253556152 records, 55 fields): 4909106 millis
+#
+# real    89m3.165s
+# user    86m41.554s
+# sys 2m15.722s
+
+#############################################################################
+# LASTZ Cow bosTau9 (DONE - 2020-12-07 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07
+    cd /hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07
+
+    printf '# human vs Cow
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau9
+SEQ2_DIR=/hive/data/genomes/bosTau9/bosTau9.2bit
+SEQ2_LEN=/hive/data/genomes/bosTau9/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    239m35.175s
+
+    cat fb.hg19.chainBosTau9Link.txt
+    # 1407432462 bases of 2991710746 (47.044%) in intersection
+
+    cat fb.hg19.chainSynBosTau9Link.txt
+    # 1354159575 bases of 2991710746 (45.264%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg19 bosTau9) > rbest.log 2>&1 &
+    #	real    274m55.811s
+
+    cat fb.hg19.chainRBest.BosTau9.txt
+    #	1290531802 bases of 2991710746 (43.137%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/bosTau9/bed/blastz.hg19.swap
+    cd /hive/data/genomes/bosTau9/bed/blastz.hg19.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07/DEF \
+        -swap  -syntenicNet -workhorse=hgwdev \
+	-smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #   real    72m28.826s
+
+    cat fb.bosTau9.chainHg19Link.txt
+    #   1342159887 bases of 2715853792 (49.419%) in intersection
+    cat fb.bosTau9.chainSynHg19Link.txt
+    #	1305558878 bases of 2715853792 (48.072%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` bosTau9 hg19) > rbest.log 2>&1 &
+XXX - running - Tue Dec  8 09:13:34 PST 2020
+    # real    272m15.176s
+
+    cat fb.bosTau9.chainRBest.Hg19.txt
+    # 1290810412 bases of 2715853792 (47.529%) in intersection
+
+#############################################################################

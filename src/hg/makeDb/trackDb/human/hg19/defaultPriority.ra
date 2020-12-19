@@ -15,7 +15,7 @@ priority 1
 
 track mrna override
 group rna
-priority 5.5
+priority 0.5
 visibility hide
 
 track intronEst override
@@ -46,13 +46,39 @@ visibility hide
 track dgvPlus override
 group varRep
 visibility hide
+#type bigBed 9 +
 html dgvPlusGold
 
     track dgvMerged override
     parent dgvPlus on
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg19/dgv/dgvMerged.bb
+    filter._size 1:9734324
+    filterByRange._size on
+    filterLabel._size Genomic size of variant
+    filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
 
     track dgvSupporting override
-    parent dgvPlus off
+    parent dgvPlus
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg19/dgv/dgvSupporting.bb
+    filter._size 1:9320633
+    filterByRange._size on
+    filterLabel._size Genomic size of variant
+    filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
+
+    track dgvGold
+    parent dgvPlus
+    shortLabel DGV Gold Standard
+    longLabel Database of Genomic Variants: Gold Standard Variants
+    bigDataUrl /gbdb/hg19/dgv/dgvGold.bb
+    type bigBed 12
+    url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg19?ref=$S;start=${;end=$};name=$$;class=Sequence
+    searchIndex name
+
+searchTable dgvGold
+searchType bigBed
+searchDescription DGV Gold Variants
 
 # Repeats
 

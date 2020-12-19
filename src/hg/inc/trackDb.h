@@ -35,8 +35,14 @@ struct minMax
     double min, max;
 };
 
+/* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
+/* This number is tacked onto the end of cached trackDb entries to make sure we
+ * don't use a cached structure that has different contents. */
+#define TRACKDB_VERSION 3 
+
 struct trackDb
-/* This describes an annotation track. */
+/* This describes an annotation track.  */
+/* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
     {
     struct trackDb *next;  /* Next in singly linked list.  Next sibling in tree. */
     char *track; /* Symbolic ID of Track - used in cart. Is tableName in database historically. */
@@ -53,6 +59,7 @@ struct trackDb
     unsigned char altColorG;	/* Light color green component 0-255 */
     unsigned char altColorB;	/* Light color blue component 0-255 */
     unsigned char useScore;	/* 1 if use score, 0 if not */
+/* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
 #ifndef	__cplusplus
     unsigned char private;	/* 1 if only want to show it on test site */
 #else
@@ -69,6 +76,7 @@ struct trackDb
     struct hash *settingsHash;  /* Hash for settings. Not saved in database.
                                  * Don't use directly, rely on trackDbSetting to access. */
     /* additional info, determined from settings */
+/* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
     char treeNodeType;          // bit map containing defining supertrack, composite and children
                                 //     of same (may be parent & child)
     struct trackDb *parent;     // parent of composite or superTracks
@@ -86,6 +94,7 @@ struct trackDb
                                 // multiple times within a single cgi. An example is the metadata
                                 // looked up once in the metaDb and used again and again.
     boolean isNewFilterType;    // are we using the new filter variables on this track
+/* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
     };
 
 #define FOLDER_MASK                      0x10
@@ -721,11 +730,11 @@ struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *su
 void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size);
 /* For this hub, Allocate shared memory and clone trackDb list into it. */
 
-void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size);
+void trackDbCloneTdbListToSharedMem(char *db, char *tdbPathString, struct trackDb *list, unsigned long size);
 /* For this native db, allocate shared memory and clone trackDb list into it. */
 
-struct trackDb *trackDbCache(char *db, time_t time);
-/* Check to see if this db has a cached trackDb. */
+struct trackDb *trackDbCache(char *db, char *tdbPathString, time_t time);
+/* Check to see if this db and trackDb table has a cached trackDb. */
 
 struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time);
 /* Check to see if this hub has a cached trackDb. */

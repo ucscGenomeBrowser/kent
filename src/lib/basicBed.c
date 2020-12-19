@@ -340,7 +340,8 @@ return ret;
  *	be a failure in the vast majority of cases parsing integers,
  *	therefore, this shouldn't be too severe a performance hit.
  */
-static int itemRgbColumn(char *column9)
+int itemRgbColumn(char *column9)
+/* Convert color specification to internal format. */
 {
 int itemRgb = 0;
 /*  Allow comma separated list of rgb values here   */
@@ -1403,9 +1404,9 @@ return result;
 }
 
 
-void loadAndValidateBed(char *row[], int bedFieldCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt)
+void loadAndValidateBedExt(char *row[], int bedFieldCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt,  boolean allow1bpOverlap)
 /* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject.
- * If a customTrack, then some errors are tolerated. */
+ * If a customTrack, then some errors are tolerated. Possibly allow exons to overlap by one base. */
 {
 int count;
 int *blockSizes = NULL;
@@ -1574,7 +1575,10 @@ printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", line
 		lineFileAbort(lf, "BED chromStarts[i]+chromStart must be less than chromEnd.");
 	    }
 	// chrom blocks must ascend without overlap
-        if (!(chromStarts[i] >= chromStarts[i-1] + blockSizes[i-1]))
+        int fudge = 0;
+        if (allow1bpOverlap)
+            fudge = -1;
+        if (!(chromStarts[i] >= chromStarts[i-1] + blockSizes[i-1] + fudge))
 		lineFileAbort(lf, "BED blocks must be in ascending order without overlap. Blocks %d and %d overlap.", i-1, i);
 	}
 
@@ -1712,6 +1716,14 @@ if (as)
     }
 
 }
+
+void loadAndValidateBed(char *row[], int bedFieldCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt)
+/* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject.
+ * If a customTrack, then some errors are tolerated. */
+{
+loadAndValidateBedExt(row, bedFieldCount, fieldCount, lf, bed, as, isCt, FALSE);
+}
+
 
 struct bed3 *bed3LoadAll(char *fileName)
 /* Load three columns from file as bed3. */

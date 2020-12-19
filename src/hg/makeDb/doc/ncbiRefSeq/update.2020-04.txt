@@ -1,0 +1,63 @@
+###############################################################################
+# Procedure for building ncbiRefSeq gene tracks on all reasonable assemblies
+###############################################################################
+
+# Working in directory:
+
+mkdir -p /hive/data/inside/ncbiRefSeq/2020-03-20
+cd /hive/data/inside/ncbiRefSeq/2020-03-20
+
+# extract list of equivalent refseq<->ucsc assemblies,
+# and format a list of commands to run:
+
+hgsql -e 'select destination,source from asmEquivalent where sourceAuthority="refseq" and destinationAuthority="ucsc";' hgFixed \
+  | awk '{printf "./updateOne %s %s\n", $1, $2}' > update.run.list
+
+# that makes a list of 147 commands:
+wc -l update.run.list
+#  147
+
+# Where the 'updateOne' script is from this source code directory:
+#	~/kent/src/hg/makeDb/doc/ncbiRefSeq/updateOne
+
+cp -p ~/kent/src/hg/makeDb/doc/ncbiRefSeq/updateOne ./
+
+# Run the procedures, 5 at a time:
+
+time (~/kent/src/hg/utils/automation/perlPara.pl 5 update.run.list) \
+    >> update.log 2>&1
+
+###############################################################################
+# No, not really
+###############################################################################
+
+# what actually happened is that I did make the run.list as described
+# above, but then:
+# I did an exhaustive search through all database browsers on hgwdev to
+# get a picture of where they stood with their absence or presence of
+# existing ncbiRefSeq.  There were a whole list of those that were first
+# timers, never had this track before.  So, I ran those up first, just as
+# above, but with a selective list.  That required a batch edit of
+# the trackDb source tree to turn on that new track for those browsers.
+
+# To scan databases on hgwdev for the presence of a database table,
+# using the periodic table status scans:
+
+grep -l -w ncbiRefSeq /hive/users/hiram/mysql50/dev50/2020/03-08/*.status.tab \
+   | sed -e 's#.*/##; s/.status.tab//;'
+
+# that makes a database list of any that have that ncbiRefSeq table
+
+# Then, for those browsers that had the existing track, I discovered that
+# two of them already had the most up to date version.  With this in mind
+# another selective list was used to run updates on those browsers that
+# needed an update.
+
+# Then archive versions of all existing and previous versions of this track
+# were dumped to GTF files and symlinked into:
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/archive/<db>/ncbiRefSeq
+# and:
+/usr/local/apache/htdocs-hgdownload/goldenPath/<db>/bigZips/genes/ncbiRefSeq.gtf.gz
+
+###############################################################################

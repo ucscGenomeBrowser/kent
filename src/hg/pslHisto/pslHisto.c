@@ -15,14 +15,12 @@ static struct optionSpec optionSpecs[] =
 boolean gMultiOnly;
 boolean gNonZero;
 
-void usage(char *msg, ...)
+void usage()
 /* usage msg and exit */
 {
-va_list ap;
-va_start(ap, msg);
-vfprintf(stderr, msg, ap);
-errAbort("\n%s",
-         "pslHisto [options] what inPsl outHisto\n"
+errAbort("pslHisto - Collect counts on PSL alignments for making histograms.\n"
+         "usage:\n"
+         "    pslHisto [options] what inPsl outHisto\n"
          "\n"
          "Collect counts on PSL alignments for making histograms. These\n"
          "then be analyzed with R, textHistogram, etc.\n"
@@ -169,7 +167,10 @@ else if (sameString(what, "coverSpread"))
 else if (sameString(what, "idSpread"))
     idSpread(pslTbl, outFh);
 else
-    usage("invalid what argument: %s", what);
+    {
+    verbose(1, "invalid what argument: %s", what);
+    usage();
+    }
 carefulClose(&outFh);
 pslTblFree(&pslTbl);
 }
@@ -179,7 +180,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
-    usage("wrong # of args:");
+    usage();
 gMultiOnly = optionExists("multiOnly");
 gNonZero =  optionExists("nonZero");
 pslHisto(argv[1], argv[2], argv[3]);

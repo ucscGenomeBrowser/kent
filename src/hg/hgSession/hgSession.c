@@ -165,7 +165,9 @@ void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
  * If encode, cgiEncodeFull the URL. 
  * If tryShortLink, print a shortened link that apache can redirect.
  * The link is an absolute link that includes the server name so people can
- * copy-paste it into emails.  */
+ * copy-paste it into emails.
+ *
+ * NOTE: Do not append CGI variables here, as it will break short links if they are enabled. */
 {
 struct dyString *dyTmp = dyStringNew(1024);
 if (tryShortLink && cfgOptionBooleanDefault("hgSession.shortLink", FALSE) &&
@@ -298,7 +300,7 @@ jsInlineF(
         "if (theClient.isIePre11() === false)\n{\n"
         "$(document).ready(function () {\n"
         "    $('#sessionTable').DataTable({\"columnDefs\": [{\"orderable\":false, \"targets\":[0,4,5,6,7,8]}],\n"
-        "                                       \"order\":[1,'asc'],\n"
+        "                                       \"order\":[2,'desc'],\n"
         "                                       \"stateSave\":true,\n"
         "                                       \"stateSaveCallback\": %s,\n"
         "                                       \"stateLoadCallback\": %s\n"
@@ -351,10 +353,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<a href=\"%s\">%s</a>", dyStringContents(dy), sessionName);
     dyStringFree(&dy);
 
+    struct tm firstUseTm;
+    ZeroVar(&firstUseTm);
+    strptime(firstUse, "%Y-%m-%d %T", &firstUseTm);
     char *spacePt = strchr(firstUse, ' ');
     if (spacePt != NULL) *spacePt = '\0';
-        printf("&nbsp;&nbsp;</TD>"
-	        "<TD><nobr>%s</nobr>&nbsp;&nbsp;</TD><TD align=center>", firstUse);
+    printf("&nbsp;&nbsp;</TD>"
+            "<TD data-order=\"%ld\"><nobr>%s</nobr>&nbsp;&nbsp;</TD><TD align=center>", mktime(&firstUseTm), firstUse);
 
     char *dbIdx = NULL;
     if (startsWith("db=", row[3]))

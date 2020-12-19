@@ -193,16 +193,26 @@ function setCartVars(names, values, errFunc, async)
     } else {
         type = "GET";
     }
-    $.ajax({
-               type: type,
-               async: async,
-               url: loc,
-               data: data,
-               trueSuccess: function () {},
-               success: catchErrorOrDispatch,
-               error: errFunc,
-               cache: false
-           });
+
+
+    if (!async || (typeof navigator.sendBeacon == 'undefined')) {
+        // XmlHttpRequest is used for all synchronous updates and for async updates in IE,
+        // because IE doesn't support sendBeacon.  If access to bowser is blocked, the default
+        // is to assume the browser is not IE.
+        $.ajax({
+                   type: type,
+                   async: async,
+                   url: loc,
+                   data: data,
+                   trueSuccess: function () {},
+                   success: catchErrorOrDispatch,
+                   error: errFunc,
+                   cache: false
+               });
+    }
+    else {
+        navigator.sendBeacon(loc, data);
+    }
 }
 
 function setCartVar(name, value, errFunc, async)

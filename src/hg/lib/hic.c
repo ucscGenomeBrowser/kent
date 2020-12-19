@@ -12,6 +12,23 @@
 #include "chromAlias.h"
 #include "interact.h"
 
+#ifdef USE_HIC
+
+void mangleName(char *ucscName, char mangledUcscName[], int size)
+/* Generate a version of an assembly's chromosome name that matches
+ * the mangling performed by the Juicer .hic creation tool (strip any initial
+ * "chr" and capitalize the rest). */
+{
+    int offset = 0;
+    char workingName[size];
+    safef(workingName, sizeof(workingName), "%s", ucscName);
+    touppers(workingName);
+    if (startsWith("CHR", workingName))
+        offset = 3;
+    safencpy(mangledUcscName, size, workingName+offset, strlen(workingName+offset));
+}
+
+
 char *hicLoadHeader(char *filename, struct hicMeta **header, char *ucscAssembly)
 /* Create a hicMeta structure for the supplied Hi-C file.  If
  * the return value is non-NULL, it points to a string containing
@@ -40,29 +57,57 @@ newMeta->attributes = attributes;
 newMeta->nAttributes = nAttributes;
 
 *header = newMeta;
-if (trackHubDatabase(genome))
-    return NULL;
 
-// add alias hash in case file uses 1 vs chr1, etc.
+struct slName *ucscNameList = NULL, *ucscName = NULL;
 if (newMeta->ucscAssembly != NULL)
+    ucscNameList = hAllChromNames(newMeta->ucscAssembly);
+struct hash *ucscToChromAlias = NULL;
+if ((newMeta->ucscAssembly != NULL) && !trackHubDatabase(ucscAssembly))
+    ucscToChromAlias = chromAliasMakeReverseLookupTable(newMeta->ucscAssembly);
+
+struct slName *hicChromNames = slNameListFromStringArray(chromosomes, nChroms);
+struct hash *hicChromHash = hashSetFromSlNameList(hicChromNames);
+struct hash *ucscToHicName = newHash(0);
+
+// For each UCSC chrom name, try to find a .hic file chromosome to fetch annotation from.
+for (ucscName = ucscNameList; ucscName != NULL; ucscName = ucscName->next)
     {
-    struct hash *aliasToUcsc = chromAliasMakeLookupTable(newMeta->ucscAssembly);
-    if (aliasToUcsc != NULL)
+    char mangledName[2048];
+    mangleName(ucscName->name, mangledName, sizeof(mangledName));
+    if (hashLookup(hicChromHash, ucscName->name))
+        hashAdd(ucscToHicName, ucscName->name, cloneString(ucscName->name));
+    else if (hashLookup(hicChromHash, mangledName))
+        hashAdd(ucscToHicName, ucscName->name, cloneString(mangledName));
+    else if (ucscToChromAlias != NULL)
         {
-        struct hash *ucscToAlias = newHash(0);
-        int i;
-        for (i=0; i<nChroms; i++)
+        // No hits on the primary chromosome name; time to start going through aliases.
+        struct hashEl *thisEl = hashLookup(ucscToChromAlias, ucscName->name);
+        while (thisEl != NULL)
             {
-            struct chromAlias *cA = hashFindVal(aliasToUcsc, chromosomes[i]);
-            if (cA != NULL)
+            struct chromAlias *cA = (struct chromAlias*) thisEl->val;
+            if (hashLookup(hicChromHash, cA->alias))
                 {
-                hashAdd(ucscToAlias, cA->chrom, cloneString(chromosomes[i]));
+                hashAdd(ucscToHicName, ucscName->name, cloneString(cA->alias));
+                break;
                 }
+            mangleName(cA->alias, mangledName, sizeof(mangledName));
+            if (hashLookup(hicChromHash, mangledName))
+                {
+                hashAdd(ucscToHicName, ucscName->name, cloneString(mangledName));
+                break;
+                }
+            thisEl = hashLookupNext(thisEl);
             }
-        newMeta->ucscToAlias = ucscToAlias;
-        hashFree(&aliasToUcsc);
         }
     }
+newMeta->ucscToAlias = ucscToHicName;
+
+if (ucscToChromAlias != NULL)
+    hashFreeWithVals(&ucscToChromAlias, chromAliasFree);
+hashFree(&hicChromHash);
+slNameFreeList(&hicChromNames);
+slNameFreeList(&ucscNameList);
+
 return NULL;
 }
 
@@ -154,3 +199,17 @@ for (i=0; i<numRecords; i++)
     }
 return networkErrMsg;
 }
+
+#else // USE_HIC
+
+char *hicLoadHeader(char *filename, struct hicMeta **header, char *ucscAssembly)
+{
+return cloneString("Hi-C support not compiled in");
+}
+
+char *hicLoadData(struct hicMeta *fileInfo, int resolution, char *normalization, char *chrom1, int start1,
+         int end1, char *chrom2, int start2, int end2, struct interact **resultPtr)
+{
+return cloneString("Hi-C support not compiled in");
+}
+#endif // USE_HIC

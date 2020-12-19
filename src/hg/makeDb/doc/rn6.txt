@@ -4441,4 +4441,78 @@ featureBits rn6 chainRegenRn1Link > fb.rn6.chainRegenRn1Link.txt 2>&1
     cat fb.rn6.chainRegenRn1Link.txt
     # 2265178557 bases of 2729860805 (82.978%) in intersection
 
+#############################################################################
+# LASTZ rat/rn6 vs. Chinese hamster CHO-K1 cell line/regenCho1
+#	(DONE - 2019-12-10 - Hiram)
+
+    mkdir /hive/data/genomes/rn6/bed/lastzRegenCho1.2019-12-10
+    cd /hive/data/genomes/rn6/bed/lastzRegenCho1.2019-12-10
+
+    printf '# Rat vs. Regeneron CHOv1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/hive/data/staging/data/blastz/HoxD55.q
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Chinese hamster ovary CHO-K1 cell line regenCho1
+SEQ2_DIR=/hive/data/genomes/regenCho1/regenCho1.2bit
+SEQ2_LEN=/hive/data/genomes/regenCho1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=1000
+
+BASE=/hive/data/genomes/rn6/bed/lastzRegenCho1.2019-12-10
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > do.log 2>&1
+    # real    798m53.424s
+
+    cat fb.rn6.chainRegenCho1Link.txt
+    # 1717059254 bases of 2729860805 (62.899%) in intersection
+    cat fb.rn6.chainSynRegenCho1Link.txt
+    # 1453767990 bases of 2729860805 (53.254%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	rn6 regenCho1) > rbest.log 2>&1 &
+    # real    1789m7.359s
+
+    cat fb.rn6.chainRBest.RegenCho1.txt
+    # 1436075393 bases of 2729860805 (52.606%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/regenCho1/bed/blastz.rn6.swap
+    cd /hive/data/genomes/regenCho1/bed/blastz.rn6.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/rn6/bed/lastzRegenCho1.2019-12-10/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    79m18.904s
+
+    cat fb.regenCho1.chainRn6Link.txt
+    # 1694175880 bases of 2266312740 (74.755%) in intersection
+    cat fb.regenCho1.chainSynRn6Link.txt
+    # 1402196536 bases of 2266312740 (61.871%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	regenCho1 rn6) > rbest.log 2>&1 &
+    # real    1687m33.035s
+
+    cat fb.regenCho1.chainRBest.Rn6.txt
+    # 1435220608 bases of 2266312740 (63.328%) in intersection
+
 #########################################################################

@@ -110,7 +110,7 @@ else
 
 static struct genoFind *gfNewEmpty(int minMatch, int maxGap, 
 	int tileSize, int stepSize, int maxPat,
-	char *oocFile, boolean isPep, boolean allowOneMismatch)
+	char *oocFile, boolean isPep, boolean allowOneMismatch, boolean noSimpRepMask)
 /* Return an empty pattern space. oocFile parameter may be NULL*/
 {
 struct genoFind *gf;
@@ -145,6 +145,7 @@ gf->tileSize = tileSize;
 gf->stepSize = stepSize;
 gf->isPep = isPep;
 gf->allowOneMismatch = allowOneMismatch;
+gf->noSimpRepMask = noSimpRepMask;
 if (segSize > 0)
     {
     gf->endLists = needHugeZeroedMem(tileSpaceSize * sizeof(gf->endLists[0]));
@@ -164,7 +165,8 @@ if (oocFile != NULL)
     if (segSize > 0)
         errAbort("Don't yet support ooc on large tile sizes");
     oocMaskCounts(oocFile, gf->listSizes, tileSize, maxPat);
-    oocMaskSimpleRepeats(gf->listSizes, tileSize, maxPat);
+    if (!gf->noSimpRepMask)
+         oocMaskSimpleRepeats(gf->listSizes, tileSize, maxPat);
     }
 return gf;
 }
@@ -512,7 +514,7 @@ for (i=0; i<tileSpaceSize; ++i)
 
 struct genoFind *gfIndexNibsAndTwoBits(int fileCount, char *fileNames[],
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-	boolean allowOneMismatch, int stepSize)
+	boolean allowOneMismatch, int stepSize, boolean noSimpRepMask)
 /* Make index for all nibs and .2bits in list. 
  *      minMatch - minimum number of matching tiles to trigger alignments
  *      maxGap   - maximum deviation from diagonal of tiles
@@ -520,10 +522,11 @@ struct genoFind *gfIndexNibsAndTwoBits(int fileCount, char *fileNames[],
  *      maxPat   - maximum use of tile to not be considered a repeat
  *      oocFile  - .ooc format file that lists repeat tiles.  May be NULL. 
  *      allowOneMismatch - allow one mismatch in a tile.  
- *      stepSize - space between tiles.  Zero means default (which is tileSize). */
+ *      stepSize - space between tiles.  Zero means default (which is tileSize). 
+ *      noSimpRepMask - skip simple repeat masking. */
 {
 struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, stepSize,
-	maxPat, oocFile, FALSE, allowOneMismatch);
+	maxPat, oocFile, FALSE, allowOneMismatch, noSimpRepMask);
 int i;
 bits32 offset = 0, nibSize;
 char *fileName;
@@ -604,6 +607,12 @@ static void maskSimplePepRepeat(struct genoFind *gf)
 /* Remove tiles from index that represent repeats
  * of period one and two. */
 {
+
+if (gf->noSimpRepMask)
+    {
+    return;
+    }
+
 int i;
 int tileSize = gf->tileSize;
 int maxPat = gf->maxPat;
@@ -716,7 +725,7 @@ for (isRc=0; isRc <= 1; ++isRc)
 void gfIndexTransNibsAndTwoBits(struct genoFind *transGf[2][3], 
     int fileCount, char *fileNames[], 
     int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-    boolean allowOneMismatch, boolean doMask, int stepSize)
+    boolean allowOneMismatch, boolean doMask, int stepSize, boolean noSimpRepMask)
 /* Make translated (6 frame) index for all .nib and .2bit files. */
 {
 struct genoFind *gf;
@@ -735,7 +744,7 @@ for (isRc=0; isRc <= 1; ++isRc)
     for (frame = 0; frame < 3; ++frame)
 	{
 	transGf[isRc][frame] = gf = gfNewEmpty(minMatch, maxGap, 
-		tileSize, stepSize, maxPat, oocFile, TRUE, allowOneMismatch);
+		tileSize, stepSize, maxPat, oocFile, TRUE, allowOneMismatch, noSimpRepMask);
 	}
     }
 
@@ -920,13 +929,13 @@ hashFree(&hash);
 struct genoFind *gfIndexSeq(bioSeq *seqList,
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
 	boolean isPep, boolean allowOneMismatch, boolean maskUpper,
-	int stepSize)
+	int stepSize, boolean noSimpRepMask)
 /* Make index for all seqs in list.  For DNA sequences upper case bits will
  * be unindexed. */
 {
 checkUniqueNames(seqList);
 struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, stepSize, maxPat, 
-				oocFile, isPep, allowOneMismatch);
+				oocFile, isPep, allowOneMismatch, noSimpRepMask);
 if (stepSize == 0)
     stepSize = tileSize;
 if (gf->segSize > 0)
@@ -1961,12 +1970,12 @@ for (qFrame = 0; qFrame<3; ++qFrame)
 }
 
 void gfMakeOoc(char *outName, char *files[], int fileCount, 
-	int tileSize, bits32 maxPat, enum gfType tType)
+	int tileSize, bits32 maxPat, enum gfType tType, boolean noSimpRepMask)
 /* Count occurences of tiles in seqList and make a .ooc file. */
 {
 boolean dbIsPep = (tType == gftProt || tType == gftDnaX || tType == gftRnaX);
 struct genoFind *gf = gfNewEmpty(gfMinMatch, gfMaxGap, tileSize, tileSize,
-	maxPat, NULL, dbIsPep, FALSE);
+	maxPat, NULL, dbIsPep, FALSE, noSimpRepMask);
 bits32 *sizes = gf->listSizes;
 int tileSpaceSize = gf->tileSpaceSize;
 bioSeq *seq, *seqList;

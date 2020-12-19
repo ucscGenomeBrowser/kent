@@ -1,0 +1,6 @@
+hub Fish genome assemblies
+shortLabel Fish assemblies
+longLabel Fish genome assemblies
+genomesFile genomes.txt
+email hclawson@ucsc.edu
+descriptionUrl index.html

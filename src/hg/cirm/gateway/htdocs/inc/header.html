@@ -37,13 +37,13 @@
 
   </head>
 
+  <body style="font-size: 14px">
   <script>
     $(document).ready(function(){
       $('[data-toggle="popover"]').popover();
     });
   </script>
 
-  <body style="font-size: 14px">
     <!--#if expr='("$SERVER_NAME" = /cirmdcm.soe.ucsc.edu/ || "$SERVER_NAME" = /cirm-01*/)'-->
 
     <div class="securesite-banner">
@@ -57,7 +57,7 @@
     <!--#endif -->
     <div class="container-fluid" style="width: 90%">
       <div class="row">
-        <a href="<!--#echo var='ROOT'-->index"><img src="<!--#echo var='ROOT'-->images/cirmSChubLogo.png"
+        <a href="<!--#echo var='ROOT'-->cirmIndex"><img src="<!--#echo var='ROOT'-->images/cirmSChubLogo.png"
         style="margin-top: 15px; max-width: 450px;" /></a>
       </div>
       <div class="row">
@@ -70,7 +70,7 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
               <li class="nav-item back-dark-blue rounded">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->index">Home</a></h5>
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->cirmIndex">Home</a></h5>
               </li>
               <li class="nav-item back-dark-pink rounded" style="margin-left: 6px">
                 <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse">Data</a></h5>
@@ -107,12 +107,7 @@
                 Logout</a></h5>
               </li>
 	      <!--#endif -->
-            </ul>
-            <form class="form-inline my-2 my-lg-0" action="https://google.com/search" method="get">
-              <input type="hidden" name="sitesearch" value="cirm.ucsc.edu" />
-              <input class="form-control mr-sm-2" style="padding: 2px 12px" type="search" name="q" placeholder="Search">
-              <button class="btn btn-outline-dark my-2 my-sm-0" style="padding: 2px 12px" type="submit">Search</button>
-            </form>
+            </ul>     
           </div>
         </nav>
       </div>

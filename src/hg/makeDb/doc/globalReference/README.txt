@@ -1,0 +1,36 @@
+
+Building in:
+
+/hive/data/genomes/asmHubs/platinumGenomes
+
+Using a list of accesion numbers:
+
+GCA_001524155.4_NA19240_prelim_3.0
+GCA_002180035.3_HG00514_prelim_3.0
+GCA_002077035.3_NA12878_prelim_3.0
+GCA_002208065.1_HG00733_prelim_1.0
+GCA_002209525.2_HG01352_prelim_2.1
+GCA_002872155.1_NA19434_prelim_1.0
+GCA_003070785.1_HG02059_prelim_1.0
+GCA_003086635.1_HG03486_prelim_1.0
+GCA_003574075.1_HG02818_prelim_1.0
+GCA_003601015.1_HG03807_prelim_1.0
+
+Creating command lines such as:
+
+#!/bin/bash
+
+./runOne.sh GCA_001524155.4_NA19240_prelim_3.0 &
+./runOne.sh GCA_002180035.3_HG00514_prelim_3.0 &
+./runOne.sh GCA_002077035.3_NA12878_prelim_3.0 &
+./runOne.sh GCA_002208065.1_HG00733_prelim_1.0
+wait
+./runOne.sh GCA_002209525.2_HG01352_prelim_2.1 &
+./runOne.sh GCA_002872155.1_NA19434_prelim_1.0 &
+./runOne.sh GCA_003070785.1_HG02059_prelim_1.0
+wait
+./runOne.sh GCA_003086635.1_HG03486_prelim_1.0 &
+./runOne.sh GCA_003574075.1_HG02818_prelim_1.0 &
+./runOne.sh GCA_003601015.1_HG03807_prelim_1.0
+wait
+

@@ -1,0 +1,267 @@
+##############################################################################
+# LASTZ Great Dane canFam5 (DONE - 2020-08-17 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm39/bed/lastzCanFam5.2020-08-17
+    cd /hive/data/genomes/mm39/bed/lastzCanFam5.2020-08-17
+
+    printf '# German shepard canFam5 vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: German shepard canFam5
+SEQ2_DIR=/hive/data/genomes/canFam5/canFam5.2bit
+SEQ2_LEN=/hive/data/genomes/canFam5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm39/bed/lastzCanFam5.2020-08-17
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    200m16.271s
+
+    cat fb.mm39.chainCanFam5Link.txt
+    #	778327929 bases of 2654624157 (29.320%) in intersection
+    cat fb.mm39.chainSynCanFam5Link.txt
+    #   735515331 bases of 2654624157 (27.707%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm39 canFam5 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    213m30.572s
+
+    cat fb.mm39.chainRBest.CanFam5.txt
+    # 740738480 bases of 2654624157 (27.904%) in intersection
+
+    mkdir /hive/data/genomes/canFam5/bed/blastz.mm39.swap
+    cd /hive/data/genomes/canFam5/bed/blastz.mm39.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm39/bed/lastzCanFam5.2020-08-17/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    44m12.732s
+
+    cat fb.canFam5.chainMm39Link.txt
+    #	762233776 bases of 2337131234 (32.614%) in intersection
+    cat fb.canFam5.chainSynMm39Link.txt
+    #   731337903 bases of 2337131234 (31.292%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev canFam5 mm39 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    174m14.398s
+
+    cat fb.canFam5.chainRBest.Mm39.txt
+    # 739648625 bases of 2337131234 (31.648%) in intersection
+
+##############################################################################
+# LASTZ mouse mm39 vs marmoset calJac4 (DONE - 2020-09-04 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm39/bed/lastzCalJac4.2020-09-04
+    cd /hive/data/genomes/mm39/bed/lastzCalJac4.2020-09-04
+
+    printf '# mouse vs marmoset calJac4
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: marmoset calJac4
+SEQ2_DIR=/hive/data/genomes/calJac4/calJac4.2bit
+SEQ2_LEN=/hive/data/genomes/calJac4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm39/bed/lastzCalJac4.2020-09-04
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    269m7.515s
+
+    cat fb.mm39.chainCalJac4Link.txt
+    #	878425270 bases of 2654624157 (33.090%) in intersection
+    cat fb.mm39.chainSynCalJac4Link.txt
+    #   830808798 bases of 2654624157 (31.297%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm39 calJac4 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    342m45.296s
+
+    cat fb.mm39.chainRBest.CalJac4.txt
+    # 835984408 bases of 2654624157 (31.492%) in intersection
+
+    mkdir /hive/data/genomes/calJac4/bed/blastz.mm39.swap
+    cd /hive/data/genomes/calJac4/bed/blastz.mm39.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm39/bed/lastzCalJac4.2020-09-04/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    51m44.991s
+
+    cat fb.calJac4.chainMm39Link.txt
+    #	885334904 bases of 2859817025 (30.958%) in intersection
+    cat fb.calJac4.chainSynMm39Link.txt
+    #   831225065 bases of 2859817025 (29.066%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev calJac4 mm39 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    298m22.974s
+
+    cat fb.calJac4.chainRBest.Mm39.txt
+    # 834211414 bases of 2859817025 (29.170%) in intersection
+
+##############################################################################
+# LASTZ Rat rn6 (DONE - 2020-10-20 - Hiram)
+    mkdir /hive/data/genomes/mm39/bed/lastzRn6.2020-10-20
+    cd /hive/data/genomes/mm39/bed/lastzRn6.2020-10-20
+
+    printf '# rat vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+# TARGET: Mouse Mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn6
+SEQ2_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ2_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/mm39/bed/lastzRn6.2020-10-20
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm39Rn6
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1 &
+    #   real    364m51.738s
+
+    cat fb.mm39.chainRn6Link.txt
+    #	1882154751 bases of 2654624157 (70.901%) in intersection
+    cat fb.mm39.chainSynRn6Link.txt
+    #	1758846483 bases of 2654624157 (66.256%) in intersection
+
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	 mm39 rn6) > rbest.log 2>&1 &
+    # real    580m33.404s
+    cat fb.mm39.chainRBest.Rn6.txt
+    #	1738608299 bases of 2654624157 (65.494%) in intersection
+
+    mkdir /hive/data/genomes/rn6/bed/blastz.mm39.swap
+    cd /hive/data/genomes/rn6/bed/blastz.mm39.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm39/bed/lastzRn6.2020-10-20/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    129m25.422s
+
+    cat fb.rn6.chainMm39Link.txt
+    #   1940254184 bases of 2729860805 (71.075%) in intersection
+    cat fb.rn6.chainSynMm39Link.txt
+    #	1808524707 bases of 2729860805 (66.250%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	rn6 mm39) > rbest.log 2>&1
+    # real    675m42.654s
+
+    cat fb.rn6.chainRBest.Mm39.txt 
+    #	1740516499 bases of 2729860805 (63.758%) in intersection
+
+##############################################################################
+# LASTZ Rhesus rheMac10 (DONE - 2020-10-20 - Hiram)
+    mkdir /hive/data/genomes/mm39/bed/lastzRheMac10.2020-10-20
+    cd /hive/data/genomes/mm39/bed/lastzRheMac10.2020-10-20
+
+    printf '# rhesus vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+# TARGET: Mouse Mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rhesus RheMac10
+SEQ2_DIR=/hive/data/genomes/rheMac10/rheMac10.2bit
+SEQ2_LEN=/hive/data/genomes/rheMac10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/mm39/bed/lastzRheMac10.2020-10-20
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm39RheMac10
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #   real    243m13.015s
+
+    cat fb.mm39.chainRheMac10Link.txt
+    #	924807390 bases of 2654624157 (34.838%) in intersection
+    cat fb.mm39.chainSynRheMac10Link.txt
+    #	878558648 bases of 2654624157 (33.095%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	mm39 rheMac10) > rbest.log 2>&1 &
+    # real    309m44.560s
+
+    cat fb.mm39.chainRBest.RheMac10.txt
+    #	880466873 bases of 2654624157 (33.167%) in intersection
+
+
+    mkdir /hive/data/genomes/rheMac10/bed/blastz.mm39.swap
+    cd /hive/data/genomes/rheMac10/bed/blastz.mm39.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm39/bed/lastzRheMac10.2020-10-20/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    51m43.176s
+
+    cat fb.rheMac10.chainMm39Link.txt
+    #   920110067 bases of 2936892733 (31.329%) in intersection
+    cat fb.rheMac10.chainSynMm39Link.txt
+    #	876443625 bases of 2936892733 (29.843%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	rheMac10 mm39) > rbest.log 2>&1
+    # real    255m21.492s
+
+    cat fb.rheMac10.chainRBest.Mm39.txt
+    #	879043885 bases of 2936892733 (29.931%) in intersection
+
+#########################################################################

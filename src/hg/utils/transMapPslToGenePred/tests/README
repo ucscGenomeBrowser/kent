@@ -1,0 +1,10 @@
+
+
+* tm-astMex1 - test cases from transmap V5 astMex1 to hg38
+  test data was created with:
+    sqlite3 /hive/data/inside/transMap/V5/data/src/astMex1/astMex1.ensembl.src.db 'select * from srcAlign' | cut -f 2- > astMex1.ensembl.psl
+    sqlite3 /hive/data/inside/transMap/V5/data/src/astMex1/astMex1.ensembl.src.db 'select srcId, cds from srcMetadata where cds is not null' > astMex1.ensembl.cds
+    mrnaToGene -genePredExt -keepInvalid  -ignoreUniqSuffix -quiet -cdsFile=astMex1.ensembl.cds -insertMergeSize=-1 astMex1.ensembl.psl astMex1.ensembl.gp
+    bigPslToPsl /gbdb/hg38/transMap/V5/hg38.ensembl.transMapV5.bigPsl /dev/stdout | tawk '/astMex1:/' > astMex1-hg38.ensembl.psl
+
+  then a subset of problem cases extracted

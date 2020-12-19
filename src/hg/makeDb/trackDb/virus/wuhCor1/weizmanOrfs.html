@@ -1,0 +1,64 @@
+<h2>Description</h2>
+<p>
+The Weizman ORFs (Open Reading Frames) track shows previously unannotated ORF
+predictions based on Ribo-Seq and RNA-seq data. It is a collection of
+tracks (<a href="/goldenpath/help/hubQuickStartGroups.html#superTrack">super track</a>) 
+that contains not only the predicted gene models, but also
+data supporting them.</p>
+
+<h2>Display Conventions and Configuration</h2>
+The Predicted ORFs track shows the predicted exons. All other tracks show the signal as 
+a x-y plot with bars.
+
+<h2>Methods</h2>
+<p>
+Methods from Finkel et al:</p>
+<p>
+To capture the full SARS-CoV-2 coding capacity, we applied a suite of ribosome
+profiling approaches to Vero cells infected with SARS-CoV-2 for 5 and 24 hours,
+and Calu3 cells infected for 7 hours. For each time point we prepared three
+different ribosome-profiling libraries, each one in two biological replicates.
+Two Ribo-seq libraries facilitate mapping of translation initiation sites, by
+treating cells with lactimidomycin (LTM) or harringtonine (Harr), two drugs
+with distinct mechanisms that prevent 80S ribosomes at translation initiation
+sites from elongating. The third Ribo-seq library was prepared from cells
+treated with the translation elongation inhibitor cycloheximide (CHX), and
+gives a snap-shot of actively translating ribosomes across the body of the
+translated ORF. In parallel, RNA-sequencing was applied to map viral
+transcripts.  </p>
+<p>
+The ORF prediction was done by using two computational tools, PRICE and
+ORF-RATER, that rely on different features of ribosome profiling data, and by
+manual inspection of the data. The predictions are based on Ribo-seq libraries
+from two time points (5 and 7 hpi) of two different cell lines (Vero E6 and
+Calu3 cells), infected with separate virus isolates.  </p>
+<p>
+The Ribo-Seq data of the 24 hours samples do not show the expected profile of
+read distribution on viral genes and therefore were not used for the procedure
+of ORF predictions.  </p>
+<p>For more details see the paper in the <b>References</b> section below.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a target="_blank" href="hgTables">Table Browser</a>, or combined with other datasets in the
+<a target="_blank" href="hgIntegrator">Data Integrator</a> tool.</p>
+
+<p>
+Please refer to our
+<a target="_blank" 
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a target="_blank" href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+
+<h2>References</h2>
+<p>
+Finkel Y, Mizrahi O, Nachshon A, Weingarten-Gabbay S, Morgenstern D, Yahalom-Ronen Y, Tamir H,
+Achdout H, Stein D, Israeli O <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32906143" target="_blank">
+    The coding capacity of SARS-CoV-2</a>.
+<em>Nature</em>. 2020 Sep 9;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32906143" target="_blank">32906143</a>
+</p>
+

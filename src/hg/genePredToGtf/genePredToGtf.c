@@ -85,7 +85,7 @@ else
 
 static void writeGtfLine(FILE *f, char *source, char *name, char *geneName,
 	char *chrom, char strand, char *type, 
-	int start, int end, int exonIx, int frame)
+	int start, int end, int exonIx, int frame, int exonCount)
 /* Write a single exon to GTF file */
 {
 assert(start <= end);
@@ -105,8 +105,16 @@ fprintf(f, "gene_id \"%s\"; ", (isNotEmpty(geneName)) ? geneName : name);
 fprintf(f, "transcript_id \"%s\"; ", name);
 if (exonIx >= 0)
     {
-    fprintf(f, "exon_number \"%d\"; ", exonIx+1);
-    fprintf(f, "exon_id \"%s.%d\";", name, exonIx+1);
+    if (strand == '-')
+	{
+	fprintf(f, "exon_number \"%d\"; ", exonCount-exonIx);
+	fprintf(f, "exon_id \"%s.%d\";", name, exonCount-exonIx);
+	}
+    else
+	{
+	fprintf(f, "exon_number \"%d\"; ", exonIx+1);
+	fprintf(f, "exon_id \"%s.%d\";", name, exonIx+1);
+	}
     }
 if (isNotEmpty(geneName))
     fprintf(f, " gene_name \"%s\";", geneName);
@@ -191,16 +199,16 @@ return (((codon->end1-codon->start1)+(codon->end2-codon->start2)) == 3);
 
 static void writeCodon(FILE *f, char *source, char *name, char *geneName,
                        char *chrom, char strand, char *type, 
-                       struct codonCoords *codon)
+                       struct codonCoords *codon, int exonCount)
 /* write the location of a codon to the GTF, if it is non-zero and complete */
 {
 writeGtfLine(f, source, name, geneName, chrom, strand, type, 
-             codon->start1, codon->end1, codon->iExon1, 0);
+             codon->start1, codon->end1, codon->iExon1, 0, exonCount);
         
 if (codon->start2 < codon->end2)
     writeGtfLine(f, source, name, geneName, chrom, strand, type, 
                  codon->start2, codon->end2, codon->iExon2, 
-                 (codon->end1-codon->start1));
+                 (codon->end1-codon->start1), exonCount);
 }
 
 static struct codonCoords findFirstCodon(struct genePred *gp, int *frames)
@@ -334,21 +342,21 @@ if (utr && (exonStart < firstUtrEnd))
     int end = min(exonEnd, firstUtrEnd);
     writeGtfLine(f, source, name, geneName, chrom, strand,
                  ((strand == '+') ? "5UTR" : "3UTR"),
-                 exonStart, end, i, -1);
+                 exonStart, end, i, -1, gp->exonCount);
     }
 if ((cdsStart < exonEnd) && (cdsEnd > exonStart))
         {
         int start = max(exonStart, cdsStart);
         int end = min(exonEnd, cdsEnd);
         writeGtfLine(f, source, name, geneName, chrom, strand, "CDS",
-                     start, end, i, frame);
+                     start, end, i, frame, gp->exonCount);
         }
 if (utr && (exonEnd > lastUtrStart))
     {
     int start = max(lastUtrStart, exonStart);
     writeGtfLine(f, source, name, geneName, chrom, strand,
                  ((strand == '+') ? "3UTR" : "5UTR"),
-                 start, exonEnd, i, -1);
+                 start, exonEnd, i, -1, gp->exonCount);
     }
 }
 
@@ -380,11 +388,11 @@ if (addComments)
             gp->strand, gp->cdsStart, gp->cdsEnd);
 
 writeGtfLine(f, source, name, geneName, chrom, strand, "transcript", 
-             gp->txStart, gp->txEnd, -1, -1);
+             gp->txStart, gp->txEnd, -1, -1, gp->exonCount);
 for (i=0; i<gp->exonCount; ++i)
     {
     writeGtfLine(f, source, name, geneName, chrom, strand, "exon", 
-             gp->exonStarts[i], gp->exonEnds[i], i, -1);
+             gp->exonStarts[i], gp->exonEnds[i], i, -1, gp->exonCount);
     if (cdsStart < cdsEnd)
         writeFeatures(gp, i, source, name, chrom, strand, geneName, 
                       firstUtrEnd, cdsStart, cdsEnd, lastUtrStart,
@@ -394,19 +402,19 @@ if (gp->strand[0] == '+')
     {
     if (codonComplete(&firstCodon))
         writeCodon(f, source, name, geneName, chrom, strand, "start_codon", 
-                   &firstCodon);
+                   &firstCodon, gp->exonCount);
     if (codonComplete(&lastCodon))
         writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
-                   &lastCodon);
+                   &lastCodon, gp->exonCount);
     }
 else
     {
     if (codonComplete(&lastCodon))
         writeCodon(f, source, name, geneName, chrom, strand, "start_codon",
-                   &lastCodon);
+                   &lastCodon, gp->exonCount);
     if (codonComplete(&firstCodon))
         writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
-                   &firstCodon);
+                   &firstCodon, gp->exonCount);
     }
 if (!(gp->optFields & genePredExonFramesFld))
     freeMem(frames);

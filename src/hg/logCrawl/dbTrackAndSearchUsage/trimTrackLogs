@@ -1,0 +1,115 @@
+#!/cluster/software/bin/python3
+
+"""
+Go through an Apache error log and combine multiple trackLog lines into
+a single line, and keep only relevant fields.
+"""
+
+import os,sys,gzip,argparse,re
+from collections import defaultdict
+
+useDict = defaultdict(list)
+
+def parseCommandLine():
+    parser = argparse.ArgumentParser(description="", add_help=True, usage="%(prog)s [options]")
+    parser.add_argument("infile", action="store", default=None, help="Input Apache error_log file, use 'stdin' to read from standard input")
+    parser.add_argument("-v", "--verbose", action="store_true", default=False, help="Log verbose output to stderr")
+    args = parser.parse_args()
+    return args
+
+def addOrMergeUsage(date, pid, ip, logPart, db, hgsid, tracks):
+    """Add a new usage onto the usageDict list, or add more tracks onto the end of a previous usage."""
+    global useDict
+    key = "|".join([pid,ip,hgsid])
+    if logPart == 0:
+        val = "|".join([date,db,tracks])
+        useDict[key].append(val)
+    else:
+        # be sure to add a comma in case apache failed to add a referer:
+        if useDict[key][-1][-1] != ",":
+            useDict[key][-1] += "," + tracks
+        else:
+            useDict[key][-1] += tracks
+
+def processPrefix(line):
+    """Split the apache error log parts between brackets into a list of elements."""
+    ret = []
+    current = ""
+    for i in range(len(line)):
+        c = line[i]
+        if c == "]" or (not i != len(line) - 1 and current):
+            # the 'AH01215:' before the trackLog statement, a relatively recent Apache addition
+            if c != "]": 
+                current += c
+            ret.append(current.strip())
+            current = ""
+        elif c == "[":
+            current = ""
+        else:
+            current += c
+    return ret
+
+def parseTrackLogLine(line, verbose):
+    splitLine = line.strip().split("trackLog")
+
+    try:
+        # the apache stuff
+        prefix = splitLine[0].strip()
+        prefixParts = processPrefix(prefix)
+        date = prefixParts[0]
+        pid = prefixParts[2].split("pid ")[1]
+        ip = prefixParts[3].split("client ")[1]
+
+        # our stuff
+        suffixParts = splitLine[1].strip().split(' ')
+        logPart = int(suffixParts[0])
+        db = suffixParts[1]
+        hgsid = suffixParts[2]
+        tracks = ""
+        if len(suffixParts) > 3:
+            tracks = suffixParts[3]
+    except IndexError:
+        sys.stderr.write("offending line:\n%s\n" % line)
+        sys.exit(1)
+    return date, pid, ip, logPart, db, hgsid, tracks
+
+def trimLog(infileHandle, verbose):
+    lineCount = 0
+    matchCount = 0
+    # use a re here because there are also "trackLog position" lines too
+    trackLogMatch = re.compile("trackLog [0-9]+")
+    for line in infileHandle:
+        lineCount += 1
+        if "str" not in str(type(line)):
+            line = line.decode("ASCII")
+        if trackLogMatch.search(line):
+            matchCount += 1
+            date, pid, ip, logPart, db, hgsid, tracks = parseTrackLogLine(line, verbose)
+            addOrMergeUsage(date, pid, ip, logPart, db, hgsid, tracks)
+
+    if verbose:
+        sys.stderr.write("Processed %d lines and found %d trackLog lines, trimmed to %d usages\n" % (
+            lineCount, matchCount, len(useDict)))
+
+def dumpTrimmed():
+    for key in useDict:
+        splitKey = key.split("|")
+        for usage in useDict[key]:
+            splitVal = usage.split("|")
+            print("%s\t%s" % ("\t".join(splitKey), "\t".join(splitVal)))
+
+def main():
+    args = parseCommandLine()
+    if args.infile == "stdin":
+        infh = sys.stdin
+    elif args.infile[-3:] == ".gz":
+        infh = gzip.open(args.infile, "rb")
+    else:
+        infh = open(args.infile, "rb")
+
+    trimLog(infh, args.verbose)
+    dumpTrimmed()
+    infh.close()
+
+if __name__ == "__main__":
+    main()

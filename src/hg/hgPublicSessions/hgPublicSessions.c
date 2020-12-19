@@ -142,6 +142,10 @@ void galleryDisplay(struct galleryEntry *galList)
 /* Print a table containing the gallery data from galList */
 {
 struct galleryEntry *thisSession = galList;
+boolean searchStrExists = cgiVarExists("search");
+char *searchStr = NULL;
+if (searchStrExists)
+    searchStr = cgiOptionalString("search");
 
 /* Hide the orderable columns and disable ordering on the visible columns
  * https://datatables.net/reference/option/columnDefs for more info.
@@ -155,8 +159,15 @@ jsInlineF(
     "                                       \"stateSave\":true,\n"
     "                                       \"stateSaveCallback\": %s,\n"
     "                                       \"stateLoadCallback\": %s,\n"
-    "                                });\n"
-    /* Recover previous sorting choice from the cart settings, if available */
+    "                                });\n",
+    jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart));
+
+// the user may have cleared the previous search via cgi option, or tried a new search:
+if (searchStrExists)
+    jsInlineF("     $('#sessionTable').DataTable().search(\"%s\").draw();\n", searchStr);
+
+/* Recover previous sorting choice from the cart settings, if available */
+jsInlineF(
     "    var startOrder = $('#sessionTable').DataTable().order();\n"
     "    if (startOrder[0][0] == 3) {\n"
     "        if (startOrder[0][1] == \"asc\") {\n"
@@ -172,12 +183,11 @@ jsInlineF(
     "                $('#sortMethod').val(\"dateDesc\");\n"
     "            }\n"
     "        } else {\n"
-    "            $('#sessionTable').DataTable().order([3,'desc']).draw();\n"
-    "            $('#sortMethod').val(\"useDesc\");\n"
+    "            $('#sessionTable').DataTable().order([2,'desc']).draw();\n"
+    "            $('#sortMethod').val(\"dateDesc\");\n"
     "        }\n"
     "    }\n"
-    "});\n",
-    jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart));
+    "});\n");
 
 jsInline(
    "function changeSort() {\n"
@@ -245,7 +255,8 @@ while (thisSession != NULL)
     printf ("\t\t<b>Views:</b> %ld\n", thisSession->useCount);
     printf ("\t\t</td>\n");
     struct tm creationDate;
-    strptime(thisSession->firstUse, "%Y-%m-%d", &creationDate);
+    ZeroVar(&creationDate);
+    strptime(thisSession->firstUse, "%Y-%m-%d %T", &creationDate);
     /* Hidden columns */
     printf ("\t\t<td>%ld</td>\n", mktime(&creationDate));
     printf ("\t\t<td>%ld</td>\n", thisSession->useCount);

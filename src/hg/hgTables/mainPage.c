@@ -375,7 +375,7 @@ if (otDefault != NULL && otDefault != otList)
     if (! otInOtList)
 	outputType = otDefault->name;
     }
-hPrintf("<SELECT NAME=\"%s\">", hgtaOutputType);
+hPrintf("<SELECT id='outputTypeDropdown' NAME=\"%s\">", hgtaOutputType);
 for (ot = otList; ot != NULL; ot = ot->next)
     {
     hPrintf(" <OPTION VALUE=%s", ot->name);
@@ -387,6 +387,35 @@ for (ot = otList; ot != NULL; ot = ot->next)
     }
 hPrintf("</SELECT>\n");
 hPrintf(" ");
+
+hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='gffNote'>"
+        "<b>Note:</b> Table Browser GTF files contain transcripts, but no gene identifiers or symbols.<br> "
+        "If you are looking for fully formatted "
+        "gene model files for use in genome analysis pipelines,<br>check the "
+        "<a href='https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/genes'>bigZips/genes</a> "
+        "directory on our download server.</DIV>", database);
+hPrintf(" ");
+
+jsInline("function checkGtfNote() {"
+    "if (document.getElementById('outputTypeDropdown').value==='gff') "
+    "    document.getElementById('gffNote').style.display=''; "
+    "else "
+    "    document.getElementById('gffNote').style.display='none'; "
+    "}"
+    "$(document).ready(checkGtfNote);\n"
+);
+jsOnEventById("change", "outputTypeDropdown", "checkGtfNote()");
+
+jsInline("function checkSnpTablesNote() {"  
+    "var trackName = document.getElementById('hgta_track').value;"
+    "if (trackName.startsWith('dbSnp') || trackName.startsWith('snp')) "
+    "    document.getElementById('snpTablesNote').style.display=''; "
+    "else "
+    "    document.getElementById('snpTablesNote').style.display='none'; "
+    "}"
+    "$(document).ready(checkSnpTablesNote);\n"
+);
+jsOnEventById("change", "outputTypeDropdown", "checkSnpTablesNote()");
 
 if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
     {
@@ -629,6 +658,13 @@ if (curTrack == NULL)
 if (isHicTable(curTable))
     hicMainPageConfig(cart, hTrackDbForTrack(database,curTable));
 
+hPrintf("<tr><td><DIV style='background-color: #faf2bb; display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='snpTablesNote'>"
+        "<b>Note:</b> Most dbSNP tables are huge. Trying to download them through the Table Browser "
+        "usually leads to a timeout.<br> "
+        "Please see our <a href='../FAQ/FAQdownloads.html#snp'>Data Access FAQ</a> "
+        "on how to download dbSNP data.</DIV></td></tr>");
+
+
 /* Region line */
 {
 char *regionType;
@@ -638,6 +674,7 @@ else
     regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeGenome);
 
 char *range = cartUsualString(cart, hgtaRange, "");
+
 if (isPositional)
     {
     boolean doEncode = FALSE; 
@@ -694,6 +731,18 @@ if (isPositional)
     else
 	cgiMakeButton(hgtaDoSetUserRegions, "define regions");
     hPrintf("</TD></TR>\n");
+
+    if (disableGenome) { // no need to check curTrack for NULL, disableGenome can only be set if curTable is set
+        hPrintf("<tr><td><DIV style='background-color: #faf2bb; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px'>");
+        char *noGenomeNote = trackDbSettingClosestToHome(curTrack, "noGenomeReason");
+        hPrintf("<b>Note:</b> This track is unavailable for genome-wide download. ");
+        if (noGenomeNote)
+            hPrintf("Reason: %s", noGenomeNote);
+        else
+            hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see the track documentation for more details. Contact us if you are still unable to access the data. ");
+        hPrintf("</DIV></td></tr>");
+    }
+
     }
 else
     {
@@ -931,12 +980,9 @@ hPrintf(
   "format, to calculate intersections between tracks, and to retrieve "
   "DNA sequence covered by a track. For help in using this application "
   "see <A HREF=\"#Help\">Using the Table Browser</A> for a description "
-  "of the controls in this form, the "
+  "of the controls in this form, and the "
   "<A HREF=\"../goldenPath/help/hgTablesHelp.html\">User's Guide</A> for "
-  "general information and sample queries, and the OpenHelix Table Browser "
-  "<A HREF=\"http://www.openhelix.com/cgi/tutorialInfo.cgi?id=28\" "
-  "TARGET=_blank>tutorial</A> for a narrated presentation of the software "
-  "features and usage. "
+  "general information and sample queries. "
   "For more complex queries, you may want to use "
   "<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A> or "
   "our <A HREF=\"../goldenPath/help/mysql.html\">public "

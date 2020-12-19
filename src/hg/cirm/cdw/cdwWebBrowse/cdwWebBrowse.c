@@ -1233,12 +1233,12 @@ printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
 
-cgiMakeHiddenVar("clearSearch", "0");
-char *clearSearch = cartOptionalString(cart, "clearSearch");
-if (clearSearch && sameString(clearSearch,"1"))
+cgiMakeHiddenVar("clearRestriction", "0");
+char *clearRestriction = cartOptionalString(cart, "clearRestriction");
+if (clearRestriction && sameString(clearRestriction,"1"))
     {
     cartSetString(cart, "cdwFile_filter", "");  // reset file filter to empty string
-    cartRemove(cart, "clearSearch");
+    cartRemove(cart, "clearRestriction");
     }
 
 // DEBUG REMOVE
@@ -1278,10 +1278,7 @@ char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
 char *where = cartUsualString(cart, "cdwFile_filter", "");
-if (!isEmpty(where))
-    {
-    printf("<BR>Restricting files to where %s. ", where);
-    }
+
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearFileName);
@@ -2238,7 +2235,9 @@ void localWebStartWrapper(char *titleString)
     printf("\t\t<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\"></script>");
     webIncludeResourceFile("cirmStyle.css");
 
-    printf("\t\t<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n"
+    printf("\t\t<link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.7.2/css/all.css\"\n"
+        "\t\t integrity=\"sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr\"\n"
+        "\t\t crossorigin=\"anonymous\">\n"
         "\n"
         "\t\t<!-- Latest compiled and minified CSS -->\n"
         "\t\t<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\"\n"

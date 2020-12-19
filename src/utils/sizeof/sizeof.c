@@ -12,6 +12,8 @@ int main()
 unsigned int byteOrder = 0x12345678;
 unsigned char *cp = (unsigned char *) &byteOrder;
 
+printf("sizeof - show size of various C types for reference\n\n");
+
 printf("     type   bytes    bits\n");
 printf("     char\t%d\t%d\n", (int)sizeof(char), 8*(int)sizeof(char));
 printf("unsigned char\t%d\t%d\n", (int)sizeof(unsigned char),

@@ -29,7 +29,7 @@ errAbort(
   "transMapPslToGenePred - convert PSL alignments of mRNAs to gene annotations.\n"
   "\n"
   "usage:\n"
-  "   mrnaToGene [options] sourceGenePred mappedPsl mappedGenePred\n"
+  "   transMapPslToGenePred [options] sourceGenePred mappedPsl mappedGenePred\n"
   "\n"
 
   "Convert PSL alignments from transmap to genePred.  It specifically handles\n"
@@ -52,6 +52,8 @@ errAbort(
   "   with the max rounded down.\n"
   "  -noBlockMerge - don't do any block merging of genePred, even of adjacent blocks.\n"
   "   This is mainly for debugging.\n"
+  "  -frameShifts=tsv - Write TSV with locations of frame-shifting indels.  The coordinates\n"
+  "   give a context for the shift for browsing, not an exact location.\n"
   "\n");
 }
 
@@ -60,6 +62,7 @@ static struct optionSpec optionSpecs[] = {
     {"nonCodingGapFillMax", OPTION_INT},
     {"codingGapFillMax", OPTION_INT},
     {"noBlockMerge", OPTION_BOOLEAN},
+    {"frameShifts", OPTION_STRING},
     {NULL, 0}
 };
 static int nonCodingGapFillMax = 0;
@@ -93,15 +96,6 @@ static int genePredExonSize(struct genePred* gp, int iExon)
 /* calculate size of an exon in a genePred */
 {
 return gp->exonEnds[iExon] - gp->exonStarts[iExon];
-}
-
-static int genePredSize(struct genePred* gp)
-/* calculate size of an all of the exons in a genePred */
-{
-int iExon, size = 0;
-for (iExon = 0; iExon < gp->exonCount; iExon++)
-    size += genePredExonSize(gp, iExon);
-return size;
 }
 
 static int pslBlockQueryToTarget(struct psl *psl, int iBlock, int pos)
@@ -162,18 +156,44 @@ return srcGenePredMap;
 static struct genePred* srcGenePredFind(struct hash* srcGenePredMap,
                                         char* qName, int qSize)
 {
-// ignore unique suffix everything after the last
-char qNameBase[512];
-safecpy(qNameBase, sizeof(qNameBase), qName);
-char *dash = strrchr(qNameBase, '-');
-if (dash != NULL)
-    *dash = '\0';
-struct genePred* gp = hashFindVal(srcGenePredMap, qNameBase);
-if (gp == NULL)
-    errAbort("can't find source genePred for %s with name %s", qName, qNameBase);
-if (genePredSize(gp) != qSize)
+// try looking up with or without the unique suffix, which are strings
+// appended like '-1' or '-1.2'
+boolean haveSuffix = strrchr(qName, '-') != NULL;
+
+struct genePred* gp = NULL;
+if (!haveSuffix)
+    {
+    gp = hashFindVal(srcGenePredMap, qName);
+    if (gp == NULL)
+        errAbort("can't find source genePred for %s", qName);
+    }
+else
+    {
+    // try removing single `.N' which would be added during mapping
+    char qNameBase1[512];
+    safecpy(qNameBase1, sizeof(qNameBase1), qName);
+    char *dot = strrchr(qNameBase1, '.');
+    if (dot != NULL)
+        {
+        *dot = '\0';
+        gp = hashFindVal(srcGenePredMap, qNameBase1);
+        }
+    if (gp == NULL)
+        {
+        // try removing full unique extension
+        char qNameBase2[512];
+        safecpy(qNameBase2, sizeof(qNameBase2), qName);
+        char *dash = strrchr(qNameBase2, '-');
+        if (dash != NULL)
+            *dash = '\0';
+        gp = hashFindVal(srcGenePredMap, qNameBase2);
+        if (gp == NULL)
+            errAbort("can't find source genePred for %s with name %s or %s", qName, qNameBase1, qNameBase2);
+        }
+    }
+if (genePredBases(gp) != qSize)
     errAbort("size of query computed from genePred %s (%d), doesn't match expected %s (%d)",
-             qNameBase, genePredSize(gp), qName, qSize);
+             gp->name, genePredBases(gp), qName, qSize);
 return gp;
 }
 
@@ -272,7 +292,7 @@ static void srcQueryExonBuild(struct genePred* srcGp,
 {
 // building in strand-order generates correct coordinate
 int qStart = 0;
-int qSize = genePredSize(srcGp);
+int qSize = genePredBases(srcGp);
 int iExon;
 if (srcGp->strand[0] == '+')
     {
@@ -489,8 +509,50 @@ else
 return mappedGp;
 }
 
-static boolean haveAdjacentMergedFrames(struct genePred *mappedGp, int iExon)
-/* Do two block have adjacent frames and will merging them keep frames contiguous?  */
+static int getExonCdsStart(struct genePred *gp, int iExon)
+/* get start of CDS in an exon */
+{
+return max(gp->exonStarts[iExon], gp->cdsStart);
+}
+
+static int getExonCdsEnd(struct genePred *gp, int iExon)
+/* get end of CDS in an exon */
+{
+return min(gp->exonEnds[iExon], gp->cdsEnd);
+}
+
+static int getExonCdsLen(struct genePred *gp, int iExon)
+/* get the length of the the CDS in an exon */
+{
+int start, end;
+genePredCdsExon(gp, iExon, &start, &end);
+return end - start;
+}
+
+
+static int getExonEndFrame(struct genePred *gp, int iExon)
+/* get the end frame of exon (half-open)  */
+{
+if (gp->exonFrames[iExon] == -1)
+    return -1;
+else
+    return frameIncr(gp->exonFrames[iExon], getExonCdsLen(gp, iExon));
+}
+
+static int codonBaseRoundDown(int bases)
+/* round down to an even multiple of three */
+{
+return 3 * (bases / 3);
+}
+
+static int wholeCodonBases(struct genePred *gp, int iExon)
+/* the number of whole codon bases in an exon */
+{
+return codonBaseRoundDown(getExonCdsLen(gp, iExon) - gp->exonFrames[iExon]);
+}
+
+static boolean haveMergableFrames(struct genePred *mappedGp, int iExon)
+/* Do two block have frames that can be merged keeping frames contiguous?  */
 {
 assert(mappedGp->exonFrames[iExon] >= 0);
 assert(mappedGp->exonFrames[iExon+1] >= 0);
@@ -498,15 +560,13 @@ int gapSize = (mappedGp->exonStarts[iExon+1] - mappedGp->exonEnds[iExon]);
 if (mappedGp->strand[0] == '+')
     {
     // how much of CDS is in this exon
-    int cdsOff = max(mappedGp->exonStarts[iExon], mappedGp->cdsStart) - mappedGp->exonStarts[iExon];
-    int cdsIncr = (genePredExonSize(mappedGp, iExon) - cdsOff) + gapSize;
+    int cdsIncr = getExonCdsLen(mappedGp, iExon) + gapSize;
     return (frameIncr(mappedGp->exonFrames[iExon], cdsIncr) == mappedGp->exonFrames[iExon+1]);
     }
 else
     {
     // how much of CDS is in next exon
-    int cdsOff = mappedGp->exonEnds[iExon+1] - min(mappedGp->exonEnds[iExon+1], mappedGp->cdsEnd);
-    int cdsIncr = (genePredExonSize(mappedGp, iExon+1) - cdsOff)  + gapSize;
+    int cdsIncr = getExonCdsLen(mappedGp, iExon+1) + gapSize;
     return (frameIncr(mappedGp->exonFrames[iExon+1], cdsIncr) == mappedGp->exonFrames[iExon]);
     }
 }
@@ -521,7 +581,7 @@ static boolean canMergeFrames(struct genePred *mappedGp, int iExon)
 /* check if frames can be merged, -1 frames merge with with any adjacent
  * frame */
 {
-return hasAdjacentNonCoding(mappedGp, iExon) || haveAdjacentMergedFrames(mappedGp, iExon);
+return hasAdjacentNonCoding(mappedGp, iExon) || haveMergableFrames(mappedGp, iExon);
 }
 
 static boolean canMergeBlocks(struct genePred *mappedGp, int iExon)
@@ -586,7 +646,125 @@ while (iExon < mappedGp->exonCount-1)
     }
 }
 
-static void convertPsl(struct hash* srcGenePredMap, struct psl *mappedPsl, FILE* genePredOutFh)
+static void prFrameShift(struct genePred *mappedGp, int chromStart, int chromEnd,
+                         int shift, char *location, FILE *frameShiftsFh)
+/* print a frame description to the TSV */
+{
+fprintf(frameShiftsFh, "%s\t%s\t%d\t%d\t%s\t%d\t%s\n", mappedGp->name, mappedGp->chrom,
+        chromStart, chromEnd, mappedGp->strand, shift, location);
+}
+
+static boolean haveConsistentFrames(struct genePred *mappedGp, int iExon)
+/* is frame between iExon and iExon+1 consistent (no frame shift)? */
+{
+if (mappedGp->strand[0] == '+')
+    return getExonEndFrame(mappedGp, iExon) == mappedGp->exonFrames[iExon+1];
+else
+    return getExonEndFrame(mappedGp, iExon+1) == mappedGp->exonFrames[iExon];
+}
+
+static void checkStartFrameShift(struct genePred *mappedGp, int iExon, FILE* frameShiftsFh)
+/* check if first codon is truncated at the start */
+{
+if (mappedGp->exonFrames[iExon] != 0)
+    {
+    int start, end;
+    if (mappedGp->strand[0] == '+')
+        {
+        start = getExonCdsStart(mappedGp, iExon);
+        end = min(start + (3 - mappedGp->exonFrames[iExon]),
+                  mappedGp->exonEnds[iExon]);
+        }
+    else
+        {
+        end = getExonCdsEnd(mappedGp, iExon);
+        start = max(end - (3 - mappedGp->exonFrames[iExon]),
+                    mappedGp->exonStarts[iExon]);
+        }
+    prFrameShift(mappedGp, start, end, mappedGp->exonFrames[iExon], "first", frameShiftsFh);
+    }
+}
+
+static void checkEndFrameShift(struct genePred *mappedGp, int iExon, FILE* frameShiftsFh)
+/* check if last codon is truncated, causing a frameshift */
+{
+if (getExonEndFrame(mappedGp, iExon) != 0)
+    {
+    int start, end;
+    if (mappedGp->strand[0] == '+')
+        {
+        end = getExonCdsEnd(mappedGp, iExon);
+        start = max(end - (3 - mappedGp->exonFrames[iExon]),
+                    mappedGp->exonStarts[iExon]);
+        }
+    else
+        {
+        start = getExonCdsStart(mappedGp, iExon);
+        end = min(start + (3 - mappedGp->exonFrames[iExon]),
+                  mappedGp->exonEnds[iExon]);
+        }
+    int shift = getExonCdsLen(mappedGp, iExon) - mappedGp->exonFrames[iExon] - wholeCodonBases(mappedGp, iExon);
+    prFrameShift(mappedGp, start, end, shift, "last", frameShiftsFh);
+    }
+}
+
+static void checkInternalFrameShift(struct genePred *mappedGp, int iExon, FILE* frameShiftsFh)
+/* check if there is a frame shift between iExon and iExon+1 */
+{
+if (!haveConsistentFrames(mappedGp, iExon))
+    {
+    // get full codons before and after as bounds
+    int start, end, shift;
+    if (mappedGp->strand[0] == '+')
+        {
+        start = max(getExonCdsStart(mappedGp, iExon) + mappedGp->exonFrames[iExon] + wholeCodonBases(mappedGp, iExon) - 3,
+                    mappedGp->exonStarts[iExon]);
+        end = min(mappedGp->exonStarts[iExon+1] + mappedGp->exonFrames[iExon+1] + 3,
+                  mappedGp->exonEnds[iExon+1]);
+        shift = abs(frameIncr(mappedGp->exonFrames[iExon], getExonCdsLen(mappedGp, iExon)) - mappedGp->exonFrames[iExon+1]);
+        }
+    else
+        {
+        start = max(getExonCdsStart(mappedGp, iExon) + getExonEndFrame(mappedGp, iExon) + wholeCodonBases(mappedGp, iExon) - 3,
+                    mappedGp->exonStarts[iExon]);
+        end = min(mappedGp->exonStarts[iExon+1] + (3 - mappedGp->exonFrames[iExon+1]),
+                  mappedGp->exonEnds[iExon+1]);
+        shift = abs(frameIncr(mappedGp->exonFrames[iExon+1], getExonCdsLen(mappedGp, iExon+1)) - mappedGp->exonFrames[iExon]);
+        }
+    prFrameShift(mappedGp, start, end, shift, "internal", frameShiftsFh);
+    }
+}
+
+static void reportFrameShifts(struct genePred *mappedGp, FILE* frameShiftsFh)
+/* report frame shifts found it a transcript, including truncated start and end */
+{
+assert(mappedGp->cdsStart < mappedGp->cdsEnd);
+
+int iExon = 0;
+
+// find first with frame
+for (; mappedGp->exonFrames[iExon] == -1; iExon++)
+    continue;
+
+// first codon
+if (mappedGp->strand[0] == '+')
+    checkStartFrameShift(mappedGp, iExon, frameShiftsFh);
+else
+    checkEndFrameShift(mappedGp, iExon, frameShiftsFh);
+
+// internal exons
+for (; (iExon < mappedGp->exonCount - 1) && (mappedGp->exonFrames[iExon + 1] > -1); iExon++)
+    checkInternalFrameShift(mappedGp, iExon, frameShiftsFh);
+
+// last codon
+if (mappedGp->strand[0] == '+')
+    checkEndFrameShift(mappedGp, iExon, frameShiftsFh);
+else
+    checkStartFrameShift(mappedGp, iExon, frameShiftsFh);
+}
+
+static void convertPsl(struct hash* srcGenePredMap, struct psl *mappedPsl, FILE* genePredOutFh,
+                       FILE* frameShiftsFh)
 /* convert a single PSL */
 {
 if (pslTStrand(mappedPsl) == '-')
@@ -602,6 +780,8 @@ srcQueryExonBuild(srcGp, srcQueryExons);
 struct genePred *mappedGp = createGenePred(srcGp, srcQueryExons, mappedPsl);
 if (!noBlockMerge)
     mergeGenePredBlocks(mappedGp);
+if ((frameShiftsFh != NULL) && (mappedGp->cdsStart < mappedGp->cdsEnd))
+    reportFrameShifts(mappedGp, frameShiftsFh);
 if (genePredCheck("mappedGenePred", stderr, -1, mappedGp))
     errAbort("invalid genePred created");
 
@@ -610,19 +790,26 @@ genePredFree(&mappedGp);
 }
 
 static void transMapPslToGenePred(char* srcGenePredFile, char* mappedPslFile,
-                                  char* mappedGenePredFile)
+                                  char* mappedGenePredFile, char* frameShiftsTsv)
 /* convert mapped psl to genePreds */
 {
 struct hash* srcGenePredMap = srcGenePredLoad(srcGenePredFile);
 struct lineFile *pslFh = pslFileOpen(mappedPslFile);
 FILE* genePredOutFh = mustOpen(mappedGenePredFile, "w");
+FILE* frameShiftsFh = NULL;
+if (frameShiftsTsv != NULL)
+    {
+    frameShiftsFh = mustOpen(frameShiftsTsv, "w");
+    fprintf(frameShiftsFh, "name\tchrom\tchromStart\tchromEnd\tstrand\tshift\tlocation\n");
+    }
 struct psl *mappedPsl;
 while ((mappedPsl = pslNext(pslFh)) != NULL)
     {
-    convertPsl(srcGenePredMap, mappedPsl, genePredOutFh);
+    convertPsl(srcGenePredMap, mappedPsl, genePredOutFh, frameShiftsFh);
     pslFree(&mappedPsl);
     }
 
+carefulClose(&frameShiftsFh);
 carefulClose(&genePredOutFh);
 lineFileClose(&pslFh);
 hashFreeWithVals(&srcGenePredMap, genePredFree);
@@ -642,6 +829,7 @@ noBlockMerge = optionExists("noBlockMerge");
 char *srcGenePredFile = argv[1];
 char *mappedPslFile = argv[2];
 char *mappedGenePredFile = argv[3];
-transMapPslToGenePred(srcGenePredFile, mappedPslFile, mappedGenePredFile);
+transMapPslToGenePred(srcGenePredFile, mappedPslFile, mappedGenePredFile,
+                      optionVal("frameShifts", NULL));
 return 0;
 }

@@ -3,12 +3,6 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doNcbiRefSeq.pl instead.
 
-# HOW TO USE THIS TEMPLATE:
-# 1. Global-replace doNcbiRefSeq.pl with your actual script name.
-# 2. Search for template and replace each instance with something appropriate.
-#    Add steps and subroutines as needed.  Other do*.pl or make*.pl may have
-#    useful example code -- this is just a skeleton.
-
 use Getopt::Long;
 use warnings;
 use strict;
@@ -29,9 +23,9 @@ use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
-    $opt_genbank
-    $opt_subgroup
-    $opt_species
+    $opt_liftFile
+    $opt_assemblyHub
+    $opt_target2bit
     $opt_toGpWarnOnly
     /;
 
@@ -61,13 +55,8 @@ sub usage {
   my ($status, $detailed) = @_;
   # Basic help (for incorrect usage):
   print STDERR "
-usage: $base [options] genbank|refseq subGroup species asmId db
+usage: $base [options] asmId db
 required arguments:
-    genbank|refseq - specify either genbank or refseq hierarchy source
-    subGroup       - specify subGroup at NCBI FTP site, examples:
-                   - vertebrate_mammalian vertebrate_other plant etc...
-    species        - species directory at NCBI FTP site, examples:
-                   - Homo_sapiens Mus_musculus etc...
     asmId          - assembly identifier at NCBI FTP site, examples:
                    - GCF_000001405.32_GRCh38.p6 GCF_000001635.24_GRCm38.p4 etc..
     db             - database to load with track tables
@@ -79,8 +68,14 @@ options:
     -buildDir dir         Use dir instead of default
                           $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ncbiRefSeq.\$date
                           (necessary when continuing at a later date).
+    -assemblyHub          the processing is taking place in an assembly hub
+                          build
     -toGpWarnOnly         add -warnAndContinue to the gff3ToGenePred operation
                           to avoid gene definitions that will not convert
+    -liftFile pathName    a lift file to translate NCBI names to local genome
+                          names
+    -target2bit pathName  when not a local UCSC genome, use this 2bit file for
+                          the target genome sequence
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -108,6 +103,7 @@ Assumptions:
    database/assembly \$db.
 2. $HgAutomate::clusterData/\$db/chrom.sizes contains all sequence names and sizes from
    \$db.2bit.
+NOTE: Override these assumptions with the -target2Bit option
 " if ($detailed);
   print "\n";
   exit $status;
@@ -115,16 +111,19 @@ Assumptions:
 
 
 # Globals:
-# Command line args: genbankRefseq subGroup species asmId db
-my ($genbankRefseq, $subGroup, $species, $asmId, $db, $ftpDir);
+# Command line args: asmId db
+my ($asmId, $db);
 # Other:
-my ($buildDir, $toGpWarnOnly, $dbExists);
+my ($ftpDir, $buildDir, $assemblyHub, $toGpWarnOnly, $dbExists, $liftFile, $target2bit);
 my ($secondsStart, $secondsEnd);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
+		      'liftFile=s',
+		      'target2bit=s',
+		      'assemblyHub',
 		      'toGpWarnOnly',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -143,16 +142,32 @@ sub checkOptions {
 #########################################################################
 # * step: download [workhorse]
 sub doDownload {
+  my $filesFound = 0;
+ my @requiredFiles = qw( genomic.gff.gz rna.fna.gz rna.gbff.gz protein.faa.gz );
+  my $filesExpected = scalar(@requiredFiles);
+  foreach my $expectFile (@requiredFiles) {
+    if ( -s "/hive/data/outside/ncbi/genomes/$ftpDir/${asmId}_${expectFile}" ) {
+      ++$filesFound;
+    } else {
+      printf STDERR "# doNcbiRefSeq.pl: missing required file /hive/data/outside/ncbi/${asmId}_${expectFile}\n";
+    }
+  }
+
+  if ($filesFound < $filesExpected) {
+    printf STDERR "# doNcbiRefSeq.pl download: can not find all files required\n";
+    exit 255;
+  }
   my $runDir = "$buildDir/download";
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "download required set of files from NCBI.";
   my $bossScript = newBash HgRemoteScript("$runDir/doDownload.bash", $workhorse,
 				      $runDir, $whatItDoes);
-  my $outsideCopy = "/hive/data/outside/ncbi/$ftpDir";
-  my $localData = "/hive/data/inside/ncbi/$ftpDir";
-  $localData =~ s/all_assembly_versions/latest_assembly_versions/;
-  my $local2Bit = "$localData/$asmId.ncbi.2bit";
+  my $outsideCopy = "/hive/data/outside/ncbi/genomes/$ftpDir";
+  # might already have the NCBI 2bit file here:
+  my $localData = $buildDir;
+  $localData =~ s#trackData/ncbiRefSeq#download#;
+  my $local2Bit = "$localData/$asmId.2bit";
 
   # establish variables
   $bossScript->add(<<_EOF_
@@ -168,6 +183,7 @@ _EOF_
     );
 
 printf STDERR "# checking $outsideCopy\n";
+printf STDERR "# checking $local2Bit\n";
 
   # see if local symLinks can be made with copies already here from NCBI:
   if ( -d "$outsideCopy" ) {
@@ -193,10 +209,9 @@ _EOF_
     );
   }
 
-printf STDERR "# checking $local2Bit\n";
   if ( -s $local2Bit ) {
     $bossScript->add(<<_EOF_
-ln -f -s $local2Bit .
+ln -f -s $local2Bit \${asmId}.ncbi.2bit
 _EOF_
     );
   } elsif ( -s "$outsideCopy/${asmId}_genomic.fna.gz") {
@@ -217,23 +232,33 @@ _EOF_
   }
 
   my $haveLiftFile = 0;
-  if ($dbExists) {
+  if ( -s "$liftFile" ) {
+       $haveLiftFile = 1;
+  } elsif ($dbExists) {
      # check if db.ucscToRefSeq exists?
      my $sql = "show tables like 'ucscToRefSeq';";
      my $result = `hgsql $db -BN -e "$sql"`;
      chomp $result;
      if ( $result =~ m/ucscToRefSeq/ ) {
        $haveLiftFile = 1;
+### the sort -k2,2 -u eliminates the problem of duplicate sequences existing
+### in the target $db assembly
        $bossScript->add(<<_EOF_
 cd \$runDir
 hgsql -N -e 'select 0,name,chromEnd,chrom,chromEnd from ucscToRefSeq;' \${db} \\
-     > \${asmId}To\${db}.lift
+     | sort -k2,2 -u > \${asmId}To\${db}.lift
 _EOF_
        );
     }
   }
 
+  my $dbTwoBit = "$HgAutomate::clusterData/$db/$db.2bit";
+  $dbTwoBit = $target2bit if (-s "$target2bit");
+
   if (! $haveLiftFile ) {
+     # if this is an assembly hub and it did NOT supply a lift file,
+     # then we don't need one, do not attempt to build
+     if (! $opt_assemblyHub) {
        $bossScript->add(<<_EOF_
 # generate idKeys for the NCBI sequence to translate names to UCSC equivalents
 
@@ -242,21 +267,23 @@ mkdir -p \$runDir/idKeys
 cd \$runDir/idKeys
 time ($doIdKeys -buildDir=\$runDir/idKeys -twoBit=\$runDir/\$asmId.ncbi.2bit \$db) > idKeys.log 2>&1
 cd \$runDir
+twoBitInfo $dbTwoBit stdout | sort -k2,2nr > \$db.chrom.sizes
 ln -f -s idKeys/\$db.idKeys.txt ./ncbi.\$asmId.idKeys.txt
 ln -f -s /hive/data/genomes/\$db/bed/idKeys/\$db.idKeys.txt ./ucsc.\$db.idKeys.txt
 # joining the idKeys establishes a lift file to translate chrom names
-join -t'\t' ucsc.\$db.idKeys.txt ncbi.\$asmId.idKeys.txt \\
+join -t\$'\\t' ucsc.\$db.idKeys.txt ncbi.\$asmId.idKeys.txt \\
    | cut -f2-3 | sort \\
-     | join -t'\t' - <(sort $HgAutomate::clusterData/\$db/chrom.sizes) \\
-       | awk -F'\t' '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$2, \$3, \$1, \$3}' \\
+     | join -t\$'\\t' - <(sort \$db.chrom.sizes) \\
+       | awk -F\$'\\t' '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$2, \$3, \$1, \$3}' \\
           | sort -k3nr > \${asmId}To\${db}.lift
 _EOF_
        );
+     }
   }
 
   $bossScript->add(<<_EOF_
 cd \$runDir
-twoBitInfo \$asmId.ncbi.2bit stdout | sort -k2nr > \$asmId.chrom.sizes
+twoBitInfo \$asmId.ncbi.2bit stdout | sort -k2nr > \$asmId.ncbi.chrom.sizes
 zcat \${asmId}_rna.fna.gz | sed -e 's/ .*//;' | gzip -c > \$asmId.rna.fa.gz
 faSize -detailed \${asmId}.rna.fa.gz | sort -k2nr > rna.sizes
 
@@ -280,10 +307,29 @@ sub doProcess {
   my $bossScript = newBash HgRemoteScript("$runDir/doProcess.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
+  my $genePredCheckDb = "genePredCheck -db=\$db";
+  if (! $dbExists) {
+    $genePredCheckDb = "genePredCheck";
+  }
   my $warnOnly = "";
   $warnOnly = "-warnAndContinue" if ($toGpWarnOnly);
 
+  my $localLiftFile = "$downloadDir/${asmId}To${db}.lift";
+  if (! -s "$localLiftFile") {
+     $localLiftFile = "../download/${asmId}To${db}.lift" if (-s "../download/${asmId}To${db}.lift");
+  }
+  $localLiftFile = "" if (! -s "$localLiftFile");
+  $localLiftFile = $liftFile if (-s $liftFile);
+  my $pslTargetSizes = "-db=\$db";
+  my $fakePslSizes = "";
+  if (-s "$target2bit") {
+    $pslTargetSizes = "-targetSizes=\$db.chrom.sizes";
+    $fakePslSizes = "-chromSize=\$db.chrom.sizes";
+  }
+
   my $dbTwoBit = "$HgAutomate::clusterData/$db/$db.2bit";
+  $dbTwoBit = $target2bit if (-s "$target2bit");
+
   $bossScript->add(<<_EOF_
 # establish all variables to use here
 
@@ -293,6 +339,7 @@ export ncbiGffGz=\$downloadDir/\${asmId}_genomic.gff.gz
 export db=$db
 export gff3ToRefLink=$gff3ToRefLink
 export gbffToCds=$gbffToCds
+export dateStamp=`date "+%F"`
 
 export annotationRelease=`zcat \$ncbiGffGz | head -100 | grep ^#.annotation-source | sed -e 's/.*annotation-source //'`
 if [ "\$annotationRelease" == "" ]; then
@@ -303,11 +350,27 @@ echo "\$annotationRelease (\$versionDate)" > ncbiRefSeqVersion.txt
 
 # this produces the genePred in NCBI coordinates
 # 8/23/17: gff3ToGenePred quits over illegal attribute SO_type... make it legal (so_type):
-zcat \$ncbiGffGz \\
-  | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
-  | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
-      -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
+  zcat \$ncbiGffGz | grep -v -f ../../../download/\${asmId}.remove.dups.list \\
+    | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
+      | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
+        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+else
+  zcat \$ncbiGffGz \\
+    | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
+      | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
+        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+fi
 genePredCheck \$asmId.gp
+
+zcat \$ncbiGffGz | egrep 'tag=(RefSeq|MANE) Select' || true > before.cut9.txt
+
+if [ -s before.cut9.txt ]; then
+  cut -f9- before.cut9.txt | tr ';' '\\n' \\
+    | grep 'Name=' | grep -v NP_ | cut -d= -f2 | sort -u \\
+       > \$asmId.refseqSelectTranscripts.txt
+fi
+rm -f before.cut9.txt
 
 # extract labels from semi-structured text in gbff COMMENT/description sections:
 zcat \$downloadDir/\${asmId}_rna.gbff.gz \\
@@ -320,16 +383,41 @@ zcat \$downloadDir/\${asmId}_rna.gbff.gz \\
 \$gff3ToRefLink \$downloadDir/\$asmId.raFile.txt \$ncbiGffGz pragmaLabels.txt 2> \$db.refLink.stderr.txt \\
   | sort > \$asmId.refLink.tab
 
+_EOF_
+  );
+  if ( -s "$localLiftFile") {
+  $bossScript->add(<<_EOF_
 # converting the NCBI coordinates to UCSC coordinates
-liftUp -extGenePred -type=.gp stdout \$downloadDir/\${asmId}To\${db}.lift drop \$asmId.gp \\
+liftUp -extGenePred -type=.gp stdout $localLiftFile warn \$asmId.gp \\
   | gzip -c > \$asmId.\$db.gp.gz
-genePredCheck -db=\$db \$asmId.\$db.gp.gz
+_EOF_
+  );
+  } else {
+  $bossScript->add(<<_EOF_
+# no lifting necessary
+cat \$asmId.gp | gzip -c > \$asmId.\$db.gp.gz
+_EOF_
+  );
+  }
+  $bossScript->add(<<_EOF_
+$genePredCheckDb \$asmId.\$db.gp.gz
+zcat \$asmId.\$db.gp.gz > ncbiRefSeq.\$dateStamp
+genePredToGtf -utr file ncbiRefSeq.\$dateStamp stdout | gzip -c \\
+  > ../\$db.\$dateStamp.ncbiRefSeq.gtf.gz
+rm -f ncbiRefSeq.\$dateStamp
 
 # curated subset of all genes
 (zegrep "^[NY][MRP]_" \$asmId.\$db.gp.gz || true) > \$db.curated.gp
 # may not be any curated genes
 if [ ! -s \$db.curated.gp ]; then
   rm -f \$db.curated.gp
+elif [ -s \$asmId.refseqSelectTranscripts.txt ]; then
+  cat \$db.curated.gp | fgrep -f \$asmId.refseqSelectTranscripts.txt - \\
+    > \$db.refseqSelect.curated.gp
+  # may not be any refseqSelect.curated genes
+  if [ ! -s \$db.refseqSelect.curated.gp ]; then
+    rm -f \$db.refseqSelect.curated.gp
+  fi
 fi
 
 # predicted subset of all genes
@@ -342,25 +430,34 @@ fi
 (zegrep "^[NXY][MRP]_" \$asmId.\$db.gp.gz || true) > \$db.ncbiRefSeq.gp
 
 if [ -s \$db.curated.gp ]; then
-  genePredCheck -db=\$db \$db.curated.gp
+  $genePredCheckDb \$db.curated.gp
+  if [ -s \$db.refseqSelect.curated.gp ]; then
+     $genePredCheckDb \$db.refseqSelect.curated.gp
+  fi
 fi
 if [ -s \$db.predicted.gp ]; then
-  genePredCheck -db=\$db \$db.predicted.gp
+  $genePredCheckDb \$db.predicted.gp
 fi
 if [ -s \$db.other.gp ]; then
-  genePredCheck -db=\$db \$db.other.gp
+  $genePredCheckDb \$db.other.gp
 fi
 
 # join the refLink metadata with curated+predicted names
 cut -f1 \$db.ncbiRefSeq.gp | sort -u > \$asmId.\$db.name.list
-join -t'\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRefSeqLink.tab
+join -t\$'\\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRefSeqLink.tab
 
 # Make bigBed with attributes in extra columns for ncbiRefSeqOther:
-genePredToBed \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
+twoBitInfo $dbTwoBit stdout | sort -k2,2n > \$db.chrom.sizes
+if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
+  genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n \\
+    | grep -v -f ../../../download/\${asmId}.remove.dups.list > \$db.other.bed
+else
+  genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
+fi
 $ncbiRefSeqOtherAttrs \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
 bedToBigBed -type=bed12+13 -as=ncbiRefSeqOther.as -tab \\
   -extraIndex=name \\
-  \$db.other.extras.bed $HgAutomate::clusterData/\$db/chrom.sizes \$db.other.bb
+  \$db.other.extras.bed \$db.chrom.sizes \$db.other.bb
 
 # Make trix index for ncbiRefSeqOther
 $ncbiRefSeqOtherIxIxx \\
@@ -370,15 +467,48 @@ ixIxx ncbiRefSeqOther.ix.tab ncbiRefSeqOther.ix{,x}
 
 # PSL data will be loaded into a psl type track to show the alignments
 (zgrep "^#" \$ncbiGffGz | head || true) > gffForPsl.gff
-(zegrep -v "NG_" \$ncbiGffGz || true) \\
-  | awk -F'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
-gff3ToPsl -dropT \$downloadDir/\$asmId.chrom.sizes \$downloadDir/rna.sizes \\
-  gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
-simpleChain -outPsl -maxGap=300000 \$asmId.psl stdout | pslSwap stdin stdout \\
-  | liftUp -type=.psl stdout \$downloadDir/\${asmId}To\${db}.lift drop stdin \\
-   | gzip -c > \$db.psl.gz
-pslCheck -targetSizes=$HgAutomate::clusterData/\$db/chrom.sizes \\
-   -querySizes=\$downloadDir/rna.sizes -db=\$db \$db.psl.gz
+if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
+  (zegrep -v "NG_" \$ncbiGffGz || true) \\
+    | grep -v -f ../../../download/\${asmId}.remove.dups.list \\
+    | awk -F\$'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
+  gff3ToPsl -dropT \$downloadDir/\$asmId.ncbi.chrom.sizes \$downloadDir/rna.sizes \\
+    gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
+else
+  (zegrep -v "NG_" \$ncbiGffGz || true) \\
+    | awk -F\$'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
+  gff3ToPsl -dropT \$downloadDir/\$asmId.ncbi.chrom.sizes \$downloadDir/rna.sizes \\
+    gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
+fi
+# might be empty result
+if [ ! -s \$asmId.psl ]; then
+  rm -f \$asmId.psl
+else
+_EOF_
+  );
+  # note else clause of above if statement is concluded below in these two
+  # cases
+  if ( -s "$localLiftFile") {
+  $bossScript->add(<<_EOF_
+ simpleChain -outPsl -maxGap=300000 \$asmId.psl stdout | pslSwap stdin stdout \\
+   | liftUp -type=.psl stdout $localLiftFile warn stdin \\
+     | gzip -c > \$db.psl.gz
+fi
+_EOF_
+  );
+  } else {
+  $bossScript->add(<<_EOF_
+ simpleChain -outPsl -maxGap=300000 \$asmId.psl stdout | pslSwap stdin stdout \\
+    | gzip -c > \$db.psl.gz
+fi
+_EOF_
+  );
+  }
+
+  $bossScript->add(<<_EOF_
+if [ -s \$db.psl.gz ]; then
+  pslCheck $pslTargetSizes \\
+    -querySizes=\$downloadDir/rna.sizes \$db.psl.gz
+fi
 
 # extract RNA CDS information from genbank record
 # Note: $asmId.raFile.txt could be used instead of _rna.gbff.gz
@@ -390,23 +520,30 @@ pslCheck -targetSizes=$HgAutomate::clusterData/\$db/chrom.sizes \\
 # that would be perfect matches to the reference genome.  The pslFixCdsJoinGap
 # will fixup those records with unusual alignments due to frameshifts of
 # various sorts as found in the rna.cds file:
-genePredToFakePsl -qSizes=\$downloadDir/rna.sizes  \$db \$db.ncbiRefSeq.gp \\
+genePredToFakePsl -qSizes=\$downloadDir/rna.sizes $fakePslSizes \$db \$db.ncbiRefSeq.gp \\
   stdout \$db.fake.cds \\
      | pslFixCdsJoinGap stdin \$asmId.rna.cds \$db.fake.psl
-pslCat -nohead \$db.psl.gz | cut -f10,14 > \$db.psl.names
+if [ -s \$db.psl.gz ]; then
+  pslCat -nohead \$db.psl.gz | cut -f10,14 > \$db.psl.names
+fi
 if [ -s \$db.psl.names ]; then
   pslSomeRecords -tToo -not \$db.fake.psl \$db.psl.names \$db.someRecords.psl
 else
   cp -p \$db.fake.psl \$db.someRecords.psl
 fi
-pslSort dirs stdout \\
- ./tmpdir \$db.psl.gz \$db.someRecords.psl \\
-   | (pslCheck -quiet -db=\$db -pass=stdout -fail=\$asmId.\$db.fail.psl stdin || true) \\
+if [ -s \$db.psl.gz ]; then
+  pslSort dirs stdout \\
+   ./tmpdir \$db.psl.gz \$db.someRecords.psl | gzip -c > \$db.sorted.psl.gz
+else
+  pslSort dirs stdout \\
+   ./tmpdir \$db.someRecords.psl | gzip -c > \$db.sorted.psl.gz
+fi
+(pslCheck -quiet $pslTargetSizes -pass=stdout -fail=\$asmId.\$db.fail.psl \$db.sorted.psl.gz || true) \\
     | pslPosTarget stdin stdout \\
     | pslRecalcMatch -ignoreQMissing stdin $dbTwoBit \$downloadDir/\$asmId.rna.fa.gz stdout \\
      | sort -k14,14 -k16,16n | gzip -c > \$asmId.\$db.psl.gz
 rm -fr ./tmpdir
-pslCheck -db=\$db \$asmId.\$db.psl.gz
+pslCheck $pslTargetSizes \$asmId.\$db.psl.gz
 _EOF_
   );
   $bossScript->execute();
@@ -424,6 +561,12 @@ sub doLoad {
 
   my $gbdbDir = "$HgAutomate::gbdb/\$db/ncbiRefSeq";
   my $dbTwoBit = "$HgAutomate::clusterData/$db/$db.2bit";
+  $dbTwoBit = $target2bit if (-s "$target2bit");
+
+  my $genePredCheckDb = "genePredCheck -db=\$db";
+  if (! $dbExists) {
+    $genePredCheckDb = "genePredCheck";
+  }
 
   $bossScript->add(<<_EOF_
 # establish all variables to use here
@@ -433,20 +576,211 @@ export asmId=$asmId
 
 _EOF_
   );
+  if (! $dbExists) {
+    $bossScript->add(<<_EOF_
+export target2bit=$dbTwoBit
 
-  $bossScript->add(<<_EOF_
+twoBitInfo \$target2bit stdout | sort -k2,2nr > \$db.chrom.sizes
+wget -O bigGenePred.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigGenePred.as'
+wget -O bigPsl.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigPsl.as'
+
+### overall gene track with both predicted and curated
+genePredToBigGenePred process/\$db.ncbiRefSeq.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeq.bigGp
+genePredToBed -tab -fillSpace process/\$db.ncbiRefSeq.gp stdout \\
+    | bedToExons stdin stdout | bedSingleCover.pl stdin > \$asmId.exons.bed
+export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$asmId.exons.bed`
+export asmSizeNoGaps=`grep sequences ../../\$asmId.faSize.txt | awk '{print \$5}'`
+export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+  \$db.ncbiRefSeq.bigGp \$db.chrom.sizes \\
+    \$db.ncbiRefSeq.bb
+bigBedInfo \$db.ncbiRefSeq.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeq.stats.txt
+LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeq %s %'d %s %'d\\n" `cat \$db.ncbiRefSeq.stats.txt` | xargs echo
+~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.ncbiRefSeq.gp \\
+    | sort -u > \$asmId.ncbiRefSeq.ix.txt
+ixIxx \$asmId.ncbiRefSeq.ix.txt \$asmId.ncbiRefSeq.ix{,x}
+rm -f \$asmId.ncbiRefSeq.ix.txt
+
+### curated only if present
+if [ -s process/\$db.curated.gp ]; then
+  genePredToBigGenePred process/\$db.curated.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqCurated.bigGp
+  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+  \$db.ncbiRefSeqCurated.bigGp \$db.chrom.sizes \\
+    \$db.ncbiRefSeqCurated.bb
+  rm -f \$db.ncbiRefSeqCurated.bigGp
+  bigBedInfo \$db.ncbiRefSeqCurated.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeqCurated.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqCurated %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqCurated.stats.txt` | xargs echo
+  ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.curated.gp \\
+    | sort -u > \$asmId.ncbiRefSeqCurated.ix.txt
+  ixIxx \$asmId.ncbiRefSeqCurated.ix.txt \$asmId.ncbiRefSeqCurated.ix{,x}
+  rm -f \$asmId.ncbiRefSeqCurated.ix.txt
+### and refseqSelect if exists (a subset of curated)
+  if [ -s process/\$db.refseqSelect.curated.gp ]; then
+    genePredToBigGenePred process/\$db.refseqSelect.curated.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqSelectCurated.bigGp
+    bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+    \$db.ncbiRefSeqSelectCurated.bigGp \$db.chrom.sizes \\
+      \$db.ncbiRefSeqSelectCurated.bb
+    rm -f \$db.ncbiRefSeqSelectCurated.bigGp
+    bigBedInfo \$db.ncbiRefSeqSelectCurated.bb | egrep "^itemCount:|^basesCovered:" \\
+      | sed -e 's/,//g' > \$db.ncbiRefSeqSelectCurated.stats.txt
+    LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqSelectCurated %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqSelectCurated.stats.txt` | xargs echo
+    ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.refseqSelect.curated.gp \\
+      | sort -u > \$asmId.ncbiRefSeqSelectCurated.ix.txt
+    ixIxx \$asmId.ncbiRefSeqSelectCurated.ix.txt \$asmId.ncbiRefSeqSelectCurated.ix{,x}
+    rm -f \$asmId.ncbiRefSeqSelectCurated.ix.txt
+  fi
+fi
+
+### predicted only if present
+if [ -s process/\$db.predicted.gp ]; then
+  genePredToBigGenePred process/\$db.predicted.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqPredicted.bigGp
+  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+  \$db.ncbiRefSeqPredicted.bigGp \$db.chrom.sizes \\
+    \$db.ncbiRefSeqPredicted.bb
+  rm -f \$db.ncbiRefSeqPredicted.bigGp
+  bigBedInfo \$db.ncbiRefSeqPredicted.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeqPredicted.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqPredicted %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqPredicted.stats.txt` | xargs echo
+  ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.predicted.gp \\
+    | sort -u > \$asmId.ncbiRefSeqPredicted.ix.txt
+  ixIxx \$asmId.ncbiRefSeqPredicted.ix.txt \$asmId.ncbiRefSeqPredicted.ix{,x}
+  rm -f \$asmId.ncbiRefSeqPredicted.ix.txt
+fi
+
+### all other annotations, not necessarily genes
+if [ -s "process/\$db.other.bb" ]; then
+  ln -f -s process/\$db.other.bb \$db.ncbiRefSeqOther.bb
+  bigBedInfo \$db.ncbiRefSeqOther.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeqOther.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqOther %s %'d %s %'d\\n" `cat \$asmId.ncbiRefSeqOther.stats.txt` | xargs echo
+fi
+if [ -s "process/ncbiRefSeqOther.ix" ]; then
+  ln -f -s process/ncbiRefSeqOther.ix ./\$db.ncbiRefSeqOther.ix
+  ln -f -s process/ncbiRefSeqOther.ixx ./\$db.ncbiRefSeqOther.ixx
+fi
+ln -f -s process/ncbiRefSeqVersion.txt ./\$db.ncbiRefSeqVersion.txt
+# select only coding genes to have CDS records
+
+awk -F" " '\$6 != \$7 {print \$1;}' process/\$db.ncbiRefSeq.gp \\
+  | sort -u > coding.cds.name.list
+
+join -t\$'\t' coding.cds.name.list process/\$asmId.rna.cds \\
+  > \$db.ncbiRefSeqCds.tab
+
+rm -f coding.cds.name.list
+
+ln -f -s process/\$asmId.\$db.ncbiRefSeqLink.tab .
+cut -f6 \$asmId.\$db.ncbiRefSeqLink.tab | grep . \\
+  | sort -u > \$db.ncbiRefSeqLink.protAcc.list
+
+zcat download/\${asmId}_protein.faa.gz \\
+   | sed -e 's/ .*//;' | faToTab -type=protein -keepAccSuffix stdin stdout \\
+     | sort | join -t\$'\\t' \$db.ncbiRefSeqLink.protAcc.list - \\
+        > \$db.ncbiRefSeqPepTable.tab
+
+# and load the fasta peptides, again, only those for items that exist
+pslCat -nohead process/\$asmId.\$db.psl.gz | cut -f10 \\
+   | sort -u > \$db.psl.used.rna.list
+cut -f5 process/\$asmId.\$db.ncbiRefSeqLink.tab \\
+   | grep . | sort -u > \$db.mrnaAcc.name.list
+sort -u \$db.psl.used.rna.list \$db.mrnaAcc.name.list > \$db.rna.select.list
+cut -f1 process/\$db.ncbiRefSeq.gp | sort -u > \$db.gp.name.list
+comm -12 \$db.rna.select.list \$db.gp.name.list > \$db.toLoad.rna.list
+comm -23 \$db.rna.select.list \$db.gp.name.list > \$db.not.used.rna.list
+faSomeRecords download/\$asmId.rna.fa.gz \$db.toLoad.rna.list \$db.rna.fa
+grep '^>' \$db.rna.fa | sed -e 's/^>//' | sort > \$db.rna.found.list
+comm -13 \$db.rna.found.list \$db.gp.name.list > \$db.noRna.available.list
+
+_EOF_
+    );
+
+  my $nonNucNames="chrM";
+
+  my $haveLiftFile = 0;
+  if ( -s "$liftFile" ) {
+       $haveLiftFile = 1;
+  }
+  # if this is an assembly hub, find out what the non-nuclear names are
+  if ( $opt_assemblyHub) {
+     if ( -s "../../sequence/$asmId.nonNucChr.names") {
+     # with lift file means to use UCSC name in the nonNucChr.names
+     if ($haveLiftFile ) {
+        $nonNucNames=`cut -f1 ../../sequence/$asmId.nonNucChr.names | xargs echo | tr ' ' '|'`;
+     } else {
+        $nonNucNames=`cut -f2 ../../sequence/$asmId.nonNucChr.names | xargs echo | tr ' ' '|'`;
+     }
+     chomp $nonNucNames;
+     }
+  }
+     # if this is an assembly hub and it did NOT supply a lift file,
+     # then we don't need one, do not attempt to build
+    $bossScript->add(<<_EOF_
+
+# If \$db.noRna.available.list is not empty but items are on chrM,
+# make fake cDNA sequence for them using chrM sequence
+# since NCBI puts proteins, not coding RNAs, in the GFF.
+if [ -s \$db.noRna.available.list ]; then
+  pslCat -nohead process/\$asmId.\$db.psl.gz \\
+    | grep -Fwf \$db.noRna.available.list \\
+      | egrep "$nonNucNames" > missingChrMFa.psl
+  if [ -s missingChrMFa.psl ]; then
+    pslToBed missingChrMFa.psl stdout \\
+      | twoBitToFa -bed=stdin \$target2bit stdout >> \$db.rna.fa
+  fi
+fi
+
+if [ -s process/\$asmId.rna.cds ]; then
+  cat process/\$asmId.rna.cds | grep '[0-9]\\+\\.\\.[0-9]\\+' \\
+    | pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
+      process/\$asmId.\$db.psl.gz \$target2bit \\
+        \$db.rna.fa ncbiRefSeqGenomicDiff || true
+
+  if [ -s ncbiRefSeqGenomicDiff.bed ]; then
+    wget -O txAliDiff.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/txAliDiff.as'
+    bedToBigBed -type=bed9+ -tab -as=txAliDiff.as \\
+      ncbiRefSeqGenomicDiff.bed \$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
+  else
+    rm -f ncbiRefSeqGenomicDiff.bed
+  fi
+fi
+
+export totalBases=`ave -col=2 \$db.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`
+export basesCovered=`bedSingleCover.pl \$db.ncbiRefSeq.bigGp | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+export percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" \\
+   "\$totalBases" "\$percentCovered" > fb.ncbiRefSeq.\$db.txt
+printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSizeNoGaps" "\$perCent" > fb.\$asmId.ncbiRefSeq.txt
+
+rm -f \$db.ncbiRefSeq.bigGp \$asmId.exons.bed
+
+pslToBigPsl -fa=download/\$asmId.rna.fa.gz -cds=process/\$asmId.rna.cds \\
+  process/\$asmId.\$db.psl.gz stdout | sort -k1,1 -k2,2n > \$asmId.bigPsl
+bedToBigBed -type=bed12+13 -tab -as=bigPsl.as -extraIndex=name \\
+  \$asmId.bigPsl \$db.chrom.sizes \$asmId.bigPsl.bb
+rm -f \$asmId.bigPsl
+_EOF_
+    );
+  } else {	# processing for a database genome
+
+    $bossScript->add(<<_EOF_
 # loading the genePred tracks, all genes in one, and subsets
 hgLoadGenePred -genePredExt \$db ncbiRefSeq process/\$db.ncbiRefSeq.gp
-genePredCheck -db=\$db ncbiRefSeq
+$genePredCheckDb ncbiRefSeq
 
 if [ -s process/\$db.curated.gp ]; then
   hgLoadGenePred -genePredExt \$db ncbiRefSeqCurated process/\$db.curated.gp
-  genePredCheck -db=\$db ncbiRefSeqCurated
+  $genePredCheckDb ncbiRefSeqCurated
+  if [ -s process/\$db.refseqSelect.curated.gp ]; then
+    hgLoadGenePred -genePredExt \$db ncbiRefSeqSelect process/\$db.refseqSelect.curated.gp
+    $genePredCheckDb ncbiRefSeqSelect
+  fi
 fi
 
 if [ -s process/\$db.predicted.gp ]; then
   hgLoadGenePred -genePredExt \$db ncbiRefSeqPredicted process/\$db.predicted.gp
-  genePredCheck -db=\$db ncbiRefSeqPredicted
+  $genePredCheckDb ncbiRefSeqPredicted
 fi
 
 mkdir -p $gbdbDir
@@ -457,10 +791,10 @@ ln -f -s `pwd`/process/ncbiRefSeqVersion.txt $gbdbDir/
 
 # select only coding genes to have CDS records
 
-awk -F"\t" '\$6 != \$7 {print \$1;}' process/\$db.ncbiRefSeq.gp \\
+awk -F\$'\\t' '\$6 != \$7 {print \$1;}' process/\$db.ncbiRefSeq.gp \\
   | sort -u > coding.cds.name.list
 
-join -t'\t' coding.cds.name.list process/\$asmId.rna.cds \\
+join -t\$'\\t' coding.cds.name.list process/\$asmId.rna.cds \\
   | hgLoadSqlTab \$db ncbiRefSeqCds ~/kent/src/hg/lib/cdsSpec.sql stdin
 
 # loading the cross reference data
@@ -473,7 +807,7 @@ hgsql -N -e 'select protAcc from ncbiRefSeqLink;' \$db | grep . \\
 
 zcat download/\${asmId}_protein.faa.gz \\
    | sed -e 's/ .*//;' | faToTab -type=protein -keepAccSuffix stdin stdout \\
-     | sort | join -t'\t' \$db.ncbiRefSeqLink.protAcc.list - \\
+     | sort | join -t\$'\\t' \$db.ncbiRefSeqLink.protAcc.list - \\
         > \$db.ncbiRefSeqPepTable.tab
 
 hgLoadSqlTab \$db ncbiRefSeqPepTable ~/kent/src/hg/lib/pepPred.sql \\
@@ -509,10 +843,35 @@ hgLoadSeq -drop -seqTbl=seqNcbiRefSeq -extFileTbl=extNcbiRefSeq \$db $gbdbDir/se
 
 hgLoadPsl \$db -table=ncbiRefSeqPsl process/\$asmId.\$db.psl.gz
 
+if [ -s process/\$asmId.rna.cds ]; then
+  zcat process/\$asmId.rna.cds | grep '[0-9]\\+\\.\\.[0-9]\\+' \\
+    | pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
+      process/\$asmId.\$db.psl.gz $dbTwoBit \\
+        \$db.rna.fa ncbiRefSeqGenomicDiff || true
+
+  rm -f $gbdbDir/ncbiRefSeqGenomicDiff.bb
+  if [ -s ncbiRefSeqGenomicDiff.bed ]; then
+    bedToBigBed -type=bed9+ -tab -as=\${HOME}/kent/src/hg/lib/txAliDiff.as \\
+      ncbiRefSeqGenomicDiff.bed process/\$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
+    ln -s `pwd`/ncbiRefSeqGenomicDiff.bb $gbdbDir/ncbiRefSeqGenomicDiff.bb
+  else
+    rm -f ncbiRefSeqGenomicDiff.bed
+  fi
+fi
+
+if [ -d "/usr/local/apache/htdocs-hgdownload/goldenPath/archive" ]; then
+ gtfFile=`ls \$db.*.ncbiRefSeq.gtf.gz`
+ mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq
+ rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$gtfFile
+ ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \\
+   /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/
+fi
+
 featureBits \$db ncbiRefSeq > fb.ncbiRefSeq.\$db.txt 2>&1
 cat fb.ncbiRefSeq.\$db.txt 2>&1
 _EOF_
-  );
+    );
+  }	#	if ($dbExists)
   $bossScript->execute();
 } # doLoad
 
@@ -542,19 +901,28 @@ _EOF_
 
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
-&usage(1) if (scalar(@ARGV) != 5);
+&usage(1) if (scalar(@ARGV) != 2);
 
 $toGpWarnOnly = 0;
 $toGpWarnOnly = 1 if ($opt_toGpWarnOnly);
+$liftFile = $opt_liftFile ? $opt_liftFile : "";
+$target2bit = $opt_target2bit ? $opt_target2bit : "";
 
 $secondsStart = `date "+%s"`;
 chomp $secondsStart;
 
 # expected command line arguments after options are processed
-($genbankRefseq, $subGroup, $species, $asmId, $db) = @ARGV;
-$ftpDir = "genomes/$genbankRefseq/$subGroup/$species/all_assembly_versions/$asmId";
+($asmId, $db) = @ARGV;
+# yes, there can be more than two fields separated by _
+# but in this case, we only care about the first two:
+# GC[AF]_123456789.3_assembly_Name
+#   0         1         2      3 ....
+my @partNames = split('_', $asmId);
+$ftpDir = sprintf("%s/%s/%s/%s/%s", $partNames[0],
+   substr($partNames[1],0,3), substr($partNames[1],3,3),
+   substr($partNames[1],6,3), $asmId);
 
-if ( ! -s "/hive/data/genomes/$db/bed/idKeys/$db.idKeys.txt") {
+if ( -z "$liftFile" && ! -s "/hive/data/genomes/$db/bed/idKeys/$db.idKeys.txt") {
   die "ERROR: can not find /hive/data/genomes/$db/bed/idKeys/$db.idKeys.txt\n\t  need to run doIdKeys.pl for $db before this procedure.";
 }
 

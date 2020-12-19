@@ -23,6 +23,7 @@
 #include "trix.h"
 #include "jsHelper.h"
 #include "imageV2.h"
+#include "hubConnect.h"
 
 
 #define TRACK_SEARCH_FORM        "trackSearch"
@@ -607,6 +608,8 @@ hPrintf("</div>"); // This div allows the clear button to empty it
 
 void doSearchTracks(struct group *groupList)
 {
+if ( isHubTrack(database))
+    errAbort("Track search functionality is not yet implemented on assembly hubs.");
 webIncludeResourceFile("ui.dropdownchecklist.css");
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 // This line is needed to get the multi-selects initialized

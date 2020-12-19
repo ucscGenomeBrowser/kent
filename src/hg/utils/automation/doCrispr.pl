@@ -387,7 +387,7 @@ sub doSpecScores {
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 # preload the /dev/shm on each parasol node with the fasta and index
-parasol list machines | awk '{print \$1}' | sort -u | while read M
+parasol list machines | grep -v dead | awk '{print \$1}' | sort -u | while read M
 do
   ssh "\${M}" "rsync -a --stats ${indexDir}/$db.fa ${indexDir}/$db.fa.fai /dev/shm/crispr10K.$db/ || true" < /dev/null
 done

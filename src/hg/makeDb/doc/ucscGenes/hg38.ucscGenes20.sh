@@ -213,7 +213,7 @@ hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from hgFixed.refLink" $
 hgMapToGene -tempDb=$tempDb $db refGene knownGene knownToLocusLink -lookup=refToLl.txt
 knownToVisiGene $tempDb -probesDb=$db
 
-awk '{OFS="\t"} {print $4,$4}' ucscGenes.bed | sort > knownToEnsembl.tab
+awk '{OFS="\t"} {print $4,$4}' ucscGenes.bed | sort | uniq > knownToEnsembl.tab
 cp knownToEnsembl.tab knownToGencode${GENCODE_VERSION}.tab
 #awk '{OFS="\t"} {print $2,$1}' tmp1 | sort > knownToEnsembl.tab
 #tawk '{print $2,$1}' tmp1 | sort > knownToGencode${GENCODE_VERSION}.tab
@@ -1126,3 +1126,21 @@ hgLoadSqlTab $db knownToMupit ~/kent/src/hg/lib/knownTo.sql knownToMupit.txt
     cd  $pd
     md5sum *.fa.gz > md5sum.txt
    
+
+#myGene2
+mkdir $dir/myGene2
+cd $dir/myGene2
+
+# copy list of genes from https://mygene2.org/MyGene2/genes 
+awk '{print $1}' | sort > genes.lst
+hgsql hg38 -Ne "select geneSymbol, kgId from kgXref" | sort > ids.txt
+join genes.lst  ids.txt | awk '{print $2,$1}' | sort > knownToMyGene2.txt
+hgLoadSqlTab $db knownToMyGene2 ~/kent/src/hg/lib/knownTo.sql knownToMyGene2.txt
+
+# make gtexDistance table
+mkdir $dir/hgNear
+cd $dir/hgNear
+hgsql hgFixed -e select 1.0, id, name from gtexTissue > gtex.weights
+hgMapToGene hg38 -all -type=genePred gtexGeneModelV6 knownGene knownToGtex
+hgExpDistance hg38 -verbose=2 -lookup=knownToGtex -weights=gtex.weights hgFixed.gtexTissueMedian hgFixed.gtexTissue gtexDistance
+

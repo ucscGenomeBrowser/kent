@@ -12,6 +12,9 @@ include trackDb.chainNet.sarcopterygii.ra
 include trackDb.chainNet.fish.ra
 include trackDb.chainNet.insects.ra
 include trackDb.chainNet.other.ra
+include trackDb.chainNet.asmHub.ra
+
+include trackDb.encode3.ra
 
 include trackDb.transMap.ra
 
@@ -275,22 +278,6 @@ color 231,203,21
 darkerLabels on
 priority 1
 visibility pack
-
-track knownGene
-shortLabel UCSC Genes
-longLabel UCSC Genes (RefSeq, GenBank, tRNAs & Comparative Genomics)
-group genes
-visibility pack
-color 12,12,120
-type genePred knownGenePep knownGeneMrna
-idXref kgAlias kgID alias
-hgGene on
-hgsid on
-directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-baseColorUseCds given
-baseColorDefault genomicCodons
-defaultLinkedTables kgXref
-intronGap 12
 
 track knownAlt
 shortLabel UCSC Alt Events
@@ -572,9 +559,11 @@ track ensGene
 shortLabel Ensembl Genes
 longLabel Ensembl Genes
 group genes
+exonNumbers on
 visibility hide
 color 150,0,0
 type genePred ensPep
+pennantIcon Updated red ../goldenPath/newsarch.html#101520 "Updated to v101 Oct. 15, 2020"
 
 track ensEstGene
 shortLabel Ensembl EST Genes
@@ -1014,6 +1003,18 @@ visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 4 .
+
+track clinvarLift
+shortLabel ClinVar Lift
+longLabel Human ClinVar variants lifted to $Organism
+group compGeno
+visibility hide
+type bigBed 12 +
+bigDataUrl /gbdb/$D/bbi/clinvarLift.bb
+itemRgb on
+urls origPos="/cgi-bin/hgTracks?position=$$" rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
+mouseOverField _mouseOver
+scoreLabel ClinVar Star-Rating (0-4)
 
 track syntenyRat
 shortLabel Rat Synteny

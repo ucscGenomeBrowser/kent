@@ -211,15 +211,14 @@ fi
 currLogFile="$db.$tableName.$currDate.$currTime.txt"
 
 # set info for prevLog
-prevLogDate=$(ls -Lt $logDir | sed -n /$db.$tableName/p | head -1 | awk -F . '{print $3}')
-prevLogTime=$(ls -Lt $logDir | sed -n /$db.$tableName/p | head -1 | awk -F . '{print $4}')
+prevLogFile=$(ls -Lt $logDir | sed -n /$db.$tableName/p | awk '(NR==1)')
 
 #initialize output string
 output="\n$db\n"
 
-if [ -e $logDir/$db.$tableName.$prevLogDate.$prevLogTime.txt ]
+if [[ $prevLogFile != "" ]]
 then
-	prevLogFile="$logDir/$db.$tableName.$prevLogDate.$prevLogTime.txt"
+	prevLogFile="$logDir/$prevLogFile"
 fi
 
 # Set tooOld for different tables
@@ -249,7 +248,6 @@ then
 			# featureBits doesn't work with bigBeds, need to turn into bed first
 			ssh qateam@hgwbeta "/usr/local/apache/cgi-bin/utils/bigBedToBed $fileName stdout" > $MYTEMPFILE
 			tblCov=$(featureBits -countGaps $db $MYTEMPFILE 2>&1)
-
 			outputCovDiff "$prevLogFile" "$tblCov" "$tbl" "$tblDate"
 			# Check for issues with table
 			checkForIssues "$tblDate" "$tooOld" "$tbl" "$percentDiff"

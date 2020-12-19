@@ -1,0 +1,240 @@
+
+NO MORE hgFixed db use.
+FYI we are using a separate database geoIp instead of sticking the tables in hgFixed.
+
+Jonathan discovered recently while using a VPN located in Los Angeles, CA
+that was hgGateway was redirecting him to genome-euro official mirror.
+89.46.114.77
+select INET_ATON('89.46.114.77');
+1496216141
+
+I checked the 2019 data from Maxmind, and it was indeed saying that the IPv4
+was in Romania.
+
+select * from geoIpNode where ipStart <= INET_ATON('89.46.114.77') and ipEnd >= INET_ATON('89.46.114.77');
++------------+------------+------+
+| ipStart    | ipEnd      | node |
++------------+------------+------+
+| 1496216064 | 1496216319 | 2    |
+----------------------------------
+
+MariaDB [hgcentraltest]> select * from gbNode;
++------+----------------------+-------------+-------------------------------------------------------------------+-----------------+
+| node | domain               | hostCountry | description                                                       | shortLabel      |
++------+----------------------+-------------+-------------------------------------------------------------------+-----------------+
+| 1    | genome.ucsc.edu      | US          | Main UCSC Genome Browser Site                                     | US Server       |
+| 2    | genome-euro.ucsc.edu | DE          | European node of UCSC Genome Browser at University of Bielefeld   | European Server |
+| 3    | genome-asia.ucsc.edu | JP          | Asian node of UCSC Genome Browser at the RIKEN institute of Japan | Asian Server    |
++------+----------------------+-------------+-------------------------------------------------------------------+-----------------+
+
+[hgwdev:GeoLite2-Country-CSV_20190611> grep 89.46.114. GeoLite2-Country-Blocks-IPv4.csv
+89.46.114.0/24,798549,798549,,0,0
+
+[hgwdev:GeoLite2-Country-CSV_20190611> grep 798549 GeoLite2-Country-Locations-en.csv
+798549,en,EU,Europe,RO,Romania,1
+
+
+This also shows the location is in LA.
+https://tools.keycdn.com/geo?host=89.46.114.77
+
+
+Since that data was a little more than a year old now,
+I got the new data from Maxmind, and it has fixed the problem.
+
+Maxmind has changed policy so that instead of a public URL to use to fetch the data,
+
+https://blog.maxmind.com/2019/12/18/significant-changes-to-accessing-and-using-geolite2-databases/
+
+
+We are now required to create an account with a password and generate a passkey to
+use with the download URL.
+
+Here is what I did:
+
+----------------
+User galt@soe.ucsc.edu
+Token 19704E66C73611EA9DF43C55ECE7FCE9
+Password Fe8DjZKU5Lf6P2z
+
+Account/User ID:  359783
+License key: 03qLHYES7EDFv43J
+
+
+------------------
+
+See if any new
+curl -I 'https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=03qLHYES7EDFv43J&suffix=zip'
+
+Download
+curl 'https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=03qLHYES7EDFv43J&suffix=zip' -o GeoLite2-Country-CSV.zip
+
+
+--------
+
+cd ~/kent/src/hg/geoIp
+
+# save a copy of the old tables in geoIp db into geoIpOld db
+save-old-for-compare
+
+mkdir update2020
+cd update2020
+
+curl 'https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=03qLHYES7EDFv43J&suffix=zip' -o GeoLite2-Country-CSV.zip
+unzip GeoLite2-Country-CSV.zip
+cd GeoLite2-Country-CSV_20200714/
+
+
+# This shows that the data for the LA ip address now correctly shows the US.
+
+[hgwdev:GeoLite2-Country-CSV_20200714> grep 89.46.114. GeoLite2-Country-Blocks-IPv4.csv
+89.46.114.0/24,6252001,1562822,,0,0
+
+network,geoname_id,registered_country_geoname_id,represented_country_geoname_id,is_anonymous_proxy,is_satellite_provider
+
+[hgwdev:GeoLite2-Country-CSV_20200714> grep 6252001 GeoLite2-Country-Locations-en.csv
+6252001,en,NA,"North America",US,"United States",0
+
+WEIRD THAT THIS SAYS VIET NAM
+[hgwdev:GeoLite2-Country-CSV_20200714> grep 1562822 GeoLite2-Country-Locations-en.csv
+1562822,en,AS,Asia,VN,Vietnam,0
+
+
+cd ~/kent/src/hg/geoIp/
+rm GeoLite2*.csv
+
+cp update2020/GeoLite2-Country-CSV_20200714/GeoLite2-Country-Blocks-IPv4.csv .
+cp update2020/GeoLite2-Country-CSV_20200714/GeoLite2-Country-Blocks-IPv6.csv .
+cp update2020/GeoLite2-Country-CSV_20200714/GeoLite2-Country-Locations-en.csv .
+
+
+-------------
+
+Append ipv4 and ipv6 data together, without duplicating the header.
+
+cat GeoLite2-Country-Blocks-IPv4.csv > GeoLite2-Country-Blocks-IPv6n4.csv
+tail -n +2 GeoLite2-Country-Blocks-IPv6.csv >> GeoLite2-Country-Blocks-IPv6n4.csv
+
+./make  # update geoIpToCountryMaxMind6 executable
+
+[hgwdev:geoIp> geoIpToCountryMaxMind6 GeoLite2-Country-Blocks-IPv6n4.csv > geoIpCountry6.tab
+80.231.5.0/24 missing  and  in location lookup, substituting US
+193.200.150.0/24 missing  and  in location lookup, substituting US
+
+
+./make-sql
+
+autoSql does not have any support for binary strings,
+we have to either add it or come up with a substitution.
+
+IMPORTANT: DO NOT SKIP THIS STEP
+# change ipStart and ipEnd from varchar to varbinary
+vi geoIpCountry6.sql
+# change ipStart and ipEnd from varchar to varbinary
+vi geoIpNode6.sql
+
+made a copy of load-tables script as load-tables6
+temporarily tweaked it to only do *6.as (to pick up the two new *6.as files,
+and ran it.
+
+geoIpNode6 should start out empty:
+rm geoIpNode6.tab
+touch geoIpNode6.tab
+
+[hgwdev:geoIp> ./load-tables6
+
+[hgwdev:geoIp> hgsql geoIp -e 'desc geoIpCountry6'
++-----------+----------------+------+-----+---------+-------+
+| Field     | Type           | Null | Key | Default | Extra |
++-----------+----------------+------+-----+---------+-------+
+| ipStart   | varbinary(255) | NO   | PRI | NULL    |       |
+| ipEnd     | varbinary(255) | NO   |     | NULL    |       |
+| countryId | varchar(255)   | NO   |     | NULL    |       |
++-----------+----------------+------+-----+---------+-------+
+[hgwdev:geoIp> hgsql geoIp -e 'desc geoIpNode6'
++---------+----------------+------+-----+---------+-------+
+| Field   | Type           | Null | Key | Default | Extra |
++---------+----------------+------+-----+---------+-------+
+| ipStart | varbinary(255) | NO   | PRI | NULL    |       |
+| ipEnd   | varbinary(255) | NO   |     | NULL    |       |
+| node    | char(1)        | NO   |     | NULL    |       |
++---------+----------------+------+-----+---------+-------+
+[hgwdev:geoIp> hgsql geoIp -e 'select count(*) from geoIpCountry6'
++----------+
+| count(*) |
++----------+
+|   413583 |
++----------+
+[hgwdev:geoIp> hgsql geoIp -e 'select count(*) from geoIpNode6'
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+I compared what I loaded to what I dumped anew,
+and it was identical. This indicates that our simple dump-encoder is working OK.
+
+hgsqldump -T tempDump/ geoIp geoIpCountry6
+diff geoIpCountry6.tab tempDump/geoIpCountry6.txt
+# no output indicates that what got loaded and re-dumped is identical.
+
+
+# fill geoIpNode6 table.
+hgsql geoIp -e 'insert into geoIpNode6 (select ipStart, ipEnd, node from geoIpCountry6 gic, countryToNode ctn where gic.countryId=ctn.countryId)'
+
+hgsql geoIp -e 'select count(*) from geoIpNode6'
++----------+
+| count(*) |
++----------+
+|   413583 |
++----------+
+1 row in set (0.00 sec)
+
+hgsql geoIp -e 'select count(*) from geoIpNode'
++----------+
+| count(*) |
++----------+
+|   326637 |
++----------+
+
+hgsql geoIp -e 'select hex(ipStart), hex(ipEnd), node from geoIpNode6 order by ipStart desc limit 5'
++----------------------------------+----------------------------------+------+
+| hex(ipStart)                     | hex(ipEnd)                       | node |
++----------------------------------+----------------------------------+------+
+| 2C0FFFF0000000000000000000000000 | 2C0FFFF0FFFFFFFFFFFFFFFFFFFFFFFF | 1    |
+| 2C0FFFE8000000000000000000000000 | 2C0FFFE8FFFFFFFFFFFFFFFFFFFFFFFF | 1    |
+| 2C0FFFD8000000000000000000000000 | 2C0FFFD8FFFFFFFFFFFFFFFFFFFFFFFF | 1    |
+| 2C0FFFD0000000000000000000000000 | 2C0FFFD0FFFFFFFFFFFFFFFFFFFFFFFF | 1    |
+| 2C0FFFC8000000000000000000000000 | 2C0FFFC8FFFFFFFFFFFFFFFFFFFFFFFF | 1    |
++----------------------------------+----------------------------------+------+
+5 rows in set (0.01 sec)
+
+hgsql geoIp -e 'select hex(ipStart), hex(ipEnd), node from geoIpNode6 order by ipStart limit 5'
++----------------------------------+----------------------------------+------+
+| hex(ipStart)                     | hex(ipEnd)                       | node |
++----------------------------------+----------------------------------+------+
+| 00000000000000000000FFFF01000000 | 00000000000000000000FFFF010000FF | 1    |
+| 00000000000000000000FFFF01000100 | 00000000000000000000FFFF010001FF | 3    |
+| 00000000000000000000FFFF01000200 | 00000000000000000000FFFF010003FF | 3    |
+| 00000000000000000000FFFF01000400 | 00000000000000000000FFFF010007FF | 1    |
+| 00000000000000000000FFFF01000800 | 00000000000000000000FFFF01000FFF | 3    |
++----------------------------------+----------------------------------+------+
+
+
+Make an extra backup of just the git untracked files just in case:
+
+mkdir /hive/data/outside/geoIp/untracked/2020-07-17
+gitu | xargs -I X cp X /hive/data/outside/geoIp/untracked/2020-07-17/
+
+
+Make a backup of the data too:
+
+mkdir /hive/data/outside/geoIp/geoIpTableDumps/2020-07-17
+# sadly we need to temporarily make it write-able by all so mysqld can write dump there.
+chmod 777 /hive/data/outside/geoIp/geoIpTableDumps/2020-07-17
+pushd /hive/data/outside/geoIp/geoIpTableDumps
+hgsqldump geoIp -T 2020-07-17 continent continentToNode country countryToContinent countryToNode gbNode geoIpCountry6 geoIpNode6
+popd
+chmod 775 /hive/data/outside/geoIp/geoIpTableDumps/2020-07-17
+
+

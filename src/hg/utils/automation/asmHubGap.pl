@@ -38,6 +38,8 @@ my %gapTypes = (
 'centromere' => 'gaps for centromeres are included when they can be reasonably localized',
 'scaffold' => 'gaps between scaffolds in chromosome assemblies',
 'contig' => 'gaps between contigs in scaffolds',
+'repeat' => 'an unresolvable repeat',
+'contamination' => 'gap inserted in place of foreign sequence to maintain the coordinates',
 'other' => 'gaps added at UCSC to annotate strings of <em>N</em>s that were not marked in the AGP file',
 'fragment' => 'gaps between whole genome shotgun contigs'
 );

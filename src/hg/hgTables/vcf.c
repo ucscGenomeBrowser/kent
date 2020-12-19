@@ -25,7 +25,7 @@ boolean isVcfTabix = FALSE, isVcf = FALSE;
 struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 if (tdb)
     {
-    isVcfTabix = startsWithWord("vcfTabix", tdb->type);
+    isVcfTabix = startsWithWord("vcfTabix", tdb->type) || startsWithWord("vcfPhasedTrio", tdb->type);
     isVcf = startsWithWord("vcf", tdb->type);
     }
 else

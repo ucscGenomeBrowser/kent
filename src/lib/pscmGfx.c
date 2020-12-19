@@ -249,7 +249,11 @@ static void pscmSetFont(struct pscmGfx *pscm, MgFont *font)
 void *v = font;
 if (v != pscm->curFont)
     {
-    psTimesFont(pscm->ps, font->psHeight);
+    if (pscm->fontMethod == 0) 
+        psTimesFont(pscm->ps, font->psHeight);
+    else
+        psSetFont(pscm->ps, pscm->fontName, font->psHeight);
+
     pscm->curFont = v;
     }
 }
@@ -752,6 +756,13 @@ psDrawCurve(pscm->ps, (double)x1, (double)y1, c1x, c1y, c2x, c2y, (double)x3, (d
 psSetDash(pscm->ps, FALSE);
 }
 
+void pscmSetFontMethod(struct pscmGfx *pscm, unsigned int method, char *fontName, char *fontFile)
+/* Which font drawing method shoud we use. */
+{
+pscm->fontMethod = method;
+pscm->fontName = cloneString(fontName);
+}
+
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName)
 /* Open up something that will someday be a PostScript file. */
 {
@@ -779,6 +790,7 @@ vg->getHint = (vg_getHint)pscmGetHint;
 vg->getFontPixelHeight = (vg_getFontPixelHeight)pscmGetFontPixelHeight;
 vg->getFontStringWidth = (vg_getFontStringWidth)pscmGetFontStringWidth;
 vg->setWriteMode = (vg_setWriteMode)pscmSetWriteMode;
+vg->setFontMethod = (vg_setFontMethod)pscmSetFontMethod;
 return vg;
 }
 

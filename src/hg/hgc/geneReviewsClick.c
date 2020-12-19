@@ -9,17 +9,18 @@
 void doGeneReviews(struct trackDb *tdb, char *itemName)
 /* generate the detail page for geneReviews */
 {
-struct sqlConnection *conn = hAllocConn(database);
-//char *table = tdb->table;
-int start = cartInt(cart, "o");
-int num = 4;
+genericHeader(tdb, itemName);
 
- genericHeader(tdb, itemName);
- genericBedClick(conn, tdb, itemName, start, num);
- prGeneReviews(conn, itemName);
- printf("<BR>");
- printTrackHtml(tdb);
- hFreeConn(&conn);
+struct sqlConnection *conn = hAllocConn(database);
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+printf("<B>Link to Gene Reviews:</B> "
+       "<a href='https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=%s' target=_blank>%s</a><BR>\n",
+         itemName, itemName); printPos(seqName, start, end, NULL, TRUE, itemName);
+prGeneReviews(conn, itemName);
+printf("<BR>");
+printTrackHtml(tdb);
+hFreeConn(&conn);
 }
 
 void prGeneReviews(struct sqlConnection *conn, char *itemName)

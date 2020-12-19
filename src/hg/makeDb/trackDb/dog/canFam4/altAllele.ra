@@ -1,0 +1,9 @@
+
+track altAllele
+shortLabel SNP and indels
+longLabel SNP and indels
+group varRep
+type vcfTabix
+visibility hide
+hapClusterHeight 81
+priority 12

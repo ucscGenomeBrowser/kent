@@ -60,8 +60,8 @@ void getstats ( int start, int end, char *seq, char *seqname, int *ncpg, int *ng
 
 void usage (void)
 { 
-  fprintf(stderr, "cpglh - calculate CpG Island data for cpgIslandExt tracks\n");
-  fprintf(stderr, "usage:\n    cpglh <sequence.fa>\n") ;
+  fprintf(stderr, "cpg_lh - calculate CpG Island data for cpgIslandExt tracks\n");
+  fprintf(stderr, "usage:\n    cpg_lh <sequence.fa>\n") ;
   fprintf(stderr, "where <sequence.fa> is fasta sequence, must be more than\n");
   fprintf(stderr, "   200 bases of legitimate sequence, not all N's\n");
   fprintf(stderr, "\nTo process the output into the UCSC bed file format:\n\n"

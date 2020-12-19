@@ -1,6 +1,6 @@
 track wgEncodeGencodeV31
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V31
 longLabel All GENCODE annotations from V31 (Ensembl 97)
 group genes

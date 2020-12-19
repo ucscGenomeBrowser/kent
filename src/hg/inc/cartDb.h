@@ -79,6 +79,8 @@ void cartDbOutput(struct cartDb *el, FILE *f, char sep, char lastSep);
 #define defaultSessionDbTableName  "sessionDb"
 #define userDbTableConfVariable         "userDbName"
 #define defaultUserDbTableName     "userDb"
+#define defaultCartTableConfVariable         "defaultCartName"
+#define defaultDefaultCartTableName     "defaultCart"
 
 char *sessionDbTable();
 /* Return the name of the sessionDb table. */
@@ -86,5 +88,7 @@ char *sessionDbTable();
 char *userDbTable();
 /* Return the name of the userDb table. */
 
+char *defaultCartTable();
+/* Return the name of the defaultCart table. */
 #endif /* CARTDB_H */
 

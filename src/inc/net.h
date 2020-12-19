@@ -24,6 +24,12 @@ int setReadWriteTimeouts(int sd, int seconds);
 int netConnect(char *hostName, int port);
 /* Start connection with a server having resolved port. Return < 0 if error. */
 
+int netConnectWithTimeout(char *hostName, int port, long msTimeout);
+/* In order to avoid a very long default timeout (several minutes) for hosts that will
+* not answer the port, we are forced to connect non-blocking.
+* After the connection has been established, we return to blocking mode.
+* Also closes sd if error. */
+
 int netMustConnect(char *hostName, int port);
 /* Start connection with server or die. */
 

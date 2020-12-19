@@ -1,0 +1,5 @@
+#cluster	table	gene	chrom	txStart	txEnd	strand	rnaLength	cdsLength
+1	Mt-tRNA	ENST00000387314.1	chrM	576	647	+	71	0
+2	Mt-tRNA	ENST00000387342.1	chrM	1601	1670	+	69	0
+3	Mt-tRNA	ENST00000387372.1	chrM	4328	4400	-	72	0
+4	Mt-tRNA	ENST00000387392.1	chrM	5586	5655	-	69	0

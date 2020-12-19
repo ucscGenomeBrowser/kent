@@ -86,6 +86,12 @@ div.card.facet-card
     margin-bottom:5px
 }
 
+span.card.facet-card
+{
+    margin-top:5px;
+    padding-top: 10px;
+}   
+
 .cirm-banner
 {
     width: 100%;

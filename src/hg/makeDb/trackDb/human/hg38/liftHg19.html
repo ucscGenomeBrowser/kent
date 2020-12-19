@@ -1,0 +1,48 @@
+<h2>Description</h2>
+
+<p>
+This track shows alignments from the hg38 to the hg19 genome assembly, used by the UCSC
+<a target="_blank" href="https://genome.ucsc.edu/cgi-bin/hgLiftOver">liftOver</a> tool and 
+<a href="https://www.ncbi.nlm.nih.gov/genome/tools/remap" target="_blank">NCBI's ReMap</a>
+service, respectively.
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>The track has three subtracks, one for UCSC and two for NCBI alignments.</p>
+<p>
+The alignments are shown as &quot;chains&quot; of alignable regions. The display is similar to
+the other chain tracks, see our 
+<a target="_blank" href="/goldenPath/help/hgTracksHelp.html#ChainDisplay">
+chain display documentation</a> for more information.
+</p>
+
+
+<H2>Data access</H2>
+<p>
+UCSC liftOver chain files for hg19 to hg38 can be obtained from a dedicated directory on our
+<a target="_blank" href="https://hgdownload.soe.ucsc.edu/goldenpath/hg19/liftOver/">
+Download server</a>. The NCBI chain file can be obtained from the
+<a target="_blank" href="https://hgdownload.cse.ucsc.edu/goldenpath/hg38/database/">
+MySQL tables directory on our download server</a>, the filename is 'chainHg19ReMap.txt.gz'.
+</p>
+
+<p>
+Both tables can also be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+</p>
+
+<h2>Methods</h2>
+ReMap 2.2 alignments were downloaded from the 
+<a target="_blank" href="ftp://ftp.ncbi.nlm.nih.gov/pub/remap/Homo_sapiens/current/">
+NCBI FTP site</a> and converted with the UCSC kent command line tools. The UCSC tool chainSwap was
+used to swap target and query genome to show the mappings on the hg38 genome. Like all data
+processing for the genome browser, the procedure is documented in our
+<a target="_blank"
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt">
+hg19 makeDoc file</a>.
+
+<h2>Credits</h2>
+<p>
+Thanks to NCBI for making the ReMap data available and to Angie Hinrichs for the file conversion.
+</p>

@@ -360,7 +360,7 @@ for (;;)
         /* Parse out first word and decide what to do. */
         word = nextWord(&line);
         if (line == NULL)
-            line = "";
+            errAbort("No value for %s line %d of %s", word, lf->lineIx, lf->fileName);
         line = trimSpaces(line);
         trackDbUpdateOldTag(&word, &line);
         if (releaseTag && sameString(word, "release"))
@@ -758,7 +758,7 @@ else if (startsWith("bed ", type) || startsWith("big", type) || startsWith("bedD
     }
 else if (startsWith("bam", type))
     cType = cfgBam;
-else if (sameWord("vcfTabix",type) || sameWord("vcf", type))
+else if (sameWord("vcfPhasedTrio", type) || sameWord("vcfTabix",type) || sameWord("vcf", type))
     cType = cfgVcf;
 else if (sameWord("halSnake",type))
     cType = cfgSnake;

@@ -36,40 +36,40 @@ mach = $(shell uname -m)
 #   as this doesn't change between release.
 ##
 #db = hg38
-#db = hg19
-db = mm10
+db = hg19
+#db = mm10
 #preRelease = no
 preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
-    ver = M24
-    prevVer = M23
+    ver = M25
+    prevVer = M24
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 99_38
-    ensemblPrevVer = 98_38
+    ensemblVer = 100_38
+    ensemblPrevVer = 99_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 33
-    prevVer = 32
+    ver = 35
+    prevVer = 34
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 99_38
-    ensemblPrevVer = 98_38
+    ensemblVer = 101_38
+    ensemblPrevVer = 100_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 32
+    verBase = 35
     ver = ${verBase}lift37
     backmapTargetVer = 19
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
-    prevVer = 29lift37
+    prevVer = 34lift37
     gencodeOrg = Gencode_human
     annGffTypeName = annotation
-    ensemblVer = 74_37      # only used to get genome chromsome name mappings
+    ensemblVer = 74_37      # only used to get genome chromsome name mappings, don't change
     ensemblPrevVer = ${ensemblVer}  # doesn't change
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
     isBackmap = yes
@@ -364,7 +364,7 @@ ${tableEntrezGeneTab}: ${tableEntrezGeneMeta} ${metaFilterDepend}
 ##
 ${gencodeGp}: ${annotationGff} ${ensemblToUcscChain}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToGenePred} ${annotationGff} ${ensemblToUcscChain} $@.${tmpExt}
+	${gencodeGxfToGenePred} ${db} ${annotationGff} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tableTranscriptionSupportLevelData}: ${metaFilterDepend}
@@ -419,9 +419,13 @@ define checkForIncorrect
 awk 'END{if (NR != 0) {print "Incorrect data, see " FILENAME>"/dev/stderr"; exit 1}}' $(basename $@).incorrect
 endef
 
-checkSanity: ${checkDir}/${tableGeneSource}.checked ${checkDir}/${tableTranscriptSource}.checked \
-	${checkDir}/${tableBasic}.checked ${checkDir}/${tableBasic}.pseudo.checked \
+checkSanity:: ${checkDir}/${tableBasic}.checked ${checkDir}/${tableBasic}.pseudo.checked \
 	${checkDir}/${tableComp}.pseudo.checked
+
+# backmap does have all gene/transcript source entries.
+ifneq (${isBackmap},yes)
+checkSanity:: ${checkDir}/${tableGeneSource}.checked   ${checkDir}/${tableTranscriptSource}.checked
+endif
 
 # are gene source all in attrs
 ${checkDir}/${tableGeneSource}.checked: ${loadedDir}/${tableGeneSource}.tab.loaded ${loadedDir}/${tableAttrs}.tab.loaded

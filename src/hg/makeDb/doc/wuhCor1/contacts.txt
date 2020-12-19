@@ -1,0 +1,2 @@
+cd /hive/data/genomes/wuhCor1/bed/contacts/
+wget https://users.soe.ucsc.edu/~afyfe/covid/hub/x8.bb

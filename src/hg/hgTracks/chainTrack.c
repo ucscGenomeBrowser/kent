@@ -536,8 +536,9 @@ boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 
 /*	what does the cart say about coloring option	*/
 chainCart->chainColor = chainFetchColorOption(cart, tdb, FALSE);
+int scoreFilterDefault = atoi(trackDbSettingOrDefault(tdb, "scoreFilter", "0"));
 chainCart->scoreFilter = cartUsualIntClosestToHome(cart, tdb,
-	FALSE, SCORE_FILTER, 0);
+	FALSE, SCORE_FILTER, scoreFilterDefault);
 
 linkedFeaturesMethods(tg);
 tg->itemColor = lfChromColor;	/*	default coloring option */

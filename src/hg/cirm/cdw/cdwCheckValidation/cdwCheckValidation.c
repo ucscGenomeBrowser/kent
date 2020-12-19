@@ -211,6 +211,7 @@ if (startsWith("status", command) && gLong)
     fprintf(f,"Printing file statistics...\n");
 
 // Loop through all jobs and gather stats. 
+struct hash *latestRuns = hashNew(0);
 struct cdwJob *job;
 for (job = jobList;; job = job->next)
     {
@@ -223,7 +224,19 @@ for (job = jobList;; job = job->next)
 	if (job->endTime > 0)
 	// Finished jobs. 
 	    {
-	    ++finJobs; 
+	    ++finJobs;
+
+            // Keep track of the most recent job found for this fileId
+            struct hashEl *fileEl = hashStore(latestRuns, fileIdString);
+            if (fileEl->val == NULL)
+                fileEl->val = job;
+            else
+                {
+                struct cdwJob *prevFileJob = (struct cdwJob*) fileEl->val;
+                if (prevFileJob->endTime < job->endTime)
+                    fileEl->val = job;
+                }
+
 	    if (job->returnCode == 0)
 	    // Jobs that passed validation. 
 		{
@@ -271,12 +284,28 @@ for (job = jobList;; job = job->next)
 
 if (startsWith("status", command))
     {
-    fprintf(f,"Total files:\t%i\n",slCount(jobList)); 
-    fprintf(f,"Finished validation:\t%i\n", finJobs); 
-    fprintf(f,"Passed validation:\t\e[1;32m%i\e[0m\n",  validFiles);  
-    fprintf(f,"Failed validation:\t\e[1;31m%i\e[0m\n",  failedJobs);  
-    fprintf(f,"Jobs in progress:\t%i\n", workingJobs); 
-    fprintf(f,"Jobs queued:\t%i\n", queuedJobs); 
+    fprintf(f,"Total files:\t%i\n",slCount(jobList));
+    fprintf(f,"Finished validation:\t%i\n", finJobs);
+    fprintf(f,"Passed validation:\t\e[1;32m%i\e[0m\n",  validFiles);
+    fprintf(f,"Failed validation:\t\e[1;31m%i\e[0m\n",  failedJobs);
+
+    int passedMostRecent = 0, failedMostRecent = 0;
+    struct hashEl *file;
+    struct hashCookie cookie = hashFirst(latestRuns);
+    while ((file = hashNext(&cookie)) != NULL)
+        {
+        struct cdwJob *job = (struct cdwJob*) file->val;
+        if (job->returnCode == 0)
+            passedMostRecent++;
+        else
+            failedMostRecent++;
+        }
+    
+    fprintf(f,"Unique files:\t%d\n", passedMostRecent+failedMostRecent);
+    fprintf(f,"Files that passed their most recent run:\t\e[1;32m%d\e[0m\n", passedMostRecent);
+    fprintf(f,"Files that failed their most recent run:\t\e[1;32m%d\e[0m\n", failedMostRecent);
+    fprintf(f,"Jobs in progress:\t%i\n", workingJobs);
+    fprintf(f,"Jobs queued:\t%i\n", queuedJobs);
     printTimeStats(f, jobList, finJobs);
     if (slCount(jobList) == finJobs)
 	fprintf(f,"Status:\t\e[1;32mCompleted\e[0m\n"); 
@@ -288,6 +317,8 @@ if (startsWith("retry", command))
     fprintf(f,"Started revalidating %i files.\n", failedJobs); 
 if (startsWith("failed", command))
     fprintf(f,"%i files failed validation.\n", failedJobs); 
+
+hashFree(&latestRuns);
 }
     
 

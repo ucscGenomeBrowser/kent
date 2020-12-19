@@ -34,6 +34,7 @@ char *curGeneId;	/* Current Gene Id. */
 char *curGeneName;		/* Biological name of gene. */
 char *curGeneChrom;	/* Chromosome current gene is on. */
 char *curAlignId;       /* Align id from knownGene genePred */
+struct trackDb *globalTdb;
 struct genePred *curGenePred;	/* Current gene prediction structure. */
 boolean isGencode;              /* is this based on the Gencode models */
 boolean isGencode2;             /* is this based on the Gencode models and use ensembl id as primary id */
@@ -199,17 +200,6 @@ sqlSafef(query, sizeof(query),
 return sqlQuickNum(conn, query) > 0;
 }
 
-char *abbreviateSummary(char *summary)
-/* Get rid of some repetitious stuff. */
-{
-char *pattern =
-"Publication Note:  This RefSeq record includes a subset "
-"of the publications that are available for this gene. "
-"Please see the Entrez Gene record to access additional publications.";
-stripString(summary, pattern);
-return summary;
-}
-
 char *descriptionString(char *id, struct sqlConnection *conn)
 /* return description as it would be printed in html, can free after use */
 {
@@ -231,7 +221,7 @@ if (summaryTables != NULL)
 	char *summary = genoQuery(id, "summarySql", conn);
 	if (summary != NULL && summary[0] != 0)
 	    {
-	    summary = abbreviateSummary(summary);
+	    summary = abbreviateRefSeqSummary(summary);
 	    dyStringPrintf(description, "<B>%s",
 		genomeSetting("summarySource"));
 	    if (genomeOptionalSetting("summaryIdSql"))
@@ -412,8 +402,7 @@ if (ajaxSection != NULL)
     }
 
 addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
-/* disable ortherOrg section for CGB servers for the time being */
-if (!hIsCgbServer()) addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(gadSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(malaCardsSection(conn, sectionRa), conn, &sectionList);
     addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
@@ -444,6 +433,7 @@ addGoodSection(flyBasePhenotypesSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(flyBaseSynonymsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(bdgpExprInSituSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(gencodeSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(infoSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(methodSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(localizationSection(conn, sectionRa), conn, &sectionList);
@@ -619,11 +609,11 @@ if (alias != NULL && sqlTableExists(conn, alias))
      sqlSafef(query, sizeof(query), "select kgID from %s where alias = '%s'", alias, name);
      char *id = sqlQuickString(conn, query);
      if (id == NULL)
-         hUserAbort("Couldn't find %s in %s.%s or %s.%s", name, database, mainTable, database, alias);
+         hUserAbort("Couldn't find %s in %s.%s or %s.%s", name, sqlGetDatabase(conn), mainTable, sqlGetDatabase(conn), alias);
      return id;
      }
 else
-     hUserAbort("Couldn't find %s in %s.%s", name, database, mainTable);
+     hUserAbort("Couldn't find %s in %s.%s", name, sqlGetDatabase(conn), mainTable);
 return NULL;
 }
 
@@ -689,7 +679,10 @@ void doKgMethod()
  * Method, Credits, and Data Use Restrictions) */
 {
 cartWebStart(cart, database, "Methods, Credits, and Use Restrictions");
-struct trackDb *tdb = hTrackDbForTrack(database, genomeSetting("knownGene"));
+char *tableName = cartUsualString(cart, hggType, NULL);
+if (tableName == NULL)
+    tableName = "knownGene";
+struct trackDb *tdb = hTrackDbForTrack(database, tableName);
 hPrintf("%s", tdb->html);
 cartWebEnd();
 }
@@ -720,7 +713,31 @@ else
     /* if kgProtMap2 table exists, this means we are doing KG III */
     if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
 
-    conn = hAllocConn(database);
+    char *tableName = cartUsualString(cart, hggType, NULL);
+    char *knownDb = hdbDefaultKnownDb(database);
+
+    // if no table has been given to us, try knownGene
+    if (tableName == NULL)
+        tableName = "knownGene";
+    
+    struct trackDb *tdb = hTrackDbForTrack(database, tableName);
+
+    if ((tdb == NULL) && sameString(tableName, "knownGene") && differentString(database, knownDb))
+        {
+        // if no table or knownGene has been given to us, and knownGene doesn't work, try the default gene track.
+        tableName = hdbGetMasterGeneTrack(knownDb);
+        tdb = hTrackDbForTrack(database, tableName);
+        }
+
+    if (tdb == NULL)
+	hUserAbort("Error: cannot open gene track %s.", tableName);
+
+    globalTdb = tdb;
+    char *externalDb = trackDbSetting(tdb, "externalDb");
+    if (externalDb != NULL)
+        conn = hAllocConn(externalDb);
+    else
+        conn = hAllocConn(database);
     curGeneId = findGeneId(conn, geneName);
     getGenePosition(conn);
     curGenePred = getCurGenePred(conn);
@@ -747,7 +764,6 @@ else
 	{
 	/* Default case - start fancy web page. */
 	measureTiming =  isNotEmpty(cartOptionalString(cart, "measureTiming"));
-        struct trackDb *tdb = hTrackDbForTrack(database, genomeSetting("knownGene"));
         isGencode = trackDbSettingOn(tdb, "isGencode");
         isGencode2 = trackDbSettingOn(tdb, "isGencode2");
 	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index",

@@ -74,7 +74,7 @@ struct hash
     boolean autoExpand;         /* Automatically expand hash */
     float expansionFactor;      /* Expand when elCount > size*expansionFactor */
     int numResizes;             /* number of times resize was called */
-    boolean ownLm;              /* TRUE if lm was allocated by newHashExt */
+    boolean ownLm;              /* TRUE if lm was allocated by newHashExt OR read in from trackDbCache  */
     };
 
 #define defaultExpansionFactor 1.0
@@ -251,6 +251,9 @@ void hashResize(struct hash *hash, int powerOfTwoSize);
 
 struct hash *hashFromSlNameList(void *list);
 /* Create a hash out of a list of slNames. */
+
+struct slName *hashSlNameFromHash(struct hash *hash);
+/* Create a slName list from the names in a hash. */
 
 struct hash *hashSetFromSlNameList(void *list);
 /* Create a hashSet (hash without values) out of a list of slNames. */

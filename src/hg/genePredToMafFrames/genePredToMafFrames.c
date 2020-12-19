@@ -115,14 +115,12 @@ outputFrames(orgs, mafFramesFile, bedFile);
 orgGenesFree(&genes);
 }
 
-void usage(char *msg)
+void usage()
 /* Explain usage and exit. */
 {
-errAbort("%s\n"
-    "\n"
-    "genePredToMafFrames - create mafFrames tables from a genePreds\n"
-    "\n"
-    "genePredToMafFrames [options] targetDb maf mafFrames geneDb1 genePred1 [geneDb2 genePred2...] \n"
+errAbort("genePredToMafFrames - create mafFrames tables from a genePreds\n"
+    "usage:\n"
+    "    genePredToMafFrames [options] targetDb maf mafFrames geneDb1 genePred1 [geneDb2 genePred2...] \n"
     "\n"
     "Create frame annotations for one or more components of a MAF.\n"
     "It is significantly faster to process multiple gene sets in the same\""
@@ -142,7 +140,7 @@ errAbort("%s\n"
     "     4 - dump information about the gene mappings that were constructed\n"
     "     5 - dump information about the gene mappings after split processing\n"
     "     6 - dump information about the gene mappings after frame linking\n"
-    "\n", msg);
+    "\n");
 }
 
 int main(int argc, char *argv[])
@@ -152,7 +150,7 @@ int numGeneDbs, i, j;
 char **geneDbs, **genePreds;
 optionInit(&argc, argv, optionSpecs);
 if ((argc < 6) || ((argc % 2) != 0))
-    usage("wrong # args");
+    usage();
 numGeneDbs = (argc - 4) / 2;
 AllocArray(geneDbs, numGeneDbs);
 AllocArray(genePreds, numGeneDbs);

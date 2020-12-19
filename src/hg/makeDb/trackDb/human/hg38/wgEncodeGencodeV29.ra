@@ -1,6 +1,6 @@
 track wgEncodeGencodeV29
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V29
 longLabel All GENCODE annotations from V29 (Ensembl 94)
 group genes

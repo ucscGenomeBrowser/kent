@@ -101,7 +101,8 @@ FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
     'ucscRetroInfo5', "refLink", "ucscRetroSeq5", "ensemblLift", "knownCanonical",
     'gbExtFile', 'flyBase2004Xref',
     # for gencode/knownGene tracks and hg38 in particular
-    "knownToTag", "ncbiRefSeqLink", "ncbiRefSeqCurated", "gtexGeneModel", "gtexGene",
+    "knownToTag", "ncbiRefSeqLink", "ncbiRefSeqCurated", "gtexGeneModel", "gtexGene", "knownAttrs",
+    "seqNcbiRefSeq",
     # for faster searches
     'hgFindSpec', 'ensemblToGeneName', "ucscToINSDC",
     # these are almost required for searches, common tracks and not too big

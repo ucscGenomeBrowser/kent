@@ -24,6 +24,7 @@ UTILS_APPLIST = \
 	bedWeedOverlapping \
 	bedMergeAdjacent \
 	bedPartition \
+	bigGenePredToGenePred \
 	bigMafToMaf \
 	bigPslToPsl \
 	binFromRange \
@@ -31,6 +32,7 @@ UTILS_APPLIST = \
 	chromGraphToBin \
 	crTreeIndexBed \
 	crTreeSearchBed \
+	faToVcf \
 	gapToLift \
 	genePredFilter \
 	genePredToBigGenePred \
@@ -60,6 +62,7 @@ USER_APP_SCRIPTS = \
 	vai.pl
 
 SCRIPT_FILES = \
+	archiveTracks.sh \
 	dbNsfpToBed.pl \
 	dumpDb.pl \
 	mergeOverlapBed4.pl \
@@ -78,12 +81,14 @@ DIRS = ${buildRefresh} \
 	geoMirrorNode \
 	makeTrackIndex \
 	mysqlSecurityCheck \
+	phyloRenameAndPrune \
 	pslFixCdsJoinGap \
 	pslMismatchGapToBed \
 	pslUniq \
 	refSeqGet \
 	safePush \
 	toDev64 \
+	vcfRenameAndPrune \
 	vcfToHgvs \
 	wigBedToStep
 

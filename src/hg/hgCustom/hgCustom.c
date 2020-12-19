@@ -122,6 +122,7 @@ puts(" Data must be formatted in\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/cram.html'>CRAM</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format3'>GFF</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format4'>GTF</A>,\n"
+" <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format23'>hic</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/interact.html'>interact</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format5'>MAF</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format12'>narrowPeak</A>,\n"
@@ -182,12 +183,6 @@ if (!isUpdateForm)
     char *onChangeDb = "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();";
     char *onChangeOrg = "document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();";
     char *onChangeClade = "document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();";
-
-    if (hIsGsidServer())
-        {
-        printf("<span style='color:red;'>The Custom Track function and its documentation is "
-                "currently under development ...</span><BR><BR>\n");
-        }
 
     puts("<TABLE BORDER=0>\n");
     if (gotClade)
@@ -1288,8 +1283,9 @@ else
     if (catch->gotError)
 	{
 	addWarning(dsWarn, err);
-	addWarning(dsWarn, catch->message->string);
 	}
+    if (isNotEmpty(catch->message->string))
+        addWarning(dsWarn, catch->message->string);
     errCatchFree(&catch);
 
     /* exclude special setting used by table browser to indicate
@@ -1303,7 +1299,7 @@ else
             nextTok = strchr(db, 0);
         db = cloneStringZ(db,nextTok-db);
         if (!sameString(db,database))
-            err = "Invalid configuration found - remove db= or return it to it's original value";
+            err = "Invalid configuration found - remove db= or return it to its original value. ";
         }
 
     if (cartVarExists(cart, hgCtUpdatedTrack) && !hasData)
@@ -1322,8 +1318,8 @@ else
                     ctUpdated = TRUE;
                     }
                 errCatchEnd(catch);
-                if (catch->gotError)
-                    addWarning(dsWarn, catch->message->string);
+                if (isNotEmpty(catch->message->string))
+                    err = catTwoStrings(emptyForNull(err), catch->message->string);
                 errCatchFree(&catch);
                 }
             }

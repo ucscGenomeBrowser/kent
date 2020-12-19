@@ -109,7 +109,7 @@ struct sumStats
     bits64 totalMatch; /* total bases matching */ 
     bits64 totalRepMatch; /* total bases matching repeats */
     float minIdent;    /* min/max fraction identity */
-    float maxIndent;
+    float maxIdent;
     float minQCover;   /* min/max coverage of query */
     float maxQCover;
     float minTCover;   /* min/max coverage of target */
@@ -251,7 +251,7 @@ if (ss->alnCnt == 0)
     {
     ss->totalQSize = psl->qSize;
     ss->minQSize = ss->maxQSize = psl->qSize;
-    ss->minIdent = ss->maxIndent = ident;
+    ss->minIdent = ss->maxIdent = ident;
     ss->minQCover = ss->maxQCover = qCover;
     ss->minTCover = ss->maxTCover = tCover;
     ss->minRepMatch = ss->maxRepMatch = repMatch;
@@ -261,7 +261,7 @@ else
     ss->minQSize = min(ss->minQSize, psl->qSize);
     ss->maxQSize = max(ss->maxQSize, psl->qSize);
     ss->minIdent = min(ss->minIdent, ident);
-    ss->maxIndent = max(ss->maxIndent, ident);
+    ss->maxIdent = max(ss->maxIdent, ident);
     ss->minQCover = min(ss->minQCover, qCover);
     ss->maxQCover = max(ss->maxQCover, qCover);
     ss->minTCover = min(ss->minTCover, tCover);
@@ -281,7 +281,7 @@ static void sumStatsSum(struct sumStats *ss, struct sumStats *ss2)
 if (ss->alnCnt == 0)
     {
     ss->minQSize = ss2->maxQSize;
-    ss->minIdent = ss2->maxIndent;
+    ss->minIdent = ss2->maxIdent;
     ss->minQCover = ss2->maxQCover;
     ss->minTCover = ss2->maxTCover;
     ss->minRepMatch = ss2->maxRepMatch;
@@ -291,7 +291,7 @@ else if (ss2->alnCnt > 0)
     ss->minQSize = min(ss->minQSize, ss2->minQSize);
     ss->maxQSize = max(ss->maxQSize, ss2->maxQSize);
     ss->minIdent = min(ss->minIdent, ss2->minIdent);
-    ss->maxIndent = max(ss->maxIndent, ss2->maxIndent);
+    ss->maxIdent = max(ss->maxIdent, ss2->maxIdent);
     ss->minQCover = min(ss->minQCover, ss2->minQCover);
     ss->maxQCover = max(ss->maxQCover, ss2->maxQCover);
     ss->minTCover = min(ss->minTCover, ss2->minTCover);
@@ -354,7 +354,7 @@ carefulClose(&fh);
 }
 
 /* header for query statistics */
-static char *queryStatsHdr = "#qName\t" "qSize\t" "alnCnt\t" "minIdent\t" "maxIndent\t" "meanIdent\t"
+static char *queryStatsHdr = "#qName\t" "qSize\t" "alnCnt\t" "minIdent\t" "maxIdent\t" "meanIdent\t"
 "minQCover\t" "maxQCover\t" "meanQCover\t" "minRepMatch\t" "maxRepMatch\t" "meanRepMatch\t"
 "minTCover\t" "maxTCover\n";
 
@@ -364,7 +364,7 @@ static void queryStatsOutput(FILE *fh, struct sumStats *qs)
 fprintf(fh, "%s\t%d\t%d\t" "%0.4f\t%0.4f\t%0.4f\t"
         "%0.4f\t%0.4f\t%0.4f\t"  "%0.4f\t%0.4f\t%0.4f\t" "%0.4f\t%0.4f\n",
         qs->qName, qs->minQSize, qs->alnCnt,
-        qs->minIdent, qs->maxIndent, calcMeanIdent(qs),
+        qs->minIdent, qs->maxIdent, calcMeanIdent(qs),
         qs->minQCover, qs->maxQCover, calcMeanQCover(qs),
         qs->minRepMatch, qs->maxRepMatch, calcMeanRepMatch(qs),
         qs->minTCover, qs->maxTCover);
@@ -413,7 +413,7 @@ outputQueryStats(queryStatsTbl, statsFile);
 
 /* header for overall statistics */
 static char *overallStatsHdr = "#queryCnt\t" "minQSize\t" "maxQSize\t" "meanQSize\t"
-"alnCnt\t" "minIdent\t" "maxIndent\t" "meanIdent\t"
+"alnCnt\t" "minIdent\t" "maxIdent\t" "meanIdent\t"
 "minQCover\t" "maxQCover\t" "meanQCover\t" "minRepMatch\t" "maxRepMatch\t" "meanRepMatch\t"
 "minTCover\t" "maxTCover\t" "aligned\t" "aligned1\t" "alignedN\t" "totalAlignedSize\n";
 
@@ -427,7 +427,7 @@ fprintf(fh, "%d\t%d\t%d\t%d\t%d\t" "%0.4f\t%0.4f\t%0.4f\t"
         "%d\t%d\t%d\t%lld\n",
         os->queryCnt, os->minQSize, os->maxQSize, calcMeanQSize(os),
         os->alnCnt,
-        os->minIdent, os->maxIndent, calcMeanIdent(os),
+        os->minIdent, os->maxIdent, calcMeanIdent(os),
         os->minQCover, os->maxQCover, calcMeanQCover(os),
         os->minRepMatch, os->maxRepMatch, calcMeanRepMatch(os),
         os->minTCover, os->maxTCover, aligned1+alignedN, aligned1, alignedN,

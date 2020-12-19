@@ -118,7 +118,8 @@ sub run {
   my $setPath = "export PATH=";
   $setPath .= "$defVars{PATH}:" if (defined $defVars{'PATH'});
   $setPath .= "$defaultPath; ";
-  system("$shCmd", "-c", $setPath . $cmd) == 0 ||
+  my $failPath = "set -xbeEu -o pipefail; ";
+  system("$shCmd", "-c", $setPath . $failPath . $cmd) == 0 ||
     &cleanDie("Command failed:\n$setPath\n$cmd\n");
 }
 
@@ -127,7 +128,7 @@ sub findCommand {
   my $setPath = "PATH=";
   $setPath .= "$defVars{PATH}:" if (defined $defVars{'PATH'});
   $setPath .= "$defaultPath; ";
-  my $which = qx{$setPath type -ap $cmd 2> /dev/null | head -1};
+  my $which = qx{$setPath type -ap $cmd 2> /dev/null | grep -v "not found" | head -1 | awk '{print \$NF}' };
   chomp $which;
   $which = $cmd if ($which eq "");
   return $which;
@@ -532,18 +533,14 @@ sub liftLav {
 sub convertOutput {
   # Convert lav file to psl or axt file, optionally dropping trivial self al's.
   my ($lav, $out) = @_;
-  my $tSeq = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
-  my $qSeq = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
-  my $tSizes = $defVars{'SEQ1_CTGLEN'} || $defVars{'SEQ1_LEN'};
-  my $qSizes = $defVars{'SEQ2_CTGLEN'} || $defVars{'SEQ2_LEN'};
   if ($opt_outFormat eq 'axt') {
     my $dropSelf = ($opt_dropSelf ? "-dropSelf " : "");
+    my $tSeq = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
+    my $qSeq = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
     &run("lavToAxt $dropSelf $lav $tSeq $qSeq $out");
   } elsif ($opt_dropSelf) {
-    # lavToPsl doesn't have lavToAxt's -dropSelf functionality, so pipe
-    # lavToAxt -dropSelf to axtToPsl.
-    &run("lavToAxt -dropSelf $lav $tSeq $qSeq stdout " .
-	 "| axtToPsl stdin $tSizes $qSizes $out");
+    &run("lavToPsl $lav stdout " .
+         "| pslDropOverlap stdin $out");
     &run("pslCheck $out");
   } else {
     &run("lavToPsl $lav $out");
@@ -574,7 +571,8 @@ my ($target, $query, $DEF, $out) = @ARGV;
 
 # It is OK to have a previous result existing
 if ( -f "$out") {
-   exit 0;
+  print STDERR "Output file $out exists; exiting.\n";
+  exit 0;
 }
 
 
@@ -693,13 +691,17 @@ foreach my $tSpec (@tFileSpecs) {
     if ($opt_outFormat) {
       if ($axtResult) {
         if ($opt_outFormat eq 'axt') {
+          if ($opt_dropSelf) {
+            die "-dropSelf not supported for AXT output from 2bit";
+          }
           &run("$catCmd $littleOut >> $localOut");
         } else {
           my $tSizes = $defVars{'SEQ1_CTGLEN'} || $defVars{'SEQ1_LEN'};
           my $qSizes = $defVars{'SEQ2_CTGLEN'} || $defVars{'SEQ2_LEN'};
+          my $dropSelfCmd = $opt_dropSelf ? "| pslDropOverlap stdin stdout" : "";
           # carry through comments
           &run("grep '^#' $littleOut | egrep -v 'identity|coverage|num_masked' > $littleConv");
-          &run("axtToPsl $littleOut $tSizes $qSizes stdout >> $littleConv");
+          &run("axtToPsl $littleOut $tSizes $qSizes stdout $dropSelfCmd >> $littleConv");
           &run("$catCmd $littleConv >> $localOut");
         }
       } else {

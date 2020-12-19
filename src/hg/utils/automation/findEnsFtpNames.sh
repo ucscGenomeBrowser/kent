@@ -27,7 +27,7 @@ bye" > ftp.rsp
 ftp -n -v -i ftp.ensembl.org < ftp.rsp > release.${VERSION}.gtf.ls-lR
 
 # the mus_musculus_ extra sequences are stuck at version 86
-egrep -v "CHECKSUMS|README" release.${VERSION}.gtf.ls-lR | awk '
+egrep -v "CHECKSUMS|README|Cyprinus_carpio_hebao_red|Cyprinus_carpio_german_mirror" release.${VERSION}.gtf.ls-lR | awk '
 {
 if (match($1,"^./[a-z0-9_]*:$")) {gsub(":$","",$1); printf "%s/", $1 }
 if (NF == 9) { if ((match($1,"^-rw")) && (match($NF,"'${VERSION}'.gtf.gz"))) {printf "%s\n", $NF} }
@@ -57,19 +57,29 @@ bye" > ftp.rsp
 
 ftp -i -n -v ftp.ensembl.org < ftp.rsp > release.${VERSION}.fasta.ls-lR
 
+
 awk '
-BEGIN{ D="notYet" }
+BEGIN{ D="notYet"; d="notyet" }
 {
   if (!match($1,"^drwx")) {
-    if (match($1,"^./[a-z_]*/pep:$")) {
+    if (match($1,"^./[0-9a-z_]*/pep:$")) {
         gsub(":$","",$1); D = $1;
+        d = tolower(D);
+        sub("./","", d);
+        sub("/pep","", d);
     }
-    if ((9 == NF) && match($1,"^-rw") && match($NF,"pep.all.fa")) {
-        printf "%s/%s\n", D, $NF
+    if ((9 == NF) && match($1,"^-rw") && match($NF,"pep.all.fa.gz")) {
+        tl = tolower($NF)
+        if (index(tl, d) > 0) {
+          printf "%s/%s\n", D, $NF
+        }
     }
   }
 }
 ' release.${VERSION}.fasta.ls-lR \
 	| sed -e "s#^./#'x' => '#; s#\$#',#" > release.${VERSION}.fasta.names
+
+#         printf "%s/%s\t%s\t%s\n", D, $NF, d, tl
+#         printf "%s/%s\t%s\t%s\n", D, $NF, d, tl
 
 rm -f ftp.rsp

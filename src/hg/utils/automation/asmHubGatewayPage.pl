@@ -7,16 +7,20 @@ use lib "$Bin";
 use AsmHub;
 use File::Basename;
 
+### XXX ### temporary hgdownload-test.gi
+### my $sourceServer = "hgdownload-test.gi.ucsc.edu";
+
 my $sourceServer = "hgdownload.soe.ucsc.edu";
 
 my @months = qw( 0 Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 
 sub usage() {
-  printf STDERR "usage: asmHubGatewayPage.pl <pathTo>/*assembly_report.txt <pathTo>/asmId.chrom.sizes <pathTo>/image.jpg <pathTo>/photoCredits.txt\n";
+  printf STDERR "usage: asmHubGatewayPage.pl <asmHubName> <pathTo>/*assembly_report.txt <pathTo>/asmId.chrom.sizes <pathTo>/image.jpg <pathTo>/photoCredits.txt\n";
   printf STDERR "output is to stdout, redirect to file: > description.html\n";
   printf STDERR "photoCredits.txt is a two line tag<tab>string file:\n";
   printf STDERR "tags: photoCreditURL and photoCreditName\n";
   printf STDERR "use string 'noPhoto' for image and credits when no photo\n";
+  printf STDERR "stderr output is routed to a 'asmId.names.tab' file for use elsewhere\n";
   exit 255;
 }
 
@@ -93,11 +97,11 @@ sub chromSizes($) {
 
 my $argc = scalar(@ARGV);
 
-if ($argc != 4) {
+if ($argc != 5) {
   usage;
 }
 
-my ($asmReport, $chromSizes, $jpgImage, $photoCredits) = @ARGV;
+my ($asmHubName, $asmReport, $chromSizes, $jpgImage, $photoCredits) = @ARGV;
 if ( ! -s $asmReport ) {
   printf STDERR "ERROR: can not find '$asmReport'\n";
   usage;
@@ -153,16 +157,24 @@ if ($jpgImage ne "noPhoto") {
 
 my $thisDir = `pwd`;
 chomp $thisDir;
-printf STDERR "# thisDir $thisDir\n";
 my $ftpName = dirname($thisDir);
 my $asmId = basename($ftpName);;
 my ($gcXPrefix, $accession, $rest) = split('_', $asmId, 3);
+my $accessionId = sprintf("%s_%s", $gcXPrefix, $accession);
+
+my $accessionDir = substr($asmId, 0 ,3);
+$accessionDir .= "/" . substr($asmId, 4 ,3);
+$accessionDir .= "/" . substr($asmId, 7 ,3);
+$accessionDir .= "/" . substr($asmId, 10 ,3);
+$accessionDir .= "/" . $accessionId;
+
 my $newStyleUrl = sprintf("%s/%s/%s/%s/%s", $gcXPrefix, substr($accession,0,3),
    substr($accession,3,3), substr($accession,6,3), $asmId);
+my $localDataUrl = sprintf("%s/%s/%s/%s/%s", $gcXPrefix, substr($accession,0,3),
+   substr($accession,3,3), substr($accession,6,3), $accessionId);
 $ftpName =~ s#/hive/data/outside/ncbi/##;
 $ftpName =~ s#/hive/data/inside/ncbi/##;
 $ftpName =~ s#/hive/data/genomes/asmHubs/##;
-printf STDERR "# ftpName $ftpName\n";
 # my $urlDirectory = `basename $ftpName`;
 # chomp $urlDirectory;
 my $speciesSubgroup = $ftpName;
@@ -280,7 +292,7 @@ printf "<!-- Display image in righthand corner -->
 <table align=right border=0 width=%d height=%d>
   <tr><td align=RIGHT><a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\"
     target=_blank>
-    <img src=\"https://%s/hubs/VGP/genomes/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
+    <img src=\"https://%s/hubs/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
   </td></tr>
   <tr><td align=right>
     <font size=-1> <em>%s</em><BR>
@@ -290,7 +302,7 @@ printf "<!-- Display image in righthand corner -->
     </font>
   </td></tr>
 </table>
-\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $sourceServer, $asmId, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
+\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $sourceServer, $accessionDir, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
 }
 
 my $sciNameUnderscore = $orgName;
@@ -301,14 +313,13 @@ printf "<p>
 <b>Common name:</b>&nbsp;%s<br>
 <b>Taxonomic name: %s, taxonomy ID:</b> <a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s' target='_blank'> %s</a><br>
 <b>Sequencing/Assembly provider ID:</b> %s<br>
-<b>Vertebrate Genomes Project information:</b> <a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a><br>
 <b>Assembly date:</b> %s<br>
 <b>Assembly type:</b> %s<br>
 <b>Assembly level:</b> %s<br>
 <b>Biosample:</b> <a href=\"https://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\">%s</a><br>
 <b>Assembly accession ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
 <b>Assembly FTP location:</b> <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/all/%s\" target=\"_blank\">%s</a><br>
-\n", $commonName, $orgName, $taxId, $taxId, $submitter, $sciNameUnderscore, $orgName, $asmDate, $descrAsmType,
+\n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
   $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $newStyleUrl, $newStyleUrl;
 
 chromSizes($chromSizes);
@@ -318,60 +329,64 @@ printf "</p>\n<hr>
 <b>Download files for this assembly hub:</b><br>
 To use the data from this assembly for a local hub instance at your
 institution, download these data as indicated by these instructions.<br>
-See also: <a href='/goldenPath/help/hgTrackHubHelp.html' target=_blank>track hub help</a> documentation.<br>
 <br>
 To download this assembly data, use this <em>rsync</em> command:
 <pre>
-  rsync -a -P rsync://$sourceServer/hubs/VGP/genomes/$asmId/ ./$asmId/
+  rsync -a -P \\
+    rsync://$sourceServer/hubs/$localDataUrl/ \\
+      ./$accessionId/
 
-  which creates the local directory: ./$asmId/
+  which creates the local directory: ./$accessionId/
 </pre>
 or this <em>wget</em> command:
 <pre>
-  wget --timestamping -m -nH -x --cut-dirs=4 -e robots=off -np -k \\
-    --reject \"index.html*\" -P \"$asmId\" \\
-       https://$sourceServer/hubs/VGP/genomes/$asmId/
+  wget --timestamping -m -nH -x --cut-dirs=6 -e robots=off -np -k \\
+    --reject \"index.html*\" -P \"$accessionId\" \\
+       https://$sourceServer/hubs/$localDataUrl/
 
-  which creates a local directory: ./$asmId/
+  which creates a local directory: ./$accessionId/
 </pre>
-<br>
-There is an included $asmId.genomes.txt file in that download
-data to use for your local track hub instance.<br>
-You will need to add a hub.txt file to point to this genomes.txt file.<br>
-Something like:
-<pre>
-hub myLocalHub
-shortLabel myLocalHub
-longLabel genomes from Vertebrate Genomes Project assemblies
-genomesFile $asmId.genomes.txt
-email yourEmail\@yourdomain.edu
-descriptionUrl html/$asmId.description.html
-</pre>
+<p>
+There is an included <em>hub.txt</em> file in that download
+data directory to use for your local track hub instance.<br>
+Using the genome browser menus: <em><strong>My Data</strong> -&gt; <strong>Track Hubs</strong></em><br>
+select the <em><strong>My Hubs</strong></em> tab to enter a URL
+to this hub.txt file to attach this assembly hub to a genome browser.
+</p>
+<p>
 The <em>html/$asmId.description.html</em> page is information for your users to
 describe this assembly.  This WEB page with these instructions
 is an instance of html/$asmId.description.html file.
+</p>
+<p>
+See also: <a href='/goldenPath/help/hgTrackHubHelp.html' target=_blank>track hub help</a> documentation.<br>
 </p>\n";
 
 printf "<hr>
 <p>
 To operate a blat server on this assembly, in the directory where you have
-the $asmId.2bit file:
+the <em>$asmId.2bit</em> file:
 <pre>
-gfServer -log=%s.gfServer.trans.log -ipLog -canStop start \\
-    yourserver.domain.edu 76543 -trans -mask %s.2bit &
-gfServer -log=%s.gfServer.log -ipLog -canStop start \\
-    yourserver.domain.edu 76542 -stepSize=5 %s.2bit &
+gfServer -log=$asmId.gfServer.trans.log -ipLog -canStop start \\
+    yourserver.domain.edu 76543 -trans -mask $asmId.2bit &
+gfServer -log=$asmId.gfServer.log -ipLog -canStop start \\
+    yourserver.domain.edu 76542 -stepSize=5 $asmId.2bit &
 </pre>
 Adjust the port numbers <em>76543</em> <em>76542</em> and the
 <em>yourserver.domain.edu</em> for your local circumstances.<br>
-Enter the following specifications in your genomes.txt file:
+Typically, port numbers in the range <em>49152</em> to <em>65535</em>
+are available for private use as in this case.
+See also: <a href='https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml' target=_blank>IANA.org</a> port registry.
+</p>
+<p>
+Enter the following specifications in your <em>genomes.txt</em> file:
 <pre>
 transBlat yourserver.domain.edu 76543
 blat yourserver.domain.edu 76542
 </pre>
 See also: <a href=\"https://genome.ucsc.edu/goldenPath/help/hubQuickStartAssembly.html#blat\"
 target=_blank>Blat for an Assembly Hub</a>
-</p>\n", $asmId, $asmId, $asmId, $asmId;
+</p>\n";
 
 printf "<hr>
 <p>

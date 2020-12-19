@@ -1,0 +1,97 @@
+hub proof
+useOneFile on
+shortLabel superTracks
+longLabel Proof of SuperTrack Settings
+email email@email.com
+
+genome hg38
+
+    # parent on + visibility xxx means that the track is hidden
+    # parent on should not be allowed on children of supertracks
+    track maxFolder
+    superTrack on
+    shortLabel maxFolder
+    longLabel maxFolder
+    type bed 4
+
+        track max1
+        parent maxFolder on
+        visibility dense
+        shortLabel max1
+        longLabel max1
+        type bigBed
+        bigDataUrl http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bigBed
+
+
+        track max2
+        parent maxFolder on
+        visibility hide
+        shortLabel max2
+        longLabel max2
+        type bigBed
+        bigDataUrl http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bigBed
+
+    # without parent on it works fine
+    track myFolderA
+    superTrack on show
+    shortLabel My Folder A
+    longLabel My folder A keeps my tracks together
+
+        track myFirstTrackA
+        parent myFolderA
+        visibility dense
+        shortLabel Ex1 Track1
+        longLabel Ex1 Track1
+        type bigBed
+        bigDataUrl http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bigBed
+
+
+        track mySecondTrackA
+        parent myFolderA
+        visibility hide
+        shortLabel Ex2 Track2
+        longLabel Ex2 Track2
+        type bigBed
+        bigDataUrl http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bigBed
+
+    # without "parent on" it works
+    # though this is depreated syntax
+    track myFolderB
+    superTrack on show
+    shortLabel My Folder B
+    longLabel My folder B keeps my tracks together
+
+        track myFirstTrackB
+        parent myFolderB dense
+        shortLabel Ex2 Track1
+        longLabel Ex2 Track1
+        type bigBed
+        bigDataUrl http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bigBed
+
+
+        track mySecondTrackB
+        parent myFolderB hide
+        shortLabel Ex2 Track2
+        longLabel Ex2 Track2
+        type bigBed
+        bigDataUrl http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bigBed
+
+    # this is deprecated syntax
+    track myFolderC
+    superTrack on show
+    shortLabel My Folder C
+    longLabel My folder C keeps my tracks together
+
+        track myFirstTrackC
+        superTrack myFolderC dense
+        shortLabel Ex3 Track1
+        longLabel Ex3 Track1
+        type bigBed
+        bigDataUrl http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bigBed
+
+        track mySecondTrackC
+        superTrack myFolderC hide
+        shortLabel Ex3 Track2
+        longLabel Ex3 Track2
+        type bigBed
+        bigDataUrl http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bigBed 

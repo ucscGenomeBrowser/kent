@@ -1,0 +1,108 @@
+track strainCons119way
+compositeTrack on
+shortLabel 119 Vertebrate CoVs
+longLabel Multiz Alignment & Conservation (119 strains: strains with vertebrate hosts and human SARS-Cov2)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility hide
+priority 2
+type bed 4
+group compGeno
+html cons119way
+
+    track strainCons119wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack strainCons119way
+
+        track strainName119way
+        subTrack strainCons119wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignment of 119 strains: red=nonsyn green=syn blue=noncod yellow=noalign
+        subGroups view=align
+        noInherit on
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        mafDot on
+	snpTable mafSnpStrainName119way
+        frames strainName119wayFrames
+	mafShowSnp on
+        type wigMaf 0.0 1.0
+        speciesCodonDefault wuhCor1
+        speciesGroups SARS-CoV-2_sequences Other_CoV_sequences_from_vertebrate_hosts
+        sGroup_SARS-CoV-2_sequences SARS-CoV-2/CA6/human/2020/USA WIV04 BetaCoV/Wuhan/IPBCAMS-WH-04/2019 2019-nCoV_WHU01 BetaCoV/Wuhan/WH-03/2019 WIV06 BetaCoV/Wuhan/YS8011/2020 BetaCoV/Hangzhou/HZ-1/2020_20cov-1L 2019-nCoV/USA-CA8/2020 BetaCoV/Wuhan/WH19008/2019 BetaCoV/Wuhan/WH19005/2019 BetaCoV/Wuhan/IPBCAMS-WH-02/2019 SARS0CoV-2/61-TW/human/2020/NPL SARS-CoV-2/WH-09/human/2020/CHN 2019-nCoV/USA-WI1/2020 2019-nCoV_HKU-SZ-002a_2020 2019-nCoV/USA-WA1/2020 Taiwan/NTU01/2020 BetaCoV/Wuhan/WH-04/2019 2019-nCoV/Japan/TY/WK-521/2020 2019-nCoV/Japan/TY/WK-501/2020 2019-nCoV/Japan/TY/WK-012/2020 2019-nCoV_HKU-SZ-005b_2020 2019-nCoV/USA-CA7/2020 SARS-CoV-2/IQTC04/human/2020/CHN SARS-CoV-2/105/human/2020/CHN SARS-CoV-2/233/human/2020/CHN SARS-CoV-2/Hu/DP/Kng/19-027 SARS-CoV-2/Hu/DP/Kng/19-020 SARS-CoV-2/SP02/human/2020/BRA 2019-nCoV/USA-AZ1/2020 SARS-CoV-2/Yunnan-01/human/2020/CHN BetaCoV/Finland/1/2020 2019-nCoV/USA-IL1/2020 BetaCoV/Korea/SNU01/2020 SARS-CoV-2/01/human/2020/SWE 2019-nCoV/USA-MA1/2020 SARS-CoV-2/WA2/human/2020/USA SARS-CoV-2/IL2/human/2020/USA 2019-nCoV/USA-CA3/2020 2019-nCoV/USA-CA2/2020 BetaCoV/Australia/VIC01/2020 2019-nCoV/USA-TX1/2020 SARS-CoV-2/IQTC03/human/2020/CHN SARS-CoV-2/IQTC02/human/2020/CHN BetaCoV/Wuhan/IPBCAMS-WH-01/2019 WIV07 2019-nCoV/USA-CA5/2020 2019-nCoV/USA-CA1/2020 BetaCoV/Wuhan/WH-01/2019 WIV05 2019-nCoV/Japan/KY/V-029/2020 BetaCoV/Japan/AI/I-004/2020 BetaCov/Taiwan/NTU02/2020 BetaCoV/Wuhan/IPBCAMS-WH-03/2019 2019-nCoV/USA-CA9/2020 BetaCoV/Wuhan/IPBCAMS-WH-05/2020 BetaCoV/Wuhan/WH19004/2020 WIV02 SARS-CoV-2/IQTC01/human/2020/CHN BetaCoV/Wuhan/WH-02/2019 BetaCoV/Wuhan/WH19002/2019
+        sGroup_Other_CoV_sequences_from_vertebrate_hosts Bat_CoV_TG13 Pangolin-CoV-2020_MP789 Bat_CoV_BM48-31/BGR/2008 Wencheng_Sm_shrew_CoV_Xingguo-101 Bat_CoV_HKU4-1 Beluga_Whale_CoV_SW1 Wigeon_CoV_HKU20 Avian_infectious_bronchitis_virus BetaCoV_HKU24_strain_HKU24-R05005I Turkey_CoV BetaCoV_ErinaceusCoV/VMC/2012-174/GER/2012 Bat_Hp-betaCoV/Zhejiang2013 BetaCoV_England_1 MERS_Middle_East_respiratory_syndrome_CoV Rabbit_CoV_HKU14 Night-heron_CoV_HKU19 Bovine_CoV Bat_CoV_PREDICT/PDF-2180 Bat_CoV_HKU5-1 Human_CoV_OC43_strain_ATCC_VR-759 Common-moorhen_CoV_HKU21 Bulbul_CoV_HKU11-934 Human_CoV_HKU1 Bat_CoV_HKU9-1 Rat_CoV_Parker BtMr-AlphaCoV/SAX2011 Mouse_hepatitis_virus_strain_MHV-A59_C12_mutant Magpie-robin_CoV_HKU18 Rousettus_bat_CoV_HKU10 Rousettus_bat_CoV_GCCDC1_356 Sparrow_CoV_HKU17 Porcine_CoV_HKU15_strain_HKU15-155 Munia_CoV_HKU13-3514 Human_CoV_229E White-eye_CoV_HKU16 Coronavirus_AcCoV-JC34 Camel_alphaCoV_camel/Riyadh/Ry141/2015 Human_Coronavirus_NL63 Mink_CoV_strain_WD1127 Ferret_CoV_FRCoV-NL-2010 Porcine_epidemic_diarrhea_virus Scotophilus_bat_CoV_512 NL63-related_bat_CoV_strain_BtKYNL63-9a Bat_CoV_HKU8 Bat_CoV_CDPHE15/USA/2006 Thrush_CoV_HKU12-600 BtRf-AlphaCoV/HuB2013 Lucheng_Rn_rat_CoV_Lucheng-19 Bat_CoV_HKU2 BtNv-AlphaCoV/SC2013 Swine_enteric_CoV_strain_Italy/213306/2009 Transmissible_gastroenteritis_virus Bat_CoV_1A Feline_infectious_peritonitis_virus BtRf-AlphaCoV/YN2012 SARS_CoV
+        speciesDefaultOff 2019-nCoV_WHU01 WIV04 BetaCoV/Wuhan/IPBCAMS-WH-04/2019 BetaCoV/Wuhan/WH-03/2019 WIV06 BetaCoV/Hangzhou/HZ-1/2020_20cov-1L BetaCoV/Wuhan/YS8011/2020 BetaCoV/Wuhan/IPBCAMS-WH-05/2020 2019-nCoV/USA-CA8/2020 2019-nCoV/USA-CA9/2020 BetaCoV/Wuhan/WH19008/2019 BetaCoV/Wuhan/IPBCAMS-WH-03/2019 BetaCoV/Wuhan/WH19005/2019 BetaCoV/Wuhan/IPBCAMS-WH-02/2019 SARS0CoV-2/61-TW/human/2020/NPL SARS-CoV-2/WH-09/human/2020/CHN 2019-nCoV/USA-WI1/2020 2019-nCoV/USA-CA5/2020 2019-nCoV/USA-CA2/2020 BetaCoV/Wuhan/WH19004/2020 BetaCov/Taiwan/NTU02/2020 SARS-CoV-2/Hu/DP/Kng/19-020 SARS-CoV-2/Hu/DP/Kng/19-027 WIV07 WIV05 SARS-CoV-2/CA6/human/2020/USA BetaCoV/Wuhan/WH-01/2019 WIV02 2019-nCoV/USA-CA3/2020 SARS-CoV-2/IQTC01/human/2020/CHN BetaCoV/Japan/AI/I-004/2020 2019-nCoV/Japan/KY/V-029/2020 BetaCoV/Wuhan/IPBCAMS-WH-01/2019 SARS-CoV-2/SP02/human/2020/BRA BetaCoV/Australia/VIC01/2020 SARS-CoV-2/Yunnan-01/human/2020/CHN SARS-CoV-2/IQTC04/human/2020/CHN BetaCoV/Finland/1/2020 2019-nCoV/USA-CA7/2020 SARS-CoV-2/105/human/2020/CHN SARS-CoV-2/233/human/2020/CHN 2019-nCoV_HKU-SZ-005b_2020 SARS-CoV-2/WA2/human/2020/USA 2019-nCoV/USA-MA1/2020 2019-nCoV/Japan/TY/WK-521/2020 2019-nCoV/Japan/TY/WK-012/2020 2019-nCoV/Japan/TY/WK-501/2020 2019-nCoV_HKU-SZ-002a_2020 2019-nCoV/USA-WA1/2020 2019-nCoV/USA-AZ1/2020 2019-nCoV/USA-TX1/2020 SARS-CoV-2/IQTC02/human/2020/CHN SARS-CoV-2/IQTC03/human/2020/CHN BetaCoV/Wuhan/WH-04/2019 Taiwan/NTU01/2020 2019-nCoV/USA-CA1/2020 SARS-CoV-2/IL2/human/2020/USA SARS-CoV-2/01/human/2020/SWE 2019-nCoV/USA-IL1/2020 BetaCoV/Korea/SNU01/2020 BetaCoV/Wuhan/WH-02/2019 BetaCoV/Wuhan/WH19002/2019 Bat_CoV_TG13 
+        speciesDefaultOn Bat_CoV_TG13 Pangolin-CoV-2020_MP789 Bat_CoV_BM48-31/BGR/2008 Wencheng_Sm_shrew_CoV_Xingguo-101 Bat_CoV_HKU4-1 Beluga_Whale_CoV_SW1 Wigeon_CoV_HKU20 Avian_infectious_bronchitis_virus BetaCoV_HKU24_strain_HKU24-R05005I Turkey_CoV BetaCoV_ErinaceusCoV/VMC/2012-174/GER/2012 Bat_Hp-betaCoV/Zhejiang2013 BetaCoV_England_1 MERS_Middle_East_respiratory_syndrome_CoV Rabbit_CoV_HKU14 Night-heron_CoV_HKU19 Bovine_CoV Bat_CoV_PREDICT/PDF-2180 Bat_CoV_HKU5-1 Human_CoV_OC43_strain_ATCC_VR-759 Common-moorhen_CoV_HKU21 Bulbul_CoV_HKU11-934 Human_CoV_HKU1 Bat_CoV_HKU9-1 Rat_CoV_Parker BtMr-AlphaCoV/SAX2011 Mouse_hepatitis_virus_strain_MHV-A59_C12_mutant Magpie-robin_CoV_HKU18 Rousettus_bat_CoV_HKU10 Rousettus_bat_CoV_GCCDC1_356 Sparrow_CoV_HKU17 Porcine_CoV_HKU15_strain_HKU15-155 Munia_CoV_HKU13-3514 Human_CoV_229E White-eye_CoV_HKU16 Coronavirus_AcCoV-JC34 Camel_alphaCoV_camel/Riyadh/Ry141/2015 Human_Coronavirus_NL63 Mink_CoV_strain_WD1127 Ferret_CoV_FRCoV-NL-2010 Porcine_epidemic_diarrhea_virus Scotophilus_bat_CoV_512 NL63-related_bat_CoV_strain_BtKYNL63-9a Bat_CoV_HKU8 Bat_CoV_CDPHE15/USA/2006 Thrush_CoV_HKU12-600 BtRf-AlphaCoV/HuB2013 Lucheng_Rn_rat_CoV_Lucheng-19 Bat_CoV_HKU2 BtNv-AlphaCoV/SC2013 Swine_enteric_CoV_strain_Italy/213306/2009 Transmissible_gastroenteritis_virus Bat_CoV_1A Feline_infectious_peritonitis_virus BtRf-AlphaCoV/YN2012 SARS_CoV
+        itemFirstCharCase noChange
+        priority 100
+        treeImage phylo/wuhCor1_119way.png
+
+    # PhyloP conservation
+    track strainCons119wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility hide
+    subTrack strainCons119way
+    viewLimits -4:5
+    viewLimitsMax -7.405:20
+
+        track strainPhyloP119way
+        subTrack strainCons119wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel PhyloP
+        longLabel 119 virus strains Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -7.405 20
+        maxHeightPixels 100:50:11
+        viewLimits -7.405:20
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track strainCons119wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility dense
+    subTrack strainCons119way
+
+        track strainPhastCons119way
+        subTrack strainCons119wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel PhastCons
+        longLabel 119 virus strains Basewise Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    #track strainCons119wayViewelements
+    #shortLabel Conserved Elements
+    #view elements
+    #visibility dense
+    #subTrack strainCons119way
+
+        #track strainPhastConsElements119way
+        #subTrack strainCons119wayViewelements on
+        #subGroups view=elements
+        #shortLabel Cons. Elements
+        #longLabel 119 virus strains Conserved Elements
+        #noInherit on
+        #color 110,10,40
+        #type bed 5 .
+        #priority 23

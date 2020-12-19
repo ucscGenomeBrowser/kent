@@ -1,0 +1,166 @@
+track assembly_
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
+type bigBed 6
+longLabel Assembly
+urlLabel NCBI Nucleotide database
+color 150,100,30
+altColor 230,170,40
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.assembly.bb
+priority 10
+html http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/assembly
+group map
+shortLabel Assembly
+visibility pack
+colorByStrand 150,100,30 230,170,40
+
+track gap_
+type bigBed 4
+longLabel Gap
+color 0,0,0
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.gap.bb
+priority 11
+html http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/gap
+group map
+shortLabel Gap
+visibility dense
+
+track gc5Base_
+type bigWig 0 100
+longLabel GC Percent in 5-Base Windows
+viewLimits 30:70
+autoScale Off
+color 0,0,0
+altColor 128,128,128
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.gc5Base.bw
+priority 23.5
+graphTypeDefault Bar
+html http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/trackDescriptions/gc5Base
+gridDefault OFF
+group map
+maxHeightPixels 128:36:16
+windowingFunction Mean
+shortLabel GC Percent
+visibility full
+
+track simpleRepeat_
+type bigBed 4 +
+longLabel Simple Tandem Repeats by TRF
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.simpleRepeat.bb
+priority 149.3
+html http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/trackDescriptions/simpleRepeat
+group varRep
+shortLabel Simple Repeats
+visibility dense
+
+track genscan_
+type bigBed 12 .
+longLabel Genscan Gene Predictions
+color 170,100,0
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.genscan.bb
+priority 50
+html http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/trackDescriptions/genscan
+group genes
+shortLabel Genscan Genes
+visibility pack
+
+track cpgIslandComposite
+shortLabel compLabel
+longLabel compLabel
+compositeTrack on
+subGroup1 view Views cpgIslandView
+
+    track cpgIslandViewTrack
+    view cpgIslandView
+    parent cpgIslandComposite
+    type bigBed
+    shortLabel viewLabel
+    longLabel viewLabel
+
+        track cpgIslandExt_
+        parent cpgIslandView
+        type bigBed 4 +
+        longLabel CpG Islands (Islands < 300 Bases are Light Green)
+        color 0,100,0
+        altColor 128,228,128
+        bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.cpgIslandExt.bb
+        priority 90
+        html http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/trackDescriptions/cpgIslandExt
+        group regulation
+        shortLabel CpG Islands
+        visibility pack
+        subGroups view=cpgIslandView
+
+track repeatMasker_
+noInherit on
+type bed 3 .
+longLabel Repeating Elements by RepeatMasker
+priority 149.1
+compositeTrack on
+html http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/trackDescriptions/repeatMasker
+group varRep
+shortLabel RepeatMasker
+visibility dense
+
+track repeatMaskerRNA_
+type bigBed 6 +
+longLabel RNA Repeating Elements by RepeatMasker
+parent repeatMasker_
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.rmsk.RNA.bb
+priority 1
+maxWindowToDraw 10000000
+spectrum on
+shortLabel RNA
+colorByStrand 50,50,150 150,50,50
+
+track repeatMaskerSimple_
+type bigBed 6 +
+longLabel Simple Repeating Elements by RepeatMasker
+parent repeatMasker_
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.rmsk.Simple.bb
+priority 2
+maxWindowToDraw 10000000
+spectrum on
+shortLabel Simple
+colorByStrand 50,50,150 150,50,50
+
+track repeatMaskerLowComplexity_
+type bigBed 6 +
+longLabel Low Complexity Repeating Elements by RepeatMasker
+parent repeatMasker_
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.rmsk.LowComplexity.bb
+priority 3
+maxWindowToDraw 10000000
+spectrum on
+shortLabel Low Complexity
+colorByStrand 50,50,150 150,50,50
+
+track repeatMaskerOther_
+type bigBed 6 +
+longLabel Other Repeating Elements by RepeatMasker
+parent repeatMasker_
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.rmsk.Other.bb
+priority 4
+maxWindowToDraw 10000000
+spectrum on
+shortLabel Other
+colorByStrand 50,50,150 150,50,50
+
+track windowMasker
+type bigBed 3 .
+longLabel Genomic Intervals Masked by WindowMasker + SDust
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.windowMasker.bb
+priority 149.26
+html http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/trackDescriptions/windowMasker
+group varRep
+shortLabel WM + SDust
+visibility dense
+
+track lastzAraTha1
+type bigBed 12 .
+longLabel lastz chain to araTha1
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/lastzRicCom1ToAraTha1.bb
+priority 150
+group compGeno
+shortLabel lastz araTha1
+visibility dense
+

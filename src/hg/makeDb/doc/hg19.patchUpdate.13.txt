@@ -157,6 +157,14 @@
     cd ..
     faSplit byname /hive/data/genomes/grcH37P13/goldenPath/bigZips/grcH37P13.fa.masked.gz \
       maskedChroms/
+# NOTE FOR NEXT TIME: fix up names, .fa --> .fa.masked like this:
+    cd maskedChroms
+    for f in *.fa; do
+      mv $f $f.masked
+    done
+    cd ..
+# END NEXT TIME
+
     ls -1 maskedChroms | wc -l
 #297
     tar cvzf p13/hg19.p13.chromFaMasked.tar.gz ./maskedChroms
@@ -171,6 +179,9 @@
     | tail -n +4 \
     | splitFileByColumn -col=5 -chromDirs -head=RepeatMaskerHeader.txt -ending=.out \
       stdin .
+# NOTE FOR NEXT TIME: clean up this file:
+    rm RepeatMaskerHeader.txt
+# END NEXT TIME
     tar cvzf ../p13/hg19.p13.chromOut.tar.gz *
     cd ..
     rm -r out
@@ -226,6 +237,8 @@
     | grep -E '_(alt|fix|hap.*)$' \
     | sed -re 's/^/hg19.2bit:/;' \
       > hg19.altsAndFixes.p13
+    # Link for blat server installation convenience:
+    ln -sf hg19.altsAndFixes.p13 altsAndFixes
 
 
 #############################################################################

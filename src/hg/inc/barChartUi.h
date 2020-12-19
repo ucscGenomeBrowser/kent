@@ -26,7 +26,7 @@
 #define BAR_CHART_MAX_VIEW_LIMIT_DEFAULT     50
 
 /* Category (bar) info */
-#define BAR_CHART_MAX_CATEGORIES        100
+#define BAR_CHART_MAX_CATEGORIES        1000
 
 /* Category filter */
 #define BAR_CHART_CATEGORY_SELECT      "categories"
@@ -38,6 +38,9 @@
 
 /* Colors for categories */
 #define BAR_CHART_CATEGORY_COLORS        "barChartColors"
+
+/* Labels and colors */
+#define BAR_CHART_CATEGORY_URL          "barChartCategoryUrl"
 
 /* Units to display on bar mouseover */
 #define BAR_CHART_UNIT                   "barChartUnit"
@@ -55,6 +58,7 @@
 #define BAR_CHART_MAX_GRAPH_SIZE_MEDIUM          "medium"
 #define BAR_CHART_MAX_GRAPH_SIZE_LARGE           "large"
 #define BAR_CHART_MAX_GRAPH_SIZE_DEFAULT          BAR_CHART_MAX_GRAPH_SIZE_LARGE
+#define BAR_CHART_SIZE_WINDOWS                   "barChartSizeWindows"
 
 void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
                         char *title, boolean boxed);

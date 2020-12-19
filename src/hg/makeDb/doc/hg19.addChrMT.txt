@@ -1,0 +1,552 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how hg19 was extended with the rCRS mitochondrial sequence (NC_012920) as chrMT
+# Redmine #24648
+
+##############################################################################
+# Get NC_012920.1 sequence, rename to chrMT. (DONE - 2020-01-14 - Angie)
+    mkdir /hive/data/genomes/hg19/MT
+    cd /hive/data/genomes/hg19/MT
+    wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/current/GCF_000001405.39_GRCh38.p13/GCF_000001405.39_GRCh38.p13_assembly_structure/non-nuclear/assembled_chromosomes/FASTA/chrMT.fna.gz
+    wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/current/GCF_000001405.39_GRCh38.p13/GCF_000001405.39_GRCh38.p13_assembly_structure/non-nuclear/assembled_chromosomes/AGP/chrMT.comp.agp.gz
+    zcat chrMT.fna.gz \
+    | sed -e 's/^>NC_012920.1.*/>chrMT/' \
+      > chrMT.fa
+    zcat chrMT.comp.agp.gz \
+    | grep -v ^# \
+    | sed -e 's/^NC_012920.1/chrMT/' \
+      > chrMT.agp
+
+
+##############################################################################
+# Basic annotations (makeGenomeDb.pl, masking) (DONE - 2020-01-14 - Angie)
+
+    # For patches, we make a new-patch-only "db" like grcH37P13 and run makeGenomeDb.pl,
+    # doRepeatMasker.pl etc. to generate the usual set of basic annotations.
+    # chrMT is so little, just run the base commands instead of the big cluster run pipelines.
+
+    # Note, we're not loading the database tables just yet; do that after 2bit and chromInfo.
+    # We need to mask the sequence before we can update the 2bit
+
+    # Add AGP info to gold table (nothing to add to gap).
+    cd /hive/data/genomes/hg19
+    hgGoldGapGl -noLoad -noGl -chrom=chrMT hg19 . .
+    ls -l chrMT*tab
+#-rw-rw-r-- 1 angie genecats  0 Jan 14 13:37 chrMT_gap.tab
+#-rw-rw-r-- 1 angie genecats 44 Jan 14 13:37 chrMT_gold.tab
+
+    # RepeatMasker
+    cd /hive/data/genomes/hg19/MT
+    /scratch/data/RepeatMasker/RepeatMasker -engine crossmatch -s -align -species 'Homo sapiens' \
+      chrMT.fa
+    hgLoadOut -tabFile=chrMT.rmsk.tab hg19 chrMT.fa.out
+    wc -l chrMT.rmsk.tab
+#5 chrMT.rmsk.tab
+
+    # SimpleRepeat (no results)
+    trfBig -trf=/cluster/bin/$MACHTYPE/trf \
+      chrMT.fa /dev/null -bedAt=chrMT.trf.bed -tempDir=/dev/shm
+    ls -l chrMT.trf.bed
+#-rw-rw-r-- 1 angie genecats 0 Jan 14 14:00 chrMT.trf.bed
+
+    # WindowMasker & SDust
+    windowmasker -ustat ../bed/windowMasker/windowmasker.counts \
+      -input chrMT.fa -output windowmasker.intervals
+    perl -wpe 'if (s/^>lcl\|(.*)\n$//) { $chr = $1; }
+               if (/^(\d+) - (\d+)/) {
+                 $s=$1; $e=$2+1; s/(\d+) - (\d+)/$chr\t$s\t$e/;
+               }' windowmasker.intervals > windowmasker.bed
+    wc -l windowmasker.bed
+#28 windowmasker.bed
+    windowmasker -ustat ../bed/windowMasker/windowmasker.counts -sdust true -input chrMT.fa \
+      -output windowmasker.sdust.intervals
+    perl -wpe 'if (s/^>lcl\|(.*)\n$//) { $chr = $1; $chr =~ s/\s*$//; }
+               if (/^(\d+) - (\d+)/) {
+                 $i++;
+                 $s=$1; $e=$2+1; s/(\d+) - (\d+)/$chr\t$s\t$e\t$chr.$i/;
+               }' windowmasker.sdust.intervals > windowmasker.sdust.bed
+    wc -l windowmasker.sdust.bed
+#36 windowmasker.sdust.bed
+
+    # Make masked and unmasked .2bit (just RepeatMasker, nothing to add from TRF/SimpleRepeat)
+    # chrMT.fa is unmasked, but just to be safe:
+    faToTwoBit -noMask chrMT.fa chrMT.unmasked.2bit
+    twoBitMask chrMT.unmasked.2bit chrMT.fa.out chrMT.masked.2bit
+
+    # hgGcPercent
+    echo -e "chrMT\t16569" > chrMT.sizes
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 hg19 chrMT.unmasked.2bit \
+    | wigToBigWig stdin chrMT.sizes chrMT.gc5Base.bw
+
+    # CpG Islands (none)
+    twoBitToFa chrMT.masked.2bit stdout \
+    | maskOutFa stdin hard chrMT.hardMasked.fa
+    /hive/data/staging/data/cpgIslandExt/cpglh chrMT.hardMasked.fa > chrMT.cpg
+    wc -l chrMT.cpg
+#0 chrMT.cpg
+
+    # GenScan has a couple predictions on chrM:
+    hgsql hg19 -NBe 'select count(*) from genscan where chrom = "chrM";'
+#2
+    gsBig chrMT.hardMasked.fa chrMT.genscan.gtf -trans=chrMT.genscan.pep \
+      -subopt=chrMT.genscan.subopt.bed \
+      -exe=/hive/data/staging/data/genscan/genscan \
+      -par=/hive/data/staging/data/genscan/HumanIso.smat -tmp=/dev/shm -window=2400000
+    wc -l chrMT.genscan*
+#  3 chrMT.genscan.gtf
+#  8 chrMT.genscan.pep
+#  4 chrMT.genscan.subopt.bed
+
+    # Augustus (none for chrM, don't bother)
+    hgsql hg19 -NBe 'select count(*) from augustusGene where chrom = "chrM";'
+#0
+
+##############################################################################
+# Extend main database 2bit, chrom.sizes, chromInfo (TODO - 2020-01-15 - Angie)
+
+    # main 2bit
+    cd /hive/data/genomes/hg19
+    time faToTwoBit <(twoBitToFa hg19.2bit stdout) <(twoBitToFa MT/chrMT.masked.2bit stdout) \
+           hg19.p13.plusMT.2bit
+#real    2m13.176s
+
+    # unmasked 2bit
+    time twoBitMask -type=.bed hg19.p13.plusMT.2bit /dev/null hg19.p13.plusMT.unmasked.2bit
+#real    0m3.220s
+
+    # chrom.sizes
+    twoBitInfo hg19.p13.plusMT.2bit stdout \
+    | sort -k 2nr,2nr > chrom.sizes.p13.plusMT
+
+    # chromInfo
+    cd /hive/data/genomes/hg19/bed/chromInfo
+    awk '{print $1 "\t" $2 "\t/gbdb/hg19/hg19.2bit";}' ../../chrom.sizes.p13.plusMT \
+      > chromInfo.p13.plusMT.tab
+    wc -l chromInfo*.tab
+#  298 chromInfo.p13.plusMT.tab
+#  297 chromInfo.p13.tab
+#   93 chromInfo.tab
+
+    # Install
+    cd /hive/data/genomes/hg19
+    ln -sf hg19.p13.plusMT.2bit hg19.2bit
+    ln -sf hg19.p13.plusMT.unmasked.2bit hg19.unmasked.2bit
+    ln -sf chrom.sizes.p13.plusMT chrom.sizes
+
+    cd /hive/data/genomes/hg19/bed/chromInfo
+    hgLoadSqlTab hg19 chromInfo $HOME/kent/src/hg/lib/chromInfo.sql chromInfo.p13.plusMT.tab
+
+
+##############################################################################
+# Extend main database tables for fileless tracks (DONE - 2020-01-15 - Angie)
+
+    # Assembly (gold)
+    cd /hive/data/genomes/hg19
+    hgGoldGapGl -noGl -chrom=chrMT hg19 . .
+    # Oops, it loaded chrMT_{gap,gold}.  (gap empty as expected)
+    hgsql hg19 -NBe 'select count(*) from chrMT_gap;  select count(*) from chrMT_gold;'
+#0
+#1
+    hgsql hg19 -e 'insert into gold select * from chrMT_gold;
+                   drop table chrMT_gap;  drop table chrMT_gold;'
+
+    cd /hive/data/genomes/hg19/MT
+    # RepeatMasker
+    hgLoadSqlTab -oldTable hg19 rmsk $HOME/kent/src/hg/lib/rmsk.sql chrMT.rmsk.tab
+
+    # Nothing to load for TRF/simpleRepeat.
+    # hgLoadBed hg19 simpleRepeat chrMT.trf.bed \
+    #     -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+    # WindowMasker/SDust<
+    hgLoadBed -oldTable hg19 windowmaskerSdust windowmasker.sdust.bed
+
+    # Genscan
+    ldHgGene -oldTable -gtf hg19 genscan chrMT.genscan.gtf
+    hgLoadBed -oldTable hg19 genscanSubopt chrMT.genscan.subopt.bed
+
+    # Nothing to load for CpG Islands or Augustus
+
+
+##############################################################################
+# Extend main database gc5BaseBw.bw (DONE - 2020-01-15 - Angie)
+
+    cd /hive/data/genomes/hg19/bed/gc5Base/
+    time (cat <(zcat hg19.p13.gc5Base.wigVarStep.gz) \
+              <(bigWigToWig ../../MT/chrMT.gc5Base.bw stdout) \
+          | gzip -c \
+            > hg19.p13.plusMT.gc5Base.wigVarStep.gz)
+#real    5m46.441s
+    time wigToBigWig hg19.p13.plusMT.gc5Base.wigVarStep.gz ../../chrom.sizes.p13.plusMT \
+      hg19.p13.plusMT.gc5Base.bw
+#real    12m42.190s
+    # Install
+    cd /hive/data/genomes/hg19/bed/gc5Base/
+    ln -sf hg19.p13.plusMT.gc5Base.wigVarStep.gz hg19.gc5Base.wigVarStep.gz
+    ln -sf hg19.p13.plusMT.gc5Base.bw hg19.gc5Base.bw
+    ln -sf /hive/data/genomes/hg19/bed/gc5Base/hg19.gc5Base.wigVarStep.gz \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/gc5Base/hg19.gc5Base.txt.gz
+
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2020-01-15 - Angie)
+    # There is no cytoBand info for these (although... could we map??)
+    # so just make a fake cytoBandIdeo to get a blank ideogram.
+    hgsql hg19 -e 'insert into cytoBandIdeo values ("chrMT", 0, 16569, "", "gneg");'
+
+
+##############################################################################
+# Extend main database download files (DONE - 2020-01-17 - Angie)
+    cd /hive/data/genomes/hg19/goldenPath/bigZips
+    mkdir p13.plusMT
+    # hg19.2bit and chrom.sizes were already extended above.
+    ln -sf /hive/data/genomes/hg19/hg19.p13.plusMT.2bit p13.plusMT/
+    ln -sf /hive/data/genomes/hg19/chrom.sizes.p13.plusMT p13.plusMT/hg19.p13.plusMT.chrom.sizes
+
+    # AGP:
+    cat <(zcat p13/hg19.p13.agp.gz) <(cat ../../MT/chrMT.agp) \
+    | gzip -c > p13.plusMT/hg19.p13.plusMT.agp.gz
+
+    # FASTA
+    twoBitToFa ../../hg19.p13.plusMT.2bit stdout \
+    | gzip -c > p13.plusMT/hg19.p13.plusMT.fa.gz
+    twoBitToFa ../../hg19.p13.plusMT.2bit stdout \
+    | maskOutFa stdin hard stdout \
+    | gzip -c > p13.plusMT/hg19.p13.plusMT.fa.masked.gz
+#TODO
+
+    # RepeatMasker (don't include header of patch file):
+    cat <(zcat p13/hg19.p13.fa.out.gz) \
+        <(cat ../../MT/chrMT.fa.out | tail -n +4) \
+    | gzip -c > p13.plusMT/hg19.p13.plusMT.fa.out.gz
+
+    # SimpleRepeats/TRF: nothing added, just copy.
+    cp p13/hg19.p13.trf.bed.gz p13.plusMT/hg19.p13.plusMT.trf.bed.gz
+
+    # hg19 also has download files with the old tar-bundle structure -- update those too.
+    # Per-chrom AGP:
+    rm -rf agp && mkdir agp && cd agp
+    tar xvzf ../p13/hg19.p13.chromAgp.tar.gz
+    mkdir MT
+    cp ../../../MT/chrMT.agp MT/
+    tar cvzf ../p13.plusMT/hg19.p13.plusMT.chromAgp.tar.gz *
+    cd ..
+    rm -rf agp
+
+    # Per-chrom soft-masked FASTA:
+    rm -rf chroms && mkdir chroms && cd chroms
+    tar xvzf ../p13/hg19.p13.chromFa.tar.gz
+    twoBitToFa ../../../MT/chrMT.masked.2bit chroms/MT.fa
+    ls -1 chroms | wc -l
+#298
+    tar cvzf ../p13.plusMT/hg19.p13.plusMT.chromFa.tar.gz ./chroms
+    cd ..
+    rm -rf chroms
+
+    # Per-chrom hard-masked FASTA:
+    rm -rf maskedChroms && mkdir maskedChroms && cd maskedChroms
+    tar xvzf ../p13/hg19.p13.chromFaMasked.tar.gz
+    twoBitToFa ../../../MT/chrMT.masked.2bit stdout \
+    | maskOutFa stdin hard maskedChroms/chrMT.fa.masked
+    ls -1 maskedChroms | wc -l
+#298
+    tar cvzf ../p13.plusMT/hg19.p13.plusMT.chromFaMasked.tar.gz ./maskedChroms
+    cd ..
+    rm -rf maskedChroms
+
+    # Per-chrom RepeatMasker .out:
+    rm -rf out && mkdir out && cd out
+    tar xvzf ../p13/hg19.p13.chromOut.tar.gz
+    mkdir MT
+    cp -p ../../../MT/chrMT.fa.out MT/
+    ls -1 | wc -l
+#298
+    tar cvzf ../p13.plusMT/hg19.p13.plusMT.chromOut.tar.gz *
+    cd ..
+    rm -r out
+
+    # Per-chrom TRF output: nothing added, just copy.
+    cp p13/hg19.p13.chromTrf.tar.gz p13.plusMT/hg19.p13.plusMT.chromTrf.tar.gz
+
+    # RepeatMasker .align files:
+    cat <(zcat p13/hg19.p13.fa.align.gz) <(cat ../../MT/chrMT.fa.align) \
+    | gzip -c > p13.plusMT/hg19.p13.plusMT.fa.align.gz
+
+    # TODO: regenerate upstream* files for p13.plusMT
+
+    # Make new md5sum.txt
+    cd p13.plusMT
+    md5sum hg19.* > md5sum.txt
+
+    # Edit README.txt
+
+    # Update latest subdir
+    cd /hive/data/genomes/hg19/goldenPath/bigZips
+    mv latest latest.bak
+    mkdir latest
+    cd latest
+    for f in ../p13.plusMT/*; do
+      noV=$(basename $(echo $f | sed -re 's/\.p13\.plusMT//;'))
+      ln -s $f $noV
+    done
+    cd ..
+    rm -rf latest.bak
+
+    # Install
+    ln -s /hive/data/genomes/hg19/goldenPath/bigZips/p13.plusMT \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/
+    rm /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/latest
+    ln -s /hive/data/genomes/hg19/goldenPath/bigZips/latest \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/
+
+    # TODO: /hive/data/genomes/hg19/goldenPath/chromosomes/ ?  Does anybody use that anymore?
+
+
+#############################################################################
+# Don't need to Build perSeqMax file for gfServer (hgBlat) -
+# but don't forget to get new blat servers for the updated hg19.2bit.
+
+
+#########################################################################
+# Regenerate idKeys with extended hg19 (DONE - 2020-01-21 - Angie)
+    mkdir /hive/data/genomes/hg19/bed/idKeys.p13.plusMT
+    cd /hive/data/genomes/hg19/bed/idKeys.p13.plusMT
+    time ($HOME/kent/src/hg/utils/automation/doIdKeys.pl \
+      -twoBit=/hive/data/genomes/hg19/hg19.p13.plusMT.unmasked.2bit \
+      -bigClusterHub=ku -smallClusterHub=ku \
+        -buildDir=`pwd` hg19) > do.log 2>&1 &
+    tail -f do.log
+#real    1m9.967s
+    cat hg19.keySignature.txt
+#3dc697674e89bb99099419f6483b96d5
+
+    # Install
+    cd /hive/data/genomes/hg19/bed/
+    rm -f idKeys
+    ln -s idKeys.p13.plusMT idKeys
+
+
+##############################################################################
+# UCSC to RefSeq, INSDC, Assembly; chromAlias (DONE - 2020-01-21 - Angie)
+    cd /hive/data/genomes/hg19/bed/ucscToINSDC
+    # ucscToINSDC has GenBank IDs for all sequences except chrM, for which it has RefSeq NC_ ID...
+    # chromAlias's genbankToAssembly.txt file has the GenBank ID for MT, so use GenBank ID here.
+    cp ucscToINSDC.p13.bed ucscToINSDC.p13.plusMT.bed
+    echo -e "chrMT\t0\t16569\tJ01415.2" >> ucscToINSDC.p13.plusMT.bed
+    # Add RefSeq ID for MT to ucscToRefSeq.
+    cp ucscToRefSeq.p13.bed ucscToRefSeq.p13.plusMT.bed
+    echo -e "chrMT\t0\t16569\tNC_012920.1" >> ucscToRefSeq.p13.plusMT.bed
+
+    # loading tables:
+    export db=hg19
+    export chrSize=`cut -f1 ucscToINSDC.p13.plusMT.bed | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    | hgLoadSqlTab ${db} ucscToINSDC stdin ucscToINSDC.p13.plusMT.bed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    | sed -e 's/INSDC/RefSeq/g;' \
+    | hgLoadSqlTab ${db} ucscToRefSeq stdin ucscToRefSeq.p13.plusMT.bed
+
+    # ucscToINSDC must be exactly 100% coverage
+    featureBits -countGaps ${db} ucscToINSDC
+#3234851260 bases of 3234851260 (100.000%) in intersection
+
+    # ucscToRefSeq must be 100% except for chrM:
+    featureBits -countGaps ${db} ucscToRefSeq
+#3234834689 bases of 3234851260 (99.999%) in intersection
+    expr 3234851260 - 3234834689
+#16571
+
+    # construct chromAlias:
+    cd /hive/data/genomes/hg19/bed/chromAlias
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' ${db} \
+    | sort -k1,1 > ucsc.refseq.p13.plusMT.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' ${db} \
+    | sort -k1,1 > ucsc.genbank.p13.plusMT.tab
+    tawk '{print $2, $1;}' ucsc.genbank.p13.plusMT.tab | sort \
+    | join -t$'\t' -o 1.2,2.2 - genbankToAssembly.txt \
+    | sort -k1,1 > ucsc.assembly.p13.plusMT.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.p13.plusMT.tab \
+    | sed -re 's/\.p13.plusMT//;' \
+        > ${db}.chromAlias.p13.plusMT.tab
+
+    # verify all there:
+    for t in refseq genbank assembly
+do
+  c0=`cat ucsc.$t.p13.plusMT.tab | wc -l`
+  c1=`grep $t hg19.chromAlias.p13.plusMT.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 297 =? 297 OK
+# checking genbank: 298 =? 298 OK
+# checking assembly: 297 =? 297 OK
+
+    hgLoadSqlTab hg19 chromAlias $HOME/kent/src/hg/lib/chromAlias.sql ${db}.chromAlias.p13.plusMT.tab
+
+
+##############################################################################
+# altSeqLiftOver (DONE - 2020-01-21 - Angie)
+    # consider chrM and chrMT to be each other's alts...
+    mkdir /hive/data/genomes/hg19/bed/altSeqLiftOver.p13.plusMT
+    cd /hive/data/genomes/hg19/bed/altSeqLiftOver.p13.plusMT
+    # Add PSL from blat to the p13 alignments from NCBI
+    blat -noHead /hive/data/genomes/hg19/hg19.2bit:{chrM,chrMT} chrMToChrMT.psl
+    pslSwap chrMToChrMT.psl chrMTToChrM.psl
+    cp /hive/data/genomes/hg19/bed/altSeqLiftOver.p13/altSeqLiftOver.psl .
+    cat chrMToChrMT.psl chrMTToChrM.psl >> altSeqLiftOver.psl
+
+    hgLoadPsl hg19 -table=altSeqLiftOverPsl altSeqLiftOver.psl
+
+    # We do not need to make a chrM-to-chrMT liftOver file... now we can just put annotations
+    # directly on chrMT!  (In addition to lifting over to chrM for backwards compat)
+
+
+#########################################################################
+# ncbiRefSeq.p13 Genes (DONE - 2020-01-21 - Angie)
+    mkdir /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-01-21
+    cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-01-21
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.25_GRCh37.p13 hg19) > do.log 2>&1 & tail -f do.log
+# *** All done !  Elapsed time: 6m42s
+#real    6m42.029s
+
+    cat fb.ncbiRefSeq.hg19.txt
+#93720294 bases of 2991710746 (3.133%) in intersection
+
+
+#########################################################################
+# ENCODE tracks don't seem to have anything for chrM (?)
+
+
+##############################################################################
+# Extend GTEX GENE (DONE 2020-01-21 - Angie)
+
+    # Conveniently, GTEx provided annotations on the real MT.  Those were plopped
+    # straight onto chrM with no coord adjustments (close enough for nice bar graphs).
+    # So just duplicate the "chrM" rows onto chrMT.
+    cd /hive/data/genomes/hg19/bed/gtex
+    cp gtexGeneV6.plusP13.bed gtexGeneV6.plusP13.plusMT.bed
+    grep ^chrM gtexGeneV6.bed | sed -re 's/chrM\t/chrMT\t/;' >> gtexGeneV6.plusP13.plusMT.bed
+
+    hgLoadBed -noBin -type=bed6+ -sqlTable=$HOME/kent/src/hg/lib/gtexGeneBed.sql -renameSqlTable \
+        hg19 gtexGene gtexGeneV6.plusP13.plusMT.bed
+
+    grep -w chrM gtexGeneModelV6.initial.gp \
+    | sed -re 's/chrM\t/chrMT\t/' \
+      > gtexGeneModelV6.MT.gp
+    sort -k2,2 -k3n,3n gtexGeneModelV6.initial.gp gtexGeneModelV6.p13.gp gtexGeneModelV6.MT.gp \
+    | hgLoadGenePred hg19 gtexGeneModel stdin
+
+
+##############################################################################
+# Oops update original wiggle gc5Base (gc5BaseBw is not released for hg19) (DONE 2020-02-18 - Angie)
+    # Redmine #24648 notes 18 & 19
+    cd /hive/data/genomes/hg19/bed/gc5Base/
+    wigEncode hg19.p13.plusMT.gc5Base.wigVarStep.gz gc5Base.p13.plusMT.{wig,wib}
+    # Install
+    ln -s `pwd`/gc5Base.p13.plusMT.wib /gbdb/hg19/wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg19/wib hg19 gc5Base gc5Base.p13.plusMT.wig
+    # Also update the gc5Base varStep wiggle download file:
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/gc5Base
+    ln -sf /hive/data/genomes/hg19/bed/gc5Base/hg19.p13.plusMT.gc5Base.wigVarStep.gz \
+      hg19.gc5Base.txt.gz
+    md5sum hg19.gc5Base.txt.gz > md5sum.txt
+
+
+##############################################################################
+# Sort & reload database tables (DONE 2020-02-20 - Angie)
+
+    # Commands run in hgsql:
+    hgsql hg19
+
+      # rename table augustusGene to augustusGeneBak;
+      # create table augustusGene like augustusGeneBak;
+      # insert into augustusGene select * from augustusGeneBak order by chrom,txStart;
+#Query OK, 33620 rows affected (0.63 sec)
+#Records: 33620  Duplicates: 0  Warnings: 0
+      # show table status like "augustusGene%";
+#(same number of rows; data size dropped a bit, but contents appear unchanged)
+      # drop table augustusGeneBak;
+
+      # rename table cpgIslandExt to cpgIslandExtBak;
+      # create table cpgIslandExt like cpgIslandExtBak;
+      # insert into cpgIslandExt select * from cpgIslandExtBak order by chrom,chromStart;
+#Records: 30344  Duplicates: 0  Warnings: 0
+      # show table status like "cpgIslandExt%";
+      # drop table cpgIslandExtBak;
+
+      # rename table gap to gapBak;
+      # create table gap like gapBak;
+      # insert into gap select * from gapBak order by chrom,chromStart;
+#Records: 497  Duplicates: 0  Warnings: 0
+      # show table status like "gap%";
+      # drop table gapBak;
+
+      # rename table genscan to genscanBak;
+      # create table genscan like genscanBak;
+      # insert into genscan select * from genscanBak order by chrom,txStart;
+#Records: 107250  Duplicates: 0  Warnings: 0
+      # show table status like "genscan%";
+      # drop table genscanBak;
+
+      # rename table gold to goldBak;
+      # create table gold like goldBak;
+      # insert into gold select * from goldBak order by chrom,chromStart;
+#Records: 28665  Duplicates: 0  Warnings: 0
+      # show table status like "gold%";
+      # drop table goldBak;
+
+      # rename table rmsk to rmskBak;
+      # create table rmsk like rmskBak;
+      # insert into rmsk select * from rmskBak order by genoName,genoStart;
+#Records: 5481341  Duplicates: 0  Warnings: 0
+      # show table status like "rmsk%";
+      # drop table rmskBak;
+
+      # rename table simpleRepeat to simpleRepeatBak;
+      # create table simpleRepeat like simpleRepeatBak;
+      # insert into simpleRepeat select * from simpleRepeatBak order by chrom,chromStart;
+#Records: 1000830  Duplicates: 0  Warnings: 0
+      # show table status like "simpleRepeat%";
+      # drop table simpleRepeatBak;
+
+      # rename table windowmaskerSdust to windowmaskerSdustBak;
+      # create table windowmaskerSdust like windowmaskerSdustBak;
+      # insert into windowmaskerSdust select * from windowmaskerSdustBak order by chrom,chromStart;
+#Records: 16745130  Duplicates: 0  Warnings: 0
+      # show table status like "windowmaskerSdust%";
+      # drop table windowmaskerSdustBak;
+      # quit
+
+    # Double check:
+    positionalTblCheck hg19 augustusGene
+    positionalTblCheck hg19 cpgIslandExt
+    positionalTblCheck hg19 gap
+    positionalTblCheck hg19 genscan
+    positionalTblCheck hg19 gold
+    positionalTblCheck hg19 rmsk
+    positionalTblCheck hg19 simpleRepeat
+    positionalTblCheck hg19 windowmaskerSdust
+
+
+#############################################################################
+# Build perSeqMax file for gfServer (hgBlat) (DONE 2020-02-24 - Angie)
+    # When the blat server is restarted with the updated hg19.2bit file,
+    # hg19.altsAndFixes needs to be copied over along with the new hg19.2bit file,
+    # and gfServer needs to be restarted with -perSeqMax=hg19.altsAndFixes.
+    cd /hive/data/genomes/hg19
+    cut -f 1 chrom.sizes.p13.plusMT \
+    | grep -E '(MT|_(alt|fix|hap.*))$' \
+    | sed -re 's/^/hg19.2bit:/;' \
+      > hg19.altsAndFixes.p13.plusMT
+    # Link for blat server installation convenience:
+    ln -sf hg19.altsAndFixes.p13.plusMT altsAndFixes
+
+
+##############################################################################

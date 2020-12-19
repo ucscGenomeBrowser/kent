@@ -253,7 +253,7 @@ for (i=0; i<fileCount; ++i)
 	    {
 	    // check for circular chrM
 	    if (doBed12 || bed->chromStart>=chromSize 
-		|| differentWord(bed->chrom,"chrM")) 
+		|| !isMito(bed->chrom))
 		{
 		warn("ERROR: %s\t%d\t%d", bed->chrom, bed->chromStart,
 		bed->chromEnd);

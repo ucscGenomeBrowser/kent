@@ -44,6 +44,8 @@
 #endif /* ITEMATTR_H */
 #endif /* GBROWSE */
 
+#include "soTerm.h"
+
 /* A few hgGenome cart constant defaults copied from */
 #define hggPrefix "hgGenome_"
 #define hggGraphPrefix hggPrefix "graph"
@@ -459,6 +461,19 @@ struct positionMatch
  long virtEnd;
  };
 
+/* mouseOver business declared in hgTracks.c */
+extern boolean enableMouseOver;
+extern struct tempName *mouseOverJsonFile;
+extern struct jsonWrite *mouseOverJson;
+
+struct wigMouseOver
+    {
+    struct wigMouseOver *next;
+    int x1;	/* beginning of a rectangle for this value */
+    int x2;	/* end of the rectangle */
+    double value;	/* data value for this region */
+    int valueCount;	/* number of data values in this rectangle */
+    };
 
 extern struct virtRegion *virtRegionList;
 extern struct virtChromRegionPos *virtChrom; // Array
@@ -480,6 +495,9 @@ extern char *emGeneTable;           /* Gene table to use for exon mostly */
 extern struct track *emGeneTrack;   /* Track for gene table for exon mostly */
 extern struct rgbColor vertWindowSeparatorColor; /* color for vertical windows separator */
 extern char *multiRegionsBedUrl;       /* URL to bed regions list */
+
+// is genome RNA?
+extern boolean genomeIsRna;
 
 // demo2
 extern int demo2NumWindows;
@@ -523,9 +541,6 @@ extern int winStart;	  /* Start of window in sequence. */
 extern int winEnd;	  /* End of window in sequence. */
 extern int maxItemsInFullTrack;  /* Maximum number of items displayed in full */
 extern char *position; 		/* Name of position. */
-extern int leftLabelWidthDefaultChars;   /* default number of characters allowed for left label */
-extern int leftLabelWidthChars;   /* number of characters allowed for left label */
-extern int trackTabWidth;
 extern int gfxBorder;		/* Width of graphics border. */
 extern int insideWidth;		/* Width of area to draw tracks in in pixels. */
 extern int insideX;		/* Start of area to draw track in in pixels. */
@@ -543,6 +558,7 @@ extern int winBaseCount;  /* Number of bases in window. */
 extern float basesPerPixel;       /* bases covered by a pixel; a measure of zoom */
 extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
 extern boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codon text in genePreds*/
+extern boolean zoomedToCodonNumberLevel; /* TRUE if zoomed so we can print codons and exon number text in genePreds*/
 extern boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we cancolor each codon*/
 
 extern char *ctFileName;	/* Custom track file. */
@@ -586,6 +602,7 @@ extern Color shadesOfRedOnYellow[EXPR_DATA_SHADES];
 extern Color shadesOfBlueOnYellow[EXPR_DATA_SHADES];
 
 extern boolean chromosomeColorsMade; /* Have the 3 shades of 8 chromosome colors been allocated? */
+extern boolean doPliColors; /* Put up the color legend for the gnomAD pLI track */
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;
 
@@ -1018,6 +1035,9 @@ void mafMethods(struct track *tg);
 
 void bamMethods(struct track *track);
 /* Methods for BAM alignment files. */
+
+void vcfPhasedMethods(struct track *track);
+/* Load items from a VCF of one individuals phased genotypes */
 
 void vcfTabixMethods(struct track *track);
 /* Methods for Variant Call Format compressed & indexed by tabix. */
@@ -1525,6 +1545,8 @@ void pgSnpMethods (struct track *tg);
 /* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
  * (if available) allele counts in mouseover. */
 
+int pgSnpHeight(struct track *tg, enum trackVisibility vis);
+
 void pgSnpCtMethods (struct track *tg);
 /* Load pgSnp track from custom tracks */
 
@@ -1674,6 +1696,9 @@ void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut);
 void labelTrackAsFiltered(struct track *tg);
 /* add text to track long label to indicate filter is active */
 
+void labelTrackAsHideEmpty(struct track *tg);
+/* add text to track long label to indicate empty subtracks are hidden */
+
 void setupHotkeys(boolean gotExtTools);
 /* setup keyboard shortcuts and a help dialog for it */
 
@@ -1691,5 +1716,26 @@ void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height);
 
+boolean recTrackSetsEnabled();
+/* Return TRUE if feature is available */
+
+boolean recTrackSetsChangeDetectEnabled();
+/* Return TRUE if feature is available, in hgConf */
+
+int recTrackSetsForDb();
+/* Return number of recommended track sets for this database */
+
+boolean hasRecTrackSet(struct cart *cart);
+/* Check if currently loaded session is in the recommended track set */
+
+void printRecTrackSets();
+/* Create dialog with list of recommended track sets */
+
+Color colorFromSoTerm(enum soTerm term);
+/* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for
+ * UTR/noncoding, black otherwise. */
+
+void maybeNewFonts(struct hvGfx *hvg);
+/* Check to see if we want to use the alternate font engine (FreeType2). */
 #endif /* HGTRACKS_H */
 

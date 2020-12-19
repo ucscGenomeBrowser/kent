@@ -6,7 +6,8 @@ clusterGenes = ${DESTBINDIR}/clusterGenes
 all:
 
 test: refSeqTest refSeqCdsTest trackNamesTest joinTest joinCdsTest \
-	overlapUseStrandTest overlapIgnoreStrandsTest
+	overlapUseStrandTest overlapIgnoreStrandsTest \
+	ignoreBasesTest ignoreBasesCdsTest ignoreBasesTinyTest
 
 # test files blatRefSeq.gp  ncbiRefSeq.gp
 #  chr1:11,689,948-12,078,317 - some basic genes
@@ -50,6 +51,21 @@ overlapUseStrandTest: mkout
 # overlaping genes blocks on opposite stands, but ignore strand
 overlapIgnoreStrandsTest: mkout
 	${clusterGenes} -ignoreStrand -trackNames output/$@.gl no genes input/overlapDiffStrands.gp
+	diff -u expected/$@.gl output/$@.gl
+
+# test of -ignoreBases
+ignoreBasesTest: mkout
+	${clusterGenes} -ignoreBases=5 output/$@.gl no input/overlapCases.gp
+	diff -u expected/$@.gl output/$@.gl
+
+ignoreBasesCdsTest: mkout
+	${clusterGenes} -ignoreBases=5 -cds output/$@.gl no input/overlapCases.gp
+	diff -u expected/$@.gl output/$@.gl
+
+# -ignoreBases bases was discarding when overlap exceeded ignored, it should
+# still put in a cluster.
+ignoreBasesTinyTest: mkout
+	${clusterGenes} -ignoreBases=40 output/$@.gl no input/Mt-tRNA.gp
 	diff -u expected/$@.gl output/$@.gl
 
 mkout:

@@ -492,6 +492,16 @@ else if (grayIx <= 26)
     if (codon[0] == GRAYIX_STOP_CODON_ALPHA)
 	codon[0] = '*';
     }
+else if (grayIx > 78)  // ribosomal slip begin
+    {
+    color = cdsColor[CDS_RIBO_SLIP1];
+    sprintf(codon,"%c",grayIx - 78 + 'A' - 1);
+    }
+else if (grayIx > 52)  // ribosomal slip end
+    {
+    color = cdsColor[CDS_RIBO_SLIP2];
+    sprintf(codon,"%c",grayIx - 52 + 'A' - 1);
+    }
 else if (grayIx > 26)
     {
     color = lighterShade(hvg, ixColor,1.5);
@@ -513,7 +523,7 @@ static char baseColorLookupCodon(DNA *dna)
 /* Call dnautil's lookupCodon, but translate stop codon '\0' to '*' for display. */
 {
 char peptide;
-if (sameString(chromName, "chrM"))
+if (isMito(chromName))
     peptide = lookupMitoCodon(dna);
 else
     peptide = lookupCodon(dna);
@@ -1035,6 +1045,12 @@ cdsColor[CDS_SYN_PROT] = hvGfxFindColorIx(hvg,CDS_SYN_PROT_R,
 cdsColor[CDS_SYN_BLEND] = hvGfxFindColorIx(hvg,CDS_SYN_BLEND_R,
 					    CDS_SYN_BLEND_G, 
 					    CDS_SYN_BLEND_B);
+cdsColor[CDS_RIBO_SLIP1] = hvGfxFindColorIx(hvg,CDS_RIBO_SLIP1_R,
+					    CDS_RIBO_SLIP1_G, 
+					    CDS_RIBO_SLIP1_B);
+cdsColor[CDS_RIBO_SLIP2] = hvGfxFindColorIx(hvg,CDS_RIBO_SLIP2_R,
+					    CDS_RIBO_SLIP2_G, 
+					    CDS_RIBO_SLIP2_B);
 }
 
 
@@ -1143,9 +1159,7 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 
     bool altColor = FALSE;
     unsigned cds5Prime = posStrand ? cdsStart : cdsEnd;
-    int width = winEnd - winStart;
-    // width cutoff really should be based on (a) how many codons this gene has, (2) the current font and (3) image width.
-    int codonIndex = !codonNumbering || width > 60 ? 0 : 1;
+    int codonIndex = !codonNumbering || !zoomedToCodonNumberLevel ? 0 : 1;
     for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
 	{
         int exonStart = starts[i];
@@ -1212,6 +1226,7 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
         // break each exon into codons and assign alternating shades.
         while (TRUE)
 	    {
+            int lastEnd = currentEnd;
             int codonInc = frame;
             if (frame == 0)  
 		{
@@ -1240,7 +1255,18 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 		    }
                 if(frame == 3) 
 		    {
+                    // end of one block and the next block starts less than three bases away
                     frame = 0;
+                    if (posStrand && ((iInc*(i + iInc))<(iInc*iN) && (currentEnd + 3 > starts[i+1])))
+                        {
+                        int letter = sfList->grayIx;
+                        if (sfList->grayIx > 52)
+                            letter -= 52;
+                        else if (sfList->grayIx > 26)
+                            letter -= 52;
+
+                        sfList->grayIx = 78 + letter;
+                        }
                     break;
 		    }
 		/* accumulate partial codon in case of one base exon, or start a new one. */
@@ -1294,6 +1320,10 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 		    currentCodon[3] = '\0';
 		    sf->grayIx = codonToGrayIx(currentCodon, altColor, &foundStart, 
 					       !posStrand, colorStopStart);
+
+                    // is this block less than 3 bases away from the previous block (ribo slip)
+                    if (posStrand && (lastEnd + 3 > currentEnd))
+                        sf->grayIx = - 'A' + 1 + 52 + baseColorLookupCodon(currentCodon);
 		    }
 		else
 		    sf->grayIx = GRAYIX_CDS_ERROR;
@@ -1547,7 +1577,7 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
 {
 char codon[64] = " ";
 Color color = colorAndCodonFromGrayIx(hvg, codon, grayIx, originalColor);
-if (sf->codonIndex)
+if (sf->codonIndex && ( e - s >= 3))  // don't put exon numbers on split codons because there isn't space.
     safef(codon, sizeof(codon), "%c %d", codon[0], sf->codonIndex);
 /* When we are zoomed out far enough so that multiple bases/codons share the 
  * same pixel, we have to draw differences in a separate pass (baseColorOverdrawDiff)

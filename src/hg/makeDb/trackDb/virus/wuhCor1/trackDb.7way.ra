@@ -1,0 +1,22 @@
+track multiz7way
+shortLabel Human CoV
+longLabel Multiz Alignment and Conservation of 7 Strains of human coronavirus
+visibility hide
+group compGeno
+frames multiz7wayFrames
+color 0, 10, 100
+altColor 0,90,10
+mafDot on
+snpTable mafSnp7way
+mafShowSnp on
+snpMode on
+type wigMaf 0.0 1.0
+speciesCodonDefault wuhCor1
+speciesGroups CoV_2019
+sGroup_CoV_2019 SARS_CoV_1 MERS OC43 HKU1 NL63 CoV229E
+speciesDefaultOn SARS_CoV_1 MERS OC43 HKU1 NL63 CoV229E
+itemFirstCharCase noChange
+treeImage phylo/wuhCor1_7way.png
+html cons7way
+pennantIcon New red ../goldenPath/newsarch.html#070720 "Released Jul. 07, 2020"
+

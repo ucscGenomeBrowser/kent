@@ -1,0 +1,6 @@
+hub VGP
+shortLabel VGP Legacy
+longLabel Vertebrate Genomes Project legacy assemblies
+genomesFile genomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl index.html

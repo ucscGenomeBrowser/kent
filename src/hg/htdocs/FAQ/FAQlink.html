@@ -11,11 +11,12 @@
 
 <ul>
 <li><a href="#link1">Creating a sharable URL to view specific tracks</a></li>
-<li><a href="#link2">Linking to the Browser at a specific position</a></li>
+<li><a href="#link2">Linking to the Browser at a specific position, or default position</a></li>
+<li><a href="#zoomVariant">Zooming in or out using a link to an HGVS identifier</a></li>
 <li><a href="#trackViz">Setting track visibility via URL</a></li>
 <li><a href="#custUrl">Loading Custom Tracks with the URL</a></li>
 <li><a href="#hubUrl">Loading Track Hubs and Assembly Hubs with the URL</a></li>
-<li><a href="#link3">Linking to gene specific information</a></li>
+<li><a href="#genes">Linking to gene-specific information</a></li>
 <li><a href="#hgsid">The hgsid parameter</a></li>
 <li><a href="#moreInfo">Additional URL parameters</a></li>
 </ul>
@@ -59,8 +60,8 @@ characters separating different parameters like so: </p>
 <p><code><a href=http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18</a></code></p>
 
 <a name="link2"></a>
-<h2>Linking to the Browser at a specific position</h2>
-<h6>How do I make a link to a specific genome or position?</h6>
+<h2>Linking to the Browser at a specific position, or default position</h2>
+<h6>How do I make a link to a specific genome, position, or HGVS variant?</h6>
 <p>
 You can link to a specific genome assembly and position in the Genome Browser using a URL with
 the <code>db=</code> and <code>position=</code> parameters.</p>
@@ -80,6 +81,39 @@ Where:</p>
 <p>The following link is an example of a URL that declares assembly and position:</p>
 <p><code><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:35000-40000">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr1:35000-40000</a></code></p>
 
+<h6>How do I make a link to the default position of a genome?</h6>
+<p>
+You can link directly to the default position of an assembly by passing the 
+<code>position=default</code> parameter. This can be helpful in cases where
+a track exists on multiple assemblies, and you want to build links to each of them. If no
+position variable is passed, the Genome Browser assumes the default position for the 
+default assembly (hg38).</p>
+<p>
+Here is an example which opens the uniprot track at the default position for sacCer3:</p>
+<p><code><a href="/cgi-bin/hgTrackUi?db=sacCer3&g=uniprot&position=default">http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=sacCer3&g=uniprot&position=default</a></code></p>
+
+<a name="zoomVariant"></a>
+<h2>Zooming in or out with a link &mdash; HGVS </h2>
+<h6>How do I zoom out using a link to a HGVS identifier?</h6>
+<p>
+To link to a specific HGVS identifier, you can construct a link with the HGVS identifier
+in the position field instead of coordinates. The default padding is 5bp on either side,
+but you can always zoom in or out with <code>hgt.out1=submit</code> or <code>hgt.in1=submit</code>.
+The numbers 1 through 4 zoom in or out corresponding to the buttons above the track window.
+The following lists the zoom levels of each number, applicable to zooming in or out:</p>
+<ul>
+<li><code>hgt.out1=submit</code> zooms out 1.5x</li>
+<li><code>hgt.out2=submit</code> zooms out 3x</li>
+<li><code>hgt.out3=submit</code> zooms out 10x
+<li><code>hgt.out4=submit</code> zooms out 100x</li>
+</ul>
+<p>
+The following link is an example which leads to the variant NM_00257:c.1208G&gt;T and zooms 
+out 3x:</p>
+<p>
+<code><a href="../cgi-bin/hgTracks?db=hg19&position=NM_000257:c.1208G%3ET&hgt.out2=submit">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=NM_000257:c.1208G>T&hgt.out2=submit</a></code></p>
+
+
 <a name="trackViz"></a>
 <h2>Setting Track Visibility via URL</h2>
 <h6>How do I create a custom URL to control the visibility of specific tracks?</h6>
@@ -94,13 +128,19 @@ parameters</a> section of the Custom Tracks User's Guide.</p>
 chosen visibility</li>
 <li><code>textSize=&lt;number&gt;</code> - sets browser text size to either 6, 8, 10, 12, 14, 18,
 24, or 34. Default is a textSize of 8.</li>
-<li><code>ignoreCookie=1</code> - removes pre-existing user settings like track seletion, custom
+<li><code>&lt;trackName&gt;.heightPer=&lt;###&gt;</code> - sets a bigWig track's height to a 
+particular number of pixels (between 20-100)</li>
+<li><code>ignoreCookie=1</code> - removes pre-existing user settings like track selection, custom
 tracks, and track hubs</li>
 </ul>
 <p>
-For example, you can use the following command to hide every track (hideTracks=1) and set the knownGene track to 
-the pack visibility (knownGene=pack):</p>
-<p><code><a href="../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack</a></code></p>
+For example, you can use the following command to hide every track (hideTracks=1), set the
+genome database to hg38 (db=hg38), set the mappability track to full visibility (mappability=full),
+and set the umap track height to 100 pixels (umap24Quantitative.heightPer=100). Each of these 
+parameters can be used individually or in combination.</p>
+<p><code><a 
+href="../cgi-bin/hgTracks?db=hg38&ignoreCookie=1&hideTracks=1&mappability=full&umap24Quantitative.heightPer=100">
+http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&mappability=full&umap24Quantitative.heightPer=100</a></code></p>
 
 <p>Composite tracks have additional URL parameters that encode options to hide, select, and 
 display subtracks.</p>
@@ -175,8 +215,9 @@ href="../goldenPath/help/hgTrackHubHelp.html">track hub user guide</a>,
 or the <a href=../goldenPath/help/hubQuickStartAssembly.html>quick start guide
 to assembly hubs</a>.
 
+<a name="genes"></a>
 <a name="link3"></a>
-<h2>Linking to gene specific information</h2>
+<h2>Linking to gene-specific information</h2>
 <h6>How do I link to a specific gene or specific gene description page?</h6>
 <p>
 To jump directly to a gene's position on the Genome Browser, set the position parameter in the

@@ -1680,7 +1680,7 @@ static void cgiMakeCheckBox2Bool(char *name, boolean checked, boolean enabled,
  * Also make a shadow hidden variable and support 2 boolean states:
  *    checked/unchecked and enabled/disabled. */
 {
-char buf[256], idBuf[256];
+char buf[256], idBuf[256], shadId[256];
 
 if(id)
     safef(idBuf, sizeof(idBuf), " id=\"%s\"", id);
@@ -1692,7 +1692,9 @@ printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s>", name, idBuf,
         (checked ? " CHECKED" : ""),
         (enabled ? "" : " DISABLED"));
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVarWithExtra(buf, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
+if (id)
+    safef(shadId, sizeof(shadId), "%s%s", cgiBooleanShadowPrefix(), id);
+cgiMakeHiddenVarWithIdExtra(buf, id ? shadId : NULL, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
 }
 
 void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
@@ -1754,6 +1756,7 @@ void cgiMakeCheckBoxFourWay(char *name, boolean checked, boolean enabled, char *
  * Also makes a shadow hidden variable that supports the 2 boolean states. */
 {
 char shadName[256];
+char shadId[256];
 
 printf("<INPUT TYPE=CHECKBOX NAME='%s'", name);
 if (id)
@@ -1773,7 +1776,9 @@ printf(">");
 
 // The hidden var needs to hold the 4way state
 safef(shadName, sizeof(shadName), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVarWithExtra(shadName, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
+if (id)
+    safef(shadId, sizeof(shadId), "%s%s", cgiBooleanShadowPrefix(), id);
+cgiMakeHiddenVarWithIdExtra(shadName, id ? shadId : NULL, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
 }
 
 
@@ -1964,8 +1969,8 @@ if (width==0)
 if (width < 65)
     width = 65;
 
-printf("<INPUT TYPE=TEXT class='inputBox' name='%s' id='%s' style='width: %dpx' value=%g",
-       varName,varName,width,initialVal);
+printf("<INPUT TYPE=TEXT class='inputBox' name='%s' id='%s' style='width: %dpx' value=%s",
+       varName,varName,width,shorterDouble(initialVal));
 jsOnEventByIdF("change", varName, "return validateFloat(this,%s,%s);",
        (min ? min : "\"null\""),(max ? max : "\"null\""));
 if (title)
@@ -1982,12 +1987,12 @@ char *minStr=NULL;
 char *maxStr=NULL;
 if ((int)min != NO_VALUE)
     {
-    safef(minLimit,sizeof(minLimit),"%g",min);
+    safef(minLimit,sizeof(minLimit),"%s",shorterDouble(min));
     minStr = minLimit;
     }
 if ((int)max != NO_VALUE)
     {
-    safef(maxLimit,sizeof(maxLimit),"%g",max);
+    safef(maxLimit,sizeof(maxLimit),"%s",shorterDouble(max));
     maxStr = maxLimit;
     }
 cgiMakeDoubleVarInRange(varName,initialVal,title,width,minStr,maxStr);
@@ -2334,21 +2339,22 @@ for (i=0; i<count; ++i)
 printf("</SELECT>\n");
 }
 
-void cgiMakeHiddenVarWithExtra(char *varName, char *string,char *extra)
+void cgiMakeHiddenVarWithIdExtra(char *varName, char *id, char *string,char *extra)
 /* Store string in hidden input for next time around. */
 {
-printf("<INPUT TYPE=HIDDEN NAME='%s' VALUE='%s'", varName, string);
+printf("<INPUT TYPE=HIDDEN NAME='%s'", varName);
+if (id)
+    printf(" ID='%s'", id);
 if (extra)
-    printf(" %s>\n",extra);
-else
-    puts(">");
+    printf(" %s",extra);
+printf(" VALUE='%s'>\n", string);
 }
 
 void cgiContinueHiddenVar(char *varName)
 /* Write CGI var back to hidden input for next time around. */
 {
 if (cgiVarExists(varName))
-    cgiMakeHiddenVar(varName, cgiString(varName));
+    cgiMakeHiddenVarWithIdExtra(varName, varName, cgiString(varName), NULL);
 }
 
 void cgiVarExclude(char *varName)

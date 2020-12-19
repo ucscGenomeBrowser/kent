@@ -4,7 +4,6 @@ longLabel Hi-C on 7 cell lines from Rao 2014
 type hic
 group regulation
 compositeTrack on
-pennantIcon New red ../goldenPath/newsarch.html#102519 Hi-C data released Oct. 25, 2019
 
 track gm12878Insitu
 shortLabel GM12878 Hi-C

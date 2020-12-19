@@ -13,46 +13,39 @@ and transcription (RNA-seq) assays and analysis performed by the ENCODE project.
 
 <p>
 Data underlying this track are presented in the 
-<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3RenHistone">Histone Modifications</a> and
+<a target="_blank"
+href="../cgi-bin/hgTrackUi?db=mm10&g=encode3RenHistone">Histone Modifications</a> and
 <a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3RenHistone">Chromatin State</a>
-tracks, part of the 
-<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3Reg">ENCODE Regulation</a> supertrack.</p>
+tracks, part of the <a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3Reg">ENCODE
+Regulation</a> supertrack.</p>
 <p>
 The promoters presented in this track were derived from experimentally validated promoters 
-provided by the
-<a target="_blank" href="https://epd.epfl.ch/EPDnew_database.php">
-Eukaryotic Promoter Database</a> (EPDNew).
-A more complete presentation of this annotation can be found in the
-<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=epdNew">EPDnew Promoters</a> track.
-</p>
+provided by the <a target="_blank" href="https://epd.epfl.ch/EPDnew_database.php">Eukaryotic
+Promoter Database</a> (EPDNew). A more complete presentation of this annotation can be found in the
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=epdNew">EPDnew Promoters</a> track.</p>
 
 <h2> Display Conventions and Configuration </h2>
 <p>
-
-This track is a multi-view composite track containing four data types
-(<em>views</em>):
+This track is a multi-view composite track containing four data types (<em>views</em>):</p>
 <ul>
-<li>Putative enhancer elements</li>
-<li>Gene promoters</li>
-<li>Predicted interactions between enhancers and gene</li>
-<li>Clustered interactions, by gene or enhancer</li>
+  <li>Putative enhancer elements</li>
+  <li>Gene promoters</li>
+  <li>Predicted interactions between enhancers and gene</li>
+  <li>Clustered interactions, by gene or enhancer</li>
 </ul>
 <p>
-For each view, there is a choice of two subtracks to display individually on the browser;
-the full set of interactions (and component promoters and enhancers), and
-a more stringent set, containing only interactions replicated in two biological
-replicates.
-Instructions for configuring multi-view
+For each view, there is a choice of two subtracks to display individually on the browser; the full
+set of interactions (and component promoters and enhancers), and a more stringent set, containing
+only interactions replicated in two biological replicates. Instructions for configuring multi-view
 tracks are <a href="/goldenPath/help/multiView.html" target=_blank>here</a>.</p>
 <p>
-The display aims to improve distinguishing genes and their interactions by coloring
-successive genes in different colors.  All interactions with a gene are colored the
-same as the gene promoter.</p>
+The display aims to improve distinguishing genes and their interactions by coloring successive genes
+in different colors. All interactions with a gene are colored the same as the gene promoter.</p>
 <p>
-The promoter display follows EPD conventions; the &quot;thin&quot; part of the item
-represents the 49 bp upstream of the annotated transcription start site (TSS) whereas 
-the &quot;thick&quot; part represents the TSS plus 10 bp downstream. 
-The relative position of the thick and thin parts define the orientation of the promoter.</p>
+The promoter display follows EPD conventions; the &quot;thin&quot; part of the item represents the
+49 bp upstream of the annotated transcription start site (TSS) whereas the &quot;thick&quot; part
+represents the TSS plus 10 bp downstream. The relative position of the thick and thin parts define
+the orientation of the promoter.</p>
 
 <h2>Methods</h2>
 <h3>Enhancers</h3>
@@ -68,15 +61,15 @@ then used to constrain enhancer/gene associations.
 All protein-coding genes and putative strong enhancers within each TAD were evaluated in 
 terms of the Spearman's correlation (SCC) between the H3K27ac pattern of enrichment and 
 the mRNA expression from RNA-seq across samples.
-The SCC of each enhancer was calculated with reference to all genes on the chromosome, and this metric was used to estimate p-value 
-by two strategies.
+The SCC of each enhancer was calculated with reference to all genes on the chromosome, and this
+metric was used to estimate p-value by two strategies.
 Putative enhancers showing a p-value &lt;= 0.05 (from both strategies)and a SCC &gt;= 0.25 
 were retained.
 </p>
 <p>
 Two maps were independently derived from two biological replicates of ChIP-seq and RNA-seq data.
-The &quot;All&quot; dataset contains significant interactions present in either biological replicate. 
-The &quot;Replicated&quot; dataset contains significant interactions present in both
+The &quot;All&quot; dataset contains significant interactions present in either biological
+replicate. The &quot;Replicated&quot; dataset contains significant interactions present in both
 Detailed methods can be found in Gorkin et al, in References below.
 <p>
 <h3>Promoters and Interactions</h3>
@@ -95,17 +88,20 @@ were merged into a single region covering the range of all promoters.</p>
 <h2>Data Access</h2>
 <p>
 Histone ChIP-seq and RNA-seq data underlying this annotation are available from the
-<a target="_blank" href="https://www.encodeproject.org/search/?type=OrganismDevelopmentSeries&internal_tags=MouseDevSeries&status=released&assembly=mm10"> ENCODE portal</a>.</p>
+<a target="_blank" href="https://www.encodeproject.org/search/?type=OrganismDevelopmentSeries&internal_tags=MouseDevSeries&status=released&assembly=mm10">
+ENCODE portal</a>.</p>
 <p>
-The EPDnew promoters for mouse can be downloaded from the <a target=_"blank" href="ftp://ccg.epfl.ch/epdnew/M_musculus/003/">EPD FTP site</a>,
+The EPDnew promoters for mouse can be downloaded from the
+<a target="_blank" href="ftp://ccg.epfl.ch/epdnew/M_musculus/003/">EPD FTP site</a>.
 
 <h2>Credits</h2>
 <p>
 Thanks to Iros Barozzi and colleagues in the
-<a target="_blank" href="https://biosciences.lbl.gov/divisions/egsb/">Environmental Genomics and Systems Biology Division</a>
-at the Lawrence Berkeley National Laboratory for generating the enhancer/gene association analysis and to
-David Gorkin and Yanxiao Zhang at the Ren lab (UCSD/Ludwig Institute for Cancer Research)
-for providing these data and assisting with track development at UCSC.</p>
+<a target="_blank" href="https://biosciences.lbl.gov/divisions/egsb/">Environmental Genomics and
+Systems Biology Division</a> at the Lawrence Berkeley National Laboratory for generating the
+enhancer/gene association analysis and to David Gorkin and Yanxiao Zhang at the Ren lab
+(UCSD/Ludwig Institute for Cancer Research) for providing these data and assisting with track
+development at UCSC.</p>
 
 <h2>References</h2>
 <p>

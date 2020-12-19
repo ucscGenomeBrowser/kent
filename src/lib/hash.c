@@ -192,7 +192,7 @@ ret = hel->val;
 if (slRemoveEl(pBucket, hel))
     {
     hash->elCount -= 1;
-    if (!hash->lm)
+    if (!hash->lm && !hash->ownLm)   // if we didn't come from local mem or trackDb cache
 	freeHashEl(hel);
     }
 return ret;
@@ -465,6 +465,19 @@ if (!hash->lm)
 hash->numResizes++;
 }
 
+struct slName *hashSlNameFromHash(struct hash *hash)
+/* Create a slName list from the names in a hash. */
+{
+struct slName *list = NULL;
+struct hashCookie cookie = hashFirst(hash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct slName *one = newSlName(hel->name);
+    slAddHead(&list, one);
+    }
+return list;
+}
 
 struct hash *hashFromSlNameList(void *list)
 /* Create a hash out of a list of slNames. */

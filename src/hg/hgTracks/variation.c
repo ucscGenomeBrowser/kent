@@ -9,6 +9,7 @@
 #include "bedCart.h"
 #include "bigBed.h"
 #include "bigDbSnp.h"
+#include "bigWarn.h"
 #include "hvGfx.h"
 #include "soTerm.h"
 
@@ -2541,15 +2542,16 @@ tg->itemColor = delHindsItemColor;
 tg->itemNameColor = delHindsItemColor;
 }
 
-// Functional impact coloring scheme with lf->filterColor values (hex RGB)
-#define bigDbSnpColorCodingChange 0x00ff0000
-#define bigDbSnpColorSyn 0x0000ff00
-#define bigDbSnpColorUtrNc 0x000000ff
+// Functional impact coloring scheme with lf->filterColor values
+#define bigDbSnpColorCodingChange MG_RED
+#define bigDbSnpColorSyn MG_GREEN
+#define bigDbSnpColorUtrNc MG_BLUE
 
-static int lfColorFromSoTerm(enum soTerm term)
-/* Assign a lf->filterColor value (hex RGB) according to soTerm. */
+Color colorFromSoTerm(enum soTerm term)
+/* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for
+ * UTR/noncoding, black otherwise. */
 {
-int color = 0;
+Color color = MG_BLACK;
 switch (term)
     {
     case frameshift_variant:
@@ -2815,8 +2817,7 @@ if (bigBedFilterInterval(bedRow, filters))
     lf->tallEnd = lf ->end = lf->components->end = bds->chromEnd;
     lf->label = bdsLabel(tdb, bds);
     lf->mouseOver = bdsMouseOver(bds);
-    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
-    lf->filterColor = lfColorFromSoTerm(bds->maxFuncImpact);
+    lf->filterColor = colorFromSoTerm(bds->maxFuncImpact);
     lf->original = bds;
     // MNVs in dbSNP are usually linked SNVs; if so, use one sf component for each SNV.
     if (bds->class == bigDbSnpMnv && bds->chromEnd - bds->chromStart > 2)
@@ -2884,8 +2885,24 @@ int maxItems = isNotEmpty(maxItemStr) ? atoi(maxItemStr) : 250000;
 bigBedAddLinkedFeaturesFromExt(tg, chromName, winStart, winEnd, freqSourceIx, 0, FALSE, 4, &lfList,
                                maxItems);
 slReverse(&lfList);
-slSort(&lfList, linkedFeaturesCmp);
-tg->items = lfList;
+// if the summary is filled in then the number of items in the region is greater than maxItems.
+if (tg->summary != NULL)
+    {
+    // too many items to display
+    tg->drawItems = bigDrawWarning;
+    tg->networkErrMsg = "Too many variants in display (zoom in to see details)";
+    tg->totalHeight = bigWarnTotalHeight;
+    tg->items = NULL;
+    }
+else
+    tg->items = lfList;
+}
+
+static Color bigDbSnpColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color stashed away in lf->filterColor. */
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+return lf->filterColor;
 }
 
 static boolean bdsIsIndel(struct bigDbSnp *bds, int *retMinAltLen, int *retMaxAltLen)
@@ -3002,12 +3019,45 @@ else
     }
 }
 
+static int lfColorCmp(const void *va, const void *vb)
+/* Compare lf->filterColors to sort based on color -- black first, red last */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+const Color ca = (Color)(a->filterColor);
+const Color cb = (Color)(b->filterColor);
+
+return snp125ColorCmpRaw(ca, a->name, cb, b->name);
+}
+
+void bigDbSnpDraw(struct track *tg, int seqStart, int seqEnd,
+                  struct hvGfx *hvg, int xOff, int yOff, int width,
+                  MgFont *font, Color color, enum trackVisibility vis)
+/* Draw linked features items. */
+{
+if (vis == tvDense ||
+    (tg->limitedVisSet && tg->limitedVis == tvDense))
+    {
+    // Sort so that items with the strongest colors appear on top.
+    slSort(&tg->items, lfColorCmp);
+    }
+else
+    {
+    // Sort by position as usual
+    slSort(&tg->items, linkedFeaturesCmp);
+    }
+genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+}
+
 void bigDbSnpMethods(struct track *track)
 /* Special load and draw hooks for type bigDbSnp. */
 {
 linkedFeaturesMethods(track);
 track->canPack = TRUE;
 track->loadItems = bigDbSnpLoadItems;
+track->drawItems = bigDbSnpDraw;
 track->drawItemAt = bigDbSnpDrawItemAt;
+track->itemColor = bigDbSnpColor;
+track->itemNameColor = bigDbSnpColor;
 track->itemName = bigLfItemName;
 }

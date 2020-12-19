@@ -11,20 +11,20 @@
 
 <ul>
 <li><a href="#blat1">BLAT vs. BLAST</a></li>
-<li><a href="#blat1b">Blat cannot find a sequence at all or not all expected matches</a></li>
-<li><a href="#blat1c">Blat or In-Silico PCR finds multiple matches such as chr_alt or chr_fix even though only one is
+<li><a href="#blat1b">BLAT cannot find a sequence at all or not all expected matches</a></li>
+<li><a href="#blat1c">BLAT or In-Silico PCR finds multiple matches such as chr_alt or chr_fix even though only one is
 expected</a></li>
 <li><a href="#blat2">BLAT use restrictions</a></li>
-<li><a href="#blat3">Downloading Blat source and documentation</a></li>
-<li><a href="#blat5">Replicating web-based Blat parameters in command-line version</a></li>
+<li><a href="#blat3">Downloading BLAT source and documentation</a></li>
+<li><a href="#blat5">Replicating web-based BLAT parameters in command-line version</a></li>
 <li><a href="#blat6">Using the <em>-ooc</em> flag</a></li>
-<li><a href="#blat4">Replicating web-based Blat percent identity and score calculations</a></li>
-<li><a href="#blat7">Replicating web-based Blat &quot;I'm feeling lucky&quot; search 
+<li><a href="#blat4">Replicating web-based BLAT percent identity and score calculations</a></li>
+<li><a href="#blat7">Replicating web-based BLAT &quot;I'm feeling lucky&quot; search 
 results</a></li>
-<li><a href="#blat8">Using Blat for short sequences with maximum sensitivity</a></li>
-<li><a href="#blat9">Blat ALL genomes</a></li>
-<li><a href="#blat10">Blat ALL genomes: No matches found</a></li>
-<li><a href="#blat11">Approximating web-based Blat results using gfServer/gfClient</a></li>
+<li><a href="#blat8">Using BLAT for short sequences with maximum sensitivity</a></li>
+<li><a href="#blat9">BLAT ALL genomes</a></li>
+<li><a href="#blat10">BLAT ALL genomes: No matches found</a></li>
+<li><a href="#blat11">Approximating web-based BLAT results using gfServer/gfClient</a></li>
 <li><a href="#blat12">Standalone or gfServer/gfClient result start positions off by one</a></li>
 
 </ul>
@@ -49,7 +49,7 @@ slightly different from those on the <a href="../cgi-bin/hgBlat">graphical versi
 On proteins, BLAT uses 4-mers rather than 11-mers, finding protein sequences of 80% and greater 
 similarity to the query of length 20+ amino acids. The protein index requires slightly more than 
 2 gigabytes of RAM. In practice -- due to sequence divergence rates over evolutionary time -- DNA 
-Blat works well within humans and primates, while protein Blat continues to find good matches within
+BLAT works well within humans and primates, while protein Blat continues to find good matches within
 terrestrial vertebrates and even earlier organisms for conserved proteins. Within humans, protein 
 Blat gives a much better picture of gene families (paralogs) than DNA Blat. However, BLAST and 
 psi-BLAST at NCBI can find much more remote matches.</p>
@@ -75,8 +75,8 @@ structure of an mRNA, but expert users can run large batch jobs and make interna
 sensitivity changes by installing command-line Blat on their own Linux server.</p>
 
 <a name="blat1b"></a>
-<h2>Blat can't find a sequence or not all expected matches</h2>
-<h6>I can't find a sequence with Blat although I'm sure it is in the genome. Am I doing 
+<h2>BLAT can't find a sequence or not all expected matches</h2>
+<h6>I can't find a sequence with BLAT although I'm sure it is in the genome. Am I doing 
 something wrong?</h6>
 <p>
 First, check if you are using the correct version of the genome. For example, two versions of the 
@@ -88,27 +88,30 @@ in the genome. qPCR primers are a typical example. For these cases, try using
 <a href="../cgi-bin/hgPcr">In-Silico PCR</a> and selecting a gene set as the target. In general, 
 the In-Silico PCR tool is more sensitive and should be preferred for pairs of primers.</p>
 <p>
-If you have verified that you are using the correct genome and that the sequence is indeed there, 
-for example by using the <a href="../cgi-bin/hgTrackUi?db=hg38&g=oligoMatch">"Short match" track
-</a>, the problem may be a result of BLAT's query-masking. 
-This happens if your input sequence is part of a repeat and present thousands of times in the genome.
-The online version of Blat masks 11mers from the query that occur more than 1024 times in the 
-genome. This is done to improve speed, but may result in missed hits when you are searching for 
-sequences in repeats.</p>
+Another problematic case is searching for sequences in repeats or transposons.
+BLAT skips the most repetitive parts of the query and limits the number of matches it finds, 
+leading to missing matches for these repeat sequences.
+The online version of BLAT masks 11mers from the query that occur more than 1024 times in the 
+genome and limits results to 16 matches per chromosome strand. This means that at most 32 locations
+per chromosome are returned. This is done to improve speed, but can result in missed hits when you
+are searching for sequences in repeats.</p>
 <p>
-If your input sequence is not one of the very repetitive sequences, but still
-present a few dozen times on a chromosome, note that Blat results are limited
-to 16 results per chromosome strand. This means that at most 32 locations
-per chromosome are returned.
-</p>
-<p>
-To find all matches for repetitive sequences with the online version of Blat, you can add more flanking sequence to your 
-query. If this is not possible, the only alternative is to download the executables of Blat and the 
-.2bit file of a genome to your own machine and use BLAT on the command line. See 
-<a href="#blat3">Downloading BLAT source and documentation</a> for more information.</p>
+Often for repeat sequences, you can use the 
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=chainSelf">self-chain track</a> to 
+find the other matches, but only if the other matches are long and specific enough. You can 
+check whether any sequence is present at a particular location 
+by using the <a href="../cgi-bin/hgTrackUi?db=hg38&g=oligoMatch">"Short match" track</a> 
+if your sequence is less than 30 bp.
+You can work around this minimum length limitation but adding more flanking sequence to your query
+to make the query unique enough. If this is not possible, the only alternative is to download 
+the executables of BLAT and the .2bit file of a genome to your own machine and use BLAT on 
+the command line. See <a href="#blat3">Downloading BLAT source and documentation</a> for 
+more information. When using the command line version of BLAT, you can set the repMatch 
+option to a large value to try to improve finding matches in repetitive regions and do not
+use one of the default 11.ooc repeat masking files.</p>
 
 <a name="blat1c"></a>
-<h2>Blat or In-Silico PCR finds multiple matches such as chr_alt or chr_fix even though only one is expected</h2>
+<h2>BLAT or In-Silico PCR finds multiple matches such as chr_alt or chr_fix even though only one is expected</h2>
 <h6>I am seeing two or more matches in the genome although there should only be one. What are these 
 extra matches?</h6>
 <p>
@@ -119,7 +122,7 @@ They also add fix sequences to resolve errors without changing the reference. Se
 target="_blank" href="http://genome.ucsc.edu/blog/patches/">patches blog post</a> for more 
 information.</p>
 <p>
-When you BLAT or isPCR a sequence which matches a chromosome location that also has a fix or alt 
+When you blat or isPCR a sequence which matches a chromosome location that also has a fix or alt 
 sequence, you will see a match on the reference chromosome (e.g. &quot;chr1&quot;) and another 
 match on the patch sequence (e.g. chr1_KN196472v1_fix). In most cases it is safe to ignore the 
 patch hit, as a human genome will not contain both the reference and alternate sequence at the 
@@ -140,20 +143,20 @@ For users with high-volume Blat demands, we recommend downloading the BLAT tool 
 information, see <a href="#blat3">Downloading BLAT source and documentation</a>.</p>
 
 <a name="blat3"></a>
-<h2>Downloading Blat source and documentation</h2>
-<h6>Is the Blat source available for download? Is documentation available?</h6>
+<h2>Downloading BLAT source and documentation</h2>
+<h6>Is the BLAT source available for download? Is documentation available?</h6>
 <p>
-Blat source and executables are freely available for academic, nonprofit and personal use. 
+BLAT source and executables are freely available for academic, nonprofit and personal use. 
 Commercial licensing information is available on the <a href="http://www.kentinformatics.com" 
 target="_blank">Kent Informatics website</a>.</p>
 <p>
-Blat source may be downloaded from 
+BLAT source may be downloaded from 
 <a href="http://hgdownload.soe.ucsc.edu/admin/">http://hgdownload.soe.ucsc.edu/admin/</a> (located 
-at /kent/src/blat within the most recent jksrci*.zip source tree). For Blat executables, go to 
+at /kent/src/blat within the most recent jksrci*.zip source tree). For BLAT executables, go to 
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">http://hgdownload.soe.ucsc.edu/admin/exe/</a> 
 and choose your machine type.</p>
 <p>
-Documentation on Blat program specifications is available 
+Documentation on BLAT program specifications is available 
 <a href="../goldenPath/help/blatSpec.html">here</a>. Note that the command-line BLAT 
 does not return matches to U nucleotides in the query sequence.</p>
 
@@ -162,7 +165,7 @@ does not return matches to U nucleotides in the query sequence.</p>
 <h6>I'm setting up my own Blat server and would like to use the same parameter values that the 
 UCSC web-based Blat server uses.</h6> 
 <p>
-We almost always <strong>expect small differences</strong> between the hgBlat/gfServer and the 
+We almost always <strong>expect small differences</strong> between the hgBLAT/gfServer and the 
 stand-alone, command-line Blat. The best matches can be found using pslReps and pslCDnaFilter 
 utilities. The web-based Blat is tuned permissively with a minimum cut-off score of 20, which will 
 display most of the alignments. We advise deciding which 
@@ -183,27 +186,27 @@ for an overview of this process.</p>
   alternative output formats (such as blast8) slightly differently, and this can lead to minor
   differences in results; particularly for short alignments. Furthermore, the query sequence
   should have all U nucleotides converted to T nucleotides or have the "-q=rna" flag used
-  to match the web-Blat.</li>
+  to match the web-BLAT.</li>
 </ul>
 <p>
 <em>faToTwoBit</em>:</p>
 <ul>
-  <li>Uses soft masking to convert Fasta format to the 2bit format for Blat input.</li>
+  <li>Uses soft masking to convert Fasta format to the 2bit format for BLAT input.</li>
 </ul>
 <p>
-<em>gfServer</em> (this is how the UCSC web-based Blat servers are configured):
+<em>gfServer</em> (this is how the UCSC web-based BLAT servers are configured):
 <ul>
   <li>
-  Blat server (capable of PCR):<br>
+  BLAT server (capable of PCR):<br>
   &nbsp;&nbsp;&nbsp;<code>gfServer start blatMachine portX -stepSize=5 -log=untrans.log 
   database.2bit</code></li>
   <li>
-  translated Blat server:<br>
+  translated BLAT server:<br>
   &nbsp;&nbsp;&nbsp;<code>gfServer start blatMachine portY -trans -mask -log=trans.log 
   database.2bit</code> </li>
 </ul>
 <p>For enabling DNA/DNA and DNA/RNA matches, only the host, port and twoBit files are needed. The 
-same port is used for both untranslated BLAT (gfClient) and PCR (webPcr). You'll need a separate 
+same port is used for both untranslated Blat (gfClient) and PCR (webPcr). You'll need a separate 
 Blat server on a separate port to enable translated Blat (protein searches or translated searches 
 in protein-space).</p>
 <p>
@@ -234,7 +237,7 @@ For more information on the parameters available for BLAT, gfServer, and gfClien
 <h2>Using the <em>-ooc</em> flag</h2>
 <h6>What does the <em>-ooc</em> flag do?</h6>
 <p>
-Using any <em>-ooc</em> option in Blat, such as <em>-ooc=11.ooc</em>, speeds up searches similar to 
+Using any <em>-ooc</em> option in BLAT, such as <em>-ooc=11.ooc</em>, speeds up searches similar to 
 repeat-masking sequence. The <em>11.ooc</em> file contains sequences determined to be 
 over-represented in the genome sequence. To improve search speed, these sequences are not used when 
 seeding an alignment against the genome. For reasonably sized sequences, this will not create a 
@@ -247,7 +250,7 @@ poor quality. For example, if a particular sequence consists primarily of sequen
 is used.</p>
 <p>
 In summary, if you are not finding certain sequences and can afford the extra processing time, you 
-may want to run Blat without the <em>11.ooc</em> file if your particular situation warrants its 
+may want to run BLAT without the <em>11.ooc</em> file if your particular situation warrants its 
 use.</p>
 
 <a name="blat4"></a>
@@ -300,8 +303,8 @@ obtaining the source code, see our <a href="FAQlicense.html">FAQ</a> on source c
 downloads.</p>
 
 <a name="blat8"></a>
-<h2>Using Blat for short sequences with maximum sensitivity</h2>
-<h6>How do I configure Blat for short sequences with maximum sensitivity?</h6> 
+<h2>Using BLAT for short sequences with maximum sensitivity</h2>
+<h6>How do I configure BLAT for short sequences with maximum sensitivity?</h6> 
 <p>
 Here are some guidelines for configuring standalone Blat and gfServer/gfClient for these 
 conditions:</p>
@@ -316,7 +319,7 @@ conditions:</p>
   For <em>minMatch</em>=1 (e.g., protein), the minimum guaranteed match length is: 1 * 
   <em>stepSize</em> + <em>tileSize</em> - 1<br>
   Note: There is also a &quot;minimum lucky size&quot; for hits. This is the smallest possible hit 
-  that Blat can find. This minimum lucky size can be calculated using the formula: <em>stepSize</em>
+  that BLAT can find. This minimum lucky size can be calculated using the formula: <em>stepSize</em>
   + <em>tileSize</em>. For example, if we use a <em>tileSize</em> of 11 and <em>stepSize</em> of 5, 
   hits smaller than 16 bases won't be reported.</li>
   <li>
@@ -332,7 +335,7 @@ conditions:</p>
   Do not use masking command-line options.</li>
 </ul>
 <p>
-The above changes will make Blat more sensitive, but will also slow the speed and increase the 
+The above changes will make BLAT more sensitive, but will also slow the speed and increase the 
 memory usage. It may be necessary to process one chromosome at a time to reduce the memory 
 requirements.</p>
 <p>
@@ -344,11 +347,11 @@ score, coverage, or quality desired. For information on obtaining the source cod
 
 <a name="blat9"></a>
 <h2>Blat ALL genomes</h2>
-<h6>How do I Blat queries for the default genome assemblies of all organisms?</h6>
+<h6>How do I blat queries for the default genome assemblies of all organisms?</h6>
 <p>
 BLAT is designed to quickly find sequence similarity between query and target sequences. 
-Generally, Blat is used to find locations of sequence homology in a single target genome or determine
- the exon structure of an mRNA. Blat also allows users to compare the query sequence against all of 
+Generally, BLAT is used to find locations of sequence homology in a single target genome or determine
+ the exon structure of an mRNA. BLAT also allows users to compare the query sequence against all of 
 the default assemblies for organisms hosted on the UCSC Genome Browser. The <em>Search ALL</em> feature
 may be useful if you have an ambiguous query sequence and are trying to determine what organism it may
 belong to.
@@ -375,12 +378,12 @@ no matches</h6>
 <p>
 In the Blat ALL results page, the "Hits" column does not represent alignments, instead it reports 
 tile hits. Tile hits are 11 base kmer matches found in the target, which do not necessarily 
-represent successful alignments. When one clicks the 'Assembly' link a full BLAT alignment for 
+represent successful alignments. When one clicks the 'Assembly' link a full Blat alignment for 
 that genome will occur and any alignment scores representing less than a 20 bp result will 
 come back as no matches found.</p>
 
 <p>
-When you submit a sequence to the BLAT ALL utility, the sequence is compared to an index in the 
+When you submit a sequence to the Blat ALL utility, the sequence is compared to an index in the 
 server. The index has been built from the target genome, with an 11bp default stepSize.
 These 11-mers &quot;tile&quot; the sequence as such:
 
@@ -399,20 +402,20 @@ and attempt to align the sequences between the hit locations in target and query
 
 <p>
 For example, if two 11-base tile hits align perfectly, it would result in a score of 22. This is 
-above the minimum required score of 20 (see <a href="#blat9">BLAT ALL genomes</a>), and would be 
+above the minimum required score of 20 (see <a href="#blat9">Blat ALL genomes</a>), and would be 
 reported as an alignment. However, there are penalties for gaps and mismatches, as well as potential 
 overlap (see stepsize in <a href="../goldenPath/help/blatSpec.html">BLAT specifications</a>), all 
-of which could bring the score below 20. In that case, BLAT ALL would report 2 &quot;hits&quot;, 
+of which could bring the score below 20. In that case, Blat ALL would report 2 &quot;hits&quot;, 
 but clicking into the assembly would report no matches. This most often occurs when there are 
-only a few (1-3) hits reported by BLAT ALL.</p>
+only a few (1-3) hits reported by Blat ALL.</p>
 
 <a name="blat11"></a>
-<h2>Approximating web-based BLAT results using gfServer/gfClient</h2>
+<h2>Approximating web-based Blat results using gfServer/gfClient</h2>
 
 <p>
 Often times using the gfServer/gfClient provides a better approximation or even replicate of
-the web-based BLAT results, which otherwise cannot be found using standalone BLAT. This approach
-mimics the blat server used by the Genome Browser web-based BLAT. The following example will show
+the web-based Blat results, which otherwise cannot be found using standalone Blat. This approach
+mimics the Blat server used by the Genome Browser web-based Blat. The following example will show
 how to set up an hg19 gfServer, then make a query. First, download the appropriate utility for
 the operating system and give it executable permissions:</p>
 <pre>
@@ -425,33 +428,33 @@ chmod +x gfServer gfClient blat
 </pre>
 <p>
 Next, download the appropriate .2bit genome (hg19 in this example), and run the gfServer
-utility with the web BLAT parameters, designating the local machine and port 1234:</p>
+utility with the web Blat parameters, designating the local machine and port 1234:</p>
 <pre>
 wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
 ./gfServer start 127.0.0.1 1234 -stepSize=5 hg19.2bit
 </pre>
 <p>
 After a few moments, the gfServer will initialize and be ready to recieve queries. In order
-to approximate web BLAT, we will use the gfClient with the following parameters, designating
+to approximate web Blat, we will use the gfClient with the following parameters, designating
 our input and output files.</p>
 <pre>
 ./gfClient -minScore=20 -minIdentity=0 127.0.0.1 1234 . input.fa out.psl
 </pre>
-<p>The output file <code>out.psl</code> should have results very similar to web-based BLAT.</p>
+<p>The output file <code>out.psl</code> should have results very similar to web-based Blat.</p>
 
 <a name="blat12"></a>
 <h2>Standalone or gfServer/gfClient result start positions off by one</h2>
-<h6>My standalone BLAT results or gfServer/gfClient BLAT results have a start
-position that is one less that what I see on web BLAT results</h6>
+<h6>My standalone Blat results or gfServer/gfClient Blat results have a start
+position that is one less that what I see on web Blat results</h6>
 <p>
 This is due to how we store internal coordinates in the Genome Browser. The default
-BLAT <strong>Output type</strong> of <strong>hyperlink</strong> shows results in our
+Blat <strong>Output type</strong> of <strong>hyperlink</strong> shows results in our
 internal coordinate data structure. These internal coordinates have a zero-based start
 and a one-based end. See the following <a target="_blank" href="/FAQ/FAQtracks#tracks1"
 >FAQ entry</a> for more information.</p>
 <p>
-If the <strong>Output type</strong> is changed to <strong>psl</strong> on web BLAT, the same
-zero-based half open coordinate results will be seen as the standalone BLAT and gfServer/gfClient 
+If the <strong>Output type</strong> is changed to <strong>psl</strong> on web Blat, the same
+zero-based half open coordinate results will be seen as the standalone Blat and gfServer/gfClient 
 procedures.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

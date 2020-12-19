@@ -50,6 +50,8 @@ priority 1.5
     url http://www.genecards.org/Search/Keyword?queryString=$$
     urlLabel In GeneCards: 
     visibility dense
+    exonArrows off
+    mouseOverField elementType
     parent geneHancer
 
         track geneHancerRegElementsDoubleElite

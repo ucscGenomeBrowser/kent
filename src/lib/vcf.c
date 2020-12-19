@@ -264,7 +264,7 @@ return vcfInfoString;
 }
 
 // Regular expressions to check format and extract information from header lines:
-static const char *fileformatRegex = "^##(file)?format=VCFv([0-9]+)(\\.([0-9]+))?$";
+static const char *fileformatRegex = "^##(file)?format=VCFv([0-9]+)(\\.([0-9]+))?";
 static const char *infoOrFormatRegex =
     "^##(INFO|FORMAT)="
     "<ID=([\\.+A-Za-z0-9_:-]+),"
@@ -403,7 +403,8 @@ if (! sameString(exp1, words[ix]))
 #define expectColumnName(vcff, exp, words, ix) expectColumnName2(vcff, exp, NULL, words, ix)
 
 // There might be a whole lot of genotype columns...
-#define VCF_MAX_COLUMNS 16 * 1024
+#define VCF_MAX_COLUMNS 256 * 1024
+#define VCF_MIN_COLUMNS 8
 
 char *vcfDefaultHeader = "#CHROM POS ID REF ALT QUAL FILTER INFO";
 /* Default header if we have none. */
@@ -416,6 +417,8 @@ int wordCount = chopLine(line+1, words);
 if (wordCount >= VCF_MAX_COLUMNS)
     vcfFileErr(vcff, "header contains at least %d columns; "
 	       "VCF_MAX_COLUMNS may need to be increased in vcf.c!", VCF_MAX_COLUMNS);
+if (wordCount < VCF_MIN_COLUMNS)
+    errAbort("VCF header missing at least one of the required VCF fields");
 expectColumnName(vcff, "CHROM", words, 0);
 expectColumnName(vcff, "POS", words, 1);
 expectColumnName(vcff, "ID", words, 2);
@@ -424,7 +427,7 @@ expectColumnName(vcff, "ALT", words, 4);
 expectColumnName2(vcff, "QUAL", "PROB", words, 5);
 expectColumnName(vcff, "FILTER", words, 6);
 expectColumnName(vcff, "INFO", words, 7);
-if (wordCount > 8)
+if (wordCount > VCF_MIN_COLUMNS)
     {
     expectColumnName(vcff, "FORMAT", words, 8);
     if (wordCount < 10)
@@ -764,7 +767,7 @@ return (alleleCount == 2 &&
         (sameString(alleles[0], alleles[1]) || sameString(".", alleles[1])));
 }
 
-static boolean allelesHavePaddingBase(char **alleles, int alleleCount)
+boolean allelesHavePaddingBase(char **alleles, int alleleCount)
 /* Examine alleles to see if they either a) all start with the same base or
  * b) include a symbolic or 0-length allele.  In either of those cases, there
  * must be an initial padding base that we'll need to trim from non-symbolic
@@ -924,8 +927,12 @@ static boolean chromsMatch(char *chromA, char *chromB)
 // Return TRUE if chromA and chromB are non-NULL and identical, possibly ignoring
 // "chr" at the beginning of one but not the other.
 {
+// Allow SARS-CoV-2 VCF to use GenBank or RefSeq ID instead of our chromified RefSeq ID:
+static char *sarsCoV2Ids[] = {"NC_045512v2", "MN908947.3", "NC_045512.2"};
 if (chromA == NULL || chromB == NULL)
     return FALSE;
+else if (stringIx(chromA, sarsCoV2Ids) >= 0 && stringIx(chromB, sarsCoV2Ids) >= 0)
+    return TRUE;
 char *chromAPlus = startsWith("chr", chromA) ? chromA+3 : chromA;
 char *chromBPlus = startsWith("chr", chromB) ? chromB+3 : chromB;
 return sameString(chromAPlus, chromBPlus);
@@ -1451,6 +1458,37 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 record->genotypeUnparsedStrings = NULL;
 }
 
+void vcfParseGenotypesGtOnly(struct vcfRecord *record)
+/* Translate record->genotypesUnparsedStrings[] into proper struct vcfGenotype[], but ignore
+ * genotype info elements, IDs, etc; parse only the genotypes (e.g. for quick display in hgTracks).
+ * This destroys genotypesUnparsedStrings. */
+{
+if (record->genotypeUnparsedStrings == NULL)
+    return;
+struct vcfFile *vcff = record->file;
+record->genotypes = vcfFileAlloc(vcff, vcff->genotypeCount * sizeof(struct vcfGenotype));
+int i;
+for (i = 0;  i < vcff->genotypeCount;  i++)
+    {
+    // Parse (.|[0-9])([/|](.|[0-9]))? in first one to four characters
+    char *string = record->genotypeUnparsedStrings[i];
+    struct vcfGenotype *gt = &(record->genotypes[i]);
+    gt->hapIxA = gt->hapIxB = -1;
+    if (string[0] != '.' && isdigit(string[0]))
+        gt->hapIxA = atoi(string);
+    if (string[1] == '/' || string[1] == '|')
+        {
+        if (isdigit(string[2]))
+            gt->hapIxB = atoi(string+2);
+        if (string[1] == '|')
+            gt->isPhased = TRUE;
+        }
+    else
+        gt->isHaploid = TRUE;
+    }
+record->genotypeUnparsedStrings = NULL;
+}
+
 const struct vcfGenotype *vcfRecordFindGenotype(struct vcfRecord *record, char *sampleId)
 /* Find the genotype and associated info for the individual, or return NULL.
  * This calls vcfParseGenotypes if it has not already been called. */
@@ -1473,6 +1511,74 @@ for (i = 0;  i < gt->infoCount;  i++)
     if (sameString(key, gt->infoElements[i].key))
         return &gt->infoElements[i];
 return NULL;
+}
+
+int vcfGenotypeIndex(int h0Ix, int h1Ix)
+/* Return the index in a linear array of distinct genotypes, given two 0-based allele indexes.
+ * This follows the following convention used by GnomAD (GATK?), that has the advantage that
+ * gt indexes of small numbers don't change as the number of alleles increases, and also matches
+ * the ref/ref, ref/alt, alt/alt convention for biallelic variants:
+ * 0/0,
+ * 0/1, 1/1,
+ * 0/2, 1/2, 2/2,
+ * 0/3, 1/3, 2/3, 3/3,
+ * ... */
+{
+// Note that in that scheme, h0Ix <= h1Ix; if h0Ix > h1Ix, swap them.
+if (h0Ix > h1Ix)
+    {
+    int tmp = h0Ix;
+    h0Ix = h1Ix;
+    h1Ix = tmp;
+    }
+return (h1Ix * (h1Ix+1) / 2) + h0Ix;
+}
+
+static int genotypeArraySize(int alleleCount)
+/* Return the number of distinct genotypes given the number of alleles.  That is the same as the
+ * array index of the first genotype that would follow for alleleCount+1. */
+{
+return vcfGenotypeIndex(0, alleleCount + 1);
+}
+
+void vcfCountGenotypes(struct vcfRecord *rec, int **retGtCounts, int **retAlleleCounts,
+                       int *retPhasedCount, int *retDiploidCount)
+/* Tally genotypes and alleles for summary, adding 1 to rec->alleleCount to represent missing data */
+{
+vcfParseGenotypes(rec);
+int *alCounts;
+AllocArray(alCounts, rec->alleleCount + 1);
+int *gtCounts;
+AllocArray(gtCounts, genotypeArraySize(rec->alleleCount + 1));
+int phasedGts = 0, diploidCount = 0;
+int i;
+for (i = 0;  i < rec->file->genotypeCount;  i++)
+    {
+    struct vcfGenotype *gt = &(rec->genotypes[i]);
+    if (gt->isPhased)
+	phasedGts++;
+    int hapIxA = gt->hapIxA;
+    if (hapIxA < 0)
+        hapIxA = rec->alleleCount;
+    alCounts[hapIxA]++;
+    if (!gt->isHaploid)
+	{
+        diploidCount++;
+        int hapIxB = gt->hapIxB;
+        if (hapIxB < 0)
+            hapIxB = rec->alleleCount;
+        alCounts[hapIxB]++;
+        gtCounts[vcfGenotypeIndex(hapIxA, hapIxB)]++;
+        }
+    }
+if (retGtCounts)
+    *retGtCounts = gtCounts;
+if (retAlleleCounts)
+    *retAlleleCounts = alCounts;
+if (retPhasedCount)
+    *retPhasedCount = phasedGts;
+if (retDiploidCount)
+    *retDiploidCount = diploidCount;
 }
 
 static char *vcfDataLineAutoSqlString =
@@ -1632,4 +1738,30 @@ vcfWriteWordArrayWithSep(f, rec->filterCount, rec->filters, ';');
 fputc('\t', f);
 vcfWriteInfo(f, rec);
 fputc('\n', f);
+}
+
+boolean looksTabular(const struct vcfInfoDef *def, const struct vcfInfoElement *el)
+/* Return TRUE if def->description seems to contain a |-separated description of columns
+ * and el's first non-empty string value has the same number of |-separated parts. */
+{
+if (!def || def->type != vcfInfoString || isEmpty(def->description))
+    return FALSE;
+if (regexMatch(def->description, COL_DESC_REGEX))
+    {
+    int descColCount = countChars(def->description, '|') + 1;
+    if (descColCount >= MIN_COLUMN_COUNT)
+        {
+        int j;
+        for (j = 0;  j < el->count;  j++)
+            {
+            char *val = el->values[j].datString;
+            if (isEmpty(val))
+                continue;
+            int elColCount = countChars(val, '|') + 1;
+            if (elColCount == descColCount)
+                return TRUE;
+            }
+        }
+    }
+return FALSE;
 }

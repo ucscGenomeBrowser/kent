@@ -376,6 +376,8 @@ puts( // TODO: Replace nested tables with CSS (difficulty is that tables are clo
 		 "CELLPADDING='0'><TR><TD>\n"
      "     <div class='subheadingBar'><div class='windowSize' id='sectTtl'>"
      );
+// FIXME: Need a more general solution here to support styling in blue bar title. 
+//      Perhaps support escaped < and > by doubling or backslash
 htmlTextOut(title);
 
 puts("     </div></div>\n"

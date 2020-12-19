@@ -84,7 +84,6 @@ printf("<input class='btn btn-secondary' type='button' id='clearButton' VALUE=\"
 jsOnEventById("click", "clearButton",
     "$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
     "$('[name=cdwBrowseFiles_page]').val('1');\n"
-    "$('[name=clearSearch]').val('1');\n"
     "$('#submit').click();\n");
 
 printf("<br>");
@@ -406,25 +405,127 @@ if (strchr(returnUrl, '?') == NULL)
 if (withFilters || visibleFacetList)
     showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc, visibleFacetList);
 
-printf("<div class='row'>\n"); // parent container
-
 if (visibleFacetList)
     {
-    // left column
-    printf("<div class='col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3'>\n");
 
-    // reset all facet value selections
-    char *op = "resetAll";
-    htmlPrintf("<a class='btn btn-secondary' href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+    // Show top bar with quick-deselects for selected facet values
+    //  as well a clear restriction button that cleans out cdwFile_filter cart var. 
+
+    struct dyString *facetBar = dyStringNew(1024);
+
+    char *where = cartUsualString(cart, "cdwFile_filter", "");
+
+
+    boolean gotSelected = FALSE;
+
+    struct slName *nameList = slNameListFromComma(visibleFacetList);
+    int f;
+    for (f = 0; f < table->fieldCount; ++f) 
+	{
+	struct facetField *field = ffArray[f];
+	if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
+	    {
+	    if (!field->allSelected)
+		{
+		gotSelected = TRUE;
+		htmlDyStringPrintf(facetBar, "<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
+		htmlDyStringPrintf(facetBar, "<dt style='display: inline-block;'>\n");
+		htmlDyStringPrintf(facetBar, "<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
+
+		struct facetVal *val;
+
+		// Sort values alphabetically
+		// Make a copy to not disturb the original order 
+		struct facetVal *valListCopy = facetsClone(field->valList);
+		slSort(&valListCopy, facetValCmp);
+		
+		for (val = valListCopy; val; val=val->next)
+		    {
+		    boolean specificallySelected = (val->selected && !field->allSelected);
+		    if (specificallySelected)
+			{
+			char *op = "remove";
+			htmlDyStringPrintf(facetBar, "<dd class=\"facet\" style='display: inline-block;'>\n");
+			htmlDyStringPrintf(facetBar, "<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
+			    specificallySelected ? "true" : "false", 
+			    specificallySelected ? "checked" : "");
+			htmlDyStringPrintf(facetBar, "<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+				"&browseFiles_facet_op=%s|url|"
+				"&browseFiles_facet_fieldName=%s|url|"
+				"&browseFiles_facet_fieldVal=%s|url|"
+				"&cdwBrowseFiles_page=1' "
+				">",
+			    cartSessionVarName(), cartSessionId(cart),
+			    op, field->fieldName, val->val
+			    );
+			htmlDyStringPrintf(facetBar, "%s (%d)</a>", val->val, val->selectCount);
+			htmlDyStringPrintf(facetBar, "</dd>\n");
+			}
+		    }
+		slFreeList(&valListCopy);
+		
+		htmlDyStringPrintf(facetBar, "</span></span>\n");
+
+		}
+
+	    }
+	}
+
+    if (!isEmpty(where) || gotSelected)
+        {
+	printf("<div>\n");
+        }
+
+    if (!isEmpty(where))
+	{
+	// left column
+        
+	printf("Restricting files to where %s. ", where);
+
+	printf("&nbsp&nbsp;");
+	printf("<input class='btn btn-secondary' type='button' id='clearRestrictionButton' VALUE=\"Clear Restriction\">");
+	jsOnEventById("click", "clearRestrictionButton",
+	    "$('[name=cdwBrowseFiles_page]').val('1');\n"
+	    "$('[name=clearRestriction]').val('1');\n"
+	    "$('#submit').click();\n");
+
+	printf("<br>");
+        }
+
+
+    if (gotSelected)
+	{
+	// reset all facet value selections button
+	char *op = "resetAll";
+	htmlPrintf("<a class='btn btn-secondary' href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
 	    "&browseFiles_facet_op=%s|url|"
 	    "&browseFiles_facet_fieldName=%s|url|"
 	    "&browseFiles_facet_fieldVal=%s|url|"
 	    "&cdwBrowseFiles_page=1' "
-	    ">%s</a><br><br>\n",
-	cartSessionVarName(), cartSessionId(cart),
-	op, "", "",
-	"Clear All"
-	);
+		">%s</a>\n",
+		cartSessionVarName(), cartSessionId(cart),
+	    op, "", "",
+	    "Clear All"
+	    );
+
+	printf("<dl style='display: inline-block;'>\n");
+	printf("%s\n", facetBar->string);
+	printf("</dl>\n");
+	}
+
+    if (!isEmpty(where) || gotSelected)
+	printf("</div><br>\n");
+
+    dyStringFree(&facetBar);
+    }
+
+printf("<div class='row'>\n"); // parent container
+
+if (visibleFacetList)
+    {
+
+    // left column
+    printf("<div class='col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3'>\n");
 
     struct slName *nameList = slNameListFromComma(visibleFacetList);
     int f;

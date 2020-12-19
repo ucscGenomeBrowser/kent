@@ -276,50 +276,6 @@ switch (str[0])
     }
 return ret;
 }
-boolean hIsGisaidServer()
-/* Is this the GISAID-customized server? Change for config variable
- * gisaid.server=yes */
-{
-static boolean gisaidHost = FALSE;
-static boolean haveChecked = FALSE;
-if (!haveChecked)
-    {
-    char *serverOpt = cfgOption("gisaid.server");
-    gisaidHost = (serverOpt != NULL) && sameString(serverOpt, "yes");
-    haveChecked = TRUE;
-    }
-return gisaidHost;
-}
-
-boolean hIsGsidServer()
-/* Is this the GSID-customized server? Change for config variable
- * gsid.server=yes */
-{
-static boolean gsidHost = FALSE;
-static boolean haveChecked = FALSE;
-if (!haveChecked)
-    {
-    char *serverOpt = cfgOption("gsid.server");
-    gsidHost = (serverOpt != NULL) && sameString(serverOpt, "yes");
-    haveChecked = TRUE;
-    }
-return gsidHost;
-}
-
-boolean hIsCgbServer()
-/* Is this a cancer genome browser server? Change for config variable
- * cgb.server=yes */
-{
-static boolean cgbHost = FALSE;
-static boolean haveChecked = FALSE;
-if (!haveChecked)
-    {
-    char *serverOpt = cfgOption("cgb.server");
-    cgbHost = (serverOpt != NULL) && sameString(serverOpt, "yes");
-    haveChecked = TRUE;
-    }
-return cgbHost;
-}
 
 void hTableStart()
 /* Output a table with solid borders. */

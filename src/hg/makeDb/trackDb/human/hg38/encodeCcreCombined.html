@@ -1,0 +1,171 @@
+<h2>Description</h2>
+<p>
+This track displays the <em>ENCODE Registry of candidate cis-Regulatory Elements</em> (cCREs) 
+in the human genome, a total of 926,535 elements identified and classified by the ENCODE Data 
+Analysis Center according to biochemical signatures.
+cCREs are the subset of representative DNase hypersensitive sites across ENCODE and
+Roadmap Epigenomics samples that are supported 
+by either histone modifications (H3K4me3 and H3K27ac) or CTCF-binding data.
+The Registry of cCREs is one of the core components of the integrative level of the
+ENCODE Encyclopedia of DNA Elements.</p>
+
+<p>
+Additional exploration of the cCRE's and underlying raw ENCODE data is provided by the
+<a target="_blank" href="https://screen.wenglab.org/">
+SCREEN</a>
+(Search Candidate cis-Regulatory Elements) web tool,
+designed specifically for the Registry, accessible by linkouts from the track details page.
+The cCREs identified in the mouse genome are available in a companion track, 
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encodeCcreCombined">here</a>.</p>
+
+<!--
+<p>
+The related cCREs by Biosample composite track presents ccREs 
+and associated epigenetic signal in all individual biosamples in a large matrix.
+Additional views of the data are provided by the <a>ENCODE Integrative Megahub</a>.
+</p>
+-->
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+CCREs are colored and labeled according to classification by regulatory signature:
+<p>
+<table cellpadding='2'>
+  
+  <tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;"></th>
+    <th style="border-bottom: 2px solid;">UCSC label</th>
+    <th style="border-bottom: 2px solid;">ENCODE classification</th>
+    <th style="border-bottom: 2px solid;">ENCODE label</th>
+  </tr>
+  </thead>
+
+<tr><td style='background-color: #FF0000;'></td><td>red</td>
+        <td>prom</td>
+        <td>promoter-like signature</td>
+        <td>PLS</td></tr>
+<tr><td style='background-color: #FFA700;'></td><td>orange</td>
+        <td>enhP</td>
+        <td>proximal enhancer-like signature</td>
+        <td>pELS</td></tr>
+<tr><td style='background-color: #FFCD00;'></td><td>yellow</td>
+        <td>enhD</td>
+        <td>distal enhancer-like signature</td>
+        <td>dELS</td></tr>
+<tr><td style='background-color: #FFAAAA;'></td><td>pink</td>
+        <td>K4m3</td>
+        <td>DNase-H3K4me3</td>
+        <td>DNase-H3K4me3</td></tr>
+<tr><td style='background-color: #00B0F0;'</td><td>blue</td>
+        <td>CTCF</td>
+        <td>CTCF-only</td>
+        <td>CTCF-only</td></tr>
+</table>
+</p>
+<p>
+The DNase-H3K4me3 elements are those with promoter-like biochemical signature that
+are not within 200bp of an annotated TSS.
+</p>
+
+<h2>Methods</h2>
+<p>
+All individual DNase hypsersensitive sites (DHSs) identified from 706 DNase-seq experiments
+in humans (a total of 93 million sites from 706 experiments) were iteratively clustered
+and filtered for the highest signal across all experiments, producing 
+representative DHSs (rDHSs), with a total of  2.2 million such sites in human.
+The highest signal elements from this set that were also supported by high H3K4me3, H3K27ac 
+and/or CTCF ChIP-seq signals were designated cCRE's (a total of 926,535 in human).
+</p>
+<p>
+Classification of cCRE's was performed based on the following criteria:
+<ol>
+  <li>cCREs with promoter-like signatures (cCRE-PLS) fall within 200 bp of an annotated GENCODE TSS
+      and have high DNase and H3K4me3 signals.</li>
+  <li>cCREs with enhancer-like signatures (cCRE-ELS) have high DNase and H3K27ac with low H3K4me3
+      max-Z score if they are within 200 bp of an annotated TSS. The subset of cCREs-ELS within 2 kb
+      of a TSS is denoted proximal (cCRE-pELS), while the remaining subset is denoted distal
+      (cCRE-dELS).</li>
+  <li>DNase-H3K4me3 cCREs have high H3K4me3 max-Z scores but low H3K27ac max-Z scores and do not
+      fall within 200 bp of a TSS.</li>
+  <li>CTCF-only cCREs have high DNase and CTCF and low H3K4me3 and H3K27ac.</li>
+</ol>
+
+<img style='margin-left: 40px;' height=229 width=371 src="../images/cCREgroups.png">
+
+<p>
+The GENCODE V24 (Ensembl 33) basic gene annotation set was used in this analysis.
+For further detail about the identification and classification of ENCODE cCREs see 
+the <i>About</i> page of the
+<a target="_blank" href="https://screen.encodeproject.org">SCREEN</a> web tool.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The ENCODE accession numbers of the constituent datasets at the
+<a target="_blank" href="https://encodeproject.org">ENCODE Portal</a>
+are available from the cCRE details page.
+</p>
+<p>
+The data in this track can be interactively explored with the 
+<a href="../cgi-bin/hgTables">Table Browser</a> or the 
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. 
+The data can be accessed from scripts through our 
+<a href="https://api.genome.ucsc.edu">API</a>, the track name is "encodeCcreCombined".
+
+<p>
+For automated download and analysis, this annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/encode3/ccre/" target="_blank">our download server</a>.
+The file for this track is called <tt>encodeCcreCombined.bb</tt>. 
+Individual regions or the whole genome annotation can be obtained using our tool 
+<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system. 
+Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, e.g.<br><br> 
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/encode3/ccre/encodeCcreCombined.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+
+<h2>Release Notes</h2>
+<p>
+This annotation is based on ENCODE data released on or before September 14, 2018.</p>
+<p>
+Data from the Common fund supported
+<a href="http://www.roadmapepigenomics.org/" target="_blank">Roadmap Epigenomics Mapping Consortium
+(REMC)</a> were included for building the ENCODE cCREs. Please see the 2015 paper on their analysis
+of reference human genomes for more information.</p>
+
+<h2>Credits</h2>
+<p>
+This dataset was produced by the ENCODE Data Analysis Center
+(<a target="_blank" href="https://www.umassmed.edu/zlab/">Zlab</a> at UMass Medical Center). 
+Thanks to Henry Pratt, Jill Moore, Michael Purcaro, and Zhiping Weng, PI for providing
+this data.
+Thanks also to the ENCODE Consortium, the ENCODE production laboratories, 
+and the ENCODE Data Coordination Center for generating and processing the datasets used here.
+</p>
+
+<h2>References</h2>
+<p>
+ENCODE Project Consortium.
+<a href="https://doi.org/10.1038/s41586-020-2493-4" target="_blank">
+Expanded Encyclopedias of DNA Elements in the Human and Mouse Genomes</a>.
+<em>Nature</em>. 2020 July 30;583(7818):699-710</p>
+
+<p>
+ENCODE Project Consortium.
+<a href="https://doi.org/10.1038/nature11247" target="_blank">
+An integrated encyclopedia of DNA elements in the human genome</a>.
+<em>Nature</em>. 2012 Sep 6;489(7414):57-74.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22955616" target="_blank">22955616</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3439153/" target="_blank">PMC3439153</a>
+</p>
+
+ENCODE Project Consortium.
+<a href="http://dx.plos.org/10.1371/journal.pbio.1001046" target="_blank">
+A user's guide to the encyclopedia of DNA elements (ENCODE)</a>.
+<em>PLoS Biol</em>. 2011 Apr;9(4):e1001046.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21526222" target="_blank">21526222</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3079585/" target="_blank">PMC3079585</a>
+</p>
+

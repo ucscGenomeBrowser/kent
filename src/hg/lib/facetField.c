@@ -36,6 +36,31 @@ struct facetVal *b = *((struct facetVal **)vb);
 return strcasecmp(a->val, b->val);
 }
 
+struct facetVal *facetsClone(struct facetVal *origList)
+/* Copy the facet vals list */
+{
+
+struct facetVal *newList = NULL;
+struct facetVal *o;  // original element
+for (o = origList; o != NULL; o = o->next)
+    {
+
+    struct facetVal *n;   // new element
+    AllocVar(n);
+    n->val = o->val;
+    n->useCount = o->useCount;
+    n->selected = o->selected;
+    n->selectCount = o->selectCount;
+
+    slAddHead(&newList, n);
+    }
+
+/* Restore reversed order and return result */
+slReverse(&newList);
+
+return newList;
+}
+
 
 static struct facetVal *facetValNew(char *val, int useCount)
 /* Create new facetVal structure */

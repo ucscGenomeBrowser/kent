@@ -12,10 +12,10 @@ longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 d
 type bed 6 +
 html gtexGeneExpr
 group expression
-priority 1
+priority 10.1
 maxItems 200
 spectrum on
-visibility pack
+visibility hide
 
 searchTable gtexGene
 query select chrom, chromStart, chromEnd, geneId from %s where geneId like '%s%%'
@@ -72,6 +72,16 @@ longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 2921 samples, 209 d
 html gtexGeneExprV4
 group expression
 priority 10.1
+
+track gtexGeneV8
+shortLabel GTEx Gene V8
+longLabel Gene Expression in 54 tissues from GTEx RNA-seq of 17382 samples, 948 donors (V8, Aug 2019)
+type bed 6 +
+group expression
+maxItems 200
+spectrum on
+priority 1
+visibility pack
 
 track gtexSnp
 release alpha

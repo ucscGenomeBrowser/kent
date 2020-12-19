@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import logging, optparse, gzip
 from sys import stdin, stdout, stderr, exit, modules
+from os.path import basename
+
 try:
     from urllib.request import urlopen # py2
 except ImportError:
@@ -13,23 +15,36 @@ except ImportError:
 # ==== functions =====
 def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
-    parser = optparse.OptionParser("""usage: %prog [options] filename - change NCBI or Ensembl chromosome names to UCSC names using the chromAlias table of the genome browser.
+    parser = optparse.OptionParser("""usage: %prog [options] filename - change NCBI or Ensembl chromosome names to UCSC names in tabular or wiggle files, using a chromAlias table.
 
-    Examples:
-        %prog -g hg19 --get
-        %prog -i test2.bed -o test2.ucsc.bed -a hg19.chromAlias.tsv -g hg19
+    Supports at least these file formats: BED, PSL, genePred, VCF, wiggle (bedgraph, span and fixed and mixes thereof), SAM, chain, interact,
+    pgSNP, GTF/GFF.
+
+    Requires a <genome>.chromAlias.tsv file which can be downloaded like this:
+        %prog --get hg19              # download the file hg19.chromAlias.tsv into current directory
+
+    If you do not want to use the --get option to retrieve the mapping tables, you can also download the alias mapping
+    files yourself, e.g. for mm10 with 'wget https://hgdownload.soe.ucsc.edu/goldenPath/mm10/database/chromAlias.txt.gz'
+
+    Then the script can be run like this:
+        %prog -i in.bed -o out.bed -a hg19.chromAlias.tsv
+        %prog -i in.bed -o out.bed -a https://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromAlias.txt.gz
+    Or in pipes, like this:
         cat test.bed | %prog -a mm10.chromAlias.tsv > test.ucsc.bed
+
     """)
 
-    parser.add_option("", "--get", dest="doDownload", action="store_true", help="download a chrom alias table from UCSC for --genomeDb into the current directory and exit")
-    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias table in tab-sep format. The alias tables for hg19 or hg38 are hardcoded in the script, they do not require a chromAlias table. Use the -g option for those.")
-    parser.add_option("-g", "--genomeDb", dest="db", action="store", help="a UCSC assembly ID, like hg19. Not required. Activates assembly-specific warning messages, only for hg19 right now.")
+    parser.add_option("", "--get", dest="downloadDb", action="store", help="download a chrom alias table from UCSC for the genomeDb into the current directory and exit")
+    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias file in tab-sep format or the http/https URL to one")
     parser.add_option("-i", "--in", dest="inFname", action="store", help="input filename, default: /dev/stdin")
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("-k", "--field", dest="fieldNo", action="store", type="int", \
+            help="index of field to convert, default is %default (1-based), for most formats, e.g. BED. For genePred, the chromosome is field 2, for PSL it is 10 or 14.", default=1)
+
     (options, args) = parser.parse_args()
 
-    if options.db is None and options.aliasFname is None:
+    if options.downloadDb is None and options.aliasFname is None:
         parser.print_help()
         exit(1)
 
@@ -46,53 +61,79 @@ def splitLines(ifh):
     #if (sys.version_info > (3, 0)):
     lineNo = 0
     for line in ifh:
-        if sep==-1:
-            if "\t" in line:
-                sep = "\t"
-            else:
-                sep = None # = split on any whitespace, consec. whitespc counts as one
-        chrom, rest = line.split(sep, 1)
-        lineNo += 1
-        yield lineNo, sep, chrom, rest
+        if line.startswith("fixedStep") or line.startswith("variableStep"):
+            row = line.split()
+            yield lineNo, " ", row # *step lines are always space-separated
+        else:
+            if sep==-1:
+                # why test first for space? Because after fixedStep, the lines are just single numbers
+                if " " in line:
+                    sep = None # = split on any whitespace, consec. whitespc counts as one
+                else:
+                    sep = "\t" # default is to split on tab
+            row = line.rstrip("\n\t").split(sep)
+            lineNo += 1
+            if sep is None:
+                sep = " "
+            yield lineNo, sep, row
 
 def parseAlias(fname):
     " parse tsv file with at least two columns, orig chrom name and new chrom name "
     toUcsc = {}
-    for line in open(fname):
+    if fname.startswith("http://") or fname.startswith("https://"):
+        ifh = urlopen(fname)
+        if fname.endswith(".gz"):
+            data = gzip.GzipFile(fileobj=ifh).read().decode()
+            ifh = data.splitlines()
+    elif fname.endswith(".gz"):
+        ifh = gzip.open(fname)
+    else:
+        ifh = open(fname)
+
+    for line in ifh:
         if line.startswith("alias"):
             continue
         row = line.rstrip("\n").split("\t")
         toUcsc[row[0]] = row[1]
     return toUcsc
 
-def chromToUcsc(db, aliasFname, ifh, ofh):
-    " convert the first column to UCSC-style chrom names "
+def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
+    " convert column number fieldIdx to UCSC-style chrom names "
     toUcsc = parseAlias(aliasFname)
 
     ucscChroms = set(toUcsc.values())
 
-    mtSkipCount = 0
-    for lineNo, sep, chrom, rest in splitLines(ifh):
-        # just pass through any UCSC chrom names
-        if chrom in ucscChroms:
-            ucscChrom = chrom
-        else:
-            if db=="hg19" and (chrom=="MT" or chrom=="M"):
-                mtSkipCount += 1
-                continue
-
+    for lineNo, sep, row in splitLines(ifh):
+        if len(row)<=2:
+            pass # fixedStep or variableStep lines are just passed through
+        elif row[0]=="fixedStep" or row[0]=="variableStep":
+            # fixedStep chrom=NC_033660.1 start=15778865 step=1
+            key, chrom = row[1].split("=")
+            assert(key=="chrom") # we assume that the first field has the chrom, that saves a lot of time
             ucscChrom = toUcsc.get(chrom)
             if ucscChrom is None:
                 logging.error("line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
                 exit(1)
                 continue
+            row[1] = "chrom="+ucscChrom
 
-        ofh.write(ucscChrom)
-        ofh.write(sep)
-        ofh.write(rest)
+        else:
+            # just pass through any UCSC chrom names
+            chrom = row[fieldIdx]
+            if row[0].startswith("#") or chrom in ucscChroms:
+                ucscChrom = chrom
+            else:
+                ucscChrom = toUcsc.get(chrom)
+                if ucscChrom is None:
+                    logging.error("line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
+                    exit(1)
+                    continue
 
-    if mtSkipCount!=0:
-        stderr.write("%d features were skipped because they were located on the M or MT chromosome. hg19 includes an older version of the mitochondrial genome and these features cannot be mapped yet.\n" % mtSkipCount)
+            row[fieldIdx] = ucscChrom
+
+        line = sep.join(row)
+        ofh.write(line)
+        ofh.write("\n")
 
 def download(db):
     url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
@@ -106,26 +147,28 @@ def download(db):
     data = gzip.GzipFile(fileobj=data).read().decode()
     outFname = db+".chromAlias.tsv"
     open(outFname, "w").write(data)
-    print("Wrote %s" % outFname)
+    print("Wrote %s to %s" % (url, outFname))
+    print("You can now convert a file with 'chromToUcsc -a %s -i infile.bed -o outfile.bed'" % outFname)
     exit(0)
 
 def main():
     args, options = parseArgs()
 
-    db = options.db
     aliasFname = options.aliasFname
     inFname = options.inFname
     outFname = options.outFname
 
-    if options.doDownload:
-        download(db)
+    if options.downloadDb:
+        download(options.downloadDb)
 
     if aliasFname is None:
-        logging.error("You need to provide an alias table with the -a option")
+        logging.error("You need to provide an alias table with the -a option or use --get to download one.")
         exit(1)
 
     if inFname is None:
         ifh = stdin
+    elif inFname.endswith(".gz"):
+        ifh = gzip.open(inFname)
     else:
         ifh = open(inFname)
 
@@ -134,6 +177,7 @@ def main():
     else:
         ofh = open(outFname, "w")
 
-    chromToUcsc(db, aliasFname, ifh, ofh)
+    fieldIdx = options.fieldNo-1
+    chromToUcsc(aliasFname, fieldIdx, ifh, ofh)
 
 main()

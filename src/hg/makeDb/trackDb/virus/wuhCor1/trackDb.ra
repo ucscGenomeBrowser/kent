@@ -1,0 +1,549 @@
+track mrna override
+visibility hide
+
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility hide
+html gap
+
+track rmsk override
+visibility hide
+
+searchTable gold
+shortCircuit 1
+termRegex NC_[0-9v]+
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+include ncbiGene.ra
+
+track rnaStructRangan
+shortLabel Rangan RNA
+longLabel Rangan et al. RNA predictions
+group rna
+visibility hide
+color 20,90,0
+type bed 6 +
+exonArrows off
+noScoreFilter .
+
+track primers
+shortLabel RT-PCR Primers
+longLabel RT-PCR Detection Kit Primer Sets
+group map
+type psl
+
+track rfam
+shortLabel Rfam
+longLabel Rfam families
+visibility hide
+group rna
+color 98,23,0
+url https://rfam.org/family/$$
+type bed 5
+
+track gordon2
+shortLabel Protein Interact.
+longLabel Human Interacting Proteins from Gordon et al. (* = druggable)
+group genes
+color 1,50,32
+type bigBed 5 +
+bigDataUrl /gbdb/wuhCor1/bbi/gordon.bb
+useScore on
+scoreMin 600
+scoreMax 1000
+priority 10
+mouseOverField drug
+urls pmid=https://www.ncbi.nlm.nih.gov/pubmed/$$
+
+track crisprDet
+shortLabel CRISPR Detection
+longLabel CRISPR Detection Guides
+group map
+type psl
+
+track rosettaMhc
+shortLabel CD8 RosettaMHC
+longLabel CD8 Epitopes predicted by NetMHC and Rosetta
+url https://rosettamhc.chemistry.ucsc.edu/?epitope=$$
+urls name="https://rosettamhc.chemistry.ucsc.edu/?epitope=$$"
+urlLabel Link to Rosetta Model
+group immu
+type bigBed 9 +
+exonArrows off
+exonNumbers off
+bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
+
+track epiValid
+shortLabel Validated Epitopes
+longLabel Validated Epitopes from SARS 2003 outbreak
+group immu
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
+
+track publicAnnots
+shortLabel Crowd-Sourced Data
+longLabel Crowd-sourced data: annotations contributed via bit.ly/cov2annots
+group map
+priority 6
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/bbi/public.bb
+mouseOverField extraField0
+filterValues.extraField0 genes,evolution,RNA,antibodies,CRISPR,primers,proteins 
+filterType.extraField0 singleList
+
+track pdb
+shortLabel PDB Structures
+longLabel Protein Data Bank (PDB) Sequence Matches
+group genes
+type bigBed 12
+visibility hide
+#$url https://www.rcsb.org/structure/$$
+url https://www.ebi.ac.uk/pdbe/pdbe-kb/covid19/$$
+urlLabel Link to PDB Covid Portal at the EBI
+iframeUrl https://www.rcsb.org/structure/$$
+iframeOptions width='1000' height='800' scrolling='yes' style='margin-top:10px'
+bigDataUrl /gbdb/wuhCor1/bbi/pdb.bb
+exonNumbers off
+priority 30
+
+track contacts
+shortLabel PDB Ligand Contacts
+longLabel Potential contact residues in PDB structures of viral proteins
+visibility hide
+group genes
+type bigBed 12 +
+bigDataUrl /gbdb/wuhCor1/bbi/contacts.bb
+mouseOverField _mouseOver
+url http://soe.ucsc.edu/~afyfe/covid/hub/t12.html?struct=$$
+urlLabel Link to 3D structure viewer:
+priority 31
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
+
+track cas13Crispr
+shortLabel Cas13 CRISPR
+longLabel Cas13 CRISPR targets
+group map
+type bigBed 5 +
+visibility hide
+bigDataUrl /gbdb/wuhCor1/bbi/cas13Crispr.bb
+exonNumbers off
+priority 40
+spectrum on
+scoreMax 700
+filter.EfficiencyScore 0
+filterLimits.EfficiencyScore 0:700
+
+track poranHla1
+shortLabel Poran HLA I
+longLabel RECON HLA-I epitopes
+visibility hide
+type bigBed 9 +
+group immu
+bigDataUrl /gbdb/wuhCor1/bbi/poranHla/CD8-hla1.bb
+noScoreFilter on
+mouseOverField name2
+html poranHla1
+
+track poranHla2
+shortLabel Poran HLA II
+longLabel RECON HLA-II epitopes
+visibility hide
+group immu
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/bbi/poranHla/CD8-hla2.bb
+noScoreFilter on
+mouseOverField name2
+html poranHla1
+
+track artic
+shortLabel ARTIC Primers
+longLabel ARTIC Oxford Nanopore sequencing primers
+visibility hide
+group map
+priority 5
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/bbi/artic.bb
+noScoreFilter on
+
+track rapid
+shortLabel RAPID Primers
+longLabel RAPID Oxford Nanopore sequencing primers
+visibility hide
+group map
+priority 5
+type bigBed 6 +
+bigDataUrl /gbdb/wuhCor1/bbi/rapid.bb
+noScoreFilter on
+pennantIcon New red ../goldenPath/newsarch.html#071720 "Released Jul. 17, 2020"
+
+# track removed as per David H email, authors got a track hub instead
+#track conticello
+#shortLabel RNA editing
+#longLabel RNA editing events from Conticello et al 2020
+#visibility hide
+#group map
+#type bigBed 9 +
+#bigDataUrl /gbdb/wuhCor1/bbi/conticello.bb
+#noScoreFilter on
+#filter.freq 0.01
+
+# original source for this composite: 
+# https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/trackHub/wuhCor1/trackDb.txt
+track phyloGenes
+type bigGenePred
+itemRgb on
+group genes
+compositeTrack on
+shortLabel PhyloCSF Genes
+longLabel PhyloCSF Genes - Curated conserved genes
+baseColorDefault genomicCodons
+exonNumbers on
+noScoreFilter on
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
+
+        track PhyloCSFgenes
+        type bigGenePred
+        #bigDataUrl https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/PhyloCSFgenes.bb
+        bigDataUrl /gbdb/wuhCor1/bbi/phyloGenes/PhyloCSFgenes.bb
+        shortLabel PhyloCSF Genes
+        longLabel PhyloCSF Genes - curated conserved genes
+        visibility pack
+        priority 10
+        parent phyloGenes
+
+        track PhyloCSFrejected
+        type bigGenePred
+        itemRgb on
+        #bigDataUrl https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/PhyloCSFrejectedGenes.bb
+        bigDataUrl /gbdb/wuhCor1/bbi/phyloGenes/PhyloCSFrejectedGenes.bb
+        shortLabel PhyloCSF Rejected Genes
+        longLabel Genes rejected from PhyloCSF genes list
+        visibility hide
+        priority 10
+        parent phyloGenes off
+
+track stringtieKim
+shortLabel StringTie-Kim
+longLabel StringTie results from minimap of Kim 2020 reads
+visibility hide
+group genes
+type bed
+
+track targets
+shortLabel T-React. Epitopes
+longLabel  T-cell reactive epitopes in patients and donors
+group immu
+visibility hide
+type bigBed
+compositeTrack on
+
+        track M1_library
+        parent targets
+        shortLabel M1 SARS-CoV peptides
+        longLabel T-Cell reactive epitopes: M1 SARS-CoV peptides mapped to SARS-Cov-2
+        type bigBed 4
+        bigDataUrl /gbdb/wuhCor1/bbi/M1_peptides.bb
+        
+        track M2_library
+        parent targets
+        shortLabel M2 SARS-CoV peptides
+        longLabel T-Cell reactive epitopes: M2 SARS-CoV peptides mapped to SARS-Cov-2
+        type bigBed 4
+        bigDataUrl /gbdb/wuhCor1/bbi/M2_peptides.bb
+
+track microdel
+shortLabel Microdeletions
+longLabel Microdeletions in GISAID sequences
+type bed 6
+group varRep
+spectrum on
+pennantIcon New red ../goldenPath/newsarch.html#070720 "Released Jul. 07, 2020"
+
+
+track nanoCov
+shortLabel Nanopore Coverage
+longLabel Nanopore transcript sequencing coverage from Naumburg et al 2020
+type bigWig
+visibility hide
+group x
+compositeTrack on
+
+        track nanoCovKim
+        shortLabel Kim 2020
+        longLabel Nanopore Coverage: Kim 2020
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/bbi/nanoCov/kim.bw
+        autoScale on
+        visibility full
+        parent nanoCov
+
+        track nanoCovDavidson
+        shortLabel Davidson 2020
+        longLabel Nanopore Coverage: Davidson 2020
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/bbi/nanoCov/davidson.bw
+        visibility full
+        autoScale on
+        parent nanoCov
+
+        track nanoCovTaiaora
+        shortLabel Taiaora 2020
+        longLabel Nanopore Coverage: Taiaora 2020
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/bbi/nanoCov/taiaora.bw
+        visibility full
+        autoScale on
+        parent nanoCov
+
+track lollySarsCov2
+shortLabel Sars Cov 2 Variants 
+longLabel  Sars Cov 2 Variants 
+bigDataUrl /gbdb/wuhCor1/lollySarsCov2.bb
+type bigLolly
+group compGeno
+autoScale on
+
+track labAssocMutsNs419
+shortLabel Lab-Assoc Muts 4/19
+longLabel Lab-Associated Mutations Discovered in Nextstrain April 19th Alignment and Tree
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/phylogenetics/labAssocMutsNs419.bb
+group varRep
+visibility hide
+release alpha
+
+track sarsCov2Phylo
+shortLabel Phylogeny: GISAID
+longLabel Phylogenetic Tree and Variants from High-coverage Sequences in GISAID EpiCoV TM
+compositeTrack on
+type vcfTabix
+hapClusterEnabled on
+hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft.linCol.nh
+hapClusterHeight 500
+hapClusterColorBy function
+sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.lineageColors.gz GISAID_clade=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.gisaidColors.gz Nextstrain_clade=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.nextstrainColors.gz
+tableBrowser off
+vcfDoQual off
+vcfDoFilter off
+geneTrack ncbiGeneBGP
+group varRep
+visibility hide
+priority 0.2
+dataVersion /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.version.txt
+pennantIcon New red ../goldenPath/newsarch.html#? "Updated Dec. 04, 2020"
+
+    track sarsCov2PhyloMinAf01
+    shortLabel Min alt AF 1%
+    longLabel Single Nucleotide Variants in GISAID EpiCov TM sequences with alternate allele frequency >= 1%
+    parent sarsCov2Phylo on
+    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
+    type vcfTabix
+    priority 10
+
+    track sarsCov2PhyloMinAf001
+    shortLabel Min alt AF 0.1%
+    longLabel Single Nucleotide Variants in GISAID EpiCov TM sequences with alternate allele frequency >= 0.1%
+    parent sarsCov2Phylo off
+    type vcfTabix
+    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
+    priority 20
+
+    track sarsCov2PhyloFull
+    shortLabel All (slow!)
+    longLabel All Single Nucleotide Variants in GISAID EpiCov TM sequences (slow at whole-genome scale)
+    parent sarsCov2Phylo off
+    type vcfTabix
+    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.vcf.gz
+    priority 30
+
+track sarsCov2PhyloPub
+shortLabel Phylogeny: Public
+longLabel Phylogenetic Tree and Variants from High-coverage Sequences in Public Databases
+compositeTrack on
+type vcfTabix
+hapClusterEnabled on
+hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.ft.nh
+hapClusterHeight 500
+hapClusterColorBy function
+sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.lineageColors.gz GISAID_clade=/gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.gisaidColors.gz Nextstrain_clade=/gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.nextstrainColors.gz
+vcfDoQual off
+vcfDoFilter off
+geneTrack ncbiGeneBGP
+group varRep
+visibility squish
+priority 0.1
+dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.version.txt
+pennantIcon New red ../goldenPath/newsarch.html#? "Updated Dec. 04, 2020"
+
+    track sarsCov2PhyloPubMinAf01
+    shortLabel Subset: Min AF 1%
+    longLabel Single Nucleotide Variants in public sequences with alternate allele frequency >= 1%
+    parent sarsCov2PhyloPub on
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.01.vcf.gz
+    type vcfTabix
+    priority 10
+
+    track sarsCov2PhyloPubMinAf001
+    shortLabel Subset: Min AF 0.1%
+    longLabel Single Nucleotide Variants in public sequences with alternate allele frequency >= 0.1%
+    parent sarsCov2PhyloPub off
+    type vcfTabix
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.001.vcf.gz
+    priority 20
+
+    track sarsCov2PhyloPubFull
+    shortLabel Subset: no min AF (slow!)
+    longLabel All Single Nucleotide Variants in public sequences (slow at whole-genome scale)
+    parent sarsCov2PhyloPub off
+    type vcfTabix
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.ambigToN.vcf.gz
+    priority 30
+
+    track sarsCov2PhyloPubAllMinAf01
+    shortLabel All: Min AF 1%
+    longLabel Single Nucleotide Variants in all public sequences with alternate allele frequency >= 1%
+    parent sarsCov2PhyloPub off
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.01.vcf.gz
+    hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.all.ft.nh
+    type vcfTabix
+    priority 40
+
+    track sarsCov2PhyloPubAllMinAf001
+    shortLabel All: Min AF 0.1%
+    longLabel Single Nucleotide Variants in all public sequences with alternate allele frequency >= 0.1%
+    parent sarsCov2PhyloPub off
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.001.vcf.gz
+    hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.all.ft.nh
+    type vcfTabix
+    priority 50
+
+    track sarsCov2PhyloPubAllFull
+    shortLabel All: no min AF (slow!)
+    longLabel All Single Nucleotide Variants in all public sequences (slow at whole-genome scale)
+    parent sarsCov2PhyloPub off
+    type vcfTabix
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.vcf.gz
+    hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.all.ft.nh
+    priority 60
+
+track problematicSites
+shortLabel Problematic Sites
+longLabel Problematic sites where masking or caution are recommended for analysis
+compositeTrack on
+type bigBed
+skipEmptyFields on
+group map
+dataVersion 2020-07-29
+pennantIcon New red ../goldenPath/newsarch.html "Updated Aug. 31, 2020"
+
+    track problematicSitesMask
+    shortLabel Mask
+    longLabel Problematic sites where masking is recommended for analysis
+    parent problematicSites
+    type bigBed
+    color 255,0,0
+    bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesMask.bb
+    priority 10
+
+    track problematicSitesCaution
+    shortLabel Caution
+    longLabel Problematic sites where caution is recommended for analysis
+    parent problematicSites
+    type bigBed
+    color 240,160,0
+    bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesCaution.bb
+    priority 20
+
+track icshape
+shortLabel icSHAPE RNA Struct
+longLabel icSHAPE RNA Structure
+type bigWig
+visibility hide
+group rna
+compositeTrack on
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 2, 2020"
+
+        track icshapeInvivo
+        shortLabel icSHAPE In-vivo
+        longLabel icSHAPE In-vivo
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/bbi/icshape/invivo.bw
+        autoScale off
+        viewLimits -0.4:4.0
+        visibility full
+        parent icshape
+        maxHeightPixels 100:40:8
+        color 100,50,20
+
+        track icshapeInvitro
+        shortLabel icSHAPE In-vitro
+        longLabel icSHAPE In-vitro
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/bbi/icshape/invitro.bw
+        autoScale off
+        viewLimits 0.0:1.0
+        visibility full
+        parent icshape
+        maxHeightPixels 100:40:8
+        color 100,80,40
+
+track potPathoIndel
+shortLabel Pot. pathogenic indels
+longLabel Potential pathogenic insertions and deletions from Gussow et al, PNAS 2020
+type bigBed 4
+bigDataUrl /gbdb/wuhCor1/bbi/potPathoIndel.bb
+group varRep
+pennantIcon New red ../goldenPath/newsarch.html "Released Sep. 4, 2020"
+
+track iedb
+shortLabel Validated epitopes from IEDB
+longLabel Validated epitopes from IEDB
+visibility hide
+group immu
+urls epitopeID="http://www.iedb.org/epitope/$$"
+type bigBed
+bigDataUrl /gbdb/wuhCor1/iedb/iedb.bb
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 20, 2020"
+
+# testing-only track, most likely not for public release
+track minkMuts
+shortLabel Mink mutations
+longLabel Mink mutations from Denmark
+group varRep
+type vcfTabix
+release alpha
+bigDataUrl /hive/data/outside/otto/sarscov2phylo/26-10-20/danishMink.vcf.gz
+
+track escape
+shortLabel Antibody escape
+longLabel Antibody escape mutations from the Whelan lab, WUSTL
+type bigBed 9 +
+group immu
+bigDataUrl /gbdb/wuhCor1/escape/escape.bb
+mouseOverField _mouseOver
+noScoreFilter on
+pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 25, 2020"
+
+include trackDb.119way.ra
+include trackDb.strainName119way.ra
+include epitopes.ra
+include trackDb.44way.ra
+include trackDb.strainName44way.ra
+include trackDb.uniprot.ra
+include trackDb.nextstrain.ra
+include kim2020.ra
+include trackDb.7way.ra
+include phylocsf.ra
+include addgene.ra
+include pond.ra
+include bloom.ra
+include weizmanOrfs.ra
+include pyle.ra
+include treangen.ra
+include pbm.ra
+include pbmShanghai.ra

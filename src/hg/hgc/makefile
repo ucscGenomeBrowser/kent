@@ -8,14 +8,14 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 A = hgc
 
 O = $A.o bamClick.o barChartClick.o bigBedClick.o bigDbSnpClick.o \
-	ccdsClick.o cgapSageClick.o dbRIP.o \
+	ccdsClick.o cgapSageClick.o clinvarSubLolly.o dbRIP.o \
 	encodeClick.o expClick.o \
 	gencodeClick.o gtexEqtlClusterClick.o gtexClick.o gvfClick.o hgdpClick.o \
 	interactClick.o lowelab.o lrgClick.o \
 	mafClick.o makeItemsClick.o mgcClick.o \
 	parClick.o peakClusters.o regMotif.o retroClick.o rmskJoinedClick.o \
 	rnaFoldClick.o \
-	transMapClick.o txCdsInfo.o pubs.o vcfClick.o virusClick.o wiggleClick.o \
+	transMapClick.o txCdsInfo.o pubs.o vcfClick.o wiggleClick.o \
 	wikiTrack.o variomeClick.o numtsClick.o geneReviewsClick.o
 
 include ../../inc/cgi_build_rules.mk

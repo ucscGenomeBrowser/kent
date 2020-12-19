@@ -1,0 +1,100 @@
+<h2>Description</h2>
+<p>
+Attempts to infer phylogenetic relationships, sites under selection, or evidence of recombination
+from SARS-CoV-2 genome sequences can be led astray by sequencing errors, contamination, and
+hypermutable sites.  In order to make reliable inferences, it is important to identify probable
+errors and susceptible sites within the genome sequences, carefully consider how those might
+affect the specific analysis one is about to perform, and perhaps exclude problematic sites from
+analysis.
+</p>
+<p>
+This track shows locations in the SARS-CoV-2 genome that have been identified as problematic for
+analysis for various reasons.  They have been collected in the github repository
+<a href="https://github.com/W-L/ProblematicSites_SARS-CoV2/"
+   target=_blank>https://github.com/W-L/ProblematicSites_SARS-CoV2/</a>.
+Locations have been separated into two subtracks and colored corresponding to levels of severity:
+<ul>
+  <li><b><span style="color: red">Mask</span></b>: Problems are expected to affect most types
+    of analysis, so it is recommended to mask out these sites before analysis.
+  <li><b><span style="color: #f0a000">Caution</span></b>: Some types of analysis may be
+    affected while other types may not; caution is recommended.
+</ul>
+</p>
+<p>
+Locations are labeled with the following terms to indicate the type of potential problem:
+  <ul>
+    <li><b>ambiguous</b>: Sites which show an excess of ambiguous basecalls relative to the 
+      number of alternative alleles, often emerging from a single country or sequencing laboratory
+    <li><b>amended</b>: Previous sequencing errors which now appear to have been fixed in the
+      latest versions of the GISAID sequences, at least in sequences from some of the sequencing
+      laboratories
+    <li><b>highly_ambiguous</b>: Sites with a very high proportion of ambiguous characters,
+      relative to the number of alternative alleles
+    <li><b>highly_homoplasic</b>: Positions which are extremely homoplasic - it is sometimes not
+      necessarily clear if these are hypermutable sites or sequencing artefacts
+    <li><b>homoplasic</b>: Homoplasic sites, with many mutation events needed to explain a
+      relatively small alternative allele count
+    <li><b>interspecific_contamination</b>: Cases (only one instance as of July 2020) in which
+      the known sequencing issue is due to contamination from genetic material that does not have
+      SARS-CoV-2 origin
+    <li><b>nanopore_adapter</b>: Cases in which the known sequencing issue is due to the adapter
+      sequences in nanopore reads
+    <li><b>narrow_src</b>: Variants which are found in sequences from only a few sequencing labs 
+      (usually two or three), possibly as a consequence of the same artefact reproduced independently
+    <li><b>neighbour_linked</b>: Proximal variants displaying near perfect linkage
+    <li><b>seq_end</b>: Alignment ends are affected by low coverage and high error rates
+      (masking recommended, but might be more stringent than necessary)
+    <li><b>single_src</b>: Only observed in samples from a single laboratory
+  </ul>
+
+</p>
+
+<h2>Methods</h2>
+<p>
+Multiple groups applied various methods (De Maio, Walker <em>et al.</em>;
+De Maio, Gozashti <em>et al.</em>; Turakhia <em>et al.</em>) to identify sites that
+were homoplasic, likely contaminated, likely sequencing error and/or observed in multiple
+virus lineages by only one or a few laboratories.  They contributed their observations
+and recommendations to the github repository
+<a href="https://github.com/W-L/ProblematicSites_SARS-CoV2/"
+   target=_blank>https://github.com/W-L/ProblematicSites_SARS-CoV2/</a>.
+UCSC downloaded the collection, split the sites into Mask and Caution subsets depending
+on the recommended action and reformatted the data for display in the Genome Browser.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The original data file was downloaded from github:
+<a href="https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf"
+   target=_blank>https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf</a>.
+You can download the bigBed files underlying this track (problematicSites*.bb) from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/problematicSites/" 
+target=_blank>Download Server</a>. The data can be explored interactively with the 
+<a href="hgTables">Table Browser</a>
+or the <a href="hgIntegrator">Data Integrator</a>. The data can be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
+</p>
+
+
+<h2>References</h2>
+
+<p>
+De Maio N, Walker C, Borges R, Weilguny L, Slodkowicz G, Goldman N.
+<a href="https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473"
+   target=_blank>Issues with SARS-CoV-2 sequencing data</a>.
+virological.org. 2020 May 5.
+</p>
+
+<p>
+De Maio N, Gozashti L, Turakhia Y, Walker C, Lanfear R, Corbett-Detig R, Goldman N.
+<a href="https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473/12"
+   target=_blank>Updated analysis with data from 12th June 2020</a>.
+virological.org. 2020 July 14.
+</p>
+
+<p>
+Turakhia Y, Thornlow B, Gozashti L, Hinrichs AS, Fernandes JD, Haussler D, and Corbett-Detig R.
+<a href="https://www.biorxiv.org/content/10.1101/2020.06.08.141127v1"
+   target=_blank>Stability of SARS-CoV-2 Phylogenies</a>.
+<em>bioRxiv</em>. 2020 June 9.
+</p>

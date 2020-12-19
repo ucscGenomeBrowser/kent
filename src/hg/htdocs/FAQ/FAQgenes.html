@@ -14,6 +14,7 @@
 <li><a href="#genestrans">What is a transcript and how is it related to a gene?</a></li>
 <li><a href="#genename">What is a gene name?</a></li>
 <li><a href="#mostCommon">What are the most common gene transcript tracks?</a></li>
+<li><a href="#wrong">I think this transcript looks strange, what shall I do?</a></li>
 <li><a href="#ens">What are Ensembl and GENCODE and is there a difference?</a></li>
 <li><a href="#ensRefseq">What are the differences among GENCODE, Ensembl and RefSeq?</a></li>
 <li><a href="#hg19">For the human assembly hg19/GRCh37: What is the difference between "UCSC 
@@ -22,11 +23,14 @@
 		    "GENCODE" and "All GENCODE" tracks?</a></li>
 <li><a href="#gencode">What is the difference between GENCODE comprehensive and basic?</a></li>
 <li><a href="#ncbiRefseq">What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</a></li>
+<li><a href="#mito">What is the best gene track for mitochondrial gene annotations?</a></li>
+<li><a href="#report">How shall I report a gene transcript in a manuscript?</a></li>
 <li><a href="#ccds">What is CCDS?</a></li>
 <li><a href="#justsingle">How can I show a single transcript per gene?</a></li>
 <li><a href="#singledownload">How can I download a file with a single transcript per gene?</a></li>
 <li><a href="#whatdo">This is rather complicated. Can you tell me which gene transcript track
                       I should use?</a></li>
+<li><a href="#gtfDownload">Does UCSC provide GTF/GFF files for gene models?</a></li>
 </ul>
 <hr>
 <p>
@@ -178,6 +182,17 @@ they contain as of March 2019:
     </tr> 
   </table>
 
+<a name="wrong"></a>
+<h6>I think this transcript looks strange, what shall I do?</h6>
+
+<p>The Genome Browser Group only displays transcripts provided by others. 
+But both RefSeq and Gencode have dedicated staff that look manually at each and every transcript and they 
+know everything there is to know about gene models.
+They are happy to answer your questions and they can change the transcript annotation. Submit your questions
+via the <a href="https://www.ncbi.nlm.nih.gov/projects/RefSeq/update.cgi" target=_blank>RefSeq contact form</a>
+or the <a href="https://www.gencodegenes.org/pages/contact.html" target=_blank>Gencode context form.</a>
+</p>
+
 
 <a name="ens"></a>
 <h2>The differences</h2>
@@ -295,18 +310,40 @@ alt="Turning on comprehensive gene set" width="750">
 <h6>What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</h6>
 <p>
 RefSeq gene transcripts, unlike GENCODE/Ensembl/UCSC Genes, are sequences that can differ from 
-the genome. They need to be aligned to the genome to create transcript models.
-Traditionally, UCSC has aligned RefSeq with BLAT (UCSC RefSeq sub-track) and NCBI has aligned with 
-splign. The advantages of the UCSC alignments are that
-they are updated more frequently and are available for older assemblies (like
-GRCh37/hg19), but they are less stable and they are not the official alignments.
-Therefore we recommend working with the NCBI annotations.
-When an assembly has an &quot;NCBI RefSeq&quot; track, we show it by default and hide the
+the genome. They need to be aligned to the genome to create annotations and UCSC
+and NCBI create alignments with different software (BLAT and splign, respectively).
+The advantages of the UCSC alignments are that
+they are updated constantly even for older assemblies, like GRCh37/hg19.
+The advantage of NCBI alignments are that they are placed manually 
+to a chromosome location and are the official alignments, e.g. for databases and manuscripts.
+Therefore, we recommend working with the NCBI annotations and when an assembly has an &quot;NCBI RefSeq&quot; track, we show it by default and hide the
 &quot;UCSC RefSeq&quot; track.
 </p>
 
+<p>The UCSC alignments can differ from the NCBI alignments for two reasons:</p>
+
+<p><b>Very similar transcripts:</b> 
+Let's take the case of two almost-identical transcripts sequences in RefSeq,
+with two genes in the genome where they could be placed.
+NCBI has a rule to place every transcript only once, and transcripts
+are manually tied to a chromosome band or location by NCBI, so each gene will get one
+and only one transcript of two. NCBI RefSeq will have two genes with one transcript each.
+UCSC RefSeq though places all
+transcripts where they align at very high identity, so both genes will get
+annotated with both transcripts. For example, 
+the transcript NM_001012276 has three almost-identical possible
+placements to the genome in the UCSC RefSeq track, as it is entirely alignment-based without any manual filtering,
+but NM_001012276.3 is shown at a single location in the NCBI RefSeq track, as the NCBI
+software will only retain the alignment at the manually annotated location. It
+may be good to know about almost-identical alignments when doing genomic
+analysis or manual inspection of NGS read alignments, but for clinical
+reporting purposes or other automated analyses, we strongly recommend to use
+the NCBI RefSeq track.
+</p>
+
 <p>
-In some rare cases, the NCBI and UCSC exon boundaries differ.
+<b>Unclear exon boundaries:</b> In some rare cases, the NCBI and UCSC exon boundaries differ.
+This happens especially when sequence deletions in the genome make the placement very difficult.
 Activating both RefSeq and UCSC RefSeq tracks helps you investigate the differences.
 Activating the RefSeq Alignments track shows NCBI's splign alignments in more detail,
 including double lines where both transcript and genomic sequence are skipped in the alignment.
@@ -331,17 +368,74 @@ subtrack makes the problematic region very clear with double lines
 indicating unalignable transcript sequence.
 </p>
 
-<p> 
-When reporting results as RefSeq coordinates, e.g. as HGVS, in research
-articles, please specify the RefSeq annotation release and also the 
-RefSeq transcript ID with version (e.g. NM_012309.4 not NM_012309).
-Different RefSeq transcript versions have different sequence (for example,
-more sequence may be added to the UTRs or even the CDS), and so the transcript coordinates
-often change from one version to the next.
+<a name="mito"></a>
+<h2>What is the best gene track for mitochondrial gene annotations</h2>
+<p>
+The mitochondrial sequence included in assembly sequence files is very
+special and most of what has been explained on this page does not apply
+to the mitochondrial gene annotations. For most assemblies in the Genome
+Browser, the sequence name of the mitochondrial genome is "chrM".<p>
+<p>
+For hg19, no mitochondrial genome was originally published.
+The UCSC Genome Browser added a chrM sequence
+that was not the mitochondrial genome sequence later selected by NCBI for GRCh37. This
+is why <strong>the current hg19 version contains two mitochondrial sequences,
+the old one called &quot;chrM&quot; and the current GRCh37 reference, 
+called &quot;chrMT&quot;</strong>. The issue is described in detail in our 
+<a target=_blank href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/README.txt">
+hg19 sequence download instructions</a>. If you use hg19 today, chrMT should be
+considered the current mitochondrial sequence, chrM is only supported for backwards
+compatibility and legacy annotation files. 
+<p>
+For chrM or chrMT (on hg19), the GENCODE tracks contain the same gene
+annotations, but RefSeq annotations only exist on chrM. Both databases 
+import their mitochondrial gene annotation directly from the rCRS 
+RefSeq record 
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/nuccore/251831106">NC_012920.1</a>. 
+The annotation was provided by 
+<a target=_blank href="https://www.mitomap.org/MITOMAP">Mitomap.org</a>, which provides detailed
+documentation about the 
+<a href="https://www.mitomap.org/foswiki/bin/view/MITOMAP/MitoSeqs" 
+target=_blank>the history of this sequence</a>.
+
+
+<a name="report"></a>
+<h2>How shall I report a gene transcript in a manuscript?</h2>
+
+<p>
+When reporting on GENCODE/Ensembl transcripts, please specify the ENST
+identifier. It is often helpful to also specify the Ensembl release, 
+which is shown on the details page, when you click onto a transcript.
 </p>
 
+<p>
+When reporting RefSeq transcripts, e.g. in HGVS, prefer the "NCBI RefSeq" track
+over the "UCSC RefSeq track".  Please specify the RefSeq transcript ID and
+also the RefSeq annotation release.
+</p>
+
+<ul>
+<li>The RefSeq transcript ID is the sequence of the transcript, the NM_xxxxx.y
+accession. The version is separated with a dot.  Different RefSeq transcript
+versions have different sequences (for example, more sequence may be added to
+the UTRs or even the CDS), and so the transcript coordinates can change from
+one version to the next, which is why reporting the version of the transcript
+is helpful for readers, e.g. report NM_012309.4, not NM_012309.
+<li>The RefSeq annotation release captures the mapping of all transcript
+sequences to the genome.  It is shown on our transcript details page, when you
+click a transcript. It looks like "Annotation Release 105 (2017-04-01)".  The
+most important part is the "Annotation Release" number, e.g. "105". The date is
+NCBI's release date. Shown below this line is the date when UCSC imported the
+data, which is not relevant for manuscripts. Note that an "Annotation release"
+is not a "RefSeq release" , a "RefSeq release" is only about sequences, not
+their mapping to the genome. NCBI provides a list of 
+<a href="https://www.ncbi.nlm.nih.gov/genome/annotation_euk/all/"
+    target=_blank>all current annotation releases</a>. The first annotation
+    release for every genome is usually "100".
+</ul>
+
 <a name="ccds"></a>
-<h6>What is CCDS?</h6>
+<h2>What is CCDS?</h2>
 <p>
 The <a target=_blank href="https://www.ncbi.nlm.nih.gov/projects/CCDS/CcdsBrowse.cgi">
 Consensus Coding Sequence Project</a> is a list of transcript coding sequence (CDS) genomic regions
@@ -352,7 +446,7 @@ As  the name implies, it does not cover UTR regions or non-coding transcripts.
 </p>
 
 <a name="justsingle"></a>
-<h6>How can I show a single transcript per gene?</h6>
+<h2>How can I show a single transcript per gene?</h2>
 
 <p> 
 For the tracks &quot;<a target=_blank 
@@ -361,21 +455,19 @@ href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes</a>&quot;
 href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE Genes</a>&quot; 
 (hg38), click on their title and on the configuration page, uncheck the 
 box &quot;Show splice variants&quot;. Only a single transcript will be shown. The method for how this
-transcript is selected is described in the track documentation below the 
-configuration settings.</p>
+transcript is selected is described in the next section below and in the track documentation. </p>
 
 <p class='text-center'>
   <img class='text-center' src="../images/SpliceVariants.png" 
 alt="Changing splice variants" width="750">
 
-<p>For the track <a target=_blank 
-href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">
-NCBI RefSeq</a> (hg38), you can activate the subtrack &quot;RefSeq HGMD&quot;.
-It contains only the transcripts that are part of the Human Gene Mutation Database.
+<p>
+For the various single-transcript options of &quot;NCBI RefSeq&quot;, please
+see the discussion of "single transcript" tracks in the next section. 
 </p>
 
 <a name="singledownload"></a>
-<h6>How can I download a file with a single transcript per gene?</h6>
+<h2>How can I download a file with a single transcript per gene?</h2>
 <p>
 This is a common request, but very often this is not necessary when designing
 an analysis.  You will have to make a choice of this single transcript using
@@ -383,18 +475,20 @@ some mechanism, and this choice will affect your pipeline results. It may be
 easier to keep all transcripts. For example, instead of annotating enhancers
 with the closest &quot;best-transcript&quot;, you can annotate them with the closest exon
 of any transcript. When mapping variants to transcripts, you can map to all
-transcripts and sort these by accession ID, showing mainly the first.  When
+transcripts and and show the transcript with the worst impact first.  When
 segmenting the chromosomes into gene loci, you can use the union of all
-transcripts of a gene rather than select a single "best" transcript.
-</p>
+transcripts of a gene, adding some predefined distance, rather than selecting a
+single "best" transcript.</p>
 
 <p>
-That being said, data tables called &quot;knownCanonical&quot; are available for
+That being said, the main gene tracks have tables that try to take guess the most interesting 
+transcript per gene. For the knownGene tracks (UCSC genes on hg19, Gencode on hg38 and mm10), 
+data tables called &quot;knownCanonical&quot; are available for
 many assemblies. They try to select only a single transcript/isoform per gene, 
-if possible.</p>
+if possible and for RefSeq similar options exist.</p>
 
 <p>
-For hg19, the knownCanonical table is a subset of the <a target="_blank" 
+<b>UCSC Genes on hg19</b>: For hg19, the knownCanonical table is a subset of the <a target="_blank" 
 href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes</a> track. It was generated by 
 identifying a canonical isoform for each cluster ID, or gene. Generally, this is the longest
 isoform. It can be downloaded directly from the <a target="_blank" 
@@ -402,14 +496,14 @@ href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/">hg19 downloads d
 or by using the <a target="_blank" href="../cgi-bin/hgTables">Table Browser</a>.</p>
 
 <p>
-For hg38, the knownCanonical table is a subset of the <a target="_blank" 
+<b>Gencode on hg38/mm10</b>: For hg38, the knownCanonical table is a subset of the <a target="_blank" 
 href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE v29</a> track. As opposed to the hg19 
 knownCanonical table, which used computationally generated gene clusters and generally chose the 
 longest isoform as the canonical isoform, the hg38 table uses ENSEMBL gene IDs to define clusters 
 (that is to say, one canonical isoform per ENSEMBL gene ID), and the method of choosing the 
 isoform is described as such:</p>
 
-<p>
+<p style="margin-left: 10em">
 <i>knownCanonical identifies the canonical isoform of each cluster ID or gene using the ENSEMBL 
 gene IDs to define each cluster. The canonical transcript is chosen using the APPRIS principal 
 transcript when available. If no APPRIS tag exists for any transcript associated with the 
@@ -420,8 +514,24 @@ It can be downloaded directly from the <a target="_blank"
 href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/">hg38 downloads database</a>
 or by using the <a target="_blank" href="../cgi-bin/hgTables">Table Browser</a>.</p>
 
+<p>
+<b>NCBI RefSeq (hg19/hg38)</b>: NCBI manually selects few, usually one,
+transcript per gene called "RefSeq Select", based on <a target=_blank
+href="https://www.ncbi.nlm.nih.gov/refseq/refseq_select/">various criteria</a>.
+Example use cases are comparative genomics and variant reporting. This subset
+is available in the RefSeq Select track under NCBI RefSeq.  RefSeq and the EBI
+also select one transcript for every protein coding gene that is annotated exactly 
+the same in both Gencode and RefSeq, a project called <a
+href="https://ncbiinsights.ncbi.nlm.nih.gov/2019/03/12/mane-select-v0-5/"
+target=_blank>"MANE select"</a>, which is another subtrack of NCBI RefSeq. 
+For the special case of clinical diagnostics
+where an even more reduced number of transcripts simplifies visual inspection,
+we also provide another subtrack, "RefSeq HGMD". It contains
+(usually) a single transcript only for genes known to cause human genetic diseases and
+the transcript is the one to which all reported clinical variants can be mapped to.
+
 <a name="whatdo"></a>
-<h6>This is rather complicated. Can you tell me which gene transcript track I should use?</h6>
+<h2>This is rather complicated. Can you tell me which gene transcript track I should use?</h2>
 <p> 
 For automated analysis, if you are doing NGS analysis and you need to capture
 all possible transcripts, GENCODE provides one of the most comprehensive gene sets.  For human 
@@ -446,6 +556,25 @@ href="http://genome.ucsc.edu/s/view/GeneSupport">Gene Support</a> public session
 helpful. This session is a collection of tracks centered around supporting evidence
 for genes.</p>
 </p>
+
+<a name="gtfDownload"></a>
+<h2>Does UCSC provide GTF/GFF files for gene models?</h2>
+<p>
+We provide files in GTF format, which is an extension to GFF2, for most assemblies. More 
+information on GTF format can be found <a target="_blank" href="FAQformat.html#format4">
+in our FAQ</a>.</p>
+<p>
+These files are generated for four gene model tables: ncbiRefSeq, refGene, ensGene, knownGene. 
+Certain assemblies, such as hg19, will have all four files while smaller assemblies may only have
+one or two of these. Which file a user should use depends on their analysis, as they contain 
+different data and metadata.</p>
+<p>
+These files are generated using the <code>genePredToGtf</code> method described in our 
+<a target="_blank" href="https://genome.ucsc.edu/FAQ/FAQdownloads.html#download37">
+downloads FAQ</a> using the <code>-utr</code> flag. They can be found on the download server 
+address <i>http://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/genes/</i> where
+<i>$db</i> is the assembly of interest. For example, the <a target="_blank" 
+href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/">hg38 GTF files</a>.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 

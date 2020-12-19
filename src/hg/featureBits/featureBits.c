@@ -397,15 +397,19 @@ if (!fileExists(fileName))
 lf = lineFileOpen(fileName, TRUE);
 while ((chain = chainRead(lf)) != NULL)
     {
-    for (b = chain->blockList; b != NULL; b = b->next)
+    if (sameString(chrom, chain->tName))
         {
-	int s = b->tStart, e = b->tEnd;
-	if (s < 0) outOfRange(lf, chrom, chromSize);
-	if (e > chromSize) outOfRange(lf, chrom, chromSize);
-	bitSetRange(acc, b->tStart, b->tEnd - b->tStart);
-	}
+        for (b = chain->blockList; b != NULL; b = b->next)
+            {
+            int s = b->tStart, e = b->tEnd;
+            if (s < 0) outOfRange(lf, chrom, chromSize);
+            if (e > chromSize) outOfRange(lf, chrom, chromSize);
+            bitSetRange(acc, b->tStart, b->tEnd - b->tStart);
+            }
+        }
     chainFree(&chain);
     }
+lineFileClose(&lf);
 }
 
 

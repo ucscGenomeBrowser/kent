@@ -79,6 +79,31 @@ struct hash *groupsInTrackList = newHash(0);
 struct hash *groupsInDatabase = newHash(0);
 struct trackDb *track;
 
+/* Do some error checking for tracks with group names that are not in database.
+ * Warnings at this stage mess up CGIs that may produce text output like hgTables & hgIntegrator,
+ * so don't warn, just put CTs in group user and others in group x. */
+groupsAll = hLoadGrps(db);
+if (!trackHubDatabase(db))
+    {
+    struct hash *allGroups = hashNew(0);
+    for (group = groupsAll;  group != NULL; group = group->next)
+        hashAdd(allGroups, group->name, group);
+    for (track = trackList; track != NULL; track = track->next)
+        {
+        /* If track isn't in a track up, and has a group we don't know about, change it to one we do. */
+        if (!startsWith("hub_", track->grp) && !hashLookup(allGroups, track->grp))
+            {
+            fprintf(stderr, "Track %s has group %s, which isn't in grp table\n",
+                    track->table, track->grp);
+            if (isCustomTrack(track->track))
+                track->grp = cloneString("user");
+            else
+                track->grp = cloneString("x");
+            }
+        }
+    hashFree(&allGroups);
+    }
+
 /* Stream through track list building up hash of active groups. */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -87,7 +112,6 @@ for (track = trackList; track != NULL; track = track->next)
     }
 
 /* Scan through group table, putting in ones where we have data. */
-groupsAll = hLoadGrps(db);
 for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll))
     {
     if (hashLookup(groupsInTrackList, group->name))
@@ -122,16 +146,6 @@ for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpLis
     else
 	slAddHead(&groupList, newGrp);
     hashAdd(groupsInDatabase, newGrp->name, newGrp);
-    }
-
-/* Do some error checking for tracks with group names that are
- * not in database.  Just warn about them. */
-if (!trackHubDatabase(db))
-    for (track = trackList; track != NULL; track = track->next)
-    {
-    if (!hashLookup(groupsInDatabase, track->grp))
-         warn("Track %s has group %s, which isn't in grp table",
-	 	track->table, track->grp);
     }
 
 /* Create dummy group for all tracks. */
@@ -386,43 +400,48 @@ struct hash *uniqHash = newHash(8);
 struct slName *name, *nameList = NULL;
 char *trackTable = track->table;
 
-hashAdd(uniqHash, trackTable, NULL);
-if (useJoiner)
-    {
-    if (allJoiner == NULL)
-        allJoiner = joinerRead("all.joiner");
-    struct joinerPair *jpList, *jp;
-    jpList = joinerRelate(allJoiner, db, trackTable, db);
-    for (jp = jpList; jp != NULL; jp = jp->next)
-	{
-	struct joinerDtf *dtf = jp->b;
-	if (cartTrackDbIsAccessDenied(dtf->database, dtf->table))
-	    continue;
-	char buf[256];
-	char *s;
-	if (sameString(dtf->database, db))
-	    s = dtf->table;
-	else
-	    {
-	    safef(buf, sizeof(buf), "%s.%s", dtf->database, dtf->table);
-	    s = buf;
-	    }
-	if (!hashLookup(uniqHash, s))
-	    {
-	    hashAdd(uniqHash, s, NULL);
-	    name = slNameNew(s);
-	    slAddHead(&nameList, name);
-	    }
-	}
-    slNameSort(&nameList);
-    }
 /* suppress for parent tracks -- only the subtracks have tables */
 if (track->subtracks == NULL)
     {
     name = slNameNew(trackTable);
     slAddHead(&nameList, name);
+    hashAdd(uniqHash, trackTable, NULL);
     }
 addTablesAccordingToTrackType(db, &nameList, uniqHash, track);
+if (useJoiner)
+    {
+    if (allJoiner == NULL)
+        allJoiner = joinerRead("all.joiner");
+    struct slName *joinedList = NULL, *t;
+    for (t = nameList;  t != NULL;  t = t->next)
+        {
+        struct joinerPair *jpList, *jp;
+        jpList = joinerRelate(allJoiner, db, t->name, db);
+        for (jp = jpList; jp != NULL; jp = jp->next)
+            {
+            struct joinerDtf *dtf = jp->b;
+            if (cartTrackDbIsAccessDenied(dtf->database, dtf->table))
+                continue;
+            char buf[256];
+            char *s;
+            if (sameString(dtf->database, db))
+                s = dtf->table;
+            else
+                {
+                safef(buf, sizeof(buf), "%s.%s", dtf->database, dtf->table);
+                s = buf;
+                }
+            if (!hashLookup(uniqHash, s))
+                {
+                hashAdd(uniqHash, s, NULL);
+                name = slNameNew(s);
+                slAddHead(&joinedList, name);
+                }
+            }
+	}
+    slNameSort(&joinedList);
+    nameList = slCat(nameList, joinedList);
+    }
 hashFree(&uniqHash);
 return nameList;
 }

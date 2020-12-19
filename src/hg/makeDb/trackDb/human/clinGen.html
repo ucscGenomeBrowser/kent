@@ -1,0 +1,239 @@
+<H2>Description</H2>
+<p>
+
+<div class="warn-note" style="border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;">
+<p><span style="font-weight: bold; color: #c70000;">NOTE:</span><br>
+<b>These data are for research purposes only. While the ClinGen data are 
+open to the public, users seeking information about a personal medical or 
+genetic condition are urged to consult with a qualified physician for 
+diagnosis and for answers to personal medical questions.
+</p>
+<p> 
+UCSC presents these data for use by qualified professionals, and even 
+such professionals should use caution in interpreting the significance of 
+information found here. No single data point should be taken at face 
+value and such data should always be used in conjunction with as much 
+corroborating data as possible. No treatment protocols should be 
+developed or patient advice given on the basis of these data without 
+careful consideration of all possible sources of information.
+</p>
+<p> 
+No attempt to identify individual patients should 
+be undertaken. No one is authorized to attempt to identify patients 
+by any means.
+</p> 
+</b>
+</div>
+
+<p>
+The <a target="_blank" href="https://clinicalgenome.org"><b>Clinical Genome Resource (ClinGen)</b></a>
+tracks display data generated from several key curation activities related to <a target="_blank" 
+href="https://clinicalgenome.org/curation-activities/gene-disease-validity/"><b>gene-disease validity</b></a>,
+<a target="_blank" href="https://clinicalgenome.org/curation-activities/dosage-sensitivity/"
+><b>dosage sensitivity</b></a>, and <a target="_blank"
+href="https://clinicalgenome.org/curation-activities/variant-pathogenicity/"><b>variant pathogenicity</b></a>.
+ClinGen is a <a target="_blank" 
+href="https://www.nih.gov/">National Institute of Health (NIH)</a>-funded initiative dedicated to 
+identifying clinically relevant genes and variants for use in precision medicine and research. 
+This is accomplished by harnessing the data from both research efforts and clinical genetic 
+testing and using it to propel expert and machine-driven curation activities. 
+ClinGen works closely with the <a target="_blank" 
+href="https://www.nlm.nih.gov/">National Center for Biotechnology Information (NCBI)</a> of the 
+<a target="_blank" href="https://www.nlm.nih.gov/">National Library of Medicine (NLM)</a>
+which distributes part of this information through its <a target="_blank"
+href="https://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a> database.
+</p>
+
+<p>
+The available data tracks are:
+<ul>
+<li><b>ClinGen Dosage Sensitivity Map -Haploinsufficiency (ClinGen 
+Haploinsufficiency) and -Triplosensitivity (ClinGen Triplosensitivity)</b> -
+Shows evidence supporting or refuting haploinsufficiency (loss) and triplosensitivity (gain) as 
+mechanisms for disease at gene-level and larger genomic regions.
+</li>
+<li><b>ClinGen Gene-Disease Validity Classification (ClinGen Validity)</b> -
+Provides a semi-qualitative measurement for the strength of evidence of a gene-disease relationship. 
+</li>
+</ul>
+</p>
+<p>
+A <b>rating system</b> is used to classify the <b>evidence</b> supporting or refuting dosage
+ sensitivity for individual genes and regions, which takes in consideration the following criteria:
+number of causative variants reported, patterns of inheritance, consistency of phenotype, evidence
+from large-scale case-control studies, mutational mechanisms, data from public genome variation 
+databases, and expert consensus opinion.
+</p>
+<p>
+The system is intended to be of a &quot;dynamic nature&quot;, with regions being reevaluated periodically to 
+incorporate emerging evidence. The evidence collected is displayed within a publicly available 
+<a target="_blank" href="https://dosage.clinicalgenome.org/index.shtml">database</a>. 
+Evidence that haploinsufficiency or triplosensitivity of a gene is associated with a specific 
+phenotype will aid in the interpretive assessment of CNVs including that gene or genomic region.
+</p>
+<p>
+Similarly, a <b>qualitative classification system</b> is used to correlate the <b>evidence</b> of 
+a gene-disease relationship: &quot;Definitive&quot;, &quot;Strong&quot;, &quot;Moderate&quot;, 
+&quot;Limited&quot;, &quot;Animal Model Only&quot;, 
+&quot;No Known Disease Relationship&quot;, &quot;Disputed&quot;, or &quot;Refuted&quot;.
+</p>
+ 
+<h2>Display Conventions</h2>
+<h3>Haploinsufficiency/Triplosensitivity tracks</h3>
+<p>
+Items are shaded according to dosage sensitivity type, <b><font color="red">red</font></b> 
+for haploinsufficiency score 3, <b><font color="blue">blue</font></b> for triplosensitivity score 3, 
+and <B><font color="#a8a8a8">grey</font></b> for other evidence scores or 
+ not yet evaluated).
+Mouseover on items shows the supporting evidence of dosage sensitivity.
+Tracks can be filtered according to the supporting evidence of dosage sensitivity.
+
+<p>
+<b>Dosage Scores</b> are used to classify the evidence of the supporting dosage sensitivity map:
+<dl>
+<dd><b>0</b> - no evidence available</dd>
+<dd><b>1</b> - little evidence for dosage pathogenicity</dd>
+<dd><b>2</b> - some evidence for dosage pathogenicity</dd>
+<dd><b>3</b> - sufficient evidence for dosage pathogenicity</dd>
+<dd><b>30</b> - gene associated with autosomal recessive phenotype</dd>
+<dd><b>40</b> - dosage sensitivity unlikely</dd>
+</dl>
+</p>
+
+<p>
+For more information on the use of the scores see the ClinGen
+<a target="_blank" href="https://clinicalgenome.org/tools/cnv-webinar/faq/">FAQs</a>.
+<p/>
+
+<H3>Gene-Disease Validity track</H3>
+
+<P>
+The gene-disease validity classifications are labeled with the disease entity and hovering 
+over the features shows the associated gene. Items are color coded based on the strength of their 
+classification as provided below:
+</P>
+<table>
+  <thead>
+  <tr>
+    <th style="border-bottom: 2px solid #6678B1;">Color</th>
+    <th style="border-bottom: 2px solid #6678B1;">Classifications</th>
+  </tr>
+  </thead>
+  <tbody><tr>
+    <th bgcolor="#7800AA"></th>
+    <td align="left"><b>Definitive:</b> The role of this gene in this particular disease has been 
+repeatedly demonstrated and has been upheld over time</td>
+  </tr>
+  <tr>
+    <th bgcolor="#000066"></th>
+    <td align="left"><b>Strong:</b> The role of this gene in disease has been independently
+demonstrated typically in at least two separate studies, including both strong variant-level
+evidence in unrelated probands and compelling gene-level evidence from experimental data</td>
+  </tr>
+  <tr>
+    <th bgcolor="#0000FF"></th>
+    <td align="left"><b>Moderate:</b> There is moderate evidence to support a causal role for this
+gene in this disease, typically including both several probands with variants and moderate 
+experimental data supporting the gene-disease assertion</td>
+  </tr>
+  <tr>
+    <th bgcolor="#9999FF"></th>
+    <td align="left"><b>Limited:</b> There is limited evidence to support a causal role for this 
+gene in this disease, such as few probands with variants and limited experimental data supporting 
+the gene-disease assertion</td>
+   </tr>
+  <tr>
+    <th bgcolor="#6E6E6E"></th>
+    <td align="left"><b>Animal Model Only:</b> There are no published human probands with variants 
+but there is animal model data supporting the gene-disease assertion</td>
+  </tr>
+  <tr>
+    <th bgcolor="#000000"></th>
+    <td align="left"><b>No Known Disease Relationship:</b> Evidence for a causal role in disease 
+has not been reported</td>
+  </tr>
+  <tr>
+    <th bgcolor="#FF9933"></th>
+    <td align="left"><b>Disputed:</b> Conflicting evidence disputing a role for this gene in this 
+disease has arisen since the initial report identifying an association between the gene and disease</td>
+  </tr>
+  <tr>
+    <th bgcolor="#FF3333"></th>
+    <td align="left"><b>Refuted:</b> Evidence refuting the role of the gene in the specified 
+disease has been reported and significantly outweighs any evidence supporting the role</td>
+  </tr>
+</tbody></table>
+
+<P>
+The version of the <b>ClinGen Standard Operating Procedures (SOPs)</b> that each gene-disease 
+classification was performed with is provided as well. An older or newer SOP version does not 
+necessarily mean the classification is any more or less valid but is provided for clarity. 
+Each details page also contains a direct link to an evidence summary detailing the rationale behind
+the specific classification and information such as a breakdown of the semi-qualitative framework, 
+relevant PubMed IDs, the type of data (Genetic vs Experimental Evidence), and a detailed summary.
+</P>
+
+<p>
+These tracks are multi-view composite tracks that contain multiple data types (views). Each view 
+within a track has separate display controls, as described 
+<a href="../goldenPath/help/multiView.html">here</a>.
+</p>
+ 
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>,
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis, the data may 
+be queried from our <a href="/goldenPath/help/api.html">REST API</a>. Please refer to our 
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our <a href="../FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a> for more
+information.
+</p>
+
+<p>
+Data is also freely available on the ClinGen website 
+<a href="https://search.clinicalgenome.org/kb/gene-validity/" target="_BLANK">(gene-disease curation methods)</a> 
+and FTP <a href="https://ftp.clinicalgenome.org/" target="_BLANK">(dosage curations)</a>. 
+</p>
+
+
+<h2>Credits</h2>
+<p>
+Thank you to ClinGen and NCBI, especially Erin Rooney Riggs, Christa Lese Martin, Tristan Nelson,
+ May Flowers, Scott Goehringer, and Phillip Weller for technical coordination and 
+consultation, and to Christopher Lee, Luis Nassar, and Anna Benet-Pages of the Genome 
+Browser team.
+</p>
+
+<h2>References</h2>
+
+<p>
+Rehm HL, Berg JS, Brooks LD, Bustamante CD, Evans JP, Landrum MJ, Ledbetter DH, Maglott DR, Martin
+CL, Nussbaum RL <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/26014595" target="_blank">
+ClinGen--the Clinical Genome Resource</a>.
+<em>N Engl J Med</em>. 2015 Jun 4;372(23):2235-42.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26014595" target="_blank">26014595</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4474187/" target="_blank">PMC4474187</a>
+</p>
+
+ <p>
+Riggs ER, Church DM, Hanson K, Horner VL, Kaminsky EB, Kuhn RM, Wain KE, Williams ES, Aradhya S,
+Kearney HM <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/22097934" target="_blank">
+Towards an evidence-based process for the clinical interpretation of copy number variation</a>.
+<em>Clin Genet</em>. 2012 May;81(5):403-12.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22097934" target="_blank">22097934</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5008023/" target="_blank">PMC5008023</a>
+</p>
+
+<p>
+Strande NT, Riggs ER, Buchanan AH, Ceyhan-Birsoy O, DiStefano M, Dwight SS, Goldstein J, Ghosh R,
+Seifert BA, Sneddon TP <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/28552198" target="_blank">
+Evaluating the Clinical Validity of Gene-Disease Associations: An Evidence-Based Framework Developed
+by the Clinical Genome Resource</a>.
+<em>Am J Hum Genet</em>. 2017 Jun 1;100(6):895-906.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28552198" target="_blank">28552198</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5473734/" target="_blank">PMC5473734</a>
+</p>
+

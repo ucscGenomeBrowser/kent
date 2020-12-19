@@ -10,7 +10,7 @@
 void usage()
 /* Explain usage and exit. */
 {
-errAbort(
+errAbort("bedJoinTabOffset - Add file offset and length of line in a text file with the same name as the BED name to each row of BED.\n"
   "usage:\n"
   "   bedJoinTabOffset inTabFile inBedFile outBedFile\n"
   "Given a bed file and tab file where each have a column with matching values:\n"

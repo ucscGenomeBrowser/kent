@@ -1,0 +1,5 @@
+# CADD track, #18492, from CADD track hub
+Thu Dec  5 06:15:48 PST 2019 (max)
+mkdir -p /hive/data/genomes/{hg19,hg38}/bed/cadd/
+wget https://krishna.gs.washington.edu/download/CADD/bigWig/CADD_GRCh38-v1.4.bw -O /hive/data/genomes/hg38/bed/cadd/CADD-v1.4.bw
+ln -s /hive/data/genomes/hg38/bed/cadd/CADD-v1.4.bw /gbdb/hg38/bbi/CADD-v1.4.bw

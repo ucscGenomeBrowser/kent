@@ -1,6 +1,7 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
-import logging, sys, optparse, re, os, datetime, gzip, urllib2, subprocess
+import logging, sys, optparse, re, os, datetime, gzip, urllib.request, urllib.error, urllib.parse, subprocess
+import tempfile
 from collections import defaultdict
 from os.path import join, basename, dirname, isfile, abspath
 from datetime import date, datetime, timedelta
@@ -13,6 +14,10 @@ dbToUrl = {
     "OMIM" : "http://www.omim.org/entry/%s",
     "Orphanet" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert=%s"
 }
+
+# since we're filtering on it, we make sure that we have all molecular consequences in the tdb file
+# if they add a new one, this script must fail and tdb must be updated.
+possMolConseqs = set(["genic downstream transcript variant","no sequence alteration","inframe indel","stop lost","genic upstream transcript variant","initiatior codon variant","inframe insertion","inframe deletion","","splice acceptor variant","splice donor variant","5 prime UTR variant","nonsense","non-coding transcript variant","3 prime UTR variant","frameshift variant","intron variant","synonymous variant","missense variant", ""])
 
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
 parser = optparse.OptionParser("""usage: %prog [options] summaryFname varAllFname hgvsFname - check and convert the three main clinVar tab-sep files to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed
@@ -33,14 +38,100 @@ if options.debug:
 else:
     logging.basicConfig(level=logging.INFO)
 
-clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories	VariationID\n"
+clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories	VariationID	PositionVCF	ReferenceAlleleVCF	AlternateAlleleVCF\n"
 # ==== FUNCTIONs =====
+
+# benign = B, likely benign = LB, conflicting = CF, likely pathogenic= LP, 
+# pathogenic = P, other = OT, uncertain = VUS, RF=risk factor
+# colors were defined by Ana Benet Pages
+cnvColors = {
+        "INS" : {
+            "OT" : "225,165,0",
+            "B" : "250,214,69",
+            "LB" : "250,214,69",
+            "CF" : "225,165,0",
+            "RF" : "225,165,0",
+            "VUS" : "225,165,0",
+            "LP" : "199,114,3",
+            "P" : "199,114,3"
+            },
+        "LOSS" : {
+            "OT" : "255,0,0",
+            "B" : "255,98,119",
+            "LB" : "255,98,119",
+            "CF" : "255,0,0",
+            "VUS" : "255,0,0",
+            "RF" : "255,0,0",
+            "LP" : "153,0,0",
+            "P" : "153,0,0"
+            },
+        "GAIN" : {
+            "OT" : "0,0,225",
+            "B" : "77,184,255",
+            "LB" : "77,184,255",
+            "CF" : "0,0,225",
+            "VUS" : "0,0,225",
+            "RF" : "0,0,225",
+            "LP" : "0,0,179",
+            "P" : "0,0,179"
+            },
+        "STRUCT" : {
+            "OT" : "0,210,0",
+            "B" : "0,255,0",
+            "LB" : "0,255,0",
+            "CF" : "0,210,0",
+            "VUS" : "0,210,0",
+            "RF" : "0,210,0",
+            "LP" : "0,128,0",
+            "P" : "0,128,0"
+            },
+        "INV" : {
+            "OT" : "192,0,192",
+            "B" : "255,128,255",
+            "LB" : "255,128,255",
+            "CF" : "192,0,192",
+            "VUS" : "192,0,192",
+            "RF" : "192,0,192",
+            "LP" : "128,0,128",
+            "P" : "128,0,128"
+            },
+        "SEQALT" : {
+            "OT" : "128,128,128",
+            "B" : "191,191,191",
+            "LB" : "191,191,191",
+            "CF" : "128,128,128",
+            "VUS" : "128,128,128",
+            "RF" : "128,128,128",
+            "LP" : "64,64,64",
+            "P" : "64,64,64"
+            },
+        "SEQLEN" : {
+            "OT" : "0,179,179",
+            "B" : "0,255,255",
+            "LB" : "0,255,255",
+            "CF" : "0,179,179",
+            "VUS" : "0,179,179",
+            "RF" : "0,179,179",
+            "LP" : "0,102,102",
+            "P" : "0,102,102"
+            },
+        "SUBST" : {
+            "OT" : "128,128,128",
+            "B" : "191,191,191",
+            "LB" : "191,191,191",
+            "CF" : "128,128,128",
+            "VUS" : "128,128,128",
+            "RF" : "128,128,128",
+            "LP" : "64,64,64",
+            "P" : "64,64,64"
+            },
+}
 
 def mustRun(cmd):
     logging.debug(cmd)
     ret = os.system(cmd)
     if ret!=0:
-        print("Could not run: %s" % cmd)
+        print(("Could not run: %s" % cmd))
         sys.exit(1)
 
 def shortenName(name):
@@ -71,8 +162,14 @@ def shortenName(name):
         if ":" in name:
             name = name.split(":")[1]
             longName = name.split(" ")[0]
-        name = name.split(" ")[0].split("[")[0].split("(")[0]
-        shortName = name
+
+        # handle genomic HGVS NC_000010.11:g.(?_87925503)_(87965482_?)del
+        if name.startswith("NC_") and "g." in name and ")" in name:
+            shortName = name
+        else:
+            # strip away the final description like " (p.Ala184del)"
+            name = name.split(" ")[0].split("[")[0].split("(")[0]
+            shortName = name
 
         if name.endswith("del"):
             shortName = "del"
@@ -93,6 +190,160 @@ def shortenName(name):
                     shortName = dupDelIns+change
 
     return shortName, longName
+
+def allTypeToCode(allType, debugId):
+    """
+    Map the allele type field from ClinVal to one of these classes for filtering:
+        STRUCT = structual alteration
+        LOSS = deletion, copy number loss, mobile element deletion
+        GAIN = duplication, tandem dupl, intrachrom transp, copy number gain
+        INS = insertion, mobile or novel element insertion
+        INV = inversion
+        SEQALT = catch-all category: multiallele cnv, undetermined, others, not defined
+        SEQLEN = short tandem repeat, short repeat, rep exp, rep contraction, NT expansion
+        SUBST = SNV, MNV, multi nucl polymophrism, indel
+        OTH = protein only
+
+        # categories were defined by Ana Benet Pages
+        # see table at https://drive.google.com/file/d/1-iqHrZTwT1wuatNA_A5b6knyqE6JG14f/view?usp=sharing
+
+    In 3/2020, these were all possible values:
+
+        fusion  6       0.000%
+        complex 61      0.005%
+        protein only    103     0.008%
+        NT expansion    142     0.011%
+        Translocation   302     0.022%
+        inversion       583     0.043%
+        undetermined variant    866     0.064%
+        insertion       7133    0.530%
+        indel   8490    0.630%
+        short repeat    18778   1.394%
+        duplication     34148   2.535%
+        copy number loss        40441   3.002%
+        copy number gain        40671   3.019%
+        deletion        77325   5.740%
+        single nucleotide variant       1118033 82.997%
+
+    """
+    allType = allType.lower() # they changed the casing in Sep 2020
+    # doing this first, as this is 80% of the data -> faster
+    if allType in ["single nucleotide variant", "variation"]:
+        # 'variation' doesn't fit anywhere, but we think that these are mostly OMIM imports, so SNV sounds OK
+        return "SUBST"
+    # the order here matches Ana's coloring table for easier reading
+    elif allType in ["translocation", "fusion", "complex"]:
+        return "STRUCT"
+    elif allType in ["deletion", "copy number loss"]:
+        return "LOSS"
+    elif allType in ["duplication", "copy number gain", "tandem duplication"]:
+        return "GAIN"
+    elif allType in ["indel", "insertion"]:
+        return "INS"
+    elif allType in ["inversion"]:
+        return "INV"
+    elif allType in ["undetermined variant"]:
+        return "SEQALT"
+    elif allType in ["short repeat", "nt expansion", "microsatellite"]:
+        return "SEQLEN"
+    #elif allType in ["variation"]: # appeared in Sep 2020
+        #return "OTH"
+    #elif allType in ["protein only"]: # looks like they removed protein only sometimes in early 2020
+        #return "OTH"
+    else:
+        print("found unknown allele type '%s' for accession %s"%(allType, debugId))
+        assert(False) # found new allele type in ClinVar table : code needs fixing
+
+def originSimpleToCode(originSimple):
+    """
+    for filtering, group the simplified origins into simpler origin codes:
+    return one of these values:
+        "GERM" = germline
+        "SOM" = somatic
+        "GERMSOM" = germline/somatic
+        "NOVO" = de novo
+        "UNK" = unknown
+
+    as of 3/2020, these are the values in originSimple and how often they appear:
+
+    tested-inconclusive     91      0.007%
+    not applicable  193     0.014%
+    germline/somatic        1808    0.134%
+    somatic 7929    0.589%
+    not provided    53173   3.947%
+    unknown 72601   5.389%
+    germline        1211288 89.919%
+    """
+    if originSimple=="germline":
+        return "GERM"
+    elif originSimple=="germline/somatic":
+        return "GERMSOM"
+    elif originSimple in ["not applicable", "not provided", "unknown", "tested-inconclusive"]:
+        return "UNK"
+    elif originSimple in ["not applicable", "not provided", "unknown"]:
+        return "UNK"
+    elif originSimple in ["somatic"]:
+        return "SOM"
+    else:
+        print("found new origin string: "+originSimple)
+        assert(False) # Clinvar has added a new origin string
+
+def clinSignToCode(pathoStr):
+    """ there are hundreds of possible pathogenicity descriptions. flatten into one of seven codes:
+    - benign = BN
+    likely benign = LB
+    conflicting = CF
+    likely pathogenic= LP
+    pathogenic = PG
+    other = OT
+    uncertain = UC
+
+    examples:
+
+    Benign/Likely benign,other      13      0.002%
+    Conflicting interpretations of pathogenicity,risk factor        13      0.002%
+    Likely benign,other     18      0.003%  
+    Pathogenic,drug response        28      0.005%
+    protective      32      0.005%
+    Pathogenic,risk factor  33      0.005%
+    Pathogenic,other        102     0.017%
+    Affects 120     0.019%
+    association     202     0.033%
+    drug response   387     0.063%
+    risk factor     444     0.072%
+    no interpretation for the single variant        564     0.092%
+    other   1687    0.274%
+    Pathogenic/Likely pathogenic    5209    0.846%
+    not provided    8860    1.440%
+    Benign/Likely benign    19489   3.167%
+    Likely pathogenic       30200   4.907%
+    Conflicting interpretations of pathogenicity    30910   5.023%
+    Pathogenic      66679   10.835%
+    Benign  77551   12.602%
+    Likely benign   154870  25.166%
+    Uncertain significance  217838  35.399%
+
+    """
+    pathoStr = pathoStr.lower()
+    # don't change the order of these unless you tested it. The order is crucial.
+    # the aim of this order is to err on the side of caution: if a variant is VUS and pathogenic,
+    # we rather classify it as VUS (=triggering manual review). If it's pathogenic and benign at the same 
+    # time, we rather classify it as pathogenic
+    if "conflicting" in pathoStr:
+        return "CF"
+    if "uncertain" in pathoStr:
+        return "VUS"
+    if "risk factor" in pathoStr:
+        return "RF"
+    if "likely pathogenic" in pathoStr:
+        return "LP"
+    if "pathogenic" in pathoStr:
+        return "P"
+    if "likely benign" in pathoStr:
+        return "LB"
+    if "benign" in pathoStr:
+        return "B"
+    return "OT"
 
 def lastMonth(d,x=1):
     """ returns same day as this month, but last month, e.g. for 2013-01-01 
@@ -115,11 +366,11 @@ def compareWithLastMonth(fname, maxDiff):
     previousDateStr = previousDate.date().isoformat()
     previousFname = fname.replace(todayStr, previousDateStr)
     if not isfile(previousFname):
-        print("Cannot find %s, cannot compare new data with previous month" % previousFname)
+        print(("Cannot find %s, cannot compare new data with previous month" % previousFname))
         return
         
-    previousCount = sum(1 for line in open(previousFname))
-    todayCount = sum(1 for line in open(fname))
+    previousCount = sum(1 for line in open(previousFname, encoding="utf8"))
+    todayCount = sum(1 for line in open(fname, encoding="utf8"))
     percDiff = (todayCount-previousCount)/float(todayCount)
 
     if percDiff < 0 and maxDiff:
@@ -174,15 +425,15 @@ def parseHgvsFile(hgvsFname):
     expHead	= "#Symbol	GeneID	VariationID	AlleleID	Type	Assembly	NucleotideExpression	NucleotideChange	ProteinExpression	ProteinChange	UsedForNaming	Submitted	OnRefSeqGene"
     allToHgvs = {}
     foundHead = False
-    for line in gzip.open(hgvsFname):
+    for line in gzip.open(hgvsFname, "rt"):
         line = line.rstrip("\n")
         if line==expHead:
             foundHead = True
         if line.startswith("#Symbol") and "GeneID" in line:
             if not line == expHead:
                 print ("Header of hgvs file has changed again. Code needs fixing")
-                print ("found:",line)
-                print ("expected:",expHead)
+                print(("found:",line))
+                print(("expected:",expHead))
             else:
                 foundHead = True
 
@@ -200,8 +451,9 @@ def parseHgvsFile(hgvsFname):
 def accListToHtml(inStr):
     """
     given a string of a list of db:acc tuples, like "dbVar:nssv578901, omim:12343", convert the accessions
-    to HTML links to the databases
+    to HTML links to the databases. Also, pull out the dbVar SSV accession for its own field later.
     """
+    dbVarAcc = ""
     newParts = []
     for part in inStr.split(","):
         fields = part.split(":")
@@ -212,6 +464,10 @@ def accListToHtml(inStr):
         db, acc = fields
         accForUrl = acc
 
+        if db=="dbVar" and len(acc)>5 and acc[1:4]=="ssv":
+            # can be nssv/essv/essv, see https://www.ncbi.nlm.nih.gov/dbvar/content/faq/#nsvnssv
+            dbVarAcc = acc
+
         if db in dbToUrl:
             if "OMIM" in db:
                 accForUrl = accForUrl.replace(".", "#")
@@ -220,7 +476,7 @@ def accListToHtml(inStr):
         else:
             newPart = part
         newParts.append(newPart)
-    return ", ".join(newParts)
+    return (", ".join(newParts)), dbVarAcc
 
 def reviewStatusToHtmlStars(reviewStatus):
     """
@@ -255,7 +511,7 @@ def reviewStatusToHtmlStars(reviewStatus):
         starCount = 0
 
     if starCount == None:
-        print("Illegal review status: %s" % revStatus)
+        print(("Illegal review status: %s" % revStatus))
         assert(False)
 
     emptyStarCount = 4-starCount
@@ -266,34 +522,101 @@ def reviewStatusToHtmlStars(reviewStatus):
     htmlStr = "".join(htmlList)
     htmlStr += "&nbsp;&nbsp;<small>based on: %s</small>" % reviewStatus
 
-    asciiDesc = "%d stars" % starCount
+    if starCount==1:
+        asciiDesc = "%d star" % starCount
+    else:
+        asciiDesc = "%d stars" % starCount
     return htmlStr, asciiDesc, starCount
+
+def loadSubmissions(summFname):
+    " load the submissions into the Mysql table for the lollipop track details page "
+    # not doing the load+rename strategy yet, I don't think it makes a difference here
+    logging.info("Loading submissions table %s into mysql, hg19 and also hg38" % summFname)
+    fh = tempfile.NamedTemporaryFile(prefix="clinVarToBed", suffix=".tsv")
+    tmpFname = fh.name
+    cmd= "zgrep -v '^#' %s > %s" % (summFname, tmpFname)
+    assert(os.system(cmd)==0)
+
+    cmd = "chmod a+r %s" % (tmpFname) # otherwise mysqld can't read the file
+    assert(os.system(cmd)==0)
+
+    cmd = "hgLoadSqlTab hg19 clinvarSub clinvarSub.sql %s" % (tmpFname)
+    assert(os.system(cmd)==0)
+
+    cmd = "hgLoadSqlTab hg38 clinvarSub clinvarSub.sql %s" % (tmpFname)
+    assert(os.system(cmd)==0)
 
 def downloadFromNcbi(skipDownload):
     " download files from NCBI and return triple of filenames "
     today = date.today().isoformat()
     outSuffix = "%s." % today
 
-    url = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
+    baseUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/"
+    url = baseUrl+"variant_summary.txt.gz"
     outFname = "archive/variant_summary.%s.txt.gz" % today
     filename = outFname
 
     # get the new variant allele file
-    varUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variation_allele.txt.gz"
+    varUrl = baseUrl+"variation_allele.txt.gz"
     varFname = join(dirname(filename), "variation_allele.%s.txt.gz" % today)
 
     # get the new hgvs allele file
-    hgvsUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/hgvs4variation.txt.gz"
+    hgvsUrl = baseUrl+"hgvs4variation.txt.gz"
     hgvsFname = join(dirname(filename), "hgvs4variation.%s.txt.gz" % today)
 
-    if not (skipDownload and isfile(outFname) and isfile(varFname) and isfile(hgvsFname)):
+    # get the summary file
+    summUrl = baseUrl+"submission_summary.txt.gz"
+    summFname = join(dirname(filename), "submission_summary.%s.txt.gz" % today)
+
+    # get the new VCF file
+    vcfUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz"
+    vcfFname = join(dirname(filename), "GRCh38.clinvar.%s.vcf.gz" % today)
+
+    if not (isfile(vcfFname)):
+        logging.info("Downlading %s to %s" % (vcfUrl, vcfFname))
+        open(vcfFname, "wb").write(urllib.request.urlopen(vcfUrl).read())
+
+    if not (skipDownload and isfile(outFname) and isfile(varFname) and isfile(hgvsFname) and isfile(summFname)):
         logging.info("Downlading %s to %s" % (url, outFname))
-        open(outFname, "w").write(urllib2.urlopen(url).read())
+        open(outFname, "wb").write(urllib.request.urlopen(url).read())
         logging.info("Downlading %s to %s" % (hgvsUrl, hgvsFname))
-        open(hgvsFname, "w").write(urllib2.urlopen(hgvsUrl).read())
+        open(hgvsFname, "wb").write(urllib.request.urlopen(hgvsUrl).read())
         logging.info("Downlading %s to %s" % (varUrl, varFname))
-        open(varFname, "w").write(urllib2.urlopen(varUrl).read())
-    return filename, varFname, hgvsFname
+        open(varFname, "wb").write(urllib.request.urlopen(varUrl).read())
+        logging.info("Downlading %s to %s" % (summUrl, summFname))
+        open(summFname, "wb").write(urllib.request.urlopen(summUrl).read())
+
+    return filename, varFname, hgvsFname, vcfFname, summFname
+
+def parseVcf(vcfFname):
+    " parse VCF and return as dict alleleId -> (molConseq) "
+    logging.info("Parsing %s" % vcfFname)
+    ret = {}
+    for line in gzip.open(vcfFname, "rt", encoding="utf_8"):
+        # #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
+        #1       930248  789256  G       A       .       .       ALLELEID=707587;CLNDISDB=MedGen:CN517202;CLNDN=not_provided;CLNHGVS=
+        if line.startswith("#"):
+            continue
+        chrom, start, end, ref, alt, qual, filter, info = line.rstrip("\n").split("\t")
+        infoParts = info.split(";")
+
+        alleleId = None
+        mc = None
+        for info in infoParts:
+            key, val = info.split("=")
+            if key=="ALLELEID":
+                alleleId = val
+            elif key=="MC":
+                mc = val.split("|")[1].split(",")[0].replace("_", " ")
+                if not mc in possMolConseqs:
+                    print("molecular consequence '%s' in VCF file is not known and so not in trackDb file. ",
+                            "Please update otto script %s" % (mc, __file__))
+                    sys.exit(1)
+
+        if mc and alleleId:
+            ret[int(alleleId)] = mc
+
+    return ret
 
 # ----------- MAIN --------------
 if args==[] and not options.auto:
@@ -303,19 +626,22 @@ if args==[] and not options.auto:
 outSuffix = ""
 
 if options.auto:
-    filename, varFName, hgvsFname = downloadFromNcbi(options.skipDownload)
+    filename, varFName, hgvsFname, vcfFname, summFname = downloadFromNcbi(options.skipDownload)
 else:
     filename = args[0]
     varFname = args[1]
     hgvsFname = args[2]
+    vcfFname = args[3]
 
 #allToVar = parseVariationAlleleFile(varFname) # the alleles are now in the hgvs file after a Clinvar change
+allToVcf = parseVcf(vcfFname)
 allToHgvs = parseHgvsFile(hgvsFname)
 
 # e.g. GRCh38/hg38 1p36.33-36.31(chr1:1181847-5507243)x1
 # GRCh38/hg38 9p24.3-q34.3(chr9:204193-138179445)
 # GRCh37/hg19 21q22.13-22.2(chr21:38741104..40274106)
 # GRCh37/hg19 15q14-15.1 chr15:34638237..42057083 complex variant
+# NC_000010.11:g.(?_87925503)_(87965482_?)del
 cnvRe = re.compile(r'GRCh[0-9]*/hg[0-9]* ([XY0-9pq.-]+) ?\(?[XYa-z_:0-9.-]+?\)?(x[0-9]+)?.*')
 
 hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_()-]+)')
@@ -327,7 +653,7 @@ hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_(
 # c.3839_3855del17
 posRe = re.compile(r'^([mgcpdrn]\.[*0-9_?+-]+)(delins|dup|del|ins|inv)?([>~ACTG0-9]*)$')
 
-ifh = gzip.open(filename)
+ifh = gzip.open(filename, "rt", encoding="latin_1")
 
 # check the header
 line1 = ifh.readline()
@@ -338,13 +664,15 @@ if (line1 != clinvarExpectHeaders): # test if clinvar has changed their header l
     raise Exception("code needs fixing")
 
 # open out files
-hg19Bed = open("archive/clinvarMain.hg19.%sbed" % outSuffix, "w")
-hg38Bed = open("archive/clinvarMain.hg38.%sbed" % outSuffix, "w")
-hg19BedCnv = open("archive/clinvarCnv.hg19.%sbed" % outSuffix, "w")
-hg38BedCnv = open("archive/clinvarCnv.hg38.%sbed" % outSuffix, "w")
+hg19Bed = open("archive/clinvarMain.hg19.%sbed" % outSuffix, "w", encoding="latin1")
+hg38Bed = open("archive/clinvarMain.hg38.%sbed" % outSuffix, "w", encoding="latin1")
+hg19BedCnv = open("archive/clinvarCnv.hg19.%sbed" % outSuffix, "w", encoding="latin1")
+hg38BedCnv = open("archive/clinvarCnv.hg38.%sbed" % outSuffix, "w", encoding="latin1")
 
 longCount = 0
 noAssCount = 0
+noMcCount = 0
+minusAccs = []
 
 # convert lines
 for line in ifh:
@@ -356,7 +684,7 @@ for line in ifh:
     alleleId, allType, name, geneId, geneSymbol, hgncId, clinSign, clinSignSimple, lastEval, snpAcc, dbVarAcc, \
       irvcAcc, phenotypeIds, phenotypeList, origin, originSimple, assembly, chromAcc, chrom, start, end, \
       refAll, varAll, cytogenetic, reviewStatus, numberSubmitters, guidelines, inGtr, otherIds, \
-      submCategories, varId = row
+      submCategories, varId, posVcf, refAllVcf, altAllVcf = row
 
     # changed in July 2018 when the "varId" was merged into this table. It used to be 
     # in allToVar
@@ -365,18 +693,26 @@ for line in ifh:
 
     hgvsCod, hgvsProt =  allToHgvs.get(alleleId, ("", ""))
 
+    molConseq = allToVcf.get(int(alleleId))
+    if molConseq is None:
+        logging.debug("%s has no molConseq" % alleleId)
+        noMcCount += 1
+        molConseq = ""
+
     if chrom=="" or assembly=="" or assembly=="NCBI36":
         noAssCount += 1
         continue
 
     if chrom=="Un" and assembly=="GRCh38":
-        print("wrong chrUn chrom on assembly hg38. Skipping %s" % irvcAcc)
+        print(("wrong chrUn chrom on assembly hg38. Skipping %s" % irvcAcc))
         continue
     chrom = "chr"+chrom
 
-    # Code-review/QA: Is it OK to pass through coordinates on chrM for hg19?
     if chrom=="chrMT": # why does NCBI use chrMT but we use chrM ?
-        chrom = "chrM"
+        if assembly=="GRCh37":
+            chrom = "chrMT" # our chrM is different from NCBI's MT, but chrMT got added hg19 in 2020 
+        else:
+            chrom = "chrM"
 
     shortName, longName = shortenName(name)
 
@@ -387,12 +723,16 @@ for line in ifh:
     if len(longName)>60:
         longName = longName[:60]+"..."
 
+    if start=="-1" and end=="-1":
+        minusAccs.append(irvcAcc)
+        continue
+
     if start=="" or end=="":
-        print("undefined start or end coordinate. record %s"% irvcAcc)
+        print("empty start or end coordinate. record %s, start/end = %s/%s "% (irvcAcc, start, end))
         continue
 
     if int(start)<0 or int(end)<0:
-        print("illegal start or end coordinate. record %s"% irvcAcc)
+        print("illegal start or end coordinate. record %s, start/end = %s/%s"% (irvcAcc, start, end))
         continue
 
     # sometimes they seem to inverse their coordinates
@@ -417,31 +757,41 @@ for line in ifh:
     # used until Oct 2017
     # if dbVarAcc.startswith("nsv") or "copy number" in allType:
     # now using just size on genome, see #20268
-    if (int(end)-int(start))>100:
+    # shortening to >= 50bp to bring into line with LOVD and gnomAD
+    if (int(end)-int(start))>=50:
         isCnv = True
     else:
         isCnv = False
 
-    if isCnv:
-        if "gain" in allType or "duplication" in allType:
-            itemRgb = "0,0,255"
-        if "deletion" in allType or "loss" in allType:
-            itemRgb = "255,0,0"
-    else:
-        isPat, isBen = False, False
-        if "pathogenic" in clinSign.lower():
-            isPat = True
-        if "benign" in clinSign.lower():
-            isBen = True
+    pathoCode = clinSignToCode(clinSign)
+    originCode = originSimpleToCode(originSimple)
+    allTypeCode = allTypeToCode(allType, "|".join(row))
 
-        if (isPat==True and isBen==True) or (isPat==False and isBen==False):
-            itemRgb = "128,128,128"
-        elif isPat==True:
-            itemRgb = "210,0,0"
-        elif isBen==True:
-            itemRgb = "0,210,0"
+    if isCnv:
+        typeColors = cnvColors[allTypeCode]
+        #else:
+        #print("CNV encountered with unknown type: %s / %s"%(allType, allTypeCode))
+        #assert(False)
+        itemRgb = typeColors.get(pathoCode)
+        if itemRgb is None:
+            print("CNV encountered with unknown pathoCode: "+pathoCode)
+            assert(False)
+
+    else:
+        if pathoCode in ["P", "LP"]: # pathogenic or likely pathogenic
+            itemRgb = "210,0,0" # red
+        elif pathoCode in ["B", "LB"]: # benign or likely benign
+            itemRgb = "0,210,0" # green
+        elif pathoCode in ["VUS", "RF"]: # uncertain
+            itemRgb = "0,0,128" # dark-blue
+        elif pathoCode in ["CF"]: # conflicting
+            itemRgb = "137,121,212" # light-blue
+        elif pathoCode in ["OT"]: # other
+            itemRgb = "128,128,128" # grey
         else:
             assert(False)# should never happen
+
+    varLen = int(end)-int(start)
 
     geneStr = geneSymbol
     if geneId.isdigit() and geneId!="-1":
@@ -449,33 +799,47 @@ for line in ifh:
     if len(geneStr)>250:
         geneStr = "not shown, too many genes"
 
-    if name=="":
+    mouseOverName = name
+
+    otherIds, dbVarSsvAcc = accListToHtml(otherIds)
+
+    if isCnv and dbVarSsvAcc!="":
+        shortName = dbVarSsvAcc
+    elif name=="":
         name = "No display name was provided by ClinVar for this variant"
         shortName = "NoName"
+        mouseOverName = ""
 
     if len(name)>90:
         name = name[:90]+"..."
     name = varId+"|"+name
+
+    if len(mouseOverName)>80:
+        mouseOverName = mouseOverName[:80]+"..."
 
     if len(hgvsProt) > 90:
         hgvsProt = hgvsProt[:90]+"..."
     if len(hgvsCod) > 90:
         hgvsCod = hgvsCod[:90]+"..."
 
-    otherIds = accListToHtml(otherIds)
-
-    phenotypeIds = accListToHtml(phenotypeIds)
+    phenotypeIds, _ = accListToHtml(phenotypeIds)
 
     starRatingHtml, asciiStars, starCount = reviewStatusToHtmlStars(reviewStatus)
 
-    mouseOverParts = [longName, clinSign, asciiStars]
+    mouseOverParts = [mouseOverName, "Type: "+allType, "Consequence: "+ molConseq, "Significance: "+clinSign,
+            "Origin: "+origin, "Phenotypes: "+phenotypeList]
+    # removed Apr 2020: numberSubmitters+" submitters", "Level: "+asciiStars
     mouseOver = ", ".join(mouseOverParts)
 
     row = [chrom, start, end, shortName, str(starCount), strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
-        name, clinSign, starRatingHtml, allType, geneStr,
+        name, clinSign, starRatingHtml, allType, geneStr, molConseq,
         snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeList, phenotypeIds, origin, assembly, cytogenetic,
-        hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, mouseOver]
+        hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, mouseOver,
+        # these fields are the for the filters, not for the display
+        pathoCode, originCode, allTypeCode, str(varLen), str(starCount),
+        # the variant ID got forgotten in the original bigBed schema, it was only part of the origName field
+        varId, dbVarSsvAcc]
 
     # replace clinvar's placeholders with real empty fields
     newRow = []
@@ -487,8 +851,6 @@ for line in ifh:
     row = newRow
 
     if assembly=="GRCh37":
-        if chrom=="chrM":
-            continue # we don't have the same MT chrom as NCBI, skip these
         ofh = hg19Bed
         if isCnv:
             ofh = hg19BedCnv
@@ -499,6 +861,8 @@ for line in ifh:
     else:
         noAssCount +=1
         
+    #for o in row:
+        #print(o, type(o))
     ofh.write("\t".join(row))
     ofh.write("\n")
 
@@ -509,6 +873,7 @@ hg38BedCnv.close()
 
 logging.info("%d lines with feature name that was too long, shortened them" % longCount)
 logging.info("%d lines without, with old assembly or no chrom, skipped" % noAssCount)
+logging.info("%d lines with -1/-1 start/end positions skipped. Examples: %s" % (len(minusAccs), minusAccs[:3]))
 
 fnames = [hg19Bed.name, hg38Bed.name, hg19BedCnv.name, hg38BedCnv.name]
 
@@ -536,7 +901,7 @@ for fname in fnames:
     tmpFname = "%s.%s.temp.bb" % (base, db)
 
     outFname = basename(outFname) # strip the archive/ part, put into current dir
-    cmd = "bedToBigBed -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, tmpFname)
+    cmd = "bedToBigBed -extraIndex=_dbVarSsvId -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, tmpFname)
     mustRun(cmd)
 
     tableName = outFname.split('.')[0] # e.g. clinvarMain
@@ -551,5 +916,7 @@ for db, tableName, tmpFname, finalFname in tmpFnames:
 for db, tableName, tmpFname, finalFname in tmpFnames:
     cmd = "hgBbiDbLink %s %s /gbdb/%s/bbi/clinvar/%s.bb" % (db, tableName, db, tableName)
     mustRun(cmd)
+
+loadSubmissions(summFname)
 
 print("ClinVar update end: OK")

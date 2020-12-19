@@ -21,7 +21,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
     chicken13kInfo.o chromBins.o chromAlias.o chr18deletions.o \
     chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o chromKeeper.o \
-    clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
+    clinvarSub.o clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
     cnpIafrate.o cnpIafrate2.o cnpLocke.o cnpRedon.o cnpSebat.o cnpSebat2.o \
     cnpSharp2.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
@@ -83,7 +83,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o ncbiRefLink.o \
     ncbiRefSeqLink.o netAlign.o netCart.o nonCodingUi.o omimTitle.o ooUtils.o \
     orthoAlleles.o pal.o pbStamp.o pcrResult.o pepPred.o \
-    peptideAtlasPeptide.o plasEndPairs.o polyGenotype.o protFeat.o pscreen.o \
+    peptideAtlasPeptide.o plasEndPairs.o polyGenotype.o protFeat.o protobuf.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rangeTreeFile.o rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
@@ -98,7 +98,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o snakeUi.o \
     snp.o snp125.o snp125CodingCoordless.o snp132Ext.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
     snpUi.o snp125Exceptions.o snp125Ui.o softPromoter.o softberryHom.o soTerm.o \
-    spDb.o splignAlign.o sqlSanity.o stanMad.o straw.o stsAlias.o \
+    spDb.o splignAlign.o sqlSanity.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o suggest.o \
     switchDbTss.o synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
@@ -110,14 +110,24 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o txAliDiff.o txCluster.o txCommon.o txEdgeBed.o \
     txEdgeOrtho.o txGraph.o txInfo.o txRnaAccs.o ucscRetroInfo.o ucscRetroOrtho.o \
-    validateGisaid.o variant.o variantProjector.o vcfUi.o \
+    variant.o variantProjector.o vcfUi.o \
     vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
     wabAli.o web.o ncRna.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
     wiggleCart.o wiggleUtils.o wikiLink.o wikiTrack.o yaleGencodeAssoc.o \
     zdobnovSynt.o oreganno.o \
     oregannoUi.o gvUi.o gv.o omicia.o protVar.o pgSnp.o \
     alignInfo.o cddInfo.o loweutils.o cddDesc.o arCOGs.o arcogdesc.o geneTree.o \
-    megablastInfo.o pgPhenoAssoc.o pgSiftPred.o pgPolyphenPred.o userRegions.o variome.o
+    megablastInfo.o pgPhenoAssoc.o pgSiftPred.o pgPolyphenPred.o userRegions.o variome.o \
+    gencodeAnnotationRemark.o gencodeAttrs.o gencodeToEntrezGene.o \
+    gencodeExonSupport.o gencodeGeneSource.o gencodeToGeneSymbol.o gencodeToPdb.o \
+    gencodeToPubMed.o gencodeToRefSeq.o gencodeTag.o \
+    gencodeTranscriptionSupportLevel.o gencodeTranscriptSource.o \
+    gencodeTranscriptSupport.o gencodeToUniProt.o
+
+
+ifeq (${USE_HIC}, 1)
+  O += straw.o
+endif
 
 ifeq (${GBROWSE}, 1)
   GBROWSE_D=-DGBROWSE

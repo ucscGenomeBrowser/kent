@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Euarch Chain/Net
 longLabel Euarchontoglire Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aTShrew=Tree_shrew bBushbaby=Bushbaby bMouseLemur=Mouse_Lemur cTarsier=Tarsier dMarmoset=Marmoset eSquirrelMonkey=Squirrel_Monkey fBaboon=Baboon gRhesus=Rhesus hGibbon=Gibbon iaOrangutan=Orangutan ibOrangutan=Orangutan jGorilla=Gorilla kaChimp=Chimp kbChimp=Chimp lHuman=Human
+subGroup2 species Species aTShrew=Tree_shrew bBushbaby=Bushbaby bMouseLemur=Mouse_Lemur cTarsier=Tarsier daMarmoset=Marmoset dbMarmoset=Marmoset eSquirrelMonkey=Squirrel_Monkey fBaboon=Baboon gRhesus=Rhesus hGibbon=Gibbon iaOrangutan=Orangutan ibOrangutan=Orangutan jaGorilla=Gorilla jbGorilla=Gorilla jcBonobo=Bonobo kaChimp=Chimp kbChimp=Chimp lHuman=Human
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cPlaty=Platyrrhini dHaplo=Haplorrhini eStrep=Strepsirrhini fScan=Scandentia
 dragAndDrop subTracks
 visibility hide
@@ -58,9 +58,17 @@ html chainNet
         type chain tarSyr2
         otherDb tarSyr2
 
+        track chainCalJac4
+        subTrack euarchontoglireChainNetViewchain off
+        subGroups view=chain species=daMarmoset clade=cPlaty
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain calJac4
+        otherDb calJac4
+
         track chainCalJac3
         subTrack euarchontoglireChainNetViewchain off
-        subGroups view=chain species=dMarmoset clade=cPlaty
+        subGroups view=chain species=dbMarmoset clade=cPlaty
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain calJac3
@@ -118,13 +126,29 @@ include chainNetRheMac8.ra
         type chain ponAbe2
         otherDb ponAbe2
 
+        track chainGorGor6
+        subTrack euarchontoglireChainNetViewchain off
+        subGroups view=chain species=jaGorilla clade=aHom
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain gorGor6
+        otherDb gorGor6
+
         track chainGorGor3
         subTrack euarchontoglireChainNetViewchain off
-        subGroups view=chain species=jGorilla clade=aHom
+        subGroups view=chain species=jbGorilla clade=aHom
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain gorGor3
         otherDb gorGor3
+
+        track chainPanPan3
+        subTrack euarchontoglireChainNetViewchain off
+        subGroups view=chain species=jcBonobo clade=aHom
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain panPan3
+        otherDb panPan3
 
         track chainPanTro6
         subTrack euarchontoglireChainNetViewchain off
@@ -183,9 +207,17 @@ include hg38ChainNet.ra
         type netAlign tarSyr2 chainTarSyr2
         otherDb tarSyr2
 
+        track netCalJac4
+        subTrack euarchontoglireChainNetViewnet off
+        subGroups view=net species=daMarmoset clade=cPlaty
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign calJac4 chainCalJac4
+        otherDb calJac4
+
         track netCalJac3
         subTrack euarchontoglireChainNetViewnet off
-        subGroups view=net species=dMarmoset clade=cPlaty
+        subGroups view=net species=dbMarmoset clade=cPlaty
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign calJac3 chainCalJac3
@@ -239,13 +271,29 @@ include hg38ChainNet.ra
         type netAlign ponAbe2 chainPonAbe2
         otherDb ponAbe2
 
+        track netGorGor6
+        subTrack euarchontoglireChainNetViewnet on
+        subGroups view=net species=jaGorilla clade=aHom
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign gorGor6 chainGorGor6
+        otherDb gorGor6
+
         track netGorGor3
         subTrack euarchontoglireChainNetViewnet on
-        subGroups view=net species=jGorilla clade=aHom
+        subGroups view=net species=jbGorilla clade=aHom
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign gorGor3 chainGorGor3
         otherDb gorGor3
+
+        track netPanPan3
+        subTrack euarchontoglireChainNetViewnet on
+        subGroups view=net species=jcBonobo clade=aHom
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign panPan3 chainPanPan3
+        otherDb panPan3
 
         track netPanTro6
         subTrack euarchontoglireChainNetViewnet on

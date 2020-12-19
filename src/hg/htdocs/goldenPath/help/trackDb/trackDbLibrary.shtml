@@ -162,6 +162,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bigBarChart</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigInteract</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigLolly</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
@@ -211,6 +212,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigInteract</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigLolly</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
@@ -356,7 +358,37 @@
     <P>The location of a remote data file containing the chain link data.</P>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigMaf bigPsl bigWig bam hic vcfTabix"></span>
+<DIV class="lollyField"><span class="types bigLolly"></span>
+<div class="format"><code>lollyField &lt;integer&gt;</code></div>
+    Use the given field as the height of the lollipop.
+</DIV>
+
+<DIV class="noStems"><span class="types bigLolly"></span>
+<div class="format"><code>noStems &lt;on/off&gt;</code></div>
+    Don't draw the stems of the lollipops.
+</DIV>
+
+<DIV class="lollySizeField"><span class="types bigLolly"></span>
+<div class="format"><code>lollySizeField &lt;integer&gt;</code></div>
+    Use the given field as the size of the lollipop, measured in percentage of the total available drawing area.
+</DIV>
+
+<DIV class="lollyMaxSize"><span class="types bigLolly"></span>
+<div class="format"><code>lollyMaxSize &lt;integer&gt;</code></div>
+    The maximum size of a lollipop in the file, used to establish margins.
+</DIV>
+
+<DIV class="yAxisLabel"><span class="types bigLolly"></span>
+<div class="format"><code>yAxisLabel.&lt;integer&gt; &lt;integer&gt; &lt;on/off&gt; &lt;R,G,B&gt; &lt;string&gt; </code></div>
+    Add a label on the y axis at the given position. Draw a line of color if requested.
+</DIV>
+
+<DIV class="yAxisNumLabels"><span class="types bigLolly"></span>
+<div class="format"><code>yAxisNumLabels.&lt;on/off&gt; &lt;integer&gt;</code></div>
+    Turn the y axis number labels on or off
+</DIV>
+
+<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigLolly bigMaf bigPsl bigWig bam hic vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -365,8 +397,8 @@
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigInteract, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
-    vcfTabix.  Note that bam/cram and vcfTabix types require a separate
+    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigLolly, bigInteract, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
+    vcfTabix.  Note that bam/cram and vcfTabix/vcfPhasedTrio types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
     <A onclick="jumpTo(this)" HREF="#">bigDataIndex</A> is used.
@@ -381,7 +413,7 @@
     <pre>   bigDataUrl biBrainH3K4me1.bb</pre>
 </DIV>
 
-<DIV class="bigDataIndex"><span class="types bam vcfTabix"></span>
+<DIV class="bigDataIndex"><span class="types bam vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>bigDataIndex &lt;url/relativePath&gt;</code></div>
     <P>The location of a remote data file containing the index. This setting
     can be used when the index cannot be placed alongside the big data file,
@@ -651,11 +683,13 @@
 </DIV>
 
 <DIV class="pennantIcon"><span class="types all"></span>
-<div class="format"><code>pennantIcon &lt;iconFile&gt;/&lt;text color&gt; [html [tip]]</code></div>
+<div class="format"><code>pennantIcon &lt;iconFile&gt;/&lt;text color&gt; [html [tip]] 
+[; &lt;iconFile&gt;/&lt;text color&gt; [html [tip]]]</code></div>
     <P>Certain tracks can be visually flagged in the Browser menu by use of an icon or text label 
     and a link to a description of the flags meaning.  The icon is displayed next to the track's
     short label in the track groups section below the Browser image, and on the track's 
-    description and configuration pages.
+    description and configuration pages. Multiple pennantIcons can be added on a single track by
+    separating each entry with a semicolon ';'.
     This setting has three parts:</P>
     <UL>
     <LI>icon -  Can be fully qualified URL (http, https, ftp) to an image file,  or the name of an image in the Browser's images directory in the 
@@ -670,6 +704,7 @@
     <P><B>Examples:</B></P>
     <pre>    pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"</pre>
     <pre>    pennantIcon New red ../goldenPath/releaseLog.html "Released October 19, 2017"</pre>
+    <pre>    pennantIcon 19.jpg liftOver.html "lifted hg19"; p12 black http://genome.ucsc.edu/patches/ "annotations patch"</pre>
 </DIV>
 
 <DIV class="priority"><span class="types all"></span>
@@ -890,7 +925,7 @@
 
 <DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
-        <code>sepFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
+        <code>sepFields fieldName1,fieldName2 ...</code><BR>
     </div>
         
     <P>This setting changes the item details page and splits the table used for showing extra fields
@@ -921,6 +956,20 @@
     <P><B>Example:</B></P>
     <pre>
     mouseOverField comment
+    </pre>
+</DIV>
+
+<DIV class="mouseOver"><span class="types bigBed"></span>
+    <div class="format">
+        <code>mouseOver &lt;pattern&gt;</code><BR>
+    </div>
+    <P>For bigBed files this setting creates mouse over text from a pattern based on the values 
+    of fields in the file.  The pattern is constructed with fieldnames from the .as file, preceded
+    by the dollar sign ($), and can include arbitrary text between the fieldnames.</P>
+
+    <P><B>Example:</B></P>
+    <pre>
+    mouseOver variant $name/$chrom:$chromStart value $score
     </pre>
 </DIV>
 
@@ -1094,6 +1143,12 @@ There are no extra options that can appear on the type bigMaf line.
 There are no extra options that can appear on the type bigBarChart line.
 </DIV>
 
+<DIV class="bigLolly"><span class="types bigLolly"></span>
+<div class="format">
+    <code>type bigLolly</code></div>
+There are no extra options that can appear on the type bigLolly line.
+</DIV>
+
 <DIV class="bigInteract"><span class="types bigInteract"></span>
 <div class="format">
     <code>type bigInteract</code></div>
@@ -1233,16 +1288,15 @@ There are no extra options that can appear on the type hic line.
     <pre>   exonArrows off</pre>
 </DIV>
 
-<DIV class="exonNumbers"><span class="types genePred bed psl"></span>
+<DIV class="exonNumbers"><span class="types genePred bed psl bigBed bigGenePred"></span>
 <div class="format"><code>exonNumbers &lt;on/off&gt;</code></div>
-    <P>On tracks that show
-    exons or blocks within features, mouseover/hover shows exon and intron numbers. 
-    Exon and intron numbers are typically shown by default
-    in these types of tracks. 
-    The mouseover exon and intron numbers can be explicitly shown or hidden using this setting.
-    </P>
+    <P>A mouseover that shows the exon and intron numbers 
+    can be explicitly shown or hidden using this setting.
+    The default is "on" for the track types genePred and bigGenePred and "off"
+    for the track types genePred and bigGenePred.</P>
     <P><B>Example:</B></P>
     <pre>   exonNumbers off</pre>
+    <P>The text can be set with the options "exonText" and "intronText". It defaults to "exon" and "intron", respectively.</P>
 </DIV>
 
 <DIV class="Filter"><span class="types bed narrowPeak broadPeak"></span>
@@ -1448,14 +1502,16 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="filter"><span class="types bed bigBed"></span>
 <div class="format">
-    <code>filter.&lt;fieldName&gt; [&lt;default integer&gt;]</code><BR>
+    <code>filter.&lt;fieldName&gt; &lt;default integer&gt;</code><BR>
     <code>filterByRange.&lt;fieldName&gt; &lt;off/on&gt;</code><BR>
     <code>filterLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code><BR>
     </div>
-    <P>There are a number of different filters available for bed data.
-    <code> filter.&lt;fieldName&gt; </code> is used for numerical data. It does not 
-    require any variables, however, a preselected filter value can be passed 
-    following the argument to enable the filter by default.</P>
+<!-- 
+    <P>There are a number of different filters available for bed data, see also the 
+    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
+    <P><code> filter.&lt;fieldName&gt; </code> is used for numerical data. It requires
+    a default value to be passed. A value of 0 (or the lowest value present in the dataset) 
+    can be used to enable numerical filtering, but filter nothing by default.</P>
     <P>By default, the range of values for <code>filter.&lt;fieldName&gt;</code> is 0 to 1000. 
     However, you can explicitly set the upper and lower limits of the filter with 
     <code>filterLimits.&lt;fieldName&gt;</code>.</P>
@@ -1482,19 +1538,23 @@ There are no extra options that can appear on the type hic line.
     <li>Column/fieldName values that start with a number followed by non-numerical characters 
     will be treated as only the number; the non-numerical characters (and any numbers 
     that follow them) will be ignored (see example below)</li>
-    <li>If a column/fieldName contains negative values, then the default filter value of 0 
-    will filter out items with negative values. If that is not the desired behavior then 
-    you should specify a value</li>
+    <li>If a column/fieldName contains negative values, be sure to specify a default value
+    at or below the lowest negative value in order to avoid actively filtering items by
+    default (unless that is the intended behavior)</li>
+    <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
+    <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a 
+    &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>By default, all bed tracks that are at least bed5 will have a score filter. 
     Enabling any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
     that default filter</li></ul></P>
 
     <P><B>Examples:</B></P>
     <pre>
-    filter.score</pre>
-    <P>In this example, filtering is being enabled for the field <code>score</code>. No default 
-    value is being passed, so by default the filter is set to 0. This means only negative values
-    will be filtered out.</P>
+    filter.score 0</pre>
+    <P>In this example, filtering is being enabled for the field <code>score</code>. We are
+    passing a default value of 0, which is usually a safe default value to pass as most score
+    values contain only positive numbers. Note, however, that any negative values would be 
+    filtered out by default in this example.</P>
     <pre>
     filter.score 300</pre>
     <P>In this second example, we are enabling filtering on the same field <code>score</code>, 
@@ -1532,12 +1592,17 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="filterText"><span class="types bigBed"></span>
 <div class="format">
-    <code>filterText.&lt;fieldName&gt; [&lt;default search string&gt;]</code><BR>
+    <code>filterText.&lt;fieldName&gt; &lt;default search string&gt;</code><BR>
     <code>filterType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code><BR>
     </div>
-    <P><code>filterText.&lt;fieldName&gt;</code> is used to enable text searching on values in the 
-    specified fieldName. It does not require any variables, however, a preselected filter value
-    can be passed following the argument to enable the filter by default.</P> 
+<!-- 
+    <P>There are a number of different filters available for bed data, see also the 
+    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
+    <P><code>filterText.&lt;fieldName&gt;</code> is used to enable text searching in the 
+    specified fieldName. It requires a default search string to be passed. An asterisk/wildcard (*)
+    can be used to enable text searching, but pass no default value. If a word or string is
+    passed, items matching the string will be filtered by default. See examples below for 
+    details.</P>
     <P><code>filterText.&lt;fieldName&gt;</code> will enable two kinds of searching, wildcard and
     regexp. By default, the wildcard option is enabled. This means that a search term with 
     a wildcard (*) item on either end will match any number of additional characters before
@@ -1555,6 +1620,9 @@ There are no extra options that can appear on the type hic line.
     <li><code>filterText.&lt;fieldName&gt;</code> will treat all fields as strings. That is to say,
     it can be enabled on entirely numerical fields, such as <code>chromStart</code>, if one is 
     looking to filter numerical values <strong>as text</strong></li>
+    <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
+    type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
+    &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling 
     any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
     that default filter</li></ul></P>
@@ -1567,9 +1635,10 @@ There are no extra options that can appear on the type hic line.
     a regexp search <code>.*BRCA.*</code>. The filter term can be freely changed in the track 
     setting page allowing users to filter on other values in the <code>geneName</code> field.</P>
     <pre>
-    filterText.geneName</pre>
+    filterText.geneName *</pre>
     <P>This example is enabling filtering on the same field as above, <code>geneName</code>,
-    however, it is not declaring a default search parameter. This means that the search box 
+    however, it is not declaring a default search parameter. This is done by passing only an
+    asterisk/wildcard (*). This means that the search box 
     will be present but no <code>geneName</code> items will be filtered out of the data 
     unless the user specifies a value.</P>
     <pre>
@@ -1585,48 +1654,76 @@ There are no extra options that can appear on the type hic line.
 <div class="format">
     <code>filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
     <code>filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
-    <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd&gt;</code><BR>
+    <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
     </div>
+<!-- 
+    <P>There are a number of different filters available for bed data, see also the 
+    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
     <P><code>filterValues.&lt;fieldName&gt;</code> is used to enable filtering by 
-    specified values within a field/column. It requires at least one value.</P>
-    <P>Every individual value must be passed in a comma separated list. You will then
-    be able to select those values as categories, choosing to display only items that
-    belong to one, any, or at least one of the selected values.</P>
-    <P>In order to choose the default selection behavior, the optional paramter
+    specified values within a field. It can be used on fields that can contain
+    one text value or a list of comma-separated values of text, like "classA,classB".
+    Usually these are category names.
+    The option requires at least one value to filter on.</P>
+    <P>Every individual possible value that can ever occur in the field must be
+    passed in a comma separated list. You will then be able to select those
+    values as categories, choosing to display only items that
+    belong to one, any, or at least one of the selected values. By default, the user
+    can select multiple values from this list and the filter lets pass any features
+    with at least one of these values (<code>multipleListOr</code>).</P>
+    <P>In order to choose the default selection behavior, the optional parameter
     <code>filterType.&lt;fieldName&gt;</code> may be used. If this parameter is not passed,
     by default the selection will be set to &quot;one or more match&quot; which is the same
-    as having <code>filterType.fieldName multipleListOr</code>. In order to remove
-    the option to select multiple categories, requiring only a single selection, 
-    <code>singleList</code> can be passed instead. The final option,
-    <code>multipleListAnd</code> will set the default to only show items in which
-    all the selected categories are present.</P>
+    as having <code>filterType.fieldName multipleListOr</code>. If the user should
+    only be able to select a single value, 
+    <code>singleList</code> can be passed instead. Another option,
+    <code>multipleListAnd</code>, means that the user can select multiple categories,
+    but the filter will let pass only features where all of these categories are present.
+    </p>
+    <p>
+    <code>multipleListOr</code> and <code>multipleListAnd</code> both still let the user
+    override the type of combination manually in the user interface with a radio button. 
+    If you specify <code>multipleListOnlyOr</code> or <code>multipleListOnlyAnd</code>
+    then the radiobutton is suppressed and the user cannot choose between the options
+    anymore. This can be used in cases where by the nature of the field, it
+    makes little sense to offer the OR or AND search. 
+    </P>
     <P>You can also choose which values to have selected by default using the
     <code>filterValuesDefault.&lt;fieldName&gt;</code> parameter. It can take a comma separated
     list just like <code>filterValues.&lt;fieldName&gt;</code>, and any items included will be
-    automatically selected. Not that the values need to be present in both settings.</P> 
-    <P>The name of the item that shows up in the dropdown menu may also be changed from
-    the actual category it matches in the data. This can be helpful in scenarios where
-    the matching category has a long or descriptive entry. In order to enable this 
-    abbreviation, you would pass the menu name, followed by a pipe, then the name
-    of the category in the data. E.x. <code>AML|Acute Myeloid Leukemia</code>. The format is as 
-    follows:</P>
-    <pre>filterValues.fieldName alternativeName1|fieldValue1,alternativeName2|fieldValue2...</pre> 
-    <P>See example below for more information.</P>
+    automatically selected. Not that the values need to be present in both settings.</P>  
+    <P>The labels in the menu shown to the user can be configured to display a different name/label
+    than the one present in the bigBed field. This can be helpful when the data values are
+    written in short form, but you want a longer more descriptive name to show up in the UI.
+    The format for this substitution is as follows:</P>
+    <pre>filterValues.fieldName fieldValue1|alternativeName1,fieldValue2|alternativeName2...</pre>
+    <P>E.g. if the value in the bigBed field is <code>AML</code>, a setting 
+    like <code>Acute Myeloid Leukemia|AML</code> will show <code>Acute Myeloid Leukemia</code> 
+    in the user interface but will lead to the value <code>AML</code> being searched in the bigBed 
+    field. This can reduce the size of the bigBed file a lot. See example below for more information.</P>
     <P><B>Notes:</B><ul>
     <li>Currently, all values must be stated individually</li>
     <li>Value names must match exactly</li>
     <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling any 
     of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable that default 
     filter</li>
+    <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
+    type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
+    &quot;.&quot; (for non-extended bigBed tracks) is required
+    <li>There should not be any white spaces between declared items after commas, e.x.
+    "itemOne,itemTwo,itemThree"</li>
     <li>The default label can be customized with the <a 
-    href="#filterLabel"><code>filterLabel.&lt;fieldName&gt;</code></a> parameter</li></ul></P>
+    href="#filterLabel"><code>filterLabel.&lt;fieldName&gt;</code></a> parameter</li>
+    <li>When using filter values in a field that incudes commas, an additional comma
+    can be used to escape it. E.x. "fieldOne,fieldTwo,,fieldTwo,fieldThree"</li>
+    </ul></P>
     <P><B>Examples:</B></P>
     <pre>
     filterValues.OddEven Odd,Even</pre>
     <P>In this simple example, we are applying <code>filterValues.&lt;fieldName&gt;</code>
     to the <code>OddEven</code> field, which designates either &quot;Even&quot; 
     or &quot;Odd&quot;. We can then filter the data using the <code>OddEven</code> 
-    field with a drop-down menu displayed on the track controls page to just evens or odds.</P>
+    field with a drop-down menu displayed on the track controls page to just evens or odds. 
+    As there is no filterType, the user can also show both evens and odds at the same time.</P>
     <pre>
     filterValues.OddEven Odd,Even
     filterType.OddEven singleList</pre>
@@ -1642,7 +1739,7 @@ There are no extra options that can appear on the type hic line.
     parameter as well. Now the default filter when the hub is loaded will have the Odd value
     preselected.</P>
     <pre>
-    filterValues.annotationType DNA-binding region,active site,beta strand,binding site,calcium-binding region</pre>
+    filterValues.annotationType DNA-BR,AS,BS,BSi</pre>
     <P>In this example the filter is being applied to multiple values in the 
     <code>annotationType</code> field. We can then select from these values in the 
     <code>annotationType</code> field with a drop-down menu displayed on the track settings page, 
@@ -1651,10 +1748,9 @@ There are no extra options that can appear on the type hic line.
     <pre>
     filterValues.annotationType DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site</pre>
     <P>In this follow up to the previous question, we have changed the name of the items that
-    show up in the drop down menu by supplying an alternative name followed by a pipe, and then 
-    the value name found in the <code>annotationType</code> field. This means
+    show up in the drop down menu to be more descriptive than the dense file format values. This means
     that if we wanted to only see items with <code>annotationType</code> of 
-    <code>DNA-binding region</code>, we would select <strong>DNA-BR</strong> from the menu.</P>
+    <code>DNA-BR</code>, we would select <code>DNA-binding region</code> from the interface menu.</P>
 </DIV>
 
 <DIV class="filterLabel"><span class="types bed bigBed"></span>
@@ -1688,6 +1784,12 @@ There are no extra options that can appear on the type hic line.
      <code>type bigBed 9</code>, or, <code>type bigBed 9+</code>, for additional
     <A HREF="../../../FAQ/FAQformat.html#format1" target="_blank">non-standard columns</A>, 
     in the trackDb stanza for the bigBed file.</P>
+    <P>Note that the display of color is affected by the <code>maxItems</code> option.
+    When the track is zoomed to the point that the number of items to display
+    exceeds <code>maxItems</code>, the track is forced into dense mode and the items
+    are drawn from the bigBed summary in the default track color rather than using
+    the <code>itemRgb column</code>.
+  </P>
     <P><B>Example:</B></P>
     <pre>   itemRgb on</pre>
 </DIV>
@@ -1749,7 +1851,7 @@ There are no extra options that can appear on the type hic line.
     <!-- DONNA -- what should they use instead?  TIM ANSWERS: The implicit score filtering 
     bases upon '.' or '+' is confusing and not used by other item based tracks.  
     Ideally, score filtering is specifically requested by "scoreFilter #", which 
-    would make "noScoreFilter on" the unneeded default. -->
+    would make "noScoreFilter on" the unneeded default. -- -->
     <P><B>Example:</B></P>
     <pre>
     type bigBed 6 +
@@ -1781,8 +1883,10 @@ There are no extra options that can appear on the type hic line.
     can be used to set the level of the lightest shade</LI>
     <LI> <code>scoreMin</code>
     and <code>scoreMax</code> can be used to define the lower and upper limits of 
-    the range that will receive graded shading</LI>
-    </UL>
+    the range that will receive graded shading</LI></UL>
+    <p><b>Note:</b> The file type must be <b>type bigBed x</b> where x is at least
+    bigBed 5. If only <b>type bigBed</b> is used, the setting will not work as
+    it is assumed to be a bigBed 3.</p>
     <P><B>Example:</B></P>
     <pre>
     spectrum on
@@ -1884,11 +1988,25 @@ There are no extra options that can appear on the type hic line.
 </DIV>
 
 <DIV class="maxLimit"><span class="types bedGraph bigBarChart"></span>
-<div class="format"><code>maxLimit&lt;#&gt;</code></div>
+<div class="format"><code>maxLimit &lt;#&gt;</code></div>
     <P>The upper limit of the data range in a track is specified with this setting.
     </P>
     <P><B>Example:</B></P>
     <pre>   maxLimit 5000</pre>
+    <P>
+</DIV>
+
+<DIV class="mergeSpannedItems"><span class="types bigBed"></span>
+<div class="format"><code>mergeSpannedItems &lt;on/off&gt;</code></div>
+    <P>Allows merging all track items that extend beyond both sides of the current viewing window
+    into one bed item in the display. The presence of this setting permits the display to offer this
+    collapsed viewing option, while the <em>on</em> or <em>off</em> denotes what view should be
+    shown by default.</P>
+    <P>The display can be enabled/disabled by the user either on the normal track configuration
+    page, or via selection from the right-click menu. If the track is a bigBed 9 (+), then the
+    merged item will be shaded as the average of all the merged items.</P>
+    <P><B>Example:</B></P>
+    <pre>   mergeSpannedItems on</pre>
     <P>
 </DIV>
 
@@ -2267,7 +2385,7 @@ There are no extra options that can appear on the type hic line.
 <div class="format">
     <code>type bedGraph &lt;field&gt;</code><BR>
     <code>minLimit &lt;#&gt;</code><BR>
-    <code>maxLimit&lt;#&gt;</code></div>
+    <code>maxLimit &lt;#&gt;</code></div>
     <P>The bedGraph type
     track has the same file format as a bed file, but is loaded into
     the MariaDB database in a form that can be graphed.  By default the
@@ -2309,25 +2427,36 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
-<DIV class="autoScale"><span class="types wig bigWig bedGraph"></span>
+<DIV class="autoScale"><span class="types wig bigWig bedGraph hic"></span>
 <div class="format"><code>autoScale &lt;off/on/group&gt;</code></div>
-    <P>The graph of the
-    data displayed in the Browser image is usually scaled on the y-axis 
-    in absolute coordinates.  However, you can display the data
-    in two types of autoScale which will ensure either that the high score in the current
-    viewing window will peak at the top of the graph, or that all tracks in a 
-    composite will be scaled according to the highest point in the viewing 
-    window of any visible tracks in the same composite.  Like most graph settings, 
-    this is configurable by the user.  Setting it to "<code>on</code>" in trackDb will default 
-    the track to <code>auto-scale to data view</code>.
-    Setting it to "<code>group</code>" in trackDb will default 
-    the track to <code>group auto-scale</code>. The default is 
-    "<code>off</code>" which will set the track to <code>use vertical viewing 
-    range setting</code>.</P>
+    <P>This setting is available for both the graph types of tracks (wig,
+    bigWig, bedGraph) and the Hi-C heatmap tracks (hic).  It behaves slightly
+    differently for each.</p>
+    <p>For graph tracks, the graph of the data displayed in the Browser image
+    is usually scaled on the y-axis in absolute coordinates.  However, you can
+    display the data in two types of autoScale which will ensure either that
+    the high score in the current viewing window will peak at the top of the
+    graph, or that all tracks in a composite will be scaled according to the
+    highest point in the viewing window of any visible tracks in the same
+    composite.  Like most graph settings, this is configurable by the user.
+    Setting it to "<code>on</code>" in trackDb will default the track to
+    <code>auto-scale to data view</code>.  Setting it to "<code>group</code>"
+    in trackDb will default the track to <code>group auto-scale</code>. The
+    default is "<code>off</code>" which will set the track to
+    <code>use vertical viewing range setting</code>.</P>
     <P>NOTE: These options can be misleading if a noisy, low signal
     erroneously appears as significant because there is no high signal in the
     view window. The "<code>group</code>" option only applies to composite 
     bigWig tracks.</P>
+    <p>For Hi-C tracks, higher interaction scores are represented with more
+    intense colors.  When this setting is set to "<code>off</code>", the score
+    at which the color reaches maximum intensity is a fixed value that can
+    be chosen with the <code>saturationScore</code> trackDb setting.  When this
+    setting is set to "<code>on</code>", the maximum intensity score
+    changes dynamically depending on the values in the current viewing window.
+    The default value for this setting is "<code>on</code>".  The
+    "<code>group</code>" option for autoScale is not available for Hi-C
+    tracks.</p>
     <P><B>Example:</B></P>
     <pre>   autoScale on</pre>
 </DIV>
@@ -3952,18 +4081,49 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
+<div class="hapClusterMethod"><span class="types vcf"></span>
+<div class="format"><code>hapClusterMethod &lt;centerWeighted|fileOrder|treeFile <em>url</em>&gt;</code></div>
+    <p>Assuming <code>hapClusterEnabled</code> is <code>true</code>, this specifies how
+    genotypes are ordered for display:
+      <ul>
+        <li><code>centerWeighted</code>: For diploid organisms, this separates the two haplotypes
+          from each sample and dynamically clusters all haplotypes by similarity, weighted by
+          proximity to a central variant.  The clustering tree will be drawn in the left label area.
+          This works best for phased genotypes.
+        <li><code>fileOrder</code>: Genotypes are displayed in the order in which they appear in
+          the VCF file.
+        <li><code>treeFile <em>url</em></code>: Genotypes are displayed in the order in which they
+          appear in <code><em>url</em></code>, a
+          <a href="https://en.wikipedia.org/wiki/Newick_format">Newick</a>-formatted tree file
+          whose leaf node IDs are the same as the genotype column IDs in the VCF file.
+          The tree will be drawn in the left label area.
+      </ul>
+    </p>
+</div>
+
 <DIV class="hapClusterColorBy"><span class="types vcf"></span>
-<div class="format"><code>hapClusterColorBy &lt;altOnly|refAlt|base&gt;</code></div>
+<div class="format"><code>hapClusterColorBy &lt;altOnly|function|refAlt|base&gt;</code></div>
     <P>Assuming <code>hapClusterEnabled</code> is <code>true</code>,
     this specifies one of three ways that reference and alternate alleles are colored:
     <UL>
       <LI><code>altOnly</code>: reference allele is white (invisible),
 	alternate allele is black.  This emphasizes haplotypes with alternate alleles.  (default)
+      <LI><code>function</code>: If the <code>geneTrack</code> setting is also provided, then
+        reference allele is white (invisible) and alternate allele is red if the variant changes
+        the protein sequence of a gene, green if the variant falls within a gene but does not
+        change the protein sequence, blue if the variant falls within the UTR of a protein-coding
+        gene or within a non-coding gene, and black if intronic or intergenic.
       <LI><code>refAlt</code>: reference allele is blue, alternate allele is red.
       <LI><code>base</code>: A is red, C is blue, G is green and T is magenta.
     </UL>
     </P>
 </DIV>
+
+<div class="geneTrack"><span class="types vcf vcfPhasedTrio"></span>
+<div class="format"><code>geneTrack &lt;<em>track</em>&gt;</code></div>
+    <p>This is for use with <code>hapClusterColorBy function</code>; it specifies the gene track
+    to use when determining the functional effect of each variant.</p>
+</div>
 
 <DIV class="hapClusterTreeAngle"><span class="types vcf"></span>
 <div class="format"><code>hapClusterTreeAngle &lt;triangle|rectangle&gt;</code></div>
@@ -4029,6 +4189,27 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
+<DIV class="vcfDoFilter"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>vcfDoFilter &lt;on/off&gt;</code></div>
+    <p>
+    Turn on/off the FILTER options available by default for VCF tracks
+    </p>
+</DIV>
+
+<DIV class="vcfDoQual"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>vcfDoQual &lt;on/off&gt;</code></div>
+    <p>
+    Turns on/off the QUAL filter options available by default for VCF tracks
+    </p>
+</DIV>
+
+<DIV class="vcfDoMaf"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>vcfDoMaf &lt;on/off&gt;</code></div>
+    <p>
+    Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks
+    </p>
+</DIV>
+
 <DIV class="vcfTabix_example"><span class="types vcfTabix"></span>
 <div class="format"><B>Example of a VCF track</B></div>
     <pre>
@@ -4041,6 +4222,64 @@ There are no extra options that can appear on the type hic line.
     <P>The data for this VCF track is stored in the remote file,
     "myVcf.gz".  That file is paired with a tabix-generated index file named
     "myVcf.gz.tbi" found in the same remote location.
+    </P>
+</DIV>
+
+<!-- - - - - - - - VCFPHASEDTRIO settings - - - - - - - -->
+<DIV class="vcfPhasedTrio_intro">
+<H3>vcfPhasedTrio: VCF+tabix with extra metadata</H3>
+<P>
+After preparing a VCF file as noted in the <A HREF="vcfTabix">VCF</A> section, if your
+data contains information on trios, you may want to use the vcfPhasedTrio track type to obtain
+a haplotype display. For more information on this display, please see the
+<A HREF="../vcf.html#trio">VCF Trio</a> documentation for a full explanation of the vcfPhasedTrio track type.
+</P>
+</DIV>
+
+<DIV class="vcfPhasedTrio"><span class="types vcfPhasedTrio"></span>
+<div class="format"><code>type vcfPhasedTrio</code></div>
+    <P>
+    blah
+    </P>
+</DIV>
+
+<DIV class="vcfChildSample"><span class="types vcfPhasedTrio"></span>
+<div class="format"><code>vcfChildSample &lt;sampleName|altName&gt;</code></div>
+    <P>
+    The VCF Genotype column ID of the &quot;child&quot; sample, followed optionally by a &quot;|&quot; character and an alias for the display. This sample will become the center haplotype if parents are also specified.
+    </P>
+</DIV>
+
+<div class="vcfParentSamples"><span class="types vcfPhasedTrio"></span>
+<div class="format"><code>vcfParentSamples &lt;sampleName|altName,sampleName|altName&gt;</code></div>
+    <P>
+    A comma separated (no spaces) list of the VCF Genotype column IDs of the &quot;parents&quot;, followed optionally by a &quot;|&quot; character and an alias for the display. This setting is optinonal, and supports one or both parents.
+    </P>
+</div>
+
+<DIV class="vcfUseAltSampleNames"><span class="types vcfPhasedTrio"></span>
+<div class="format"><code>vcfUseAltSampleNames &lt;on/off&gt;</code></div>
+    <P>
+    Make the display use the aliases as the default labels for each haplotype lane instead of the
+    ID from the VCF.
+    </P>
+</DIV>
+
+<DIV class="vcfPhasedTrio_example"><span class="types vcfPhasedTrio"></span>
+<div class="format"><B>Example of a VCF Phased Trio track</B></div>
+    <pre>
+    track myVcf
+    type vcfPhasedTrio
+    bigDataUrl http://myorg.edu/mylab/myVcf.gz
+    vcfChildSample NA123456|son
+    vcfParentSamples NA654321|mother,NA321654|father
+    vcfUseAltSampleNames on
+      ...    </pre>
+    <P>The data for this VCF track is stored in the remote file,
+    "myVcf.gz".  That file is paired with a tabix-generated index file named
+    "myVcf.gz.tbi" found in the same remote location. "NA123456" is the ID of one
+    of the Genotype columns in the VCF, and the parent haplotypes will displayed
+    relative to their similarity to this sample.
     </P>
 </DIV>
 
@@ -4605,6 +4844,17 @@ For the complete bigInteract format definitions please see the
     </pre>
 </div>
 
+<!-- - - - - - - - bigLolly settings - - - - - - - -->
+<DIV class="bigLolly_intro">
+<H3>bigLolly: Lollipop Charts</H3>
+    <P>
+    Lollipop graphs are usually used to display data that is local to a single base that has one to three data values assigned to it which can be displayed using the lollipop height, the color, and the size of the circle at the top of the lollipop.
+</DIV>
+
+<DIV class="bigLolly_example"><span class="types bigLolly"></span>
+<div class="format"><B>Example of a bigLolly track</B></div>
+</DIV>
+
 <!-- - - - - - - - hic settings - - - - - - - -->
 <DIV class="hic_intro">
 <H3>hic: Hi-C contact matrices</H3>
@@ -4615,15 +4865,68 @@ by the <a href="https://www.aidenlab.org" target="_blank">Aiden Lab</a> at <a ta
 href="https://www.bcm.edu">Baylor College of Medicine</a>.  This is an indexed
 binary format that supports remote access, so the file can be hosted on any web accessible
 server and displayed at UCSC.
-For more information on the .hic file format, see the documentation on <a target="_blank"
+For more information on the .hic file format and the Juicer tool that generates these files,
+see the documentation on <a target="_blank"
 href="https://github.com/aidenlab/juicer/wiki/Data">github</a>.</p>
 </DIV>
+
+<div class="drawMode"><span class="types hic"></span>
+<div class="format"><code>drawMode &lt;triangle|square|arc&gt;</code></div>
+    <p>This setting controls the default display mode for the hic track. In arc
+mode, an interaction between two regions is drawn as an arc between the centers
+of those two regions.  In square mode, interactions are represented by a square
+in a heatmap.  The interacting regions for any square can be identified by
+projecting the sides of the square onto the diagonal axis of the heatmap and
+seeing where those points fall in the chromosome window being viewed.  In
+triangle mode, interactions are drawn as diamonds.  The interaction regions for
+any diamond can be identified by projecting the sides of the diamond onto the
+horizontal axis of the heatmap and seeing where those points fall in the
+chromosome window.
+    </p>
+</div>
+
+<div class="normalization"><span class="types hic"></span>
+<div class="format"><code>normalization &lt;NONE|VC|VC_SQRT|KR&gt;</code></div>
+    <p>This setting controls which method is the default for normalizing the raw
+scores from the .hic file.  Scores for all of these methods are computed during
+the creation of the .hic file.  For more information on these methods, see the
+Juicer documentation linked above.
+    </p>
+</div>
+
+<div class="resolution"><span class="types hic"></span>
+<div class="format"><code>resolution &lt;Auto|integer&gt;</code></div>
+    <p>This setting controls the default size of the bins that the Hi-C contact
+results are grouped into.  The list of available resolutions depends on the
+file, but common values include numbers like 5000 and 10000.  In addition to an
+integer value, the string <code>Auto</code> can also be provided (Auto is also
+the default if this setting is not specified).  In Auto mode, the browser will
+dynamically choose a resolution that seems to provide a good amount of detail
+depending on the size of the chromosome window currently being viewed.
+    </p>
+</div>
+
+<div class="saturationScore"><span class="types hic"></span>
+<div class="format"><code>saturationScore &lt;float&gt;</code></div>
+    <p>The saturationScore setting is part of how the color shades of the
+heatmap are displayed.  Colors in the heatmap correlate with the score of each
+interaction - a higher interaction score corresponds to a higher color
+intensity.  At some point, however, maximum color saturation is reached and higher
+interaction scores don't change the color any further.  This setting determines
+what the default score is for the point at which that maximum color saturation is
+reached.
+    </p>
+</div>
 
 <DIV class="hic_example"><span class="types hic"></span>
 <div class="format"><B>Example of a hic track</B></div>
     <pre>
     track myHiCData
     type hic
+    drawMode arc
+    color 0,0,255
+    saturationScore 12
+    normalization KR
     bigDataUrl http://...
     </pre>
 </div>
@@ -4663,6 +4966,27 @@ For the complete bigBarChart format definitions please see the
         to the selected value.  When unset, the default value is &quot;large&quot;.
     </P>
 </DIV>
+<DIV class="barChartSizeWindows"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartSizeWindows &lt;largeMax&gt; &lt;smallMin&gt;</code></div>
+    <P>This setting provides a way to choose the basepair thresholds which determine the barChart
+        sizes (small, medium, or large charts). The default basepair window size is 50000 and 
+        500000 bases, which is intended for one chart per gene in vertebrate genomes. This 
+        setting can be used to flexibly customize chart sizes based on the basepair window 
+        size being visualized when densely annotating a sequence.</p>
+
+<table>
+<tr><td><i>large</i></td><td> window size &lt; largeMax</td></tr>
+<tr><td><i>medium</i></td><td> window size &gt;= largeMax and &lt; smallMin</td></tr>
+<tr><td><i>small</i></td><td>window size &gt;= smallMin</td></tr>
+</table>
+    <P><B>Example:</B></P>
+    <pre>   barChartSizeWindows 500 8000</pre>
+    <P>In this example, used when displaying barCharts on a 30,000 basepair viral genome,
+    large charts appear in windows up to 499 bases, medium in windows
+    from 500 to 7999 in size, and small when 8000 or more bases are shown in browser window.
+    </P>
+</DIV>
+
 <DIV class="barChartMetric"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartMetric &lt;metric&gt;</code></div>
     <P>This setting provides a label for details page information about the barChart values presented.
@@ -4680,8 +5004,8 @@ For the complete bigBarChart format definitions please see the
 <DIV class="barChartColors"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartColors &lt;color1 color2...&gt;</code></div>
     <P>This setting is a list of colors, one for each category (bar).
-        Colors are specified as RGB values (#FFFFFF) or by name (the 16 HTML color names defined
-        in HTML 4.01).  
+        Colors are specified as RGB values (255,255,255 or #FFFFFF) or by name 
+        (the 16 HTML color names defined in HTML 4.01).  
         The named HTML colors are: <div class='dot' style='background: #000000'></div>black,
             <div class='dot'style='background: silver'></div>silver,
             <div class='dot'style='background: gray'></div>gray,
@@ -4713,6 +5037,14 @@ Used together with barChartSampleUrl to generate a box plot on the details page.
 barChartMatrixUrl file.  Used for generating a box plot on the details page.
     </P>
 </DIV>
+<DIV class="barChartCategoryUrl"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartCategoryUrl &lt;url&gt;</code></div>
+    <P>Specifies a tab-separated file that provides labels and optionally colors for the 
+categories (bars).
+This setting can replace the <code>barChartBars</code> and <code>barChartColors</code> settings,
+and is particularly useful for tracks with large numbers of categories.
+    </P>
+</DIV>
 
 <DIV class="bigBarChart_example"><span class="types bigBarChart"></span>
 <div class="format"><B>Example of a bigBarChart track</B></div>
@@ -4724,7 +5056,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     barChartLabel Brain Regions
     barChartMetric median
     barChartBars Amygdala Cerebellum Cortex Hippocampus
-    barChartColors #ff0000 green maroon navy
+    barChartColors #ff0000 0,255,0 maroon navy
     shortLabel Brain RNA
     longLabel Brain Gene Expression
     spectrum on
@@ -4778,10 +5110,11 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 <H3>Supertrack settings</H3>
     <P>The first 
     hierarchical container is called the supertrack, which may be thought of as 
-    a folder that holds other tracks. The Browser currently supports only one
+    a folder that holds other tracks that by default are closed, unless the
+    setting <code>show</code> is added. The Browser currently supports only one
     level of supertrack folders.  Generally the subtracks
     of a supertrack are of differing types.  If all the children are
-    of the same type, it is often better to use the "compositeTrack" grouping
+    of the same type, it is often better to use the <a href="#compositeTrack">compositeTrack</a> grouping
     described below.  If all of the children are wig or bigWig tracks, it may
     be of interest to use a signal overlay "container multiWig" grouping. Signal
     overlay tracks display the signal data from several subtracks as colored
@@ -4794,36 +5127,62 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 </DIV>
 
 <DIV class="superTrack"><span class="types superTrack"></span>
-<div class="format"><code>superTrack on</code></div>
-    <P>To declare a supertrack, simply add this
+<div class="format"><code>superTrack on show</code></div>
+    <p>
+    To declare a supertrack, simply add this
     setting to a track definition that will hold a few standard
     settings. To set a supertrack to display as default add the word show,
-    <code>superTrack on show</code>, to the end of the statement.
-    When attempting to debug visibility settings, it may be 
-    helpful to read the <A href='#inheritance'>note about
-    inheritance</A> found below.</P> 
-    </P>
+    <code>superTrack on show</code>, to the end of the statement. To have
+    the supertrack not display by default use only <code>superTrack on</code>.
+    It may help to think of the original declaring supertrack stanza as a
+    light switch that by default is off, and can be flipped on by adding <code>show</code>.</p>
+    <p>
+    All tracks that claim membership to the supertrack should set their
+    own visibilities in lower stanzas by declaring settings such as
+    <code>parent superTrack1</code> and also by having a separate
+    <code>visibility dense</code> line. If no visibility setting
+    is defined for a track, the default setting of hide is assigned.
+    This can cause confusion if one mistakenly tries to set visibilities only
+    at the top supertack stanza, not allowed, and leaves them out for each child.</p>
+    <p>
+    Do not confuse the parent line with how it is used in composites. For example,
+    in supertracks DO NOT follow the example of <strike><code>parent superTrack1 [off/on]</code></strike>,
+    where <code>[off/on]</code> will only work with composite tracks. When attempting to debug visibility
+    settings, it may be helpful to read the <A href='#inheritance'>note about
+    inheritance</A> found below.</p>
 </DIV>
 
 <DIV class="parent_supertrack"><span class="types superTrack"></span>
 <div class="format"><code>parent &lt;superTrack&gt;</code></div>
     <P>Membership in a supertrack, composite, or aggregate track is declared by the
-    child, not the supertrack itself.  Any number of children may
-    belong to one supertrack, but ten is a suggested maximum number for usability
+    child, not the supertrack itself with a line such as <code>parent superTrack1</code>.</p>
+    <p>
+    Do not confuse the parent line with how it is used in composites. For example,
+    in supertracks DO NOT follow the example of <code>parent compositeTrack1 [off/on]</code>,
+    which will only work with composite tracks.</p>
+    <p>
+    Any number of children may belong to one supertrack, but ten is a suggested number for usability
     considerations.  Stylistically, children's stanzas within the trackDB typically are indented
     directly under the stanza of the parent. However, this is less frequently the case with
     supertracks, because the children are often scattered in other places within the trackDb 
     file, or the supertrack children are themselves composites containing
     additional indentation that makes enforcement of the supertrack
-    indentation impractical.</P>
+    indentation impractical.</p>
+    <p>
+    All tracks that claim membership to the supertrack should set their
+    own visibilities in lower stanzas by declaring separate settings such as
+    <code>visibility dense</code>.When attempting to debug visibility settings, it may be
+    helpful to read the <A href='#inheritance'>note about
+    inheritance</A> found below.</p>
 </DIV>
 
 <DIV class="superTrack_example"><span class="types superTrack"></span>
 <div class="format"><B>Example of a Supertrack</B></div>
+    <p>
+    Example 1
     <pre>
     track myFolder
     superTrack on show
-    group regulation
     shortLabel My Folder
     longLabel My folder keeps my tracks together
       ...
@@ -4837,11 +5196,22 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
         parent myFolder
         visibility hide
           ...    </pre>
-    <P>The supertrack called "My Folder"
-    contains two children.  All will be grouped under 
-    "regulation".  Notice that the first track is visible by
-    default (if the supertrack itself is visible by adding &quot;show&quot;), but the second
-    track is not.</P>
+    <p>The track called &quot;My Folder&quot; is declared as a supertrack and
+    contains two children who claim membership with parent lines.
+    Notice that the first track, <code>track myFirstTrack</code>, is visible by
+    default with <code>visibility dense</code> (because the supertrack itself,
+    <code>myFolder</code>, has the light-switch-like setting
+    of <code>show</code> to display all the contents of the supertrack).
+    The second track, <code>track mySecondTrack</code>, is not displayed,
+    however, with <code>visibility hide</code> and will require clicking a
+    box on the Track Setting page to display.</p>
+    <p>Note: do not confuse the parent
+    line with how it is used in composites. For example,
+    in supertracks DO NOT follow the example of <strike><code>parent superTrack1 [off/on]</code></strike>,
+    which will only work with composite tracks. See the
+    <a href="../hubQuickStartGroups.html" target="_blank">Quick Start Guide to
+    Organizing Track Hubs into Groupings</a> for more examples.</p>
+</p>
 </DIV>
 
 
@@ -4952,22 +5322,37 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 
 <DIV class="hideEmptySubtracks"><span class="types compositeTrack"></span>
 <div class="format">
-        <code>hideEmptySubtracks &lt;on/default&gt; [multiBed.bb multiBedSources.tab]</code></div>
-    <P>When you have many subtracks in a composite track, it may be useful to limit the display
+        <code>hideEmptySubtracks &lt;on/off&gt;</code></div>
+    <p>When you have many subtracks in a composite track, it may be useful to limit the display
     to only those with data in the current viewing window.  This track setting produces a
     checkbox on the track configuration page allowing the user to enable or disable this feature.
-    if <code>default</code> is specified, the feature is on by default (the checkbox is checked).
+    if <code>on</code> is specified, the feature is on by default (the checkbox is checked).
     </p>
+</DIV>
+<DIV class="hideEmptySubtracksMultiBedUrl"><span class="types compositeTrack"></span>
+<div class="format">
+        <code>hideEmptySubtracksMultiBedUrl file.bb</code></div>
     <p>
-    For extremely large composites, especially those where each subtrack may be sparse,
+    For large composites, especially those where each subtrack may be sparse,
     substantial performance improvements can be gained by creating an index file of the 
     intersections of items in all subtracks (&quot;multiBed&quot;).  This file, and an
-    accompanying sources file, are optional arguments to this setting.
-    Instructions for creating these files are at the MultiBed help page (TBD).
+    accompanying sources file, are optional settings for the
+    <code>hideEmptySubtracks</code> feature.
+    Instructions for creating these files are at the MultiBed help page (TBD).</p>
+    <p>
+    NOTE: These settings are required to use the <code>hideEmptySubtracks</code> feature 
+    with multi-view composites.</p>
+</DIV>
+<DIV class="hideEmptySubtracksSourcesUrl"><span class="types compositeTrack"></span>
+<div class="format">
+        <code>hideEmptySubtracksSourcesUrl file.tab</code></div>
+    <p>
+    This setting is used in conjunction with the <code>hideEmptySubtracksMultiBedUrl</code> 
+    setting, described above.</p>
 </DIV>
 <DIV class="hideEmptySubtracksLabel"><span class="types compositeTrack"></span>
 <div class="format">
-        <code>hideEmptySubtracks &lt;label&gt;</code></div>
+        <code>hideEmptySubtracksLabel &lt;label&gt;</code></div>
     <P>This setting is used in conjunction with the <code>hideEmptySubtracks</code> setting
     to customize the label preceding the selection checkbox on the track configuration page.
     Default wording is &quot;Hide empty subtracks&quot;.  Custom wording is useful to distinguish
