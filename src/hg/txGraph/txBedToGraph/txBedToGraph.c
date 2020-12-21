@@ -304,7 +304,8 @@ for (cluster = clusterList; cluster != NULL; cluster = nextCluster)
     verbose(2, "Got cluster of %d called %s.\n", slCount(cluster->lbList), name);
     struct txGraph *graph = makeGraph(cluster->lbList, maxBleedOver, maxUncheckedBleed, 
     	seqCache, singleExonMaxOverlap, name);
-    slAddHead(&graphList, graph);
+    if (graph != NULL)
+	slAddHead(&graphList, graph);
     lbClusterFree(&cluster);
     }
 slReverse(&graphList);
