@@ -1,0 +1,128 @@
+<H2>Description</H2>
+<p>
+This track set shows the results of the
+<a target=_blank href="https://www.covid19hg.org/blog/2020-11-24-covid-19-hgi-results-for-data-freeze-4-october-2020/"><b>GWAS Data Release 4 (October 2020)</b></a> 
+from the 
+<a target=_blank href="https://www.covid19hg.org/">
+<b>COVID-19 Host Genetics Initiative (HGI)</b></a>: 
+a collaborative effort to facilitate 
+the generation of meta-analysis across multiple studies contributed by
+<a target="_blank" href="https://www.covid19hg.org/partners/">partners world-wide</a>
+to identify the genetic determinants of <b>SARS-CoV-2</b> infection susceptibility, disease severity 
+and outcomes. The COVID-19 HGI also aims to provide a platform for study partners to 
+share analytical results in the form of summary statistics and/or individual level data of COVID-19
+host genetics research. At the time of this release, a total of 137 studies were registered with 
+this effort.
+</p>
+
+<p>
+The specific phenotypes studied by the COVID-19 HGI are those that benefit from maximal sample 
+size: primary analysis on disease severity. For the Data Release 4 the number of cases have
+increased by nearly ten-fold (over 30,000 COVID-19 cases and 1.47 million controls) by combining
+data from 34 studies across 16 countries. The increased sample size resulted in strong evidence of 
+seven genomic regions associated with severe COVID-19, on chromosomes 3, 6, 9, 12, 19, and 21; and 
+one additional signal on chromosome 3 associated with COVID-19 partial-susceptibility.
+The four tracks here are based on data from HGI meta-analyses A2, B2, C1, and C2, described here:
+</p>
+
+<ul>
+<li><b>Severe COVID GWAS (A2):</b> Very severe respiratory confirmed covid vs. population (4336 cases from 12 studies)</li>
+<li><b>Hosp COVID GWAS (B2):</b> Hospitalized covid vs. population (7885 cases from 21 studies)</li>
+<li><b>Tested COVID GWAS (C1):</b> Covid vs. lab/self-reported negative (17965 cases from 33 studies)</li>
+<li><b>COVID GWAS (C2):</b> Covid vs. population (30937 cases from 36 studies)</li>
+</ul>
+
+Due to privacy concerns, these browser tracks exclude data provided by 23andMe contributed
+studies in the full analysis results. The actual study and case 
+and control counts for the individual browser tracks are listed in the track labels. Details on 
+all studies can be found <a target="=blank" href="https://www.covid19hg.org/results/">here</a>.
+
+
+<H2>Display Conventions</H2>
+<p>
+Displayed items are colored by <b>GWAS effect</b>:  red for positive (harmful) effect, 
+blue for negative (protective) effect.
+The height ('lollipop stem') of the item is based on statistical significance (<b>p-value</b>). 
+For better visualization of the data, only SNPs with p-values smaller than 1e-3 are 
+displayed by default.</p>
+<p>
+The color saturation indicates effect size (beta coefficient): values over the median of effect 
+size are brightly colored (bright red
+<span style='background-color: #ff0000;'>&nbsp;&nbsp;</span>
+, bright blue
+<span style='background-color: #0000ff;'>&nbsp;&nbsp;</span>
+),
+those below the median are paler (light red
+<span style='background-color: #ffa0a0;'>&nbsp;&nbsp;</span>
+, light blue
+<span style='background-color: #a0a0ff;'>&nbsp;&nbsp;</span>
+). 
+</p>
+<p>
+Each track has separate display controls and data can be filtered according to the
+<b>number of studies</b>, <b>minimum -log10 p-value</b>, and the
+<b>effect size (beta coefficient)</b>, using the track <b>Configure</b> options.</p>
+<p>
+<b>Mouseover</b> on items shows the rs ID (or chrom:pos if none assigned), both the non-effect 
+and effect alleles, the effect size (beta coefficient), the p-value, and the number of 
+studies.
+Additional information on each variant can be found on the details page by clicking on 
+the item. </p>  
+
+<H2>Methods</H2>
+<p>
+COVID-19 Host Genetics Initiative (HGI) GWAS meta-analysis round 4 (October 2020) results were 
+used in this study. 
+Each participating study partner submitted GWAS summary statistics for up to four 
+of the <a target=_blank href="https://www.covid19hg.org/results/">COVID-19 phenotype definitions</a>.</p>
+<p>
+Data were generated from genome-wide SNP array and whole exome and genome
+sequencing, leveraging the impact of both common and rare variants. The statistical analysis
+performed takes into account differences between sex, ancestry, and date of sample collection. 
+Alleles were harmonized across studies and reported allele frequencies are based on gnomAD 
+version 3.0 reference data. Most study partners used the <b>SAIGE GWAS</b> pipeline in order 
+to generate summary statistics used for the COVID-19 HGI meta-analysis. The summary statistics 
+of individual studies were manually examined for inflation, 
+deflation, and excessive number of false positives.  
+Qualifying summary statistics were filtered for 
+<b>INFO > 0.6</b> and <b>MAF > 0.0001</b> prior to meta-analyzing the entirety of the data. 
+</p>
+The meta-analysis was performed using fixed effects inverse variance weighting.
+The meta-analysis software and workflow are available <a target=_blank 
+href="https://github.com/covid19-hg/META_ANALYSIS">here</a>. More information about the 
+prospective studies, processing pipeline, results and data sharing can be found 
+<a target=_blank href="https://www.covid19hg.org/about/">here</a>.
+</p>
+
+<H2>Data Access</H2>
+<p>
+The data underlying these tracks and summary statistics results are publicly available in <a target=_blank href="https://www.covid19hg.org/results">COVID19-hg Release 4 (October 2020)</a>.
+The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
+Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. 
+Please refer to
+our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.
+</p>
+
+<H2>Credits</H2>
+<p>
+Thanks to the COVID-19 Host Genetics Initiative contributors and project leads for making these 
+data available, and in particular to Rachel Liao, Juha Karjalainen, and Kumar Veerapen at the 
+Broad Institute for their review and input during browser track development.
+</p>
+
+<H2>References</H2>
+
+<p>
+COVID-19 Host Genetics Initiative.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32404885" target="_blank">
+The COVID-19 Host Genetics Initiative, a global initiative to elucidate the role of host genetic
+factors in susceptibility and severity of the SARS-CoV-2 virus pandemic</a>.
+<em>Eur J Hum Genet</em>. 2020 Jun;28(6):715-718.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32404885" target="_blank">32404885</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7220587/" target="_blank">PMC7220587</a>
+</p>
+
+
+
