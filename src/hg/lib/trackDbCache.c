@@ -6,6 +6,7 @@
 #include "portable.h"
 #include "localmem.h"
 #include "hgConfig.h"
+#include <time.h>
 
 static char *trackDbCacheDir;     // the trackDb cache directory root   
 
@@ -163,6 +164,37 @@ else
 return cloneString(dirName);
 }
 
+static time_t checkIncFiles(char *dirName, time_t hubTime)
+/* Check the incFiles.txt file (if present) to see if it has files with newer dates than in time. */
+{
+char fileName[4096];
+safef(fileName, sizeof fileName, "%s/%s", dirName, "incFiles.txt");
+struct lineFile *lf = lineFileMayOpen(fileName, TRUE);
+
+if (lf == NULL)
+    return hubTime;
+
+char *line;
+while (lineFileNextReal(lf, &line))
+    {
+    struct udcFile *checkCache = udcFileMayOpen(line, NULL);
+    if (checkCache == NULL)  // if the file disappeared, let's expire the cache!
+        {
+        hubTime = time(NULL);
+        break;
+        }
+
+    time_t incTime = udcUpdateTime(checkCache);
+    if (incTime > hubTime)
+        hubTime = incTime;
+    udcFileClose(&checkCache);
+    }
+
+lineFileClose(&lf);
+
+return hubTime;
+}
+
 static struct trackDb *checkCache(char *string, char *tdbPathString, time_t time)
 /* Check to see if this db or hub has a cached trackDb. string is either a db 
  * or a SHA1 calculated from a hubUrl. Use time to see if cache should be flushed. */
@@ -174,12 +206,19 @@ if (!isDirectory(dirName))
     return NULL;
     }
 
+// check the incFiles file and see if any of the included files are newer 
+// than the time we've been given
+time = checkIncFiles(dirName, time);
+
 // look for files named by the address they use
 struct slName *files = listDir(dirName, "*");
 char fileName[4096];
 for(; files; files = files->next)
     {
     if (sameString(files->name, "name.txt"))
+        continue;
+
+    if (sameString(files->name, "incFiles.txt"))
         continue;
 
     safef(fileName, sizeof fileName, "%s/%s", dirName, files->name);
@@ -271,8 +310,8 @@ hexBinaryString(hash,  SHA_DIGEST_LENGTH, newName, (SHA_DIGEST_LENGTH + 1) * 2);
 return checkCache(newName, NULL, time);
 }
 
-static void cloneTdbListToSharedMem(char *string, char *tdbPathString, struct trackDb *list, unsigned long size, char *name)
-/* Allocate shared memory and clone trackDb list into it. */
+static void cloneTdbListToSharedMem(char *string, char *tdbPathString, struct trackDb *list, unsigned long size, char *name, char *incFiles)
+/* Allocate shared memory and clone trackDb list into it. Record the names of include files in incFiles if not empty. */
 {
 static int inited = 0;
 
@@ -369,17 +408,26 @@ if (tdbPathString == NULL)
 else
     fprintf(stream, "%s.%s\n", name,tdbPathString);
 carefulClose(&stream);
+
+// write out included files if present
+if (!isEmpty(incFiles))
+    {
+    safef(fileName, sizeof fileName, "%s/incFiles.txt", dirName);
+    stream = mustOpen(fileName, "w");
+    fputs(incFiles, stream);
+    carefulClose(&stream);
+    }
 }
 
 void trackDbCloneTdbListToSharedMem(char *db, char *tdbPathString, struct trackDb *list, unsigned long size)
 /* For this native db, allocate shared memory and clone trackDb list into it. */
 {
 cacheLog("cloning memory for db %s %ld", db, size);
-cloneTdbListToSharedMem(db, tdbPathString, list, size, db);
+cloneTdbListToSharedMem(db, tdbPathString, list, size, db, NULL);
 }
 
-void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size)
-/* For this hub, Allocate shared memory and clone trackDb list into it. */
+void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size, char *incFiles)
+/* For this hub, Allocate shared memory and clone trackDb list into it. incFiles has a list of include files that may be null. */
 {
 if ((*trackDbUrl == '.') || (list == NULL)) // don't cache empty lists or collections
     return;
@@ -390,7 +438,7 @@ SHA1((const unsigned char *)trackDbUrl, strlen(trackDbUrl), hash);
 char newName[(SHA_DIGEST_LENGTH + 1) * 2];
 hexBinaryString(hash,  SHA_DIGEST_LENGTH, newName, (SHA_DIGEST_LENGTH + 1) * 2);
 
-cloneTdbListToSharedMem(newName, NULL, list, size, trackDbUrl);
+cloneTdbListToSharedMem(newName, NULL, list, size, trackDbUrl, incFiles);
 }
 
 boolean trackDbCacheOn()

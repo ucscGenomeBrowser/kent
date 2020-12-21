@@ -371,7 +371,7 @@ struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database,
 unsigned hubId = hubIdFromTrackName(trackName);
 struct hubConnectStatus *hub = hubFromId(hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
-struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome);
+struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome, NULL);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
 //this next line causes warns to print outside of warn box on hgTrackUi
@@ -760,14 +760,15 @@ if (trackHub != NULL)
             memCheckPoint(); // we want to know how much memory is used to build the tdbList
             }
 
-        tdbList = trackHubTracksForGenome(trackHub, hubGenome);
+        struct dyString *incFiles = newDyString(4096);
+        tdbList = trackHubTracksForGenome(trackHub, hubGenome, incFiles);
         tdbList = trackDbLinkUpGenerations(tdbList);
         tdbList = trackDbPolishAfterLinkup(tdbList, database);
         trackDbPrioritizeContainerItems(tdbList);
         trackHubPolishTrackNames(trackHub, tdbList);
 
         if (doCache)
-            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint());
+            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint(), incFiles->string);
 	}
     }
 return tdbList;
