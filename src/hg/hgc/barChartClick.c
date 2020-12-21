@@ -371,13 +371,61 @@ else
     warn("Error creating boxplot from sample data with command: %s", cmd->string);
 }
 
+static void printBarChart(struct barChartBed *chart, struct trackDb *tdb, double maxVal)
+/* Plot bar chart without quartiles or anything fancy just using SVG */
+{
+/* Load up input labels, color, and data */
+struct barChartCategory *categs = barChartUiGetCategories(database, tdb);
+int categCount = slCount(categs);
+if (categCount != chart->expCount)
+    {
+    warn("Problem in %s barchart track. There are %d categories in trackDb and %d in data",
+	tdb->track, categCount, chart->expCount);
+    return;
+    }
+
+double heightPer=18.0;
+double innerHeight=heightPer-1;
+double widthPer=1300.0;
+double labelOffset = 20.0;
+double barOffset = 260.0;
+double barMaxWidth = widthPer-barOffset - 45;
+double totalHeight = heightPer * categCount;
+
+printf("<svg width=\"%g\" height=\"%g\">\n", widthPer, totalHeight);
+double yPos = 0.0;
+int i;
+struct barChartCategory *categ;
+
+printf("<clipPath id=\"labelClip\"><rect x=\"%g\" y=\"0\" width=\"%g\" height=\"%g\"/></clipPath>",
+    labelOffset, barOffset-labelOffset, totalHeight);
+for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer)
+    {
+    double score = chart->expScores[i];
+    double barWidth = 0;
+    if (maxVal > 0.0)
+	barWidth = barMaxWidth * score/maxVal;
+    replaceChar(categ->label, '_', ' ');
+    printf("<rect x=\"0\" y=\"%g\" width=\"15\" height=\"%g\" style=\"fill:#%06X\"/>\n",
+	yPos, innerHeight, categ->color);
+    printf("<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
+	barOffset, yPos, barWidth, innerHeight, categ->color);
+    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" clip-path=\"url(#labelClip)\"\">%s</text>\n", 
+	labelOffset, yPos+innerHeight-1, innerHeight-1, categ->label);
+    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n", 
+	barOffset+barWidth+2, yPos+innerHeight-1, innerHeight-1, score);
+    }
+printf("<svg>");
+}
+
+
 struct asColumn *asFindColByIx(struct asObject *as, int ix)
 /* Find AS column by index */
 {
 struct asColumn *asCol;
 int i;
 for (i=0, asCol = as->columnList; asCol != NULL && i<ix; asCol = asCol->next, i++);
-return asCol;
+    return asCol;
 }
 
 void doBarChartDetails(struct trackDb *tdb, char *item)
@@ -411,12 +459,13 @@ if (trackDbSettingClosestToHomeOrDefault(tdb, "url", NULL) != NULL)
 else
     printf("<b>%s: </b>%s<br>\n", nameLabel, chartItem->name);
 name2Label = name2Col ? name2Col->comment : "Alternative name";
-if (differentString(chartItem->name2, "")) {
+if (differentString(chartItem->name2, "")) 
+    {
     if (trackDbSettingClosestToHomeOrDefault(tdb, "url2", NULL) != NULL)
         printOtherCustomUrl(tdb, chartItem->name2, "url2", TRUE);
     else
         printf("<b>%s: </b> %s<br>\n", name2Label, chartItem->name2);
-}
+    }
 
 int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
@@ -441,10 +490,10 @@ if (numColumns > 0)
 
 char *matrixUrl = NULL, *sampleUrl = NULL;
 struct barChartItemData *vals = getSampleVals(tdb, chartItem, &matrixUrl, &sampleUrl);
+puts("<p>");
 if (vals != NULL)
     {
     // Print boxplot
-    puts("<p>");
     char *df = makeDataFrame(tdb->table, vals);
     char *colorFile = makeColorFile(tdb);
     printBoxplot(df, item, chartItem->name2, units, colorFile);
@@ -453,6 +502,10 @@ if (vals != NULL)
                         chartItem->name2 ? " (" : "",
                         chartItem->name2 ? chartItem->name2 : "",
                         chartItem->name2 ? ")" : "");
+    }
+else
+    {
+    printBarChart(chartItem, tdb, highLevel);
     }
 puts("<br>");
 }
