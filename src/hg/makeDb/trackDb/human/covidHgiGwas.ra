@@ -1,5 +1,5 @@
 track covidHgiGwasR4Pval
-html covidHgiGwasR4
+html covidHgiGwasR4Pval
 release alpha
 shortLabel COVID GWAS Pval
 longLabel GWAS meta-analyses (by Pvalue) Release 4 (Oct 2020) from COVID-19 Host Genetics Initiative
@@ -52,7 +52,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
     release alpha
     parent covidHgiGwasR4Pval on
     shortLabel Tested COVID GWAS R4 Pval
-    longLabel Tested GWAS Pvalue (Analysis C1) Rel 4 (Oct 2020) from COVID-19 Host Genetics Initiative (11085 cases: 20 studies)
+    longLabel Tested GWAS Pvalue Rel 4 (Oct 2020) from COVID-19 Host Genetics Initiative (Analysis C1: 11085 cases: 20 studies)
     bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4C1.$D.EC.bb
 
 track covidHgiGwasR4
