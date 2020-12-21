@@ -33,17 +33,13 @@ priority 1
         altColor 0,90,10
         type wigMaf 0.0 1.0
         speciesCodonDefault mm39
-        speciesGroups Primate Euarchontoglires Laurasiatheria Afrotheria Mammal Birds Sarcopterygii Fish 
-        sGroup_Primate calJac4 gorGor6 hg38 panPan3 panTro6 tarSyr2 rheMac10 otoGar3
-        sGroup_Euarchontoglires rn6 GCF_003668045.3 casCan1 speTri2 manPen1 cavPor3 galVar1
-	sGroup_Laurasiatheria equCab3 turTru2 canFam4 tupBel1 susScr3
-	sGroup_Afrotheria loxAfr3 oryCun2 oviAri4 neoSch1 bosTau9 ochPri3 eriEur2
-	sGroup_Mammal echTel2 sorAra2 monDom5
-        sGroup_Birds galGal6
-        sGroup_Sarcopterygii xenTro9
-        sGroup_Fish danRer11 petMar3
-        speciesDefaultOff petMar3
-        speciesDefaultOn rn6 GCF_003668045.3 casCan1 speTri2 manPen1 cavPor3 galVar1
+        speciesGroups Glires Euarchontoglires Placental_Mammal Vertebrate
+        sGroup_Glires rn6 GCF_003668045.3 casCan1 cavPor3 speTri2 oryCun2 ochPri3
+        sGroup_Euarchontoglires galVar1 hg38 panPan3 panTro6 gorGor6 rheMac10 calJac4 tarSyr2 otoGar3 tupBel1
+        sGroup_Placental_Mammal manPen1 equCab3 turTru2 canFam4 susScr3 loxAfr3 oviAri4 neoSch1 bosTau9 eriEur2 echTel2 sorAra2
+        sGroup_Vertebrate monDom5 xenTro9 galGal6 danRer11 petMar3
+        speciesDefaultOn rn6 GCF_003668045.3 casCan1 cavPor3 speTri2 oryCun2 ochPri3 hg38 rheMac10 manPen1 oviAri4 canFam4 monDom5
+        speciesDefaultOff galVar1 panPan3 panTro6 gorGor6 calJac4 tarSyr2 otoGar3 tupBel1 susScr3 turTru2 neoSch1 bosTau9 equCab3 eriEur2 sorAra2 loxAfr3 echTel2 galGal6 xenTro9 danRer11 petMar3
         defaultMaf multiz35wayDefault
         itemFirstCharCase noChange
         treeImage phylo/mm39_35way.png
