@@ -1,10 +1,12 @@
-/* clusterMatrixToBarchartBed - Take a gene matrix and a gene bed file and a way to cluster 
- * samples into a barchart type bed. */
+/* clusterMatrixToBarchartBed - Compute a barchart bed file from  a gene matrix 
+ * and a gene bed file and a way to cluster samples. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "localmem.h"
+#include "obscure.h"
 #include "sqlNum.h"
 
 boolean clDataOffset = FALSE;
@@ -14,13 +16,13 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "clusterMatrixToBarchartBed - Take a gene matrix and a gene bed file and a way to cluster\n"
-  "samples into a barchart type bed\n"
+  "clusterMatrixToBarchartBed - Compute a barchart bed file from  a gene matrix\n"
+  "and a gene bed file and a way to cluster samples.\n"
   "usage:\n"
   "   clusterMatrixToBarchartBed sampleClusters.tsv geneMatrix.tsv geneset.bed output.bed\n"
   "where:\n"
-  "   sampleClusters.tsv is a tab separated file with the first column being sample ids\n"
-  "   geneMatrix.tsv has a row for each gene. The first row uses the same sample ids\n"
+  "   sampleClusters.tsv is a two column tab separated file with sampleId and clusterId\n"
+  "   geneMatrix.tsv has a row for each gene. The first row uses the same sampleId as above\n"
   "   geneset.bed has the maps the genes in the matrix (from it's first column) to the genome\n"
   "   output.bed is the resulting bar chart, with one column per cluster\n"
   "options:\n"
@@ -91,9 +93,12 @@ lineFileClose(&lf);
 }
 
 void clusterMatrixToBarchartBed(char *sampleClusters, char *matrixTsv, char *geneBed, char *output)
-/* clusterMatrixToBarchartBed - Take a gene matrix and a gene bed file and a way to cluster samples 
- * into a barchart type bed. */
+/* clusterMatrixToBarchartBed - Compute a barchart bed file from  a gene matrix 
+ * and a gene bed file and a way to cluster samples. */
 {
+/* Figure out if we need to do medians etc */
+boolean doMedian = !clMean;
+
 /* Load up the gene set */
 verbose(1, "clusterMatrixToBarchartBed(%s,%s,%s,%s)\n", sampleClusters, matrixTsv, geneBed, output);
 int bedRowSize = 0;
@@ -124,21 +129,25 @@ while ((hel = hashNext(&cookie)) != NULL)
 sortStrings(clusterNames, clusterCount);
 verbose(2, "%s to %s\n", clusterNames[0], clusterNames[clusterCount-1]);
 
-/* Figure out size of each alphabetized cluster in terms of number of samples in cluster */
+/* Figure out size of each alphabetized cluster in terms of number of samples in cluster 
+ * if we are doing median */
 int clusterSize[clusterCount];
-for (clusterIx = 0; clusterIx < clusterCount; ++clusterIx)
-    {
-    clusterSize[clusterIx] = hashIntVal(clusterHash, clusterNames[clusterIx]);
-    verbose(2, "clusterSize[%d] = %d\n", clusterIx, clusterSize[clusterIx]);
-    }
-
-/* Make up array of doubles for each cluster to hold all samples in that clusters */
 double *clusterSamples[clusterCount];
-for (clusterIx = 0; clusterIx < clusterCount; ++clusterIx)
+if (doMedian)
     {
-    double *samples;
-    AllocArray(samples, clusterSize[clusterIx]);
-    clusterSamples[clusterIx] = samples;
+    for (clusterIx = 0; clusterIx < clusterCount; ++clusterIx)
+	{
+	clusterSize[clusterIx] = hashIntVal(clusterHash, clusterNames[clusterIx]);
+	verbose(2, "clusterSize[%d] = %d\n", clusterIx, clusterSize[clusterIx]);
+	}
+
+    /* Make up array of doubles for each cluster to hold all samples in that clusters */
+    for (clusterIx = 0; clusterIx < clusterCount; ++clusterIx)
+	{
+	double *samples;
+	AllocArray(samples, clusterSize[clusterIx]);
+	clusterSamples[clusterIx] = samples;
+	}
     }
 
 /* Make hash that goes from cluster name to cluster index */
@@ -186,6 +195,7 @@ for (colIx=1; colIx <colCount; colIx = colIx+1)
 char **matrixRow;
 AllocArray(matrixRow, colAlloc);
 int hitCount = 0, missCount = 0;
+dotForUserInit(100);
 for (;;)
     {
     /* Fetch next line and remember how long it is.  Just skip over lines that are empty or
@@ -216,9 +226,10 @@ for (;;)
 	++hitCount;
 	}
 
+    /* A gene may map multiple places.  This loop takes care of that */
     for (; onePos != NULL; onePos = hashLookupNext(onePos))
         {
-	char **geneBedVal = onePos->val;
+	char **geneBedVal = onePos->val;	// Get our bed as string array out of hash
 
 	/* Zero out cluster histogram */
 	int i;
@@ -228,23 +239,26 @@ for (;;)
 	    clusterElements[i] = 0;
 	    }
 
-	zeroBytes(&clusterTotal, sizeof(clusterTotal));
-	zeroBytes(&clusterElements, sizeof(clusterElements));
-
 	/* Loop through rest of row filling in histogram */
 	for (i=1; i<colCount; ++i)
 	    {
 	    int clusterIx = colToCluster[i];
-	    double val = sqlDouble(matrixRow[i]);
-	    int pos = clusterElements[clusterIx];
-	    if (pos >= clusterSize[clusterIx])
-		internalErr();
-	    clusterElements[clusterIx] = pos+1;
-	    clusterSamples[clusterIx][pos] = val;
-	    clusterTotal[clusterIx] += val;
+	    char *textVal = matrixRow[i];
+	    // special case so common we parse out "0" inline
+	    double val = (textVal[0] == '0' && textVal[1] == 0) ? 0.0 : sqlDouble(textVal);
+	    int valCount = clusterElements[clusterIx];
+	    clusterElements[clusterIx] = valCount+1;
+	    if (doMedian)
+		{
+		if (valCount >= clusterSize[clusterIx])
+		    internalErr();
+		clusterSamples[clusterIx][valCount] = val;
+		}
+	    else
+		clusterTotal[clusterIx] += val;
 	    }
 
-	/* Output info */
+	/* Output info - first from the bed, then our barchart */
 	for (i=0; i<bedRowSize; ++i)
 	    fprintf(f, "%s\t",  geneBedVal[i]);
 	fprintf(f, "%d\t", clusterCount);
@@ -252,10 +266,10 @@ for (;;)
 	    {
 	    if (i != 0)
 	       fprintf(f, ",");
-	    if (clMean)
-		fprintf(f, "%g",  clusterTotal[i]/clusterElements[i]);
-	    else
+	    if (doMedian)
 		fprintf(f, "%g", doubleMedian(clusterElements[i], clusterSamples[i]));
+	    else
+		fprintf(f, "%g",  clusterTotal[i]/clusterElements[i]);
 	    }
 	
 	/* Data file offset info */
@@ -264,8 +278,7 @@ for (;;)
 
 	fprintf(f, "\n");
 	}
-
-
+    dotForUser();
     }
 verbose(1, "%d genes found, %d missed\n", hitCount, missCount);
 carefulClose(&f);
