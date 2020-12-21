@@ -19,17 +19,115 @@ this effort.
 The specific phenotypes studied by the COVID-19 HGI are those that benefit from maximal sample 
 size: primary analysis on disease severity. For the Data Release 4 the number of cases have
 increased by nearly ten-fold (over 30,000 COVID-19 cases and 1.47 million controls) by combining
-data from 34 studies across 16 countries. The increased sample size resulted in strong evidence of 
-seven genomic regions associated with severe COVID-19, on chromosomes 3, 6, 9, 12, 19, and 21; and 
-one additional signal on chromosome 3 associated with COVID-19 partial-susceptibility.
+data from 34 studies across 16 countries. 
+</p>
+
+<p>
 The four tracks here are based on data from HGI meta-analyses A2, B2, C1, and C2, described here:
 </p>
 
 <ul>
-<li><b>Severe COVID GWAS (A2):</b> Very severe respiratory confirmed covid vs. population (4336 cases from 12 studies)</li>
-<li><b>Hosp COVID GWAS (B2):</b> Hospitalized covid vs. population (7885 cases from 21 studies)</li>
-<li><b>Tested COVID GWAS (C1):</b> Covid vs. lab/self-reported negative (17965 cases from 33 studies)</li>
-<li><b>COVID GWAS (C2):</b> Covid vs. population (30937 cases from 36 studies)</li>
+<li><b>Severe COVID vars (A2):</b> Cases with very severe respiratory failure confirmed
+ for COVID-19 vs. population (i.e. everybody that is not a case).
+ The increased sample size resulted in strong evidence of 
+ seven genomic regions associated with severe COVID-19 and one additional signal associated with 
+ COVID-19 partial-susceptibility. Many of these regions were identified by the 
+ <a target="_blank" href="https://genomicc.org/">Genetics of Mortality in Critical Care (GenOMICC)</a>
+ study and are shown below (table adapted from 
+ <a target="_blank" href="https://www.nature.com/articles/s41586-020-03065-y">Pairo-Castineira <em>et. al.</em></a>).
+</li>
+
+<table class="stdTbl">
+  <tr>
+    <th>SNP</th>
+    <th>Human GRCh37/hg19 Assembly</th>
+    <th>Human GRCh38/hg38 Assembly</th>
+    <th>Risk Alelle</th>
+    <th>Alternative</th>
+    <th>Gene nearest to SNP</th>
+  </tr>
+  <tr>
+    <td>rs73064425</td>
+    <td>chr3:45901089-45901089</td>
+    <td>chr3:45859597-45859597</td>
+    <td>T</td>
+    <td>C</td>
+    <td>LZTFL1</td>
+  </tr>
+  <tr>
+    <td>rs9380142</td>
+    <td>chr6:29798794-29798794</td>
+    <td>chr6:29831017-29831017</td>
+    <td>A</td>
+    <td>G</td>
+    <td>HLA-G</td>
+  </tr>
+  <tr>
+    <td>rs143334143</td>
+    <td>chr6:31121426-31121426</td>
+    <td>chr6:31153649-31153649</td>
+    <td>A</td>
+    <td>G</td>
+    <td>CCHCR1</td>
+  </tr>
+  <tr>
+   <td>rs3131294</td>
+    <td><a href="">
+chr6:32180146-32180146</a></td>
+    <td><a href="">
+chr6:32212369-32212369</a></td>
+    <td>G</td>
+    <td>A</td>
+    <td>NOTCH4</td>
+   </tr>
+   <tr>
+    <td>rs10735079</td>
+    <td>chr12:113380008-113380008</td>
+    <td>chr12:112942203-112942203</td>
+    <td>A</td>
+    <td>G</td>
+    <td>OAS3</td>
+   </tr>
+   <tr>
+    <td>rs74956615</td>
+    <td>chr19:10427721-10427721</td>
+    <td>chr19:10317045-10317045</td>
+    <td>A</td>
+    <td>T</td>
+    <td>ICAM5/TYK2</td>
+   </tr>
+   <tr>
+    <td>rs2109069</td>
+    <td>chr19:4719443-4719443</td>
+    <td>chr19:4719431-4719431</td>
+    <td>A</td>
+    <td>G</td>
+    <td>DPP9</td>
+   </tr>
+   <tr>
+    <td>rs2236757</td>
+    <td>chr21:34624917-34624917</td>
+    <td>chr21:33252612-33252612</td>
+    <td>A</td>
+    <td>G</td>
+    <td>IFNAR2</td>
+   </tr>
+</table>
+</p>
+<p>
+<li><b>Hosp COVID vars (B2):</b> Cases hospitalized and confirmed for COVID-19 vs. 
+population (i.e. everybody that is not a case)</li>
+</p>
+<p>
+<li><b>Tested COVID vars (C1):</b> Cases with laboratory confirmed SARS-CoV-2 infection, or 
+health record/phisician-confirmed COVID-19, or self-reported COVID-19 via questionare vs. laboratory
+/self-reported negative cases</li>
+</p>
+<p>
+<li><b>All COVID vars (C2):</b> Cases with laboratory confirmed SARS-CoV-2 infection, or 
+health record/phisician-confirmed COVID-19, or self-reported COVID-19 vs. population (i.e. everybody
+that is not a case)</li>
+</p>
 </ul>
 
 Due to privacy concerns, these browser tracks exclude data provided by 23andMe contributed
@@ -37,10 +135,9 @@ studies in the full analysis results. The actual study and case
 and control counts for the individual browser tracks are listed in the track labels. Details on 
 all studies can be found <a target="=blank" href="https://www.covid19hg.org/results/">here</a>.
 
-
 <H2>Display Conventions</H2>
 <p>
-Displayed items are colored by <b>GWAS effect</b>:  red for positive (harmful) effect, 
+Displayed items are colored by <b>GWAS effect</b>: red for positive (harmful) effect, 
 blue for negative (protective) effect.
 The height ('lollipop stem') of the item is based on statistical significance (<b>p-value</b>). 
 For better visualization of the data, only SNPs with p-values smaller than 1e-3 are 
@@ -124,5 +221,13 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32404885" target="_blank">324
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7220587/" target="_blank">PMC7220587</a>
 </p>
 
+<p>
+Pairo-Castineira E, Clohisey S, Klaric L, Bretherick AD, Rawlik K, Pasko D, Walker S, Parkinson N,
+Fourman MH, Russell CD <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33307546" target="_blank">
+Genetic mechanisms of critical illness in Covid-19</a>.
+<em>Nature</em>. 2020 Dec 11;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33307546" target="_blank">33307546</a>
+</p>
 
 
