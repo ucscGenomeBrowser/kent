@@ -13,6 +13,7 @@
 #include "asParse.h"
 #include "hgc.h"
 #include "trackHub.h"
+#include "memgfx.h"
 
 #include "barChartBed.h"
 #include "barChartCategory.h"
@@ -371,6 +372,22 @@ else
     warn("Error creating boxplot from sample data with command: %s", cmd->string);
 }
 
+static double longestLabelSize(struct barChartCategory *categList)
+/* Get estimate of longest label in pixels */
+{
+MgFont *font = mgHelvetica14Font();
+int longest = 0;
+struct barChartCategory *categ;
+for (categ = categList; categ != NULL; categ = categ->next)
+    {
+    int size = mgFontStringWidth(font, categ->label);
+    if (size > longest)
+        longest = size;
+    }
+return longest * 1.1;
+}
+
+
 static void printBarChart(struct barChartBed *chart, struct trackDb *tdb, double maxVal)
 /* Plot bar chart without quartiles or anything fancy just using SVG */
 {
@@ -386,9 +403,11 @@ if (categCount != chart->expCount)
 
 double heightPer=18.0;
 double innerHeight=heightPer-1;
-double widthPer=1300.0;
+double widthPer=1250.0;
+double labelWidth = longestLabelSize(categs) + 2;
+if (labelWidth > widthPer/2) labelWidth = widthPer/2;
 double labelOffset = 20.0;
-double barOffset = 260.0;
+double barOffset = labelOffset + labelWidth;
 double barMaxWidth = widthPer-barOffset - 45;
 double totalHeight = heightPer * categCount;
 
@@ -411,7 +430,7 @@ for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer
     printf("<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
 	barOffset, yPos, barWidth, innerHeight, categ->color);
     printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" clip-path=\"url(#labelClip)\"\">%s</text>\n", 
-	labelOffset, yPos+innerHeight-1, innerHeight-1, categ->label);
+ 	labelOffset, yPos+innerHeight-1, innerHeight-1, categ->label);
     printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n", 
 	barOffset+barWidth+2, yPos+innerHeight-1, innerHeight-1, score);
     }
