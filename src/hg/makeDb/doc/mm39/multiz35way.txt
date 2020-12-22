@@ -95,94 +95,110 @@
         mm39.35way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
         | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
 
-    # construct db to name translation list:
+    # construct db to name sed translation list:
+
     cat species.list.txt | while read DB
 do
 hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
-done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
-    | sed -e "s#'#_x_#g;" > db.to.name.txt
+done | sed -e 's#^#s/#;' | sed -e "s#\t#/#; s/ /_/g;" | sed -e 's#$#/;#' | sed -e 's/\./_/g' \
+    | sed -e "s#'#_x_#g;" > db.to.name.sed
 
-# edited db.to.name.txt to change - to _ in some of the names.
-# e.g. Crab-eating -> Crab_eating,
-# the Crab-eating didn't survive the tree_doctor
+    printf "s/GCF_003668045.3/Chinese_hamster/;\n" >> db.to.name.sed
 
-/cluster/bin/phast/tree_doctor --rename "`cat db.to.name.txt`" mm39.35way.nh \
-   | sed -e 's/0\+)/)/g; s/0\+,/,/g' \
-     | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
-       | sed -e "s#_x_#'#g;" > mm39.35way.commonNames.nh
+    sed -f db.to.name.sed mm39.35way.nh | sed -e "s#_x_#'#g; s#X__#X._#;"\
+       > mm39.35way.commonNames.nh
 
     cat mm39.35way.commonNames.nh | sed -e 's/^/# /;'
-# ((((((((((((Human:0.00655,
-#            Chimp:0.00684):0.00122,
-#           Bonobo:0.00784):0.003,
-#          Gorilla:0.008964):0.009693,
-#         Orangutan:0.01894):0.003471,
-#        Gibbon:0.02227):0.01204,
-#       (((((Rhesus:0.003991,
-#           (Crab_eating_macaque:0.002991,
-#           Pig_tailed_macaque:0.005):0.001):0.001,
-#          Sooty_mangabey:0.008):0.005,
-#         Baboon:0.010042):0.01061,
-#        (Green_monkey:0.027,
-#        Drill:0.03):0.002):0.003,
-#       ((Proboscis_monkey:0.0007,
-#        Angolan_colobus:0.0008):0.0008,
-#       (Golden_snub:0.0007,
-#       Black_snub:0.0007):0.0008):0.018):0.02):0.02183,
-#      (((Marmoset:0.03,
-#        Squirrel_monkey:0.01035):0.00865,
-#       White_faced_sapajou:0.04):0.006,
-#      Ma's_night_monkey:0.04):0.005):0.05209,
-#     Tarsier:0.1114):0.02052,
-#    (((Mouse_lemur:0.0556,
-#      Coquerel's_sifaka:0.05):0.015,
-#     (Black_lemur:0.01,
-#     Sclater's_lemur:0.01):0.015):0.015,
-#    Bushbaby:0.1194):0.02052):0.015494,
-#   Mouse:0.356483):0.020593,
-#  Dog:0.165928):0.023664,
-# Armadillo:0.176526);
+# ((((((((((((((Mouse:0.089509,
+#              Rat:0.096589):0.072773,
+#             Chinese_hamster:0.17):0.08015,
+#            Beaver:0.17):0.05,
+#           Squirrel:0.125468):0.022992,
+#          Guinea_pig:0.175779):0.025746,
+#         (Rabbit:0.114227,
+#         Pika:0.201069):0.101463):0.015313,
+#        ((((((((Human:0.00655,
+#               Chimp:0.00684):0.00122,
+#              Bonobo:0.00784):0.003,
+#             Gorilla:0.008964):0.025204,
+#            Rhesus:0.043601):0.02183,
+#           Marmoset:0.04965):0.05209,
+#          Tarsier:0.1114):0.02052,
+#         Bushbaby:0.13992):0.013494,
+#        (Tree_shrew:0.136203,
+#        Malayan_flying_lemur:0.08):0.054937):0.002):0.020593,
+#       (((Pig:0.12,
+#         (Dolphin:0.064688,
+#         (Cow:0.11,
+#         Sheep:0.085):0.013592):0.045488):0.02,
+#        ((Horse:0.084397,
+#         Chinese_pangolin:0.05):0.017,
+#        (Dog:0.054458,
+#        Hawaiian_monk_seal:0.097):0.069845):0.008727):0.011671,
+#       (Hedgehog:0.221785,
+#       Shrew:0.269562):0.056393):0.021227):0.023664,
+#      (Elephant:0.098929,
+#      Tenrec:0.245936):0.056717):0.234728,
+#     Opossum:0.285786):0.181168,
+#    Chicken:0.509442):0.05,
+#   X._tropicalis:0.347944):0.211354,
+#  Zebrafish:1.201072):0.2,
+# Lamprey:0.975747);
 
 #	Use this specification in the phyloGif tool:
 #	http://genome.ucsc.edu/cgi-bin/phyloGif
 #	to obtain a png image for src/hg/htdocs/images/phylo/mm39_35way.png
 
-    ~/kent/src/hg/utils/phyloTrees/asciiTree.pl mm39.35way.nh > t.nh
-    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh t.nh \
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,scientificName from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e 's#^#s/#;' | sed -e "s#\t#/#; s/ /_/g;" | sed -e 's#$#/;#' | sed -e 's/\./_/g' \
+    | sed -e "s#'#_x_#g;" > db.to.sciName.sed
+
+    printf "s/GCF_003668045.3/Cricetulus_griseus/;\n" >> db.to.sciName.sed
+
+    sed -f db.to.sciName.sed mm39.35way.nh > mm39.35way.scientificNames.nh
+
+       > mm39.35way.commonNames.nh
+
        | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
           > mm39.35way.scientificNames.nh
-    rm -f t.nh
     cat mm39.35way.scientificNames.nh | sed -e 's/^/# /;'
-# ((((((((((((Homo_sapiens:0.00655,
-#            Pan_troglodytes:0.00684):0.00122,
-#           Pan_paniscus:0.00784):0.003,
-#          Gorilla_gorilla_gorilla:0.008964):0.009693,
-#         Pongo_pygmaeus_abelii:0.01894):0.003471,
-#        Nomascus_leucogenys:0.02227):0.01204,
-#       (((((Macaca_mulatta:0.003991,
-#           (Macaca_fascicularis:0.002991,
-#           Macaca_nemestrina:0.005):0.001):0.001,
-#          Cercocebus_atys:0.008):0.005,
-#         Papio_anubis:0.010042):0.01061,
-#        (Chlorocebus_sabaeus:0.027,
-#        Mandrillus_leucophaeus:0.03):0.002):0.003,
-#       ((Nasalis_larvatus:0.0007,
-#        Colobus_angolensis_palliatus:0.0008):0.0008,
-#       (Rhinopithecus_roxellana:0.0007,
-#       Rhinopithecus_bieti:0.0007):0.0008):0.018):0.02):0.02183,
-#      (((Callithrix_jacchus:0.03,
-#        Saimiri_boliviensis:0.01035):0.00865,
-#       Cebus_capucinus_imitator:0.04):0.006,
-#      Aotus_nancymaae:0.04):0.005):0.05209,
-#     Tarsius_syrichta:0.1114):0.02052,
-#    (((Microcebus_murinus:0.0556,
-#      Propithecus_coquereli:0.05):0.015,
-#     (Eulemur_macaco:0.01,
-#     Eulemur_flavifrons:0.01):0.015):0.015,
-#    Otolemur_garnettii:0.1194):0.02052):0.015494,
-#   Mus_musculus:0.356483):0.020593,
-#  Canis_lupus_familiaris:0.165928):0.023664,
-# Dasypus_novemcinctus:0.176526);
+# ((((((((((((((Mus_musculus:0.089509,
+#              Rattus_norvegicus:0.096589):0.072773,
+#             Cricetulus_griseus:0.17):0.08015,
+#            Castor_canadensis:0.17):0.05,
+#           Spermophilus_tridecemlineatus:0.125468):0.022992,
+#          Cavia_porcellus:0.175779):0.025746,
+#         (Oryctolagus_cuniculus:0.114227,
+#         Ochotona_princeps:0.201069):0.101463):0.015313,
+#        ((((((((Homo_sapiens:0.00655,
+#               Pan_troglodytes:0.00684):0.00122,
+#              Pan_paniscus:0.00784):0.003,
+#             Gorilla_gorilla_gorilla:0.008964):0.025204,
+#            Macaca_mulatta:0.043601):0.02183,
+#           Callithrix_jacchus:0.04965):0.05209,
+#          Tarsius_syrichta:0.1114):0.02052,
+#         Otolemur_garnettii:0.13992):0.013494,
+#        (Tupaia_belangeri:0.136203,
+#        Galeopterus_variegatus:0.08):0.054937):0.002):0.020593,
+#       (((Sus_scrofa:0.12,
+#         (Tursiops_truncatus:0.064688,
+#         (Bos_taurus:0.11,
+#         Ovis_aries:0.085):0.013592):0.045488):0.02,
+#        ((Equus_caballus:0.084397,
+#         Manis_pentadactyla:0.05):0.017,
+#        (Canis_lupus_familiaris:0.054458,
+#        Neomonachus_schauinslandi:0.097):0.069845):0.008727):0.011671,
+#       (Erinaceus_europaeus:0.221785,
+#       Sorex_araneus:0.269562):0.056393):0.021227):0.023664,
+#      (Loxodonta_africana:0.098929,
+#      Echinops_telfairi:0.245936):0.056717):0.234728,
+#     Monodelphis_domestica:0.285786):0.181168,
+#    Gallus_gallus:0.509442):0.05,
+#   Xenopus_tropicalis:0.347944):0.211354,
+#  Danio_rerio:1.201072):0.2,
+# Petromyzon_marinus:0.975747);
 
     /cluster/bin/phast/all_dists mm39.35way.nh | grep mm39 \
         | sed -e "s/mm39.//" | sort -k2n > 35way.distances.txt
@@ -223,49 +239,7 @@ done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
 # petMar3       2.253737
 # danRer11      2.279062
 
-    printf '#!/usr/bin/env perl
-
-use strict;
-use warnings;
-
-open (FH, "<35way.distances.txt") or
-        die "can not read 35way.distances.txt";
-
-my $count = 0;
-while (my $line = <FH>) {
-    chomp $line;
-    my ($D, $dist) = split('"'"'\\s+'"'"', $line);
-    my $chain = "chain" . ucfirst($D);
-    my $B="/hive/data/genomes/mm39/bed/lastz.$D/fb.mm39." .
-        $chain . "Link.txt";
-    my $chainLinkMeasure =
-        `awk '"'"'{print \\$5}'"'"' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
-    chomp $chainLinkMeasure;
-    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
-    $chainLinkMeasure =~ s/\\%%//;
-    my $swapFile="/hive/data/genomes/${D}/bed/lastz.mm39/fb.${D}.chainMm39Link.txt";
-    my $swapMeasure = "N/A";
-    if ( -s $swapFile ) {
-	$swapMeasure =
-	    `awk '"'"'{print \\$5}'"'"' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
-	chomp $swapMeasure;
-	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
-	$swapMeasure =~ s/\\%%//;
-    }
-    my $orgName=
-    `hgsql -N -e "select organism from dbDb where name='"'"'$D'"'"';" hgcentraltest`;
-    chomp $orgName;
-    if (length($orgName) < 1) {
-        $orgName="N/A";
-    }
-    ++$count;
-    printf "# %%02d  %%.4f (%%%% %%06.3f) (%%%% %%06.3f) - %%s %%s\\n", $count, $dist,
-        $chainLinkMeasure, $swapMeasure, $orgName, $D;
-}
-close (FH);
-' > sizeStats.pl
-    chmod +x ./sizeStats.pl
-    ./sizeStats.pl
+    ~/kent/src/hg/makeDb/doc/mm39/sizeStats.pl
 
 #	If you can fill in all the numbers in this table, you are ready for
 #	the multiple alignment procedure
@@ -700,22 +674,22 @@ runOne $(root1) {check out exists ../maf/$(root1).maf}
     #   This is going to take all day.
     cd /dev/shm
     time hgLoadMaf -pathPrefix=/gbdb/mm39/multiz35way/maf mm39 multiz35way
-    # Loaded 40625470 mafs in 358 files from /gbdb/mm39/multiz35way/maf
-    # real    28m23.045s
+    # Loaded 44558775 mafs in 54 files from /gbdb/mm39/multiz35way/maf
+    # real    21m8.685s
 
     time (cat /gbdb/mm39/multiz35way/maf/*.maf \
         | hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 mm39 multiz35waySummary stdin)
-#  Created 4568973 summary blocks from 850984320 components and 40625470 mafs from stdin
-#  real    49m52.561s
+# Created 7693860 summary blocks from 597609421 components and 44558775 mafs from stdin
+# real    28m44.150s
 
 
--rw-rw-r--   1 2171190193 Nov  2 16:40 multiz35way.tab
--rw-rw-r--   1  215756735 Nov  2 17:44 multiz35waySummary.tab
+# -rw-rw-r--   1 2269241117 Dec 19 15:05 multiz35way.tab
+# -rw-rw-r--   1  379606617 Dec 19 15:48 multiz35waySummary.tab
 
-    wc -l multiz30*.tab
-#    40625470 multiz35way.tab
-#     4568973 multiz35waySummary.tab
+    wc -l multiz35*.tab
+#   44558775 multiz35way.tab
+#    7693860 multiz35waySummary.tab
 
     rm multiz35way*.tab
 
@@ -804,6 +778,7 @@ XXX - running - Sat Dec 19 09:06:14 PST 2020
     #	where it is running.  Best to run this over in scratch.
     cd /dev/shm
     time hgLoadMaf -pathPrefix=/gbdb/mm39/multiz35way/maf mm39 multiz35way
+XXX - running - Sat Dec 19 14:47:00 PST 2020
     # Loaded 40655883 mafs in 358 files from /gbdb/mm39/multiz35way/maf
     # real    37m27.075s
 
