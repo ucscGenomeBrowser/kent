@@ -881,7 +881,7 @@ if (errCatchStart(errCatch))
         else if (!extFileExists(htmlPath))
             warn("warning: '%s' htmlPath file does not exist or is not accessible: '%s'", genome->name, htmlPath);
         }
-    tdbList = trackHubTracksForGenome(hub, genome);
+    tdbList = trackHubTracksForGenome(hub, genome, NULL);
     tdbList = trackDbLinkUpGenerations(tdbList);
     tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
     trackHubPolishTrackNames(hub, tdbList);

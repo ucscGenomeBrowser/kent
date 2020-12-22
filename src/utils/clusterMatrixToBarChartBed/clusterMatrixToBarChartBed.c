@@ -10,7 +10,8 @@
 #include "sqlNum.h"
 
 boolean clDataOffset = FALSE;
-boolean clMean = FALSE;
+boolean clMedian = FALSE;
+char *clName2 = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -24,10 +25,13 @@ errAbort(
   "   sampleClusters.tsv is a two column tab separated file with sampleId and clusterId\n"
   "   geneMatrix.tsv has a row for each gene. The first row uses the same sampleId as above\n"
   "   geneset.bed has the maps the genes in the matrix (from it's first column) to the genome\n"
+  "        geneset.bed needs 6 standard bed fields.  Unless name2 is set it also needs a name2\n"
+  "        field as the last field\n"
   "   output.bed is the resulting bar chart, with one column per cluster\n"
   "options:\n"
   "   -dataOffset - store the position of gene in geneMatrix.tsv file in output\n"
-  "   -mean - use mean (instead of median)\n"
+  "   -median - use median (instead of mean)\n"
+  "   -name2=twoColFile.tsv - get name2 from file where first col is same ase geneset.bed's name\n"
   );
 }
 
@@ -35,7 +39,8 @@ errAbort(
 static struct optionSpec options[] = {
    {"dataOffset", OPTION_BOOLEAN},
    {"_dataOffset", OPTION_BOOLEAN},
-   {"mean", OPTION_BOOLEAN},
+   {"median", OPTION_BOOLEAN},
+   {"name2", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -97,13 +102,37 @@ void clusterMatrixToBarchartBed(char *sampleClusters, char *matrixTsv, char *gen
  * and a gene bed file and a way to cluster samples. */
 {
 /* Figure out if we need to do medians etc */
-boolean doMedian = !clMean;
+boolean doMedian = clMedian;
 
 /* Load up the gene set */
 verbose(1, "clusterMatrixToBarchartBed(%s,%s,%s,%s)\n", sampleClusters, matrixTsv, geneBed, output);
 int bedRowSize = 0;
 struct hash *geneHash = hashTsvBy(geneBed, 3, &bedRowSize);
-verbose(1, "%d genes in %s\n", geneHash->elCount, geneBed);
+verbose(1, "%d columns about %d genes in %s\n", bedRowSize, geneHash->elCount, geneBed);
+
+/* Deal with external gene hash */
+struct hash *nameToName2 = NULL;
+if (clName2 != NULL)
+    {
+    int colCount = 0;
+    nameToName2 = hashTsvBy(clName2, 0, &colCount);
+    if (colCount != 2)
+        errAbort("Expecting %s to be a two column tab separated file", clName2);
+    }
+
+/* Keep track of how many fields gene bed has to have and locate name2 */
+int geneBedMinSize = 6;
+int name2Ix = bedRowSize - 1;	    // Last field if it is in bed
+if (clName2 != NULL)
+    geneBedMinSize -= 1;
+if (bedRowSize < geneBedMinSize)
+    {
+    if (clName2 == NULL)
+	errAbort("%s needs to have at least 6 standard BED fields and a name2 field\n", geneBed);
+    else
+	errAbort("%s needs to have at least 6 standard BED fields\n", geneBed);
+    }
+
 
 /* Load up the sample clustering */
 struct hash *sampleHash = NULL, *clusterHash = NULL;
@@ -258,9 +287,26 @@ for (;;)
 		clusterTotal[clusterIx] += val;
 	    }
 
-	/* Output info - first from the bed, then our barchart */
-	for (i=0; i<bedRowSize; ++i)
+	/* Output info - first six from the bed, then name2, then our barchart */
+	for (i=0; i<6; ++i)
 	    fprintf(f, "%s\t",  geneBedVal[i]);
+
+	char *name = geneBedVal[3];	// By bed definition it's fourth field
+	char *name2 = NULL;
+	if (nameToName2 != NULL)
+	    {
+	    char **namedRow = hashFindVal(nameToName2, name);
+	    if (namedRow != NULL)
+		name2 = namedRow[1];	    // [0] is name 
+	    else
+	        warn("Can't find %s in %s", name, clName2);
+	    }
+	else
+	    name2 = geneBedVal[name2Ix];
+	if (name2 == NULL)
+	    name2 = name;
+	fprintf(f, "%s\t", name2);
+
 	fprintf(f, "%d\t", clusterCount);
 	for (i=0; i<clusterCount; ++i)
 	    {
@@ -291,7 +337,8 @@ optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
 clDataOffset = (optionExists("_dataOffset") || optionExists("dataOffset"));
-clMean = optionExists("mean");
+clMedian = optionExists("median");
+clName2 = optionVal("name2", clName2);
 clusterMatrixToBarchartBed(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

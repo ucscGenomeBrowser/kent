@@ -1086,12 +1086,13 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome)
+struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles)
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
- * types.  Do a few other quick checks to catch errors early. */
+ * types.  Do a few other quick checks to catch errors early. If incFiles is not NULL,
+ * put the list of included files in there. */
 {
 struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
-struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL, incFiles);
 lineFileClose(&lf);
 
 char *tabMetaName = hashFindVal(genome->settingsHash, "metaTab");
@@ -1303,7 +1304,7 @@ struct trackDb *tdbList = NULL;
 if (trackHubDatabase(db))
     {
     struct trackHubGenome *genome = trackHubGetGenome(db);
-    tdbList = trackHubTracksForGenome(genome->trackHub, genome);
+    tdbList = trackHubTracksForGenome(genome->trackHub, genome, NULL);
     }
 else
     tdbList = hubCollectTracks(db, NULL);

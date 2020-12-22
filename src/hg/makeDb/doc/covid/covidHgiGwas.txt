@@ -17,7 +17,7 @@ cd /hive/data/outside/covid/covidHostGenetics
 4 ALT     effect allele (beta is for this allele)
 5 SNP     #CHR:POS:REF:ALT
 {STUDY}_AF_Allele2      allele frequency in {STUDY}
-{STUDY}_AF_fc   allele frequency in {STUDY} / allele frequency in gnomAD v3 (1000000 if frequency in gnomAD is 0). Calculated based on each study's ancestry in gnomAD
+{STUDY}_AF_fc   allele frequency in {SeUDY} / allele frequency in gnomAD v3 (1000000 if frequency in gnomAD is 0). Calculated based on each study'ss ancestry in gnomAD
 {STUDY}_N
 6 + (X = #studies * 3) all_meta_N      number of studies that had the variant after AF and INFO filtering and as such were used for the meta
 7 + X all_inv_var_meta_beta   effect size on log(OR) scale
@@ -170,4 +170,200 @@ make makeHgi.csh >&! makeHgi.out &
 18.000000  0
 19.000000  0
 20.000000  1
+
+
+##################################
+# Release 4 (October 2020)
+# Dec. 2020 Kate
+
+#23 contributors world-wide, including 23 and me
+#14 European contributors in 23andme leave-out analysis
+
+# download, all leaving out 23andme (to allow full download)
+# using 4 analyses this time, as per Ana recommendation (enough power now in A2 and C1)
+
+# Note the analysis methods have changed slightly.  Effect size ranges are much smaller.
+
+B2: Hospitalized Covid vs population
+Cases: 8638 - 23andme (613+140) =  7885
+Controls: 1736547 - 23andme (680416+94327) = 961804
+
+C2: Covid vs population
+Cases: 30937 - 23andme (506+9913+2553) = 17965
+Controls: 1471815 - 23andme (3110+85072+13086) =
+
+A2: Very severe respratory confirmed covid vs population
+Cases: 4933 - 23andme (495 + 102) = 4336
+Controls: 1398672 (680440 + 94330) = 623902
+
+C1: Covid vs. lab/self-reported negative
+Cases: 24057 - 23andme (506 + 9913 + 2553) = 11085
+Controls: 218062 - 23andme (85072 + 13086 + 3110) = 116794
+Studies: 23 - 23andme (3) = 20
+
+# hg38
+wget https://storage.googleapis.com/covid19-hg-public/20200915/results/20201020/COVID19_HGI_B2_ALL_leave_23andme_20201020.txt.gz
+wget https://storage.googleapis.com/covid19-hg-public/20200915/results/20201020/COVID19_HGI_C2_ALL_leave_23andme_20201020.txt.gz
+
+wget https://storage.googleapis.com/covid19-hg-public/20200915/results/20201020/COVID19_HGI_A2_ALL_leave_23andme_20201020.txt.gz
+wget https://storage.googleapis.com/covid19-hg-public/20200915/results/20201020/COVID19_HGI_C1_ALL_leave_23andme_20201020.txt.gz
+
+# hg19
+wget https://storage.googleapis.com/covid19-hg-public/20200915/results/20201020/COVID19_HGI_B2_ALL_leave_23andme_20201020.b37.txt.gz
+wget https://storage.googleapis.com/covid19-hg-public/20200915/results/20201020/COVID19_HGI_C2_ALL_leave_23andme_20201020.b37.txt.gz
+
+wget https://storage.googleapis.com/covid19-hg-public/20200915/results/20201020/COVID19_HGI_A2_ALL_leave_23andme_20201020.b37.txt.gz
+wget https://storage.googleapis.com/covid19-hg-public/20200915/results/20201020/COVID19_HGI_C1_ALL_leave_23andme_20201020.b37.txt.gz
+
+gunzip *.z
+
+# rename
+ln -s COVID19_HGI_B2_ALL_leave_23andme_20201020.b37.txt covidHgiGwasR4.B2.hg19.txt
+ln -s COVID19_HGI_B2_ALL_leave_23andme_20201020.txt covidHgiGwasR4.B2.hg38.txt
+ln -s COVID19_HGI_C2_ALL_leave_23andme_20201020.b37.txt covidHgiGwasR4.C2.hg19.txt
+ln -s COVID19_HGI_C2_ALL_leave_23andme_20201020.txt covidHgiGwasR4.C2.hg38.txt
+
+ln -s COVID19_HGI_A2_ALL_leave_23andme_20201020.txt covidHgiGwasR4.A2.hg38.txt
+ln -s COVID19_HGI_A2_ALL_leave_23andme_20201020.b37.txt covidHgiGwasR4.A2.hg19.txt
+ln -s COVID19_HGI_C1_ALL_leave_23andme_20201020.txt covidHgiGwasR4.C1.hg38.txt
+ln -s COVID19_HGI_C1_ALL_leave_23andme_20201020.b37.txt covidHgiGwasR4.C1.hg19.txt
+
+wc -l covidHgiGwas*.txt
+
+# previous (release 3) track
+#15392647 covidHgiGwas.B2.hg38.txt
+# 15M
+#24600933 covidHgiGwas.C2.hg38.txt
+
+   11830413 covidHgiGwasR4.A2.hg19.txt
+   11846556 covidHgiGwasR4.A2.hg38.txt
+   11434012 covidHgiGwasR4.B2.hg19.txt
+   11449434 covidHgiGwasR4.B2.hg38.txt
+# 11M
+   13060711 covidHgiGwasR4.C1.hg19.txt
+   13075183 covidHgiGwasR4.C1.hg38.txt
+   12706061 covidHgiGwasR4.C2.hg19.txt
+   12722892 covidHgiGwasR4.C2.hg38.txt
+
+# Note more filtered than release 3 data
+
+
+# Columns
+#
+# head -2 covidHgiGwasR4.B2.hg19.txt
+
+CHR    POS     REF     ALT     SNP
+all_meta_N      all_inv_var_meta_beta   all_inv_var_meta_sebeta all_inv_var_meta_p      all_inv_var_het_p
+all_meta_sample_N       all_meta_AF     rsid
+
+# 13 fields
+
+# These are same as Release 3, except:
+# 1. hg19 lacks trailing columns from lift
+# 2. there are no study-specific values (between SNP and all_meta_N)
+
+# determine range of effect size for filter settings, excluding low significance (log pvalue<3 items)
+
+# parse and generate bigBed files
+
+cat > makeHgi.csh << 'EOF'
+    set bin = ~/kent/src/hg/makeDb/outside/covid
+foreach d (B2.hg19 B2.hg38 C2.hg19 C2.hg38 A2.hg19 A2.hg38 C1.hg19 C1.hg38)
+    set db = $d:e
+    set a = $d:r
+    set sizes = /hive/data/genomes/$db/chrom.sizes
+    set b = covidHgiGwasR4
+    set f = $b.$a.$db
+    set bb = $b$a.$db
+    echo $b.$a.$db
+    if ($a == "B2") then
+        set studies = 21
+    else if ($a == "C2") then
+        set studies = 33
+    else if ($a == "A2") then
+        set studies = 12
+    else if ($a == "C1") then
+        set studies = 20
+    endif
+
+    # colored by pvalue  (effect size determines lolly height)
+    # NOTE: this track will not be on RR (perhaps will host on genome-test for comparison with
+    #   earlier data
+    perl $bin/makeCovidHgiGwas.pl $db $studies $f.txt R4 > $f.bed
+    bedSort $f.bed $f.sorted.bed
+    bedToBigBed -type=bed9+12 -as=$bin/covidHgiGwas.as -tab $f.sorted.bed $sizes $bb.bb
+    ln -s `pwd`/$bb.bb /gbdb/$db/covidHgiGwas
+
+    # colored by effect size (pvalue determines lolly height)
+    #perl $bin/makeCovidHgiGwas.pl $db $studies $f.txt R4 .025 > $f.EC.bed
+# Use medians: positive theshold .178, negative threshold .119
+    perl $bin/makeCovidHgiGwas.pl $db $studies $f.txt R4 .066 .115 > $f.EC.bed
+    bedSort $f.EC.bed $f.sorted.EC.bed
+    bedToBigBed -type=bed9+12 -as=$bin/covidHgiGwas.as -tab $f.sorted.EC.bed $sizes $bb.EC.bb
+    ln -s `pwd`/$bb.EC.bb /gbdb/$db/covidHgiGwas
+    end
+'EOF'
+
+# At Ana's suggestion, remake track with per-track effect size coloring thresholds
+
+cat >getEffectSizes.csh << 'EOF'
+foreach a (A2 B2 C1 C2)
+    echo -n "$a\t"
+    awk '$13 >= 3.0 {print}' covidHgiGwasR4.$a.hg38.EC.bed > $a.highPvalues.bed
+    awk '$10 < 0 {print $21}' $a.highPvalues.bed | sort -n >  negEffects.$a.txt
+    awk '$10 > 0 {print $21}' $a.highPvalues.bed | sort -n > posEffects.$a.txt
+    set neg = `ave negEffects.$a.txt  | grep median | awk '{print $2}'`
+    set pos = `ave posEffects.$a.txt  | grep median | awk '{print $2}'`
+    echo "$neg\t$pos"
+end
+'EOF'
+
+cat getEffectsizes.out
+A2      0.130000        0.276000
+B2      0.118000        0.206000
+C1      0.094000        0.169000
+C2      0.066000        0.115000
+
+
+cat > reColor.csh << 'EOF'
+    set bin = ~/kent/src/hg/makeDb/outside/covid
+foreach d (A2.hg38 B2.hg38 C1.hg38 C2.hg38 C2.hg19 A2.hg19 C1.hg19 B2.hg19 )
+    set db = $d:e
+    set a = $d:r
+    set sizes = /hive/data/genomes/$db/chrom.sizes
+    set b = covidHgiGwasR4
+    set f = $b.$a.$db
+    set bb = $b.$a.$db
+    echo $b.$a.$db
+    if ($a == "A2") then
+        set studies = 12
+        # median negative and positive effect sizes
+        set neg = 0.130000; set pos = 0.276000
+    else if ($a == "B2") then
+        set studies = 21
+        set neg = 0.118000 ; set pos = 0.206000
+    else if ($a == "C1") then
+        set studies = 20
+        set neg = 0.094000; set pos = 0.169000
+    else if ($a == "C2") then
+        set studies = 33
+        set neg = 0.066000; set pos = 0.115000
+    endif
+
+    # colored by pvalue  (effect size determines lolly height)
+    #perl $bin/makeCovidHgiGwas.pl $db $studies $f.txt R4 > $f.beta.bed
+    #bedSort $f.beta.bed $f.beta.sorted.bed
+    #bedToBigBed -type=bed9+12 -as=$bin/covidHgiGwas.as -tab $f.beta.sorted.bed $sizes $bb.beta.bb
+    #ln -s `pwd`/$bb.beta.bb /gbdb/$db/covidHgiGwas
+
+    # colored by effect size (pvalue determines lolly height)
+    perl $bin/makeCovidHgiGwas.pl $db $studies $f.txt R4 $neg $pos > $f.bed
+    bedSort $f.bed $f.sorted.bed
+    bedToBigBed -type=bed9+12 -as=$bin/covidHgiGwas.as -tab $f.sorted.bed $sizes $bb.bb
+    ln -s `pwd`/$bb.bb /gbdb/$db/covidHgiGwas
+    end
+'EOF'
+
+csh reColor.csh >&! reColor.out &
+tail -100f reColor.out
 
