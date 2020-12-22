@@ -31,7 +31,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
     parent covidHgiGwasR4Pval on
     shortLabel Severe COVID vars
     longLabel Severe respiratory COVID risk variants from the COVID-19 HGI GWAS Analysis A2 (4336 cases, 12 studies, Rel 4: Oct 2020)
-    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4A2.$D.EC.bb
+    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4.A2.$D.bb
     priority 1
 
     track covidHgiGwasR4PvalB2
@@ -39,7 +39,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
     parent covidHgiGwasR4Pval on
     shortLabel Hosp COVID vars
     longLabel Hospitalized COVID risk variants from the COVID-19 HGI GWAS Analysis B2 (7885 cases, 21 studies, Rel 4: Oct 2020)
-    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4B2.$D.EC.bb
+    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4.B2.$D.bb
     priority 2
 
     track covidHgiGwasR4PvalC1
@@ -47,7 +47,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
     parent covidHgiGwasR4Pval on
     shortLabel Tested COVID vars
     longLabel Tested COVID risk variants from the COVID-19 HGI GWAS Analyis C1 (11085 cases, 20 studies, Rel 4: Oct 2020)
-    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4C1.$D.EC.bb
+    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4.C1.$D.bb
     priority 3
 
     track covidHgiGwasR4PvalC2
@@ -55,7 +55,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
     parent covidHgiGwasR4Pval on
     shortLabel All COVID vars
     longLabel COVID risk variants from the COVID-19 HGI GWAS Analysis C2 (17965 cases, 33 studies, Rel 4: Oct 2020)
-    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4C2.$D.EC.bb
+    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4.C2.$D.bb
     priority 4
 
 track covidHgiGwas
