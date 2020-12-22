@@ -37,8 +37,8 @@ mach = $(shell uname -m)
 ##
 preRelease = no
 #preRelease = yes
-db = hg38
-#db = hg19
+#db = hg38
+db = hg19
 #db = mm10
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
@@ -62,11 +62,11 @@ else ifeq (${db},hg38)
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 35
+    verBase = 36
     ver = ${verBase}lift37
     backmapTargetVer = 19
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
-    prevVer = 34lift37
+    prevVer = 35lift37
     gencodeOrg = Gencode_human
     annGffTypeName = annotation
     ensemblVer = 74_37      # only used to get genome chromsome name mappings, don't change
