@@ -384,7 +384,7 @@ for (categ = categList; categ != NULL; categ = categ->next)
     if (size > longest)
         longest = size;
     }
-return longest * 1.1;
+return longest * 1.09;
 }
 
 
@@ -404,7 +404,7 @@ if (categCount != chart->expCount)
 double heightPer=18.0;
 double innerHeight=heightPer-1;
 double widthPer=1250.0;
-double labelWidth = longestLabelSize(categs) + 2;
+double labelWidth = longestLabelSize(categs) + 10;
 if (labelWidth > widthPer/2) labelWidth = widthPer/2;
 double labelOffset = 20.0;
 double barOffset = labelOffset + labelWidth;
