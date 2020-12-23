@@ -4,7 +4,7 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD) - Variants, Coverage, and Constraint
 group varRep
 html gnomad
-pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020"
+pennantIcon Updated red ../goldenPath/newsarch.html "Updated Dec. 23, 2020"
 
     track gnomadVariants
     compositeTrack on
@@ -17,6 +17,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     visibility pack
     type vcfTabix
     html gnomadVariants
+    release public
 
         track gnomadGenomesVariants
         parent gnomadVariants on
@@ -30,7 +31,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
         configureByPopup off
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
         url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r2_1&ignore=$$
-        urlLabel gnomAD: 
+        urlLabel gnomAD:
+        release public 
 
         track gnomadExomesVariants
         parent gnomadVariants on
@@ -45,6 +47,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
         bigDataUrl /gbdb/hg19/gnomAD/vcf/gnomad.exomes.r2.0.2.sites.vcf.gz
         url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r2_1&ignore=$$
         urlLabel gnomAD: 
+        release public
 
     track gnomadCoverage
     compositeTrack on
@@ -885,6 +888,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     type bigBed 9 +
     bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.genomes.bb
     parent gnomadSuper
+    visibility squish
     labelFields name,rsId
     defaultLabelFields name
     sepFields AC_afr
@@ -901,7 +905,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
     html gnomadExomesGenomes
-    release alpha,beta
+    pennantIcon Updated red
 
     track gnomadExomes
     shortLabel gnomAD Exomes Variants
@@ -910,6 +914,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     type bigBed 9 +
     bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.exomes.bb
     parent gnomadSuper
+    visibility squish
     labelFields name,rsId
     defaultLabelFields name
     filterValues.annot pLoF,missense,synonymous,other
@@ -925,7 +930,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
     html gnomadExomesGenomes
-    release alpha,beta
+    pennantIcon Updated red
 
 searchTable pliByTranscript
 searchType bigBed
