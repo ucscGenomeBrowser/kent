@@ -24,6 +24,5 @@ include wgEncodeGencodeV32.ra
 include wgEncodeGencodeV33.ra
 include wgEncodeGencodeV34.ra
 include wgEncodeGencodeV35.ra
-# can't do this yet until hgc is updated
-# include gencodeV36.ra alpha
+include wgEncodeGencodeV36.ra
 
