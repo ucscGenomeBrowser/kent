@@ -1,4 +1,3 @@
-
 track uuGene
 shortLabel UU GSD1.0 genes
 longLabel Uppsala University GSD1.0 gene annotations
@@ -6,3 +5,4 @@ group genes
 visibility hide
 color 12,12,120
 type bed 12 .
+pennantIcon New red
