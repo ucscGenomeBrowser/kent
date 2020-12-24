@@ -10,6 +10,7 @@ static struct optionSpec optionSpecs[] =
 {
     {"detailed", OPTION_BOOLEAN},
     {"tab", OPTION_BOOLEAN},
+    {"veryDetailed", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -22,7 +23,9 @@ errAbort("faSize - print total base count in fa files.\n"
 	 "Command flags\n"
 	 "   -detailed        outputs name and size of each record\n"
          "                    has the side effect of printing nothing else\n"
-         "   -tab             output statistics in a tab separated format\n");
+         "   -tab             output statistics in a tab separated format\n"
+         "   -veryDetailed    outputs name, size, #Ns, #real, #upper, #lower of each record\n"
+         );
 }
 
 struct faInfo
@@ -170,6 +173,7 @@ unsigned long long uCount = 0;
 unsigned long long lCount = 0;
 struct lineFile *lf;
 struct faInfo *fiList = NULL, *fi;
+boolean veryDetailed = optionExists("veryDetailed");
 boolean detailed = optionExists("detailed");
 boolean tabFmt = optionExists("tab");
 
@@ -213,7 +217,11 @@ for (i = 0; i<faCount; ++i)
 	fi->nCount = ns;
 	fi->uCount = us;
 	fi->lCount = ls;
-	if (detailed)
+        if (veryDetailed)
+            {
+	    printf("%s\t%d\t%d\t%d\t%d\t%d\n", seq.name, seq.size, ns, seq.size-ns, us, ls);
+            }
+	else if (detailed)
 	    {
 	    printf("%s\t%d\n", seq.name, seq.size);
 	    }

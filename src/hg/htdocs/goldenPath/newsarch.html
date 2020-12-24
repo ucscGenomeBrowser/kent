@@ -46,11 +46,69 @@
         <li><a href="#2001">2001 News</a></li>
       </ul>
     </div>
-  </div>
+  </div> 
 </div>
 
 <!-- ============= 2020 archived news ============= -->
 <a name="2020"></a>
+
+<a name="122320"></a>
+<h2>Dec. 23, 2020 &nbsp;&nbsp; New ClinVar Interpretations track for human (hg19/hg38)</h2>
+<p>
+We are pleased to release a new track, <b>ClinVar Interpretations</b>, for the hg19/GRCh37 and 
+hg38/GRCh38 human assemblies. This track can be found as part of the <a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&c=chr10&g=clinvar">ClinVar Composite</a>. It is the first
+track to use our bead graph display, which is a variation of our existing <a target="_blank"
+href="#062019">lollipop display</a>.</p>
+<p>
+The <b>ClinVar Interpretations track</b> displays the genomic positions of individual variant 
+submissions and interpretations of the clinical significance, as well as their relationship 
+to disease in the ClinVar database. As seen on the image below, the variants are classified into
+six categories each on a separate horizontal line:</p>
+
+<p class="text-center">
+  <img class='text-center' src="../images/clinVarInterp.png"  width='100%' 
+alt="ClinVar Interpretations track with bead graph display.">
+</p>
+
+<ul>
+<li><font color="d20000"><b>P</b> - Pathogenic</font></li>
+<li><font color="d20000"><b>LP</b> - Likely Pathogenic</font></li>
+<li><font color="000088"><b>VUS</b> - Variant of Unknown Significance</font></li>
+<li><font color="#00d200"><b>LB</b> - Likely Benign</font></li>
+<li><font color="#00d200"><b>B</b> - Benign</font></li>
+<li><font color="#888"><b>OTH</b> - Others</li></font></ul>
+
+<p>
+The size of the bead on the line represents the number of submissions at that genomic position.
+The color of the beads aids to distinguish the categories further. Hovering on the track 
+items shows the genomic variations which start at that position and the 
+number of individual submissions with that classification. Additional information on the variants
+can be found by clicking into the item.</p>
+<p>
+For more information see the <a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&c=chr10&g=clinvar">track description page</a>.</p>
+<p>
+We would link to thank <a target="_blank" href="https://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a>
+for making these data available, as well as Brian Joseph Raney, Ana Benet Pages, Gerardo Perez, 
+and Lou Nassar for the development and release of this track.</p>
+
+<a name="121620"></a>
+<h2>Dec. 16, 2020 &nbsp;&nbsp; New In-Silico PCR feature for assembly hubs</h2>
+<p>
+We are excited to announce assembly hubs can now perform In-Silico PCR. Assembly hub developers 
+have long been able to activate DNA and amino acid BLAT searches on their hubs by running gfServers 
+from their institution, and now with the new isPcr setting, they can enable In-Silico PCR searches too 
+using the same running gfServers. In-Silico PCR searches a sequence database with a pair of PCR primers, 
+using an indexing strategy for fast performance to find target regions across the genome. Browser users without an 
+institution to host gfServers can still benefit from this new feature by downloading and installing a virtual machine 
+<a href="help/gbib.html">Genome Browser in a Box (GBiB)</a>, and alternatively running gfServers on the GBiB, all 
+locally from a laptop. For more information see the <a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs" 
+target="_blank">Assembly Hub Wiki</a> and the <a href="help/hubQuickStartAssembly.html" 
+target="_blank">Quick Start Guide to Assembly Hubs</a>.</p>
+
+<p>
+We would like to thank Brian Raney and Gerardo Perez for their work on this release.</p>
 
 <a name="121520"></a>
 <h2>Dec. 15, 2020 &nbsp;&nbsp; New V35 GENCODE genes track for Human (hg19/GRCh37)</h2>

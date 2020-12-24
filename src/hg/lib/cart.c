@@ -3475,7 +3475,9 @@ struct cart *lastDbPosCart = cartOfNothing();
 boolean gotCart = FALSE;
 char dbPosKey[256];
 safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
-if (sameOk(cgiOptionalString("position"), "lastDbPos"))
+
+// use cartCgiUsualString in case request is coming via ajax call from hgGateway
+if (sameOk(cartCgiUsualString(cart, "position", NULL), "lastDbPos"))
     {
     char *dbLocalPosContent = cartUsualString(cart, dbPosKey, NULL);
     if (dbLocalPosContent)

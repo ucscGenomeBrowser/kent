@@ -72,12 +72,16 @@ if (sameWord(ingestSym, "smart-seq2")
     || sameWord(ingestSym, "smart-seq2 paired-end"))
 	return "smart-seq2 PE";
 if (sameWord(ingestSym, "cite-seq")) return "cite-seq";
+if (sameWord(ingestSym, "cel-seq2")) return "cel-seq2";
+if (sameWord(ingestSym, "sci-rna-seq")) return "sci-rna-seq";
+if (sameWord(ingestSym, "seq-well")) return "seq-well";
 if (sameWord(ingestSym, "indrop")) return "inDrop";
 if (sameWord(ingestSym, "mars-seq")) return "mars-seq";
 if (sameWord(ingestSym, "drop-seq")) return "drop-seq";
 if (sameWord(ingestSym, "dronc-seq")) return "dronc-seq";
 if (sameWord(ingestSym, "10x 3' v1 sequencing")) return "10X Chromium V1";
 if (sameWord(ingestSym, "10x 3' v3 sequencing")) return "10X Chromium V3";
+if (sameWord(ingestSym, "10x v3 sequencing")) return "10X Chromium V3";
 // if (sameWord(ingestSym, "xyz")) return "xyz";
 errAbort("Unknown ingest-info.library_construction_method %s", ingestSym);
 return NULL;
@@ -165,13 +169,25 @@ while ((contrib = nextContrib(&p)) != NULL)
 freeMem(dupe);
 }
 
+struct jsonElement *bypassListOfOne(struct jsonElement *el, char *name)
+/* Check that element is a list with just one member, and then return that one member */
+{
+if (el->type != jsonList)
+    errAbort("Expected %s to be a list", name);
+struct slRef *list = el->val.jeList;
+int listSize = slCount(list);
+if (listSize != 1)
+    errAbort("Expected %s to be a list with just one member", name);
+return list->val;
+}
+
 void outputTracker(FILE *f, char *projectName, char *submissionId, char *uuid,
     struct hash *projectHash, int subBunCount, struct dyString *scratch)
 /* Look for interesting state info from parth's tracker outside of ingest and output it */
 {
 /* Grab the dss-info and lots of pieces of it. It sees both primary and analysis,
  * not sure about matrix */
-struct jsonElement *dssEl = hashMustFindVal(projectHash, "dss-info");
+struct jsonElement *dssEl = bypassListOfOne(hashMustFindVal(projectHash, "dss-info"), "dss-info");
 struct jsonElement *awsPrimary = jsonMustFindNamedField(dssEl,
 						"dss-info", "aws_primary_bundle_count");
 int awsPrimaryCount = jsonDoubleVal(awsPrimary, "aws_primary_bundle_count");
@@ -186,13 +202,15 @@ struct jsonElement *gcpAnalysis = jsonMustFindNamedField(dssEl,
 int gcpAnalysisCount = jsonDoubleVal(gcpAnalysis, "gcp_analysis_bundle_count");
 
 /* Grab just a little bit from azul-info */
-struct jsonElement *azulEl = hashMustFindVal(projectHash, "azul-info");
+struct jsonElement *azulEl = bypassListOfOne(hashMustFindVal(projectHash, "azul-info"), 
+						"azul-info");
 struct jsonElement *azulBundle = jsonMustFindNamedField(azulEl,
 						"azul-info", "analysis_bundle_count");
 int azulBundleCount = jsonDoubleVal(azulBundle, "azul-info.analysis_bundle_count");
 
 /* Grab a little bit from analysis-info */
-struct jsonElement *analysisEl = hashMustFindVal(projectHash, "analysis-info");
+struct jsonElement *analysisEl = bypassListOfOne(hashMustFindVal(projectHash, "analysis-info"),
+						"analysis-info");
 struct jsonElement *succeededEl = jsonFindNamedField(analysisEl, 
 						"analysis-info", "succeeded_workflows");
 int succeededWorkflows = 0;
@@ -200,7 +218,8 @@ if (succeededEl != NULL)
     succeededWorkflows = jsonDoubleVal(succeededEl, "succeeded_workflows");
 
 /* And get the matrix stuff! */
-struct jsonElement *matrixEl = hashMustFindVal(projectHash, "matrix-info");
+struct jsonElement *matrixEl = bypassListOfOne(hashMustFindVal(projectHash, "matrix-info"),
+						"matrix-info");
 struct jsonElement *matBundle = jsonMustFindNamedField(matrixEl, 
 						"matrix-info", "analysis_bundle_count");
 int matrixBundleCount = jsonDoubleVal(matBundle, "matrix-info.analysis_bundle_count");
@@ -257,6 +276,7 @@ fprintf(fTracker, "#@project_id@hcat_project@short_name@id\t?uuid\tsubmission_id
 
 /* Main loop - once through for each project (or in some cases project fragment */
 struct slRef *projectRef;
+verbose(1, "Got %d high level objects\n", slCount(rootEl->val.jeList));
 for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRef->next)
     {
     /* Each project is an object/hash/dictionary depending on your fave language.
@@ -266,78 +286,107 @@ for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRe
     char *projectUuid = uuidEl->val.jeString;
 
     /* Get the ingest-info subobject and make sure it's complete. */
-    struct jsonElement *ingestEl = hashFindVal(projectHash, "ingest-info");
-    if (ingestEl == NULL)
+    struct jsonElement *ingestList = hashFindVal(projectHash, "ingest-info");
+    if (ingestList == NULL)
         errAbort("Can't find ingest-info for project_uuid %s", projectUuid);
-    char *primaryState = jsonStringField(ingestEl, "primary_state");
-    if (!isComplete(primaryState))
-         continue;
+    if (ingestList->type != jsonList)
+        errAbort("Expecting list value for ingest-info");
+    int ingestListSize = slCount(ingestList->val.jeList);
+    if (ingestListSize != 1)
+        verbose(1, "ingest-info[] has %d members\n", ingestListSize);
 
-    /* God help us even among the completes there are multiple projects associated
-     * with the same thing.  So far project_short_name is unique.  We'll just take
-     * the first (complete) one and warn about the rest.  Some of the dupes have the
-     * same uuid, some different.  Yes, it's a little messy this input . */
-    char *shortName = jsonStringField(ingestEl, "project_short_name");
-    // Abbreviate what is really and truly not a short name!
-    if (startsWith("Single cell RNAseq characterization of cell types produced over time in an in ",
-	 shortName))
+    int subBunCount = 0;
+    struct slRef *ingestRef;
+    char *submissionId = NULL;
+    char *shortName = NULL;
+    boolean gotReal = FALSE;
+    for (ingestRef = ingestList->val.jeList; ingestRef != NULL; ingestRef = ingestRef->next)
 	{
-        shortName = "Single cell RNAseq characterization of cell types produced over time";
-	verbose(2, "Abbreviated shortName to %s\n", shortName);
+	struct jsonElement *ingestEl = ingestRef->val;
+	char *primaryState = jsonStringField(ingestEl, "primary_state");
+	if (!isComplete(primaryState))
+	     continue;
+
+	/* God help us even among the completes there are multiple projects associated
+	 * with the same thing.  So far project_short_name is unique.  We'll just take
+	 * the first (complete) one and warn about the rest.  Some of the dupes have the
+	 * same uuid, some different.  Yes, it's a little messy this input . */
+	shortName = jsonStringField(ingestEl, "project_short_name");
+	if (shortName == NULL)
+	    {
+	    verbose(1, "Skipping project without shortName '%s'\n", shortName);
+	    continue;
+	    }
+	// Abbreviate what is really and truly not a short name!
+	if (startsWith("Single cell RNAseq characterization of cell types produced over time in an in ",
+	     shortName))
+	    {
+	    shortName = "Single cell RNAseq characterization of cell types produced over time";
+	    verbose(2, "Abbreviated shortName to %s\n", shortName);
+	    }
+	if (hashLookup(uniqShortNameHash, shortName))
+	    {
+	    verbose(2, "Skipping duplicate project named '%s'\n", shortName);
+	    continue;
+	    }
+	hashAdd(uniqShortNameHash, shortName, NULL);
+
+	/* Grab more string fields we like from ingest-info. */
+	submissionId = jsonStringField(ingestEl, "submission_id");
+	if (submissionId == NULL)
+	   {
+	   warn("submissionId for %s is NULL", projectUuid);
+	   continue;
+	   }
+	char *title = jsonStringField(ingestEl, "project_title");
+	char *wrangler = jsonStringField(ingestEl, "data_curator");
+	char *contributors = jsonStringField(ingestEl, "primary_investigator");
+	char *submissionDateTime = jsonStringField(ingestEl, "submission_date");
+
+	/* Turn dateTime into just date */
+	char *tStart = strchr(submissionDateTime, 'T');
+	if (tStart == NULL)
+	    errAbort("No T separator in submission_date %s", submissionDateTime);
+	char *submissionDate = cloneStringZ(submissionDateTime, tStart - submissionDateTime);
+
+	/* Get species list, maybe.... */
+	struct jsonElement *speciesEl = jsonMustFindNamedField(ingestEl, "ingest-info", "species");
+	struct slRef *speciesRefList = jsonListVal(speciesEl, "species");
+	char *species = sciNameRefsToSpecies(speciesRefList, scratch);
+	struct jsonElement *subBunCountEl = jsonMustFindNamedField(ingestEl, 
+					"ingest-info", "submission_bundles_exported_count");
+	subBunCount = jsonDoubleVal(subBunCountEl, "submission_bundles_exported_count");
+
+	/* Get assay techs maybe */
+	struct jsonElement *constructEl = jsonMustFindNamedField(ingestEl, "ingest-info", 
+						    "library_construction_methods");
+	struct slRef *constructList = jsonListVal(constructEl, "library_construction_methods");
+	char *techs = ingestConstructionRefsToAssayTech(constructList, scratch);
+
+	/* Still more error checking */
+	hashAddUnique(uniqHash, projectUuid, NULL);
+	hashAddUnique(uniqTitleHash, title, NULL);
+
+	/* Update contributors table */
+	dyStringClear(contribCsv);
+	outputContributors(fContrib, contributors, "contributor", contribCsv, scratch);
+	outputContributors(fContrib, wrangler, "wrangler", contribCsv, scratch);
+
+	/* Update project table */
+	fprintf(fProject, "%s\t%s\t", shortName, title);
+	fprintf(fProject, "%s\t%s\t%s\t", species, techs, contribCsv->string);
+	fprintf(fProject, "%s\n", submissionDate);
+	gotReal = TRUE;
+
+	break;	    // Still figuring out if this loop is here to stay
 	}
-    if (hashLookup(uniqShortNameHash, shortName))
-        {
-	verbose(2, "Skipping duplicate project named '%s'\n", shortName);
-	continue;
-	}
-    hashAdd(uniqShortNameHash, shortName, NULL);
-
-    /* Grab more string fields we like from ingest-info. */
-    char *submissionId = jsonStringField(ingestEl, "submission_id");
-    char *title = jsonStringField(ingestEl, "project_title");
-    char *wrangler = jsonStringField(ingestEl, "data_curator");
-    char *contributors = jsonStringField(ingestEl, "primary_investigator");
-    char *submissionDateTime = jsonStringField(ingestEl, "submission_date");
-
-    /* Turn dateTime into just date */
-    char *tStart = strchr(submissionDateTime, 'T');
-    if (tStart == NULL)
-        errAbort("No T separator in submission_date %s", submissionDateTime);
-    char *submissionDate = cloneStringZ(submissionDateTime, tStart - submissionDateTime);
-
-    /* Get species list, maybe.... */
-    struct jsonElement *speciesEl = jsonMustFindNamedField(ingestEl, "ingest-info", "species");
-    struct slRef *speciesRefList = jsonListVal(speciesEl, "species");
-    char *species = sciNameRefsToSpecies(speciesRefList, scratch);
-    struct jsonElement *subBunCountEl = jsonMustFindNamedField(ingestEl, 
-				    "ingest-info", "submission_bundles_exported_count");
-    int subBunCount = jsonDoubleVal(subBunCountEl, "submission_bundles_exported_count");
-
-    /* Get assay techs maybe */
-    struct jsonElement *constructEl = jsonMustFindNamedField(ingestEl, "ingest-info", 
-						"library_construction_methods");
-    struct slRef *constructList = jsonListVal(constructEl, "library_construction_methods");
-    char *techs = ingestConstructionRefsToAssayTech(constructList, scratch);
-
-    /* Still more error checking */
-    hashAddUnique(uniqHash, projectUuid, NULL);
-    hashAddUnique(uniqTitleHash, title, NULL);
-
-    /* Update contributors table */
-    dyStringClear(contribCsv);
-    outputContributors(fContrib, contributors, "contributor", contribCsv, scratch);
-    outputContributors(fContrib, wrangler, "wrangler", contribCsv, scratch);
-
-    /* Update project table */
-    fprintf(fProject, "%s\t%s\t", shortName, title);
-    fprintf(fProject, "%s\t%s\t%s\t", species, techs, contribCsv->string);
-    fprintf(fProject, "%s\n", submissionDate);
 
     /* We processed the heck out of the ingest-info, and this routine is so long,
      * pass along what we parsed out that goes into the tracker table, and have it
      * deal with the azul-info, matrix-info, etc,  which are read-only to wranglers. */
-    outputTracker(fTracker, shortName, submissionId, projectUuid, projectHash, 
-	subBunCount, scratch);
+    if (gotReal)
+	outputTracker(fTracker, shortName, submissionId, projectUuid, projectHash, 
+	    subBunCount, scratch);
     }
 }
 

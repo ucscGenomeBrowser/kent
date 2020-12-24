@@ -2908,7 +2908,101 @@ identifier wgEncodeGencodeExonSupportV35
 
 # end Gencode V35
 
+# begin Gencode V36
 
+# gencode genePred tables with no associations
+# wgEncodeGencodePolyaV36
+# wgEncodeGencode2wayConsPseudoV36
+
+# gencode genePred tables with joining through wgEncodeGencodeAttrsV36
+identifier wgEncodeGencodeBasicAttrsV36
+"Link together Gencode Basic Table with Attributes table"
+    hg38.wgEncodeGencodeAttrsV36.transcriptId
+    hg38.wgEncodeGencodeBasicV36.name
+
+identifier wgEncodeGencodeCompAttrsV36
+"Link together Gencode Comprehensive Table with Attributes table"
+    hg38.wgEncodeGencodeAttrsV36.transcriptId
+    hg38.wgEncodeGencodeCompV36.name
+
+identifier wgEncodeGencodePseudoGeneAttrsV36
+"Link together Gencode PseudoGene Table with Attributes table"
+    hg38.wgEncodeGencodeAttrsV36.transcriptId
+    hg38.wgEncodeGencodePseudoGeneV36.name
+
+# gencode association tables (joined through wgEncodeGencodeAttrsV36)
+identifier wgEncodeGencodeGeneSourceV36
+"Link together Gencode Gene Source table with Attributes table"
+    hg38.wgEncodeGencodeGeneSourceV36.geneId
+    hg38.wgEncodeGencodeAttrsV36.geneId
+
+identifier wgEncodeGencodeGeneSymbolV36
+"Link together Gencode gene symbol table with Attributes table"
+    hg38.wgEncodeGencodeGeneSymbolV36.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV36.transcriptId minCheck=0.20
+
+identifier wgEncodeGencodePdbV36
+"Link together Gencode Pdb table with Attributes table"
+    hg38.wgEncodeGencodePdbV36.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV36.transcriptId minCheck=0.015
+
+identifier wgEncodeGencodePubMedV36
+"Link together Gencode Pubmed table with Attributes table"
+    hg38.wgEncodeGencodePubMedV36.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV36.transcriptId  minCheck=0.63
+
+identifier wgEncodeGencodeRefSeqV36
+"Link together Gencode RefSeq table with Attributes table"
+    hg38.wgEncodeGencodeRefSeqV36.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV36.transcriptId minCheck=0.05
+
+identifier wgEncodeGencodeRefSeqToRefGeneV36
+"Link together Gencode RefSeq table with refGene track"
+    hg38.wgEncodeGencodeRefSeqV36.rnaAcc dupeOk chopAfter=.
+    hg38.refGene.name minCheck=0.77
+
+identifier wgEncodeGencodeTagV36
+"Link together Gencode Tag table with Attributes table"
+    hg38.wgEncodeGencodeTagV36.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV36.transcriptId minCheck=0.36
+    hg38.wgEncodeGencodeRefSeqV36.transcriptId minCheck=0.9
+
+identifier wgEncodeGencodeTranscriptSourceV36
+"Link together Gencode Transcript Source table with Attributes table"
+    hg38.wgEncodeGencodeTranscriptSourceV36.transcriptId
+    hg38.wgEncodeGencodeAttrsV36.transcriptId
+
+identifier wgEncodeGencodeTranscriptSupportV36
+"Link together Gencode Transcript Support table with Attributes table"
+    hg38.wgEncodeGencodeTranscriptSupportV36.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV36.transcriptId minCheck=0.08
+
+identifier wgEncodeGencodeTranscriptionSupportLevelV36
+"Link together Gencode Transcription Support Level table with Attributes table"
+    hg38.wgEncodeGencodeTranscriptionSupportLevelV36.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV36.transcriptId minCheck=0.30
+
+identifier wgEncodeGencodeUniProtV36
+"Link together Gencode UniProt Support table with Attributes table"
+    hg38.wgEncodeGencodeUniProtV36.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV36.transcriptId minCheck=0.35
+
+identifier wgEncodeGencodeAnnotationRemarkV36
+"Link together Gencode Annotation Remark table with Attributes table"
+    hg38.wgEncodeGencodeAnnotationRemarkV36.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV36.transcriptId minCheck=0.10
+
+identifier wgEncodeGencodeEntrezGeneV36
+"Link together Gencode UniProt Support table with Attributes table"
+    hg38.wgEncodeGencodeEntrezGeneV36.transcriptId dupeOk
+    hg38.wgEncodeGencodeEntrezGeneV36.transcriptId minCheck=0.35
+
+identifier wgEncodeGencodeExonSupportV36
+"Link together Gencode Exon Support table with Attributes table"
+    hg38.wgEncodeGencodeExonSupportV36.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV36.transcriptId minCheck=0.80
+
+# end Gencode V36
 
 # begin Gencode V24lift37
 
@@ -3901,6 +3995,97 @@ identifier wgEncodeGencodeEntrezGeneV35lift37
     hg19.wgEncodeGencodeEntrezGeneV35lift37.transcriptId minCheck=0.35
 
 # end Gencode V35lift37
+
+# begin Gencode V36lift37
+
+# gencode genePred tables with no associations
+# wgEncodeGencodePolyaV36lift37
+# wgEncodeGencode2wayConsPseudoV36lift37
+
+# gencode genePred tables with joining through wgEncodeGencodeAttrsV36lift37
+identifier wgEncodeGencodeBasicAttrsV36lift37
+"Link together Gencode Basic Table with Attributes table"
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId
+    hg19.wgEncodeGencodeBasicV36lift37.name
+
+identifier wgEncodeGencodeCompAttrsV36lift37
+"Link together Gencode Comprehensive Table with Attributes table"
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId
+    hg19.wgEncodeGencodeCompV36lift37.name
+
+identifier wgEncodeGencodePseudoGeneAttrsV36lift37
+"Link together Gencode PseudoGene Table with Attributes table"
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId
+    hg19.wgEncodeGencodePseudoGeneV36lift37.name
+
+# gencode association tables (joined through wgEncodeGencodeAttrsV36lift37)
+identifier wgEncodeGencodeGeneSourceV36lift37
+"Link together Gencode Gene Source table with Attributes table"
+    hg19.wgEncodeGencodeGeneSourceV36lift37.geneId
+    hg19.wgEncodeGencodeAttrsV36lift37.geneId
+
+identifier wgEncodeGencodeGeneSymbolV36lift37
+"Link together Gencode gene symbol table with Attributes table"
+    hg19.wgEncodeGencodeGeneSymbolV36lift37.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId minCheck=0.20
+
+identifier wgEncodeGencodePdbV36lift37
+"Link together Gencode Pdb table with Attributes table"
+    hg19.wgEncodeGencodePdbV36lift37.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId minCheck=0.015
+
+identifier wgEncodeGencodePubMedV36lift37
+"Link together Gencode Pubmed table with Attributes table"
+    hg19.wgEncodeGencodePubMedV36lift37.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId  minCheck=0.63
+
+identifier wgEncodeGencodeRefSeqV36lift37
+"Link together Gencode RefSeq table with Attributes table"
+    hg19.wgEncodeGencodeRefSeqV36lift37.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId minCheck=0.05
+
+identifier wgEncodeGencodeRefSeqToRefGeneV36lift37
+"Link together Gencode RefSeq table with refGene track"
+    hg19.wgEncodeGencodeRefSeqV36lift37.rnaAcc dupeOk chopAfter=.
+    hg19.refGene.name minCheck=0.77
+
+identifier wgEncodeGencodeTagV36lift37
+"Link together Gencode Tag table with Attributes table"
+    hg19.wgEncodeGencodeTagV36lift37.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId minCheck=0.36
+    hg19.wgEncodeGencodeRefSeqV36lift37.transcriptId minCheck=0.9
+
+identifier wgEncodeGencodeTranscriptSourceV36lift37
+"Link together Gencode Transcript Source table with Attributes table"
+    hg19.wgEncodeGencodeTranscriptSourceV36lift37.transcriptId
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId
+
+identifier wgEncodeGencodeTranscriptSupportV36lift37
+"Link together Gencode Transcript Support table with Attributes table"
+    hg19.wgEncodeGencodeTranscriptSupportV36lift37.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId minCheck=0.08
+
+identifier wgEncodeGencodeTranscriptionSupportLevelV36lift37
+"Link together Gencode Transcription Support Level table with Attributes table"
+    hg19.wgEncodeGencodeTranscriptionSupportLevelV36lift37.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId minCheck=0.30
+
+identifier wgEncodeGencodeUniProtV36lift37
+"Link together Gencode UniProt Support table with Attributes table"
+    hg19.wgEncodeGencodeUniProtV36lift37.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId minCheck=0.35
+
+identifier wgEncodeGencodeAnnotationRemarkV36lift37
+"Link together Gencode Annotation Remark table with Attributes table"
+    hg19.wgEncodeGencodeAnnotationRemarkV36lift37.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV36lift37.transcriptId minCheck=0.10
+
+identifier wgEncodeGencodeEntrezGeneV36lift37
+"Link together Gencode UniProt Support table with Attributes table"
+    hg19.wgEncodeGencodeEntrezGeneV36lift37.transcriptId dupeOk
+    hg19.wgEncodeGencodeEntrezGeneV36lift37.transcriptId minCheck=0.35
+
+# end Gencode V36lift37
 
 
 
