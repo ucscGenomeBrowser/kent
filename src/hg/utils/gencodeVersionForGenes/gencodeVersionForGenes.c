@@ -173,22 +173,20 @@ for (v = versionList; v != NULL; v = v->next)
 	bestIsSym = FALSE;
 	}
     }
-verbose(1, "best is %s as %s with %d of %d (%g%%) hits\n", bestVersion->name, 
-    (bestIsSym?"sym":"id"),   bestCount, geneCount, 100.0 * bestCount/geneCount);
+verbose(1, "best is %s as %s on %s with %d of %d (%g%%) hits\n", bestVersion->name, 
+    (bestIsSym?"sym":"id"), bestVersion->ucscDb, bestCount, geneCount, 100.0 * bestCount/geneCount);
 
 if (bedOut != NULL)
     {
+    /* If they ask for BED give them the whole geneset for their best version */
     FILE *f = mustOpen(bedOut, "w");
-    struct version *v = bestVersion;
-    struct slName *gene;
-    for (gene = geneList; gene != NULL; gene = gene->next)
+    struct gsvt *gsvt;
+    for (gsvt = gsvtList; gsvt != NULL; gsvt = gsvt->next)
         {
-	char *geneName = gene->name;
-	struct gsvt *gsvt = (bestIsSym ? hashFindVal(v->symHash, geneName) 
-				       : hashFindVal(v->idHash, geneName) );
-	if (gsvt != NULL)
+	if (sameString(gsvt->gencodeVersion, bestVersion->name))
 	    {
-	    fprintf(f, "%s\t%d\t%d\t%s\t", gsvt->chrom, gsvt->chromStart, gsvt->chromEnd, geneName);
+	    fprintf(f, "%s\t%d\t%d\t%s\t", 
+		gsvt->chrom, gsvt->chromStart, gsvt->chromEnd, gsvt->gene);
 	    fprintf(f, "%d\t%s\t%d\t", gsvt->score, gsvt->strand, gsvt->thickStart);
 	    fprintf(f, "%u\t", gsvt->blockCount);
 
@@ -207,7 +205,6 @@ if (bedOut != NULL)
 	    /* Print human readable form of gene symbol */
 	    fprintf(f, "\t%s", gsvt->symbol);
 	    fprintf(f, "\n");
-
 	    }
 	}
     carefulClose(&f);
