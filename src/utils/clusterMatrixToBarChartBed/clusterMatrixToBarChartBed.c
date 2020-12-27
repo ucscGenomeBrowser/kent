@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-boolean clDataOffset = FALSE;
+boolean clSimple = FALSE;
 boolean clMedian = FALSE;
 char *clName2 = NULL;
 
@@ -29,7 +29,7 @@ errAbort(
   "        field as the last field\n"
   "   output.bed is the resulting bar chart, with one column per cluster\n"
   "options:\n"
-  "   -dataOffset - store the position of gene in geneMatrix.tsv file in output\n"
+  "   -simple - don't store the position of gene in geneMatrix.tsv file in output\n"
   "   -median - use median (instead of mean)\n"
   "   -name2=twoColFile.tsv - get name2 from file where first col is same ase geneset.bed's name\n"
   );
@@ -37,8 +37,7 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {"dataOffset", OPTION_BOOLEAN},
-   {"_dataOffset", OPTION_BOOLEAN},
+   {"simple", OPTION_BOOLEAN},
    {"median", OPTION_BOOLEAN},
    {"name2", OPTION_STRING},
    {NULL, 0},
@@ -319,7 +318,7 @@ for (;;)
 	    }
 	
 	/* Data file offset info */
-	if (clDataOffset)
+	if (!clSimple)
 	    fprintf(f, "\t%lld\t%lld",  (long long)lineFileTell(lf), (long long)lineLength);
 
 	fprintf(f, "\n");
@@ -336,7 +335,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
-clDataOffset = (optionExists("_dataOffset") || optionExists("dataOffset"));
+clSimple = optionExists("simple");
 clMedian = optionExists("median");
 clName2 = optionVal("name2", clName2);
 clusterMatrixToBarchartBed(argv[1], argv[2], argv[3], argv[4]);
