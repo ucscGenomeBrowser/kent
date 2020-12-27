@@ -5,6 +5,7 @@
 #include "hash.h"
 #include "options.h"
 #include "obscure.h"
+#include "portable.h"
 #include "sqlNum.h"
 #include "sqlList.h"
 
@@ -18,12 +19,14 @@ errAbort(
   "   gencodeVersionForGenes genes.txt geneSymVer.tsv\n"
   "options:\n"
   "   -bed=output.bed - Create bed file for mapping genes to best genome\n"
+  "   -allBed=outputDir - Output beds for all versions in geneSymVer.tsv\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"bed", OPTION_STRING},
+   {"allBed", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -96,6 +99,47 @@ slReverse(&list);
 return list;
 }
 
+void saveGsvtAsBed(struct gsvt *gsvt, char *name, char *symbol, FILE *f)
+/* Print out one gsvt as a bed record to f*/
+{
+fprintf(f, "%s\t%d\t%d\t%s\t", 
+    gsvt->chrom, gsvt->chromStart, gsvt->chromEnd, name);
+fprintf(f, "%d\t%s\t%d\t", gsvt->score, gsvt->strand, gsvt->thickStart);
+fprintf(f, "%u\t", gsvt->blockCount);
+
+/* Print exon-by-exon fields. */
+int i;
+
+/* Print block sizes */
+for (i=0; i<gsvt->blockCount; ++i)
+	fprintf(f, "%u,", gsvt->blockSizes[i]);
+    fprintf(f, "\t");
+
+/* Print block starts */
+for (i=0; i<gsvt->blockCount; ++i)
+    fprintf(f, "%u,", gsvt->blockStarts[i]);
+
+/* Print human readable form of gene symbol */
+fprintf(f, "\t%s", symbol);
+fprintf(f, "\n");
+}
+
+void writeOneVersionOfGvstAsBed(struct gsvt *list, char *version, char *bedOut)
+/* If they ask for BED give them the whole geneset for their best version */
+{
+if (bedOut != NULL)
+{
+FILE *f = mustOpen(bedOut, "w");
+struct gsvt *gsvt;
+for (gsvt = list; gsvt != NULL; gsvt = gsvt->next)
+	{
+	if (sameString(gsvt->gencodeVersion, version))
+	    saveGsvtAsBed(gsvt, gsvt->gene, gsvt->symbol, f);
+	}
+    carefulClose(&f);
+    }
+}
+
 struct version
 /* Keep info on one version */
     {
@@ -108,7 +152,7 @@ struct version
     struct hash *symHash;
     };
 
-void gencodeVersionForGenes(char *geneListFile, char *geneSymVerTxFile, char *bedOut)
+void gencodeVersionForGenes(char *geneListFile, char *geneSymVerTxFile, char *bedOut, char *allBedOut)
 /* gencodeVersionForGenes - Figure out which version of a gencode gene set a 
  * set of gene identifiers best fits. */
 {
@@ -141,6 +185,20 @@ for (gsvt = gsvtList; gsvt!=NULL; gsvt = gsvt->next)
     hashAdd(version->symHash, gsvt->symbol, gsvt);
     }
 verbose(1, "examining %d versions of gencode\n", versionHash->elCount);
+
+if (allBedOut != NULL)
+    {
+    makeDirsOnPath(allBedOut);
+    struct version *v;
+    for (v = versionList; v != NULL; v = v->next)
+        {
+	char fileName[PATH_LEN];
+	char *name = cloneString(v->name);
+	subChar(name, 'V', '-');
+	safef(fileName, sizeof(fileName), "%s/%s.%s.bed", allBedOut, v->ucscDb, name);
+	writeOneVersionOfGvstAsBed(gsvtList, v->name, fileName);
+	}
+    }
 
 /* Loop through each version counting up genes etc. */
 struct version *bestVersion = NULL;
@@ -178,33 +236,18 @@ verbose(1, "best is %s as %s on %s with %d of %d (%g%%) hits\n", bestVersion->na
 
 if (bedOut != NULL)
     {
-    /* If they ask for BED give them the whole geneset for their best version */
     FILE *f = mustOpen(bedOut, "w");
-    struct gsvt *gsvt;
-    for (gsvt = gsvtList; gsvt != NULL; gsvt = gsvt->next)
+    struct slName *gene;
+    struct hash *hash = (bestIsSym ?bestVersion->symHash : bestVersion->idHash);
+    for (gene = geneList; gene != NULL; gene = gene->next)
         {
-	if (sameString(gsvt->gencodeVersion, bestVersion->name))
+	struct gsvt *gsvt = hashFindVal(hash, gene->name);
+	if (gsvt != NULL)
 	    {
-	    fprintf(f, "%s\t%d\t%d\t%s\t", 
-		gsvt->chrom, gsvt->chromStart, gsvt->chromEnd, gsvt->gene);
-	    fprintf(f, "%d\t%s\t%d\t", gsvt->score, gsvt->strand, gsvt->thickStart);
-	    fprintf(f, "%u\t", gsvt->blockCount);
-
-	    /* Print exon-by-exon fields. */
-	    int i;
-
-	    /* Print block sizes */
-	    for (i=0; i<gsvt->blockCount; ++i)
-		fprintf(f, "%u,", gsvt->blockSizes[i]);
-	    fprintf(f, "\t");
-
-	    /* Print block starts */
-	    for (i=0; i<gsvt->blockCount; ++i)
-		fprintf(f, "%u,", gsvt->blockStarts[i]);
-
-	    /* Print human readable form of gene symbol */
-	    fprintf(f, "\t%s", gsvt->symbol);
-	    fprintf(f, "\n");
+	    if (bestIsSym)
+		saveGsvtAsBed(gsvt, gene->name, gsvt->gene, f);
+	    else
+		saveGsvtAsBed(gsvt, gsvt->gene, gene->name, f);
 	    }
 	}
     carefulClose(&f);
@@ -217,6 +260,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-gencodeVersionForGenes(argv[1],argv[2], optionVal("bed", NULL));
+gencodeVersionForGenes(argv[1],argv[2], optionVal("bed", NULL), optionVal("allBed", NULL));
 return 0;
 }
