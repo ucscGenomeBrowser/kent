@@ -246,7 +246,7 @@ for (;;)
     struct hashEl *onePos = hashLookup(geneHash, geneName);
     if (onePos == NULL)
 	{
-	warn("Can't find gene %s in %s", geneName, geneBed);
+	verbose(2, "Can't find gene %s in %s", geneName, geneBed);
 	++missCount;
 	continue;
 	}
@@ -326,7 +326,7 @@ for (;;)
 	}
     dotForUser();
     }
-verbose(1, "%d genes found, %d missed\n", hitCount, missCount);
+verbose(1, "\n%d genes found, %d (%0.2f%%) missed\n", hitCount, missCount, 100.0*missCount/(hitCount+missCount));
 carefulClose(&f);
 }
 
