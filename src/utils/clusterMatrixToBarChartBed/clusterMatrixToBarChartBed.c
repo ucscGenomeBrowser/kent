@@ -105,10 +105,10 @@ void clusterMatrixToBarchartBed(char *sampleClusters, char *matrixTsv, char *gen
 boolean doMedian = clMedian;
 
 /* Load up the gene set */
-verbose(1, "clusterMatrixToBarchartBed(%s,%s,%s,%s)\n", sampleClusters, matrixTsv, geneBed, output);
+verbose(2, "clusterMatrixToBarchartBed(%s,%s,%s,%s)\n", sampleClusters, matrixTsv, geneBed, output);
 int bedRowSize = 0;
 struct hash *geneHash = hashTsvBy(geneBed, 3, &bedRowSize);
-verbose(1, "%d columns about %d genes in %s\n", bedRowSize, geneHash->elCount, geneBed);
+verbose(2, "%d columns about %d genes in %s\n", bedRowSize, geneHash->elCount, geneBed);
 
 /* Deal with external gene hash */
 struct hash *nameToName2 = NULL;
