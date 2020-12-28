@@ -404,6 +404,14 @@ function Table(caption, aligns, widths, headers, rows)
   return table.concat(buffer,'\n')
 end
 
+function RawBlock(format, str)
+  if format == "html" then
+    return str
+  else
+    return ''
+  end
+end
+
 function Div(s, attr)
   return "<div" .. attributes(attr) .. ">\n" .. s .. "</div>"
 end
