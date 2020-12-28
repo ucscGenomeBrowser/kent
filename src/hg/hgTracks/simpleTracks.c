@@ -270,7 +270,7 @@ Color shadesOfBrown[10+1];	/* 10 shades of brown from tan to tar. */
 struct rgbColor brownColor = {100, 50, 0};
 struct rgbColor tanColor = {255, 240, 200};
 struct rgbColor guidelineColor = {220, 220, 255};
-struct rgbColor lightGuidelineColor = {232, 232, 255};
+struct rgbColor multiRegionAltColor = {235, 235, 255};
 struct rgbColor undefinedYellowColor = {240,240,180};
 
 Color shadesOfSea[10+1];       /* Ten sea shades. */

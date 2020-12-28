@@ -5386,7 +5386,7 @@ if (withGuidelines)
 	    if (emAltHighlight)
 		{
 		// light blue alternating backgrounds
-		Color lightBlue = hvGfxFindRgb(bgImg, &lightGuidelineColor);
+		Color lightBlue = hvGfxFindRgb(bgImg, &multiRegionAltColor);
 		for (window=windows; window; window=window->next) // background under every other window
 		    {
 		    if (window->regionOdd)
