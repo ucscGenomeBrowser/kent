@@ -39,7 +39,14 @@ struct fieldedRow *fieldedTableAdd(struct fieldedTable *table,  char **row, int 
 struct fieldedRow *fieldedTableAddHead(struct fieldedTable *table, char **row, int rowSize, int id);
 /* Create a new row and add it to start of table.  Return row. */
 
-struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *url, char *requiredFields[], int requiredCount);
+struct fieldedTable *fieldedTableReadTabHeader(struct lineFile *lf, 
+    char *requiredFields[], int requiredCount);
+/* Read in first line of file treating it as a fieldedTable header line. 
+ * Use lineFileNextRowTab(lf, row, table->fieldCount)  on a row you provide
+ * that is table->fieldCount sized */
+
+struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *url, 
+    char *requiredFields[], int requiredCount);
 /* Read table from tab-separated file with a #header line that defines the fields.  Ensures
  * all requiredFields (if any) are present.  The url is just used for error reporting and 
  * should be the same as fileName for most purposes.  This is used by edwSubmit though which

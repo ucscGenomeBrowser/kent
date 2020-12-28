@@ -190,6 +190,42 @@ table->rowList = newList;
 lmCleanup(&lm);
 }
 
+struct fieldedTable *fieldedTableReadTabHeader(struct lineFile *lf, 
+    char *requiredFields[], int requiredCount)
+/* Read in first line of file treating it as a fieldedTable header line. 
+ * Used in combination with fieldedTableReadNextRow() */
+{
+/* Get first line and turn it into field list. */
+char *line;
+if (!lineFileNext(lf, &line, NULL))
+   errAbort("%s is empty", lf->fileName);
+boolean startsSharp = FALSE;
+if (line[0] == '#')
+   {
+   line = skipLeadingSpaces(line+1);
+   startsSharp = TRUE;
+   }
+   
+int fieldCount = chopByChar(line, '\t', NULL, 0);
+char *fields[fieldCount];
+chopTabs(line, fields);
+
+/* Make sure that all required fields are present. */
+int i;
+for (i = 0; i < requiredCount; ++i)
+    {
+    char *required = requiredFields[i];
+    int ix = stringArrayIx(required, fields, fieldCount);
+    if (ix < 0)
+        errAbort("%s is missing required field '%s'", lf->fileName, required);
+    }
+
+/* Create fieldedTable . */
+struct fieldedTable *table = fieldedTableNew(lf->fileName, fields, fieldCount);
+table->startsSharp = startsSharp;
+return table;
+}
+
 struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *reportFileName, 
     char *requiredFields[], int requiredCount)
 /* Read table from tab-separated file with a #header line that defines the fields.  Ensures
@@ -215,37 +251,11 @@ else
     reportFileName = fileName;
     }
 
-/* Get first line and turn it into field list. */
-char *line;
-if (!lineFileNext(lf, &line, NULL))
-   errAbort("%s is empty", reportFileName);
-boolean startsSharp = FALSE;
-if (line[0] == '#')
-   {
-   line = skipLeadingSpaces(line+1);
-   startsSharp = TRUE;
-   }
-   
-int fieldCount = chopByChar(line, '\t', NULL, 0);
-char *fields[fieldCount];
-chopTabs(line, fields);
-
-/* Make sure that all required fields are present. */
-int i;
-for (i = 0; i < requiredCount; ++i)
+struct fieldedTable *table = fieldedTableReadTabHeader(lf, requiredFields, requiredCount);
+char *row[table->fieldCount];
+while (lineFileNextRowTab(lf, row, table->fieldCount))
     {
-    char *required = requiredFields[i];
-    int ix = stringArrayIx(required, fields, fieldCount);
-    if (ix < 0)
-        errAbort("%s is missing required field '%s'", reportFileName, required);
-    }
-
-/* Create fieldedTable . */
-struct fieldedTable *table = fieldedTableNew(reportFileName, fields, fieldCount);
-table->startsSharp = startsSharp;
-while (lineFileRowTab(lf, fields))
-    {
-    fieldedTableAdd(table, fields, fieldCount, lf->lineIx);
+    fieldedTableAdd(table, row, table->fieldCount, lf->lineIx);
     }
 
 /* Clean up and go home. */
