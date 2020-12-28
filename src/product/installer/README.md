@@ -1,4 +1,4 @@
-% Genome Browser in the Cloud User's Guide
+% Genome Browser in the Cloud User\'s Guide
 
 # What is Genome Browser in the Cloud?
 
