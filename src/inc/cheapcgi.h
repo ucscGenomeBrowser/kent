@@ -457,7 +457,10 @@ void cgiMakeCheckboxGroupWithVals(char *name, char *menu[], char *values[], int 
 /* Make a table of checkboxes that have the same variable name but different
  * values (same behavior as a multi-select input), with nice labels in menu[]. */
 
-void cgiMakeHiddenVarWithExtra(char *varName, char *string, char *extra);
+void cgiMakeHiddenVarWithIdExtra(char *varName, char *id, char *string,char *extra);
+/* Store string in hidden input for next time around. */
+
+#define cgiMakeHiddenVarWithExtra(name,val,extra) cgiMakeHiddenVarWithIdExtra((name),NULL,(val),extra)
 /* Store string in hidden input for next time around. */
 
 #define cgiMakeHiddenVar(name,val) cgiMakeHiddenVarWithExtra((name),(val),NULL)

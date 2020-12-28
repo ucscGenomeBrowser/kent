@@ -279,22 +279,6 @@ darkerLabels on
 priority 1
 visibility pack
 
-track knownGene
-shortLabel UCSC Genes
-longLabel UCSC Genes (RefSeq, GenBank, tRNAs & Comparative Genomics)
-group genes
-visibility pack
-color 12,12,120
-type genePred knownGenePep knownGeneMrna
-idXref kgAlias kgID alias
-hgGene on
-hgsid on
-directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-baseColorUseCds given
-baseColorDefault genomicCodons
-defaultLinkedTables kgXref
-intronGap 12
-
 track knownAlt
 shortLabel UCSC Alt Events
 longLabel Alternative Splicing, Alternative Promoter and Similar Events in UCSC Genes
@@ -575,9 +559,11 @@ track ensGene
 shortLabel Ensembl Genes
 longLabel Ensembl Genes
 group genes
+exonNumbers on
 visibility hide
 color 150,0,0
 type genePred ensPep
+pennantIcon Updated red ../goldenPath/newsarch.html#101520 "Updated to v101 Oct. 15, 2020"
 
 track ensEstGene
 shortLabel Ensembl EST Genes

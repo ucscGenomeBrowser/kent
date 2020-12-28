@@ -1,0 +1,66 @@
+##############################################################################
+# LASTZ Rat rn6 (DONE - 2020-10-20 - Hiram)
+    mkdir /hive/data/genomes/rheMac10/bed/lastzRn6.2020-10-20
+    cd /hive/data/genomes/rheMac10/bed/lastzRn6.2020-10-20
+
+    printf '# rat vs rhesus
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+# TARGET: Rhesus RheMac10
+SEQ1_DIR=/hive/data/genomes/rheMac10/rheMac10.2bit
+SEQ1_LEN=/hive/data/genomes/rheMac10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn6
+SEQ2_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ2_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/rheMac10/bed/lastzRn6.2020-10-20
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S rheMac10Rn6
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #   real    278m29.024s
+
+    cat fb.rheMac10.chainRn6Link.txt
+    #	901231172 bases of 2936892733 (30.687%) in intersection
+    cat fb.rheMac10.chainSynRn6Link.txt
+    #   854008376 bases of 2936892733 (29.079%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	rheMac10 rn6) > rbest.log 2>&1 &
+    # real    293m29.540s
+
+    cat fb.rheMac10.chainRBest.Rn6.txt
+    #	860406990 bases of 2936892733 (29.297%) in intersection
+
+    mkdir /hive/data/genomes/rn6/bed/blastz.rheMac10.swap
+    cd /hive/data/genomes/rn6/bed/blastz.rheMac10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rheMac10/bed/lastzRn6.2020-10-20/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    61m59.379s
+
+    cat fb.rn6.chainRheMac10Link.txt
+    #   938991388 bases of 2729860805 (34.397%) in intersection
+    cat fb.rn6.chainSynRheMac10Link.txt
+    #	873546846 bases of 2729860805 (32.000%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	rn6 rheMac10) > rbest.log 2>&1
+    # real    358m51.937s
+
+    cat fb.rn6.chainRBest.RheMac10.txt
+    #	861947799 bases of 2729860805 (31.575%) in intersection
+
+#########################################################################

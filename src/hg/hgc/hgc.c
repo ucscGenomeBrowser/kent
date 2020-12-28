@@ -826,6 +826,18 @@ if (item != NULL && item[0] != 0)
     cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
 else
     cartWebStart(cart, database, "%s", tdb->longLabel);
+
+// QA noticed that clicking the +- buttons to collapse item detail tables was
+// generating messages in the Apache log if you went directly to an item page
+// without first visiting hgTracks. Clicking those buttons causes a cartDump
+// in order to save the state of visibility of the table, which in
+// turn needs an hgsid in order to save the state correctly. However, because
+// we aren't in a form, we have never saved the hgsid to a hidden
+// input element, and so the javascript that creates the cartDump link attaches
+// an empty 'hgsid=' parameter, which cartDump doesn't like. Since we aren't in
+// a form, use the 'common' object to store the parameter so the links to cartDump
+// are correct:
+jsInlineF("var common = {hgsid:\"%s\"};\n", cartSessionId(cart));
 }
 
 void printItemDetailsHtml(struct trackDb *tdb, char *itemName)
@@ -1550,15 +1562,55 @@ slReverse(fields);
 return fields;
 }
 
-int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
+void printExtraDetailsTable(char *trackName, char *tableName, char *fileName, struct dyString *tableText)
+// convert a tab-sep table to HTML
+{
+struct lineFile *lf = lineFileOnString(fileName, TRUE, tableText->string);
+char *description = tableName != NULL ? tableName : "Additional Details";
+printf("<table>");
+jsBeginCollapsibleSection(cart, trackName, "extraTbl", description, FALSE);
+printf("<table class=\"bedExtraTbl\">\n");
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    printf("<tr><td>");
+    char *toPrint = replaceChars(line, "\t", "</td><td>");
+    printf("%s", toPrint);
+    printf("</td></tr>\n");
+    }
+printf("</table>\n"); // closes bedExtraTbl
+jsEndCollapsibleSection();
+printf("</table>\n"); // close wrapper table
+}
+
+static struct slName *findFieldsInExtraFile(char *detailsTableUrl, struct asColumn *col, struct dyString *ds)
+// return a list of the ${}-enclosed fields from an extra file
+{
+struct slName *foundFields = NULL;
+char *table = netReadTextFileIfExists(hReplaceGbdb(detailsTableUrl));
+if (table)
+    {
+    for (; col != NULL; col = col->next)
+        {
+        char field[256];
+        safef(field, sizeof(field), "${%s}", col->name);
+        if (stringIn(field, table))
+            {
+            struct slName *replaceField = slNameNew(col->name);
+            slAddHead(&foundFields, replaceField);
+            }
+        }
+    dyStringPrintf(ds, "%s", table);
+    slReverse(foundFields);
+    }
+return foundFields;
+}
+
+int extraFieldsPrintAs(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount, struct asObject *as)
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
 // Returns number of extra fields actually printed.
 {
-struct asObject *as = asForDb(tdb, database);
-if (as == NULL)
-    return 0;
-
 // We are trying to print extra fields so we need to figure out how many fields to skip
 int start = extraFieldsStart(tdb, fieldCount, as);
 
@@ -1578,6 +1630,20 @@ char *sepFieldsStr = trackDbSetting(tdb, "sepFields");
 struct slName *sepFields = NULL;
 if (sepFieldsStr)
     sepFields = slNameListFromComma(sepFieldsStr);
+
+// make list of fields that we want to substitute
+// this setting has format description|URLorFilePath, with the stuff before the pipe optional
+char *extraDetailsTableName = NULL, *extraDetails = cloneString(trackDbSetting(tdb, "extraDetailsTable"));
+if (extraDetails && strchr(extraDetails,'|'))
+    {
+    extraDetailsTableName = extraDetails;
+    extraDetails = strchr(extraDetails,'|');
+    *extraDetails++ = 0;
+    }
+struct dyString *extraTblStr = dyStringNew(0);
+struct slName *detailsTableFields = NULL;
+if (extraDetails)
+    detailsTableFields = findFieldsInExtraFile(extraDetails, col, extraTblStr);
 
 // iterate over fields, print as table rows
 int count = 0;
@@ -1608,6 +1674,20 @@ for (;col != NULL && count < fieldCount;col=col->next)
     // external extra fields in that _ field names have some meaning and are not shown
     if (startsWith("_", fieldName) || (skipIds && slNameInList(skipIds, fieldName)))
         continue;
+
+    // don't print this field if we are gonna print it later in a custom table
+    if (detailsTableFields && slNameInList(detailsTableFields, fieldName))
+        {
+        int fieldLen = strlen(fieldName);
+        char *replaceField = needMem(fieldLen+4);
+        replaceField[0] = '$';
+        replaceField[1] = '{';
+        strcpy(replaceField+2, fieldName);
+        replaceField[fieldLen+2] = '}';
+        replaceField[fieldLen+3] = 0;
+        extraTblStr = dyStringSub(extraTblStr->string, replaceField, fields[ix]);
+        continue;
+        }
 
     // skip this row if it's empty and "skipEmptyFields" option is set
     if (skipEmptyFields && isEmpty(fields[ix]))
@@ -1640,7 +1720,6 @@ for (;col != NULL && count < fieldCount;col=col->next)
     else
         printf("<td>%s</td></tr>\n", fields[ix]);
     }
-asObjectFree(&as);
 if (skipIds)
     slFreeList(skipIds);
 if (sepFields)
@@ -1649,8 +1728,30 @@ if (sepFields)
 if (count > 0)
     printf("</table>\n");
 
+if (detailsTableFields)
+    {
+    printf("<br>\n");
+    printExtraDetailsTable(tdb->track, extraDetailsTableName, extraDetails, extraTblStr);
+    }
+
 return count;
 }
+
+int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
+// Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
+// sr may be null for bigBeds.
+// Returns number of extra fields actually printed.
+{
+struct asObject *as = asForDb(tdb, database);
+if (as == NULL)
+    return 0;
+
+int ret =  extraFieldsPrintAs(tdb, sr, fields,fieldCount, as);
+//asObjectFree(&as);
+
+return ret;
+}
+
 
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
@@ -3007,6 +3108,7 @@ char startBuf[16], endBuf[16];
 int lastChromId = -1;
 char chromName[bbi->chromBpt->keySize+1];
 
+boolean firstTime = TRUE;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromName, sizeof(chromName));
@@ -3015,8 +3117,32 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, 4);
     if (showEvery || sameString(bedRow[3], item))
 	{
-        struct psl *psl= pslFromBigPsl(chromName, bb, seqTypeField, NULL, NULL);
+        char *cdsStr, *seq;
+        struct psl *psl= pslFromBigPsl(chromName, bb, seqTypeField, &seq, &cdsStr);
         slAddHead(&pslList, psl);
+
+        // we're assuming that if there are multiple psl's with the same id that
+        // they are the same query sequence so we only put out one set of sequences
+        if (firstTime  && !isEmpty(seq))    // if there is a query sequence
+            {
+            firstTime = FALSE;
+            printf("<H3>Links to sequence:</H3>\n");
+            printf("<UL>\n");
+
+            if (!isEmpty(cdsStr))  // if we have CDS 
+                {
+                puts("<LI>\n");
+                hgcAnchorSomewhere("htcTranslatedBigPsl", item, "translate", seqName);
+                printf("Translated Amino Acid Sequence</A> from Query Sequence\n");
+                puts("</LI>\n");
+                }
+
+            puts("<LI>\n");
+            hgcAnchorSomewhere("htcBigPslSequence", item, tdb->track, seqName);
+            printf("Query Sequence</A> \n");
+            puts("</LI>\n");
+            printf("</UL>\n");
+            }
 	}
     }
 
@@ -4144,7 +4270,7 @@ if (differentString(type, "bigInteract") && differentString(type, "interact"))
     {
     // skip generic URL code as these may have multiple items returned for a click
     itemForUrl = getIdInUrl(tdb, item);
-    if (itemForUrl != NULL && trackDbSetting(tdb, "url"))
+    if (itemForUrl != NULL && trackDbSetting(tdb, "url") && differentString(type, "bigBed"))
         {
         printCustomUrl(tdb, itemForUrl, item == itemForUrl);
         printIframe(tdb, itemForUrl);
@@ -7247,7 +7373,10 @@ struct psl *psl;
 char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
+struct sqlConnection *conn = NULL;
 
+if (!trackHubDatabase(database))
+    conn = hAllocConnTrack(database, tdb);
 
 aliTable = cartString(cart, "aliTable");
 if (isCustomTrack(aliTable))
@@ -7268,7 +7397,7 @@ char *chrom = cartString(cart, "c");
 
 char *seq, *cdsString = NULL;
 struct lm *lm = lmInit(0);
-char *fileName = bbiNameFromSettingOrTable(tdb, NULL, tdb->table);
+char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 char *bedRow[32];
@@ -8501,6 +8630,92 @@ freez(&prot);
 genePredFree(&gp);
 }
 
+void htcBigPsl( char *acc, boolean translate)
+/* Output bigPsl query sequence, translated to amino acid sequence if requested. */
+{
+struct sqlConnection *conn = NULL;
+
+if (!trackHubDatabase(database))
+    conn = hAllocConn(database);
+
+int start = cartInt(cart, "l");
+int end = cartInt(cart, "r");
+char *table = cartString(cart, "table");
+
+struct trackDb *tdb ;
+if (isCustomTrack(table))
+    {
+    struct customTrack *ct = lookupCt(table);
+    tdb = ct->tdb;
+    }
+else if (isHubTrack(table))
+    tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
+else
+    tdb = hashFindVal(trackHash, table);
+char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct lm *lm = lmInit(0);
+int ivStart = start, ivEnd = end;
+if (start == end)
+    {  
+    // item is an insertion; expand the search range from 0 bases to 2 so we catch it:
+    ivStart = max(0, start-1);
+    ivEnd++;
+    }  
+
+unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+struct bigBedInterval *bb, *bbList = NULL;
+
+bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
+
+char *bedRow[32];
+char startBuf[16], endBuf[16];
+
+int lastChromId = -1;
+char chromName[bbi->chromBpt->keySize+1];
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromName, sizeof(chromName));
+
+    lastChromId=bb->chromId;
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, 4);
+
+    // we're assuming that if there are multiple psl's with the same id that
+    // they are the same query sequence so we only put out one sequence
+    if (sameString(bedRow[3], acc))
+	{
+        char *cdsStr, *seq;
+        pslFromBigPsl(chromName, bb, seqTypeField, &seq, &cdsStr);
+
+        if (translate)
+            {
+            struct genbankCds cds;
+            if (!genbankCdsParse(cdsStr, &cds))
+                errAbort("can't parse CDS for %s: %s", acc, cdsStr);
+            int protBufSize = ((cds.end-cds.start)/3)+4;
+            char *prot = needMem(protBufSize);
+
+            seq[cds.end] = '\0';
+            dnaTranslateSome(seq+cds.start, prot, protBufSize);
+
+            cartHtmlStart("Protein Translation of query sequence");
+            displayProteinPrediction(acc, prot);
+            return;
+            }
+        else
+            {
+            cartHtmlStart("Query sequence");
+            printf("<PRE><TT>");
+            printf(">%s length=%d\n", acc,(int)strlen(seq));
+            printLines(stdout, seq, 50);
+            printf("</TT></PRE>");
+            return;
+            }
+	}
+    }
+}
+
 void htcTranslatedMRna(struct trackDb *tdb, char *acc)
 /* Translate mRNA to protein and display it. */
 {
@@ -8869,7 +9084,11 @@ else if (isCustomTrack(table))
 else
     {
     tdb = hashFindVal(trackHash, table);
-    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    struct sqlConnection *conn = NULL;
+
+    if (!trackHubDatabase(database))
+        conn = hAllocConnTrack(database, tdb);
+    char *bigDataUrl = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
     if (bigDataUrl)
         {
         itemCount = getSeqForBigGene(tdb, geneName);
@@ -11578,7 +11797,9 @@ if (sqlTableExists(conn, refSeqSummaryTable))
     sqlSafef(query, sizeof(query),
           "select summary from %s where mrnaAcc = '%s'", refSeqSummaryTable, acc);
     summary = sqlQuickString(conn, query);
+    summary = abbreviateRefSeqSummary(summary);
     }
+
 return summary;
 }
 
@@ -21380,7 +21601,7 @@ else if (sameWord(type, "bigMaf"))
     genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigDbSnp"))
     doBigDbSnp(ct->tdb, item);
-else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
+else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred") || sameWord(type, "bigLolly"))
     bigBedCustomClick(ct->tdb);
 else if (sameWord(type, "bigBarChart") || sameWord(type, "barChart"))
     doBarChartDetails(ct->tdb, item);
@@ -26294,6 +26515,14 @@ else if (sameWord(table, "htcExtSeq"))
 else if (sameWord(table, "htcTranslatedProtein"))
     {
     htcTranslatedProtein(item);
+    }
+else if (sameWord(table, "htcBigPslSequence"))
+    {
+    htcBigPsl(item, FALSE);
+    }
+else if (sameWord(table, "htcTranslatedBigPsl"))
+    {
+    htcBigPsl(item, TRUE);
     }
 else if (sameWord(table, "htcTranslatedPredMRna"))
     {

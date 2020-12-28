@@ -686,7 +686,7 @@ edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
     ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 34lift37 100 'April 2020'
 
 ##############################################################################
-2020-06-07: import of UCSC GENCODE group processing of GENCODE V35lift37 pre-release (markd)
+2020-10-14: import of UCSC GENCODE group processing of GENCODE V35lift37 pre-release (markd)
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
 
     # download, build and load tables
@@ -713,4 +713,82 @@ edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
     make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
     # commit all
+##############################################################################
+2020-11-12: import of UCSC GENCODE group processing of GENCODE V35lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV35lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV35lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbsOldSchema hg19 35lift37 101 'June 2020'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release.
+
+    # edit human/hg19/trackDb.gencode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV35lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV35lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+    make alpha DBS=hg19
+
+##############################################################################
+2020-12-21: import of UCSC GENCODE group processing of GENCODE V36lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV36lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV36lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbsOldSchema hg19 36lift37 102 'Nov 2020'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release.
+
+    # edit human/hg19/trackDb.gencode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV36lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV36lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    problem:
+      Error: 1 of 233706 elements (0.000%) of hg19.wgEncodeGencodeAttrsV36lift37.transcriptId are not in key wgEncodeGencodeTranscriptSourceV36lift37.transcriptId line 4061 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
+      Error: 1 of 233706 elements (0.000%) of hg19.wgEncodeGencodeAttrsV36lift37.geneId are not in key wgEncodeGencodeGeneSourceV36lift37.geneId line 4025 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
+
+      The gene/transcript pair is missing from metadata:  ENSG00000168939.6 ENST00000302805.2
+      These are missing from
+	 data/release_36lift37/gencode.v36lift37.metadata.Transcript_source.gz 
+         data/release_36lift37/gencode.v36lift37.metadata.Gene_source.gz
+
+      this is the weird cases of SPRV3 which has now has a transcript past the PAR
+
+      ENSG00000168939.6	SPRY3	protein_coding		ENST00000302805.2	SPRY3-001	protein_coding		OTTHUMG00000022675.2	OTTHUMT00000058823.2	CCDS14769.4	2	coding	ENSP00000302978.2	CCDS,PAR,appris_principal,basic
+      ENSG00000168939.12_4	SPRY3	protein_coding		ENST00000302805.7_1	SPRY3-201	protein_coding		OTTHUMG00000022675.3_4	OTTHUMT00000058823.3_1	CCDS14769.4	2	coding	ENSP00000302978.2	CCDS,appris_principal_1,basic
+
+      Edit tables to work around it for now and work out with EBI.
+      
+    # commit all
+    make alpha DBS=hg19
+
+wgEncodeGencodeTranscriptSourceV36lift37
+
 ##############################################################################

@@ -683,6 +683,7 @@ struct clusterMaker
     {
     struct clusterMaker *next;	/* Next in list */
     struct dlList *clusters;	/* Doubly linked list of clusters. */
+    struct cluster *orphans;    /* not added to clusters due to gIgnoreBases */
     struct binKeeper *bk;	/* Bin-keeper that tracks exons. */
     };
 
@@ -717,6 +718,7 @@ for (node = cm->clusters->tail; !dlStart(node); node=node->prev)
     cluster = node->val;
     slAddHead(&clusterList, cluster);
     }
+clusterList = slCat(clusterList, cm->orphans);
 slSort(&clusterList, clusterCmp);
 
 if (gDetectConflicted)
@@ -787,8 +789,8 @@ else
     *currentNodePtr = clusterMakerAddExonOverlap(cm, cg, exonStart, exonEnd, bList, *currentNodePtr);
 }
 
-void clusterMakerAdd(struct clusterMaker *cm, struct clusterGene *cg)
-/* Add gene to clusterMaker. */
+bool clusterMakerAdd(struct clusterMaker *cm, struct clusterGene *cg)
+/* Add gene to clusterMaker, return false if not added due to gIgnoreBases */
 {
 int exonIx;
 struct dlNode *currentNode = NULL;
@@ -801,9 +803,14 @@ struct dlNode *currentNode = NULL;
  * genes, the only gene range is added as if it was a single exon. */
 
 verbose(2, "add gene: [%s] %s %d-%d\n", cg->track->name, cg->gp->name, cg->gp->txStart, cg->gp->txEnd);
+bool added = FALSE;
 if (gJoinContained)
     {
-    clusterMakerAddExon(cm, cg, cg->effectiveStart, cg->effectiveEnd, &currentNode);
+    if (cg->effectiveStart < cg->effectiveEnd)
+        {
+        clusterMakerAddExon(cm, cg, cg->effectiveStart, cg->effectiveEnd, &currentNode);
+        added = TRUE;
+        }
     }
 else
     {
@@ -811,9 +818,27 @@ else
         {
         int exonStart, exonEnd;
         if (gpGetExon(cg, exonIx, FALSE, &exonStart, &exonEnd))
+            {
             clusterMakerAddExon(cm, cg, exonStart, exonEnd, &currentNode);
+            added = TRUE;
+            }
         }
     }
+return added;
+}
+
+void addOrphan(struct clusterMaker *cm, struct clusterGene* cg)
+/* create an orphan cluster and added it to the orphans */
+{
+struct cluster *cluster = clusterNew();
+cg->cluster = cluster;
+slSafeAddHead(&cluster->genes, cg);
+cluster->chrom = cg->gp->chrom;
+cluster->start = cg->gp->txStart;
+cluster->end = cg->gp->txEnd;
+cluster->txStart = cg->gp->txStart;
+cluster->txEnd = cg->gp->txEnd;
+slSafeAddHead(&cm->orphans, cluster);
 }
 
 void loadGenes(struct clusterMaker *cm, struct sqlConnection *conn,
@@ -834,7 +859,8 @@ while ((gp = slPopHead(&genes)) != NULL)
     if ((!gUseCds) || (gp->cdsStart < gp->cdsEnd))
         {
         struct clusterGene* cg = clusterGeneNew(track, gp);
-        clusterMakerAdd(cm, cg);
+        if (!clusterMakerAdd(cm, cg))
+            addOrphan(cm, cg);
         ++totalGeneCount;
         }
     else

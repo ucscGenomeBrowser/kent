@@ -30,6 +30,6 @@ printf "# destDir: %s\n" "${destDir}"
 
 ssh qateam@hgdownload.soe.ucsc.edu "mkdir -p ${destDir}" 2>&1 | grep -v "X11 forwarding request" || true
 printf "# successful mkdir\n"
-rsync --stats -a -L "${srcDir}/" "qateam@hgdownload.soe.ucsc.edu:${destDir}/" \
+rsync --delete --stats -a -L -P "${srcDir}/" "qateam@hgdownload.soe.ucsc.edu:${destDir}/" \
   2>&1 | grep -v "X11 forwarding request" || true
 printf "# successful rsync\n"

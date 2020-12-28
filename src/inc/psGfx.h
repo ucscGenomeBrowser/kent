@@ -125,6 +125,6 @@ void psLineTo(struct psGfx *ps, double x, double y);
 
 void psCircle(struct psGfx *ps, double x, double y, double rad, boolean filled);
 
-void psSetFont(struct psGfx *ps, char *fontName);
+void psSetFont(struct psGfx *ps, char *fontName, double fontSize );
 #endif /* PSGFX_H */
 

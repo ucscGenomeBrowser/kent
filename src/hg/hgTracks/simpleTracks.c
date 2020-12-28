@@ -238,15 +238,13 @@ int winStart;                   /* Start of window in sequence. */
 int winEnd;                     /* End of window in sequence. */
 char *position = NULL;          /* Name of position. */
 
-int trackTabWidth = 11;
-int leftLabelWidthDefaultChars = 20;   /* default number of characters allowed for left label */
-int leftLabelWidthChars = 20;   /* number of characters allowed for left label */
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;                 /* Start of area to draw left labels on. */
 int leftLabelWidth;             /* Width of area to draw left labels on. */
 float basesPerPixel = 0;       /* bases covered by a pixel; a measure of zoom */
 boolean zoomedToBaseLevel;      /* TRUE if zoomed so we can draw bases. */
+boolean zoomedToCodonNumberLevel; /* TRUE if zoomed so we can print codons and exon number text in genePreds*/
 boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in genePreds*/
 boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
 
@@ -289,18 +287,6 @@ void initTl()
 {
 trackLayoutInit(&tl, cart);
 
-// label width, but don't exceed 1/2 of image
-leftLabelWidthChars = cartUsualInt(cart, "hgt.labelWidth", leftLabelWidthDefaultChars);
-if (leftLabelWidthChars < 2)
-    leftLabelWidthChars = leftLabelWidthDefaultChars;
-tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth + 3;
-int maxLabelWidth = 0.5*tl.picWidth;
-if (tl.leftLabelWidth  > maxLabelWidth)
-    {
-    // overflow, force to 1/2 width
-    leftLabelWidthChars = maxLabelWidth/tl.nWidth;
-    tl.leftLabelWidth = leftLabelWidthChars * tl.nWidth;
-    }
 }
 
 static boolean isTooLightForTextOnWhite(struct hvGfx *hvg, Color color)
@@ -2694,12 +2680,20 @@ for (ref = exonList; TRUE; )
 		--numExonIntrons;  // introns are one fewer than exons
 		}
 
-	    if (!revStrand)
+            char strandChar;
+	    if (!revStrand) {
 		exonIntronNumber = exonIx;
-	    else
+                strandChar = '+';
+            }
+	    else {
 		exonIntronNumber = numExonIntrons-exonIx+1;
+                strandChar = '-';
+            }
 
-	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", exonIntronText, exonIntronNumber, numExonIntrons);
+            if (!isEmpty(lf->name))
+                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d", lf->name, strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
+            else
+                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d", strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
 
 	    if (w > 0) // draw exon or intron if width is greater than 0
 		{
@@ -4077,7 +4071,13 @@ if (tg->tdb)
     if (sameString(type, "interact") || sameString(type, "bigInteract"))
         return FALSE;
     }
-boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "on"), "on");
+
+char *defVal = "off";
+char *type = tg->tdb->type;
+if (startsWith("bigGenePred", type) || startsWith("genePred", type))
+    defVal = "on";
+
+boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", defVal), "on");
 return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
  && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
 }
@@ -12657,12 +12657,47 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 
+static char *omimGetInheritanceCode(char *inhMode)
+/* Translate inheritance mode strings into much shorter codes. */
+{
+static struct dyString *dy = NULL;  // re-use this string
+if (dy == NULL)
+    dy = dyStringNew(0);
+dyStringClear(dy);
+
+struct slName *modes = slNameListFromString(inhMode, ',');
+
+for(; modes; modes = modes->next)
+    {
+    stripChar(modes->name, '?');
+    char *mode = skipLeadingSpaces(modes->name);
+    if (sameString(mode, "Autosomal dominant"))
+        dyStringAppend(dy, "AD");
+    else if (sameString(mode, "Autosomal recessive"))
+        dyStringAppend(dy, "AR");
+    else if (sameString(mode, "X-linked"))
+        dyStringAppend(dy, "XL");
+    else if (sameString(mode, "X-linked dominant"))
+        dyStringAppend(dy, "XLD");
+    else if (sameString(mode, "X-linked recessive"))
+        dyStringAppend(dy, "XLR");
+    else if (sameString(mode, "Y-linked"))
+        dyStringAppend(dy, "YL");
+    else if (!isEmpty(mode))
+        dyStringAppend(dy, mode);
+
+    if (modes->next)
+        dyStringAppend(dy, "/");
+    }
+return dy->string;
+}
+
 static char *omimGene2DisorderList(char *name)
 /* Return list of disorders associated with a OMIM entry.  Do not free result! */
 {
 static struct dyString *dy = NULL;
 struct sqlConnection *conn;
-char query[256];
+char query[4096];
 
 if (dy == NULL)
     dy = dyStringNew(0);
@@ -12672,19 +12707,63 @@ dyStringClear(dy);
 conn = hAllocConn(database);
 sqlSafef(query,sizeof(query),
         "select geneSymbol from omimGeneMap2 where omimId =%s", name);
-char buf[256];
+char buf[4096];
 char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (isNotEmpty(ret))
-    dyStringAppend(dy, ret);
-
-sqlSafef(query,sizeof(query),
-        "select distinct description from omimPhenotype, omimGene2 where name='%s' and name=cast(omimId as char) order by description", name);
-char *disorders = collapseRowsFromQuery(query, "; ", 20);
-if (isNotEmpty(disorders))
     {
-    dyStringAppend(dy, "; disorder(s): ");
-    dyStringAppend(dy, disorders);
+    struct slName *genes = slNameListFromString(ret, ',');
+    dyStringPrintf(dy, "Gene: %s", genes->name);
+    genes = genes->next;
+    if (genes)
+        {
+        if (slCount(genes) > 1)
+            dyStringPrintf(dy, ", Synonyms: ");
+        else
+            dyStringPrintf(dy, ", Synonym: ");
+        for(; genes; genes = genes->next)
+            {
+            dyStringPrintf(dy, "%s", genes->name);
+            if (genes->next)
+                dyStringPrintf(dy, ",");
+        }
     }
+
+    // now phenotype information
+    sqlSafef(query,sizeof(query),
+            "select GROUP_CONCAT(omimPhenotype.description, '|',inhMode  , '|',omimPhenoMapKey SEPARATOR '$') from omimGene2, omimGeneMap, omimPhenotype where omimGene2.name=omimGeneMap.omimId and omimGene2.name=omimPhenotype.omimId and omimGene2.name =%s", name);
+    ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
+
+    if (ret)
+        {
+        struct slName *phenotypes = slNameListFromString(ret, '$');
+        if (slCount(phenotypes))
+            {
+            if (slCount(phenotypes) > 1)
+                dyStringPrintf(dy, ", Phenotypes: ");
+            else
+                dyStringPrintf(dy, ", Phenotype: ");
+
+            for(; phenotypes; phenotypes = phenotypes->next)
+                {
+                struct slName *components = slNameListFromString(phenotypes->name, '|');
+                dyStringPrintf(dy, "%s", components->name);
+                components = components->next;
+
+                char *inhCode = omimGetInheritanceCode(components->name);
+                if (!isEmpty(inhCode))
+                    dyStringPrintf(dy, ", %s", inhCode);
+                components = components->next;
+
+                if (!isEmpty(components->name))
+                    dyStringPrintf(dy, ", %s", components->name);
+
+                if (phenotypes->next)
+                    dyStringPrintf(dy, "; ");
+                }
+            }
+        }
+    }
+
 hFreeConn(&conn);
 return(dy->string);
 }

@@ -43,9 +43,14 @@ var subCfg = { // subtrack config module.
 
         // checkboxes have hidden boolshads which should be marked when unchecked
         if (obj.type === "checkbox") {
-            var boolshad = normed($("input.cbShadow[name='boolshad\\." + obj.name+"']"));
+            var boolshad = normed($("input.cbShadow#boolshad\\."+obj.id));
             if (boolshad) {
                 $(boolshad).addClass('changed');
+	    } else {
+		boolshad = normed($("input.cbShadow[name='boolshad\\." + obj.name+"']"));
+		if (boolshad) {
+		    $(boolshad).addClass('changed');
+		}
             }
         }
     },
@@ -56,9 +61,14 @@ var subCfg = { // subtrack config module.
 
         // checkboxes have hidden boolshads which should be cleared in tandem
         if (obj.type === "checkbox") {
-            var boolshad = normed($("input.cbShadow[name='boolshad\\." + obj.name+"']"));
+            var boolshad = normed($("input.cbShadow#boolshad\\."+obj.id));
             if (boolshad) {
                 $(boolshad).removeClass('changed');
+	    } else {
+		boolshad = normed($("input.cbShadow[name='boolshad\\." + obj.name+"']"));
+		if (boolshad) {
+		    $(boolshad).removeClass('changed');
+		}
             }
         }
     },

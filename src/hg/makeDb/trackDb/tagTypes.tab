@@ -26,6 +26,7 @@ bamGrayMode bam
 bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
 barChartColors barChart bigBarChart
+barChartCategoryUrl barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 # below for backwards compatibility during QA. 
 barChartDataUrl barChart bigBarChart
@@ -117,6 +118,7 @@ dimensions *
 directUrl *
 dividers *
 dragAndDrop *
+drawMode hic
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
@@ -130,6 +132,7 @@ expStep bed expRatio
 expTable bed expRatio
 extTable *
 externalDb bigGenePred
+extraDetailsTable bigBed
 fieldCount customTracks
 filePos *
 fileSortOrder *
@@ -247,7 +250,7 @@ itemCount customTracks
 itemDetailsHtmlTable genePred psl bed bigPsl
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract bigGenePred
+itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract bigGenePred bigLolly
 lfPslTable bed
 linesAt chromGraph
 linkDataUrl  bigChain
@@ -305,10 +308,11 @@ noColorTag bam
 noInherit *
 nonBedFieldsLabel bigBed
 noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl interact bigInteract
-noParentConfig bed bigBed
+noParentConfig bed bigBed bigLolly
 notNCBI bed
 noGenomeReason *
-noStems bigBed bigLolly
+normalization hic
+lollyNoStems bigBed bigLolly
 ococci bed
 offset customTracks
 oldToNew genePred
@@ -342,11 +346,13 @@ pslTable bed bigPsl
 refSeqAnnoVersion genePred
 release *
 refUrl bam
+resolution hic
 ucscRetroInfo psl bigPsl
 ucscRetroParentTables *
 vcfChildSample vcfPhasedTrio
 vcfParentSamples vcfPhasedTrio
 vcfUseAltSampleNames vcfPhasedTrio
+saturationScore hic
 sGroup_Afrotheria wigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf
@@ -354,6 +360,9 @@ sGroup_Birds wigMaf
 sGroup_Brachycera wigMaf
 sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
+sGroup_Carnivore wigMaf
+sGroup_Cetartiodactyla wigMaf
+sGroup_Chiroptera wigMaf
 sGroup_CoV_2019 wigMaf
 sGroup_CoV wigMaf
 sGroup_SARS-CoV-2_sequences wigMaf
@@ -405,6 +414,7 @@ sGroup_Primates wigMaf
 sGroup_Reptiles wigMaf
 sGroup_Reston_1989-90 wigMaf
 sGroup_Rhabditina wigMaf
+sGroup_Rodents wigMaf
 sGroup_Sarcopterygii wigMaf
 sGroup_Spirurina wigMaf
 sGroup_Strongylida wigMaf
@@ -428,7 +438,7 @@ scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bi
 scoreFilterMax bed bedlogR peptideMapping bigBed bigPsl
 scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed bigPsl
 scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed bigPsl
-scoreLabel bed bigBed bigPsl bigGenePred
+scoreLabel bed bigBed bigPsl bigGenePred bigLolly
 searchIndex bigBed bigPsl bigGenePred bigBarChart
 searchTrix bigBed bigPsl bigGenePred
 selectSubject psl bigPsl
@@ -543,11 +553,11 @@ wigColorBy wig
 wigFile customTracks
 wiggle wigMaf
 windowingFunction *
-xrefTrack *
+xrefDataUrl *
 yalePseudoAssoc *
 yaleUrl *
 yalePseudoUrl *
 yLinOnOff wigMaf
 yLineMark *
 yLineOnOff *
-yNumLabels bigBed bigLolly
+yAxisNumLabels bigBed bigLolly

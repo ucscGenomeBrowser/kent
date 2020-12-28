@@ -194,6 +194,34 @@ for(;trackHub; trackHub = trackHub->next)
 return cladeList;
 }
 
+struct dbDb *trackHubGetPcrServers()
+/* Look through attached trackHubs to see which of them have "isPcr" line in them. */
+{
+struct dbDb *db, *dbList = NULL;
+
+if (globalAssemblyHubList != NULL)
+    {
+    struct trackHub *trackHub = globalAssemblyHubList;
+
+    for(;trackHub; trackHub = trackHub->next)
+	{
+	struct trackHubGenome *hubGenome = trackHub->genomeList;
+	for(; hubGenome; hubGenome = hubGenome->next)
+	    {
+            if (hashFindVal(hubGenome->settingsHash,"isPcr") != NULL)
+		{
+		db = makeDbDbFromAssemblyGenome(hubGenome);
+		slAddHead(&dbList, db);
+		}
+	    }
+	}
+    }
+
+slReverse(&dbList);
+slSort(&dbList, hDbDbCmpOrderKey);
+return dbList;
+}
+
 static struct dbDb *getDbDbs(char *clade, boolean blatEnabled)
 /* Get a list of struct dbDbs from track hubs.  Only get blat enabled ones if asked */
 {
@@ -1058,12 +1086,13 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome)
+struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles)
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
- * types.  Do a few other quick checks to catch errors early. */
+ * types.  Do a few other quick checks to catch errors early. If incFiles is not NULL,
+ * put the list of included files in there. */
 {
 struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
-struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL, incFiles);
 lineFileClose(&lf);
 
 char *tabMetaName = hashFindVal(genome->settingsHash, "metaTab");
@@ -1275,12 +1304,32 @@ struct trackDb *tdbList = NULL;
 if (trackHubDatabase(db))
     {
     struct trackHubGenome *genome = trackHubGetGenome(db);
-    tdbList = trackHubTracksForGenome(genome->trackHub, genome);
+    tdbList = trackHubTracksForGenome(genome->trackHub, genome, NULL);
     }
 else
     tdbList = hubCollectTracks(db, NULL);
 
 findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
+}
+
+boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort)
+/* Get the isPcr params from a trackHub genome. */
+{
+char *hostPort;
+
+hostPort = trackHubAssemblyField(database, "isPcr");
+
+if (hostPort == NULL)
+    return FALSE;
+   
+hostPort = cloneString(hostPort);
+
+*pHost = nextWord(&hostPort);
+if (hostPort == NULL)
+    return FALSE;
+*pPort = hostPort;
+
+return TRUE;
 }
 
 boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort)

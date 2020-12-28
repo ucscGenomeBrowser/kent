@@ -134,6 +134,21 @@ while (--halfLen >= 0)
     }
 }
 
+static int stringCmp(const void *va, const void *vb)
+/* Compare function to sort array of strings. */
+{
+char **a = (char **)va;
+char **b = (char **)vb;
+return strcmp(*a, *b);
+}
+
+void sortStrings(char **array, int count)
+/* Sort array using strcmp */
+{
+if (count > 1)
+    qsort(array, count, sizeof(array[0]), stringCmp); 
+}
+
 /* Swap buffers a and b. */
 void swapBytes(char *a, char *b, int length)
 {
@@ -450,6 +465,7 @@ a->val = x;
 return a;
 }
 
+
 static int doubleCmp(const void *va, const void *vb)
 /* Compare function to sort array of doubles. */
 {
@@ -468,7 +484,7 @@ void doubleSort(int count, double *array)
 /* Sort an array of doubles. */
 {
 if (count > 1)
-qsort(array, count, sizeof(array[0]), doubleCmp);
+    qsort(array, count, sizeof(array[0]), doubleCmp);
 }
 
 double doubleMedian(int count, double *array)
@@ -1391,6 +1407,21 @@ for (;;)
     if (c1 == 0)  /* Take care of end of string in both. */
 	return 0;
     }
+}
+
+int differentWordNullOk(char *s1, char *s2)
+/* Returns 0 if two strings (either of which may be NULL)
+ * are the same, ignoring case.  Otherwise returns the
+ * difference between the first non-matching characters. */
+{
+if (s1 == s2)
+    return FALSE;
+else if (s1 == NULL)
+    return -1;
+else if (s2 == NULL)
+    return 1;
+else
+    return differentWord(s1,s2);
 }
 
 int differentStringNullOk(char *a, char *b)

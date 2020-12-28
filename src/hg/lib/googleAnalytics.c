@@ -43,7 +43,7 @@ if (!scriptName)
     return;
 
 char* cgiName = basename(scriptName);
-if (sameWord(cgiName, "hgc") || sameWord(cgiName, "hgTracks"))
+if (sameWord(cgiName, "hgc") || sameWord(cgiName, "hgTracks") || sameWord(cgiName, "hgGene"))
 {
     // see https://support.google.com/analytics/answer/1136920?hl=en
     jsInlineF(

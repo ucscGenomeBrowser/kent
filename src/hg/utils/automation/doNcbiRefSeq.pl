@@ -350,10 +350,17 @@ echo "\$annotationRelease (\$versionDate)" > ncbiRefSeqVersion.txt
 
 # this produces the genePred in NCBI coordinates
 # 8/23/17: gff3ToGenePred quits over illegal attribute SO_type... make it legal (so_type):
-zcat \$ncbiGffGz \\
-  | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
-  | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
-      -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
+  zcat \$ncbiGffGz | grep -v -f ../../../download/\${asmId}.remove.dups.list \\
+    | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
+      | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
+        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+else
+  zcat \$ncbiGffGz \\
+    | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
+      | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
+        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+fi
 genePredCheck \$asmId.gp
 
 zcat \$ncbiGffGz | egrep 'tag=(RefSeq|MANE) Select' || true > before.cut9.txt
@@ -441,7 +448,12 @@ join -t\$'\\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRef
 
 # Make bigBed with attributes in extra columns for ncbiRefSeqOther:
 twoBitInfo $dbTwoBit stdout | sort -k2,2n > \$db.chrom.sizes
-genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
+if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
+  genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n \\
+    | grep -v -f ../../../download/\${asmId}.remove.dups.list > \$db.other.bed
+else
+  genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
+fi
 $ncbiRefSeqOtherAttrs \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
 bedToBigBed -type=bed12+13 -as=ncbiRefSeqOther.as -tab \\
   -extraIndex=name \\
@@ -719,15 +731,19 @@ if [ -s \$db.noRna.available.list ]; then
   fi
 fi
 
-if [ -s process/\$asmId.rna.cds.gz ]; then
-  zcat process/\$asmId.rna.cds.gz egrep '[0-9]+\\.\\.[0-9]\\+' \\
-    pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
+if [ -s process/\$asmId.rna.cds ]; then
+  cat process/\$asmId.rna.cds | grep '[0-9]\\+\\.\\.[0-9]\\+' \\
+    | pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
       process/\$asmId.\$db.psl.gz \$target2bit \\
         \$db.rna.fa ncbiRefSeqGenomicDiff || true
 
-  wget -O txAliDiff.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/txAliDiff.as'
-  bedToBigBed -type=bed9+ -tab -as=txAliDiff.as \\
-    ncbiRefSeqGenomicDiff.bed \$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
+  if [ -s ncbiRefSeqGenomicDiff.bed ]; then
+    wget -O txAliDiff.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/txAliDiff.as'
+    bedToBigBed -type=bed9+ -tab -as=txAliDiff.as \\
+      ncbiRefSeqGenomicDiff.bed \$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
+  else
+    rm -f ncbiRefSeqGenomicDiff.bed
+  fi
 fi
 
 export totalBases=`ave -col=2 \$db.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`
@@ -827,16 +843,20 @@ hgLoadSeq -drop -seqTbl=seqNcbiRefSeq -extFileTbl=extNcbiRefSeq \$db $gbdbDir/se
 
 hgLoadPsl \$db -table=ncbiRefSeqPsl process/\$asmId.\$db.psl.gz
 
-if [ -s process/\$asmId.rna.cds.gz ]; then
-  zcat process/\$asmId.rna.cds.gz egrep '[0-9]+\\.\\.[0-9]\\+' \\
-    pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
+if [ -s process/\$asmId.rna.cds ]; then
+  zcat process/\$asmId.rna.cds | grep '[0-9]\\+\\.\\.[0-9]\\+' \\
+    | pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
       process/\$asmId.\$db.psl.gz $dbTwoBit \\
         \$db.rna.fa ncbiRefSeqGenomicDiff || true
 
-  bedToBigBed -type=bed9+ -tab -as=~/kent/src/hg/lib/txAliDiff.as \\
-    ncbiRefSeqGenomicDiff.bed process/\$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
   rm -f $gbdbDir/ncbiRefSeqGenomicDiff.bb
-  ln -s `pwd`/ncbiRefSeqGenomicDiff.bb $gbdbDir/ncbiRefSeqGenomicDiff.bb
+  if [ -s ncbiRefSeqGenomicDiff.bed ]; then
+    bedToBigBed -type=bed9+ -tab -as=\${HOME}/kent/src/hg/lib/txAliDiff.as \\
+      ncbiRefSeqGenomicDiff.bed process/\$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
+    ln -s `pwd`/ncbiRefSeqGenomicDiff.bb $gbdbDir/ncbiRefSeqGenomicDiff.bb
+  else
+    rm -f ncbiRefSeqGenomicDiff.bed
+  fi
 fi
 
 if [ -d "/usr/local/apache/htdocs-hgdownload/goldenPath/archive" ]; then

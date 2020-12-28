@@ -11,7 +11,7 @@
 
 <ul>
 <li><a href="#link1">Creating a sharable URL to view specific tracks</a></li>
-<li><a href="#link2">Linking to the Browser at a specific position</a></li>
+<li><a href="#link2">Linking to the Browser at a specific position, or default position</a></li>
 <li><a href="#zoomVariant">Zooming in or out using a link to an HGVS identifier</a></li>
 <li><a href="#trackViz">Setting track visibility via URL</a></li>
 <li><a href="#custUrl">Loading Custom Tracks with the URL</a></li>
@@ -60,7 +60,7 @@ characters separating different parameters like so: </p>
 <p><code><a href=http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18</a></code></p>
 
 <a name="link2"></a>
-<h2>Linking to the Browser at a specific position</h2>
+<h2>Linking to the Browser at a specific position, or default position</h2>
 <h6>How do I make a link to a specific genome, position, or HGVS variant?</h6>
 <p>
 You can link to a specific genome assembly and position in the Genome Browser using a URL with
@@ -81,6 +81,16 @@ Where:</p>
 <p>The following link is an example of a URL that declares assembly and position:</p>
 <p><code><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:35000-40000">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr1:35000-40000</a></code></p>
 
+<h6>How do I make a link to the default position of a genome?</h6>
+<p>
+You can link directly to the default position of an assembly by passing the 
+<code>position=default</code> parameter. This can be helpful in cases where
+a track exists on multiple assemblies, and you want to build links to each of them. If no
+position variable is passed, the Genome Browser assumes the default position for the 
+default assembly (hg38).</p>
+<p>
+Here is an example which opens the uniprot track at the default position for sacCer3:</p>
+<p><code><a href="/cgi-bin/hgTrackUi?db=sacCer3&g=uniprot&position=default">http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=sacCer3&g=uniprot&position=default</a></code></p>
 
 <a name="zoomVariant"></a>
 <h2>Zooming in or out with a link &mdash; HGVS </h2>

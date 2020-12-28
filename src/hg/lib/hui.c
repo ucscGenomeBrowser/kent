@@ -4201,24 +4201,6 @@ filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "Non
 		  "align=\"CENTER\"><hr noshade color=\"%s\" width=\"100%%\"></TD></TR>\n"
 #define DIVIDER_PRINT(color) printf(DIVIDING_LINE,COLOR_BG_DEFAULT,(color))
 
-static char *checkBoxIdMakeForTrack(struct trackDb *tdb,members_t** dims,int dimMax,
-				membership_t *membership)
-// Creates an 'id' string for subtrack checkbox in style that matrix understand:
-//     "cb_dimX_dimY_view_cb"
-{
-int len = strlen(tdb->track) + 10;
-char *id = needMem(len);
-safef(id,len,"%s_sel",tdb->track);
-return id;
-}
-
-static void checkBoxIdFree(char**id)
-// Frees 'id' string 
-{
-if (id && *id)
-    freez(id);
-}
-
 static boolean divisionIfNeeded(char **lastDivide,dividers_t *dividers,membership_t *membership)
 // Keeps track of location within subtracks in order to provide requested division lines
 {
@@ -4868,6 +4850,7 @@ boolean useDragAndDrop = settings->useDragAndDrop;
 boolean restrictions = settings->restrictions;
 struct dyString *dyHtml = newDyString(SMALLBUF);
 char buffer[SMALLBUF];
+char id[SMALLBUF];
 char *db = cartString(cart, "db");
 
 // The subtracks need to be sorted by priority but only sortable and dragable will have
@@ -4951,9 +4934,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	dividersFree(&dividers);
 	}
 
-    // Start the TR which must have an id that is directly related to the checkBox id
-    char *id = checkBoxIdMakeForTrack(subtrack,membersForAll->members,membersForAll->dimMax,
-				      membership); // view is known tag
+    safef(id, sizeof(id), "%s_sel", subtrack->track);
     printf("<TR valign='top' class='%s%s'",
 		colors[colorIx],(useDragAndDrop?" trDraggable":""));
     printf(" id=tr_%s%s>\n",id,(!visibleCB && !settings->displayAll?" style='display:none'":""));
@@ -5173,7 +5154,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     // End of row and free ourselves of this subtrack
     puts("</TD></TR>\n");
-    checkBoxIdFree(&id);
 
     boolean showCfg = trackDbSettingOn(subtrack, "showCfg");
     if (showCfg)
@@ -8301,6 +8281,44 @@ puts("<BR>\n");
 
 return TRUE;
 }
+void fastMatixToSubtrackMap()
+// prints out the "common" globals json hash
+// This hash is the one utils.js and therefore all CGIs know about
+{
+struct dyString *dy = dyStringNew(1024);
+dyStringPrintf(dy,
+"var mtxSubMap = {};\n"
+"$( document ).ready(function()\n"
+"{\n"
+"matCB = $('input.matCB:first');\n"
+"if (!matCB)\n"
+"    return;\n"
+"var matClassList = $( matCB ).attr('class').split(' ');\n"
+"matClassList = aryRemove(matClassList,['matCB','changed','disabled','abc']);\n"
+"if (matClassList.length === 0 )\n"
+"    return;\n"
+"subCBs = $('input.subCB');\n"
+"$( subCBs ).each( function (i) { \n"
+"  // class='subCB BS-Seq Mantle_Cell_Lymphoma venous_blood A007MCL CNAG CPG_methylation_cov signal' \n"
+"  var classList = $( this ).attr('class').split(' ');\n"
+"  if (matClassList.length === 1) {\n"
+"      var classes = '.' + classList[1]; // dimX or dimY \n"
+"  } else {\n"
+"      var classes = '.' + classList[1] + '.' + classList[2]; // dimX and dimY \n"
+"  }\n"
+"  if (mtxSubMap[classes] === undefined) {\n"
+"    mtxSubMap[classes] = [this];\n"
+"  } else {\n"
+"    mtxSubMap[classes].push(this);\n"
+"  }\n"
+"});\n"
+"});\n"
+);
+
+jsInline(dy->string);
+dyStringFree(&dy);
+}
+
 
 static boolean compositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb,
                                    char *formName)
@@ -8524,6 +8542,8 @@ if (treeImage != NULL)
 
 // If any filter additional filter composites, they can be added at the end.
 compositeUiByFilter(db, cart, parentTdb, formName);
+
+fastMatixToSubtrackMap();  
 
 return TRUE;
 }
@@ -9232,7 +9252,7 @@ if (tableName)
     {
     char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
     if (date != NULL)
-	printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", date);
+	printf("<B>Data last updated at UCSC:&nbsp;</B>%s<BR>\n", date);
     }
 hFreeConn(&conn);
 }
@@ -9240,7 +9260,7 @@ hFreeConn(&conn);
 void printBbiUpdateTime(time_t *timep)
 /* for bbi files, print out the timep value */
 {
-    printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", sqlUnixTimeToDate(timep, FALSE));
+    printf("<B>Data last updated at UCSC:&nbsp;</B>%s<BR>\n", sqlUnixTimeToDate(timep, FALSE));
 }
 
 static boolean tableDescriptionsExists(struct sqlConnection *conn)
@@ -9393,15 +9413,32 @@ for (i=0; i<fieldCount; ++i)
     if (out[i]==NULL)
         continue;
 
-    // prefix field with $
+    // If a field is a prefix or suffix to another field, for example 'chrom' and 'chromStart'
+    // we don't want to erroneously sub out the 'chrom' in 'chromStart'. Allow the wrapping
+    // protected fields in ${} to prevent the substitution:
     char *field = in[i];
-    char *spec = needMem(strlen(field) + 2);
+    int fieldLen = strlen(field);
+    char *spec = needMem(fieldLen + 2);
+    char *strictSpec = needMem(fieldLen + 4);
     *spec = '$';
+    *strictSpec = '$';
+    strictSpec[1] = '{';
     strcpy(spec + 1, field);
+    strcpy(strictSpec + 2, field);
+    strictSpec[fieldLen + 2] = '}';
+    strictSpec[fieldLen + 3] = '\0';
 
+    if (stringIn(strictSpec, s->string))
+        {
+        d = dyStringSub(s->string, strictSpec, out[i]);
+        s = d;
+        }
+    // the user may have both a ${} enclosed instance and a non-enclosed one!
     d = dyStringSub(s->string, spec, out[i]);
+
     dyStringFree(&s);
     freeMem(spec);
+    freeMem(strictSpec);
     s = d;
     d = NULL;
     }
@@ -9444,8 +9481,8 @@ char *replaceInUrl(char *url, char *idInUrl, struct cart *cart, char *db, char *
 {
 struct dyString *uUrl = NULL;
 struct dyString *eUrl = NULL;
-char startString[64], endString[64];
-char *ins[13], *outs[13];
+char startString[64], endString[64],oneBasedStart[64];
+char *ins[14], *outs[14];
 char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
 
 char *scName = NULL;
@@ -9508,17 +9545,22 @@ if (stringIn(":", idInUrl)) {
 // URL may now contain item boundaries
 ins[9] = "${";
 ins[10] = "$}";
+ins[13] = "$#";
 if (cart!=NULL && cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
     {
     char *itemBeg = cartString(cart, "o"); // unexpected commas?
     char *itemEnd = cartString(cart, "t");
     outs[9] = itemBeg;
     outs[10] = itemEnd;
+    safef(oneBasedStart, sizeof(oneBasedStart), "%d", cartInt(cart, "o") + 1);
+    outs[13] = oneBasedStart;
     }
 else // should never be but I am unwilling to bet the farm
     {
     outs[9] = startString;
     outs[10] = endString;
+    safef(oneBasedStart, sizeof(oneBasedStart), "%d", winStart + 1);
+    outs[13] = oneBasedStart;
     }
 
 ins[11] = "$n";
@@ -9601,7 +9643,7 @@ if (version == NULL)
     }
 
 if (isNotEmpty(version))
-    printf("<B>Data version:</B> %s <BR>\n", version);
+    printf("<B>Source data version:</B> %s <BR>\n", version);
 }
 
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart)

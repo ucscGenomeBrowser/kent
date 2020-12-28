@@ -378,13 +378,13 @@
     The maximum size of a lollipop in the file, used to establish margins.
 </DIV>
 
-<DIV class="yLabel"><span class="types bigLolly"></span>
-<div class="format"><code>yLabel.&lt;integer&gt; &lt;integer&gt;</code></div>
+<DIV class="yAxisLabel"><span class="types bigLolly"></span>
+<div class="format"><code>yAxisLabel.&lt;integer&gt; &lt;integer&gt; &lt;on/off&gt; &lt;R,G,B&gt; &lt;string&gt; </code></div>
     Add a label on the y axis at the given position. Draw a line of color if requested.
 </DIV>
 
-<DIV class="yNumLabels"><span class="types bigLolly"></span>
-<div class="format"><code>yNumLabels.&lt;on/off&gt; &lt;integer&gt;</code></div>
+<DIV class="yAxisNumLabels"><span class="types bigLolly"></span>
+<div class="format"><code>yAxisNumLabels.&lt;on/off&gt; &lt;integer&gt;</code></div>
     Turn the y axis number labels on or off
 </DIV>
 
@@ -925,7 +925,7 @@
 
 <DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
-        <code>sepFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
+        <code>sepFields fieldName1,fieldName2 ...</code><BR>
     </div>
         
     <P>This setting changes the item details page and splits the table used for showing extra fields
@@ -1288,16 +1288,15 @@ There are no extra options that can appear on the type hic line.
     <pre>   exonArrows off</pre>
 </DIV>
 
-<DIV class="exonNumbers"><span class="types genePred bed psl"></span>
+<DIV class="exonNumbers"><span class="types genePred bed psl bigBed bigGenePred"></span>
 <div class="format"><code>exonNumbers &lt;on/off&gt;</code></div>
-    <P>On tracks that show
-    exons or blocks within features, mouseover/hover shows exon and intron numbers. 
-    Exon and intron numbers are typically shown by default
-    in these types of tracks. 
-    The mouseover exon and intron numbers can be explicitly shown or hidden using this setting.
-    </P>
+    <P>A mouseover that shows the exon and intron numbers 
+    can be explicitly shown or hidden using this setting.
+    The default is "on" for the track types genePred and bigGenePred and "off"
+    for the track types genePred and bigGenePred.</P>
     <P><B>Example:</B></P>
     <pre>   exonNumbers off</pre>
+    <P>The text can be set with the options "exonText" and "intronText". It defaults to "exon" and "intron", respectively.</P>
 </DIV>
 
 <DIV class="Filter"><span class="types bed narrowPeak broadPeak"></span>
@@ -2428,25 +2427,36 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
-<DIV class="autoScale"><span class="types wig bigWig bedGraph"></span>
+<DIV class="autoScale"><span class="types wig bigWig bedGraph hic"></span>
 <div class="format"><code>autoScale &lt;off/on/group&gt;</code></div>
-    <P>The graph of the
-    data displayed in the Browser image is usually scaled on the y-axis 
-    in absolute coordinates.  However, you can display the data
-    in two types of autoScale which will ensure either that the high score in the current
-    viewing window will peak at the top of the graph, or that all tracks in a 
-    composite will be scaled according to the highest point in the viewing 
-    window of any visible tracks in the same composite.  Like most graph settings, 
-    this is configurable by the user.  Setting it to "<code>on</code>" in trackDb will default 
-    the track to <code>auto-scale to data view</code>.
-    Setting it to "<code>group</code>" in trackDb will default 
-    the track to <code>group auto-scale</code>. The default is 
-    "<code>off</code>" which will set the track to <code>use vertical viewing 
-    range setting</code>.</P>
+    <P>This setting is available for both the graph types of tracks (wig,
+    bigWig, bedGraph) and the Hi-C heatmap tracks (hic).  It behaves slightly
+    differently for each.</p>
+    <p>For graph tracks, the graph of the data displayed in the Browser image
+    is usually scaled on the y-axis in absolute coordinates.  However, you can
+    display the data in two types of autoScale which will ensure either that
+    the high score in the current viewing window will peak at the top of the
+    graph, or that all tracks in a composite will be scaled according to the
+    highest point in the viewing window of any visible tracks in the same
+    composite.  Like most graph settings, this is configurable by the user.
+    Setting it to "<code>on</code>" in trackDb will default the track to
+    <code>auto-scale to data view</code>.  Setting it to "<code>group</code>"
+    in trackDb will default the track to <code>group auto-scale</code>. The
+    default is "<code>off</code>" which will set the track to
+    <code>use vertical viewing range setting</code>.</P>
     <P>NOTE: These options can be misleading if a noisy, low signal
     erroneously appears as significant because there is no high signal in the
     view window. The "<code>group</code>" option only applies to composite 
     bigWig tracks.</P>
+    <p>For Hi-C tracks, higher interaction scores are represented with more
+    intense colors.  When this setting is set to "<code>off</code>", the score
+    at which the color reaches maximum intensity is a fixed value that can
+    be chosen with the <code>saturationScore</code> trackDb setting.  When this
+    setting is set to "<code>on</code>", the maximum intensity score
+    changes dynamically depending on the values in the current viewing window.
+    The default value for this setting is "<code>on</code>".  The
+    "<code>group</code>" option for autoScale is not available for Hi-C
+    tracks.</p>
     <P><B>Example:</B></P>
     <pre>   autoScale on</pre>
 </DIV>
@@ -4855,15 +4865,68 @@ by the <a href="https://www.aidenlab.org" target="_blank">Aiden Lab</a> at <a ta
 href="https://www.bcm.edu">Baylor College of Medicine</a>.  This is an indexed
 binary format that supports remote access, so the file can be hosted on any web accessible
 server and displayed at UCSC.
-For more information on the .hic file format, see the documentation on <a target="_blank"
+For more information on the .hic file format and the Juicer tool that generates these files,
+see the documentation on <a target="_blank"
 href="https://github.com/aidenlab/juicer/wiki/Data">github</a>.</p>
 </DIV>
+
+<div class="drawMode"><span class="types hic"></span>
+<div class="format"><code>drawMode &lt;triangle|square|arc&gt;</code></div>
+    <p>This setting controls the default display mode for the hic track. In arc
+mode, an interaction between two regions is drawn as an arc between the centers
+of those two regions.  In square mode, interactions are represented by a square
+in a heatmap.  The interacting regions for any square can be identified by
+projecting the sides of the square onto the diagonal axis of the heatmap and
+seeing where those points fall in the chromosome window being viewed.  In
+triangle mode, interactions are drawn as diamonds.  The interaction regions for
+any diamond can be identified by projecting the sides of the diamond onto the
+horizontal axis of the heatmap and seeing where those points fall in the
+chromosome window.
+    </p>
+</div>
+
+<div class="normalization"><span class="types hic"></span>
+<div class="format"><code>normalization &lt;NONE|VC|VC_SQRT|KR&gt;</code></div>
+    <p>This setting controls which method is the default for normalizing the raw
+scores from the .hic file.  Scores for all of these methods are computed during
+the creation of the .hic file.  For more information on these methods, see the
+Juicer documentation linked above.
+    </p>
+</div>
+
+<div class="resolution"><span class="types hic"></span>
+<div class="format"><code>resolution &lt;Auto|integer&gt;</code></div>
+    <p>This setting controls the default size of the bins that the Hi-C contact
+results are grouped into.  The list of available resolutions depends on the
+file, but common values include numbers like 5000 and 10000.  In addition to an
+integer value, the string <code>Auto</code> can also be provided (Auto is also
+the default if this setting is not specified).  In Auto mode, the browser will
+dynamically choose a resolution that seems to provide a good amount of detail
+depending on the size of the chromosome window currently being viewed.
+    </p>
+</div>
+
+<div class="saturationScore"><span class="types hic"></span>
+<div class="format"><code>saturationScore &lt;float&gt;</code></div>
+    <p>The saturationScore setting is part of how the color shades of the
+heatmap are displayed.  Colors in the heatmap correlate with the score of each
+interaction - a higher interaction score corresponds to a higher color
+intensity.  At some point, however, maximum color saturation is reached and higher
+interaction scores don't change the color any further.  This setting determines
+what the default score is for the point at which that maximum color saturation is
+reached.
+    </p>
+</div>
 
 <DIV class="hic_example"><span class="types hic"></span>
 <div class="format"><B>Example of a hic track</B></div>
     <pre>
     track myHiCData
     type hic
+    drawMode arc
+    color 0,0,255
+    saturationScore 12
+    normalization KR
     bigDataUrl http://...
     </pre>
 </div>
@@ -4941,8 +5004,8 @@ For the complete bigBarChart format definitions please see the
 <DIV class="barChartColors"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartColors &lt;color1 color2...&gt;</code></div>
     <P>This setting is a list of colors, one for each category (bar).
-        Colors are specified as RGB values (#FFFFFF) or by name (the 16 HTML color names defined
-        in HTML 4.01).  
+        Colors are specified as RGB values (255,255,255 or #FFFFFF) or by name 
+        (the 16 HTML color names defined in HTML 4.01).  
         The named HTML colors are: <div class='dot' style='background: #000000'></div>black,
             <div class='dot'style='background: silver'></div>silver,
             <div class='dot'style='background: gray'></div>gray,
@@ -4974,6 +5037,14 @@ Used together with barChartSampleUrl to generate a box plot on the details page.
 barChartMatrixUrl file.  Used for generating a box plot on the details page.
     </P>
 </DIV>
+<DIV class="barChartCategoryUrl"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartCategoryUrl &lt;url&gt;</code></div>
+    <P>Specifies a tab-separated file that provides labels and optionally colors for the 
+categories (bars).
+This setting can replace the <code>barChartBars</code> and <code>barChartColors</code> settings,
+and is particularly useful for tracks with large numbers of categories.
+    </P>
+</DIV>
 
 <DIV class="bigBarChart_example"><span class="types bigBarChart"></span>
 <div class="format"><B>Example of a bigBarChart track</B></div>
@@ -4985,7 +5056,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     barChartLabel Brain Regions
     barChartMetric median
     barChartBars Amygdala Cerebellum Cortex Hippocampus
-    barChartColors #ff0000 green maroon navy
+    barChartColors #ff0000 0,255,0 maroon navy
     shortLabel Brain RNA
     longLabel Brain Gene Expression
     spectrum on

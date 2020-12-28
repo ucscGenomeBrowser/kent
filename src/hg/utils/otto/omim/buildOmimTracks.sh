@@ -92,29 +92,26 @@ hgLoadSqlTab -verbose=0 -warn $db omimAvNew $SQLDIR/omimAv.sql omimAv.tab
 # but this works.
 hgsql $db -e 'update omimAvNew set repl2 = rtrim(ltrim(repl2))'
 
+tawk '{print $1, $8}' omimAv.tab | perl -ne 'chomp; m/^(\S+)/; $avId = $1; while (m/(rs\d+)(,|$)/g) {print "$avId\t$1\n"}' > omimAvLinkTmp.tab
 if [ "$db" == "hg18" ]
 then
-#  hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp130 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
   snpTbl="snp130";
+  hgsql $db -Ne 'drop table if exists omimAvLinkTmp'
+  hgsql $db -Ne 'create table omimAvLinkTmp (avId text not null, dbSnpId text not null, index(dbSnpId(10)))'
+  hgsql $db -Ne 'load data local infile "omimAvLinkTmp.tab" into table omimAvLinkTmp'
+  hgsql $db -N -e "select chrom, chromStart, chromEnd, avId from omimAvLinkTmp l, $snpTbl s where s.name = l.dbSnpId" | bedSort stdin omimAvSnp.tab
+  hgsql $db -Ne 'drop table omimAvLinkTmp'
 elif [ "$db" == "hg19" ]
 then
-#  hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp151 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
-  snpTbl="snp151";
+  sort -k2 omimAvLinkTmp.tab | join -t$'\t' -1 4 -2 2 ../../../hg19.dbSnp153.bed4 - | cut -f2- > omimAvSnp.tab
 elif [ "$db" == "hg38" ]
 then
-#  hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp151 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
-  snpTbl="snp151";
+  sort -k2 omimAvLinkTmp.tab | join -t$'\t' -1 4 -2 2 ../../../hg38.dbSnp153.bed4 - | cut -f2- > omimAvSnp.tab
 else
   echo "Error in buildOmimTracks.csh: unable to construct omimAvSnp for $db.  Do not know which SNP table to use."
   exit 255;
 fi
 
-tawk '{print $1, $8}' omimAv.tab | perl -ne 'chomp; m/^(\S+)/; $avId = $1; while (m/(rs\d+)(,|$)/g) {print "$avId\t$1\n"}' > omimAvLinkTmp.tab
-hgsql $db -Ne 'drop table if exists omimAvLinkTmp'
-hgsql $db -Ne 'create table omimAvLinkTmp (avId text not null, dbSnpId text not null, index(dbSnpId(10)))'
-hgsql $db -Ne 'load data local infile "omimAvLinkTmp.tab" into table omimAvLinkTmp'
-hgsql $db -N -e "select chrom, chromStart, chromEnd, avId from omimAvLinkTmp l, $snpTbl s where s.name = l.dbSnpId" | bedSort stdin omimAvSnp.tab
-hgsql $db -Ne 'drop table omimAvLinkTmp'
 
 hgLoadBed -verbose=0 -allowStartEqualEnd  $db omimAvSnpNew omimAvSnp.tab
 cd ..

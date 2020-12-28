@@ -83,7 +83,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o ncbiRefLink.o \
     ncbiRefSeqLink.o netAlign.o netCart.o nonCodingUi.o omimTitle.o ooUtils.o \
     orthoAlleles.o pal.o pbStamp.o pcrResult.o pepPred.o \
-    peptideAtlasPeptide.o plasEndPairs.o polyGenotype.o protFeat.o pscreen.o \
+    peptideAtlasPeptide.o plasEndPairs.o polyGenotype.o protFeat.o protobuf.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rangeTreeFile.o rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \

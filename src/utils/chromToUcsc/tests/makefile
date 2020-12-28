@@ -15,6 +15,7 @@ all:
 	diff out/mm10.bed expected/mm10.bed
 	python3 ${DESTBINDIR}/chromToUcsc  -i in/hg19.bed -o out/hg19.bed -a https://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromAlias.txt.gz 2> /dev/null
 	diff out/hg19.bed expected/hg19.bed
+	python2 ${DESTBINDIR}/chromToUcsc -i in/hg19.vcf -o out/hg19.vcf -a hg19.chromAlias.tsv 2> /dev/null
 
 clean:
 	rm -f out/*

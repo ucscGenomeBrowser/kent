@@ -1159,9 +1159,7 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 
     bool altColor = FALSE;
     unsigned cds5Prime = posStrand ? cdsStart : cdsEnd;
-    int width = winEnd - winStart;
-    // width cutoff really should be based on (a) how many codons this gene has, (2) the current font and (3) image width.
-    int codonIndex = !codonNumbering || width > 60 ? 0 : 1;
+    int codonIndex = !codonNumbering || !zoomedToCodonNumberLevel ? 0 : 1;
     for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
 	{
         int exonStart = starts[i];
@@ -1579,7 +1577,7 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
 {
 char codon[64] = " ";
 Color color = colorAndCodonFromGrayIx(hvg, codon, grayIx, originalColor);
-if (sf->codonIndex)
+if (sf->codonIndex && ( e - s >= 3))  // don't put exon numbers on split codons because there isn't space.
     safef(codon, sizeof(codon), "%c %d", codon[0], sf->codonIndex);
 /* When we are zoomed out far enough so that multiple bases/codons share the 
  * same pixel, we have to draw differences in a separate pass (baseColorOverdrawDiff)

@@ -1,4 +1,4 @@
-####
+ ####
 # build GENCODE tracks requires CCDS and markd python junk.
 # targets:
 #   all - do everything
@@ -35,11 +35,11 @@ mach = $(shell uname -m)
 # - ensemblPrevVersion is use to get chrom name mappings for pre-release,
 #   as this doesn't change between release.
 ##
+preRelease = no
+#preRelease = yes
 #db = hg38
 db = hg19
 #db = mm10
-#preRelease = no
-preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
     ver = M25
@@ -52,17 +52,17 @@ ifeq (${db},mm10)
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 35
-    prevVer = 34
+    ver = 36
+    prevVer = 35
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 101_38
-    ensemblPrevVer = 100_38
+    ensemblVer = 102_38
+    ensemblPrevVer = 101_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 35
+    verBase = 36
     ver = ${verBase}lift37
     backmapTargetVer = 19
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping

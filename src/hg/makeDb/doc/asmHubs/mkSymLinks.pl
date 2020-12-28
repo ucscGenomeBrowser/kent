@@ -68,6 +68,7 @@ foreach my $asmId (@orderList) {
   my $trackDb = "$buildDir/$asmId.trackDb.txt";
   if ( ! -s "${trackDb}" ) {
     printf STDERR "# %03d not built yet: %s\n", $orderIndex, $asmId;
+    printf STDERR "# missing tdb: '%s'\n", $trackDb;
     next;
   }
   ++$buildDone;

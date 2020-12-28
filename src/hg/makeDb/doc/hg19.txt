@@ -32150,9 +32150,10 @@ csh $bin/getxEqtlLoadTissues.csh UCSC_output >&! loadTissuesV2.log &
 ###########################################################################
 # HGMD (updated 12/10/19 max)
 # HGMD (updated 01/25/18 max)
-# got hgmd 2017 from Frank Schacherer Frank.Schacherer@qiagen.com and Rupert Yip Rupert.Yip@qiagen.com
+# HGMD (updated 12/12/20 max)
+# got hgmd from Frank Schacherer Frank.Schacherer@qiagen.com and Rupert Yip Rupert.Yip@qiagen.com
 # see also the file hg38/hgmd.txt
-year=2019
+year=2020
 cd /hive/data/genomes/hg19/bed/hgmd
 cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg19.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-1; end=$4+1; col="100,100,100"} else if ($5=="D") {start=$4-1; end=$4; col="170,170,170"} else {start=$4-1; end=$4; col="0,0,0"}; print "chr"$3,start,end,$2":"$1,0,".",start,end,col,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
 bedToBigBed hgmd.bed /hive/data/genomes/hg19/chrom.sizes hgmd.bb -type=bed9+ -as=hgmd.as -tab
@@ -32160,9 +32161,24 @@ ln -s /hive/data/genomes/hg19/bed/hgmd/hgmd.bb /gbdb/hg19/bbi/hgmd.bb
 hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
 # Forgot, finally done Oct 24: also updated hgBeacon
 bigBedToBed /gbdb/hg19/bbi/hgmd.bb /tmp/temp.bed
-/usr/local/apache/cgi-bin/hgBeacon -f hgmd temp.bed hgmd
+python2 /usr/local/apache/cgi-bin/hgBeacon -f hgmd /tmp/temp.bed hgmd
 # Forgot, finally done June 26: updated GBIB as qateam
 scp /gbdb/hg19/bbi/hgmd.bb hgdownload:/usr/local/apache/gbib/prot/
+# next restrict RefSeq down to HGMD subset 
+
+# addition of HGMD-restricted subset, Max, Jan 29 2019, updated Dec 10 2019
+cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-10-27/
+year=2019
+# change in 2019: ignore the version numbers, otherwise only 1815 transcripts left, big update by HGMD in 2019
+# adding "." so NM_123 doesn't match NM_123123
+cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | cut -d. -f1 | sort -u | awk '{print $1"."}' > hgmdTranscripts.txt
+cat process/hg19.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
+hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
+$ wc -l hgmd.curated.gp 
+7965 hgmd.curated.gp in 2019
+8971 hgmd.curated.gp in 2020
+
+# now continue the process at ../hg38/hgmd.txt
 
 #############################################################################
 # LASTZ human/hg19 vs. pig/susScr11 - (DONE - 2018-04-02 - Hiram)
@@ -32788,18 +32804,6 @@ TMPDIR=/dev/shm
     cat fb.ponAbe3.chainRBest.Hg19.txt
     # 2641865423 bases of 3043444524 (86.805%) in intersection
 
-##############################################################################
-# addition of HGMD-restricted subset, Max, Jan 29 2019, updated Dec 10 2019
-cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2019-11-21/
-year=2019
-#cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | sort -u > hgmdTranscripts.txt
-# change in 2019: ignore the version numbers, otherwise only 1815 transcripts left, big update by HGMD in 2019
-# adding "." so NM_123 doesn't match NM_123123
-cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | cut -d. -f1 | sort -u | awk '{print $1"."}' > hgmdTranscripts.txt
-cat process/hg19.curated.gp | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
-hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
-$ wc -l hgmd.curated.gp 
-7965 hgmd.curated.gp
 #############################################################################
 # genomenom mastermind track, Max, Feb 2019
 cd /hive/data/genomes/hg19/bed/mastermind/
@@ -33709,19 +33713,29 @@ hgLoadBed hg19 -noBin -tab -type=bed6+4 \
     ln -sf `pwd`/$pre.bb /gbdb/hg19/ncbiRefSeq/$pre.bb
 
 #############################################################################
-# clinvarSubLolly track  IN PROGRESS BRANEY 10/11/2020
+# clinvarSubLolly track  DONE BRANEY 12/14/2020
 mkdir /cluster/data/hg19/bed/clinvarSubLolly
 cd /cluster/data/hg19/bed/clinvarSubLolly
-bigBedToBed /gbdb/hg19/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$3,$4}' | sort  -S 40g > sort.main.bed
+bigBedToBed /gbdb/hg19/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$2+1,$4}' | sort  -S 40g > sort.main.bed
 hgsql hg19 -Ne "select varId,clinSign,scv from clinvarSub" | sort  -S 40g  > clinvarSubSub.txt
 
 join -t $'\t' sort.main.bed clinvarSubSub.txt | tawk '{print $2,$3,$4,$5,$6,$1, $7}' | sort -S 40g -k1,1 -k2,2n -k5,5 | tawk -f makeFranklin   | tawk -f assignColors > tmp1
-tawk '{print $1":"$2 + 1"-"$3"←Variants (submissions):"$11}' tmp1 > tmp2
+# add the line break after v409
+#tawk '{print $1":"$2 + 1"-"$3" <br>Variants (submissions):"$11}' tmp1 > tmp2
+tawk '{print $1":"$2 + 1"-"$3" Variants (submissions):"$11}' tmp1 > tmp2
 paste tmp1 tmp2 > bigBedInput.bed
 
 bedToBigBed -as=$HOME/kent/src/hg/lib/clinvarSubLolly.as -type=bed9+5 -tab bigBedInput.bed /cluster/data/hg19/chrom.sizes clinvarSubLolly.bb
 mkdir -p /gbdb/hg19/clinvarSubLolly
 ln -s `pwd`/clinvarSubLolly.bb /gbdb/hg19/clinvarSubLolly/clinvarSubLolly.bb
+
+bigBedToBed /gbdb/hg19/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$2+1,$4,$13,$15,$18,$19}' | sort  -S 40g > sort.main.bed
+hgsql hg19 -Ne "select * from clinvarSub" | sort  -S 40g  > clinvarSubSub.txt
+join -t $'\t' sort.main.bed clinvarSubSub.txt | tawk '{print $2,$3,$4,$5,0,"+",0,0,"0,0,0",$6,$20,$8, $9,$1,$10,$7,$11,$12,$13,$14,$15,$16,$17,$18,$19,$21}' | sort -S 40g -k1,1 -k2,2n | tawk -f assignScore > bigBedInput.bed
+
+bedToBigBed -as=clinvarSubBB.as -type=bed9+11 -tab bigBedInput.bed /cluster/data/hg19/chrom.sizes clinvarSub.bb
+ln -s `pwd`/clinvarSub.bb /gbdb/hg19/clinvarSubLolly/clinvarSub.bb
+
 
 #############################################################################
 # Trios for Genome In a Bottle - DONE 08/04/2020 ChrisL
@@ -33773,4 +33787,153 @@ find split/ -name "*.bedGraph" | parallel -j15 'bedGraphToBigWig {} /hive/data/g
 mkdir -p /gbdb/hg19/gnomAD/pext
 ln -s `pwd`/split/*.bw /gbdb/hg19/gnomAD/pext/
 
+#############################################################################
+# update 2020-10-27 (DONE - Hiram - 2020-10-27)
 
+  mkdir /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-10-27
+  cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-10-27
+
+  time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=hgwdev -workhorse=hgwdev \
+      GCF_000001405.25_GRCh37.p13 hg19) > do.log 2>&1 &
+  # real    6m47.005s
+
+  cat fb.ncbiRefSeq.hg19.txt
+  # 93720294 bases of 2991710746 (3.133%) in intersection
+
+#############################################################################
+# Covid-19 rare mutations, Max, Fri Oct 30 08:40:34 PDT 2020
+# received table from qzhang02@rockefeller.edu, wrote to UCSC.txt
+cd /hive/data/genomes/hg19/bed/covidMuts/
+dos2unix UCSC.txt
+cat UCSC.txt | tawk '{$1="chr"$1; chrom=$1; start=$2; rsId=$3; ref=$4; alt=$5; zygo=$6; gene=$7; genotype=$8; inh=$9; end=$2+length(ref); print chrom, start, end, ref">"alt, "0", ".", start, end, "0,0,0", "1", length(ref), "0", ref, alt, rsId, zygo, gene, genotype, inh;}' | grep -v chrchr > covidMuts.bed
+bedSort covidMuts.bed covidMuts.bed
+bedToBigBed -tab covidMuts.bed ../../chrom.sizes covidMuts.bb -as=../../hg19/bed/covidMuts/covidMuts.as -type=bed12+
+#############################################################################
+
+#############################################################################
+# gnomAD v2.1.1 update, ChrisL 12-2-2020
+#############################################################################
+# See /hive/data/inside/gnomAD/v2.1.1/run.sh for more information, listed
+# here are the important steps:
+WORKDIR=/hive/data/inside/gnomAD/v2.1.1/
+cd $WORKDIR
+db="hg19"
+cd $db
+
+time parallel -j15 --joblog exomes.run.log --plus "vcfToBed -fields=${fields} {} exomes/{/..}.bed" ::: /hive/data/outside/gnomAD.2/v2.1.1/exomes/*.bgz
+# real    16m42.939s
+# user    172m26.966s
+# sys 1m41.186s
+
+# now turn into a single bed
+time cat hg19/exomes/*.bed | ./gnomadVcfBedToBigBed stdin stdout | sort -k1,1 -k2,2n > gnomad.v2.1.1.exomes.bed
+# real    21m44.331s
+# user    20m24.018s
+# sys 3m5.405s
+time bedToBigBed -type=bed9+50 -tab -as=exomes.as gnomad.v2.1.1.exomes.bed /hive/data/genomes/hg19/chrom.sizes exomes.bb
+# pass1 - making usageList (24 chroms): 11485 millis
+# pass2 - checking and writing primary data (17209972 records, 57 fields): 339555 millis
+#
+# real    6m45.792s
+# user    6m7.880s
+# sys 0m11.924s
+
+# same for genomes
+cd $db
+time parallel -j15 --joblog genomes.run.log --plus "vcfToBed -fields=${fields} {} genomes/{/..}.bed" ::: /hive/data/outside/gnomAD.2/v2.1.1/genomes/*.bgz
+# real  134m40.184s
+# user    1559m44.664s
+# sys 12m0.858s
+cd ..
+time cat hg19/genomes/*.bed | ./gnomadVcfBedToBigBed stdin stdout | sort -k1,1 -k2,2n > gnomad.v2.1.1.genomes.bed
+# real    199m48.619s
+# user    186m49.769s
+# sys 29m12.841s
+
+# now South Asian variants in the genomes file, change type:
+time bedToBigBed -type=bed9+47 -tab -as=genomes.as gnomad.v2.1.1.genomes.bed /hive/data/genomes/hg19/chrom.sizes genomes.bb
+# pass1 - making usageList (23 chroms): 165336 millis
+# pass2 - checking and writing primary data (253556152 records, 55 fields): 4909106 millis
+#
+# real    89m3.165s
+# user    86m41.554s
+# sys 2m15.722s
+
+#############################################################################
+# LASTZ Cow bosTau9 (DONE - 2020-12-07 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07
+    cd /hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07
+
+    printf '# human vs Cow
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau9
+SEQ2_DIR=/hive/data/genomes/bosTau9/bosTau9.2bit
+SEQ2_LEN=/hive/data/genomes/bosTau9/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    239m35.175s
+
+    cat fb.hg19.chainBosTau9Link.txt
+    # 1407432462 bases of 2991710746 (47.044%) in intersection
+
+    cat fb.hg19.chainSynBosTau9Link.txt
+    # 1354159575 bases of 2991710746 (45.264%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg19 bosTau9) > rbest.log 2>&1 &
+    #	real    274m55.811s
+
+    cat fb.hg19.chainRBest.BosTau9.txt
+    #	1290531802 bases of 2991710746 (43.137%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/bosTau9/bed/blastz.hg19.swap
+    cd /hive/data/genomes/bosTau9/bed/blastz.hg19.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07/DEF \
+        -swap  -syntenicNet -workhorse=hgwdev \
+	-smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #   real    72m28.826s
+
+    cat fb.bosTau9.chainHg19Link.txt
+    #   1342159887 bases of 2715853792 (49.419%) in intersection
+    cat fb.bosTau9.chainSynHg19Link.txt
+    #	1305558878 bases of 2715853792 (48.072%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` bosTau9 hg19) > rbest.log 2>&1 &
+XXX - running - Tue Dec  8 09:13:34 PST 2020
+    # real    272m15.176s
+
+    cat fb.bosTau9.chainRBest.Hg19.txt
+    # 1290810412 bases of 2715853792 (47.529%) in intersection
+
+#############################################################################

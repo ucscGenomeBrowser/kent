@@ -12,6 +12,7 @@
 #include "limits.h"
 #include "float.h"
 #include "bigBedFilter.h"
+#include "asParse.h"
 
 #define LOLLY_DIAMETER    2 * (lollyCart->radius + 2)
 
@@ -38,10 +39,50 @@ itemRgb.b = color & 0xff;
 return  hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b);
 }
 
-void doYLabels(struct track *tg, struct hvGfx *hvg, int width, int height, struct lollyCartOptions *lollyCart, int xOff, int yOff, Color color, MgFont *font, boolean doLabels )
-/* Draw labels or lines for labels. */
+// structure to capture yLabels
+struct yLabel
 {
-double range = lollyCart->upperLimit - lollyCart->lowerLimit;
+struct yLabel *next;
+unsigned y;
+char *label;
+unsigned long color;
+boolean on;
+};
+
+int cmpY(const void *va, const void *vb)
+// sort the lines by y value
+{
+const struct yLabel *a = *((struct yLabel **)va);
+const struct yLabel *b = *((struct yLabel **)vb);
+return a->y - b->y;
+}
+
+// font heights available to the user
+unsigned fontHeights[] = { 6,8,10,12,14,18,24 ,34 };
+
+unsigned findBiggest(unsigned num)
+/* find biggest font not bigger than num */
+{
+int ii;
+unsigned prev = 0;
+
+for (ii=0; ii < ArraySize(fontHeights); prev = fontHeights[ii], ii++)
+    if (fontHeights[ii] > num)
+        return prev;
+
+return 34;
+}
+
+void doYLabels(struct track *tg, struct hvGfx *hvg, int width, int height, struct lollyCartOptions *lollyCart, int xOff, int yOff, Color color, MgFont *font, boolean doLabels )
+/* parse lines like yAxisLabel <y offset> <draw line ?>  <R,G,B> <label>
+ * Draw labels or lines for labels. */
+{
+struct hashEl *hel = trackDbSettingsLike(tg->tdb, "yAxisLabel*");
+
+if (hel == NULL)
+    return;
+
+double range = tg->graphUpperLimit - tg->graphLowerLimit;
 int fontHeight = tl.fontHeight+1;
 // we need a margin on top and bottom for half a lolly, and some space at the bottom
 // for the lolly stems
@@ -50,23 +91,67 @@ double topAndBottomMargins = LOLLY_DIAMETER / 2 + LOLLY_DIAMETER / 2;
 double usableHeight = height - topAndBottomMargins - minimumStemHeight; 
 yOff += LOLLY_DIAMETER / 2;
 
-struct hashEl *hel = trackDbSettingsLike(tg->tdb, "yLabel*");
-// parse lines like yLabel <y offset> <draw line ?>  <R,G,B> <label>
+struct yLabel *lineList = NULL;
+struct yLabel *line;
 for(; hel; hel = hel->next)
     {
+    AllocVar(line);
+    slAddHead(&lineList, line);
+
     char *setting = cloneString((char *)hel->val);
-    int number = atoi(nextWord(&setting)); 
-    boolean drawLine = sameString("on", nextWord(&setting));
+    double number = atof(nextWord(&setting)); 
+    line->on = sameString("on", nextWord(&setting));
     unsigned char red, green, blue;
     char *colorStr = nextWord(&setting);
     parseColor(colorStr, &red, &green, &blue);
-    unsigned long  lineColor = MAKECOLOR_32(red, green, blue);
-    char *label = setting;
-    int offset = usableHeight * ((double)number  - lollyCart->lowerLimit) / range;
+    line->color = MAKECOLOR_32(red, green, blue);
+    line->label = cloneString(setting);
+
+    int offset = usableHeight * ((double)number  - tg->graphLowerLimit) / range;
+    line->y = yOff + (usableHeight - offset);
+    }
+
+slSort(&lineList, cmpY);
+unsigned minDiff = BIGNUM;
+struct yLabel *prev = NULL;
+MgFont *labelfont = font;
+
+// figure out what font height we should use
+if (doLabels)
+    {
+    for(line = lineList; line; prev = line, line = line->next)
+        {
+        if (prev)
+            {
+            unsigned min = line->y - prev->y;
+            
+            if (min < minDiff)
+                minDiff = min;
+            }
+        }
+
+    if (minDiff <= tl.fontHeight)
+        {
+        unsigned choice = findBiggest(minDiff);
+        if (doLabels && (choice == 0))
+            return;
+        if (choice < tl.fontHeight)
+            {
+            char size[1024];
+
+            safef(size, sizeof size, "%d", choice);
+            labelfont = mgFontForSizeAndStyle(size, "medium");
+            }
+        }
+    fontHeight = mgFontPixelHeight(labelfont) + 1;
+    }
+
+for(line = lineList; line; line = line->next)
+    {
     if (doLabels)
-        hvGfxTextRight(hvg, xOff, yOff + (usableHeight - offset) - fontHeight / 2 , width - 1, fontHeight, color, font, label);
-    else if (drawLine)
-        hvGfxLine(hvg, xOff, yOff + (usableHeight - offset),  xOff + width , yOff + (usableHeight - offset), lineColor);
+        hvGfxTextRight(hvg, xOff, line->y - fontHeight / 2 , width - 1, fontHeight, line->color, labelfont, line->label);
+    else if (line->on)
+        hvGfxLine(hvg, xOff, line->y,  xOff + width , line->y, line->color);
     }
 }
 
@@ -80,10 +165,7 @@ struct lolly *popList = tg->items, *pop;
 struct lollyCartOptions *lollyCart = tg->lollyCart;
 int trackHeight = tg->lollyCart->height ;
 
-if (popList == NULL)   // nothing to draw
-    return;
-
-if ( tg->visibility == tvDense)  // in dense mode we just track lines
+if ( tg->visibility == tvDense)  // in dense mode we just draw lines
     {
     for (pop = popList; pop; pop = pop->next)
         {
@@ -95,6 +177,10 @@ if ( tg->visibility == tvDense)  // in dense mode we just track lines
     }
 
 doYLabels(tg, hvg, width, trackHeight, tg->lollyCart, xOff, yOff, color, font, FALSE);
+
+if (popList == NULL)   // nothing to draw
+    return;
+
 boolean noMapBoxes = FALSE;
 int numItems =  slCount(popList);
 if ( numItems > 5000)
@@ -105,9 +191,22 @@ if ( numItems > 5000)
     mapBoxHgcOrHgGene(hvg, winStart, winEnd, xOff, yOff, width,  trackHeight,
                   tg->track, "", buffer, "hgTracks", FALSE, NULL);
     }
-// first draw the lines so they won't overlap any lollies
-int fontHeight = tl.fontHeight + 1;
+
+// calculate the lollipop heights
+double range = tg->graphUpperLimit - tg->graphLowerLimit;
+int fontHeight = tl.fontHeight+1;
 double usableHeight = trackHeight - LOLLY_DIAMETER - fontHeight; 
+for(pop = popList; pop; pop = pop->next)
+    {
+    if (pop->radius == -1)
+        pop->radius = lollyCart->radius;
+    if (range == 0.0)
+        pop->height = usableHeight ;
+    else
+        pop->height = usableHeight * (pop->val  - tg->graphLowerLimit) / range;
+    }
+
+// first draw the lines so they won't overlap any lollies
 yOff += LOLLY_DIAMETER / 2;
 
 if (!lollyCart->noStems)
@@ -151,10 +250,10 @@ doYLabels(tg, hvg, width, height-fontHeight, lollyCart, xOff, yOff+fontHeight, c
 
 hvGfxText(hvg, xOff, yOff+centerLabel, color, font, tg->shortLabel);
 
-char *setting = trackDbSetting(tg->tdb, "yNumLabels");
+char *setting = trackDbSetting(tg->tdb, "yAxisNumLabels");
 if (setting && sameString("off", setting))
     return;
-if (isnan(lollyCart->upperLimit))
+if (isnan(tg->graphUpperLimit))
     {
     hvGfxTextRight(hvg, xOff, yOff + LOLLY_DIAMETER, width - 1, fontHeight, color,
         font, "NO DATA");
@@ -162,14 +261,14 @@ if (isnan(lollyCart->upperLimit))
     }
 
 char upper[1024];
-safef(upper, sizeof(upper), "%g -",   lollyCart->upperLimit);
+safef(upper, sizeof(upper), "%g -",   tg->graphUpperLimit);
 hvGfxTextRight(hvg, xOff, yOff + fontHeight / 2 + LOLLY_DIAMETER / 2 , width - 1, fontHeight, color,
     font, upper);
 char lower[1024];
-if (lollyCart->lowerLimit < lollyCart->upperLimit)
+if (tg->graphLowerLimit < tg->graphUpperLimit)
     {
-    safef(lower, sizeof(lower), "%g -", lollyCart->lowerLimit);
-    hvGfxTextRight(hvg, xOff, yOff+height - LOLLY_DIAMETER - fontHeight/2 , width - 1, fontHeight,
+    safef(lower, sizeof(lower), "%g -", tg->graphLowerLimit);
+    hvGfxTextRight(hvg, xOff, yOff+height - LOLLY_DIAMETER / 2 - 2 *fontHeight + fontHeight/2 , width - 1, fontHeight,
         color, font, lower);
     }
 }
@@ -193,6 +292,25 @@ const struct lolly *b = *((struct lolly **)vb);
 return a->height - b->height;
 }
 
+static int getField(struct trackDb *tdb, char *name, struct asObject *as, int defaultValue)
+/* Get the as field (if any) that a trackDb variable references.  This can either be
+ * a field name, or a number. */
+{
+int ret = defaultValue;
+char *setting = trackDbSetting(tdb, name);
+if (setting != NULL)
+    {
+    if (isNumericString(setting))
+        ret = atoi(setting);
+    else 
+        {
+        struct asColumn *columns = as->columnList;
+        ret = asColumnMustFindIx(columns, setting) + 1;
+        }
+    }
+return ret;
+}
+
 void lollyLoadItems(struct track *tg)
 // load lollies from the data file
 {
@@ -209,21 +327,15 @@ else if (tg->visibility == tvPack)
     }
 struct lm *lm = lmInit(0);
 struct bbiFile *bbi =  fetchBbiForTrack(tg);
+struct asObject *as = bigBedAsOrDefault(bbi);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
 char *bedRow[bbi->fieldCount];
 char startBuf[16], endBuf[16];
 struct lolly *popList = NULL, *pop;
 
-unsigned lollyField = 5;  // we use the score field by default
-char *setting = trackDbSetting(tg->tdb, "lollyField");
-if (setting != NULL)
-    lollyField = atoi(setting);
+unsigned lollyField = getField(tg->tdb, "lollyField", as, 5);  // we use the score field by default
+int lollySizeField = getField(tg->tdb, "lollySizeField", as, -1);  // no size field by default
 
-int lollySizeField = -1 ;
-setting = trackDbSetting(tg->tdb, "lollySizeField");
-if (setting != NULL)
-    lollySizeField = atoi(setting);
-    
 double minVal = DBL_MAX, maxVal = -DBL_MAX;
 //double sumData = 0.0, sumSquares = 0.0;
 unsigned count = 0;
@@ -301,35 +413,29 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 if (filtered)
    labelTrackAsFilteredNumber(tg, filtered);
 
-if (count == 0)
-    lollyCart->upperLimit = lollyCart->lowerLimit = NAN; // no lollies in range
-else if (lollyCart->autoScale == wiggleScaleAuto)
+if (lollyCart->autoScale == wiggleScaleAuto)
     {
-    lollyCart->upperLimit = maxVal;
-    lollyCart->lowerLimit = minVal;
-    }
-
-double range = lollyCart->upperLimit - lollyCart->lowerLimit;
-int fontHeight = tl.fontHeight+1;
-double usableHeight = trackHeight - LOLLY_DIAMETER - fontHeight; 
-for(pop = popList; pop; pop = pop->next)
-    {
-    if (pop->radius == -1)
-        pop->radius = lollyCart->radius;
-    if (range == 0.0)
-        pop->height = usableHeight ;
+    if (maxVal == -DBL_MAX)
+        {
+        tg->graphUpperLimit = NAN;
+        tg->graphLowerLimit = NAN;
+        }
     else
-        pop->height = usableHeight * (pop->val  - lollyCart->lowerLimit) / range;
+        {
+        tg->graphUpperLimit = maxVal;
+        tg->graphLowerLimit = minVal;
+        }
     }
 
 slSort(&popList, cmpHeight);
 tg->items = popList;
 }
 
-static struct lollyCartOptions *lollyCartOptionsNew(struct cart *cart, struct trackDb *tdb, 
+static struct lollyCartOptions *lollyCartOptionsNew(struct cart *cart, struct track *track, 
                                 int wordCount, char *words[])
 // the structure that is attached to the track structure
 {
+struct trackDb *tdb = track->tdb;
 struct lollyCartOptions *lollyCart;
 AllocVar(lollyCart);
 
@@ -349,15 +455,45 @@ double tDbMaxY;     /*  data range limits from trackDb type line */
 char *trackWords[8];     /*  to parse the trackDb type line  */
 int trackWordCount = 0;  /*  to parse the trackDb type line  */
 wigFetchMinMaxYWithCart(cart, tdb, tdb->track, &lollyCart->minY, &lollyCart->maxY, &tDbMinY, &tDbMaxY, trackWordCount, trackWords);
-lollyCart->upperLimit = lollyCart->maxY;
-lollyCart->lowerLimit = lollyCart->minY;
+track->graphUpperLimit = lollyCart->maxY;
+track->graphLowerLimit = lollyCart->minY;
 lollyCart->radius = 5;
-lollyCart->noStems = trackDbSettingOn(tdb, "noStems");
+lollyCart->noStems = trackDbSettingOn(tdb, "lollyNoStems");
 char *setting = trackDbSetting(tdb, "lollyMaxSize");
 if (setting)
     lollyCart->radius = atoi(setting);
 
 return lollyCart;
+}
+
+void lollyRegionGraphLimits(struct track *tg)
+/* Set common graphLimits across all windows */
+{
+double graphUpperLimit = -BIGDOUBLE;
+double graphLowerLimit = BIGDOUBLE;
+struct track *tgSave = tg;
+struct window *w;
+
+// find graphLimits across all windows.
+for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
+    {
+    if (isnan(tg->graphUpperLimit))
+        continue;
+
+    if (tg->graphUpperLimit > graphUpperLimit)
+	graphUpperLimit = tg->graphUpperLimit;
+    if (tg->graphLowerLimit < graphLowerLimit)
+	graphLowerLimit = tg->graphLowerLimit;
+    }
+if (graphUpperLimit == -BIGDOUBLE)
+    graphUpperLimit = graphLowerLimit = NAN;
+
+// set same common graphLimits in all windows.
+for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
+    {
+    tg->graphUpperLimit = graphUpperLimit;
+    tg->graphLowerLimit = graphLowerLimit;
+    }
 }
 
 void lollyMethods(struct track *track, struct trackDb *tdb, 
@@ -366,7 +502,7 @@ void lollyMethods(struct track *track, struct trackDb *tdb,
 {
 bigBedMethods(track, tdb, wordCount, words);
 
-struct lollyCartOptions *lollyCart = lollyCartOptionsNew(cart, tdb, wordCount, words);
+struct lollyCartOptions *lollyCart = lollyCartOptionsNew(cart, track, wordCount, words);
 
 lollyCart->typeWordCount = wordCount;
 AllocArray(lollyCart->typeWords, wordCount);
@@ -376,6 +512,7 @@ for(ii=0; ii < wordCount; ii++)
 track->loadItems = lollyLoadItems;
 track->drawItems = lollyDrawItems;
 track->totalHeight = lollyHeight; 
+track->preDrawMultiRegion = lollyRegionGraphLimits;
 track->drawLeftLabels = lollyLeftLabels;
 track->lollyCart = lollyCart;
 }

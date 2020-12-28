@@ -4,11 +4,11 @@ track unipCov2AliSwissprot
 shortLabel Full Proteins
 longLabel UniProt full-length proteins
 priority 1
-visibility hide
+visibility dense
 type bigPsl
 bigDataUrl /gbdb/$D/uniprot/unipAliSwissprotCov2.bb
 searchIndex name,acc
-#urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
 labelFields protShortNames,geneName,uniprotName,acc,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
 mouseOverField protFullNames
 itemRgb off
@@ -28,8 +28,7 @@ visibility pack
 color 0,2,80
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipChainCov2.bb
-#urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
 group uniprot
 dataVersion /gbdb/$D/uniprot/version.txt
@@ -47,8 +46,7 @@ color 2,12,100
 group uniprot
 type bigGenePred
 bigDataUrl /gbdb/wuhCor1/uniprot/unipInterestCov2.bb
-#urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
@@ -64,7 +62,7 @@ group uniprot
 visibility dense
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipDomainCov2.bb
-#urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
@@ -78,6 +76,7 @@ visibility dense
 type bigBed
 group uniprot
 bigDataUrl /gbdb/wuhCor1/uniprot/protease_sites.bb
+urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion Manually created based on April 2020 UniProt release
 exonNumbers off
 color 50,50,20
@@ -87,11 +86,11 @@ shortLabel Disulf. Bonds
 longLabel UniProt Disulfide Bonds
 priority 8
 group uniprot
-#parent uniprotCov2 off
 visibility dense
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipDisulfBondCov2.bb
 dataVersion /gbdb/$D/uniprot/version.txt
+urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
 exonNumbers off
 itemRgb on
@@ -107,7 +106,7 @@ visibility dense
 type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipModifCov2.bb
-#urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 itemRgb on
@@ -142,7 +141,7 @@ group uniprot
 type bigPsl
 bigDataUrl /gbdb/$D/uniprot/unipAliTremblCov2.bb
 searchIndex name,acc
-#urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
 labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
 mouseOverField protFullNames
 itemRgb off
@@ -162,6 +161,7 @@ visibility dense
 type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipLocSignalCov2.bb
+urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
 color 255,0,150
 itemRgb off
 dataVersion /gbdb/$D/uniprot/version.txt
@@ -188,6 +188,7 @@ priority 5
 visibility dense
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipLocTransMembCov2.bb
+urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
 group uniprot
 color 0,150,0
 itemRgb off
@@ -227,8 +228,7 @@ visibility dense
 type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipStructCov2.bb
-#urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
@@ -243,8 +243,7 @@ visibility dense
 group uniprot
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipOtherCov2.bb
-#urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
@@ -259,8 +258,7 @@ group uniprot
 visibility dense
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipRepeatCov2.bb
-#urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2

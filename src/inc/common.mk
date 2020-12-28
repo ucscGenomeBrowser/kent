@@ -68,7 +68,7 @@ endif
 
 # autodetect UCSC installation of hal:
 ifeq (${HALDIR},)
-    HALDIR = /hive/groups/browser/hal/halRelease/hal.2015-11-11
+    HALDIR = /hive/groups/browser/hal/build/hal.2020-12-18
     ifneq ($(wildcard ${HALDIR}),)
         ifeq (${USE_HAL},)
           USE_HAL=1
@@ -77,9 +77,13 @@ ifeq (${HALDIR},)
 endif
 
 ifeq (${USE_HAL},1)
-    HALLIBS=${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halChain.a ${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halLiftover.a ${HALDIR}/lib/halLod.a ${HALDIR}/lib/halLib.a ${HALDIR}/lib/sonLib.a ${HALDIR}/lib/libhdf5_cpp.a ${HALDIR}/lib/libhdf5.a ${HALDIR}/lib/libhdf5_hl.a -lstdc++
+    # force static libraries to keep programs portable
+    HDF5DIR=/hive/groups/browser/hal/build/hdf5-1.12.0
+    HDF5LIBDIR=${HDF5DIR}/local/lib
+    HDF5LIBS=${HDF5LIBDIR}/libhdf5_cpp.a ${HDF5LIBDIR}/libhdf5.a ${HDF5LIBDIR}/libhdf5_hl.a
+    HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib.a ${HDF5LIBS} -lcurl -lstdc++
     HG_DEFS+=-DUSE_HAL
-    HG_INC+=-I${HALDIR}/inc
+    HG_INC+=-I${HALDIR}/inc -I${HALDIR}/hal/blockViz/inc
 endif
 # on hgwdev, include HAL by defaults
 ifeq (${IS_HGWDEV},yes)
@@ -93,6 +97,7 @@ endif
 ifeq (${USE_HIC},1)
     HG_DEFS+=-DUSE_HIC
 endif
+
 
 # libssl: disabled by default
 ifneq (${SSL_DIR}, "/usr/include/openssl")
