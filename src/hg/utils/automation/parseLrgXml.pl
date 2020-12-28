@@ -11,16 +11,21 @@ use XML::LibXML;
 use Data::Dumper; #print Data::Dumper->Dump([$dom], [qw(dom)]);
 
 my $assemblyPrefix = shift @ARGV;
+my $workdir = shift @ARGV;
+if (not defined $workdir) { $workdir = "./";}
 
 sub usage {
   my ($status) = @_;
   my $base = $0;
   $base =~ s/^(.*\/)?//;
   print STDERR "
-usage: $base assemblyPrefix
+usage: $base assemblyPrefix pathToFiles
     Parses LRG_*.xml files in current directory into BED (LRG regions)
     and genePred+Cdna+Pep (transcripts in LRG coordinates.)
     assemblyPrefix is something like \"GRCh37\" to match GRCh37.p5 etc.
+
+    If pathToFiles is present, look for pathToFiles/LRG_*.xml files. pathToFiles
+    defaults to the current working directory.
 
 ";
   exit $status;
@@ -306,9 +311,9 @@ if (! $assemblyPrefix) {
   usage(1);
 }
 
-my @xmlFiles = <LRG_*.xml>;
+my @xmlFiles = <"$workdir/LRG_*.xml">;
 if (@xmlFiles == 0) {
-  warn "No LRG_*.xml files found in current directory -- need to cd somewhere?\n";
+  warn "No LRG_*.xml files found in $workdir -- need to cd somewhere?\n";
 }
 
 open(my $bedF, "| sort -k1,1 -k2n,2n >lrg.bed")

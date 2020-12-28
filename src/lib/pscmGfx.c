@@ -247,9 +247,13 @@ static void pscmSetFont(struct pscmGfx *pscm, MgFont *font)
  * PostScript.  We'll try and arrange it so that the PostScript
  * fonts match the gem fonts more or less. */
 void *v = font;
-if ((pscm->fontMethod == 0) && (v != pscm->curFont))
+if (v != pscm->curFont)
     {
-    psTimesFont(pscm->ps, font->psHeight);
+    if (pscm->fontMethod == 0) 
+        psTimesFont(pscm->ps, font->psHeight);
+    else
+        psSetFont(pscm->ps, pscm->fontName, font->psHeight);
+
     pscm->curFont = v;
     }
 }
@@ -757,7 +761,6 @@ void pscmSetFontMethod(struct pscmGfx *pscm, unsigned int method, char *fontName
 {
 pscm->fontMethod = method;
 pscm->fontName = cloneString(fontName);
-psSetFont(pscm->ps, fontName);
 }
 
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName)

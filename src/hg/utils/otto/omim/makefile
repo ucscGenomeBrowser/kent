@@ -2,6 +2,7 @@ SUBDIRS = doOmimGene2 doOmimGeneSymbols doOmimLocation
 PREFIX = /hive/data/outside/omim
 
 all: ${SUBDIRS:%=%.suball}
+FILES = omimWrapper.sh omim.tables checkOmim.sh validateOmim.sh parseGeneMap.pl omimUploadWrapper.sh checkOmimUpload.sh doOmimPhenotypeNew buildOmimTracks.sh flagOmimGene.py
 
 %.suball:
 	${MAKE} -C $* all
@@ -15,6 +16,9 @@ installSub: ${SUBDIRS:%=%.install}
 
 %.install:
 	${MAKE} -C $* install
+
+validate: check-prefix
+	$(foreach i, $(FILES), echo $(i); diff ${PREFIX}/$(i) $(i);)
 
 make-prefix: check-prefix
 	mkdir -p ${PREFIX}

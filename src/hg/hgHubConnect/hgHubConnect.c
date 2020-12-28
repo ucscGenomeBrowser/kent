@@ -1556,7 +1556,7 @@ for(; genomeList; genomeList = genomeList->next)
     if (!firstTime)
 	hPrintf(",");
     firstTime = FALSE;
-    hPrintf("<A href=\"../cgi-bin/hgTracks?db=%s&%s\">%s</A>",genomeList->name, 
+    hPrintf("<A href=\"../cgi-bin/hgTracks?db=%s&%s&position=lastDbPos\">%s</A>",genomeList->name, 
 	cartSidUrlString(cart),trackHubSkipHubName(genomeList->name));
     }
 hPrintf("<BR><BR>");

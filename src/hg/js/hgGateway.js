@@ -621,7 +621,7 @@ var hgGateway = (function() {
     // graphical species-picker, db select, and position autocomplete.
 
     // Constants
-    var speciesWatermark = 'Enter species or common name';
+    var speciesWatermark = 'Enter species, common name or assembly ID';
     var positionWatermark = 'Enter position, gene symbol or search terms';
     // Shortcuts to popular species:
     var favIconTaxId = [ ['Human', 9606],
@@ -1454,7 +1454,7 @@ var hgGateway = (function() {
         var cmd;
         if (db !== uiState.db) {
             setAssemblyDescriptionTitle(db, uiState.genome);
-            cmd = { setDb: { db: db } };
+            cmd = { setDb: { db: db, position: "lastDbPos" } };
             if (uiState.hubUrl) {
                 cmd.setDb.hubUrl = uiState.hubUrl;
             }

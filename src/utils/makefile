@@ -45,6 +45,7 @@ UTILS_APPLIST = \
 	colTransform \
 	countChars \
 	endsInLf \
+	clusterMatrixToBarChartBed \
 	cpgIslandExt \
 	faAlign \
 	fastqToFa \
@@ -107,7 +108,6 @@ UTILS_APPLIST = \
 	wigCorrelate \
 	wigToBigWig \
 	wordLine \
-	chromToUcsc
 
 # list of utilities to build of interest only at UCSC
 
@@ -145,6 +145,7 @@ UCSC_APPS = \
 	udcCleanup \
 	undupFa \
 	upper \
+	vcfFilter \
 	venn \
 	verticalSplitSqlTable \
 	weedLines
@@ -160,6 +161,8 @@ USER_APP_SCRIPTS = \
 	tdbRename \
 	tdbSort \
 	webSync \
+	chromToUcsc \
+	bigHeat
 
 SCRIPT_FILES = \
 	agpToLift \

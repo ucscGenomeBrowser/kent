@@ -1,0 +1,153 @@
+#!/bin/bash
+
+set -beEu -o pipefail
+
+export gcxName=$1
+export asmId=$2
+export clade=$3
+export sciName=$4
+### !!! the 'clade' is obsolete and is unused anywhere.  It is passed around
+### because it used to be a requirement for the gateway page script, but it
+### it isn't used there either
+
+export asmHubName=$clade
+
+### export ucscNames="-ucscNames"
+export ucscNames=""
+export augustusSpecies="-augustusSpecies=human"
+
+export ncbiRmsk="-ncbiRmsk"
+export noRmsk=""
+export subGroup="vertebrate_other"
+
+if [ "${clade}" = "primates" ]; then
+  subGroup="vertebrate_mammalian"
+elif [ "${clade}" = "mammals" ]; then
+  subGroup="vertebrate_mammalian"
+elif [ "${clade}" = "fishes" ]; then
+  subGroup="vertebrate_other"
+  augustusSpecies="-augustusSpecies=zebrafish"
+elif [ "${clade}" = "fish" ]; then
+  subGroup="vertebrate_other"
+  augustusSpecies="-augustusSpecies=zebrafish"
+elif [ "${clade}" = "birds" ]; then
+  subGroup="vertebrate_other"
+  augustusSpecies="-augustusSpecies=chicken"
+elif [ "${clade}" = "vertebrate" ]; then
+  subGroup="vertebrate_other"
+elif [ "${clade}" = "invertebrate" ]; then
+  subGroup="invertebrate"
+elif [ "${clade}" = "plants" ]; then
+  subGroup="plants"
+elif [ "${clade}" = "vertebrate_mammalian" ]; then
+  subGroup="vertebrate_mammalian"
+elif [ "${clade}" = "vertebrate_other" ]; then
+  subGroup="vertebrate_other"
+elif [ "${clade}" = "nematode" ]; then
+  subGroup="invertebrate"
+  asmHubName="invertebrate"
+  augustusSpecies="-augustusSpecies=caenorhabditis"
+elif [ "${clade}" = "drosophila" ]; then
+  subGroup="invertebrate"
+  asmHubName="invertebrate"
+  augustusSpecies="-augustusSpecies=fly"
+elif [ "${clade}" = "Amellifera" ]; then
+  subGroup="invertebrate"
+  asmHubName="invertebrate"
+  augustusSpecies="-augustusSpecies=honeybee1"
+elif [ "${clade}" = "Agambiae" ]; then
+  subGroup="invertebrate"
+  asmHubName="invertebrate"
+  augustusSpecies="-augustusSpecies=culex"
+elif [ "${clade}" = "Scerevisiae" ]; then
+  subGroup="fungi"
+  asmHubName="fungi"
+  augustusSpecies="-augustusSpecies=saccharomyces"
+elif [ "${clade}" = "viral" ]; then
+  subGroup="viral"
+elif [ "${clade}" = "bacteria" ]; then
+  subGroup="bacteria"
+  noRmsk="-noRmsk"
+  augustusSpecies="-noAugustus -noXenoRefSeq"
+else
+  printf "ERROR: unrecognized clade: '%s'\n" "${clade}" 1>&2
+  exit 255
+fi
+
+export stepStart="download"
+export stepEnd="trackDb"
+### export stepStart="ncbiRefSeq"
+### export stepEnd="ncbiRefSeq"
+### export stepStart="trackDb"
+### export stepEnd="trackDb"
+
+# download, sequence, assemblyGap, gatewayPage, cytoBand, gc5Base,
+# repeatMasker, simpleRepeat, allGaps, idKeys, windowMasker, addMask,
+# gapOverlap, tandemDups, cpgIslands, ncbiGene, ncbiRefSeq, xenoRefGene,
+# augustus, trackDb, cleanup
+
+export linkTop="/hive/data/genomes/asmHubs"
+export TOP0="/hive/data/genomes/asmHubs"
+export TOP="/hive/data/genomes/asmHubs/allBuild"
+cd $TOP
+
+export gcPrefix=`echo $gcxName | cut -c1-3`
+export topBuild="genbankBuild"
+export genbankRefseq="genbank"
+if [ "${gcPrefix}" = "GCF" ]; then
+  topBuild="refseqBuild"
+  genbankRefseq="refseq"
+fi
+
+export gc0=`echo $gcxName | cut -c5-7`
+export gc1=`echo $gcxName | cut -c8-10`
+export gc2=`echo $gcxName | cut -c11-13`
+
+export buildDir=`printf "%s/%s/%s/%s/%s/%s" "${TOP0}/${topBuild}" "${gcPrefix}" "${gc0}" "${gc1}" "${gc2}" "${asmId}"`
+
+export linkDir=`printf "%s/%s/%s/%s" "${linkTop}" "${genbankRefseq}" "${subGroup}" "${sciName}"`
+
+if [ -d "${buildDir}" ]; then
+  printf "# Already done ? $gcxName\n" 1>&2
+  exit 255
+#  printf "# removing: %s\n" "${buildDir}" 1>&2
+#  rm -fr "${buildDir}"
+fi
+
+
+mkdir -p ${TOP0}/${topBuild}/buildLogs/${subGroup}
+export logFile="${TOP0}/${topBuild}/buildLogs/${subGroup}/${asmId}.log"
+
+if [ ! -d "${buildDir}" ]; then
+  mkdir -p "${buildDir}"
+fi
+if [ ! -d "${linkDir}" ]; then
+  mkdir -p "${linkDir}"
+fi
+if [ ! -L "${linkDir}/${asmId}" ]; then
+  ln -s "${buildDir}" "${linkDir}"
+fi
+ls -d "${buildDir}" "${linkDir}/${asmId}"
+
+echo "========================= "`date "+%F %T"` >> "${logFile}"
+
+echo "/hive/data/genomes/asmHubs/${genbankRefseq}Build/doIdKeys \"${asmId}\" &" >> "${logFile}"
+
+/hive/data/genomes/asmHubs/${genbankRefseq}Build/doIdKeys "${asmId}" >> "${logFile}" 2>&1 &
+
+echo "### \$HOME/kent/src/hg/utils/automation/doAssemblyHub.pl \
+  -continue=\"${stepStart}\" -stop=\"${stepEnd}\" \
+    -rmskSpecies=\"$sciName\" -bigClusterHub=ku -buildDir=\`pwd\` \
+      -asmHubName=$asmHubName -fileServer=hgwdev -smallClusterHub=hgwdev \
+        ${noRmsk} ${ncbiRmsk} ${ucscNames} ${augustusSpecies} -workhorse=hgwdev \"${asmId}\"" >> "${logFile}"
+
+cd "${buildDir}"
+if [ ! -s "${buildDir}/build.log" ]; then
+  ln -s "${logFile}" "${buildDir}/build.log"
+fi
+
+time ($HOME/kent/src/hg/utils/automation/doAssemblyHub.pl \
+  -continue="${stepStart}" -stop="${stepEnd}" \
+    -rmskSpecies="$sciName" -bigClusterHub=ku -buildDir=`pwd` \
+      -asmHubName=$asmHubName -fileServer=hgwdev -smallClusterHub=hgwdev \
+        ${noRmsk} ${ncbiRmsk} ${ucscNames} ${augustusSpecies} -workhorse=hgwdev "${asmId}") >> "${logFile}" 2>&1

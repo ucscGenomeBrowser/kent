@@ -73,6 +73,7 @@
 #include <openssl/sha.h>
 #include "customComposite.h"
 #include "chromAlias.h"
+#include "jsonWrite.h"
 
 //#include "bed3Sources.h"
 
@@ -159,6 +160,16 @@ struct hgPositions *hgp = NULL;
 struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test, preview, or public browser */
 char *organization;             /* UCSC */
+
+/* mouseOver popUp global data, each track that wants to send json
+ * data will need to know the json file name from mouseOverJson
+ * and will write the track data to mouseOverJson.  The structure
+ * of the data in the json output will depend upon what the track needs
+ * to send.
+ */
+boolean enableMouseOver = FALSE;
+struct tempName *mouseOverJsonFile = NULL;
+struct jsonWrite *mouseOverJson = NULL;
 
 struct hash *trackHash = NULL; /* Hash of the tracks by their name. */
 
@@ -627,26 +638,6 @@ for(cb = cbList; cb != NULL; cb = cb->next)
     }
 }
 
-static void maybeNewFonts(struct hvGfx *hvg)
-/* Check to see if we want to use the alternate font engine (FreeType2). */
-{
-if (sameString(cfgOptionDefault("freeType", "off"), "on"))
-    {
-    char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
-    char buffer[4096];
-
-    extern char *freeTypeFontNames[];
-    extern char *freeTypeFontFiles[];
-    int ii;
-    for(ii=0; ii < 33; ii++)
-        if (sameString(freeTypeFontNames[ii], tl.textFont))
-            break;
-    char *fontFile = freeTypeFontFiles[ii];
-    char *fontName = freeTypeFontNames[ii];
-    safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
-    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
-    }
-}
 
 boolean makeChromIdeoImage(struct track **pTrackList, char *psOutput,
                         struct tempName *ideoTn)
@@ -5041,6 +5032,25 @@ else
     if (measureTiming)
         measureTime("Time at start of obtaining trash hgt png image file");
     trashDirFile(&pngTn, "hgt", "hgt", ".png");
+    if (enableMouseOver)
+	{   /* created here at this time to get the same name as .png file
+	     * it is copied from pngTn since if we repeated trashFileDir()
+	     * to get the name, it could be different since there is a
+	     * timestamp involved in making the name.
+	     */
+        /* will open this file upon successful exit to write the data */
+	AllocVar(mouseOverJsonFile);
+	char *tmpStr = cloneString(pngTn.forCgi);
+	char *jsonStr = replaceChars(tmpStr, ".png", ".json");
+	safef(mouseOverJsonFile->forCgi, ArraySize(mouseOverJsonFile->forCgi), "%s", jsonStr);
+	freeMem(tmpStr);
+	freeMem(jsonStr);
+	tmpStr = cloneString(pngTn.forHtml);
+        jsonStr = replaceChars(tmpStr, ".png", ".json");
+	safef(mouseOverJsonFile->forHtml, ArraySize(mouseOverJsonFile->forHtml), "%s", jsonStr);
+	freeMem(tmpStr);
+	freeMem(jsonStr);
+	}
     hvg = hvGfxOpenPng(pixWidth, pixHeight, pngTn.forCgi, transparentImage);
 
     if (theImgBox)
@@ -6962,6 +6972,20 @@ if (hideTracks)
 struct hash *superTrackHash = newHash(5);  // cache whether supertrack is hiding tracks or not
 char buffer[4096];
 
+// Check to see if we have a versioned default gene track and let the knownGene 
+// cart variable determine its visibility
+char *defaultGeneTrack = NULL;
+char *knownDb = hdbDefaultKnownDb(database);
+if (differentString(knownDb, database))
+    defaultGeneTrack = hdbGetMasterGeneTrack(knownDb);
+
+if (defaultGeneTrack)
+    {
+    char *s = cartOptionalString(cart, "knownGene");
+    if ((s != NULL) && (differentString(s, "hide")))
+        cartSetString(cart, defaultGeneTrack, s);
+    }
+
 for (track = trackList; track != NULL; track = track->next)
     {
     // deal with any supertracks we're seeing for the first time
@@ -7982,6 +8006,7 @@ long thisTime = 0, lastTime = 0;
 basesPerPixel = ((float)virtWinBaseCount) / ((float)fullInsideWidth);
 zoomedToBaseLevel = (virtWinBaseCount <= fullInsideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(virtWinBaseCount/3) * tl.mWidth) <= fullInsideWidth;
+zoomedToCodonNumberLevel = (ceil(virtWinBaseCount/3) * tl.mWidth * 5) <= fullInsideWidth;
 zoomedToCdsColorLevel = (virtWinBaseCount <= fullInsideWidth*3);
 
 if (psOutput != NULL)
@@ -8690,6 +8715,10 @@ for(window=windows;window;window=window->next)
     }
 setGlobalsFromWindow(windows); // first window // restore globals
 
+/* DBG - a message box to display information from the javascript
+hPrintf("<div id='mouseDbg'><span id='dbgMouseOver'><p>. . . dbgMouseOver</p></span></div>\n");
+ */
+
 #ifdef USE_NAVIGATION_LINKS
 hPrintf("<TABLE BORDER=0 CELLPADDING=0 width='%d'><tr style='font-size:small;'>\n",
         tl.picWidth);//min(tl.picWidth, 800));
@@ -8766,7 +8795,7 @@ if (!hideControls)
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
-    hWrites("Click or drag in the base position track to zoom in. ");
+    hWrites("Click+shift+drag to zoom in. ");
     hWrites("Click side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
     hWrites("Drag tracks left or right to new position. ");
@@ -9827,6 +9856,7 @@ virtWinBaseCount = virtWinEnd - virtWinStart;
 if (virtWinBaseCount <= 0)
     hUserAbort("Window out of range on %s", virtChromName);
 
+
 if (!cartUsualBoolean(cart, "hgt.psOutput", FALSE)
  && !cartUsualBoolean(cart, "hgt.imageV1" , FALSE))
     {
@@ -10555,6 +10585,23 @@ measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTi
 if (measureTiming)
     measureTime("Startup (bottleneck %d ms) ", botDelayMillis);
 
+char *mouseOverEnabled = cfgOption("mouseOverEnabled");
+if (sameWordOk(mouseOverEnabled, "on"))
+    {
+    enableMouseOver = TRUE;
+    /* mouseOverJsonFile will be initializes and created at the same
+     * time as the browser .png image file
+     */
+    mouseOverJson = jsonWriteNew();
+    jsonWriteObjectStart(mouseOverJson, NULL);
+    /* this jsonWrite structure will finish off upon successful exit.
+     * each track will start a list with the track name:
+     *   jsonWriteListStart(mouseOverJson, tg->track);
+     */
+    }
+else
+    enableMouseOver = FALSE;
+
 if (issueBotWarning)
     {
     char *ip = getenv("REMOTE_ADDR");
@@ -10571,9 +10618,8 @@ if (measureTiming)
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
-#if  0
-state = cgiUrlString();
-printf("State: %s\n", state->string);
+#if 0
+printf("State: %s\n", cgiUrlString()->string);
 #endif
 
 getDbAndGenome(cart, &database, &organism, oldVars);
@@ -10653,6 +10699,9 @@ if(!trackImgOnly)
 
     webIncludeResourceFile("spectrum.min.css");
     webIncludeResourceFile("jquery-ui.css");
+    if (enableMouseOver)
+      webIncludeResourceFile("mouseOver.css");
+
     if (!searching)     // NOT doing search
         {
         webIncludeResourceFile("jquery.contextmenu.css");
@@ -10667,6 +10716,7 @@ if(!trackImgOnly)
 
     cartFlushHubWarnings();
     }
+
 
 if (cartVarExists(cart, "chromInfoPage"))
     {
@@ -10761,6 +10811,30 @@ jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 
 struct dyString *dy = dyStringNew(1024);
 jsonDyStringPrint(dy, (struct jsonElement *) jsonForClient, "hgTracks", 0);
+jsInline(dy->string);
+dyStringFree(&dy);
+
+dy = dyStringNew(1024);
+if (enableMouseOver)
+    {
+    jsonWriteObjectEnd(mouseOverJson);
+    /* if any data was written, it is longer than 4 bytes */
+    if (strlen(mouseOverJson->dy->string) > 4)
+	{
+	FILE *trashJson = mustOpen(mouseOverJsonFile->forCgi, "w");
+	fputs(mouseOverJson->dy->string,trashJson);
+	carefulClose(&trashJson);
+	}
+
+    hPrintf("<div id='mouseOverVerticalLine' class='mouseOverVerticalLine'></div>\n");
+    hPrintf("<div id='mouseOverText' class='mouseOverText'></div>\n");
+    dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
+    dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
+    }
+else
+    {
+    dyStringPrintf(dy, "window.mouseOverEnabled=false;\n");
+    }
 jsInline(dy->string);
 dyStringFree(&dy);
 

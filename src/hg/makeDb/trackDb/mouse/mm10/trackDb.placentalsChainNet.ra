@@ -58,6 +58,14 @@ html chainNet
         type chain ailMel1
         otherDb ailMel1
 
+        track chainCanFam5
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=daDog clade=eCarn
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain canFam5
+        otherDb canFam5
+
         track chainCanFam4
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=daDog clade=eCarn
@@ -287,6 +295,14 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ailMel1 chainAilMel1
         otherDb ailMel1
+
+        track netCanFam5
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=daDog clade=eCarn
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign canFam5 chainCanFam4
+        otherDb canFam5
 
         track netCanFam4
         subTrack placentalChainNetViewnet off

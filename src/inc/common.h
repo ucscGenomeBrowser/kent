@@ -344,6 +344,10 @@ void reverseDoubles(double *a, int length);
 void reverseStrings(char **a, int length);
 /* Reverse the order of the char* array. */
 
+void sortStrings(char **array, int count);
+/* Sort array using strcmp */
+
+
 void swapBytes(char *a, char *b, int length);
 /* Swap buffers a and b. */
 

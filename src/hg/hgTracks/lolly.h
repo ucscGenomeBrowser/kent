@@ -11,7 +11,6 @@
 struct lollyCartOptions
     {
     int origHeight, height;
-    double upperLimit, lowerLimit;
     double minY, maxY;
     enum wiggleScaleOptEnum autoScale;
     int radius;    // percentage of height to use for lollipop circle

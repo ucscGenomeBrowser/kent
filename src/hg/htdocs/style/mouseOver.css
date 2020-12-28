@@ -1,0 +1,29 @@
+.mouseOverVerticalLine {
+  position: fixed;
+  width: 1px;
+  background: #ffff00;
+  height: 100%;
+  display: none;
+  z-index: 999;
+  opacity: 1;
+  border-style: hidden solid hidden solid;
+  border-width: 1px;
+  border-color: #2222cc;
+  pointer-events: none
+}
+
+.mouseOverText {
+  position: fixed;
+  left: 100px;
+  top: 100px;
+  width: auto;
+  height: auto;
+  background-color: #3333cc;
+  color: #ffff00;
+  display: none;
+  opacity: 1;
+  z-index: 1000;
+  border: 1px solid #ffff00;
+  text-align: right;
+  pointer-events: none
+}

@@ -1,9 +1,5 @@
 # Genes and Gene Predictions
 
-track knownGene override
-bigGeneDataUrl /gbdb/hg18/knownGene.bb
-priority 1
-
 track refGene override
 priority 2
 

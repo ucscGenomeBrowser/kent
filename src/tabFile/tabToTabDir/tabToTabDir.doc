@@ -1,0 +1,105 @@
+tabToTabDir - Convert a large tab-separated table to a directory full of such tables according
+to a specification. The program is designed to make it relatively easy to unpack overloaded
+single fields into multiple fields, and to created normalized less redundant representations.
+The command line is:
+   tabToTabDir in.tsv spec.x outDir
+ 
+Command Line Parameters:
+in.tsv is a tab-separated input file.  The first line is the label names and may start with #
+spec.txt is a file that says what columns to put into the output, described in more detail below.
+outDir is a directory where the output tab separated files are sent, it may be . and will be created      if necessary
+
+Options:
+   -id=fieldName - Add a numeric id field of given name that starts at 1 and autoincrements 
+                   for each table
+   -startId=fieldName - sets starting ID to be something other than 1
+
+
+The Spec.x file:
+
+The spec file, which by convention has a .x suffix, defines how the output tables are created
+from the input tables.  The spec.x file is divided into blank line separated stanzas.  The
+most common type of stanza defines what an output table looks like.  For instance
+       table myTable id
+       name
+       id
+       balance
+would extract the three fields in, name, and cost from in.tsv,  and output the uniq results
+into myTable.tsv with id being a unique (key) field after removing duplicate rows.
+
+It is possible to transform a column rather than simply selecting it.  A common transform
+is just to rename the fields.   In the example above we could rename the name field to
+be a label field instead with a stanza like so:
+       table myTable id
+       label name
+       id
+       balance
+ 
+In general a table stanza starts with a table line, and is followed by the names of fields
+to output for that table.   The table line includes the output table name, and which field
+of the output to use primary key.  The field lines follow the table line,  one line per field
+in the new table.   The general format for these lines is <output label> <optional expression>.
+If there is no optional expression then it is assumed the output is just echoing that of the
+column of the same name in the input.  If there is an expression, it is intepreted as a string
+expression that can use any of the fields in the input table as a variable.  So, in the above 
+example the new field "label" gets filled in with values from the old field "name." These
+expressions can get more complex, and the fields can be reordered as well as in this
+example, which also shows the # style commenting:
+three fields into a table:
+       table myTable id
+       id		       # Let's move this to first field like it is in our other tables
+       label name + " " + id   # Names are human readable but not unique enough for everyone
+       name		       # Keep the name field though unchanged, it's useful
+       balance  assets - debits
+The expressions allowed to fill in a new field are pretty rich.  Please see src/lib/strex.doc
+for a full description of these expressions.
+
+The spec can contain multiple table stanzas as in this example which might separate out
+a two smaller person and account tables from a larger input table that might record
+transactions:
+       table person id
+       id	person_id
+       name	person_name
+
+       table accounts id
+       id	transaction_id
+       person	person_id
+       change	unit_cost*unit_count
+Each output table has duplicate rows merged using the key-column to determine uniqueness.
+If a more than one row of the input generates the same key in the output that is ok so long as
+all of the other fields that are generated agree as well.  An exception for this is made for
+summary expressions.
+
+Summary expression all begin with the character '$'.   The allowed summary expressions are
+    $count - counts up number of input rows that yield this row
+    $stats sourceExpression - creates comma separated list of all values and some statistics
+    $list sourceExpression - creates comma separated list of unique values of sourceExpression
+If the source field starts with '@' then it is followed
+by a table name and is intepreted as the same value as the key field in the this table
+
+If there is a '?' in front of the column name it is taken to mean an optional field.
+if the corresponding source field does not exist then there's no error (and no output)
+for that column
+
+In addition to the table stanza there can be a 'define' stanza at the start of the file
+that defines variables that can be used in sourceFields for tables.  This looks like:
+         define
+         variable1 sourceField1
+         variable2 sourceField2
+The defines can be useful particularly when multiple tables of output want the same field.
+Though tabToTabDir encourages normalization,  realistically it is used to fill in things
+for some pretty redundant formats.
+
+There is also a 'unroll' stanza that can be used to make up a table that unrolls comma-separated
+list fields into a tables instead. The format is
+	unroll tableName id
+	field1  [expression1]
+	field2	[expression2]
+	     ...
+	fieldN  [expressionN]
+where the expression rules follow the same logic as the they do for table stanzas.  The
+expressions for an unroll need to evaluate to the same comma separated list for each row
+in the input table,  and all fields must have the same number of values.  Thus the 
+unroll stanza only works on a small subset of input fields.  Nonetheless it is useful for
+unpacking author lists and in some other cases as well.
+

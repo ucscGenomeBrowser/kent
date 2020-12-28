@@ -10,7 +10,7 @@
 #include "dnaseq.h"
 #include "math.h"
 #include "udc.h"
-#include "md5.h"
+#include <openssl/md5.h>
 
 // static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
@@ -23,9 +23,6 @@ errAbort(
   "   twoBitDup file.2bit\n"
   "options:\n"
   "  -keyList=file - file to write a key list, two columns: md5sum and sequenceName\n"
-  "                   NOTE: use of keyList is very time expensive for 2bit files\n"
-  "                   with a large number of sequences (> 5,000).  Better to\n"
-  "                   use a cluster run with the doIdKeys.pl automation script.\n"
   "  -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   "\nexample: twoBitDup -keyList=stdout db.2bit \\\n"
   "          | grep -v 'are identical' | sort > db.idKeys.txt"
@@ -70,11 +67,26 @@ for (index = tbf->indexList; index != NULL; index = index->next)
 	printf("%s and %s are identical\n", index->name, (char *)hel->val);
     else
 	hel = hashAdd(seqHash, seq->dna, index->name);
-    if (keyListFile) {
+    if (keyListFile)
+	{
+/* This used to be extremely slow:
+#include "md5.h"
        char *md5Sum = md5HexForString(seq->dna);
        fprintf(keyListFile, "%s\t%s\n", md5Sum, index->name);
        freeMem(md5Sum);
-    }
+ * changed to use MD5() in openssl 2020-12-04:
+ */
+	unsigned char md5Result[MD5_DIGEST_LENGTH];
+	MD5((unsigned char *)seq->dna, strlen(seq->dna), md5Result);
+	int i;
+	struct dyString *ds = newDyString(MD5_DIGEST_LENGTH);
+	for(i = 0; i < MD5_DIGEST_LENGTH; i++)
+	    {
+	    dyStringPrintf(ds, "%02x", md5Result[i]);
+	    }
+	fprintf(keyListFile, "%s\t%s\n", ds->string, index->name);
+	freeDyString(&ds);
+	}
     freeDnaSeq(&seq);
     }
 }

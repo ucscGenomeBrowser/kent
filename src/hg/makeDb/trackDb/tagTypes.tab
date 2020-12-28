@@ -26,6 +26,7 @@ bamGrayMode bam
 bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
 barChartColors barChart bigBarChart
+barChartCategoryUrl barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 # below for backwards compatibility during QA. 
 barChartDataUrl barChart bigBarChart
@@ -131,6 +132,7 @@ expStep bed expRatio
 expTable bed expRatio
 extTable *
 externalDb bigGenePred
+extraDetailsTable bigBed
 fieldCount customTracks
 filePos *
 fileSortOrder *
@@ -358,6 +360,9 @@ sGroup_Birds wigMaf
 sGroup_Brachycera wigMaf
 sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
+sGroup_Carnivore wigMaf
+sGroup_Cetartiodactyla wigMaf
+sGroup_Chiroptera wigMaf
 sGroup_CoV_2019 wigMaf
 sGroup_CoV wigMaf
 sGroup_SARS-CoV-2_sequences wigMaf
@@ -409,6 +414,7 @@ sGroup_Primates wigMaf
 sGroup_Reptiles wigMaf
 sGroup_Reston_1989-90 wigMaf
 sGroup_Rhabditina wigMaf
+sGroup_Rodents wigMaf
 sGroup_Sarcopterygii wigMaf
 sGroup_Spirurina wigMaf
 sGroup_Strongylida wigMaf

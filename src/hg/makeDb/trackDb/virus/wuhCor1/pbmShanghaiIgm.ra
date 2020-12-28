@@ -1,0 +1,605 @@
+track igm
+shortLabel S-PBM IgM
+longLabel S Protein Antibody Peptide Binding Microarray - IgM - Sheng-ce Tao group, Jiao Tung Univ.
+type bed 9
+compositeTrack on
+visibility dense
+labelOnFeature on
+itemRgb on
+parent pbmShanghai
+
+
+    track igm_COVID_409
+    shortLabel COVID 409
+    longLabel COVID 409
+    type bigBed 9
+    priority 0
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_409.bb
+    parent igm on
+
+    track igm_COVID_408
+    shortLabel COVID 408
+    longLabel COVID 408
+    type bigBed 9
+    priority 1
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_408.bb
+    parent igm on
+
+    track igm_COVID_13
+    shortLabel COVID 13
+    longLabel COVID 13
+    type bigBed 9
+    priority 2
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_13.bb
+    parent igm on
+
+    track igm_Ctrl_LC181
+    shortLabel Ctrl LC181
+    longLabel Ctrl LC181
+    type bigBed 9
+    priority 3
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_LC181.bb
+    parent igm on
+
+    track igm_Ctrl_LC175
+    shortLabel Ctrl LC175
+    longLabel Ctrl LC175
+    type bigBed 9
+    priority 4
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_LC175.bb
+    parent igm on
+
+    track igm_Ctrl_NC67
+    shortLabel Ctrl NC67
+    longLabel Ctrl NC67
+    type bigBed 9
+    priority 5
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_NC67.bb
+    parent igm on
+
+    track igm_COVID_404
+    shortLabel COVID 404
+    longLabel COVID 404
+    type bigBed 9
+    priority 6
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_404.bb
+    parent igm on
+
+    track igm_COVID_16
+    shortLabel COVID 16
+    longLabel COVID 16
+    type bigBed 9
+    priority 7
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_16.bb
+    parent igm on
+
+    track igm_COVID_502
+    shortLabel COVID 502
+    longLabel COVID 502
+    type bigBed 9
+    priority 8
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_502.bb
+    parent igm on
+
+    track igm_COVID_15
+    shortLabel COVID 15
+    longLabel COVID 15
+    type bigBed 9
+    priority 9
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_15.bb
+    parent igm on
+
+    track igm_COVID_416
+    shortLabel COVID 416
+    longLabel COVID 416
+    type bigBed 9
+    priority 10
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_416.bb
+    parent igm on
+
+    track igm_Ctrl_LC177
+    shortLabel Ctrl LC177
+    longLabel Ctrl LC177
+    type bigBed 9
+    priority 11
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_LC177.bb
+    parent igm on
+
+    track igm_Ctrl_LC169
+    shortLabel Ctrl LC169
+    longLabel Ctrl LC169
+    type bigBed 9
+    priority 12
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_LC169.bb
+    parent igm on
+
+    track igm_Ctrl_LC168
+    shortLabel Ctrl LC168
+    longLabel Ctrl LC168
+    type bigBed 9
+    priority 13
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_LC168.bb
+    parent igm on
+
+    track igm_Ctrl_LC182
+    shortLabel Ctrl LC182
+    longLabel Ctrl LC182
+    type bigBed 9
+    priority 14
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_LC182.bb
+    parent igm on
+
+    track igm_COVID_528
+    shortLabel COVID 528
+    longLabel COVID 528
+    type bigBed 9
+    priority 15
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_528.bb
+    parent igm on
+
+    track igm_Ctrl_NC65
+    shortLabel Ctrl NC65
+    longLabel Ctrl NC65
+    type bigBed 9
+    priority 16
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_NC65.bb
+    parent igm on
+
+    track igm_Ctrl_NC98
+    shortLabel Ctrl NC98
+    longLabel Ctrl NC98
+    type bigBed 9
+    priority 17
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_NC98.bb
+    parent igm on
+
+    track igm_Ctrl_NC63
+    shortLabel Ctrl NC63
+    longLabel Ctrl NC63
+    type bigBed 9
+    priority 18
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_NC63.bb
+    parent igm on
+
+    track igm_Ctrl_LC180
+    shortLabel Ctrl LC180
+    longLabel Ctrl LC180
+    type bigBed 9
+    priority 19
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_LC180.bb
+    parent igm on
+
+    track igm_Ctrl_NC64
+    shortLabel Ctrl NC64
+    longLabel Ctrl NC64
+    type bigBed 9
+    priority 20
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_NC64.bb
+    parent igm on
+
+    track igm_Ctrl_NC96
+    shortLabel Ctrl NC96
+    longLabel Ctrl NC96
+    type bigBed 9
+    priority 21
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_NC96.bb
+    parent igm on
+
+    track igm_COVID_4372
+    shortLabel COVID 4372
+    longLabel COVID 4372
+    type bigBed 9
+    priority 22
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_4372.bb
+    parent igm on
+
+    track igm_COVID_531
+    shortLabel COVID 531
+    longLabel COVID 531
+    type bigBed 9
+    priority 23
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_531.bb
+    parent igm on
+
+    track igm_Ctrl_NC95
+    shortLabel Ctrl NC95
+    longLabel Ctrl NC95
+    type bigBed 9
+    priority 24
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_NC95.bb
+    parent igm on
+
+    track igm_Ctrl_NC66
+    shortLabel Ctrl NC66
+    longLabel Ctrl NC66
+    type bigBed 9
+    priority 25
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_NC66.bb
+    parent igm on
+
+    track igm_Ctrl_NC97
+    shortLabel Ctrl NC97
+    longLabel Ctrl NC97
+    type bigBed 9
+    priority 26
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_NC97.bb
+    parent igm on
+
+    track igm_Ctrl_LC171
+    shortLabel Ctrl LC171
+    longLabel Ctrl LC171
+    type bigBed 9
+    priority 27
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_LC171.bb
+    parent igm on
+
+    track igm_COVID_523
+    shortLabel COVID 523
+    longLabel COVID 523
+    type bigBed 9
+    priority 28
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_523.bb
+    parent igm on
+
+    track igm_COVID_527
+    shortLabel COVID 527
+    longLabel COVID 527
+    type bigBed 9
+    priority 29
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_527.bb
+    parent igm on
+
+    track igm_COVID_414
+    shortLabel COVID 414
+    longLabel COVID 414
+    type bigBed 9
+    priority 30
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_414.bb
+    parent igm on
+
+    track igm_COVID_11
+    shortLabel COVID 11
+    longLabel COVID 11
+    type bigBed 9
+    priority 31
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_11.bb
+    parent igm on
+
+    track igm_COVID_17
+    shortLabel COVID 17
+    longLabel COVID 17
+    type bigBed 9
+    priority 32
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_17.bb
+    parent igm on
+
+    track igm_COVID_744
+    shortLabel COVID 744
+    longLabel COVID 744
+    type bigBed 9
+    priority 33
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_744.bb
+    parent igm on
+
+    track igm_COVID_526
+    shortLabel COVID 526
+    longLabel COVID 526
+    type bigBed 9
+    priority 34
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_526.bb
+    parent igm on
+
+    track igm_COVID_529
+    shortLabel COVID 529
+    longLabel COVID 529
+    type bigBed 9
+    priority 35
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_529.bb
+    parent igm on
+
+    track igm_COVID_18
+    shortLabel COVID 18
+    longLabel COVID 18
+    type bigBed 9
+    priority 36
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_18.bb
+    parent igm on
+
+    track igm_COVID_419
+    shortLabel COVID 419
+    longLabel COVID 419
+    type bigBed 9
+    priority 37
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_419.bb
+    parent igm on
+
+    track igm_COVID_4021
+    shortLabel COVID 4021
+    longLabel COVID 4021
+    type bigBed 9
+    priority 38
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_4021.bb
+    parent igm on
+
+    track igm_COVID_415
+    shortLabel COVID 415
+    longLabel COVID 415
+    type bigBed 9
+    priority 39
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_415.bb
+    parent igm on
+
+    track igm_COVID_19
+    shortLabel COVID 19
+    longLabel COVID 19
+    type bigBed 9
+    priority 40
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_19.bb
+    parent igm on
+
+    track igm_COVID_534
+    shortLabel COVID 534
+    longLabel COVID 534
+    type bigBed 9
+    priority 41
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_534.bb
+    parent igm on
+
+    track igm_COVID_14
+    shortLabel COVID 14
+    longLabel COVID 14
+    type bigBed 9
+    priority 42
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_14.bb
+    parent igm on
+
+    track igm_COVID_406
+    shortLabel COVID 406
+    longLabel COVID 406
+    type bigBed 9
+    priority 43
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_406.bb
+    parent igm on
+
+    track igm_COVID_532
+    shortLabel COVID 532
+    longLabel COVID 532
+    type bigBed 9
+    priority 44
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_532.bb
+    parent igm on
+
+    track igm_COVID_5333
+    shortLabel COVID 5333
+    longLabel COVID 5333
+    type bigBed 9
+    priority 45
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_5333.bb
+    parent igm on
+
+    track igm_COVID_520
+    shortLabel COVID 520
+    longLabel COVID 520
+    type bigBed 9
+    priority 46
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_520.bb
+    parent igm on
+
+    track igm_COVID_608
+    shortLabel COVID 608
+    longLabel COVID 608
+    type bigBed 9
+    priority 47
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_608.bb
+    parent igm on
+
+    track igm_Ctrl_LC174
+    shortLabel Ctrl LC174
+    longLabel Ctrl LC174
+    type bigBed 9
+    priority 48
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/Ctrl_LC174.bb
+    parent igm on
+
+    track igm_COVID_508
+    shortLabel COVID 508
+    longLabel COVID 508
+    type bigBed 9
+    priority 49
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_508.bb
+    parent igm on
+
+    track igm_COVID_605
+    shortLabel COVID 605
+    longLabel COVID 605
+    type bigBed 9
+    priority 50
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_605.bb
+    parent igm on
+
+    track igm_COVID_730
+    shortLabel COVID 730
+    longLabel COVID 730
+    type bigBed 9
+    priority 51
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_730.bb
+    parent igm on
+
+    track igm_COVID_727
+    shortLabel COVID 727
+    longLabel COVID 727
+    type bigBed 9
+    priority 52
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_727.bb
+    parent igm on
+
+    track igm_COVID_533
+    shortLabel COVID 533
+    longLabel COVID 533
+    type bigBed 9
+    priority 53
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_533.bb
+    parent igm on
+
+    track igm_COVID_12
+    shortLabel COVID 12
+    longLabel COVID 12
+    type bigBed 9
+    priority 54
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_12.bb
+    parent igm on
+
+    track igm_COVID_610
+    shortLabel COVID 610
+    longLabel COVID 610
+    type bigBed 9
+    priority 55
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_610.bb
+    parent igm on
+
+    track igm_COVID_4371
+    shortLabel COVID 4371
+    longLabel COVID 4371
+    type bigBed 9
+    priority 56
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_4371.bb
+    parent igm on
+
+    track igm_COVID_407
+    shortLabel COVID 407
+    longLabel COVID 407
+    type bigBed 9
+    priority 57
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_407.bb
+    parent igm on
+
+    track igm_COVID_607
+    shortLabel COVID 607
+    longLabel COVID 607
+    type bigBed 9
+    priority 58
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_607.bb
+    parent igm on
+
+    track igm_COVID_510
+    shortLabel COVID 510
+    longLabel COVID 510
+    type bigBed 9
+    priority 59
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_510.bb
+    parent igm on
+
+    track igm_COVID_5222
+    shortLabel COVID 5222
+    longLabel COVID 5222
+    type bigBed 9
+    priority 60
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_5222.bb
+    parent igm on
+
+    track igm_COVID_535
+    shortLabel COVID 535
+    longLabel COVID 535
+    type bigBed 9
+    priority 61
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_535.bb
+    parent igm on
+
+    track igm_COVID_501
+    shortLabel COVID 501
+    longLabel COVID 501
+    type bigBed 9
+    priority 62
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_501.bb
+    parent igm on
+
+    track igm_COVID_509
+    shortLabel COVID 509
+    longLabel COVID 509
+    type bigBed 9
+    priority 63
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_509.bb
+    parent igm on
+
+    track igm_COVID_410
+    shortLabel COVID 410
+    longLabel COVID 410
+    type bigBed 9
+    priority 64
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_410.bb
+    parent igm on
+
+    track igm_COVID_401
+    shortLabel COVID 401
+    longLabel COVID 401
+    type bigBed 9
+    priority 65
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_401.bb
+    parent igm on
+
+    track igm_COVID_522
+    shortLabel COVID 522
+    longLabel COVID 522
+    type bigBed 9
+    priority 66
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_522.bb
+    parent igm on
+
+    track igm_COVID_405
+    shortLabel COVID 405
+    longLabel COVID 405
+    type bigBed 9
+    priority 67
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_405.bb
+    parent igm on
+
+    track igm_COVID_429
+    shortLabel COVID 429
+    longLabel COVID 429
+    type bigBed 9
+    priority 68
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_429.bb
+    parent igm on
+
+    track igm_COVID_432
+    shortLabel COVID 432
+    longLabel COVID 432
+    type bigBed 9
+    priority 69
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_432.bb
+    parent igm on
+
+    track igm_COVID_530
+    shortLabel COVID 530
+    longLabel COVID 530
+    type bigBed 9
+    priority 70
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_530.bb
+    parent igm on
+
+    track igm_COVID_436
+    shortLabel COVID 436
+    longLabel COVID 436
+    type bigBed 9
+    priority 71
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_436.bb
+    parent igm on
+
+    track igm_COVID_4022
+    shortLabel COVID 4022
+    longLabel COVID 4022
+    type bigBed 9
+    priority 72
+    bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/COVID_4022.bb
+    parent igm on
+
+track igmAllSum
+shortLabel S-PBM: IgM Response Frequency
+longLabel S Protein Antibody Peptide Binding Microarray - IgM - Response Frequency
+type bigWig
+visibility full
+autoScale on
+maxHeightPixels 100:24:8
+bigDataUrl /gbdb/wuhCor1/pbmShanghai/igm/allSum.bw
+parent pbmShanghai
+

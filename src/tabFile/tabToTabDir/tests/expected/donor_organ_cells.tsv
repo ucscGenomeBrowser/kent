@@ -1,0 +1,13 @@
+#id	age	organ	cell_count	cell_types
+AB_S8	postnatal 54 years	brain	58	oligodendrocytes,hybrid,astrocytes,OPC,microglia
+AB_S11	postnatal 37 years	brain	63	hybrid,neuron,astrocytes,microglia,oligodendrocytes,endothelial
+AB_S1	postnatal 47 years	brain	24	astrocytes,endothelial,microglia,neuron
+AB_S2	postnatal 63 years	brain	5	microglia,astrocytes,neuron
+AB_S3	postnatal 22 years	brain	4	neuron,nonreplicating fetal neuron,endothelial
+AB_S4	postnatal 50 years	brain	77	astrocytes,hybrid,neuron,oligodendrocytes
+AB_S5	postnatal 63 years	brain	44	endothelial,neuron,oligodendrocytes,microglia
+AB_S7	postnatal 21 years	brain	57	neuron,oligodendrocytes,hybrid,astrocytes
+FB_S1	prenatal 16-18 W	brain	26	replicating fetal neuron,nonreplicating fetal neuron
+FB_S2	prenatal 16-18 W	brain	46	nonreplicating fetal neuron,replicating fetal neuron
+FB_S3	prenatal 16-18 W	brain	33	nonreplicating fetal neuron
+FB_S6	prenatal 16-18 W	brain	29	nonreplicating fetal neuron,replicating fetal neuron

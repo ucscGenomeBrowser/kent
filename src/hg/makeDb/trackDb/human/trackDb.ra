@@ -30,7 +30,7 @@ include trackDb.dbVar.ra
 include trackDb.clinGen.ra
 
 # Genome In a Bottle
-include trackDb.giab.ra alpha
+include trackDb.giab.ra
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -94,7 +94,7 @@ visibility hide
 type bigBed 12 +
 noScoreFilter .
 urlLabel Link to LRG report: 
-url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml
 urls hgncId="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" ncbiAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
 baseColorDefault diffBases
 baseColorUseSequence lrg
@@ -174,7 +174,7 @@ type bed 3
         longLabel Genomenon Mastermind Variants extracted from full text publications
         visibility dense
         type bigBed 9 +
-        urls url=https://mastermind.genomenon.com/detail?disease=all%20diseases&$$
+        urls url=$$
         bigDataUrl /gbdb/$D/bbi/mastermind.bb
         noScoreFilter on
         exonNumbers off
@@ -3182,10 +3182,12 @@ urls ncbiTranscript=https://www.ncbi.nlm.nih.gov/nuccore/$$ ensemblTranscript=ht
 cdsTable lrgCds
 cdnaTable lrgCdna
 pepTable lrgPep
-baseColorDefault diffCodons
+altColor 127,127,127
+baseColorDefault genomicCodons
+baseColorUseSequence lfExtra
 baseColorUseCds table lrgCds
-baseColorUseSequence table lrgCdna
 indelDoubleInsert on
+indelPolyA on
 indelQueryInsert on
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
@@ -3193,7 +3195,8 @@ showCdsAllScales .
 showCdsMaxZoom 10000.0
 color 54,125,29
 urlLabel Link to LRG transcript:
-url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+bigDataUrl /gbdb/$D/bbi/lrgBigPsl.bb
 
 track lrgTranscriptAli
 shortLabel LRG Transcripts
@@ -3215,7 +3218,7 @@ showCdsAllScales .
 showCdsMaxZoom 10000.0
 color 54,125,29
 urlLabel Link to LRG transcript:
-url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
 
 track affyHuEx1
 shortLabel Affy HuEx 1.0
@@ -3628,29 +3631,6 @@ hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome omimGeneMap omimGeneMap2 omimPhenotype omimGeneSymbol omim2gene
 noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
-release public
-
-track omimGene2bb
-shortLabel OMIM Genes (New)
-longLabel OMIM Gene Phenotypes - Dark Green Can Be Disease-causing
-group phenDis
-visibility hide
-color 0, 80, 0
-type bigBed 9 +
-hgsid on
-url http://www.omim.org/entry/$$
-urlLabel Link to OMIM:
-tableBrowser noGenome omimGeneMap omimGeneMap2 omimPhenotype omimGeneSymbol omim2gene
-bigDataUrl /gbdb/$D/bbi/omimGene2.bb
-itemRgb on
-mouseOverField _mouseOver
-noScoreFilter on
-labelFields name,mainSym
-defaultLabelFields name,mainSym
-html omimGene2 
-noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
-release alpha,beta
-searchIndex name
 
 track omimAvSnp
 shortLabel OMIM Alleles
@@ -3759,6 +3739,7 @@ mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
 maxItems 1000
+pennantIcon Updated red
 
 track snpedia
 shortLabel SNPedia
@@ -5472,6 +5453,9 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 track sgpGene override
 longLabel SGP Gene Predictions Using Mouse/$Organism Homology
 
+track uniprot override
+hideEmptySubtracks off
+
 searchTable cnvDevDelayCase
 semiShortCircuit 1
 termRegex nssv[0-9]+
@@ -5486,19 +5470,19 @@ searchPriority 50
 
 include covidHgiGwas.ra
 
-track covidHgeMuts
+track covidMuts
 type bigBed 12 + 
-shortLabel COVID-19 Immunity Variants
-longLabel COVID-19 Immunity Variants from the COVID Human Genetics Effort
-mouseOver $name $rsId $gene Genotype: $genotype; Zygosity: $zygo ; Inheritance: $inhMode
+shortLabel Rare Harmful Vars
+longLabel Rare variants underlying COVID-19 severity and susceptibility from the COVID Human Genetics Effort
+mouseOver $gene $name $rsId Genotype: $genotype; Zygosity: $zygo ; Inheritance: $inhMode
 labelFields gene, name
 defaultLabelFields gene, name
 noScoreFilter on
 group covid 
 color 179,0,0
 visibility hide
-html covidHgeMuts
-bigDataUrl /gbdb/hg38/covid/covidMuts.bb
+bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
+pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 12, 2020"
  
 
 

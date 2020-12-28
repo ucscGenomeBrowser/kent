@@ -46,11 +46,506 @@
         <li><a href="#2001">2001 News</a></li>
       </ul>
     </div>
-  </div>
+  </div> 
 </div>
 
 <!-- ============= 2020 archived news ============= -->
 <a name="2020"></a>
+
+<a name="122320"></a>
+<h2>Dec. 23, 2020 &nbsp;&nbsp; New ClinVar Interpretations track for human (hg19/hg38)</h2>
+<p>
+We are pleased to release a new track, <b>ClinVar Interpretations</b>, for the hg19/GRCh37 and 
+hg38/GRCh38 human assemblies. This track can be found as part of the <a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&c=chr10&g=clinvar">ClinVar Composite</a>. It is the first
+track to use our bead graph display, which is a variation of our existing <a target="_blank"
+href="#062019">lollipop display</a>.</p>
+<p>
+The <b>ClinVar Interpretations track</b> displays the genomic positions of individual variant 
+submissions and interpretations of the clinical significance, as well as their relationship 
+to disease in the ClinVar database. As seen on the image below, the variants are classified into
+six categories each on a separate horizontal line:</p>
+
+<p class="text-center">
+  <img class='text-center' src="../images/clinVarInterp.png"  width='100%' 
+alt="ClinVar Interpretations track with bead graph display.">
+</p>
+
+<ul>
+<li><font color="d20000"><b>P</b> - Pathogenic</font></li>
+<li><font color="d20000"><b>LP</b> - Likely Pathogenic</font></li>
+<li><font color="000088"><b>VUS</b> - Variant of Unknown Significance</font></li>
+<li><font color="#00d200"><b>LB</b> - Likely Benign</font></li>
+<li><font color="#00d200"><b>B</b> - Benign</font></li>
+<li><font color="#888"><b>OTH</b> - Others</li></font></ul>
+
+<p>
+The size of the bead on the line represents the number of submissions at that genomic position.
+The color of the beads aids to distinguish the categories further. Hovering on the track 
+items shows the genomic variations which start at that position and the 
+number of individual submissions with that classification. Additional information on the variants
+can be found by clicking into the item.</p>
+<p>
+For more information see the <a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&c=chr10&g=clinvar">track description page</a>.</p>
+<p>
+We would link to thank <a target="_blank" href="https://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a>
+for making these data available, as well as Brian Joseph Raney, Ana Benet Pages, Gerardo Perez, 
+and Lou Nassar for the development and release of this track.</p>
+
+<a name="121620"></a>
+<h2>Dec. 16, 2020 &nbsp;&nbsp; New In-Silico PCR feature for assembly hubs</h2>
+<p>
+We are excited to announce assembly hubs can now perform In-Silico PCR. Assembly hub developers 
+have long been able to activate DNA and amino acid BLAT searches on their hubs by running gfServers 
+from their institution, and now with the new isPcr setting, they can enable In-Silico PCR searches too 
+using the same running gfServers. In-Silico PCR searches a sequence database with a pair of PCR primers, 
+using an indexing strategy for fast performance to find target regions across the genome. Browser users without an 
+institution to host gfServers can still benefit from this new feature by downloading and installing a virtual machine 
+<a href="help/gbib.html">Genome Browser in a Box (GBiB)</a>, and alternatively running gfServers on the GBiB, all 
+locally from a laptop. For more information see the <a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs" 
+target="_blank">Assembly Hub Wiki</a> and the <a href="help/hubQuickStartAssembly.html" 
+target="_blank">Quick Start Guide to Assembly Hubs</a>.</p>
+
+<p>
+We would like to thank Brian Raney and Gerardo Perez for their work on this release.</p>
+
+<a name="121520"></a>
+<h2>Dec. 15, 2020 &nbsp;&nbsp; New V35 GENCODE genes track for Human (hg19/GRCh37)</h2>
+<p>
+We are pleased to announce a new GENCODE Genes annotation track, which corresponds
+to <a href="http://www.ensembl.info/2020/08/20/ensembl-101-has-been-released/"
+target="_blank">Ensembl 101</a>, for the: <a target="_blank" 
+href="../../cgi-bin/hgTrackUi?db=hg19&c=chr21&g=wgEncodeGencodeV35lift37">hg19/GRCh37</a> assembly.
+The GENCODE V35 annotations were mapped to hg38/GRCh38 and then back-mapped
+to the hg19/GRCh37 assembly. The gene set contains the following
+tracks:</p>
+<ul>
+  <li>Basic - a subset of the <em>Comprehensive set</em>.</li>
+  <li>Comprehensive - all GENCODE coding and non-coding transcript annotations, including
+      polymorphic pseudogenes. This includes both manual and automatic annotations.</li>
+  <li>Pseudogenes - all annotations except polymorphic pseudogenes.</li></ul>
+<p>
+Details on each release can be found on the <a target="_blank" 
+href="https://www.gencodegenes.org/">GENCODE site</a>. This includes <a target="_blank" 
+href="https://www.gencodegenes.org/human/stats.html">statistics on each release</a>.
+<p>We would like to thank the <a target="_blank" 
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these
+annotations. We would also like to thank Mark Diekhans and Lou Nassar for the development and
+release of this track.</p>
+
+<a name="120920"></a>
+<h2>Dec. 9, 2020 &nbsp;&nbsp; New Genome Browser: Hawaiian monk seal, neoSch1 (<em>Neomonachus schauinslandi</em>)</h2>
+<p>
+A genome browser is now available for the Hawaiian monk seal  (<em>Neomonachus schauinslandi</em>) assembly
+released in Jun. 2017 by the
+<a href="https://www.hopkinsmedicine.org/profiles/results/directory/profile/5985613/alan-scott" 
+target="_blank">Johns Hopkins University</a> (ASM220157v1).
+<h3>About the assembly:</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b>  <a href="../../cgi-bin/hgGateway?db=neoSch1" 
+  target="_blank">neoSch1</a></li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="https://www.jhu.edu/">
+Johns Hopkins University</a></li>
+  <li><b>Assembly date:</b> Jun. 2017</li>
+  <li><B>Accession ID:</B> GCF_002201575.1</li>
+  <li><B>NCBI Genome ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/genome/8042"
+TARGET="_blank">8042</A> (<em>Neomonachus schauinslandi</em>)</li>
+  <li><B>NCBI Assembly ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/assembly/GCF_002201575.1/"
+TARGET="_blank">1137021</A></li>
+  <li><B>NCBI BioProject ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/bioproject/384558"
+TARGET="_blank">384558</A></li>
+  <li><B>NCBI BioSample ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/biosample/SAMN06841387"
+TARGET="_blank">SAMN06841387</A></li>
+  <li><b>Scaffold count: </b>7,873</li>
+  <li><b>Total size: </b>2,400,934,290</li>
+  <li><a href="../goldenPath/credits.html#hawaiian_monk_seal_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+  <li><a href="../goldenPath/credits.html#hawaiian_monk_seal_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+  <li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/neoSch1/" 
+target="_blank" >FTP</a></li>
+  <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#hawaiian_monk_seal"
+target="_blank" >Downloads page</a></li>
+</ul>
+</p>
+<p>
+We would like to thank Alan F. Scott at Johns Hopkins University and NCBI for creating this new Hawaiian 
+monk seal assembly. We would also like to thank Hiram Clawson, Robert Kuhn, and Gerardo 
+Perez for the development and release of the neoSch1 genome browser.
+</p>
+
+<a name="120220"></a>
+<h2>Dec. 2, 2020 &nbsp;&nbsp; New and updated UniProt tracks for 117 assemblies</h2>
+<p>
+We are pleased to announce new and updated
+<a href="https://www.uniprot.org/" target="_blank"</a>UniProt tracks</a> for the
+following assemblies:</p><br>
+<div class="container">
+  <div class="row">
+  <div class="col-sm-4">
+  <ul>
+        <li>A. gambiae <a href="../cgi-bin/hgTrackUi?db=anoGam1&g=uniprot&position=default"
+         target=_blank>(anoGam1)</a></li>
+        <li>A. gambiae <a href="../cgi-bin/hgTrackUi?db=anoGam3&g=uniprot&position=default"
+         target=_blank>(anoGam3)</a></li>
+        <li>A. mellifera <a href="../cgi-bin/hgTrackUi?db=apiMel2&g=uniprot&position=default"
+         target=_blank>(apiMel2)</a></li>
+        <li>African clawed frog <a href="../cgi-bin/hgTrackUi?db=xenLae2&g=uniprot&position=default"
+         target=_blank>(xenLae2)</a></li>
+        <li>Alpaca <a href="../cgi-bin/hgTrackUi?db=vicPac2&g=uniprot&position=default"
+         target=_blank>(vicPac2)</a></li>
+        <li>American alligator <a href="../cgi-bin/hgTrackUi?db=allMis1&g=uniprot&position=default"
+         target=_blank>(allMis1)</a></li>
+        <li>Armadillo <a href="../cgi-bin/hgTrackUi?db=dasNov3&g=uniprot&position=default"
+         target=_blank>(dasNov3)</a></li>
+        <li>Atlantic cod <a href="../cgi-bin/hgTrackUi?db=gadMor1&g=uniprot&position=default"
+         target=_blank>(gadMor1)</a></li>
+        <li>Baboon <a href="../cgi-bin/hgTrackUi?db=papAnu4&g=uniprot&position=default"
+         target=_blank>(papAnu4)</a></li>
+        <li>Baboon <a href="../cgi-bin/hgTrackUi?db=papHam1&g=uniprot&position=default"
+         target=_blank>(papHam1)</a></li>
+        <li>Bison <a href="../cgi-bin/hgTrackUi?db=bisBis1&g=uniprot&position=default"
+         target=_blank>(bisBis1)</a></li>
+        <li>Bonobo <a href="../cgi-bin/hgTrackUi?db=panPan3&g=uniprot&position=default"
+         target=_blank>(panPan3)</a></li>
+        <li>Brown kiwi <a href="../cgi-bin/hgTrackUi?db=aptMan1&g=uniprot&position=default"
+         target=_blank>(aptMan1)</a></li>
+        <li>Budgerigar <a href="../cgi-bin/hgTrackUi?db=melUnd1&g=uniprot&position=default"
+         target=_blank>(melUnd1)</a></li>
+        <li>Bushbaby <a href="../cgi-bin/hgTrackUi?db=otoGar3&g=uniprot&position=default"
+         target=_blank>(otoGar3)</a></li>
+        <li>C. brenneri <a href="../cgi-bin/hgTrackUi?db=caePb2&g=uniprot&position=default"
+         target=_blank>(caePb2)</a></li>
+        <li>C. briggsae <a href="../cgi-bin/hgTrackUi?db=cb3&g=uniprot&position=default"
+         target=_blank>(cb3)</a></li>
+        <li>C. elegans <a href="../cgi-bin/hgTrackUi?db=ce10&g=uniprot&position=default"
+         target=_blank>(ce10)</a></li>
+        <li>C. elegans <a href="../cgi-bin/hgTrackUi?db=ce11&g=uniprot&position=default"
+         target=_blank>(ce11)</a></li>
+        <li>C. elegans <a href="../cgi-bin/hgTrackUi?db=ce6&g=uniprot&position=default"
+         target=_blank>(ce6)</a></li>
+        <li>C. intestinalis <a href="../cgi-bin/hgTrackUi?db=ci3&g=uniprot&position=default"
+         target=_blank>(ci3)</a></li>
+        <li>C. japonica <a href="../cgi-bin/hgTrackUi?db=caeJap1&g=uniprot&position=default"
+         target=_blank>(caeJap1)</a></li>
+        <li>C. remanei <a href="../cgi-bin/hgTrackUi?db=caeRem3&g=uniprot&position=default"
+         target=_blank>(caeRem3)</a></li>
+        <li>Cat <a href="../cgi-bin/hgTrackUi?db=felCat9&g=uniprot&position=default"
+         target=_blank>(felCat9)</a></li>
+        <li>Chicken <a href="../cgi-bin/hgTrackUi?db=galGal6&g=uniprot&position=default"
+         target=_blank>(galGal6)</a></li>
+        <li>Chimp <a href="../cgi-bin/hgTrackUi?db=panTro6&g=uniprot&position=default"
+         target=_blank>(panTro6)</a></li>
+        <li>Chinese hamster <a href="../cgi-bin/hgTrackUi?db=criGriChoV2&g=uniprot&position=default"
+         target=_blank>(criGriChoV2)</a></li>
+        <li>Chinese pangolin <a href="../cgi-bin/hgTrackUi?db=manPen1&g=uniprot&position=default"
+         target=_blank>(manPen1)</a></li>
+        <li>Coelacanth <a href="../cgi-bin/hgTrackUi?db=latCha1&g=uniprot&position=default"
+         target=_blank>(latCha1)</a></li>
+        <li>Cow <a href="../cgi-bin/hgTrackUi?db=bosTau8&g=uniprot&position=default"
+         target=_blank>(bosTau8)</a></li>
+        <li>Cow <a href="../cgi-bin/hgTrackUi?db=bosTau9&g=uniprot&position=default"
+         target=_blank>(bosTau9)</a></li>
+        <li>Crab-eating macaque <a href="../cgi-bin/hgTrackUi?db=macFas5&g=uniprot&position=default"
+         target=_blank>(macFas5)</a></li>
+        <li>D. ananassae <a href="../cgi-bin/hgTrackUi?db=droAna2&g=uniprot&position=default"
+         target=_blank>(droAna2)</a></li>
+        <li>D. erecta <a href="../cgi-bin/hgTrackUi?db=droEre1&g=uniprot&position=default"
+         target=_blank>(droEre1)</a></li>
+        <li>D. grimshawi <a href="../cgi-bin/hgTrackUi?db=droGri1&g=uniprot&position=default"
+         target=_blank>(droGri1)</a></li>
+        <li>D. melanogaster <a href="../cgi-bin/hgTrackUi?db=dm6&g=uniprot&position=default"
+         target=_blank>(dm6)</a></li>
+        <li>D. mojavensis <a href="../cgi-bin/hgTrackUi?db=droMoj2&g=uniprot&position=default"
+         target=_blank>(droMoj2)</a></li>
+        <li>D. persimilis <a href="../cgi-bin/hgTrackUi?db=droPer1&g=uniprot&position=default"
+         target=_blank>(droPer1)</a></li>
+        <li>D. pseudoobscura <a href="../cgi-bin/hgTrackUi?db=dp3&g=uniprot&position=default"
+         target=_blank>(dp3)</a></li>
+   </ul></div>
+   <div class="col-sm-4">
+   <ul>
+        <li>D. sechellia <a href="../cgi-bin/hgTrackUi?db=droSec1&g=uniprot&position=default"
+         target=_blank>(droSec1)</a></li>
+        <li>D. simulans <a href="../cgi-bin/hgTrackUi?db=droSim1&g=uniprot&position=default"
+         target=_blank>(droSim1)</a></li>
+        <li>D. virilis <a href="../cgi-bin/hgTrackUi?db=droVir2&g=uniprot&position=default"
+         target=_blank>(droVir2)</a></li>
+        <li>D. yakuba <a href="../cgi-bin/hgTrackUi?db=droYak2&g=uniprot&position=default"
+         target=_blank>(droYak2)</a></li>
+        <li>Dog <a href="../cgi-bin/hgTrackUi?db=canFam4&g=uniprot&position=default"
+         target=_blank>(canFam4)</a></li>
+        <li>Dolphin <a href="../cgi-bin/hgTrackUi?db=turTru2&g=uniprot&position=default"
+         target=_blank>(turTru2)</a></li>
+        <li>Ebola virus <a href="../cgi-bin/hgTrackUi?db=eboVir3&g=uniprot&position=default"
+         target=_blank>(eboVir3)</a></li>
+        <li>Elephant <a href="../cgi-bin/hgTrackUi?db=loxAfr3&g=uniprot&position=default"
+         target=_blank>(loxAfr3)</a></li>
+        <li>Elephant shark <a href="../cgi-bin/hgTrackUi?db=calMil1&g=uniprot&position=default"
+         target=_blank>(calMil1)</a></li>
+        <li>Ferret <a href="../cgi-bin/hgTrackUi?db=musFur1&g=uniprot&position=default"
+         target=_blank>(musFur1)</a></li>
+        <li>Fugu <a href="../cgi-bin/hgTrackUi?db=fr3&g=uniprot&position=default"
+         target=_blank>(fr3)</a></li>
+        <li>Garter snake <a href="../cgi-bin/hgTrackUi?db=thaSir1&g=uniprot&position=default"
+         target=_blank>(thaSir1)</a></li>
+        <li>Gibbon <a href="../cgi-bin/hgTrackUi?db=nomLeu3&g=uniprot&position=default"
+         target=_blank>(nomLeu3)</a></li>
+        <li>Golden eagle <a href="../cgi-bin/hgTrackUi?db=aquChr2&g=uniprot&position=default"
+         target=_blank>(aquChr2)</a></li>
+        <li>Golden snub-nosed monkey <a href="../cgi-bin/hgTrackUi?db=rhiRox1&g=uniprot&position=default"
+         target=_blank>(rhiRox1)</a></li>
+        <li>Gorilla <a href="../cgi-bin/hgTrackUi?db=gorGor6&g=uniprot&position=default"
+         target=_blank>(gorGor6)</a></li>
+        <li>Green monkey <a href="../cgi-bin/hgTrackUi?db=chlSab2&g=uniprot&position=default"
+         target=_blank>(chlSab2)</a></li>
+        <li>Guinea pig <a href="../cgi-bin/hgTrackUi?db=cavPor3&g=uniprot&position=default"
+         target=_blank>(cavPor3)</a></li>
+        <li>Hedgehog <a href="../cgi-bin/hgTrackUi?db=eriEur2&g=uniprot&position=default"
+         target=_blank>(eriEur2)</a></li>
+        <li>Horse <a href="../cgi-bin/hgTrackUi?db=equCab3&g=uniprot&position=default"
+         target=_blank>(equCab3)</a></li>
+        <li>Human <a href="../cgi-bin/hgTrackUi?db=hg19&g=uniprot&position=default"
+         target=_blank>(hg19)</a></li>
+        <li>Human <a href="../cgi-bin/hgTrackUi?db=hg38&g=uniprot&position=default"
+         target=_blank>(hg38)</a></li>
+        <li>Kangaroo rat <a href="../cgi-bin/hgTrackUi?db=dipOrd1&g=uniprot&position=default"
+         target=_blank>(dipOrd1)</a></li>
+        <li>Lamprey <a href="../cgi-bin/hgTrackUi?db=petMar3&g=uniprot&position=default"
+         target=_blank>(petMar3)</a></li>
+        <li>Lancelet <a href="../cgi-bin/hgTrackUi?db=braFlo1&g=uniprot&position=default"
+         target=_blank>(braFlo1)</a></li>
+        <li>Lizard <a href="../cgi-bin/hgTrackUi?db=anoCar2&g=uniprot&position=default"
+         target=_blank>(anoCar2)</a></li>
+        <li>Malayan flying lemur <a href="../cgi-bin/hgTrackUi?db=galVar1&g=uniprot&position=default"
+         target=_blank>(galVar1)</a></li>
+        <li>Manatee <a href="../cgi-bin/hgTrackUi?db=triMan1&g=uniprot&position=default"
+         target=_blank>(triMan1)</a></li>
+        <li>Marmoset <a href="../cgi-bin/hgTrackUi?db=calJac3&g=uniprot&position=default"
+         target=_blank>(calJac3)</a></li>
+        <li>Medaka <a href="../cgi-bin/hgTrackUi?db=oryLat2&g=uniprot&position=default"
+         target=_blank>(oryLat2)</a></li>
+        <li>Medium ground finch <a href="../cgi-bin/hgTrackUi?db=geoFor1&g=uniprot&position=default"
+         target=_blank>(geoFor1)</a></li>
+        <li>Megabat <a href="../cgi-bin/hgTrackUi?db=pteVam1&g=uniprot&position=default"
+         target=_blank>(pteVam1)</a></li>
+        <li>Microbat <a href="../cgi-bin/hgTrackUi?db=myoLuc2&g=uniprot&position=default"
+         target=_blank>(myoLuc2)</a></li>
+        <li>Minke whale <a href="../cgi-bin/hgTrackUi?db=balAcu1&g=uniprot&position=default"
+         target=_blank>(balAcu1)</a></li>
+        <li>Mouse <a href="../cgi-bin/hgTrackUi?db=mm10&g=uniprot&position=default"
+         target=_blank>(mm10)</a></li>
+        <li>Mouse <a href="../cgi-bin/hgTrackUi?db=mm9&g=uniprot&position=default"
+         target=_blank>(mm9)</a></li>
+        <li>Mouse lemur <a href="../cgi-bin/hgTrackUi?db=micMur2&g=uniprot&position=default"
+         target=_blank>(micMur2)</a></li>
+        <li>Naked mole-rat <a href="../cgi-bin/hgTrackUi?db=hetGla2&g=uniprot&position=default"
+         target=_blank>(hetGla2)</a></li>
+        <li>Nile tilapia <a href="../cgi-bin/hgTrackUi?db=oreNil2&g=uniprot&position=default"
+         target=_blank>(oreNil2)</a></li>
+   </ul></div>
+   <div class="col-sm-4">
+   <ul>
+        <li>Opossum <a href="../cgi-bin/hgTrackUi?db=monDom5&g=uniprot&position=default"
+         target=_blank>(monDom5)</a></li>
+        <li>Orangutan <a href="../cgi-bin/hgTrackUi?db=ponAbe3&g=uniprot&position=default"
+         target=_blank>(ponAbe3)</a></li>
+        <li>P. pacificus <a href="../cgi-bin/hgTrackUi?db=priPac1&g=uniprot&position=default"
+         target=_blank>(priPac1)</a></li>
+        <li>Painted turtle <a href="../cgi-bin/hgTrackUi?db=chrPic1&g=uniprot&position=default"
+         target=_blank>(chrPic1)</a></li>
+        <li>Panda <a href="../cgi-bin/hgTrackUi?db=ailMel1&g=uniprot&position=default"
+         target=_blank>(ailMel1)</a></li>
+        <li>Pig <a href="../cgi-bin/hgTrackUi?db=susScr3&g=uniprot&position=default"
+         target=_blank>(susScr3)</a></li>
+        <li>Pika <a href="../cgi-bin/hgTrackUi?db=ochPri3&g=uniprot&position=default"
+         target=_blank>(ochPri3)</a></li>
+        <li>Platypus <a href="../cgi-bin/hgTrackUi?db=ornAna2&g=uniprot&position=default"
+         target=_blank>(ornAna2)</a></li>
+        <li>Proboscis monkey <a href="../cgi-bin/hgTrackUi?db=nasLar1&g=uniprot&position=default"
+         target=_blank>(nasLar1)</a></li>
+        <li>Rabbit <a href="../cgi-bin/hgTrackUi?db=oryCun2&g=uniprot&position=default"
+         target=_blank>(oryCun2)</a></li>
+        <li>Rat <a href="../cgi-bin/hgTrackUi?db=rn6&g=uniprot&position=default"
+         target=_blank>(rn6)</a></li>
+        <li>Rhesus <a href="../cgi-bin/hgTrackUi?db=rheMac8&g=uniprot&position=default"
+         target=_blank>(rheMac8)</a></li>
+        <li>Rock hyrax <a href="../cgi-bin/hgTrackUi?db=proCap1&g=uniprot&position=default"
+         target=_blank>(proCap1)</a></li>
+        <li>S. cerevisiae <a href="../cgi-bin/hgTrackUi?db=sacCer2&g=uniprot&position=default"
+         target=_blank>(sacCer2)</a></li>
+        <li>S. cerevisiae <a href="../cgi-bin/hgTrackUi?db=sacCer3&g=uniprot&position=default"
+         target=_blank>(sacCer3)</a></li>
+        <li>S. purpuratus <a href="../cgi-bin/hgTrackUi?db=strPur2&g=uniprot&position=default"
+         target=_blank>(strPur2)</a></li>
+        <li>SARS-CoV-2 <a href="../cgi-bin/hgTrackUi?db=wuhCor1&g=uniprot&position=default"
+         target=_blank>(wuhCor1)</a></li>
+        <li>Sea hare <a href="../cgi-bin/hgTrackUi?db=aplCal1&g=uniprot&position=default"
+         target=_blank>(aplCal1)</a></li>
+        <li>Sheep <a href="../cgi-bin/hgTrackUi?db=oviAri3&g=uniprot&position=default"
+         target=_blank>(oviAri3)</a></li>
+        <li>Sheep <a href="../cgi-bin/hgTrackUi?db=oviAri4&g=uniprot&position=default"
+         target=_blank>(oviAri4)</a></li>
+        <li>Shrew <a href="../cgi-bin/hgTrackUi?db=sorAra2&g=uniprot&position=default"
+         target=_blank>(sorAra2)</a></li>
+        <li>Sloth <a href="../cgi-bin/hgTrackUi?db=choHof1&g=uniprot&position=default"
+         target=_blank>(choHof1)</a></li>
+        <li>Southern sea otter <a href="../cgi-bin/hgTrackUi?db=enhLutNer1&g=uniprot&position=default"
+         target=_blank>(enhLutNer1)</a></li>
+        <li>Squirrel <a href="../cgi-bin/hgTrackUi?db=speTri2&g=uniprot&position=default"
+         target=_blank>(speTri2)</a></li>
+        <li>Squirrel monkey <a href="../cgi-bin/hgTrackUi?db=saiBol1&g=uniprot&position=default"
+         target=_blank>(saiBol1)</a></li>
+        <li>Stickleback <a href="../cgi-bin/hgTrackUi?db=gasAcu1&g=uniprot&position=default"
+         target=_blank>(gasAcu1)</a></li>
+        <li>Tarsier <a href="../cgi-bin/hgTrackUi?db=tarSyr2&g=uniprot&position=default"
+         target=_blank>(tarSyr2)</a></li>
+        <li>Tasmanian devil <a href="../cgi-bin/hgTrackUi?db=sarHar1&g=uniprot&position=default"
+         target=_blank>(sarHar1)</a></li>
+        <li>Tenrec <a href="../cgi-bin/hgTrackUi?db=echTel2&g=uniprot&position=default"
+         target=_blank>(echTel2)</a></li>
+        <li>Tetraodon <a href="../cgi-bin/hgTrackUi?db=tetNig2&g=uniprot&position=default"
+         target=_blank>(tetNig2)</a></li>
+        <li>Tibetan frog <a href="../cgi-bin/hgTrackUi?db=nanPar1&g=uniprot&position=default"
+         target=_blank>(nanPar1)</a></li>
+        <li>Tree shrew <a href="../cgi-bin/hgTrackUi?db=tupBel1&g=uniprot&position=default"
+         target=_blank>(tupBel1)</a></li>
+        <li>Turkey <a href="../cgi-bin/hgTrackUi?db=melGal5&g=uniprot&position=default"
+         target=_blank>(melGal5)</a></li>
+        <li>Wallaby <a href="../cgi-bin/hgTrackUi?db=macEug2&g=uniprot&position=default"
+         target=_blank>(macEug2)</a></li>
+        <li>White rhinoceros <a href="../cgi-bin/hgTrackUi?db=cerSim1&g=uniprot&position=default"
+         target=_blank>(cerSim1)</a></li>
+        <li>X. tropicalis <a href="../cgi-bin/hgTrackUi?db=xenTro9&g=uniprot&position=default"
+         target=_blank>(xenTro9)</a></li>
+        <li>Zebra finch <a href="../cgi-bin/hgTrackUi?db=taeGut2&g=uniprot&position=default"
+         target=_blank>(taeGut2)</a></li>
+        <li>Zebrafish <a href="../cgi-bin/hgTrackUi?db=danRer10&g=uniprot&position=default"
+         target=_blank>(danRer10)</a></li>
+        <li>Zebrafish <a href="../cgi-bin/hgTrackUi?db=danRer7&g=uniprot&position=default"
+         target=_blank>(danRer7)</a></li>
+    </ul></div>
+</div></div>
+<p>
+These tracks will continue to be updated automatically as part of a quarterly pipeline.</p>
+<p>
+Thanks to UniProt for providing these annotations, as well as
+Maximilian Haeussler and Lou Nassar of the UCSC Genome Browser group for their
+work in creating and releasing these tracks.</p>
+
+<a name="111620"></a>
+<h2>Nov. 16, 2020 &nbsp;&nbsp; Genome in a Bottle tracks now available for human</h2>
+<p>
+We are pleased to announce the release of three new tracks from the
+<a href="https://www.nist.gov/programs-projects/genome-bottle" target="_blank">Genome in a
+Bottle Consortium (GIAB)</a> available for human assemblies,
+<a href="../cgi-bin/hgTrackUi?db=hg19&c=chrX&g=giab" target="_blank">GRCh37/hg19</a> and
+<a href="../cgi-bin/hgTrackUi?db=hg38&c=chrX&g=giab" target="_blank">GRCh38/hg38</a>. GIAB is an
+open, public consortium hosted by <a href="https://www.nist.gov/" target="_blank">NIST</a>. The
+priority of GIAB is to develop reference standards, reference methods, and reference data by
+authoritative characterization of human genomes for use in benchmarking, including analytical
+validation and technology development that will support translation of whole human genome sequencing
+to clinical practice. The sole purpose of this work is to provide validated variants and regions to
+enable technology and bioinformatics developers to benchmark and optimize their detection methods.
+</p>
+<p>
+There are two phased trio tracks and a structural variants track available:
+</p>
+<ul>
+  <li>
+    <strong>Ashkenazim and the Chinese Trio tracks</strong> - shows benchmark SNV calls from two
+    son/father/mother trios of Ashkenazi Jewish and Han Chinese ancestry from the Personal Genome
+    Project, consented for commercial redistribution.
+  </li>
+  <li>
+    <strong>Structural Variants track</strong> - shows benchmark SV calls (nssv) and variant regions
+    (nsv) (5,262 insertions and 4,095 deletions, &gt; 50 bp, in 2.51 Gb of the genome) from the son
+    (HG002/NA24385) from the Ashkenazi Jewish trio.
+  </li>
+</ul>
+<p>
+We would like to thank NCBI, the Genome in a Bottle Consortium, and NIST for providing the
+benchmark VCF and BED files. We would also like to thank Chris Lee and Jairo Navarro for the
+creation and release of the Genome Browser tracks.
+</p>
+
+<a name="110320"></a>
+<h2>Nov. 3, 2020 &nbsp;&nbsp; New gnomAD pext track for Tissue specific transcript expression</h2>
+<p>
+We are happy to share that we have updated our gnomAD super track to include
+the gnomAD pext datasets on the GRCh37/hg19 genome. This track displays isoform 
+expression levels across 53 tissues based on 11,706 tissue samples from 
+the Genotype Tissue Expression (GTEx) v7 dataset, showing a comprehensive 
+view of the expression of exons across 
+a gene using the proportion expression across transcripts, or pext metric, a 
+transcript-level annotation metric which quantifies isoform expression for variants.
+</p>
+<p>
+This may be especially useful to those interested in alternative splicing and 
+clinicial assessment of variants. For more
+information, please see the track description page and the associated publication:</p>
+<ul>
+<li><a href="/cgi-bin/hgTrackUi?db=hg19&g=gnomadPext">Gnomad pext track for hg19 </a></li>
+<li><a href="https://www.nature.com/articles/s41586-020-2329-2" target="_blank">Transcript 
+expression-aware annotation improves rare variant interpretation</a></li>
+</ul>
+<p>
+We would like to thank the gnomAD team at the BROAD institute and the UCSC Genome Browser team members
+Chris Lee, Anna Benet-Pages, and Daniel Schmelter for developing, and 
+releasing this track.
+</p>
+
+
+<a name="102320"></a>
+<h2>Oct. 23, 2020 &nbsp;&nbsp; The new GRCm39 Mouse Genome Browser is here</h2>
+<p>
+We are pleased to announce the release of a new mouse assembly, mm39, which corresponds to the
+GRCm39 assembly released by the <a href="https://www.ncbi.nlm.nih.gov/grc/mouse"
+target="_blank">Genome Reference Consortium</a> (GRC). Starting with this release, the UCSC Genome
+Browser version numbers for mouse assemblies will match those of the GRC to minimize version
+confusion. Hence, the GRCm39 assembly is referred to as mm39 in Genome Browser datasets and
+documentation.</p>
+<h3>About the assembly (mm39):</h3>
+<ul>
+  <li>
+    UCSC Genome Browser assembly ID: mm39</li>
+  <li>
+    Sequencing/Assembly provider ID: Genome Reference Consortium Mouse Build 39 (GCA_000001635.9)
+    GRCm39<li>
+  <li>
+    Assembly date: Jun. 2020</li>
+  <li>
+    Accession ID: GCA_000001635.9</li>
+  <li>
+    NCBI Genome ID: <a href="https://www.ncbi.nlm.nih.gov/genome/52" target="_blank">52</a>
+    (Mus musculus)</li>
+  <li>
+    NCBI Assembly ID: <a href="https://www.ncbi.nlm.nih.gov/assembly/7358741"
+    target="_blank">7358741</a></li>
+  <li>
+    NCBI BioProject ID: <a href="https://www.ncbi.nlm.nih.gov/bioproject/20689"
+    target="_blank">20689</a></li>
+</ul>
+<p>
+For more information about the files included in the GRCm39 GenBank submission, see the
+<a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/635/GCA_000001635.9_GRCm39/README.txt"
+target="_blank">GRCm39 README</a>. The GRCm39 GenBank record provides a detailed array of
+<a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000001635.27/" target="_blank">statistics about
+this assembly</a>. Bulk downloads of the sequence and annotation data may be obtained from the
+Genome Browser <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/mm39/">FTP server</a> or
+the <a href="http://hgdownload.soe.ucsc.edu/downloads.html#mouse" target="_blank">Downloads
+page</a>. The annotation tracks for this browser were generated by UCSC and collaborators
+worldwide.</p>
+<p>
+We would like to thank the GRC and NCBI for creating this new mouse assembly. We would also like to
+thank Hiram Clawson and Jairo Navarro for the development and release of the mm39 genome browser.
+</p>
 
 <a name="102120"></a>
 <h2>Oct. 21, 2020 &nbsp;&nbsp; October 21st release for SARS-CoV-2 genome browser</h2>
@@ -364,6 +859,7 @@ coordination and consultation, and to Chris Lee, Anna Benet-Pages, and Daniel Sc
 of the Genome Browser team for developing, and releasing this track.
 </p>
 <a name="100120"></a>
+
 <h2>Oct. 1, 2020 &nbsp;&nbsp; New video: Making links to the Genome Browser. 
 Part 3: Composite tracks, custom tracks and spreadsheets
 </h2>
@@ -505,10 +1001,10 @@ are available on our page: <a href="../../covid19.html">COVID-19 Resources at UC
 </p>
 
 <p>
-These data are shown in our new lollypop visualization in order to show the dimensions of 
+These data are shown in our new lollipop visualization in order to show the dimensions of 
 effect size and p-value in addition to location. Filters are also
 available for these variables and the number of studies. Custom tracks using the 
-lollypop format are not yet available. For more information on these
+lollipop format are not yet available. For more information on these
 datasets, please read the track description page and try the interactive visualization
 for yourself:</p>
 <ul>
@@ -519,7 +1015,7 @@ for yourself:</p>
 <div class="text-center">
 <a href="../../cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=dschmelt&hgS_otherUserSessionName=covidGwas">
 <img width="80%" height="80%" 
-src="../../images/CovidGWAS.png" alt="The COVID-19 GWAS track shows variants as lollypops,
+src="../../images/CovidGWAS.png" alt="The COVID-19 GWAS track shows variants as lollipops,
 with the colored head showing the p-value and the height of the stick showing effect size."></a>
 </div>
 

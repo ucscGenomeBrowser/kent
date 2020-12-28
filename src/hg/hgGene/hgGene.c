@@ -200,17 +200,6 @@ sqlSafef(query, sizeof(query),
 return sqlQuickNum(conn, query) > 0;
 }
 
-char *abbreviateSummary(char *summary)
-/* Get rid of some repetitious stuff. */
-{
-char *pattern =
-"Publication Note:  This RefSeq record includes a subset "
-"of the publications that are available for this gene. "
-"Please see the Entrez Gene record to access additional publications.";
-stripString(summary, pattern);
-return summary;
-}
-
 char *descriptionString(char *id, struct sqlConnection *conn)
 /* return description as it would be printed in html, can free after use */
 {
@@ -232,7 +221,7 @@ if (summaryTables != NULL)
 	char *summary = genoQuery(id, "summarySql", conn);
 	if (summary != NULL && summary[0] != 0)
 	    {
-	    summary = abbreviateSummary(summary);
+	    summary = abbreviateRefSeqSummary(summary);
 	    dyStringPrintf(description, "<B>%s",
 		genomeSetting("summarySource"));
 	    if (genomeOptionalSetting("summaryIdSql"))
