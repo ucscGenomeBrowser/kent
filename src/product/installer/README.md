@@ -43,6 +43,11 @@ For mirror-specific help, please contact the Mirror Forum as listed on our [cont
 For an installation demonstration, see the [Genome Browser in the Cloud (GBiC) Introduction](https://www.youtube.com/watch?v=dcJERBVnjio)
 video:
 
+<p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dcJERBVnjio?rel=0"
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen></iframe></p>
+
 # How does the GBiC program work?
 
 The GBiC program downloads the Genome Browser CGIs and sets up the central MySQL (MariaDB) database.
