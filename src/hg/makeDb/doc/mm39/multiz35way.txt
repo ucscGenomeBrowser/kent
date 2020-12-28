@@ -1736,7 +1736,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # bash script
 
 #!/bin/sh
-export geneTbl="refGene"
+export geneTbl="ncbiRefSeq"
 for S in 300 2000 5000
 do
     echo "making upstream${S}.maf"
@@ -1748,7 +1748,7 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-
+XXX - running - Wed Dec 23 14:36:49 PST 2020
     #   real    88m40.730s
 
 -rw-rw-r-- 1   52659159 Nov  6 11:46 upstream300.ncbiRefSeq.maf.gz
@@ -1759,14 +1759,19 @@ done
     ## compress the maf files
     cd /hive/data/genomes/mm39/bed/multiz35way/downloads/multiz35way
     mkdir maf
-    rsync -a -P ../../anno/result/ ./maf/
-    du -hsc maf/
-    # 156G    maf
+    time rsync -a -P ../../maf/ ./maf/
+    # real    12m9.290s
+
+    du -hscL maf/ ../../maf/
+    #	141G    maf/
+    #	141G    ../../maf/
+
     cd maf
     time gzip *.maf &
-    # real    135m1.784s
+XXX - running - Wed Dec 23 14:55:47 PST 2020
+    # real    81m10.239s
 
-    du -hscL maf ../../anno/result/
+    du -hscL maf ../../maf/
     #  18G     maf
 
     cd maf
@@ -1785,23 +1790,25 @@ done
     grep TREE ../../4d/all.mod | awk '{print $NF}' \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
          > mm39.35way.nh
-    ~/kent/src/hg/utils/phyloTrees/commonNames.sh mm39.35way.nh \
-      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
-         > mm39.35way.commonNames.nh
-    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh mm39.35way.nh \
-	| $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
-	    > mm39.35way.scientificNames.nh
+
+    sed -f ../../db.to.name.sed mm39.35way.nh \
+       | sed -e "s#_x_#'#g; s#X__#X._#;" > mm39.35way.commonNames.nh
+
+    sed -f ../../db.to.sciName.sed mm39.35way.nh \
+           > mm39.35way.scientificNames.nh
+
     time md5sum *.nh *.maf.gz > md5sum.txt
     #   real    0m3.147s
 
     ln -s `pwd`/*.maf.gz `pwd`/*.nh \
         /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/multiz35way
 
-    du -hsc ./maf ../../anno/result
+    du -hscL ./maf ../../maf
     #  18G     ./maf
-    # 156G    ../../anno/result
+    # 156G    ../../maf
 
-    # obtain the README.txt from mm39/multiz20way and update for this
+XXX
+    # obtain the README.txt from danRer10/multiz12way and update for this
     #   situation
     ln -s `pwd`/*.txt \
          /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/multiz35way/
@@ -1820,6 +1827,7 @@ done
     time md5sum *.mod *.bw > md5sum.txt
     #   real    0m20.354s
 
+XXX
     # obtain the README.txt from mm39/phastCons20way and update for this
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/phastCons35way/mm39.35way.phastCons
     cd mm39.35way.phastCons
@@ -1846,6 +1854,7 @@ done
 
     md5sum *.mod *.bw > md5sum.txt
 
+XXX 
     # obtain the README.txt from mm39/phyloP20way and update for this
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/phyloP35way/mm39.35way.phyloP
     cd mm39.35way.phyloP
@@ -1894,33 +1903,30 @@ done
     echo "wait" >> $gp.jobs
 
     time (sh -x ./$gp.jobs) > $gp.jobs.log 2>&1
-XXX - running - Tue Dec 22 21:33:28 PST 2020
-    # real    79m18.323s
+    # real    18m43.962s
 
     export mz=multiz35way
     export gp=ncbiRefSeq
     time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonAA.fa.gz
-    # real    1m28.841s
+    # real    2m0.962s
 
     time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    3m56.370s
+    #   real    10m12.351s
 
-    # -rw-rw-r-- 1 397928833 Nov  6 18:44 ncbiRefSeq.multiz35way.exonAA.fa.gz
-    # -rw-rw-r-- 1 580377720 Nov  6 18:49 ncbiRefSeq.multiz35way.exonNuc.fa.gz
+    # -rw-rw-r-- 1  906052407 Dec 23 16:34 ncbiRefSeq.multiz35way.exonAA.fa.gz
+    # -rw-rw-r-- 1 1596566489 Dec 23 16:53 ncbiRefSeq.multiz35way.exonNuc.fa.gz
 
     export mz=multiz35way
     export gp=ncbiRefSeq
     export db=mm39
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
-
-    cd  $pd
-    md5sum *.fa.gz > md5sum.txt
 
     rm -rf exonAA exonNuc
 
