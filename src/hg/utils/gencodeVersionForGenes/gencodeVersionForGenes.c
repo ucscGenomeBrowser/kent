@@ -18,7 +18,7 @@ errAbort(
   "usage:\n"
   "   gencodeVersionForGenes genes.txt geneSymVer.tsv\n"
   "options:\n"
-  "   -bed=output.bed - Create bed file for mapping genes to best genome\n"
+  "   -bed=output.bed - Create bed file for mapping genes to genome via best gencode fit\n"
   "   -allBed=outputDir - Output beds for all versions in geneSymVer.tsv\n"
   );
 }
@@ -152,6 +152,51 @@ struct version
     struct hash *symHash;
     };
 
+boolean isAccForm(char *s, char *prefix, int prefixSize, int digitCount, boolean withVersion)
+/* Return TRUE if s is form <prefix><digitCount digits>[.version] */
+{
+if (!startsWith(prefix, s))
+    return FALSE;
+s += prefixSize;
+int digits = countLeadingDigits(s);
+if (digits != digitCount)
+    return FALSE;
+s += digitCount;
+if (withVersion)
+    {
+    if (s[0] != '.')
+        return FALSE;
+    s += 1;
+    digits = countLeadingDigits(s);
+    if (s[digits] != 0)
+        return FALSE;
+    }
+else
+    {
+    if (s[0] != 0)
+        return FALSE;
+    }
+return TRUE;
+}
+
+int countEnsgForms(struct slName *geneList, boolean withVersion)
+/* Count # of elements on list that are of form ENSG + 11 digits + maybe .digits */
+{
+/* Define constants for ENSG type stuff */
+char *prefix = "ENSG";
+int digitCount = 11;
+int prefixSize = strlen(prefix);
+
+int count = 0;
+struct slName *gene;
+for (gene = geneList; gene != NULL; gene = gene->next)
+    {
+    if (isAccForm(gene->name, prefix, prefixSize, digitCount, withVersion))
+        ++count;
+    }
+return count;
+}
+
 void gencodeVersionForGenes(char *geneListFile, char *geneSymVerTxFile, char *bedOut, char *allBedOut)
 /* gencodeVersionForGenes - Figure out which version of a gencode gene set a 
  * set of gene identifiers best fits. */
@@ -167,6 +212,20 @@ if (geneCount <= 0)
 struct version *versionList = NULL;
 struct gsvt *gsvt, *gsvtList = gsvtLoadAll(geneSymVerTxFile);
 verbose(2, "Got %d genes from many versions in %s\n", slCount(gsvtList), geneSymVerTxFile);
+
+/* Classify it as dotted/undotted/symboled. Strip dots off of gene list if needs undotting */
+int dottedCount = countEnsgForms(geneList, TRUE);
+int undottedCount = countEnsgForms(geneList, FALSE);
+boolean isUndotted = (undottedCount > geneCount/2);
+if (isUndotted)
+    {
+    for (gsvt = gsvtList; gsvt!=NULL; gsvt = gsvt->next)
+        chopSuffix(gsvt->gene);
+    }
+    
+verbose(2, "dottedCount %d, undottedCount %d, isUndotted %d\n", 
+    dottedCount, undottedCount, isUndotted);
+
 struct hash *versionHash = hashNew(0);
 for (gsvt = gsvtList; gsvt!=NULL; gsvt = gsvt->next)
     {
@@ -231,6 +290,10 @@ for (v = versionList; v != NULL; v = v->next)
 	bestIsSym = FALSE;
 	}
     }
+
+
+if (bestVersion == NULL)
+    errAbort("Can't find any matches to any versions of gencode");
 verbose(1, "best is %s as %s on %s with %d of %d (%g%%) hits\n", bestVersion->name, 
     (bestIsSym?"sym":"id"), bestVersion->ucscDb, bestCount, geneCount, 100.0 * bestCount/geneCount);
 
@@ -245,9 +308,9 @@ if (bedOut != NULL)
 	if (gsvt != NULL)
 	    {
 	    if (bestIsSym)
-		saveGsvtAsBed(gsvt, gene->name, gsvt->gene, f);
-	    else
 		saveGsvtAsBed(gsvt, gsvt->gene, gene->name, f);
+	    else
+		saveGsvtAsBed(gsvt, gsvt->gene, gsvt->symbol, f);
 	    }
 	}
     carefulClose(&f);
