@@ -15,7 +15,6 @@ errAbort(
   "options:\n"
   "   -newCol=colLabels - one line per label in a file\n"
   "   -newRow=rowLabels - one line per label in a file\n"
-  "   -first=text - text to use as first word in file\n"
   );
 }
 
@@ -72,19 +71,18 @@ char *line;
 int lineSize;
 lineFileNeedNext(lf, &line, &lineSize);
 int colCount = 0;
-char *word = nextTabWord(&line);
-char *first = optionVal("first", word);
-fprintf(f, "%s", first);
 if (newColumns != NULL)
     {
     colCount = newColumnCount;
+    fputs(newColumns[0], f);
     int i;
-    for (i=0; i<colCount; ++i)
+    for (i=1; i<colCount; ++i)
         fprintf(f, "\t%s", newColumns[i]);
     fputc('\n', f);
     }
 else
     {
+    char *word;
     while ((word = nextTabWord(&line)) != NULL)
          {
 	 fprintf(f, "\t%s", word);
@@ -98,12 +96,12 @@ while (lineFileNext(lf, &line, NULL))
     {
     if (newRows != NULL)
         {
+	++rowIx;
 	if (rowIx >= newRowCount)
 	    errAbort("Not enough lines in %s for %s", newRowFile, input);
 	fputs(newRows[rowIx], f);
-	nextTabWord(&line); // skip over old first word
 	fputc('\t', f);
-	++rowIx;
+	nextTabWord(&line); // skip over old first word
 	}
     fputs(line, f);
     fputc('\n', f);
