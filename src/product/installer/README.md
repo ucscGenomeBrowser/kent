@@ -89,7 +89,7 @@ Your network firewall must allow outgoing connections to the following servers a
 If you need to move data to another partition because the root file system is too small for all of
 the assembly\'s data, the following steps will help complete the installation. First, do a minimal
 installation with the browserSetup.sh script as described below, using just the \"install\"
-argument. Then make symlinks to the directory that will contain the data, e.g. if your biggest
+argument. Then make symlinks to the directory that will contain the data, e.g\. if your biggest
 filesystem is called \"/big\":
 
 ```
