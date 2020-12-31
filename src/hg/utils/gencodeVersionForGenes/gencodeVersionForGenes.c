@@ -308,9 +308,9 @@ if (bedOut != NULL)
 	if (gsvt != NULL)
 	    {
 	    if (bestIsSym)
-		saveGsvtAsBed(gsvt, gsvt->gene, gene->name, f);
+		saveGsvtAsBed(gsvt, gene->name, gsvt->gene, f);
 	    else
-		saveGsvtAsBed(gsvt, gsvt->gene, gsvt->symbol, f);
+		saveGsvtAsBed(gsvt, gene->name, gsvt->symbol, f);
 	    }
 	}
     carefulClose(&f);
