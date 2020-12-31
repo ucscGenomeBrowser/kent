@@ -43,34 +43,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct hash *hashTsvBy(char *in, int keyColIx, int *retColCount)
-/* Return a hash of rows keyed by the given column */
-{
-struct lineFile *lf = lineFileOpen(in, TRUE);
-struct hash *hash = hashNew(0);
-char *line = NULL, **row = NULL;
-int colCount = 0, colAlloc=0;	/* Columns as counted and as allocated */
-while (lineFileNextReal(lf, &line))
-    {
-    if (colCount == 0)
-        {
-	*retColCount = colCount = chopByChar(line, '\t', NULL, 0);
-	verbose(2, "Got %d columns in first real line\n", colCount);
-	colAlloc = colCount + 1;  // +1 so we can detect unexpected input and complain 
-	lmAllocArray(hash->lm, row, colAlloc);
-	}
-    int count = chopByChar(line, '\t', row, colAlloc);
-    if (count != colCount)
-        {
-	errAbort("Expecting %d words, got more than that line %d of %s", 
-	    colCount, lf->lineIx, lf->fileName);
-	}
-    hashAdd(hash, row[keyColIx], lmCloneRow(hash->lm, row, colCount) );
-    }
-lineFileClose(&lf);
-return hash;
-}
-
 void hashSamplesAndClusters(char *tsvFile, 
     struct hash **retSampleHash, struct hash **retClusterHash)
 /* Read two column tsv file into a hash keyed by first column */
@@ -223,6 +195,7 @@ for (colIx=1; colIx <colCount; colIx = colIx+1)
 char **matrixRow;
 AllocArray(matrixRow, colAlloc);
 int hitCount = 0, missCount = 0;
+double sumTotal = 0;
 dotForUserInit(100);
 for (;;)
     {
@@ -272,8 +245,13 @@ for (;;)
 	    {
 	    int clusterIx = colToCluster[i];
 	    char *textVal = matrixRow[i];
+if (clusterIx == clusterCount - 1)  //ugly
+    {
+    uglyf("%s %d %s\n", geneName, i, textVal);
+    }
 	    // special case so common we parse out "0" inline
 	    double val = (textVal[0] == '0' && textVal[1] == 0) ? 0.0 : sqlDouble(textVal);
+	    sumTotal += val;
 	    int valCount = clusterElements[clusterIx];
 	    clusterElements[clusterIx] = valCount+1;
 	    if (doMedian)
@@ -314,7 +292,9 @@ for (;;)
 	    if (doMedian)
 		fprintf(f, "%g", doubleMedian(clusterElements[i], clusterSamples[i]));
 	    else
+		{
 		fprintf(f, "%g",  clusterTotal[i]/clusterElements[i]);
+		}
 	    }
 	
 	/* Data file offset info */
@@ -326,6 +306,11 @@ for (;;)
     dotForUser();
     }
 verbose(1, "\n%d genes found, %d (%0.2f%%) missed\n", hitCount, missCount, 100.0*missCount/(hitCount+missCount));
+if (!doMedian)
+    {
+    verbose(1, "matrix total %g, %d clusters, %g ave/cluster\n", 
+	sumTotal, clusterCount, sumTotal/clusterCount);
+    }
 carefulClose(&f);
 }
 
