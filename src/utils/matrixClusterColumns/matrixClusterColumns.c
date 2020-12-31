@@ -14,7 +14,7 @@ void usage()
 {
 errAbort(
   "matrixClusterColumns - Group the columns of a matrix into clusters, and output a matrix with\n"
-  "the same number of rows and generally much fewer columns.\n"
+  "the same number of rows and generally much fewer columns. Combines columns by taking mean.\n"
   "usage:\n"
   "   matrixClusterColumns input meta.tsv sample cluster output.tsv [clusterCol output2 ... ]\n"
   "where:\n"
@@ -27,6 +27,7 @@ errAbort(
   "options:\n"
   "   -columnLabels=file.txt - a file with a line for each column, required for mtx inputs\n"
   "   -rowLabels=file.txt - a file with a label for each row, also required for mtx inputs\n"
+  "   -makeIndex=index.tsv - output index tsv file with <matrix-col1><input-file-pos><line-len>\n"
   );
 }
 
@@ -34,6 +35,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"columnLabels", OPTION_STRING},
    {"rowLabels", OPTION_STRING},
+   {"makeIndex", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -77,18 +79,18 @@ return sum;
 }
 
 struct vMatrix
-/* Virtual matrix - fast row-oriented access to either tsv or mtx files */
+/* Virtual matrix - little wrapper around a fielded table/lineFile combination
+ * to help manage row-at-a-time access. */
     {
     struct vMatrix *next;
 
-
-        /* TSV private fields */
+        /* kind of private fields */
     struct lineFile *lf;	    // Line file for tab-sep case
     struct fieldedTable *ft;	    // fielded table if a tab-sep file
-    double *rowAsNum;		    // Our fielded table result array of numbers
     char **rowAsStrings;		    // Our row as an array of strings
 
-	/* From below are fields that you can read */
+	/* From below are fields that yu can read but not change */
+    double *rowAsNum;		    // Our fielded table result array of numbers
     char **rowLabels;		    // If non-NULL array of labels for each row
     char **colLabels;		    // Array of labels for each column
     int colCount;		    // Number of columns in a row
@@ -111,7 +113,6 @@ struct vMatrix *v = needMem(sizeof(*v));
 struct lineFile *lf = v->lf = lineFileOpen(matrixFile, TRUE);
 struct fieldedTable *ft = v->ft = fieldedTableReadTabHeader(lf, NULL, 0);
 v->colCount = ft->fieldCount-1;	    // Don't include row label field 
-uglyf("v->colCount is %d insize vMatrixOpen for %s\n", v->colCount, matrixFile);
 v->rowAsNum = needHugeMem(v->colCount * sizeof(v->rowAsNum[0]));
 v->rowAsStrings = needHugeMem(ft->fieldCount * sizeof(v->rowAsStrings[0]));
 if (columnLabels == NULL)
@@ -140,7 +141,7 @@ double *vMatrixNextRow(struct vMatrix *v)
 /* Return next row of matrix or NULL if at end of file */
 {
 int colCount = v->colCount;
-if (!lineFileNextRow(v->lf, v->rowAsStrings, colCount))
+if (!lineFileNextRow(v->lf, v->rowAsStrings, colCount+1))
     return NULL;
 
 /* Save away the row label for later. */
@@ -154,7 +155,7 @@ dyStringAppend(v->rowLabel, rowLabel);
 
 /* Convert ascii to floating point, with little optimization for the many zeroes we usually see */
 int i;
-for (i=1; i<colCount; ++i)
+for (i=1; i<=colCount; ++i)
     {
     char *str = v->rowAsStrings[i];
     double val = ((str[0] == '0' && str[1] == 0) ? 0.0 : sqlDouble(str));
@@ -216,7 +217,6 @@ hashFree(&uniqHash);
 
 /* Just alphabetize names for now */
 slNameSort(&nameList);
-uglyf("Got %d unique values for %s\n", slCount(nameList), clusterField);
 
 /* Make up hash that maps cluster names to cluster ids */
 struct hash *clusterHash = hashNew(0);	/* Keyed by cluster, no value */
@@ -249,7 +249,7 @@ for (colIx=0; colIx < colCount; colIx = colIx+1)
     else
 	unclusteredColumns += 1;
     }
-verbose(2, "%d total columns, %d unclustered, %d misses\n", 
+verbose(1, "%d total columns, %d unclustered, %d misses\n", 
     colCount, unclusteredColumns, missCount);
 
 /* Allocate space for results for clustering one line */
@@ -317,8 +317,6 @@ for (i=0; i<colCount; ++i)
 #endif /* SOON */
 	    clusterTotal[clusterIx] += val;
 	}
-    else
-        uglyAbort("WTF");
     }
 
 /* Do output to file */
@@ -338,10 +336,6 @@ for (i=0; i<clusterCount; ++i)
     }
 	
 	/* Data file offset info */
-#ifdef SOON
-	if (!clSimple)
-	    fprintf(f, "\t%lld\t%lld",  (long long)lineFileTell(lf), (long long)lineLength);
-#endif /* SOON */
 
 fprintf(f, "\n");
 }
@@ -350,10 +344,14 @@ fprintf(f, "\n");
 
 
 void matrixClusterColumns(char *matrixFile, char *metaFile, char *sampleField,
-    int outputCount, char **clusterFields, char **outputFiles)
+    int outputCount, char **clusterFields, char **outputFiles, char *outputIndex)
 /* matrixClusterColumns - Group the columns of a matrix into clusters, and output a matrix 
  * the with same number of rows and generally much fewer columns.. */
 {
+FILE *fIndex = NULL;
+if (outputIndex)
+    fIndex = mustOpen(outputIndex, "w");
+
 /* Load up metadata and make sure we have all of the cluster fields we need 
  * and fill out array of clusterIx corresponding to clusterFields in metaFile. */
 struct fieldedTable *metaTable = fieldedTableFromTabFile(metaFile, metaFile, NULL, 0);
@@ -375,7 +373,6 @@ for (i=0; i<outputCount; ++i)
     job = clusteringNew(clusterFields[i], outputFiles[i], metaTable, sampleFieldIx, v);
     slAddTail(&jobList, job);
     }
-uglyf("Made %d jobs\n", outputCount);
 
 
 /* Chug through big matrix a row at a time clustering */
@@ -385,6 +382,12 @@ for (;;)
   double *a = vMatrixNextRow(v);
   if (a == NULL)
        break;
+  if (fIndex)
+      {
+      fprintf(fIndex, "%s", v->rowLabel->string);
+      struct lineFile *lf = v->lf;
+      fprintf(fIndex, "\t%lld\t%lld\n",  (long long)lineFileTell(lf), (long long)lineFileTellSize(lf));
+      }
   for (job = jobList; job != NULL; job = job->next)
       clusterRow(job, v, a);
   dotForUser();
@@ -396,12 +399,14 @@ for (job = jobList; job != NULL; job = job->next)
     carefulClose(&job->file);
 
 vMatrixClose(&v);
+carefulClose(&fIndex);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+char *makeIndex = optionVal("makeIndex", NULL);
 int minArgc = 6;
 if (argc < minArgc || ((argc-minArgc)%2)!=0)  // Force minimum, even number
     usage();
@@ -415,6 +420,6 @@ for (i=0; i<outputCount; ++i)
     outputFiles[i] = pair[1];
     pair += 2;
     }
-matrixClusterColumns(argv[1], argv[2], argv[3], outputCount, clusterFields, outputFiles);
+matrixClusterColumns(argv[1], argv[2], argv[3], outputCount, clusterFields, outputFiles, makeIndex);
 return 0;
 }
