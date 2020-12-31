@@ -55,6 +55,7 @@
 #include "trackVersion.h"
 #include "hubConnect.h"
 #include "bigBedFilter.h"
+#include "net.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -341,9 +342,152 @@ printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->track, metada
 return TRUE;
 }
 
+/* Multi-region UI */
+
+boolean makeMultiRegionLink(char *db, struct trackDb *tdb)
+/* Make a link to launch browser in multi-region custom URL mode, based on
+ * track setting. This includes creating a custom track displaying the regions.
+ * The link switches to exit multi-region if browser is already in multi-region mode
+ * based on regions defined for this track. */
+{
+char *regionUrl = trackDbSetting(tdb, MULTI_REGION_BED_URL);
+if (isEmpty(regionUrl))
+    return FALSE;
+
+// make custom track for regions, alternating colors
+
+// TODO: truncate CT name and label at word boundary
+// TODO: fix bedPackDense to work with multi-region
+// TODO: limit number of regions ?
+struct dyString *dsCustomText = dyStringCreate(
+            "track name=\'%s Regions\' description=\'Regions of interest for track: %s' "
+            "visibility=dense bedPackDense=on labelOnFeature=on itemRgb=on noScoreFilter=on\n",
+                tdb->shortLabel, tdb->longLabel);
+
+#ifdef LATER
+// TODO: libify
+struct dyString *ds = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    int sd = netUrlOpen(regionUrl);
+    if (sd >= 0)
+        {
+        char *newUrl = NULL;
+        int newSd = 0;
+        if (netSkipHttpHeaderLinesHandlingRedirect(sd, regionUrl, &newSd, &newUrl))
+            {
+            if (newUrl) /* redirect can modify the url */
+                {
+                freeMem(newUrl);
+                sd = newSd;
+                }
+
+            ds = netSlurpFile(sd);
+            close(sd);
+            }
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    warn("%s", errCatch->message->string);
+
+// how come no warning if bad file ?
+errCatchFree(&errCatch);
+#endif
+
+// TODO: support $D, etc. in URL
+int sd = netUrlOpen(regionUrl);
+if (sd < 0)
+    return FALSE;
+struct dyString *dsRegionBed = netSlurpFile(sd);
+close(sd);
+if (!dsRegionBed)
+    return FALSE;
+char *regionBedTxt = dyStringCannibalize(&dsRegionBed);
+
+// count fields in BED. Accept up to BED9 (user-spec colors)
+char *bedTxt = cloneString(regionBedTxt);
+struct lineFile *lf = lineFileOnString(NULL, TRUE, bedTxt);
+char *words[9];
+int bedSize = lineFileChopNext(lf, words, sizeof words);
+lineFileClose(&lf);
+freeMem(bedTxt);
+
+lf = lineFileOnString(NULL, TRUE, regionBedTxt);
+
+char *colorLight = "184,201,255";       // blue
+char *colorDark = "0,0,0";              // black
+char *color = colorLight;
+boolean doLightColor = TRUE;
+
+int id = 1;
+char name[100];
+char userColor[10];
+struct bed *region;
+
+while (lineFileChopNext(lf, words, bedSize))
+    {
+    region = bedLoadN(words, bedSize);
+    if (bedSize < 9)
+        {
+        // assign alternating light/dark color
+        color = doLightColor ? colorLight : colorDark;
+        doLightColor = !doLightColor;
+        }
+    else
+        {
+        // no lib ? sigh
+        int colorIx = (int)region->itemRgb;
+        struct rgbColor rgb = colorIxToRgb(colorIx);
+        safef(userColor, sizeof userColor, "%d,%d,%d", rgb.b, rgb.g, rgb.r);
+
+        // or this ? -- uglier but deeper in code
+        //safef(userColor, sizeof userColor, "%d,%d,%d", (region->itemRgb & 0xff0000) >> 16,
+            //(region->itemRgb & 0xff00) >> 8, (region->itemRgb & 0xff));
+        }
+    if (bedSize < 4)
+        {
+        // region label based on chrom and an item number
+        safef(name, sizeof name, "r%d/%s", id++, region->chrom);
+        }
+    dyStringPrintf(dsCustomText, "%s\t%d\t%d\t%s\t"
+                        "0\t.\t%d\t%d\t%s\n",
+                            region->chrom, region->chromStart, region->chromEnd,  name,
+                            region->chromStart, region->chromEnd, color);
+    }
+lineFileClose(&lf);
+
+char customHtml[1000];
+safef(customHtml, sizeof customHtml, "<h2>Description</h2>\n"
+    "<p>This custom track displays regions of interest for the "
+    "<a href='../cgi-bin/hgTrackUi?db=%s&g=%s'><em>%s</em> track</a>.</p>",
+        db, tdb->track, tdb->shortLabel);
+
+// TODO: support #padding in custom regions file
+
+printf("<p><a target='_blank' "
+            "href='../cgi-bin/hgTracks?"
+                "virtMode=1&"
+                "virtModeType=customUrl&"
+                "virtWinFull=on&"
+                "virtShortDesc=%s&"
+                "multiRegionsBedUrl=%s&"
+                "%s=%s&"
+                "%s=%s'>"
+            "View regions of interest</a>"
+                " for this track in multi-region view</a> (custom regions mode)</p>",
+                    tdb->track, cgiEncode(regionUrl),
+                    CT_CUSTOM_DOC_TEXT_VAR, cgiEncode(customHtml),
+                    CT_CUSTOM_TEXT_VAR, cgiEncode(dyStringCannibalize(&dsCustomText)));
+return TRUE;
+}
+
 void extraUiLinks(char *db,struct trackDb *tdb)
 // Show metadata, and downloads, schema links where appropriate
 {
+makeMultiRegionLink(db, tdb);
+
 struct slPair *pairs = trackDbMetaPairs(tdb);
 if (pairs != NULL)
     printf("<b>Metadata:</b><br>%s\n", pairsAsHtmlTable( pairs, tdb, FALSE, FALSE));
