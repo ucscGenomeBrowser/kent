@@ -8,7 +8,6 @@
 #include "fieldedTable.h"
 #include "sqlNum.h"
 
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -28,6 +27,7 @@ errAbort(
   "   -columnLabels=file.txt - a file with a line for each column, required for mtx inputs\n"
   "   -rowLabels=file.txt - a file with a label for each row, also required for mtx inputs\n"
   "   -makeIndex=index.tsv - output index tsv file with <matrix-col1><input-file-pos><line-len>\n"
+  "   -median if set ouput median rather than mean cluster value\n"
   );
 }
 
@@ -36,6 +36,7 @@ static struct optionSpec options[] = {
    {"columnLabels", OPTION_STRING},
    {"rowLabels", OPTION_STRING},
    {"makeIndex", OPTION_STRING},
+   {"median", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -178,12 +179,19 @@ struct clustering
     double *clusterTotal;  /* A place to hold totals for each cluster */
     int *clusterElements;  /* A place to hold counts for each cluster */
     double *clusterResults; /* Results after clustering */
+    struct hash *clusterSizeHash;   /* Keyed by cluster, int value is elements in cluster */
+    int *clusterSizes;	    /* An array that holds size of each cluster */
+
+    /* Things needed by median handling */
+    boolean doMedian;	/* If true we calculate median */
+    double **clusterSamples; /* An array that holds an array big enough for all vals in cluster. */
+
     FILE *file;		    /* output */
     };
 
 
 struct clustering *clusteringNew(char *clusterField, char *outputFile, 
-    struct fieldedTable *metaTable, int sampleFieldIx, struct vMatrix *v)
+    struct fieldedTable *metaTable, int sampleFieldIx, struct vMatrix *v, boolean doMedian)
 /* Make up a new clustering job structure */
 {
 struct clustering *job;
@@ -192,13 +200,16 @@ job->clusterField = clusterField;
 job->outputFile = outputFile;
 int clusterFieldIx = job->clusterMetaIx = fieldedTableMustFindFieldIx(metaTable, clusterField);
 
-/* Make up hash of sample names with cluster values */
+/* Make up hash of sample names with cluster name values 
+ * and also hash of cluster names with size values */
 struct hash *sampleHash = hashNew(0);	/* Keyed by sample value is cluster */
+struct hash *clusterSizeHash = job->clusterSizeHash = hashNew(0);
 struct fieldedRow *fr;
 for (fr = metaTable->rowList; fr != NULL; fr = fr->next)
     {
     char **row = fr->row;
     hashAdd(sampleHash, row[sampleFieldIx], row[clusterFieldIx]);
+    hashIncInt(clusterSizeHash, row[clusterFieldIx]);
     }
 
 /* Find all uniq cluster names */
@@ -219,12 +230,34 @@ hashFree(&uniqHash);
 slNameSort(&nameList);
 
 /* Make up hash that maps cluster names to cluster ids */
-struct hash *clusterHash = hashNew(0);	/* Keyed by cluster, no value */
+struct hash *clusterIxHash = hashNew(0);	/* Keyed by cluster, no value */
 struct slName *name;
 int i;
 for (name = nameList, i=0; name != NULL; name = name->next, ++i)
-    hashAddInt(clusterHash, name->name, i);
-int clusterCount = job->clusterCount = clusterHash->elCount;
+    hashAddInt(clusterIxHash, name->name, i);
+int clusterCount = job->clusterCount = clusterIxHash->elCount;
+
+/* Make up array that holds size of each cluster */
+AllocArray(job->clusterSizes, clusterCount);
+for (i = 0, name = nameList; i < clusterCount; ++i, name = name->next)
+    {
+    job->clusterSizes[i] = hashIntVal(job->clusterSizeHash, name->name);
+    verbose(2, "clusterSizes[%d] = %d\n", i, job->clusterSizes[i]);
+    }
+
+if (doMedian)
+    {	
+    /* Allocate arrays to hold number of samples and all sample vals for each cluster */
+    job->doMedian = doMedian;
+    AllocArray(job->clusterSamples, clusterCount);
+    int clusterIx;
+    for (clusterIx = 0; clusterIx < clusterCount; ++clusterIx)
+	{
+	double *samples;
+	AllocArray(samples, job->clusterSizes[clusterIx]);
+	job->clusterSamples[clusterIx] = samples;
+	}
+    }
 
 /* Make up array that has -1 where no cluster available, otherwise output index */
 int colCount = v->colCount;
@@ -238,7 +271,7 @@ for (colIx=0; colIx < colCount; colIx = colIx+1)
     colToCluster[colIx] = -1;
     if (clusterName != NULL)
         {
-	int clusterId = hashIntValDefault(clusterHash, clusterName, -1);
+	int clusterId = hashIntValDefault(clusterIxHash, clusterName, -1);
 	colToCluster[colIx] = clusterId;
 	if (clusterId == -1)
 	    {
@@ -277,7 +310,7 @@ fputc('\n', f);
 
 /* Clean up and return result */
 hashFree(&sampleHash);
-hashFree(&clusterHash);
+hashFree(&clusterIxHash);
 return job;
 }
 
@@ -298,6 +331,7 @@ for (i=0; i<clusterCount; ++i)
 /* Loop through rest of row filling in histogram */
 int colCount = v->colCount;
 int *colToCluster = job->colToCluster;
+boolean doMedian = job->doMedian;
 for (i=0; i<colCount; ++i)
     {
     int clusterIx = colToCluster[i];
@@ -306,15 +340,13 @@ for (i=0; i<colCount; ++i)
 	double val = a[i];
 	int valCount = clusterElements[clusterIx];
 	clusterElements[clusterIx] = valCount+1;
-#ifdef SOON
 	if (doMedian)
 	    {
-	    if (valCount >= clusterSize[clusterIx])
+	    if (valCount >= job->clusterSizes[clusterIx])
 		internalErr();
-	    clusterSamples[clusterIx][valCount] = val;
+	    job->clusterSamples[clusterIx][valCount] = val;
 	    }
 	else
-#endif /* SOON */
 	    clusterTotal[clusterIx] += val;
 	}
     }
@@ -326,11 +358,9 @@ for (i=0; i<clusterCount; ++i)
     {
     fprintf(f, "\t");
     double val;
-#ifdef SOON
     if (doMedian)
-	val = doubleMedian(clusterElements[i], clusterSamples[i]);
+	val = doubleMedian(clusterElements[i], job->clusterSamples[i]);
     else
-#endif /* SOON */
 	val = clusterTotal[i]/clusterElements[i];
     fprintf(f, "%g", val);
     }
@@ -344,7 +374,7 @@ fprintf(f, "\n");
 
 
 void matrixClusterColumns(char *matrixFile, char *metaFile, char *sampleField,
-    int outputCount, char **clusterFields, char **outputFiles, char *outputIndex)
+    int outputCount, char **clusterFields, char **outputFiles, char *outputIndex, boolean doMedian)
 /* matrixClusterColumns - Group the columns of a matrix into clusters, and output a matrix 
  * the with same number of rows and generally much fewer columns.. */
 {
@@ -370,7 +400,7 @@ struct clustering *jobList = NULL, *job;
 int i;
 for (i=0; i<outputCount; ++i)
     {
-    job = clusteringNew(clusterFields[i], outputFiles[i], metaTable, sampleFieldIx, v);
+    job = clusteringNew(clusterFields[i], outputFiles[i], metaTable, sampleFieldIx, v, doMedian);
     slAddTail(&jobList, job);
     }
 
@@ -420,6 +450,7 @@ for (i=0; i<outputCount; ++i)
     outputFiles[i] = pair[1];
     pair += 2;
     }
-matrixClusterColumns(argv[1], argv[2], argv[3], outputCount, clusterFields, outputFiles, makeIndex);
+matrixClusterColumns(argv[1], argv[2], argv[3], 
+    outputCount, clusterFields, outputFiles, makeIndex, optionExists("median"));
 return 0;
 }
