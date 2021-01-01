@@ -15,14 +15,13 @@ errAbort(
   "matrixClusterColumns - Group the columns of a matrix into clusters, and output a matrix with\n"
   "the same number of rows and generally much fewer columns. Combines columns by taking mean.\n"
   "usage:\n"
-  "   matrixClusterColumns input meta.tsv sample cluster output.tsv [clusterCol output2 ... ]\n"
+  "   matrixClusterColumns input meta.tsv cluster outMatrix.tsv outStats.tsv [cluster2 outMatrix2.tsv outStats2.tsv ... ]\n"
   "where:\n"
   "   input is a file either in tsv format or in mtx (matrix mart sorted) format\n"
   "   meta.tsv is a table where the first row is field labels and the first column is sample ids\n"
-  "   sample is the name of the field with the sample (often single cell) id's\n"
   "   cluster is the name of the field with the cluster names\n"
   "You can produce multiple clusterings in the same pass through the input matrix by specifying\n"
-  "additional cluster/output pairs in the command line.\n"
+  "additional cluster/outMatrix/outStats triples in the command line.\n"
   "options:\n"
   "   -columnLabels=file.txt - a file with a line for each column, required for mtx inputs\n"
   "   -rowLabels=file.txt - a file with a label for each row, also required for mtx inputs\n"
@@ -172,32 +171,36 @@ struct clustering
     {
     struct clustering *next;
     char *clusterField;	    /* Field to cluster on */
-    char *outputFile;	    /* Where to put result */
+    char *outMatrixFile;    /* Where to put matrix result */
+    char *outStatsFile;	    /* Where to put stats result */
     int clusterMetaIx;	    /* Index of cluster field in meta table */
     int *colToCluster;	    /* Maps input matrix column to clustered column */
     int clusterCount;   /* Number of different values in column we are clustering */
     double *clusterTotal;  /* A place to hold totals for each cluster */
+    double *clusterGrandTotal;	/* Total over all rows */
     int *clusterElements;  /* A place to hold counts for each cluster */
     double *clusterResults; /* Results after clustering */
     struct hash *clusterSizeHash;   /* Keyed by cluster, int value is elements in cluster */
+    char **clusterNames;	    /* Holds name of each cluster */
     int *clusterSizes;	    /* An array that holds size of each cluster */
 
     /* Things needed by median handling */
     boolean doMedian;	/* If true we calculate median */
     double **clusterSamples; /* An array that holds an array big enough for all vals in cluster. */
 
-    FILE *file;		    /* output */
+    FILE *matrixFile;		    /* output */
     };
 
 
-struct clustering *clusteringNew(char *clusterField, char *outputFile, 
-    struct fieldedTable *metaTable, int sampleFieldIx, struct vMatrix *v, boolean doMedian)
+struct clustering *clusteringNew(char *clusterField, char *outMatrixFile, char *outStatsFile,
+    struct fieldedTable *metaTable, struct vMatrix *v, boolean doMedian)
 /* Make up a new clustering job structure */
 {
 struct clustering *job;
 AllocVar(job);
 job->clusterField = clusterField;
-job->outputFile = outputFile;
+job->outMatrixFile = outMatrixFile;
+job->outStatsFile = outStatsFile;
 int clusterFieldIx = job->clusterMetaIx = fieldedTableMustFindFieldIx(metaTable, clusterField);
 
 /* Make up hash of sample names with cluster name values 
@@ -208,7 +211,7 @@ struct fieldedRow *fr;
 for (fr = metaTable->rowList; fr != NULL; fr = fr->next)
     {
     char **row = fr->row;
-    hashAdd(sampleHash, row[sampleFieldIx], row[clusterFieldIx]);
+    hashAdd(sampleHash, row[0], row[clusterFieldIx]);
     hashIncInt(clusterSizeHash, row[clusterFieldIx]);
     }
 
@@ -239,9 +242,11 @@ int clusterCount = job->clusterCount = clusterIxHash->elCount;
 
 /* Make up array that holds size of each cluster */
 AllocArray(job->clusterSizes, clusterCount);
+AllocArray(job->clusterNames, clusterCount);
 for (i = 0, name = nameList; i < clusterCount; ++i, name = name->next)
     {
     job->clusterSizes[i] = hashIntVal(job->clusterSizeHash, name->name);
+    job->clusterNames[i] = name->name;
     verbose(2, "clusterSizes[%d] = %d\n", i, job->clusterSizes[i]);
     }
 
@@ -290,10 +295,11 @@ job->clusterResults = needHugeMem(clusterCount * sizeof(job->clusterResults[0]))
 
 /* Allocate a few more things */
 job->clusterTotal = needMem(clusterCount*sizeof(job->clusterTotal[0]));
+job->clusterGrandTotal = needMem(clusterCount*sizeof(job->clusterGrandTotal[0]));
 job->clusterElements = needMem(clusterCount*sizeof(job->clusterElements[0]));
 
 /* Open file - and write out header */
-FILE *f = job->file = mustOpen(job->outputFile, "w");
+FILE *f = job->matrixFile = mustOpen(job->outMatrixFile, "w");
 if (v->ft->startsSharp)
     fputc('#', f);
 
@@ -308,10 +314,26 @@ for (name = nameList; name != NULL; name = name->next)
     }
 fputc('\n', f);
 
+
+
 /* Clean up and return result */
 hashFree(&sampleHash);
 hashFree(&clusterIxHash);
 return job;
+}
+
+void outputClusterStats(struct clustering *job)
+/* Output statistics on each cluster in this job. */
+{
+FILE *f = mustOpen(job->outStatsFile, "w");
+fprintf(f, "#cluster\tcount\ttotal\n");
+int i;
+for (i=0; i<job->clusterCount; ++i)
+    {
+    fprintf(f, "%s\t%d\t%g\n", job->clusterNames[i], 
+	job->clusterElements[i], job->clusterGrandTotal[i]);
+    }
+carefulClose(&f);
 }
 
 void clusterRow(struct clustering *job, struct vMatrix *v, double *a)
@@ -340,33 +362,33 @@ for (i=0; i<colCount; ++i)
 	double val = a[i];
 	int valCount = clusterElements[clusterIx];
 	clusterElements[clusterIx] = valCount+1;
+	clusterTotal[clusterIx] += val;
 	if (doMedian)
 	    {
 	    if (valCount >= job->clusterSizes[clusterIx])
 		internalErr();
 	    job->clusterSamples[clusterIx][valCount] = val;
 	    }
-	else
-	    clusterTotal[clusterIx] += val;
 	}
     }
 
-/* Do output to file */
-FILE *f = job->file;
+/* Do output to file and grand totalling */
+FILE *f = job->matrixFile;
 fprintf(f, "%s", v->rowLabel->string);
+double *grandTotal = job->clusterGrandTotal;
 for (i=0; i<clusterCount; ++i)
     {
     fprintf(f, "\t");
+    double total = clusterTotal[i];
+    grandTotal[i] += total;
     double val;
     if (doMedian)
 	val = doubleMedian(clusterElements[i], job->clusterSamples[i]);
     else
-	val = clusterTotal[i]/clusterElements[i];
+	val = total/clusterElements[i];
     fprintf(f, "%g", val);
     }
 	
-	/* Data file offset info */
-
 fprintf(f, "\n");
 }
 
@@ -374,7 +396,8 @@ fprintf(f, "\n");
 
 
 void matrixClusterColumns(char *matrixFile, char *metaFile, char *sampleField,
-    int outputCount, char **clusterFields, char **outputFiles, char *outputIndex, boolean doMedian)
+    int outputCount, char **clusterFields, char **outMatrixFiles, char **outStatsFiles,
+    char *outputIndex, boolean doMedian)
 /* matrixClusterColumns - Group the columns of a matrix into clusters, and output a matrix 
  * the with same number of rows and generally much fewer columns.. */
 {
@@ -385,7 +408,6 @@ if (outputIndex)
 /* Load up metadata and make sure we have all of the cluster fields we need 
  * and fill out array of clusterIx corresponding to clusterFields in metaFile. */
 struct fieldedTable *metaTable = fieldedTableFromTabFile(metaFile, metaFile, NULL, 0);
-int sampleFieldIx = fieldedTableMustFindFieldIx(metaTable, sampleField);
 struct hash *metaHash = fieldedTableIndex(metaTable, sampleField);
 verbose(1, "Read %d rows from %s\n", metaHash->elCount, metaFile);
 
@@ -400,7 +422,8 @@ struct clustering *jobList = NULL, *job;
 int i;
 for (i=0; i<outputCount; ++i)
     {
-    job = clusteringNew(clusterFields[i], outputFiles[i], metaTable, sampleFieldIx, v, doMedian);
+    job = clusteringNew(clusterFields[i], outMatrixFiles[i], outStatsFiles[i], 
+			metaTable, v, doMedian);
     slAddTail(&jobList, job);
     }
 
@@ -424,9 +447,12 @@ for (;;)
   }
 fputc('\n', stderr);  // Cover last dotForUser
 
-/* Close files */
+/* Do stats and close files */
 for (job = jobList; job != NULL; job = job->next)
-    carefulClose(&job->file);
+    {
+    outputClusterStats(job);
+    carefulClose(&job->matrixFile);
+    }
 
 vMatrixClose(&v);
 carefulClose(&fIndex);
@@ -438,19 +464,20 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 char *makeIndex = optionVal("makeIndex", NULL);
 int minArgc = 6;
-if (argc < minArgc || ((argc-minArgc)%2)!=0)  // Force minimum, even number
+if (argc < minArgc || ((argc-minArgc)%3)!=0)  // Force minimum, even number
     usage();
-int outputCount = 1 + (argc-minArgc)/2;	      // Add one since at minimum have 1
-char *clusterFields[outputCount], *outputFiles[outputCount];
+int outputCount = 1 + (argc-minArgc)/3;	      // Add one since at minimum have 1
+char *clusterFields[outputCount], *outMatrixFiles[outputCount], *outStatsFiles[outputCount];
 int i;
-char **pair = argv + minArgc - 2;
+char **triples = argv + minArgc - 3;
 for (i=0; i<outputCount; ++i)
     {
-    clusterFields[i] = pair[0];
-    outputFiles[i] = pair[1];
-    pair += 2;
+    clusterFields[i] = triples[0];
+    outMatrixFiles[i] = triples[1];
+    outStatsFiles[i] = triples[2];
+    triples += 3;
     }
 matrixClusterColumns(argv[1], argv[2], argv[3], 
-    outputCount, clusterFields, outputFiles, makeIndex, optionExists("median"));
+    outputCount, clusterFields, outMatrixFiles, outStatsFiles, makeIndex, optionExists("median"));
 return 0;
 }
