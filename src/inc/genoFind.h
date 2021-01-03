@@ -446,14 +446,6 @@ struct gfClump *gfPcrClumps(struct genoFind *gf,
  * clump->tStart and clump->tEnd so that the coords are relative to that 
  * target sequence (not the collection of all target sequences). */
 
-void gfLoadIndexFile(char *fileName, struct genoFind **gfRet, struct genoFind *transGf[2][3],
-                     boolean isTrans);
-/* load indexes from file.  Only one of gfRet or transGf is set. */
-
-void gfWriteIndexFile(struct genoFind *gf, struct genoFind *transGf[2][3], boolean isTrans,
-                      char *fileName);
-/* write index to file that can be mapped.  Only one of gf or transGf is used. */
-
 #define MAXSINGLEPIECESIZE 5000 /* maximum size of a single piece */
 
 #define gfVersion "37x0"	/* Current BLAT version number */

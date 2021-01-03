@@ -88,7 +88,9 @@ else
 host = argv[1];
 port = argv[2];
 seqDir = argv[3];
-outList = gfPcrViaNet(host, port, seqDir, inList, maxSize, minPerfect, minGood);
+struct gfConnection *conn = gfConnect(host, port, NULL, NULL);
+outList = gfPcrViaNet(conn, seqDir, inList, maxSize, minPerfect, minGood);
+gfDisconnect(&conn);
 gfPcrOutputWriteAll(outList, clOut, NULL, outFile);
 gfPcrOutputFreeList(&outList);
 gfPcrInputFreeList(&inList);

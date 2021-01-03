@@ -3,6 +3,7 @@
 
 #ifndef GFPCRLIB_H
 #define GFPCRLIB_H
+struct gfConnection;
 
 struct gfPcrInput
 /* Info for input to one PCR experiment. */

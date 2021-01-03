@@ -10,6 +10,7 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "cheapcgi.h"
+#include "genoFind.h"
 #include "gfPcrLib.h"
 #include "gfWebLib.h"
 
@@ -68,8 +69,8 @@ if (errCatchStart(errCatch))
     AllocVar(gpi);
     gpi->fPrimer = fPrimer;
     gpi->rPrimer = rPrimer;
-    gpoList = gfPcrViaNet(server->host, server->port, 
-    	server->seqDir, gpi, maxSize, minPerfect, minGood);
+    struct gfConnection *conn = gfConnect(server->host, server->port, NULL, NULL);
+    gpoList = gfPcrViaNet(conn, server->seqDir, gpi, maxSize, minPerfect, minGood);
     if (gpoList != NULL)
 	{
 	printf("<TT><PRE>");
