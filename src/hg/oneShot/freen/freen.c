@@ -42,6 +42,14 @@ if (ret < 0)
 return ret;
 }
 
+hid_t h5fOpen(char *fileName,  int accessType)
+{
+hid_t ret = H5Fopen(fileName, accessType, H5P_DEFAULT);
+if (ret < 0)
+   errAbort("Couldn't open %s", fileName);
+return ret;
+}
+
 void freen(char *fileName)
 /* Test something */
 {
@@ -49,8 +57,8 @@ void freen(char *fileName)
 /*
  * Open file, dataset, and attribute.
  */
-hid_t file = H5Fopen (fileName, H5F_ACC_RDONLY, H5P_DEFAULT);
-hid_t dset = h5dOpen (file, FULLDATASET);
+hid_t file = h5fOpen (fileName, H5F_ACC_RDONLY);
+hid_t dset = h5dOpen (file, "obs/__categories");
 
 /*
  * Get the datatype.
