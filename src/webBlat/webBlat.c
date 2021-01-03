@@ -360,7 +360,7 @@ txServer = isTxType(type);
 server = findServer(txServer);
 
 /* Loop through sequences doing alignments and saving to file. */
-struct gfConnection *conn = gfConnect(server->host, server->port, server->dynGenomeDir != NULL);
+struct gfConnection *conn = gfConnect(server->host, server->port, server->genome, server->dynGenomeDir);
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
     if (txServer)
@@ -368,29 +368,26 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	gvo->reportTargetStrand = TRUE;
 	if (protQuery)
 	    {
-	    gfAlignTrans(conn, server->seqDir, seq, 5,
-                         tFileCache, gvo, server->genome, server->dynGenomeDir);
+	    gfAlignTrans(conn, server->seqDir, seq, 5, tFileCache, gvo);
 	    }
 	else
 	    {
 	    boolean isRna = sameWord(type, "RNA");
 	    gfAlignTransTrans(conn, server->seqDir, seq, FALSE, 5,
-                              tFileCache, gvo, isRna, server->genome, server->dynGenomeDir);
+                              tFileCache, gvo, isRna);
 	    if (!isRna)
 	        {
 		reverseComplement(seq->dna, seq->size);
 		gfAlignTransTrans(conn, server->seqDir, seq, TRUE, 5,
-                                  tFileCache, gvo, FALSE, server->genome, server->dynGenomeDir);
+                                  tFileCache, gvo, FALSE);
 		}
 	    }
 	}
     else
         {
-	gfAlignStrand(conn, server->seqDir, seq, FALSE, 16,
-                      tFileCache, gvo, server->genome, server->dynGenomeDir);
+	gfAlignStrand(conn, server->seqDir, seq, FALSE, 16, tFileCache, gvo);
 	reverseComplement(seq->dna, seq->size);
-	gfAlignStrand(conn, server->seqDir, seq, TRUE, 16,
-                      tFileCache, gvo, server->genome, server->dynGenomeDir);
+	gfAlignStrand(conn, server->seqDir, seq, TRUE, 16, tFileCache, gvo);
 	}
     gfOutputQuery(gvo, f);
     }
