@@ -53,7 +53,7 @@ html gnomad
         bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
         priority 2
 
-    track gnomadGenomesVariantsV3.1
+    track gnomadGenomesVariantsV3_1
     parent gnomadVariants
     shortLabel gnomAD v3.1
     longLabel Genome Aggregation Database (gnomAD) Genome Variants v3.1
