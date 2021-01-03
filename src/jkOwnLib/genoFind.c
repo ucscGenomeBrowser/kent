@@ -243,7 +243,7 @@ int i;
 for (i = 0; i < gf->tileSpaceSize; i++)
     if (gf->listSizes[i] < gf->maxPat)
         count += gf->listSizes[i];
-mustWrite(f, gf->allocated, count*sizeof(bits32));
+mustWrite(f, gf->allocated, count*sizeof(gfOffset));
 return off;
 }
 
@@ -274,7 +274,7 @@ size_t count = 0;
 int i;
 for (i = 0; i < gf->tileSpaceSize; i++)
     count += gf->listSizes[i];
-mustWrite(f, gf->allocated, 3*count*sizeof(bits16));
+mustWrite(f, gf->allocated, 3*count*sizeof(struct endList));
 return off;
 }
 
