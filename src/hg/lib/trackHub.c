@@ -910,6 +910,7 @@ expandOneUrl(tdb->settingsHash, genome->trackDbFile, "linkDataUrl");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "searchTrix");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartSampleUrl");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartMatrixUrl");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartStatsUrl");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, SUBTRACK_HIDE_EMPTY_MULTIBED_URL);
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, SUBTRACK_HIDE_EMPTY_SOURCES_URL);
 }
