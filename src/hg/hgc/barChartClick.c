@@ -15,6 +15,7 @@
 #include "trackHub.h"
 #include "memgfx.h"
 #include "hgColors.h"
+#include "fieldedTable.h"
 
 #include "barChartBed.h"
 #include "barChartCategory.h"
@@ -402,11 +403,24 @@ if (categCount != chart->expCount)
     return;
     }
 
+char *statsFile = trackDbSetting(tdb, "barChartStatsUrl");
+struct hash *statsHash = NULL;
+int countStatIx = 0;
+double statsSize = 0.0;
+if (statsFile != NULL)
+    {
+    char *required[] = {"cluster", "count", "total"};
+    struct fieldedTable *ft = fieldedTableFromTabFile(
+	statsFile, statsFile, required, ArraySize(required));
+    statsHash = fieldedTableIndex(ft, "cluster");
+    countStatIx = fieldedTableFindFieldIx(ft, "count");
+    statsSize = 8*(fieldedTableMaxColChars(ft, countStatIx)+1);
+    }
+
 /* Some constants that control layout */
 double heightPer=18.0;
 double totalWidth=1250.0;
 double borderSize = 1.0;
-
 
 double headerHeight = heightPer + 2*borderSize;
 double innerHeight=heightPer-borderSize;
@@ -414,7 +428,8 @@ double labelWidth = longestLabelSize(categs) + 9;  // Add some because size is j
 if (labelWidth > totalWidth/2) labelWidth = totalWidth/2;  // Don't let labels take up more than half
 double patchWidth = heightPer;
 double labelOffset = patchWidth + 2*borderSize;
-double barOffset = labelOffset + labelWidth;
+double statsOffset = labelOffset + labelWidth;
+double barOffset = statsOffset + statsSize;
 double barMaxWidth = totalWidth-barOffset - 45;	    // The 45 is to leave room for ~6 digit number at end.
 double totalHeight = headerHeight + heightPer * categCount + borderSize;
 
@@ -424,6 +439,9 @@ printf("<svg width=\"%g\" height=\"%g\">\n", totalWidth, totalHeight);
 printf("<rect width=\"%g\" height=\"%g\" style=\"fill:#%s\"/>\n", totalWidth, headerHeight, HG_COL_HEADER);
 printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n", 
     labelOffset, innerHeight-1, innerHeight-1, "Sample");
+if (statsSize > 0.0)
+    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n", 
+	statsOffset, innerHeight-1, innerHeight-1, "N");
 printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s %s</text>\n", 
     barOffset, innerHeight-1, innerHeight-1, metric, "Value");
 
@@ -447,11 +465,18 @@ for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer
 	barOffset, yPos, barWidth, innerHeight, categ->color);
     if (i&1)  // every other time
 	printf("<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
-	    labelOffset, yPos, labelWidth, innerHeight, 0xFFFFFF);
+	    labelOffset, yPos, labelWidth+statsSize, innerHeight, 0xFFFFFF);
     printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" clip-path=\"url(#labelClip)\"\">%s</text>\n", 
  	labelOffset, yPos+innerHeight-1, innerHeight-1, categ->label);
-    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" clip-path=\"url(#labelClip)\"\">%s</text>\n", 
- 	labelOffset, yPos+innerHeight-1, innerHeight-1, categ->label);
+    if (statsSize > 0.0)
+	{
+	struct fieldedRow *fr = hashFindVal(statsHash, categ->label);
+	if (fr != NULL)
+	    {
+	    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n", 
+		statsOffset, yPos+innerHeight-1, innerHeight-1, fr->row[countStatIx]);
+	    }
+	}
     printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n", 
 	barOffset+barWidth+2, yPos+innerHeight-1, innerHeight-1, score);
     }
