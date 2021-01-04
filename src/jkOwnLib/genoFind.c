@@ -93,6 +93,56 @@ if (gf != NULL)
     }
 }
 
+/* constants for endList */
+#if GFSERVER64
+#define ENDLIST_ENTRY_NUM_PARTS 3  // 48-bits endList entry parts
+#else
+#define ENDLIST_ENTRY_NUM_PARTS 5  // 80-bits endList entry parts
+#endif
+
+#define ENDLIST_ENTRY_SIZE (ENDLIST_ENTRY_NUM_PARTS * sizeof(endListPart))
+/* byte size of an entry in endList array */
+
+INLINE endListPart* endListGetEntry(struct genoFind *gf, int iRow, int iCol)
+/* get an entry in the endlist array */
+{
+assert(iCol < gf->listSizes[iRow]);
+bits8 *row = (bits8*)gf->endLists[iRow];
+return (endListPart*)(row + (iCol * ENDLIST_ENTRY_SIZE));
+}
+
+INLINE void endListSetEntryValues(struct genoFind *gf, int iRow, int iCol,
+                                  bits16 tileTail, gfOffset offset)
+/* store values in an endList entry */
+{
+endListPart* entry = endListGetEntry(gf, iRow, iCol);
+entry[0] = tileTail;
+#if GFSERVER64
+entry[1] = offset >> 32;
+entry[2] = (offset >> 16) & 0xffff;
+entry[3] = offset & 0xffff;
+#else
+entry[1] = offset >> 16;
+entry[2] = offset & 0xffff;
+#endif
+}
+
+INLINE bits16 endListEntryTileTail(endListPart *entry)
+/* get endList tileTail value */
+{
+return entry[0];
+}
+
+INLINE gfOffset endListEntryOffset(endListPart *entry)
+/* get endList genome offset */
+{
+#if GFSERVER64
+return (entry[1] << 32) | (entry[2] << 16) | entry[3];
+#else
+return (entry[1] << 16) | entry[2];
+#endif
+}
+
 static off_t mustSeekAligned(FILE *f)
 /* seek so that the current offset is 64-bit aligned */
 {
@@ -274,7 +324,7 @@ size_t count = 0;
 int i;
 for (i = 0; i < gf->tileSpaceSize; i++)
     count += gf->listSizes[i];
-mustWrite(f, gf->allocated, 3*count*sizeof(struct endList));
+mustWrite(f, gf->allocated, count * ENDLIST_ENTRY_SIZE);
 return off;
 }
 
@@ -282,7 +332,7 @@ static void genoFindMapEndLists(void *memMapped, off_t off, struct genoFind *gf)
 /* maps the endLists into memory */
 {
 gf->endLists = needHugeZeroedMem(gf->tileSpaceSize * sizeof(gf->endLists[0]));
-struct endList *cur = gf->allocated;
+endListPart* cur = gf->allocated;
 size_t count = 0;
 int i;
 for (i = 0; i < gf->tileSpaceSize; i++)
@@ -395,7 +445,11 @@ static void genoFindIndexInitHeader(struct genoFindIndex *gfIdx,
 zeroBytes(hdr, sizeof(struct genoFindIndexFileHdr));
 safecpy(hdr->magic, sizeof(hdr->magic), indexFileMagic);
 safecpy(hdr->version, sizeof(hdr->version), indexFileVerison);
+#ifdef GFSERVER64
+hdr->indexAddressSize = 64;
+#else
 hdr->indexAddressSize = 32;
+#endif
 hdr->isTrans = gfIdx->isTrans;
 }
 
@@ -700,7 +754,11 @@ return nibSize;
 static bits64 maxTotalBases()
 /* Return maximum bases we can index. */
 {
-return 0x1fULL << 48; // index restricted to 48 bits
+#ifdef GFSERVER64
+return 0x1fULL << 64; // 64-bit index
+#else
+return 0x1UL << 32;    // 32-bit index
+#endif
 }
 
 static bits64 twoBitCheckTotalSize(struct twoBitFile *tbf)
@@ -784,18 +842,18 @@ static int gfAllocLargeLists(struct genoFind *gf)
 int count = 0;
 int i;
 gfOffset *listSizes = gf->listSizes;
-struct endList **endLists = gf->endLists;
-struct endList *allocated = NULL;
+endListPart **endLists = gf->endLists;
+endListPart *allocated = NULL;
 int tileSpaceSize = gf->tileSpaceSize;
 
 for (i=0; i<tileSpaceSize; ++i)
     count += listSizes[i];
 if (count > 0)
-    gf->allocated = allocated = needHugeMem(count * sizeof(struct endList));
+    gf->allocated = allocated = needHugeMem(count * ENDLIST_ENTRY_SIZE);
 for (i=0; i<tileSpaceSize; ++i)
     {
     endLists[i] = allocated;
-    allocated += sizeof(struct endList) * listSizes[i];
+    allocated += ENDLIST_ENTRY_SIZE * listSizes[i];
     }
 return count;
 }
@@ -843,8 +901,6 @@ int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 int tileHead;
 int tileTail;
 gfOffset *listSizes = gf->listSizes;
-struct endList **endLists = gf->endLists;
-struct endList *endList;
 int headCount;
 
 initNtLookup();
@@ -854,11 +910,8 @@ for (i=0; i<=lastTile; i += stepSize)
     tileTail = makeTile(poly + tileHeadSize, tileTailSize);
     if (tileHead >= 0 && tileTail >= 0)
         {
-	endList = endLists[tileHead];
 	headCount = listSizes[tileHead]++;
-	endList += headCount * 3;		/* Because have three slots per. */
-	endList->tileTail = tileTail;
-	endList->offset = offset;
+        endListSetEntryValues(gf, i, headCount, tileTail, offset);
 	}
     offset += stepSize;
     poly += stepSize;
@@ -1385,7 +1438,7 @@ static struct gfSeqSource *findSource(struct genoFind *gf, gfOffset targetPos)
 struct gfSeqSource *ss =  bsearch(&targetPos, gf->sources, gf->sourceCount, 
 	sizeof(gf->sources[0]), bCmpSeqSource);
 if (ss == NULL)
-    errAbort("Couldn't find source for %lld", targetPos);
+    errAbort("Couldn't find source for " GFOFFSET_FMT, targetPos);
 return ss;
 }
 
@@ -1418,7 +1471,7 @@ struct gfSeqSource *ss = clump->target;
 char *name = ss->fileName;
 
 if (name == NULL) name = ss->seq->name;
-fprintf(f, "%llu-%llu %s %llu-%llu, hits %d\n", 
+fprintf(f, GFOFFSET_FMT "-" GFOFFSET_FMT " %s " GFOFFSET_FMT "-" GFOFFSET_FMT ", hits %d\n", 
 	clump->qStart, clump->qEnd, name,
 	clump->tStart - ss->start, clump->tEnd - ss->start,
 	clump->hitCount);
@@ -2090,7 +2143,7 @@ int i, j;
 int tileHead, tileTail;
 int listSize;
 gfOffset qStart;
-struct endList *endList;
+endListPart *endList;
 int hitCount = 0;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 
@@ -2111,9 +2164,10 @@ for (i=0; i<=lastStart; ++i)
 	endList = gf->endLists[tileHead];
 	for (j=0; j<listSize; ++j)
 	    {
-	    if (endList->tileTail == tileTail)
+            endListPart *entry = endListGetEntry(gf, tileHead, j);
+ 	    if (endListEntryTileTail(entry) == tileTail)
 		{
-		int tStart = endList->offset;
+		int tStart = endListEntryOffset(entry);
 		if (target == NULL || 
 			(target == findSource(gf, tStart) 
 			&& tStart >= tMin && tStart < tMax) ) 
@@ -2151,7 +2205,7 @@ int i, j;
 int tileHead, tileTail;
 int listSize;
 gfOffset qStart;
-struct endList *endList;
+endListPart *endList;
 int hitCount = 0;
 int varPos, varVal;	/* Variable position. */
 int (*makeTile)(char *poly, int n); 
@@ -2207,12 +2261,12 @@ for (i=0; i<=lastStart; ++i)
 			{
 			listSize = gf->listSizes[tileHead];
 			qStart = i;
-			endList = gf->endLists[tileHead];
 			for (j=0; j<listSize; ++j)
 			    {
-			    if (endList->tileTail == tileTail)
+                            endListPart *entry = endListGetEntry(gf, tileHead, j);
+			    if (endListEntryTileTail(entry) == tileTail)
 				{
-				int tStart = endList->offset;
+				int tStart = endListEntryOffset(entry);
 				if (target == NULL || 
 					(target == findSource(gf, tStart) 
 					&& tStart >= tMin && tStart < tMax) ) 
