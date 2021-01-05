@@ -440,6 +440,7 @@ skipEmptyFields on
 group map
 dataVersion 2020-07-29
 pennantIcon New red ../goldenPath/newsarch.html "Updated Aug. 31, 2020"
+release beta,public
 
     track problematicSitesMask
     shortLabel Mask
@@ -449,6 +450,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Updated Aug. 31, 2020"
     color 255,0,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesMask.bb
     priority 10
+    release beta,public
 
     track problematicSitesCaution
     shortLabel Caution
@@ -458,6 +460,38 @@ pennantIcon New red ../goldenPath/newsarch.html "Updated Aug. 31, 2020"
     color 240,160,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesCaution.bb
     priority 20
+    release beta,public
+
+track problematicSites
+shortLabel Problematic Sites
+longLabel Problematic sites where masking or caution are recommended for analysis
+compositeTrack on
+type bigBed
+skipEmptyFields on
+group map
+dataVersion v4 (2020-12-22)
+pennantIcon New red ../goldenPath/newsarch.html "Updated Dec. 30, 2020"
+release alpha
+
+    track problematicSitesMask
+    shortLabel Mask
+    longLabel Problematic sites where masking is recommended for analysis
+    parent problematicSites
+    type bigBed
+    color 255,0,0
+    bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesMask.bb
+    priority 10
+    release alpha
+
+    track problematicSitesCaution
+    shortLabel Caution
+    longLabel Problematic sites where caution is recommended for analysis
+    parent problematicSites
+    type bigBed
+    color 240,160,0
+    bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesCaution.bb
+    priority 20
+    release alpha
 
 track icshape
 shortLabel icSHAPE RNA Struct
@@ -528,6 +562,21 @@ bigDataUrl /gbdb/wuhCor1/escape/escape.bb
 mouseOverField _mouseOver
 noScoreFilter on
 pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 25, 2020"
+
+track lineageB_1_1_7_US
+shortLabel B.1.1.7 in USA
+longLabel Lineage B.1.1.7 (a.k.a. 501Y.V1, VOC 202012/01) Sequences in the United States: SNVs and Deletions
+type vcfTabix
+bigDataUrl /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first8.vcf.gz
+hapClusterEnabled on
+hapClusterMethod treeFile /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first8.nwk
+hapClusterHeight 144
+hapClusterColorBy function
+geneTrack ncbiGeneBGP
+vcfDoQual off
+vcfDoFilter off
+group varRep
+pennantIcon New red ../goldenPath/newsarch.html "Released Jan. ?, 2021"
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra

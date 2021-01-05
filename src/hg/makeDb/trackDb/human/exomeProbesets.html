@@ -1,0 +1,275 @@
+<h1>Description</h1>
+<p>
+This set of tracks shows the genomic positions of <b>probes</b> and <b>targets</b> from a full 
+suite of in-solution-capture target enrichment exome kits for <b>Next Generation Sequencing (NGS)</b>
+applications. Also known as <b>exome sequencing</b> or <b>whole exome sequencing (WES)</b>, 
+this technique allows high-throughput parallel sequencing of all exons (e.g. coding region of genes 
+which affect protein function), constituting about 1% of the human genome, or approximately 30 
+million base pairs.
+</p>
+<p> 
+The tracks are intended to show the major differences in target genomic regions between the 
+different exome capture kits from the major players in the NGS sequencing market:
+<a target=blank href="https://www.illumina.com"><b>Illumina Inc.</b></a>, 
+<a target=blank href="https://www.roche.com"><b>Roche NimbleGen Inc.</b></a>, 
+<a target=blank href="https://www.agilent.com"><b>Agilent Technologies Inc.</b></a>,
+<a target=blank href="https://en.mgi-tech.com"><b>MGI Tech</b></a>,
+<a target=blank href="https://www.twistbioscience.com"><b>Twist Bioscience</b></a>, and
+<a target=blank href="https://www.idtdna.com"><b>Integrated DNA Technologies Inc.</b></a>.
+</p>
+
+<h1>Display Conventions and Configuration</h1>
+
+<p>
+Items are shaded according to manufacturing company:
+<ul>
+<li><b><font color="#FFB000">IDT (Integrated DNA Technologies)</font></b></li>
+<li><b><font color="#FE6100">Twist Biosciences</font></b></li>
+<li><b><font color="#DC267F">MGI Tech (Beijing Genomics Institute)</font></b></li>
+<li><b><font color="#648FFF">Roche NimbleGen</font></b></li>
+<li><b><font color="#785EF0">Agilent Technologies</font></b></li>
+<li><b><font color="#163EA4">Illumina</font></b></li>
+</ul>
+</p>
+
+<p>
+Tracks labeled as <em><b>Probes (P)</em></b> indicate the footprint of the oligonucleotide probes
+mapped to the human genome. This is the technically relevant targeted region by the assay. However, 
+the sequenced region will be bigger than this since flanking sequences are sequenced as well.  
+Tracks labeled as <em><b>Target Regions (T)</em></b> indicate the genomic regions targeted by the
+assay. This is the biologically relevant target region. It's not granted that all targeted regions
+will be sequenced perfectly, it might be some capture bias on certain locations. The Target
+Regions are those normally used for coverage analysis. 
+</p>
+
+<h1>Methods</h1>
+
+<p>
+The capture of the genomic regions of interest using <b>in-solution capture</b>, is achieved 
+through the hybridization of a set of probes (oligonucleotides) with a sample of fragmented genomic 
+DNA in a solution environment. The probes hybridize selectively to the genomic regions of interest 
+which, after a process of exclusion of the non-selective DNA material, can be pulled down and 
+sequenced enabling selective DNA sequencing of the genomic regions (e.g. exons) of interest. 
+In-solution capture sequencing is a sensitive method to detect single nucleotide variants, 
+insertions and deletions, and copy number variations.
+<p>
+
+<style> 
+#kit, #kit table, #kit th, #kit td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 2px;
+}
+</style>
+
+<table id="kit" width=74%>
+   <tr>
+      <th>Kit</th>
+      <th>Targeted Region</th>
+      <th>Databases Used for Design</th>
+      <th>Year of Release</th>
+   </tr>
+   <tr>
+      <td>IDT -  xGen Exome Research Panel V1.0</td>				
+      <td>39 Mb</td>
+      <td>Coding sequences from RefSeq (19,396 genes)</td>
+      <td>2015</td>
+   </tr>
+   <tr>
+      <td>IDT -  xGen Exome Research Panel V2.0</td>
+      <td>34 Mb</td>
+      <td>Coding sequences from RefSeq 109 (19,433 genes)</td>
+      <td>2020</td>
+   </tr>
+   <tr>
+      <td>Twist - RefSeq Exome Panel</td>
+      <td>3.6 Mb</td>
+      <td>Curated subset of protein coding genes from CCDS</td>
+      <td>N/A</td>
+   </tr>
+   <tr>
+      <td>Twist - Core Exome Panel</td>
+      <td>33 Mb</td>
+      <td>Protein coding genes from CCDS</td>
+      <td>N/A</td>
+   </tr>
+   <tr>
+      <td>Twist - Comprehensive Exome Panel</td>
+      <td>36.8 Mb</td>
+      <td>Protein coding genes from RefSeq, CCDS, and GENCODE </td>
+      <td>2020</td>
+   </tr>
+   <tr>
+      <td>MGI - Easy Exome Capture V4</td>
+      <td>59 Mb</td>
+      <td>CCDS, GENCODE, RefSeq, and miRBase</td>
+      <td>N/A</td>
+   </tr>
+   <tr>
+      <td>MGI - Easy Exome Capture V5</td>
+      <td>69 Mb</td>
+      <td>CCDS, GENCODE, RefSeq, miRBase, and MGI Clinical Database</td>
+      <td>N/A</td>
+   </tr>
+   <tr>
+      <td>Agilent - SureSelect Clinical Research Exome</td>
+      <td>54 Mb</td>
+      <td>Disease-associated regions from OMIM, HGMD, and ClinVar</td>
+      <td>2014</td>
+   </tr>
+   <tr>
+      <td>Agilent - SureSelect Clinical Research Exome V2</td>
+      <td>63.7 Mb</td>
+      <td>Disease-associated regions from OMIM, HGMD, ClinVar, and ACMG</td>
+      <td>2017</td>
+   </tr>
+   <tr>
+      <td>Agilent - SureSelect Focused Exome</td>
+      <td>12 Mb</td>
+      <td>Disease-associated regions from HGMD, OMIM and ClinVar</td>
+  <td>2016</td>
+</tr>
+   <tr>
+      <td>Agilent - SureSelect All Exon V4</td>
+      <td>51 Mb</td>
+      <td>Coding regions from CCDS, RefSeq, and GENCODE v6, miRBase v17, TCGA v6, and UCSC known genes</td>
+      <td>2011</td>
+   </tr>
+   <tr>
+      <td>Agilent - SureSelect All Exon V4 + UTRs</td>
+      <td>71 Mb</td>
+      <td>Coding regions and 5' and 3' UTR sequences from CCDS, RefSeq, and GENCODE v6, regions from miRBase v17, TCGA v6, and UCSC known genes</td>
+      <td>2011</td>
+   </tr>
+   <tr>
+      <td>Agilent - SureSelect All Exon V5 </td>
+      <td>50 Mb</td>
+      <td>Coding regions from Refseq, GENCODE, UCSC, TCGA, CCDS, and miRBase (21.522 genes)</td>
+      <td>2012</td>
+   </tr>
+   <tr>
+      <td>Agilent - SureSelect All Exon V5 + UTRs</td>
+      <td>74 Mb</td>
+      <td>Coding regions and 5' and 3' UTR sequences from Refseq, GENCODE, UCSC, TCGA, CCDS, and  miRBase (21.522 genes)</td>
+      <td>2012</td>
+   </tr>
+   <tr>
+      <td>Agilent - SureSelect All Exon V6 r2</td>
+      <td>60 Mb</td>
+      <td>Coding regions from RefSeq, CCDS, GENCODE, HGMD, and OMIM</td>
+      <td>2016</td>
+   </tr>
+   <tr>
+      <td>Agilent - SureSelect All Exon V6 + COSMIC r2</td>
+      <td>66 Mb</td>
+      <td>Coding regions from RefSeq, CCDS, GENCODE, HGMD, and OMIM, and targets from both TCGA and COSMIC</td>
+      <td>2016</td>
+   </tr>
+   <tr>
+      <td>Agilent - SureSelect All Exon V6 + UTR r2</td>
+      <td>75 Mb</td>
+      <td>Coding regions and 5' and 3' UTR sequences from RefSeq, GENCODE, CCDS, and UCSC known genes,and  miRNAs and lncRNA sequences</td>
+      <td>2016</td>
+   </tr>
+   <tr>
+      <td>Agilent - SureSelect All Exon V7</td>
+      <td>35.7 Mb</td>
+      <td>Coding regions from RefSeq, CCDS, GENCODE, and UCSC known genes</td>
+      <td>2018</td>
+   </tr>
+   <tr>
+      <td>Roche - KAPA HyperExome</td>
+      <td>43Mb </td>
+      <td>Coding regions from CCDS, RefSeq, Ensembl, GENCODE,and variants from ClinVar</td>
+      <td>2020</td>
+   </tr>
+   <tr>
+      <td>Roche - SeqCap EZ Exome V3</td>
+      <td>64 Mb</td>
+      <td>Coding regions from RefSeq RefGene CDS, CCDS, and miRBase v14 databases, plus coverage of 97% Vega, 97% Gencode, and 99% Ensembl</td>
+      <td>2018</td>
+   </tr>
+   <tr>
+      <td>Roche - SeqCap EZ Exome V3 + UTR</td>
+      <td>92 Mb</td>
+      <td>Coding sequences from RefSeq RefGene, CCDS, and miRBase v14, plus coverage of 97% Vega, 97% Gencode, and 99% Ensembl and UTRs from RefSeq RefGene table from UCSC GRCh37/hg19 March 2012 and Ensembl (GRCh37 v64)</td>
+      <td>2018</td>
+   </tr>
+   <tr>
+      <td>Roche - SeqCap EZ MedExome</td>
+      <td>47 Mb</td>
+      <td>Coding sequences from CCDS 17, RefSeq, Ensembl 76, VEGA 56, GENCODE 20, miRBase 21, and disease-associated regions from GeneTests, ClinVar, and based on customer input</td>
+      <td>2014</td>
+   </tr>
+   <tr>
+      <td>Roche - SeqCap EZ MedExome + Mito</td>
+      <td>47 Mb</td>
+      <td>Coding sequences and mitochondrial genes from CCDS 17, RefSeq, Ensembl 76, VEGA 56, GENCODE 20 and miRBase 21, disease-associated regions from GeneTests, ClinVar, and based on customer input</td>
+      <td>2014</td>
+   </tr>
+   <tr>
+      <td>Illumina - Nextera DNA Exome V1.2</td>
+      <td>45 Mb</td>
+      <td>Coding regions from RefSeq, CCDS, Ensembl, and GENCODE v19</td>
+      <td>2015</td>
+   </tr>
+   <tr>
+      <td>Illumina - Nextera Rapid Capture Exome</td>
+      <td>37 Mb</td>
+      <td>212,158 targeted exonic regions with start and stop chromosome locations in GRCh37/hg19</td>
+      <td>2013</td>
+   </tr>
+   <tr>
+      <td>Illumina - Nextera Rapid Capture Exome V1.2</td>
+      <td>37 Mb</td>
+      <td>Coding regions from RefSeq, CCDS, Ensembl, and GENCODE v12</td>
+      <td>2014</td>
+   </tr>
+   <tr>
+      <td>Illumina - Nextera Rapid Capture Expanded Exome</td>
+      <td>66 Mb</td>
+      <td>Coding regions from RefSeq, CCDS, Ensembl, and GENCODE v12</td>
+      <td>2013</td>
+   </tr>
+   <tr>
+      <td>Illumina - TruSeq DNA Exome V1.2</td>
+      <td>45 Mb</td>
+      <td>Coding regions from RefSeq, CCDS, and Ensembl</td>
+      <td>2017</td>
+   </tr>
+   <tr>
+      <td>Illumina - TruSeq Rapid Exome V1.2</td>
+      <td>45 Mb</td>
+      <td>Coding regions from RefSeq, CCDS, Ensembl, and GENECODE v19</td>
+      <td>2015</td>
+   </tr>
+   <tr>
+      <td>Illumina - TruSight ONE V1.1</td>
+      <td>12 Mb</td>
+      <td>Coding regions of 6700 genes from HGMD, OMIM, and GeneTest</td>
+      <td>2017</td>
+   </tr>
+   <tr>
+      <td>Illumina - TruSight Exome</td>
+      <td>7 Mb</td>
+      <td>Disease-causing mutations as curated by HGMD</td>
+      <td>2017</td>
+   </tr>
+   <tr>
+      <td>Illumina - AmpliSeq Exome Panel</td>
+      <td>N/A</td>
+      <td>CCDS coding regions</td>
+      <td>2019</td>
+   </tr>
+</table>
+
+<h1>Credits</h1>
+
+<p> 
+Thanks to Illumina (U.S), Roche NimbleGen, Inc. (U.S.), Agilent Technologies (U.S.), MGI Tech 
+(Beijing Genomics Institute, China), Twist Bioscience (U.S.), and Integrated DNA Technologies (IDT), 
+Inc. (U.S.). for making this data available and to Tiana Pereira, Pranav Muthuraman, Began Nguy and Anna Benet-Pages for enginering this tracks.
+</p> 
+
+
+

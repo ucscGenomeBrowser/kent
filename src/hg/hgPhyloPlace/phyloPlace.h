@@ -140,7 +140,7 @@ void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct dnaSeq *ref,
 
 struct tempName *writeCustomTracks(struct tempName *vcfTn, struct usherResults *ur,
                                    struct slName *sampleIds, struct phyloTree *bigTree,
-                                   int fontHeight, int *pStartTime);
+                                   char *source, int fontHeight, int *pStartTime);
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 
 
