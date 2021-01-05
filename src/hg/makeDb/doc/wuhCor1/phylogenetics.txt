@@ -424,7 +424,7 @@
 #
 
 #########################################################################
-# B.1.1.7 variants (DONE - 2021-01-04 - angie)
+# B.1.1.7 variants (DONE - 2021-01-05 - angie)
 
 mkdir /hive/data/genomes/wuhCor1/bed/lineageB_1_1_7_US
 cd /hive/data/genomes/wuhCor1/bed/lineageB_1_1_7_US
@@ -473,9 +473,35 @@ cp /data/apache/userdata/sessions/fb/AngieHinrichs/0f8b7e37/ct/uploadedSamples_h
     lineageB_1_1_7_US_first8.nwk
 # Edit the Newick file to add B.1.1.7 consensus.
 
+# 2020-01-05: More sequences have appeard in GenBank; replace EPI_ IDs with GenBank accessions
+# so we can share VCF:
+zcat lineageB_1_1_7_US_first8.vcf.gz \
+| sed -re 's/EPI_ISL_755593/MW430974.1/;
+           s/EPI_ISL_755594/MW430966.1/;
+           s/EPI_ISL_755595/MW430967.1/;
+           s/EPI_ISL_755596/MW430968.1/;' \
+> lineageB_1_1_7_US_first8.vcf
+bgzip -f lineageB_1_1_7_US_first8.vcf
+tabix -p vcf lineageB_1_1_7_US_first8.vcf.gz
+sed -re 's/EPI_ISL_755593/MW430974.1/;
+         s/EPI_ISL_755594/MW430966.1/;
+         s/EPI_ISL_755595/MW430967.1/;
+         s/EPI_ISL_755596/MW430968.1/;' \
+    lineageB_1_1_7_US_first8.nwk > tmp
+mv tmp lineageB_1_1_7_US_first8.nwk
+
+# That VCF file will have to suppressed from download, but we can make a public-only VCF
+# file to offer for download:
+zcat lineageB_1_1_7_US_first8.vcf.gz \
+| cut -f 1-16 \
+| vcfFilter -minAc=1 stdin \
+    > lineageB_1_1_7_US_first6.vcf
+bgzip lineageB_1_1_7_US_first6.vcf
+tabix -p vcf lineageB_1_1_7_US_first6.vcf.gz
+
 # Install in /gbdb
 mkdir /gbdb/wuhCor1/lineageB_1_1_7_US
-ln -s `pwd`/lineageB_1_1_7_US_first8.vcf.gz* /gbdb/wuhCor1/lineageB_1_1_7_US/
+ln -s `pwd`/lineageB_1_1_7_US_first*.vcf.gz* /gbdb/wuhCor1/lineageB_1_1_7_US/
 ln -s `pwd`/lineageB_1_1_7_US_first8.nwk /gbdb/wuhCor1/lineageB_1_1_7_US/
 
 
