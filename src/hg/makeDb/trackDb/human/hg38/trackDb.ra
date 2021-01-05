@@ -12,6 +12,7 @@ include gdcCancer.ra
 
 include gencodeV35.ra alpha
 include liftOver.ra
+include exomeProbesets.ra alpha
 
 track miRnaAtlas
 compositeTrack on
