@@ -55,7 +55,12 @@
 #include "trackVersion.h"
 #include "hubConnect.h"
 #include "bigBedFilter.h"
+
+// TODO: these should go away after refactoring of multi-region link
+#include "hex.h"
 #include "net.h"
+#include "trashDir.h"
+#include <openssl/sha.h>
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -416,8 +421,10 @@ freeMem(bedTxt);
 
 lf = lineFileOnString(NULL, TRUE, regionBedTxt);
 
-char *colorLight = "184,201,255";       // blue
-char *colorDark = "0,0,0";              // black
+// TODO: refactor with interact multi-region
+
+static char *colorLight = "184,201,255";       // blue
+static char *colorDark = "0,0,0";              // black
 char *color = colorLight;
 boolean doLightColor = TRUE;
 
@@ -426,6 +433,23 @@ char name[100];
 char userColor[10];
 struct bed *region;
 
+struct tempName mrTn;
+trashDirFile(&mrTn, "hgt", "custRgn_track", ".bed");
+FILE *f = fopen(mrTn.forCgi, "w");
+if (f == NULL)
+    errAbort("can't create temp file %s", mrTn.forCgi);
+char regionInfo[1024];
+char *regionFile = cloneString(mrTn.forCgi);
+
+#ifdef LATER
+safef(regionInfo, sizeof regionInfo, "#padding %d\n", padding);
+mustWrite(f, regionInfo, strlen(regionInfo));
+
+safef(regionInfo, sizeof regionInfo, "#shortDesc %s\n", name);
+mustWrite(f, regionInfo, strlen(regionInfo));
+#endif
+
+// write to trash file and custom track
 while (lineFileChopNext(lf, words, bedSize))
     {
     region = bedLoadN(words, bedSize);
@@ -451,12 +475,34 @@ while (lineFileChopNext(lf, words, bedSize))
         // region label based on chrom and an item number
         safef(name, sizeof name, "r%d/%s", id++, region->chrom);
         }
+    else
+        {
+        strcpy(name, region->name);
+        }
+    // write to trash file
+    safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n",
+                    region->chrom, region->chromStart, region->chromEnd);
+    mustWrite(f, regionInfo, strlen(regionInfo));
+
+    // write to custom track
     dyStringPrintf(dsCustomText, "%s\t%d\t%d\t%s\t"
                         "0\t.\t%d\t%d\t%s\n",
                             region->chrom, region->chromStart, region->chromEnd,  name,
                             region->chromStart, region->chromEnd, color);
     }
 lineFileClose(&lf);
+fclose(f);
+
+// create SHA1 file; used to see if file has changed
+unsigned char hash[SHA_DIGEST_LENGTH];
+SHA1((const unsigned char *)regionInfo, strlen(regionInfo), hash);
+char newSha1[(SHA_DIGEST_LENGTH + 1) * 2];
+hexBinaryString(hash, SHA_DIGEST_LENGTH, newSha1, (SHA_DIGEST_LENGTH + 1) * 2);
+char sha1File[1024];
+safef(sha1File, sizeof sha1File, "%s.sha1", mrTn.forCgi);
+f = mustOpen(sha1File, "w");
+mustWrite(f, newSha1, strlen(newSha1));
+carefulClose(&f);
 
 char customHtml[1000];
 safef(customHtml, sizeof customHtml, "<h2>Description</h2>\n"
@@ -466,8 +512,8 @@ safef(customHtml, sizeof customHtml, "<h2>Description</h2>\n"
 
 // TODO: support #padding in custom regions file
 
-printf("<p><a target='_blank' "
-            "href='../cgi-bin/hgTracks?"
+printf("<p>View regions of interest for this track in "
+            "<a target='_blank' href='../cgi-bin/hgTracks?"
                 "virtMode=1&"
                 "virtModeType=customUrl&"
                 "virtWinFull=on&"
@@ -475,9 +521,9 @@ printf("<p><a target='_blank' "
                 "multiRegionsBedUrl=%s&"
                 "%s=%s&"
                 "%s=%s'>"
-            "View regions of interest</a>"
-                " for this track in multi-region view</a> (custom regions mode)</p>",
-                    tdb->track, cgiEncode(regionUrl),
+            "multi-region view</a>"
+                " (custom regions mode)</p>",
+                    tdb->track, cgiEncode(regionFile),
                     CT_CUSTOM_DOC_TEXT_VAR, cgiEncode(customHtml),
                     CT_CUSTOM_TEXT_VAR, cgiEncode(dyStringCannibalize(&dsCustomText)));
 return TRUE;
