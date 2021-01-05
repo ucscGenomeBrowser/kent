@@ -1,4 +1,5 @@
-/* hcaUnpack5 - Convert cellxgene hdf5 files to something cell browser and genome browser like better.. */
+/* hcaUnpack5 - Convert cellxgene hdf5 files to something cell browser and genome browser 
+ * like better.. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -6,6 +7,7 @@
 #include "localmem.h"
 #include "portable.h"
 #include "obscure.h"
+#include "sparseMatrix.h"
 #include <hdf5.h>
 
 void usage()
@@ -419,109 +421,6 @@ return size;
 }
 
 
-struct sparseRowVal
-/* Linked list of things in a row */
-    {
-    struct sparseRowVal *next;
-    int x;
-    float val;
-    };
-
-struct sparseRowMatrix
-/* A sparse matrix with fast row access in memory */
-    {
-    struct sparseRowMatrix *next;
-    int xSize, ySize;	/* Dimensions of our matrix */
-    struct lm *lm;	/* Local memory pool, where row lists come from */
-    struct sparseRowVal **rows;
-    };
-
-struct sparseRowMatrix *sparseRowMatrixNew(int xSize, int ySize)
-/* Make up a new sparseRowMatrix structure */
-{
-struct sparseRowMatrix *matrix;
-AllocVar(matrix);
-matrix->xSize = xSize;
-matrix->ySize = ySize;
-matrix->lm = lmInit(0);
-lmAllocArray(matrix->lm, matrix->rows, ySize);
-return matrix;
-}
-
-void sparseRowMatrixFree(struct sparseRowMatrix **pMatrix)
-/* Free up resources associated with sparse matrix  */
-{
-struct sparseRowMatrix *matrix = *pMatrix;
-if (matrix != NULL)
-    {
-    lmCleanup(&matrix->lm);
-    freez(pMatrix);
-    }
-}
-
-static void inline sparseRowMatrixAdd(struct sparseRowMatrix *matrix, int x, int y, float val)
-/* Add data to our sparse matrix */
-{
-struct sparseRowVal *fv;
-lmAllocVar(matrix->lm, fv);
-fv->x = x;
-fv->val = val;
-slAddHead(&matrix->rows[y], fv);
-}
-
-void sparseRowMatrixTsvBody(struct sparseRowMatrix *matrix, char **rowLabels, 
-    boolean withDots, FILE *f)
-/* Write body (but not header) of matrix to tsv file */
-{
-int xSize = matrix->xSize; 
-int ySize = matrix->ySize;
-int x,y;
-double row[xSize];
-for (y=0; y<ySize; ++y)
-    {
-    zeroBytes(row, sizeof(row));
-    struct sparseRowVal *fv;
-    for (fv = matrix->rows[y]; fv != NULL; fv = fv->next)
-	row[fv->x] = fv->val;
-    fprintf(f, "%s", rowLabels[y]);
-    for (x=0; x<xSize; ++x)
-	{
-        fprintf(f, "\t%g", row[x]);
-	}
-    fprintf(f, "\n");
-    if (withDots)
-	dotForUser();
-    }
-}
-
-static void writeTsvRow(FILE *f, int rowSize, char **row)
-/* Write out row of strings to a line in tab-sep file */
-{
-if (rowSize > 0)
-    {
-    fprintf(f, "%s", row[0]);
-    int i;
-    for (i=1; i<rowSize; ++i)
-        fprintf(f, "\t%s", row[i]);
-    }
-fprintf(f, "\n");
-}
-
-void sparseRowMatrixSaveAsTsv(struct sparseRowMatrix *matrix, 
-    char **columnLabels, char **rowLabels, boolean withDots, char *fileName)
-{
-FILE *f = mustOpen(fileName, "w");
-verbose(1, "outputting %d row matrix, a dot every 100 rows\n", matrix->ySize);
-fprintf(f, "gene\t");
-writeTsvRow(f, matrix->xSize, columnLabels);
-if (withDots)
-    dotForUserInit(100);
-sparseRowMatrixTsvBody(matrix, rowLabels, withDots, f);
-verbose(1, "\n");
-carefulClose(&f);
-}
-
-
 void saveExprMatrix(struct hcaUnpack5 *context, char **rowLabels, char *fileName)
 /* Save out expression matrix.  Just process it one line at a time so as
  * not to run out of memory */
@@ -598,9 +497,7 @@ for (colIx = 0; colIx <colCount; ++colIx)
     }
 
 /* Open output and Write out header */
-sparseRowMatrixSaveAsTsv(matrix, indexCol->val.asString, rowLabels, TRUE, fileName);
-
-
+sparseRowMatrixSaveAsTsv(matrix, indexCol->val.asString, rowLabels, fileName);
 
 /* Clean up and go home*/
 sparseRowMatrixFree(&matrix);
