@@ -12,9 +12,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hcaUnpack5 - Convert cellxgene hdf5 files to a directory filled with 3 things\n"
+  "hcaUnpack5 - Convert h5ad (scanpy) files to a directory filled with 3 things\n"
   "usage:\n"
-  "   hcaUnpack5 input.h5 outDir\n"
+  "   hcaUnpack5 input.h5ad outDir\n"
   "The output dir will be populated with exprMatrix.tsv, meta.tsv, and project.tsv\n"
   "where:\n"
   "    exprMatrix.tsv has the cell x gene matrix with cells as columns.  This includes\n"
@@ -419,75 +419,106 @@ return size;
 }
 
 
-struct flipVal
-/* helps us flip around things */
+struct sparseRowVal
+/* Linked list of things in a row */
     {
-    struct flipVal *next;
+    struct sparseRowVal *next;
     int x;
     float val;
     };
 
-struct sparseFlip
-/* Struct to help flip a sparse matrix */
+struct sparseRowMatrix
+/* A sparse matrix with fast row access in memory */
     {
-    struct sparseFlip *next;
+    struct sparseRowMatrix *next;
     int xSize, ySize;	/* Dimensions of our matrix */
     struct lm *lm;	/* Local memory pool, where row lists come from */
-    struct flipVal **rows;
+    struct sparseRowVal **rows;
     };
 
-struct sparseFlip *sparseFlipNew(int xSize, int ySize)
-/* Make up a new sparseFlipper structure */
+struct sparseRowMatrix *sparseRowMatrixNew(int xSize, int ySize)
+/* Make up a new sparseRowMatrix structure */
 {
-struct sparseFlip *flip;
-AllocVar(flip);
-flip->xSize = xSize;
-flip->ySize = ySize;
-flip->lm = lmInit(0);
-lmAllocArray(flip->lm, flip->rows, ySize);
-return flip;
+struct sparseRowMatrix *matrix;
+AllocVar(matrix);
+matrix->xSize = xSize;
+matrix->ySize = ySize;
+matrix->lm = lmInit(0);
+lmAllocArray(matrix->lm, matrix->rows, ySize);
+return matrix;
 }
 
-void sparseFlipFree(struct sparseFlip **pFlip)
-/* Free up resources associated with sparse flipper */
+void sparseRowMatrixFree(struct sparseRowMatrix **pMatrix)
+/* Free up resources associated with sparse matrix  */
 {
-struct sparseFlip *flip = *pFlip;
-if (flip != NULL)
+struct sparseRowMatrix *matrix = *pMatrix;
+if (matrix != NULL)
     {
-    lmCleanup(&flip->lm);
-    freez(pFlip);
+    lmCleanup(&matrix->lm);
+    freez(pMatrix);
     }
 }
 
-static void inline sparseFlipAdd(struct sparseFlip *flip, int x, int y, float val)
+static void inline sparseRowMatrixAdd(struct sparseRowMatrix *matrix, int x, int y, float val)
 /* Add data to our sparse matrix */
 {
-struct flipVal *fv;
-lmAllocVar(flip->lm, fv);
+struct sparseRowVal *fv;
+lmAllocVar(matrix->lm, fv);
 fv->x = x;
 fv->val = val;
-slAddHead(&flip->rows[y], fv);
+slAddHead(&matrix->rows[y], fv);
 }
 
-void sparseFlipTsvBody(struct sparseFlip *flip, char **rowLabels, FILE *f)
+void sparseRowMatrixTsvBody(struct sparseRowMatrix *matrix, char **rowLabels, 
+    boolean withDots, FILE *f)
 /* Write body (but not header) of matrix to tsv file */
 {
-int xSize = flip->xSize; 
-int ySize = flip->ySize;
+int xSize = matrix->xSize; 
+int ySize = matrix->ySize;
 int x,y;
 double row[xSize];
 for (y=0; y<ySize; ++y)
     {
     zeroBytes(row, sizeof(row));
-    struct flipVal *fv;
-    for (fv = flip->rows[y]; fv != NULL; fv = fv->next)
+    struct sparseRowVal *fv;
+    for (fv = matrix->rows[y]; fv != NULL; fv = fv->next)
 	row[fv->x] = fv->val;
     fprintf(f, "%s", rowLabels[y]);
     for (x=0; x<xSize; ++x)
+	{
         fprintf(f, "\t%g", row[x]);
+	}
     fprintf(f, "\n");
-    dotForUser();
+    if (withDots)
+	dotForUser();
     }
+}
+
+static void writeTsvRow(FILE *f, int rowSize, char **row)
+/* Write out row of strings to a line in tab-sep file */
+{
+if (rowSize > 0)
+    {
+    fprintf(f, "%s", row[0]);
+    int i;
+    for (i=1; i<rowSize; ++i)
+        fprintf(f, "\t%s", row[i]);
+    }
+fprintf(f, "\n");
+}
+
+void sparseRowMatrixSaveAsTsv(struct sparseRowMatrix *matrix, 
+    char **columnLabels, char **rowLabels, boolean withDots, char *fileName)
+{
+FILE *f = mustOpen(fileName, "w");
+verbose(1, "outputting %d row matrix, a dot every 100 rows\n", matrix->ySize);
+fprintf(f, "gene\t");
+writeTsvRow(f, matrix->xSize, columnLabels);
+if (withDots)
+    dotForUserInit(100);
+sparseRowMatrixTsvBody(matrix, rowLabels, withDots, f);
+verbose(1, "\n");
+carefulClose(&f);
 }
 
 
@@ -495,14 +526,8 @@ void saveExprMatrix(struct hcaUnpack5 *context, char **rowLabels, char *fileName
 /* Save out expression matrix.  Just process it one line at a time so as
  * not to run out of memory */
 {
-/* Open output and Write out header */
-FILE *f = mustOpen(fileName, "w");
-fprintf(f, "gene_id");
+/* Get column with sample names, aka indexCol */
 struct metaCol *indexCol = context->indexCol;
-int i;
-for (i=0; i<indexCol->size; ++i)
-    fprintf(f, "\t%s", indexCol->val.asString[i]);
-fprintf(f, "\n");
 
 hid_t file = context->file;
 
@@ -541,8 +566,8 @@ int sizeAlloc = 0;
 int *intiBuf = NULL;
 float *fValBuf = NULL;
 
-/* Scan through matrix a column at a time, reading it into flipper */
-struct sparseFlip *flip = sparseFlipNew(context->cellCount, context->geneCount);
+/* Scan through matrix a column at a time, reading it into matrix  */
+struct sparseRowMatrix *matrix = sparseRowMatrixNew(context->cellCount, context->geneCount);
 int colIx;
 int colCount = context->cellCount;
 for (colIx = 0; colIx <colCount; ++colIx)
@@ -569,18 +594,18 @@ for (colIx = 0; colIx <colCount; ++colIx)
 
     int i;
     for (i=0; i<size; ++i)
-        sparseFlipAdd(flip, colIx, intiBuf[i], fValBuf[i]);
+        sparseRowMatrixAdd(matrix, colIx, intiBuf[i], fValBuf[i]);
     }
-verbose(1, "outputting %d row matrix, a dot every 100 rows\n", context->geneCount);
-dotForUserInit(100);
-sparseFlipTsvBody(flip, rowLabels, f);
-verbose(1, "\n");
+
+/* Open output and Write out header */
+sparseRowMatrixSaveAsTsv(matrix, indexCol->val.asString, rowLabels, TRUE, fileName);
+
+
 
 /* Clean up and go home*/
-sparseFlipFree(&flip);
+sparseRowMatrixFree(&matrix);
 freez(&intiBuf);
 freez(&fValBuf);
-carefulClose(&f);
 }
 
 void saveArrayOfStrings(char **array, int size, char *fileName)
