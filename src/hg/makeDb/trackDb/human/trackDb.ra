@@ -3182,10 +3182,12 @@ urls ncbiTranscript=https://www.ncbi.nlm.nih.gov/nuccore/$$ ensemblTranscript=ht
 cdsTable lrgCds
 cdnaTable lrgCdna
 pepTable lrgPep
-baseColorDefault diffCodons
+altColor 127,127,127
+baseColorDefault genomicCodons
+baseColorUseSequence lfExtra
 baseColorUseCds table lrgCds
-baseColorUseSequence table lrgCdna
 indelDoubleInsert on
+indelPolyA on
 indelQueryInsert on
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
@@ -3194,6 +3196,7 @@ showCdsMaxZoom 10000.0
 color 54,125,29
 urlLabel Link to LRG transcript:
 url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+bigDataUrl /gbdb/$D/bbi/lrgBigPsl.bb
 
 track lrgTranscriptAli
 shortLabel LRG Transcripts
@@ -3736,6 +3739,7 @@ mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
 maxItems 1000
+pennantIcon Updated red
 
 track snpedia
 shortLabel SNPedia
@@ -5448,6 +5452,9 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 
 track sgpGene override
 longLabel SGP Gene Predictions Using Mouse/$Organism Homology
+
+track uniprot override
+hideEmptySubtracks off
 
 searchTable cnvDevDelayCase
 semiShortCircuit 1

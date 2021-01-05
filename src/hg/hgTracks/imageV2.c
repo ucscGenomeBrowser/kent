@@ -1797,7 +1797,13 @@ for (;item!=NULL;item=item->next)
         warn("map item has no url!");
 
     if (item->title != NULL && strlen(item->title) > 0)
-        hPrintf(" TITLE='%s'", attributeEncode(item->title) );
+        {
+        // for TITLEs, which we use for mouseOvers,  since they can't have HTML in 
+        // them, we substitute a unicode new line for <br> after we've encoded it.  
+        // This is stop-gap until we start doing mouseOvers entirely in Javascript
+        char *encodedString = attributeEncode(item->title);
+        hPrintf(" TITLE='%s'", replaceChars(encodedString,"&#x3C;br&#x3E;", "&#8232;"));
+        }
     if (item->id != NULL)
         hPrintf(" id='%s'", item->id);
     hPrintf(">" );

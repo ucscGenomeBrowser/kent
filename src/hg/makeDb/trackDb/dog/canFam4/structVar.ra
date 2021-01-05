@@ -1,4 +1,3 @@
-
 track structVar
 shortLabel Struct Var
 longLabel Structural variations
@@ -6,3 +5,4 @@ group varRep
 visibility hide
 color 153,0,153
 type bed 4 .
+pennantIcon New red

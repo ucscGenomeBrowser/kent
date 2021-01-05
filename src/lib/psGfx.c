@@ -197,7 +197,7 @@ fprintf(f, "closepath\n");
 fprintf(f, "fill\n");
 }
 
-void psSetFont(struct psGfx *ps, char *fontName)
+void psSetFont(struct psGfx *ps, char *fontName, double size)
 {
 FILE *f = ps->f;
 fprintf(f, "/%s findfont ", fontName);
@@ -205,7 +205,8 @@ fprintf(f, "/%s findfont ", fontName);
 /* Note the 1.2 and the 1.0 below seem to get it to 
  * position about where the stuff developed for pixel
  * based systems expects it.  It is all a kludge though! */
-fprintf(f, "%f scalefont setfont\n", -(1/0.8)*ps->fontHeight*ps->yScale*1.5);
+fprintf(f, "%f scalefont setfont\n", -size*ps->yScale*1.2);
+ps->fontHeight = size*0.8;
 }
 
 void psTimesFont(struct psGfx *ps, double size)

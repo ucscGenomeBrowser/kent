@@ -9,7 +9,7 @@ noParentConfig on
 itemRgb on
 urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 scoreLabel ClinVar Star-Rating (0-4)
-pennantIcon Updated red /goldenPath/newsarch.html#093020a "Updated Sep. 30, 2020"
+pennantIcon New red /goldenPath/newsarch.html#122320 "Updated Dec. 23, 2020"
 
         track clinvarMain
         parent clinvar
@@ -66,7 +66,7 @@ pennantIcon Updated red /goldenPath/newsarch.html#093020a "Updated Sep. 30, 2020
 
         track clinvarSubLolly
         parent clinvar
-        shortLabel ClinVar SNVs interp
+        shortLabel ClinVar interp
         longLabel ClinVar SNVs submitted interpretations and evidence
         bigDataUrl /gbdb/$D/clinvarSubLolly/clinvarSubLolly.bb
         xrefDataUrl /gbdb/$D/clinvarSubLolly/clinvarSub.bb

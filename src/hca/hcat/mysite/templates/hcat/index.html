@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<style>
+			body		{ font-size: 1.0em; font-family: arial, sans-serif; color: #333333; width: 800px; }
+			.color 		{ color: #1C7CC7;} /* pastel blue */
+			.colortwo 	{ color: #0F78CA;} /* very slightly more blue */
+			.secondary 	{ color: #00D0F4;} /* very bright blue */
+			.hover 		{ color: #2DAFD7;} /* slightly gray blue */
+			.accent		{ color: #CF912C;} /* brown, slight orange hue */
+			.lightaccent 	{ color: #E8AA45; } /* slightly brighter than dark accent */
+			.background	{ background-color: #f4f7f9; }
+			.gray-darkest { color: #333333; }
+			.gray-dark { color: #666666; }
+			.gray-medium { color: #999999; }
+			.gray-light { color: #CCCCCC; }
+			.gray-lightest { color: #EAEAEA; }
+			h3		{ color: #2DAFD7; border-bottom: 1px solid #cccccc; width: 800px; }
+		</style>
+	</head>
+	<body>
+<!--
+		<div class="color">1C7CC7</div>
+		<div class="colortwo">0F78CA</div>
+		<div class="secondary">00D0F4</div>
+		<div class="hover">2DAFD7</div>
+		<div class="accent">CF912C</div>
+		<div class="lightaccent">E8AA45</div>
+		<div class="background">f4f7f9</div>
+-->
+		<h2><img src="media/tuatu_smaller_blue.png" style="float:left;width:195px;height:195px;;padding-right: 20"> HCA Tuatara: <span class="accent">pre</span>submission data tracking</h2>
+
+		<h3>About</h3>
+		<p>Tuatara is a database to keep track of projects that the HCA is 
+		integrating or interested in integrating into the Atlas.  It can answer data 
+		roadmap questions like "<span class="gray-medium">What is the current status of single nuclei-seq? I'd like to know when we can expect it so I can prioritize pipeline development, and from who so I can read papers from the labs.</span>"
+		Tuatara is built on top of Python, Django, and a relational database that we hope will replace several spreadsheets.</p>
+
+		<h3>Access</h3>
+		<p>If you are interested in access to Tuatara through a <a href="admin">prototypical web interface</a>, please email clayfischer@ucsc.edu.  We will be rolling out broader access as we interate through feedback.</p>
+
+		<h3>API</h3>
+		<p>A <span class="accent">REST</span>ful API allows one to query for current status of projects. Combined with the tracker.data.humancellatlas.org API, a full dashboard can be built to show all data known and in progress. Not all data is available through the API due to GDPR constraints, but enough data to make informed decisions based on known projects is available.  Here's a list of the restful urls supported by the API:
+		<ul>
+		<li><a href="api">https://tuatara.data.humancellatlas.org/api</a> - lists all classes and the number of objects in each class
+		<li><a href="api/project">https://tuatara.data.humancellatlas.org/api/project</a> - lists information on all projects
+		<li><a href="api/project/HumanInnateLymphoidCells">https://tuatara.data.humancellatlas.org/api/project/[project short name]</a> - list info on project with short name
+		<li><a href="api/projectstatus">https://tuatara.data.humancellatlas.org/api/projectstatus</a> - List and describe values in project.status field
+		<li><a href="api/contributor">https://tuatara.data.humancellatlas.org/api/contributor</a> - List contributors to any project
+		<li><a href="api/tracker">https://tuatara.data.humancellatlas.org/api/tracker</a> - Post-submission tracking of project
+		<li><a href="api/cdnalibraryprep">https://tuatara.data.humancellatlas.org/api/cdnalibraryprep</a> - Types of single cell RNA sequencing assay
+		<li><a href="api/disease">https://tuatara.data.humancellatlas.org/api/disease</a> - Diseases currently in any project.
+		<li><a href="api/organ">https://tuatara.data.humancellatlas.org/api/organ</a> - Organs currently used in any project.
+		
+	</body>
+</html>
+

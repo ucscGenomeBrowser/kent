@@ -50,15 +50,22 @@ class ProjectStatusAdmin(admin.ModelAdmin):
     
 admin.site.register(ProjectStatus, ProjectStatusAdmin)
 
+class TagAdmin(admin.ModelAdmin):
+    search_fields = ['tag', 'description']
+    list_display = ['tag', 'description']
+    autocomplete_fields = ['projects']
+
+admin.site.register(Tag, TagAdmin)
+    
 class WranglingStatusAdmin(admin.ModelAdmin):
     list_display = ['status', 'description']
     
 admin.site.register(WranglingStatus, WranglingStatusAdmin)
 
-class EffortTypeAdmin(admin.ModelAdmin):
+class ProjectSourceTypeAdmin(admin.ModelAdmin):
     list_display = ['short_name', 'description']
     
-admin.site.register(EffortType, EffortTypeAdmin)
+admin.site.register(ProjectSourceType, ProjectSourceTypeAdmin)
 
 class TrackerAdmin(admin.ModelAdmin):
     readonly_fields = ['project','uuid','submission_id', 'submission_bundles_exported_count',
@@ -87,39 +94,45 @@ class TrackerInline(admin.TabularInline):
     can_delete = False
 
 class ProjectAdmin(admin.ModelAdmin):
-    search_fields = ['short_name', 'title']
+    search_fields = ['short_name', 'title', 'description']
     autocomplete_fields = ["contributors", "labs", 
-    	"organ", "organ_part", "disease", "files",
-    	"species", "sample_type", "assay_tech", "publications", 
-	"grants", "files", "urls", "contacts", ]
+    	"organ", "organ_part", "disease", 
+    	"species", "sample_type", "cdna_library_prep", "publications", 
+	"grants", "urls", "contacts", "tags", "preservation_method"]
     list_display = ['short_name', 'stars', 'status', 'primary_wrangler', 'submit_date',]
-    list_filter = ['species', 'effort', 'primary_wrangler', 'status', 'assay_tech']
+    list_filter = ['species', 'organ', 'disease', 'project_source', 'primary_wrangler', 'status', 'cdna_library_prep', 'tags']
     inlines = [TrackerInline,]
     fieldsets = (
-        ('overall', { 'fields': (('short_name', 'status', ), ('title', 'stars'), ('labs', 'consent'), ('git_ticket_url'))}), 
-        ('biosample',  { 'fields': (('species', 'sample_type'), ('organ', 'organ_part'), 'disease')}),
-        ('assay', { 'fields': (('assay_tech', 'cells_expected'))}),
-	('pubs, people, and pay', { 'fields': ('description', 'publications', 'contributors', 'grants')}),
-	('wrangling',  { 'fields': (
+        ('Overall', { 'fields': (('short_name', 'status'), ('title'), ('labs', 'consent'), ('tags', 'stars'))}), 
+        ('Biosample',  { 'fields': (('species', 'disease'), ('organ', 'organ_part'), ('sample_type', 'preservation_method'))}),
+        ('Assay', { 'fields': ('cdna_library_prep', 'cells_expected')}),
+	('Pubs, people, and pay', { 'fields': ('description', 'publications', 'contributors', 'grants')}),
+	('Wrangling',  { 'fields': (
 		('primary_wrangler', 'secondary_wrangler'), 
 		('wrangling_status', 'comments'),
-		('effort', 'origin_name',),
-		('contacts', 'files'),
-		('first_contact_date', 'last_contact_date'),
+		('project_source', 'origin_name',),
+		('contacts', 'first_contact_date', 'last_contact_date'),
+                ('git_ticket_url'),
+                ('wrangler_drive'),
+		('staging_area', ),
+                ('shared_google_sheet'),
 		)}),
-	('submission steps',  { 'fields': (
+	('Submission steps',  { 'fields': (
 		('questionnaire_date', 'questionnaire_comments'),
 		('tAndC_date', 'tAndC_comments'),
 		('sheet_template_date', 'sheet_template', ),
-                ('shared_google_sheet'),
 		('sheet_from_lab_date', 'sheet_from_lab', ),
 		('back_to_lab_date', 'back_to_lab', ),
                 ('lab_review_date', 'lab_review_comments', ),
-		('sheet_validated_date', 'sheet_that_validated', ),
-		('staging_area_date', 'staging_area', ),
-		('submit_date', 'submit_comments', ),
+		('submit_date', 'sheet_submitted', ),
 		)}),
     )
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ProjectAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['title'].widget.attrs['style'] = 'width: 60em;'
+        form.base_fields['staging_area'].widget.attrs['style'] = 'width: 50em;'
+        return form
+
 
 admin.site.register(Project, ProjectAdmin)
 
@@ -176,12 +189,18 @@ class SampleTypeAdmin(admin.ModelAdmin):
 
 admin.site.register(SampleType, SampleTypeAdmin)
 
-class AssayTechAdmin(admin.ModelAdmin):
+class PreservationMethodAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "description"]
+    list_display = ["short_name", "description"]
+
+admin.site.register(PreservationMethod, PreservationMethodAdmin)
+
+class CdnaLibraryPrepAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
     autocomplete_fields = ['projects']
 
-admin.site.register(AssayTech, AssayTechAdmin)
+admin.site.register(CdnaLibraryPrep, CdnaLibraryPrepAdmin)
 
 class PublicationAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "title"]

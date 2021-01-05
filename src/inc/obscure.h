@@ -156,6 +156,9 @@ struct hash *hashNameIntFile(char *fileName);
 struct hash *hashTwoColumnFile(char *fileName);
 /* Given a two column file (key, value) return a hash. */
 
+struct hash *hashTsvBy(char *in, int keyColIx, int *retColCount);
+/* Return a hash of rows keyed by the given column */
+
 struct slPair *slPairTwoColumnFile(char *fileName);
 /* Read in a two column file into an slPair list */
 

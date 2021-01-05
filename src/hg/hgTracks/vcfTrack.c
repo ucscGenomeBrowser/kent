@@ -2153,6 +2153,12 @@ struct txInfo *txiList;
 if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode, &gSeqWin, &txiList))
     return;
 struct phyloTree *tree = getTreeFromFile(tg->tdb);
+if (tree == NULL)
+    {
+    warn("No tree in file '%s'", trackDbSetting(tg->tdb, VCF_HAP_METHOD_VAR));
+    vcfGtHapFileOrderDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+    return;
+    }
 int gtHapCount;
 unsigned int *leafOrderToHapOrderStart, *leafOrderToHapOrderEnd;
 unsigned int *gtHapOrder = gtHapOrderFromTree(vcff, tree,

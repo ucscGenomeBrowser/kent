@@ -283,7 +283,7 @@ static void addVersionRa(boolean strict, char *database, char *dirName, char *ra
 /* Read in tracks from raName and add them to table, pruning as required. Call
  * top-down so that track override will work. */
 {
-struct trackDb *tdbList = trackDbFromRa(raName, NULL), *tdb;
+struct trackDb *tdbList = trackDbFromRa(raName, NULL, NULL), *tdb;
 /* prune records of the incorrect release */
 tdbList= pruneRelease(tdbList);
 
@@ -872,6 +872,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	    }
 	}
 
+    sqlUpdate(conn, NOSQLINJ "flush tables");
     sqlDisconnect(&conn);
     verbose(1, "Loaded database %s\n", database);
     }

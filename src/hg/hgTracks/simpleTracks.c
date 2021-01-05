@@ -244,6 +244,7 @@ int leftLabelX;                 /* Start of area to draw left labels on. */
 int leftLabelWidth;             /* Width of area to draw left labels on. */
 float basesPerPixel = 0;       /* bases covered by a pixel; a measure of zoom */
 boolean zoomedToBaseLevel;      /* TRUE if zoomed so we can draw bases. */
+boolean zoomedToCodonNumberLevel; /* TRUE if zoomed so we can print codons and exon number text in genePreds*/
 boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in genePreds*/
 boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
 
@@ -4068,10 +4069,14 @@ if (tg->tdb)
     char *type = tg->tdb->type;
     if (sameString(type, "interact") || sameString(type, "bigInteract"))
         return FALSE;
-    if (startsWith("bigGenePred", type) || startsWith("genePred", type))
-        return TRUE;
     }
-boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "off"), "on");
+
+char *defVal = "off";
+char *type = tg->tdb->type;
+if (startsWith("bigGenePred", type) || startsWith("genePred", type))
+    defVal = "on";
+
+boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", defVal), "on");
 return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
  && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
 }

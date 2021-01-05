@@ -1,4 +1,4 @@
-% Genome Browser in the Cloud User's Guide
+% Genome Browser in the Cloud User\'s Guide
 
 # What is Genome Browser in the Cloud?
 
@@ -8,21 +8,21 @@ UCSC Genome Browser on their server/cloud instance, rather than using
 [Genome Browser in a Box](gbib.html) (GBIB) 
 or our public website. Please see the 
 [Installation of a UCSC Genome Browser on a local machine (mirror)](mirror.html#considerations-before-installing-a-genome-browser)
-page for a summary of installation options, including the pros and cons of using a mirror installation
-via the GBiC program vs. using GBiB.
+page for a summary of installation options, including the pros and cons of using a mirror
+installation via the GBiC program vs\. using GBiB.
 
-The program works by setting up MySQL, Apache, and Ghostscript, and then copying the Genome
-Browser CGIs onto the machine under `/usr/local/apache/`. Because it also deactivates the default
-Apache htdocs/cgi folders, it is best run on a new machine, or at least a host that is not 
+The program works by setting up MySQL (MariaDB), Apache, and Ghostscript, and then copying the
+Genome Browser CGIs onto the machine under `/usr/local/apache/`. Because it also deactivates the
+default Apache htdocs/cgi folders, it is best run on a new machine, or at least a host that is not
 already used as a web server. The tool can also download full or partial assembly databases,
-update the Genome Browser CGIs, and remove temporary files (aka "trash cleaning").
+update the Genome Browser CGIs, and remove temporary files (aka \"trash cleaning\").
 
 The GBiC program has been tested with Ubuntu 14/16 LTS, Centos 6/6.7/7.2, and Fedora 20.
 
 It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft 
 Azure (Ubuntu). If you want to load data on the fly from UCSC, you need to select the 
-data centers "US West (N. California)" (Amazon) or "West US" (Microsoft) for best performance. 
-Other data centers (e.g. East Coast) will require a local copy of the genome assembly, which 
+data centers \"US West (N. California)\" (Amazon) or \"West US\" (Microsoft) for best performance. 
+Other data centers (e.g\. East Coast) will require a local copy of the genome assembly, which 
 requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum 
 size of a single Amazon EBS volume.
 
@@ -34,52 +34,80 @@ Run the program as root, like this:
 
     sudo bash browserSetup.sh install
 
-The `install` command downloads and configures Apache, MySQL and Ghostscript, copies the Genome Browser
-CGIs, and configures the mirror to load data remotely from UCSC. The `install` command must be
-run before any other command is used.
-
-For an installation demonstration, see the [Genome Browser in the Cloud (GBiC) Introduction](https://www.youtube.com/watch?v=dcJERBVnjio)
-video.
+The `install` command downloads and configures Apache, MySQL (MariaDB) and Ghostscript, copies the
+Genome Browser CGIs, and configures the mirror to load data remotely from UCSC. The `install`
+command must be run before any other command is used.
 
 For mirror-specific help, please contact the Mirror Forum as listed on our [contact page](../../contacts.html).
 
+For an installation demonstration, see the [Genome Browser in the Cloud (GBiC) Introduction](https://www.youtube.com/watch?v=dcJERBVnjio)
+video:
+
+<p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dcJERBVnjio?rel=0"
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen></iframe></p>
+
 # How does the GBiC program work?
 
-The GBiC program downloads the Genome Browser CGIs and sets up the central MySQL database. All
-potentially destructive steps require confirmation by the user (unless the `-b`
-batch mode option is specified).
+The GBiC program downloads the Genome Browser CGIs and sets up the central MySQL (MariaDB) database.
+All potentially destructive steps require confirmation by the user (unless the `-b` batch mode
+option is specified).
 
-In particular, MySQL and Apache are installed and set up with the right package
-manager (yum or apt-get). A default random password is set for the
-MySQL root user and added to the `~/.my.cnf` file of the Unix root account. 
-If you have already set up MySQL, you must create the 
-`~/.my.cnf` file. The program will detect this and create a template file for you.
-The program also performs some minor tasks such as placing symlinks, detecting
-MariaDB, deactivating SELinux, finding the correct path for your Apache install
-and adapting the MySQL socket config.
+In particular, MySQL (MariaDB) and Apache are installed and set up with the right package manager
+(yum or apt-get). A default random password is set for the MySQL (MariaDB) root user and added to
+the `~/.my.cnf` file of the Unix root account. If you have already set up MySQL (MariaDB), you must
+create the `~/.my.cnf` file. The program will detect this and create a template file for you. The
+program also performs some minor tasks such as placing symlinks, detecting MariaDB, deactivating
+SELinux, finding the correct path for your Apache install and adapting the MySQL (MariaDB) socket
+config.
 
-This will result in a Genome Browser accessible on localhost that loads its data 
-through genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If
-your geographic location is not on the US West Coast, the performance will be too slow for normal 
-use, though sufficient to test that the setup is functional. A special MySQL server is
-set up in Germany for users in Europe. You can change the `/usr/local/apache/cgi-bin/hg.conf`
-genome-mysql.soe.ucsc.edu lines to genome-euro-mysql.soe.ucsc.edu in order to get better
-performance. You can then use the program to download 
-assemblies of interest to your local Genome Browser, which will result in performance at least 
-as fast as the UCSC site.
+This will result in a Genome Browser accessible on localhost that loads its data through
+genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If your geographic location is not on
+the US West Coast, the performance will be too slow for normal use, though sufficient to test that
+the setup is functional. A special MySQL (MariaDB) server is set up in Germany for users in Europe.
+You can change the `/usr/local/apache/cgi-bin/hg.conf` genome-mysql.soe.ucsc.edu lines to
+genome-euro-mysql.soe.ucsc.edu in order to get better performance. You can then use the program to
+download assemblies of interest to your local Genome Browser, which will result in performance at
+least as fast as the UCSC site.
+
+### Network requirements
 
 Your network firewall must allow outgoing connections to the following servers and ports:
-	MySQL connections, used to load tracks not local to your computer:
-		US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)
-		European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)
-	TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163), used by rsync to download track data
-	TCP port 80 on hgdownload.soe.ucsc.edu (128.114.119.163), used to download html descriptions on the fly
 
-# GBiC commands
+* MySQL (MariaDB) connections, used to load tracks not local to your computer:
+	* US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)
+	* European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)
+* Rsync, used to download track data:
+	* US server: TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163)
+	* European server: TCP port 873 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)
+* Download HTML descriptions on the fly:
+	* US server: TCP port 80 on hgdownload.soe.ucsc.edu (128.114.119.163)
+	* European server: TCP port 80 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)
+
+### Root file system too small for all data
+If you need to move data to another partition because the root file system is too small for all of
+the assembly\'s data, the following steps will help complete the installation. First, do a minimal
+installation with the browserSetup.sh script as described below, using just the \"install\"
+argument. Then make symlinks to the directory that will contain the data, e.g\. if your biggest
+filesystem is called \"/big\":
+
+```
+sudo mv /var/lib/mysql /big/
+sudo mv /gbdb /big/
+sudo ln -s /big/mysql /var/lib/mysql
+sudo ln -s /big/gbdb /gbdb
+```
+
+Then use the \"mirror\" or \"minimal\" arguments to browserSetup.sh to rsync over the majority of
+the data.
+
+
+# GBiC Commands
 
 The first argument of the program is called `command` in the following section of this document. 
 The first command that you will need is `install`, which installs the Genome Browser dependencies,
-binary files and basic MySQL infrastructure:
+binary files and basic MySQL (MariaDB) infrastructure:
 
     sudo bash browserSetup.sh install
 
@@ -94,12 +122,12 @@ To improve the performance of your Genome Browser, the program accepts the comma
 `minimal`. It will download the minimal tables required for reasonable
 performance from places in the US and possibly others, e.g., from
 Japan. Call it like this to trade space for performance and download a few
-of the most used MySQL tables for hg38:
+of the most used MariaDB tables for hg38:
 
     sudo bash browserSetup.sh minimal hg38
 
 If the Genome Browser is still too slow, you will have to mirror all tables of a 
-genome assembly. By default, rsync is used for the download.  Alternatively you can use
+genome assembly. By default, rsync is used for the download. Alternatively you can use
 UDR, a UDP-based fast transfer protocol (option: `-u`). 
 
     sudo bash browserSetup.sh -u mirror hg38
@@ -117,7 +145,7 @@ to 2TB or less with the `-t` option:
 
     sudo bash browserSetup.sh -t noEncode mirror hg19
 
-For a full list of `-t` options, see the [All GBiC options](#all-gbic-options) section  or run the 
+For a full list of `-t` options, see the [All GBiC options](#all-gbic-options) section or run the 
 program with no arguments.
 
 To update all CGIs and fully mirrored assemblies, call the
@@ -139,8 +167,8 @@ To update only the Genome Browser software and not the data, use the
     sudo bash browserSetup.sh cgiUpdate
 
 Software may break or not work correctly if the necessary data is not available. 
-Thus in most circumstances we recommend you use the `mirror`, `update`, or `minimal` commands instead
-of `cgiUpdate`.
+Thus in most circumstances, we recommend you use the `mirror`, `update`, or `minimal` commands
+instead of `cgiUpdate`.
 
 You will also want to add a cleaning command to your crontab to remove 
 the temporary files that are created during normal Genome Browser usage. These accumulate
@@ -237,4 +265,4 @@ options:
 * Max Haeussler for writing the program.
 * Christopher Lee for testing and QA.
 * Daniel Vera (bio.fsu.edu) for his RHEL install notes.
-* Bruce O'Neill, Malcolm Cook for feedback.
+* Bruce O\'Neill, Malcolm Cook for feedback.

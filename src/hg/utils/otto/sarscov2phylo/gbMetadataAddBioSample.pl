@@ -83,7 +83,7 @@ while (<>) {
       # BioSample file doesn't have info for this BioSample accession
       print STDERR "Missing BioSample info for $bAcc\n";
       $missingCount++;
-      if ($missingCount >= 100) {
+      if ($missingCount >= 1000) {
         die "Too many missing BioSamples, quitting.\n";
       }
       # Pass through as-is

@@ -283,8 +283,12 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	    mc->leftStatus = mc->rightStatus = 0; /* squash annotation */
 
 	    e = strchr(mc->src, '.');
+	    /* Look up dyString corresponding to  org */
 	    if (e == NULL)
+                {
 		orgName = mc->src;
+                org = hashFindVal(orgHash, orgName);
+                }
 	    else
 		{
 		int len = e - mc->src;
@@ -293,11 +297,28 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		memcpy(buf, mc->src, len);
 		buf[len] = 0;
 		orgName = buf;
+                // if the orderList is present, it may have organism names with dots in them,
+                // If we can't find the sequence after one dot, we look again after two
+                if (orderList != NULL)  
+                    {
+                    if ((org = hashFindVal(orgHash, orgName)) == NULL)  // couldn't find this org
+                        {
+                        e = strchr(e + 1, '.');  // look for another dot following the first dot
+                        if (e != NULL)
+                            {
+                            // if we found a dot, try the longer name 
+                            len = e - mc->src;
+                            if (len >= sizeof(buf))
+                                errAbort("organism/database name %s too long", mc->src);
+                            memcpy(buf, mc->src, len);
+                            buf[len] = 0;
+                            org = hashFindVal(orgHash, orgName);
+                            }
+                        }
+                    }
 		}
 
-	    /* Look up dyString corresponding to  org, and create a
-	     * new one if necessary. */
-	    org = hashFindVal(orgHash, orgName);
+	    /* create a  new org if necessary. */
 	    if (org == NULL)
 		{
 		if (orderList != NULL)

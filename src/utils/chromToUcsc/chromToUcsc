@@ -17,6 +17,9 @@ def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
     parser = optparse.OptionParser("""usage: %prog [options] filename - change NCBI or Ensembl chromosome names to UCSC names in tabular or wiggle files, using a chromAlias table.
 
+    Supports at least these file formats: BED, PSL, genePred, VCF, wiggle (bedgraph, span and fixed and mixes thereof), SAM, chain, interact,
+    pgSNP, GTF/GFF.
+
     Requires a <genome>.chromAlias.tsv file which can be downloaded like this:
         %prog --get hg19              # download the file hg19.chromAlias.tsv into current directory
 
@@ -63,12 +66,15 @@ def splitLines(ifh):
             yield lineNo, " ", row # *step lines are always space-separated
         else:
             if sep==-1:
-                if "\t" in line:
-                    sep = "\t"
-                else:
+                # why test first for space? Because after fixedStep, the lines are just single numbers
+                if " " in line:
                     sep = None # = split on any whitespace, consec. whitespc counts as one
+                else:
+                    sep = "\t" # default is to split on tab
             row = line.rstrip("\n\t").split(sep)
             lineNo += 1
+            if sep is None:
+                sep = " "
             yield lineNo, sep, row
 
 def parseAlias(fname):
@@ -161,6 +167,8 @@ def main():
 
     if inFname is None:
         ifh = stdin
+    elif inFname.endswith(".gz"):
+        ifh = gzip.open(inFname)
     else:
         ifh = open(inFname)
 

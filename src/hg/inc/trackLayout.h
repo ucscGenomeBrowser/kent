@@ -39,6 +39,7 @@ boolean trackLayoutInclFontExtras();
 #define leftLabelWidthDefaultChars 20   /* default number of characters allowed for left label */
 #define textSizeVar "textSize"	/* Variable name used for text size. */
 #define textFontVar "textFont"	/* Variable name used for text font. */
+#define textStyleVar "textStyle"	/* Variable name used for text font style. */
 #define trackTabWidth 11        /* Mini-button width */
 #define MAX_DISPLAY_PIXEL_WIDTH 5000
 
