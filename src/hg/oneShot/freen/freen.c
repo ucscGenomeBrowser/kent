@@ -14,6 +14,7 @@
 #include "obscure.h"
 #include "localmem.h"
 #include "csv.h"
+#include "hex.h"
 #include "memgfx.h"
 #include "correlate.h"
 #include "vMatrix.h"
@@ -110,11 +111,28 @@ correlateFree(&c);
 return result;
 }
 
-struct rgbColor colors[5] = {{0x33,0x33,0xFF},{ 0xCC,0x00,0xCC},{ 0xFF,0x11,0x11},{ 0x00,0xB0,0x00},{ 0xF0,0x99,0x00}};
+struct hash *loadColors(char *fileName)
+/* Load up a hash keyed by name in the first column with R G B 2 digit hex in the next three cols */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *hash = hashNew(0);
+char *row[4];
+while (lineFileRow(lf, row))
+    {
+    struct rgbColor color;
+    color.r = hexToByte(row[1]);
+    color.g = hexToByte(row[2]);
+    color.b = hexToByte(row[3]);
+    hashAdd(hash, row[0], lmCloneMem(hash->lm, &color, sizeof(color)));
+    }
+lineFileClose(&lf);
+return hash;
+}
 
-void freen(char *refMatrixTsv, char *sampleMatrixTsv, char *colorsOut)
+void freen(char *refMatrixTsv, char *colorsTsv, char *sampleMatrixTsv, char *colorsOut)
 /* Test something */
 {
+struct hash *colorHash = loadColors(colorsTsv);
 struct memMatrix *refMatrix = memMatrixFromTsv(refMatrixTsv);
 verbose(1, "%s is %d x %d\n", refMatrixTsv, refMatrix->xSize, refMatrix->ySize);
 normalizeColumns(refMatrix);
@@ -158,9 +176,8 @@ for (sampleIx=0; sampleIx<sampleMatrix->xSize; ++sampleIx)
 	 distances[refIx] = distance;
 	 }
 
-     minDistance *= 0.75;
      for (refIx = 0; refIx < refMatrix->xSize; ++refIx)
-	 distances[refIx] -= minDistance - 0.01;
+	 distances[refIx] += 0.02 - minDistance*0.9;
 
      double totalForce = 0;
      double forces[refMatrix->xSize];
@@ -179,10 +196,12 @@ for (sampleIx=0; sampleIx<sampleMatrix->xSize; ++sampleIx)
 	 {
 	 for (refIx=0; refIx < refMatrix->xSize; ++refIx)
 	     {
+	     char *label = refMatrix->xLabels[refIx];
+	     struct rgbColor *color = hashMustFindVal(colorHash, label);
 	     double normForce = forces[refIx]/totalForce;
-	     r += colors[refIx].r * normForce;
-	     g += colors[refIx].g * normForce;
-	     b += colors[refIx].b * normForce;
+	     r += color->r * normForce;
+	     g += color->g * normForce;
+	     b += color->b * normForce;
 	     }
 	 }
      else
@@ -197,9 +216,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 5)
     usage();
-freen(argv[1], argv[2], argv[3]);
+freen(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
 
