@@ -37,7 +37,7 @@ The program works by setting up MySQL (MariaDB), Apache, and Ghostscript, and th
 Genome Browser CGIs onto the machine under <code>/usr/local/apache/</code>. Because it also deactivates the
 default Apache htdocs/cgi folders, it is best run on a new machine, or at least a host that is not
 already used as a web server. The tool can also download full or partial assembly databases,
-update the Genome Browser CGIs, and remove temporary files (aka &quot;trash cleaning&quot;).
+update the Genome Browser CGIs, and remove temporary files (aka &ldquo;trash cleaning&rdquo;).
 </p>
 
 <p>
@@ -47,7 +47,7 @@ The GBiC program has been tested with Ubuntu 14/16 LTS, Centos 6/6.7/7.2, and Fe
 <p>
 It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft
 Azure (Ubuntu). If you want to load data on the fly from UCSC, you need to select the
-data centers &quot;US West (N. California)&quot; (Amazon) or &quot;West US&quot; (Microsoft) for best performance.
+data centers &ldquo;US West (N. California)&rdquo; (Amazon) or &ldquo;West US&rdquo; (Microsoft) for best performance.
 Other data centers (e.g. East Coast) will require a local copy of the genome assembly, which
 requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum
 size of a single Amazon EBS volume.
@@ -151,9 +151,9 @@ Your network firewall must allow outgoing connections to the following servers a
 <p>
 If you need to move data to another partition because the root file system is too small for all of
 the assembly&#39;s data, the following steps will help complete the installation. First, do a minimal
-installation with the browserSetup.sh script as described below, using just the &quot;install&quot;
-argument. Then make symlinks to the directory that will contain the data, e.g. if your biggest
-filesystem is called &quot;/big&quot;:
+installation with the browserSetup.sh script as described below, using just the &ldquo;install&rdquo;
+argument. Then make symlinks to the directory that will contain the data, e.g. if your
+biggest filesystem is called &ldquo;/big&rdquo;:
 </p>
 
 <pre><code>sudo mv /var/lib/mysql /big/
@@ -162,7 +162,7 @@ sudo ln -s /big/mysql /var/lib/mysql
 sudo ln -s /big/gbdb /gbdb</code></pre>
 
 <p>
-Then use the &quot;mirror&quot; or &quot;minimal&quot; arguments to browserSetup.sh to rsync over the majority of
+Then use the &ldquo;mirror&rdquo; or &ldquo;minimal&rdquo; arguments to browserSetup.sh to rsync over the majority of
 the data.
 </p>
 

@@ -17,7 +17,7 @@ sequence in the United States was announced Dec. 29 2020.
 </p>
 <p>
 This track shows single-nucleotide variants and deletions from the SARS-CoV-2 reference genome
-in the B.1.1.7 consensus sequence and the first eight genome sequences in the United States
+in the B.1.1.7 consensus sequence and the first nine genome sequences in the United States
 that were assigned to B.1.1.7.
 </p>
 <p>
@@ -27,12 +27,14 @@ see Methods below).
 UShER places uploaded sequences in a global phylogenetic tree and also extracts subtrees
 showing each sample's local phylogenetic context.  hgPhyloPlace generates a JSON file for
 each subtree which can be displayed using
-<a href="https://nextstrain.org/" target=_blank>nextstrain.org</a>.  The first eight U.S.
-B.1.1.7 sequences have been placed in four clusters which correlate with geographic location.
+<a href="https://nextstrain.org/" target=_blank>nextstrain.org</a>.  The first nine U.S.
+B.1.1.7 sequences have been placed in five clusters which correlate with geographic location.
 Here are links to view the subtrees at nextstrain.org:
 <ul>
   <li><a href="https://nextstrain.org/fetch/hgwdev.gi.ucsc.edu/~angie/B.1.1.7_US/MW422255_CA-CDC-STM-P017_19_25_2020-12-30.json"
-         target=_blank>California - San Diego</a>
+         target=_blank>New York and California - San Diego</a>
+    (sequences from the two locations are closely related enough to fall in the same subtree
+    of 50 samples)
   <li><a href="https://nextstrain.org/fetch/hgwdev.gi.ucsc.edu/~angie/B.1.1.7_US/CA-CDPH-UC301_UC302_2020-12-30.json"
          target=_blank>California - San Bernardino</a>
   <li><a href="https://nextstrain.org/fetch/hgwdev.gi.ucsc.edu/~angie/B.1.1.7_US/MW422256_2020-12-30.json"
@@ -75,7 +77,7 @@ clicking on the gray button to the left of the tree or by right-clicking on the 
 
 <h2>Methods</h2>
 <p>
-The eight U.S. B.1.1.7 genome sequences available as of Jan. 2, 2021 were downloaded from
+The nine U.S. B.1.1.7 genome sequences available as of Jan. 2, 2021 were downloaded from
 GenBank
 and GISAID
 and uploaded to the test server version of
@@ -100,14 +102,24 @@ so that deletion variants could be displayed in addition to SNVs.
 
 <h2>Data Access</h2>
 <p>
-The first sequences from California and Colorado are available from GenBank:
+The first sequences from California, Colorado, Florida and New York are available from GenBank:
   <ul>
     <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW422255"
            target=_blank>USA/SEARCH-5574-SAN/2020 (MW422255.1)</a> (California - San Diego)
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW430966"
+           target=_blank>USA/CA-CDC-STM-P017/2020 (MW430966.1)</a> (California - San Diego)
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW430967"
+           target=_blank>USA/CA-CDC-STM-P019/2020 (MW430967.1)</a> (California - San Diego)
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW430968"
+           target=_blank>USA/CA-CDC-STM-P025/2020 (MW430968.1)</a> (California - San Diego)
     <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW422256"
            target=_blank>USA/CO-CDPHE-2100156850/2020 (MW422256.1)</a> (Colorado)
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW430974"
+           target=_blank>USA/FL-CDC-STM-P012/2020 (MW430974.1)</a> (Florida)
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW440433"
+           target=_blank>USA/NY-Wadsworth-291673-01/2020 (MW440433.1)</a> (New York)
   </ul>
-All eight sequences are available from
+All nine sequences are available from
 <a href="https://www.gisaid.org/" target=_blank>GISAID</a>.
 GISAID data displayed in the Genome Browser are subject to GISAID's
 <a href="https://www.gisaid.org/registration/terms-of-use/" target=_blank>Terms and Conditions</a>.
@@ -122,8 +134,8 @@ COG-UK releases daily updates of sequences and metadata; scroll down to the
 <p>
 The variants in the B.1.1.7 consensus sequence and the sequences available from GenBank
 may be downloaded in Variant Call Format (VCF):
-<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first2.vcf.gz"
-   target=_blank>lineageB_1_1_7_US_first2.vcf.gz</a>
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first7.vcf.gz"
+   target=_blank>lineageB_1_1_7_US_first7.vcf.gz</a>
 </p>
 <p>
 The mutation-annotated phylogenetic tree file used by UShER to place the sequences
@@ -143,13 +155,6 @@ on which this research is based.
 </p>
 
 <h2>References</h2>
-
-<p>
-Turakhia Y, Thornlow B, Hinrichs AS, De Maio M, Gozashti L, Lanfear R, Haussler D, Corbett-Detig R.
-<a href="https://www.biorxiv.org/content/10.1101/2020.09.26.314971v1?rss=1"
-   target=_blank>Ultrafast Sample Placement on Existing Trees (UShER) Empowers Real-Time
-  Phylogenetics for the SARS-CoV-2 Pandemic</a>.
-<em>bioRxiv</em>. 2020 Sep 28.
 
 <p>
 Rambaut A, Holmes EC, O'Toole &#193;, Hill V, McCrone JT, Ruis C, du Plessis L, Pybus OG.
@@ -176,6 +181,13 @@ Geidelberg L, Hinsley WR, Laydon DJ, Dabrera G, O'Toole &#193;, <em>et al.</em>
   epidemiological and genetic data</a>.
   <em>Virological</em>.  2020 Dec 31.
 </p>
+
+<p>
+Turakhia Y, Thornlow B, Hinrichs AS, De Maio M, Gozashti L, Lanfear R, Haussler D, Corbett-Detig R.
+<a href="https://www.biorxiv.org/content/10.1101/2020.09.26.314971v1?rss=1"
+   target=_blank>Ultrafast Sample Placement on Existing Trees (UShER) Empowers Real-Time
+  Phylogenetics for the SARS-CoV-2 Pandemic</a>.
+<em>bioRxiv</em>. 2020 Sep 28.
 
 <p>
 Li H.
