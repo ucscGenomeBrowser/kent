@@ -1983,7 +1983,7 @@ static Color rDrawPhyloTreeInLabelArea(struct phyloTree *node, struct hvGfx *hvg
                                        struct hash *highlightSamples, struct hash *sampleColors)
 /* Recursively draw the tree in the left label area. */
 {
-const int branchW = 4;
+const int branchW = 8;
 int labelEnd = leftLabelX + leftLabelWidth;
 Color color = MG_BLACK;
 if (!sampleColors)
