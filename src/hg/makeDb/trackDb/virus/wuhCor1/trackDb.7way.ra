@@ -20,3 +20,29 @@ treeImage phylo/wuhCor1_7way.png
 html cons7way
 pennantIcon New red ../goldenPath/newsarch.html#070720 "Released Jul. 07, 2020"
 
+track phastCons7way
+shortLabel Human CoV phastCons
+longLabel Basewise Conservation by PhastCons of 7 Strains of human coronavirus
+configurable on
+type wig 0 1
+maxHeightPixels 100:40:11
+autoScale off
+spanList 1
+windowingFunction mean
+color 70,130,70
+altColor 130,70,70
+group compGeno
+
+track phyloP7way
+shortLabel Human CoV PhyloP
+longLabel Basewise Conservation by PhyloP of 7 Strains of human coronavirus
+configurable on
+type wig -1.054 3.454
+maxHeightPixels 100:50:11
+viewLimits -1.054:3.454
+autoScale off
+spanList 1
+windowingFunction mean
+color 60,60,140
+altColor 140,60,60
+group compGeno
