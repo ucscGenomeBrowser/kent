@@ -565,12 +565,12 @@ pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 25, 2020"
 
 track lineageB_1_1_7_US
 shortLabel B.1.1.7 in USA
-longLabel Lineage B.1.1.7 (a.k.a. 501Y.V1, VOC 202012/01) Sequences in the United States
+longLabel Lineage B.1.1.7 (a.k.a. 501Y.V1, VOC 202012/01) Sequences in the United States: SNVs and Deletions
 type vcfTabix
-bigDataUrl /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first8.vcf.gz
+bigDataUrl /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first9.vcf.gz
 hapClusterEnabled on
-hapClusterMethod treeFile /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first8.nwk
-hapClusterHeight 144
+hapClusterMethod treeFile /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first9.nwk
+hapClusterHeight 160
 hapClusterColorBy function
 geneTrack ncbiGeneBGP
 vcfDoQual off
