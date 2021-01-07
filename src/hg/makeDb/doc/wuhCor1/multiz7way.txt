@@ -49,13 +49,13 @@ axtToPsl $target.$query.axt $target.sizes $query.sizes $target.$query.psl
 axtToMaf $target.$query.axt $target.sizes $query.sizes $target.$query.maf
 axtChain -psl -verbose=0 -linearGap=loose $target.$query.psl \
    ../../../../$target.2bit $query.2bit stdout \
-    | chainAntiRepeat ../../../../$target.2bit $query.2bit stdin $target.$query.chain 
+    | chainAntiRepeat ../../../../$target.2bit $query.2bit stdin $target.$query.chain
 chainPreNet $target.$query.chain $target.sizes $query.sizes stdout \
    | chainNet  stdin -minSpace=1 $target.sizes $query.sizes stdout /dev/null \
      | netSyntenic stdin $target.$query.noClass.net
 netSplit $target.$query.noClass.net net
 netToAxt net/*.net $target.$query.chain ../../../../$target.2bit $query.2bit stdout \
-   | axtSort stdin $target.$query.axtNet  
+   | axtSort stdin $target.$query.axtNet
 axtToMaf -tPrefix=NC_045512v2. -qPrefix=$query.  $target.$query.axtNet \
    $target.sizes $query.sizes $target.$query.mafNet
 cd  ${TOP}
@@ -240,8 +240,8 @@ mkdir  /hive/data/genomes/wuhCor1/bed/multiz7way/mafFrames
 cd  /hive/data/genomes/wuhCor1/bed/multiz7way/mafFrames
 
 cp -p "/hive/data/outside/ncbi/genomes/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_protein.faa.gz" .
- 
-zgrep "^>" GCF_009858895.2_ASM985889v3_protein.faa.gz 
+
+zgrep "^>" GCF_009858895.2_ASM985889v3_protein.faa.gz
 >YP_009724389.1 orf1ab polyprotein [Wuhan seafood market pneumonia virus]
 >YP_009724390.1 surface glycoprotein [Wuhan seafood market pneumonia virus]
 >YP_009724391.1 ORF3a protein [Wuhan seafood market pneumonia virus]
@@ -282,7 +282,7 @@ mkdir -p  /hive/data/genomes/wuhCor1/bed/snpView7Way
 cd /hive/data/genomes/wuhCor1/bed/snpView7Way
 
 awk '/^s/ {print $2}' ../multiz7way/defraged.multiz7way.maf \
-  | sed 's/\..*//' > species.lst  
+  | sed 's/\..*//' > species.lst
 for i in `cat species.lst`; do f=`echo $i \
   | tr '_' '-'`; echo "s/$f/$i/g"; done > backSedScript.txt
 for i in `cat species.lst`; do f=`echo $i \
@@ -360,4 +360,334 @@ awk '{print $1,$2,$3,$4,$5}' output.bed | sed 's/ 1580$/ 0/' > load.bed
 
 hgLoadBed wuhCor1 mafSnp7way load.bed
 # Read 22910 elements of size 5 from load.bed
+
+#########################################################################
+# Phylogenetic tree from 7-way (DONE - 2020-01-06 - Hiram)
+    mkdir /hive/data/genomes/wuhCor1/bed/multiz7way/4d
+    cd /hive/data/genomes/wuhCor1/bed/multiz7way/4d
+
+    # tried using the 'defraged' maf:
+    ../defraged.multiz7way.maf
+    # that did not work
+    # Skipping 4d.all.mfa; insufficient informative sites ...
+
+    # using the full maf:
+    ../multiz7way.maf
+
+    # using ncbiGene for wuhCor1
+    hgsql -N -e 'select * from ncbiGene;' wuhCor1 \
+       | cut -f2- > wuhCor1.ncbiGene.gp
+
+    genePredSingleCover wuhCor1.ncbiGene.gp stdout \
+       | sort > wuhCor1.ncbiGeneNR.gp
+    wc -l *.gp
+    #  13 wuhCor1.ncbiGene.gp
+    #  10 wuhCor1.ncbiGeneNR.gp
+
+    sed -e 's/wuhCor1.NC_045512v2/NC_045512v2.NC_045512v2/' \
+       ../multiz7way.maf > multiz7way.NC_045512v2.maf
+
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+       --4d --features wuhCor1.ncbiGeneNR.gp \
+         -i MAF multiz7way.NC_045512v2.maf -o SS > multiz7way.ss
+    # real    0m0.140s
+
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+        -i SS --tuple-size 1 multiz7way.ss > multiz7way.mfa
+    # real    0m0.015s
+
+    #want comma-less species.list
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+       --aggregate "`cat ../species.list`" multiz7way.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # real    0m0.020s
+
+    # check they are all in there:
+    grep "^>" 4d.all.mfa | sort -u | wc -l
+    #  7
+
+    sed -e 's/ /,/g;' ../tree.nh > tree_commas.nh
+
+    # tree_commas.nh looks like:
+# ((((NC_045512v2,SARS_CoV_1),MERS),(OC43,HKU1)),(CoV229E,NL63))
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree_commas.nh 4d.all.mfa
+    #   real    0m0.458s
+
+    mv phyloFit.mod all.mod
+
+    grep "TREE:" all.mod | sed -e 's/TREE: //;' > 7way.nh
+
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/all_dists \
+      7way.nh | grep NC_045512v2 | sed -e 's/NC_045512v2.//;' \
+         | sort -k2n > 7way.distances.txt
+    sed -e 's/^/# /;' 7way.distances.txt
+# SARS_CoV_1    0.735593
+# NL63  1.720630
+# MERS  1.797932
+# CoV229E       1.879442
+# OC43  1.962180
+# HKU1  2.136617
+
+##############################################################################
+# phastCons 7-way (DONE - 2020-01-06 - Hiram)
+    # split 7way mafs into 10M chunks and generate sufficient statistics
+    # files for # phastCons
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/wuhCor1/bed/multiz7way/cons/SS
+    cd /hive/data/genomes/wuhCor1/bed/multiz7way/cons/SS
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+       ../../defraged.multiz7way.maf -i MAF -o SS \
+          -r multiz7way -w 10000000,0 -I 1000 -B 5000
+
+    # Run phastCons
+
+export len=45
+export cov=0.3
+export rho=0.3
+export c=wuhCor1
+
+
+    cd /hive/data/genomes/wuhCor1/bed/multiz7way/cons
+
+sed -e 's/NC_045512v2/wuhCor1/g' ../4d/all.mod > all.mod
+
+time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phastCons \
+  SS/multiz7way.1-29903.ss all.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $c.bed --score \
+     | sed -e "s/$c/NC_045512v2/;" > $c.pp
+# real    0m0.134s
+
+awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "NC_045512v2", $2, $3, $5, $5}' \
+   wuhCor1.bed > tmpMostConserved.bed
+/cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    wigToBigWig -verbose=2 $c.pp /hive/data/genomes/wuhCor1/chrom.sizes $c.bw
+# pid=130258: VmPeak:      43032 kB
+
+    bigWigInfo wuhCor1.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 48,184
+# primaryIndexSize: 6,436
+# zoomLevels: 6
+# chromCount: 1
+# basesCovered: 29,903
+# mean: 0.859734
+# min: 0.000000
+# max: 1.000000
+# std: 0.264092
+
+    wigEncode $c.pp phastCons7way.wig phastCons7way.wib
+    #  Converted wuhCor1.pp, upper limit 1.00, lower limit 0.00
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/wuhCor1/bed/multiz7way/cons
+    hgLoadBed wuhCor1 phastConsElements7way mostConserved.bed
+    # Read 41 elements of size 5 from mostConserved.bed
+
+    featureBits wuhCor1 phastConsElements7way
+    #  26555 bases of 29903 (88.804%) in intersection
+
+    ln -s `pwd`/phastCons7way.wib \
+          /gbdb/wuhCor1/multiz7way/phastCons7way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/wuhCor1/multiz7way \
+	wuhCor1 phastCons7way phastCons7way.wig
+
+    # on human we often try for 5% overall cov, and 70% CDS cov
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits wuhCor1 -enrichment ncbiGene:cds phastConsElements7way
+# ncbiGene:cds 97.850%, phastConsElements7way 88.804%, both 86.654%,
+#   cover 88.56%, enrich 1.00x
+
+    wigTableStats.sh wuhCor1 phastCons7way
+# db.table          min max mean       count sumData      stdDev  viewLimits
+wuhCor1.phastCons7way   0 1 0.859734 29903 25708.6 0.264091 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    hgWiggle -doHistogram -db=wuhCor1 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons7way > histogram.data 2>&1
+    #	real    2m40.179s
+
+XXX - to be done
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Ebola wuhCor1 Histogram phastCons7way track"
+set xlabel " phastCons7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#########################################################################
+# phyloP for 7-way (DONE - 2020-01-06 - Hiram)
+    # run phyloP with score=LRT
+    mkdir /cluster/data/wuhCor1/bed/multiz7way/consPhyloP
+    cd /cluster/data/wuhCor1/bed/multiz7way/consPhyloP
+
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.226
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../4d/all.mod 0.226 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.387000 0.113000 0.113000 0.387000
+
+    sed -e 's/wuhCor1/NC_045512v2/' ../cons/SS/multiz7way.1-29903.ss \
+      > NC_045512v2.ss
+
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloP \
+      --method LRT --mode CONACC --wig-scores --chrom NC_045512v2 \
+        -i SS all.mod NC_045512v2.ss > NC_045512v2.wigFix
+    # real    0m0.589s
+
+    # check integrity of data with wigToBigWig
+    wigToBigWig -verbose=2 NC_045512v2.wigFix \
+      /hive/data/genomes/wuhCor1/chrom.sizes phyloP7way.bw
+    # pid=139119: VmPeak:      43032 kB
+
+    bigWigInfo phyloP7way.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 50,209
+# primaryIndexSize: 6,436
+# zoomLevels: 6
+# chromCount: 1
+# basesCovered: 29,903
+# mean: 0.727993
+# min: -1.054000
+# max: 3.454000
+# std: 0.946768
+
+    #	encode those files into wiggle data
+    wigEncode NC_045512v2.wigFix phyloP7way.wig phyloP7way.wib
+    # Converted NC_045512v2.wigFix, upper limit 3.45, lower limit -1.05
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP7way.wib /gbdb/wuhCor1/multiz7way/phyloP7way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/wuhCor1/multiz7way wuhCor1 \
+	phyloP7way phyloP7way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh wuhCor1 phyloP7way
+# db.table              min max   mean  count sumData
+wuhCor1.phyloP7way  -1.054 3.454 0.727993 29903 21769.2
+#    stdDev    viewLimits
+#    0.946768  viewLimits=-1.054:3.454
+
+#	that range is: 1.054 + 3.454 = 4.508 for hBinSize=0.004508
+
+    #  Create histogram to get an overview of all the data
+    hgWiggle -doHistogram -hBinSize=0.004508 -hBinCount=1000 \
+       -hMinVal=-1.054 -verbose=2 \
+	    -db=wuhCor1 phyloP7way > histogram.data 2>&1
+
+XXX - to be done
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000158
+# median 0.000791
+# Q3 0.002532
+# average 0.002123
+# min 0.000053
+# max 0.045049
+# count 471
+# total 1.000058
+# standard deviation 0.004132
+
+    #	create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Ebola wuhCor1 Histogram phyloP7way track"
+set xlabel " phyloP7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# 7-way downloads (DONE - 2020-03-18 - Hiram)
+    mkdir -p \
+       /hive/data/genomes/wuhCor1/bed/multiz7way/downloads/phastCons7way
+    cd /hive/data/genomes/wuhCor1/bed/multiz7way/downloads/phastCons7way
+
+    cp -p ../../cons/wuhCor1.pp ./wuhCor1.phastCons7way.wigFix
+    gzip wuhCor1.phastCons7way.wigFix
+    ln -s ../../cons/all.mod ./wuhCor1.phastCons7way.mod
+    ln -s ../../cons/wuhCor1.bw ./wuhCor1.phastCons7way.bw
+    ln -s ../wuhCor1.7way.nameList.txt .
+
+    # reusing the README.txt file from the 119way already completed:
+# /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phastCons119way/README.txt
+    # edited here to reflect this construction
+
+    md5sum *.txt *.gz *.mod *.bw > md5sum.txt
+
+    mkdir -p \
+       /hive/data/genomes/wuhCor1/bed/multiz7way/downloads/phyloP7way
+    cd /hive/data/genomes/wuhCor1/bed/multiz7way/downloads/phyloP7way
+
+    ln -s ../../consPhyloP/all.mod ./wuhCor1.phyloP7way.mod
+    cp -p ../../consPhyloP/NC_045512v2.wigFix ./wuhCor1.phyloP7way.wigFix
+    ln -s ../../consPhyloP/phyloP7way.bw ./wuhCor1.phyloP7way.bw
+    gzip *.wigFix
+
+    ln -s ../../acc.date.description.list wuhCor1.7way.nameList.txt
+
+    # reusing the README.txt file from:
+# /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phyloP119way/README.txt
+    # edited here to reflect this construction
+
+    md5sum *.txt *.gz *.mod *.bw > md5sum.txt
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phastCons7way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phastCons7way
+    ln -s \
+     /hive/data/genomes/wuhCor1/bed/multiz7way/downloads/phastCons7way/* ./
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phyloP7way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phyloP7way
+    ln -s \
+     /hive/data/genomes/wuhCor1/bed/multiz7way/downloads/phyloP7way/* ./
+
 ##############################################################################

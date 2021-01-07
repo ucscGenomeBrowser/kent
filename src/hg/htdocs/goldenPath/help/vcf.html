@@ -27,6 +27,64 @@ Track Hub Help documentation.</p>
 <p>If you have VCF trio data, you may be interested in formatting your track as a
 <a href="#trio">Phased Trios</a> track as described below.
 
+<h2>VCF Format </h2>
+<p>
+VCF is an all-purpose format for defining variants of all types: SNVs,
+CNVs and translocations.  It can annotate all the variants in an individual as well
+as a population.  Typically, a VCF file is too large to load directly into a custom
+track on the Browser and must be loaded as binary tabix-indexed file as described
+below.
+
+The full specification of VCF is found in
+<a href = "http://samtools.github.io/hts-specs/VCFv4.3.pdf" target = _blank>documents
+on github</a>.
+
+<p>Here is a look at an example from that file showing a few rows of data for
+three samples.  Details and descriptions of the data fields are in the
+<a href = "http://samtools.github.io/hts-specs/VCFv4.3.pdf" target = _blank>.pdf</a>.
+The data here can be pasted directly into hg18 on the Genome Browser.  We
+have added two lines at the top of the entry that are not in the official example
+to make the display work in the Browser.
+</p>
+<p>
+Note that the first data field, identifying the chromosome, is in official VCF
+format which does not include the "chr" usually associated with Genome Browser
+chrom names.  Either version will work in the Browser.
+</p>
+
+<p>
+<pre>
+track type=vcf name="vcf example" description="three samples in a vcf" db=hg18 visibility="full"
+browser position chr20:1-1306000
+##fileformat=VCFv4.2
+##fileDate=20090805
+##source=myImputationProgramV3.1
+##reference=file:///seq/references/1000GenomesPilot-NCBI36.fasta
+##contig=&lt;ID=20,length=62435964,assembly=B36,md5=f126cdf8a6e0c7f379d618ff66beb2da,species="Homo sapiens",taxonomy=x&gt;
+##phasing=partial
+##INFO=&lt;ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data"&gt;
+##INFO=&lt;ID=DP,Number=1,Type=Integer,Description="Total Depth"&gt;
+##INFO=&lt;ID=AF,Number=A,Type=Float,Description="Allele Frequency"&gt;
+##INFO=&lt;ID=AA,Number=1,Type=String,Description="Ancestral Allele"&gt;
+##INFO=&lt;ID=DB,Number=0,Type=Flag,Description="dbSNP membership, build 129"&gt;
+##INFO=&lt;ID=H2,Number=0,Type=Flag,Description="HapMap2 membership"&gt;
+##FILTER=&lt;ID=q10,Description="Quality below 10"&gt;
+##FILTER=&lt;ID=s50,Description="Less than 50% of samples have data"&gt;
+##FORMAT=&lt;ID=GT,Number=1,Type=String,Description="Genotype"&gt;
+##FORMAT=&lt;ID=GQ,Number=1,Type=Integer,Description="Genotype Quality"&gt;
+##FORMAT=&lt;ID=DP,Number=1,Type=Integer,Description="Read Depth"&gt;
+##FORMAT=&lt;ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality"&gt;
+#CHROM POS ID REF ALT QUAL FILTER INFO FORMAT NA00001 NA00002 NA00003
+20	14370	rs6054257	G	A	29	PASS	NS=3;DP=14;AF=0.5;DB;H2	GT:GQ:DP:HQ	0|0:48:1:51,51	1|0:48:8:51,51	1/1:43:5:.,.
+20	17330	.	T	A	3	q10	NS=3;DP=11;AF=0.017	GT:GQ:DP:HQ	0|0:49:3:58,50	0|1:3:5:65,3	0/0:41:3
+20	1110696	rs6040355	A	G,T	67	PASS	NS=2;DP=10;AF=0.333,0.667;AA=T;DB	GT:GQ:DP:HQ	1|2:21:6:23,27	2|1:2:0:18,2	2/2:35:4
+20	1230237	.	T	.	47	PASS	NS=3;DP=13;AA=T	GT:GQ:DP:HQ	0|0:54:7:56,60	0|0:48:4:51,51	0/0:61:2
+20	1234567	microsat1	GTC	G,GTCT	50	PASS	NS=3;DP=9;AA=G	GT:GQ:DP	0/1:35:4	0/2:17:2	1/1:40:3
+
+</pre>
+
+</p>
+
 <h2>Generating a VCF track</h2>
 <p>
 The typical workflow for generating a VCF custom track is this:</p>
