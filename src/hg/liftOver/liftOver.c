@@ -188,8 +188,8 @@ double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
 
 optionInit(&argc, argv, optionSpecs);
-minMatch = optionFloat("minMatch", minMatch);
-minBlocks = optionFloat("minBlocks", minBlocks);
+minMatch = optionDouble("minMatch", minMatch);
+minBlocks = optionDouble("minBlocks", minBlocks);
 fudgeThick = optionExists("fudgeThick");
 multiple = optionExists("multiple");
 noSerial = optionExists("noSerial");
