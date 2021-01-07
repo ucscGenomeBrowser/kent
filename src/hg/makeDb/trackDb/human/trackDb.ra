@@ -131,7 +131,6 @@ filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Unc
 mergeSpannedItems on
 searchIndex name
 mouseOverField _mouseOver
-pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 searchTable decipher
 searchMethod exact
@@ -3702,7 +3701,6 @@ compositeTrack on
 type bigBed 4 +
 tableBrowser off lovdComp
 html lovdComp
-pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
         track lovdShort
         shortLabel LOVD Variants < 50 bp
@@ -5096,7 +5094,6 @@ mouseOver $name disease(s): $diseases
 html geneReviews
 url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
 noScoreFilter on
-pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 searchName geneReviews
 searchTable geneReviews
