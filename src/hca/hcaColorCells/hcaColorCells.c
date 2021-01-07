@@ -249,15 +249,14 @@ for (sampleIx=0; sampleIx<sampleMatrix->xSize; ++sampleIx)
 	 distances[refIx] = distance;
 	 }
 
-     for (refIx = 0; refIx < refMatrix->xSize; ++refIx)
-	 distances[refIx] += 0.02 - minDistance*0.9; // The 0.02 avoids zero singularity
-						     // The -90% minDistance amplifies color
-
      double totalForce = 0;
      double forces[refMatrix->xSize];
      for (refIx=0; refIx < refMatrix->xSize; ++refIx)
          {
 	 double distance = distances[refIx];
+	 // fprintf(f, "\t%g", distance);
+	 distance += 0.04 - minDistance*0.9; // The 0.04 avoids zero singularity
+					     // The -90% minDistance amplifies color
 	 double force = 1.0/(distance*distance);    // The distance squared amplifies too
 	 fprintf(f, "\t%g", force);
 	 totalForce += force;
