@@ -3,7 +3,7 @@ shortLabel Exome Probesets
 longLabel Exome Capture Probesets and Targeted Region
 group genes
 type bigBed
-visibility dense
+visibility hide
 allButtonPair on
 compositeTrack on
 
