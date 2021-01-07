@@ -1809,7 +1809,12 @@ for (i=0; ; ++i)
     char c;
     bits64 sizeRead = udcRead(file, &c, 1);
     if (sizeRead == 0)
-	return NULL;
+        {
+        // EOF before newline: return NULL for empty string
+        if (i == 0)
+            return NULL;
+        break;
+        }
     buf[i] = c;
     if (c == '\n')
 	{

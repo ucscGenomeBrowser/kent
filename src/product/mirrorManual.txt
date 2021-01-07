@@ -1417,3 +1417,47 @@ Steps to set up CRAM track support:
     repository at kent/src/product/scripts/fetchCramReference.sh.  The account
     that runs this script must have read/write permissions for the cramRef/,
     cramRef/pending/, and cramRef/error/ directories.
+
+# Using FreeType font support for anti-aliased text
+
+The Genome Browser can use a set of hard-coded Type1 fonts for text display
+in hgTracks.   The fonts are NOT distributed as part of the Genome Browser files
+but they exist natively on the UNIX systems we use in our production environment.  On our systems they
+exist in one of these three directories:
+/usr/share/X11/fonts/urw-fonts, /usr/share/fonts/default/Type1, or /usr/share/fonts/type1/gsfonts.
+To support FreeType font drawing on your system you may need to install these files if they
+are not already present.
+
+To turn on the FreeType font rendering you need to add this line to your hg.conf file:
+
+freeType=on
+
+By default, the Genome Browser looks in the directory /usr/share/fonts/default/Type1 for the
+font files it expects to find.   If you have these fonts in a different directory, you need
+to add this line to your hg.conf file:
+
+freeTypeDir=<apache accessible directory with fonts in it>
+
+The names of the font files that the Genome Browser expects and their md5sums are in the following table:
+
+5624bc04bbd862287bda3c44b15e90d6  a010013l.pfb
+6883f53d0d140f972480f179bb5e4e3b  a010015l.pfb
+db21f79bac990fa7e3de6d4cc6f54020  a010033l.pfb
+c3d0c3af6bc183010204ca923fb98e83  a010035l.pfb
+33265074c9c45c356f90de9cc47259b3  n019003l.pfb
+9d07b8658622c2e0127628c87fdb9661  n019004l.pfb
+df59ecc7bd232d2355786fd644f13baa  n019023l.pfb
+9f2d4377d9eea95dfdfa705c83a39464  n019024l.pfb
+8f75382bd2620a20aaeb06ab8c591e8f  n019043l.pfb
+28bb40d1700909b2509e2125a1963e2c  n019044l.pfb
+adf4d5565bec1170f0a5810c6984ff55  n019063l.pfb
+57e1a49c39a546c2883375df12111816  n019064l.pfb
+84e347c88eff2e77ed40b020b457bafe  n021003l.pfb
+8721c1175d907d7d484bdaa91d4533ad  n021004l.pfb
+eef0367afaa10b929e528c40c980b941  n021023l.pfb
+7af41ff3536fadcdc27eb9e5cc1c32d3  n021024l.pfb
+db95b702b81c12df1f91d15c8a6c3191  n022003l.pfb
+e97c9af68414fabe157af711b7691df7  n022004l.pfb
+f13fb8e581426a1ffa5fc12b10ad0f34  n022023l.pfb
+f3cd9244150f086434b62d5c5bb559b0  n022024l.pfb
+30aef717b7c68a6b6b7760b764fbd01c  z003034l.pfb

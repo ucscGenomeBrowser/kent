@@ -1,0 +1,199 @@
+<h2>Description</h2>
+<p>
+Lineage <a href="https://cov-lineages.org/global_report_B.1.1.7.html"
+           target=_blank>B.1.1.7</a> (Rambaut <em>et al.</em>),
+also known as 20B/501Y.V1
+(<a href="https://nextstrain.org/groups/blab/ncov/variants/20b-501y-v1"
+    target=_blank>Nextstrain</a>) and
+Variant of Concern (VOC) 202012/01
+(<a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/948152/Technical_Briefing_VOC202012-2_Briefing_2_FINAL.pdf"
+    target=_blank>Public Health England</a>),
+spread rapidly in England in November and December 2020
+(Volz <em>et al.</em>).
+It has a large number of variants including non-synonymous substitutions and deletions,
+and as of Jan. 4 2021, over 7,000 sequences from 29 countries have been submitted to
+<a href="https://www.gisaid.org/" target=_blank>GISAID</a>.  The first confirmed B.1.1.7
+sequence in the United States was announced Dec. 29 2020.
+</p>
+<p>
+This track shows single-nucleotide variants and deletions from the SARS-CoV-2 reference genome
+in the B.1.1.7 consensus sequence and the first nine genome sequences in the United States
+that were assigned to B.1.1.7.
+</p>
+<p>
+The track was generated using hgPhyloPlace, the Genome Browser's web front end to
+<a href="https://github.com/yatisht/usher/" target=_blank>UShER</a> (Turakhia <em>et al.</em>,
+see Methods below).
+UShER places uploaded sequences in a global phylogenetic tree and also extracts subtrees
+showing each sample's local phylogenetic context.  hgPhyloPlace generates a JSON file for
+each subtree which can be displayed using
+<a href="https://nextstrain.org/" target=_blank>nextstrain.org</a>.  The first nine U.S.
+B.1.1.7 sequences have been placed in five clusters which correlate with geographic location.
+Here are links to view the subtrees at nextstrain.org:
+<ul>
+  <li><a href="https://nextstrain.org/fetch/hgwdev.gi.ucsc.edu/~angie/B.1.1.7_US/NY_SanDiego_2020-12-30.json"
+         target=_blank>New York and California - San Diego</a>
+    (sequences from the two locations are closely related enough to fall in the same subtree
+    of 50 samples)
+  <li><a href="https://nextstrain.org/fetch/hgwdev.gi.ucsc.edu/~angie/B.1.1.7_US/CA-CDPH-UC301_UC302_2020-12-30.json"
+         target=_blank>California - San Bernardino</a>
+  <li><a href="https://nextstrain.org/fetch/hgwdev.gi.ucsc.edu/~angie/B.1.1.7_US/MW422256_2020-12-30.json"
+         target=_blank>Colorado</a>
+  <li><a href="https://nextstrain.org/fetch/hgwdev.gi.ucsc.edu/~angie/B.1.1.7_US/EPI_ISL_755593.json"
+         target=_blank>Florida</a>
+</ul>
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+In &quot;dense&quot; mode, a vertical line is drawn at each position where there is a variant.
+In &quot;squish&quot; and &quot;pack&quot; modes, the display shows a plot of all 
+samples' variants, with samples ordered using the phylogenetic tree in order to highlight 
+patterns of linkage. &quot;Full&quot; display mode shows each variant on its own row, 
+ordered by position instead of lineage.</p>
+<p>
+Each sample is placed in a horizontal row of pixels; when the number of
+samples exceeds the number of vertical pixels for the track, multiple
+samples fall in the same pixel row and pixels are averaged across samples.</p>
+<p>
+Each variant is a vertical bar at its position in the SARS-CoV-2 genome
+with white (invisible) representing the reference allele;
+the non-reference allele is shown in red if it changes the protein sequence of a gene,
+green if it falls within a gene but does not change the protein,
+and black if it does not fall within a gene.
+Tick marks are drawn at the top and bottom of each variant's vertical bar
+to make the bar more visible when most alleles are reference alleles.
+</p>
+<p>
+The phylogenetic tree showing inferred relationships between the samples is depicted
+in the left column of the display.
+Mousing over this will show the sample identifiers.
+With the default font size (or smaller), the leaves of the tree are labeled by sample
+identifiers.  For larger font sizes, the track height will need to be increased in order
+for the labels to fit.
+The track height can be adjusted in the track controls, which can be reached by
+clicking on the gray button to the left of the tree or by right-clicking on the image.
+</p>
+
+<h2>Methods</h2>
+<p>
+The nine U.S. B.1.1.7 genome sequences available as of Jan. 2, 2021 were downloaded from
+GenBank
+and GISAID
+and uploaded to the test server version of
+<a href="https://genome-test.gi.ucsc.edu/cgi-bin/hgPhyloPlace" target=_blank>hgPhyloPlace</a>
+(the test server was used in order to get the most recent available data,
+<a href="https://www.cogconsortium.uk/" target=_blank>COG-UK</a> sequences
+downloaded Dec. 30th, 2020).
+B.1.1.7 consensus sequence was determined from COG-UK sequences assigned to B.1.1.7 with
+early sample collection dates.
+hgPhyloPlace uses
+<a href="https://github.com/yatisht/usher/" target=_blank>UShER</a> (Turakhia <em>et al.</em>)
+to place uploaded SARS-CoV-2 genome sequences in a global phylogenetic tree,
+and generates custom tracks for the Genome Browser showing single-nucleotide variants
+(SNVs) in uploaded sequences.
+hgPhyloPlace ignores insertion/deletion variants, working only with SNVs
+because those are adequate for inferring phylogeny; however, since B.1.1.7 has four
+deletion variants, three of which cause amino acid deletions from genes,
+<a href="https://github.com/lh3/minimap2"
+   target=_blank>minimap2</a> (Li) was used to align B.1.1.7 to the reference genome
+so that deletion variants could be displayed in addition to SNVs.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The first sequences from California, Colorado, Florida and New York are available from GenBank:
+  <ul>
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW422255"
+           target=_blank>USA/SEARCH-5574-SAN/2020 (MW422255.1)</a> (California - San Diego)
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW430966"
+           target=_blank>USA/CA-CDC-STM-P017/2020 (MW430966.1)</a> (California - San Diego)
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW430967"
+           target=_blank>USA/CA-CDC-STM-P019/2020 (MW430967.1)</a> (California - San Diego)
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW430968"
+           target=_blank>USA/CA-CDC-STM-P025/2020 (MW430968.1)</a> (California - San Diego)
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW422256"
+           target=_blank>USA/CO-CDPHE-2100156850/2020 (MW422256.1)</a> (Colorado)
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW430974"
+           target=_blank>USA/FL-CDC-STM-P012/2020 (MW430974.1)</a> (Florida)
+    <li><a href="https://www.ncbi.nlm.nih.gov/nuccore/MW440433"
+           target=_blank>USA/NY-Wadsworth-291673-01/2020 (MW440433.1)</a> (New York)
+  </ul>
+All nine sequences are available from
+<a href="https://www.gisaid.org/" target=_blank>GISAID</a>.
+GISAID data displayed in the Genome Browser are subject to GISAID's
+<a href="https://www.gisaid.org/registration/terms-of-use/" target=_blank>Terms and Conditions</a>.
+SARS-CoV-2 genome sequences and metadata are available for download from
+<a href="https://gisaid.org" target=_blank>GISAID</a> EpiCoV&trade;.
+</p>
+<p>
+COG-UK releases daily updates of sequences and metadata; scroll down to the
+&quot;Latest Sequence Data&quot; section of the
+<a href="https://www.cogconsortium.uk/data/" target=_blank>Data</a> page for links.
+</p>
+<p>
+The variants in the B.1.1.7 consensus sequence and the sequences available from GenBank
+may be downloaded in Variant Call Format (VCF):
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first7.vcf.gz"
+   target=_blank>lineageB_1_1_7_US_first7.vcf.gz</a>
+</p>
+<p>
+The mutation-annotated phylogenetic tree file used by UShER to place the sequences
+may be downloaded in order to run UShER locally:
+<a href="https://genome-test.gi.ucsc.edu/~angie/UShER_SARS-CoV-2/public-2020-12-08.all.plus.cogUk.12-30.masked.pb"
+   target=_blank>public-2020-12-08.all.plus.cogUk.12-30.masked.pb</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+This work is made possible by the open sharing of genetic data by research
+groups from all over the world.
+We gratefully acknowledge the authors and the originating laboratories where the clinical
+specimen or virus isolate was first obtained and the submitting laboratories, where sequence
+data have been generated and submitted to public databases,
+on which this research is based.
+</p>
+
+<h2>References</h2>
+
+<p>
+Rambaut A, Holmes EC, O'Toole &#193;, Hill V, McCrone JT, Ruis C, du Plessis L, Pybus OG.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32669681" target="_blank">
+A dynamic nomenclature proposal for SARS-CoV-2 lineages to assist genomic epidemiology</a>.
+<em>Nat Microbiol</em>. 2020 Nov;5(11):1403-1407.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32669681" target="_blank">32669681</a>
+</p>
+
+<p>
+Rambaut A, Loman N, Pybus O, Barclay W, Barrett J,
+Carabelli A, Connor T, Peacock T, Robertson DL, Volz E, <em>et al.</em>
+<a href="https://virological.org/t/preliminary-genomic-characterisation-of-an-emergent-sars-cov-2-lineage-in-the-uk-defined-by-a-novel-set-of-spike-mutations/563"
+   target=_blank>Preliminary genomic characterisation of an emergent SARS-CoV-2 lineage in the UK
+  defined by a novel set of spike mutations</a>.
+<em>Virological</em>.  2020 Dec 18.
+</p>
+
+<p>
+Volz E, Mishra S, Chand M, Barrett JC, Johnson E,
+Geidelberg L, Hinsley WR, Laydon DJ, Dabrera G, O'Toole &#193;, <em>et al.</em>
+<a href="https://virological.org/t/transmission-of-sars-cov-2-lineage-b-1-1-7-in-england-insights-from-linking-epidemiological-and-genetic-data/576"
+   target=_blank>Transmission of SARS-CoV-2 Lineage B.1.1.7 in England: Insights from linking
+  epidemiological and genetic data</a>.
+  <em>Virological</em>.  2020 Dec 31.
+</p>
+
+<p>
+Turakhia Y, Thornlow B, Hinrichs AS, De Maio M, Gozashti L, Lanfear R, Haussler D, Corbett-Detig R.
+<a href="https://www.biorxiv.org/content/10.1101/2020.09.26.314971v1?rss=1"
+   target=_blank>Ultrafast Sample Placement on Existing Trees (UShER) Empowers Real-Time
+  Phylogenetics for the SARS-CoV-2 Pandemic</a>.
+<em>bioRxiv</em>. 2020 Sep 28.
+
+<p>
+Li H.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/29750242" target="_blank">
+Minimap2: pairwise alignment for nucleotide sequences</a>.
+<em>Bioinformatics</em>. 2018 Sep 15;34(18):3094-3100.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29750242" target="_blank">29750242</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6137996/" target="_blank">PMC6137996</a>
+</p>

@@ -1631,7 +1631,7 @@ if (vcfTn)
 
         // Make custom tracks for uploaded samples and subtree(s).
         struct tempName *ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree->tree,
-                                                  fontHeight, &startTime);
+                                                  source, fontHeight, &startTime);
                                
         // Offer big tree w/new samples for download
         puts("<h3>Downloads</h3>");

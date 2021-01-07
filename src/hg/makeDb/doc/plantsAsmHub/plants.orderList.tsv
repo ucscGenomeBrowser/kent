@@ -1,13 +1,16 @@
 GCF_001190045.1_Vigan1.1	adzuki bean
+GCF_902201215.1_ALMONDv2	almond
 GCF_000442705.1_EG5	African oil palm
 GCF_004799145.1_ASM479914v1	algarrobo blanco
 GCF_002114115.1_ASM211411v1	apple
+GCF_014843425.1_RJC1_Hi-C	Barbados nut
 GCF_000219495.3_MedtrA17_4.0	barrel medic
 GCF_000511025.2_RefBeet-1.2.2	beet
 GCF_001995035.1_ASM199503v1	bitter melon
 GCF_000002775.4_Pop_tri_v3	black cottonwood
 GCF_004153795.1_AHAU_CSS_1	black tea
 GCF_000208745.1_Criollo_cocoa_genome_V2	cacao
+GCF_900626175.2_cs10	cannabis
 GCF_000710875.1_Pepper_Zunla_1_Ref_v1.0	capsicum
 GCF_001625215.1_ASM162521v1	carrot
 GCF_001659605.1_Manihot_esculenta_v6	cassava
@@ -27,6 +30,7 @@ GCF_004118075.1_ASM411807v1	cowpea
 GCF_002738365.1_Cmos_1.0	crookneck pumpkin
 GCF_000413155.1_DPV01	date palm
 GCF_002303985.1_Duzib1.0	durian
+GCF_008831285.1_ASM883128v1	East African water lily
 GCF_001411555.2_Walnut_2.0	English walnut
 GCF_000327365.1_Graimondii2_0	eudicots
 GCF_000375325.1_Caprub1_0	eudicots
@@ -35,6 +39,7 @@ GCF_000414095.1_ASM41409v2	eudicots
 GCF_000816755.2_Araip1.1	eudicots
 GCF_000817695.2_Aradu1.1	eudicots
 GCF_001406875.1_SPENNV200	eudicots
+GCF_001531365.1_CcrdV1	eudicots
 GCF_001879085.1_NIATTr2	eudicots
 GCF_002168275.1_ASM216827v2	eudicots
 GCF_002870075.1_Lsat_Salinas_v7	eudicots
@@ -59,6 +64,7 @@ GCF_002220235.1_ASM222023v1	green algae
 GCF_003935025.1_Abrus_2018	Indian licorice
 GCF_000346735.1_P.mume_V1.0	Japanese apricot
 GCF_001879475.1_Asagao_1.1	Japanese morning glory
+GCF_001433935.1_IRGSP-1.0	Japanese rice
 GCF_000004255.2_v.1.0	lyrate rockcress
 GCF_000231095.1_Oryza_brachyantha.v1.4b	malo sina
 GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0	maize
@@ -86,7 +92,9 @@ GCF_000612305.1_Egrandis1_0	rose gum
 GCF_001654055.1_ASM165405v1	rubber tree
 GCF_000365185.1_Chinese_Lotus_1.1	sacred lotus
 GCF_000478725.1_Eutsalg1_0	saltwater cress
+GCF_900635055.1_Sole10x-PRISCAF	scented satinash
 GCF_000512975.1_S_indicum_v1.0	sesame
+GCF_900635035.1_Rarg10x-PRISCAF	silver malletwood
 GCF_000003195.3_Sorghum_bicolor_NCBIv3	sorghum
 GCF_000463585.1_ASM46358v1	spider flower
 GCF_002007265.1_ASM200726v1	spinach
@@ -99,7 +107,6 @@ GCF_000612285.1_Gossypium_arboreum_v1.0	tree cotton
 GCF_003576645.1_ASM357664v1	trilobed morning glory
 GCF_001633185.1_ValleyOak3.0	valley oak
 GCF_002806865.1_ASM280686v2	vegetable marrow
-GCF_002162155.1_WEW_v2.0	wild emmer wheat
 GCF_000184155.1_FraVesHawaii_1.0	wild strawberry
 GCF_000313855.2_ASM31385v2	wild Malaysian banana
 GCF_000695525.1_BOL	wild cabbage

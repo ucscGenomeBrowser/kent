@@ -324,7 +324,8 @@
 
 
 #########################################################################
-# PROBLEMATIC SITES (DONE - 2020-08-26 - Angie)
+# PROBLEMATIC SITES (DONE - 2020-12-30 - Angie)
+# Previously updated 2020-08-26
 
     today=$(date +%y-%m-%d)
     mkdir -p /hive/data/genomes/wuhCor1/bed/problematicSites/$today
@@ -421,5 +422,131 @@
 # updates to SARS-CoV-2 PHYLOGENY (both GISAID and PUBLIC SEQUENCE) from
 # 2020-11 onward are driven by scripts in hg/utils/otto/sarscov2phylo/ .
 #
+
+#########################################################################
+# B.1.1.7 variants (DONE - 2021-01-05 - angie)
+
+mkdir /hive/data/genomes/wuhCor1/bed/lineageB_1_1_7_US
+cd /hive/data/genomes/wuhCor1/bed/lineageB_1_1_7_US
+# I downloaded the first eight U.S. lineage B.1.1.7 sequences from GenBank (MW422255, MW422256)
+# and GISAID (EPI_ISL_755593, EPI_ISL_755594, EPI_ISL_755595, EPI_ISL_755596, EPI_ISL_755940,
+# EPI_ISL_755941), used hgPhyloPlace to align them to the genome, place in phylo tree and make
+# custom tracks including a VCF track with the 8 samples.  Copy the custom track VCF and Newick:
+cp /data/apache/userdata/sessions/fb/AngieHinrichs/0f8b7e37/ct/ct_hgwdev_1761a_38f864.vcf \
+    lineageB_1_1_7_US_first8.vcf
+
+# Run minimap2 to get VCF for deletion variants that hgPhyloPlace ignores:
+minimap2  --cs NC_045512v2.fa MW422255.1.fa | paftools.js call -L 20000 -f NC_045512v2.fa -
+#NC_045512v2     11287   .       GTCTGGTTTT      G
+#NC_045512v2     21764   .       ATACATG A
+#NC_045512v2     21990   .       TTTA    T
+#NC_045512v2     28270   .       TA      T
+
+# Edit lineageB_1_1_7_US_first8.vcf to add those deletion variants and remove no-call SNVs at
+# overlapping positions.
+
+# Add a column for B.1.1.7 consensus variants; default to match reference, then edit to set to alt
+# allele in specific locations.
+perl -wne 'chomp; @w = split("\t");
+           if (@w == 1) { print $_ . "\n"; }
+           elsif ($w[0] eq "#CHROM") { print join("\t", @w[0..8], "B.1.1.7", @w[9..$#w]) . "\n"; }
+           else {
+             if ($w[7] =~ /^(AC=\d+;AN=)(\d+)$/) {
+               $newAN = $2 + 1;
+               $w[7] = "$1$newAN";
+             } else { die "Unexpected INFO column $w[7]"; }
+             print join("\t", @w[0..8], "0", @w[9..$#w]) . "\n";
+           }' \
+    lineageB_1_1_7_US_first8.vcf > tmp
+
+# Edit tmp to set genotype value for B.1.1.7 to 1 where appropriate.
+
+# Exclude variants with no alt allele (included in hgPhyloPlace VCF only to highlight where a
+# sample has N's at variants in the big tree; not needed here & not handled quite right by our
+# VCF display...)
+tawk '$5 != "*"' tmp > lineageB_1_1_7_US_first8.vcf
+
+bgzip -f lineageB_1_1_7_US_first8.vcf
+tabix -p vcf lineageB_1_1_7_US_first8.vcf.gz
+# Copy the Newick tree file showing the relationship between the 8 samples:
+cp /data/apache/userdata/sessions/fb/AngieHinrichs/0f8b7e37/ct/uploadedSamples_hgwdev_16d7d_38f4d0.nwk \
+    lineageB_1_1_7_US_first8.nwk
+# Edit the Newick file to add B.1.1.7 consensus.
+
+# 2020-01-05: More sequences have appeard in GenBank; replace EPI_ IDs with GenBank accessions
+# so we can share VCF:
+zcat lineageB_1_1_7_US_first8.vcf.gz \
+| sed -re 's/EPI_ISL_755593/MW430974.1/;
+           s/EPI_ISL_755594/MW430966.1/;
+           s/EPI_ISL_755595/MW430967.1/;
+           s/EPI_ISL_755596/MW430968.1/;' \
+> lineageB_1_1_7_US_first8.vcf
+bgzip -f lineageB_1_1_7_US_first8.vcf
+tabix -p vcf lineageB_1_1_7_US_first8.vcf.gz
+sed -re 's/EPI_ISL_755593/MW430974.1/;
+         s/EPI_ISL_755594/MW430966.1/;
+         s/EPI_ISL_755595/MW430967.1/;
+         s/EPI_ISL_755596/MW430968.1/;' \
+    lineageB_1_1_7_US_first8.nwk > tmp
+mv tmp lineageB_1_1_7_US_first8.nwk
+
+# That VCF file will have to suppressed from download, but we can make a public-only VCF
+# file to offer for download:
+zcat lineageB_1_1_7_US_first8.vcf.gz \
+| cut -f 1-16 \
+| vcfFilter -minAc=1 stdin \
+    > lineageB_1_1_7_US_first6.vcf
+bgzip lineageB_1_1_7_US_first6.vcf
+tabix -p vcf lineageB_1_1_7_US_first6.vcf.gz
+
+# 2020-01-05: Sequence just became available from NY; add it in starting with hgPhyloPlace VCF...
+tail -n+399 /data/apache/trash/ct/ct_pp_hgwdev_angie_bcfa_4f0e10.ct | tawk '$5 != "*"' > tmp
+# Get deletion lines to add in:
+zcat lineageB_1_1_7_US_first8.vcf.gz | grep del >> tmp
+# Edit the deletion lines into the correct places so lines are sorted by position.
+# Check for other edits to make:
+zcat lineageB_1_1_7_US_first8.vcf.gz | cut -f 1-9 > /data/tmp/angie/1
+cut -f 1-9 tmp > /data/tmp/angie/2
+diff /data/tmp/angie/[12]
+#26c26
+#< NC_045512v2   17615   A17615G A       G       .       .       AC=5;AN=9       GT
+#---
+#> NC_045512v2   17615   A17615G A       G       .       .       AC=6;AN=9       GT
+# -- aha, the new sequence adds 1 to the AC for A17615G.
+# But the same variants are there in each file, so we can paste columns and then fix up AC and AN
+# with vcfFilter.
+cut -f 18 tmp > tmp2
+zcat lineageB_1_1_7_US_first8.vcf.gz \
+| paste - tmp2 \
+| vcfFilter -minAc=1 stdin \
+    > lineageB_1_1_7_US_first9.vcf
+# Edit lineageB_1_1_7_US_first9.vcf to fix the pasted ##fileformat and ##reference header lines.
+bgzip -f lineageB_1_1_7_US_first9.vcf
+tabix -p vcf lineageB_1_1_7_US_first9.vcf.gz
+# Now copy the Newick file:
+cp /data/apache/trash/ct/uploadedSamples_hgwdev_angie_bcfa_4f0e10.nwk lineageB_1_1_7_US_first9.nwk
+# Edit the Newick file to add B.1.1.7 consensus.
+
+# Ha, I just missed the GenBank release!  Well, replace EPI_ISL_767594 with MW440433.1.  :)
+zcat lineageB_1_1_7_US_first9.vcf.gz \
+| sed -re 's/EPI_ISL_767594/MW440433.1/;' \
+    > lineageB_1_1_7_US_first9.vcf
+bgzip -f lineageB_1_1_7_US_first9.vcf
+tabix -p vcf lineageB_1_1_7_US_first9.vcf.gz
+sed -re 's/EPI_ISL_767594/MW440433.1/;' lineageB_1_1_7_US_first9.nwk > tmp
+mv tmp lineageB_1_1_7_US_first9.nwk
+# Update the GenBank subset VCF that we can offer for download:
+zcat lineageB_1_1_7_US_first9.vcf.gz \
+| cut -f 1-16,19 \
+| vcfFilter -minAc=1 stdin \
+    > lineageB_1_1_7_US_first7.vcf
+bgzip lineageB_1_1_7_US_first7.vcf
+tabix -p vcf lineageB_1_1_7_US_first7.vcf.gz
+
+# Install in /gbdb
+mkdir /gbdb/wuhCor1/lineageB_1_1_7_US
+ln -s `pwd`/lineageB_1_1_7_US_first*.vcf.gz* /gbdb/wuhCor1/lineageB_1_1_7_US/
+ln -s `pwd`/lineageB_1_1_7_US_first*.nwk /gbdb/wuhCor1/lineageB_1_1_7_US/
+
 
 #########################################################################
