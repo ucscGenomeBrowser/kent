@@ -158,7 +158,6 @@ char *hTrackUiForTrack(char *trackName);
 #define SUBTRACK_HIDE_EMPTY_MULTIBED_URL       "hideEmptySubtracksMultiBedUrl"
 #define SUBTRACK_HIDE_EMPTY_SOURCES_URL        "hideEmptySubtracksSourcesUrl"
 
-
 // multi-region 
 #define MULTI_REGION_CHROM      "multi"
 #define OLD_MULTI_REGION_CHROM  "virt"

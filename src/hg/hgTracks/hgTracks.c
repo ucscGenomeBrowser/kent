@@ -2241,7 +2241,9 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
                 char position[1024];
                 safef(position, sizeof position, "%s:%ld-%ld", h->chrom, h->chromStart, h->chromEnd);
                 char *newPosition = undisguisePosition(position); // UN-DISGUISE VMODE
-                if (startsWith("virt:", newPosition))
+                if (startsWith(MULTI_REGION_CHROM, newPosition))
+                   newPosition = replaceChars(position, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
+                if (startsWith(MULTI_REGION_CHROM, newPosition))
                     {
                     parseVPosition(newPosition, &h->chrom, &h->chromStart, &h->chromEnd);
                     }
@@ -2768,7 +2770,7 @@ if (newStart == -1) // none of the windows intersected with the position
     return position; // return original
 //  return new virt undisguised position as a string
 char newPos[1024];
-safef (newPos, sizeof newPos, "virt:%ld-%ld", (newStart+1), newEnd);
+safef (newPos, sizeof newPos, "%s:%ld-%ld", MULTI_REGION_CHROM, (newStart+1), newEnd);
 return cloneString(newPos);
 }
 
@@ -5390,7 +5392,7 @@ if (withGuidelines)
 		for (window=windows; window; window=window->next) // background under every other window
 		    {
 		    if (window->regionOdd)
-			hvGfxBox(bgImg, window->insideX, 0, window->insideWidth, pixHeight, lightBlue);
+                        hvGfxBox(bgImg, window->insideX, 0, window->insideWidth, pixHeight, lightBlue);
 		    }
 		}
 	    else
@@ -8634,6 +8636,17 @@ if (!hideControls)
 		hPuts("Organism ");
 		printAssemblyListHtmlExtra(database, "change", javascript);
 		}
+        if (sameString(virtModeType, "default"))
+            {
+            hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", 
+                    "Configure view in multi-region display mode",
+                    "popUpHgt.hgTracks('multi-region config'); return false;", FALSE);
+            }
+        else
+            {
+            hButtonWithMsg("hgt.exitMultiRegion", "exit multi-region", "Exit multi-region display mode");
+            }
+        hPrintf(" ");
 
         /* Multi-region button on position line */
         if (sameString(virtModeType, "default"))
@@ -8849,8 +8862,8 @@ if (!hideControls)
     hPrintf(" ");
 
     hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", 
-                        "Configure multi-region display options", 
-                        "popUpHgt.hgTracks('multi-region config'); return false;", virtMode);
+                    "Configure multi-region display options", 
+                    "popUpHgt.hgTracks('multi-region config'); return false;", virtMode);
     hPrintf(" ");
 
     hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
@@ -9497,13 +9510,14 @@ if (NULL == position)
 	{
         restoreSavedVirtPosition();
 	}
-    if (startsWith("virt:", position))
+    if (startsWith(OLD_MULTI_REGION_CHROM, position))
+        position = replaceChars(position, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
+    if (startsWith(MULTI_REGION_CHROM, position))
 	{
 	position = stripCommas(position); // sometimes the position string arrives with commas in it.
 	positionIsVirt = TRUE;
 	}
     }
-
 
 if (sameString(position, ""))
     {
@@ -9622,7 +9636,9 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
 lastVirtModeExtraState = cartUsualString(cart, "lastVirtModeExtraState", lastVirtModeExtraState);
 
 // DISGUISED POSITION
-if (!startsWith("virt:", position) && (virtualSingleChrom()))
+if (startsWith(OLD_MULTI_REGION_CHROM, position))
+    position = replaceChars(position, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
+if (!startsWith(MULTI_REGION_CHROM, position) && (virtualSingleChrom()))
     {
     // "virtualSingleChrom trying to find best vchrom location corresponding to chromName, winStart, winEnd
     findNearest = TRUE;
@@ -9757,7 +9773,7 @@ else
     }
 
 if (virtMode)
-    virtChromName = "virt";
+    virtChromName = MULTI_REGION_CHROM;
 else
     virtChromName = chromName;
 
