@@ -8636,17 +8636,6 @@ if (!hideControls)
 		hPuts("Organism ");
 		printAssemblyListHtmlExtra(database, "change", javascript);
 		}
-        if (sameString(virtModeType, "default"))
-            {
-            hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", 
-                    "Configure view in multi-region display mode",
-                    "popUpHgt.hgTracks('multi-region config'); return false;", FALSE);
-            }
-        else
-            {
-            hButtonWithMsg("hgt.exitMultiRegion", "exit multi-region", "Exit multi-region display mode");
-            }
-        hPrintf(" ");
 
         /* Multi-region button on position line */
         if (sameString(virtModeType, "default"))
