@@ -30,7 +30,7 @@ shortLabel Precurs. Proteins
 longLabel Full-length SwissProt precursor protein sequences (before cleavage into protein products)
 priority 1
 type bigGenePred
-visibility dense
+visibility pack
 bigDataUrl /gbdb/wuhCor1/uniprot/unipFullSeq.bb
 searchIndex acc
 urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
@@ -44,7 +44,7 @@ exonNumbers off
 
 track unipCov2Chain
 shortLabel Protein Products
-longLabel UniProt Protein Products (Polypeptide Chains)
+longLabel UniProt Protein Products (Polypeptide Chains, after cleavage)
 priority 2
 visibility pack
 color 0,2,80
