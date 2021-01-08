@@ -550,3 +550,60 @@ ln -s `pwd`/lineageB_1_1_7_US_first*.nwk /gbdb/wuhCor1/lineageB_1_1_7_US/
 
 
 #########################################################################
+# Normalize VCF+tree sample names in 13-11-20 public-all set; it will be basis of
+# incrementally updated public tree going forward.  (DONE - 2021-01-07 - Angie)
+
+cd /hive/data/outside/otto/sarscov2phylo/13-11-20
+# Names currently used in VCF+tree:
+zcat public-13-11-20.all.minAf.01.vcf.gz | head | grep ^#CHROM \
+| sed -re 's/\t/\n/g;' | tail -n+10 \
+    > public-13-11-20.all.names
+wc -l public-13-11-20.all.names
+#157816 public-13-11-20.all.names
+# There are some inconsistent name and date formats that we need to clean up e.g.
+#NorthernIreland/NIRE-102049/2020|Northern_Ireland/NIRE-102049/2020|20-03-23
+#Northern_Ireland/NIRE-106F84/2020|2020-05-26
+# i.e. gisaidStrain|cogUkName|shortenedDate vs. cogUkName|date
+# --> Use only cogUkName since that's all we'll get going forward
+# --> Shorten dates that are not shortened
+# While we're at it, remove the rev-strand (doh!) CNCB version of GZMU0016
+# (Guangzhou/GZMU0016/2020|CNA0013710|20-02-25) because mafft made a garbage alignment
+# for it, while the GenBank version is fine.
+awk -F\| '{ if ($2 ~ /^(England|Northern|Scotland|Wales)/) { print $0 "\t" $2 "|" $3; }
+            else { print $0 "\t" $0; } }' \
+    public-13-11-20.all.names \
+| grep -v CNA0013710 \
+| sed -re 's/20([0-9][0-9])(-[0-9-]+)?$/\1\2/; s/, /_/g; s/[, ]/_/g;' \
+    > cleanup.renaming
+wc -l cleanup.renaming
+#157815 cleanup.renaming
+# Make sure there aren't any dups
+cut -f 1 cleanup.renaming | sort -u | wc -l
+#157815
+cut -f 2 cleanup.renaming | sort -u | wc -l
+#157815
+# Make new VCF+tree with cleaned-up names
+phyloRenameAndPrune public-13-11-20.all.nh cleanup.renaming public-13-11-20.all.renamed.nh
+vcfRenameAndPrune public-13-11-20.all.vcf.gz cleanup.renaming stdout \
+| bgzip -c > public-13-11-20.all.renamed.vcf.gz
+# Now a script in hg/utils/otto/sarscov2phylo/ can use those files as a base
+# for incrementally adding in new public sequences.
+
+
+#########################################################################
+# Remove rev-strand version of GZMU0016 from cncb fasta (DONE - 2021-01-07 - Angie)
+
+cd /hive/data/outside/otto/sarscov2phylo/cncb.2020-10-15
+grep ^\> cncb.nonGenBank.fasta | sed -re 's/^>//;' | grep CNA0013710 | awk '{print $1;}' \
+    > exclude.CNA0013710
+faSomeRecords -exclude cncb.nonGenBank.fasta exclude.CNA0013710 tmp
+faSize cncb.nonGenBank.fasta
+#7754193 bases (35730 N's 7718463 real 7718459 upper 4 lower) in 260 sequences in 1 files
+#Total size: mean 29823.8 sd 235.7 min 26973 (BetaCoV/Wuhan/WH19002/2019) max 29941 (Guangzhou/GZ8H0005/2020) median 29861
+faSize tmp
+#7724289 bases (35730 N's 7688559 real 7688555 upper 4 lower) in 259 sequences in 1 files
+#Total size: mean 29823.5 sd 236.1 min 26973 (BetaCoV/Wuhan/WH19002/2019) max 29941 (Guangzhou/GZ8H0005/2020) median 29860
+mv tmp cncb.nonGenBank.fasta
+
+
+#########################################################################
