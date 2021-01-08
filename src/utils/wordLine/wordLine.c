@@ -30,17 +30,13 @@ void wordLine(char *file)
  * word to each line. */
 {
 struct lineFile *lf = lineFileOpen(file, TRUE);
-int lineSize, wordCount;
-static char *line, *words[1024*16];
-int i;
+ char *line;
 
-while (lineFileNext(lf, &line, &lineSize))
+while (lineFileNext(lf, &line, NULL))
     {
-    wordCount = chopLine(line, words);
-    for (i=0; i<wordCount; ++i)
-	{
-	puts(words[i]);
-	}
+    char *word;
+    while ((word = nextWord(&line)) != NULL)
+	puts(word);
     }
 lineFileClose(&lf);
 }

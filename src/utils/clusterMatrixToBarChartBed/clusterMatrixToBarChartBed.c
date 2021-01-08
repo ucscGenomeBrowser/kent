@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-boolean clDataOffset = FALSE;
+boolean clSimple = FALSE;
 boolean clMedian = FALSE;
 char *clName2 = NULL;
 
@@ -29,7 +29,7 @@ errAbort(
   "        field as the last field\n"
   "   output.bed is the resulting bar chart, with one column per cluster\n"
   "options:\n"
-  "   -dataOffset - store the position of gene in geneMatrix.tsv file in output\n"
+  "   -simple - don't store the position of gene in geneMatrix.tsv file in output\n"
   "   -median - use median (instead of mean)\n"
   "   -name2=twoColFile.tsv - get name2 from file where first col is same ase geneset.bed's name\n"
   );
@@ -37,40 +37,11 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {"dataOffset", OPTION_BOOLEAN},
-   {"_dataOffset", OPTION_BOOLEAN},
+   {"simple", OPTION_BOOLEAN},
    {"median", OPTION_BOOLEAN},
    {"name2", OPTION_STRING},
    {NULL, 0},
 };
-
-struct hash *hashTsvBy(char *in, int keyColIx, int *retColCount)
-/* Return a hash of rows keyed by the given column */
-{
-struct lineFile *lf = lineFileOpen(in, TRUE);
-struct hash *hash = hashNew(0);
-char *line = NULL, **row = NULL;
-int colCount = 0, colAlloc=0;	/* Columns as counted and as allocated */
-while (lineFileNextReal(lf, &line))
-    {
-    if (colCount == 0)
-        {
-	*retColCount = colCount = chopByChar(line, '\t', NULL, 0);
-	verbose(2, "Got %d columns in first real line\n", colCount);
-	colAlloc = colCount + 1;  // +1 so we can detect unexpected input and complain 
-	lmAllocArray(hash->lm, row, colAlloc);
-	}
-    int count = chopByChar(line, '\t', row, colAlloc);
-    if (count != colCount)
-        {
-	errAbort("Expecting %d words, got more than that line %d of %s", 
-	    colCount, lf->lineIx, lf->fileName);
-	}
-    hashAdd(hash, row[keyColIx], lmCloneRow(hash->lm, row, colCount) );
-    }
-lineFileClose(&lf);
-return hash;
-}
 
 void hashSamplesAndClusters(char *tsvFile, 
     struct hash **retSampleHash, struct hash **retClusterHash)
@@ -105,10 +76,10 @@ void clusterMatrixToBarchartBed(char *sampleClusters, char *matrixTsv, char *gen
 boolean doMedian = clMedian;
 
 /* Load up the gene set */
-verbose(1, "clusterMatrixToBarchartBed(%s,%s,%s,%s)\n", sampleClusters, matrixTsv, geneBed, output);
+verbose(2, "clusterMatrixToBarchartBed(%s,%s,%s,%s)\n", sampleClusters, matrixTsv, geneBed, output);
 int bedRowSize = 0;
 struct hash *geneHash = hashTsvBy(geneBed, 3, &bedRowSize);
-verbose(1, "%d columns about %d genes in %s\n", bedRowSize, geneHash->elCount, geneBed);
+verbose(2, "%d columns about %d genes in %s\n", bedRowSize, geneHash->elCount, geneBed);
 
 /* Deal with external gene hash */
 struct hash *nameToName2 = NULL;
@@ -224,6 +195,7 @@ for (colIx=1; colIx <colCount; colIx = colIx+1)
 char **matrixRow;
 AllocArray(matrixRow, colAlloc);
 int hitCount = 0, missCount = 0;
+double sumTotal = 0;
 dotForUserInit(100);
 for (;;)
     {
@@ -246,7 +218,7 @@ for (;;)
     struct hashEl *onePos = hashLookup(geneHash, geneName);
     if (onePos == NULL)
 	{
-	warn("Can't find gene %s in %s", geneName, geneBed);
+	verbose(2, "Can't find gene %s in %s", geneName, geneBed);
 	++missCount;
 	continue;
 	}
@@ -273,8 +245,13 @@ for (;;)
 	    {
 	    int clusterIx = colToCluster[i];
 	    char *textVal = matrixRow[i];
+if (clusterIx == clusterCount - 1)  //ugly
+    {
+    uglyf("%s %d %s\n", geneName, i, textVal);
+    }
 	    // special case so common we parse out "0" inline
 	    double val = (textVal[0] == '0' && textVal[1] == 0) ? 0.0 : sqlDouble(textVal);
+	    sumTotal += val;
 	    int valCount = clusterElements[clusterIx];
 	    clusterElements[clusterIx] = valCount+1;
 	    if (doMedian)
@@ -315,18 +292,25 @@ for (;;)
 	    if (doMedian)
 		fprintf(f, "%g", doubleMedian(clusterElements[i], clusterSamples[i]));
 	    else
+		{
 		fprintf(f, "%g",  clusterTotal[i]/clusterElements[i]);
+		}
 	    }
 	
 	/* Data file offset info */
-	if (clDataOffset)
+	if (!clSimple)
 	    fprintf(f, "\t%lld\t%lld",  (long long)lineFileTell(lf), (long long)lineLength);
 
 	fprintf(f, "\n");
 	}
     dotForUser();
     }
-verbose(1, "%d genes found, %d missed\n", hitCount, missCount);
+verbose(1, "\n%d genes found, %d (%0.2f%%) missed\n", hitCount, missCount, 100.0*missCount/(hitCount+missCount));
+if (!doMedian)
+    {
+    verbose(1, "matrix total %g, %d clusters, %g ave/cluster\n", 
+	sumTotal, clusterCount, sumTotal/clusterCount);
+    }
 carefulClose(&f);
 }
 
@@ -336,7 +320,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
-clDataOffset = (optionExists("_dataOffset") || optionExists("dataOffset"));
+clSimple = optionExists("simple");
 clMedian = optionExists("median");
 clName2 = optionVal("name2", clName2);
 clusterMatrixToBarchartBed(argv[1], argv[2], argv[3], argv[4]);
