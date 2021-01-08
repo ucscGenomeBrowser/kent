@@ -330,7 +330,7 @@ group varRep
 visibility hide
 priority 0.2
 dataVersion /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#? "Updated Dec. 04, 2020"
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
@@ -373,7 +373,7 @@ group varRep
 visibility squish
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#? "Updated Dec. 04, 2020"
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloPubMinAf01
     shortLabel Subset: Min AF 1%
@@ -464,7 +464,7 @@ type bigBed
 skipEmptyFields on
 group map
 dataVersion v4 (2020-12-22)
-pennantIcon New red ../goldenPath/newsarch.html "Updated Dec. 30, 2020"
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 30, 2020"
 release alpha
 
     track problematicSitesMask
@@ -552,7 +552,7 @@ group immu
 bigDataUrl /gbdb/wuhCor1/escape/escape.bb
 mouseOverField _mouseOver
 noScoreFilter on
-pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 25, 2020"
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Nov. 25, 2020"
 
 track lineageB_1_1_7_US
 shortLabel B.1.1.7 in USA
@@ -567,7 +567,7 @@ geneTrack ncbiGeneBGP
 vcfDoQual off
 vcfDoFilter off
 group varRep
-pennantIcon New red ../goldenPath/newsarch.html "Released Jan. 7, 2021"
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Jan. 7, 2021"
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
