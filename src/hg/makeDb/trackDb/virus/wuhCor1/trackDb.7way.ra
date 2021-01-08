@@ -18,7 +18,6 @@ speciesDefaultOn SARS_CoV_1 MERS OC43 HKU1 NL63 CoV229E
 itemFirstCharCase noChange
 treeImage phylo/wuhCor1_7way.png
 html cons7way
-pennantIcon New red ../goldenPath/newsarch.html#070720 "Released Jul. 07, 2020"
 
 track phastCons7way
 shortLabel Human CoV phastCons

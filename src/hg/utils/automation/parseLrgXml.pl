@@ -138,7 +138,7 @@ sub parseOneLrg {
     if ($seq eq 'unlocalized') {
       $seq = "Un";
     }
-    if ($mapType eq 'haplotype' || $mapType eq 'fix_patch' || $mapType eq 'novel_patch') {
+    if ($mapType eq 'haplotype' || $mapType eq 'fix_patch' || $mapType eq 'novel_patch' || $mapType eq 'patch') {
       my $gbAcc = $refMapping->findvalue('@other_id_syn');
       $gbAcc =~ m/^[A-Z]+\d+\.\d+$/ || die "$xmlIn: $assemblyPrefix has $mapType mapping with " .
         "other_id_syn='$gbAcc', expecting versioned GenBank acc (e.g. 'KI270850.1').";
