@@ -441,10 +441,13 @@ if (f == NULL)
 char regionInfo[1024];
 char *regionFile = cloneString(mrTn.forCgi);
 
-#ifdef LATER
+// TODO: trackDb setting ?
+#define MULTI_REGION_BED_DEFAULT_PADDING        1000
+int padding = MULTI_REGION_BED_DEFAULT_PADDING;
 safef(regionInfo, sizeof regionInfo, "#padding %d\n", padding);
 mustWrite(f, regionInfo, strlen(regionInfo));
 
+#ifdef LATER
 safef(regionInfo, sizeof regionInfo, "#shortDesc %s\n", name);
 mustWrite(f, regionInfo, strlen(regionInfo));
 #endif
@@ -485,10 +488,12 @@ while (lineFileChopNext(lf, words, bedSize))
     mustWrite(f, regionInfo, strlen(regionInfo));
 
     // write to custom track
+    int start = max(region->chromStart - padding, 0);
+    int end = min(region->chromEnd + padding, hChromSize(db, region->chrom));
     dyStringPrintf(dsCustomText, "%s\t%d\t%d\t%s\t"
                         "0\t.\t%d\t%d\t%s\n",
-                            region->chrom, region->chromStart, region->chromEnd,  name,
-                            region->chromStart, region->chromEnd, color);
+                            region->chrom, start, end,  name,
+                            start, end, color);
     }
 lineFileClose(&lf);
 fclose(f);
