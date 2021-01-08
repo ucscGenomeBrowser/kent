@@ -576,7 +576,7 @@ geneTrack ncbiGeneBGP
 vcfDoQual off
 vcfDoFilter off
 group varRep
-pennantIcon New red ../goldenPath/newsarch.html "Released Jan. ?, 2021"
+pennantIcon New red ../goldenPath/newsarch.html "Released Jan. 7, 2021"
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
