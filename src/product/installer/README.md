@@ -38,7 +38,7 @@ The `install` command downloads and configures Apache, MySQL (MariaDB) and Ghost
 Genome Browser CGIs, and configures the mirror to load data remotely from UCSC. The `install`
 command must be run before any other command is used.
 
-For mirror-specific help, please contact the Mirror Forum as listed on our [contact page](../../contacts.html).
+For mirror-specific help, please contact the Mirror Forum as listed on our [contact page](https://genome.ucsc.edu/contacts.html).
 
 For an installation demonstration, see the [Genome Browser in the Cloud (GBiC) Introduction](https://www.youtube.com/watch?v=dcJERBVnjio)
 video:
