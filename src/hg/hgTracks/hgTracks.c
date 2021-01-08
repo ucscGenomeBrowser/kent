@@ -8630,12 +8630,12 @@ if (!hideControls)
 	char buf[256];
 	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
 	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
-	    char *javascript = "document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;";
-	    if (containsStringNoCase(database, "zoo"))
-		{
-		hPuts("Organism ");
-		printAssemblyListHtmlExtra(database, "change", javascript);
-		}
+        char *javascript = "document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;";
+        if (containsStringNoCase(database, "zoo"))
+            {
+            hPuts("Organism ");
+            printAssemblyListHtmlExtra(database, "change", javascript);
+            }
 
         /* Multi-region button on position line */
         if (sameString(virtModeType, "default"))
