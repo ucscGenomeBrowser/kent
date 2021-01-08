@@ -1,9 +1,9 @@
 kentSrc = ../../..
 include ../../../inc/common.mk
 
-L += $(MYSQLLIBS) -lm -lz
+L += $(MYSQLLIBS) -lm -lz 
 MYLIBDIR = ../../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  -lhdf5 $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = freen.o
 
