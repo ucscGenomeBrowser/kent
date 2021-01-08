@@ -3178,13 +3178,9 @@ mouseOverField mouseOver
 skipFields mouseOver
 skipEmptyFields on
 urls ncbiTranscript=https://www.ncbi.nlm.nih.gov/nuccore/$$ ensemblTranscript=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$ ncbiProtein=https://www.ncbi.nlm.nih.gov/protein/$$ ensemblProtein=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$
-cdsTable lrgCds
-cdnaTable lrgCdna
-pepTable lrgPep
 altColor 127,127,127
 baseColorDefault genomicCodons
 baseColorUseSequence lfExtra
-baseColorUseCds table lrgCds
 indelDoubleInsert on
 indelPolyA on
 indelQueryInsert on
