@@ -9,7 +9,7 @@
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 
-<h1>Installation of a UCSC Genome Browser on a local machine (&quot;mirror&quot;)</h1>
+<h1>Installation of a UCSC Genome Browser on a local machine (&ldquo;mirror&rdquo;)</h1>
 <h2>Contents</h2>
 <h6><a href='#considerations-before-installing-a-genome-browser'>Considerations before installing a Genome Browser</a></h6>
 <h6><a href='#installing-a-genome-browser-locally-with-the-gbic-installer'>Installing a Genome Browser locally with the GBiC installer</a></h6>
@@ -40,7 +40,7 @@ which will show only the main browser graphic without any decorations.
 
 <p>
 You can then use various parameters to adapt this graphic to your use case
-(e.g. set the displayed position, switch tracks on/off or highlight a range with a color),
+(e.g. set the displayed position, switch tracks on/off or highlight a range with a color),
 see our <a href='https://genome.ucsc.edu/goldenpath/help/customTrack.html#SHARE' title=''>manual pages</a> for a list
 of the parameters.
 </p></li>
@@ -52,7 +52,7 @@ of the parameters.
 <a href='https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html#Assembly' title=''>Assembly Hubs</a>:
 Assembly Hubs allow you to prepare any FASTA file, add annotations and use
 the Genome Browser to visualize it. All you need is a webserver where you
-save the indexed genome sequence and files to annotate it, e.g. in BAM,
+save the indexed genome sequence and files to annotate it, e.g. in BAM,
 bigBed or bigWig format.
 </p>
 
@@ -69,7 +69,7 @@ bigBed or bigWig format.
 <ul>
 <li>You need access to a public webserver to store the files.</li>
 <li>Data is rendered at UCSC. Private data can be
-password-protected and loaded through https and restricted to UCSC&#39;s
+password-protected and loaded through https and restricted to UCSC’s
 IP address, but has to be located on the web and accessible by the
 UCSC webserver.</li>
 <li>For BLAT searches in your genome, you have to start a BLAT
@@ -78,7 +78,7 @@ server yourself on a Unix server.</li>
 annotation files or HAL (multiple alignment) files and is located far
 from Santa Cruz, the display performance of assembly hubs may be slower than a local mirror. This issue
 can be resolved by using a UCSC mirror closer to the assembly
-hub (e.g. use genome-euro.ucsc.edu for assembly hubs located on servers in Europe,
+hub (e.g. use genome-euro.ucsc.edu for assembly hubs located on servers in Europe,
 or genome-asia.ucsc.edu for those in Asia). Alternatively, you can improve performance
 by moving your hub data to a webspace
 provider closer to Santa Cruz or by using a content distribution network,
@@ -92,7 +92,7 @@ where all content is mirrored and the closest location is chosen by your provide
 <p>
 <a href='https://genome.ucsc.edu/goldenPath/help/gbib.html' title=''>Genome Browser in a Box</a> (GBiB):
 is a fully configured virtual machine that includes
-Apache and MySQL (MariaDB), and has behavior identical to the UCSC website.
+Apache and MySQL, and has behavior identical to the UCSC website.
 GBiB loads genome data from the UCSC download servers on the fly.
 Website and data updates are applied automatically every two weeks. By default, GBiB
 uses the VirtualBox virtualization software, so it can be run on any
@@ -116,7 +116,7 @@ annotation tracks you need and use your GBiB off-line even on a laptop.
 
 <ul>
 <li>Requires the free VirtualBox software or a commercial Virtualization system.</li>
-<li>By default requires opening at least three outgoing ports to UCSC for MySQL (MariaDB), Rsync downloads
+<li>By default requires opening at least three outgoing ports to UCSC for MySQL, Rsync downloads
 and BLAT in your firewall. Once all data is downloaded, no open ports are needed.</li>
 <li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks, like a manual local installation.</li>
 </ul></li>
@@ -147,11 +147,11 @@ details, see the <a href='#installing-a-genome-browser-locally-with-the-gbic-ins
 <ul>
 <li>To keep up with changes in the Genome Browser, you will have to install
 linux packages and update the linux distribution yourself in the future
-and run the installation script with the &#39;update&#39; command if you want to
+and run the installation script with the &lsquo;update&rsquo; command if you want to
 take advantage of new features in the Genome Browser.</li>
 <li>Preferably run on a linux server that is not used otherwise.</li>
 <li>By default requires opening at least three outgoing ports to UCSC for
-MySQL (MariaDB) and BLAT in your firewall. Once all data is downloaded and BLAT
+MySQL and BLAT in your firewall. Once all data is downloaded and BLAT
 setup locally, no open ports are needed anymore.</li>
 <li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks.</li>
 </ul></li>
@@ -183,7 +183,7 @@ the <a href='#manual-installation-instructions' title=''>section below</a>.
 <li>Will probably require some support via the <a href='mailto:&#58&#103&#101&#110&#111&#109&#101&#45&#109&#105&#114&#114&#111&#114&#64&#115&#111&#101&#46&#117&#99&#115&#99&#46&#101&#100&#117' title=''>genome-mirror</a> mailing list.</li>
 <li>To keep up with changes in the Genome Browser, you will have to
 install linux packages and update the linux distribution yourself in
-the future and apply UCSC data updates yourself using rsync or MySQL (MariaDB) table loads</li>
+the future and apply UCSC data updates yourself using rsync or MySQL table loads</li>
 <li>Configuration changes on our side may break your setup.</li>
 <li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks.</li>
 <li>For commercial users: license agreements take longer to negotiate, no click-through license.</li>
@@ -214,11 +214,10 @@ distributions.
 It has been tested on Ubuntu 14/16, RedHat/CentOS 6 and 7,
 and Fedora 20. Preferably, the installation should be performed on a fresh Linux
 installation, as it deactivates the default site config file in Apache
-and fills the MySQL (MariaDB) directory with numerous databases. The easiest way to accomplish this is to
+and fills the MySQL directory with numerous databases. The easiest way to accomplish this is to
 run the Genome Browser in the Cloud program in a new virtual machine. The program also works on
-Docker (see 
-<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/product/installer/docker">Dockerfile</a>)
-and cloud computing virtual machines, and has been tested on those sold by Amazon, Microsoft and Google.
+Docker and cloud computing virtual machines, and has been tested on those sold by
+Amazon, Microsoft and Google.
 </p>
 
 <p>
@@ -240,7 +239,7 @@ To run the installation program, please see the <a href='https://genome.ucsc.edu
 If the installation program does not work on your linux distribution or you prefer to
 make adaptations to your mirror, we also provide <a href='mirrorManual.html' title=''>step-by-step installation
 instructions</a> that cover the configuration of Apache,
-MySQL (MariaDB), the Genome Browser CGIs, temporary file removal and other topics, like
+MySQL, the Genome Browser CGIs, temporary file removal and other topics, like
 data loading through proxies.
 </p>
 
@@ -252,6 +251,8 @@ unusual platforms.
 
 <ul>
 <li><a href='http://enotacoes.wordpress.com/2009/09/03/installing-a-minimal-ucsc-mirror-in-ubuntu-jaunty-64-bits/' title=''>Installation on Ubuntu</a></li>
+<li><a href='http://www.bioinformatics.uni-muenster.de/download/ucsc' title=''>Installation into a FreeBSD jail</a>, by Norbert Grundmann, Universitaet Muenster, Germany</li>
+<li><a href='http://bergmanlab.ls.manchester.ac.uk/?p=32' title=''>Compilation of the Kent source tree on OSX with fink</a> by Casey Bergman, Manchester, UK</li>
 <li><a href='http://www.oliverelliott.org/article/bioinformatics/tut_genomebrowser/' title=''>Browser installation and new genome setup</a>, by Oliver Elliott, Columbia University, USA</li>
 <li><a href='http://genomewiki.ucsc.edu/index.php/Browser_Installation' title=''>Installation notes in our wiki</a></li>
 </ul>
@@ -286,7 +287,7 @@ sent in batch, thus allowing for much higher transmission speeds over long
 distances. UDR will be especially useful for users who are downloading
 from places distant to California. The US East Coast and the
 international community will likely see much higher download speeds when
-using UDR vs. rsync, http or ftp.
+using UDR vs. rsync, http or ftp.
 </p>
 
 <p>
@@ -302,24 +303,19 @@ rsync installed on your system.
 <p>
 For your convenience, we offer a binary distribution of UDR for
 Red Hat Enterprise Linux 6.x (or variants such as CentOS 6 or Scientific
-Linux 6). You&#39;ll find both a 64-bit and 32-bit rpm <a href='http://hgdownload.soe.ucsc.edu/admin/udr' title=''>here</a>.
+Linux 6). You’ll find both a 64-bit and 32-bit rpm <a href='http://hgdownload.soe.ucsc.edu/admin/udr' title=''>here</a>.
 </p>
 
 <p>
 Once you have a working UDR binary, either by building from source or by
-installing the rpm, you can download files from either of our
+installing the rpm, you can download files from either of our our
 download servers in a fashion similar to rsync. For example, using
-rsync, all of the MySQL (MariaDB) tables for the hg19
-database can be downloaded using either one of the following four commands, using the North American
-or European download servers:
+rsync, all of the MySQL tables for the hg19
+database can be downloaded using either one of the following two commands:
 </p>
 
 <pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hg19/ /my/local/hg19/
 rsync -avP hgdownload.soe.ucsc.edu::mysql/hg19/ /my/local/hg19/</code></pre>
-<pre><code>rsync -avP rsync://hgdownload2.soe.ucsc.edu/mysql/hg19/ /my/local/hg19/
-rsync -avP hgdownload2.soe.ucsc.edu::mysql/hg19/ /my/local/hg19/</code></pre>
-<pre><code>rsync -avP rsync://hgdownload-euro.soe.ucsc.edu/mysql/hg19/ /my/local/hg19/
-rsync -avP hgdownload-euro.soe.ucsc.edu::mysql/hg19/ /my/local/hg19/</code></pre>
 
 <p>
 Using UDR is very similar. The UDR syntax for downloading the same data
@@ -327,8 +323,6 @@ would be:
 </p>
 
 <pre><code>udr rsync -avP hgdownload.soe.ucsc.edu::mysql/hg19/ /my/local/hg19/</code></pre>
-<pre><code>udr rsync -avP hgdownload2.soe.ucsc.edu::mysql/hg19/ /my/local/hg19/</code></pre>
-<pre><code>udr rsync -avP hgdownload-euro.soe.ucsc.edu::mysql/hg19/ /my/local/hg19/</code></pre>
 
 <a name='the-genome-mirror-mailing-list'></a>
 <h2>The genome-mirror mailing list</h2>
@@ -337,7 +331,7 @@ would be:
 For questions about installing and mirroring the UCSC Genome Browser, contact the UCSC mailing
 list <a href='mailto:&#58&#103&#101&#110&#111&#109&#101&#45&#109&#105&#114&#114&#111&#114&#64&#115&#111&#101&#46&#117&#99&#115&#99&#46&#101&#100&#117' title=''>&#103&#101&#110&#111&#109&#101&#45&#109&#105&#114&#114&#111&#114&#64&#115&#111&#101&#46&#117&#99&#115&#99&#46&#101&#100&#117</a>. <strong><span class="gbsWarnText">
 Messages sent to this address
-will be posted on the moderated genome-mirror mailing list, which is archived on a SEARCHABLE PUBLIC
+will be posted the moderated genome-mirror mailing list, which is archived on a SEARCHABLE PUBLIC
 </span><a href='http://groups.google.com/a/soe.ucsc.edu/group/genome-mirror' title=''>Google Groups forum</a></strong>.
 </p>
 
