@@ -1,0 +1,191 @@
+
+track heartCellAtlas
+superTrack on
+shortLabel Heart Cell Atlas
+longLabel Heart single cell RNA data from https://heartcellatlas.com
+visibility hide
+group expression
+
+    track heartAtlasCellTypes
+    superTrack heartCellAtlas
+    type bigBarChart
+    visibility pack
+    shortLabel Heart HCA Cells
+    longLabel Heart cell RNA sorted by cell type from https://heartcellatlas.org
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/heartCellAtlas/cell_type.bb
+    barChartStatsUrl /gbdb/$D/bbi/heartCellAtlas/cell_type.stats
+    barChartColors #e97c36 #c5249a #06bd02 #f4702a #fa1613 #1495b4 #a5591c #dcb10e #c82a92 #d6684d #ba715a #c5249a #dfa484
+    barChartBars Adipocytes Atrial_Cardiomyocyte Endothelial Fibroblast \
+    	Lymphoid Mesothelial Myeloid Neuronal NotAssigned Pericytes Smooth_muscle_cells \
+	Ventricular_Cardiomyocyte doublets
+    transformFunc NONE
+    barChartLimit 2
+    group expression
+    priority 2
+
+    track heartAtlasRegion
+    superTrack heartCellAtlas
+    type bigBarChart
+    visibility hide
+    shortLabel Heart HCA Region
+    longLabel Heart cell RNA sorted by region of collection from https://heartcellatlas.org
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/heartCellAtlas/region.bb
+    barChartStatsUrl /gbdb/$D/bbi/heartCellAtlas/region.stats
+    barChartColors #ff0000 #fff000 #00ff2a #00d2ff #2a00ff #ff00f0
+    barChartBars AX LA LV RA RV SP
+    transformFunc NONE
+    barChartLimit 1.5
+    group expression
+
+    track heartAtlasAgeGroup
+    superTrack heartCellAtlas
+    type bigBarChart
+    visibility hide
+    shortLabel Heart HCA Age
+    longLabel Heart cell RNA binned by age group of donor from https://heartcellatlas.org
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/heartCellAtlas/age_group.bb
+    barChartStatsUrl /gbdb/$D/bbi/heartCellAtlas/age_group.stats
+    barChartColors #ff0000 #ffd200 #80ff00 #00ffd2 #0080ff #7f00ff #ff00d2
+    barChartBars 40-45 45-50 50-55 55-60 60-65 65-70 70-75
+    transformFunc NONE
+    barChartLimit 2
+    group expression
+
+    track heartAtlasCellStates
+    superTrack heartCellAtlas
+    type bigBarChart
+    visibility hide
+    shortLabel Heart HCA State
+    longLabel Heart cell RNA binned by cell state from https://heartcellatlas.org
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/heartCellAtlas/cell_states.bb
+    barChartStatsUrl /gbdb/$D/bbi/heartCellAtlas/cell_states.stats
+    barChartColors #e87b38 #e87a37 #e4793a #ec9d85 #c94223 #7b771c #846c16 #f11e17 #dc2e19 #f51a15 #b27652 #e22917 #df6f43 #d97443 #439d18 #0cba04 #0cba04 #0eb804 #11b705 #0eb804 #20ad08 #c47b4a #a2784d #ea7135 #f0702e #f0702e #eb7230 #ea7132 #de7439 #ee712f #d34075 #f6d5c7 #b3501f #b97c4e #c14a26 #d97046 #1495b4 #a65519 #7e751d #757a1a #d9ac13 #e8802a #bbae74 #d970b9 #e5b86f #eedbc6 #ea2316 #f11d15 #ccc3a3 #dd654b #de6947 #937d48 #c82994 #c56e56 #a47158 #c6249a #c62599 #c52e91 #c82d90 #d96ebb #dfa484 #c82a92 #c6249a #c5249a #c72895 #c72895 #c5239b
+    #barChartColors #e87b38 #e87a37 #e4793a #ec9d85 #c94223 #7b771c #846c16 #f11e17 #dc2e19 #f51a15 #b27652 #e22917 #df6f43 #d97443 #439d18 #0cba04 #0cba04 #0eb804 #11b705 #0eb804 #20ad08 #c47b4a #a2784d #ea7135 #f0702e #f0702e #eb7230 #ea7132 #de7439 #ee712f #d34075 #f6d5c7 #b3501f #b97c4e #c14a26 #d97046 #1495b4 #a65519 #7e751d #757a1a #d9ac13 #e8802a #bbae74 #d970b9 #e5b86f #eedbc6 #ea2316 #f11d15 #ccc3a3 #dd654b #de6947 #937d48 #c82994 #c56e56 #a47158 #c6249a #c62599 #c52e91 #c82d90 #d96ebb #dfa484 #c82a92 #c6249a #c5249a #c72895 #c72895 #c5239b
+    #barChartColors #ff0000 #ff1a00 #ff3500 #ff844c #ff6a00 #ff8300 #ff9200 #ffa100 #ffb300 #ffc700 #ffda00 #ffec00 #feff00 #ebff00 #d8ff00 #c5ff00 #b2ff00 #a0ff00 #91ff00 #82ff00 #52ff00 #1cff00 #00ff18 #00ff4e #00ff81 #00ff90 #00ff9f #00ffb1 #00ffc4 #00ffd7 #00ffea #82fffd #00eeff #00dbff #00c8ff #00b5ff #00a2ff #0093ff #0084ff #006cff #0052ff #0037ff #4c60ff #4c4dff #5d4cff #b9a7fe #4e00ff #6900ff #a74cff #9100ff #a000ff #b200ff #c500ff #d800ff #eb00ff #fe00ff #ff00ec #ff00da #ff00c7 #ff4cc9 #ff4cbd #ff0092 #ff0083 #ff006a #ff0050 #ff0035 #ff001a
+    barChartBars Adip1 Adip2 Adip3 Adip4 B_cells CD14+Mo CD16+Mo CD4+T_cytox CD4+T_tem CD8+T_cytox CD8+T_tem DC DOCK4+MØ1 DOCK4+MØ2 EC10_CMC-like EC1_cap EC2_cap EC3_cap EC4_immune EC5_art EC6_ven EC7_atria EC8_ln EC9_FB-like FB1 FB2 FB3 FB4 FB5 FB6 FB7 IL17RA+Mo LYVE1+MØ1 LYVE1+MØ2 LYVE1+MØ3 Mast Meso Mo_pi MØ_AgP MØ_mod NC1 NC2 NC3 NC4 NC5 NC6 NK NKT NØ PC1_vent PC2_atria PC3_str PC4_CMC-like SMC1_basic SMC2_art aCM1 aCM2 aCM3 aCM4 aCM5 doublets nan vCM1 vCM2 vCM3 vCM4 vCM5
+    transformFunc NONE
+    barChartLimit 4
+    group expression
+
+    track heartAtlasDonor
+    superTrack heartCellAtlas
+    type bigBarChart
+    visibility hide
+    shortLabel Heart HCA Donor
+    longLabel Heart cell RNA binned by organ donor from https://heartcellatlas.org
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/heartCellAtlas/donor.bb
+    barChartStatsUrl /gbdb/$D/bbi/heartCellAtlas/donor.stats
+    barChartColors #ff0000 #ff8000 #ffd200 #d2ff00 #80ff00 #00ff7f #00ffd1 #00d2ff #0080ff #0000ff #7f00ff #d100ff #ff00d2 #ff0080
+    barChartBars D1 D11 D2 D3 D4 D5 D6 D7 H2 H3 H4 H5 H6 H7
+    transformFunc NONE
+    barChartLimit 4
+    group expression
+
+    track heartAtlasGender
+    superTrack heartCellAtlas
+    type bigBarChart
+    visibility hide
+    shortLabel Heart HCA Gender
+    longLabel Heart cell RNA binned by gender of donor from https://heartcellatlas.org
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/heartCellAtlas/gender.bb
+    barChartStatsUrl /gbdb/$D/bbi/heartCellAtlas/gender.stats
+    barChartColors #ff0000 #00d2ff
+    barChartBars Female Male
+    transformFunc NONE
+    barChartLimit 1
+    group expression
+
+    track heartAtlasSource
+    superTrack heartCellAtlas
+    type bigBarChart
+    visibility hide
+    shortLabel Heart HCA Source
+    longLabel Heart cell RNA binned by source (nucleus vs whole cell) from https://heartcellatlas.org
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/heartCellAtlas/source.bb
+    barChartStatsUrl /gbdb/$D/bbi/heartCellAtlas/source.stats
+    barChartColors #ff0000 #00ff2a #2a00ff
+    barChartBars CD45+ Cells Nuclei
+    transformFunc NONE
+    barChartLimit 2
+    group expression
+
+    track heartAtlasSample
+    superTrack heartCellAtlas
+    type bigBarChart
+    visibility hide
+    shortLabel Heart HCA Sample
+    longLabel Heart cell RNA binned by biosample from https://heartcellatlas.org
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/heartCellAtlas/sample.bb
+    barChartStatsUrl /gbdb/$D/bbi/heartCellAtlas/sample.stats
+    barChartColors #ff0000 #ff0c00 #ff1800 #ff2400 #ff3000 #ff3c00 #ff4900 #ff5500 #ff6100 #ff6d00 #ff7900 #ff8300 #ff8a00 #ff9100 #ff9700 #ff9e00 #ffa600 #ffae00 #ffb700 #ffc000 #ffc900 #ffd100 #ffda00 #ffe300 #ffeb00 #fff400 #fffc00 #f8ff00 #f0ff00 #e7ff00 #deff00 #d6ff00 #cdff00 #c4ff00 #bcff00 #b3ff00 #c3ff4c #a2ff00 #9bff00 #94ff00 #afff4c #86ff00 #7fff00 #67ff00 #4fff00 #36ff00 #1eff00 #06ff00 #00ff12 #00ff2a #00ff43 #00ff5b #00ff73 #00ff83 #00ff8a #00ff91 #00ff98 #00ff9e #00ffa6 #a7fee3 #a7fee6 #4cffd2 #4cffd9 #4cffdf #c1fff6 #00ffe3 #4cfff1 #00fff4 #00fffc #4cfaff #00efff #4ceeff #4ce7ff #4ce2ff #00cdff #00c4ff #00bcff #00b3ff #00aaff #00a2ff #009bff #0094ff #008dff #0086ff #007fff #0073ff #0067ff #005bff #004fff #0043ff #0036ff #002aff #001eff #0012ff #0006ff #0600ff #1200ff #1e00ff #2a00ff #3600ff #4300ff #4f00ff #5b00ff #6700ff #7300ff #8000ff #8600ff #8d00ff #9400ff #9b00ff #a200ff #aa00ff #b300ff #bc00ff #c400ff #cd00ff #d600ff #de00ff #e700ff #f000ff #f800ff #ff00fc #ff00f4 #ff00eb #ff00e3 #ff00da #ff00d1 #ff00c9 #ff00c0 #ff00b7 #ff00ae #ff00a6 #ff009e #ff0097 #ff0091 #ff008a #ff0083 #ff0079 #ff006d #ff0061 #ff0055 #ff0049 #ff003c #ff4c6e #ff0024 #ff0018 #ff000c
+    barChartBars H0015_LA_new H0015_LV H0015_RA H0015_RV H0015_apex H0015_septum H0020_LA_new H0020_LV H0020_RA H0020_RV H0020_apex H0020_septum H0025_LA H0025_LV H0025_RA H0025_RV H0025_apex H0025_septum H0026_LA H0026_LV_V3 H0026_RA H0026_RV H0026_apex H0026_septum2 H0035_LA H0035_LV H0035_RA H0035_RV H0035_apex H0035_septum H0037_Apex H0037_LA_corr H0037_LV H0037_RA_corr H0037_RV H0037_septum HCAHeart7606896 HCAHeart7656534 HCAHeart7656535 HCAHeart7656536 HCAHeart7656537 HCAHeart7656538 HCAHeart7656539 HCAHeart7664652 HCAHeart7664653 HCAHeart7664654 HCAHeart7698015 HCAHeart7698016 HCAHeart7698017 HCAHeart7702873 HCAHeart7702874 HCAHeart7702875 HCAHeart7702876 HCAHeart7702877 HCAHeart7702878 HCAHeart7702879 HCAHeart7702880 HCAHeart7702881 HCAHeart7702882 HCAHeart7728604 HCAHeart7728605 HCAHeart7728606 HCAHeart7728607 HCAHeart7728608 HCAHeart7728609 HCAHeart7745966 HCAHeart7745967 HCAHeart7745968 HCAHeart7745969 HCAHeart7745970 HCAHeart7751845 HCAHeart7757636 HCAHeart7757637 HCAHeart7757638 HCAHeart7757639 HCAHeart7829976 HCAHeart7829977 HCAHeart7829978 HCAHeart7829979 HCAHeart7833852 HCAHeart7833853 HCAHeart7833854 HCAHeart7833855 HCAHeart7835148 HCAHeart7835149 HCAHeart7836681 HCAHeart7836682 HCAHeart7836683 HCAHeart7836684 HCAHeart7843999 HCAHeart7844000 HCAHeart7844001 HCAHeart7844002 HCAHeart7844003 HCAHeart7844004 HCAHeart7850539 HCAHeart7850540 HCAHeart7850541 HCAHeart7850542 HCAHeart7850543 HCAHeart7850544 HCAHeart7850545 HCAHeart7850546 HCAHeart7850547 HCAHeart7850548 HCAHeart7850549 HCAHeart7850551 HCAHeart7880860 HCAHeart7880861 HCAHeart7880862 HCAHeart7880863 HCAHeart7888922 HCAHeart7888923 HCAHeart7888924 HCAHeart7888925 HCAHeart7888926 HCAHeart7888927 HCAHeart7888928 HCAHeart7888929 HCAHeart7905327 HCAHeart7905328 HCAHeart7905329 HCAHeart7905330 HCAHeart7905331 HCAHeart7905332 HCAHeart7964513 HCAHeart7985086 HCAHeart7985087 HCAHeart7985088 HCAHeart7985089 HCAHeart8102858 HCAHeart8102859 HCAHeart8102860 HCAHeart8102861 HCAHeart8102862 HCAHeart8102863 HCAHeart8102864 HCAHeart8102865 HCAHeart8102866 HCAHeart8102867 HCAHeart8102868 HCAHeart8287123 HCAHeart8287124 HCAHeart8287125 HCAHeart8287126 HCAHeart8287127 HCAHeart8287128
+    transformFunc NONE
+    barChartLimit 4
+    group expression
+
+    #track type
+    #type bigBarChart
+    #visibility hide
+    #shortLabel type
+    #longLabel type
+    #barChartMetric mean
+    #barChartUnit UMI/cell
+    #defaultLabelFields name
+    #labelFields name,name2
+    #bigDataUrl type.bb
+    #barChartColors #ff0000 #00d2ff
+    #barChartBars DBD DCD
+    #transformFunc NONE
+    #barChartLimit 4
+    #group expression
+
+    track heartAtlasVersion
+    superTrack heartCellAtlas
+    type bigBarChart
+    visibility hide
+    shortLabel Heart HCA Version
+    longLabel Heart cell RNA binned by 10x chemistry version from https://heartcellatlas.org
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/heartCellAtlas/version.bb
+    barChartStatsUrl /gbdb/$D/bbi/heartCellAtlas/version.stats
+    barChartColors #ff0000 #00d2ff
+    barChartBars V2 V3
+    transformFunc NONE
+    barChartLimit 1
+    group expression
+

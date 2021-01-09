@@ -10,6 +10,9 @@ include mane.ra
 
 include gdcCancer.ra
 
+include cortexVelmeshev.ra
+include heartCellAtlas.ra
+
 include gencodeV35.ra alpha
 include liftOver.ra
 include exomeProbesets.ra alpha
