@@ -41,6 +41,7 @@ group uniprot
 #color 2,12,120
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
+baseColorDefault genomicCodons
 
 track unipCov2Chain
 shortLabel Protein Products
@@ -57,7 +58,6 @@ dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 itemRgb on
 html uniprotCov2
-baseColorDefault genomicCodons
 
 track unipCov2Interest
 shortLabel Highlights
@@ -73,7 +73,6 @@ mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 itemRgb on
-baseColorDefault genomicCodons
 
 track unipCov2Domain
 shortLabel Protein Domains
@@ -89,7 +88,6 @@ mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 html uniprotCov2
-baseColorDefault genomicCodons
 
 track unipProtease
 shortLabel Protease Cleavage
@@ -117,7 +115,6 @@ mouseOverField comments
 exonNumbers off
 itemRgb on
 html uniprotCov2
-baseColorDefault genomicCodons
 
 track unipCov2Modif
 shortLabel Glycosyl/Phosph.
@@ -133,7 +130,6 @@ mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 itemRgb on
 html uniprotCov2
-baseColorDefault genomicCodons
 
 #track uniprotCov2
 #shortLabel UniProt Other
@@ -189,7 +185,6 @@ itemRgb off
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
-baseColorDefault genomicCodons
 
         #track unipCov2LocExtra
         #shortLabel Extracellular
@@ -217,7 +212,6 @@ itemRgb off
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
-baseColorDefault genomicCodons
 
         #track unipCov2LocCytopl
         #shortLabel Cytoplasmic
@@ -257,7 +251,6 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
-baseColorDefault genomicCodons
 
 track unipCov2Other
 shortLabel Other Annot.
@@ -272,7 +265,6 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="htt
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
-baseColorDefault genomicCodons
 
 track unipCov2Repeat
 shortLabel Repeats
@@ -287,7 +279,6 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="htt
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
-baseColorDefault genomicCodons
 
         #track unipCov2Conflict
         #shortLabel Seq. Conflicts
