@@ -14,6 +14,7 @@ include cortexVelmeshev.ra
 include heartCellAtlas.ra
 include kidneyStewart.ra
 include muscleDeMicheli.ra
+include lungVieiraBraga.ra
 
 include gencodeV35.ra alpha
 include liftOver.ra
