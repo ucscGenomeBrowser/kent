@@ -4,7 +4,7 @@ table barChartBed
     string chrom;       "Reference sequence chromosome or scaffold"
     uint   chromStart;  "Start position in chromosome"
     uint   chromEnd;    "End position in chromosome"
-    string name;        "Name or ID of item, ideally both human readable and unique"
+    string name;        "Name or ID of item"
     uint   score;       "Score from 0-1000, typically derived from total of median value from all categories"
     char[1] strand;     "+ or - for strand. Use . if not applicable"
     string name2;       "Alternative name for item"
