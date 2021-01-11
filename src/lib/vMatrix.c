@@ -25,13 +25,14 @@ if (v != NULL)
     }
 }
 
-struct vRowMatrix *vRowMatrixNewEmpty(int xSize, char **columnLabels)
+struct vRowMatrix *vRowMatrixNewEmpty(int xSize, char **columnLabels, char *centerLabel)
 /* Allocate vRowMatrix but without methods or data filled in */
 {
 struct vRowMatrix *v;
 AllocVar(v);
 v->xSize = xSize;
 v->columnLabels = columnLabels;
+v->centerLabel = centerLabel;
 return v;
 }
 
@@ -91,6 +92,7 @@ int xSize = m->xSize = v->xSize;
 
 /* Make a local memory copy of the xLabels */
 struct lm *lm = m->lm;
+m->centerLabel = lmCloneString(lm, v->centerLabel);
 m->xLabels = lmCloneRow(lm, v->columnLabels, xSize);
 
 /* Loop through all rows, fetching row data and label 
@@ -106,7 +108,7 @@ while ((row = vRowMatrixNextRow(v, &label)) != NULL)
     lmRefAdd(lm, &dataRefList, lmCloneMem(lm, row, xSize * sizeof(*row)));
     }
 slReverse(&nameList);
-slReverse(dataRefList);
+slReverse(&dataRefList);
 
 /* Allocate arrays for row starts and y labels */
 int ySize = m->ySize = slCount(nameList);
@@ -143,7 +145,7 @@ struct tsvMatrix
     char **stringRow;	    /* Unparsed string row */
     double *row;	    /* string row converted to double  */
     struct lineFile *lf;    /* File we are working on. */
-    char *firstWord;	    /* First word in file */
+    char *centerLabel;	    /* First word in file */
     };
 
 struct tsvMatrix *tsvMatrixNew(char *fileName)
@@ -154,7 +156,7 @@ if (lf == NULL)
     return NULL;
 char *line;
 lineFileNeedNext(lf, &line, NULL);
-char *firstWord = nextTabWord(&line);	// Skip label
+char *centerLabel = nextTabWord(&line);
 
 int rowSize = chopByChar(line, '\t', NULL, 0);
 if (rowSize < 1)
@@ -165,7 +167,7 @@ AllocVar(m);
 m->rowSize = rowSize;
 AllocArray(m->stringRow, rowSize+1);
 AllocArray(m->row, rowSize);
-m->firstWord = cloneString(firstWord);
+m->centerLabel = cloneString(centerLabel);
 
 /* ALlocate column labels and copy outside of this line's space */
 AllocArray(m->columnLabels, rowSize);
@@ -192,7 +194,7 @@ if (m != NULL)
 	   freeMem(m->columnLabels[i]);
 	freeMem(m->columnLabels);
 	}
-    freeMem(m->firstWord);
+    freeMem(m->centerLabel);
     freeMem(m->stringRow);
     freeMem(m->row);
     lineFileClose(&m->lf);
@@ -236,7 +238,7 @@ struct vRowMatrix *vRowMatrixOnTsv(char *fileName)
 /* Return a vRowMatrix on a tsv file with first column and row as labels */
 {
 struct tsvMatrix *m = tsvMatrixNew(fileName);
-struct vRowMatrix *v = vRowMatrixNewEmpty(m->rowSize, m->columnLabels);
+struct vRowMatrix *v = vRowMatrixNewEmpty(m->rowSize, m->columnLabels, m->centerLabel);
 v->vData = m;
 v->nextRow = vTsvMatrixNextRow;
 v->free = vTsvMatrixFree;

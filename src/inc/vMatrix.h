@@ -20,6 +20,7 @@ struct vRowMatrix
     struct vRowMatrix *next;
     int xSize;	/* Dimensions */
     int y;		/* Current Y position */
+    char *centerLabel;	/* Label to put in corner between row and column labels */
     char **columnLabels;	    /* xSize of these */
     double *(*nextRow)(struct vRowMatrix *matrix, char **retLabel);	    /* Fetch next row of data, NULL at end */
     void (*free)(struct vRowMatrix *matrix);	    /* Free up any associated data */
@@ -35,7 +36,7 @@ double *vRowMatrixNextRow(struct vRowMatrix *v, char **retLabel);
 void vRowMatrixFree(struct vRowMatrix **pv);
 /* Free up vRowMatrix (and call it's free method) */
 
-struct vRowMatrix *vRowMatrixNewEmpty(int xSize, char **columnLabels);
+struct vRowMatrix *vRowMatrixNewEmpty(int xSize, char **columnLabels, char *centerLabel);
 /* Allocate vRowMatrix but without methods or data filled in.  Typically used by a factory/wrapper method  
  * such as vRowMatrixOnTsv*/
 
@@ -50,8 +51,9 @@ struct memMatrix
     {
     struct memMatrix *next;
     int xSize, ySize;	/* Dimensions */
-    double **rows;	/* There are y items here */
+    double **rows;	/* There are xSize items in each of ySize rows */
     char **xLabels, **yLabels;  /* Arrays of labels */
+    char *centerLabel;	/* Label to put in corner between row and column labels */
     struct lm *lm;
     };
 
