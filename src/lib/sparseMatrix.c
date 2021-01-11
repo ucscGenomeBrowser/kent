@@ -2,6 +2,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "localmem.h"
+#include "obscure.h"
 #include "sparseMatrix.h"
 
 
@@ -71,19 +72,6 @@ for (y=0; y<ySize; ++y)
 	}
     fprintf(f, "\n");
     }
-}
-
-static void writeTsvRow(FILE *f, int rowSize, char **row)
-/* Write out row of strings to a line in tab-sep file */
-{
-if (rowSize > 0)
-    {
-    fprintf(f, "%s", row[0]);
-    int i;
-    for (i=1; i<rowSize; ++i)
-        fprintf(f, "\t%s", row[i]);
-    }
-fprintf(f, "\n");
 }
 
 void sparseRowMatrixSaveAsTsv(struct sparseRowMatrix *matrix, 
