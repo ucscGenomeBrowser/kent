@@ -1,4 +1,4 @@
-/* clusterMatrixToBarchartBed - Compute a barchart bed file from  a gene matrix 
+/* clusterMatrixToBarChartBed - Compute a barchart bed file from  a gene matrix 
  * and a gene bed file and a way to cluster samples. */
 
 #include "common.h"
@@ -17,11 +17,11 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "clusterMatrixToBarchartBed - Compute a barchart bed file from  a gene matrix\n"
+  "clusterMatrixToBarChartBed - Compute a barchart bed file from  a gene matrix\n"
   "and a gene bed file and a way to cluster samples.\n"
   "NOTE: consider using matrixClusterColumns and matrixToBarChartBed instead\n"
   "usage:\n"
-  "   clusterMatrixToBarchartBed sampleClusters.tsv geneMatrix.tsv geneset.bed output.bed\n"
+  "   clusterMatrixToBarChartBed sampleClusters.tsv geneMatrix.tsv geneset.bed output.bed\n"
   "where:\n"
   "   sampleClusters.tsv is a two column tab separated file with sampleId and clusterId\n"
   "   geneMatrix.tsv has a row for each gene. The first row uses the same sampleId as above\n"
@@ -69,15 +69,15 @@ lineFileClose(&lf);
 *retClusterHash = clusterHash;
 }
 
-void clusterMatrixToBarchartBed(char *sampleClusters, char *matrixTsv, char *geneBed, char *output)
-/* clusterMatrixToBarchartBed - Compute a barchart bed file from  a gene matrix 
+void clusterMatrixToBarChartBed(char *sampleClusters, char *matrixTsv, char *geneBed, char *output)
+/* clusterMatrixToBarChartBed - Compute a barchart bed file from  a gene matrix 
  * and a gene bed file and a way to cluster samples. */
 {
 /* Figure out if we need to do medians etc */
 boolean doMedian = clMedian;
 
 /* Load up the gene set */
-verbose(2, "clusterMatrixToBarchartBed(%s,%s,%s,%s)\n", sampleClusters, matrixTsv, geneBed, output);
+verbose(2, "clusterMatrixToBarChartBed(%s,%s,%s,%s)\n", sampleClusters, matrixTsv, geneBed, output);
 int bedRowSize = 0;
 struct hash *geneHash = hashTsvBy(geneBed, 3, &bedRowSize);
 verbose(2, "%d columns about %d genes in %s\n", bedRowSize, geneHash->elCount, geneBed);
@@ -324,6 +324,6 @@ if (argc != 5)
 clSimple = optionExists("simple");
 clMedian = optionExists("median");
 clName2 = optionVal("name2", clName2);
-clusterMatrixToBarchartBed(argv[1], argv[2], argv[3], argv[4]);
+clusterMatrixToBarChartBed(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
