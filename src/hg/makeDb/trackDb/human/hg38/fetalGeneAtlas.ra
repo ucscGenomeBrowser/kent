@@ -11,7 +11,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     type bigBarChart
     visibility pack
     shortLabel Fetal Cells
-    longLabel Fetal Gene Atlas sorted by cell type from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by cell type from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
@@ -30,7 +30,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     type bigBarChart
     visibility hide
     shortLabel Fetal Assay
-    longLabel Fetal Gene Atlas sorted by assay (cell/nucleus) from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by assay (cell/nucleus) from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
@@ -47,7 +47,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     type bigBarChart
     visibility hide
     shortLabel Fetal Exp
-    longLabel Fetal Gene Atlas sorted by experiment id from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by experiment id from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
@@ -65,7 +65,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     type bigBarChart
     visibility hide
     shortLabel Fetal Organ
-    longLabel Fetal Gene Atlas sorted by organ from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by organ from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
@@ -83,7 +83,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     type bigBarChart
     visibility hide
     shortLabel Fetal Lineage
-    longLabel Fetal Gene Atlas sorted by cell lineage and organ from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by cell lineage and organ from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
@@ -101,7 +101,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     type bigBarChart
     visibility hide
     shortLabel Fetal RT Group
-    longLabel Fetal Gene Atlas sorted by RT group from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by RT group from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
@@ -119,7 +119,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     type bigBarChart
     visibility hide
     shortLabel Fetal Donor ID
-    longLabel Fetal Gene Atlas sorted by donor ID from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by donor ID from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
@@ -137,7 +137,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     type bigBarChart
     visibility hide
     shortLabel Fetal Sex
-    longLabel Fetal Gene Atlas sorted by sex from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by sex from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2

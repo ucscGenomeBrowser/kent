@@ -6,34 +6,33 @@ visibility hide
 group expression
 
     track cortexVelmeshevCellType
-    superTrack cortexVelmeshev
+    parent cortexVelmeshev
     type bigBarChart
     visibility pack
     shortLabel Cortex Cells
-    longLabel Cerebral cortex RNA sorted by cell type from Velmeshev et al 2019
+    longLabel Cerebral cortex RNA binned by cell type from Velmeshev et al 2019
     barChartMetric mean
     barChartUnit UMI/cell
-    defaultLabelFields name
+    defaultLabelFields name2
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/cortexVelmeshev/cell_type.bb
     barChartStatsUrl /gbdb/$D/bbi/cortexVelmeshev/cell_type.stats
     barChartColors #81ce00 #81cd00 #01c000 #dcbf00 #dcbf00 #dbbe00 #dcbf00 #ddbf00 #ddbf00 #ddbf00 #ddbf00 #fe1211 #bdb701 #bab701 #dcbf00 #bbbe01 #85c601
     #barChartColors #ff0000 #ff6900 #ffb100 #fffc00 #b6ff00 #61ff00 #00ff70 #00ffbc #00f7ff #00acff #0061ff #0700ff #7000ff #b600ff #ff00fc #ff00b1 #ff0069
     barChartBars AST-FB AST-PP Endothelial IN-PV IN-SST IN-SV2C IN-VIP L2/3 L4 L5/6 L5/6-CC Microglia Neu-NRGN-I Neu-NRGN-II Neu-mat OPC Oligodendrocytes
-    priority 1
     transformFunc NONE
     barChartLimit 2
     group expression
 
     track cortexVelmeshevDiagnosis
-    superTrack cortexVelmeshev
+    parent cortexVelmeshev
     type bigBarChart
     visibility hide
     shortLabel Cortex Diagnosis
-    longLabel Cerebral cortex RNA sorted by ASD/control diagnosis from Velmeshev et al 2019
+    longLabel Cerebral cortex RNA binned by ASD/control diagnosis from Velmeshev et al 2019
     barChartMetric mean
     barChartUnit UMI/cell
-    defaultLabelFields name
+    defaultLabelFields name2
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/cortexVelmeshev/diagnosis.bb
     barChartStatsUrl /gbdb/$D/bbi/cortexVelmeshev/diagnosis.stats
@@ -44,14 +43,14 @@ group expression
     group expression
 
     track cortexVelmeshevDonor
-    superTrack cortexVelmeshev
+    parent cortexVelmeshev
     type bigBarChart
     visibility hide
     shortLabel Cortex Donor
-    longLabel Cerebral cortex RNA sorted by organ donor from Velmeshev et al 2019
+    longLabel Cerebral cortex RNA binned by organ donor from Velmeshev et al 2019
     barChartMetric mean
     barChartUnit UMI/cell
-    defaultLabelFields name
+    defaultLabelFields name2
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/cortexVelmeshev/donor.bb
     barChartStatsUrl /gbdb/$D/bbi/cortexVelmeshev/donor.stats
@@ -62,14 +61,14 @@ group expression
     group expression
 
     track cortexVelmeshevSample
-    superTrack cortexVelmeshev
+    parent cortexVelmeshev
     type bigBarChart
     visibility hide
     shortLabel Cortex Sample
-    longLabel Cerebral cortex RNA sorted by biosample from Velmeshev et al 2019
+    longLabel Cerebral cortex RNA binned by biosample from Velmeshev et al 2019
     barChartMetric mean
     barChartUnit UMI/cell
-    defaultLabelFields name
+    defaultLabelFields name2
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/cortexVelmeshev/sample.bb
     barChartStatsUrl /gbdb/$D/bbi/cortexVelmeshev/sample.stats
@@ -81,14 +80,14 @@ group expression
     group expression
 
     track cortexVelmeshevSex
-    superTrack cortexVelmeshev
+    parent cortexVelmeshev
     type bigBarChart
     visibility hide
     shortLabel Cortex Sex
-    longLabel Cerebral cortex RNA sorted by sex of donor from Velmeshev et al 2019
+    longLabel Cerebral cortex RNA binned by sex of donor from Velmeshev et al 2019
     barChartMetric mean
     barChartUnit UMI/cell
-    defaultLabelFields name
+    defaultLabelFields name2
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/cortexVelmeshev/sex.bb
     barChartStatsUrl /gbdb/$D/bbi/cortexVelmeshev/sex.stats

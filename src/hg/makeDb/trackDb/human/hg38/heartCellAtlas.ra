@@ -7,11 +7,11 @@ visibility hide
 group expression
 
     track heartAtlasCellTypes
-    superTrack heartCellAtlas
+    parent heartCellAtlas
     type bigBarChart
     visibility pack
     shortLabel Heart HCA Cells
-    longLabel Heart cell RNA sorted by cell type from https://heartcellatlas.org
+    longLabel Heart cell RNA binned by cell type from https://heartcellatlas.org
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name
@@ -25,14 +25,13 @@ group expression
     transformFunc NONE
     barChartLimit 2
     group expression
-    priority 2
 
     track heartAtlasRegion
-    superTrack heartCellAtlas
+    parent heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Region
-    longLabel Heart cell RNA sorted by region of collection from https://heartcellatlas.org
+    longLabel Heart cell RNA binned by region of collection from https://heartcellatlas.org
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name
@@ -46,7 +45,7 @@ group expression
     group expression
 
     track heartAtlasAgeGroup
-    superTrack heartCellAtlas
+    parent heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Age
@@ -64,7 +63,7 @@ group expression
     group expression
 
     track heartAtlasCellStates
-    superTrack heartCellAtlas
+    parent heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA State
@@ -84,7 +83,7 @@ group expression
     group expression
 
     track heartAtlasDonor
-    superTrack heartCellAtlas
+    parent heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Donor
@@ -102,7 +101,7 @@ group expression
     group expression
 
     track heartAtlasGender
-    superTrack heartCellAtlas
+    parent heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Gender
@@ -120,7 +119,7 @@ group expression
     group expression
 
     track heartAtlasSource
-    superTrack heartCellAtlas
+    parent heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Source
@@ -138,7 +137,7 @@ group expression
     group expression
 
     track heartAtlasSample
-    superTrack heartCellAtlas
+    parent heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Sample
@@ -172,7 +171,7 @@ group expression
     #group expression
 
     track heartAtlasVersion
-    superTrack heartCellAtlas
+    parent heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Version
