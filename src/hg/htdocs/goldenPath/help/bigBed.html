@@ -223,12 +223,14 @@ BigBed files can
 store extra fields in addition to the <a href="../../FAQ/FAQformat.html#format1">predefined BED 
 fields</a>. 
 In this example, you will create your own bigBed file from a fully featured existing BED file that 
-contains the standard BED fields up to and including the <em>color</em> field (field 9), plus two 
+contains the standard BED fields up to and including the <em>color</em> field called <em>itemRgb</em>
+(field 9), plus two 
 additional non-standard fields (two alternate names for each item in the file). 
+The standard BED column itemRgb contains an R,G,B color value (e.g. "255,0,0").
 The resulting
 bigBed file will have nine standard BED columns and two additional non-standard user-defined columns.
-The standard column 9 is called the itemRgb field, it contains an R,G,B color value (e.g. 255,0,0).
 </p>
+<p>
 If you add extra fields to your bigBed file, you must include an AutoSql format
 (<em>.as</em>) file describing the fields. 
 In this file, all fields (standard and non-standard) are described with a short
@@ -238,12 +240,11 @@ For more information on AutoSql, see
 well as examples of <em>.as</em> files in 
 <a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/tree/master/src/hg/lib"
 target="_blank">this directory</a>. 
-
-<p>
-The bedToBigBed program is run with the arguments <code>-type=bed9+2</code> and also 
+Then, the bedToBigBed program is run with the arguments <code>-type=bed9+2</code> and also 
 <code>-as=bedExample2.as</code> to help correctly interpret all the columns in the data. 
 </p>
 
+<p>
 This example also demonstrates how to create an extra search index on the name field, and the first of the 
 extra fields to be used for track item search. The searchIndex setting requires the input BED data to be
 case-sensitive sorted (<code>sort -k1,1 -k2,2n</code>), where newer versions of the tool bedToBigBed
