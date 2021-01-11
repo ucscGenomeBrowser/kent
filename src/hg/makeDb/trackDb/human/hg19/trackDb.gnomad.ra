@@ -359,6 +359,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html "Updated Dec. 23, 2020"
         filterByRange._pli on
         parent gnomadPLI on
         priority 1
+        release beta,public
 
         track pliByTranscript
         shortLabel gnomAD Transcript Constraint
@@ -376,6 +377,80 @@ pennantIcon Updated red ../goldenPath/newsarch.html "Updated Dec. 23, 2020"
         filterByRange._pli on
         parent gnomadPLI off
         priority 2
+        release beta,public
+
+        track pliByGene
+        shortLabel gnomAD Gene LoF Constraint
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Gene (pLI)
+        type bigBed 12 +
+        mouseOverField _mouseOver
+        itemRgb on
+        searchIndex name,geneName
+        bigDataUrl /gbdb/hg19/gnomAD/pLI/pliByGene.bb
+        url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
+        urlLabel View this Gene on the gnomAD browser
+        labelFields name,geneName
+        defaultLabelFields geneName
+        filter._pli 0:1
+        filterLabel._pli Show only items between this pLI range
+        filterByRange._pli on
+        parent gnomadPLI on
+        priority 1
+        release alpha
+
+        track missenseByGene
+        shortLabel gnomAD Gene Missense Constraint
+        longLabel gnomAD Predicted Missense Constraint Metrics By Gene (Z-scores)
+        type bigBed 12 +
+        mouseOverField _mouseOver
+        itemRgb on
+        searchIndex name,geneName
+        bigDataUrl /gbdb/hg19/gnomAD/missense/missenseByGene.bb
+        url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
+        urlLabel View this Gene on the gnomAD browser
+        labelFields name,geneName
+        filter._zscore 0
+        filterLabel._zscore Show only items between this Z-score range
+        filterByRange._zscore on
+        parent gnomadPLI off
+        priority 2
+        release alpha
+
+        track pliByTranscript
+        shortLabel gnomAD Transcript LoF Constraint
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI)
+        type bigBed 12 +
+        mouseOverField _mouseOver
+        itemRgb on
+        searchIndex name,geneName
+        bigDataUrl /gbdb/hg19/gnomAD/pLI/pliByTranscript.bb
+        url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
+        urlLabel View this Transcript on the gnomAD browser
+        labelFields name,geneName
+        filter._pli 0:1
+        filterLabel._pli Show only items between this pLI range
+        filterByRange._pli on
+        parent gnomadPLI off
+        priority 2
+        release alpha
+
+        track missenseByTranscript
+        shortLabel gnomAD Transcript Missense Constraint
+        longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores)
+        type bigBed 12 +
+        mouseOverField _mouseOver
+        itemRgb on
+        searchIndex name,geneName
+        bigDataUrl /gbdb/hg19/gnomAD/missense/missenseByTranscript.bb
+        url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
+        urlLabel View this Transcript on the gnomAD browser
+        labelFields name,geneName
+        filter._zscore 0
+        filterLabel._zscore Show only items between this Z-score range
+        filterByRange._zscore on
+        parent gnomadPLI off
+        priority 2
+        release alpha
 
         track gnomadMissense
         parent gnomadPLI off

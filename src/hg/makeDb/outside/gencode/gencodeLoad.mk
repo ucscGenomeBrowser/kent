@@ -35,11 +35,12 @@ mach = $(shell uname -m)
 # - ensemblPrevVersion is use to get chrom name mappings for pre-release,
 #   as this doesn't change between release.
 ##
-preRelease = no
-#preRelease = yes
+#preRelease = no
+preRelease = yes
 #db = hg38
-db = hg19
+#db = hg19
 #db = mm10
+db = mm39
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
     ver = M25
@@ -49,6 +50,16 @@ ifeq (${db},mm10)
     annGffTypeName = chr_patch_hapl_scaff.annotation
     ensemblVer = 100_38
     ensemblPrevVer = 99_38
+    ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
+else ifeq (${db},mm39)
+    grcRefAssembly = GRCm39
+    ver = M26
+    prevVer = 
+    gencodeOrg = Gencode_mouse
+    ftpReleaseSubdir = release_${ver}
+    annGffTypeName = chr_patch_hapl_scaff.annotation
+    ensemblVer = 102_38
+    ensemblPrevVer =
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38

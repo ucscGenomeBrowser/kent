@@ -62,8 +62,8 @@ cell bed bedGraph
 centerLabelsDense *
 centerLabelsPack *
 chainColor chain bigChain
-chainLinearGap netAlign chain bed psl bigPsl bigChain
-chainMinScore netAlign chain bed psl bigPsl bigChain
+chainLinearGap netAlign chain bed psl bigPsl bigChain bigMaf
+chainMinScore netAlign chain bed psl bigPsl bigChain bigMaf
 chainNormScoreAvailable netAlign bed chain bigChain
 chimpDb bed
 chimpMacaqueOrthoTable bed
@@ -275,8 +275,8 @@ mafFile customTracks
 mafShowSnp wigMaf
 mafTrack bed
 mapDispatcher expRatio
-matrix netAlign bed chain psl bigPsl bigChain
-matrixHeader netAlign bed chain psl bigPsl bigChain
+matrix netAlign bed chain psl bigPsl bigChain bigMaf
+matrixHeader netAlign bed chain psl bigPsl bigChain bigMaf
 maxChromName customTracks
 maxHeightPixels *
 maxItems *
@@ -476,7 +476,7 @@ speciesCodonDefault wigMafProt wigMaf
 speciesDefaultOff wigMaf
 speciesDefaultOn wigMaf
 speciesGroups wigMafProt wigMaf
-speciesOrder bed maf wigMaf
+speciesOrder bed maf wigMaf bigMaf
 speciesTarget wigMaf
 speciesTree wigMaf
 speciesUseFile wigMafProt wigMaf
@@ -495,7 +495,7 @@ subGroups *
 subGroupMetaTables *
 subTrack *
 subgroups bed
-summary wigMaf
+summary wigMaf bigMaf
 superTrack *
 symbolTable bed genePred
 pubsArticleTable bed psl bigPsl

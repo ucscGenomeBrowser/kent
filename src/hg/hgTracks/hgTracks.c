@@ -4233,6 +4233,11 @@ while (lineFileNext(lf, &line, &lineSize))
         warn("BED chromEnd %u > size %u for chromosome/scaffold %s", bed->chromEnd, ci->size, bed->chrom);
 	return FALSE;
 	}
+    if (!(bed->chromEnd > bed->chromStart)) // do not allow empty regions
+	{
+        warn("BED chromEnd %u must be greater than chromStart %u %s", bed->chromEnd, bed->chromStart, bed->chrom);
+	return FALSE;
+	}
 
     slAddHead(&bedList, bed);
 

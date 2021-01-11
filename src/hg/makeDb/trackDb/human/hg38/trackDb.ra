@@ -563,8 +563,6 @@ vcfDoQual off
 vcfDoMaf off
 compositeTrack on
 geneTrack ncbiRefSeqCurated
-pennantIcon New red ../goldenPath/newsarch.html#092520 "Released Jul. 21, 2020"
-
 
     track tgpNA19685_m011_MXL
     parent tgpTrios

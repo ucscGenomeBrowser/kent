@@ -122,7 +122,6 @@ mouseOverField _mouseOver
 url http://soe.ucsc.edu/~afyfe/covid/hub/t12.html?struct=$$
 urlLabel Link to 3D structure viewer:
 priority 31
-pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
 
 track cas13Crispr
 shortLabel Cas13 CRISPR
@@ -179,7 +178,6 @@ priority 5
 type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/bbi/rapid.bb
 noScoreFilter on
-pennantIcon New red ../goldenPath/newsarch.html#071720 "Released Jul. 17, 2020"
 
 # track removed as per David H email, authors got a track hub instead
 #track conticello
@@ -204,7 +202,6 @@ longLabel PhyloCSF Genes - Curated conserved genes
 baseColorDefault genomicCodons
 exonNumbers on
 noScoreFilter on
-pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
 
         track PhyloCSFgenes
         type bigGenePred
@@ -262,8 +259,6 @@ longLabel Microdeletions in GISAID sequences
 type bed 6
 group varRep
 spectrum on
-pennantIcon New red ../goldenPath/newsarch.html#070720 "Released Jul. 07, 2020"
-
 
 track nanoCov
 shortLabel Nanopore Coverage
@@ -335,7 +330,7 @@ group varRep
 visibility hide
 priority 0.2
 dataVersion /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#? "Updated Dec. 04, 2020"
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
@@ -378,7 +373,7 @@ group varRep
 visibility squish
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#? "Updated Dec. 04, 2020"
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloPubMinAf01
     shortLabel Subset: Min AF 1%
@@ -439,7 +434,6 @@ type bigBed
 skipEmptyFields on
 group map
 dataVersion 2020-07-29
-pennantIcon New red ../goldenPath/newsarch.html "Updated Aug. 31, 2020"
 release beta,public
 
     track problematicSitesMask
@@ -470,7 +464,7 @@ type bigBed
 skipEmptyFields on
 group map
 dataVersion v4 (2020-12-22)
-pennantIcon New red ../goldenPath/newsarch.html "Updated Dec. 30, 2020"
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 30, 2020"
 release alpha
 
     track problematicSitesMask
@@ -500,7 +494,6 @@ type bigWig
 visibility hide
 group rna
 compositeTrack on
-pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 2, 2020"
 
         track icshapeInvivo
         shortLabel icSHAPE In-vivo
@@ -532,7 +525,6 @@ longLabel Potential pathogenic insertions and deletions from Gussow et al, PNAS 
 type bigBed 4
 bigDataUrl /gbdb/wuhCor1/bbi/potPathoIndel.bb
 group varRep
-pennantIcon New red ../goldenPath/newsarch.html "Released Sep. 4, 2020"
 
 track iedb
 shortLabel Validated epitopes from IEDB
@@ -542,7 +534,6 @@ group immu
 urls epitopeID="http://www.iedb.org/epitope/$$"
 type bigBed
 bigDataUrl /gbdb/wuhCor1/iedb/iedb.bb
-pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 20, 2020"
 
 # testing-only track, most likely not for public release
 track minkMuts
@@ -561,7 +552,7 @@ group immu
 bigDataUrl /gbdb/wuhCor1/escape/escape.bb
 mouseOverField _mouseOver
 noScoreFilter on
-pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 25, 2020"
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Nov. 25, 2020"
 
 track lineageB_1_1_7_US
 shortLabel B.1.1.7 in USA
@@ -576,7 +567,7 @@ geneTrack ncbiGeneBGP
 vcfDoQual off
 vcfDoFilter off
 group varRep
-pennantIcon New red ../goldenPath/newsarch.html "Released Jan. ?, 2021"
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Jan. 7, 2021"
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra

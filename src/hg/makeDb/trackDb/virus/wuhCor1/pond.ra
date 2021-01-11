@@ -8,7 +8,6 @@ compositeTrack on
 group varRep
 spectrum on
 exonArrows off
-pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 28, 2020"
         
         track Common_Variants
         parent pond
