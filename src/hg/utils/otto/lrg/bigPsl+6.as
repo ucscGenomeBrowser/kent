@@ -1,5 +1,5 @@
-table bigPsl
-"bigPsl pairwise alignment"
+table lrgBigPsl
+"Locus Reference Genomic Transcript Annotations"
     (
     string chrom;       "Reference sequence chromosome or scaffold"
     uint   chromStart;  "Start position in chromosome"
