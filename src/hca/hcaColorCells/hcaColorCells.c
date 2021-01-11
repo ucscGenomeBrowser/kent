@@ -5,7 +5,6 @@
 #include "options.h"
 #include "obscure.h"
 #include "localmem.h"
-#include "hex.h"
 #include "sqlNum.h"
 #include "memgfx.h"
 #include "correlate.h"
@@ -113,6 +112,40 @@ correlateFree(&c);
 return result;
 }
 
+int unpackHexString(char *hexString, struct lineFile *lf, int maxLen)
+/* Convert hexideximal string up to two digits long to binary value */
+{
+int len = strlen(hexString);
+if (len < 0 || len > maxLen)
+    errAbort("Expecting a one to %d digit hex number, but got %s line %d of %s", 
+	maxLen, hexString, lf->lineIx, lf->fileName);
+int acc = 0;
+char c;
+while ((c = *hexString++) != 0)
+    {
+    int val;
+    if (isdigit(c))
+        val = c - '0';
+    else
+        {
+	if (c >= 'a' && c <= 'f')
+	    val = c - 'a' + 10;
+	else if (c >= 'A' && c <= 'F')
+	    val = c - 'A' + 10;
+	else
+	    {
+	    val = 0;	// Stop compiler complianing about unitialized variable
+	    errAbort("Expecting hexadecimal character, got %c line %d of %s",
+		c, lf->lineIx, lf->fileName);
+	    }
+	}
+    acc <<= 4;
+    acc += val;
+    }
+return acc;
+}
+
+
 struct hash *loadColors(char *fileName)
 /* Load up a hash keyed by name in the first column with R G B 2 digit hex in the next three cols */
 {
@@ -122,9 +155,9 @@ char *row[4];
 while (lineFileRow(lf, row))
     {
     struct rgbColor color;
-    color.r = hexToByte(row[1]);
-    color.g = hexToByte(row[2]);
-    color.b = hexToByte(row[3]);
+    color.r = unpackHexString(row[1], lf, 2);
+    color.g = unpackHexString(row[2], lf, 2);
+    color.b = unpackHexString(row[3], lf, 2);
     hashAdd(hash, row[0], lmCloneMem(hash->lm, &color, sizeof(color)));
     }
 lineFileClose(&lf);
@@ -238,7 +271,7 @@ for (sampleIx=0; sampleIx<sampleMatrix->xSize; ++sampleIx)
      int refIx;
      double minDistance = 3.0;	// 2 is as big as it gets
      double maxDistance = 0;
-     double distances [refMatrix->xSize];
+     double distances[refMatrix->xSize];
      for (refIx=0; refIx < refMatrix->xSize; ++refIx)
          {
 	 double distance = refDistance(refMatrix, refRowHash, refIx,  sampleMatrix, sampleIx);
