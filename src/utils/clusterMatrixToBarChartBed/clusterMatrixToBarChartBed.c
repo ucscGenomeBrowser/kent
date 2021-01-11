@@ -246,10 +246,6 @@ for (;;)
 	    {
 	    int clusterIx = colToCluster[i];
 	    char *textVal = matrixRow[i];
-if (clusterIx == clusterCount - 1)  //ugly
-    {
-    uglyf("%s %d %s\n", geneName, i, textVal);
-    }
 	    // special case so common we parse out "0" inline
 	    double val = (textVal[0] == '0' && textVal[1] == 0) ? 0.0 : sqlDouble(textVal);
 	    sumTotal += val;
