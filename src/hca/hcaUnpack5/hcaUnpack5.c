@@ -17,7 +17,7 @@ errAbort(
   "hcaUnpack5 - Convert h5ad (scanpy) files to a directory filled with 3 things\n"
   "usage:\n"
   "   hcaUnpack5 input.h5ad outDir\n"
-  "The output dir will be populated with exprMatrix.tsv, meta.tsv, and project.tsv\n"
+  "The output dir will be populated with exprMatrix.tsv, meta.tsv, and gene.lst\n"
   "where:\n"
   "    exprMatrix.tsv has the cell x gene matrix with cells as columns.  This includes\n"
   "             the cell names in the first row and the gene names in the first column.\n."
