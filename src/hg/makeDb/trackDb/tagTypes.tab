@@ -31,6 +31,7 @@ barChartMatrixUrl barChart bigBarChart
 barChartStatsUrl barChart bigBarChart
 # below for backwards compatibility during QA. 
 barChartDataUrl barChart bigBarChart
+barChartLimit barChart bigBarChart
 #
 barChartLabel barChart bigBarChart
 barChartMetric barChart bigBarChart
@@ -512,7 +513,7 @@ transMapInfo psl bigPsl
 transMapSrc psl bigPsl
 transMapTypeDesc psl bigPsl
 transMapSrcSet psl bigPsl
-transformFunc bed bedGraph wig bigWig
+transformFunc bed bigBed bedGraph wig bigWig barChart bigBarChart
 treeImage wigMaf
 txInfo genePred
 type *
