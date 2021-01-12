@@ -2768,7 +2768,7 @@ var rightClick = {
                             // item (gene) name
                             a = /i=([^&]+)/.exec(href);
                             if (a && a[1]) {
-                                title = a[1];
+                                title = decodeURIComponent(a[1]);
                             }
                         }
                         if (displayItemFunctions) {

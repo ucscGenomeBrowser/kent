@@ -1955,6 +1955,14 @@ printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g>", varName,
         maxDigits, initialVal);
 }
 
+void cgiMakeDoubleVarWithExtra(char *varName, double initialVal, int maxDigits, char *extra)
+/* Make a text control filled with initial value and optional extra HTML.  */
+{
+if (maxDigits == 0) maxDigits = 4;
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g %s>", varName,
+        maxDigits, initialVal, emptyForNull(extra));
+}
+
 void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width,
                              char *min, char *max)
 /* Make a floating point control filled with initial value.

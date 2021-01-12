@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 
 L += $(MYSQLLIBS) -lm -lz 
 MYLIBDIR = ../../../lib/$(MACHTYPE)
-MYLIBS =  -lhdf5 $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = freen.o
 

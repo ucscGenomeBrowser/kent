@@ -159,6 +159,9 @@ struct hash *hashTwoColumnFile(char *fileName);
 struct hash *hashTsvBy(char *in, int keyColIx, int *retColCount);
 /* Return a hash of rows keyed by the given column */
 
+void writeTsvRow(FILE *f, int rowSize, char **row);
+/* Write out row of strings to a line in tab-sep file */
+
 struct slPair *slPairTwoColumnFile(char *fileName);
 /* Read in a two column file into an slPair list */
 
