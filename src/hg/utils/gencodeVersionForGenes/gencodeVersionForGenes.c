@@ -20,6 +20,8 @@ errAbort(
   "options:\n"
   "   -bed=output.bed - Create bed file for mapping genes to genome via best gencode fit\n"
   "   -allBed=outputDir - Output beds for all versions in geneSymVer.tsv\n"
+  "   -geneToId=geneToId.tsv - Output two column file with symbol from gene.txt and gencode\n"
+  "                  gene names as second. Symbols with no gene found are omitted\n"
   );
 }
 
@@ -27,6 +29,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"bed", OPTION_STRING},
    {"allBed", OPTION_STRING},
+   {"geneToId", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -197,7 +200,8 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 return count;
 }
 
-void gencodeVersionForGenes(char *geneListFile, char *geneSymVerTxFile, char *bedOut, char *allBedOut)
+void gencodeVersionForGenes(char *geneListFile, char *geneSymVerTxFile, 
+    char *geneToIdOut, char *bedOut, char *allBedOut)
 /* gencodeVersionForGenes - Figure out which version of a gencode gene set a 
  * set of gene identifiers best fits. */
 {
@@ -315,6 +319,20 @@ if (bedOut != NULL)
 	}
     carefulClose(&f);
     }
+
+if (geneToIdOut != NULL)
+    {
+    FILE *f = mustOpen(geneToIdOut, "w");
+    struct slName *gene;
+    struct hash *hash = (bestIsSym ?bestVersion->symHash : bestVersion->idHash);
+    for (gene = geneList; gene != NULL; gene = gene->next)
+        {
+	struct gsvt *gsvt = hashFindVal(hash, gene->name);
+	if (gsvt != NULL)
+	    fprintf(f, "%s\t%s\n", gene->name, gsvt->gene);
+	}
+    carefulClose(&f);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -323,6 +341,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-gencodeVersionForGenes(argv[1],argv[2], optionVal("bed", NULL), optionVal("allBed", NULL));
+gencodeVersionForGenes(argv[1],argv[2], 
+    optionVal("geneToId", NULL), optionVal("bed", NULL), optionVal("allBed", NULL));
 return 0;
 }

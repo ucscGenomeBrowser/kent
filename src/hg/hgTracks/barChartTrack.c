@@ -335,13 +335,11 @@ extras = (struct barChartTrack *)tg->extraUiData;
 extras->colors = getCategoryColors(tg);
 
 struct trackDb *tdb = tg->tdb;
-extras->doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_LOG_TRANSFORM, 
-                                                BAR_CHART_LOG_TRANSFORM_DEFAULT);
+extras->doLogTransform = barChartIsLogTransformed(cart, tdb->track, tdb);
 extras->maxMedian = barChartUiMaxMedianScore(tdb);
 extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tdb, FALSE, 
                                                         BAR_CHART_NO_WHITEOUT, BAR_CHART_NO_WHITEOUT_DEFAULT);
-extras->maxViewLimit = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
-                                BAR_CHART_MAX_VIEW_LIMIT, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
+extras->maxViewLimit = barChartCurViewMax(cart, tg->track, tg->tdb);
 extras->maxGraphSize = trackDbSettingClosestToHomeOrDefault(tdb, 
                                 BAR_CHART_MAX_GRAPH_SIZE, BAR_CHART_MAX_GRAPH_SIZE_DEFAULT);
 extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");

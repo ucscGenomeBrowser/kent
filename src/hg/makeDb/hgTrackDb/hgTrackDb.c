@@ -459,7 +459,7 @@ char* val = (char*)el->val;
  * Just leak memory when doing substitution.
  */
 if (sameString(el->name, "bigDataUrl") || sameString(el->name, "searchTrix") ||
-    sameString(el->name, "xrefDataUrl"))
+    sameString(el->name, "xrefDataUrl") || sameString(el->name, "barChartStatsUrl"))
     {
     val = replaceChars(val, "$D", database);
     }

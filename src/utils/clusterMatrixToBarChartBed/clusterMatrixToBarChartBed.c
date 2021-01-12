@@ -19,6 +19,7 @@ void usage()
 errAbort(
   "clusterMatrixToBarchartBed - Compute a barchart bed file from  a gene matrix\n"
   "and a gene bed file and a way to cluster samples.\n"
+  "NOTE: consider using matrixClusterColumns and matrixToBarChartBed instead\n"
   "usage:\n"
   "   clusterMatrixToBarchartBed sampleClusters.tsv geneMatrix.tsv geneset.bed output.bed\n"
   "where:\n"

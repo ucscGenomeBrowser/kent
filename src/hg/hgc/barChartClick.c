@@ -22,6 +22,7 @@
 #include "barChartData.h"
 #include "barChartSample.h"
 #include "barChartUi.h"
+#include "hgConfig.h"
 
 #define EXTRA_FIELDS_SIZE 256
 
@@ -430,6 +431,7 @@ double patchWidth = heightPer;
 double labelOffset = patchWidth + 2*borderSize;
 double statsOffset = labelOffset + labelWidth;
 double barOffset = statsOffset + statsSize;
+double statsRightOffset = barOffset - 9;
 double barMaxWidth = totalWidth-barOffset - 45;	    // The 45 is to leave room for ~6 digit number at end.
 double totalHeight = headerHeight + heightPer * categCount + borderSize;
 
@@ -440,8 +442,8 @@ printf("<rect width=\"%g\" height=\"%g\" style=\"fill:#%s\"/>\n", totalWidth, he
 printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n", 
     labelOffset, innerHeight-1, innerHeight-1, "Sample");
 if (statsSize > 0.0)
-    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n", 
-	statsOffset, innerHeight-1, innerHeight-1, "N");
+    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n", 
+	statsRightOffset, innerHeight-1, innerHeight-1, "N");
 printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s %s</text>\n", 
     barOffset, innerHeight-1, innerHeight-1, metric, "Value");
 
@@ -458,7 +460,8 @@ for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer
     double barWidth = 0;
     if (maxVal > 0.0)
 	barWidth = barMaxWidth * score/maxVal;
-    replaceChar(categ->label, '_', ' ');
+    char *deunder = cloneString(categ->label);
+    replaceChar(deunder, '_', ' ');
     printf("<rect x=\"0\" y=\"%g\" width=\"15\" height=\"%g\" style=\"fill:#%06X\"/>\n",
 	yPos, innerHeight, categ->color);
     printf("<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
@@ -467,14 +470,16 @@ for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer
 	printf("<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
 	    labelOffset, yPos, labelWidth+statsSize, innerHeight, 0xFFFFFF);
     printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" clip-path=\"url(#labelClip)\"\">%s</text>\n", 
- 	labelOffset, yPos+innerHeight-1, innerHeight-1, categ->label);
+ 	labelOffset, yPos+innerHeight-1, innerHeight-1, deunder);
     if (statsSize > 0.0)
 	{
 	struct fieldedRow *fr = hashFindVal(statsHash, categ->label);
+	if (fr == NULL)
+	    fr = hashFindVal(statsHash, deunder);
 	if (fr != NULL)
 	    {
-	    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n", 
-		statsOffset, yPos+innerHeight-1, innerHeight-1, fr->row[countStatIx]);
+	    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n", 
+		statsRightOffset, yPos+innerHeight-1, innerHeight-1, fr->row[countStatIx]);
 	    }
 	}
     printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n", 
@@ -570,7 +575,8 @@ if (vals != NULL)
     }
 else
     {
-    printBarChart(chartItem, tdb, highLevel, metric);
+    if (cfgOptionBooleanDefault("svgBarChart", FALSE))
+	printBarChart(chartItem, tdb, highLevel, metric);
     }
 puts("<br>");
 }

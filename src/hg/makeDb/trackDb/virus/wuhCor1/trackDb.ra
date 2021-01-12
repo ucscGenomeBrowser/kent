@@ -587,3 +587,13 @@ include pyle.ra
 include treangen.ra
 include pbm.ra
 include pbmShanghai.ra
+
+track spikeMuts
+shortLabel Spike Mutations
+longLabel Amino Acid Mutations in the Spike Protein
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/spikeMuts/spikeMuts.bb
+pennantIcon new red
+mouseOverField clinicalNotes
+group varRep
+
