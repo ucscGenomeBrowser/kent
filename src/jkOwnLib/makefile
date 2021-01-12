@@ -8,7 +8,7 @@ O = bandExt.o crudeali.o ffAliHelp.o ffSeedExtend.o fuzzyFind.o \
 T = ../lib/$(MACHTYPE)/jkOwnLib.a
 
 # for 64-bit gfServer index
-O64 = genoFind64.o trans364.o ooc64.o
+O64 = $(addsuffix 64.o, $(basename $O))
 T64 = ../lib/$(MACHTYPE)/jkOwnLib64.a
 
 %64.o: %.c

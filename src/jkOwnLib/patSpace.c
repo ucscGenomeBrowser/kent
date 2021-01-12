@@ -15,11 +15,7 @@
 #ifdef BIGONE
 
 #define maxBlockCount (2*230*1024 - 1)
-#ifdef GFSERVER64
-#define psBits bits64
-#else
 #define psBits bits32
-#endif
 /* psBits is the size of an index word.  If 16 bits
  * patSpace will use less memory, but be limited to
  * 16 meg or less genome size. */
@@ -265,7 +261,7 @@ int startIx = 0;
 int total = 0;
 struct dnaSeq *seq;
 psBits maxPat;
-psBits *listSizes;
+bits32 *listSizes;
 int seedSpaceSize = ps->seedSpaceSize;
 
 maxPat = ps->maxPat = maxPatCount;

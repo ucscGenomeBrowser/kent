@@ -1,35 +1,37 @@
 kentSrc = ..
 include ../inc/common.mk
 
-L += -lm $(SOCKETLIB) -lz
-MYLIBDIR = ../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a 
-
-O = blat.o
-
-blat: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/blat $O $(MYLIBS) $L
-	${STRIP} ${DESTDIR}${BINDIR}/blat${EXE}
 
 all:
-	cd ../lib && ${MAKE}
-	make
+	${MAKE} build
+	${MAKE} build IDXSIZE=64
+
+ifeq (${IDXSIZE},64)
+A = blat64
+CFLAGS += -DGFSERVER64
+preMyLibs += ../lib/$(MACHTYPE)/jkOwnLib64.a
+else
+A = blat
+preMyLibs += ../lib/$(MACHTYPE)/jkOwnLib.a
+endif
+
+build: ${DESTDIR}${BINDIR}/${A}${EXE}
+include $(kentSrc)/inc/userApp.mk
+L += -lm $(SOCKETLIB)
+
+blat64.c: blat.c
+	ln -sf $< $@
+
 tags:
 	ctags *.c *.h ../lib/*.c ../inc/*.h
 
 test::
-	blat -verbose=0 hCrea.geno hCrea.mrna testRna.psl
-	cmp testRna.psl refRna.psl
-	blat -verbose=0 -prot hCrea.pep mCrea.pep testProt.psl
-	cmp testProt.psl refProt.psl
-	blat -verbose=0 -t=dnax -q=prot hCrea.geno mCrea.pep testProtX.psl
-	cmp testProtX.psl refProtX.psl
-	blat -verbose=0 -t=dnax -q=rnax hCrea.geno mCrea.mrna testRnaX.psl
-	cmp testRnaX.psl refRnaX.psl
-	blat -verbose=0 -fine hCrea.geno hCrea.mrna testFine.psl
-	cmp testFine.psl refFine.psl
 	cd test && ${MAKE}
 
 clean::
-	rm -f testRna.psl testProt.psl testProtX.psl testRnaX.psl \
-	testFine.psl $(O) blat
+	${MAKE} clean_idxsize
+	${MAKE} clean_idxsize IDXSIZE=64
+	cd test && ${MAKE} clean
+
+clean_idxsize:
+	rm -fr ${O} blat64.c
