@@ -590,10 +590,12 @@ include pbmShanghai.ra
 
 track spikeMuts
 shortLabel Spike Mutations
-longLabel Amino Acid Mutations in the Spike Protein
-type bigBed 4 +
+longLabel Spike protein mutations from community annotation (Jan 2021)
+type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/spikeMuts/spikeMuts.bb
 pennantIcon new red
-mouseOverField clinicalNotes
+itemRgb on
+mouseOver $name $clinicalNotes
+urls geographyChartsUrl="$$" nextstrainBuildUrl="$$"
 group varRep
 
