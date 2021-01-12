@@ -1,14 +1,16 @@
 #!/bin/bash -e
+gfServer=${1:-gfServer}   # first arg is optional name of gfServer program
+testName=$(basename $0)
 
 # build index
-gfIdx=output/testIndexTrans.gfidx
+gfIdx=output/$testName.gfidx
 rm -f $gfIdx
 mkdir -p output
-gfServer index -trans $gfIdx input/creaGeno.2bit >/dev/null
+$gfServer index -trans $gfIdx input/creaGeno.2bit >/dev/null
 
 # read index
-gfServer start -trans -indexFile=$gfIdx localhost 17768 -canStop input/creaGeno.2bit >/dev/null &
+$gfServer start -trans -indexFile=$gfIdx localhost 17768 -canStop input/creaGeno.2bit >/dev/null &
 sleep 1
-gfServer transQuery localhost 17768 input/mCrea.mrna > output/testIndexFileTrans.out
-gfServer stop localhost 17768 > /dev/null
-diff -u expected/testIndexFileTrans.out output/testIndexFileTrans.out
+$gfServer transQuery localhost 17768 input/mCrea.mrna > output/$testName.out
+$gfServer stop localhost 17768 > /dev/null
+diff -u expected/$testName.out output/$testName.out

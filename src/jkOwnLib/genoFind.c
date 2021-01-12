@@ -137,7 +137,7 @@ INLINE gfOffset endListEntryOffset(endListPart *entry)
 /* get endList genome offset */
 {
 #if GFSERVER64
-return (entry[1] << 32) | (entry[2] << 16) | entry[3];
+return ((bits64)entry[1] << 32) | ((bits64)entry[2] << 16) | (bits64)entry[3];
 #else
 return (entry[1] << 16) | entry[2];
 #endif
@@ -462,8 +462,13 @@ if (!sameString(hdr->magic, indexFileMagic))
     errAbort("wrong magic string for index file");
 if (!sameString(hdr->version, indexFileVerison))
     errAbort("unsupported version for index file: %s", hdr->version);
+#ifdef GFSERVER64
+if (hdr->indexAddressSize != 64)
+    errAbort("compiled for 64-bit index, but not a 64-bit index: %d", hdr->indexAddressSize);
+#else
 if (hdr->indexAddressSize != 32)
-    errAbort("not a 32-bit index: %d", hdr->indexAddressSize);
+    errAbort("compiled for 32-bit index, but not a 32-bit index: %d", hdr->indexAddressSize);
+#endif
 if (hdr->isTrans != gfIdx->isTrans)
     errAbort("index file has isTrans=%d, isTrans=%d requested", hdr->isTrans, gfIdx->isTrans);
 }
@@ -708,7 +713,7 @@ int stepSize = gf->stepSize;
 int tileHeadSize = gf->tileSize - gf->segSize;
 int maxPat = gf->maxPat;
 int tile;
-gfOffset *listSizes = gf->listSizes;
+bits32 *listSizes = gf->listSizes;
 int i, lastTile = seq->size - tileSize;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 
@@ -755,9 +760,9 @@ static bits64 maxTotalBases()
 /* Return maximum bases we can index. */
 {
 #ifdef GFSERVER64
-return 0x1fULL << 64; // 64-bit index
+return 18446744073709551615ULL; // 64-bit index
 #else
-return 0x1UL << 32;    // 32-bit index
+return 4294967295ULL;    // 32-bit index
 #endif
 }
 
@@ -802,7 +807,7 @@ static int gfAllocLists(struct genoFind *gf)
 {
 int count = 0;
 int i;
-gfOffset *listSizes = gf->listSizes;
+bits32 *listSizes = gf->listSizes;
 gfOffset **lists = gf->lists;
 gfOffset *allocated = NULL;
 gfOffset maxPat = gf->maxPat;
@@ -841,7 +846,7 @@ static int gfAllocLargeLists(struct genoFind *gf)
 {
 int count = 0;
 int i;
-gfOffset *listSizes = gf->listSizes;
+bits32 *listSizes = gf->listSizes;
 endListPart **endLists = gf->endLists;
 endListPart *allocated = NULL;
 int tileSpaceSize = gf->tileSpaceSize;
@@ -869,7 +874,7 @@ int i, lastTile = seq->size - tileSize;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 int maxPat = gf->maxPat;
 int tile;
-gfOffset *listSizes = gf->listSizes;
+bits32 *listSizes = gf->listSizes;
 gfOffset **lists = gf->lists;
 
 initNtLookup();
@@ -900,7 +905,7 @@ int i, lastTile = seq->size - tileSize;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 int tileHead;
 int tileTail;
-gfOffset *listSizes = gf->listSizes;
+bits32 *listSizes = gf->listSizes;
 int headCount;
 
 initNtLookup();
@@ -950,7 +955,7 @@ return nibSize;
 static void gfZeroOverused(struct genoFind *gf)
 /* Zero out counts of overused tiles. */
 {
-gfOffset *sizes = gf->listSizes;
+bits32 *sizes = gf->listSizes;
 int tileSpaceSize = gf->tileSpaceSize, i;
 int maxPat = gf->maxPat;
 int overCount = 0;
@@ -968,7 +973,7 @@ for (i=0; i<tileSpaceSize; ++i)
 static void gfZeroNonOverused(struct genoFind *gf)
 /* Zero out counts of non-overused tiles. */
 {
-gfOffset *sizes = gf->listSizes;
+bits32 *sizes = gf->listSizes;
 int tileSpaceSize = gf->tileSpaceSize, i;
 int maxPat = gf->maxPat;
 int overCount = 0;
@@ -1087,7 +1092,7 @@ if (gf->noSimpRepMask)
 int i;
 int tileSize = gf->tileSize;
 int maxPat = gf->maxPat;
-gfOffset *listSizes = gf->listSizes;
+bits32 *listSizes = gf->listSizes;
 
 for (i=0; i<20; ++i)
     {
@@ -2449,7 +2454,7 @@ void gfMakeOoc(char *outName, char *files[], int fileCount,
 boolean dbIsPep = (tType == gftProt || tType == gftDnaX || tType == gftRnaX);
 struct genoFind *gf = gfNewEmpty(gfMinMatch, gfMaxGap, tileSize, tileSize,
 	maxPat, NULL, dbIsPep, FALSE, noSimpRepMask);
-gfOffset *sizes = gf->listSizes;
+bits32 *sizes = gf->listSizes;
 int tileSpaceSize = gf->tileSpaceSize;
 bioSeq *seq, *seqList;
 bits32 sig = oocSig, psz = tileSize;

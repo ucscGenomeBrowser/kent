@@ -1,5 +1,5 @@
 #!/bin/bash -e
-
+gfServer=${1:-gfServer}   # first arg is optional name of gfServer program
 testName=$(basename $0)
 
 # build index
@@ -8,9 +8,9 @@ gfDir=${gfRootDir}/crea
 rm -rf $gfDir
 mkdir -p $gfDir
 cp -f input/creaGeno.2bit $gfDir/crea.2bit
-gfServer index -trans $gfDir/crea.trans.gfidx $gfDir/crea.2bit >/dev/null
+$gfServer index -trans $gfDir/crea.trans.gfidx $gfDir/crea.2bit >/dev/null
 
 # test query
 
-./dynTester $gfRootDir transQuery crea crea input/crea.mrna output/${testName}.out
+./dynTester --gfServer=$gfServer $gfRootDir transQuery crea crea input/crea.mrna output/${testName}.out
 diff -u expected/${testName}.out output/${testName}.out

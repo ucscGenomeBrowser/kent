@@ -1,7 +1,7 @@
-Counting tiles in tests/input/hCreaGeno.nib
-Counting tiles in tests/input/mCreaGeno.nib
-Adding tiles in tests/input/hCreaGeno.nib
-Adding tiles in tests/input/mCreaGeno.nib
+Counting tiles in input/hCreaGeno.nib
+Counting tiles in input/mCreaGeno.nib
+Adding tiles in input/hCreaGeno.nib
+Adding tiles in input/mCreaGeno.nib
 Done adding
 mCreaMrna 3-355 mCreaGeno.nib 2365-2717, hits 32
 mCreaMrna 1352-1583 mCreaGeno.nib 7040-7271, hits 21
