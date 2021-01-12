@@ -93,7 +93,7 @@ if (clName2 != NULL)
     }
 
 /* Keep track of how many fields gene bed has to have and locate name2 */
-int geneBedMinSize = 6;
+int geneBedMinSize = 7;
 int name2Ix = bedRowSize - 1;	    // Last field if it is in bed
 if (clName2 != NULL)
     geneBedMinSize -= 1;
