@@ -587,3 +587,15 @@ include pyle.ra
 include treangen.ra
 include pbm.ra
 include pbmShanghai.ra
+
+track spikeMuts
+shortLabel Spike Mutations
+longLabel Spike protein mutations from community annotation (Jan 2021)
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/spikeMuts/spikeMuts.bb
+pennantIcon new red
+itemRgb on
+mouseOver $name $clinicalNotes
+urls geographyChartsUrl="$$" nextstrainBuildUrl="$$"
+group varRep
+

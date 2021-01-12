@@ -1613,12 +1613,10 @@ done
     time (zcat downloads/*.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/mm39/chrom.sizes \
 	phyloP35way.bw) > bigWig.log 2>&1
-XXX - running - Tue Dec 22 18:30:43 PST 2020
 
     egrep "real|VmPeak" bigWig.log
-    # pid=66292: VmPeak:    33751268 kB
-    #  real    43m40.194s
-
+    # pid=123418: VmPeak:   22609988 kB
+    # real    22m26.776s
 
     bigWigInfo phyloP35way.bw  | sed -e 's/^/# /;'
 # version: 4
@@ -1733,6 +1731,10 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #########################################################################
     ## create upstream refGene maf files
     cd /hive/data/genomes/mm39/bed/multiz35way/downloads/multiz35way
+
+    # Brian had to fix mafFrags so it could work with the assembly GCF
+    # identifier
+
     # bash script
 
 #!/bin/sh
@@ -1748,12 +1750,41 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-XXX - running - Wed Dec 23 14:36:49 PST 2020
-    #   real    88m40.730s
+    #   real    117m33.236s
 
--rw-rw-r-- 1   52659159 Nov  6 11:46 upstream300.ncbiRefSeq.maf.gz
--rw-rw-r-- 1  451126665 Nov  6 12:15 upstream2000.ncbiRefSeq.maf.gz
--rw-rw-r-- 1 1080533794 Nov  6 12:55 upstream5000.ncbiRefSeq.maf.gz
+-rw-rw-r-- 1   96310644 Jan  4 17:04 upstream300.ncbiRefSeq.maf.gz
+-rw-rw-r-- 1  948130770 Jan  4 17:41 upstream2000.ncbiRefSeq.maf.gz
+-rw-rw-r-- 1 2032740393 Jan  4 18:48 upstream5000.ncbiRefSeq.maf.gz
+
+    # verify sanity:
+    zgrep "^s " upstream300.ncbiRefSeq.maf.gz | awk '{print $2}' \
+      | sort | uniq -c | sort -rn | less
+    
+    # they all have the same counts, followed by single gene names:
+  89641 xenTro9
+  89641 turTru2
+  89641 tupBel1
+  89641 tarSyr2
+  89641 susScr3
+...
+  89641 casCan1
+  89641 canFam4
+  89641 calJac4
+  89641 bosTau9
+  89641 GCF_003668045.3
+      1 XM_982184.5
+      1 XM_981747.8
+      1 XM_981711.5
+      1 XM_981599.4
+      1 XM_977914.8
+... etc ...
+
+    # same pattern seen with the 2000 and 5000 upstreams
+    zgrep "^s " upstream2000.ncbiRefSeq.maf.gz | awk '{print $2}' \
+      | sort | uniq -c | sort -rn | less
+
+    zgrep "^s " upstream5000.ncbiRefSeq.maf.gz | awk '{print $2}' \
+      | sort | uniq -c | sort -rn | less
 
     ######################################################################
     ## compress the maf files
@@ -1768,14 +1799,14 @@ XXX - running - Wed Dec 23 14:36:49 PST 2020
 
     cd maf
     time gzip *.maf &
-XXX - running - Wed Dec 23 14:55:47 PST 2020
-    # real    81m10.239s
+    # about an hour
 
     du -hscL maf ../../maf/
-    #  18G     maf
+    #	16G     maf
+    #	141G    ../../maf/
 
     cd maf
-    md5sum *.maf.gz *.nh > md5sum.txt
+    md5sum *.maf.gz > md5sum.txt
 
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/multiz35way/maf
     cd maf
@@ -1807,7 +1838,6 @@ XXX - running - Wed Dec 23 14:55:47 PST 2020
     #  18G     ./maf
     # 156G    ../../maf
 
-XXX
     # obtain the README.txt from danRer10/multiz12way and update for this
     #   situation
     ln -s `pwd`/*.txt \
@@ -1827,8 +1857,7 @@ XXX
     time md5sum *.mod *.bw > md5sum.txt
     #   real    0m20.354s
 
-XXX
-    # obtain the README.txt from mm39/phastCons20way and update for this
+    # obtain the README.txt from danRer10/phastCons12way and update for this
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/phastCons35way/mm39.35way.phastCons
     cd mm39.35way.phastCons
     ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/phastCons35way/mm39.35way.phastCons
@@ -1854,8 +1883,8 @@ XXX
 
     md5sum *.mod *.bw > md5sum.txt
 
-XXX 
-    # obtain the README.txt from mm39/phyloP20way and update for this
+    # obtain the README.txt from danRer10/phyloP12way and update for this
+    #   situation
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/phyloP35way/mm39.35way.phyloP
     cd mm39.35way.phyloP
     ln -s `pwd`/* \
@@ -1863,12 +1892,11 @@ XXX
 
     cd ..
 
-    #   situation
     ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/phyloP35way
 
 #############################################################################
-# hgPal downloads (TBD - 2017-11-06 - Hiram)
+# hgPal downloads (DONE - 2020-12-23 - Hiram)
 #   FASTA from 35-way for ncbiRefSeq, refGene and knownCanonical
 
     ssh hgwdev
@@ -1931,11 +1959,11 @@ XXX
     rm -rf exonAA exonNuc
 
 #############################################################################
-# wiki page for 35-way (TBD - 2017-11-06 - Hiram)
+# wiki page for 35-way (DONE - 2021-01-11 - Hiram)
     mkdir /hive/users/hiram/bigWays/mm39.35way
     cd /hive/users/hiram/bigWays
     echo "mm39" > mm39.35way/ordered.list
-    awk '{print $1}' /hive/data/genomes/mm39/bed/multiz35way/35way.distances.txt \
+awk '{print $1}' /hive/data/genomes/mm39/bed/multiz35way/35way.distances.txt \
        >> mm39.35way/ordered.list
 
     # sizeStats.sh catches up the cached measurements required for data
@@ -1945,7 +1973,10 @@ XXX
     # dbDb.sh constructs mm39.35way/XenTro9_35-way_conservation_alignment.html
     # may need to add new assembly references to srcReference.list and
     # urlReference.list
+    # Updated this script to work with the GCF accession and finding relevant
+    # data from the assembly hub files
     ./dbDb.sh mm39 35way
+
     # sizeStats.pl constructs mm39.35way/XenTro9_35-way_Genome_size_statistics.html
     # this requires entries in coverage.list for new sequences
     ./sizeStats.pl mm39 35way
@@ -1954,22 +1985,23 @@ XXX
     ./defCheck.pl mm39 35way
 
     # this constructs the html pages in mm39.35way/:
-# -rw-rw-r-- 1 6247 May  2 17:07 XenTro9_35-way_conservation_alignment.html
-# -rw-rw-r-- 1 8430 May  2 17:09 XenTro9_35-way_Genome_size_statistics.html
-# -rw-rw-r-- 1 5033 May  2 17:10 XenTro9_35-way_conservation_lastz_parameters.html
+# -rw-rw-r-- 1 17957 Jan  4 17:56 Mm39_35-way_conservation_alignment.html
+# -rw-rw-r-- 1 11991 Jan  4 17:58 Mm39_35-way_conservation_lastz_parameters.html
+# -rw-rw-r-- 1 23297 Jan 11 14:58 Mm39_35-way_Genome_size_statistics.html
 
     # add those pages to the genomewiki.  Their page names are the
     # names of the .html files without the .html:
-#  XenTro9_35-way_conservation_alignment
-#  XenTro9_35-way_Genome_size_statistics
-#  XenTro9_35-way_conservation_lastz_parameters
+# Mm39_35-way_Genome_size_statistics.html
+# Mm39_35-way_conservation_alignment.html
+# Mm39_35-way_conservation_lastz_parameters.html
 
     # when you view the first one you enter, it will have links to the
     # missing two.
 
 ############################################################################
-# pushQ readmine (TBD - 2017-11-07 - Hiram)
+# pushQ readmine (TBD - 2021-01-11 - Hiram)
 
+XXX - ready - Mon Jan 11 16:30:45 PST 2021
   cd /usr/local/apache/htdocs-hgdownload/goldenPath/mm39
   find -L `pwd`/multiz35way `pwd`/phastCons35way `pwd`/phyloP35way \
 	/gbdb/mm39/multiz35way -type f \
