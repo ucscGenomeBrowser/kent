@@ -123,6 +123,7 @@ enum strexOp
 
     /* Binary operations. */
     strexOpAdd,
+    strexOpSubtract,
     strexOpOr,
     strexOpAnd,
 
@@ -983,11 +984,12 @@ struct strexParse *p = strexParseUnaryNeg(in);
 for (;;)
     {
     char *tok = tokenizerNext(tkz);
-    if (tok == NULL || differentString(tok, "+"))
+    if (tok == NULL || (differentString(tok, "+") && differentString(tok, "-")))
 	{
 	tokenizerReuse(tkz);
 	return p;
 	}
+    enum strexOp op = (tok[0] == '+' ? strexOpAdd : strexOpSubtract);
 
     /* What we've parsed so far becomes left side of binary op, next term ends up on right. */
     struct strexParse *l = p;
@@ -995,6 +997,14 @@ for (;;)
 
     /* Make left and right side into a common type */
     enum strexType childType = commonTypeForMathBop(l->type, r->type);
+    if (op == strexOpSubtract)
+        {
+	if (childType == strexTypeString)
+	    {
+	    errAbort("Expecting numbers around '-' sign line %d of %s",
+		in->tkz->lf->lineIx, in->tkz->lf->fileName);
+	    }
+	}
     l = strexParseCoerce(l, childType);
     r = strexParseCoerce(r, childType);
 
@@ -1234,6 +1244,32 @@ r.type = strexTypeString;
 return r;
 }
 
+static struct strexEval strexEvalSubtract(struct strexParse *p, struct strexRun *run)
+/* Return a - b. */
+{
+struct strexParse *lp = p->children;
+struct strexParse *rp = lp->next;
+struct strexEval lv = strexLocalEval(lp, run);
+struct strexEval rv = strexLocalEval(rp, run);
+struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
+switch (lv.type)
+    {
+    case strexTypeInt:
+	res.val.i = (lv.val.i - rv.val.i);
+	break;
+    case strexTypeDouble:
+	res.val.x = (lv.val.x - rv.val.x);
+	break;
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = lv.type;
+return res;
+}
+
 static struct strexEval strexEvalAdd(struct strexParse *p, struct strexRun *run)
 /* Return a + b. */
 {
@@ -1274,6 +1310,7 @@ switch (lv.type)
 res.type = lv.type;
 return res;
 }
+
 
 static struct strexEval strexEvalOr(struct strexParse *p, struct strexRun *run)
 /* Return a or b. */
@@ -2058,6 +2095,9 @@ switch (p->op)
     /* Mathematical ops, simple binary type */
     case strexOpAdd:
        res = strexEvalAdd(p, run);
+       break;
+    case strexOpSubtract:
+       res = strexEvalSubtract(p, run);
        break;
 
     /* Logical ops, simple binary type and not*/
