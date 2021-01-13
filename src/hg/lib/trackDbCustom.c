@@ -1571,6 +1571,18 @@ if (metadataInTdb)
 return NULL;
 }
 
+boolean trackSettingIsFile(char *setting)
+/* Returns TRUE if setting found in trackDb stanza is a file setting that
+ * would benefit from directory $D substitution among other things - looks for
+ * settings that ends in "Url" and a few others. */
+{
+return endsWith(setting, "Url") ||
+    sameString(setting, "bigDataIndex") ||
+    sameString(setting, "frames") ||
+    sameString(setting, "summary") ||
+    sameString(setting, "searchTrix");
+}
+
 char *labelAsFilteredNumber(char *label, unsigned numOut)
 /* add text to label to indicate filter is active */
 {

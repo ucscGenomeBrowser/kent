@@ -1,6 +1,6 @@
 track wgEncodeGencodeV35
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V35
 longLabel All GENCODE annotations from V35 (Ensembl 101)
 group genes
@@ -30,6 +30,7 @@ wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV35
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV35
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV35
 wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV35
+pennantIcon New red ../goldenPath/newsarch.html#011321 "Updated Jan. 13, 2021"
 
     track wgEncodeGencodeV35ViewGenes
     shortLabel Genes

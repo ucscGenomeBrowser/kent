@@ -374,6 +374,7 @@ visibility squish
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.version.txt
 pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
+release beta,public
 
     track sarsCov2PhyloPubMinAf01
     shortLabel Subset: Min AF 1%
@@ -382,6 +383,7 @@ pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
     bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.01.vcf.gz
     type vcfTabix
     priority 10
+    release beta,public
 
     track sarsCov2PhyloPubMinAf001
     shortLabel Subset: Min AF 0.1%
@@ -390,6 +392,7 @@ pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.001.vcf.gz
     priority 20
+    release beta,public
 
     track sarsCov2PhyloPubFull
     shortLabel Subset: no min AF (slow!)
@@ -398,6 +401,7 @@ pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.ambigToN.vcf.gz
     priority 30
+    release beta,public
 
     track sarsCov2PhyloPubAllMinAf01
     shortLabel All: Min AF 1%
@@ -407,6 +411,7 @@ pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
     hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.all.ft.nh
     type vcfTabix
     priority 40
+    release beta,public
 
     track sarsCov2PhyloPubAllMinAf001
     shortLabel All: Min AF 0.1%
@@ -416,6 +421,7 @@ pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
     hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.all.ft.nh
     type vcfTabix
     priority 50
+    release beta,public
 
     track sarsCov2PhyloPubAllFull
     shortLabel All: no min AF (slow!)
@@ -425,6 +431,67 @@ pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
     bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.vcf.gz
     hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.all.ft.nh
     priority 60
+    release beta,public
+
+track sarsCov2PhyloPub
+shortLabel Phylogeny: Public
+longLabel Phylogenetic Tree and Variants from Sequences in Public Databases
+compositeTrack on
+type vcfTabix
+hapClusterEnabled on
+hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.nwk
+hapClusterHeight 500
+hapClusterColorBy function
+sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2PhyloPub/public.all.lineageColors.gz
+vcfDoQual off
+vcfDoFilter off
+geneTrack ncbiGeneBGP
+group varRep
+visibility squish
+priority 0.1
+dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Jan. ?, 2021"
+release alpha
+
+    track sarsCov2PhyloPubAllMinAf01
+    shortLabel All: Min AF 1%
+    longLabel Single Nucleotide Variants in all public sequences with alternate allele frequency >= 1%
+    parent sarsCov2PhyloPub on
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.01.vcf.gz
+    type vcfTabix
+    priority 10
+    release alpha
+
+    track sarsCov2PhyloPubAllMinAf001
+    shortLabel All: Min AF 0.1%
+    longLabel Single Nucleotide Variants in all public sequences with alternate allele frequency >= 0.1%
+    parent sarsCov2PhyloPub off
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.001.vcf.gz
+    type vcfTabix
+    priority 20
+    release alpha
+
+    track sarsCov2PhyloPubAllFull
+    shortLabel All: no min AF (slow!)
+    longLabel All Single Nucleotide Variants in all public sequences (slow at whole-genome scale)
+    parent sarsCov2PhyloPub off
+    type vcfTabix
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.vcf.gz
+    priority 30
+    release alpha
+
+track sarsCov2PhyloPubParsimony
+shortLabel Parsimony: Public
+longLabel Parsimony Scores of Phylogenetic Tree and Variants from Sequences in Public Databases
+type bigWig
+autoScale on
+maxHeightPixels 128:40:8
+viewLimits 0:1000
+group varRep
+priority 0.11
+bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.parsimony.bw
+dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Jan. ?, 2021"
 
 track problematicSites
 shortLabel Problematic Sites

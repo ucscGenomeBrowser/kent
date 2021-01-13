@@ -1,6 +1,6 @@
 track wgEncodeGencodeV32
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V32
 longLabel All GENCODE annotations from V32 (Ensembl 98)
 group genes
