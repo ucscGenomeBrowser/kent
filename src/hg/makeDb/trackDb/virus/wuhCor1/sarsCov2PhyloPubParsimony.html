@@ -1,0 +1,88 @@
+<h2>Description</h2>
+<p>
+Given a phylogenetic tree of related sequences,
+a <a href="https://en.wikipedia.org/wiki/Maximum_parsimony_(phylogenetics)"
+     target=_blank>parsimony</a> score
+can be computed for each mutation as the minimum number of nucleotide changes along branches
+of the tree that would lead to the observed sample genotypes at the leaves of the tree.
+For example, if there is a branch for which all leaves have a mutation, and no other leaves of
+the tree have the mutation, then the mutation presumably occurred once on that branch and the
+parsimony score would be one.  However, when a mutation appears on leaves belonging to several
+branches whose other leaves do not have the mutation, then the mutation would need to occur
+on multiple branches in the tree, increasing the parsimony score.  Mutations with a parsimony
+score that is relatively high, especially when compared to alternate allele count (the number 
+of samples/leaves with the mutation), may be of interest when identifying systematic errors
+and/or sites of recurrent mutations.
+</p>
+<p>
+This track shows the parsimony score of each single nucleotide sequence (SNV)
+found in sequences available from
+<a href="https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=SARS-CoV-2,%20taxid:2697049" target=_blank>NCBI Virus / GenBank</a>,
+<a href="https://www.cogconsortium.uk/data/" target=_blank>COG-UK</a> and the
+<a href="https://bigd.big.ac.cn/ncov/release_genome"
+   target=_blank>China National Center for Bioinformation</a>,
+in a phylogenetic tree based on
+<a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a>
+release <a href="https://zenodo.org/record/4289383" target=_blank>13-11-20</a> (Lanfear)
+with more recent public sequences added using
+<a href="https://github.com/yatisht/usher" target=_blank>UShER</a> (Turakhia <em>et al.</em>),
+as a bar graph with the height indicating the score.
+(The <a href="hgTrackUi?db=wuhCor1&g=sarsCov2PhyloPub"><em>Phylogeny: Public</em> track</a>
+displays the phylogenetic tree and sample genotypes
+from which the parsimony scores were generated.)
+</p>
+
+<h2>Methods</h2>
+<p>
+Parsimony scores were extracted from the output of the find_parsimonious_assignments program from the
+<a href="https://github.com/yatisht/strain_phylogenetics" target=_blank>strain_phylogenetics</a>
+package (Turakhia <em> et al.</em>).
+See the <a href="hgTrackUi?db=wuhCor1&g=sarsCov2PhyloPub"><em>Phylogeny: Public</em> track</a>
+for details about the phylogenetic tree and SNVs.
+
+<h2>Data Access</h2>
+<p>
+You can download the
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/public.all.parsimony.bw"
+   target=_blank>bigWig file</a> underlying this track from our
+Download Server. The data can be explored interactively with the 
+<a href="hgTables">Table Browser</a>
+or the <a href="hgIntegrator">Data Integrator</a>. The data can be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
+</p>
+
+<h2>Credits</h2>
+<p>This work is made possible by the open sharing of genetic data by research
+groups from all over the world. We gratefully acknowledge their contributions.
+Special thanks to Rob Lanfear for developing, running and sharing the
+<a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> pipeline
+and results.
+</p>
+
+<h2>Data usage policy</h2>
+<p>
+The data presented here is intended to rapidly disseminate analysis of
+important pathogens. Unpublished data is included with permission of the data
+generators, and does not impact their right to publish. Please contact the
+respective authors if you intend to carry out further research using their data.
+</p>
+
+<h2>References</h2>
+<p>
+Lanfear, Rob (2020). A global phylogeny of SARS-CoV-2 sequences from GISAID. Zenodo DOI:
+<a href="https://zenodo.org/record/4289383" target=_blank>10.5281/zenodo.3958883</a>
+</p>
+
+<p>
+Turakhia Y, Thornlow B, Gozashti L, Hinrichs AS, Fernandes JD, Haussler D, and Corbett-Detig R.
+<a href="https://www.biorxiv.org/content/10.1101/2020.06.08.141127v1"
+   target=_blank>Stability of SARS-CoV-2 Phylogenies</a>.
+<em>bioRxiv</em>. 2020 June 9.
+</p>
+
+<p>
+Turakhia Y, Thornlow B, Hinrichs AS, De Maio N, Gozashti L, Lanfear R, Haussler D, and Corbett-Detig R.
+<a href="https://www.biorxiv.org/content/10.1101/2020.09.26.314971v1"
+   target=_blank>Ultrafast Sample Placement on Existing Trees (UShER) Empowers Real-Time Phylogenetics for the SARS-CoV-2 Pandemic</a>.
+<em>bioRxiv</em>. 2020 September 28.
+</p>

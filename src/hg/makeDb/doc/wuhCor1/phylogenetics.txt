@@ -586,6 +586,25 @@ cut -f 2 cleanup.renaming | sort -u | wc -l
 phyloRenameAndPrune public-13-11-20.all.nh cleanup.renaming public-13-11-20.all.renamed.nh
 vcfRenameAndPrune public-13-11-20.all.vcf.gz cleanup.renaming stdout \
 | bgzip -c > public-13-11-20.all.renamed.vcf.gz
+# Make a protobuf for UShER/hgPhyloPlace -- mask out problematic sites first..
+problematicSitesVcf=/hive/data/genomes/wuhCor1/bed/problematicSites/20-12-30/problematic_sites_sarsCov2.vcf
+tawk '{ if ($1 ~ /^#/) { print; } else if ($7 == "mask") { $1 = "NC_045512v2"; print; } }' \
+    $problematicSitesVcf > mask.vcf
+time vcfFilter -excludeVcf=mask.vcf public-13-11-20.all.renamed.vcf.gz \
+| gzip -c \
+    > public-13-11-20.all.renamed.masked.vcf.gz
+usherDir=~angie/github/usher
+usher=$usherDir/build/usher
+time $usher -c -u \
+  -v public-13-11-20.all.renamed.masked.vcf.gz \
+  -t public-13-11-20.all.renamed.nh \
+  -o public-13-11-20.all.renamed.masked.pb
+#real    21m48.333s
+# Likewise for the notMasked.pb
+time $usher -c -u \
+  -v <(zcat public-13-11-20.all.renamed.vcf.gz) \
+  -t public-13-11-20.all.renamed.nh \
+  -o public-13-11-20.all.renamed.notMasked.pb
 # Now a script in hg/utils/otto/sarscov2phylo/ can use those files as a base
 # for incrementally adding in new public sequences.
 
