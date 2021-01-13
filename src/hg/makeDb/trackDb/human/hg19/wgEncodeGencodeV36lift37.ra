@@ -29,6 +29,7 @@ wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV36lift37
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV36lift37
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV36lift37
 wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV36lift37
+pennantIcon New red ../goldenPath/newsarch.html#011321 "Updated Jan. 13, 2021"
 
     track wgEncodeGencodeV36lift37ViewGenes
     shortLabel Genes
