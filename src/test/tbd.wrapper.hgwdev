@@ -16,6 +16,7 @@ rm -f *
 $HOME/kent/src/test/buildTableDescriptions.pl \
    -kentSrc $HOME/kent/src \
    -hgConf $HOME/.hg.conf \
+   -subDir hg/lib \
    -noLoad >& ~/hgwdev.buildTableDescriptions.log
 
 # once we have all the new .sql files, compare each new file to the 
