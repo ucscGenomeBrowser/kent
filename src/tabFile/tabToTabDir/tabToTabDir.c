@@ -31,7 +31,7 @@ errAbort(
 "   -startId=fieldName - sets starting ID to be something other than 1\n"
 "usage:\n"
 "   in.tsv is a tab-separated input file.  The first line is the label names and may start with #\n"
-"   spec.txt is a file that says what columns to put into the output, described in more detail below.\n"
+"   spec.x is a file that says what columns to put into the output, described in more detail below.\n"
 "The spec.x file contains one blank line separated stanza per output table.\n"
 "Each stanza should look like:\n"
 "        table tableName    key-column\n"
@@ -39,7 +39,7 @@ errAbort(
 "        columnName2	sourceExpression2\n"
 "              ...\n"
 "if the sourceExpression is missing it is assumed to be a just a field of the same name from in.tsv\n"
-"Otherwise the sourceField can be a strex expression involving fields in in.tsv.\n"
+"Otherwise the sourceExpression can be a strex expression involving fields in in.tsv.\n"
 "\n"
 "Each output table has duplicate rows merged using the key-column to determine uniqueness.\n"
 "Please see tabToTabDir.doc in the source code for more information on what can go into spec.x.\n"
@@ -203,6 +203,7 @@ char *s = trimSpaces(input);
 if (isEmpty(s))
     {
     s = cloneString(name);
+    fv->type = fvVar;
     }
 c = s[0];
 if (c == '@')

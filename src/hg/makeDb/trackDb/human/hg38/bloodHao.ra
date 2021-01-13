@@ -1,0 +1,131 @@
+track bloodHao
+superTrack on
+shortLabel Blood (PBMC) Hao
+longLabel Peripheral blood mononuclear cells (PBMC) from Hao et al 2020
+visibility hide
+group expression
+
+    track bloodHaoCellType
+    parent bloodHao
+    type bigBarChart
+    visibility pack
+    shortLabel Blood PBMC Cells
+    longLabel Blood PBMCs binned by cell type (level 2) from Hao et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    bigDataUrl /gbdb/$D/bbi/bloodHao/cell_type.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/cell_type.stats
+    #barChartColors #ff4c4c #ff3900 #ff7300 #ff9900 #ffc000 #ffe900 #ecff00 #c3ff00 #b9ff4c #6fff00 #00ff04 #00ff77 #4cffbb #00ffc6 #00ffef #00e6ff #82deff #4cb6ff #4c9aff #0035ff #0400ff #3d00ff #7700ff #b94cff #c300ff #ec00ff #ff4cef #ff00c0 #ff4cb7 #ff0073 #ff0039
+#    barChartColors #cc736c #c01622 #c01623 #c01622 #b14c04 #b14c04 #b9164b #b30b64 #d2608c #b3086c #b30a68 #b30e60 #e06478 #b20c64 #bc1942 #b14c04 #e19aa7 #d06383 #d05f8f #b51059 #f41218 #f0121a #e71322 #d3657d #c01f33 #b30b65 #cc746c #b22f20 #cd5e95 #be1843 #ba2529
+barChartColors #cc736c #c01522 #c01622 #c01622 #a35a04 #a35a04 #b91449 #b30b64 #d25f8a #b2086b #b30a68 #b30d5f #e05f73 #b20c63 #bc1740 #a25b03 #e19aa6 #d06382 #d05f8e #b51058 #f4040a #f0060d #e70817 #d2647c #bd1f30 #b30a65 #cb746c #b13020 #cc5e95 #bd1540 #b92428
+    barChartBars ASDC B_intermediate B_memory B_naive CD14_Mono CD16_Mono CD4_CTL CD4_Naive CD4_Proliferating CD4_TCM CD4_TEM CD8_Naive CD8_Proliferating CD8_TCM CD8_TEM Doublet Eryth HSPC ILC MAIT NK NK_Proliferating NK_CD56bright Plasmablast Platelet Treg cDC1 cDC2 dnT gdT pDC
+    transformFunc NONE
+    barChartLimit 2
+
+
+    track bloodHaoL1
+    parent bloodHao
+    type bigBarChart
+    visibility hide
+    shortLabel celltype.l1
+    longLabel celltype.l1
+    barChartMetric unknown
+    barChartUnit unknown
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/bloodHao/celltype.l1.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/celltype.l1.stats
+    #barChartColors #ff0000 #ffbb00 #a4ff00 #00ff92 #00d2ff #0020ff #a400ff #ff00bb
+    #barChartColors #c01522 #b3096a #b31650 #b22f21 #b14d03 #f51217 #bc252e #b7164d
+    barChartColors #c01521 #b20969 #b31650 #b12f21 #a25b03 #f40409 #b8272c #b7154c
+    barChartBars B CD4_T CD8_T DC Mono NK other other_T
+    transformFunc NONE
+    barChartLimit 2
+
+    track bloodHaoL2
+    parent bloodHao
+    type bigBarChart
+    visibility hide
+    shortLabel celltype.l2
+    longLabel celltype.l2
+    barChartMetric unknown
+    barChartUnit unknown
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/bloodHao/celltype.l2.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/celltype.l2.stats
+    barChartColors #ff4c4c #ff3900 #ff7300 #ff9900 #ffc000 #ffe900 #ecff00 #c3ff00 #b9ff4c #6fff00 #00ff04 #00ff77 #4cffbb #00ffc6 #00ffef #00e6ff #82deff #4cb6ff #4c9aff #0035ff #0400ff #3d00ff #7700ff #b94cff #c300ff #ec00ff #ff4cef #ff00c0 #ff4cb7 #ff0073 #ff0039
+    barChartBars ASDC B_intermediate B_memory B_naive CD14_Mono CD16_Mono CD4_CTL CD4_Naive CD4_Proliferating CD4_TCM CD4_TEM CD8_Naive CD8_Proliferating CD8_TCM CD8_TEM Doublet Eryth HSPC ILC MAIT NK NK_Proliferating NK_CD56bright Plasmablast Platelet Treg cDC1 cDC2 dnT gdT pDC
+    transformFunc NONE
+    barChartLimit 2
+
+    track bloodHaoL3
+    parent bloodHao
+    type bigBarChart
+    visibility hide
+    shortLabel Blood PBMC Cells L3
+    longLabel soon Blood PBMCs binned by cell type (level 3) from Hao et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/bloodHao/celltype.l3.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/celltype.l3.stats
+    #barChartCategoryUrl /gbdb/$D/bbi/bloodHao/celltype.l3.categories
+    barChartColors #ff8282 #feb1a7 #ff3d00 #ff5c00 #ff7b00 #ff8e00 #ffa000 #ffb500 #ffcb00 #ffe100 #fff700 #f1ff00 #e5ff4c #c5ff00 #afff00 #9bff00 #89ff00 #93ff4c #27ff00 #4cff5b #00ff53 #4cffa8 #4cffb5 #00ffa8 #00ffbe #00ffd5 #00ffea #00fdff #4ceeff #00d2ff #00bbff #00a5ff #0093ff #82c1ff #4c93ff #4c7dff #0027ff #0008ff #1600ff #3400ff #5300ff #7200ff #8900ff #b94cff #d782ff #c500ff #db00ff #f100ff #ff4cf9 #ff00e1 #ff00cb #ff4ccb #ff4cbc #ff008e #ff007b #ff005c #ff003d #ff001e
+    barChartBars ASDC_mDC ASDC_pDC B_intermediate_kappa B_intermediate_lambda B_memory_kappa B_memory_lambda B_naive_kappa B_naive_lambda CD14_Mono CD16_Mono CD4_CTL CD4_Naive CD4_Proliferating CD4_TCM_1 CD4_TCM_2 CD4_TCM_3 CD4_TEM_1 CD4_TEM_2 CD4_TEM_3 CD4_TEM_4 CD8_Naive CD8_Naive_2 CD8_Proliferating CD8_TCM_1 CD8_TCM_2 CD8_TCM_3 CD8_TEM_1 CD8_TEM_2 CD8_TEM_3 CD8_TEM_4 CD8_TEM_5 CD8_TEM_6 Doublet Eryth HSPC ILC MAIT NK_Proliferating NK_1 NK_2 NK_3 NK_4 NK_CD56bright Plasma Plasmablast Platelet Treg_Memory Treg_Naive cDC1 cDC2_1 cDC2_2 dnT_1 dnT_2 gdT_1 gdT_2 gdT_3 gdT_4 pDC
+    transformFunc NONE
+    barChartLimit 2
+
+    track bloodHaoDonor
+    parent bloodHao
+    type bigBarChart
+    visibility hide
+    shortLabel donor
+    longLabel donor
+    barChartMetric unknown
+    barChartUnit unknown
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/bloodHao/donor.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/donor.stats
+    barChartColors #ff0000 #ffbb00 #a4ff00 #00ff92 #00d2ff #0020ff #a400ff #ff00bb
+    barChartBars P1 P2 P3 P4 P5 P6 P7 P8
+    transformFunc NONE
+    barChartLimit 2
+
+    track bloodHaoTime
+    parent bloodHao
+    type bigBarChart
+    visibility hide
+    shortLabel time
+    longLabel time
+    barChartMetric unknown
+    barChartUnit unknown
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/bloodHao/time.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/time.stats
+    barChartColors #ff0000 #00ff2a #2a00ff
+    barChartBars 0 3 7
+    transformFunc NONE
+    barChartLimit 2
+
+    track bloodHaoPhase
+    parent bloodHao
+    type bigBarChart
+    visibility hide
+    shortLabel Phase
+    longLabel Phase
+    barChartMetric unknown
+    barChartUnit unknown
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/bloodHao/Phase.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/Phase.stats
+    barChartColors #ff0000 #00ff2a #2a00ff
+    barChartBars G1 G2M S
+    transformFunc NONE
+    barChartLimit 2
+

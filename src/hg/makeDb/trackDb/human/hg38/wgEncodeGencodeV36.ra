@@ -30,6 +30,7 @@ wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV36
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV36
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV36
 wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV36
+pennantIcon New red ../goldenPath/newsarch.html#011321 "Updated Jan. 13, 2021"
 
     track wgEncodeGencodeV36ViewGenes
     shortLabel Genes

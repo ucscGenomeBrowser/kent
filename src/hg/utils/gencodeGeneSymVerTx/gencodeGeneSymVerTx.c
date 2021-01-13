@@ -12,9 +12,9 @@ void usage()
 {
 errAbort(
   "gencodeGeneSymVerTx - Create a tab separated file with gene ID/symbol/best transcript mapping \n"
-  "for many version of gencode.\n"
+  "for many version of gencode.  Internal to UCSC - depends on local directory structures.\n"
   "        /hive/data/genomes/hg*/bed/gencodeV17/data/gencode.tsv\n"
-  "containing exactly the files we need for input.\n"
+  "Needs to contain exactly the files we need for input.\n"
   "usage:\n"
   "   gencodeGeneSymVerTx input.list\toutput.tsv\n"
   "where input.lst is files to be run on.  The file names are parsed and should be\n"

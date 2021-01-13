@@ -27,7 +27,6 @@ DIRS = \
     txgAnalyze \
     txgGoodEdges \
     txgToAgx \
-    txgToGeneBed \
     txgToXml \
     txgTrim
 

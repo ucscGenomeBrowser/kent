@@ -1,5 +1,6 @@
 /* hgTrackDb - Create trackDb table from text files. */
 
+
 /* Copyright (C) 2013 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 #include "common.h"
@@ -16,7 +17,6 @@
 #include "portable.h"
 #include "dystring.h"
 #include "regexHelper.h"
-
 
 
 void usage()
@@ -292,15 +292,15 @@ tdbList= pruneRelease(tdbList);
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     if (tdb->overrides != NULL)
-    {
+	{
         verbose(3,"# override '%s'\n", tdb->track);
 	applyOverride(trackHash, tdb);
-    }
+	}
     else
-    {
+	{
         verbose(3,"# track '%s'\n", tdb->track);
 	hashStore(trackHash, tdb->track)->val = tdb;
-    }
+	}
     }
 }
 
@@ -455,11 +455,11 @@ static char *subsituteVariables(struct hashEl *el, char *database)
 /* substitute variables where supported */
 {
 char* val = (char*)el->val;
+char *name = el->name;
 /* Only some attribute support variable substitution, at least for now
  * Just leak memory when doing substitution.
  */
-if (sameString(el->name, "bigDataUrl") || sameString(el->name, "searchTrix") ||
-    sameString(el->name, "xrefDataUrl"))
+if (trackSettingIsFile(name))
     {
     val = replaceChars(val, "$D", database);
     }
@@ -751,6 +751,7 @@ if (strict)
 tdbList = pruneEmptyContainers(tdbList);
 checkSubGroups(database,tdbList,strict);
 trackDbPrioritizeContainerItems(tdbList);
+
 return tdbList;
 }
 

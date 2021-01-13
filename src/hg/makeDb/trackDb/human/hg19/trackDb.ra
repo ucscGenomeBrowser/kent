@@ -2792,6 +2792,8 @@ exonArrows on
 dataVersion EPDNew Version 006 (May 2018)
 visibility hide
 
+include fetalGeneAtlas.ra
+
 #  include doseSensitivity.ra
 
 track rmskTracks

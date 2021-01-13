@@ -115,14 +115,26 @@ cgiMakeHiddenVar(buf, "0");
 
 /* Convenience functions for hgTrackUi */
 
+boolean barChartIsLogTransformed(struct cart *cart, char *track, struct trackDb *tdb)
+/* Return TRUE if bar chart needs to be log transformed */
+{
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
+boolean isLog = TRUE;
+char *trans = trackDbSetting(tdb, "transformFunc");
+if (trans != NULL)
+    isLog = sameWord(trans, "LOG");
+return cartCgiUsualBoolean(cart, cartVar, isLog);
+}
+
 void barChartUiLogTransform(struct cart *cart, char *track, struct trackDb *tdb)
 /* Checkbox to select log-transformed RPKM values */
 /* NOTE: this code from gtexUi.c.  Consider sharing. */
 {
 char cartVar[1024];
-puts("<b>Log10(x+1) transform:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
-boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSFORM_DEFAULT);
+puts("<b>Log10(x+1) transform:</b>\n");
+boolean isLogTransform = barChartIsLogTransformed(cart, track, tdb);
 cgiMakeCheckBoxWithId(cartVar, isLogTransform, cartVar);
 jsOnEventByIdF("change", cartVar, "barChartUiTransformChanged('%s');", track);
 }
@@ -140,19 +152,29 @@ if (setting != NULL)
 return BAR_CHART_MAX_LIMIT_DEFAULT;
 }
 
+double barChartCurViewMax(struct cart *cart, char *trackName, struct trackDb *tdb)
+/* Look up max value to scale for this bar chart - consults both cart and trackDb defaults. */
+{
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s.%s", trackName, BAR_CHART_MAX_VIEW_LIMIT);
+char *limitString = trackDbSettingOrDefault(tdb, BAR_CHART_LIMIT, "50");
+double limit = atof(limitString);
+if (limit <= 0) limit = 0.001;
+return cartCgiUsualDouble(cart, cartVar, limit);
+}
+
 void barChartUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
 /* Set viewing limits if log transform not checked */
 /* NOTE: this code from gtexUi.c.  Consider sharing. */
 {
-char cartVar[1024];
 char buf[512];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
-boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSFORM_DEFAULT);
+boolean isLogTransform = barChartIsLogTransformed(cart, track, tdb);
 safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
 printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
+double viewMax = barChartCurViewMax(cart, track, tdb);
+char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_MAX_VIEW_LIMIT);
-int viewMax = cartCgiUsualInt(cart, cartVar, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
-cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
+cgiMakeDoubleVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
 char *unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit, 
                                 round(barChartUiMaxMedianScore(tdb)));

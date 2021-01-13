@@ -3169,8 +3169,8 @@ url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
 track lrgBigPsl
-shortLabel LRG Transcripts (RM 24672)
-longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations (RedMine 24672)
+shortLabel LRG Transcripts
+longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
 group genes
 visibility hide
 type bigPsl
@@ -3178,13 +3178,9 @@ mouseOverField mouseOver
 skipFields mouseOver
 skipEmptyFields on
 urls ncbiTranscript=https://www.ncbi.nlm.nih.gov/nuccore/$$ ensemblTranscript=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$ ncbiProtein=https://www.ncbi.nlm.nih.gov/protein/$$ ensemblProtein=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$
-cdsTable lrgCds
-cdnaTable lrgCdna
-pepTable lrgPep
 altColor 127,127,127
 baseColorDefault genomicCodons
 baseColorUseSequence lfExtra
-baseColorUseCds table lrgCds
 indelDoubleInsert on
 indelPolyA on
 indelQueryInsert on
@@ -3196,6 +3192,7 @@ color 54,125,29
 urlLabel Link to LRG transcript:
 url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
 bigDataUrl /gbdb/$D/bbi/lrgBigPsl.bb
+release alpha
 
 track lrgTranscriptAli
 shortLabel LRG Transcripts
@@ -3218,6 +3215,7 @@ showCdsMaxZoom 10000.0
 color 54,125,29
 urlLabel Link to LRG transcript:
 url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+release beta,public
 
 track affyHuEx1
 shortLabel Affy HuEx 1.0

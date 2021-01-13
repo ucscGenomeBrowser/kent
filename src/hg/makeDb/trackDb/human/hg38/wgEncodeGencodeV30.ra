@@ -1,6 +1,6 @@
 track wgEncodeGencodeV30
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V30
 longLabel All GENCODE annotations from V30 (Ensembl 96)
 group genes

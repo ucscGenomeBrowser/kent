@@ -2,7 +2,7 @@
 set -beEu -x -o pipefail
 
 #	Do not modify this script, modify the source tree copy:
-#	kent/src/hg/utils/otto/sarscov2phylo/mapPublic.sh
+#	kent/src/hg/utils/otto/sarscov2phylo/publicCredits.sh
 
 usage() {
     echo "usage: $0"
@@ -28,6 +28,9 @@ ncbiMetadata=ncbi.authors.20-11-13.csv
 #   * select columns center_name, sample_accession, sample_alias
 #   * Download report: TSV
 #   * file saved to filereport_read_run_PRJEB37886_tsv.2020-11-3.txt (extra first column, run_accession)
+# 2021-01-08: the project seems to have 133312 sequences, but the download file is cut off
+# after 100,000.  It would probably be more efficient to just identify all of the country/center
+# strings in strain names, and ask COG-UK how to attribute sequences from each one.
 cogUkMetadata=filereport_read_run_PRJEB37886_tsv.2020-11-13.txt
 
 
