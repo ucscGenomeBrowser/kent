@@ -675,4 +675,5 @@ searchTable spikeMuts
 searchType bigBed
 searchDescription Spike protein mutations
 searchMethod fuzzy
+padding 5
 
