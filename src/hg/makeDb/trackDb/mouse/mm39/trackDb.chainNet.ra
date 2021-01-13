@@ -1,7 +1,7 @@
 track mm39ChainNet
 compositeTrack on
-shortLabel Mm39  Chain/Net
-longLabel Mm39  Chain and Net Alignments
+shortLabel Chain/Net
+longLabel Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species s000=Rat s001=Chinese_hamster s002=Chinese_hamster s003=Beaver s004=Squirrel s005=Guinea_pig s006=Pika s007=Rabbit s008=Malayan_flying_lemur s009=Tree_shrew s010=Bushbaby s011=Tarsier s012=Marmoset s013=Rhesus s014=Gorilla s015=Bonobo s016=Chimp s017=Human s018=Shrew s019=Hedgehog s020=Hawaiian_monk_seal s021=Dog s022=Dog s023=Canada_lynx s024=Chinese_pangolin s025=Horse s026=Sheep s027=Cow s028=Dolphin s029=Pig s030=Tenrec s031=Elephant s032=Opossum s033=Chicken s034=lance-tailed_manakin s035=X._tropicalis s036=Zebrafish s037=Lamprey
 subGroup3 clade Clade c00=glires c01=euarchontoglires c02=primates c03=laurasiatheria c04=vertebrates
