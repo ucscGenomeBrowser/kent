@@ -7,7 +7,7 @@ shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
 html gnomad
-release beta,public
+release public
 
     track gnomadGenomesVariantsV3
     parent gnomadVariants
@@ -24,7 +24,7 @@ release beta,public
     visibility dense
     url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r3&ignore=$$
     urlLabel gnomAD: 
-    release beta,public
+    release public
 
     track gnomadVariantsV2
     parent gnomadVariants 
@@ -40,7 +40,7 @@ release beta,public
     html gnomad
     priority 2
     visibility hide
-    release beta,public
+    release public
 
         track gnomadGenomesVariantsV2
         parent gnomadVariantsV2 on
@@ -48,7 +48,7 @@ release beta,public
         longLabel Genome Aggregation Database (gnomAD) Genome Variants v2.1
         bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
         priority 1
-        release beta,public
+        release public
 
         track gnomadExomesVariantsV2
         parent gnomadVariantsV2 on
@@ -56,7 +56,7 @@ release beta,public
         longLabel Genome Aggregation Database (gnomAD) Exome Variants v2.1
         bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
         priority 2
-        release beta,public
+        release public
 
 track gnomadVariants
 superTrack on
@@ -64,7 +64,7 @@ shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
 html gnomadV3_1
-release alpha
+release alpha,beta
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -80,7 +80,7 @@ release alpha
     html gnomadV3_1
     priority 2
     visibility hide
-    release alpha
+    release alpha,beta
 
         track gnomadGenomesVariantsV2
         parent gnomadVariantsV2 on
@@ -88,7 +88,7 @@ release alpha
         longLabel Genome Aggregation Database (gnomAD) Genome Variants v2.1
         bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
         priority 1
-        release alpha
+        release alpha,beta
 
         track gnomadExomesVariantsV2
         parent gnomadVariantsV2 on
@@ -96,7 +96,7 @@ release alpha
         longLabel Genome Aggregation Database (gnomAD) Exome Variants v2.1
         bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
         priority 2
-        release alpha
+        release alpha,beta
 
     track gnomadGenomesVariantsV3_1
     parent gnomadVariants
@@ -126,4 +126,4 @@ release alpha
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
     extraDetailsTable /gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
-    release alpha
+    release alpha,beta
