@@ -1,0 +1,314 @@
+track lungTravaglini2020
+superTrack on
+shortLabel Lung Travaglini
+longLabel Lung cells from from Travaglini et al 2020
+visibility hide
+group expression
+
+    track lungTravaglini2020CellType10x
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility pack
+    shortLabel Lung Cells 10x
+    longLabel Lung cells 10x method binned by merged cell type from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/cell_type.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/cell_type.stats
+    barChartBars Adventitial_Fibroblast Airway_Smooth_Muscle Alveolar_Epithelial_Type_1 Alveolar_Epithelial_Type_2 Alveolar_Fibroblast Artery B Basal Basophil/Mast_1 Basophil/Mast_2 Bronchial_Vessel_1 Bronchial_Vessel_2 CD4+_Memory/Effector_T CD4+_Naive_T CD8+_Memory/Effector_T CD8+_Naive_T Capillary Capillary_Aerocyte Capillary_Intermediate_1 Capillary_Intermediate_2 Ciliated Classical_Monocyte Club Differentiating_Basal EREG+_Dendritic Fibromyocyte Goblet IGSF21+_Dendritic Intermediate_Monocyte Ionocyte Lipofibroblast Lymphatic Macrophage Mesothelial Mucous Myeloid_Dendritic_Type_1 Myeloid_Dendritic_Type_2 Myofibroblast Natural_Killer Natural_Killer_T Neuroendocrine Nonclassical_Monocyte OLR1+_Classical_Monocyte Pericyte Plasma Plasmacytoid_Dendritic Platelet/Megakaryocyte Proliferating_Basal Proliferating_Macrophage Proliferating_NK/T Proximal_Basal Proximal_Ciliated Serous Signaling_Alveolar_Epithelial_Type_2 TREM2+_Dendritic Vascular_Smooth_Muscle Vein
+    barChartColors #eb692b #bf02bd #5c7838 #0895bb #9d5455 #29a610 #f20947 #c5285d #c92c4b #cb2b4a #d92046 #82bc64 #f70645 #f40847 #fa0445 #f60645 #0ab905 #0fb508 #09ba04 #d0816e #196bc3 #e7241e #1750e6 #1c4fe2 #f8210a #d25fc5 #0a50f4 #f6210d #f5220e #cbd4de #f4bca2 #b7384b #f4230c #eca3a3 #2b50cf #ee2513 #f02412 #d63357 #d61f41 #f06082 #f5d4df #f31e13 #ea221c #7b5b57 #96485f #f35e84 #f89e96 #9289be #f4230c #ea6584 #6a429c #0a6fcf #abb1df #0895bb #f71f0d #be07b6 #1fac0c
+    transformFunc NONE
+    barChartLimit 5
+
+    track lungTravaglini2020DetailedCellType10x
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Detail 10x
+    longLabel Lung cells 10x method binned by detailed cell type from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/detailed_cell_type.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/detailed_cell_type.stats
+    #barChartColors #f39d72 #f79e70 #f26d28 #d35bcf #bd08b7 #bc07b9 #d7d7c6 #95723b #617b3e #0497be #0397be #0596bd #fbd4c0 #e46b2f #dc6736 #7db867 #2ea318 #2e9e17 #d87389 #e3cacf #c32d51 #e8c3cb #62539a #ab3374 #d9767e #ad435d #b73d48 #b63f5b #d07d87 #bc383d #9ba977 #67c960 #be2f54 #845660 #677139 #b33071 #c779a6 #b2326e #954865 #85575f #b08c92 #5d783b #716750 #63743d #5ecf5b #0ab906 #0fb50a #07bb04 #c98077 #06bc04 #09ba05 #08ba05 #0857ee #4e6294 #146dc6 #e71e23 #e81e22 #e12127 #0651f7 #0451f9 #0d52ef #db717d #1857dd #f9bcbd #f96465 #d260c8 #1358e1 #fbbbbc #f66667 #f66667 #f51618 #c2dae3 #e2b7ae #e3c8cb #994b5a #be848f #df2128 #e51e24 #e22025 #eaa0a6 #1154e7 #1255e6 #f7bebe #f36769 #f39c9d #f2676a #f69b9c #ee1a1d #f4cec8 #ecb6ad #d474ac #8aae78 #87b071 #587d36 #369a21 #419027 #efd8e5 #f3171a #f2181a #f51718 #e22226 #dfa3ca #ae4d63 #9fa085 #c4b5be #795a6c #f5bec0 #e9a1a8 #e86d71 #e9c4c7 #ed9da2 #ead9e1 #928db8 #f39c9e #e41e24 #e02126 #bbc1a8 #eca0a2 #5f5193 #136dc7 #a7b6de #0496bd #f7999b #e32025 #d25ccd #bc07b8 #72c064 #2fa417 #8bae6a
+    #barChartColors #f99b72 #fb9d70 #f96b28 #d558d1 #c105ba #bf04bb #f5c6d3 #e4495a #d12987 #0496bf #0397bf #0596be #fdd3c0 #f56432 #f15e3b #ed6b82 #e34853 #e32244 #e9688b #f1c0d5 #dd1c56 #eac1cc #ac3288 #c72374 #eb6b80 #d32a6b #dd2451 #d92867 #e86c8d #e31d45 #e6828e #e87b9b #db1b5b #cc1e92 #d51b76 #ce1e7a #dd68b3 #cf1d79 #ce1c87 #cd1f90 #df68ae #cf1c87 #cd1e91 #d01d84 #e5779f #df4162 #d72f6c #e2465a #e36d7d #da3571 #e74e51 #d93470 #0a50f6 #c12e81 #106dcd #f01822 #f21821 #ec1a26 #0650fa #0550fb #0d50f3 #e26d7d #1d4fe4 #fabbbd #fb6265 #d75ccc #1750e9 #fcbabb #fa6366 #f96367 #f91418 #c3d8e6 #efb1b1 #f0c0cf #d02473 #df6d9c #e71c29 #eb1a24 #e91b26 #ef9da6 #1250ee #1450ed #fbbbbe #f86468 #f8999d #f6656a #fa989c #f4161d #f9ccc9 #f5b3af #e06cb3 #de6bb4 #e268a7 #cf1c86 #d22787 #d02085 #f5d4e8 #f81419 #f81519 #f91418 #ef1a25 #e99bd1 #d9327a #e16fb1 #d1acc7 #984380 #fabbc0 #f49aaa #f46671 #efc0c9 #f39aa1 #e8d9e4 #8590c6 #f59a9f #eb1a24 #e71c28 #eb9ac5 #f59aa2 #6a4a95 #0172d5 #a9b2e5 #0496be #fa989b #eb1a25 #d659d0 #c004bb #ec6c87 #e64d50 #ee6a7e
+    #barChartColors #ff4c4c #ff554c #ff1b00 #ff694c #ff3700 #ff4500 #ffaa82 #ff6100 #ff6f00 #ff7d00 #ff8600 #ff8d00 #ffcb82 #ff9d00 #ffa500 #ffc74c #ffb900 #ffc300 #ffdc4c #ffeb82 #ffe100 #fff582 #fff400 #fffe00 #f8ff4c #ebff00 #e2ff00 #d8ff00 #dcff4c #c4ff00 #ceff4c #c7ff4c #a6ff00 #9eff00 #96ff00 #8eff00 #aaff4c #7cff00 #60ff00 #44ff00 #68ff4c #0cff00 #00ff0e #00ff2a #4cff7d #00ff62 #00ff7e #00ff87 #4cffb0 #00ff96 #00ff9e #00ffa7 #00ffb1 #00ffbb #00ffc5 #00ffcf #00ffd8 #00ffe2 #00ffec #00fff6 #00fdff #4cf7ff #00eaff #a7f4fe #4ce2ff #4cdcff #00c3ff #82dcff #4cc7ff #4cc0ff #009dff #82cbff #82c7ff #82c3ff #007cff #4c99ff #0060ff #0052ff #0044ff #829cff #0028ff #001aff #8287ff #4c4cff #564cff #604cff #9682ff #3800ff #a482ff #874cff #914cff #9a4cff #a44cff #8600ff #8e00ff #9600ff #cf82ff #a600ff #b000ff #ba00ff #c400ff #dc4cff #d800ff #ea4cff #f582ff #f500ff #ff82fe #ff4cf7 #ff4cf1 #fea7f4 #ff82eb #ffc1f2 #ff4cd5 #ff82dc #ff00af #ff00a5 #ff4cba #ff82cb #ff008d #ff0086 #ff82bf #ff006f #ff4c90 #ff0053 #ff4c7c #ff0037 #ff4c69 #ff001b #ff4c55
+     #barChartColors #f89d6e #f69c70 #db6235 #d45ccb #bd0ab2 #be05b9 #ced9c3 #63763a #617339 #0795bc #0696bc #0894bb #f7d3c1 #9e6245 #9e4b5e #90aa6b #31a411 #41901a #f65c85 #f0bfcb #f20947 #ecc2c8 #b33965 #d11f58 #e56c7f #c62e4d #cd2a43 #cb2b4a #e27f7e #dc1c46 #c9a271 #6ac65f #f40847 #f20a46 #f30945 #f20948 #fa5984 #f50747 #f90445 #f50846 #fc5883 #f50745 #f00c46 #f70645 #62cb5c #0fb508 #19ad0c #09ba04 #d0816e #0fb507 #0cb806 #12b309 #2050dc #3b62a7 #0870d0 #e8231f #ec221a #e52620 #1b50e1 #1b50e1 #224fdb #df717c #184fe6 #fcbeb7 #fa6b5d #d25fc5 #0a50f4 #fcbeb7 #f96960 #f86c5e #f5220e #cbd4de #f4bca2 #e9c5ca #b53a4a #d07889 #f3230f #f5230c #f4230d #eca3a3 #2b50ce #2850d2 #f4bec3 #f46d62 #f59f98 #f36e63 #f69d9a #f02411 #f9d2c1 #eab2ac #e36a93 #ef6183 #ec6382 #f10b45 #b33939 #e61344 #f5d4df #f22015 #ef1e19 #f32012 #ea221c #deb1b5 #85545d #95a27e #d1aeb8 #96495f #f9b8c9 #f794ad #f25f84 #f1c2c1 #f89e96 #ebd9e1 #9189bf #fa9e93 #f4240b #f2240e #f198ac #ed9cab #6a429c #0a6fcf #abb1df #0895bb #fc9d91 #f61e0f #d25ec8 #bd07b4 #7bba64 #25ab0d #8cad6a
+     barChartColors #f89d6e #f69c70 #db6235 #d45ccb #bd0ab2 #be05b9 #ced9c3 #63763a #617339 #0795bc #0696bc #0894bb #f7d3c1 #9e6245 #9e4b5e #90aa6b #31a411 #41901a #f65c85 #f0bfcb #f20947 #ecc2c8 #b33965 #d11f58 #e56c7f #c62e4d #cd2a43 #cb2b4a #e27f7e #dc1c46 #c9a271 #6ac65f #f40847 #f20a46 #f30945 #f20948 #fa5984 #f50747 #f90445 #f50846 #fc5883 #f50745 #f00c46 #f70645 #62cb5c #0fb508 #19ad0c #09ba04 #d0816e #0fb507 #0cb806 #12b309 #2050dc #3b62a7 #0870d0 #e8231f #ec221a #e52620 #1b50e1 #1b50e1 #224fdb #df717c #184fe6 #fcbeb7 #fa6b5d #d25fc5 #0a50f4 #fcbeb7 #f96960 #f86c5e #f5220e #cbd4de #f4bca2 #e9c5ca #b53a4a #d07889 #f3230f #f5230c #f4230d #eca3a3 #2b50ce #2850d2 #f4bec3 #f46d62 #f59f98 #f36e63 #f69d9a #f02411 #f9d2c1 #eab2ac #e36a93 #ef6183 #ec6382 #f10b45 #b33939 #e61344 #f5d4df #f22015 #ef1e19 #f32012 #ea221c #deb1b5 #85545d #95a27e #d1aeb8 #96495f #f9b8c9 #f794ad #f25f84 #f1c2c1 #f89e96 #ebd9e1 #9189bf #fa9e93 #f4240b #f2240e #f198ac #ed9cab #6a429c #0a6fcf #abb1df #0895bb #fc9d91 #f61e0f #d25ec8 #bd07b4 #7bba64 #25ab0d #8cad6a
+    barChartBars Adventitial_Fibroblast_P1 Adventitial_Fibroblast_P2 Adventitial_Fibroblast_P3 Airway_Smooth_Muscle_P1 Airway_Smooth_Muscle_P2 Airway_Smooth_Muscle_P3 Alveolar_Epithelial_Type_1_P1 Alveolar_Epithelial_Type_1_P2 Alveolar_Epithelial_Type_1_P3 Alveolar_Epithelial_Type_2_P1 Alveolar_Epithelial_Type_2_P2 Alveolar_Epithelial_Type_2_P3 Alveolar_Fibroblast_P1 Alveolar_Fibroblast_P2 Alveolar_Fibroblast_P3 Artery_P1 Artery_P2 Artery_P3 B_P1 B_P2 B_P3 Basal_P1 Basal_P2 Basal_P3 Basophil/Mast_1_P1 Basophil/Mast_1_P2 Basophil/Mast_1_P3 Basophil/Mast_2_P3 Bronchial_Vessel_1_P1 Bronchial_Vessel_1_P3 Bronchial_Vessel_2_P1 Bronchial_Vessel_2_P3 CD4+_Memory/Effector_T_P1 CD4+_Memory/Effector_T_P2 CD4+_Memory/Effector_T_P3 CD4+_Naive_T_P1 CD4+_Naive_T_P2 CD4+_Naive_T_P3 CD8+_Memory/Effector_T_P1 CD8+_Memory/Effector_T_P2 CD8+_Memory/Effector_T_P3 CD8+_Naive_T_P1 CD8+_Naive_T_P2 CD8+_Naive_T_P3 Capillary_Aerocyte_P1 Capillary_Aerocyte_P2 Capillary_Aerocyte_P3 Capillary_Intermediate_1_P2 Capillary_Intermediate_2_P2 Capillary_P1 Capillary_P2 Capillary_P3 Ciliated_P1 Ciliated_P2 Ciliated_P3 Classical_Monocyte_P1 Classical_Monocyte_P2 Classical_Monocyte_P3 Club_P1 Club_P2 Club_P3 Differentiating_Basal_P1 Differentiating_Basal_P3 EREG+_Dendritic_P1 EREG+_Dendritic_P2 Fibromyocyte_P3 Goblet_P3 IGSF21+_Dendritic_P1 IGSF21+_Dendritic_P2 IGSF21+_Dendritic_P3 Intermediate_Monocyte_P2 Ionocyte_P3 Lipofibroblast_P1 Lymphatic_P1 Lymphatic_P2 Lymphatic_P3 Macrophage_P1 Macrophage_P2 Macrophage_P3 Mesothelial_P1 Mucous_P2 Mucous_P3 Myeloid_Dendritic_Type_1_P1 Myeloid_Dendritic_Type_1_P2 Myeloid_Dendritic_Type_1_P3 Myeloid_Dendritic_Type_2_P1 Myeloid_Dendritic_Type_2_P2 Myeloid_Dendritic_Type_2_P3 Myofibroblast_P1 Myofibroblast_P2 Myofibroblast_P3 Natural_Killer_T_P2 Natural_Killer_T_P3 Natural_Killer_P1 Natural_Killer_P2 Natural_Killer_P3 Neuroendocrine_P3 Nonclassical_Monocyte_P1 Nonclassical_Monocyte_P2 Nonclassical_Monocyte_P3 OLR1+_Classical_Monocyte_P2 Pericyte_P1 Pericyte_P2 Pericyte_P3 Plasma_P1 Plasma_P3 Plasmacytoid_Dendritic_P1 Plasmacytoid_Dendritic_P2 Plasmacytoid_Dendritic_P3 Platelet/Megakaryocyte_P1 Platelet/Megakaryocyte_P3 Proliferating_Basal_P1 Proliferating_Basal_P3 Proliferating_Macrophage_P1 Proliferating_Macrophage_P2 Proliferating_Macrophage_P3 Proliferating_NK/T_P2 Proliferating_NK/T_P3 Proximal_Basal_P3 Proximal_Ciliated_P3 Serous_P3 Signaling_Alveolar_Epithelial_Type_2_P3 TREM2+_Dendritic_P1 TREM2+_Dendritic_P3 Vascular_Smooth_Muscle_P2 Vascular_Smooth_Muscle_P3 Vein_P1 Vein_P2 Vein_P3
+    transformFunc NONE
+    barChartLimit 6
+
+    track lungTravaglini2020Compartment10x
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Compart 10x
+    longLabel Lung cells 10x method binned by compartment from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/compartment.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/compartment.stats
+    #barChartColors #ff0000 #a4ff00 #00d2ff #a400ff
+    #barChartColors #e1435e #0694be #f3171d #e03b6c
+    barChartColors #07bb04 #0b92ba #f82209 #b7278a
+    barChartBars endothelial epithelial immune stromal
+    transformFunc NONE
+    barChartLimit 2
+
+    track lungTravaglini2020Donor10x
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Donor 10x
+    longLabel Lung cells 10x method binned by organ donor from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/donor.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/donor.stats
+    #barChartColors #ff0000 #00ff2a #2a00ff
+    #barChartColors #f0181f #f4161d #ce2a39
+    barChartColors #f6210c #f21d14 #e1281f
+    barChartBars 1 2 3
+    transformFunc NONE
+    barChartLimit 2
+
+    track lungTravaglini2020Location10x
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Locat 10x
+    longLabel Lung cells 10x method binned by location from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/location.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/location.stats
+    #barChartColors #ff0000 #a4ff00 #00d2ff #a400ff
+    #barChartColors #e61b3f #f2171e #f5161d #0894bd
+    barChartColors #f50746 #f6200d #f11d16 #0d92b8
+    barChartBars blood distal medial proximal
+    transformFunc NONE
+    barChartLimit 2
+
+    track lungTravaglini2020MagneticSelection10x
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Mag Sel 10x
+    longLabel Lung cells 10x method binned by magnetic.selection from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/magnetic.selection.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/magnetic.selection.stats
+    #barChartColors #ff0000 #a4ff00 #00d2ff #a400ff
+    #barChartColors #e61b3f #2683ad #fb1316 #f1171f
+    barChartColors #f50746 #407694 #f41a15 #f7220a
+    barChartBars blood epithelial immune_and_endothelial stromal
+    transformFunc NONE
+    barChartLimit 2
+
+    track lungTravaglini2020Organ10x
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Organ 10x
+    longLabel Lung cells 10x method binned by organ from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/organ.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/organ.stats
+    #barChartColors #e61b3f #ef1820
+    #barChartColors #ff0000 #00d2ff
+    barChartColors #f50746 #f41f10
+    barChartBars blood lung
+    transformFunc NONE
+    barChartLimit 2
+
+    track lungTravaglini2020Sample10x
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Sample 10x
+    longLabel Lung cells 10x method binned by sample from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/sample.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/sample.stats
+    #barChartColors #ff0000 #ffd200 #80ff00 #00ffd2 #0080ff #7f00ff #ff00d2
+    #barChartColors #e51a42 #e71b3c #ec1a24 #f4161d #ea1b24 #f5161d #0894bd
+    barChartColors #f60746 #f40846 #f4220d #f31e13 #f22210 #f11d16 #0d92b8
+    barChartBars blood_1 blood_3 distal_1a distal_2 distal_3 medial_2 proximal_3
+    transformFunc NONE
+    barChartLimit 4
+
+    track lungTravaglini2020CellTypeFacs
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Cells FACS
+    longLabel Lung cells FACS method binned by merged cell type from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit count/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/facs/cell_type.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/facs/cell_type.stats
+    barChartBars Adventitial_Fibroblast Airway_Smooth_Muscle Alveolar_Epithelial_Type_1 Alveolar_Epithelial_Type_2 Alveolar_Fibroblast Artery B Basal Basophil/Mast_1 Bronchial_Vessel_1 CD4+_Memory/Effector_T CD4+_Naive_T CD8+_Memory/Effector_T CD8+_Naive_T Capillary Capillary_Aerocyte Capillary_Intermediate_1 Ciliated Classical_Monocyte Club Dendritic Differentiating_Basal Fibromyocyte Goblet IGSF21+_Dendritic Intermediate_Monocyte Ionocyte Lipofibroblast Lymphatic Macrophage Myeloid_Dendritic_Type_2 Myofibroblast Natural_Killer Natural_Killer_T Neuroendocrine Neutrophil Nonclassical_Monocyte Pericyte Plasma Plasmacytoid_Dendritic Proliferating_NK/T Signaling_Alveolar_Epithelial_Type_2 Vascular_Smooth_Muscle Vein
+    #barChartColors #f66c26 #bf01be #b32e6d #0397be #ec672e #2b9f16 #d21f49 #aa2b77 #e76b79 #5f802b #f00a49 #f30848 #f35d86 #f60548 #13b20b #16af0c #13b10a #0271d5 #de203a #294fd4 #f0a09e #c671a5 #d261c2 #0850f6 #f7a095 #fb9e91 #e39eb9 #f29a73 #e86c71 #fa6e5a #f0a09e #d4769f #f50648 #f65a86 #d8699f #da3022 #f17162 #bc1694 #d6aab7 #eb6b73 #f35c88 #0397be #be0ab0 #60cc5c
+    barChartColors #f66c26 #bf01be #b32e6d #0397be #ec672e #2b9f16 #d21f49 #aa2b77 #dc2136 #5f802b #f00a49 #f30848 #ed0c4a #f60548 #13b20b #16af0c #13b10a #0271d5 #de203a #294fd4 #e9716d #a92a79 #bc11a3 #0850f6 #f3705f #f96e5a #d66d96 #eb682d #dd232a #f82507 #e9716d #bf326f #f50648 #f2084a #c41d6f #da3022 #ea2a14 #bc1694 #c27f93 #e1202d #ed0b4c #0397be #be0ab0 #10b30a
+    barChartLimit 600
+    transformFunc NONE
+
+    track lungTravaglini2020DetailedCellTypeFacs
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Detail FACS
+    longLabel Lung cells FACS method binned by detailed cell type from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit count/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/facs/detailed_cell_type.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/facs/detailed_cell_type.stats
+    barChartBars Adventitial_Fibroblast_P1 Adventitial_Fibroblast_P2 Adventitial_Fibroblast_P3 Airway_Smooth_Muscle_P1 Airway_Smooth_Muscle_P2 Airway_Smooth_Muscle_P3 Alveolar_Epithelial_Type_1_P1 Alveolar_Epithelial_Type_1_P2 Alveolar_Epithelial_Type_1_P3 Alveolar_Epithelial_Type_2_P1 Alveolar_Epithelial_Type_2_P2 Alveolar_Epithelial_Type_2_P3 Alveolar_Fibroblast_P1 Alveolar_Fibroblast_P2 Alveolar_Fibroblast_P3 Artery_P1 Artery_P2 Artery_P3 B_P1 B_P2 B_P3 Basal_P1 Basal_P2 Basal_P3 Basophil/Mast_1_P1 Basophil/Mast_1_P2 Basophil/Mast_1_P3 Bronchial_Vessel_1_P1 CD4+_Memory/Effector_T_P1 CD4+_Naive_T_P1 CD4+_Naive_T_P2 CD8+_Memory/Effector_T_P1 CD8+_Naive_T_P1 CD8+_Naive_T_P2 Capillary_Aerocyte_P1 Capillary_Aerocyte_P2 Capillary_Aerocyte_P3 Capillary_Intermediate_1_P2 Capillary_P1 Capillary_P2 Capillary_P3 Ciliated_P1 Ciliated_P2 Ciliated_P3 Classical_Monocyte_P1 Club_P1 Club_P2 Club_P3 Dendritic_P1 Differentiating_Basal_P3 Fibromyocyte_P3 Goblet_P1 Goblet_P2 Goblet_P3 IGSF21+_Dendritic_P2 IGSF21+_Dendritic_P3 Intermediate_Monocyte_P2 Intermediate_Monocyte_P3 Ionocyte_P3 Lipofibroblast_P1 Lymphatic_P1 Lymphatic_P2 Lymphatic_P3 Macrophage_P2 Macrophage_P3 Myeloid_Dendritic_Type_2_P3 Myofibroblast_P2 Myofibroblast_P3 Natural_Killer_T_P2 Natural_Killer_T_P3 Natural_Killer_P1 Natural_Killer_P2 Natural_Killer_P3 Neuroendocrine_P1 Neuroendocrine_P3 Neutrophil_P1 Neutrophil_P2 Neutrophil_P3 Nonclassical_Monocyte_P1 Nonclassical_Monocyte_P2 Pericyte_P1 Pericyte_P2 Pericyte_P3 Plasma_P3 Plasmacytoid_Dendritic_P1 Plasmacytoid_Dendritic_P2 Plasmacytoid_Dendritic_P3 Proliferating_NK/T_P2 Proliferating_NK/T_P3 Signaling_Alveolar_Epithelial_Type_2_P1 Signaling_Alveolar_Epithelial_Type_2_P3 Vascular_Smooth_Muscle_P1 Vascular_Smooth_Muscle_P2 Vascular_Smooth_Muscle_P3 Vein_P2
+    barChartColors #f56c26 #ed6a2a #f06a2a #bf03bc #b90eac #be05b8 #bb2873 #a1445a #b32b70 #0596bd #0397be #0497be #e66036 #e56730 #e96530 #4f8428 #21a615 #e96c70 #cb244c #e16e7c #e16d7e #c51b71 #823e89 #bb2270 #da2238 #e66a7f #d72436 #5f802b #f00a49 #f00a49 #f25d89 #ed0c4a #f60649 #ed0b4c #3d921f #16af0c #39941b #13b10a #418f21 #11b30a #3c931d #0e6dcc #0471d3 #116dca #de203a #304ecd #1c50e0 #2a4fd1 #e9716d #a92a79 #bc11a3 #7a88da #0950f5 #5b8af9 #f17161 #ed7264 #e97465 #f66f5e #d66d96 #eb682d #de222a #d9242c #e96c71 #f72507 #f76f5d #e9716d #ba8c97 #c4237c #f45d86 #f0094b #f60548 #f20849 #f2084a #c31f6f #d46aa1 #d1332c #eaa5a0 #e6756c #d33327 #f37060 #c20f9b #b51c91 #c31095 #c27f93 #e56b7d #e86f6f #f19ba8 #ef5f88 #f35c89 #0497be #0397be #be0cab #b3297f #bd0bae #10b30a
+    barChartLimit 1200
+    transformFunc NONE
+
+    track lungTravaglini2020OrganFacs
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Organ FACS
+    longLabel Lung cells FACS method binned by organ from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit count/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/facs/organ.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/facs/organ.stats
+    barChartBars blood lung
+    barChartColors #e8104a #178cb2
+    barChartLimit 600
+    transformFunc NONE
+
+    track lungTravaglini2020LabelFacs
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Label FACS
+    longLabel Lung cells FACS method binned by label from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit count/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/facs/label.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/facs/label.stats
+    barChartBars Ecpam,_CD45 Epcam_(+) Epcam_(-) na
+    barChartColors #0eb508 #0497be #f90446 #c61d93
+    barChartLimit 600
+    transformFunc NONE
+
+    track lungTravaglini2020DonorFacs
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Donor FACS
+    longLabel Lung cells FACS method binned by organ donor from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit count/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/facs/donor.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/facs/donor.stats
+    barChartBars 1 2 3
+    barChartColors #1b89b1 #2b80a3 #1090b7
+    barChartLimit 200
+    transformFunc NONE
+
+    track lungTravaglini2020LocationFacs
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Locat FACS
+    longLabel Lung cells FACS method binned by location from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit count/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/facs/location.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/facs/location.stats
+    barChartBars blood distal medial proximal
+    barChartColors #e8104a #198ab1 #2186ac #0696bd
+    barChartLimit 400
+    transformFunc NONE
+
+    track lungTravaglini2020GatingFacs
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Gating FACS
+    longLabel Lung cells FACS method binned by gating from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit count/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/facs/gating.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/facs/gating.stats
+    barChartBars Bcell CD45+_Epcam- CD45-_Epcam+ CD45-_Epcam- NK cd4 cd8 monocyte nan wbc
+    #barChartColors #c2294f #f40749 #0c92b9 #ba2f7b #eb0d4a #e0154d #f00a49 #e26d81 #1b89af #eb0e49
+    barChartColors #c2294f #f40749 #0c92b9 #ba2f7b #eb0d4a #e0154d #f00a49 #d32442 #1b89af #eb0e49
+    barChartLimit 600
+    transformFunc NONE
+
+    track lungTravaglini2020CompartmentFacs
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Compart FACS
+    longLabel Lung cells FACS method binned by compartment from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit count/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/facs/compartment.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/facs/compartment.stats
+    barChartBars endothelial epithelial immune stromal
+    barChartColors #0eb508 #0497be #f90446 #c61d93
+    barChartLimit 300
+    transformFunc NONE
+
+    track lungTravaglini2020SampleFacs
+    parent lungTravaglini2020
+    type bigBarChart
+    visibility hide
+    shortLabel Lung Sample FACS
+    longLabel Lung cells FACS method binned by sample from Travaglini et al 2020
+    barChartMetric mean
+    barChartUnit count/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/facs/sample.bb
+    barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/facs/sample.stats
+    barChartBars blood_1 distal_1a distal_1b distal_2 distal_3 medial_2 medial_3 proximal_3
+    barChartColors #e8104a #0895bb #aa2b7b #327b9d #178cb2 #2285ab #2883aa #0696bd
+    barChartLimit 400
+    transformFunc NONE
+
