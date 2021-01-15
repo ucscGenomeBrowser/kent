@@ -1967,36 +1967,33 @@ cramRef/pending/, and cramRef/error/ directories.
 <p>
 The Genome Browser can use a set of hard-coded Type1 fonts for text display
 in hgTracks. The fonts are NOT distributed as part of the Genome Browser files
-but they exist natively on the UNIX systems we use in our production environment. On our systems they
-exist in one of these three directories:
-/usr/share/X11/fonts/urw-fonts, /usr/share/fonts/default/Type1, or /usr/share/fonts/type1/gsfonts.
+but they exist natively on the UNIX systems we use in our production environment. 
 To support FreeType font drawing on your system you may need to install these files if they
-are not already present.
-</p>
+are not already present. On our systems, they exist in one of these three directories:
+<pre>/usr/share/X11/fonts/urw-fonts
+/usr/share/fonts/default/Type1
+/usr/share/fonts/type1/gsfonts</pre>
 
 <p>
 To turn on the FreeType font rendering you need to add this line to your hg.conf file:
 </p>
 
-<p>
-freeType=on
-</p>
+<pre>freeType=on</pre>
 
 <p>
-By default, the Genome Browser looks in the directory /usr/share/fonts/default/Type1 for the
-font files it expects to find. If you have these fonts in a different directory, you need
+By default, the Genome Browser looks in the directory 
+<code>/usr/share/fonts/default/Type1</code> for the
+font files. If you have these fonts in a different directory, you need
 to add this line to your hg.conf file:
 </p>
 
-<p>
-freeTypeDir=<code>html</code>
-</p>
+<pre>freeTypeDir=Path/To/Fonts</pre>
 
 <p>
 The names of the font files that the Genome Browser expects and their md5sums are in the following table:
 </p>
 
-<p>
+<pre>
 5624bc04bbd862287bda3c44b15e90d6 a010013l.pfb
 6883f53d0d140f972480f179bb5e4e3b a010015l.pfb
 db21f79bac990fa7e3de6d4cc6f54020 a010033l.pfb
@@ -2018,7 +2015,7 @@ e97c9af68414fabe157af711b7691df7 n022004l.pfb
 f13fb8e581426a1ffa5fc12b10ad0f34 n022023l.pfb
 f3cd9244150f086434b62d5c5bb559b0 n022024l.pfb
 30aef717b7c68a6b6b7760b764fbd01c z003034l.pfb
-</p>
+</pre>
 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
