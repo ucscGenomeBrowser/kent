@@ -611,16 +611,6 @@ type vcfTabix
 release alpha
 bigDataUrl /hive/data/outside/otto/sarscov2phylo/26-10-20/danishMink.vcf.gz
 
-track escape
-shortLabel Antibody escape
-longLabel Antibody escape mutations from the Whelan lab, WUSTL
-type bigBed 9 +
-group immu
-bigDataUrl /gbdb/wuhCor1/escape/escape.bb
-mouseOverField _mouseOver
-noScoreFilter on
-pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Nov. 25, 2020"
-
 track lineageB_1_1_7_US
 shortLabel B.1.1.7 in USA
 longLabel Lineage B.1.1.7 (a.k.a. 501Y.V1, VOC 202012/01) Sequences in the United States: SNVs and Deletions
@@ -635,6 +625,18 @@ vcfDoQual off
 vcfDoFilter off
 group varRep
 pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Jan. 7, 2021"
+
+track escape
+shortLabel Escape: 21 monocl Ab
+longLabel Mutations that lead to escape from 21 antibodies, Whelan lab, WUSTL (Mouse over to show mutation details)
+parent escapeMonocl
+visibility pack
+type bigBed 9 +
+group immu
+bigDataUrl /gbdb/wuhCor1/escape/escape.bb
+mouseOverField _mouseOver
+noScoreFilter on
+release public
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
@@ -654,6 +656,8 @@ include pyle.ra
 include treangen.ra
 include pbm.ra
 include pbmShanghai.ra
+include escapeMonocl.ra alpha
+include bloomSerumEsc.ra alpha
 
 track spikeMuts
 shortLabel Spike Mutations
