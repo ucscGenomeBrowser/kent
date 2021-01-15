@@ -21,7 +21,7 @@ group expression
     #barChartColors #ff0000 #ff6900 #ffb100 #fffc00 #b6ff00 #61ff00 #00ff70 #00ffbc #00f7ff #00acff #0061ff #0700ff #7000ff #b600ff #ff00fc #ff00b1 #ff0069
     barChartBars AST-FB AST-PP Endothelial IN-PV IN-SST IN-SV2C IN-VIP L2/3 L4 L5/6 L5/6-CC Microglia Neu-NRGN-I Neu-NRGN-II Neu-mat OPC Oligodendrocytes
     transformFunc NONE
-    barChartLimit 2
+    barChartLimit 4
     group expression
 
     track cortexVelmeshevDiagnosis
