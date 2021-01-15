@@ -1999,18 +1999,17 @@ awk '{print $1}' /hive/data/genomes/mm39/bed/multiz35way/35way.distances.txt \
     # missing two.
 
 ############################################################################
-# pushQ readmine (TBD - 2021-01-11 - Hiram)
+# pushQ readmine (DONE - 2021-01-15 - Hiram)
 
-XXX - ready - Mon Jan 11 16:30:45 PST 2021
   cd /usr/local/apache/htdocs-hgdownload/goldenPath/mm39
   find -L `pwd`/multiz35way `pwd`/phastCons35way `pwd`/phyloP35way \
 	/gbdb/mm39/multiz35way -type f \
-    > /hive/data/genomes/mm39/bed/multiz35way/downloads/redmine.20216.fileList
-  wc -l /hive/data/genomes/mm39/bed/multiz35way/downloads/redmine.20216.fileList
-# 1450 /hive/data/genomes/mm39/bed/multiz35way/downloads/redmine.20216.fileList
+    > /hive/data/genomes/mm39/bed/multiz35way/downloads/redmine.26584.file.list
+  wc -l /hive/data/genomes/mm39/bed/multiz35way/downloads/redmine.26584.file.list
+# 1450 /hive/data/genomes/mm39/bed/multiz35way/downloads/redmine.26584.file.list
 
   cd /hive/data/genomes/mm39/bed/multiz35way/downloads
   hgsql -e 'show tables;' mm39 | grep 35way \
-	| sed -e 's/^/mm39./;' > redmine.20216.table.list
+	| sed -e 's/^/mm39./;' > redmine.26584.table.list
 
 ############################################################################
