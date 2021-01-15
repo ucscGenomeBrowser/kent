@@ -18,6 +18,8 @@ include lungVieiraBraga.ra
 include fetalGeneAtlas.ra
 include bloodHao.ra
 include lungTravaglini2020.ra
+include skinSoleBoldo.ra
+include liverMacParland.ra
 
 include gencodeV35.ra alpha
 include liftOver.ra
