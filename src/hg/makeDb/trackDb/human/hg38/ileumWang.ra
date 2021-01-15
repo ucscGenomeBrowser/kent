@@ -20,7 +20,7 @@ group expression
     barChartBars Enteriendocrine Enterocyte Goblet Paneth-like Progenitor Stem_Cell TA
     barChartColors #c4d2ec #0198c0 #578bfd #6e9fd9 #867f68 #e8b562 #cdaf7e
     transformFunc NONE
-    barChartLimit 2
+    barChartLimit 1.6
 
     track ileumWangDonor
     parent ileumWang
