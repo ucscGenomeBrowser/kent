@@ -25,6 +25,7 @@ my $kentSrc   = "/cluster/home/galt/kentclean/src";
 my $gbdDPath  = "/cluster/home/galt/kentclean/src/hg/htdocs/goldenPath/gbdDescriptions.html";
 my $noLoad    = 0;
 my $verbose   = 0;
+my $subDir   = "";
 
 # Hard-coded behaviors:
 my $debug         = 0;
@@ -77,6 +78,7 @@ $basename  [-kentSrc dir]  [-gbdDPath f]  [-noLoad]  [-help]
     -db db:             Work only on db, not on all active dbs.
     -hgConf file:       Use file instead of ~/.hg.conf.
     -noLoad:		Don't load the database, just create .sql files.
+    -subDir		Grab AS files from this sub directory of kentSrc rather than kentSrc
     -help:		Print this message.
 ";
     exit(@_);
@@ -164,9 +166,10 @@ sub getTableFields {
 #
 sub slurpAutoSql {
   my $rootDir = shift;
+  my $subDir = shift;
   confess "Too few arguments"  if (! defined $rootDir);
   confess "Too many arguments" if (defined shift);
-  open(P, "find $rootDir -name '*.as' -print |") || die "Can't open pipe";
+  open(P, "find $rootDir/$subDir -name '*.as' -print |") || die "Can't open pipe";
   my %tableAS = ();
   my %objectAS = ();
   my $gotLeftParen = 0;
@@ -345,6 +348,7 @@ use vars qw/
     $opt_db
     $opt_hgConf
     $opt_help
+    $opt_subDir
     $opt_verbose
     /;
 
@@ -354,6 +358,7 @@ my $ok = GetOptions("kentSrc=s",
 		    "db=s",
 		    "hgConf=s",
 		    "help",
+		    "subDir=s",
 		    "verbose");
 &usage(1) if (! $ok);
 &usage(0) if ($opt_help);
@@ -362,6 +367,7 @@ $gbdDPath = $opt_gbdDPath if ($opt_gbdDPath);
 $noLoad   = 1 if (defined $opt_noLoad);
 $verbose  = $opt_verbose if (defined $opt_verbose);
 $verbose  = 1 if ($debug);
+$subDir = $opt_subDir if ($opt_subDir);
 
 # If -hgConf is given, set HGDB_CONF environment variable so our call to
 # hgsql uses the correct file.
@@ -375,7 +381,7 @@ if ($opt_hgConf) {
 ############################################################################
 # MAIN
 
-my %tableAutoSql = slurpAutoSql($kentSrc);
+my %tableAutoSql = slurpAutoSql($kentSrc, $subDir);
 my %fieldsAutoSql = indexAutoSqlByFields(\%tableAutoSql);
 my %tableAnchors = parseGbdDescriptions($gbdDPath);
 my $hgConf = HgConf->new($opt_hgConf);
@@ -442,7 +448,9 @@ foreach my $db (@dbs) {
     #*** should suggest addition to gbdD of table&.as if not already in there;
     #*** should complain about gbdD tables not in any active db.
     my $asd = (defined $as) ? $as->{autoSql} : "";
+    # my $asFileName = (defined $as) ? $as->{filename} : "noAs";
     $asd =~ s/'/\\'/g;
+    # print "fileName  $asFileName $table\n";
     print SQL "INSERT INTO tableDescriptions (tableName, autoSqlDef, gbdAnchor)"
       . " values ('$table', '$asd', '$anchor');\n";
   }

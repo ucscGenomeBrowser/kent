@@ -3174,6 +3174,7 @@ longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
 group genes
 visibility hide
 type bigPsl
+html lrgTranscriptAli
 mouseOverField mouseOver
 skipFields mouseOver
 skipEmptyFields on
@@ -4074,12 +4075,21 @@ searchType psl
 termRegex HIT[0-9]{9,9}
 searchPriority 50
 
+searchTable lrgBigPsl
+searchMethod exact
+searchType bigBed
+termRegex LRG_[0-9]+t[0-9]+
+semiShortCircuit 1
+searchPriority 50
+release alpha
+
 searchTable lrgTranscriptAli
 searchMethod exact
 searchType psl
 termRegex LRG_[0-9]+t[0-9]+
 semiShortCircuit 1
 searchPriority 50
+release beta,public
 
 searchName lrgTranscriptAliNoTNum
 searchTable lrgTranscriptAli

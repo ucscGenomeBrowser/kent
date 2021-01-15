@@ -1,0 +1,172 @@
+<h2>Description</h2>
+<p>
+The gnomAD v3.1 track shows variants from 76,156 whole genomes (and no exomes), all mapped to the 
+GRCh38/hg38 reference sequence. 4,454 genomes were added to the number of genomes in the previous v3 release. For more detailed information on gnomAD v3.1, see the related <a target="_blank" 
+href="https://gnomad.broadinstitute.org/blog/2020-10-gnomad-v3-1/">blog post</a>.</p>
+
+<p>
+The gnomAD v2 tracks show variants from 125,748 exomes and 15,708 whole genomes, all mapped to 
+the GRCh37/hg19 reference sequence and lifted to the GRCh38/hg38 assembly. The data originate 
+from 141,456 unrelated individuals sequenced as part of various population-genetic and 
+disease-specific <a target="_blank" href="https://gnomad.broadinstitute.org/about">studies</a> 
+collected by the <a target="_blank" 
+href="https://gnomad.broadinstitute.org/">Genome Aggregation Database (gnomAD)</a>, release 2.1.1.
+Raw data from all studies have been reprocessed through a unified pipeline and jointly
+variant-called to increase consistency across projects. For more information on the processing
+pipeline and population annotations, see the following <a target="_blank"
+href="https://macarthurlab.org/2017/02/27/the-genome-aggregation-database-gnomad">blog post</a>
+and the 2.1.1 <a href="https://storage.googleapis.com/gnomad-public/release/2.1.1/README.txt"
+target="_blank">README</a>.</p>
+<p>
+gnomAD v2 data are based on the GRCh37/hg19 assembly. These tracks display the 
+GRCh38/hg38 lift-over provided by gnomAD on their downloads site.
+</p>
+<p>
+For questions on the gnomAD data, also see the <a target="_blank" 
+href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a>.</p>
+<p>
+More details on the Variant type(s) can be found on the <a target="_blank" 
+href="http://www.sequenceontology.org/so_wiki/index.php/Category:SO:SOFA">Sequence Ontology page</a>.</p>
+
+<h2>Display Conventions and Configuration</h2>
+<h3>gnomAD v3.1</h3>
+<p>
+By default, a maximum of 50,000 variants can be displayed at a time (before applying the filters
+described below), before the track switches to dense display mode.
+</p>
+
+<p>
+Mouse hover on an item will display many details about each variant, including the affected gene(s),
+the variant type, and annotation (missense, synonymous, etc).
+</p>
+
+<p>
+Following the conventions on the gnomAD browser, items are shaded according to their Annotation
+type:
+<table class="stdTbl">
+    <tr><td>pLoF</td><td width="50px" style="background: rgb(255,32,0)"></td></tr>
+    <tr><td>Missense</td><td width="50px" style="background: rgb(247,189,0)"></td></tr>
+    <tr><td>Synonymous</td><td style="background: rgb(4,255,0)"></td></tr>
+    <tr><td>Other</td><td style="background: rgb(95,95,95)"></td></tr>
+</table>
+</p>
+
+<h4>Label Options</h4>
+<p>
+By default, variants are labeled according to their chromosomal position followed by the reference
+and alternate alleles, for example &quot;chr1:1234-1235 T/CAG&quot;. 
+</p>
+
+<p>
+dbSNP rsID's are also available as an additional label, if the variant is present in dbSnp.
+</p>
+
+<h4>Filtering Options</h4>
+<p>
+Three filters are available for these tracks:
+</p>
+<ul>
+    <li>FILTER: Used to exclude/include variants that failed Random Forest
+    (RF), Inbreeding Coefficient (Inbreeding Coeff), or Allele Count (AC0) filters. The
+    PASS option is used to include/exclude variants that pass all of the RF,
+    InbreedingCoeff, and AC0 filters, as denoted in the original VCF.
+    <li>Annotation type: Used to exclude/include variants that are annotated as
+    Probability Loss of Function (pLoF), Missense, Synonymous, or Other, as
+    annotated by VEP version 85 (GENCODE v19).
+    <li>Variant Type: Used to exclude/include variants according to the type of
+    variation, as annotated by VEP v85.
+</ul>
+There is one additional configurable filter on the minimum minor allele frequency.
+
+<p>
+
+<h3>gnomAD v2.1.1</h3>
+The gnomAD v2.1.1 track follows the standard display and configuration options available for <a href="/goldenPath/help/hgVcfTrackHelp.html">VCF tracks</a>, briefly explained below.
+<dl>
+  <dt></dt>
+  <dd><li>In <button type="button">dense</button> mode, a vertical line is drawn at the position of
+    each variant.</li>
+  <li>In <button type="button">pack</button> mode, &quot;ref&quot; and &quot;alt&quot; alleles are
+    displayed to the left of a vertical line with colored portions corresponding to allele counts.
+    Hovering the mouse pointer over a variant pops up a display of alleles and counts.</li></dd>
+</dl>
+
+<h4>Filtering Options</h4>
+<p>
+Four filters are available for these tracks, the same as the underlying VCF:
+<ul>
+    <li>AC0: Allele Count 0 after filtering out low confidence genotypes (GQ &lt; 20; DP &lt; 10; and AB &lt; 0.2 for het calls))
+    <li>InbreedingCoeff: Inbreeding Coefficient &lt; -0.3
+    <li>RF: Used to exclude/include variants that failed Random Forest filtering thresholds of 0.055272738028512555, 0.20641025579497013 (probabilities of being a true positive variant) for SNPs, indels)
+    <li>Pass: Variant passes all 3 filters
+</ul>
+</p>
+
+<p>
+There are two additional filters available, one for the minimum minor allele frequency, and a configurable filter on the QUAL score.
+</p>
+
+<a name="UCSCMethods">
+<h2>UCSC Methods</h2>
+<p>
+For the v3.1 update, In order to cut down on the amount of displayed data, the following variant
+types have been filtered out, but are still viewable in the gnomAD browser:
+<ul>
+    <li>Regulatory Region Variants
+    <li>Downstream/Upstream Gene Variants
+    <li>Transcription Factor Binding Site Variants
+</ul>
+</p>
+
+<p>
+For the full steps used to create the track at UCSC, please see the section
+denoted &quot;gnomAD v3.1 update&quot; in the <a
+href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg38/gnomad.txt"
+target="_blank">hg38 makedoc</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
+Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a target="_blank" 
+href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are stored in files that
+can be downloaded from our <a
+href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/" target="_blank">download server</a>, subject
+to the conditions set forth by the gnomAD consortium (see below). Variant VCFs can be found in the
+vcf/ subdirectory. The v3.1 update files are in a
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v3.1/variants/">special directory</a> as
+they have been transformed from the underlying VCF.</p>
+<p>
+The data can also be found directly from the gnomAD <a target="_blank" 
+href="https://gnomad.broadinstitute.org/downloads">downloads page</a>. Please refer to
+our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
+Database Consortium</a> for making these data available. The data are released under the <a
+href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License
+(OBdL)</a> as described <a href="https://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
+</p>
+
+<h2>References</h2>
+
+<p>
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alfoldi J, Wang Q, Collins RL, Laricchia KM,
+Ganna A, Birnbaum DP <em>et al</em>.
+<a target="_blank" href="https://www.biorxiv.org/content/10.1101/531210v3.full">Variation across 
+141,456 human exomes and genomes reveals the spectrum of loss-of-function intolerance across human 
+protein-coding genes</a>. doi: https://doi.org/10.1101/531210.
+</p>
+<p>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB <em>et al</em>.
+<a href="https://www.nature.com/articles/nature19057" target="_blank">Analysis of protein-coding
+genetic variation in 60,706 humans</a>. <em>Nature</em>. 2016 Aug 17;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>

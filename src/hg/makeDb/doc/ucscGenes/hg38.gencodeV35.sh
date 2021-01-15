@@ -88,6 +88,13 @@ sort knownCanon.txt knownTag.txt knownAttrs.txt | awk '{if ($1 != last) {print l
 hgsql -e "select * from gencodeAnnot$GENCODE_VERSION" --skip-column-names $db | cut -f 2-16 |  tawk '{print $1,$13,$14,$8,$15}' | sort | uniq > knownCds.tab
 hgLoadSqlTab -notOnServer $tempDb knownCds $kent/src/hg/lib/knownCds.sql knownCds.tab
 
+hgsql -e "select * from gencodeTag$GENCODE_VERSION" --skip-column-names $db |  sort | uniq  > knownToTag.tab
+hgLoadSqlTab -notOnServer $tempDb knownToTag $kent/src/hg/lib/knownTo.sql knownToTag.tab
+
+hgsql $tempDb -Ne "select k.name, g.geneId, g.unused1, g.geneType,g.transcriptName,g.transcriptType,g.unused2, g.unused3,  g.ccdsId, g.level, g.transcriptClass from knownGene k, $db.gencodeAttrs$GENCODE_VERSION g where k.name=g.transcriptId" | sort | uniq > knownAttrs.tab
+
+hgLoadSqlTab -notOnServer $tempDb knownAttrs $kent/src/hg/lib/knownAttrs.sql knownAttrs.tab
+
 
 cat  << __EOF__  > colors.sed
 s/coding/12\t12\t120/
@@ -97,6 +104,16 @@ s/other/254\t0\t0/
 __EOF__
 
 hgsql $db -Ne "select * from gencodeAttrs$GENCODE_VERSION" | tawk '{print $4,$10}' | sed -f colors.sed > colors.txt
+hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql colors.txt
+
+hgsql $tempDb -N -e 'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' > kgSpAlias_0.tmp
+
+hgsql $tempDb -N -e 'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID' >> kgSpAlias_0.tmp
+cat kgSpAlias_0.tmp|sort -u  > kgSpAlias.tab
+rm kgSpAlias_0.tmp
+
+hgLoadSqlTab -notOnServer $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
+
 
 #ifdef NOTNOW
 hgsql $db -Ne "select * from gencodeToUniProt$GENCODE_VERSION" | tawk '{print $1,$2}'|  sort > uniProt.txt
@@ -114,7 +131,7 @@ hgsql $tempDb -Ne "select kgId, geneSymbol, spID from kgXref" > geneNames.txt
 genePredToBigGenePred -colors=colors.txt -geneNames=geneNames.txt -known -cds=knownCds.tab   knownGene.gp  stdout | sort -k1,1 -k2,2n >  gencodeAnnot$GENCODE_VERSION.bgpInput
 
 tawk '{print $4,$0}' gencodeAnnot$GENCODE_VERSION.bgpInput | sort > join1
-hgsql $db -Ne "select transcriptId, transcriptClass from gencodeAttrs$GENCODE_VERSION" | sort > attrs.txt
+hgsql $db -Ne "select transcriptId, transcriptClass from gencodeAttrs$GENCODE_VERSION" |  sed 's/other/nonCoding/'| sort > attrs.txt
 join -t $'\t'   join1 attrs.txt > join2
 hgsql $db -Ne "select transcriptId, source from gencodeTranscriptSource$GENCODE_VERSION" | sort > source.txt
 join -t $'\t'   join2 source.txt > join3
@@ -475,3 +492,19 @@ hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 gzip run.*/all.tab
+
+hgLoadNetDist $genomes/hg19/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
+    -sqlRemap="select distinct value, name from knownToHprd"
+hgLoadNetDist $genomes/hg19/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2P -sqlRemap="select distinct locusLinkID, kgID from hgFixed.refLink,kgXref where hgFixed.refLink.mrnaAcc = kgXref.refSeq"
+hgLoadNetDist $genomes/hg19/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P -sqlRemap="select distinct locusLinkID, kgID from hgFixed.refLink,kgXref where hgFixed.refLink.mrnaAcc = kgXref.refSeq"
+
+mkdir $dir/wikipedia
+cd $dir/wikipedia
+hgsql $tempDb -e "select geneSymbol,name from knownGene g, kgXref x where g.name=x.kgId " | sort > $tempDb.symbolToId.txt
+join -t $'\t'   /hive/groups/browser/wikipediaScrape/symbolToPage.txt $tempDb.symbolToId.txt | tawk '{print $3,$2}' | sort | uniq > $tempDb.idToPage.txt
+hgLoadSqlTab $tempDb knownToWikipedia $HOME/kent/src/hg/lib/knownTo.sql $tempDb.idToPage.txt
+
+# make views for all the tables in the specific database
+hgsql knownGeneV35 -Ne "show full tables" | grep -v VIEW | grep -v history | grep -v masterGeneTrack | grep -v chromInfo | awk '{print $1}' | sort > v35.tables.txt
+hgsql knownGeneV35 -Ne "show full tables" | grep -v VIEW | grep -v history | grep -v masterGeneTrack | grep -v chromInfo | awk '{print "show tables like \""$1"\";"}' > showTables.txt
+hgsql knownGeneV35 -Ne "show full tables" | grep -v VIEW | grep -v history | grep -v masterGeneTrack | grep -v chromInfo | awk '{print "create view "$1" as select * from knownGeneV35."$1";"}' > makeViews.txt

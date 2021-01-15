@@ -229,7 +229,7 @@ for (i = 0; i<faCount; ++i)
 	}
     lineFileClose(&lf);
     }
-if (!detailed)
+if (!(detailed || veryDetailed))
     {
     double perCentMasked = 100.0;
     double perCentRealMasked = 100.0;

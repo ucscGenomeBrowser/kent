@@ -1,4 +1,4 @@
-table bed
+table bedItemRgbTest
 "Browser extensible data"
     (
     string chrom;      "Reference sequence chromosome or scaffold"

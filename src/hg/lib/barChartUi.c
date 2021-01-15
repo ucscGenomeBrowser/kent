@@ -120,8 +120,10 @@ boolean barChartIsLogTransformed(struct cart *cart, char *track, struct trackDb 
 {
 char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
+boolean isLog = TRUE;
 char *trans = trackDbSetting(tdb, "transformFunc");
-boolean isLog = sameWordOk(trans, "LOG");
+if (trans != NULL)
+    isLog = sameWord(trans, "LOG");
 return cartCgiUsualBoolean(cart, cartVar, isLog);
 }
 
@@ -165,12 +167,13 @@ void barChartUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
 /* Set viewing limits if log transform not checked */
 /* NOTE: this code from gtexUi.c.  Consider sharing. */
 {
-char cartVar[1024];
 char buf[512];
 boolean isLogTransform = barChartIsLogTransformed(cart, track, tdb);
 safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
 printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
 double viewMax = barChartCurViewMax(cart, track, tdb);
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_MAX_VIEW_LIMIT);
 cgiMakeDoubleVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
 char *unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit, 

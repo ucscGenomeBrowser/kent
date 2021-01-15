@@ -744,6 +744,11 @@ struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time);
 boolean trackDbCacheOn();
 /* Check to see if we're caching trackDb contents. */
 
+boolean trackSettingIsFile(char *setting);
+/* Returns TRUE if setting found in trackDb stanza is a file setting that
+ * would benefit from directory $D substitution among other things - looks for
+ * settings that ends in "Url" and a few others. */
+
 char *labelAsFiltered(char *label);
 /* add text to label to indicate filter is active */
 
