@@ -682,18 +682,17 @@ directory: src/product/ex.hg.conf
 demonstrates the use of the &ldquo;readonly&rdquo; user for genome database
 access and the &ldquo;readwrite&rdquo; user for hgcentral database access.
 </p></li>
+
 <li><p>
 The hgsql command: Developers can access the browser databases via the &lsquo;hgsql&rsquo;
 command which can be built in the source-tree at:
 </p>
 
-<p>
-kent/src/hg/hgsql/
-</p>
+<pre>kent/src/hg/hgsql/</pre>
 
 <p>
-This &lsquo;hgsql&rsquo; command provides a convenient front-end to
-the standard &lsquo;mysql&rsquo; command by reading the user’s ~/.hg.conf
+This &quot;hgsql&quot; command provides a convenient front-end to
+the standard &lsquo;mysql&rsquo; command by reading the user&rsquo;s ~/.hg.conf
 file to provide access to the browser databases with the
 appropriate identity. Each user creates a ~/.hg.conf file
 (same format as the above mentioned cgi-bin/hg.conf file)
@@ -939,9 +938,10 @@ from the CN of the user and server certs.
 </p>
 
 <p>
-Further MySQL SSL documentation is available from <a href='https://dev.mysql.com/doc/refman/5.6/en/ssl-connections.html' title=''>https://dev.mysql.com/doc/refman/5.6/en/ssl-connections.html</a>
-</p></li>
-</ol>
+Further MySQL SSL documentation is available from 
+<a href='https://dev.mysql.com/doc/refman/5.6/en/creating-ssl-files-using-openssl.html'>
+https://dev.mysql.com/doc/refman/5.6/en/creating-ssl-files-using-openssl.html</a>
+</p>
 
 <a name='adding-a-custom-genome-to-the-browser'></a>
 <h2>Adding a custom genome to the browser</h2>
@@ -1533,9 +1533,11 @@ the source tree for local circumstances.
 
 <p>
 Install Git software version 1.6.2.2 or later. See the Git Community Handbook
-installation (<a href='http://book.git-scm.com/2_installing_git.html' title=''>http://book.git-scm.com/2_installing_git.html</a>) and setup
-(<a href='http://book.git-scm.com/2_setup_and_initialization.html' title=''>http://book.git-scm.com/2_setup_and_initialization.html</a>) instructions, as well
-as our Installing git (<a href='http://genomewiki.ucsc.edu/index.php/Installing_git' title=''>http://genomewiki.ucsc.edu/index.php/Installing_git</a>)
+installation (<a href='https://git-scm.com/book/en/v2/Getting-Started-Installing-Git'>
+https://git-scm.com/book/en/v2/Getting-Started-Installing-Git</a>) and setup
+(<a href='https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup'>
+https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup</a>) 
+instructions, as well as our Installing git (<a href='http://genomewiki.ucsc.edu/index.php/Installing_git' title=''>http://genomewiki.ucsc.edu/index.php/Installing_git</a>)
 Genomewiki page.
 </p>
 
