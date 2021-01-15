@@ -1,0 +1,41 @@
+track ileumWang
+superTrack on
+shortLabel Ileum Wang
+longLabel Ileum single cell sequencing from Wang et al 2020
+visibility hide
+group expression
+
+    track ileumWangCellType
+    parent ileumWang
+    type bigBarChart
+    visibility pack
+    shortLabel Ileum Cells
+    longLabel Ileum cells binned by cell type from Wang et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/ileumWang/cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/ileumWang/cell_type.stats
+    barChartBars Enteriendocrine Enterocyte Goblet Paneth-like Progenitor Stem_Cell TA
+    barChartColors #c4d2ec #0198c0 #578bfd #6e9fd9 #867f68 #e8b562 #cdaf7e
+    transformFunc NONE
+    barChartLimit 2
+
+    track ileumWangDonor
+    parent ileumWang
+    type bigBarChart
+    visibility hide
+    shortLabel Ileum Donor
+    longLabel Ileum cells binned by organ donor from Wang et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/ileumWang/donor.bb
+    barChartStatsUrl /gbdb/hg38/bbi/ileumWang/donor.stats
+    barChartBars Ileum-1 Ileum-2
+    barChartColors #0d91bc #0397bf
+    transformFunc NONE
+    barChartLimit 2
+

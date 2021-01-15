@@ -21,6 +21,9 @@ include lungTravaglini2020.ra
 include skinSoleBoldo.ra
 include liverMacParland.ra
 include pancreasBaron.ra
+include ileumWang.ra
+include colonWang.ra
+include rectumWang.ra
 
 include gencodeV35.ra alpha
 include liftOver.ra
