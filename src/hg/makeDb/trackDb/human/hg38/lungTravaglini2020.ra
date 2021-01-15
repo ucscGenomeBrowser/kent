@@ -20,7 +20,7 @@ group expression
     barChartBars Adventitial_Fibroblast Airway_Smooth_Muscle Alveolar_Epithelial_Type_1 Alveolar_Epithelial_Type_2 Alveolar_Fibroblast Artery B Basal Basophil/Mast_1 Basophil/Mast_2 Bronchial_Vessel_1 Bronchial_Vessel_2 CD4+_Memory/Effector_T CD4+_Naive_T CD8+_Memory/Effector_T CD8+_Naive_T Capillary Capillary_Aerocyte Capillary_Intermediate_1 Capillary_Intermediate_2 Ciliated Classical_Monocyte Club Differentiating_Basal EREG+_Dendritic Fibromyocyte Goblet IGSF21+_Dendritic Intermediate_Monocyte Ionocyte Lipofibroblast Lymphatic Macrophage Mesothelial Mucous Myeloid_Dendritic_Type_1 Myeloid_Dendritic_Type_2 Myofibroblast Natural_Killer Natural_Killer_T Neuroendocrine Nonclassical_Monocyte OLR1+_Classical_Monocyte Pericyte Plasma Plasmacytoid_Dendritic Platelet/Megakaryocyte Proliferating_Basal Proliferating_Macrophage Proliferating_NK/T Proximal_Basal Proximal_Ciliated Serous Signaling_Alveolar_Epithelial_Type_2 TREM2+_Dendritic Vascular_Smooth_Muscle Vein
     barChartColors #eb692b #bf02bd #5c7838 #0895bb #9d5455 #29a610 #f20947 #c5285d #c92c4b #cb2b4a #d92046 #82bc64 #f70645 #f40847 #fa0445 #f60645 #0ab905 #0fb508 #09ba04 #d0816e #196bc3 #e7241e #1750e6 #1c4fe2 #f8210a #d25fc5 #0a50f4 #f6210d #f5220e #cbd4de #f4bca2 #b7384b #f4230c #eca3a3 #2b50cf #ee2513 #f02412 #d63357 #d61f41 #f06082 #f5d4df #f31e13 #ea221c #7b5b57 #96485f #f35e84 #f89e96 #9289be #f4230c #ea6584 #6a429c #0a6fcf #abb1df #0895bb #f71f0d #be07b6 #1fac0c
     transformFunc NONE
-    barChartLimit 5
+    barChartLimit 6
 
     track lungTravaglini2020DetailedCellType10x
     parent lungTravaglini2020

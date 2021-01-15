@@ -23,7 +23,7 @@ group expression
     	Lymphoid Mesothelial Myeloid Neuronal NotAssigned Pericytes Smooth_muscle_cells \
 	Ventricular_Cardiomyocyte doublets
     transformFunc NONE
-    barChartLimit 2
+    barChartLimit 3
     group expression
 
     track heartAtlasRegion
