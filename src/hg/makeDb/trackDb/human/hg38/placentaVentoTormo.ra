@@ -128,7 +128,7 @@ group expression
     #barChartColors #fc0344 #fd0244 #f06a71 #c28c85 #57d456 #f29ba9 #fe9d8f #fb92ab #fc5882 #f27064 #fa0543 #f598a9 #d8aeb3 #fd90ac #f3627c #fd2302 #d26eb1 #d556d3 #ffd4bd
     barChartColors #fa0346 #fb0345 #e46a7f #906de2 #57d356 #e99bb3 #fe9d8f #f793ae #fa5884 #e86f71 #f60647 #ee99b0 #b59dec #fc90ad #e06491 #fc2304 #ce6eb5 #d556d3 #fed4be
     transformFunc NONE
-    barChartLimit 4
+    barChartLimit 2
 
     track placentaVentoTormoCellDetailedSs2
     parent placentaVentoTormo
@@ -147,7 +147,7 @@ group expression
     #barChartColors #f29ea1 #f59ca1 #c28c85 #58d356 #c7dfbb #f29ba9 #fe9d8f #fb92ab #fc5882 #f27064 #fa5a82 #fb92ab #fb0444 #fc5982 #fb5982 #f598a9 #d8aeb3 #fd90ac #f3627c #fc2302 #fb6e59 #fc9e90 #f994ab #f75d81 #fa5a82 #fc5982 #dfa4c4 #e29bcf #d558d1 #d557d1 #e395d7 #fd5782 #fc0343 #ffd4bd
     barChartColors #e99eac #ed9caa #906de2 #58d357 #c8dcc0 #e99bb3 #fe9d8f #f793ae #fa5884 #e86f71 #f75a85 #f992ae #f90446 #f95984 #f95984 #ee99b0 #b59dec #fc90ad #e06491 #fb2304 #f86e5d #fa9e93 #f494b0 #f15e87 #f75b85 #f95984 #dca3c8 #df9bd1 #d458d1 #d458d2 #e095d8 #fb5884 #fa0345 #fed4be
     transformFunc NONE
-    barChartLimit 4
+    barChartLimit 2
 
     track placentaVentoTormoLocationSs2
     parent placentaVentoTormo
@@ -166,7 +166,7 @@ group expression
     #barChartColors #f90643 #f50b40
     barChartColors #f50747 #ec0c49
     transformFunc NONE
-    barChartLimit 4
+    barChartLimit 2
 
     track placentaVentoTormoMatFetSs2
     parent placentaVentoTormo
@@ -185,5 +185,5 @@ group expression
     #barChartColors #e77768 #f80742 #c7dfbb
     barChartColors #926cdf #f30847 #c8dcc0
     transformFunc NONE
-    barChartLimit 4
+    barChartLimit 2
 
