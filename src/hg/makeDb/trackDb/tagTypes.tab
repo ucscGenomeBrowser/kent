@@ -250,7 +250,7 @@ itemClassNameColumn genePred
 itemClassClassColumn genePred
 itemCount customTracks
 itemDetailsHtmlTable genePred psl bed bigPsl
-itemFirstCharCase wigMafProt wigMaf
+itemFirstCharCase wigMafProt wigMaf bigMaf
 itemImagePath bed
 itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract bigGenePred bigLolly
 lfPslTable bed

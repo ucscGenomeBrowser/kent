@@ -3708,8 +3708,10 @@ _EOF_
 #LRG_163.xml
 #LRG_347.xml
 
+    cat lrgCdna.tab | sed -e 's/^/>/;' | tr '\t' '\n' > lrgCdna.fa
     # construct bigPsl with five extra fields
-    pslToBigPsl lrgTranscriptsHg38.psl bigPsl.txt
+    pslToBigPsl -fa=lrgCdna.fa -cds=lrgTranscripts.cds \
+	lrgTranscriptsHg38.psl bigPsl.txt
 
     # add the five extra identifiers to the bigPsl file:
     join -t$'\t' -1 4 \
@@ -3721,6 +3723,7 @@ _EOF_
     bedToBigBed -as=bigPsl+6.as -type=bed12+19 -tab \
        lrgExtraTranscriptsHg38.bigPsl.bed ../../../chrom.sizes lrgBigPsl.bb
     bigBedInfo lrgBigPsl.bb
+    rm -f /gbdb/hg38/bbi/lrgBigPsl.bb
     ln -sf `pwd`/lrgBigPsl.bb /gbdb/hg38/bbi
     hgBbiDbLink hg38 lrgBigPsl /gbdb/hg38/bbi/lrgBigPsl.bb
 

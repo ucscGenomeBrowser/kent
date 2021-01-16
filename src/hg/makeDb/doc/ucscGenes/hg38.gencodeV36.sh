@@ -1,13 +1,15 @@
 # This doc assumes that the gencode* tables have been built on $db
 db=hg38
-GENCODE_VERSION=V35
+GENCODE_VERSION=V36
+PREV_GENCODE_VERSION=V35
 dir=/hive/data/genomes/$db/bed/gencode$GENCODE_VERSION/build
 genomes=/hive/data/genomes
-tempDb=knownGeneV35
+tempDb=knownGeneV36
+oldDb=knownGeneV35
 kent=$HOME/kent
 spDb=sp180404
 cpuFarm=ku
-export curVer=13
+export curVer=14
 export Db=Hg38
 export xdb=mm10
 export Xdb=Mm10
@@ -56,12 +58,14 @@ txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq | bedClip stdin /cluster/data/hg38/chrom.sizes  ucscSplice.bed
 
 zcat gencode${GENCODE_VERSION}.bed.gz |  awk '{print $4}' | sort > newGencodeName.txt
-hgsql $db -Ne "select name,alignId from knownGene" | sort > oldGenToUcsc.txt
-kgAllocId oldGenToUcsc.txt newGencodeName.txt 5070122 stdout | sort -u >  txToAcc.tab
-# lastId 5072896
+hgsql $oldDb -Ne "select name,alignId from knownGene" | sort > oldGenToUcsc.txt
+kgAllocId oldGenToUcsc.txt newGencodeName.txt 5072896 stdout | sort -u >  txToAcc.tab
+# lastId 5075761
 
 makeUcscGeneTables -justKnown $db $tempDb $GENCODE_VERSION txToAcc.tab
 hgLoadSqlTab -notOnServer $tempDb knownGene $kent/src/hg/lib/knownGene.sql knownGene.gp
+#hgsql $db -Ne "create view $tempDb.all_mrna as select * from all_mrna"
+hgsql $db -Ne "create view $tempDb.trackDb as select * from trackDb"
 hgLoadGenePred -genePredExt $tempDb  knownGeneExt knownGeneExt.gp
 hgMapToGene -type=psl -all -tempDb=$tempDb $db all_mrna knownGene knownToMrna
 hgMapToGene -tempDb=$tempDb $db refGene knownGene knownToRefSeq
@@ -103,9 +107,20 @@ s/pseudo/255\t51\t255/
 s/other/254\t0\t0/
 __EOF__
 
-hgsql $db -Ne "select * from gencodeAttrs$GENCODE_VERSION" | tawk '{print $4,$10}' | sed -f colors.sed > colors.txt
+hgsql $db -Ne "select * from gencodeAttrs$GENCODE_VERSION" | tawk '{print $5,$13}' | sed -f colors.sed > colors.txt
 hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql colors.txt
 
+hgsql $tempDb -e "select * from knownToMrna" | tail -n +2 | tawk '{if ($1 != last) {print last, count, buffer; count=1; buffer=$2} else {count++;buffer=$2","buffer} last=$1}' | tail -n +2 | sort > tmp1
+hgsql $tempDb  -e "select * from knownToMrnaSingle" | tail -n +2 | sort > tmp2
+join  tmp2 tmp1 > knownGene.ev
+txGeneAlias $db $spDb kgXref.tab knownGene.ev oldToNew.tab foo.alias foo.protAlias
+tawk '{split($2,a,"."); for(ii = 1; ii <= a[2]; ii++) print $1,a[1] "." ii }' txToAcc.tab >> foo.alias
+tawk '{split($1,a,"."); for(ii = 1; ii <= a[2] - 1; ii++) print $1,a[1] "." ii }' txToAcc.tab >> foo.alias
+sort foo.alias | uniq > ucscGenes.alias
+sort foo.protAlias | uniq > ucscGenes.protAlias
+rm foo.alias foo.protAlias
+hgLoadSqlTab -notOnServer $tempDb kgAlias $kent/src/hg/lib/kgAlias.sql ucscGenes.alias
+hgLoadSqlTab -notOnServer $tempDb kgProtAlias $kent/src/hg/lib/kgProtAlias.sql ucscGenes.protAlias
 hgsql $tempDb -N -e 'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' > kgSpAlias_0.tmp
 
 hgsql $tempDb -N -e 'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID' >> kgSpAlias_0.tmp
@@ -122,7 +137,7 @@ join -a 1 gene.txt uniProt.txt > geneNames.txt
 #endif
 
 //genePredToBigGenePred -score=knownScore.txt  -colors=colors.txt -geneNames=geneNames.txt  -known gencodeAnnot$GENCODE_VERSION.txt  gencodeAnnot$GENCODE_VERSION.bgpInput
-hgsql $db -Ne "select * from gencodeAnnot$GENCODE_VERSION" | cut -f 2- > gencodeAnnot$GENCODE_VERSION.txt
+#hgsql $db -Ne "select * from gencodeAnnot$GENCODE_VERSION" | cut -f 2- > gencodeAnnot$GENCODE_VERSION.txt
 #genePredToBigGenePred -colors=colors.txt gencodeAnnot$GENCODE_VERSION.txt stdout | sort -k1,1 -k2,2n >  gencodeAnnot$GENCODE_VERSION.bgpInput
 
 hgsql $tempDb -Ne "select kgId, geneSymbol, spID from kgXref" > geneNames.txt
@@ -152,18 +167,7 @@ bedToBigBed -extraIndex=name -type=bed12+16 -tab -as=$HOME/kent/src/hg/lib/genco
 
 ln -s `pwd`/$db.gencode$GENCODE_VERSION.bb /gbdb/$db/gencode/gencode$GENCODE_VERSION.bb
 
-hgsql $tempDb -e "select * from knownToMrna" | tail -n +2 | tawk '{if ($1 != last) {print last, count, buffer; count=1; buffer=$2} else {count++;buffer=$2","buffer} last=$1}' | tail -n +2 | sort > tmp1
-hgsql $tempDb  -e "select * from knownToMrnaSingle" | tail -n +2 | sort > tmp2
-join  tmp2 tmp1 > knownGene.ev
 
-txGeneAlias $db $spDb kgXref.tab knownGene.ev oldToNew.tab foo.alias foo.protAlias
-tawk '{split($2,a,"."); for(ii = 1; ii <= a[2]; ii++) print $1,a[1] "." ii }' txToAcc.tab >> foo.alias
-tawk '{split($1,a,"."); for(ii = 1; ii <= a[2] - 1; ii++) print $1,a[1] "." ii }' txToAcc.tab >> foo.alias
-sort foo.alias | uniq > ucscGenes.alias
-sort foo.protAlias | uniq > ucscGenes.protAlias
-rm foo.alias foo.protAlias
-hgLoadSqlTab -notOnServer $tempDb kgAlias $kent/src/hg/lib/kgAlias.sql ucscGenes.alias
-hgLoadSqlTab -notOnServer $tempDb kgProtAlias $kent/src/hg/lib/kgProtAlias.sql ucscGenes.protAlias
 
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from hgFixed.refLink" $db > refToLl.txt
 hgMapToGene -tempDb=$tempDb $db refGene knownGene knownToLocusLink -lookup=refToLl.txt

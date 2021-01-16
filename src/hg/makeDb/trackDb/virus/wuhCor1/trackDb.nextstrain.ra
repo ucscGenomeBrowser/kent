@@ -19,17 +19,6 @@ url https://nextstrain.org/ncov?d=tree&m=div&label=clade:$$
 urlLabel View in Nextstrain: 
 pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
 
-track nextstrainOldClade
-shortLabel Nextstrn Old Clades
-longLabel Old (March 2020) Nextstrain clade designations (A1a, A2, etc.) from nextstrain.org/ncov
-type bigBed 12 +
-itemRgb on
-visibility hide
-group varRep
-priority 0.505
-bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainOldClade.bb
-pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
-
 track nextstrainSamples
 shortLabel Nextstrain Variants
 longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
@@ -44,7 +33,7 @@ group varRep
 priority 0.51
 hapClusterColorBy function
 geneTrack ncbiGeneBGP
-subGroup1 view Views all=All_Samples newClades=New_Clades(19A,_19B_etc.) oldClades=Old_Clades_(A1a,_A2_etc.)
+subGroup1 view Views all=All_Samples newClades=Year-Letter_Clades
 compositeTrack on
 pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
 
@@ -77,7 +66,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
     track nextstrainSamplesViewNewClades
     view newClades
     parent nextstrainSamples
-    shortLabel New Clades (19A, 19B, etc.)
+    shortLabel Year-Letter Clades
     visibility hide
 
         track nextstrainSamples19A
@@ -130,111 +119,75 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20C.vcf.gz
         priority 50
 
-    track nextstrainSamplesViewOldClades
-    view oldClades
-    parent nextstrainSamples
-    shortLabel Old Clades (A1a, A2, etc.)
-    visibility hide
+        track nextstrainSamples20D
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 20D Variants
+        longLabel Variants in Clade 20D Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20D.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20D.vcf.gz
+        priority 50
 
-        track nextstrainSamplesA1a
-        parent nextstrainSamplesViewOldClades on
-        subGroups view=oldClades
-        shortLabel A1a Variants
-        longLabel Variants in Clade A1a Nextstrain/GISAID Samples from nextstrain.org/ncov
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA1a.nh
-        hapClusterHeight 49
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA1a.vcf.gz
-        priority 110
+        track nextstrainSamples20E_EU1
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 20E/EU1 Variants
+        longLabel Variants in Clade 20E/EU1 Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20E_EU1.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20E_EU1.vcf.gz
+        priority 50
 
-        track nextstrainSamplesA2
-        parent nextstrainSamplesViewOldClades on
-        subGroups view=oldClades
-        shortLabel A2 Variants
-        longLabel Variants in Clade A2 Nextstrain/GISAID Samples from nextstrain.org/ncov
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA2.nh
-        hapClusterHeight 240
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2.vcf.gz
-        priority 120
+        track nextstrainSamples20F
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 20F Variants
+        longLabel Variants in Clade 20F Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20F.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20F.vcf.gz
+        priority 50
 
-        track nextstrainSamplesA2a
-        parent nextstrainSamplesViewOldClades on
-        subGroups view=oldClades
-        shortLabel A2a Variants
-        longLabel Variants in Clade A2a Nextstrain/GISAID Samples from nextstrain.org/ncov
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA2a.nh
-        hapClusterHeight 239
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2a.vcf.gz
-        priority 130
+        track nextstrainSamples20G
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 20G Variants
+        longLabel Variants in Clade 20G Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20G.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20G.vcf.gz
+        priority 50
 
-        track nextstrainSamplesA3
-        parent nextstrainSamplesViewOldClades on
-        subGroups view=oldClades
-        shortLabel A3 Variants
-        longLabel Variants in Clade A3 Nextstrain/GISAID Samples from nextstrain.org/ncov
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA3.nh
-        hapClusterHeight 14
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA3.vcf.gz
-        priority 140
+        track nextstrainSamples20H_501Y_V2
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 20H/501Y.V2 Variants
+        longLabel Variants in Clade 20H/501Y.V2 Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20H_501Y.V2.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20H_501Y.V2.vcf.gz
+        priority 50
 
-        track nextstrainSamplesA6
-        parent nextstrainSamplesViewOldClades on
-        subGroups view=oldClades
-        shortLabel A6 Variants
-        longLabel Variants in Clade A6 Nextstrain/GISAID Samples from nextstrain.org/ncov
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA6.nh
-        hapClusterHeight 11
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA6.vcf.gz
-        priority 150
+        track nextstrainSamples20I_501Y_V1
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 20I/501Y.V1 Variants
+        longLabel Variants in Clade 20I/501Y.V1 Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20I_501Y.V1.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20I_501Y.V1.vcf.gz
+        priority 50
 
-        track nextstrainSamplesA7
-        parent nextstrainSamplesViewOldClades on
-        subGroups view=oldClades
-        shortLabel A7 Variants
-        longLabel Variants in Clade A7 Nextstrain/GISAID Samples from nextstrain.org/ncov
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA7.nh
-        hapClusterHeight 1
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA7.vcf.gz
-        priority 160
-
-        track nextstrainSamplesB
-        parent nextstrainSamplesViewOldClades on
-        subGroups view=oldClades
-        shortLabel B Variants
-        longLabel Variants in Clade B Nextstrain/GISAID Samples from nextstrain.org/ncov
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB.nh
-        hapClusterHeight 103
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB.vcf.gz
-        priority 170
-
-        track nextstrainSamplesB1
-        parent nextstrainSamplesViewOldClades on
-        subGroups view=oldClades
-        shortLabel B1 Variants
-        longLabel Variants in Clade B1 Nextstrain/GISAID Samples from nextstrain.org/ncov
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB1.nh
-        hapClusterHeight 71
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB1.vcf.gz
-        priority 180
-
-        track nextstrainSamplesB2
-        parent nextstrainSamplesViewOldClades on
-        subGroups view=oldClades
-        shortLabel B2 Variants
-        longLabel Variants in Clade B2 Nextstrain/GISAID Samples from nextstrain.org/ncov
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB2.nh
-        hapClusterHeight 4
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB2.vcf.gz
-        priority 190
-
-        track nextstrainSamplesB4
-        parent nextstrainSamplesViewOldClades on
-        subGroups view=oldClades
-        shortLabel B4 Variants
-        longLabel Variants in Clade B4 Nextstrain/GISAID Samples from nextstrain.org/ncov
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB4.nh
-        hapClusterHeight 4
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB4.vcf.gz
-        priority 200
+        track nextstrainSamples20J_501Y_V3
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 20J/501Y.V3 Variants
+        longLabel Variants in Clade 20J/501Y.V3 Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20J_501Y.V3.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20J_501Y.V3.vcf.gz
+        priority 50
 
 
 track nextstrainFreq
@@ -242,7 +195,7 @@ shortLabel Nextstrain Frequency
 longLabel Nextstrain Variants Alternate Allele Frequency
 type bigWig
 compositeTrack on
-subGroup1 view Views all=All_Samples newClades=New_Clades(19A,_19B_etc.) oldClades=Old_Clades_(A1a,_A2_etc.)
+subGroup1 view Views all=All_Samples newClades=Year-Letter_Clades
 visibility hide
 group varRep
 autoScale off
@@ -270,7 +223,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
     track nextstrainFreqViewNewClades
     view newClades
     parent nextstrainFreq
-    shortLabel New Clades (19A, 19B, etc.)
+    shortLabel Year-Letter Clades
     visibility hide
 
         track nextstrainFreq19A
@@ -323,111 +276,75 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         subGroups view=newClades
         priority 50
 
-    track nextstrainFreqViewOldClades
-    view oldClades
-    parent nextstrainFreq
-    shortLabel Old Clades (A1a, A2, etc.)
-    visibility hide
-
-        track nextstrainFreqA1
-        shortLabel A1a
-        longLabel Nextstrain, A1a clade: Alternate allele frequency
+        track nextstrainFreq20D
+        shortLabel 20D
+        longLabel Nextstrain, 20D clade: Alternate allele frequency
         type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA1a.bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20D.bigWig
         visibility dense
-        parent nextstrainFreqViewOldClades
-        subGroups view=oldClades
-        priority 110
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
 
-        track nextstrainFreqA2
-        shortLabel A2
-        longLabel Nextstrain, A2 clade: Alternate allele frequency
+        track nextstrainFreq20E_EU1
+        shortLabel 20E/EU1
+        longLabel Nextstrain, 20E_EU1 clade: Alternate allele frequency
         type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2.bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20E_EU1.bigWig
         visibility dense
-        parent nextstrainFreqViewOldClades
-        subGroups view=oldClades
-        priority 120
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
 
-        track nextstrainFreqA2a
-        shortLabel A2a
-        longLabel Nextstrain, A2a clade: Alternate allele frequency
+        track nextstrainFreq20F
+        shortLabel 20F
+        longLabel Nextstrain, 20F clade: Alternate allele frequency
         type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2a.bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20F.bigWig
         visibility dense
-        parent nextstrainFreqViewOldClades
-        subGroups view=oldClades
-        priority 130
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
 
-        track nextstrainFreqA3
-        shortLabel A3
-        longLabel Nextstrain, A3 clade: Alternate allele frequency
+        track nextstrainFreq20G
+        shortLabel 20G
+        longLabel Nextstrain, 20G clade: Alternate allele frequency
         type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA3.bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20G.bigWig
         visibility dense
-        parent nextstrainFreqViewOldClades
-        subGroups view=oldClades
-        priority 140
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
 
-        track nextstrainFreqA6
-        shortLabel A6
-        longLabel Nextstrain, A6 clade: Alternate allele frequency
+        track nextstrainFreq20H_501Y.V2
+        shortLabel 20H/501Y.V2
+        longLabel Nextstrain, 20H/501Y.V2 clade: Alternate allele frequency
         type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA6.bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20H_501Y.V2.bigWig
         visibility dense
-        parent nextstrainFreqViewOldClades
-        subGroups view=oldClades
-        priority 150
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
 
-        track nextstrainFreqA7
-        shortLabel A7
-        longLabel Nextstrain, A7 clade: Alternate allele frequency
+        track nextstrainFreq20J_501Y.V3
+        shortLabel 20J/501Y.V3
+        longLabel Nextstrain, 20J/501Y.V3 clade: Alternate allele frequency
         type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA7.bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20J_501Y.V3.bigWig
         visibility dense
-        parent nextstrainFreqViewOldClades
-        subGroups view=oldClades
-        priority 160
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
 
-        track nextstrainFreqB
-        shortLabel B
-        longLabel Nextstrain, B clade: Alternate allele frequency
+        track nextstrainFreq20J_501Y_V3
+        shortLabel 20J/501Y.V3
+        longLabel Nextstrain, 20J/501Y.V3 clade: Alternate allele frequency
         type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB.bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20J_501Y.V3.bigWig
         visibility dense
-        parent nextstrainFreqViewOldClades
-        subGroups view=oldClades
-        priority 170
-
-        track nextstrainFreqB1
-        shortLabel B1
-        longLabel Nextstrain, B1 clade: Alternate allele frequency
-        type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB1.bigWig
-        visibility dense
-        parent nextstrainFreqViewOldClades
-        subGroups view=oldClades
-        priority 180
-
-        track nextstrainFreqB2
-        shortLabel B2
-        longLabel Nextstrain, B2 clade: Alternate allele frequency
-        type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB2.bigWig
-        visibility dense
-        parent nextstrainFreqViewOldClades
-        subGroups view=oldClades
-        priority 190
-
-        track nextstrainFreqB4
-        shortLabel B4
-        longLabel Nextstrain, B4 clade: Alternate allele frequency
-        type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB4.bigWig
-        visibility dense
-        parent nextstrainFreqViewOldClades
-        subGroups view=oldClades
-        priority 200
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
 
 track nextstrainParsimony
 shortLabel Nextstrain Parsimony
@@ -437,7 +354,6 @@ bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainParsimony.bw
 group varRep
 visibility hide
 autoScale off
-viewLimits 0:20
-viewLimitsMax 0:100
+viewLimits 0:60
 maxHeightPixels 100:40:8
 pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
