@@ -328,6 +328,7 @@ html chainNet
 # Great dane 'Zoey'
 ################################################################
 track chainNetCanFam5
+release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -350,6 +351,7 @@ spectrum on
 html chainNet
 
     track chainNetCanFam5Viewchain
+    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -357,6 +359,7 @@ html chainNet
     spectrum on
 
         track chainCanFam5
+        release alpha
         parent chainNetCanFam5Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -365,12 +368,14 @@ html chainNet
         html chainNet
 
     track chainNetCanFam5Viewnet
+    release alpha
     shortLabel Net
     view net
     visibility full
     parent chainNetCanFam5
 
         track netCanFam5
+        release alpha
         parent chainNetCanFam5Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
