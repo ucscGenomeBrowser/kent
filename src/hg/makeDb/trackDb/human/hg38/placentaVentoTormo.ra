@@ -1,0 +1,189 @@
+track placentaVentoTormo
+superTrack on
+shortLabel Placenta Vento-Tormo
+longLabel Placenta and decidua cells from from Vento-Tormo et al 2018
+visibility hide
+group expression
+
+    track placentaVentoTormoCellType10x
+    parent placentaVentoTormo
+    type bigBarChart
+    visibility pack
+    shortLabel Placenta Cells
+    longLabel Placenta and decidua cells binned by cell type 10x from Vento-Tormo et al 2018
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/cell_type.stats
+    barChartBars CD4+_T CD8+_T DC EVT Endo Granulocytes HB ILC MAIT MO NK Plasma SCT Treg VCT dM dP dS fFB
+    #barChartColors #fa0443 #fd0244 #eb1d2c #a8652a #0db805 #f0647f #f82605 #f75d81 #fb0444 #ed1e25 #f30c41 #f4617f #b26028 #fa5a81 #b76126 #f3270a #ab2b88 #bf05b9 #f86d24
+    barChartColors #f80645 #fb0345 #e91b31 #6027c7 #06bc03 #ee6283 #f62509 #f65c83 #f80545 #ea2027 #f30a44 #f16082 #5823d3 #fa5983 #5924d2 #f62509 #a5298d #bf03bc #fc6e22
+    transformFunc NONE
+    barChartLimit 2
+
+    track placentaVentoTormoCellDetailed10x
+    parent placentaVentoTormo
+    type bigBarChart
+    visibility hide
+    shortLabel Placenta Detail
+    longLabel Placenta and decidua cells binned by detailed cell type 10x from Vento-Tormo et al 2018
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/detailed_cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/detailed_cell_type.stats
+    barChartBars DC1 DC2 EVT Endo_(f) Endo_(m) Endo_L Granulocytes HB ILC3 MAIT MO NK_CD16+ NK_CD16- PB_Naive_CD4_ PB_Naive_CD8 PB_clonal_CD8 Plasma SCT Treg VCT dM1 dM2 dM3 dNK_p dNK1 dNK2 dNK3 dP1 dP2 dS1 dS2 dS3 dT_CD4 dT_CD8 fFB1 fFB2
+    #barChartColors #f26a69 #f46c63 #727508 #5ecf56 #0bb901 #5dd056 #fe6c56 #a6540a #fa5c7b #fb053f #ee1f1c #fa053f #fd587f #f80a37 #f80b36 #fb0440 #f86669 #747409 #fa5b7c #7d6f08 #db2a1d #e5241d #bd440e #f01134 #f60a3c #f9073e #fa063f #26a704 #29a504 #409506 #329e05 #3d9706 #fb053f #fa053f #3e9706 #7eba59
+    #barChartColors #f36c69 #f56e63 #a77311 #65cd57 #10b702 #62cf57 #fe6c56 #b1580d #fa5d7b #fb063f #ef221c #fa073f #fd597f #f90c37 #f80d36 #fb0540 #f96869 #ad7112 #fa5d7c #b66d12 #dd2d1d #e6271d #c3480f #f11533 #f70c3b #f9083e #fa073e #63970c #61970c #84880f #7d8d0f #6e8d0d #fb063e #fb063f #f9701f #fb9f6a
+    #barChartColors #f16b6e #f36d68 #aa6329 #69c95b #16b108 #67c95c #fe6c57 #b24f1f #f95d7d #fa0641 #ec2024 #fa0641 #fc5980 #f70c3a #f70d39 #fb0541 #f7676c #af6229 #f95c7e #b76126 #db2a29 #e42427 #c34121 #ef1438 #f50b3e #f80840 #f90741 #9f3e72 #b41c99 #c002bc #be09b2 #b51e93 #fa0640 #fa0641 #f76c24 #fa9e6c
+    #barChartColors #f16b6e #f36d68 #aa6329 #69c95b #16b108 #67c95c #fe6c57 #b24f1f #f95d7d #fa0641 #ec2024 #fa0641 #fc5980 #f70c3a #f70d39 #fb0541 #f7676c #af6229 #f95c7e #b76126 #db2a29 #e42427 #c34121 #ef1438 #f50b3e #f80840 #f90741 #9f3e72 #b41c99 #c002bc #be09b2 #b51e93 #fa0640 #fa0641 #f76c24 #fa9e6c
+    #barChartColors #f36d67 #f46d65 #b55b24 #6ac95b #17b108 #67c95c #f5686d #f52707 #f95c80 #fa0543 #ef2417 #f90642 #fc5882 #f60942 #f50a42 #fb0543 #f56378 #bb5823 #f95c80 #c25720 #f0280e #f1270f #f62706 #ef1339 #f50b40 #f80841 #f90742 #a03e71 #b51c98 #c002bc #be09b2 #b61e91 #fa0542 #fa0642 #f76c24 #fa9e6c
+    #barChartColors #ef6b71 #f26874 #a8652a #68ca5b #15b208 #66c95c #f0647f #f82605 #f75d81 #fb0444 #ed1e25 #f80743 #fc5982 #fa0543 #f90643 #fb0443 #f4617f #b26028 #fa5a81 #b76126 #f0290d #ee2810 #f92505 #e41d39 #ec133e #f20d41 #f40b41 #9f3e73 #b41c99 #c002bc #be09b3 #b51e93 #fb0343 #f80742 #f76c24 #fa9e6c
+    #barChartColors #ef6b71 #f26874 #a8652a #68ca5b #15b208 #66c95c #f0647f #f82605 #f75d81 #fb0444 #ed1e25 #f80743 #fc5982 #fa0543 #f90643 #fb0443 #f4617f #b26028 #fa5a81 #b76126 #f0290d #ee2810 #f92505 #e41d39 #ec133e #f20d41 #f40b41 #9f3e73 #b41c99 #c002bc #be09b3 #b51e93 #fb0343 #f80742 #f76c24 #fa9e6c
+    barChartColors #ef6a72 #ef6779 #6027c7 #78bb68 #0cb706 #6ac561 #ee6283 #f62509 #f65c83 #f80545 #ea2027 #f40845 #f95983 #f60746 #f50846 #f90545 #f16082 #5823d3 #fa5983 #5924d2 #f4250a #f0260f #f0270e #e51543 #ed0f44 #f10b44 #f30a44 #943d78 #b11b9d #be05b9 #be05b8 #b516a1 #fa0445 #f70644 #fc6e22 #ea9779
+    transformFunc NONE
+    barChartLimit 2
+
+    track placentaVentoTormoLocation10x
+    parent placentaVentoTormo
+    type bigBarChart
+    visibility pack
+    shortLabel Placenta Loc
+    longLabel Placenta and decidua cells binned by cell location 10x from Vento-Tormo et al 2018
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/Location.bb
+    barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/Location.stats
+    barChartBars Blood Decidua Placenta
+    #barChartColors #fb073c #cd3120 #697c06
+    #barChartColors #fb083c #d03520 #bd7215
+    #barChartColors #fa083e #c82359 #bd6626
+    #barChartColors #fa083e #c82359 #bd6626
+    #barChartColors #f90642 #cc2354 #ce541d
+    #barChartColors #fc0343 #b52a6d #c26124
+    barChartColors #f90545 #be2467 #5a24d1
+    transformFunc NONE
+    barChartLimit 2
+
+    track placentaVentoTormoStage10x
+    parent placentaVentoTormo
+    type bigBarChart
+    visibility hide
+    shortLabel Placenta Stage
+    longLabel Placenta and decidua cells binned by placental stage 10x from Vento-Tormo et al 2018
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/Stage.bb
+    barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/Stage.stats
+    barChartBars 12_+_1_LMP_(12_+_1_PCW) 12+2_LMP(10+2_PCW) 6_GW_/_LMP_(4_PCW) 8_+_2_LMP_(6_+_2_PCW) 9_+_2GW_(7_+_2_PCW) 9+2_GW_/_LMP_(7_PCW) 9+4_LMP(7+4_PCW)
+    #barChartColors #f60c37 #f7093c #727507 #e52618 #727607 #826c07 #379c05
+    #barChartColors #f60e37 #f70b3b #b07112 #e72a18 #95740d #ad6d10 #6d900d
+    #barChartColors #f40e3b #f50b3e #b26328 #e32628 #b1356a #b05f26 #be07b4
+    #barChartColors #f40e3b #f50b3e #b26328 #e32628 #b1356a #b05f26 #be07b4
+    #barChartColors #f40c3e #f50a40 #c35420 #e42627 #bb335d #ce451c #be07b4
+    #barChartColors #ef0f41 #ee1040 #b36227 #d32742 #ae366f #b65b23 #be07b5
+    barChartColors #f00c45 #ef0d44 #6026c7 #d51e4c #ab2f7a #6227c4 #be06b8
+    transformFunc NONE
+    barChartLimit 2
+
+    track placentaVentoTormoMatFet10x
+    parent placentaVentoTormo
+    type bigBarChart
+    visibility hide
+    shortLabel Placenta Mat/Fet
+    longLabel Placenta and decidua cells binned by maternal/fetal 10x from Vento-Tormo et al 2018
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/mom_child.bb
+    barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/mom_child.stats
+    barChartBars fetal maternal unknown
+    #barChartColors #c26426 #dd1a49 #66c95c
+    barChartColors #5923d3 #e11549 #6ac561
+    transformFunc NONE
+    barChartLimit 2
+
+    track placentaVentoTormoCellTypeSs2
+    parent placentaVentoTormo
+    type bigBarChart
+    visibility hide
+    shortLabel Placenta Cells Ss2
+    longLabel Placenta and decidua cells binned by cell type smart-seq2 10x from Vento-Tormo et al 2018
+    barChartMetric mean
+    barChartUnit units/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/cell_type.stats
+    barChartBars CD4+_T CD8+_T DC EVT Endo Granulocytes HB ILC MAIT MO NK Plasma SCT Treg VCT dM dP dS fFB
+    #barChartColors #fc0344 #fd0244 #f59ca1 #c28c85 #8fe28e #f7bcc5 #febeb4 #fcb7c7 #fc5882 #f27064 #fa0543 #f8bbc6 #e5c9cc #feb5c8 #f3627c #fd2302 #d26eb1 #d556d3 #ffe3d3
+    #barChartColors #fc0344 #fd0244 #f06a71 #c28c85 #57d456 #f29ba9 #fe9d8f #fb92ab #fc5882 #f27064 #fa0543 #f598a9 #d8aeb3 #fd90ac #f3627c #fd2302 #d26eb1 #d556d3 #ffd4bd
+    barChartColors #fa0346 #fb0345 #e46a7f #906de2 #57d356 #e99bb3 #fe9d8f #f793ae #fa5884 #e86f71 #f60647 #ee99b0 #b59dec #fc90ad #e06491 #fc2304 #ce6eb5 #d556d3 #fed4be
+    transformFunc NONE
+    barChartLimit 4
+
+    track placentaVentoTormoCellDetailedSs2
+    parent placentaVentoTormo
+    type bigBarChart
+    visibility hide
+    shortLabel Placenta Detail Ss2
+    longLabel Placenta and decidua cells binned by detailed cell type smart-seq2 10x from Vento-Tormo et al 2018
+    barChartMetric mean
+    barChartUnit units/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/detailed_cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/detailed_cell_type.stats
+    barChartBars DC1 DC2 EVT Endo_(m) Endo_L Granulocytes HB ILC3 MAIT MO NK_CD16+ NK_CD16- PB_Naive_CD4_ PB_Naive_CD8 PB_clonal_CD8 Plasma SCT Treg VCT dM1 dM2 dM3 dNK_p dNK1 dNK2 dNK3 dP1 dP2 dS1 dS2 dS3 dT_CD4 dT_CD8 fFB1
+    #barChartColors #f6bec1 #f8bdc0 #c28c85 #90e28f #daead2 #f7bcc5 #febeb4 #fcb7c7 #fc5882 #f27064 #fa5a82 #fdb6c7 #fb0444 #fc5982 #fb5982 #f8bbc6 #e5c9cc #feb5c8 #f3627c #fc2302 #fb6e59 #fdbfb5 #fbb7c7 #f75d81 #fa5a82 #fc5982 #eac2d8 #ecbcdf #d558d1 #d557d1 #ecb8e4 #fd5782 #fc0343 #ffe3d3
+    #barChartColors #f29ea1 #f59ca1 #c28c85 #58d356 #c7dfbb #f29ba9 #fe9d8f #fb92ab #fc5882 #f27064 #fa5a82 #fb92ab #fb0444 #fc5982 #fb5982 #f598a9 #d8aeb3 #fd90ac #f3627c #fc2302 #fb6e59 #fc9e90 #f994ab #f75d81 #fa5a82 #fc5982 #dfa4c4 #e29bcf #d558d1 #d557d1 #e395d7 #fd5782 #fc0343 #ffd4bd
+    barChartColors #e99eac #ed9caa #906de2 #58d357 #c8dcc0 #e99bb3 #fe9d8f #f793ae #fa5884 #e86f71 #f75a85 #f992ae #f90446 #f95984 #f95984 #ee99b0 #b59dec #fc90ad #e06491 #fb2304 #f86e5d #fa9e93 #f494b0 #f15e87 #f75b85 #f95984 #dca3c8 #df9bd1 #d458d1 #d458d2 #e095d8 #fb5884 #fa0345 #fed4be
+    transformFunc NONE
+    barChartLimit 4
+
+    track placentaVentoTormoLocationSs2
+    parent placentaVentoTormo
+    type bigBarChart
+    visibility pack
+    shortLabel Placenta Loc Ss2
+    longLabel Placenta and decidua cells binned by cell location smart-seq2 10x from Vento-Tormo et al 2018
+    barChartMetric mean
+    barChartUnit units/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/Location.bb
+    barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/Location.stats
+    barChartBars Blood Decidua
+    #barChartColors #f90643 #f50b40
+    #barChartColors #f90643 #f50b40
+    barChartColors #f50747 #ec0c49
+    transformFunc NONE
+    barChartLimit 4
+
+    track placentaVentoTormoMatFetSs2
+    parent placentaVentoTormo
+    type bigBarChart
+    visibility hide
+    shortLabel Placenta Mat/Fet Ss2
+    longLabel Placenta and decidua cells -seq2binned by maternal/fetal smart-seq2 10x from Vento-Tormo et al 2018
+    barChartMetric mean
+    barChartUnit units/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/mom_child.bb
+    barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/mom_child.stats
+    barChartBars fetal maternal unknown
+    #barChartColors #e77768 #f80742 #daead2
+    #barChartColors #e77768 #f80742 #c7dfbb
+    barChartColors #926cdf #f30847 #c8dcc0
+    transformFunc NONE
+    barChartLimit 4
+
