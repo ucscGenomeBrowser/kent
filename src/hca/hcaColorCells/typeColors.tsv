@@ -1,0 +1,30 @@
+#label	RR	GG	BB
+# where RR GG BB are two hexadecimal digit color components
+
+#blue	33	33	FF
+#red	FF	11	11
+#purple	CC	00	CC	
+#blue_green	00	A0	30
+#teal	00	90	C0
+#gold	F0	99	00
+#green	00	B0	00
+#muck	B0	80	00
+#orange	FF	80	30
+#
+#
+neural	E0	C0	00
+immune	FF	11	11
+lymphoid	FF	00	44
+myeloid	FF	22	00
+endothelial	00	C0	00
+epithelial	00	99	C0
+ciliated	00	72	D6
+secretory	00	50	FF
+tubule	00	00	FF
+fibroblast	FF	70	20
+fat	F0	80	30
+stem_cell	E0	90	10
+muscle	C0	00	C0
+hepatocyte	B0	00	B0
+trophoblast	50	20	E0
+glia	80	D0	00
