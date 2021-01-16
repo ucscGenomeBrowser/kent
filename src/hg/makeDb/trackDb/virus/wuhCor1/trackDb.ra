@@ -629,7 +629,6 @@ pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Jan. 7, 2021"
 track escape
 shortLabel Escape: 21 monocl Ab
 longLabel Mutations that lead to escape from 21 antibodies, Whelan lab, WUSTL (Mouse over to show mutation details)
-parent escapeMonocl
 visibility pack
 type bigBed 9 +
 group immu
@@ -656,8 +655,8 @@ include pyle.ra
 include treangen.ra
 include pbm.ra
 include pbmShanghai.ra
-include escapeMonocl.ra alpha
-include bloomSerumEsc.ra alpha
+#include escapeMonocl.ra alpha
+#include escapeSerum.ra alpha
 
 track spikeMuts
 shortLabel Spike Mutations
