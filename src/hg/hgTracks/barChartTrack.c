@@ -376,7 +376,19 @@ if (isNotEmpty(setting))
         extras->winMedGraph = atoi(words[1]);
         }
     }
-int scale = (getCategoryCount(tg) < 15 ? 2 : 1);
+int barCount = getCategoryCount(tg);
+double scale = 1.0;
+if (barCount < 20)
+    scale = 2.0;
+else if (barCount < 40)
+    scale = 1.5;
+else if (barCount < 80)
+    scale = 1.0;
+else if (barCount < 120)
+    scale = 0.75;
+else
+    scale = 0.5;
+
 long winSize = virtWinBaseCount;
 if (winSize < extras->winMaxGraph && 
         sameString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_LARGE))
