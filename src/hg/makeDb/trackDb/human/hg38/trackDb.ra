@@ -14,7 +14,7 @@ include cortexVelmeshev.ra
 include heartCellAtlas.ra
 include kidneyStewart.ra
 include muscleDeMicheli.ra
-include lungVieiraBraga.ra
+#include lungVieiraBraga.ra
 include fetalGeneAtlas.ra
 include bloodHao.ra
 include lungTravaglini2020.ra
