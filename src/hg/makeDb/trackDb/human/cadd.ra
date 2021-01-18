@@ -5,6 +5,8 @@ type bigWig
 #superTrack on show
 compositeTrack on
 visibility hide
+maxHeightPixels 128:20:8
+maxWindowToQuery 500000
 group phenDis
 viewLimits 0:30
 color 100,130,160
