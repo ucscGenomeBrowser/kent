@@ -64,6 +64,7 @@ shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
 html gnomadV3_1
+pennantIcon Updated red ../goldenPath/newsarch.html "Updated Jan. 19, 2021"
 release beta,public
 
     track gnomadVariantsV2
@@ -126,4 +127,5 @@ release beta,public
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
     extraDetailsTable /gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
+    pennantIcon Updated red
     release beta,public
