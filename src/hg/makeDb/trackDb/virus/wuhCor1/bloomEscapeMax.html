@@ -1,0 +1,77 @@
+<h2>Description</h2>
+<p>
+This track shows how much any amino acid mutations in the receptor
+binding domain affect the binding of antibodies from either convalescent Covid-19
+patients in the  Hospitalized or Ambulatory Adults with Respiratory Viral
+Infections (HAARVI) cohort or monoclonal antibodies.
+</p>
+<p>
+The data is based on deep mutational scanning data measuring the effect of the change 
+in binding from all wild type allele to all possible mutant alleles. The authors use a yeast 
+display system to experimentally measure the effect of all possible point (amino acid) 
+RBD mutations on antibody binding affinity. The resulting number per mutation
+and patient sample is a mutation's "escape fraction", the fraction of all yeast
+cells expressing RBD with that mutation that fall into the FACS escape bin.
+These escape fractions range from 0 (no effect on serum antibody binding) to 1
+(all cells with this mutation are in the antibody-escape bin).</p>
+
+<p>
+We show just a summary of the data. Better and detailed structural
+visualizations are available from the authors via dms-view using the following links:
+<a target="_blank" href = "https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_HAARVI_sera/">patient sera</a>,
+<a target="_blank" href="https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_Crowe_antibodies/">10 monoclonal antibodies</a>,
+<a target="_blank" href = "https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_clinical_Abs/">4 treatment antibodies</a>.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Shown with shading and on mouse over is the maximum escape, of all mutations, for every sample and amino acid.
+</ol>
+
+<h2>Methods</h2>
+<p>
+Patient sera: data was downloaded from <a href="https://github.com/jbloomlab/SARS-CoV-2-RBD_MAP_HAARVI_sera/blob/main/results/supp_data/human_sera_raw_data.csv" target=_blank>the jbloomlab Github file</a> and parsed into bedGraph format.</p>
+<p>10 Antibodies: Table S1 from Starr et al, was downloaded and parsed into bedGraph format.</p>
+
+<p>4 treatment antibodies: Data was downloaded from <a href="https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_clinical_Abs/" target=_blank>the jbloomlab Github file</a> and parsed into bedGraph format using the total and maximum values.</p>
+
+<h2>Data Access</h2>
+<p>
+The data of these tracks as stored at UCSC can be explored interactively with the
+<a target="_blank" href="hgTables">Table Browser</a>, or combined with other datasets in the
+<a target="_blank" href="hgIntegrator">Data Integrator</a> tool.</p>
+
+<p>
+Please refer to our
+<a target="_blank" 
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a target="_blank" href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+
+<h2>References</h2>
+<p>
+Greaney AJ, Loes AN, Crawford K, Starr T, Malone K, Chu H, Bloom JD.
+<a href="https://www.biorxiv.org/content/10.1101/2020.12.31.425021v1" target="_blank">
+Comprehensive mapping of mutations to the SARS-CoV-2 receptor-binding domain that affect recognition by polyclonal human serum antibodies
+</a>.
+<em>Biorxiv</em>. 2021 Jan 04;.
+</p>
+Greaney AJ, Starr TN, Gilchuk P, Zost SJ, Binshtein E, Loes AN, Hilton SK, Huddleston J, Eguia R,
+Crawford KHD <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33259788" target="_blank">
+    Complete Mapping of Mutations to the SARS-CoV-2 Spike Receptor-Binding Domain that Escape Antibody
+    Recognition</a>.
+<em>Cell Host Microbe</em>. 2020 Nov 19;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33259788" target="_blank">33259788</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7676316/" target="_blank">PMC7676316</a>
+</p>
+
+<p>
+Starr TN, Greaney AJ, Addetia A, Hannon WW, Choudhary MC, Dingens AS, Li JZ, Bloom JD.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33299993" target="_blank">
+    Prospective mapping of viral mutations that escape antibodies used to treat COVID-19</a>.
+<em>bioRxiv</em>. 2020 Dec 1;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33299993" target="_blank">33299993</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7724661/" target="_blank">PMC7724661</a>
+</p>

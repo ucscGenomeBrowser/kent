@@ -1,0 +1,45 @@
+track cadd
+shortLabel CADD
+longLabel CADD 1.6 Score for all possible single-basepair variants (zoom in to show exact score on mouse over, same basepair = score 0.0)
+type bigWig
+#superTrack on show
+compositeTrack on
+visibility hide
+maxHeightPixels 128:20:8
+maxWindowToQuery 500000
+group phenDis
+viewLimits 0:30
+color 100,130,160
+viewLimitsMax 0:100
+
+        track caddA
+        shortLabel Mutation to A
+        longLabel CADD Score: Mutation to A
+        type bigWig
+        parent cadd on
+        visibility dense
+        bigDataUrl /gbdb/hg19/cadd/a.bw
+
+        track caddC
+        shortLabel Mutation to C
+        longLabel CADD Score: Mutation to C
+        type bigWig
+        parent cadd on
+        visibility dense
+        bigDataUrl /gbdb/hg19/cadd/c.bw
+
+        track caddG
+        shortLabel Mutation to G
+        longLabel CADD Score: Mutation to G
+        type bigWig
+        parent cadd on
+        visibility dense
+        bigDataUrl /gbdb/hg19/cadd/g.bw
+
+        track caddT
+        shortLabel Mutation to T
+        longLabel CADD Score: Mutation to T
+        type bigWig
+        parent cadd on
+        visibility dense
+        bigDataUrl /gbdb/hg19/cadd/t.bw
