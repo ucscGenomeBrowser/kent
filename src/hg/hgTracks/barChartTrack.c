@@ -378,16 +378,18 @@ if (isNotEmpty(setting))
     }
 int barCount = getCategoryCount(tg);
 double scale = 1.0;
-if (barCount < 20)
+if (barCount <= 20)
     scale = 2.0;
-else if (barCount < 40)
+else if (barCount <= 50)
     scale = 1.5;
-else if (barCount < 80)
+else if (barCount <= 100)
     scale = 1.0;
-else if (barCount < 120)
+else if (barCount <= 150)
     scale = 0.75;
-else
+else if (barCount <= 200)
     scale = 0.5;
+else 
+    scale = 0.25;
 
 long winSize = virtWinBaseCount;
 if (winSize < extras->winMaxGraph && 
