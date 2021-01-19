@@ -18,7 +18,8 @@ group expression
     bigDataUrl /gbdb/hg38/bbi/rectumWang/cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/rectumWang/cell_type.stats
     barChartBars Enteriendocrine Enterocyte Goblet Paneth-like Progenitor Stem_Cell TA
-    barChartColors #dad8d4 #0298bf #0352fb #69b1cd #9e874e #e7b463 #ab8743
+    barChartColors #c7d2e5 #0198c0 #0251fc #7197d7 #4d689b #9e9fa2 #949dae
+    #barChartColors #dad8d4 #0298bf #0352fb #69b1cd #9e874e #e7b463 #ab8743
     transformFunc NONE
     barChartLimit 1.6
 
@@ -35,7 +36,8 @@ group expression
     bigDataUrl /gbdb/hg38/bbi/rectumWang/donor.bb
     barChartStatsUrl /gbdb/hg38/bbi/rectumWang/donor.stats
     barChartBars Rectum-1 Rectum-2
-    barChartColors #52719f #3a81a5
+    barChartColors #205cd4 #215bd3
+    #barChartColors #52719f #3a81a5
     transformFunc NONE
     barChartLimit 2
 

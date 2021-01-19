@@ -18,7 +18,8 @@ group expression
     bigDataUrl /gbdb/hg38/bbi/muscleDeMicheli/cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/muscleDeMicheli/cell_type.stats
     #barChartColors #ff4c4c #ff7000 #ffbb00 #f3ff00 #a4ff00 #20ff00 #00ff92 #00ffdd #00d2ff #4cacff #0020ff #5000ff #a400ff #f300ff #ff00bb #ff0070
-    barChartColors #d459cf #b615a3 #eb6929 #f61814 #906329 #0bb804 #ed6d25 #fa6d23 #fb6e22 #ca8980 #20aa0a #c73427 #e33329 #876618 #13b209 #f51915
+    #barChartColors #d459cf #b615a3 #eb6929 #f61814 #906329 #0bb804 #ed6d25 #fa6d23 #fb6e22 #ca8980 #20aa0a #c73427 #e33329 #876618 #13b209 #f51915
+    barChartColors #d55acd #bb1b98 #fd8738 #da2f08 #b6513e #11b606 #b65928 #b35024 #b25023 #cf8b7e #419916 #fc344a #d33e3f #98672c #1dad0c #dc2c04
     barChartBars ACTA1+_Mature_skeletal_muscle ACTA2+_MYH11+_MYL9+_Smooth_muscle_cells APOD+_CFD+_PLAC9+_Adipocytes C1QA+_CD74+_Macrophages CD36+_VWF+_Platelets CLDN5+_PECAM1+_Endothelial COL1A1+_Fibroblasts DCN+_GSN+_MYOC+_Fibroblasts FBN1+_MFAP5+_CD55+_Fibroblasts HBA1+_Erythroblasts ICAM1+_SELE+_VCAM1+_Endothelial IL7R+_PTPRC+_NKG7+_B/T/NK_cells PAX7+_DLK1+_MuSCs_and_progenitors PAX7low_MYF5+_MuSCs_and_progenitors RGS5+_MYL9+_Pericytes S100A9+_LYZ+_Inflammatory_macrophages
     transformFunc NONE
     barChartLimit 2
@@ -37,7 +38,8 @@ group expression
     bigDataUrl /gbdb/hg38/bbi/muscleDeMicheli/sample.bb
     barChartStatsUrl /gbdb/hg38/bbi/muscleDeMicheli/sample.stats
     #barChartColors #ff0000 #ff9c00 #ebff4c #4cff00 #00ffad #00d2ff #004cff #6600ff #e300ff #ff009c
-    barChartColors #ba3652 #da5d34 #cf878e #a35636 #ed5c2a #f56725 #ca3b6c #23a90e #698b18 #9f7726
+    #barChartColors #ba3652 #da5d34 #cf878e #a35636 #ed5c2a #f56725 #ca3b6c #23a90e #698b18 #9f7726
+    barChartColors #e13b4c #b84b3a #d2838b #aa5739 #be4931 #b54e29 #b93467 #39a015 #6e8220 #a0692f
     barChartBars hu01_061419 hu02_062419 hu03_062719 hu04_080619 hu05_111418 hu06_120518 hu07_021219 hu08_092618 hu09_092718 hu10_101018
     transformFunc NONE
     barChartLimit 2

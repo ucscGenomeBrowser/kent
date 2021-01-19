@@ -17,7 +17,8 @@ group expression
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/cortexVelmeshev/cell_type.bb
     barChartStatsUrl /gbdb/$D/bbi/cortexVelmeshev/cell_type.stats
-    barChartColors #81ce00 #81cd00 #01c000 #dcbf00 #dcbf00 #dbbe00 #dcbf00 #ddbf00 #ddbf00 #ddbf00 #ddbf00 #fe1211 #bdb701 #bab701 #dcbf00 #bbbe01 #85c601
+    barChartColors #81ce00 #81cd00 #01c000 #ebbf00 #ebbf00 #eabe00 #ebbf00 #ecbf00 #ecbf00 #ecbf00 #edbf00 #ef1211 #c8b701 #c5b701 #ebbf00 #c5be01 #86c601
+    #barChartColors #81ce00 #81cd00 #01c000 #dcbf00 #dcbf00 #dbbe00 #dcbf00 #ddbf00 #ddbf00 #ddbf00 #ddbf00 #fe1211 #bdb701 #bab701 #dcbf00 #bbbe01 #85c601
     #barChartColors #ff0000 #ff6900 #ffb100 #fffc00 #b6ff00 #61ff00 #00ff70 #00ffbc #00f7ff #00acff #0061ff #0700ff #7000ff #b600ff #ff00fc #ff00b1 #ff0069
     barChartBars AST-FB AST-PP Endothelial IN-PV IN-SST IN-SV2C IN-VIP L2/3 L4 L5/6 L5/6-CC Microglia Neu-NRGN-I Neu-NRGN-II Neu-mat OPC Oligodendrocytes
     transformFunc NONE
@@ -36,7 +37,8 @@ group expression
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/cortexVelmeshev/diagnosis.bb
     barChartStatsUrl /gbdb/$D/bbi/cortexVelmeshev/diagnosis.stats
-    barChartColors #ff0000 #00d2ff
+    barChartColors #ebbf00 #e9bf00
+    #barChartColors #ff0000 #00d2ff
     barChartBars ASD Control
     transformFunc NONE
     barChartLimit 2
@@ -54,7 +56,8 @@ group expression
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/cortexVelmeshev/donor.bb
     barChartStatsUrl /gbdb/$D/bbi/cortexVelmeshev/donor.stats
-    barChartColors #ff0000 #ff3900 #ff7300 #ff9900 #ffc000 #ffe900 #ecff00 #c3ff00 #9bff00 #6fff00 #00ff04 #00ff77 #00ff9e #00ffc6 #00ffef #00e6ff #00bdff #0097ff #006fff #0035ff #0400ff #3d00ff #7700ff #9b00ff #c300ff #ec00ff #ff00e9 #ff00c0 #ff0099 #ff0073 #ff0039
+    barChartColors #e5be00 #e7bf00 #e8bf00 #e9bf00 #c6c200 #ecbf00 #bec100 #e9bf00 #e8bf00 #ebbf00 #e9bf00 #adc600 #e8be00 #e2be00 #e8bf00 #c1c200 #dfbd00 #ebbf00 #e4bf00 #e9bf00 #ecbf00 #e3be00 #e5be00 #d9bf00 #ebbf00 #e3bf00 #eabf00 #ebbf00 #eabf00 #e9bf00 #e8bf00
+    #barChartColors #ff0000 #ff3900 #ff7300 #ff9900 #ffc000 #ffe900 #ecff00 #c3ff00 #9bff00 #6fff00 #00ff04 #00ff77 #00ff9e #00ffc6 #00ffef #00e6ff #00bdff #0097ff #006fff #0035ff #0400ff #3d00ff #7700ff #9b00ff #c300ff #ec00ff #ff00e9 #ff00c0 #ff0099 #ff0073 #ff0039
     barChartBars 1823 4341 4849 4899 5144 5163 5242 5278 5294 5387 5391 5403 5408 5419 5531 5538 5554 5565 5577 5841 5864 5879 5893 5936 5939 5945 5958 5976 5978 6032 6033
     transformFunc NONE
     barChartLimit 3
@@ -72,8 +75,9 @@ group expression
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/cortexVelmeshev/sample.bb
     barChartStatsUrl /gbdb/$D/bbi/cortexVelmeshev/sample.stats
+    barChartColors #e5be00 #e7bf00 #e6bf00 #e8bf00 #e9bf00 #c6c200 #ecbf00 #bec100 #e7bf00 #e6be00 #e4be00 #e9bf00 #ebbf00 #e9bf00 #adc600 #e8be00 #e2be00 #e3be00 #e9bf00 #c1c200 #dfbd00 #ebbf00 #ebbf00 #e4bf00 #e9bf00 #ecbf00 #e3be00 #ebbf00 #cbc000 #d9bf00 #e8bf00 #ecbf00 #e3bf00 #e6bf00 #ecbf00 #ebbf00 #eabf00 #e9bf00 #e9bf00 #e6bf00 #e9be00
     #barChartColors #ff0000 #ff2b00 #ff5700 #ff8100 #ff9a00 #ffb700 #ffd600 #fff500 #eaff00 #cbff00 #abff00 #91ff00 #67ff00 #0fff00 #00ff47 #00ff88 #00ffa1 #00ffc0 #00ffdf #00fffd #00e1ff #00c2ff #00a3ff #008aff #0067ff #003bff #000fff #1c00ff #4700ff #7300ff #9100ff #ab00ff #cb00ff #ea00ff #ff00f5 #ff00d6 #ff00b7 #ff009a #ff0081 #ff0057 #ff002b
-    barChartColors #d7be00 #d9bf00 #d7bf00 #d9bf00 #dabf00 #bcc200 #ddbf00 #b5c100 #d8bf00 #d8be00 #d6be00 #dabf00 #dcbf00 #dabf00 #a6c600 #d9be00 #d4be00 #d5be00 #dabf00 #b8c200 #d1bd00 #dcbf00 #dcbf00 #d6bf00 #dabf00 #ddbf00 #d5be00 #dcbf00 #c1c000 #ccbf00 #d9bf00 #dcbf00 #d5bf00 #d7bf00 #dcbf00 #dcbf00 #dbbf00 #dabf00 #dabf00 #d7bf00 #dabe00
+    #barChartColors #d7be00 #d9bf00 #d7bf00 #d9bf00 #dabf00 #bcc200 #ddbf00 #b5c100 #d8bf00 #d8be00 #d6be00 #dabf00 #dcbf00 #dabf00 #a6c600 #d9be00 #d4be00 #d5be00 #dabf00 #b8c200 #d1bd00 #dcbf00 #dcbf00 #d6bf00 #dabf00 #ddbf00 #d5be00 #dcbf00 #c1c000 #ccbf00 #d9bf00 #dcbf00 #d5bf00 #d7bf00 #dcbf00 #dcbf00 #dbbf00 #dabf00 #dabf00 #d7bf00 #dabe00
     barChartBars 1823_BA24 4341_BA24 4341_BA46 4849_BA24 4899_BA24 5144_PFC 5163_BA24 5242_BA24 5278_BA24 5278_PFC 5294_BA24 5294_BA9 5387_BA9 5391_BA24 5403_PFC 5408_PFC_Nova 5419_PFC 5531_BA24 5531_BA9 5538_PFC_Nova 5554_BA24 5565_BA24 5565_BA9 5577_BA9 5841_BA9 5864_BA9 5879_PFC_Nova 5893_BA24 5893_PFC 5936_PFC_Nova 5939_BA24 5939_BA9 5945_PFC 5958_BA24 5958_BA9 5976_BA9 5978_BA24 5978_BA9 6032_BA24 6033_BA24 6033_BA9
     transformFunc NONE
     barChartLimit 2
@@ -91,7 +95,8 @@ group expression
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/cortexVelmeshev/sex.bb
     barChartStatsUrl /gbdb/$D/bbi/cortexVelmeshev/sex.stats
-    barChartColors #ff0000 #00d2ff
+    barChartColors #e8bf00 #ebbf00
+    #barChartColors #ff0000 #00d2ff
     barChartBars F M
     transformFunc NONE
     barChartLimit 2
