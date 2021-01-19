@@ -649,15 +649,14 @@ include trackDb.7way.ra
 include phylocsf.ra
 include addgene.ra
 include pond.ra
-include bloom.ra
 include weizmanOrfs.ra
 include pyle.ra
 include treangen.ra
 include pbm.ra
 include pbmShanghai.ra
-#include escapeMonocl.ra alpha
-#include escapeSerum.ra alpha
+
 include abEscape.ra alpha
+include bloom.ra
 
 track spikeMuts
 shortLabel Spike Mutations
