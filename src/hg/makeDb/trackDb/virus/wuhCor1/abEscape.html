@@ -1,0 +1,148 @@
+<h2>Description</h2>
+<p>
+The subtracks of this track show mutations that lead to escape from patient serum antibodies or monoclonal
+antibodies. Most of the mutations assayed were in the receptor binding domain (RBD) of the S protein. 
+The data shown here was imported from different studies, listed below. The
+Bloom lab papers used deep mutational scanning data to measure the effect of all
+    possible mutations in the Spike RBD using a
+        yeast surface display system.
+<ol>
+<li>Bloom lab, patients A-K: antibodies in sera from the  Hospitalized or Ambulatory Adults with Respiratory Viral
+Infections (HAARVI) cohort, described in <a href="https://www.biorxiv.org/content/10.1101/2020.12.31.425021v1" target="_blank">
+    Greaney et al., Biorxiv 2021</a>.</li>
+
+<li>Bloom lab, 10 antibodies: A selection of ten monoclonal antibodies, described
+in <a target=_blank href="https://www.ncbi.nlm.nih.gov/pubmed/33259788">Greaney et al, Cell Host Microbe 2020.</a>
+</li>
+
+<li>Bloom lab, 4 treatment antibodies: Four monoclonal antibodies licensed for treatment.
+The results were described in <a target=_blank
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7724661/">Starr et al,
+Biorxiv 2021.</a>
+</li>
+
+<li>Whelan lab, 21 antibodies: a selection screen of 21 neutralizing monoclonal
+antibodies (mAbs) against the receptor binding domain (RBD) generated 48 escape
+    mutants. The results were described in <a
+        href="https://www.biorxiv.org/content/10.1101/2020.11.06.372037v1"
+        target="_blank">
+Liu et al, Biorxiv 2020</a>.
+
+<li>Rappuoli lab, serum from one patient: three mutations obtained by passaging of 
+cells in neutralizing serum from a single patient, described in <a href="https://www.ncbi.nlm.nih.gov/pubmed/33398278" target="_blank">
+    Andreano et al, Biorxiv 2021</a>.
+</ol>
+</p>
+
+<p>
+For the Bloom lab data, we show just a summary of the data. Better and detailed structural
+visualizations are available from the authors via dms-view using the following links:
+<a target="_blank" href = "https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_HAARVI_sera/">patient sera</a>,
+<a target="_blank" href="https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_Crowe_antibodies/">10 monoclonal antibodies</a>,
+<a target="_blank" href = "https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_clinical_Abs/">4 treatment antibodies</a>.
+</p>
+
+<h2>Display Conventions and Configuration<h2>
+<h3>Bloom lab data</h3>
+<p>Scores represent the &quot;escape fraction&quot; (discussed at length in the Methods 
+of the paper) which &quot;represent the fraction of a given variant that escape antibody 
+binding, and should in principle range from 0 to 1.&quot;. 
+&quot;Note that the magnitude of the measured effects of mutations on antibody escape depends on
+the antibody concentration and the flow cytometry gates applied, meaning that the
+escape fractions are comparable across sites for any given antibody, but are not precisely
+comparable among antibodies without external calibration.&quot;</p>
+
+
+<p>A higher score indicates a greater level of escape.</p>
+
+<p>The data summarized to protein positions are shown as 36 subtracks, one per sample, that indicate
+the maximum score per amino acid position that was assayed as shades of color
+or, in full mode, as a x-y barplot. Blue subtracks show data from monoclonal
+antibodies, red ones from patient sera. By configuring the current track (click
+on "Antibody escape" under the image), one can display the total sum of all
+scores per amino acid. <p>
+
+<p>The data is summarized as two x-y barplots, as the average values per amino acid,
+again in red (sera) and blue (MABs). Finally, another summary track has one feature
+per position where the score exceeds 0.18. These features are clickable and the details page
+show the exact amino acid changes and their scores. </a>
+
+<h3>Display Conventions and Configuration</h3>
+<p>Features are labeled with the nucleotide and protein coordinates and the name of the antibody. 
+Click a feature or mouse-over a feature to show these annotations.<p>
+
+<h3>Display Conventions and Configuration</h3>
+<p>The three mutations are labeled with the protein coordinates.<p>
+
+<h2>Methods</h2>
+<p>
+Patient sera: data was downloaded from <a href="https://github.com/jbloomlab/SARS-CoV-2-RBD_MAP_HAARVI_sera/blob/main/results/supp_data/human_sera_raw_data.csv" target=_blank>the jbloomlab Github file</a> and parsed into bedGraph format.</p>
+
+<p>10 Antibodies: Table S1 from Starr et al, was downloaded and parsed into bedGraph format.</p>
+
+<p>4 treatment antibodies: Data was downloaded from <a href="https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_clinical_Abs/" target=_blank>the jbloomlab Github file</a> and parsed into bedGraph format using the total and maximum values.</p>
+
+<p>21 Antibodies: Table 2 from Liu et al 2020, was copied manually and converted to bedGraph format.</p>
+
+<p>For the Rappuoli lab, the mutations were manually copied from the text.</p>
+
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a target="_blank" href="hgTables">Table Browser</a>, or combined with other datasets in the
+<a target="_blank" href="hgIntegrator">Data Integrator</a> tool.</p>
+
+<p>
+Please refer to our
+<a target="_blank" 
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a target="_blank" href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+
+<h2>References</h2>
+<p>
+<p>
+Greaney AJ, Loes AN, Crawford K, Starr T, Malone K, Chu H, Bloom JD.
+<a href="https://www.biorxiv.org/content/10.1101/2020.12.31.425021v1" target="_blank">
+Comprehensive mapping of mutations to the SARS-CoV-2 receptor-binding domain that affect recognition by polyclonal human serum antibodies
+</a>.
+<em>Biorxiv</em>. 2021 Jan 04;.
+</p>
+
+Greaney AJ, Starr TN, Gilchuk P, Zost SJ, Binshtein E, Loes AN, Hilton SK, Huddleston J, Eguia R,
+Crawford KHD <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33259788" target="_blank">
+    Complete Mapping of Mutations to the SARS-CoV-2 Spike Receptor-Binding Domain that Escape Antibody
+    Recognition</a>.
+<em>Cell Host Microbe</em>. 2020 Nov 19;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33259788" target="_blank">33259788</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7676316/" target="_blank">PMC7676316</a>
+</p>
+
+<p>
+Zhuoming Liu, Laura A. VanBlargan, Paul W. Rothlauf, Louis-Marie Bloyet, Rita E. Chen, Spencer Stumpf, Haiyan Zhao, John M. Errico, Elitza S. Theel, Ali H. Ellebedy, Daved H. Fremont, Michael S. Diamond, Sean P. J. Whelan
+<a href="https://www.biorxiv.org/content/10.1101/2020.11.06.372037v1" target="_blank">
+Landscape analysis of escape variants identifies SARS-CoV-2 spike mutations that attenuate monoclonal and serum antibody neutralization</a>.
+<em>Biorxiv</em>. 2020 
+</p>
+
+<p>
+Starr TN, Greaney AJ, Addetia A, Hannon WW, Choudhary MC, Dingens AS, Li JZ, Bloom JD.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33299993" target="_blank">
+    Prospective mapping of viral mutations that escape antibodies used to treat COVID-19</a>.
+<em>bioRxiv</em>. 2020 Dec 1;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33299993" target="_blank">33299993</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7724661/" target="_blank">PMC7724661</a>
+</p>
+<p>
+Andreano E, Piccini G, Licastro D, Casalino L, Johnson NV, Paciello I, Monego SD, Pantano E,
+Manganaro N, Manenti A <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33398278" target="_blank">
+    SARS-CoV-2 escape &lt;i&gt;in vitro&lt;/i&gt; from a highly neutralizing COVID-19 convalescent
+    plasma</a>.
+<em>bioRxiv</em>. 2020 Dec 28;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33398278" target="_blank">33398278</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7781313/" target="_blank">PMC7781313</a>
+</p>

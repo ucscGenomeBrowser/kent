@@ -3,11 +3,13 @@ shortLabel Antibody Escape
 longLabel Escape from serum or monoclonal antibodies: Whelan, Bloom and Rappuoli groups
 type bigBed
 group immu
-priority 6
+priority 30
 visibility hide
 superTrack on show
 
-        track abEscapeWhelan
+include bloomEsc.ra
+
+        track escape
         shortLabel Whelan 21 Ab
         longLabel Whelan lab: RBD Mutations that lead to escape from 21 monoclonal antibodies (click to show mutation details)
         parent abEscape
@@ -16,8 +18,9 @@ superTrack on show
         bigDataUrl /gbdb/wuhCor1/escape/escape.bb
         mouseOverField _mouseOver
         noScoreFilter on
+        priority 33.1
 
-        track abEscapeRappuoli
+        track rappuoli
         shortLabel Rappuoli Serum Escape 
         longLabel Rappuoli lab: S Mutations that lead to escape from neutralizing antibodies from plasma of a single patient
         parent abEscape
@@ -25,5 +28,5 @@ superTrack on show
         type bigBed 4
         bigDataUrl /gbdb/wuhCor1/rappuoli/rappuoli.bb
         noScoreFilter on
+        priority 33.2
 
-include bloomEsc.ra
