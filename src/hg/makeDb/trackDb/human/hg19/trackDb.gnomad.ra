@@ -934,7 +934,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html "Updated Dec. 23, 2020"
     filter.AF 0.0
     filterLabel.AF Minor Allele Frequency Filter
     maxItems 50000
-    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
+    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type; Allele Count: $AC
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
@@ -961,7 +961,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html "Updated Dec. 23, 2020"
     filter.AF 0.0
     filterLabel.AF Minor Allele Frequency Filter
     maxItems 50000
-    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
+    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type; Allele Count: $AC
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
