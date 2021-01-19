@@ -32,6 +32,9 @@ include trackDb.clinGen.ra
 # Genome In a Bottle
 include trackDb.giab.ra
 
+# CADD scores
+include cadd.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
@@ -198,26 +201,6 @@ type bed 3
         parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOverField _mouseOver
-
-track pathoPred
-type bigWig
-longLabel Pathogenicity predictions
-shortLabel Pathogenicity
-color 112,172,192
-visibility hide
-superTrack on
-group phenDis
-
-        track cadd
-        type bigWig
-        longLabel CADD scores version 1.4
-        viewLimits 0:30
-        color 100,130,160
-        bigDataUrl /gbdb/$D/bbi/CADD-v1.4.bw
-        viewLimitsMax 0:100
-        shortLabel CADD
-        visibility full
-        parent pathoPred on
 
 track caseControl
 compositeTrack on
@@ -3174,6 +3157,7 @@ longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
 group genes
 visibility hide
 type bigPsl
+html lrgTranscriptAli
 mouseOverField mouseOver
 skipFields mouseOver
 skipEmptyFields on
@@ -4074,12 +4058,21 @@ searchType psl
 termRegex HIT[0-9]{9,9}
 searchPriority 50
 
+searchTable lrgBigPsl
+searchMethod exact
+searchType bigBed
+termRegex LRG_[0-9]+t[0-9]+
+semiShortCircuit 1
+searchPriority 50
+release alpha
+
 searchTable lrgTranscriptAli
 searchMethod exact
 searchType psl
 termRegex LRG_[0-9]+t[0-9]+
 semiShortCircuit 1
 searchPriority 50
+release beta,public
 
 searchName lrgTranscriptAliNoTNum
 searchTable lrgTranscriptAli

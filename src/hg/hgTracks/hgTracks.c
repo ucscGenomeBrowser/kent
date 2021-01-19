@@ -10572,16 +10572,21 @@ if (measureTiming)
 char *mouseOverEnabled = cfgOption("mouseOverEnabled");
 if (sameWordOk(mouseOverEnabled, "on"))
     {
-    enableMouseOver = TRUE;
-    /* mouseOverJsonFile will be initializes and created at the same
-     * time as the browser .png image file
-     */
-    mouseOverJson = jsonWriteNew();
-    jsonWriteObjectStart(mouseOverJson, NULL);
-    /* this jsonWrite structure will finish off upon successful exit.
-     * each track will start a list with the track name:
-     *   jsonWriteListStart(mouseOverJson, tg->track);
-     */
+    /* can not use mouseOver in any virtual mode */
+    char *isMultiRegion = cartUsualString(cart, "virtModeType", "default");
+    if (sameWordOk(isMultiRegion, "default"))
+	{
+	enableMouseOver = TRUE;
+	/* mouseOverJsonFile will be initializes and created at the same
+	 * time as the browser .png image file
+	 */
+	mouseOverJson = jsonWriteNew();
+	jsonWriteObjectStart(mouseOverJson, NULL);
+	/* this jsonWrite structure will finish off upon successful exit.
+	 * each track will start a list with the track name:
+	 *   jsonWriteListStart(mouseOverJson, tg->track);
+	 */
+	}
     }
 else
     enableMouseOver = FALSE;

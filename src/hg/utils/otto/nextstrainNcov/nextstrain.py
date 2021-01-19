@@ -41,12 +41,20 @@ oldCladeColors = { 'A1a': '73,75,225', 'A2': '75,131,233', 'A2a': '92,173,207',
                    'B': '233,205,74', 'B1': '255,176,65', 'B2': '255,122,53',
                    'B4': '249,53,41' }
 
-# Clades from late morning of June 2nd, 2020:
-newCladeColors = { '19A': '76,135,232',
-                   '19B': '110,194,178',
-                   '20A': '168,214,110',
-                   '20B': '232,206,75',
-                   '20C': '255,146,58' }
+# Clades from Jan. 2021:
+newCladeColors = { '19A': '61,21,199',
+                   '19B': '56,72,230',
+                   '20A': '64,124,223',
+                   '20B': '80,163,190',
+                   '20C': '103,189,147',
+                   '20D': '132,206,108',
+                   '20E (EU1)': '171,201,81',
+                   '20F': '211,204,64',
+                   '20G': '242,185,54',
+                   '20H/501Y.V2': '252,147,48',
+                   '20I/501Y.V1': '252,89,41',
+                   '20J/501Y.V3': '243,28,32',
+         }
 
 def cladeColorFromName(cladeName, cladeColors):
     color = cladeColors.get(cladeName);
@@ -421,6 +429,12 @@ def sampleIdsFromNode(node, cladeTops=()):
         sampleIds = [sampleId]
     return sampleIds
 
+def sanitizeFileName(filename):
+    """Remove or replace characters that cause trouble in filenames"""
+    filename = filename.replace('/', '_').replace(' ', '_')
+    filename = filename.replace('(', '').replace(')', '')
+    return filename
+
 cladeSampleCounts = {}
 cladeSampleNames = {}
 
@@ -434,7 +448,8 @@ def vcfForClades(clades, cladeTops=()):
         cladeSampleList = [ sample for sample in samples if sample['id'] in cladeSampleIds ]
         cladeSampleCounts[cladeName] = len(cladeSampleList)
         cladeSampleNames[cladeName] = [ sampleName(sample) for sample in cladeSampleList ]
-        with open('nextstrainSamples' + cladeName + '.vcf', 'w') as outV:
+        sanitizedCladeName = sanitizeFileName(cladeName)
+        with open('nextstrainSamples' + sanitizedCladeName + '.vcf', 'w') as outV:
             writeVcfHeaderExceptSamples(outV)
             outV.write('\t'.join(cladeSampleNames[cladeName]) + '\n')
             for mv in mergedVars:
@@ -499,13 +514,7 @@ def bedForClades(fileName, clades, cladeColors):
                                        cladeSampleCounts[name],
                                        ', '.join(cladeSampleNames[name]) ])) + '\n')
 
-if (len(oldClades) == 0):
-    # This ncov.json must be from when old clades were the new clades, and the new clades
-    # had not yet arrived.  Revert to old colors and don't exclude subclades.
-    newCladeColors = oldCladeColors
-    newCladeTops = ()
-else:
-    newCladeTops = [ newClades[cladeName]['topNode'] for cladeName in newClades ]
+newCladeTops = [ newClades[cladeName]['topNode'] for cladeName in newClades ]
 vcfForClades(newClades, newCladeTops)
 bedForClades('nextstrainClade.bed', newClades, newCladeColors)
 if (len(oldClades)):
@@ -593,10 +602,12 @@ def rNextstrainToNewick(node, cladeColors, cladeTops=(), parentClade=None, paren
         else:
             cladeName = 'unassigned'
         color = str(cladeRgbFromName(cladeName, cladeColors))
+        cladeShortened = cladeName.split(' ', 1)[0]
+        cladeShortened = cladeShortened.split('/', 1)[0]
         descendants = ','.join([ rNextstrainToNewick(child, cladeColors, cladeTops, cladeName,
                                                      varStr)
                                  for child in kids if child not in cladeTops ])
-        label = '#'.join([cladeName, resolveVarStrDashMuts(varStr)])
+        label = '#'.join([cladeShortened, resolveVarStrDashMuts(varStr)])
         treeString = '(' + descendants + ')' + label + ':' + color
     else:
         nodeAttrs = node['node_attrs']
@@ -619,7 +630,7 @@ if (len(oldClades)):
 
 def newickForClades(clades, cladeColors, cladeTops=()):
     for cladeName in clades:
-        filename = 'nextstrain' + cladeName + '.nh'
+        filename = 'nextstrain' + sanitizeFileName(cladeName) + '.nh'
         node = clades[cladeName]['topNode']
         with open(filename, 'w') as outF:
             outF.write(rNextstrainToNewick(node, cladeColors, cladeTops) + ';\n')
@@ -645,8 +656,12 @@ with open('nextstrainSamples.varPaths', 'w') as outF:
     for sample in samples:
         lab = sample['lab']
         labAbbrev = abbreviateLab(lab)
-        outF.write('\t'.join([sampleName(sample), sample['clade'], labAbbrev, lab,
-                              sample['varStr']]) + '\n');
+        try:
+            outF.write('\t'.join([sampleName(sample), sample['clade'], labAbbrev, lab,
+                                  sample['varStr']]) + '\n');
+        except:
+            print("Problem writing varPaths for sample '", sampleName(sample), "', varStr '",
+                  sample['varStr'])
 
 # Narrow down variants to "informative" set (bi-allelic, each allele supported by
 # sufficient number of samples):
@@ -659,16 +674,20 @@ for mv in mergedVars:
     pv, alts, altCounts, sampleAlleles, backMutSamples = mv
     pos, varNameMerged, ref, altStr = pv
     recurrentAlts = []
+    recurrentAltCounts = []
     for alt, altCount in zip(alts, altCounts):
         if (altCount < minSamples):
             discardedAlleles.append([ chrom, pos-1, pos, ref + str(pos) + alt ])
         else:
             recurrentAlts.append(alt)
+            recurrentAltCounts.append(altCount)
     if (len(recurrentAlts) > 1):
         multiRecurrentName = ','.join([ ref + str(pos) + alt for alt in recurrentAlts ])
         blacklist.append([ chrom, pos-1, pos, multiRecurrentName ])
     elif (len(recurrentAlts) == 1):
         informativeVariants.append([ pos, ref, recurrentAlts[0] ])
+        if varNameMerged not in variantCounts:
+            variantCounts[varNameMerged] = recurrentAltCounts[0]
 
 # Dump out BED files for the categories:
 with open('nextstrainDiscarded.bed', 'w') as outF:
