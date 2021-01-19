@@ -34257,7 +34257,7 @@ end
 
 
 #############################################################################
-# fetalGeneAtlas JimK 01-14-2020
+# fetalGeneAtlas JimK 01-19-2020
 ############################################################################
 # This is the RNA-seq part of the data set described in 
 # "A human cell atlas of fetal gene expression" by Cao, Day et al
@@ -34299,6 +34299,8 @@ cut -f 1 clust/cell_type.matrix > gene.lst
 
 # Figure out the geneset they used and generate mapping file
 gencodeVersionForGenes gene.lst /hive/data/inside/geneSymVerTx.tsv -bed=mapping.bed
+# best is gencodeV19 as id on hg19 with 60284 of 63562 (94.8428%) hits
+
 
 # Turn some into barChart, and then bigBarChart
 foreach s (cell_type Assay Experiment_batch donor Organ Organ_cell_lineage RT_group sex)
