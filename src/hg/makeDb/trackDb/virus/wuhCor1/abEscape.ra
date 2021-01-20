@@ -31,7 +31,7 @@ include bloomEsc.ra
         priority 33.2
 
         track mccoy
-        shortLabel Rappuoli Serum Escape 
+        shortLabel McCoy Escape 
         longLabel McCoy lab: S Mutation impact on neutralization by serum and mAbs
         parent abEscape
         visibility pack
@@ -39,5 +39,5 @@ include bloomEsc.ra
         bigDataUrl /gbdb/wuhCor1/mccoy/mccoy.bb
         mouseOverField description
         noScoreFilter on
-        priority 33.2
+        priority 33.3
 
