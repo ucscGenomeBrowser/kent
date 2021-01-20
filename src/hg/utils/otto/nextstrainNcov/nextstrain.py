@@ -656,8 +656,12 @@ with open('nextstrainSamples.varPaths', 'w') as outF:
     for sample in samples:
         lab = sample['lab']
         labAbbrev = abbreviateLab(lab)
-        outF.write('\t'.join([sampleName(sample), sample['clade'], labAbbrev, lab,
-                              sample['varStr']]) + '\n');
+        try:
+            outF.write('\t'.join([sampleName(sample), sample['clade'], labAbbrev, lab,
+                                  sample['varStr']]) + '\n');
+        except:
+            print("Problem writing varPaths for sample '", sampleName(sample), "', varStr '",
+                  sample['varStr'])
 
 # Narrow down variants to "informative" set (bi-allelic, each allele supported by
 # sufficient number of samples):

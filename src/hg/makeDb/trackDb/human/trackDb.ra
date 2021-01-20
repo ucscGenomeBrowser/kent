@@ -33,7 +33,7 @@ include trackDb.clinGen.ra
 include trackDb.giab.ra
 
 # CADD scores
-include cadd.ra
+include cadd.ra alpha
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
