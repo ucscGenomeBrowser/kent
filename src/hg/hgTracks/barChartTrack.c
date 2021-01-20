@@ -415,6 +415,13 @@ else
     extras->padding = MIN_GRAPH_PADDING;
     extras->maxHeight = tl.fontHeight * 4;
     }
+if (extras->barWidth <= 2)
+    {
+    if (extras->padding > 1)
+	extras->padding = 1;
+    extras->barWidth = 2;
+    }
+
 extras->modelHeight =  extras->boxModelHeight + 3;
 extras->margin = 1;
 extras->squishHeight = tl.fontHeight - tl.fontHeight/2;
