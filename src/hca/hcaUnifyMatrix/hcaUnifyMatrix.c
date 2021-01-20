@@ -34,13 +34,17 @@ errAbort(
   "options:\n"
   "   -bed=mapping.bed\n"
   "   -empty=val - store val (rather than default -1) to show missing data\n"
+  "   -trackDb=stanza.ra - save trackDb stanza here\n"
+  "   -stats=stats.tsv - save merged stats file here\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"bed", OPTION_STRING},
-   {"val", OPTION_DOUBLE},
+   {"empty", OPTION_DOUBLE},
+   {"trackDb", OPTION_STRING},
+   {"stats", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -50,8 +54,11 @@ struct uniInput
     struct uniInput *next;  /* Next in singly linked list. */
     char *name;	/* Short, will be reused as label prefix */
     int priority;	/* 1 is attended to first, then 2, etc.  */
+    double scaleOut;	/* Everything gets multiplied by this in the output */
     char *mappingBed;	/* Mapping bed file name */
     char *matrixFile;	/* Matrix file name */
+    char *colorFile;	/* File it first column sample, last color */
+    char *statsFile;	/* File stats are in */
     struct hash *rowHash;	/* keyed by 4th field, values char**  */
     struct hash *bedHash;	/* Also keyed by 4th field */
     struct slRef *rowList;	/* List of all parsed out rows as char** */
@@ -69,8 +76,11 @@ struct uniInput *ret;
 AllocVar(ret);
 ret->name = cloneString(row[0]);
 ret->priority = sqlSigned(row[1]);
-ret->mappingBed = cloneString(row[2]);
-ret->matrixFile = cloneString(row[3]);
+ret->scaleOut = sqlDouble(row[2]);
+ret->mappingBed = cloneString(row[3]);
+ret->matrixFile = cloneString(row[4]);
+ret->colorFile = cloneString(row[5]);
+ret->statsFile = cloneString(row[6]);
 return ret;
 }
 
@@ -80,7 +90,7 @@ struct uniInput *uniInputLoadAll(char *fileName)
 {
 struct uniInput *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -256,6 +266,64 @@ return bestSource;
 }
 
 
+void outputTrackDb(char *fileName, struct uniInput *uniList)
+/* Write out a trackDb stanza for us */
+{
+FILE *f = mustOpen(fileName, "w");
+fprintf(f, "track uniBarChart\n");
+fprintf(f, "type bigBarChart\n");
+struct dyString *bars = dyStringNew(0), *colors = dyStringNew(0);
+dyStringAppend(bars, "barChartBars");
+dyStringAppend(colors, "barChartColors");
+struct uniInput *uni;
+for (uni = uniList; uni != NULL; uni = uni->next)
+    {
+    struct lineFile *lf = lineFileOpen(uni->colorFile, TRUE);
+    char *line;
+    while (lineFileNextReal(lf, &line))
+        {
+	char *firstWord = nextTabWord(&line);
+	char *lastWord = NULL;
+	char *word;
+	while ((word = nextTabWord(&line)) != NULL)
+	     lastWord = word;
+	subChar(firstWord, ' ', '_');	// Oh no, underbars!
+	dyStringPrintf(bars, " %s_%s", uni->name, firstWord);
+	dyStringPrintf(colors, " %s", lastWord);
+	}
+    lineFileClose(&lf);
+    }
+fprintf(f, "%s\n", bars->string);
+fprintf(f, "%s\n", colors->string);
+carefulClose(&f);
+}
+
+void outputStats(char *fileName, struct uniInput *uniList)
+/* Write out a trackDb stanza for us */
+{
+FILE *f = mustOpen(fileName, "w");
+struct uniInput *uni;
+for (uni = uniList; uni != NULL; uni = uni->next)
+    {
+    struct lineFile *lf = lineFileOpen(uni->statsFile, TRUE);
+    char *line;
+    while (lineFileNext(lf, &line, NULL))
+        {
+	char *start = skipLeadingSpaces(line);
+	if (start[0] == '#' || start[0] == 0)
+	    fprintf(f, "%s\n", line);
+	else
+	    {
+	    fprintf(f, "%s %s\n", uni->name, line);
+	    }
+	}
+    lineFileClose(&lf);
+    }
+carefulClose(&f);
+}
+
+
+
 void writeOneGraph(struct txGraph *g,  struct uniInput *uniList, struct hash *uniHash, 
     FILE *f, FILE *bedF)
 /* Here we write out one graph.  Normally just write in one piece, but
@@ -310,7 +378,7 @@ for (i=0; i<g->sourceCount; ++i)
 		int x;
 		for (x=0; x<uni->matrix->xSize; ++x)
 		    {
-		    fprintf(f, "\t%g", uni->matrix->rows[y][x]);
+		    fprintf(f, "\t%g", uni->scaleOut*uni->matrix->rows[y][x]);
 		    }
 		}
 	    else
@@ -388,6 +456,18 @@ for (g = gList; g != NULL; g = g->next)
     }
 carefulClose(&f);
 carefulClose(&bedF);
+
+char *trackDb = optionVal("trackDb", NULL);
+if (trackDb != NULL)
+    {
+    outputTrackDb(trackDb, uniList);
+    }
+
+char *stats = optionVal("stats", NULL);
+if (stats != NULL)
+    {
+    outputStats(stats, uniList);
+    }
 }
 
 int main(int argc, char *argv[])
