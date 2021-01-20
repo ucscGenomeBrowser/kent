@@ -115,8 +115,8 @@ void saveGsvtAsBed(struct gsvt *gsvt, char *name, char *symbol, FILE *f)
 {
 fprintf(f, "%s\t%d\t%d\t%s\t", 
     gsvt->chrom, gsvt->chromStart, gsvt->chromEnd, name);
-fprintf(f, "%d\t%s\t%d\t", gsvt->score, gsvt->strand, gsvt->thickStart);
-fprintf(f, "%u\t", gsvt->blockCount);
+fprintf(f, "%d\t%s\t%d\t%d\t", gsvt->score, gsvt->strand, gsvt->thickStart, gsvt->thickEnd);
+fprintf(f, "0\t%u\t", gsvt->blockCount);
 
 /* Print exon-by-exon fields. */
 int i;
