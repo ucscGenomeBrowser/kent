@@ -25,6 +25,7 @@ include ileumWang.ra
 include colonWang.ra
 include rectumWang.ra
 include placentaVentoTormo.ra
+include singleCellMerged.ra
 
 include gencodeV35.ra alpha
 include liftOver.ra
