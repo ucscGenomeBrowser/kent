@@ -6,66 +6,8 @@ superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
-html gnomad
-release alpha
-
-    track gnomadGenomesVariantsV3
-    parent gnomadVariants
-    shortLabel gnomAD v3
-    longLabel Genome Aggregation Database (gnomAD) Genome Variants v3
-    dataVersion Release 3.0 (October 16, 2019)
-    type vcfTabix
-    showHardyWeinberg on
-    configureByPopup off
-    maxWindowToDraw 200000
-    html gnomad
-    bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r3.0.sites.vcf.gz
-    priority 1
-    visibility dense
-    url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r3&ignore=$$
-    urlLabel gnomAD: 
-    release alpha
-
-    track gnomadVariantsV2
-    parent gnomadVariants 
-    compositeTrack on
-    shortLabel gnomAD v2
-    longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants v2.1
-    type vcfTabix
-    showHardyWeinberg on
-    configureByPopup off
-    maxWindowToDraw 200000
-    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
-    dataVersion Release 2.1.1 (March 6, 2019)
-    html gnomad
-    priority 2
-    visibility hide
-    release alpha
-
-        track gnomadGenomesVariantsV2
-        parent gnomadVariantsV2 on
-        shortLabel gnomAD Genome v2
-        longLabel Genome Aggregation Database (gnomAD) Genome Variants v2.1
-        bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
-        priority 1
-        release alpha
-
-        track gnomadExomesVariantsV2
-        parent gnomadVariantsV2 on
-        shortLabel gnomAD Exome v2
-        longLabel Genome Aggregation Database (gnomAD) Exome Variants v2.1
-        bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
-        priority 2
-        release alpha
-
-track gnomadVariants
-superTrack on
-shortLabel gnomAD Variants
-longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
-group varRep
 html gnomadV3_1
-pennantIcon Updated red ../goldenPath/newsarch.html "Updated Jan. 19, 2021"
-release beta,public
+pennantIcon Updated red ../goldenPath/newsarch.html#012021 "Updated Jan. 20, 2021"
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -79,9 +21,8 @@ release beta,public
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     dataVersion Release 2.1.1 (March 6, 2019)
     html gnomadV3_1
-    priority 2
+    priority 3
     visibility hide
-    release beta,public
 
         track gnomadGenomesVariantsV2
         parent gnomadVariantsV2 on
@@ -89,7 +30,6 @@ release beta,public
         longLabel Genome Aggregation Database (gnomAD) Genome Variants v2.1
         bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
         priority 1
-        release beta,public
 
         track gnomadExomesVariantsV2
         parent gnomadVariantsV2 on
@@ -97,7 +37,22 @@ release beta,public
         longLabel Genome Aggregation Database (gnomAD) Exome Variants v2.1
         bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
         priority 2
-        release beta,public
+
+    track gnomadGenomesVariantsV3
+    parent gnomadVariants
+    shortLabel gnomAD v3
+    longLabel Genome Aggregation Database (gnomAD) Genome Variants v3
+    dataVersion Release 3.0 (October 16, 2019)
+    type vcfTabix
+    showHardyWeinberg on
+    configureByPopup off
+    maxWindowToDraw 200000
+    html gnomad
+    bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r3.0.sites.vcf.gz
+    priority 2
+    visibility hide
+    url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r3&ignore=$$
+    urlLabel gnomAD:
 
     track gnomadGenomesVariantsV3_1
     parent gnomadVariants
@@ -126,6 +81,5 @@ release beta,public
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type; Allele Count: $AC
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraDetailsTable /gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
-    pennantIcon Updated red
-    release beta,public
+    extraDetailsTable Population Frequences|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
+    pennantIcon New red ../goldenPath/newsarch.html#012021 "Updated Jan. 20, 2021"

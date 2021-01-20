@@ -30,3 +30,14 @@ include bloomEsc.ra
         noScoreFilter on
         priority 33.2
 
+        track mccoy
+        shortLabel McCoy Escape 
+        longLabel McCoy lab: S Mutation impact on neutralization by serum and mAbs
+        parent abEscape
+        visibility pack
+        type bigBed 8 +
+        bigDataUrl /gbdb/wuhCor1/mccoy/mccoy.bb
+        mouseOverField description
+        noScoreFilter on
+        priority 33.3
+

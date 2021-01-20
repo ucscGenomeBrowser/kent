@@ -1,0 +1,70 @@
+track pancreasBaron
+superTrack on
+shortLabel Pancreas Baron
+longLabel Pancreas single cell sequencing from Baron et al 2016
+visibility hide
+group expression
+
+    track pancreasBaronCellType
+    parent pancreasBaron
+    type bigBarChart
+    visibility pack
+    shortLabel Pancreas Cells
+    longLabel Pancreas cells binned by cell type from Baron et al 2016
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/pancreasBaron/cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/pancreasBaron/cell_type.stats
+    barChartBars acinar activated_stellate alpha beta delta ductal endothelial epsilon gamma macrophage mast quiescent_stellate schwann t_cell
+    #barChartColors #0150fe #79b665 #99472e #8f4e2e #97492d #556159 #56d456 #decac2 #ba8672 #f8bcbb #f9bcbb #76b964 #ced7bd #fbd2d2
+    #barChartColors #084cf1 #6c979f #1846d8 #0d4de9 #1549dd #0101fd #56d457 #bcc7f1 #6684e3 #f2bcc1 #f4bcc0 #6a9e9a #c1c8e0 #f9d2d4
+    #barChartColors #1152e9 #faa06c #3254c1 #1b53dd #2c54c8 #535d95 #57d456 #c6cde7 #788ed3 #f7bebc #f8bdbd #f9a06c #e6d4c5 #fbd3d2
+    #barChartColors #1057e6 #f7a06e #2c5dc1 #1957db #285bc8 #0298be #57d457 #c3d0e8 #7493d3 #f3c0bf #f5bfbf #f6a06e #ddd6cc #f9d4d4
+    barChartColors #1355e1 #c68c6e #2b59bb #1c54d5 #2857c2 #0397bd #57d357 #c3cfe6 #7491cf #f5c0b4 #fab9b9 #c58c6e #d4d2cc #ffd7db
+    transformFunc NONE
+    barChartLimit 2.5
+
+    track pancreasBaronBatch
+    parent pancreasBaron
+    type bigBarChart
+    visibility hide
+    shortLabel Pancreas Batch
+    longLabel Pancreas cells binned by batch from Baron et al 2016
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/pancreasBaron/batch.bb
+    barChartStatsUrl /gbdb/hg38/bbi/pancreasBaron/batch.stats
+    barChartBars human1_lib1 human1_lib2 human1_lib3 human2_lib1 human2_lib2 human2_lib3 human3_lib1 human3_lib2 human3_lib3 human3_lib4 human4_lib1 human4_lib3
+    #barChartColors #746621 #746522 #815a26 #964d25 #a14528 #954d27 #655166 #5a4f79 #55517d #4f5088 #8f5126 #924f28
+    #barChartColors #0e4de3 #0f4ce3 #0e4ce6 #1641db #1842d9 #1442dd #094bef #084bf1 #084cf2 #074cf2 #1146e1 #1145e2
+    #barChartColors #2355d1 #2455d0 #2154d5 #3555bd #3554be #3155c2 #1553e4 #1352e7 #1152e9 #1152ea #2a55cb #2955cc
+    #barChartColors #215ad0 #215acf #1f59d4 #2b62be #2c60be #2861c2 #1458e2 #1257e4 #1056e6 #1056e7 #245ec9 #235fca
+    barChartColors #1f57cc #2057cb #1e56cf #285fba #295dba #265ebe #1456de #1256e1 #1155e3 #1055e4 #235bc4 #225cc5
+    transformFunc NONE
+    barChartLimit 2
+
+    track pancreasBaronDonor
+    parent pancreasBaron
+    type bigBarChart
+    visibility hide
+    shortLabel Pancreas Donor
+    longLabel Pancreas cells binned by organ donor from Baron et al 2016
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/pancreasBaron/donor.bb
+    barChartStatsUrl /gbdb/hg38/bbi/pancreasBaron/donor.stats
+    barChartBars human1 human2 human3 human4
+    #barChartColors #7a6123 #9a4a26 #59507a #915027
+    #barChartColors #0e4ce5 #1642dc #084bf1 #1146e2
+    #barChartColors #2255d3 #3355c0 #1252e8 #2955cc
+    #barChartColors #1f5ad2 #2a61c0 #1157e5 #235eca
+    barChartColors #1e57ce #275ebc #1155e2 #225bc5
+    transformFunc NONE
+    barChartLimit 2
+

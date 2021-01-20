@@ -390,6 +390,15 @@ for (categ = categList; categ != NULL; categ = categ->next)
 return longest * 1.09;
 }
 
+void deunderbarColumn(struct fieldedTable *ft, char *field)
+/* Ununderbar all of a column inside table because space/underbar gets
+ * so confusing */
+{
+int fieldIx = fieldedTableFindFieldIx(ft, field);
+struct fieldedRow *row;
+for (row = ft->rowList; row != NULL; row = row->next)
+    replaceChar(row->row[fieldIx], '_', ' ');
+}
 
 static void printBarChart(struct barChartBed *chart, struct trackDb *tdb, double maxVal, char *metric)
 /* Plot bar chart without quartiles or anything fancy just using SVG */
@@ -413,6 +422,7 @@ if (statsFile != NULL)
     char *required[] = {"cluster", "count", "total"};
     struct fieldedTable *ft = fieldedTableFromTabFile(
 	statsFile, statsFile, required, ArraySize(required));
+    deunderbarColumn(ft, "cluster");
     statsHash = fieldedTableIndex(ft, "cluster");
     countStatIx = fieldedTableFindFieldIx(ft, "count");
     statsSize = 8*(fieldedTableMaxColChars(ft, countStatIx)+1);
@@ -473,9 +483,7 @@ for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer
  	labelOffset, yPos+innerHeight-1, innerHeight-1, deunder);
     if (statsSize > 0.0)
 	{
-	struct fieldedRow *fr = hashFindVal(statsHash, categ->label);
-	if (fr == NULL)
-	    fr = hashFindVal(statsHash, deunder);
+	struct fieldedRow *fr = hashFindVal(statsHash, deunder);
 	if (fr != NULL)
 	    {
 	    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n", 
@@ -485,7 +493,7 @@ for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer
     printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n", 
 	barOffset+barWidth+2, yPos+innerHeight-1, innerHeight-1, score);
     }
-printf("<svg>");
+printf("</svg>");
 }
 
 
