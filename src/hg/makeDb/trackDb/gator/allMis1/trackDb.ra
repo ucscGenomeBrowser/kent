@@ -35,4 +35,4 @@ visibility dense
 track simpleRepeat override
 visibility dense
 
-include ../../refSeqComposite.ra
+include ../../refSeqComposite.ra alpha

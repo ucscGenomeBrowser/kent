@@ -587,7 +587,6 @@ bedNameLabel Mutation
 mouseOver $name $clinicalNotes
 noScoreFilter on
 urls geographyChartsUrl="$$" nextstrainBuildUrl="$$"
-visibility pack
 searchIndex name
 searchTrix /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.ix
 group varRep

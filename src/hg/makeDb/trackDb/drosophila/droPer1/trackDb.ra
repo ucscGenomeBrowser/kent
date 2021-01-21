@@ -16,4 +16,4 @@ release alpha
 track netDm3 override
 release alpha
 
-include ../../refSeqComposite.ra
+include ../../refSeqComposite.ra alpha
