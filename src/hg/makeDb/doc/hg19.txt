@@ -34181,3 +34181,166 @@ Footprint file:
 
 cut -f1,2,3 sorted-KAPA_HyperExome_hg19_capture_targets.bed > sorted-cut-KAPA_HyperExome_hg19_capture_targets.bed
 #############################################################################
+
+#############################################################################
+# skinSoleBoldo JimK 01-14-2020
+# This describes how we got the skinSoleBoldo data set into the 
+# Genome Browser from the Cell Browser.
+#############################################################################
+
+# Create working directory and go there
+mkdir /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo
+cd /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo
+
+# Create output dir for binaries
+mkdir bbi 
+
+# Downloaded files from the UCSC cell browser's as so
+wget https://cells.ucsc.edu/aging-human-skin/meta.tsv
+wget https://cells.ucsc.edu/aging-human-skin/exprMatrix.tsv.gz
+
+# Get the first line (fields) out of meta.tsv and also make stats on it
+head -1 meta.tsv > meta.fields
+tabInfo meta.tsv -vals=20 > meta.20
+
+
+# Make a bunch of smaller matrices by clustering columns.  Mostly we'll use the cluster one
+# but some of the others are good to look at sometimes too.  This is the time consuming step.
+mkdir clust
+matrixClusterColumns -makeIndex=clust/exprMatrix.ix  exprMatrix.tsv.gz meta.tsv \
+    Celltype clust/cell_type.matrix bbi/cell_type.stats \
+    subj clust/donor.matrix bbi/donor.stats \
+    age	clust/age.matrix bbi/age.stats \
+    Celltype_and_Age clust/age_cell_type.matrix bbi/age_cell_type.stats 
+
+# Get the first column (the genes) out of expression matrix.  
+cut -f 1 clust/cell_type.matrix > gene.lst
+
+# Figure out the geneset they used and generate mapping file
+gencodeVersionForGenes gene.lst /hive/data/inside/geneSymVerTx.tsv -bed=mapping.bed
+# best is gencodeV19 as sym on hg19 with 21217 of 21353 (99.3631%) hits
+
+# Turn some into barChart, and then bigBarChart
+foreach s (cell_type donor age age_cell_type)
+    matrixToBarChartBed clust/$s.matrix mapping.bed clust/$s.bed -stats=bbi/$s.stats -trackDb=clust/$s.ra
+    bedSort clust/$s.bed clust/$s.bed
+    bedToBigBed clust/$s.bed /hive/data/genomes/hg19/chrom.sizes bbi/$s.bb -type=bed6+3 -as=/cluster/home/kent/src/hg/lib/simpleBarChartBed.as
+end
+
+# Make up special colors for cell_type.  First manually create two column 
+# file that relates at least some of sample labels to cell types we have colors for.
+# Call this file clust/cell_type.labels.  
+matrixClusterColumns clust/cell_type.matrix clust/cell_type.labels cluster clust/cell_type.unnormed clust/cell_type.restats
+matrixNormalize column sum clust/cell_type.unnormed clust/cell_type.ref
+
+# Use same colors for sample
+foreach s (cell_type donor age age_cell_type)
+    hcaColorCells clust/cell_type.ref ../typeColors.tsv clust/$s.matrix clust/$s.refStats -trackDb=clust/$s.colors -stats=bbi/$s.stats
+end
+
+# Link files needed by browser at runtime to the /gbdb dir
+mkdir /gbdb/hg19/bbi/skinSoleBoldo
+foreach s (cell_type donor age age_cell_type)
+    ln -s /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo/bbi/$s.bb /gbdb/hg19/bbi/skinSoleBoldo/
+    ln -s /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo/bbi/$s.stats /gbdb/hg19/bbi/skinSoleBoldo/
+end
+
+# Add the bits from clust/*.ra and clust/*.colors to hg19/trackDb.ra and you should be good.
+rm -f tracks.ra
+foreach s (cell_type donor age age_cell_type)
+    grep -v barChartColors clust/$s.ra >>tracks.ra
+    cat clust/$s.colors >> tracks.ra
+    echo transformFunc NONE >> tracks.ra
+    echo barChartLimit 2 >> tracks.ra
+    echo "" >> tracks.ra
+end
+
+
+#############################################################################
+# fetalGeneAtlas JimK 01-19-2020
+############################################################################
+# This is the RNA-seq part of the data set described in 
+# "A human cell atlas of fetal gene expression" by Cao, Day et al
+# Science 13 Nove 2020.   This was imported from Cell Browser
+
+# Create directory for work.
+
+mkdir -p /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas
+cd /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas
+
+# Create output dir for binaries
+mkdir bbi 
+
+# link in in files from cell browser
+ln -s /hive/data/inside/cells/datasets/fetal-gene-atlas/genes/all/meta.tsv .
+ln -s /hive/data/inside/cells/datasets/fetal-gene-atlas/genes/all/exprMatrix.tsv.gz .
+
+# Get the first line (fields) out of meta.tsv and also make stats on it
+head -1 meta.tsv > meta.fields
+tabInfo meta.tsv -vals=20 > meta.20
+
+
+# Make a bunch of smaller matrices by clustering columns.  Mostly we'll use the cluster one
+# but some of the others are good to look at sometimes too.  This is the time consuming step.
+mkdir clust
+matrixClusterColumns -makeIndex=clust/exprMatrix.ix  exprMatrix.tsv.gz meta.tsv \
+    Main_cluster_name clust/cell_type.matrix bbi/cell_type.stats \
+    Assay clust/Assay.matrix bbi/Assay.stats \
+    Experiment_batch clust/Experiment_batch.matrix bbi/Experiment_batch.stats \
+    Fetus_id clust/donor.matrix bbi/donor.stats \
+    Organ clust/Organ.matrix bbi/Organ.stats \
+    Organ_cell_lineage clust/Organ_cell_lineage.matrix bbi/Organ_cell_lineage.stats \
+    RT_group clust/RT_group.matrix bbi/RT_group.stats \
+    sex clust/sex.matrix bbi/sex.stats 
+
+# Get the first column (the genes) out of expression matrix.  
+cut -f 1 clust/cell_type.matrix > gene.lst
+
+
+# Figure out the geneset they used and generate mapping file
+gencodeVersionForGenes gene.lst /hive/data/inside/geneSymVerTx.tsv -bed=mapping.bed
+# best is gencodeV19 as id on hg19 with 60284 of 63562 (94.8428%) hits
+
+
+# Turn some into barChart, and then bigBarChart
+foreach s (cell_type Assay Experiment_batch donor Organ Organ_cell_lineage RT_group sex)
+    matrixToBarChartBed clust/$s.matrix mapping.bed clust/$s.bed -stats=bbi/$s.stats -trackDb=clust/$s.ra
+    bedSort clust/$s.bed clust/$s.bed
+    bedToBigBed clust/$s.bed /hive/data/genomes/hg19/chrom.sizes bbi/$s.bb -type=bed6+3 -as=/cluster/home/kent/src/hg/lib/simpleBarChartBed.as
+end
+
+# Make up special colors for cell_type.  First manually create two column 
+# file that relates at least some of sample labels to cell types we have colors for.
+# Call this file clust/cell_type.labels.  
+matrixClusterColumns clust/cell_type.matrix clust/cell_type.labels cluster clust/cell_type.unnormed clust/cell_type.restats
+matrixNormalize column sum clust/cell_type.unnormed clust/cell_type.ref
+hcaColorCells clust/cell_type.ref ../typeColors.tsv clust/cell_type.matrix clust/cell_type.refStats -trackDb=clust/cell_type.colors -stats=bbi/cell_type.stats
+
+# Use same colors for some others
+foreach s (Experiment_batch donor Organ Organ_cell_lineage RT_group)
+    hcaColorCells clust/cell_type.ref ../typeColors.tsv clust/$s.matrix clust/$s.refStats -trackDb=clust/$s.colors -stats=bbi/$s.stats
+end
+
+# Link files needed by browser at runtime to the /gbdb dir
+mkdir /gbdb/hg19/bbi/fetalGeneAtlas
+foreach s (cell_type Assay Experiment_batch donor Organ Organ_cell_lineage RT_group sex)
+    ln -s /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas/bbi/$s.bb /gbdb/hg19/bbi/fetalGeneAtlas/
+    ln -s /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas/bbi/$s.stats /gbdb/hg19/bbi/fetalGeneAtlas/
+end
+
+
+hgBbiDbLink hg19 fetalGeneAtlasCellTypes /gbdb/hg19/bbi/fetalGeneAtlas/cell_type.bb
+hgBbiDbLink hg19 fetalGeneAtlasDonor /gbdb/hg19/bbi/fetalGeneAtlas/donor.bb
+hgBbiDbLink hg19 fetalGeneAtlasAssay /gbdb/hg19/bbi/fetalGeneAtlas/Assay.bb
+hgBbiDbLink hg19 fetalGeneAtlasExperiment /gbdb/hg19/bbi/fetalGeneAtlas/Experiment_batch.bb
+hgBbiDbLink hg19 fetalGeneAtlasOrgan /gbdb/hg19/bbi/fetalGeneAtlas/Organ.bb
+hgBbiDbLink hg19 fetalGeneAtlasOrganCellLineage /gbdb/hg19/bbi/fetalGeneAtlas/Organ_cell_lineage.bb
+hgBbiDbLink hg19 fetalGeneAtlasRtGroup /gbdb/hg19/bbi/fetalGeneAtlas/RG_group.bb
+hgBbiDbLink hg19 fetalGeneAtlasSex /gbdb/hg19/bbi/fetalGeneAtlas/sex.bb
+
+# Add the bits from clust/*.ra and clust/*.colors to hg19/trackDb.ra and you should be good.
+foreach s (cell_type Assay Experiment_batch donor Organ Organ_cell_lineage RT_group sex)
+    echo >> clust/$s.ra
+end
+cat clust/*.ra > tracks.ra
+

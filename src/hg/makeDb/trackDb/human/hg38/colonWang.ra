@@ -1,0 +1,47 @@
+track colonWang
+superTrack on
+shortLabel Colon Wang
+longLabel Colon single cell sequencing from Wang et al 2020
+visibility hide
+group expression
+
+    track colonWangCellType
+    parent colonWang
+    type bigBarChart
+    visibility pack
+    shortLabel Colon Cells
+    longLabel Colon cells binned by cell type from Wang et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/colonWang/cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/colonWang/cell_type.stats
+    barChartBars Enteriendocrine Enterocyte Goblet Paneth-like Progenitor Stem_Cell TA
+    barChartColors #c7d2e5 #0198c0 #0251fc #7197d7 #4d689b #9e9fa2 #949dae
+    #barChartColors #bcd0f3 #0198c0 #568bfd #629be4 #436ca1 #9ea0a1 #919eb1
+    #barChartColors #c2d1eb #0197c1 #0a57ef #5991f6 #2c63c1 #9ea0a2 #4669a1
+    #barChartColors #dad8d4 #0298bf #0352fb #69b1cd #9e874e #e7b463 #ab8743
+    transformFunc NONE
+    barChartLimit 1.6
+
+    track colonWangDonor
+    parent colonWang
+    type bigBarChart
+    visibility hide
+    shortLabel Colon Donor
+    longLabel Colon cells binned by organ donor from Wang et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/colonWang/donor.bb
+    barChartStatsUrl /gbdb/hg38/bbi/colonWang/donor.stats
+    barChartBars Colon-1 Colon-2
+    barChartColors #205cd4 #215bd3
+    #barChartColors #078fc2 #0296c0
+    #barChartColors #145cdf #0b5de9
+    #barChartColors #52719f #3a81a5
+    transformFunc NONE
+    barChartLimit 2
+

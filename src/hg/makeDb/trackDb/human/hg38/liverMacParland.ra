@@ -1,0 +1,85 @@
+track liverMacParland
+superTrack on
+shortLabel Liver MacParland
+longLabel Liver single cell sequencing from MacParland et al 2018
+visibility hide
+group expression
+
+
+    track liverMacParlandCellType
+    parent liverMacParland
+    type bigBarChart
+    visibility pack
+    shortLabel Liver Cells
+    longLabel Liver cells binned by cell type from MacParland et al 2018
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/liverMacParland/cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/liverMacParland/cell_type.stats
+    barChartBars B_cell Cholangiocyte Erythroid Hepatocyte Inflammatory_Macs LSEC_1 LSEC_2,3 NK-like Non-inflammatory_Macs Plasma Portal_endothelial Stellate abT_cell gdT_cell_1 gdT_cell_2
+    barChartColors #f1798a #908ffd #d3c4db #af01af #d42c0d #5e97d5 #5d8fe8 #f0798a #e3725c #c27d9a #58d05c #e7cbbe #e93650 #e87a8c #cc7d95
+    #barChartColors #da6973 #8f8ffd #cfc3dd #af01af #da1820 #5c97d5 #5b8fea #d86a74 #dc6971 #b17391 #57d15b #e7cbbe #c61f2d #d36c77 #bc7187
+    #barChartColors #eb6a6a #c2afb6 #d3cccf #55586d #ef1818 #5a99d7 #5990eb #e96b6b #eb696a #c9787b #56d25a #c2d6d1 #df1f20 #e56c6d #d47474
+    #barChartColors #eb696b #c3adb9 #d8c7d4 #bf01bf #ef181a #5a99d7 #5a90eb #e86a6c #eb696c #c9777e #57d25a #c3d5d2 #df1f22 #e46c6f #d47477
+    #barChartColors #eb6b6d #c7aeb9 #dbc8d4 #bf01bf #ef191c #5d99d6 #5c90ea #e96c6e #eb6a6d #cc7a81 #58d15b #f5d0d5 #df2125 #e56e71 #d5767a
+    #barChartColors #db2229 #2a50cc #77467e #bf01bf #ed1a1d #0d7a91 #1065bd #d8232b #df2027 #9c3b5a #04bb07 #dd6070 #d8232b #d1262f #ae354b
+    #barChartColors #e76b70 #a1b1e9 #d7c8d9 #bf01bf #ed191d #5ea6b6 #6098d3 #e56c72 #ea6a6f #bd7b91 #58d25a #f5cbd5 #d8222b #e16e75 #c97787
+    #barChartColors #db2129 #2a4fcc #77457e #bf01bf #ed191d #0d7a91 #1065bd #d8222b #df2027 #9c395a #04bb07 #dd5070 #d8222b #d1252f #ae344b
+    #barChartColors #db212a #2a4ecd #75437e #af01af #ec191e #0d7a91 #0f64be #d8222c #df1f27 #9b385c #04bb07 #dd408f #d8222c #d12530 #ae324d
+    ##barChartColors #e76b71 #a0b1e9 #d6c8d9 #af01af #ec191e #5ea6b6 #5f98d4 #e56c72 #e96a6f #bd7a93 #58d25a #f5c7de #d8222c #e06e75 #c97788
+    #barChartColors #db212a #2a4ecd #75437e #af01af #ec191e #0d7a91 #0f64be #d8222c #df1f27 #9b385c #04bb07 #dd408f #d8222c #d12530 #ae324d
+    #barChartColors #e11e20 #0250fc #6e4379 #af01af #f01718 #0fb10b #16aa11 #df1f20 #e61c1d #a63545 #02be02 #447b37 #e11f1f #da2123 #b72f38
+    #barChartColors #e01e21 #784760 #79426c #af01af #ef181a #0865c3 #0858e1 #dd2023 #e11e22 #ae333d #02bb08 #347165 #de1f22 #d72226 #bd2e32
+    #barChartColors #e26873 #8f8ffe #cec2df #af01b0 #e91720 #5a98d8 #5a8feb #e06974 #e56872 #b47195 #57d15b #c1d1d7 #d31d2e #db6a78 #c26f8a
+    transformFunc NONE
+    barChartLimit 1.5
+
+    track liverMacParlandBroadCellType
+    parent liverMacParland
+    type bigBarChart
+    visibility hide
+    shortLabel Liver Broad
+    longLabel Liver cells binned by broad cell type from MacParland et al 2018
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/liverMacParland/BroadCellType.bb
+    barChartStatsUrl /gbdb/hg38/bbi/liverMacParland/BroadCellType.stats
+    barChartBars B-cell Cholangiocyte Endothelial Erythroid Hepatocyte Kupffer Stellate T/NK-cell
+    #barChartColors #dd7071 #c2afb6 #035dde #d3cccf #55586d #f01818 #c2d6d1 #e11e1f
+    #barChartColors #dd6f73 #c3adb9 #045cde #d8c7d4 #bf01bf #ef181a #c3d5d2 #e11e21
+    #barChartColors #dd7176 #c7aeb9 #065cdd #dbc8d4 #bf01bf #ef191b #f5d0d5 #e12023
+    #barChartColors #d37380 #a1b1e9 #089162 #d7c8d9 #bf01bf #ed191d #f5d0d5 #db212a
+    #barChartColors #e76c70 #a1b1e9 #d7c8d9 #bf01bf #ed1a1d #5ea7b6 #6098d3 #e56c72 #ea6a6f #bd7c91 #58d25a #f5d0d5 #d8232b #e16e75 #c97887
+    #barChartColors #d37281 #a0b1e9 #089162 #d6c8d9 #af01af #ed191d #f5c7de #da202a
+    #barChartColors #c76e81 #8f8ffd #055bdc #cfc3dd #af01af #db181f #e7cbbe #c81e2c
+    barChartColors #dc7b91 #908ffd #075bdb #d3c4db #af01af #d92b07 #e7cbbe #eb364f
+    transformFunc NONE
+    barChartLimit 1.5
+
+    track liverMacParlandDonor
+    parent liverMacParland
+    type bigBarChart
+    visibility hide
+    shortLabel Liver Donor
+    longLabel Liver cells binned by organ donor from MacParland et al 2018
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/liverMacParland/donor.bb
+    barChartStatsUrl /gbdb/hg38/bbi/liverMacParland/donor.stats
+    barChartBars P1TLH P2TLH P3TLH P4TLH P5TLH
+    #barChartColors #da2125 #764861 #5c5669 #ec191a #dd2022
+    #barChartColors #da2026 #af0fae #be02be #ec191b #dd1f24
+    #barChartColors #da2228 #b112ac #be03bd #ec1b1d #dd2126
+    #barChartColors #d12431 #a915b0 #be03be #e71c21 #d12332
+    #barChartColors #d12331 #9d14a5 #ae02ae #e71b21 #d12332
+    #barChartColors #c5202d #8e10a8 #ac02ae #d71a22 #c41f30
+    barChartColors #ae3f5a #9112a6 #ad03ae #dd3751 #d63856
+    transformFunc NONE
+    barChartLimit 1.5
+

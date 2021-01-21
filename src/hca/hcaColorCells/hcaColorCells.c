@@ -20,6 +20,7 @@ errAbort(
   "options:\n"
   "   -trackDb=out.ra - output colors as barChartColors trackDb line\n"
   "   -stats=sample.stats from matrixClusterColumns - will lighten low N columns\n"
+  "   -cellMin=N - set the minimum number of cells to get color penalty to N\n"
   );
 }
 
@@ -27,6 +28,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"trackDb", OPTION_STRING},
    {"stats", OPTION_STRING},
+   {"cellMin", OPTION_INT},
    {NULL, 0},
 };
 
@@ -233,6 +235,8 @@ normalizeColumns(sampleMatrix);
 stripGencodeVersion(sampleMatrix);
 
 struct hash *statsHash = NULL;
+int cellMin = optionInt("cellMin", 12);
+int cellNearMin = cellMin*6;
 char *statsFile = optionVal("stats", NULL);
 if (statsFile != NULL)
     {
@@ -321,9 +325,9 @@ for (sampleIx=0; sampleIx<sampleMatrix->xSize; ++sampleIx)
 	struct matrixClusterStats *stats = hashFindVal(statsHash, sampleLabel);
 	if (stats == NULL)
 	    errAbort("%s is in matrixFile but not %s", sampleLabel, statsFile);
-	if (stats->count < 60)
+	if (stats->count < cellNearMin)
 	    belief *= modFactor;
-	if (stats->count < 12)
+	if (stats->count < cellMin)
 	    belief *= modFactor;
 	if (stats->total < 1e6)
 	    belief *= modFactor;
