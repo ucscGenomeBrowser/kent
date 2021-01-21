@@ -81,5 +81,5 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012021 "Updated Jan. 20, 202
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type; Allele Count: $AC
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraDetailsTable Population Frequences|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
+    extraDetailsTable Population Frequencies|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
     pennantIcon New red ../goldenPath/newsarch.html#012021 "Updated Jan. 20, 2021"
