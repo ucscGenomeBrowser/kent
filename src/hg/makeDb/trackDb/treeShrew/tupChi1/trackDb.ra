@@ -14,4 +14,4 @@ searchPriority 8
 
 include trackDb.5way.ra alpha
 include trackDb.4way.ra
-include ../../refSeqComposite.ra
+include ../../refSeqComposite.ra alpha
