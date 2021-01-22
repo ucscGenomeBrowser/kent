@@ -379,17 +379,17 @@ if (isNotEmpty(setting))
 int barCount = getCategoryCount(tg);
 double scale = 1.0;
 if (barCount <= 20)
-    scale = 2.0;
-else if (barCount <= 50)
-    scale = 1.5;
-else if (barCount <= 100)
+    scale = 2.5;
+else if (barCount <= 40)
+    scale = 1.6;
+else if (barCount <= 60)
     scale = 1.0;
-else if (barCount <= 150)
-    scale = 0.75;
+else if (barCount <= 120)
+    scale = 0.9;
 else if (barCount <= 200)
-    scale = 0.5;
+    scale = 0.75;
 else 
-    scale = 0.25;
+    scale = 0.5;
 
 long winSize = virtWinBaseCount;
 if (winSize < extras->winMaxGraph && 
@@ -415,11 +415,15 @@ else
     extras->padding = MIN_GRAPH_PADDING;
     extras->maxHeight = tl.fontHeight * 4;
     }
-if (extras->barWidth <= 2)
+if (extras->barWidth == 1 && extras->padding == 1)
+   {
+   extras->barWidth = 2;
+   extras->padding = 0;
+   }
+if (extras->barWidth < 1)
     {
-    if (extras->padding > 1)
-	extras->padding = 1;
-    extras->barWidth = 2;
+    extras->barWidth = 1;
+    extras->padding = 0;
     }
 
 extras->modelHeight =  extras->boxModelHeight + 3;
@@ -694,7 +698,7 @@ for (categ = categs; categ != NULL; categ = categ->next, i++)
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
                                         extras->maxHeight, extras->doLogTransform);
-    mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, extras->barWidth, height, 
+    mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, extras->barWidth + extras->padding, height, 
                         tg->track, mapItemName, chartMapText(tg, categ, expScore));
     x1 = x1 + extras->barWidth + extras->padding;
     }

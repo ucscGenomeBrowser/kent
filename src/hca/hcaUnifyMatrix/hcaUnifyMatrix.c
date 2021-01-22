@@ -329,6 +329,7 @@ void writeOneGraph(struct txGraph *g,  struct uniInput *uniList, struct hash *un
 /* Here we write out one graph.  Normally just write in one piece, but
  * we will at least snoop for those that need breaking up */
 {
+verbose(3, "writeOneGraph %s with %d sources\n", g->name, g->sourceCount);
 /* Find best txSource and it's associated type. */
 int i;
 struct txSource *bestTxSource = NULL;
@@ -366,7 +367,6 @@ for (i=0; i<g->sourceCount; ++i)
 	struct bed *bestBed = hashMustFindVal(bestUni->bedHash, txSource->accession);
 	for (uni = uniList; uni != NULL; uni = uni->next)
 	    {
-	    if (bestBed != bestBed) uglyAbort("Absurd!");
 	    struct txSource *ourSource = findBestSource(g, bestBed, uni);
 	    if (ourSource != NULL)
 	        {
@@ -415,9 +415,9 @@ for (uni = uniList; uni != NULL; uni = uni->next)
     {
     hashAdd(uniHash, uni->mappingBed, uni);
     loadMappingBed(uni);
-    verbose(1, "%d genes in %s\n", uni->bedHash->elCount, uni->mappingBed);
+    verbose(2, "%d genes in %s\n", uni->bedHash->elCount, uni->mappingBed);
     loadMatrix(uni);
-    verbose(1, "%d genes and %d samples in %s\n", 
+    verbose(2, "%d genes and %d samples in %s\n", 
 	uni->matrix->ySize, uni->matrix->xSize, uni->matrixFile);
     totalColumns += uni->matrix->xSize;
     }

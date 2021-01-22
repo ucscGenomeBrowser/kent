@@ -53,6 +53,7 @@ errAbort(
   "  -release=alpha|beta|public - Include trackDb entries with this release tag only.\n"
   "  -settings - for trackDb scanning, output table name, type line,\n"
   "            -  and settings hash to stderr while loading everything."
+  "  -remoteLogin - use remote login to check for the existence of bigDataUrl files\n"
   );
 }
 
@@ -61,12 +62,15 @@ static struct optionSpec optionSpecs[] = {
     {"strict", OPTION_BOOLEAN},
     {"release", OPTION_STRING},
     {"settings", OPTION_BOOLEAN},
+    {"remoteLogin", OPTION_STRING},
     {NULL,      0}
 };
 
 static char *raName = "trackDb.ra";
 
 static char *release = "alpha";
+
+static char *remoteLogin = NULL;
 
 // release tags
 #define RELEASE_ALPHA  (1 << 0)
@@ -124,7 +128,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
 	slAddHead(&newList, tdb);
 	}
-    else if (trackDataAccessible(db, tdb) || tdbIsDownloadsOnly(tdb))
+    else if (tdbIsDownloadsOnly(tdb) || trackDataAccessibleRemote(db, tdb, remoteLogin)) 
         {
         slAddHead(&newList, tdb);
         }
@@ -909,6 +913,7 @@ if (strchr(raName, '/') != NULL)
     errAbort("-raName value should be a file name without directories");
 release = optionVal("release", release);
 releaseBit = getReleaseBit(release);
+remoteLogin = optionVal("remoteLogin", remoteLogin);
 
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5], optionExists("strict"));
 return 0;
