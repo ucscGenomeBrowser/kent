@@ -259,7 +259,12 @@ beta_all: ${DBS:%=%_beta}
 
 %_betaTest:
 	# now do loads on hgwbeta
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -remoteLogin=${BETA_MACHINE} -release=beta trackDb_betaTest hgFindSpec_betaTest $*
+	ssh  ${BETA_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=beta trackDb_betaTest hgFindSpec_betaTest $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta hgsql $* -Ne "select tableName from trackDb" | sort > $*.tableList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta hgsql $* -Ne "select tableName from trackDb_betaTest" | sort > $*.tableListTest.txt
+	-diff $*.tableList.txt $*.tableListTest.txt
+	rm $*.gbdbList.txt $*.tableList.txt $*.tableListTest.txt
 
 %_beta:
 	# now do loads on hgwbeta
@@ -281,7 +286,12 @@ public: onbeta clean
 public_all: ${DBS:%=%_public}
 
 %_publicTest:
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -remoteLogin=${PUBLIC_MACHINE} -release=public trackDb_publicTest hgFindSpecTest_publicTest $*
+	ssh  ${PUBLIC_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=public trackDb_publicTest hgFindSpecTest_publicTest $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta hgsql $* -Ne "select tableName from trackDb_public" | sort > $*.tableList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta hgsql $* -Ne "select tableName from trackDb_publicTest" | sort > $*.tableListTest.txt
+	-diff $*.tableList.txt $*.tableListTest.txt
+	rm $*.gbdbList.txt $*.tableList.txt $*.tableListTest.txt
 
 %_public:
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public $*
