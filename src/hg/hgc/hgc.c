@@ -3091,13 +3091,19 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         {
         /* print standard position information */
         char *strand = restFields[2];
-        printPos(seqName, ivStart, ivEnd, strand, FALSE, item);
         int bedSize = 25;
         int restBedFields = bedSize - 3;
+        struct slPair *extraFieldPairs = NULL;
         if (restCount > restBedFields)
             {
             char **extraFields = (restFields + restBedFields);
             int extraFieldCount = restCount - restBedFields;
+            extraFieldPairs = getExtraFields(tdb, extraFields, extraFieldCount);
+            char *itemForUrl = getIdInUrl(tdb, item);
+            printCustomUrlWithFields(tdb, item, item, item == itemForUrl, extraFieldPairs);
+            if (itemForUrl)
+                printIframe(tdb, itemForUrl);
+            printPos(seqName, ivStart, ivEnd, strand, FALSE, item);
             int printCount = extraFieldsPrint(tdb,NULL,extraFields, extraFieldCount);
             printCount += 0;
             }
@@ -4272,7 +4278,8 @@ if (differentString(type, "bigInteract") && differentString(type, "interact"))
     {
     // skip generic URL code as these may have multiple items returned for a click
     itemForUrl = getIdInUrl(tdb, item);
-    if (itemForUrl != NULL && trackDbSetting(tdb, "url") && differentString(type, "bigBed"))
+    if (itemForUrl != NULL && trackDbSetting(tdb, "url") && differentString(type, "bigBed")
+            && differentString(type, "bigPsl"))
         {
         printCustomUrl(tdb, itemForUrl, item == itemForUrl);
         printIframe(tdb, itemForUrl);
