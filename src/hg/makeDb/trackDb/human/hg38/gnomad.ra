@@ -69,7 +69,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     defaultLabelFields name
     sepFields AC_afr
     filterValues.annot pLoF,missense,synonymous,other
-    filterValuesDefault.annot pLoF,missense,synonymous
     filterValues.FILTER PASS,InbreedingCoeff,RF,AC0
     filterType.FILTER multipleListAnd
     filterValuesDefault.FILTER PASS
