@@ -788,3 +788,17 @@ if (err < 0)
      errnoAbort("Couldn't make symbolic link from %s to %s\n", oldName, newName);
 }
 
+boolean remoteFileExists(char *remoteLogin, char *file)
+/* Check to see if the file exists on the remote machine. */
+{
+char buffer[4096];
+
+//  rsync might be a better choice, but checking for non-zero is more complicated
+//safef(buffer, sizeof buffer, "rsync -qnav qateam@%s:%s /dev/null 2> /dev/null", server, file);
+safef(buffer, sizeof buffer, "ssh %s test -s \"%s\"", remoteLogin, file);
+
+int ret = system(buffer);
+if (ret)
+    return FALSE;
+return TRUE;
+}

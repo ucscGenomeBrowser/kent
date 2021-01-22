@@ -3082,7 +3082,6 @@ else if (showAll)
 else
     bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
 
-
 /* print out extra fields */
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
@@ -3090,6 +3089,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     int restCount = chopTabs(cloneString(bb->rest), restFields);
     if (sameString(restFields[0], item))
         {
+        /* print standard position information */
+        char *strand = restFields[2];
+        printPos(seqName, ivStart, ivEnd, strand, FALSE, item);
         int bedSize = 25;
         int restBedFields = bedSize - 3;
         if (restCount > restBedFields)

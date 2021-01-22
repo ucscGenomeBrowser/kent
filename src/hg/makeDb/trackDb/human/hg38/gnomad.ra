@@ -78,8 +78,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012021 "Updated Jan. 20, 202
     filter.AF 0.0
     filterLabel.AF Minor Allele Frequency Filter
     maxItems 50000
-    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type; Allele Count: $AC
+    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); Genes: $genes; Type: $annot; Tag: $FILTER; Allele Frequency: $AF
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraDetailsTable Population Frequences|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
+    extraDetailsTable Population Frequencies|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
     pennantIcon New red ../goldenPath/newsarch.html#012021 "Updated Jan. 20, 2021"
