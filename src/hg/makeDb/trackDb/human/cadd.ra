@@ -1,16 +1,41 @@
+track caddSuper
+shortLabel CADD
+longLabel CADD 1.6 Score for all single-basepair mutations and selected insertions/deletions
+superTrack on show
+type bed
+visibility hide
+group phenDis
+color 100,130,160
+
+
+        track caddIns
+        shortLabel Insertions
+        longLabel CADD Score: Insertions
+        type bigBed 9 +
+        parent caddSuper
+        visibility dense
+        bigDataUrl /gbdb/$D/cadd/ins.bb
+        mouseOverField $change $phred
+
+        track caddDel
+        shortLabel Deletions
+        longLabel CADD Score: Deletions
+        type bigBed 9 +
+        parent caddSuper
+        visibility dense
+        bigDataUrl /gbdb/$D/cadd/del.bb
+        mouseOverField $change $phred
+
 track cadd
 shortLabel CADD
-longLabel CADD 1.6 Score for all possible single-basepair variants (zoom in to show exact score on mouse over, same basepair = score 0.0)
+longLabel CADD 1.6 Score for all possible single-basepair mutations (zoom in to show exact score on mouse over, same basepair = score 0.0)
 type bigWig
-#superTrack on show
 compositeTrack on
-visibility hide
-maxHeightPixels 128:20:8
-maxWindowToQuery 500000
+parent caddSuper
+visibility dense
+#maxWindowToQuery 500000
 group phenDis
-viewLimits 0:30
 color 100,130,160
-viewLimitsMax 0:100
 
         track caddA
         shortLabel Mutation to A
@@ -18,7 +43,10 @@ viewLimitsMax 0:100
         type bigWig
         parent cadd on
         visibility dense
-        bigDataUrl /gbdb/hg19/cadd/a.bw
+        bigDataUrl /gbdb/$D/cadd/a.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:30
+        viewLimitsMax 0:100
 
         track caddC
         shortLabel Mutation to C
@@ -26,7 +54,10 @@ viewLimitsMax 0:100
         type bigWig
         parent cadd on
         visibility dense
-        bigDataUrl /gbdb/hg19/cadd/c.bw
+        bigDataUrl /gbdb/$D/cadd/c.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:30
+        viewLimitsMax 0:100
 
         track caddG
         shortLabel Mutation to G
@@ -34,7 +65,10 @@ viewLimitsMax 0:100
         type bigWig
         parent cadd on
         visibility dense
-        bigDataUrl /gbdb/hg19/cadd/g.bw
+        bigDataUrl /gbdb/$D/cadd/g.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:30
+        viewLimitsMax 0:100
 
         track caddT
         shortLabel Mutation to T
@@ -42,4 +76,7 @@ viewLimitsMax 0:100
         type bigWig
         parent cadd on
         visibility dense
-        bigDataUrl /gbdb/hg19/cadd/t.bw
+        bigDataUrl /gbdb/$D/cadd/t.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:30
+        viewLimitsMax 0:100
