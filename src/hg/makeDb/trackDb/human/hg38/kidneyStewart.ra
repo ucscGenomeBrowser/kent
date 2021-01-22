@@ -1,0 +1,121 @@
+track kidneyStewart
+superTrack on
+shortLabel Kidney Stewart
+longLabel Kidney single cell data from  Stewart et al 2019
+visibility hide
+group expression
+
+    track kidneyStewartCellType
+    parent kidneyStewart
+    type bigBarChart
+    visibility pack
+    shortLabel Kidney Cells
+    longLabel Kidney RNA binned by merged cell type from Stewart et al 2019
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/kidneyStewart/cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/kidneyStewart/cell_type.stats
+    barChartBars Ascending_vasa_recta_endothelium B_cell CD4_T_cell CD8_T_cell Connecting_tubule Descending_vasa_recta_endothelium Epithelial_progenitor_cell Fibroblast Glomerular_endothelium Intercalated_cell MNP NK_cell Other_immune Pelvic_epithelium Peritubular_capillary_endothelium Podocyte Principal_cell Proximal_tubule Thick_ascending_limb_of_Loop_of_Henle Transitional_urothelium
+    barChartColors #5bd05a #ec374a #f7354b #f7354b #5f66ed #5fcd5b #60afce #c98b6b #0ab707 #181dda #de2a02 #f1374b #e7a69c #5cb6cf #05bb04 #9f968b #6496d4 #0e0ceb #181cd9 #bfd7e4
+    transformFunc NONE
+    barChartLimit 2
+    group expression
+
+    track kidneyStewartBroadCellType
+    parent kidneyStewart
+    type bigBarChart
+    visibility hide
+    shortLabel Kidney Broad CT
+    longLabel Kidney RNA binned by broad cell type from Stewart et al 2019
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/kidneyStewart/broad_celltype.bb
+    barChartStatsUrl /gbdb/hg38/bbi/kidneyStewart/broad_celltype.stats
+    barChartBars Ascending_vasa_recta_endothelium B_cell CD4_T_cell CD8_T_cell Connecting_tubule Descending_vasa_recta_endothelium Epithelial_progenitor_cell Fibroblast Glomerular_endothelium Intercalated_cell MNP-a/classical_monocyte_derived MNP-b/non-classical_monocyte_derived MNP-c/dendritic_cell MNP-d/Tissue_macrophage Mast_cell Myofibroblast NK_cell NKT_cell Neutrophil Pelvic_epithelium Peritubular_capillary_endothelium Plasmacytoid_dendritic_cell Podocyte Principal_cell Proximal_tubule Thick_ascending_limb_of_Loop_of_Henle Transitional_urothelium
+    barChartColors #5bd05a #ec374a #f7354b #f7354b #5f66ed #5fcd5b #60afce #e0cdc4 #0ab707 #181dda #e77258 #e67259 #e2745e #e8a497 #eec7c9 #c88b6c #eb384a #f4364b #e5c8c1 #5cb6cf #05bb04 #edc6c6 #9f968b #6496d4 #0e0ceb #181cd9 #bfd7e4
+    #barChartColors #5ad05a #e91c1d #ee191b #ee191a #5f79e5 #5bd05a #5dadd2 #fed5bd #09b808 #121de0 #e86c6e #e86c6d #f06869 #ec9ea0 #f2bfc0 #8aab84 #e91c1d #ee191a #e1c9c8 #5bb7d1 #04bd03 #f4bebf #8c9f9d #619dd4 #090af1 #131cdf #bdd8e6
+    #barChartColors #ff4c4c #ff4200 #ff8200 #ffa900 #ffe34c #f8ff4c #d7ff4c #dcfea7 #5aff00 #00ff2a #4cffaf #4cffcb #4cffec #4cefff #a7e7fe #4cb0ff #005aff #0017ff #b5a7fe #984cff #9a00ff #eba7fe #f84cff #ff4ce3 #ff00a9 #ff0082 #fea7be
+    transformFunc NONE
+    barChartLimit 2
+    group expression
+
+    track kidneyStewartCompartment
+    parent kidneyStewart
+    type bigBarChart
+    visibility hide
+    shortLabel Kidney Compartment
+    longLabel Kidney RNA binned by compartment from Stewart et al 2019
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/kidneyStewart/compartment.bb
+    barChartStatsUrl /gbdb/hg38/bbi/kidneyStewart/compartment.stats
+    barChartColors #0e0dea #fb344a #dd2a02 #257684
+    #barChartColors #090af1 #f31717 #e61d1f #13609f
+    #barChartColors #ff0000 #a4ff00 #00d2ff #a400ff
+    barChartBars PT lymphoid myeloid non_PT
+    transformFunc NONE
+    barChartLimit 2
+    group expression
+
+    track kidneyStewartDetailedCellType
+    parent kidneyStewart
+    type bigBarChart
+    visibility hide
+    shortLabel Kidney Details
+    longLabel Kidney RNA binned by detailed cell type from Stewart et al 2019
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/kidneyStewart/detailed_cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/kidneyStewart/detailed_cell_type.stats
+    barChartBars Ascending_vasa_recta_endothelium B_cell CD4_T_cell CD8_T_cell Connecting_tubule Descending_vasa_recta_endothelium Distinct_proximal_tubule_1 Distinct_proximal_tubule_2 Epithelial_progenitor_cell Fibroblast Glomerular_endothelium Indistinct_intercalated_cell MNP-a/classical_monocyte_derived MNP-b/non-classical_monocyte_derived MNP-c/dendritic_cell MNP-d/Tissue_macrophage Mast_cell Myofibroblast NK_cell NKT_cell Neutrophil Pelvic_epithelium Peritubular_capillary_endothelium_1 Peritubular_capillary_endothelium_2 Plasmacytoid_dendritic_cell Podocyte Principal_cell Proliferating_Proximal_Tubule Proximal_tubule Thick_ascending_limb_of_Loop_of_Henle Transitional_urothelium Type_A_intercalated_cell Type_B_intercalated_cell
+    barChartColors #5bd05a #ec374a #f7354b #f7354b #5f66ed #5fcd5b #bfd5e4 #5d5df3 #60afce #e0cdc4 #0ab707 #6b6cdf #e77258 #e67259 #e2745e #e8a497 #eec7c9 #c88b6c #eb384a #f4364b #e5c8c1 #5cb6cf #07ba05 #65c860 #edc6c6 #9f968b #6496d4 #615fef #0e0dea #181cd9 #bfd7e4 #656be5 #6873df
+    transformFunc NONE
+    barChartLimit 2
+    group expression
+
+    track kidneyStewartExperiment
+    parent kidneyStewart
+    type bigBarChart
+    visibility hide
+    shortLabel Kidney Experiment
+    longLabel Kidney RNA binned by Experiment from Stewart et al 2019
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/kidneyStewart/Experiment.bb
+    barChartStatsUrl /gbdb/hg38/bbi/kidneyStewart/Experiment.stats
+    barChartColors #cec2e1 #415c71 #1712e1 #2b1fc6 #0d0cec #1d16db #6f6ddd #928faf #e03752 #100ee8 #2118d4 #7581cf #251cce
+    #barChartColors #ff8282 #ff8500 #ffdf00 #bcff00 #31ff00 #00ff9b #4cfffc #4cbdff #0031ff #5800ff #bc00ff #ff4ce8 #ff0085
+    barChartBars PapRCC RCC1 RCC2 RCC3 Teen_Tx TxK1 TxK2 TxK3 TxK4 VHL_RCC Wilms1 Wilms2 Wilms3
+    transformFunc NONE
+    barChartLimit 2
+    group expression
+
+    track kidneyStewartProject
+    parent kidneyStewart
+    type bigBarChart
+    visibility hide
+    shortLabel Kidney Project
+    longLabel Kidney RNA binned by project from Stewart et al 2019
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/kidneyStewart/Project.bb
+    barChartStatsUrl /gbdb/hg38/bbi/kidneyStewart/Project.stats
+    barChartBars Experiment_set_1 Experiment_set_2
+    barChartColors #0d0bed #c8385f
+    #barChartColors #ff0000 #00d2ff
+    transformFunc NONE
+    barChartLimit 2
+    group expression
+

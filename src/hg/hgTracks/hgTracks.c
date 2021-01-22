@@ -4233,6 +4233,11 @@ while (lineFileNext(lf, &line, &lineSize))
         warn("BED chromEnd %u > size %u for chromosome/scaffold %s", bed->chromEnd, ci->size, bed->chrom);
 	return FALSE;
 	}
+    if (!(bed->chromEnd > bed->chromStart)) // do not allow empty regions
+	{
+        warn("BED chromEnd %u must be greater than chromStart %u %s", bed->chromEnd, bed->chromStart, bed->chrom);
+	return FALSE;
+	}
 
     slAddHead(&bedList, bed);
 
@@ -8859,19 +8864,19 @@ if (!hideControls)
         }
     if (doPliColors)
         {
-        hPrintf("<B>gnomAD Loss-of-Function Constraint (pLI) Color Key:</B><BR> ");
+        hPrintf("<B>gnomAD Loss-of-Function Constraint (LOEUF) Color Key:</B><BR> ");
         hPrintf("<table style=\"border: 1px solid black\"><tr>\n");
-        hPrintf("<td style=\"background-color:rgb(0,244,153)\">&lt; 0.1</td>\n");
-        hPrintf("<td style=\"background-color:rgb(74,240,94)\">&lt; 0.2</td>\n");
-        hPrintf("<td style=\"background-color:rgb(127,233,58)\">&lt; 0.3</td>\n");
-        hPrintf("<td style=\"background-color:rgb(165,224,26)\">&lt; 0.4</td>\n");
-        hPrintf("<td style=\"background-color:rgb(191,210,22)\">&lt; 0.5</td>\n");
-        hPrintf("<td style=\"background-color:rgb(210,191,13)\">&lt; 0.6</td>\n");
-        hPrintf("<td style=\"background-color:rgb(224,165,8)\">&lt; 0.7</td>\n");
-        hPrintf("<td style=\"background-color:rgb(233,127,5)\">&lt; 0.8</td>\n");
-        hPrintf("<td style=\"background-color:rgb(240,74,3)\">&lt; 0.9</td>\n");
-        hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 1</td>\n");
-        hPrintf("<td style=\"color: white; background-color:rgb(160,160,160)\">No pLI score</td>\n");
+        hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 0.1</td>\n");
+        hPrintf("<td style=\"background-color:rgb(240,74,3)\">&lt; 0.2</td>\n");
+        hPrintf("<td style=\"background-color:rgb(233,127,5)\">&lt; 0.3</td>\n");
+        hPrintf("<td style=\"background-color:rgb(224,165,8)\">&lt; 0.4</td>\n");
+        hPrintf("<td style=\"background-color:rgb(210,191,13)\">&lt; 0.5</td>\n");
+        hPrintf("<td style=\"background-color:rgb(191,210,22)\">&lt; 0.6</td>\n");
+        hPrintf("<td style=\"background-color:rgb(165,224,26)\">&lt; 0.7</td>\n");
+        hPrintf("<td style=\"background-color:rgb(127,233,58)\">&lt; 0.8</td>\n");
+        hPrintf("<td style=\"background-color:rgb(74,240,94)\">&lt; 0.9</td>\n");
+        hPrintf("<td style=\"background-color:rgb(0,244,153)\">&ge; 0.9</td>\n");
+        hPrintf("<td style=\"color: white; background-color:rgb(160,160,160)\">No LOEUF score</td>\n");
         hPrintf("</tr></table>\n");
         }
 
@@ -10567,16 +10572,21 @@ if (measureTiming)
 char *mouseOverEnabled = cfgOption("mouseOverEnabled");
 if (sameWordOk(mouseOverEnabled, "on"))
     {
-    enableMouseOver = TRUE;
-    /* mouseOverJsonFile will be initializes and created at the same
-     * time as the browser .png image file
-     */
-    mouseOverJson = jsonWriteNew();
-    jsonWriteObjectStart(mouseOverJson, NULL);
-    /* this jsonWrite structure will finish off upon successful exit.
-     * each track will start a list with the track name:
-     *   jsonWriteListStart(mouseOverJson, tg->track);
-     */
+    /* can not use mouseOver in any virtual mode */
+    char *isMultiRegion = cartUsualString(cart, "virtModeType", "default");
+    if (sameWordOk(isMultiRegion, "default"))
+	{
+	enableMouseOver = TRUE;
+	/* mouseOverJsonFile will be initializes and created at the same
+	 * time as the browser .png image file
+	 */
+	mouseOverJson = jsonWriteNew();
+	jsonWriteObjectStart(mouseOverJson, NULL);
+	/* this jsonWrite structure will finish off upon successful exit.
+	 * each track will start a list with the track name:
+	 *   jsonWriteListStart(mouseOverJson, tg->track);
+	 */
+	}
     }
 else
     enableMouseOver = FALSE;
@@ -10597,9 +10607,8 @@ if (measureTiming)
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
-#if  0
-state = cgiUrlString();
-printf("State: %s\n", state->string);
+#if 0
+printf("State: %s\n", cgiUrlString()->string);
 #endif
 
 getDbAndGenome(cart, &database, &organism, oldVars);

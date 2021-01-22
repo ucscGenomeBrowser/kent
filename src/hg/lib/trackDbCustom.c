@@ -300,9 +300,10 @@ else
     return NULL;
 }
 
-struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag)
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag, struct dyString *incFiles)
 /* Load track info from ra file already opened as lineFile into list.  If releaseTag is
- * non-NULL then only load tracks that mesh with release. */
+ * non-NULL then only load tracks that mesh with release. If incFiles is not-NULL, put
+ * list of included files in there. */
 {
 char *raFile = lf->fileName;
 char *line, *word;
@@ -334,8 +335,10 @@ for (;;)
                 trackDbCheckValidRelease(subRelease);
             if (releaseTag && subRelease && !sameString(subRelease, releaseTag))
                 errAbort("Include with release %s inside include with release %s line %d of %s", subRelease, releaseTag, lf->lineIx, lf->fileName);
-            struct trackDb *incTdb = trackDbFromRa(incFile, subRelease);
+            struct trackDb *incTdb = trackDbFromRa(incFile, subRelease, incFiles);
             btList = slCat(btList, incTdb);
+            if (incFiles)
+                dyStringPrintf(incFiles, "%s\n", incFile);
             }
 	}
     if (done)
@@ -397,12 +400,13 @@ for(ii=0; ii < count; ii++)
 return TRUE;
 }
 
-struct trackDb *trackDbFromRa(char *raFile, char *releaseTag)
+struct trackDb *trackDbFromRa(char *raFile, char *releaseTag, struct dyString *incFiles)
 /* Load track info from ra file into list.  If releaseTag is non-NULL
- * then only load tracks that mesh with release. */
+ * then only load tracks that mesh with release. if incFiles is non-null, 
+ * add included file names to it.*/
 {
 struct lineFile *lf = udcWrapShortLineFile(raFile, NULL, 16*1024*1024);
-struct trackDb *tdbList = trackDbFromOpenRa(lf, releaseTag);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, releaseTag, incFiles);
 lineFileClose(&lf);
 return tdbList;
 }
@@ -1565,6 +1569,18 @@ if (metadataInTdb)
     return convertNameValueString(metadataInTdb);
 
 return NULL;
+}
+
+boolean trackSettingIsFile(char *setting)
+/* Returns TRUE if setting found in trackDb stanza is a file setting that
+ * would benefit from directory $D substitution among other things - looks for
+ * settings that ends in "Url" and a few others. */
+{
+return endsWith(setting, "Url") ||
+    sameString(setting, "bigDataIndex") ||
+    sameString(setting, "frames") ||
+    sameString(setting, "summary") ||
+    sameString(setting, "searchTrix");
 }
 
 char *labelAsFilteredNumber(char *label, unsigned numOut)

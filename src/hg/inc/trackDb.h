@@ -360,13 +360,15 @@ int trackDbCmpShortLabel(const void *va, const void *vb);
 void trackDbOverridePriority(struct hash *tdHash, char *priorityRa);
 /* Override priority settings using a ra file. */
 
-struct trackDb *trackDbFromRa(char *raFile, char *releaseTag);
+struct trackDb *trackDbFromRa(char *raFile, char *releaseTag, struct dyString *incFiles);
 /* Load track info from ra file into list.  If releaseTag is non-NULL
- * then only load tracks that mesh with release. */
+ * then only load tracks that mesh with release. if incFiles is non-null, 
+ * add included file names to it.*/
 
-struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag);
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag, struct dyString *incFiles);
 /* Load track info from ra file already opened as lineFile into list.  If releaseTag is
- * non-NULL then only load tracks that mesh with release. */
+ * non-NULL then only load tracks that mesh with release. If incFiles is not-NULL, put
+ * list of included files in there. */
 
 void trackDbPolish(struct trackDb *bt);
 /* Fill in missing values with defaults. */
@@ -727,8 +729,8 @@ struct trackDb *lmCloneTdbList(struct lm *lm, struct trackDb *list, struct track
 struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *superHash);
 /* clone a super track tdb structure. */
 
-void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size);
-/* For this hub, Allocate shared memory and clone trackDb list into it. */
+void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size, char *incFiles);
+/* For this hub, Allocate shared memory and clone trackDb list into it. incFiles has a list of include files that may be null. */
 
 void trackDbCloneTdbListToSharedMem(char *db, char *tdbPathString, struct trackDb *list, unsigned long size);
 /* For this native db, allocate shared memory and clone trackDb list into it. */
@@ -741,6 +743,11 @@ struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time);
 
 boolean trackDbCacheOn();
 /* Check to see if we're caching trackDb contents. */
+
+boolean trackSettingIsFile(char *setting);
+/* Returns TRUE if setting found in trackDb stanza is a file setting that
+ * would benefit from directory $D substitution among other things - looks for
+ * settings that ends in "Url" and a few others. */
 
 char *labelAsFiltered(char *label);
 /* add text to label to indicate filter is active */

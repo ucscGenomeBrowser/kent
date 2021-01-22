@@ -1,0 +1,78 @@
+track skinSoleBoldo
+superTrack on
+shortLabel Skin Sole-Boldo
+longLabel Skin single cell data from  Sole-Boldo et al 2020
+visibility hide
+group expression
+
+    track skinSoleBoldoCellType
+    parent skinSoleBoldo
+    type bigBarChart
+    visibility pack
+    shortLabel Skin Cell
+    longLabel Skin single cell RNA binned by cell type from Sole-Boldo et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg19/bbi/skinSoleBoldo/cell_type.bb
+    barChartStatsUrl /gbdb/hg19/bbi/skinSoleBoldo/cell_type.stats
+    barChartBars Diff._Keratinocytes EpSC_and_undiff._progenitors Erythrocytes Lymphatic_EC Macrophages+DC Melanocytes Mesenchymal Pericytes Pro-inflammatory Secretory-papilliary Secretory-reticular T_cells Vascular_EC
+    barChartColors #0198bf #0c94b3 #98989b #339437 #de2a02 #5db7cb #2160ba #329d1e #1158dc #0a54ed #0551f7 #fa354a #04bd03
+    transformFunc NONE
+    barChartLimit 4
+
+    track skinSoleBoldoDonor
+    parent skinSoleBoldo
+    type bigBarChart
+    visibility hide
+    shortLabel Skin Donor
+    longLabel Skin single cell RNA binned by skin donor from Sole-Boldo et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg19/bbi/skinSoleBoldo/donor.bb
+    barChartStatsUrl /gbdb/hg19/bbi/skinSoleBoldo/donor.stats
+    barChartBars S1 S2 S3 S4 S5
+    barChartColors #60832d #736b4f #2b9737 #0b94b2 #31747c
+    #barChartColors #61712b #7b534a #2d9036 #0c92b1 #326c7b
+    transformFunc NONE
+    barChartLimit 2
+
+    track skinSoleBoldoAge
+    parent skinSoleBoldo
+    type bigBarChart
+    visibility hide
+    shortLabel Skin Age
+    longLabel Skin single cell RNA binned by skin donor's age from Sole-Boldo et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg19/bbi/skinSoleBoldo/age.bb
+    barChartStatsUrl /gbdb/hg19/bbi/skinSoleBoldo/age.stats
+    barChartBars OLD YOUNG
+    barChartColors #2a934a #76743a
+    #barChartColors #2c8c49 #785d37
+    transformFunc NONE
+    barChartLimit 2
+
+    track skinSoleBoldoAgeCellType
+    parent skinSoleBoldo
+    type bigBarChart
+    visibility hide
+    shortLabel Skin Cell+Age
+    longLabel Skin single cell RNA binned by cell type and donor's age from Sole-Boldo et all 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg19/bbi/skinSoleBoldo/age_cell_type.bb
+    barChartStatsUrl /gbdb/hg19/bbi/skinSoleBoldo/age_cell_type.stats
+    barChartBars Diff_Keratinocytes_OLD Diff_Keratinocytes_YOUNG EpSC_and_undiff_progenitors_OLD EpSC_and_undiff_progenitors_YOUNG Erythrocytes_OLD Erythrocytes_YOUNG Lymphatic_EC_OLD Lymphatic_EC_YOUNG Macrophages+DC_OLD Macrophages+DC_YOUNG Melanocytes_OLD Melanocytes_YOUNG Mesenchymal_OLD Mesenchymal_YOUNG Pericytes_OLD Pericytes_YOUNG Pro-inflammatory_OLD Pro-inflammatory_YOUNG Secretory-papilliary_OLD Secretory-papilliary_YOUNG Secretory-reticular_OLD Secretory-reticular_YOUNG T_cells_OLD T_cells_YOUNG Vascular_EC_OLD Vascular_EC_YOUNG
+    barChartColors #0298be #0397bd #0a94b4 #1390ab #b8bdbb #98989b #30943e #b0cba3 #dc2b03 #dc2b03 #5cb8cd #97ced7 #6792dd #2d679f #1bac12 #449226 #1158db #195bcd #0853ef #175ad0 #0551f7 #0952f1 #ea8184 #f9364a #07bb05 #0cb807
+    #barChartColors #0298be #0497bc #0c92b3 #158da9 #c6b2b4 #fe6161 #328b3d #b1c4a3 #fb2403 #fa2403 #5db6cc #98ccd7 #688fdc #2e5f9d #1ca712 #458524 #1256db #1a57cc #0952ef #1956cf #0650f6 #0a51f0 #ea6481 #f90444 #08b905 #0db507
+    transformFunc NONE
+    barChartLimit 4
+

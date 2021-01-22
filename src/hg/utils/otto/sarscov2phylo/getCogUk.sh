@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -beEu -o pipefail
+set -beEux -o pipefail
 
 # Download latest COG-UK fasta and metadata; update $ottoDir/cogUk.latest link.
 

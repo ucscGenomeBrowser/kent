@@ -933,7 +933,7 @@ if (trackHubDatabase(db))
     if (hub != NULL)
         {
         struct trackHubGenome *hubGenome = trackHubFindGenome(hub, db);
-        struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome), *tdb;
+        struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome, NULL), *tdb;
         for (tdb = tdbList;  tdb != NULL;  tdb = tdb->next)
             {
             hashAdd(dbTblHash, tdb->table, slNameNew(tdb->table));
@@ -3932,11 +3932,13 @@ trackDbAddTableField(tdbList);
 return tdbList;
 }
 
-boolean trackDataAccessible(char *database, struct trackDb *tdb)
+boolean trackDataAccessibleRemote(char *database, struct trackDb *tdb, char *remoteLogin)
 /* Return TRUE if underlying data are accessible - meaning the track has either
  * a bigDataUrl with remote URL (http:// etc), a bigDataUrl with an existing local file,
  * or a database table with the same name.
- * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. */
+ * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. 
+ *
+ * if remoteLogin is not NULL, use it when looking for the file */
 {
 if (startsWith("mathWig", tdb->type))
     return TRUE; // assume mathWig data is available.  Fail at load time if it isn't
@@ -3948,7 +3950,12 @@ if (bigDataUrl != NULL)
     if (hasProtocol(bigDataUrlLocal))
         return TRUE;
     else
-        return fileExists(bigDataUrlLocal);
+        {
+        if (remoteLogin == NULL)
+            return fileExists(bigDataUrlLocal);
+        else
+            return remoteFileExists(remoteLogin, bigDataUrlLocal);
+        }
     }
 else
     {
@@ -3961,6 +3968,16 @@ else
     return (hTableForTrack(database, tdb->table) != NULL);
     }
 }
+
+boolean trackDataAccessible(char *database, struct trackDb *tdb)
+/* Return TRUE if underlying data are accessible - meaning the track has either
+ * a bigDataUrl with remote URL (http:// etc), a bigDataUrl with an existing local file,
+ * or a database table with the same name.
+ * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. */
+{
+return trackDataAccessibleRemote(database, tdb, NULL);
+}
+
 
 static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 	       boolean privateHost, struct trackDb **tdbRetList)

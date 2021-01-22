@@ -46,11 +46,270 @@
         <li><a href="#2001">2001 News</a></li>
       </ul>
     </div>
-  </div>
+  </div> 
 </div>
+
+<!-- ============= 2021 archived news ============= -->
+<a name="2021"></a>
+
+<a name="011321"></a>
+<h2>Jan. 13, 2020 &nbsp;&nbsp; New GENCODE gene tracks: Human V35/V36 (hg19/hg38)</h2>
+<p>
+We are pleased to announce new GENCODE Gene annotation tracks, which correspond
+to <a href="http://www.ensembl.info/2020/08/20/ensembl-101-has-been-released/"
+target="_blank">Ensembl 101</a> and <a target="_blank"
+href="https://www.ensembl.info/2020/11/30/ensembl-102-has-been-released/">Ensembl 102</a>,
+for the <a target="_blank" 
+href="../../cgi-bin/hgTrackUi?db=hg19&c=chr21&g=wgEncodeGencodeV36lift37">hg19/GRCh37</a> and
+<a target="_blank" href="../../cgi-bin/hgTrackUi?db=hg38c=chr1&g=wgEncodeGencodeSuper">hg38/GRCh38</a>
+human assemblies. The annotations were mapped to hg38 and then back-mapped
+to the hg19 assembly. All gene sets contain the following tracks:</p>
+<ul>
+  <li>Basic - a subset of the <em>Comprehensive set</em>.</li>
+  <li>Comprehensive - all GENCODE coding and non-coding transcript annotations, including
+      polymorphic pseudogenes. This includes both manual and automatic annotations.</li>
+  <li>Pseudogenes - all annotations except polymorphic pseudogenes.</li></ul>
+<p>
+The hg38 annotations also include the following tracks not available on hg19:
+</p>
+<ul>
+  <li>2-way Pseudogenes - pseudogenes predicted by both the Yale Pseudopipe and UCSC
+      Retrofinder pipelines.</li>
+  <li>PolyA - polyA signals and sites manually annotated on the genome based on transcribed
+      evidence (ESTs and cDNAs) of 3' end of transcripts containing at least 3 A's not matching the
+      genome.</li></ul>
+<p>
+Details on each release can be found on the <a target="_blank" 
+href="https://www.gencodegenes.org/">GENCODE site</a>. This includes <a target="_blank" 
+href="https://www.gencodegenes.org/human/stats.html">statistics on each release</a>.
+<p>We would like to thank the <a target="_blank" 
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these
+annotations. We would also like to thank Mark Diekhans and Lou Nassar for the development and
+release of these data.</p>
+
+<a name="010821"></a>
+<h2>Jan. 8, 2020 &nbsp;&nbsp; January 8th SARS-CoV-2 update</h2>
+<p>
+We are pleased to start the year with our fifth data release for the <a href="/cgi-bin/hgTracks?db=wuhCor1" 
+target="_blank">coronavirus genome browser</a>. (See also our <a
+href="#040320">first</a>, <a href="#050420">second</a>, <a href="#080720">third</a>,
+and <a href="#102120">fourth</a> releases)</p>
+
+<p>
+This update includes an updated track as well as three new tracks for 
+the <a href="/cgi-bin/hgTracks?db=wuhCor1" 
+target="_blank">coronavirus genome browser</a>, and a track for the <a 
+href="/cgi-bin/hgTracks?db=hg19" target="_blank">hg19/GRCh37</a> and <a
+href="/cgi-bin/hgTracks?db=hg38" target="_blank">hg38/GRCh38</a> human assemblies. Worth note is
+the <a href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=lineageB_1_1_7_US" 
+target="_blank">B.1.1.7 in USA</a>
+track which shows substitution and deletion variants in the <b>B.1.1.7 lineage</b>, known for its 
+rapid spread in England in November and December 2020, alongside the first nine genome 
+sequences in the United States that were assigned to the lineage.</p>
+
+<p>
+We have also updated our <a target="_blank" href="/cgi-bin/hgPhyloPlace">web interface</a> 
+to <a target="_blank" href="https://github.com/yatisht/usher">UShER</a>, a tool for 
+placing new SARS-CoV-2 sequences in a global phylogenetic tree,
+to include <a target="_blank" href="https://www.cogconsortium.uk/data/">COG-UK</a> 
+sequences available as of Dec. 30, 2020 including thousands of new sequences in 
+the B.1.1.7 lineage.</p>
+
+<p>
+Clicking on any of the track titles below will lead to the track description page, 
+which includes additional information and allows for configuration of various display options.</p>
+<p>
+This release includes the following tracks:<br><br></p>
+
+<ul><li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=lineageB_1_1_7_US">
+B.1.1.7 in USA</a> - This track shows single-nucleotide variants 
+and deletions from the SARS-CoV-2 reference genome in the B.1.1.7 consensus sequence 
+and the first nine genome sequences in the United States that were assigned to B.1.1.7.
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=escape">
+Antibody escape</a> - This track contains mutations 
+in the Spike protein that attenuate monoclonal and serum antibody neutralization.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=pbmShanghai">
+S Antib Pept Array</a> - This track shows intensities of a microarray spotted 
+with short peptides derived from the S protein. Sera from both convalescent COVID-19 
+and control patients were screened on the peptide microarray for both IgG and IgM responses.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&c=chr1&g=covidHgiGwasR4Pval">
+COVID GWAS v4 (hg38</a>, <a target="_blank" href="/cgi-bin/hgTrackUi?db=hg19&c=chr1&g=covidHgiGwasR4Pval">
+hg19</a>) - This track set shows the results of the <a target="_blank" 
+href="https://www.covid19hg.org/blog/2020-11-24-covid-19-hgi-results-for-data-freeze-4-october-2020/">
+GWAS Data Release 4 (October 2020)</a> from the <a target="_blank" href="https://www.covid19hg.org/">
+COVID-19 Host Genetics Initiative (HGI)</a> which aims to identify the genetic determinants of 
+SARS-CoV-2 infection susceptibility, disease severity and outcomes.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=sarsCov2PhyloPub">
+Updated - Phylogenetic Tree and Variants from High-coverage Sequences in Public Databases</a>
+- Updated from release <b>28-08-20</b> to <b>28-10-20</b>. This track displays a phylogenetic tree
+inferred from SARS-CoV-2 genome sequences from <a 
+href="https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=SARS-CoV-2,%20taxid:2697049" 
+target="_blank">GenBank</a>, <a href="https://www.cogconsortium.uk/data/" 
+target="_blank">COG-UK</a> and the <a href="https://bigd.big.ac.cn/ncov/release_genome" 
+target="_blank">China National Center for Bioinformation</a>, and variants found
+in the sequences. Since this track is sourced from public databases, we can offer VCF files with
+sequence variants for <a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/" 
+target="_blank">download</a>.</li>
+</ul>
+
+<p><br>
+We would like to thank the publication authors <a target="_blank" 
+href="https://www.ncbi.nlm.nih.gov/pubmed/32895485">Li <em>et al</em></a> and
+<a target="_blank" 
+href="https://www.biorxiv.org/content/10.1101/2020.11.06.372037v1">Liu <em>et al</em></a> for
+making these data available. We would also like to thank
+<a href="http://public.gi.ucsc.edu/~jferna10/" target="_blank">Jason Fernandes</a>,
+<a href="https://www.cogconsortium.uk/" target="_blank">COG-UK</a>,
+<a href="https://www.ncbi.nlm.nih.gov/genbank/" target="_blank">GenBank</a>,
+the <a href="https://gisaid.org/" target="_blank">GISAID Initiative</a>,
+the <a href="https://www.covid19hg.org/" target="_blank">COVID-19 Host Genetics Initiative (HGI)</a>
+and their <a target="_blank" href="https://www.covid19hg.org/partners/">partners</a>, as well as
+Rachel Liao, Juha Karjalainen, and Kumar Veerapen from the <a target="_blank" 
+href="https://www.broadinstitute.org/">Broad Institute</a>.</p>
+
+<p>
+These tracks are made possible due to the worldwide efforts of scientists, including the
+<a href="/staff.html" target="_blank">Genome Browser team</a>. We will continue to
+provide SARS-COVID-2 resources as they become available. For the latest data, see our
+<a href="http://genome-preview.soe.ucsc.edu/cgi-bin/hgTracks?db=wuhCor1&position=lastDbPos" 
+target="_blank">preview site</a>. Note that content on our preview server has not
+undergone our QA process, and is subject to change at any time.</p>
 
 <!-- ============= 2020 archived news ============= -->
 <a name="2020"></a>
+
+<a name="122320"></a>
+<h2>Dec. 23, 2020 &nbsp;&nbsp; New ClinVar Interpretations track for human (hg19/hg38)</h2>
+<p>
+We are pleased to release a new track, <b>ClinVar Interpretations</b>, for the hg19/GRCh37 and 
+hg38/GRCh38 human assemblies. This track can be found as part of the <a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&c=chr10&g=clinvar">ClinVar Composite</a>. It is the first
+track to use our bead graph display, which is a variation of our existing <a target="_blank"
+href="#062019">lollipop display</a>.</p>
+<p>
+The <b>ClinVar Interpretations track</b> displays the genomic positions of individual variant 
+submissions and interpretations of the clinical significance, as well as their relationship 
+to disease in the ClinVar database. As seen on the image below, the variants are classified into
+six categories each on a separate horizontal line:</p>
+
+<p class="text-center">
+  <img class='text-center' src="../images/clinVarInterp.png"  width='100%' 
+alt="ClinVar Interpretations track with bead graph display.">
+</p>
+
+<ul>
+<li><font color="d20000"><b>P</b> - Pathogenic</font></li>
+<li><font color="d20000"><b>LP</b> - Likely Pathogenic</font></li>
+<li><font color="000088"><b>VUS</b> - Variant of Unknown Significance</font></li>
+<li><font color="#00d200"><b>LB</b> - Likely Benign</font></li>
+<li><font color="#00d200"><b>B</b> - Benign</font></li>
+<li><font color="#888"><b>OTH</b> - Others</li></font></ul>
+
+<p>
+The size of the bead on the line represents the number of submissions at that genomic position.
+The color of the beads aids to distinguish the categories further. Hovering on the track 
+items shows the genomic variations which start at that position and the 
+number of individual submissions with that classification. Additional information on the variants
+can be found by clicking into the item.</p>
+<p>
+For more information see the <a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&c=chr10&g=clinvar">track description page</a>.</p>
+<p>
+We would link to thank <a target="_blank" href="https://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a>
+for making these data available, as well as Brian Joseph Raney, Ana Benet Pages, Gerardo Perez, 
+and Lou Nassar for the development and release of this track.</p>
+
+<a name="121620"></a>
+<h2>Dec. 16, 2020 &nbsp;&nbsp; New In-Silico PCR feature for assembly hubs</h2>
+<p>
+We are excited to announce assembly hubs can now perform In-Silico PCR. Assembly hub developers 
+have long been able to activate DNA and amino acid BLAT searches on their hubs by running gfServers 
+from their institution, and now with the new isPcr setting, they can enable In-Silico PCR searches too 
+using the same running gfServers. In-Silico PCR searches a sequence database with a pair of PCR primers, 
+using an indexing strategy for fast performance to find target regions across the genome. Browser users without an 
+institution to host gfServers can still benefit from this new feature by downloading and installing a virtual machine 
+<a href="help/gbib.html" target="_blank">Genome Browser in a Box (GBiB)</a>, and alternatively running gfServers on the
+ GBiB, all locally from a laptop. For more information see the <a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs"
+target="_blank">Assembly Hub Wiki</a> and the <a href="help/hubQuickStartAssembly.html" 
+target="_blank">Quick Start Guide to Assembly Hubs</a>.</p>
+
+<p>
+We would like to thank Brian Raney and Gerardo Perez for their work on this release.</p>
+
+<a name="121520"></a>
+<h2>Dec. 15, 2020 &nbsp;&nbsp; New V35 GENCODE genes track for Human (hg19/GRCh37)</h2>
+<p>
+We are pleased to announce a new GENCODE Genes annotation track, which corresponds
+to <a href="http://www.ensembl.info/2020/08/20/ensembl-101-has-been-released/"
+target="_blank">Ensembl 101</a>, for the: <a target="_blank" 
+href="../../cgi-bin/hgTrackUi?db=hg19&c=chr21&g=wgEncodeGencodeV35lift37">hg19/GRCh37</a> assembly.
+The GENCODE V35 annotations were mapped to hg38/GRCh38 and then back-mapped
+to the hg19/GRCh37 assembly. The gene set contains the following
+tracks:</p>
+<ul>
+  <li>Basic - a subset of the <em>Comprehensive set</em>.</li>
+  <li>Comprehensive - all GENCODE coding and non-coding transcript annotations, including
+      polymorphic pseudogenes. This includes both manual and automatic annotations.</li>
+  <li>Pseudogenes - all annotations except polymorphic pseudogenes.</li></ul>
+<p>
+Details on each release can be found on the <a target="_blank" 
+href="https://www.gencodegenes.org/">GENCODE site</a>. This includes <a target="_blank" 
+href="https://www.gencodegenes.org/human/stats.html">statistics on each release</a>.
+<p>We would like to thank the <a target="_blank" 
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these
+annotations. We would also like to thank Mark Diekhans and Lou Nassar for the development and
+release of this track.</p>
+
+<a name="120920"></a>
+<h2>Dec. 9, 2020 &nbsp;&nbsp; New Genome Browser: Hawaiian monk seal, neoSch1 (<em>Neomonachus schauinslandi</em>)</h2>
+<p>
+A genome browser is now available for the Hawaiian monk seal  (<em>Neomonachus schauinslandi</em>) assembly
+released in Jun. 2017 by the
+<a href="https://www.hopkinsmedicine.org/profiles/results/directory/profile/5985613/alan-scott" 
+target="_blank">Johns Hopkins University</a> (ASM220157v1).
+<h3>About the assembly:</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b>  <a href="../../cgi-bin/hgGateway?db=neoSch1" 
+  target="_blank">neoSch1</a></li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="https://www.jhu.edu/">
+Johns Hopkins University</a></li>
+  <li><b>Assembly date:</b> Jun. 2017</li>
+  <li><B>Accession ID:</B> GCF_002201575.1</li>
+  <li><B>NCBI Genome ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/genome/8042"
+TARGET="_blank">8042</A> (<em>Neomonachus schauinslandi</em>)</li>
+  <li><B>NCBI Assembly ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/assembly/GCF_002201575.1/"
+TARGET="_blank">1137021</A></li>
+  <li><B>NCBI BioProject ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/bioproject/384558"
+TARGET="_blank">384558</A></li>
+  <li><B>NCBI BioSample ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/biosample/SAMN06841387"
+TARGET="_blank">SAMN06841387</A></li>
+  <li><b>Scaffold count: </b>7,873</li>
+  <li><b>Total size: </b>2,400,934,290</li>
+  <li><a href="../goldenPath/credits.html#hawaiian_monk_seal_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+  <li><a href="../goldenPath/credits.html#hawaiian_monk_seal_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+  <li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/neoSch1/" 
+target="_blank" >FTP</a></li>
+  <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#hawaiian_monk_seal"
+target="_blank" >Downloads page</a></li>
+</ul>
+</p>
+<p>
+We would like to thank Alan F. Scott at Johns Hopkins University and NCBI for creating this new Hawaiian 
+monk seal assembly. We would also like to thank Hiram Clawson, Robert Kuhn, and Gerardo 
+Perez for the development and release of the neoSch1 genome browser.
+</p>
 
 <a name="120220"></a>
 <h2>Dec. 2, 2020 &nbsp;&nbsp; New and updated UniProt tracks for 117 assemblies</h2>
@@ -560,7 +819,7 @@ target="_blank">Weizmann Institute of Science</a> and the <a href="https://gisai
 target="_blank">GISAID Initiative</a>.</p>
 <p>
 These tracks are made possible due to the worldwide efforts of scientists, including the 
-<a href="/staff.html" target="_blank">Genome Browser team</a>. Will will continue to 
+<a href="/staff.html" target="_blank">Genome Browser team</a>. We will continue to 
 provide SARS-COVID-2 resources as they become available. For the latest data, see our 
 <a href="http://genome-preview.soe.ucsc.edu/cgi-bin/hgTracks?db=wuhCor1&position=lastDbPos" 
 target="_blank">development site</a>. Note that content on our preview server has not 

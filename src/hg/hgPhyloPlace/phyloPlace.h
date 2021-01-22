@@ -15,6 +15,16 @@
 
 #define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
 
+struct treeChoices
+/* Phylogenetic tree versions for the user to choose from. */
+{
+    char **protobufFiles;      // Mutation annotated tree files in protobuf format for UShER
+    char **metadataFiles;      // Sample metadata a la GISAID's nextmeta download option
+    char **sources;            // GISAID or public
+    char **descriptions;       // Menu labels to describe the options to the user
+    int count;                 // Number of choices (and size of each array)
+};
+
 struct seqInfo
 /* User sequences, alignments and statistics */
 {
@@ -123,13 +133,14 @@ struct usherResults *runUsher(char *usherPath, char *usherAssignmentsPath, char 
  * and parse other results out of stderr output. */
 
 void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct dnaSeq *ref,
-                       char *bigGenePredFile, struct hash *sampleMetadata, char *jsonFile);
+                       char *bigGenePredFile, struct hash *sampleMetadata, char *jsonFile,
+                       char *source);
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 
 struct tempName *writeCustomTracks(struct tempName *vcfTn, struct usherResults *ur,
                                    struct slName *sampleIds, struct phyloTree *bigTree,
-                                   int fontHeight, int *pStartTime);
+                                   char *source, int fontHeight, int *pStartTime);
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 
 
@@ -146,16 +157,19 @@ char *phyloPlaceDbSettingPath(char *db, char *settingName);
 /* Return path to a file named by a setting from hgPhyloPlaceData/<db>/config.ra,
  * or NULL if not found.  (Append hgPhyloPlaceData/<db>/ to the beginning of relative path) */
 
+struct treeChoices *loadTreeChoices(char *db);
+/* If <db>/config.ra specifies a treeChoices file, load it up, else return NULL. */
+
 void reportTiming(int *pStartTime, char *message);
 /* Print out a report to stderr of how much time something took. */
 
 boolean hgPhyloPlaceEnabled();
 /* Return TRUE if hgPhyloPlace is enabled in hg.conf and db wuhCor1 exists. */
 
-char *phyloPlaceSamples(struct lineFile *lf, char *db, boolean doMeasureTiming, int subtreeSize,
-                        int fontHeight);
-/* Given a lineFile that contains either FASTA or VCF, prepare VCF for add_missing_samples;
- * if that goes well then run add_missing_samples, report results, make custom track files
+char *phyloPlaceSamples(struct lineFile *lf, char *db, char *defaultProtobuf,
+                        boolean doMeasureTiming, int subtreeSize, int fontHeight);
+/* Given a lineFile that contains either FASTA or VCF, prepare VCF for usher;
+ * if that goes well then run usher, report results, make custom track files
  * and return the top-level custom track file; otherwise return NULL. */
 
 #endif //_PHYLO_PLACE_H_

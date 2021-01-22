@@ -3082,7 +3082,6 @@ else if (showAll)
 else
     bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
 
-
 /* print out extra fields */
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
@@ -3090,6 +3089,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     int restCount = chopTabs(cloneString(bb->rest), restFields);
     if (sameString(restFields[0], item))
         {
+        /* print standard position information */
+        char *strand = restFields[2];
+        printPos(seqName, ivStart, ivEnd, strand, FALSE, item);
         int bedSize = 25;
         int restBedFields = bedSize - 3;
         if (restCount > restBedFields)
@@ -3108,6 +3110,7 @@ char startBuf[16], endBuf[16];
 int lastChromId = -1;
 char chromName[bbi->chromBpt->keySize+1];
 
+boolean firstTime = TRUE;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromName, sizeof(chromName));
@@ -3116,8 +3119,32 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, 4);
     if (showEvery || sameString(bedRow[3], item))
 	{
-        struct psl *psl= pslFromBigPsl(chromName, bb, seqTypeField, NULL, NULL);
+        char *cdsStr, *seq;
+        struct psl *psl= pslFromBigPsl(chromName, bb, seqTypeField, &seq, &cdsStr);
         slAddHead(&pslList, psl);
+
+        // we're assuming that if there are multiple psl's with the same id that
+        // they are the same query sequence so we only put out one set of sequences
+        if (firstTime  && !isEmpty(seq))    // if there is a query sequence
+            {
+            firstTime = FALSE;
+            printf("<H3>Links to sequence:</H3>\n");
+            printf("<UL>\n");
+
+            if (!isEmpty(cdsStr))  // if we have CDS 
+                {
+                puts("<LI>\n");
+                hgcAnchorSomewhere("htcTranslatedBigPsl", item, "translate", seqName);
+                printf("Translated Amino Acid Sequence</A> from Query Sequence\n");
+                puts("</LI>\n");
+                }
+
+            puts("<LI>\n");
+            hgcAnchorSomewhere("htcBigPslSequence", item, tdb->track, seqName);
+            printf("Query Sequence</A> \n");
+            puts("</LI>\n");
+            printf("</UL>\n");
+            }
 	}
     }
 
@@ -7348,7 +7375,10 @@ struct psl *psl;
 char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
+struct sqlConnection *conn = NULL;
 
+if (!trackHubDatabase(database))
+    conn = hAllocConnTrack(database, tdb);
 
 aliTable = cartString(cart, "aliTable");
 if (isCustomTrack(aliTable))
@@ -7369,7 +7399,7 @@ char *chrom = cartString(cart, "c");
 
 char *seq, *cdsString = NULL;
 struct lm *lm = lmInit(0);
-char *fileName = bbiNameFromSettingOrTable(tdb, NULL, tdb->table);
+char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 char *bedRow[32];
@@ -8602,6 +8632,92 @@ freez(&prot);
 genePredFree(&gp);
 }
 
+void htcBigPsl( char *acc, boolean translate)
+/* Output bigPsl query sequence, translated to amino acid sequence if requested. */
+{
+struct sqlConnection *conn = NULL;
+
+if (!trackHubDatabase(database))
+    conn = hAllocConn(database);
+
+int start = cartInt(cart, "l");
+int end = cartInt(cart, "r");
+char *table = cartString(cart, "table");
+
+struct trackDb *tdb ;
+if (isCustomTrack(table))
+    {
+    struct customTrack *ct = lookupCt(table);
+    tdb = ct->tdb;
+    }
+else if (isHubTrack(table))
+    tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
+else
+    tdb = hashFindVal(trackHash, table);
+char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct lm *lm = lmInit(0);
+int ivStart = start, ivEnd = end;
+if (start == end)
+    {  
+    // item is an insertion; expand the search range from 0 bases to 2 so we catch it:
+    ivStart = max(0, start-1);
+    ivEnd++;
+    }  
+
+unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+struct bigBedInterval *bb, *bbList = NULL;
+
+bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
+
+char *bedRow[32];
+char startBuf[16], endBuf[16];
+
+int lastChromId = -1;
+char chromName[bbi->chromBpt->keySize+1];
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromName, sizeof(chromName));
+
+    lastChromId=bb->chromId;
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, 4);
+
+    // we're assuming that if there are multiple psl's with the same id that
+    // they are the same query sequence so we only put out one sequence
+    if (sameString(bedRow[3], acc))
+	{
+        char *cdsStr, *seq;
+        pslFromBigPsl(chromName, bb, seqTypeField, &seq, &cdsStr);
+
+        if (translate)
+            {
+            struct genbankCds cds;
+            if (!genbankCdsParse(cdsStr, &cds))
+                errAbort("can't parse CDS for %s: %s", acc, cdsStr);
+            int protBufSize = ((cds.end-cds.start)/3)+4;
+            char *prot = needMem(protBufSize);
+
+            seq[cds.end] = '\0';
+            dnaTranslateSome(seq+cds.start, prot, protBufSize);
+
+            cartHtmlStart("Protein Translation of query sequence");
+            displayProteinPrediction(acc, prot);
+            return;
+            }
+        else
+            {
+            cartHtmlStart("Query sequence");
+            printf("<PRE><TT>");
+            printf(">%s length=%d\n", acc,(int)strlen(seq));
+            printLines(stdout, seq, 50);
+            printf("</TT></PRE>");
+            return;
+            }
+	}
+    }
+}
+
 void htcTranslatedMRna(struct trackDb *tdb, char *acc)
 /* Translate mRNA to protein and display it. */
 {
@@ -8970,7 +9086,11 @@ else if (isCustomTrack(table))
 else
     {
     tdb = hashFindVal(trackHash, table);
-    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    struct sqlConnection *conn = NULL;
+
+    if (!trackHubDatabase(database))
+        conn = hAllocConnTrack(database, tdb);
+    char *bigDataUrl = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
     if (bigDataUrl)
         {
         itemCount = getSeqForBigGene(tdb, geneName);
@@ -26397,6 +26517,14 @@ else if (sameWord(table, "htcExtSeq"))
 else if (sameWord(table, "htcTranslatedProtein"))
     {
     htcTranslatedProtein(item);
+    }
+else if (sameWord(table, "htcBigPslSequence"))
+    {
+    htcBigPsl(item, FALSE);
+    }
+else if (sameWord(table, "htcTranslatedBigPsl"))
+    {
+    htcBigPsl(item, TRUE);
     }
 else if (sameWord(table, "htcTranslatedPredMRna"))
     {

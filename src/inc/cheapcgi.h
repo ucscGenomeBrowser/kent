@@ -373,6 +373,8 @@ void cgiMakeIntVarWithMax(char *varName, int initialVal, char *title, int width,
 
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits);
 /* Make a text control filled with initial floating-point value.  */
+void cgiMakeDoubleVarWithExtra(char *varName, double initialVal, int maxDigits, char *extra);
+/* Make a text control filled with initial floating-point value and optional extra HTML.  */
 
 void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width, 
                              char *min, char *max);

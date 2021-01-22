@@ -45,6 +45,7 @@ UTILS_APPLIST = \
 	colTransform \
 	countChars \
 	endsInLf \
+	clusterMatrixToBarChartBed \
 	cpgIslandExt \
 	faAlign \
 	fastqToFa \

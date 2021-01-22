@@ -10,8 +10,26 @@ include mane.ra
 
 include gdcCancer.ra
 
+include cortexVelmeshev.ra
+include heartCellAtlas.ra
+include kidneyStewart.ra
+include muscleDeMicheli.ra
+#include lungVieiraBraga.ra
+include fetalGeneAtlas.ra
+include bloodHao.ra
+include lungTravaglini2020.ra
+include skinSoleBoldo.ra
+include liverMacParland.ra
+include pancreasBaron.ra
+include ileumWang.ra
+include colonWang.ra
+include rectumWang.ra
+include placentaVentoTormo.ra
+include singleCellMerged.ra
+
 include gencodeV35.ra alpha
 include liftOver.ra
+include exomeProbesets.ra alpha
 
 track miRnaAtlas
 compositeTrack on
@@ -554,8 +572,6 @@ vcfDoQual off
 vcfDoMaf off
 compositeTrack on
 geneTrack ncbiRefSeqCurated
-pennantIcon New red ../goldenPath/newsarch.html#092520 "Released Jul. 21, 2020"
-
 
     track tgpNA19685_m011_MXL
     parent tgpTrios
@@ -693,6 +709,8 @@ include knownGene.ra beta,public
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
+
+include trackDb.241way.ra alpha
 
 # track multiz145way
 # shortLabel 145way maf

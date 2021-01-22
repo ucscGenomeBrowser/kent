@@ -2740,6 +2740,7 @@ var rightClick = {
                     if (title.length > maxLength) {
                         title = title.substring(0, maxLength) + "...";
                     }
+
                     if ((isGene || isHgc || id === "wikiTrack") && href.indexOf("i=mergedItem") === -1) {
                         // Add "Open details..." item
                         var displayItemFunctions = false;
@@ -2763,14 +2764,16 @@ var rightClick = {
                                 }
                             }
                         }
-                        if (isHgc && href.indexOf('g=gtexGene') !== -1) {
-                            // For GTEx gene mouseovers, replace title (which may be a tissue name) with 
-                            // item (gene) name
+
+                        if (isHgc && ( href.indexOf('g=gtexGene')!== -1 || href.indexOf('g=unip') !== -1 )) {
+                            // For GTEx gene and UniProt mouseovers, replace title (which may be a tissue name) with 
+                            // item (gene) name. Also need to unescape the urlencoded characters and the + sign.
                             a = /i=([^&]+)/.exec(href);
                             if (a && a[1]) {
-                                title = a[1];
+                                title = decodeURIComponent(a[1].replace(/\+/g, " "));
                             }
                         }
+
                         if (displayItemFunctions) {
                             o[rightClick.makeImgTag("magnify.png") + " Zoom to " +  title] = {
                                 onclick: function(menuItemClicked, menuObject) {

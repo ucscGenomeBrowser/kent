@@ -925,7 +925,7 @@
 
 <DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
-        <code>sepFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
+        <code>sepFields fieldName1,fieldName2 ...</code><BR>
     </div>
         
     <P>This setting changes the item details page and splits the table used for showing extra fields
@@ -4848,7 +4848,10 @@ For the complete bigInteract format definitions please see the
 <DIV class="bigLolly_intro">
 <H3>bigLolly: Lollipop Charts</H3>
     <P>
-    Lollipop graphs are usually used to display data that is local to a single base that has one to three data values assigned to it which can be displayed using the lollipop height, the color, and the size of the circle at the top of the lollipop.
+    Lollipop graphs are usually used to display data that is local to a single base that
+    has one to three data values assigned to it which can be displayed using the lollipop
+    height, the color, and the size of the circle at the top of the lollipop. For examples
+    visit the <a href="../bigLolly.html">bigLolly help page</a>.
 </DIV>
 
 <DIV class="bigLolly_example"><span class="types bigLolly"></span>

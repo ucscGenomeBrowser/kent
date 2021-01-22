@@ -1,5 +1,6 @@
 /* hgTrackDb - Create trackDb table from text files. */
 
+
 /* Copyright (C) 2013 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 #include "common.h"
@@ -16,7 +17,6 @@
 #include "portable.h"
 #include "dystring.h"
 #include "regexHelper.h"
-
 
 
 void usage()
@@ -53,6 +53,7 @@ errAbort(
   "  -release=alpha|beta|public - Include trackDb entries with this release tag only.\n"
   "  -settings - for trackDb scanning, output table name, type line,\n"
   "            -  and settings hash to stderr while loading everything."
+  "  -remoteLogin - use remote login to check for the existence of bigDataUrl files\n"
   );
 }
 
@@ -61,12 +62,15 @@ static struct optionSpec optionSpecs[] = {
     {"strict", OPTION_BOOLEAN},
     {"release", OPTION_STRING},
     {"settings", OPTION_BOOLEAN},
+    {"remoteLogin", OPTION_STRING},
     {NULL,      0}
 };
 
 static char *raName = "trackDb.ra";
 
 static char *release = "alpha";
+
+static char *remoteLogin = NULL;
 
 // release tags
 #define RELEASE_ALPHA  (1 << 0)
@@ -124,7 +128,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
 	slAddHead(&newList, tdb);
 	}
-    else if (trackDataAccessible(db, tdb) || tdbIsDownloadsOnly(tdb))
+    else if (tdbIsDownloadsOnly(tdb) || trackDataAccessibleRemote(db, tdb, remoteLogin)) 
         {
         slAddHead(&newList, tdb);
         }
@@ -283,7 +287,7 @@ static void addVersionRa(boolean strict, char *database, char *dirName, char *ra
 /* Read in tracks from raName and add them to table, pruning as required. Call
  * top-down so that track override will work. */
 {
-struct trackDb *tdbList = trackDbFromRa(raName, NULL), *tdb;
+struct trackDb *tdbList = trackDbFromRa(raName, NULL, NULL), *tdb;
 /* prune records of the incorrect release */
 tdbList= pruneRelease(tdbList);
 
@@ -292,15 +296,15 @@ tdbList= pruneRelease(tdbList);
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     if (tdb->overrides != NULL)
-    {
+	{
         verbose(3,"# override '%s'\n", tdb->track);
 	applyOverride(trackHash, tdb);
-    }
+	}
     else
-    {
+	{
         verbose(3,"# track '%s'\n", tdb->track);
 	hashStore(trackHash, tdb->track)->val = tdb;
-    }
+	}
     }
 }
 
@@ -455,11 +459,11 @@ static char *subsituteVariables(struct hashEl *el, char *database)
 /* substitute variables where supported */
 {
 char* val = (char*)el->val;
+char *name = el->name;
 /* Only some attribute support variable substitution, at least for now
  * Just leak memory when doing substitution.
  */
-if (sameString(el->name, "bigDataUrl") || sameString(el->name, "searchTrix") ||
-    sameString(el->name, "xrefDataUrl"))
+if (trackSettingIsFile(name))
     {
     val = replaceChars(val, "$D", database);
     }
@@ -751,6 +755,7 @@ if (strict)
 tdbList = pruneEmptyContainers(tdbList);
 checkSubGroups(database,tdbList,strict);
 trackDbPrioritizeContainerItems(tdbList);
+
 return tdbList;
 }
 
@@ -872,6 +877,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	    }
 	}
 
+    sqlUpdate(conn, NOSQLINJ "flush tables");
     sqlDisconnect(&conn);
     verbose(1, "Loaded database %s\n", database);
     }
@@ -907,6 +913,7 @@ if (strchr(raName, '/') != NULL)
     errAbort("-raName value should be a file name without directories");
 release = optionVal("release", release);
 releaseBit = getReleaseBit(release);
+remoteLogin = optionVal("remoteLogin", remoteLogin);
 
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5], optionExists("strict"));
 return 0;

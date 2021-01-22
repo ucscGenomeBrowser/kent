@@ -7,77 +7,88 @@
 
 <h1>Genome Browser FAQ</h1>
 <p> 
-This page contains responses to questions frequently asked by our user community and subscribers 
-to the <a href="http://groups.google.com/a/soe.ucsc.edu/group/genome?hl=en" 
-target="_blank">Genome Browser mailing list</a>.</p>
+This page contains responses to frequently asked questions from our user community.
+A full list of public questions is available for search from our 
+<a href="https://groups.google.com/a/soe.ucsc.edu/group/genome?hl=en" 
+target="_blank">Genome Browser mailing list</a>. To ask a question, please 
+visit our <a href="../contacts.html">Contact Us</em></a> page.</p>
 
 <h2>FAQ categories</h2>
-
 <ul>
-<li><a href="FAQdisplay.html">Display Problems</a></li>
-<li><a href="FAQreleases.html">Assembly Releases and Versions</a></li>
-<li><a href="FAQdownloads.html">Data and Downloads</a></li>
-<li><a href="FAQtracks.html">Genome Browser Tracks</a></li>
-<li><a href="FAQgenes.html">Genes and Gene Tracks</a></li>
-<li><a href="FAQcustom.html">Custom Annotation Tracks</a></li>
 <li><a href="FAQformat.html">Data File Formats</a></li>
-<li><a href="FAQblat.html">Blat</a></li>
-<li><a href="../ENCODE/FAQ/index.html">ENCODE Resources and FAQ</a></li>
-<li><a href="FAQcite.html">Citing the Genome Browser</a></li>
+<li><a href="FAQblat.html">Blat sequence alignment</a></li>
+<li><a href="FAQdownloads.html">Data and Downloads</a></li>
+<li><a href="FAQgenes.html">Genes and Gene Tracks</a></li>
+<li><a href="FAQreleases.html">Assembly Releases and Versions</a></li>
+<li><a href="FAQtracks.html">Genome Browser Tracks</a></li>
 <li><a href="FAQlink.html">Linking to the Genome Browser</a></li>
+<li><a href="FAQcustom.html">Custom Annotation Tracks</a></li>
+<li><a href="FAQcite.html">Citing the Genome Browser</a></li>
 <li><a href="FAQlicense.html">Mirroring or Licensing the Genome Browser</a></li>
+<li><a href="FAQdisplay.html">Display Problems</a></li>
+<li><a href="../ENCODE/FAQ/index.html">ENCODE Resources and FAQ</a></li>
 <li><a href="FAQmaillist.html">Posting a question to the mailing list</a></li>
 </ul>
 <hr>
 <!-- Search GB FAQ -->
-<form name="googleForm0" method="GET" action="http://www.google.com/search" 
+<form name="googleForm0" method="GET" action="https://www.google.com/search" 
 onSubmit="document.googleForm0.q.value=document.googleForm0.qq.value+'   site:genome.ucsc.edu/FAQ/';">
   <p>
   Search the Genome Browser FAQs: &nbsp;
   <input type="hidden" name="q" value="">
   <input type="hidden" name="num" value="10">
   <input type="hidden" name="filter" value="0">
-  <input type=text name=qq size=30 maxlength=255 value="">
+  <input type=text name=qq size=25 maxlength=255 value="">
+  <input type="submit" value="Submit">
+  </p>
+</form>
+
+<!-- Search GB help documentation -->
+<form name="googleForm2" method="GET" action="https://www.google.com/search" 
+onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+' site:genome.ucsc.edu/goldenPath/help';">
+  <p>
+  Search the Genome Browser help pages: &nbsp;
+  <input type="hidden" name="q" value="">
+  <input type="hidden" name="num" value="10">
+  <input type="hidden" name="filter" value="0">
+  <input type=text name=qq size=25 maxlength=255 value="">
   <input type="submit" value="Submit">
   </p>
 </form>
 
 <!-- Search entire GB site -->
-<form name="googleForm1" method="GET" action="http://www.google.com/search" 
-onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/';">
+<form name="googleForm1" method="GET" action="https://www.google.com/search" 
+onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+' site:genome.ucsc.edu/';">
   <p>
   Search the entire Genome Browser website: &nbsp;
   <input type="hidden" name="q" value="">
   <input type="hidden" name="num" value="10">
   <input type="hidden" name="filter" value="0">
-  <input type=text name=qq size=30 maxlength=255 value="">
+  <input type=text name=qq size=25 maxlength=255 value="">
   <input type="submit" value="Submit">
   </p>
 </form>
 
-<!-- Searhc GB help documentation -->
-<form name="googleForm2" method="GET" action="http://www.google.com/search" 
-onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">
+<!-- Search Wiki pages -->
+<form name="googleForm3" method="GET" action="https://www.google.com/search" 
+onSubmit="document.googleForm3.q.value=document.googleForm3.qq.value+' site:genomewiki.ucsc.edu/';">
   <p>
-  Search the Genome Browser help documentation pages: &nbsp;
+  Search our user-edited wiki website: &nbsp;
   <input type="hidden" name="q" value="">
   <input type="hidden" name="num" value="10">
   <input type="hidden" name="filter" value="0">
-  <input type=text name=qq size=30 maxlength=255 value="">
+  <input type=text name=qq size=25 maxlength=255 value="">
   <input type="submit" value="Submit">
   </p>
 </form>
 
 <!-- Search GB genomic data (gateway page) -->
 <p>
-Search for genomic data (gene symbols, chromosome coordinates, etc.) at the 
-<a href="../cgi-bin/hgGateway" target="_blank">Genome Browser gateway page</a>.</p>
-
-<!-- Search GB mailing list -->
-<p>
-Search the <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome" 
-target="_blank">Genome Browser support mailing list</a>.</p>
-<p>
-Questions and feedback welcome from our <a href="../contacts.html">Contact Us</em></a> page.</p>
+Search for genomic data from our 
+<a href="../cgi-bin/hgGateway" target="_blank">organism Gateway page</a>, 
+<a href="../cgi-bin/hgTracks?hgt_tSearch=track+search" target="_blank">
+Track search page</a>, or 
+<a href="../cgi-bin/hgHubConnect#publicHubs" target="_blank">
+Public Hub</a> collection.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

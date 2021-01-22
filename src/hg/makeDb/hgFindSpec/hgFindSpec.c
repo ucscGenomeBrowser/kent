@@ -338,6 +338,7 @@ if (verboseLevel() > 0)
 	    }
 	}
 
+    sqlUpdate(conn, NOSQLINJ "flush tables");
     sqlDisconnect(&conn);
     if (verboseLevel() > 0)
 	printf("Loaded database %s\n", database);
