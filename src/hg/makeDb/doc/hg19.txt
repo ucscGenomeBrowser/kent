@@ -34311,13 +34311,13 @@ end
 
 # Make up special colors for cell_type.  First manually create two column 
 # file that relates at least some of sample labels to cell types we have colors for.
-# Call this file clust/cell_type.labels.  
-matrixClusterColumns clust/cell_type.matrix clust/cell_type.labels cluster clust/cell_type.unnormed clust/cell_type.restats
+# Call this file cell_type.labels.  
+matrixClusterColumns clust/cell_type.matrix cell_type.labels cluster clust/cell_type.unnormed clust/cell_type.restats
 matrixNormalize column sum clust/cell_type.unnormed clust/cell_type.ref
-hcaColorCells clust/cell_type.ref ../typeColors.tsv clust/cell_type.matrix clust/cell_type.refStats -trackDb=clust/cell_type.colors -stats=bbi/cell_type.stats
+#hcaColorCells clust/cell_type.ref ../typeColors.tsv clust/cell_type.matrix clust/cell_type.refStats -trackDb=clust/cell_type.colors -stats=bbi/cell_type.stats
 
 # Use same colors for some others
-foreach s (Experiment_batch donor Organ Organ_cell_lineage RT_group)
+foreach s (cell_type Assay Experiment_batch donor Organ Organ_cell_lineage RT_group sex)
     hcaColorCells clust/cell_type.ref ../typeColors.tsv clust/$s.matrix clust/$s.refStats -trackDb=clust/$s.colors -stats=bbi/$s.stats
 end
 
