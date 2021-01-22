@@ -375,15 +375,24 @@ else
     warn("Error creating boxplot from sample data with command: %s", cmd->string);
 }
 
+static double estimateStringWidth(char *s)
+/* Get estimate of string width based on a memory font that is about the
+ * same size as svg will be using.  After much research I don't think we
+ * can get the size from the server, would have to be in Javascript to get
+ * more precise */
+{
+MgFont *font = mgHelvetica14Font();
+return mgFontStringWidth(font, s);
+}
+
 static double longestLabelSize(struct barChartCategory *categList)
 /* Get estimate of longest label in pixels */
 {
-MgFont *font = mgHelvetica14Font();
 int longest = 0;
 struct barChartCategory *categ;
 for (categ = categList; categ != NULL; categ = categ->next)
     {
-    int size = mgFontStringWidth(font, categ->label);
+    int size = estimateStringWidth(categ->label);
     if (size > longest)
         longest = size;
     }
@@ -442,7 +451,8 @@ double labelOffset = patchWidth + 2*borderSize;
 double statsOffset = labelOffset + labelWidth;
 double barOffset = statsOffset + statsSize;
 double statsRightOffset = barOffset - 9;
-double barMaxWidth = totalWidth-barOffset - 45;	    // The 45 is to leave room for ~6 digit number at end.
+double barNumLabelWidth = estimateStringWidth(" 1234.000"); 
+double barMaxWidth = totalWidth-barOffset -barNumLabelWidth ;
 double totalHeight = headerHeight + heightPer * categCount + borderSize;
 
 printf("<svg width=\"%g\" height=\"%g\">\n", totalWidth, totalHeight);
