@@ -2,36 +2,37 @@
 <p>
 The subtracks of this track show mutations that lead to escape from patient serum antibodies or monoclonal
 antibodies. Most of the mutations assayed were in the receptor binding domain (RBD) of the S protein. 
-The data shown here was imported from different studies, listed below. The
-Bloom lab papers used deep mutational scanning data to measure the effect of all
-    possible mutations in the Spike RBD using a
-        yeast surface display system.
+The data shown here were imported from different studies, listed below. The
+Bloom lab papers used deep mutational scanning data to measure the effect of all 
+possible mutations in the Spike RBD using a yeast surface display system.</p>
 <ol>
-<li>Bloom lab, patients A-K: antibodies in sera from the  Hospitalized or Ambulatory Adults with Respiratory Viral
+<li><b>Bloom lab</b> - patients A-K: antibodies in sera from the  Hospitalized or Ambulatory Adults with Respiratory Viral
 Infections (HAARVI) cohort, described in <a href="https://www.biorxiv.org/content/10.1101/2020.12.31.425021v1" target="_blank">
     Greaney et al., Biorxiv 2021</a>.</li>
 
-<li>Bloom lab, 10 antibodies: A selection of ten monoclonal antibodies, described
+<li><b>Bloom lab</b> - 10 antibodies: A selection of ten monoclonal antibodies, described
 in <a target=_blank href="https://www.ncbi.nlm.nih.gov/pubmed/33259788">Greaney et al, Cell Host Microbe 2020.</a>
 </li>
 
-<li>Bloom lab, 4 treatment antibodies: Four monoclonal antibodies licensed for treatment.
+<li><b>Bloom lab</b> - 4 treatment antibodies: Four monoclonal antibodies licensed for treatment.
 The results were described in <a target=_blank
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7724661/">Starr et al,
 Biorxiv 2021.</a>
 </li>
 
-<li>Whelan lab, 21 antibodies: a selection screen of 21 neutralizing monoclonal
+<li><b>Whelan lab</b> - 21 antibodies: a selection screen of 21 neutralizing monoclonal
 antibodies (mAbs) against the receptor binding domain (RBD) generated 48 escape
     mutants. The results were described in <a
         href="https://www.biorxiv.org/content/10.1101/2020.11.06.372037v1"
         target="_blank">
 Liu et al, Biorxiv 2020</a>.
 
-<li>Rappuoli lab, serum from one patient: three mutations obtained by passaging of 
-cells in neutralizing serum from a single patient, described in <a href="https://www.ncbi.nlm.nih.gov/pubmed/33398278" target="_blank">
-    Andreano et al, Biorxiv 2021</a>.
-<li>McCoy lab: mutations tested on monoclonal antibodies and patient sera, described in <a href="https://www.biorxiv.org/content/10.1101/2021.01.15.426849v1?ct=" target="_blank">Rees-Spear et al, Biorxiv 2021</a>.
+<li><b>Rappuoli lab</b> - serum from one patient: three mutations obtained by passaging of 
+cells in neutralizing serum from a single patient, described in <a 
+href="https://www.ncbi.nlm.nih.gov/pubmed/33398278" target="_blank">Andreano et al, Biorxiv 2021</a>.
+<li><b>McCoy lab</b> - mutations tested on monoclonal antibodies and patient sera, described in 
+<a href="https://www.biorxiv.org/content/10.1101/2021.01.15.426849v1?ct=" 
+target="_blank">Rees-Spear et al, Biorxiv 2021</a>.
 </ol>
 </p>
 
@@ -43,7 +44,7 @@ visualizations are available from the authors via dms-view using the following l
 <a target="_blank" href = "https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_clinical_Abs/">4 treatment antibodies</a>.
 </p>
 
-<h2>Display Conventions and Configuration<h2>
+<h2>Display Conventions and Configuration</h2>
 <h3>Bloom lab data</h3>
 <p>Scores represent the &quot;escape fraction&quot; (discussed at length in the Methods 
 of the paper) which &quot;represent the fraction of a given variant that escape antibody 
@@ -68,20 +69,27 @@ again in red (sera) and blue (MABs). Finally, another summary track has one feat
 per position where the score exceeds 0.18. These features are clickable and the details page
 show the exact amino acid changes and their scores. </a>
 
-<h3>Display Conventions and Configuration</h3>
+<h3>Whelan lab data</h3>
 <p>Features are labeled with the nucleotide and protein coordinates and the name of the antibody. 
 Click a feature or mouse-over a feature to show these annotations.<p>
 
-<h3>Display Conventions and Configuration</h3>
+<h3>Rappuoli lab data</h3>
 <p>The three mutations are labeled with the protein coordinates.<p>
+
+<h3>McCoy lab data</h3>
+<p>Features are labeled with the amino acid mutation coordinates. 
+Click a feature or mouse-over a feature to show a description on the specific mutation.<p>
 
 <h2>Methods</h2>
 <p>
-Patient sera: data was downloaded from <a href="https://github.com/jbloomlab/SARS-CoV-2-RBD_MAP_HAARVI_sera/blob/main/results/supp_data/human_sera_raw_data.csv" target=_blank>the jbloomlab Github file</a> and parsed into bedGraph format.</p>
+Patient sera: data was downloaded from <a 
+href="https://github.com/jbloomlab/SARS-CoV-2-RBD_MAP_HAARVI_sera/blob/main/results/supp_data/human_sera_raw_data.csv" 
+target=_blank>the jbloomlab Github file</a> and parsed into bedGraph format.</p>
 
 <p>10 Antibodies: Table S1 from Starr et al, was downloaded and parsed into bedGraph format.</p>
 
-<p>4 treatment antibodies: Data was downloaded from <a href="https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_clinical_Abs/" target=_blank>the jbloomlab Github file</a> and parsed into bedGraph format using the total and maximum values.</p>
+<p>4 treatment antibodies: Data was downloaded from <a href="https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_clinical_Abs/" 
+target=_blank>the jbloomlab Github file</a> and parsed into bedGraph format using the total and maximum values.</p>
 
 <p>21 Antibodies: Table 2 from Liu et al 2020, was copied manually and converted to bedGraph format.</p>
 
@@ -103,7 +111,6 @@ for questions, or our
 for more information.</p>
 
 <h2>References</h2>
-<p>
 <p>
 Greaney AJ, Loes AN, Crawford K, Starr T, Malone K, Chu H, Bloom JD.
 <a href="https://www.biorxiv.org/content/10.1101/2020.12.31.425021v1" target="_blank">
