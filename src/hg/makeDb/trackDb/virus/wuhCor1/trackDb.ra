@@ -596,17 +596,6 @@ vcfDoFilter off
 group varRep
 pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Jan. 7, 2021"
 
-track escape
-shortLabel Escape: 21 monocl Ab
-longLabel Mutations that lead to escape from 21 antibodies, Whelan lab, WUSTL (Mouse over to show mutation details)
-visibility pack
-type bigBed 9 +
-group immu
-bigDataUrl /gbdb/wuhCor1/escape/escape.bb
-mouseOverField _mouseOver
-noScoreFilter on
-release public
-
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra
