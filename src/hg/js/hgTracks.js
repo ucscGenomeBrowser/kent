@@ -4656,9 +4656,9 @@ var mouseOver = {
     var msgHeight = Math.ceil($('#mouseOverText').height());
     var lineHeight = Math.max(0, tdHeight - msgHeight);
     var lineTop = Math.max(0, tdTop + msgHeight);
-    var msgLeft = Math.max(0, clientX - (msgWidth/2) - 3); // with magic 3
+    var msgLeft = Math.max(tdLeft, clientX - (msgWidth/2) - 3); // with magic 3
+    msgLeft = Math.min(msgLeft, rightSide - msgWidth);  // right border limit
     var lineLeft = Math.max(0, clientX - 3);  // with magic 3
-    $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
     $('#mouseOverText').css('left',msgLeft + "px");
     $('#mouseOverText').css('top',tdTop + "px");
     $('#mouseOverVerticalLine').css('left',lineLeft + "px");
@@ -4732,7 +4732,7 @@ var mouseOver = {
     // =======================================================================
     receiveData: function (arr)
     {
-      mouseOver.visible = false;
+      mouseOver.popUpDisappear();
       for (var trackName in arr) {
 	// clear these variables if they existed before
       if (mouseOver.trackType[trackName]) {mouseOver.trackType[trackName] = undefined;}
@@ -4772,13 +4772,19 @@ var mouseOver = {
       } else {
          mouseOverValue = "&nbsp;" + longestNumber + "&nbsp;";
       }
-      $('#mouseOverText').html(mouseOverValue);	// see how big as rendered
       $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
+      $('#mouseOverText').html(mouseOverValue);	// see how big as rendered
       var maximumWidth = Math.ceil($('#mouseOverText').width());
       $('#mouseOverText').html("no&nbsp;data");	// might be bigger
       if (Math.ceil($('#mouseOverText').width() > maximumWidth)) {
           maximumWidth = Math.ceil($('#mouseOverText').width());
       }
+      // XXX this is not working when there are two wiggle tracks in display
+      //     and the window is dragged left or right.  The track where the
+      //     drag takes place seems to be dominate somehow and it's width
+      //     calculation overrides the other track width calculation
+      //     even though the .html() has been set here correctly, the
+      //     width() comes back with the dragged track value ?
       mouseOver.maximumWidth[trackName] = maximumWidth;
       }
     },  //      receiveData: function (arr)
