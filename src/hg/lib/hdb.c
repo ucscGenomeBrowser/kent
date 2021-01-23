@@ -3932,11 +3932,13 @@ trackDbAddTableField(tdbList);
 return tdbList;
 }
 
-boolean trackDataAccessible(char *database, struct trackDb *tdb)
+boolean trackDataAccessibleHash(char *database, struct trackDb *tdb, struct hash *gbdbHash)
 /* Return TRUE if underlying data are accessible - meaning the track has either
  * a bigDataUrl with remote URL (http:// etc), a bigDataUrl with an existing local file,
  * or a database table with the same name.
- * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. */
+ * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. 
+ *
+ * if gbdbHash is not NULL, use it when looking for the file */
 {
 if (startsWith("mathWig", tdb->type))
     return TRUE; // assume mathWig data is available.  Fail at load time if it isn't
@@ -3948,7 +3950,12 @@ if (bigDataUrl != NULL)
     if (hasProtocol(bigDataUrlLocal))
         return TRUE;
     else
-        return fileExists(bigDataUrlLocal);
+        {
+        if (gbdbHash == NULL)
+            return fileExists(bigDataUrlLocal);
+        else
+            return hashLookup(gbdbHash, bigDataUrlLocal) != NULL;
+        }
     }
 else
     {
@@ -3961,6 +3968,16 @@ else
     return (hTableForTrack(database, tdb->table) != NULL);
     }
 }
+
+boolean trackDataAccessible(char *database, struct trackDb *tdb)
+/* Return TRUE if underlying data are accessible - meaning the track has either
+ * a bigDataUrl with remote URL (http:// etc), a bigDataUrl with an existing local file,
+ * or a database table with the same name.
+ * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. */
+{
+return trackDataAccessibleHash(database, tdb, NULL);
+}
+
 
 static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 	       boolean privateHost, struct trackDb **tdbRetList)

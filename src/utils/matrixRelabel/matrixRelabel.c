@@ -110,7 +110,10 @@ else
     {
     char *word = nextTabWord(&line);
     if (word != NULL)
+	{
 	fprintf(f, "%s", word);
+	colCount += 1;
+	}
     while ((word = nextTabWord(&line)) != NULL)
          {
 	 fprintf(f, "\t%s", word);
@@ -119,16 +122,17 @@ else
     fputc('\n', f);
     }
 
-int rowIx = 0;
+int rowIx = 1;
+boolean checkedColCount = FALSE;
 while (lineFileNext(lf, &line, NULL))
     {
     char *rowLabel = nextTabWord(&line);
     if (newRows != NULL)
         {
-	++rowIx;
 	if (rowIx >= newRowCount)
 	    errAbort("Not enough lines in %s for %s", newRowFile, input);
 	rowLabel = newRows[rowIx];
+	++rowIx;
 	}
     if (lookupHash != NULL)
         {
@@ -143,8 +147,27 @@ while (lineFileNext(lf, &line, NULL))
 	    }
 	rowLabel = newLabel;
 	}
+    if (!checkedColCount)
+        {
+	char *dupe = cloneString(line);
+	char *s = dupe;
+	int count = 1;  // Include rowLabel
+	while (nextTabWord(&s) != NULL)
+	    ++count;
+	freez(&dupe);
+	if (count != colCount)
+	    lineFileExpectWords(lf, colCount, count);
+	checkedColCount = TRUE;
+	}
     fprintf(f, "%s\t%s\n", rowLabel, line);
     }
+if (newRows != NULL)
+    {
+    if (rowIx != newRowCount)
+        errAbort("%s has %d rows and %s has %d, not all row labels written",
+	    input, rowIx, newRowFile, newRowCount);
+    }
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])

@@ -6,6 +6,7 @@
 #include "options.h"
 #include "fieldedTable.h"
 #include "genePred.h"
+#include "jksql.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -14,7 +15,7 @@ errAbort(
   "gencodeGeneSymVerTx - Create a tab separated file with gene ID/symbol/best transcript mapping \n"
   "for many version of gencode.  Internal to UCSC - depends on local directory structures.\n"
   "        /hive/data/genomes/hg*/bed/gencodeV17/data/gencode.tsv\n"
-  "Needs to contain exactly the files we need for input.\n"
+  "Needs to contain exactly the files we need for input. Also this will poll the refGene table\n"
   "usage:\n"
   "   gencodeGeneSymVerTx input.list\toutput.tsv\n"
   "where input.lst is files to be run on.  The file names are parsed and should be\n"
@@ -39,6 +40,7 @@ struct transcript
     char *status;
     char *type;
     struct slName *tags;
+    struct genePred *gp;
     };
 
 struct gene
@@ -56,14 +58,14 @@ struct version
     {
     struct version *next;	/* Next in list */
     char *name;			/* gencodeV19 gencodeV34 etc */
-    char *metaName;		/* Full path to gencode.tsv file */
-    char *genePredName;		/* Full path to gencode.gp file */
+    char *metaName;		/* Full path to gencode.tsv file if any*/
+    char *genePredName;		/* Full path to gencode.gp file if any */
     char *ucscDb;		/* hg19, hg38, etc */
     struct gene *geneList;	/* List of genes */
     struct hash *gpHash;	/* Hash of genePredictions keyed by transcript ID */
     };
 
-int scoreTranscript(struct transcript *tx)
+int scoreGencodeTx(struct transcript *tx)
 /* Return a score for transcripts, higher is better.  Weights are ad hoc fit to data */
 {
 int score = 0;
@@ -124,19 +126,46 @@ for (tag = tagList; tag != NULL; tag = tag->next)
 return tagList;
 }
 
-struct hash *hashGenePredFile(char *fileName)
-/* Load in a genepred into a hash keyed by name */
+struct hash *hashGenePredList(struct genePred *gpList)
+/* Load a hash up with gene preds keyed by name */
 {
-struct genePred *gp, *gpList = genePredLoadAll(fileName);
 struct hash *hash = hashNew(0);
+struct genePred *gp;
 for (gp = gpList; gp != NULL; gp = gp->next)
     hashAdd(hash, gp->name, gp);
 return hash;
 }
 
+struct hash *hashGenePredFile(char *fileName)
+/* Load in a genepred into a hash keyed by name */
+{
+struct genePred *gpList = genePredLoadAll(fileName);
+return hashGenePredList(gpList);
+}
 
-struct gene *makeGeneList(struct version *v)
-/* makeGeneList - Create a table that links gene with a canonical transcript to 
+struct gene *geneNew(char *name, char *symbol, struct hash *geneHash)
+/* Make a new nearly empty gene structure */
+{
+struct gene *gene;
+struct lm *lm = geneHash->lm;
+lmAllocVar(lm, gene);
+gene->symbol = lmCloneString(lm, symbol);
+hashAddSaveName(geneHash, name, gene, &gene->name);
+return gene;
+}
+
+struct transcript *transcriptNew(char *name)
+/* Make a new nearly empty transcript */
+{
+struct transcript *tx;
+AllocVar(tx);
+tx->name = cloneString(name);
+return tx;
+}
+
+
+struct gene *makeGencodeGeneList(struct version *v)
+/* makeGencodeGeneList - Create a table that links gene with a canonical transcript to 
  *  represent the gene for a particular version of gencode. */
 {
 char *metaIn = v->metaName;
@@ -162,28 +191,25 @@ struct hash *geneHash = hashNew(0);	// gene valued
 struct gene *geneList = NULL;
 
 /* Scan through table building up transcripts and genes. */
-struct fieldedRow *row;
-for (row = table->rowList; row != NULL; row = row->next)
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
     {
-    char *geneName = row->row[geneIx];
+    char **row = fr->row;
+    char *geneName = row[geneIx];
     struct gene *gene = hashFindVal(geneHash, geneName);
     if (gene == NULL)
         {
-	AllocVar(gene);
-	gene->symbol = cloneString(row->row[geneNameIx]);
-	hashAddSaveName(geneHash, geneName, gene, &gene->name);
+	gene = geneNew(geneName, row[geneNameIx], geneHash);
 	slAddHead(&geneList, gene);
 	}
-    struct transcript *tx;
-    AllocVar(tx);
-    tx->status = hashStoreName(statusHash, row->row[statusIx]);
-    tx->type = hashStoreName(typeHash,row->row[typeIx]);
-    tx->tags = parseTags(tagHash, row->row[tagsIx]);
-    tx->name = hashStoreName(txHash, row->row[transcriptIx]);
+    struct transcript *tx = transcriptNew(row[transcriptIx]);
+    tx->status = hashStoreName(statusHash, row[statusIx]);
+    tx->type = hashStoreName(typeHash,row[typeIx]);
+    tx->tags = parseTags(tagHash, row[tagsIx]);
     slAddHead(&gene->txList, tx);
     }
 slReverse(&geneList);
-verbose(1, "Have %d genes, %d transcripts, %d status, %d type, %d tags\n", 
+verbose(2, "Have %d genes, %d transcripts, %d status, %d type, %d tags\n", 
     geneHash->elCount, txHash->elCount, statusHash->elCount, typeHash->elCount, tagHash->elCount);
 
 /* Find best for each gene */
@@ -195,7 +221,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     int bestScore = -BIGNUM;
     for (tx = gene->txList; tx != NULL; tx = tx->next)
         {
-	int score = scoreTranscript(tx);
+	int score = scoreGencodeTx(tx);
 	if (score > bestScore)
 	     {
 	     bestScore = score;
@@ -204,10 +230,82 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 	}
     gene->bestTx = bestTx;
     }
-verbose(1, "Found best genes\n");
+verbose(2, "Found best genes\n");
 return geneList;
 }
 
+int scoreRefSeqTx(struct transcript *tx)
+/* Return a score for transcripts, higher is better.  Weights are ad hoc fit to data */
+{
+char *name = tx->name;
+int score = 0;
+if (startsWith("NM_", name))
+     score += 9000;
+else if (startsWith("NR_", name))
+     score += 8000;
+else if (startsWith("NP_", name))
+     score += 7000;
+struct genePred *gp = tx->gp;
+if (gp->cdsStart < gp->cdsEnd)
+     score += 600;
+
+/* Favor mappings to real chromosomes */
+score += 90 - strlen(gp->chrom);
+return score;
+}
+
+struct transcript *findBestRefTx(struct transcript *txList)
+/* Return best looking transcript in list assuming it's a refSeq thing */
+{
+struct transcript *tx;
+int bestScore = -BIGNUM;
+struct transcript *bestTx = NULL;
+
+for (tx = txList; tx != NULL; tx = tx->next)
+    {
+    int score = scoreRefSeqTx(tx);
+    if (score > bestScore)
+        {
+	bestScore = score;
+	bestTx = tx;
+	}
+    }
+return bestTx;
+}
+
+
+struct gene *makeRefGeneList(struct version *v, struct genePred *gpList)
+/* We turn genePred format list of transcripts into list of genes by fusing on 
+ * name2 field */
+{
+struct hash *geneHash = hashNew(0);
+struct genePred *gp;
+struct gene *geneList = NULL;
+
+for (gp = gpList; gp != NULL; gp = gp->next)
+    {
+    char *name = gp->name2;
+    struct gene *gene = hashFindVal(geneHash, name);
+    if (gene == NULL)
+        {
+	gene = geneNew(name, name, geneHash);
+	slAddHead(&geneList, gene);
+	}
+    struct transcript *tx = transcriptNew(gp->name);
+    tx->gp = gp;
+    slAddHead(&gene->txList, tx);
+    }
+
+/* Now go through trying to make best transcript for the gene */
+struct gene *gene;
+for (gene = geneList; gene != NULL; gene = gene->next)
+    {
+    slReverse(&gene->txList);
+    gene->bestTx = findBestRefTx(gene->txList);
+    gene->name = cloneString(gene->bestTx->name);   
+    }
+return geneList;
+}
 
 
 struct version *versionsFromFile(char *input)
@@ -241,19 +339,68 @@ slReverse(&list);
 return list;
 }
 
+struct genePred *gpLoadAllFromTable(char *db, char *table)
+/* Connect to database and load all genePreds from table */
+{
+struct genePred *list = NULL;
+struct sqlConnection *conn = sqlConnect(db);
+char query[512];
+sqlSafef(query, sizeof(query), "select * from %s", table);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct genePred *gp = genePredKnownLoad(row+1, 12); // Skip bin
+    slAddHead(&list, gp);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return list;
+}
+
+struct version *refSeqVersions()
+/* Return list of refSeq versions, just from hg19 or hg38 for now */
+{
+char *targets[] = {"hg19", "hg38"};
+int targetCount = ArraySize(targets);
+struct version *list = NULL;
+int i;
+for (i=0; i<targetCount; ++i)
+    {
+    char *db = targets[i];
+    struct version *v;
+    AllocVar(v);
+    v->name = "refGene";
+    v->ucscDb = db;
+    struct genePred *gpList = gpLoadAllFromTable(db, v->name);
+    v->geneList = makeRefGeneList(v, gpList);
+    v->gpHash = hashGenePredList(gpList);
+    verbose(1, "refSeq %s %d transcripts into %d genes\n", db, slCount(gpList), slCount(v->geneList));
+    slAddHead(&list, v);
+    }
+return list;
+}
+
 void gencodeGeneSymVerTx(char *input, char *output)
 /* gencodeGeneSymVerTx - Create a tab separated file with gene ID/symbol/best transcript 
  * mapping for many version of gencode. */
 {
-struct version *v, *versionList = versionsFromFile(input);
-verbose(1, "Read %d versions\n", slCount(versionList));
+/* Read in refSeq */
+struct version *refSeqVersionList = refSeqVersions();
+verbose(1, "refSeq %d versions\n", slCount(refSeqVersionList));
 
-/* Read them all in before making output.  */
+struct version *v, *versionList = versionsFromFile(input);
+verbose(1, "Gencode %d versions\n", slCount(versionList));
+
+/* Read in all gencode from file from output.  */
 for (v = versionList; v != NULL; v = v->next)
     {
-    v->geneList = makeGeneList(v);
+    v->geneList = makeGencodeGeneList(v);
     v->gpHash = hashGenePredFile(v->genePredName);
     }
+
+versionList = slCat(refSeqVersionList, versionList);
 
 /* Now make output */
 FILE *f = mustOpen(output, "w");
@@ -263,12 +410,11 @@ for (v = versionList; v != NULL; v = v->next)
     struct gene *gene;
     for (gene = v->geneList; gene != NULL; gene = gene->next)
         {
-	struct hashEl *hel;
-	for (hel = hashLookup(v->gpHash, gene->bestTx->name); hel != NULL; hel = hashLookupNext(hel))
+	struct genePred *gp = hashFindVal(v->gpHash, gene->bestTx->name);
+	if (gp != NULL)
 	    {
 	    fprintf(f, "%s\t%s\t%s\t%s\t",   
 		gene->name, gene->symbol, v->name, v->ucscDb);
-	    struct genePred *gp = hel->val;
 	    /* Print scalar bed fields. */
 	    fprintf(f, "%s\t", gp->chrom);
 	    fprintf(f, "%u\t", gp->txStart);

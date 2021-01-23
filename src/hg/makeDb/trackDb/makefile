@@ -208,6 +208,7 @@ HIVE_TRIX = /hive/data/inside/trix
 DATA_TRIX = /data/trix
 ALPHA_MACHINE = hgwdev.gi.ucsc.edu
 BETA_MACHINE = qateam@hgwbeta.soe.ucsc.edu
+PUBLIC_MACHINE = qateam@hgw0.soe.ucsc.edu
 
 # For the new demo-$USER machines, the "USER" passed in to makefile contains a hyphen which
 # needs to be replaced with an underscore for mysql table names.
@@ -245,11 +246,25 @@ alpha_all: ${DBS:%=%_alpha}
 
 onbeta:	/cluster/home/${USER}/.hg.conf.beta
 
+betaTest: onbeta clean 
+	${MAKE} betaTest_all
+
+betaTest_all: ${DBS:%=%_betaTest}
+
 beta: onbeta clean 
 	${GIT} pull
 	${MAKE} beta_all
 
 beta_all: ${DBS:%=%_beta}
+
+%_betaTest:
+	# now do loads on hgwbeta
+	ssh  ${BETA_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=beta trackDb_betaTest hgFindSpec_betaTest $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta hgsql $* -Ne "select tableName from trackDb" | sort > $*.tableList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta hgsql $* -Ne "select tableName from trackDb_betaTest" | sort > $*.tableListTest.txt
+	-diff $*.tableList.txt $*.tableListTest.txt
+	rm $*.gbdbList.txt $*.tableList.txt $*.tableListTest.txt
 
 %_beta:
 	# now do loads on hgwbeta
@@ -259,11 +274,24 @@ beta_all: ${DBS:%=%_beta}
 	# now make files for hgwdev-beta (we share the tables with hgwbeta)
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
 
+publicTest: onbeta clean
+	${MAKE} publicTest_all
+
+publicTest_all: ${DBS:%=%_publicTest}
+
 public: onbeta clean
 	${GIT} pull
 	${MAKE} public_all
 
 public_all: ${DBS:%=%_public}
+
+%_publicTest:
+	ssh  ${PUBLIC_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=public trackDb_publicTest hgFindSpecTest_publicTest $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta hgsql $* -Ne "select tableName from trackDb_public" | sort > $*.tableList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta hgsql $* -Ne "select tableName from trackDb_publicTest" | sort > $*.tableListTest.txt
+	-diff $*.tableList.txt $*.tableListTest.txt
+	rm $*.gbdbList.txt $*.tableList.txt $*.tableListTest.txt
 
 %_public:
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public $*

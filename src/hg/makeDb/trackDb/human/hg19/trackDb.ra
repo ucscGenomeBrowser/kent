@@ -2808,6 +2808,7 @@ dataVersion EPDNew Version 006 (May 2018)
 visibility hide
 
 include fetalGeneAtlas.ra
+include skinSoleBoldo.ra
 
 #  include doseSensitivity.ra
 

@@ -196,6 +196,20 @@ struct clustering *clusteringNew(char *clusterField, char *outMatrixFile, char *
     struct fieldedTable *metaTable, struct vMatrix *v, boolean doMedian)
 /* Make up a new clustering job structure */
 {
+/* Check that all column names in matrix are unique */
+int colCount = v->colCount;
+char **colLabels = v->colLabels;
+struct hash *uniqColHash = hashNew(0);
+int colIx;
+for (colIx=0; colIx < colCount; colIx = colIx+1)
+    {
+    char *label = colLabels[colIx];
+    if (hashLookup(uniqColHash, label) == NULL)
+	hashAdd(uniqColHash, label, NULL);
+    else
+        errAbort("Duplicated column label %s in input matrix", label);
+    }
+
 struct clustering *job;
 AllocVar(job);
 job->clusterField = clusterField;
@@ -211,7 +225,11 @@ struct fieldedRow *fr;
 for (fr = metaTable->rowList; fr != NULL; fr = fr->next)
     {
     char **row = fr->row;
-    hashAdd(sampleHash, row[0], row[clusterFieldIx]);
+    char *sample = row[0];
+    if (!hashLookup(uniqColHash, sample))
+        errAbort("%s is in %s but not input matrix", sample, metaTable->name);
+
+    hashAdd(sampleHash, sample, row[clusterFieldIx]);
     hashIncInt(clusterSizeHash, row[clusterFieldIx]);
     }
 
@@ -234,8 +252,8 @@ slNameSort(&nameList);
 
 /* Make up hash that maps cluster names to cluster ids */
 struct hash *clusterIxHash = hashNew(0);	/* Keyed by cluster, no value */
-struct slName *name;
 int i;
+struct slName *name;
 for (name = nameList, i=0; name != NULL; name = name->next, ++i)
     hashAddInt(clusterIxHash, name->name, i);
 int clusterCount = job->clusterCount = clusterIxHash->elCount;
@@ -264,14 +282,14 @@ if (doMedian)
 	}
     }
 
-/* Make up array that has -1 where no cluster available, otherwise output index */
-int colCount = v->colCount;
+
+/* Make up array that has -1 where no cluster available, otherwise output index, also
+ * hash up all column labels. */
 int *colToCluster = job->colToCluster = needHugeMem(colCount * sizeof(colToCluster[0]));
-int colIx;
 int unclusteredColumns = 0, missCount = 0;
 for (colIx=0; colIx < colCount; colIx = colIx+1)
     {
-    char *colName = v->colLabels[colIx];
+    char *colName = colLabels[colIx];
     char *clusterName = hashFindVal(sampleHash, colName);
     colToCluster[colIx] = -1;
     if (clusterName != NULL)

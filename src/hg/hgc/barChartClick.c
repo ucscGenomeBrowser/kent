@@ -375,21 +375,39 @@ else
     warn("Error creating boxplot from sample data with command: %s", cmd->string);
 }
 
+static double estimateStringWidth(char *s)
+/* Get estimate of string width based on a memory font that is about the
+ * same size as svg will be using.  After much research I don't think we
+ * can get the size from the server, would have to be in Javascript to get
+ * more precise */
+{
+MgFont *font = mgHelvetica14Font();
+return mgFontStringWidth(font, s);
+}
+
 static double longestLabelSize(struct barChartCategory *categList)
 /* Get estimate of longest label in pixels */
 {
-MgFont *font = mgHelvetica14Font();
 int longest = 0;
 struct barChartCategory *categ;
 for (categ = categList; categ != NULL; categ = categ->next)
     {
-    int size = mgFontStringWidth(font, categ->label);
+    int size = estimateStringWidth(categ->label);
     if (size > longest)
         longest = size;
     }
 return longest * 1.09;
 }
 
+void deunderbarColumn(struct fieldedTable *ft, char *field)
+/* Ununderbar all of a column inside table because space/underbar gets
+ * so confusing */
+{
+int fieldIx = fieldedTableFindFieldIx(ft, field);
+struct fieldedRow *row;
+for (row = ft->rowList; row != NULL; row = row->next)
+    replaceChar(row->row[fieldIx], '_', ' ');
+}
 
 static void printBarChart(struct barChartBed *chart, struct trackDb *tdb, double maxVal, char *metric)
 /* Plot bar chart without quartiles or anything fancy just using SVG */
@@ -413,6 +431,7 @@ if (statsFile != NULL)
     char *required[] = {"cluster", "count", "total"};
     struct fieldedTable *ft = fieldedTableFromTabFile(
 	statsFile, statsFile, required, ArraySize(required));
+    deunderbarColumn(ft, "cluster");
     statsHash = fieldedTableIndex(ft, "cluster");
     countStatIx = fieldedTableFindFieldIx(ft, "count");
     statsSize = 8*(fieldedTableMaxColChars(ft, countStatIx)+1);
@@ -432,7 +451,8 @@ double labelOffset = patchWidth + 2*borderSize;
 double statsOffset = labelOffset + labelWidth;
 double barOffset = statsOffset + statsSize;
 double statsRightOffset = barOffset - 9;
-double barMaxWidth = totalWidth-barOffset - 45;	    // The 45 is to leave room for ~6 digit number at end.
+double barNumLabelWidth = estimateStringWidth(" 1234.000"); 
+double barMaxWidth = totalWidth-barOffset -barNumLabelWidth ;
 double totalHeight = headerHeight + heightPer * categCount + borderSize;
 
 printf("<svg width=\"%g\" height=\"%g\">\n", totalWidth, totalHeight);
@@ -473,9 +493,7 @@ for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer
  	labelOffset, yPos+innerHeight-1, innerHeight-1, deunder);
     if (statsSize > 0.0)
 	{
-	struct fieldedRow *fr = hashFindVal(statsHash, categ->label);
-	if (fr == NULL)
-	    fr = hashFindVal(statsHash, deunder);
+	struct fieldedRow *fr = hashFindVal(statsHash, deunder);
 	if (fr != NULL)
 	    {
 	    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n", 
@@ -485,7 +503,7 @@ for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer
     printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n", 
 	barOffset+barWidth+2, yPos+innerHeight-1, innerHeight-1, score);
     }
-printf("<svg>");
+printf("</svg>");
 }
 
 

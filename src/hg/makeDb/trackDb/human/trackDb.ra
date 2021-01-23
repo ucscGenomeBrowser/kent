@@ -33,7 +33,7 @@ include trackDb.clinGen.ra
 include trackDb.giab.ra
 
 # CADD scores
-include cadd.ra
+include cadd.ra alpha
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -3158,7 +3158,7 @@ group genes
 visibility hide
 type bigPsl
 html lrgTranscriptAli
-mouseOverField mouseOver
+mouseOver ${name}: ${ncbiTranscript} ${ensemblTranscript} ${ncbiProtein} ${ensemblProtein} ${geneName}
 skipFields mouseOver
 skipEmptyFields on
 urls ncbiTranscript=https://www.ncbi.nlm.nih.gov/nuccore/$$ ensemblTranscript=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$ ncbiProtein=https://www.ncbi.nlm.nih.gov/protein/$$ ensemblProtein=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$
@@ -3173,8 +3173,8 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 color 54,125,29
-urlLabel Link to LRG transcript:
-url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+urlLabel Link to LRG transcript
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$<_lrgParent>.xml#transcripts_anchor
 bigDataUrl /gbdb/$D/bbi/lrgBigPsl.bb
 release alpha
 

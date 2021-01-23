@@ -5,7 +5,8 @@ type bigBed
 group immu
 priority 30
 visibility hide
-superTrack on show
+superTrack on
+pennantIcon New red ../goldenPath/newsarch.html "Released Jan. 22, 2021"
 
 include bloomEsc.ra
 
@@ -19,6 +20,7 @@ include bloomEsc.ra
         mouseOverField _mouseOver
         noScoreFilter on
         priority 33.1
+        html abEscape
 
         track rappuoli
         shortLabel Rappuoli Serum Escape 
@@ -29,4 +31,16 @@ include bloomEsc.ra
         bigDataUrl /gbdb/wuhCor1/rappuoli/rappuoli.bb
         noScoreFilter on
         priority 33.2
+        html abEscape
 
+        track mccoy
+        shortLabel McCoy Escape 
+        longLabel McCoy lab: S Mutation impact on neutralization by serum and mAbs
+        parent abEscape
+        visibility pack
+        type bigBed 8 +
+        bigDataUrl /gbdb/wuhCor1/mccoy/mccoy.bb
+        mouseOverField description
+        noScoreFilter on
+        priority 33.3
+        html abEscape
