@@ -814,24 +814,97 @@ if (tg->isBigBed)
 return bed->name;
 }
 
+static void barsToGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
+                double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw bar chart over item in proportional to gene way*/
+{
+/* Fetch our item and the bed from it */
+struct barChartItem *itemInfo = (struct barChartItem *)item;
+struct bed *bed = itemInfo->bed;
+double baseWidth = bed->chromEnd - bed->chromStart;
+
+/* Figure out where to draw things in Y dimension */
+struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
+int topGraphHeight = chartHeight(tg, itemInfo);
+topGraphHeight = max(topGraphHeight, tl.fontHeight);
+int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
+int yGene = yZero + extras->margin;
+
+/* Figure out width between bars */
+double xStart = (bed->chromStart- winStart) * scale;
+double xEnd = (bed->chromEnd - winStart)* scale;
+int pixelWidth = xEnd - xStart;
+int barCount = bed->expCount;
+double oneWidth = pixelWidth/barCount;
+
+/* Figure out how much space to leave between bars */
+int barSpacing = round(oneWidth/10);
+if (barSpacing == 0)
+    {
+    if (oneWidth >= 3)
+        barSpacing = 1;
+    }
+
+// drawScaledBox(hvg, bed->chromStart, bed->chromEnd, scale, xOff, y, topGraphHeight, MG_YELLOW);  // ugly debug
+
+int i;
+// int lastEnd = xStart + xOff;
+Color clipColor = MG_MAGENTA;
+for (i=0; i<barCount; ++i)
+    {
+    struct rgbColor rgb = extras->colors[i];
+    int color = hvGfxFindColorIx(hvg, rgb.r, rgb.g, rgb.b);
+    int cStart = bed->chromStart + baseWidth*i/barCount;
+    int cEnd = bed->chromStart + baseWidth*(i+1)/barCount;
+    double expScore = bed->expScores[i];
+    int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit, 
+                                        extras->maxHeight, extras->doLogTransform);
+    drawScaledBox(hvg, cStart, cEnd, scale, xOff, y+topGraphHeight-height, height, color);
+    if (!extras->doLogTransform && expScore > extras->maxViewLimit)
+        drawScaledBox(hvg, cStart, cEnd, scale, xOff, yZero-height+1, 2, clipColor);
+    }
+
+
+// Draw the line our graph sits on top of
+drawScaledBox(hvg, bed->chromStart, bed->chromEnd, scale, xOff, yGene+1, extras->boxModelHeight, 
+                MG_GRAY);
+}
+
+static void barsToGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
+                        char *mapItemName, int start, int end, int x, int y, int width, int height)
+/* Create a map box on item and label, and one for each category (bar in the graph) */
+{
+struct barChartItem *chartItem = (struct barChartItem *)item;
+struct bed *bed = (struct bed *)chartItem->bed;
+genericMapItem(tg, hvg, item, bed->name, bed->name, start, end, x, y, width, height);
+}
+
 void barChartMethods(struct track *tg)
 /* Bar Chart track type: draw fixed width chart of colored bars over a BED item */
 {
 tg->bedSize = 8;
 bedMethods(tg);
 tg->canPack = TRUE;
-tg->drawItemAt = barChartDrawAt;
-tg->preDrawItems = barChartPreDrawItems;
 tg->loadItems = barChartLoadItems;
-tg->mapItem = barChartMapItem;
 tg->itemName = barChartItemName;
 tg->mapItemName = barChartMapItemName;
 tg->itemHeight = barChartItemHeight;
 tg->itemStart = barChartItemStart;
 tg->itemEnd = barChartItemEnd;
 tg->totalHeight = barChartTotalHeight;
-tg->nonPropDrawItemAt = barChartNonPropDrawAt;
-tg->nonPropPixelWidth = barChartNonPropPixelWidth;
+if (trackDbSettingClosestToHomeOn(tg->tdb, "barChartFitGene"))
+    {
+    tg->drawItemAt = barsToGeneDrawAt;
+    tg->mapItem = barsToGeneMapItem;
+    }
+else
+    {
+    tg->preDrawItems = barChartPreDrawItems;
+    tg->drawItemAt = barChartDrawAt;
+    tg->mapItem = barChartMapItem;
+    tg->nonPropDrawItemAt = barChartNonPropDrawAt;
+    tg->nonPropPixelWidth = barChartNonPropPixelWidth;
+    }
 }
 
 void barChartCtMethods(struct track *tg)
