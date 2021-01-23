@@ -10,13 +10,13 @@ Variant of Concern (VOC) 202012/01
     target=_blank>Public Health England</a>),
 spread rapidly in England in November and December 2020
 (Volz <em>et al.</em>).
-It has a large number of variants including non-synonymous substitutions and deletions,
+It has a large number of mutations including non-synonymous substitutions and deletions,
 and as of Jan. 4 2021, over 7,000 sequences from 29 countries have been submitted to
 <a href="https://www.gisaid.org/" target=_blank>GISAID</a>.  The first confirmed B.1.1.7
 sequence in the United States was announced Dec. 29 2020.
 </p>
 <p>
-This track shows single-nucleotide variants and deletions from the SARS-CoV-2 reference genome
+This track shows single-nucleotide substitutions and deletions from the SARS-CoV-2 reference genome
 in the B.1.1.7 consensus sequence and the first nine genome sequences in the United States
 that were assigned to B.1.1.7.
 </p>
@@ -47,22 +47,22 @@ Here are links to view the subtrees at nextstrain.org:
 
 <h2>Display Conventions</h2>
 <p>
-In &quot;dense&quot; mode, a vertical line is drawn at each position where there is a variant.
+In &quot;dense&quot; mode, a vertical line is drawn at each position where there is a mutation.
 In &quot;squish&quot; and &quot;pack&quot; modes, the display shows a plot of all 
-samples' variants, with samples ordered using the phylogenetic tree in order to highlight 
-patterns of linkage. &quot;Full&quot; display mode shows each variant on its own row, 
+samples' mutations, with samples ordered using the phylogenetic tree in order to highlight
+patterns of linkage. &quot;Full&quot; display mode shows each mutation on its own row,
 ordered by position instead of lineage.</p>
 <p>
 Each sample is placed in a horizontal row of pixels; when the number of
 samples exceeds the number of vertical pixels for the track, multiple
 samples fall in the same pixel row and pixels are averaged across samples.</p>
 <p>
-Each variant is a vertical bar at its position in the SARS-CoV-2 genome
+Each mutation is a vertical bar at its position in the SARS-CoV-2 genome
 with white (invisible) representing the reference allele;
 the non-reference allele is shown in red if it changes the protein sequence of a gene,
 green if it falls within a gene but does not change the protein,
 and black if it does not fall within a gene.
-Tick marks are drawn at the top and bottom of each variant's vertical bar
+Tick marks are drawn at the top and bottom of each mutation's vertical bar
 to make the bar more visible when most alleles are reference alleles.
 </p>
 <p>
@@ -87,14 +87,14 @@ and uploaded to <a href="hgPhyloPlace">hgPhyloPlace</a>,
 which uses
 <a href="https://github.com/yatisht/usher/" target=_blank>UShER</a> (Turakhia <em>et al.</em>)
 to place uploaded SARS-CoV-2 genome sequences in a global phylogenetic tree,
-and generates custom tracks for the Genome Browser showing single-nucleotide variants
-(SNVs) in uploaded sequences.
-hgPhyloPlace ignores insertion/deletion variants, working only with SNVs
+and generates custom tracks for the Genome Browser showing single-nucleotide substitutions
+in uploaded sequences.
+hgPhyloPlace ignores insertion/deletion mutations, working only with substitutions
 because those are adequate for inferring phylogeny; however, since B.1.1.7 has four
-deletion variants, three of which cause amino acid deletions from genes,
+deletions, three of which cause amino acid deletions from genes,
 <a href="https://github.com/lh3/minimap2"
    target=_blank>minimap2</a> (Li) was used to align B.1.1.7 to the reference genome
-so that deletion variants could be displayed in addition to SNVs.
+so that deletions could be displayed in addition to substitutions.
 </p>
 
 <h2>Data Access</h2>
@@ -129,7 +129,7 @@ COG-UK releases daily updates of sequences and metadata; scroll down to the
 <a href="https://www.cogconsortium.uk/data/" target=_blank>Data</a> page for links.
 </p>
 <p>
-The variants in the B.1.1.7 consensus sequence and the sequences available from GenBank
+The mutations in the B.1.1.7 consensus sequence and the sequences available from GenBank
 may be downloaded in Variant Call Format (VCF):
 <a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first7.vcf.gz"
    target=_blank>lineageB_1_1_7_US_first7.vcf.gz</a>
