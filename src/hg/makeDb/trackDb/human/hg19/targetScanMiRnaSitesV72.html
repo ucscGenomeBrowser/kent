@@ -1,0 +1,108 @@
+<H2> Description</H2>
+<P>
+This track shows conserved mammalian microRNA regulatory target sites
+for conserved microRNA families in
+the 3' UTR regions of Refseq Genes, as predicted by TargetScanHuman 7.2.
+<P>
+
+<H2>Method</H2>
+<P>
+Putative miRNA binding sites in UTRs were found by searching for conserved 
+8mer, 7mer, and 6mer sites that match the seed regions from all known miRNA
+families in mammals. Using protein-coding human transcripts from Gencode v19
+and RefSeq, aligned vertebrate 3' UTRs were extracted from multiz alignments to
+create 3' UTR profiles. These 3' UTRs were scanned to identify conserved 
+matches to the miRNA seed region, as in Friedman <em>et al</em>., 2009. These 
+sites were then assigned a percentile rank (-1 to 99) based on their
+<A HREF="http://www.targetscan.org/vert_70/docs/context_score.html">context++
+score</A> (Agarwal <EM>et al</EM>., 2015).
+For further details of the methods used to generate
+this annotation, see the references
+and the <A HREF="http://www.targetscan.org/" TARGET="_blank">TargetScan</A>
+website.</P>
+
+<H2>Release Notes </H2>
+<P>
+Compared to previous releases, Release 7 uses an improved method to predict
+targeting efficacy (the context++ model, Agarwal <em>et al</em>., 2015), uses 3' UTR
+profiles that indicate the fraction of mRNA containing each site (Nam <em>et al</em>.,
+2014), and uses updated miRNA families curated from Chiang <em>et al</em>., 2010 and
+Fromm <em>et al</em>., 2015. The previous version released by UCSC was 5.1. For further
+information on previous releases refer to 
+<A HREF="http://www.targetscan.org/vert_72/docs/help.html"
+TARGET="_blank">TargetScan Releases</A>.
+</P>
+
+<H2>Credit</H2>
+<P>
+Thanks to George Bell of
+<a href="http://barc.wi.mit.edu/"
+target="_blank">Bioinformatics and Research Computing</a> at the Whitehead
+Institute for providing this annotation, which was generated in collaboration
+with the labs of David Bartel and Chris Burge.
+Additional information on microRNA target prediction is available on the
+<A HREF="http://www.targetscan.org/" TARGET="_blank">TargetScan</A> website.
+</P>
+
+<H2>Data Access</H2>
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>,
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis, the data may
+be queried from our <a href="/goldenPath/help/api.html">REST API</a>. Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our <a href="../FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a> for more
+information.
+</p>
+
+<p>
+Data is also freely available on the Target Scan website
+<a href="http://www.targetscan.org/cgi-bin/targetscan/data_download.vert72.cgi" target="_BLANK">TargetScanHuman V7.2 Data Download</a>.
+</p>
+
+<H2>References</H2>
+
+<p>
+Agarwal V, Bell GW, Nam JW, Bartel DP.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/26267216" target="_blank">
+Predicting effective microRNA target sites in mammalian mRNAs</a>.
+<em>Elife</em>. 2015 Aug 12;4.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26267216" target="_blank">26267216</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4532895/" target="_blank">PMC4532895</a>
+</p>
+
+<p>
+Garcia DM, Baek D, Shin C, Bell GW, Grimson A, Bartel DP.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/21909094" target="_blank">
+Weak seed-pairing stability and high target-site abundance decrease the proficiency of lsy-6 and
+other microRNAs</a>.
+<em>Nat Struct Mol Biol</em>. 2011 Sep 11;18(10):1139-46.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21909094" target="_blank">21909094</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3190056/" target="_blank">PMC3190056</a>
+</p>
+
+<p>
+Friedman RC, Farh KK, Burge CB, Bartel DP.
+<a href="https://genome.cshlp.org/content/19/1/92.long" target="_blank">
+Most mammalian mRNAs are conserved targets of microRNAs</a>.
+<em>Genome Res</em>. 2009 Jan;19(1):92-105.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/18955434" target="_blank">18955434</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2612969/" target="_blank">PMC2612969</a>
+</p>
+
+<p>
+Grimson A, Farh KK, Johnston WK, Garrett-Engele P, Lim LP, Bartel DP.
+<a href="https://www.sciencedirect.com/science/article/pii/S1097276507004078" target="_blank">
+MicroRNA targeting specificity in mammals: determinants beyond seed pairing</a>.
+<em>Mol Cell</em>. 2007 Jul 6;27(1):91-105.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/17612493" target="_blank">17612493</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3800283/" target="_blank">PMC3800283</a>
+</p>
+
+<p>
+Lewis BP, Burge CB, Bartel DP.
+<a href="https://www.sciencedirect.com/science/article/pii/S0092867404012607" target="_blank">
+Conserved seed pairing, often flanked by adenosines, indicates that thousands of human genes are
+microRNA targets</a>.
+<em>Cell</em>. 2005 Jan 14;120(1):15-20.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15652477" target="_blank">15652477</a>
+</p>
