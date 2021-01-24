@@ -181,7 +181,7 @@ if (name == NULL)
 return (hashLookup(extras->categoryFilter, name) != NULL);
 }
 
-static int maxCategoryForItem(struct bed *bed, int threshold)
+static int maxCategoryForItem(struct bed *bed)
 /* Return id of highest valued category for an item, if significantly higher than median.
  * If none are over threshold, return -1 */
 {
@@ -199,9 +199,9 @@ for (i=0; i<expCount; i++)
         }
     totalScore += expScore;
     }
-// threshold to consider this item category specific -- a category contributes > threshold % to 
-// total level
-if (totalScore < 1 || maxScore <= (totalScore * threshold * .01))
+double threshold = 5.4 * totalScore / bed->expCount; /* The 54 cats in  and 10% of that for backwards
+						      * compatability */
+if (totalScore < 1 || maxScore <= threshold)
     return -1;
 return maxNum;
 }
@@ -210,7 +210,7 @@ static Color barChartItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* A bit of category-specific coloring in squish mode only, on bed item */
 {
 struct bed *bed = item;
-int id = maxCategoryForItem(bed, SPECIFICITY_THRESHOLD);
+int id = maxCategoryForItem(bed);
 if (id < 0)
     return MG_BLACK;
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
@@ -270,13 +270,20 @@ return valToClippedHeight(maxExp, extras->maxMedian, extras->maxViewLimit, extra
         extras->doLogTransform);
 }
 
-static int chartItemHeightOptionalMax(struct track *tg, void *item, boolean isMax)
+enum trackVisibility trackVisAfterLimit(struct track *tg)
+/* Somewhat carefully figure out track visibility after limits may or may not have been set */
 {
-// It seems that this can be called early or late
-struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 enum trackVisibility vis = tg->visibility;
 if (tg->limitedVisSet)
     vis = tg->limitedVis;
+return vis;
+}
+
+static int chartItemHeightOptionalMax(struct track *tg, void *item, boolean isMax)
+{
+struct barChartTrack *extras = tg->extraUiData;
+// It seems that this can be called early or late
+enum trackVisibility vis = trackVisAfterLimit(tg);
 
 int height;
 if (vis == tvSquish || vis == tvDense)
@@ -664,7 +671,7 @@ int itemEnd = bed->chromEnd;
 int x1, x2;
 if (tg->limitedVis == tvSquish)
     {
-    int categId = maxCategoryForItem(bed, SPECIFICITY_THRESHOLD);
+    int categId = maxCategoryForItem(bed);
     char *maxCateg = "";
     if (categId > 1)
         maxCateg = getCategoryLabel(tg, categId);
@@ -851,6 +858,12 @@ static void barsToGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, in
                 double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw bar chart over item in proportional to gene way*/
 {
+if (vis != tvFull && vis != tvPack)
+    {
+    barChartDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+    return;
+    }
+
 /* Fetch our item and the bed from it */
 struct barChartItem *itemInfo = (struct barChartItem *)item;
 struct bed *bed = itemInfo->bed;
@@ -893,6 +906,13 @@ static void barsToGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, c
                         char *mapItemName, int start, int end, int x, int y, int width, int height)
 /* Create a map box on item and label, and one for each category (bar in the graph) */
 {
+enum trackVisibility vis = trackVisAfterLimit(tg);
+if (vis != tvFull && vis != tvPack)
+    {
+    barChartMapItem(tg, hvg, item, itemName, mapItemName, start, end, x, y, width, height);
+    return;
+    }
+
 struct barChartTrack *extras = tg->extraUiData;
 struct barChartItem *itemInfo = item;
 struct bed *bed = itemInfo->bed;
