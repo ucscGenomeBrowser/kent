@@ -396,7 +396,7 @@ for (categ = categList; categ != NULL; categ = categ->next)
     if (size > longest)
         longest = size;
     }
-return longest * 1.09;
+return longest * 1.02;
 }
 
 void deunderbarColumn(struct fieldedTable *ft, char *field)
