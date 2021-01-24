@@ -54,6 +54,9 @@
 #define BAR_CHART_NO_WHITEOUT         "noWhiteout"
 #define BAR_CHART_NO_WHITEOUT_DEFAULT        FALSE
 
+/* Fit graph to bounds of gene */
+#define BAR_CHART_FIT_TO_GENE	"barChartFitGene"
+
 /* Support limiting graphs to small or medium hights (bypass semantic zoom) */
 #define BAR_CHART_MAX_GRAPH_SIZE                 "barChartMaxSize"
 #define BAR_CHART_MAX_GRAPH_SIZE_SMALL           "small"
