@@ -3,7 +3,7 @@ superTrack on
 shortLabel Blood (PBMC) Hao
 longLabel Peripheral blood mononuclear cells (PBMC) from Hao et al 2020
 visibility hide
-group expression
+group singleCell
 
     track bloodHaoCellType
     parent bloodHao

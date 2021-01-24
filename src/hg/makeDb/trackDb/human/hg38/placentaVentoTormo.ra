@@ -3,7 +3,7 @@ superTrack on
 shortLabel Placenta Vento-Tormo
 longLabel Placenta and decidua cells from from Vento-Tormo et al 2018
 visibility hide
-group expression
+group singleCell
 
     track placentaVentoTormoCellType10x
     parent placentaVentoTormo

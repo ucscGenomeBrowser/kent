@@ -3,7 +3,7 @@ superTrack on
 shortLabel Kidney Stewart
 longLabel Kidney single cell data from  Stewart et al 2019
 visibility hide
-group expression
+group singleCell
 
     track kidneyStewartCellType
     parent kidneyStewart
@@ -21,7 +21,6 @@ group expression
     barChartColors #5bd05a #ec374a #f7354b #f7354b #5f66ed #5fcd5b #60afce #c98b6b #0ab707 #181dda #de2a02 #f1374b #e7a69c #5cb6cf #05bb04 #9f968b #6496d4 #0e0ceb #181cd9 #bfd7e4
     transformFunc NONE
     barChartLimit 2
-    group expression
 
     track kidneyStewartBroadCellType
     parent kidneyStewart
@@ -41,7 +40,6 @@ group expression
     #barChartColors #ff4c4c #ff4200 #ff8200 #ffa900 #ffe34c #f8ff4c #d7ff4c #dcfea7 #5aff00 #00ff2a #4cffaf #4cffcb #4cffec #4cefff #a7e7fe #4cb0ff #005aff #0017ff #b5a7fe #984cff #9a00ff #eba7fe #f84cff #ff4ce3 #ff00a9 #ff0082 #fea7be
     transformFunc NONE
     barChartLimit 2
-    group expression
 
     track kidneyStewartCompartment
     parent kidneyStewart
@@ -61,7 +59,6 @@ group expression
     barChartBars PT lymphoid myeloid non_PT
     transformFunc NONE
     barChartLimit 2
-    group expression
 
     track kidneyStewartDetailedCellType
     parent kidneyStewart
@@ -79,7 +76,6 @@ group expression
     barChartColors #5bd05a #ec374a #f7354b #f7354b #5f66ed #5fcd5b #bfd5e4 #5d5df3 #60afce #e0cdc4 #0ab707 #6b6cdf #e77258 #e67259 #e2745e #e8a497 #eec7c9 #c88b6c #eb384a #f4364b #e5c8c1 #5cb6cf #07ba05 #65c860 #edc6c6 #9f968b #6496d4 #615fef #0e0dea #181cd9 #bfd7e4 #656be5 #6873df
     transformFunc NONE
     barChartLimit 2
-    group expression
 
     track kidneyStewartExperiment
     parent kidneyStewart
@@ -98,7 +94,6 @@ group expression
     barChartBars PapRCC RCC1 RCC2 RCC3 Teen_Tx TxK1 TxK2 TxK3 TxK4 VHL_RCC Wilms1 Wilms2 Wilms3
     transformFunc NONE
     barChartLimit 2
-    group expression
 
     track kidneyStewartProject
     parent kidneyStewart
@@ -117,5 +112,4 @@ group expression
     #barChartColors #ff0000 #00d2ff
     transformFunc NONE
     barChartLimit 2
-    group expression
 
