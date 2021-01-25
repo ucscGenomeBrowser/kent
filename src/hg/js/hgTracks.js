@@ -2765,7 +2765,14 @@ var rightClick = {
                             }
                         }
 
-                        if (isHgc && ( href.indexOf('g=gtexGene')!== -1 || href.indexOf('g=unip') !== -1 )) {
+                        // when "exonNumbers on", the mouse over text is not a good item description for the right-click menu
+                        // "exonNumbers on" is the default for genePred/bigGenePred tracks but can also be actived for bigBed and others
+                        // We don't have the value of "exonNumbers" here, so just use a heuristic to see if it's on
+                        if (title.search(/, strand [+-], Intron /)!==-1) {
+                            title = title.split(",")[0];
+                        }
+
+                        else if (isHgc && ( href.indexOf('g=gtexGene')!== -1 || href.indexOf('g=unip') !== -1 )) {
                             // For GTEx gene and UniProt mouseovers, replace title (which may be a tissue name) with 
                             // item (gene) name. Also need to unescape the urlencoded characters and the + sign.
                             a = /i=([^&]+)/.exec(href);
