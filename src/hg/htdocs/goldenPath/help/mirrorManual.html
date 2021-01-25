@@ -394,32 +394,34 @@ their home directory with mode 600 and named: ~/.hg.conf
 <p>
 These copies may have different db.user specification
 to allow developers write access to the database.
-See also: README.mysql.setup
 </p></li>
 <li><p>
-Load databases of interest. See also: README.QuickStart
-</p></li>
-</ol>
+Load databases of interest. See also:
+</p>
 
 <pre><code>src/product/scripts/activeDbList.sh
 src/product/scripts/minimal.db.list.txt
-src/product/scripts/loadDb.sh
+src/product/scripts/loadDb.sh</code></pre>
 
+<p>
 And discussion in scripts/README about whether you can use directly
 the MySQL binary database files, or if you need to download goldenPath
 database text dumps and load them into the database.
+</p>
 
+<p>
 An alternative to loading the database tables from text files,
 is to directly rsync the MySQL tables themselves and place them
-in your MySQL /var/ directory.  These tables are much larger
+in your MySQL /var/ directory. These tables are much larger
 than the text files due to the sizes of indexes created during a
 table load, but it can save a lot of time since the data loading
-step is quite compute intensive.  A typical rsync command for an
+step is quite compute intensive. A typical rsync command for an
 entire database (e.g. ce4) would be something like:
+</p>
 
-    rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/</code></pre>
-
-<ol>
+<p>
+rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/
+</p></li>
 <li><p>
 Download extra databases to work with a full genome assembly
 such as human/hg38: hgFixed go140213 proteins140122 sp140122
@@ -427,19 +429,15 @@ Construct symlinks in your MySQL data directory to use database
 names: go proteome uniProt for these database directories:
 </p>
 
-<p>
-$ ls -og proteome go uniProt
-lrwxrwxrwx 1 8 Feb 26 11:39 go -&gt; go140213
+<pre><code>$ ls -og proteome go uniProt
+lrwxrwxrwx 1  8 Feb 26 11:39 go -&gt; go140213
 lrwxrwxrwx 1 14 Mar 27 12:01 proteome -&gt; proteins140122
-lrwxrwxrwx 1 8 Mar 27 12:01 uniProt -&gt; sp140122
-</p>
+lrwxrwxrwx 1  8 Mar 27 12:01 uniProt -&gt; sp140122
 
-<p>
 $ ls -ld go140213 proteins140122 sp140122
 drwx------ 2 mysql mysql 4096 Feb 26 10:57 go140213
 drwx------ 2 mysql mysql 4096 Aug 19 08:08 proteins140122
-drwx------ 2 mysql mysql 4096 Mar 26 13:01 sp140122
-</p>
+drwx------ 2 mysql mysql 4096 Mar 26 13:01 sp140122</code></pre>
 
 <p>
 These file names are data stamped YYMMDD to indicate changes
@@ -455,37 +453,40 @@ scripts/fetchMinimalGbdb.sh
 <li><p>
 The browser should now appear at the URL:
 http://localhost/
+</p>
+
+<p>
+Check your Apache error_log file for hints to solving problems.
 </p></li>
-</ol>
+<li><p>
+BLAT server setup: The blatServers table in the database hgcentral needs to
+have a fully qualified host name specified in the &#39;host&#39; column.
+</p>
 
-<pre><code>Check your Apache error_log file for hints to solving problems.</code></pre>
+<p>
+Educational and non-profit institutions are allowed to use
+blat free of charge. Commercial installations of the browser
+require a license for blat. See also: <a href='http://kentinformatics.com/index.html' title=''>http://kentinformatics.com/index.html</a>
+and: <a href='http://genome.ucsc.edu/license/' title=''>http://genome.ucsc.edu/license/</a>
+In the source tree: src/gfServer/README.blat
+</p></li>
+<li><p>
+Useful links:
+</p>
 
-<ol>
-<li>BLAT server setup: The blatServers table in the database hgcentral needs to
-have a fully qualified host name specified in the &#39;host&#39; column.</li>
-</ol>
+<p>
+<a href='http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ' title=''>http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ</a>
+</p>
 
-<pre><code>Educational and non-profit institutions are allowed to use
-blat free of charge.  Commercial installations of the browser
-require a license for blat.  See also: &lt;http://kentinformatics.com/index.html&gt;
-and: &lt;http://genome.ucsc.edu/license/&gt;
-In the source tree: src/gfServer/README.blat</code></pre>
-
-<ol>
-<li>Useful links:</li>
-</ol>
-
-<pre><code>&lt;http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ&gt;
-
+<p>
 There are numerous README files in the source tree on
 a variety of specific subjects, e.g.:
+</p>
 
-    ./src/README
-    ./src/product/README.*
-    ./src/hg/makeDb/trackDB/README
-    ./src/hg/makeDb/doc/make*.txt</code></pre>
-
-<ol>
+<pre><code>./src/README
+./src/product/README.*
+./src/hg/makeDb/trackDB/README
+./src/hg/makeDb/doc/make*.txt</code></pre></li>
 <li><p>
 Apache configuration:
 </p>
