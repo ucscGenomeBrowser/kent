@@ -135,7 +135,7 @@ def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
         else:
             # just pass through any UCSC chrom names
             chrom = row[fieldIdx]
-            if row[0].startswith("#") or chrom in ucscChroms:
+            if row[0].startswith("#") or chrom in ucscChroms or chrom=="*":
                 ucscChrom = chrom
             else:
                 ucscChrom = toUcsc.get(chrom)
