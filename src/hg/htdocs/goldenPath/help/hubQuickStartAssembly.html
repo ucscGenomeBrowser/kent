@@ -147,8 +147,17 @@ For example:
    isPcr yourLab.yourInstitution.edu 4096 dynamic jillLab
 </pre>
 </p>
+
 <p>
-for files names in the form:
+The following commands are an example on how to make the gfidx files:
+<pre>
+gfServer index myGenome.untrans.gfidx myGenome.2bit
+gfServer index -trans myGenome.trans.gfidx myGenome.2bit
+</pre>
+</p>
+
+<p>
+The files names in the form:
 <pre>
     $rootdir/jillLab/myGenome.2bit
     $rootdir/jillLab/myGenome.untrans.gfidx
@@ -157,7 +166,7 @@ for files names in the form:
 </p>
 
 <p>
-For for more deeply nest directory, for instance, for instance following the NCBI
+For for more deeply nest directory, for instance, the following the NCBI
 convention:
 <pre>
    transBlat yourLab.yourInstitution.edu 4096 dynamic GCF/000/181/335/GCF_000181335.3
