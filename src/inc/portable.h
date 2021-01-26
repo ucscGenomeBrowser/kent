@@ -184,8 +184,5 @@ void makeSymLink(char *oldName, char *newName);
 long long freeSpaceOnFileSystem(char *path);
 /* Given a path to a file or directory on a file system,  return free space
  * in bytes. */
-
-boolean remoteFileExists(char *remoteLogin, char *file);
-/* Check to see if the file exists on the remote machine. */
 #endif /* PORTABLE_H */
 
