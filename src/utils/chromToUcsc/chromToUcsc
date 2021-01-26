@@ -17,8 +17,9 @@ def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
     parser = optparse.OptionParser("""usage: %prog [options] filename - change NCBI or Ensembl chromosome names to UCSC names in tabular or wiggle files, using a chromAlias table.
 
-    Supports at least these file formats: BED, PSL, genePred, VCF, wiggle (bedgraph, span and fixed and mixes thereof), SAM, chain, interact,
-    pgSNP, GTF/GFF.
+    Supports these UCSC file formats:
+    BED, genePred, PSL, wiggle (all formats), bedGraph, VCF, SAM
+    ... or any other csv or tsv format where the sequence (chromosome) name is a separate field.
 
     Requires a <genome>.chromAlias.tsv file which can be downloaded like this:
         %prog --get hg19              # download the file hg19.chromAlias.tsv into current directory
@@ -31,6 +32,8 @@ def parseArgs():
         %prog -i in.bed -o out.bed -a https://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromAlias.txt.gz
     Or in pipes, like this:
         cat test.bed | %prog -a mm10.chromAlias.tsv > test.ucsc.bed
+    For BAM files use in a pipe with samtools:
+        samtools view -h in.bam | ./chromToUcsc -a mm10.chromAlias.tsv | samtools -bS > out.bam
 
     """)
 
@@ -40,7 +43,7 @@ def parseArgs():
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
     parser.add_option("-k", "--field", dest="fieldNo", action="store", type="int", \
-            help="index of field to convert, default is %default (1-based), for most formats, e.g. BED. For genePred, the chromosome is field 2, for PSL it is 10 or 14.", default=1)
+            help="index of field to convert, default is %default (first field is 1), for most formats, e.g. BED. For genePred, set this option to 2, for PSL it is 10 or 14. If any line starts with @ (SAM format), this field is automatically set to 2.", default=1)
 
     (options, args) = parser.parse_args()
 
@@ -63,7 +66,7 @@ def splitLines(ifh):
     for line in ifh:
         if line.startswith("fixedStep") or line.startswith("variableStep"):
             row = line.split()
-            yield lineNo, " ", row # *step lines are always space-separated
+            yield lineNo, " ", row, line # *step lines are always space-separated
         else:
             if sep==-1:
                 # why test first for space? Because after fixedStep, the lines are just single numbers
@@ -75,7 +78,7 @@ def splitLines(ifh):
             lineNo += 1
             if sep is None:
                 sep = " "
-            yield lineNo, sep, row
+            yield lineNo, sep, row, line
 
 def parseAlias(fname):
     " parse tsv file with at least two columns, orig chrom name and new chrom name "
@@ -86,7 +89,7 @@ def parseAlias(fname):
             data = gzip.GzipFile(fileobj=ifh).read().decode()
             ifh = data.splitlines()
     elif fname.endswith(".gz"):
-        ifh = gzip.open(fname)
+        ifh = gzip.open(fname, "rt")
     else:
         ifh = open(fname)
 
@@ -102,8 +105,9 @@ def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
     toUcsc = parseAlias(aliasFname)
 
     ucscChroms = set(toUcsc.values())
+    isSam = False
 
-    for lineNo, sep, row in splitLines(ifh):
+    for lineNo, sep, row, line in splitLines(ifh):
         if len(row)<=2:
             pass # fixedStep or variableStep lines are just passed through
         elif row[0]=="fixedStep" or row[0]=="variableStep":
@@ -114,9 +118,20 @@ def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
             if ucscChrom is None:
                 logging.error("line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
                 exit(1)
-                continue
             row[1] = "chrom="+ucscChrom
 
+        elif row[0][0]== "@":
+            fieldIdx = 2 # SAM format detected
+            isSam = True
+            if row[0]=="@SQ":
+                # @SQ     SN:1    LN:195471971
+                chrom = row[1].split(":")[1]
+                if chrom not in ucscChroms:
+                    ucscChrom = toUcsc.get(chrom)
+                    if ucscChrom is None:
+                        logging.error("SAM format, header line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
+                        exit(1)
+                    row[1] = "SN:%s" % ucscChrom
         else:
             # just pass through any UCSC chrom names
             chrom = row[fieldIdx]
@@ -127,7 +142,10 @@ def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
                 if ucscChrom is None:
                     logging.error("line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
                     exit(1)
-                    continue
+            if isSam:
+                mateChrom = row[6]
+                if mateChrom!="=":
+                    row[6] = toUcsc[mateChrom]
 
             row[fieldIdx] = ucscChrom
 
@@ -168,12 +186,14 @@ def main():
     if inFname is None:
         ifh = stdin
     elif inFname.endswith(".gz"):
-        ifh = gzip.open(inFname)
+        ifh = gzip.open(inFname, "rt")
     else:
         ifh = open(inFname)
 
     if outFname is None:
         ofh = stdout
+    elif outFname.endswith(".gz"):
+        ofh = gzip.open(outFname, "wt")
     else:
         ofh = open(outFname, "w")
 
