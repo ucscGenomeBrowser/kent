@@ -4632,7 +4632,7 @@ var mouseOver = {
     var tdRect = tdId.getBoundingClientRect();
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
-//    if (tdTop < 0) { return; }  // track is scrolled off top of screen
+    if (tdTop < 0) { return; }  // track is scrolled off top of screen
     var tdWidth = Math.floor(tdRect.width);
     var tdHeight = Math.floor(tdRect.height);
     var rightSide = tdLeft + tdWidth;
