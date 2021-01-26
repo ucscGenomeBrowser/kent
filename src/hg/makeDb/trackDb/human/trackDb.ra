@@ -3685,8 +3685,8 @@ tableBrowser off lovdComp
 html lovdComp
 
         track lovdShort
-        shortLabel LOVD Variants < 50 bp
-        longLabel Leiden Open Variation Database, short < 50 bp variants
+        shortLabel LOVD Variants < 50 bp + ins
+        longLabel Leiden Open Variation Database, short < 50 bp variants and insertions of any length
         group phenDis
         visibility hide
         urls id="http://varcache.lovd.nl/redirect/$$"
