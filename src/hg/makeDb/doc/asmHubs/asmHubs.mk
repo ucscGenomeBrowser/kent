@@ -59,3 +59,10 @@ clean::
 	rm -f ${destDir}/${testIndexName}.html
 	rm -f ${destDir}/${statsName}.html
 	rm -f ${destDir}/${testStatsName}.html
+
+sendDownload::
+	${toolsDir}/mkSendList.pl ${orderList} | while read F; do \
+	  ${toolsDir}/sendToHgdownload.sh $$F < /dev/null; done
+	rsync -L -a -P --exclude 'test*' \
+	    /usr/local/apache/htdocs-hgdownload/hubs/${name}/ \
+		qateam@hgdownload:/mirrordata/hubs/${name}/

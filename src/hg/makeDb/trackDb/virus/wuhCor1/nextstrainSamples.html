@@ -1,61 +1,59 @@
 <h2>Description</h2>
 <p>
 <a href="https://nextstrain.org/ncov/global" target=_blank>Nextstrain.org</a> displays
-data about single nucleotide variant alleles in the SARS-CoV-2 RNA and protein sequences that have
-occurred in different samples of the virus during the current 2019/2020 outbreak.
+data about mutations in the SARS-CoV-2 RNA and protein sequences that have
+occurred in different samples of the virus during the current 2019-2021 outbreak.
 Nextstrain has a powerful user interface for viewing the evolutionary tree
-that it infers from the patterns of variants in sequences worldwide, but
-does not offer a detailed plot of variants along the genome
+that it infers from the patterns of mutations in sequences worldwide, but
+does not offer a detailed plot of mutations along the genome
 that can be correlated with other molecular information,
-so we have processed their data into this track to display the variants
+so we have processed their data into this track to display the mutations
 called by Nextstrain for each sample that Nextstrain has obtained from
 <a href="https://gisaid.org" target=_blank>GISAID</a>.
 </p>
 <p>
 Click on the vertical column in the display for any position in the
-SARS-CoV-2 genome to see more details about the variant(s) that occur
+SARS-CoV-2 genome to see more details about the mutation(s) that occur
 at that position, including protein change (if applicable; protein
 changes use gene names in the <em>Nextstrain Genes</em> track), number of
-samples with the variant, list giving the nucleotide (allele) for that
+samples with the mutation, list giving the nucleotide (allele) for that
 position in each GISAID sample, etc.
 </p>
 <p>
 Nextstrain identifies certain clades within the phylogenetic tree
 according to
-<a href="https://github.com/nextstrain/ncov/blob/master/defaults/clades.tsv" target="_blank">a set of defining variants</a>.
+<a href="https://github.com/nextstrain/ncov/blob/master/defaults/clades.tsv" target="_blank">a set of defining mutations</a>.
 The <a href="hgTrackUi?db=wuhCor1&g=nextstrainClade"><em>Nextstrain Clades</em></a>
 track provides more information about these clades
 and serves as a useful color key for the clade colors in the phylogenetic tree display.
 </p>
 <p>
-This track is composed of several subtracks so that different subsets of variants may be viewed:
+This track is composed of several subtracks so that different subsets of mutations may be viewed:
   <ul>
     <li><b>Recurrent Bi-allelic</b>: This is the only subtrack displayed by default.
-      It is limited to variants that have been observed in at least two samples, and
+      It is limited to mutations that have been observed in at least two samples, and
       excludes positions at which more than one alternate allele has been observed in
       more than one sample.</li>
-    <li><b>All Variants</b>: All variants found in all samples.</li>
-    <li><b><em>&lt;Clade&gt;</em> Variants</b>: All variants found in samples belonging to
-      <em>&lt;Clade&gt;</em>, which is one of Nextstrain's clades:
-      A1a, A2, A2a, A3, A6, A7, B, B1, B2, or B4 ("old" clades, March 15 - June 2, 2020), or
-      19A, 19B, 20A, 20B or 20C (June 2, 2020 - present).</li>
+    <li><b>All</b>: All mutations found in all samples.</li>
+    <li><b><em>&lt;Clade&gt;</em> Mutations</b>: All mutations found in samples belonging to
+      <em>&lt;Clade&gt;</em>, which is one of Nextstrain's clades (19A, 19B, 20A, etc.)</li>
   </ul>
 </p>
 
 <h2>Display Conventions</h2>
 <p>
-In &quot;dense&quot; mode, a vertical line is drawn at each position where there is a variant.
-In &quot;pack&quot; mode, the display shows a plot of all samples' variants, with samples
+In &quot;dense&quot; mode, a vertical line is drawn at each position where there is a mutation.
+In &quot;pack&quot; mode, the display shows a plot of all samples' mutations, with samples
 ordered using Nextstrain's phylogenetic tree in order to highlight patterns of linkage.</p>
 <p>
 Each sample is placed in a horizontal row of pixels; when the number of
 samples exceeds the number of vertical pixels for the track, multiple
 samples fall in the same pixel row and pixels are averaged across samples.</p>
 <p>
-Each variant is a vertical bar at its position in the SARS-CoV-2 genome
+Each mutation is a vertical bar at its position in the SARS-CoV-2 genome
 with white (invisible) representing the reference allele
 and black representing the non-reference allele(s).
-Tick marks are drawn at the top and bottom of each variant's vertical bar
+Tick marks are drawn at the top and bottom of each mutation's vertical bar
 to make the bar more visible when most alleles are reference alleles.
 Insertions and deletions are not shown as these are removed from the data
 by Nextstrain.
@@ -70,7 +68,7 @@ sample names are drawn to the right of the tree; however, with thousands of
 samples in the Nextstrain tree, and a maximum track height of 2500 pixels,
 the full Nextstrain tree is too large for sample names to be displayed.
 In the track controls, the user can choose to display subtracks containing
-the phylogenetic trees and variants for individual clades.
+the phylogenetic trees and mutations for individual clades.
 Some clades have few enough samples that they can be made tall enough to
 display sample names.
 Branches of the phylogenetic tree are colored by clade using the same
@@ -90,11 +88,11 @@ color scheme as
 
 <h2>Data Access</h2>
 <p>
-SARS-CoV-2 variants displayed by Nextstrain are derived from a subset of
+SARS-CoV-2 mutations displayed by Nextstrain are derived from a subset of
 <a href="https://www.gisaid.org" target="_blank">GISAID</a> sequences, and the GISAID
 <a href="https://www.gisaid.org/registration/terms-of-use/" target="_blank">Terms and Conditions</a>
 prohibit the redistribution of GISAID-derived data. They also require that the submitters of all
-sequences be acknowledged when the variants are used.
+sequences be acknowledged when the mutations are used.
 <a href="https://nextstrain.org/ncov/global" target="_blank">Nextstrain.org</a> offers
 phylogenetic trees, author credits and other files:
 scroll to the bottom of the page and click &quot;DOWNLOAD DATA&quot;, and a dialog with
