@@ -4486,6 +4486,9 @@ var mouseOver = {
     delayInProgress: false,        // true while waiting for delay timer
     mostRecentMouseEvt: null,   // to use when mouse delay is finished
     browserTextSize: 12,        // default if not found otherwise
+    measureTextBox: null,
+    noDataString: "no&nbsp;data",	// message for no data at this position
+    noDataSize: 0,	// will be set to size of text 'no data'
 
     // items{} - key name is track name, value is an array of data items
     //           where the format of each item can be different for different
@@ -4649,7 +4652,7 @@ var mouseOver = {
        foundIdx = mouseOver.findRange(graphOffset, mouseOver.items[trackName]);
     }
     // can show 'no data' when not found
-    var mouseOverValue = "no&nbsp;data";
+    var mouseOverValue = mouseOver.noDataString;
     if (foundIdx > -1) { // value to display
       if (mouseOver.items[trackName][foundIdx].c > 1) {
         mouseOverValue = "&nbsp;&mu;&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
@@ -4717,6 +4720,20 @@ var mouseOver = {
       mouseOver.popUpTimer = setTimeout(mouseOver.delayCompleted, mouseOver.popUpDelay);
     },
 
+    // given a string of text, return width of rendered text size
+    // using an off-screen span element that is created here first time through
+    getWidthOfText: function (measureThis)
+    {
+    if(mouseOver.measureTextBox === null){  // set up first time only
+        mouseOver.measureTextBox = document.createElement('span');
+        var cssText = "position: fixed; width: auto; display: block; text-align: right; left:-999px; top:-999px; font-style:normal; font-size:" + mouseOver.browserTextSize + "px; font-family:" + jQuery('body').css('font-family');
+        mouseOver.measureTextBox.style.cssText = cssText;
+        document.body.appendChild(mouseOver.measureTextBox);
+    }
+    mouseOver.measureTextBox.innerHTML = measureThis;
+    return Math.ceil(mouseOver.measureTextBox.clientWidth);
+    },
+
     // =======================================================================
     // receiveData() callback for successful JSON request, receives incoming
     //             JSON data and gets it into global variables for use here.
@@ -4780,18 +4797,13 @@ var mouseOver = {
          mouseOverValue = "&nbsp;" + longestNumber + "&nbsp;";
       }
       $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
-      $('#mouseOverText').html(mouseOverValue);	// see how big as rendered
-      var maximumWidth = Math.ceil($('#mouseOverText').width());
-      $('#mouseOverText').html("no&nbsp;data");	// might be bigger
-      if (Math.ceil($('#mouseOverText').width() > maximumWidth)) {
-          maximumWidth = Math.ceil($('#mouseOverText').width());
+      var maximumWidth = mouseOver.getWidthOfText(mouseOverValue);
+      if ( 0 === mouseOver.noDataSize) {  // only need to do this once
+        mouseOver.noDataSize = mouseOver.getWidthOfText(mouseOver.noDataString);
       }
-      // XXX this is not working when there are two wiggle tracks in display
-      //     and the window is dragged left or right.  The track where the
-      //     drag takes place seems to be dominate somehow and it's width
-      //     calculation overrides the other track width calculation
-      //     even though the .html() has been set here correctly, the
-      //     width() comes back with the dragged track value ?
+      if (mouseOver.noDataSize > maximumWidth) {
+          maximumWidth = mouseOver.noDataSize;
+      }
       mouseOver.maximumWidth[trackName] = maximumWidth;
       }
     },  //      receiveData: function (arr)
