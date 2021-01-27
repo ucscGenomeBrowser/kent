@@ -2,9 +2,9 @@
 <p>
 This track displays a phylogenetic tree inferred from SARS-CoV-2 genome sequences collected by
 <a href="https://gisaid.org" target=_blank>GISAID</a>,
-and variants found in the sequences.  By default, only very common variants (alternate allele found
+and mutations found in the sequences.  By default, only very common mutations (alternate allele found
 in at least 1% of samples) are displayed, but other subtracks may be made visible in order to see
-more rare variants.
+more rare mutations.
 The phylogenetic tree is inferred by Rob Lanfear's
 <a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> pipeline.
 For display in the narrow space to the left of the main genome browser image, nodes in the tree
@@ -72,22 +72,22 @@ phylogenetic tree, Pangolin lineages,
 
 <h2>Display Conventions</h2>
 <p>
-In &quot;dense&quot; mode, a vertical line is drawn at each position where there is a variant.
-In &quot;pack&quot; mode, the display shows a plot of all samples' variants, with samples
+In &quot;dense&quot; mode, a vertical line is drawn at each position where there is a mutation.
+In &quot;pack&quot; mode, the display shows a plot of all samples' mutations, with samples
 ordered using the phylogenetic tree in order to highlight patterns of linkage.</p>
 <p>
 Each sample is placed in a horizontal row of pixels; when the number of
 samples exceeds the number of vertical pixels for the track, multiple
 samples fall in the same pixel row and pixels are averaged across samples.</p>
 <p>
-Each variant is a vertical bar at its position in the SARS-CoV-2 genome
+Each mutation is a vertical bar at its position in the SARS-CoV-2 genome
 with white (invisible) representing the reference allele;
 the non-reference allele is shown in red if it changes the protein sequence of a gene,
 green if it falls within a gene but does not change the protein,
 and black if it does not fall within a gene.
-Tick marks are drawn at the top and bottom of each variant's vertical bar
+Tick marks are drawn at the top and bottom of each mutation's vertical bar
 to make the bar more visible when most alleles are reference alleles.
-Only single-nucleotide variants (SNVs) are displayed, not insertions or deletions.
+Only single-nucleotide mutations are displayed, not insertions or deletions.
 </p>
 <p>
 The phylogenetic tree showing inferred relationships between the samples is depicted
@@ -143,12 +143,12 @@ target=_blank>Download Server</a>. The data can be explored interactively with t
 or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. 
 </p>
 <p>
-Note: while the VCF files contain variants found in sequences collected by
+Note: while the VCF files contain mutations found in sequences collected by
 <a href="https://gisaid.org" target=_blank>GISAID</a>,
 they are not sufficient to reconstruct the original sequences available from GISAID
 due to treatment of ambiguous IUPAC bases as missing information in the VCF and
-omission of insertion and deletion variants.  Additionally, the subtracks that are
-filtered to include only variants found in a minimum percentage of samples give
+omission of insertion and deletion mutations.  Additionally, the subtracks that are
+filtered to include only mutations found in a minimum percentage of samples give
 very incomplete representations of samples.  Researchers wishing to work with SARS-CoV-2
 genomic sequences should register with GISAID and download the full sequences.
 </p>

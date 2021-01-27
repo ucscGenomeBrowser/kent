@@ -296,11 +296,11 @@ compositeTrack on
         parent nanoCov
 
 track lollySarsCov2
-shortLabel Sars Cov 2 Variants 
-longLabel  Sars Cov 2 Variants 
+shortLabel Sars Cov 2 Lolly
+longLabel  Sars Cov 2 Lolly May 2020
 bigDataUrl /gbdb/wuhCor1/lollySarsCov2.bb
 type bigLolly
-group compGeno
+group x
 autoScale on
 
 track labAssocMutsNs419
@@ -314,7 +314,7 @@ release alpha
 
 track sarsCov2Phylo
 shortLabel Phylogeny: GISAID
-longLabel Phylogenetic Tree and Variants from High-coverage Sequences in GISAID EpiCoV TM
+longLabel Phylogenetic Tree and Nucleotide Substitution Mutations in High-coverage Sequences in GISAID EpiCoV TM
 compositeTrack on
 type vcfTabix
 hapClusterEnabled on
@@ -334,7 +334,7 @@ pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
-    longLabel Single Nucleotide Variants in GISAID EpiCov TM sequences with alternate allele frequency >= 1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 1% in GISAID EpiCov TM Sequences
     parent sarsCov2Phylo on
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
     type vcfTabix
@@ -342,7 +342,7 @@ pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloMinAf001
     shortLabel Min alt AF 0.1%
-    longLabel Single Nucleotide Variants in GISAID EpiCov TM sequences with alternate allele frequency >= 0.1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 0.1% in GISAID EpiCov TM Sequences
     parent sarsCov2Phylo off
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
@@ -350,7 +350,7 @@ pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloFull
     shortLabel All (slow!)
-    longLabel All Single Nucleotide Variants in GISAID EpiCov TM sequences (slow at whole-genome scale)
+    longLabel All Nucleotide Substitution Mutations in GISAID EpiCov TM Sequences (slow at whole-genome scale)
     parent sarsCov2Phylo off
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.vcf.gz
@@ -358,7 +358,7 @@ pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
 track sarsCov2PhyloPub
 shortLabel Phylogeny: Public
-longLabel Phylogenetic Tree and Variants from Sequences in Public Databases
+longLabel Phylogenetic Tree and Nucleotide Substitution Mutations in Sequences in Public Databases
 compositeTrack on
 type vcfTabix
 hapClusterEnabled on
@@ -377,8 +377,8 @@ pennantIcon New red ../goldenPath/newsarch.html#011821 "Updated Jan. 18, 2021"
 release beta,public
 
     track sarsCov2PhyloPubAllMinAf01
-    shortLabel All: Min AF 1%
-    longLabel Single Nucleotide Variants in all public sequences with alternate allele frequency >= 1%
+    shortLabel Min AF 1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 1% in Public Sequences
     parent sarsCov2PhyloPub on
     bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.01.vcf.gz
     type vcfTabix
@@ -386,8 +386,8 @@ release beta,public
     release beta,public
 
     track sarsCov2PhyloPubAllMinAf001
-    shortLabel All: Min AF 0.1%
-    longLabel Single Nucleotide Variants in all public sequences with alternate allele frequency >= 0.1%
+    shortLabel Min AF 0.1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 0.1% in Public Sequences
     parent sarsCov2PhyloPub off
     bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.001.vcf.gz
     type vcfTabix
@@ -395,8 +395,8 @@ release beta,public
     release beta,public
 
     track sarsCov2PhyloPubAllFull
-    shortLabel All: no min AF (slow!)
-    longLabel All Single Nucleotide Variants in all public sequences (slow at whole-genome scale)
+    shortLabel No Min AF (slow!)
+    longLabel All Nucleotide Substitution Mutations in Public Sequences (slow at whole-genome scale)
     parent sarsCov2PhyloPub off
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.vcf.gz
@@ -405,7 +405,7 @@ release beta,public
 
 track sarsCov2PhyloPub
 shortLabel Phylogeny: Public
-longLabel Phylogenetic Tree and Variants from Sequences in Public Databases
+longLabel Phylogenetic Tree and Nucleotide Substitution Mutations from Sequences in Public Databases
 compositeTrack on
 type vcfTabix
 hapClusterEnabled on
@@ -424,8 +424,8 @@ pennantIcon New red ../goldenPath/newsarch.html#011821 "Updated Jan. ??, 2021"
 release alpha
 
     track sarsCov2PhyloPubAllMinAf01
-    shortLabel All: Min AF 1%
-    longLabel Single Nucleotide Variants in all public sequences with alternate allele frequency >= 1%
+    shortLabel Min AF 1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 1% in Public Sequences
     parent sarsCov2PhyloPub on
     bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.01.vcf.gz
     type vcfTabix
@@ -433,8 +433,8 @@ release alpha
     release alpha
 
     track sarsCov2PhyloPubAllMinAf001
-    shortLabel All: Min AF 0.1%
-    longLabel Single Nucleotide Variants in all public sequences with alternate allele frequency >= 0.1%
+    shortLabel Min AF 0.1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 0.1% in Public Sequences
     parent sarsCov2PhyloPub off
     bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.001.vcf.gz
     type vcfTabix
@@ -442,8 +442,8 @@ release alpha
     release alpha
 
     track sarsCov2PhyloPubAllFull
-    shortLabel All: no min AF (slow!)
-    longLabel All Single Nucleotide Variants in all public sequences (slow at whole-genome scale)
+    shortLabel No Min AF (slow!)
+    longLabel All Nucleotide Substitution Mutations in Public Sequences (slow at whole-genome scale)
     parent sarsCov2PhyloPub off
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.vcf.gz
@@ -452,7 +452,7 @@ release alpha
 
 track sarsCov2PhyloPubParsimony
 shortLabel Parsimony: Public
-longLabel Parsimony Scores of Phylogenetic Tree and Variants from Sequences in Public Databases
+longLabel Parsimony Scores of Phylogenetic Tree and Nucleotide Substitution Mutations in Public Sequences
 type bigWig
 autoScale on
 maxHeightPixels 128:40:8
@@ -595,17 +595,6 @@ vcfDoQual off
 vcfDoFilter off
 group varRep
 pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Jan. 7, 2021"
-
-track escape
-shortLabel Escape: 21 monocl Ab
-longLabel Mutations that lead to escape from 21 antibodies, Whelan lab, WUSTL (Mouse over to show mutation details)
-visibility pack
-type bigBed 9 +
-group immu
-bigDataUrl /gbdb/wuhCor1/escape/escape.bb
-mouseOverField _mouseOver
-noScoreFilter on
-release public
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra

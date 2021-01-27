@@ -582,7 +582,7 @@ static void addMutationsToTree(struct phyloTree *node, struct variantPathNode **
 struct variantPathNode *nodeMuts = slPopHead(pNodeMutList);
 if (! nodeMuts)
     errAbort("addMutationsToTree: subtree mutation list has fewer nodes than subtree");
-if (! sameString(nodeMuts->nodeName, node->ident->name))
+if (node->ident->name && ! sameString(nodeMuts->nodeName, node->ident->name))
     errAbort("addMutationsToTree: subtree node name is '%s' but subtree mutation list item is '%s'",
              node->ident->name, nodeMuts->nodeName);
 if (node->priv != NULL)
