@@ -4632,12 +4632,13 @@ var mouseOver = {
     var tdRect = tdId.getBoundingClientRect();
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
-    if (tdTop < 0) { return; }  // track is scrolled off top of screen
+//    if (tdTop < 0) { return; }  // track is scrolled off top of screen
     var tdWidth = Math.floor(tdRect.width);
     var tdHeight = Math.floor(tdRect.height);
     var rightSide = tdLeft + tdWidth;
     // clientX is the X coordinate of the mouse hot spot
     var clientX = Math.floor(evt.clientX);
+    var clientY = Math.floor(evt.clientY);
     // the graphOffset is the index (x coordinate) into the 'items' definitions
     //  of the data value boxes for the graph.  The magic number three
     //   is used elsewhere in this code, note the comment on the constant
@@ -4669,15 +4670,29 @@ var mouseOver = {
     if (tdTop < 0) { lineHeight = Math.max(0, tdHeight + tdTop - msgHeight); }
     var lineTop = Math.max(0, tdTop + msgHeight);
     var msgLeft = Math.max(tdLeft, clientX - (msgWidth/2) - 3); // with magic 3
-    msgLeft = Math.min(msgLeft, rightSide - msgWidth);  // right border limit
+    if (clientY < tdTop + msgHeight) {
+      msgLeft = clientX - msgWidth - 6;     // to the left of the cursor
+      if (msgLeft < tdLeft) {   // hits left edge, switch
+        msgLeft = clientX;         // to right of cursor
+      }
+    } else {
+      msgLeft = Math.min(msgLeft, rightSide - msgWidth);  // right border limit
+    }
     var lineLeft = Math.max(0, clientX - 3);  // with magic 3
-    $('#mouseOverText').css('left',msgLeft + "px");
     if (tdTop < 0) {
       var bottomMsg = tdTop + tdHeight - msgHeight;
+      // there is no real way to get cursor height, assume size of msgHeight
+      if (clientY > (bottomMsg - msgHeight)) { // assume cursor size==msgHeight
+        msgLeft = clientX - msgWidth - 6;     // to the left of the cursor
+        if (msgLeft < tdLeft) {   // hits left edge, switch
+          msgLeft = clientX;         // to right of cursor
+        }
+      }
       $('#mouseOverText').css('top',bottomMsg + "px");
     } else {
       $('#mouseOverText').css('top',tdTop + "px");
     }
+    $('#mouseOverText').css('left',msgLeft + "px");
     $('#mouseOverVerticalLine').css('left',lineLeft + "px");
     $('#mouseOverVerticalLine').css('top',lineTop + "px");
     $('#mouseOverVerticalLine').css('height',lineHeight + "px");
