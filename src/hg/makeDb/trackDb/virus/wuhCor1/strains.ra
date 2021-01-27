@@ -34,7 +34,7 @@ noScoreFilter on
         parent strainMuts
         shortLabel Brz Strain Muts 
         longLabel Brazil strain (P.1, 20J/501Y.V3) amino acid mutations
-        bigDataUrl /gbdb/wuhCor1/strainMuts/strainMutsSA.bb
+        bigDataUrl /gbdb/wuhCor1/strainMuts/strainMutsBrz.bb
         url https://cov-lineages.org/global_report_P.1.html
         color 249,53,41
         priority 3
