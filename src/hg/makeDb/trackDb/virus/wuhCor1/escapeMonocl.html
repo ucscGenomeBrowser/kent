@@ -1,0 +1,107 @@
+<h2>Description</h2>
+<p>
+The subtracks of this track show mutations that lead to escape from monoclonal
+antibodies obtained from different studies: <ol>
+<li>Whelan lab, 21 antibodies: A selection screen of 21 neutralizing monoclonal antibodies (mAbs) against the receptor binding domain (RBD) generated 48 escape mutants. The results were described in 
+<a href="https://www.biorxiv.org/content/10.1101/2020.11.06.372037v1" target="_blank">
+Liu et al, Biorxiv 2020</a>.
+<li>Bloom lab, 10 antibodies: deep mutational scanning data measured the effect of all possible mutations in 
+the Spike RBD to binding of 10 antibodies using a yeast surface display system. The results were
+described
+in <a target=_blank href="https://www.ncbi.nlm.nih.gov/pubmed/33259788">Greaney et al, Cell Host Microbe 2020.</a>
+</li>
+<li>Bloom lab, 4 treatment antibodies: deep mutational scanning data measured the effect of all possible mutations in 
+the Spike RBD to binding of 4 antibodies licensed for treatment. The results were
+described
+in <a target=_blank href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7724661/">Starr et al, Biorxiv 2021.</a>
+</li>
+</ol>
+</p>
+
+<p>
+For the Bloom lab data, we show just a summary of the data. Fully detailed structural
+visualizations are available from the authors via dms-view for the 
+
+<a target="_blank" 
+href="https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_Crowe_antibodies/">10 monoclonal antibodies</a>.</p>
+
+and the <a 
+target="_blank" href = "https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_clinical_Abs/">4 treatment antibodies</a>.</p>
+
+<h2>Display Conventions and Configuration - Whelan lab</h2>
+<p>Features are labeled with the nucleotide and protein coordinates and the name of the antibody. 
+Click a feature or mouse-over a feature to show these annotations.<p>
+
+<h2>Display Conventions and Configuration - Bloom lab</h2>
+<p>Scores represent the &quot;escape fraction&quot; (discussed at length in the Methods 
+of the paper) which &quot;represent the fraction of a given variant that escape antibody 
+binding, and should in principle range from 0 to 1.&quot;</p>
+
+<p>A higher score indicates a greater level of escape.</p>
+
+<p>Each subtrack contains all the scores representing mutations to a particular amino 
+acid (each annotation is a Spike codon). For instance the A subtrack measures the escape 
+fraction for a particular antibody if the annotated amino acid is mutated to alanine (if 
+the wildtype amino acid is A, then the score is 0). The &quot;total&quot; subtracks 
+represent the sum of all escape fractions for all amino acid changes at a position. 
+The &quot;max&quot; subtracks are the escape fraction for the amino acid substitution 
+with the greatest escape fraction.</p>
+
+<p>&quot;Note that the magnitude of the measured effects of mutations on antibody escape depends on
+the antibody concentration and the flow cytometry gates applied, meaning that the
+escape fractions are comparable across sites for any given antibody, but are not precisely
+comparable among antibodies without external calibration.&quot;</p>
+
+<p>Visualizations of the data are available from the authors <a target="_blank" 
+href="https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_Crowe_antibodies/">here</a>.</p>
+
+<h2>Methods</h2>
+<p>10 Antibodies: Table S1 from Starr et al, was downloaded and parsed into bedGraph format.</p>
+
+<p>21 Antibodies: Table 2 from Liu et al 2020, was copied manually and converted to bedGraph format.</p>
+
+<p>4 Antibodies: Data was downloaded from <a href="https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_clinical_Abs/" target=_blank>the jbloomlab Github file</a> and parsed into bedGraph format using the total and maximum values.</p>
+
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a target="_blank" href="hgTables">Table Browser</a>, or combined with other datasets in the
+<a target="_blank" href="hgIntegrator">Data Integrator</a> tool.</p>
+
+<p>
+Please refer to our
+<a target="_blank" 
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a target="_blank" href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+
+<h2>References</h2>
+<p>
+Greaney AJ, Starr TN, Gilchuk P, Zost SJ, Binshtein E, Loes AN, Hilton SK, Huddleston J, Eguia R,
+Crawford KHD <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33259788" target="_blank">
+    Complete Mapping of Mutations to the SARS-CoV-2 Spike Receptor-Binding Domain that Escape Antibody
+    Recognition</a>.
+<em>Cell Host Microbe</em>. 2020 Nov 19;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33259788" target="_blank">33259788</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7676316/" target="_blank">PMC7676316</a>
+</p>
+
+<p>
+Zhuoming Liu, Laura A. VanBlargan, Paul W. Rothlauf, Louis-Marie Bloyet, Rita E. Chen, Spencer Stumpf, Haiyan Zhao, John M. Errico, Elitza S. Theel, Ali H. Ellebedy, Daved H. Fremont, Michael S. Diamond, Sean P. J. Whelan
+<a href="https://www.biorxiv.org/content/10.1101/2020.11.06.372037v1" target="_blank">
+Landscape analysis of escape variants identifies SARS-CoV-2 spike mutations that attenuate monoclonal and serum antibody neutralization</a>.
+<em>Biorxiv</em>. 2020 
+</p>
+
+<p>
+Starr TN, Greaney AJ, Addetia A, Hannon WW, Choudhary MC, Dingens AS, Li JZ, Bloom JD.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33299993" target="_blank">
+    Prospective mapping of viral mutations that escape antibodies used to treat COVID-19</a>.
+<em>bioRxiv</em>. 2020 Dec 1;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33299993" target="_blank">33299993</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7724661/" target="_blank">PMC7724661</a>
+</p>
+<!-- Can't find original article link for https://www.ncbi.nlm.nih.gov/pubmed/33299993 -->

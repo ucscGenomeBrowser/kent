@@ -184,6 +184,5 @@ void makeSymLink(char *oldName, char *newName);
 long long freeSpaceOnFileSystem(char *path);
 /* Given a path to a file or directory on a file system,  return free space
  * in bytes. */
-
 #endif /* PORTABLE_H */
 

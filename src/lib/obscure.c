@@ -168,6 +168,47 @@ lineFileClose(&lf);
 return hash;
 }
 
+struct hash *hashTsvBy(char *in, int keyColIx, int *retColCount)
+/* Return a hash of rows keyed by the given column */
+{
+struct lineFile *lf = lineFileOpen(in, TRUE);
+struct hash *hash = hashNew(0);
+char *line = NULL, **row = NULL;
+int colCount = 0, colAlloc=0;	/* Columns as counted and as allocated */
+while (lineFileNextReal(lf, &line))
+    {
+    if (colCount == 0)
+        {
+	*retColCount = colCount = chopByChar(line, '\t', NULL, 0);
+	verbose(2, "Got %d columns in first real line\n", colCount);
+	colAlloc = colCount + 1;  // +1 so we can detect unexpected input and complain 
+	lmAllocArray(hash->lm, row, colAlloc);
+	}
+    int count = chopByChar(line, '\t', row, colAlloc);
+    if (count != colCount)
+        {
+	errAbort("Expecting %d words, got more than that line %d of %s", 
+	    colCount, lf->lineIx, lf->fileName);
+	}
+    hashAdd(hash, row[keyColIx], lmCloneRow(hash->lm, row, colCount) );
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+void writeTsvRow(FILE *f, int rowSize, char **row)
+/* Write out row of strings to a line in tab-sep file */
+{
+if (rowSize > 0)
+    {
+    fprintf(f, "%s", row[0]);
+    int i;
+    for (i=1; i<rowSize; ++i)
+        fprintf(f, "\t%s", row[i]);
+    }
+fprintf(f, "\n");
+}
+
 struct slPair *slPairTwoColumnFile(char *fileName)
 /* Read in a two column file into an slPair list */
 {

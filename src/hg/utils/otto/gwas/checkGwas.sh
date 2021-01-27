@@ -96,6 +96,11 @@ do
     hgsql -Ne "select * from gwasCatalog" ${db} | gzip >  gwasCatalog.txt.gz
 done
 
+# testing new archival script
+cd ${WORKDIR}/${today}
+/cluster/home/chmalee/bin/scripts/archiveTracks.sh -t "gwasCatalog" /hive/data/inside/archive/ "hg38 hg19 hg18" "GWAS_Catalog" 2>archiveTracks.${dateDir}.err
+printf "archiveTracks.sh for gwas catalog exit status %d\n" "$?"
+
 
 echo "Gwas Installed `date`" 
 

@@ -1,43 +1,29 @@
-.wigMouseOver {
-    position: fixed;
-    left: 0px;
-    top: 100px;
-    width: auto;
-    height: auto;
-    background-color: #ff69b4;
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(1.1);
-    margin-left: 200;
-    z-index: 1000;
-}
-
-.wigMouseOverValue {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 1rem 1.5rem;
-    width: 24rem;
-    border-radius: 0.5rem;
-}
-
-.showMouseOver {
-    opacity: 1;
-    visibility: visible;
-    transform: scale(1.0);
-    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
-}
-
-.mouseOverHighlight {
-  border-left: 2px solid orange;
-  height: 60px;
+.mouseOverVerticalLine {
   position: fixed;
-  left: 0;
-  margin-left: -1px;
-  top: 0;
+  width: 1px;
+  background: #ffff00;
+  height: 100%;
   display: none;
   z-index: 999;
+  opacity: 1;
+  border-style: hidden solid hidden solid;
+  border-width: 1px;
+  border-color: #2222cc;
+  pointer-events: none
+}
+
+.mouseOverText {
+  position: fixed;
+  left: 100px;
+  top: 100px;
+  width: auto;
+  height: auto;
+  background-color: #3333cc;
+  color: #ffff00;
+  display: none;
+  opacity: 1;
+  z-index: 1000;
+  border: 1px solid #ffff00;
+  text-align: right;
   pointer-events: none
 }

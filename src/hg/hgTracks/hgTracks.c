@@ -73,6 +73,7 @@
 #include <openssl/sha.h>
 #include "customComposite.h"
 #include "chromAlias.h"
+#include "jsonWrite.h"
 
 //#include "bed3Sources.h"
 
@@ -160,7 +161,15 @@ struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test, preview, or public browser */
 char *organization;             /* UCSC */
 
+/* mouseOver popUp global data, each track that wants to send json
+ * data will need to know the json file name from mouseOverJson
+ * and will write the track data to mouseOverJson.  The structure
+ * of the data in the json output will depend upon what the track needs
+ * to send.
+ */
 boolean enableMouseOver = FALSE;
+struct tempName *mouseOverJsonFile = NULL;
+struct jsonWrite *mouseOverJson = NULL;
 
 struct hash *trackHash = NULL; /* Hash of the tracks by their name. */
 
@@ -629,26 +638,6 @@ for(cb = cbList; cb != NULL; cb = cb->next)
     }
 }
 
-static void maybeNewFonts(struct hvGfx *hvg)
-/* Check to see if we want to use the alternate font engine (FreeType2). */
-{
-if (sameString(cfgOptionDefault("freeType", "off"), "on"))
-    {
-    char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
-    char buffer[4096];
-
-    extern char *freeTypeFontNames[];
-    extern char *freeTypeFontFiles[];
-    int ii;
-    for(ii=0; ii < 33; ii++)
-        if (sameString(freeTypeFontNames[ii], tl.textFont))
-            break;
-    char *fontFile = freeTypeFontFiles[ii];
-    char *fontName = freeTypeFontNames[ii];
-    safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
-    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
-    }
-}
 
 boolean makeChromIdeoImage(struct track **pTrackList, char *psOutput,
                         struct tempName *ideoTn)
@@ -4244,6 +4233,11 @@ while (lineFileNext(lf, &line, &lineSize))
         warn("BED chromEnd %u > size %u for chromosome/scaffold %s", bed->chromEnd, ci->size, bed->chrom);
 	return FALSE;
 	}
+    if (!(bed->chromEnd > bed->chromStart)) // do not allow empty regions
+	{
+        warn("BED chromEnd %u must be greater than chromStart %u %s", bed->chromEnd, bed->chromStart, bed->chrom);
+	return FALSE;
+	}
 
     slAddHead(&bedList, bed);
 
@@ -5043,6 +5037,25 @@ else
     if (measureTiming)
         measureTime("Time at start of obtaining trash hgt png image file");
     trashDirFile(&pngTn, "hgt", "hgt", ".png");
+    if (enableMouseOver)
+	{   /* created here at this time to get the same name as .png file
+	     * it is copied from pngTn since if we repeated trashFileDir()
+	     * to get the name, it could be different since there is a
+	     * timestamp involved in making the name.
+	     */
+        /* will open this file upon successful exit to write the data */
+	AllocVar(mouseOverJsonFile);
+	char *tmpStr = cloneString(pngTn.forCgi);
+	char *jsonStr = replaceChars(tmpStr, ".png", ".json");
+	safef(mouseOverJsonFile->forCgi, ArraySize(mouseOverJsonFile->forCgi), "%s", jsonStr);
+	freeMem(tmpStr);
+	freeMem(jsonStr);
+	tmpStr = cloneString(pngTn.forHtml);
+        jsonStr = replaceChars(tmpStr, ".png", ".json");
+	safef(mouseOverJsonFile->forHtml, ArraySize(mouseOverJsonFile->forHtml), "%s", jsonStr);
+	freeMem(tmpStr);
+	freeMem(jsonStr);
+	}
     hvg = hvGfxOpenPng(pixWidth, pixHeight, pngTn.forCgi, transparentImage);
 
     if (theImgBox)
@@ -6964,6 +6977,20 @@ if (hideTracks)
 struct hash *superTrackHash = newHash(5);  // cache whether supertrack is hiding tracks or not
 char buffer[4096];
 
+// Check to see if we have a versioned default gene track and let the knownGene 
+// cart variable determine its visibility
+char *defaultGeneTrack = NULL;
+char *knownDb = hdbDefaultKnownDb(database);
+if (differentString(knownDb, database))
+    defaultGeneTrack = hdbGetMasterGeneTrack(knownDb);
+
+if (defaultGeneTrack)
+    {
+    char *s = cartOptionalString(cart, "knownGene");
+    if ((s != NULL) && (differentString(s, "hide")))
+        cartSetString(cart, defaultGeneTrack, s);
+    }
+
 for (track = trackList; track != NULL; track = track->next)
     {
     // deal with any supertracks we're seeing for the first time
@@ -7984,6 +8011,7 @@ long thisTime = 0, lastTime = 0;
 basesPerPixel = ((float)virtWinBaseCount) / ((float)fullInsideWidth);
 zoomedToBaseLevel = (virtWinBaseCount <= fullInsideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(virtWinBaseCount/3) * tl.mWidth) <= fullInsideWidth;
+zoomedToCodonNumberLevel = (ceil(virtWinBaseCount/3) * tl.mWidth * 5) <= fullInsideWidth;
 zoomedToCdsColorLevel = (virtWinBaseCount <= fullInsideWidth*3);
 
 if (psOutput != NULL)
@@ -8678,6 +8706,10 @@ for(window=windows;window;window=window->next)
     }
 setGlobalsFromWindow(windows); // first window // restore globals
 
+/* DBG - a message box to display information from the javascript
+hPrintf("<div id='mouseDbg'><span id='dbgMouseOver'><p>. . . dbgMouseOver</p></span></div>\n");
+ */
+
 #ifdef USE_NAVIGATION_LINKS
 hPrintf("<TABLE BORDER=0 CELLPADDING=0 width='%d'><tr style='font-size:small;'>\n",
         tl.picWidth);//min(tl.picWidth, 800));
@@ -8754,7 +8786,7 @@ if (!hideControls)
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
-    hWrites("Click or drag in the base position track to zoom in. ");
+    hWrites("Click+shift+drag to zoom in. ");
     hWrites("Click side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
     hWrites("Drag tracks left or right to new position. ");
@@ -8832,19 +8864,19 @@ if (!hideControls)
         }
     if (doPliColors)
         {
-        hPrintf("<B>gnomAD Loss-of-Function Constraint (pLI) Color Key:</B><BR> ");
+        hPrintf("<B>gnomAD Loss-of-Function Constraint (LOEUF) Color Key:</B><BR> ");
         hPrintf("<table style=\"border: 1px solid black\"><tr>\n");
-        hPrintf("<td style=\"background-color:rgb(0,244,153)\">&lt; 0.1</td>\n");
-        hPrintf("<td style=\"background-color:rgb(74,240,94)\">&lt; 0.2</td>\n");
-        hPrintf("<td style=\"background-color:rgb(127,233,58)\">&lt; 0.3</td>\n");
-        hPrintf("<td style=\"background-color:rgb(165,224,26)\">&lt; 0.4</td>\n");
-        hPrintf("<td style=\"background-color:rgb(191,210,22)\">&lt; 0.5</td>\n");
-        hPrintf("<td style=\"background-color:rgb(210,191,13)\">&lt; 0.6</td>\n");
-        hPrintf("<td style=\"background-color:rgb(224,165,8)\">&lt; 0.7</td>\n");
-        hPrintf("<td style=\"background-color:rgb(233,127,5)\">&lt; 0.8</td>\n");
-        hPrintf("<td style=\"background-color:rgb(240,74,3)\">&lt; 0.9</td>\n");
-        hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 1</td>\n");
-        hPrintf("<td style=\"color: white; background-color:rgb(160,160,160)\">No pLI score</td>\n");
+        hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 0.1</td>\n");
+        hPrintf("<td style=\"background-color:rgb(240,74,3)\">&lt; 0.2</td>\n");
+        hPrintf("<td style=\"background-color:rgb(233,127,5)\">&lt; 0.3</td>\n");
+        hPrintf("<td style=\"background-color:rgb(224,165,8)\">&lt; 0.4</td>\n");
+        hPrintf("<td style=\"background-color:rgb(210,191,13)\">&lt; 0.5</td>\n");
+        hPrintf("<td style=\"background-color:rgb(191,210,22)\">&lt; 0.6</td>\n");
+        hPrintf("<td style=\"background-color:rgb(165,224,26)\">&lt; 0.7</td>\n");
+        hPrintf("<td style=\"background-color:rgb(127,233,58)\">&lt; 0.8</td>\n");
+        hPrintf("<td style=\"background-color:rgb(74,240,94)\">&lt; 0.9</td>\n");
+        hPrintf("<td style=\"background-color:rgb(0,244,153)\">&ge; 0.9</td>\n");
+        hPrintf("<td style=\"color: white; background-color:rgb(160,160,160)\">No LOEUF score</td>\n");
         hPrintf("</tr></table>\n");
         }
 
@@ -9808,6 +9840,7 @@ virtWinBaseCount = virtWinEnd - virtWinStart;
 if (virtWinBaseCount <= 0)
     hUserAbort("Window out of range on %s", virtChromName);
 
+
 if (!cartUsualBoolean(cart, "hgt.psOutput", FALSE)
  && !cartUsualBoolean(cart, "hgt.imageV1" , FALSE))
     {
@@ -10051,34 +10084,37 @@ if (aliasHash)
 long long total = 0;
 char msg1[512], msg2[512];
 boolean truncating;
-int count = limit;
+int lineCount = 0;
 
 truncating = (limit > 0) && (seqCount > limit);
 
-for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
+for( ;lineCount < seqCount && (chromInfo != NULL); ++lineCount, chromInfo = chromInfo->next)
     {
-    char *aliasNames = chrAliases(aliasHash, chromInfo->chrom);
     unsigned size = chromInfo->size;
-    cgiSimpleTableRowStart();
-    cgiSimpleTableFieldStart();
-    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
-           hgTracksName(), cartSessionVarName(), cartSessionId(cart),
-           chromInfo->chrom,chromInfo->chrom);
-    cgiTableFieldEnd();
-    cgiTableFieldStartAlignRight();
-    printLongWithCommas(stdout, size);
-    puts("&nbsp;&nbsp;");
-    cgiTableFieldEnd();
-    if (hasAlias)
+    if (lineCount < limit)
 	{
+	char *aliasNames = chrAliases(aliasHash, chromInfo->chrom);
+	cgiSimpleTableRowStart();
 	cgiSimpleTableFieldStart();
-	if (aliasNames)
-            htmlPrintf("%s", aliasNames);
-	else
-            htmlPrintf("&nbsp;");
-        cgiTableFieldEnd();
+	htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
+	    hgTracksName(), cartSessionVarName(), cartSessionId(cart),
+	    chromInfo->chrom,chromInfo->chrom);
+	cgiTableFieldEnd();
+	cgiTableFieldStartAlignRight();
+	printLongWithCommas(stdout, size);
+	puts("&nbsp;&nbsp;");
+	cgiTableFieldEnd();
+	if (hasAlias)
+	    {
+	    cgiSimpleTableFieldStart();
+	    if (aliasNames)
+		htmlPrintf("%s", aliasNames);
+	    else
+		htmlPrintf("&nbsp;");
+	    cgiTableFieldEnd();
         }
-    cgiTableRowEnd();
+	cgiTableRowEnd();
+	}
     total += size;
     }
 if (!truncating)
@@ -10096,8 +10132,6 @@ else
     cgiSimpleTableFieldStart();
     puts(msg2);
     cgiTableFieldEnd();
-    for(;limit-- && (chromInfo != NULL); chromInfo = chromInfo->next)
-	total += chromInfo->size;
 
     unsigned scafCount = seqCount;
     cgiTableRowEnd();
@@ -10538,7 +10572,23 @@ if (measureTiming)
 
 char *mouseOverEnabled = cfgOption("mouseOverEnabled");
 if (sameWordOk(mouseOverEnabled, "on"))
-    enableMouseOver = TRUE;
+    {
+    /* can not use mouseOver in any virtual mode */
+    char *isMultiRegion = cartUsualString(cart, "virtModeType", "default");
+    if (sameWordOk(isMultiRegion, "default"))
+	{
+	enableMouseOver = TRUE;
+	/* mouseOverJsonFile will be initializes and created at the same
+	 * time as the browser .png image file
+	 */
+	mouseOverJson = jsonWriteNew();
+	jsonWriteObjectStart(mouseOverJson, NULL);
+	/* this jsonWrite structure will finish off upon successful exit.
+	 * each track will start a list with the track name:
+	 *   jsonWriteListStart(mouseOverJson, tg->track);
+	 */
+	}
+    }
 else
     enableMouseOver = FALSE;
 
@@ -10558,9 +10608,8 @@ if (measureTiming)
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
-#if  0
-state = cgiUrlString();
-printf("State: %s\n", state->string);
+#if 0
+printf("State: %s\n", cgiUrlString()->string);
 #endif
 
 getDbAndGenome(cart, &database, &organism, oldVars);
@@ -10657,6 +10706,7 @@ if(!trackImgOnly)
 
     cartFlushHubWarnings();
     }
+
 
 if (cartVarExists(cart, "chromInfoPage"))
     {
@@ -10756,9 +10806,25 @@ dyStringFree(&dy);
 
 dy = dyStringNew(1024);
 if (enableMouseOver)
-      dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
-    else
-      dyStringPrintf(dy, "window.mouseOverEnabled=false;\n");
+    {
+    jsonWriteObjectEnd(mouseOverJson);
+    /* if any data was written, it is longer than 4 bytes */
+    if (strlen(mouseOverJson->dy->string) > 4)
+	{
+	FILE *trashJson = mustOpen(mouseOverJsonFile->forCgi, "w");
+	fputs(mouseOverJson->dy->string,trashJson);
+	carefulClose(&trashJson);
+	}
+
+    hPrintf("<div id='mouseOverVerticalLine' class='mouseOverVerticalLine'></div>\n");
+    hPrintf("<div id='mouseOverText' class='mouseOverText'></div>\n");
+    dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
+    dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
+    }
+else
+    {
+    dyStringPrintf(dy, "window.mouseOverEnabled=false;\n");
+    }
 jsInline(dy->string);
 dyStringFree(&dy);
 

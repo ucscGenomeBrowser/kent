@@ -319,9 +319,10 @@ function matSubCBsetShadow(subCB,triggerChange)
         shadowState = 1;
     if (isFauxDisabled(subCB,true))
         shadowState -= 2;
-    var fourWay = normed($("input.cbShadow#boolshad\\."+subCB.id));
+    var noDot = subCB.id.replace(/\./g, "\\.");
+    var fourWay = normed($("input.cbShadow#boolshad\\."+noDot));
     if (!fourWay) {
-        warn("DEBUG: Failed to find fourWay shadow for '#"+subCB.id);
+        warn("DEBUG: Failed to find fourWay shadow for '#"+noDot);
         return;
     }
     if ($(fourWay).val() !== shadowState.toString()) {

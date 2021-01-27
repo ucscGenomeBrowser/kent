@@ -1053,6 +1053,10 @@ char *hRefSeqAccForChrom(char *db, char *chrom);
 /* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.
  * db must never change. */
 
+char *abbreviateRefSeqSummary(char *summary);
+/* strip off the uninformative parts from the RefSeq Summary text: the repetitive note
+ * about the publication subset and the Evidence-Data-Notes */
+
 boolean isMito(char *chrom);
 /* Return True if chrom is chrM or chrMT */
 
@@ -1061,4 +1065,13 @@ char *hdbDefaultKnownDb(char *db);
 
 char *hdbGetMasterGeneTrack(char *knownDb);
 /* Get the native gene track for a knownGene database. */
+
+boolean trackDataAccessibleHash(char *database, struct trackDb *tdb, struct hash *gbdbHash);
+/* Return TRUE if underlying data are accessible - meaning the track has either
+ * a bigDataUrl with remote URL (http:// etc), a bigDataUrl with an existing local file,
+ * or a database table with the same name.
+ * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. 
+ *
+ * if gbdbHash is not NULL, use it when looking for the file */
+
 #endif /* HDB_H */

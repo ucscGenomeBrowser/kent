@@ -24,7 +24,7 @@ include ncbiGene.ra
 track rnaStructRangan
 shortLabel Rangan RNA
 longLabel Rangan et al. RNA predictions
-group genes
+group rna
 visibility hide
 color 20,90,0
 type bed 6 +
@@ -41,7 +41,7 @@ track rfam
 shortLabel Rfam
 longLabel Rfam families
 visibility hide
-group genes
+group rna
 color 98,23,0
 url https://rfam.org/family/$$
 type bed 5
@@ -122,7 +122,6 @@ mouseOverField _mouseOver
 url http://soe.ucsc.edu/~afyfe/covid/hub/t12.html?struct=$$
 urlLabel Link to 3D structure viewer:
 priority 31
-pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
 
 track cas13Crispr
 shortLabel Cas13 CRISPR
@@ -179,7 +178,6 @@ priority 5
 type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/bbi/rapid.bb
 noScoreFilter on
-pennantIcon New red ../goldenPath/newsarch.html#071720 "Released Jul. 17, 2020"
 
 # track removed as per David H email, authors got a track hub instead
 #track conticello
@@ -204,7 +202,6 @@ longLabel PhyloCSF Genes - Curated conserved genes
 baseColorDefault genomicCodons
 exonNumbers on
 noScoreFilter on
-pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
 
         track PhyloCSFgenes
         type bigGenePred
@@ -262,8 +259,6 @@ longLabel Microdeletions in GISAID sequences
 type bed 6
 group varRep
 spectrum on
-pennantIcon New red ../goldenPath/newsarch.html#070720 "Released Jul. 07, 2020"
-
 
 track nanoCov
 shortLabel Nanopore Coverage
@@ -301,11 +296,11 @@ compositeTrack on
         parent nanoCov
 
 track lollySarsCov2
-shortLabel Sars Cov 2 Variants 
-longLabel  Sars Cov 2 Variants 
+shortLabel Sars Cov 2 Lolly
+longLabel  Sars Cov 2 Lolly May 2020
 bigDataUrl /gbdb/wuhCor1/lollySarsCov2.bb
 type bigLolly
-group compGeno
+group x
 autoScale on
 
 track labAssocMutsNs419
@@ -319,14 +314,14 @@ release alpha
 
 track sarsCov2Phylo
 shortLabel Phylogeny: GISAID
-longLabel Phylogenetic Tree and Variants from High-coverage Sequences in GISAID EpiCoV TM
+longLabel Phylogenetic Tree and Nucleotide Substitution Mutations in High-coverage Sequences in GISAID EpiCoV TM
 compositeTrack on
 type vcfTabix
 hapClusterEnabled on
 hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft.linCol.nh
 hapClusterHeight 500
 hapClusterColorBy function
-sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.lineageColors.gz GISAID_clade=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.gisaidColors.gz
+sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.lineageColors.gz GISAID_clade=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.gisaidColors.gz Nextstrain_clade=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.nextstrainColors.gz
 tableBrowser off
 vcfDoQual off
 vcfDoFilter off
@@ -334,11 +329,12 @@ geneTrack ncbiGeneBGP
 group varRep
 visibility hide
 priority 0.2
-dataVersion 28-08-20
+dataVersion /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.version.txt
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
-    longLabel Single Nucleotide Variants in GISAID EpiCov TM sequences with alternate allele frequency >= 1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 1% in GISAID EpiCov TM Sequences
     parent sarsCov2Phylo on
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
     type vcfTabix
@@ -346,7 +342,7 @@ dataVersion 28-08-20
 
     track sarsCov2PhyloMinAf001
     shortLabel Min alt AF 0.1%
-    longLabel Single Nucleotide Variants in GISAID EpiCov TM sequences with alternate allele frequency >= 0.1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 0.1% in GISAID EpiCov TM Sequences
     parent sarsCov2Phylo off
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
@@ -354,54 +350,118 @@ dataVersion 28-08-20
 
     track sarsCov2PhyloFull
     shortLabel All (slow!)
-    longLabel All Single Nucleotide Variants in GISAID EpiCov TM sequences (slow at whole-genome scale)
+    longLabel All Nucleotide Substitution Mutations in GISAID EpiCov TM Sequences (slow at whole-genome scale)
     parent sarsCov2Phylo off
     type vcfTabix
-    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.ambigToN.vcf.gz
+    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.vcf.gz
     priority 30
 
 track sarsCov2PhyloPub
 shortLabel Phylogeny: Public
-longLabel Phylogenetic Tree and Variants from High-coverage Sequences in Public Databases
+longLabel Phylogenetic Tree and Nucleotide Substitution Mutations in Sequences in Public Databases
 compositeTrack on
 type vcfTabix
 hapClusterEnabled on
-hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.ft.nh
+hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.nwk
 hapClusterHeight 500
 hapClusterColorBy function
-sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.lineageColors.gz
+sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2PhyloPub/public.all.lineageColors.gz
 vcfDoQual off
 vcfDoFilter off
 geneTrack ncbiGeneBGP
 group varRep
 visibility squish
 priority 0.1
-dataVersion 28-08-20
-pennantIcon New red ../goldenPath/newsarch.html#102120 "Released Oct. 21, 2020"
+dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
+pennantIcon New red ../goldenPath/newsarch.html#011821 "Updated Jan. 18, 2021"
+release beta,public
 
-    track sarsCov2PhyloPubMinAf01
-    shortLabel Min alt AF 1%
-    longLabel Single Nucleotide Variants in public sequences with alternate allele frequency >= 1%
+    track sarsCov2PhyloPubAllMinAf01
+    shortLabel Min AF 1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 1% in Public Sequences
     parent sarsCov2PhyloPub on
-    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.01.vcf.gz
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.01.vcf.gz
     type vcfTabix
     priority 10
+    release beta,public
 
-    track sarsCov2PhyloPubMinAf001
-    shortLabel Min alt AF 0.1%
-    longLabel Single Nucleotide Variants in public sequences with alternate allele frequency >= 0.1%
+    track sarsCov2PhyloPubAllMinAf001
+    shortLabel Min AF 0.1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 0.1% in Public Sequences
     parent sarsCov2PhyloPub off
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.001.vcf.gz
     type vcfTabix
-    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.001.vcf.gz
     priority 20
+    release beta,public
 
-    track sarsCov2PhyloPubFull
-    shortLabel All (slow!)
-    longLabel All Single Nucleotide Variants in public sequences (slow at whole-genome scale)
+    track sarsCov2PhyloPubAllFull
+    shortLabel No Min AF (slow!)
+    longLabel All Nucleotide Substitution Mutations in Public Sequences (slow at whole-genome scale)
     parent sarsCov2PhyloPub off
     type vcfTabix
-    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.ambigToN.vcf.gz
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.vcf.gz
     priority 30
+    release beta,public
+
+track sarsCov2PhyloPub
+shortLabel Phylogeny: Public
+longLabel Phylogenetic Tree and Nucleotide Substitution Mutations from Sequences in Public Databases
+compositeTrack on
+type vcfTabix
+hapClusterEnabled on
+hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.nwk
+hapClusterHeight 500
+hapClusterColorBy function
+sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2PhyloPub/public.all.lineageColors.gz Nextstrain_clade=/gbdb/wuhCor1/sarsCov2PhyloPub/public.all.nextstrainColors.gz
+vcfDoQual off
+vcfDoFilter off
+geneTrack ncbiGeneBGP
+group varRep
+visibility squish
+priority 0.1
+dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
+pennantIcon New red ../goldenPath/newsarch.html#011821 "Updated Jan. ??, 2021"
+release alpha
+
+    track sarsCov2PhyloPubAllMinAf01
+    shortLabel Min AF 1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 1% in Public Sequences
+    parent sarsCov2PhyloPub on
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.01.vcf.gz
+    type vcfTabix
+    priority 10
+    release alpha
+
+    track sarsCov2PhyloPubAllMinAf001
+    shortLabel Min AF 0.1%
+    longLabel Nucleotide Substitution Mutations with Alternate Allele Frequency >= 0.1% in Public Sequences
+    parent sarsCov2PhyloPub off
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.minAf.001.vcf.gz
+    type vcfTabix
+    priority 20
+    release alpha
+
+    track sarsCov2PhyloPubAllFull
+    shortLabel No Min AF (slow!)
+    longLabel All Nucleotide Substitution Mutations in Public Sequences (slow at whole-genome scale)
+    parent sarsCov2PhyloPub off
+    type vcfTabix
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.vcf.gz
+    priority 30
+    release alpha
+
+track sarsCov2PhyloPubParsimony
+shortLabel Parsimony: Public
+longLabel Parsimony Scores of Phylogenetic Tree and Nucleotide Substitution Mutations in Public Sequences
+type bigWig
+autoScale on
+maxHeightPixels 128:40:8
+viewLimits 0:1000
+group varRep
+priority 0.11
+bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.parsimony.bw
+dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Jan. ?, 2021"
 
 track problematicSites
 shortLabel Problematic Sites
@@ -411,7 +471,7 @@ type bigBed
 skipEmptyFields on
 group map
 dataVersion 2020-07-29
-pennantIcon New red ../goldenPath/newsarch.html "Updated Aug. 31, 2020"
+release beta,public
 
     track problematicSitesMask
     shortLabel Mask
@@ -421,6 +481,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Updated Aug. 31, 2020"
     color 255,0,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesMask.bb
     priority 10
+    release beta,public
 
     track problematicSitesCaution
     shortLabel Caution
@@ -430,6 +491,38 @@ pennantIcon New red ../goldenPath/newsarch.html "Updated Aug. 31, 2020"
     color 240,160,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesCaution.bb
     priority 20
+    release beta,public
+
+track problematicSites
+shortLabel Problematic Sites
+longLabel Problematic sites where masking or caution are recommended for analysis
+compositeTrack on
+type bigBed
+skipEmptyFields on
+group map
+dataVersion v4 (2020-12-22)
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 30, 2020"
+release alpha
+
+    track problematicSitesMask
+    shortLabel Mask
+    longLabel Problematic sites where masking is recommended for analysis
+    parent problematicSites
+    type bigBed
+    color 255,0,0
+    bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesMask.bb
+    priority 10
+    release alpha
+
+    track problematicSitesCaution
+    shortLabel Caution
+    longLabel Problematic sites where caution is recommended for analysis
+    parent problematicSites
+    type bigBed
+    color 240,160,0
+    bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesCaution.bb
+    priority 20
+    release alpha
 
 track icshape
 shortLabel icSHAPE RNA Struct
@@ -438,7 +531,6 @@ type bigWig
 visibility hide
 group rna
 compositeTrack on
-pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 2, 2020"
 
         track icshapeInvivo
         shortLabel icSHAPE In-vivo
@@ -446,7 +538,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 2, 2020"
         type bigWig
         bigDataUrl /gbdb/wuhCor1/bbi/icshape/invivo.bw
         autoScale off
-        viewLimits 0.0:1.0
+        viewLimits -0.4:4.0
         visibility full
         parent icshape
         maxHeightPixels 100:40:8
@@ -470,7 +562,6 @@ longLabel Potential pathogenic insertions and deletions from Gussow et al, PNAS 
 type bigBed 4
 bigDataUrl /gbdb/wuhCor1/bbi/potPathoIndel.bb
 group varRep
-pennantIcon New red ../goldenPath/newsarch.html "Released Sep. 4, 2020"
 
 track iedb
 shortLabel Validated epitopes from IEDB
@@ -480,8 +571,30 @@ group immu
 urls epitopeID="http://www.iedb.org/epitope/$$"
 type bigBed
 bigDataUrl /gbdb/wuhCor1/iedb/iedb.bb
-pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 20, 2020"
 
+# testing-only track, most likely not for public release
+track minkMuts
+shortLabel Mink mutations
+longLabel Mink mutations from Denmark
+group varRep
+type vcfTabix
+release alpha
+bigDataUrl /hive/data/outside/otto/sarscov2phylo/26-10-20/danishMink.vcf.gz
+
+track lineageB_1_1_7_US
+shortLabel B.1.1.7 in USA
+longLabel Lineage B.1.1.7 (a.k.a. 501Y.V1, VOC 202012/01) Sequences in the United States: SNVs and Deletions
+type vcfTabix
+bigDataUrl /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first9.vcf.gz
+hapClusterEnabled on
+hapClusterMethod treeFile /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first9.nwk
+hapClusterHeight 160
+hapClusterColorBy function
+geneTrack ncbiGeneBGP
+vcfDoQual off
+vcfDoFilter off
+group varRep
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Jan. 7, 2021"
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
@@ -495,5 +608,33 @@ include trackDb.7way.ra
 include phylocsf.ra
 include addgene.ra
 include pond.ra
-include bloom.ra
 include weizmanOrfs.ra
+include pyle.ra
+include treangen.ra
+include pbm.ra
+include pbmShanghai.ra
+include abEscape.ra
+include bloom.ra
+
+track spikeMuts
+shortLabel Spike Mutations
+longLabel Spike protein mutations from community annotation (Jan 2021)
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/spikeMuts/spikeMuts.bb
+pennantIcon new red
+itemRgb on
+bedNameLabel Mutation
+mouseOver $name $clinicalNotes
+noScoreFilter on
+urls geographyChartsUrl="$$" nextstrainBuildUrl="$$"
+searchIndex name
+searchTrix /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.ix
+group varRep
+
+searchTable spikeMuts
+searchType bigBed
+searchDescription Spike protein mutations
+searchMethod fuzzy
+padding 5
+
+include strains.ra

@@ -238,15 +238,13 @@ int winStart;                   /* Start of window in sequence. */
 int winEnd;                     /* End of window in sequence. */
 char *position = NULL;          /* Name of position. */
 
-int trackTabWidth = 11;
-int leftLabelWidthDefaultChars = 20;   /* default number of characters allowed for left label */
-int leftLabelWidthChars = 20;   /* number of characters allowed for left label */
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;                 /* Start of area to draw left labels on. */
 int leftLabelWidth;             /* Width of area to draw left labels on. */
 float basesPerPixel = 0;       /* bases covered by a pixel; a measure of zoom */
 boolean zoomedToBaseLevel;      /* TRUE if zoomed so we can draw bases. */
+boolean zoomedToCodonNumberLevel; /* TRUE if zoomed so we can print codons and exon number text in genePreds*/
 boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in genePreds*/
 boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
 
@@ -288,18 +286,6 @@ void initTl()
 {
 trackLayoutInit(&tl, cart);
 
-// label width, but don't exceed 1/2 of image
-leftLabelWidthChars = cartUsualInt(cart, "hgt.labelWidth", leftLabelWidthDefaultChars);
-if (leftLabelWidthChars < 2)
-    leftLabelWidthChars = leftLabelWidthDefaultChars;
-tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth + 3;
-int maxLabelWidth = 0.5*tl.picWidth;
-if (tl.leftLabelWidth  > maxLabelWidth)
-    {
-    // overflow, force to 1/2 width
-    leftLabelWidthChars = maxLabelWidth/tl.nWidth;
-    tl.leftLabelWidth = leftLabelWidthChars * tl.nWidth;
-    }
 }
 
 static boolean isTooLightForTextOnWhite(struct hvGfx *hvg, Color color)
@@ -2693,12 +2679,20 @@ for (ref = exonList; TRUE; )
 		--numExonIntrons;  // introns are one fewer than exons
 		}
 
-	    if (!revStrand)
+            char strandChar;
+	    if (!revStrand) {
 		exonIntronNumber = exonIx;
-	    else
+                strandChar = '+';
+            }
+	    else {
 		exonIntronNumber = numExonIntrons-exonIx+1;
+                strandChar = '-';
+            }
 
-	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", exonIntronText, exonIntronNumber, numExonIntrons);
+            if (!isEmpty(lf->name))
+                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d", lf->name, strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
+            else
+                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d", strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
 
 	    if (w > 0) // draw exon or intron if width is greater than 0
 		{
@@ -4075,10 +4069,14 @@ if (tg->tdb)
     char *type = tg->tdb->type;
     if (sameString(type, "interact") || sameString(type, "bigInteract"))
         return FALSE;
-    if (sameString(type, "bigGenePred") || sameString(type, "genePred"))
-        return TRUE;
     }
-boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "off"), "on");
+
+char *defVal = "off";
+char *type = tg->tdb->type;
+if (startsWith("bigGenePred", type) || startsWith("genePred", type))
+    defVal = "on";
+
+boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", defVal), "on");
 return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
  && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
 }
@@ -12658,7 +12656,7 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 
-static char *getCode(char *inhMode)
+static char *omimGetInheritanceCode(char *inhMode)
 /* Translate inheritance mode strings into much shorter codes. */
 {
 static struct dyString *dy = NULL;  // re-use this string
@@ -12750,7 +12748,7 @@ if (isNotEmpty(ret))
                 dyStringPrintf(dy, "%s", components->name);
                 components = components->next;
 
-                char *inhCode = getCode(components->name);
+                char *inhCode = omimGetInheritanceCode(components->name);
                 if (!isEmpty(inhCode))
                     dyStringPrintf(dy, ", %s", inhCode);
                 components = components->next;

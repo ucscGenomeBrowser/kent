@@ -1,0 +1,50 @@
+# strains of interest
+
+track strainMuts
+shortLabel Strain Mutations
+longLabel  Strains of interest amino acid mutations from virological.org, cov-lineages.org and medRxiv (Jan 2021)
+group varRep
+visibility hide
+compositeTrack on
+type bigBed 4
+pennantIcon new red
+bedNameLabel Mutation
+darkerLabels on
+noScoreFilter on
+
+        track strainMutsUK
+        parent strainMuts
+        shortLabel UK Strain Muts 
+        longLabel UK strain (B.1.1.7, 20I/507.V1, VOC) amino acid mutations
+        bigDataUrl /gbdb/wuhCor1/strainMuts/strainMutsUK.bb
+        url https://cov-lineages.org/global_report_B.1.1.7.html
+        color 255,117,53
+        priority 1
+        
+        track strainMutsSA
+        parent strainMuts
+        shortLabel SA Strain Muts 
+        longLabel South Africa strain (B.1.351, 20H/501Y.V2) amino acid mutations
+        bigDataUrl /gbdb/wuhCor1/strainMuts/strainMutsSA.bb
+        url https://cov-lineages.org/global_report_B.1.351.html
+        color 255,170,63
+        priority 2
+
+        track strainMutsBrz
+        parent strainMuts
+        shortLabel Brz Strain Muts 
+        longLabel Brazil strain (P.1, 20J/501Y.V3) amino acid mutations
+        bigDataUrl /gbdb/wuhCor1/strainMuts/strainMutsSA.bb
+        url https://cov-lineages.org/global_report_P.1.html
+        color 249,53,41
+        priority 3
+
+        track strainMutsCA
+        parent strainMuts
+        shortLabel CA Strain Muts 
+        longLabel California strain (B.1.429, CA.20C) amino acid mutations
+        bigDataUrl /gbdb/wuhCor1/strainMuts/strainMutsCA.bb
+        color 105,190,185
+        priority 4
+
+-

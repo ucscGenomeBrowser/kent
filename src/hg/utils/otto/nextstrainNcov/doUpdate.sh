@@ -1,4 +1,5 @@
 #!/bin/bash
+source ~/.bashrc
 set -beEu -o pipefail
 
 #	Do not modify this script, modify the source tree copy:

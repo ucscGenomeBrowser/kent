@@ -27,6 +27,8 @@
 #include "web.h"
 #include "botDelay.h"
 #include "oligoTm.h"
+#include "trackHub.h"
+#include "hubConnect.h"
 
 
 struct cart *cart;	/* The user's ui state. */
@@ -66,6 +68,32 @@ struct targetPcrServer
    struct targetDb *targetDb;     /* All of the info about the target. */
    };
 
+struct pcrServer *getTrackHubServers()
+/* Get the list of track hubs that have PCR services. */
+{
+struct pcrServer *serverList = NULL, *server;
+
+struct dbDb *dbDbList = trackHubGetPcrServers();
+
+for(; dbDbList; dbDbList = dbDbList->next)
+    {
+    AllocVar(server);
+    server->db = dbDbList->name;
+    server->genome = dbDbList->organism;
+    server->description = dbDbList->description;
+    trackHubGetPcrParams(server->db, &server->host, &server->port);
+    struct trackHubGenome *genome = trackHubGetGenome(server->db);
+    server->seqDir = cloneString(genome->twoBitPath);
+    char *ptr = strrchr(server->seqDir, '/');
+    // we only want the directory name
+    if (ptr != NULL)
+         *ptr = 0;
+    slAddHead(&serverList, server);
+    }
+
+return serverList;
+}
+
 struct pcrServer *getServerList()
 /* Get list of available servers. */
 {
@@ -73,6 +101,8 @@ struct pcrServer *serverList = NULL, *server;
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr;
 char **row;
+
+serverList = getTrackHubServers();
 
 /* Do a little join to get data to fit into the pcrServer. */
 sr = sqlGetResult(conn, 
@@ -118,6 +148,8 @@ struct targetPcrServer *getTargetServerList(char *db, char *name)
 /* Get list of available non-genomic-assembly target pcr servers associated 
  * with db (and name, if not NULL).  There may be none -- that's fine. */
 {
+if (trackHubDatabase(db))
+    return NULL;
 struct targetPcrServer *serverList = NULL, *server;
 struct sqlConnection *conn = hConnectCentral();
 struct sqlConnection *conn2 = hAllocConn(db);
@@ -237,7 +269,7 @@ for (server = serverList; server != NULL; server = server->next)
 	hashAdd(uniqHash, server->genome, NULL);
 	printf("  <OPTION%s VALUE=\"%s\">%s</OPTION>\n", 
 	    (sameWord(genome, server->genome) ? " SELECTED" : ""), 
-	    server->genome, server->genome);
+	    server->genome, hubConnectSkipHubPrefix(server->genome));
 	}
     }
 printf("</SELECT>\n");

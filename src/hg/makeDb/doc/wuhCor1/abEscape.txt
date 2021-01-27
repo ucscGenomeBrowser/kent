@@ -1,0 +1,2 @@
+cd /hive/data/genomes/wuhCor1/bed/bloomEsc
+python ~/kent/src/hg/makeDb/bloom/bloomEsc.py

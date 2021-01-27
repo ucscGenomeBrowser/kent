@@ -197,7 +197,6 @@ while ((oneName = csvParseNext(&pos, csvScratch)) != NULL)
 	++contributorCount;
 	}
     }
-uglyf("Got %d contributors other than %s\n", slCount(contributorList), contactName);
 
 /* Go through all tags, looking for ones that start with 'contact'.  Just add commas
  * to most of them but contact_name get's real stuff */

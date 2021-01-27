@@ -90,6 +90,9 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   chomp $descr;
   my $orgName=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.* name: .* (##; s#).*##;'`;
   chomp $orgName;
+  if (defined($commonName{$asmId})) {
+     $orgName = $commonName{$asmId};
+  }
 
   printf "genome %s\n", $accessionId;
   printf "trackDb ../%s/%s/trackDb.txt\n", $accessionDir, $accessionId;

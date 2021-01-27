@@ -142,6 +142,10 @@ void galleryDisplay(struct galleryEntry *galList)
 /* Print a table containing the gallery data from galList */
 {
 struct galleryEntry *thisSession = galList;
+boolean searchStrExists = cgiVarExists("search");
+char *searchStr = NULL;
+if (searchStrExists)
+    searchStr = cgiOptionalString("search");
 
 /* Hide the orderable columns and disable ordering on the visible columns
  * https://datatables.net/reference/option/columnDefs for more info.
@@ -155,8 +159,15 @@ jsInlineF(
     "                                       \"stateSave\":true,\n"
     "                                       \"stateSaveCallback\": %s,\n"
     "                                       \"stateLoadCallback\": %s,\n"
-    "                                });\n"
-    /* Recover previous sorting choice from the cart settings, if available */
+    "                                });\n",
+    jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart));
+
+// the user may have cleared the previous search via cgi option, or tried a new search:
+if (searchStrExists)
+    jsInlineF("     $('#sessionTable').DataTable().search(\"%s\").draw();\n", searchStr);
+
+/* Recover previous sorting choice from the cart settings, if available */
+jsInlineF(
     "    var startOrder = $('#sessionTable').DataTable().order();\n"
     "    if (startOrder[0][0] == 3) {\n"
     "        if (startOrder[0][1] == \"asc\") {\n"
@@ -176,8 +187,7 @@ jsInlineF(
     "            $('#sortMethod').val(\"dateDesc\");\n"
     "        }\n"
     "    }\n"
-    "});\n",
-    jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart));
+    "});\n");
 
 jsInline(
    "function changeSort() {\n"

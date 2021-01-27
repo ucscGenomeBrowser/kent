@@ -173,6 +173,20 @@ AllocVar(b);
 hts_itr_t *iter = sam_itr_querys(idx, header, position);
 if (iter == NULL && startsWith("chr", position))
     iter = sam_itr_querys(idx, header, position + strlen("chr"));
+// Special case to support SARS-CoV-2: If header uses a RefSeq or GenBank accession instead of
+// our "NC_045512v2", go with that.
+if (iter == NULL && header->n_targets == 1 && startsWith("NC_045512v2", position) &&
+    (startsWith("NC_045512", header->target_name[0]) ||
+     startsWith("MN908947", header->target_name[0])))
+    {
+    char *colon = strrchr(position, ':');
+    char customPos[512];
+    if (colon)
+        safef(customPos, sizeof customPos, "%s%s", header->target_name[0], colon);
+    else
+        safecpy(customPos, sizeof customPos, header->target_name[0]);
+    iter = sam_itr_querys(idx, header, customPos);
+    }
 
 if (iter == NULL)
     return;

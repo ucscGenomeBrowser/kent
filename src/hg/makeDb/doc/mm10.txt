@@ -3495,6 +3495,24 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s lastzMonDom5.2012-03-29 lastz.monDom5
 
+    # add syntenic net and recip best per user request 2020-11 - Hiram
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=syntenicNet -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=loose) > synNet.log 2>&1 &
+    # real    4m58.921s
+
+    cat fb.mm10.chainSynMonDom5Link.txt
+    # 181282548 bases of 2652783500 (6.834%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 monDom5 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    1024m21.233s
+
+    cat fb.mm10.chainRBest.MonDom5.txt
+    # 208921944 bases of 2652783500 (7.876%) in intersection
+
+
     #	and for the swap
     mkdir /hive/data/genomes/monDom5/bed/blastz.mm10.swap
     cd /hive/data/genomes/monDom5/bed/blastz.mm10.swap
@@ -3509,6 +3527,23 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/monDom5/bed
     ln -s blastz.mm10.swap lastz.mm10
+
+    # add syntenic net and recip best per user request 2020-11 - Hiram
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzMonDom5.2012-03-29/DEF \
+	-continue=syntenicNet -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=loose) > synNet.log 2>&1 &
+    # real    4m52.417s
+    cat fb.monDom5.chainMm10Link.txt
+    # 252291401 bases of 3501660299 (7.205%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev monDom5 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    1013m15.298s
+
+    cat fb.monDom5.chainRBest.Mm10.txt
+    # 209696912 bases of 3501660299 (5.988%) in intersection
 
 #########################################################################
 # lastz Tasmanian Devil sarHar1 (DONE - 2012-03-29 - Hiram)
@@ -3683,6 +3718,17 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s lastzOrnAna1.2012-03-29 lastz.ornAna1
 
+    # add syntenic net and recip best per user request 2020-11 - Hiram
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=syntenicNet -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=loose) > synNet.log 2>&1 &
+    # real    2m3.337s
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 ornAna1 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    196m25.100s
+
     #	and for the swap
     mkdir /hive/data/genomes/ornAna1/bed/blastz.mm10.swap
     cd /hive/data/genomes/ornAna1/bed/blastz.mm10.swap
@@ -3697,6 +3743,23 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/ornAna1/bed
     ln -s blastz.mm10.swap lastz.mm10
+
+    # add syntenic net and recip best per user request 2020-11 - Hiram
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzOrnAna1.2012-03-29/DEF \
+	-continue=syntenicNet -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=loose) > synNet.log 2>&1 &
+    # real    3m17.422s
+    cat fb.ornAna1.chainSynMm10Link.txt
+    # 76550450 bases of 1842236818 (4.155%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev ornAna1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    207m50.665s
+
+    cat fb.ornAna1.chainRBest.Mm10.txt
+    # 114682047 bases of 1842236818 (6.225%) in intersection
 
 #########################################################################
 # lastz turtle chrPic1 (DONE - 2012-03-29 - Hiram)
@@ -16799,7 +16862,7 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 galGal6) > rbest.log 2>&1 &
     # real    116m19.316s
 
-    cat fb.mm10.chainRBest.GalGal6.txt 
+    cat fb.mm10.chainRBest.GalGal6.txt
     # 79649474 bases of 2652783500 (3.002%) in intersection
 
     # and for the swap:
@@ -16944,7 +17007,7 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 cotJap2) > rbest.log 2>&1 &
     # real    104m58.905s
 
-    cat fb.mm10.chainRBest.CotJap2.txt 
+    cat fb.mm10.chainRBest.CotJap2.txt
     # 76298136 bases of 2652783500 (2.876%) in intersection
 
     # and for the swap:
@@ -16984,11 +17047,11 @@ aws s3 sync s3://czbiohub-tabula-muris/tabula_muris_bam_files/ . --delete
 cd ~/projects/czi/cbData/ucsc/tabulaMuris
 csvToTab TM_facs_metadata.csv > TM_facs_metadata.tsv
 cat TM_facs_metadata.csv | tr '.' '-' | csvToTab > TM_facs_metadata.fix.tsv
-# this is not necessary anymore, the new mm10.sizes file comes with cbTrackHub and 
+# this is not necessary anymore, the new mm10.sizes file comes with cbTrackHub and
 # includes the ERCCs
 hgsql -N -e 'select alias,chrom from chromAlias;' mm10 > mm10.chromAlias.tab
 faSize ERCC92.fa -detailed > ERCC.sizes
-cat /hive/data/genomes/mm10/chrom.sizes ERCC.sizes > mm10ercc.sizes 
+cat /hive/data/genomes/mm10/chrom.sizes ERCC.sizes > mm10ercc.sizes
 
 # the next one requires single cell browser, from https://github.com/maximilianh/cellBrowser
 cbTrackHub mm10 bam/ TM_facs_metadata.fix.tsv cell_ontology_class hub/ --name "TabulaMuris"
@@ -17141,7 +17204,7 @@ cbTrackHub mm10 bam/ TM_facs_metadata.fix.tsv cell_ontology_class hub/ --name "T
 	    gzip -c > exonAA/$C.exonAA.fa.gz"
     done > $gp.$mz.jobs
 
-    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
     # 267m58.813s
 
     rm *.known.bed

@@ -73,7 +73,6 @@ array1 uncsv(GEO_Series_summary,1)
 cutMid replace("abcdefg", "cde", "")
 subSub replace("abcdefg", "abcdefg", "subSub")
 
-
 table project id
 id data_set_id
 title	
@@ -109,4 +108,20 @@ donor @donor
 id ncbi_bio_sample
 biosample_cell_type
 lab_quake_cell
+
+
+table lab_submitters lab
+lab
+submitters $list submitter
+fluidics_chip
+age $list GEO_Sample_age
+age_stats $stats GEO_Sample_age
+
+table donor_organ_cells id
+id biosample_source_id
+age GEO_Sample_age
+organ organ_anatomical_name
+cell_count $count
+cell_types $list biosample_cell_type
+
 

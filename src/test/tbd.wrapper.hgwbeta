@@ -1,0 +1,63 @@
+#!/bin/bash
+#
+# This wis a wrapper for the buildTableDescriptions cron job. It will 
+# generate the sql code for the generation of the tableDescriptions, but
+# then will compare it to the sql code that was used to build the current
+# tableDescriptions table. If the code has not changed, it won't regenerate
+# the table.
+#
+# Written by: Jorge Garcia
+# Date: March 18, 2019
+# 
+
+# go to the build directory and clear it, then create all the .sql files
+cd /scratch/build/tbd.new.build.hgwbeta
+rm -f *
+$HOME/kent/src/test/buildTableDescriptions.pl \
+   -kentSrc $HOME/kent/src \
+   -hgConf $HOME/.hg.conf.beta \
+   -subDir hg/lib \
+   -noLoad >& ~/hgwbeta.buildTableDescriptions.log
+
+# once we have all the new .sql files, compare each new file to the 
+# corresponding file in the current directory. If the new file is different
+# than the current file (or if the file doesn't exist in the current directory)
+# then generate a new tableDescriptions and move the .sql file to the current
+# directory
+echo "Starting tbd on hgwbeta.\n" >> /var/tmp/tbd.hgwbeta.log
+/bin/date >> /var/tmp/tbd.hgwbeta.log
+/bin/mv $HOME/.hg.conf $HOME/.hg.conf.tmpsave
+/bin/cp $HOME/.hg.conf.beta $HOME/.hg.conf
+for i in *
+do
+   db=`basename -s .tableDescriptions.sql $i`
+   if [ -f ../tbd.current.build.hgwbeta/$i ] 
+   then
+      if ! cmp -s $i ../tbd.current.build.hgwbeta/$i
+      then 
+         # New file different from current file. Create new table
+         echo "$i different => Updating\n" >> /var/tmp/tbd.hgwbeta.log
+         if `/cluster/bin/x86_64/hgsql $db < $i`
+         then
+           mv $i ../tbd.current.build.hgwbeta/$i
+         else
+           echo "ERROR running hgsql on $db with input $i\n"
+           echo "ERROR running hgsql on $db with input $i\n" >> /var/tmp/tbd.hgwbeta.log
+         fi
+      fi
+   else
+      # There is no current file for this table. Create new table
+      echo "$i new => Creating\n" >> /var/tmp/tbd.hgwbeta.log
+      if `/cluster/bin/x86_64/hgsql $db < $i`
+      then
+        mv $i ../tbd.current.build.hgwbeta/$i
+      else
+        echo "ERROR running hgsql on $db with input $i\n"
+        echo "ERROR running hgsql on $db with input $i\n" >> /var/tmp/tbd.hgwbeta.log
+      fi
+   fi
+done
+/bin/mv $HOME/.hg.conf.tmpsave $HOME/.hg.conf
+
+echo "Finished tbd on hgwbeta.\n" >> /var/tmp/tbd.hgwbeta.log
+/bin/date >> /var/tmp/tbd.hgwbeta.log

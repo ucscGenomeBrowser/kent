@@ -1680,7 +1680,7 @@ static void cgiMakeCheckBox2Bool(char *name, boolean checked, boolean enabled,
  * Also make a shadow hidden variable and support 2 boolean states:
  *    checked/unchecked and enabled/disabled. */
 {
-char buf[256], idBuf[256];
+char buf[256], idBuf[256], shadId[256];
 
 if(id)
     safef(idBuf, sizeof(idBuf), " id=\"%s\"", id);
@@ -1692,7 +1692,9 @@ printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s>", name, idBuf,
         (checked ? " CHECKED" : ""),
         (enabled ? "" : " DISABLED"));
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVarWithExtra(buf, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
+if (id)
+    safef(shadId, sizeof(shadId), "%s%s", cgiBooleanShadowPrefix(), id);
+cgiMakeHiddenVarWithIdExtra(buf, id ? shadId : NULL, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
 }
 
 void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
@@ -1951,6 +1953,14 @@ if (maxDigits == 0) maxDigits = 4;
 
 printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g>", varName,
         maxDigits, initialVal);
+}
+
+void cgiMakeDoubleVarWithExtra(char *varName, double initialVal, int maxDigits, char *extra)
+/* Make a text control filled with initial value and optional extra HTML.  */
+{
+if (maxDigits == 0) maxDigits = 4;
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g %s>", varName,
+        maxDigits, initialVal, emptyForNull(extra));
 }
 
 void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width,

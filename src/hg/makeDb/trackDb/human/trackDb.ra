@@ -30,7 +30,10 @@ include trackDb.dbVar.ra
 include trackDb.clinGen.ra
 
 # Genome In a Bottle
-include trackDb.giab.ra alpha
+include trackDb.giab.ra
+
+# CADD scores
+include cadd.ra alpha
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -94,7 +97,7 @@ visibility hide
 type bigBed 12 +
 noScoreFilter .
 urlLabel Link to LRG report: 
-url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml
 urls hgncId="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" ncbiAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
 baseColorDefault diffBases
 baseColorUseSequence lrg
@@ -131,7 +134,6 @@ filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Unc
 mergeSpannedItems on
 searchIndex name
 mouseOverField _mouseOver
-pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 searchTable decipher
 searchMethod exact
@@ -174,7 +176,7 @@ type bed 3
         longLabel Genomenon Mastermind Variants extracted from full text publications
         visibility dense
         type bigBed 9 +
-        urls url=https://mastermind.genomenon.com/detail?disease=all%20diseases&$$
+        urls url=$$
         bigDataUrl /gbdb/$D/bbi/mastermind.bb
         noScoreFilter on
         exonNumbers off
@@ -199,26 +201,6 @@ type bed 3
         parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOverField _mouseOver
-
-track pathoPred
-type bigWig
-longLabel Pathogenicity predictions
-shortLabel Pathogenicity
-color 112,172,192
-visibility hide
-superTrack on
-group phenDis
-
-        track cadd
-        type bigWig
-        longLabel CADD scores version 1.4
-        viewLimits 0:30
-        color 100,130,160
-        bigDataUrl /gbdb/$D/bbi/CADD-v1.4.bw
-        viewLimitsMax 0:100
-        shortLabel CADD
-        visibility full
-        parent pathoPred on
 
 track caseControl
 compositeTrack on
@@ -3170,30 +3152,31 @@ url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
 track lrgBigPsl
-shortLabel LRG Transcripts (RM 24672)
-longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations (RedMine 24672)
+shortLabel LRG Transcripts
+longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
 group genes
 visibility hide
 type bigPsl
-mouseOverField mouseOver
+html lrgTranscriptAli
+mouseOver ${name}: ${ncbiTranscript} ${ensemblTranscript} ${ncbiProtein} ${ensemblProtein} ${geneName}
 skipFields mouseOver
 skipEmptyFields on
 urls ncbiTranscript=https://www.ncbi.nlm.nih.gov/nuccore/$$ ensemblTranscript=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$ ncbiProtein=https://www.ncbi.nlm.nih.gov/protein/$$ ensemblProtein=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$
-cdsTable lrgCds
-cdnaTable lrgCdna
-pepTable lrgPep
-baseColorDefault diffCodons
-baseColorUseCds table lrgCds
-baseColorUseSequence table lrgCdna
+altColor 127,127,127
+baseColorDefault genomicCodons
+baseColorUseSequence lfExtra
 indelDoubleInsert on
+indelPolyA on
 indelQueryInsert on
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 color 54,125,29
-urlLabel Link to LRG transcript:
-url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+urlLabel Link to LRG transcript
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$<_lrgParent>.xml#transcripts_anchor
+bigDataUrl /gbdb/$D/bbi/lrgBigPsl.bb
+release alpha
 
 track lrgTranscriptAli
 shortLabel LRG Transcripts
@@ -3215,7 +3198,8 @@ showCdsAllScales .
 showCdsMaxZoom 10000.0
 color 54,125,29
 urlLabel Link to LRG transcript:
-url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+release beta,public
 
 track affyHuEx1
 shortLabel Affy HuEx 1.0
@@ -3699,11 +3683,10 @@ compositeTrack on
 type bigBed 4 +
 tableBrowser off lovdComp
 html lovdComp
-pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
         track lovdShort
-        shortLabel LOVD Variants < 50 bp
-        longLabel Leiden Open Variation Database, short < 50 bp variants
+        shortLabel LOVD Variants < 50 bp + ins
+        longLabel Leiden Open Variation Database, short < 50 bp variants and insertions of any length
         group phenDis
         visibility hide
         urls id="http://varcache.lovd.nl/redirect/$$"
@@ -3736,6 +3719,7 @@ mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
 maxItems 1000
+pennantIcon Updated red
 
 track snpedia
 shortLabel SNPedia
@@ -4074,12 +4058,21 @@ searchType psl
 termRegex HIT[0-9]{9,9}
 searchPriority 50
 
+searchTable lrgBigPsl
+searchMethod exact
+searchType bigBed
+termRegex LRG_[0-9]+t[0-9]+
+semiShortCircuit 1
+searchPriority 50
+release alpha
+
 searchTable lrgTranscriptAli
 searchMethod exact
 searchType psl
 termRegex LRG_[0-9]+t[0-9]+
 semiShortCircuit 1
 searchPriority 50
+release beta,public
 
 searchName lrgTranscriptAliNoTNum
 searchTable lrgTranscriptAli
@@ -5092,7 +5085,6 @@ mouseOver $name disease(s): $diseases
 html geneReviews
 url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
 noScoreFilter on
-pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 searchName geneReviews
 searchTable geneReviews
@@ -5449,6 +5441,9 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 track sgpGene override
 longLabel SGP Gene Predictions Using Mouse/$Organism Homology
 
+track uniprot override
+hideEmptySubtracks off
+
 searchTable cnvDevDelayCase
 semiShortCircuit 1
 termRegex nssv[0-9]+
@@ -5465,8 +5460,8 @@ include covidHgiGwas.ra
 
 track covidMuts
 type bigBed 12 + 
-shortLabel COVID Immunity Vars
-longLabel COVID-19 Immunity Variants from the COVID Human Genetics Effort
+shortLabel Rare Harmful Vars
+longLabel Rare variants underlying COVID-19 severity and susceptibility from the COVID Human Genetics Effort
 mouseOver $gene $name $rsId Genotype: $genotype; Zygosity: $zygo ; Inheritance: $inhMode
 labelFields gene, name
 defaultLabelFields gene, name
@@ -5475,6 +5470,7 @@ group covid
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
+pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 12, 2020"
  
 
 

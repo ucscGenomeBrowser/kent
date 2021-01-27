@@ -41,6 +41,9 @@ my @saveIdx = (
                 my @savedCols = ();
                 foreach $i (@saveIdx) { 
                   $savedCols[@savedCols] = $w[$i];
+                  if ($i == 33 && $savedCols[$#savedCols] ne "Y") { # if CNV is missing add a 'N'
+                    $savedCols[$#savedCols] = "N";
+                  }
                 } 
                 # trim leading/trailing spaces if any; 
                 # convert the Unicode in titles to HTML because non-ASCII gives Galaxy trouble. 

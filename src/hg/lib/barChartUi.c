@@ -5,6 +5,8 @@
 
 #include "cheapcgi.h"
 #include "cart.h"
+#include "net.h"
+#include "errCatch.h"
 #include "hui.h"
 #include "trackDb.h"
 #include "jsHelper.h"
@@ -113,14 +115,26 @@ cgiMakeHiddenVar(buf, "0");
 
 /* Convenience functions for hgTrackUi */
 
+boolean barChartIsLogTransformed(struct cart *cart, char *track, struct trackDb *tdb)
+/* Return TRUE if bar chart needs to be log transformed */
+{
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
+boolean isLog = TRUE;
+char *trans = trackDbSetting(tdb, "transformFunc");
+if (trans != NULL)
+    isLog = sameWord(trans, "LOG");
+return cartCgiUsualBoolean(cart, cartVar, isLog);
+}
+
 void barChartUiLogTransform(struct cart *cart, char *track, struct trackDb *tdb)
 /* Checkbox to select log-transformed RPKM values */
 /* NOTE: this code from gtexUi.c.  Consider sharing. */
 {
 char cartVar[1024];
-puts("<b>Log10(x+1) transform:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
-boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSFORM_DEFAULT);
+puts("<b>Log10(x+1) transform:</b>\n");
+boolean isLogTransform = barChartIsLogTransformed(cart, track, tdb);
 cgiMakeCheckBoxWithId(cartVar, isLogTransform, cartVar);
 jsOnEventByIdF("change", cartVar, "barChartUiTransformChanged('%s');", track);
 }
@@ -138,88 +152,193 @@ if (setting != NULL)
 return BAR_CHART_MAX_LIMIT_DEFAULT;
 }
 
+double barChartCurViewMax(struct cart *cart, char *trackName, struct trackDb *tdb)
+/* Look up max value to scale for this bar chart - consults both cart and trackDb defaults. */
+{
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s.%s", trackName, BAR_CHART_MAX_VIEW_LIMIT);
+char *limitString = trackDbSettingOrDefault(tdb, BAR_CHART_LIMIT, "50");
+double limit = atof(limitString);
+if (limit <= 0) limit = 0.001;
+return cartCgiUsualDouble(cart, cartVar, limit);
+}
+
 void barChartUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
 /* Set viewing limits if log transform not checked */
 /* NOTE: this code from gtexUi.c.  Consider sharing. */
 {
-char cartVar[1024];
 char buf[512];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
-boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSFORM_DEFAULT);
+boolean isLogTransform = barChartIsLogTransformed(cart, track, tdb);
 safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
 printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
+double viewMax = barChartCurViewMax(cart, track, tdb);
+char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_MAX_VIEW_LIMIT);
-int viewMax = cartCgiUsualInt(cart, cartVar, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
-cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
+cgiMakeDoubleVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
 char *unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit, 
                                 round(barChartUiMaxMedianScore(tdb)));
 }
 
-struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)
-/* Get category colors and descriptions.  Use barChartColors setting if present.
-   If not, if there is a barChartBars setting, assign rainbow colors.
- * O/w look for a table naed track+Category, and use labels and colors there 
- */
+// TODO: libify
+static boolean isUrl(char *url)
 {
-struct barChartCategory *categs = NULL;
-char *words[BAR_CHART_MAX_CATEGORIES];
-char *colorWords[BAR_CHART_MAX_CATEGORIES];
-char *labels = trackDbSettingClosestToHome(tdb, BAR_CHART_CATEGORY_LABELS);
-char *colors = trackDbSettingClosestToHome(tdb, BAR_CHART_CATEGORY_COLORS);
-struct barChartCategory *categ = NULL;
+return startsWith("http://", url)
+   || startsWith("https://", url)
+   || startsWith("ftp://", url);
+}
 
-if (labels == NULL)
+static void getCategsFromSettings(char *track, char *labelSetting, char *colorSetting, 
+                                        struct slName **labels, struct slName **colors)
+/* Get category labels and optionally colors, from track settings */
+{
+if (!labels || !colors)
+    return;
+if (isEmpty(labelSetting))
     {
-    errAbort("barChart track %s missing required %s setting\n", tdb->track, BAR_CHART_CATEGORY_LABELS);
+    errAbort("barChart track %s missing required setting: %s or %s\n",
+                    track, BAR_CHART_CATEGORY_LABELS, BAR_CHART_CATEGORY_URL);
     }
+char *words[BAR_CHART_MAX_CATEGORIES];
+int labelCount = chopLine(cloneString(labelSetting), words);
+*labels = slNameListFromStringArray(words, labelCount);
+if (isNotEmpty(colorSetting))
+    {
+    int colorCount = chopLine(cloneString(colorSetting), words);
+    if (colorCount != labelCount)
+        errAbort("barChart track %s settings mismatch: %s (%d) and  %s (%d)\n",
+            track, BAR_CHART_CATEGORY_LABELS, labelCount, BAR_CHART_CATEGORY_COLORS, colorCount);
+    *colors = slNameListFromStringArray(words, labelCount);
+    }
+}
+
+static void getCategsFromFile(char *track, char *categUrl,
+                                        struct slName **labels, struct slName **colors)
+/* Get category labels and optionally colors, from category file.
+ * This is tab-sep file, column 1 is category label, optional column 2 is a color spec */
+{
+if (!labels || !colors) return;
+struct lineFile *lf = NULL;
+
+// protect against network error
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    if (isUrl(categUrl))
+        lf = netLineFileOpen(categUrl);
+    else
+        lf = lineFileMayOpen(categUrl, TRUE);
+    }
+errCatchEnd(errCatch); 
+if (errCatch->gotError)
+    {
+    if (isNotEmpty(errCatch->message->string))
+        errAbort("unable to open %s track file %s: %s", 
+                    track, categUrl, errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+char *line = NULL;
+int cols = 0;
+while (lineFileNextReal(lf, &line))
+    {
+    char *words[2];
+    int wordCount = chopTabs(line, words);
+    if (cols)
+        {
+        if (wordCount != cols)
+            errAbort("barChart track %s category file %s expecting %d words, got %d",
+                        track, categUrl, cols, wordCount);
+        }
+    else
+        {
+        cols = wordCount;
+        }
+    slAddHead(&labels, slNameNew(words[0]));
+    if (wordCount == 2)
+        slAddHead(&colors, slNameNew(words[1]));
+    }
+slReverse(&labels);
+slReverse(&colors);
+}
+
+static struct barChartCategory *createCategs(char *track, 
+                                                struct slName *labels, struct slName *colors)
+/* Populate category structs from label and color lists.  Assign rainbow if no color list */
+{
+struct barChartCategory *categs = NULL, *categ = NULL;
+int count = slCount(labels);
+struct rgbColor *rainbow = NULL;
+if (!colors)
+    {
+    rainbow = getRainbow(&saturatedRainbowAtPos, count);
+    }
+int i;
+char buf[6];
+for (i=0 ; i<count && labels; i++)
+    {
+    AllocVar(categ);
+    categ->id = i;
+    safef(buf, sizeof buf, "%d", i);
+    categ->name = cloneString(buf);
+    categ->label = labels->name;
+    if (!colors)
+        {
+        // rainbow
+        categ->color = ((rainbow[i].r & 0xff)<<16) + 
+                    ((rainbow[i].g & 0xff)<<8) + 
+                    ((rainbow[i].b & 0xff));
+        }
+    else
+        {
+        // colors from user
+        unsigned rgb = 0;
+        char *color = colors->name;
+        if (!htmlColorForCode(color, &rgb))
+            {
+            if (!htmlColorForName(color, &rgb))
+                {
+                /* try r,g,b */
+                if (index(color, ','))
+                    {
+                    unsigned char r, g, b;
+                    parseColor(color, &r, &g, &b);
+                    htmlColorFromRGB(&rgb, r, g, b);
+                    }
+                else
+                    {
+                    warn("barChart track %s unknown color %s. Must r,g,b or #ffffff or one of %s\n",
+                            track, color, slNameListToString(htmlColorNames(),','));
+                    }
+                }
+            }
+        categ->color = rgb;
+        }
+    slAddHead(&categs, categ);
+    labels = labels->next;
+    if (colors)
+        colors = colors->next;
+    }
+slReverse(&categs);
+return categs;
+}
+
+struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)
+/* Get category colors and descriptive labels.
+   Use labels in tab-sep file specified by barChartCategoryUrl setting, o/w in barChartBars setting.
+   If colors are not specified via barChartColors setting or second column in category file,
+   assign rainbow colors.  Colors are specified as #fffff or r,g,b  or html color name) */
+{
+struct slName *labels = NULL, *colors = NULL;
+char *categUrl = trackDbSetting(tdb, BAR_CHART_CATEGORY_URL);
+if (isNotEmpty(categUrl))
+    getCategsFromFile(tdb->track, categUrl, &labels, &colors);
 else
     {
-    int count = chopLine(cloneString(labels), words);
-    struct rgbColor *rainbow = getRainbow(&saturatedRainbowAtPos, count);
-    if (colors != NULL)
-        {
-        int colorCount = chopLine(cloneString(colors), colorWords);
-        if (colorCount != count)
-            warn("barChart track %s mismatch between label (%d)  and color (%d) settings", 
-                    tdb->track, count, colorCount);
-        }
-    int i;
-    char buf[6];
-    for (i=0; i<count; i++)
-        {
-        AllocVar(categ);
-        categ->id = i;
-        safef(buf, sizeof buf, "%d", i);
-        categ->name = cloneString(buf);
-        categ->label = words[i];
-        if (colors)
-            {
-            unsigned rgb;
-            char *color = colorWords[i];
-            if (htmlColorForCode(color, &rgb))
-                {
-                categ->color = rgb;
-                }
-            else if (htmlColorForName(color, &rgb))
-                {
-                categ->color = rgb;
-                }
-            else
-                warn("barChart track %s unknown color %s. Must be one of %s\n",
-                        tdb->track, color, slNameListToString(htmlColorNames(),','));
-            }
-        else
-            {
-            categ->color = ((rainbow[i].r & 0xff)<<16) + 
-                        ((rainbow[i].g & 0xff)<<8) + 
-                        ((rainbow[i].b & 0xff));
-            }
-        slAddHead(&categs, categ);
-        }
-    slReverse(&categs);
+    char *labelSetting = trackDbSetting(tdb, BAR_CHART_CATEGORY_LABELS);
+    char *colorSetting = trackDbSetting(tdb, BAR_CHART_CATEGORY_COLORS);
+    getCategsFromSettings(tdb->track, labelSetting, colorSetting, &labels, &colors);
     }
-return categs;
+return createCategs(tdb->track, labels, colors);
 }
 
 struct barChartCategory *barChartUiGetCategoryById(int id, char *database, 

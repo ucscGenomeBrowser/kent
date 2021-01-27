@@ -1414,7 +1414,7 @@ for (el = *pAccList; el != NULL; el = el->next)
     dyStringPrintf(dy, "%s</A>", acc);
 
     /* print description for item, or lacking that, the product name */
-    char description[512];
+    char description[1028];
     safef(description, sizeof(description), "%s", "n/a"); 
     char query[512];
     sqlSafef(query, sizeof(query), 

@@ -933,7 +933,7 @@ if (trackHubDatabase(db))
     if (hub != NULL)
         {
         struct trackHubGenome *hubGenome = trackHubFindGenome(hub, db);
-        struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome), *tdb;
+        struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome, NULL), *tdb;
         for (tdb = tdbList;  tdb != NULL;  tdb = tdb->next)
             {
             hashAdd(dbTblHash, tdb->table, slNameNew(tdb->table));
@@ -3932,11 +3932,13 @@ trackDbAddTableField(tdbList);
 return tdbList;
 }
 
-boolean trackDataAccessible(char *database, struct trackDb *tdb)
+boolean trackDataAccessibleHash(char *database, struct trackDb *tdb, struct hash *gbdbHash)
 /* Return TRUE if underlying data are accessible - meaning the track has either
  * a bigDataUrl with remote URL (http:// etc), a bigDataUrl with an existing local file,
  * or a database table with the same name.
- * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. */
+ * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. 
+ *
+ * if gbdbHash is not NULL, use it when looking for the file */
 {
 if (startsWith("mathWig", tdb->type))
     return TRUE; // assume mathWig data is available.  Fail at load time if it isn't
@@ -3948,7 +3950,12 @@ if (bigDataUrl != NULL)
     if (hasProtocol(bigDataUrlLocal))
         return TRUE;
     else
-        return fileExists(bigDataUrlLocal);
+        {
+        if (gbdbHash == NULL)
+            return fileExists(bigDataUrlLocal);
+        else
+            return hashLookup(gbdbHash, bigDataUrlLocal) != NULL;
+        }
     }
 else
     {
@@ -3961,6 +3968,16 @@ else
     return (hTableForTrack(database, tdb->table) != NULL);
     }
 }
+
+boolean trackDataAccessible(char *database, struct trackDb *tdb)
+/* Return TRUE if underlying data are accessible - meaning the track has either
+ * a bigDataUrl with remote URL (http:// etc), a bigDataUrl with an existing local file,
+ * or a database table with the same name.
+ * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. */
+{
+return trackDataAccessibleHash(database, tdb, NULL);
+}
+
 
 static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 	       boolean privateHost, struct trackDb **tdbRetList)
@@ -5842,6 +5859,29 @@ if (seqAcc == NULL)
 return seqAcc;
 }
 
+char *abbreviateRefSeqSummary(char *summary) 
+/* strip off the uninformative parts from the RefSeq Summary text: the repetitive note
+ * about the publication subset and the Evidence-Data-Notes */
+{
+if (!summary)
+    return summary;
+
+char *pattern =
+"Publication Note:  This RefSeq record includes a subset "
+"of the publications that are available for this gene. "
+"Please see the Gene record to access additional publications.";
+stripString(summary, pattern);
+
+// remove anything after ##Evidence-Data-START##
+char *findStr = "##Evidence-Data-START##";
+char *start = memMatch(findStr, strlen(findStr), summary, strlen(summary));
+if (start)
+    *start = 0;
+
+return summary;
+}
+
+
 char *hdbGetMasterGeneTrack(char *knownDb)
 /* Get the native gene track for a knownGene database. */
 {
@@ -5865,6 +5905,12 @@ char *hdbDefaultKnownDb(char *db)
 {
 static char *checkedDb = NULL;
 static char *knownDb = NULL;
+
+if (trackHubDatabase(db))
+    return db;
+
+if (cfgOptionBooleanDefault("ignoreDefaultKnown", FALSE))
+    return db;
 
 if (sameOk(checkedDb, db))            // if we already know it, return it.
     return knownDb;

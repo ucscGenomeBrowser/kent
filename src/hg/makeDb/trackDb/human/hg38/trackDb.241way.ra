@@ -1,0 +1,111 @@
+track cons241way
+compositeTrack on
+shortLabel 241way
+longLabel Vertebrate Multiz Alignment & Conservation (241 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+# subGroup2 clade Clade glires=Glires euarchontoglires=Euarchontoglires placental=Placental all=All_species
+subGroup2 clade Clade primate=Primate carnivore=Carnivore cetartiodactyla=Cetartiodactyla chiroptera=Chiroptera rodents=Rodents vert=Vertebrates all=All_species
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility hide
+type bed 4
+group compGeno
+priority 1
+
+    track cons241wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons241way
+
+        track cactus241way
+        subTrack cons241wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 241 Vertebrates
+        subGroups view=align clade=vert
+        noInherit on
+#        irows on
+#        summary cactus241waySummary
+#        frames cactus241wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault hg38
+        speciesGroups Primate Carnivore Cetartiodactyla Chiroptera Rodents Vertebrates
+        sGroup_Primate Pan_troglodytes Pan_paniscus Gorilla_gorilla Pongo_abelii nomLeu3 Macaca_fascicularis Macaca_mulatta Papio_anubis Macaca_nemestrina Mandrillus_leucophaeus Nasalis_larvatus Erythrocebus_patas Cercopithecus_neglectus Chlorocebus_sabaeus Semnopithecus_entellus Rhinopithecus_roxellana Rhinopithecus_bieti Pygathrix_nemaeus colAng1 Piliocolobus_tephrosceles Cercocebus_atys Pithecia_pithecia Ateles_geoffroyi Aotus_nancymaae Callicebus_donacophilus Alouatta_palliata Cebus_albifrons cebCap1 Saguinus_imperator saiBol1 Callithrix_jacchus Daubentonia_madagascariensis Lemur_catta Eulemur_fulvus Eulemur_flavifrons Propithecus_coquereli Indri_indri Cheirogaleus_medius Mirza_coquereli Microcebus_murinus Nycticebus_coucang otoGar3
+        sGroup_Carnivore Neomonachus_schauinslandi Leptonychotes_weddellii Mirounga_angustirostris odoRosDiv1 Zalophus_californianus Ursus_maritimus Ailuropoda_melanoleuca Panthera_tigris Panthera_onca Panthera_pardus Acinonyx_jubatus Puma_concolor Felis_nigripes Cryptoprocta_ferox Felis_catus Ailurus_fulgens Lycaon_pictus Canis_lupus_familiaris Canis_lupus Vulpes_lagopus Hyaena_hyaena Paradoxurus_hermaphroditus Mellivora_capensis Enhydra_lutris Pteronura_brasiliensis Helogale_parvula Mungos_mungo Spilogale_gracilis Suricata_suricatta Mustela_putorius
+        sGroup_Cetartiodactyla Eubalaena_japonica Eschrichtius_robustus Balaenoptera_bonaerensis Balaenoptera_acutorostrata Ziphius_cavirostris Monodon_monoceros Delphinapterus_leucas Mesoplodon_bidens orcOrc1 Lipotes_vexillifer Tursiops_truncatus Neophocaena_asiaeorientalis Phocoena_phocoena Platanista_gangetica Inia_geoffrensis Kogia_breviceps Hippopotamus_amphibius Camelus_dromedarius Camelus_ferus Camelus_bactrianus Vicugna_pacos Sus_scrofa Giraffa_tippelskirchi Okapia_johnstoni Elaphurus_davidianus Catagonus_wagneri Bubalus_bubalis Rangifer_tarandus Odocoileus_virginianus Bison_bison bosMut1 Bos_indicus Bos_taurus Moschus_moschiferus Pantholops_hodgsonii Beatragus_hunteri Ovis_canadensis Ovis_aries Antilocapra_americana Hemitragus_hylocrius Ammotragus_lervia Capra_hircus Capra_aegagrus Saiga_tatarica Tragulus_javanicus
+        sGroup_Chiroptera Hipposideros_armiger Rhinolophus_sinicus pteAle1 Pteropus_vampyrus Tadarida_brasiliensis Hipposideros_galeritus eidHel1 Miniopterus_schreibersii Miniopterus_natalensis Macroglossus_sobrinus Rousettus_aegyptiacus Eptesicus_fuscus myoBra1 myoLuc2 Myotis_myotis myoDav1 Mormoops_blainvillei Megaderma_lyra ptePar1 Desmodus_rotundus Craseonycteris_thonglongyai Anoura_caudifer Murina_feae Tonatia_saurophila Carollia_perspicillata Pipistrellus_pipistrellus Micronycteris_hirsuta Noctilio_leporinus Lasiurus_borealis Artibeus_jamaicensis
+        sGroup_Rodents Glis_glis Graphiurus_murinus Xerus_inauris Spermophilus_dauricus Castor_canadensis speTri2 Aplodontia_rufa Marmota_marmota Hystrix_cristata Heterocephalus_glaber Muscardinus_avellanarius Cuniculus_paca chiLan1 Dasyprocta_punctata fukDam1 Ctenodactylus_gundi Dinomys_branickii Dolichotis_patagonum Hydrochoerus_hydrochaeris Cavia_tschudii Cavia_porcellus cavApe1 dipOrd2 Dipodomys_stephensi Nannospalax_galili Thryonomys_swinderianus Octodon_degus Allactaga_bullata Petromus_typicus Perognathus_longimembris Zapus_hudsonius Jaculus_jaculus Ctenomys_sociabilis Capromys_pilorides Myocastor_coypus Cricetomys_gambianus Peromyscus_maniculatus Onychomys_torridus Cricetulus_griseus Ellobius_talpinus Mesocricetus_auratus Ellobius_lutescens Psammomys_obesus Meriones_unguiculatus micOch1 Ondatra_zibethicus Acomys_cahirinus Sigmodon_hispidus Mus_musculus Mus_caroli Mus_spretus Mus_pahari Rattus_norvegicus
+        sGroup_Vertebrates Galeopterus_variegatus Ceratotherium_simum_cottoni Ceratotherium_simum Diceros_bicornis Dicerorhinus_sumatrensis Tapirus_indicus Tapirus_terrestris Equus_asinus Equus_przewalskii Equus_caballus Tupaia_tana tupChi1 Trichechus_manatus Loxodonta_africana Manis_pentadactyla Manis_javanica Choloepus_didactylus Choloepus_hoffmanni Tolypeutes_matacus Chaetophractus_vellerosus Oryctolagus_cuniculus Lepus_americanus Orycteropus_afer Dasypus_novemcinctus Myrmecophaga_tridactyla Tamandua_tetradactyla Solenodon_paradoxus Scalopus_aquaticus Procavia_capensis Heterohyrax_brucei Chrysochloris_asiatica Uropsilus_gracilis Condylura_cristata Ochotona_princeps Echinops_telfairi eleEdw1 Erinaceus_europaeus sorAra2 Microgale_talazaci Crocidura_indochinensis
+ itemFirstCharCase noChange
+        treeImage phylo/hg38_241way.png
+        priority 145
+
+    # PhyloP conservation
+    track cons241wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons241way
+    viewLimits -20.0:9.869
+    viewLimitsMax -20:0.869
+
+        track phyloP241way
+        subTrack cons241wayViewphyloP on
+        subGroups view=phyloP clade=all
+        shortLabel Cons 241 Verts
+        longLabel 241 vertebrates Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -20 7.532
+        maxHeightPixels 100:50:11
+        viewLimits -4.5:4.88
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons241wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons241way
+
+        track phastCons241way
+        subTrack cons241wayViewphastcons off
+        subGroups view=phastcons clade=all
+        shortLabel Cons 241 Verts
+        longLabel 241 vertebrates conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons241wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons241way
+
+        track phastConsElements241way
+        subTrack cons241wayViewelements off
+        subGroups view=elements clade=all
+        shortLabel 241 Vert. El
+        longLabel 241 vertebrates Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

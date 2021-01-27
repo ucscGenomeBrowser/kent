@@ -335,13 +335,11 @@ extras = (struct barChartTrack *)tg->extraUiData;
 extras->colors = getCategoryColors(tg);
 
 struct trackDb *tdb = tg->tdb;
-extras->doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_LOG_TRANSFORM, 
-                                                BAR_CHART_LOG_TRANSFORM_DEFAULT);
+extras->doLogTransform = barChartIsLogTransformed(cart, tdb->track, tdb);
 extras->maxMedian = barChartUiMaxMedianScore(tdb);
 extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tdb, FALSE, 
                                                         BAR_CHART_NO_WHITEOUT, BAR_CHART_NO_WHITEOUT_DEFAULT);
-extras->maxViewLimit = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
-                                BAR_CHART_MAX_VIEW_LIMIT, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
+extras->maxViewLimit = barChartCurViewMax(cart, tg->track, tg->tdb);
 extras->maxGraphSize = trackDbSettingClosestToHomeOrDefault(tdb, 
                                 BAR_CHART_MAX_GRAPH_SIZE, BAR_CHART_MAX_GRAPH_SIZE_DEFAULT);
 extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
@@ -378,7 +376,21 @@ if (isNotEmpty(setting))
         extras->winMedGraph = atoi(words[1]);
         }
     }
-int scale = (getCategoryCount(tg) < 15 ? 2 : 1);
+int barCount = getCategoryCount(tg);
+double scale = 1.0;
+if (barCount <= 20)
+    scale = 2.5;
+else if (barCount <= 40)
+    scale = 1.6;
+else if (barCount <= 60)
+    scale = 1.0;
+else if (barCount <= 120)
+    scale = 0.9;
+else if (barCount <= 200)
+    scale = 0.75;
+else 
+    scale = 0.5;
+
 long winSize = virtWinBaseCount;
 if (winSize < extras->winMaxGraph && 
         sameString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_LARGE))
@@ -403,6 +415,17 @@ else
     extras->padding = MIN_GRAPH_PADDING;
     extras->maxHeight = tl.fontHeight * 4;
     }
+if (extras->barWidth == 1 && extras->padding == 1)
+   {
+   extras->barWidth = 2;
+   extras->padding = 0;
+   }
+if (extras->barWidth < 1)
+    {
+    extras->barWidth = 1;
+    extras->padding = 0;
+    }
+
 extras->modelHeight =  extras->boxModelHeight + 3;
 extras->margin = 1;
 extras->squishHeight = tl.fontHeight - tl.fontHeight/2;
@@ -675,7 +698,7 @@ for (categ = categs; categ != NULL; categ = categ->next, i++)
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
                                         extras->maxHeight, extras->doLogTransform);
-    mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, extras->barWidth, height, 
+    mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, extras->barWidth + extras->padding, height, 
                         tg->track, mapItemName, chartMapText(tg, categ, expScore));
     x1 = x1 + extras->barWidth + extras->padding;
     }

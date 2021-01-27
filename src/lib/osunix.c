@@ -787,4 +787,3 @@ int err = symlink(oldName, newName);
 if (err < 0)
      errnoAbort("Couldn't make symbolic link from %s to %s\n", oldName, newName);
 }
-

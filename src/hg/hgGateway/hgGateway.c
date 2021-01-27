@@ -209,10 +209,21 @@ static void setDb(struct cartJson *cj, struct hash *paramHash)
 {
 char *db = cartJsonRequiredParam(paramHash, "db", cj->jw, "setDb");
 char *hubUrl = cartJsonOptionalParam(paramHash, "hubUrl");
+// we want to go back to the most recent position on this db
+// so push "lastDbPos" into the cart so cartGetPosition() can find it
+char *maybePosition = cartJsonOptionalParam(paramHash, "position");
+if (maybePosition)
+    cartSetString(cart, "position", maybePosition);
 int taxId = hTaxId(db);
-writeFindPositionInfo(cj->jw, db, taxId, hubUrl, hDefaultPos(db));
+
+// look up the old position the user was browsing (if they came here from
+// a hub connection for instance) and start them there, otherwise use
+// the assembly default position
+char *maybeLastPos = cartGetPosition(cart, db, NULL);
+char *pos = maybeLastPos != NULL ? maybeLastPos : hDefaultPos(db);
+writeFindPositionInfo(cj->jw, db, taxId, hubUrl, pos);
 cartSetString(cart, "db", db);
-cartSetString(cart, "position", hDefaultPos(db));
+cartSetString(cart, "position", pos);
 }
 
 static void getUiState(struct cartJson *cj, struct hash *paramHash)
@@ -702,9 +713,10 @@ struct aHubMatch
     char *shortLabel;          // hub shortLabel
     char *hubUrl;              // hub url
     char *aDb;                 // assembly db hosted by hub
+    char *label;               // label for this db
     };
 
-static struct aHubMatch *aHubMatchNew(char *shortLabel, char *hubUrl, char *aDb)
+static struct aHubMatch *aHubMatchNew(char *shortLabel, char *hubUrl, char *aDb, char *label)
 /* Allocate and return a description of an assembly hub db. */
 {
 struct aHubMatch *match;
@@ -712,32 +724,42 @@ AllocVar(match);
 match->shortLabel = cloneString(shortLabel);
 match->hubUrl = cloneString(hubUrl);
 match->aDb = cloneString(aDb);
+match->label = cloneString(label);
 return match;
 }
 
-static struct hash *unpackHubDbUrlList(struct slName *hubDbUrlList)
-/* hubDbUrlList contains strings like "db,hubUrl" -- split on comma and return a hash of
+static struct hash *unpackHubDbUrlList(struct slName *hubDbUrlList, struct hash **labelHash)
+/* hubDbUrlList contains strings like "db\tlabel\thubUrl" -- split on tab and return a hash of
  * hubUrl to one or more dbs. */
 {
 struct hash *hubToDb = hashNew(0);
+struct hash *dbToLabel = hashNew(0);
 struct slName *hubDbUrl;
 for (hubDbUrl = hubDbUrlList;  hubDbUrl != NULL;  hubDbUrl = hubDbUrl->next)
     {
-    char *comma = strchr(hubDbUrl->name, ',');
-    if (comma)
+    char *tab = strchr(hubDbUrl->name, '\t');
+    if (tab)
         {
         char *db = hubDbUrl->name;
-        *comma = '\0';
-        char *hubUrl = comma+1;
-        struct hashEl *hel = hashLookup(hubToDb, hubUrl);
-        struct slName *dbList = hel ? hel->val : NULL;
-        slAddHead(&dbList, slNameNew(db));
-        if (hel == NULL)
-            hashAdd(hubToDb, hubUrl, dbList);
-        else
-            hel->val = dbList;
+        *tab = '\0';
+        char *label = tab+1;
+        char *url = strchr(label, '\t');
+        if (url)
+            {
+            *url = '\0';
+            char *hubUrl = url+1;
+            struct hashEl *hel = hashLookup(hubToDb, hubUrl);
+            struct slName *dbList = hel ? hel->val : NULL;
+            slAddHead(&dbList, slNameNew(db));
+            if (hel == NULL)
+                hashAdd(hubToDb, hubUrl, dbList);
+            else
+                hel->val = dbList;
+            }
+            hashAdd(dbToLabel, db, label);
         }
     }
+*labelHash = dbToLabel;
 return hubToDb;
 }
 
@@ -754,7 +776,8 @@ struct hash *localDbs = hashNew(0);
 struct dbDb *dbDb;
 for (dbDb = dbDbList;  dbDb != NULL;  dbDb = dbDb->next)
     hashStore(localDbs, dbDb->name);
-struct hash *hubToDb = unpackHubDbUrlList(hubDbUrlList);
+struct hash *dbLabel = NULL;
+struct hash *hubToDb = unpackHubDbUrlList(hubDbUrlList, &dbLabel);
 // Build up a query to find shortLabel and dbList for each hubUrl.
 struct dyString *query = sqlDyStringCreate("select shortLabel,hubUrl,dbList from %s "
                                            "where hubUrl in (",
@@ -785,14 +808,20 @@ while ((row = sqlNextRow(sr)) != NULL)
         // top-level hub match, no specific db match; add all of hub's assembly dbs
         for (dbName = hubDbList;  dbName != NULL;  dbName = dbName->next)
             if (! hashLookup(localDbs, dbName->name))
-                slAddHead(&aHubMatchList, aHubMatchNew(shortLabel, hubUrl, dbName->name));
+                slAddHead(&aHubMatchList, aHubMatchNew(shortLabel, hubUrl, dbName->name, NULL));
         }
     else
         {
         // Add matching assembly dbs that are found in hubDbList
         for (dbName = matchDbList;  dbName != NULL;  dbName = dbName->next)
             if (! hashLookup(localDbs, dbName->name) && slNameInList(hubDbList, dbName->name))
-                slAddHead(&aHubMatchList, aHubMatchNew(shortLabel, hubUrl, dbName->name));
+                {
+                char *label = hashFindVal(dbLabel, dbName->name);
+                if (label)
+                    slAddHead(&aHubMatchList, aHubMatchNew(shortLabel, hubUrl, dbName->name, label));
+                else
+                    slAddHead(&aHubMatchList, aHubMatchNew(shortLabel, hubUrl, dbName->name, NULL));
+                }
         }
     }
 slReverse(&aHubMatchList);
@@ -817,7 +846,7 @@ for (aHubMatch = aHubMatchList;  aHubMatch != NULL;  aHubMatch = aHubMatch->next
     jsonWriteString(jw, "category", category);
     jsonWriteString(jw, "value", aHubMatch->aDb);
     // Use just the db as label, since shortLabel is included in the category label.
-    jsonWriteString(jw, "label", aHubMatch->aDb);
+    jsonWriteString(jw, "label", aHubMatch->label);
     jsonWriteObjectEnd(jw);
     }
 }
@@ -832,7 +861,7 @@ struct sqlConnection *conn = hConnectCentral();
 if (sqlTableExists(conn, hubSearchTableName))
     {
     char query[1024];
-    sqlSafef(query, sizeof(query), "select distinct(concat(db, concat(',', hubUrl))) from %s "
+    sqlSafef(query, sizeof(query), "select distinct(concat(db, concat(concat('\t', label), concat('\t', hubUrl)))) from %s "
              "where track = '' and "
              "(db like '%s%%' or label like '%%%s%%' or text like '%s%%')",
              hubSearchTableName, term, term, term);
@@ -841,7 +870,7 @@ if (sqlTableExists(conn, hubSearchTableName))
     if (aHubMatchList == NULL)
         {
         // Try a looser query
-        sqlSafef(query, sizeof(query), "select distinct(concat(db, concat(',', hubUrl))) from %s "
+        sqlSafef(query, sizeof(query), "select distinct(concat(db, concat(concat('\t', label), concat('\t', hubUrl))) from %s "
                  "where track = '' and text like '%% %s%%'",
                  hubSearchTableName, term);
         hubDbUrlList = sqlQuickList(conn, query);

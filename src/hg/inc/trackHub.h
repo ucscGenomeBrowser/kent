@@ -79,9 +79,10 @@ struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName
 /* Return trackHubGenome of given name associated with hub.  Return NULL if no
  * such genome. */
 
-struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome);
+struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles);
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
- * types.  Do a few other quick checks to catch errors early. */
+ * types.  Do a few other quick checks to catch errors early. If incFiles is not NULL,
+ * put the list of included files in there. */
 
 void trackHubAddNamePrefix(char *hubName, struct trackDb *tdbList);
 /* For a hub named "xyz" add the prefix "hub_xyz_" to each track and parent field. 
@@ -207,5 +208,10 @@ void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
     struct trackDb *tdb);
 /* Check remote file exists and is of correct type. Wrap this in error catcher */
 
+struct dbDb *trackHubGetPcrServers();
+/* Look through attached trackHubs to see which of them have "isPcr" line in them. */
+
+boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort);
+/* Get the isPcr params from a trackHub genome. */
 #endif /* TRACKHUB_H */
 

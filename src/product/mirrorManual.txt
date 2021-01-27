@@ -6,7 +6,7 @@ The genome browser requires only Apache and MySQL and uses these directories:
 
 - static html files: we typically keep them under /usr/local/apache/htdocs and
   configure Apache to load them from there, to avoid conflicts with the 
-  Linux distribution's default location /var/www/html
+  distribution of the Linux default location /var/www/html
 - MySQL databases: most of them are read-only, except the `hgcentral` database
   which is read-write. Most linux distributions keep these under /var/lib/mysql
 - static genome data files in /gbdb/
@@ -268,25 +268,24 @@ Confirm the following:
 
     These copies may have different db.user specification
     to allow developers write access to the database.
-    See also: README.mysql.setup
 
-10.  Load databases of interest.  See also: README.QuickStart
+10.  Load databases of interest.  See also: 
 
-    src/product/scripts/activeDbList.sh
-    src/product/scripts/minimal.db.list.txt
-    src/product/scripts/loadDb.sh
+         src/product/scripts/activeDbList.sh
+         src/product/scripts/minimal.db.list.txt
+         src/product/scripts/loadDb.sh
 
-    And discussion in scripts/README about whether you can use directly
-    the MySQL binary database files, or if you need to download goldenPath
-    database text dumps and load them into the database.
-    
-    An alternative to loading the database tables from text files,
-    is to directly rsync the MySQL tables themselves and place them
-    in your MySQL /var/ directory.  These tables are much larger
-    than the text files due to the sizes of indexes created during a
-    table load, but it can save a lot of time since the data loading
-    step is quite compute intensive.  A typical rsync command for an
-    entire database (e.g. ce4) would be something like:
+     And discussion in scripts/README about whether you can use directly
+     the MySQL binary database files, or if you need to download goldenPath
+     database text dumps and load them into the database.
+     
+     An alternative to loading the database tables from text files,
+     is to directly rsync the MySQL tables themselves and place them
+     in your MySQL /var/ directory.  These tables are much larger
+     than the text files due to the sizes of indexes created during a
+     table load, but it can save a lot of time since the data loading
+     step is quite compute intensive.  A typical rsync command for an
+     entire database (e.g. ce4) would be something like:
 
         rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/
 
@@ -295,15 +294,15 @@ Confirm the following:
     Construct symlinks in your MySQL data directory to use database
     names: go proteome uniProt for these database directories:
 
-        $ ls -og proteome go uniProt
-        lrwxrwxrwx 1  8 Feb 26 11:39 go -> go140213
-        lrwxrwxrwx 1 14 Mar 27 12:01 proteome -> proteins140122
-        lrwxrwxrwx 1  8 Mar 27 12:01 uniProt -> sp140122
-
-        $ ls -ld go140213 proteins140122 sp140122
-        drwx------ 2 mysql mysql 4096 Feb 26 10:57 go140213
-        drwx------ 2 mysql mysql 4096 Aug 19 08:08 proteins140122
-        drwx------ 2 mysql mysql 4096 Mar 26 13:01 sp140122
+         $ ls -og proteome go uniProt
+         lrwxrwxrwx 1  8 Feb 26 11:39 go -> go140213
+         lrwxrwxrwx 1 14 Mar 27 12:01 proteome -> proteins140122
+         lrwxrwxrwx 1  8 Mar 27 12:01 uniProt -> sp140122
+ 
+         $ ls -ld go140213 proteins140122 sp140122
+         drwx------ 2 mysql mysql 4096 Feb 26 10:57 go140213
+         drwx------ 2 mysql mysql 4096 Aug 19 08:08 proteins140122
+         drwx------ 2 mysql mysql 4096 Mar 26 13:01 sp140122
 
      These file names are data stamped YYMMDD to indicate changes
      over time as they are updated with new builds of the UCSC gene track.
@@ -317,28 +316,28 @@ Confirm the following:
 13.  The browser should now appear at the URL:
 	http://localhost/
 
-	Check your Apache error_log file for hints to solving problems.
+     Check your Apache error_log file for hints to solving problems.
 
 14.  BLAT server setup: The blatServers table in the database hgcentral needs to
 	have a fully qualified host name specified in the 'host' column.
 
-    Educational and non-profit institutions are allowed to use
-    blat free of charge.  Commercial installations of the browser
-    require a license for blat.  See also: <http://kentinformatics.com/index.html>
-    and: <http://genome.ucsc.edu/license/>
-    In the source tree: src/gfServer/README.blat
+     Educational and non-profit institutions are allowed to use
+     blat free of charge.  Commercial installations of the browser
+     require a license for blat.  See also: <http://kentinformatics.com/index.html>
+     and: <http://genome.ucsc.edu/license/>
+     In the source tree: src/gfServer/README.blat
 
 15.  Useful links:
 
-    <http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ>
-
-    There are numerous README files in the source tree on
-    a variety of specific subjects, e.g.:
-
-        ./src/README
-        ./src/product/README.*
-        ./src/hg/makeDb/trackDB/README
-        ./src/hg/makeDb/doc/make*.txt
+     <http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ>
+ 
+     There are numerous README files in the source tree on
+     a variety of specific subjects, e.g.:
+ 
+         ./src/README
+         ./src/product/README.*
+         ./src/hg/makeDb/trackDB/README
+         ./src/hg/makeDb/doc/make*.txt
 
 16. Apache configuration:
 
@@ -495,7 +494,7 @@ command which can be built in the source-tree at:
 	kent/src/hg/hgsql/
 
     This 'hgsql' command provides a convenient front-end to
-    the standard 'mysql' command by reading the user's ~/.hg.conf
+    the standard 'mysql'' command by reading the user's ~/.hg.conf
     file to provide access to the browser databases with the
     appropriate identity.  Each user creates a ~/.hg.conf file
     (same format as the above mentioned cgi-bin/hg.conf file)
@@ -674,7 +673,8 @@ command which can be built in the source-tree at:
     In later versions of MySQL, it is a requirement that the CN of the CA cert must DIFFER 
     from the CN of the user and server certs.
 
-    Further MySQL SSL documentation is available from <https://dev.mysql.com/doc/refman/5.6/en/ssl-connections.html>
+    Further MySQL SSL documentation is available from 
+<https://dev.mysql.com/doc/refman/5.6/en/creating-ssl-files-using-openssl.html> 
 
 # Adding a custom genome to the browser
     
@@ -810,7 +810,7 @@ discusses the steps required to enable this function.
     in the /cgi-bin/hg.conf file, for example a host machine called
     "ctdbhost":
 
-    customTracks.host=ctdbHost
+        customTracks.host=ctdbHost
 
     The database name used on this host is fixed at customTrash which is a
     define in the source tree file hg/inc/customTrack.h
@@ -1085,7 +1085,7 @@ requests rather than POST.  Try adding &formMethod=GET to an URL.
 Not all forms pay attention to that input, but when they do it
 generally looks like this:
 
-hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",
+    hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",
     getScriptName(), cartUsualString(cart, "formMethod", "POST"));
 
 If you add &formMethod=GET and a subsequently fetched form is still
@@ -1105,9 +1105,9 @@ UCSC.  This is useful for mirror sites that have their own customizations in
 the source tree for local circumstances.
  
 Install Git software version 1.6.2.2 or later. See the Git Community Handbook
- installation (<http://book.git-scm.com/2_installing_git.html>) and setup
- (<http://book.git-scm.com/2_setup_and_initialization.html>) instructions, as well
- as our Installing git (<http://genomewiki.ucsc.edu/index.php/Installing_git>)
+ installation (<https://git-scm.com/book/en/v2/Getting-Started-Installing-Git>) and setup
+ (<href='https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup>) instructions, as well
+ as our Installing Git (<http://genomewiki.ucsc.edu/index.php/Installing_git>)
  Genomewiki page.
 
 Start an initial Git local repository:
@@ -1154,14 +1154,14 @@ bigWig or bigBed data via custom track bigDataUrl.
 
 One must add the setting "httpProxy", "httpsProxy", "ftpProxy" to hg.conf
 
-httpProxy=http://someProxyServer:3128
-httpsProxy=http://someProxyServer:3128
-ftpProxy=ftp://127.0.0.1:2121
+    httpProxy=http://someProxyServer:3128
+    httpsProxy=http://someProxyServer:3128
+    ftpProxy=ftp://127.0.0.1:2121
 
 If the proxy server requires BASIC authentication
 
-httpProxy=http://user:password@someProxyServer:3128
-httpsProxy=http://user:password@someProxyServer:3128
+    httpProxy=http://user:password@someProxyServer:3128
+    httpsProxy=http://user:password@someProxyServer:3128
 
 where user and password may need URL-encoding
 if they contain special characters such as
@@ -1171,7 +1171,7 @@ If you wish to exclude domains from proxying,
 create a comma-separated list of domain-suffixes.  
 If a domain ends with an entry from this list, the proxy will be skipped.
 
-noProxy=ucsc.edu,mit.edu
+    noProxy=ucsc.edu,mit.edu
 
 
 (The httpProxy and httpsProxy URLs should use http protocol, not https.
@@ -1417,3 +1417,52 @@ Steps to set up CRAM track support:
     repository at kent/src/product/scripts/fetchCramReference.sh.  The account
     that runs this script must have read/write permissions for the cramRef/,
     cramRef/pending/, and cramRef/error/ directories.
+
+# Using FreeType font support for anti-aliased text
+
+The Genome Browser can use a set of hard-coded Type1 fonts for text display
+in hgTracks.   The fonts are NOT distributed as part of the Genome Browser files
+but they exist natively on the UNIX systems we use in our production environment.
+To support FreeType font drawing on your system you may need to install these files if they
+are not already present. On most systems, they exist in one of three directories:
+
+    /usr/share/X11/fonts/urw-fonts
+    /usr/share/fonts/default/Type1
+    /usr/share/fonts/type1/gsfonts
+
+To turn on the FreeType font rendering you need to add this line to your hg.conf file:
+
+    freeType=on
+
+By default, the Genome Browser looks in the directory 
+
+    /usr/share/fonts/default/Type1 
+
+for the font files it expects to find. If you have these fonts in a different directory, you need
+to add this line to your hg.conf file:
+
+    freeTypeDir='<apache accessible directory path with fonts in it>'
+
+The names of the font files that the Genome Browser expects and their md5sums are in the following table:
+
+    5624bc04bbd862287bda3c44b15e90d6  a010013l.pfb
+    6883f53d0d140f972480f179bb5e4e3b  a010015l.pfb
+    db21f79bac990fa7e3de6d4cc6f54020  a010033l.pfb
+    c3d0c3af6bc183010204ca923fb98e83  a010035l.pfb
+    33265074c9c45c356f90de9cc47259b3  n019003l.pfb
+    9d07b8658622c2e0127628c87fdb9661  n019004l.pfb
+    df59ecc7bd232d2355786fd644f13baa  n019023l.pfb
+    9f2d4377d9eea95dfdfa705c83a39464  n019024l.pfb
+    8f75382bd2620a20aaeb06ab8c591e8f  n019043l.pfb
+    28bb40d1700909b2509e2125a1963e2c  n019044l.pfb
+    adf4d5565bec1170f0a5810c6984ff55  n019063l.pfb
+    57e1a49c39a546c2883375df12111816  n019064l.pfb
+    84e347c88eff2e77ed40b020b457bafe  n021003l.pfb
+    8721c1175d907d7d484bdaa91d4533ad  n021004l.pfb
+    eef0367afaa10b929e528c40c980b941  n021023l.pfb
+    7af41ff3536fadcdc27eb9e5cc1c32d3  n021024l.pfb
+    db95b702b81c12df1f91d15c8a6c3191  n022003l.pfb
+    e97c9af68414fabe157af711b7691df7  n022004l.pfb
+    f13fb8e581426a1ffa5fc12b10ad0f34  n022023l.pfb
+    f3cd9244150f086434b62d5c5bb559b0  n022024l.pfb
+    30aef717b7c68a6b6b7760b764fbd01c  z003034l.pfb

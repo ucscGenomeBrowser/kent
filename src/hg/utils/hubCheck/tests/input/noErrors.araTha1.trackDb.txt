@@ -1,0 +1,11 @@
+track cpgIslandExt
+type bigBed 4 +
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+color 0,100,0
+altColor 128,228,128
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.cpgIslandExt.bb
+priority 90
+html http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/trackDescriptions/cpgIslandExt
+group regulation
+shortLabel CpG Islands
+visibility pack
