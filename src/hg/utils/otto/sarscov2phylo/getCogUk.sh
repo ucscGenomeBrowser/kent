@@ -17,6 +17,7 @@ cd $ottoDir/cogUk.$today
 
 curl -S -s $cogUrlBase/cog_all.fasta | xz -T 50 > cog_all.fasta.xz
 curl -S -s $cogUrlBase/cog_metadata.csv > cog_metadata.csv
+curl -S -s $cogUrlBase/cog_global_tree.newick > cog_global_tree.newick
 
 tail -n +2 cog_metadata.csv \
 | awk -F, '{print $1 "\t" $4;}' | sort > cogUkToDate
