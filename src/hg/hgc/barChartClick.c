@@ -459,8 +459,9 @@ printf("<svg width=\"%g\" height=\"%g\">\n", totalWidth, totalHeight);
 
 /* Draw header */
 printf("<rect width=\"%g\" height=\"%g\" style=\"fill:#%s\"/>\n", totalWidth, headerHeight, HG_COL_HEADER);
+char *sampleLabel = trackDbSettingOrDefault(tdb, "barChartLabel", "Sample");
 printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n", 
-    labelOffset, innerHeight-1, innerHeight-1, "Sample");
+    labelOffset, innerHeight-1, innerHeight-1, sampleLabel);
 if (statsSize > 0.0)
     printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n", 
 	statsRightOffset, innerHeight-1, innerHeight-1, "N");
