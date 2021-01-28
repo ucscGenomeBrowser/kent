@@ -27,7 +27,6 @@ include rectumWang.ra
 include placentaVentoTormo.ra
 include singleCellMerged.ra
 
-include gencodeV35.ra alpha
 include liftOver.ra
 include exomeProbesets.ra alpha
 
@@ -706,6 +705,7 @@ include trackDb.cloneEnd.ra
 include hg38Patch11.ra alpha
 
 include knownGene.ra beta,public
+include knownGene.alpha.ra alpha
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
