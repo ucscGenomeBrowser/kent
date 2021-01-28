@@ -6564,6 +6564,19 @@ tg->itemColor   = knownGeneColor;
 void knownGeneMethods(struct track *tg)
 /* Make track of known genes. */
 {
+boolean isGencode3 = trackDbSettingOn(tg->tdb, "isGencode3");
+
+// knownGene is now a bigBed track
+if (isGencode3)
+    {
+    char *words[3];
+    words[0] = "bigGenePred";
+    words[1] = "12";
+    words[2] = 0;
+    complexBedMethods(tg, tg->tdb, TRUE, 2, words);
+    return;
+    }
+
 /* use loadGenePredWithName2 instead of loadKnownGene to pick up proteinID */
 tg->loadItems   = loadKnownGene;
 tg->itemName    = knownGeneName;
