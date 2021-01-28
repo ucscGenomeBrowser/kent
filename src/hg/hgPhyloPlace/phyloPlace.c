@@ -1120,10 +1120,10 @@ if (isFasta)
     puts("<th>Bases aligned"
          TOOLTIP("Number of bases aligned to reference NC_045512.2 Wuhan/Hu-1, including "
                  "matches and mismatches")
-         "</th>\n<th>Insertions"
+         "</th>\n<th>Inserted bases"
          TOOLTIP("Number of bases in aligned portion of uploaded sequence that are not present in "
                  "reference NC_045512.2 Wuhan/Hu-1")
-         "</th>\n<th>Deletions"
+         "</th>\n<th>Deleted bases"
          TOOLTIP("Number of bases in reference NC_045512.2 Wuhan/Hu-1 that are not "
                  "present in aligned portion of uploaded sequence")
          "</th>");
@@ -1335,22 +1335,45 @@ if (seqInfoList)
                 dyStringPrintf(dy, "bases %d - %d align to reference bases %d - %d",
                                psl->qStart+1, psl->qEnd, psl->tStart+1, psl->tEnd);
                 printTooltip(dy->string);
+                int insBases = 0, insCount = 0, delBases = 0, delCount = 0;
+                if (psl->qBaseInsert || psl->tBaseInsert)
+                    {
+                    // Tally up actual insertions and deletions; ignore skipped N bases.
+                    int ix;
+                    for (ix = 0;  ix < psl->blockCount - 1;  ix++)
+                        {
+                        int qGapStart = psl->qStarts[ix] + psl->blockSizes[ix];
+                        int qGapEnd = psl->qStarts[ix+1];
+                        int qGapLen = qGapEnd - qGapStart;
+                        int tGapStart = psl->tStarts[ix] + psl->blockSizes[ix];
+                        int tGapEnd = psl->tStarts[ix+1];
+                        int tGapLen = tGapEnd - tGapStart;
+                        if (qGapLen > tGapLen)
+                            {
+                            insCount++;
+                            insBases += qGapLen - tGapLen;
+                            }
+                        else if (tGapLen > qGapLen)
+                            {
+                            delCount++;
+                            delBases += tGapLen - qGapLen;
+                            }
+                        }
+                    }
                 printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(psl->qBaseInsert), psl->qBaseInsert);
-                if (psl->qBaseInsert)
+                       qcClassForIndel(insBases), insBases);
+                if (insBases)
                     {
                     dyStringClear(dy);
-                    dyStringPrintf(dy, "%d bases in %d locations",
-                                   psl->qBaseInsert, psl->qNumInsert);
+                    dyStringPrintf(dy, "%d bases in %d locations", insBases, insCount);
                     printTooltip(dy->string);
                     }
                 printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(psl->tBaseInsert), psl->tBaseInsert);
-                if (psl->tBaseInsert)
+                       qcClassForIndel(delBases), delBases);
+                if (delBases)
                     {
                     dyStringClear(dy);
-                    dyStringPrintf(dy, "%d bases in %d locations",
-                                   psl->tBaseInsert, psl->tNumInsert);
+                    dyStringPrintf(dy, "%d bases in %d locations", delBases, delCount);
                     printTooltip(dy->string);
                     }
                 printf("</td>");
