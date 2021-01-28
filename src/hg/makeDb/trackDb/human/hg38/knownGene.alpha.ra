@@ -16,6 +16,7 @@ defaultLabelFields geneName
 itemRgb on
 #externalDb knownGeneV36
 maxItems 50000
+html knownGene.alpha
 
 #searchName gencodeV36
 #searchTable gencodeAnnotV36
