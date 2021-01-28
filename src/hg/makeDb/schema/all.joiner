@@ -8667,6 +8667,27 @@ identifier gtexTissue
     hgFixed.gtexSampleData.tissue dupeOk
     hgFixed.gtexTissue.name
 
+identifier gtexDonorV8
+"GTEx V8 donor ID"
+    hgFixed.gtexDonorV8.name
+    hgFixed.gtexSampleV8.donor
+
+identifier gtexSampleV8
+"GTEx V8 sample ID"
+    hgFixed.gtexSampleV8.sampleId
+    hgFixed.gtexSampleDataV8.sample
+
+identifier gtexGeneIdV8
+"GTEx V8 gene ID (ENS gene)"
+    hgFixed.gtexSampleDataV8.geneId dupeOk
+    hg19,hg38.gtexGeneV8.geneId
+    hg19,hg38.gtexGeneModelV8.name
+
+identifier gtexTissueV8
+"Short name for GTEx V8 tissue (UCSC)"
+    hgFixed.gtexSampleDataV8.tissue dupeOk
+    hgFixed.gtexTissueV8.name
+
 identifier chromAlias
 "Chromosome name correspondence to Ensembl, RefSeq, GenBank assemblies"
     $gbd.chromAlias.chrom dupeOk
