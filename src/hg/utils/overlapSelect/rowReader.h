@@ -6,15 +6,17 @@
 #define ROWREADER_H
 
 struct rowReader
-/* object to read rows */
+/* object to read records as rows */
 {
     int numCols;          /* number of columns in current row */
-    char **row;           /* parsed row */
+    char **row;           /* split row */
+    int maxParsedCols;    /* number of columns that are to be parsed, others
+                           * should be just passed through. */
     int colSpace;         /* number of columns allocated in row */
     struct lineFile *lf;  /* if reading from a file */
 };
 
-struct rowReader *rowReaderOpen(char *fileName, boolean isPslFile);
+struct rowReader *rowReaderOpen(char *fileName, int maxParsedCols, boolean isPslFile);
 /* create a row reader for a file */
 
 void rowReaderFree(struct rowReader **rrPtr);
