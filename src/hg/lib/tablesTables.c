@@ -424,13 +424,14 @@ if (pluralInstructions != NULL)
 
 if (visibleFacetList)
     {
-
     // Show top bar with quick-deselects for selected facet values
-    //  as well a clear restriction button that cleans out cdwFile_filter cart var. 
+    //  as well a clear restriction button that cleans out _filter cart var. 
 
     struct dyString *facetBar = dyStringNew(1024);
+    char filterVar[256];
+    safef(filterVar, sizeof(filterVar), "%s_filter", varPrefix);
 
-    char *where = cartUsualString(cart, "cdwFile_filter", "");
+    char *where = cartUsualString(cart, filterVar, "");
 
 
     boolean gotSelected = FALSE;
@@ -462,7 +463,7 @@ if (visibleFacetList)
 		    {
 		    char *op = "remove";
 		    htmlDyStringPrintf(facetBar, "<dd class=\"facet\" style='display: inline-block;'>\n");
-		    htmlDyStringPrintf(facetBar, "<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
+		    htmlDyStringPrintf(facetBar, "<input type=checkbox value=%s class=ttFsCheckBox %s>&nbsp;",
 			specificallySelected ? "true" : "false", 
 			specificallySelected ? "checked" : "");
 		    htmlDyStringPrintf(facetBar, "<a href='%s"
@@ -584,7 +585,7 @@ if (visibleFacetList)
 		if (specificallySelected)
 		    op = "remove";
 		printf("<dd class=\"facet\">\n");
-		htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
+		htmlPrintf("<input type=checkbox value=%s class=ttFSCheckBox %s>&nbsp;",
 		    specificallySelected ? "true" : "false", 
 		    specificallySelected ? "checked" : "");
 		htmlPrintf("<a href='%s"
@@ -640,7 +641,7 @@ if (visibleFacetList)
     // Clicking a checkbox is actually a click on the following link
     jsInlineF(
 	"$(function () {\n"
-	"  $('.cdwFSCheckBox').click(function() {\n"
+	"  $('.ttFsCheckBox').click(function() {\n"
 	"    this.nextSibling.nextSibling.click();\n"
 	"  });\n"
 	"});\n");
@@ -857,12 +858,14 @@ struct dyString *fusedFields = fuseCsvFields(conn, from, fields, visibleFacetLis
 webTableBuildQuery(cart, from, initialWhere, varPrefix, 
     fusedFields->string, withFilters, &query, &where);
 
-char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
+char selListVar[256];
+safef(selListVar, sizeof(selListVar), "%s_facet_selList", varPrefix);
+char *selectedFacetValues=cartUsualString(cart, selListVar, "");
 
 struct facetField **ffArray = NULL;
 struct fieldedTable *table = NULL;
 
-char pageVar[64];
+char pageVar[256];
 safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
 int page = 0;
 struct fieldedTableSegment context;

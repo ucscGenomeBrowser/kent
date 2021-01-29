@@ -51,7 +51,7 @@ if (ft != NULL)
 }
 
 
-void facetedTableWebInit(struct facetedTable *ft)
+void facetedTableWebInit()
 /* Print out scripts and css that we need.  We should be in a page body or title. */
 {
 webIncludeResourceFile("facets.css");
@@ -96,6 +96,14 @@ safef(var, sizeof(var), "%s_facet_fieldVal", ft->varPrefix);
 return cartOptionalString(cart, var);
 }
 
+char *facetedTableSelList(struct facetedTable *ft, struct cart *cart)
+/* Look up sel val in cart */
+{
+char var[256];
+safef(var, sizeof(var), "%s_facet_selList", ft->varPrefix);
+return cartOptionalString(cart, var);
+}
+
 
 void facetedTableRemoveOpVars(struct facetedTable *ft, struct cart *cart)
 /* Remove sel op/field/name vars from cart */
@@ -109,17 +117,46 @@ safef(var, sizeof(var), "%s_facet_fieldName", ft->varPrefix);
 cartRemove(cart, var);
 }
 
+boolean facetedTableUpdateOnFacetClick(struct facetedTable *ft, struct cart *cart)
+/* If we got called by a click on a facet deal with that and return TRUE, else do
+ * nothing and return false */
+{
+char *selOp = facetedTableSelOp(ft, cart);
+if (selOp)
+    {
+    char *selFieldName = facetedTableSelField(ft, cart);
+    char *selFieldVal = facetedTableSelVal(ft, cart);
+    if (selFieldName && selFieldVal)
+	{
+	char selListVar[256];
+	safef(selListVar, sizeof(selListVar), "%s_facet_selList", ft->varPrefix);
+	char *selectedFacetValues=cartUsualString(cart, selListVar, "");
+	struct facetField *selList = deLinearizeFacetValString(selectedFacetValues);
+	selectedListFacetValUpdate(&selList, selFieldName, selFieldVal, selOp);
+	char *newSelectedFacetValues = linearizeFacetVals(selList);
+	cartSetString(cart, selListVar, newSelectedFacetValues);
+	facetedTableRemoveOpVars(ft, cart);
+	}
+    return TRUE;
+    }
+else
+    return FALSE;
+}
+
+
 void doBody()
 {
 /* Fake up a 'track' for development */
 char *trackName = "cellFacetsJk1";
+char *trackName2 = "tableList";
 
 struct sqlConnection *conn = sqlConnect(database);
 struct hash *emptyHash = hashNew(0);
 struct facetedTable *ft = facetedTableNew("the original", trackName);
+struct facetedTable *ft2 = facetedTableNew("the other", trackName2);
 
 /* Write out html to pull in the other files we use. */
-facetedTableWebInit(ft);
+facetedTableWebInit();
 
 /* Working within a form we save context */
 printf("<form action=\"../cgi-bin/hgFacetedBars\" name=\"facetForm\" method=\"GET\">\n");
@@ -132,29 +169,27 @@ safef(returnUrl, sizeof(returnUrl), "../cgi-bin/hgFacetedBars?%s",
     cartSidUrlString(cart) );
 
 /* If we got called by a click on a facet deal with that */
-char *selOp = facetedTableSelOp(ft, cart);
-if (selOp)
-    {
-    char *selFieldName = facetedTableSelField(ft, cart);
-    char *selFieldVal = facetedTableSelVal(ft, cart);
-    if (selFieldName && selFieldVal)
-	{
-	char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
-	struct facetField *selList = deLinearizeFacetValString(selectedFacetValues);
-	selectedListFacetValUpdate(&selList, selFieldName, selFieldVal, selOp);
-	char *newSelectedFacetValues = linearizeFacetVals(selList);
-	cartSetString(cart, "cdwSelectedFieldValues", newSelectedFacetValues);
-	facetedTableRemoveOpVars(ft, cart);
-	}
-    }
 
 /* Put up the big faceted search table */
+printf("<div>\n");
+facetedTableUpdateOnFacetClick(ft, cart);
 webFilteredSqlTable(cart, conn, 
     "cell_count,organ,cell_type", trackName, "", 
     returnUrl, trackName, 32, 
     emptyHash, NULL, 
-    FALSE, NULL, 100, 10, emptyHash, "organ,cell_class,stage,cell_type",
+    FALSE, NULL, 50, 7, emptyHash, "organ,cell_class,stage,cell_type",
     NULL);
+printf("</div>\n");
+
+printf("<div>\n");
+facetedTableUpdateOnFacetClick(ft2, cart);
+webFilteredSqlTable(cart, conn, 
+    "tableName,field,type,nullAllowed", trackName2, "", 
+    returnUrl, trackName2, 32, 
+    emptyHash, NULL, 
+    FALSE, NULL, 50, 7, emptyHash, "type,field,tableName",
+    NULL);
+printf("</div>\n");
 
 /* Clean up and go home. */
 printf("</form>\n");
