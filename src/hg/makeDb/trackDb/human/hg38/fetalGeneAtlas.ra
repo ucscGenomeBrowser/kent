@@ -5,10 +5,11 @@ longLabel Fetal Gene Atlas from Cao et al 2020
 visibility hide
 group singleCell
 pennantIcon 19.jpg liftover.html "lifted from hg19"
+type bigBarChart
+barChartFitGene on
 
     track fetalGeneAtlasCellType
     parent fetalGeneAtlas
-    type bigBarChart
     visibility pack
     shortLabel Fetal Cells
     longLabel Fetal Gene Atlas binned by cell type from Cao et al 2020
@@ -31,7 +32,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasAssay
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Assay
     longLabel Fetal Gene Atlas binned by assay (cell/nucleus) from Cao et al 2020
@@ -50,7 +50,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasExperiment
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Exp
     longLabel Fetal Gene Atlas binned by experiment id from Cao et al 2020
@@ -70,7 +69,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasOrgan
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Organ
     longLabel Fetal Gene Atlas binned by organ from Cao et al 2020
@@ -90,7 +88,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasOrganCellLineage
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Lineage
     longLabel Fetal Gene Atlas binned by cell lineage and organ from Cao et al 2020
@@ -110,7 +107,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasRtGroup
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal RT Group
     longLabel Fetal Gene Atlas binned by RT group from Cao et al 2020
@@ -130,7 +126,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasDonor
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Donor ID
     longLabel Fetal Gene Atlas binned by donor ID from Cao et al 2020
@@ -150,7 +145,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasSex
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Sex
     longLabel Fetal Gene Atlas binned by sex from Cao et al 2020
