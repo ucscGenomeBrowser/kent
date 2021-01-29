@@ -58,7 +58,9 @@ safef(returnUrl, sizeof(returnUrl), "../cgi-bin/hgFacetedBars?%s",
     cartSidUrlString(cart) );
 
 /* If we got called by a click on a facet deal with that */
-char *selOp = cartOptionalString(cart, "browseFiles_facet_op");
+char opVar[256];
+safef(opVar, sizeof(opVar), "%s_facet_op", trackName);
+char *selOp = cartOptionalString(cart, opVar);
 if (selOp)
     {
     char *selFieldName = cartOptionalString(cart, "browseFiles_facet_fieldName");
@@ -70,7 +72,7 @@ if (selOp)
 	selectedListFacetValUpdate(&selList, selFieldName, selFieldVal, selOp);
 	char *newSelectedFacetValues = linearizeFacetVals(selList);
 	cartSetString(cart, "cdwSelectedFieldValues", newSelectedFacetValues);
-	cartRemove(cart, "browseFiles_facet_op");
+	cartRemove(cart, opVar);
 	cartRemove(cart, "browseFiles_facet_fieldName");
 	cartRemove(cart, "browseFiles_facet_fieldVal");
 	}

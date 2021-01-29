@@ -466,12 +466,12 @@ if (visibleFacetList)
 			specificallySelected ? "true" : "false", 
 			specificallySelected ? "checked" : "");
 		    htmlDyStringPrintf(facetBar, "<a href='%s"
-			    "&browseFiles_facet_op=%s|url|"
+			    "&%s_facet_op=%s|url|"
 			    "&browseFiles_facet_fieldName=%s|url|"
 			    "&browseFiles_facet_fieldVal=%s|url|"
 			    "&%s_page=1' "
 			    ">",
-			returnUrl,
+			returnUrl, varPrefix,
 			op, field->fieldName, val->val, varPrefix
 			);
 		    htmlDyStringPrintf(facetBar, "%s (%d)</a>", val->val, val->selectCount);
@@ -515,12 +515,12 @@ if (visibleFacetList)
 	// reset all facet value selections button
 	char *op = "resetAll";
 	htmlPrintf("<a class='btn btn-secondary' href='%s"
-	    "&browseFiles_facet_op=%s|none|"
+	    "&%s_facet_op=%s|none|"
 	    "&browseFiles_facet_fieldName=%s|url|"
 	    "&browseFiles_facet_fieldVal=%s|url|"
 	    "&%s_page=1' "
 		">%s</a>\n",
-		returnUrl, op, "", "", varPrefix, "Clear All"
+		returnUrl, varPrefix, op, "", "", varPrefix, "Clear All"
 	    );
 
 	printf("<dl style='display: inline-block;'>\n");
@@ -556,12 +556,12 @@ if (visibleFacetList)
 	    {
 	    char *op = "reset";
 	    htmlPrintf("<dd><a class='btn btn-secondary' href='%s"
-		    "&browseFiles_facet_op=%s|url|"
+		    "&%s_facet_op=%s|url|"
 		    "&browseFiles_facet_fieldName=%s|url|"
 		    "&browseFiles_facet_fieldVal=%s|url|"
 		    "&%s_page=1' "
 		    ">%s</a></dd>\n",
-		returnUrl,
+		returnUrl, varPrefix,
 		op, field->fieldName, "", varPrefix,
 		"Clear"
 		);
@@ -588,12 +588,12 @@ if (visibleFacetList)
 		    specificallySelected ? "true" : "false", 
 		    specificallySelected ? "checked" : "");
 		htmlPrintf("<a href='%s"
-			"&browseFiles_facet_op=%s|none|"
+			"&%s_facet_op=%s|none|"
 			"&browseFiles_facet_fieldName=%s|url|"
 			"&browseFiles_facet_fieldVal=%s|url|"
 			"&%s_page=1' "
 			">",
-		    returnUrl,
+		    returnUrl, varPrefix,
 		    op, field->fieldName, val->val, varPrefix
 		    );
 		htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
@@ -610,12 +610,12 @@ if (visibleFacetList)
 	    {
 	    char *op = "showAllValues";
 	    htmlPrintf("<dd><a href='%s"
-		    "&browseFiles_facet_op=%s|url|"
+		    "&%s_facet_op=%s|url|"
 		    "&browseFiles_facet_fieldName=%s|url|"
 		    "&browseFiles_facet_fieldVal=%s|url|"
 		    "&%s_page=1' "
 		    ">See %d More</a></dd>\n",
-		returnUrl, op, field->fieldName, "", varPrefix, valuesNotShown 
+		returnUrl, varPrefix, op, field->fieldName, "", varPrefix, valuesNotShown 
 		);
 	    }
 
@@ -624,12 +624,12 @@ if (visibleFacetList)
 	    {
 	    char *op = "showSomeValues";
 	    htmlPrintf("<dd><a href='%s"
-		    "&browseFiles_facet_op=%s|url|"
+		    "&%s_facet_op=%s|url|"
 		    "&browseFiles_facet_fieldName=%s|url|"
 		    "&browseFiles_facet_fieldVal=%s|url|"
 		    "&%s_page=1' "
 		    ">%s</a></dd>\n",
-		returnUrl, op, field->fieldName, "", varPrefix,
+		returnUrl, varPrefix, op, field->fieldName, "", varPrefix,
 		"See Fewer"
 		);
 	    }

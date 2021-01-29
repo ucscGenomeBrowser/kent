@@ -45,7 +45,6 @@ boolean isPublicSite = FALSE;
 
 
 char *excludeVars[] = {"cdwCommand", "submit", "DownloadFormat", NULL};
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -1248,7 +1247,7 @@ if (clearRestriction && sameString(clearRestriction,"1"))
 
 //warn("getCdwTableSetting(cdwFileFacets)=%s", getCdwTableSetting("cdwFileFacets")); // DEBUG REMOVE
 
-char *selOp = cartOptionalString(cart, "browseFiles_facet_op");
+char *selOp = cartOptionalString(cart, "cdwBrowseFiles_facet_op");
 if (selOp)
     {
     char *selFieldName = cartOptionalString(cart, "browseFiles_facet_fieldName");
@@ -1263,7 +1262,7 @@ if (selOp)
 	char *newSelectedFacetValues = linearizeFacetVals(selList);
 	//warn("newSelectedFacetValues=[%s]", newSelectedFacetValues); // DEBUG REMOVE
 	cartSetString(cart, "cdwSelectedFieldValues", newSelectedFacetValues);
-	cartRemove(cart, "browseFiles_facet_op");
+	cartRemove(cart, "cdwBrowseFiles_facet_op");
 	cartRemove(cart, "browseFiles_facet_fieldName");
 	cartRemove(cart, "browseFiles_facet_fieldVal");
 	}
