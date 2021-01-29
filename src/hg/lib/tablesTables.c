@@ -69,7 +69,7 @@ return table;
 
 static void showTableFilterInstructionsEtc(struct fieldedTable *table, 
     char *pluralInstructions, struct  fieldedTableSegment *largerContext, void (*addFunc)(int),
-    char *visibleFacetList)
+    char *visibleFacetList, char *varPrefix)
 /* Print instructional text, and basic summary info on who passes filter, and a submit
  * button just in case user needs it */
 {
@@ -82,10 +82,12 @@ printf("<input class='btn btn-secondary' type='submit' name='submit' id='submit'
 
 printf("&nbsp&nbsp;");
 printf("<input class='btn btn-secondary' type='button' id='clearButton' VALUE=\"Clear Search\">");
-jsOnEventById("click", "clearButton",
+char jsText[1024];
+safef(jsText, sizeof(jsText),
     "$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
-    "$('[name=cdwBrowseFiles_page]').val('1');\n"
-    "$('#submit').click();\n");
+    "$('[name=%s_page]').val('1');\n"
+    "$('#submit').click();\n",  varPrefix);
+jsOnEventById("click", "clearButton", jsText);
 
 printf("<br>");
 
@@ -137,16 +139,16 @@ jsInlineF(
 }
 #endif
 
-static void resetPageNumberOnChange(char *id)
+static void resetPageNumberOnChange(char *id, char *varPrefix)
 /* On change, reset page number to 1. */
 {
 jsInlineF(
 "$(function() {\n"
 " $('form').delegate('#%s','change keyup paste',function(e){\n"
-"  $('[name=cdwBrowseFiles_page]').val('1');\n"
+"  $('[name=%s_page]').val('1');\n"
 " });\n"
 "});\n"
-, id);
+, id, varPrefix);
 }
 
 
@@ -186,7 +188,7 @@ for (el = visibleFields; el != NULL; el = el->next)
         printf(" value=\"%s\">\n", oldVal);
 
     /* Write out javascript to reset page number to 1 if filter changes */
-    resetPageNumberOnChange(varName);
+    resetPageNumberOnChange(varName, varPrefix);
 
     /* Set up the auto-suggest list for this filter */
     if (suggestHash != NULL)
@@ -352,7 +354,7 @@ if (largerContext != NULL)  // Need to page?
 	    printf("<a href='#' id='%s'>&#9198;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('1');\n"
-		"$('#submit').click();\n"
+		"event.target.closest('form').submit();\n"
 		, varPrefix);
 	    printf("&nbsp;&nbsp;&nbsp;");
 
@@ -361,7 +363,7 @@ if (largerContext != NULL)  // Need to page?
 	    printf("<a href='#' id='%s'>&#9194;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('%d');\n"
-		"$('#submit').click();\n"
+		"event.target.closest('form').submit();\n"
 		, varPrefix, (curPage+1)-1);
 	    printf("&nbsp;&nbsp;&nbsp;");
 	    }
@@ -383,7 +385,7 @@ if (largerContext != NULL)  // Need to page?
 	    printf("<a href='#' id='%s'>&#9193;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('%d');\n"
-		"$('#submit').click();\n"
+		"event.target.closest('form').submit();\n"
 		, varPrefix, (curPage+1)+1);
 
 	    // last page
@@ -392,7 +394,7 @@ if (largerContext != NULL)  // Need to page?
 	    printf("<a href='#' id='%s'>&#9197;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('%d');\n"
-		"$('#submit').click();\n"
+		"event.target.closest('form').submit();\n"
 		, varPrefix, totalPages);
 
 	    }
@@ -417,7 +419,8 @@ if (strchr(returnUrl, '?') == NULL)
      errAbort("Expecting returnUrl to include ? in showFieldedTable\nIt's %s", returnUrl);
 
 if (pluralInstructions != NULL)
-    showTableFilterInstructionsEtc(table, pluralInstructions, largerContext, addFunc, visibleFacetList);
+    showTableFilterInstructionsEtc(table, pluralInstructions, largerContext, addFunc, 
+	    visibleFacetList, varPrefix);
 
 if (visibleFacetList)
     {
@@ -462,14 +465,14 @@ if (visibleFacetList)
 		    htmlDyStringPrintf(facetBar, "<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
 			specificallySelected ? "true" : "false", 
 			specificallySelected ? "checked" : "");
-		    htmlDyStringPrintf(facetBar, "<a href='%s|none|&cdwCommand=browseFiles"
+		    htmlDyStringPrintf(facetBar, "<a href='%s"
 			    "&browseFiles_facet_op=%s|url|"
 			    "&browseFiles_facet_fieldName=%s|url|"
 			    "&browseFiles_facet_fieldVal=%s|url|"
-			    "&cdwBrowseFiles_page=1' "
+			    "&%s_page=1' "
 			    ">",
 			returnUrl,
-			op, field->fieldName, val->val
+			op, field->fieldName, val->val, varPrefix
 			);
 		    htmlDyStringPrintf(facetBar, "%s (%d)</a>", val->val, val->selectCount);
 		    htmlDyStringPrintf(facetBar, "</dd>\n");
@@ -496,10 +499,12 @@ if (visibleFacetList)
 
 	printf("&nbsp&nbsp;");
 	printf("<input class='btn btn-secondary' type='button' id='clearRestrictionButton' VALUE=\"Clear Restriction\">");
-	jsOnEventById("click", "clearRestrictionButton",
-	    "$('[name=cdwBrowseFiles_page]').val('1');\n"
+	char jsText[1024];
+	safef(jsText, sizeof(jsText),
+	    "$('[name=%s_page]').val('1');\n"
 	    "$('[name=clearRestriction]').val('1');\n"
-	    "$('#submit').click();\n");
+	    "$('#submit').click();\n", varPrefix);
+	jsOnEventById("click", "clearRestrictionButton", jsText);
 
 	printf("<br>");
         }
@@ -509,13 +514,13 @@ if (visibleFacetList)
 	{
 	// reset all facet value selections button
 	char *op = "resetAll";
-	htmlPrintf("<a class='btn btn-secondary' href='%s|none|&cdwCommand=browseFiles"
+	htmlPrintf("<a class='btn btn-secondary' href='%s"
 	    "&browseFiles_facet_op=%s|none|"
 	    "&browseFiles_facet_fieldName=%s|url|"
 	    "&browseFiles_facet_fieldVal=%s|url|"
-	    "&cdwBrowseFiles_page=1' "
+	    "&%s_page=1' "
 		">%s</a>\n",
-		returnUrl, op, "", "", "Clear All"
+		returnUrl, op, "", "", varPrefix, "Clear All"
 	    );
 
 	printf("<dl style='display: inline-block;'>\n");
@@ -550,14 +555,14 @@ if (visibleFacetList)
 	if (!field->allSelected)  // add reset facet link
 	    {
 	    char *op = "reset";
-	    htmlPrintf("<dd><a class='btn btn-secondary' href='%s|none|&cdwCommand=browseFiles"
+	    htmlPrintf("<dd><a class='btn btn-secondary' href='%s"
 		    "&browseFiles_facet_op=%s|url|"
 		    "&browseFiles_facet_fieldName=%s|url|"
 		    "&browseFiles_facet_fieldVal=%s|url|"
-		    "&cdwBrowseFiles_page=1' "
+		    "&%s_page=1' "
 		    ">%s</a></dd>\n",
 		returnUrl,
-		op, field->fieldName, "",
+		op, field->fieldName, "", varPrefix,
 		"Clear"
 		);
 	    }
@@ -582,14 +587,14 @@ if (visibleFacetList)
 		htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
 		    specificallySelected ? "true" : "false", 
 		    specificallySelected ? "checked" : "");
-		htmlPrintf("<a href='%s|none|&cdwCommand=browseFiles"
+		htmlPrintf("<a href='%s"
 			"&browseFiles_facet_op=%s|none|"
 			"&browseFiles_facet_fieldName=%s|url|"
 			"&browseFiles_facet_fieldVal=%s|url|"
-			"&cdwBrowseFiles_page=1' "
+			"&%s_page=1' "
 			">",
 		    returnUrl,
-		    op, field->fieldName, val->val
+		    op, field->fieldName, val->val, varPrefix
 		    );
 		htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
 		printf("</dd>\n");
@@ -604,13 +609,13 @@ if (visibleFacetList)
 	if (valuesNotShown > 0)
 	    {
 	    char *op = "showAllValues";
-	    htmlPrintf("<dd><a href='%s|none|&cdwCommand=browseFiles"
+	    htmlPrintf("<dd><a href='%s"
 		    "&browseFiles_facet_op=%s|url|"
 		    "&browseFiles_facet_fieldName=%s|url|"
 		    "&browseFiles_facet_fieldVal=%s|url|"
-		    "&cdwBrowseFiles_page=1' "
+		    "&%s_page=1' "
 		    ">See %d More</a></dd>\n",
-		returnUrl, op, field->fieldName, "", valuesNotShown 
+		returnUrl, op, field->fieldName, "", varPrefix, valuesNotShown 
 		);
 	    }
 
@@ -618,13 +623,13 @@ if (visibleFacetList)
 	if (field->showAllValues && valuesShown >= facetUsualSize)
 	    {
 	    char *op = "showSomeValues";
-	    htmlPrintf("<dd><a href='%s|none|&cdwCommand=browseFiles"
+	    htmlPrintf("<dd><a href='%s"
 		    "&browseFiles_facet_op=%s|url|"
 		    "&browseFiles_facet_fieldName=%s|url|"
 		    "&browseFiles_facet_fieldVal=%s|url|"
-		    "&cdwBrowseFiles_page=1' "
+		    "&%s_page=1' "
 		    ">%s</a></dd>\n",
-		returnUrl, op, field->fieldName, "",
+		returnUrl, op, field->fieldName, "", varPrefix,
 		"See Fewer"
 		);
 	    }
