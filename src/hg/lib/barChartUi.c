@@ -7,6 +7,7 @@
 #include "cart.h"
 #include "net.h"
 #include "errCatch.h"
+#include "web.h"
 #include "hui.h"
 #include "trackDb.h"
 #include "jsHelper.h"
@@ -15,6 +16,7 @@
 #include "htmlColor.h"
 #include "barChartCategory.h"
 #include "barChartUi.h"
+#include "tablesTables.h"
 
 /* Restrict features on right-click (popup) version */
 static boolean isPopup = FALSE;
@@ -362,7 +364,7 @@ if (categ == NULL)
 return categ->label;
 }
 
-void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
+void barChartCfgUiSelectEachBar(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
                         char *title, boolean boxed)
 /* Bar chart track type */
 {
@@ -415,3 +417,24 @@ makeCategoryCheckboxes(cartVar, categs, selectedValues);
 puts("\n</table>\n");
 cfgEndBox(boxed);
 }
+
+void barChartFacetedUi(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
+                        char *title, boolean boxed)
+/* Bar chart track type that has an associated facets tables */
+{
+printf("<iframe id=\"barChartFacetedUi\" src=\"../cgi-bin/hgFacetedBars?%s\" ",
+    cartSidUrlString(cart));
+printf(" height=\"600\" width=\"1200\" ");  // I hope these get set from javascript soon
+printf(">");
+}
+
+void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
+                        char *title, boolean boxed)
+/* Put up facets in certain situations. */
+{
+if (sameString(track, "singleCellMerged"))
+    barChartFacetedUi(database, cart, tdb, track, title, boxed);
+else
+    barChartCfgUiSelectEachBar(database, cart, tdb, track, title, boxed);
+}
+
