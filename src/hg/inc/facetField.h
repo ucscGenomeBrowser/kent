@@ -1,8 +1,6 @@
 #ifndef FACETFIELD_H
 #define FACETFIELD_H
 
-#define FacetFieldLimit 20   // maximum facet values to show before displaying the See More link 
-
 struct facetVal
 /* Keep track of number of uses of a field value */
     {
