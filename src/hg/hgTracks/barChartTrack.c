@@ -15,7 +15,6 @@
 
 // If a category contributes more than this percentage, its color is displayed in squish mode
 // Could be a trackDb setting
-#define SPECIFICITY_THRESHOLD   10
 
 struct barChartTrack
 /* Track extras */
