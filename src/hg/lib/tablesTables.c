@@ -16,6 +16,7 @@
 #include "cart.h"
 #include "facetField.h"
 #include "tablesTables.h"
+#include "csv.h"
 
 struct fieldedTable *fieldedTableFromDbQuery(struct sqlConnection *conn, char *query)
 /* Return fieldedTable from a database query */
@@ -33,7 +34,7 @@ return table;
 }
 
 struct fieldedTable *fieldedTableAndCountsFromDbQuery(struct sqlConnection *conn, char *query, int limit, int offset, 
-    char *selectedFields, struct facetField ***pFfArray, int *pResultCount)
+    char *visibleFields, struct facetField ***pFfArray, int *pResultCount)
 /* Return fieldedTable from a database query and also fetch use and select counts */
 {
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -43,7 +44,7 @@ struct facetField **ffArray;
 AllocArray(ffArray, fieldCount);
 struct fieldedTable *table = fieldedTableNew(query, fields, fieldCount);
 
-struct facetField *ffList = facetFieldsFromSqlTableInit(fields, fieldCount, selectedFields, ffArray);
+struct facetField *ffList = facetFieldsFromSqlTableInit(fields, fieldCount, visibleFields, ffArray);
 
 char **row;
 int i = 0;
@@ -67,7 +68,7 @@ return table;
 }
 
 static void showTableFilterInstructionsEtc(struct fieldedTable *table, 
-    char *itemPlural, struct  fieldedTableSegment *largerContext, void (*addFunc)(int),
+    char *pluralInstructions, struct  fieldedTableSegment *largerContext, void (*addFunc)(int),
     char *visibleFacetList)
 /* Print instructional text, and basic summary info on who passes filter, and a submit
  * button just in case user needs it */
@@ -88,7 +89,7 @@ jsOnEventById("click", "clearButton",
 
 printf("<br>");
 
-printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
+printf("%d&nbsp;%s&nbsp;found. ", matchCount, pluralInstructions);
 
 if (addFunc)
     addFunc(matchCount);
@@ -149,8 +150,8 @@ jsInlineF(
 }
 
 
-static void showTableFilterControlRow(struct fieldedTable *table, struct cart *cart, 
-    char *varPrefix, int maxLenField, struct hash *suggestHash)
+static void showTableFilterControlRow(struct fieldedTable *table, struct slName *visibleFields,
+    struct cart *cart, char *varPrefix, int maxLenField, struct hash *suggestHash)
 /* Assuming we are in table already drow control row.
  * The suggestHash is keyed by field name.  If something is there we'll assume
  * it's value is slName list of suggestion values */
@@ -159,17 +160,18 @@ static void showTableFilterControlRow(struct fieldedTable *table, struct cart *c
 printf("<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css'>\n");
 printf("<script src='https://code.jquery.com/ui/1.12.1/jquery-ui.js'></script>\n");
 
-int i;
 printf("<tr>");
-for (i=0; i<table->fieldCount; ++i)
+struct slName *el;
+for (el = visibleFields; el != NULL; el = el->next)
     {
-    char *field = table->fields[i];
+    char *field = el->name;
+    int fieldIx = fieldedTableMustFindFieldIx(table, field);
     char varName[256];
     safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
     printf("<td>");
 
     /* Approximate size of input control in characters */
-    int size = fieldedTableMaxColChars(table, i);
+    int size = fieldedTableMaxColChars(table, fieldIx);
     if (size > maxLenField)
 	size = maxLenField;
 
@@ -202,8 +204,8 @@ for (i=0; i<table->fieldCount; ++i)
 printf("</TR>");
 }
 
-static void showTableSortingLabelRow(struct fieldedTable *table, struct cart *cart, char *varPrefix,
-    char *returnUrl)
+static void showTableSortingLabelRow(struct fieldedTable *table, struct slName *visibleFields, 
+    struct cart *cart, char *varPrefix, char *returnUrl)
 /* Put up the label row with sorting fields attached.  ALso actually sort table.  */
 {
 /* Get order var */
@@ -215,15 +217,15 @@ char pageVar[64];
 safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
 
 /* Print column labels */
-int i;
-for (i=0; i<table->fieldCount; ++i)
+struct slName *vis;
+for (vis = visibleFields; vis != NULL; vis = vis->next)
     {
     printf("<td>");
     printf("<A class=\"topbar\" HREF=\"");
     printf("%s", returnUrl);
     printf("&%s=1", pageVar);
     printf("&%s=", orderVar);
-    char *field = table->fields[i];
+    char *field = vis->name;
     if (!isEmpty(orderFields) && sameString(orderFields, field))
         printf("-");
     printf("%s", field);
@@ -261,16 +263,25 @@ if (!isEmpty(orderFields))
     }
 }
 
-static void showTableDataRows(struct fieldedTable *table, int pageSize, int maxLenField,
+static void showTableDataRows(struct fieldedTable *table, struct slName *visibleFields,
+    int pageSize, int maxLenField,
     struct hash *tagOutputWrappers, void *wrapperContext)
 /* Render data rows into HTML */
 {
+/* Look up visible fields in table */
+int visFieldCount = slCount(visibleFields);
+int visIx[visFieldCount];
+int i;
+struct slName *el = visibleFields;;
+for (i=0; i<visFieldCount; ++i, el = el->next)
+    visIx[i] = fieldedTableMustFindFieldIx(table, el->name);
+
+/* Figure out numerical ones */
 int count = 0;
 struct fieldedRow *row;
-boolean isNum[table->fieldCount];
-int i;
-for (i=0; i<table->fieldCount; ++i)
-    isNum[i] = fieldedTableColumnIsNumeric(table, i);
+boolean isNum[visFieldCount];
+for (i=0; i<visFieldCount; ++i)
+    isNum[i] = fieldedTableColumnIsNumeric(table, visIx[i]);
 
 for (row = table->rowList; row != NULL; row = row->next)
     {
@@ -278,8 +289,10 @@ for (row = table->rowList; row != NULL; row = row->next)
          break;
     printf("<TR>\n");
     int fieldIx = 0;
-    for (fieldIx=0; fieldIx<table->fieldCount; ++fieldIx)
+    int i;
+    for (i=0; i<visFieldCount; ++i)
 	{
+	fieldIx = visIx[i];
 	char shortVal[maxLenField+1];
 	char *longVal = emptyForNull(row->row[fieldIx]);
 	char *val = longVal;
@@ -388,22 +401,23 @@ if (largerContext != NULL)  // Need to page?
 }
 
 void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table, 
-    char *returnUrl, char *varPrefix,
+    char *visibleFieldList, char *returnUrl, char *varPrefix,
     int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, 
-    int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
+    boolean withFilters, char *pluralInstructions, 
+    int pageSize, int facetUsualSize,
+    struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
     struct facetField **ffArray, char *visibleFacetList,
-    void (*addFunc)(int))
+    void (*addFunc)(int) )
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
- * Pass in 0 for no max */
+ * Pass in 0 for no max. */
 {
 if (strchr(returnUrl, '?') == NULL)
      errAbort("Expecting returnUrl to include ? in showFieldedTable\nIt's %s", returnUrl);
 
-if (withFilters || visibleFacetList)
-    showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc, visibleFacetList);
+if (pluralInstructions != NULL)
+    showTableFilterInstructionsEtc(table, pluralInstructions, largerContext, addFunc, visibleFacetList);
 
 if (visibleFacetList)
     {
@@ -418,57 +432,55 @@ if (visibleFacetList)
 
     boolean gotSelected = FALSE;
 
-    struct slName *nameList = slNameListFromComma(visibleFacetList);
-    int f;
-    for (f = 0; f < table->fieldCount; ++f) 
+    struct slName *visList = slNameListFromComma(visibleFacetList);
+    struct slName *vis;
+    for (vis = visList; vis != NULL; vis = vis->next)
 	{
+	int f = fieldedTableMustFindFieldIx(table, vis->name);
 	struct facetField *field = ffArray[f];
-	if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
+	if (!field->allSelected)
 	    {
-	    if (!field->allSelected)
+	    gotSelected = TRUE;
+	    htmlDyStringPrintf(facetBar, "<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
+	    htmlDyStringPrintf(facetBar, "<dt style='display: inline-block;'>\n");
+	    htmlDyStringPrintf(facetBar, "<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
+
+	    struct facetVal *val;
+
+	    // Sort values alphabetically
+	    // Make a copy to not disturb the original order 
+	    struct facetVal *valListCopy = facetsClone(field->valList);
+	    slSort(&valListCopy, facetValCmp);
+	    
+	    for (val = valListCopy; val; val=val->next)
 		{
-		gotSelected = TRUE;
-		htmlDyStringPrintf(facetBar, "<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
-		htmlDyStringPrintf(facetBar, "<dt style='display: inline-block;'>\n");
-		htmlDyStringPrintf(facetBar, "<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
-
-		struct facetVal *val;
-
-		// Sort values alphabetically
-		// Make a copy to not disturb the original order 
-		struct facetVal *valListCopy = facetsClone(field->valList);
-		slSort(&valListCopy, facetValCmp);
-		
-		for (val = valListCopy; val; val=val->next)
+		boolean specificallySelected = (val->selected && !field->allSelected);
+		if (specificallySelected)
 		    {
-		    boolean specificallySelected = (val->selected && !field->allSelected);
-		    if (specificallySelected)
-			{
-			char *op = "remove";
-			htmlDyStringPrintf(facetBar, "<dd class=\"facet\" style='display: inline-block;'>\n");
-			htmlDyStringPrintf(facetBar, "<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
-			    specificallySelected ? "true" : "false", 
-			    specificallySelected ? "checked" : "");
-			htmlDyStringPrintf(facetBar, "<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
-				"&browseFiles_facet_op=%s|url|"
-				"&browseFiles_facet_fieldName=%s|url|"
-				"&browseFiles_facet_fieldVal=%s|url|"
-				"&cdwBrowseFiles_page=1' "
-				">",
-			    cartSessionVarName(), cartSessionId(cart),
-			    op, field->fieldName, val->val
-			    );
-			htmlDyStringPrintf(facetBar, "%s (%d)</a>", val->val, val->selectCount);
-			htmlDyStringPrintf(facetBar, "</dd>\n");
-			}
+		    char *op = "remove";
+		    htmlDyStringPrintf(facetBar, "<dd class=\"facet\" style='display: inline-block;'>\n");
+		    htmlDyStringPrintf(facetBar, "<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
+			specificallySelected ? "true" : "false", 
+			specificallySelected ? "checked" : "");
+		    htmlDyStringPrintf(facetBar, "<a href='%s|none|&cdwCommand=browseFiles"
+			    "&browseFiles_facet_op=%s|url|"
+			    "&browseFiles_facet_fieldName=%s|url|"
+			    "&browseFiles_facet_fieldVal=%s|url|"
+			    "&cdwBrowseFiles_page=1' "
+			    ">",
+			returnUrl,
+			op, field->fieldName, val->val
+			);
+		    htmlDyStringPrintf(facetBar, "%s (%d)</a>", val->val, val->selectCount);
+		    htmlDyStringPrintf(facetBar, "</dd>\n");
 		    }
-		slFreeList(&valListCopy);
-		
-		htmlDyStringPrintf(facetBar, "</span></span>\n");
-
 		}
+	    slFreeList(&valListCopy);
+	    
+	    htmlDyStringPrintf(facetBar, "</span></span>\n");
 
 	    }
+
 	}
 
     if (!isEmpty(where) || gotSelected)
@@ -497,15 +509,13 @@ if (visibleFacetList)
 	{
 	// reset all facet value selections button
 	char *op = "resetAll";
-	htmlPrintf("<a class='btn btn-secondary' href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
-	    "&browseFiles_facet_op=%s|url|"
+	htmlPrintf("<a class='btn btn-secondary' href='%s|none|&cdwCommand=browseFiles"
+	    "&browseFiles_facet_op=%s|none|"
 	    "&browseFiles_facet_fieldName=%s|url|"
 	    "&browseFiles_facet_fieldVal=%s|url|"
 	    "&cdwBrowseFiles_page=1' "
 		">%s</a>\n",
-		cartSessionVarName(), cartSessionId(cart),
-	    op, "", "",
-	    "Clear All"
+		returnUrl, op, "", "", "Clear All"
 	    );
 
 	printf("<dl style='display: inline-block;'>\n");
@@ -527,102 +537,98 @@ if (visibleFacetList)
     // left column
     printf("<div class='col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3'>\n");
 
-    struct slName *nameList = slNameListFromComma(visibleFacetList);
-    int f;
-    for (f = 0; f < table->fieldCount; ++f) 
+    struct slName *visList = slNameListFromComma(visibleFacetList);
+    struct slName *vis;
+    for (vis = visList; vis != NULL; vis = vis->next)
 	{
+	int f = fieldedTableMustFindFieldIx(table, vis->name);
 	struct facetField *field = ffArray[f];
-	if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
+	htmlPrintf("<div class='card facet-card'><div class='card-body'>\n");
+	htmlPrintf("<h6 class='card-title'>%s</h6><dl>\n", field->fieldName);
+	struct facetVal *val;
+
+	if (!field->allSelected)  // add reset facet link
 	    {
-            htmlPrintf("<div class='card facet-card'><div class='card-body'>\n");
-            htmlPrintf("<h6 class='card-title'>%s</h6><dl>\n", field->fieldName);
-	    struct facetVal *val;
-
-	    if (!field->allSelected)  // add reset facet link
-		{
-		char *op = "reset";
-		htmlPrintf("<dd><a class='btn btn-secondary' href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
-			"&browseFiles_facet_op=%s|url|"
-			"&browseFiles_facet_fieldName=%s|url|"
-			"&browseFiles_facet_fieldVal=%s|url|"
-			"&cdwBrowseFiles_page=1' "
-			">%s</a></dd>\n",
-		    cartSessionVarName(), cartSessionId(cart),
-		    op, field->fieldName, "",
-		    "Clear"
-		    );
-		}
-
-	    int valuesShown = 0;
-	    int valuesNotShown = 0;
-	    if (field->showAllValues)  // Sort alphabetically if they want all values 
-	        {
-		slSort(&field->valList, facetValCmp);
-		}
-	    for (val = field->valList; val; val=val->next)
-		{
-		boolean specificallySelected = (val->selected && !field->allSelected);
-		if ((val->selectCount > 0 && (field->showAllValues || valuesShown < FacetFieldLimit))
-		    || specificallySelected)
-		    {
-		    ++valuesShown;
-		    char *op = "add";
-		    if (specificallySelected)
-			op = "remove";
-		    printf("<dd class=\"facet\">\n");
-		    htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
-			specificallySelected ? "true" : "false", 
-			specificallySelected ? "checked" : "");
-		    htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
-			    "&browseFiles_facet_op=%s|url|"
-			    "&browseFiles_facet_fieldName=%s|url|"
-			    "&browseFiles_facet_fieldVal=%s|url|"
-                            "&cdwBrowseFiles_page=1' "
-			    ">",
-			cartSessionVarName(), cartSessionId(cart),
-			op, field->fieldName, val->val
-                        );
-		    htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
-		    printf("</dd>\n");
-		    }
-		else if (val->selectCount > 0)
-		    {
-		    ++valuesNotShown;
-		    }
-		}
-
-	    // show "See More" link when facet has lots of values
-	    if (valuesNotShown > 0)
-		{
-		char *op = "showAllValues";
-		htmlPrintf("<dd><a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
-			"&browseFiles_facet_op=%s|url|"
-			"&browseFiles_facet_fieldName=%s|url|"
-			"&browseFiles_facet_fieldVal=%s|url|"
-			"&cdwBrowseFiles_page=1' "
-			">See %d More</a></dd>\n",
-		    cartSessionVarName(), cartSessionId(cart),
-		    op, field->fieldName, "", valuesNotShown 
-		    );
-		}
-
-	    // show "See Fewer" link when facet has lots of values
-	    if (field->showAllValues && valuesShown >= FacetFieldLimit)
-		{
-		char *op = "showSomeValues";
-		htmlPrintf("<dd><a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
-			"&browseFiles_facet_op=%s|url|"
-			"&browseFiles_facet_fieldName=%s|url|"
-			"&browseFiles_facet_fieldVal=%s|url|"
-			"&cdwBrowseFiles_page=1' "
-			">%s</a></dd>\n",
-		    cartSessionVarName(), cartSessionId(cart),
-		    op, field->fieldName, "",
-		    "See Fewer"
-		    );
-		}
-            htmlPrintf("</div></div>\n");
+	    char *op = "reset";
+	    htmlPrintf("<dd><a class='btn btn-secondary' href='%s|none|&cdwCommand=browseFiles"
+		    "&browseFiles_facet_op=%s|url|"
+		    "&browseFiles_facet_fieldName=%s|url|"
+		    "&browseFiles_facet_fieldVal=%s|url|"
+		    "&cdwBrowseFiles_page=1' "
+		    ">%s</a></dd>\n",
+		returnUrl,
+		op, field->fieldName, "",
+		"Clear"
+		);
 	    }
+
+	int valuesShown = 0;
+	int valuesNotShown = 0;
+	if (field->showAllValues)  // Sort alphabetically if they want all values 
+	    {
+	    slSort(&field->valList, facetValCmp);
+	    }
+	for (val = field->valList; val; val=val->next)
+	    {
+	    boolean specificallySelected = (val->selected && !field->allSelected);
+	    if ((val->selectCount > 0 && (field->showAllValues || valuesShown < facetUsualSize))
+		|| specificallySelected)
+		{
+		++valuesShown;
+		char *op = "add";
+		if (specificallySelected)
+		    op = "remove";
+		printf("<dd class=\"facet\">\n");
+		htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
+		    specificallySelected ? "true" : "false", 
+		    specificallySelected ? "checked" : "");
+		htmlPrintf("<a href='%s|none|&cdwCommand=browseFiles"
+			"&browseFiles_facet_op=%s|none|"
+			"&browseFiles_facet_fieldName=%s|url|"
+			"&browseFiles_facet_fieldVal=%s|url|"
+			"&cdwBrowseFiles_page=1' "
+			">",
+		    returnUrl,
+		    op, field->fieldName, val->val
+		    );
+		htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
+		printf("</dd>\n");
+		}
+	    else if (val->selectCount > 0)
+		{
+		++valuesNotShown;
+		}
+	    }
+
+	// show "See More" link when facet has lots of values
+	if (valuesNotShown > 0)
+	    {
+	    char *op = "showAllValues";
+	    htmlPrintf("<dd><a href='%s|none|&cdwCommand=browseFiles"
+		    "&browseFiles_facet_op=%s|url|"
+		    "&browseFiles_facet_fieldName=%s|url|"
+		    "&browseFiles_facet_fieldVal=%s|url|"
+		    "&cdwBrowseFiles_page=1' "
+		    ">See %d More</a></dd>\n",
+		returnUrl, op, field->fieldName, "", valuesNotShown 
+		);
+	    }
+
+	// show "See Fewer" link when facet has lots of values
+	if (field->showAllValues && valuesShown >= facetUsualSize)
+	    {
+	    char *op = "showSomeValues";
+	    htmlPrintf("<dd><a href='%s|none|&cdwCommand=browseFiles"
+		    "&browseFiles_facet_op=%s|url|"
+		    "&browseFiles_facet_fieldName=%s|url|"
+		    "&browseFiles_facet_fieldVal=%s|url|"
+		    "&cdwBrowseFiles_page=1' "
+		    ">%s</a></dd>\n",
+		returnUrl, op, field->fieldName, "",
+		"See Fewer"
+		);
+	    }
+	htmlPrintf("</div></div>\n");
 	}
     printf("</div>\n");
     // Clicking a checkbox is actually a click on the following link
@@ -641,23 +647,27 @@ else
     printf("<div class='col-12'>\n");
     
 printf("  <div>\n");
-printf("    <table class=\"table table-striped table-bordered table-sm text-nowrap\">\n");
+if (visibleFieldList != NULL)
+    {
+    struct slName *fieldList = slNameListFromComma(visibleFieldList);
+    printf("    <table class=\"table table-striped table-bordered table-sm text-nowrap\">\n");
 
-/* Draw optional filters cells ahead of column labels*/
-printf("<thead>\n");
-if (withFilters)
-    showTableFilterControlRow(table, cart, varPrefix, maxLenField, suggestHash);
-showTableSortingLabelRow(table, cart, varPrefix, returnUrl);
-printf("</thead>\n");
+    /* Draw optional filters cells ahead of column labels*/
+    printf("<thead>\n");
+    if (withFilters)
+	showTableFilterControlRow(table, fieldList, cart, varPrefix, maxLenField, suggestHash);
+    showTableSortingLabelRow(table, fieldList, cart, varPrefix, returnUrl);
+    printf("</thead>\n");
 
-printf("<tbody>\n");
-showTableDataRows(table, pageSize, maxLenField, tagOutputWrappers, wrapperContext);
-printf("</tbody>\n");
-printf("</table>\n");
-printf("</div>");
+    printf("<tbody>\n");
+    showTableDataRows(table, fieldList, pageSize, maxLenField, tagOutputWrappers, wrapperContext);
+    printf("</tbody>\n");
+    printf("</table>\n");
+    printf("</div>");
+    if (largerContext != NULL)
+	showTablePaging(table, cart, varPrefix, largerContext, pageSize);
 
-if (largerContext != NULL)
-    showTablePaging(table, cart, varPrefix, largerContext, pageSize);
+    }
 
 if (visibleFacetList) // close right column, if there are two columns
     printf("</div>");
@@ -672,10 +682,11 @@ void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table,
  * is an optional way to enrich output of specific columns of the table.  It is keyed
  * by column name and has for values functions of type webTableOutputWrapperType. */
 {
-webFilteredFieldedTable(cart, table, returnUrl, varPrefix, 
+webFilteredFieldedTable(cart, table, NULL, returnUrl, varPrefix, 
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
-    slCount(table->rowList), NULL, NULL, NULL, NULL, NULL);
+    slCount(table->rowList), 
+    0, NULL, NULL, NULL, NULL, NULL);
 }
 
 
@@ -771,15 +782,63 @@ if (!isEmpty(orderFields))
 *retWhere = where;
 }
 
-void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn, 
-    char *fields, char *from, char *initialWhere,  
-    char *returnUrl, char *varPrefix, int maxFieldWidth, 
-    struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, char *visibleFacetList,
-    void (*addFunc)(int) )
-/* Given a query to the database in conn that is basically a select query broken into
- * separate clauses, construct and display an HTML table around results. This HTML table has
- * column names that will sort the table, and optionally (if withFilters is set)
+struct dyString *fuseCsvFields(struct sqlConnection *conn, char *table, 
+    char *firstCsv, char *secondCsv)
+/* Return a list that is firstCsv followed by any fields in secondCsv not already in firstCsv
+ *      "a,b,c,d",  "b,f,d,e"   yeilds "a,b,c,d,f,e"
+ * order is preserved in firstCsv and when possible in second */
+{
+struct hash *uniq = hashNew(0);
+struct dyString *result = dyStringNew(0);
+
+/* Add everything in aList to both hash and result */
+struct slName *el;
+struct slName *aList = slNameListFromComma(firstCsv);
+for (el = aList; el != NULL; el = el->next)
+    {
+    if (sqlColumnExists(conn, table, el->name))
+	csvEscapeAndAppend(result, el->name);
+    hashAdd(uniq, el->name, NULL);
+    }
+
+/* Only add bList if it's not in there already and it is in database */
+struct slName *bList = slNameListFromComma(secondCsv);
+for (el = bList; el != NULL; el = el->next)
+    {
+    if (!hashLookup(uniq, el->name))
+        {
+	if (sqlColumnExists(conn, table, el->name))
+	    csvEscapeAndAppend(result, el->name);
+	hashAdd(uniq, el->name, NULL);
+	}
+    }
+
+/* Clean up and return with result */
+slFreeList(&aList);
+slFreeList(&bList);
+hashFree(&uniq);
+return result;
+}
+
+void webFilteredSqlTable(struct cart *cart,    /* User set preferences here */
+    struct sqlConnection *conn,		       /* Connection to database */
+    char *fields, char *from, char *initialWhere,  /* Our query in three parts */
+    char *returnUrl, char *varPrefix,	       /* Url to get back to us, and cart var prefix */
+    int maxFieldWidth,			       /* How big do we let fields get in characters */
+    struct hash *tagOutWrappers,	       /* A hash full of callbacks, one for each column */
+    void *wrapperContext,		       /* Gets passed to callbacks in tagOutWrappers */
+    boolean withFilters,	/* If TRUE put up filter controls under labels */
+    char *pluralInstructions,   /* If non-NULL put up instructions and clear/search buttons */
+    int pageSize,		/* How many items per page */
+    int facetUsualSize,		/* How many items in a facet before opening */
+    struct hash *suggestHash,	/* If using filter can put suggestions for categorical items here */
+    char *visibleFacetList,     /* Comma separated list of fields to facet on */
+    void (*addFunc)(int) )      /* Callback relevant with pluralInstructions only */
+/* Turn sql query into a nice interactive table, possibly with facets.  It constructs
+ * a query to the database in conn that is basically a select query broken into
+ * separate clauses, construct and display an HTML table around results. Optionally table
+ * may have a faceted search to the left or fields that can filter under the labels.  The table 
+ * has column names that will sort the table, and optionally (if withFilters is set)
  * it will also allow field-by-field wildcard queries on a set of controls it draws above
  * the labels. 
  *    Much of the functionality rests on the call to webFilteredFieldedTable.  This function
@@ -788,7 +847,9 @@ void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn,
 {
 struct dyString *query;
 struct dyString *where;
-webTableBuildQuery(cart, from, initialWhere, varPrefix, fields, withFilters, &query, &where);
+struct dyString *fusedFields = fuseCsvFields(conn, from, fields, visibleFacetList);
+webTableBuildQuery(cart, from, initialWhere, varPrefix, 
+    fusedFields->string, withFilters, &query, &where);
 
 char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
 
@@ -806,7 +867,8 @@ context.tableOffset = page * pageSize;
 
 if (visibleFacetList)
     {
-    table = fieldedTableAndCountsFromDbQuery(conn, query->string, pageSize, context.tableOffset, selectedFacetValues, &ffArray, &context.tableSize);
+    table = fieldedTableAndCountsFromDbQuery(conn, query->string, pageSize, 
+	context.tableOffset, selectedFacetValues, &ffArray, &context.tableSize);
     }
 else
     {
@@ -831,10 +893,12 @@ if (!visibleFacetList)
     table = fieldedTableFromDbQuery(conn, query->string);
     }
 
-webFilteredFieldedTable(cart, table, returnUrl, varPrefix, maxFieldWidth, 
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, ffArray, visibleFacetList, addFunc);
+webFilteredFieldedTable(cart, table, fields, returnUrl, varPrefix, maxFieldWidth, 
+    tagOutWrappers, wrapperContext, withFilters, pluralInstructions, 
+    pageSize, facetUsualSize, &context, suggestHash, ffArray, visibleFacetList, addFunc);
 fieldedTableFree(&table);
 
+dyStringFree(&fusedFields);
 dyStringFree(&query);
 dyStringFree(&where);
 }
