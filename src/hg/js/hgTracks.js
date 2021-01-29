@@ -4635,7 +4635,7 @@ var mouseOver = {
 //    if (tdTop < 0) { return; }  // track is scrolled off top of screen
     var tdWidth = Math.floor(tdRect.width);
     var tdHeight = Math.floor(tdRect.height);
-    var rightSide = tdLeft + tdWidth;
+    var tdRight = tdLeft + tdWidth;
     // clientX is the X coordinate of the mouse hot spot
     var clientX = Math.floor(evt.clientX);
     var clientY = Math.floor(evt.clientY);
@@ -4645,7 +4645,7 @@ var mouseOver = {
     //   LEFTADD.
     var graphOffset = Math.max(0, clientX - tdLeft - 3);
     if (hgTracks.revCmplDisp) {
-       graphOffset = Math.max(0, rightSide - clientX);
+       graphOffset = Math.max(0, tdRight - clientX);
     }
 
     var windowUp = false;     // see if window is supposed to become visible
@@ -4668,30 +4668,21 @@ var mouseOver = {
     var msgHeight = Math.ceil($('#mouseOverText').height());
     var lineHeight = Math.max(0, tdHeight - msgHeight);
     if (tdTop < 0) { lineHeight = Math.max(0, tdHeight + tdTop - msgHeight); }
-    var lineTop = Math.max(0, tdTop + msgHeight);
     var msgLeft = Math.max(tdLeft, clientX - (msgWidth/2) - 3); // with magic 3
-    if (clientY < tdTop + msgHeight) {
+    var msgTop = Math.max(0, tdTop);
+    var lineTop = Math.max(0, msgTop + msgHeight);
+    var lineLeft = Math.max(0, clientX - 3);  // with magic 3
+    if (clientY < msgTop + msgHeight) {	// cursor overlaps with the msg box
       msgLeft = clientX - msgWidth - 6;     // to the left of the cursor
-      if (msgLeft < tdLeft) {   // hits left edge, switch
+      if (msgLeft < tdLeft || msgLeft < 0) {   // hits left edge, switch
         msgLeft = clientX;         // to right of cursor
       }
-    } else {
-      msgLeft = Math.min(msgLeft, rightSide - msgWidth);  // right border limit
+    } else {	// apply limits to left and right edges, window or image
+      msgLeft = Math.min(msgLeft, tdRight - msgWidth);  // image right limit
+      msgLeft = Math.min(msgLeft, $(window).width() - msgWidth); // window right
+      msgLeft = Math.max(0, msgLeft);  // left window edge limit
     }
-    var lineLeft = Math.max(0, clientX - 3);  // with magic 3
-    if (tdTop < 0) {
-      var bottomMsg = tdTop + tdHeight - msgHeight;
-      // there is no real way to get cursor height, assume size of msgHeight
-      if (clientY > (bottomMsg - msgHeight)) { // assume cursor size==msgHeight
-        msgLeft = clientX - msgWidth - 6;     // to the left of the cursor
-        if (msgLeft < tdLeft) {   // hits left edge, switch
-          msgLeft = clientX;         // to right of cursor
-        }
-      }
-      $('#mouseOverText').css('top',bottomMsg + "px");
-    } else {
-      $('#mouseOverText').css('top',tdTop + "px");
-    }
+    $('#mouseOverText').css('top',msgTop + "px");
     $('#mouseOverText').css('left',msgLeft + "px");
     $('#mouseOverVerticalLine').css('left',lineLeft + "px");
     $('#mouseOverVerticalLine').css('top',lineTop + "px");

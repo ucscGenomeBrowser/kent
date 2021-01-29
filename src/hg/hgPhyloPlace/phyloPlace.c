@@ -1120,10 +1120,10 @@ if (isFasta)
     puts("<th>Bases aligned"
          TOOLTIP("Number of bases aligned to reference NC_045512.2 Wuhan/Hu-1, including "
                  "matches and mismatches")
-         "</th>\n<th>Insertions"
+         "</th>\n<th>Inserted bases"
          TOOLTIP("Number of bases in aligned portion of uploaded sequence that are not present in "
                  "reference NC_045512.2 Wuhan/Hu-1")
-         "</th>\n<th>Deletions"
+         "</th>\n<th>Deleted bases"
          TOOLTIP("Number of bases in reference NC_045512.2 Wuhan/Hu-1 that are not "
                  "present in aligned portion of uploaded sequence")
          "</th>");
@@ -1262,7 +1262,8 @@ if (si->nCountEnd)
 
 static void summarizeSequences(struct seqInfo *seqInfoList, boolean isFasta,
                                struct usherResults *ur, struct tempName *jsonTns[],
-                               struct hash *sampleMetadata, struct mutationAnnotatedTree *bigTree)
+                               struct hash *sampleMetadata, struct mutationAnnotatedTree *bigTree,
+                               struct dnaSeq *refGenome)
 /* Show a table with composition & alignment stats for each sequence that passed basic QC. */
 {
 if (seqInfoList)
@@ -1271,6 +1272,7 @@ if (seqInfoList)
     printSummaryHeader(isFasta);
     puts("<tbody>");
     struct dyString *dy = dyStringNew(0);
+    struct dyString *dyExtra = dyStringNew(0);
     struct seqInfo *si;
     for (si = seqInfoList;  si != NULL;  si = si->next)
         {
@@ -1335,23 +1337,74 @@ if (seqInfoList)
                 dyStringPrintf(dy, "bases %d - %d align to reference bases %d - %d",
                                psl->qStart+1, psl->qEnd, psl->tStart+1, psl->tEnd);
                 printTooltip(dy->string);
-                printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(psl->qBaseInsert), psl->qBaseInsert);
-                if (psl->qBaseInsert)
+                int insBases = 0, insCount = 0, delBases = 0, delCount = 0;
+                if (psl->qBaseInsert || psl->tBaseInsert)
                     {
+                    // Tally up actual insertions and deletions; ignore skipped N bases.
                     dyStringClear(dy);
-                    dyStringPrintf(dy, "%d bases in %d locations",
-                                   psl->qBaseInsert, psl->qNumInsert);
+                    dyStringClear(dyExtra);
+                    int ix;
+                    for (ix = 0;  ix < psl->blockCount - 1;  ix++)
+                        {
+                        int qGapStart = psl->qStarts[ix] + psl->blockSizes[ix];
+                        int qGapEnd = psl->qStarts[ix+1];
+                        int qGapLen = qGapEnd - qGapStart;
+                        int tGapStart = psl->tStarts[ix] + psl->blockSizes[ix];
+                        int tGapEnd = psl->tStarts[ix+1];
+                        int tGapLen = tGapEnd - tGapStart;
+                        if (qGapLen > tGapLen)
+                            {
+                            insCount++;
+                            int insLen = qGapLen - tGapLen;
+                            insBases += insLen;
+                            if (isNotEmpty(dy->string))
+                                dyStringAppend(dy, ", ");
+                            if (insLen <= 12)
+                                {
+                                char insSeq[insLen+1];
+                                safencpy(insSeq, sizeof insSeq, si->seq->dna + qGapEnd - insLen,
+                                         insLen);
+                                touppers(insSeq);
+                                dyStringPrintf(dy, "%d-%d:%s",
+                                               tGapEnd, tGapEnd+1, insSeq);
+                                }
+                            else
+                                dyStringPrintf(dy, "%d-%d:%d bases",
+                                               tGapEnd, tGapEnd+1, insLen);
+                            }
+                        else if (tGapLen > qGapLen)
+                            {
+                            delCount++;
+                            int delLen = tGapLen - qGapLen;;
+                            delBases += delLen;
+                            if (isNotEmpty(dyExtra->string))
+                                dyStringAppend(dyExtra, ", ");
+                            if (delLen <= 12)
+                                {
+                                char delSeq[delLen+1];
+                                safencpy(delSeq, sizeof delSeq, refGenome->dna + tGapEnd - delLen,
+                                         delLen);
+                                touppers(delSeq);
+                                dyStringPrintf(dyExtra, "%d-%d:%s",
+                                               tGapEnd - delLen + 1, tGapEnd, delSeq);
+                                }
+                            else
+                                dyStringPrintf(dyExtra, "%d-%d:%d bases",
+                                               tGapEnd - delLen + 1, tGapEnd, delLen);
+                            }
+                        }
+                    }
+                printf("</td><td class='%s'>%d ",
+                       qcClassForIndel(insBases), insBases);
+                if (insBases)
+                    {
                     printTooltip(dy->string);
                     }
                 printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(psl->tBaseInsert), psl->tBaseInsert);
-                if (psl->tBaseInsert)
+                       qcClassForIndel(delBases), delBases);
+                if (delBases)
                     {
-                    dyStringClear(dy);
-                    dyStringPrintf(dy, "%d bases in %d locations",
-                                   psl->tBaseInsert, psl->tNumInsert);
-                    printTooltip(dy->string);
+                    printTooltip(dyExtra->string);
                     }
                 printf("</td>");
                 }
@@ -1608,7 +1661,8 @@ if (vcfTn)
                "button, and then you can drag on a CSV file to "
                "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
                "</p>\n");
-        summarizeSequences(seqInfoList, isFasta, results, jsonTns, sampleMetadata, bigTree);
+        summarizeSequences(seqInfoList, isFasta, results, jsonTns, sampleMetadata, bigTree,
+                           refGenome);
         reportTiming(&startTime, "write summary table (including reading in lineages)");
         for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
             {
