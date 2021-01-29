@@ -21,12 +21,39 @@ struct hash *oldVars = NULL;
 char *database = NULL;
 char *genome = NULL;
 
-void doBody()
-{
-struct sqlConnection *conn = sqlConnect(database);
-struct hash *emptyHash = hashNew(0);
+struct facetedTable
+/* Help manage a faceted table */
+    {
+    struct facetedTable *next;
+    char *name;		/* Name of file or database table */
+    char *varPrefix;	/* Prefix used on variables */
+    };
 
-/* Write out html to pull in the other files we use. */
+struct facetedTable *facetedTableNew(char *name, char *varPrefix)
+{
+struct facetedTable *ft;
+AllocVar(ft);
+ft->name = cloneString(name);
+ft->varPrefix = cloneString(varPrefix);
+return ft;
+}
+
+void facetedTableFree(struct facetedTable **pFt)
+/* Free up resources associated with faceted table */
+{
+struct facetedTable *ft = *pFt;
+if (ft != NULL)
+    {
+    freeMem(ft->name);
+    freeMem(ft->varPrefix);
+    freez(pFt);
+    }
+}
+
+
+void facetedTableWebInit(struct facetedTable *ft)
+/* Print out scripts and css that we need.  We should be in a page body or title. */
+{
 webIncludeResourceFile("facets.css");
 printf("\t\t<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\"></script>");
 printf("\t\t<link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.7.2/css/all.css\"\n"
@@ -43,13 +70,60 @@ printf("\t\t<link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases
     "\t\t integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\"\n"
     "\t\t crossorigin=\"anonymous\"></script>\n"
     );
+}
+
+char *facetedTableSelOp(struct facetedTable *ft, struct cart *cart)
+/* Look up selOp in cart */
+{
+char var[256];
+safef(var, sizeof(var), "%s_facet_op", ft->varPrefix);
+return cartOptionalString(cart, var);
+}
+
+char *facetedTableSelField(struct facetedTable *ft, struct cart *cart)
+/* Look up sel field in cart */
+{
+char var[256];
+safef(var, sizeof(var), "%s_facet_fieldName", ft->varPrefix);
+return cartOptionalString(cart, var);
+}
+
+char *facetedTableSelVal(struct facetedTable *ft, struct cart *cart)
+/* Look up sel val in cart */
+{
+char var[256];
+safef(var, sizeof(var), "%s_facet_fieldVal", ft->varPrefix);
+return cartOptionalString(cart, var);
+}
+
+
+void facetedTableRemoveOpVars(struct facetedTable *ft, struct cart *cart)
+/* Remove sel op/field/name vars from cart */
+{
+char var[256];
+safef(var, sizeof(var), "%s_facet_op", ft->varPrefix);
+cartRemove(cart, var);
+safef(var, sizeof(var), "%s_facet_fieldVal", ft->varPrefix);
+cartRemove(cart, var);
+safef(var, sizeof(var), "%s_facet_fieldName", ft->varPrefix);
+cartRemove(cart, var);
+}
+
+void doBody()
+{
+/* Fake up a 'track' for development */
+char *trackName = "cellFacetsJk1";
+
+struct sqlConnection *conn = sqlConnect(database);
+struct hash *emptyHash = hashNew(0);
+struct facetedTable *ft = facetedTableNew("the original", trackName);
+
+/* Write out html to pull in the other files we use. */
+facetedTableWebInit(ft);
 
 /* Working within a form we save context */
 printf("<form action=\"../cgi-bin/hgFacetedBars\" name=\"facetForm\" method=\"GET\">\n");
 cartSaveSession(cart);
-
-/* Fake up a 'track' for development */
-char *trackName = "cellFacetsJk1";
 
 /* Set up url that has enough context to get back to us.  This is very much a work in 
  * progress. */
@@ -58,13 +132,11 @@ safef(returnUrl, sizeof(returnUrl), "../cgi-bin/hgFacetedBars?%s",
     cartSidUrlString(cart) );
 
 /* If we got called by a click on a facet deal with that */
-char opVar[256];
-safef(opVar, sizeof(opVar), "%s_facet_op", trackName);
-char *selOp = cartOptionalString(cart, opVar);
+char *selOp = facetedTableSelOp(ft, cart);
 if (selOp)
     {
-    char *selFieldName = cartOptionalString(cart, "browseFiles_facet_fieldName");
-    char *selFieldVal = cartOptionalString(cart, "browseFiles_facet_fieldVal");
+    char *selFieldName = facetedTableSelField(ft, cart);
+    char *selFieldVal = facetedTableSelVal(ft, cart);
     if (selFieldName && selFieldVal)
 	{
 	char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
@@ -72,9 +144,7 @@ if (selOp)
 	selectedListFacetValUpdate(&selList, selFieldName, selFieldVal, selOp);
 	char *newSelectedFacetValues = linearizeFacetVals(selList);
 	cartSetString(cart, "cdwSelectedFieldValues", newSelectedFacetValues);
-	cartRemove(cart, opVar);
-	cartRemove(cart, "browseFiles_facet_fieldName");
-	cartRemove(cart, "browseFiles_facet_fieldVal");
+	facetedTableRemoveOpVars(ft, cart);
 	}
     }
 

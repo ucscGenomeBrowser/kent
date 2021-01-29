@@ -1250,8 +1250,8 @@ if (clearRestriction && sameString(clearRestriction,"1"))
 char *selOp = cartOptionalString(cart, "cdwBrowseFiles_facet_op");
 if (selOp)
     {
-    char *selFieldName = cartOptionalString(cart, "browseFiles_facet_fieldName");
-    char *selFieldVal = cartOptionalString(cart, "browseFiles_facet_fieldVal");
+    char *selFieldName = cartOptionalString(cart, "cdwBrowseFiles_facet_fieldName");
+    char *selFieldVal = cartOptionalString(cart, "cdwBrowseFiles_facet_fieldVal");
     if (selFieldName && selFieldVal)
 	{
 	char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
@@ -1263,8 +1263,8 @@ if (selOp)
 	//warn("newSelectedFacetValues=[%s]", newSelectedFacetValues); // DEBUG REMOVE
 	cartSetString(cart, "cdwSelectedFieldValues", newSelectedFacetValues);
 	cartRemove(cart, "cdwBrowseFiles_facet_op");
-	cartRemove(cart, "browseFiles_facet_fieldName");
-	cartRemove(cart, "browseFiles_facet_fieldVal");
+	cartRemove(cart, "cdwBrowseFiles_facet_fieldName");
+	cartRemove(cart, "cdwBrowseFiles_facet_fieldVal");
 	}
     }
 
