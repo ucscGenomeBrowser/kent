@@ -7,24 +7,23 @@ visibility hide
 group phenDis
 color 100,130,160
 
-
         track caddIns
         shortLabel Insertions
-        longLabel CADD Score: Insertions
+        longLabel CADD Score: Insertions - label is length of insertion
         type bigBed 9 +
         parent caddSuper
         visibility dense
         bigDataUrl /gbdb/$D/cadd/ins.bb
-        mouseOverField $change $phred
+        mouseOver Mutation: $change CADD Phred score: $phred
 
         track caddDel
         shortLabel Deletions
-        longLabel CADD Score: Deletions
+        longLabel CADD Score: Deletions - label is length of deletion
         type bigBed 9 +
         parent caddSuper
         visibility dense
         bigDataUrl /gbdb/$D/cadd/del.bb
-        mouseOverField $change $phred
+        mouseOver Mutation: $change CADD Phred score: $phred
 
 track cadd
 shortLabel CADD
@@ -38,8 +37,8 @@ group phenDis
 color 100,130,160
 
         track caddA
-        shortLabel Mutation to A
-        longLabel CADD Score: Mutation to A
+        shortLabel Mutation: A
+        longLabel CADD Score: Mutation is A
         type bigWig
         parent cadd on
         visibility dense
@@ -49,8 +48,8 @@ color 100,130,160
         viewLimitsMax 0:100
 
         track caddC
-        shortLabel Mutation to C
-        longLabel CADD Score: Mutation to C
+        shortLabel Mutation: C
+        longLabel CADD Score: Mutation is C
         type bigWig
         parent cadd on
         visibility dense
@@ -60,8 +59,8 @@ color 100,130,160
         viewLimitsMax 0:100
 
         track caddG
-        shortLabel Mutation to G
-        longLabel CADD Score: Mutation to G
+        shortLabel Mutation: G
+        longLabel CADD Score: Mutation is G
         type bigWig
         parent cadd on
         visibility dense
@@ -71,8 +70,8 @@ color 100,130,160
         viewLimitsMax 0:100
 
         track caddT
-        shortLabel Mutation to T
-        longLabel CADD Score: Mutation to T
+        shortLabel Mutation: T
+        longLabel CADD Score: Mutation is T
         type bigWig
         parent cadd on
         visibility dense
