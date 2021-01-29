@@ -1022,7 +1022,7 @@ if (!securityColumnsInTable)
     suggestHash = accessibleSuggestHash(conn, fields, efList);
 
 webFilteredSqlTable(cart, conn, fields, fromTable, where->string, returnUrl, varPrefix, maxFieldWidth,
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash, visibleFacetList, makeDownloadAllButtonForm);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, 15, suggestHash, visibleFacetList, makeDownloadAllButtonForm);
 
 /* Clean up and go home. */
 cdwFileFreeList(&efList);
