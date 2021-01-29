@@ -268,25 +268,24 @@ Confirm the following:
 
     These copies may have different db.user specification
     to allow developers write access to the database.
-    See also: README.mysql.setup
 
-10.  Load databases of interest.  See also: README.QuickStart
+10.  Load databases of interest.  See also: 
 
-    src/product/scripts/activeDbList.sh
-    src/product/scripts/minimal.db.list.txt
-    src/product/scripts/loadDb.sh
+         src/product/scripts/activeDbList.sh
+         src/product/scripts/minimal.db.list.txt
+         src/product/scripts/loadDb.sh
 
-    And discussion in scripts/README about whether you can use directly
-    the MySQL binary database files, or if you need to download goldenPath
-    database text dumps and load them into the database.
-    
-    An alternative to loading the database tables from text files,
-    is to directly rsync the MySQL tables themselves and place them
-    in your MySQL /var/ directory.  These tables are much larger
-    than the text files due to the sizes of indexes created during a
-    table load, but it can save a lot of time since the data loading
-    step is quite compute intensive.  A typical rsync command for an
-    entire database (e.g. ce4) would be something like:
+     And discussion in scripts/README about whether you can use directly
+     the MySQL binary database files, or if you need to download goldenPath
+     database text dumps and load them into the database.
+     
+     An alternative to loading the database tables from text files,
+     is to directly rsync the MySQL tables themselves and place them
+     in your MySQL /var/ directory.  These tables are much larger
+     than the text files due to the sizes of indexes created during a
+     table load, but it can save a lot of time since the data loading
+     step is quite compute intensive.  A typical rsync command for an
+     entire database (e.g. ce4) would be something like:
 
         rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/
 
@@ -295,15 +294,15 @@ Confirm the following:
     Construct symlinks in your MySQL data directory to use database
     names: go proteome uniProt for these database directories:
 
-        $ ls -og proteome go uniProt
-        lrwxrwxrwx 1  8 Feb 26 11:39 go -> go140213
-        lrwxrwxrwx 1 14 Mar 27 12:01 proteome -> proteins140122
-        lrwxrwxrwx 1  8 Mar 27 12:01 uniProt -> sp140122
-
-        $ ls -ld go140213 proteins140122 sp140122
-        drwx------ 2 mysql mysql 4096 Feb 26 10:57 go140213
-        drwx------ 2 mysql mysql 4096 Aug 19 08:08 proteins140122
-        drwx------ 2 mysql mysql 4096 Mar 26 13:01 sp140122
+         $ ls -og proteome go uniProt
+         lrwxrwxrwx 1  8 Feb 26 11:39 go -> go140213
+         lrwxrwxrwx 1 14 Mar 27 12:01 proteome -> proteins140122
+         lrwxrwxrwx 1  8 Mar 27 12:01 uniProt -> sp140122
+ 
+         $ ls -ld go140213 proteins140122 sp140122
+         drwx------ 2 mysql mysql 4096 Feb 26 10:57 go140213
+         drwx------ 2 mysql mysql 4096 Aug 19 08:08 proteins140122
+         drwx------ 2 mysql mysql 4096 Mar 26 13:01 sp140122
 
      These file names are data stamped YYMMDD to indicate changes
      over time as they are updated with new builds of the UCSC gene track.
@@ -317,28 +316,28 @@ Confirm the following:
 13.  The browser should now appear at the URL:
 	http://localhost/
 
-	Check your Apache error_log file for hints to solving problems.
+     Check your Apache error_log file for hints to solving problems.
 
 14.  BLAT server setup: The blatServers table in the database hgcentral needs to
 	have a fully qualified host name specified in the 'host' column.
 
-    Educational and non-profit institutions are allowed to use
-    blat free of charge.  Commercial installations of the browser
-    require a license for blat.  See also: <http://kentinformatics.com/index.html>
-    and: <http://genome.ucsc.edu/license/>
-    In the source tree: src/gfServer/README.blat
+     Educational and non-profit institutions are allowed to use
+     blat free of charge.  Commercial installations of the browser
+     require a license for blat.  See also: <http://kentinformatics.com/index.html>
+     and: <http://genome.ucsc.edu/license/>
+     In the source tree: src/gfServer/README.blat
 
 15.  Useful links:
 
-    <http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ>
-
-    There are numerous README files in the source tree on
-    a variety of specific subjects, e.g.:
-
-        ./src/README
-        ./src/product/README.*
-        ./src/hg/makeDb/trackDB/README
-        ./src/hg/makeDb/doc/make*.txt
+     <http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ>
+ 
+     There are numerous README files in the source tree on
+     a variety of specific subjects, e.g.:
+ 
+         ./src/README
+         ./src/product/README.*
+         ./src/hg/makeDb/trackDB/README
+         ./src/hg/makeDb/doc/make*.txt
 
 16. Apache configuration:
 

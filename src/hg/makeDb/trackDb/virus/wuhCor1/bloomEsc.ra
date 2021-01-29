@@ -9,6 +9,7 @@ visibility full
 color 255,0,0
 priority 30.1
 type bigWig
+html abEscape
 
 track bloomEscMabAvg
 shortLabel Bloom MAB Average
@@ -21,6 +22,7 @@ visibility full
 color 0,0,255
 priority 30.2
 type bigWig
+html abEscape
 
 track bloomEscTop
 shortLabel Bloom Strong Mutations
@@ -34,6 +36,7 @@ scoreMin 0
 scoreMax 15
 mouseOverField _mouseOver
 priority 30.3
+html abEscape
 
 track bloomEscMax
 shortLabel Bloom Max Escape
@@ -46,6 +49,7 @@ parent abEscape
 #color 0,0,0
 viewLimits 0:1.0
 priority 30.7
+html abEscape
 
    track A_120Max
    shortLabel Serum: A, day 120

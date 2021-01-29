@@ -2765,7 +2765,14 @@ var rightClick = {
                             }
                         }
 
-                        if (isHgc && ( href.indexOf('g=gtexGene')!== -1 || href.indexOf('g=unip') !== -1 )) {
+                        // when "exonNumbers on", the mouse over text is not a good item description for the right-click menu
+                        // "exonNumbers on" is the default for genePred/bigGenePred tracks but can also be actived for bigBed and others
+                        // We don't have the value of "exonNumbers" here, so just use a heuristic to see if it's on
+                        if (title.search(/, strand [+-], Intron /)!==-1) {
+                            title = title.split(",")[0];
+                        }
+
+                        else if (isHgc && ( href.indexOf('g=gtexGene')!== -1 || href.indexOf('g=unip') !== -1 )) {
                             // For GTEx gene and UniProt mouseovers, replace title (which may be a tissue name) with 
                             // item (gene) name. Also need to unescape the urlencoded characters and the + sign.
                             a = /i=([^&]+)/.exec(href);
@@ -4479,6 +4486,9 @@ var mouseOver = {
     delayInProgress: false,        // true while waiting for delay timer
     mostRecentMouseEvt: null,   // to use when mouse delay is finished
     browserTextSize: 12,        // default if not found otherwise
+    measureTextBox: null,
+    noDataString: "no&nbsp;data",	// message for no data at this position
+    noDataSize: 0,	// will be set to size of text 'no data'
 
     // items{} - key name is track name, value is an array of data items
     //           where the format of each item can be different for different
@@ -4622,18 +4632,20 @@ var mouseOver = {
     var tdRect = tdId.getBoundingClientRect();
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
+//    if (tdTop < 0) { return; }  // track is scrolled off top of screen
     var tdWidth = Math.floor(tdRect.width);
     var tdHeight = Math.floor(tdRect.height);
-    var rightSide = tdLeft + tdWidth;
+    var tdRight = tdLeft + tdWidth;
     // clientX is the X coordinate of the mouse hot spot
     var clientX = Math.floor(evt.clientX);
+    var clientY = Math.floor(evt.clientY);
     // the graphOffset is the index (x coordinate) into the 'items' definitions
     //  of the data value boxes for the graph.  The magic number three
     //   is used elsewhere in this code, note the comment on the constant
     //   LEFTADD.
     var graphOffset = Math.max(0, clientX - tdLeft - 3);
     if (hgTracks.revCmplDisp) {
-       graphOffset = Math.max(0, rightSide - clientX);
+       graphOffset = Math.max(0, tdRight - clientX);
     }
 
     var windowUp = false;     // see if window is supposed to become visible
@@ -4642,10 +4654,10 @@ var mouseOver = {
        foundIdx = mouseOver.findRange(graphOffset, mouseOver.items[trackName]);
     }
     // can show 'no data' when not found
-    var mouseOverValue = "no&nbsp;data";
+    var mouseOverValue = mouseOver.noDataString;
     if (foundIdx > -1) { // value to display
       if (mouseOver.items[trackName][foundIdx].c > 1) {
-        mouseOverValue = "&nbsp;&mu;&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
+        mouseOverValue = "&nbsp;~&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
       } else {
         mouseOverValue = "&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
       }
@@ -4655,12 +4667,23 @@ var mouseOver = {
     $('#mouseOverText').width(msgWidth);
     var msgHeight = Math.ceil($('#mouseOverText').height());
     var lineHeight = Math.max(0, tdHeight - msgHeight);
-    var lineTop = Math.max(0, tdTop + msgHeight);
-    var msgLeft = Math.max(0, clientX - (msgWidth/2) - 3); // with magic 3
+    if (tdTop < 0) { lineHeight = Math.max(0, tdHeight + tdTop - msgHeight); }
+    var msgLeft = Math.max(tdLeft, clientX - (msgWidth/2) - 3); // with magic 3
+    var msgTop = Math.max(0, tdTop);
+    var lineTop = Math.max(0, msgTop + msgHeight);
     var lineLeft = Math.max(0, clientX - 3);  // with magic 3
-    $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
+    if (clientY < msgTop + msgHeight) {	// cursor overlaps with the msg box
+      msgLeft = clientX - msgWidth - 6;     // to the left of the cursor
+      if (msgLeft < tdLeft || msgLeft < 0) {   // hits left edge, switch
+        msgLeft = clientX;         // to right of cursor
+      }
+    } else {	// apply limits to left and right edges, window or image
+      msgLeft = Math.min(msgLeft, tdRight - msgWidth);  // image right limit
+      msgLeft = Math.min(msgLeft, $(window).width() - msgWidth); // window right
+      msgLeft = Math.max(0, msgLeft);  // left window edge limit
+    }
+    $('#mouseOverText').css('top',msgTop + "px");
     $('#mouseOverText').css('left',msgLeft + "px");
-    $('#mouseOverText').css('top',tdTop + "px");
     $('#mouseOverVerticalLine').css('left',lineLeft + "px");
     $('#mouseOverVerticalLine').css('top',lineTop + "px");
     $('#mouseOverVerticalLine').css('height',lineHeight + "px");
@@ -4710,6 +4733,20 @@ var mouseOver = {
       mouseOver.popUpTimer = setTimeout(mouseOver.delayCompleted, mouseOver.popUpDelay);
     },
 
+    // given a string of text, return width of rendered text size
+    // using an off-screen span element that is created here first time through
+    getWidthOfText: function (measureThis)
+    {
+    if(mouseOver.measureTextBox === null){  // set up first time only
+        mouseOver.measureTextBox = document.createElement('span');
+        var cssText = "position: fixed; width: auto; display: block; text-align: right; left:-999px; top:-999px; font-style:normal; font-size:" + mouseOver.browserTextSize + "px; font-family:" + jQuery('body').css('font-family');
+        mouseOver.measureTextBox.style.cssText = cssText;
+        document.body.appendChild(mouseOver.measureTextBox);
+    }
+    mouseOver.measureTextBox.innerHTML = measureThis;
+    return Math.ceil(mouseOver.measureTextBox.clientWidth);
+    },
+
     // =======================================================================
     // receiveData() callback for successful JSON request, receives incoming
     //             JSON data and gets it into global variables for use here.
@@ -4732,7 +4769,7 @@ var mouseOver = {
     // =======================================================================
     receiveData: function (arr)
     {
-      mouseOver.visible = false;
+      mouseOver.popUpDisappear();
       for (var trackName in arr) {
 	// clear these variables if they existed before
       if (mouseOver.trackType[trackName]) {mouseOver.trackType[trackName] = undefined;}
@@ -4768,16 +4805,17 @@ var mouseOver = {
       mouseOver.tracks[trackName] = itemCount;	// != 0 -> indicates valid track
       var mouseOverValue = "";
       if (hasMean) {
-         mouseOverValue = "&nbsp;&mu;&nbsp;" + longestNumber + "&nbsp;";
+         mouseOverValue = "&nbsp;~&nbsp;" + longestNumber + "&nbsp;";
       } else {
          mouseOverValue = "&nbsp;" + longestNumber + "&nbsp;";
       }
-      $('#mouseOverText').html(mouseOverValue);	// see how big as rendered
       $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
-      var maximumWidth = Math.ceil($('#mouseOverText').width());
-      $('#mouseOverText').html("no&nbsp;data");	// might be bigger
-      if (Math.ceil($('#mouseOverText').width() > maximumWidth)) {
-          maximumWidth = Math.ceil($('#mouseOverText').width());
+      var maximumWidth = mouseOver.getWidthOfText(mouseOverValue);
+      if ( 0 === mouseOver.noDataSize) {  // only need to do this once
+        mouseOver.noDataSize = mouseOver.getWidthOfText(mouseOver.noDataString);
+      }
+      if (mouseOver.noDataSize > maximumWidth) {
+          maximumWidth = mouseOver.noDataSize;
       }
       mouseOver.maximumWidth[trackName] = maximumWidth;
       }

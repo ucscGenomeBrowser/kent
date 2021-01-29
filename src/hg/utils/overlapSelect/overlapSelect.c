@@ -63,6 +63,8 @@ enum recordFmt {
     CHAINQ_FMT,
     GENEPRED_FMT,
     BED_FMT,
+    BED3P_FMT,
+    BED6P_FMT,
     COORD_COLS_FMT
 };
 
@@ -100,6 +102,10 @@ if (sameString(fmt, "genePred"))
     return GENEPRED_FMT;
 if (sameString(fmt, "bed"))
     return BED_FMT;
+if (sameString(fmt, "bed3+"))
+    return BED3P_FMT;
+if (sameString(fmt, "bed6+"))
+    return BED6P_FMT;
 errAbort("invalid file format: %s", fmt);
 return UNKNOWN_FMT;
 }
@@ -145,7 +151,11 @@ switch (fmt)
     case GENEPRED_FMT:
         return chromAnnGenePredReaderNew(fileName, caOpts);
     case BED_FMT:
-        return chromAnnBedReaderNew(fileName, caOpts);
+        return chromAnnBedReaderNew(fileName, caOpts, 12);
+    case BED3P_FMT:
+        return chromAnnBedReaderNew(fileName, caOpts, 3);
+    case BED6P_FMT:
+        return chromAnnBedReaderNew(fileName, caOpts, 6);
     case COORD_COLS_FMT:
         return chromAnnTabReaderNew(fileName, cols, caOpts);
     case UNKNOWN_FMT:
@@ -367,8 +377,15 @@ static char *usageMsg =
 errAbort("%s", usageMsg);
 }
 
-/* entry */
+static boolean hasStrand(unsigned fmt, struct coordCols* coordCols)
+/* does the format include strand? */
+{
+return !((selectFmt == BED3P_FMT) ||
+         ((selectFmt == COORD_COLS_FMT) && (coordCols->strandCol == -1)));
+}
+
 int main(int argc, char** argv)
+/* entry */
 {
 char *selectFile, *inFile, *outFile, *dropFile;
 optionInit(&argc, argv, optionSpecs);
@@ -392,6 +409,8 @@ else if (optionExists("selectCoordCols"))
     }
 else
     selectFmt = getFileFormat(selectFile);
+if ((selectFmt == BED3P_FMT) || (selectFmt == BED6P_FMT))
+    selectCaOpts |= chromAnnRange; // no blocks
 
 if (optionExists("selectCds"))
     selectCaOpts |= chromAnnCds;
@@ -413,6 +432,8 @@ else if (optionExists("inCoordCols"))
     }
 else
     inFmt = getFileFormat(inFile);
+if ((inFmt == BED3P_FMT) || (inFmt == BED6P_FMT))
+    inCaOpts |= chromAnnRange; // no blocks
 
 inCaOpts = chromAnnSaveLines; // need lines for output
 if (optionExists("inCds"))
@@ -437,6 +458,14 @@ if (optionExists("excludeSelf"))
     selectOpts |= selExcludeSelf;
 if (optionExists("idMatch"))
     selectOpts |= selIdMatch;
+
+/* catch conflicts */
+boolean needStrand = (selectOpts & (selStrand | selOppositeStrand)) != 0;
+    if (!hasStrand(selectFmt, &selectCoordCols) && needStrand)
+    errAbort("request selecting by strand and selectFile doesn't have strand");
+if (!hasStrand(inFmt, &inCoordCols) && needStrand)
+    errAbort("request selecting by strand and inFile doesn't have strand");
+
 
 criteria.threshold = optionFloat("overlapThreshold", 0.0);
 criteria.thresholdCeil = optionFloat("overlapThresholdCeil", 1.1);

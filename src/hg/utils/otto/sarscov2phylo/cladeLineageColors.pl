@@ -52,7 +52,14 @@ my %ns2col = ( # Nextstrain clade coloring
               "19A" => "#f79e43",
               "20A" => "#b6d77a",
               "20C" => "#8fd4ed",
-              "20B" => "#a692c3"
+              "20B" => "#a692c3",
+              # Added in Jan. 2021, when Nextstrain added a bunch of new clades:
+              "20D" => "#8020a0", # from 20B (purple)
+              "20E" => "#44cc44", # from 20A (green)
+              "20F" => "#8822aa", # from 20B (purple)
+              "20G" => "#8888ff", # from 20C (blue)
+              "20H" => "#6666ff", # from 20C (blue)
+              "20I" => "#cc44ee", # from 20B (purple)
              );
 
 my %gc2col = ( # GISAID clade coloring
@@ -74,8 +81,8 @@ open(my $gF, ">gisaidColors") || die "Can't open gisaidColors: $!";
 while (<>) {
   chomp;
   my ($sample, $nsClade, $lineage, $gClade) = split("\t");
-  # Strip subclade from Nextstrain clade
-  $nsClade =~ s/\..*//;
+  # Strip subclade and other naming fluff from Nextstrain clade
+  $nsClade =~ s/[\. \/].*//;
   if (defined $ns2col{$nsClade}) {
     print $nsF "$sample\t$ns2col{$nsClade}\n";
   } else {
@@ -119,8 +126,7 @@ while (<>) {
     }
     if ($lineage eq "B.1.1" ||
         substr($lineage, 0, 6) eq "B.1.1." ||
-        substr($lineage, 0, 1) eq "C" ||
-        substr($lineage, 0, 1) eq "D") {
+        substr($lineage, 0, 1) =~ /[C-Z]/) {
       # Shades of purple -- minimum depth is 3, use even/odd to alternate colors
       my $endNum = ($lineage =~ m/\.(\d+)$/) ? ($1 + 0) : 0;
       if ($linDepth > 5) {
