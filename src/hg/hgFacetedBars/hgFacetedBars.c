@@ -14,6 +14,7 @@
 #include "knetUdc.h"
 #include "genbank.h"
 #include "tablesTables.h"
+#include "facetField.h"
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -104,7 +105,6 @@ safef(var, sizeof(var), "%s_facet_selList", ft->varPrefix);
 return cartOptionalString(cart, var);
 }
 
-
 void facetedTableRemoveOpVars(struct facetedTable *ft, struct cart *cart)
 /* Remove sel op/field/name vars from cart */
 {
@@ -148,12 +148,10 @@ void doBody()
 {
 /* Fake up a 'track' for development */
 char *trackName = "cellFacetsJk1";
-char *trackName2 = "tableList";
 
 struct sqlConnection *conn = sqlConnect(database);
 struct hash *emptyHash = hashNew(0);
 struct facetedTable *ft = facetedTableNew("the original", trackName);
-struct facetedTable *ft2 = facetedTableNew("the other", trackName2);
 
 /* Write out html to pull in the other files we use. */
 facetedTableWebInit();
@@ -168,28 +166,39 @@ char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/hgFacetedBars?%s",
     cartSidUrlString(cart) );
 
-/* If we got called by a click on a facet deal with that */
-
 /* Put up the big faceted search table */
 printf("<div>\n");
+char *statsFileName = "/gbdb/hg38/bbi/singleCellMerged/barChart.stats";
+char *requiredStatsFields[] = {"cluster","count","mean","organ","cell_class","stage","cell_type"};
+struct fieldedTable *table = fieldedTableFromTabFile(statsFileName, statsFileName, 
+    requiredStatsFields, ArraySize(requiredStatsFields));
 facetedTableUpdateOnFacetClick(ft, cart);
+
+/* Look up sel val in cart */
+char *selList = facetedTableSelList(ft, cart);
+struct facetField *ffArray[table->fieldCount];
+int selCount = 0;
+facetFieldsFromFieldedTable(table, selList, ffArray, &selCount);
+// uglyf("%d of %d selected in facets", selCount, table->rowCount);
+webFilteredFieldedTable(cart, table, 
+    "count,cluster,mean", returnUrl, trackName, 
+    32, emptyHash, NULL,
+    FALSE, NULL,
+    table->rowCount, 7,
+    NULL, emptyHash,
+    ffArray, "organ,cell_class,stage,cell_type",
+    NULL);
+
+#ifdef OLD
 webFilteredSqlTable(cart, conn, 
-    "cell_count,organ,cell_type", trackName, "", 
+    "organ,cell_class,cell_type", trackName, "", 
     returnUrl, trackName, 32, 
     emptyHash, NULL, 
     FALSE, NULL, 50, 7, emptyHash, "organ,cell_class,stage,cell_type",
     NULL);
+#endif /* OLD */
 printf("</div>\n");
 
-printf("<div>\n");
-facetedTableUpdateOnFacetClick(ft2, cart);
-webFilteredSqlTable(cart, conn, 
-    "tableName,field,type,nullAllowed", trackName2, "", 
-    returnUrl, trackName2, 32, 
-    emptyHash, NULL, 
-    FALSE, NULL, 50, 7, emptyHash, "type,field,tableName",
-    NULL);
-printf("</div>\n");
 
 /* Clean up and go home. */
 printf("</form>\n");
