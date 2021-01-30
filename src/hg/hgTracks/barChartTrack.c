@@ -9,6 +9,8 @@
 #include "hvGfx.h"
 #include "spaceSaver.h"
 #include "hubConnect.h"
+#include "fieldedTable.h"
+#include "facetedTable.h"
 #include "barChartBed.h"
 #include "barChartCategory.h"
 #include "barChartUi.h"
@@ -149,7 +151,24 @@ struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 struct barChartCategory *categ = NULL;
 extras->categories = getCategories(tg);
 extras->categoryFilter = hashNew(0);
-if (cartListVarExistsAnyLevel(cart, tg->tdb, FALSE, BAR_CHART_CATEGORY_SELECT))
+char *barChartFacets = trackDbSetting(tg->tdb, "barChartFacets");
+char *barChartStatsUrl = trackDbSetting(tg->tdb, "barChartStatsUrl");
+if (barChartFacets != NULL && barChartStatsUrl != NULL)
+    {
+    struct fieldedTable *table = fieldedTableFromTabFile(barChartStatsUrl,
+	barChartStatsUrl, NULL, 0);
+    struct facetedTable *facTab = facetedTableFromTable(table, tg->track, barChartFacets);
+    struct slInt *sel, *selList = facetedTableSelectOffsets(facTab, cart);
+    for (sel = selList; sel != NULL; sel = sel->next)
+        {
+	char numBuf[16];
+	safef(numBuf, sizeof(numBuf), "%d", sel->val);
+	char *numCopy = lmCloneString(extras->categoryFilter->lm, numBuf);
+	hashAdd(extras->categoryFilter, numCopy, numCopy);
+	}
+    return;
+    }
+else if (cartListVarExistsAnyLevel(cart, tg->tdb, FALSE, BAR_CHART_CATEGORY_SELECT))
     {
     struct slName *selectedValues = cartOptionalSlNameListClosestToHome(cart, tg->tdb, 
                                                         FALSE, BAR_CHART_CATEGORY_SELECT);
@@ -157,7 +176,9 @@ if (cartListVarExistsAnyLevel(cart, tg->tdb, FALSE, BAR_CHART_CATEGORY_SELECT))
         {
         struct slName *name;
         for (name = selectedValues; name != NULL; name = name->next)
+	    {
             hashAdd(extras->categoryFilter, name->name, name->name);
+	    }
         return;
         }
     }
@@ -853,6 +874,21 @@ int start = *pStart = iStart + bed->chromStart;
 *pEnd = start + iWidth*barThinner;
 }
 
+static int countFilteredBars(struct track *tg)
+/* Count up number of bars that remain after filtering */
+{
+struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
+struct barChartCategory *categ;
+int count = 0;
+for (categ=extras->categories; categ != NULL; categ=categ->next)
+    {
+    if (filterCategory(extras, categ->name))
+	++count;
+    }
+return count;
+}
+
+
 static void barsToGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
                 double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw bar chart over item in proportional to gene way*/
@@ -875,24 +911,29 @@ int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
 int yGene = yZero + extras->margin;
 
 /* Figure out width between bars */
-int barCount = bed->expCount;
+int barCount = countFilteredBars(tg);
+int expCount = bed->expCount;
 
-// drawScaledBox(hvg, bed->chromStart, bed->chromEnd, scale, xOff, y, topGraphHeight, MG_YELLOW);  // ugly debug
 
 int i;
 Color clipColor = MG_MAGENTA;
-for (i=0; i<barCount; ++i)
+int outBarIx = 0;
+struct barChartCategory *categ;
+for (i=0, categ=extras->categories; i<expCount && categ != NULL; ++i, categ=categ->next)
     {
+    if (!filterCategory(extras, categ->name))
+        continue;
     struct rgbColor rgb = extras->colors[i];
     int color = hvGfxFindColorIx(hvg, rgb.r, rgb.g, rgb.b);
     int cStart, cEnd;
-    findBarPosX(bed, scale, i, barCount, &cStart, &cEnd);
+    findBarPosX(bed, scale, outBarIx, barCount, &cStart, &cEnd);
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit, 
                                         extras->maxHeight, extras->doLogTransform);
     drawScaledBox(hvg, cStart, cEnd, scale, xOff, y+topGraphHeight-height, height, color);
     if (!extras->doLogTransform && expScore > extras->maxViewLimit)
         drawScaledBox(hvg, cStart, cEnd, scale, xOff, yZero-height+1, 2, clipColor);
+    ++outBarIx;
     }
 
 
@@ -911,21 +952,24 @@ if (vis != tvFull && vis != tvPack)
     barChartMapItem(tg, hvg, item, itemName, mapItemName, start, end, x, y, width, height);
     return;
     }
-
 struct barChartTrack *extras = tg->extraUiData;
 struct barChartItem *itemInfo = item;
 struct bed *bed = itemInfo->bed;
-if (width > bed->expCount)	// When get down to less than a pixel suppress the bar-by-bar map boxes*/
+int barCount = countFilteredBars(tg);
+if (width > barCount)	// When get down to less than a pixel suppress the bar-by-bar map boxes*/
     {
     int i = 0;
+    int outBarIx = 0;
     struct barChartCategory *categs = getCategories(tg);
     struct barChartCategory *categ;
     int topGraphHeight = chartHeight(tg, itemInfo);
     double scale = scaleForWindow(insideWidth, winStart, winEnd);
     for (categ = categs; categ != NULL; categ = categ->next, i++)
 	{
+	if (!filterCategory(extras, categ->name))
+	    continue;
 	int cStart, cEnd;
-	findBarPosX(bed, scale, i, bed->expCount, &cStart, &cEnd);
+	findBarPosX(bed, scale, outBarIx, barCount, &cStart, &cEnd);
 	int x1,x2;
 	if (scaledBoxToPixelCoords(cStart, cEnd, scale, 0, &x1, &x2))
 	    {
@@ -935,6 +979,7 @@ if (width > bed->expCount)	// When get down to less than a pixel suppress the ba
 	    mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1+insideX, y+topGraphHeight-height, x2-x1, height,
 				tg->track, mapItemName, chartMapText(tg, categ, expScore));
 	    }
+	++outBarIx;
 	}
     }
 mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x, y, width, height, tg->track, itemName, NULL);
