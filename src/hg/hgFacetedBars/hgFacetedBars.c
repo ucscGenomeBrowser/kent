@@ -15,6 +15,7 @@
 #include "genbank.h"
 #include "tablesTables.h"
 #include "facetField.h"
+#include "sqlNum.h"
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -143,6 +144,80 @@ else
     return FALSE;
 }
 
+struct wrapContext
+/* Context used by various wrappers. */
+    {
+    int nameIx;	    /* First col by convention is name */
+    int countIx;    /* Index of count in row */
+    int meanIx;    /* The field that has total read count */
+    int colorIx;    /* Index of color in row */
+    double maxMean;/* Maximum of any total value */
+    };
+
+void wrapMean(struct fieldedTable *table, struct fieldedRow *row,
+    char *field, char *val, char *shortVal, void *context)
+/* Write out wrapper draws a SVG bar*/
+{
+struct wrapContext *wc = context;
+char *color = "#000000";
+int colorIx = wc->colorIx;
+if (colorIx >= 0)
+    color = row->row[colorIx];
+double mean = sqlDouble(val);
+int width = 500, height = 13;  // These are units of ~2010 pixels or something
+double barWidth = (double)width*mean/wc->maxMean;
+printf("<svg width=\"%g\" height=\"%d\">", barWidth, height);
+printf("<rect width=\"%g\" height=\"%d\" style=\"fill:%s\">", 
+    barWidth, height, color);
+printf("</svg>");
+printf(" %6.2f", mean);
+}
+
+double fieldedTableMaxInCol(struct fieldedTable *table, int colIx)
+/* Figure out total and count columns from context and use them to figure
+ * out maximum mean value */
+{
+boolean firstTime = TRUE;
+double max = 0.0;
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    double val = sqlDouble(fr->row[colIx]);
+    if (firstTime)
+	{
+        max = val;
+	firstTime = FALSE;
+	}
+    else if (max < val)
+        max = val;
+    }
+return max;
+}
+
+#ifdef OLD
+double calcMaxMean(struct fieldedTable *table, struct wrapContext *context)
+/* Go through text table figureing out mean for each row based on 
+ * context fields.  Return max of the means */
+{
+boolean firstTime = TRUE;
+double max = 0.0;
+struct fieldedRow *fr;
+int countIx = context->countIx;
+int totalIx = context->totalIx;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    double val = sqlDouble(fr->row[totalIx])/sqlDouble(fr->row[countIx]);
+    if (firstTime)
+	{
+        max = val;
+	firstTime = FALSE;
+	}
+    else if (max < val)
+        max = val;
+    }
+return max;
+}
+#endif /* OLD */
 
 void doBody()
 {
@@ -151,6 +226,7 @@ char *trackName = "cellFacetsJk1";
 
 struct sqlConnection *conn = sqlConnect(database);
 struct hash *emptyHash = hashNew(0);
+struct hash *wrapperHash = hashNew(0);
 struct facetedTable *ft = facetedTableNew("the original", trackName);
 
 /* Write out html to pull in the other files we use. */
@@ -166,39 +242,41 @@ char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/hgFacetedBars?%s",
     cartSidUrlString(cart) );
 
-/* Put up the big faceted search table */
-printf("<div>\n");
+/* Put up the big faceted search table in a new div */
+
+/* Load up table from tsv file */
 char *statsFileName = "/gbdb/hg38/bbi/singleCellMerged/barChart.stats";
-char *requiredStatsFields[] = {"cluster","count","mean","organ","cell_class","stage","cell_type"};
+char *requiredStatsFields[] = {"cluster","count","organ","cell_class","stage","cell_type"};
 struct fieldedTable *table = fieldedTableFromTabFile(statsFileName, statsFileName, 
     requiredStatsFields, ArraySize(requiredStatsFields));
+
+/* Update facet selections from users input if any */
 facetedTableUpdateOnFacetClick(ft, cart);
 
-/* Look up sel val in cart */
+/* Do facet selection calculations */
 char *selList = facetedTableSelList(ft, cart);
 struct facetField *ffArray[table->fieldCount];
-int selCount = 0;
-facetFieldsFromFieldedTable(table, selList, ffArray, &selCount);
-// uglyf("%d of %d selected in facets", selCount, table->rowCount);
-webFilteredFieldedTable(cart, table, 
-    "count,cluster,mean", returnUrl, trackName, 
-    32, emptyHash, NULL,
+struct fieldedTable *selected = facetFieldsFromFieldedTable(table, selList, ffArray);
+
+
+/* Set up wrappers for some of output fields */
+struct wrapContext context = {.nameIx = 0,
+		              .countIx = fieldedTableFindFieldIx(table, "count"),
+		              .meanIx = fieldedTableFindFieldIx(table, "mean_total"),
+			      .colorIx = fieldedTableFindFieldIx(table, "color"), 
+			     };
+context.maxMean = fieldedTableMaxInCol(table, context.meanIx);
+
+/* Put up faceted search and table of visible fields. */
+hashAdd(wrapperHash, "mean_total", wrapMean);
+webFilteredFieldedTable(cart, selected, 
+    "count,cluster,mean_total", returnUrl, trackName, 
+    32, wrapperHash, &context,
     FALSE, NULL,
-    table->rowCount, 7,
+    selected->rowCount, 7,
     NULL, emptyHash,
     ffArray, "organ,cell_class,stage,cell_type",
     NULL);
-
-#ifdef OLD
-webFilteredSqlTable(cart, conn, 
-    "organ,cell_class,cell_type", trackName, "", 
-    returnUrl, trackName, 32, 
-    emptyHash, NULL, 
-    FALSE, NULL, 50, 7, emptyHash, "organ,cell_class,stage,cell_type",
-    NULL);
-#endif /* OLD */
-printf("</div>\n");
-
 
 /* Clean up and go home. */
 printf("</form>\n");
