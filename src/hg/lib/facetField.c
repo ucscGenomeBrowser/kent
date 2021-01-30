@@ -390,28 +390,25 @@ if (pSelectedRowCount)
 return ffList;
 }
 
-struct facetField *facetFieldsFromFieldedTable(struct fieldedTable *ft, char *selectedFields,
-    struct facetField *ffArray[], int *retSelectedRowCount)
+struct fieldedTable *facetFieldsFromFieldedTable(struct fieldedTable *ft, char *selectedFields,
+    struct facetField *ffArray[])
 /* Get a facetField list and initialize arrays based on selected fields from table 
  * ffArray must be big enough to hold all fields in table */
 {
-struct facetField *ffList = facetFieldsFromSqlTableInit(ft->fields, ft->fieldCount, 
-    selectedFields, ffArray);
-
-struct fieldedRow *fr;
-int selectedRowCount = 0;
 int fieldCount = ft->fieldCount;
+struct fieldedTable *subTable = fieldedTableNew(ft->name, ft->fields, fieldCount);
+struct facetField *ffList = facetFieldsFromSqlTableInit(ft->fields, fieldCount, 
+    selectedFields, ffArray);
+struct fieldedRow *fr;
 for (fr = ft->rowList; fr != NULL; fr = fr->next)
     {
     if (perRowFacetFields(fieldCount, fr->row, "", ffArray))
-	++selectedRowCount;
+	{
+	fieldedTableAdd(subTable, fr->row, fieldCount, fr->id);
+	}
     }
-
 facetFieldsFromSqlTableFinish(ffList, facetValCmpUseCountDesc);
-
-if (retSelectedRowCount != NULL)
-    *retSelectedRowCount = selectedRowCount;
-return ffList;
+return subTable;
 }
 
 struct facetVal *facetValMajorPlusOther(struct facetVal *list, double minRatio)

@@ -1,6 +1,10 @@
 #ifndef FACETFIELD_H
 #define FACETFIELD_H
 
+#ifndef FIELDEDTABLE
+#include "fieldedTable.h"
+#endif
+
 struct facetVal
 /* Keep track of number of uses of a field value */
     {
@@ -58,8 +62,8 @@ struct facetField *facetFieldsFromSqlTable(struct sqlConnection *conn, char *tab
     char *nullVal, char *where, char *selectedFields, int *pSelectedRowCount);
 /* Return a list of facetField, one for each field of given table */
 
-struct facetField *facetFieldsFromFieldedTable(struct fieldedTable *ft, char *selectedFields,
-    struct facetField *ffArray[], int *retSelectedRowCount);
+struct fieldedTable *facetFieldsFromFieldedTable(struct fieldedTable *ft, char *selectedFields,
+    struct facetField *ffArray[]);
 /* Return a list of facetField, one for each selected field of given table.  It'll
  * scan through table to do this and optionally you can get the count of selected rows. */
 
