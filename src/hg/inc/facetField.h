@@ -58,6 +58,11 @@ struct facetField *facetFieldsFromSqlTable(struct sqlConnection *conn, char *tab
     char *nullVal, char *where, char *selectedFields, int *pSelectedRowCount);
 /* Return a list of facetField, one for each field of given table */
 
+struct facetField *facetFieldsFromFieldedTable(struct fieldedTable *ft, char *selectedFields,
+    struct facetField *ffArray[], int *retSelectedRowCount);
+/* Return a list of facetField, one for each selected field of given table.  It'll
+ * scan through table to do this and optionally you can get the count of selected rows. */
+
 struct facetVal *facetValMajorPlusOther(struct facetVal *list, double minRatio);
 /* Return a list of only the tags that are over minRatio of total tags.
  * If there are tags that have smaller amounts than this, lump them together
