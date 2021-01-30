@@ -585,7 +585,7 @@ if (visibleFacetList)
 		if (specificallySelected)
 		    op = "remove";
 		printf("<dd class=\"facet\">\n");
-		htmlPrintf("<input type=checkbox value=%s class=ttFSCheckBox %s>&nbsp;",
+		htmlPrintf("<input type=checkbox value=%s class=ttFsCheckBox %s>&nbsp;",
 		    specificallySelected ? "true" : "false", 
 		    specificallySelected ? "checked" : "");
 		htmlPrintf("<a href='%s"
