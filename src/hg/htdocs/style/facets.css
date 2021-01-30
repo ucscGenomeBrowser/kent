@@ -23,4 +23,7 @@ A:visited.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica,
 A:active.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #2020FF; font-size: 15px; }
 A:hover.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #2020FF; font-size: 15px; }
 
-A:link.btn-secondary { background-color: #EEEEEE; }
+A:link.btn-secondary { color: #0000C0; background-color: #EEEEEE; }
+A:hover.btn-secondary { color: #1010F0; background-color: #F2F2F2; }
+A:visited.btn-secondary { color: #0000C0; background-color: #EEEEEE; }
+A:active.btn-secondary { color: #0000C0; background-color: #EEEEEE; }
