@@ -10,6 +10,7 @@ defaultLabelFields name
 labelFields name,name2
 bigDataUrl /gbdb/hg38/bbi/singleCellMerged/barChart.bb
 barChartStatsUrl /gbdb/hg38/bbi/singleCellMerged/barChart.stats
+barChartFacets organ,cell_class,stage,cell_type
 transformFunc NONE
 barChartLimit 100
 barChartFitGene on
