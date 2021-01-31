@@ -79,10 +79,9 @@ void facetedBarChart(char *item, struct barChartBed *chart, struct trackDb *tdb,
 {
 char *trackName = tdb->track;
 struct sqlConnection *conn = sqlConnect(database);
-struct hash *emptyHash = hashNew(0);
 struct hash *wrapperHash = hashNew(0);
 
-/* Write out html to pull in the other files we use and make white background */
+/* Write html to make white background */
 hInsideStyleToWhite();
 
 /* Set up url that has enough context to get back to us.  */
@@ -132,7 +131,6 @@ facetedTableWriteHtml(facTab, cart, selected, displayList,
 
 /* Clean up and go home. */
 printf("</div></form>\n");
-hashFree(&emptyHash);
 facetedTableFree(&facTab);
 sqlDisconnect(&conn);
 }

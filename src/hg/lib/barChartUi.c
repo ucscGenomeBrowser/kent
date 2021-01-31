@@ -16,6 +16,7 @@
 #include "htmlColor.h"
 #include "barChartCategory.h"
 #include "barChartUi.h"
+#include "facetedTable.h"
 #include "tablesTables.h"
 
 /* Restrict features on right-click (popup) version */
@@ -191,11 +192,9 @@ return startsWith("http://", url)
 }
 
 static void getCategsFromSettings(char *track, char *labelSetting, char *colorSetting, 
-                                        struct slName **labels, struct slName **colors)
+                                        struct slName **retLabels, struct slName **colors)
 /* Get category labels and optionally colors, from track settings */
 {
-if (!labels || !colors)
-    return;
 if (isEmpty(labelSetting))
     {
     errAbort("barChart track %s missing required setting: %s or %s\n",
@@ -203,7 +202,13 @@ if (isEmpty(labelSetting))
     }
 char *words[BAR_CHART_MAX_CATEGORIES];
 int labelCount = chopLine(cloneString(labelSetting), words);
-*labels = slNameListFromStringArray(words, labelCount);
+struct slName *labelList = *retLabels = slNameListFromStringArray(words, labelCount);
+
+/* Strip out underbars from trackDb early */
+struct slName *label;
+for (label = labelList; label != NULL; label = label->next)
+    subChar(label->name, '_', ' ');
+
 if (isNotEmpty(colorSetting))
     {
     int colorCount = chopLine(cloneString(colorSetting), words);
@@ -368,15 +373,8 @@ void barChartCfgUiSelectEachBar(char *database, struct cart *cart, struct trackD
                         char *title, boolean boxed)
 /* Bar chart track type */
 {
-if (cartVarExists(cart, "ajax"))
-    isPopup = TRUE;
-boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
-if (startsWith("big", tdb->type))
-    labelCfgUi(database, cart, tdb, track);
 printf("\n<table id=barChartControls style='font-size:%d%%' %s>\n<tr><td>", 
         isPopup ? 75 : 100, boxed ?" width='100%'":"");
-
-char cartVar[1024];
 
 /* Data transform. When selected, the next control (view limits max) is disabled */
 
@@ -388,7 +386,6 @@ barChartUiLogTransform(cart, track, tdb);
 puts("&nbsp;&nbsp;");
 barChartUiViewLimits(cart, track, tdb);
 puts("</div>");
-
 /* Category filter */
 printf("<br>");
 char *categoryLabel =  trackDbSettingClosestToHomeOrDefault(tdb, 
@@ -396,6 +393,7 @@ char *categoryLabel =  trackDbSettingClosestToHomeOrDefault(tdb,
 char *db = cartString(cart, "db");
 struct barChartCategory *categs = barChartUiGetCategories(db, tdb);
 printf("<div><b>%s:</b>\n", categoryLabel);
+char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_CATEGORY_SELECT);
 if (isPopup)
     {
@@ -415,26 +413,81 @@ if (cartListVarExistsAnyLevel(cart, tdb, FALSE, BAR_CHART_CATEGORY_SELECT))
 makeCategoryCheckboxes(cartVar, categs, selectedValues);
 
 puts("\n</table>\n");
-cfgEndBox(boxed);
+}
+
+void wrapColor(struct fieldedTable *table, struct fieldedRow *row,
+    char *field, char *val, char *shortVal, void *context)
+/* Write out wrapper draws a SVG bar*/
+{
+printf("<div style=\"background-color:%s\">&nbsp;&nbsp;&nbsp</span>", val);
+// printf("<TD><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR>");
 }
 
 void barChartFacetedUi(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
                         char *title, boolean boxed)
 /* Bar chart track type that has an associated facets tables */
 {
-printf("<iframe id=\"barChartFacetedUi\" src=\"../cgi-bin/hgFacetedBars?%s\" ",
-    cartSidUrlString(cart));
-printf(" height=\"600\" width=\"1200\" ");  // I hope these get set from javascript soon
-printf(">");
+puts("<br>");
+barChartUiLogTransform(cart, track, tdb);
+puts("&nbsp;&nbsp;");
+barChartUiViewLimits(cart, track, tdb);
+
+char *facets = trackDbSetting(tdb, "barChartFacets");
+char *statsFile = trackDbRequiredSetting(tdb, "barChartStatsUrl");
+
+/* Write html to make white background */
+hInsideStyleToWhite();
+
+/* Set up url that has enough context to get back to us.  */
+struct dyString *returnUrl = dyStringNew(0);
+dyStringPrintf(returnUrl, "../cgi-bin/hgTrackUi?g=%s", track);
+dyStringPrintf(returnUrl, "&%s", cartSidUrlString(cart));
+
+/* Load up table from tsv file */
+char *requiredStatsFields[] = {"count",};
+struct fieldedTable *table = fieldedTableFromTabFile(statsFile, statsFile, 
+    requiredStatsFields, ArraySize(requiredStatsFields));
+
+/* Update facet selections from users input if any and get selected part of table */
+struct facetedTable *facTab = facetedTableFromTable(table, tdb->track, facets);
+facetedTableUpdateOnClick(facTab, cart);
+struct fieldedTable *selected = facetedTableSelect(facTab, cart);
+
+/* Add wrapper function(s) */
+struct hash *wrapperHash = hashNew(0);
+hashAdd(wrapperHash, "color", wrapColor);
+
+/* Pick which fields to display.  We'll take the first field whatever it is
+ * named, color if possible, and also count, and any faceted fields. */
+struct dyString *displayList = dyStringNew(0);
+int colorIx = fieldedTableFindFieldIx(table, "color");
+if (colorIx >= 0)
+   dyStringPrintf(displayList, "color,");
+dyStringAppend(displayList, table->fields[0]);
+dyStringPrintf(displayList, ",count,%s", facets);
+
+/* Put up facets and table */
+facetedTableWriteHtml(facTab, cart, selected, displayList->string,
+    returnUrl->string, 40, wrapperHash, NULL, 7);
+
+/* Clean up and go home. */
+facetedTableFree(&facTab);
 }
 
 void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
                         char *title, boolean boxed)
 /* Put up facets in certain situations. */
 {
-if (sameString(track, "singleCellMerged"))
+if (cartVarExists(cart, "ajax"))
+    isPopup = TRUE;
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+if (startsWith("big", tdb->type))
+    labelCfgUi(database, cart, tdb, track);
+char *facets = trackDbSetting(tdb, "barChartFacets");
+if (facets != NULL)
     barChartFacetedUi(database, cart, tdb, track, title, boxed);
 else
     barChartCfgUiSelectEachBar(database, cart, tdb, track, title, boxed);
+cfgEndBox(boxed);
 }
 
