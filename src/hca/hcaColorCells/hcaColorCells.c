@@ -93,27 +93,6 @@ for (i=0; i<qMatrix->ySize; ++i)
 return sqrt(sumSquares);
 }
 
-double refCorrelate(struct memMatrix *refMatrix, struct hash *refHash, int refCol,
-    struct memMatrix *qMatrix, int qCol)
-/* Return a dotProduct between a column in a reference matrix and a query matrix.
- * The reference matrix has a row hash so that we can look up the corresponding row
- * based on the label in the qMatrix row.  If somethign is missing from refMatrix
- * that's ok, it just won't contribute to the dot product. */
-{
-struct correlate *c = correlateNew();
-int i;
-for (i=0; i<qMatrix->ySize; ++i)
-    {
-    char *label = qMatrix->yLabels[i];
-    double *row = hashFindVal(refHash, label);
-    if (row != NULL)
-	correlateNext(c, row[refCol], qMatrix->rows[i][qCol]);
-    }
-double result = correlateResult(c);
-correlateFree(&c);
-return result;
-}
-
 int unpackHexString(char *hexString, struct lineFile *lf, int maxLen)
 /* Convert hexideximal string up to two digits long to binary value */
 {
