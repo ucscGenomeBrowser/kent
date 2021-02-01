@@ -6,6 +6,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
+#include "linefile.h"
 
 char hexTab[16] = {'0', '1', '2', '3', '4', '5', '6', '7', 
 	'8', '9', 'a', 'b', 'c', 'd', 'e', 'f', };
@@ -65,5 +66,38 @@ while (--inSize >= 0)
     *out++ = hexTab[c&0xf];
     }
 *out = 0;
+}
+
+int unpackHexString(char *hexString, struct lineFile *lf, int maxLen)
+/* Convert hexideximal string up to maxLen digits long to binary value */
+{
+int len = strlen(hexString);
+if (len < 0 || len > maxLen)
+    errAbort("Expecting a one to %d digit hex number, but got %s line %d of %s", 
+	maxLen, hexString, lf->lineIx, lf->fileName);
+int acc = 0;
+char c;
+while ((c = *hexString++) != 0)
+    {
+    int val;
+    if (isdigit(c))
+        val = c - '0';
+    else
+        {
+	if (c >= 'a' && c <= 'f')
+	    val = c - 'a' + 10;
+	else if (c >= 'A' && c <= 'F')
+	    val = c - 'A' + 10;
+	else
+	    {
+	    val = 0;	// Stop compiler complianing about unitialized variable
+	    errAbort("Expecting hexadecimal character, got %c line %d of %s",
+		c, lf->lineIx, lf->fileName);
+	    }
+	}
+    acc <<= 4;
+    acc += val;
+    }
+return acc;
 }
 
