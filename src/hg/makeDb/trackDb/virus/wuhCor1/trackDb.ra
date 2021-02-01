@@ -373,7 +373,7 @@ group varRep
 visibility squish
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#011821 "Updated Jan. 18, 2021"
+pennantIcon Updated red ../goldenPath/newsarch.html#012921 "Updated Jan. 29, 2021"
 release beta,public
 
     track sarsCov2PhyloPubAllMinAf01
@@ -621,7 +621,6 @@ shortLabel Spike Mutations
 longLabel Spike protein mutations from community annotation (Jan 2021)
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/spikeMuts/spikeMuts.bb
-pennantIcon new red
 itemRgb on
 bedNameLabel Mutation
 mouseOver $name $clinicalNotes
@@ -630,6 +629,7 @@ urls geographyChartsUrl="$$" nextstrainBuildUrl="$$"
 searchIndex name
 searchTrix /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.ix
 group varRep
+pennantIcon New red ../goldenPath/newsarch.html#012921 "Released Jan. 29, 2021"
 
 searchTable spikeMuts
 searchType bigBed

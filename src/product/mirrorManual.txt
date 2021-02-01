@@ -494,7 +494,7 @@ command which can be built in the source-tree at:
 	kent/src/hg/hgsql/
 
     This 'hgsql' command provides a convenient front-end to
-    the standard 'mysql'' command by reading the user's ~/.hg.conf
+    the standard 'mysql' command by reading the user's ~/.hg.conf
     file to provide access to the browser databases with the
     appropriate identity.  Each user creates a ~/.hg.conf file
     (same format as the above mentioned cgi-bin/hg.conf file)
