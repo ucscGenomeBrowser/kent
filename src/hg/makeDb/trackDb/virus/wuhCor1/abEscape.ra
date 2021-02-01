@@ -6,9 +6,8 @@ group immu
 priority 30
 visibility hide
 superTrack on
-pennantIcon New red ../goldenPath/newsarch.html "Released Jan. 22, 2021"
-
 include bloomEsc.ra
+pennantIcon Updated red ../goldenPath/newsarch.html#012921 "Updated Jan. 29, 2021"
 
         track escape
         shortLabel Whelan 21 Ab
