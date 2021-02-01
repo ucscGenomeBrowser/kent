@@ -85,7 +85,7 @@
 	<li class="first"><a href="../gtex.html">Genotype Tissue Expression (GTEx)</a></li>
 	<li><a href="../ENCODE/index.html">Encyclopedia of DNA Elements (ENCODE)</a></li>
 	<li><a href="../singlecell.html">UCSC Cell Browser</a></li>
-	<li class="last"><a href="../covid19.html">UCSC COVID-19 Resources</a></li>
+	<li class="last"><a href="../covid19.html">UCSC COVID-19 Research</a></li>
 	</ul>
 <!-- OPTIONAL_PROJECT_MENU_END -->
 
