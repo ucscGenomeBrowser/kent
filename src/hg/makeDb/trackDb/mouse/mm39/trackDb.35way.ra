@@ -11,6 +11,7 @@ visibility full
 type bed 4
 group compGeno
 priority 1
+pennantIcon New red ../goldenPath/newsarch.html#012721 "Released Jan. 27, 2021"
 
     track cons35wayViewalign
     shortLabel Multiz Alignments
@@ -38,8 +39,8 @@ priority 1
         sGroup_Euarchontoglires galVar1 hg38 panPan3 panTro6 gorGor6 rheMac10 calJac4 tarSyr2 otoGar3 tupBel1
         sGroup_Placental_Mammal manPen1 equCab3 turTru2 canFam4 susScr3 loxAfr3 oviAri4 neoSch1 bosTau9 eriEur2 echTel2 sorAra2
         sGroup_Vertebrate monDom5 xenTro9 galGal6 danRer11 petMar3
-        speciesDefaultOn rn6 GCF_003668045.3 casCan1 cavPor3 speTri2 oryCun2 ochPri3 hg38 rheMac10 manPen1 oviAri4 canFam4 monDom5
-        speciesDefaultOff galVar1 panPan3 panTro6 gorGor6 calJac4 tarSyr2 otoGar3 tupBel1 susScr3 turTru2 neoSch1 bosTau9 equCab3 eriEur2 sorAra2 loxAfr3 echTel2 galGal6 xenTro9 danRer11 petMar3
+        speciesDefaultOn rn6 cavPor3 speTri2 oryCun2 ochPri3 hg38 rheMac10 manPen1 oviAri4 canFam4 monDom5
+        speciesDefaultOff galVar1 panPan3 panTro6 gorGor6 calJac4 tarSyr2 otoGar3 tupBel1 susScr3 turTru2 neoSch1 bosTau9 equCab3 eriEur2 sorAra2 loxAfr3 echTel2 galGal6 xenTro9 danRer11 petMar3 GCF_003668045.3 casCan1
         defaultMaf multiz35wayDefault
         itemFirstCharCase noChange
         treeImage phylo/mm39_35way.png
