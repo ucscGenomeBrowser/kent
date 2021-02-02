@@ -126,7 +126,7 @@ char displayList[256];
 safef(displayList, sizeof(displayList), "%s,count,val", table->fields[0]);
 
 facetedTableWriteHtml(facTab, cart, selected, displayList,
-    returnUrl->string, 32, wrapperHash, &context, 7);
+    returnUrl->string, 32, wrapperHash, &context, 5);
 
 
 /* Clean up and go home. */
