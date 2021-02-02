@@ -23,5 +23,8 @@ char hexToNibble(char n);
 unsigned char hexToByte(char *hex);
 /* convert hexidecimal characters to unsigned char. */
 
+int unpackHexString(char *hexString, struct lineFile *lf, int maxLen);
+/* Convert hexideximal string up to maxLen digits long to binary value */
+
 #endif /* HEX_H */
 
