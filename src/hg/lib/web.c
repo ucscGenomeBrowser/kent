@@ -1409,6 +1409,7 @@ if(docRoot == NULL)
 
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("jquery.plugins.js", NULL);
+jsIncludeFile("utils.js", NULL);
 webIncludeResourceFile("nice_menu.css");
 
 // Read in menu bar html
@@ -1558,6 +1559,18 @@ if(contextSpecificHelpLink)
     safef(buf, sizeof(buf), "<li><a href='%s'>%s</a></li>", contextSpecificHelpLink, contextSpecificHelpLabel);
     menuStr = replaceChars(menuStr, "<!-- CONTEXT_SPECIFIC_HELP -->", buf);
     }
+
+// links to hgTracks need to use the web browser width and set the hgTracks image
+// size in pixels correctly to match the hgGateway "GO" button
+jsInline("$(\"#tools1 ul li a\").each( function (a) {\n"
+"    if (this.href && this.href.indexOf(\"hgTracks\") !== -1) {\n"
+"        var obj = this;\n"
+"        obj.onclick = function(e) {\n"
+"            var pix = calculateHgTracksWidth();\n"
+"            e.currentTarget.href += \"&pix=\" + pix;\n"
+"        }\n"
+"    }\n"
+"});\n");
 return menuStr;
 }
 
