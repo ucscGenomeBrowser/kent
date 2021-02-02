@@ -40,11 +40,13 @@ struct barChartTrack
      int winMaxGraph;             /* Draw large graphs if window size smaller than this */
      int winMedGraph;             /* Draw medium graphs if window size greater than this 
                                         and smaller than winMaxGraph */
+     int winSmallGraph;		/* Draw small graphs if windowSize between this and 
+                                 * win medGraph, draw tiny if smaller */
 
     int squishHeight;           /* Height of item in squish mode (larger than typical) */
     int boxModelHeight;         /* Height of indicator box drawn under graph to show gene extent */
     int modelHeight;            /* Height of box drawn under graph with padding */
-    int barWidth;               /* Width of individual bar in pixels */
+    double barWidth;               /* Width of individual bar in pixels */
     int margin;
     int padding;
     int maxHeight;
@@ -220,7 +222,7 @@ for (i=0; i<expCount; i++)
     totalScore += expScore;
     }
 double threshold = 5.4 * totalScore / bed->expCount; /* The 54 cats in  and 10% of that for backwards
-						      * compatability */
+						      * compatability with the GTEX 54 element track */
 if (totalScore < 1 || maxScore <= threshold)
     return -1;
 return maxNum;
@@ -343,6 +345,21 @@ int height = chartItemHeightOptionalMax(tg, item, FALSE);
 return height;
 }
 
+static int chartWidth(struct track *tg, struct barChartItem *itemInfo)
+{
+struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
+if (extras->fitToGene)
+    {
+    struct bed *bed = itemInfo->bed;
+    return scaleForWindow(bed->chromEnd - bed->chromStart, winStart, winEnd);
+    }
+else
+    {
+    int count = filteredCategoryCount(extras);
+    return (extras->barWidth * count) + (extras->padding * (count-1)) + 2;
+    }
+}
+
 static void barChartLoadItems(struct track *tg)
 /* Load method for track items */
 {
@@ -377,6 +394,7 @@ extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 
 #define MAX_BAR_CHART_MODEL_HEIGHT     2
 #define MED_BAR_CHART_MODEL_HEIGHT     2
+#define SMALL_BAR_CHART_MODEL_HEIGHT   1
 #define MIN_BAR_CHART_MODEL_HEIGHT     1
 
 #define WIN_MAX_GRAPH_DEFAULT 50000
@@ -384,16 +402,22 @@ extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 #define MAX_BAR_WIDTH 5
 #define MAX_GRAPH_PADDING 2
 
-#define WIN_MED_GRAPH_DEFAULT 500000
+#define WIN_MED_GRAPH_DEFAULT 300000
 #define MED_GRAPH_HEIGHT 100
 #define MED_BAR_WIDTH 3
 #define MED_GRAPH_PADDING 1
 
-#define MIN_BAR_WIDTH 1
+#define WIN_SMALL_GRAPH_DEFAULT 2000000
+#define SMALL_GRAPH_HEIGHT 75
+#define SMALL_BAR_WIDTH 1
+#define SMALL_GRAPH_PADDING 0
+
+#define MIN_BAR_WIDTH 0.5
 #define MIN_GRAPH_PADDING 0
 
 extras->winMaxGraph = WIN_MAX_GRAPH_DEFAULT;
 extras->winMedGraph = WIN_MED_GRAPH_DEFAULT;
+extras->winSmallGraph = WIN_SMALL_GRAPH_DEFAULT;
 char *setting = trackDbSetting(tdb, BAR_CHART_SIZE_WINDOWS);
 if (isNotEmpty(setting))
     {
@@ -405,59 +429,6 @@ if (isNotEmpty(setting))
         extras->winMedGraph = atoi(words[1]);
         }
     }
-int barCount = getCategoryCount(tg);
-double scale = 1.0;
-if (barCount <= 20)
-    scale = 2.5;
-else if (barCount <= 40)
-    scale = 1.6;
-else if (barCount <= 60)
-    scale = 1.0;
-else if (barCount <= 120)
-    scale = 0.9;
-else if (barCount <= 200)
-    scale = 0.75;
-else 
-    scale = 0.5;
-
-long winSize = virtWinBaseCount;
-if (winSize < extras->winMaxGraph && 
-        sameString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_LARGE))
-{
-    extras->boxModelHeight = MAX_BAR_CHART_MODEL_HEIGHT;
-    extras->barWidth = MAX_BAR_WIDTH * scale;
-    extras->padding = MAX_GRAPH_PADDING;
-    extras->maxHeight = MAX_GRAPH_HEIGHT;
-    }
-else if (winSize < extras->winMedGraph && 
-        differentString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_SMALL))
-    {
-    extras->boxModelHeight = MED_BAR_CHART_MODEL_HEIGHT;
-    extras->barWidth = MED_BAR_WIDTH * scale;
-    extras->padding = MED_GRAPH_PADDING;
-    extras->maxHeight = MED_GRAPH_HEIGHT;
-    }
-else
-    {
-    extras->boxModelHeight = MIN_BAR_CHART_MODEL_HEIGHT;
-    extras->barWidth = MIN_BAR_WIDTH * scale;
-    extras->padding = MIN_GRAPH_PADDING;
-    extras->maxHeight = tl.fontHeight * 4;
-    }
-if (extras->barWidth == 1 && extras->padding == 1)
-   {
-   extras->barWidth = 2;
-   extras->padding = 0;
-   }
-if (extras->barWidth < 1)
-    {
-    extras->barWidth = 1;
-    extras->padding = 0;
-    }
-
-extras->modelHeight =  extras->boxModelHeight + 3;
-extras->margin = 1;
-extras->squishHeight = tl.fontHeight - tl.fontHeight/2;
 
 /* Get bed (names and all-sample category median scores) in range */
 loadSimpleBedWithLoader(tg, (bedItemLoader)barChartSimpleBedLoad);
@@ -478,6 +449,69 @@ if (bed != NULL)
 
 filterCategories(tg);
 
+int barCount = filteredCategoryCount(extras);
+double scale = 1.0;
+if (barCount <= 20)
+    scale = 2.5;
+else if (barCount <= 40)
+    scale = 1.6;
+else if (barCount <= 60)
+    scale = 1.0;
+else if (barCount <= 120)
+    scale = 0.8;
+else if (barCount <= 200)
+    scale = 0.6;
+else 
+    scale = 0.5;
+
+long winSize = virtWinBaseCount;
+if (winSize < extras->winMaxGraph && 
+        sameString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_LARGE))
+{
+    extras->boxModelHeight = MAX_BAR_CHART_MODEL_HEIGHT;
+    extras->barWidth = MAX_BAR_WIDTH * scale;
+    extras->padding = MAX_GRAPH_PADDING * scale;
+    extras->maxHeight = MAX_GRAPH_HEIGHT;
+    }
+else if (winSize < extras->winMedGraph)
+    {
+    extras->boxModelHeight = MED_BAR_CHART_MODEL_HEIGHT;
+    extras->barWidth = MED_BAR_WIDTH * scale;
+    extras->padding = MED_GRAPH_PADDING * scale;
+    extras->maxHeight = MED_GRAPH_HEIGHT;
+    }
+else if (winSize < extras->winSmallGraph)
+    {
+    extras->boxModelHeight = SMALL_BAR_CHART_MODEL_HEIGHT;
+    extras->barWidth = SMALL_BAR_WIDTH * scale;
+    extras->padding = SMALL_GRAPH_PADDING * scale;
+    extras->maxHeight = SMALL_GRAPH_HEIGHT;
+    }
+else
+    {
+    extras->boxModelHeight = MIN_BAR_CHART_MODEL_HEIGHT;
+    extras->barWidth = MIN_BAR_WIDTH * scale;
+    extras->padding = MIN_GRAPH_PADDING * scale;
+    extras->maxHeight = tl.fontHeight * 4;
+    }
+if (extras->barWidth > 1)
+    extras->barWidth = floor(extras->barWidth);
+    
+if (extras->barWidth <= 1 && extras->padding == 1)
+   {
+   extras->barWidth = 2;
+   extras->padding = 0;
+   }
+if (extras->barWidth < 1)
+    extras->padding = 0;
+else
+    extras->barWidth = round(extras->barWidth);
+// uglyAbort("barCount %d, graphSize %s, extras->barWidth = %g, extras->padding = %d, scale = %g", barCount, extras->maxGraphSize, extras->barWidth, extras->padding, scale);
+
+extras->modelHeight =  extras->boxModelHeight + 3;
+extras->margin = 1;
+extras->squishHeight = tl.fontHeight - tl.fontHeight/2;
+
 while (bed != NULL)
     {
     AllocVar(itemInfo);
@@ -494,25 +528,10 @@ tg->items = list;
 /***********************************************/
 /* Draw */
 
-static int chartWidth(struct track *tg, struct barChartItem *itemInfo)
-{
-struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
-if (extras->fitToGene)
-    {
-    struct bed *bed = itemInfo->bed;
-    return scaleForWindow(bed->chromEnd - bed->chromStart, winStart, winEnd);
-    }
-else
-    {
-    int count = filteredCategoryCount(extras);
-    return (extras->barWidth * count) + (extras->padding * (count-1)) + 2;
-    }
-}
-
 static int barChartX(struct bed *bed)
 /* Locate chart on X, relative to viewport. */
 {
-int start = max(bed->chromStart, winStart);
+int start = max(bed->chromStart, winStart);	// Consider making this simply bed->chromStart -jk
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
 int x1 = round((start - winStart) * scale);
 return x1;
@@ -590,6 +609,7 @@ struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 struct barChartItem *itemInfo = (struct barChartItem *)item;
 struct bed *bed = itemInfo->bed;
 int topGraphHeight = chartHeight(tg, itemInfo);
+int graphWidth = chartWidth(tg, itemInfo);
 topGraphHeight = max(topGraphHeight, tl.fontHeight);
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
 
@@ -612,6 +632,9 @@ Color clipColor = MG_MAGENTA;
 int i;
 int expCount = bed->expCount;
 struct barChartCategory *categ;
+int barCount = filteredCategoryCount(extras), barsDrawn = 0;
+double invCount = 1.0/barCount;
+int x0 = x1;
 for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=categ->next)
     {
     if (!filterCategory(extras, categ->name))
@@ -622,13 +645,19 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
     int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit, 
                                         extras->maxHeight, extras->doLogTransform);
     if (extras->padding == 0 || sameString(colorScheme, BAR_CHART_COLORS_USER))
-        hvGfxBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx);
+	{
+	int x1 = barsDrawn * graphWidth * invCount;
+	barsDrawn += 1;
+        hvGfxBox(hvg, x1 + x0, yZero-height+1, max(1,barWidth), height, fillColorIx);
+	}
     else
+	{
         hvGfxOutlinedBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx, lineColorIx);
+	x1 = x1 + barWidth + extras->padding;
+	}
     // mark clipped bar with magenta tip
     if (!extras->doLogTransform && expScore > extras->maxViewLimit)
         hvGfxBox(hvg, x1, yZero-height+1, barWidth, 2, clipColor);
-    x1 = x1 + barWidth + extras->padding;
     }
 }
 
@@ -671,6 +700,28 @@ assert(x1);
 *x1 = round((double)((int)s-winStart)*scale + insideX);
 assert(x2);
 *x2 = round((double)((int)e-winStart)*scale + insideX);
+}
+
+static void findBarPosX(int chromStart, int chromEnd, double scale, int barIx, int barCount, int *pStart, int *pEnd)
+/* Figure out start/end position of our bar's region */
+{
+int baseWidth = chromEnd - chromStart;
+double scaledSize = baseWidth *scale;
+double oneWidth = scaledSize/barCount;
+double barThinner = 1.0;
+if (oneWidth >= 5.0)
+    {
+    if (oneWidth > 7.0)
+       barThinner = 0.8;
+    else
+       barThinner = 0.75;
+    }
+
+int iStart = baseWidth*barIx/barCount;
+int iEnd = baseWidth*(barIx+1)/barCount;
+int iWidth = iEnd - iStart;
+int start = *pStart = iStart + chromStart;
+*pEnd = start + iWidth*barThinner;
 }
 
 static void barChartMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
@@ -726,23 +777,28 @@ int graphX = barChartX(bed);
 if (graphX < 0)
     return;
 
-// x1 is at left of graph
-x1 = insideX + graphX;
-int i = 0;
+int graphWidth = chartWidth(tg, itemInfo);
+int x0 = insideX + graphX;
+int barCount = filteredCategoryCount(extras);
+double invCount = 1.0/barCount;
+int i = 0, barsDrawn = 0;
 for (categ = categs; categ != NULL; categ = categ->next, i++)
     {
     if (!filterCategory(extras, categ->name))
 	continue;
+    x1 = barsDrawn * graphWidth * invCount;
+    barsDrawn += 1;
+    x2 = barsDrawn * graphWidth * invCount;
+    int width = x2-x1;
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
                                         extras->maxHeight, extras->doLogTransform);
-    mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, extras->barWidth + extras->padding, height, 
+    mapBoxHc(hvg, itemStart, itemEnd, x0 + x1, yZero-height, width, height, 
                         tg->track, mapItemName, chartMapText(tg, categ, expScore));
     x1 = x1 + extras->barWidth + extras->padding;
     }
 
 // map over background of chart
-int graphWidth = chartWidth(tg, itemInfo);
 getItemX(start, end, &x1, &x2);
 mapBoxHc(hvg, itemStart, itemEnd, x1, y, graphWidth, itemHeight-3,
                     tg->track, mapItemName, itemName);
@@ -852,42 +908,6 @@ if (tg->isBigBed)
 return bed->name;
 }
 
-void findBarPosX(struct bed *bed, double scale, int barIx, int barCount, int *pStart, int *pEnd)
-/* Figure out start/end position of our bar's region */
-{
-int baseWidth = bed->chromEnd - bed->chromStart;
-double scaledSize = baseWidth *scale;
-double oneWidth = scaledSize/barCount;
-double barThinner = 1.0;
-if (oneWidth >= 5.0)
-    {
-    if (oneWidth > 7.0)
-       barThinner = 0.8;
-    else
-       barThinner = 0.75;
-    }
-
-int iStart = baseWidth*barIx/barCount;
-int iEnd = baseWidth*(barIx+1)/barCount;
-int iWidth = iEnd - iStart;
-int start = *pStart = iStart + bed->chromStart;
-*pEnd = start + iWidth*barThinner;
-}
-
-static int countFilteredBars(struct track *tg)
-/* Count up number of bars that remain after filtering */
-{
-struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
-struct barChartCategory *categ;
-int count = 0;
-for (categ=extras->categories; categ != NULL; categ=categ->next)
-    {
-    if (filterCategory(extras, categ->name))
-	++count;
-    }
-return count;
-}
-
 
 static void barsToGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
                 double scale, MgFont *font, Color color, enum trackVisibility vis)
@@ -911,7 +931,7 @@ int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
 int yGene = yZero + extras->margin;
 
 /* Figure out width between bars */
-int barCount = countFilteredBars(tg);
+int barCount = filteredCategoryCount(extras);
 int expCount = bed->expCount;
 
 
@@ -926,7 +946,7 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; ++i, categ=cate
     struct rgbColor rgb = extras->colors[i];
     int color = hvGfxFindColorIx(hvg, rgb.r, rgb.g, rgb.b);
     int cStart, cEnd;
-    findBarPosX(bed, scale, outBarIx, barCount, &cStart, &cEnd);
+    findBarPosX(bed->chromStart, bed->chromEnd, scale, outBarIx, barCount, &cStart, &cEnd);
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit, 
                                         extras->maxHeight, extras->doLogTransform);
@@ -955,7 +975,7 @@ if (vis != tvFull && vis != tvPack)
 struct barChartTrack *extras = tg->extraUiData;
 struct barChartItem *itemInfo = item;
 struct bed *bed = itemInfo->bed;
-int barCount = countFilteredBars(tg);
+int barCount = filteredCategoryCount(extras);
 if (width > barCount)	// When get down to less than a pixel suppress the bar-by-bar map boxes*/
     {
     int i = 0;
@@ -969,7 +989,7 @@ if (width > barCount)	// When get down to less than a pixel suppress the bar-by-
 	if (!filterCategory(extras, categ->name))
 	    continue;
 	int cStart, cEnd;
-	findBarPosX(bed, scale, outBarIx, barCount, &cStart, &cEnd);
+	findBarPosX(bed->chromStart, bed->chromEnd, scale, outBarIx, barCount, &cStart, &cEnd);
 	int x1,x2;
 	if (scaledBoxToPixelCoords(cStart, cEnd, scale, 0, &x1, &x2))
 	    {
