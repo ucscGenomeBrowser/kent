@@ -470,7 +470,7 @@ if (visibleFacetList)
 			    "&%s_facet_op=%s|url|"
 			    "&%s_facet_fieldName=%s|url|"
 			    "&%s_facet_fieldVal=%s|url|"
-			    "&%s_page=1' "
+			    "&%s_page=1'"
 			    ">",
 			returnUrl, varPrefix,
 			op, varPrefix, field->fieldName, varPrefix, val->val, varPrefix
@@ -539,7 +539,6 @@ printf("<div class='row'>\n"); // parent container
 
 if (visibleFacetList)
     {
-
     // left column
     printf("<div class='col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3'>\n");
 
@@ -547,9 +546,13 @@ if (visibleFacetList)
     struct slName *vis;
     for (vis = visList; vis != NULL; vis = vis->next)
 	{
+	char selfId[256];
+	safef(selfId, sizeof(selfId), "%s_self_a_%s", varPrefix, vis->name);
+	subChar(selfId, ' ', '_');
+
 	int f = fieldedTableMustFindFieldIx(table, vis->name);
 	struct facetField *field = ffArray[f];
-	htmlPrintf("<div class='card facet-card'><div class='card-body'>\n");
+	htmlPrintf("<div id=\"%s\" class='card facet-card'><div class='card-body'>\n", selfId);
 	htmlPrintf("<h6 class='card-title'>%s</h6><dl>\n", field->fieldName);
 	struct facetVal *val;
 
@@ -574,6 +577,8 @@ if (visibleFacetList)
 	    {
 	    slSort(&field->valList, facetValCmp);
 	    }
+	int extraAnchorPeriod = 10;
+	int extraAnchorPos = 0;
 	for (val = field->valList; val; val=val->next)
 	    {
 	    boolean specificallySelected = (val->selected && !field->allSelected);
@@ -581,10 +586,20 @@ if (visibleFacetList)
 		|| specificallySelected)
 		{
 		++valuesShown;
+		++extraAnchorPos;
 		char *op = "add";
 		if (specificallySelected)
 		    op = "remove";
-		printf("<dd class=\"facet\">\n");
+		printf("<dd class=\"facet\"");
+		if (extraAnchorPos >= extraAnchorPeriod)
+		    {
+		    safef(selfId, sizeof(selfId), "%s_self_a_%s_%s", varPrefix, vis->name, 
+			val->val);
+		    subChar(selfId, ' ', '_');
+		    printf(" id=\"%s\"", selfId);
+		    extraAnchorPos= 0;
+		    }
+		printf(">\n");
 		htmlPrintf("<input type=checkbox value=%s class=ttFsCheckBox %s>&nbsp;",
 		    specificallySelected ? "true" : "false", 
 		    specificallySelected ? "checked" : "");
@@ -592,10 +607,10 @@ if (visibleFacetList)
 			"&%s_facet_op=%s|none|"
 			"&%s_facet_fieldName=%s|url|"
 			"&%s_facet_fieldVal=%s|url|"
-			"&%s_page=1' "
+			"&%s_page=1#%s' "
 			">",
 		    returnUrl, varPrefix,
-		    op, varPrefix, field->fieldName, varPrefix, val->val, varPrefix
+		    op, varPrefix, field->fieldName, varPrefix, val->val, varPrefix, selfId
 		    );
 		htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
 		printf("</dd>\n");
@@ -614,25 +629,28 @@ if (visibleFacetList)
 		    "&%s_facet_op=%s|url|"
 		    "&%s_facet_fieldName=%s|url|"
 		    "&%s_facet_fieldVal=%s|url|"
-		    "&%s_page=1' "
+		    "&%s_page=1#%s' "
 		    ">See %d More</a></dd>\n",
 		returnUrl, varPrefix, op, 
-		varPrefix, field->fieldName, varPrefix, "", varPrefix, valuesNotShown 
+		varPrefix, field->fieldName, varPrefix, "", 
+		varPrefix, selfId, valuesNotShown
 		);
 	    }
 
 	// show "See Fewer" link when facet has lots of values
 	if (field->showAllValues && valuesShown >= facetUsualSize)
 	    {
+	    safef(selfId, sizeof(selfId), "%s_self_a_%s", varPrefix, vis->name);
+	    subChar(selfId, ' ', '_');
 	    char *op = "showSomeValues";
 	    htmlPrintf("<dd><a href='%s"
 		    "&%s_facet_op=%s|url|"
 		    "&%s_facet_fieldName=%s|url|"
 		    "&%s_facet_fieldVal=%s|url|"
-		    "&%s_page=1' "
+		    "&%s_page=1#%s' "
 		    ">%s</a></dd>\n",
 		returnUrl, varPrefix, op, varPrefix, field->fieldName, varPrefix, "", varPrefix,
-		"See Fewer"
+		selfId, "See Fewer"
 		);
 	    }
 	htmlPrintf("</div></div>\n");
