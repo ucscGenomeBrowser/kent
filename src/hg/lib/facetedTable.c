@@ -1,3 +1,5 @@
+/* facetedTable - routines to help produce a sortable table with facet selection fields.
+ * This builds on top of things in tablesTables and facetField. */
 
 #include "common.h"
 #include "hash.h"

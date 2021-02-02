@@ -1,3 +1,6 @@
+/* facetedTable - routines to help produce a sortable table with facet selection fields.
+ * This builds on top of things in tablesTables and facetField. */
+
 #ifndef FACETEDTABLE_H
 #define FACETEDTABLE_H
 
@@ -22,7 +25,7 @@ struct facetedTable
     {
     struct facetedTable *next;
     char *name;		/* Name of file or database table */
-    char *varPrefix;	/* Prefix used on variables */
+    char *varPrefix;	/* Prefix used on CGI variables */
     char *facets;   /* Comma separated list of facets */
     struct fieldedTable *table;	/* Associated table-in-memory */
     struct facetField **ffArray; /* Additional info on each field of table for faceter */
@@ -42,10 +45,15 @@ boolean facetedTableUpdateOnClick(struct facetedTable *facTab, struct cart *cart
 struct fieldedTable *facetedTableSelect(struct facetedTable *facTab, struct cart *cart);
 /* Return table containing rows of table that have passed facet selection */
 
-void facetedTableWriteHtml(struct facetedTable *facTab, struct cart *cart,
-    struct fieldedTable *selected, char *displayList, 
-    char *returnUrl, int maxLenField, 
-    struct hash *tagOutputWrappers, void *wrapperContext, int facetUsualSize);
+void facetedTableWriteHtml(struct facetedTable *facTab, 
+    struct cart *cart,		    /* User settingss and stuff */
+    struct fieldedTable *selected,  /* Table that just contains rows that survive selection */
+    char *displayList,		    /* Comma separated list of fields to display in table */
+    char *returnUrl,		    /* Url that takes us back to page we are writing next click */
+    int maxFieldWidth,		    /* How big do we let fields get in characters */
+    struct hash *tagOutWrappers,    /* A hash full of callbacks, keyed by field name */
+    void *wrapperContext,	    /* Gets passed to callbacks in tagOutWrappers */
+    int facetUsualSize);	    /* Ho many items in a facet before opening */
 /* Write out the main HTML associated with facet selection and table. */
 
 struct slInt *facetedTableSelectOffsets(struct facetedTable *facTab, struct cart *cart);
