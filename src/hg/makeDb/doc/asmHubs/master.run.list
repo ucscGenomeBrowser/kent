@@ -578,6 +578,7 @@
 ./runBuild GCF_012393455.1 GCF_012393455.1_Tufts_HGry_1.1 mammals Halichoerus_grypus
 ./runBuild GCF_012460135.1 GCF_012460135.1_BPBGC_Mater_1.0 birds Molothrus_ater
 ./runBuild GCF_012931545.1 GCF_012931545.1_Oket_V1 fish Oncorhynchus_keta
+./runBuild GCF_013052645.1 GCF_013052645.1_Mhudiblu_PPA_v0 primates Pan_paniscus
 ./runBuild GCF_013100865.1 GCF_013100865.1_CAS_Tse_1.0 vertebrate Trachemys_scripta_elegans
 ./runBuild GCF_013103735.1 GCF_013103735.1_CSU_Ecrag_1.0 fish Etheostoma_cragini
 ./runBuild GCF_013265735.2 GCF_013265735.2_USDA_OmykA_1.1 fishes Oncorhynchus_mykiss
