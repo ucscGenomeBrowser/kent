@@ -127,64 +127,12 @@ referring to yourAssembly, that would have matching port numbers:</p>
 The assembly hub can be configured to talk to a dynamic BLAT server that loads
 a pre-built index when started by an <code>xinetd</code> super-server.  This
 allows genomes to have a blat server without needing it to be resident in
-memory at all times.
+memory at all times.  See
+<a href="http://genomewiki.ucsc.edu/index.php/Running_your_own_gfServer">Running your own gfServer</a>
+and
+<a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs#Adding_BLAT_servers">Adding BLAT servers</a>
+for details on how to setup dynamic BLAT servers
 <p>
-</p>
-A dynamic BLAT server is specified with the <code>dynamic</code> argument to
-the <code>blat</code> or <code>transBlat</code> specification, followed by
-the <code>gfServer</code> dynamic root-relative path of the directory
-containing the <code>2bit</code> and <code>gfidx</code> files, named in the form
-<ul>
-  <li><code><em>myGenome</em>.2bit</code> - two-bit format genomic sequence
-  <li><code><em>myGenome</em>.untrans.gfidx</code> - untranslated index, built by <code>gfServer index</code>
-  <li><code><em>myGenome</em>.trans.gfidx</code> - translated index, built by <code>gfServer -trans index</code>
-</ul>
-<p>
-For example:
-<pre>
-   transBlat yourLab.yourInstitution.edu 4096 dynamic jillLab
-   blat yourLab.yourInstitution.edu 4096 dynamic jillLab
-   isPcr yourLab.yourInstitution.edu 4096 dynamic jillLab
-</pre>
-</p>
-
-<p>
-The following commands are an example on how to make the gfidx files:
-<pre>
-gfServer index -stepSize=5 myGenome.untrans.gfidx myGenome.2bit
-gfServer index -trans myGenome.trans.gfidx myGenome.2bit
-</pre>
-</p>
-
-<p>
-The files names in the form:
-<pre>
-    $rootdir/jillLab/myGenome.2bit
-    $rootdir/jillLab/myGenome.untrans.gfidx
-    $rootdir/jillLab/myGenome.trans.gfidx
-</pre>
-</p>
-
-<p>
-For a more deeply nest directory, for instance, the following NCBI
-convention:
-<pre>
-   transBlat yourLab.yourInstitution.edu 4096 dynamic GCF/000/181/335/GCF_000181335.3
-   blat yourLab.yourInstitution.edu 4096 dynamic GCF/000/181/335/GCF_000181335.3
-</pre>
-</p>
-<p>
-will reference these genome files:
-<pre>
-    $rootdir/GCF/000/181/335/GCF_000181335.3/GCF_000181335.3.2bit
-    $rootdir/GCF/000/181/335/GCF_000181335.3/GCF_000181335.3.untrans.gfidx
-    $rootdir/GCF/000/181/335/GCF_000181335.3/GCF_000181335.3.trans.gfidx
-</pre>
-</p>
-
-See <code>gfServer</code> documentation for the details
-of configuring a dynamic BLAT server and generating indexes.
-  
 See an example genomes.txt with commented out lines 
 <a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/genomes.txt"
 target="_blank">here</a>, and please note the uppercase &quot;B&quot; in transBlat. For more 
