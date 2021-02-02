@@ -32,6 +32,8 @@ drawBoxPlot <- function(df) {
                         whisklty=1, whiskcol=gray, 
                         # 'staples'
                         staplecol=gray, staplecex=1.3, staplewex=.8,
+                        # with R versions 3.6 and later must suppress x-labels manually
+                        xlab="",
                         # erase X axis labels (add later rotated)
                         names=rep(c(""), count))
 
@@ -74,6 +76,8 @@ drawBoxPlot <- function(df) {
                         staplecol=gray, staplecex=1.3, staplewex=.8,
                         # erase y ticks
                         yaxt="n",
+                        # with R versions 3.6 and later must suppress x-labels manually
+                        xlab="",
                         # erase X axis labels (add later rotated)
                         names=rep(c(""), count))
         y1 <- par("usr")[1]

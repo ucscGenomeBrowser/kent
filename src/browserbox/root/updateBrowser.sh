@@ -348,6 +348,9 @@ touch /data/mysql/hgFixed/gtexTissue.{MYI,MYD,frm}
 
 # -- END JUNE 2017
 
+# Feb 2021, knownCds is required for knownGene display
+touch /data/mysql/hg38/knownCds.{MYI,MYD,frm}
+
 if [ "$1" != "hgwdev" ] ; then
   echo - Updating GBDB files...
   rsync $RSYNCOPTS --existing rsync://hgdownload.soe.ucsc.edu/gbdb/ /data/gbdb/
