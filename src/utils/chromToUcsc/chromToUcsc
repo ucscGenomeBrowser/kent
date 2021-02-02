@@ -27,6 +27,9 @@ def parseArgs():
     If you do not want to use the --get option to retrieve the mapping tables, you can also download the alias mapping
     files yourself, e.g. for mm10 with 'wget https://hgdownload.soe.ucsc.edu/goldenPath/mm10/database/chromAlias.txt.gz'
 
+    For NCBI RefSeq assemblies that are available as UCSC track hubs, the chromAlias files can be obtained like this:
+       'wget https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/405/GCF_000001405.39/GCF_000001405.39.chromAlias.txt'
+
     Then the script can be run like this:
         %prog -i in.bed -o out.bed -a hg19.chromAlias.tsv
         %prog -i in.bed -o out.bed -a https://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromAlias.txt.gz
