@@ -1,6 +1,9 @@
-
 #ifndef HEX_H
 #define HEX_H
+
+#ifndef LINEFILE_H
+#include "linefile.h"
+#endif 
 
 char nibbleToHex(char n);
 /* convert nibble to hexidecimal character. 0 <= n <= 15. */
