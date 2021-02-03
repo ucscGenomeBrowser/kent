@@ -1810,14 +1810,14 @@ track targetScanMiRnaSites
 superTrack on
 shortLabel TS miRNA Targets
 pennantIcon Updated red
-longLabel Predicted microRNA Target Sites from TargetScan
+longLabel TargetScan predicted microRNA target sites
 group regulation
 visibility hide
 
     track targetScanS
     parent targetScanMiRnaSites
     shortLabel TS miRNA sites
-    longLabel TargetScan miRNA Regulatory Sites
+    longLabel TargetScan miRNA Regulatory Sites (Release 5.1, April 2009)
     color 0,96,0
     scoreFilterMax 100
     type bed 6 .
@@ -1827,7 +1827,7 @@ visibility hide
     track targetScanMiRnaSitesV72
     parent targetScanMiRnaSites
     release alpha
-    shortLabel TS miRNA V7.2
+    shortLabel TS miRNA v7.2
     longLabel Predicted microRNA Target Sites from TargetScanHuman 7.2 (March 2018)
     visibility pack
     itemRgb on
