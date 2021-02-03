@@ -82,7 +82,7 @@ printf(
   "   -maxIntron=N   Sets maximum intron size. Default is %d.\n"
   "   -genome=name  When using a dynamic gfServer, The genome name is used to \n"
   "                 find the data files relative to the dynamic gfServer root, named \n"
-  "                 in the form $genome.2bit, $genome.untrans.gfidx, and $genome.trans.gfidx, \n"
+  "                 in the form $genome.2bit, $genome.untrans.gfidx, and $genome.trans.gfidx\n"
   "   -genomeDataDir=path\n"
   "                 When using a dynamic gfServer, this is the dynamic gfServer root directory\n"
   "                 that contained the genome data files.  Defaults to being the root directory.\n"
