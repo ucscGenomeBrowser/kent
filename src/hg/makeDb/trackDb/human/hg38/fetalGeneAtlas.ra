@@ -6,7 +6,6 @@ visibility hide
 group singleCell
 pennantIcon 19.jpg liftover.html "lifted from hg19"
 type bigBarChart
-barChartFitGene on
 
     track fetalGeneAtlasCellType
     parent fetalGeneAtlas

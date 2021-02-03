@@ -83,7 +83,6 @@ maxItems 200
 spectrum on
 priority 1
 visibility pack
-barChartFitGene off
 
 track gtexSnp
 release alpha

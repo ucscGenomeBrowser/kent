@@ -24,7 +24,6 @@ struct barChartTrack
     boolean noWhiteout;         /* Suppress whiteout of graph background (allow highlight, blue lines) */
     double maxMedian;           /* Maximum median across all categories */
     boolean doLogTransform;     /* Log10(x+1) */
-    boolean fitToGene;		/* Fit our width to gene */
     char *unit;                /* Units for category values (e.g. RPKM) */
     struct barChartCategory *categories; /* Category names, colors, etc. */
     int categCount;             /* Count of categories - derived from above */
@@ -353,8 +352,8 @@ int count = filteredCategoryCount(extras);
 return (extras->barWidth * count) + (extras->padding * (count-1)) + 2;
 }
 
-int windowsTotalIntersection(struct window *list, char *chrom, int chromStart, int chromEnd)
-/* Return total size all bits of region that intersects windows list */
+static int windowsTotalIntersection(struct window *list, char *chrom, int chromStart, int chromEnd)
+/* Return total size all bits of region defined by chrom/start/end that intersects windows list */
 {
 if (list == NULL || list->next == NULL)
     return (double)insideWidth * (chromEnd - chromStart) / (winEnd - winStart);
@@ -386,17 +385,9 @@ static int chartWidth(struct track *tg, struct barChartItem *itemInfo)
 /* How wide is the chart? */
 {
 struct bed *bed = itemInfo->bed;
-struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 int geneSize = windowsTotalIntersection(windows, bed->chrom, bed->chromStart, bed->chromEnd);
-if (extras->fitToGene)
-    {
-    return geneSize;
-    }
-else
-    {
-    int standardSize =  chartStandardWidth(tg, itemInfo);
-    return max(standardSize, geneSize);
-    }
+int standardSize =  chartStandardWidth(tg, itemInfo);
+return max(standardSize, geneSize);
 }
 
 static void barChartLoadItems(struct track *tg)
@@ -423,7 +414,6 @@ extras->doLogTransform = barChartIsLogTransformed(cart, tdb->track, tdb);
 extras->maxMedian = barChartUiMaxMedianScore(tdb);
 extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tdb, FALSE, 
                                                         BAR_CHART_NO_WHITEOUT, BAR_CHART_NO_WHITEOUT_DEFAULT);
-extras->fitToGene = trackDbSettingClosestToHomeOn(tdb, BAR_CHART_FIT_TO_GENE);
 extras->maxViewLimit = barChartCurViewMax(cart, tg->track, tg->tdb);
 extras->maxGraphSize = trackDbSettingClosestToHomeOrDefault(tdb, 
                                 BAR_CHART_MAX_GRAPH_SIZE, BAR_CHART_MAX_GRAPH_SIZE_DEFAULT);
@@ -615,10 +605,6 @@ if (vis == tvSquish)
     return;
     }
 
-int graphX = barChartX(bed);
-if (graphX < 0)
-    return;
-
 // draw line to show range of item on the genome (since chart is fixed width)
 int topGraphHeight = chartHeight(tg, itemInfo);
 topGraphHeight = max(topGraphHeight, tl.fontHeight);
@@ -638,28 +624,6 @@ static int barChartNonPropPixelWidth(struct track *tg, void *item)
 struct barChartItem *itemInfo = (struct barChartItem *)item;
 int graphWidth = chartWidth(tg, itemInfo);
 return graphWidth;
-}
-
-static void findBarPosX(int chromStart, int chromEnd, double scale, int barIx, int barCount, int *pStart, int *pEnd)
-/* Figure out start/end position of our bar's region */
-{
-int baseWidth = chromEnd - chromStart;
-double scaledSize = baseWidth *scale;
-double oneWidth = scaledSize/barCount;
-double barThinner = 1.0;
-if (oneWidth >= 5.0)
-    {
-    if (oneWidth > 7.0)
-       barThinner = 0.8;
-    else
-       barThinner = 0.75;
-    }
-
-int iStart = baseWidth*barIx/barCount;
-int iEnd = baseWidth*(barIx+1)/barCount;
-int iWidth = iEnd - iStart;
-int start = *pStart = iStart + chromStart;
-*pEnd = start + iWidth*barThinner;
 }
 
 static void barChartNonPropDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
@@ -816,8 +780,6 @@ struct barChartCategory *categs = getCategories(tg);
 struct barChartCategory *categ = NULL;
 
 int graphX = barChartX(bed);
-if (graphX < 0)
-    return;
 
 int graphWidth = chartWidth(tg, itemInfo);
 int x0 = insideX + graphX;
@@ -831,13 +793,12 @@ for (categ = categs; categ != NULL; categ = categ->next, i++)
     x1 = barsDrawn * graphWidth * invCount;
     barsDrawn += 1;
     x2 = barsDrawn * graphWidth * invCount;
-    int width = x2-x1;
+    int width = max(1, x2-x1);
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
                                         extras->maxHeight, extras->doLogTransform);
     mapBoxHc(hvg, itemStart, itemEnd, x0 + x1, yZero-height, width, height, 
                         tg->track, mapItemName, chartMapText(tg, categ, expScore));
-    x1 = x1 + extras->barWidth + extras->padding;
     }
 
 // map over background of chart
@@ -951,102 +912,6 @@ return bed->name;
 }
 
 
-static void barsToGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
-                double scale, MgFont *font, Color color, enum trackVisibility vis)
-/* Draw bar chart over item in proportional to gene way*/
-{
-if (vis != tvFull && vis != tvPack)
-    {
-    barChartDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-    return;
-    }
-
-/* Fetch our item and the bed from it */
-struct barChartItem *itemInfo = (struct barChartItem *)item;
-struct bed *bed = itemInfo->bed;
-
-/* Figure out where to draw things in Y dimension */
-struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
-int topGraphHeight = chartHeight(tg, itemInfo);
-topGraphHeight = max(topGraphHeight, tl.fontHeight);
-int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
-int yGene = yZero + extras->margin;
-
-/* Figure out width between bars */
-int barCount = filteredCategoryCount(extras);
-int expCount = bed->expCount;
-
-
-int i;
-Color clipColor = MG_MAGENTA;
-int outBarIx = 0;
-struct barChartCategory *categ;
-for (i=0, categ=extras->categories; i<expCount && categ != NULL; ++i, categ=categ->next)
-    {
-    if (!filterCategory(extras, categ->name))
-        continue;
-    struct rgbColor rgb = extras->colors[i];
-    int color = hvGfxFindColorIx(hvg, rgb.r, rgb.g, rgb.b);
-    int cStart, cEnd;
-    findBarPosX(bed->chromStart, bed->chromEnd, scale, outBarIx, barCount, &cStart, &cEnd);
-    double expScore = bed->expScores[i];
-    int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit, 
-                                        extras->maxHeight, extras->doLogTransform);
-    drawScaledBox(hvg, cStart, cEnd, scale, xOff, y+topGraphHeight-height, height, color);
-    if (!extras->doLogTransform && expScore > extras->maxViewLimit)
-        drawScaledBox(hvg, cStart, cEnd, scale, xOff, yZero-height+1, 2, clipColor);
-    ++outBarIx;
-    }
-
-
-// Draw the line our graph sits on top of
-drawScaledBox(hvg, bed->chromStart, bed->chromEnd, scale, xOff, yGene+1, extras->boxModelHeight, 
-                MG_GRAY);
-}
-
-static void barsToGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
-                        char *mapItemName, int start, int end, int x, int y, int width, int height)
-/* Create a map box on item and label, and one for each category (bar in the graph) */
-{
-enum trackVisibility vis = trackVisAfterLimit(tg);
-if (vis != tvFull && vis != tvPack)
-    {
-    barChartMapItem(tg, hvg, item, itemName, mapItemName, start, end, x, y, width, height);
-    return;
-    }
-struct barChartTrack *extras = tg->extraUiData;
-struct barChartItem *itemInfo = item;
-struct bed *bed = itemInfo->bed;
-int barCount = filteredCategoryCount(extras);
-if (width > barCount)	// When get down to less than a pixel suppress the bar-by-bar map boxes*/
-    {
-    int i = 0;
-    int outBarIx = 0;
-    struct barChartCategory *categs = getCategories(tg);
-    struct barChartCategory *categ;
-    int topGraphHeight = chartHeight(tg, itemInfo);
-    double scale = scaleForWindow(insideWidth, winStart, winEnd);
-    for (categ = categs; categ != NULL; categ = categ->next, i++)
-	{
-	if (!filterCategory(extras, categ->name))
-	    continue;
-	int cStart, cEnd;
-	findBarPosX(bed->chromStart, bed->chromEnd, scale, outBarIx, barCount, &cStart, &cEnd);
-	int x1,x2;
-	if (scaledBoxToPixelCoords(cStart, cEnd, scale, 0, &x1, &x2))
-	    {
-	    double expScore = bed->expScores[i];
-	    int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit, 
-						extras->maxHeight, extras->doLogTransform);
-	    mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1+insideX, y+topGraphHeight-height, x2-x1, height,
-				tg->track, mapItemName, chartMapText(tg, categ, expScore));
-	    }
-	++outBarIx;
-	}
-    }
-mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x, y, width, height, tg->track, itemName, NULL);
-}
-
 void barChartMethods(struct track *tg)
 /* Bar Chart track type: draw fixed width chart of colored bars over a BED item */
 {
@@ -1060,19 +925,11 @@ tg->itemHeight = barChartItemHeight;
 tg->itemStart = barChartItemStart;
 tg->itemEnd = barChartItemEnd;
 tg->totalHeight = barChartTotalHeight;
-if (trackDbSettingClosestToHomeOn(tg->tdb, BAR_CHART_FIT_TO_GENE))
-    {
-    tg->drawItemAt = barsToGeneDrawAt;
-    tg->mapItem = barsToGeneMapItem;
-    }
-else
-    {
-    tg->preDrawItems = barChartPreDrawItems;
-    tg->drawItemAt = barChartDrawAt;
-    tg->mapItem = barChartMapItem;
-    tg->nonPropDrawItemAt = barChartNonPropDrawAt;
-    tg->nonPropPixelWidth = barChartNonPropPixelWidth;
-    }
+tg->preDrawItems = barChartPreDrawItems;
+tg->drawItemAt = barChartDrawAt;
+tg->mapItem = barChartMapItem;
+tg->nonPropDrawItemAt = barChartNonPropDrawAt;
+tg->nonPropPixelWidth = barChartNonPropPixelWidth;
 }
 
 void barChartCtMethods(struct track *tg)
