@@ -786,6 +786,7 @@ int x0 = insideX + graphX;
 int barCount = filteredCategoryCount(extras);
 double invCount = 1.0/barCount;
 int i = 0, barsDrawn = 0;
+int extraAtTop = 4;
 for (categ = categs; categ != NULL; categ = categ->next, i++)
     {
     if (!filterCategory(extras, categ->name))
@@ -797,6 +798,7 @@ for (categ = categs; categ != NULL; categ = categ->next, i++)
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
                                         extras->maxHeight, extras->doLogTransform);
+    height = min(height+extraAtTop, extras->maxHeight);
     mapBoxHc(hvg, itemStart, itemEnd, x0 + x1, yZero-height, width, height, 
                         tg->track, mapItemName, chartMapText(tg, categ, expScore));
     }
