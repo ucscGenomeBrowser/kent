@@ -577,7 +577,7 @@ if (visibleFacetList)
 	    {
 	    slSort(&field->valList, facetValCmp);
 	    }
-	int extraAnchorPeriod = 10;
+	int extraAnchorPeriod = 15;
 	int extraAnchorPos = 0;
 	for (val = field->valList; val; val=val->next)
 	    {
