@@ -150,7 +150,9 @@ bioTypesSmallNonCoding = frozenset([BioType.miRNA,
                                     BioType.scRNA,
                                     BioType.snRNA,
                                     BioType.sRNA,
-                                    BioType.scaRNA])
+                                    BioType.scaRNA,
+                                    BioType.vaultRNA,
+                                    BioType.vault_RNA])
 
 # imported from external databases
 bioTypesNonCodingExternalDb = frozenset([BioType.miRNA,
