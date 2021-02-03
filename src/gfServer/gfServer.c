@@ -1106,7 +1106,6 @@ struct dynSession
 {
     boolean isTrans;              // translated 
     char genome[256];             // genome name
-    char gfIdxFile[PATH_LEN];     // index file location
     struct hash *perSeqMaxHash;   // max hits per sequence
     struct genoFindIndex *gfIdx;  // index
 };

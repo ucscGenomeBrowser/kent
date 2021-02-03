@@ -23,6 +23,7 @@ test::
 	cd tests && ./testDynServerTrans
 	cd tests && ./testDynServerWithDir
 	cd tests && ./testDynServerPerSeqMax
+	cd tests && ./testDynServerPcr
 
 clean::
 	rm -fr ${O} tests/output
