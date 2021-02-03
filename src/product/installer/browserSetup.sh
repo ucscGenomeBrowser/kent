@@ -706,7 +706,7 @@ function installRedhat () {
     # MySQL-python is required for hgGeneGraph
     # CentOS up to and including 7 default to python2, so MySQL-python is in the repos
     if yum list MySQL-python 2> /dev/null ; then
-            yum -y MySQL-python
+            yum -y install MySQL-python
     # Centos 8 defaults to python3 and it does not have a package MySQL-python anymore
     # So we install python2, the mysql libraries and fix up my_config.h manually
     # This is strange, but I was unable to find a different working solution. MariaDB does not have my_config.h

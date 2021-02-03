@@ -38,6 +38,10 @@ while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
   my ($asmId, $commonName) = split('\t', $line);
+  if (!defined($commonName)) {
+    printf STDERR "ERROR: missing tab sep common name:\n'%s'\n", $line;
+    exit 255;
+  }
   if (defined($commonName{$asmId})) {
     printf STDERR "ERROR: duplicate asmId: '%s'\n", $asmId;
     printf STDERR "previous name: '%s'\n", $commonName{$asmId};

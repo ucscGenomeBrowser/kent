@@ -28,7 +28,7 @@ include placentaVentoTormo.ra
 include singleCellMerged.ra
 
 include liftOver.ra
-include exomeProbesets.ra alpha
+include exomeProbesets.ra
 
 track miRnaAtlas
 compositeTrack on
