@@ -2,13 +2,13 @@ track exomeProbesets
 shortLabel Exome Probesets
 longLabel Exome Capture Probesets and Targeted Region
 type bigBed
-group genes
+group map
 visibility hide
 allButtonPair on
 compositeTrack on
 
 	track xGen_Research_Probes
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/xgen-exome-research-panel-probes-hg19.bb
 	shortLabel IDT xGen v1.0 P
 	longLabel IDT -  xGen Exome Research Panel V1.0 Probes  
@@ -17,7 +17,7 @@ compositeTrack on
 	color 255,176,0
 
 	track xGen_Research_Targets
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/xgen-exome-research-panel-targets-hg19.bb
 	shortLabel IDT xGen V1.0 T
 	longLabel IDT - xGen Exome Research Panel V1.0 Target Regions  
@@ -53,7 +53,7 @@ compositeTrack on
 	color 254,97,0
 	
 	track Twist_Exome_RefSeq_Targets
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/TwistExomeRefSeqTargets_hg19.bb
 	shortLabel Twist RefSeq T
 	longLabel Twist - RefSeq Exome Panel Target Regions
@@ -62,7 +62,7 @@ compositeTrack on
 	color 254,97,0
 	
 	track Twist_Exome_Target
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/TwistExomeTarget_hg19.bb
 	shortLabel Twist Core T
 	longLabel Twist - Core Exome Panel Target Regions
@@ -71,7 +71,7 @@ compositeTrack on
 	color 254,97,0
 	
 	track MGI_Exome_Capture_V4
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/MGI_Exome_Capture_V4.bb
 	shortLabel MGI Easy V4 T
 	longLabel MGI - Easy Exome Capture V4 Target Regions
@@ -80,7 +80,7 @@ compositeTrack on
 	color 220,38,127
 	
 	track MGI_Exome_Capture_V5
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/MGI_Exome_Capture_V5.bb
 	shortLabel MGI Easy V5 T
 	longLabel MGI - Easy Exome Capture V5 Target Regions
@@ -121,7 +121,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V6+UTRs_Regions
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07604624_Regions.bb
 	shortLabel SureSelect SureSel. V6+UTR T
 	longLabel Agilent - SureSelect All Exon V6 + UTR r2 Target Regions
@@ -129,7 +129,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V6+UTRs_Covered
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07604624_Covered.bb
 	shortLabel SureSel. V6+UTR P
 	longLabel Agilent - SureSelect All Exon V6 + UTR r2 Covered by Probes
@@ -137,7 +137,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V6_Regions
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07604514_Regions.bb
 	shortLabel SureSel. V6 T
 	longLabel Agilent - SureSelect All Exon V6 r2 Target Regions
@@ -145,7 +145,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V6_Covered
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07604514_Covered.bb
 	shortLabel SureSel. V6 P
 	longLabel Agilent - SureSelect All Exon V6 r2 Covered by Probes
@@ -153,7 +153,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V6+COSMIC_Regions
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07604715_Regions.bb
 	shortLabel SureSel. V6+COSMIC T
 	longLabel Agilent - SureSelect All Exon V6 + COSMIC r2 Target Regions
@@ -161,7 +161,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V6+COSMIC_Covered
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07604715_Covered.bb
 	shortLabel SureSel. V6+COSMIC P
 	longLabel Agilent - SureSelect All Exon V6 + COSMIC r2 Covered by Probes
@@ -169,7 +169,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_Focused_Regions
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07084713_Regions.bb
 	shortLabel SureSel. Focused T
 	longLabel Agilent - SureSelect Focused Exome Target Regions
@@ -177,7 +177,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_Focused_Covered
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07084713_Covered.bb
 	shortLabel SureSel. Focused P
 	longLabel Agilent - SureSelect Focused Exome Covered by Probes
@@ -185,7 +185,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_Clinical_Research_Regions
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S06588914_Regions.bb
 	shortLabel SureSel. Clinical T
 	longLabel Agilent - SureSelect Clinical Research Exome Target Regions
@@ -193,7 +193,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_Clinical_Research_Covered
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S06588914_Covered.bb
 	shortLabel SureSel. Clinical P
 	longLabel Agilent - SureSelect Clinical Research Exome Covered by Probes
@@ -201,7 +201,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V5_Regions
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S04380110_Regions.bb
 	shortLabel SureSel. V5 T
 	longLabel Agilent - SureSelect All Exon V5 Target Regions
@@ -209,7 +209,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V5_Covered
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S04380110_Covered.bb
 	shortLabel SureSel. V5 P
 	longLabel Agilent - SureSelect All Exon V5 Covered by Probes
@@ -217,7 +217,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V5+UTRs_Regions
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S04380219_Regions.bb
 	shortLabel SureSel. V5+UTR T
 	longLabel Agilent - SureSelect All Exon V5 + UTRs Target Regions
@@ -225,7 +225,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V5+UTRs_Covered
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S04380219_Covered.bb
 	shortLabel SureSel. V5+UTR P
 	longLabel Agilent - SureSelect All Exon V5 + UTRs Covered by Probes
@@ -233,7 +233,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V4+UTRs_Regions
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S03723424_Regions.bb
 	shortLabel SureSel. V4+UTR T
 	longLabel Agilent - SureSelect All Exon V4 + UTRs Target Regions
@@ -241,7 +241,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V4+UTRs_Covered
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S03723424_Covered.bb
 	shortLabel SureSel. V4+UTR P
 	longLabel Agilent - SureSelect All Exon V4 + UTRs Covered by Probe
@@ -249,7 +249,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V4_Regions
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S03723314_Regions.bb
 	shortLabel SureSel. V4 T
 	longLabel Agilent - SureSelect All Exon V4 Target Regions
@@ -257,7 +257,7 @@ compositeTrack on
 	color 120,94,240
 
 	track Agilent_Human_Exon_V4_Covered
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S03723314_Covered.bb
 	shortLabel SureSel. V4 P
 	longLabel Agilent - SureSelect All Exon V4 Covered by Probes
@@ -281,7 +281,7 @@ compositeTrack on
 	color 100,143,255
 
 	track SeqCap_EZ_ExomeV3_Plus_UTR_hg19_primary_annotated
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/sorted-SeqCap_EZ_ExomeV3_Plus_UTR_hg19_primary_annotated.bb
 	shortLabel SeqCap EZ V3 UTR T
 	longLabel Roche - SeqCap EZ Exome V3 + UTR Primary Target Regions
@@ -289,7 +289,7 @@ compositeTrack on
 	color 100,143,255
 	
 	track SeqCap_EZ_Exome_v3_hg19_capture
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/sorted_SeqCap_EZ_Exome_v3_hg19_capture_targets.bb
 	shortLabel SeqCap EZ V3 P
 	longLabel Roche - SeqCap EZ Exome V3 Capture Probe Footprint
@@ -297,7 +297,7 @@ compositeTrack on
 	color 100,143,255
 
 	track SeqCap_EZ_ExomeV3_Plus_UTR_hg19_capture_annotated
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/sorted-SeqCap_EZ_ExomeV3_Plus_UTR_hg19_capture_annotated.bb
 	shortLabel SeqCap EZ V3 UTR P
 	longLabel Roche - SeqCap EZ Exome V3 + UTR Capture Probe Footprint
@@ -305,7 +305,7 @@ compositeTrack on
 	color 100,143,255
 
 	track SeqCap_EZ_Exome_v3_hg19_primary
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/sorted_SeqCap_EZ_Exome_v3_hg19_primary_targets.bb
 	shortLabel SeqCap EZ V3 T
 	longLabel Roche - SeqCap EZ Exome V3 Primary Target Regions
@@ -329,7 +329,7 @@ compositeTrack on
 	color 100,143,255
 
 	track SeqCap-EZ_MedExome_hg19_capture_targets
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/sorted-SeqCap_EZ_MedExome_hg19_capture_targets.bb
 	shortLabel SeqCap EZ Med P
 	longLabel Roche - SeqCap EZ MedExome Capture Probe Footprint
@@ -337,7 +337,7 @@ compositeTrack on
 	color 100,143,255
 
 	track SeqCap-EZ_MedExome_hg19_empirical_targets
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/sorted_SeqCap_EZ_MedExome_hg19_empirical_targets.bb
 	shortLabel SeqCap EZ Med T
 	longLabel Roche - SeqCap EZ MedExome Empirical Target Regions
@@ -345,7 +345,7 @@ compositeTrack on
 	color 100,143,255
 
 	track truseq-dna-exome-targeted-manifest-v1-2
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/truseq-dna-exome-targeted-regions-manifest-v1-2.bb
 	shortLabel TruSeq DNA V1.2 T
 	longLabel Illumina - TruSeq DNA Exome V1.2 Target Regions
@@ -353,7 +353,7 @@ compositeTrack on
 	color 22,62,164
 
 	track nexterarapidcapture_exome_targetedregions_v1
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/nexterarapidcapture_exome_targetedregions_v1.2.bb
 	shortLabel Nextera Rapid V1.2 T
 	longLabel Illumina - Nextera Rapid Capture Exome V1.2 Target Regions
@@ -361,7 +361,7 @@ compositeTrack on
 	color 22,62,164
 
 	track nexterarapidcapture_exome_targetedregions
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/nexterarapidcapture_exome_targetedregions.bb
 	shortLabel Nextera Rapid T
 	longLabel Illumina - Nextera Rapid Capture Exome Target Regions
@@ -369,7 +369,7 @@ compositeTrack on
 	color 22,62,164
 
 	track nexterarapidcapture_expandexome_targetedregions
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/nexterarapidcapture_expandedexome_targetedregions.bb
 	shortLabel Nextera Rapid Exp. T
 	longLabel Illumina - Nextera Rapid Capture Expanded Exome Target Regions
@@ -377,15 +377,15 @@ compositeTrack on
 	color 22,62,164
 
 	track truseq-rapid-exome-targeted-regions-manifest-v1-2
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/truseq-rapid-exome-targeted-regions-manifest-v1-2.bb
-	shortLabel TruSeq Rapid Tv1.2 
+	shortLabel TruSeq Rapid v1.2 T 
 	longLabel Illumina - TruSeq Rapid Exome V1.2 Target Regions Regions
 	type bigBed 4
 	color 22,62,164
 
 	track nextera-dna-exome-targeted-regions-manifest-v1-2
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/nextera-dna-exome-targeted-regions-manifest-v1-2.bb
 	shortLabel Nextera DNA V1.2 T
 	longLabel Illumina - Nextera DNA Exome V1.2 Target Regions
@@ -401,7 +401,7 @@ compositeTrack on
 	color 22,62,164
 
 	track TruSight_One_v1
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/TruSight_One_v1.1.bb
 	shortLabel TruSight One V1.1 T
 	longLabel Illumina - TruSight ONE V1.1 Target Regions
@@ -409,7 +409,7 @@ compositeTrack on
 	color 22,62,164
 
 	track trusight_exome_manifest_a
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/trusight_exome_manifest_a.bb
 	shortLabel TruSight Target
 	longLabel Illumina - TruSight Exome Target Regions
