@@ -492,7 +492,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     }
 gfClumpFreeList(&clumpList);
 errSendString(connectionHandle, "end");
-logDebug("%lu PCR %s %s %d clumps\n", clock1000(), fPrimer, rPrimer, clumpCount);
+logDebug("%lu PCR %s %s %d clumps", clock1000(), fPrimer, rPrimer, clumpCount);
 }
 
 
