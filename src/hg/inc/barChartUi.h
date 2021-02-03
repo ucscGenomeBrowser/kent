@@ -28,7 +28,7 @@
 #define BAR_CHART_LIMIT	"barChartLimit"
 
 /* Category (bar) info */
-#define BAR_CHART_MAX_CATEGORIES        1000
+#define BAR_CHART_MAX_CATEGORIES        2000
 
 /* Category filter */
 #define BAR_CHART_CATEGORY_SELECT      "categories"
@@ -53,9 +53,6 @@
 /* Suppress whiteout behind graph (to show highlight and blue lines) */
 #define BAR_CHART_NO_WHITEOUT         "noWhiteout"
 #define BAR_CHART_NO_WHITEOUT_DEFAULT        FALSE
-
-/* Fit graph to bounds of gene */
-#define BAR_CHART_FIT_TO_GENE	"barChartFitGene"
 
 /* Support limiting graphs to small or medium hights (bypass semantic zoom) */
 #define BAR_CHART_MAX_GRAPH_SIZE                 "barChartMaxSize"
