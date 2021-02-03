@@ -345,18 +345,57 @@ int height = chartItemHeightOptionalMax(tg, item, FALSE);
 return height;
 }
 
-static int chartWidth(struct track *tg, struct barChartItem *itemInfo)
+static int chartStandardWidth(struct track *tg, struct barChartItem *itemInfo)
+/* How wide is chart if we go by standard bar chart size? */
 {
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
+int count = filteredCategoryCount(extras);
+return (extras->barWidth * count) + (extras->padding * (count-1)) + 2;
+}
+
+int windowsTotalIntersection(struct window *list, char *chrom, int chromStart, int chromEnd)
+/* Return total size all bits of region that intersects windows list */
+{
+if (list == NULL || list->next == NULL)
+    return (double)insideWidth * (chromEnd - chromStart) / (winEnd - winStart);
+long long totalGenoSize = 0;
+int totalPixelSize = 0;
+struct window *w;
+int totalIntersect = 0;
+for (w = list; w != NULL; w = w->next)
+    {
+    totalPixelSize += w->insideWidth;;
+    totalGenoSize += w->winEnd - w->winStart;
+
+    if (sameString(w->chromName, chrom))
+        {
+	int single = rangeIntersection(w->winStart, w->winEnd, chromStart, chromEnd);
+	if (single > 0)
+	    totalIntersect += single;
+	}
+    }
+if (totalIntersect == 0)
+    return 0;
+else
+    {
+    return totalPixelSize * (double)totalIntersect / totalGenoSize;
+    }
+}
+
+static int chartWidth(struct track *tg, struct barChartItem *itemInfo)
+/* How wide is the chart? */
+{
+struct bed *bed = itemInfo->bed;
+struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
+int geneSize = windowsTotalIntersection(windows, bed->chrom, bed->chromStart, bed->chromEnd);
 if (extras->fitToGene)
     {
-    struct bed *bed = itemInfo->bed;
-    return scaleForWindow(bed->chromEnd - bed->chromStart, winStart, winEnd);
+    return geneSize;
     }
 else
     {
-    int count = filteredCategoryCount(extras);
-    return (extras->barWidth * count) + (extras->padding * (count-1)) + 2;
+    int standardSize =  chartStandardWidth(tg, itemInfo);
+    return max(standardSize, geneSize);
     }
 }
 
@@ -531,7 +570,8 @@ tg->items = list;
 static int barChartX(struct bed *bed)
 /* Locate chart on X, relative to viewport. */
 {
-int start = max(bed->chromStart, winStart);	// Consider making this simply bed->chromStart -jk
+// int start = max(bed->chromStart, winStart);	// Consider making this simply bed->chromStart -jk
+int start = bed->chromStart;
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
 int x1 = round((start - winStart) * scale);
 return x1;
@@ -541,7 +581,7 @@ return x1;
 static void drawGraphBox(struct track *tg, struct barChartItem *itemInfo, struct hvGfx *hvg, int x, int y)
 /* Draw white background for graph */
 {
-Color lighterGray = MAKECOLOR_32(0xF3, 0xF3, 0xF3);
+Color lighterGray = MAKECOLOR_32(0xE8, 0xE8, 0xE8);
 int width = chartWidth(tg, itemInfo);
 int height = chartHeight(tg, itemInfo);
 hvGfxOutlinedBox(hvg, x, y-height, width, height, MG_WHITE, lighterGray);
@@ -600,6 +640,28 @@ int graphWidth = chartWidth(tg, itemInfo);
 return graphWidth;
 }
 
+static void findBarPosX(int chromStart, int chromEnd, double scale, int barIx, int barCount, int *pStart, int *pEnd)
+/* Figure out start/end position of our bar's region */
+{
+int baseWidth = chromEnd - chromStart;
+double scaledSize = baseWidth *scale;
+double oneWidth = scaledSize/barCount;
+double barThinner = 1.0;
+if (oneWidth >= 5.0)
+    {
+    if (oneWidth > 7.0)
+       barThinner = 0.8;
+    else
+       barThinner = 0.75;
+    }
+
+int iStart = baseWidth*barIx/barCount;
+int iEnd = baseWidth*(barIx+1)/barCount;
+int iWidth = iEnd - iStart;
+int start = *pStart = iStart + chromStart;
+*pEnd = start + iWidth*barThinner;
+}
+
 static void barChartNonPropDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
                 double scale, MgFont *font, Color color, enum trackVisibility vis)
 {
@@ -610,16 +672,18 @@ struct barChartItem *itemInfo = (struct barChartItem *)item;
 struct bed *bed = itemInfo->bed;
 int topGraphHeight = chartHeight(tg, itemInfo);
 int graphWidth = chartWidth(tg, itemInfo);
+#ifdef OLD
+#endif /* OLD */
 topGraphHeight = max(topGraphHeight, tl.fontHeight);
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
 
 int graphX = barChartX(bed);
-int x1 = xOff + graphX;         // x1 is at left of graph
-int keepX = x1;
-drawGraphBase(tg, itemInfo, hvg, keepX, yZero+1);
+int x0 = xOff + graphX;         // x0 is at left of graph
+int x1 = x0;
+drawGraphBase(tg, itemInfo, hvg, x0, yZero+1);
 
 if (!extras->noWhiteout)
-    drawGraphBox(tg, itemInfo, hvg, keepX, yZero+1);
+    drawGraphBox(tg, itemInfo, hvg, x0, yZero+1);
 
 struct rgbColor lineColor = {.r=0};
 int lineColorIx = hvGfxFindColorIx(hvg, lineColor.r, lineColor.g, lineColor.b);
@@ -634,7 +698,6 @@ int expCount = bed->expCount;
 struct barChartCategory *categ;
 int barCount = filteredCategoryCount(extras), barsDrawn = 0;
 double invCount = 1.0/barCount;
-int x0 = x1;
 for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=categ->next)
     {
     if (!filterCategory(extras, categ->name))
@@ -646,9 +709,10 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
                                         extras->maxHeight, extras->doLogTransform);
     if (extras->padding == 0 || sameString(colorScheme, BAR_CHART_COLORS_USER))
 	{
-	int x1 = barsDrawn * graphWidth * invCount;
+	int cStart = barsDrawn * graphWidth * invCount;
+	int cEnd = (barsDrawn+1) * graphWidth * invCount;
+        hvGfxBox(hvg, cStart + x0, yZero-height+1, cEnd-cStart - extras->padding, height, fillColorIx);
 	barsDrawn += 1;
-        hvGfxBox(hvg, x1 + x0, yZero-height+1, max(1,barWidth), height, fillColorIx);
 	}
     else
 	{
@@ -700,28 +764,6 @@ assert(x1);
 *x1 = round((double)((int)s-winStart)*scale + insideX);
 assert(x2);
 *x2 = round((double)((int)e-winStart)*scale + insideX);
-}
-
-static void findBarPosX(int chromStart, int chromEnd, double scale, int barIx, int barCount, int *pStart, int *pEnd)
-/* Figure out start/end position of our bar's region */
-{
-int baseWidth = chromEnd - chromStart;
-double scaledSize = baseWidth *scale;
-double oneWidth = scaledSize/barCount;
-double barThinner = 1.0;
-if (oneWidth >= 5.0)
-    {
-    if (oneWidth > 7.0)
-       barThinner = 0.8;
-    else
-       barThinner = 0.75;
-    }
-
-int iStart = baseWidth*barIx/barCount;
-int iEnd = baseWidth*(barIx+1)/barCount;
-int iWidth = iEnd - iStart;
-int start = *pStart = iStart + chromStart;
-*pEnd = start + iWidth*barThinner;
 }
 
 static void barChartMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
