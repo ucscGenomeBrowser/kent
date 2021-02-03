@@ -2790,7 +2790,7 @@ include wgEncodeReg.dev.ra alpha
 #
 include platinumGenomes.ra
 include hic.ra
-include exomeProbesets.ra alpha
+include exomeProbesets.ra
 
 track epdNew
 shortLabel EPDnew Promoters
