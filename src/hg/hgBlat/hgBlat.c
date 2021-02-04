@@ -647,13 +647,20 @@ else  // hyperlink
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
 	printf("%s",psl->tName);
 	spaceOut(stdout, maxTChromNameSize - strlen(psl->tName));
-	printf("  %-2s  %9d %9d %6d\n",
+	printf("  %-2s  %9d %9d %6d",
 	    psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
+
+        if (endsWith(psl->tName, "_fix"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQblat.html#blat1c\">What is chrom_fix?</A>");
+        if (endsWith(psl->tName, "_alt"))
+            printf("   <SMALL><A target=_blank HREF=\"../FAQ/FAQblat.html#blat1c\">What is chrom_alt?</A></SMALL>");
+        puts("\n");
 	}
     printf("</PRE>\n");
     webNewSection("Help");
-    puts("<P style=\"text-align:left\"><SMALL><A HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A><br><A HREF=\"../FAQ/FAQblat.html#blat1c\">What is chr_alt & chr_fix?</A></SMALL></P>\n");
+    puts("<P style=\"text-align:left\"><A target=_blank HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A><br>");
+    puts("<A target=_blank HREF=\"../FAQ/FAQblat.html#blat1c\">What is chr_alt & chr_fix?</A></P>\n");
     puts("</DIV>\n");
     }
 pslFreeList(&pslList);
@@ -1743,9 +1750,9 @@ jsOnEventById("click", "allResultsText",
 printf("</TD>\n");
 
 printf("<TD COLSPAN=4 style='text-align:right'>\n");
-printf("<INPUT style='height:1.5em; width:100px; font-size:1.2em' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
-printf("<INPUT style='font-size:1.2em' TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
-printf("<INPUT style='font-size:1.2em' TYPE=SUBMIT NAME=Clear VALUE=Clear>\n");
+printf("<INPUT style='height:1.5em; width:100px; font-size:1.0em' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
+printf("<INPUT style='font-size:1.0em' TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
+printf("<INPUT style='font-size:1.0em' TYPE=SUBMIT NAME=Clear VALUE=Clear>\n");
 printf("</TD>\n");
 printf("</TR>\n");
 
