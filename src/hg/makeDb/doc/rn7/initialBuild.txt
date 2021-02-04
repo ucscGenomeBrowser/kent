@@ -1,0 +1,1256 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the rn7
+#	GCF_009663435.1
+
+#  Can use existing photograph (otherwise find one before starting here)
+
+#########################################################################
+#  Initial steps, reuse existing photograph (DONE - 2021-02-03 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/rn7
+cd ~/kent/src/hg/makeDb/doc/rn7
+
+sed -e 's/calJac4/rn7/g; s/CalJac4/Rn7/g; s/DONE/TBD/g;' \
+   ../calJac4/initialBuild.txt > initialBuild.txt
+
+mkdir -p /hive/data/genomes/rn7/refseq
+cd /hive/data/genomes/rn7
+
+# reuse existing photo from rn6:
+cp -p ../rn6/photoReference.txt .
+
+cat photoReference.txt
+
+photoCreditURL  http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Rat%20(brown%20norway)&id=79111
+photoCreditName NHGRI press photos
+
+## download from NCBI
+cd /hive/data/genomes/rn7/refseq
+
+time rsync -L -a -P --stats \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/015/227/675/GCF_015227675.2_mRatBN7.2/ ./
+# sent 3,249 bytes  received 4,735,520,193 bytes  46,655,403.37 bytes/sec
+# total size is 4,734,351,911  speedup is 1.00
+
+# real    1m41.513s
+
+# this information is from the top of 
+
+#    rn7/refseq/*_assembly_report.txt
+#    (aka: rn7/refseq/GCF_015227675.2_mRatBN7.2_assembly_report.txt
+
+# Assembly name:  mRatBN7.2
+# Organism name:  Rattus norvegicus (Norway rat)
+# Infraspecific name:  strain=BN/NHsdMcwi
+# Sex:  male
+# Taxid:          10116
+# BioSample:      SAMN16261960
+# BioProject:     PRJNA662791
+# Submitter:      Wellcome Sanger Institute
+# Date:           2020-11-10
+# Assembly type:  haploid (principal pseudohaplotype of diploid)
+# Release type:   minor
+# Assembly level: Chromosome
+# Genome representation: full
+# WGS project:    JACYVU01
+# Assembly method: FALCON-Unzip v. 2020
+# Expected final version: yes
+# Genome coverage: 92.0x
+# Sequencing technology: PacBio Sequel; 10X Genomics Chromium; BioNano; Arima Hi-C
+# GenBank assembly accession: GCA_015227675.2
+# RefSeq assembly accession: GCF_015227675.2
+# RefSeq assembly and GenBank assemblies identical: no
+# Linked assembly: GCA_016700215.1 (alternate pseudohaplotype of diploid)
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_015227685.1      GCF_015227685.1 Primary Assembly
+## GCA_000002045.1      GCF_000002045.1 non-nuclear
+
+# check assembly size for later reference:
+
+time faSize G*BN7.2_genomic.fna.gz
+
+# 2647915728 bases (21334956 N's 2626580772 real 1692490994 upper
+#	934089778 lower) in 176 sequences in 1 files
+# Total size: mean 15044975.7 sd 44833491.7 min 746 (NW_023637828.1)
+#	max 260522016 (NC_051336.1) median 44754
+# %35.28 masked total, %35.56 masked real
+
+# real    0m37.002s
+
+
+# Survey types of gaps:
+
+zgrep -v "^#" *gaps.txt.gz | cut -f5 | sort | uniq -c | sed -e 's/^/# /;'
+#     581 within_scaffold
+
+# And total size in gaps:
+zgrep -v "^#" *gaps.txt.gz | awk '{print $3-$2+1}' | ave stdin \
+  | sed -e 's/^/# /;'
+# Q1 100.000000
+# median 200.000000
+# Q3 22550.000000
+# average 36721.094664
+# min 10.000000
+# max 660122.000000
+# count 581
+# total 21334956.000000
+# standard deviation 95181.017236
+
+     # survey the sequence to see if it has IUPAC characters:
+     time zgrep -v "^>" G*BN7.2_genomic.fna.gz \
+        | perl -ne '{print join("\n",split(//))}' \
+           | sed -e '/^$/d' | sort | uniq -c | sort -rn | sed -e 's/^/# /;'
+# 480465436 T
+# 480274173 A
+# 365876597 C
+# 365874788 G
+# 281434031 t
+# 281431374 a
+# 185631190 g
+# 185593183 c
+# 21334956 N
+
+real    29m30.166s
+user    44m12.938s
+sys     1m20.452s
+
+#############################################################################
+# establish config.ra file (DONE - 2021-02-03 - Hiram)
+    cd /hive/data/genomes/rn7
+    ~/kent/src/hg/utils/automation/prepConfig.pl rn7 mammal rat \
+       refseq/*_assembly_report.txt > rn7.config.ra
+
+    # fix commonName:
+commonName Norway rat
+to:
+commonName Rat
+    # fix orderKey:
+orderKey 16952
+to
+orderKey 18032
+
+    # compare with previous version to see if it is sane:
+    diff rn7.config.ra ../rn6/rn6.config.ra
+
+    # verify it really does look sane
+    cat rn7.config.ra
+# config parameters for makeGenomeDb.pl:
+db rn7
+clade mammal
+scientificName Rattus norvegicus
+commonName Rat
+assemblyDate Nov. 2020
+assemblyLabel Wellcome Sanger Institute
+assemblyShortLabel mRatBN7.2
+orderKey 18032
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_001665.2
+mitoAcc none
+fastaFiles /hive/data/genomes/rn7/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/rn7/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir rat
+photoCreditURL  http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Rat%20(brown%20norway)&id=79111
+photoCreditName NHGRI press photos
+ncbiGenomeId 73
+ncbiAssemblyId 9079111
+ncbiAssemblyName mRatBN7.2
+ncbiBioProject 662791
+ncbiBioSample SAMN16261960
+genBankAccessionID GCF_015227675.2
+taxId 10116
+
+#############################################################################
+# setup UCSC named files (DONE - 2021-02-03 - Hiram)
+
+    mkdir /hive/data/genomes/rn7/ucsc
+    cd /hive/data/genomes/rn7/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../refseq/G*BN7.2_genomic.fna.gz refseq.2bit
+    #  real    0m38.943s
+
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be creating a refseq.2bit file
+    # to be removed later
+
+    # compare gaps with what the gaps.gz file reported:
+    twoBitInfo -nBed refseq.2bit  refseq.gap.bed
+    awk '{print $3-$2}' *.gap.bed | ave stdin | sed -e 's/^/# /;'
+# Q1 100.000000
+# median 200.000000
+# Q3 22550.000000
+# average 36721.094664
+# min 10.000000
+# max 660122.000000
+# count 581
+# total 21334956.000000
+# standard deviation 95181.017236
+
+    # this is exactly the same set of gaps found above
+
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+      ../refseq/G*BN7.2_genomic.fna.gz \
+	../refseq/*_assembly_structure/Primary_Assembly
+NC_051336.1 chr1
+NC_051337.1 chr2
+NC_051338.1 chr3
+NC_051339.1 chr4
+NC_051340.1 chr5
+NC_051341.1 chr6
+NC_051342.1 chr7
+NC_051343.1 chr8
+NC_051344.1 chr9
+NC_051345.1 chr10
+NC_051346.1 chr11
+NC_051347.1 chr12
+NC_051348.1 chr13
+NC_051349.1 chr14
+NC_051350.1 chr15
+NC_051351.1 chr16
+NC_051352.1 chr17
+NC_051353.1 chr18
+NC_051354.1 chr19
+NC_051355.1 chr20
+NC_051356.1 chrX
+NC_051357.1 chrY
+
+real    11m5.085s
+
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+    # processed 141 sequences into chrUn.fa.gz
+    # real    0m2.448s
+
+    time ~/kent/src/hg/utils/automation/unlocalizedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+# 19
+# Y
+# 12
+# processed 12 sequences into chr*_random.gz 3 files
+
+# real    0m1.106s
+
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../rn7.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_001665.2
+
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    cat chrM.agp
+# chrM    1       16313   1       O       NC_001665.2     1       16313   +
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+    gzip chrM.fa
+
+    faSize chrM.fa.gz
+# 16313 bases (0 N's 16313 real 16313 upper 0 lower) in 1 sequences in 1 files
+
+    # verify fasta and AGPs agree
+    time faToTwoBit *.fa.gz test.2bit
+    # real    0m50.257s
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 2647915728 bases (21334956 N's 2626580772 real 2626580772 upper 0 lower)
+#	in 176 sequences in 1 files
+# Total size: mean 15044975.7 sd 44833491.7 min 746 (chrUn_NW_023637828v1)
+#	max 260522016 (chr1) median 44754
+
+    # same numbers as above (except for upper/lower masking)
+# 2647915728 bases (21334956 N's 2626580772 real 1692490994 upper
+#	934089778 lower) in 176 sequences in 1 files
+
+    # See if the AGP files define all the gaps:
+    # categories of gaps:
+     awk '$5 == "N"' *.agp | cut -f7 | sort | uniq -c | sed -e 's/^/# /;'
+#     581 scaffold
+
+    # the gaps file defined:
+#     581 within_scaffold
+
+    awk '$5 == "N"' *.agp | awk '{print $3-$2+1}' | ave stdin \
+	| sed -e 's/^/# /;'
+# Q1 100.000000
+# median 200.000000
+# Q3 22550.000000
+# average 36721.094664
+# min 10.000000
+# max 660122.000000
+# count 581
+# total 21334956.000000
+# standard deviation 95181.017236
+
+    # survey of AGP types of gaps:
+    #   beware, can also be type U in col 5, doesn't happen here:
+    awk '$5 == "U"' *.agp   (no output)
+    awk '$5 == "N"' *.agp | awk '{print $7,$NF}' | sort | uniq -c \
+	| sed -e 's/^/# /;'
+#     581 scaffold map;proximity_ligation
+
+    # name equivalences in the assembly_report file:
+    grep -v "^#" \
+     ../refseq/G*BN7.2_assembly_report.txt \
+      | awk '{printf "%s\t%s\n", $1,$5}' | sort > ncbi.assembly.genbank.equivalence
+    grep -v "^#" \
+     ../refseq/G*BN7.2_assembly_report.txt \
+      | awk '{printf "%s\t%s\n", $1,$7}' | sort > ncbi.assembly.refseq.equivalence
+    join -t$'\t' ncbi.assembly.genbank.equivalence \
+        ncbi.assembly.refseq.equivalence > ncbi.genbank.refseq.names
+    (watch our for the MT sequence has 'na' for genbank name)
+
+    # no longer need these temporary 2bit files
+    rm test.2bit refseq.2bit refseq.gap.bed
+
+#############################################################################
+#  Initial database build (DONE - 2021-02-03 - Hiram)
+
+    # verify sequence and AGP are OK:
+    cd /hive/data/genomes/rn7
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp rn7.config.ra) > agp.log 2>&1
+    # real    2m28.118s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db rn7.config.ra) > db.log 2>&1
+    # real    15m3.169s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add rn7 to trackDb/makefile   refs #26682
+    # fixing up the images reference to rn7.jpg
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/rn7
+    ln -s `pwd`/rn7.unmasked.2bit /gbdb/rn7/rn7.2bit
+
+#############################################################################
+# verify gap table vs NCBI gap file (DONE - 2021-02-03 - Hiram)
+    mkdir /hive/data/genomes/rn7/bed/gap
+    cd /hive/data/genomes/rn7/bed/gap
+
+    zgrep -v "^#" ../../refseq/G*_gaps.txt.gz \
+	| awk '{printf "%s\t%d\t%d\t%s_%s\n", $1,$2-1,$3,$5,$6}' \
+	| sort -k1,1 -k2,2n > refseq.gap.bed
+
+    # type survey:
+    cut -f4 *.bed | sort | uniq -c | sed -e 's/^/# /;'
+#     581 within_scaffold_map;proximity_ligation
+
+    # how much defined by NCBI:
+    awk '{print $3-$2}' *.bed | ave stdin | grep -w total
+    # total 21334956.000000
+
+    # how much in the gap table:
+    hgsql -e 'select * from gap;' rn7 | awk '{print $4-$3}' \
+	| ave stdin | grep -w total
+    # total 21334956.000000
+
+    # gap table type survey:
+    hgsql -N -e 'select type from gap;' rn7 \
+        | sort | uniq -c | sed -e 's/^/    #/;'
+    #    581 scaffold
+
+    # should be same numbers everywhere, investigate anomalies
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2021-02-03 - Hiram)
+    mkdir /hive/data/genomes/rn7/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/rn7/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/rn7/rn7.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku rn7) > do.log 2>&1
+    # real    16m40.237s
+
+    cat fb.rn7.cpgIslandExtUnmasked.txt
+    # 12050281 bases of 2626580772 (0.459%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2021-02-03 - Hiram)
+    mkdir /hive/data/genomes/rn7/bed/cytoBand
+    cd /hive/data/genomes/rn7/bed/cytoBand
+    makeCytoBandIdeo.csh rn7
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2021-02-03 - Hiram)
+    mkdir /hive/data/genomes/rn7/bed/idKeys
+    cd /hive/data/genomes/rn7/bed/idKeys
+
+    time (doIdKeys.pl \
+        -twoBit=/hive/data/genomes/rn7/rn7.unmasked.2bit \
+        -buildDir=`pwd` rn7) > do.log 2>&1 &
+    # real    0m37.959s
+
+    cat rn7.keySignature.txt
+    #  40260b0b04686933dabe31bb3dff9f3e
+
+#############################################################################
+# gapOverlap (DONE - 2020-02-03 - Hiram)
+    mkdir /hive/data/genomes/rn7/bed/gapOverlap
+    cd /hive/data/genomes/rn7/bed/gapOverlap
+    time (doGapOverlap.pl \
+        -twoBit=/hive/data/genomes/rn7/rn7.unmasked.2bit rn7 ) \
+        > do.log 2>&1 &
+XXX - running - Wed Feb  3 16:27:56 PST 2021
+    # real    0m54.302s
+
+    # there were not very many gaps, it only had to do one job and blat
+    # found nothing.
+
+    # this result does not exist:
+    cat fb.rn7.gapOverlap.txt
+    # 608 bases of 2728222451 (0.000%) in intersection
+
+    # manually finish off since it quit in the load step
+    doGapOverlap.pl -continue=cleanup \
+        -twoBit=/hive/data/genomes/rn7/rn7.unmasked.2bit rn7
+        
+#############################################################################
+# tandemDups (DONE - 2020-02-03 - Hiram)
+    mkdir /hive/data/genomes/rn7/bed/tandemDups
+    cd /hive/data/genomes/rn7/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/rn7/rn7.unmasked.2bit rn7) \
+        > do.log 2>&1 &
+XXX - running - Wed Feb  3 16:27:56 PST 2021
+    # real    193m21.761s
+
+    cat fb.rn7.tandemDups.txt
+    # 80358205 bases of 2897824427 (2.773%) in intersection
+
+    bigBedInfo rn7.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 1,402,773
+#  primaryDataSize: 36,657,311
+#  primaryIndexSize: 119,132
+#  zoomLevels: 9
+#  chromCount: 894
+#  basesCovered: 1,457,658,879
+#  meanDepth (of bases covered): 8.428920
+#  minDepth: 1.000000
+#  maxDepth: 344.000000
+#  std of depth: 18.274027
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2021-02-03 - Hiram)
+    # construct idKeys for the refseq and genbank sequence
+    mkdir /hive/data/genomes/rn7/refseq/idKeys
+    cd /hive/data/genomes/rn7/refseq/idKeys
+    faToTwoBit ../G*BN7.2_genomic.fna.gz rn7.refseq.2bit
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/rn7.refseq.2bit refseqRn7)  > do.log 2>&1 &
+    # real    6m36.946s
+
+    sed -e 's/^/    # /;' refseqRn7.keySignature.txt
+    # 40260b0b04686933dabe31bb3dff9f3e
+
+    mkdir /hive/data/genomes/rn7/genbank
+    cd /hive/data/genomes/rn7/genbank
+
+    faToTwoBit \
+/hive/data/outside/ncbi/genomes/GCA/015/227/675/GCA_015227675.2_mRatBN7.2/GCA_015227675.2_mRatBN7.2_genomic.fna.gz rn7.genbank.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/rn7.genbank.2bit genbankRn7)  > do.log 2>&1 &
+    # real    2m56.082s
+
+    sed -e 's/^/    # /;' genbankRn7.keySignature.txt
+    # 40260b0b04686933dabe31bb3dff9f3e
+
+    mkdir /hive/data/genomes/rn7/bed/chromAlias
+    cd /hive/data/genomes/rn7/bed/chromAlias
+
+    join -t$'\t' ../idKeys/rn7.idKeys.txt \
+        ../../genbank/genbankRn7.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+    join -t$'\t' ../idKeys/rn7.idKeys.txt \
+        ../../refseq/idKeys/refseqRn7.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+ # IF the genbank list is missing chrM, look it up in Entrez nucleotide, then:
+#    grep chrM ucscToRefSeq.bed | sed -e 's/NC_025586.1/KM588314.1/;' \
+#       >> ucscToINSDC.bed
+#    # and re-sort
+#    cat ucscToINSDC.bed | sort -k1,1 -k2,2n > t
+#    mv t ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    #	176 ucscToINSDC.bed
+    #	176 ucscToRefSeq.bed
+    #	176 ../../chrom.sizes
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 27
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab rn7 ucscToINSDC stdin ucscToINSDC.bed
+
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab rn7 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # should be quiet for all OK
+    checkTableCoords rn7 ucscToINSDC
+    checkTableCoords rn7 ucscToRefSeq
+
+    # should cover %100 entirely:
+    featureBits -countGaps rn7 ucscToINSDC
+    # 2647915728 bases of 2647915728 (100.000%) in intersection
+
+    featureBits -countGaps rn7 ucscToRefSeq
+    # 2647915728 bases of 2647915728 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2021-02-03 - Hiram)
+
+    mkdir /hive/data/genomes/rn7/bed/chromAlias
+    cd /hive/data/genomes/rn7/bed/chromAlias
+
+    grep -v "^#" ../../refseq/G*BN7.2_assembly_report.txt \
+	| awk '{printf "%s\t%s\n", $5,$1}' | sort > ncbi.genbank.txt
+    grep -v "^#" ../../refseq/G*BN7.2_assembly_report.txt \
+	| awk '{printf "%s\t%s\n", $7,$1}' | sort > ncbi.refseq.txt
+
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' rn7 \
+        | sort -k1,1 > ucsc.genbank.tab
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' rn7 \
+        | sort -k1,1 > ucsc.refseq.tab
+
+    # the awk removes lines where the UCSC name is identical to the NCBI name
+    join -t$'\t' -1 2 <(sort -k2,2 ucsc.refseq.tab) ncbi.refseq.txt \
+      | cut -f2-3 | awk '$1 != $2' | sort > ucsc.assembly.tab
+
+#  IF needing to add chrM definition to genbank file
+#    printf "chrM\tNC_005089.1\n" > ucsc.genbank.tab
+
+    # genbank and refseq should be the same, assembly can be less
+    wc -l *.tab ../../chrom.sizes
+    #	176 ucsc.assembly.tab
+    #	176 ucsc.genbank.tab
+    #	176 ucsc.refseq.tab
+    #	176 ../../chrom.sizes
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+        > rn7.chromAlias.tab
+# working: assembly
+# working: genbank
+# working: refseq
+
+for t in assembly genbank refseq
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t rn7.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking assembly: 176 =? 176 OK
+# checking genbank: 176 =? 176 OK
+# checking refseq: 176 =? 176 OK
+
+    # verify chrM is here properly:
+    grep chrM rn7.chromAlias.tab 
+# KM588314.1      chrM    genbank
+# MT      chrM    assembly
+# NC_025586.1     chrM    refseq
+
+    hgLoadSqlTab rn7 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        rn7.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2021-02-03 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/rat/rn7
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" rn7 \
+      | sed -e 's/[0-9.]\+//;' | sort | uniq -c | sed -e 's/^/# /;'
+#     756 JACYVU
+#       1 NC_
+
+    # implies a rule: '[JN][AC][CUYV0-9_]+(\.[0-9_]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" rn7 | wc -l
+    # 757
+
+    hgsql -N -e "select frag from gold;" rn7 \
+       | egrep -e '[JN][AC][CUYV0-9_]+(\.[0-9_]+)?' | wc -l
+    # 757
+
+    hgsql -N -e "select frag from gold;" rn7 \
+      | egrep -v -e '[JN][AC][CUYV0-9_]+(\.[0-9_]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rat/rn7/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [JN][AC][CUYV0-9_]+(\.[0-9_]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+    git commit -m 'adding search rule for gold/assembly track refs #26682' \
+       trackDb.ra
+
+##########################################################################
+# running repeat masker (DONE - 2020-02-03 - Hiram)
+    # using new repeat masker version 4.1.0
+    mkdir /hive/data/genomes/rn7/bed/repeatMasker
+    cd /hive/data/genomes/rn7/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=hgwdev rn7) > do.log 2>&1
+XXX - running - Wed Feb  3 16:29:03 PST 2021
+    # real    402m37.300s
+
+    cat faSize.rmsk.txt
+# 2897824427 bases (38007443 N's 2859816984 real 1455718019 upper
+#	1404098965 lower) in 964 sequences in 1 files
+# Total size: mean 3006041.9 sd 20298858.9 min 285 (chrUn_NW_023264940v1)
+#	max 217961735 (chr1) median 42174
+# %48.45 masked total, %49.10 masked real
+
+    egrep -i "versi|relea" do.log
+# RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+# CC    RepBase RELEASE 20181026;      
+
+    sed -e 's/^/# /;' versionInfo.txt 
+# The repeat files provided for this assembly were generated using RepeatMasker.
+#   Smit, AFA, Hubley, R & Green, P.,
+#   RepeatMasker Open-4.0.
+#   1996-2010 <http://www.repeatmasker.org>.
+# 
+# VERSION:
+# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+# Search Engine: Crossmatch [ 1.090518 ]
+# Master RepeatMasker Database: /hive/data/staging/data/RepeatMasker181121/Libraries/RepeatMaskerLib.embl ( Complete Database: dc20181026-rb20181026 )
+# 
+# 
+# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+# CC    RepBase RELEASE 20181026;                                   *
+# # RepeatMasker engine: -engine crossmatch -s
+# # RepeatMasker library options: -species 'Callithrix jacchus'
+# 
+# PARAMETERS:
+# /hive/data/staging/data/RepeatMasker/RepeatMasker -engine crossmatch -s -align -species 'Callithrix jacchus'
+
+    time featureBits -countGaps rn7 rmsk
+    # 1404097506 bases of 2897824427 (48.454%) in intersection
+    # real    0m23.891s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' rn7 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1404097506.000000
+    # real    0m21.422s
+
+##########################################################################
+# running simple repeat (DONE - 2020-02-03 - Hiram)
+
+    mkdir /hive/data/genomes/rn7/bed/simpleRepeat
+    cd /hive/data/genomes/rn7/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409=6 rn7) > do.log 2>&1 &
+XXX - running - Wed Feb  3 16:29:44 PST 2021
+    # real    128m26.410s
+
+    cat fb.simpleRepeat
+    # 106897704 bases of 2859817025 (3.738%) in intersection
+
+    cd /hive/data/genomes/rn7
+    # if using the Window Masker result:
+    cd /hive/data/genomes/rn7
+#    twoBitMask bed/windowMasker/rn7.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  rn7.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # add to rmsk after it is done:
+    twoBitMask rn7.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed rn7.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa rn7.2bit stdout | faSize stdin > faSize.rn7.2bit.txt
+    cat faSize.rn7.2bit.txt
+# 2897824427 bases (38007443 N's 2859816984 real 1454005411 upper
+#	1405811573 lower) in 964 sequences in 1 files
+# Total size: mean 3006041.9 sd 20298858.9 min 285 (chrUn_NW_023264940v1)
+#	max 217961735 (chr1) median 42174
+# %48.51 masked total, %49.16 masked real
+
+
+    rm /gbdb/rn7/rn7.2bit
+    ln -s `pwd`/rn7.2bit /gbdb/rn7/rn7.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (TBD - 2020-09-02 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rn7/bed/microsat
+    cd /hive/data/genomes/rn7/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+         ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed rn7 microsat microsat.bed
+    # Read 41788 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (TBD - 2020-09-02 - Hiram)
+
+    mkdir /hive/data/genomes/rn7/bed/windowMasker
+    cd /hive/data/genomes/rn7/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev rn7) > do.log 2>&1
+    # real    119m59.049s
+
+    # Masking statistics
+    cat faSize.rn7.cleanWMSdust.txt
+# 2897824427 bases (38007443 N's 2859816984 real 1756905691 upper 1102911293 lower) in 964 sequences in 1 files
+# Total size: mean 3006041.9 sd 20298858.9 min 285 (chrUn_NW_023264940v1) max 217961735 (chr1) median 42174
+# %38.06 masked total, %38.57 masked real
+
+##########################################################################
+# cpgIslands - (TBD - 2020-09-03 - Hiram)
+    mkdir /hive/data/genomes/rn7/bed/cpgIslands
+    cd /hive/data/genomes/rn7/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku rn7) > do.log 2>&1
+    # real    3m28.053s
+
+    cat fb.rn7.cpgIslandExt.txt
+    # 10571422 bases of 2654624157 (0.398%) in intersection
+
+##############################################################################
+# genscan - (TBD - 2020-09-03 - Hiram)
+    mkdir /hive/data/genomes/rn7/bed/genscan
+    cd /hive/data/genomes/rn7/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku rn7) > do.log 2>&1
+    # real    73m39.179s
+
+    # two jobs broken:
+./runGsBig2M.csh chr22 000 gtf/000/chr22.gtf pep/000/chr22.pep subopt/000/chr22.bed &
+./runGsBig2M.csh chr4 000 gtf/000/chr4.gtf pep/000/chr4.pep subopt/000/chr4.bed
+wait
+    # real    56m30.462s
+
+    # continuing
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku rn7) > makeBed.log 2>&1
+    # real    1m1.807s
+
+    cat fb.rn7.genscan.txt
+    # 56416049 bases of 2859817025 (1.973%) in intersection
+
+    cat fb.rn7.genscanSubopt.txt
+    # 54809849 bases of 2859817025 (1.917%) in intersection
+
+#########################################################################
+# ncbiGene (TBD - 2020-09-03 - Hiram)
+
+    # don't need to do this on GCF/RefSeq assemblies, they have RefSeq genes
+    mkdir /hive/data/genomes/rn7/bed/xenoRefGene
+    cd /hive/data/genomes/rn7/bed/xenoRefGene
+
+    time (~/kent/src/hg/utils/automation/doXenoRefGene.pl -buildDir=`pwd` \
+       -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev rn7) > do.log 2>&1 &
+    # real    67m18.015s
+
+#########################################################################
+# Create kluster run files (TBD - 2020-09-03 - Hiram)
+
+    # numerator is rn7 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap rn7 gap
+    # 36757259 bases of 2793460667 (1.316%) in intersection
+    #                      ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2793460667 / 2861349177 \) \* 1024
+    #  ( 2793460667 / 2861349177 ) * 1024 = 999.704526
+
+    # ==> use -repMatch=1000 according to size scaled down from 1024 for human.
+    cd /hive/data/genomes/rn7
+    time blat rn7.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/rn7.11.ooc \
+        -repMatch=1000
+    # Wrote 34987 overused 11-mers to jkStuff/rn7.11.ooc
+    # real    0m29.438s
+    # calJac3 at repMatch=950
+    #	Wrote 32908 overused 11-mers to jkStuff/calJac3.11.ooc
+
+    # survey sizes of all gaps:
+    hgsql -N -e 'select size from gap;' rn7 | ave stdin | sed -e 's/^/# /;'
+# Q1 100.000000
+# median 24230.500000
+# Q3 55834.000000
+# average 100548.682540
+# min 13.000000
+# max 1000000.000000
+# count 378
+# total 38007402.000000
+# standard deviation 237103.349286
+    hgsql -N -e 'select size from gap;' rn7 | sort -n | uniq -c | sed -e 's/^/# /;'
+
+    # survey sizes of non-bridged gaps:
+    hgsql -N -e 'select size from gap where bridge="no" order by size;' \
+	rn7  | sort | uniq -c | sort -k2,2n | sed -e 's/^/# /;'
+#       7 100
+#       8 50000
+#      22 1000000
+
+    # and survey the number bridged gaps over 50,000 bases:
+    hgsql -N -e 'select size from gap where bridge="yes" and size > 49999;' \
+        rn7 | wc -l
+    # 86
+
+    # forget the non-bridged of size 100, use 50,000 and allow bridged
+
+    # use gap size of 50000 to construct a lift file:
+    gapToLift -allowBridged -verbose=2 -minGap=50000 rn7 \
+	jkStuff/rn7.gaps.lft -bedFile=jkStuff/rn7.gaps.bed
+    wc -l jkStuff/rn7.gaps*.
+    # 1073 jkStuff/rn7.gaps.bed
+    # 1073 jkStuff/rn7.gaps.lft
+
+    # to see the gaps sizes used:
+    bedInvert.pl chrom.sizes jkStuff/rn7.gaps.bed \
+	| cut -f4 | sort -n | uniq -c | less
+
+########################################################################
+# lastz/chain/net swap human/hg38 (TBD - 2020-04-10 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzRn7.2020-08-03
+
+    cat fb.hg38.chainRn7Link.txt
+    # 2338614467 bases of 3110768607 (75.178%) in intersection
+    cat fb.hg38.chainSynRn7Link.txt
+    # 2261509186 bases of 3110768607 (72.699%) in intersection
+    cat fb.hg38.chainRBest.Rn7.txt
+    # 2146650109 bases of 3110768607 (69.007%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/rn7/bed/blastz.hg38.swap
+    cd /hive/data/genomes/rn7/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzRn7.2020-08-03/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    105m30.938s
+
+    cat fb.rn7.chainHg38Link.txt
+    # 2256668215 bases of 2859817025 (78.910%) in intersection
+    cat fb.rn7.chainSynHg38Link.txt
+    # 2183912419 bases of 2859817025 (76.365%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	rn7 hg38) > rbest.log 2>&1 &
+    # real    467m22.590s
+
+    cat fb.rn7.chainRBest.Hg38.txt
+    # 2147250913 bases of 2859817025 (75.084%) in intersection
+
+############################################################################
+# lastz/chain/net swap mouse/mm10 (TBD - 2020-08-03 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzRn7.2020-08-03
+
+    cat fb.mm10.chainRn7Link.txt
+    #	877278264 bases of 2652783500 (33.070%) in intersection
+    cat fb.mm10.chainSynRn7Link.txt
+    #   830868888 bases of 2652783500 (31.321%) in intersection
+    cat fb.mm10.chainRBest.Rn7.txt
+    # 835445771 bases of 2652783500 (31.493%) in intersection
+
+    mkdir /hive/data/genomes/rn7/bed/blastz.mm10.swap
+    cd /hive/data/genomes/rn7/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRn7.2020-08-03/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    51m16.400s
+
+    cat fb.rn7.chainMm10Link.txt
+    #	882506277 bases of 2859817025 (30.859%) in intersection
+    cat fb.rn7.chainSynMm10Link.txt
+    #   831171319 bases of 2859817025 (29.064%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev rn7 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    308m53.845s
+
+    cat fb.rn7.chainRBest.Mm10.txt
+    # 833789913 bases of 2859817025 (29.155%) in intersection
+
+##############################################################################
+# GENBANK AUTO UPDATE (TBD - 2020-09-03 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Callithrix geoffroyi	7	0	0
+    # Callithrix jacchus	1607	292992	221
+    # Callithrix kuhlii	1	0	0
+    # Callithrix penicillata	1	0	0
+    # Callithrix pygmaea	5	0	0
+    # Callithrix sp.	4	0	0
+
+    # edit etc/genbank.conf to add rn7 just after mm10
+
+# Marmoset - GCF_009663435.1 - Callithrix_jacchus_cj1700BN7.2
+rn7.serverGenome = /hive/data/genomes/rn7/rn7.2bit
+rn7.ooc = /hive/data/genomes/rn7/jkStuff/rn7.11.ooc
+rn7.lift = /hive/data/genomes/rn7/jkStuff/rn7.gaps.lft
+rn7.perChromTables = no
+rn7.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+rn7.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+rn7.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+rn7.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+rn7.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+rn7.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+rn7.downloadDir = rn7
+rn7.refseq.mrna.native.load  = yes
+rn7.refseq.mrna.xeno.load = yes
+rn7.refseq.mrna.xeno.loadDesc  = yes
+rn7.genbank.mrna.xeno.load  = yes
+# rn7.upstreamGeneTbl = ensGene
+# rn7.upstreamMaf = multiz13way /hive/data/genomes/rn7/bed/multiz13way/species.list
+
+    # verify the files specified exist before checking in the file:
+  grep ^rn7 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
+# -rw-rw-r-- 1 755819249 Sep  3 10:51 /hive/data/genomes/rn7/rn7.2bit
+# -rw-rw-r-- 1    139956 Sep  3 11:54 /hive/data/genomes/rn7/jkStuff/rn7.11.ooc
+# -rw-rw-r-- 1     61169 Sep  3 12:42 /hive/data/genomes/rn7/jkStuff/rn7.gaps.lft
+
+    git commit -m "Added rn7 rat; refs #26682" etc/genbank.conf
+    git push
+
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add rn7 to:
+    #   etc/hgwdev.dbs etc/align.dbs
+    git commit -m "Added rn7 - rat refs #26682" etc/hgwdev.dbs etc/align.dbs
+    git push
+    make etc-update
+
+    # wait a few days for genbank magic to take place, the tracks will
+    # appear
+
+#############################################################################
+# augustus gene track (TBD - 2020-09-04 - Hiram)
+
+    mkdir /hive/data/genomes/rn7/bed/augustus
+    cd /hive/data/genomes/rn7/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev rn7) > do.log 2>&1
+    # real    119m49.652s
+
+    cat fb.rn7.augustusGene.txt
+    # 56033149 bases of 2859817025 (1.959%) in intersection
+
+#########################################################################
+# ncbiRefSeq (TBD - 2020-09-17 - Hiram)
+
+    mkdir /hive/data/genomes/rn7/bed/ncbiRefSeq
+    cd /hive/data/genomes/rn7/bed/ncbiRefSeq
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=hgwdev -workhorse=hgwdev \
+      GCF_009663435.1_Callithrix_jacchus_cj1700BN7.2 rn7) > do.log 2>&1 &
+
+    cat fb.ncbiRefSeq.rn7.txt
+    #  102754440 bases of 2859817025 (3.593%) in intersection
+
+    # add: include ../../refSeqComposite.ra
+    # to the rat/rn7/trackDb.ra to turn on the track in the browser
+
+    # XXX 2020-09-17 - ready for this after genbank runs
+
+    featureBits -enrichment rn7 refGene ncbiRefSeq 
+ # refGene 0.402%, ncbiRefSeq 3.148%, both 0.402%, cover 99.90%, enrich 31.73x
+    featureBits -enrichment rn7 ncbiRefSeq refGene
+ # ncbiRefSeq 3.148%, refGene 0.402%, both 0.402%, cover 12.76%, enrich 31.73x
+
+    featureBits -enrichment rn7 ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 0.401%, refGene 0.402%, both 0.400%, cover 99.66%, enrich 247.79x
+
+    featureBits -enrichment rn7 refGene ncbiRefSeqCurated
+ # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
+
+##############################################################################
+# LIFTOVER TO calJac3 (TBD - 2020-09-04 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rn7/bed/blat.calJac3.2020-09-04
+    cd /hive/data/genomes/rn7/bed/blat.calJac3.2020-09-04
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -query2Bit=/hive/data/genomes/calJac3/calJac3.2bit \
+        -querySizes=/hive/data/genomes/calJac3/chrom.sizes \
+        -ooc=/hive/data/genomes/rn7/jkStuff/rn7.11.ooc \
+         rn7 calJac3
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -query2Bit=/hive/data/genomes/calJac3/calJac3.2bit \
+        -querySizes=/hive/data/genomes/calJac3/chrom.sizes \
+        -ooc=/hive/data/genomes/rn7/jkStuff/rn7.11.ooc \
+         rn7 calJac3) > doLiftOverToRn7.log 2>&1
+    # real    248m51.413s
+
+    # see if the liftOver menus function in the browser from rn7 to calJac3
+
+##############################################################################
+#  BLATSERVERS ENTRY (TBD - 2020-09-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rn7", "blat1a", "17902", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rn7", "blat1a", "17903", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to same as calJac3 via blat of the protein from there
+##  (TBD - 2020-09-17 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr15:67061035-67077513"
+	where name="rn7";' hgcentraltest
+
+##############################################################################
+# crispr whole genome (TBD - 2020-09-04 -> 2020-09-10 - Hiram)
+    mkdir /hive/data/genomes/rn7/bed/crisprAll
+    cd /hive/data/genomes/rn7/bed/crisprAll
+
+    # need to have augustus genes done.  This will not work with genscan
+
+    # the large shoulder argument will cause the entire genome to be scanned
+    # this takes a while for a new genome to get the bwa indexing done
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
+    rn7 augustusGene -shoulder=250000000 -tableName=crisprAll \
+    -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) >> ranges.log 2>&1
+    # real    73m51.391s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=guides -stop=load rn7 augustusGene \
+	-shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > specScores.log 2>&1
+    # real    7968m4.344s
+
+    cat guides/run.time | sed -e 's/^/# /;'
+# Completed: 100 of 100 jobs
+# CPU time in finished jobs:      12157s     202.62m     3.38h    0.14d  0.000 y
+# IO & Wait Time:                   252s       4.20m     0.07h    0.00d  0.000 y
+# Average job time:                 124s       2.07m     0.03h    0.00d
+# Longest finished job:             505s       8.42m     0.14h    0.01d
+# Submission to last job:           517s       8.62m     0.14h    0.01d
+
+    cat specScores/run.time | sed -e 's/^/# /;'
+# Completed: 3085907 of 3085907 jobs
+# CPU time in finished jobs:  294759806s 4912663.43m 81877.72h 3411.57d  9.347 y
+# IO & Wait Time:               6938403s  115640.05m  1927.33h   80.31d  0.220 y
+# Average job time:                  98s       1.63m     0.03h    0.00d
+# Longest finished job:             372s       6.20m     0.10h    0.00d
+# Submission to last job:        324356s    5405.93m    90.10h    3.75d
+
+     grep "Number of specScores" specScores.log
+# Number of specScores: 230996937
+
+    cat effScores/run.time | sed -e 's/^/# /;'
+# Completed: 28837 of 28837 jobs
+# CPU time in finished jobs:   14627399s  243789.98m  4063.17h  169.30d  0.464 y
+# IO & Wait Time:                527816s    8796.94m   146.62h    6.11d  0.017 y
+# Average job time:                 526s       8.76m     0.15h    0.01d
+# Longest finished job:            1466s      24.43m     0.41h    0.02d
+# Submission to last job:         32001s     533.35m     8.89h    0.37d
+
+    cat offTargets/run.time | sed -e 's/^/# /;'
+# Completed: 154296 of 154296 jobs
+# CPU time in finished jobs:    2640432s   44007.20m   733.45h   30.56d  0.084 y
+# IO & Wait Time:                986281s   16438.02m   273.97h   11.42d  0.031 y
+# Average job time:                  24s       0.39m     0.01h    0.00d
+# Longest finished job:              49s       0.82m     0.01h    0.00d
+# Submission to last job:         12302s     205.03m     3.42h    0.14d
+
+    bigBedInfo crispr.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 22
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 287,101,022
+# primaryDataSize: 12,714,904,685
+# primaryIndexSize: 18,017,884
+# zoomLevels: 10
+# chromCount: 34
+# basesCovered: 2,272,744,456
+# meanDepth (of bases covered): 2.905440
+# minDepth: 1.000000
+# maxDepth: 29.000000
+# std of depth: 1.956870
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # verify all the business is done for release
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl rn7
+# 66 tables in database rn7 - Dog, Canis lupus familiaris
+# verified 55 tables in database rn7, 11 extra tables, 14 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# gapOverlap    1 optional tables
+# tandemDups    1 optional tables
+# 1     chainCanFam3    - extra table
+# 2     chainCanFam3Link        - extra table
+# 3     chainRBestCanFam3       - extra table
+# 4     chainRBestCanFam3Link   - extra table
+# . . . etc . . .
+# 8     crisprAllTargets        - extra table
+# 9     netCanFam3      - extra table
+# 10    netRBestCanFam3 - extra table
+# 11    netSynCanFam3   - extra table
+# 13 genbank tables found
+# verified 28 required tables, 1 missing tables
+# 1     ucscToRefSeq    - missing table
+# hg38 chainNet to rn7 found 3 required tables
+# mm10 chainNet to rn7 found 3 required tables
+# hg38 chainNet RBest and syntenic to rn7 found 6 optional tables
+# mm10 chainNet RBest and syntenic to rn7 found 3 optional tables
+# liftOver to previous versions: 1, from previous versions: 1
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=rn7 -tableCoverage all.joiner
+    joinerCheck -database=rn7 -times all.joiner
+    joinerCheck -database=rn7 -keys all.joiner
+
+    # when clean, check in:
+    git commit -m 'adding rules for rn7 refs #26682' all.joiner
+    git push
+    # run up a 'make alpha' in hg/hgTables to get this all.joiner file
+    # into the hgwdev/genome-test system
+
+    cd /hive/data/genomes/rn7
+    time (makeDownloads.pl rn7) > downloads.log 2>&1
+    #  real    20m11.930s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/rn7/pushQ
+    cd /hive/data/genomes/rn7/pushQ
+ time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList rn7) > rn7.pushQ.sql 2> stderr.out
+    # real    13m21.313s
+
+    # remove the tandemDups and gapOverlap from the file list:
+    sed -i -e "/tandemDups/d" redmine.rn7.table.list
+    sed -i -e "/Tandem Dups/d" redmine.rn7.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.rn7.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.rn7.releaseLog.txt
+
+    # remove the multiz7way tables:
+    sed -i -e "/multiz7way/d" redmine.rn7.table.list
+
+    # edit the file list and expand the wildcards: .../calJac*/...
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+# redmine.rn7.releaseLog.txt
+WARNING: rn7 does not have seq
+WARNING: hgwdev does not have phyloPng-generated /usr/local/apache/htdocs/images/phylo/rn7_7way.gif (or png) for multiz7way.
+
+WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+supporting and genbank tables) which tracks to assign these tables to:
+  chainRBestHg38
+  chainRBestHg38Link
+  chainRBestMacFas5
+  chainRBestMacFas5Link
+... etc
+    crisprAllRanges
+  gbLoaded
+  netRBestHg38
+  netRBestMacFas5
+  netRBestMm10
+  netRBestMm39
+  netSynHg38
+  netSynMacFas5
+  netSynMm10
+  netSynMm39
+
+    # verify the file list does correctly match to files
+    cat redmine.rn7.file.list | while read L
+do
+  eval ls $L > /dev/null
+done
+    # should be silent, missing files will show as errors
+
+    # verify database tables, how many to expect:
+    wc -l redmine.rn7.table.list
+    # 70 redmine.rn7.table.list
+
+    # how many actual:
+    awk -F'.' '{printf "hgsql -N %s -e '"'"'show table status like \"%s\";'"'"'\n", $1, $2}' redmine.rn7.table.list | sh | wc -l
+    # 70
+
+    # would be a smaller number actual if some were missing
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+
+#	/hive/data/genomes/rn7/pushQ/redmine.rn7.file.list
+#	/hive/data/genomes/rn7/pushQ/redmine.rn7.releaseLog.txt
+#	/hive/data/genomes/rn7/pushQ/redmine.rn7.table.list
+
+#########################################################################
