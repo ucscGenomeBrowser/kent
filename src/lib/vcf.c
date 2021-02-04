@@ -402,8 +402,6 @@ if (! sameString(exp1, words[ix]))
 
 #define expectColumnName(vcff, exp, words, ix) expectColumnName2(vcff, exp, NULL, words, ix)
 
-// There might be a whole lot of genotype columns...
-#define VCF_MAX_COLUMNS 256 * 1024
 #define VCF_MIN_COLUMNS 8
 
 char *vcfDefaultHeader = "#CHROM POS ID REF ALT QUAL FILTER INFO";
@@ -412,11 +410,9 @@ char *vcfDefaultHeader = "#CHROM POS ID REF ALT QUAL FILTER INFO";
 static void parseColumnHeaderRow(struct vcfFile *vcff, char *line)
 /* Make sure column names are as we expect, and store genotype sample IDs if any are given. */
 {
-char *words[VCF_MAX_COLUMNS];
-int wordCount = chopLine(line+1, words);
-if (wordCount >= VCF_MAX_COLUMNS)
-    vcfFileErr(vcff, "header contains at least %d columns; "
-	       "VCF_MAX_COLUMNS may need to be increased in vcf.c!", VCF_MAX_COLUMNS);
+int wordCount = chopLine(line+1, NULL);
+char *words[wordCount];
+chopLine(line+1, words);
 if (wordCount < VCF_MIN_COLUMNS)
     errAbort("VCF header missing at least one of the required VCF fields");
 expectColumnName(vcff, "CHROM", words, 0);
@@ -751,7 +747,7 @@ struct vcfRecord *vcfNextRecord(struct vcfFile *vcff)
 /* Parse the words in the next line from vcff into a vcfRecord. Return NULL at end of file.
  * Note: this does not store record in vcff->records! */
 {
-char *words[VCF_MAX_COLUMNS];
+char *words[10 + vcff->genotypeCount];
 int wordCount;
 if ((wordCount = lineFileChopTab(vcff->lf, words)) <= 0)
     return NULL;
@@ -998,7 +994,7 @@ if (vcff && chrom != NULL)
 	{
 	char lineCopy[strlen(line)+1];
 	safecpy(lineCopy, sizeof(lineCopy), line);
-	char *words[VCF_MAX_COLUMNS];
+	char *words[10 + vcff->genotypeCount];
 	int wordCount = chopTabs(lineCopy, words);
 	wordCount = checkWordCount(vcff, words, wordCount);
 	struct vcfRecord *record = vcfRecordFromRow(vcff, words);
