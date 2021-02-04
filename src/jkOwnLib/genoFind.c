@@ -2536,6 +2536,7 @@ int fPosListSize, rPosListSize;
 struct hash *targetHash = newHash(0);
 
 /* Build up array of all tiles in reverse primer. */
+initNtLookup();
 AllocArray(rTiles, rTileCount);
 for (rTileIx = 0; rTileIx<rTileCount; ++rTileIx)
     {
