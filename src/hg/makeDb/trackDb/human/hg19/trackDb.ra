@@ -1806,31 +1806,38 @@ mafTrack multiz46way
 origAssembly hg17
 pennantIcon 17.jpg ../goldenPath/help/liftOver.html "lifted from hg17"
 
-track targetScanS
-shortLabel TS miRNA sites
-longLabel TargetScan miRNA Regulatory Sites
+track targetScanMiRnaSites
+superTrack on
+shortLabel TS miRNA Targets
+pennantIcon Updated red
+longLabel TargetScan predicted microRNA target sites
 group regulation
 visibility hide
-color 0,96,0
-scoreFilterMax 100
-type bed 6 .
-urlLabel TargetScan link:
-url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
 
-track targetScanMiRnaSitesV72
-release alpha
-shortLabel TS miRNA V7.2
-longLabel Predicted microRNA target sites from TargetScanHuman 7.2 (March 2018)
-group regulation
-visibility hide
-itemRgb on
-type bigBed 12 +
-filter.targetScanScore -1
-filterLimits.targetScanScore -1:99
-pennantIcon New red
-urlLabel View miRNA target at TargetScan
-url http://www.targetscan.org/cgi-bin/targetscan/vert_72/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
-bigDataUrl /gbdb/hg19/targetScan/targetScanSitesV72.bb
+    track targetScanS
+    parent targetScanMiRnaSites
+    shortLabel TS miRNA sites
+    longLabel TargetScan miRNA Regulatory Sites (Release 5.1, April 2009)
+    color 0,96,0
+    scoreFilterMax 100
+    type bed 6 .
+    urlLabel TargetScan link:
+    url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+
+    track targetScanMiRnaSitesV72
+    parent targetScanMiRnaSites
+    release alpha
+    shortLabel TS miRNA v7.2
+    longLabel Predicted microRNA Target Sites from TargetScanHuman 7.2 (March 2018)
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    filter.targetScanScore -1
+    filterLimits.targetScanScore -1:99
+    pennantIcon New red
+    urlLabel View miRNA target at TargetScan
+    url http://www.targetscan.org/cgi-bin/targetscan/vert_72/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+    bigDataUrl /gbdb/hg19/targetScan/targetScanSitesV72.bb
 
 track ntHumChimpCodingDiff override
 origAssembly hg18
@@ -2847,4 +2854,5 @@ baseColorDefault genomicCodons
 track clinGenCnv override
 filter.size 773:11309570
 filterLimits.size 773:11309570
+
 

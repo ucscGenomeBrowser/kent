@@ -1,68 +1,10 @@
 <H2> Description</H2>
 <P>
-This track shows conserved mammalian microRNA regulatory target sites
-for conserved microRNA families in
-the 3' UTR regions of Refseq Genes, as predicted by TargetScanHuman 7.2.
-</P>
-
-<H2>Display Conventions</H2>
-<P>
-The track items are colored based on the four classes of target sites identified in 
-Agarwal <em>et al</em>., 2015. 
-</P>
-
-<table cellpadding="2">
-	<tbody>
-		<tr>
-			<td>Purple</td>
-			<td style="background-color: #800080; padding-left: 20px"></td>
-			<td>8mer</td>
-		</tr>
-		<tr>
-			<td>Red</td>
-			<td style="background-color: #ff0000; padding-left: 20px"></td>
-			<td>7mer-m8</td>
-		</tr>
-		<tr>
-			<td>Blue</td>
-			<td style="background-color: #1e90ff; padding-left: 20px"></td>
-			<td>7mer-A1</td>
-		</tr>
-		<tr>
-			<td>Green</td>
-			<td style="background-color: #00ff00; padding-left: 20px"></td>
-			<td>Non-canonical</td>
-		</tr>
-	</tbody>
-</table>	
-
-<H2>Method</H2>
-<P>
-Putative miRNA binding sites in UTRs were found by searching for conserved 
-8mer, 7mer, and 6mer sites that match the seed regions from all known miRNA
-families in mammals. Using protein-coding human transcripts from GENCODE v19
-and RefSeq, aligned vertebrate 3' UTRs were extracted from Multiz alignments to
-create 3' UTR profiles. These 3' UTRs were scanned to identify conserved 
-matches to the miRNA seed region, as in Friedman <em>et al</em>., 2009. These 
-sites were then assigned a percentile rank based on their
-<A HREF="http://www.targetscan.org/vert_70/docs/context_score.html">context++
-score</A> (Agarwal <EM>et al</EM>., 2015). This field is set to -1 for some
-noncanonical sites where the context++ score model isn't applicable.
-For further details of the methods used to generate
-this annotation, see the references
-and the <A HREF="http://www.targetscan.org/" TARGET="_blank">TargetScan</A>
-website.</P>
-
-<H2>Release Notes </H2>
-<P>
-Compared to previous releases, Release 7 uses an improved method to predict
-targeting efficacy (the context++ model, Agarwal <em>et al</em>., 2015), uses 3' UTR
-profiles that indicate the fraction of mRNA containing each site (Nam <em>et al</em>.,
-2014), and uses updated miRNA families curated from Chiang <em>et al</em>., 2010 and
-Fromm <em>et al</em>., 2015. The previous version released by UCSC was 5.1. For further
-information on previous releases refer to 
-<A HREF="http://www.targetscan.org/vert_72/docs/help.html"
-TARGET="_blank">TargetScan Releases</A>.
+<a target="_blank" href="https://targetscan.org">TargetScan</a> 
+is a web resource that provides predictions of biological targets of microRNAs by 
+searching for the presence of sites that match the seed region of each miRNA.
+The TargetScan browser tracks show conserved mammalian microRNA regulatory target sites
+for conserved microRNA families in the 3' UTR regions of human Refseq Genes.
 </P>
 
 <H2>Credit</H2>
@@ -87,8 +29,8 @@ information.
 </p>
 
 <p>
-Data is also freely available on the Target Scan website
-<a href="http://www.targetscan.org/cgi-bin/targetscan/data_download.vert72.cgi" target="_BLANK">TargetScanHuman V7.2 Data Download</a>.
+Data is also freely available on the
+<a href="http://www.targetscan.org" target="_BLANK">TargetScan website</a>.
 </p>
 
 <H2>References</H2>
