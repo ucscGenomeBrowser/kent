@@ -215,6 +215,37 @@ void errSendLongString(int sd, char *s)
 if (sendOk) sendOk = netSendLongString(sd, s);
 }
 
+void logGenoFind(struct genoFind *gf)
+/* debug log the genoFind parameters */
+{
+logDebug("gf->isMapped: %d", gf->isMapped);
+logDebug("gf->maxPat: %d", gf->maxPat);
+logDebug("gf->minMatch: %d", gf->minMatch);
+logDebug("gf->maxGap: %d", gf->maxGap);
+logDebug("gf->tileSize: %d", gf->tileSize);
+logDebug("gf->stepSize: %d", gf->stepSize);
+logDebug("gf->tileSpaceSize: %d", gf->tileSpaceSize);
+logDebug("gf->tileMask: %d", gf->tileMask);
+logDebug("gf->sourceCount: %d", gf->sourceCount);
+logDebug("gf->isPep: %d", gf->isPep);
+logDebug("gf->allowOneMismatch: %d", gf->allowOneMismatch);
+logDebug("gf->noSimpRepMask: %d", gf->noSimpRepMask);
+logDebug("gf->segSize: %d", gf->segSize);
+logDebug("gf->totalSeqSize: %d", gf->totalSeqSize);
+}
+
+void logGenoFindIndex(struct genoFindIndex *gfIdx)
+/* debug log the genoFind parameters in an genoFindIndex */
+{
+logDebug("gfIdx->isTrans: %d", gfIdx->isTrans);
+logDebug("gfIdx->noSimpRepMask: %d", gfIdx->noSimpRepMask);
+if (gfIdx->untransGf != NULL)
+    logGenoFind(gfIdx->untransGf);
+else
+    logGenoFind(gfIdx->transGf[0][0]);
+}
+
+
 void genoFindDirect(char *probeName, int fileCount, char *seqFiles[])
 /* Don't set up server - just directly look for matches. */
 {
@@ -685,6 +716,7 @@ else
     gfIdx = genoFindIndexLoad(indexFile, doTrans);
     logInfo("index loading completed in %4.3f seconds", 0.001 * (clock1000() - startIndexTime));
     }
+logGenoFindIndex(gfIdx);
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = netAcceptingSocket(port, 100);
@@ -1121,6 +1153,7 @@ tileSize = gf->tileSize;
 noSimpRepMask = gf->noSimpRepMask;
 allowOneMismatch = gf->allowOneMismatch;
 stepSize = gf->stepSize;
+logGenoFindIndex(gfIdx);
 return gfIdx;
 }
 
