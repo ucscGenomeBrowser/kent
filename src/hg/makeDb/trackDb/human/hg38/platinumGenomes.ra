@@ -7,6 +7,8 @@ dataVersion Release 2017-1.0
 configureByPopup off
 type vcfTabix
 html ../platinumGenomes
+vcfDoFilter off
+vcfDoMaf off
 
     track platinumNA12877
     parent platinumGenomes
@@ -20,6 +22,8 @@ html ../platinumGenomes
     configureByPopup off
     chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
     bigDataUrl /gbdb/hg38/platinumGenomes/NA12877.vcf.gz
+    vcfDoFilter off
+    vcfDoMaf off
     
     track platinumNA12878
     parent platinumGenomes
@@ -33,7 +37,8 @@ html ../platinumGenomes
     configureByPopup off
     chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
     bigDataUrl /gbdb/hg38/platinumGenomes/NA12878.vcf.gz
-    
+    vcfDoFilter off
+    vcfDoMaf off
     
     track platinumHybrid
     parent platinumGenomes
@@ -47,3 +52,5 @@ html ../platinumGenomes
     configureByPopup off
     chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
     bigDataUrl /gbdb/hg38/platinumGenomes/hg38.hybrid.vcf.gz
+    vcfDoFilter off
+    vcfDoMaf off
