@@ -739,6 +739,8 @@ struct sampleMetadata *metadataForSample(struct hash *sampleMetadata, char *samp
 /* Look up sampleId in sampleMetadata, by accession if sampleId seems to include an accession. */
 {
 struct sampleMetadata *met = NULL;
+if (sampleMetadata == NULL)
+    return NULL;
 char *epiId = epiIdFromSampleName(sampleId);
 if (epiId)
     met = hashFindVal(sampleMetadata, epiId);
