@@ -651,10 +651,16 @@ else  // hyperlink
 	    psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
 
-        if (endsWith(psl->tName, "_fix"))
-            printf("   <A target=_blank HREF=\"../FAQ/FAQblat.html#blat1c\">What is chrom_fix?</A>");
-        if (endsWith(psl->tName, "_alt"))
-            printf("   <SMALL><A target=_blank HREF=\"../FAQ/FAQblat.html#blat1c\">What is chrom_alt?</A></SMALL>");
+        // if you modify this, also modify hgPcr.c:doQuery, which implements a similar feature
+        char *seq = psl->tName;
+        if (endsWith(seq, "_fix"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads#downloadFix\">What is chrom_fix?</A>");
+        else if (endsWith(seq, "_alt"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads#downloadAlt\">What is chrom_alt?</A>");
+        else if (endsWith(seq, "_random"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads#download10\">What is chrom_random?</A>");
+        else if (startsWith(seq, "chrUn"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads#download11\">What is a chrUn sequence?</A>");
         puts("\n");
 	}
     printf("</PRE>\n");
