@@ -9,6 +9,7 @@
 #include "memgfx.h"
 #include "correlate.h"
 #include "vMatrix.h"
+#include "hex.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -75,7 +76,7 @@ double refDistance(struct memMatrix *refMatrix, struct hash *refHash, int refCol
     struct memMatrix *qMatrix, int qCol)
 /* Return a dotProduct between a column in a reference matrix and a query matrix.
  * The reference matrix has a row hash so that we can look up the corresponding row
- * based on the label in the qMatrix row.  If somethign is missing from refMatrix
+ * based on the label in the qMatrix row.  If something is missing from refMatrix
  * that's ok, it just won't contribute to the dot product. */
 {
 int i;
@@ -91,60 +92,6 @@ for (i=0; i<qMatrix->ySize; ++i)
 	}
     }
 return sqrt(sumSquares);
-}
-
-double refCorrelate(struct memMatrix *refMatrix, struct hash *refHash, int refCol,
-    struct memMatrix *qMatrix, int qCol)
-/* Return a dotProduct between a column in a reference matrix and a query matrix.
- * The reference matrix has a row hash so that we can look up the corresponding row
- * based on the label in the qMatrix row.  If somethign is missing from refMatrix
- * that's ok, it just won't contribute to the dot product. */
-{
-struct correlate *c = correlateNew();
-int i;
-for (i=0; i<qMatrix->ySize; ++i)
-    {
-    char *label = qMatrix->yLabels[i];
-    double *row = hashFindVal(refHash, label);
-    if (row != NULL)
-	correlateNext(c, row[refCol], qMatrix->rows[i][qCol]);
-    }
-double result = correlateResult(c);
-correlateFree(&c);
-return result;
-}
-
-int unpackHexString(char *hexString, struct lineFile *lf, int maxLen)
-/* Convert hexideximal string up to two digits long to binary value */
-{
-int len = strlen(hexString);
-if (len < 0 || len > maxLen)
-    errAbort("Expecting a one to %d digit hex number, but got %s line %d of %s", 
-	maxLen, hexString, lf->lineIx, lf->fileName);
-int acc = 0;
-char c;
-while ((c = *hexString++) != 0)
-    {
-    int val;
-    if (isdigit(c))
-        val = c - '0';
-    else
-        {
-	if (c >= 'a' && c <= 'f')
-	    val = c - 'a' + 10;
-	else if (c >= 'A' && c <= 'F')
-	    val = c - 'A' + 10;
-	else
-	    {
-	    val = 0;	// Stop compiler complianing about unitialized variable
-	    errAbort("Expecting hexadecimal character, got %c line %d of %s",
-		c, lf->lineIx, lf->fileName);
-	    }
-	}
-    acc <<= 4;
-    acc += val;
-    }
-return acc;
 }
 
 

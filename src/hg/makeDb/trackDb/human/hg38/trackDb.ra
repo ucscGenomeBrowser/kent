@@ -26,6 +26,7 @@ include colonWang.ra
 include rectumWang.ra
 include placentaVentoTormo.ra
 include singleCellMerged.ra
+#include lungMadissoon.ra
 
 include liftOver.ra
 include exomeProbesets.ra

@@ -3,6 +3,7 @@
 #include "hash.h"
 #include "linefile.h"
 #include "jksql.h"
+#include "fieldedTable.h"
 #include "facetField.h"
 #include "csv.h"
 
@@ -117,19 +118,20 @@ int facetCount = 0;  // non-NULL facet count
 int i;
 for (i=0; i<fieldCount; ++i)
     {
+    struct facetField *ff = ffArray[i];
     char *val = row[i];
     if (val == NULL)
 	val = nullVal;
     if (val != NULL)
 	{
-	facetFieldAdd(ffArray[i], val, FALSE);
-	if (ffArray[i]->currentVal->selected)
+	facetFieldAdd(ff, val, FALSE);
+	if (ff->currentVal->selected)
 	    ++totalSelectedFacets;
 	++facetCount;
 	}
     else
 	{
-	ffArray[i]->currentVal = NULL;
+	ff->currentVal = NULL;
 	}
     }
 
@@ -140,11 +142,12 @@ if ((totalSelectedFacets == facetCount) && (facetCount > 0))
     }
 for (i=0; i<fieldCount; ++i)
     {
-    if (ffArray[i]->currentVal) // disregard null values
+    struct facetField *ff = ffArray[i];
+    if (ff->currentVal) // disregard null values
 	{
 	// disregard one's self.
-	if ((totalSelectedFacets - (int)ffArray[i]->currentVal->selected) == (facetCount - 1))
-	    ffArray[i]->currentVal->selectCount++;
+	if ((totalSelectedFacets - (int)ff->currentVal->selected) == (facetCount - 1))
+	    ff->currentVal->selectCount++;
 	    // shown on GUI to guide choosing by user
 	}
     }
@@ -290,6 +293,7 @@ slReverse(&ffList);
 return ffList;
 }
 
+
 struct facetField *facetFieldsFromSqlTableInit(char *fields[], int fieldCount, char *selectedFields, struct facetField *ffArray[])
 /* Initialize ffList and ffArray and selected facet values */
 {
@@ -384,6 +388,27 @@ sqlFreeResult(&sr);
 if (pSelectedRowCount)
     *pSelectedRowCount = selectedRowCount;
 return ffList;
+}
+
+struct fieldedTable *facetFieldsFromFieldedTable(struct fieldedTable *ft, char *selectedFields,
+    struct facetField *ffArray[])
+/* Get a facetField list and initialize arrays based on selected fields from table 
+ * ffArray must be big enough to hold all fields in table */
+{
+int fieldCount = ft->fieldCount;
+struct fieldedTable *subTable = fieldedTableNew(ft->name, ft->fields, fieldCount);
+struct facetField *ffList = facetFieldsFromSqlTableInit(ft->fields, fieldCount, 
+    selectedFields, ffArray);
+struct fieldedRow *fr;
+for (fr = ft->rowList; fr != NULL; fr = fr->next)
+    {
+    if (perRowFacetFields(fieldCount, fr->row, "", ffArray))
+	{
+	fieldedTableAdd(subTable, fr->row, fieldCount, fr->id);
+	}
+    }
+facetFieldsFromSqlTableFinish(ffList, facetValCmpUseCountDesc);
+return subTable;
 }
 
 struct facetVal *facetValMajorPlusOther(struct facetVal *list, double minRatio)
