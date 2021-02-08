@@ -120,6 +120,52 @@ but can be changed to get the size for a particular assembly:
   
     rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/mysql/ | egrep "Number of files:|total size is"
 
+# Local Git repository
+Use the following procedures to create your own personal copy of the kent source
+tree where you can have your own edits that are not part of the development at
+UCSC.  This is useful for mirror sites that have their own customizations in
+the source tree for local circumstances.
+ 
+Install Git software version 1.6.2.2 or later. See the Git Community Handbook
+ installation (<https://git-scm.com/book/en/v2/Getting-Started-Installing-Git>) and setup
+ (<href='https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup>) instructions, as well
+ as our Installing Git (<http://genomewiki.ucsc.edu/index.php/Installing_git>)
+ Genomewiki page.
+
+Start an initial Git local repository:
+
+    git clone git://genome-source.soe.ucsc.edu/kent.git
+ 
+or, if a firewall prevents git daemon port 9418, use:
+ 
+    git clone http://genome-source.soe.ucsc.edu/kent.git
+ 
+The kent source tree will be imported to the current working directory in a
+directory named ./kent/.
+
+Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
+ the browser. To create a beta tracking branch:
+ 
+    cd kent
+    git checkout -t -b beta origin/beta
+ 
+The -b creates a local branch with name "beta", and checks it out.
+The -t makes it a tracking branch, so that 'git pull' brings in updates from
+origin/beta, the "real" beta branch in our public central read-only repository.
+
+To get the latest UCSC release, from anywhere within the kent source tree:
+ 
+    git pull
+
+Updates: UCSC generally updates the origin/beta branch every three weeks. If you are 
+ updating database tables for a mirror site, we recommend that you update the
+ source at the same time, as source code is sometimes modified to include
+ operations on new columns that have been added to database tables.
+ 
+For instructions on keeping local tracks separate from UCSC Genome Browser
+tracks created at UCSC and mirrored from there, see the section "Adding tracks
+to the browser" below.
+
 # Installing the UCSC Genome browser
 
 Note: we offer Genome-Browser-in-a-Box (GBIB), a fully configured virtual
@@ -127,10 +173,12 @@ machine image that can be converted for VirtualBox, VMWare, Hyper-V and other
 popular environments.  We also offer Genome-Browser-in-the-Cloud (GBIC) an
 shell script that installs a genome browser in most main Linux distributions
 (Most Debian and Redhat-based ones, like Ubuntu and CentOS). 
-See https://hgwdev-max.gi.ucsc.edu/goldenPath/help/mirror.html
+See https://genome.ucsc.edu/goldenPath/help/mirror.html
 
 Scripts to perform all of the functions below can be found in
-the directory here: src/products/scripts/
+the directory https://github.com/ucscGenomeBrowser/kent/tree/master/src/product/scripts.
+In a git clone of the kent repository, the scripts
+are located in src/product/scripts.
 
 Confirm the following:
 
@@ -676,6 +724,52 @@ command which can be built in the source-tree at:
     Further MySQL SSL documentation is available from 
 <https://dev.mysql.com/doc/refman/5.6/en/creating-ssl-files-using-openssl.html> 
 
+# Local Git repository
+Use the following procedures to create your own personal copy of the kent source
+tree where you can have your own edits that are not part of the development at
+UCSC.  This is useful for mirror sites that have their own customizations in
+the source tree for local circumstances.
+ 
+Install Git software version 1.6.2.2 or later. See the Git Community Handbook
+ installation (<https://git-scm.com/book/en/v2/Getting-Started-Installing-Git>) and setup
+ (<href='https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup>) instructions, as well
+ as our Installing Git (<http://genomewiki.ucsc.edu/index.php/Installing_git>)
+ Genomewiki page.
+
+Start an initial Git local repository:
+
+    git clone git://genome-source.soe.ucsc.edu/kent.git
+ 
+or, if a firewall prevents git daemon port 9418, use:
+ 
+    git clone http://genome-source.soe.ucsc.edu/kent.git
+ 
+The kent source tree will be imported to the current working directory in a
+directory named ./kent/.
+
+Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
+ the browser. To create a beta tracking branch:
+ 
+    cd kent
+    git checkout -t -b beta origin/beta
+ 
+The -b creates a local branch with name "beta", and checks it out.
+The -t makes it a tracking branch, so that 'git pull' brings in updates from
+origin/beta, the "real" beta branch in our public central read-only repository.
+
+To get the latest UCSC release, from anywhere within the kent source tree:
+ 
+    git pull
+
+Updates: UCSC generally updates the origin/beta branch every three weeks. If you are 
+ updating database tables for a mirror site, we recommend that you update the
+ source at the same time, as source code is sometimes modified to include
+ operations on new columns that have been added to database tables.
+ 
+See also: the README files in the source tree directory src/product/README.*.
+For instructions on keeping local tracks separate from UCSC Genome Browser
+tracks, see src/product/README.trackDb.
+
 # Adding a custom genome to the browser
     
 Please note that setting up an [assembly hub](http://genomewiki.ucsc.edu/index.php/Assembly_Hubs) 
@@ -1097,52 +1191,6 @@ FireFox, so after debugging hgTables, you will probably want to add
 &formMethod=POST to an URL (or clear cart, load session etc).
 
 One thing that does not work with GET is "upload file" inputs.
-
-# Local Git repository
-Use the following procedures to create your own personal copy of the kent source
-tree where you can have your own edits that are not part of the development at
-UCSC.  This is useful for mirror sites that have their own customizations in
-the source tree for local circumstances.
- 
-Install Git software version 1.6.2.2 or later. See the Git Community Handbook
- installation (<https://git-scm.com/book/en/v2/Getting-Started-Installing-Git>) and setup
- (<href='https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup>) instructions, as well
- as our Installing Git (<http://genomewiki.ucsc.edu/index.php/Installing_git>)
- Genomewiki page.
-
-Start an initial Git local repository:
-
-    git clone git://genome-source.soe.ucsc.edu/kent.git
- 
-or, if a firewall prevents git daemon port 9418, use:
- 
-    git clone http://genome-source.soe.ucsc.edu/kent.git
- 
-The kent source tree will be imported to the current working directory in a
-directory named ./kent/.
-
-Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
- the browser. To create a beta tracking branch:
- 
-    cd kent
-    git checkout -t -b beta origin/beta
- 
-The -b creates a local branch with name "beta", and checks it out.
-The -t makes it a tracking branch, so that 'git pull' brings in updates from
-origin/beta, the "real" beta branch in our public central read-only repository.
-
-To get the latest UCSC release, from anywhere within the kent source tree:
- 
-    git pull
-
-Updates: UCSC generally updates the origin/beta branch every three weeks. If you are 
- updating database tables for a mirror site, we recommend that you update the
- source at the same time, as source code is sometimes modified to include
- operations on new columns that have been added to database tables.
- 
-See also: the README files in the source tree directory src/product/README.*.
-For instructions on keeping local tracks separate from UCSC Genome Browser
-tracks, see src/product/README.trackDb.
 
 # Proxy support
 

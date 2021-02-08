@@ -7,7 +7,9 @@ GITUP = ${GIT} pull
 user:
 	${MAKE} doInstall destDir=${kentSrc}/hg/htdocs
 	@echo ""
-	@echo "Don't forget to cd to kent/src/hg/htdocs, commit goldenPath/help/mirror.html"
+	@echo "You can now 'cd ~/kent/src/hg/htdocs' and run 'make' there"
+	@echo ""
+	@echo "To commit the change, cd to kent/src/hg/htdocs, commit goldenPath/help/mirror.html"
 	@echo "and goldenPath/help/mirrorManual.html, and run your makes from there!"
 	@echo ""
 	@echo "Or run this:"

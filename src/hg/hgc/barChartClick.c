@@ -23,6 +23,7 @@
 #include "barChartSample.h"
 #include "barChartUi.h"
 #include "hgConfig.h"
+#include "facetedBar.h"
 
 #define EXTRA_FIELDS_SIZE 256
 
@@ -396,20 +397,19 @@ for (categ = categList; categ != NULL; categ = categ->next)
     if (size > longest)
         longest = size;
     }
-return longest * 1.09;
+return longest * 1.02;
 }
 
-void deunderbarColumn(struct fieldedTable *ft, char *field)
+void deunderbarColumn(struct fieldedTable *ft, int fieldIx)
 /* Ununderbar all of a column inside table because space/underbar gets
  * so confusing */
 {
-int fieldIx = fieldedTableFindFieldIx(ft, field);
 struct fieldedRow *row;
 for (row = ft->rowList; row != NULL; row = row->next)
     replaceChar(row->row[fieldIx], '_', ' ');
 }
 
-static void printBarChart(struct barChartBed *chart, struct trackDb *tdb, double maxVal, char *metric)
+static void svgBarChart(struct barChartBed *chart, struct trackDb *tdb, double maxVal, char *metric)
 /* Plot bar chart without quartiles or anything fancy just using SVG */
 {
 /* Load up input labels, color, and data */
@@ -428,11 +428,11 @@ int countStatIx = 0;
 double statsSize = 0.0;
 if (statsFile != NULL)
     {
-    char *required[] = {"cluster", "count", "total"};
+    char *required[] = { "count", "total"};
     struct fieldedTable *ft = fieldedTableFromTabFile(
 	statsFile, statsFile, required, ArraySize(required));
-    deunderbarColumn(ft, "cluster");
-    statsHash = fieldedTableIndex(ft, "cluster");
+    deunderbarColumn(ft, 0);
+    statsHash = fieldedTableIndex(ft, ft->fields[0]);
     countStatIx = fieldedTableFindFieldIx(ft, "count");
     statsSize = 8*(fieldedTableMaxColChars(ft, countStatIx)+1);
     }
@@ -459,8 +459,9 @@ printf("<svg width=\"%g\" height=\"%g\">\n", totalWidth, totalHeight);
 
 /* Draw header */
 printf("<rect width=\"%g\" height=\"%g\" style=\"fill:#%s\"/>\n", totalWidth, headerHeight, HG_COL_HEADER);
+char *sampleLabel = trackDbSettingOrDefault(tdb, "barChartLabel", "Sample");
 printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n", 
-    labelOffset, innerHeight-1, innerHeight-1, "Sample");
+    labelOffset, innerHeight-1, innerHeight-1, sampleLabel);
 if (statsSize > 0.0)
     printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n", 
 	statsRightOffset, innerHeight-1, innerHeight-1, "N");
@@ -507,6 +508,18 @@ printf("</svg>");
 }
 
 
+static void printBarChart(char *item, struct barChartBed *chart, struct trackDb *tdb, 
+    double maxVal, char *metric)
+/* Plot bar chart without expressionMatrix or R plots*/
+{
+char *statsFile = trackDbSetting(tdb, "barChartStatsUrl");
+char *facets = trackDbSetting(tdb, "barChartFacets");
+if (facets != NULL && statsFile != NULL)
+    facetedBarChart(item, chart, tdb, maxVal, statsFile, facets, metric);
+else
+    svgBarChart(chart, tdb, maxVal, metric);
+}
+
 struct asColumn *asFindColByIx(struct asObject *as, int ix)
 /* Find AS column by index */
 {
@@ -545,30 +558,29 @@ nameLabel = trackDbSettingClosestToHomeOrDefault(tdb, "bedNameLabel", nameCol ? 
 if (trackDbSettingClosestToHomeOrDefault(tdb, "url", NULL) != NULL)
     printCustomUrl(tdb, item, TRUE);
 else
-    printf("<b>%s: </b>%s<br>\n", nameLabel, chartItem->name);
+    printf("<b>%s: </b>%s ", nameLabel, chartItem->name);
 name2Label = name2Col ? name2Col->comment : "Alternative name";
 if (differentString(chartItem->name2, "")) 
     {
     if (trackDbSettingClosestToHomeOrDefault(tdb, "url2", NULL) != NULL)
         printOtherCustomUrl(tdb, chartItem->name2, "url2", TRUE);
     else
-        printf("<b>%s: </b> %s<br>\n", name2Label, chartItem->name2);
+        printf("(%s: %s)<br>\n", name2Label, chartItem->name2);
     }
+else
+    printf("<br>\n");
 
 int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
 char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
 char *metric = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_METRIC, "");
-printf("<b>Total all %s values: </b> %0.2f %s<br>\n", metric, barChartTotalValue(chartItem), units);
 printf("<b>Maximum %s value: </b> %0.2f %s in %s<br>\n", 
                 metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
-printf("<b>Score: </b> %d<br>\n", chartItem->score); 
 printf("<b>Genomic position: "
                 "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
                     database, hgTracksPathAndSettings(), database, 
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd,
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd);
-printf("<b>Strand: </b> %s\n", chartItem->strand); 
 
 // print any remaining extra fields
 if (numColumns > 0)
@@ -594,7 +606,9 @@ if (vals != NULL)
 else
     {
     if (cfgOptionBooleanDefault("svgBarChart", FALSE))
-	printBarChart(chartItem, tdb, highLevel, metric);
+	{
+	printBarChart(item, chartItem, tdb, highLevel, metric);
+	}
     }
 puts("<br>");
 }
