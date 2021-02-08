@@ -16,7 +16,6 @@ itemRgb on
 maxItems 50000
 html knownGene.alpha
 searchIndex name
-searchTrix /gbdb/hg38/gencode/gencodeV36.ix
 
 searchName knownGeneAcc
 searchTable knownGene
@@ -38,8 +37,3 @@ hgsid on
 oldToNew kg12ToKg13
 baseColorUseCds given
 baseColorDefault genomicCodons
-
-searchTable knownGene
-searchType bigBed
-searchDescription  Gencode 36
-searchPriority 1.0

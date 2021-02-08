@@ -38,6 +38,7 @@ struct trackDb *globalTdb;
 struct genePred *curGenePred;	/* Current gene prediction structure. */
 boolean isGencode;              /* is this based on the Gencode models */
 boolean isGencode2;             /* is this based on the Gencode models and use ensembl id as primary id */
+boolean isGencode3;             /* is this based on the Gencode models and use ensembl id as primary id */
 int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
@@ -260,9 +261,9 @@ freez(&description);
 char buffer[1024];
 char *commaPos;
    
-if (isGencode || isGencode2)
+if (isGencode || isGencode2 || isGencode3)
     {
-    hPrintf("<B>Gencode Transcript:</B> %s<br>\n", isGencode2 ? curGeneId : curAlignId);;
+    hPrintf("<B>Gencode Transcript:</B> %s<br>\n", isGencode2 || isGencode3 ? curGeneId : curAlignId);;
     char buffer[1024];
     hPrintf("<B>Gencode Gene:</B> %s<br>\n", getGencodeGeneId(conn, curGeneId, buffer, sizeof buffer));
     }
@@ -766,8 +767,9 @@ else
 	measureTiming =  isNotEmpty(cartOptionalString(cart, "measureTiming"));
         isGencode = trackDbSettingOn(tdb, "isGencode");
         isGencode2 = trackDbSettingOn(tdb, "isGencode2");
+        isGencode3 = trackDbSettingOn(tdb, "isGencode3");
 	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index",
-	    genome, curGeneName, isGencode2 ? curGeneId : curAlignId);
+	    genome, curGeneName, isGencode2 || isGencode3 ? curGeneId : curAlignId);
 	webMain(conn, tdb);
 	cartWebEnd();
 	}
