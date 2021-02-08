@@ -874,6 +874,14 @@ void queryServer(char *host, char *port, char *db, struct dnaSeq *seq, char *typ
 /* Send simple query to server and report results. (no, it doesn't do this)
  * queryRC is true when the query has been reverse-complemented */
 {
+/*
+ * xinetd throttles by refusing more connections, which causes queries to fail
+ * when the configured limit is reached.  Rather than trying to throttle in the
+ * client, dynamic servers are excluded. See issue #26658.
+ */
+if (genomeDataDir != NULL)
+    return;
+
 struct genomeHits *gH;
 AllocVar(gH);
 
