@@ -661,7 +661,7 @@ else  // hyperlink
             printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads#download10\">What is chrom_random?</A>");
         else if (startsWith(seq, "chrUn"))
             printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads#download11\">What is a chrUn sequence?</A>");
-        puts("\n");
+        printf("\n");
 	}
     printf("</PRE>\n");
     webNewSection("Help");
