@@ -671,21 +671,27 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit, 
                                         extras->maxHeight, extras->doLogTransform);
+    boolean isClipped = (!extras->doLogTransform && expScore > extras->maxViewLimit);
+    int barTop = yZero - height + 1;
     if (extras->padding == 0 || sameString(colorScheme, BAR_CHART_COLORS_USER))
 	{
 	int cStart = barsDrawn * graphWidth * invCount;
 	int cEnd = (barsDrawn+1) * graphWidth * invCount;
-        hvGfxBox(hvg, cStart + x0, yZero-height+1, cEnd-cStart - extras->padding, height, fillColorIx);
+	x1 = cStart + x0;
+	barWidth = cEnd - cStart;
+        hvGfxBox(hvg, x1, barTop, barWidth, height, fillColorIx);
+	if (isClipped)
+	    hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
 	barsDrawn += 1;
 	}
     else
 	{
-        hvGfxOutlinedBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx, lineColorIx);
+        hvGfxOutlinedBox(hvg, x1, barTop, barWidth, height, fillColorIx, lineColorIx);
+	// mark clipped bar with magenta tip
+	if (isClipped)
+	    hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
 	x1 = x1 + barWidth + extras->padding;
 	}
-    // mark clipped bar with magenta tip
-    if (!extras->doLogTransform && expScore > extras->maxViewLimit)
-        hvGfxBox(hvg, x1, yZero-height+1, barWidth, 2, clipColor);
     }
 }
 
