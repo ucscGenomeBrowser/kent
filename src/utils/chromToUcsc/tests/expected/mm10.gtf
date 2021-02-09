@@ -1,0 +1,10 @@
+#!genome-build GRCm38.p6
+#!genome-version GRCm38
+#!genome-date 2012-01
+#!genome-build-accession NCBI:GCA_000001635.8
+#!genebuild-last-updated 2020-02
+chr1	havana	gene	3073253	3074322	.	+	.	gene_id "ENSMUSG00000102693"; gene_version "1"; gene_name "4933401J01Rik"; gene_source "havana"; gene_biotype "TEC"; havana_gene "OTTMUSG00000049935"; havana_gene_version "1";
+chr1	havana	transcript	3073253	3074322	.	+	.	gene_id "ENSMUSG00000102693"; gene_version "1"; transcript_id "ENSMUST00000193812"; transcript_version "1"; gene_name "4933401J01Rik"; gene_source "havana"; gene_biotype "TEC"; havana_gene "OTTMUSG00000049935"; havana_gene_version "1"; transcript_name "4933401J01Rik-201"; transcript_source "havana"; transcript_biotype "TEC"; havana_transcript "OTTMUST00000127109"; havana_transcript_version "1"; tag "basic"; transcript_support_level "NA";
+chr1	havana	exon	3073253	3074322	.	+	.	gene_id "ENSMUSG00000102693"; gene_version "1"; transcript_id "ENSMUST00000193812"; transcript_version "1"; exon_number "1"; gene_name "4933401J01Rik"; gene_source "havana"; gene_biotype "TEC"; havana_gene "OTTMUSG00000049935"; havana_gene_version "1"; transcript_name "4933401J01Rik-201"; transcript_source "havana"; transcript_biotype "TEC"; havana_transcript "OTTMUST00000127109"; havana_transcript_version "1"; exon_id "ENSMUSE00001343744"; exon_version "1"; tag "basic"; transcript_support_level "NA";
+chr1	ensembl	gene	3102016	3102125	.	+	.	gene_id "ENSMUSG00000064842"; gene_version "1"; gene_name "Gm26206"; gene_source "ensembl"; gene_biotype "snRNA";
+chr1	ensembl	transcript	3102016	3102125	.	+	.	gene_id "ENSMUSG00000064842"; gene_version "1"; transcript_id "ENSMUST00000082908"; transcript_version "1"; gene_name "Gm26206"; gene_source "ensembl"; gene_biotype "snRNA"; transcript_name "Gm26206-201"; transcript_source "ensembl"; transcript_biotype "snRNA"; tag "basic"; transcript_support_level "NA";
