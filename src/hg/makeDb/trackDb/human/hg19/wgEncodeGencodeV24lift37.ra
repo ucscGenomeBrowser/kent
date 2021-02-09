@@ -107,13 +107,6 @@ searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.27301
 
-searchName wgEncodeGencodeBasicGeneSymV24lift37
-searchTable wgEncodeGencodeBasicV24lift37
-searchMethod exact
-searchType genePred
-searchPriority 2.27302
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
-
 searchName wgEncodeGencodeBasicGeneV24lift37
 searchTable wgEncodeGencodeBasicV24lift37
 searchMethod prefix
@@ -148,13 +141,6 @@ searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.27306
-
-searchName wgEncodeGencodeCompGeneSymV24lift37
-searchTable wgEncodeGencodeCompV24lift37
-searchMethod exact
-searchType genePred
-searchPriority 2.27307
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodeCompGeneV24lift37
 searchTable wgEncodeGencodeCompV24lift37
@@ -191,13 +177,6 @@ searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.27311
 
-searchName wgEncodeGencodePseudoGeneGeneSymV24lift37
-searchTable wgEncodeGencodePseudoGeneV24lift37
-searchMethod exact
-searchType genePred
-searchPriority 2.27312
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
-
 searchName wgEncodeGencodePseudoGeneGeneV24lift37
 searchTable wgEncodeGencodePseudoGeneV24lift37
 searchMethod prefix
@@ -224,3 +203,4 @@ termRegex OTTHUMG[0-9.]+
 searchPriority 2.27315
 xrefTable wgEncodeGencodeAttrsV24lift37
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
