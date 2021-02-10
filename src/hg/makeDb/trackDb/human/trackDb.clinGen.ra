@@ -30,7 +30,7 @@ html clinGen
     longLabel ClinGen Dosage Sensitivity Map - Triplosensitivity
     visibility pack
     type bigBed 9 +
-    bigDataUrl /gbdb//$D/bbi/clinGen/clinGenTriplo.bb
+    bigDataUrl /gbdb/$D/bbi/clinGen/clinGenTriplo.bb
     mouseOverField _mouseOver
     filterValues.triploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
     filterLabel.triploScore Dosage Sensitivity Score
