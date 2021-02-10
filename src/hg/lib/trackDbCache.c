@@ -409,13 +409,17 @@ else
     fprintf(stream, "%s.%s\n", name,tdbPathString);
 carefulClose(&stream);
 
-// write out included files if present
+// write out included files if present, or delete existing file if not
+safef(fileName, sizeof fileName, "%s/incFiles.txt", dirName);
 if (!isEmpty(incFiles))
     {
-    safef(fileName, sizeof fileName, "%s/incFiles.txt", dirName);
     stream = mustOpen(fileName, "w");
     fputs(incFiles, stream);
     carefulClose(&stream);
+    }
+else
+    {
+    remove(fileName);
     }
 }
 
