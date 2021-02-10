@@ -678,7 +678,7 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
 	int cStart = barsDrawn * graphWidth * invCount;
 	int cEnd = (barsDrawn+1) * graphWidth * invCount;
 	x1 = cStart + x0;
-	barWidth = cEnd - cStart;
+	barWidth = cEnd - cStart - extras->padding;
         hvGfxBox(hvg, x1, barTop, barWidth, height, fillColorIx);
 	if (isClipped)
 	    hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
