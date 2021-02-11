@@ -1448,6 +1448,8 @@ if (enableMouseOver && mouseOverData)
         jsonWriteObjectStart(mouseOverJson, NULL);
         jsonWriteNumber(mouseOverJson, "x1", (long long)dataItem->x1);
         jsonWriteNumber(mouseOverJson, "x2", (long long)dataItem->x2);
+	if (wigCart->doNegative)
+	    dataItem->value = - dataItem->value;
         jsonWriteDouble(mouseOverJson, "v", dataItem->value);
         jsonWriteNumber(mouseOverJson, "c", dataItem->valueCount);
         jsonWriteObjectEnd(mouseOverJson);
