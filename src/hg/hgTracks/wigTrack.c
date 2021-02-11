@@ -1438,9 +1438,6 @@ drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
 
 if (enableMouseOver && mouseOverData)
     {
-    enum wiggleTransformFuncEnum transformFunc = wigCart->transformFunc;
-    boolean gotLog = (transformFunc == wiggleTransformFuncLog);
-
     jsonWriteObjectStart(mouseOverJson, tg->track);
     jsonWriteString(mouseOverJson, "t", tg->tdb->type);
     jsonWriteListStart(mouseOverJson, "d");
@@ -1451,8 +1448,6 @@ if (enableMouseOver && mouseOverData)
         jsonWriteObjectStart(mouseOverJson, NULL);
         jsonWriteNumber(mouseOverJson, "x1", (long long)dataItem->x1);
         jsonWriteNumber(mouseOverJson, "x2", (long long)dataItem->x2);
-	if (gotLog)
-	    dataItem->value = doTransform(dataItem->value, transformFunc);
 	if (wigCart->doNegative)
 	    dataItem->value = - dataItem->value;
         jsonWriteDouble(mouseOverJson, "v", dataItem->value);
