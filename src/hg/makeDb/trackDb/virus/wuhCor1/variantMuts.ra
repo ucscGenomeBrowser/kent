@@ -1,73 +1,30 @@
 # Mutations in variants of concern or interest
 
-track variantNucMuts
-shortLabel Nucleotide Muts
-longLabel  Nucleotide mutations in Variants of Concern (VOC) or Interest (VOI) identified from GISAID sequences (Feb 5, 2021)
-group varRep
-visibility dense
+track variantMuts
+shortLabel Variants of Concern
+longLabel  Mutations in Variants of Concern (VOC) or Interest (VOI) identified from GISAID sequences (Feb 5, 2021)
 compositeTrack on
-type bigBed 4
-pennantIcon new red
-html variantMuts
+subGroup1 View Views AA=Amino_Acid NUC=Nucleotide
+subGroup2 variant Variants B117=B.1.1.7_(UK) B1351=B.1.351_(South_Africa) P1=P.1_(Brazil) B1429=B.1.429_(California)
+sortOrder View=+ variant=+
 bedNameLabel Mutation
+type bigBed 4
 darkerLabels on
 noScoreFilter on
-
-        track variantNucMuts_B.1.1.7
-        parent variantNucMuts
-        shortLabel B.1.1.7 Nuc Muts
-        longLabel B.1.1.7 VOC ("UK variant", 20I/507.V1) nucleotide mutations in 9838 GISAID sequences (Feb 5, 2021)
-        bigDataUrl /gbdb/wuhCor1/strainMuts/variantNucMuts_B.1.1.7_2021_02_05.bb
-        url https://outbreak.info/situation-reports?pango=B.1.1.7
-        urlLabel B.1.1.7 Situation Report at outbreak.info
-        color 255,117,53
-        priority 1
-
-        track variantNucMuts_B.1.351
-        parent variantNucMuts
-        shortLabel B.1.351 Nuc Muts
-        longLabel B.1.351 VOC ("South Africa variant", 20H/501Y.V2) nucleotide mutations in 793 GISAID sequences (Feb 5, 2021)
-        bigDataUrl /gbdb/wuhCor1/strainMuts/variantNucMuts_B.1.351_2021_02_05.bb
-        url https://outbreak.info/situation-reports?pango=B.1.351
-        urlLabel B.1.351 Situation Report at outbreak.info
-        color 255,170,63
-        priority 2
-
-        track variantNucMuts_P.1
-        parent variantNucMuts
-        shortLabel P.1 Nuc Muts 
-        longLabel P.1 VOC ("Brazil variant", 20J/501Y.V3) nucleotide mutations in 78 GISAID sequences (Feb 5, 2021)
-        bigDataUrl /gbdb/wuhCor1/strainMuts/variantNucMuts_P.1_2021_02_05.bb
-        url https://outbreak.info/situation-reports?pango=P.1
-        urlLabel P.1 Situation Report at outbreak.info
-        color 249,53,41
-        priority 3
-
-        track variantNucMuts_B.1.429
-        parent variantNucMuts
-        shortLabel B.1.429 Nuc Muts 
-        longLabel B.1.429 VOI ("California variant", 20C, CA VUI1) nucleotide mutations in 1360 GISAID sequences (Feb 5, 2021)
-        bigDataUrl /gbdb/wuhCor1/strainMuts/variantNucMuts_B.1.429_2021_02_05.bb
-        url https://outbreak.info/situation-reports?pango=B.1.429
-        urlLabel B.1.429 Situation Report at outbreak.info
-        color 105,190,185
-        priority 4
+group varRep
+showSubtrackColorOnUi on
+visibility hide
 
 track variantAaMuts
+view AA
+parent variantMuts
 shortLabel Amino Acid Muts
 longLabel  Amino acid mutations in Variants of Concern (VOC) or Interest (VOI) identified from GISAID sequences (Feb 5, 2021)
-group varRep
-visibility hide
-compositeTrack on
-type bigBed 4
-pennantIcon new red
-bedNameLabel Mutation
-darkerLabels on
-noScoreFilter on
-html variantMuts
+visibility dense
 
         track variantAaMuts_B.1.1.7
-        parent variantAaMuts
+        parent variantAaMuts on
+        subGroups variant=B117 View=AA
         shortLabel B.1.1.7 AA Muts 
         longLabel B.1.1.7 VOC ("UK variant", 20I/507.V1) amino acid mutations in 9838 GISAID sequences (Feb 5, 2021)
         bigDataUrl /gbdb/wuhCor1/strainMuts/variantAaMuts_B.1.1.7_2021_02_05.bb
@@ -78,7 +35,8 @@ html variantMuts
         priority 1
 
         track variantAaMuts_B.1.351
-        parent variantAaMuts
+        parent variantAaMuts on
+        subGroups variant=B1351 View=AA
         shortLabel B.1.351 AA Muts
         longLabel B.1.351 VOC ("South Africa variant", 20H/501Y.V2) amino acid mutations in 793 GISAID sequences (Feb 5, 2021)
         bigDataUrl /gbdb/wuhCor1/strainMuts/variantAaMuts_B.1.351_2021_02_05.bb
@@ -89,7 +47,8 @@ html variantMuts
         priority 2
 
         track variantAaMuts_P.1
-        parent variantAaMuts
+        parent variantAaMuts on
+        subGroups variant=P1 View=AA
         shortLabel P.1 AA Muts 
         longLabel P.1 VOC ("Brazil variant", 20J/501Y.V3) amino acid mutations in 78 GISAID sequences (Feb 5, 2021)
         bigDataUrl /gbdb/wuhCor1/strainMuts/variantAaMuts_P.1_2021_02_05.bb
@@ -100,10 +59,63 @@ html variantMuts
         priority 3
 
         track variantAaMuts_B.1.429
-        parent variantAaMuts
+        parent variantAaMuts on
+        subGroups variant=B1429 View=AA
         shortLabel B.1.429 AA Muts 
         longLabel B.1.429 VOI ("California variant", 20C, CA VUI1) amino acid mutations in 1360 GISAID sequences (Feb 5, 2021)
         bigDataUrl /gbdb/wuhCor1/strainMuts/variantAaMuts_B.1.429_2021_02_05.bb
+        url https://outbreak.info/situation-reports?pango=B.1.429
+        urlLabel B.1.429 Situation Report at outbreak.info
+        color 105,190,185
+        priority 4
+
+
+track variantNucMuts
+parent variantMuts
+view NUC
+shortLabel Nucleotide Muts
+longLabel  Nucleotide mutations in Variants of Concern (VOC) or Interest (VOI) identified from GISAID sequences (Feb 5, 2021)
+visibility dense
+
+        track variantNucMuts_B.1.1.7
+        parent variantNucMuts off
+        subGroups variant=B117 View=NUC
+        shortLabel B.1.1.7 Nuc Muts
+        longLabel B.1.1.7 VOC ("UK variant", 20I/507.V1) nucleotide mutations in 9838 GISAID sequences (Feb 5, 2021)
+        bigDataUrl /gbdb/wuhCor1/strainMuts/variantNucMuts_B.1.1.7_2021_02_05.bb
+        url https://outbreak.info/situation-reports?pango=B.1.1.7
+        urlLabel B.1.1.7 Situation Report at outbreak.info
+        color 255,117,53
+        priority 1
+
+        track variantNucMuts_B.1.351
+        parent variantNucMuts off
+        subGroups variant=B1351 View=NUC
+        shortLabel B.1.351 Nuc Muts
+        longLabel B.1.351 VOC ("South Africa variant", 20H/501Y.V2) nucleotide mutations in 793 GISAID sequences (Feb 5, 2021)
+        bigDataUrl /gbdb/wuhCor1/strainMuts/variantNucMuts_B.1.351_2021_02_05.bb
+        url https://outbreak.info/situation-reports?pango=B.1.351
+        urlLabel B.1.351 Situation Report at outbreak.info
+        color 255,170,63
+        priority 2
+
+        track variantNucMuts_P.1
+        parent variantNucMuts off
+        subGroups variant=P1 View=NUC
+        shortLabel P.1 Nuc Muts 
+        longLabel P.1 VOC ("Brazil variant", 20J/501Y.V3) nucleotide mutations in 78 GISAID sequences (Feb 5, 2021)
+        bigDataUrl /gbdb/wuhCor1/strainMuts/variantNucMuts_P.1_2021_02_05.bb
+        url https://outbreak.info/situation-reports?pango=P.1
+        urlLabel P.1 Situation Report at outbreak.info
+        color 249,53,41
+        priority 3
+
+        track variantNucMuts_B.1.429
+        parent variantNucMuts off
+        subGroups variant=B1429 View=NUC
+        shortLabel B.1.429 Nuc Muts 
+        longLabel B.1.429 VOI ("California variant", 20C, CA VUI1) nucleotide mutations in 1360 GISAID sequences (Feb 5, 2021)
+        bigDataUrl /gbdb/wuhCor1/strainMuts/variantNucMuts_B.1.429_2021_02_05.bb
         url https://outbreak.info/situation-reports?pango=B.1.429
         urlLabel B.1.429 Situation Report at outbreak.info
         color 105,190,185
