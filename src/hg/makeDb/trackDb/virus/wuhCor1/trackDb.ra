@@ -637,4 +637,4 @@ searchDescription Spike protein mutations
 searchMethod fuzzy
 padding 5
 
-include strains.ra
+include variantMuts.ra
