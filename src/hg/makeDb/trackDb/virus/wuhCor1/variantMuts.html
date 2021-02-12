@@ -1,0 +1,174 @@
+<h2>Description</h2>
+<p>
+This track displays amino acid and nucleotide mutations in three SARS-CoV-2 Variants of 
+Concern (B.1.1.7, B.1.351 and P.1) and one Variant of Interest (B.1.429), 
+as defined in late January 2021.
+Mutations were identified from viral sequences at 
+<a href="https://gisaid.org" target=_blank>GISAID</a>.
+Variant incidence and geographic distribution information is available from links to the 
+<a target="_blank" href="https://Outbreak.info">Outbreak.info</a> web resource
+on the track details pages.</p>
+<p>
+The related track
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=wuhCor1&g=lineageB_1_1_7_US"> B.1.1.7 in USA</a>
+displays a phylogenetic tree of the first B.1.1.7 variant sequences collected in the United States.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Track colors are based on 
+<a href="https://github.com/cov-lineages/pangolin/" target=_blank>Pangolin</a>
+lineage (Rambaut <em>et al.</em>) conventions at the time this track was generated:
+
+<table style="border-spacing: 20px 2px;">
+  <tr>
+    <th>Color</th><th>Variant</th></tr>
+  <tr>
+    <td><span style="background-color: #F93529;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>P.1</td></tr>
+  <tr>
+    <td><span style="background-color: #FF7535;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1.1.7</td></tr>
+  <tr>
+    <td><span style="background-color: #FFAA3F;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1.351</td></tr>
+  <tr>
+    <td><span style="background-color: #69BEB9;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.429</td></tr>
+</table>
+</p>
+<p>
+Mutations in the amino acid track are named with the format: 
+<pre>
+        [Reference amino acid][1-based coordinate in peptide][Alternate amino acid]
+</pre>  
+<p>
+Mutations in the nucleotide track are named with the format: 
+<pre>
+        [Reference nucleotide][1-based coordinate in genome][Alternate nucleotide]
+</pre>
+Insertions and deletions in both tracks are named: 
+<pre>
+        [del/ins]_[1-based genomic coordinate of first affected nucleotide]
+</pre>
+</p>
+
+<h2>Methods</h2>
+<p>
+For each virus variant, SARS-CoV-2 sequences containing all characteristic
+mutations of the lineage were downloaded from GISAID.
+SNPs were called by first aligning the sequences using the
+profile alignment script at the
+<a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> repository (
+<a href="https://github.com/roblanf/sarscov2phylo/blob/master/scripts/global_profile_alignment.sh" target="_blank">
+global_profile_alignment.sh</a>
+).
+then calling SNPs variants using the UCSC <em>faToVcf</em> script
+(available on the download server
+<a target="_blank" href="https://hgdownload.soe.ucsc.edu/admin/exe/">here</a>) and
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2">
+the SARS-CoV-2 reference sequence</a>.
+SNPs present at a frequency
+above 0.95 are retained while all others are discarded.
+<p>
+For indel detection, the 
+<a target="_blank" href="https://github.com/lh3/minimap2">Minimap2</a> 
+suite of tools was used as follows:
+
+<pre>
+        minimap2 --cs [Reference Sequence] [Set of Unaligned Sequences] | paftools.js call -L 10000 -
+</pre>
+
+Indels present at a frequency less than 0.85 were retained.</p>
+<p>
+The results were then combined and formatted by the  
+<a target="blank" href="<https://github.com/nickeener/sarscov2lineages/blob/main/scripts/lineageVariants.py">lineageVariants.py</a>. 
+The entire pipeline was run using the 
+<a target="blank" href="https://github.com/nickeener/sarscov2lineages/blob/main/lineageVariants.sh">
+lineageVariants.sh</a>.
+<p>
+
+<h2>Data Access</h2>
+<p>
+You can download the data files for this track from the
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/variantMuts/"
+   target=_blank>UCSC Download Server</a>.
+The data can be explored interactively with the
+<a href="hgTables">Table Browser</a>
+or the <a href="hgIntegrator">Data Integrator</a>. The data can be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+<p>This work is made possible by the open sharing of genetic data by research
+groups from all over the world. We gratefully acknowledge their contributions.
+We thank 
+<a taret="_blank" href="https://www.robertlanfear.com/"> Rob Lanfear</a> 
+at the Australia National University for the developing and maintaining the
+<a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> web resource.
+We also thank 
+the <a href="http://sulab.org/" rel="noreferrer" target="_blank">Su</a>, <a href="http://wulab.io/" rel="noreferrer" target="_blank">Wu</a>, and <a href="https://andersen-lab.com/" rel="noreferrer" target="_blank">Andersen</a> labs at Scripps Research for creating the 
+<a target="_blank" href="https://Outbreak.info">Outbreak.info</a> resource.
+The lineageVariants scripts were developed and run at UCSC by Nick Keener.
+</p>
+
+<h2>References</h2>
+<p>
+Rambaut A, Holmes EC, O'Toole &#193;, Hill V, McCrone JT, Ruis C, du Plessis L, Pybus OG.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32669681" target="_blank">
+A dynamic nomenclature proposal for SARS-CoV-2 lineages to assist genomic epidemiology</a>.
+<em>Nat Microbiol</em>. 2020 Nov;5(11):1403-1407.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32669681" target="_blank">32669681</a>
+</p>
+<p>
+Rambaut A, Loman N, Pybus O, Barclay W, Barrett J,
+Carabelli A, Connor T, Peacock T, Robertson DL, Volz E, <em>et al.</em>
+<a href="https://virological.org/t/preliminary-genomic-characterisation-of-an-emergent-sars-cov-2-lineage-in-the-uk-defined-by-a-novel-set-of-spike-mutations/563"
+   target=_blank>Preliminary genomic characterisation of an emergent SARS-CoV-2 lineage in the UK
+  defined by a novel set of spike mutations</a>.
+<em>Virological</em>.  2020 Dec 18.
+</p>
+
+<p>
+Volz E, Mishra S, Chand M, Barrett JC, Johnson E,
+Geidelberg L, Hinsley WR, Laydon DJ, Dabrera G, O'Toole &#193;, <em>et al.</em>
+<a href="https://virological.org/t/transmission-of-sars-cov-2-lineage-b-1-1-7-in-england-insights-from-linking-epidemiological-and-genetic-data/576"
+   target=_blank>Transmission of SARS-CoV-2 Lineage B.1.1.7 in England: Insights from linking
+  epidemiological and genetic data</a>.
+  <em>Virological</em>.  2020 Dec 31.
+</p>
+
+Tegally <em>et al</em>, December 21, 2020.
+<a target="_blank" href="https://www.medrxiv.org/content/10.1101/2020.12.21.20248640v1">
+Emergence and rapid spread of a new severe acute respiratory syndrome-related coronavirus 2 (SARS-CoV-2) lineage with multiple spike mutations in South Africa</a> medRxiv preprint.
+
+Zhang <em> al</em>, January 20, 2021.
+<a target="_blank" href="https://www.medrxiv.org/content/10.1101/2021.01.18.21249786v1">
+Emergence of a novel SARS-CoV-2 strain in Southern California, USA</a> medRxiv preprint.
+
+<p>
+Voloch <em>et al</em>, December 26, 2020. 
+<a target="_blank" href="https://www.medrxiv.org/content/10.1101/2020.12.23.20248598v1">
+Genomic characterization of a novel SARS-CoV-2 lineage from Rio de Janeiro, Brazil</a> medRxiv preprint.
+</p>
+
+<p>
+Lanfear, Rob (2020). A global phylogeny of SARS-CoV-2 sequences from GISAID. Zenodo DOI:
+<a href="https://zenodo.org/record/4289383" target=_blank>10.5281/zenodo.3958883</a>
+</p>
+<p>
+Li Heng
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/29750242" target="_blank">
+Minimap2: pairwise alignment for nucleotide sequences</a>.
+<em>Bioinformatics</em>. 2018 Sep 15;34(18):3094-3100.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29750242" target="_blank">29750242</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6137996/" target="_blank">PMC6137996</a>
+</p>
+<p>
+Gangavarapu, Karthik; Alkuzweny, Manar; Cano, Marco; Haag, Emily; Latif, Alaa Abdel; Mullen, Julia L.; Rush, Benjamin; Tsueng, Ginger; Zhou, Jerry; Andersen, Kristian G.; Wu, Chunlei; Su, Andrew I.; Hughes, Laura D. <a target="_blank" href="https://outbreak.info/">Outbreak.info</a>
+</p>
+</p>
+
+
+
