@@ -4,7 +4,7 @@ track ucscStrainNucMuts
 shortLabel UCSC Strain Nuc Muts
 longLabel  Strains of interest nucleotide mutations identified from GISAID sequences by UCSC Genomics Inst
 group varRep
-visibility hide
+visibility dense
 compositeTrack on
 type vcfTabix
 pennantIcon new red
