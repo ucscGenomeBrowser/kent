@@ -629,7 +629,7 @@ urls geographyChartsUrl="$$" nextstrainBuildUrl="$$"
 searchIndex name
 searchTrix /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.ix
 group varRep
-pennantIcon New red ../goldenPath/newsarch.html#012921 "Released Jan. 29, 2021"
+#pennantIcon New red ../goldenPath/newsarch.html#012921 "Released Jan. 29, 2021"
 
 searchTable spikeMuts
 searchType bigBed

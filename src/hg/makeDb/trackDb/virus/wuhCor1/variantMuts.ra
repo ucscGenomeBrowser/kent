@@ -13,7 +13,7 @@ darkerLabels on
 noScoreFilter on
 group varRep
 allButtonPair on
-showSubtrackColorOnUi on
+pennantIcon New red
 visibility hide
 
         track variantAaMuts_B.1.1.7
