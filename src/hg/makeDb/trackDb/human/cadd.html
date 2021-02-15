@@ -1,25 +1,25 @@
 <h2>Description</h2>
 
 <p> This track collection shows <a href="https://cadd.gs.washington.edu/"
-target="_blank">Combined Annotation Dependent Depletion</a> score.
-CADD is a tool for scoring the deleteriousness of single nucleotide variants as well as insertion/deletions variants in the human genome.
+target="_blank">Combined Annotation Dependent Depletion</a> scores.
+CADD is a tool for scoring the deleteriousness of single nucleotide variants as
+well as insertion/deletions variants in the human genome.</p>
+
+<p>
+Some mutation annotations
+tend to exploit a single information type (e.g. phastCons or phylP for
+conservation) and/or are restricted in scope (e.g. to missense changes). Thus,
+a broadly applicable metric that objectively weights and integrates diverse
+information is needed.  Combined Annotation Dependent Depletion (CADD) is a
+framework that integrates multiple annotations into one metric by contrasting
+variants that survived natural selection with simulated mutations.
 </p>
 
 <p>
-Many mutation annotations
-tend to exploit a single information type (e.g. conservation) and/or are
-restricted in scope (e.g. to missense changes). Thus, a broadly applicable
-metric that objectively weights and integrates diverse information is needed.
-Combined Annotation Dependent Depletion (CADD) is a framework that integrates
-multiple annotations into one metric by contrasting variants that survived
-natural selection with simulated mutations.
-</p>
-
-<p>
-C-scores strongly correlate with allelic diversity, pathogenicity of both
+CADD scores strongly correlate with allelic diversity, pathogenicity of both
 coding and non-coding variants, and experimentally measured regulatory effects,
 and also highly rank causal variants within individual genome sequences.
-Finally, C-scores of complex trait-associated variants from genome-wide
+Finally, CADD scores of complex trait-associated variants from genome-wide
 association studies (GWAS) are significantly higher than matched controls and
 correlate with study sample size, likely reflecting the increased accuracy of
 larger GWAS.
@@ -27,41 +27,53 @@ larger GWAS.
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-There are four subtracks of this track: four for every possible single nucleotide mutation, 
-one for insertions and one for deletions. All subtracks show the CADD Phred score on mouse over.
-<p>
+There are six subtracks of this track: four for every possible single nucleotide mutation, 
+one for insertions and one for deletions. All subtracks show the CADD Phred
+score on mouse over.<p>
 
 <p>
-For single nucleotides, at every
-nucleotide position, with three values per position, one for every possible
-mutation. 
-For the single nucleotide variants, please zoom in until you can see every basepair. The mouse overs
-will other show averages over all nucleotides under the cursor, which is indicated by the prefix "~"
-in the mouse over text.
+<b>Single nucleotide variants (SNV):</b> For SNVs, at every
+genome position, there are three values per position, one for every possible
+nucleotide mutation. The fourth value, "no mutation", e.g. A to A, is always
+set to zero.<br>
+When using this track, please zoom in until you can see every basepair at the
+top of the display. Otherwise, there are several nucleotides under your mouse
+cursor per pixel and instead of an actual score, the tooltip text can only show
+the average score of all nucleotides under the cursor, which is indicated by
+the prefix "~" in the mouse over and averages of scores are not useful for any
+application of CADD.
 </p>
 
-<p>The scores are also shown on mouse over for a set of insertions and deletions. On hg38, the selected
-set has been obtained from Gnomad3. On hg19, it has been obtained from XXX (TODO: ask CADD authors).
-</p>
+<p><b>Insertions and deletions:</b>: Scores are also shown on mouse over for a
+set of insertions and deletions. On hg38, the set has been obtained from
+Gnomad3. On hg19, the set of indels has been obtained from various sources
+(gnomAD2, ExAC, 1000 Genomes, ESP). If your insertion or deleletion of interest
+is not in the track, you will need to use CADD's
+<a target=_blank href="https://cadd.gs.washington.edu/score">Online scoring tool</a>
+to obtain them.</p>
 
 <H2>Data access</H2>
 <p>
-The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
-or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+CADD scores are freely available for all non-commercial applications from <a target=_blank href="https://cadd.gs.washington.edu/download">the CADD website</a>. For commercial applications, see <a target=_blank href="https://cadd.gs.washington.edu/contact">the license instructions</a> there.
+</p>
 
 <p>
-For automated download and analysis, the genome annotation is stored in a bigWig file that
+The CADD data on the UCSC Genome Browser can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the <a
+href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated download and analysis, the genome annotation is stored at UCSC in bigWig and bigBed files that
 can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/" target="_blank">our download server</a>.
 The files for this track are called <tt>a.bw, c.bw, g.bw, t.bw, ins.bb and del.bb</tt>. Individual
 regions or the whole genome annotation can be obtained using our tool <tt>bigWigToWig</tt>
-which can be compiled from the source code or downloaded as a precompiled
+or <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
-The tool
-can also be used to obtain only features within a given range, e.g. 
-<tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/a.bw stdout</tt></p>
-</p>
+The tools
+can also be used to obtain only features within a given range, e.g. <br>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/a.bw stdout</tt><br>
+or<br>
+<tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/ins.bb stdout</tt></p>
 
 <h2>Methods</h2>
 
@@ -74,7 +86,7 @@ documented in our <a target=_BLANK href="https://github.com/ucscGenomeBrowser/ke
 
 <h2>Credits</h2>
 <p>
-Thanks to the Kircher lab for providing the data.
+Thanks to the CADD development team for providing precomputed data as simple tab-separated files.
 </p>
 
 <h2>References</h2>
