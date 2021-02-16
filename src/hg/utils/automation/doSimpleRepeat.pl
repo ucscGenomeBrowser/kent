@@ -354,7 +354,7 @@ if ( -s simpleRepeat.bed ) then
   twoBitInfo $unmaskedSeq stdout | sort -k2nr > tmp.chrom.sizes
   bedToBigBed -tab -type=bed4+12 -as=\$HOME/kent/src/hg/lib/simpleRepeat.as \\
     simpleRepeat.bed16.bed tmp.chrom.sizes simpleRepeat.bb
-  rm -f tmp.chrom.sizes simpleRepeat.bed16.bed tmp.chrom.sizes
+  rm -f tmp.chrom.sizes simpleRepeat.bed16.bed
 else
   echo empty simpleRepeat.bed - no repeats found
 endif
