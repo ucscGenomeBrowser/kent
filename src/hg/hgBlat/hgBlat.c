@@ -506,6 +506,8 @@ char unhideTrack[64];
 char *sort = cartUsualString(cart, "sort", pslSortList[0]);
 char *output = cartUsualString(cart, "output", outputList[0]);
 boolean pslOut = startsWith("psl", output);
+boolean pslRawOut = sameWord("pslRaw", output);
+boolean jsonOut = sameWord(output, "json");
 
 sprintf(uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 
@@ -550,13 +552,23 @@ if(feelingLucky)
     }
 else if (pslOut)
     {
-    printf("<TT><PRE>");
+    if (!pslRawOut)
+        printf("<TT><PRE>");
     if (!sameString(output, "psl no header"))
 	pslxWriteHead(stdout, qType, tType);
+
     for (psl = pslList; psl != NULL; psl = psl->next)
 	pslTabOut(psl, stdout);
+
+    if (pslRawOut)
+        exit(0);
+    printf("<TT><PRE>");
     printf("</PRE></TT>");
     }
+else if (jsonOut)  {
+        pslWriteAllJson(pslList, stdout, TRUE);
+        exit(0);
+}
 else  // hyperlink
     {
     printf("<H2>BLAT Search Results</H2>");
@@ -1393,8 +1405,11 @@ if (allGenomes)
 else
     getDbAndGenome(cart, &db, &genome, oldVars);
 
+char *output = cgiString("output");
+boolean isJson= sameWordOk(output, "json");
+boolean isPslRaw= sameWordOk(output, "pslRaw");
 
-if(!feelingLucky && !allGenomes)
+if (!feelingLucky && !allGenomes && !isJson && !isPslRaw)
     cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), db);
 
 /* Load user sequence and figure out if it is DNA or protein. */
