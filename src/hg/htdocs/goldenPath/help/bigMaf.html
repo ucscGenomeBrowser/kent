@@ -94,6 +94,9 @@ database is located at
 target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</p>
 <pre><code>mafToBigMaf hg38 chr22_KI270731v1_random.maf stdout | sort -k1,1 -k2,2n > bigMaf.txt
 bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bigMaf.txt hg38.chrom.sizes bigMaf.bb </code></pre>
+<p>Note that the hg38 in the mafToBigMaf hg38 command indicates the referenceDb and matches the
+expected prefix of the primary species' sequence name, for instance hg38 for the
+hg38.chr22_KI270731v1_random found in the input example chr22_KI270731v1_random.maf file.</p>
 <p>
 <strong>Step 6.</strong> 
 Follow the below steps to create the binary indexed mafFrames and mafSummary files to accompany 
