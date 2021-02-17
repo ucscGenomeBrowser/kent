@@ -184,12 +184,12 @@ fprintf(f, "%u,", el->qNumInsert);
 fprintf(f, "%d,", el->qBaseInsert);
 fprintf(f, "%u,", el->tNumInsert);
 fprintf(f, "%d,", el->tBaseInsert);
-fprintf(f, "'%s',", el->strand);
-fprintf(f, "'%s',", el->qName);
+fprintf(f, "\"%s\",", el->strand);
+fprintf(f, "\"%s\",", el->qName);
 fprintf(f, "%u,", el->qSize);
 fprintf(f, "%u,", el->qStart);
 fprintf(f, "%u,", el->qEnd);
-fprintf(f, "'%s',", el->tName);
+fprintf(f, "\"%s\",", el->tName);
 fprintf(f, "%u,", el->tSize);
 fprintf(f, "%u,", el->tStart);
 fprintf(f, "%u,", el->tEnd);
@@ -199,7 +199,7 @@ fputs("[", f);
 for (int i=0; i<el->blockCount; ++i)
     {
     fprintf(f, "%u", el->blockSizes[i]);
-    if (i-1<el->blockCount)
+    if (i < el->blockCount-1)
         fputc(',', f);
     }
 fputs("]", f);
@@ -209,7 +209,7 @@ fputs("[", f);
 for (int i=0; i<el->blockCount; ++i)
     {
     fprintf(f, "%u", el->qStarts[i]);
-    if (i-1<el->blockCount)
+    if (i < el->blockCount-1)
         fputc(',', f); // json does not allow trailing commas
     }
 fputs("]", f);
@@ -219,7 +219,7 @@ fputs("[", f);
 for (int i=0; i<el->blockCount; ++i)
     {
     fprintf(f, "%u", el->tStarts[i]);
-    if (i-1<el->blockCount)
+    if (i < el->blockCount-1)
         fputc(',', f);
     }
 fputs("]", f);
@@ -231,7 +231,7 @@ if (el->qSequence)
     for (int i=0; i<el->blockCount; ++i)
 	{
 	fprintf(f, "'%s'", el->qSequence[i]);
-        if (i-1<el->blockCount)
+        if (i < el->blockCount-1)
             fputc(',', f);
 	}
     fputc(']',f);
@@ -240,8 +240,8 @@ if (el->qSequence)
     fputc('[',f);
     for (int i=0; i<el->blockCount; ++i)
 	{
-	fprintf(f, "%s", el->tSequence[i]);
-        if (i-1<el->blockCount)
+	fprintf(f, "\"%s\"", el->tSequence[i]);
+        if (i < el->blockCount-1)
             fputc(',', f);
 	}
     fputc(']',f);
@@ -253,7 +253,7 @@ if (ferror(f))
     errAbort("\n");
     }
 
-fputs("]\n", f);
+fputs("]", f);
 }
 
 void pslOutput(struct psl *el, FILE *f, char sep, char lastSep) 
@@ -553,9 +553,9 @@ f);
 static void pslLabelColumnsJson(FILE *f) 
 /* Write column info as a JSON array */
 {
-fputs("['matches', 'misMatches', 'repMatches', 'nCount', 'qNumInsert', 'qBaseInsert', "
-        "'tNumInsert', 'tBaseInsert', 'strand', 'qName', 'qSize', 'qStart', 'qEnd', 'tName', "
-        "'tSize', 'tEnd', 'blockCount', 'blockSizes', 'qStarts', 'tStarts]", f);
+fputs("[\"matches\", \"misMatches\", \"repMatches\", \"nCount\", \"qNumInsert\", \"qBaseInsert\", "
+        "\"tNumInsert\", \"tBaseInsert\", \"strand\", \"qName\", \"qSize\", \"qStart\", \"qEnd\", \"tName\", "
+        "\"tSize\", \"tEnd\", \"blockCount\", \"blockSizes\", \"qStarts\", \"tStarts\"]", f);
 }
 
 void pslxWriteHead(FILE *f, enum gfType qType, enum gfType tType)
@@ -601,7 +601,7 @@ for (struct psl *psl = pslList; psl; psl = psl->next)
         fputs(",\n", f);
     }
 
-puts("]\n");
+puts("\n]\n");
 }
 
 void pslxFileOpen(char *fileName, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf)
