@@ -62,7 +62,16 @@ Download the autoSql file <em><a href="examples/bigMaf.as">bigMaf.as</a></em> ne
 <code>bedToBigBed</code>. If you have opted to include the optional frame summary and information 
 with your bigMaf file, you must also download the autoSql files 
 <a href="examples/mafSummary.as">mafSummary.as</a> and 
-<a href="examples/mafFrames.as">mafFrames.as</a> files.</p> 
+<a href="examples/mafFrames.as">mafFrames.as</a> files.</p>
+<p>
+Here are wget commands to obtain the above files and the hg38.chrom.sizes file mentioned below:
+<pre><code>wget https://genome.ucsc.edu/goldenPath/help/examples/chr22_KI270731v1_random.maf
+wget https://genome.ucsc.edu/goldenPath/help/examples/chr22_KI270731v1_random.gp
+wget https://genome.ucsc.edu/goldenPath/help/examples/bigMaf.as
+wget https://genome.ucsc.edu/goldenPath/help/examples/mafSummary.as
+wget https://genome.ucsc.edu/goldenPath/help/examples/mafFrames.as
+wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes
+</code></pre>
 <p>
 <strong>Step 4.</strong> 
 Download the <code>bedToBigBed</code> and <code>mafToBigMaf</code> programs from the UCSC
@@ -110,8 +119,8 @@ version of the track line will look something like this:</p>
 <pre><code>track type=bigMaf name="My Big MAF" description="A Multiple Alignment" bigDataUrl=http://myorg.edu/mylab/bigMaf.bb</code></pre>
 <p>
 <strong>Step 9.</strong> 
-Paste the custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom track 
-management page</a>.</p>
+Paste the custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom track
+management page</a>. Navigate to chr22_KI270731v1_random to see the example data for this track.</p>
 <p>
 The <code>bedToBigBed</code> program can be run with several additional options. For a full
 list of the available options, type <code>bedToBigBed</code> (with no arguments) on the command line
