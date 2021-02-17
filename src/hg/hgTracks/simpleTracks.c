@@ -1137,7 +1137,7 @@ if (x < xEnd)
     char *encodedTrack = cgiEncode(track);
     if (theImgBox && curImgTrack)
         {
-        char link[512];
+        char link[2000];
         if (directUrl)
             {
             safef(link,sizeof(link),directUrl, item, chromName, start, end, encodedTrack, database);
