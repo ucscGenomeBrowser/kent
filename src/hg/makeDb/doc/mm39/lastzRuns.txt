@@ -303,10 +303,10 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	 mm39 rn7) > rbest.log 2>&1 &
-XXX - running - Fri Feb  5 11:01:26 PST 2021
-    # real    580m33.404s
+    # real    588m38.122s
+
     sed -e 's/^/    # /;' fb.mm39.chainRBest.Rn7.txt
-    #	1738608299 bases of 2654624157 (65.494%) in intersection
+    # 1754204799 bases of 2654624157 (66.081%) in intersection
 
     mkdir /hive/data/genomes/rn7/bed/blastz.mm39.swap
     cd /hive/data/genomes/rn7/bed/blastz.mm39.swap
@@ -324,11 +324,10 @@ XXX - running - Fri Feb  5 11:01:26 PST 2021
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	rn7 mm39) > rbest.log 2>&1
-XXX - running - Fri Feb  5 11:00:02 PST 2021
-    # real    675m42.654s
+    # real    605m42.354s
 
     sed -e 's/^/    # /;' fb.rn7.chainRBest.Mm39.txt 
-    #	1740516499 bases of 2729860805 (63.758%) in intersection
+    # 1754416686 bases of 2626580772 (66.795%) in intersection
 
 ##############################################################################
 # LASTZ Chinese hamster criGriChoV2 (DONE - 2020-11-23 - Hiram)
