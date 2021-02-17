@@ -167,7 +167,7 @@ DBS = \
 	rheMac2 rheMac3 rheMac7 rheMac8 rheMac10 \
 	rhiBie1 \
 	rhiRox1 \
-	rn3 rn4 rn5 rn6 \
+	rn3 rn4 rn5 rn6 rn7 \
 	rouAeg1 \
 	sacCer1 sacCer2 sacCer3 \
 	saiBol1 \

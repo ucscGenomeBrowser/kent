@@ -1,0 +1,29 @@
+/* CSS for faceted search
+ *
+ * Copyright (C) 2021 The Regents of the University of California
+ */
+
+
+/* Styling for parts of page body */
+div.card.facet-card
+{
+    margin-bottom:5px
+}
+
+span.card.facet-card
+{
+    margin-top:5px;
+    padding-top: 10px;
+}   
+
+/* Restyling topbar class */
+.topbar { white-space: nowrap; padding: 0px 10px;}
+A:link.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #0000F0; font-size: 15px; }
+A:visited.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #0000C0; font-size: 15px; }
+A:active.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #2020FF; font-size: 15px; }
+A:hover.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #2020FF; font-size: 15px; }
+
+A:link.btn-secondary { color: #0000C0; background-color: #EEEEEE; }
+A:hover.btn-secondary { color: #1010F0; background-color: #F2F2F2; }
+A:visited.btn-secondary { color: #0000C0; background-color: #EEEEEE; }
+A:active.btn-secondary { color: #0000C0; background-color: #EEEEEE; }

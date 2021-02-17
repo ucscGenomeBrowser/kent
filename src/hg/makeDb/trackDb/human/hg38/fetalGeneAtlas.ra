@@ -3,12 +3,12 @@ superTrack on
 shortLabel Fetal Gene Atlas
 longLabel Fetal Gene Atlas from Cao et al 2020
 visibility hide
-group expression
+group singleCell
 pennantIcon 19.jpg liftover.html "lifted from hg19"
+type bigBarChart
 
     track fetalGeneAtlasCellType
     parent fetalGeneAtlas
-    type bigBarChart
     visibility pack
     shortLabel Fetal Cells
     longLabel Fetal Gene Atlas binned by cell type from Cao et al 2020
@@ -28,11 +28,10 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     barChartBars AFP_ALB_positive_cells Acinar_cells Adrenocortical_cells Amacrine_cells Antigen_presenting_cells Astrocytes Bipolar_cells Bronchiolar_and_alveolar_epithelial_cells CCL19_CCL21_positive_cells CLC_IL5RA_positive_cells CSH1_CSH2_positive_cells Cardiomyocytes Chromaffin_cells Ciliated_epithelial_cells Corneal_and_conjunctival_epithelial_cells Ductal_cells ELF3_AGBL2_positive_cells ENS_glia ENS_neurons Endocardial_cells Epicardial_fat_cells Erythroblasts Excitatory_neurons Extravillous_trophoblasts Ganglion_cells Goblet_cells Granule_neurons Hematopoietic_stem_cells Hepatoblasts Horizontal_cells IGFBP1_DKK1_positive_cells Inhibitory_interneurons Inhibitory_neurons Intestinal_epithelial_cells Islet_endocrine_cells Lens_fibre_cells Limbic_system_neurons Lymphatic_endothelial_cells Lymphoid_cells MUC13_DMBT1_positive_cells Megakaryocytes Mesangial_cells Mesothelial_cells Metanephric_cells Microglia Myeloid_cells Neuroendocrine_cells Oligodendrocytes PAEP_MECOM_positive_cells PDE11A_FAM19A2_positive_cells PDE1C_ACSM3_positive_cells Parietal_and_chief_cells Photoreceptor_cells Purkinje_neurons Retinal_pigment_cells Retinal_progenitors_and_Muller_glia SATB2_LRRC7_positive_cells SKOR2_NPSR1_positive_cells SLC24A4_PEX5L_positive_cells SLC26A4_PAEP_positive_cells STC2_TLX1_positive_cells Satellite_cells Schwann_cells Skeletal_muscle_cells Smooth_muscle_cells Squamous_epithelial_cells Stellate_cells Stromal_cells Sympathoblasts Syncytiotrophoblasts_and_villous_cytotrophoblasts Thymic_epithelial_cells Thymocytes Trophoblast_giant_cells Unipolar_brush_cells Ureteric_bud_cells Vascular_endothelial_cells Visceral_neurons
     transformFunc NONE
     barChartLimit 3
-    group expression
+    barChartFacets organ,cell_class,cell_type
 
     track fetalGeneAtlasAssay
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Assay
     longLabel Fetal Gene Atlas binned by assay (cell/nucleus) from Cao et al 2020
@@ -51,7 +50,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasExperiment
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Exp
     longLabel Fetal Gene Atlas binned by experiment id from Cao et al 2020
@@ -71,7 +69,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasOrgan
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Organ
     longLabel Fetal Gene Atlas binned by organ from Cao et al 2020
@@ -91,7 +88,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasOrganCellLineage
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Lineage
     longLabel Fetal Gene Atlas binned by cell lineage and organ from Cao et al 2020
@@ -111,7 +107,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasRtGroup
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal RT Group
     longLabel Fetal Gene Atlas binned by RT group from Cao et al 2020
@@ -131,7 +126,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasDonor
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Donor ID
     longLabel Fetal Gene Atlas binned by donor ID from Cao et al 2020
@@ -151,7 +145,6 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track fetalGeneAtlasSex
     parent fetalGeneAtlas
-    type bigBarChart
     visibility hide
     shortLabel Fetal Sex
     longLabel Fetal Gene Atlas binned by sex from Cao et al 2020

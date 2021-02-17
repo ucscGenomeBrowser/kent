@@ -4,7 +4,7 @@ superTrack on
 shortLabel Heart Cell Atlas
 longLabel Heart single cell RNA data from https://heartcellatlas.com
 visibility hide
-group expression
+group singleCell
 
     track heartAtlasCellTypes
     parent heartCellAtlas
@@ -25,7 +25,6 @@ group expression
 	Ventricular_Cardiomyocyte doublets
     transformFunc NONE
     barChartLimit 3
-    group expression
 
     track heartAtlasRegion
     parent heartCellAtlas
@@ -44,7 +43,6 @@ group expression
     barChartBars AX LA LV RA RV SP
     transformFunc NONE
     barChartLimit 1.5
-    group expression
 
     track heartAtlasAgeGroup
     parent heartCellAtlas
@@ -63,7 +61,6 @@ group expression
     barChartBars 40-45 45-50 50-55 55-60 60-65 65-70 70-75
     transformFunc NONE
     barChartLimit 2
-    group expression
 
     track heartAtlasCellStates
     parent heartCellAtlas
@@ -84,7 +81,6 @@ group expression
     barChartBars Adip1 Adip2 Adip3 Adip4 B_cells CD14+Mo CD16+Mo CD4+T_cytox CD4+T_tem CD8+T_cytox CD8+T_tem DC DOCK4+MØ1 DOCK4+MØ2 EC10_CMC-like EC1_cap EC2_cap EC3_cap EC4_immune EC5_art EC6_ven EC7_atria EC8_ln EC9_FB-like FB1 FB2 FB3 FB4 FB5 FB6 FB7 IL17RA+Mo LYVE1+MØ1 LYVE1+MØ2 LYVE1+MØ3 Mast Meso Mo_pi MØ_AgP MØ_mod NC1 NC2 NC3 NC4 NC5 NC6 NK NKT NØ PC1_vent PC2_atria PC3_str PC4_CMC-like SMC1_basic SMC2_art aCM1 aCM2 aCM3 aCM4 aCM5 doublets nan vCM1 vCM2 vCM3 vCM4 vCM5
     transformFunc NONE
     barChartLimit 4
-    group expression
 
     track heartAtlasDonor
     parent heartCellAtlas
@@ -103,7 +99,6 @@ group expression
     barChartBars D1 D11 D2 D3 D4 D5 D6 D7 H2 H3 H4 H5 H6 H7
     transformFunc NONE
     barChartLimit 4
-    group expression
 
     track heartAtlasSex
     parent heartCellAtlas
@@ -122,7 +117,6 @@ group expression
     barChartBars Female Male
     transformFunc NONE
     barChartLimit 1
-    group expression
 
     track heartAtlasSource
     parent heartCellAtlas
@@ -141,7 +135,6 @@ group expression
     barChartBars CD45+ Cells Nuclei
     transformFunc NONE
     barChartLimit 2
-    group expression
 
     track heartAtlasSample
     parent heartCellAtlas
@@ -160,7 +153,6 @@ group expression
     barChartBars H0015_LA_new H0015_LV H0015_RA H0015_RV H0015_apex H0015_septum H0020_LA_new H0020_LV H0020_RA H0020_RV H0020_apex H0020_septum H0025_LA H0025_LV H0025_RA H0025_RV H0025_apex H0025_septum H0026_LA H0026_LV_V3 H0026_RA H0026_RV H0026_apex H0026_septum2 H0035_LA H0035_LV H0035_RA H0035_RV H0035_apex H0035_septum H0037_Apex H0037_LA_corr H0037_LV H0037_RA_corr H0037_RV H0037_septum HCAHeart7606896 HCAHeart7656534 HCAHeart7656535 HCAHeart7656536 HCAHeart7656537 HCAHeart7656538 HCAHeart7656539 HCAHeart7664652 HCAHeart7664653 HCAHeart7664654 HCAHeart7698015 HCAHeart7698016 HCAHeart7698017 HCAHeart7702873 HCAHeart7702874 HCAHeart7702875 HCAHeart7702876 HCAHeart7702877 HCAHeart7702878 HCAHeart7702879 HCAHeart7702880 HCAHeart7702881 HCAHeart7702882 HCAHeart7728604 HCAHeart7728605 HCAHeart7728606 HCAHeart7728607 HCAHeart7728608 HCAHeart7728609 HCAHeart7745966 HCAHeart7745967 HCAHeart7745968 HCAHeart7745969 HCAHeart7745970 HCAHeart7751845 HCAHeart7757636 HCAHeart7757637 HCAHeart7757638 HCAHeart7757639 HCAHeart7829976 HCAHeart7829977 HCAHeart7829978 HCAHeart7829979 HCAHeart7833852 HCAHeart7833853 HCAHeart7833854 HCAHeart7833855 HCAHeart7835148 HCAHeart7835149 HCAHeart7836681 HCAHeart7836682 HCAHeart7836683 HCAHeart7836684 HCAHeart7843999 HCAHeart7844000 HCAHeart7844001 HCAHeart7844002 HCAHeart7844003 HCAHeart7844004 HCAHeart7850539 HCAHeart7850540 HCAHeart7850541 HCAHeart7850542 HCAHeart7850543 HCAHeart7850544 HCAHeart7850545 HCAHeart7850546 HCAHeart7850547 HCAHeart7850548 HCAHeart7850549 HCAHeart7850551 HCAHeart7880860 HCAHeart7880861 HCAHeart7880862 HCAHeart7880863 HCAHeart7888922 HCAHeart7888923 HCAHeart7888924 HCAHeart7888925 HCAHeart7888926 HCAHeart7888927 HCAHeart7888928 HCAHeart7888929 HCAHeart7905327 HCAHeart7905328 HCAHeart7905329 HCAHeart7905330 HCAHeart7905331 HCAHeart7905332 HCAHeart7964513 HCAHeart7985086 HCAHeart7985087 HCAHeart7985088 HCAHeart7985089 HCAHeart8102858 HCAHeart8102859 HCAHeart8102860 HCAHeart8102861 HCAHeart8102862 HCAHeart8102863 HCAHeart8102864 HCAHeart8102865 HCAHeart8102866 HCAHeart8102867 HCAHeart8102868 HCAHeart8287123 HCAHeart8287124 HCAHeart8287125 HCAHeart8287126 HCAHeart8287127 HCAHeart8287128
     transformFunc NONE
     barChartLimit 4
-    group expression
 
     #track type
     #type bigBarChart
@@ -176,7 +168,6 @@ group expression
     #barChartBars DBD DCD
     #transformFunc NONE
     #barChartLimit 4
-    #group expression
 
     track heartAtlasVersion
     parent heartCellAtlas
@@ -195,5 +186,4 @@ group expression
     barChartBars V2 V3
     transformFunc NONE
     barChartLimit 1
-    group expression
 

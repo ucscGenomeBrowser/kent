@@ -14,7 +14,7 @@ make beta >& make.strict.log
 /bin/egrep -i "html missing" make.strict.log > warning.txt
 /bin/egrep -iv "html missing" make.strict.log > make.strict.log2
 mv make.strict.log2 make.strict.log
-set res = `/bin/egrep -i "error|warn" make.strict.log`
+set res = `/bin/egrep -i "error|warn" make.strict.log | grep -v ignored`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
    echo "trackDb strict errs found:"

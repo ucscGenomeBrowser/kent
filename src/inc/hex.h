@@ -1,6 +1,9 @@
-
 #ifndef HEX_H
 #define HEX_H
+
+#ifndef LINEFILE_H
+#include "linefile.h"
+#endif 
 
 char nibbleToHex(char n);
 /* convert nibble to hexidecimal character. 0 <= n <= 15. */
@@ -22,6 +25,9 @@ char hexToNibble(char n);
 
 unsigned char hexToByte(char *hex);
 /* convert hexidecimal characters to unsigned char. */
+
+int unpackHexString(char *hexString, struct lineFile *lf, int maxLen);
+/* Convert hexideximal string up to maxLen digits long to binary value */
 
 #endif /* HEX_H */
 

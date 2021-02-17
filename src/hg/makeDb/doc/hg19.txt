@@ -14179,6 +14179,39 @@ ln -s /gbdb/hg19/evoFold /usr/local/apache/htdocs/evoFold/hg19
     # kent/src/hg/makeDb/trackDb/human/hg19
 
 ##########################################################################
+# Update targetScanS track to Version 7.2 - (DONE 2021-02-03 Brittney & Kate)
+
+cd /hive/data/genomes/hg19/bed/targetScanS
+mkdir vert_72
+
+wget --header="accept-encoding: gzip" http://www.targetscan.org/vert_72/vert_72_data_download/Predicted_Target_Locations.default_predictions.hg19.bed.zip 
+
+unzip Predicted_Target_Locations.default_predictions.hg19.bed.zip 
+
+# The downloaded file is a BED12. The score column has values between -1 and 100. 
+# Everything else looks good.
+# Create a new BED12+1 file with this score value as field 13 and change the score values 
+# to 0 in column 5.
+
+awk 'OFS="\t" {c=$5; $5="0"; print $0, c}' \
+        < Predicted_Target_Locations.default_predictions.hg19.bed
+        > bed12+1_targetScanSitesV72.bed
+
+# copy "bedDetail.as" from ~/kent/src/hg/lib and rename to targetScanS.as and edit to 
+# match our new BED12+1 file. 
+cp ~/kent/src/hg/lib/bedDetail.as .
+mv bedDetail.as targetScanS.as    
+
+bedToBigBed -type=bed12+1 -as=targetScanS.as bed12+1_targetScanSitesV72.bed \
+        ../../../chrom.sizes targetScanSitesV72.bb
+
+# Link bigBed file into /gbdb directory for access by browser
+cd /gbdb/hg19
+mkdir targetScan
+cd targetScan
+ln -s /hive/data/genomes/hg19/bed/targetScanS/vert_72/targetScanSitesV72.bb .
+
+##########################################################################
 # Neandertal tracks for hg19 (DONE - 2010-12-14 - Hiram)
     # data supplied by Ed Green into /hive/data/outside/homNea/hg19
     # add Neandertal group to hg19 grp
@@ -34344,3 +34377,17 @@ foreach s (cell_type Assay Experiment_batch donor Organ Organ_cell_lineage RT_gr
 end
 cat clust/*.ra > tracks.ra
 
+#############################################################################
+# CADD, max Wed Feb 10 06:08:01 PST 2021
+cd /hive/data/genomes/hg19/bed/cadd/
+wget https://krishna.gs.washington.edu/download/CADD/v1.6/GRCh37/InDels.tsv.gz
+wget https://krishna.gs.washington.edu/download/CADD/v1.6/GRCh37/whole_genome_SNVs.tsv.gz
+time python ~/kent/src/hg/makeDb/cadd/caddToBed.py InDels.tsv.gz
+time python ~/kent/src/hg/makeDb/cadd/caddToWig.py
+wigToBigWig a.wig ../../chrom.sizes a.bw  &
+wigToBigWig c.wig ../../chrom.sizes c.bw  &
+wigToBigWig a.wig ../../chrom.sizes a.bw &
+wigToBigWig g.wig ../../chrom.sizes g.bw &
+bedToBigBed ins.bed ../../chrom.sizes ins.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as
+bedToBigBed del.bed ../../chrom.sizes del.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as
+rm -f *.wig *.bed

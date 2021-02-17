@@ -10,6 +10,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "fieldedTable.h"
+#include "sqlNum.h"
 #include "net.h"
 
 struct fieldedTable *fieldedTableNew(char *name, char **fields, int fieldCount)
@@ -128,6 +129,27 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	}
     }
 return anyVals;
+}
+
+double fieldedTableMaxInCol(struct fieldedTable *table, int colIx)
+/* Figure out total and count columns from context and use them to figure
+ * out maximum mean value */
+{
+boolean firstTime = TRUE;
+double max = 0.0;
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    double val = sqlDouble(fr->row[colIx]);
+    if (firstTime)
+	{
+        max = val;
+	firstTime = FALSE;
+	}
+    else if (max < val)
+        max = val;
+    }
+return max;
 }
 
 static int slPairCmpNumbers(const void *va, const void *vb)

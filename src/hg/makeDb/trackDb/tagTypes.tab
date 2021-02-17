@@ -27,6 +27,7 @@ bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
 barChartColors barChart bigBarChart
 barChartCategoryUrl barChart bigBarChart
+barChartFacets barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 barChartStatsUrl barChart bigBarChart
 # below for backwards compatibility during QA. 

@@ -35,3 +35,17 @@ if (newVal <= 0) newVal = 1;
 if (newVal > newMax) newVal = newMax;
 return newVal;
 }
+
+void hInsideStyleToWhite()
+/* Override a few old styling things to get a white instead of cream background */
+{
+printf("<style>");
+printf("body.cgi {\n");
+printf("   background: #F0F0F0;\n");
+printf("}\n");
+printf("table.hgInside {\n");
+printf("   background: #FFFFFF;\n");
+printf("}\n");
+printf("</style>");
+}
+
