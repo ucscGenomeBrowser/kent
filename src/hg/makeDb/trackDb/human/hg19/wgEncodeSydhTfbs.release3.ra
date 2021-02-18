@@ -27,8 +27,8 @@ subGroup3 factor Factor AP2alpha=AP-2&alpha; AP2gamma=AP-2&gamma; ARID3ANB100279
 subGroup4 control Control HVD=Harvard IGGGOAT=IgG-goat IGGMUS=IgG-mus IGGRAB=IgG-rab LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA STD=Standard UCD=UC_Davis
 subGroup5 treatment Treatment aNONE=None ETOH01b=EtOH_0.01%_4_hr ETOH01c=EtOH_0.01%_12_hr ETOH01d=EtOH_0.01%_36_hr FORSKLN=Forskolin IFNa30=IFN&alpha;_30_min IFNa6h=IFN&alpha;_6_hr IFNg30=IFN&gamma;_30_min IFNg6h=IFN&gamma;_6_hr INSLN=Insulin MNaseD=MNaseD PRAVAST=Pravastatin TNFa=TNFa TTAM=4-hydroxytamoxifen_36_hr TTAM112H=4-hydroxytamoxifen_12_hr TTAM14H=4-hydroxytamoxifen_14_hr
 dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
-dimensionZchecked aNone,IFNa30,IGNa6h,IFNg30,IFNg6h
-dimensionAchecked std,IGGMUS,IGGRAB
+dimensionZchecked aNone,IFNa30,IFNa6h,IFNg30,IFNg6h
+dimensionAchecked STD,IGGMUS,IGGRAB,UCD
 filterComposite dimZ=one dimA=multi
 sortOrder cellType=+ factor=+ control=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View control=Control setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
