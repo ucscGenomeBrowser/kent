@@ -880,7 +880,7 @@ hPrintf("<h4>genome sequences (and tracks) present in this track hub (<a href='%
 
 if (NULL == genome)
     {
-    hPrintf("<h4>odd error, can not find a gnomeList ? at url: '%s'</h4>\n", hubTop->url);
+    hPrintf("<h4>odd error, can not find a genomeList ? at url: '%s'</h4>\n", hubTop->url);
     return;
     }
 
