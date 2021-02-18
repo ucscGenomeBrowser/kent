@@ -34391,3 +34391,7 @@ wigToBigWig g.wig ../../chrom.sizes g.bw &
 bedToBigBed ins.bed ../../chrom.sizes ins.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as
 bedToBigBed del.bed ../../chrom.sizes del.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as
 rm -f *.wig *.bed
+# for the next release:
+# don't forget to copy the new files to /usr/local/apache/htdocs-hgdownload/goldenPath/archive/hg19/cadd/<version>
+# and update the "current" symlink
+# also add a section "Archived Data" to the docs page with a link to the hgdownload archive directory
