@@ -1,0 +1,174 @@
+<h2>Description</h2>
+<h3>Chain Track</h3>
+<p>
+The chain track shows alignments of $organism ($date/$db) to
+other genomes using a gap scoring system that allows longer gaps 
+than traditional affine gap scoring systems. It can also tolerate gaps in both
+$organism and the other genome simultaneously. These 
+&quot;double-sided&quot; gaps can be caused by local inversions and 
+overlapping deletions in both species. 
+<p>
+The chain track displays boxes joined together by either single or
+double lines. The boxes represent aligning regions.
+Single lines indicate gaps that are largely due to a deletion in the
+$organism assembly or an insertion in the other assembly.
+Double lines represent more complex gaps that involve substantial
+sequence in both species. This may result from inversions, overlapping
+deletions, an abundance of local mutation, or an unsequenced gap in one
+species.  In cases where multiple chains align over a particular region of
+the other genome, the chains with single-lined gaps are often 
+due to processed pseudogenes, while chains with double-lined gaps are more 
+often due to paralogs and unprocessed pseudogenes.</p> 
+<p>
+In the "pack" and "full" display
+modes, the individual feature names indicate the chromosome, strand, and
+location (in thousands) of the match for each matching alignment.</p>
+
+<h3>Net Track</h3>
+<p>
+The net track shows the best $organism/other chain for 
+every part of the other genome. It is useful for
+finding orthologous regions and for studying genome
+rearrangement.  The $organism sequence used in this annotation is from
+the $date ($db) assembly.</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Multiple species are grouped together in a composite track.  In the display 
+and on the configuration page, an effort was made to group them loosely 
+into "clades."  These groupings are based on the taxonomic classification 
+at <a href="https://www.ncbi.nlm.nih.gov/Taxonomy" target=_BLANK>NCBI</a>,
+using the CommonTree tool.
+
+Some organisms may be pulled from a larger group into a subgroup, to emphasize 
+a relationship.  For example, members of an Order may be listed together, while 
+other organisms in the same Superorder may be grouped separately under the
+Superorder name.
+</p>
+
+<h3>Chain Track</h3>
+<p>By default, the chains to chromosome-based assemblies are colored
+based on which chromosome they map to in the aligning organism. To turn
+off the coloring, check the &quot;off&quot; button next to: Color
+track based on chromosome.</p>
+<p>
+To display only the chains of one chromosome in the aligning
+organism, enter the name of that chromosome (e.g. chr4) in box next to: 
+Filter by chromosome.</p>
+
+<h3>Net Track</h3>
+<p>
+In full display mode, the top-level (level 1)
+chains are the largest, highest-scoring chains that
+span this region.  In many cases gaps exist in the
+top-level chain.  When possible, these are filled in by
+other chains that are displayed at level 2.  The gaps in 
+level 2 chains may be filled by level 3 chains and so
+forth. </p>
+<p>
+In the graphical display, the boxes represent ungapped 
+alignments; the lines represent gaps.  Click
+on a box to view detailed information about the chain
+as a whole; click on a line to display information
+about the gap.  The detailed information is useful in determining
+the cause of the gap or, for lower level chains, the genomic
+rearrangement. </p> 
+<p> 
+Individual items in the display are categorized as one of four types
+(other than gap):</p>
+<p><ul>
+<li><b>Top</b> - the best, longest match. Displayed on level 1.
+<li><b>Syn</b> - line-ups on the same chromosome as the gap in the level above
+it.
+<li><b>Inv</b> - a line-up on the same chromosome as the gap above it, but in 
+the opposite orientation.
+<li><b>NonSyn</b> - a match to a chromosome different from the gap in the 
+level above.
+</ul></p>
+
+<h2>Methods</h2>
+<h3>Chain track</h3>
+<p>
+The lastz alignments were converted into axt format using the lavToAxt
+program. The axt alignments were fed into axtChain, which organizes all
+alignments between a single $organism chromosome and a single
+chromosome from the other genome into a group and creates a kd-tree out
+of the gapless subsections (blocks) of the alignments. A dynamic program
+was then run over the kd-trees to find the maximally scoring chains of these
+blocks.
+</p><p>
+See also: <a HREF="http://genomewiki.ucsc.edu/index.php/Mm39_35-way_conservation_lastz_parameters"
+target=_blank>lastz parameters</a> and other details (e.g., update time) 
+and chain <a HREF="http://genomewiki.ucsc.edu/index.php/Mm39_35-way_Genome_size_statistics"
+target=_blank>minimum score and gap</a> parameters used in these alignments.
+</p>
+
+<h3>Net track</h3>
+<p>
+Chains were derived from lastz alignments, using the methods
+described on the chain tracks description pages, and sorted with the 
+highest-scoring chains in the genome ranked first. The program
+chainNet was then used to place the chains one at a time, trimming them as 
+necessary to fit into sections not already covered by a higher-scoring chain. 
+During this process, a natural hierarchy emerged in which a chain that filled 
+a gap in a higher-scoring chain was placed underneath that chain. The program 
+netSyntenic was used to fill in information about the relationship between 
+higher- and lower-level chains, such as whether a lower-level
+chain was syntenic or inverted relative to the higher-level chain. 
+The program netClass was then used to fill in how much of the gaps and chains 
+contained <em>N</em>s (sequencing gaps) in one or both species and how much
+was filled with transposons inserted before and after the two organisms 
+diverged.</p>
+
+<h2>Credits</h2>
+<p>
+Lastz (previously known as blastz) was developed at
+<a HREF="http://www.bx.psu.edu/miller_lab/" 
+target=_blank>Pennsylvania State University</a> by 
+Minmei Hou, Scott Schwartz, Zheng Zhang, and Webb Miller with advice from
+Ross Hardison.</p>
+<p>
+Lineage-specific repeats were identified by Arian Smit and his 
+<a HREF="http://www.repeatmasker.org" target=_blank>RepeatMasker</a>
+program.</p>
+<p>
+The axtChain program was developed at the University of California at 
+Santa Cruz by Jim Kent with advice from Webb Miller and David Haussler.</p>
+<p>
+The browser display and database storage of the chains and nets were created
+by Robert Baertsch and Jim Kent.</p>
+<p>
+The chainNet, netSyntenic, and netClass programs were
+developed at the University of California
+Santa Cruz by Jim Kent.</p>
+<p>
+
+<h2>References</h2>
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
+target="_blank">Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002:115-26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+</p>
+
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="https://www.pnas.org/content/100/20/11484"
+target="_blank">Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W.
+<a href="https://genome.cshlp.org/content/13/1/103.abstract"
+target="_blank">Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
+</p>
