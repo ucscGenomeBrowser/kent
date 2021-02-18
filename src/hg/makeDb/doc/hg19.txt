@@ -14184,23 +14184,23 @@ ln -s /gbdb/hg19/evoFold /usr/local/apache/htdocs/evoFold/hg19
 cd /hive/data/genomes/hg19/bed/targetScanS
 mkdir vert_72
 
-wget --header="accept-encoding: gzip" http://www.targetscan.org/vert_72/vert_72_data_download/Predicted_Target_Locations.default_predictions.hg19.bed.zip 
+wget --header="accept-encoding: gzip" http://www.targetscan.org/vert_72/vert_72_data_download/Predicted_Target_Locations.default_predictions.hg19.bed.zip
 
-unzip Predicted_Target_Locations.default_predictions.hg19.bed.zip 
+unzip Predicted_Target_Locations.default_predictions.hg19.bed.zip
 
-# The downloaded file is a BED12. The score column has values between -1 and 100. 
+# The downloaded file is a BED12. The score column has values between -1 and 100.
 # Everything else looks good.
-# Create a new BED12+1 file with this score value as field 13 and change the score values 
+# Create a new BED12+1 file with this score value as field 13 and change the score values
 # to 0 in column 5.
 
 awk 'OFS="\t" {c=$5; $5="0"; print $0, c}' \
         < Predicted_Target_Locations.default_predictions.hg19.bed
         > bed12+1_targetScanSitesV72.bed
 
-# copy "bedDetail.as" from ~/kent/src/hg/lib and rename to targetScanS.as and edit to 
-# match our new BED12+1 file. 
+# copy "bedDetail.as" from ~/kent/src/hg/lib and rename to targetScanS.as and edit to
+# match our new BED12+1 file.
 cp ~/kent/src/hg/lib/bedDetail.as .
-mv bedDetail.as targetScanS.as    
+mv bedDetail.as targetScanS.as
 
 bedToBigBed -type=bed12+1 -as=targetScanS.as bed12+1_targetScanSitesV72.bed \
         ../../../chrom.sizes targetScanSitesV72.bb
@@ -32197,7 +32197,7 @@ bigBedToBed /gbdb/hg19/bbi/hgmd.bb /tmp/temp.bed
 python2 /usr/local/apache/cgi-bin/hgBeacon -f hgmd /tmp/temp.bed hgmd
 # Forgot, finally done June 26: updated GBIB as qateam
 scp /gbdb/hg19/bbi/hgmd.bb hgdownload:/usr/local/apache/gbib/prot/
-# next restrict RefSeq down to HGMD subset 
+# next restrict RefSeq down to HGMD subset
 
 # addition of HGMD-restricted subset, Max, Jan 29 2019, updated Dec 10 2019
 cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-10-27/
@@ -32207,7 +32207,7 @@ year=2019
 cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | cut -d. -f1 | sort -u | awk '{print $1"."}' > hgmdTranscripts.txt
 cat process/hg19.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
 hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
-$ wc -l hgmd.curated.gp 
+$ wc -l hgmd.curated.gp
 7965 hgmd.curated.gp in 2019
 8971 hgmd.curated.gp in 2020
 
@@ -33042,7 +33042,7 @@ cp /hive/data/inside/pubs/text/medline/articles.db /dev/shm/max/
 bedAppendPaperInfo avada.s.bed avadaPapers.bed  --db /dev/shm/max --geneIdx=9
 bedSort avadaPapers.bed avadaPapers.bed
 cat avadaPapers.bed | uniq > avadaPapers.u.bed
-bedToBigBed avadaPapers.u.bed /hive/data/genomes/hg19/chrom.sizes -as=${HOME}/kent/src/hg/makeDb/avada/avada.as  -tab avada.bb -type=bed9+   
+bedToBigBed avadaPapers.u.bed /hive/data/genomes/hg19/chrom.sizes -as=${HOME}/kent/src/hg/makeDb/avada/avada.as  -tab avada.bb -type=bed9+
 rm /dev/shm/max/articles.db
 cd /gbdb/hg19/bbi
 ln -s /hive/data/genomes/hg19/bed/avada/avada.bb
@@ -33567,14 +33567,14 @@ table doseSensitivity
 
     for f in *.bed.gz; do out=${f/.bed.gz/}; zcat $f | tail -n +2 | cut -f1-4,18-28,31,32,36-38,41-42 | tawk '{$1="chr"$1; print $0}'> $out.bed4Plus; done
     # variant types:
-    zcat gnomad_v2.1_sv.sites.bed.gz | cut -f32 | sort | uniq -c       
+    zcat gnomad_v2.1_sv.sites.bed.gz | cut -f32 | sort | uniq -c
       52604 BND y
-       4778 CPX x 
+       4778 CPX x
           8 CTX y
-     169635 DEL x 
-      49571 DUP x 
-     109025 INS x 
-        748 INV x 
+     169635 DEL x
+      49571 DUP x
+     109025 INS x
+        748 INV x
        1108 MCNV x
           1 SVTYPE
 
@@ -33583,7 +33583,7 @@ table doseSensitivity
 
     chromSizes=/hive/data/genomes/hg19/chrom.sizes
     for f in *.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+19 -as=gnomadSv.as -extraIndex=name $f $chromSizes $out.bb; done
-    mkdir -p /gbdb/hg19/gnomAD/structuralVariants/ 
+    mkdir -p /gbdb/hg19/gnomAD/structuralVariants/
     cd /gbdb/hg19/gnomAD/structuralVariants/
     cp -s /hive/data/outside/gnomAD.2/structuralVariants/*.bb .
 
@@ -33632,7 +33632,7 @@ for i in orig/*.bed; do out=`echo $i | sed -e 's|orig/VQSRv2.18_||g'`; out=`base
 for i in bed/filter*.bed; do echo $i; bedSort $i $i; bedToBigBed $i /hive/data/genomes/hg19/chrom.sizes bb/`basename $i .bed`.bed -type=bed3; done
 cd /gbdb/hg19/bbi/special;
 for i in /hive/data/genomes/hg19/bed/specialRegions/bb/filter*.bb;  do ln -s $i; done
-bedSort orig/hg19-blacklist.v2.bed orig/hg19-blacklist.v2.bed 
+bedSort orig/hg19-blacklist.v2.bed orig/hg19-blacklist.v2.bed
 bedToBigBed orig/hg19-blacklist.v2.bed /hive/data/genomes/hg19/chrom.sizes  bb/encBlacklist.bb -tab
 
 #############################################################################
@@ -33669,13 +33669,13 @@ wc -l gtexGeneV8.tab
 #54481 gtexGeneV8.tab
 
 # 1070 genes not found in GencodeAttrs table
-# e.g. 
+# e.g.
 Can't find geneId ENSG00000278267 in wgEncodeGencodeAttrsV26lift37
 #from Ensembl page for MIR6859-1:
 #Stable ID ENSG00000278267 not present in GRCh37.
 
 # 650 genes not found in modelHash
-# e.g. 
+# e.g.
 Can't find gene ENSG00000279928.2 in modelHash
 # From Ensembl
 Gene: FO538757.1 ENSG00000279928
@@ -33978,12 +33978,12 @@ We made tracks for the main Exome Kit Vendors: IDT, Twist Biosciences, MGI, Agil
 
 Note: IDT, Agilent and Roche have bed files for the Probes and for the Target Regions. Twist, MGI, and Illumina have bed files for the Target Regions (but not for Probes).
 
-Data downloaded in my windows desktop and copied to hgwdev: 
-scp <file.bed> ana@hgwdev.gi.ucsc.edu://hive/data/genomes/hg19/bed/exonArrays/raw/idt 
+Data downloaded in my windows desktop and copied to hgwdev:
+scp <file.bed> ana@hgwdev.gi.ucsc.edu://hive/data/genomes/hg19/bed/exonArrays/raw/idt
 
 # IDT Datasets:
 
-Track: IDT - xGen Exome Research Panel Probes 
+Track: IDT - xGen Exome Research Panel Probes
 Download: https://sfvideo.blob.core.windows.net/sitefinity/docs/default-source/supplementary-product-info/xgen-exome-research-panel-probesbe255a1532796e2eaa53ff00001c1b3c.bed?sfvrsn=425c3407_7&download=true
 File name: xgen-exome-research-panel-probes-hg19.bed
 
@@ -34015,13 +34015,13 @@ File name: Twist_ComprehensiveExome_targets_hg19.bed
 
 # MGI Datasets:
 
-Track: MGI - Easy Exome Capture V4 Target Regions 
+Track: MGI - Easy Exome Capture V4 Target Regions
 Download: https://en.mgitech.cn/Uploads/Temp/file/20191225/5e03126e808a0.zip
 File name: MGI_Exome_Capture_V4.bed
 
-Track: MGI - Easy Exome Capture V5 Target Regions 
+Track: MGI - Easy Exome Capture V5 Target Regions
 Download: https://en.mgitech.cn/Uploads/Temp/file/20191225/5e0312a7be43e.zip
-File name: MGI_Exome_Capture_V5.bed 
+File name: MGI_Exome_Capture_V5.bed
 
 # Agilent Datasets:
 Download for all Agilent files: https://earray.chem.agilent.com/suredesign/ - Password needed (from Ana)
@@ -34035,7 +34035,7 @@ File name: S06588914_Regions.bed
 Track: Agilent - SureSelect Clinical Research Exome V2 Covered by Probes
 File name: S30409818_Covered.bed
 
-Track: Agilent - SureSelect Clinical Research Exome V2 Target Regions 
+Track: Agilent - SureSelect Clinical Research Exome V2 Target Regions
 File name: S30409818_Regions.bed
 
 Track: Agilent - SureSelect Focused Exome Covered by Probes
@@ -34206,7 +34206,7 @@ The following files from Roche had long entries in col4, causing these files to 
 
 We ran the command
 
-> cut -f1,2,3 
+> cut -f1,2,3
 
 for all such files. Here's an example for the Roche - KAPA HyperExome Capture Probe:
 
@@ -34217,7 +34217,7 @@ cut -f1,2,3 sorted-KAPA_HyperExome_hg19_capture_targets.bed > sorted-cut-KAPA_Hy
 
 #############################################################################
 # skinSoleBoldo JimK 01-14-2020
-# This describes how we got the skinSoleBoldo data set into the 
+# This describes how we got the skinSoleBoldo data set into the
 # Genome Browser from the Cell Browser.
 #############################################################################
 
@@ -34226,7 +34226,7 @@ mkdir /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo
 cd /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo
 
 # Create output dir for binaries
-mkdir bbi 
+mkdir bbi
 
 # Downloaded files from the UCSC cell browser's as so
 wget https://cells.ucsc.edu/aging-human-skin/meta.tsv
@@ -34244,9 +34244,9 @@ matrixClusterColumns -makeIndex=clust/exprMatrix.ix  exprMatrix.tsv.gz meta.tsv 
     Celltype clust/cell_type.matrix bbi/cell_type.stats \
     subj clust/donor.matrix bbi/donor.stats \
     age	clust/age.matrix bbi/age.stats \
-    Celltype_and_Age clust/age_cell_type.matrix bbi/age_cell_type.stats 
+    Celltype_and_Age clust/age_cell_type.matrix bbi/age_cell_type.stats
 
-# Get the first column (the genes) out of expression matrix.  
+# Get the first column (the genes) out of expression matrix.
 cut -f 1 clust/cell_type.matrix > gene.lst
 
 # Figure out the geneset they used and generate mapping file
@@ -34260,9 +34260,9 @@ foreach s (cell_type donor age age_cell_type)
     bedToBigBed clust/$s.bed /hive/data/genomes/hg19/chrom.sizes bbi/$s.bb -type=bed6+3 -as=/cluster/home/kent/src/hg/lib/simpleBarChartBed.as
 end
 
-# Make up special colors for cell_type.  First manually create two column 
+# Make up special colors for cell_type.  First manually create two column
 # file that relates at least some of sample labels to cell types we have colors for.
-# Call this file clust/cell_type.labels.  
+# Call this file clust/cell_type.labels.
 matrixClusterColumns clust/cell_type.matrix clust/cell_type.labels cluster clust/cell_type.unnormed clust/cell_type.restats
 matrixNormalize column sum clust/cell_type.unnormed clust/cell_type.ref
 
@@ -34292,7 +34292,7 @@ end
 #############################################################################
 # fetalGeneAtlas JimK 01-19-2020
 ############################################################################
-# This is the RNA-seq part of the data set described in 
+# This is the RNA-seq part of the data set described in
 # "A human cell atlas of fetal gene expression" by Cao, Day et al
 # Science 13 Nove 2020.   This was imported from Cell Browser
 
@@ -34302,7 +34302,7 @@ mkdir -p /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas
 cd /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas
 
 # Create output dir for binaries
-mkdir bbi 
+mkdir bbi
 
 # link in in files from cell browser
 ln -s /hive/data/inside/cells/datasets/fetal-gene-atlas/genes/all/meta.tsv .
@@ -34324,9 +34324,9 @@ matrixClusterColumns -makeIndex=clust/exprMatrix.ix  exprMatrix.tsv.gz meta.tsv 
     Organ clust/Organ.matrix bbi/Organ.stats \
     Organ_cell_lineage clust/Organ_cell_lineage.matrix bbi/Organ_cell_lineage.stats \
     RT_group clust/RT_group.matrix bbi/RT_group.stats \
-    sex clust/sex.matrix bbi/sex.stats 
+    sex clust/sex.matrix bbi/sex.stats
 
-# Get the first column (the genes) out of expression matrix.  
+# Get the first column (the genes) out of expression matrix.
 cut -f 1 clust/cell_type.matrix > gene.lst
 
 
@@ -34342,9 +34342,9 @@ foreach s (cell_type Assay Experiment_batch donor Organ Organ_cell_lineage RT_gr
     bedToBigBed clust/$s.bed /hive/data/genomes/hg19/chrom.sizes bbi/$s.bb -type=bed6+3 -as=/cluster/home/kent/src/hg/lib/simpleBarChartBed.as
 end
 
-# Make up special colors for cell_type.  First manually create two column 
+# Make up special colors for cell_type.  First manually create two column
 # file that relates at least some of sample labels to cell types we have colors for.
-# Call this file cell_type.labels.  
+# Call this file cell_type.labels.
 matrixClusterColumns clust/cell_type.matrix cell_type.labels cluster clust/cell_type.unnormed clust/cell_type.restats
 matrixNormalize column sum clust/cell_type.unnormed clust/cell_type.ref
 #hcaColorCells clust/cell_type.ref ../typeColors.tsv clust/cell_type.matrix clust/cell_type.refStats -trackDb=clust/cell_type.colors -stats=bbi/cell_type.stats
@@ -34391,3 +34391,79 @@ wigToBigWig g.wig ../../chrom.sizes g.bw &
 bedToBigBed ins.bed ../../chrom.sizes ins.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as
 bedToBigBed del.bed ../../chrom.sizes del.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as
 rm -f *.wig *.bed
+
+##############################################################################
+#  update sno/miRNA TRACK (WORKING - 2021-02-18 - Hiram)
+    # last release for GRCh37 was version 20: 2013-06-13
+
+    # The data in this track is out of date so update the track.
+    mkdir /hive/data/genomes/hg19/bed/wgRna-2013-06-13
+    cd /hive/data/genomes/hg19/bed/wgRna-2013-06-13
+
+    wget --timestamping \
+         ftp://mirbase.org/pub/mirbase/20/genomes/hsa.gff3
+
+    # examine chromosome list:
+    grep -v "^#" hsa.gff3 | cut -f1 | sort | uniq -c > chr.list
+
+    # Only select the primary transcripts, make coords 0-based so they match
+    # gencode and refseq tracks, and remove ID and Alias entries in column 9:
+    grep -v "^#" hsa.gff3 | grep -c "miRNA_primary_transcript"
+    # 1871
+    tawk '{if ($3 == "miRNA_primary_transcript") {$4-=1; print;}}' hsa.gff3 \
+        | grep -v '^#' | tr ';' '\t' | tr '=' '\t' | cut -f1-8,14 \
+           > hsa.primaryCleaned.gff3
+    wc -l hsa.primaryCleaned.gff3
+    # 1971
+
+    # now get into bed format, with type="miRNA"
+    tawk '{print $1, $4, $5, $9, 0, $7, 0, 0, "miRNA";}' \
+       hsa.primaryCleaned.gff3 > miRNA.bed
+
+    # get snoRNA entries from current wgRNA table:
+    hgsql -Ne "select * from wgRna where type != 'miRNA'" hg19 \
+      | cut -f2- > wgRna.other.bed
+
+        # combine and load:
+    cat miRNA.bed wgRna.other.bed > wgRna2021-02-18.bed
+    hgLoadBed -tab -renameSqlTable -verbose=4 \
+        -sqlTable=$HOME/kent/src/hg/lib/wgRna.sql \
+        -as=$HOME/kent/src/hg/lib/wgRna.as hg19 wgRnaNew wgRna2021-02-18.bed
+# ### kent source version 410 ###
+# Reading wgRna2021-02-18.bed
+# Read 2273 elements of size 9 from wgRna2021-02-18.bed
+# Loading hg19
+
+    # compare old and new tables:
+    hgsql -Ne "select type, count(*) from wgRna group by type" hg19
++---------+-----+
+| CDBox   | 269 |
+| HAcaBox | 112 |
+| miRNA   | 939 |
+| scaRna  |  21 |
++---------+-----+
+    hgsql -Ne "select type, count(*) from wgRnaNew group by type" hg19
++---------+------+
+| CDBox   |  269 |
+| HAcaBox |  112 |
+| miRNA   | 1871 |
+| scaRna  |   21 |
++---------+------+
+    # compared to hg38:
+    hgsql -Ne "select type, count(*) from wgRna group by type" hg38
++---------+------+
+| CDBox   |  269 |
+| HAcaBox |  112 |
+| miRNA   | 1918 |
+| scaRna  |   21 |
++---------+------+
+
+    # backup old table and compare to new one before rename. Should be only miRNA update:
+    hgsql -Ne "select * from wgRna" hg19 | cut -f2- > wgRna.backup
+    comm -23 <(sort -k1 -k2n wgRna2021-02-18.bed) <(sort -k1 -k2n wgRna.backup) | cut -f9 | sort -u
+miRNA
+
+    # rename wgRnaNew table:
+    hgsqlSwapTables -dropTable3 hg19 wgRnaNew wgRna wgRnaOld
+
+##############################################################################
