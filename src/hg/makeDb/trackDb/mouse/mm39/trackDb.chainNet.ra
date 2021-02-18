@@ -27,7 +27,7 @@ html mm39ChainNet
     spectrum on
 
         track chainRn7
-        subTrack mm39ChainNetViewchain on
+        subTrack mm39ChainNetViewchain off
         subGroups view=chain species=s000a clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -357,7 +357,7 @@ html mm39ChainNet
         otherDb rn7
 
         track netRn6
-        subTrack mm39ChainNetViewnet off
+        subTrack mm39ChainNetViewnet on
         subGroups view=net species=s000b clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -433,7 +433,7 @@ html mm39ChainNet
         otherDb galVar1
 
         track netTupBel1
-        subTrack mm39ChainNetViewnet off
+        subTrack mm39ChainNetViewnet on
         subGroups view=net species=s009 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -497,7 +497,7 @@ html mm39ChainNet
         otherDb panTro6
 
         track netHg38
-        subTrack mm39ChainNetViewnet off
+        subTrack mm39ChainNetViewnet on
         subGroups view=net species=s017 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -569,7 +569,7 @@ html mm39ChainNet
         otherDb oviAri4
 
         track netBosTau9
-        subTrack mm39ChainNetViewnet off
+        subTrack mm39ChainNetViewnet on
         subGroups view=net species=s027 clade=c03
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -645,7 +645,7 @@ html mm39ChainNet
         otherDb xenTro9
 
         track netDanRer11
-        subTrack mm39ChainNetViewnet off
+        subTrack mm39ChainNetViewnet on
         subGroups view=net species=s036 clade=c04
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
