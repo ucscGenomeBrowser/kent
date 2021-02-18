@@ -566,7 +566,7 @@ else if (pslOut)
     printf("</PRE></TT>");
     }
 else if (jsonOut)  {
-        pslWriteAllJson(pslList, stdout, TRUE);
+        pslWriteAllJson(pslList, stdout, database, TRUE);
         exit(0);
 }
 else  // hyperlink

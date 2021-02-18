@@ -195,34 +195,32 @@ fprintf(f, "%u,", el->tStart);
 fprintf(f, "%u,", el->tEnd);
 fprintf(f, "%u,", el->blockCount);
 
-fputs("[", f);
+fputs("\"", f);
 for (int i=0; i<el->blockCount; ++i)
     {
     fprintf(f, "%u", el->blockSizes[i]);
     if (i < el->blockCount-1)
         fputc(',', f);
     }
-fputs("]", f);
-fputs(",", f);
+fputs("\",", f);
 
-fputs("[", f);
+fputs("\"", f);
 for (int i=0; i<el->blockCount; ++i)
     {
     fprintf(f, "%u", el->qStarts[i]);
     if (i < el->blockCount-1)
         fputc(',', f); // json does not allow trailing commas
     }
-fputs("]", f);
-fputs(",", f);
+fputs("\",", f);
 
-fputs("[", f);
+fputs("\"", f);
 for (int i=0; i<el->blockCount; ++i)
     {
     fprintf(f, "%u", el->tStarts[i]);
     if (i < el->blockCount-1)
         fputc(',', f);
     }
-fputs("]", f);
+fputs("\"", f);
 
 if (el->qSequence)
     {
@@ -586,13 +584,19 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 fclose(f);
 }
 
-void pslWriteAllJson(struct psl *pslList, FILE *f, boolean writeHeader)
+void pslWriteAllJson(struct psl *pslList, FILE *f, char *db, boolean writeHeader)
 /* Write a psl file from list as a json array . */
 {
-fputs("[\n", f);
-if (writeHeader)
+fputs("{\n", f);
+if (writeHeader) 
+    {
+    fputs("\"track\": \"blat\",\n", f);
+    fprintf(f, "\"genome\": \"%s\",\n", db);
+    fputs("\"fields\": ", f);
     pslLabelColumnsJson(f);
-fputs(",\n", f);
+    fputs(",\n", f);
+    }
+fputs("\"blat\" : [\n", f);
 
 for (struct psl *psl = pslList; psl; psl = psl->next)
     {
@@ -601,7 +605,7 @@ for (struct psl *psl = pslList; psl; psl = psl->next)
         fputs(",\n", f);
     }
 
-puts("\n]\n");
+puts("\n]\n}\n");
 }
 
 void pslxFileOpen(char *fileName, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf)
