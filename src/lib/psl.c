@@ -172,6 +172,88 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+void pslOutputJson(struct psl *el, FILE *f) 
+/* print out psl as a json array */
+{
+fputs("[", f);
+fprintf(f, "%u,", el->match);
+fprintf(f, "%u,", el->misMatch);
+fprintf(f, "%u,", el->repMatch);
+fprintf(f, "%u,", el->nCount);
+fprintf(f, "%u,", el->qNumInsert);
+fprintf(f, "%d,", el->qBaseInsert);
+fprintf(f, "%u,", el->tNumInsert);
+fprintf(f, "%d,", el->tBaseInsert);
+fprintf(f, "\"%s\",", el->strand);
+fprintf(f, "\"%s\",", el->qName);
+fprintf(f, "%u,", el->qSize);
+fprintf(f, "%u,", el->qStart);
+fprintf(f, "%u,", el->qEnd);
+fprintf(f, "\"%s\",", el->tName);
+fprintf(f, "%u,", el->tSize);
+fprintf(f, "%u,", el->tStart);
+fprintf(f, "%u,", el->tEnd);
+fprintf(f, "%u,", el->blockCount);
+
+fputs("\"", f);
+for (int i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%u", el->blockSizes[i]);
+    if (i < el->blockCount-1)
+        fputc(',', f);
+    }
+fputs("\",", f);
+
+fputs("\"", f);
+for (int i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%u", el->qStarts[i]);
+    if (i < el->blockCount-1)
+        fputc(',', f); // json does not allow trailing commas
+    }
+fputs("\",", f);
+
+fputs("\"", f);
+for (int i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%u", el->tStarts[i]);
+    if (i < el->blockCount-1)
+        fputc(',', f);
+    }
+fputs("\"", f);
+
+if (el->qSequence)
+    {
+    fputc(',',f);
+    fputc('[',f);
+    for (int i=0; i<el->blockCount; ++i)
+	{
+	fprintf(f, "'%s'", el->qSequence[i]);
+        if (i < el->blockCount-1)
+            fputc(',', f);
+	}
+    fputc(']',f);
+    fputc(',',f);
+
+    fputc('[',f);
+    for (int i=0; i<el->blockCount; ++i)
+	{
+	fprintf(f, "\"%s\"", el->tSequence[i]);
+        if (i < el->blockCount-1)
+            fputc(',', f);
+	}
+    fputc(']',f);
+    }
+
+if (ferror(f))
+    {
+    perror("Error writing psl file\n");
+    errAbort("\n");
+    }
+
+fputs("]", f);
+}
+
 void pslOutput(struct psl *el, FILE *f, char sep, char lastSep) 
 /* Print out psl.  Separate fields with sep. Follow last field with lastSep. */
 {
@@ -466,6 +548,14 @@ fputs("\n"
 f);
 }
 
+static void pslLabelColumnsJson(FILE *f) 
+/* Write column info as a JSON array */
+{
+fputs("[\"matches\", \"misMatches\", \"repMatches\", \"nCount\", \"qNumInsert\", \"qBaseInsert\", "
+        "\"tNumInsert\", \"tBaseInsert\", \"strand\", \"qName\", \"qSize\", \"qStart\", \"qEnd\", \"tName\", "
+        "\"tSize\", \"tEnd\", \"blockCount\", \"blockSizes\", \"qStarts\", \"tStarts\"]", f);
+}
+
 void pslxWriteHead(FILE *f, enum gfType qType, enum gfType tType)
 /* Write header for extended (possibly protein) psl file. */
 {
@@ -492,6 +582,30 @@ if (writeHeader)
 for (psl = pslList; psl != NULL; psl = psl->next)
     pslTabOut(psl, f);
 fclose(f);
+}
+
+void pslWriteAllJson(struct psl *pslList, FILE *f, char *db, boolean writeHeader)
+/* Write a psl file from list as a json array . */
+{
+fputs("{\n", f);
+if (writeHeader) 
+    {
+    fputs("\"track\": \"blat\",\n", f);
+    fprintf(f, "\"genome\": \"%s\",\n", db);
+    fputs("\"fields\": ", f);
+    pslLabelColumnsJson(f);
+    fputs(",\n", f);
+    }
+fputs("\"blat\" : [\n", f);
+
+for (struct psl *psl = pslList; psl; psl = psl->next)
+    {
+    pslOutputJson(psl, f);
+    if (psl->next)
+        fputs(",\n", f);
+    }
+
+puts("\n]\n}\n");
 }
 
 void pslxFileOpen(char *fileName, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf)
