@@ -14,6 +14,7 @@ noScoreFilter on
 group varRep
 allButtonPair on
 pennantIcon New red
+dataVersion Released Feb. 17, 2021
 visibility hide
 
         track variantAaMuts_B.1.1.7

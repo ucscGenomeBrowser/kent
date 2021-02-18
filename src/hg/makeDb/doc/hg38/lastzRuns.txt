@@ -12922,3 +12922,81 @@ TMPDIR=/dev/shm
     # 2147250913 bases of 2859817025 (75.084%) in intersection
 
 ############################################################################
+# LASTZ MOUSE Rn7 (DONE - 2021-02-04 - Hiram)
+    # can no longer use the lineage specific repeats with the new lastz
+    # use a screen to manage this longish job:
+    screen -S hg38Rn7
+
+    mkdir /hive/data/genomes/hg38/bed/lastzRn7.2021-02-04
+    cd /hive/data/genomes/hg38/bed/lastzRn7.2021-02-04
+
+    # best to always specify an exact path to lastz so we know which one is used
+    # lastz default parameters are human-mouse parameters
+
+    printf '# human vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Rn7
+SEQ2_DIR=/hive/data/genomes/rn7/rn7.2bit
+SEQ2_LEN=/hive/data/genomes/rn7/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzRn7.2021-02-04
+TMPDIR=/dev/shm
+' > DEF
+
+    # verify files exist:
+    grep "=" DEF | cut -d= -f2 | xargs ls -ogd
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    270m41.393s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRn7Link.txt
+    # 958592205 bases of 3110768607 (30.815%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynRn7Link.txt
+    # 904066852 bases of 3110768607 (29.062%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg38 rn7) > rbest.log 2>&1 &
+    # real    313m26.149s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.Rn7.txt
+    # 883775977 bases of 3110768607 (28.410%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/rn7/bed/blastz.hg38.swap
+    cd /hive/data/genomes/rn7/bed/blastz.hg38.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzRn7.2021-02-04/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -swap -syntenicNet) > swap.log 2>&1
+    #   real    74m20.215s
+
+    sed -e 's/^/    # /;' fb.rn7.chainHg38Link.txt
+    # 928866703 bases of 2626580772 (35.364%) in intersection
+
+    sed -e 's/^/    # /;' fb.rn7.chainSynHg38Link.txt
+    # 879484562 bases of 2626580772 (33.484%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	rn7 hg38) > rbest.log 2>&1 &
+    # real    373m6.610s
+
+    sed -e 's/^/    # /;' fb.rn7.chainRBest.Hg38.txt
+    # 885516265 bases of 2626580772 (33.714%) in intersection
+
+#########################################################################

@@ -31,14 +31,20 @@ my %optionalCheckList = ( 'ensGene' => "Ensembl genes",
 'chainRBestHg38Link' => "chainNetRBestHg38",
 'chainRBestMm10' => "chainNetRBestMm10",
 'chainRBestMm10Link' => "chainNetRBestMm10",
+'chainRBestMm39' => "chainNetRBestMm39",
+'chainRBestMm39Link' => "chainNetRBestMm39",
 'chainSynHg38' => "chainNetSynHg38",
 'chainSynHg38Link' => "chainNetSynHg38",
 'chainSynMm10' => "chainNetSynMm10",
 'chainSynMm10Link' => "chainNetSynMm10",
+'chainSynMm39' => "chainNetSynMm39",
+'chainSynMm39Link' => "chainNetSynMm39",
 'netRBestHg38' => "chainNetRBestHg38",
 'netRBestMm10' => "chainNetRBestMm10",
+'netRBestMm39' => "chainNetRBestMm39",
 'netSynHg38' => "chainNetSynHg38",
 'netSynMm10' => "chainNetSynMm10",
+'netSynMm39' => "chainNetSynMm39",
 'tandemDups' => "tandemDups",
 'gapOverlap' => "gapOverlap"
 );
@@ -48,6 +54,8 @@ my %tableCheckList = ( 'augustusGene' => 1,
 'chainHg38Link' => 1,
 'chainMm10' => 1,
 'chainMm10Link' => 1,
+'chainMm39' => 1,
+'chainMm39Link' => 1,
 'chromAlias' => 1,
 'chromInfo' => 1,
 'cpgIslandExt' => 1,
@@ -65,6 +73,7 @@ my %tableCheckList = ( 'augustusGene' => 1,
 'nestedRepeats' => 1,
 'netHg38' => 1,
 'netMm10' => 1,
+'netMm39' => 1,
 'rmsk' => 1,
 'simpleRepeat' => 1,
 'tableDescriptions' => 1,
@@ -235,15 +244,13 @@ foreach my $table (sort keys %missingTables) {
 my %optionalChainNet;
 my %expectedChainNet;
 my @chainTypes = ("", "RBest", "Syn");
-my @otherDbs = ("hg38", "mm10");
+my @otherDbs = ("hg38", "mm10", "mm39");
 for (my $i = 0; $i < scalar(@chainTypes); ++$i) {
    my $chainTable = "chain" . $chainTypes[$i] .  $Db;
    my $chainLinkTable = "chain" . $chainTypes[$i] .  $Db . "Link";
    my $netTable = "net" . $chainTypes[$i] . $Db;
    for (my $j = 0; $j < scalar(@otherDbs); ++$j) {
       next if ($db eq $otherDbs[$j]);
-      # mm10 Syntenics do not exist (yet)
-      next if ($otherDbs[$j] eq "mm10" && $chainTypes[$i] eq "Syn");
       if (length($chainTypes[$i]) > 0) { # RBest and Syn are optional
          $optionalChainNet{$otherDbs[$j]} += 1 if (checkTableExists($otherDbs[$j], $chainTable));
          $optionalChainNet{$otherDbs[$j]} += 1 if (checkTableExists($otherDbs[$j], $chainLinkTable));
@@ -299,6 +306,14 @@ if ( $db ne "mm10" ) {
   chomp $chainNet;
   if ($chainNet != 2) {
    printf STDERR "# ERROR: missing mm10.chainNet trackDb definitions for $db (found: $chainNet instead of 2)\n";
+  }
+}
+
+if ( $db ne "mm39" ) {
+  $chainNet = `hgsql -e 'select * from trackDb;' mm39 | egrep "^chain$Db|^net$Db" | wc -l`;
+  chomp $chainNet;
+  if ($chainNet != 2) {
+   printf STDERR "# ERROR: missing mm39.chainNet trackDb definitions for $db (found: $chainNet instead of 2)\n";
   }
 }
 

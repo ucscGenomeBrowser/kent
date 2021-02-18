@@ -10,7 +10,7 @@ visibility hide
         track ORFs
         type bigBed 12 +
         shortLabel ORF predictions
-        longLabel ORF predictions
+        longLabel Weizman ORF predictions
         color 40,80,120
         parent weizmanOrfs pack
         bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/ORFs.bb
