@@ -617,6 +617,25 @@ include abEscape.ra
 include bloom.ra
 
 track spikeMuts
+release alpha
+shortLabel Spike Mutations
+longLabel Spike protein mutations from community annotation (Feb 2021)
+html spikeMuts.Feb21
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/spikeMuts/spikeMuts.Feb21.bb
+itemRgb on
+bedNameLabel Mutation
+mouseOver $name $clinicalNotes
+noScoreFilter on
+urls geographyChartsUrl="$$" nextstrainBuildUrl="$$"
+searchIndex name
+searchTrix /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.Feb21.ix
+group varRep
+pennantIcon Updated red
+
+#pennantIcon New red ../goldenPath/newsarch.html#012921 "Released Jan. 29, 2021"
+track spikeMuts
+release beta,public
 shortLabel Spike Mutations
 longLabel Spike protein mutations from community annotation (Jan 2021)
 type bigBed 9 +
