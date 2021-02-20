@@ -432,10 +432,9 @@ freez(&path);
 return newPath;
 }
 
-static boolean gotFullText(char *db, char *name)
+static boolean gotFullText(char *db, char *indexPath)
 /* Return TRUE if we have full text index. */
 {
-char *indexPath = makeIndexPath(db, name);
 boolean result = FALSE;
 
 if (udcExists(indexPath))
@@ -446,7 +445,6 @@ else
     result = FALSE;
     }
 
-freez(&indexPath);
 return result;
 }
 
@@ -626,7 +624,7 @@ table->posList = posList;
 hashFree(&hash);
 dyStringFree(&dy); }
 
-boolean findKnownGeneFullText(char *db, char *term,struct hgPositions *hgp, char *name)
+static boolean findKnownGeneFullText(char *db, char *term,struct hgPositions *hgp, char *name, char *path)
 /* Look for position in full text. */
 {
 boolean gotIt = FALSE;
@@ -636,7 +634,6 @@ char *lowered = cloneString(term);
 char *keyWords[HGFIND_MAX_KEYWORDS];
 int keyCount;
 
-char *path = makeIndexPath(db, name);
 trix = trixOpen(path);
 tolowers(lowered);
 keyCount = chopLine(lowered, keyWords);
@@ -2090,7 +2087,11 @@ for (table = hgp->tableList; table != NULL; table = table->next)
     }
 
 if(containerDivPrinted)
+    {
+    if (hgp->shortCircuited)
+        fprintf(f, "<A HREF=\"%s?%s&noShort=1\"> More results...</A>", hgTracksName(), getenv("QUERY_STRING"));
     fprintf(f, "</div>\n");
+    }
 }
 
 static struct hgPositions *hgPositionsSearch(char *db, char *spec,
@@ -2297,12 +2298,15 @@ boolean isSpecial = TRUE;
 boolean found = FALSE;
 char *upcTerm = cloneString(term);
 touppers(upcTerm);
-if (sameString(hfs->searchType, "knownGene"))
+if (startsWith("knownGene", hfs->searchType))
     {
     char *knownDatabase = hdbDefaultKnownDb(db);
     char *name = (sameString(knownDatabase, db)) ? "knownGene" : knownDatabase;
-    if (gotFullText(db, name))
-	found = findKnownGeneFullText(db, term, hgp, name);
+    char *indexPath = hgFindSpecSetting(hfs, "searchTrix");
+    if (indexPath == NULL)
+        indexPath = makeIndexPath(db, name);
+    if (gotFullText(db, indexPath))
+	found = findKnownGeneFullText(db, term, hgp, name, indexPath);
     }
 else if (sameString(hfs->searchType, "refGene"))
     {
@@ -2890,18 +2894,25 @@ else if (!matchesHgvs(cart, db, term, hgp))
 
     if (!trackHubDatabase(db))
 	hgFindSpecGetAllSpecs(db, &shortList, &longList);
-    for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
-	{
-	if (hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
-			    multiTerm))
-	    {
-	    done = TRUE;
-	    if (! hgFindSpecSetting(hfs, "semiShortCircuit"))
-		break;
-	    }
-	}
+    if (cartOptionalString(cart, "noShort") == NULL)
+        {
+        hgp->shortCircuited = TRUE;
+        for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
+            {
+            if (hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
+                                multiTerm))
+                {
+                done = TRUE;
+                if (! hgFindSpecSetting(hfs, "semiShortCircuit"))
+                    break;
+                }
+            }
+        }
+    else
+        cartRemove(cart, "noShort");
     if (! done)
 	{
+        hgp->shortCircuited = FALSE;
 	for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
 	    {
 	    hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
