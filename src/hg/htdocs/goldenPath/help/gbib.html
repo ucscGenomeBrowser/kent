@@ -545,7 +545,7 @@ supported so the <strong>GEO ftp link</strong> can be loaded on the browser).</p
 <a name="Fonts"></a>
 <h3>Enabling additional font styles</h3>
 <p>
-In order to enable the use of additional fonts in the tracks display, the following lines
+To enable the use of additional fonts in the tracks display, the following lines
 need to be need to be added to the <code>hg.conf</code> file:</p>
 <pre>
 freeType=on
@@ -595,7 +595,7 @@ mysql hgcentral -Ne "insert into defaultCart select contents from namedSessionDb
 Where <strong>nameOfSession</strong> is the name of the created session and 
 <strong>nameOfUser</strong> is the name of the user the session was created under. Keep
 in mind that only the top entry in that table will be used to pull default variables, so
-in order to change the new defaults (or to remove the new dedaults) first you will want
+to change the new defaults (or to remove the new dedaults) you will first want
 to delete the table contents:</p>
 <pre>
 mysql hgcentral -Ne "delete from defaultCart"
