@@ -1252,7 +1252,7 @@ function waitMaskSetup(timeOutInMs)
     var  waitMask = normed($('#waitMask'));
     if (!waitMask) {
         // create the waitMask
-        $("body").append("<div id='waitMask' class='waitMask');'></div>");
+        $("body").append("<div id='waitMask' class='waitMask'></div>");
         waitMask = normed($('#waitMask'));
     }
     $(waitMask).css({opacity:0.0,display:'block',top: '0px', 
@@ -1852,7 +1852,7 @@ function filterByMaxHeight(multiSel)
         }
     }
     var maxHeight = $(window).height() - pos;
-    var selHeight = $(multiSel).children().length * 21;
+    var selHeight = ($(multiSel).children().length + 1) * 22;
     if (maxHeight > selHeight)
         maxHeight = null;
 
