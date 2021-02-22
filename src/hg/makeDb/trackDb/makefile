@@ -192,7 +192,7 @@ DBS = \
 	vicPac1 vicPac2 \
 	wuhCor1 \
 	xenLae2 \
-	xenTro1 xenTro2 xenTro3 xenTro7 xenTro9
+	xenTro1 xenTro2 xenTro3 xenTro7 xenTro9 xenTro10
 
 ARCHIVED_DBS = \
 	rheMac1 \

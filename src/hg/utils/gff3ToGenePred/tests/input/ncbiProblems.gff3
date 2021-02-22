@@ -59,3 +59,17 @@ NC_006839.1	RefSeq	gene	3969	5004	.	+	.	ID=gene26975;Dbxref=GeneID:3283493;Name=
 NC_006839.1	RefSeq	CDS	3969	5004	.	+	0	ID=cds39762;Parent=gene26975;Dbxref=Genbank:YP_203371.1,GeneID:3283493;Name=YP_203371.1;Note=TAA stop codon is completed by the addition of 3' A residues to the mRNA;gbkey=CDS;gene=ND2;product=NADH dehydrogenase subunit 2;protein_id=YP_203371.1;transl_except=(pos:5004..5004%2Caa:TERM);transl_table=2
 NC_006839.1	RefSeq	gene	14258	15399	.	+	.	ID=gene26986;Dbxref=GeneID:3283504;Name=CYTB;gbkey=Gene;gene=CYTB;gene_biotype=protein_coding
 NC_006839.1	RefSeq	CDS	14258	15399	.	+	0	ID=cds39773;Parent=gene26986;Dbxref=Genbank:YP_203382.1,GeneID:3283504;Name=YP_203382.1;Note=TAA stop codon is completed by the addition of 3' A residues to the mRNA;gbkey=CDS;gene=CYTB;product=cytochrome b;protein_id=YP_203382.1;transl_except=(pos:15398..15399%2Caa:TERM);transl_table=2
+
+
+# ---
+# from GCF_000707805.1_CFSAN007451_01.0_genomic.gff.gz
+# where CDS from "Protein Homology" source doesn't have a name.
+# ---
+
+##sequence-region NZ_JNTI01000141.1 1 815
+##species https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=670
+NZ_JNTI01000141.1	RefSeq	region	1	815	.	+	.	ID=id216;Dbxref=taxon:670;collection-date=2012-08-24;country=USA:MD;gbkey=Src;genome=genomic;isolation-source=stool;mol_type=genomic DNA;nat-host=Homo sapiens;strain=CFSAN007451
+NZ_JNTI01000141.1	RefSeq	gene	1	262	.	+	.	ID=gene4619;Name=EM97_RS47665;gbkey=Gene;gene_biotype=pseudogene;locus_tag=EM97_RS47665;old_locus_tag=EM97_23795;partial=true;pseudo=true;start_range=.,1
+NZ_JNTI01000141.1	Protein Homology	CDS	1	262	.	+	1	ID=cds4555;Parent=gene4619;gbkey=CDS;partial=true;product=HAD family hydrolase;pseudo=true;start_range=.,1;transl_table=11
+NZ_JNTI01000141.1	RefSeq	gene	348	815	.	-	.	ID=gene4620;Name=EM97_RS0128530;end_range=815,.;gbkey=Gene;gene_biotype=protein_coding;locus_tag=EM97_RS0128530;partial=true
+NZ_JNTI01000141.1	Protein Homology	CDS	348	815	.	-	0	ID=cds4556;Parent=gene4620;Dbxref=Genbank:WP_050549089.1;Name=WP_050549089.1;end_range=815,.;gbkey=CDS;partial=true;product=histone acetyltransferase;protein_id=WP_050549089.1;transl_table=11
