@@ -3131,7 +3131,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
         // we're assuming that if there are multiple psl's with the same id that
         // they are the same query sequence so we only put out one set of sequences
-        if (firstTime  && !isEmpty(seq))    // if there is a query sequence
+        if (differentString(item, "PrintAllSequences") && firstTime && !isEmpty(seq))    // if there is a query sequence
             {
             firstTime = FALSE;
             printf("<H3>Links to sequence:</H3>\n");
