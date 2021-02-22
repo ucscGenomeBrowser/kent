@@ -59,7 +59,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         parent uniprot
         visibility dense
         type bigBed 12 +
-        bigDataUrl /gbdb/wuhCor1/uniprot/unipAliSwissprot.bb
+        bigDataUrl /gbdb/$D/uniprot/unipAliSwissprot.bb
         color 255,0,150
         itemRgb off
 
