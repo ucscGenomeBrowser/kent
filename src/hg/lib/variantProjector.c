@@ -288,7 +288,9 @@ int endInBlk = min(blkEnd, gEnd);
 int len = endInBlk - startInBlk;
 if (len > 0)
     {
-    assert(bufSize > *pBufOffset + len);
+    if (bufSize <= *pBufOffset + len)
+        errAbort("appendOverlap: bufSize=%u <= bufOffset %d + len %d",
+                 (unsigned int)bufSize, *pBufOffset, len);
     seqWindowCopy(gSeqWin, startInBlk, len, buf+*pBufOffset, bufSize-*pBufOffset);
     *pBufOffset += len;
     }
@@ -338,7 +340,9 @@ static boolean genomeTxMismatch(char *txRef, struct seqWindow *gSeqWin,
 boolean mismatch = FALSE;
 if (isNotEmpty(txRef))
     {
-    int bufLen = gEnd - gStart + 1;
+    // Watch out for overlapping blocks due to ribosomal slippage as in SARS-CoV-2.
+    int fudge = 3;
+    int bufLen = gEnd - gStart + 1 + fudge;;
     char splicedGSeq[bufLen];
     splicedGSeq[0] = '\0';
     spliceGenomicInRange(gSeqWin, gStart, gEnd, txAli, FALSE, splicedGSeq, sizeof(splicedGSeq));
