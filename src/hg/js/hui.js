@@ -42,8 +42,9 @@ function _matSelectViewForSubTracks(obj,view)
                             aryRemove(classList,["matCB","changed","disabled","abc"]) );
                 });
 
-                // Walk through checked non-ABC matCBs and sheck related subCBs
-                var subCBs = $("input.subCB").filter("."+view).not(":checked");
+                // Walk through checked non-ABC matCBs and check related subCBs
+                var subCbsSelected = filterCompSubCBsSurviving();
+                var subCBs = $(subCbsSelected).filter("."+view).not(":checked");
                 matCBs.not(".abc").each( function (i) {
                     var classList = $( this ).attr("class").split(" ");
                     classList = aryRemove(classList,["matCB","changed","disabled"]);
@@ -56,6 +57,7 @@ function _matSelectViewForSubTracks(obj,view)
                         matSubCBsetShadow(this,true);  // will update "subCfg" if needed
                         hideOrShowSubtrack(this);
                     });
+
                 });
             } // If no matrix, then enabling is all that was needed.
 
@@ -170,6 +172,7 @@ function matCbClick(matCB)
 function _matSetMatrixCheckBoxes(state)
 {   // matButtons:onclick Set all Matrix checkboxes to state.
     // If additional arguments are passed in, the list of CBs will be narrowed by the classes
+
     var matCBs = $("input.matCB").not(".abc");
     for (var vIx=1;vIx<arguments.length;vIx++) {
         matCBs = $( matCBs ).filter("."+arguments[vIx]);  // Successively limit list
@@ -197,13 +200,13 @@ function _matSetMatrixCheckBoxes(state)
         exposeAll();  // Unhide composite vis?
     showOrHideSelectedSubtracks();
     matSubCBsSelected();
-    //jQuery(this).css('cursor', '');
 
-    var tbody = normed($(subCbs[0]).parents('tbody.sorting'));
+    var tbody = normed($('tbody.sortable'));
     if (tbody)
          $(tbody).removeClass('sorting');
     return true;
 }
+
 function matSetMatrixCheckBoxes(state)
 { // Called exclusively by matrix [+][-] buttons on click
     var tbody = normed($('tbody.sortable'));
@@ -497,6 +500,11 @@ function matSubCBsSelected()
         $(counter).text($(subCBs).filter(":enabled:checked").not('.disabled').length + 
                                                             " of " +$(subCBs).length+ " selected");
     }
+
+    if (typeof(ddcl) === "object") {
+        setTimeout(function(){ ddcl.reinitFacetCounts(); }, 50);
+    }
+
 }
 
 /////////////////// subtrack configuration support ////////////////
@@ -890,7 +898,7 @@ function _filterComposite()
     // Update count
     matSubCBsSelected();
 
-    var tbody = normed($(subCbsSelected[0]).parents('tbody.sorting'));
+    var tbody = normed($('tbody.sortable'));
     if (tbody)
          $(tbody).removeClass('sorting');
 }
@@ -909,74 +917,160 @@ function filterCompositeDone(event)
     event.stopImmediatePropagation();
     $(this).unbind( event );
     filterCompositeTrigger();
-    //waitOnFunction(filterCompositeTrigger,$(this));
+
 }
 
 function filterCompositeSelectionChanged(obj)
 {   // filterComposite:onchange Set subtrack selection based upon the changed filter
     // [Not called for filterBy]
-
     var subCBs = $("input.subCB");
     if (subCBs.length > 300) {
         $(obj).one('done',filterCompositeDone);
         return;
     } else
         filterCompositeTrigger();
+
 }
+
+function filterCountFacets(possibleClasses, hiddenViewClasses, possibleSelections)
+{
+
+    possibleClasses = aryRemove(possibleClasses,[ "subCB","changed","disabled" ]);
+
+    if ($(possibleClasses).length > 0) {
+
+	if (aryFind(hiddenViewClasses, possibleClasses[possibleClasses.length-1])=== -1) {
+
+	    for (var vIx=0; vIx < possibleClasses.length; vIx++) {
+		var onePoss = possibleClasses[vIx];
+		if (possibleSelections[onePoss] === undefined) {
+		    possibleSelections[onePoss] = 1;
+		} else {
+		    ++possibleSelections[onePoss];
+		}
+	    }
+
+	}
+    }
+}
+
+function filterCompositeExcludeOptionsQuick(multiSelect, possibleSelections)
+{ // Will mark all options in one filterComposite boxes that are inconsistent with the current
+  // selections in other filterComposite boxes.  Mark is class ".excluded"
+
+    var magic = "Magic23541236746574569670787890877563457346846578452346457435645t794312";
+
+    if (possibleSelections[magic] === undefined) {
+
+	var allSubCBs = $("input.subCB");
+	if (allSubCBs.length === 0) {
+	    return false;
+	}
+
+	// IE takes tooo long, so this should be called only when leaving the filterBy box
+	if (theClient.isIePre11() && $(allSubCBs).filter(":checked").length > 300) 
+	    return false;
+
+	// Walk through all subCBs to get other related tags
+	$( allSubCBs ).each( function (i)  {
+	    // is it viz?
+	    if (this.checked && isFauxDisabled(this,true) === false) {
+		var possibleClasses = $( this ).attr("class").split(" ");
+		// [] because it does not need view filtering
+		filterCountFacets(possibleClasses, [], possibleSelections);  
+	    }
+	});
+	possibleSelections[magic] = 1;  // mark that it has been initialized
+    } 
+
+
+    // Walk through all options in this filterBox to set excluded class
+    var opts = $(multiSelect).children("option");
+    for (var ix = 1;ix < opts.length;ix++) { // All is always allowed
+	var count = possibleSelections[opts[ix].value];
+	if (count === undefined) {
+	    count = 0;
+	}
+	opts[ix].facetCount = count;
+    }
+
+    return true;
+    
+}
+
 
 function filterCompositeExcludeOptions(multiSelect)
 { // Will mark all options in one filterComposite boxes that are inconsistent with the current
   // selections in other filterComposite boxes.  Mark is class ".excluded"
+
     // Compare to the list of all trs
     var allSubCBs = $("input.subCB");
-    if (allSubCBs.length === 0)
+    if (allSubCBs.length === 0) {
         return false;
+    }
 
     // IE takes tooo long, so this should be called only when leaving the filterBy box
     if (theClient.isIePre11() && $(allSubCBs).filter(":checked").length > 300) 
         return false;
 
-    var filterClass = filterCompFilterVar(multiSelect);
-    if (!filterClass || filterClass.length === 0)
-        return false;
+    var filterClass = filterCompFilterVar(multiSelect);  // returns facet name e.g. sample_source
+    if (!filterClass || filterClass.length === 0) {
+        return false; 
+    }
 
+    var updated = false;
     // Look at list of CBs that would be selected if all were selected for this filter
-    var subCbsSelected = filterCompSubCBsSurviving(filterClass);
-    if (subCbsSelected.length === 0)
-        return false;
+    var subCbsSelected = filterCompSubCBsSurviving(filterClass);  // apply facet filters for all columns except this one.
+    if (subCbsSelected.length === 0) {
+	updated = true;
+    }
 
     if (allSubCBs.length === subCbsSelected.length) {
         $(multiSelect).children('option.excluded').removeClass('excluded');
-        return true;
+	updated = true;
     }
 
-    // Walk through all selected subCBs to get other related tags
-    var possibleSelections = [];  // empty array
-    $( subCbsSelected ).each( function (i)  {
 
-        var possibleClasses = $( this ).attr("class").split(" ");
-        if ($(possibleClasses).length > 0)
-            possibleClasses = aryRemove(possibleClasses,[ "subCB","changed","disabled" ]);
-        if ($(possibleClasses).length > 0)
-            possibleSelections = possibleSelections.concat(possibleClasses);
+    // Walk through all selected subCBs to get other related tags
+    var possibleSelections  = {};    // empty object acting as hash for selected tracks
+    var possibleSelectionsX = {};    //  for non-selected tracks, used for not selected but choosable facet values.
+
+    hiddenViewClasses=matViewClasses('hidden');
+
+    $( subCbsSelected ).each( function (i)  {
+	var possibleClasses = $( this ).attr("class").split(" ");
+	// is subtrack selected and viz?
+	if (this.checked && isFauxDisabled(this,true) === false) {
+	    filterCountFacets(possibleClasses, hiddenViewClasses, possibleSelections);
+        } else {
+	    filterCountFacets(possibleClasses, hiddenViewClasses, possibleSelectionsX);
+	}
     });
 
     // Walk through all options in this filterBox to set excluded class
-    var updated = false;
-    if (possibleSelections.length > 0) {
-        var opts = $(multiSelect).children("option");
-        for (var ix = 1;ix < opts.length;ix++) { // All is always allowed
-            if (aryFind(possibleSelections,opts[ix].value) === -1) {
-                if ($(opts[ix]).hasClass('excluded') === false) {
-                    $(opts[ix]).addClass('excluded');
-                    updated = true;
-                }
-            } else if ($(opts[ix]).hasClass('excluded')) {
-                $(opts[ix]).removeClass('excluded');
-                updated = true;
-            }
-        }
+    var opts = $(multiSelect).children("option");
+    for (var ix = 1;ix < opts.length;ix++) { // All is always allowed
+	var count = possibleSelections[opts[ix].value];
+	if (count === undefined) {
+	    count = possibleSelectionsX[opts[ix].value];
+	    if (count === undefined) {
+		count = 0;
+	    }
+	}
+	opts[ix].facetCount = count;
+	if (count === 0) {
+	    if ($(opts[ix]).hasClass('excluded') === false) {
+		$(opts[ix]).addClass('excluded');
+		updated = true;
+	    }
+	} else {
+	    if ($(opts[ix]).hasClass('excluded')) {
+		$(opts[ix]).removeClass('excluded');
+		updated = true;
+	    }
+	}
     }
+
     return updated;
 }
 

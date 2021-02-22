@@ -541,10 +541,11 @@ supported so the <strong>GEO ftp link</strong> can be loaded on the browser).</p
 <a name="CustomizingGbib"></a>
 <h2>Customizing your GBiB</h2>
 
+<!--
 <a name="Fonts"></a>
 <h3>Enabling additional font styles</h3>
 <p>
-In order to enable the use of additional fonts in the tracks display, the following lines
+To enable the use of additional fonts in the tracks display, the following lines
 need to be need to be added to the <code>hg.conf</code> file:</p>
 <pre>
 freeType=on
@@ -558,6 +559,7 @@ The file can be found in the following location:</p>
 <p>
 The fonts can then be change by pressing the <strong>configuration</strong> located below the 
 image on the tracks display.</p>.
+-->
 
 <a name="Defaults"></a>
 <h3>Changing the default Genome Browser options on a GBiB</h3>
@@ -593,7 +595,7 @@ mysql hgcentral -Ne "insert into defaultCart select contents from namedSessionDb
 Where <strong>nameOfSession</strong> is the name of the created session and 
 <strong>nameOfUser</strong> is the name of the user the session was created under. Keep
 in mind that only the top entry in that table will be used to pull default variables, so
-in order to change the new defaults (or to remove the new dedaults) first you will want
+to change the new defaults (or to remove the new dedaults) you will first want
 to delete the table contents:</p>
 <pre>
 mysql hgcentral -Ne "delete from defaultCart"
@@ -633,7 +635,7 @@ in mind that once you have opened up GBiB for remote access, anyone who knows yo
 will be able to access your instance of GBiB and the files that you have shared with
 it.</strong></p>
 <p>
-If you do not want your colleagues to configure track mirroring in your shared GBiB, you can use 
+To control access by others to configure track mirroring in your shared GBiB, you can use
 the commands <code>gbibMirrorOff</code> and <code>gbibMirrorOn</code> to disable or enable the
 &quot;Mirror Tracks&quot; function in the menu.</p>
 
