@@ -34,7 +34,8 @@ test:   pslSelectTests \
 	xenoPslStatsTest \
 	xenoPslStatsStrandTest \
 	xenoPslGpStatsStrandTest \
-	xenoGpPslStatsStrandTest
+	xenoGpPslStatsStrandTest \
+	extraColumnTests
 
 ###
 # selecting PSLs
@@ -789,6 +790,37 @@ xenoPslGpStatsStrandTest: mkout
 xenoGpPslStatsStrandTest: mkout
 	${overlapSelect} -strand -statsOutputAll -excludeSelf input/xenoEst1.gp input/xenoEst1.psl output/$@.stats
 	${DIFF} expected/$@.stats output/$@.stats
+
+
+# test for passing through extra columns
+extraColumnTests: extraPslTest extraBed3Test extraBed3SelectTest extraBed6Test extraBed6SelectTest \
+	extraBigPslTest extraBigPslSelectTest extraGenePredTest
+
+extraPslTest: mkout
+	${overlapSelect} -strand -excludeSelf -inFmt=psl input/transMap.psl input/transMap.psl+meta output/$@.psl+meta
+	${DIFF} expected/$@.psl+meta output/$@.psl+meta
+extraBed3Test: mkout
+	${overlapSelect} -excludeSelf -selectFmt=bed3+ -inFmt=bed3+ input/transMap.bed4+meta input/transMap.bed4+meta output/$@.bed4+meta
+	${DIFF} expected/$@.bed4+meta output/$@.bed4+meta
+extraBed3SelectTest: mkout
+	${overlapSelect} -excludeSelf -selectFmt=bed3+ -inFmt=psl input/transMap.bed4+meta input/transMap.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+extraBed6Test: mkout
+	${overlapSelect} -strand -excludeSelf -selectFmt=bed6+ -inFmt=bed6+ input/transMap.bed6+meta input/transMap.bed6+meta output/$@.bed6+meta
+	${DIFF} expected/$@.bed6+meta output/$@.bed6+meta
+extraBed6SelectTest: mkout
+	${overlapSelect} -strand -excludeSelf -selectFmt=bed6+ -inFmt=psl input/transMap.bed6+meta input/transMap.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+extraBigPslTest: mkout
+	${overlapSelect} -strand -excludeSelf input/transMap.psl input/transMap.bigPsl.bed output/$@.bigPsl.bed
+	${DIFF} expected/$@.bigPsl.bed output/$@.bigPsl.bed
+extraBigPslSelectTest: mkout
+	${overlapSelect} -strand -excludeSelf input/transMap.bigPsl.bed input/transMap.bigPsl.bed output/$@.bigPsl.bed
+	${DIFF} expected/$@.bigPsl.bed output/$@.bigPsl.bed
+extraGenePredTest: mkout
+	${overlapSelect} -strand -excludeSelf -inFmt=genePred input/transMap.psl input/transMap.gp+meta output/$@.gp+meta
+	${DIFF} expected/$@.gp+meta output/$@.gp+meta
+
 
 mkout:
 	@${MKDIR} output

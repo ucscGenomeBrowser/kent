@@ -17,6 +17,7 @@ GCF_001595765.1_Mnat.v1	Natal long-fingered bat
 GCF_002288925.2_ASM228892v3	beluga whale
 GCF_000308155.1_EptFus1.0	big brown bat
 GCF_000325575.1_ASM32557v1	black flying fox
+GCF_011064425.1_Rrattus_CSIRO_v1	black rat
 GCF_000412655.1_ASM41265v1	Brandt's bat
 GCF_003584765.1_ASM358476v1	brown bear
 GCF_900631625.1_zalCal2.2	California sea lion
@@ -50,6 +51,8 @@ GCF_000349665.1_MesAur1.0	golden hamster
 GCF_000002295.2_MonDom5	gray short-tailed opossum
 GCF_012393455.1_Tufts_HGry_1.1	gray seal
 GCF_001890085.1_ASM189008v1	great roundleaf bat
+GCF_014108235.1_mMyoMyo1.p	greater mouse-eared bat
+GCF_004348235.1_GSC_HSeal_1.0	harbor seal
 GCF_002201575.1_ASM220157v1	Hawaiian monk seal
 GCF_014824575.1_WHU_Shon_v2	Honduran yellow-shouldered bat
 GCF_002863925.1_EquCab3.0	horse
@@ -73,6 +76,7 @@ GCF_000247695.1_HetGla_female_1.0	naked mole-rat
 GCF_005190385.1_NGI_Narwhal_1	narwhal
 GCF_000208655.1_Dasnov3.0	nine-banded armadillo
 GCF_003265705.1_ASM326570v1	northern fur seal
+GCF_010015895.1_GSC_riverotter_1.0	Northern American river otter
 GCF_000001895.5_Rnor_6.0	Norway rat Rnor6.0
 GCF_000002265.2_Rn_Celera	Norway rat celera
 GCA_015227675.2_mRatBN7.2	Norway rat BN7
@@ -81,6 +85,7 @@ GCF_000151885.1_Dord_2.0	Ord's kangaroo rat
 GCF_000321225.1_Oros_1.0	Pacific walrus
 GCF_003676395.1_ASM367639v1	Pacific white-sided dolphin
 GCF_004126475.1_mPhyDis1_v1.p	pale spear-nosed bat
+GCF_014108415.1_mMolMol1.p	Pallas's mastiff bat
 GCF_000003025.6_Sscrofa11.1	pig
 GCF_004115215.1_mOrnAna1.p.v1	platypus
 GCF_000687225.1_UrsMar_1.0	polar bear
@@ -96,6 +101,7 @@ GCF_002288905.1_ASM228890v2	sea otter
 GCF_002742125.1_Oar_rambouillet_v1.0	Rambouillet sheep
 GCF_900095145.1_PAHARI_EIJ_v1.1	shrew mouse
 GCF_000313985.2_ASM31398v2	small Madagascar hedgehog
+GCF_011800145.1_KU_Mleo_1.0	southern elephant seal
 GCF_008632895.1_UCSF_Mcou_1	southern multimammate mouse
 GCF_000283155.1_CerSimSim1.0	southern white rhinoceros
 GCF_002837175.2_ASM283717v2	sperm whale

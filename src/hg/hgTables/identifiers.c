@@ -203,7 +203,7 @@ hPrintf("Please paste in the identifiers you want to include.\n");
 if (sqlDatabaseExists("hgTemp"))
     explainIdentifiers(actualDb, alternateConn, idField);
 else
-    warn("No hgTemp database found for temporary tables.<br>Please src/product/README.mysql.setup for more information.");
+    warn("No hgTemp database found for temporary tables.<br>Please see https://genome.ucsc.edu/goldenPath/help/mirrorManual.html#mysql-setup for more information.");
 hPrintf("<BR>\n");
 cgiMakeTextArea(hgtaPastedIdentifiers, oldPasted, 10, 70);
 hPrintf("<BR>\n");

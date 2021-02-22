@@ -120,6 +120,52 @@ but can be changed to get the size for a particular assembly:
   
     rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/mysql/ | egrep "Number of files:|total size is"
 
+# Local Git repository
+Use the following procedures to create your own personal copy of the kent source
+tree where you can have your own edits that are not part of the development at
+UCSC.  This is useful for mirror sites that have their own customizations in
+the source tree for local circumstances.
+ 
+Install Git software version 1.6.2.2 or later. See the Git Community Handbook
+ installation (<https://git-scm.com/book/en/v2/Getting-Started-Installing-Git>) and setup
+ (<href='https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup>) instructions, as well
+ as our Installing Git (<http://genomewiki.ucsc.edu/index.php/Installing_git>)
+ Genomewiki page.
+
+Start an initial Git local repository:
+
+    git clone git://genome-source.soe.ucsc.edu/kent.git
+ 
+or, if a firewall prevents git daemon port 9418, use:
+ 
+    git clone http://genome-source.soe.ucsc.edu/kent.git
+ 
+The kent source tree will be imported to the current working directory in a
+directory named ./kent/.
+
+Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
+ the browser. To create a beta tracking branch:
+ 
+    cd kent
+    git checkout -t -b beta origin/beta
+ 
+The -b creates a local branch with name "beta", and checks it out.
+The -t makes it a tracking branch, so that 'git pull' brings in updates from
+origin/beta, the "real" beta branch in our public central read-only repository.
+
+To get the latest UCSC release, from anywhere within the kent source tree:
+ 
+    git pull
+
+Updates: UCSC generally updates the origin/beta branch every three weeks. If you are 
+ updating database tables for a mirror site, we recommend that you update the
+ source at the same time, as source code is sometimes modified to include
+ operations on new columns that have been added to database tables.
+ 
+For instructions on keeping local tracks separate from UCSC Genome Browser
+tracks created at UCSC and mirrored from there, see the section "Adding tracks
+to the browser" below.
+
 # Installing the UCSC Genome browser
 
 Note: we offer Genome-Browser-in-a-Box (GBIB), a fully configured virtual
@@ -127,10 +173,12 @@ machine image that can be converted for VirtualBox, VMWare, Hyper-V and other
 popular environments.  We also offer Genome-Browser-in-the-Cloud (GBIC) an
 shell script that installs a genome browser in most main Linux distributions
 (Most Debian and Redhat-based ones, like Ubuntu and CentOS). 
-See https://hgwdev-max.gi.ucsc.edu/goldenPath/help/mirror.html
+See https://genome.ucsc.edu/goldenPath/help/mirror.html
 
 Scripts to perform all of the functions below can be found in
-the directory here: src/products/scripts/
+the directory https://github.com/ucscGenomeBrowser/kent/tree/master/src/product/scripts.
+In a git clone of the kent repository, the scripts
+are located in src/product/scripts.
 
 Confirm the following:
 
@@ -161,7 +209,7 @@ Confirm the following:
     (your exact pathnames may vary depending upon your installation)
 
     Set MySQL database access permissions.  The examples mentioned
-    in the README.mysql.setup instructions will allow this
+    in the "Mysql setup" section will allow this
     setup to function as described here.
 
     To setup the example user accounts as mentioned in these
@@ -227,7 +275,8 @@ Confirm the following:
 
 6.  Copy CGI binaries: This set of binaries are for x86_64 types of Linux machines.
     If you need to instead build binaries for your platform,
-    follow the instructions in: README.building.source
+    follow the instructions in the section "Building the kent source tree", below.
+
     See also: src/product/scripts/kentSrcUpdate.sh
 
         rsync -avP rsync://hgdownload.soe.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/
@@ -494,7 +543,7 @@ command which can be built in the source-tree at:
 	kent/src/hg/hgsql/
 
     This 'hgsql' command provides a convenient front-end to
-    the standard 'mysql'' command by reading the user's ~/.hg.conf
+    the standard 'mysql' command by reading the user's ~/.hg.conf
     file to provide access to the browser databases with the
     appropriate identity.  Each user creates a ~/.hg.conf file
     (same format as the above mentioned cgi-bin/hg.conf file)
@@ -987,7 +1036,7 @@ This is usually a simple configuration problem.  Items to verify:
 
 1.  the hg.conf file in the cgi-bin directory specifies the correct
 	user names and passwords for MySQL database access.
-	See also: README.mysql.setup
+	See also the section "Mysql Setup" below.
 2.  The cgi-bin directory is set to permissions 755 and not 775 or 777
 	When permissions are too permissive for this directory, Apache
 	errors out with suexec permission violations.
@@ -1013,7 +1062,7 @@ line:
 By itself with no arguments, it should produce the default tracks
 display HTML page for the Human genome.  This assumes you have set
 up your $HOME/.hg.conf file to allow access to the MySQL databases.
-(See also: README.mysql.setup).  A binary execution failure should
+(See also: section "Mysql Setup").  A binary execution failure should
 be obvious at this stage of the game.  If it exits because of SIGSEGV
 we can run it under a debugger for specifics.  More on this below.
 
@@ -1098,52 +1147,6 @@ FireFox, so after debugging hgTables, you will probably want to add
 
 One thing that does not work with GET is "upload file" inputs.
 
-# Local Git repository
-Use the following procedures to create your own personal copy of the kent source
-tree where you can have your own edits that are not part of the development at
-UCSC.  This is useful for mirror sites that have their own customizations in
-the source tree for local circumstances.
- 
-Install Git software version 1.6.2.2 or later. See the Git Community Handbook
- installation (<https://git-scm.com/book/en/v2/Getting-Started-Installing-Git>) and setup
- (<href='https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup>) instructions, as well
- as our Installing Git (<http://genomewiki.ucsc.edu/index.php/Installing_git>)
- Genomewiki page.
-
-Start an initial Git local repository:
-
-    git clone git://genome-source.soe.ucsc.edu/kent.git
- 
-or, if a firewall prevents git daemon port 9418, use:
- 
-    git clone http://genome-source.soe.ucsc.edu/kent.git
- 
-The kent source tree will be imported to the current working directory in a
-directory named ./kent/.
-
-Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
- the browser. To create a beta tracking branch:
- 
-    cd kent
-    git checkout -t -b beta origin/beta
- 
-The -b creates a local branch with name "beta", and checks it out.
-The -t makes it a tracking branch, so that 'git pull' brings in updates from
-origin/beta, the "real" beta branch in our public central read-only repository.
-
-To get the latest UCSC release, from anywhere within the kent source tree:
- 
-    git pull
-
-Updates: UCSC generally updates the origin/beta branch every three weeks. If you are 
- updating database tables for a mirror site, we recommend that you update the
- source at the same time, as source code is sometimes modified to include
- operations on new columns that have been added to database tables.
- 
-See also: the README files in the source tree directory src/product/README.*.
-For instructions on keeping local tracks separate from UCSC Genome Browser
-tracks, see src/product/README.trackDb.
-
 # Proxy support
 
 net.c now has support for http(s) proxy servers
@@ -1174,8 +1177,8 @@ If a domain ends with an entry from this list, the proxy will be skipped.
     noProxy=ucsc.edu,mit.edu
 
 
-(The httpProxy and httpsProxy URLs should use http protocol, not https.
-One reason for this is that https sessions would end up doubly-encoded.)
+The httpProxy and httpsProxy URLs should use http protocol, not https.
+One reason for this is that https sessions would end up doubly-encoded.
 
 If you are debugging your proxy configuration, you can use this hg.conf setting
 to turn on logging to stderr.
@@ -1466,3 +1469,281 @@ The names of the font files that the Genome Browser expects and their md5sums ar
     f13fb8e581426a1ffa5fc12b10ad0f34  n022023l.pfb
     f3cd9244150f086434b62d5c5bb559b0  n022024l.pfb
     30aef717b7c68a6b6b7760b764fbd01c  z003034l.pfb
+
+# Building the kent source tree.
+
+In some cases, you may have to modify the source code itself. In these cases, you would need
+to build all the tools and CGI programs from the source code on your machine.
+
+There are scripts available in the git repo src/product/scripts/ directory 
+that can run all of these steps for you with the script:  scripts/kentSrcUpdate.sh
+See the instructions in scripts/README
+
+If you have the kent git repository cloned:
+
+1. Check your shell environment.  It should
+	contain a MACHTYPE variable.  Typical values, for example:
+	i386 i686 sparc alpha x86_64 ppc
+	If there is none, set it to indicate your
+	CPU architecture, for example,
+	MACHTYPE=i686
+	export MACHTYPE
+	You need to do this if your existing MACHTYPE is a long string
+	such as: i686-pc-linux-gnu
+	since this is used as an argument on the command line to gcc
+	which will not work with the - signs in the strings.
+	Typical values: i386 i686 x86_64 sparc ppc
+
+	To determine the machine cpu type of your computer, try
+	one of these uname command options:
+	$ uname -m
+	$ uname -p
+	$ uname -a
+
+	Remember to set this MACHTYPE in your .bashrc or .tcshrc home directory
+	environment files so it will be set properly at your next login.
+
+	The browser code has not been tested by UCSC outside a
+	CentOS Linux on Intel or AMD Opteron environment.
+	Other users do report successful operation on other systems.
+
+        Depending upon what libraries you have installed locally, you may want
+        to set environment variable USE_SAMTABIX.
+
+	See also:
+	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
+
+2.  Create a directory where binaries will be moved to during
+	the build of the source tree:
+	$ mkdir -p ~/bin/${MACHTYPE}
+
+3a. ALTERNATE PATH: 
+        If you are going to do a full build anyway, skip this and proceed straight to step 3 below.
+        Otherwise, to make a minimal utility build without mysql:
+	There are some utilities that depend only on jkweb.a and not jkhgap.a
+	which means they can be compiled without needing mysql client installed.
+	To make a utility like pslCDnaFilter without installing mysql client:
+        # create jkweb.a
+          cd kent/src/lib
+          make
+        # create stringify utility required by some makefiles
+          cd kent/src/utils/stringify
+          make
+        # create pslCDnaFilter utility program
+          cd kent/src/hg/pslCDnaFilter
+          make
+        Proceed similarly for any other such utilities.
+        You are done and can stop here.
+
+3.  Create the following shell environment variables:
+
+    NOTE: As of mid-October 2013 the makefile build system in the source
+          tree will attempt to configure MYSQLINC and MYSQLLIBS with
+          the mysql_config command.  To use that automatic configuration,
+          eliminate any MYSQLINC and MYSQLLIBS definitions from your shell
+          environment and make sure mysql_config can be found in your PATH.
+          This option is not perfect and may not function correctly.
+          It usually will not use a static linked library which can lead
+          to a known issue on the Mac OSX.  See 'Known Problems' item 10 below.
+
+        In the case the automatic configuration does not function, you
+        can set these variables in your shell environment to override
+        the automatic configuration:
+
+	MYSQLINC=/usr/include/mysql
+	MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -lz"
+	export MYSQLINC MYSQLLIBS
+	Your setting may vary depending upon where your
+	mysql is installed.  The above example is typical.
+	If your system does not have this set of include files
+	or this static client.a file, you may need to install
+	the mysql-devel package to obtain the mysql development
+	environment.  (http://dev.mysql.com/downloads/)
+	With that package installed, this command:
+		mysql_config --libs
+	will display the appropriate libraries to link with
+	for your system configuration.  And:
+		mysql_config --include
+	will display the appropriate MYSQLINC directory.
+	The -lz requires a link to the libraries installed in the
+	zlib-devel rpm.
+
+4a. Required SSL support:
+	In order for the libraries to be able to use SSL,
+	for instance to support fetching HTTPS URLs,
+	install openssl.  We are currently using these packages: 
+	openssl-1.0.1e
+	openssl-devel-1.0.1e
+        SSL is also useful for accessing bigWig and bigBed over HTTPS.
+        The directory on your server should be found automatically.
+
+4b.  In the source tree, perform the following:
+	$ cd kent/src
+	$ make libs
+	At this point, you can build utilities in other parts of
+	the source tree if that is your goal.  Go to the directory
+	of the utility command you want to build and run a 'make'
+	in that directory.  The resulting binary will be placed
+	in $HOME/bin/$MACHTYPE
+
+5.  To continue building the CGI binaries
+	$ cd kent/src/hg
+	$ make compile
+	$ make install DESTDIR=/destination/prefix
+
+	Where "/destination/prefix" is your choice, and
+	this will install the cgi binaries in:
+	/destination/prefix/usr/local/apache/cgi-bin
+
+        If your cgi-bin directory is something different than
+	/usr/local/apache/cgi-bin then use the CGI_BIN variable, e.g.:
+	    make install DESTDIR=/var/www CGI_BIN=/cgi-bin \
+		DOCUMENTROOT=/var/www/html
+
+	You can save yourself time and trouble if your Apache is somewhere
+	other than at /usr/local/apache by creating that directory and making
+	symlinks to your actual apache directories.  For example:
+	mkdir /usr/local/apache
+	ln -s /var/www/cgi-bin /usr/local/apache/cgi-bin
+	ln -s /var/www/html /usr/local/apache/htdocs
+	ln -s /var/www/cgi-bin-${LOGNAME} /usr/local/apache/cgi-bin
+
+	With those symlinks in place, a simple 'make cgi' can be used
+	instead of the 'make compile; make install DESTDIR=...' business.
+
+        If your apache DocumentRoot is something different than
+        /usr/local/apache/htdocs then use the DOCUMENTROOT variable.
+        This value should be a full path and should agree with the 
+        browser.documentRoot setting in hg.conf; see the section "Mysql Setup"
+        for more details.
+
+	$ make install DESTDIR=/destination/prefix CGI_BIN=/cgi-bin/path DOCUMENTROOT=/usr/local/apache/htdocs
+
+	to install binaries in "/destination/prefix/cgi-bin/path"
+
+	[NOTE:  These 'make' commands assume gnu make is being used]
+
+6.  After source tree updates, the make sequence is:
+	$ cd kent/src
+	$ make clean
+	$ make libs
+	$ cd hg
+	$ make compile
+	$ make install DESTDIR=/destination/prefix
+
+====================================================================
+Known problems:
+
+1.  A compile/link of a utility has complaints about undefined symbols
+	such as: bind, accept, listen, gethostbyname, socket, setsockopt,
+	connect, inet_pton, inet_ntop or h_errno
+    To fix this, you need to add '-lsocket -lnsl' to your MYSQLLIBS
+    environment variable.  This is typically the case on Solaris systems:
+	MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -lsocket -lnsl -lz"
+
+2.  The build fails immediately in the first src/lib/ directory with
+	the compiler issuing a warning about unused variables.
+	Some newer versions of gcc issue these warnings and the
+	src/inc/common.mk file specifies -Werror which causes it to
+	exit on these warnings.  Either remove the -Werror specifications
+	in src/inc/common.mk or add the -Wno-unused-variable to instruct
+	the compiler to allow these warnings without an exit.
+
+3.  The build fails during a link of any program under the src/hg/
+	hierarchy with an error something like:
+	undefined reference to `SSL_CTX_free'
+	undefined reference to `ERR_get_error_line_data'
+	undefined reference to `SSL_read'
+	undefined reference to `SSL_get_error'
+	undefined reference to `SSL_write'
+    This error is due to your mysql libraries have been compiled with SSL
+	functionality enabled.  To fix this build problem, add '-lssl'
+	to your MYSQLLIBS environment variable to satisify these SSL
+	library functions.
+
+4.  Build fails on Macintosh with an error:
+aliType.c:5: warning: `rcsid' defined but not used
+make: *** [aliType.o] Error 1
+
+    The OSTYPE environment variable needs to be set to "darwin".  If your
+    shell is bash, it is a shell local variable instead of an environment
+    variable as with tcsh.
+
+    To avoid this error, place an export statement in your $HOME/.bashrc
+    environment:
+    export OSTYPE
+    This causes the OSTYPE variable to be recognized during the
+    make and the conditional statements in src/inc/common.mk will
+    include the -Wno-unused-variable option in the build.
+
+5.  The build fails with an error:
+    gifdecomp.c:274: error: call to function 'gif_out_line' without
+	a real prototype
+
+    This happens with newer versions of the gcc compiler.  To avoid the
+    build stopping at this point, eliminate the -Werror argument from the
+    src/inc/common.mk file.  We will fix this error as soon as we
+    get our hands on a newer version of the gcc compiler.
+
+6.  The build fails with an error of this type:
+    pipeline.c: In function waitOnExec:
+    pipeline.c:351: error: ignoring return value of read, declared with
+	attribute warn_unused_result 
+
+    This happens with newer versions of the gcc compiler.  To avoid the
+    build stopping at this point, eliminate the -Werror argument from the
+    src/inc/common.mk file.  We will fix this error as soon as we
+    get our hands on a newer version of the gcc compiler.
+
+7.  Build fails complaining about missing png.h file:
+	pngwrite.c:7:87: error: png.h: No such file or directory
+
+    Find out where your png.h file is and set PNGINCL to something like:
+    export PNGINCL="-I/opt/local/include/libpng14"
+    pointing to the directory where png.h exists.
+
+8.  Build fails at the point of building a CGI binary with the error:
+    Undefined symbols:
+	"_png_write_png", referenced from:
+	    _mgSaveToPng in jkweb.a(pngwrite.o)
+	... other png symbols ...
+
+    You need to find out where your libpng.a is located.  For example
+    it may be in /opt/local/lib/libpng.a  When found, use the PNGLIB
+    variable to specify it, for example:
+    export PNGLIB=/opt/local/lib/libpng.a
+    or equivalent:
+    export PNGLIB='-L/opt/local/lib -lpng'
+
+9. Build fails with complains about missing functions dlclose, dlopen:
+  /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function `add_plugin':
+  (.text+0x1ed): undefined reference to `dlclose'
+  /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function `mysql_client_plugin_deinit':
+  (.text+0x28b): undefined reference to `dlclose'
+  /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function `mysql_load_plugin_v':
+  (.text+0x51e): undefined reference to `dlopen'
+
+  To add the library that includes these functions, add '-ldl' to the
+  MYSQLLIBS string: MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -ldl -lz"
+
+10. Mac OSX dynamic link with the MySQL libraries results in the following
+    run-time error for CGI binaries or command line programs:
+
+    dyld: Library not loaded: libmysqlclient.18.dylib
+
+    This is a known problem with the dynamic library for MySQL,
+    with potential work-arounds offered:
+        http://bugs.mysql.com/bug.php?id=61243
+
+    Or, you can set the MYSQLINC and MYSQLLIBS shell environment variables
+    to the static MySQL library as mentioned in Step 3 above.
+
+11. Genome browser issues error:
+
+    "PDF format not available" when trying to export to pdf.
+
+    The browser can't find the command 'ps2pdf' which is usually
+    found in /usr/bin/ps2pdf and is installed with the 'ghostscript'
+    package.  Install the 'ghostscript' package and verify ps2pdf is
+    in: /usr/bin/ps2pdf
+

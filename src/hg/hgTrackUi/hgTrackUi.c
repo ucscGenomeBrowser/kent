@@ -2851,6 +2851,7 @@ char *track = tdb->track;
 // NOTE: Developer, please try to use cfgTypeFromTdb()/cfgByCfgType().
 
 boolean boxed = trackDbSettingClosestToHomeOn(tdb, "boxedCfg");
+boolean isGencode3 = trackDbSettingOn(tdb, "isGencode3");
 // UI precedence:
 // 1) supers to get them out of the way: they have no controls
 // 2) special cases based upon track name (developer please avoid)
@@ -2898,7 +2899,7 @@ else if (startsWith("transMapAln", track) && (trackDbSetting(tdb, "bigDataUrl") 
     transMapUI(tdb);
 else if (sameString(track, "rgdGene2"))
     rgdGene2UI(tdb);
-else if (sameString(track, "knownGene"))
+else if (sameString(track, "knownGene") && !isGencode3)
     knownGeneUI(tdb);
 else if (sameString(track, "omimLocation"))
     omimLocationUI(tdb);

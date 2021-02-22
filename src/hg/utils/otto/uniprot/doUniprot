@@ -160,6 +160,7 @@ def parseArgs():
         print("To actually run the pipeline, you need to specify the argument 'run'.")
         parser.print_help()
         print("To actually run the pipeline, you need to specify the argument 'run'.")
+        sys.exit(0)
 
     if options.debug:
         consLevel = logging.DEBUG
@@ -1125,6 +1126,9 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
     relFname = join(tabDir, "version.txt")
 
     if not options.skipDownload and not options.skipParse:
+        if not isdir(tmpDir):
+            os.makedirs(tmpDir)
+
         localFname = join(uprotDir, "uniprot_sprot.xml.gz")
         if not isNewer(upUrl, localFname):
             logging.info("files at %s are not newer than file in %s, nothing to do. Specify -l to skip this check." % (upUrl, localFname))

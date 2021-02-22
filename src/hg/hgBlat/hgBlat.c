@@ -506,6 +506,8 @@ char unhideTrack[64];
 char *sort = cartUsualString(cart, "sort", pslSortList[0]);
 char *output = cartUsualString(cart, "output", outputList[0]);
 boolean pslOut = startsWith("psl", output);
+boolean pslRawOut = sameWord("pslRaw", output);
+boolean jsonOut = sameWord(output, "json");
 
 sprintf(uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 
@@ -550,13 +552,23 @@ if(feelingLucky)
     }
 else if (pslOut)
     {
-    printf("<TT><PRE>");
+    if (!pslRawOut)
+        printf("<TT><PRE>");
     if (!sameString(output, "psl no header"))
 	pslxWriteHead(stdout, qType, tType);
+
     for (psl = pslList; psl != NULL; psl = psl->next)
 	pslTabOut(psl, stdout);
+
+    if (pslRawOut)
+        exit(0);
+    printf("<TT><PRE>");
     printf("</PRE></TT>");
     }
+else if (jsonOut)  {
+        pslWriteAllJson(pslList, stdout, database, TRUE);
+        exit(0);
+}
 else  // hyperlink
     {
     printf("<H2>BLAT Search Results</H2>");
@@ -647,13 +659,26 @@ else  // hyperlink
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
 	printf("%s",psl->tName);
 	spaceOut(stdout, maxTChromNameSize - strlen(psl->tName));
-	printf("  %-2s  %9d %9d %6d\n",
+	printf("  %-2s  %9d %9d %6d",
 	    psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
+
+        // if you modify this, also modify hgPcr.c:doQuery, which implements a similar feature
+        char *seq = psl->tName;
+        if (endsWith(seq, "_fix"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#downloadFix\">What is chrom_fix?</A>");
+        else if (endsWith(seq, "_alt"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#downloadAlt\">What is chrom_alt?</A>");
+        else if (endsWith(seq, "_random"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download10\">What is chrom_random?</A>");
+        else if (startsWith(seq, "chrUn"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download11\">What is a chrUn sequence?</A>");
+        printf("\n");
 	}
     printf("</PRE>\n");
     webNewSection("Help");
-    puts("<P style=\"text-align:left\"><SMALL><A HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A><br><A HREF=\"../FAQ/FAQblat.html#blat1c\">What is chr_alt & chr_fix?</A></SMALL></P>\n");
+    puts("<P style=\"text-align:left\"><A target=_blank HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A><br>");
+    puts("<A target=_blank HREF=\"../FAQ/FAQblat.html#blat1c\">What is chr_alt & chr_fix?</A></P>\n");
     puts("</DIV>\n");
     }
 pslFreeList(&pslList);
@@ -1380,8 +1405,11 @@ if (allGenomes)
 else
     getDbAndGenome(cart, &db, &genome, oldVars);
 
+char *output = cgiString("output");
+boolean isJson= sameWordOk(output, "json");
+boolean isPslRaw= sameWordOk(output, "pslRaw");
 
-if(!feelingLucky && !allGenomes)
+if (!feelingLucky && !allGenomes && !isJson && !isPslRaw)
     cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), db);
 
 /* Load user sequence and figure out if it is DNA or protein. */
@@ -1743,9 +1771,9 @@ jsOnEventById("click", "allResultsText",
 printf("</TD>\n");
 
 printf("<TD COLSPAN=4 style='text-align:right'>\n");
-printf("<INPUT style='height:1.5em; width:100px; font-size:1.2em' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
-printf("<INPUT style='font-size:1.2em' TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
-printf("<INPUT style='font-size:1.2em' TYPE=SUBMIT NAME=Clear VALUE=Clear>\n");
+printf("<INPUT style='height:1.5em; width:100px; font-size:1.0em' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
+printf("<INPUT style='font-size:1.0em' TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
+printf("<INPUT style='font-size:1.0em' TYPE=SUBMIT NAME=Clear VALUE=Clear>\n");
 printf("</TD>\n");
 printf("</TR>\n");
 

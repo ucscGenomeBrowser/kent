@@ -106,7 +106,9 @@ FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
     # for faster searches
     'hgFindSpec', 'ensemblToGeneName', "ucscToINSDC",
     # these are almost required for searches, common tracks and not too big
-    "ensGene", "xenoRefGene"
+    "ensGene", "xenoRefGene",
+    # added in Feb 2021, necessary now for knownGenes display
+    "knownCds"
     ]
 
 # always copy these hgFixed tables

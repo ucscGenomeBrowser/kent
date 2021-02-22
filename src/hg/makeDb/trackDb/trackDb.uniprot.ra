@@ -52,6 +52,17 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         indelQueryInsert on
         baseColorTickColor contrastingColor
 
+        track unipFullSeq
+        shortLabel UniProt Proteins
+        longLabel Full UniProt Protein Sequences
+        priority 3
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/wuhCor1/uniprot/unipAliSwissprot.bb
+        color 255,0,150
+        itemRgb off
+
         track unipLocSignal
         shortLabel Signal Peptide
         longLabel UniProt Signal Peptides
@@ -105,6 +116,16 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipChain.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipInterest
+        shortLabel Interest
+        longLabel UniProt Regions of Interest
+        priority 4
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipInterest.bb
+        itemRgb off
 
         track unipDomain
         shortLabel Domains

@@ -3,7 +3,7 @@ superTrack on
 shortLabel Lung Travaglini
 longLabel Lung cells from from Travaglini et al 2020
 visibility hide
-group expression
+group singleCell
 
     track lungTravaglini2020CellType10x
     parent lungTravaglini2020

@@ -15,6 +15,7 @@
 <h6><a href="#GbibMirroring">Improving speed and performance</a></h6>
 <h6><a href="#UpdatingGbib">Updating Genome Browser in a Box</a></h6>
 <h6><a href="#YourTracks">Viewing your own data</a></h6>
+<h6><a href="#CustomizingGbib">Customizing your GBiB</a></h6>
 <h6><a href="#SharingGBIB">Sharing Genome Browser in a Box with others</a></h6>
 <h6><a href="#UsrAcct">User accounts and sessions</a></h6>
 <h6><a href="#Trouble">Troubleshooting common problems</a></h6>
@@ -530,12 +531,75 @@ sudo wget
 The file can then be found in the GBiB's 
 <a href="http://127.0.0.1:1234/folders/"><code>http://127.0.0.1:1234/folders/</code></a> location, 
 or loaded with a direct link to the files location:</p> 
-<!-- FIX ME -- THIS URL DOESN'T WORK -->
+
 <pre><code><a href="http://127.0.0.1:1234/cgi-bin/hgTracks?db=hg19&hgt.customText=http://127.0.0.1:1234/folders/GSM1186795.bw&position=chrM" 
 target="_blank">http://127.0.0.1:1234/cgi-bin/hgTracks?db=hg19&hgt.customText=<strong>http://127.0.0.1:1234/folders/GSM1186795.bw</strong>&position=chrM</a></code></pre>
 <p>
 (NOTE: In this above example, the <strong>ftp location</strong> now has byte-range requests 
 supported so the <strong>GEO ftp link</strong> can be loaded on the browser).</p>
+
+<a name="CustomizingGbib"></a>
+<h2>Customizing your GBiB</h2>
+
+<!--
+<a name="Fonts"></a>
+<h3>Enabling additional font styles</h3>
+<p>
+To enable the use of additional fonts in the tracks display, the following lines
+need to be need to be added to the <code>hg.conf</code> file:</p>
+<pre>
+freeType=on
+freeTypeDir=/usr/share/fonts/type1/gsfonts
+</pre>
+<p>
+The file can be found in the following location:</p>
+<pre>
+/usr/local/apache/cgi-bin/hg.conf
+</pre>
+<p>
+The fonts can then be change by pressing the <strong>configuration</strong> located below the 
+image on the tracks display.</p>.
+-->
+
+<a name="Defaults"></a>
+<h3>Changing the default Genome Browser options on a GBiB</h3>
+<p>
+GBiB supports changes to some default settings such as assembly, attached hubs, fonts, text size, 
+etc. Changing these defaults means that any time a new user goes to the mirror, or whenver 
+all user settings are reset, the custom options will be enabled. This can be useful in cases
+when it is desirable to have hubs attached by default, to change the default assembly or
+visibility display, etc.</p>
+<p>
+The first step is to create a <a href="#UsrAcct">Session</a> containing all desired display
+options, hubs, etc. Then a file will be created from within the GBiB that contains the 
+command to create a new MySQL table: <strong>defaultCart</strong>. See the 
+<a href="#Connectwithssh">Connect with ssh</a> section of this page for help logging into
+your GBiB. Contents of new file <strong>defaultCart.sql</strong>:</p>
+<pre>
+#The default cart
+CREATE TABLE defaultCart (
+    contents longblob not null	# cart contents
+);
+</pre>
+<p>
+The table can then be loaded:</p>
+<pre>
+mysql hgcentral < defaultCart.sql
+</pre>
+<p>
+Finally, the contents of the desired session can be entered into the new table.</p>
+<pre>
+mysql hgcentral -Ne "insert into defaultCart select contents from namedSessionDb where sessionName='nameOfSession' and userName='nameOfUser'"
+</pre>
+</p>
+Where <strong>nameOfSession</strong> is the name of the created session and 
+<strong>nameOfUser</strong> is the name of the user the session was created under. Keep
+in mind that only the top entry in that table will be used to pull default variables, so
+to change the new defaults (or to remove the new dedaults) you will first want
+to delete the table contents:</p>
+<pre>
+mysql hgcentral -Ne "delete from defaultCart"
+</pre>
 
 <a name="SharingGBIB"></a>
 <h2>Sharing Genome Browser in a Box with others</h2>
@@ -571,7 +635,7 @@ in mind that once you have opened up GBiB for remote access, anyone who knows yo
 will be able to access your instance of GBiB and the files that you have shared with
 it.</strong></p>
 <p>
-If you do not want your colleagues to configure track mirroring in your shared GBiB, you can use 
+To control access by others to configure track mirroring in your shared GBiB, you can use
 the commands <code>gbibMirrorOff</code> and <code>gbibMirrorOn</code> to disable or enable the
 &quot;Mirror Tracks&quot; function in the menu.</p>
 

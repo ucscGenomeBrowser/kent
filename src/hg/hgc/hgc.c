@@ -9093,11 +9093,7 @@ else if (isCustomTrack(table))
 else
     {
     tdb = hashFindVal(trackHash, table);
-    struct sqlConnection *conn = NULL;
-
-    if (!trackHubDatabase(database))
-        conn = hAllocConnTrack(database, tdb);
-    char *bigDataUrl = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
     if (bigDataUrl)
         {
         itemCount = getSeqForBigGene(tdb, geneName);
