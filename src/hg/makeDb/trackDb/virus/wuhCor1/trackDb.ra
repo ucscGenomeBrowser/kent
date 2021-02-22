@@ -330,7 +330,7 @@ group varRep
 visibility hide
 priority 0.2
 dataVersion /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
+#pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
