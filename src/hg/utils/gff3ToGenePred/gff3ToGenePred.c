@@ -277,7 +277,7 @@ if (isGeneWithCdsChildCase(mrna))
     {
     // is name something like YP_203370.1 (don't try too hard)
     struct gff3Ann *cds = mrna->children->ann;
-    if ((strlen(cds->name) > 4) && isupper(cds->name[0]) && isupper(cds->name[1])
+    if ((cds->name != NULL) && (strlen(cds->name) > 4) && isupper(cds->name[0]) && isupper(cds->name[1])
         && (cds->name[2] == '_') && isdigit(cds->name[3]))
         return cds->name;
     }
