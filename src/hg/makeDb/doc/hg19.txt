@@ -34379,6 +34379,11 @@ cat clust/*.ra > tracks.ra
 
 #############################################################################
 # CADD, max Wed Feb 10 06:08:01 PST 2021
+# note for the next release / archiving, procedure as per team meeting and Chris Lee:
+# don't forget to copy the new files to /usr/local/apache/htdocs-hgdownload/goldenPath/archive/hg19/cadd/<version>
+# and update the "current" symlink
+# also add a section "Archived Data" to the docs page with a link to the hgdownload archive directory
+# If motivated, also add a hub.txt
 cd /hive/data/genomes/hg19/bed/cadd/
 wget https://krishna.gs.washington.edu/download/CADD/v1.6/GRCh37/InDels.tsv.gz
 wget https://krishna.gs.washington.edu/download/CADD/v1.6/GRCh37/whole_genome_SNVs.tsv.gz
@@ -34391,7 +34396,6 @@ wigToBigWig g.wig ../../chrom.sizes g.bw &
 bedToBigBed ins.bed ../../chrom.sizes ins.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as
 bedToBigBed del.bed ../../chrom.sizes del.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as
 rm -f *.wig *.bed
-
 ##############################################################################
 #  update sno/miRNA TRACK (WORKING - 2021-02-18 - Hiram)
     # last release for GRCh37 was version 20: 2013-06-13
