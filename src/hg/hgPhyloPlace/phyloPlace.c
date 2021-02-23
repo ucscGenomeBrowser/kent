@@ -1158,17 +1158,83 @@ puts("<th>#SNVs used for placement"
      "</th></tr></thead>");
 }
 
-static char *qcClassForIntMin(int n, int minExc, int minGood, int minMeh, int minBad)
+
+// Default QC thresholds for calling an input sequence excellent/good/fair/bad [/fail]:
+static int qcThresholdsMinLength[] = { 29750, 29500, 29000, 28000 };
+static int qcThresholdsMaxNs[] = { 0, 5, 20, 100 };
+static int qcThresholdsMaxMixed[] = { 0, 5, 20, 100 };
+static int qcThresholdsMaxIndel[] = { 9, 18, 24, 36 };
+static int qcThresholdsMaxSNVs[] = { 25, 35, 45, 55 };
+static int qcThresholdsMaxMaskedSNVs[] = { 0, 1, 2, 3 };
+static int qcThresholdsMaxImputed[] = { 0, 5, 20, 100 };
+static int qcThresholdsMaxPlacements[] = { 1, 2, 3, 4 };
+static int qcThresholdsMaxPScore[] = { 0, 2, 5, 10 };
+
+static void wordsToQcThresholds(char **words, int *thresholds)
+/* Parse words from file into thresholds array.  Caller must ensure words and thresholds each
+ * have 4 items. */
+{
+int i;
+for (i = 0;  i < 4;  i++)
+    thresholds[i] = atoi(words[i]);
+}
+
+static void readQcThresholds(char *db)
+/* If config.ra specifies a file with QC thresholds for excellent/good/fair/bad [/fail],
+ * parse it and replace the default values in qcThresholds arrays.  */
+{
+char *qcThresholdsFile = phyloPlaceDbSettingPath(db, "qcThresholds");
+if (isNotEmpty(qcThresholdsFile))
+    {
+    if (fileExists(qcThresholdsFile))
+        {
+        struct lineFile *lf = lineFileOpen(qcThresholdsFile, TRUE);
+        char *line;
+        while (lineFileNext(lf, &line, NULL))
+            {
+            char *words[16];
+            int wordCount = chopTabs(line, words);
+            lineFileExpectWords(lf, 5, wordCount);
+            if (sameWord(words[0], "length"))
+                wordsToQcThresholds(words+1, qcThresholdsMinLength);
+            else if (sameWord(words[0], "nCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxNs);
+            else if (sameWord(words[0], "mixedCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxMixed);
+            else if (sameWord(words[0], "indelCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxIndel);
+            else if (sameWord(words[0], "snvCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxSNVs);
+            else if (sameWord(words[0], "maskedSnvCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxMaskedSNVs);
+            else if (sameWord(words[0], "imputedBases"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxImputed);
+            else if (sameWord(words[0], "placementCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxPlacements);
+            else if (sameWord(words[0], "parsimony"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxPScore);
+            else
+                warn("qcThresholds file %s: unrecognized parameter '%s', skipping",
+                     qcThresholdsFile, words[0]);
+            }
+        lineFileClose(&lf);
+        }
+    else
+        warn("qcThresholds %s: file not found", qcThresholdsFile);
+    }
+}
+
+static char *qcClassForIntMin(int n, int thresholds[])
 /* Return {qcExcellent, qcGood, qcMeh, qcBad or qcFail} depending on how n compares to the
  * thresholds. Don't free result. */
 {
-if (n >= minExc)
+if (n >= thresholds[0])
     return "qcExcellent";
-else if (n >= minGood)
+else if (n >= thresholds[1])
     return "qcGood";
-else if (n >= minMeh)
+else if (n >= thresholds[2])
     return "qcMeh";
-else if (n >= minBad)
+else if (n >= thresholds[3])
     return "qcBad";
 else
     return "qcFail";
@@ -1177,20 +1243,20 @@ else
 static char *qcClassForLength(int length)
 /* Return qc class for length of sequence. */
 {
-return qcClassForIntMin(length, 29750, 29500, 29000, 28000);
+return qcClassForIntMin(length, qcThresholdsMinLength);
 }
 
-static char *qcClassForIntMax(int n, int maxExc, int maxGood, int maxMeh, int maxBad)
+static char *qcClassForIntMax(int n, int thresholds[])
 /* Return {qcExcellent, qcGood, qcMeh, qcBad or qcFail} depending on how n compares to the
  * thresholds. Don't free result. */
 {
-if (n <= maxExc)
+if (n <= thresholds[0])
     return "qcExcellent";
-else if (n <= maxGood)
+else if (n <= thresholds[1])
     return "qcGood";
-else if (n <= maxMeh)
+else if (n <= thresholds[2])
     return "qcMeh";
-else if (n <= maxBad)
+else if (n <= thresholds[3])
     return "qcBad";
 else
     return "qcFail";
@@ -1199,49 +1265,49 @@ else
 static char *qcClassForNs(int nCount)
 /* Return qc class for #Ns in sample. */
 {
-return qcClassForIntMax(nCount, 0, 5, 20, 100);
+return qcClassForIntMax(nCount, qcThresholdsMaxNs);
 }
 
 static char *qcClassForMixed(int mixedCount)
 /* Return qc class for #ambiguous bases in sample. */
 {
-return qcClassForIntMax(mixedCount, 0, 5, 20, 100);
+return qcClassForIntMax(mixedCount, qcThresholdsMaxMixed);
 }
 
 static char *qcClassForIndel(int indelCount)
 /* Return qc class for #inserted or deleted bases. */
 {
-return qcClassForIntMax(indelCount, 0, 2, 5, 10);
+return qcClassForIntMax(indelCount, qcThresholdsMaxIndel);
 }
 
 static char *qcClassForSNVs(int snvCount)
 /* Return qc class for #SNVs in sample. */
 {
-return qcClassForIntMax(snvCount, 10, 20, 30, 40);
+return qcClassForIntMax(snvCount, qcThresholdsMaxSNVs);
 }
 
 static char *qcClassForMaskedSNVs(int maskedCount)
 /* Return qc class for #SNVs at problematic sites. */
 {
-return qcClassForIntMax(maskedCount, 0, 1, 2, 3);
+return qcClassForIntMax(maskedCount, qcThresholdsMaxMaskedSNVs);
 }
 
 static char *qcClassForImputedBases(int imputedCount)
 /* Return qc class for #ambiguous bases for which UShER imputed values based on placement. */
 {
-return qcClassForMixed(imputedCount);
+return qcClassForIntMax(imputedCount, qcThresholdsMaxImputed);
 }
 
 static char *qcClassForPlacements(int placementCount)
 /* Return qc class for number of equally parsimonious placements. */
 {
-return qcClassForIntMax(placementCount, 1, 2, 3, 4);
+return qcClassForIntMax(placementCount, qcThresholdsMaxPlacements);
 }
 
 static char *qcClassForPScore(int parsimonyScore)
 /* Return qc class for parsimonyScore. */
 {
-return qcClassForIntMax(parsimonyScore, 0, 2, 5, 10);
+return qcClassForIntMax(parsimonyScore, qcThresholdsMaxPScore);
 }
 
 static void printTooltip(char *text)
@@ -1781,6 +1847,7 @@ if (vcfTn)
                                             &startTime);
     if (results->subtreeInfoList || seqCount > MAX_SEQ_DETAILS)
         {
+        readQcThresholds(db);
         int subtreeCount = slCount(results->subtreeInfoList);
         // Sort subtrees by number of user samples (largest first).
         slSort(&results->subtreeInfoList, subTreeInfoUserSampleCmp);
