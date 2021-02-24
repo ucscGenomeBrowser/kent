@@ -9,8 +9,6 @@ compositeTrack on
 allButtonPair on
 mouseOverField comments
 urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-scoreLabel Score (1000=SwissProt, 0=Trembl)
-scoreFilter 0
 itemRgb on
 dataVersion /gbdb/$D/uniprot/version.txt
 hideEmptySubtracks on
@@ -126,6 +124,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipInterest.bb
         itemRgb off
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipDomain
         shortLabel Domains
