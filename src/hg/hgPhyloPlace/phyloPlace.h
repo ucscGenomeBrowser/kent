@@ -99,6 +99,7 @@ struct usherResults
     {
     struct tempName *bigTreePlusTn;      // Newick file: original tree plus user's samples
     struct hash *samplePlacements;       // Info about each sample's placement in the tree
+    struct subtreeInfo *singleSubtreeInfo;  // Comprehensive subtree with all uploaded samples
     struct subtreeInfo *subtreeInfoList; // For each subtree: tree, file, node info etc.
     };
 
