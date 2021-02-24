@@ -5,7 +5,7 @@ parent abEscape
 bigDataUrl /gbdb/wuhCor1/bloomEsc/serumAvg.bw
 viewLimits 0:26
 maxHeightPixels 100:28:8
-visibility full
+visibility dense
 color 255,0,0
 priority 30.1
 type bigWig
@@ -18,7 +18,7 @@ parent abEscape
 bigDataUrl /gbdb/wuhCor1/bloomEsc/mabAvg.bw
 viewLimits 0:13
 maxHeightPixels 100:28:8
-visibility full
+visibility hide
 color 0,0,255
 priority 30.2
 type bigWig
@@ -29,7 +29,7 @@ shortLabel Bloom Strong Mutations
 longLabel Bloom Lab: Strong S RBD-mutation antibody escape - positions with max score > 0.18 - shading = number of samples where found
 parent abEscape
 bigDataUrl /gbdb/wuhCor1/bloomEsc/top.bb
-visibility pack
+visibility hide
 type bigBed 9 +
 spectrum on
 scoreMin 0
@@ -43,7 +43,7 @@ shortLabel Bloom Max Escape
 longLabel Bloom Lab: S RBD-mutation antibody escape - maximum escape score per amino acid - 13 MABs and serum from 11 patients (A-K)
 type bigWig
 #autoScale group
-visibility dense
+visibility hide
 compositeTrack on
 parent abEscape
 #color 0,0,0
