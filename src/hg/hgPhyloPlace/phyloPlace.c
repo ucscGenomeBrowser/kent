@@ -1034,11 +1034,8 @@ if (ti == NULL)
 return ti;
 }
 
-//#*** TODO: Replace temporary host with nextstrain.org when feature request is released
-//#*** https://github.com/nextstrain/nextstrain.org/pull/216
 static char *nextstrainHost()
-/* Until the new /fetch/ function is live on nextstrain.org, get their temporary staging host
- * from an hg.conf param, or NULL if missing. */
+/* Return the nextstrain hostname from an hg.conf param, or NULL if missing. */
 {
 return cfgOption("nextstrainHost");
 }
@@ -1054,33 +1051,48 @@ struct dyString *dy = dyStringCreate("%s/fetch/%s", nextstrainHost(), jsonUrlFor
 return dyStringCannibalize(&dy);
 }
 
-static void makeNextstrainButton(char *idBase, int ix, struct tempName *jsonTns[])
-/* Make a button to view results in Nextstrain.  idBase is a short string and
+static void makeNextstrainButton(char *id, struct tempName *tn, char *label)
+/* Make a button to view an auspice JSON file in Nextstrain. */
+{
+char *nextstrainUrl = nextstrainUrlFromTn(tn);
+struct dyString *js = dyStringCreate("window.open('%s');", nextstrainUrl);
+cgiMakeOnClickButton(id, js->string, label);
+dyStringFree(&js);
+freeMem(nextstrainUrl);
+}
+
+static void makeNextstrainButtonN(char *idBase, int ix, struct tempName *jsonTns[])
+/* Make a button to view one subtree in Nextstrain.  idBase is a short string and
  * ix is 0-based subtree number. */
 {
 char buttonId[256];
 safef(buttonId, sizeof buttonId, "%s%d", idBase, ix+1);
 char buttonLabel[256];
 safef(buttonLabel, sizeof buttonLabel, "view subtree %d in Nextstrain", ix+1);
-char *nextstrainUrl = nextstrainUrlFromTn(jsonTns[ix]);
-struct dyString *js = dyStringCreate("window.open('%s');", nextstrainUrl);
-cgiMakeOnClickButton(buttonId, js->string, buttonLabel);
-dyStringFree(&js);
-freeMem(nextstrainUrl);
+makeNextstrainButton(buttonId, jsonTns[ix], buttonLabel);
 }
 
-static void makeButtonRow(struct tempName *jsonTns[], int subtreeCount, boolean isFasta)
+static void makeNsSingleTreeButton(struct tempName *tn)
+/* Make a button to view single subtree (with all uploaded samples) in Nextstrain. */
+{
+makeNextstrainButton("viewNextstrainSingleSubtree", tn, "view comprehensive subtree in Nextstrain");
+}
+
+static void makeButtonRow(struct tempName *singleSubtreeJsonTn, struct tempName *jsonTns[],
+                          int subtreeCount, boolean isFasta)
 /* Russ's suggestion: row of buttons at the top to view results in GB, Nextstrain, Nextclade. */
 {
 puts("<p>");
 cgiMakeButton("submit", "view in Genome Browser");
 if (nextstrainHost())
     {
+    printf("&nbsp;");
+    makeNsSingleTreeButton(singleSubtreeJsonTn);
     int ix;
     for (ix = 0;  ix < subtreeCount;  ix++)
         {
         printf("&nbsp;");
-        makeNextstrainButton("viewNextstrainTopRow", ix, jsonTns);
+        makeNextstrainButtonN("viewNextstrainTopRow", ix, jsonTns);
         }
     }
 if (0 && isFasta)
@@ -1842,10 +1854,13 @@ if (vcfTn)
     {
     fflush(stdout);
     int seqCount = slCount(seqInfoList);
+    // Don't make smaller subtrees when a large number of sequences are uploaded.
+    if (seqCount > MAX_SEQ_DETAILS)
+        subtreeSize = 0;
     struct usherResults *results = runUsher(usherPath, usherAssignmentsPath, vcfTn->forCgi,
                                             subtreeSize, sampleIds, bigTree->condensedNodes,
                                             &startTime);
-    if (results->subtreeInfoList || seqCount > MAX_SEQ_DETAILS)
+    if (results->singleSubtreeInfo)
         {
         readQcThresholds(db);
         int subtreeCount = slCount(results->subtreeInfoList);
@@ -1856,6 +1871,11 @@ if (vcfTn)
         struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
         struct seqWindow *gSeqWin = chromSeqWindowNew(db, chrom, 0, chromSize);
         struct hash *sampleMetadata = getSampleMetadata(metadataFile);
+        struct tempName *singleSubtreeJsonTn;
+        AllocVar(singleSubtreeJsonTn);
+        trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
+        treeToAuspiceJson(results->singleSubtreeInfo, db, geneInfoList, gSeqWin, sampleMetadata,
+                          singleSubtreeJsonTn->forCgi, source);
         struct tempName *jsonTns[subtreeCount];
         struct subtreeInfo *ti;
         int ix;
@@ -1867,14 +1887,12 @@ if (vcfTn)
                               source);
             }
         puts("<p></p>");
-        if (subtreeCount > 0 && subtreeCount <= MAX_SUBTREE_BUTTONS)
-            {
-            makeButtonRow(jsonTns, subtreeCount, isFasta);
-            printf("<p>If you have metadata you wish to display, click a 'view subtree in "
-                   "Nextstrain' button, and then you can drag on a CSV file to "
-                   "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
-                   "</p>\n");
-            }
+        int subtreeButtonCount = (seqCount <= MAX_SEQ_DETAILS) ? subtreeCount : 0;
+        makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeButtonCount, isFasta);
+        printf("<p>If you have metadata you wish to display, click a 'view subtree in "
+               "Nextstrain' button, and then you can drag on a CSV file to "
+               "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
+               "</p>\n");
         if (seqCount <= MAX_SEQ_DETAILS)
             {
             summarizeSequences(seqInfoList, isFasta, results, jsonTns, sampleMetadata, bigTree,
@@ -1889,7 +1907,7 @@ if (vcfTn)
                 else if (subtreeCount > 1)
                     printf("Unrelated sample");
                 printf("</h3>\n");
-                makeNextstrainButton("viewNextstrainSub", ix, jsonTns);
+                makeNextstrainButtonN("viewNextstrainSub", ix, jsonTns);
                 puts("<br>");
                 // Make a sub-subtree with only user samples for display:
                 struct phyloTree *subtree = phyloOpenTree(ti->subtreeTn->forCgi);
