@@ -5470,7 +5470,7 @@ group covid
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
-pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 12, 2020"
+#pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 12, 2020"
  
 
 
