@@ -710,6 +710,42 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
         else
             warn("Unexpected filename '%s' from usher, ignoring", file->name);
         }
+    else if (startsWith("single-subtree", file->name))
+        {
+        // We have a single subtree, not subtree-N-* files
+        int subtreeIx = 0;
+        subtreeCount = 1;
+        char fnameCpy[strlen(file->name)+1];
+        safecpy(fnameCpy, sizeof fnameCpy, file->name);
+        char *parts[4];
+        int partCount = chopString(fnameCpy, "-", parts, ArraySize(parts));
+        if (partCount == 2)
+            {
+            // Expect single-subtree.nh
+            if (!endsWith(parts[1], ".nh"))
+                warn("Unexpected filename '%s' from usher, ignoring", file->name);
+            else
+                {
+                AllocVar(subtreeTns[subtreeIx]);
+                trashDirFile(subtreeTns[subtreeIx], "ct", "subtree", ".nwk");
+                mustRename(path, subtreeTns[subtreeIx]->forCgi);
+                }
+            }
+        else if (partCount == 3)
+            {
+            // Expect single-subtree-mutations.txt or single-subtree-expanded.txt
+            if (sameString(parts[2], "mutations.txt"))
+                {
+                subtreeMuts[subtreeIx] = parseSubtreeMutations(path);
+                }
+            else if (sameString(parts[2], "expanded.txt"))
+                {
+                // Don't need this, just remove it
+                }
+            }
+        else
+            warn("Unexpected filename '%s' from usher, ignoring", file->name);
+        }
     else if (sameString(file->name, "final-tree.nh"))
         {
         // Don't need this, just remove it.
@@ -747,7 +783,7 @@ char *numThreadsStr = "16";
 struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "usher_outdir", ".dir");
 char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOutDir.forCgi,
-                "-k", subtreeSizeStr, "-T", numThreadsStr, "-u", "-l", NULL };
+                "-K", subtreeSizeStr, "-T", numThreadsStr, "-u", "-l", NULL };
 char **cmds[] = { cmd, NULL };
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "usher_stderr", ".txt");

@@ -23,9 +23,15 @@ static void writeAuspiceMeta(FILE *outF, struct slName *subtreeUserSampleIds, ch
 fprintf(outF,
         "\"meta\": { "
         "\"title\": \"Subtree with %s", subtreeUserSampleIds->name);
-struct slName *sln;
-for (sln = subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
-    fprintf(outF, ", %s", sln->name);
+int sampleCount = slCount(subtreeUserSampleIds);
+if (sampleCount > 10)
+    fprintf(outF, " and %d other uploaded samples", sampleCount - 1);
+else
+    {
+    struct slName *sln;
+    for (sln = subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
+        fprintf(outF, ", %s", sln->name);
+    }
 fputs("\", "
       "\"panels\": [ \"tree\"] , "
       "\"colorings\": [ "
@@ -139,14 +145,6 @@ if (lineage)
     jsonWriteObjectValue(jw, "pangolin_lineage", lineage);
 }
 
-struct geneInfo
-/* Information sufficient to determine whether a genome change causes a coding change. */
-    {
-    struct geneInfo *next;
-    struct psl *psl;        // Alignment of transcript to genome
-    struct dnaSeq *txSeq;   // Transcript sequence
-    };
-
 static boolean changesProtein(struct singleNucChange *snc, struct geneInfo *gi,
                               struct seqWindow *gSeqWin,
                               int *retAaStart, char *retOldAa, char *retNewAa)
@@ -187,8 +185,8 @@ if (snc->chromStart < gi->psl->tEnd && snc->chromStart >= gi->psl->tStart)
 return isCodingChange;
 }
 
-static struct slPair *getAaMutations(struct singleNucChange *sncList, struct geneInfo *geneInfoList,
-                                     struct seqWindow *gSeqWin)
+struct slPair *getAaMutations(struct singleNucChange *sncList, struct geneInfo *geneInfoList,
+                              struct seqWindow *gSeqWin)
 /* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }. */
 {
 struct slPair *geneChangeList = NULL;
@@ -433,8 +431,8 @@ slReverse(&geneInfoList);
 return geneInfoList;
 }
 
-void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct dnaSeq *ref,
-                       char *bigGenePredFile, struct hash *sampleMetadata, char *jsonFile,
+void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneInfoList,
+                       struct seqWindow *gSeqWin, struct hash *sampleMetadata, char *jsonFile,
                        char *source)
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
@@ -454,12 +452,9 @@ int depth = 0;
 struct phyloTree *root = phyloTreeNewNode("wrapper");
 phyloAddEdge(root, tree);
 tree = root;
-struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, ref);
-struct seqWindow *gSeqWin = chromSeqWindowNew(db, chrom, 0, chromSize);
 struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
                                sampleMetadata, nodeNum, source };
 rTreeToAuspiceJson(tree, depth, &aji, NULL, NULL, NULL, NULL);
-chromSeqWindowFree(&gSeqWin);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string, outF);
 jsonWriteFree(&jw);
