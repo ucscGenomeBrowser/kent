@@ -1,0 +1,14 @@
+track catV2
+shortLabel CAT Genes
+longLabel CAT Gene Annotations
+type bigGenePred
+group genes
+itemRgb on
+priority 1
+visibility pack
+searchIndex name,name2,txId,geneName,sourceGene,sourceTranscript,alignmentId
+bigDataUrl /gbdb/calJac4/catV2/consensus.bb
+labelFields name,name2,txId,geneName,sourceGene,sourceTranscript,alignmentId
+defaultLabelFields name
+labelSeparator " "
+
