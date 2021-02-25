@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 
 # make VERBOSE=-verbose=2 will echo out positions as they convert
 
-test:   bin bedPlus3 bedPlus3-200 bed8 bed12 simpleTest minus enm001 chuckTest chuckBigTest enr223 scaffoldEndBug
+test:   bin bedPlus3 bed8 bed12 simpleTest minus enm001 chuckTest chuckBigTest enr223 scaffoldEndBug
 
 # tests too slow to use in default test suite
 testSlow: mm3 multiple
@@ -42,14 +42,6 @@ bedPlus3:	mkdirs
                 output/bedPlus3.good.bed output/bedPlus3.bad.bed 2> /dev/null
 	cat output/bedPlus3.{good,bad}.bed | \
                 diff - expected/bedPlus3.bed 1>&2
-
-bedPlus3-256:	mkdirs
-	${liftOver} -bedPlus=3 \
-            input/bedPlus-256.bed \
-            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
-                output/bedPlus3-256.good.bed output/bedPlus3-256.bad.bed 2> /dev/null
-	cat output/bedPlus3-256.{good,bad}.bed | \
-                diff - expected/bedPlus3-256.bed 1>&2
 
 simpleTest:     mkdirs
 	${liftOver} \
