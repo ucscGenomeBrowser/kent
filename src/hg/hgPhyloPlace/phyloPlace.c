@@ -1352,7 +1352,6 @@ if (seqInfoList)
     printSummaryHeader(isFasta);
     puts("<tbody>");
     struct dyString *dy = dyStringNew(0);
-    struct dyString *dyExtra = dyStringNew(0);
     struct seqInfo *si;
     for (si = seqInfoList;  si != NULL;  si = si->next)
         {
@@ -1417,74 +1416,17 @@ if (seqInfoList)
                 dyStringPrintf(dy, "bases %d - %d align to reference bases %d - %d",
                                psl->qStart+1, psl->qEnd, psl->tStart+1, psl->tEnd);
                 printTooltip(dy->string);
-                int insBases = 0, insCount = 0, delBases = 0, delCount = 0;
-                if (psl->qBaseInsert || psl->tBaseInsert)
+                printf("</td><td class='%s'>%d ",
+                       qcClassForIndel(si->insBases), si->insBases);
+                if (si->insBases)
                     {
-                    // Tally up actual insertions and deletions; ignore skipped N bases.
-                    dyStringClear(dy);
-                    dyStringClear(dyExtra);
-                    int ix;
-                    for (ix = 0;  ix < psl->blockCount - 1;  ix++)
-                        {
-                        int qGapStart = psl->qStarts[ix] + psl->blockSizes[ix];
-                        int qGapEnd = psl->qStarts[ix+1];
-                        int qGapLen = qGapEnd - qGapStart;
-                        int tGapStart = psl->tStarts[ix] + psl->blockSizes[ix];
-                        int tGapEnd = psl->tStarts[ix+1];
-                        int tGapLen = tGapEnd - tGapStart;
-                        if (qGapLen > tGapLen)
-                            {
-                            insCount++;
-                            int insLen = qGapLen - tGapLen;
-                            insBases += insLen;
-                            if (isNotEmpty(dy->string))
-                                dyStringAppend(dy, ", ");
-                            if (insLen <= 12)
-                                {
-                                char insSeq[insLen+1];
-                                safencpy(insSeq, sizeof insSeq, si->seq->dna + qGapEnd - insLen,
-                                         insLen);
-                                touppers(insSeq);
-                                dyStringPrintf(dy, "%d-%d:%s",
-                                               tGapEnd, tGapEnd+1, insSeq);
-                                }
-                            else
-                                dyStringPrintf(dy, "%d-%d:%d bases",
-                                               tGapEnd, tGapEnd+1, insLen);
-                            }
-                        else if (tGapLen > qGapLen)
-                            {
-                            delCount++;
-                            int delLen = tGapLen - qGapLen;;
-                            delBases += delLen;
-                            if (isNotEmpty(dyExtra->string))
-                                dyStringAppend(dyExtra, ", ");
-                            if (delLen <= 12)
-                                {
-                                char delSeq[delLen+1];
-                                safencpy(delSeq, sizeof delSeq, refGenome->dna + tGapEnd - delLen,
-                                         delLen);
-                                touppers(delSeq);
-                                dyStringPrintf(dyExtra, "%d-%d:%s",
-                                               tGapEnd - delLen + 1, tGapEnd, delSeq);
-                                }
-                            else
-                                dyStringPrintf(dyExtra, "%d-%d:%d bases",
-                                               tGapEnd - delLen + 1, tGapEnd, delLen);
-                            }
-                        }
+                    printTooltip(si->insRanges);
                     }
                 printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(insBases), insBases);
-                if (insBases)
+                       qcClassForIndel(si->delBases), si->delBases);
+                if (si->delBases)
                     {
-                    printTooltip(dy->string);
-                    }
-                printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(delBases), delBases);
-                if (delBases)
-                    {
-                    printTooltip(dyExtra->string);
+                    printTooltip(si->delRanges);
                     }
                 printf("</td>");
                 }
@@ -1630,7 +1572,8 @@ return sncList;
 }
 
 static void writeOneTsvRow(FILE *f, char *sampleId, struct usherResults *results,
-                           struct geneInfo *geneInfoList, struct seqWindow *gSeqWin)
+                           struct hash *seqInfoHash, struct geneInfo *geneInfoList,
+                           struct seqWindow *gSeqWin)
 /* Write one row of tab-separate summary for sampleId. */
 {
     struct placementInfo *info = hashFindVal(results->samplePlacements, sampleId);
@@ -1675,11 +1618,47 @@ static void writeOneTsvRow(FILE *f, char *sampleId, struct usherResults *results
     fputc('\t', f);
     // path through tree to sample
     printVariantPathNoNodeNames(f, info->variantPath);
+    // number of equally parsimonious placements
+    fprintf(f, "\t%d", info->bestNodeCount);
+    // parsimony score
+    fprintf(f, "\t%d", info->parsimonyScore);
+    struct seqInfo *si = hashFindVal(seqInfoHash, sampleId);
+    if (si)
+        {
+        if (si->psl)
+            {
+            // length
+            fprintf(f, "\t%d", si->seq->size);
+            struct psl *psl = si->psl;
+            // aligned bases, indel counts & ranges
+            int aliCount = psl->match + psl->misMatch + psl->repMatch;
+            fprintf(f, "\t%d\t%d\t%s\t%d\t%s",
+                    aliCount, si->insBases, emptyForNull(si->insRanges),
+                    si->delBases, emptyForNull(si->delRanges));
+            }
+        else
+            fprintf(f, "\t\t\t\t\t\t");
+        // SNVs that were masked (Problematic Sites track), not used in placement
+        fputc('\t', f);
+        struct singleNucChange *snc;
+        for (snc = si->maskedSncList;  snc != NULL;  snc = snc->next)
+            {
+            if (snc != si->maskedSncList)
+                fputc(',', f);
+            fprintf(f, "%c%d%c", snc->refBase, snc->chromStart+1, snc->newBase);
+            }
+        }
+    else
+        {
+        warn("writeOneTsvRow: no sequenceInfo for sample '%s'", sampleId);
+        fprintf(f, "\t\t\t\t\t\t\t");
+        }
     fputc('\n', f);
 }
 
 static void rWriteTsvSummaryTreeOrder(struct phyloTree *node, FILE *f, struct usherResults *results,
-                                      struct geneInfo *geneInfoList, struct seqWindow *gSeqWin)
+                                      struct hash *seqInfoHash, struct geneInfo *geneInfoList,
+                                      struct seqWindow *gSeqWin)
 /* As we encounter leaves (user-uploaded samples) in depth-first search order, write out a line
  * of TSV summary for each one. */
 {
@@ -1687,18 +1666,29 @@ if (node->numEdges)
     {
     int i;
     for (i = 0;  i < node->numEdges;  i++)
-        rWriteTsvSummaryTreeOrder(node->edges[i], f, results, geneInfoList, gSeqWin);
+        rWriteTsvSummaryTreeOrder(node->edges[i], f, results, seqInfoHash, geneInfoList, gSeqWin);
     }
 else
     {
-    writeOneTsvRow(f, node->ident->name, results, geneInfoList, gSeqWin);
+    writeOneTsvRow(f, node->ident->name, results, seqInfoHash, geneInfoList, gSeqWin);
     }
 }
 
 
+static struct hash *hashFromSeqInfoList(struct seqInfo *seqInfoList)
+/* Hash sequence name to seqInfo for quick lookup. */
+{
+struct hash *hash = hashNew(0);
+struct seqInfo *si;
+for (si = seqInfoList;  si != NULL;  si = si->next)
+    hashAdd(hash, si->seq->name, si);
+return hash;
+}
+
 static struct tempName *writeTsvSummary(struct usherResults *results, struct phyloTree *sampleTree,
-                                        struct slName *sampleIds, struct geneInfo *geneInfoList,
-                                        struct seqWindow *gSeqWin, int *pStartTime)
+                                        struct slName *sampleIds, struct seqInfo *seqInfoList,
+                                        struct geneInfo *geneInfoList, struct seqWindow *gSeqWin,
+                                        int *pStartTime)
 /* Write a tab-separated summary file for download.  If the user uploaded enough samples to make
  * a tree, then write out samples in tree order; otherwise use sampleIds list. */
 {
@@ -1706,18 +1696,23 @@ struct tempName *tsvTn = NULL;
 AllocVar(tsvTn);
 trashDirFile(tsvTn, "ct", "usher", ".tsv");
 FILE *f = mustOpen(tsvTn->forCgi, "w");
-fprintf(f, "name\tnuc_mutations\taa_mutations\timputed_bases\tmutation_path\n");
+fprintf(f, "name\tnuc_mutations\taa_mutations\timputed_bases\tmutation_path"
+        "\tplacement_count\tparsimony_score_increase\tlength\taligned_bases"
+        "\tins_bases\tins_ranges\tdel_bases\tdel_ranges\tmasked_mutations"
+        "\n");
+struct hash *seqInfoHash = hashFromSeqInfoList(seqInfoList);
 if (sampleTree)
     {
-    rWriteTsvSummaryTreeOrder(sampleTree, f, results, geneInfoList, gSeqWin);
+    rWriteTsvSummaryTreeOrder(sampleTree, f, results, seqInfoHash, geneInfoList, gSeqWin);
     }
 else
     {
     struct slName *sample;
     for (sample = sampleIds;  sample != NULL;  sample = sample->next)
-        writeOneTsvRow(f, sample->name, results, geneInfoList, gSeqWin);
+        writeOneTsvRow(f, sample->name, results, seqInfoHash, geneInfoList, gSeqWin);
     }
 carefulClose(&f);
+hashFree(&seqInfoHash);
 reportTiming(pStartTime, "write tsv summary");
 return tsvTn;
 }
@@ -1929,8 +1924,8 @@ if (vcfTn)
                                                   source, fontHeight, &sampleTree, &startTime);
 
         // Make a TSV summary file
-        struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, geneInfoList,
-                                                 gSeqWin, &startTime);
+        struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
+                                                 geneInfoList, gSeqWin, &startTime);
 
         // Offer big tree w/new samples for download
         puts("<h3>Downloads</h3>");
