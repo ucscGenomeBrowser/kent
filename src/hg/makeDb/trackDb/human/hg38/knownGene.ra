@@ -1,4 +1,3 @@
-
 track knownGene 
 shortLabel GENCODE v32
 longLabel  GENCODE v32 Comprehensive Transcript Set (only Basic displayed by default)
@@ -48,4 +47,3 @@ shortCircuit 1
 semiShortCircuit 1
 termRegex ENST[0-9.]+
 searchPriority 9
-
