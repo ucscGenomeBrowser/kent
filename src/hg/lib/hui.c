@@ -365,7 +365,7 @@ if (isEmpty(regionUrl))
 // TODO: fix bedPackDense to work with multi-region
 // TODO: limit number of regions ?
 struct dyString *dsCustomText = dyStringCreate(
-            "track name=\'%s Regions\' description=\'Regions of interest for track: %s' "
+            "track name=\'%s ROI\' description=\'[Regions of Interest] %s' "
             "visibility=dense bedPackDense=on labelOnFeature=on itemRgb=on noScoreFilter=on\n",
                 tdb->shortLabel, tdb->longLabel);
 
@@ -453,6 +453,7 @@ mustWrite(f, regionInfo, strlen(regionInfo));
 #endif
 
 // write to trash file and custom track
+int regionCount = 0;
 while (lineFileChopNext(lf, words, bedSize))
     {
     region = bedLoadN(words, bedSize);
@@ -494,6 +495,7 @@ while (lineFileChopNext(lf, words, bedSize))
                         "0\t.\t%d\t%d\t%s\n",
                             region->chrom, start, end,  name,
                             start, end, color);
+    regionCount++;
     }
 lineFileClose(&lf);
 fclose(f);
@@ -517,8 +519,8 @@ safef(customHtml, sizeof customHtml, "<h2>Description</h2>\n"
 
 // TODO: support #padding in custom regions file
 
-printf("<p>View regions of interest for this track in "
-            "<a target='_blank' href='../cgi-bin/hgTracks?"
+printf("<p>Display %d regions of interest for this track in "
+            "<a href='../cgi-bin/hgTracks?"
                 "virtMode=1&"
                 "virtModeType=customUrl&"
                 "virtWinFull=on&"
@@ -527,10 +529,13 @@ printf("<p>View regions of interest for this track in "
                 "%s=%s&"
                 "%s=%s'>"
             "multi-region view</a>"
-                " (custom regions mode)</p>",
-                    tdb->track, cgiEncode(regionFile),
+                " (custom regions mode)",
+                    regionCount, tdb->track, cgiEncode(regionFile),
                     CT_CUSTOM_DOC_TEXT_VAR, cgiEncode(customHtml),
                     CT_CUSTOM_TEXT_VAR, cgiEncode(dyStringCannibalize(&dsCustomText)));
+printf("&nbsp;&nbsp;&nbsp;");
+printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
+printf("</p>");
 return TRUE;
 }
 
