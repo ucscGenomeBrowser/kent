@@ -10,6 +10,7 @@ GCA_900108605.1_NNQGG.v01	American mink
 GCF_000464555.1_PanTig1.0	Amur tiger
 GCF_000803125.2_CamDro3	Arabian camel
 GCF_003426925.1_ASM342692v1	Arctic ground squirrel
+GCF_015852505.1_mTacAcu1.pri	Australian echidna
 GCF_001305755.1_ASM130575v1	ass
 GCF_000767855.1_Ca_bactrianus_MBC_1.0	Bactrian camel
 GCF_000327345.1_ASM32734v1	David's myotis bat
@@ -37,7 +38,9 @@ GCF_000743615.1_DMR_v1.0	Damara mole-rat DMR 1.0
 GCF_012274545.1_DMR_v1.0_HiC	Damara mole-rat DMR 1.0 HiC
 GCF_000260255.1_OctDeg1.0	degu
 GCF_012295265.1_UNSW_AlpineDingo_1.0	dingo
-GCF_000002285.3_CanFam3.1	dog
+GCF_000002285.3_CanFam3.1	dog (boxer Tasha 2011)
+GCF_000002285.5_Dog10K_Boxer_Tasha	dog (boxer Tasha 2020)
+GCF_014441545.1_ROS_Cfam_1.0	dog (labrador)
 GCF_000181335.3_Felis_catus_9.0	domestic cat
 GCF_000215625.1_MusPutFur1.0	domestic ferret
 GCF_000151735.1_Cavpor3.0	domestic guinea pig
@@ -79,7 +82,7 @@ GCF_003265705.1_ASM326570v1	northern fur seal
 GCF_010015895.1_GSC_riverotter_1.0	Northern American river otter
 GCF_000001895.5_Rnor_6.0	Norway rat Rnor6.0
 GCF_000002265.2_Rn_Celera	Norway rat celera
-GCA_015227675.2_mRatBN7.2	Norway rat BN7
+GCF_015227675.2_mRatBN7.2	Norway rat BN7.2
 GCA_015244455.1_mRatBN7.1_alternate_haplotype	Norway rat BN7 haplotype
 GCF_000151885.1_Dord_2.0	Ord's kangaroo rat
 GCF_000321225.1_Oros_1.0	Pacific walrus
@@ -107,6 +110,7 @@ GCF_000283155.1_CerSimSim1.0	southern white rhinoceros
 GCF_002837175.2_ASM283717v2	sperm whale
 GCF_000260355.1_ConCri1.0	star-nosed mole
 GCF_004028035.1_ASM402803v1	Steller sea lion
+GCF_003009895.1_ASM300989v1	striped hyena
 GCF_000696425.1_G_variegatus-3.0.2	Sunda flying lemur
 GCF_902635505.1_mSarHar1.11	Tasmanian devil
 GCF_000236235.1_SpeTri2.0	thirteen-lined ground squirrel
