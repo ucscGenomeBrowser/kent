@@ -179,7 +179,7 @@ $ftpName =~ s#/hive/data/genomes/asmHubs/##;
 # chomp $urlDirectory;
 my $speciesSubgroup = $ftpName;
 my $asmType = "genbank";
-$asmType = "refseq" if ( $speciesSubgroup =~ m#refseq/#);
+$asmType = "refseq" if ( $gcXPrefix =~ m#GCF#);
 $speciesSubgroup =~ s#genomes/$asmType/##;;
 $speciesSubgroup =~ s#/.*##;;
 

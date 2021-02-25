@@ -1,0 +1,142 @@
+# strains of interest
+
+track ucscStrainNucMuts
+shortLabel UCSC Strain Nuc Muts
+longLabel  Strains of interest nucleotide mutations identified from GISAID sequences by UCSC Genomics Inst
+group varRep
+visibility dense
+compositeTrack on
+type vcfTabix
+pennantIcon new red
+html ucscStrainMuts
+hapClusterEnabled on
+hapClusterColorBy function
+geneTrack ncbiGeneBGP
+
+        track ucscStrainNucMutsUK
+        parent ucscStrainNucMuts
+        shortLabel B.1.1.7 Nuc Muts
+        longLabel B.1.1.7 strain ("UK variant", 20I/507.V1, VOC) nucleotide mutations identifed from GISAID sequences
+        bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainNucMutsUK.vcf.gz
+        color 255,117,53
+        priority 1
+
+        track ucscStrainNucMutsSA
+        parent ucscStrainNucMuts
+        shortLabel B.1.351 Nuc Muts
+        longLabel B.1.351 strain ("South Africa Variant", 20H/501Y.V2) nucleotide mutations identifed from GISAID sequences
+        bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainNucMutsSA.vcf.gz
+        color 255,170,63
+        priority 2
+
+        track ucscStrainNucMutsBrz
+        parent ucscStrainNucMuts
+        shortLabel P.1 Nuc Muts 
+        longLabel P.1 strain ("Brazil Variant", 20J/501Y.V3) nucleotide mutations identifed from GISAID sequences
+        bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainNucMutsBrz.vcf.gz
+        color 249,53,41
+        priority 3
+
+        track ucscStrainNucMutsCA
+        parent ucscStrainNucMuts
+        shortLabel B.1.429 Nuc Muts 
+        longLabel B.1.429 ("California Variant", CA.20C) nucleotide mutations identifed from GISAID sequences
+        bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainNucMutsCA.vcf.gz
+        color 105,190,185
+        priority 4
+
+track ucscStrainMuts
+shortLabel UCSC Strain Muts
+longLabel  Strains of interest amino acid mutations identified from GISAID sequences by UCSC Genomics Inst
+group varRep
+visibility hide
+compositeTrack on
+type bigBed 4
+pennantIcon new red
+bedNameLabel Mutation
+darkerLabels on
+noScoreFilter on
+
+        track ucscStrainMutsUK
+        parent ucscStrainMuts
+        shortLabel B.1.1.7 AA Muts 
+        longLabel B.1.1.7 strain ("UK Variant", 20I/507.V1, VOC) amino acid mutations identifed from GISAID
+        bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainMutsUK.bb
+        url https://cov-lineages.org/global_report_B.1.1.7.html
+        color 255,117,53
+        priority 1
+
+        track ucscStrainMutsSA
+        parent ucscStrainMuts
+        shortLabel B.1.351 AA Muts
+        longLabel B.1.351 strain ("South Africa Variant", 20H/501Y.V2) amino acid mutations identifed from GISAID sequences
+        bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainMutsSA.bb
+        url https://cov-lineages.org/global_report_B.1.351.html
+        color 255,170,63
+        priority 2
+
+        track ucscStrainMutsBrz
+        parent ucscStrainMuts
+        shortLabel P.1 AA Muts 
+        longLabel P.1 strain ("Brazil Variant", 20J/501Y.V3) amino acid mutations identifed from GISAID sequences
+        bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainMutsBrz.bb
+        url https://cov-lineages.org/global_report_P.1.html
+        color 249,53,41
+        priority 3
+
+        track ucscStrainMutsCA
+        parent ucscStrainMuts
+        shortLabel B.1.429 AA Muts 
+        longLabel B.1.429 strain ("California Variant", CA.20C) amino acid mutations identifed from GISAID sequences
+        bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainMutsCA.bb
+        color 105,190,185
+        priority 4
+
+track strainMuts
+shortLabel Strain Mutations
+longLabel  Strains of interest amino acid mutations from virological.org, cov-lineages.org and medRxiv (Jan 2021)
+group varRep
+visibility hide
+compositeTrack on
+type bigBed 4
+pennantIcon new red
+bedNameLabel Mutation
+darkerLabels on
+noScoreFilter on
+
+        track strainMutsUK
+        parent strainMuts
+        shortLabel UK Strain Muts 
+        longLabel UK strain (B.1.1.7, 20I/507.V1, VOC) amino acid mutations from virological.org and cov-lineages.org
+        bigDataUrl /gbdb/wuhCor1/strainMuts/strainMutsUK.bb
+        url https://cov-lineages.org/global_report_B.1.1.7.html
+        color 255,117,53
+        priority 1
+        
+        track strainMutsSA
+        parent strainMuts
+        shortLabel SA Strain Muts 
+        longLabel South Africa strain (B.1.351, 20H/501Y.V2) amino acid mutations from virological.org and cov-lineages.org
+        bigDataUrl /gbdb/wuhCor1/strainMuts/strainMutsSA.bb
+        url https://cov-lineages.org/global_report_B.1.351.html
+        color 255,170,63
+        priority 2
+
+        track strainMutsBrz
+        parent strainMuts
+        shortLabel Brz Strain Muts 
+        longLabel Brazil strain (P.1, 20J/501Y.V3) amino acid mutations from virological.org and cov-lineages.orgedRxiv and community annotation
+        bigDataUrl /gbdb/wuhCor1/strainMuts/strainMutsBrz.bb
+        url https://cov-lineages.org/global_report_P.1.html
+        color 249,53,41
+        priority 3
+
+        track strainMutsCA
+        parent strainMuts
+        shortLabel CA Strain Muts 
+        longLabel California strain (B.1.429, CA.20C) amino acid mutations from medRxiv
+        bigDataUrl /gbdb/wuhCor1/strainMuts/strainMutsCA.bb
+        color 105,190,185
+        priority 4
+
+-

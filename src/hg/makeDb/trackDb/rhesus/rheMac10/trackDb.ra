@@ -30,4 +30,3 @@ hapClusterHeight 360
 hapClusterEnabled on
 hapClusterMethod fileOrder
 maxWindowToDraw 1000000
-pennantIcon New red ../goldenPath/newsarch.html#080320 "Released Aug. 3, 2020"

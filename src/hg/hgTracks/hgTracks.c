@@ -4235,6 +4235,11 @@ while (lineFileNext(lf, &line, &lineSize))
         warn("BED chromEnd %u > size %u for chromosome/scaffold %s", bed->chromEnd, ci->size, bed->chrom);
 	return FALSE;
 	}
+    if (!(bed->chromEnd > bed->chromStart)) // do not allow empty regions
+	{
+        warn("BED chromEnd %u must be greater than chromStart %u %s", bed->chromEnd, bed->chromStart, bed->chrom);
+	return FALSE;
+	}
 
     slAddHead(&bedList, bed);
 
@@ -8875,19 +8880,19 @@ if (!hideControls)
         }
     if (doPliColors)
         {
-        hPrintf("<B>gnomAD Loss-of-Function Constraint (pLI) Color Key:</B><BR> ");
+        hPrintf("<B>gnomAD Loss-of-Function Constraint (LOEUF) Color Key:</B><BR> ");
         hPrintf("<table style=\"border: 1px solid black\"><tr>\n");
-        hPrintf("<td style=\"background-color:rgb(0,244,153)\">&lt; 0.1</td>\n");
-        hPrintf("<td style=\"background-color:rgb(74,240,94)\">&lt; 0.2</td>\n");
-        hPrintf("<td style=\"background-color:rgb(127,233,58)\">&lt; 0.3</td>\n");
-        hPrintf("<td style=\"background-color:rgb(165,224,26)\">&lt; 0.4</td>\n");
-        hPrintf("<td style=\"background-color:rgb(191,210,22)\">&lt; 0.5</td>\n");
-        hPrintf("<td style=\"background-color:rgb(210,191,13)\">&lt; 0.6</td>\n");
-        hPrintf("<td style=\"background-color:rgb(224,165,8)\">&lt; 0.7</td>\n");
-        hPrintf("<td style=\"background-color:rgb(233,127,5)\">&lt; 0.8</td>\n");
-        hPrintf("<td style=\"background-color:rgb(240,74,3)\">&lt; 0.9</td>\n");
-        hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 1</td>\n");
-        hPrintf("<td style=\"color: white; background-color:rgb(160,160,160)\">No pLI score</td>\n");
+        hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 0.1</td>\n");
+        hPrintf("<td style=\"background-color:rgb(240,74,3)\">&lt; 0.2</td>\n");
+        hPrintf("<td style=\"background-color:rgb(233,127,5)\">&lt; 0.3</td>\n");
+        hPrintf("<td style=\"background-color:rgb(224,165,8)\">&lt; 0.4</td>\n");
+        hPrintf("<td style=\"background-color:rgb(210,191,13)\">&lt; 0.5</td>\n");
+        hPrintf("<td style=\"background-color:rgb(191,210,22)\">&lt; 0.6</td>\n");
+        hPrintf("<td style=\"background-color:rgb(165,224,26)\">&lt; 0.7</td>\n");
+        hPrintf("<td style=\"background-color:rgb(127,233,58)\">&lt; 0.8</td>\n");
+        hPrintf("<td style=\"background-color:rgb(74,240,94)\">&lt; 0.9</td>\n");
+        hPrintf("<td style=\"background-color:rgb(0,244,153)\">&ge; 0.9</td>\n");
+        hPrintf("<td style=\"color: white; background-color:rgb(160,160,160)\">No LOEUF score</td>\n");
         hPrintf("</tr></table>\n");
         }
 
@@ -10105,34 +10110,37 @@ if (aliasHash)
 long long total = 0;
 char msg1[512], msg2[512];
 boolean truncating;
-int count = limit;
+int lineCount = 0;
 
 truncating = (limit > 0) && (seqCount > limit);
 
-for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
+for( ;lineCount < seqCount && (chromInfo != NULL); ++lineCount, chromInfo = chromInfo->next)
     {
-    char *aliasNames = chrAliases(aliasHash, chromInfo->chrom);
     unsigned size = chromInfo->size;
-    cgiSimpleTableRowStart();
-    cgiSimpleTableFieldStart();
-    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
-           hgTracksName(), cartSessionVarName(), cartSessionId(cart),
-           chromInfo->chrom,chromInfo->chrom);
-    cgiTableFieldEnd();
-    cgiTableFieldStartAlignRight();
-    printLongWithCommas(stdout, size);
-    puts("&nbsp;&nbsp;");
-    cgiTableFieldEnd();
-    if (hasAlias)
+    if (lineCount < limit)
 	{
+	char *aliasNames = chrAliases(aliasHash, chromInfo->chrom);
+	cgiSimpleTableRowStart();
 	cgiSimpleTableFieldStart();
-	if (aliasNames)
-            htmlPrintf("%s", aliasNames);
-	else
-            htmlPrintf("&nbsp;");
-        cgiTableFieldEnd();
+	htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
+	    hgTracksName(), cartSessionVarName(), cartSessionId(cart),
+	    chromInfo->chrom,chromInfo->chrom);
+	cgiTableFieldEnd();
+	cgiTableFieldStartAlignRight();
+	printLongWithCommas(stdout, size);
+	puts("&nbsp;&nbsp;");
+	cgiTableFieldEnd();
+	if (hasAlias)
+	    {
+	    cgiSimpleTableFieldStart();
+	    if (aliasNames)
+		htmlPrintf("%s", aliasNames);
+	    else
+		htmlPrintf("&nbsp;");
+	    cgiTableFieldEnd();
         }
-    cgiTableRowEnd();
+	cgiTableRowEnd();
+	}
     total += size;
     }
 if (!truncating)
@@ -10150,8 +10158,6 @@ else
     cgiSimpleTableFieldStart();
     puts(msg2);
     cgiTableFieldEnd();
-    for(;limit-- && (chromInfo != NULL); chromInfo = chromInfo->next)
-	total += chromInfo->size;
 
     unsigned scafCount = seqCount;
     cgiTableRowEnd();
@@ -10593,16 +10599,21 @@ if (measureTiming)
 char *mouseOverEnabled = cfgOption("mouseOverEnabled");
 if (sameWordOk(mouseOverEnabled, "on"))
     {
-    enableMouseOver = TRUE;
-    /* mouseOverJsonFile will be initializes and created at the same
-     * time as the browser .png image file
-     */
-    mouseOverJson = jsonWriteNew();
-    jsonWriteObjectStart(mouseOverJson, NULL);
-    /* this jsonWrite structure will finish off upon successful exit.
-     * each track will start a list with the track name:
-     *   jsonWriteListStart(mouseOverJson, tg->track);
-     */
+    /* can not use mouseOver in any virtual mode */
+    char *isMultiRegion = cartUsualString(cart, "virtModeType", "default");
+    if (sameWordOk(isMultiRegion, "default"))
+	{
+	enableMouseOver = TRUE;
+	/* mouseOverJsonFile will be initializes and created at the same
+	 * time as the browser .png image file
+	 */
+	mouseOverJson = jsonWriteNew();
+	jsonWriteObjectStart(mouseOverJson, NULL);
+	/* this jsonWrite structure will finish off upon successful exit.
+	 * each track will start a list with the track name:
+	 *   jsonWriteListStart(mouseOverJson, tg->track);
+	 */
+	}
     }
 else
     enableMouseOver = FALSE;

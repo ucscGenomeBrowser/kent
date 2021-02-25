@@ -17,7 +17,7 @@
 	<li><a href="../cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm39&amp;position=lastDbPos">Mouse GRCm39/mm39</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
-	<li><a href="http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hubIndex.html">Mouse: 16 strains</a></li>
+	<li><a href="https://hgdownload.soe.ucsc.edu/hubs/">Genome Assembly Hubs</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=wuhCor1&amp;position=lastDbPos">SARS-CoV-2 (COVID-19)</a></li>
 	<li class="last"><a href="../cgi-bin/hgGateway">Other</a></li>
         </ul>
@@ -85,7 +85,7 @@
 	<li class="first"><a href="../gtex.html">Genotype Tissue Expression (GTEx)</a></li>
 	<li><a href="../ENCODE/index.html">Encyclopedia of DNA Elements (ENCODE)</a></li>
 	<li><a href="../singlecell.html">UCSC Cell Browser</a></li>
-	<li class="last"><a href="../covid19.html">UCSC COVID-19 Resources</a></li>
+	<li class="last"><a href="../covid19.html">UCSC COVID-19 Research</a></li>
 	</ul>
 <!-- OPTIONAL_PROJECT_MENU_END -->
 

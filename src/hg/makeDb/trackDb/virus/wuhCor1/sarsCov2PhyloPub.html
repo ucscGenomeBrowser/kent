@@ -7,9 +7,9 @@ available from
 <a href="https://bigd.big.ac.cn/ncov/release_genome"
    target=_blank>China National Center for Bioinformation</a>,
 contributed by laboratories around the world,
-and variants found in those sequences.  By default, only very common variants (alternate allele found
+and mutations found in those sequences.  By default, only very common mutations (alternate allele found
 in at least 1% of samples) are displayed, but other subtracks may be made visible in order to see
-more rare variants.</p>
+more rare mutations.</p>
 <p>
 The phylogenetic tree is inferred by the
 <a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> pipeline
@@ -78,24 +78,24 @@ phylogenetic tree, Pangolin lineages,
 
 <h2>Display Conventions</h2>
 <p>
-In &quot;dense&quot; mode, a vertical line is drawn at each position where there is a variant.
+In &quot;dense&quot; mode, a vertical line is drawn at each position where there is a mutation.
 In &quot;squish&quot; and &quot;pack&quot; modes, the display shows a plot of all 
-samples' variants, with samples ordered using the phylogenetic tree in order to highlight 
-patterns of linkage. &quot;Full&quot; display mode shows each variant on its own row, 
+samples' mutations, with samples ordered using the phylogenetic tree in order to highlight
+patterns of linkage. &quot;Full&quot; display mode shows each mutation on its own row,
 ordered by position instead of lineage.</p>
 <p>
 Each sample is placed in a horizontal row of pixels; when the number of
 samples exceeds the number of vertical pixels for the track, multiple
 samples fall in the same pixel row and pixels are averaged across samples.</p>
 <p>
-Each variant is a vertical bar at its position in the SARS-CoV-2 genome
+Each mutation is a vertical bar at its position in the SARS-CoV-2 genome
 with white (invisible) representing the reference allele;
 the non-reference allele is shown in red if it changes the protein sequence of a gene,
 green if it falls within a gene but does not change the protein,
 and black if it does not fall within a gene.
-Tick marks are drawn at the top and bottom of each variant's vertical bar
+Tick marks are drawn at the top and bottom of each mutation's vertical bar
 to make the bar more visible when most alleles are reference alleles.
-Only single-nucleotide variants (SNVs) are displayed, not insertions or deletions.
+Only single-nucleotide substitutions are displayed, not insertions or deletions.
 </p>
 <p>
 The phylogenetic tree showing inferred relationships between the samples is depicted
@@ -140,7 +140,7 @@ documentation.
 </p>
 <p>UCSC makes a reduced version of the tree that contains only samples from fully public
 databases (GenBank, COG-UK direct release, CNCB)
-that do not prohibit UCSC from offering sequence variants for download (see Data Access).
+that do not prohibit UCSC from offering sequence mutations for download (see Data Access).
 UCSC also makes several adjustments to the phylogenetic tree for compact display:
   <ul>
     <li> We shorten &quot;2019&quot; and &quot;2020&quot; in dates to &quot;19&quot;
@@ -160,17 +160,17 @@ Files are available from our
 <a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/" 
 target=_blank>Download Server</a>:
 <ul>
-  <li>Sequence variants, allele counts and sample genotypes in
+  <li>Sequence mutations, allele counts and sample genotypes in
     <a href="https://samtools.github.io/hts-specs/VCFv4.2.pdf"
        target=_blank>Variant Call Format (VCF)</a> files:
     <ul>
-      <li>Variants with a minimum alternate allele frequency of 1% (<a
+      <li>Mutations with a minimum alternate allele frequency of 1% (<a
         href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.01.vcf.gz" 
         target=_blank>public.minAf.01.vcf.gz</a>)
-      <li>Variants with a minimum alternate allele frequency of 0.1% (<a
+      <li>Mutations with a minimum alternate allele frequency of 0.1% (<a
         href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.001.vcf.gz" 
         target=_blank>public.minAf.001.vcf.gz</a>)
-      <li>All variants (<a
+      <li>All mutations (<a
         href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/public.ambigToN.vcf.gz" 
         target=_blank>public.ambigToN.vcf.gz</a>)
     </ul>
@@ -232,10 +232,11 @@ Lanfear, R.
 target=_blank>10.5281/zenodo.3958883</a>. 2020.
 
 <p>
-Rambaut A, Holmes EC, Hill V, O'Toole A, McCrone JT, Ruis Chris, du Plessis L, Pybus OG.
-<a href="https://www.biorxiv.org/content/10.1101/2020.04.17.046086v1"
-   target=_blank>A dynamic nomenclature proposal for SARS-CoV-2 to assist genomic epidemiology</a>.
-<em>bioRxiv</em>. 2020 Apr 19.
+Rambaut A, Holmes EC, O'Toole &#193;, Hill V, McCrone JT, Ruis C, du Plessis L, Pybus OG.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32669681" target="_blank">
+A dynamic nomenclature proposal for SARS-CoV-2 lineages to assist genomic epidemiology</a>.
+<em>Nat Microbiol</em>. 2020 Nov;5(11):1403-1407.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32669681" target="_blank">32669681</a>
 </p>
 
 <p>

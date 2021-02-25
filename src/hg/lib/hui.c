@@ -7225,6 +7225,8 @@ char *geneLabel = cartUsualStringClosestToHome(cart, tdb,parentLevel, "label", "
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 labelCfgUi(db, cart, tdb, name);
+boolean isGencode3 = trackDbSettingOn(tdb, "isGencode3");
+
 if (sameString(name, "acembly"))
     {
     char *acemblyClass = cartUsualStringClosestToHome(cart,tdb,parentLevel,"type",
@@ -7233,7 +7235,7 @@ if (sameString(name, "acembly"))
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
     }
-else if (startsWith("gencodeV", name))
+else if (isGencode3)
     {
     newGencodeShowOptions(cart, tdb);
     }

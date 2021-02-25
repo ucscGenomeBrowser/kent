@@ -6,7 +6,7 @@ group covid
 visibility hide
 autoScale on
 maxHeightPixels 48:75:128
-pennantIcon New red ../goldenPath/newsarch.html "Released Dec. 23, 2020"
+#pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Dec. 23, 2020"
 type bigLolly 9 +
 lollyField 13
 mouseOver $name $ref/$alt effect $effectSize pVal $pValue studies $sourceCount

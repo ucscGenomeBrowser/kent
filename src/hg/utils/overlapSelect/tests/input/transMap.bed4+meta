@@ -1,0 +1,10 @@
+chr1	11034	14413	panTro6:XM_016947840.2-1.1	panTro6	XM_016947840.2	chr12	29160	32606	1000	1000	LOC741353	741353	non_coding	non_coding	syn	Chimp	Pan troglodytes	Pan
+chr1	12954	18922	macFas5:XM_015433411.1-1.1	macFas5	XM_015433411.1	chr13	18486378	18493394	1000	1000	LOC102144060	102144060	non_coding	non_coding	syn	Crab-eating macaque	Macaca fascicularis	Macaca
+chr1	14356	28870	calJac3:XM_017975843.1-1.1	calJac3	XM_017975843.1	chr9	11762743	11779367	1000	1000	LOC100397417	100397417	non_coding	non_coding	syn	Marmoset	Callithrix jacchus	Callit
+chr1	14356	29666	calJac3:XM_009003379.2-1.1	calJac3	XM_009003379.2	chr9	11762053	11779367	1000	1000	LOC100397417	100397417	non_coding	non_coding	syn	Marmoset	Callithrix jacchus	Callit
+chr1	14361	29961	colAng1:XM_011957135.1-1.1	colAng1	XM_011957135.1	NW_012117788v1	771464	789021	1000	1000	LOC105522587	105522587	non_coding	non_coding	syn	Angolan colobus	Colobus angolensis palliatus	Colobu
+chr1	14362	24901	colAng1:XM_011957136.1-1.1	colAng1	XM_011957136.1	NW_012117788v1	776470	789020	1000	1000	LOC105522587	105522587	non_coding	non_coding	syn	Angolan colobus	Colobus angolensis palliatus	Colobu
+chr1	14399	30013	ponAbe3:XM_009237661.2-1.1	ponAbe3	XM_009237661.2	chr12	7240	24849	1000	1000	WASHC1	100441991	non_coding	non_coding	syn	Orangutan	Pongo pygmaeus abelii	Pongo
+chr1	14403	24891	bosTau9:NM_001105406.1-1.1	bosTau9	NM_001105406.1	chr5	106998654	107014531	1000	979	WASHC1	533602	protein_coding	protein_coding	syn	Cow	Bos taurus	Bos
+chr1	14403	29017	felCat9:XM_003988273.5-1.1	felCat9	XM_003988273.5	chrB4	37921671	37939094	1000	1000	WASHC1	101088585	non_coding	non_coding	syn	Cat	Felis catus	Felis
+chr1	14493	28788	galVar1:XM_008577796.1-1.1	galVar1	XM_008577796.1	NW_007726181v1	1003967	1019295	1000	1000	WASH1	103594559	non_coding	non_coding	syn	Malayan flying lemur	Galeopterus variegatus	Galeop

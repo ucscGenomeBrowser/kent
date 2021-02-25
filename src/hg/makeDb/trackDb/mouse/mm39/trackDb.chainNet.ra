@@ -1,0 +1,662 @@
+track mm39ChainNet
+compositeTrack on
+shortLabel Chain/Net
+longLabel Chain and Net Alignments
+subGroup1 view Views chain=Chains net=Nets
+subGroup2 species Species s000a=Rat s000b=Rat s001=Chinese_hamster s002=Chinese_hamster s003=Beaver s004=Squirrel s005=Guinea_pig s006=Pika s007=Rabbit s008=Malayan_flying_lemur s009=Tree_shrew s010=Bushbaby s011=Tarsier s012=Marmoset s013=Rhesus s014=Gorilla s015=Bonobo s016=Chimp s017=Human s018=Shrew s019=Hedgehog s020=Hawaiian_monk_seal s021=Dog s022=Dog s023=Canada_lynx s024=Chinese_pangolin s025=Horse s026=Sheep s027=Cow s028=Dolphin s029=Pig s030=Tenrec s031=Elephant s032=Opossum s033=Chicken s034=lance-tailed_manakin s035=X._tropicalis s036=Zebrafish s037=Lamprey
+subGroup3 clade Clade c00=glires c01=euarchontoglires c02=primates c03=laurasiatheria c04=vertebrates
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+color 0,0,0
+altColor 255,255,0
+type bed 3
+chainLinearGap loose
+chainMinScore 5000
+dimensions dimensionX=clade dimensionY=species
+sortOrder species=+ view=+ clade=+
+configurable on
+html mm39ChainNet
+
+    track mm39ChainNetViewchain
+    shortLabel  Chains
+    view chain
+    visibility pack
+    subTrack mm39ChainNet
+    spectrum on
+
+        track chainRn7
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s000a clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rn7
+        otherDb rn7
+
+        track chainRn6
+        subTrack mm39ChainNetViewchain on
+        subGroups view=chain species=s000b clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rn6
+        otherDb rn6
+
+        track chainCriGriChoV2
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s001 clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain criGriChoV2
+        otherDb criGriChoV2
+
+        track chainGCF_003668045.3
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s002 clade=c00
+        shortLabel Chinese hamster Chain
+        longLabel Chinese hamster (Jun. 2020 GCF_003668045.3_CriGri-PICRH-1.0) Chained Alignments
+        type bigChain GCF_003668045.3
+        bigDataUrl /gbdb/mm39/bbi/chainNet/chainGCF_003668045.3.bb
+        linkDataUrl /gbdb/mm39/bbi/chainNet/chainGCF_003668045.3Link.bb
+        otherDb GCF_003668045.3
+
+        track chainCasCan1
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s003 clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain casCan1
+        otherDb casCan1
+
+        track chainSpeTri2
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s004 clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain speTri2
+        otherDb speTri2
+
+        track chainCavPor3
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s005 clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain cavPor3
+        otherDb cavPor3
+
+        track chainOchPri3
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s006 clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain ochPri3
+        otherDb ochPri3
+
+        track chainOryCun2
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s007 clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain oryCun2
+        otherDb oryCun2
+
+        track chainGalVar1
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s008 clade=c01
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain galVar1
+        otherDb galVar1
+
+        track chainTupBel1
+        subTrack mm39ChainNetViewchain on
+        subGroups view=chain species=s009 clade=c01
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain tupBel1
+        otherDb tupBel1
+
+        track chainOtoGar3
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s010 clade=c02
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain otoGar3
+        otherDb otoGar3
+
+        track chainTarSyr2
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s011 clade=c02
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain tarSyr2
+        otherDb tarSyr2
+
+        track chainCalJac4
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s012 clade=c02
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain calJac4
+        otherDb calJac4
+
+        track chainRheMac10
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s013 clade=c02
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rheMac10
+        otherDb rheMac10
+
+        track chainGorGor6
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s014 clade=c02
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain gorGor6
+        otherDb gorGor6
+
+        track chainPanPan3
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s015 clade=c02
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain panPan3
+        otherDb panPan3
+
+        track chainPanTro6
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s016 clade=c02
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain panTro6
+        otherDb panTro6
+
+        track chainHg38
+        subTrack mm39ChainNetViewchain on
+        subGroups view=chain species=s017 clade=c02
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain hg38
+        otherDb hg38
+
+        track chainSorAra2
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s018 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain sorAra2
+        otherDb sorAra2
+
+        track chainEriEur2
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s019 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain eriEur2
+        otherDb eriEur2
+
+        track chainNeoSch1
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s020 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain neoSch1
+        otherDb neoSch1
+
+        track chainCanFam5
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s021 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain canFam5
+        otherDb canFam5
+
+        track chainCanFam4
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s022 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain canFam4
+        otherDb canFam4
+
+        track chainGCF_007474595.2
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s023 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain GCF_007474595.2
+        otherDb GCF_007474595.2
+
+        track chainManPen1
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s024 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain manPen1
+        otherDb manPen1
+
+        track chainEquCab3
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s025 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain equCab3
+        otherDb equCab3
+
+        track chainOviAri4
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s026 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain oviAri4
+        otherDb oviAri4
+
+        track chainBosTau9
+        subTrack mm39ChainNetViewchain on
+        subGroups view=chain species=s027 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bosTau9
+        otherDb bosTau9
+
+        track chainTurTru2
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s028 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain turTru2
+        otherDb turTru2
+
+        track chainSusScr3
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s029 clade=c03
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain susScr3
+        otherDb susScr3
+
+        track chainEchTel2
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s030 clade=c04
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain echTel2
+        otherDb echTel2
+
+        track chainLoxAfr3
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s031 clade=c04
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain loxAfr3
+        otherDb loxAfr3
+
+        track chainMonDom5
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s032 clade=c04
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain monDom5
+        otherDb monDom5
+
+        track chainGalGal6
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s033 clade=c04
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain galGal6
+        otherDb galGal6
+
+        track chainGCF_009829145.1
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s034 clade=c04
+        shortLabel lance-tailed manakin Chain
+        longLabel lance-tailed manakin (Jan. 2020 GCF_009829145.1_bChiLan1.pri) Chained Alignments
+        type bigChain GCF_009829145.1
+        bigDataUrl /gbdb/mm39/bbi/chainNet/chainGCF_009829145.1.bb
+        linkDataUrl /gbdb/mm39/bbi/chainNet/chainGCF_009829145.1Link.bb
+        otherDb GCF_009829145.1
+
+        track chainXenTro9
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s035 clade=c04
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain xenTro9
+        otherDb xenTro9
+
+        track chainDanRer11
+        subTrack mm39ChainNetViewchain on
+        subGroups view=chain species=s036 clade=c04
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain danRer11
+        otherDb danRer11
+
+        track chainPetMar3
+        subTrack mm39ChainNetViewchain off
+        subGroups view=chain species=s037 clade=c04
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain petMar3
+        otherDb petMar3
+
+    track mm39ChainNetViewnet
+    shortLabel  Nets
+    view net
+    visibility dense
+    subTrack mm39ChainNet
+
+        track netRn7
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s000a clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign rn7 chainRn7
+        otherDb rn7
+
+        track netRn6
+        subTrack mm39ChainNetViewnet on
+        subGroups view=net species=s000b clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign rn6 chainRn6
+        otherDb rn6
+
+        track netCriGriChoV2
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s001 clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign criGriChoV2 chainCriGriChoV2
+        otherDb criGriChoV2
+
+        track netGCF_003668045.3
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s002 clade=c00
+        shortLabel Chinese hamster mafNet
+        longLabel Chinese hamster (Jun. 2020 GCF_003668045.3_CriGri-PICRH-1.0) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/mm39/bbi/chainNet/mm39.GCF_003668045.3.net.bb
+        summary /gbdb/mm39/bbi/chainNet/mm39.GCF_003668045.3.net.summary.bb
+        speciesOrder GCF_003668045.3
+        otherDb GCF_003668045.3
+        itemFirstCharCase noChange
+
+        track netCasCan1
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s003 clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign casCan1 chainCasCan1
+        otherDb casCan1
+
+        track netSpeTri2
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s004 clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign speTri2 chainSpeTri2
+        otherDb speTri2
+
+        track netCavPor3
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s005 clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign cavPor3 chainCavPor3
+        otherDb cavPor3
+
+        track netOchPri3
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s006 clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign ochPri3 chainOchPri3
+        otherDb ochPri3
+
+        track netOryCun2
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s007 clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign oryCun2 chainOryCun2
+        otherDb oryCun2
+
+        track netGalVar1
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s008 clade=c01
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign galVar1 chainGalVar1
+        otherDb galVar1
+
+        track netTupBel1
+        subTrack mm39ChainNetViewnet on
+        subGroups view=net species=s009 clade=c01
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign tupBel1 chainTupBel1
+        otherDb tupBel1
+
+        track netOtoGar3
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s010 clade=c02
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign otoGar3 chainOtoGar3
+        otherDb otoGar3
+
+        track netTarSyr2
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s011 clade=c02
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign tarSyr2 chainTarSyr2
+        otherDb tarSyr2
+
+        track netCalJac4
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s012 clade=c02
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign calJac4 chainCalJac4
+        otherDb calJac4
+
+        track netRheMac10
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s013 clade=c02
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign rheMac10 chainRheMac10
+        otherDb rheMac10
+
+        track netGorGor6
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s014 clade=c02
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign gorGor6 chainGorGor6
+        otherDb gorGor6
+
+        track netPanPan3
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s015 clade=c02
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign panPan3 chainPanPan3
+        otherDb panPan3
+
+        track netPanTro6
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s016 clade=c02
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign panTro6 chainPanTro6
+        otherDb panTro6
+
+        track netHg38
+        subTrack mm39ChainNetViewnet on
+        subGroups view=net species=s017 clade=c02
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign hg38 chainHg38
+        otherDb hg38
+
+        track netSorAra2
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s018 clade=c03
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign sorAra2 chainSorAra2
+        otherDb sorAra2
+
+        track netEriEur2
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s019 clade=c03
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign eriEur2 chainEriEur2
+        otherDb eriEur2
+
+        track netNeoSch1
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s020 clade=c03
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign neoSch1 chainNeoSch1
+        otherDb neoSch1
+
+        track netCanFam5
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s021 clade=c03
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign canFam5 chainCanFam5
+        otherDb canFam5
+
+        track netCanFam4
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s022 clade=c03
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign canFam4 chainCanFam4
+        otherDb canFam4
+
+        track netManPen1
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s024 clade=c03
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign manPen1 chainManPen1
+        otherDb manPen1
+
+        track netEquCab3
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s025 clade=c03
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign equCab3 chainEquCab3
+        otherDb equCab3
+
+        track netOviAri4
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s026 clade=c03
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign oviAri4 chainOviAri4
+        otherDb oviAri4
+
+        track netBosTau9
+        subTrack mm39ChainNetViewnet on
+        subGroups view=net species=s027 clade=c03
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign bosTau9 chainBosTau9
+        otherDb bosTau9
+
+        track netTurTru2
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s028 clade=c03
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign turTru2 chainTurTru2
+        otherDb turTru2
+
+        track netSusScr3
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s029 clade=c03
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign susScr3 chainSusScr3
+        otherDb susScr3
+
+        track netEchTel2
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s030 clade=c04
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign echTel2 chainEchTel2
+        otherDb echTel2
+
+        track netLoxAfr3
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s031 clade=c04
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign loxAfr3 chainLoxAfr3
+        otherDb loxAfr3
+
+        track netMonDom5
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s032 clade=c04
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign monDom5 chainMonDom5
+        otherDb monDom5
+
+        track netGalGal6
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s033 clade=c04
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign galGal6 chainGalGal6
+        otherDb galGal6
+
+        track netGCF_009829145.1
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s034 clade=c04
+        shortLabel lance-tailed manakin mafNet
+        longLabel lance-tailed manakin (Jan. 2020 GCF_009829145.1_bChiLan1.pri) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/mm39/bbi/chainNet/mm39.GCF_009829145.1.net.bb
+        summary /gbdb/mm39/bbi/chainNet/mm39.GCF_009829145.1.net.summary.bb
+        speciesOrder GCF_009829145.1
+        otherDb GCF_009829145.1
+        itemFirstCharCase noChange
+
+        track netXenTro9
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s035 clade=c04
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign xenTro9 chainXenTro9
+        otherDb xenTro9
+
+        track netDanRer11
+        subTrack mm39ChainNetViewnet on
+        subGroups view=net species=s036 clade=c04
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign danRer11 chainDanRer11
+        otherDb danRer11
+
+        track netPetMar3
+        subTrack mm39ChainNetViewnet off
+        subGroups view=net species=s037 clade=c04
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign petMar3 chainPetMar3
+        otherDb petMar3
+

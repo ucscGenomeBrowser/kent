@@ -14,7 +14,7 @@ errAbort(
   "   matrixScale in.tsv scale out.tsv\n"
   "where in and out are labeled matrices and scale is a floating point number\n"
   "options:\n"
-  "   -unlabeled - don't scale first row or column\n"
+  "   -unlabeled - do scale first row or column\n"
   );
 }
 

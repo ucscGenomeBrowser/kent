@@ -1500,6 +1500,8 @@ maxWindowToDraw 5000000
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 url http://evs.gs.washington.edu/EVS/PopStatsServlet?searchBy=rsOrChrom&target=$$&chromosome=$s&chromoStart=${&chromoEnd=$}&x=0&y=0
 urlLabel Exome Variant Server:
+vcfDoQual off
+vcfDoFilter off
 
 include trackDb.gnomad.ra
 
@@ -1806,7 +1808,43 @@ mafTrack multiz46way
 origAssembly hg17
 pennantIcon 17.jpg ../goldenPath/help/liftOver.html "lifted from hg17"
 
+track targetScanMiRnaSites
+release alpha
+superTrack on
+shortLabel TS miRNA Targets
+pennantIcon Updated red
+longLabel TargetScan predicted microRNA target sites
+group regulation
+visibility hide
+
+    track targetScanS
+    release alpha
+    parent targetScanMiRnaSites
+    shortLabel TS miRNA sites
+    longLabel TargetScan miRNA Regulatory Sites (Release 5.1, April 2009)
+    color 0,96,0
+    scoreFilterMax 100
+    type bed 6 .
+    urlLabel TargetScan link:
+    url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+
+    track targetScanMiRnaSitesV72
+    release alpha
+    parent targetScanMiRnaSites
+    shortLabel TS miRNA v7.2
+    longLabel Predicted microRNA Target Sites from TargetScanHuman 7.2 (March 2018)
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    filter.targetScanScore -1
+    filterLimits.targetScanScore -1:99
+    pennantIcon New red
+    urlLabel View miRNA target at TargetScan
+    url http://www.targetscan.org/cgi-bin/targetscan/vert_72/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+    bigDataUrl /gbdb/hg19/targetScan/targetScanSitesV72.bb
+
 track targetScanS
+release beta,public
 shortLabel TS miRNA sites
 longLabel TargetScan miRNA Regulatory Sites
 group regulation
@@ -2771,9 +2809,11 @@ include encode3.ra
 
 include wgEncodeReg.dev.ra alpha
 
+# other tracks
+#
 include platinumGenomes.ra
-
 include hic.ra
+include exomeProbesets.ra
 
 track epdNew
 shortLabel EPDnew Promoters
@@ -2789,6 +2829,9 @@ color 50,50,200
 exonArrows on
 dataVersion EPDNew Version 006 (May 2018)
 visibility hide
+
+include fetalGeneAtlas.ra
+include skinSoleBoldo.ra
 
 #  include doseSensitivity.ra
 
@@ -2827,4 +2870,5 @@ baseColorDefault genomicCodons
 track clinGenCnv override
 filter.size 773:11309570
 filterLimits.size 773:11309570
+
 

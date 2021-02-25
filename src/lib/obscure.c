@@ -196,6 +196,19 @@ lineFileClose(&lf);
 return hash;
 }
 
+void writeTsvRow(FILE *f, int rowSize, char **row)
+/* Write out row of strings to a line in tab-sep file */
+{
+if (rowSize > 0)
+    {
+    fprintf(f, "%s", row[0]);
+    int i;
+    for (i=1; i<rowSize; ++i)
+        fprintf(f, "\t%s", row[i]);
+    }
+fprintf(f, "\n");
+}
+
 struct slPair *slPairTwoColumnFile(char *fileName)
 /* Read in a two column file into an slPair list */
 {

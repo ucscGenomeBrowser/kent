@@ -1292,8 +1292,7 @@ There are no extra options that can appear on the type hic line.
 <div class="format"><code>exonNumbers &lt;on/off&gt;</code></div>
     <P>A mouseover that shows the exon and intron numbers 
     can be explicitly shown or hidden using this setting.
-    The default is "on" for the track types genePred and bigGenePred and "off"
-    for the track types genePred and bigGenePred.</P>
+    The default is "on" for the track types genePred and bigGenePred.</P>
     <P><B>Example:</B></P>
     <pre>   exonNumbers off</pre>
     <P>The text can be set with the options "exonText" and "intronText". It defaults to "exon" and "intron", respectively.</P>
@@ -4848,7 +4847,10 @@ For the complete bigInteract format definitions please see the
 <DIV class="bigLolly_intro">
 <H3>bigLolly: Lollipop Charts</H3>
     <P>
-    Lollipop graphs are usually used to display data that is local to a single base that has one to three data values assigned to it which can be displayed using the lollipop height, the color, and the size of the circle at the top of the lollipop.
+    Lollipop graphs are usually used to display data that is local to a single base that
+    has one to three data values assigned to it which can be displayed using the lollipop
+    height, the color, and the size of the circle at the top of the lollipop. For examples
+    visit the <a href="../bigLolly.html">bigLolly help page</a>.
 </DIV>
 
 <DIV class="bigLolly_example"><span class="types bigLolly"></span>

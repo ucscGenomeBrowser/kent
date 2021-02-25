@@ -17,9 +17,17 @@ errAbort(
   "identifiers best fits\n"
   "usage:\n"
   "   gencodeVersionForGenes genes.txt geneSymVer.tsv\n"
+  "where:\n"
+  "   genes.txt is a list of gene symbols or identifiers, one per line\n"
+  "   geneSymVer.tsv is output of gencodeGeneSymVer, usually /hive/data/inside/geneSymVerTx.tsv\n"
   "options:\n"
   "   -bed=output.bed - Create bed file for mapping genes to genome via best gencode fit\n"
   "   -allBed=outputDir - Output beds for all versions in geneSymVer.tsv\n"
+  "   -geneToId=geneToId.tsv - Output two column file with symbol from gene.txt and gencode\n"
+  "                  gene names as second. Symbols with no gene found are omitted\n"
+  "   -miss=output.txt - unassigned genes are put here, one per line\n"
+  "   -target=ucscDb - something like hg38 or hg19.  If set this will use most recent\n"
+  "                version of each gene that exists for the assembly in symbol mode\n"
   );
 }
 
@@ -27,6 +35,9 @@ errAbort(
 static struct optionSpec options[] = {
    {"bed", OPTION_STRING},
    {"allBed", OPTION_STRING},
+   {"geneToId", OPTION_STRING},
+   {"miss", OPTION_STRING},
+   {"target", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -104,8 +115,8 @@ void saveGsvtAsBed(struct gsvt *gsvt, char *name, char *symbol, FILE *f)
 {
 fprintf(f, "%s\t%d\t%d\t%s\t", 
     gsvt->chrom, gsvt->chromStart, gsvt->chromEnd, name);
-fprintf(f, "%d\t%s\t%d\t", gsvt->score, gsvt->strand, gsvt->thickStart);
-fprintf(f, "%u\t", gsvt->blockCount);
+fprintf(f, "%d\t%s\t%d\t%d\t", gsvt->score, gsvt->strand, gsvt->thickStart, gsvt->thickEnd);
+fprintf(f, "0\t%u\t", gsvt->blockCount);
 
 /* Print exon-by-exon fields. */
 int i;
@@ -152,6 +163,31 @@ struct version
     struct hash *symHash;
     };
 
+int versionCmp(const void *va, const void *vb)
+/* Compare to sort based on query start. */
+{
+const struct version *a = *((struct version **)va);
+const struct version *b = *((struct version **)vb);
+return strcmp(a->ucscDb, b->ucscDb);
+}
+
+boolean isSortedByDb(struct version *list)
+/* ErrAbort with a message if list is not sorted by db */
+{
+struct version *prev = list;
+if (prev == NULL)
+  return TRUE;
+for (;;)
+    {
+    struct version *next = prev->next;
+    if (next == NULL)
+        return TRUE;
+    if (versionCmp(&prev, &next) < 0)
+        return FALSE;
+    prev = next;
+    }
+}
+
 boolean isAccForm(char *s, char *prefix, int prefixSize, int digitCount, boolean withVersion)
 /* Return TRUE if s is form <prefix><digitCount digits>[.version] */
 {
@@ -197,7 +233,38 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 return count;
 }
 
-void gencodeVersionForGenes(char *geneListFile, char *geneSymVerTxFile, char *bedOut, char *allBedOut)
+struct hash *combinedDbHash(struct version *versionList, char *targetDb, boolean isSym)
+/* Make a hash that will return the most recent matching gsvt assuming versions sorted
+ * from oldest to most recent */
+{
+struct hash *combinedHash = hashNew(0);
+struct version *v;
+for (v = versionList; v != NULL; v = v->next)
+    {
+    if (!sameString(targetDb, v->ucscDb))
+        continue;
+    struct hash *verHash = (isSym ?v->symHash : v->idHash);
+    struct hashEl *hel;
+    struct hashCookie cookie = hashFirst(verHash);
+    while ((hel = hashNext(&cookie)) != NULL)
+	hashAdd(combinedHash, hel->name, hel->val);
+    }
+return combinedHash;
+}
+
+int countHashHits(struct hash *hash, struct slName *list)
+/* Return count of number of things on list that are in hash */
+{
+int count = 0;
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+    if (hashLookup(hash, el->name))
+        ++count;
+return count;
+}
+
+void gencodeVersionForGenes(char *geneListFile, char *geneSymVerTxFile, char *targetDb,
+    char *geneToIdOut, char *bedOut, char *allBedOut, char *missesOut)
 /* gencodeVersionForGenes - Figure out which version of a gencode gene set a 
  * set of gene identifiers best fits. */
 {
@@ -243,7 +310,8 @@ for (gsvt = gsvtList; gsvt!=NULL; gsvt = gsvt->next)
     hashAdd(version->idHash, gsvt->gene, gsvt);
     hashAdd(version->symHash, gsvt->symbol, gsvt);
     }
-verbose(1, "examining %d versions of gencode\n", versionHash->elCount);
+slReverse(&versionList);
+verbose(1, "examining %d versions of gencode and refseq\n", versionHash->elCount);
 
 if (allBedOut != NULL)
     {
@@ -291,20 +359,35 @@ for (v = versionList; v != NULL; v = v->next)
 	}
     }
 
-
+/* Report best version, maybe not best one we will actually use though */
 if (bestVersion == NULL)
     errAbort("Can't find any matches to any versions of gencode");
 verbose(1, "best is %s as %s on %s with %d of %d (%g%%) hits\n", bestVersion->name, 
     (bestIsSym?"sym":"id"), bestVersion->ucscDb, bestCount, geneCount, 100.0 * bestCount/geneCount);
 
+/* Now we want to make a hash that will give us a gsvt for our genes. We start with the hash
+ * for the best gencode version. */
+struct hash *gsvtHash = (bestIsSym ?bestVersion->symHash : bestVersion->idHash);
+struct hash *targetHash = NULL;
+
+
+/* If they have a target db, we do more processing, making a hash out of all versions that
+ * target that database instead. */
+if (targetDb != NULL)
+    {
+    gsvtHash = targetHash = combinedDbHash(versionList, targetDb, bestIsSym);
+    int hitCount = countHashHits(targetHash, geneList);
+    verbose(1, "on %s %d of %d (%g%%) hit across versions\n", targetDb, 
+	hitCount, geneCount, 100.0 * hitCount/geneCount);
+    }
+
 if (bedOut != NULL)
     {
     FILE *f = mustOpen(bedOut, "w");
     struct slName *gene;
-    struct hash *hash = (bestIsSym ?bestVersion->symHash : bestVersion->idHash);
     for (gene = geneList; gene != NULL; gene = gene->next)
         {
-	struct gsvt *gsvt = hashFindVal(hash, gene->name);
+	struct gsvt *gsvt = hashFindVal(gsvtHash, gene->name);
 	if (gsvt != NULL)
 	    {
 	    if (bestIsSym)
@@ -312,6 +395,31 @@ if (bedOut != NULL)
 	    else
 		saveGsvtAsBed(gsvt, gene->name, gsvt->symbol, f);
 	    }
+	}
+    carefulClose(&f);
+    }
+
+if (geneToIdOut != NULL)
+    {
+    FILE *f = mustOpen(geneToIdOut, "w");
+    struct slName *gene;
+    for (gene = geneList; gene != NULL; gene = gene->next)
+        {
+	struct gsvt *gsvt = hashFindVal(gsvtHash, gene->name);
+	if (gsvt != NULL)
+	    fprintf(f, "%s\t%s\n", gene->name, gsvt->gene);
+	}
+    carefulClose(&f);
+    }
+
+if (missesOut != NULL)
+    {
+    FILE *f = mustOpen(missesOut, "w");
+    struct slName *gene;
+    for (gene = geneList; gene != NULL; gene = gene->next)
+        {
+	if (hashLookup(gsvtHash, gene->name) == NULL)
+	    fprintf(f, "%s\n", gene->name);
 	}
     carefulClose(&f);
     }
@@ -323,6 +431,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-gencodeVersionForGenes(argv[1],argv[2], optionVal("bed", NULL), optionVal("allBed", NULL));
+gencodeVersionForGenes(argv[1],argv[2], optionVal("target", NULL),
+    optionVal("geneToId", NULL), optionVal("bed", NULL), 
+    optionVal("allBed", NULL), optionVal("miss", NULL));
 return 0;
 }

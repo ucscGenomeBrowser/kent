@@ -228,7 +228,7 @@ static float calcMeanQCover(struct sumStats *ss)
 if (ss->totalQSize == 0)
     return 0.0;
 else
-    return (float)(((double)ss->totalAlign)/((double)(ss->alnCnt*ss->totalQSize)));
+    return (float)(((double)ss->totalAlign)/((double)ss->totalQSize));
 }
 
 static float calcMeanRepMatch(struct sumStats *ss)
@@ -258,6 +258,7 @@ if (ss->alnCnt == 0)
     }
 else
     {
+    ss->totalQSize += psl->qSize;
     ss->minQSize = min(ss->minQSize, psl->qSize);
     ss->maxQSize = max(ss->maxQSize, psl->qSize);
     ss->minIdent = min(ss->minIdent, ident);

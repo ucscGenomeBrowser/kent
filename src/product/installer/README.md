@@ -1,4 +1,4 @@
-% Genome Browser in the Cloud User\'s Guide
+% Genome Browser in the Cloud User&apos;s Guide
 
 # What is Genome Browser in the Cloud?
 
@@ -9,20 +9,20 @@ UCSC Genome Browser on their server/cloud instance, rather than using
 or our public website. Please see the 
 [Installation of a UCSC Genome Browser on a local machine (mirror)](mirror.html#considerations-before-installing-a-genome-browser)
 page for a summary of installation options, including the pros and cons of using a mirror
-installation via the GBiC program vs\. using GBiB.
+installation via the GBiC program vs&period; using GBiB.
 
 The program works by setting up MySQL (MariaDB), Apache, and Ghostscript, and then copying the
 Genome Browser CGIs onto the machine under `/usr/local/apache/`. Because it also deactivates the
 default Apache htdocs/cgi folders, it is best run on a new machine, or at least a host that is not
 already used as a web server. The tool can also download full or partial assembly databases,
-update the Genome Browser CGIs, and remove temporary files (aka \"trash cleaning\").
+update the Genome Browser CGIs, and remove temporary files (aka "trash cleaning").
 
 The GBiC program has been tested with Ubuntu 14/16 LTS, Centos 6/6.7/7.2, and Fedora 20.
 
 It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft 
 Azure (Ubuntu). If you want to load data on the fly from UCSC, you need to select the 
-data centers \"US West (N. California)\" (Amazon) or \"West US\" (Microsoft) for best performance. 
-Other data centers (e.g\. East Coast) will require a local copy of the genome assembly, which 
+data centers "US West (N. California)" (Amazon) or "West US" (Microsoft) for best performance. 
+Other data centers (e.g&period; East Coast) will require a local copy of the genome assembly, which 
 requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum 
 size of a single Amazon EBS volume.
 
@@ -38,7 +38,7 @@ The `install` command downloads and configures Apache, MySQL (MariaDB) and Ghost
 Genome Browser CGIs, and configures the mirror to load data remotely from UCSC. The `install`
 command must be run before any other command is used.
 
-For mirror-specific help, please contact the Mirror Forum as listed on our [contact page](../../contacts.html).
+For mirror-specific help, please contact the Mirror Forum as listed on our [contact page](https://genome.ucsc.edu/contacts.html).
 
 For an installation demonstration, see the [Genome Browser in the Cloud (GBiC) Introduction](https://www.youtube.com/watch?v=dcJERBVnjio)
 video:
@@ -87,10 +87,10 @@ Your network firewall must allow outgoing connections to the following servers a
 
 ### Root file system too small for all data
 If you need to move data to another partition because the root file system is too small for all of
-the assembly\'s data, the following steps will help complete the installation. First, do a minimal
-installation with the browserSetup.sh script as described below, using just the \"install\"
-argument. Then make symlinks to the directory that will contain the data, e.g\. if your biggest
-filesystem is called \"/big\":
+the assembly&apos;s data, the following steps will help complete the installation. First, do a
+minimal installation with the browserSetup.sh script as described below, using just the "install"
+argument. Then make symlinks to the directory that will contain the data, e.g&period; if your
+biggest filesystem is called "/big":
 
 ```
 sudo mv /var/lib/mysql /big/
@@ -99,7 +99,7 @@ sudo ln -s /big/mysql /var/lib/mysql
 sudo ln -s /big/gbdb /gbdb
 ```
 
-Then use the \"mirror\" or \"minimal\" arguments to browserSetup.sh to rsync over the majority of
+Then use the "mirror" or "minimal" arguments to browserSetup.sh to rsync over the majority of
 the data.
 
 
@@ -265,4 +265,4 @@ options:
 * Max Haeussler for writing the program.
 * Christopher Lee for testing and QA.
 * Daniel Vera (bio.fsu.edu) for his RHEL install notes.
-* Bruce O\'Neill, Malcolm Cook for feedback.
+* Bruce O&apos;Neill, Malcolm Cook for feedback.

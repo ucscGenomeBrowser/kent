@@ -85,15 +85,21 @@ database is located at
 <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
 target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</p>
 <p>
+Here are wget commands to obtain these above files.
+<pre><code>wget https://genome.ucsc.edu/goldenPath/help/examples/bigChain.as
+wget https://genome.ucsc.edu/goldenPath/help/examples/bigLink.as
+wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes
+wget https://genome.ucsc.edu/goldenPath/help/examples/chr22_KI270731v1_random.hg38.mm10.rbest.chain
+</code></pre></p>
 <strong>Step 5.</strong> 
 Use the <code>hgLoadChain</code> utility to generate the <em>chain.tab</em> and <em>link.tab</em> 
 files needed to create the bigChain file:</p> 
-<pre><code>hgLoadChain -noBin -test hg38 bigChain chr22_KI2707731v1_random.hg38.mm10.rbest.chain</code></pre>
+<pre><code>hgLoadChain -noBin -test hg38 bigChain chr22_KI270731v1_random.hg38.mm10.rbest.chain</code></pre>
 <p>
 <strong>Step 6.</strong> 
 Create the bigChain file from your input chain file using a combination of <code>sed</code>, 
 <code>awk</code> and the <code>bedToBigBed</code> utility: 
-<pre><code>sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' &gt; chr22_KI270731v1_random.hg38.mm10.rbest.bigChain
+<pre><code>sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' &gt; chr22_KI270731v1_random.hg38.mm10.rbest.bigChain
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab chr22_KI270731v1_random.hg38.mm10.rbest.bigChain hg38.chrom.sizes bigChain.bb</code></pre></p> 
 <p>
 <strong>Step 7.</strong> 

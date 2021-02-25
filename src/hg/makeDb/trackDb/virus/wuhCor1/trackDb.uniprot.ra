@@ -1,28 +1,51 @@
 # uncomposited the uniprot track a little, as suggested by Jim and Angie.
 # this is only possible by renaming all tracks and copying the desc page
-track unipCov2AliSwissprot
-shortLabel Full Proteins
-longLabel UniProt full-length proteins
+#
+# UniProtein have no differences relative to the genome. No need for this to be an alignment track.
+# Note that the uniprot pipeline creates this track twice, once as a bigPsl, once as a bigGenePred.
+# For wuhCor1, we use the bigGenePred (see below)
+#track unipCov2AliSwissprot
+#shortLabel Protein Alignments
+#longLabel UCSC alignment of full-length SwissProt proteins to genome
+#priority 1
+#visibility dense
+#type bigPsl
+#bigDataUrl /gbdb/$D/uniprot/unipAliSwissprotCov2.bb
+#searchIndex name,acc
+#urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+#labelFields protShortNames,geneName,uniprotName,acc,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
+#mouseOverField protFullNames
+#itemRgb off
+#group uniprot
+#color 2,12,120
+#indelDoubleInsert on
+#indelQueryInsert on
+#baseColorTickColor contrastingColor
+#dataVersion /gbdb/$D/uniprot/version.txt
+#exonNumbers off
+
+# this is the bigGenePred created from the bigPsl
+track unipCov2FullSeq
+shortLabel Precurs. Proteins
+longLabel Full-length SwissProt precursor protein sequences (before cleavage into protein products)
 priority 1
-visibility dense
-type bigPsl
-bigDataUrl /gbdb/$D/uniprot/unipAliSwissprotCov2.bb
-searchIndex name,acc
+type bigGenePred
+visibility pack
+bigDataUrl /gbdb/wuhCor1/uniprot/unipFullSeq.bb
+searchIndex acc
 urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
 labelFields protShortNames,geneName,uniprotName,acc,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
-mouseOverField protFullNames
-itemRgb off
+mouseOverField comments
+itemRgb on
 group uniprot
-color 2,12,120
-indelDoubleInsert on
-indelQueryInsert on
-baseColorTickColor contrastingColor
+#color 2,12,120
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
+baseColorDefault genomicCodons
 
 track unipCov2Chain
 shortLabel Protein Products
-longLabel UniProt Protein Products (Polypeptide Chains)
+longLabel UniProt Protein Products (Polypeptide Chains, after cleavage)
 priority 2
 visibility pack
 color 0,2,80
@@ -35,7 +58,6 @@ dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 itemRgb on
 html uniprotCov2
-baseColorDefault genomicCodons
 
 track unipCov2Interest
 shortLabel Highlights
@@ -51,7 +73,6 @@ mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 itemRgb on
-baseColorDefault genomicCodons
 
 track unipCov2Domain
 shortLabel Protein Domains
@@ -67,12 +88,11 @@ mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 html uniprotCov2
-baseColorDefault genomicCodons
 
 track unipProtease
 shortLabel Protease Cleavage
 longLabel Protease Cleavage Sites
-visibility dense
+visibility hide
 type bigBed
 group uniprot
 bigDataUrl /gbdb/wuhCor1/uniprot/protease_sites.bb
@@ -86,7 +106,7 @@ shortLabel Disulf. Bonds
 longLabel UniProt Disulfide Bonds
 priority 8
 group uniprot
-visibility dense
+visibility hide
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipDisulfBondCov2.bb
 dataVersion /gbdb/$D/uniprot/version.txt
@@ -95,14 +115,13 @@ mouseOverField comments
 exonNumbers off
 itemRgb on
 html uniprotCov2
-baseColorDefault genomicCodons
 
 track unipCov2Modif
 shortLabel Glycosyl/Phosph.
 longLabel UniProt Amino Acid Glycosylation/Phosphorylation sites
 priority 9
 #parent uniprotCov2 off
-visibility dense
+visibility hide
 type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipModifCov2.bb
@@ -111,7 +130,6 @@ mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 itemRgb on
 html uniprotCov2
-baseColorDefault genomicCodons
 
 #track uniprotCov2
 #shortLabel UniProt Other
@@ -131,33 +149,33 @@ baseColorDefault genomicCodons
 #itemRgb on
 #dataVersion /gbdb/$D/uniprot/version.txt
 
-track unipCov2AliTrembl
-shortLabel TrEMBL Aln.
-longLabel UCSC alignment of TrEMBL proteins to genome
-priority 2
-#parent uniprotCov2 off
-visibility hide
-group uniprot
-type bigPsl
-bigDataUrl /gbdb/$D/uniprot/unipAliTremblCov2.bb
-searchIndex name,acc
-urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
-labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
-mouseOverField protFullNames
-itemRgb off
-color 0,150,250
-indelDoubleInsert on
-indelQueryInsert on
-baseColorTickColor contrastingColor
-dataVersion /gbdb/$D/uniprot/version.txt
-html uniprotCov2
+#track unipCov2AliTrembl
+#shortLabel TrEMBL Aln.
+#longLabel UCSC alignment of TrEMBL proteins to genome
+#priority 2
+##parent uniprotCov2 off
+#visibility hide
+#group uniprot
+#type bigPsl
+#bigDataUrl /gbdb/$D/uniprot/unipAliTremblCov2.bb
+#searchIndex name,acc
+#urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+#labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
+#mouseOverField protFullNames
+#itemRgb off
+#color 0,150,250
+#indelDoubleInsert on
+#indelQueryInsert on
+#baseColorTickColor contrastingColor
+#dataVersion /gbdb/$D/uniprot/version.txt
+#html uniprotCov2
 
 track unipCov2LocSignal
 shortLabel Signal Peptides
 longLabel UniProt Signal Peptides
 priority 3
 #parent uniprotCov2 off
-visibility dense
+visibility hide
 type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipLocSignalCov2.bb
@@ -167,7 +185,6 @@ itemRgb off
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
-baseColorDefault genomicCodons
 
         #track unipCov2LocExtra
         #shortLabel Extracellular
@@ -185,7 +202,7 @@ shortLabel Transmem. Domains
 longLabel UniProt Transmembrane Domains
 priority 5
 #parent uniprotCov2 on
-visibility dense
+visibility hide
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipLocTransMembCov2.bb
 urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
@@ -195,7 +212,6 @@ itemRgb off
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
-baseColorDefault genomicCodons
 
         #track unipCov2LocCytopl
         #shortLabel Cytoplasmic
@@ -208,23 +224,26 @@ baseColorDefault genomicCodons
         #color 255,150,0
         #itemRgb off
 
-        #track unipCov2Mut
-        #shortLabel Mutations
-        #longLabel UniProt Amino Acid Mutations
-        #priority 10
-        #parent uniprotCov2 off
-        #visibility dense
-        #type bigGenePred
-        #bigDataUrl /gbdb/$D/uniprot/unipMutCov2.bb
-        ##urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
-        #urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+track unipCov2Mut
+shortLabel Mutations
+longLabel UniProt Amino Acid Mutations
+priority 10
+#parent uniprotCov2 off
+group uniprot
+visibility dense
+type bigBed 12 +
+bigDataUrl /gbdb/$D/uniprot/unipMutCov2.bb
+mouseOverField comments
+urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
+#urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+html uniprotCov2
 
 track unipCov2Struct
 shortLabel Structure
 longLabel UniProt Protein Primary/Secondary Structure Annotations
 priority 11
 #parent uniprotCov2 off
-visibility dense
+visibility hide
 type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipStructCov2.bb
@@ -232,14 +251,13 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
-baseColorDefault genomicCodons
 
 track unipCov2Other
 shortLabel Other Annot.
 longLabel UniProt Other Annotations
 priority 11
 #parent uniprotCov2 off
-visibility dense
+visibility hide
 group uniprot
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipOtherCov2.bb
@@ -247,7 +265,6 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="htt
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
-baseColorDefault genomicCodons
 
 track unipCov2Repeat
 shortLabel Repeats
@@ -255,14 +272,13 @@ longLabel UniProt Repeats
 priority 12
 group uniprot
 #parent uniprotCov2 off
-visibility dense
+visibility hide
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipRepeatCov2.bb
 urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
-baseColorDefault genomicCodons
 
         #track unipCov2Conflict
         #shortLabel Seq. Conflicts

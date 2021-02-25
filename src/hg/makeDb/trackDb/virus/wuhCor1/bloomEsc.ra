@@ -1,0 +1,730 @@
+track bloomEscSerumAvg
+shortLabel Bloom Serum Average
+longLabel Bloom Lab: S RBD-mutation patient serum antibody escape - average score across serum samples (patients A-K)
+parent abEscape
+bigDataUrl /gbdb/wuhCor1/bloomEsc/serumAvg.bw
+viewLimits 0:26
+maxHeightPixels 100:28:8
+visibility dense
+color 255,0,0
+priority 30.1
+type bigWig
+html abEscape
+
+track bloomEscMabAvg
+shortLabel Bloom MAB Average
+longLabel Bloom Lab: S RBD-mutation monoclonal antibody escape - average score across all 13 MAB samples
+parent abEscape
+bigDataUrl /gbdb/wuhCor1/bloomEsc/mabAvg.bw
+viewLimits 0:13
+maxHeightPixels 100:28:8
+visibility hide
+color 0,0,255
+priority 30.2
+type bigWig
+html abEscape
+
+track bloomEscTop
+shortLabel Bloom Strong Mutations
+longLabel Bloom Lab: Strong S RBD-mutation antibody escape - positions with max score > 0.18 - shading = number of samples where found
+parent abEscape
+bigDataUrl /gbdb/wuhCor1/bloomEsc/top.bb
+visibility hide
+type bigBed 9 +
+spectrum on
+scoreMin 0
+scoreMax 15
+mouseOverField _mouseOver
+priority 30.3
+html abEscape
+
+track bloomEscMax
+shortLabel Bloom Max Escape
+longLabel Bloom Lab: S RBD-mutation antibody escape - maximum escape score per amino acid - 13 MABs and serum from 11 patients (A-K)
+type bigWig
+#autoScale group
+visibility hide
+compositeTrack on
+parent abEscape
+#color 0,0,0
+viewLimits 0:1.0
+priority 30.7
+html abEscape
+
+   track A_120Max
+   shortLabel Serum: A, day 120
+   longLabel Bloom antibody escape -  Max Score - A_120 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/A_120.max.bw
+   color 255,0,0
+   priority 30.71
+
+   track A_21Max
+   shortLabel Serum: A, day 021
+   longLabel Bloom antibody escape -  Max Score - A_21 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/A_21.max.bw
+   color 255,0,0
+   priority 30.72
+
+   track A_45Max
+   shortLabel Serum: A, day 045
+   longLabel Bloom antibody escape -  Max Score - A_45 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/A_45.max.bw
+   color 255,0,0
+   priority 30.73
+
+   track B_113Max
+   shortLabel Serum: B, day 113
+   longLabel Bloom antibody escape -  Max Score - B_113 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/B_113.max.bw
+   color 255,0,0
+   priority 30.74
+
+   track B_26Max
+   shortLabel Serum: B, day 026
+   longLabel Bloom antibody escape -  Max Score - B_26 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/B_26.max.bw
+   color 255,0,0
+   priority 30.75
+
+   track C_104Max
+   shortLabel Serum: C, day 104
+   longLabel Bloom antibody escape -  Max Score - C_104 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/C_104.max.bw
+   color 255,0,0
+   priority 30.76
+
+   track C_32Max
+   shortLabel Serum: C, day 032
+   longLabel Bloom antibody escape -  Max Score - C_32 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/C_32.max.bw
+   color 255,0,0
+   priority 30.77
+
+   track D_33Max
+   shortLabel Serum: D, day 033
+   longLabel Bloom antibody escape -  Max Score - D_33 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/D_33.max.bw
+   color 255,0,0
+   priority 30.78
+
+   track D_76Max
+   shortLabel Serum: D, day 076
+   longLabel Bloom antibody escape -  Max Score - D_76 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/D_76.max.bw
+   color 255,0,0
+   priority 30.79
+
+   track E_104Max
+   shortLabel Serum: E, day 104
+   longLabel Bloom antibody escape -  Max Score - E_104 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/E_104.max.bw
+   color 255,0,0
+   priority 30.80
+
+   track E_28Max
+   shortLabel Serum: E, day 028
+   longLabel Bloom antibody escape -  Max Score - E_28 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/E_28.max.bw
+   color 255,0,0
+   priority 30.81
+
+   track F_115Max
+   shortLabel Serum: F, day 115
+   longLabel Bloom antibody escape -  Max Score - F_115 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/F_115.max.bw
+   color 255,0,0
+   priority 30.82
+
+   track F_48Max
+   shortLabel Serum: F, day 048
+   longLabel Bloom antibody escape -  Max Score - F_48 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/F_48.max.bw
+   color 255,0,0
+   priority 30.83
+
+   track G_18Max
+   shortLabel Serum: G, day 018
+   longLabel Bloom antibody escape -  Max Score - G_18 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/G_18.max.bw
+   color 255,0,0
+   priority 30.84
+
+   track G_94Max
+   shortLabel Serum: G, day 094
+   longLabel Bloom antibody escape -  Max Score - G_94 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/G_94.max.bw
+   color 255,0,0
+   priority 30.85
+
+   track H_152Max
+   shortLabel Serum: H, day 152
+   longLabel Bloom antibody escape -  Max Score - H_152 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/H_152.max.bw
+   color 255,0,0
+   priority 30.86
+
+   track H_61Max
+   shortLabel Serum: H, day 061
+   longLabel Bloom antibody escape -  Max Score - H_61 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/H_61.max.bw
+   color 255,0,0
+   priority 30.87
+
+   track I_102Max
+   shortLabel Serum: I, day 102
+   longLabel Bloom antibody escape -  Max Score - I_102 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/I_102.max.bw
+   color 255,0,0
+   priority 30.88
+
+   track I_26Max
+   shortLabel Serum: I, day 026
+   longLabel Bloom antibody escape -  Max Score - I_26 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/I_26.max.bw
+   color 255,0,0
+   priority 30.89
+
+   track J_121Max
+   shortLabel Serum: J, day 121
+   longLabel Bloom antibody escape -  Max Score - J_121 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/J_121.max.bw
+   color 255,0,0
+   priority 30.90
+
+   track J_15Max
+   shortLabel Serum: J, day 015
+   longLabel Bloom antibody escape -  Max Score - J_15 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/J_15.max.bw
+   color 255,0,0
+   priority 30.91
+
+   track K_103Max
+   shortLabel Serum: K, day 103
+   longLabel Bloom antibody escape -  Max Score - K_103 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/K_103.max.bw
+   color 255,0,0
+   priority 30.92
+
+   track K_29Max
+   shortLabel Serum: K, day 029
+   longLabel Bloom antibody escape -  Max Score - K_29 
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/K_29.max.bw
+   color 255,0,0
+   priority 30.93
+
+   track LY-CoV016Max
+   shortLabel MAB LY-CoV016
+   longLabel Bloom antibody escape - Max Score - MAB LY-CoV016
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/LY-CoV016.max.bw
+   color 0,0,255
+   priority 30.94
+
+   track REGN10933Max
+   shortLabel MAB REGN10933
+   longLabel Bloom antibody escape - Max Score - MAB REGN10933
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/REGN10933.max.bw
+   color 0,0,255
+   priority 30.95
+
+   track REGN10933-REGN10987Max
+   shortLabel MAB REGN10933-REGN10987
+   longLabel Bloom antibody escape - Max Score - MAB REGN10933-REGN10987
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/REGN10933-REGN10987.max.bw
+   color 0,0,255
+   priority 30.96
+
+   track REGN10987Max
+   shortLabel MAB REGN10987
+   longLabel Bloom antibody escape - Max Score - MAB REGN10987
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/REGN10987.max.bw
+   color 0,0,255
+   priority 30.97
+
+   track rCR3022Max
+   shortLabel MAB rCR3022
+   longLabel Bloom antibody escape - Max Score - MAB rCR3022
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/rCR3022.max.bw
+   color 0,0,255
+   priority 30.98
+
+   track COV2-2050Max
+   shortLabel MAB COV2-2050
+   longLabel Bloom antibody escape - Max Score - MAB COV2-2050
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2050.max.bw
+   color 0,0,255
+   priority 30.99
+
+   track COV2-2082Max
+   shortLabel MAB COV2-2082
+   longLabel Bloom antibody escape - Max Score - MAB COV2-2082
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2082.max.bw
+   color 0,0,255
+   priority 31.01
+
+   track COV2-2094Max
+   shortLabel MAB COV2-2094
+   longLabel Bloom antibody escape - Max Score - MAB COV2-2094
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2094.max.bw
+   color 0,0,255
+   priority 31.02
+
+   track COV2-2096Max
+   shortLabel MAB COV2-2096
+   longLabel Bloom antibody escape - Max Score - MAB COV2-2096
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2096.max.bw
+   color 0,0,255
+   priority 31.03
+
+   track COV2-2165Max
+   shortLabel MAB COV2-2165
+   longLabel Bloom antibody escape - Max Score - MAB COV2-2165
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2165.max.bw
+   color 0,0,255
+   priority 31.03
+
+   track COV2-2479Max
+   shortLabel MAB COV2-2479
+   longLabel Bloom antibody escape - Max Score - MAB COV2-2479
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2479.max.bw
+   color 0,0,255
+   priority 31.04
+
+   track COV2-2499Max
+   shortLabel MAB COV2-2499
+   longLabel Bloom antibody escape - Max Score - MAB COV2-2499
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2499.max.bw
+   color 0,0,255
+   priority 31.05
+
+   track COV2-2677Max
+   shortLabel MAB COV2-2677
+   longLabel Bloom antibody escape - Max Score - MAB COV2-2677
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2677.max.bw
+   color 0,0,255
+   priority 31.05
+
+   track COV2-2832Max
+   shortLabel MAB COV2-2832
+   longLabel Bloom antibody escape - Max Score - MAB COV2-2832
+   parent bloomEscMax on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2832.max.bw
+   color 0,0,255
+   priority 31.06
+
+track bloomEscTotal
+shortLabel Bloom Total Escape
+longLabel Bloom Lab: S RBD-mutation antibody escape - total escape score per amino acid - 13 MABs and serum from 11 patients (A-K)
+type bigWig
+parent abEscape
+autoScale group
+compositeTrack on
+visibility hide
+color 0,0,0
+priority 32.00
+
+   track A_120Total
+   shortLabel Serum: A, day 120
+   longLabel Bloom antibody escape - Total Score - Subject A, Day 120
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/A_120.tot.bw
+
+   track A_21Total
+   shortLabel Serum: A, day 021
+   longLabel Bloom antibody escape - Total Score - Subject A, Day 21
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/A_21.tot.bw
+
+   track A_45Total
+   shortLabel Serum: A, day 045
+   longLabel Bloom antibody escape - Total Score - Subject A, Day 45
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/A_45.tot.bw
+
+   track B_113Total
+   shortLabel Serum: B, day 113
+   longLabel Bloom antibody escape - Total Score - Subject B, Day 113
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/B_113.tot.bw
+
+   track B_26Total
+   shortLabel Serum: B, day 026
+   longLabel Bloom antibody escape - Total Score - Subject B, Day 26
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/B_26.tot.bw
+
+   track COV2-2050Total
+   shortLabel MAB COV2-2050 total
+   longLabel Bloom antibody escape - Total Score - COV2-2050 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2050.tot.bw
+
+   track COV2-2082Total
+   shortLabel MAB COV2-2082 total
+   longLabel Bloom antibody escape - Total Score - COV2-2082 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2082.tot.bw
+
+   track COV2-2094Total
+   shortLabel MAB COV2-2094 total
+   longLabel Bloom antibody escape - Total Score - COV2-2094 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2094.tot.bw
+
+   track COV2-2096Total
+   shortLabel MAB COV2-2096 total
+   longLabel Bloom antibody escape - Total Score - COV2-2096 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2096.tot.bw
+
+   track COV2-2165Total
+   shortLabel MAB COV2-2165 total
+   longLabel Bloom antibody escape - Total Score - COV2-2165 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2165.tot.bw
+
+   track COV2-2479Total
+   shortLabel MAB COV2-2479 total
+   longLabel Bloom antibody escape - Total Score - COV2-2479 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2479.tot.bw
+
+   track COV2-2499Total
+   shortLabel MAB COV2-2499 total
+   longLabel Bloom antibody escape - Total Score - COV2-2499 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2499.tot.bw
+
+   track COV2-2677Total
+   shortLabel MAB COV2-2677 total
+   longLabel Bloom antibody escape - Total Score - COV2-2677 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2677.tot.bw
+
+   track COV2-2832Total
+   shortLabel MAB COV2-2832 total
+   longLabel Bloom antibody escape - Total Score - COV2-2832 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/COV2-2832.tot.bw
+
+   track C_104Total
+   shortLabel Serum: C, day 104
+   longLabel Bloom antibody escape - Total Score - Subject C, Day 104
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/C_104.tot.bw
+
+   track C_32Total
+   shortLabel Serum: C, day 032
+   longLabel Bloom antibody escape - Total Score - Subject C, Day 32
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/C_32.tot.bw
+
+   track D_33Total
+   shortLabel Serum: D, day 033
+   longLabel Bloom antibody escape - Total Score - Subject D, Day 33
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/D_33.tot.bw
+
+   track D_76Total
+   shortLabel Serum: D, day 076
+   longLabel Bloom antibody escape - Total Score - Subject D, Day 76
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/D_76.tot.bw
+
+   track E_104Total
+   shortLabel Serum: E, day 104
+   longLabel Bloom antibody escape - Total Score - Subject E, Day 104
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/E_104.tot.bw
+
+   track E_28Total
+   shortLabel Serum: E, day 028
+   longLabel Bloom antibody escape - Total Score - Subject E, Day 28
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/E_28.tot.bw
+
+   track F_115Total
+   shortLabel Serum: F, day 115
+   longLabel Bloom antibody escape - Total Score - Subject F, Day 115
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/F_115.tot.bw
+
+   track F_48Total
+   shortLabel Serum: F, day 048
+   longLabel Bloom antibody escape - Total Score - Subject F, Day 48
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/F_48.tot.bw
+
+   track G_18Total
+   shortLabel Serum: G, day 018
+   longLabel Bloom antibody escape - Total Score - Subject G, Day 18
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/G_18.tot.bw
+
+   track G_94Total
+   shortLabel Serum: G, day 094
+   longLabel Bloom antibody escape - Total Score - Subject G, Day 94
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/G_94.tot.bw
+
+   track H_152Total
+   shortLabel Serum: H, day 152
+   longLabel Bloom antibody escape - Total Score - Subject H, Day 152
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/H_152.tot.bw
+
+   track H_61Total
+   shortLabel Serum: H, day 061
+   longLabel Bloom antibody escape - Total Score - Subject H, Day 61
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/H_61.tot.bw
+
+   track I_102Total
+   shortLabel Serum: I, day 102
+   longLabel Bloom antibody escape - Total Score - Subject I, Day 102
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/I_102.tot.bw
+
+   track I_26Total
+   shortLabel Serum: I, day 026
+   longLabel Bloom antibody escape - Total Score - Subject I, Day 26
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/I_26.tot.bw
+
+   track J_121Total
+   shortLabel Serum: J, day 121
+   longLabel Bloom antibody escape - Total Score - Subject J, Day 121
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/J_121.tot.bw
+
+   track J_15Total
+   shortLabel Serum: J, day 015
+   longLabel Bloom antibody escape - Total Score - Subject J, Day 15
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/J_15.tot.bw
+
+   track K_103Total
+   shortLabel Serum: K, day 103
+   longLabel Bloom antibody escape - Total Score - Subject K, Day 103
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/K_103.tot.bw
+
+   track K_29Total
+   shortLabel Serum: K, day 029
+   longLabel Bloom antibody escape - Total Score - Subject K, Day 29
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/K_29.tot.bw
+
+   track LY-CoV016Total
+   shortLabel MAB LY-CoV016 total
+   longLabel Bloom antibody escape - Total Score - LY-CoV016 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/LY-CoV016.tot.bw
+
+   track REGN10933Total
+   shortLabel MAB REGN10933 total
+   longLabel Bloom antibody escape - Total Score - REGN10933 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/REGN10933.tot.bw
+
+   track REGN10933-REGN10987Total
+   shortLabel MAB REGN10933-REGN10987 total
+   longLabel Bloom antibody escape - Total Score - REGN10933-REGN10987 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/REGN10933-REGN10987.tot.bw
+
+   track REGN10987Total
+   shortLabel MAB REGN10987 total
+   longLabel Bloom antibody escape - Total Score - REGN10987 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/REGN10987.tot.bw
+
+   track rCR3022Total
+   shortLabel MAB rCR3022 total
+   longLabel Bloom antibody escape - Total Score - rCR3022 
+   parent bloomEscTotal on
+   visibility dense
+   type bigWig
+   bigDataUrl /gbdb/wuhCor1/bloomEsc/rCR3022.tot.bw
+

@@ -7,6 +7,7 @@ longLabel Variant Calls from High-Coverage Genome Sequence of an Archaic Denisov
 type vcfTabix
 visibility hide
 group denisova
+vcfDoMaf off
 
 track dhcVcfModern
 compositeTrack on
@@ -21,66 +22,77 @@ group denisova
     parent dhcVcfModern
     shortLabel Dinka Variants
     longLabel Dinka Individual Variant Calls
+    vcfDoMaf off
     priority 1
 
     track dhcVcfHGDP00456
     parent dhcVcfModern
     shortLabel Mbuti Variants
     longLabel Mbuti Individual (HGDP00456) Variant Calls
+    vcfDoMaf off
     priority 2
 
     track dhcVcfHGDP00521
     parent dhcVcfModern
     shortLabel French Variants
     longLabel French Individual (HGDP00521) Variant Calls
+    vcfDoMaf off
     priority 3
 
     track dhcVcfHGDP00542
     parent dhcVcfModern
     shortLabel Papuan Variants
     longLabel Papuan Individual (HGDP00542) Variant Calls
+    vcfDoMaf off
     priority 4
 
     track dhcVcfHGDP00665
     parent dhcVcfModern
     shortLabel Sardin. Variants
     longLabel Sardinian Individual (HGDP00665) Variant Calls
+    vcfDoMaf off
     priority 5
 
     track dhcVcfHGDP00778
     parent dhcVcfModern
     shortLabel Han Variants
     longLabel Han Individual (HGDP00778) Variant Calls
+    vcfDoMaf off
     priority 6
 
     track dhcVcfHGDP00927
     parent dhcVcfModern
     shortLabel Yoruba Variants
     longLabel Yoruba Individual (HGDP00927) Variant Calls
+    vcfDoMaf off
     priority 7
 
     track dhcVcfHGDP00998
     parent dhcVcfModern
     shortLabel Karit. Variants
     longLabel Karitiana Individual (HGDP00998) Variant Calls
+    vcfDoMaf off
     priority 8
 
     track dhcVcfHGDP01029
     parent dhcVcfModern
     shortLabel San Variants
     longLabel San Individual (HGDP01029) Variant Calls
+    vcfDoMaf off
     priority 9
 
     track dhcVcfHGDP01284
     parent dhcVcfModern
     shortLabel Mandenka Variants
     longLabel Mandenka Individual (HGDP01284) Variant Calls
+    vcfDoMaf off
     priority 10
 
     track dhcVcfHGDP01307
     parent dhcVcfModern
     shortLabel Dai Variants
     longLabel Dai Individual (HGDP01307) Variant Calls
+    vcfDoMaf off
     priority 11
 
 track dhcBamDenisova

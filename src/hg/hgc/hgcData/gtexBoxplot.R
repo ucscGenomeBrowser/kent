@@ -71,6 +71,8 @@ exprPlot <- boxplot(rpkm ~ tissueFactor, data=df, ylab=yLabel, ylim=yLimit,
                         whisklty=1, whiskcol=gray, 
                         # 'staples'
                         staplecol=gray, staplecex=1.3, staplewex=.8,
+                        # with R versions 3.6 and later must suppress x-labels manually
+                        xlab="",
                         # erase Y axis labels (add later rotated)
                         names=rep(c(""), count))
 

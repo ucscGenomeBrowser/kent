@@ -46,7 +46,7 @@ ln -sf $cncbDir/cncb.nonGenBank.fasta .
 ln -sf $ncbiDir/genbank.fa.xz .
 ln -sf $cogUkDir/cog_all.fasta.xz .
 ln -sf $nextfasta .
-xcat $nextmeta | tail -n+2 | cut -f1,3 > seqToEpi
+xcat $nextmeta | tail -n+2 | cut -f1,3 | uniq > seqToEpi
 
 cd $mapScriptDir
 ./build.sh -t $today

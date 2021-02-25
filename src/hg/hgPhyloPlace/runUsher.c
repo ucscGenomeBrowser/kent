@@ -582,7 +582,7 @@ static void addMutationsToTree(struct phyloTree *node, struct variantPathNode **
 struct variantPathNode *nodeMuts = slPopHead(pNodeMutList);
 if (! nodeMuts)
     errAbort("addMutationsToTree: subtree mutation list has fewer nodes than subtree");
-if (! sameString(nodeMuts->nodeName, node->ident->name))
+if (node->ident->name && ! sameString(nodeMuts->nodeName, node->ident->name))
     errAbort("addMutationsToTree: subtree node name is '%s' but subtree mutation list item is '%s'",
              node->ident->name, nodeMuts->nodeName);
 if (node->priv != NULL)
@@ -593,41 +593,57 @@ for (i = 0;  i < node->numEdges;  i++)
     addMutationsToTree(node->edges[i], pNodeMutList);
 }
 
-static struct subtreeInfo *parseSubtrees(int subtreeCount, struct tempName *subtreeTns[],
+static struct subtreeInfo *parseOneSubtree(struct tempName *subtreeTn,
+                                           struct variantPathNode *subtreeMuts,
+                                           struct slName *userSampleIds, struct hash *condensedNodes)
+/* Parse usher's subtree output, figure out which user samples are in subtree and expand names
+ * of condensed nodes. */
+{
+struct subtreeInfo *ti;
+AllocVar(ti);
+ti->subtreeTn = subtreeTn;
+ti->subtree = phyloOpenTree(ti->subtreeTn->forCgi);
+addMutationsToTree(ti->subtree, &subtreeMuts);
+if (subtreeMuts != NULL)
+    errAbort("addMutationsToTree: subtreeMutationList has more nodes than subtree");
+struct slName *subtreeIdList = phyloLeafNames(ti->subtree);
+// Don't do name substitutions on condensed node names in subtreeIdToIx since the IDs have to
+// match those in the original tree from protobuf.
+ti->subtreeIdToIx = slNameListToIxHash(subtreeIdList);
+ti->subtreeUserSampleIds = getSubtreeSampleIds(userSampleIds, ti->subtreeIdToIx);
+if (slCount(ti->subtreeUserSampleIds) == 0)
+    errAbort("No user sample IDs found in subtree file %s", ti->subtreeTn->forCgi);
+// Substitute in nicer node names for condensed nodes for displaying to the user in
+// custom tracks and Nextstrain/auspice JSON.
+struct hash *nameSubstitutions = expandCondensedNodeNames(condensedNodes, subtreeIdList);
+if (nameSubstitutions->elCount > 0)
+    ti->subtreeTn = substituteTreeNames(ti->subtree, nameSubstitutions);
+ti->subtreeNameList = substituteNameList(subtreeIdList, nameSubstitutions);
+hashFree(&nameSubstitutions);
+slFreeList(&subtreeIdList);
+return ti;
+}
+
+static struct subtreeInfo *parseSubtrees(int subtreeCount, struct tempName *singleSubtreeTn,
+                                         struct variantPathNode *singleSubtreeMuts,
+                                         struct tempName *subtreeTns[],
                                          struct variantPathNode *subtreeMuts[],
                                          struct slName *userSampleIds, struct hash *condensedNodes)
 /* Parse usher's subtree output, figure out which user samples are in each subtree, expand names
- * of condensed nodes, and write auspice json. */
+ * of condensed nodes.  Add parsed singleSubtree at head of list, followed by numbered subtrees. */
 {
 struct subtreeInfo *subtreeInfoList = NULL;
 int sIx;
 for (sIx = 0;  sIx < subtreeCount;  sIx++)
     {
-    struct subtreeInfo *ti;
-    AllocVar(ti);
-    ti->subtreeTn = subtreeTns[sIx];
-    ti->subtree = phyloOpenTree(ti->subtreeTn->forCgi);
-    addMutationsToTree(ti->subtree, &subtreeMuts[sIx]);
-    if (subtreeMuts[sIx] != NULL)
-        errAbort("addMutationsToTree: subtreeMutationList has more nodes than subtree");
-    struct slName *subtreeIdList = phyloLeafNames(ti->subtree);
-    // Don't do name substitutions on condensed node names in subtreeIdToIx since the IDs have to
-    // match those in the original tree from protobuf.
-    ti->subtreeIdToIx = slNameListToIxHash(subtreeIdList);
-    ti->subtreeUserSampleIds = getSubtreeSampleIds(userSampleIds, ti->subtreeIdToIx);
-    if (slCount(ti->subtreeUserSampleIds) == 0)
-        errAbort("No user sample IDs found in subtree file %s", ti->subtreeTn->forCgi);
-    // Substitute in nicer node names for condensed nodes for displaying to the user in
-    // custom tracks and Nextstrain/auspice JSON.
-    struct hash *nameSubstitutions = expandCondensedNodeNames(condensedNodes, subtreeIdList);
-    if (nameSubstitutions->elCount > 0)
-        ti->subtreeTn = substituteTreeNames(ti->subtree, nameSubstitutions);
-    ti->subtreeNameList = substituteNameList(subtreeIdList, nameSubstitutions);
+    struct subtreeInfo *ti = parseOneSubtree(subtreeTns[sIx], subtreeMuts[sIx], userSampleIds,
+                                             condensedNodes);
     slAddHead(&subtreeInfoList, ti);
-    hashFree(&nameSubstitutions);
-    slFreeList(&subtreeIdList);
     }
 slReverse(&subtreeInfoList);
+struct subtreeInfo *ti = parseOneSubtree(singleSubtreeTn, singleSubtreeMuts, userSampleIds,
+                                         condensedNodes);
+slAddHead(&subtreeInfoList, ti);
 return subtreeInfoList;
 }
 
@@ -640,6 +656,8 @@ return dy->string;
 }
 
 static int processOutDirFiles(struct usherResults *results, char *outDir,
+                              struct tempName **retSingleSubtreeTn,
+                              struct variantPathNode **retSingleSubtreeMuts,
                               struct tempName *subtreeTns[], struct variantPathNode *subtreeMuts[],
                               int maxSubtrees)
 /* Get paths to files in outDir; parse them, move files that we'll keep up to trash/ct/,
@@ -710,6 +728,45 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
         else
             warn("Unexpected filename '%s' from usher, ignoring", file->name);
         }
+    else if (startsWith("single-subtree", file->name))
+        {
+        // One subtree to bind them all
+        char fnameCpy[strlen(file->name)+1];
+        safecpy(fnameCpy, sizeof fnameCpy, file->name);
+        char *parts[4];
+        int partCount = chopString(fnameCpy, "-", parts, ArraySize(parts));
+        if (partCount == 2)
+            {
+            // Expect single-subtree.nh
+            if (!endsWith(parts[1], ".nh"))
+                warn("Unexpected filename '%s' from usher, ignoring", file->name);
+            else if (retSingleSubtreeTn)
+                {
+                struct tempName *tn;
+                AllocVar(tn);
+                trashDirFile(tn, "ct", "subtree", ".nwk");
+                mustRename(path, tn->forCgi);
+                *retSingleSubtreeTn = tn;
+                }
+            }
+        else if (partCount == 3)
+            {
+            // Expect single-subtree-mutations.txt or single-subtree-expanded.txt
+            if (sameString(parts[2], "mutations.txt"))
+                {
+                if (retSingleSubtreeMuts)
+                    *retSingleSubtreeMuts = parseSubtreeMutations(path);
+                }
+            else if (sameString(parts[2], "expanded.txt"))
+                {
+                // Don't need this, just remove it
+                }
+            else
+                warn("Unexpected filename '%s' from usher, ignoring", file->name);
+            }
+        else
+            warn("Unexpected filename '%s' from usher, ignoring", file->name);
+        }
     else if (sameString(file->name, "final-tree.nh"))
         {
         // Don't need this, just remove it.
@@ -747,7 +804,7 @@ char *numThreadsStr = "16";
 struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "usher_outdir", ".dir");
 char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOutDir.forCgi,
-                "-k", subtreeSizeStr, "-T", numThreadsStr, "-u", "-l", NULL };
+                "-k", subtreeSizeStr, "-K", "1000", "-T", numThreadsStr, "-u", "-l", NULL };
 char **cmds[] = { cmd, NULL };
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "usher_stderr", ".txt");
@@ -756,12 +813,14 @@ pipelineClose(&pl);
 reportTiming(pStartTime, "run usher");
 parseStderr(tnStderr.forCgi, results->samplePlacements);
 
-struct tempName *subtreeTns[MAX_SUBTREES];
-struct variantPathNode *subtreeMuts[MAX_SUBTREES];
-int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, subtreeTns, subtreeMuts,
-                                      MAX_SUBTREES);
-results->subtreeInfoList = parseSubtrees(subtreeCount, subtreeTns, subtreeMuts, userSampleIds,
-                                         condensedNodes);
+struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
+struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
+int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn, &singleSubtreeMuts,
+                                      subtreeTns, subtreeMuts, MAX_SUBTREES);
+results->subtreeInfoList = parseSubtrees(subtreeCount, singleSubtreeTn, singleSubtreeMuts,
+                                         subtreeTns, subtreeMuts, userSampleIds, condensedNodes);
+results->singleSubtreeInfo = results->subtreeInfoList;
+results->subtreeInfoList = results->subtreeInfoList->next;
 return results;
 }
 

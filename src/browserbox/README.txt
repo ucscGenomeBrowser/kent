@@ -5,8 +5,19 @@ Genome Browser in a box. It should be possible to convert
 a Ubuntu 14 installation into a Genome Browser in a box by copying all these
 files into the root directory as sudo. (Redmine #11957)
 
-See also the main gbib doc page:
+The main file that is changed 90% of the time when GBIB changes is this one:
+
+   ~/kent/src/browserbox/root/updateBrowser.sh
+
+It is the big script that is run on every start and also whenever the flag file
+changes on hgdownload, after an hgdownload update (see the wiki documentation
+below)
+
+See the main gbib doc page:
 http://genomewiki.ucsc.edu/genecats/index.php/Genome_Browser_in_a_Box_config
+
+There are at least five wiki pages for every aspect of GBIB: development, 
+configuration, updates, release process and pushes.
 
 The following symlinks are not in git and have to be set manually :
 usr/local/apache/htdocs/folders -> /media

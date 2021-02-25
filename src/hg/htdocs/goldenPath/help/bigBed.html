@@ -127,7 +127,7 @@ track</a> management page.</p>
 
 <h2>Examples</h2>
 <a name=Ex1></a>
-<h3>Example #1</h3>
+<h3>Example #1: Load an existing bigBed file</h3>
 <p>
 In this example, you will load an existing bigBed file,
 <em>bigBedExample.bb</em>, on the UCSC http server. This file contains chromosome 21 data on the 
@@ -167,9 +167,9 @@ track type=bigBed name=&quot;bigBed Example One&quot; description=&quot;A bigBed
 </ol>
 
 <a name=Ex2></a>
-<h3>Example #2</h3>
+<h3>Example #2: Create a bigBed file from a BED file</h3>
 <p>
-In this example, you will create your own bigBed file from an existing bed file.</p>
+In this example, you will convert a sample BED file to bigBed format.</p>
 <ol>
   <li> 
   Save the BED file <a href="examples/bedExample.txt"><em>bedExample.txt</em></a> to a server, ideally one
@@ -217,26 +217,37 @@ chmod a+x bedToBigBed</code></pre>
 </ol>
 
 <a name=Ex3></a>
-<h3>Example #3</h3>
+<h3>Example #3: Create a bigBed file with extra (custom) fields</h3>
 <p>
-In this example, you will create your own bigBed file from a fully featured existing BED file that 
-contains the standard BED fields up to and including the <em>color</em> field (field 9), plus two 
-additional non-standard fields (two alternate names for each item in the file). Since the resulting
-bigBed file will have nine standard BED columns, which would include what is referenced as the 
-itemRgb field to inform the browser to display a R,G,B color value (e.g. 255,0,0), and two
-additional non-standard user-defined columns, the bedToBigBed program is given <code>-type=bed9+2
-</code> and a file called <code>-as=bedExample2.as</code> to help correctly interpret all the 
-columns in the data. BigBed files can 
+BigBed files can 
 store extra fields in addition to the <a href="../../FAQ/FAQformat.html#format1">predefined BED 
-fields</a>. If you add extra fields to your bigBed file, you must include an AutoSql format
-(<em>.as</em>) file describing the fields. For more information on AutoSql, see 
+fields</a>. 
+In this example, you will create your own bigBed file from a fully featured existing BED file that 
+contains the standard BED fields up to and including the <em>color</em> field called <em>itemRgb</em>
+(field 9), plus two 
+additional non-standard fields (two alternate names for each item in the file). 
+The standard BED column itemRgb contains an R,G,B color value (e.g. "255,0,0").
+The resulting
+bigBed file will have nine standard BED columns and two additional non-standard user-defined columns.
+</p>
+<p>
+If you add extra fields to your bigBed file, you must include an AutoSql format
+(<em>.as</em>) file describing the fields. 
+In this file, all fields (standard and non-standard) are described with a short
+internal name and also a human-readable description.
+For more information on AutoSql, see 
 <a href="http://www.linuxjournal.com/article/5949" target="_blank">Kent and Brumbaugh, 2002</a>, as 
 well as examples of <em>.as</em> files in 
 <a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/tree/master/src/hg/lib"
 target="_blank">this directory</a>. 
-This example also demonstrates how to create extra indices on the name field, and the first of the 
+Then, the bedToBigBed program is run with the arguments <code>-type=bed9+2</code> and also 
+<code>-as=bedExample2.as</code> to help correctly interpret all the columns in the data. 
+</p>
+
+<p>
+This example also demonstrates how to create an extra search index on the name field, and the first of the 
 extra fields to be used for track item search. The searchIndex setting requires the input BED data to be
-case-senstive sorted (<code>sort -k1,1 -k2,2n</code>), where newer versions of the tool bedToBigBed
+case-sensitive sorted (<code>sort -k1,1 -k2,2n</code>), where newer versions of the tool bedToBigBed
 (available <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">here</a>) are enhanced to catch
 improper input.</p>
 <ol>
@@ -303,7 +314,8 @@ This will save the position and all settings that you made, all track visibiliti
 highlights, etc.
 </p>
 <p>
-If you want to create URLs programmatically from software, look at Example #6 on <a href="customTrack.html#EXAMPLE6">this page</a>.
+If you want to create URLs to your bigBed file programmatically from software, 
+look at Example #6 on <a href="customTrack.html#EXAMPLE6">this page</a>.
 </p>
 
 <h2>Extracting Data from the bigBed Format</h2>

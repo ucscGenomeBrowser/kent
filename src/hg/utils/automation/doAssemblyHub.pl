@@ -807,17 +807,18 @@ sub doSequence {
 
   ###########  non-nuclear scaffold unlocalized sequence  ################
   my $nonNucChr2scaf = "$nonNucAsm/unlocalized_scaffolds/unlocalized.chr2scaf";
+  my $agpSource = "$nonNucAsm/unlocalized_scaffolds/AGP";
   if ( -s $nonNucChr2scaf ) {
     my $agpOutput = "$runDir/$asmId.nonNucUnlocalized.agp.gz";
     my $agpNames = "$runDir/$asmId.nonNucUnlocalized.names";
     my $fastaOut = "$runDir/$asmId.nonNucUnlocalized.fa.gz";
     $partsDone += 1;
     if (needsUpdate($nonNucChr2scaf, $agpOutput)) {
-      compositeAgp($nonNucChr2scaf, $agpSource, $agpOutput, $agpNames);
+      unlocalizedAgp($nonNucChr2scaf, $agpSource, $agpOutput, $agpNames);
       `touch -r $nonNucChr2scaf $agpOutput`;
     }
     if (needsUpdate($twoBitFile, $fastaOut)) {
-      compositeFasta($nonNucChr2scaf, $twoBitFile, $fastaOut);
+      unlocalizedFasta($nonNucChr2scaf, $twoBitFile, $fastaOut);
       `touch -r $twoBitFile $fastaOut`;
     }
   }

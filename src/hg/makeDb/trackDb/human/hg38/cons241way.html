@@ -1,0 +1,2614 @@
+<p>
+Downloads for data in this track are available:
+<ul>
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz100way/">Multiz alignments</a> (MAF format), and phylogenetic trees
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/">PhyloP conservation</a> (WIG format)
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/">PhastCons conservation</a> (WIG format)
+</ul>
+
+<h2>Description</h2>
+<p>
+This track shows multiple alignments of 100 vertebrate
+species and measurements of evolutionary conservation using
+two methods (<em>phastCons</em> and <em>phyloP</em>) from the
+<a href="http://compgen.cshl.edu/phast/" target="_BLANK">
+PHAST package</a>, for all species.
+The multiple alignments were generated using multiz and
+other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
+target=_blank>Penn State Bioinformatics</a>
+comparative genomics alignment pipeline.
+Conserved elements identified by phastCons are also displayed in
+this track.
+PHAST/Multiz are built from chains ("alignable") and nets ("syntenic"),                                                                                        see the documentation of the Chain/Net tracks for a description of the complete
+alignment process.
+</p>
+<p>
+PhastCons is a hidden Markov model-based method that estimates the probability that each
+nucleotide belongs to a conserved element, based on the multiple alignment.
+It considers not just each individual alignment column, but also its
+flanking columns.  By contrast, phyloP separately measures conservation at
+individual columns, ignoring the effects of their neighbors.  As a
+consequence, the phyloP plots have a less smooth appearance than the
+phastCons plots, with more "texture" at individual sites.  The two methods
+have different strengths and weaknesses.  PhastCons is sensitive to "runs"
+of conserved sites, and is therefore effective for picking out conserved
+elements.  PhyloP, on the other hand, is more appropriate for evaluating
+signatures of selection at particular nucleotides or classes of nucleotides
+(e.g., third codon positions, or first positions of miRNA target sites).
+</p>
+<p>
+Another important difference is that phyloP can measure acceleration
+(faster evolution than expected under neutral drift) as well as
+conservation (slower than expected evolution).  In the phyloP plots, sites
+predicted to be conserved are assigned positive scores (and shown in blue),
+while sites predicted to be fast-evolving are assigned negative scores (and
+shown in red).  The absolute values of the scores represent -log p-values
+under a null hypothesis of neutral evolution.  The phastCons scores, by
+contrast, represent probabilities of negative selection and range between 0
+and 1.
+</p>
+<p>
+Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
+missing data, and both were run with the same parameters.
+</p>
+<P>
+See also: <A HREF="http://genomewiki.ucsc.edu/index.php/Hg38_100-way_conservation_alignment"
+TARGET=_blank>lastz parameters</A> and other details
+and chain <A HREF="http://genomewiki.ucsc.edu/index.php/Hg38_100-way_Genome_size_statistics"
+TARGET=_blank>minimum score and gap</A> parameters used in these alignments.
+</P>
+
+<p>
+UCSC has repeatmasked and aligned all genome assemblies, and
+provides all the sequences for download.  For genome assemblies
+not available in the genome browser, there are alternative assembly hub
+genome browsers.  Missing sequence in any assembly
+is highlighted in the track display by regions of yellow when
+zoomed out and by Ns when displayed at base level (see <em>Gap Annotation</em>, below).</p>
+<p>
+<blockquote>
+<table border=1 class='stdTbl'>
+<tr><th>count</th>
+    <th>common<br>name</th>
+    <th>CLADE</th>
+    <th>group</th>
+    <th>scientific<br>name</th>
+    <th>sequencing<br>source</th>
+    <th>NCBI<br>assembly</th>
+    <th>species<br>status</th>
+</tr>
+<tr><th>1</th>
+    <th>Cape golden mole</th>
+    <th>AFROSORICIDA</th>
+    <th>Chrysochloridae</th>
+    <th>Chrysochloris asiatica</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027935.1/ target=_blank>GCA_004027935.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>2</th>
+    <th>Small madagascar hedgehog</th>
+    <th>AFROSORICIDA</th>
+    <th>Tenrecidae</th>
+    <th>Echinops telfairi</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000313985.1/ target=_blank>GCF_000313985.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>3</th>
+    <th>Talazac's shrew tenrec</th>
+    <th>AFROSORICIDA</th>
+    <th>Tenrecidae</th>
+    <th>Microgale talazaci</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026705.1/ target=_blank>GCA_004026705.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>4</th>
+    <th>Cheetah</th>
+    <th>CARNIVORA</th>
+    <th>Felidae</th>
+    <th>Acinonyx jubatus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_001443585.1/ target=_blank>GCF_001443585.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>5</th>
+    <th>Giant panda</th>
+    <th>CARNIVORA</th>
+    <th>Ursidae</th>
+    <th>Ailuropoda melanoleuca</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002007445.1/ target=_blank>GCA_002007445.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>6</th>
+    <th>Lesser panda</th>
+    <th>CARNIVORA</th>
+    <th>Ailuridae</th>
+    <th>Ailurus fulgens</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002007465.1/ target=_blank>GCA_002007465.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>7</th>
+    <th>Domestic dog</th>
+    <th>CARNIVORA</th>
+    <th>Canidae</th>
+    <th>Canis lupus familiaris</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000002285.3/ target=_blank>GCF_000002285.3</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>8</th>
+    <th>Domestic dog (village dog)</th>
+    <th>CARNIVORA</th>
+    <th>Canidae</th>
+    <th>Canis lupus familiaris</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027395.1/ target=_blank>GCA_004027395.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>9</th>
+    <th>Fossa</th>
+    <th>CARNIVORA</th>
+    <th>Eupleridae</th>
+    <th>Cryptoprocta ferox</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004023885.1/ target=_blank>GCA_004023885.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>10</th>
+    <th>Sea otter</th>
+    <th>CARNIVORA</th>
+    <th>Mustelidae</th>
+    <th>Enhydra lutris</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_002288905.1/ target=_blank>GCF_002288905.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>11</th>
+    <th>Domestic cat</th>
+    <th>CARNIVORA</th>
+    <th>Felidae</th>
+    <th>Felis catus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000181335.2/ target=_blank>GCF_000181335.2</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>12</th>
+    <th>Black-footed cat</th>
+    <th>CARNIVORA</th>
+    <th>Felidae</th>
+    <th>Felis nigripes</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004023925.1/ target=_blank>GCA_004023925.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>13</th>
+    <th>Dwarf mongoose</th>
+    <th>CARNIVORA</th>
+    <th>Herpestidae</th>
+    <th>Helogale parvula</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004023845.1/ target=_blank>GCA_004023845.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>14</th>
+    <th>Striped hyena</th>
+    <th>CARNIVORA</th>
+    <th>Hyaenidae</th>
+    <th>Hyaena hyaena</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004023945.1/ target=_blank>GCA_004023945.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>15</th>
+    <th>Weddell seal</th>
+    <th>CARNIVORA</th>
+    <th>Phocidae</th>
+    <th>Leptonychotes weddellii</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000349705.1/ target=_blank>GCF_000349705.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>16</th>
+    <th>African hunting dog</th>
+    <th>CARNIVORA</th>
+    <th>Canidae</th>
+    <th>Lycaon pictus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_001887905.1/ target=_blank>GCA_001887905.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>17</th>
+    <th>Honey badger</th>
+    <th>CARNIVORA</th>
+    <th>Mustelidae</th>
+    <th>Mellivora capensis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024625.1/ target=_blank>GCA_004024625.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>18</th>
+    <th>Northern elephant seal</th>
+    <th>CARNIVORA</th>
+    <th>Phocidae</th>
+    <th>Mirounga angustirostris</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004023865.1/ target=_blank>GCA_004023865.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>19</th>
+    <th>South African banded mongoose</th>
+    <th>CARNIVORA</th>
+    <th>Herpestidae</th>
+    <th>Mungos mungo</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004023785.1/ target=_blank>GCA_004023785.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>20</th>
+    <th>Domestic ferret</th>
+    <th>CARNIVORA</th>
+    <th>Mustelidae</th>
+    <th>Mustela putorius</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000239315.1/ target=_blank>GCF_000239315.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>21</th>
+    <th>Hawaiian monk seal</th>
+    <th>CARNIVORA</th>
+    <th>Phocidae</th>
+    <th>Neomonachus schauinslandi</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002201575.1/ target=_blank>GCA_002201575.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>22</th>
+    <th>Pacific walrus</th>
+    <th>CARNIVORA</th>
+    <th>Odobenidae</th>
+    <th>Odobenus rosmarus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000321225.1/ target=_blank>GCF_000321225.1</a></th>
+    <th>DD</th>
+</tr>
+<tr><th>23</th>
+    <th>Jaguar</th>
+    <th>CARNIVORA</th>
+    <th>Felidae</th>
+    <th>Panthera onca</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004023805.1/ target=_blank>GCA_004023805.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>24</th>
+    <th>Leopard</th>
+    <th>CARNIVORA</th>
+    <th>Felidae</th>
+    <th>Panthera pardus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_001857705.1/ target=_blank>GCA_001857705.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>25</th>
+    <th>Amur tiger</th>
+    <th>CARNIVORA</th>
+    <th>Felidae</th>
+    <th>Panthera tigris</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000464555.1/ target=_blank>GCF_000464555.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>26</th>
+    <th>Asian palm civet</th>
+    <th>CARNIVORA</th>
+    <th>Viverridae</th>
+    <th>Paradoxurus hermaphroditus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024585.1/ target=_blank>GCA_004024585.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>27</th>
+    <th>Giant otter</th>
+    <th>CARNIVORA</th>
+    <th>Mustelidae</th>
+    <th>Pteronura brasiliensis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024605.1/ target=_blank>GCA_004024605.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>28</th>
+    <th>Puma</th>
+    <th>CARNIVORA</th>
+    <th>Felidae</th>
+    <th>Puma concolor</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_003327715.1/ target=_blank>GCF_003327715.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>29</th>
+    <th>Western spotted skunk</th>
+    <th>CARNIVORA</th>
+    <th>Mephitidae</th>
+    <th>Spilogale gracilis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004023965.1/ target=_blank>GCA_004023965.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>30</th>
+    <th>Meerkat</th>
+    <th>CARNIVORA</th>
+    <th>Herpestidae</th>
+    <th>Suricata suricatta</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004023905.1/ target=_blank>GCA_004023905.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>31</th>
+    <th>Polar bear</th>
+    <th>CARNIVORA</th>
+    <th>Ursidae</th>
+    <th>Ursus maritimus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000687225.1/ target=_blank>GCF_000687225.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>32</th>
+    <th>Arctic fox</th>
+    <th>CARNIVORA</th>
+    <th>Canidae</th>
+    <th>Vulpes lagopus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004023825.1/ target=_blank>GCA_004023825.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>33</th>
+    <th>California sea lion</th>
+    <th>CARNIVORA</th>
+    <th>Otariidae</th>
+    <th>Zalophus californianus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024565.1/ target=_blank>GCA_004024565.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>34</th>
+    <th>Aoudad</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Ammotragus lervia</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002201775.1/ target=_blank>GCA_002201775.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>35</th>
+    <th>Pronghorn</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Antilocapridae</th>
+    <th>Antilocapra americana</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027515.1/ target=_blank>GCA_004027515.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>36</th>
+    <th>Minke whale</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Balaenopteridae</th>
+    <th>Balaenoptera acutorostrata</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000493695.1/ target=_blank>GCF_000493695.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>37</th>
+    <th>Antarctic minke whale</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Balaenopteridae</th>
+    <th>Balaenoptera bonaerensis</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000978805.1/ target=_blank>GCA_000978805.1</a></th>
+    <th>DD</th>
+</tr>
+<tr><th>38</th>
+    <th>Hirola</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Beatragus hunteri</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027495.1/ target=_blank>GCA_004027495.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>39</th>
+    <th>American bison</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Bison bison</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000754665.1/ target=_blank>GCF_000754665.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>40</th>
+    <th>Zebu cattle</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Bos indicus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000247795.2/ target=_blank>GCA_000247795.2</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>41</th>
+    <th>Wild yak</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Bos mutus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000298355.1/ target=_blank>GCF_000298355.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>42</th>
+    <th>Cattle</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Bos taurus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000003205.7/ target=_blank>GCF_000003205.7</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>43</th>
+    <th>Water buffalo</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Bubalus bubalis</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000471725.1/ target=_blank>GCF_000471725.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>44</th>
+    <th>Bactrian camel</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Camelidae</th>
+    <th>Camelus bactrianus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000767855.1/ target=_blank>GCF_000767855.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>45</th>
+    <th>Arabian camel</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Camelidae</th>
+    <th>Camelus dromedarius</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000767585.1/ target=_blank>GCF_000767585.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>46</th>
+    <th>Wild bactrian camel</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Camelidae</th>
+    <th>Camelus ferus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000311805.1/ target=_blank>GCF_000311805.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>47</th>
+    <th>Wild goat</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Capra aegagrus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000978405.1/ target=_blank>GCA_000978405.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>48</th>
+    <th>Goat</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Capra hircus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_001704415.1/ target=_blank>GCF_001704415.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>49</th>
+    <th>Chacoan peccary</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Tayassuidae</th>
+    <th>Catagonus wagneri</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024745.1/ target=_blank>GCA_004024745.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>50</th>
+    <th>Beluga whale</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Monodontidae</th>
+    <th>Delphinapterus leucas</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_002288925.1/ target=_blank>GCF_002288925.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>51</th>
+    <th>Pere david's deer</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Cervidae</th>
+    <th>Elaphurus davidianus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002443075.1/ target=_blank>GCA_002443075.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>52</th>
+    <th>Grey whale</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Eschrichtiidae</th>
+    <th>Eschrichtius robustus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004363415.1/ target=_blank>GCA_004363415.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>53</th>
+    <th>North Pacific right whale</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Balaenidae</th>
+    <th>Eubalaena japonica</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004363455.1/ target=_blank>GCA_004363455.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>54</th>
+    <th>Giraffe</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Giraffidae</th>
+    <th>Giraffa tippelskirchi</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_001651235.1/ target=_blank>GCA_001651235.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>55</th>
+    <th>Nilgiri tahr</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Hemitragus hylocrius</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026825.1/ target=_blank>GCA_004026825.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>56</th>
+    <th>Hippopotamus</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Hippopotamidae</th>
+    <th>Hippopotamus amphibius</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027065.1/ target=_blank>GCA_004027065.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>57</th>
+    <th>Amazon river dolphin</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Iniidae</th>
+    <th>Inia geoffrensis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004363515.1/ target=_blank>GCA_004363515.1</a></th>
+    <th>DD</th>
+</tr>
+<tr><th>58</th>
+    <th>Pygmy sperm whale</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Physeteridae</th>
+    <th>Kogia breviceps</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004363705.1/ target=_blank>GCA_004363705.1</a></th>
+    <th>DD</th>
+</tr>
+<tr><th>59</th>
+    <th>Yangtze river dolphin</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Iniidae</th>
+    <th>Lipotes vexillifer</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000442215.1/ target=_blank>GCF_000442215.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>60</th>
+    <th>Sowerby's beaked whale</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Ziphiidae</th>
+    <th>Mesoplodon bidens</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027085.1/ target=_blank>GCA_004027085.1</a></th>
+    <th>DD</th>
+</tr>
+<tr><th>61</th>
+    <th>Narwhal</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Monodontidae</th>
+    <th>Monodon monoceros</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026685.1/ target=_blank>GCA_004026685.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>62</th>
+    <th>Siberian musk deer</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Moschidae</th>
+    <th>Moschus moschiferus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024705.1/ target=_blank>GCA_004024705.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>63</th>
+    <th>Yangtze finless porpoise</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Phocoenidae</th>
+    <th>Neophocaena asiaeorientalis</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_003031525.1/ target=_blank>GCA_003031525.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>64</th>
+    <th>White-tailed deer</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Cervidae</th>
+    <th>Odocoileus virginianus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002102435.1/ target=_blank>GCA_002102435.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>65</th>
+    <th>Okapi</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Giraffidae</th>
+    <th>Okapia johnstoni</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_001660835.1/ target=_blank>GCA_001660835.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>66</th>
+    <th>Killer whale</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Delphinidae</th>
+    <th>Orcinus orca</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000331955.2/ target=_blank>GCF_000331955.2</a></th>
+    <th>DD</th>
+</tr>
+<tr><th>67</th>
+    <th>Sheep</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Ovis aries</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000298735.2/ target=_blank>GCF_000298735.2</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>68</th>
+    <th>Peninsular bighorn sheep</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Ovis canadensis cremnobates</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026945.1/ target=_blank>GCA_004026945.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>69</th>
+    <th>Chiru</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Pantholops hodgsonii</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000400835.1/ target=_blank>GCF_000400835.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>70</th>
+    <th>Harbor porpoise</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Phocoenidae</th>
+    <th>Phocoena phocoena</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004363495.1/ target=_blank>GCA_004363495.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>71</th>
+    <th>Indus river dolphin</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Platanistidae</th>
+    <th>Platanista gangetica minor</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004363435.1/ target=_blank>GCA_004363435.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>72</th>
+    <th>Siberian reindeer</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Cervidae</th>
+    <th>Rangifer tarandus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026565.1/ target=_blank>GCA_004026565.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>73</th>
+    <th>Russian saiga</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Bovidae</th>
+    <th>Saiga tatarica tatarica</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024985.1/ target=_blank>GCA_004024985.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>74</th>
+    <th>Pig</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Suidae</th>
+    <th>Sus scrofa</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000003025.5/ target=_blank>GCF_000003025.5</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>75</th>
+    <th>Java lesser chevrotain</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Tragulidae</th>
+    <th>Tragulus javanicus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024965.1/ target=_blank>GCA_004024965.1</a></th>
+    <th>DD</th>
+</tr>
+<tr><th>76</th>
+    <th>Bottlenose dolphin</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Delphinidae</th>
+    <th>Tursiops truncatus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_001922835.1/ target=_blank>GCA_001922835.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>77</th>
+    <th>Alpaca</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Camelidae</th>
+    <th>Vicugna pacos</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000767525.1/ target=_blank>GCA_000767525.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>78</th>
+    <th>Cuvier's beaked whale</th>
+    <th>CETARTIODACTYLA</th>
+    <th>Ziphiidae</th>
+    <th>Ziphius cavirostris</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004364475.1/ target=_blank>GCA_004364475.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>79</th>
+    <th>Tailed tailless bat</th>
+    <th>CHIROPTERA</th>
+    <th>Phyllostomidae</th>
+    <th>Anoura caudifer</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027475.1/ target=_blank>GCA_004027475.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>80</th>
+    <th>Jamacian fruit-eating bat</th>
+    <th>CHIROPTERA</th>
+    <th>Phyllostomidae</th>
+    <th>Artibeus jamaicensis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027435.1/ target=_blank>GCA_004027435.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>81</th>
+    <th>Seba's short-tailed bat</th>
+    <th>CHIROPTERA</th>
+    <th>Phyllostomidae</th>
+    <th>Carollia perspicillata</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027735.1/ target=_blank>GCA_004027735.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>82</th>
+    <th>Bumblebee bat</th>
+    <th>CHIROPTERA</th>
+    <th>Craseonycteridae</th>
+    <th>Craseonycteris thonglongyai</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027555.1/ target=_blank>GCA_004027555.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>83</th>
+    <th>Common vampire bat</th>
+    <th>CHIROPTERA</th>
+    <th>Phyllostomidae</th>
+    <th>Desmodus rotundus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002940915.2/ target=_blank>GCA_002940915.2</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>84</th>
+    <th>Straw-colored fruit bat</th>
+    <th>CHIROPTERA</th>
+    <th>Pteropodidae</th>
+    <th>Eidolon helvum</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000465285.1/ target=_blank>GCA_000465285.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>85</th>
+    <th>Big brown bat</th>
+    <th>CHIROPTERA</th>
+    <th>Vespertilionidae</th>
+    <th>Eptesicus fuscus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000308155.1/ target=_blank>GCF_000308155.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>86</th>
+    <th>Great roundleaf bat</th>
+    <th>CHIROPTERA</th>
+    <th>Hipposideridae</th>
+    <th>Hipposideros armiger</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_001890085.1/ target=_blank>GCA_001890085.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>87</th>
+    <th>Cantor's leaf-nosed bat</th>
+    <th>CHIROPTERA</th>
+    <th>Hipposideridae</th>
+    <th>Hipposideros galeritus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027415.1/ target=_blank>GCA_004027415.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>88</th>
+    <th>Eastern red bat</th>
+    <th>CHIROPTERA</th>
+    <th>Vespertilionidae</th>
+    <th>Lasiurus borealis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026805.1/ target=_blank>GCA_004026805.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>89</th>
+    <th>Long-tongued fruit bat</th>
+    <th>CHIROPTERA</th>
+    <th>Pteropodidae</th>
+    <th>Macroglossus sobrinus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027375.1/ target=_blank>GCA_004027375.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>90</th>
+    <th>Greater false vampire bat</th>
+    <th>CHIROPTERA</th>
+    <th>Megadermatidae</th>
+    <th>Megaderma lyra</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026885.1/ target=_blank>GCA_004026885.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>91</th>
+    <th>Hairy big-eared bat</th>
+    <th>CHIROPTERA</th>
+    <th>Phyllostomidae</th>
+    <th>Micronycteris hirsuta</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026765.1/ target=_blank>GCA_004026765.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>92</th>
+    <th>Bats</th>
+    <th>CHIROPTERA</th>
+    <th>Vespertilionidae</th>
+    <th>Miniopterus natalensis</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_001595765.1/ target=_blank>GCF_001595765.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>93</th>
+    <th>Common bent-wing bat</th>
+    <th>CHIROPTERA</th>
+    <th>Vespertilionidae</th>
+    <th>Miniopterus schreibersii</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026525.1/ target=_blank>GCA_004026525.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>94</th>
+    <th>Ghost-faced bat</th>
+    <th>CHIROPTERA</th>
+    <th>Mormoopidae</th>
+    <th>Mormoops blainvillei</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026545.1/ target=_blank>GCA_004026545.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>95</th>
+    <th>Ashy-gray tube-nosed bat</th>
+    <th>CHIROPTERA</th>
+    <th>Vespertilionidae</th>
+    <th>Murina feae</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026665.1/ target=_blank>GCA_004026665.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>96</th>
+    <th>Brandt's bat</th>
+    <th>CHIROPTERA</th>
+    <th>Vespertilionidae</th>
+    <th>Myotis brandtii</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000412655.1/ target=_blank>GCF_000412655.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>97</th>
+    <th>Bats</th>
+    <th>CHIROPTERA</th>
+    <th>Vespertilionidae</th>
+    <th>Myotis davidii</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000327345.1/ target=_blank>GCF_000327345.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>98</th>
+    <th>Little brown bat</th>
+    <th>CHIROPTERA</th>
+    <th>Vespertilionidae</th>
+    <th>Myotis lucifugus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000147115.1/ target=_blank>GCF_000147115.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>99</th>
+    <th>Greater mouse-eared bat</th>
+    <th>CHIROPTERA</th>
+    <th>Vespertilionidae</th>
+    <th>Myotis myotis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026985.1/ target=_blank>GCA_004026985.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>100</th>
+    <th>Greater bulldog bat</th>
+    <th>CHIROPTERA</th>
+    <th>Noctilionidae</th>
+    <th>Noctilio leporinus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026585.1/ target=_blank>GCA_004026585.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>101</th>
+    <th>Common pipistrelle</th>
+    <th>CHIROPTERA</th>
+    <th>Vespertilionidae</th>
+    <th>Pipistrellus pipistrellus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026625.1/ target=_blank>GCA_004026625.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>102</th>
+    <th>Parnell's mustached bat</th>
+    <th>CHIROPTERA</th>
+    <th>Mormoopidae</th>
+    <th>Pteronotus parnellii</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000465405.1/ target=_blank>GCA_000465405.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>103</th>
+    <th>Black flying fox</th>
+    <th>CHIROPTERA</th>
+    <th>Pteropodidae</th>
+    <th>Pteropus alecto</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000325575.1/ target=_blank>GCF_000325575.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>104</th>
+    <th>Large flying fox</th>
+    <th>CHIROPTERA</th>
+    <th>Pteropodidae</th>
+    <th>Pteropus vampyrus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000151845.1/ target=_blank>GCF_000151845.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>105</th>
+    <th>Chinese rufous horseshoe bat</th>
+    <th>CHIROPTERA</th>
+    <th>Rhinolophidae</th>
+    <th>Rhinolophus sinicus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_001888835.1/ target=_blank>GCA_001888835.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>106</th>
+    <th>Egyptian fruit bat</th>
+    <th>CHIROPTERA</th>
+    <th>Pteropodidae</th>
+    <th>Rousettus aegyptiacus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024865.1/ target=_blank>GCA_004024865.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>107</th>
+    <th>Mexican free-tailed bat</th>
+    <th>CHIROPTERA</th>
+    <th>Molossidae</th>
+    <th>Tadarida brasiliensis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004025005.1/ target=_blank>GCA_004025005.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>108</th>
+    <th>Stripe-headed round-eared bat</th>
+    <th>CHIROPTERA</th>
+    <th>Phyllostomidae</th>
+    <th>Tonatia saurophila</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024845.1/ target=_blank>GCA_004024845.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>109</th>
+    <th>Screaming hairy armadillo</th>
+    <th>CINGULATA</th>
+    <th>Dasypodidae</th>
+    <th>Chaetophractus vellerosus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027955.1/ target=_blank>GCA_004027955.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>110</th>
+    <th>Nine-banded armadillo</th>
+    <th>CINGULATA</th>
+    <th>Dasypodidae</th>
+    <th>Dasypus novemcinctus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000208655.1/ target=_blank>GCF_000208655.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>111</th>
+    <th>Southern three-banded armadillo</th>
+    <th>CINGULATA</th>
+    <th>Dasypodidae</th>
+    <th>Tolypeutes matacus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004025125.1/ target=_blank>GCA_004025125.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>112</th>
+    <th>Sunda flying lemur</th>
+    <th>DERMOPTERA</th>
+    <th>Cynocephalidae</th>
+    <th>Galeopterus variegatus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027255.1/ target=_blank>GCA_004027255.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>113</th>
+    <th>Star-nosed mole</th>
+    <th>EULIPOTYPHLA</th>
+    <th>Talpidae</th>
+    <th>Condylura cristata</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000260355.1/ target=_blank>GCF_000260355.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>114</th>
+    <th>Indochinese shrew</th>
+    <th>EULIPOTYPHLA</th>
+    <th>Soricidae</th>
+    <th>Crocidura indochinensis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027635.1/ target=_blank>GCA_004027635.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>115</th>
+    <th>Western european hedgehog</th>
+    <th>EULIPOTYPHLA</th>
+    <th>Erinaceidae</th>
+    <th>Erinaceus europaeus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000296755.1/ target=_blank>GCF_000296755.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>116</th>
+    <th>Eastern mole</th>
+    <th>EULIPOTYPHLA</th>
+    <th>Talpidae</th>
+    <th>Scalopus aquaticus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024925.1/ target=_blank>GCA_004024925.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>117</th>
+    <th>Hispaniolan solenodon</th>
+    <th>EULIPOTYPHLA</th>
+    <th>Solenodontidae</th>
+    <th>Solenodon paradoxus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004363575.1/ target=_blank>GCA_004363575.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>118</th>
+    <th>European shrew</th>
+    <th>EULIPOTYPHLA</th>
+    <th>Soricidae</th>
+    <th>Sorex araneus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000181275.1/ target=_blank>GCF_000181275.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>119</th>
+    <th>Gracile shrew-like mole</th>
+    <th>EULIPOTYPHLA</th>
+    <th>Talpidae</th>
+    <th>Uropsilus gracilis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024945.1/ target=_blank>GCA_004024945.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>120</th>
+    <th>African yellow-spotted rock hyrax</th>
+    <th>HYRACOIDEA</th>
+    <th>Procaviidae</th>
+    <th>Heterohyrax brucei</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026845.1/ target=_blank>GCA_004026845.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>121</th>
+    <th>South African rock hyrax</th>
+    <th>HYRACOIDEA</th>
+    <th>Procaviidae</th>
+    <th>Procavia capensis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026925.1/ target=_blank>GCA_004026925.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>122</th>
+    <th>Snowshoe hare</th>
+    <th>LAGOMORPHA</th>
+    <th>Leporidae</th>
+    <th>Lepus americanus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026855.1/ target=_blank>GCA_004026855.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>123</th>
+    <th>American pika</th>
+    <th>LAGOMORPHA</th>
+    <th>Ochotonidae</th>
+    <th>Ochotona princeps</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000292845.1/ target=_blank>GCF_000292845.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>124</th>
+    <th>Rabbit</th>
+    <th>LAGOMORPHA</th>
+    <th>Leporidae</th>
+    <th>Oryctolagus cuniculus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000003625.3/ target=_blank>GCF_000003625.3</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>125</th>
+    <th>Cape elephant shrew</th>
+    <th>MACROSCELIDEA</th>
+    <th>Macroscelididae</th>
+    <th>Elephantulus edwardii</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027355.1/ target=_blank>GCA_004027355.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>126</th>
+    <th>Southern white rhinoceros</th>
+    <th>PERISSODACTYLA</th>
+    <th>Rhinocerotidae</th>
+    <th>Ceratotherium simum</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000283155.1/ target=_blank>GCF_000283155.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>127</th>
+    <th>Northern white rhino</th>
+    <th>PERISSODACTYLA</th>
+    <th>Rhinocerotidae</th>
+    <th>Ceratotherium simum cottoni</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027795.1/ target=_blank>GCA_004027795.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>128</th>
+    <th>Sumatran rhinoceros</th>
+    <th>PERISSODACTYLA</th>
+    <th>Rhinocerotidae</th>
+    <th>Dicerorhinus sumatrensis</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002844835.1/ target=_blank>GCA_002844835.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>129</th>
+    <th>Black rhinocerous</th>
+    <th>PERISSODACTYLA</th>
+    <th>Rhinocerotidae</th>
+    <th>Diceros bicornis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027315.1/ target=_blank>GCA_004027315.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>130</th>
+    <th>Ass</th>
+    <th>PERISSODACTYLA</th>
+    <th>Equidae</th>
+    <th>Equus asinus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_001305755.1/ target=_blank>GCF_001305755.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>131</th>
+    <th>Horse</th>
+    <th>PERISSODACTYLA</th>
+    <th>Equidae</th>
+    <th>Equus caballus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000002305.2/ target=_blank>GCF_000002305.2</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>132</th>
+    <th>Przewalski's horse</th>
+    <th>PERISSODACTYLA</th>
+    <th>Equidae</th>
+    <th>Equus przewalskii</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000696695.1/ target=_blank>GCF_000696695.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>133</th>
+    <th>Malayan tapir</th>
+    <th>PERISSODACTYLA</th>
+    <th>Tapiridae</th>
+    <th>Tapirus indicus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024905.1/ target=_blank>GCA_004024905.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>134</th>
+    <th>South American tapir</th>
+    <th>PERISSODACTYLA</th>
+    <th>Tapiridae</th>
+    <th>Tapirus terrestris</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004025025.1/ target=_blank>GCA_004025025.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>135</th>
+    <th>Malayan pangolin</th>
+    <th>PHOLIDOTA</th>
+    <th>Manidae</th>
+    <th>Manis javanica</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_001685135.1/ target=_blank>GCF_001685135.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>136</th>
+    <th>Chinese pangolin</th>
+    <th>PHOLIDOTA</th>
+    <th>Manidae</th>
+    <th>Manis pentadactyla</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000738955.1/ target=_blank>GCA_000738955.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>137</th>
+    <th>Linnaeus's two toed sloth</th>
+    <th>PILOSA</th>
+    <th>Megalonychidae</th>
+    <th>Choloepus didactylus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027855.1/ target=_blank>GCA_004027855.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>138</th>
+    <th>Hoffmann's two-fingered sloth</th>
+    <th>PILOSA</th>
+    <th>Megalonychidae</th>
+    <th>Choloepus hoffmanni</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000164785.2/ target=_blank>GCA_000164785.2</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>139</th>
+    <th>Giant anteater</th>
+    <th>PILOSA</th>
+    <th>Myrmecophagidae</th>
+    <th>Myrmecophaga tridactyla</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026745.1/ target=_blank>GCA_004026745.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>140</th>
+    <th>Southern tamandua</th>
+    <th>PILOSA</th>
+    <th>Myrmecophagidae</th>
+    <th>Tamandua tetradactyla</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004025105.1/ target=_blank>GCA_004025105.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>141</th>
+    <th>Mexican howler monkey</th>
+    <th>PRIMATES</th>
+    <th>Atelidae</th>
+    <th>Alouatta palliata mexicana</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027835.1/ target=_blank>GCA_004027835.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>142</th>
+    <th>Ma's night monkey</th>
+    <th>PRIMATES</th>
+    <th>Aotidae</th>
+    <th>Aotus nancymaae</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000952055.2/ target=_blank>GCA_000952055.2</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>143</th>
+    <th>Geoffroy's spider monkey</th>
+    <th>PRIMATES</th>
+    <th>Atelidae</th>
+    <th>Ateles geoffroyi</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024785.1/ target=_blank>GCA_004024785.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>144</th>
+    <th>White-eared titi</th>
+    <th>PRIMATES</th>
+    <th>Pitheciidae</th>
+    <th>Callicebus donacophilus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027715.1/ target=_blank>GCA_004027715.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>145</th>
+    <th>White-tufted-ear marmoset</th>
+    <th>PRIMATES</th>
+    <th>Cebidae</th>
+    <th>Callithrix jacchus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002754865.1/ target=_blank>GCA_002754865.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>146</th>
+    <th>White-fronted capuchin</th>
+    <th>PRIMATES</th>
+    <th>Cebidae</th>
+    <th>Cebus albifrons</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027755.1/ target=_blank>GCA_004027755.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>147</th>
+    <th>White-faced sapajou</th>
+    <th>PRIMATES</th>
+    <th>Cebidae</th>
+    <th>Cebus capucinus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_001604975.1/ target=_blank>GCF_001604975.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>148</th>
+    <th>Sooty mangabey</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Cercocebus atys</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000955945.1/ target=_blank>GCF_000955945.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>149</th>
+    <th>De brazza's monkey</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Cercopithecus neglectus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027615.1/ target=_blank>GCA_004027615.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>150</th>
+    <th>Fat-tailed dwarf lemur</th>
+    <th>PRIMATES</th>
+    <th>Cheirogaleidae</th>
+    <th>Cheirogaleus medius</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024725.1/ target=_blank>GCA_004024725.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>151</th>
+    <th>Green monkey</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Chlorocebus sabaeus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000409795.2/ target=_blank>GCF_000409795.2</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>152</th>
+    <th>Angolan colobus</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Colobus angolensis</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000951035.1/ target=_blank>GCF_000951035.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>153</th>
+    <th>Aye-aye</th>
+    <th>PRIMATES</th>
+    <th>Daubentoniidae</th>
+    <th>Daubentonia madagascariensis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027145.1/ target=_blank>GCA_004027145.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>154</th>
+    <th>Patas monkey</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Erythrocebus patas</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027335.1/ target=_blank>GCA_004027335.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>155</th>
+    <th>Sclater's lemur</th>
+    <th>PRIMATES</th>
+    <th>Lemuridae</th>
+    <th>Eulemur flavifrons</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_001262665.1/ target=_blank>GCA_001262665.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>156</th>
+    <th>Common brown lemur</th>
+    <th>PRIMATES</th>
+    <th>Lemuridae</th>
+    <th>Eulemur fulvus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027275.1/ target=_blank>GCA_004027275.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>157</th>
+    <th>Western lowland gorilla</th>
+    <th>PRIMATES</th>
+    <th>Hominidae</th>
+    <th>Gorilla gorilla</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_900006655.3/ target=_blank>GCA_900006655.3</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>158</th>
+    <th>Human</th>
+    <th>PRIMATES</th>
+    <th>Hominidae</th>
+    <th>Homo sapiens</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000001405.27/ target=_blank>GCA_000001405.27</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>159</th>
+    <th>Indri</th>
+    <th>PRIMATES</th>
+    <th>Indridae</th>
+    <th>Indri indri</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004363605.1/ target=_blank>GCA_004363605.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>160</th>
+    <th>Ring tailed lemur</th>
+    <th>PRIMATES</th>
+    <th>Lemuridae</th>
+    <th>Lemur catta</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024665.1/ target=_blank>GCA_004024665.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>161</th>
+    <th>Crab-eating macaque</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Macaca fascicularis</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000364345.1/ target=_blank>GCF_000364345.1</a></th>
+    <th>DD</th>
+</tr>
+<tr><th>162</th>
+    <th>Rhesus monkey</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Macaca mulatta</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000772875.2/ target=_blank>GCF_000772875.2</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>163</th>
+    <th>Pig-tailed macaque</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Macaca nemestrina</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000956065.1/ target=_blank>GCF_000956065.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>164</th>
+    <th>Drill</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Mandrillus leucophaeus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000951045.1/ target=_blank>GCF_000951045.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>165</th>
+    <th>Gray mouse lemur</th>
+    <th>PRIMATES</th>
+    <th>Cheirogaleidae</th>
+    <th>Microcebus murinus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000165445.3/ target=_blank>GCA_000165445.3</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>166</th>
+    <th>Coquerel's giant mouse lemur</th>
+    <th>PRIMATES</th>
+    <th>Cheirogaleidae</th>
+    <th>Mirza coquereli</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024645.1/ target=_blank>GCA_004024645.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>167</th>
+    <th>Proboscis monkey</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Nasalis larvatus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027105.1/ target=_blank>GCA_004027105.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>168</th>
+    <th>Northern white-cheeked gibbon</th>
+    <th>PRIMATES</th>
+    <th>Hylobatidae</th>
+    <th>Nomascus leucogenys</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000146795.2/ target=_blank>GCF_000146795.2</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>169</th>
+    <th>Sunda slow loris</th>
+    <th>PRIMATES</th>
+    <th>Lorisidae</th>
+    <th>Nycticebus coucang</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027815.1/ target=_blank>GCA_004027815.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>170</th>
+    <th>Small-eared galago</th>
+    <th>PRIMATES</th>
+    <th>Galagidae</th>
+    <th>Otolemur garnettii</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000181295.1/ target=_blank>GCF_000181295.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>171</th>
+    <th>Pygmy chimpanzee</th>
+    <th>PRIMATES</th>
+    <th>Hominidae</th>
+    <th>Pan paniscus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000258655.2/ target=_blank>GCF_000258655.2</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>172</th>
+    <th>Chimpanzee</th>
+    <th>PRIMATES</th>
+    <th>Hominidae</th>
+    <th>Pan troglodytes</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002880755.3/ target=_blank>GCA_002880755.3</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>173</th>
+    <th>Olive baboon</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Papio anubis</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000264685.2/ target=_blank>GCA_000264685.2</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>174</th>
+    <th>Ugandan red colobus</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Piliocolobus tephrosceles</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002776525.1/ target=_blank>GCA_002776525.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>175</th>
+    <th>White-faced saki</th>
+    <th>PRIMATES</th>
+    <th>Pitheciidae</th>
+    <th>Pithecia pithecia</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026645.1/ target=_blank>GCA_004026645.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>176</th>
+    <th>Sumatran orangutan</th>
+    <th>PRIMATES</th>
+    <th>Hominidae</th>
+    <th>Pongo abelii</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002880775.3/ target=_blank>GCA_002880775.3</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>177</th>
+    <th>Coquerel's sifaka</th>
+    <th>PRIMATES</th>
+    <th>Indridae</th>
+    <th>Propithecus coquereli</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000956105.1/ target=_blank>GCF_000956105.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>178</th>
+    <th>Red-shanked douc</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Pygathrix nemaeus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024825.1/ target=_blank>GCA_004024825.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>179</th>
+    <th>Black snub-nosed monkey</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Rhinopithecus bieti</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_001698545.1/ target=_blank>GCF_001698545.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>180</th>
+    <th>Golden snub-nosed monkey</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Rhinopithecus roxellana</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000769185.1/ target=_blank>GCF_000769185.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>181</th>
+    <th>Emperor tamarin</th>
+    <th>PRIMATES</th>
+    <th>Cebidae</th>
+    <th>Saguinus imperator</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024885.1/ target=_blank>GCA_004024885.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>182</th>
+    <th>Bolivian squirrel monkey</th>
+    <th>PRIMATES</th>
+    <th>Cebidae</th>
+    <th>Saimiri boliviensis</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000235385.1/ target=_blank>GCF_000235385.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>183</th>
+    <th>Northern Plains gray langur</th>
+    <th>PRIMATES</th>
+    <th>Cercopithecidae</th>
+    <th>Semnopithecus entellus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004025065.1/ target=_blank>GCA_004025065.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>184</th>
+    <th>African savanna elephant</th>
+    <th>PROBOSCIDEA</th>
+    <th>Elephantidae</th>
+    <th>Loxodonta Africana</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000001905.1/ target=_blank>GCF_000001905.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>185</th>
+    <th>Cairo spiny mouse</th>
+    <th>RODENTIA</th>
+    <th>Muridae</th>
+    <th>Acomys cahirinus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027535.1/ target=_blank>GCA_004027535.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>186</th>
+    <th>Gobi jerboa</th>
+    <th>RODENTIA</th>
+    <th>Dipodidae</th>
+    <th>Allactaga bullata</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027895.1/ target=_blank>GCA_004027895.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>187</th>
+    <th>Mountain beaver</th>
+    <th>RODENTIA</th>
+    <th>Aplodontiidae</th>
+    <th>Aplodontia rufa</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027875.1/ target=_blank>GCA_004027875.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>188</th>
+    <th>Desmarest's hutia</th>
+    <th>RODENTIA</th>
+    <th>Capromyidae</th>
+    <th>Capromys pilorides</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027915.1/ target=_blank>GCA_004027915.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>189</th>
+    <th>North American beaver</th>
+    <th>RODENTIA</th>
+    <th>Castoridae</th>
+    <th>Castor canadensis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027675.1/ target=_blank>GCA_004027675.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>190</th>
+    <th>Brazilian guinea pig</th>
+    <th>RODENTIA</th>
+    <th>Caviidae</th>
+    <th>Cavia aperea</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_000688575.1/ target=_blank>GCA_000688575.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>191</th>
+    <th>Domestic guinea pig</th>
+    <th>RODENTIA</th>
+    <th>Caviidae</th>
+    <th>Cavia porcellus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000151735.1/ target=_blank>GCF_000151735.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>192</th>
+    <th>Montane guinea pig</th>
+    <th>RODENTIA</th>
+    <th>Caviidae</th>
+    <th>Cavia tschudii</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027695.1/ target=_blank>GCA_004027695.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>193</th>
+    <th>Long-tailed chinchilla</th>
+    <th>RODENTIA</th>
+    <th>Chinchillidae</th>
+    <th>Chinchilla lanigera</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000276665.1/ target=_blank>GCF_000276665.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>194</th>
+    <th>Gambian pouched rat</th>
+    <th>RODENTIA</th>
+    <th>Nesomyidae</th>
+    <th>Cricetomys gambianus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027575.1/ target=_blank>GCA_004027575.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>195</th>
+    <th>Chinese hamster</th>
+    <th>RODENTIA</th>
+    <th>Nesomyidae</th>
+    <th>Cricetulus griseus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_900186095.1/ target=_blank>GCA_900186095.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>196</th>
+    <th>Common gundi</th>
+    <th>RODENTIA</th>
+    <th>Ctenodactylidae</th>
+    <th>Ctenodactylus gundi</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027205.1/ target=_blank>GCA_004027205.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>197</th>
+    <th>Social tuco-tuco</th>
+    <th>RODENTIA</th>
+    <th>Ctenomyidae</th>
+    <th>Ctenomys sociabilis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027165.1/ target=_blank>GCA_004027165.1</a></th>
+    <th>CR</th>
+</tr>
+<tr><th>198</th>
+    <th>Lowland paca</th>
+    <th>RODENTIA</th>
+    <th>Cuniculidae</th>
+    <th>Cuniculus paca</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004365215.1/ target=_blank>GCA_004365215.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>199</th>
+    <th>Central American agouti</th>
+    <th>RODENTIA</th>
+    <th>Dasyproctidae</th>
+    <th>Dasyprocta punctata</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004363535.1/ target=_blank>GCA_004363535.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>200</th>
+    <th>Pacarana</th>
+    <th>RODENTIA</th>
+    <th>Dinomyidae</th>
+    <th>Dinomys branickii</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027595.1/ target=_blank>GCA_004027595.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>201</th>
+    <th>Ord's kangaroo rat</th>
+    <th>RODENTIA</th>
+    <th>Heteromyidae</th>
+    <th>Dipodomys ordii</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000151885.1/ target=_blank>GCF_000151885.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>202</th>
+    <th>Stephen's kangaroo rat</th>
+    <th>RODENTIA</th>
+    <th>Heteromyidae</th>
+    <th>Dipodomys stephensi</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024685.1/ target=_blank>GCA_004024685.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>203</th>
+    <th>Patagonian mara</th>
+    <th>RODENTIA</th>
+    <th>Caviidae</th>
+    <th>Dolichotis patagonum</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027295.1/ target=_blank>GCA_004027295.1</a></th>
+    <th>NT</th>
+</tr>
+<tr><th>204</th>
+    <th>Transcaucasian mole vole</th>
+    <th>RODENTIA</th>
+    <th>Cricetidae</th>
+    <th>Ellobius lutescens</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_001685075.1/ target=_blank>GCA_001685075.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>205</th>
+    <th>Northern mole vole</th>
+    <th>RODENTIA</th>
+    <th>Cricetidae</th>
+    <th>Ellobius talpinus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_001685095.1/ target=_blank>GCA_001685095.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>206</th>
+    <th>Damara mole-rat</th>
+    <th>RODENTIA</th>
+    <th>Bathyergidae</th>
+    <th>Fukomys damarensis</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000743615.1/ target=_blank>GCF_000743615.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>207</th>
+    <th>Edible dormouse</th>
+    <th>RODENTIA</th>
+    <th>Gliridae</th>
+    <th>Glis glis</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027185.1/ target=_blank>GCA_004027185.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>208</th>
+    <th>Woodland doormouse</th>
+    <th>RODENTIA</th>
+    <th>Gliridae</th>
+    <th>Graphiurus murinus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027655.1/ target=_blank>GCA_004027655.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>209</th>
+    <th>Naked mole-rat</th>
+    <th>RODENTIA</th>
+    <th>Bathyergidae</th>
+    <th>Heterocephalus glaber</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000247695.1/ target=_blank>GCF_000247695.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>210</th>
+    <th>Capybara</th>
+    <th>RODENTIA</th>
+    <th>Caviidae</th>
+    <th>Hydrochoerus hydrochaeris</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027455.1/ target=_blank>GCA_004027455.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>211</th>
+    <th>Northern crested porcupine</th>
+    <th>RODENTIA</th>
+    <th>Hystricidae</th>
+    <th>Hystrix cristata</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026905.1/ target=_blank>GCA_004026905.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>212</th>
+    <th>Thirteen-lined ground squirrel</th>
+    <th>RODENTIA</th>
+    <th>Sciuridae</th>
+    <th>Ictidomys tridecemlineatus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000236235.1/ target=_blank>GCF_000236235.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>213</th>
+    <th>Lesser egyptian jerboa</th>
+    <th>RODENTIA</th>
+    <th>Dipodidae</th>
+    <th>Jaculus jaculus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000280705.1/ target=_blank>GCF_000280705.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>214</th>
+    <th>Alpine marmot</th>
+    <th>RODENTIA</th>
+    <th>Sciuridae</th>
+    <th>Marmota marmota</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_001458135.1/ target=_blank>GCF_001458135.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>215</th>
+    <th>Mongolian jird</th>
+    <th>RODENTIA</th>
+    <th>Muridae</th>
+    <th>Meriones unguiculatus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026785.1/ target=_blank>GCA_004026785.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>216</th>
+    <th>Golden hamster</th>
+    <th>RODENTIA</th>
+    <th>Cricetidae</th>
+    <th>Mesocricetus auratus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000349665.1/ target=_blank>GCF_000349665.1</a></th>
+    <th>VU</th>
+</tr>
+<tr><th>217</th>
+    <th>Prairie vole</th>
+    <th>RODENTIA</th>
+    <th>Cricetidae</th>
+    <th>Microtus ochrogaster</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000317375.1/ target=_blank>GCF_000317375.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>218</th>
+    <th>Ryukyu mouse</th>
+    <th>RODENTIA</th>
+    <th>Muridae</th>
+    <th>Mus caroli</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_900094665.2/ target=_blank>GCA_900094665.2</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>219</th>
+    <th>House mouse</th>
+    <th>RODENTIA</th>
+    <th>Muridae</th>
+    <th>Mus musculus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000001635.26/ target=_blank>GCF_000001635.26</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>220</th>
+    <th>Shrew mouse</th>
+    <th>RODENTIA</th>
+    <th>Muridae</th>
+    <th>Mus pahari</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_900095145.2/ target=_blank>GCA_900095145.2</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>221</th>
+    <th>Western wild mouse</th>
+    <th>RODENTIA</th>
+    <th>Muridae</th>
+    <th>Mus spretus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_001624865.1/ target=_blank>GCA_001624865.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>222</th>
+    <th>Hazel dormouse</th>
+    <th>RODENTIA</th>
+    <th>Gliridae</th>
+    <th>Muscardinus avellanarius</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027005.1/ target=_blank>GCA_004027005.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>223</th>
+    <th>Coypu</th>
+    <th>RODENTIA</th>
+    <th>Myocastoridae</th>
+    <th>Myocastor coypus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004027025.1/ target=_blank>GCA_004027025.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>224</th>
+    <th>Upper galilee mountains blind mole rat</th>
+    <th>RODENTIA</th>
+    <th>Spalacidae</th>
+    <th>Nannospalax galili</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000622305.1/ target=_blank>GCF_000622305.1</a></th>
+    <th>DD</th>
+</tr>
+<tr><th>225</th>
+    <th>Degu</th>
+    <th>RODENTIA</th>
+    <th>Octodontidae</th>
+    <th>Octodon degus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000260255.1/ target=_blank>GCF_000260255.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>226</th>
+    <th>Muskrat</th>
+    <th>RODENTIA</th>
+    <th>Cricetidae</th>
+    <th>Ondatra zibethicus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026605.1/ target=_blank>GCA_004026605.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>227</th>
+    <th>Scorpion mouse</th>
+    <th>RODENTIA</th>
+    <th>Cricetidae</th>
+    <th>Onychomys torridus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026725.1/ target=_blank>GCA_004026725.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>228</th>
+    <th>Pacific pocket mouse</th>
+    <th>RODENTIA</th>
+    <th>Heteromyidae</th>
+    <th>Perognathus longimembris pacificus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004363475.1/ target=_blank>GCA_004363475.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>229</th>
+    <th>Prairie deer mouse</th>
+    <th>RODENTIA</th>
+    <th>Cricetidae</th>
+    <th>Peromyscus maniculatus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000500345.1/ target=_blank>GCF_000500345.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>230</th>
+    <th>Dassie rat</th>
+    <th>RODENTIA</th>
+    <th>Petromuridae</th>
+    <th>Petromus typicus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004026965.1/ target=_blank>GCA_004026965.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>231</th>
+    <th>Fat sand rat</th>
+    <th>RODENTIA</th>
+    <th>Muridae</th>
+    <th>Psammomys obesus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002215935.1/ target=_blank>GCA_002215935.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>232</th>
+    <th>Norway rat</th>
+    <th>RODENTIA</th>
+    <th>Muridae</th>
+    <th>Rattus norvegicus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000001895.5/ target=_blank>GCF_000001895.5</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>233</th>
+    <th>Hispid cotton rat</th>
+    <th>RODENTIA</th>
+    <th>Cricetidae</th>
+    <th>Sigmodon hispidus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004025045.1/ target=_blank>GCA_004025045.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>234</th>
+    <th>Daurian ground squirrel</th>
+    <th>RODENTIA</th>
+    <th>Sciuridae</th>
+    <th>Spermophilus dauricus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_002406435.1/ target=_blank>GCA_002406435.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>235</th>
+    <th>Greater cane rat</th>
+    <th>RODENTIA</th>
+    <th>Thryonomyidae</th>
+    <th>Thryonomys swinderianus</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004025085.1/ target=_blank>GCA_004025085.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>236</th>
+    <th>Cape ground squirrel</th>
+    <th>RODENTIA</th>
+    <th>Sciuridae</th>
+    <th>Xerus inauris</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024805.1/ target=_blank>GCA_004024805.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>237</th>
+    <th>Meadow jumping mouse</th>
+    <th>RODENTIA</th>
+    <th>Dipodidae</th>
+    <th>Zapus hudsonius</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004024765.1/ target=_blank>GCA_004024765.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>238</th>
+    <th>Northern tree shrew</th>
+    <th>SCANDENTIA</th>
+    <th>Tupaiidae</th>
+    <th>Tupaia belangeri chinensis</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000334495.1/ target=_blank>GCF_000334495.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>239</th>
+    <th>Large treeshrew</th>
+    <th>SCANDENTIA</th>
+    <th>Tupaiidae</th>
+    <th>Tupaia tana</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004365275.1/ target=_blank>GCA_004365275.1</a></th>
+    <th>LC</th>
+</tr>
+<tr><th>240</th>
+    <th>Florida manatee</th>
+    <th>SIRENIA</th>
+    <th>Trichechidae</th>
+    <th>Trichechus manatus</th>
+    <th>2. Existing assembly</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCF_000243295.1/ target=_blank>GCF_000243295.1</a></th>
+    <th>EN</th>
+</tr>
+<tr><th>241</th>
+    <th>Aardvark</th>
+    <th>TUBULIDENTATA</th>
+    <th>Orycteropodidae</th>
+    <th>Orycteropus afer</th>
+    <th>1. Zoonomia</th>
+    <th><a href=https://www.ncbi.nlm.nih.gov/assembly/GCA_004365145.1/ target=_blank>GCA_004365145.1</a></th>
+    <th>LC</th>
+</tr>
+</table><br>
+<b>Table 1.</b> <em>Genome assemblies included in the 241-way Conservation track.</em><br>
+<b>Species status:</b>LC = Least Concern; NT = Near threatened; VU = Vulnerable; EN = Endangered; CR = Critically endangered<br>
+</blockquote></p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+In full and pack display modes, conservation scores are displayed as a
+<em>wiggle track</em> (histogram) in which the height reflects the
+size of the score.
+The conservation wiggles can be configured in a variety of ways to
+highlight different aspects of the displayed information.
+Click the <a href="../goldenPath/help/hgWiggleTrackHelp.html"
+target=_blank>Graph configuration help</a> link for an explanation
+of the configuration options.</p>
+<p>
+Pairwise alignments of each species to the $organism genome are
+displayed below the conservation histogram as a grayscale density plot (in
+pack mode) or as a wiggle (in full mode) that indicates alignment quality.
+In dense display mode, conservation is shown in grayscale using
+darker values to indicate higher levels of overall conservation
+as scored by phastCons. </p>
+<p>
+Checkboxes on the track configuration page allow selection of the
+species to include in the pairwise display.
+Note that excluding species from the pairwise display does not alter the
+the conservation score display.</p>
+<p>
+To view detailed information about the alignments at a specific
+position, zoom the display in to 30,000 or fewer bases, then click on
+the alignment.</p>
+
+<h3>Gap Annotation</h3>
+<p>
+The <em>Display chains between alignments</em> configuration option
+enables display of gaps between alignment blocks in the pairwise alignments in
+a manner similar to the Chain track display.  The following
+conventions are used:
+<ul>
+<li><b>Single line:</b> No bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the $organism genome
+or a lineage-specific deletion between the aligned blocks in the aligning
+species.
+<li><b>Double line:</b> Aligning species has one or more unalignable bases in
+the gap region. Possibly due to excessive evolutionary distance between
+species or independent indels in the region between the aligned blocks in both
+species.
+<li><b>Pale yellow coloring:</b> Aligning species has Ns in the gap region.
+Reflects uncertainty in the relationship between the DNA of both species, due
+to lack of sequence in relevant portions of the aligning species.
+</ul></p>
+
+<h3>Genomic Breaks</h3>
+<p>
+Discontinuities in the genomic context (chromosome, scaffold or region) of the
+aligned DNA in the aligning species are shown as follows:
+<ul>
+<li>
+<b>Vertical blue bar:</b> Represents a discontinuity that persists indefinitely
+on either side, <em>e.g.</em> a large region of DNA on either side of the bar
+comes from a different chromosome in the aligned species due to a large scale
+rearrangement.
+<li>
+<b>Green square brackets:</b> Enclose shorter alignments consisting of DNA from
+one genomic context in the aligned species nested inside a larger chain of
+alignments from a different genomic context. The alignment within the
+brackets may represent a short misalignment, a lineage-specific insertion of a
+transposon in the $organism genome that aligns to a paralogous copy somewhere
+else in the aligned species, or other similar occurrence.
+</ul></p>
+
+<h3>Base Level</h3>
+<p>
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment. The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $organism sequence at those
+alignment positions relative to the longest non-$organism sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</p>
+<p>
+Codon translation is available in base-level display mode if the
+displayed region is identified as a coding segment. To display this annotation,
+select the species for translation from the pull-down menu in the Codon
+Translation configuration section at the top of the page. Then, select one of
+the following modes:
+<ul>
+<li>
+<b>No codon translation:</b> The gene annotation is not used; the bases are
+displayed without translation.
+<li>
+<b>Use default species reading frames for translation:</b> The annotations from
+the genome displayed in the <em>Default species to establish reading frame</em>
+pull-down menu are used to translate all the aligned species present in the
+alignment.
+<li>
+<b>Use reading frames for species if available, otherwise no translation:</b>
+Codon translation is performed only for those species where the region is
+annotated as protein coding.
+<li><b>Use reading frames for species if available, otherwise use default species:</b>
+Codon translation is done on those species that are annotated as being protein
+coding over the aligned region using species-specific annotation; the remaining
+species are translated using the default species annotation.
+</ul></p>
+<p>
+Codon translation uses the following gene tracks as the basis for translation:
+
+<blockquote><table class="stdTbl">
+<tr align=left><td><b>Gene Track</b></td><td><b>Species</b></td></tr>
+<tr align=left><td>UCSC Genes</td><td>Human, Mouse</td></tr>
+<tr align=left><td>RefSeq Genes</td><td>Cow, Frog (X. tropicalis)</td></tr>
+<tr align=left><td>Ensembl Genes v73</td><td>Atlantic cod, Bushbaby, Cat, Chicken, Chimp, Coelacanth, Dog, Elephant, Ferret, Fugu, Gorilla, Horse, Lamprey, Lizard, Mallard duck, Marmoset, Medaka, Megabat, Microbat, Orangutan, Panda, Pig, Platypus, Rat, Soft-shell Turtle, Southern platyfish, Squirrel, Tasmanian devil, Tetraodon, Zebrafish</td></tr>
+<tr align=left><td>no annotation</td><td>Aardvark, Alpaca, American alligator, Armadillo, Baboon, Bactrian camel, Big brown bat, Black flying-fox, Brush-tailed rat, Budgerigar, Burton's mouthbreeder, Cape elephant shrew, Cape golden mole, Chinchilla, Chinese hamster, Chinese tree shrew, Collared flycatcher, Crab-eating macaque, David's myotis (bat), Dolphin, Domestic goat, Gibbon, Golden hamster, Green monkey, Green seaturtle, Hedgehog, Killer whale, Lesser Egyptian jerboa, Manatee, Medium ground finch, Mexican tetra (cavefish), Naked mole-rat, Nile tilapia, Pacific walrus, Painted turtle, Parrot, Peregrine falcon, Pika, Prairie vole, Princess of Burundi, Pundamilia nyererei, Rhesus, Rock pigeon, Saker falcon, Scarlet Macaw, Sheep, Shrew, Spiny softshell turtle, Spotted gar, Squirrel monkey, Star-nosed mole, Tawny puffer fish, Tenrec, Tibetan antelope, Tibetan ground jay, Wallaby, Weddell seal, White rhinoceros, White-throated sparrow, Zebra Mbuna, Zebra finch</td></tr>
+</table>
+<b>Table 2.</b> <em>Gene tracks used for codon translation.</em>
+</blockquote></p>
+
+<h2>Methods</h2>
+<p>
+Pairwise alignments with the $organism genome were generated for
+each species using lastz from repeat-masked genomic sequence.
+Lineage-specific repeats were removed prior to alignment, then reinserted.
+Pairwise alignments were then linked into chains using a dynamic programming
+algorithm that finds maximally scoring chains of gapless subsections
+of the alignments organized in a kd-tree.
+The scoring matrix and parameters for pairwise alignment and chaining
+were tuned for each species based on phylogenetic distance from the reference.
+High-scoring chains were then placed along the genome, with
+gaps filled by lower-scoring chains, to produce an alignment net.
+For more information about the chaining and netting process and
+parameters for each species, see the description pages for the Chain and Net
+tracks.</p>
+<p>
+An additional filtering step was introduced in the generation of the 100-way
+conservation track to reduce the number of paralogs and pseudogenes from the
+high-quality assemblies and the suspect alignments from the low-quality
+assemblies:
+the pairwise alignments of high-quality mammalian
+sequences (placental and marsupial) were filtered based on synteny;
+those for 2X mammalian genomes were filtered to retain only
+alignments of best quality in both the target and query (&quot;reciprocal
+best&quot;).</p>
+<p>
+The resulting best-in-genome pairwise alignments
+were progressively aligned using multiz/autoMZ,
+following the tree topology diagrammed above, to produce multiple alignments.
+The multiple alignments were post-processed to
+add annotations indicating alignment gaps, genomic breaks,
+and base quality of the component sequences.
+The annotated multiple alignments, in MAF format, are available for
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz100way"
+target=_blank>bulk download</a>.
+An alignment summary table containing an entry for each
+alignment block in each species was generated to improve
+track display performance at large scales.
+Framing tables were constructed to enable
+visualization of codons in the multiple alignment display.</p>
+
+<h3> Phylogenetic Tree Model</h3>
+<p>
+Both <em>phastCons</em> and <em>phyloP</em> are phylogenetic methods that rely
+on a tree model containing the tree topology, branch lengths representing
+evolutionary distance at neutrally evolving sites, the background distribution
+of nucleotides, and a substitution rate matrix.
+The
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/hg38.phastCons100way.mod"
+target=_blank>all-species tree model</a> for this track was
+generated using the <em>phyloFit</em> program from the PHAST package
+(REV model, EM algorithm, medium precision) using multiple alignments of
+4-fold degenerate sites extracted from the 100-way alignment
+(msa_view).  The 4d sites were derived from the RefSeq (Reviewed+Coding) gene
+set, filtered to select single-coverage long transcripts.
+</p>
+<p>
+This same tree model was used in the phyloP calculations; however, the
+background frequencies were modified to maintain reversibility.
+The resulting tree model:
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/hg38.phyloP100way.mod"
+target=_blank>all species</a>.
+</p>
+<h3> PhastCons Conservation </h3>
+<p>
+The phastCons program computes conservation scores based on a phylo-HMM, a
+type of probabilistic model that describes both the process of DNA
+substitution at each site in a genome and the way this process changes from
+one site to the next (Felsenstein and Churchill 1996, Yang 1995, Siepel and
+Haussler 2005).  PhastCons uses a two-state phylo-HMM, with a state for
+conserved regions and a state for non-conserved regions.  The value plotted
+at each site is the posterior probability that the corresponding alignment
+column was "generated" by the conserved state of the phylo-HMM.  These
+scores reflect the phylogeny (including branch lengths) of the species in
+question, a continuous-time Markov model of the nucleotide substitution
+process, and a tendency for conservation levels to be autocorrelated along
+the genome (i.e., to be similar at adjacent sites).  The general reversible
+(REV) substitution model was used.  Unlike many conservation-scoring programs,
+phastCons does not rely on a sliding window
+of fixed size; therefore, short highly-conserved regions and long moderately
+conserved regions can both obtain high scores.
+More information about
+phastCons can be found in Siepel <em>et al</em>. 2005.</p>
+<p>
+The phastCons parameters used were: expected-length=45,
+target-coverage=0.3, rho=0.3.</p>
+
+<h3> PhyloP Conservation </h3>
+<p>
+The phyloP program supports several different methods for computing
+p-values of conservation or acceleration, for individual nucleotides or
+larger elements (<a href="http://compgen.cshl.edu/phast/" target="_blank">
+http://compgen.cshl.edu/phast/</a>).  Here it was used
+to produce separate scores at each base (--wig-scores option), considering
+all branches of the phylogeny rather than a particular subtree or lineage
+(i.e., the --subtree option was not used).  The scores were computed by
+performing a likelihood ratio test at each alignment column (--method LRT),
+and scores for both conservation and acceleration were produced (--mode
+CONACC).
+</p>
+<h3> Conserved Elements </h3>
+<p>
+The conserved elements were predicted by running phastCons with the
+--viterbi option.  The predicted elements are segments of the alignment
+that are likely to have been "generated" by the conserved state of the
+phylo-HMM. Each element is assigned a log-odds score equal to its log
+probability under the conserved model minus its log probability under the
+non-conserved model. The "score" field associated with this track contains
+transformed log-odds scores, taking values between 0 and 1000. (The scores
+are transformed using a monotonic function of the form a * log(x) + b.) The
+raw log odds scores are retained in the "name" field and can be seen on the
+details page or in the browser when the track's display mode is set to
+"pack" or "full".
+</p>
+
+<h2>Credits</h2>
+<p> This track was created using the following programs:
+<ul>
+<li> Alignment tools: lastz (formerly blastz) and multiz by Minmei Hou, Scott Schwartz and Webb
+Miller of the <a href="http://www.bx.psu.edu/miller_lab/"
+target=_blank>Penn State Bioinformatics Group</a>
+<li> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
+<li> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
+other programs in PHAST by
+<a href="http://siepellab.labsites.cshl.edu/"
+target=_blank>Adam Siepel</a> at Cold Spring Harbor Laboratory (original development
+done at the Haussler lab at UCSC).
+<li> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
+by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
+<li> Tree image generator: phyloPng by Galt Barber, UCSC
+<li> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle
+display), and Brian Raney (gap annotation and codon framing) at UCSC
+</ul>
+</p>
+<p>The phylogenetic tree is based on Murphy <em>et al</em>. (2001) and general
+consensus in the vertebrate phylogeny community.  Thanks to Giacomo Bernardi for
+help with the fish relationships.
+</p>
+
+<h2>References</h2>
+
+<h3>Phylo-HMMs, phastCons, and phyloP:</h3>
+<p>
+Felsenstein J, Churchill GA.
+<a href="https://academic.oup.com/mbe/article/13/1/93/1055515/A-Hidden-Markov-Model-approach-to-
+variation-among" target="_blank">A Hidden Markov Model approach to variation among sites in rate of
+evolution</a>. <em>Mol Biol Evol</em>. 1996 Jan;13(1):93-104.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/8583911" target="_blank">8583911</a>
+</p>
+
+<p>
+Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
+<a href="https://genome.cshlp.org/content/20/1/110.long" target="_blank">
+Detection of nonneutral substitution rates on mammalian phylogenies</a>.
+<em>Genome Res</em>. 2010 Jan;20(1):110-21.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19858363" target="_blank">19858363</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2798823/" target="_blank">PMC2798823</a>
+</p>
+
+<p>
+Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
+Clawson H, Spieth J, Hillier LW, Richards S, <em>et al.</em>
+<a href="https://genome.cshlp.org/content/15/8/1034"
+target="_blank">Evolutionarily conserved elements in vertebrate, insect, worm,
+and yeast genomes</a>.
+<em>Genome Res</em>. 2005 Aug;15(8):1034-50.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16024819" target="_blank">16024819</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1182216/" target="_blank">PMC1182216</a>
+</p>
+
+<p>
+Siepel A, Haussler D.
+<a href="http://compgen.cshl.edu/~acs/phylohmm.pdf"
+target="_blank">Phylogenetic Hidden Markov Models</a>.
+In: Nielsen R, editor. Statistical Methods in Molecular Evolution.
+New York: Springer; 2005. pp. 325-351.
+</p>
+
+<p>
+Yang Z.
+<a href="https://www.genetics.org/content/139/2/993"
+target="_blank">A space-time process model for the evolution of DNA
+sequences</a>.
+<em>Genetics</em>. 1995 Feb;139(2):993-1005.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/7713447" target="_blank">7713447</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1206396/" target="_blank">PMC1206396</a>
+</p>
+
+<h3>Chain/Net:</h3>
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="https://www.pnas.org/content/100/20/11484"
+target="_blank">Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
+</p>
+
+<h3>Multiz:</h3>
+<p>
+Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
+Baertsch R, Rosenbloom K, Clawson H, Green ED, <em>et al.</em>
+<a href="https://genome.cshlp.org/content/14/4/708.abstract"
+target="_blank">Aligning multiple genomic sequences with the threaded blockset aligner</a>.
+<em>Genome Res</em>. 2004 Apr;14(4):708-15.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15060014" target="_blank">15060014</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC383317/" target="_blank">PMC383317</a>
+</p>
+
+<h3>Lastz (formerly Blastz):</h3>
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
+target="_blank">Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002:115-26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+</p>
+
+<p>
+Harris RS.
+<a href="http://www.bx.psu.edu/~rsharris/rsharris_phd_thesis_2007.pdf"
+target="_blank">Improved pairwise alignment of genomic DNA</a>.
+<em>Ph.D. Thesis</em>. Pennsylvania State University, USA. 2007.
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W.
+<a href="https://genome.cshlp.org/content/13/1/103.abstract"
+target="_blank">Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
+</p>
+
+
+<h3>Phylogenetic Tree:</h3>
+<p>
+Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
+Ryder OA, Stanhope MJ, de Jong WW, Springer MS.
+<a href="https://science.sciencemag.org/content/294/5550/2348"
+target="_blank">Resolution of the early placental mammal radiation using Bayesian phylogenetics</a>.
+<em>Science</em>. 2001 Dec 14;294(5550):2348-51.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11743200" target="_blank">11743200</a>
+</p>

@@ -122,6 +122,7 @@ else
 	    }
 	}
     }
+slReverse(&rowList);
 return rowList;
 }
 

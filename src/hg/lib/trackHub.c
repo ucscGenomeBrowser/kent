@@ -902,17 +902,14 @@ static void expandBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome
 	struct trackDb *tdb)
 /* Expand bigDataUrls so that no longer relative to genome->trackDbFile */
 {
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataIndex");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "frames");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "summary");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "linkDataUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "searchTrix");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartSampleUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartMatrixUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartStatsUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, SUBTRACK_HIDE_EMPTY_MULTIBED_URL);
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, SUBTRACK_HIDE_EMPTY_SOURCES_URL);
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(tdb->settingsHash);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    char *name = hel->name;
+    if (trackSettingIsFile(name))
+	expandOneUrl(tdb->settingsHash, genome->trackDbFile, name);
+    }
 }
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)

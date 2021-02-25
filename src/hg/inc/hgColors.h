@@ -31,4 +31,7 @@ int hGrayInRange(int oldVal, int oldMin, int oldMax, int newMax);
  * is perhaps a little odd, forcing 0 go to 1, but visually it works
  * out nicely when 0 is white. */
 
+void hInsideStyleToWhite();
+/* Override a few old styling things to get a white instead of cream background */
+
 #endif /* HGCOLORS_H */

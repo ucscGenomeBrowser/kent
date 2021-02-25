@@ -38,6 +38,10 @@ while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
   my ($asmId, $commonName) = split('\t', $line);
+  if (!defined($commonName)) {
+    printf STDERR "ERROR: missing tab sep common name:\n'%s'\n", $line;
+    exit 255;
+  }
   if (defined($commonName{$asmId})) {
     printf STDERR "ERROR: duplicate asmId: '%s'\n", $asmId;
     printf STDERR "previous name: '%s'\n", $commonName{$asmId};
@@ -90,6 +94,9 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   chomp $descr;
   my $orgName=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.* name: .* (##; s#).*##;'`;
   chomp $orgName;
+  if (defined($commonName{$asmId})) {
+     $orgName = $commonName{$asmId};
+  }
 
   printf "genome %s\n", $accessionId;
   printf "trackDb ../%s/%s/trackDb.txt\n", $accessionDir, $accessionId;

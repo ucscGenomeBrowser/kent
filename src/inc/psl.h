@@ -128,6 +128,9 @@ void pslxWriteHead(FILE *f, enum gfType qType, enum gfType tType);
 void pslWriteAll(struct psl *pslList, char *fileName, boolean writeHeader);
 /* Write a psl file from list. */
 
+void pslWriteAllJson(struct psl *pslList, FILE *f, char *db, boolean writeHeader);
+/* Write a psl file from list as a json array . */
+
 struct lineFile *pslFileOpen(char *fileName);
 /* Read header part of psl and make sure it's right. 
  * Return line file handle to it. */
