@@ -123,10 +123,9 @@ var ddcl = {
         // Show only first as selected if it is selected
         if (allCheckboxes[0].checked === true) {
             allCheckboxes.each(function(index) {
-                if (index > 0)
-		    {
+                if (index > 0) {
                     $(this).attr('checked',false);
-		    }
+		}
             });
         }
 

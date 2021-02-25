@@ -403,11 +403,11 @@ function matCbFindFromSubCb(subCB)
     // (e.g. "subDB GM10847 NFKB aNone IGGrab Signal")
     classList = aryRemove(classList,["subCB","changed","disabled"]);
     var classes = classList.slice(0,2).join('.');   // Assume X and Y they are the first 2
-    var matCB = $("input.matCB."+classes); // Note, this works for filtering because we want 'AND'
+    var matCB = $("input.matCB."+classes).not(".abc"); // Note, this works for filtering because we want 'AND'
     if (matCB.length === 1)
         return matCB;
 
-    matCB = $("input.matCB."+classList[0]); // No hit so this must be a 1D matrix
+    matCB = $("input.matCB."+classList[0]).not(".abc"); // No hit so this must be a 1D matrix
     if (matCB.length === 1)
         return matCB;
 
