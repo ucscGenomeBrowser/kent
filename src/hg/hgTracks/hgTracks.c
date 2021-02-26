@@ -2699,7 +2699,7 @@ char *chrom = NULL;
 long start = 0;
 long end = 0;
 parseVPosition(position, &chrom, &start, &end);
-if (!sameString(chrom, "virt"))
+if (!sameString(chrom, "multi"))
     return position; // return original
 struct window *windows = makeWindowListFromVirtChrom(start, end);
 char *nonVirtChromName = windows->chromName;
@@ -3073,7 +3073,7 @@ char *nonVirtPositionFromHighlightPos()
 {
 struct highlightVar *h = parseHighlightInfo();
 
-if (!(h && h->db && sameString(h->db, database) && sameString(h->chrom,"virt")))
+if (!(h && h->db && sameString(h->db, database) && sameString(h->chrom,"multi")))
     return NULL;
 
 struct window *windows = makeWindowListFromVirtChrom(h->chromStart, h->chromEnd);
@@ -9474,7 +9474,7 @@ if (h && h->db && sameString(h->db, database))
 	{
 	// save new highlight position to cart var
 	char cartVar[1024];
-	safef(cartVar, sizeof cartVar, "%s.%s:%ld-%ld#%s", h->db, "virt", virtStart, virtEnd, h->hexColor);
+	safef(cartVar, sizeof cartVar, "%s.%s:%ld-%ld#%s", h->db, "multi", virtStart, virtEnd, h->hexColor);
 	cartSetString(cart, "highlight", cartVar);
 	}
     else
