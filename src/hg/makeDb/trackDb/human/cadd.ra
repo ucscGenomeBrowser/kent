@@ -18,6 +18,7 @@ visibility dense
 group phenDis
 color 100,130,160
 html caddSuper
+maxWindowToDraw 10000000
 
         track caddA
         shortLabel Mutation: A
@@ -72,6 +73,7 @@ visibility dense
 bigDataUrl /gbdb/$D/cadd/ins.bb
 mouseOver Mutation: $change CADD Phred score: $phred
 html caddSuper
+maxWindowToDraw 200000
 
 track caddDel
 shortLabel Deletions
@@ -82,4 +84,5 @@ visibility dense
 bigDataUrl /gbdb/$D/cadd/del.bb
 mouseOver Mutation: $change CADD Phred score: $phred
 html caddSuper
+maxWindowToDraw 200000
 
