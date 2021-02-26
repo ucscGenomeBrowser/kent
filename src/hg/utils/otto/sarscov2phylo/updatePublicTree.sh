@@ -304,6 +304,32 @@ sampleCountComma=$(echo $sampleCount \
 echo "$sampleCountComma genomes from GenBank, COG-UK and CNCB ($today); sarscov2phylo 13-11-20 tree with newer sequences added by UShER" \
     > hgPhyloPlace.description.txt
 
+cp -p public-$today.all.masked.pb{,.bak}
+
+# Add nextclade annotations to protobuf
+zcat public-$today.metadata.tsv.gz \
+| tail -n+2 | tawk '$8 != "" {print $8, $1;}' \
+| sed -re 's/^20E \(EU1\)/20E.EU1/;' \
+    > cladeToPublicName
+time ~/github/usher/build/matUtils annotate -T 50 \
+    -i public-$today.all.masked.pb \
+    -c cladeToPublicName \
+    -o public-$today.all.masked.nextclade.pb \
+    >& annotate.nextclade.out
+
+# Add pangolin lineage annotations to protobuf
+zcat public-$today.metadata.tsv.gz \
+| tail -n+2 | tawk '$9 != "" {print $9, $1;}' \
+    > lineageToPublicName
+time ~/github/usher/build/matUtils annotate -T 50 \
+    -i public-$today.all.masked.nextclade.pb \
+    -c lineageToPublicName \
+    -o public-$today.all.masked.nextclade.pangolin.pb \
+    >& annotate.pangolin.out
+
+# Not all the Pangolin lineages can be assigned nodes so for now just use nextclade
+cp -p public-$today.all.masked.nextclade.pb public-$today.all.masked.pb
+
 # Update gbdb links -- not every day, too much churn for getting releases out and the
 # tracks are getting unmanageably large for VCF.
 if false; then
