@@ -8651,8 +8651,12 @@ if (!hideControls)
             }
         else
             {
-            hButtonWithMsg("hgt.exitMultiRegion", "exit multi-region", 
-                                "Exit multi-region display mode");
+            char buf[100];
+            safef(buf, sizeof buf, "exit %s multi-region", 
+                (sameString(virtModeType, "exonMostly") ? "exon" :
+                (sameString(virtModeType, "geneMostly") ? "gene" : 
+                (sameString(virtModeType, "singleAltHaplo") ? "haplo": "custom"))));
+            hButtonWithMsg("hgt.exitMultiRegion", buf, "Exit multi-region display mode");
             }
         hPrintf(" ");
 
@@ -8853,11 +8857,6 @@ if (!hideControls)
         }
 
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
-    hPrintf(" ");
-
-    hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", 
-                    "Configure multi-region display options", 
-                    "popUpHgt.hgTracks('multi-region config'); return false;", virtMode);
     hPrintf(" ");
 
     hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
