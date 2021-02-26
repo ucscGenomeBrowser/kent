@@ -148,10 +148,21 @@ if (isNotEmpty(filename) && fileExists(filename))
         addPathIfNecessary(dy, db, words[0]);
         treeChoices->protobufFiles[treeChoices->count] = cloneString(dy->string);
         addPathIfNecessary(dy, db, words[1]);
-        treeChoices->metadataFiles[treeChoices->count] = dyStringCannibalize(&dy);
+        treeChoices->metadataFiles[treeChoices->count] = cloneString(dy->string);
         treeChoices->sources[treeChoices->count] = cloneString(words[2]);
-        treeChoices->descriptions[treeChoices->count] = cloneString(words[3]);
+        // Description can be either a file or just some text.
+        addPathIfNecessary(dy, db, words[3]);
+        if (fileExists(dy->string))
+            {
+            char *desc = NULL;
+            readInGulp(dy->string, &desc, NULL);
+            fprintf(stderr, "reading '%s' --> '%s'\n", dy->string, desc);
+            treeChoices->descriptions[treeChoices->count] = desc;
+            }
+        else
+            treeChoices->descriptions[treeChoices->count] = cloneString(words[3]);
         treeChoices->count++;
+        dyStringFree(&dy);
         }
     lineFileClose(&lf);
     }
