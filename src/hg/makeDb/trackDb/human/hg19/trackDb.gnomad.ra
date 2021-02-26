@@ -920,6 +920,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.genomes.bb
     parent gnomadSuper
     visibility squish
+    dataVersion Release 2.1.1
     labelFields name,rsId
     defaultLabelFields name
     sepFields AC_afr
@@ -947,6 +948,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.exomes.bb
     parent gnomadSuper
     visibility squish
+    dataVersion Release 2.1.1
     labelFields name,rsId
     defaultLabelFields name
     filterValues.annot pLoF,missense,synonymous,other

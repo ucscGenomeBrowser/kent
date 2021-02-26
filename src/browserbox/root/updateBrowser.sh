@@ -424,7 +424,7 @@ if [ "$1" != "hgwdev" ] ; then
   echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.soe.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
   
   echo updating hgcentral database, make sure to always overwrite
-  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz --existing rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
+  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/ --exclude hubSearch* --exclude tableDescriptions* --exclude hubSearchText* --exclude gbNode* --exclude geoIp* ; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
   # update blat servers
   mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu") WHERE host not like "%ucsc.edu"'
   # the box does not officially support the HAL right now, remove the ecoli hubs

@@ -7,7 +7,7 @@ well as insertion/deletions variants in the human genome.</p>
 
 <p>
 Some mutation annotations
-tend to exploit a single information type (e.g. phastCons or phylP for
+tend to exploit a single information type (e.g. phastCons or phyloP for
 conservation) and/or are restricted in scope (e.g. to missense changes). Thus,
 a broadly applicable metric that objectively weights and integrates diverse
 information is needed.  Combined Annotation Dependent Depletion (CADD) is a
@@ -29,59 +29,68 @@ larger GWAS.
 <p>
 There are six subtracks of this track: four for every possible single nucleotide mutation, 
 one for insertions and one for deletions. All subtracks show the CADD Phred
-score on mouse over.<p>
+score on mouseover.<p>
 
 <p>
 <b>Single nucleotide variants (SNV):</b> For SNVs, at every
 genome position, there are three values per position, one for every possible
-nucleotide mutation. The fourth value, "no mutation", e.g. A to A, is always
+nucleotide mutation. The fourth value, &quot;no mutation&quot;, e.g. A to A, is always
 set to zero.<br>
 When using this track, please zoom in until you can see every basepair at the
 top of the display. Otherwise, there are several nucleotides under your mouse
 cursor per pixel and instead of an actual score, the tooltip text can only show
 the average score of all nucleotides under the cursor, which is indicated by
-the prefix "~" in the mouse over and averages of scores are not useful for any
+the prefix &quot;~&quot; in the mouseover and averages of scores are not useful for any
 application of CADD.
 </p>
 
-<p><b>Insertions and deletions:</b>: Scores are also shown on mouse over for a
+<p><b>Insertions and deletions:</b> Scores are also shown on mouseover for a
 set of insertions and deletions. On hg38, the set has been obtained from
 Gnomad3. On hg19, the set of indels has been obtained from various sources
 (gnomAD2, ExAC, 1000 Genomes, ESP). If your insertion or deleletion of interest
 is not in the track, you will need to use CADD's
-<a target=_blank href="https://cadd.gs.washington.edu/score">Online scoring tool</a>
+<a target="_blank" href="https://cadd.gs.washington.edu/score">online scoring tool</a>
 to obtain them.</p>
 
-<H2>Data access</H2>
+<h2>Data access</h2>
 <p>
-CADD scores are freely available for all non-commercial applications from <a target=_blank href="https://cadd.gs.washington.edu/download">the CADD website</a>. For commercial applications, see <a target=_blank href="https://cadd.gs.washington.edu/contact">the license instructions</a> there.
+CADD scores are freely available for all non-commercial applications from
+<a target="_blank" href="https://cadd.gs.washington.edu/download">the CADD website</a>.
+For commercial applications, see
+<a target="_blank" href="https://cadd.gs.washington.edu/contact">the license instructions</a> there.
 </p>
 
 <p>
 The CADD data on the UCSC Genome Browser can be explored interactively with the
-<a href="../cgi-bin/hgTables">Table Browser</a> or the <a
-href="../cgi-bin/hgIntegrator">Data Integrator</a>.
-For automated download and analysis, the genome annotation is stored at UCSC in bigWig and bigBed files that
-can be downloaded from
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated download and analysis, the genome annotation is stored at UCSC in bigWig and bigBed
+files that can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/" target="_blank">our download server</a>.
 The files for this track are called <tt>a.bw, c.bw, g.bw, t.bw, ins.bb and del.bb</tt>. Individual
 regions or the whole genome annotation can be obtained using our tool <tt>bigWigToWig</tt>
 or <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
-The tools
-can also be used to obtain only features within a given range, e.g. <br>
-<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/a.bw stdout</tt><br>
-or<br>
+The tools can also be used to obtain only features within a given range, e.g.
+<br>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/a.bw stdout</tt>
+<br>
+or
+<br>
 <tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/ins.bb stdout</tt></p>
 
 <h2>Methods</h2>
 
 <p>
 Data were converted from the files provided on
-<a href="https://cadd.gs.washington.edu/download" target="_blank">the CADD Downloads website</a>, provided by the Kircher lab,
-using <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/cadd" target=_BLANK>custom Python scripts</a>, 
-documented in our <a target=_BLANK href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/cadd.txt">makeDoc</a> files.
+<a href="https://cadd.gs.washington.edu/download" target="_blank">the CADD Downloads website</a>,
+provided by the Kircher lab, using
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/cadd" target="_blank">
+custom Python scripts</a>, 
+documented in our <a target="_blank"
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/cadd.txt">
+makeDoc</a> files.
 </p>
 
 <h2>Credits</h2>
@@ -93,18 +102,17 @@ Thanks to the CADD development team for providing precomputed data as simple tab
 <p>
 Kircher M, Witten DM, Jain P, O'Roak BJ, Cooper GM, Shendure J.
 <a href="http://dx.doi.org/10.1038/ng.2892" target="_blank">
-    A general framework for estimating the relative pathogenicity of human genetic variants</a>.
+A general framework for estimating the relative pathogenicity of human genetic variants</a>.
 <em>Nat Genet</em>. 2014 Mar;46(3):310-5.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24487276" target="_blank">24487276</a>; PMC: <a
-    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3992975/" target="_blank">PMC3992975</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24487276" target="_blank">24487276</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3992975/" target="_blank">PMC3992975</a>
 </p>
 
 <p>
 Rentzsch P, Witten D, Cooper GM, Shendure J, Kircher M.
 <a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gky1016" target="_blank">
-    CADD: predicting the deleteriousness of variants throughout the human genome</a>.
+CADD: predicting the deleteriousness of variants throughout the human genome</a>.
 <em>Nucleic Acids Res</em>. 2019 Jan 8;47(D1):D886-D894.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30371827" target="_blank">30371827</a>; PMC: <a
-    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6323892/" target="_blank">PMC6323892</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30371827" target="_blank">30371827</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6323892/" target="_blank">PMC6323892</a>
 </p>
-

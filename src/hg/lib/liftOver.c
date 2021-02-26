@@ -39,7 +39,7 @@ else
 }
 
 // The maximum number of words per line that can be lifted:
-#define LIFTOVER_MAX_WORDS 256
+#define LIFTOVER_MAX_WORDS 2048
 
 void readLiftOverMap(char *fileName, struct hash *chainHash)
 /* Read map file into hashes. */

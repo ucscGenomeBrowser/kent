@@ -18,3 +18,6 @@ searchPriority 8
 
 include ../../refSeqComposite.ra
 include trackDb.7way.ra alpha
+
+include trackDb.catV2.ra alpha
+include trackDb.isoseq.ra alpha

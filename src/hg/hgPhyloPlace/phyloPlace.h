@@ -36,15 +36,19 @@ struct seqInfo
 /* User sequences, alignments and statistics */
 {
     struct seqInfo *next;
-    struct dnaSeq *seq;
-    struct psl *psl;
-    struct singleNucChange *sncList;
-    struct singleNucChange *maskedSncList;
-    struct slRef *maskedReasonsList;
-    uint nCountStart;
-    uint nCountMiddle;
-    uint nCountEnd;
-    uint ambigCount;
+    struct dnaSeq *seq;                     // Uploaded sequence
+    struct psl *psl;                        // Alignment to reference (if FASTA uploaded)
+    struct singleNucChange *sncList;        // SNVs in seq
+    struct singleNucChange *maskedSncList;  // SNVs that were masked (not used for placement)
+    struct slRef *maskedReasonsList;        // Reason (from Problematic Sites) for masking each SNV
+    uint nCountStart;                       // #Ns at beginning of seq
+    uint nCountMiddle;                      // #Ns not at beginning or end of seq
+    uint nCountEnd;                         // #Ns at end of seq
+    uint ambigCount;                        // # ambiguous IUPAC bases
+    char *insRanges;                        // ranges and sequences inserted into reference
+    char *delRanges;                        // ranges and sequences deleted from reference
+    uint insBases;                          // total #bases inserted into reference
+    uint delBases;                          // total #bases deleted from reference
 };
 
 struct variantPathNode
@@ -81,6 +85,8 @@ struct placementInfo
     struct baseVal *imputedBases;         // Ambiguous bases imputed to ref/alt [ACGT]
     int parsimonyScore;                   // Parsimony cost of placing sample
     int bestNodeCount;                    // Number of equally parsimonious placements
+    char *nextClade;                      // Nextstrain clade assigned by UShER
+    char *pangoLineage;                   // Pango lineage assigned by UShER
     };
 
 struct subtreeInfo

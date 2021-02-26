@@ -148,10 +148,21 @@ if (isNotEmpty(filename) && fileExists(filename))
         addPathIfNecessary(dy, db, words[0]);
         treeChoices->protobufFiles[treeChoices->count] = cloneString(dy->string);
         addPathIfNecessary(dy, db, words[1]);
-        treeChoices->metadataFiles[treeChoices->count] = dyStringCannibalize(&dy);
+        treeChoices->metadataFiles[treeChoices->count] = cloneString(dy->string);
         treeChoices->sources[treeChoices->count] = cloneString(words[2]);
-        treeChoices->descriptions[treeChoices->count] = cloneString(words[3]);
+        // Description can be either a file or just some text.
+        addPathIfNecessary(dy, db, words[3]);
+        if (fileExists(dy->string))
+            {
+            char *desc = NULL;
+            readInGulp(dy->string, &desc, NULL);
+            fprintf(stderr, "reading '%s' --> '%s'\n", dy->string, desc);
+            treeChoices->descriptions[treeChoices->count] = desc;
+            }
+        else
+            treeChoices->descriptions[treeChoices->count] = cloneString(words[3]);
         treeChoices->count++;
+        dyStringFree(&dy);
         }
     lineFileClose(&lf);
     }
@@ -1034,6 +1045,29 @@ if (ti == NULL)
 return ti;
 }
 
+static void lookForCladesAndLineages(struct seqInfo *seqInfoList, struct hash *samplePlacements,
+                                     boolean *retGotClades, boolean *retGotLineages)
+/* See if UShER has annotated any clades and/or lineages for seqs. */
+{
+boolean gotClades = FALSE, gotLineages = FALSE;
+struct seqInfo *si;
+for (si = seqInfoList;  si != NULL;  si = si->next)
+    {
+    struct placementInfo *pi = hashFindVal(samplePlacements, si->seq->name);
+    if (pi)
+        {
+        if (isNotEmpty(pi->nextClade))
+            gotClades = TRUE;
+        if (isNotEmpty(pi->pangoLineage))
+            gotLineages = TRUE;
+        if (gotClades && gotLineages)
+            break;
+        }
+    }
+*retGotClades = gotClades;
+*retGotLineages = gotLineages;
+}
+
 static char *nextstrainHost()
 /* Return the nextstrain hostname from an hg.conf param, or NULL if missing. */
 {
@@ -1108,7 +1142,7 @@ puts("</p>");
 
 #define TOOLTIP(text) " <div class='tooltip'>(?)<span class='tooltiptext'>" text "</span></div>"
 
-static void printSummaryHeader(boolean isFasta)
+static void printSummaryHeader(boolean isFasta, boolean gotClades, boolean gotLineages)
 /* Print the summary table header row with tooltips explaining columns. */
 {
 puts("<thead><tr>");
@@ -1149,13 +1183,21 @@ puts("<th>#SNVs used for placement"
      TOOLTIP("Number of single-nucleotide variants in uploaded sample that are masked "
              "(not used for placement) because they occur at known "
              "<a href='https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473/12' "
-             "target=_blank>Problematic Sites</a>")
-     "</th>\n<th>Neighboring sample in tree"
+             "target=_blank>Problematic Sites</a>"));;
+if (gotClades)
+    puts("</th>\n<th>Nextstrain clade"
+     TOOLTIP("The <a href='https://nextstrain.org/blog/2021-01-06-updated-SARS-CoV-2-clade-naming' "
+             "target=_blank>Nextstrain clade</a> assigned to the sample by UShER"));
+if (gotLineages)
+    puts("</th>\n<th>Pango lineage"
+     TOOLTIP("The <a href='https://cov-lineages.org/' "
+             "target=_blank>Pango lineage</a> assigned to the sample by UShER"));
+puts("</th>\n<th>Neighboring sample in tree"
      TOOLTIP("A sample already in the tree that is a child of the node at which the uploaded "
              "sample was placed, to give an example of a closely related sample")
      "</th>\n<th>Lineage of neighbor"
-     TOOLTIP("The <a href='https://github.com/cov-lineages/pangolin' target=_blank>"
-             "Pangolin lineage</a> assigned to the nearest neighboring sample already in the tree")
+     TOOLTIP("The <a href='https://cov-lineages.org/' target=_blank>"
+             "Pango lineage</a> assigned to the nearest neighboring sample already in the tree")
      "</th>\n<th>#Imputed values for mixed bases"
      TOOLTIP("If the uploaded sequence contains mixed/ambiguous bases, then UShER may assign "
              "values based on maximum parsimony")
@@ -1349,10 +1391,11 @@ static void summarizeSequences(struct seqInfo *seqInfoList, boolean isFasta,
 if (seqInfoList)
     {
     puts("<table class='seqSummary'>");
-    printSummaryHeader(isFasta);
+    boolean gotClades = FALSE, gotLineages = FALSE;
+    lookForCladesAndLineages(seqInfoList, ur->samplePlacements, &gotClades, &gotLineages);
+    printSummaryHeader(isFasta, gotClades, gotLineages);
     puts("<tbody>");
     struct dyString *dy = dyStringNew(0);
-    struct dyString *dyExtra = dyStringNew(0);
     struct seqInfo *si;
     for (si = seqInfoList;  si != NULL;  si = si->next)
         {
@@ -1417,74 +1460,17 @@ if (seqInfoList)
                 dyStringPrintf(dy, "bases %d - %d align to reference bases %d - %d",
                                psl->qStart+1, psl->qEnd, psl->tStart+1, psl->tEnd);
                 printTooltip(dy->string);
-                int insBases = 0, insCount = 0, delBases = 0, delCount = 0;
-                if (psl->qBaseInsert || psl->tBaseInsert)
+                printf("</td><td class='%s'>%d ",
+                       qcClassForIndel(si->insBases), si->insBases);
+                if (si->insBases)
                     {
-                    // Tally up actual insertions and deletions; ignore skipped N bases.
-                    dyStringClear(dy);
-                    dyStringClear(dyExtra);
-                    int ix;
-                    for (ix = 0;  ix < psl->blockCount - 1;  ix++)
-                        {
-                        int qGapStart = psl->qStarts[ix] + psl->blockSizes[ix];
-                        int qGapEnd = psl->qStarts[ix+1];
-                        int qGapLen = qGapEnd - qGapStart;
-                        int tGapStart = psl->tStarts[ix] + psl->blockSizes[ix];
-                        int tGapEnd = psl->tStarts[ix+1];
-                        int tGapLen = tGapEnd - tGapStart;
-                        if (qGapLen > tGapLen)
-                            {
-                            insCount++;
-                            int insLen = qGapLen - tGapLen;
-                            insBases += insLen;
-                            if (isNotEmpty(dy->string))
-                                dyStringAppend(dy, ", ");
-                            if (insLen <= 12)
-                                {
-                                char insSeq[insLen+1];
-                                safencpy(insSeq, sizeof insSeq, si->seq->dna + qGapEnd - insLen,
-                                         insLen);
-                                touppers(insSeq);
-                                dyStringPrintf(dy, "%d-%d:%s",
-                                               tGapEnd, tGapEnd+1, insSeq);
-                                }
-                            else
-                                dyStringPrintf(dy, "%d-%d:%d bases",
-                                               tGapEnd, tGapEnd+1, insLen);
-                            }
-                        else if (tGapLen > qGapLen)
-                            {
-                            delCount++;
-                            int delLen = tGapLen - qGapLen;;
-                            delBases += delLen;
-                            if (isNotEmpty(dyExtra->string))
-                                dyStringAppend(dyExtra, ", ");
-                            if (delLen <= 12)
-                                {
-                                char delSeq[delLen+1];
-                                safencpy(delSeq, sizeof delSeq, refGenome->dna + tGapEnd - delLen,
-                                         delLen);
-                                touppers(delSeq);
-                                dyStringPrintf(dyExtra, "%d-%d:%s",
-                                               tGapEnd - delLen + 1, tGapEnd, delSeq);
-                                }
-                            else
-                                dyStringPrintf(dyExtra, "%d-%d:%d bases",
-                                               tGapEnd - delLen + 1, tGapEnd, delLen);
-                            }
-                        }
+                    printTooltip(si->insRanges);
                     }
                 printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(insBases), insBases);
-                if (insBases)
+                       qcClassForIndel(si->delBases), si->delBases);
+                if (si->delBases)
                     {
-                    printTooltip(dy->string);
-                    }
-                printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(delBases), delBases);
-                if (delBases)
-                    {
-                    printTooltip(dyExtra->string);
+                    printTooltip(si->delRanges);
                     }
                 printf("</td>");
                 }
@@ -1536,6 +1522,10 @@ if (seqInfoList)
         struct placementInfo *pi = hashFindVal(ur->samplePlacements, si->seq->name);
         if (pi)
             {
+            if (gotClades)
+                printf("<td>%s</td>", pi->nextClade ? pi->nextClade : "n/a");
+            if (gotLineages)
+                printf("<td>%s</td>", pi->pangoLineage ? pi->pangoLineage : "n/a");
             struct slName *neighbor = findNearestNeighbor(bigTree, pi->sampleId, pi->variantPath);
             char *lineage = neighbor ?  lineageForSample(sampleMetadata, neighbor->name) : "?";
             printf("<td>%s</td><td>%s</td>",
@@ -1562,7 +1552,13 @@ if (seqInfoList)
             printf("</td>");
             }
         else
+            {
+            if (gotClades)
+                printf("<td>n/a></td>");
+            if (gotLineages)
+                printf("<td>n/a></td>");
             printf("<td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td>");
+            }
         int ix;
         struct subtreeInfo *ti = subtreeInfoForSample(ur->subtreeInfoList, si->seq->name, &ix);
         if (ix < 0)
@@ -1630,7 +1626,8 @@ return sncList;
 }
 
 static void writeOneTsvRow(FILE *f, char *sampleId, struct usherResults *results,
-                           struct geneInfo *geneInfoList, struct seqWindow *gSeqWin)
+                           struct hash *seqInfoHash, struct geneInfo *geneInfoList,
+                           struct seqWindow *gSeqWin)
 /* Write one row of tab-separate summary for sampleId. */
 {
     struct placementInfo *info = hashFindVal(results->samplePlacements, sampleId);
@@ -1675,11 +1672,47 @@ static void writeOneTsvRow(FILE *f, char *sampleId, struct usherResults *results
     fputc('\t', f);
     // path through tree to sample
     printVariantPathNoNodeNames(f, info->variantPath);
+    // number of equally parsimonious placements
+    fprintf(f, "\t%d", info->bestNodeCount);
+    // parsimony score
+    fprintf(f, "\t%d", info->parsimonyScore);
+    struct seqInfo *si = hashFindVal(seqInfoHash, sampleId);
+    if (si)
+        {
+        if (si->psl)
+            {
+            // length
+            fprintf(f, "\t%d", si->seq->size);
+            struct psl *psl = si->psl;
+            // aligned bases, indel counts & ranges
+            int aliCount = psl->match + psl->misMatch + psl->repMatch;
+            fprintf(f, "\t%d\t%d\t%s\t%d\t%s",
+                    aliCount, si->insBases, emptyForNull(si->insRanges),
+                    si->delBases, emptyForNull(si->delRanges));
+            }
+        else
+            fprintf(f, "\t\t\t\t\t\t");
+        // SNVs that were masked (Problematic Sites track), not used in placement
+        fputc('\t', f);
+        struct singleNucChange *snc;
+        for (snc = si->maskedSncList;  snc != NULL;  snc = snc->next)
+            {
+            if (snc != si->maskedSncList)
+                fputc(',', f);
+            fprintf(f, "%c%d%c", snc->refBase, snc->chromStart+1, snc->newBase);
+            }
+        }
+    else
+        {
+        warn("writeOneTsvRow: no sequenceInfo for sample '%s'", sampleId);
+        fprintf(f, "\t\t\t\t\t\t\t");
+        }
     fputc('\n', f);
 }
 
 static void rWriteTsvSummaryTreeOrder(struct phyloTree *node, FILE *f, struct usherResults *results,
-                                      struct geneInfo *geneInfoList, struct seqWindow *gSeqWin)
+                                      struct hash *seqInfoHash, struct geneInfo *geneInfoList,
+                                      struct seqWindow *gSeqWin)
 /* As we encounter leaves (user-uploaded samples) in depth-first search order, write out a line
  * of TSV summary for each one. */
 {
@@ -1687,18 +1720,29 @@ if (node->numEdges)
     {
     int i;
     for (i = 0;  i < node->numEdges;  i++)
-        rWriteTsvSummaryTreeOrder(node->edges[i], f, results, geneInfoList, gSeqWin);
+        rWriteTsvSummaryTreeOrder(node->edges[i], f, results, seqInfoHash, geneInfoList, gSeqWin);
     }
 else
     {
-    writeOneTsvRow(f, node->ident->name, results, geneInfoList, gSeqWin);
+    writeOneTsvRow(f, node->ident->name, results, seqInfoHash, geneInfoList, gSeqWin);
     }
 }
 
 
+static struct hash *hashFromSeqInfoList(struct seqInfo *seqInfoList)
+/* Hash sequence name to seqInfo for quick lookup. */
+{
+struct hash *hash = hashNew(0);
+struct seqInfo *si;
+for (si = seqInfoList;  si != NULL;  si = si->next)
+    hashAdd(hash, si->seq->name, si);
+return hash;
+}
+
 static struct tempName *writeTsvSummary(struct usherResults *results, struct phyloTree *sampleTree,
-                                        struct slName *sampleIds, struct geneInfo *geneInfoList,
-                                        struct seqWindow *gSeqWin, int *pStartTime)
+                                        struct slName *sampleIds, struct seqInfo *seqInfoList,
+                                        struct geneInfo *geneInfoList, struct seqWindow *gSeqWin,
+                                        int *pStartTime)
 /* Write a tab-separated summary file for download.  If the user uploaded enough samples to make
  * a tree, then write out samples in tree order; otherwise use sampleIds list. */
 {
@@ -1706,18 +1750,23 @@ struct tempName *tsvTn = NULL;
 AllocVar(tsvTn);
 trashDirFile(tsvTn, "ct", "usher", ".tsv");
 FILE *f = mustOpen(tsvTn->forCgi, "w");
-fprintf(f, "name\tnuc_mutations\taa_mutations\timputed_bases\tmutation_path\n");
+fprintf(f, "name\tnuc_mutations\taa_mutations\timputed_bases\tmutation_path"
+        "\tplacement_count\tparsimony_score_increase\tlength\taligned_bases"
+        "\tins_bases\tins_ranges\tdel_bases\tdel_ranges\tmasked_mutations"
+        "\n");
+struct hash *seqInfoHash = hashFromSeqInfoList(seqInfoList);
 if (sampleTree)
     {
-    rWriteTsvSummaryTreeOrder(sampleTree, f, results, geneInfoList, gSeqWin);
+    rWriteTsvSummaryTreeOrder(sampleTree, f, results, seqInfoHash, geneInfoList, gSeqWin);
     }
 else
     {
     struct slName *sample;
     for (sample = sampleIds;  sample != NULL;  sample = sample->next)
-        writeOneTsvRow(f, sample->name, results, geneInfoList, gSeqWin);
+        writeOneTsvRow(f, sample->name, results, seqInfoHash, geneInfoList, gSeqWin);
     }
 carefulClose(&f);
+hashFree(&seqInfoHash);
 reportTiming(pStartTime, "write tsv summary");
 return tsvTn;
 }
@@ -1929,8 +1978,8 @@ if (vcfTn)
                                                   source, fontHeight, &sampleTree, &startTime);
 
         // Make a TSV summary file
-        struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, geneInfoList,
-                                                 gSeqWin, &startTime);
+        struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
+                                                 geneInfoList, gSeqWin, &startTime);
 
         // Offer big tree w/new samples for download
         puts("<h3>Downloads</h3>");
