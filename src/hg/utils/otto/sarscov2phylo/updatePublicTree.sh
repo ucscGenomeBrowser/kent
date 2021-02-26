@@ -299,6 +299,11 @@ else
         > version.txt
 fi
 
+sampleCountComma=$(echo $sampleCount \
+                   | sed -re 's/([0-9]+)([0-9]{3})$/\1,\2/; s/([0-9]+)([0-9]{3},[0-9]{3})$/\1,\2/;')
+echo "$sampleCountComma genomes from GenBank, COG-UK and CNCB ($today); sarscov2phylo 13-11-20 tree with newer sequences added by UShER" \
+    > hgPhyloPlace.description.txt
+
 # Update gbdb links -- not every day, too much churn for getting releases out and the
 # tracks are getting unmanageably large for VCF.
 if false; then
@@ -321,9 +326,22 @@ fi
 y=$(date +%Y)
 m=$(date +%m)
 d=$(date +%d)
-archive=/hive/users/angie/publicTrees/$y/$m/$d
+archiveRoot=/hive/users/angie/publicTrees
+archive=$archiveRoot/$y/$m/$d
 mkdir -p $archive
 ln `pwd`/public-$today.all.nwk $archive/
 ln `pwd`/public-$today.all.masked.{pb,vcf.gz} $archive/
 ln `pwd`/public-$today.metadata.tsv.gz $archive/
+# Update 'latest' in $archiveRoot
+ln -f `pwd`/public-$today.all.nwk $archiveRoot/public-latest.all.nwk
+ln -f `pwd`/public-$today.all.masked.pb $archiveRoot/public-latest.all.masked.pb
+ln -f `pwd`/public-$today.all.masked.vcf.gz $archiveRoot/public-latest.all.masked.vcf.gz
+ln -f `pwd`/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata.tsv.gz
+ln -f `pwd`/hgPhyloPlace.description.txt $archiveRoot/public-latest.version.txt
 
+# Update 'latest' protobuf, metadata and desc in and cgi-bin{,-angie}/hgPhyloPlaceData/wuhCor1/
+for dir in /usr/local/apache/cgi-bin{-angie,}/hgPhyloPlaceData/wuhCor1; do
+    ln -sf `pwd`/public-$today.all.masked.pb $dir/public-latest.all.masked.pb
+    ln -sf `pwd`/public-$today.metadata.tsv.gz $dir/public-latest.metadata.tsv.gz
+    ln -sf `pwd`/hgPhyloPlace.description.txt $dir/public-latest.version.txt
+done
