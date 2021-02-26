@@ -85,6 +85,8 @@ struct placementInfo
     struct baseVal *imputedBases;         // Ambiguous bases imputed to ref/alt [ACGT]
     int parsimonyScore;                   // Parsimony cost of placing sample
     int bestNodeCount;                    // Number of equally parsimonious placements
+    char *nextClade;                      // Nextstrain clade assigned by UShER
+    char *pangoLineage;                   // Pango lineage assigned by UShER
     };
 
 struct subtreeInfo

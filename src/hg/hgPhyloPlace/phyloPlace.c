@@ -1045,6 +1045,29 @@ if (ti == NULL)
 return ti;
 }
 
+static void lookForCladesAndLineages(struct seqInfo *seqInfoList, struct hash *samplePlacements,
+                                     boolean *retGotClades, boolean *retGotLineages)
+/* See if UShER has annotated any clades and/or lineages for seqs. */
+{
+boolean gotClades = FALSE, gotLineages = FALSE;
+struct seqInfo *si;
+for (si = seqInfoList;  si != NULL;  si = si->next)
+    {
+    struct placementInfo *pi = hashFindVal(samplePlacements, si->seq->name);
+    if (pi)
+        {
+        if (isNotEmpty(pi->nextClade))
+            gotClades = TRUE;
+        if (isNotEmpty(pi->pangoLineage))
+            gotLineages = TRUE;
+        if (gotClades && gotLineages)
+            break;
+        }
+    }
+*retGotClades = gotClades;
+*retGotLineages = gotLineages;
+}
+
 static char *nextstrainHost()
 /* Return the nextstrain hostname from an hg.conf param, or NULL if missing. */
 {
@@ -1119,7 +1142,7 @@ puts("</p>");
 
 #define TOOLTIP(text) " <div class='tooltip'>(?)<span class='tooltiptext'>" text "</span></div>"
 
-static void printSummaryHeader(boolean isFasta)
+static void printSummaryHeader(boolean isFasta, boolean gotClades, boolean gotLineages)
 /* Print the summary table header row with tooltips explaining columns. */
 {
 puts("<thead><tr>");
@@ -1160,13 +1183,21 @@ puts("<th>#SNVs used for placement"
      TOOLTIP("Number of single-nucleotide variants in uploaded sample that are masked "
              "(not used for placement) because they occur at known "
              "<a href='https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473/12' "
-             "target=_blank>Problematic Sites</a>")
-     "</th>\n<th>Neighboring sample in tree"
+             "target=_blank>Problematic Sites</a>"));;
+if (gotClades)
+    puts("</th>\n<th>Nextstrain clade"
+     TOOLTIP("The <a href='https://nextstrain.org/blog/2021-01-06-updated-SARS-CoV-2-clade-naming' "
+             "target=_blank>Nextstrain clade</a> assigned to the sample by UShER"));
+if (gotLineages)
+    puts("</th>\n<th>Pango lineage"
+     TOOLTIP("The <a href='https://cov-lineages.org/' "
+             "target=_blank>Pango lineage</a> assigned to the sample by UShER"));
+puts("</th>\n<th>Neighboring sample in tree"
      TOOLTIP("A sample already in the tree that is a child of the node at which the uploaded "
              "sample was placed, to give an example of a closely related sample")
      "</th>\n<th>Lineage of neighbor"
-     TOOLTIP("The <a href='https://github.com/cov-lineages/pangolin' target=_blank>"
-             "Pangolin lineage</a> assigned to the nearest neighboring sample already in the tree")
+     TOOLTIP("The <a href='https://cov-lineages.org/' target=_blank>"
+             "Pango lineage</a> assigned to the nearest neighboring sample already in the tree")
      "</th>\n<th>#Imputed values for mixed bases"
      TOOLTIP("If the uploaded sequence contains mixed/ambiguous bases, then UShER may assign "
              "values based on maximum parsimony")
@@ -1360,7 +1391,9 @@ static void summarizeSequences(struct seqInfo *seqInfoList, boolean isFasta,
 if (seqInfoList)
     {
     puts("<table class='seqSummary'>");
-    printSummaryHeader(isFasta);
+    boolean gotClades = FALSE, gotLineages = FALSE;
+    lookForCladesAndLineages(seqInfoList, ur->samplePlacements, &gotClades, &gotLineages);
+    printSummaryHeader(isFasta, gotClades, gotLineages);
     puts("<tbody>");
     struct dyString *dy = dyStringNew(0);
     struct seqInfo *si;
@@ -1489,6 +1522,10 @@ if (seqInfoList)
         struct placementInfo *pi = hashFindVal(ur->samplePlacements, si->seq->name);
         if (pi)
             {
+            if (gotClades)
+                printf("<td>%s</td>", pi->nextClade ? pi->nextClade : "n/a");
+            if (gotLineages)
+                printf("<td>%s</td>", pi->pangoLineage ? pi->pangoLineage : "n/a");
             struct slName *neighbor = findNearestNeighbor(bigTree, pi->sampleId, pi->variantPath);
             char *lineage = neighbor ?  lineageForSample(sampleMetadata, neighbor->name) : "?";
             printf("<td>%s</td><td>%s</td>",
@@ -1515,7 +1552,13 @@ if (seqInfoList)
             printf("</td>");
             }
         else
+            {
+            if (gotClades)
+                printf("<td>n/a></td>");
+            if (gotLineages)
+                printf("<td>n/a></td>");
             printf("<td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td>");
+            }
         int ix;
         struct subtreeInfo *ti = subtreeInfoForSample(ur->subtreeInfoList, si->seq->name, &ix);
         if (ix < 0)

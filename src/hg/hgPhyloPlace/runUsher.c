@@ -647,6 +647,34 @@ slAddHead(&subtreeInfoList, ti);
 return subtreeInfoList;
 }
 
+static void parseClades(char *filename, struct hash *samplePlacements)
+/* Parse usher's clades.txt, which might have {sample, clade} or {sample, clade, lineage}. */
+{
+struct hash *wordStore = hashNew(0);
+struct lineFile *lf = lineFileOpen(filename, TRUE);
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    char *words[3];
+    int wordCount = chopTabs(line, words);
+    char *sampleId = words[0];
+    struct placementInfo *info = hashFindVal(samplePlacements, sampleId);
+    if (!info)
+        errAbort("parseClades: can't find placementInfo for sample '%s'", sampleId);
+    if (wordCount > 1)
+        {
+        // Nextstrain's clade "20E (EU1)" has to be tweaked to "20E.EU1" for matUtils to avoid
+        // whitespace trouble; tweak it back.
+        if (sameString(words[1], "20E.EU1"))
+            words[1] = "20E (EU1)";
+        info->nextClade = hashStoreName(wordStore, words[1]);
+        }
+    if (wordCount > 2)
+        info->pangoLineage = hashStoreName(wordStore, words[2]);
+    }
+lineFileClose(&lf);
+}
+
 static char *dirPlusFile(struct dyString *dy, char *dir, char *file)
 /* Write dir/file into dy and return pointer to dy->string. */
 {
@@ -766,6 +794,10 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
             }
         else
             warn("Unexpected filename '%s' from usher, ignoring", file->name);
+        }
+    else if (sameString(file->name, "clades.txt"))
+        {
+        parseClades(path, results->samplePlacements);
         }
     else if (sameString(file->name, "final-tree.nh"))
         {
