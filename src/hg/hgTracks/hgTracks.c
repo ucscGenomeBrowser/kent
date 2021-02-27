@@ -7269,6 +7269,7 @@ if (tdbIsComposite(tg->tdb))
 	    {
 	    subtrack->loadItems = dontLoadItems;
 	    subtrack->drawItems = drawMaxWindowWarning;
+	    subtrack->preDrawItems = NULL;
 	    subtrack->limitedVis = tvDense;
 	    subtrack->limitedVisSet = TRUE;
 	    }
@@ -7278,6 +7279,7 @@ else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
     {
     tg->loadItems = dontLoadItems;
     tg->drawItems = drawMaxWindowWarning;
+    tg->preDrawItems = NULL;
     tg->limitedVis = tvDense;
     tg->limitedVisSet = TRUE;
     }
