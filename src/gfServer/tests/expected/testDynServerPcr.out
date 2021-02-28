@@ -1,23 +1,17 @@
 0ddf270562684f29pcr testPcr testDynServerPcr CCTGAAGGCATCAGTGTACCCCAGGAATGCCCAA CTCATGAGTGGCTCCTAAAGCAGCTGCGTGG 4096
 
-testPcr.2bit:22_50k_plus	48875	49195	+
-testPcr.2bit:22_50k_plus	22100	24605	+
-testPcr.2bit:22_50k_plus	48875	49195	-
-testPcr.2bit:22_50k_plus	22100	24605	-
+testPcr.2bit:22_50k_plus	25000	25985	+
+testPcr.2bit:22_1k_minus	0	985	-
 end
 0ddf270562684f29pcr testPcr testDynServerPcr tggtgagagggggaaggtttt ggagctctgacatctgggttctg 4096
 
-testPcr.2bit:22_50k_plus	48875	49195	+
-testPcr.2bit:22_50k_plus	22100	24605	+
-testPcr.2bit:22_50k_plus	48875	49195	-
-testPcr.2bit:22_50k_plus	22100	24605	-
+testPcr.2bit:22_50k_plus	25050	25935	+
+testPcr.2bit:22_1k_minus	50	935	-
 end
 0ddf270562684f29pcr testPcr testDynServerPcr GGAGCTCTGACATCTGGGTTCTGGA tggtgagagggggaaggttttcttt 4096
 
-testPcr.2bit:22_50k_plus	48875	49195	+
-testPcr.2bit:22_50k_plus	22100	24605	+
-testPcr.2bit:22_50k_plus	48875	49195	-
-testPcr.2bit:22_50k_plus	22100	24605	-
+testPcr.2bit:22_1k_minus	50	935	+
+testPcr.2bit:22_50k_plus	25050	25935	-
 end
 0ddf270562684f29untransInfo testPcr testDynServerPcr
 
