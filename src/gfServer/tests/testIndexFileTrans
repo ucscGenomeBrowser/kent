@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # build index
-gfIdx=output/testIndexTrans.gfidx
+gfIdx=output/creaGeno.trans.gfidx
 rm -f $gfIdx
 mkdir -p output
 gfServer index -trans $gfIdx input/creaGeno.2bit >/dev/null

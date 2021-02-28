@@ -1111,9 +1111,34 @@ if (netGetString(sd, buf) != NULL)
 close(sd);
 }
 
+static void checkIndexFileName(char *gfxFile, char *seqFile)
+/* validate that index matches conventions, as base name is stored in index */
+{
+char seqBaseName[FILENAME_LEN], seqExt[FILEEXT_LEN];
+splitPath(seqFile, NULL, seqBaseName, seqExt);
+if ((strlen(seqBaseName) == 0) || !sameString(seqExt, ".2bit"))
+    errAbort("gfServer index requires a two-bit genome file with a base name of `myGenome.2bit`, got %s%s",
+             seqBaseName, seqExt);
+
+char gfxBaseName[FILENAME_LEN], gfxExt[FILEEXT_LEN];
+splitPath(gfxFile, NULL, gfxBaseName, gfxExt);
+if (!sameString(gfxExt, ".gfidx"))
+    errAbort("gfServer index must have an file extension of '.gfidx', got %s", gfxExt);
+char expectBaseName[FILENAME_LEN];
+safef(expectBaseName, sizeof(expectBaseName), "%s.%s", seqBaseName,
+      (doTrans ? "trans" : "untrans"));
+if (!sameString(gfxBaseName, expectBaseName))
+    errAbort("%s index file base name must be '%s.gfidx', got %s%s",
+             (doTrans ? "translated" : "untranslated"), expectBaseName, gfxBaseName, gfxExt);
+}
+
 static void buildIndex(char *gfxFile, int fileCount, char *seqFiles[])
 /* build pre-computed index for seqFiles and write to gfxFile */
 {
+if (fileCount > 1)
+    errAbort("gfServer index only works with a single genome file");
+checkIndexFileName(gfxFile, seqFiles[0]);
+
 struct genoFindIndex *gfIdx = genoFindIndexBuild(fileCount, seqFiles, minMatch, maxGap, tileSize,
                                                  repMatch, doTrans, NULL, allowOneMismatch, doMask, stepSize,
                                                  noSimpRepMask);
