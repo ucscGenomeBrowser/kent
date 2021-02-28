@@ -278,7 +278,9 @@ for (;filterBy != NULL; filterBy = filterBy->next)
     }
 
 /* custom gencode filters */
-if (startsWith("gencodeV", tdb->track))
+boolean isGencode3 = trackDbSettingOn(tdb, "isGencode3");
+
+if (isGencode3)
     addGencodeFilters(cart, tdb, &filters);
 
 return filters;

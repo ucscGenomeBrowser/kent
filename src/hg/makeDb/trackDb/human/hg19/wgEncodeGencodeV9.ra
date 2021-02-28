@@ -143,13 +143,6 @@ searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.29701
 
-searchName wgEncodeGencodeBasicGeneSymV9
-searchTable wgEncodeGencodeBasicV9
-searchMethod exact
-searchType genePred
-searchPriority 2.29702
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
-
 searchName wgEncodeGencodeBasicGeneV9
 searchTable wgEncodeGencodeBasicV9
 searchMethod prefix
@@ -185,13 +178,6 @@ searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.29706
 
-searchName wgEncodeGencodeCompGeneSymV9
-searchTable wgEncodeGencodeCompV9
-searchMethod exact
-searchType genePred
-searchPriority 2.29707
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
-
 searchName wgEncodeGencodeCompGeneV9
 searchTable wgEncodeGencodeCompV9
 searchMethod prefix
@@ -226,5 +212,4 @@ searchMethod exact
 searchType genePred
 termRegex PGOHUM[0-9.]+
 searchPriority 2.29711
-
 

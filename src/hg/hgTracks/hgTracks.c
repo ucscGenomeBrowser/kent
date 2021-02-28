@@ -7269,6 +7269,7 @@ if (tdbIsComposite(tg->tdb))
 	    {
 	    subtrack->loadItems = dontLoadItems;
 	    subtrack->drawItems = drawMaxWindowWarning;
+	    subtrack->preDrawItems = NULL;
 	    subtrack->limitedVis = tvDense;
 	    subtrack->limitedVisSet = TRUE;
 	    }
@@ -7278,6 +7279,7 @@ else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
     {
     tg->loadItems = dontLoadItems;
     tg->drawItems = drawMaxWindowWarning;
+    tg->preDrawItems = NULL;
     tg->limitedVis = tvDense;
     tg->limitedVisSet = TRUE;
     }
@@ -10084,34 +10086,37 @@ if (aliasHash)
 long long total = 0;
 char msg1[512], msg2[512];
 boolean truncating;
-int count = limit;
+int lineCount = 0;
 
 truncating = (limit > 0) && (seqCount > limit);
 
-for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
+for( ;lineCount < seqCount && (chromInfo != NULL); ++lineCount, chromInfo = chromInfo->next)
     {
-    char *aliasNames = chrAliases(aliasHash, chromInfo->chrom);
     unsigned size = chromInfo->size;
-    cgiSimpleTableRowStart();
-    cgiSimpleTableFieldStart();
-    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
-           hgTracksName(), cartSessionVarName(), cartSessionId(cart),
-           chromInfo->chrom,chromInfo->chrom);
-    cgiTableFieldEnd();
-    cgiTableFieldStartAlignRight();
-    printLongWithCommas(stdout, size);
-    puts("&nbsp;&nbsp;");
-    cgiTableFieldEnd();
-    if (hasAlias)
+    if (lineCount < limit)
 	{
+	char *aliasNames = chrAliases(aliasHash, chromInfo->chrom);
+	cgiSimpleTableRowStart();
 	cgiSimpleTableFieldStart();
-	if (aliasNames)
-            htmlPrintf("%s", aliasNames);
-	else
-            htmlPrintf("&nbsp;");
-        cgiTableFieldEnd();
+	htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
+	    hgTracksName(), cartSessionVarName(), cartSessionId(cart),
+	    chromInfo->chrom,chromInfo->chrom);
+	cgiTableFieldEnd();
+	cgiTableFieldStartAlignRight();
+	printLongWithCommas(stdout, size);
+	puts("&nbsp;&nbsp;");
+	cgiTableFieldEnd();
+	if (hasAlias)
+	    {
+	    cgiSimpleTableFieldStart();
+	    if (aliasNames)
+		htmlPrintf("%s", aliasNames);
+	    else
+		htmlPrintf("&nbsp;");
+	    cgiTableFieldEnd();
         }
-    cgiTableRowEnd();
+	cgiTableRowEnd();
+	}
     total += size;
     }
 if (!truncating)
@@ -10129,8 +10134,6 @@ else
     cgiSimpleTableFieldStart();
     puts(msg2);
     cgiTableFieldEnd();
-    for(;limit-- && (chromInfo != NULL); chromInfo = chromInfo->next)
-	total += chromInfo->size;
 
     unsigned scafCount = seqCount;
     cgiTableRowEnd();

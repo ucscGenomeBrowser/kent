@@ -58,7 +58,7 @@ static long totalTracks = 0;
 static boolean allTrackSettings = FALSE;	/* checkbox setting */
 static char **shortLabels = NULL;	/* public hub short labels in array */
 static int publicHubCount = 0;
-static char *defaultHub = "Plants";
+static char *defaultHub = "Synonymous Constraint";
 static char *defaultDb = "ce11";
 long enteredMainTime = 0;	/* will become = clock1000() on entry */
 		/* to allow calculation of when to bail out, taking too long */
@@ -880,7 +880,7 @@ hPrintf("<h4>genome sequences (and tracks) present in this track hub (<a href='%
 
 if (NULL == genome)
     {
-    hPrintf("<h4>odd error, can not find a gnomeList ? at url: '%s'</h4>\n", hubTop->url);
+    hPrintf("<h4>odd error, can not find a genomeList ? at url: '%s'</h4>\n", hubTop->url);
     return;
     }
 

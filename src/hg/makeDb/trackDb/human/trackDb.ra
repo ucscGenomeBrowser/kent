@@ -33,7 +33,8 @@ include trackDb.clinGen.ra
 include trackDb.giab.ra
 
 # CADD scores
-include cadd.ra alpha
+include caddAlpha.ra alpha
+include cadd.ra beta
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -3173,8 +3174,8 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 color 54,125,29
-urlLabel Link to LRG transcript:
-url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+urlLabel Link to LRG transcript
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$<_lrgParent>.xml#transcripts_anchor
 bigDataUrl /gbdb/$D/bbi/lrgBigPsl.bb
 release alpha
 
@@ -3685,8 +3686,8 @@ tableBrowser off lovdComp
 html lovdComp
 
         track lovdShort
-        shortLabel LOVD Variants < 50 bp
-        longLabel Leiden Open Variation Database, short < 50 bp variants
+        shortLabel LOVD Variants < 50 bp + ins
+        longLabel Leiden Open Variation Database, short < 50 bp variants and insertions of any length
         group phenDis
         visibility hide
         urls id="http://varcache.lovd.nl/redirect/$$"
@@ -5470,7 +5471,7 @@ group covid
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
-pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 12, 2020"
+#pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 12, 2020"
  
 
 

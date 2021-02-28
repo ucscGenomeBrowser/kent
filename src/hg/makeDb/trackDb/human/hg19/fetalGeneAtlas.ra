@@ -10,14 +10,15 @@ group expression
     type bigBarChart
     visibility pack
     shortLabel Fetal Cells
-    longLabel Fetal Gene Atlas sorted by cell type from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by cell type from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
     labelFields name,name2
-    bigDataUrl /gbdb/hg19/bbi/fetalGeneAtlas/cell_type.bb
-    barChartStatsUrl /gbdb/hg19/bbi/fetalGeneAtlas/cell_type.stats
-    barChartColors #a0a19f #2d5dc8 #7b904b #d2b015 #de201d #95b915 #bea227 #557d7e #a1a493 #b689aa #9076da #af1ea8 #a99c39 #428590 #63b7cb #2b5fc7 #c371c0 #80c50c #cbac1c #449834 #fe8838 #868147 #e1b80b #5d38bc #ddb50e #2c5fc6 #ddb60e #ad5335 #717969 #b7a328 #79775d #deb60d #e7bb07 #4d7292 #3b65b4 #aaa695 #e1b80b #09bb07 #d02c26 #416ca3 #886d4a #809b36 #d18347 #899f39 #da2520 #e31c19 #697d72 #91b915 #70776c #b29d2f #96a3a8 #275cce #ac9d30 #dcb50f #858254 #aba923 #dac769 #dbb50f #d9b311 #c8cab0 #5e8533 #8c656b #80c110 #b90db6 #8d5776 #248da6 #80903e #7e9e32 #94904b #778058 #83aeb3 #b54836 #5326d8 #d7b312 #4d7491 #10b70c #c9ab1e
+    bigDataUrl /gbdb/$D/bbi/fetalGeneAtlas/cell_type.bb
+    barChartStatsUrl /gbdb/$D/bbi/fetalGeneAtlas/cell_type.stats
+    barChartColors #c75cc6 #3259c7 #7d8952 #d3ac19 #de201f #adb119 #be9c2d #577881 #a4a096 #b787ac #9275da #af1ea8 #aa973d #477f92 #65b5cb #2f5cc6 #c471c0 #80c709 #cba81f #489338 #fe8839 #8a7352 #e1b60c #5f37bb #ddb311 #305cc5 #deb410 #ad4e3b #b001af #b99b2f #7c7062 #deb40f #e7ba08 #536a95 #3f61b4 #ad9f9a #e1b60d #0aba08 #d02b29 #4766a4 #8b6651 #82953b #d07f49 #8c9840 #d92422 #e31b1b #6c7676 #bca424 #756d72 #b39635 #999eaa #2b59cd #ae9537 #dcb212 #88775c #b09f2b #dbc46b #dcb212 #dab014 #c9c6b4 #618237 #8d656b #80c60a #b80db6 #8d5675 #2889a7 #838546 #809836 #958951 #79785f #87a9b4 #b5443b #5425d7 #d7b015 #507093 #12b50d #c9a721
+    #barChartColors #a0a19f #2d5dc8 #7b904b #d2b015 #de201d #95b915 #bea227 #557d7e #a1a493 #b689aa #9076da #af1ea8 #a99c39 #428590 #63b7cb #2b5fc7 #c371c0 #80c50c #cbac1c #449834 #fe8838 #868147 #e1b80b #5d38bc #ddb50e #2c5fc6 #ddb60e #ad5335 #717969 #b7a328 #79775d #deb60d #e7bb07 #4d7292 #3b65b4 #aaa695 #e1b80b #09bb07 #d02c26 #416ca3 #886d4a #809b36 #d18347 #899f39 #da2520 #e31c19 #697d72 #91b915 #70776c #b29d2f #96a3a8 #275cce #ac9d30 #dcb50f #858254 #aba923 #dac769 #dbb50f #d9b311 #c8cab0 #5e8533 #8c656b #80c110 #b90db6 #8d5776 #248da6 #80903e #7e9e32 #94904b #778058 #83aeb3 #b54836 #5326d8 #d7b312 #4d7491 #10b70c #c9ab1e
     #barChartColors #a0a19f #2d5dc8 #7b904b #d2b015 #de201d #95b915 #bea227 #557d7e #a1a493 #b689aa #9076da #af1ea8 #a99c39 #428590 #63b7cb #2b5fc7 #c371c0 #80c50c #cbac1c #449834 #fe8838 #868147 #e1b80b #5d38bc #ddb50e #2c5fc6 #ddb60e #ad5335 #717969 #b7a328 #79775d #deb60d #e7bb07 #4d7292 #3b65b4 #aaa695 #e1b80b #09bb07 #d02c26 #416ca3 #886d4a #809b36 #d18347 #899f39 #da2520 #e31c19 #697d72 #91b915 #70776c #b29d2f #96a3a8 #275cce #ac9d30 #dcb50f #858254 #aba923 #dac769 #dbb50f #d9b311 #c8cab0 #5e8533 #8c656b #80c110 #b90db6 #8d5776 #248da6 #80903e #7e9e32 #94904b #778058 #83aeb3 #b54836 #5326d8 #d7b312 #4d7491 #10b70c #c9ab1e
     #barChartColors #a0a19f #2d5dc8 #7b904b #d2b015 #de201d #95b915 #bea227 #557d7e #a1a493 #b689aa #9076da #af1ea8 #a99c39 #428590 #63b7cb #2b5fc7 #c371c0 #80c50c #cbac1c #449834 #fe8838 #868147 #e1b80b #5d38bc #ddb50e #2c5fc6 #ddb60e #ad5335 #717969 #b7a328 #79775d #deb60d #e7bb07 #4d7292 #3b65b4 #aaa695 #e1b80b #09bb07 #d02c26 #416ca3 #886d4a #809b36 #d18347 #899f39 #da2520 #e31c19 #697d72 #91b915 #70776c #b29d2f #96a3a8 #275cce #ac9d30 #dcb50f #858254 #aba923 #dac769 #dbb50f #d9b311 #c8cab0 #5e8533 #8c656b #80c110 #b90db6 #8d5776 #248da6 #80903e #7e9e32 #94904b #778058 #83aeb3 #b54836 #5326d8 #d7b312 #4d7491 #10b70c #c9ab1e
     #barChartColors #a1a59a #2c5fc7 #7c9248 #d5b312 #e0201b #96bc12 #c2a621 #557f7c #a3a88d #b88ba8 #a6aa90 #b11ea7 #ab9f35 #418a8c #62b8cb #2a60c7 #c571bf #80c60b #cdaf18 #439b2f #fe8838 #888442 #e2b909 #777d58 #deb70c #2b60c5 #deb80b #af5530 #727d63 #baa623 #7c7f51 #dfb80b #e8bc06 #4c7590 #3a66b3 #adab8d #e2b909 #08bc05 #d32c23 #416fa1 #8b7143 #819e33 #d48543 #89a137 #dc251d #e51c18 #6a806e #92bc12 #727e62 #b6a228 #97a6a5 #265dce #b0a12b #ddb60d #88884b #adac1f #dcc966 #ddb60d #dbb50e #c9ccae #5e882f #8e6768 #80c30d #ba0db5 #8e5873 #2390a5 #819438 #7fa02e #969447 #7b8a4a #83b1b0 #b84931 #7d7c5b #d9b50f #4d768f #10b80a #cbad1b
@@ -33,15 +34,16 @@ group expression
     type bigBarChart
     visibility hide
     shortLabel Fetal Assay
-    longLabel Fetal Gene Atlas sorted by assay (cell/nucleus) from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by assay (cell/nucleus) from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
     labelFields name,name2
-    bigDataUrl /gbdb/hg19/bbi/fetalGeneAtlas/Assay.bb
-    barChartStatsUrl /gbdb/hg19/bbi/fetalGeneAtlas/Assay.stats
+    bigDataUrl /gbdb/$D/bbi/fetalGeneAtlas/Assay.bb
+    barChartStatsUrl /gbdb/$D/bbi/fetalGeneAtlas/Assay.stats
     #barChartColors #ff0000 #00d2ff
-    barChartColors #4b7a87 #e5bb08
+    #barChartColors #4b7a87 #e5bb08
+    barChartColors #4c758b #e5b909
     barChartBars Cell Nuclei
     transformFunc NONE
     barChartLimit 2
@@ -51,14 +53,15 @@ group expression
     type bigBarChart
     visibility hide
     shortLabel Fetal Exp
-    longLabel Fetal Gene Atlas sorted by experiment id from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by experiment id from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
     labelFields name,name2
-    bigDataUrl /gbdb/hg19/bbi/fetalGeneAtlas/Experiment_batch.bb
-    barChartStatsUrl /gbdb/hg19/bbi/fetalGeneAtlas/Experiment_batch.stats
-    barChartColors #c6b017 #ddb80c #cfb215 #d1b412 #e8bc06 #5e8a63 #3f719d
+    bigDataUrl /gbdb/$D/bbi/fetalGeneAtlas/Experiment_batch.bb
+    barChartStatsUrl /gbdb/$D/bbi/fetalGeneAtlas/Experiment_batch.stats
+    barChartColors #c9ab1b #dfb50e #d0ae18 #d4b114 #e8bb07 #5e836a #406ea0
+    #barChartColors #c6b017 #ddb80c #cfb215 #d1b412 #e8bc06 #5e8a63 #3f719d
     #barChartColors #bcb215 #d0b90a #c4b313 #c6b510 #d9bc05 #5d8b62 #3e729c
     #barChartColors #ff0000 #ffd200 #80ff00 #00ffd2 #0080ff #7f00ff #ff00d2
     barChartBars exp1 exp2 exp3 exp4 exp5 exp6 exp7
@@ -70,14 +73,15 @@ group expression
     type bigBarChart
     visibility hide
     shortLabel Fetal Organ
-    longLabel Fetal Gene Atlas sorted by organ from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by organ from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
     labelFields name,name2
-    bigDataUrl /gbdb/hg19/bbi/fetalGeneAtlas/Organ.bb
-    barChartStatsUrl /gbdb/hg19/bbi/fetalGeneAtlas/Organ.stats
-    barChartColors #7b9544 #e5bb07 #e5ba08 #d5b312 #ae20a6 #5d7b73 #81a135 #79814f #629e3b #b90db6 #205ad3 #6c6877 #826b21 #1b5bd9 #b94334
+    bigDataUrl /gbdb/$D/bbi/fetalGeneAtlas/Organ.bb
+    barChartStatsUrl /gbdb/$D/bbi/fetalGeneAtlas/Organ.stats
+    barChartColors #7c8e4a #e6ba08 #e5b909 #d6b015 #ae20a6 #5f7577 #849c3a #aa0ea6 #619841 #b90db6 #2359d2 #6f637a #836824 #1e5ad9 #b94138
+    #barChartColors #7b9544 #e5bb07 #e5ba08 #d5b312 #ae20a6 #5d7b73 #81a135 #79814f #629e3b #b90db6 #205ad3 #6c6877 #826b21 #1b5bd9 #b94334
     #barChartColors #ff0000 #ff7700 #ffc500 #e3ff00 #93ff00 #00ff2a #00ffad #00fcff #00a7ff #004cff #2a00ff #9300ff #e300ff #ff00c5 #ff0077
     #barChartColors #789741 #d7bc06 #d7bb06 #cab50f #ae20a5 #5c7d71 #7fa233 #79834b #609f39 #b90db5 #1f5bd3 #738e40 #886c1f #1a5cd9 #c3442e
     barChartBars Adrenal Cerebellum Cerebrum Eye Heart Intestine Kidney Liver Lung Muscle Pancreas Placenta Spleen Stomach Thymus
@@ -89,14 +93,15 @@ group expression
     type bigBarChart
     visibility hide
     shortLabel Fetal Lineage
-    longLabel Fetal Gene Atlas sorted by cell lineage and organ from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by cell lineage and organ from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
     labelFields name,name2
-    bigDataUrl /gbdb/hg19/bbi/fetalGeneAtlas/Organ_cell_lineage.bb
-    barChartStatsUrl /gbdb/hg19/bbi/fetalGeneAtlas/Organ_cell_lineage.stats
-    barChartColors #7b904b #9279d5 #a99c38 #7e7856 #c13a2f #826f4f #d92520 #c8cab0 #7fc011 #719738 #94904b #1fae16 #94b915 #ddb60e #deb60d #d92621 #8fb817 #dcb50f #d9b311 #d7b312 #2ca720 #9ab816 #e1b80b #e7bb07 #e1b80b #dcd6c9 #da2520 #93ba15 #dbb50f #2aa81e #d2b015 #bac272 #bea227 #63b7cb #ddb50e #b7a328 #aaa695 #e1726d #b29d2f #ac9d30 #858254 #aba923 #c96bc4 #d9d9cd #838a48 #79c36c #b689aa #af1ea8 #c371c0 #449834 #fe8838 #e7e2df #0eb80a #ce2e27 #89694f #e11e1b #dac769 #80bd14 #8d5577 #80844c #1fae17 #bba22a #687978 #80c110 #ccad1b #aba490 #4d7292 #1faf15 #c2392e #c5ac8a #dc221e #8a6b66 #7e9938 #22ad18 #a9a392 #c6342d #cdbbab #809b36 #899f39 #de201d #798b49 #4d7491 #1eb014 #878245 #ad5335 #717969 #c13d2e #8c6d48 #d2ab88 #d02d26 #80903e #3ba026 #557d7e #cec2ee #43858f #0aba07 #d02e26 #817053 #d08247 #e11e1b #6d7e6c #468190 #869f30 #1cb014 #dcc867 #dad5d0 #63cd60 #d08178 #dad4ce #e46f6c #8c656b #aacf67 #b90db6 #866666 #81814f #20ad18 #2d5dc8 #a1a493 #2b5fc7 #7fbf13 #a1963e #7b7263 #3b65b4 #69c964 #c4352f #c1a791 #da2321 #835d74 #787f55 #1ead18 #a1a19f #5d38bc #79775d #9d5849 #dbd4cc #ce2e28 #70776c #847857 #80854b #778058 #5326d8 #489733 #a0a19d #936b40 #c6362c #b19e87 #dcab86 #d72721 #5e8533 #829931 #22ae16 #428590 #a9c870 #c2b97c #aaa392 #2c5fc6 #77c26e #c4362e #416ca3 #bca991 #e1716e #96a3ab #96a3a8 #275cce #298ca3 #7a8f44 #72c56a #de201d #aca48a #83aeb3 #b54836 #83bc72
+    bigDataUrl /gbdb/$D/bbi/fetalGeneAtlas/Organ_cell_lineage.bb
+    barChartStatsUrl /gbdb/$D/bbi/fetalGeneAtlas/Organ_cell_lineage.stats
+    barChartColors #7d8952 #9478d5 #aa963d #826c5f #c03833 #856855 #d82423 #c9c6b4 #80c50c #72923c #958951 #22ab19 #abb219 #deb410 #deb40f #d82524 #b9a227 #dcb212 #dab014 #d7b015 #2fa323 #b5ac1e #e1b60c #e7ba08 #e1b60d #ddd4cb #d92423 #bea523 #dcb212 #2da521 #d3ac19 #bdbb78 #be9c2d #65b5cb #ddb311 #b99b2f #ad9f9a #e17170 #b39635 #ae9537 #88775c #b09f2b #c96ac4 #dad6cf #85844c #7bbf6f #b787ac #af1ea8 #c471c0 #489338 #fe8839 #e8e0e0 #0fb60c #cd2d2a #8b6354 #e11d1d #dbc46b #80c20e #8e5377 #82814e #22ab1a #bb9d2f #6c717d #81c10f #cca91e #af9a98 #536a95 #22ac18 #c23732 #c5a98d #db2121 #8c666a #7f933d #24aa1a #ad9999 #c53330 #cdb9ad #82953b #8c9840 #dd201f #7b884b #507093 #20ad17 #8b7450 #ad4e3b #b001af #c13a33 #8f6550 #d2a78b #cf2c2a #838546 #409a2b #577881 #cfc2ee #487f91 #0bb909 #cf2c29 #846859 #cf7f4a #e11d1d #707770 #4c7a91 #889934 #1ead16 #dcc56a #dbd2d2 #65cb61 #d07f7b #dbd2cf #e36f6e #8d656b #abd164 #b80db6 #876467 #837c53 #22aa1a #3259c7 #a4a096 #2f5cc6 #80c30e #a29142 #81646c #3f61b4 #6ac766 #c33333 #c1a593 #d92323 #845e72 #7a7f54 #21aa1b #c65ec5 #5f37bb #7c7062 #9f534f #dcd2ce #cd2d2c #756d72 #86715c #827d51 #79785f #5425d7 #4d9138 #c65fc4 #946446 #c53530 #b3998b #dba988 #d62624 #618237 #849336 #25aa19 #477f92 #aac86e #c3b580 #ae9999 #305cc5 #7abe71 #c43531 #4766a4 #bda693 #e17170 #989ead #999eaa #2b59cd #2d87a3 #7b8b47 #74c26c #de201f #aea28c #87a9b4 #b5443b #86b876
+    #barChartColors #7b904b #9279d5 #a99c38 #7e7856 #c13a2f #826f4f #d92520 #c8cab0 #7fc011 #719738 #94904b #1fae16 #94b915 #ddb60e #deb60d #d92621 #8fb817 #dcb50f #d9b311 #d7b312 #2ca720 #9ab816 #e1b80b #e7bb07 #e1b80b #dcd6c9 #da2520 #93ba15 #dbb50f #2aa81e #d2b015 #bac272 #bea227 #63b7cb #ddb50e #b7a328 #aaa695 #e1726d #b29d2f #ac9d30 #858254 #aba923 #c96bc4 #d9d9cd #838a48 #79c36c #b689aa #af1ea8 #c371c0 #449834 #fe8838 #e7e2df #0eb80a #ce2e27 #89694f #e11e1b #dac769 #80bd14 #8d5577 #80844c #1fae17 #bba22a #687978 #80c110 #ccad1b #aba490 #4d7292 #1faf15 #c2392e #c5ac8a #dc221e #8a6b66 #7e9938 #22ad18 #a9a392 #c6342d #cdbbab #809b36 #899f39 #de201d #798b49 #4d7491 #1eb014 #878245 #ad5335 #717969 #c13d2e #8c6d48 #d2ab88 #d02d26 #80903e #3ba026 #557d7e #cec2ee #43858f #0aba07 #d02e26 #817053 #d08247 #e11e1b #6d7e6c #468190 #869f30 #1cb014 #dcc867 #dad5d0 #63cd60 #d08178 #dad4ce #e46f6c #8c656b #aacf67 #b90db6 #866666 #81814f #20ad18 #2d5dc8 #a1a493 #2b5fc7 #7fbf13 #a1963e #7b7263 #3b65b4 #69c964 #c4352f #c1a791 #da2321 #835d74 #787f55 #1ead18 #a1a19f #5d38bc #79775d #9d5849 #dbd4cc #ce2e28 #70776c #847857 #80854b #778058 #5326d8 #489733 #a0a19d #936b40 #c6362c #b19e87 #dcab86 #d72721 #5e8533 #829931 #22ae16 #428590 #a9c870 #c2b97c #aaa392 #2c5fc6 #77c26e #c4362e #416ca3 #bca991 #e1716e #96a3ab #96a3a8 #275cce #298ca3 #7a8f44 #72c56a #de201d #aca48a #83aeb3 #b54836 #83bc72
     #barChartColors #799248 #a6a98f #a39e34 #7e7b50 #cc3a2a #867247 #e7251d #acb284 #80c20f #709935 #909346 #1eb012 #92bb13 #d1b70b #d1b80b #e7261d #8dbb13 #d0b60d #ceb50e #ccb50f #2aaa1b #97ba13 #d4b909 #d9bc06 #d4b909 #ddd7c7 #e8251d #91bc11 #d0b60d #29ab19 #c8b312 #b8c46f #b8a621 #62b8cb #d1b70c #b1a623 #abab8d #ea726b #ada228 #a8a12a #85874a #a6ab1f #ca6ac3 #dadbca #828e41 #78c569 #b88aa7 #b01ea7 #c471bf #429b2e #ef8030 #e8e2dd #0db908 #db2f23 #8d6c46 #f01d19 #d4c866 #80c011 #8e5674 #7f8746 #1eaf14 #b3a526 #667c73 #81c20e #c2af17 #aca78a #4b748f #1eb112 #ce392a #c2ac85 #ea221c #8b6d61 #7c9b34 #21af14 #aaa68d #d23429 #b79b7c #7f9d32 #85a137 #ec201b #788d44 #4b768f #1db211 #888540 #b55530 #717c62 #cd3d28 #907040 #cfaa81 #dd2d22 #7f9438 #3aa420 #537e7c #d7d8ce #41898b #09bb06 #dd2e22 #847549 #c87f3e #f01e19 #6c8267 #44878a #83a12c #1bb211 #d5ca65 #dad6ce #62ce5e #d78174 #dbd5ca #ed6f6a #8d6768 #abd164 #b90db5 #866862 #818449 #1faf14 #2b5ec7 #a2a88d #2960c7 #7fc010 #9d9939 #7c765b #3966b2 #68cb62 #d0352b #bfa78b #e8231e #845f71 #778152 #1db014 #a1a599 #757c57 #7a7e50 #a65b3f #dcd6c9 #db2e23 #717d62 #847b50 #808943 #798a4a #7b7c5a #479c2b #a1a498 #966c3c #d23727 #b4a081 #d7a980 #e5271e #5f872f #809b2d #21b013 #40898c #aaca6c #c0bc78 #aba68c #2b60c5 #76c46b #d03629 #406fa1 #baa98c #ea716b #95a5a8 #96a5a4 #265dcd #278ea1 #799240 #71c767 #ed201b #ada686 #82b1b0 #bf4930 #83be6e
     #barChartColors #ff0000 #fe534c #ff1400 #ff1f00 #ff2900 #ff3400 #ff3e00 #ff7e4c #ff5300 #ff5d00 #ff6800 #ff7200 #ff7d00 #ff8400 #ff8a00 #ff8f00 #ff9500 #ff9b00 #ffa100 #ffa800 #ffaf00 #ffb700 #ffbe00 #ffc600 #ffcd00 #ffea82 #ffdc00 #ffe300 #ffeb00 #fff200 #fff900 #fcff4c #f5ff00 #f3ff4c #e6ff00 #dfff00 #e3ff4c #deff4c #c9ff00 #c1ff00 #baff00 #b2ff00 #c4ff4c #d1ff82 #9eff00 #b6ff4c #b2ff4c #8cff00 #aaff4c #80ff00 #6eff00 #d7ffc1 #44ff00 #2fff00 #1aff00 #05ff00 #4cff56 #00ff23 #00ff38 #00ff4d #00ff62 #00ff77 #00ff83 #00ff89 #00ff8f #4cffb4 #00ff9a #00ffa0 #00ffa7 #4cffc6 #00ffb6 #00ffbd #00ffc5 #00ffcc #4cffe0 #00ffdb #4cffea #00ffea #00fff1 #00fff8 #00fdff #00f6ff #00efff #00e7ff #00e0ff #00d9ff #00d1ff #00caff #4cd5ff #00bbff #00b4ff #00acff #00a5ff #a7ddfe #0099ff #0093ff #008dff #0087ff #0081ff #0078ff #006eff #0063ff #0059ff #004eff #4c7cff #a7bbfe #4c6dff #4c66ff #a7b0fe #4c57ff #0005ff #4f4cff #0e00ff #1900ff #2300ff #2e00ff #3800ff #7a4cff #4d00ff #5700ff #6200ff #6c00ff #7700ff #a64cff #8600ff #ae4cff #9200ff #9800ff #9e00ff #a400ff #c44cff #b200ff #ba00ff #c100ff #e482ff #d000ff #d800ff #df00ff #e600ff #ee00ff #f500ff #fc00ff #ff4cfa #ff00f2 #ff00eb #ff4ceb #ff4ce6 #ff00d5 #ff00cd #ff00c6 #ff00be #ff00b7 #ff4cc7 #ff4cc2 #ff4cbd #ff009b #ff4cb4 #ff008f #ff008a #ff4ca8 #ff4ca4 #ff4c9c #ff4c95 #ff005d #ff0053 #ff0048 #ff4c77 #ff0034 #ff4c69 #ff4c62 #ff0014 #ff4c53
     barChartBars Adrenal-Adrenocortical_cells Adrenal-CSH1_CSH2_positive_cells Adrenal-Chromaffin_cells Adrenal-Erythroblasts Adrenal-Lymphoid_cells Adrenal-Megakaryocytes Adrenal-Myeloid_cells Adrenal-SLC26A4_PAEP_positive_cells Adrenal-Schwann_cells Adrenal-Stromal_cells Adrenal-Sympathoblasts Adrenal-Vascular_endothelial_cells Cerebellum-Astrocytes Cerebellum-Granule_neurons Cerebellum-Inhibitory_interneurons Cerebellum-Microglia Cerebellum-Oligodendrocytes Cerebellum-Purkinje_neurons Cerebellum-SLC24A4_PEX5L_positive_cells Cerebellum-Unipolar_brush_cells Cerebellum-Vascular_endothelial_cells Cerebrum-Astrocytes Cerebrum-Excitatory_neurons Cerebrum-Inhibitory_neurons Cerebrum-Limbic_system_neurons Cerebrum-Megakaryocytes Cerebrum-Microglia Cerebrum-Oligodendrocytes Cerebrum-SKOR2_NPSR1_positive_cells Cerebrum-Vascular_endothelial_cells Eye-Amacrine_cells Eye-Astrocytes Eye-Bipolar_cells Eye-Corneal_and_conjunctival_epithelial_cells Eye-Ganglion_cells Eye-Horizontal_cells Eye-Lens_fibre_cells Eye-Microglia Eye-PDE11A_FAM19A2_positive_cells Eye-Photoreceptor_cells Eye-Retinal_pigment_cells Eye-Retinal_progenitors_and_Muller_glia Eye-Skeletal_muscle_cells Eye-Smooth_muscle_cells Eye-Stromal_cells Eye-Vascular_endothelial_cells Heart-CLC_IL5RA_positive_cells Heart-Cardiomyocytes Heart-ELF3_AGBL2_positive_cells Heart-Endocardial_cells Heart-Epicardial_fat_cells Heart-Erythroblasts Heart-Lymphatic_endothelial_cells Heart-Lymphoid_cells Heart-Megakaryocytes Heart-Myeloid_cells Heart-SATB2_LRRC7_positive_cells Heart-Schwann_cells Heart-Smooth_muscle_cells Heart-Stromal_cells Heart-Vascular_endothelial_cells Heart-Visceral_neurons Intestine-Chromaffin_cells Intestine-ENS_glia Intestine-ENS_neurons Intestine-Erythroblasts Intestine-Intestinal_epithelial_cells Intestine-Lymphatic_endothelial_cells Intestine-Lymphoid_cells Intestine-Mesothelial_cells Intestine-Myeloid_cells Intestine-Smooth_muscle_cells Intestine-Stromal_cells Intestine-Vascular_endothelial_cells Kidney-Erythroblasts Kidney-Lymphoid_cells Kidney-Megakaryocytes Kidney-Mesangial_cells Kidney-Metanephric_cells Kidney-Myeloid_cells Kidney-Stromal_cells Kidney-Ureteric_bud_cells Kidney-Vascular_endothelial_cells Liver-Erythroblasts Liver-Hematopoietic_stem_cells Liver-Hepatoblasts Liver-Lymphoid_cells Liver-Megakaryocytes Liver-Mesothelial_cells Liver-Myeloid_cells Liver-Stellate_cells Liver-Vascular_endothelial_cells Lung-Bronchiolar_and_alveolar_epithelial_cells Lung-CSH1_CSH2_positive_cells Lung-Ciliated_epithelial_cells Lung-Lymphatic_endothelial_cells Lung-Lymphoid_cells Lung-Megakaryocytes Lung-Mesothelial_cells Lung-Myeloid_cells Lung-Neuroendocrine_cells Lung-Squamous_epithelial_cells Lung-Stromal_cells Lung-Vascular_endothelial_cells Lung-Visceral_neurons Muscle-Erythroblasts Muscle-Lymphatic_endothelial_cells Muscle-Lymphoid_cells Muscle-Megakaryocytes Muscle-Myeloid_cells Muscle-Satellite_cells Muscle-Schwann_cells Muscle-Skeletal_muscle_cells Muscle-Smooth_muscle_cells Muscle-Stromal_cells Muscle-Vascular_endothelial_cells Pancreas-Acinar_cells Pancreas-CCL19_CCL21_positive_cells Pancreas-Ductal_cells Pancreas-ENS_glia Pancreas-ENS_neurons Pancreas-Erythroblasts Pancreas-Islet_endocrine_cells Pancreas-Lymphatic_endothelial_cells Pancreas-Lymphoid_cells Pancreas-Mesothelial_cells Pancreas-Myeloid_cells Pancreas-Smooth_muscle_cells Pancreas-Stromal_cells Pancreas-Vascular_endothelial_cells Placenta-AFP_ALB_positive_cells Placenta-Extravillous_trophoblasts Placenta-IGFBP1_DKK1_positive_cells Placenta-Lymphoid_cells Placenta-Megakaryocytes Placenta-Myeloid_cells Placenta-PAEP_MECOM_positive_cells Placenta-Smooth_muscle_cells Placenta-Stromal_cells Placenta-Syncytiotrophoblasts_and_villous_cytotrophoblasts Placenta-Trophoblast_giant_cells Placenta-Vascular_endothelial_cells Spleen-AFP_ALB_positive_cells Spleen-Erythroblasts Spleen-Lymphoid_cells Spleen-Megakaryocytes Spleen-Mesothelial_cells Spleen-Myeloid_cells Spleen-STC2_TLX1_positive_cells Spleen-Stromal_cells Spleen-Vascular_endothelial_cells Stomach-Ciliated_epithelial_cells Stomach-ENS_glia Stomach-ENS_neurons Stomach-Erythroblasts Stomach-Goblet_cells Stomach-Lymphatic_endothelial_cells Stomach-Lymphoid_cells Stomach-MUC13_DMBT1_positive_cells Stomach-Mesothelial_cells Stomach-Myeloid_cells Stomach-Neuroendocrine_cells Stomach-PDE1C_ACSM3_positive_cells Stomach-Parietal_and_chief_cells Stomach-Squamous_epithelial_cells Stomach-Stromal_cells Stomach-Vascular_endothelial_cells Thymus-Antigen_presenting_cells Thymus-Stromal_cells Thymus-Thymic_epithelial_cells Thymus-Thymocytes Thymus-Vascular_endothelial_cells
@@ -108,14 +113,15 @@ group expression
     type bigBarChart
     visibility hide
     shortLabel Fetal RT Group
-    longLabel Fetal Gene Atlas sorted by RT group from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by RT group from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
     labelFields name,name2
-    bigDataUrl /gbdb/hg19/bbi/fetalGeneAtlas/RT_group.bb
-    barChartStatsUrl /gbdb/hg19/bbi/fetalGeneAtlas/RT_group.stats
-    barChartColors #678360 #909c36 #708c54 #678460 #9ba12e #789540 #859b38 #e5bb07 #e5bb07 #e5ba08 #e4ba08 #e6bb07 #e1b80b #d8b60f #e1b80a #e5ba08 #deb70d #e4ba08 #e1b80b #e6bb07 #d5b312 #d7b411 #d3b213 #ccae19 #d0b115 #ad21a5 #ab24a2 #ae21a5 #ae1ea8 #ae1fa7 #ab25a1 #a23493 #ae1fa7 #ac24a2 #5a787e #577681 #708056 #708a56 #517487 #637262 #d4d6d4 #537786 #e5e3e1 #83a22f #729547 #96a62a #8ea430 #7f9c3d #87a038 #77954b #7d9c40 #829e3c #757b5b #808545 #778445 #707469 #737d58 #7f8247 #757b5b #788251 #70736e #51836f #639942 #539a3d #589253 #5ea12f #4a8f56 #55944a #7ba037 #57a42a #6ca42d #528a63 #b711b2 #b90cb6 #b80fb4 #b80eb5 #b611b2 #ac24a2 #b612b2 #b90cb6 #1d5ad6 #2559ce #66743c #5326d8 #999aa6 #5b35c1 #717b51 #d2cae3 #696182 #8e71e1 #7e8a47 #727466 #6a7f55 #72874f #b09b77 #7e712b #aa9e76 #7c6d2f #668224 #5a8b33 #648323 #9f5624 #1a5adc #2889a5 #1b59dc #2776b6 #b64635 #bd3f32 #e6e3e0 #e3cec8 #e4cec6 #bb4232
+    bigDataUrl /gbdb/$D/bbi/fetalGeneAtlas/RT_group.bb
+    barChartStatsUrl /gbdb/$D/bbi/fetalGeneAtlas/RT_group.stats
+    barChartColors #6a7d64 #92933f #71855a #6a7e64 #9e9936 #798e46 #879241 #e6b908 #e6b909 #e5b909 #e4b909 #e6ba08 #e2b60c #dab311 #e2b60c #e5b909 #dfb40f #e4b80a #e1b60d #e7ba08 #d6af15 #d8b114 #d4ae17 #cdaa1d #d1ad18 #ad21a5 #ab24a2 #ae20a5 #ae1ea8 #ae1fa6 #ab24a1 #a23394 #ae1fa7 #ac23a3 #616e83 #5d6d86 #717a5c #70835e #566d8a #656e65 #d6d3d6 #577189 #e6e1e3 #869d33 #72914c #999d33 #909a39 #819643 #8a993f #789051 #7f9646 #859743 #a616a1 #a22297 #a22099 #ab0ba9 #a713a3 #a715a1 #a813a3 #ab0ca8 #ac09aa #537f72 #629545 #549541 #588d57 #5e9b34 #4c8c58 #568f4e #7d993d #579e2f #6aa030 #548666 #b611b2 #b90cb6 #b80eb4 #b80eb5 #b611b2 #ac24a2 #b612b1 #b90cb6 #2059d5 #2858cd #68723e #5425d7 #9b97a8 #5c34c1 #737555 #d3c9e3 #6c5c85 #8f71e1 #81824e #746d6c #6d7959 #757f54 #b1997a #7f6d2f #ab9b79 #7e6a33 #687e28 #5e8638 #658027 #a05427 #1c58db #2c86a5 #1e57db #2b73b6 #b6433a #bc3d36 #e7e1e2 #e3ccca #e5ccc8 #bb3f37
+    #barChartColors #678360 #909c36 #708c54 #678460 #9ba12e #789540 #859b38 #e5bb07 #e5bb07 #e5ba08 #e4ba08 #e6bb07 #e1b80b #d8b60f #e1b80a #e5ba08 #deb70d #e4ba08 #e1b80b #e6bb07 #d5b312 #d7b411 #d3b213 #ccae19 #d0b115 #ad21a5 #ab24a2 #ae21a5 #ae1ea8 #ae1fa7 #ab25a1 #a23493 #ae1fa7 #ac24a2 #5a787e #577681 #708056 #708a56 #517487 #637262 #d4d6d4 #537786 #e5e3e1 #83a22f #729547 #96a62a #8ea430 #7f9c3d #87a038 #77954b #7d9c40 #829e3c #757b5b #808545 #778445 #707469 #737d58 #7f8247 #757b5b #788251 #70736e #51836f #639942 #539a3d #589253 #5ea12f #4a8f56 #55944a #7ba037 #57a42a #6ca42d #528a63 #b711b2 #b90cb6 #b80fb4 #b80eb5 #b611b2 #ac24a2 #b612b2 #b90cb6 #1d5ad6 #2559ce #66743c #5326d8 #999aa6 #5b35c1 #717b51 #d2cae3 #696182 #8e71e1 #7e8a47 #727466 #6a7f55 #72874f #b09b77 #7e712b #aa9e76 #7c6d2f #668224 #5a8b33 #648323 #9f5624 #1a5adc #2889a5 #1b59dc #2776b6 #b64635 #bd3f32 #e6e3e0 #e3cec8 #e4cec6 #bb4232
     #barChartColors #ff0000 #ff1000 #ff2000 #ff3000 #ff4000 #ff4f00 #ff5f00 #ff6f00 #ff7f00 #ff8900 #ff9100 #ff9a00 #ffa300 #ffaf00 #ffba00 #ffc600 #ffd100 #ffdd00 #ffe800 #fff300 #fffe00 #f3ff00 #e8ff00 #ddff00 #d2ff00 #c6ff00 #bbff00 #afff00 #a4ff00 #9bff00 #92ff00 #89ff00 #80ff00 #60ff00 #40ff00 #1fff00 #00ff00 #00ff20 #00ff40 #00ff60 #a7fed3 #00ff89 #c1ffe4 #00ff9b #00ffa4 #00ffaf #00ffbb #00ffc6 #00ffd2 #00ffdd #00ffe8 #00fff3 #00feff #00f3ff #00e8ff #00ddff #00d1ff #00c6ff #00baff #00afff #00a3ff #009aff #0091ff #0088ff #007fff #006fff #005fff #004fff #003fff #002fff #001fff #000fff #0000ff #1000ff #2000ff #3000ff #3f00ff #4f00ff #5f00ff #6f00ff #7f00ff #8800ff #9100ff #9a00ff #be4cff #af00ff #ba00ff #eba7fe #d100ff #e74cff #e800ff #f300ff #fe00ff #ff00f3 #ff4cee #ff00dd #ff4cdf #ff00c6 #ff00bb #ff00af #ff00a4 #ff009b #ff0092 #ff0089 #ff0080 #ff0070 #ff0060 #ff0050 #ffc1d1 #fea7b7 #ff4c62 #ff0010
     #barChartColors #66855d #8c9e33 #6e8e51 #65865c #96a32b #75973d #829d35 #d7bc06 #d7bb06 #d7bb07 #d6bb07 #d8bc06 #d4b909 #ccb70d #d4b909 #d7bb07 #d2b80b #d6bb07 #d4b909 #d8bc06 #cab510 #cbb50f #c8b411 #c2b016 #c6b312 #ae21a4 #ac24a1 #af20a4 #af1ea7 #af1fa5 #ab24a0 #a33492 #af1fa6 #ad24a1 #5a7b7a #56787e #708254 #6f8c54 #507685 #65735f #d5d8d2 #527984 #e5e5df #81a42c #709745 #92a827 #8aa52e #7c9e3a #83a135 #759748 #7a9d3e #7f9f3a #757e56 #808740 #788640 #707764 #737f53 #7f8443 #757e55 #78854c #707667 #4f856d #619a3f #529b3a #569351 #5ca32c #489054 #549548 #78a135 #55a527 #6aa62b #518b60 #b711b2 #ba0cb6 #b90eb4 #b90db5 #b711b2 #ad24a1 #b711b1 #ba0cb6 #1c5bd6 #255ace #6a753a #768054 #9bae89 #798a46 #748342 #d7d8cf #6f8b47 #a2a892 #7e913c #78903f #6d8b41 #738c46 #b39c74 #827228 #ad9f73 #816e2b #698321 #5b8d2f #668520 #a75721 #195adc #278ca3 #1a59dc #2678b5 #c04730 #c8402d #e7e4de #e5cfc6 #dbb6a7 #c6422d
     barChartBars Adrenal_H26350 Adrenal_H26547 Adrenal_H27098 Adrenal_H27471 Adrenal_H27472 Adrenal_H27474 Adrenal_H27552 Cerebellum_H27471 Cerebellum_H27472 Cerebellum_H27474 Cerebellum_H27477 Cerebellum_H27634 Cerebrum_H27058 Cerebrum_H27098 Cerebrum_H27423 Cerebrum_H27431 Cerebrum_H27432 Cerebrum_H27464 Cerebrum_H27471 Cerebrum_H27474 Eye_H27458 Eye_H27472 Eye_H27552 Eye_H27620 Eye_H27634 Heart_H26547 Heart_H27098 Heart_H27295 Heart_H27423 Heart_H27431 Heart_H27464 Heart_H27471 Heart_H27472 Heart_H27473 Intestine_H27771 Intestine_H27772 Intestine_H27798 Intestine_H27799 Intestine_H27876 Intestine_H27909 Intestine_H27913 Intestine_H27915 Intestine_H27948 Kidney_H27771 Kidney_H27772 Kidney_H27798 Kidney_H27870 Kidney_H27876 Kidney_H27909 Kidney_H27913 Kidney_H27915 Kidney_H27948 Liver_H27058 Liver_H27098 Liver_H27423 Liver_H27431 Liver_H27464 Liver_H27471 Liver_H27472 Liver_H27473 Liver_H27474 Lung_H26350 Lung_H26547 Lung_H27058 Lung_H27098 Lung_H27423 Lung_H27431 Lung_H27464 Lung_H27471 Lung_H27472 Lung_H27474 Lung_H27477 Muscle_H27098 Muscle_H27431 Muscle_H27471 Muscle_H27472 Muscle_H27473 Muscle_H27474 Muscle_H27477 Muscle_H27634 Pancreas_H27870 Pancreas_H27876 Pancreas_H27948 Placenta_H26350 Placenta_H26547 Placenta_H27058 Placenta_H27098 Placenta_H27423 Placenta_H27431 Placenta_H27464 Placenta_H27471 Placenta_H27472 Placenta_H27473 Placenta_H27474 Spleen_H26350 Spleen_H26547 Spleen_H27431 Spleen_H27464 Spleen_H27471 Spleen_H27472 Spleen_H27552 Spleen_H27634 Stomach_H27870 Stomach_H27876 Stomach_H27909 Stomach_H27948 Thymus_H26547 Thymus_H27423 Thymus_H27431 Thymus_H27471 Thymus_H27552 Thymus_H27634
@@ -127,14 +133,15 @@ group expression
     type bigBarChart
     visibility hide
     shortLabel Fetal Donor ID
-    longLabel Fetal Gene Atlas sorted by donor ID from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by donor ID from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
     labelFields name,name2
-    bigDataUrl /gbdb/hg19/bbi/fetalGeneAtlas/donor.bb
-    barChartStatsUrl /gbdb/hg19/bbi/fetalGeneAtlas/donor.stats
-    barChartColors #628462 #879b35 #e1b80a #8ea32e #ae21a5 #c5ad1a #e5ba08 #deb70d #d5b312 #e2b909 #e2ba09 #ddb80c #7b7a58 #e6bb07 #e3ba08 #9aa22d #ccae19 #e6bb07 #82a230 #709549 #829d38 #708a56 #1859dd #205ad3 #3d6ca3 #77954b #638b66 #55846d
+    bigDataUrl /gbdb/$D/bbi/fetalGeneAtlas/donor.bb
+    barChartStatsUrl /gbdb/$D/bbi/fetalGeneAtlas/donor.stats
+    barChartColors #647e66 #8a933b #e2b60c #92953b #ae20a5 #c8a91d #e5b909 #dfb40f #d6af15 #e3b80b #e3b80a #deb50e #a5199f #e6ba08 #e4b80a #9d9935 #cdaa1d #e6ba08 #859d34 #70904e #85973d #70835e #1a58dc #2359d2 #3f69a4 #779052 #64846d #557f72
+    #barChartColors #628462 #879b35 #e1b80a #8ea32e #ae21a5 #c5ad1a #e5ba08 #deb70d #d5b312 #e2b909 #e2ba09 #ddb80c #7b7a58 #e6bb07 #e3ba08 #9aa22d #ccae19 #e6bb07 #82a230 #709549 #829d38 #708a56 #1859dd #205ad3 #3d6ca3 #77954b #638b66 #55846d
     #barChartColors #61865e #849c32 #d4b909 #8aa52c #af20a4 #bcaf17 #d7bb07 #d2b80b #cab510 #d5ba08 #d5ba08 #d0b90a #7a7c55 #d8bc06 #d5bb07 #95a42a #c2b016 #d8bc06 #80a32d #6e9647 #809f35 #6f8c54 #175adc #1f5bd3 #3c6da2 #749749 #618d64 #53856b
     #barChartColors #ff0000 #ff4000 #ff8000 #ffa400 #ffd200 #fffe00 #d2ff00 #a4ff00 #80ff00 #00ff00 #00ff7f #00ffa3 #00ffd1 #00fffe #00d2ff #00a4ff #0080ff #0040ff #0000ff #3f00ff #7f00ff #a300ff #d100ff #fe00ff #ff00d2 #ff00a4 #ff0080 #ff0040
     barChartBars H26350 H26547 H27058 H27098 H27295 H27423 H27431 H27432 H27458 H27464 H27471 H27472 H27473 H27474 H27477 H27552 H27620 H27634 H27771 H27772 H27798 H27799 H27870 H27876 H27909 H27913 H27915 H27948
@@ -146,15 +153,16 @@ group expression
     type bigBarChart
     visibility hide
     shortLabel Fetal Sex
-    longLabel Fetal Gene Atlas sorted by sex from Cao et al 2020
+    longLabel Fetal Gene Atlas binned by sex from Cao et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
     defaultLabelFields name2
     labelFields name,name2
-    bigDataUrl /gbdb/hg19/bbi/fetalGeneAtlas/sex.bb
-    barChartStatsUrl /gbdb/hg19/bbi/fetalGeneAtlas/sex.stats
+    bigDataUrl /gbdb/$D/bbi/fetalGeneAtlas/sex.bb
+    barChartStatsUrl /gbdb/$D/bbi/fetalGeneAtlas/sex.stats
     #barChartColors #ff0000 #00d2ff
-    barChartColors #d9b70e #e6bb07
+    #barChartColors #d9b70e #e6bb07
+    barChartColors #dbb410 #e6ba08
     barChartBars F M
     transformFunc NONE
     barChartLimit 2

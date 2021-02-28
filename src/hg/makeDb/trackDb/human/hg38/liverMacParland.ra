@@ -3,7 +3,7 @@ superTrack on
 shortLabel Liver MacParland
 longLabel Liver single cell sequencing from MacParland et al 2018
 visibility hide
-group expression
+group singleCell
 
 
     track liverMacParlandCellType

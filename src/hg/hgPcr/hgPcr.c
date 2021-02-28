@@ -520,6 +520,43 @@ else
 cartSetString(cart, cartVar, buf);
 }
 
+static void printHelpLinks(struct gfPcrOutput *gpoList) {
+    /* print links to our docs for special chromosome names */
+    // if you modify this, also modify hgBlat.c:showAliPlaces, which implements a similar feature, for hgBlat
+    boolean isAlt = FALSE;
+    boolean isFix = FALSE;
+    boolean isRandom = FALSE;
+    boolean isChrUn = FALSE;
+
+    if (gpoList != NULL)
+        {
+        struct gfPcrOutput *gpo;
+        for (gpo = gpoList;  gpo != NULL;  gpo = gpo->next)
+            {
+            char *seq = gpo->seqName;
+            if (endsWith(seq, "_fix"))
+                isFix = TRUE;
+            else if (endsWith(seq, "_alt"))
+                isAlt = TRUE;
+            else if (endsWith(seq, "_random"))
+                isRandom = TRUE;
+            else if (startsWith(seq, "chrUn"))
+                isChrUn = TRUE;
+            }
+        }
+
+    if (isFix || isRandom || isAlt || isChrUn)
+        webNewSection("Notes on the results above");
+
+    if (isFix)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#downloadFix\">What is chrom_fix?</A><BR>");
+    if (isAlt)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#downloadAlt\">What is chrom_alt?</A><BR>");
+    if (isRandom)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#download10\">What is chrom_random?</A><BR>");
+    if (isChrUn)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#download11\">What is a chrUn sequence?</A><BR>");
+}
 
 void doQuery(struct pcrServer *server, struct gfPcrInput *gpi,
 	     int maxSize, int minPerfect, int minGood)
@@ -530,6 +567,8 @@ struct gfConnection *conn = gfConnect(server->host, server->port,
 struct gfPcrOutput *gpoList =
     gfPcrViaNet(conn, server->seqDir, gpi,
 		maxSize, minPerfect, minGood);
+
+
 if (gpoList != NULL)
     {
     char urlFormat[2048];
@@ -539,6 +578,8 @@ if (gpoList != NULL)
     printf("<TT><PRE>");
     gfPcrOutputWriteAll(gpoList, "fa", urlFormat, "stdout");
     printf("</PRE></TT>");
+    
+    printHelpLinks(gpoList);
     writePcrResultTrack(gpoList, server->db, NULL);
     }
 else
@@ -560,6 +601,7 @@ splitPath(server->targetDb->seqFile, seqDir, NULL, NULL);
 if (endsWith("/", seqDir))
     seqDir[strlen(seqDir) - 1] = '\0';
 gpoList = gfPcrViaNet(conn, seqDir, gpi, maxSize, minPerfect, minGood);
+
 if (gpoList != NULL)
     {
     struct gfPcrOutput *gpo;
@@ -583,6 +625,7 @@ if (gpoList != NULL)
 	gfPcrOutputWriteOne(gpo, "fa", urlFormat, stdout);
 	printf("\n");
 	}
+
     printf("</PRE></TT>");
     writePcrResultTrack(gpoList, server->targetDb->db, server->targetDb->name);
     }

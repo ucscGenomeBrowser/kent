@@ -53,8 +53,8 @@ then
         ../../../processClinGenDosage.py ClinGen_region_curation_list_${grc}.tsv ClinGen_gene_curation_list_${grc}.tsv ${db}.omimPhenotypes ../output/${db}
         sort -k1,1 -k2,2n ../output/${db}.haplo.bed > ../output/${db}.clinGenHaplo.bed
         sort -k1,1 -k2,2n ../output/${db}.triplo.bed > ../output/${db}.clinGenTriplo.bed
-        bedToBigBed -type=bed9+13 -as=../../clinGenDosageHaplo.as -tab ../output/${db}.clinGenHaplo.bed /hive/data/genomes/${db}/chrom.sizes ../output/${db}.clinGenHaplo.bb
-        bedToBigBed -type=bed9+13 -as=../../clinGenDosageTriplo.as -tab ../output/${db}.clinGenTriplo.bed /hive/data/genomes/${db}/chrom.sizes ../output/${db}.clinGenTriplo.bb
+        bedToBigBed -type=bed9+16 -as=../../clinGenDosageHaplo.as -tab ../output/${db}.clinGenHaplo.bed /hive/data/genomes/${db}/chrom.sizes ../output/${db}.clinGenHaplo.bb
+        bedToBigBed -type=bed9+16 -as=../../clinGenDosageTriplo.as -tab ../output/${db}.clinGenTriplo.bed /hive/data/genomes/${db}/chrom.sizes ../output/${db}.clinGenTriplo.bb
         cp ../output/${db}.clinGenHaplo.bb ${WORKDIR}/release/${db}/clinGenHaplo.bb
         cp ../output/${db}.clinGenTriplo.bb ${WORKDIR}/release/${db}/clinGenTriplo.bb
     done

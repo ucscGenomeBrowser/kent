@@ -167,7 +167,7 @@ DBS = \
 	rheMac2 rheMac3 rheMac7 rheMac8 rheMac10 \
 	rhiBie1 \
 	rhiRox1 \
-	rn3 rn4 rn5 rn6 \
+	rn3 rn4 rn5 rn6 rn7 \
 	rouAeg1 \
 	sacCer1 sacCer2 sacCer3 \
 	saiBol1 \
@@ -192,7 +192,7 @@ DBS = \
 	vicPac1 vicPac2 \
 	wuhCor1 \
 	xenLae2 \
-	xenTro1 xenTro2 xenTro3 xenTro7 xenTro9
+	xenTro1 xenTro2 xenTro3 xenTro7 xenTro9 xenTro10
 
 ARCHIVED_DBS = \
 	rheMac1 \
@@ -263,7 +263,9 @@ beta_all: ${DBS:%=%_beta}
 
 %_beta:
 	# now do loads on hgwbeta
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec $*
+	-ssh  ${BETA_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=beta trackDb hgFindSpec $*
+	rm  -f $*.gbdbList.txt
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb beta metaDb $*
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
 	# now make files for hgwdev-beta (we share the tables with hgwbeta)
@@ -284,7 +286,9 @@ public_all: ${DBS:%=%_public}
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -remoteLogin=${PUBLIC_MACHINE} -release=public trackDb_publicTest hgFindSpecTest_publicTest $*
 
 %_public:
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public $*
+	-ssh  ${PUBLIC_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=public trackDb_public hgFindSpec_public $*
+	rm -f $*.gbdbList.txt
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb public metaDb_public $*
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ${BUILD_TRIX} trackDb_public metaDb_public cv/public/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
 

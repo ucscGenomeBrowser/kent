@@ -148,10 +148,21 @@ if (isNotEmpty(filename) && fileExists(filename))
         addPathIfNecessary(dy, db, words[0]);
         treeChoices->protobufFiles[treeChoices->count] = cloneString(dy->string);
         addPathIfNecessary(dy, db, words[1]);
-        treeChoices->metadataFiles[treeChoices->count] = dyStringCannibalize(&dy);
+        treeChoices->metadataFiles[treeChoices->count] = cloneString(dy->string);
         treeChoices->sources[treeChoices->count] = cloneString(words[2]);
-        treeChoices->descriptions[treeChoices->count] = cloneString(words[3]);
+        // Description can be either a file or just some text.
+        addPathIfNecessary(dy, db, words[3]);
+        if (fileExists(dy->string))
+            {
+            char *desc = NULL;
+            readInGulp(dy->string, &desc, NULL);
+            fprintf(stderr, "reading '%s' --> '%s'\n", dy->string, desc);
+            treeChoices->descriptions[treeChoices->count] = desc;
+            }
+        else
+            treeChoices->descriptions[treeChoices->count] = cloneString(words[3]);
         treeChoices->count++;
+        dyStringFree(&dy);
         }
     lineFileClose(&lf);
     }
@@ -583,20 +594,20 @@ else
 return neighbors;
 }
 
-static void printVariantPathNoNodeNames(struct variantPathNode *variantPath)
-/* Print out variant path with no node names (even if non-numeric) */
+static void printVariantPathNoNodeNames(FILE *f, struct variantPathNode *variantPath)
+/* Print out variant path with no node names (even if non-numeric) to f. */
 {
 struct variantPathNode *vpn;
 for (vpn = variantPath;  vpn != NULL;  vpn = vpn->next)
     {
     if (vpn != variantPath)
-        printf(" > ");
+        fprintf(f, " > ");
     struct singleNucChange *snc;
     for (snc = vpn->sncList;  snc != NULL;  snc = snc->next)
         {
         if (snc != vpn->sncList)
-            printf(", ");
-        printf("%c%d%c", snc->parBase, snc->chromStart+1, snc->newBase);
+            fprintf(f, ", ");
+        fprintf(f, "%c%d%c", snc->parBase, snc->chromStart+1, snc->newBase);
         }
     }
 }
@@ -739,6 +750,8 @@ struct sampleMetadata *metadataForSample(struct hash *sampleMetadata, char *samp
 /* Look up sampleId in sampleMetadata, by accession if sampleId seems to include an accession. */
 {
 struct sampleMetadata *met = NULL;
+if (sampleMetadata == NULL)
+    return NULL;
 char *epiId = epiIdFromSampleName(sampleId);
 if (epiId)
     met = hashFindVal(sampleMetadata, epiId);
@@ -814,14 +827,14 @@ if (showBestNodePaths && info->bestNodes)
         printf("<ul><li><b>used for placement</b>: ");
     if (differentString(info->bestNodes->name, "?") && !isAllDigits(info->bestNodes->name))
         printf("%s ", info->bestNodes->name);
-    printVariantPathNoNodeNames(info->bestNodes->variantPath);
+    printVariantPathNoNodeNames(stdout, info->bestNodes->variantPath);
     struct bestNodeInfo *bn;
     for (bn = info->bestNodes->next;  bn != NULL;  bn = bn->next)
         {
         printf("\n<li>");
         if (differentString(bn->name, "?") && !isAllDigits(bn->name))
             printf("%s ", bn->name);
-        printVariantPathNoNodeNames(bn->variantPath);
+        printVariantPathNoNodeNames(stdout, bn->variantPath);
         char *lineage = lineageForSample(sampleMetadata, bn->name);
         if (isNotEmpty(lineage))
             printf(": lineage %s", lineage);
@@ -1032,11 +1045,31 @@ if (ti == NULL)
 return ti;
 }
 
-//#*** TODO: Replace temporary host with nextstrain.org when feature request is released
-//#*** https://github.com/nextstrain/nextstrain.org/pull/216
+static void lookForCladesAndLineages(struct seqInfo *seqInfoList, struct hash *samplePlacements,
+                                     boolean *retGotClades, boolean *retGotLineages)
+/* See if UShER has annotated any clades and/or lineages for seqs. */
+{
+boolean gotClades = FALSE, gotLineages = FALSE;
+struct seqInfo *si;
+for (si = seqInfoList;  si != NULL;  si = si->next)
+    {
+    struct placementInfo *pi = hashFindVal(samplePlacements, si->seq->name);
+    if (pi)
+        {
+        if (isNotEmpty(pi->nextClade))
+            gotClades = TRUE;
+        if (isNotEmpty(pi->pangoLineage))
+            gotLineages = TRUE;
+        if (gotClades && gotLineages)
+            break;
+        }
+    }
+*retGotClades = gotClades;
+*retGotLineages = gotLineages;
+}
+
 static char *nextstrainHost()
-/* Until the new /fetch/ function is live on nextstrain.org, get their temporary staging host
- * from an hg.conf param, or NULL if missing. */
+/* Return the nextstrain hostname from an hg.conf param, or NULL if missing. */
 {
 return cfgOption("nextstrainHost");
 }
@@ -1052,33 +1085,48 @@ struct dyString *dy = dyStringCreate("%s/fetch/%s", nextstrainHost(), jsonUrlFor
 return dyStringCannibalize(&dy);
 }
 
-static void makeNextstrainButton(char *idBase, int ix, struct tempName *jsonTns[])
-/* Make a button to view results in Nextstrain.  idBase is a short string and
+static void makeNextstrainButton(char *id, struct tempName *tn, char *label)
+/* Make a button to view an auspice JSON file in Nextstrain. */
+{
+char *nextstrainUrl = nextstrainUrlFromTn(tn);
+struct dyString *js = dyStringCreate("window.open('%s');", nextstrainUrl);
+cgiMakeOnClickButton(id, js->string, label);
+dyStringFree(&js);
+freeMem(nextstrainUrl);
+}
+
+static void makeNextstrainButtonN(char *idBase, int ix, struct tempName *jsonTns[])
+/* Make a button to view one subtree in Nextstrain.  idBase is a short string and
  * ix is 0-based subtree number. */
 {
 char buttonId[256];
 safef(buttonId, sizeof buttonId, "%s%d", idBase, ix+1);
 char buttonLabel[256];
 safef(buttonLabel, sizeof buttonLabel, "view subtree %d in Nextstrain", ix+1);
-char *nextstrainUrl = nextstrainUrlFromTn(jsonTns[ix]);
-struct dyString *js = dyStringCreate("window.open('%s');", nextstrainUrl);
-cgiMakeOnClickButton(buttonId, js->string, buttonLabel);
-dyStringFree(&js);
-freeMem(nextstrainUrl);
+makeNextstrainButton(buttonId, jsonTns[ix], buttonLabel);
 }
 
-static void makeButtonRow(struct tempName *jsonTns[], int subtreeCount, boolean isFasta)
+static void makeNsSingleTreeButton(struct tempName *tn)
+/* Make a button to view single subtree (with all uploaded samples) in Nextstrain. */
+{
+makeNextstrainButton("viewNextstrainSingleSubtree", tn, "view comprehensive subtree in Nextstrain");
+}
+
+static void makeButtonRow(struct tempName *singleSubtreeJsonTn, struct tempName *jsonTns[],
+                          int subtreeCount, boolean isFasta)
 /* Russ's suggestion: row of buttons at the top to view results in GB, Nextstrain, Nextclade. */
 {
 puts("<p>");
 cgiMakeButton("submit", "view in Genome Browser");
 if (nextstrainHost())
     {
+    printf("&nbsp;");
+    makeNsSingleTreeButton(singleSubtreeJsonTn);
     int ix;
     for (ix = 0;  ix < subtreeCount;  ix++)
         {
         printf("&nbsp;");
-        makeNextstrainButton("viewNextstrainTopRow", ix, jsonTns);
+        makeNextstrainButtonN("viewNextstrainTopRow", ix, jsonTns);
         }
     }
 if (0 && isFasta)
@@ -1094,7 +1142,7 @@ puts("</p>");
 
 #define TOOLTIP(text) " <div class='tooltip'>(?)<span class='tooltiptext'>" text "</span></div>"
 
-static void printSummaryHeader(boolean isFasta)
+static void printSummaryHeader(boolean isFasta, boolean gotClades, boolean gotLineages)
 /* Print the summary table header row with tooltips explaining columns. */
 {
 puts("<thead><tr>");
@@ -1120,10 +1168,10 @@ if (isFasta)
     puts("<th>Bases aligned"
          TOOLTIP("Number of bases aligned to reference NC_045512.2 Wuhan/Hu-1, including "
                  "matches and mismatches")
-         "</th>\n<th>Insertions"
+         "</th>\n<th>Inserted bases"
          TOOLTIP("Number of bases in aligned portion of uploaded sequence that are not present in "
                  "reference NC_045512.2 Wuhan/Hu-1")
-         "</th>\n<th>Deletions"
+         "</th>\n<th>Deleted bases"
          TOOLTIP("Number of bases in reference NC_045512.2 Wuhan/Hu-1 that are not "
                  "present in aligned portion of uploaded sequence")
          "</th>");
@@ -1135,13 +1183,21 @@ puts("<th>#SNVs used for placement"
      TOOLTIP("Number of single-nucleotide variants in uploaded sample that are masked "
              "(not used for placement) because they occur at known "
              "<a href='https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473/12' "
-             "target=_blank>Problematic Sites</a>")
-     "</th>\n<th>Neighboring sample in tree"
+             "target=_blank>Problematic Sites</a>"));;
+if (gotClades)
+    puts("</th>\n<th>Nextstrain clade"
+     TOOLTIP("The <a href='https://nextstrain.org/blog/2021-01-06-updated-SARS-CoV-2-clade-naming' "
+             "target=_blank>Nextstrain clade</a> assigned to the sample by UShER"));
+if (gotLineages)
+    puts("</th>\n<th>Pango lineage"
+     TOOLTIP("The <a href='https://cov-lineages.org/' "
+             "target=_blank>Pango lineage</a> assigned to the sample by UShER"));
+puts("</th>\n<th>Neighboring sample in tree"
      TOOLTIP("A sample already in the tree that is a child of the node at which the uploaded "
              "sample was placed, to give an example of a closely related sample")
      "</th>\n<th>Lineage of neighbor"
-     TOOLTIP("The <a href='https://github.com/cov-lineages/pangolin' target=_blank>"
-             "Pangolin lineage</a> assigned to the nearest neighboring sample already in the tree")
+     TOOLTIP("The <a href='https://cov-lineages.org/' target=_blank>"
+             "Pango lineage</a> assigned to the nearest neighboring sample already in the tree")
      "</th>\n<th>#Imputed values for mixed bases"
      TOOLTIP("If the uploaded sequence contains mixed/ambiguous bases, then UShER may assign "
              "values based on maximum parsimony")
@@ -1156,17 +1212,83 @@ puts("<th>#SNVs used for placement"
      "</th></tr></thead>");
 }
 
-static char *qcClassForIntMin(int n, int minExc, int minGood, int minMeh, int minBad)
+
+// Default QC thresholds for calling an input sequence excellent/good/fair/bad [/fail]:
+static int qcThresholdsMinLength[] = { 29750, 29500, 29000, 28000 };
+static int qcThresholdsMaxNs[] = { 0, 5, 20, 100 };
+static int qcThresholdsMaxMixed[] = { 0, 5, 20, 100 };
+static int qcThresholdsMaxIndel[] = { 9, 18, 24, 36 };
+static int qcThresholdsMaxSNVs[] = { 25, 35, 45, 55 };
+static int qcThresholdsMaxMaskedSNVs[] = { 0, 1, 2, 3 };
+static int qcThresholdsMaxImputed[] = { 0, 5, 20, 100 };
+static int qcThresholdsMaxPlacements[] = { 1, 2, 3, 4 };
+static int qcThresholdsMaxPScore[] = { 0, 2, 5, 10 };
+
+static void wordsToQcThresholds(char **words, int *thresholds)
+/* Parse words from file into thresholds array.  Caller must ensure words and thresholds each
+ * have 4 items. */
+{
+int i;
+for (i = 0;  i < 4;  i++)
+    thresholds[i] = atoi(words[i]);
+}
+
+static void readQcThresholds(char *db)
+/* If config.ra specifies a file with QC thresholds for excellent/good/fair/bad [/fail],
+ * parse it and replace the default values in qcThresholds arrays.  */
+{
+char *qcThresholdsFile = phyloPlaceDbSettingPath(db, "qcThresholds");
+if (isNotEmpty(qcThresholdsFile))
+    {
+    if (fileExists(qcThresholdsFile))
+        {
+        struct lineFile *lf = lineFileOpen(qcThresholdsFile, TRUE);
+        char *line;
+        while (lineFileNext(lf, &line, NULL))
+            {
+            char *words[16];
+            int wordCount = chopTabs(line, words);
+            lineFileExpectWords(lf, 5, wordCount);
+            if (sameWord(words[0], "length"))
+                wordsToQcThresholds(words+1, qcThresholdsMinLength);
+            else if (sameWord(words[0], "nCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxNs);
+            else if (sameWord(words[0], "mixedCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxMixed);
+            else if (sameWord(words[0], "indelCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxIndel);
+            else if (sameWord(words[0], "snvCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxSNVs);
+            else if (sameWord(words[0], "maskedSnvCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxMaskedSNVs);
+            else if (sameWord(words[0], "imputedBases"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxImputed);
+            else if (sameWord(words[0], "placementCount"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxPlacements);
+            else if (sameWord(words[0], "parsimony"))
+                wordsToQcThresholds(words+1, qcThresholdsMaxPScore);
+            else
+                warn("qcThresholds file %s: unrecognized parameter '%s', skipping",
+                     qcThresholdsFile, words[0]);
+            }
+        lineFileClose(&lf);
+        }
+    else
+        warn("qcThresholds %s: file not found", qcThresholdsFile);
+    }
+}
+
+static char *qcClassForIntMin(int n, int thresholds[])
 /* Return {qcExcellent, qcGood, qcMeh, qcBad or qcFail} depending on how n compares to the
  * thresholds. Don't free result. */
 {
-if (n >= minExc)
+if (n >= thresholds[0])
     return "qcExcellent";
-else if (n >= minGood)
+else if (n >= thresholds[1])
     return "qcGood";
-else if (n >= minMeh)
+else if (n >= thresholds[2])
     return "qcMeh";
-else if (n >= minBad)
+else if (n >= thresholds[3])
     return "qcBad";
 else
     return "qcFail";
@@ -1175,20 +1297,20 @@ else
 static char *qcClassForLength(int length)
 /* Return qc class for length of sequence. */
 {
-return qcClassForIntMin(length, 29750, 29500, 29000, 28000);
+return qcClassForIntMin(length, qcThresholdsMinLength);
 }
 
-static char *qcClassForIntMax(int n, int maxExc, int maxGood, int maxMeh, int maxBad)
+static char *qcClassForIntMax(int n, int thresholds[])
 /* Return {qcExcellent, qcGood, qcMeh, qcBad or qcFail} depending on how n compares to the
  * thresholds. Don't free result. */
 {
-if (n <= maxExc)
+if (n <= thresholds[0])
     return "qcExcellent";
-else if (n <= maxGood)
+else if (n <= thresholds[1])
     return "qcGood";
-else if (n <= maxMeh)
+else if (n <= thresholds[2])
     return "qcMeh";
-else if (n <= maxBad)
+else if (n <= thresholds[3])
     return "qcBad";
 else
     return "qcFail";
@@ -1197,49 +1319,49 @@ else
 static char *qcClassForNs(int nCount)
 /* Return qc class for #Ns in sample. */
 {
-return qcClassForIntMax(nCount, 0, 5, 20, 100);
+return qcClassForIntMax(nCount, qcThresholdsMaxNs);
 }
 
 static char *qcClassForMixed(int mixedCount)
 /* Return qc class for #ambiguous bases in sample. */
 {
-return qcClassForIntMax(mixedCount, 0, 5, 20, 100);
+return qcClassForIntMax(mixedCount, qcThresholdsMaxMixed);
 }
 
 static char *qcClassForIndel(int indelCount)
 /* Return qc class for #inserted or deleted bases. */
 {
-return qcClassForIntMax(indelCount, 0, 2, 5, 10);
+return qcClassForIntMax(indelCount, qcThresholdsMaxIndel);
 }
 
 static char *qcClassForSNVs(int snvCount)
 /* Return qc class for #SNVs in sample. */
 {
-return qcClassForIntMax(snvCount, 10, 20, 30, 40);
+return qcClassForIntMax(snvCount, qcThresholdsMaxSNVs);
 }
 
 static char *qcClassForMaskedSNVs(int maskedCount)
 /* Return qc class for #SNVs at problematic sites. */
 {
-return qcClassForIntMax(maskedCount, 0, 1, 2, 3);
+return qcClassForIntMax(maskedCount, qcThresholdsMaxMaskedSNVs);
 }
 
 static char *qcClassForImputedBases(int imputedCount)
 /* Return qc class for #ambiguous bases for which UShER imputed values based on placement. */
 {
-return qcClassForMixed(imputedCount);
+return qcClassForIntMax(imputedCount, qcThresholdsMaxImputed);
 }
 
 static char *qcClassForPlacements(int placementCount)
 /* Return qc class for number of equally parsimonious placements. */
 {
-return qcClassForIntMax(placementCount, 1, 2, 3, 4);
+return qcClassForIntMax(placementCount, qcThresholdsMaxPlacements);
 }
 
 static char *qcClassForPScore(int parsimonyScore)
 /* Return qc class for parsimonyScore. */
 {
-return qcClassForIntMax(parsimonyScore, 0, 2, 5, 10);
+return qcClassForIntMax(parsimonyScore, qcThresholdsMaxPScore);
 }
 
 static void printTooltip(char *text)
@@ -1262,13 +1384,16 @@ if (si->nCountEnd)
 
 static void summarizeSequences(struct seqInfo *seqInfoList, boolean isFasta,
                                struct usherResults *ur, struct tempName *jsonTns[],
-                               struct hash *sampleMetadata, struct mutationAnnotatedTree *bigTree)
+                               struct hash *sampleMetadata, struct mutationAnnotatedTree *bigTree,
+                               struct dnaSeq *refGenome)
 /* Show a table with composition & alignment stats for each sequence that passed basic QC. */
 {
 if (seqInfoList)
     {
     puts("<table class='seqSummary'>");
-    printSummaryHeader(isFasta);
+    boolean gotClades = FALSE, gotLineages = FALSE;
+    lookForCladesAndLineages(seqInfoList, ur->samplePlacements, &gotClades, &gotLineages);
+    printSummaryHeader(isFasta, gotClades, gotLineages);
     puts("<tbody>");
     struct dyString *dy = dyStringNew(0);
     struct seqInfo *si;
@@ -1336,22 +1461,16 @@ if (seqInfoList)
                                psl->qStart+1, psl->qEnd, psl->tStart+1, psl->tEnd);
                 printTooltip(dy->string);
                 printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(psl->qBaseInsert), psl->qBaseInsert);
-                if (psl->qBaseInsert)
+                       qcClassForIndel(si->insBases), si->insBases);
+                if (si->insBases)
                     {
-                    dyStringClear(dy);
-                    dyStringPrintf(dy, "%d bases in %d locations",
-                                   psl->qBaseInsert, psl->qNumInsert);
-                    printTooltip(dy->string);
+                    printTooltip(si->insRanges);
                     }
                 printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(psl->tBaseInsert), psl->tBaseInsert);
-                if (psl->tBaseInsert)
+                       qcClassForIndel(si->delBases), si->delBases);
+                if (si->delBases)
                     {
-                    dyStringClear(dy);
-                    dyStringPrintf(dy, "%d bases in %d locations",
-                                   psl->tBaseInsert, psl->tNumInsert);
-                    printTooltip(dy->string);
+                    printTooltip(si->delRanges);
                     }
                 printf("</td>");
                 }
@@ -1403,6 +1522,10 @@ if (seqInfoList)
         struct placementInfo *pi = hashFindVal(ur->samplePlacements, si->seq->name);
         if (pi)
             {
+            if (gotClades)
+                printf("<td>%s</td>", pi->nextClade ? pi->nextClade : "n/a");
+            if (gotLineages)
+                printf("<td>%s</td>", pi->pangoLineage ? pi->pangoLineage : "n/a");
             struct slName *neighbor = findNearestNeighbor(bigTree, pi->sampleId, pi->variantPath);
             char *lineage = neighbor ?  lineageForSample(sampleMetadata, neighbor->name) : "?";
             printf("<td>%s</td><td>%s</td>",
@@ -1429,7 +1552,13 @@ if (seqInfoList)
             printf("</td>");
             }
         else
+            {
+            if (gotClades)
+                printf("<td>n/a></td>");
+            if (gotLineages)
+                printf("<td>n/a></td>");
             printf("<td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td>");
+            }
         int ix;
         struct subtreeInfo *ti = subtreeInfoForSample(ur->subtreeInfoList, si->seq->name, &ix);
         if (ix < 0)
@@ -1449,6 +1578,197 @@ if (seqInfoList)
         }
     puts("</tbody></table><p></p>");
     }
+}
+
+static struct singleNucChange *sncListFromSampleMutsAndImputed(struct slName *sampleMuts,
+                                                               struct baseVal *imputedBases)
+/* Convert a list of "<ref><pos><alt>" names to struct singleNucChange list.
+ * However, if <alt> is ambiguous, skip it because variantProjector doesn't like it.
+ * Add imputed base predictions. */
+{
+struct singleNucChange *sncList = NULL;
+struct slName *mut;
+for (mut = sampleMuts;  mut != NULL;  mut = mut->next)
+    {
+    char ref = mut->name[0];
+    if (ref < 'A' || ref > 'Z')
+        errAbort("sncListFromSampleMuts: expected ref base value, got '%c' in '%s'",
+                 ref, mut->name);
+    int pos = atoi(&(mut->name[1]));
+    if (pos < 1 || pos > chromSize)
+        errAbort("sncListFromSampleMuts: expected pos between 1 and %d, got %d in '%s'",
+                 chromSize, pos, mut->name);
+    char alt = mut->name[strlen(mut->name)-1];
+    if (alt < 'A' || alt > 'Z')
+        errAbort("sncListFromSampleMuts: expected alt base value, got '%c' in '%s'",
+                 alt, mut->name);
+    if (isIupacAmbiguous(alt))
+        continue;
+    struct singleNucChange *snc;
+    AllocVar(snc);
+    snc->chromStart = pos-1;
+    snc->refBase = ref;
+    snc->newBase = alt;
+    slAddHead(&sncList, snc);
+    }
+struct baseVal *bv;
+for (bv = imputedBases;  bv != NULL;  bv = bv->next)
+    {
+    struct singleNucChange *snc;
+    AllocVar(snc);
+    snc->chromStart = bv->chromStart;
+    snc->refBase = '?';
+    snc->newBase = bv->val[0];
+    slAddHead(&sncList, snc);
+    }
+slReverse(&sncList);
+return sncList;
+}
+
+static void writeOneTsvRow(FILE *f, char *sampleId, struct usherResults *results,
+                           struct hash *seqInfoHash, struct geneInfo *geneInfoList,
+                           struct seqWindow *gSeqWin)
+/* Write one row of tab-separate summary for sampleId. */
+{
+    struct placementInfo *info = hashFindVal(results->samplePlacements, sampleId);
+    // sample name / ID
+    fprintf(f, "%s\t", sampleId);
+    // nucleotide mutations
+    struct slName *mut;
+    for (mut = info->sampleMuts;  mut != NULL;  mut = mut->next)
+        {
+        if (mut != info->sampleMuts)
+            fputc(',', f);
+        fputs(mut->name, f);
+        }
+    fputc('\t', f);
+    // AA mutations
+    struct singleNucChange *sncList = sncListFromSampleMutsAndImputed(info->sampleMuts,
+                                                                      info->imputedBases);
+    struct slPair *geneAaMutations = getAaMutations(sncList, geneInfoList, gSeqWin);
+    struct slPair *geneAaMut;
+    boolean first = TRUE;
+    for (geneAaMut = geneAaMutations;  geneAaMut != NULL;  geneAaMut = geneAaMut->next)
+        {
+        struct slName *aaMut;
+        for (aaMut = geneAaMut->val;  aaMut != NULL;  aaMut = aaMut->next)
+            {
+            if (first)
+                first = FALSE;
+            else
+                fputc(',', f);
+            fprintf(f, "%s:%s", geneAaMut->name, aaMut->name);
+            }
+        }
+    fputc('\t', f);
+    // imputed bases (if any)
+    struct baseVal *bv;
+    for (bv = info->imputedBases;  bv != NULL;  bv = bv->next)
+        {
+        if (bv != info->imputedBases)
+            fputc(',', f);
+        fprintf(f, "%d%s", bv->chromStart+1, bv->val);
+        }
+    fputc('\t', f);
+    // path through tree to sample
+    printVariantPathNoNodeNames(f, info->variantPath);
+    // number of equally parsimonious placements
+    fprintf(f, "\t%d", info->bestNodeCount);
+    // parsimony score
+    fprintf(f, "\t%d", info->parsimonyScore);
+    struct seqInfo *si = hashFindVal(seqInfoHash, sampleId);
+    if (si)
+        {
+        if (si->psl)
+            {
+            // length
+            fprintf(f, "\t%d", si->seq->size);
+            struct psl *psl = si->psl;
+            // aligned bases, indel counts & ranges
+            int aliCount = psl->match + psl->misMatch + psl->repMatch;
+            fprintf(f, "\t%d\t%d\t%s\t%d\t%s",
+                    aliCount, si->insBases, emptyForNull(si->insRanges),
+                    si->delBases, emptyForNull(si->delRanges));
+            }
+        else
+            fprintf(f, "\t\t\t\t\t\t");
+        // SNVs that were masked (Problematic Sites track), not used in placement
+        fputc('\t', f);
+        struct singleNucChange *snc;
+        for (snc = si->maskedSncList;  snc != NULL;  snc = snc->next)
+            {
+            if (snc != si->maskedSncList)
+                fputc(',', f);
+            fprintf(f, "%c%d%c", snc->refBase, snc->chromStart+1, snc->newBase);
+            }
+        }
+    else
+        {
+        warn("writeOneTsvRow: no sequenceInfo for sample '%s'", sampleId);
+        fprintf(f, "\t\t\t\t\t\t\t");
+        }
+    fputc('\n', f);
+}
+
+static void rWriteTsvSummaryTreeOrder(struct phyloTree *node, FILE *f, struct usherResults *results,
+                                      struct hash *seqInfoHash, struct geneInfo *geneInfoList,
+                                      struct seqWindow *gSeqWin)
+/* As we encounter leaves (user-uploaded samples) in depth-first search order, write out a line
+ * of TSV summary for each one. */
+{
+if (node->numEdges)
+    {
+    int i;
+    for (i = 0;  i < node->numEdges;  i++)
+        rWriteTsvSummaryTreeOrder(node->edges[i], f, results, seqInfoHash, geneInfoList, gSeqWin);
+    }
+else
+    {
+    writeOneTsvRow(f, node->ident->name, results, seqInfoHash, geneInfoList, gSeqWin);
+    }
+}
+
+
+static struct hash *hashFromSeqInfoList(struct seqInfo *seqInfoList)
+/* Hash sequence name to seqInfo for quick lookup. */
+{
+struct hash *hash = hashNew(0);
+struct seqInfo *si;
+for (si = seqInfoList;  si != NULL;  si = si->next)
+    hashAdd(hash, si->seq->name, si);
+return hash;
+}
+
+static struct tempName *writeTsvSummary(struct usherResults *results, struct phyloTree *sampleTree,
+                                        struct slName *sampleIds, struct seqInfo *seqInfoList,
+                                        struct geneInfo *geneInfoList, struct seqWindow *gSeqWin,
+                                        int *pStartTime)
+/* Write a tab-separated summary file for download.  If the user uploaded enough samples to make
+ * a tree, then write out samples in tree order; otherwise use sampleIds list. */
+{
+struct tempName *tsvTn = NULL;
+AllocVar(tsvTn);
+trashDirFile(tsvTn, "ct", "usher", ".tsv");
+FILE *f = mustOpen(tsvTn->forCgi, "w");
+fprintf(f, "name\tnuc_mutations\taa_mutations\timputed_bases\tmutation_path"
+        "\tplacement_count\tparsimony_score_increase\tlength\taligned_bases"
+        "\tins_bases\tins_ranges\tdel_bases\tdel_ranges\tmasked_mutations"
+        "\n");
+struct hash *seqInfoHash = hashFromSeqInfoList(seqInfoList);
+if (sampleTree)
+    {
+    rWriteTsvSummaryTreeOrder(sampleTree, f, results, seqInfoHash, geneInfoList, gSeqWin);
+    }
+else
+    {
+    struct slName *sample;
+    for (sample = sampleIds;  sample != NULL;  sample = sample->next)
+        writeOneTsvRow(f, sample->name, results, seqInfoHash, geneInfoList, gSeqWin);
+    }
+carefulClose(&f);
+hashFree(&seqInfoHash);
+reportTiming(pStartTime, "write tsv summary");
+return tsvTn;
 }
 
 static struct slName **getProblematicSites(char *db)
@@ -1581,17 +1901,30 @@ else
 lineFileClose(&lf);
 if (vcfTn)
     {
+    fflush(stdout);
+    int seqCount = slCount(seqInfoList);
+    // Don't make smaller subtrees when a large number of sequences are uploaded.
+    if (seqCount > MAX_SEQ_DETAILS)
+        subtreeSize = 0;
     struct usherResults *results = runUsher(usherPath, usherAssignmentsPath, vcfTn->forCgi,
                                             subtreeSize, sampleIds, bigTree->condensedNodes,
                                             &startTime);
-    if (results->subtreeInfoList)
+    if (results->singleSubtreeInfo)
         {
+        readQcThresholds(db);
         int subtreeCount = slCount(results->subtreeInfoList);
         // Sort subtrees by number of user samples (largest first).
         slSort(&results->subtreeInfoList, subTreeInfoUserSampleCmp);
         // Make Nextstrain/auspice JSON file for each subtree.
         char *bigGenePredFile = phyloPlaceDbSettingPath(db, "bigGenePredFile");
+        struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
+        struct seqWindow *gSeqWin = chromSeqWindowNew(db, chrom, 0, chromSize);
         struct hash *sampleMetadata = getSampleMetadata(metadataFile);
+        struct tempName *singleSubtreeJsonTn;
+        AllocVar(singleSubtreeJsonTn);
+        trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
+        treeToAuspiceJson(results->singleSubtreeInfo, db, geneInfoList, gSeqWin, sampleMetadata,
+                          singleSubtreeJsonTn->forCgi, source);
         struct tempName *jsonTns[subtreeCount];
         struct subtreeInfo *ti;
         int ix;
@@ -1599,57 +1932,86 @@ if (vcfTn)
             {
             AllocVar(jsonTns[ix]);
             trashDirFile(jsonTns[ix], "ct", "subtreeAuspice", ".json");
-            treeToAuspiceJson(ti, db, refGenome, bigGenePredFile, sampleMetadata,
-                              jsonTns[ix]->forCgi, source);
+            treeToAuspiceJson(ti, db, geneInfoList, gSeqWin, sampleMetadata, jsonTns[ix]->forCgi,
+                              source);
             }
         puts("<p></p>");
-        makeButtonRow(jsonTns, subtreeCount, isFasta);
-        printf("<p>If you have metadata you wish to display, click a 'view subtree in Nextstrain' "
-               "button, and then you can drag on a CSV file to "
+        int subtreeButtonCount = (seqCount <= MAX_SEQ_DETAILS) ? subtreeCount : 0;
+        makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeButtonCount, isFasta);
+        printf("<p>If you have metadata you wish to display, click a 'view subtree in "
+               "Nextstrain' button, and then you can drag on a CSV file to "
                "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
                "</p>\n");
-        summarizeSequences(seqInfoList, isFasta, results, jsonTns, sampleMetadata, bigTree);
-        reportTiming(&startTime, "write summary table (including reading in lineages)");
-        for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
+        if (seqCount <= MAX_SEQ_DETAILS)
             {
-            int subtreeUserSampleCount = slCount(ti->subtreeUserSampleIds);
-            printf("<h3>Subtree %d: ", ix+1);
-            if (subtreeUserSampleCount > 1)
-                printf("%d related samples", subtreeUserSampleCount);
-            else if (subtreeCount > 1)
-                printf("Unrelated sample");
-            printf("</h3>\n");
-            makeNextstrainButton("viewNextstrainSub", ix, jsonTns);
-            puts("<br>");
-            // Make a sub-subtree with only user samples for display:
-            struct phyloTree *subtree = phyloOpenTree(ti->subtreeTn->forCgi);
-            subtree = phyloPruneToIds(subtree, ti->subtreeUserSampleIds);
-            describeSamplePlacements(ti->subtreeUserSampleIds, results->samplePlacements, subtree,
-                                     sampleMetadata, bigTree, source);
+            summarizeSequences(seqInfoList, isFasta, results, jsonTns, sampleMetadata, bigTree,
+                               refGenome);
+            reportTiming(&startTime, "write summary table (including reading in lineages)");
+            for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
+                {
+                int subtreeUserSampleCount = slCount(ti->subtreeUserSampleIds);
+                printf("<h3>Subtree %d: ", ix+1);
+                if (subtreeUserSampleCount > 1)
+                    printf("%d related samples", subtreeUserSampleCount);
+                else if (subtreeCount > 1)
+                    printf("Unrelated sample");
+                printf("</h3>\n");
+                makeNextstrainButtonN("viewNextstrainSub", ix, jsonTns);
+                puts("<br>");
+                // Make a sub-subtree with only user samples for display:
+                struct phyloTree *subtree = phyloOpenTree(ti->subtreeTn->forCgi);
+                subtree = phyloPruneToIds(subtree, ti->subtreeUserSampleIds);
+                describeSamplePlacements(ti->subtreeUserSampleIds, results->samplePlacements,
+                                         subtree, sampleMetadata, bigTree, source);
+                }
+            reportTiming(&startTime, "describe placements");
             }
-        reportTiming(&startTime, "describe placements");
+        else
+            printf("<p>(Skipping details and subtrees; "
+                   "you uploaded %d sequences, and details/subtrees are shown only when "
+                   "you upload at most %d sequences.)</p>\n",
+                   seqCount, MAX_SEQ_DETAILS);
 
         // Make custom tracks for uploaded samples and subtree(s).
+        struct phyloTree *sampleTree = NULL;
         struct tempName *ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree->tree,
-                                                  source, fontHeight, &startTime);
-                               
+                                                  source, fontHeight, &sampleTree, &startTime);
+
+        // Make a TSV summary file
+        struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
+                                                 geneInfoList, gSeqWin, &startTime);
+
         // Offer big tree w/new samples for download
         puts("<h3>Downloads</h3>");
         puts("<ul>");
         printf("<li><a href='%s' download>SARS-CoV-2 phylogenetic tree "
                "with your samples (Newick file)</a>\n", results->bigTreePlusTn->forHtml);
+        printf("<li><a href='%s' download>TSV summary of sequences and placements</a>\n",
+               tsvTn->forHtml);
         for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
            {
+            int subtreeUserSampleCount = slCount(ti->subtreeUserSampleIds);
             printf("<li><a href='%s' download>Subtree with %s", ti->subtreeTn->forHtml,
                    ti->subtreeUserSampleIds->name);
-            struct slName *sln;
-            for (sln = ti->subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
-                printf(", %s", sln->name);
+            if (subtreeUserSampleCount > 10)
+                printf(" and %d other samples", subtreeUserSampleCount - 1);
+            else
+                {
+                struct slName *sln;
+                for (sln = ti->subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
+                    printf(", %s", sln->name);
+                }
             puts(" (Newick file)</a>");
             printf("<li><a href='%s' download>Auspice JSON for subtree with %s",
                    jsonTns[ix]->forHtml, ti->subtreeUserSampleIds->name);
-            for (sln = ti->subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
-                printf(", %s", sln->name);
+            if (subtreeUserSampleCount > 10)
+                printf(" and %d other samples", subtreeUserSampleCount - 1);
+            else
+                {
+                struct slName *sln;
+                for (sln = ti->subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
+                    printf(", %s", sln->name);
+                }
             puts(" (JSON file)</a>");
             }
         puts("</ul>");
@@ -1657,9 +2019,9 @@ if (vcfTn)
         // Notify in opposite order of custom track creation.
         puts("<h3>Custom tracks for viewing in the Genome Browser</h3>");
         printf("<p>Added custom track of uploaded samples.</p>\n");
-        printf("<p>Added %d subtree custom track%s.</p>\n",
-               subtreeCount, (subtreeCount > 1 ? "s" : ""));
-
+        if (subtreeCount <= MAX_SUBTREE_CTS)
+            printf("<p>Added %d subtree custom track%s.</p>\n",
+                   subtreeCount, (subtreeCount > 1 ? "s" : ""));
         ctFile = urlFromTn(ctTn);
         }
     else

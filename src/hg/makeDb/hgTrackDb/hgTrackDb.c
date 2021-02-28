@@ -52,8 +52,8 @@ errAbort(
   "   for the ra files.\n"
   "  -release=alpha|beta|public - Include trackDb entries with this release tag only.\n"
   "  -settings - for trackDb scanning, output table name, type line,\n"
-  "            -  and settings hash to stderr while loading everything."
-  "  -remoteLogin - use remote login to check for the existence of bigDataUrl files\n"
+  "            -  and settings hash to stderr while loading everything.\n"
+  "  -gbdbList - list of files to confirm existance of bigDataUrl files\n"
   );
 }
 
@@ -62,7 +62,7 @@ static struct optionSpec optionSpecs[] = {
     {"strict", OPTION_BOOLEAN},
     {"release", OPTION_STRING},
     {"settings", OPTION_BOOLEAN},
-    {"remoteLogin", OPTION_STRING},
+    {"gbdbList", OPTION_STRING},
     {NULL,      0}
 };
 
@@ -70,7 +70,8 @@ static char *raName = "trackDb.ra";
 
 static char *release = "alpha";
 
-static char *remoteLogin = NULL;
+static char *gbdbList = NULL;
+static struct hash *gbdbHash = NULL;
 
 // release tags
 #define RELEASE_ALPHA  (1 << 0)
@@ -128,7 +129,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
 	slAddHead(&newList, tdb);
 	}
-    else if (tdbIsDownloadsOnly(tdb) || trackDataAccessibleRemote(db, tdb, remoteLogin)) 
+    else if (tdbIsDownloadsOnly(tdb) || trackDataAccessibleHash(db, tdb, gbdbHash)) 
         {
         slAddHead(&newList, tdb);
         }
@@ -901,6 +902,18 @@ errAbort("release must be alpha, beta, or public");
 return 0;  /* make compiler happy */
 }
 
+struct hash *hashLines(char *fileName)
+/* Read all lines in file and put them in a hash. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[1];
+struct hash *hash = newHash(0);
+while (lineFileRow(lf, row))
+    hashAdd(hash, row[0], NULL);
+lineFileClose(&lf);
+return hash;
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -913,7 +926,10 @@ if (strchr(raName, '/') != NULL)
     errAbort("-raName value should be a file name without directories");
 release = optionVal("release", release);
 releaseBit = getReleaseBit(release);
-remoteLogin = optionVal("remoteLogin", remoteLogin);
+gbdbList = optionVal("gbdbList", gbdbList);
+
+if (gbdbList)
+    gbdbHash = hashLines(gbdbList);
 
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5], optionExists("strict"));
 return 0;

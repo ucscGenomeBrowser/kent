@@ -3,7 +3,7 @@ superTrack on
 shortLabel Lung Vieira Braga
 longLabel Lung single cell data from Vieira Braga et al 2019
 visibility hide
-group expression
+group singleCell
 
     track lungVieiraBragaCellType
     parent lungVieiraBraga
@@ -22,4 +22,3 @@ group expression
     barChartBars Nasal_basal_1 Nasal_basal_2 Nasal_ciliated_1 Nasal_ciliated_2 Nasal_club Nasal_dendritic_cells Nasal_goblet_2 Nasal_goblet_1 Nasal_ionocytes Nasal_neutrophils Epithelial_basal_1 Epithelial_basal_2 Epithelial_ciliated_1 Epithelial_ciliated_2 Epithelial_club Epithelial_goblet_2 Epithelial_goblet_1 Epithelial_ionocytes Epithelial_type_2_alveolar Epithelial_type_1_alveolar Other_B_cells Other_dendritic_cells Other_endothelial Other_fibroblasts Other_luminal_macrophages Other_lymphatic Other_mast_cells Other_mesothelium Other_neutrophils Other_smooth_muscle Other_T_and_NK_cells Bronchi_B_cells Bronchi_basal_1 Bronchi_basal_2 Bronchi_ciliated_1 Bronchi_ciliated_2 Bronchi_club Bronchi_dendritic_cells Bronchi_endothelial Bronchi_fibroblasts Bronchi_goblet_2 Bronchi_goblet_1 Bronchi_ionocytes Bronchi_luminal_macrophages Bronchi_lymphatic Bronchi_mast_cells Bronchi_Neutrophils Bronchi_smooth_muscle Bronchi_T_and_NK_cells Paranchyma/alv._B_cells Paranchyma/alv._basal_1 Paranchyma/alv._basal_2 Paranchyma/alv._ciliated_1 Paranchyma/alv._ciliated_2 Paranchyma/alv._club Paranchyma/alv._dendritic_cells Paranchyma/alv._endothelial Paranchyma/alv._fibroblasts Paranchyma/alv._luminal_macrophages Paranchyma/alv._lymphatic Paranchyma/alv._mast_cells Paranchyma/alv._mesothelium Paranchyma/alv._neutrophils Paranchyma/alv._smooth_muscle Paranchyma/alv._T_and_NK Paranchyma/alv._type_2_alveolar Paranchyma/alv._type_1_alveolar
     transformFunc NONE
     barChartLimit 3
-    group expression

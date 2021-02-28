@@ -27,6 +27,7 @@ bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
 barChartColors barChart bigBarChart
 barChartCategoryUrl barChart bigBarChart
+barChartFacets barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 barChartStatsUrl barChart bigBarChart
 # below for backwards compatibility during QA. 
@@ -241,6 +242,7 @@ interactUp interact bigInteract
 interactMultiRegion interact bigInteract
 intronGap psl genePred bigPsl
 irows wigMaf
+isGencode3 genePred bigGenePred
 isGencode2 genePred bigGenePred
 isGencode genePred
 itemAttrTbl genePred

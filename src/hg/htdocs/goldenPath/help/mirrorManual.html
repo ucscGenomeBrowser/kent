@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <!-- DO NOT EDIT THE HTDOCS VERSION OF THIS FILE. THIS FILE IS AUTOMATICALLY
      GENERATED FROM A MARKDOWN FILE IN kent/src/product. MAKE ANY EDITS TO
-     THIS PAGE THERE, RUN MAKE, AND FOLLOW THE INSTRUCTIONS TO EDIT THIS PAGE. -->
+     THIS PAGE THERE, THEN RUN MAKE in kent/src/product/mirrorDocs, AND FOLLOW THE 
+     INSTRUCTIONS TO COMMIT THIS PAGE INTO git. -->
 <!--#set var="TITLE" value="Genome Browser Manual Installation" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -14,13 +15,14 @@
 <h6><a href='#overview-of-the-genome-browser-directories-and-databases'>Overview of the Genome Browser directories and databases</a></h6>
 <h6><a href='#software-requirements'>Software Requirements</a></h6>
 <h6><a href='#hardware-and-disk-space-requirements'>Hardware and disk space requirements</a></h6>
+<h6><a href='#local-git-repository'>Local Git repository</a></h6>
 <h6><a href='#installing-the-ucsc-genome-browser'>Installing the UCSC Genome browser</a></h6>
 <h6><a href='#mysql-setup'>MySQL Setup</a></h6>
+<h6><a href='#local-git-repository'>Local Git repository</a></h6>
 <h6><a href='#adding-a-custom-genome-to-the-browser'>Adding a custom genome to the browser</a></h6>
 <h6><a href='#modifying-the-source-code'>Modifying the source code</a></h6>
 <h6><a href='#custom-track-database'>Custom Track Database</a></h6>
 <h6><a href='#debugging-the-cgi-binaries'>Debugging the CGI binaries</a></h6>
-<h6><a href='#local-git-repository'>Local Git repository</a></h6>
 <h6><a href='#proxy-support'>Proxy support</a></h6>
 <h6><a href='#adding-tracks-to-the-browser'>Adding tracks to the browser</a></h6>
 <h6><a href='#the-udc-local-cache-directory'>The UDC local cache directory</a></h6>
@@ -36,7 +38,7 @@ The genome browser requires only Apache and MySQL and uses these directories:
 <ul>
 <li>static html files: we typically keep them under /usr/local/apache/htdocs and
 configure Apache to load them from there, to avoid conflicts with the
-Linux distribution’s default location /var/www/html</li>
+distribution of the Linux default location /var/www/html</li>
 <li>MySQL databases: most of them are read-only, except the <code>hgcentral</code> database
 which is read-write. Most linux distributions keep these under /var/lib/mysql</li>
 <li>static genome data files in /gbdb/</li>
@@ -61,9 +63,9 @@ When a web browser requests a Genome Browser page, typically /cgi-bin/hgTracks,
 Apache executes this CGI program. The programs then read information about how to
 connect to MySQL using the file hg.conf, connects to MySQL, reads the
 installed genome assemblies and the current user session from the MySQL database
-hgcentral. For each genome assembly, there is a separate MySQL database (e.g. 
-hg38). Some types of data (e.g. raw genome sequences) are kept as indexed
-binary files outside of MySQL, they are located in /gbdb, e.g. /gbdb/hg38. The
+hgcentral. For each genome assembly, there is a separate MySQL database (e.g.
+hg38). Some types of data (e.g. raw genome sequences) are kept as indexed
+binary files outside of MySQL, they are located in /gbdb, e.g. /gbdb/hg38. The
 location of the /gbdb directory can be changed with a setting in hg.conf. Some
 types of data are not specific for a genome, these are kept in the MySQL
 databases hgFixed, proteome and visiGene.
@@ -118,12 +120,12 @@ Optional:
 </p>
 
 <ul>
-<li>&lsquo;ghostscript&rsquo; ps to pdf converter - <a href='http://ghostscript.com' title=''>http://ghostscript.com</a></li>
-<li>&lsquo;git&rsquo; source code management: <a href='http://git-scm.com/downloads' title=''>http://git-scm.com/downloads</a></li>
-<li>&lsquo;gmt&rsquo; map plotting tools <a href='http://www.soest.hawaii.edu/gmt/' title=''>http://www.soest.hawaii.edu/gmt/</a></li>
-<li>&lsquo;pstack&rsquo; for stack traces</li>
-<li>&lsquo;R&rsquo; for the GTex track</li>
-<li>&lsquo;python-mysqldb&rsquo; for the gene interactions track (python2)</li>
+<li>&#39;ghostscript&#39; ps to pdf converter - <a href='http://ghostscript.com' title=''>http://ghostscript.com</a></li>
+<li>&#39;git&#39; source code management: <a href='http://git-scm.com/downloads' title=''>http://git-scm.com/downloads</a></li>
+<li>&#39;gmt&#39; map plotting tools <a href='http://www.soest.hawaii.edu/gmt/' title=''>http://www.soest.hawaii.edu/gmt/</a></li>
+<li>&#39;pstack&#39; for stack traces</li>
+<li>&#39;R&#39; for the GTex track</li>
+<li>&#39;python-mysqldb&#39; for the gene interactions track (python2)</li>
 </ul>
 
 <p>
@@ -191,6 +193,74 @@ but can be changed to get the size for a particular assembly:
 
 <pre><code>rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/mysql/ | egrep &quot;Number of files:|total size is&quot;</code></pre>
 
+<a name='local-git-repository'></a>
+<h2>Local Git repository</h2>
+
+<p>
+Use the following procedures to create your own personal copy of the kent source
+tree where you can have your own edits that are not part of the development at
+UCSC. This is useful for mirror sites that have their own customizations in
+the source tree for local circumstances.
+</p>
+
+<p>
+Install Git software version 1.6.2.2 or later. See the Git Community Handbook
+installation (<a href='https://git-scm.com/book/en/v2/Getting-Started-Installing-Git' title=''>https://git-scm.com/book/en/v2/Getting-Started-Installing-Git</a>) and setup
+(&lt;href=&#39;https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup&gt;) instructions, as well
+as our Installing Git (<a href='http://genomewiki.ucsc.edu/index.php/Installing_git' title=''>http://genomewiki.ucsc.edu/index.php/Installing_git</a>)
+Genomewiki page.
+</p>
+
+<p>
+Start an initial Git local repository:
+</p>
+
+<pre><code>git clone git://genome-source.soe.ucsc.edu/kent.git</code></pre>
+
+<p>
+or, if a firewall prevents git daemon port 9418, use:
+</p>
+
+<pre><code>git clone http://genome-source.soe.ucsc.edu/kent.git</code></pre>
+
+<p>
+The kent source tree will be imported to the current working directory in a
+directory named ./kent/.
+</p>
+
+<p>
+Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
+the browser. To create a beta tracking branch:
+</p>
+
+<pre><code>cd kent
+git checkout -t -b beta origin/beta</code></pre>
+
+<p>
+The -b creates a local branch with name &quot;beta&quot;, and checks it out.
+The -t makes it a tracking branch, so that &#39;git pull&#39; brings in updates from
+origin/beta, the &quot;real&quot; beta branch in our public central read-only repository.
+</p>
+
+<p>
+To get the latest UCSC release, from anywhere within the kent source tree:
+</p>
+
+<pre><code>git pull</code></pre>
+
+<p>
+Updates: UCSC generally updates the origin/beta branch every three weeks. If you are
+updating database tables for a mirror site, we recommend that you update the
+source at the same time, as source code is sometimes modified to include
+operations on new columns that have been added to database tables.
+</p>
+
+<p>
+For instructions on keeping local tracks separate from UCSC Genome Browser
+tracks created at UCSC and mirrored from there, see the section &quot;Adding tracks
+to the browser&quot; below.
+</p>
+
 <a name='installing-the-ucsc-genome-browser'></a>
 <h2>Installing the UCSC Genome browser</h2>
 
@@ -200,12 +270,14 @@ machine image that can be converted for VirtualBox, VMWare, Hyper-V and other
 popular environments. We also offer Genome-Browser-in-the-Cloud (GBIC) an
 shell script that installs a genome browser in most main Linux distributions
 (Most Debian and Redhat-based ones, like Ubuntu and CentOS).
-See https://hgwdev-max.gi.ucsc.edu/goldenPath/help/mirror.html
+See https://genome.ucsc.edu/goldenPath/help/mirror.html
 </p>
 
 <p>
 Scripts to perform all of the functions below can be found in
-the directory here: src/products/scripts/
+the directory https://github.com/ucscGenomeBrowser/kent/tree/master/src/product/scripts.
+In a git clone of the kent repository, the scripts
+are located in src/product/scripts.
 </p>
 
 <p>
@@ -218,7 +290,7 @@ Apache web server is installed and working, http://localhost/
 provides the Apache default home page from your machine
 NOTE: The browser static html web pages require the Apache
 XBitHack option to be enabled to allow SSI <code>html</code> statements to function.
-Add &lsquo;Options +Includes&rsquo; for your html directory, your
+Add &#39;Options +Includes&#39; for your html directory, your
 httpd.conf file entry looks like:
 </p>
 
@@ -274,7 +346,7 @@ export WEBROOT</code></pre>
 <p>
 The browser WEB pages and cgi-bin binaries expect these
 two directories to be next to each other in ${WEBROOT}
-since referrals in html are often: &ldquo;../cgi-bin&rdquo;
+since referrals in html are often: &quot;../cgi-bin&quot;
 </p>
 
 <p>
@@ -312,7 +384,7 @@ chmod 755 ${WEBROOT}/cgi-bin</code></pre>
 
 <p>
 (this chmod 755 will prevent suexec failures that are indicated
-by &ldquo;Premature end of script headers&rdquo; errors in the Apache
+by &quot;Premature end of script headers&quot; errors in the Apache
 error_log. Your cgi binaries should also be 755 permissions.)
 </p>
 
@@ -322,7 +394,7 @@ ln -s ${WEBROOT}/trash  ${WEBROOT}/html/trash</code></pre>
 
 <p>
 The browser creates .png (and other) files in the trash directory.
-The &lsquo;chmod 777&rsquo; allows the Apache WEB server to write into
+The &#39;chmod 777&#39; allows the Apache WEB server to write into
 that directory.
 </p>
 
@@ -357,7 +429,7 @@ mysql -u browser -pgenome hgcentral &lt; hgcentral.sql</code></pre>
 Please note, it is possible to create alternative hgcentral
 databases. For example, for test purposes. In this
 case use a unique name for the hgcentral database, such
-as &ldquo;hgcentraltest&rdquo;, and it can be specified in the hg.conf
+as &quot;hgcentraltest&quot;, and it can be specified in the hg.conf
 file as mentioned in the next step. To create a second copy
 of the hgcentral database:
 </p>
@@ -393,32 +465,34 @@ their home directory with mode 600 and named: ~/.hg.conf
 <p>
 These copies may have different db.user specification
 to allow developers write access to the database.
-See also: README.mysql.setup
 </p></li>
 <li><p>
-Load databases of interest. See also: README.QuickStart
-</p></li>
-</ol>
+Load databases of interest. See also:
+</p>
 
 <pre><code>src/product/scripts/activeDbList.sh
 src/product/scripts/minimal.db.list.txt
-src/product/scripts/loadDb.sh
+src/product/scripts/loadDb.sh</code></pre>
 
+<p>
 And discussion in scripts/README about whether you can use directly
 the MySQL binary database files, or if you need to download goldenPath
 database text dumps and load them into the database.
+</p>
 
+<p>
 An alternative to loading the database tables from text files,
 is to directly rsync the MySQL tables themselves and place them
-in your MySQL /var/ directory.  These tables are much larger
+in your MySQL /var/ directory. These tables are much larger
 than the text files due to the sizes of indexes created during a
 table load, but it can save a lot of time since the data loading
-step is quite compute intensive.  A typical rsync command for an
+step is quite compute intensive. A typical rsync command for an
 entire database (e.g. ce4) would be something like:
+</p>
 
-    rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/</code></pre>
-
-<ol>
+<p>
+rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/
+</p></li>
 <li><p>
 Download extra databases to work with a full genome assembly
 such as human/hg38: hgFixed go140213 proteins140122 sp140122
@@ -426,19 +500,15 @@ Construct symlinks in your MySQL data directory to use database
 names: go proteome uniProt for these database directories:
 </p>
 
-<p>
-$ ls -og proteome go uniProt
-lrwxrwxrwx 1 8 Feb 26 11:39 go -&gt; go140213
+<pre><code>$ ls -og proteome go uniProt
+lrwxrwxrwx 1  8 Feb 26 11:39 go -&gt; go140213
 lrwxrwxrwx 1 14 Mar 27 12:01 proteome -&gt; proteins140122
-lrwxrwxrwx 1 8 Mar 27 12:01 uniProt -&gt; sp140122
-</p>
+lrwxrwxrwx 1  8 Mar 27 12:01 uniProt -&gt; sp140122
 
-<p>
 $ ls -ld go140213 proteins140122 sp140122
-drwx—— 2 mysql mysql 4096 Feb 26 10:57 go140213
-drwx—— 2 mysql mysql 4096 Aug 19 08:08 proteins140122
-drwx—— 2 mysql mysql 4096 Mar 26 13:01 sp140122
-</p>
+drwx------ 2 mysql mysql 4096 Feb 26 10:57 go140213
+drwx------ 2 mysql mysql 4096 Aug 19 08:08 proteins140122
+drwx------ 2 mysql mysql 4096 Mar 26 13:01 sp140122</code></pre>
 
 <p>
 These file names are data stamped YYMMDD to indicate changes
@@ -454,43 +524,46 @@ scripts/fetchMinimalGbdb.sh
 <li><p>
 The browser should now appear at the URL:
 http://localhost/
+</p>
+
+<p>
+Check your Apache error_log file for hints to solving problems.
 </p></li>
-</ol>
+<li><p>
+BLAT server setup: The blatServers table in the database hgcentral needs to
+have a fully qualified host name specified in the &#39;host&#39; column.
+</p>
 
-<pre><code>Check your Apache error_log file for hints to solving problems.</code></pre>
+<p>
+Educational and non-profit institutions are allowed to use
+blat free of charge. Commercial installations of the browser
+require a license for blat. See also: <a href='http://kentinformatics.com/index.html' title=''>http://kentinformatics.com/index.html</a>
+and: <a href='http://genome.ucsc.edu/license/' title=''>http://genome.ucsc.edu/license/</a>
+In the source tree: src/gfServer/README.blat
+</p></li>
+<li><p>
+Useful links:
+</p>
 
-<ol>
-<li>BLAT server setup: The blatServers table in the database hgcentral needs to
-have a fully qualified host name specified in the &lsquo;host&rsquo; column.</li>
-</ol>
+<p>
+<a href='http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ' title=''>http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ</a>
+</p>
 
-<pre><code>Educational and non-profit institutions are allowed to use
-blat free of charge.  Commercial installations of the browser
-require a license for blat.  See also: &lt;http://kentinformatics.com/index.html&gt;
-and: &lt;http://genome.ucsc.edu/license/&gt;
-In the source tree: src/gfServer/README.blat</code></pre>
-
-<ol>
-<li>Useful links:</li>
-</ol>
-
-<pre><code>&lt;http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ&gt;
-
+<p>
 There are numerous README files in the source tree on
 a variety of specific subjects, e.g.:
+</p>
 
-    ./src/README
-    ./src/product/README.*
-    ./src/hg/makeDb/trackDB/README
-    ./src/hg/makeDb/doc/make*.txt</code></pre>
-
-<ol>
+<pre><code>./src/README
+./src/product/README.*
+./src/hg/makeDb/trackDB/README
+./src/hg/makeDb/doc/make*.txt</code></pre></li>
 <li><p>
 Apache configuration:
 </p>
 
 <p>
-To lock down your trash directory from scanning via &ldquo;indexes&rdquo;
+To lock down your trash directory from scanning via &quot;indexes&quot;
 enter the following in your httpd.conf:
 </p>
 
@@ -503,7 +576,7 @@ Allow from all
 
 <p>
 The specified directory name is your apache: DocumentRoot/trash
-e.g. /usr/local/apache/htdocs/trash
+e.g. /usr/local/apache/htdocs/trash
 </p></li>
 </ol>
 
@@ -512,7 +585,7 @@ e.g. /usr/local/apache/htdocs/trash
 
 <ol>
 <li><p>
-Enable &ldquo;LOAD DATA LOCAL INFILE&rdquo;:
+Enable &quot;LOAD DATA LOCAL INFILE&quot;:
 </p>
 
 <p>
@@ -557,8 +630,8 @@ genome databases. The browser CGI binaries
 require read-only access to the genome databases.</li>
 <li>A MySQL user that has write permissions to one database.
 The CGI binaries require write permissions to one particular
-database (hgcentral) for maintaining user’s cart information to
-store the user’s browser cookie settings.</li>
+database (hgcentral) for maintaining user&#39;s cart information to
+store the user&#39;s browser cookie settings.</li>
 <li>A MySQL user that has general write permissions to all
 browser and genome databases to be used by developers</li>
 </ol>
@@ -572,7 +645,7 @@ the text file: $WEBROOT/cgi-bin/hg.conf
 Developers of the browser databases obtain their MySQL identities
 from a text file in their home directory: ~/.hg.conf
 Note the initial dot in the name: .hg.conf
-This file in a user’s directory will specify a higher-privileged user
+This file in a user&#39;s directory will specify a higher-privileged user
 to allow read/write access to the MySQL databases.
 This file must be set to mode 600 to provide security of the user
 and password to the database:
@@ -599,7 +672,7 @@ You can execute that script to set up these example users.
 </p>
 
 <p>
-An example full read/write access user: &ldquo;browser&rdquo;, is created with
+An example full read/write access user: &quot;browser&quot;, is created with
 the following procedure.
 </p>
 
@@ -613,13 +686,13 @@ to perform the following:
  $ mysql -u root -p${SQL_PASSWORD} -e &quot;show tables;&quot; mysql</code></pre>
 
 <p>
-Create a MySQL user called &ldquo;browser&rdquo; with password
-&ldquo;genome&rdquo; and give access to selected MySQL commands
+Create a MySQL user called &quot;browser&quot; with password
+&quot;genome&quot; and give access to selected MySQL commands
 for the following list of databases. When you add other
 databases, you will need to add these permissions to your
 databases. This procedure of adding permissions specifically
 for a set list of databases is a more secure method than allowing
-the MySQL &ldquo;browser&rdquo; user to have access to any database.
+the MySQL &quot;browser&quot; user to have access to any database.
 </p>
 
 <p>
@@ -639,8 +712,8 @@ the MySQL &ldquo;browser&rdquo; user to have access to any database.
 The above granted permissions are recommended for browser developers.
 The WEB browser CGI binaries need SELECT, INSERT and CREATE TEMPORARY
 TABLES permissions. For example, you should create a special user for
-the browser genome databases only. In this example, user: &ldquo;readonly&rdquo;
-with password: &ldquo;access&rdquo;
+the browser genome databases only. In this example, user: &quot;readonly&quot;
+with password: &quot;access&quot;
 </p>
 
 <pre><code> for DB in cb1 hgcentral hgFixed hg38 proteins140122 sp140122 go140213 uniProt go
@@ -664,8 +737,8 @@ Create a database to hold temporary tables:
 
 <p>
 A third MySQL user should be created with read-write access to only
-the hgcentral database. For example, a user: &ldquo;readwrite&rdquo;
-with password: &ldquo;update&rdquo;
+the hgcentral database. For example, a user: &quot;readwrite&quot;
+with password: &quot;update&quot;
 </p>
 
 <pre><code> for DB in hgcentral
@@ -679,20 +752,21 @@ with password: &ldquo;update&rdquo;
 The cgi-bin binaries obtain their MySQL identities from
 the hg.conf file in the cgi-bin directory. The file in this
 directory: src/product/ex.hg.conf
-demonstrates the use of the &ldquo;readonly&rdquo; user for genome database
-access and the &ldquo;readwrite&rdquo; user for hgcentral database access.
+demonstrates the use of the &quot;readonly&quot; user for genome database
+access and the &quot;readwrite&quot; user for hgcentral database access.
 </p></li>
-
 <li><p>
-The hgsql command: Developers can access the browser databases via the &lsquo;hgsql&rsquo;
+The hgsql command: Developers can access the browser databases via the &#39;hgsql&#39;
 command which can be built in the source-tree at:
 </p>
 
-<pre>kent/src/hg/hgsql/</pre>
+<p>
+kent/src/hg/hgsql/
+</p>
 
 <p>
-This &quot;hgsql&quot; command provides a convenient front-end to
-the standard &lsquo;mysql&rsquo; command by reading the user&rsquo;s ~/.hg.conf
+This &#39;hgsql&#39; command provides a convenient front-end to
+the standard &#39;mysql&#39; command by reading the user&#39;s ~/.hg.conf
 file to provide access to the browser databases with the
 appropriate identity. Each user creates a ~/.hg.conf file
 (same format as the above mentioned cgi-bin/hg.conf file)
@@ -707,7 +781,7 @@ databases.
 </p>
 
 <p>
-The above example hg.conf could be used as a user’s ~/.hg.conf
+The above example hg.conf could be used as a user&#39;s ~/.hg.conf
 file with the change of db.user, db.password, central.user,
 and central.password to be the fully permitted read-write user:
 </p>
@@ -831,7 +905,7 @@ The cipher setting is a colon-separated list of SSL ciphers that are supported.
 
 <p>
 The security files like certs etc. that are specified in the above settings
-must be readable by the unix account that mysqld runs under, default is &ldquo;mysql&rdquo;.
+must be readable by the unix account that mysqld runs under, default is &quot;mysql&quot;.
 </p>
 
 <p>
@@ -841,7 +915,7 @@ SELinux or apparmor may block access to certain locations.
 
 <p>
 yaSSL, which is still often used with the MySQL Community Edition,
-expects keys to be in the PKCS #1 format and doesn’t support the PKCS #8 format used by OpenSSL 1.0 and newer.
+expects keys to be in the PKCS #1 format and doesn&#39;t support the PKCS #8 format used by OpenSSL 1.0 and newer.
 You can convert the key to the old format using openssl rsa:
 openssl rsa -in key_in_pkcs1_or_pkcs8.pem -out key_in_pkcs1.pem
 </p>
@@ -850,7 +924,7 @@ openssl rsa -in key_in_pkcs1_or_pkcs8.pem -out key_in_pkcs1.pem
 yaSSL requires that all components of the CA certificate tree be contained within a single CA certificate file
 and that each certificate in the file has a unique SubjectName value.
 To work around this limitation, concatenate the individual certificate files comprising the certificate tree
-into a new file and specify that file as the value of the –ssl-ca option.
+into a new file and specify that file as the value of the --ssl-ca option.
 For example,
 </p>
 
@@ -876,12 +950,12 @@ These are the SSL settings which can be placed into your hg.conf for CGIs or .hg
  db.cipher=DHE-RSA-AES256-SHA:AES128-SHA</code></pre>
 
 <p>
-The key and certificate for &ldquo;someuser&rdquo; above are signed by a ca.
+The key and certificate for &quot;someuser&quot; above are signed by a ca.
 </p>
 
 <p>
 The verifyServerCert setting if it exists tells the client
-to verify that the CN field in the server’s cert matches the
+to verify that the CN field in the server&#39;s cert matches the
 hostname to which it is connecting. This prevents Man-In-the-Middle attacks.
 </p>
 
@@ -890,7 +964,7 @@ The caPath and crlPath options only work with OpenSSL.
 </p>
 
 <p>
-The example shows the most common use for the profile &ldquo;db&rdquo;.
+The example shows the most common use for the profile &quot;db&quot;.
 But the SSL settings work with any profile in the hg.conf file.
 </p>
 
@@ -904,14 +978,14 @@ Configuring SSL requirements for mysql user accounts:
 </p>
 
 <p>
-You can tell mysql to require SSL for a user’s account like this:
+You can tell mysql to require SSL for a user&#39;s account like this:
 </p>
 
 <pre><code> GRANT ALL PRIVILEGES ON *.* TO &#39;someuser&#39;@&#39;%&#39;
    REQUIRE SSL;</code></pre>
 
 <p>
-You can tell mysql to use SSL for a user’s account and to
+You can tell mysql to use SSL for a user&#39;s account and to
 further require the client to use their key and x509 certificate to connect by saying:
 </p>
 
@@ -938,9 +1012,77 @@ from the CN of the user and server certs.
 </p>
 
 <p>
-Further MySQL SSL documentation is available from 
-<a href='https://dev.mysql.com/doc/refman/5.6/en/creating-ssl-files-using-openssl.html'>
-https://dev.mysql.com/doc/refman/5.6/en/creating-ssl-files-using-openssl.html</a>
+Further MySQL SSL documentation is available from
+<a href='https://dev.mysql.com/doc/refman/5.6/en/creating-ssl-files-using-openssl.html' title=''>https://dev.mysql.com/doc/refman/5.6/en/creating-ssl-files-using-openssl.html</a>
+</p></li>
+</ol>
+
+<a name='local-git-repository'></a>
+<h2>Local Git repository</h2>
+
+<p>
+Use the following procedures to create your own personal copy of the kent source
+tree where you can have your own edits that are not part of the development at
+UCSC. This is useful for mirror sites that have their own customizations in
+the source tree for local circumstances.
+</p>
+
+<p>
+Install Git software version 1.6.2.2 or later. See the Git Community Handbook
+installation (<a href='https://git-scm.com/book/en/v2/Getting-Started-Installing-Git' title=''>https://git-scm.com/book/en/v2/Getting-Started-Installing-Git</a>) and setup
+(&lt;href=&#39;https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup&gt;) instructions, as well
+as our Installing Git (<a href='http://genomewiki.ucsc.edu/index.php/Installing_git' title=''>http://genomewiki.ucsc.edu/index.php/Installing_git</a>)
+Genomewiki page.
+</p>
+
+<p>
+Start an initial Git local repository:
+</p>
+
+<pre><code>git clone git://genome-source.soe.ucsc.edu/kent.git</code></pre>
+
+<p>
+or, if a firewall prevents git daemon port 9418, use:
+</p>
+
+<pre><code>git clone http://genome-source.soe.ucsc.edu/kent.git</code></pre>
+
+<p>
+The kent source tree will be imported to the current working directory in a
+directory named ./kent/.
+</p>
+
+<p>
+Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
+the browser. To create a beta tracking branch:
+</p>
+
+<pre><code>cd kent
+git checkout -t -b beta origin/beta</code></pre>
+
+<p>
+The -b creates a local branch with name &quot;beta&quot;, and checks it out.
+The -t makes it a tracking branch, so that &#39;git pull&#39; brings in updates from
+origin/beta, the &quot;real&quot; beta branch in our public central read-only repository.
+</p>
+
+<p>
+To get the latest UCSC release, from anywhere within the kent source tree:
+</p>
+
+<pre><code>git pull</code></pre>
+
+<p>
+Updates: UCSC generally updates the origin/beta branch every three weeks. If you are
+updating database tables for a mirror site, we recommend that you update the
+source at the same time, as source code is sometimes modified to include
+operations on new columns that have been added to database tables.
+</p>
+
+<p>
+See also: the README files in the source tree directory src/product/README.*.
+For instructions on keeping local tracks separate from UCSC Genome Browser
+tracks, see src/product/README.trackDb.
 </p>
 
 <a name='adding-a-custom-genome-to-the-browser'></a>
@@ -1065,7 +1207,7 @@ undocumented way to solve your problem.
 
 <p>
 If you need to change the code, make sure to isolate your changes into a
-single function, if possible. Using git, merge your branch into our &ldquo;beta&rdquo;
+single function, if possible. Using git, merge your branch into our &quot;beta&quot;
 branch, ideally for every release, then recompile. If your changes could be
 useful for someone else, and you are getting tired of updating them to keep up
 with our changing code base, consider submitting them as a pull request, so we
@@ -1101,7 +1243,7 @@ Summary configuration
 <ul>
 <li>database loader binaries hgLoadBed, hgLoadWiggle and wigEncode are
 installed in /cgi-bin/loader/ - these are installed via the normal
-&lsquo;make cgi&rsquo; in the source tree kent/src/hg/ directory.</li>
+&#39;make cgi&#39; in the source tree kent/src/hg/ directory.</li>
 <li>an empty customTrash database has been created on the MySQL host -
 create this manually once, the MySQL host name is a configuration
 item, the database name customTrash is not a configuration item</li>
@@ -1127,12 +1269,10 @@ host that usually serves up the assembly databases or the hgcentral
 database. It is not required that the custom track database be on a
 separate MySQL server. The specification of the host machine is placed
 in the /cgi-bin/hg.conf file, for example a host machine called
-&ldquo;ctdbhost&rdquo;:
+&quot;ctdbhost&quot;:
 </p>
 
-<p>
-customTracks.host=ctdbHost
-</p>
+<pre><code> customTracks.host=ctdbHost</code></pre>
 
 <p>
 The database name used on this host is fixed at customTrash which is a
@@ -1186,10 +1326,10 @@ Database loaders:
 <p>
 The database loaders used to load custom tracks are the standard loader
 commands found in the source tree, hgLoadBed, hgLoadWiggle and
-wigEncode. They are installed into /cgi-bin/loader/ with a &lsquo;make cgi&rsquo;
+wigEncode. They are installed into /cgi-bin/loader/ with a &#39;make cgi&#39;
 from the source tree directory kent/src/hg/ These loaders are used by
 the cgi binaries hgCustom, hgTracks, and hgTables to load custom tracks
-into the database. They are operated in an exec’d pipeline fashion, the
+into the database. They are operated in an exec&#39;d pipeline fashion, the
 code details can be see in src/hg/lib/customFactory.c
 </p></li>
 <li><p>
@@ -1319,7 +1459,7 @@ files, at the time of adding the configuration items to
 versions upon their next use by the user. Therefore, to enable this
 function on the round-robin WEB servers, we will need to do the update
 to /cgi-bin/hg.conf in as much a simultaneous manner as possible.
-Perhaps something like a shell script to do eight background rsync’s all
+Perhaps something like a shell script to do eight background rsync&#39;s all
 at the same time.
 </p></li>
 <li><p>
@@ -1390,7 +1530,7 @@ for example hgTracks:
 <pre><code>kent/src/hg/hgTracks</code></pre>
 
 <p>
-In this directory, run a &lsquo;make compile&rsquo; to produce a binary that
+In this directory, run a &#39;make compile&#39; to produce a binary that
 is left in this directory. This binary can be run from the command
 line:
 </p>
@@ -1416,10 +1556,10 @@ that a CGI binary would normally see.
 <p>
 To prepare the binaries for operation under a debugger, go to
 the src/inc directory and edit the common.mk configuration file.
-Change &ldquo;COPT=-O&rdquo; to read: &ldquo;COPT=-g&rdquo;
-GNU gcc will allow &ldquo;-O&rdquo; with &ldquo;-g&rdquo;, and some bugs will only exhibit
+Change &quot;COPT=-O&quot; to read: &quot;COPT=-g&quot;
+GNU gcc will allow &quot;-O&quot; with &quot;-g&quot;, and some bugs will only exhibit
 themselves with -O on. However the optimizations with -O can
-sometimes confuse the debugger’s sense of location due to
+sometimes confuse the debugger&#39;s sense of location due to
 optimization rearrangement of code.
 Also eliminate the -Wuninitialized option from the HG_WARN definition
 to avoid constant warnings about that being incompatible with -g.
@@ -1437,7 +1577,7 @@ make compile</code></pre>
 
 <p>
 The hgTracks binary will now have all symbol information in it and
-it can be operated under a debugger such as ddd (or gdb, etc…).
+it can be operated under a debugger such as ddd (or gdb, etc...).
 </p>
 
 <p>
@@ -1451,7 +1591,7 @@ http://<code>html</code>/cgi-bin/cartDump
 <p>
 This will display all environment variables in effect at the time
 of the crash. Most of the track display options that are marked
-as &ldquo;hide&rdquo; can be ignored. That is their default setting already.
+as &quot;hide&quot; can be ignored. That is their default setting already.
 The important ones are the db, position, and specific options for
 the track under consideration. The command line can be formatted
 just as if it was a URL string. For example:
@@ -1496,18 +1636,12 @@ Not all forms pay attention to that input, but when they do it
 generally looks like this:
 </p>
 
-hPrintf(&quot;
-
-<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>
-
-<p>
-<code>tex</code>&ldquo;,
-getScriptName(), cartUsualString(cart,&rdquo;formMethod&ldquo;,&rdquo;POST&quot;));
-</p>
+<pre><code>hPrintf(&quot;&lt;FORM ACTION=\&quot;%s\&quot; NAME=\&quot;mainForm\&quot; METHOD=%s&gt;\n&quot;,
+getScriptName(), cartUsualString(cart, &quot;formMethod&quot;, &quot;POST&quot;));</code></pre>
 
 <p>
 If you add &amp;formMethod=GET and a subsequently fetched form is still
-posting, you might need to alter the &ldquo;&lt;FORM…&rdquo; statement to use the
+posting, you might need to alter the &quot;&lt;FORM...&quot; statement to use the
 cartUsualString.
 </p>
 
@@ -1518,77 +1652,7 @@ FireFox, so after debugging hgTables, you will probably want to add
 </p>
 
 <p>
-One thing that does not work with GET is &ldquo;upload file&rdquo; inputs.
-</p>
-
-<a name='local-git-repository'></a>
-<h2>Local Git repository</h2>
-
-<p>
-Use the following procedures to create your own personal copy of the kent source
-tree where you can have your own edits that are not part of the development at
-UCSC. This is useful for mirror sites that have their own customizations in
-the source tree for local circumstances.
-</p>
-
-<p>
-Install Git software version 1.6.2.2 or later. See the Git Community Handbook
-installation (<a href='https://git-scm.com/book/en/v2/Getting-Started-Installing-Git'>
-https://git-scm.com/book/en/v2/Getting-Started-Installing-Git</a>) and setup
-(<a href='https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup'>
-https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup</a>) 
-instructions, as well as our Installing git (<a href='http://genomewiki.ucsc.edu/index.php/Installing_git' title=''>http://genomewiki.ucsc.edu/index.php/Installing_git</a>)
-Genomewiki page.
-</p>
-
-<p>
-Start an initial Git local repository:
-</p>
-
-<pre><code>git clone git://genome-source.soe.ucsc.edu/kent.git</code></pre>
-
-<p>
-or, if a firewall prevents git daemon port 9418, use:
-</p>
-
-<pre><code>git clone http://genome-source.soe.ucsc.edu/kent.git</code></pre>
-
-<p>
-The kent source tree will be imported to the current working directory in a
-directory named ./kent/.
-</p>
-
-<p>
-Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
-the browser. To create a beta tracking branch:
-</p>
-
-<pre><code>cd kent
-git checkout -t -b beta origin/beta</code></pre>
-
-<p>
-The -b creates a local branch with name &ldquo;beta&rdquo;, and checks it out.
-The -t makes it a tracking branch, so that &lsquo;git pull&rsquo; brings in updates from
-origin/beta, the &ldquo;real&rdquo; beta branch in our public central read-only repository.
-</p>
-
-<p>
-To get the latest UCSC release, from anywhere within the kent source tree:
-</p>
-
-<pre><code>git pull</code></pre>
-
-<p>
-Updates: UCSC generally updates the origin/beta branch every three weeks. If you are
-updating database tables for a mirror site, we recommend that you update the
-source at the same time, as source code is sometimes modified to include
-operations on new columns that have been added to database tables.
-</p>
-
-<p>
-See also: the README files in the source tree directory src/product/README.*.
-For instructions on keeping local tracks separate from UCSC Genome Browser
-tracks, see src/product/README.trackDb.
+One thing that does not work with GET is &quot;upload file&quot; inputs.
 </p>
 
 <a name='proxy-support'></a>
@@ -1603,28 +1667,24 @@ bigWig or bigBed data via custom track bigDataUrl.
 </p>
 
 <p>
-One must add the setting &ldquo;httpProxy&rdquo;, &ldquo;httpsProxy&rdquo;, &ldquo;ftpProxy&rdquo; to hg.conf
+One must add the setting &quot;httpProxy&quot;, &quot;httpsProxy&quot;, &quot;ftpProxy&quot; to hg.conf
 </p>
 
-<p>
-httpProxy=http://someProxyServer:3128
+<pre><code>httpProxy=http://someProxyServer:3128
 httpsProxy=http://someProxyServer:3128
-ftpProxy=ftp://127.0.0.1:2121
-</p>
+ftpProxy=ftp://127.0.0.1:2121</code></pre>
 
 <p>
 If the proxy server requires BASIC authentication
 </p>
 
-<p>
-httpProxy=http://user:password@someProxyServer:3128
-httpsProxy=http://user:password@someProxyServer:3128
-</p>
+<pre><code>httpProxy=http://user:password@someProxyServer:3128
+httpsProxy=http://user:password@someProxyServer:3128</code></pre>
 
 <p>
 where user and password may need URL-encoding
 if they contain special characters such as
-&ldquo;:&rdquo; and &ldquo;@&rdquo;.
+&quot;:&quot; and &quot;@&quot;.
 </p>
 
 <p>
@@ -1632,9 +1692,7 @@ If you wish to exclude domains from proxying,
 create a comma-separated list of domain-suffixes.<br/>If a domain ends with an entry from this list, the proxy will be skipped.
 </p>
 
-<p>
-noProxy=ucsc.edu,mit.edu
-</p>
+<pre><code>noProxy=ucsc.edu,mit.edu</code></pre>
 
 <p>
 (The httpProxy and httpsProxy URLs should use http protocol, not https.
@@ -1682,8 +1740,8 @@ Built from track specifications in your trackDb.ra file.
 Please note the description of trackDb.ra entries in the
 source tree: src/hg/makeDb/trackDb/README
 The correspondence between the database table and the trackDb.ra
-definition is in the name used on the &lsquo;track&rsquo; line in the
-trackDb.ra file. Your database table name is used on the &lsquo;track&rsquo;
+definition is in the name used on the &#39;track&#39; line in the
+trackDb.ra file. Your database table name is used on the &#39;track&#39;
 definition line.</li>
 </ol>
 
@@ -1727,7 +1785,7 @@ hundreds of utilities, 345 at last count, that are not needed
 for ordinary browser development. In most cases a developer will
 need only a couple of the loaders and utilities. Since the libraries
 were built for the CGI binaries, to build any utility or
-loader, simply go into its directory and run a &lsquo;make&rsquo;
+loader, simply go into its directory and run a &#39;make&#39;
 </p>
 
 <p>
@@ -1749,7 +1807,7 @@ src/hg/makeDb/hgFindSpec/
 src/hg/makeDb/hgLoadBed/</code></pre>
 
 <p>
-And run a &lsquo;make&rsquo; in each one. The resulting binary is placed
+And run a &#39;make&#39; in each one. The resulting binary is placed
 in: \(HOME/bin/\)MACHTYPE
 This binary directory should be in your PATH, or make this directory
 be a symlink to some binary directory that is in your PATH
@@ -1795,10 +1853,10 @@ This loads your local specific table trackDb_localTracks in the database.
 This name trackDb_localTracks is not special, just different than
 the ordinary trackDb table. It should have some meaning to anyone
 in your environment and not be the same name as any UCSC database
-table. The two &lsquo;.&rsquo; arguments in the command above refer
+table. The two &#39;.&#39; arguments in the command above refer
 to directory names. Since you have no hierarchy of levels in this
 single directory, unlike in the source tree trackDb hierarchy, the
-&lsquo;.&rsquo; arguments refer to the current directory.
+&#39;.&#39; arguments refer to the current directory.
 </p>
 
 <p>
@@ -1829,7 +1887,7 @@ Older instructions about building the source tree remain valid:
 
 <p>
 If you really do want to build all the utilities and all database
-loaders, perform the following &lsquo;make&rsquo; commands in your source tree:
+loaders, perform the following &#39;make&#39; commands in your source tree:
 </p>
 
 <pre><code>cd src
@@ -1843,7 +1901,7 @@ make</code></pre>
 <p>
 This builds everything cleanly, all CGI binaries, all database
 loaders, all utilities. Perform this sequence each time you
-do a &lsquo;git pull&rsquo; on your source tree. The &lsquo;make clean&rsquo; step
+do a &#39;git pull&#39; on your source tree. The &#39;make clean&#39; step
 is especially important since the makefile hierarchy does not
 have built in dependencies and will not rebuild items that
 depend upon each other. The traditional dependency on the
@@ -1900,7 +1958,7 @@ On some systems this directory is called cgi-bin/.
 <p>
 The UCSC Genome Browser is capable of displaying tracks from both the BAM and
 CRAM file formats. While BAM tracks provide all of the required data within
-the file, however, CRAM tracks depend on external &ldquo;reference sequence&rdquo; files
+the file, however, CRAM tracks depend on external &quot;reference sequence&quot; files
 (see http://www.ebi.ac.uk/ena/software/cram-toolkit for more information about
 the CRAM format). A bit of information on how the Browser works with these
 files is included below. For installation instructions, skip to the numbered
@@ -1942,8 +2000,8 @@ Add the hg.conf setting cramRef. The value should be the path (relative
 or absolute) to a directory where CRAM reference sequences are stored.
 </p></li>
 <li><p>
-Inside the cramRef directory create subdirectories called &ldquo;pending&rdquo; and
-&ldquo;error&rdquo;. The apache user must have read/write permissions for the pending/
+Inside the cramRef directory create subdirectories called &quot;pending&quot; and
+&quot;error&quot;. The apache user must have read/write permissions for the pending/
 directory, and at least read permissions for the cramRef/ and error/
 directories.<br/>If you plan to manually load all CRAM reference sequences for your tracks into
 the cramRef directory, track support is now complete. If you prefer to
@@ -1967,55 +2025,59 @@ cramRef/pending/, and cramRef/error/ directories.
 <p>
 The Genome Browser can use a set of hard-coded Type1 fonts for text display
 in hgTracks. The fonts are NOT distributed as part of the Genome Browser files
-but they exist natively on the UNIX systems we use in our production environment. 
+but they exist natively on the UNIX systems we use in our production environment.
 To support FreeType font drawing on your system you may need to install these files if they
-are not already present. On our systems, they exist in one of these three directories:
-<pre>/usr/share/X11/fonts/urw-fonts
+are not already present. On most systems, they exist in one of three directories:
+</p>
+
+<pre><code>/usr/share/X11/fonts/urw-fonts
 /usr/share/fonts/default/Type1
-/usr/share/fonts/type1/gsfonts</pre>
+/usr/share/fonts/type1/gsfonts</code></pre>
 
 <p>
 To turn on the FreeType font rendering you need to add this line to your hg.conf file:
 </p>
 
-<pre>freeType=on</pre>
+<pre><code>freeType=on</code></pre>
 
 <p>
-By default, the Genome Browser looks in the directory 
-<code>/usr/share/fonts/default/Type1</code> for the
-font files. If you have these fonts in a different directory, you need
+By default, the Genome Browser looks in the directory
+</p>
+
+<pre><code>/usr/share/fonts/default/Type1 </code></pre>
+
+<p>
+for the font files it expects to find. If you have these fonts in a different directory, you need
 to add this line to your hg.conf file:
 </p>
 
-<pre>freeTypeDir=Path/To/Fonts</pre>
+<pre><code>freeTypeDir=&#39;&lt;apache accessible directory path with fonts in it&gt;&#39;</code></pre>
 
 <p>
 The names of the font files that the Genome Browser expects and their md5sums are in the following table:
 </p>
 
-<pre>
-5624bc04bbd862287bda3c44b15e90d6 a010013l.pfb
-6883f53d0d140f972480f179bb5e4e3b a010015l.pfb
-db21f79bac990fa7e3de6d4cc6f54020 a010033l.pfb
-c3d0c3af6bc183010204ca923fb98e83 a010035l.pfb
-33265074c9c45c356f90de9cc47259b3 n019003l.pfb
-9d07b8658622c2e0127628c87fdb9661 n019004l.pfb
-df59ecc7bd232d2355786fd644f13baa n019023l.pfb
-9f2d4377d9eea95dfdfa705c83a39464 n019024l.pfb
-8f75382bd2620a20aaeb06ab8c591e8f n019043l.pfb
-28bb40d1700909b2509e2125a1963e2c n019044l.pfb
-adf4d5565bec1170f0a5810c6984ff55 n019063l.pfb
-57e1a49c39a546c2883375df12111816 n019064l.pfb
-84e347c88eff2e77ed40b020b457bafe n021003l.pfb
-8721c1175d907d7d484bdaa91d4533ad n021004l.pfb
-eef0367afaa10b929e528c40c980b941 n021023l.pfb
-7af41ff3536fadcdc27eb9e5cc1c32d3 n021024l.pfb
-db95b702b81c12df1f91d15c8a6c3191 n022003l.pfb
-e97c9af68414fabe157af711b7691df7 n022004l.pfb
-f13fb8e581426a1ffa5fc12b10ad0f34 n022023l.pfb
-f3cd9244150f086434b62d5c5bb559b0 n022024l.pfb
-30aef717b7c68a6b6b7760b764fbd01c z003034l.pfb
-</pre>
+<pre><code>5624bc04bbd862287bda3c44b15e90d6  a010013l.pfb
+6883f53d0d140f972480f179bb5e4e3b  a010015l.pfb
+db21f79bac990fa7e3de6d4cc6f54020  a010033l.pfb
+c3d0c3af6bc183010204ca923fb98e83  a010035l.pfb
+33265074c9c45c356f90de9cc47259b3  n019003l.pfb
+9d07b8658622c2e0127628c87fdb9661  n019004l.pfb
+df59ecc7bd232d2355786fd644f13baa  n019023l.pfb
+9f2d4377d9eea95dfdfa705c83a39464  n019024l.pfb
+8f75382bd2620a20aaeb06ab8c591e8f  n019043l.pfb
+28bb40d1700909b2509e2125a1963e2c  n019044l.pfb
+adf4d5565bec1170f0a5810c6984ff55  n019063l.pfb
+57e1a49c39a546c2883375df12111816  n019064l.pfb
+84e347c88eff2e77ed40b020b457bafe  n021003l.pfb
+8721c1175d907d7d484bdaa91d4533ad  n021004l.pfb
+eef0367afaa10b929e528c40c980b941  n021023l.pfb
+7af41ff3536fadcdc27eb9e5cc1c32d3  n021024l.pfb
+db95b702b81c12df1f91d15c8a6c3191  n022003l.pfb
+e97c9af68414fabe157af711b7691df7  n022004l.pfb
+f13fb8e581426a1ffa5fc12b10ad0f34  n022023l.pfb
+f3cd9244150f086434b62d5c5bb559b0  n022024l.pfb
+30aef717b7c68a6b6b7760b764fbd01c  z003034l.pfb</code></pre>
 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
