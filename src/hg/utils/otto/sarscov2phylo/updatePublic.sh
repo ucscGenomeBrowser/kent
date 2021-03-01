@@ -32,8 +32,7 @@ mkdir -p $ncbiDir
 cd $ncbiDir
 $scriptDir/getNcbi.sh >& getNcbi.log
 
-$scriptDir/nextcladeCogUk.sh &
-$scriptDir/nextcladeNcbi.sh
+$scriptDir/nextcladeNcbi.sh &
 $scriptDir/pangolinNcbi.sh
 
 buildDir=$ottoDir/$today
@@ -41,4 +40,4 @@ mkdir -p $buildDir
 cd $buildDir
 $scriptDir/updatePublicTree.sh $prevDate $problematicSitesVcf >& updatePublicTree.log
 
-echo OMG success\!
+cat hgPhyloPlace.description.txt
