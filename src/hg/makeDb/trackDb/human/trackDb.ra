@@ -34,7 +34,7 @@ include trackDb.giab.ra
 
 # CADD scores
 include caddAlpha.ra alpha
-include cadd.ra beta
+include cadd.ra beta,public
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
