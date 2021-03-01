@@ -5309,7 +5309,7 @@ if (withLeftLabels)
             (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 
-        boolean doWiggle = cartOrTdbBoolean(cart, track->tdb, "doWiggle" , FALSE);
+        boolean doWiggle = checkIfWiggling(cart, track);
         if (doWiggle)
             track->drawLeftLabels = wigLeftLabels;
     #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
