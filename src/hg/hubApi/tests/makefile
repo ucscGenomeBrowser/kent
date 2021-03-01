@@ -10,7 +10,7 @@ listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
 	test29 test39 test40 test41 test42 test43 test44 test45 test46 test47 \
-	test48 test49 test50 test51 test52 test53 test54 test55 test56
+	test48 test49 test50 test51 test52 test53 test54 test55 test56 test57
 
 listSchema: schema01 schema02 schema03 schema04 schema05 schema06 schema07 \
 	schema08 schema09 schema10 schema11 schema12
@@ -362,6 +362,14 @@ test55: setOutput
 test56: setOutput
 	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=clonePos;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5;chrom=chr21;start=20000000;end=30000000'\n"
 	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=clonePos -maxItemsOutput=5 -jsonOutputArrays -chrom=chr21 -start=20000000 -end=30000000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/getData/track?genome=ce11;track=mrna;maxItemsOutput=5
+
+# PSL track, no chrom specified, exercise column name tName instead of chrom
+test57: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=mrna;genome=ce11;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=ce11 -track=mrna -maxItemsOutput=5 -jsonOutputArrays | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ###############################################################################
@@ -1047,8 +1055,8 @@ notSup10: setOutput
 #      5 vcfTabix - not supported</li>
 
 redmine23733: setOutput
-	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/track?track=knownGene;genome=hg38;chrom=chr1;end=48000;start=47000'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=knownGene -chrom=chr1 -start=47000 -end=48000 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/track?track=knownGene;genome=hg19;chrom=chr1;end=48000;start=47000'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=knownGene -chrom=chr1 -start=47000 -end=48000 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | grep -v "^#" | sort | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # end coordinate for get sequence past end of chromosome, database genome
@@ -1066,7 +1074,7 @@ redmine24089b: setOutput
 # full chromosome fetch from a NIB based genom
 redmine24666: setOutput
 	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/sequence?genome=ci2;chrom=scaffold_8534'\n"
-	@./jsonConsumer.pl -endpoint="/getData/sequence" -genome=ci2 -chrom=scaffold_8534 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" |  gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -genome=ci2 -chrom=scaffold_8534 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | grep -v "^#" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # full chromosome fetch from a NIB based genom
