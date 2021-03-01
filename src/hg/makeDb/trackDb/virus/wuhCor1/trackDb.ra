@@ -330,7 +330,7 @@ group varRep
 visibility hide
 priority 0.2
 dataVersion /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
+#pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
@@ -618,18 +618,19 @@ include bloom.ra
 
 track spikeMuts
 shortLabel Spike Mutations
-longLabel Spike protein mutations from community annotation (Jan 2021)
+longLabel Spike protein mutations from community annotation (Feb 2021)
+html spikeMuts.Feb21
 type bigBed 9 +
-bigDataUrl /gbdb/wuhCor1/spikeMuts/spikeMuts.bb
+bigDataUrl /gbdb/wuhCor1/spikeMuts/spikeMuts.Feb21.bb
 itemRgb on
 bedNameLabel Mutation
 mouseOver $name $clinicalNotes
 noScoreFilter on
 urls geographyChartsUrl="$$" nextstrainBuildUrl="$$"
 searchIndex name
-searchTrix /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.ix
+searchTrix /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.Feb21.ix
 group varRep
-#pennantIcon New red ../goldenPath/newsarch.html#012921 "Released Jan. 29, 2021"
+pennantIcon Updated red ../goldenPath/newsarch.html "Updated Feb. 23, 2021"
 
 searchTable spikeMuts
 searchType bigBed

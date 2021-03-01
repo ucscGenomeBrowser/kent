@@ -1,0 +1,1449 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the xenTro10
+#	GCF_000004195.4 UCB_Xtro_10.0
+
+#  Can use existing photograph (otherwise find one before starting here)
+
+GCF_000004195.4_UCB_Xtro_10.0
+
+#########################################################################
+#  Initial steps, reuse existing photograph (DONE - 2021-02-22 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/xenTro10
+cd ~/kent/src/hg/makeDb/doc/xenTro10
+
+sed -e 's/rn7/xenTro10/g; s/Rn7/XenTro10/g; s/DONE/TBD/g;' \
+   ../rn7/initialBuild.txt > initialBuild.txt
+
+mkdir -p /hive/data/genomes/xenTro10/refseq
+cd /hive/data/genomes/xenTro10
+
+# reuse existing photo from rn6:
+cp -p ../xenTro9/photoReference.txt .
+
+cat photoReference.txt
+
+photoCreditURL  http://www.unc.edu/
+photoCreditName UNC Chapel Hill, Chris Showell, all rights reserved
+
+## download from NCBI
+cd /hive/data/genomes/xenTro10/refseq
+
+time rsync -L -a -P --stats \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/004/195/GCF_000004195.4_UCB_Xtro_10.0/ ./
+# sent 1,944 bytes  received 2,564,625,305 bytes  58,956,948.25 bytes/sec
+# total size is 2,563,991,656  speedup is 1.00
+
+# real    0m43.151s
+
+# this information is from the top of 
+
+#    xenTro10/refseq/*_assembly_report.txt
+#    (aka: xenTro10/refseq/GCF_000004195.4_UCB_Xtro_10.0_assembly_report.txt
+
+# Assembly name:  UCB_Xtro_10.0
+# Organism name:  Xenopus tropicalis (tropical clawed frog)
+# Infraspecific name:  strain=Nigerian
+# Sex:  female
+# Taxid:          8364
+# BioSample:      SAMN13041969
+# BioProject:     PRJNA577946
+# Submitter:      University of California, Berkeley
+# Date:           2019-11-14
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# WGS project:    AAMC04
+# Assembly method: Supernova v. 1.1.5; Canu v. 1.6-132-gf9284f8; DBG2OLC v. commit 1f7e752; 3D-DNA v. commit 2796c3b; quickmerge v. commit e4ea490
+# Expected final version: yes
+# Genome coverage: 111.5x
+# Sequencing technology: PacBio Sequel; Illumina HiSeq
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000004195.4
+# RefSeq assembly accession: GCF_000004195.4
+# RefSeq assembly and GenBank assemblies identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000004205.4      GCF_000004205.4 Primary Assembly
+##      GCF_000005075.1 non-nuclear
+
+# check assembly size for later reference:
+
+time faSize G*10.0_genomic.fna.gz
+
+# 1451301209 bases (2839231 N's 1448461978 real 855052036 upper
+#	593409942 lower) in 167 sequences in 1 files
+# Total size: mean 8690426.4 sd 36088840.6 min 582 (NW_022279502.1)
+#	max 217471166 (NC_030677.2) median 4995
+# %40.89 masked total, %40.97 masked real
+
+# real    0m20.700s
+
+# Survey types of gaps:
+
+zgrep -v "^#" *gaps.txt.gz | cut -f5 | sort | uniq -c | sed -e 's/^/# /;'
+#     #     684 within_scaffold
+
+# And total size in gaps:
+zgrep -v "^#" *gaps.txt.gz | awk '{print $3-$2+1}' | ave stdin \
+  | sed -e 's/^/# /;'
+# Q1 1000.000000
+# median 1000.000000
+# Q3 1000.000000
+# average 4150.922515
+# min 10.000000
+# max 89993.000000
+# count 684
+# total 2839231.000000
+# standard deviation 10589.035103
+
+     # survey the sequence to see if it has IUPAC characters:
+     time zgrep -v "^>" G*10.0_genomic.fna.gz \
+        | perl -ne '{print join("\n",split(//))}' \
+           | sed -e '/^$/d' | sort | uniq -c | sort -rn | sed -e 's/^/# /;'
+# 253122809 A
+# 252918830 T
+# 176440721 a
+# 176092850 t
+# 174558871 C
+# 174451526 G
+# 120576351 c
+# 120300020 g
+# 2839231 N
+
+# real    16m23.469s
+# user    25m5.844s
+# sys     0m47.304s
+
+#############################################################################
+# establish config.ra file (DONE - 2021-02-22 - Hiram)
+    cd /hive/data/genomes/xenTro10
+    ~/kent/src/hg/utils/automation/prepConfig.pl xenTro10 vertebrate xenTro \
+       refseq/*_assembly_report.txt > xenTro10.config.ra
+
+    # fix commonName:
+commonName Tropical clawed frog
+to:
+commonName X. tropicalis
+    # fix orderKey:
+orderKey 20432
+to
+orderKey 24035
+
+    # to see the orderKey correctly:
+    hgsql -e 'select name, organism,orderKey from dbDb order by orderKey ;' hgcentraltest
+#  ...
+# xenTro9 X. tropicalis   24036
+# xenTro7 X. tropicalis   24037
+# xenTro3 X. tropicalis   24038
+# xenTro2 X. tropicalis   24039
+# xenTro1 X. tropicalis   24040
+#  ...
+
+    # compare with previous version to see if it is sane:
+    diff xenTro10.config.ra ../rn6/rn6.config.ra
+
+    # verify it really does look sane
+    cat xenTro10.config.ra
+# config parameters for makeGenomeDb.pl:
+db xenTro10
+clade vertebrate
+genomeCladePriority 70
+scientificName Xenopus tropicalis
+commonName X. tropicalis
+assemblyDate Nov. 2019
+assemblyLabel University of California, Berkeley
+assemblyShortLabel UCB_Xtro_10.0
+orderKey 24035
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_006839.1
+mitoAcc none
+fastaFiles /hive/data/genomes/xenTro10/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/xenTro10/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir xenTro
+photoCreditURL  http://www.unc.edu/
+photoCreditName UNC Chapel Hill, Chris Showell, all rights reserved
+ncbiGenomeId 80
+ncbiAssemblyId 5323661
+ncbiAssemblyName UCB_Xtro_10.0
+ncbiBioProject 577946
+ncbiBioSample SAMN13041969
+genBankAccessionID GCF_000004195.4
+taxId 8364
+
+#############################################################################
+# setup UCSC named files (DONE - 2021-02-22 - Hiram)
+
+    mkdir /hive/data/genomes/xenTro10/ucsc
+    cd /hive/data/genomes/xenTro10/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../refseq/G*10.0_genomic.fna.gz refseq.2bit
+    #  real    0m19.983s
+
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be creating a refseq.2bit file
+    # to be removed later
+
+    # compare gaps with what the gaps.gz file reported:
+    twoBitInfo -nBed refseq.2bit  refseq.gap.bed
+    awk '{print $3-$2}' *.gap.bed | ave stdin | sed -e 's/^/# /;'
+# Q1 1000.000000
+# median 1000.000000
+# Q3 1000.000000
+# average 4150.922515
+# min 10.000000
+# max 89993.000000
+# count 684
+# total 2839231.000000
+# standard deviation 10589.035103
+
+    # this is exactly the same set of gaps found above
+
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+      ../refseq/G*10.0_genomic.fna.gz \
+	../refseq/*_assembly_structure/Primary_Assembly
+NC_030677.2 chr1
+NC_030678.2 chr2
+NC_030679.2 chr3
+NC_030680.2 chr4
+NC_030681.2 chr5
+NC_030682.2 chr6
+NC_030683.2 chr7
+NC_030684.2 chr8
+NC_030685.2 chr9
+NC_030686.2 chr10
+
+real    5m38.430s
+
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+    # processed 156 sequences into chrUn.fa.gz
+    # real    0m1.530s
+
+    # this one has no unlocalized sequence:
+    ls ../refseq/*_assembly_structure/Primary_Assembly
+# assembled_chromosomes  placed_scaffolds      unplaced_scaffolds
+# component_localID2acc  scaffold_localID2acc
+
+#     time ~/kent/src/hg/utils/automation/unlocalizedWithChroms.pl \
+#        ../refseq/*_assembly_structure/Primary_Assembly
+
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../xenTro10.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_006839.1
+
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    cat chrM.agp
+# chrM    1       17610   1       O       NC_006839.1     1       17610   +
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+    gzip chrM.fa
+
+    faSize chrM.fa.gz
+# 17610 bases (0 N's 17610 real 17610 upper 0 lower) in 1 sequences in 1 files
+
+    # verify fasta and AGPs agree
+    time faToTwoBit *.fa.gz test.2bit
+    # real    0m25.818s
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 1451301209 bases (2839231 N's 1448461978 real 1448461978 upper 0 lower)
+#	in 167 sequences in 1 files
+# Total size: mean 8690426.4 sd 36088840.6 min 582 (chrUn_NW_022279502v1)
+#	max 217471166 (chr1) median 4995
+
+    # same numbers as above (except for upper/lower masking)
+# 1451301209 bases (2839231 N's 1448461978 real 855052036 upper
+#	593409942 lower) in 167 sequences in 1 files
+
+    # See if the AGP files define all the gaps:
+    # categories of gaps:
+    awk '$5 == "N"' *.agp | cut -f7 | sort | uniq -c | sed -e 's/^/# /;'
+    # this one defined no gaps at all in the AGP files.  Each AGP
+    # is simply a single scaffold
+
+    ### customize a fake AGP
+    for N in 1 2 3 4 5 6 7 8 9 10
+do
+#  printf "chr%s:\t" "${N}"
+  zgrep -v "^#" chr${N}.agp | cut -d$'\t' -f6 | while read acc
+  do
+      printf "s/chr${N}_/${acc}_/;\n"
+  done
+done > agp.sed
+
+twoBitToFa test.2bit stdout | hgFakeAgp \
+  -minContigGap=1 -minScaffoldGap=100000 -singleContigs stdin stdout \
+    | sed -f agp.sed > fixMe.agp.test
+
+grep chrUn fixMe.agp.test | grep -v -w contig | egrep -v "v1_[0-9]" \
+  | cut -f1 | sort -u > chrUn.single.contig.list
+grep chrUn fixMe.agp.test | egrep "v1_[0-9]" | cut -f1 | sort -u \
+   > chrUn.multi.contig.list
+
+cat chrUn.multi.contig.list | while read chrUn
+do
+  zgrep "$chrUn" chrUn.agp | cut -d$'\t' -f6 | while read acc
+  do
+      printf "s/${chrUn}_/${acc}_/;\n"
+  done
+done > chrUn.agp.sed
+
+grep -v -w chrM fixMe.agp.test | grep -v "chrUn" > ucsc.xenTro10.agp
+grep -F -f chrUn.single.contig.list chrUn.agp >> ucsc.xenTro10.agp
+zgrep -v "^#" chrM.agp >> ucsc.xenTro10.agp
+grep -F -f chrUn.multi.contig.list fixMe.agp.test \
+   | sed -f chrUn.agp.sed >> ucsc.xenTro10.agp
+
+    # And, verify it works:
+    checkAgpAndFa ucsc.xenTro10.agp test.2bit 2>&1 | tail -4
+agpFrag->chromStart: 1686, agpFrag->chromEnd: 3381, dnaOffset: 1686
+FASTA sequence entry
+Valid Fasta file entry
+All AGP and FASTA entries agree - both files are valid
+
+    # and see if all the gaps are defined:
+    awk '$5 == "N"' ucsc.xenTro10.agp | ave -col=6 stdin \
+        | sed -e 's/^/    # /;'
+
+    # Q1 1000.000000
+    # median 1000.000000
+    # Q3 1000.000000
+    # average 4150.922515
+    # min 10.000000
+    # max 89993.000000
+    # count 684
+    # total 2839231.000000
+    # standard deviation 10589.035103
+
+    # these are the same numbers defined in the gaps file
+    zgrep -v "^#" ../refseq/*gaps.txt.gz | ave -col=4 stdin \
+      | sed -e 's/^/    # /;'
+    # Q1 1000.000000
+    # median 1000.000000
+    # Q3 1000.000000
+    # average 4150.922515
+    # min 10.000000
+    # max 89993.000000
+    # count 684
+    # total 2839231.000000
+    # standard deviation 10589.035103
+
+    # name equivalences in the assembly_report file:
+
+    # lookup the assembly GCA_000004195.4 at
+    #  https://www.ncbi.nlm.nih.gov/assembly/GCF_000004195.4/
+    # to find that chrMT is named: Y789013.1
+    # (watch out for the MT sequence has 'na' for genbank name)
+
+    grep -v "^#" \
+     ../refseq/G*10.0_assembly_report.txt \
+      | awk '{printf "%s\t%s\n", $1,$5}' \
+         | sed -e 's/na/Y789013.1/;' | sort > ncbi.assembly.genbank.equivalence
+
+    grep -v "^#" \
+     ../refseq/G*10.0_assembly_report.txt \
+  | awk '{printf "%s\t%s\n", $1,$7}' | sort > ncbi.assembly.refseq.equivalence
+
+    join -t$'\t' ncbi.assembly.genbank.equivalence \
+        ncbi.assembly.refseq.equivalence > ncbi.genbank.refseq.names
+    # verify MT is correct:
+    grep MT ncbi.genbank.refseq.names
+    #	MT      Y789013.1       NC_006839.1
+
+    # no longer need these temporary 2bit files
+    rm test.2bit refseq.2bit refseq.gap.bed
+
+    # And, fixup the agpFiles definition line in ../xenTro10.config.ra from:
+agpFiles /hive/data/genomes/xenTro10/ucsc/*.agp
+    # to
+agpFiles /hive/data/genomes/xenTro10/ucsc/ucsc.xenTro10.agp
+
+#############################################################################
+#  Initial database build (DONE - 2021-02-22 - Hiram)
+
+    # verify sequence and AGP are OK:
+    cd /hive/data/genomes/xenTro10
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp xenTro10.config.ra) > agp.log 2>&1
+    # real    1m22.219s
+    # make sure there isn't an error here:
+    tail agp.log
+    # should say:  *** All done!  (through the 'agp' step)
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db xenTro10.config.ra) > db.log 2>&1
+    # real    8m20.212s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add xenTro10 to trackDb/makefile   refs #24693
+    # fixing up the images reference to xenTro10.jpg
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/xenTro10
+    ln -s `pwd`/xenTro10.unmasked.2bit /gbdb/xenTro10/xenTro10.2bit
+
+#############################################################################
+# verify gap table vs NCBI gap file (DONE - 2021-02-22 - Hiram)
+    mkdir /hive/data/genomes/xenTro10/bed/gap
+    cd /hive/data/genomes/xenTro10/bed/gap
+
+    zgrep -v "^#" ../../refseq/G*_gaps.txt.gz \
+	| awk '{printf "%s\t%d\t%d\t%s_%s\n", $1,$2-1,$3,$5,$6}' \
+	| sort -k1,1 -k2,2n > refseq.gap.bed
+
+    # type survey:
+    cut -f4 *.bed | sort | uniq -c | sed -e 's/^/# /;'
+#     684 within_scaffold_paired-ends
+
+    # how much defined by NCBI:
+    awk '{print $3-$2}' *.bed | ave stdin | grep -w total
+    # total 2839231.000000
+
+    # how much in the gap table:
+    hgsql -e 'select * from gap;' xenTro10 | awk '{print $4-$3}' \
+	| ave stdin | grep -w total
+    # total 2839231.000000
+
+    # gap table type survey:
+    hgsql -N -e 'select type from gap;' xenTro10 \
+        | sort | uniq -c | sed -e 's/^/    #/;'
+    #    684 contig
+
+    # should be same numbers everywhere, investigate anomalies
+
+    # even though this assembly is called a 'scaffold' assembly, it
+    # is more like a new type of assembly.  This is a long-read assembly
+    # and each individual chromosome sequence is one single 'scaffold'
+    # I have marked the gaps as 'contig' gaps since we don't have a different
+    # definition type, but the meaning is correct.  The known gaps in these
+    # scaffolds are not gaps between 'scaffolds', they are gaps that have
+    # known distances due to paired end matching, this is typically what
+    # a 'contig' gap would be.
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2021-02-22 - Hiram)
+    mkdir /hive/data/genomes/xenTro10/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/xenTro10/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/xenTro10/xenTro10.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku xenTro10) > do.log 2>&1
+    # real    2m30.637s
+
+    cat fb.xenTro10.cpgIslandExtUnmasked.txt | sed -e 's/^/    # /;'
+    # 19528674 bases of 1448461978 (1.348%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2021-02-22 - Hiram)
+    mkdir /hive/data/genomes/xenTro10/bed/cytoBand
+    cd /hive/data/genomes/xenTro10/bed/cytoBand
+    makeCytoBandIdeo.csh xenTro10
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2021-02-22 - Hiram)
+    mkdir /hive/data/genomes/xenTro10/bed/idKeys
+    cd /hive/data/genomes/xenTro10/bed/idKeys
+
+    time (doIdKeys.pl \
+        -twoBit=/hive/data/genomes/xenTro10/xenTro10.unmasked.2bit \
+        -buildDir=`pwd` xenTro10) > do.log 2>&1 &
+    # real    0m28.960s
+
+    cat xenTro10.keySignature.txt
+    #  b7d209c6d0405acdf866c641f2b10929
+
+#############################################################################
+# gapOverlap (DONE - 2020-02-22 - Hiram)
+    mkdir /hive/data/genomes/xenTro10/bed/gapOverlap
+    cd /hive/data/genomes/xenTro10/bed/gapOverlap
+    time (doGapOverlap.pl \
+        -twoBit=/hive/data/genomes/xenTro10/xenTro10.unmasked.2bit xenTro10 ) \
+        > do.log 2>&1 &
+XXX - running - Mon Feb 22 13:00:00 PST 2021
+    # real    0m54.302s
+
+    # there were not very many gaps, it only had to do one job and blat
+    # found nothing.
+
+    # this result does not exist:
+    cat fb.xenTro10.gapOverlap.txt
+    # 608 bases of 2728222451 (0.000%) in intersection
+
+    # manually finish off since it quit in the load step
+    doGapOverlap.pl -continue=cleanup \
+        -twoBit=/hive/data/genomes/xenTro10/xenTro10.unmasked.2bit xenTro10
+        
+#############################################################################
+# tandemDups (DONE - 2020-02-22 - Hiram)
+    mkdir /hive/data/genomes/xenTro10/bed/tandemDups
+    cd /hive/data/genomes/xenTro10/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/xenTro10/xenTro10.unmasked.2bit xenTro10) \
+        > do.log 2>&1 &
+XXX - running - Mon Feb 22 13:05:48 PST 2021
+    # real    193m21.761s
+
+    cat fb.xenTro10.tandemDups.txt
+    # 80358205 bases of 2897824427 (2.773%) in intersection
+
+    bigBedInfo xenTro10.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 1,402,773
+#  primaryDataSize: 36,657,311
+#  primaryIndexSize: 119,132
+#  zoomLevels: 9
+#  chromCount: 894
+#  basesCovered: 1,457,658,879
+#  meanDepth (of bases covered): 8.428920
+#  minDepth: 1.000000
+#  maxDepth: 344.000000
+#  std of depth: 18.274027
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2021-02-22 - Hiram)
+    # construct idKeys for the refseq and genbank sequence
+    mkdir /hive/data/genomes/xenTro10/refseq/idKeys
+    cd /hive/data/genomes/xenTro10/refseq/idKeys
+    faToTwoBit ../G*10.0_genomic.fna.gz xenTro10.refseq.2bit
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/xenTro10.refseq.2bit refseqXenTro10)  > do.log 2>&1 &
+    # real    0m26.841s
+
+    sed -e 's/^/    # /;' refseqXenTro10.keySignature.txt
+    # b7d209c6d0405acdf866c641f2b10929
+
+    mkdir /hive/data/genomes/xenTro10/genbank
+    cd /hive/data/genomes/xenTro10/genbank
+
+    faToTwoBit \
+ /hive/data/outside/ncbi/genomes/GCA/000/004/195/GCA_000004195.4_UCB_Xtro_10.0/GCA_000004195.4_UCB_Xtro_10.0_genomic.fna.gz \
+      xenTro10.genbank.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/xenTro10.genbank.2bit genbankXenTro10)  > do.log 2>&1 &
+    # real    0m30.177s
+
+    sed -e 's/^/    # /;' genbankXenTro10.keySignature.txt
+    # 83ef9ef1fd7d99e843bbad2b04c7b485
+
+    mkdir /hive/data/genomes/xenTro10/bed/chromAlias
+    cd /hive/data/genomes/xenTro10/bed/chromAlias
+
+    join -t$'\t' ../idKeys/xenTro10.idKeys.txt \
+        ../../genbank/genbankXenTro10.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+    join -t$'\t' ../idKeys/xenTro10.idKeys.txt \
+        ../../refseq/idKeys/refseqXenTro10.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    grep chrM *
+ucscToINSDC.bed:chrM    0       17610   Y789013.1
+ucscToRefSeq.bed:chrM   0       17610   NC_006839.1
+
+ # IF the genbank list is missing chrM, look it up in Entrez nucleotide:
+    #  https://www.ncbi.nlm.nih.gov/assembly/GCF_000004195.4/
+    # to find that chrMT is named: Y789013.1
+    # then:
+#    grep chrM ucscToRefSeq.bed | sed -e 's/NC_006839.1/Y789013.1/;' \
+#       >> ucscToINSDC.bed
+#    # and re-sort
+#    cat ucscToINSDC.bed | sort -k1,1 -k2,2n > t
+#    mv t ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    #	176 ucscToINSDC.bed
+    #	176 ucscToRefSeq.bed
+    #	176 ../../chrom.sizes
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 20
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab xenTro10 ucscToINSDC stdin ucscToINSDC.bed
+
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab xenTro10 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # should be quiet for all OK
+    checkTableCoords xenTro10 ucscToINSDC
+    checkTableCoords xenTro10 ucscToRefSeq
+
+    # should cover %100 entirely:
+    featureBits -countGaps xenTro10 ucscToINSDC
+    # 1451301209 bases of 1451301209 (100.000%) in intersection
+
+    featureBits -countGaps xenTro10 ucscToRefSeq
+    # 1451301209 bases of 1451301209 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2021-02-22 - Hiram)
+
+    mkdir /hive/data/genomes/xenTro10/bed/chromAlias
+    cd /hive/data/genomes/xenTro10/bed/chromAlias
+
+    grep -v "^#" ../../refseq/G*10.0_assembly_report.txt \
+	| awk '{printf "%s\t%s\n", $5,$1}' | sort > ncbi.genbank.txt
+    grep -v "^#" ../../refseq/G*10.0_assembly_report.txt \
+	| awk '{printf "%s\t%s\n", $7,$1}' | sort > ncbi.refseq.txt
+
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' xenTro10 \
+        | sort -k1,1 > ucsc.genbank.tab
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' xenTro10 \
+        | sort -k1,1 > ucsc.refseq.tab
+
+    # the awk removes lines where the UCSC name is identical to the NCBI name
+    join -t$'\t' -1 2 <(sort -k2,2 ucsc.refseq.tab) ncbi.refseq.txt \
+      | cut -f2-3 | awk '$1 != $2' | sort > ucsc.assembly.tab
+
+#  IF needing to add chrM definition to genbank file
+#    printf "chrM\tNC_005089.1\n" > ucsc.genbank.tab
+
+    # genbank and refseq should be the same, assembly can be less
+    wc -l *.tab ../../chrom.sizes
+    #	167 ucsc.assembly.tab
+    #	167 ucsc.genbank.tab
+    #	167 ucsc.refseq.tab
+    #	167 ../../chrom.sizes
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+        > xenTro10.chromAlias.tab
+# working: assembly
+# working: genbank
+# working: refseq
+
+for t in assembly genbank refseq
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t xenTro10.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking assembly: 167 =? 167 OK
+# checking genbank: 167 =? 167 OK
+# checking refseq: 167 =? 167 OK
+
+    # verify chrM is here properly:
+    grep chrM xenTro10.chromAlias.tab 
+# MT      chrM    assembly
+# NC_006839.1     chrM    refseq
+# Y789013.1       chrM    genbank
+
+    hgLoadSqlTab xenTro10 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        xenTro10.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2021-02-22 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/xenTro/xenTro10
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" xenTro10 \
+      | sed -e 's/[0-9.]\+//;' | sort | uniq -c | sed -e 's/^/# /;'
+#     756 AAMC
+#       1 NC_
+
+    # implies a rule: '[AN][AC][CM0-9_]+(\.[0-9_]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" xenTro10 | wc -l
+    # 851
+
+    hgsql -N -e "select frag from gold;" xenTro10 \
+       | egrep -e '[AN][AC][CM0-9_]+(\.[0-9_]+)?' | wc -l
+    # 851
+
+    hgsql -N -e "select frag from gold;" xenTro10 \
+       | egrep -v -e '[AN][AC][CM0-9_]+(\.[0-9_]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/xenTro/xenTro10/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][AC][CM0-9_]+(\.[0-9_]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+    git commit -m 'adding gold table assembly track search rule refs #24693' \
+        trackDb.ra
+
+    # verify in the browser the searches for the 'contig' names will function
+
+##########################################################################
+# running repeat masker (DONE - 2020-02-22 - Hiram)
+    # using new repeat masker version 4.1.0
+    mkdir /hive/data/genomes/xenTro10/bed/repeatMasker
+    cd /hive/data/genomes/xenTro10/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=hgwdev xenTro10) > do.log 2>&1
+XXX - running - Mon Feb 22 12:46:57 PST 2021
+    # real    397m24.001s
+
+    cat faSize.rmsk.txt
+# 2647915728 bases (21334956 N's 2626580772 real 1457026804 upper
+#	1169553968 lower) in 176 sequences in 1 files
+# Total size: mean 15044975.7 sd 44833491.7 min 746 (chrUn_NW_023637828v1)
+#	max 260522016 (chr1) median 44754
+# %44.17 masked total, %44.53 masked real
+
+    egrep -i "versi|relea" do.log
+# RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+# CC    RepBase RELEASE 20181026;         
+
+    sed -e 's/^/# /;' versionInfo.txt 
+# The repeat files provided for this assembly were generated using RepeatMasker.
+#   Smit, AFA, Hubley, R & Green, P.,
+#   RepeatMasker Open-4.0.
+#   1996-2010 <http://www.repeatmasker.org>.
+# 
+# VERSION:
+# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+# Search Engine: Crossmatch [ 1.090518 ]
+# Master RepeatMasker Database: /hive/data/staging/data/RepeatMasker181121/Libraries/RepeatMaskerLib.embl ( Complete Database: dc20181026-rb20181026 )
+# 
+# 
+# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+# CC    RepBase RELEASE 20181026;                                   *
+# # RepeatMasker engine: -engine crossmatch -s
+# # RepeatMasker library options: -species 'Rattus norvegicus'
+# 
+# PARAMETERS:
+# /hive/data/staging/data/RepeatMasker/RepeatMasker -engine crossmatch -s -align -species 'Rattus norvegicus'
+
+    time featureBits -countGaps xenTro10 rmsk
+    # 1169555321 bases of 2647915728 (44.169%) in intersection
+    # real    0m36.935s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' xenTro10 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1169555321.000000
+    # real    0m23.489s
+
+##########################################################################
+# running simple repeat (DONE - 2020-02-22 - Hiram)
+
+    mkdir /hive/data/genomes/xenTro10/bed/simpleRepeat
+    cd /hive/data/genomes/xenTro10/bed/simpleRepeat
+    # a bit smaller trf409 option 4 instead of the usual 6
+    # it refers to the expected maximum TR length in millions
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409=4 xenTro10) > do.log 2>&1 &
+XXX - running - Mon Feb 22 12:50:54 PST 2021
+    # real    288m35.826s
+
+    cat fb.simpleRepeat
+    # 94485470 bases of 2626580772 (3.597%) in intersection
+
+    cd /hive/data/genomes/xenTro10
+    # if using the Window Masker result:
+    cd /hive/data/genomes/xenTro10
+#    twoBitMask bed/windowMasker/xenTro10.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  xenTro10.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # add to rmsk after it is done:
+    twoBitMask xenTro10.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed xenTro10.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa xenTro10.2bit stdout | faSize stdin > faSize.xenTro10.2bit.txt
+    cat faSize.xenTro10.2bit.txt
+# 2647915728 bases (21334956 N's 2626580772 real 1452560391 upper
+#	1174020381 lower) in 176 sequences in 1 files
+# Total size: mean 15044975.7 sd 44833491.7 min 746 (chrUn_NW_023637828v1)
+#	max 260522016 (chr1) median 44754
+# %44.34 masked total, %44.70 masked real
+
+    # reset symlink
+    rm /gbdb/xenTro10/xenTro10.2bit
+    ln -s `pwd`/xenTro10.2bit /gbdb/xenTro10/xenTro10.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (TBD - 2021-02-03 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/xenTro10/bed/microsat
+    cd /hive/data/genomes/xenTro10/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+         ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed xenTro10 microsat microsat.bed
+    # Read 244331 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (TBD - 2021-02-03 - Hiram)
+
+    mkdir /hive/data/genomes/xenTro10/bed/windowMasker
+    cd /hive/data/genomes/xenTro10/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev xenTro10) > do.log 2>&1
+    # real    103m59.019s
+
+    # Masking statistics
+    cat faSize.xenTro10.cleanWMSdust.txt
+# 2647915728 bases (21334956 N's 2626580772 real 1677807978 upper
+#	948772794 lower) in 176 sequences in 1 files
+# Total size: mean 15044975.7 sd 44833491.7 min 746 (chrUn_NW_023637828v1)
+#	max 260522016 (chr1) median 44754
+# %35.83 masked total, %36.12 masked real
+
+##########################################################################
+# cpgIslands - (TBD - 2021-02-04 - Hiram)
+    mkdir /hive/data/genomes/xenTro10/bed/cpgIslands
+    cd /hive/data/genomes/xenTro10/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku xenTro10) > do.log 2>&1
+    # real    3m40.227s
+
+    sed -e 's/^/    # /;' fb.xenTro10.cpgIslandExt.txt
+    # 10397605 bases of 2626580772 (0.396%) in intersection
+
+##############################################################################
+# genscan - (TBD - 2021-02-04 - 02-15 - Hiram)
+    mkdir /hive/data/genomes/xenTro10/bed/genscan
+    cd /hive/data/genomes/xenTro10/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku xenTro10) > do.log 2>&1
+    # real    73m39.179s
+
+    # two jobs broken:
+./runGsBig2M.csh chr2 000 gtf/000/chr2.gtf pep/000/chr2.pep subopt/000/chr2.bed &
+./runGsBig2M.csh chr11 000 gtf/000/chr11.gtf pep/000/chr11.pep subopt/000/chr11.bed
+wait
+    # real    68m25.959s
+
+    # continuing
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku xenTro10) > makeBed.log 2>&1
+    # real    0m43.231s
+
+    sed -e 's/^/    # /;' fb.xenTro10.genscan.txt
+    # 55066515 bases of 2626580772 (2.097%) in intersection
+
+    sed -e 's/^/    # /;' fb.xenTro10.genscanSubopt.txt
+    # 57355860 bases of 2626580772 (2.184%) in intersection
+
+#########################################################################
+# ncbiGene (TBD - 2020-09-03 - Hiram)
+
+    # don't need to do this on GCF/RefSeq assemblies, they have RefSeq genes
+    mkdir /hive/data/genomes/xenTro10/bed/xenoRefGene
+    cd /hive/data/genomes/xenTro10/bed/xenoRefGene
+
+    time (~/kent/src/hg/utils/automation/doXenoRefGene.pl -buildDir=`pwd` \
+       -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev xenTro10) > do.log 2>&1 &
+    # real    67m18.015s
+
+#########################################################################
+# Create kluster run files (TBD - 2021-02-04 - Hiram)
+
+    # numerator is xenTro10 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap xenTro10 gap
+    # 19396258 bases of 2614093470 (0.742%) in intersection
+    #                      ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2614093470 / 2861349177 \) \* 1024
+    #  ( 2614093470 / 2861349177 ) * 1024 = 935.513825
+
+    # ==> use -repMatch=1000 according to size scaled down from 1024 for human.
+    cd /hive/data/genomes/xenTro10
+    time blat xenTro10.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/xenTro10.11.ooc \
+        -repMatch=1000
+    #   Wrote 27322 overused 11-mers to jkStuff/xenTro10.11.ooc
+    #   real    0m26.195s
+
+    # rn6 at repMatch=1000
+    #   Wrote 27021 overused 11-mers to jkStuff/rn6.11.ooc
+
+    # survey sizes of all gaps:
+    hgsql -N -e 'select size from gap;' xenTro10 | ave stdin | sed -e 's/^/# /;'
+# Q1 100.000000
+# median 200.000000
+# Q3 22550.000000
+# average 36721.094664
+# min 10.000000
+# max 660122.000000
+# count 581
+# total 21334956.000000
+# standard deviation 95181.017236
+
+hgsql -N -e 'select size from gap;' xenTro10 | sort -n | uniq -c | sed -e 's/^/# /;'
+
+    # There are no non-bridged gaps on this genome
+    # survey sizes of non-bridged gaps:
+    hgsql -N -e 'select size from gap where bridge="no" order by size;' \
+	xenTro10  | sort | uniq -c | sort -k2,2n | sed -e 's/^/# /;'
+#       7 100
+#       8 50000
+#      22 1000000
+
+    # and survey the number bridged gaps over 50,000 bases:
+    hgsql -N -e 'select size from gap where bridge="yes" and size > 49999;' \
+        xenTro10 | wc -l
+    # 92
+
+    # forget the non-bridged of size 100, use 50,000 and allow bridged
+
+    # use gap size of 50000 to construct a lift file:
+    gapToLift -allowBridged -verbose=2 -minGap=50000 xenTro10 \
+	jkStuff/xenTro10.gaps.lft -bedFile=jkStuff/xenTro10.gaps.bed
+    wc -l jkStuff/xenTro10.gaps*
+    #	268 jkStuff/xenTro10.gaps.bed
+    #	268 jkStuff/xenTro10.gaps.lft
+
+    # to see the gaps sizes used:
+    bedInvert.pl chrom.sizes jkStuff/xenTro10.gaps.bed \
+	| cut -f4 | sort -n | uniq -c | less
+
+##############################################################################
+# lastz/chain/net swap human/hg38 (TBD - 2021-02-04 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzXenTro10.2021-02-04
+
+    sed -e 's/^/    # /;' fb.hg38.chainXenTro10Link.txt
+    # 958592205 bases of 3110768607 (30.815%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynXenTro10Link.txt
+    # 904066852 bases of 3110768607 (29.062%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg38 xenTro10) > rbest.log 2>&1 &
+    # real    313m26.149s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.XenTro10.txt
+    # 883775977 bases of 3110768607 (28.410%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/xenTro10/bed/blastz.hg38.swap
+    cd /hive/data/genomes/xenTro10/bed/blastz.hg38.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzXenTro10.2021-02-04/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -swap -syntenicNet) > swap.log 2>&1
+    #   real    74m20.215s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainHg38Link.txt
+    # 928866703 bases of 2626580772 (35.364%) in intersection
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainSynHg38Link.txt
+    # 879484562 bases of 2626580772 (33.484%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	xenTro10 hg38) > rbest.log 2>&1 &
+    # real    373m6.610s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainRBest.Hg38.txt
+    # 885516265 bases of 2626580772 (33.714%) in intersection
+
+##############################################################################
+# lastz/chain/net swap mouse/mm39 (TBD - 2021-02-04 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/mm39/bed/lastzXenTro10.2021-02-04
+
+    sed -e 's/^/    # /;' fb.mm39.chainXenTro10Link.txt
+    # 1898735724 bases of 2654624157 (71.526%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainSynXenTro10Link.txt
+    # 1787593557 bases of 2654624157 (67.339%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	 mm39 xenTro10) > rbest.log 2>&1 &
+    # real    588m38.122s
+
+    sed -e 's/^/    # /;' fb.mm39.chainRBest.XenTro10.txt
+    # 1754204799 bases of 2654624157 (66.081%) in intersection
+
+    mkdir /hive/data/genomes/xenTro10/bed/blastz.mm39.swap
+    cd /hive/data/genomes/xenTro10/bed/blastz.mm39.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm39/bed/lastzXenTro10.2021-02-04/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    116m47.862s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainMm39Link.txt
+    # 1855165978 bases of 2626580772 (70.630%) in intersection
+    sed -e 's/^/    # /;' fb.xenTro10.chainSynMm39Link.txt
+    # 1763550257 bases of 2626580772 (67.142%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	xenTro10 mm39) > rbest.log 2>&1
+    # real    605m42.354s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainRBest.Mm39.txt 
+    # 1754416686 bases of 2626580772 (66.795%) in intersection
+
+##############################################################################
+# lastz/chain/net swap mouse/mm10 (TBD - 2021-02-15 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzXenTro10.2021-02-15
+
+    sed -e 's/^/    # /;' fb.mm10.chainXenTro10Link.txt
+    # 1896928045 bases of 2652783500 (71.507%) in intersection
+    sed -e 's/^/    # /;' fb.mm10.chainSynXenTro10Link.txt
+    # 1787142074 bases of 2652783500 (67.369%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	 mm10 xenTro10) > rbest.log 2>&1 &
+    # real    578m13.711s
+
+    sed -e 's/^/    # /;' fb.mm10.chainRBest.XenTro10.txt
+    # 1753198266 bases of 2652783500 (66.089%) in intersection
+
+    mkdir /hive/data/genomes/xenTro10/bed/blastz.mm10.swap
+    cd /hive/data/genomes/xenTro10/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzXenTro10.2021-02-15/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    112m36.899s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainMm10Link.txt
+    # 1853300495 bases of 2626580772 (70.559%) in intersection
+    sed -e 's/^/    # /;' fb.xenTro10.chainSynMm10Link.txt
+    # 1762899567 bases of 2626580772 (67.118%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	xenTro10 mm10) > rbest.log 2>&1
+    # real    599m24.766s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainRBest.Mm10.txt 
+    # 1753558422 bases of 2626580772 (66.762%) in intersection
+
+##############################################################################
+# GENBANK AUTO UPDATE (TBD - 2021-02-04 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Rattus norvegicus       130246  1103640 17794
+
+    # edit etc/genbank.conf to add xenTro10 just before rn6
+
+# xenTro10 (xenTro GCF_015227675.2 mRat10.0)
+xenTro10.serverGenome = /hive/data/genomes/xenTro10/xenTro10.2bit
+xenTro10.ooc = /hive/data/genomes/xenTro10/jkStuff/xenTro10.11.ooc
+xenTro10.lift = /hive/data/genomes/xenTro10/jkStuff/xenTro10.gaps.lft
+xenTro10.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+xenTro10.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+xenTro10.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+xenTro10.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+xenTro10.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+xenTro10.downloadDir = xenTro10
+xenTro10.refseq.mrna.xeno.load  = yes
+xenTro10.refseq.mrna.xeno.loadDesc = yes
+xenTro10.genbank.mrna.xeno.load  = yes
+xenTro10.perChromTables = no
+xenTro10.mgc = yes
+# xenTro10.upstreamGeneTbl = ensGene
+# xenTro10.upstreamMaf = multiz13way /hive/data/genomes/xenTro10/bed/multiz13way/species.list.txt
+
+    # verify the files specified exist before checking in the file:
+  grep ^xenTro10 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
+# -rw-rw-r-- 1    109296 Feb  4 09:28 /hive/data/genomes/xenTro10/jkStuff/xenTro10.11.ooc
+# -rw-rw-r-- 1     13791 Feb  4 09:34 /hive/data/genomes/xenTro10/jkStuff/xenTro10.gaps.lft
+# -rw-rw-r-- 1 692151553 Feb  4 09:20 /hive/data/genomes/xenTro10/xenTro10.2bit
+
+    git commit -m "Added xenTro10 xenTro refs #24693" etc/genbank.conf
+    git push
+
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add xenTro10 to:
+    #   etc/hgwdev.dbs etc/align.dbs
+    git commit -m "Added xenTro10 - xenTro refs #24693" etc/hgwdev.dbs etc/align.dbs
+    git push
+    make etc-update
+
+    # wait a few days for genbank magic to take place, the tracks will
+    # appear
+
+#############################################################################
+# augustus gene track (TBD - 2021-02-04 - Hiram)
+
+    mkdir /hive/data/genomes/xenTro10/bed/augustus
+    cd /hive/data/genomes/xenTro10/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev xenTro10) > do.log 2>&1
+    # real    119m10.900s
+
+    cat fb.xenTro10.augustusGene.txt
+    # 49646030 bases of 2626580772 (1.890%) in intersection
+
+#########################################################################
+# ncbiRefSeq (TBD - 2021-02-04 - Hiram)
+
+    mkdir /hive/data/genomes/xenTro10/bed/ncbiRefSeq
+    cd /hive/data/genomes/xenTro10/bed/ncbiRefSeq
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=hgwdev -workhorse=hgwdev \
+      GCF_015227675.2_mRat10.0 xenTro10) > do.log 2>&1 &
+    # real    6m52.120s
+
+    cat fb.ncbiRefSeq.xenTro10.txt
+    #  107770866 bases of 2626580772 (4.103%) in intersection
+
+    # add: include ../../refSeqComposite.ra
+    # to the rat/xenTro10/trackDb.ra to turn on the track in the browser
+
+joinerCheck says:
+
+ xenTro10.ncbiRefSeqLink.protAcc - hits 74754 of 74755 (99.999%)
+Error: 1 of 74755 elements (0.001%) of xenTro10.ncbiRefSeqLink.protAcc are not in key ncbiRefSeqPepTable.name line 8640 of all.joiner
+Example miss: NP_536324.1
+
+
+    # XXX 2021-02-04 - ready for this after genbank runs
+
+    featureBits -enrichment xenTro10 refGene ncbiRefSeq 
+ # refGene 0.402%, ncbiRefSeq 3.148%, both 0.402%, cover 99.90%, enrich 31.73x
+    featureBits -enrichment xenTro10 ncbiRefSeq refGene
+ # ncbiRefSeq 3.148%, refGene 0.402%, both 0.402%, cover 12.76%, enrich 31.73x
+
+    featureBits -enrichment xenTro10 ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 0.401%, refGene 0.402%, both 0.400%, cover 99.66%, enrich 247.79x
+
+    featureBits -enrichment xenTro10 refGene ncbiRefSeqCurated
+ # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
+
+##############################################################################
+# LIFTOVER TO rn6 (TBD - 2021-02-04 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/xenTro10/bed/blat.rn6.2021-02-04
+    cd /hive/data/genomes/xenTro10/bed/blat.rn6.2021-02-04
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -query2Bit=/hive/data/genomes/rn6/rn6.2bit \
+        -querySizes=/hive/data/genomes/rn6/chrom.sizes \
+        -ooc=/hive/data/genomes/xenTro10/jkStuff/xenTro10.11.ooc \
+         xenTro10 rn6
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -query2Bit=/hive/data/genomes/rn6/rn6.2bit \
+        -querySizes=/hive/data/genomes/rn6/chrom.sizes \
+        -ooc=/hive/data/genomes/xenTro10/jkStuff/xenTro10.11.ooc \
+         xenTro10 rn6) > doLiftOverToXenTro10.log 2>&1
+    # real    248m51.413s
+
+    # see if the liftOver menus function in the browser from xenTro10 to rn6
+
+##############################################################################
+#  BLATSERVERS ENTRY (TBD - 2021-02-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("xenTro10", "blat1b", "17910", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("xenTro10", "blat1b", "17911", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+##############################################################################
+## reset default position to same as rn6 via blat of the DNA from rn6
+##  (TBD - 2021-02-04 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr1:79348972-79379997"
+	where name="xenTro10";' hgcentraltest
+
+##############################################################################
+# crispr whole genome (TBD - 2020-09-04 -> 2020-09-10 - Hiram)
+    mkdir /hive/data/genomes/xenTro10/bed/crisprAll
+    cd /hive/data/genomes/xenTro10/bed/crisprAll
+
+    # need to have augustus genes done.  This will not work with genscan
+
+    # the large shoulder argument will cause the entire genome to be scanned
+    # this takes a while for a new genome to get the bwa indexing done
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
+    xenTro10 augustusGene -shoulder=250000000 -tableName=crisprAll \
+    -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) >> ranges.log 2>&1
+    # real    64m40.351s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=guides -stop=load xenTro10 augustusGene \
+	-shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > specScores.log 2>&1
+    # real    7968m4.344s
+
+    # broken specScores step due to power failure ku reset
+    # first part of specScores
+# Completed: 925541 of 3066093 jobs
+# Crashed: 503 jobs
+# Other count: 1999108 jobs
+# CPU time in finished jobs:   84291533s 1404858.88m 23414.31h  975.60d  2.673 y
+# IO & Wait Time:               2560453s   42674.22m   711.24h   29.63d  0.081 y
+# Average job time:                  94s       1.56m     0.03h    0.00d
+# Longest finished job:             709s      11.82m     0.20h    0.01d
+# Submission to last job:         87660s    1461.00m    24.35h    1.01d
+    # second part of specScores
+# Completed: 2140552 of 2140552 jobs
+# CPU time in finished jobs:  190374829s 3172913.81m 52881.90h 2203.41d  6.037 y
+# IO & Wait Time:               4108443s   68474.05m  1141.23h   47.55d  0.130 y
+# Average job time:                  91s       1.51m     0.03h    0.00d
+# Longest finished job:             193s       3.22m     0.05h    0.00d
+# Submission to last job:        208681s    3478.02m    57.97h    2.42d
+
+    # and putting together the results
+    time find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
+
+    # real    806m23.857s
+    # user    4m0.906s
+    # sys     13m39.775s
+
+    # continuing with effScores:
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=effScores -stop=load xenTro10 augustusGene \
+	-shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > effScores.log 2>&1
+    # real    1964m18.261s
+
+
+    cat guides/run.time | sed -e 's/^/# /;'
+# Completed: 100 of 100 jobs
+# CPU time in finished jobs:      13041s     217.34m     3.62h    0.15d  0.000 y
+# IO & Wait Time:                   340s       5.67m     0.09h    0.00d  0.000 y
+# Average job time:                 134s       2.23m     0.04h    0.00d
+# Longest finished job:             512s       8.53m     0.14h    0.01d
+# Submission to last job:           513s       8.55m     0.14h    0.01d
+
+    cat specScores/run.time | sed -e 's/^/# /;'
+# Completed: 2140552 of 2140552 jobs
+# CPU time in finished jobs:  190374829s 3172913.81m 52881.90h 2203.41d  6.037 y
+# IO & Wait Time:               4108443s   68474.05m  1141.23h   47.55d  0.130 y
+# Average job time:                  91s       1.51m     0.03h    0.00d
+# Longest finished job:             193s       3.22m     0.05h    0.00d
+# Submission to last job:        208681s    3478.02m    57.97h    2.42d
+
+     grep "Number of specScores" specScores.log
+# Number of specScores: 229203141
+
+    cat effScores/run.time | sed -e 's/^/# /;'
+# Completed: 27591 of 27591 jobs
+# CPU time in finished jobs:   13780234s  229670.56m  3827.84h  159.49d  0.437 y
+# IO & Wait Time:                 93812s    1563.54m    26.06h    1.09d  0.003 y
+# Average job time:                 503s       8.38m     0.14h    0.01d
+# Longest finished job:           52764s     879.40m    14.66h    0.61d
+# Submission to last job:         70493s    1174.88m    19.58h    0.82d
+
+    cat offTargets/run.time | sed -e 's/^/# /;'
+# Completed: 153305 of 153305 jobs
+# CPU time in finished jobs:    2423705s   40395.08m   673.25h   28.05d  0.077 y
+# IO & Wait Time:               1680214s   28003.57m   466.73h   19.45d  0.053 y
+# Average job time:                  27s       0.45m     0.01h    0.00d
+# Longest finished job:              60s       1.00m     0.02h    0.00d
+# Submission to last job:          5880s      98.00m     1.63h    0.07d
+
+    bigBedInfo crispr.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 22
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 274,741,534
+# primaryDataSize: 12,314,717,925
+# primaryIndexSize: 17,246,852
+# zoomLevels: 10
+# chromCount: 31
+# basesCovered: 2,157,342,037
+# meanDepth (of bases covered): 2.929093
+# minDepth: 1.000000
+# maxDepth: 33.000000
+# std of depth: 1.944611
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
+     # had incorrect orderKey specified in beginning rn6.config.ra
+     # correct to 18019 by looking at the output of:
+# hgsql -e 'select name,organism,orderKey from dbDb order by orderKey;' \
+#	hgcentraltest | less
+#	oryCun1 Rabbit  18010
+#	regenRn1        Rat     18020
+#	regenRn0        Rat     18021
+#	rn6     Rat     18031
+#	xenTro10     Rat     18032
+#	rn5     Rat     18032
+#	rn4     Rat     18033
+#	rn3     Rat     18034
+#	rn2     Rat     18035
+#	tauEry1 Red crested turaco      18360
+
+     hgsql -e 'update dbDb set orderKey=18019 where name="xenTro10";' hgcentraltest
+
+
+    cd $HOME/kent/src/hg/makeDb/schema
+    # verify all the business is done for release
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl xenTro10
+# 66 tables in database xenTro10 - Dog, Canis lupus familiaris
+# verified 55 tables in database xenTro10, 11 extra tables, 14 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# gapOverlap    1 optional tables
+# tandemDups    1 optional tables
+# 1     chainCanFam3    - extra table
+# 2     chainCanFam3Link        - extra table
+# 3     chainRBestCanFam3       - extra table
+# 4     chainRBestCanFam3Link   - extra table
+# . . . etc . . .
+# 8     crisprAllTargets        - extra table
+# 9     netCanFam3      - extra table
+# 10    netRBestCanFam3 - extra table
+# 11    netSynCanFam3   - extra table
+# 13 genbank tables found
+# verified 28 required tables, 1 missing tables
+# 1     ucscToRefSeq    - missing table
+# hg38 chainNet to xenTro10 found 3 required tables
+# mm10 chainNet to xenTro10 found 3 required tables
+# hg38 chainNet RBest and syntenic to xenTro10 found 6 optional tables
+# mm10 chainNet RBest and syntenic to xenTro10 found 3 optional tables
+# liftOver to previous versions: 1, from previous versions: 1
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=xenTro10 -tableCoverage all.joiner
+    joinerCheck -database=xenTro10 -times all.joiner
+    joinerCheck -database=xenTro10 -keys all.joiner
+
+    # when clean, check in:
+    git commit -m 'adding rules for xenTro10 refs #24693' all.joiner
+    git push
+    # run up a 'make alpha' in hg/hgTables to get this all.joiner file
+    # into the hgwdev/genome-test system
+
+    cd /hive/data/genomes/xenTro10
+    time (makeDownloads.pl xenTro10) > downloads.log 2>&1
+    #  real    20m11.930s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/xenTro10/pushQ
+    cd /hive/data/genomes/xenTro10/pushQ
+ time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList xenTro10) > xenTro10.pushQ.sql 2> stderr.out
+    # real    13m21.313s
+
+    # remove the tandemDups and gapOverlap from the file list:
+    sed -i -e "/tandemDups/d" redmine.xenTro10.table.list
+    sed -i -e "/Tandem Dups/d" redmine.xenTro10.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.xenTro10.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.xenTro10.releaseLog.txt
+
+    # remove the multiz7way tables:
+    sed -i -e "/multiz7way/d" redmine.xenTro10.table.list
+
+    # edit the file list and expand the wildcards: .../calJac*/...
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+# redmine.xenTro10.releaseLog.txt
+WARNING: xenTro10 does not have seq
+WARNING: hgwdev does not have phyloPng-generated /usr/local/apache/htdocs/images/phylo/xenTro10_7way.gif (or png) for multiz7way.
+
+WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+supporting and genbank tables) which tracks to assign these tables to:
+  chainRBestHg38
+  chainRBestHg38Link
+  chainRBestMacFas5
+  chainRBestMacFas5Link
+... etc
+    crisprAllRanges
+  gbLoaded
+  netRBestHg38
+  netRBestMacFas5
+  netRBestMm10
+  netRBestMm39
+  netSynHg38
+  netSynMacFas5
+  netSynMm10
+  netSynMm39
+
+    # verify the file list does correctly match to files
+    cat redmine.xenTro10.file.list | while read L
+do
+  eval ls $L > /dev/null
+done
+    # should be silent, missing files will show as errors
+
+    # verify database tables, how many to expect:
+    wc -l redmine.xenTro10.table.list
+    # 70 redmine.xenTro10.table.list
+
+    # how many actual:
+    awk -F'.' '{printf "hgsql -N %s -e '"'"'show table status like \"%s\";'"'"'\n", $1, $2}' redmine.xenTro10.table.list | sh | wc -l
+    # 70
+
+    # would be a smaller number actual if some were missing
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+
+#	/hive/data/genomes/xenTro10/pushQ/redmine.xenTro10.file.list
+#	/hive/data/genomes/xenTro10/pushQ/redmine.xenTro10.releaseLog.txt
+#	/hive/data/genomes/xenTro10/pushQ/redmine.xenTro10.table.list
+
+#########################################################################

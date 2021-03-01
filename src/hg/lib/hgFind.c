@@ -2894,7 +2894,7 @@ else if (!matchesHgvs(cart, db, term, hgp))
 
     if (!trackHubDatabase(db))
 	hgFindSpecGetAllSpecs(db, &shortList, &longList);
-    if (cartOptionalString(cart, "noShort") == NULL)
+    if ((cart == NULL) || (cartOptionalString(cart, "noShort") == NULL))
         {
         hgp->shortCircuited = TRUE;
         for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)

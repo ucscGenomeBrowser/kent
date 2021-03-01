@@ -1,4 +1,3 @@
-
 track knownGene
 shortLabel GENCODE V36
 longLabel GENCODE V36
@@ -6,6 +5,7 @@ priority 1
 visibility pack
 type bigGenePred
 bigDataUrl /gbdb/hg38/gencode/gencodeV36.bb
+baseColorDefault genomicCodons
 group genes
 isGencode3 on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s

@@ -9,8 +9,6 @@ compositeTrack on
 allButtonPair on
 mouseOverField comments
 urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-scoreLabel Score (1000=SwissProt, 0=Trembl)
-scoreFilter 0
 itemRgb on
 dataVersion /gbdb/$D/uniprot/version.txt
 hideEmptySubtracks on
@@ -59,7 +57,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         parent uniprot
         visibility dense
         type bigBed 12 +
-        bigDataUrl /gbdb/wuhCor1/uniprot/unipAliSwissprot.bb
+        bigDataUrl /gbdb/$D/uniprot/unipAliSwissprot.bb
         color 255,0,150
         itemRgb off
 
@@ -73,6 +71,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         bigDataUrl /gbdb/$D/uniprot/unipLocSignal.bb
         color 255,0,150
         itemRgb off
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipLocExtra
         shortLabel Extracellular
@@ -84,6 +83,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         bigDataUrl /gbdb/$D/uniprot/unipLocExtra.bb
         color 0,150,255
         itemRgb off
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipLocTransMemb
         shortLabel Transmembrane
@@ -95,6 +95,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         bigDataUrl /gbdb/$D/uniprot/unipLocTransMemb.bb
         color 0,150,0
         itemRgb off
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipLocCytopl
         shortLabel Cytoplasmic
@@ -106,6 +107,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         bigDataUrl /gbdb/$D/uniprot/unipLocCytopl.bb
         color 255,150,0
         itemRgb off
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipChain
         shortLabel Chains
@@ -116,6 +118,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipChain.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipInterest
         shortLabel Interest
@@ -126,6 +129,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipInterest.bb
         itemRgb off
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipDomain
         shortLabel Domains
@@ -136,6 +140,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipDomain.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipDisulfBond
         shortLabel Disulf. Bonds
@@ -145,6 +150,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipDisulfBond.bb
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipModif
         shortLabel AA Modifications
@@ -155,6 +161,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipModif.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipMut
         shortLabel Mutations
@@ -176,6 +183,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipStruct.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipOther
         shortLabel Other Annot.
@@ -186,6 +194,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipOther.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipRepeat
         shortLabel Repeats
@@ -196,6 +205,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipRepeat.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipConflict
         shortLabel Seq. Conflicts
@@ -206,6 +216,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipConflict.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
 searchTable unipAliSwissprot
 searchType bigBed

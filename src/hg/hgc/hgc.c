@@ -3131,7 +3131,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
         // we're assuming that if there are multiple psl's with the same id that
         // they are the same query sequence so we only put out one set of sequences
-        if (firstTime  && !isEmpty(seq))    // if there is a query sequence
+        if (differentString(item, "PrintAllSequences") && firstTime && !isEmpty(seq))    // if there is a query sequence
             {
             firstTime = FALSE;
             printf("<H3>Links to sequence:</H3>\n");
@@ -7619,17 +7619,11 @@ hFreeConn(&conn);
 void htcCdnaAliInWindow(char *acc)
 /* Show part of alignment in browser window for accession. */
 {
-char query[256];
-char table[64];
-struct sqlConnection *conn;
-struct sqlResult *sr;
-char **row;
 struct psl *wholePsl, *partPsl;
 struct dnaSeq *rnaSeq;
 char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
-boolean hasBin;
 char accChopped[512] ;
 safef(accChopped, sizeof(accChopped), "%s",acc);
 chopSuffix(accChopped);
@@ -7642,9 +7636,6 @@ char *accForTitle = startsWith("ncbiRefSeq", aliTable) ? acc : accChopped;
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", accForTitle, aliTable);
 htmlFramesetStart(title);
-
-conn = hAllocConn(database);
-getCdsStartAndStop(conn, acc, aliTable, &cdsStart, &cdsEnd);
 
 if (startsWith("user", aliTable))
     {
@@ -7705,12 +7696,19 @@ if (startsWith("user", aliTable))
 else
     {
     /* Look up alignments in database */
+    struct sqlConnection *conn = hAllocConn(database);
+    getCdsStartAndStop(conn, acc, aliTable, &cdsStart, &cdsEnd);
+
+    char table[64];
+    boolean hasBin;
     if (!hFindSplitTable(database, seqName, aliTable, table, sizeof table, &hasBin))
 	errAbort("aliTable %s not found", aliTable);
+    char query[256];
     sqlSafef(query, sizeof(query),
          "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d", 
          table, acc, seqName, start);
-    sr = sqlGetResult(conn, query);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
     if ((row = sqlNextRow(sr)) == NULL)
 	errAbort("Couldn't find alignment for %s at %d", acc, start);
     wholePsl = pslLoad(row+hasBin);
@@ -7740,6 +7738,7 @@ else
 	else
 	    rnaSeq = hRnaSeq(database, acc);
 	}
+    hFreeConn(&conn);
     }
 /* Get partial psl for part of alignment in browser window: */
 if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
@@ -7752,7 +7751,6 @@ if (startsWith("xeno", aliTable))
 else
     showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
 				NULL, cdsStart, cdsEnd);
-hFreeConn(&conn);
 }
 
 void htcChainAli(char *item)

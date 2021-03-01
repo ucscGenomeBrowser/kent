@@ -15,7 +15,7 @@ group varRep
 allButtonPair on
 pennantIcon New red
 dataVersion Released Feb. 17, 2021
-visibility hide
+visibility dense
 
         track variantAaMuts_B.1.1.7
         parent variantMuts on
