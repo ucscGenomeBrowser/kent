@@ -38,7 +38,7 @@ ref2bit=/hive/data/genomes/wuhCor1/wuhCor1.2bit
 
 usherDir=~angie/github/usher
 usher=$usherDir/build/usher
-matToVcf=$usherDir/build/matToVcf
+matUtils=$usherDir/build/matUtils
 find_parsimonious_assignments=~angie/github/strain_phylogenetics/build/find_parsimonious_assignments
 
 scriptDir=$(dirname "${BASH_SOURCE[0]}")
@@ -148,7 +148,7 @@ time $usher -u -T 50 \
     -o public-$today.all.notMasked.pb \
     >& usher.addNewUnmasked.log
 #~10 hours for 56k seqs, ~72m for 6k
-$matToVcf -i public-$today.all.notMasked.pb -v public-$today.all.vcf
+$matUtils convert -i public-$today.all.notMasked.pb -v public-$today.all.vcf
 ls -l public-$today.all.vcf
 wc -l public-$today.all.vcf
 bgzip -f public-$today.all.vcf
@@ -168,7 +168,7 @@ time $usher -u -T 50 \
 mv uncondensed-final-tree.nh public-$today.all.nwk
 # Masked VCF that goes with the masked protobuf, for public distribution for folks who want
 # to run UShER and also have the VCF.
-$matToVcf -i public-$today.all.masked.pb -v public-$today.all.masked.vcf
+$matUtils convert -i public-$today.all.masked.pb -v public-$today.all.masked.vcf
 gzip public-$today.all.masked.vcf
 
 # Make allele-frequency-filtered versions
@@ -311,7 +311,8 @@ zcat public-$today.metadata.tsv.gz \
 | tail -n+2 | tawk '$8 != "" {print $8, $1;}' \
 | sed -re 's/^20E \(EU1\)/20E.EU1/;' \
     > cladeToPublicName
-time ~/github/usher/build/matUtils annotate -T 50 \
+time $matUtils annotate -T 50 \
+    -l \
     -i public-$today.all.masked.pb \
     -c cladeToPublicName \
     -o public-$today.all.masked.nextclade.pb \
@@ -321,7 +322,7 @@ time ~/github/usher/build/matUtils annotate -T 50 \
 zcat public-$today.metadata.tsv.gz \
 | tail -n+2 | tawk '$9 != "" {print $9, $1;}' \
     > lineageToPublicName
-time ~/github/usher/build/matUtils annotate -T 50 \
+time $matUtils annotate -T 50 \
     -i public-$today.all.masked.nextclade.pb \
     -c lineageToPublicName \
     -o public-$today.all.masked.nextclade.pangolin.pb \

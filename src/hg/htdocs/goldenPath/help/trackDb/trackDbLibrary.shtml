@@ -1368,6 +1368,14 @@ There are no extra options that can appear on the type hic line.
     </P>
     <P>The score filter will exclude items that fall below the setting. That is, a
     scoreFilter of 800 will exclude all items with a score below 800.</P>
+    <p>Since the introduction of scoreFilter more powerful filter.&lt;fieldName&gt;
+    options exist where the score column can be filtered with different syntax.
+    In such a way <code>scoreFilter 400</code> and <code>scoreFilterLimits 0:1000</code>
+    can be replaced with <code>filter.score 400</code> and <code>filterByRange.score 0:1000</code>.
+    The advantage of switching to the filter.&lt;fieldName&gt; approach is that filters
+    can also be added on additional bigBed &lt;fieldNames&gt; such as filterText.disease
+    or filterValues.cellType where bigBeds defined with a disease or cellType column can
+    be filtered. See filter.&lt;fieldName&gt; for more information and examples. </p>
     <P><B>Example:</B></P>
     <pre>
     scoreFilter 300
