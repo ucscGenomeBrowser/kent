@@ -156,7 +156,6 @@ if (isNotEmpty(filename) && fileExists(filename))
             {
             char *desc = NULL;
             readInGulp(dy->string, &desc, NULL);
-            fprintf(stderr, "reading '%s' --> '%s'\n", dy->string, desc);
             treeChoices->descriptions[treeChoices->count] = desc;
             }
         else
@@ -773,6 +772,13 @@ if (!met && strchr(sampleId, '|'))
         met = hashFindVal(sampleMetadata, words[0]);
     if (met == NULL && wordCount > 1 && isNotEmpty(words[1]))
         met = hashFindVal(sampleMetadata, words[1]);
+    }
+// If it's one of our collapsed node names, dig out the example name and try that.
+if (!met && isdigit(sampleId[0]) && strstr(sampleId, "_from_"))
+    {
+    char *eg = strstr(sampleId, "_eg_");
+    if (eg)
+        met = hashFindVal(sampleMetadata, eg+strlen("_eg_"));
     }
 return met;
 }
@@ -1625,10 +1631,176 @@ slReverse(&sncList);
 return sncList;
 }
 
+struct aaMutInfo
+// A protein change, who has it, and how important we think it is.
+{
+    char *name;                 // The name that people are used to seeing, e.g. "E484K', "N501Y"
+    struct slName *sampleIds;   // The uploaded samples that have it
+    int priority;               // For sorting; lower number means scarier.
+    int pos;                    // 1-based position
+    char oldAa;                 // Reference AA
+    char newAa;                 // Alt AA
+};
+
+int aaMutInfoCmp(const void *a, const void *b)
+/* Compare aaMutInfo priority for sorting. */
+{
+const struct aaMutInfo *amiA = *(struct aaMutInfo * const *)a;
+const struct aaMutInfo *amiB = *(struct aaMutInfo * const *)b;
+return amiA->priority - amiB->priority;
+}
+
+// For now, hardcode SARS-CoV-2 Spike RBD coords and antibody escape positions (1-based).
+static int rbdStart = 319;
+static int rbdEnd = 541;
+static boolean *escapeMutPos = NULL;
+
+static void initEscapeMutPos()
+/* Allocate excapeMutPos and set positions implicated by at least a couple experiments from Bloom Lab
+ * or that appear in Whelan, Rappuoli or McCoy tracks. */
+{
+AllocArray(escapeMutPos, rbdEnd);
+escapeMutPos[332] = TRUE;
+escapeMutPos[334] = TRUE;
+escapeMutPos[335] = TRUE;
+escapeMutPos[337] = TRUE;
+escapeMutPos[339] = TRUE;
+escapeMutPos[340] = TRUE;
+escapeMutPos[345] = TRUE;
+escapeMutPos[346] = TRUE;
+escapeMutPos[348] = TRUE;
+escapeMutPos[352] = TRUE;
+escapeMutPos[357] = TRUE;
+escapeMutPos[359] = TRUE;
+escapeMutPos[361] = TRUE;
+escapeMutPos[362] = TRUE;
+escapeMutPos[363] = TRUE;
+escapeMutPos[365] = TRUE;
+escapeMutPos[366] = TRUE;
+escapeMutPos[367] = TRUE;
+escapeMutPos[369] = TRUE;
+escapeMutPos[370] = TRUE;
+escapeMutPos[371] = TRUE;
+escapeMutPos[372] = TRUE;
+escapeMutPos[373] = TRUE;
+escapeMutPos[374] = TRUE;
+escapeMutPos[376] = TRUE;
+escapeMutPos[378] = TRUE;
+escapeMutPos[383] = TRUE;
+escapeMutPos[384] = TRUE;
+escapeMutPos[385] = TRUE;
+escapeMutPos[386] = TRUE;
+escapeMutPos[408] = TRUE;
+escapeMutPos[417] = TRUE;
+escapeMutPos[441] = TRUE;
+escapeMutPos[444] = TRUE;
+escapeMutPos[445] = TRUE;
+escapeMutPos[445] = TRUE;
+escapeMutPos[447] = TRUE;
+escapeMutPos[449] = TRUE;
+escapeMutPos[450] = TRUE;
+escapeMutPos[452] = TRUE;
+escapeMutPos[455] = TRUE;
+escapeMutPos[456] = TRUE;
+escapeMutPos[458] = TRUE;
+escapeMutPos[472] = TRUE;
+escapeMutPos[473] = TRUE;
+escapeMutPos[474] = TRUE;
+escapeMutPos[476] = TRUE;
+escapeMutPos[477] = TRUE;
+escapeMutPos[478] = TRUE;
+escapeMutPos[479] = TRUE;
+escapeMutPos[483] = TRUE;
+escapeMutPos[484] = TRUE;
+escapeMutPos[485] = TRUE;
+escapeMutPos[486] = TRUE;
+escapeMutPos[487] = TRUE;
+escapeMutPos[489] = TRUE;
+escapeMutPos[490] = TRUE;
+escapeMutPos[494] = TRUE;
+escapeMutPos[499] = TRUE;
+escapeMutPos[504] = TRUE;
+escapeMutPos[514] = TRUE;
+escapeMutPos[517] = TRUE;
+escapeMutPos[522] = TRUE;
+escapeMutPos[525] = TRUE;
+escapeMutPos[526] = TRUE;
+escapeMutPos[527] = TRUE;
+escapeMutPos[528] = TRUE;
+escapeMutPos[529] = TRUE;
+escapeMutPos[530] = TRUE;
+escapeMutPos[531] = TRUE;
+}
+
+static int spikePriority(int pos, char newAa)
+/* Lower number for scarier spike mutation, per spike mutations track / RBD. */
+{
+if (escapeMutPos == NULL)
+    initEscapeMutPos();
+int priority = 0;
+if (pos >= rbdStart && pos <= rbdEnd)
+    {
+    // Receptor binding domain
+    priority = 100;
+    // Antibody escape mutation in Variant of Concern/Interest
+    if (pos == 484)
+        priority = 10;
+    else if (pos == 501)
+        priority = 15;
+    else if (pos == 452)
+        priority = 20;
+    // Other antibody escape mutations
+    else if (pos == 439 || pos == 477)
+        priority = 25;
+    else if (escapeMutPos[pos])
+        priority = 50;
+    }
+else if (pos >= 675 && pos <= 681)
+    // Furin cleavage site; circumstantial evidence for Q677{H,P} spread in US.
+    // Interesting threads on SPHERES 2021-02-26 about P681H tradeoff between infectivity vs
+    // range of cell types that can be infected and other observations about that region.
+    priority = 110;
+else if (pos == 614 && newAa == 'G')
+    // Old hat
+    priority = 1000;
+else
+    // Somewhere else in Spike
+    priority = 500;
+return priority;
+}
+
+static void addSpikeChange(struct hash *spikeChanges, char *aaMutStr, char *sampleId)
+/* Tally up an observance of a S gene change in a sample. */
+{
+// Parse oldAa, pos, newAA out of aaMutStr.  Need a more elegant way of doing this;
+// this is a rush job to get something usable out there asap.
+char oldAa = aaMutStr[0];
+int pos = atoi(aaMutStr+1);
+char newAa = aaMutStr[strlen(aaMutStr)-1];
+struct hashEl *hel = hashLookup(spikeChanges, aaMutStr);
+if (hel == NULL)
+    {
+    struct aaMutInfo *ami;
+    AllocVar(ami);
+    ami->name = cloneString(aaMutStr);
+    slNameAddHead(&ami->sampleIds, sampleId);
+    ami->priority = spikePriority(pos, newAa);
+    ami->pos = pos;
+    ami->oldAa = oldAa;
+    ami->newAa = newAa;
+    hashAdd(spikeChanges, aaMutStr, ami);
+    }
+else
+    {
+    struct aaMutInfo *ami = hel->val;
+    slNameAddHead(&ami->sampleIds, sampleId);
+    }
+}
+
 static void writeOneTsvRow(FILE *f, char *sampleId, struct usherResults *results,
                            struct hash *seqInfoHash, struct geneInfo *geneInfoList,
-                           struct seqWindow *gSeqWin)
-/* Write one row of tab-separate summary for sampleId. */
+                           struct seqWindow *gSeqWin, struct hash *spikeChanges)
+/* Write one row of tab-separate summary for sampleId.  Accumulate S gene AA change info. */
 {
     struct placementInfo *info = hashFindVal(results->samplePlacements, sampleId);
     // sample name / ID
@@ -1658,6 +1830,8 @@ static void writeOneTsvRow(FILE *f, char *sampleId, struct usherResults *results
             else
                 fputc(',', f);
             fprintf(f, "%s:%s", geneAaMut->name, aaMut->name);
+            if (sameString(geneAaMut->name, "S"))
+                addSpikeChange(spikeChanges, aaMut->name, sampleId);
             }
         }
     fputc('\t', f);
@@ -1691,7 +1865,7 @@ static void writeOneTsvRow(FILE *f, char *sampleId, struct usherResults *results
                     si->delBases, emptyForNull(si->delRanges));
             }
         else
-            fprintf(f, "\t\t\t\t\t\t");
+            fprintf(f, "\tn/a\tn/a\tn/a\tn/a\tn/a\tn/a");
         // SNVs that were masked (Problematic Sites track), not used in placement
         fputc('\t', f);
         struct singleNucChange *snc;
@@ -1705,14 +1879,14 @@ static void writeOneTsvRow(FILE *f, char *sampleId, struct usherResults *results
     else
         {
         warn("writeOneTsvRow: no sequenceInfo for sample '%s'", sampleId);
-        fprintf(f, "\t\t\t\t\t\t\t");
+        fprintf(f, "\tn/a\tn/a\tn/a\tn/a\tn/a\tn/a\tn/a");
         }
     fputc('\n', f);
 }
 
 static void rWriteTsvSummaryTreeOrder(struct phyloTree *node, FILE *f, struct usherResults *results,
                                       struct hash *seqInfoHash, struct geneInfo *geneInfoList,
-                                      struct seqWindow *gSeqWin)
+                                      struct seqWindow *gSeqWin, struct hash *spikeChanges)
 /* As we encounter leaves (user-uploaded samples) in depth-first search order, write out a line
  * of TSV summary for each one. */
 {
@@ -1720,11 +1894,12 @@ if (node->numEdges)
     {
     int i;
     for (i = 0;  i < node->numEdges;  i++)
-        rWriteTsvSummaryTreeOrder(node->edges[i], f, results, seqInfoHash, geneInfoList, gSeqWin);
+        rWriteTsvSummaryTreeOrder(node->edges[i], f, results, seqInfoHash, geneInfoList, gSeqWin,
+                                  spikeChanges);
     }
 else
     {
-    writeOneTsvRow(f, node->ident->name, results, seqInfoHash, geneInfoList, gSeqWin);
+    writeOneTsvRow(f, node->ident->name, results, seqInfoHash, geneInfoList, gSeqWin, spikeChanges);
     }
 }
 
@@ -1742,13 +1917,14 @@ return hash;
 static struct tempName *writeTsvSummary(struct usherResults *results, struct phyloTree *sampleTree,
                                         struct slName *sampleIds, struct seqInfo *seqInfoList,
                                         struct geneInfo *geneInfoList, struct seqWindow *gSeqWin,
-                                        int *pStartTime)
+                                        struct hash *spikeChanges, int *pStartTime)
 /* Write a tab-separated summary file for download.  If the user uploaded enough samples to make
- * a tree, then write out samples in tree order; otherwise use sampleIds list. */
+ * a tree, then write out samples in tree order; otherwise use sampleIds list.
+ * Accumulate S gene changes. */
 {
 struct tempName *tsvTn = NULL;
 AllocVar(tsvTn);
-trashDirFile(tsvTn, "ct", "usher", ".tsv");
+trashDirFile(tsvTn, "ct", "usher_samples", ".tsv");
 FILE *f = mustOpen(tsvTn->forCgi, "w");
 fprintf(f, "name\tnuc_mutations\taa_mutations\timputed_bases\tmutation_path"
         "\tplacement_count\tparsimony_score_increase\tlength\taligned_bases"
@@ -1757,17 +1933,59 @@ fprintf(f, "name\tnuc_mutations\taa_mutations\timputed_bases\tmutation_path"
 struct hash *seqInfoHash = hashFromSeqInfoList(seqInfoList);
 if (sampleTree)
     {
-    rWriteTsvSummaryTreeOrder(sampleTree, f, results, seqInfoHash, geneInfoList, gSeqWin);
+    rWriteTsvSummaryTreeOrder(sampleTree, f, results, seqInfoHash, geneInfoList, gSeqWin,
+                              spikeChanges);
     }
 else
     {
     struct slName *sample;
     for (sample = sampleIds;  sample != NULL;  sample = sample->next)
-        writeOneTsvRow(f, sample->name, results, seqInfoHash, geneInfoList, gSeqWin);
+        writeOneTsvRow(f, sample->name, results, seqInfoHash, geneInfoList, gSeqWin, spikeChanges);
     }
 carefulClose(&f);
 hashFree(&seqInfoHash);
 reportTiming(pStartTime, "write tsv summary");
+return tsvTn;
+}
+
+static struct tempName *writeSpikeChangeSummary(struct hash *spikeChanges, int totalSampleCount)
+/* Write a tab-separated summary of S (Spike) gene changes for download. */
+{
+struct tempName *tsvTn = NULL;
+AllocVar(tsvTn);
+trashDirFile(tsvTn, "ct", "usher_S_muts", ".tsv");
+FILE *f = mustOpen(tsvTn->forCgi, "w");
+fprintf(f, "aa_mutation\tsample_count\tsample_frequency\tsample_ids"
+        "\n");
+struct aaMutInfo *sChanges[spikeChanges->elCount];
+struct hashCookie cookie = hashFirst(spikeChanges);
+int ix = 0;
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    if (ix >= spikeChanges->elCount)
+        errAbort("writeSpikeChangeSummary: hash elCount is %d but got more elements",
+                 spikeChanges->elCount);
+    sChanges[ix++] = hel->val;
+    }
+if (ix != spikeChanges->elCount)
+    errAbort("writeSpikeChangeSummary: hash elCount is %d but got fewer elements (%d)",
+             spikeChanges->elCount, ix);
+qsort(sChanges, ix, sizeof(sChanges[0]), aaMutInfoCmp);
+for (ix = 0;  ix < spikeChanges->elCount;  ix++)
+    {
+    struct aaMutInfo *ami = sChanges[ix];
+    int sampleCount = slCount(ami->sampleIds);
+    fprintf(f, "S:%s\t%d\t%f",
+            ami->name, sampleCount, (double)sampleCount / (double)totalSampleCount);
+    slReverse(&ami->sampleIds);
+    fprintf(f, "\t%s", ami->sampleIds->name);
+    struct slName *sample;
+    for (sample = ami->sampleIds->next;  sample != NULL;  sample = sample->next)
+        fprintf(f, ",%s", sample->name);
+    fputc('\n', f);
+    }
+carefulClose(&f);
 return tsvTn;
 }
 
@@ -1936,7 +2154,9 @@ if (vcfTn)
                               source);
             }
         puts("<p></p>");
-        int subtreeButtonCount = (seqCount <= MAX_SEQ_DETAILS) ? subtreeCount : 0;
+        int subtreeButtonCount = subtreeCount;
+        if (seqCount > MAX_SEQ_DETAILS || subtreeCount > MAX_SUBTREE_BUTTONS)
+            subtreeButtonCount = 0;
         makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeButtonCount, isFasta);
         printf("<p>If you have metadata you wish to display, click a 'view subtree in "
                "Nextstrain' button, and then you can drag on a CSV file to "
@@ -1977,9 +2197,11 @@ if (vcfTn)
         struct tempName *ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree->tree,
                                                   source, fontHeight, &sampleTree, &startTime);
 
-        // Make a TSV summary file
+        // Make a sample summary TSV file and accumulate S gene changes
+        struct hash *spikeChanges = hashNew(0);
         struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
-                                                 geneInfoList, gSeqWin, &startTime);
+                                                 geneInfoList, gSeqWin, spikeChanges, &startTime);
+        struct tempName *sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
 
         // Offer big tree w/new samples for download
         puts("<h3>Downloads</h3>");
@@ -1988,6 +2210,8 @@ if (vcfTn)
                "with your samples (Newick file)</a>\n", results->bigTreePlusTn->forHtml);
         printf("<li><a href='%s' download>TSV summary of sequences and placements</a>\n",
                tsvTn->forHtml);
+        printf("<li><a href='%s' download>TSV summary of S (Spike) gene changes</a>\n",
+               sTsvTn->forHtml);
         for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
            {
             int subtreeUserSampleCount = slCount(ti->subtreeUserSampleIds);
