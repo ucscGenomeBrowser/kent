@@ -46,12 +46,14 @@ fputs("\", "
       "        [ \"20I/501Y.V1\", \"#CC44EE\" ], [ \"20A.EU2\", \"#448844\"  ], "
       "        [ \"uploaded sample\", \"#FF0000\" ] ],"
       "    \"title\": \"Nextstrain Clade\", \"type\": \"categorical\" },"
-      "  { \"key\": \"GISAID_clade\","
+      , outF);
+if (sameString(source, "GISAID"))
+    fputs("  { \"key\": \"GISAID_clade\","
       "    \"scale\": [ [ \"S\", \"#EC676D\" ], [ \"L\", \"#F79E43\" ], [ \"O\", \"#F9D136\" ],"
       "        [ \"V\", \"#FAEA95\" ], [ \"G\", \"#B6D77A\" ], [ \"GH\", \"#8FD4ED\" ],"
       "        [ \"GR\", \"#A692C3\" ] ],"
       "    \"title\": \"GISAID Clade\", \"type\": \"categorical\" },"
-      , outF);
+          , outF);
 fprintf(outF, "  { \"key\": \"userOrOld\", "
         "    \"scale\": [ [ \"uploaded sample\", \"#CC0000\"] , [ \"%s\", \"#000000\"] ],"
         "    \"title\": \"Sample type\", \"type\": \"categorical\" }"
