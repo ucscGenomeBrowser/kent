@@ -284,10 +284,10 @@ if (isEmpty(chrom))
 	if (hti && hti->isSplit) /* when split, make up split chr name */
 	    {
 	    safef(fullTableName, sizeof(fullTableName), "%s_%s", ci->chrom, hti->rootName);
-	    sqlDyStringPrintf(query, "select * from %s where chrom='%s'", fullTableName, ci->chrom);
+	    sqlDyStringPrintf(query, "select * from %s where %s='%s'", fullTableName, chromName, ci->chrom);
 	    }
 	else
-	    sqlDyStringPrintf(query, "select * from %s where chrom='%s'", splitSqlTable, ci->chrom);
+	    sqlDyStringPrintf(query, "select * from %s where %s='%s'", splitSqlTable, chromName, ci->chrom);
 	if (tdb && isWiggleDataTable(tdb->type))
             itemsDone += wigTableDataOutput(jw, db, splitSqlTable, chrom,
 		start, end, itemsDone);

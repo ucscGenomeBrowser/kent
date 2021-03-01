@@ -271,11 +271,11 @@ switch (wireType)
                     errAbort("Sorry, data type %d not yet supported", dataType);
                 *pBytesLeft -= emByteLength;
                 }
-            else
-                {
-                verbose(2, "Skipping %lld bytes of undefined field\n", emByteLength);
-                pbSkipBytes(stream, emByteLength, pBytesLeft);
-                }
+            }
+        else
+            {
+            verbose(2, "Skipping %lld bytes of undefined field\n", emByteLength);
+            pbSkipBytes(stream, emByteLength, pBytesLeft);
             }
         }
         break;

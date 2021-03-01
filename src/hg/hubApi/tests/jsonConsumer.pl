@@ -396,8 +396,8 @@ if (ref($jsonReturn) eq "HASH") {
   if (defined($jsonReturn->{"publicHubs"})) {
      my $arrayData = $jsonReturn->{"publicHubs"};
      foreach my $data (@$arrayData) {
-	if ($data->{'shortLabel'} eq "Plants") {
-        printf "### Plants public hub data\n";
+	if ($data->{'shortLabel'} eq "Synonymous Constraint") {
+        printf "### Synonymous Constraint public hub data\n";
 	  foreach my $key (sort keys %$data) {
 	  next if ($key eq "registrationTime");
 	  printf "'%s'\t'%s'\n", $key, $data->{$key};
