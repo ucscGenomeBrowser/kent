@@ -556,6 +556,7 @@ wibFile customTracks
 wigColorBy wig
 wigFile customTracks
 wiggle wigMaf
+wiggleWindow *
 windowingFunction *
 xrefDataUrl *
 yalePseudoAssoc *

@@ -4473,6 +4473,8 @@ for (item = items; item; item = item->next)
             {
             unsigned start = sf->start;
             unsigned end = sf->end;
+            if (start == end)
+                end++;
             if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
                 continue;
 
