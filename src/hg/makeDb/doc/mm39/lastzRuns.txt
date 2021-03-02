@@ -2107,3 +2107,65 @@ sed -e 's/^/    # /;' fb.${query}.chainRBest.${Target}.txt
     # 1456469555 bases of 2366634374 (61.542%) in intersection
 
 ##############################################################################
+# LASTZ X. tropicalis xenTro10 (DONE - 2021-02-22 - Hiram)
+    mkdir /hive/data/genomes/mm39/bed/lastzXenTro10.2021-02-22
+    cd /hive/data/genomes/mm39/bed/lastzXenTro10.2021-02-22
+
+    printf '# X. tropicalis vs Mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+# TARGET: Mouse Mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: X. tropicalis XenTro10
+SEQ2_DIR=/hive/data/genomes/xenTro10/xenTro10.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/mm39/bed/lastzXenTro10.2021-02-22
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+      -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    #	real    231m18.929s
+
+    sed -e 's/^/    # /;' fb.mm39.chainXenTro10Link.txt
+    # 53459877 bases of 2654624157 (2.014%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainSynXenTro10Link.txt
+    # 22503702 bases of 2654624157 (0.848%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+           mm39 xenTro10) > rbest.log 2>&1
+    #	real    188m44.842s
+
+    sed -e's/^/    # /;' fb.mm39.chainRBest.XenTro10.txt
+    # 38090013 bases of 2654624157 (1.435%) in intersection
+
+    mkdir /hive/data/genomes/xenTro10/bed/blastz.mm39.swap
+    cd /hive/data/genomes/xenTro10/bed/blastz.mm39.swap
+    time (doBlastzChainNet.pl -noDbNameCheck -swap -verbose=2 \
+      /hive/data/genomes/mm39/bed/lastzXenTro10.2021-02-22/DEF \
+      -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    #	real    11m51.841s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainMm39Link.txt
+    # 69880088 bases of 1448461978 (4.824%) in intersection
+    sed -e 's/^/    # /;'  fb.xenTro10.chainSynMm39Link.txt
+    # 22992776 bases of 1448461978 (1.587%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+       xenTro10 mm39) > rbest.log 2>&1
+    #	real    189m59.538s
+
+    sed -e 's/^/    # /;'  fb.xenTro10.chainRBest.Mm39.txt
+
+    # 37509757 bases of 1448461978 (2.590%) in intersection
+
+##############################################################################
