@@ -18,7 +18,7 @@ def parseArgs():
     parser = optparse.OptionParser("""usage: %prog [options] filename - change NCBI or Ensembl chromosome names to UCSC names in tabular or wiggle files, using a chromAlias table.
 
     Supports these UCSC file formats:
-    BED, genePred, PSL, wiggle (all formats), bedGraph, VCF, SAM
+    BED, genePred, PSL, wiggle (all formats), bedGraph, VCF, SAM, GTF, Chain
     ... or any other csv or tsv format where the sequence (chromosome) name is a separate field.
 
     Requires a <genome>.chromAlias.tsv file which can be downloaded like this:
@@ -43,7 +43,7 @@ def parseArgs():
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
     parser.add_option("-k", "--field", dest="fieldNo", action="store", type="int", \
-            help="index of field to convert, default is %default (first field is 1), for most formats, e.g. BED. For genePred, set this option to 2, for PSL it is 10 or 14. If any line starts with @ (SAM format), this field is automatically set to 2.", default=1)
+            help="index of field to convert, default is %default (first field is 1). This works for BED, bedGraph, GTF, wiggle, VCF. For genePred, set this option to 2, for PSL use 10 (target) or 14 (query), for Chain use 2 (target) or 7 (query). If any line starts with @ (SAM format), this field is automatically set to 2.", default=1)
 
     (options, args) = parser.parse_args()
 
@@ -61,24 +61,28 @@ def parseArgs():
 def splitLines(ifh):
     " yield (chromName, restOfLine) for all lines of ifh "
     sep = -1
-    #if (sys.version_info > (3, 0)):
     lineNo = 0
     for line in ifh:
-        if line.startswith("fixedStep") or line.startswith("variableStep"):
-            row = line.split()
-            yield lineNo, " ", row, line # *step lines are always space-separated
+        lineNo += 1
+        if line.startswith("#"):
+            yield lineNo, None, None, line.rstrip("\n\r")
         else:
-            if sep==-1:
-                # why test first for space? Because after fixedStep, the lines are just single numbers
-                if " " in line:
-                    sep = None # = split on any whitespace, consec. whitespc counts as one
-                else:
-                    sep = "\t" # default is to split on tab
-            row = line.rstrip("\n\t").split(sep)
-            lineNo += 1
-            if sep is None:
-                sep = " "
-            yield lineNo, sep, row, line
+            if line.startswith("fixedStep") or line.startswith("variableStep"):
+                row = line.split()
+                yield lineNo, " ", row, line # *step lines are always space-separated
+            else:
+                if sep==-1:
+                    # why test first for space? Because after fixedStep, the lines are just single numbers
+                    if "\t" in line:
+                        sep = "\t"
+                    elif " " in line:
+                        sep = None # = split on any whitespace, consec. whitespc counts as one
+                    else:
+                        sep = "\t" # default is to split on tab
+                row = line.rstrip("\n\r").split(sep)
+                if sep is None:
+                    sep = " "
+                yield lineNo, sep, row, line
 
 def parseAlias(fname):
     " parse tsv file with at least two columns, orig chrom name and new chrom name "
@@ -108,8 +112,12 @@ def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
     isSam = False
 
     for lineNo, sep, row, line in splitLines(ifh):
-        if len(row)<=2:
-            pass # fixedStep or variableStep lines are just passed through
+        if line.startswith("#"):
+            ofh.write(line) # comments (e.g. gtf) are just passed through
+            ofh.write("\n")
+            continue
+        elif len(row)<=2:
+            pass   # fixedStep or variableStep value lines are passed through
         elif row[0]=="fixedStep" or row[0]=="variableStep":
             # fixedStep chrom=NC_033660.1 start=15778865 step=1
             key, chrom = row[1].split("=")

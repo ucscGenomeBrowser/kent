@@ -2772,7 +2772,9 @@ var rightClick = {
                             title = title.split(",")[0];
                         }
 
-                        else if (isHgc && ( href.indexOf('g=gtexGene')!== -1 || href.indexOf('g=unip') !== -1 )) {
+                        else if (isHgc && ( href.indexOf('g=gtexGene')!== -1 
+                                            || href.indexOf('g=unip') !== -1 
+                                            || href.indexOf('g=knownGene') !== -1 )) {
                             // For GTEx gene and UniProt mouseovers, replace title (which may be a tissue name) with 
                             // item (gene) name. Also need to unescape the urlencoded characters and the + sign.
                             a = /i=([^&]+)/.exec(href);
@@ -4670,7 +4672,9 @@ var mouseOver = {
     $('#mouseOverText').width(msgWidth);
     var msgHeight = Math.ceil($('#mouseOverText').height());
     var lineHeight = Math.max(0, tdHeight - msgHeight);
-    if (tdTop < 0) { lineHeight = Math.max(0, tdHeight + tdTop - msgHeight); }
+    if (tdTop < 0) {
+       lineHeight = Math.max(0, tdHeight + tdTop - msgHeight);
+    }
     var msgLeft = Math.max(tdLeft, clientX - (msgWidth/2) - 3); // with magic 3
     var msgTop = Math.max(0, tdTop);
     var lineTop = Math.max(0, msgTop + msgHeight);

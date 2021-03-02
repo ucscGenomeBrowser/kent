@@ -448,22 +448,25 @@ join -t\$'\\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRef
 
 # Make bigBed with attributes in extra columns for ncbiRefSeqOther:
 twoBitInfo $dbTwoBit stdout | sort -k2,2n > \$db.chrom.sizes
-if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
-  genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n \\
-    | grep -v -f ../../../download/\${asmId}.remove.dups.list > \$db.other.bed
-else
-  genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
+
+if [ -s \$db.other.gp ]; then
+  if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
+    genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n \\
+      | grep -v -f ../../../download/\${asmId}.remove.dups.list > \$db.other.bed
+  else
+    genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
+  fi
+  $ncbiRefSeqOtherAttrs \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
+  bedToBigBed -type=bed12+13 -as=ncbiRefSeqOther.as -tab \\
+    -extraIndex=name \\
+    \$db.other.extras.bed \$db.chrom.sizes \$db.other.bb
+
+  # Make trix index for ncbiRefSeqOther
+  $ncbiRefSeqOtherIxIxx \\
+    ncbiRefSeqOther.as \$db.other.extras.bed > ncbiRefSeqOther.ix.tab
+
+  ixIxx ncbiRefSeqOther.ix.tab ncbiRefSeqOther.ix{,x}
 fi
-$ncbiRefSeqOtherAttrs \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
-bedToBigBed -type=bed12+13 -as=ncbiRefSeqOther.as -tab \\
-  -extraIndex=name \\
-  \$db.other.extras.bed \$db.chrom.sizes \$db.other.bb
-
-# Make trix index for ncbiRefSeqOther
-$ncbiRefSeqOtherIxIxx \\
-  ncbiRefSeqOther.as \$db.other.extras.bed > ncbiRefSeqOther.ix.tab
-
-ixIxx ncbiRefSeqOther.ix.tab ncbiRefSeqOther.ix{,x}
 
 # PSL data will be loaded into a psl type track to show the alignments
 (zgrep "^#" \$ncbiGffGz | head || true) > gffForPsl.gff
@@ -866,6 +869,10 @@ if [ -d "/usr/local/apache/htdocs-hgdownload/goldenPath/archive" ]; then
  ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \\
    /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/
 fi
+
+rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes/\$db.ncbiRefSeq.gtf.gz
+ ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \\
+    /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes/\$db.ncbiRefSeq.gtf.gz
 
 featureBits \$db ncbiRefSeq > fb.ncbiRefSeq.\$db.txt 2>&1
 cat fb.ncbiRefSeq.\$db.txt 2>&1

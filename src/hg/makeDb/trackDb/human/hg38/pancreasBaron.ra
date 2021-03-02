@@ -3,7 +3,7 @@ superTrack on
 shortLabel Pancreas Baron
 longLabel Pancreas single cell sequencing from Baron et al 2016
 visibility hide
-group expression
+group singleCell
 
     track pancreasBaronCellType
     parent pancreasBaron

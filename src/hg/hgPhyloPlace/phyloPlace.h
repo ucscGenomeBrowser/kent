@@ -9,9 +9,16 @@
 #include "linefile.h"
 #include "parsimonyProto.h"
 #include "phyloTree.h"
+#include "seqWindow.h"
 #include "trashDir.h"
 
 #define PHYLOPLACE_DATA_DIR "hgPhyloPlaceData"
+
+// Allow users to upload a lot of sequences, but put limits on how much detail we'll show and
+// how many custom tracks we'll create.
+#define MAX_SUBTREE_BUTTONS 5
+#define MAX_SEQ_DETAILS 100
+#define MAX_SUBTREE_CTS 10
 
 #define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
 
@@ -29,15 +36,19 @@ struct seqInfo
 /* User sequences, alignments and statistics */
 {
     struct seqInfo *next;
-    struct dnaSeq *seq;
-    struct psl *psl;
-    struct singleNucChange *sncList;
-    struct singleNucChange *maskedSncList;
-    struct slRef *maskedReasonsList;
-    uint nCountStart;
-    uint nCountMiddle;
-    uint nCountEnd;
-    uint ambigCount;
+    struct dnaSeq *seq;                     // Uploaded sequence
+    struct psl *psl;                        // Alignment to reference (if FASTA uploaded)
+    struct singleNucChange *sncList;        // SNVs in seq
+    struct singleNucChange *maskedSncList;  // SNVs that were masked (not used for placement)
+    struct slRef *maskedReasonsList;        // Reason (from Problematic Sites) for masking each SNV
+    uint nCountStart;                       // #Ns at beginning of seq
+    uint nCountMiddle;                      // #Ns not at beginning or end of seq
+    uint nCountEnd;                         // #Ns at end of seq
+    uint ambigCount;                        // # ambiguous IUPAC bases
+    char *insRanges;                        // ranges and sequences inserted into reference
+    char *delRanges;                        // ranges and sequences deleted from reference
+    uint insBases;                          // total #bases inserted into reference
+    uint delBases;                          // total #bases deleted from reference
 };
 
 struct variantPathNode
@@ -74,6 +85,8 @@ struct placementInfo
     struct baseVal *imputedBases;         // Ambiguous bases imputed to ref/alt [ACGT]
     int parsimonyScore;                   // Parsimony cost of placing sample
     int bestNodeCount;                    // Number of equally parsimonious placements
+    char *nextClade;                      // Nextstrain clade assigned by UShER
+    char *pangoLineage;                   // Pango lineage assigned by UShER
     };
 
 struct subtreeInfo
@@ -92,6 +105,7 @@ struct usherResults
     {
     struct tempName *bigTreePlusTn;      // Newick file: original tree plus user's samples
     struct hash *samplePlacements;       // Info about each sample's placement in the tree
+    struct subtreeInfo *singleSubtreeInfo;  // Comprehensive subtree with all uploaded samples
     struct subtreeInfo *subtreeInfoList; // For each subtree: tree, file, node info etc.
     };
 
@@ -116,6 +130,14 @@ struct sampleMetadata
     char *region;       // Continent on which sample was collected
     };
 
+struct geneInfo
+/* Information sufficient to determine whether a genome change causes a coding change. */
+    {
+    struct geneInfo *next;
+    struct psl *psl;        // Alignment of transcript to genome
+    struct dnaSeq *txSeq;   // Transcript sequence
+    };
+
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
                               boolean *informativeBases, struct slName **maskSites,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
@@ -132,15 +154,23 @@ struct usherResults *runUsher(char *usherPath, char *usherAssignmentsPath, char 
  * subtrees to trash files, return list of slRef to struct tempName for the trash files
  * and parse other results out of stderr output. */
 
-void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct dnaSeq *ref,
-                       char *bigGenePredFile, struct hash *sampleMetadata, char *jsonFile,
+struct slPair *getAaMutations(struct singleNucChange *sncList, struct geneInfo *geneInfoList,
+                              struct seqWindow *gSeqWin);
+/* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }. */
+
+struct geneInfo *getGeneInfoList(char *bigGenePredFile, struct dnaSeq *refGenome);
+/* If config.ra has a source of gene annotations, then return the gene list. */
+
+void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneInfoList,
+                       struct seqWindow *gSeqWin, struct hash *sampleMetadata, char *jsonFile,
                        char *source);
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 
 struct tempName *writeCustomTracks(struct tempName *vcfTn, struct usherResults *ur,
                                    struct slName *sampleIds, struct phyloTree *bigTree,
-                                   char *source, int fontHeight, int *pStartTime);
+                                   char *source, int fontHeight, struct phyloTree **retSampleTree,
+                                   int *pStartTime);
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 
 

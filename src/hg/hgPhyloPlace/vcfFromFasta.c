@@ -481,6 +481,68 @@ for (i = 0, qSeq = querySeqs;  i < sampleCount;  i++, qSeq = qSeq->next)
 writeSnvsToVcfFile(snvsByPos, ref, sampleNames, sampleCount, maskSites, vcfFileName);
 }
 
+static void analyzeGaps(struct seqInfo *filteredSeqs, struct dnaSeq *refGenome)
+/* Tally up actual insertions and deletions in each psl; ignore skipped N bases. */
+{
+struct seqInfo *si;
+for (si = filteredSeqs;  si != NULL;  si = si->next)
+    {
+    struct psl *psl = si->psl;
+    if (psl && (psl->qBaseInsert || psl->tBaseInsert))
+        {
+        struct dyString *dyIns = dyStringNew(0);
+        struct dyString *dyDel = dyStringNew(0);
+        int insBases = 0, delBases = 0;
+        int ix;
+        for (ix = 0;  ix < psl->blockCount - 1;  ix++)
+            {
+            int qGapStart = psl->qStarts[ix] + psl->blockSizes[ix];
+            int qGapEnd = psl->qStarts[ix+1];
+            int qGapLen = qGapEnd - qGapStart;
+            int tGapStart = psl->tStarts[ix] + psl->blockSizes[ix];
+            int tGapEnd = psl->tStarts[ix+1];
+            int tGapLen = tGapEnd - tGapStart;
+            if (qGapLen > tGapLen)
+                {
+                int insLen = qGapLen - tGapLen;
+                insBases += insLen;
+                if (isNotEmpty(dyIns->string))
+                    dyStringAppend(dyIns, ", ");
+                if (insLen <= 12)
+                    {
+                    char insSeq[insLen+1];
+                    safencpy(insSeq, sizeof insSeq, si->seq->dna + qGapEnd - insLen, insLen);
+                    touppers(insSeq);
+                    dyStringPrintf(dyIns, "%d-%d:%s", tGapEnd, tGapEnd+1, insSeq);
+                    }
+                else
+                    dyStringPrintf(dyIns, "%d-%d:%d bases", tGapEnd, tGapEnd+1, insLen);
+                }
+            else if (tGapLen > qGapLen)
+                {
+                int delLen = tGapLen - qGapLen;;
+                delBases += delLen;
+                if (isNotEmpty(dyDel->string))
+                    dyStringAppend(dyDel, ", ");
+                if (delLen <= 12)
+                    {
+                    char delSeq[delLen+1];
+                    safencpy(delSeq, sizeof delSeq, refGenome->dna + tGapEnd - delLen, delLen);
+                    touppers(delSeq);
+                    dyStringPrintf(dyDel, "%d-%d:%s", tGapEnd - delLen + 1, tGapEnd, delSeq);
+                    }
+                else
+                    dyStringPrintf(dyDel, "%d-%d:%d bases", tGapEnd - delLen + 1, tGapEnd, delLen);
+                }
+            }
+        si->insBases = insBases;
+        si->delBases = delBases;
+        si->insRanges = dyStringCannibalize(&dyIns);
+        si->delRanges = dyStringCannibalize(&dyDel);
+        }
+    }
+}
+
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
                               boolean *informativeBases, struct slName **maskSites,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
@@ -508,6 +570,7 @@ if (filteredSeqs)
         struct psl *psl;
         for (psl = filteredAlignments;  psl != NULL;  psl = psl->next)
             slNameAddHead(&sampleIds, psl->qName);
+        analyzeGaps(filteredSeqs, refGenome);
         slReverse(&sampleIds);
         reportTiming(pStartTime, "write VCF for uploaded FASTA");
         }

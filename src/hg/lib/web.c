@@ -369,10 +369,10 @@ puts( // TODO: Replace nested tables with CSS (difficulty is that tables are clo
      "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
      "<TR><TD COLSPAN=3>\n"
      "<div id=firstSection>"
-     "      <!--outer table is for border purposes-->\n"
-     "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' "
+     " <!--outer table is for border purposes-->\n"
+     " <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' "
 		 "CELLPADDING='1'><TR><TD>\n"
-     "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' "
+     " <TABLE CLASS='hgInside' BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' "
 		 "CELLPADDING='0'><TR><TD>\n"
      "     <div class='subheadingBar'><div class='windowSize' id='sectTtl'>"
      );
@@ -381,7 +381,7 @@ puts( // TODO: Replace nested tables with CSS (difficulty is that tables are clo
 htmlTextOut(title);
 
 puts("     </div></div>\n"
-     "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
+     "     <TABLE CLASS='hgInside' BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
 	  "<TR><TH HEIGHT=10></TH></TR>\n"
      "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
      );

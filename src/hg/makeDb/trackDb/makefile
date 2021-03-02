@@ -167,7 +167,7 @@ DBS = \
 	rheMac2 rheMac3 rheMac7 rheMac8 rheMac10 \
 	rhiBie1 \
 	rhiRox1 \
-	rn3 rn4 rn5 rn6 \
+	rn3 rn4 rn5 rn6 rn7 \
 	rouAeg1 \
 	sacCer1 sacCer2 sacCer3 \
 	saiBol1 \
@@ -192,7 +192,7 @@ DBS = \
 	vicPac1 vicPac2 \
 	wuhCor1 \
 	xenLae2 \
-	xenTro1 xenTro2 xenTro3 xenTro7 xenTro9
+	xenTro1 xenTro2 xenTro3 xenTro7 xenTro9 xenTro10
 
 ARCHIVED_DBS = \
 	rheMac1 \

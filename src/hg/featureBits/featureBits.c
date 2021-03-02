@@ -32,6 +32,7 @@ static struct optionSpec optionSpecs[] =
     {"countGaps", OPTION_BOOLEAN},
     {"noRandom", OPTION_BOOLEAN},
     {"noHap", OPTION_BOOLEAN},
+    {"primaryChroms", OPTION_BOOLEAN},
     {"dots", OPTION_INT},
     {"minFeatureSize", OPTION_INT},
     {"enrichment", OPTION_BOOLEAN},
@@ -54,6 +55,7 @@ char *chromSizes = NULL;		/* read chrom sizes from file instead of database . */
 boolean countGaps = FALSE;	/* Count gaps in denominator? */
 boolean noRandom = FALSE;	/* Exclude _random chromosomes? */
 boolean noHap = FALSE;	/* Exclude _hap|_alt chromosomes? */
+boolean primaryChroms = FALSE; /* only include primary chroms */
 int dots = 0;	/* print dots every N chroms (scaffolds) processed */
 boolean calcEnrichment = FALSE;	/* Calculate coverage/enrichment? */
 int binSize = 500000;	/* Default bin size. */
@@ -87,6 +89,7 @@ errAbort(
   "   -countGaps        Count gaps in denominator\n"
   "   -noRandom         Don't include _random (or Un) chromosomes\n"
   "   -noHap            Don't include _hap|_alt chromosomes\n"
+  "   -primaryChroms    Primary assembly (chroms without '_' in name)\n"
   "   -dots=N           Output dot every N chroms (scaffolds) processed\n"
   "   -minFeatureSize=n Don't include bits of the track that are smaller than\n"
   "                     minFeatureSize, useful for differentiating between\n"
@@ -216,7 +219,8 @@ return  !((noRandom && (endsWith(name, "_random")
                         || startsWith("chrUn", name)
                         || sameWord("chrNA", name) /* danRer */
                         || sameWord("chrU", name)))  /* dm */
-          || (noHap && haplotype(name)));
+          || (noHap && haplotype(name))
+          || (primaryChroms && (strchr(name, '_') != NULL)));
 }
 
 void bitsToBins(Bits *bits, char *chrom, int chromSize, FILE *binFile, int binSize, int binOverlap)
@@ -926,6 +930,7 @@ notResults = optionExists("not");
 countGaps = optionExists("countGaps");
 noRandom = optionExists("noRandom");
 noHap = optionExists("noHap");
+primaryChroms = optionExists("primaryChroms");
 dots = optionInt("dots", dots);
 where = optionVal("where", NULL);
 calcEnrichment = optionExists("enrichment");

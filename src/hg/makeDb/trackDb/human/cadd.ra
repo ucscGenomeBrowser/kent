@@ -7,24 +7,6 @@ visibility hide
 group phenDis
 color 100,130,160
 
-        track caddIns
-        shortLabel Insertions
-        longLabel CADD Score: Insertions - label is length of insertion
-        type bigBed 9 +
-        parent caddSuper
-        visibility dense
-        bigDataUrl /gbdb/$D/cadd/ins.bb
-        mouseOver Mutation: $change CADD Phred score: $phred
-
-        track caddDel
-        shortLabel Deletions
-        longLabel CADD Score: Deletions - label is length of deletion
-        type bigBed 9 +
-        parent caddSuper
-        visibility dense
-        bigDataUrl /gbdb/$D/cadd/del.bb
-        mouseOver Mutation: $change CADD Phred score: $phred
-
 track cadd
 shortLabel CADD
 longLabel CADD 1.6 Score for all possible single-basepair mutations (zoom in to show exact score on mouse over, same basepair = score 0.0)
@@ -35,10 +17,12 @@ visibility dense
 #maxWindowToQuery 500000
 group phenDis
 color 100,130,160
+html caddSuper
+#maxWindowToDraw 10000000
 
         track caddA
         shortLabel Mutation: A
-        longLabel CADD Score: Mutation is A
+        longLabel CADD 1.6 Score: Mutation is A
         type bigWig
         parent cadd on
         visibility dense
@@ -49,7 +33,7 @@ color 100,130,160
 
         track caddC
         shortLabel Mutation: C
-        longLabel CADD Score: Mutation is C
+        longLabel CADD 1.6 Score: Mutation is C
         type bigWig
         parent cadd on
         visibility dense
@@ -60,7 +44,7 @@ color 100,130,160
 
         track caddG
         shortLabel Mutation: G
-        longLabel CADD Score: Mutation is G
+        longLabel CADD 1.6 Score: Mutation is G
         type bigWig
         parent cadd on
         visibility dense
@@ -71,7 +55,7 @@ color 100,130,160
 
         track caddT
         shortLabel Mutation: T
-        longLabel CADD Score: Mutation is T
+        longLabel CADD 1.6 Score: Mutation is T
         type bigWig
         parent cadd on
         visibility dense
@@ -79,3 +63,26 @@ color 100,130,160
         maxHeightPixels 128:20:8
         viewLimits 0:30
         viewLimitsMax 0:100
+
+track caddIns
+shortLabel Insertions
+longLabel CADD 1.6 Score: Insertions - label is length of insertion
+type bigBed 9 +
+parent caddSuper
+visibility dense
+bigDataUrl /gbdb/$D/cadd/ins.bb
+mouseOver Mutation: $change CADD Phred score: $phred
+html caddSuper
+#maxWindowToDraw 200000
+
+track caddDel
+shortLabel Deletions
+longLabel CADD 1.6 Score: Deletions - label is length of deletion
+type bigBed 9 +
+parent caddSuper
+visibility dense
+bigDataUrl /gbdb/$D/cadd/del.bb
+mouseOver Mutation: $change CADD Phred score: $phred
+html caddSuper
+#maxWindowToDraw 200000
+

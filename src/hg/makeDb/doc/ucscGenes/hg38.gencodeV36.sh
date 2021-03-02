@@ -9,7 +9,10 @@ oldDb=knownGeneV35
 kent=$HOME/kent
 spDb=sp180404
 cpuFarm=ku
-export curVer=14
+export oldGeneDir=/cluster/data/hg38/bed/ucsc.20.1
+export oldGeneBed=$oldGeneDir/ucscGenes.bed
+export lastVer=12
+export curVer=13
 export Db=Hg38
 export xdb=mm10
 export Xdb=Mm10
@@ -44,6 +47,18 @@ export cpuFarm=ku
 
 mkdir -p $dir
 cd $dir
+
+# first get list of tables from push request in $lastVer.table.lst
+# here's the redmine http://redmine.soe.ucsc.edu/issues/21644
+wc -l $oldGeneDir/$lastVer.table.lst 
+# 62
+
+(
+cat $oldGeneDir/$lastVer.table.lst | grep -v "ToKg$lastVer" | grep -v "XrefOld" | grep -v "knownGeneOld" | grep -v "knownToGencode" 
+echo kg${lastVer}ToKg${curVer}
+echo knownGeneOld$lastVer
+echo kgXrefOld$lastVer
+) | sort >  $curVer.table.lst 
 
 echo "create database $tempDb" | hgsql ""
 echo "create table chromInfo like  $db.chromInfo" | hgsql $tempDb
@@ -130,6 +145,9 @@ cat kgSpAlias_0.tmp|sort -u  > kgSpAlias.tab
 rm kgSpAlias_0.tmp
 
 hgLoadSqlTab -notOnServer $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
+
+txGeneExplainUpdate2 $oldGeneBed ucscGenes.bed kgOldToNew.tab
+hgLoadSqlTab -notOnServer $tempDb kg${lastVer}ToKg${curVer} $kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
 
 
 #ifdef NOTNOW
@@ -343,6 +361,12 @@ ixIxx knownGene.txt knownGene${GENCODE_VERSION}.ix knownGene${GENCODE_VERSION}.i
  rm -rf /gbdb/$db/knownGene${GENCODE_VERSION}.ix /gbdb/$db/knownGene${GENCODE_VERSION}.ixx
 ln -s $dir/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene${GENCODE_VERSION}.ix
 ln -s $dir/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene${GENCODE_VERSION}.ixx  
+tawk '{print $5}' knownCanonical.tab | sort > knownCanonicalId.txt
+join knownCanonicalId.txt knownGene.txt | join -v 1 /dev/stdin pseudo.txt > knownGeneFast.txt
+ixIxx knownGeneFast.txt knownGeneFast${GENCODE_VERSION}.ix knownGeneFast${GENCODE_VERSION}.ixx
+ rm -rf /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ix /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ixx
+ln -s $dir/knownGeneFast${GENCODE_VERSION}.ix  /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ix
+ln -s $dir/knownGeneFast${GENCODE_VERSION}.ixx /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ixx  
 
 #zcat gencode${GENCODE_VERSION}.bed.gz > ucscGenes.bed
 #jtwoBitToFa -noMask /cluster/data/$db/$db.2bit -bed=ucscGenes.bed stdout | faFilter -uniq stdin  ucscGenes.fa
@@ -639,3 +663,65 @@ hgMapToGene -geneTableType=genePred -tempDb=$tempDb $db affyU95 knownGene knownT
     wget "http://www.hprd.org/edownload/HPRD_FLAT_FILES_041310"
     tar xvf HPRD_FLAT_FILES_041310
     knownToHprd $tempDb FLAT_FILES_072010/HPRD_ID_MAPPINGS.txt
+
+    time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
+	    hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
+    time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
+	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnfAtlas2
+
+# Build knownToMupit
+
+mkdir mupit
+cd mupit
+
+# mupit-pdbids.txt was emailed from Kyle Moad (kmoad@insilico.us.com)
+# wc -l 
+cp /hive/data/outside/mupit/mupit-pdbids.txt .
+# get knownGene IDs and associated PDB IDS
+# the extDb{Ref} parts come from hg/hgGene/domains.c:domainsPrint()
+hgsql -Ne "select kgID, extAcc1 from $db.kgXref x \
+    inner join sp180404.extDbRef sp on x.spID = sp.acc \
+    inner join sp180404.extDb e on sp.extDb=e.id \
+    where x.spID != '' and e.val='PDB' order by kgID" \
+    > $db.knownToPdb.txt;
+# filter out pdbIds not found in mupit
+cat mupit-pdbids.txt | tr '[a-z]' '[A-Z]' | \
+    grep -Fwf - $db.knownToPdb.txt >  knownToMupit.txt;
+# check that it filtered correctly:
+# cut -f2 $db.knownToMuipit.txt | sort -u | wc -l;
+# load new table for hgGene/hgc
+hgLoadSqlTab $db knownToMupit ~/kent/src/hg/lib/knownTo.sql knownToMupit.txt
+
+#myGene2
+mkdir $dir/myGene2
+cd $dir/myGene2
+
+# copy list of genes from https://mygene2.org/MyGene2/genes 
+awk '{print $1}' | sort > genes.lst
+hgsql hg38 -Ne "select geneSymbol, kgId from kgXref" | sort > ids.txt
+join -t $'\t' genes.lst  ids.txt | tawk '{print $2,$1}' | sort > knownToMyGene2.txt
+hgLoadSqlTab $db knownToMyGene2 ~/kent/src/hg/lib/knownTo.sql knownToMyGene2.txt
+
+# make knownToNextProt
+mkdir -p $dir/nextProt
+cd $dir/nextProt
+
+wget "ftp://ftp.nextprot.org/pub/current_release/ac_lists/nextprot_ac_list_all.txt"
+awk '{print $0, $0}' nextprot_ac_list_all.txt | sed 's/NX_//' | sort > displayIdToNextProt.txt
+hgsql -e "select spID,kgId from kgXref" --skip-column-names $tempDb | awk '{if (NF == 2) print}' | sort > displayIdToKgId.txt
+join displayIdToKgId.txt displayIdToNextProt.txt | awk 'BEGIN {OFS="\t"} {print $2,$3}' > knownToNextProt.tab
+hgLoadSqlTab -notOnServer $tempDb  knownToNextProt $kent/src/hg/lib/knownTo.sql  knownToNextProt.tab
+
+# this should be done AFTER moving the new tables into hg38
+hgKgGetText $tempDb tempSearch.txt
+sort tempSearch.txt > tempSearch2.txt
+tawk '{split($2,a,"."); printf "%s\t", $1;for(ii = 1; ii <= a[2]; ii++) printf "%s ",a[1] "." ii; printf "\n" }' txToAcc.tab | sort > tempSearch3.txt
+tawk '{split($2,a,"."); printf "%s\t%s ", $1,a[1];for(ii = 1; ii <= a[2]; ii++) printf "%s ",a[1] "." ii; printf "\n" }' knownAttrs.tab | sort > tempSearch4.txt
+join tempSearch2.txt tempSearch3.txt | join /dev/stdin tempSearch4.txt | sort > gencode$GENCODE_VERSION.txt
+ixIxx gencode$GENCODE_VERSION.txt gencode$GENCODE_VERSION.ix gencode$GENCODE_VERSION.ixx
+ rm -rf /gbdb/$tempDb/gencode/gencode$GENCODE_VERSION.ix /gbdb/$tempDb/gencode/gencode$GENCODE_VERSION.ixx
+ln -s $dir/gencode$GENCODE_VERSION.ix  /gbdb/$tempDb/gencode/gencode$GENCODE_VERSION.ix
+ln -s $dir/gencode$GENCODE_VERSION.ixx /gbdb/$tempDb/gencode/gencode$GENCODE_VERSION.ixx  
+
+

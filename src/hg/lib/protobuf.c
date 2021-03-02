@@ -154,13 +154,26 @@ for (i = 0;  i < length;  i++)
 return string;
 }
 
+static void pbSkipBytes(FILE *stream, bits64 length, long long *pBytesLeft)
+/* Skip <length> bytes from stream.  Inefficient but I don't expect to do this much. */
+{
+if (*pBytesLeft < length)
+    errAbort("pbSkipBytes: called with length (%llu) > bytesLeft (%lld)", length, *pBytesLeft);
+bits64 i;
+for (i = 0;  i < length;  i++)
+    {
+    bits8 val;
+    if (!pbNextByte(stream, &val, pBytesLeft))
+        errAbort("Expecting to skip %llu bytes but got EOF at byte %llu", length, i);
+    }
+}
+
 static struct protobufFieldDef *protobufDefForField(struct protobufDef *proto, bits32 fieldNum)
 {
 struct protobufFieldDef *field;
 for (field = proto->fields;  field != NULL;  field = field->next)
     if (field->fieldNum == fieldNum)
         return field;
-errAbort("protobufDefForField: no field in message '%s' has number %d", proto->name, fieldNum);
 return NULL;
 }
 
@@ -177,10 +190,22 @@ enum pbWireType wireType = pbParseWireType(val);
 bits8 fieldNumB1 = pbParseFieldNumberFirstByte(val);
 bits32 fieldNum = pbFinishVarint(stream, fieldNumB1, pBytesLeft);
 field->def = protobufDefForField(proto, fieldNum);
-enum pbDataType dataType = field->def->dataType;
-verbose(2, "pbParseField: wire type %d, fieldNumber %u, field name '%s', data type %d, "
-        "bytesLeft %lld\n",
-        wireType, fieldNum, field->def->name, dataType, *pBytesLeft);
+// Forwards compatibility: when a newer protobuf spec has a new field, and we don't know what
+// to do with that field, just ignore the field.
+enum pbDataType dataType = pbdtInvalid;
+if (field->def)
+    {
+    dataType = field->def->dataType;
+    verbose(2, "pbParseField: wire type %d, fieldNumber %u, field name '%s', data type %d, "
+            "bytesLeft %lld\n",
+            wireType, fieldNum, field->def->name, dataType, *pBytesLeft);
+    }
+else
+    {
+    verbose(2, "pbParseField: wire type %d, fieldNumber %u, no definition for field, "
+            "bytesLeft %lld\n",
+            wireType, fieldNum, *pBytesLeft);
+    }
 bits64 varint;
 bits32 val32b;
 int i;
@@ -190,14 +215,14 @@ switch (wireType)
         varint = pbParseVarint(stream, pBytesLeft);
         if (dataType == pbdtInt32)
             field->value.vInt32 = varint;
-        else
+        else if (field->def)
             errAbort("Sorry, data type %d not yet supported", dataType);
         break;
     case pbwt64b:
         varint = pbParse64b(stream, pBytesLeft);
         if (dataType == pbdtUint64)
             field->value.vUint64 = varint;
-        else
+        else if (field->def)
             errAbort("Sorry, data type %d not yet supported", dataType);
         break;
     case pbwtLengthDelim:
@@ -206,43 +231,51 @@ switch (wireType)
         if (*pBytesLeft < emByteLength)
             errAbort("Embedded byte length (%lld) > *pBytesLeft (%lld)",
                      emByteLength, *pBytesLeft);
-        verbose(2, "Embedded with byte length %lld, data type %d, bytesLeft %lld\n",
-                emByteLength, dataType, *pBytesLeft);
-        if (emByteLength > 0)
+        if (field->def)
             {
-            long long emBytesLeft = emByteLength;
-            if (dataType == pbdtString)
+            verbose(2, "Embedded with byte length %lld, data type %d, bytesLeft %lld\n",
+                    emByteLength, dataType, *pBytesLeft);
+            if (emByteLength > 0)
                 {
-                field->value.vString = pbParseString(stream, emByteLength, &emBytesLeft);
-                field->length = emByteLength;
-                }
-            else if (dataType == pbdtInt32)
-                {
-                AllocArray(field->value.vPacked, emByteLength);
-                for (i = 0;  emBytesLeft > 0;  i++)
+                long long emBytesLeft = emByteLength;
+                if (dataType == pbdtString)
                     {
-                    field->value.vPacked[i].vInt32 = pbParseVarint(stream, &emBytesLeft);
-                    verbose(2, "[%d] = %d, embedded bytes left %lld\n",
-                            i, field->value.vPacked[i].vInt32, emBytesLeft);
+                    field->value.vString = pbParseString(stream, emByteLength, &emBytesLeft);
+                    field->length = emByteLength;
                     }
-                field->length = i;
-                }
-            else if (dataType == pbdtEmbedded)
-                {
-                verbose(2, "Expecting %lld bytes of embedded '%s' message.\n",
-                        emByteLength, field->def->embedded->name);
-                if (emByteLength > 0)
+                else if (dataType == pbdtInt32)
                     {
-                    AllocArray(field->value.vEmbedded, emByteLength);
+                    AllocArray(field->value.vPacked, emByteLength);
                     for (i = 0;  emBytesLeft > 0;  i++)
-                        field->value.vEmbedded[i] = protobufParse(stream, field->def->embedded,
-                                                                  &emBytesLeft);
+                        {
+                        field->value.vPacked[i].vInt32 = pbParseVarint(stream, &emBytesLeft);
+                        verbose(2, "[%d] = %d, embedded bytes left %lld\n",
+                                i, field->value.vPacked[i].vInt32, emBytesLeft);
+                        }
                     field->length = i;
                     }
+                else if (dataType == pbdtEmbedded)
+                    {
+                    verbose(2, "Expecting %lld bytes of embedded '%s' message.\n",
+                            emByteLength, field->def->embedded->name);
+                    if (emByteLength > 0)
+                        {
+                        AllocArray(field->value.vEmbedded, emByteLength);
+                        for (i = 0;  emBytesLeft > 0;  i++)
+                            field->value.vEmbedded[i] = protobufParse(stream, field->def->embedded,
+                                                                      &emBytesLeft);
+                        field->length = i;
+                        }
+                    }
+                else
+                    errAbort("Sorry, data type %d not yet supported", dataType);
+                *pBytesLeft -= emByteLength;
                 }
-            else
-                errAbort("Sorry, data type %d not yet supported", dataType);
-            *pBytesLeft -= emByteLength;
+            }
+        else
+            {
+            verbose(2, "Skipping %lld bytes of undefined field\n", emByteLength);
+            pbSkipBytes(stream, emByteLength, pBytesLeft);
             }
         }
         break;
@@ -250,7 +283,7 @@ switch (wireType)
                 val32b = pbParse32b(stream, pBytesLeft);
         if (dataType == pbdtFixed32)
             field->value.vUint32 = val32b;
-        else
+        else if (field->def)
             errAbort("Sorry, data type %d not yet supported", dataType);
         break;
     default:
@@ -278,8 +311,13 @@ while (*pBytesLeft > 0)
     field = pbParseField(stream, proto, pBytesLeft);
     if (field == NULL)
         break;
-    slAddHead(&pb->fields, field);
-    verbose(2, "protobufParse: got field %s, %lld bytes left\n", field->def->name, *pBytesLeft);
+    if (field->def)
+        {
+        slAddHead(&pb->fields, field);
+        verbose(2, "protobufParse: got field %s, %lld bytes left\n", field->def->name, *pBytesLeft);
+        }
+    else
+        verbose(2, "protobufParse: skipped undefined field, %lld bytes left\n", *pBytesLeft);
     }
 slReverse(&pb->fields);
 return pb;

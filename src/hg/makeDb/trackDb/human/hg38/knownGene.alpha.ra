@@ -1,13 +1,11 @@
-
 track knownGene
-#track gencodeKnownV36
-#table knownGene
 shortLabel GENCODE V36
 longLabel GENCODE V36
 priority 1
 visibility pack
 type bigGenePred
 bigDataUrl /gbdb/hg38/gencode/gencodeV36.bb
+baseColorDefault genomicCodons
 group genes
 isGencode3 on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
@@ -17,16 +15,7 @@ itemRgb on
 #externalDb knownGeneV36
 maxItems 50000
 html knownGene.alpha
-
-#searchName gencodeV36
-#searchTable gencodeAnnotV36
-#searchType knownGene
-#searchPriority 1
-
-#searchTable gencodeV36
-#searchPriority 2.07207
-#searchType bigBed
-#
+searchIndex name
 
 searchName knownGeneAcc
 searchTable knownGene
@@ -36,4 +25,24 @@ shortCircuit 1
 semiShortCircuit 1
 termRegex ENST[0-9.]+
 searchPriority 9
+
+track knownGeneOld12
+shortLabel Old UCSC Genes
+longLabel Previous Version of UCSC Genes
+group genes
+visibility hide
+color 82,82,160
+type genePred
+hgsid on
+oldToNew kg12ToKg13
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchName knownGeneFast
+searchTable knownGene
+searchType knownGeneFast
+shortCircuit 1
+searchPriority 1
+searchTrix /gbdb/hg38/knownGeneFastV36.ix
+doPage 1
 

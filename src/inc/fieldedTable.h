@@ -64,6 +64,10 @@ void fieldedTableToTabFileWithId(struct fieldedTable *table, char *fileName,
 boolean fieldedTableColumnIsNumeric(struct fieldedTable *table, int fieldIx);
 /* Return TRUE if field has numeric values wherever non-null */
 
+double fieldedTableMaxInCol(struct fieldedTable *table, int colIx);
+/* Figure out total and count columns from context and use them to figure
+ * out maximum mean value */
+
 int fieldedTableMaxColChars(struct fieldedTable *table, int colIx);
 /* Calculate the maximum number of characters in a cell for a column */
 

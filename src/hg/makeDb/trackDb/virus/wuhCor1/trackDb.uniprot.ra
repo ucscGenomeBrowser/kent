@@ -92,7 +92,7 @@ html uniprotCov2
 track unipProtease
 shortLabel Protease Cleavage
 longLabel Protease Cleavage Sites
-visibility dense
+visibility hide
 type bigBed
 group uniprot
 bigDataUrl /gbdb/wuhCor1/uniprot/protease_sites.bb
@@ -106,7 +106,7 @@ shortLabel Disulf. Bonds
 longLabel UniProt Disulfide Bonds
 priority 8
 group uniprot
-visibility dense
+visibility hide
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipDisulfBondCov2.bb
 dataVersion /gbdb/$D/uniprot/version.txt
@@ -121,7 +121,7 @@ shortLabel Glycosyl/Phosph.
 longLabel UniProt Amino Acid Glycosylation/Phosphorylation sites
 priority 9
 #parent uniprotCov2 off
-visibility dense
+visibility hide
 type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipModifCov2.bb
@@ -175,7 +175,7 @@ shortLabel Signal Peptides
 longLabel UniProt Signal Peptides
 priority 3
 #parent uniprotCov2 off
-visibility dense
+visibility hide
 type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipLocSignalCov2.bb
@@ -202,7 +202,7 @@ shortLabel Transmem. Domains
 longLabel UniProt Transmembrane Domains
 priority 5
 #parent uniprotCov2 on
-visibility dense
+visibility hide
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipLocTransMembCov2.bb
 urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
@@ -243,7 +243,7 @@ shortLabel Structure
 longLabel UniProt Protein Primary/Secondary Structure Annotations
 priority 11
 #parent uniprotCov2 off
-visibility dense
+visibility hide
 type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipStructCov2.bb
@@ -257,7 +257,7 @@ shortLabel Other Annot.
 longLabel UniProt Other Annotations
 priority 11
 #parent uniprotCov2 off
-visibility dense
+visibility hide
 group uniprot
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipOtherCov2.bb
@@ -272,7 +272,7 @@ longLabel UniProt Repeats
 priority 12
 group uniprot
 #parent uniprotCov2 off
-visibility dense
+visibility hide
 type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipRepeatCov2.bb
 urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"

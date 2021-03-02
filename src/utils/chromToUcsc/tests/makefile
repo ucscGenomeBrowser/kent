@@ -19,6 +19,8 @@ all:
 	diff out/hg19.vcf expected/hg19.vcf
 	python3 ${DESTBINDIR}/chromToUcsc  -i in/mm10.ebi.sam.gz -a mm10.chromAlias.tsv -o out/mm10.ebi.sam 2> /dev/null
 	diff out/mm10.ebi.sam expected/mm10.ebi.sam
+	python3 ${DESTBINDIR}/chromToUcsc  -i in/grc38.100.gtf.gz -a mm10.chromAlias.tsv -o out/mm10.gtf 2> /dev/null
+	diff out/mm10.gtf expected/mm10.gtf
 
 clean:
 	rm -f out/*

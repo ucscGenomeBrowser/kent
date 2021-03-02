@@ -870,7 +870,7 @@ if (sqlTableExists(conn, hubSearchTableName))
     if (aHubMatchList == NULL)
         {
         // Try a looser query
-        sqlSafef(query, sizeof(query), "select distinct(concat(db, concat(concat('\t', label), concat('\t', hubUrl))) from %s "
+        sqlSafef(query, sizeof(query), "select distinct(concat(db, concat(concat('\t', label), concat('\t', hubUrl)))) from %s "
                  "where track = '' and text like '%% %s%%'",
                  hubSearchTableName, term);
         hubDbUrlList = sqlQuickList(conn, query);
