@@ -1226,13 +1226,13 @@ calJac4.genbank.mrna.xeno.load  = yes
 
     cd /hive/data/genomes/calJac4
     time (makeDownloads.pl calJac4) > downloads.log 2>&1
-    #  real    16m11.233s
+    #  real    20m11.930s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/calJac4/pushQ
     cd /hive/data/genomes/calJac4/pushQ
  time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList calJac4) > calJac4.pushQ.sql 2> stderr.out
-    # real    15m2.385s
+    # real    13m21.313s
 
     # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.calJac4.table.list
@@ -1240,15 +1240,33 @@ calJac4.genbank.mrna.xeno.load  = yes
     sed -i -e "/gapOverlap/d" redmine.calJac4.table.list
     sed -i -e "/Gap Overlaps/d" redmine.calJac4.releaseLog.txt
 
+    # remove the multiz7way tables:
+    sed -i -e "/multiz7way/d" redmine.calJac4.table.list
+
+    # edit the file list and expand the wildcards: .../calJac*/...
+
     #   check for errors in stderr.out, some are OK, e.g.:
-  # WARNING: calJac4 does not have ucscToRefSeq
-  # WARNING: hgwdev does not have /gbdb/calJac4/ncbiRefSeq/ncbiRefSeqVersion.txt
-  # WARNING: hgwdev does not have /gbdb/calJac4/ncbiRefSeq/ncbiRefSeqOther.bb
-  # WARNING: hgwdev does not have /gbdb/calJac4/ncbiRefSeq/ncbiRefSeqOther.ix
-  # WARNING: hgwdev does not have /gbdb/calJac4/ncbiRefSeq/ncbiRefSeqOther.ixx
-  # WARNING: hgwdev does not have /gbdb/calJac4/ncbiRefSeq/seqNcbiRefSeq.rna.fa
-  # WARNING: calJac4 does not have seq
-  # WARNING: calJac4 does not have extFile
+# redmine.calJac4.releaseLog.txt
+WARNING: calJac4 does not have seq
+WARNING: hgwdev does not have phyloPng-generated /usr/local/apache/htdocs/images/phylo/calJac4_7way.gif (or png) for multiz7way.
+
+WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+supporting and genbank tables) which tracks to assign these tables to:
+  chainRBestHg38
+  chainRBestHg38Link
+  chainRBestMacFas5
+  chainRBestMacFas5Link
+... etc
+    crisprAllRanges
+  gbLoaded
+  netRBestHg38
+  netRBestMacFas5
+  netRBestMm10
+  netRBestMm39
+  netSynHg38
+  netSynMacFas5
+  netSynMm10
+  netSynMm39
 
     # verify the file list does correctly match to files
     cat redmine.calJac4.file.list | while read L
@@ -1259,11 +1277,11 @@ done
 
     # verify database tables, how many to expect:
     wc -l redmine.calJac4.table.list
-    # 52 redmine.calJac4.table.list
+    # 70 redmine.calJac4.table.list
 
     # how many actual:
     awk -F'.' '{printf "hgsql -N %s -e '"'"'show table status like \"%s\";'"'"'\n", $1, $2}' redmine.calJac4.table.list | sh | wc -l
-    # 52
+    # 70
 
     # would be a smaller number actual if some were missing
 
