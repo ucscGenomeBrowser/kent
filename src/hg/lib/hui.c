@@ -528,7 +528,7 @@ printf("<a href='../cgi-bin/hgTracks?"
                 "multiRegionsBedUrl=%s&"
                 "%s=%s&"
                 "%s=%s'>"
-        "Display regions of interest (%d) </a>",
+        "Display regions of interest (%d)</a>",
                     tdb->track, cgiEncode(regionFile),
                     CT_CUSTOM_DOC_TEXT_VAR, cgiEncode(customHtml),
                     CT_CUSTOM_TEXT_VAR, cgiEncode(dyStringCannibalize(&dsCustomText)), regionCount);
