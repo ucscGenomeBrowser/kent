@@ -519,8 +519,8 @@ safef(customHtml, sizeof customHtml, "<h2>Description</h2>\n"
 
 // TODO: support #padding in custom regions file
 
-printf("<p>Display %d regions of interest for this track in "
-            "<a href='../cgi-bin/hgTracks?"
+printf("<p>");
+printf("<a href='../cgi-bin/hgTracks?"
                 "virtMode=1&"
                 "virtModeType=customUrl&"
                 "virtWinFull=on&"
@@ -528,11 +528,11 @@ printf("<p>Display %d regions of interest for this track in "
                 "multiRegionsBedUrl=%s&"
                 "%s=%s&"
                 "%s=%s'>"
-            "multi-region view</a>"
-                " (custom regions mode)",
-                    regionCount, tdb->track, cgiEncode(regionFile),
+        "Display regions of interest (%d) </a>",
+                    tdb->track, cgiEncode(regionFile),
                     CT_CUSTOM_DOC_TEXT_VAR, cgiEncode(customHtml),
-                    CT_CUSTOM_TEXT_VAR, cgiEncode(dyStringCannibalize(&dsCustomText)));
+                    CT_CUSTOM_TEXT_VAR, cgiEncode(dyStringCannibalize(&dsCustomText)), regionCount);
+printf(" in multi-region view (custom regions mode)");
 printf("&nbsp;&nbsp;&nbsp;");
 printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
 printf("</p>");
