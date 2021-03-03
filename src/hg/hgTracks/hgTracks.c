@@ -9066,6 +9066,9 @@ if (showTrackControls)
 
 if (sameString(database, "wuhCor1"))
     {
+    puts("<p class='centeredCol'>\n"
+         "For information about this browser and related resources, see "
+         "<a target='blank' href='../covid19.html'>COVID-19 Research at UCSC</a>.</p>");
     // GISAID wants this displayed on any page that shows any GISAID data
     puts("<p class='centeredCol'>\n"
          "GISAID data displayed in the Genome Browser are subject to GISAID's\n"
