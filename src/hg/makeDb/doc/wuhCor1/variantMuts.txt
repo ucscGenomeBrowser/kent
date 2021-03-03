@@ -16,6 +16,8 @@ P.1: 78
 #       bright for spike rbp, medium for other spike, light for other
 # Later: integrate with antibody escape annotations
 
+cd /hive/data/genomes/wuhCor1/bed/strains/keener3
+
 $ wc -l *.aa.bed
   24 gisaid_B.1.1.7_2021_02_05_aa.bed
   16 gisaid_B.1.351_2021_02_05_aa.bed
