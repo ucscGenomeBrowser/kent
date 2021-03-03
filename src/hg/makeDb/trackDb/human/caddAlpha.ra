@@ -76,6 +76,7 @@ html caddSuper
 wiggleWindow 40000
 maxItems 1000000
 maxWindowToDraw 9000000
+scoreFilterLimits 0:100
 
 track caddDel
 shortLabel Deletions
@@ -89,4 +90,4 @@ html caddSuper
 wiggleWindow 40000
 maxItems 1000000
 maxWindowToDraw 9000000
-
+scoreFilterLimits 0:100
