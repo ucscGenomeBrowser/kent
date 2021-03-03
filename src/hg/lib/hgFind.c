@@ -2165,7 +2165,8 @@ char *db = cartString(cart, "db");
 char *lastPosition = cartOptionalString(cart, "lastPosition");
 if (isNotEmpty(lastPosition) && !IS_CART_VAR_EMPTY(lastPosition))
     {
-    if (startsWith("virt:", lastPosition))
+    if (startsWith(MULTI_REGION_CHROM, lastPosition) || 
+        startsWith(OLD_MULTI_REGION_CHROM, lastPosition))
         {
         lastPosition = cartUsualString(cart, "nonVirtPosition", hDefaultPos(db));
         }

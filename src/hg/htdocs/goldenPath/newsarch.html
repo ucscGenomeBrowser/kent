@@ -51,6 +51,46 @@
 
 <!-- ============= 2021 archived news ============= -->
 <a name="2021"></a>
+<a name="030221"></a>
+<h2>Mar. 02, 2021 &nbsp;&nbsp; CADD Scores now available for hg19 and hg38</h2>
+<p>
+We are happy to announce the release of a new track for human assemblies, 
+<a href="../cgi-bin/hgTrackUi?db=hg19&chr=chrX&g=caddSuper">hg19</a> and
+<a href="../cgi-bin/hgTrackUi?db=hg38&chr=chrX&g=caddSuper">hg38</a>. The new track shows
+<a href="https://cadd.gs.washington.edu/" target="_blank">Combined Annotation Dependent Depletion
+(CADD)</a> scores for each base in the genome and corresponds to the v1.6 developmental release.
+CADD is a tool for scoring the deleteriousness of single nucleotide variants as well as
+insertion/deletion variants in the human genome. CADD scores strongly correlate with allelic
+diversity, pathogenicity of both coding and non-coding variants, experimentally measured regulatory
+effects, and also highly rank causal variants within individual genome sequences. Finally, CADD
+scores of complex trait-associated variants from genome-wide association studies (GWAS) are
+significantly higher than matched controls and correlate with study sample size, likely reflecting
+the increased accuracy of larger GWAS.</p>
+
+<p>The supertrack consists of the following tracks:</p>
+<ul>
+  <li><strong>CADD</strong> (composite track)
+    <ul>
+      <li>Mutation: A</li>
+      <li>Mutation: C</li>
+      <li>Mutation: G</li>
+      <li>Mutation: T</li>
+    </ul>
+  </li>
+  <li><strong>Deletions</strong></li>
+  <li><strong>Insertions</strong></li>  
+</ul>
+
+<p>
+CADD scores are freely available for all non-commercial applications from the
+<a href="https://cadd.gs.washington.edu/download" target="_blank">CADD website</a>. For commercial
+applications, see the
+<a href="https://cadd.gs.washington.edu/contact" target="_blank">license instructions</a> there.</p>
+
+<p>
+We would like to thank the CADD development team for providing precomputed data as simple
+tab-separated files. We would also like to thank Max Haeussler and Jairo Navarro for the creation
+and release of these tracks.</p>
 
 <a name="021821"></a>
 <h2>Feb. 18, 2021 &nbsp;&nbsp; New Genome Browser: Marmoset, calJac4</h2>

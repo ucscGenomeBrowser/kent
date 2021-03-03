@@ -914,7 +914,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
 
     track gnomadGenomes
     shortLabel gnomAD Genomes Variants
-    longLabel Genome Aggregation Database (gnomAD) Whole Genome Variants
+    longLabel Genome Aggregation Database (gnomAD) Genome Variants v2.1.1
     itemRgb on
     type bigBed 9 +
     bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.genomes.bb
@@ -942,7 +942,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
 
     track gnomadExomes
     shortLabel gnomAD Exomes Variants
-    longLabel Genome Aggregation Database (gnomAD) Exome Variants
+    longLabel Genome Aggregation Database (gnomAD) Exome Variants v2.1.1
     itemRgb on
     type bigBed 9 +
     bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.exomes.bb
