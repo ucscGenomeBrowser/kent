@@ -973,6 +973,40 @@
     </pre>
 </DIV>
 
+<DIV class="interact_example"><span class="types bigInteract"></span>
+<div class="format"><B>Example of an interact/bigInteract track</B></div>
+    <pre>
+    track snpGeneInteractions
+    type bigInteract
+    interactDirectional true
+    maxHeightPixels 300:150:20
+    bigDataUrl http://...
+    </pre>
+</div>
+
+<DIV class="multiRegionBedUrl"><span class="types all"></span>
+<div class="format"><code>multiRegionBedUrl &lt;url/relativePath&gt;</code></div>
+    <P>This setting causes a link to appear on the track configuration and items details pages to
+launch a 
+<a target="_blank" href="https://genome.ucsc.edu/goldenPath/help/multiRegionHelp.html">
+multi-region custom regions view</a>, 
+where the regions are defined by the file supplied 
+as an argument to the setting.  
+It is useful for tracks with sparse annotations in the genome.
+The file must be 
+<a target="_blank" href="https://genome.ucsc.edu/FAQ/FAQformat.html#format1">BED format</a>,
+and should contain a limited number (e.g. 2 to 10) regions of 
+interest for the track. 
+It can be BED 3 format (chrom, start, end), but may have any number of 
+additional fields.  
+When the link is clicked, a companion custom track is also created in order to
+highlight and title the displayed regions.   
+If the name field (field 4) is present in the BED file, the name for each region 
+will be displayed in the custom track.
+    <P><B>Example</B></P>
+    <pre>    multiRegionBedUrl covidMuts.regions.bed</pre>
+</DIV>
+
 <DIV class="wgEncode"><span class="types all"></span>
 <div class="format"><code>wgEncode on</code></div>
     <P><I>NOT FOR HUBS.</I></P>
