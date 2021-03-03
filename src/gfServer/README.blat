@@ -68,3 +68,19 @@ goes.
 
 
 
+Dynamic BLAT server:
+
+gfServer now supports a dynamic mode, which allows servers that are
+started on demand without needing to continually occupy memory.  A single
+dynamic gfServer can serve multiple genomes and multiple simultaneous
+users.
+
+An index is prebuilt using 'gfServer index'.  See gfServer help
+for details and naming convention.  Fast hard disk or SSDs should be
+used to store the genomes and indexes.  Sufficient memory will be
+need for unique genome indexes that are used simultaneously.  Queries
+against we same genome index will be shared between multiple process.
+
+The server is then configued to start via xinetd.  See
+blat-xinetd.example for an example configuration.
+

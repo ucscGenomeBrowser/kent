@@ -128,6 +128,13 @@ if (hubAssemblyHash == NULL)
 return trackHubGetGenome(database) != NULL;
 }
 
+char *trackHubDatabaseToGenome(char *db)
+/* get a database name that is either a genome database or a trackHub
+ * database, return the genome assembly */
+{
+return trackHubDatabase(db) ? trackHubAssemblyField(db, "genome") : db;
+}
+
 char *trackHubAssemblyField(char *database, char *field)
 /* Get data field from a assembly data hub. */
 {
@@ -1310,49 +1317,45 @@ else
 findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
 }
 
-boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort)
+static void parseBlatPcrParams(char *database, char *type, char *setting,
+                               char **pHost, char **pPort, char **pGenomeDataDir)
+/* parser parameters for either blat or pcr */
+{
+char *conf = trimSpaces(cloneString(setting));
+int numWords = chopByWhite(conf, NULL, 5);
+if ((numWords < 2) || (numWords > 4))
+    errAbort("invalid configuration for hub %s server, expect 2 or 4 arguments: %s", type, setting);
+char *words[4];
+chopByWhite(conf, words, numWords);
+
+*pHost = words[0];
+*pPort = words[1];
+if (numWords > 2)
+    {
+    if (!sameString(words[2], "dynamic"))
+        errAbort("invalid configuration for hub %s server, third argument should be 'dynamic' or omitted, got: %s", type, words[2]);
+    *pGenomeDataDir = words[3];
+    }
+else
+    *pGenomeDataDir = NULL;
+}
+
+boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort, char **pGenomeDataDir)
 /* Get the isPcr params from a trackHub genome. */
 {
-char *hostPort;
-
-hostPort = trackHubAssemblyField(database, "isPcr");
-
-if (hostPort == NULL)
-    return FALSE;
-   
-hostPort = cloneString(hostPort);
-
-*pHost = nextWord(&hostPort);
-if (hostPort == NULL)
-    return FALSE;
-*pPort = hostPort;
-
+char *type = "isPcr";
+char *setting = trackHubAssemblyField(database, type);
+parseBlatPcrParams(database, type, setting, pHost, pPort, pGenomeDataDir);
 return TRUE;
 }
 
-boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort)
+boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort, char **pGenomeDataDir)
 {
-char *hostPort;
-
-if (isTrans)
-    {
-    hostPort = trackHubAssemblyField(database, "transBlat");
-    }
-else
-    {
-    hostPort = trackHubAssemblyField(database, "blat");
-    }
-
-if (hostPort == NULL)
+char *type = isTrans ? "transBlat" : "blat";
+char *setting = trackHubAssemblyField(database, type);
+if (setting == NULL)
     return FALSE;
-   
-hostPort = cloneString(hostPort);
-
-*pHost = nextWord(&hostPort);
-if (hostPort == NULL)
-    return FALSE;
-*pPort = hostPort;
-
+parseBlatPcrParams(database, type, setting, pHost, pPort, pGenomeDataDir);
 return TRUE;
 }
 

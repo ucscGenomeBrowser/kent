@@ -20,6 +20,8 @@ static struct optionSpec optionSpecs[] = {
     {"out", OPTION_STRING},
     {"maxIntron", OPTION_INT},
     {"nohead", OPTION_BOOLEAN},
+    {"genome", OPTION_STRING},
+    {"genomeDataDir", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -30,6 +32,8 @@ double minIdentity = 90;
 char *outputFormat = "psl";
 char *qType = "dna";
 char *tType = "dna";
+char *genome = NULL;
+char *genomeDataDir = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -75,8 +79,15 @@ printf(
   "                   blast - similar to NCBI blast format\n"
   "                   blast8- NCBI blast tabular format\n"
   "                   blast9 - NCBI blast tabular format with comments\n"
-  "   -maxIntron=N   Sets maximum intron size. Default is %d.\n",
-                        gfVersion, ffIntronMaxDefault);
+  "   -maxIntron=N   Sets maximum intron size. Default is %d.\n"
+  "   -genome=name  When using a dynamic gfServer, The genome name is used to \n"
+  "                 find the data files relative to the dynamic gfServer root, named \n"
+  "                 in the form $genome.2bit, $genome.untrans.gfidx, and $genome.trans.gfidx\n"
+  "   -genomeDataDir=path\n"
+  "                 When using a dynamic gfServer, this is the dynamic gfServer root directory\n"
+  "                 that contained the genome data files.  Defaults to being the root directory.\n"
+  "                \n",
+  gfVersion, ffIntronMaxDefault);
 exit(-1);
 }
 
@@ -101,43 +112,37 @@ snprintf(databaseName, sizeof(databaseName), "%s:%s", hostName, portName);
 gvo = gfOutputAny(outputFormat,  round(minIdentity*10), qType == gftProt, tType == gftProt,
 	optionExists("nohead"), databaseName, 23, 3.0e9, minIdentity, out);
 gfOutputHead(gvo, out);
+struct gfConnection *conn = gfConnect(hostName, portName, genome, genomeDataDir);
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
     {
-    int conn = gfConnect(hostName, portName);
     if (dots != 0)
         {
 	if (++dotMod >= dots)
 	    {
 	    dotMod = 0;
-	    fputc('.', stdout);
-	    fflush(stdout);
+            verboseDot();
 	    }
 	}
     if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
-	gfAlignTrans(&conn, tSeqDir, &seq, minScore, tFileCache, gvo);
+	gfAlignTrans(conn, tSeqDir, &seq, minScore, tFileCache, gvo);
 	}
     else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
-	gfAlignTransTrans(&conn, tSeqDir, &seq, FALSE, minScore, tFileCache, 
-		gvo, qType == gftRnaX);
+	gfAlignTransTrans(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo, qType == gftRnaX);
 	if (qType == gftDnaX)
 	    {
 	    reverseComplement(seq.dna, seq.size);
-	    close(conn);
-	    conn = gfConnect(hostName, portName);
-	    gfAlignTransTrans(&conn, tSeqDir, &seq, TRUE, minScore, tFileCache,
-	    	gvo, FALSE);
+	    gfAlignTransTrans(conn, tSeqDir, &seq, TRUE, minScore, tFileCache, gvo, FALSE);
 	    }
 	}
     else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
 	{
-	gfAlignStrand(&conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo);
-	conn = gfConnect(hostName, portName);
+	gfAlignStrand(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo);
 	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(&conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo);
+	gfAlignStrand(conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo);
 	}
     else
         {
@@ -146,6 +151,8 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
 	}
     gfOutputQuery(gvo, out);
     }
+gfDisconnect(&conn);
+
 if (out != stdout)
     printf("Output is in %s\n", outName);
 gfFileCacheFree(&tFileCache);
@@ -167,6 +174,14 @@ minIdentity = optionFloat("minIdentity", minIdentity);
 minScore = optionInt("minScore", minScore);
 dots = optionInt("dots", 0);
 outputFormat = optionVal("out", outputFormat);
+genome = optionVal("genome", NULL);
+genomeDataDir = optionVal("genomeDataDir", NULL);
+if ((genomeDataDir != NULL) && (genome == NULL))
+    errAbort("-genomeDataDir requires the -genome option");
+if ((genome != NULL) && (genomeDataDir == NULL))
+    genomeDataDir = ".";
+
+
 /* set global for fuzzy find functions */
 setFfIntronMax(optionInt("maxIntron", ffIntronMaxDefault));
 gfClient(argv[1], argv[2], argv[3], argv[4], argv[5], tType, qType);

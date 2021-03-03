@@ -64,6 +64,27 @@ In-silico PCR do
 This index will be slightly more sensitive, noticeably so for small query sequences,
 with blat.
 
+
+CREATING A DYNAMIC GFSERVER
+
+To avoid having a number of gfServer processing sitting in memory, indices can
+be pre-generate as files on disk and then gfServer instances launched
+dynamically using xinetd.
+
+See gfServer/blat-xinetd.example for an example xinetd configuration file.
+Data files must be create using the following layout, where the $rootdir
+is the directory specified to gfServer in the xinetd file
+
+    $rootdir/$genome/$genome.2bit
+    $rootdir/$genome/$genome.untrans.gfidx
+    $rootdir/$genome/$genome.trans.gfidx
+
+The gfServer index command is used to generate the indices:
+
+  gfServer index $rootdir/$genome/$genome.untrans.gfidx $rootdir/$genome/$genome.2bit
+  gfServer index -trans $rootdir/$genome/$genome.trans.gfidx $rootdir/$genome/$genome.2bit
+
+
 EDITING THE WEBBLAT.CFG FILE
 
 The webBlat.cfg file tells the webBlat program where to look for gfServers and
@@ -75,6 +96,12 @@ commands are:
    		associated sequence directory, and the name of the database to display in
                 the webPcr web page.
    gfServerTrans - defines location of a translated server.
+   dynServer - define the location of a dynamic gfServer that runs under xinetd with
+               pre-build indexes.  Arguments are:
+               - host, port
+               - genome - symbolic name of genome
+               - genomeDataDir - absolute or gfServer root-relative directory containing index files
+               - sequenceDir
    background - defines the background image if any to display on web page
    company    - defines company name to display on web page
    tempDir    - where to put temporary files.  This path is relative to where the web
@@ -88,11 +115,20 @@ might find at a typical installation:
 
 company Awesome Research Amalgamated
 background /images/dnaPaper.jpg
-gfServerTrans bigRamMachine 17778 /data/genomes/twoBit/hg19.2bit Human Genome
-gfServer bigRamMachine 17779 /data/genomes/twoBit/hg19.2bit Human Genome
-gfServerTrans bigRamMachine 17780 /data/genomes/twoBit/mm10.2bit Mouse Genome
-gfServer bigRamMachine 17781 /data/genomestwoBit/mm10.2bit Mouse Genome
+gfServerTrans bigRamMachine 17778 /data/genomes/twoBit Human Genome
+gfServer bigRamMachine 17779 /data/genomes/twoBit Human Genome
+gfServerTrans bigRamMachine 17780 /data/genomes/twoBit Mouse Genome
+gfServer bigRamMachine 17781 /data/genomestwoBit Mouse Genome
 tempDir ../tmp
+
+
+For dynamic gfServer, which server both untranslated and translated request,
+must be given a genome name and server root relative directory.
+Multiple genomes can be on same port. The specification is in the form:
+
+dynServer mediumRamMachine 17799 hg19 genomes/hg19 /data/genomes/hg19 Human Genome
+dynServer mediumRamMachine 17799 mm10 genomes/mm10 /data/genomes/mm10 Mouse Genome
+
 
 PUTTING WEBBLAT WHERE THE WEB SERVER CAN EXECUTE IT
 

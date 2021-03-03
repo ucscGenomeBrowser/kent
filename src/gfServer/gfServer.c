@@ -3,10 +3,12 @@
 /* Copyright 2001-2003 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include <signal.h>
+#include <stdarg.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include "portable.h"
+#include "filePath.h"
 #include "net.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -45,6 +47,7 @@ static struct optionSpec optionSpecs[] = {
     {"syslog", OPTION_BOOLEAN},
     {"perSeqMax", OPTION_STRING},
     {"noSimpRepMask", OPTION_BOOLEAN},
+    {"indexFile", OPTION_STRING},
     {"timeout", OPTION_INT},
     {NULL, 0}
 };
@@ -67,6 +70,7 @@ boolean seqLog = FALSE;
 boolean ipLog = FALSE;
 boolean doMask = FALSE;
 boolean canStop = FALSE;
+char *indexFile = NULL;
 
 int timeout = 90;  // default timeout in seconds
 
@@ -97,6 +101,32 @@ errAbort(
   "      gfServer status host port\n"
   "   To get input file list:\n"
   "      gfServer files host port\n"
+  "   To generate a precomputed index:\n"
+  "      gfServer index gfidx file(s)\n"
+  "     where the files are .2bit or .nib format files.  Separate indexes are\n"
+  "     be created for untranslated and translated queries.  These can be used\n"
+  "     with a persistent server as with 'start -indexFile or a dynamic server.\n"
+  "     They must follow the naming convention for for dynamic servers.\n"
+  "   To run a dynamic server (usually called by xinetd):\n"
+  "      gfServer dynserver rootdir\n"
+  "     Data files for genomes are found relative to the root directory.\n"
+  "     Queries are made using the prefix of the file path relative to the root\n"
+  "     directory.  The files $genome.2bit, $genome.untrans.gfidx, and\n"
+  "     $genome.trans.gfidx are required. Typically the structure will be in\n"
+  "     the form:\n"
+  "         $rootdir/$genomeDataDir/$genome.2bit\n"
+  "         $rootdir/$genomeDataDir/$genome.untrans.gfidx\n"
+  "         $rootdir/$genomeDataDir/$genome.trans.gfidx\n"
+  "     in this case, one would call gfClient with \n"
+  "         -genome=$genome -genomeDataDir=$genomeDataDir\n"
+  "     Often $genomeDataDir will be the same name as $genome, however it\n"
+  "     can be a multi-level path. For instance:\n"
+  "          GCA/902/686/455/GCA_902686455.1_mSciVul1.1/\n"
+  "     The translated or untranslated index maybe omitted if there is no\n"
+  "     need to handle that type of request.\n"
+  "     The -perSeqMax functionality can be implemented by creating a file\n"
+  "         $rootdir/$genomeDataDir/$genome.perseqmax\n"
+  "\n"
   "options:\n"
   "   -tileSize=N     Size of n-mers to index.  Default is 11 for nucleotides, 4 for\n"
   "                   proteins (or translated nucleotides).\n"
@@ -127,9 +157,13 @@ errAbort(
   "                   Default is %d.\n"
   "   -perSeqMax=file File contains one seq filename (possibly with ':seq' suffix) per line.\n"
   "                   -maxDnaHits will be applied to each filename[:seq] separately: each may\n"
-  "                   have at most maxDnaHits/2 hits.\n"
+  "                   have at most maxDnaHits/2 hits.  The filename MUST not include the directory.\n"
   "                   Useful for assemblies with many alternate/patch sequences.\n"
   "   -canStop        If set, a quit message will actually take down the server.\n"
+  "   -indexFile      Index file create by `gfServer index'. Saving index can speed up\n"
+  "                   gfServer startup by two orders of magnitude.  The parameters must\n"
+  "                   exactly match the parameters when the file is written or bad things\n"
+  "                   will happen.\n"
   "   -timeout=N      Timeout in seconds.\n"
   "                   Default is %d.\n"
   ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize, timeout
@@ -171,6 +205,7 @@ sendOk = TRUE;
 void errSendString(int sd, char *s)
 // Send string. If not OK, remember we had an error, do not try to write anything more on this connection.
 {
+
 if (sendOk) sendOk = netSendString(sd, s);
 }
 
@@ -179,6 +214,37 @@ void errSendLongString(int sd, char *s)
 {
 if (sendOk) sendOk = netSendLongString(sd, s);
 }
+
+void logGenoFind(struct genoFind *gf)
+/* debug log the genoFind parameters */
+{
+logDebug("gf->isMapped: %d", gf->isMapped);
+logDebug("gf->maxPat: %d", gf->maxPat);
+logDebug("gf->minMatch: %d", gf->minMatch);
+logDebug("gf->maxGap: %d", gf->maxGap);
+logDebug("gf->tileSize: %d", gf->tileSize);
+logDebug("gf->stepSize: %d", gf->stepSize);
+logDebug("gf->tileSpaceSize: %d", gf->tileSpaceSize);
+logDebug("gf->tileMask: %d", gf->tileMask);
+logDebug("gf->sourceCount: %d", gf->sourceCount);
+logDebug("gf->isPep: %d", gf->isPep);
+logDebug("gf->allowOneMismatch: %d", gf->allowOneMismatch);
+logDebug("gf->noSimpRepMask: %d", gf->noSimpRepMask);
+logDebug("gf->segSize: %d", gf->segSize);
+logDebug("gf->totalSeqSize: %d", gf->totalSeqSize);
+}
+
+void logGenoFindIndex(struct genoFindIndex *gfIdx)
+/* debug log the genoFind parameters in an genoFindIndex */
+{
+logDebug("gfIdx->isTrans: %d", gfIdx->isTrans);
+logDebug("gfIdx->noSimpRepMask: %d", gfIdx->noSimpRepMask);
+if (gfIdx->untransGf != NULL)
+    logGenoFind(gfIdx->untransGf);
+else
+    logGenoFind(gfIdx->transGf[0][0]);
+}
+
 
 void genoFindDirect(char *probeName, int fileCount, char *seqFiles[])
 /* Don't set up server - just directly look for matches. */
@@ -277,9 +343,10 @@ int missCount = 0;
 int trimCount = 0;
 
 void dnaQuery(struct genoFind *gf, struct dnaSeq *seq, 
-              int connectionHandle, char buf[256], struct hash *perSeqMaxHash)
+              int connectionHandle, struct hash *perSeqMaxHash)
 /* Handle a query for DNA/DNA match. */
 {
+char buf[256];
 struct gfClump *clumpList = NULL, *clump;
 int limit = 1000;
 int clumpCount = 0, hitCount = -1;
@@ -315,9 +382,10 @@ logDebug("%lu %d clumps, %d hits", clock1000(), clumpCount, hitCount);
 }
 
 void transQuery(struct genoFind *transGf[2][3], aaSeq *seq, 
-	int connectionHandle, char buf[256])	
+	int connectionHandle)
 /* Handle a query for protein/translated DNA match. */
 {
+char buf[256];
 struct gfClump *clumps[3], *clump;
 int isRc, frame;
 char strand;
@@ -365,9 +433,10 @@ logDebug("%lu %d clumps, %d hits", clock1000(), clumpCount, hitCount);
 }
 
 void transTransQuery(struct genoFind *transGf[2][3], struct dnaSeq *seq, 
-	int connectionHandle, char buf[256])	
+	int connectionHandle)
 /* Handle a query for protein/translated DNA match. */
 {
+char buf[256];
 struct gfClump *clumps[3][3], *clump;
 int isRc, qFrame, tFrame;
 char strand;
@@ -454,7 +523,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     }
 gfClumpFreeList(&clumpList);
 errSendString(connectionHandle, "end");
-logDebug("%lu PCR %s %s %d clumps\n", clock1000(), fPrimer, rPrimer, clumpCount);
+logDebug("%lu PCR %s %s %d clumps", clock1000(), fPrimer, rPrimer, clumpCount);
 }
 
 
@@ -493,7 +562,7 @@ errSendString(connectionHandle, message);
 }
 
 static void errorSafeQuery(boolean doTrans, boolean queryIsProt, 
-	struct dnaSeq *seq, struct genoFind *gf, struct genoFind *transGf[2][3], 
+	struct dnaSeq *seq, struct genoFindIndex *gfIdx, 
 	int connectionHandle, char *buf, struct hash *perSeqMaxHash)
 /* Wrap error handling code around index query. */
 {
@@ -505,13 +574,12 @@ if (status == 0)    /* Always true except after long jump. */
     if (doTrans)
        {
        if (queryIsProt)
-	    transQuery(transGf, seq, connectionHandle, buf);
+	    transQuery(gfIdx->transGf, seq, connectionHandle);
        else
-	    transTransQuery(transGf, seq, 
-		connectionHandle, buf);
+	    transTransQuery(gfIdx->transGf, seq, connectionHandle);
        }
     else
-	dnaQuery(gf, seq, connectionHandle, buf, perSeqMaxHash);
+	dnaQuery(gfIdx->untransGf, seq, connectionHandle, perSeqMaxHash);
     errorSafeCleanup();
     }
 else    /* They long jumped here because of an error. */
@@ -552,34 +620,50 @@ while ((c = *s++) != 0)
 return FALSE;
 }
 
+static boolean haveFileBaseName(char *baseName, int fileCount, char *seqFiles[])
+/* check if the file list contains the base name of the per-seq max spec */
+{
+int i;
+for (i = 0; i < fileCount; i++)
+    if (sameString(findTail(seqFiles[i], '/'), baseName))
+        return TRUE;
+return FALSE;
+}
+
+static struct hash *buildPerSeqMax(int fileCount, char *seqFiles[], char* perSeqMaxFile)
+/* do work of building perSeqMaxhash */
+{
+struct hash *perSeqMaxHash = hashNew(0);
+struct lineFile *lf = lineFileOpen(perSeqMaxFile, TRUE);
+char *line;
+while (lineFileNextReal(lf, &line))
+    {
+    // Make sure line contains a valid seq filename (before optional ':seq'), directories are ignored
+    char *seqFile = findTail(trimSpaces(line), '/');
+    char copy[strlen(seqFile)+1];
+    safecpy(copy, sizeof copy, seqFile);
+    char *colon = strrchr(copy, ':');
+    if (colon)
+        *colon = '\0';
+    if (haveFileBaseName(copy, fileCount, seqFiles) < 0)
+        lineFileAbort(lf, "'%s' does not appear to be a sequence file from the "
+                      "command line", copy);
+    hashAddInt(perSeqMaxHash, seqFile, 0);
+    }
+lineFileClose(&lf);
+return perSeqMaxHash;
+}
+    
+
 static struct hash *maybePerSeqMax(int fileCount, char *seqFiles[])
 /* If options include -perSeqMax=file, then read the sequences named in the file into a hash
  * for testing membership in the set of sequences to exclude from -maxDnaHits accounting. */
 {
-struct hash *perSeqMaxHash = NULL;
 char *fileName = optionVal("perSeqMax", NULL);
 if (isNotEmpty(fileName))
-    {
-    perSeqMaxHash = hashNew(0);
-    struct lineFile *lf = lineFileOpen(fileName, TRUE);
-    char *line;
-    while (lineFileNextReal(lf, &line))
-        {
-        // Make sure line contains a valid seq filename (before optional ':seq')
-        char *seqFile = trimSpaces(line);
-        char copy[strlen(seqFile)+1];
-        safecpy(copy, sizeof copy, seqFile);
-        char *colon = strrchr(copy, ':');
-        if (colon)
-            *colon = '\0';
-        if (stringArrayIx(copy, seqFiles, fileCount) < 0)
-            lineFileAbort(lf, "'%s' does not appear to be a sequence file from the "
-                          "command line", copy);
-        hashAddInt(perSeqMaxHash, seqFile, 0);
-        }
-    lineFileClose(&lf);
-    }
-return perSeqMaxHash;
+    return buildPerSeqMax(fileCount, seqFiles, fileName);
+else
+    return NULL;
 }
 
 static void hashZeroVals(struct hash *hash)
@@ -595,8 +679,7 @@ void startServer(char *hostName, char *portName, int fileCount,
 	char *seqFiles[])
 /* Load up index and hang out in RAM. */
 {
-struct genoFind *gf = NULL;
-static struct genoFind *transGf[2][3];
+struct genoFindIndex *gfIdx = NULL;
 char buf[256];
 char *line, *command;
 struct sockaddr_in6 fromAddr;
@@ -617,22 +700,23 @@ strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime); /* formate datet
 logInfo("gfServer version %s on host %s, port %s  (%s)", gfVersion, 
 	hostName, portName, timestr);
 struct hash *perSeqMaxHash = maybePerSeqMax(fileCount, seqFiles);
-if (doTrans)
+
+time_t startIndexTime = clock1000();
+if (indexFile == NULL)
     {
-    uglyf("starting translated server...\n");
-    logInfo("setting up translated index");
-    gfIndexTransNibsAndTwoBits(transGf, fileCount, seqFiles, 
-    	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, 
-	doMask, stepSize, noSimpRepMask);
+    char *desc = doTrans ? "translated" : "untranslated";
+    uglyf("starting %s server...\n", desc);
+    logInfo("setting up %s index", desc);
+    gfIdx = genoFindIndexBuild(fileCount, seqFiles, minMatch, maxGap, tileSize, repMatch, doTrans, NULL,
+                               allowOneMismatch, doMask, stepSize, noSimpRepMask);
+    logInfo("index building completed in %4.3f seconds", 0.001 * (clock1000() - startIndexTime));
     }
 else
     {
-    uglyf("starting untranslated server...\n");
-    logInfo("setting up untranslated index");
-    gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch, 
-    	maxGap, tileSize, repMatch, NULL, allowOneMismatch, stepSize, noSimpRepMask);
+    gfIdx = genoFindIndexLoad(indexFile, doTrans);
+    logInfo("index loading completed in %4.3f seconds", 0.001 * (clock1000() - startIndexTime));
     }
-logInfo("indexing complete");
+logGenoFindIndex(gfIdx);
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = netAcceptingSocket(port, 100);
@@ -809,8 +893,8 @@ for (;;)
                                 faWriteNext(lf, "query", seq.dna, seq.size);
 				fflush(lf);
 				}
-			    errorSafeQuery(doTrans, queryIsProt, &seq, gf, 
-                                           transGf, connectionHandle, buf, perSeqMaxHash);
+			    errorSafeQuery(doTrans, queryIsProt, &seq, gfIdx, 
+                                           connectionHandle, buf, perSeqMaxHash);
                             if (perSeqMaxHash)
                                 hashZeroVals(perSeqMaxHash);
 			    }
@@ -846,7 +930,7 @@ for (;;)
 	else
 	    {
 	    maxDistance = atoi(s);
-	    errorSafePcr(gf, f, r, maxDistance, connectionHandle);
+	    errorSafePcr(gfIdx->untransGf, f, r, maxDistance, connectionHandle);
 	    }
 	}
     else if (sameString("files", command))
@@ -1027,6 +1111,321 @@ if (netGetString(sd, buf) != NULL)
 close(sd);
 }
 
+static void checkIndexFileName(char *gfxFile, char *seqFile)
+/* validate that index matches conventions, as base name is stored in index */
+{
+char seqBaseName[FILENAME_LEN], seqExt[FILEEXT_LEN];
+splitPath(seqFile, NULL, seqBaseName, seqExt);
+if ((strlen(seqBaseName) == 0) || !sameString(seqExt, ".2bit"))
+    errAbort("gfServer index requires a two-bit genome file with a base name of `myGenome.2bit`, got %s%s",
+             seqBaseName, seqExt);
+
+char gfxBaseName[FILENAME_LEN], gfxExt[FILEEXT_LEN];
+splitPath(gfxFile, NULL, gfxBaseName, gfxExt);
+if (!sameString(gfxExt, ".gfidx"))
+    errAbort("gfServer index must have an file extension of '.gfidx', got %s", gfxExt);
+char expectBaseName[FILENAME_LEN];
+safef(expectBaseName, sizeof(expectBaseName), "%s.%s", seqBaseName,
+      (doTrans ? "trans" : "untrans"));
+if (!sameString(gfxBaseName, expectBaseName))
+    errAbort("%s index file base name must be '%s.gfidx', got %s%s",
+             (doTrans ? "translated" : "untranslated"), expectBaseName, gfxBaseName, gfxExt);
+}
+
+static void buildIndex(char *gfxFile, int fileCount, char *seqFiles[])
+/* build pre-computed index for seqFiles and write to gfxFile */
+{
+if (fileCount > 1)
+    errAbort("gfServer index only works with a single genome file");
+checkIndexFileName(gfxFile, seqFiles[0]);
+
+struct genoFindIndex *gfIdx = genoFindIndexBuild(fileCount, seqFiles, minMatch, maxGap, tileSize,
+                                                 repMatch, doTrans, NULL, allowOneMismatch, doMask, stepSize,
+                                                 noSimpRepMask);
+genoFindIndexWrite(gfIdx, gfxFile);
+}
+
+static void dynWarnErrorVa(char* msg, va_list args)
+/* warnHandler to log and send back an error response */
+{
+char buf[4096];
+int msgLen = vsnprintf(buf, sizeof(buf) - 1, msg, args);
+buf[msgLen] = '\0';
+logError("%s", buf);
+printf("Error: %s\n", buf);
+}
+
+struct dynSession
+/* information on dynamic server connection session.  This is all data
+ * currently cached.  If is not changed if the genome and query mode is the
+ * same as the previous request.
+ */
+{
+    boolean isTrans;              // translated 
+    char genome[256];             // genome name
+    struct hash *perSeqMaxHash;   // max hits per sequence
+    struct genoFindIndex *gfIdx;  // index
+};
+
+static struct genoFindIndex *loadGfIndex(char *gfIdxFile, boolean isTrans)
+/* load index and set globals from it */
+{
+struct genoFindIndex *gfIdx = genoFindIndexLoad(gfIdxFile, isTrans);
+struct genoFind *gf = isTrans ? gfIdx->transGf[0][0] : gfIdx->untransGf;
+minMatch = gf->minMatch;
+maxGap = gf->maxGap;
+tileSize = gf->tileSize;
+noSimpRepMask = gf->noSimpRepMask;
+allowOneMismatch = gf->allowOneMismatch;
+stepSize = gf->stepSize;
+logGenoFindIndex(gfIdx);
+return gfIdx;
+}
+
+static void dynWarnHandler(char *format, va_list args)
+/* log error warning and error message, along with printing */
+{
+logErrorVa(format, args);
+vfprintf(stderr, format, args);
+fputc('\n', stderr);
+}
+
+static void dynSessionInit(struct dynSession *dynSession, char *rootDir,
+                           char *genome, char *genomeDataDir, boolean isTrans)
+/* Initialize or reinitialize a dynSession object */
+{
+if ((!isSafeRelativePath(genome)) || (strchr(genome, '/') != NULL))
+    errAbort("genome argument can't contain '/' or '..': %s", genome);
+if (!isSafeRelativePath(genomeDataDir))
+    errAbort("genomeDataDir argument must be a relative path without '..' elements: %s", genomeDataDir);
+
+// will free current content if initialized
+genoFindIndexFree(&dynSession->gfIdx);
+hashFree(&dynSession->perSeqMaxHash);
+
+time_t startTime = clock1000();
+dynSession->isTrans = isTrans;
+safecpy(dynSession->genome, sizeof(dynSession->genome), genome);
+
+// construct path to sequence and index files
+char seqFileDir[PATH_LEN];
+safef(seqFileDir, sizeof(seqFileDir), "%s/%s", rootDir, genomeDataDir);
+    
+char seqFile[PATH_LEN];
+safef(seqFile, PATH_LEN, "%s/%s.2bit", seqFileDir, genome);
+if (!fileExists(seqFile))
+    errAbort("sequence file for %s does not exist: %s", genome, seqFile);
+
+char gfIdxFile[PATH_LEN];
+safef(gfIdxFile, PATH_LEN, "%s/%s.%s.gfidx", seqFileDir, genome, isTrans ? "trans" : "untrans");
+if (!fileExists(gfIdxFile))
+    errAbort("gf index file for %s does not exist: %s", genome, gfIdxFile);
+dynSession->gfIdx = loadGfIndex(gfIdxFile, isTrans);
+
+char perSeqMaxFile[PATH_LEN];
+safef(perSeqMaxFile, PATH_LEN, "%s/%s.perseqmax", seqFileDir, genome);
+if (fileExists(perSeqMaxFile))
+    {
+    /* only the basename of the file is saved in the index */
+    char *slash = strrchr(seqFile, '/');
+    char *seqFiles[1] = {(slash != NULL) ? slash + 1 : seqFile};
+    dynSession->perSeqMaxHash = buildPerSeqMax(1, seqFiles, perSeqMaxFile);
+    }
+logInfo("dynserver: index loading completed in %4.3f seconds", 0.001 * (clock1000() - startTime));
+}
+
+static char *dynReadCommand(char* rootDir)
+/* read command and log, NULL if no more */
+{
+char buf[PATH_LEN];
+int readSize = read(STDIN_FILENO, buf, sizeof(buf)-1);
+if (readSize < 0)
+    errAbort("EOF from client");
+if (readSize == 0)
+    return NULL;
+buf[readSize] = '\0';
+if (!startsWith(gfSignature(), buf))
+    errAbort("query does not start with signature, got '%s'", buf);
+char *cmd = cloneString(buf + strlen(gfSignature()));
+logInfo("dynserver: %s", cmd);
+return cmd;
+}
+
+static const int DYN_CMD_MAX_ARGS = 8;  // more than needed to check for junk
+
+static int dynNextCommand(char* rootDir, struct dynSession *dynSession, char **args)
+/* Read query request from stdin and (re)initialize session to match
+ * parameters.  Return number of arguments or zero on EOF
+ *
+ * Commands are in the format:
+ *  signature+command genome genomeDataDir [arg ...]
+ */
+{
+char *cmdStr = dynReadCommand(rootDir);
+if (cmdStr == NULL)
+    return 0;
+
+int numArgs = chopByWhite(cmdStr, args, DYN_CMD_MAX_ARGS);
+if (numArgs == 0)
+    errAbort("empty command");
+if (numArgs < 3)
+    errAbort("expected at least 3 arguments for a dynamic server command");
+boolean isTrans = sameString("protQuery", args[0]) || sameString("transQuery", args[0])
+    || sameString("transInfo", args[0]);
+
+// initialize session if new or changed
+if ((dynSession->isTrans != isTrans) || (!sameString(dynSession->genome, args[1])))
+    dynSessionInit(dynSession, rootDir, args[1], args[2], isTrans);
+return numArgs;
+}
+
+static struct dnaSeq* dynReadQuerySeq(int qSize, boolean isTrans, boolean queryIsProt)
+/* read the DNA sequence from the query, filtering junk  */
+{
+struct dnaSeq *seq;
+AllocVar(seq);
+seq->size = qSize;
+seq->dna = needLargeMem(qSize+1);
+if (gfReadMulti(STDIN_FILENO, seq->dna, qSize) != qSize)
+    errAbort("read of %d bytes of query sequence failed", qSize);
+seq->dna[qSize] = '\0';
+
+if (queryIsProt)
+    {
+    seq->size = aaFilteredSize(seq->dna);
+    aaFilter(seq->dna, seq->dna);
+    }
+else
+    {
+    seq->size = dnaFilteredSize(seq->dna);
+    dnaFilter(seq->dna, seq->dna);
+    }
+int maxSize = (isTrans ? maxAaSize : maxNtSize);
+if (seq->size > maxSize)
+    {
+    seq->size = maxSize;
+    seq->dna[maxSize] = 0;
+    }
+
+return seq;
+}
+
+static void dynamicServerQuery(struct dynSession *dynSession, int numArgs, char **args)
+/* handle search queries
+ *
+ *  signature+command genome genomeDataDir qsize
+ */
+{
+struct genoFindIndex *gfIdx = dynSession->gfIdx;
+if (numArgs != 4)
+    errAbort("expected 4 words in %s command, got %d", args[0], numArgs);
+int qSize = atoi(args[3]);
+
+boolean queryIsProt = sameString(args[0], "protQuery");
+mustWriteFd(STDOUT_FILENO, "Y", 1);
+struct dnaSeq* seq = dynReadQuerySeq(qSize, gfIdx->isTrans, queryIsProt);
+if (gfIdx->isTrans)
+    {
+    if (queryIsProt)
+        transQuery(gfIdx->transGf, seq, STDOUT_FILENO);
+    else
+        transTransQuery(gfIdx->transGf, seq, STDOUT_FILENO);
+    }
+else
+    {
+    dnaQuery(gfIdx->untransGf, seq, STDOUT_FILENO, dynSession->perSeqMaxHash);
+    }
+netSendString(STDOUT_FILENO, "end");
+}
+
+static void dynamicServerInfo(struct dynSession *dynSession, int numArgs, char **args)
+/* handle one of the info commands
+ *
+ *  signature+command genome genomeDataDir
+ */
+{
+struct genoFindIndex *gfIdx = dynSession->gfIdx;
+if (numArgs != 3)
+    errAbort("expected 3 words in %s command, got %d", args[0], numArgs);
+
+char buf[256];
+struct genoFind *gf = gfIdx->isTrans ? gfIdx->transGf[0][0] : gfIdx->untransGf;
+sprintf(buf, "version %s", gfVersion);
+netSendString(STDOUT_FILENO, buf);
+sprintf(buf, "type %s", (gfIdx->isTrans ? "translated" : "nucleotide"));
+netSendString(STDOUT_FILENO, buf);
+sprintf(buf, "tileSize %d", gf->tileSize);
+netSendString(STDOUT_FILENO, buf);
+sprintf(buf, "stepSize %d", gf->stepSize);
+netSendString(STDOUT_FILENO, buf);
+sprintf(buf, "minMatch %d", gf->minMatch);
+netSendString(STDOUT_FILENO, buf);
+netSendString(STDOUT_FILENO, "end");
+}
+
+static void dynamicServerPcr(struct dynSession *dynSession, int numArgs, char **args)
+/* Execute a PCR query
+ *
+ *  signature+command genome genomeDataDir forward reverse maxDistance
+ */
+{
+struct genoFindIndex *gfIdx = dynSession->gfIdx;
+if (numArgs != 6)
+    errAbort("expected 6 words in %s command, got %d", args[0], numArgs);
+char *fPrimer = args[3];
+char *rPrimer = args[4];
+int maxDistance = atoi(args[5]);
+if (badPcrPrimerSeq(fPrimer) || badPcrPrimerSeq(rPrimer))
+    errAbort("Can only handle ACGT in primer sequences.");
+pcrQuery(gfIdx->untransGf, fPrimer, rPrimer, maxDistance, STDOUT_FILENO);
+}
+
+static bool dynamicServerCommand(char* rootDir, struct dynSession* dynSession)
+/* Execute one command from stdin, (re)initializing session as needed */
+{
+time_t startTime = clock1000();
+char *args[DYN_CMD_MAX_ARGS];
+int numArgs = dynNextCommand(rootDir, dynSession, args);
+if (numArgs == 0)
+    return FALSE;
+if (sameString("query", args[0]) || sameString("protQuery", args[0])
+    || sameString("transQuery", args[0]))
+    {
+    dynamicServerQuery(dynSession, numArgs, args);
+    }
+else if (sameString("untransInfo", args[0]) || sameString("transInfo", args[0]))
+    {
+    dynamicServerInfo(dynSession, numArgs, args);
+    }
+else if (sameString("pcr", args[0]))
+    {
+    dynamicServerPcr(dynSession, numArgs, args);
+    }
+else
+    errAbort("invalid command '%s'", args[0]);
+
+logInfo("dynserver: %s completed in %4.3f seconds", args[0], 0.001 * (clock1000() - startTime));
+freeMem(args[0]);
+return TRUE;
+}
+
+static void dynamicServer(char* rootDir)
+/* dynamic server for inetd. Read query from stdin, open index, query, respond, exit.
+ * only one query at a time */
+{
+pushWarnHandler(dynWarnHandler);
+logDebug("dynamicServer connect");
+
+// make sure errors are logged
+pushWarnHandler(dynWarnErrorVa);
+struct dynSession dynSession;
+ZeroVar(&dynSession);
+
+while (dynamicServerCommand(rootDir, &dynSession))
+    continue;
+logDebug("dynamicServer disconnect");
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -1060,6 +1459,7 @@ ipLog = optionExists("ipLog");
 doMask = optionExists("mask");
 canStop = optionExists("canStop");
 noSimpRepMask = optionExists("noSimpRepMask");
+indexFile = optionVal("indexFile", NULL);
 timeout = optionInt("timeout", timeout);
 if (argc < 2)
     usage();
@@ -1132,6 +1532,18 @@ else if (sameWord(command, "files"))
     if (argc != 4)
 	usage();
     getFileList(argv[2], argv[3]);
+    }
+else if (sameWord(command, "index"))
+    {
+    if (argc < 4)
+        usage();
+    buildIndex(argv[2], argc-3, argv+3);
+    }
+else if (sameWord(command, "dynserver"))
+    {
+    if (argc < 3)
+        usage();
+    dynamicServer(argv[2]);
     }
 else
     {
