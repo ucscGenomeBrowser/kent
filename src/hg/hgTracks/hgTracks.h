@@ -61,6 +61,9 @@
 
 #define BIGBEDMAXIMUMITEMS 100000
 
+#define MULTI_REGION_VIRTUAL_CHROM_NAME "multi"
+// original name was 'virt'
+
 /* for botDelay call, 10 second for warning, 20 second for immediate exit */
 #define delayFraction   0.25
 extern long enteredMainTime;
