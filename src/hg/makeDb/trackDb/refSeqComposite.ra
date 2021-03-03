@@ -1,7 +1,7 @@
 track refSeqComposite
 compositeTrack on
 shortLabel NCBI RefSeq
-longLabel RefSeq gene from NCBI
+longLabel RefSeq genes from NCBI
 group genes
 visibility pack
 type genePred
