@@ -8652,11 +8652,12 @@ if (!hideControls)
         else
             {
             char buf[100];
-            safef(buf, sizeof buf, "exit %s multi-region", 
-                (sameString(virtModeType, "exonMostly") ? "exon" :
-                (sameString(virtModeType, "geneMostly") ? "gene" : 
-                (sameString(virtModeType, "singleAltHaplo") ? "haplo": "custom"))));
-            hButtonWithMsg("hgt.exitMultiRegion", buf, "Exit multi-region display mode");
+            safef(buf, sizeof buf, "exit multi-region (%s) mode and return to normal display",
+                (sameString(virtModeType, "exonMostly") ? "exon-only" :
+                (sameString(virtModeType, "geneMostly") ? "gene-only" :
+                (sameString(virtModeType, "singleAltHaplo") ? "alternative haplotype":
+                                                "custom regions"))));
+            hButtonWithMsg("hgt.exitMultiRegion", "exit multi-region", buf);
             }
         hPrintf(" ");
 
