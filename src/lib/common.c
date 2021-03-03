@@ -2664,9 +2664,9 @@ if (size != 0 && fread(buf, size, 1, file) != 1)
 }
 
 void writeString(FILE *f, char *s)
-/* Write a 255 or less character string to a file.
- * This will write the length of the string in the first
- * byte then the string itself. */
+/* Write a 255 or less character string to a file.  Truncate if longer.  This
+ * will write the length of the string in the first byte then the string
+ * itself. */
 {
 UBYTE bLen;
 int len = strlen(s);
@@ -2680,6 +2680,17 @@ bLen = len;
 writeOne(f, bLen);
 mustWrite(f, s, len);
 }
+
+void writeStringSafe(FILE *f, char *s)
+/* Write a 255 or less character string to a file.  Generate an error if
+ * longer.  This will write the length of the string in the first byte then
+ * the string itself. */
+{
+if (strlen(s) > 255)
+    errAbort("attempt to write string longer than 255 bytes");
+writeString(f, s);
+}
+
 
 char *readString(FILE *f)
 /* Read a string (written with writeString) into
@@ -2762,6 +2773,23 @@ if (ferror(file))
     errAbort("mustGetLine: fgets failed: %s", strerror(ferror(file)));
 }
 
+
+static char *getWhenceStr(int whence)
+/* get string description of fseek/lseek whence parameter */
+{
+return ((whence == SEEK_SET) ? "SEEK_SET" : (whence == SEEK_CUR) ? "SEEK_CUR" :
+        (whence == SEEK_END) ? "SEEK_END" : "invalid 'whence' value");
+
+}
+
+void mustSeek(FILE *file, off_t offset, int whence)
+/* Seek to given offset, relative to whence (see man fseek) in file or errAbort. */
+{
+int ret = fseek(file, offset, whence);
+if (ret < 0)
+    errnoAbort("fseek(%lld, %s (%d)) failed", (long long)offset, getWhenceStr(whence), whence);
+}
+
 int mustOpenFd(char *fileName, int flags)
 /* Open a file descriptor (see man 2 open) or squawk and die. */
 {
@@ -2828,9 +2856,7 @@ off_t mustLseek(int fd, off_t offset, int whence)
 {
 off_t ret = lseek(fd, offset, whence);
 if (ret < 0)
-    errnoAbort("lseek(%d, %lld, %s (%d)) failed", fd, (long long)offset,
-	       ((whence == SEEK_SET) ? "SEEK_SET" : (whence == SEEK_CUR) ? "SEEK_CUR" :
-		(whence == SEEK_END) ? "SEEK_END" : "invalid 'whence' value"), whence);
+    errnoAbort("lseek(%d, %lld, %s (%d)) failed", fd, (long long)offset, getWhenceStr(whence), whence);
 return ret;
 }
 
@@ -3449,6 +3475,19 @@ sz = vasafef(buffer, bufSize, format, args);
 va_end(args);
 return sz;
 }
+
+int safefcat(char* buffer, int bufSize, char *format, ...)
+/* Safely format string to the end of the buffer.  Returns number of characters
+ * appended. */
+{
+int sz, len = strlen(buffer);;
+va_list args;
+va_start(args, format);
+sz = vasafef(buffer + len, bufSize - len, format, args);
+va_end(args);
+return sz;
+}
+
 
 void safecpy(char *buf, size_t bufSize, const char *src)
 /* copy a string to a buffer, with bounds checking.*/

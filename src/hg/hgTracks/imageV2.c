@@ -1376,7 +1376,7 @@ if (*chromStart < 0)
 *chromEnd = *chromStart + positionWidth;
 // get chrom size
 long virtChromSize = 0;
-if (sameString(imgBox->chrom, "virt"))
+if (sameString(imgBox->chrom, MULTI_REGION_VIRTUAL_CHROM_NAME))
     {
     virtChromSize = virtSeqBaseCount;
     }

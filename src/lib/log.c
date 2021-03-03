@@ -197,6 +197,7 @@ void logOpenFile(char* program, char *logFile)
 {
 setProgram(program);
 gLogFh = mustOpen(logFile, "a");
+setlinebuf(gLogFh);
 pushWarnHandler(logWarnHandler);
 pushAbortHandler(logAbortHandler);
 }

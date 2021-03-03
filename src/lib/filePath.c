@@ -121,7 +121,6 @@ char *mustExpandRelativePath(char *dir, char* relPath)
  * Result should be freeMem'd.*/
 {
 char *path = expandRelativePath(dir, relPath);
-verbose(3, "dir=%s\nrelPath=%s\npath=%s\n", dir, relPath, path);
 if (!path)
     errAbort("Too many .. in path %s to make relative to submitDir %s\n", relPath, dir);
 return path;
@@ -149,7 +148,6 @@ char *mustPathRelativeToFile(char *baseFile, char *relPath)
 /* Make Path Relative To File or Abort. */
 {
 char *path = pathRelativeToFile(baseFile, relPath);
-verbose(3, "baseFile=%s\nrelPath=%s\npath=%s\n", baseFile, relPath, path);
 if (!path)
     errAbort("Too many .. in symlink path %s to make relative to %s\n", relPath, baseFile);
 return path;
@@ -212,4 +210,28 @@ safecat(relPath, sizeof relPath, toFile);
 safecat(relPath, sizeof relPath, toExt);
 
 return cloneString(relPath);
+}
+
+boolean isSafeRelativePath(char *path)
+/* check that path is relative and contains no ".." elements */
+{
+if (startsWith("/", path))
+    return FALSE;
+char tmpPath[PATH_LEN];
+safecpy(tmpPath, sizeof(tmpPath), path);
+
+char *p = tmpPath;
+while (TRUE)
+    {
+    char *end = strchr(p, '/');
+    if (end != NULL)
+        *end = '\0';
+    if (sameString(p, ".."))
+        return FALSE;
+    if (end == NULL)
+        break;
+    else
+        p = end++;
+    }
+return TRUE;
 }

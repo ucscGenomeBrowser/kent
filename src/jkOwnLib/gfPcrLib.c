@@ -453,20 +453,24 @@ else
 	minPerfect, minGood, strand, pOutList);
 }
 
-struct gfRange *gfPcrGetRanges(char *host, char *port, char *fPrimer, char *rPrimer,
+struct gfRange *gfPcrGetRanges(struct gfConnection *conn, char *fPrimer, char *rPrimer,
 	int maxSize)
 /* Query gfServer with primers and convert response to a list of gfRanges. */
 {
 char buf[4096];
-int conn = gfConnect(host, port);
 struct gfRange *rangeList = NULL, *range;
 
 /* Query server and put results into rangeList. */
-safef(buf, sizeof(buf), "%spcr %s %s %d", gfSignature(), fPrimer, rPrimer, maxSize);
-mustWriteFd(conn, buf, strlen(buf));
+gfBeginRequest(conn);
+if (conn->isDynamic)
+    safef(buf, sizeof(buf), "%spcr %s %s %s %s %d", gfSignature(), conn->genome, conn->genomeDataDir,
+          fPrimer, rPrimer, maxSize);
+else
+    safef(buf, sizeof(buf), "%spcr %s %s %d", gfSignature(), fPrimer, rPrimer, maxSize);
+mustWriteFd(conn->fd, buf, strlen(buf));
 for (;;)
     {
-    if (netGetString(conn, buf) == NULL)
+    if (netGetString(conn->fd, buf) == NULL)
 	break;
     if (sameString(buf, "end"))
 	break;
@@ -490,13 +494,13 @@ for (;;)
 	slAddHead(&rangeList, range);
 	}
     }
-close(conn);
+gfEndRequest(conn);
 slReverse(&rangeList);
 return rangeList;
 }
 
 static void gfPcrOneViaNet(
-	char *host, char *port, char *seqDir,
+	struct gfConnection *conn, char *seqDir,
 	char *pcrName, char *fPrimer, char *rPrimer, int maxSize,
 	int minPerfect, int minGood,
 	struct hash *tFileCache, struct gfPcrOutput **pOutList)
@@ -518,7 +522,7 @@ if (minPrimerSize < minGood || minPrimerSize < minPerfect)
 	fPrimer, fPrimerSize, rPrimer, rPrimerSize, minGood);
 
 /* Load ranges and do more detailed snooping. */
-rangeList = gfPcrGetRanges(host, port, fPrimer, rPrimer, maxSize);
+rangeList = gfPcrGetRanges(conn, fPrimer, rPrimer, maxSize);
 for (range = rangeList; range != NULL; range = range->next)
     {
     int tSeqSize;
@@ -535,7 +539,7 @@ gfRangeFreeList(&rangeList);
 }
 
 
-struct gfPcrOutput *gfPcrViaNet(char *host, char *port, char *seqDir, 
+struct gfPcrOutput *gfPcrViaNet(struct gfConnection *conn, char *seqDir, 
 	struct gfPcrInput *inList, int maxSize, int minPerfect, int minGood)
 /* Do PCRs using gfServer index, returning list of results. */
 {
@@ -545,7 +549,7 @@ struct gfPcrOutput *outList = NULL;
 
 for (in = inList; in != NULL; in = in->next)
     {
-    gfPcrOneViaNet(host, port, seqDir,
+    gfPcrOneViaNet(conn, seqDir,
     	in->name, in->fPrimer, in->rPrimer, maxSize,
 	minPerfect, minGood,
     	tFileCache, &outList);
