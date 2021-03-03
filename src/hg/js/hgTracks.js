@@ -3974,8 +3974,8 @@ var imageV2 = {
 
         var oldJson = hgTracks;
         var valid = false;
+        var stripped = {};
         if (!newJson) {
-            var stripped = {};
             stripJsEmbedded(response, true, stripped);
             if ( ! stripped.warnMsg )
                 warn("hgTracks object is missing from the response");
@@ -4004,6 +4004,9 @@ var imageV2 = {
             } else {
                 valid = true;
             }
+            // the ajax request may have generated an error or warning in the warnbox
+            // so make sure those warnings still get to the user
+            stripJsEmbedded(response, false, stripped);
         }
         if (valid) {
             if (imageV2.enabled

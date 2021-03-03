@@ -4513,6 +4513,7 @@ switch(cType)
                 {
                 labelCfgUi(db, cart, tdb, prefix);
                 mergeSpanCfgUi(cart, tdb, prefix);
+                wigOption(cart, prefix, title, tdb);
                 }
 			}
 			break;

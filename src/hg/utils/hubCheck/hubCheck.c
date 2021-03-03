@@ -815,9 +815,12 @@ if (errCatchStart(errCatch))
 
     if (options->checkFiles)
         hubCheckBigDataUrl(hub, genome, tdb);
-    trackHubAddDescription(genome->trackDbFile, tdb);
-    if (!tdb->html)
-        warn("warning: missing description page for track: '%s'", tdb->track);
+    if (!sameString(tdb->track, "cytoBandIdeo"))
+        {
+        trackHubAddDescription(genome->trackDbFile, tdb);
+        if (!tdb->html)
+            warn("warning: missing description page for track: '%s'", tdb->track);
+        }
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError || errCatch->gotWarning)
