@@ -20,6 +20,7 @@
 #include "parsimonyProto.h"
 #include "phyloPlace.h"
 #include "phyloTree.h"
+#include "pipeline.h"
 #include "psl.h"
 #include "ra.h"
 #include "regexHelper.h"
@@ -1989,6 +1990,36 @@ carefulClose(&f);
 return tsvTn;
 }
 
+static struct tempName *makeSubtreeZipFile(struct usherResults *results, struct tempName *jsonTns[],
+                                           struct tempName *singleSubtreeJsonTn, int *pStartTime)
+/* Make a zip archive file containing all of the little subtree Newick and JSON files so
+ * user doesn't have to click on each one. */
+{
+struct tempName *zipTn;
+AllocVar(zipTn);
+trashDirFile(zipTn, "ct", "usher_subtrees", ".zip");
+int subtreeCount = slCount(results->subtreeInfoList);
+char *cmd[10 + 2*(subtreeCount+1)];
+char **cmds[] = { cmd, NULL };
+int cIx = 0, sIx = 0;
+cmd[cIx++] = "zip";
+cmd[cIx++] = "-j";
+cmd[cIx++] = zipTn->forCgi;
+cmd[cIx++] = singleSubtreeJsonTn->forCgi;
+cmd[cIx++] = results->singleSubtreeInfo->subtreeTn->forCgi;
+struct subtreeInfo *ti;
+for (ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, sIx++)
+    {
+    cmd[cIx++] = jsonTns[sIx]->forCgi;
+    cmd[cIx++] = ti->subtreeTn->forCgi;
+    }
+cmd[cIx++] = NULL;
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, NULL);
+pipelineClose(&pl);
+reportTiming(pStartTime, "make subtree zipfile");
+return zipTn;
+}
+
 static struct slName **getProblematicSites(char *db)
 /* If config.ra specfies maskFile them return array of lists (usually NULL) of reasons that
  * masking is recommended, one per position in genome; otherwise return NULL. */
@@ -2014,13 +2045,15 @@ if (isNotEmpty(pSitesFile) && fileExists(pSitesFile))
 return pSites;
 }
 
-static void downloadsRow(char *treeFile, char *sampleSummaryFile, char *spikeSummaryFile)
+static void downloadsRow(char *treeFile, char *sampleSummaryFile, char *spikeSummaryFile,
+                         char *subtreeZipFile)
 /* Make a row of quick download file links, to appear between the button row & big summary table. */
 {
 printf("<p><b>Downloads:</b> | ");
 printf("<a href='%s' download>Global phylogenetic tree with your sequences</a> | ", treeFile);
 printf("<a href='%s' download>TSV summary of sequences and placements</a> | ", sampleSummaryFile);
-printf("<a href='%s' download>TSV summary of Spike mutations</a> |", spikeSummaryFile);
+printf("<a href='%s' download>TSV summary of Spike mutations</a> | ", spikeSummaryFile);
+printf("<a href='%s' download>ZIP file of subtree JSON and Newick files</a> | ", subtreeZipFile);
 puts("</p>");
 }
 
@@ -2159,7 +2192,9 @@ if (vcfTn)
         for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
             {
             AllocVar(jsonTns[ix]);
-            trashDirFile(jsonTns[ix], "ct", "subtreeAuspice", ".json");
+            char subtreeName[512];
+            safef(subtreeName, sizeof(subtreeName), "subtreeAuspice%d", ix+1);
+            trashDirFile(jsonTns[ix], "ct", subtreeName, ".json");
             treeToAuspiceJson(ti, db, geneInfoList, gSeqWin, sampleMetadata, jsonTns[ix]->forCgi,
                               source);
             }
@@ -2183,7 +2218,10 @@ if (vcfTn)
         struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
                                                  geneInfoList, gSeqWin, spikeChanges, &startTime);
         struct tempName *sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
-        downloadsRow(results->bigTreePlusTn->forHtml, tsvTn->forHtml, sTsvTn->forHtml);
+        struct tempName *zipTn = makeSubtreeZipFile(results, jsonTns, singleSubtreeJsonTn,
+                                                    &startTime);
+        downloadsRow(results->bigTreePlusTn->forHtml, tsvTn->forHtml, sTsvTn->forHtml,
+                     zipTn->forHtml);
 
         if (seqCount <= MAX_SEQ_DETAILS)
             {
@@ -2224,8 +2262,12 @@ if (vcfTn)
                tsvTn->forHtml);
         printf("<li><a href='%s' download>TSV summary of S (Spike) gene changes</a>\n",
                sTsvTn->forHtml);
+        printf("<li><a href='%s' download>ZIP archive of subtree Newick and JSON files</a>\n",
+               zipTn->forHtml);
+        // For now, leave in the individual links so I don't break anybody's pipeline that's
+        // scraping this page...
         for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
-           {
+            {
             int subtreeUserSampleCount = slCount(ti->subtreeUserSampleIds);
             printf("<li><a href='%s' download>Subtree with %s", ti->subtreeTn->forHtml,
                    ti->subtreeUserSampleIds->name);
