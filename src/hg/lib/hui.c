@@ -349,7 +349,7 @@ return TRUE;
 
 /* Multi-region UI */
 
-boolean makeMultiRegionLink(char *db, struct trackDb *tdb)
+boolean makeMultiRegionLink(char *db, struct trackDb *tdb, struct cart *cart)
 /* Make a link to launch browser in multi-region custom URL mode, based on
  * track setting. This includes creating a custom track displaying the regions.
  * The link switches to exit multi-region if browser is already in multi-region mode
@@ -519,6 +519,11 @@ safef(customHtml, sizeof customHtml, "<h2>Description</h2>\n"
 
 // TODO: support #padding in custom regions file
 
+enum trackVisibility vis =
+                hTvFromString(cartUsualString(cart, tdb->track, hStringFromTv(tdb->visibility)));
+if (vis == tvHide)
+    vis = tvDense;
+
 printf("<p>");
 printf("<a href='../cgi-bin/hgTracks?"
                 "virtMode=1&"
@@ -527,9 +532,10 @@ printf("<a href='../cgi-bin/hgTracks?"
                 "virtShortDesc=%s&"
                 "multiRegionsBedUrl=%s&"
                 "%s=%s&"
+                "%s=%s&"
                 "%s=%s'>"
         "Display regions of interest (%d)</a>",
-                    tdb->track, cgiEncode(regionFile),
+                    tdb->track, cgiEncode(regionFile), tdb->track, hStringFromTv(vis),
                     CT_CUSTOM_DOC_TEXT_VAR, cgiEncode(customHtml),
                     CT_CUSTOM_TEXT_VAR, cgiEncode(dyStringCannibalize(&dsCustomText)), regionCount);
 printf(" in multi-region view (custom regions mode)");
@@ -539,10 +545,10 @@ printf("</p>");
 return TRUE;
 }
 
-void extraUiLinks(char *db,struct trackDb *tdb)
+void extraUiLinks(char *db, struct trackDb *tdb, struct cart *cart)
 // Show metadata, and downloads, schema links where appropriate
 {
-makeMultiRegionLink(db, tdb);
+makeMultiRegionLink(db, tdb, cart);
 
 struct slPair *pairs = trackDbMetaPairs(tdb);
 if (pairs != NULL)

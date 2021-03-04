@@ -1415,7 +1415,7 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
 void makeTopLink(struct trackDb *tdb);
 // Link to top of UI page
 
-void extraUiLinks(char *db,struct trackDb *tdb);
+void extraUiLinks(char *db, struct trackDb *tdb, struct cart *cart);
 // Show downloads, schema and metadata links where appropriate
 
 boolean chainDbNormScoreAvailable(struct trackDb *tdb);

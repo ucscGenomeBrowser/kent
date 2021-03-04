@@ -1373,7 +1373,8 @@ for (;;)
     {
     if (netGetString(conn->fd, buf) == NULL)
 	{
-	warn("Error reading status information from %s:%s",serve->host, serve->port);
+	warn("Error reading status information from %s:%s; gfServer maybe down or misconfigured, see system logs for details",
+             serve->host, serve->port);
 	ret = -1;
         break;
 	}

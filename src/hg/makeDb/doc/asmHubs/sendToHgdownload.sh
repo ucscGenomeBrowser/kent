@@ -30,6 +30,12 @@ printf "# destDir: %s\n" "${destDir}"
 
 ssh qateam@hgdownload.soe.ucsc.edu "mkdir -p ${destDir}" 2>&1 | grep -v "X11 forwarding request" || true
 printf "# successful mkdir\n"
-rsync --delete --stats -a -L -P "${srcDir}/" "qateam@hgdownload.soe.ucsc.edu:${destDir}/" \
+# genomes.txt obsolete now with the single file
+ssh qateam@hgdownload.soe.ucsc.edu "rm ${destDir}/genomes.txt" 2>&1 | egrep -v "cannot remove|X11 forwarding request" || true
+# ssh qateam@hgdownload.soe.ucsc.edu "rm ${destDir}/html/*.description.html" 2>&1 | grep -v "X11 forwarding request" || true
+rsync --delete --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@hgdownload.soe.ucsc.edu:${destDir}/" \
+  2>&1 | grep -v "X11 forwarding request" || true
+# the new single file hub genome trackDb file:
+rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@hgdownload.soe.ucsc.edu:${destDir}/hub.txt" \
   2>&1 | grep -v "X11 forwarding request" || true
 printf "# successful rsync\n"

@@ -34,11 +34,15 @@ open (FH, "find ./GCF ./GCA -mindepth 4 -maxdepth 4 -type d |") or die "can not 
 while (my $path = <FH>) {
   chomp $path;
   my $genomes = "$path/genomes.txt";
+  if ( ! -s "$genomes" ) {
+    $genomes = "$path/hub.txt";
+  }
   if ( -s "$genomes" ) {
-    open (GE, "egrep '^description|^scientificName|^htmlPath' $genomes|") or die "can not read $genomes";;
+    open (GE, "egrep '^description|^scientificName|^htmlPath|^taxId' $genomes|tr -d ''|") or die "can not read $genomes";;
     my $descr = "";
     my $sciName = "";
     my $asmId = "";
+    my $taxId = "";
     my $asmName = "";
     while (my $line = <GE>) {
       chomp $line;
@@ -47,6 +51,8 @@ while (my $path = <FH>) {
         $descr = $value;
       } elsif ($line =~ m/^scientificName/) {
         $sciName = $value;
+      } elsif ($line =~ m/^taxId/) {
+        $taxId = $value;
       } elsif ($line =~ m/^htmlPath/) {
         $asmId = $value;
         $asmId=~ s/.description.html//;
@@ -56,7 +62,7 @@ while (my $path = <FH>) {
     }
     close (GE);
     my $acc = basename($path);
-    printf "%s\t%s\t%s\t%s\n", $acc, $asmName, $sciName, $descr;
+    printf "%s\t%s\t%s\t%s\t%s\n", $acc, $asmName, $sciName, $descr, $taxId;
   }
 }
 close (FH);

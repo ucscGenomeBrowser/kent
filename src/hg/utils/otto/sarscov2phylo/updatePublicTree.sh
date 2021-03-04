@@ -194,8 +194,7 @@ tabix -p vcf public-$today.all.minAf.01.vcf.gz
 # Parsimony scores on collapsed tree
 time $find_parsimonious_assignments --tree public-$today.all.nwk \
     --vcf <(gunzip -c public-$today.all.vcf.gz) \
-> fpa.out
-tail -n+2 fpa.out \
+| tail -n+2 \
 | sed -re 's/^[A-Z]([0-9]+)[A-Z,]+.*parsimony_score=([0-9]+).*/\1\t\2/;' \
 | tawk '{print "NC_045512v2", $1-1, $1, $2;}' \
 | sort -k2n,2n \
@@ -359,6 +358,10 @@ mkdir -p $archive
 ln `pwd`/public-$today.all.nwk $archive/
 ln `pwd`/public-$today.all.masked.{pb,vcf.gz} $archive/
 ln `pwd`/public-$today.metadata.tsv.gz $archive/
+ln `pwd`/public-$today.all.masked.nextclade.pangolin.pb $archive/
+ln `pwd`/cladeToPublicName $archive/
+ln `pwd`/lineageToPublicName $archive/
+
 # Update 'latest' in $archiveRoot
 ln -f `pwd`/public-$today.all.nwk $archiveRoot/public-latest.all.nwk
 ln -f `pwd`/public-$today.all.masked.pb $archiveRoot/public-latest.all.masked.pb
@@ -367,8 +370,11 @@ ln -f `pwd`/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata.ts
 ln -f `pwd`/hgPhyloPlace.description.txt $archiveRoot/public-latest.version.txt
 
 # Update 'latest' protobuf, metadata and desc in and cgi-bin{,-angie}/hgPhyloPlaceData/wuhCor1/
-for dir in /usr/local/apache/cgi-bin{-angie,}/hgPhyloPlaceData/wuhCor1; do
+for dir in /usr/local/apache/cgi-bin{-angie,-demo-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
     ln -sf `pwd`/public-$today.all.masked.pb $dir/public-latest.all.masked.pb
     ln -sf `pwd`/public-$today.metadata.tsv.gz $dir/public-latest.metadata.tsv.gz
     ln -sf `pwd`/hgPhyloPlace.description.txt $dir/public-latest.version.txt
 done
+
+# Clean up
+nice xz new*fa &
