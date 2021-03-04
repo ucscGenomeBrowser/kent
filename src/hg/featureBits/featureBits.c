@@ -43,6 +43,7 @@ static struct optionSpec optionSpecs[] =
     {"binOverlap", OPTION_INT},
     {"bedRegionIn", OPTION_STRING},
     {"bedRegionOut", OPTION_STRING},
+    {"countBlocks", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -60,6 +61,7 @@ int dots = 0;	/* print dots every N chroms (scaffolds) processed */
 boolean calcEnrichment = FALSE;	/* Calculate coverage/enrichment? */
 int binSize = 500000;	/* Default bin size. */
 int binOverlap = 250000;	/* Default bin size. */
+boolean countBlocks = FALSE;	/* Count blocks in bed12 rather than extent. */
 
 /* to process chroms without constantly looking up in chromInfo, create
  * this list of them from the chromInfo once.
@@ -87,6 +89,7 @@ errAbort(
   "   -or               Or tables together instead of anding them\n"
   "   -not              Output negation of resulting bit set.\n"
   "   -countGaps        Count gaps in denominator\n"
+  "   -countBlocks      Count blocks in bed12 files rather than entire extent.\n"
   "   -noRandom         Don't include _random (or Un) chromosomes\n"
   "   -noHap            Don't include _hap|_alt chromosomes\n"
   "   -primaryChroms    Primary assembly (chroms without '_' in name)\n"
@@ -359,32 +362,108 @@ while ((psl = pslNext(lf)) != NULL)
 lineFileClose(&lf);
 }
 
-void fbOrBed(Bits *acc, char *track, char *chrom, int chromSize)
-/* Or in bits of psl file that correspond to chrom. */
+static int howManyFields(char *fileName)
+/* Figure out how many fields the first bed has in this file. */
 {
-struct lineFile *lf;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *row[256];
+unsigned numFields = 0;
+if (lineFileNextReal(lf, &line))
+    numFields = chopByWhite(line, row, ArraySize(row));
+
+lineFileClose(&lf);
+return numFields;
+}
+
+static struct bed *cacheBeds(char *fileName)
+/* Read in the beds from this file and keep them in a cache. */
+{
+static char *cachedFile;
+static struct bed *cachedBeds;
+
+if ((cachedFile == NULL) || differentString(cachedFile, fileName))
+    {
+    if (cachedBeds)
+        {
+        bedFreeList(&cachedBeds);
+        freez(&cachedFile);
+        }
+
+    cachedFile = cloneString(fileName);
+    unsigned numFields = howManyFields(cachedFile);
+    cachedBeds = bedLoadNAllChrom(fileName, numFields > 12 ? 12 : numFields, NULL);
+    }
+
+return cachedBeds;
+}
+
+void fbOrBed(Bits *acc, char *track, char *chrom, int chromSize)
+/* Or in bits of bed file that correspond to chrom. */
+{
 char fileName[512];
-char *row[3];
-int s, e, w;
 
 chromFileName(track, chrom, fileName);
 if (!fileExists(fileName))
     return;
-lf = lineFileOpen(fileName, TRUE);
-while (lineFileRow(lf, row))
+struct bed *bed, *beds = cacheBeds(fileName);
+
+for(bed = beds; bed; bed = bed->next)
     {
-    if (sameString(row[0], chrom))
+    if (sameString(bed->chrom, chrom))
         {
-	s = lineFileNeedNum(lf, row, 1);
-	if (s < 0) outOfRange(lf, chrom, chromSize);
-	e = lineFileNeedNum(lf, row, 2);
-	if (e > chromSize) outOfRange(lf, chrom, chromSize);
-	w = e - s;
-	if (w > 0)
-	    bitSetRange(acc, s, w);
+        if (countBlocks && (bed->blockCount > 0))
+            {
+            int ii;
+            for(ii=0; ii < bed->blockCount; ii++)
+                bitSetRange(acc, bed->chromStart + bed->chromStarts[ii], bed->blockSizes[ii]);
+            }
+        else
+            {
+            int w;
+            w = bed->chromEnd - bed->chromStart;
+            if (w > 0)
+                bitSetRange(acc, bed->chromStart, w);
+            }
 	}
     }
-lineFileClose(&lf);
+}
+
+void fbOrBigBed(Bits *acc, char *track, char *chrom, int chromSize)
+/* Or in a bigBed file. */
+{
+char fileName[512];
+chromFileName(track, chrom, fileName);
+if (!fileExists(fileName))
+    return;
+
+struct lm *lm = lmInit(0);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+unsigned fieldCount = bbi->definedFieldCount;
+char *bedRow[fieldCount];
+struct bigBedInterval *interval, *intervalList = bigBedIntervalQuery(bbi, chrom, 0, chromSize, 0, lm);
+
+for (interval = intervalList; interval != NULL; interval = interval->next)
+    {
+    if (countBlocks && (fieldCount >= 12))
+        {
+        char startBuf[16], endBuf[16];
+        bigBedIntervalToRow(interval, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        struct bed *bed = bedLoadN(bedRow, fieldCount);
+        int ii;
+        for(ii=0; ii < bed->blockCount; ii++)
+            bitSetRange(acc, bed->chromStart + bed->chromStarts[ii], bed->blockSizes[ii]);
+        bedFree(&bed);
+        }
+    else
+        {
+        int w = interval->end - interval->start;
+        if (w > 0)
+            bitSetRange(acc, interval->start, w);
+        }
+    }
+    
+lmCleanup(&lm);
+bbiFileClose(&bbi);
 }
 
 void fbOrChain(Bits *acc, char *track, char *chrom, int chromSize)
@@ -440,6 +519,10 @@ else if (isFileType(track, "bed"))
 else if (isFileType(track, "chain"))
     {
     fbOrChain(acc, track, chrom, chromSize);
+    }
+else if (isFileType(track, "bb"))
+    {
+    fbOrBigBed(acc, track, chrom, chromSize);
     }
 else  
     errAbort("can't determine file type of: %s", track);
@@ -928,6 +1011,7 @@ chromSizes = optionVal("chromSize", NULL);
 orLogic = optionExists("or");
 notResults = optionExists("not");
 countGaps = optionExists("countGaps");
+countBlocks = optionExists("countBlocks");
 noRandom = optionExists("noRandom");
 noHap = optionExists("noHap");
 primaryChroms = optionExists("primaryChroms");

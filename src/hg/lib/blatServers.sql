@@ -10,6 +10,7 @@ CREATE TABLE blatServers (
     port int not null,	# TCP/IP port on host
     isTrans tinyint not null,	# 0 for nucleotide/1 for translated nucleotide
     canPcr tinyint not null,	# 1 for use with PCR, 0 for not
+    dynamic tinyint not null,	# 1 for if gfServer is dynamic under xinetd, 0 for not
               #Indices
     PRIMARY KEY(db)
 );

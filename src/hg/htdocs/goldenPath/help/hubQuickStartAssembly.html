@@ -118,9 +118,20 @@ gfServer start localhost 17779 -stepSize=5 yourAssembly.2bit &</code></pre>
 <p>
 Then you can edit the genomes.txt file of your assembly hub to include three lines in the stanza 
 referring to yourAssembly, that would have matching port numbers:</p>
-<pre><code>transBlat yourLab.yourInstitution.edu 17777
-blat yourLab.yourInstitution.edu 17779 
-isPcr yourLab.yourInstitution.edu 17779 </code></pre>
+<pre>
+   transBlat yourLab.yourInstitution.edu 17777
+   blat yourLab.yourInstitution.edu 17779
+   isPcr yourLab.yourInstitution.edu 17779 </code></pre>
+</pre>
+<p>
+The assembly hub can be configured to talk to a dynamic BLAT server that loads
+a pre-built index when started by an <code>xinetd</code> super-server.  This
+allows genomes to have a blat server without needing it to be resident in
+memory at all times.  See
+<a href="http://genomewiki.ucsc.edu/index.php/Running_your_own_gfServer">Running your own gfServer</a>
+and
+<a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs#Adding_BLAT_servers">Adding BLAT servers</a>
+for details on how to setup dynamic BLAT servers
 <p>
 See an example genomes.txt with commented out lines 
 <a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/genomes.txt"
@@ -195,7 +206,7 @@ use &quot;x&quot; when the cursor is over the <code>#</code> at the start of the
 and <code>:w!</code> to save the changes and <code>:q</code> to quit. </p>
 <pre><code>blat localhost 17779
 transBlat localhost 17777
-isPcr localhost 17779 </code></pre>
+isPcr yourLab.yourInstitution.edu 17779 </code></pre>
 <p>
 Please note that if you loaded your hub earlier, it will take five minutes (300 seconds)
 for the browser to check for any changes to genomes.txt, and that this delay can be
