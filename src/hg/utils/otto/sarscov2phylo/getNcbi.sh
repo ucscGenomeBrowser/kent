@@ -81,3 +81,7 @@ time cleanGenbank < ncbi_dataset/data/genomic.fna \
 
 rm -f $ottoDir/ncbi.latest
 ln -s ncbi.$today $ottoDir/ncbi.latest
+
+# Clean up
+rm -r ncbi_dataset
+nice xz all.bioSample.* &
