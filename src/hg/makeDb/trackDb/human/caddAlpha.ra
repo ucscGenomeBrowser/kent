@@ -1,7 +1,7 @@
 track caddSuper
 shortLabel CADD
 longLabel CADD 1.6 Score for all single-basepair mutations and selected insertions/deletions
-superTrack on show
+superTrack on hide
 type bed
 visibility hide
 group phenDis
