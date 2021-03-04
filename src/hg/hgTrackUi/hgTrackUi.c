@@ -3046,7 +3046,7 @@ if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrack
         hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
 
     // Additional special case navigation links may be added
-    extraUiLinks(database,tdb);
+    extraUiLinks(database, tdb, cart);
     }
 }
 
