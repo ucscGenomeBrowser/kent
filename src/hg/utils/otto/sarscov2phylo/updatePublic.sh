@@ -18,9 +18,12 @@ prevDate=$1
 problematicSitesVcf=$2
 
 ottoDir=/hive/data/outside/otto/sarscov2phylo
+gisaidDir=/hive/users/angie/gisaid
 
 today=$(date +%F)
 scriptDir=$(dirname "${BASH_SOURCE[0]}")
+
+$scriptDir/gisaidFromChunks.sh
 
 cogUkDir=$ottoDir/cogUk.$today
 mkdir -p $cogUkDir
@@ -34,6 +37,8 @@ $scriptDir/getNcbi.sh >& getNcbi.log
 
 $scriptDir/nextcladeNcbi.sh &
 $scriptDir/pangolinNcbi.sh
+
+$scriptDir/updateIdMapping.sh $gisaidDir/{metadata_batch_$today.tsv.gz,sequences_batch_$today.fa.xz}
 
 buildDir=$ottoDir/$today
 mkdir -p $buildDir
