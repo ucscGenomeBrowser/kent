@@ -1146,6 +1146,14 @@ char *chopPrefix(char *s);
 char *chopPrefixAt(char *s, char c);
 /* Like chopPrefix, but can chop on any character, not just '.' */
 
+INLINE char *findTail(char *s, char c)
+/* find the start of the string following the last occurrence of c.
+ * return the whole string if not found.  Does not modify the string. */
+{
+char *cp = strrchr(s, c);
+return (cp == NULL) ? s : cp+1;
+}
+
 FILE *mustOpen(char *fileName, char *mode);
 /* Open a file - or squawk and die. */
 
@@ -1165,6 +1173,9 @@ void mustGetLine(FILE *file, char *buf, int charCount);
 /* Read at most charCount-1 bytes from file, but stop after newline if one is
  * encountered.  The string in buf is '\0'-terminated.  (See man 3 fgets.)
  * Die if there is an error. */
+
+void mustSeek(FILE *file, off_t offset, int whence);
+/* Seek to given offset, relative to whence (see man fseek) in file or errAbort. */
 
 int mustOpenFd(char *fileName, int flags);
 /* Open a file descriptor (see man 2 open) or squawk and die. */
@@ -1201,6 +1212,11 @@ void writeString(FILE *f, char *s);
 /* Write a 255 or less character string to a file.
  * This will write the length of the string in the first
  * byte then the string itself. */
+
+void writeStringSafe(FILE *f, char *s);
+/* Write a 255 or less character string to a file.  Generate an error if
+ * longer.  This will write the length of the string in the first byte then
+ * the string itself. */
 
 char *readString(FILE *f);
 /* Read a string (written with writeString) into
@@ -1415,6 +1431,14 @@ void truncatef(char *buf, int size, char *format, ...);
 int safef(char* buffer, int bufSize, char *format, ...)
 /* Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. */
+#ifdef __GNUC__
+__attribute__((format(printf, 3, 4)))
+#endif
+;
+
+int safefcat(char* buffer, int bufSize, char *format, ...)
+/* Safely format string to the end of the buffer.  Returns number of characters
+ * appended. */
 #ifdef __GNUC__
 __attribute__((format(printf, 3, 4)))
 #endif

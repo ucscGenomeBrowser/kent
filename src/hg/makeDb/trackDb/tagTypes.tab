@@ -27,6 +27,7 @@ bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
 barChartColors barChart bigBarChart
 barChartCategoryUrl barChart bigBarChart
+multiRegionBedUrl *
 barChartFacets barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 barChartStatsUrl barChart bigBarChart
@@ -556,6 +557,7 @@ wibFile customTracks
 wigColorBy wig
 wigFile customTracks
 wiggle wigMaf
+wiggleWindow *
 windowingFunction *
 xrefDataUrl *
 yalePseudoAssoc *

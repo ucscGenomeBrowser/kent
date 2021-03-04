@@ -38,7 +38,7 @@ ref2bit=/hive/data/genomes/wuhCor1/wuhCor1.2bit
 
 usherDir=~angie/github/usher
 usher=$usherDir/build/usher
-matToVcf=$usherDir/build/matToVcf
+matUtils=$usherDir/build/matUtils
 find_parsimonious_assignments=~angie/github/strain_phylogenetics/build/find_parsimonious_assignments
 
 scriptDir=$(dirname "${BASH_SOURCE[0]}")
@@ -148,7 +148,7 @@ time $usher -u -T 50 \
     -o public-$today.all.notMasked.pb \
     >& usher.addNewUnmasked.log
 #~10 hours for 56k seqs, ~72m for 6k
-$matToVcf -i public-$today.all.notMasked.pb -v public-$today.all.vcf
+$matUtils convert -i public-$today.all.notMasked.pb -v public-$today.all.vcf
 ls -l public-$today.all.vcf
 wc -l public-$today.all.vcf
 bgzip -f public-$today.all.vcf
@@ -168,7 +168,7 @@ time $usher -u -T 50 \
 mv uncondensed-final-tree.nh public-$today.all.nwk
 # Masked VCF that goes with the masked protobuf, for public distribution for folks who want
 # to run UShER and also have the VCF.
-$matToVcf -i public-$today.all.masked.pb -v public-$today.all.masked.vcf
+$matUtils convert -i public-$today.all.masked.pb -v public-$today.all.masked.vcf
 gzip public-$today.all.masked.vcf
 
 # Make allele-frequency-filtered versions
@@ -194,8 +194,7 @@ tabix -p vcf public-$today.all.minAf.01.vcf.gz
 # Parsimony scores on collapsed tree
 time $find_parsimonious_assignments --tree public-$today.all.nwk \
     --vcf <(gunzip -c public-$today.all.vcf.gz) \
-> fpa.out
-tail -n+2 fpa.out \
+| tail -n+2 \
 | sed -re 's/^[A-Z]([0-9]+)[A-Z,]+.*parsimony_score=([0-9]+).*/\1\t\2/;' \
 | tawk '{print "NC_045512v2", $1-1, $1, $2;}' \
 | sort -k2n,2n \
@@ -304,6 +303,33 @@ sampleCountComma=$(echo $sampleCount \
 echo "$sampleCountComma genomes from GenBank, COG-UK and CNCB ($today); sarscov2phylo 13-11-20 tree with newer sequences added by UShER" \
     > hgPhyloPlace.description.txt
 
+cp -p public-$today.all.masked.pb{,.bak}
+
+# Add nextclade annotations to protobuf
+zcat public-$today.metadata.tsv.gz \
+| tail -n+2 | tawk '$8 != "" {print $8, $1;}' \
+| sed -re 's/^20E \(EU1\)/20E.EU1/;' \
+    > cladeToPublicName
+time $matUtils annotate -T 50 \
+    -l \
+    -i public-$today.all.masked.pb \
+    -c cladeToPublicName \
+    -o public-$today.all.masked.nextclade.pb \
+    >& annotate.nextclade.out
+
+# Add pangolin lineage annotations to protobuf
+zcat public-$today.metadata.tsv.gz \
+| tail -n+2 | tawk '$9 != "" {print $9, $1;}' \
+    > lineageToPublicName
+time $matUtils annotate -T 50 \
+    -i public-$today.all.masked.nextclade.pb \
+    -c lineageToPublicName \
+    -o public-$today.all.masked.nextclade.pangolin.pb \
+    >& annotate.pangolin.out
+
+# Not all the Pangolin lineages can be assigned nodes so for now just use nextclade
+cp -p public-$today.all.masked.nextclade.pb public-$today.all.masked.pb
+
 # Update gbdb links -- not every day, too much churn for getting releases out and the
 # tracks are getting unmanageably large for VCF.
 if false; then
@@ -332,6 +358,10 @@ mkdir -p $archive
 ln `pwd`/public-$today.all.nwk $archive/
 ln `pwd`/public-$today.all.masked.{pb,vcf.gz} $archive/
 ln `pwd`/public-$today.metadata.tsv.gz $archive/
+ln `pwd`/public-$today.all.masked.nextclade.pangolin.pb $archive/
+ln `pwd`/cladeToPublicName $archive/
+ln `pwd`/lineageToPublicName $archive/
+
 # Update 'latest' in $archiveRoot
 ln -f `pwd`/public-$today.all.nwk $archiveRoot/public-latest.all.nwk
 ln -f `pwd`/public-$today.all.masked.pb $archiveRoot/public-latest.all.masked.pb
@@ -340,8 +370,11 @@ ln -f `pwd`/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata.ts
 ln -f `pwd`/hgPhyloPlace.description.txt $archiveRoot/public-latest.version.txt
 
 # Update 'latest' protobuf, metadata and desc in and cgi-bin{,-angie}/hgPhyloPlaceData/wuhCor1/
-for dir in /usr/local/apache/cgi-bin{-angie,}/hgPhyloPlaceData/wuhCor1; do
+for dir in /usr/local/apache/cgi-bin{-angie,-demo-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
     ln -sf `pwd`/public-$today.all.masked.pb $dir/public-latest.all.masked.pb
     ln -sf `pwd`/public-$today.metadata.tsv.gz $dir/public-latest.metadata.tsv.gz
     ln -sf `pwd`/hgPhyloPlace.description.txt $dir/public-latest.version.txt
 done
+
+# Clean up
+nice xz new*fa &

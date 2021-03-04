@@ -18189,3 +18189,75 @@ TMPDIR=/dev/shm
     # 1753558422 bases of 2626580772 (66.762%) in intersection
 
 ##############################################################################
+# lastz frog xenTro10 (DONE - 2021-02-22 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10XenTro10
+    mkdir /hive/data/genomes/mm10/bed/lastzXenTro10.2021-02-22
+    cd /hive/data/genomes/mm10/bed/lastzXenTro10.2021-02-22
+
+    printf '# Mouse vs. frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/hive/data/staging/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+
+# QUERY: frog xenTro10
+SEQ2_DIR=/hive/data/genomes/xenTro10/xenTro10.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro10/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/mm10/bed/lastzXenTro10.2021-02-22
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) \
+              > do.log 2>&1 &
+    #	real    288m14.529s
+
+    sed -e 's/^/    # /;' fb.mm10.chainXenTro10Link.txt
+    # 96546694 bases of 2652783500 (3.639%) in intersection
+    sed -e 's/^/    # /;' fb.mm10.chainSynXenTro10Link.txt
+    # 34676951 bases of 2652783500 (1.307%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 \
+       xenTro10) > rbest.log 2>&1 &
+    # real    396m41.983s
+
+    sed -e 's/^/    # /;' fb.mm10.chainRBest.XenTro10.txt
+    # 62288287 bases of 2652783500 (2.348%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/xenTro10/bed/blastz.mm10.swap
+    cd /hive/data/genomes/xenTro10/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzXenTro10.2021-02-22/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
+	> swap.log 2>&1 &
+    #	real    24m33.940s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainMm10Link.txt
+    # 121679610 bases of 1448461978 (8.401%) in intersection
+    sed -e 's/^/    # /;' fb.xenTro10.chainSynMm10Link.txt
+    # 35210769 bases of 1448461978 (2.431%) in intersection
+
+  time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` xenTro10 mm10) \
+         > rbest.log 2>&1 &
+    # real    372m38.637s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainRBest.Mm10.txt
+    # 58901471 bases of 1448461978 (4.066%) in intersection
+
+#########################################################################

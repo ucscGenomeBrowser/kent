@@ -16,7 +16,7 @@
 
 // Allow users to upload a lot of sequences, but put limits on how much detail we'll show and
 // how many custom tracks we'll create.
-#define MAX_SUBTREE_BUTTONS 50
+#define MAX_SUBTREE_BUTTONS 5
 #define MAX_SEQ_DETAILS 100
 #define MAX_SUBTREE_CTS 10
 
@@ -85,6 +85,8 @@ struct placementInfo
     struct baseVal *imputedBases;         // Ambiguous bases imputed to ref/alt [ACGT]
     int parsimonyScore;                   // Parsimony cost of placing sample
     int bestNodeCount;                    // Number of equally parsimonious placements
+    char *nextClade;                      // Nextstrain clade assigned by UShER
+    char *pangoLineage;                   // Pango lineage assigned by UShER
     };
 
 struct subtreeInfo

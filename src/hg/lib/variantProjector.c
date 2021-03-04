@@ -342,7 +342,7 @@ if (isNotEmpty(txRef))
     {
     // Watch out for overlapping blocks due to ribosomal slippage as in SARS-CoV-2.
     int fudge = 3;
-    int bufLen = gEnd - gStart + 1 + fudge;;
+    int bufLen = gEnd - gStart + 1 + fudge;
     char splicedGSeq[bufLen];
     splicedGSeq[0] = '\0';
     spliceGenomicInRange(gSeqWin, gStart, gEnd, txAli, FALSE, splicedGSeq, sizeof(splicedGSeq));

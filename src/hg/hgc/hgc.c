@@ -3277,7 +3277,7 @@ void printTrackHtml(struct trackDb *tdb)
 if (!isCustomTrack(tdb->track))
     {
     printRelatedTracks(database, trackHash, tdb, cart);
-    extraUiLinks(database, tdb);
+    extraUiLinks(database, tdb, cart);
     printTrackUiLink(tdb);
     printOrigAssembly(tdb);
     printDataVersion(database, tdb);

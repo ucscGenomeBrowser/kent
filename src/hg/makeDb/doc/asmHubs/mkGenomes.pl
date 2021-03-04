@@ -5,9 +5,10 @@ use warnings;
 use File::Basename;
 
 my $argc = scalar(@ARGV);
-if ($argc != 1) {
-  printf STDERR "mkGenomes.pl [two column name list] > .../hub/genomes.txt\n";
-  printf STDERR "e.g.: mkGenomes.pl vgp.primary.assemblies.tsv > .../vgp/genomes.txt\n";
+if ($argc != 3) {
+  printf STDERR "mkGenomes.pl blatHost blatPort [two column name list] > .../hub/genomes.txt\n";
+  printf STDERR "e.g.: mkGenomes.pl localhost 4040 vgp.primary.assemblies.tsv > .../vgp/genomes.txt\n";
+  printf STDERR "e.g.: mkGenomes.pl hgwdev 4040 vgp.primary.assemblies.tsv > .../vgp/download.genomes.txt\n";
   printf STDERR "the name list is found in \$HOME/kent/src/hg/makeDb/doc/asmHubs/\n";
   printf STDERR "\nthe two columns are 1: asmId (accessionId_assemblyName)\n";
   printf STDERR "column 2: common name for species, columns separated by tab\n";
@@ -19,9 +20,64 @@ if ($argc != 1) {
   exit 255;
 }
 
+my $downloadHost = "hgwdev";
+my @blatHosts = qw( localhost hgwdev );
+my @blatPorts = qw( 4040 4040 );
+
+################### writing out hub.txt file, twice ##########################
+sub singleFileHub($$$$$$$$$$) {
+  my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $defPos, $taxId, $trackDb, $accessionDir) = @_;
+  my @fhN;
+  push @fhN, $fh1;
+  push @fhN, $fh2;
+
+  my $fileCount = 0;
+  my @tdbLines;
+  open (TD, "<$trackDb") or die "can not read trackDb: $trackDb";
+  while (my $tdbLine = <TD>) {
+     chomp $tdbLine;
+     push @tdbLines, $tdbLine;
+  }
+  close (TD);
+  foreach my $fh (@fhN) {
+    printf $fh "hub %s genome assembly\n", $accessionId;
+    printf $fh "shortLabel %s\n", $orgName;
+    printf $fh "longLabel %s/%s/%s genome assembly\n", $orgName, $descr, $asmId;
+    printf $fh "useOneFile on\n";
+    printf $fh "email hclawson\@ucsc.edu\n";
+    printf $fh "descriptionUrl html/%s.description.html\n", $asmId;
+    printf $fh "\n";
+    printf $fh "genome %s\n", $accessionId;
+    printf $fh "taxId %s\n", $taxId if (length($taxId) > 1);
+    printf $fh "groups groups.txt\n";
+    printf $fh "description %s\n", $orgName;
+    printf $fh "twoBitPath %s.2bit\n", $accessionId;
+    printf $fh "chromSizes %s.chrom.sizes.txt\n", $accessionId;
+    printf $fh "chromAlias %s.chromAlias.txt\n", $accessionId;
+    printf $fh "organism %s\n", $descr;
+    printf $fh "defaultPos %s\n", $defPos;
+    printf $fh "scientificName %s\n", $descr;
+    printf $fh "htmlPath html/%s.description.html\n", $asmId;
+    # until blat server host is ready for hgdownload, avoid these lines
+    if ($blatHosts[$fileCount] ne $downloadHost) {
+      printf $fh "blat %s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatPorts[$fileCount];
+      printf $fh "transBlat %s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatPorts[$fileCount];
+      printf $fh "isPcr %s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatPorts[$fileCount];
+    }
+    printf $fh "\n";
+    foreach my $tdbLine (@tdbLines) {
+      printf $fh "%s\n", $tdbLine;
+    }
+    ++$fileCount;
+  }
+}
+
+##############################################################################
 my $home = $ENV{'HOME'};
 my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
 
+my $blatHost = shift;
+my $blatPort = shift;
 my $inputList = shift;
 my $orderList = $inputList;
 if ( ! -s "$orderList" ) {
@@ -66,6 +122,7 @@ foreach my $asmId (@orderList) {
   $accessionDir .= "/" . substr($asmId, 7 ,3);
   $accessionDir .= "/" . substr($asmId, 10 ,3);
   my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
+  my $destDir = "/hive/data/genomes/asmHubs/$accessionDir/$accessionId";
   if ($gcPrefix eq "GCA") {
      $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
   }
@@ -90,6 +147,8 @@ foreach my $asmId (@orderList) {
   }
   ++$buildDone;
 printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessionId;
+  my $taxId=`grep -i "taxid:" $asmReport | head -1 | awk '{printf \$(NF)}'`;
+  chomp $taxId;
   my $descr=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.*organism name: *##i; s# (.*\$##;'`;
   chomp $descr;
   my $orgName=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.* name: .* (##; s#).*##;'`;
@@ -99,6 +158,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   }
 
   printf "genome %s\n", $accessionId;
+  printf "taxId %s\n", $taxId if (length($taxId) > 1);
   printf "trackDb ../%s/%s/trackDb.txt\n", $accessionDir, $accessionId;
   printf "groups groups.txt\n";
   printf "description %s\n", $orgName;
@@ -122,23 +182,17 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf "orderKey %d\n", $buildDone;
   printf "scientificName %s\n", $descr;
   printf "htmlPath ../%s/%s/html/%s.description.html\n", $accessionDir, $accessionId, $asmId;
+  # until blat server host is ready for hgdownload, avoid these lines
+  if ($blatHost ne $downloadHost) {
+    if ( -s "${destDir}/$accessionId.trans.gfidx" ) {
+      printf "blat $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
+    printf "transBlat $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
+      printf "isPcr $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
+    }
+  }
   printf "\n";
-  my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
-  my $localOrderKey;
-  open (GF, ">$localGenomesFile") or die "can not write to $localGenomesFile";
-  printf GF "genome %s\n", $accessionId;
-  printf GF "trackDb trackDb.txt\n";
-  printf GF "groups groups.txt\n";
-  printf GF "description %s\n", $orgName;
-  printf GF "twoBitPath %s.2bit\n", $accessionId;
-  printf GF "chromSizes %s.chrom.sizes.txt\n", $accessionId;
-  printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
-  printf GF "organism %s\n", $descr;
-  printf GF "defaultPos %s\n", $defPos;
-  printf GF "orderKey %d\n", $localOrderKey++;
-  printf GF "scientificName %s\n", $descr;
-  printf GF "htmlPath html/%s.description.html\n", $asmId;
-  close (GF);
+
+  # the original multi-file system:
   my $localHubTxt = "$buildDir/${asmId}.hub.txt";
   open (HT, ">$localHubTxt") or die "can not write to $localHubTxt";
   printf HT "hub %s genome assembly\n", $accessionId;
@@ -148,6 +202,39 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf HT "email hclawson\@ucsc.edu\n";
   printf HT "descriptionUrl html/%s.description.html\n", $asmId;
   close (HT);
+
+  # try creating single file hub.txt, one for hgwdev, one for hgdownload
+  my $downloadHubTxt = "$buildDir/${asmId}.download.hub.txt";
+  open (DL, ">$downloadHubTxt") or die "can not write to $downloadHubTxt";
+  $localHubTxt = "$buildDir/${asmId}.singleFile.hub.txt";
+  open (HT, ">$localHubTxt") or die "can not write to $localHubTxt";
+
+  singleFileHub(\*HT, \*DL, $accessionId, $orgName, $descr, $asmId,
+	$defPos, $taxId, $trackDb, $accessionDir);
+
+  my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
+  open (GF, ">$localGenomesFile") or die "can not write to $localGenomesFile";
+  printf GF "genome %s\n", $accessionId;
+  printf GF "taxId %s\n", $taxId if (length($taxId) > 1);
+  printf GF "trackDb trackDb.txt\n";
+  printf GF "groups groups.txt\n";
+  printf GF "description %s\n", $orgName;
+  printf GF "twoBitPath %s.2bit\n", $accessionId;
+  printf GF "chromSizes %s.chrom.sizes.txt\n", $accessionId;
+  printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
+  printf GF "organism %s\n", $descr;
+  printf GF "defaultPos %s\n", $defPos;
+  printf GF "scientificName %s\n", $descr;
+  printf GF "htmlPath html/%s.description.html\n", $asmId;
+  # until blat server host is ready for hgdownload, avoid these lines
+  if ($blatHost ne $downloadHost) {
+    if ( -s "${destDir}/$accessionId.trans.gfidx" ) {
+      printf GF "blat $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
+      printf GF "transBlat $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
+     printf GF "isPcr $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
+    }
+  }
+  close (GF);
 
   my $localGroups = "$buildDir/${asmId}.groups.txt";
   open (GR, ">$localGroups") or die "can not write to $localGroups";
@@ -231,4 +318,3 @@ htmlPath GCA_900324485.2_fMasArm1.2/html/GCA_900324485.2_fMasArm1.2.description.
 ## Assembly-Units:
 ## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
 ## GCA_002180045.3              Primary Assembly
-
