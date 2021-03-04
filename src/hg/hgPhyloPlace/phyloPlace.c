@@ -2014,6 +2014,16 @@ if (isNotEmpty(pSitesFile) && fileExists(pSitesFile))
 return pSites;
 }
 
+static void downloadsRow(char *treeFile, char *sampleSummaryFile, char *spikeSummaryFile)
+/* Make a row of quick download file links, to appear between the button row & big summary table. */
+{
+printf("<p><b>Downloads:</b> | ");
+printf("<a href='%s' download>Global phylogenetic tree with your sequences</a> | ", treeFile);
+printf("<a href='%s' download>TSV summary of sequences and placements</a> | ", sampleSummaryFile);
+printf("<a href='%s' download>TSV summary of Spike mutations</a> |", spikeSummaryFile);
+puts("</p>");
+}
+
 static int subTreeInfoUserSampleCmp(const void *pa, const void *pb)
 /* Compare subtreeInfo by number of user sample IDs (highest number first). */
 {
@@ -2162,6 +2172,19 @@ if (vcfTn)
                "Nextstrain' button, and then you can drag on a CSV file to "
                "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
                "</p>\n");
+
+        // Make custom tracks for uploaded samples and subtree(s).
+        struct phyloTree *sampleTree = NULL;
+        struct tempName *ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree->tree,
+                                                  source, fontHeight, &sampleTree, &startTime);
+
+        // Make a sample summary TSV file and accumulate S gene changes
+        struct hash *spikeChanges = hashNew(0);
+        struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
+                                                 geneInfoList, gSeqWin, spikeChanges, &startTime);
+        struct tempName *sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
+        downloadsRow(results->bigTreePlusTn->forHtml, tsvTn->forHtml, sTsvTn->forHtml);
+
         if (seqCount <= MAX_SEQ_DETAILS)
             {
             summarizeSequences(seqInfoList, isFasta, results, jsonTns, sampleMetadata, bigTree,
@@ -2191,17 +2214,6 @@ if (vcfTn)
                    "you uploaded %d sequences, and details/subtrees are shown only when "
                    "you upload at most %d sequences.)</p>\n",
                    seqCount, MAX_SEQ_DETAILS);
-
-        // Make custom tracks for uploaded samples and subtree(s).
-        struct phyloTree *sampleTree = NULL;
-        struct tempName *ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree->tree,
-                                                  source, fontHeight, &sampleTree, &startTime);
-
-        // Make a sample summary TSV file and accumulate S gene changes
-        struct hash *spikeChanges = hashNew(0);
-        struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
-                                                 geneInfoList, gSeqWin, spikeChanges, &startTime);
-        struct tempName *sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
 
         // Offer big tree w/new samples for download
         puts("<h3>Downloads</h3>");
@@ -2243,7 +2255,7 @@ if (vcfTn)
         // Notify in opposite order of custom track creation.
         puts("<h3>Custom tracks for viewing in the Genome Browser</h3>");
         printf("<p>Added custom track of uploaded samples.</p>\n");
-        if (subtreeCount <= MAX_SUBTREE_CTS)
+        if (subtreeCount > 0 && subtreeCount <= MAX_SUBTREE_CTS)
             printf("<p>Added %d subtree custom track%s.</p>\n",
                    subtreeCount, (subtreeCount > 1 ? "s" : ""));
         ctFile = urlFromTn(ctTn);
