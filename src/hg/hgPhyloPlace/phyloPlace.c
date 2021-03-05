@@ -1092,17 +1092,18 @@ struct dyString *dy = dyStringCreate("%s/fetch/%s", nextstrainHost(), jsonUrlFor
 return dyStringCannibalize(&dy);
 }
 
-static void makeNextstrainButton(char *id, struct tempName *tn, char *label)
+static void makeNextstrainButton(char *id, struct tempName *tn, char *label, char *mouseover)
 /* Make a button to view an auspice JSON file in Nextstrain. */
 {
 char *nextstrainUrl = nextstrainUrlFromTn(tn);
 struct dyString *js = dyStringCreate("window.open('%s');", nextstrainUrl);
-cgiMakeOnClickButton(id, js->string, label);
+cgiMakeOnClickButtonWithMsg(id, js->string, label, mouseover);
 dyStringFree(&js);
 freeMem(nextstrainUrl);
 }
 
-static void makeNextstrainButtonN(char *idBase, int ix, struct tempName *jsonTns[])
+static void makeNextstrainButtonN(char *idBase, int ix, int userSampleCount, int subtreeSize,
+                                  struct tempName *jsonTns[])
 /* Make a button to view one subtree in Nextstrain.  idBase is a short string and
  * ix is 0-based subtree number. */
 {
@@ -1110,30 +1111,41 @@ char buttonId[256];
 safef(buttonId, sizeof buttonId, "%s%d", idBase, ix+1);
 char buttonLabel[256];
 safef(buttonLabel, sizeof buttonLabel, "view subtree %d in Nextstrain", ix+1);
-makeNextstrainButton(buttonId, jsonTns[ix], buttonLabel);
+struct dyString *dyMo = dyStringCreate("view subtree %d with %d of your sequences and %d other "
+                                       "sequences from the phylogenetic tree for context",
+                                       ix+1, userSampleCount, subtreeSize - userSampleCount);
+makeNextstrainButton(buttonId, jsonTns[ix], buttonLabel, dyMo->string);
+dyStringFree(&dyMo);
 }
 
 static void makeNsSingleTreeButton(struct tempName *tn)
 /* Make a button to view single subtree (with all uploaded samples) in Nextstrain. */
 {
-makeNextstrainButton("viewNextstrainSingleSubtree", tn, "view comprehensive subtree in Nextstrain");
+makeNextstrainButton("viewNextstrainSingleSubtree", tn, "view single subtree in Nextstrain",
+                     "view one subtree that includes all of your uploaded sequences plus "
+                     SINGLE_SUBTREE_SIZE" randomly selected sequences from the phylogenetic "
+                     "tree for context");
 }
 
 static void makeButtonRow(struct tempName *singleSubtreeJsonTn, struct tempName *jsonTns[],
-                          int subtreeCount, boolean isFasta)
+                          struct subtreeInfo *subtreeInfoList, int subtreeSize, boolean isFasta)
 /* Russ's suggestion: row of buttons at the top to view results in GB, Nextstrain, Nextclade. */
 {
 puts("<p>");
-cgiMakeButton("submit", "view in Genome Browser");
+cgiMakeButtonWithMsg("submit", "view in Genome Browser",
+                     "view your uploaded sequences, their phylogenetic relationship and their "
+                     "mutations along with many other datasets available in the Genome Browser");
 if (nextstrainHost())
     {
     printf("&nbsp;");
     makeNsSingleTreeButton(singleSubtreeJsonTn);
+    struct subtreeInfo *ti;
     int ix;
-    for (ix = 0;  ix < subtreeCount;  ix++)
+    for (ix = 0, ti = subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
         {
+        int userSampleCount = slCount(ti->subtreeUserSampleIds);
         printf("&nbsp;");
-        makeNextstrainButtonN("viewNextstrainTopRow", ix, jsonTns);
+        makeNextstrainButtonN("viewNextstrainTopRow", ix, userSampleCount, subtreeSize, jsonTns);
         }
     }
 if (0 && isFasta)
@@ -2199,10 +2211,10 @@ if (vcfTn)
                               source);
             }
         puts("<p></p>");
-        int subtreeButtonCount = subtreeCount;
+        struct subtreeInfo *subtreeInfoForButtons = results->subtreeInfoList;
         if (seqCount > MAX_SEQ_DETAILS || subtreeCount > MAX_SUBTREE_BUTTONS)
-            subtreeButtonCount = 0;
-        makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeButtonCount, isFasta);
+            subtreeInfoForButtons = NULL;
+        makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeInfoForButtons, subtreeSize, isFasta);
         printf("<p>If you have metadata you wish to display, click a 'view subtree in "
                "Nextstrain' button, and then you can drag on a CSV file to "
                "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
@@ -2237,7 +2249,8 @@ if (vcfTn)
                 else if (subtreeCount > 1)
                     printf("Unrelated sample");
                 printf("</h3>\n");
-                makeNextstrainButtonN("viewNextstrainSub", ix, jsonTns);
+                makeNextstrainButtonN("viewNextstrainSub", ix, subtreeUserSampleCount, subtreeSize,
+                                      jsonTns);
                 puts("<br>");
                 // Make a sub-subtree with only user samples for display:
                 struct phyloTree *subtree = phyloOpenTree(ti->subtreeTn->forCgi);
