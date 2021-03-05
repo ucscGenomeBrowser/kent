@@ -17,7 +17,7 @@ searchPriority 8
 
 include xenoRefGene.ra
 include trackDb.35way.ra
-include ../../refSeqComposite.ra alpha
+include ../../refSeqComposite.ra
 include trackDb.chainNet.ra
 include trackDb.syntenicNet.ra alpha
 include trackDb.rbestNet.ra alpha
