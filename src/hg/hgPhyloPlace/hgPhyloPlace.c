@@ -189,6 +189,24 @@ puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most si
      "which supports "
      "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' "
      "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.</p>\n");
+puts("</div>");
+puts("</div>");
+puts("<div class='readableWidth'>");
+puts("<div class='gbControl col-md-12'>\n"
+     "<div style='float:left; margin-right: 10px;'>"
+     "<iframe width='267' height='150' src='https://www.youtube.com/embed/humQ1NyZOUM' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>\n"
+     "</div><p>"
+     "The <a href='https://www.cdc.gov/amd/training/covid-19-gen-epi-toolkit.html' target=_blank>"
+     "CDC COVID-19 Genomic Epidemiology Toolkit</a> now includes a training module for UShER!\n"
+     "Module 3.3 includes a <a href='https://youtu.be/humQ1NyZOUM' target=_blank>video</a>, "
+     "slides (<a href='https://www.cdc.gov/amd/pdf/slidesets/toolkit-module-3.3-usher.pdf' "
+     "target=_blank>PDF</a>), and links to more resources.\n"
+     "</p>"
+     );
+puts("</div>");
+puts("</div>");
+puts("<div class='readableWidth'>");
+puts("  <div class='gbControl col-md-12'>");
 puts("<p><b>Note:</b> "
      "Please do not upload any files that contain "
      "<a href='https://en.wikipedia.org/wiki/Protected_health_information#United_States' "
