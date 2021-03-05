@@ -8647,22 +8647,9 @@ if (!hideControls)
             }
 
         /* Multi-region button on position line */
-        if (sameString(virtModeType, "default"))
-            {
-            hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region",
+        hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region",
                     "Configure view in multi-region display mode",
                     "popUpHgt.hgTracks('multi-region config'); return false;", FALSE);
-            }
-        else
-            {
-            char buf[100];
-            safef(buf, sizeof buf, "exit multi-region (%s) mode and return to normal display",
-                (sameString(virtModeType, "exonMostly") ? "exon-only" :
-                (sameString(virtModeType, "geneMostly") ? "gene-only" :
-                (sameString(virtModeType, "singleAltHaplo") ? "alternative haplotype":
-                                                "custom regions"))));
-            hButtonWithMsg("hgt.exitMultiRegion", "exit multi-region", buf);
-            }
         hPrintf(" ");
 
 	if (virtualSingleChrom()) // DISGUISE VMODE
@@ -9530,13 +9517,6 @@ if (!positionIsVirt)
     {
     if (! resolvePosition(&position))
         return;
-    }
-
-if  (cgiVarExists("hgt.exitMultiRegion"))
-    {
-    cartRemove(cart, "hgt.exitMultiRegion");
-    cartSetString(cart, "virtModeType", "default");
-    cartSetBoolean(cart, "virtMode", FALSE);
     }
 
 virtMode = cartUsualBoolean(cart, "virtMode", FALSE);
