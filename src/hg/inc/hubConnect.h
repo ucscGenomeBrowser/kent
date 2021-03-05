@@ -77,6 +77,7 @@ struct hubConnectStatus
     unsigned  status;   /* 1 if private */
     };
 
+
 void hubConnectStatusFree(struct hubConnectStatus **pHub);
 /* Free hubConnectStatus */
 
@@ -131,8 +132,7 @@ char *hubFileVar();
 boolean hubWriteToFile(FILE *f, struct hubConnectStatus *el);
 /* write out a hubConnectStatus structure to a file */
 
-unsigned hubFindOrAddUrlInStatusTable(char *database, struct cart *cart,
-    char *url, char **errorMessage);
+unsigned hubFindOrAddUrlInStatusTable(struct cart *cart, char *url, char **errorMessage);
 /* find or add a URL to the status table */
 
 unsigned hubResetError(char *url);
@@ -174,6 +174,10 @@ struct trackDb *hubCollectTracks( char *database, struct grp **pGroupList);
 char *hubConnectSkipHubPrefix(char *trackName);
 /* Given something like "hub_123_myWig" return myWig.  Don't free this, it's not allocated */
 
+struct hubConnectStatus *hubFromId(unsigned hubId);
+/* Given a hub ID number, return corresponding trackHub structure.
+ * ErrAbort if there's a problem. */
+
 struct hubConnectStatus *hubConnectNewHub();
 /* return the hub of the hubUrl we added (if any) */
 
@@ -182,5 +186,13 @@ char *hubPublicTableName();
 
 char *hubNameFromUrl(char *hubUrl);
 /* Given the URL for a hub, return its hub_# name. */
+
+void addPublicHubsToHubStatus(struct cart *cart, struct sqlConnection *conn, char *publicTable, char  *statusTable);
+/* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
+
+struct hash *buildPublicLookupHash(struct sqlConnection *conn, char *publicTable, char *statusTable,
+        struct hash **pHash);
+/* Return a hash linking hub URLs to struct hubEntries.  Also make pHash point to a hash that just stores
+ * the names of the public hubs (for use later when determining if hubs were added by the user) */
 
 #endif /* HUBCONNECT_H */

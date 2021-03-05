@@ -367,10 +367,9 @@ void cartReplaceHubVars(struct cart *cart, char *hubFileVar, char *oldHubUrl, ch
 if (! startsWith(customCompositeCartName, hubFileVar))
     errAbort("cartReplaceHubVars: expected hubFileVar to begin with '"customCompositeCartName"' "
              "but got '%s'", hubFileVar);
-char *db = hubFileVar + strlen(customCompositeCartName "-");
 char *errorMessage;
-unsigned oldHubId =  hubFindOrAddUrlInStatusTable(db, cart, oldHubUrl, &errorMessage);
-unsigned newHubId =  hubFindOrAddUrlInStatusTable(db, cart, newHubUrl, &errorMessage);
+unsigned oldHubId =  hubFindOrAddUrlInStatusTable(cart, oldHubUrl, &errorMessage);
+unsigned newHubId =  hubFindOrAddUrlInStatusTable(cart, newHubUrl, &errorMessage);
 
 // need to change hgHubConnect.hub.#hubNumber# (connected hubs)
 struct slPair *hv, *hubVarList = cartVarsWithPrefix(cart, hgHubConnectHubVarPrefix);

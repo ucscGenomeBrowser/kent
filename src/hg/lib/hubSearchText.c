@@ -8,7 +8,8 @@
 #include "jksql.h"
 #include "rangeTree.h"
 #include "hubSearchText.h"
-
+#include "hubPublic.h"
+#include "hgConfig.h"
 
 
 char *hubSearchTextCommaSepFieldNames = "hubUrl,db,track,label,textLength,text,parents,parentTypes";
@@ -250,4 +251,147 @@ if (hst->textLength == hubSearchTextLong)
     hst->text = longTextContext;
     }
 return hst;
+}
+
+char *modifyTermsForHubSearch(char *hubSearchTerms, bool isStrictSearch)
+/* This won't exactly be pretty.  MySQL treats any sequence of alphanumerics and underscores
+ * as a word, and single apostrophes are allowed as long as they don't come back-to-back.
+ * Cut down to those characters, then add initial + (for requiring word) and * (for word
+ * expansion) as appropriate. */
+{
+char *cloneTerms = cloneString(hubSearchTerms);
+struct dyString *modifiedTerms = dyStringNew(0);
+if (isNotEmpty(cloneTerms))
+    {
+    int i;
+    for (i=0; i<strlen(cloneTerms); i++)
+        {
+        // allowed punctuation is underscore and apostrophe, and we'll do special handling for hyphen
+        if (!isalnum(cloneTerms[i]) && cloneTerms[i] != '_' && cloneTerms[i] != '\'' &&
+                cloneTerms[i] != '-')
+            cloneTerms[i] = ' ';
+        }
+    char *splitTerms[1024];
+    int termCount = chopByWhite(cloneTerms, splitTerms, sizeof(splitTerms));
+    for (i=0; i<termCount; i++)
+        {
+        char *hyphenatedTerms[1024];
+        int hyphenTerms = chopString(splitTerms[i], "-", hyphenatedTerms, sizeof(hyphenatedTerms));
+        int j;
+        for (j=0; j<hyphenTerms-1; j++)
+            {
+            dyStringPrintf(modifiedTerms, "+%s ", hyphenatedTerms[j]);
+            }
+        if (isStrictSearch)
+            dyStringPrintf(modifiedTerms, "+%s ", hyphenatedTerms[j]);
+        else
+            {
+            dyStringPrintf(modifiedTerms, "+%s* ", hyphenatedTerms[j]);
+            }
+        }
+    }
+return dyStringCannibalize(&modifiedTerms);
+}
+
+void getHubSearchResults(struct sqlConnection *conn, char *hubSearchTableName,
+        char *hubSearchTerms, bool checkLongText, char *dbFilter, struct hash *hubLookup,
+        struct hash **searchResultHashRet, struct slName **hubsToPrintRet, char *extra)
+/* Find hubs, genomes, and tracks that match the provided search terms.
+ * Return all hits that satisfy the (optional) supplied assembly filter.
+ * if checkLongText is FALSE, skip searching within the long description text entries */
+{
+char *cleanSearchTerms = cloneString(hubSearchTerms);
+if (isNotEmpty(cleanSearchTerms))
+    tolowers(cleanSearchTerms);
+bool isStrictSearch = FALSE;
+char *modifiedSearchTerms = modifyTermsForHubSearch(cleanSearchTerms, isStrictSearch);
+struct hubSearchText *hubSearchResultsList = NULL;
+struct dyString *query = dyStringNew(100);
+char *noLongText = NULL;
+
+if (!checkLongText)
+    noLongText = cloneString("textLength = 'Short' and");
+else
+    noLongText = cloneString("");
+
+sqlDyStringPrintf(query, "select * from %s where ", hubSearchTableName);
+// sqlDyStringPrintf complains about spaces in %s strings and
+// extra has already been escaped so add it on here
+dyStringPrintf(query, "%s %s", noLongText, extra);
+if (isNotEmpty(modifiedSearchTerms))
+    {
+    if (isNotEmpty(extra))
+        {
+        sqlDyStringPrintf(query, " and ");
+        }
+    sqlDyStringPrintf(query, "match(text) against ('%s' in boolean mode)"
+        " order by match(text) against ('%s' in boolean mode)",
+        modifiedSearchTerms, modifiedSearchTerms);
+    }
+
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hubSearchText *hst = hubSearchTextLoadWithNullGiveContext(row, cleanSearchTerms);
+    // Skip rows where the long text matched the more lax MySQL search (punctuation just
+    // splits terms into two words, so "rna-seq" finds "rna" and "seq" separately, but
+    // not the more strict rules used to find context for the search terms.
+    if ((hst->textLength == hubSearchTextLong) && isEmpty(hst->text))
+        continue;
+    char *hubUrl = hst->hubUrl;
+    struct hubEntry *hubInfo = hashFindVal(hubLookup, hubUrl);
+    if (hubInfo == NULL)
+        continue; // Search table evidently includes a hub that's not on this server.  Skip it.
+    char *db = cloneString(hst->db);
+    tolowers(db);
+    if (isNotEmpty(dbFilter))
+        {
+        if (isNotEmpty(db))
+            {
+            if (stringIn(dbFilter, db) == NULL)
+                continue;
+            }
+        else
+            {
+            // no db in the hubSearchText means this is a top-level hub hit.
+            // filter by the db list associated with the hub instead
+            char *dbList = cloneString(hubInfo->dbList);
+            tolowers(dbList);
+            if (stringIn(dbFilter, dbList) == NULL)
+                continue;
+            }
+        }
+    // Add hst to the list to be returned
+    slAddHead(&hubSearchResultsList, hst);
+    }
+slReverse(&hubSearchResultsList);
+struct slName *hubsToPrint = NULL;
+struct hash *searchResultHash = hashNew(0);
+struct hubSearchText *hst = hubSearchResultsList;
+while (hst != NULL)
+    {
+    struct hubSearchText *nextHst = hst->next;
+    hst->next = NULL;
+    struct hashEl *hubHashEnt = hashLookup(searchResultHash, hst->hubUrl);
+    if (hubHashEnt == NULL)
+        {
+        slNameAddHead(&hubsToPrint, hst->hubUrl);
+        hashAdd(searchResultHash, hst->hubUrl, hst);
+        }
+    else
+        slAddHead(&(hubHashEnt->val), hst);
+    hst = nextHst;
+    }
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(searchResultHash);
+while ((hel = hashNext(&cookie)) != NULL)
+    slReverse(&(hel->val));
+*searchResultHashRet = searchResultHash;
+*hubsToPrintRet = hubsToPrint;
+}
+
+char *hubSearchTextTableName()
+{
+return cfgOptionDefault("hubSearchTextTable", "hubSearchText");
 }

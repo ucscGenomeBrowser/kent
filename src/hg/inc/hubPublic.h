@@ -23,6 +23,20 @@ struct hubPublic
     char *descriptionUrl;	/* URL to description HTML */
     };
 
+struct hubEntry
+// for entries pulled from hubPublic
+    {
+    struct hubEntry *next;
+    char *hubUrl;
+    char *shortLabel;
+    char *longLabel;
+    char *dbList;
+    char *errorMessage;
+    int id;
+    char *descriptionUrl;
+    bool tableHasDescriptionField;
+    };
+
 void hubPublicStaticLoad(char **row, struct hubPublic *ret);
 /* Load a row from hubPublic table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -82,6 +96,7 @@ void hubPublicJsonOutput(struct hubPublic *el, FILE *f);
 /* Print out hubPublic in JSON format. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+struct hubEntry *hubEntryTextLoad(char **row, bool hasDescription);
 
 #endif /* HUBPUBLIC_H */
 

@@ -3,6 +3,7 @@
 /* Copyright (C) 2012 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
+#include <pthread.h>
 #include "common.h"
 #include "search.h"
 #include "hCommon.h"
@@ -23,7 +24,12 @@
 #include "trix.h"
 #include "jsHelper.h"
 #include "imageV2.h"
+#include "hgConfig.h"
+#include "trackHub.h"
 #include "hubConnect.h"
+#include "hubPublic.h"
+#include "hubSearchText.h"
+#include "errCatch.h"
 
 
 #define TRACK_SEARCH_FORM        "trackSearch"
@@ -35,6 +41,10 @@
 #define TRACK_SEARCH_ON_GROUP    "tsGroup"
 #define TRACK_SEARCH_ON_DESCR    "tsDescr"
 #define TRACK_SEARCH_SORT        "tsSort"
+#define TRACK_SEARCH_ON_HUBS     "tsIncludePublicHubs"
+
+// the list of found tracks
+struct slRef *tracks = NULL;
 
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
@@ -167,11 +177,341 @@ for (ix=0;ix<count;ix++)
 return count;
 }
 
-static struct slRef *simpleSearchForTracksstruct(char *simpleEntry)
+static struct trackDb *getSuperTrackTdbs(struct trackDb *tdbList)
+/* Supertracks are not in the main trackDbList returned by hubAddTracks, find them
+ * here since our search hits may hit them */
+{
+struct hash *superTrackHash = hashNew(0);
+struct trackDb *tdb, *ret = NULL;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (tdbIsSuperTrackChild(tdb) && hashFindVal(superTrackHash, tdb->parent->track) == NULL)
+        {
+        hashAdd(superTrackHash, tdb->parent->track, tdb->parent);
+        }
+    }
+struct hashEl *hel, *helList = hashElListHash(superTrackHash);
+for (hel = helList; hel != NULL; hel = hel->next)
+    slAddHead(&ret, (struct trackDb *)hel->val);
+return ret;
+}
+
+static void hubTdbListToTrackList(struct trackDb *tdbList, struct track **trackList,
+                                struct slName *trackNames)
+/* Recursively convert a (struct trackDb *) to a (struct track *) */
+{
+struct trackDb *tmp, *next;
+for (tmp = tdbList; tmp != NULL; tmp = next)
+    {
+    next = tmp->next;
+    if (slNameInList(trackNames, tmp->track))
+        {
+        struct track *t = trackFromTrackDb(tmp);
+        slAddHead(trackList, t);
+        }
+    if (tmp->subtracks)
+        hubTdbListToTrackList(tmp->subtracks, trackList, trackNames);
+    }
+}
+
+static void hubTdbListAddSupers(struct trackDb *tdbList, struct track **trackList,
+                                struct slName *trackNames)
+/* a track we are looking for might be a super track and thus not in tdbList, look for it here */
+{
+struct trackDb *tmp, *superTrackDbs = getSuperTrackTdbs(tdbList);
+for (tmp = superTrackDbs; tmp != NULL; tmp = tmp->next)
+    {
+    if (slNameInList(trackNames, tmp->track))
+        {
+        struct track *tg = trackFromTrackDb(tmp);
+        slAddHead(trackList, tg);
+        }
+    }
+}
+
+struct hubSearchTracks
+/* A helper struct for collapsing a (struct hubSearchText *) into just the parts
+ * we need for looking up the track hits */
+    {
+    struct hubSearchTracks *next;
+    char *hubUrl; // the url to this hub which is used as a key into the search hash
+    int hubId;
+    struct hubConnectStatus *hub; // the hubStatus result
+    struct slName *searchedTracks; // the track names the search terms matched against
+    };
+
+struct paraFetchData
+/* A helper struct for managing connecting to many hubs in parallel  and adding the
+ * relevant tracks to the global (struct slRef *)tracks struct. */
+    {
+    struct paraFetchData *next;
+    char *hubName; // the name of the hub for measureTiming results
+    struct hubSearchTracks *hst; // the tracks we are adding to the search results
+    struct track *tlist; // the resulting tracks to add to the global trackList
+    pthread_t *threadId; // so we can stop the thread if it has been taking too long
+    long searchTime; // how many milliseconds did it take to search this hub
+    boolean done;
+    };
+
+// helper variables for connecting to hubs in parallel
+pthread_mutex_t pfdMutex = PTHREAD_MUTEX_INITIALIZER;
+struct paraFetchData *pfdListInitial = NULL;
+struct paraFetchData *pfdList = NULL;
+struct paraFetchData *pfdRunning = NULL;
+struct paraFetchData *pfdDone = NULL;
+
+void *addUnconnectedHubSearchResults(void *threadParam)
+/* Add a not yet connected hub to the search results */
+{
+struct paraFetchData *pfd = NULL;
+pthread_mutex_lock(&pfdMutex);
+// the wait function will set pfdList = NULL, so don't start up any more
+// stuff if that happens:
+boolean allDone = FALSE;
+if (!pfdList)
+    allDone = TRUE;
+else
+    {
+    pfd = slPopHead(&pfdList);
+    pfd->threadId = threadParam;
+    slAddHead(&pfdRunning, pfd);
+    }
+pthread_mutex_unlock(&pfdMutex);
+if (allDone)
+    return NULL;
+struct hubSearchTracks *hst = pfd->hst;
+struct track *tracksToAdd = NULL;
+long startTime = clock1000();
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    struct trackDb *tdbList = hubAddTracks(hst->hub, database);
+    if (measureTiming)
+        measureTime("After connecting to hub %s: '%d': ", hst->hubUrl, hst->hubId);
+    // get composite and subtracks into trackList
+    hubTdbListToTrackList(tdbList, &tracksToAdd, hst->searchedTracks);
+    hubTdbListAddSupers(tdbList, &tracksToAdd, hst->searchedTracks);
+    pthread_mutex_lock(&pfdMutex);
+    pfd->tlist = tracksToAdd;
+    pfd->done = TRUE;
+    if (measureTiming)
+        {
+        pfd->searchTime = clock1000() - startTime;;
+        measureTime("Finished finding tracks for hub '%s': ", pfd->hubName);
+        }
+    slRemoveEl(&pfdRunning, pfd);
+    slAddHead(&pfdDone, pfd);
+    pthread_mutex_unlock(&pfdMutex);
+    }
+errCatchEnd(errCatch);
+//always return NULL for pthread_create()
+return NULL;
+}
+
+static void hubSearchHashToPfdList(struct hash *searchResultsHash, struct hash *hubLookup,
+                                    struct sqlConnection *conn)
+/* getHubSearchResults() returned a hash of search hits to various hubs, convert that
+ * into something we can work on in parallel */
+{
+struct hubSearchTracks *ret = NULL;
+struct hashCookie cookie = hashFirst(searchResultsHash);
+struct hash *hubUrlsToTrackList = hashNew(0);
+struct hashEl *hel = NULL;
+struct dyString *trackName = dyStringNew(0);
+struct slName *connectedHubs = hubConnectHubsInCart(cart);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct hubSearchText *hst = (struct hubSearchText *)hel->val;
+    struct hubEntry *hubInfo = (struct hubEntry *) hashFindVal(hubLookup, hst->hubUrl);
+    if (isNotEmpty(hubInfo->errorMessage))
+        continue;
+    // if we were already checking out this hub, then it's search hits
+    // were already taken care of by the regular search code
+    char hubId[256];
+    safef(hubId, sizeof(hubId), "%d", hubInfo->id);
+    if (slNameInList(connectedHubs, hubId))
+        continue;
+    struct hubConnectStatus *hub = hubConnectStatusForId(conn, hubInfo->id);
+    // the hubSearchText contains multiple entries per lookup in order to form
+    // the hgHubConnect UI. We only need one type of hit here:
+    struct hubSearchTracks *found = hashFindVal(hubUrlsToTrackList, hst->hubUrl);
+    for (; hst != NULL; hst = hst->next)
+        {
+        // don't add results for matches to the hub descriptionUrl, only to track names/descs
+        if (isNotEmpty(hst->track) && hst->textLength != hubSearchTextMeta)
+            {
+            if (!found)
+                {
+                AllocVar(found);
+                found->hubUrl = hst->hubUrl;
+                found->searchedTracks = NULL;
+                found->hub = hub;
+                found->hubId = hubInfo->id;
+                slAddHead(&ret, found);
+                hashAdd(hubUrlsToTrackList, hst->hubUrl, found);
+                }
+            dyStringPrintf(trackName, "%s%d_%s", hubTrackPrefix, hubInfo->id, hst->track);
+            slNameStore(&found->searchedTracks, cloneString(trackName->string));
+            dyStringClear(trackName);
+            }
+        }
+    }
+struct hubSearchTracks *t;
+for (t = ret; t != NULL; t = t->next)
+    {
+    struct paraFetchData *pfd;
+    AllocVar(pfd);
+    pfd->hubName = t->hubUrl;
+    pfd->hst = t;
+    slAddHead(&pfdList, pfd);
+    slAddHead(&pfdListInitial, CloneVar(pfd));
+    }
+
+if (measureTiming)
+    measureTime("Finished converting hubSearchText to hubSearchTracks and pfd");
+}
+
+void waitForSearchResults(int numThreads, pthread_t *threadList)
+/* Run each thread and kill the ones that take too long */
+{
+// only wait 5 seconds, if something is in the cache we can show it
+// otherwise just ignore, nobody should wait more than 5 seconds
+// for a simple track search. Although note that just getting to
+// this point can take quite a while depending on hgcentral
+// connections and obtaining trackDb.
+int maxTime = 5 * 1000;
+int waitTime = 0;
+int lockStatus = 0;
+struct paraFetchData *pfd;
+while(1)
+    {
+    sleep1000(50);
+    waitTime += 50;
+    boolean allDone = TRUE;
+    // we don't want to block in the event one of the child threads is
+    // taking forever
+    lockStatus = pthread_mutex_trylock(&pfdMutex);
+    if (pfdList || pfdRunning)
+        allDone = FALSE;
+    if (allDone)
+        {
+        if (lockStatus == 0) // we aquired the lock
+            pthread_mutex_unlock(&pfdMutex);
+        break;
+        }
+    if (waitTime >= maxTime)
+        {
+        if (lockStatus == 0) // we aquired the lock
+            pthread_mutex_unlock(&pfdMutex);
+        break;
+        }
+    if (lockStatus == 0) // release the lock if we got it
+        pthread_mutex_unlock(&pfdMutex);
+    }
+
+// now that we've waited the maximum time we need to kill
+// any running threads and add the results of any threads
+// that ran successfully
+lockStatus = pthread_mutex_trylock(&pfdMutex);
+struct paraFetchData *neverRan = pfdList;
+if (lockStatus == 0)
+    {
+    if (measureTiming)
+        fprintf(stdout, "<span class='timing'>Successfully aquired lock, adding any succesful thread data\n<br></span>");
+    for (pfd = pfdDone; pfd != NULL; pfd = pfd->next)
+        {
+        struct track *t;
+        for (t = pfd->tlist; t != NULL; t = t->next)
+            refAdd(&tracks, t);
+        pthread_join(*pfd->threadId, NULL);
+        if (measureTiming)
+            measureTime("'%s' search times", pfd->hubName);
+        }
+    for (pfd = pfdRunning; pfd != NULL; pfd = pfd->next)
+        {
+        pthread_cancel(*pfd->threadId);
+        if (measureTiming)
+            measureTime("'%s' search times: timed out", pfd->hubName);
+        }
+    for (pfd = neverRan; pfd != NULL; pfd = pfd->next)
+        if (measureTiming)
+            measureTime("'%s' search times: never ran", pfd->hubName);
+    }
+else
+    {
+    // Should we warn or something that results are still waiting? As of now
+    // just silently return instead, and note that no unconnected hub data
+    // will show up (we get connected hub results for free because of
+    // trackDbCaching)
+    if (measureTiming)
+        measureTime("Timed out searching hubs");
+    }
+if (lockStatus == 0)
+    pthread_mutex_unlock(&pfdMutex);
+}
+
+void addHubSearchResults(struct slName *nameList, char *descSearch)
+/* add public hubs to the track list */
+{
+// set to something large so we always use the udc cache
+struct sqlConnection *conn = hConnectCentral();
+char *hubSearchTableName = hubSearchTextTableName();
+char *publicTable = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE",
+    hubPublicTableConfVariable, defaultHubPublicTableName);
+char *statusTable = cfgOptionEnvDefault("HGDB_HUB_STATUS_TABLE",
+    hubStatusTableConfVariable, defaultHubStatusTableName);
+struct dyString *extra = dyStringNew(0);
+if (nameList)
+    {
+    struct slName *tmp = NULL;
+    for (tmp = nameList; tmp != NULL; tmp = tmp->next)
+        {
+        dyStringPrintf(extra, "label like '%%%s%%'", tmp->name);
+        if (tmp->next)
+            dyStringPrintf(extra, " and ");
+        }
+    }
+
+if (sqlTableExists(conn, hubSearchTableName))
+    {
+    struct hash *searchResultsHash = hashNew(0);
+    struct hash *pHash = hashNew(0);
+    struct slName *hubsToPrint = NULL;
+    addPublicHubsToHubStatus(cart, conn, publicTable, statusTable);
+    struct hash *hubLookup = buildPublicLookupHash(conn, publicTable, statusTable, &pHash);
+    char *db = cloneString(trackHubSkipHubName(database));
+    tolowers(db);
+    getHubSearchResults(conn, hubSearchTableName, descSearch, descSearch != NULL, db, hubLookup, &searchResultsHash, &hubsToPrint, extra->string);
+    hubSearchHashToPfdList(searchResultsHash, hubLookup, conn);
+    if (measureTiming)
+        measureTime("after querying hubSearchText table and ready to start threads");
+    int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));
+    int pfdListCount = 0, pt;
+    if (ptMax > 0)
+        {
+        pfdListCount = slCount(pfdList);
+        pthread_t *threads = NULL;
+        ptMax = min(ptMax, pfdListCount);
+        if (ptMax > 0)
+            {
+            AllocArray(threads, ptMax);
+            for (pt = 0; pt < ptMax; pt++)
+                {
+                int rc = pthread_create(&threads[pt], NULL, addUnconnectedHubSearchResults, &threads[pt]);
+                if (rc )
+                    errAbort("Unexpected error in pthread_create");
+                }
+            }
+        waitForSearchResults(ptMax, threads);
+        }
+    }
+if (measureTiming)
+    measureTime("Total time spent searching hubs");
+}
+
+static void simpleSearchForTracks(char *simpleEntry)
 // Performs the simple search and returns the found tracks.
 {
-struct slRef *tracks = NULL;
-
 // Prepare for trix search
 if (!isEmpty(simpleEntry))
     {
@@ -185,7 +525,7 @@ if (!isEmpty(simpleEntry))
         trixWordCount++;
         val = nextWord(&tmp);
         }
-    if (trixWordCount > 0)
+    if (trixWordCount > 0 && !isHubTrack(database))
         {
         // Unfortunately trixSearch can't handle the slName list
         int i;
@@ -210,16 +550,15 @@ if (!isEmpty(simpleEntry))
         //trixClose(trix);  // don't bother (this is a CGI that is about to end)
         }
     }
-return tracks;
 }
 
-static struct slRef *advancedSearchForTracks(struct sqlConnection *conn,struct group *groupList,
+static void advancedSearchForTracks(struct sqlConnection *conn,struct group *groupList,
                                              char *nameSearch, char *typeSearch, char *descSearch,
-                                             char *groupSearch, struct slPair *mdbPairs)
+                                             char *groupSearch, struct slPair *mdbPairs,
+                                             boolean includeHubResults)
 // Performs the advanced search and returns the found tracks.
 {
 int tracksFound = 0;
-struct slRef *tracks = NULL;
 int numMetadataNonEmpty = 0;
 struct slPair *pair = mdbPairs;
 for (; pair!= NULL;pair=pair->next)
@@ -235,7 +574,7 @@ if (!isEmpty(typeSearch) && sameString(typeSearch,ANYLABEL))
 
 if (isEmpty(nameSearch) && isEmpty(typeSearch) && isEmpty(descSearch)
 && isEmpty(groupSearch) && numMetadataNonEmpty == 0)
-    return NULL;
+    return;
 
 // First do the metaDb searches, which can be done quickly for all tracks with db queries.
 struct hash *matchingTracks = NULL;
@@ -254,7 +593,7 @@ if (numMetadataNonEmpty)
         mdbObjsFree(&mdbObjs);
         }
     if (matchingTracks == NULL)
-        return NULL;
+        return;
     }
 
 // Set the word lists up once
@@ -320,8 +659,10 @@ for (group = groupList; group != NULL; group = group->next)
             }
         }
     }
-
-return tracks;
+if (measureTiming)
+    measureTime("searched native tracks: ");
+if (includeHubResults)
+    addHubSearchResults(nameList,descSearch);
 }
 
 #define MAX_FOUND_TRACKS 100
@@ -608,8 +949,6 @@ hPrintf("</div>"); // This div allows the clear button to empty it
 
 void doSearchTracks(struct group *groupList)
 {
-if ( isHubTrack(database))
-    errAbort("Track search functionality is not yet implemented on assembly hubs.");
 webIncludeResourceFile("ui.dropdownchecklist.css");
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 // This line is needed to get the multi-selects initialized
@@ -628,8 +967,14 @@ char *descSearch  = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 char *groupSearch = cartUsualString(  cart, TRACK_SEARCH_ON_GROUP,ANYLABEL);
 boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search")
                    || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
-struct sqlConnection *conn = hAllocConn(database);
-boolean metaDbExists = sqlTableExists(conn, "metaDb");
+boolean includeHubResults = cartUsualBoolean(cart, TRACK_SEARCH_ON_HUBS, FALSE);
+struct sqlConnection *conn = NULL;
+boolean metaDbExists = FALSE;
+if (!isHubTrack(database))
+    {
+    conn = hAllocConn(database);
+    metaDbExists = sqlTableExists(conn, "metaDb");
+    }
 int tracksFound = 0;
 int cols;
 char buf[512];
@@ -755,6 +1100,15 @@ cgiMakeDropListFullExt(TRACK_SEARCH_ON_TYPE, formatLabels, formatTypes, formatCo
     NULL, NULL, "'min-width:40%; font-size:.9em;", "typeSearch");
 hPrintf("</td></tr>\n");
 
+// include public hubs in output:
+hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
+hPrintf("<td nowrap><b style='max-width:100px;'>Include Public Hub Search Results:</b></td>");
+hPrintf("<td></td>");
+hPrintf("<td colspan='%d'>", cols - 4);
+cgiMakeCheckBox(TRACK_SEARCH_ON_HUBS, includeHubResults);
+hPrintf("NOTE: Including public hubs in results may be slow");
+hPrintf("</td></tr>\n");
+
 // mdb selects
 struct slPair *mdbSelects = NULL;
 if (metaDbExists)
@@ -793,15 +1147,15 @@ if (measureTiming)
 if (doSearch)
     {
     // Now search
-    struct slRef *tracks = NULL;
+    long startTime = clock1000();
     if (selectedTab==simpleTab && !isEmpty(simpleEntry))
-        tracks = simpleSearchForTracksstruct(simpleEntry);
+        simpleSearchForTracks(simpleEntry);
     else if (selectedTab==advancedTab)
-        tracks = advancedSearchForTracks(conn,groupList,nameSearch,typeSearch,descSearch,
-                                         groupSearch,mdbSelects);
+        advancedSearchForTracks(conn,groupList,nameSearch,typeSearch,descSearch,
+                                         groupSearch,mdbSelects, includeHubResults);
 
     if (measureTiming)
-        measureTime("Searched for tracks");
+        fprintf(stdout, "<span class='timing'>Searched for tracks: %lu<br></span>", clock1000()-startTime);
 
     // Sort and Print results
     if (selectedTab!=filesTab)
