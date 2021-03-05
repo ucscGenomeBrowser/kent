@@ -8460,6 +8460,7 @@ if (virtMode)
     jsonObjectAdd(jsonForClient, "nonVirtPosition", newJsonString(cartString(cart, "nonVirtPosition")));
     jsonObjectAdd(jsonForClient, "virtChromChanged", newJsonBoolean(virtChromChanged));
     jsonObjectAdd(jsonForClient, "virtualSingleChrom", newJsonBoolean(virtualSingleChrom())); // DISGUISE POS
+    jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(virtModeType));
     }
 
 char dbPosKey[256];
