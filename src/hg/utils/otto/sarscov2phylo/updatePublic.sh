@@ -35,9 +35,6 @@ mkdir -p $ncbiDir
 cd $ncbiDir
 $scriptDir/getNcbi.sh >& getNcbi.log
 
-$scriptDir/nextcladeNcbi.sh &
-$scriptDir/pangolinNcbi.sh
-
 $scriptDir/updateIdMapping.sh $gisaidDir/{metadata_batch_$today.tsv.gz,sequences_batch_$today.fa.xz}
 
 buildDir=$ottoDir/$today
