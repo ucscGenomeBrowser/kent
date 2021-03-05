@@ -610,15 +610,6 @@ var genomePos = {
                 autoOpen: false,
                 minWidth: 400,
                 minHeight: 40,
-                buttons: {  
-                    "exit multi-region mode": function() {
-                        $(this).dialog("close");
-                    }
-                },
-
-                open: function () { // Make OK the focus/default action
-                   $(this).parents('.ui-dialog-buttonpane button:eq(0)').focus(); 
-                },
 
                 close: function() {
                     // All exits to dialog should go through this
