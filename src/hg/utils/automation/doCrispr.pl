@@ -17,8 +17,8 @@ use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
-    $opt_forHub
     $opt_twoBit
+    $opt_shoulder
     $opt_tableName
     /;
 
@@ -51,6 +51,7 @@ my $fileServer = 'hgwdev';
 my $workhorse = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $twoBit = "$HgAutomate::clusterData/\$db/\$db.2bit";
+my $shoulder = 10000;	# default shoulder around exons
 my $tableName = "crispr10K";	# table name in database to load
 my $python = "/cluster/software/bin/python";
 
@@ -62,20 +63,22 @@ sub usage {
   my ($status, $detailed) = @_;
   # Basic help (for incorrect usage):
   print STDERR "
-usage: $base db
+usage: $base db geneTrack
 options:
     db - UCSC database name
+    geneTrack - name of track to use for source of genes, valid names:
+                knownGene, ensGene, xenoRefGene
 ";
   print STDERR $stepper->getOptionHelp();
   print STDERR <<_EOF_
     -buildDir dir         Use dir instead of default:
                               $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/crispr
-    -forHub               This is being build for a hub, remove assumptions about
-                              database-based genome
     -twoBit seq.2bit      Use seq.2bit as the input sequence instead
                               of default: ($twoBit).
+    -shoulder N           Use N as 'shoulder' extra on each side of an exon,
+                              default: $shoulder bases.
     -tableName name       Use name as gbdb path name and base name for db
-                              table name, default: $tableName(Ranges|Targets)
+i                             table name, default: $tableName(Ranges|Targets)
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -87,7 +90,7 @@ _EOF_
 Automates UCSC's crispr procedure.  Steps:
     indexFa Construct bwa index for source fasta, will be skipped when already
             available (workhorse)
-    ranges: Construct ranges to work on, avoiding gaps (workhorse)
+    ranges: Construct ranges to work on around exons (workhorse)
     guides: Extract guide sequences from ranges (smallClusterHub)
     specScoreJobList: Construct spec score jobList (workhorse)
     specScores: Compute spec scores (bigClusterHub)
@@ -116,18 +119,18 @@ Assumptions:
 
 # Globals:
 # Command line args: db
-my ($db);
+my ($db, $geneTrack);
 # Other:
-my ($buildDir, $forHub, $secondsStart, $secondsEnd, $dbExists, $crisporGenomesDir, $genomeFname,
-    $chromSizes);
+my ($buildDir, $secondsStart, $secondsEnd, $dbExists, $genomeFname,
+    $chromSizes, $exonShoulder);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
 		      'twoBit=s',
+		      'shoulder=s',
 		      'tableName=s',
-                      'forHub',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -142,7 +145,8 @@ sub checkOptions {
 # * step: indexFa [workhorse]
 sub doIndexFa {
   my $runDir = "$buildDir/indexFa";
-  my $testDone = "${crisporGenomesDir}/${db}/genomeInfo.tab";
+  my $resultDir = "$crisporSrc/genomes/$db";
+  my $testDone = "${resultDir}/genomeInfo.tab";
 
   &HgAutomate::mustMkdir($runDir);
   my $whatItDoes = "Construct bwa indexes for the new genome fasta.";
@@ -153,41 +157,29 @@ sub doIndexFa {
 export PATH=$crisporSrc/tools/usrLocalBin:\$PATH
 export TMPDIR=/dev/shm
 
-if [ $forHub = 1 -a ! -s "$chromSizes" ] ; then
-  twoBitInfo $twoBit $chromSizes
-fi
-if [ ! -s "$db.fa" ] ; then
-  twoBitToFa -noMask $twoBit $db.fa
+if [ ! -s "$testDone" ]; then
+  time ($crisporSrc/tools/crisprAddGenome \\
+      ucscLocal $db --geneTable=$geneTrack --baseDir \\
+          $crisporSrc/genomes) > createIndex.log 2>&1 &
 fi
 
 if [ ! -s "$db.fa.fai" ]; then
+  twoBitToFa -noMask $twoBit $db.fa
   /cluster/bin/samtools-0.1.19/samtools faidx $db.fa &
 fi
 
-if [ ! -s "$testDone" ]; then
-  if [ $forHub = 1 ] ; then
-    time ($crisporSrc/tools/crisprAddGenome \\
-        fasta $db.fa --baseDir $crisporGenomesDir \\
-        --desc='$db|$db|$db|$db') > createIndex.log 2>&1 &
-  else
-    time ($crisporSrc/tools/crisprAddGenome \\
-        ucscLocal $db --baseDir $crisporSrc/genomes) > createIndex.log 2>&1 &
-  fi
-fi
-
 wait
-
 if [ ! -s "$db.fa.fai" ]; then
-  printf "ERROR: step indexFa: samtools index of $db.fa has failed\\n" 1>&2
-  exit 255
+   printf "ERROR: step indexFa: samtools index of $db.fa has failed\\n" 1>&2
+   exit 255
 fi
+
 if [ ! -s "$testDone" ]; then
    printf "ERROR: bwa index not created correctly\\n" 1>&2
    printf "result file does not exist:\\n" 1>&2
    printf "%s\\n" "$testDone"
    exit 255
 fi
-
 _EOF_
   );
   $bossScript->execute();
@@ -227,8 +219,26 @@ sub doRanges {
 		$workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
+printf "# getting genes\\n" 1>&2
+hgsql $db -NB -e 'select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from '$geneTrack' where chrom not like "%_alt" and chrom not like "%hap%"; '  > genes.gp
+printf "# Number of transcripts: %d\\n" "`cat genes.gp | wc -l`" 1>&2
+printf "# break genes into exons and add $exonShoulder bp on each side\\n" 1>&2
+genePredToBed genes.gp stdout | grep -v hap | grep -v chrUn \\
+    | bedToExons stdin stdout \\
+    | awk '{\$2=\$2-$exonShoulder; \$3=\$3+$exonShoulder; \$6="+"; print}' \\
+    | bedClip -truncate  stdin $chromSizes stdout | grep -v _alt \\
+    | grep -i -v hap > ranges.bed
+
 printf "# Get sequence without any gaps.\\n" 1>&2
-twoBitInfo -nBed $twoBit stdout | bedInvert.pl $chromSizes stdin > crisprRanges.bed
+# featureBits $db -not gap -bed=notGap.bed
+hgsql -N -e 'select chrom,chromStart,chromEnd from gap;' $db \\
+   | bedInvert.pl $chromSizes stdin > notGap.bed
+
+# the minCoverage means 1 base in 100 billion will be recognized properly
+# the awk '\$4 > 19' selects items 20 bases and larger sized items
+bedIntersect -minCoverage=0.00000000001 ranges.bed notGap.bed \\
+   stdout | bedSingleCover.pl stdin | awk '\$4 > 19' \\
+      > crisprRanges.bed
 
 twoBitToFa -noMask -bedPos -bed=crisprRanges.bed $twoBit ranges.fa
 
@@ -283,8 +293,8 @@ mkdir -p tmp
 find $inFaDir -type f | grep "\.fa\$" > fa.list
 $gensub2 fa.list single gsub jobList
 $paraRun
-find tmp -name '*.fa' | xargs cat | grep -v "^>" > ../allGuides.txt
-find tmp -name '*.bed' | xargs cat > ../allGuides.bed
+catDir -suffix=.fa tmp | grep -v "^>" > ../allGuides.txt
+catDir -suffix=.bed tmp > ../allGuides.bed
 _EOF_
   );
   $bossScript->execute();
@@ -528,18 +538,13 @@ sub doLoad {
   $bossScript->add(<<_EOF_
 # creating the bigBed file
 $python $crisprScripts/createBigBed.py $db allGuides.bed specScores.tab effScores.tab offtargets.offsets.tab
-_EOF_
-  );
-  if (!$forHub) {
-    $bossScript->add(<<_EOF_
 # now link it into gbdb
 mkdir -p /gbdb/$db/$tableName/
 ln -sf `pwd`/crispr.bb /gbdb/$db/$tableName/crispr.bb
 ln -sf `pwd`/crisprDetails.tab /gbdb/$db/$tableName/crisprDetails.tab
 _EOF_
-     );
-  }
-  if ($dbExists && !$forHub) {
+  );
+  if ($dbExists) {
     $bossScript->add(<<_EOF_
 hgBbiDbLink $db ${tableName}Targets /gbdb/$db/$tableName/crispr.bb
 hgLoadBed $db ${tableName}Ranges ranges/crisprRanges.bed
@@ -612,7 +617,7 @@ _EOF_
 
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
-&usage(1) if (scalar(@ARGV) != 1);
+&usage(1) if (scalar(@ARGV) != 2);
 $workhorse = $opt_workhorse if ($opt_workhorse);
 $bigClusterHub = $opt_bigClusterHub if ($opt_bigClusterHub);
 $smallClusterHub = $opt_smallClusterHub if ($opt_smallClusterHub);
@@ -627,27 +632,22 @@ $secondsStart = `date "+%s"`;
 chomp $secondsStart;
 
 # required command line arguments:
-($db) = @ARGV;
+($db, $geneTrack) = @ARGV;
 
 # Establish directory to work in:
 $buildDir = $opt_buildDir ? $opt_buildDir :
-    "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/crispr";
-$forHub = $opt_forHub ? 1 : 0;
+  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/crispr";
 $twoBit = $opt_twoBit ? $opt_twoBit : "$HgAutomate::clusterData/$db/$db.2bit";
 &HgAutomate::verbose(1, "# 2bit file: $twoBit\n");
 die "can not find 2bit file: '$twoBit'" if ( ! -s $twoBit);
+$shoulder = $opt_shoulder ? $opt_shoulder : $shoulder;
 $tableName = $opt_tableName ? $opt_tableName : $tableName;
+die "illegal value for shoulder: $shoulder, must be >= 30" if ($shoulder < 30);
+&HgAutomate::verbose(1, "# shoulder: $shoulder bases\n");
 &HgAutomate::verbose(1, "# tableName $tableName\n");
-
-if ($forHub) {
-    $crisporGenomesDir  = "$buildDir/genomes";
-    $chromSizes = "$buildDir/indexFa/chrom.sizes";
-} else {
-    $crisporGenomesDir = "$crisporSrc/genomes";
-    $chromSizes = "/hive/data/genomes/$db/chrom.sizes";
-}
-$genomeFname = "$crisporGenomesDir/$db/$db.fa.bwt";
-
+$genomeFname = "$crisporSrc/genomes/$db/$db.fa.bwt";
+$chromSizes = "/hive/data/genomes/$db/chrom.sizes";
+$exonShoulder = $shoulder;
 
 # may be working on a 2bit file that does not have a database browser
 $dbExists = 0;
