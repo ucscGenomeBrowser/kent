@@ -26,6 +26,7 @@ results</a></li>
 <li><a href="#blat10">BLAT ALL genomes: No matches found</a></li>
 <li><a href="#blat11">Approximating web-based BLAT results using gfServer/gfClient</a></li>
 <li><a href="#blat12">Standalone or gfServer/gfClient result start positions off by one</a></li>
+<li><a href="#blat13">Protein-translated BLAT having different results</a></li>
 
 </ul>
 <hr>
@@ -456,6 +457,19 @@ and a one-based end. See the following <a target="_blank" href="/FAQ/FAQtracks#t
 If the <strong>Output type</strong> is changed to <strong>psl</strong> on web Blat, the same
 zero-based half open coordinate results will be seen as the standalone Blat and gfServer/gfClient 
 procedures.</p>
+
+<a name="blat13"></a>
+<h2>Protein-translated BLAT having different results</h2>
+<p>
+Protein-translated BLAT (protein or translated RNA queries) uses the standard vertebrate
+genetic code. It will be slightly less sensitive on mitochondria and species using other
+genetic codes. More information on standard genetic codes can be found on the
+<a target="_blank"
+href="https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes">
+NCBI The Genetic Codes page</a>. Additional details on mitochondria codon tables can be found on
+the <a target="_blank"
+href="https://www.wikiwand.com/en/DNA_and_RNA_codon_tables">Wikiwand website</a>.
+</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 </body>
