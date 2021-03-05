@@ -575,7 +575,7 @@ var genomePos = {
             if (matches) {
                 end = matches[1];
                 if (end < hgTracks.chromEnd) {
-                    str += "<br>(full virtual region is multi:1-" + hgTracks.chromEnd + ")";
+                    str += ". Full virtual region is multi:1-" + hgTracks.chromEnd + ". Zoom out to view.";
                 }
             }
             if (!(hgTracks.virtualSingleChrom && (hgTracks.windows.length === 1))) {
