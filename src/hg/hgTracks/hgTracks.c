@@ -8647,8 +8647,9 @@ if (!hideControls)
             }
 
         /* Multi-region button on position line */
-        hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region",
-                    "Configure view in multi-region display mode",
+        safef(buf, sizeof buf, "configure view %s multi-region display mode", 
+                                sameString(virtModeType, "default") ? "in" : "or exit");
+        hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf,
                     "popUpHgt.hgTracks('multi-region config'); return false;", FALSE);
         hPrintf(" ");
 
