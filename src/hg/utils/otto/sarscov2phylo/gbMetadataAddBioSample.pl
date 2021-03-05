@@ -60,7 +60,7 @@ while (<>) {
     if (exists $b2Name{$bAcc}) {
       my ($bName, $bDate, $bCountry) = ($b2Name{$bAcc}, normalizeDate($b2Date{$bAcc}),
                                         $b2Country{$bAcc});
-      if (! $gbDate) {
+      if (! $gbDate || length($bDate) > length($gbDate)) {
         $gbDate = $bDate;
       } elsif ($bDate && $gbDate ne $bDate) {
         print STDERR "CONFLICT: Genbank date ($gbAcc $gbName) = $gbDate, " .
