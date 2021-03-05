@@ -566,7 +566,12 @@ var genomePos = {
         if (hgTracks.windows) {
             var i, len, end;
             var matches = /^multi:[0-9]+-([0-9]+)/.exec(position);
-            var str = position;
+            var modeType = (hgTracks.virtModeType === "customUrl" ? "Custom regions on virtual chromosome" :
+                            (hgTracks.virtModeType === "exonMostly" ? "Exon view of" :
+                            (hgTracks.virtModeType === "geneMostly" ? "Gene view of" :
+                            (hgTracks.virtModeType === "singleAltHaplo" ? "Alternate haplotype as virtual chromosome" :
+                                        "Unknown mode"))));
+            var str = modeType + "&nbsp;" + position;
             if (matches) {
                 end = matches[1];
                 if (end < hgTracks.chromEnd) {
@@ -574,15 +579,24 @@ var genomePos = {
                 }
             }
             if (!(hgTracks.virtualSingleChrom && (hgTracks.windows.length === 1))) {
-                str += "<br>\n";
-                str += "<br>\n";
-                str += "<ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
-                for (i=0,len=hgTracks.windows.length; i < len; ++i) {
-                    var w = hgTracks.windows[i];
-                    str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd +
-                                "&nbsp;&nbsp;&nbsp;" + (w.winEnd - w.winStart) + " bp" + "</li>\n";
+                var w;
+                if (hgTracks.windows.length <= 10) {
+                    str += "<p><table>\n";
+                    for (i=0,len=hgTracks.windows.length; i < len; ++i) {
+                        w = hgTracks.windows[i];
+                        str += "<tr><td>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd + "</td><td>" + 
+                                    (w.winEnd - w.winStart) + " bp" + "</td></tr>\n";
+                    }
+                    str += "</table></p>\n";
+                } else {
+                    str += "<br><ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
+                    for (i=0,len=hgTracks.windows.length; i < len; ++i) {
+                        w = hgTracks.windows[i];
+                        str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd +
+                                    "&nbsp;&nbsp;&nbsp;" + (w.winEnd - w.winStart) + " bp" + "</li>\n";
+                    }
+                    str += "</ul>\n";
                 }
-                str += "</ul>\n";
             }
             $("#positionDisplayPosition").html(str);
         } else {
@@ -590,21 +604,12 @@ var genomePos = {
         }
         $(positionDialog).dialog({
                 modal: true,
-                title: "Multi-region position ranges",
+                title: "Multi-Region Position Ranges",
                 closeOnEscape: true,
                 resizable: false,
                 autoOpen: false,
                 minWidth: 400,
                 minHeight: 40,
-                buttons: {  
-                    "OK": function() {
-                        $(this).dialog("close");
-                    }
-                },
-
-                open: function () { // Make OK the focus/default action
-                   $(this).parents('.ui-dialog-buttonpane button:eq(0)').focus(); 
-                },
 
                 close: function() {
                     // All exits to dialog should go through this
@@ -3346,7 +3351,7 @@ function addKeyboardHelpEntries() {
 // View DNA
 function gotoGetDnaPage() {
     var position = hgTracks.chromName+":"+hgTracks.winStart+"-"+hgTracks.winEnd;
-    if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") === 0)) {
+    if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") === 0)) {
         position = genomePos.get().replace(/,/g,'');
     } else if (hgTracks.windows && hgTracks.nonVirtPosition) {
         position = hgTracks.nonVirtPosition;
@@ -4237,7 +4242,7 @@ var imageV2 = {
     {
         pos = parsePositionWithDb(position);
         // DISGUISE
-        if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") === 0)) {
+        if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") === 0)) {
             var positionStr = pos.chrom+":"+pos.start+"-"+pos.end;
             var newPosition = genomePos.disguisePosition(positionStr);
             var newPos = parsePosition(newPosition);
@@ -4252,7 +4257,7 @@ var imageV2 = {
     // undisguise highlight pos
     {
         // UN-DISGUISE
-        if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") !== 0)) {
+        if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") !== 0)) {
             var position = pos.chrom+":"+pos.start+"-"+pos.end;
             var newPosition = genomePos.undisguisePosition(position);
             var newPos = parsePosition(newPosition);
