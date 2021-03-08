@@ -97,11 +97,6 @@ foreach db ( $dbs )
      WHERE name = "'$db'"' hgcentral`
   if ( 0 == $active ) then
     set comment="staged"
-    set archived=`hgsql -h $sqlrr -N -e 'SELECT active FROM dbDbArch \
-       WHERE name = "'$db'"' hgcentral`
-    if ( 1 == $archived ) then
-      set comment="archived\n"
-    endif
     echo $db $comment | gawk '{printf "%7s %-10s", $1, $2}'
     echo
     echo $db $comment | gawk '{printf "%7s %-10s", $1, $2}' >> $summaryFile
