@@ -2778,7 +2778,7 @@ var rightClick = {
                         // when "exonNumbers on", the mouse over text is not a good item description for the right-click menu
                         // "exonNumbers on" is the default for genePred/bigGenePred tracks but can also be actived for bigBed and others
                         // We don't have the value of "exonNumbers" here, so just use a heuristic to see if it's on
-                        if (title.search(/, strand [+-], Intron /)!==-1) {
+                        if (title.search(/, strand [+-], (Intron|Exon) /)!==-1) {
                             title = title.split(",")[0];
                         }
 
