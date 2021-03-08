@@ -169,9 +169,7 @@ Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 END
 }
   my $indexUrl = "index";
-  $indexUrl = "testIndex" if ($testOutput);
   my $asmStats = "asmStats";
-  $asmStats = "testAsmStats" if ($testOutput);
   print <<"END"
 <h3>See also: <a href='$indexUrl.html'>hub access</a>,&nbsp;<a href='$asmStats.html'>assembly statistics</a></h3><br>
 

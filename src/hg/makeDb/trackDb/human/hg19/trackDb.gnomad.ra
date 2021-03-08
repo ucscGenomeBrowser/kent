@@ -453,8 +453,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
 
         track gnomadMissense
         parent gnomadPLI off
-        shortLabel gnomAD Regional Constraint
-        longLabel gnomAD Predicted Constraint Metrics By Transcript Regions (O/E scores)
+        shortLabel gnomAD Regional Missense Constraint  (ExAc Dataset) 
+        longLabel gnomAD Predicted Regional Missense Constraint Metrics (O/E scores from ExAc Dataset)
         bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
         itemRgb on
         labelFields name,geneName
@@ -914,7 +914,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
 
     track gnomadGenomes
     shortLabel gnomAD Genomes Variants
-    longLabel Genome Aggregation Database (gnomAD) Whole Genome Variants
+    longLabel Genome Aggregation Database (gnomAD) Genome Variants v2.1.1
     itemRgb on
     type bigBed 9 +
     bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.genomes.bb
@@ -942,7 +942,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
 
     track gnomadExomes
     shortLabel gnomAD Exomes Variants
-    longLabel Genome Aggregation Database (gnomAD) Exome Variants
+    longLabel Genome Aggregation Database (gnomAD) Exome Variants v2.1.1
     itemRgb on
     type bigBed 9 +
     bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.exomes.bb

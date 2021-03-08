@@ -547,14 +547,15 @@ for (i = 0;  i < node->numEdges;  i++)
     rSubstTreeNames(node->edges[i], nameSubstitutions);
 }
 
-static struct tempName *substituteTreeNames(struct phyloTree *tree, struct hash *nameSubstitutions)
+static struct tempName *substituteTreeNames(struct phyloTree *tree, char *treeName,
+                                            struct hash *nameSubstitutions)
 /* If tree has any nodes whose names are in nameSubstitutions, then substitute those names.
  * Write tree out to a trash file and return its location. */
 {
 rSubstTreeNames(tree, nameSubstitutions);
 struct tempName *newTn;
 AllocVar(newTn);
-trashDirFile(newTn, "ct", "treeNameSubst", ".nwk");
+trashDirFile(newTn, "ct", treeName, ".nwk");
 FILE *f = mustOpen(newTn->forCgi, "w");
 phyloPrintTree(tree, f);
 carefulClose(&f);
@@ -593,7 +594,7 @@ for (i = 0;  i < node->numEdges;  i++)
     addMutationsToTree(node->edges[i], pNodeMutList);
 }
 
-static struct subtreeInfo *parseOneSubtree(struct tempName *subtreeTn,
+static struct subtreeInfo *parseOneSubtree(struct tempName *subtreeTn, char *subtreeName,
                                            struct variantPathNode *subtreeMuts,
                                            struct slName *userSampleIds, struct hash *condensedNodes)
 /* Parse usher's subtree output, figure out which user samples are in subtree and expand names
@@ -617,7 +618,7 @@ if (slCount(ti->subtreeUserSampleIds) == 0)
 // custom tracks and Nextstrain/auspice JSON.
 struct hash *nameSubstitutions = expandCondensedNodeNames(condensedNodes, subtreeIdList);
 if (nameSubstitutions->elCount > 0)
-    ti->subtreeTn = substituteTreeNames(ti->subtree, nameSubstitutions);
+    ti->subtreeTn = substituteTreeNames(ti->subtree, subtreeName, nameSubstitutions);
 ti->subtreeNameList = substituteNameList(subtreeIdList, nameSubstitutions);
 hashFree(&nameSubstitutions);
 slFreeList(&subtreeIdList);
@@ -636,13 +637,15 @@ struct subtreeInfo *subtreeInfoList = NULL;
 int sIx;
 for (sIx = 0;  sIx < subtreeCount;  sIx++)
     {
-    struct subtreeInfo *ti = parseOneSubtree(subtreeTns[sIx], subtreeMuts[sIx], userSampleIds,
-                                             condensedNodes);
+    char subtreeName[512];
+    safef(subtreeName, sizeof(subtreeName), "subtree%d", sIx+1);
+    struct subtreeInfo *ti = parseOneSubtree(subtreeTns[sIx], subtreeName, subtreeMuts[sIx],
+                                             userSampleIds, condensedNodes);
     slAddHead(&subtreeInfoList, ti);
     }
 slReverse(&subtreeInfoList);
-struct subtreeInfo *ti = parseOneSubtree(singleSubtreeTn, singleSubtreeMuts, userSampleIds,
-                                         condensedNodes);
+struct subtreeInfo *ti = parseOneSubtree(singleSubtreeTn, "singleSubtree", singleSubtreeMuts,
+                                         userSampleIds, condensedNodes);
 slAddHead(&subtreeInfoList, ti);
 return subtreeInfoList;
 }
@@ -836,7 +839,8 @@ char *numThreadsStr = "16";
 struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "usher_outdir", ".dir");
 char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOutDir.forCgi,
-                "-k", subtreeSizeStr, "-K", "1000", "-T", numThreadsStr, "-u", "-l", NULL };
+                "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE, "-T", numThreadsStr, "-u", "-l",
+                NULL };
 char **cmds[] = { cmd, NULL };
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "usher_stderr", ".txt");

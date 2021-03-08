@@ -1,15 +1,16 @@
 /* faToVcf - Convert a FASTA alignment file to VCF. */
 #include "common.h"
+#include "errCatch.h"
 #include "fa.h"
 #include "linefile.h"
 #include "hash.h"
 #include "iupac.h"
 #include "options.h"
 
-void usage()
+void usage(int exitCode)
 /* Explain usage and exit. */
 {
-errAbort(
+fputs(
   "faToVcf - Convert a FASTA alignment file to Variant Call Format (VCF) single-nucleotide diffs\n"
   "usage:\n"
   "   faToVcf in.fa out.vcf\n"
@@ -31,7 +32,9 @@ errAbort(
   "   -vcfChrom=seqName     Use seqName for the CHROM column in VCF (default: ref sequence)\n"
   "in.fa must contain a series of sequences with different names and the same length.\n"
   "Both N and - are treated as missing information.\n"
+  , stderr
   );
+exit(exitCode);
 }
 
 #define MAX_ALTS 256
@@ -48,6 +51,8 @@ static struct optionSpec options[] = {
     { "resolveAmbiguous", OPTION_BOOLEAN },
     { "startOffset", OPTION_INT},
     { "vcfChrom", OPTION_STRING },
+    { "h", OPTION_BOOLEAN },
+    { "-help", OPTION_BOOLEAN },
     { NULL, 0 },
 };
 
@@ -381,12 +386,24 @@ carefulClose(&outF);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionInit(&argc, argv, options);
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    optionInit(&argc, argv, options);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    warn("%s", errCatch->message->string);
+    usage(1);
+    }
+errCatchFree(&errCatch);
+
 if (optionExists("ambiguousToN") && optionExists("resolveAmbiguous"))
     errAbort("-ambiguousToN and -resolveAmbiguous conflict with each other; "
              "please use only one.");
+if (optionExists("h") || optionExists("-help"))
+    usage(0);
 if (argc != 3)
-    usage();
+    usage(1);
 faToVcf(argv[1], argv[2]);
 return 0;
 }

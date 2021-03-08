@@ -3277,7 +3277,7 @@ void printTrackHtml(struct trackDb *tdb)
 if (!isCustomTrack(tdb->track))
     {
     printRelatedTracks(database, trackHash, tdb, cart);
-    extraUiLinks(database, tdb);
+    extraUiLinks(database, tdb, cart);
     printTrackUiLink(tdb);
     printOrigAssembly(tdb);
     printDataVersion(database, tdb);
@@ -4823,7 +4823,7 @@ if (sameString(casing, "upper"))
 if (*casing != 0)
     cartSetString(cart, "hgSeq.casing", casing);
 
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcName());
+printf("<FORM ACTION=\"%s\" METHOD=\"%s\">\n\n", hgcName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna3");
 
@@ -5446,6 +5446,19 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                     }
                 sqlFreeResult(&sr);
                 hFreeConn(&conn);
+                }
+            else if (sameString(ct->dbTrackType, "bigBed"))
+                {
+                struct lm *lm = lmInit(0);
+                struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(ct->bbiFile, seqName, winStart, winEnd, 0, lm);
+                char *bedRow[32];
+                char startBuf[16], endBuf[16];
+                for (bb = bbList; bb != NULL; bb = bb->next)
+                    {
+                    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+                    struct bed *bed = bedLoadN(bedRow, ct->bbiFile->definedFieldCount);
+                    slAddHead(&ctBedList, bed);
+                    }
                 }
             else
                 {
@@ -25647,7 +25660,7 @@ else
     twoBitDir = buf;
     }
 
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -verbose=0 -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed9+16  %s %s %s",  
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -verbose=0 -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed12+13  %s %s %s",  
         udcDefaultDir(), bigPslFile, twoBitDir, outputBigBed);
 system(cmdBuffer);
 unlink(bigPslFile);

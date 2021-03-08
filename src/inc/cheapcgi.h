@@ -280,8 +280,11 @@ void cgiMakeButtonWithOnClick(char *name, char *value, char *msg, char *onClick)
 void cgiMakeButton(char *name, char *value);
 /* Make 'submit' type button. */
 
+void cgiMakeOnClickButtonWithMsg(char *id, char *command, char *value, char *msg);
+/* Make button (not submit) with client side onClick javascript. Display msg on mouseover. */
+
 void cgiMakeOnClickButton(char *id, char *command, char *value);
-/* Make 'push' type button with client side onClick (java)script. */
+/* Make button (not submit) with client side onClick javascript. */
 
 void cgiMakeOnClickSubmitButton(char *command, char *name, char *value);
 /* Make submit button with both variable name and value with client side
