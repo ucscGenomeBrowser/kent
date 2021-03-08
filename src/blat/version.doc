@@ -1,7 +1,4 @@
 37:
-
-     o gfServer and gfClient now support dyanmic BLAT servers using a pre-build
-       index on disk.  This allows a blat serve to be launched on-demand by xinetd.
      o (in 36x1) Fixed problem with -fastMap option that made it put in gaps in the
        allignment sometimes when a short mismatch would be a better choice.
      o (in 36x2) Fixed problem with -maxIntron set to non-default value on protein query.
