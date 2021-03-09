@@ -8647,9 +8647,9 @@ if (!hideControls)
             }
 
         /* Multi-region button on position line */
-        safef(buf, sizeof buf, "configure view %s multi-region display mode", 
+        safef(buf, sizeof buf, "configure %s multi-region display mode", 
                                 sameString(virtModeType, "default") ? "in" : "or exit");
-        hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf,
+        hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf,
                     "popUpHgt.hgTracks('multi-region config'); return false;", FALSE);
         hPrintf(" ");
 
@@ -8674,6 +8674,7 @@ if (!hideControls)
 	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
 	hWrites(" ");
 	hButton("goButton", "go");
+
 	if (!trackHubDatabase(database))
 	    {
             jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
