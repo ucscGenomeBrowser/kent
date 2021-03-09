@@ -18,7 +18,8 @@ variants that survived natural selection with simulated mutations.
 <p>
 CADD scores strongly correlate with allelic diversity, pathogenicity of both
 coding and non-coding variants, experimentally measured regulatory effects,
-and also highly rank causal variants within individual genome sequences.
+and also rank causal variants within individual genome sequences with a higher
+value than non-causal variants. 
 Finally, CADD scores of complex trait-associated variants from genome-wide
 association studies (GWAS) are significantly higher than matched controls and
 correlate with study sample size, likely reflecting the increased accuracy of
@@ -29,7 +30,15 @@ larger GWAS.
 <p>
 There are six subtracks of this track: four for every possible single nucleotide mutation, 
 one for insertions and one for deletions. All subtracks show the CADD Phred
-score on mouseover.<p>
+score on mouseover.</p>
+<p>
+PHRED-scaled scores are normalized to all potential ∼9 billion SNVs, and
+thereby provide an externally comparable unit for analysis. For example, a
+scaled score of 10 or greater indicates a raw score in the top 10% of all
+possible reference genome SNVs, and a score of 20 or greater indicates a raw
+score in the top 1%, regardless of the details of the annotation set, model
+parameters, etc.
+</p>
 
 <p>
 <b>Single nucleotide variants (SNV):</b> For SNVs, at every
