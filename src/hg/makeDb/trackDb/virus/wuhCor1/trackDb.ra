@@ -583,7 +583,7 @@ bigDataUrl /hive/data/outside/otto/sarscov2phylo/26-10-20/danishMink.vcf.gz
 
 track lineageB_1_1_7_US
 shortLabel B.1.1.7 in USA
-longLabel Lineage B.1.1.7 (a.k.a. 501Y.V1, VOC 202012/01) Sequences in the United States: SNVs and Deletions
+longLabel Early Lineage B.1.1.7 (a.k.a. 501Y.V1, VOC 202012/01) Sequences in the United States: SNVs and Deletions
 type vcfTabix
 bigDataUrl /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first9.vcf.gz
 hapClusterEnabled on
