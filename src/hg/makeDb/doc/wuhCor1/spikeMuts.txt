@@ -3,7 +3,9 @@
 
 # RM #26782
 
-# Manually screenscrape from these URL's:
+cd /hive/data/genomes/wuhCor1/bed/spikeMuts
+
+# Manually screenscrape from these URL'
 
 # Compute chromStart
 
@@ -88,6 +90,10 @@ ln -s `pwd`/spikeMutsSearch.ixx /gbdb/wuhCor1/spikeMuts
 
 # Edit spikeMuts.bed file
 
+cd /hive/data/genomes/wuhCor1/bed/spikeMuts
+mkdir feb21
+cd feb21
+
 cp ../spikeMuts.bed .
 wc -l spikeMuts.bed
 # 14 spikeMuts.bed
@@ -166,4 +172,14 @@ ln -s /hive/data/gbdb/wuhCor1/spikeMuts/spikeMutsSearch.ixx .
 # dump to downloads file
 hgsql wuhCor1 -e "select * from trackDb_kate where tableName='spikeMuts'" > spikeMuts.trackDb.tab
 gzip spikeMuts.trackDb.tab
+
+####################
+# Fix typo in L452R (L453R)
+
+(2021-03-10 kate)
+
+# edit manually
+vim spikeMuts.danger.sorted.bed
+bedToBigBed -extraIndex=name -tab -type=bed9+7 -as=../spikeMuts.as spikeMuts.danger.sorted.bed \
+        ../../../chrom.sizes spikeMuts.Feb21.colorByDanger.bb
 
