@@ -1,3 +1,6 @@
+# for emacs: -*- mode: sh; -*-
+
+#########################################################################
 Thu Apr  9 07:52:21 PDT 2020 Max
 
 cd /hive/data/genomes/wuhCor1/bed/primers
@@ -7,3 +10,45 @@ blat ../../wuhCor1.2bit primers.fa stdout -stepSize=3 -tileSize=6  -minScore=10 
 hgLoadPsl wuhCor1 primers.psl 
 hgLoadSeq wuhCor1 primers.fa -replace
 cut -f10 primers.psl  | sort > found.txt
+
+
+#########################################################################
+# SWIFT primers (DONE 2021-03-10 angie)
+
+mkdir /hive/data/genomes/wuhCor1/bed/swift
+cd /hive/data/genomes/wuhCor1/bed/swift
+wget https://swiftbiosci.com/wp-content/uploads/2020/09/sarscov2_v1_masterfile.txt.zip
+unzip sarscov2_v1_masterfile.txt.zip
+head sarscov2_v1_masterfile.txt
+#NC_045512.2     200     301     covid19genome_200-29703_s7490_U_88      182     200     covid19genome_200-29703_s7490_U_88F     301     322     covid19genome_200-29703_s7490_U_88R     CTGCAGGCTGCTTACGGT      AGGCAAACTGAGTTGGACGTG
+#...
+# Looks like they use interbase coords, good, columns appear to be
+# chrom, amplicon{Start,End,Name}, forward{Start,End,Name}, reverse{Start,End,Name}, {forw,rev}Seq
+# I don't see any info about pools etc on https://swiftbiosci.com/swift-amplicon-sars-cov-2-panel/
+# so BED 6 + sequence should do here.
+perl -wne 'chomp; chomp;
+           (undef, undef, undef, undef, $fSt, $fE, $fN, $rSt, $rE, $rN, $fSeq, $rSeq) = split;
+           print join("\t", "NC_045512v2", $fSt, $fE, $fN, 0, "+", $fSeq) . "\n";
+           print join("\t", "NC_045512v2", $rSt, $rE, $rN, 0, "-", $rSeq) . "\n";
+    ' sarscov2_v1_masterfile.txt \
+| sed -re 's/covid19genome_200-29703_//' \
+| sort -k1,1 -k2n,2n > swift.bed
+cat > swift.as <<EOF
+table swift
+"Browser extensible data (6 fields) plus sequence "
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position"
+    uint   chromEnd;   "End position"
+    string name;       "Name"
+    uint   score;      "Score from 0-1000 (BED placeholder)"
+    char[1] strand;    "+ (forward) or - (reverse)"
+    string sequence;   "Sequence"
+    )
+EOF
+bedToBigBed -type=bed6+1 -as=swift.as swift.bed ../../chrom.sizes swift.bb
+# Link into bbi along with other primer tracks (artic.bb, rapid.bb):
+ln -s `pwd`/swift.bb /gbdb/wuhCor1/bbi/
+
+
+#########################################################################
