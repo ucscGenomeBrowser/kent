@@ -95,3 +95,5 @@ sendDownload::
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${genomesTxt}.txt \
 		qateam@hgdownload:/mirrordata/hubs/${name}/${genomesTxt}.txt
 
+verifyDownload:
+	${toolsDir}/verifyOnDownload.sh ${orderList}
