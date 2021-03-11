@@ -11,7 +11,7 @@
 The UCSC Genome Browser is an open-source, interactive sequence visualization tool that 
 has been a cornerstone of genomics since we released the first human genome assembly 
 20 years ago; cited in more than 37,000 scientific articles and used by thousands of 
-researchers each day. It allows for cross referencing of research, clinical, 
+researchers each day. It allows for cross-referencing of research, clinical, 
 and epidemiology data against the SARS-CoV-2 reference genome. This data is updated frequently 
 and new datasets are added as they become available.</p>
 <p>
@@ -45,7 +45,7 @@ The standardized reference genome sequence shown is from one of the first isolat
 or wuhCor1. With more than 80 track datasets across the SARS-CoV-2 reference genome's nearly 30,000 RNA
 bases, navigation is essential to finding the information you want to see. Below is an example
 view of the Genome Browser with labeled sections highlighting the navigation, reference sequence, 
-annotations, and additional available track datasets.</p>
+annotations, and other available track datasets.</p>
 
 <p>
 Navigation controls at the top allow users to move left and right and to zoom. The search box 
@@ -69,7 +69,7 @@ bottom of the page.</p>
 <a name="genes"></a>
 <h2>Genes and Sequence Alignments</h2>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-5">
 <p>
 Gene and protein annotations are organized by the contributor, most notably NCBI and UniProt. 
 Having multiple information sources allows a consensus to be formed among datasets.
@@ -80,11 +80,11 @@ as interactions between viral proteins and human proteins (protein interact), PD
 RNA structure annotations (Rangan RNA), and more.</p> 
 
 <p>
-Sequence alignments and conservation data is also available across the SARS-CoV-2 genome,
-from large scale views to individual bases and amino acids. There are four main conservation
-tracks which compare sequence similarity of 44 bat coronaviruses, 119 vertebrate coronaviruses,
+Sequence alignments and conservation data are also available across the SARS-CoV-2 genome,
+from large-scale views to individual bases and amino acids. There are four main conservation
+tracks that compare sequence similarity of 44 bat coronaviruses, 119 vertebrate coronaviruses,
 PhyloCSF computed conservation scores, and alignments of 7 human coronaviruses. The tracks have 
-different displays depending on visibility mode and number of bases on the screen.</p>
+different displays depending on visibility mode and the number of bases on the screen.</p>
 
 <p>
 Datasets can be turned on by setting the dropdown 
@@ -96,11 +96,11 @@ will take you to a page with complete information about that item and dataset.</
   </div>
 
 
-  <div class="col-md-6">
+  <div class="col-md-7">
 <p class="text-center">
   <a href="http://genome.ucsc.edu/s/dschmelt/covidBrowserIntroGenes"><img class="text-center" 
     src="../../images/covidBrowserIntroGenes.png" 
-    alt="Some of the gene and conservation data on the Genome Browser" width="800" height="427"></a>
+    alt="Some of the gene and conservation data on the Genome Browser" width="700" height="375"></a>
   <p class="gbsCaption text-center">This Genome Browser display shows some of the gene and 
     conservation tracks available on the SARS-CoV-2 genome. You should be able to see UniProt 
     protein products, regions of interest, and domains all mapped against the SARS-CoV-2 genome.
@@ -143,7 +143,7 @@ including those from the <a href="https://www.iedb.org/" target="_blank">
 Immune Epitope Database (IEDB)</a> and from 
 <a href="../../cgi-bin/hgTrackUi?db=wuhCor1&g=targets">a study of COVID+ patients</a>.
 Of particular interest are the datasets describing surveys of antibody response across 
-a variety of SARS-CoV-2 variants in the receptor binding domain 
+a variety of SARS-CoV-2 variants in the receptor-binding domain 
 (<a href="../../cgi-bin/hgTrackUi?db=wuhCor1&g=abEscape">Antibody Escape Mutations</a>).</p>
 
 <p class="text-center">
@@ -151,7 +151,7 @@ a variety of SARS-CoV-2 variants in the receptor binding domain
     src="../../images/covidBrowserIntroVars.png" 
     alt="Some of the variation and immunology data on the Genome Browser" width="800" height="427"></a>
   <p class="gbsCaption text-center">This image is an example of some of the variation data tracks
-  that can be displayed on the SARS-CoV-2 genome, zoomed into the receptor binding domain (RBD) of 
+  that can be displayed on the SARS-CoV-2 genome, zoomed into the receptor-binding domain (RBD) of 
   the Spike protein. Validated epitopes are displayed in black that may be a target for 
   therapeutic antibodies. In red and black, antibody escape scores are are shown for each 
   genome position. Smaller tick marks show amino acid or nucleotide changes from different sources,
@@ -167,18 +167,18 @@ instantaneous tracing of strains and transmission events. This tool is called
 exists as an interactive web-tool to compare sequences and link to existing public phylogenetic 
 trees.
 <p class="text-center">
-  <a href="./../cgi-bin/hgPhyloPlace"><img class="text-center" 
+  <a href="../../cgi-bin/hgPhyloPlace"><img class="text-center" 
     src="../../images/covidBrowserIntroUShER.png" 
-    alt="Example of the UShER phylogeny placement tool" width="800" 
-    height="427"></a>
+    alt="Example of the UShER phylogeny placement tool" width="1000" 
+    height="275"></a>
   <p class="gbsCaption text-center">After uploading a Fasta file, the tool returns a page with quality 
-metrics like number of bases aligned, number of Ns, and number of maximally parsimonious 
-placements along with the lineage and clade of the neares neighbor. Colored boxes highlight 
+metrics such as: number of bases aligned, number of Ns, and number of maximally parsimonious 
+placements along with the lineage and clade of the nearest neighbor. Colored boxes highlight 
 possible quality issues, green meaning this was a high confidence placement.</p>
 <p>
 Next, you can view your aligned SARS-CoV-2 sequence genotypes along with their closest known 
-relatives among the 150,000+ public sequences. You can look at compare among your uploaded samples or trace possible 
-transmission vectors using mutational signitures.</p>
+relatives among the 150,000+ public sequences. You can look at compare among your uploaded 
+samples or trace possible transmission vectors using mutational signatures.</p>
 <p class="text-center">
   <a href="./../s/dschmelt/covidBrowserIntroUShER2"><img class="text-center" 
     src="../../images/covidBrowserIntroUShER2.png" 
@@ -188,7 +188,16 @@ transmission vectors using mutational signitures.</p>
 their most closely aligned public sequences. You can investigate genotypes and relationships 
 between samples.</p>
 
-<h2>API, SQL, Downloads, Custom Tracks</h2>
+<h2>Custom Tracks, Downloads, API, and SQL features</h2>
+<p>
+Along with a suite of data tracks, filters, and visualization options for the SARS-CoV-2
+genome, the UCSC Genome Browser offers many additional ways to interface with our data. 
+You can upload your data on the reference genome in <a href="">nearly any format</a> with our
+<a href="">Custom Track tool</a>. If you have unaligned sequence, you can use our <a href="">BLAT
+sequence alignment tool</a> to get coordinates and basewise comparison with any reference genome.
+ We have a <a href="">JSON API</a> which return.
+
+
 
 <h2>Support Docs, Contact Us</h2>
 
