@@ -35,22 +35,24 @@ mach = $(shell uname -m)
 # - ensemblPrevVersion is use to get chrom name mappings for pre-release,
 #   as this doesn't change between release.
 ##
-#preRelease = no
-preRelease = yes
-#db = hg38
+preRelease = no
+#preRelease = yes
+db = hg38
 #db = hg19
 #db = mm10
-db = mm39
+#db = mm39
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
-    ver = M25
+    verBase = M25
     prevVer = M24
+    ver = ${verBase}lift37
     gencodeOrg = Gencode_mouse
-    ftpReleaseSubdir = release_${ver}
+    ftpReleaseSubdir = release_${verBase}/GRCm38_mapping
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 100_38
-    ensemblPrevVer = 99_38
+    ensemblVer = 101_37      # only used to get genome chromsome name mappings, don't change
+    ensemblPrevVer = ${ensemblVer}  # doesn't change
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
+    isBackmap = yes
 else ifeq (${db},mm39)
     grcRefAssembly = GRCm39
     ver = M26
@@ -63,13 +65,13 @@ else ifeq (${db},mm39)
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 36
-    prevVer = 35
+    ver = 37
+    prevVer = 36
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 102_38
-    ensemblPrevVer = 101_38
+    ensemblVer = 103_38
+    ensemblPrevVer = 102_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37

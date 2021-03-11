@@ -25,4 +25,5 @@ include wgEncodeGencodeV33.ra
 include wgEncodeGencodeV34.ra
 include wgEncodeGencodeV35.ra
 include wgEncodeGencodeV36.ra
+include wgEncodeGencodeV37.ra
 
