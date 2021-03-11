@@ -12,14 +12,15 @@ The UCSC Genome Browser is an open-source, interactive sequence visualization to
 has been a cornerstone of genomics since we released the first human genome assembly 
 20 years ago; cited in more than 37,000 scientific articles and used by thousands of 
 researchers each day. It allows for cross referencing of research, clinical, 
-and epidemiology data against the SARS-CoV-2 reference genome. </p>
+and epidemiology data against the SARS-CoV-2 reference genome. This data is updated frequently 
+and new datasets are added as they become available.</p>
 <p>
 This guide will go through some of the most important use cases of the SARS-CoV-2 Genome Browser. 
 These topics include:</p>
 <ul>
-<li><a href="nav">Browser Orientation and Navigation</a></li>
-<li><a href="genes">Gene information and sequences</a></li>
-<li><a href="var">Variation data</a></li>
+<li><a href="nav">Orientation and Navigation</a></li>
+<li><a href="genes">Gene Data and Sequence Alignments</a></li>
+<li><a href="var">Variation and Immunology data</a></li>
 <li><a href="usher">Phylogeny Contact Tracing using USHER</a></li>
 <li><a href="data">Exporting bulk data</a></li>
 <li><a href="support">Support and Collaboration</a></li>
@@ -37,7 +38,7 @@ For those who prefer a video explanation, we also have the following tutorial:</
 
 
 <a name="nav"></a>
-<h2>Orientation and Navigation</h2>
+<h2>Genome Browser Orientation and Navigation</h2>
 <p>
 The standardized reference genome sequence shown is from one of the first isolated cases, known as
 <a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2" target="_blank">NC_045512v2</a>
@@ -52,7 +53,7 @@ allows users to search for particular features or to move to exact genomic coord
 RNA sequence is shown only when the view is sufficiently zoomed in. Annotations are shown 
 for data tracks that have been set to visible in the Available Tracks section at the bottom.
 Tracks can be configured with a right-click or by clicking on their name near the 
-bottom of the page.
+bottom of the page.</p>
 
 <p class="text-center">
   <a href="http://genome.ucsc.edu/s/SARS_CoV2/Figure1"><img class="text-center" 
@@ -66,7 +67,9 @@ bottom of the page.
 </p>
 
 <a name="genes"></a>
-<h2>Viewing Genes and Sequence Alignments</h2>
+<h2>Genes and Sequence Alignments</h2>
+<div class="row">
+  <div class="col-md-6">
 <p>
 Gene and protein annotations are organized by the contributor, most notably NCBI and UniProt. 
 Having multiple information sources allows a consensus to be formed among datasets.
@@ -83,17 +86,21 @@ tracks which compare sequence similarity of 44 bat coronaviruses, 119 vertebrate
 PhyloCSF computed conservation scores, and alignments of 7 human coronaviruses. The tracks have 
 different displays depending on visibility mode and number of bases on the screen.</p>
 
-<p>Datasets can be turned on by setting the dropdown 
+<p>
+Datasets can be turned on by setting the dropdown 
 next to the data track name from &quot;hide&quot; to dense, squish, pack, or full. Then click 
 the <button>refresh</button> button to see these changes in effect.
 Clicking on a data track name will take you to a description with more information on the 
 dataset, display conventions, methods, and references. Clicking on a particular item 
-will similarly take you to a page with complete information about that item and dataset.</p>
+will take you to a page with complete information about that item and dataset.</p>
+  </div>
 
-<p class="text-center">
+
+  <div class="col-md-6">
+<p class="text-left">
   <a href="http://genome.ucsc.edu/s/dschmelt/covidBrowserIntroGenes"><img class="text-center" 
     src="../../images/covidBrowserIntroGenes.png" 
-    alt="Some of the gene and conservation data on the Genome Browser" width="900" height="474"></a>
+    alt="Some of the gene and conservation data on the Genome Browser" width="800" height="427"></a>
   <p class="gbsCaption text-center">This Genome Browser display shows some of the gene and 
     conservation tracks available on the SARS-CoV-2 genome. You should be able to see UniProt 
     protein products, regions of interest, and domains all mapped against the SARS-CoV-2 genome.
@@ -102,14 +109,47 @@ will similarly take you to a page with complete information about that item and 
     reference SARS-CoV-2 genome. Interact with this session by clicking on the picture. 
   </p>
 </p>
+ </div>
+</div>
 
 <a name="var"></a>
-<h2>VARS</h2>
+<h2>Exploring Variation and Immunology Data</h2>
+<p>
+The SARS-CoV-2 Genome Browser displays data on variation within SARS-CoV-2
+from UniProt, GenBank, GISAID, Nexstrain, and other providers. These data cover global trends
+in SARS-CoV-2 variation among all available public sequences, with regional descriptions 
+available through clicking into a particular entry. A few of the most notable tracks under the
+&quot;Variation and Repeats&quot; section are the 
+<a href="../../cgi-bin/hgTrackUi?db=wuhCor1&g=sarsCov2PhyloPub">Phylogeny: Public track</a>, which shows a 
+continuously updating phylogenetic tree that clusters similar sequences, with the frequency of each
+mutation shown by the height of the bar at that particular base. Tools are provided to filter these 
+data to show only well-supported mutation calls, set thresholds for minor-allele frequency, and display 
+data for specific clades.</p>
+<p>
+Another track is the 
+spike protein mutations from community annotations, highlighted as amino acid changes. 
+The Genome Browser also has the 
+<a href="../../cgi-bin/hgTrackUi?db=wuhCor1&g=variantMuts">Variants of Concern track</a>, which 
+pinpoints each accumulated mutation that defines 4 strains of SARS-CoV-2 
+of particular concern, labeled based on lay terms (such as 'California variant') as well as 
+the using the lineage defined by the 
+<a href="https://github.com/cov-lineages/pangolin/" target="_blank">Pangolin software</a> 
+(such as 'B.1.1.7').</p>
+
+<p>
+The Genome Browser also provides 12 immunology datasets that can inform potential therapeutic 
+targets or public health risks. Protein epitopes are highlighted in the genome by multiple tracks, 
+including those from the <a href="https://www.iedb.org/" target="_blank">
+Immune Epitope Database (IEDB)</a> and from 
+<a href="../../cgi-bin/hgTrackUi?db=wuhCor1&g=targets">a study of COVID+ patients</a>.
+Of particular interest are the datasets describing surveys of antibody response across 
+a variety of SARS-CoV-2 variants in the receptor binding domain 
+(<a href="../../cgi-bin/hgTrackUi?db=wuhCor1&g=abEscape">Antibody Escape Mutations</a>).</p>
 
 <a name="usher"></a>
 <h2>Genetic Contact Tracing with hgPhyloPlace</h2>
 
-<h2>API, SQL, Downloads</h2>
+<h2>API, SQL, Downloads, Custom Tracks</h2>
 
 <h2>Support Docs, Contact Us</h2>
 
