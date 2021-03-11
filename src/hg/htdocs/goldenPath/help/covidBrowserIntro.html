@@ -5,41 +5,108 @@
 
 
 <h1>Introduction to the SARS-CoV-2 Genome Browser</h1>
+ <div class="row">
+  <div class="col-sm-6">
 <p>
 The UCSC Genome Browser is an open-source, interactive sequence visualization tool that 
 has been a cornerstone of genomics since we released the first human genome assembly 
-20 years ago; cited in more than 37,000 
-scientific articles. It allows for cross referencing of research, clinical, 
+20 years ago; cited in more than 37,000 scientific articles and used by thousands of 
+researchers each day. It allows for cross referencing of research, clinical, 
 and epidemiology data against the SARS-CoV-2 reference genome. </p>
-
 <p>
 This guide will go through some of the most important use cases of the SARS-CoV-2 Genome Browser. 
-For those who prefer a video explanation, we also the following:</p>
-<p><iframe width="560" height="315" src="https://www.youtube.com/embed/Ee6h0xyZDOM?rel=0" 
-frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen></iframe></p>
+These topics include:</p>
+<ul>
+<li><a href="nav">Browser Orientation and Navigation</a></li>
+<li><a href="genes">Gene information and sequences</a></li>
+<li><a href="var">Variation data</a></li>
+<li><a href="usher">Phylogeny Contact Tracing using USHER</a></li>
+<li><a href="data">Exporting bulk data</a></li>
+<li><a href="support">Support and Collaboration</a></li>
+</ul>
+<p>
+For those who prefer a video explanation, we also have the following tutorial:</p>
+ </div>
+ <div class="col-md-6">
+<p>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/Ee6h0xyZDOM?rel=0" 
+  frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+  allowfullscreen></iframe></p>
+ </div>
+</div>
 
+
+<a name="nav"></a>
 <h2>Orientation and Navigation</h2>
 <p>
-With more than 80 total datasets across the SARS-CoV-2 reference genome's nearly 30,000 RNA
+The standardized reference genome sequence shown is from one of the first isolated cases, known as
+<a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2" target="_blank">NC_045512v2</a>
+or wuhCor1. With more than 80 track datasets across the SARS-CoV-2 reference genome's nearly 30,000 RNA
 bases, navigation is essential to finding the information you want to see. Below is an example
 view of the Genome Browser with labeled sections highlighting the navigation, reference sequence, 
-annotations, and additional available track datasets below.
+annotations, and additional available track datasets.</p>
+
+<p>
+Navigation controls at the top allow users to move left and right and to zoom. The search box 
+allows users to search for particular features or to move to exact genomic coordinates. The 
+RNA sequence is shown only when the view is sufficiently zoomed in. Annotations are shown 
+for data tracks that have been set to visible in the Available Tracks section at the bottom.
+Tracks can be configured with a right-click or by clicking on their name near the 
+bottom of the page.
 
 <p class="text-center">
-  <img class="text-center" src="../../images/covidBrowserIntroNav.png" 
-    alt="Labeled orientation to the Genome Browser" width="1000" height="526">
+  <a href="http://genome.ucsc.edu/s/SARS_CoV2/Figure1"><img class="text-center" 
+    src="../../images/covidBrowserIntroNav.png" 
+    alt="Labeled orientation to the Genome Browser" width="900" height="474"></a>
   <p class="gbsCaption text-center">This is a view of the SARS-CoV-2 Genome Browser with 
-    labeled elements to help with orientation.</p>
+    labeled elements to help with orientation. Interact with this session by clicking on 
+    the picture. To read the full caption, please go to our 
+    <a href="https://www.nature.com/articles/s41588-020-0700-8#Fig1">Nature Genetics paper</a>.
+  </p>
 </p>
 
+<a name="genes"></a>
+<h2>Viewing Genes and Sequence Alignments</h2>
+<p>
+Gene and protein annotations are organized by the contributor, most notably NCBI and UniProt. 
+Having multiple information sources allows a consensus to be formed among datasets.
+Like many viral genomes, molecular complexity arises from polyproteins rearranging, 
+generating ~29 protein products. Most notable among these is the S (spike) protein which defines
+coronaviruses and allows entry into our cell membranes. Additional tracks contain information such 
+as interactions between viral proteins and human proteins (protein interact), PDB structures, and 
+RNA structure annotations (Rangan RNA), and more.</p> 
 
-<h2>GENES</h2>
+<p>
+Sequence alignments and conservation data is also available across the SARS-CoV-2 genome,
+from large scale views to individual bases and amino acids. There are four main conservation
+tracks which compare sequence similarity of 44 bat coronaviruses, 119 vertebrate coronaviruses,
+PhyloCSF computed conservation scores, and alignments of 7 human coronaviruses. The tracks have 
+different displays depending on visibility mode and number of bases on the screen.</p>
 
+<p>Datasets can be turned on by setting the dropdown 
+next to the data track name from &quot;hide&quot; to dense, squish, pack, or full. Then click 
+the <button>refresh</button> button to see these changes in effect.
+Clicking on a data track name will take you to a description with more information on the 
+dataset, display conventions, methods, and references. Clicking on a particular item 
+will similarly take you to a page with complete information about that item and dataset.</p>
+
+<p class="text-center">
+  <a href="http://genome.ucsc.edu/s/dschmelt/covidBrowserIntroGenes"><img class="text-center" 
+    src="../../images/covidBrowserIntroGenes.png" 
+    alt="Some of the gene and conservation data on the Genome Browser" width="900" height="474"></a>
+  <p class="gbsCaption text-center">This Genome Browser display shows some of the gene and 
+    conservation tracks available on the SARS-CoV-2 genome. You should be able to see UniProt 
+    protein products, regions of interest, and domains all mapped against the SARS-CoV-2 genome.
+    Below those tracks are two different conservation alignments in &quot;squish&quot; and 
+    &quot;pack&quot; formats, comparing bat-host and human-host coronavirus sequences with the 
+    reference SARS-CoV-2 genome. Interact with this session by clicking on the picture. 
+  </p>
+</p>
+
+<a name="var"></a>
 <h2>VARS</h2>
 
-<h2>NEW DATA</h2>
-
+<a name="usher"></a>
 <h2>Genetic Contact Tracing with hgPhyloPlace</h2>
 
 <h2>API, SQL, Downloads</h2>
