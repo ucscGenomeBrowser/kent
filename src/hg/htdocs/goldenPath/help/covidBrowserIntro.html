@@ -10,20 +10,22 @@
 <p>
 The UCSC Genome Browser is an open-source, interactive sequence visualization tool that 
 has been a cornerstone of genomics since we released the first human genome assembly 
-20 years ago; cited in more than 37,000 scientific articles and used by thousands of 
-researchers each day. It allows for cross-referencing of research, clinical, 
-and epidemiology data against the SARS-CoV-2 reference genome. This data is updated frequently 
-and new datasets are added as they become available.</p>
+20 years ago. Cited in more than 37,000 scientific articles and used by thousands of 
+researchers each day; it allows for cross-referencing of research, clinical, 
+and epidemiology data against the SARS-CoV-2 reference genome. This data is continuously 
+updated and added to as new datasets become available. For a more thorough description,
+please reference our <a href="https://www.nature.com/articles/s41588-020-0700-8" target="_blank">
+SARS-CoV-2 Genome Browser Nature Genetics paper</a>.</p>
 <p>
 This guide will go through some of the most important use cases of the SARS-CoV-2 Genome Browser. 
 These topics include:</p>
 <ul>
-<li><a href="nav">Orientation and Navigation</a></li>
-<li><a href="genes">Gene Data and Sequence Alignments</a></li>
-<li><a href="var">Variation and Immunology data</a></li>
-<li><a href="usher">Phylogeny Contact Tracing using USHER</a></li>
-<li><a href="data">Exporting bulk data</a></li>
-<li><a href="support">Support and Collaboration</a></li>
+<li><a href="#nav">Orientation and Navigation</a></li>
+<li><a href="#genes">Gene Data and Sequence Alignments</a></li>
+<li><a href="#var">Variation and Immunology data</a></li>
+<li><a href="#usher">Phylogenetic Contact Tracing using USHER</a></li>
+<li><a href="#data">Other tools and data downloads</a></li>
+<li><a href="#support">Support and Collaboration</a></li>
 </ul>
 <p>
 For those who prefer a video explanation, we also have the following tutorial:</p>
@@ -58,11 +60,12 @@ bottom of the page.</p>
 <p class="text-center">
   <a href="http://genome.ucsc.edu/s/SARS_CoV2/Figure1"><img class="text-center" 
     src="../../images/covidBrowserIntroNav.png" 
-    alt="Labeled orientation to the Genome Browser" width="900" height="474"></a>
+    alt="Labeled orientation to the Genome Browser" width="1200" height="594"></a>
   <p class="gbsCaption text-center">This is a view of the SARS-CoV-2 Genome Browser with 
     labeled elements to help with orientation. Interact with this session by clicking on 
     the picture. To read the full caption, please go to our 
-    <a href="https://www.nature.com/articles/s41588-020-0700-8#Fig1">Nature Genetics paper</a>.
+    <a href="https://www.nature.com/articles/s41588-020-0700-8#Fig1" target="_blank">
+    Nature Genetics paper</a>.
   </p>
 </p>
 
@@ -81,10 +84,11 @@ RNA structure annotations (Rangan RNA), and more.</p>
 
 <p>
 Sequence alignments and conservation data are also available across the SARS-CoV-2 genome,
-from large-scale views to individual bases and amino acids. There are four main conservation
-tracks that compare sequence similarity of 44 bat coronaviruses, 119 vertebrate coronaviruses,
-PhyloCSF computed conservation scores, and alignments of 7 human coronaviruses. The tracks have 
-different displays depending on visibility mode and the number of bases on the screen.</p>
+from large-scale views to individual bases and amino acids. Four conservation
+tracks compare sequences with 44 bat coronaviruses, 119 vertebrate 
+coronaviruses, 7 human coronaviruses, and PhyloCSF computed conservation scores. 
+The tracks have different displays depending on visibility mode and the number of 
+bases on the screen.</p>
 
 <p>
 Datasets can be turned on by setting the dropdown 
@@ -128,7 +132,7 @@ data for specific clades.</p>
 <p>
 Another track is the 
 spike protein mutations from community annotations, highlighted as amino acid changes. 
-The Genome Browser also has the 
+The Genome Browser has also has the 
 <a href="../../cgi-bin/hgTrackUi?db=wuhCor1&g=variantMuts">Variants of Concern track</a>, which 
 pinpoints each accumulated mutation that defines 4 strains of SARS-CoV-2 
 of particular concern, labeled based on lay terms (such as 'California variant') as well as 
@@ -160,7 +164,7 @@ a variety of SARS-CoV-2 variants in the receptor-binding domain
 <a name="usher"></a>
 <h2>Genetic Contact Tracing with UShER</h2>
 <p>
-The UCSC Genome Browser also has developed a tool that allows placement of SARS-CoV-2
+The UCSC Genome Browser has developed a tool that allows placement of SARS-CoV-2
 sequences onto existing phylogenetic trees far faster than previous methods, allowing 
 instantaneous tracing of strains and transmission events. This tool is called 
 <a href="../../cgi-bin/hgPhyloPlace">Ultrafast Sample placement on Existing tRees (UShER)</a> and
@@ -180,7 +184,7 @@ Next, you can view your aligned SARS-CoV-2 sequence genotypes along with their c
 relatives among the 150,000+ public sequences. You can look at compare among your uploaded 
 samples or trace possible transmission vectors using mutational signatures.</p>
 <p class="text-center">
-  <a href="./../s/dschmelt/covidBrowserIntroUShER2"><img class="text-center" 
+  <a href="http://genome.ucsc.edu/s/dschmelt/covidBrowserIntroUShER2"><img class="text-center" 
     src="../../images/covidBrowserIntroUShER2.png" 
     alt="Example of the UShER phylogeny placement tool tree features" width="800" 
     height="427"></a>
@@ -188,17 +192,57 @@ samples or trace possible transmission vectors using mutational signatures.</p>
 their most closely aligned public sequences. You can investigate genotypes and relationships 
 between samples.</p>
 
-<h2>Custom Tracks, Downloads, API, and SQL features</h2>
+<a name="data"></a>
+<h2>Other tools and features</h2>
+<h3>Custom Tracks, BLAT, Track Hubs</h3>
 <p>
 Along with a suite of data tracks, filters, and visualization options for the SARS-CoV-2
 genome, the UCSC Genome Browser offers many additional ways to interface with our data. 
-You can upload your data on the reference genome in <a href="">nearly any format</a> with our
-<a href="">Custom Track tool</a>. If you have unaligned sequence, you can use our <a href="">BLAT
-sequence alignment tool</a> to get coordinates and basewise comparison with any reference genome.
- We have a <a href="">JSON API</a> which return.
+You can upload your data on the reference genome in 
+<a href="../../FAQ/FAQformat.html">nearly any format</a> with our
+<a href="../..//cgi-bin/hgCustom">Custom Track tool</a>. If you have unaligned sequence,
+ you can use our <a href="../../cgi-bin/hgBlat">BLAT
+sequence alignment tool</a> to get coordinates and base-by-base comparison 
+with any reference genome. We also display formatted data
+as <a href="hgTrackHubHelp.html">Track Hubs</a> and curate a list of 
+user-submitted <a href="../../cgi-bin/hgHubConnect?#publicHubs">Public Track Hubs</a>.
+</p>
+<h3>Downloads, Table Browser, JSON API, SQL</h3>
+<p>
+As part of our open-source, open-access philosophy, we try to make it as easy as possible 
+for researchers to download entire datasets or filtered subsets. Each track description page
+has a Data Access section which points users to our main options for data download.
+For downloading complete datasets, our 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#SARS-CoV-2">SARS-CoV-2 download 
+directory</a> provides access to all our source files for transparency and reproducibility. 
+Our <a href="../../cgi-bin/hgTables">Table Browser</a> tool lets users interact with our
+data using a variety of filters based on score, identifiers, or any other field. Table Browser
+also allows users to convert data into multiple different formats (e.g. BED, GTF) and to access
+different formatted sequence outputs (in FASTA format).</p>
 
+<p>
+We have a <a href="api.html">JSON API</a> which can be programmatically called and return
+any dataset in its entirety or as a filtered subset based on documented input parameter. We also
+offer a <a href="mysql.html">Public SQL server</a> for similar flexible, automatic way to access
+genomic data and annotations.
+</p>
 
+<a name="support"></a>
+<h2>Support and Collaboration</h2>
+<p>The Genome Browser offers rapid email support for anything related to our tools. If your 
+question is general or may have been asked before, please review our 
+<a href="hgTracksHelp.html">Browser documentation</a> and our archive 
+of <a href="https://groups.google.com/u/1/a/soe.ucsc.edu/g/genome">
+previously answered questions</a>. If you would still like help, please go to
+our <a href="../../contacts.html">Contact Us</a> page to see access our email support. When contacting us, 
+please include a session link, images, and example data if applicable. We are active on 
+social media, you can follow us on <a href="https://twitter.com/GenomeBrowser">Twitter</a>
+or <a href="https://www.facebook.com/ucscGenomeBrowser">Facebook</a>.
+</p>
 
-<h2>Support Docs, Contact Us</h2>
-
+<p>
+We are always looking to collaborate with researchers and add new datasets to our site. 
+We also seek to continuously improve our tools to meet the needs of the scientific community. 
+If you have any collaboration ideas, contributions, or feature requests, please reach out through
+our <a href="../../cgi-bin/hgUserSuggestion">suggestion page</a>.</a>
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
