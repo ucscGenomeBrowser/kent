@@ -97,7 +97,7 @@ will take you to a page with complete information about that item and dataset.</
 
 
   <div class="col-md-6">
-<p class="text-left">
+<p class="text-center">
   <a href="http://genome.ucsc.edu/s/dschmelt/covidBrowserIntroGenes"><img class="text-center" 
     src="../../images/covidBrowserIntroGenes.png" 
     alt="Some of the gene and conservation data on the Genome Browser" width="800" height="427"></a>
@@ -146,8 +146,47 @@ Of particular interest are the datasets describing surveys of antibody response 
 a variety of SARS-CoV-2 variants in the receptor binding domain 
 (<a href="../../cgi-bin/hgTrackUi?db=wuhCor1&g=abEscape">Antibody Escape Mutations</a>).</p>
 
+<p class="text-center">
+  <a href="http://genome.ucsc.edu/s/dschmelt/covidBrowserIntroVars"><img class="text-center" 
+    src="../../images/covidBrowserIntroVars.png" 
+    alt="Some of the variation and immunology data on the Genome Browser" width="800" height="427"></a>
+  <p class="gbsCaption text-center">This image is an example of some of the variation data tracks
+  that can be displayed on the SARS-CoV-2 genome, zoomed into the receptor binding domain (RBD) of 
+  the Spike protein. Validated epitopes are displayed in black that may be a target for 
+  therapeutic antibodies. In red and black, antibody escape scores are are shown for each 
+  genome position. Smaller tick marks show amino acid or nucleotide changes from different sources,
+  with more information available by clicking into the item.</p>
+
 <a name="usher"></a>
-<h2>Genetic Contact Tracing with hgPhyloPlace</h2>
+<h2>Genetic Contact Tracing with UShER</h2>
+<p>
+The UCSC Genome Browser also has developed a tool that allows placement of SARS-CoV-2
+sequences onto existing phylogenetic trees far faster than previous methods, allowing 
+instantaneous tracing of strains and transmission events. This tool is called 
+<a href="../../cgi-bin/hgPhyloPlace">Ultrafast Sample placement on Existing tRees (UShER)</a> and
+exists as an interactive web-tool to compare sequences and link to existing public phylogenetic 
+trees.
+<p class="text-center">
+  <a href="./../cgi-bin/hgPhyloPlace"><img class="text-center" 
+    src="../../images/covidBrowserIntroUShER.png" 
+    alt="Example of the UShER phylogeny placement tool" width="800" 
+    height="427"></a>
+  <p class="gbsCaption text-center">After uploading a Fasta file, the tool returns a page with quality 
+metrics like number of bases aligned, number of Ns, and number of maximally parsimonious 
+placements along with the lineage and clade of the neares neighbor. Colored boxes highlight 
+possible quality issues, green meaning this was a high confidence placement.</p>
+<p>
+Next, you can view your aligned SARS-CoV-2 sequence genotypes along with their closest known 
+relatives among the 150,000+ public sequences. You can look at compare among your uploaded samples or trace possible 
+transmission vectors using mutational signitures.</p>
+<p class="text-center">
+  <a href="./../s/dschmelt/covidBrowserIntroUShER2"><img class="text-center" 
+    src="../../images/covidBrowserIntroUShER2.png" 
+    alt="Example of the UShER phylogeny placement tool tree features" width="800" 
+    height="427"></a>
+  <p class="gbsCaption text-center">The uploaded sequences are highlighted in blue alongside 
+their most closely aligned public sequences. You can investigate genotypes and relationships 
+between samples.</p>
 
 <h2>API, SQL, Downloads, Custom Tracks</h2>
 
