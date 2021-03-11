@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="COVID Genome Browser Intro" -->
+<!--#set var="TITLE" value="COVID Browser Intro" -->
 <!--#set var="ROOT" value="../.." -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
@@ -12,7 +12,8 @@ The UCSC Genome Browser is an open-source, interactive sequence visualization to
 has been a cornerstone of genomics since we released the first human genome assembly 
 20 years ago. Cited in more than 37,000 scientific articles and used by thousands of 
 researchers each day; it allows for cross-referencing of research, clinical, 
-and epidemiology data against reference genomes, including SARS-CoV-2. This data is continuously 
+and epidemiology data against reference genomes, including 
+<a href="../../cgi-bin/hgGateway?db=wuhCor1">SARS-CoV-2</a>. This data is continuously 
 updated and added to as new datasets become available. For a more thorough description,
 please reference our <a href="https://www.nature.com/articles/s41588-020-0700-8" target="_blank">
 SARS-CoV-2 Genome Browser Nature Genetics paper</a>. We also post updates and COVID Browser
@@ -43,12 +44,14 @@ For those who prefer a video explanation, we also have the following tutorial:</
 <a name="nav"></a>
 <h2>Genome Browser Orientation and Navigation</h2>
 <p>
-The standardized reference genome sequence shown is from one of the first isolated cases, known as
-<a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2" target="_blank">NC_045512v2</a>
-or wuhCor1. With more than 80 track datasets across the SARS-CoV-2 reference genome's nearly 30,000 RNA
+The standardized reference genome displayed on the 
+<a href=../../hgTracks?db=wuhCor1">COVID Genome Browser</a> is from one of the first isolated 
+cases, known as <a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2" 
+target="_blank">NC_045512v2</a> or wuhCor1. With more than 80 track datasets across the 
+SARS-CoV-2 reference genome's nearly 30,000 RNA
 bases, navigation is essential to finding the information you want to see. Below is an example
-view of the Genome Browser with labeled sections highlighting the navigation, reference sequence, 
-annotations, and other available track datasets.</p>
+view of the SARS-CoV-2 Genome Browser with labeled sections highlighting the navigation, 
+reference sequence, annotations, and other available track datasets.</p>
 
 <p>
 <b>Navigation controls</b> at the top allow users to move left and right and to zoom. 
@@ -123,7 +126,7 @@ will take you to a page with complete information about that item and dataset.</
 <div class="row">
   <div class="col-md-5">
 <p>
-The SARS-CoV-2 Genome Browser displays data on variation within SARS-CoV-2
+The <a href="../../cgi-bin/hgTracks?db=wuhCor1">SARS-CoV-2 Genome Browser</a> displays data on variation within SARS-CoV-2
 from UniProt, GenBank, GISAID, Nexstrain, and other providers. These datasets cover global trends
 in SARS-CoV-2 variation among all available public sequences, with regional descriptions 
 available through clicking into a particular entry. A few of the most notable tracks under the
@@ -189,11 +192,12 @@ metrics such as: number of bases aligned, number of Ns, and number of maximally 
 placements along with the lineage and clade of the nearest neighbor. Colored boxes highlight 
 possible quality issues, green meaning this was a high confidence placement.</p>
 
-<h3>SARS-CoV-2 Phylogenic Trees</h3>
+<h3>SARS-CoV-2/ COVID Phylogenic Trees</h3>
 <p>
 You can view your aligned SARS-CoV-2 sequence genotypes along with their closest known 
 relatives among the 150,000+ public sequences. You can compare among your uploaded 
 samples or trace possible transmission vectors using mutational signatures.</p>
+
 <p class="text-center">
   <a href="http://genome.ucsc.edu/s/dschmelt/covidBrowserIntroUShER2"><img class="text-center" 
     src="../../images/covidBrowserIntroUShER2.png" 
@@ -202,9 +206,11 @@ samples or trace possible transmission vectors using mutational signatures.</p>
   <p class="gbsCaption text-center">The uploaded sequences are highlighted in blue alongside 
 their most closely aligned public sequences. You can investigate genotypes and relationships 
 between samples.</p>
+</p>
+
 
 <a name="data"></a>
-<h2>Other tools and features</h2>
+<h2>Other tools, downloads, and features</h2>
 <h3>Custom Tracks, BLAT, Track Hubs</h3>
 <p>
 Along with a suite of data tracks, filters, and visualization options for the SARS-CoV-2
