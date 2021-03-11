@@ -165,18 +165,28 @@ longLabel ARTIC Oxford Nanopore sequencing primers
 visibility hide
 group map
 priority 5
-type bigBed 4 +
+type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/bbi/artic.bb
 noScoreFilter on
 
 track rapid
-shortLabel RAPID Primers
-longLabel RAPID Oxford Nanopore sequencing primers
+shortLabel RAPID/Midnight Primers
+longLabel RAPID/Midnight 1200bp amplicon Oxford Nanopore sequencing primers
 visibility hide
 group map
 priority 5
 type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/bbi/rapid.bb
+noScoreFilter on
+
+track swift
+shortLabel Swift Primers
+longLabel Swift BioSciences sequencing primers
+visibility hide
+group map
+priority 5
+type bigBed 6 +
+bigDataUrl /gbdb/wuhCor1/bbi/swift.bb
 noScoreFilter on
 
 # track removed as per David H email, authors got a track hub instead
