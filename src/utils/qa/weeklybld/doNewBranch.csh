@@ -133,7 +133,7 @@ if ( $status ) then
 endif
 
 ## copy binaries to beta machine:
-rsync -a -P --exclude=hg.conf --exclude=hg.conf.private \
+rsync -rLptgoD -P --exclude=hg.conf --exclude=hg.conf.private \
   /usr/local/apache/cgi-bin-beta/ qateam@hgwbeta:/data/apache/cgi-bin/
 ## this htdocs rsync seems redundant. buildBeta.csh does not update htdocs-beta, 
 ##  but make beta in htdocs/ does, however they should be identical already.

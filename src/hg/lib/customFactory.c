@@ -2859,6 +2859,8 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 
 setBbiViewLimits(track);
+track->dbTrackType = cloneString("bigBed");
+track->fieldCount = track->bbiFile->definedFieldCount;
 return track;
 }
 

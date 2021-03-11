@@ -12999,4 +12999,87 @@ TMPDIR=/dev/shm
     sed -e 's/^/    # /;' fb.rn7.chainRBest.Hg38.txt
     # 885516265 bases of 2626580772 (33.714%) in intersection
 
-#########################################################################
+#############################################################################
+# LASTZ human/hg38 vs. X. tropicalis/xenTro10 - (DONE - 2021-02-22 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzXenTro10.2021-02-22
+    cd /hive/data/genomes/hg38/bed/lastzXenTro10.2021-02-22
+
+    printf '# human vs X. tropicalis
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/staging/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=10
+SEQ1_LAP=10000
+
+# QUERY: X. tropicalis xenTro10
+SEQ2_DIR=/hive/data/genomes/xenTro10/xenTro10.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzXenTro10.2021-02-22
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1 &
+    # real    805m18.879s
+
+    sed -e 's/^/    # /;' fb.hg38.chainXenTro10Link.txt
+    # 146412457 bases of 3110768607 (4.707%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynXenTro10Link.txt
+    # 41291684 bases of 3110768607 (1.327%) in intersection
+
+ time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg38 xenTro10) \
+       > rbest.log 2>&1 &
+    # real    435m37.210s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.XenTro10.txt
+    # 73679844 bases of 3110768607 (2.369%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/xenTro10/bed/blastz.hg38.swap
+    cd /hive/data/genomes/xenTro10/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzXenTro10.2021-02-22/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    79m35.244s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainHg38Link.txt
+    # 150875559 bases of 1448461978 (10.416%) in intersection
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainSynHg38Link.txt
+    # 40317510 bases of 1448461978 (2.783%) in intersection
+
+  time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` xenTro10 hg38) \
+       > rbest.log 2>&1
+XXX - running - Tue Mar  2 10:52:22 PST 2021
+    # real    749m24.229s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainRBest.Hg38.txt
+
+#############################################################################

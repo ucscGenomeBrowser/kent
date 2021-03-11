@@ -157,8 +157,8 @@ for (si = seqs;  si != NULL;  si = si->next)
     {
     // Positive strand only; we're expecting a mostly complete match to the reference
     gfLongDnaInMem(si->seq, gf, FALSE, gfMinScore, NULL, gvo, FALSE, FALSE);
-    reportTiming(pStartTime, "gfLongDnaInMem");
     }
+reportTiming(pStartTime, "gfLongDnaInMem all");
 gfOutputFree(&gvo);
 carefulClose(&f);
 alignments = pslLoadAll(pslTn.forCgi);

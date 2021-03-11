@@ -20,6 +20,7 @@
 #include "parsimonyProto.h"
 #include "phyloPlace.h"
 #include "phyloTree.h"
+#include "pipeline.h"
 #include "psl.h"
 #include "ra.h"
 #include "regexHelper.h"
@@ -1091,17 +1092,18 @@ struct dyString *dy = dyStringCreate("%s/fetch/%s", nextstrainHost(), jsonUrlFor
 return dyStringCannibalize(&dy);
 }
 
-static void makeNextstrainButton(char *id, struct tempName *tn, char *label)
+static void makeNextstrainButton(char *id, struct tempName *tn, char *label, char *mouseover)
 /* Make a button to view an auspice JSON file in Nextstrain. */
 {
 char *nextstrainUrl = nextstrainUrlFromTn(tn);
 struct dyString *js = dyStringCreate("window.open('%s');", nextstrainUrl);
-cgiMakeOnClickButton(id, js->string, label);
+cgiMakeOnClickButtonWithMsg(id, js->string, label, mouseover);
 dyStringFree(&js);
 freeMem(nextstrainUrl);
 }
 
-static void makeNextstrainButtonN(char *idBase, int ix, struct tempName *jsonTns[])
+static void makeNextstrainButtonN(char *idBase, int ix, int userSampleCount, int subtreeSize,
+                                  struct tempName *jsonTns[])
 /* Make a button to view one subtree in Nextstrain.  idBase is a short string and
  * ix is 0-based subtree number. */
 {
@@ -1109,30 +1111,41 @@ char buttonId[256];
 safef(buttonId, sizeof buttonId, "%s%d", idBase, ix+1);
 char buttonLabel[256];
 safef(buttonLabel, sizeof buttonLabel, "view subtree %d in Nextstrain", ix+1);
-makeNextstrainButton(buttonId, jsonTns[ix], buttonLabel);
+struct dyString *dyMo = dyStringCreate("view subtree %d with %d of your sequences and %d other "
+                                       "sequences from the phylogenetic tree for context",
+                                       ix+1, userSampleCount, subtreeSize - userSampleCount);
+makeNextstrainButton(buttonId, jsonTns[ix], buttonLabel, dyMo->string);
+dyStringFree(&dyMo);
 }
 
 static void makeNsSingleTreeButton(struct tempName *tn)
 /* Make a button to view single subtree (with all uploaded samples) in Nextstrain. */
 {
-makeNextstrainButton("viewNextstrainSingleSubtree", tn, "view comprehensive subtree in Nextstrain");
+makeNextstrainButton("viewNextstrainSingleSubtree", tn, "view single subtree in Nextstrain",
+                     "view one subtree that includes all of your uploaded sequences plus "
+                     SINGLE_SUBTREE_SIZE" randomly selected sequences from the phylogenetic "
+                     "tree for context");
 }
 
 static void makeButtonRow(struct tempName *singleSubtreeJsonTn, struct tempName *jsonTns[],
-                          int subtreeCount, boolean isFasta)
+                          struct subtreeInfo *subtreeInfoList, int subtreeSize, boolean isFasta)
 /* Russ's suggestion: row of buttons at the top to view results in GB, Nextstrain, Nextclade. */
 {
 puts("<p>");
-cgiMakeButton("submit", "view in Genome Browser");
+cgiMakeButtonWithMsg("submit", "view in Genome Browser",
+                     "view your uploaded sequences, their phylogenetic relationship and their "
+                     "mutations along with many other datasets available in the Genome Browser");
 if (nextstrainHost())
     {
     printf("&nbsp;");
     makeNsSingleTreeButton(singleSubtreeJsonTn);
+    struct subtreeInfo *ti;
     int ix;
-    for (ix = 0;  ix < subtreeCount;  ix++)
+    for (ix = 0, ti = subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
         {
+        int userSampleCount = slCount(ti->subtreeUserSampleIds);
         printf("&nbsp;");
-        makeNextstrainButtonN("viewNextstrainTopRow", ix, jsonTns);
+        makeNextstrainButtonN("viewNextstrainTopRow", ix, userSampleCount, subtreeSize, jsonTns);
         }
     }
 if (0 && isFasta)
@@ -1989,6 +2002,36 @@ carefulClose(&f);
 return tsvTn;
 }
 
+static struct tempName *makeSubtreeZipFile(struct usherResults *results, struct tempName *jsonTns[],
+                                           struct tempName *singleSubtreeJsonTn, int *pStartTime)
+/* Make a zip archive file containing all of the little subtree Newick and JSON files so
+ * user doesn't have to click on each one. */
+{
+struct tempName *zipTn;
+AllocVar(zipTn);
+trashDirFile(zipTn, "ct", "usher_subtrees", ".zip");
+int subtreeCount = slCount(results->subtreeInfoList);
+char *cmd[10 + 2*(subtreeCount+1)];
+char **cmds[] = { cmd, NULL };
+int cIx = 0, sIx = 0;
+cmd[cIx++] = "zip";
+cmd[cIx++] = "-j";
+cmd[cIx++] = zipTn->forCgi;
+cmd[cIx++] = singleSubtreeJsonTn->forCgi;
+cmd[cIx++] = results->singleSubtreeInfo->subtreeTn->forCgi;
+struct subtreeInfo *ti;
+for (ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, sIx++)
+    {
+    cmd[cIx++] = jsonTns[sIx]->forCgi;
+    cmd[cIx++] = ti->subtreeTn->forCgi;
+    }
+cmd[cIx++] = NULL;
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, NULL);
+pipelineClose(&pl);
+reportTiming(pStartTime, "make subtree zipfile");
+return zipTn;
+}
+
 static struct slName **getProblematicSites(char *db)
 /* If config.ra specfies maskFile them return array of lists (usually NULL) of reasons that
  * masking is recommended, one per position in genome; otherwise return NULL. */
@@ -2012,6 +2055,18 @@ if (isNotEmpty(pSitesFile) && fileExists(pSitesFile))
     bigBedFileClose(&bbi);
     }
 return pSites;
+}
+
+static void downloadsRow(char *treeFile, char *sampleSummaryFile, char *spikeSummaryFile,
+                         char *subtreeZipFile)
+/* Make a row of quick download file links, to appear between the button row & big summary table. */
+{
+printf("<p><b>Downloads:</b> | ");
+printf("<a href='%s' download>Global phylogenetic tree with your sequences</a> | ", treeFile);
+printf("<a href='%s' download>TSV summary of sequences and placements</a> | ", sampleSummaryFile);
+printf("<a href='%s' download>TSV summary of Spike mutations</a> | ", spikeSummaryFile);
+printf("<a href='%s' download>ZIP file of subtree JSON and Newick files</a> | ", subtreeZipFile);
+puts("</p>");
 }
 
 static int subTreeInfoUserSampleCmp(const void *pa, const void *pb)
@@ -2149,19 +2204,37 @@ if (vcfTn)
         for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
             {
             AllocVar(jsonTns[ix]);
-            trashDirFile(jsonTns[ix], "ct", "subtreeAuspice", ".json");
+            char subtreeName[512];
+            safef(subtreeName, sizeof(subtreeName), "subtreeAuspice%d", ix+1);
+            trashDirFile(jsonTns[ix], "ct", subtreeName, ".json");
             treeToAuspiceJson(ti, db, geneInfoList, gSeqWin, sampleMetadata, jsonTns[ix]->forCgi,
                               source);
             }
         puts("<p></p>");
-        int subtreeButtonCount = subtreeCount;
+        struct subtreeInfo *subtreeInfoForButtons = results->subtreeInfoList;
         if (seqCount > MAX_SEQ_DETAILS || subtreeCount > MAX_SUBTREE_BUTTONS)
-            subtreeButtonCount = 0;
-        makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeButtonCount, isFasta);
+            subtreeInfoForButtons = NULL;
+        makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeInfoForButtons, subtreeSize, isFasta);
         printf("<p>If you have metadata you wish to display, click a 'view subtree in "
                "Nextstrain' button, and then you can drag on a CSV file to "
                "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
                "</p>\n");
+
+        // Make custom tracks for uploaded samples and subtree(s).
+        struct phyloTree *sampleTree = NULL;
+        struct tempName *ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree->tree,
+                                                  source, fontHeight, &sampleTree, &startTime);
+
+        // Make a sample summary TSV file and accumulate S gene changes
+        struct hash *spikeChanges = hashNew(0);
+        struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
+                                                 geneInfoList, gSeqWin, spikeChanges, &startTime);
+        struct tempName *sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
+        struct tempName *zipTn = makeSubtreeZipFile(results, jsonTns, singleSubtreeJsonTn,
+                                                    &startTime);
+        downloadsRow(results->bigTreePlusTn->forHtml, tsvTn->forHtml, sTsvTn->forHtml,
+                     zipTn->forHtml);
+
         if (seqCount <= MAX_SEQ_DETAILS)
             {
             summarizeSequences(seqInfoList, isFasta, results, jsonTns, sampleMetadata, bigTree,
@@ -2176,7 +2249,8 @@ if (vcfTn)
                 else if (subtreeCount > 1)
                     printf("Unrelated sample");
                 printf("</h3>\n");
-                makeNextstrainButtonN("viewNextstrainSub", ix, jsonTns);
+                makeNextstrainButtonN("viewNextstrainSub", ix, subtreeUserSampleCount, subtreeSize,
+                                      jsonTns);
                 puts("<br>");
                 // Make a sub-subtree with only user samples for display:
                 struct phyloTree *subtree = phyloOpenTree(ti->subtreeTn->forCgi);
@@ -2192,17 +2266,6 @@ if (vcfTn)
                    "you upload at most %d sequences.)</p>\n",
                    seqCount, MAX_SEQ_DETAILS);
 
-        // Make custom tracks for uploaded samples and subtree(s).
-        struct phyloTree *sampleTree = NULL;
-        struct tempName *ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree->tree,
-                                                  source, fontHeight, &sampleTree, &startTime);
-
-        // Make a sample summary TSV file and accumulate S gene changes
-        struct hash *spikeChanges = hashNew(0);
-        struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
-                                                 geneInfoList, gSeqWin, spikeChanges, &startTime);
-        struct tempName *sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
-
         // Offer big tree w/new samples for download
         puts("<h3>Downloads</h3>");
         puts("<ul>");
@@ -2212,8 +2275,12 @@ if (vcfTn)
                tsvTn->forHtml);
         printf("<li><a href='%s' download>TSV summary of S (Spike) gene changes</a>\n",
                sTsvTn->forHtml);
+        printf("<li><a href='%s' download>ZIP archive of subtree Newick and JSON files</a>\n",
+               zipTn->forHtml);
+        // For now, leave in the individual links so I don't break anybody's pipeline that's
+        // scraping this page...
         for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
-           {
+            {
             int subtreeUserSampleCount = slCount(ti->subtreeUserSampleIds);
             printf("<li><a href='%s' download>Subtree with %s", ti->subtreeTn->forHtml,
                    ti->subtreeUserSampleIds->name);
@@ -2243,7 +2310,7 @@ if (vcfTn)
         // Notify in opposite order of custom track creation.
         puts("<h3>Custom tracks for viewing in the Genome Browser</h3>");
         printf("<p>Added custom track of uploaded samples.</p>\n");
-        if (subtreeCount <= MAX_SUBTREE_CTS)
+        if (subtreeCount > 0 && subtreeCount <= MAX_SUBTREE_CTS)
             printf("<p>Added %d subtree custom track%s.</p>\n",
                    subtreeCount, (subtreeCount > 1 ? "s" : ""));
         ctFile = urlFromTn(ctTn);

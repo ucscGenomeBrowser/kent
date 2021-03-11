@@ -2241,7 +2241,9 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
                 char position[1024];
                 safef(position, sizeof position, "%s:%ld-%ld", h->chrom, h->chromStart, h->chromEnd);
                 char *newPosition = undisguisePosition(position); // UN-DISGUISE VMODE
-                if (startsWith("virt:", newPosition))
+                if (startsWith(MULTI_REGION_CHROM, newPosition))
+                   newPosition = replaceChars(position, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
+                if (startsWith(MULTI_REGION_CHROM, newPosition))
                     {
                     parseVPosition(newPosition, &h->chrom, &h->chromStart, &h->chromEnd);
                     }
@@ -2697,7 +2699,7 @@ char *chrom = NULL;
 long start = 0;
 long end = 0;
 parseVPosition(position, &chrom, &start, &end);
-if (!sameString(chrom, "virt"))
+if (!sameString(chrom, MULTI_REGION_VIRTUAL_CHROM_NAME))
     return position; // return original
 struct window *windows = makeWindowListFromVirtChrom(start, end);
 char *nonVirtChromName = windows->chromName;
@@ -2768,7 +2770,7 @@ if (newStart == -1) // none of the windows intersected with the position
     return position; // return original
 //  return new virt undisguised position as a string
 char newPos[1024];
-safef (newPos, sizeof newPos, "virt:%ld-%ld", (newStart+1), newEnd);
+safef (newPos, sizeof newPos, "%s:%ld-%ld", MULTI_REGION_CHROM, (newStart+1), newEnd);
 return cloneString(newPos);
 }
 
@@ -3071,7 +3073,8 @@ char *nonVirtPositionFromHighlightPos()
 {
 struct highlightVar *h = parseHighlightInfo();
 
-if (!(h && h->db && sameString(h->db, database) && sameString(h->chrom,"virt")))
+if (!(h && h->db && sameString(h->db, database) && 
+        sameString(h->chrom, MULTI_REGION_VIRTUAL_CHROM_NAME)))
     return NULL;
 
 struct window *windows = makeWindowListFromVirtChrom(h->chromStart, h->chromEnd);
@@ -5309,7 +5312,7 @@ if (withLeftLabels)
             (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 
-        boolean doWiggle = cartOrTdbBoolean(cart, track->tdb, "doWiggle" , FALSE);
+        boolean doWiggle = checkIfWiggling(cart, track);
         if (doWiggle)
             track->drawLeftLabels = wigLeftLabels;
     #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
@@ -5391,11 +5394,11 @@ if (withGuidelines)
 	    if (emAltHighlight)
 		{
 		// light blue alternating backgrounds
-		Color lightBlue = hvGfxFindRgb(bgImg, &guidelineColor);
+		Color lightBlue = hvGfxFindRgb(bgImg, &multiRegionAltColor);
 		for (window=windows; window; window=window->next) // background under every other window
 		    {
 		    if (window->regionOdd)
-			hvGfxBox(bgImg, window->insideX, 0, window->insideWidth, pixHeight, lightBlue);
+                        hvGfxBox(bgImg, window->insideX, 0, window->insideWidth, pixHeight, lightBlue);
 		    }
 		}
 	    else
@@ -8457,6 +8460,7 @@ if (virtMode)
     jsonObjectAdd(jsonForClient, "nonVirtPosition", newJsonString(cartString(cart, "nonVirtPosition")));
     jsonObjectAdd(jsonForClient, "virtChromChanged", newJsonBoolean(virtChromChanged));
     jsonObjectAdd(jsonForClient, "virtualSingleChrom", newJsonBoolean(virtualSingleChrom())); // DISGUISE POS
+    jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(virtModeType));
     }
 
 char dbPosKey[256];
@@ -8635,12 +8639,19 @@ if (!hideControls)
 	char buf[256];
 	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
 	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
-	    char *javascript = "document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;";
-	    if (containsStringNoCase(database, "zoo"))
-		{
-		hPuts("Organism ");
-		printAssemblyListHtmlExtra(database, "change", javascript);
-		}
+        char *javascript = "document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;";
+        if (containsStringNoCase(database, "zoo"))
+            {
+            hPuts("Organism ");
+            printAssemblyListHtmlExtra(database, "change", javascript);
+            }
+
+        /* Multi-region button on position line */
+        safef(buf, sizeof buf, "configure %s multi-region display mode", 
+                                sameString(virtModeType, "default") ? "in" : "or exit");
+        hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf,
+                    "popUpHgt.hgTracks('multi-region config'); return false;", FALSE);
+        hPrintf(" ");
 
 	if (virtualSingleChrom()) // DISGUISE VMODE
 	    safef(buf, sizeof buf, "%s", windowsSpanPosition());
@@ -8663,6 +8674,7 @@ if (!hideControls)
 	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
 	hWrites(" ");
 	hButton("goButton", "go");
+
 	if (!trackHubDatabase(database))
 	    {
             jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
@@ -8839,11 +8851,6 @@ if (!hideControls)
         }
 
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
-    hPrintf(" ");
-
-    hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", 
-                        "Configure multi-region display options", 
-                        "popUpHgt.hgTracks('multi-region config'); return false;", virtMode);
     hPrintf(" ");
 
     hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
@@ -9049,6 +9056,9 @@ if (showTrackControls)
 
 if (sameString(database, "wuhCor1"))
     {
+    puts("<p class='centeredCol'>\n"
+         "For information about this browser and related resources, see "
+         "<a target='blank' href='../covid19.html'>COVID-19 Research at UCSC</a>.</p>");
     // GISAID wants this displayed on any page that shows any GISAID data
     puts("<p class='centeredCol'>\n"
          "GISAID data displayed in the Genome Browser are subject to GISAID's\n"
@@ -9460,7 +9470,8 @@ if (h && h->db && sameString(h->db, database))
 	{
 	// save new highlight position to cart var
 	char cartVar[1024];
-	safef(cartVar, sizeof cartVar, "%s.%s:%ld-%ld#%s", h->db, "virt", virtStart, virtEnd, h->hexColor);
+	safef(cartVar, sizeof cartVar, "%s.%s:%ld-%ld#%s", h->db, MULTI_REGION_VIRTUAL_CHROM_NAME, 
+                virtStart, virtEnd, h->hexColor);
 	cartSetString(cart, "highlight", cartVar);
 	}
     else
@@ -9490,13 +9501,14 @@ if (NULL == position)
 	{
         restoreSavedVirtPosition();
 	}
-    if (startsWith("virt:", position))
+    if (startsWith(OLD_MULTI_REGION_CHROM, position))
+        position = replaceChars(position, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
+    if (startsWith(MULTI_REGION_CHROM, position))
 	{
 	position = stripCommas(position); // sometimes the position string arrives with commas in it.
 	positionIsVirt = TRUE;
 	}
     }
-
 
 if (sameString(position, ""))
     {
@@ -9608,7 +9620,9 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
 lastVirtModeExtraState = cartUsualString(cart, "lastVirtModeExtraState", lastVirtModeExtraState);
 
 // DISGUISED POSITION
-if (!startsWith("virt:", position) && (virtualSingleChrom()))
+if (startsWith(OLD_MULTI_REGION_CHROM, position))
+    position = replaceChars(position, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
+if (!startsWith(MULTI_REGION_CHROM, position) && (virtualSingleChrom()))
     {
     // "virtualSingleChrom trying to find best vchrom location corresponding to chromName, winStart, winEnd
     findNearest = TRUE;
@@ -9743,7 +9757,7 @@ else
     }
 
 if (virtMode)
-    virtChromName = "virt";
+    virtChromName = MULTI_REGION_CHROM;
 else
     virtChromName = chromName;
 

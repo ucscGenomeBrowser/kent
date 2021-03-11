@@ -61,6 +61,9 @@
 
 #define BIGBEDMAXIMUMITEMS 100000
 
+#define MULTI_REGION_VIRTUAL_CHROM_NAME "multi"
+// original name was 'virt'
+
 /* for botDelay call, 10 second for warning, 20 second for immediate exit */
 #define delayFraction   0.25
 extern long enteredMainTime;
@@ -580,6 +583,7 @@ extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black
                                    * Red is put at end to alert overflow. */
 extern Color shadesOfBrown[10+1]; /* 10 shades of brown from tan to tar. */
 extern struct rgbColor guidelineColor;
+extern struct rgbColor multiRegionAltColor;
 extern struct rgbColor undefinedYellowColor;
 extern Color darkGreenColor;
 
@@ -1621,8 +1625,8 @@ int tgCmpPriority(const void *va, const void *vb);
 void printMenuBar();
 /* Put up the menu bar. */
 
-void checkIfWiggling(struct cart *cart, struct track *tg);
-/* Check to see if a linkedFeatures track should be drawing as a wiggle. */
+boolean checkIfWiggling(struct cart *cart, struct track *tg);
+/* Check to see if a track should be drawing as a wiggle. */
 
 boolean isTypeBedLike(struct track *track);
 /* Check if track type is BED-like packable thing (but not rmsk or joinedRmsk) */

@@ -1,0 +1,33 @@
+# This is a sample xinetd configuration file for setting up dynamic gfServer.
+# This mode used pre-build indexes that are quickly mapped into memory An
+# xinetd (or inetd) super-server launches the server on demand to handle a
+# single request. This allows a large number of genomes to be indexed without
+# requiring them to be in RAM.
+#
+#
+# The indexes are built with 'gfServer index'.  All data # files must be under
+# the root directory as specified by to the 'gfServer dynserver' command.  The
+# root directory must contain directories for each genome with the twobit and
+# index files following the convention::
+#         $genome/$genome.2bit
+#         $genome/$genome.untrans.gfidx
+#         $genome/$genome.trans.gfidx
+#
+# suggest install this file as /etc/xinetd.d/blat or whatever you name
+# the service.  xinetd doesn't like names with `.' in them.
+# 
+
+service blat
+{
+        port            = 8000
+        socket_type     = stream
+        wait            = no
+        user            = blat
+        group           = blat
+        server          = /home/blat/bin/gfServer
+        server_args     = dynserver /home/blat/genomes
+        type            = UNLISTED
+        log_on_success  += USERID EXIT
+        log_on_failure  += USERID
+        disable         = no
+}

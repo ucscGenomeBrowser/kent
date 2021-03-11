@@ -9,6 +9,7 @@
 #include "dystring.h"
 #include "filePath.h"
 #include "linefile.h"
+#include "jsHelper.h"
 
 #define CGI_NAME "cgi-bin/hgMenubar"
 #define NAVBAR_INC_PATH "/inc/globalNavBar.inc"
@@ -26,6 +27,7 @@ void printIncludes(char* baseDir)
 printf ("<noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>\n");
 printf ("<script type='text/javascript' SRC='%sjs/jquery.js'></script>\n", baseDir);
 printf ("<script type='text/javascript' SRC='%sjs/jquery.plugins.js'></script>\n", baseDir);
+printf("<script type='text/javascript' SRC='%s/js/utils.js'></script>\n", baseDir);
 printf ("<LINK rel='STYLESHEET' href='%sstyle/nice_menu.css' TYPE='text/css'>\n", baseDir);
 }
 
@@ -55,6 +57,18 @@ while (lineFileNext(menuFile, &oldLine, &lineSize))
     }
 
 lineFileClose(&menuFile);
+// links to hgTracks need to use the web browser width and set the hgTracks image
+// size in pixels correctly to match the hgGateway "GO" button
+jsInline("$(\"#tools1 ul li a\").each( function (a) {\n"
+"    if (this.href && this.href.indexOf(\"hgTracks\") !== -1) {\n"
+"        var obj = this;\n"
+"        obj.onclick = function(e) {\n"
+"            var pix = calculateHgTracksWidth();\n"
+"            e.currentTarget.href += \"&pix=\" + pix;\n"
+"        }\n"
+"    }\n"
+"});\n");
+jsInlineFinish();
 }
 
 

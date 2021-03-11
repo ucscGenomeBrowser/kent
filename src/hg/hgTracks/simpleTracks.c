@@ -269,7 +269,8 @@ Color shadesOfGray[10+1];	/* 10 shades of gray from white to black
 Color shadesOfBrown[10+1];	/* 10 shades of brown from tan to tar. */
 struct rgbColor brownColor = {100, 50, 0};
 struct rgbColor tanColor = {255, 240, 200};
-struct rgbColor guidelineColor = { 220, 220, 255};
+struct rgbColor guidelineColor = {220, 220, 255};
+struct rgbColor multiRegionAltColor = {235, 235, 255};
 struct rgbColor undefinedYellowColor = {240,240,180};
 
 Color shadesOfSea[10+1];       /* Ten sea shades. */
@@ -362,16 +363,30 @@ rgbColor.b = (rgbColor.b+128)/2;
 return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
-void checkIfWiggling(struct cart *cart, struct track *tg)
-/* Check to see if a linkedFeatures track should be drawing as a wiggle. */
+boolean checkIfWiggling(struct cart *cart, struct track *tg)
+/* Check to see if a track should be drawing as a wiggle. */
 {
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
+
+if (!doWiggle)
+    {
+    char *setting = trackDbSetting(tg->tdb, "wiggleWindow" );
+    if (setting)
+        {
+        unsigned size = sqlUnsigned(setting);
+        if ((size > 0) && ((winEnd - winStart) > size))
+            doWiggle = TRUE;
+        }
+    }
+
 if (doWiggle)
     {
     tg->drawLeftLabels = wigLeftLabels;
     tg->colorShades = shadesOfGray;
     tg->mapsSelf = TRUE;
     }
+
+return doWiggle;
 }
 
 struct sameItemNode
@@ -736,7 +751,7 @@ int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vi
  * they use. */
 {
 
-boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
+boolean doWiggle = checkIfWiggling(cart, tg);
 if (doWiggle)
     {
     struct wigCartOptions *wigCart = tg->wigCartData;
@@ -4459,6 +4474,8 @@ for (item = items; item; item = item->next)
             {
             unsigned start = sf->start;
             unsigned end = sf->end;
+            if (start == end)
+                end++;
             if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
                 continue;
 
@@ -4752,7 +4769,7 @@ if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
 if (vis != tvDense && baseColorCanDraw(tg))
     baseColorInitTrack(hvg, tg);
-boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
+boolean doWiggle = checkIfWiggling(cart, tg);
 if (doWiggle)
     {
     genericDrawItemsWiggle(tg, seqStart, seqEnd, hvg, xOff, yOff, width,

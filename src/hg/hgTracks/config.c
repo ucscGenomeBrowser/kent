@@ -804,7 +804,7 @@ if (conn && sqlTableExists(conn,"knownCanonical"))
 hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "customUrl", sameWord("customUrl", virtModeType));
 hPrintf("</TD><TD>");
-hPrintf("Enter Custom regions as BED, or a URL to them:<br>");
+hPrintf("Enter custom regions as BED, or a URL to them:<br>");
 multiRegionsBedUrl = cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
 struct dyString *dyMultiRegionsBedInput = dyStringNew(256);
 if (strstr(multiRegionsBedUrl,"://"))

@@ -255,6 +255,15 @@ if apt-cache policy curl | grep "Installed: .none." > /dev/null; then
 fi
 
 echo
+
+# Feb 2021: cgi-bin and htdocs are now too big for the root partition. Moving both to the data partition:
+if [ ! -L /usr/local/apache/htdocs ] ; then
+ rsync -avp /usr/local/apache/htdocs/ /data/htdocs/ && rm -rf /usr/local/apache/htdocs && ln -s /data/htdocs /usr/local/apache/htdocs 
+fi
+if [ ! -L /usr/local/apache/cgi-bin ] ; then
+ rsync -avp /usr/local/apache/cgi-bin/ /data/cgi-bin/ && rm -rf /usr/local/apache/cgi-bin && ln -s  /data/cgi-bin /usr/local/apache/cgi-bin
+fi
+
 echo - Updating the genome browser software via rsync:
 
 # CGI-BIN and HTDOCS:
@@ -305,13 +314,6 @@ if [ "$1" == "hgwdev" ] ; then
 
 # normal public updates from hgdownload are easier, not many excludes necessary
 else
-   # Feb 2021: cgi-bin and htdocs are now too big for the root partition. Moving both to the data partition.
-   if [ ! -L /usr/local/apache/htdocs ] ; then
-     rsync -avp /usr/local/apache/htdocs/ /data/htdocs/ && rm -rf /usr/local/apache/htdocs && ln -s /data/htdocs /usr/local/apache/htdocs 
-   fi
-   if [ ! -L /usr/local/apache/cgi-bin ] ; then
-     rsync -avp /usr/local/apache/cgi-bin/ /data/cgi-bin/ && rm -rf /usr/local/apache/cgi-bin && ln -s  /data/cgi-bin /usr/local/apache/cgi-bin
-   fi
 
     # update CGIs
     echo - Updating CGIs...
