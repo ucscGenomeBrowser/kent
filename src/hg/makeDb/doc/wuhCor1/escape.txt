@@ -1,3 +1,4 @@
+cd /hive/data/genomes/wuhCor1/bed/escape
 #cat table2.txt  | awk '($1!="") {OFS="\t"; nucl=$1; prot=$2; ab=$3; start=21562+substr(nucl, 2, length(nucl)-2); $1="NC_045512v2"; $2=start; $3=$2+1; $4=prot; $5="0"; $6="."; $7=start; $8=start+1; $9="0,0,0"; $10=nucl; $11=prot; $12="S-protein nucleotide change: "nucl"; amino acid change: "prot"; antibody name: "ab; print}' > escape.bed
 python ~/kent/src/hg/makeDb/doc/wuhCor1/escape.py > escape.bed
 bedSort escape.bed escape.bed
