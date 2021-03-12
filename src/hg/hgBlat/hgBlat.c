@@ -1849,8 +1849,8 @@ printf("%s",
 "<P>The <b>Search all</b> checkbox allows you to search all genomes at the same time. "
 "Search all is only available for default assemblies and attached hubs with dedicated BLAT servers."
 "The new dynamic BLAT servers enable searching on unlimited numbers of genomes "
-"using a fixed amount of memory. However, because of the time required to swap, those assemblies are skipped, "
-"and do not appear in the output.\n");
+"using a fixed amount of memory. However, because of the time required to swap, assemblies on dynamic servers are not searched, "
+"but are noted as skipped in the output.\n");
 
 printf("<P>The <b>All Results</b> checkbox disables minimum matches filtering so all results are seen." 
 " For example, with a human dna search, 20 is minimum matches required, based on the genome size, to filter out lower-quality results.\n"
