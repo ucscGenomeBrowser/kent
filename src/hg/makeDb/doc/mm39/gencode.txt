@@ -29,7 +29,8 @@
        Error: 55597 of 140725 elements (39.508%) of mm39.wgEncodeGencodeAttrsVM26.transcriptId are not in key wgEncodeGencodeExonSupportVM26.transcriptId line 5880 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
        Error: 55597 of 140725 elements (39.508%) of mm39.wgEncodeGencodeAttrsVM26.transcriptId are not in key wgEncodeGencodeExonSupportVM26.transcriptId line 5880 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
 
-    # however, these are not currently used by the browser, so modify joiner check
+    # however, these are not currently used by the browser, so modify joiner check. Check
+    # with GENCODE is this is expected, might be a cleanup on move to mm39
 
 
     # check tracks in browser sandbox

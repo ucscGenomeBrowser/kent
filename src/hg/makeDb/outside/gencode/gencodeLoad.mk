@@ -36,12 +36,13 @@ preRelease = no
 #preRelease = yes
 #db = hg38
 #db = hg19
-db = mm39
+#db = mm39
 #db = mm10
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
     verBase = M25
     prevVer = M24
+    backmapTargetVer = M25
     ver = ${verBase}lift37
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${verBase}/GRCm38_mapping
