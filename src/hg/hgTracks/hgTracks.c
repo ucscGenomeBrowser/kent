@@ -8651,8 +8651,6 @@ if (!hideControls)
     /* Make line that says position. */
 	{
 	char buf[256];
-	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
-	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
         char *javascript = "document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;";
         if (containsStringNoCase(database, "zoo"))
             {
@@ -8699,6 +8697,30 @@ if (!hideControls)
             if (assemblySupportsGeneSuggest(database))
                 hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
 	    }
+
+        // hg.conf controlled links
+
+        // database-specific link: 2 hg.conf settings, format <db>_TopLink{Label}
+        struct slName *dbLinks = cfgNamesWithPrefix(database);
+        struct slName *link;
+        char *dbTopLink = NULL, *dbTopLinkLabel = NULL;
+        for (link = dbLinks; link != NULL; link = link->next)
+            {
+            char *name = cloneString(link->name);
+            char *setting = chopPrefixAt(link->name, '_');
+            if (sameString(setting, "TopLink"))
+                dbTopLink = cfgOption(name);
+            else if (sameString(setting, "TopLinkLabel"))
+                dbTopLinkLabel = cfgOption(name);
+            }
+        if (dbTopLink && dbTopLinkLabel)
+            {
+            hPrintf("&nbsp;&nbsp;<a href='%s' target='_blank'><em><b>%s</em></b></a>\n",
+                dbTopLink, dbTopLinkLabel);
+            }
+        // generic link
+	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
+	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
 	if (survey && differentWord(survey, "off"))
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'>"
                     "<A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n",
