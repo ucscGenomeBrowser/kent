@@ -280,11 +280,18 @@ for (pfd = pfdDone; pfd; pfd = pfd->next)
     if (pfd->error)
         ++errCount;
     }
+slCat(pfdDone, pfdRunning);
+pfdRunning = NULL;
+slCat(pfdDone, pfdNeverStarted);
+pfdNeverStarted = NULL;
 pthread_mutex_unlock( &pfdMutex );
 return errCount;
 }
 
 // ==================
+
+int nonHubDynamicBlatServerCount = 0;
+int hubDynamicBlatServerCount   = 0;
 
 struct serverTable
 /* Information on a server. */
@@ -360,6 +367,7 @@ if (atoi(row[6]))
     {
     st->isDynamic = TRUE;
     st->genomeDataDir = cloneString(st->db);  // directories by database name for database genomes
+    ++nonHubDynamicBlatServerCount;
     }
 
 sqlFreeResult(&sr);
@@ -394,6 +402,7 @@ if (genomeDataDir != NULL)
     {
     st->isDynamic = TRUE;
     st->genomeDataDir = cloneString(genomeDataDir);
+    ++hubDynamicBlatServerCount;
     }
 return st;
 }
@@ -899,13 +908,6 @@ void queryServer(char *host, char *port, char *db, struct dnaSeq *seq, char *typ
 /* Send simple query to server and report results. (no, it doesn't do this)
  * queryRC is true when the query has been reverse-complemented */
 {
-/*
- * xinetd throttles by refusing more connections, which causes queries to fail
- * when the configured limit is reached.  Rather than trying to throttle in the
- * client, dynamic servers are excluded. See issue #26658.
- */
-if (genomeDataDir != NULL)
-    return;
 
 struct genomeHits *gH;
 AllocVar(gH);
@@ -926,7 +928,22 @@ gH->isProt = isProt;
 gH->isDynamic = (genomeDataDir != NULL);
 gH->genomeDataDir = genomeDataDir;
 gH->dbg = dyStringNew(256);
-slAddHead(&pfdList, gH);
+
+/* SKIP DYNAMIC SERVERS
+ * xinetd throttles by refusing more connections, which causes queries to fail
+ * when the configured limit is reached.  Rather than trying to throttle in the
+ * client, dynamic servers are excluded. See issue #26658.
+ */
+if (gH->isDynamic)
+    {
+    gH->error = TRUE;
+    gH->networkErrMsg = cloneString("Skipped Dynamic Server");
+    slAddHead(&pfdDone, gH);
+    }
+else
+    {
+    slAddHead(&pfdList, gH);
+    }
 }
 
 void findBestGene(struct genomeHits *gH, int queryFrame)
@@ -1432,7 +1449,7 @@ if (allGenomes)
 else
     getDbAndGenome(cart, &db, &genome, oldVars);
 
-char *output = cgiString("output");
+char *output = cgiOptionalString("output");
 boolean isJson= sameWordOk(output, "json");
 boolean isPslRaw= sameWordOk(output, "pslRaw");
 
@@ -1748,7 +1765,7 @@ puts("<TABLE class='hgBlatTable' BORDER=0 WIDTH=80>\n");
 printf("<TR>\n");
 printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>Genome:");
 printf(" <INPUT TYPE=CHECKBOX id=allGenomes NAME=allGenomes VALUE=\"\">");
-printf(" <span id=searchAllText> Search all<span>");
+printf(" <span id=searchAllText> Search all genomes on dedicated BLAT servers.<span>");
 printf("</TD>");
 // clicking on the Search ALL text clicks the checkbox.
 jsOnEventById("click", "searchAllText", 
@@ -1829,8 +1846,11 @@ printf("%s",
 "is <tt>GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG</tt> (human SOD1).\n</P>\n");
 
 printf("%s", 
-"<P>The <b>Search all</b> checkbox allows you to search all\n"
-"genomes at the same time. It will query the default assembly of every organism and BLAT servers of attached hubs.\n");
+"<P>The <b>Search all</b> checkbox allows you to search all genomes at the same time. "
+"Search all is only available for default assemblies and attached hubs with dedicated BLAT servers."
+"The new dynamic BLAT servers enable searching on unlimited numbers of genomes "
+"using a fixed amount of memory. However, because of the time required to swap, assemblies on dynamic servers are not searched, "
+"but are noted as skipped in the output.\n");
 
 printf("<P>The <b>All Results</b> checkbox disables minimum matches filtering so all results are seen." 
 " For example, with a human dna search, 20 is minimum matches required, based on the genome size, to filter out lower-quality results.\n"
@@ -1928,7 +1948,7 @@ for (;gH1; gH1 = gH2->next)
 	gH1->hide = TRUE;
     else if (!gH1->error && gH2->error)
 	gH2->hide = TRUE;
-    else  // keep the best scoring or the pair, hide the other
+    else  // keep the best scoring of the pair, hide the other
 	{
 	if (gH2->maxGeneHits > gH1->maxGeneHits)
 	    gH1->hide = TRUE;
@@ -2107,6 +2127,9 @@ else
 	char *saveOrg = organism;
 	struct sqlConnection *conn = hConnectCentral();
 	int dbCount = 0;
+	nonHubDynamicBlatServerCount = 0;
+	hubDynamicBlatServerCount   = 0;
+
 	for(this = dbList; this; this = this->next)
 	    {
 	    db = this->name;
@@ -2276,10 +2299,23 @@ else
 	    
 		printf("</TR>\n");
 		}
-	    printf("</TABLE><br><br>\n");
+	    printf("</TABLE><br>\n");
 
 	    if (debuggingGfResults)
 		printDebugging();
+
+	    if (hubDynamicBlatServerCount > 0 || nonHubDynamicBlatServerCount > 0) 
+		{
+		printf("Dedicated static BLAT servers are fast but require lots of memory, processors and machines.<br>\n"
+		    "Dynamic BLAT servers only require disk space, and can support an unlimited numbers of genomes,<br>\n"
+		    "however they take time to swap indexes into memory and have limited parallelism.<br>\n"
+		    "The BLAT All Genomes feature does not currently support dynamic BLAT servers.<br>\n");
+		if (nonHubDynamicBlatServerCount > 0)
+		    printf( "Number of dynamic BLAT genomes at this site: %d<br>\n", nonHubDynamicBlatServerCount);
+		if (hubDynamicBlatServerCount > 0)
+	  	    printf( "Number of dynamic BLAT genomes on attached hubs: %d<br>\n", hubDynamicBlatServerCount);
+		}
+	    printf( "<br>\n");
 
 	    fakeAskForSeqForm(organism, db);
 	    }

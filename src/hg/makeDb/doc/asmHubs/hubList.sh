@@ -34,11 +34,12 @@ printf "# This file: https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubLis
 # in the genome browser. For example: https://genome.ucsc.edu/h/GCA_003369685.2
 #
 # additional columns may be added in the future (for example taxonId)
+# (some assemblies have taxonId at this time, soon to have them all)
 #
-# accession\tassembly\tscientific name\tcommon name
+# accession\tassembly\tscientific name\tcommon name\ttaxonId
 " > /mirrordata/hubs/UCSC_GI.assemblyHubList.txt
 
-./asmHubList.pl | sort >> /mirrordata/hubs/UCSC_GI.assemblyHubList.txt
+./asmHubList.pl goForIt | sort >> /mirrordata/hubs/UCSC_GI.assemblyHubList.txt
 
 export after=`grep -v "^#" /mirrordata/hubs/UCSC_GI.assemblyHubList.txt | wc -l`
 

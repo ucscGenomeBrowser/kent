@@ -444,7 +444,7 @@ struct gfClump *gfPcrClumps(struct genoFind *gf,
 
 #define MAXSINGLEPIECESIZE 5000 /* maximum size of a single piece */
 
-#define gfVersion "37x0"	/* Current BLAT version number */
+#define gfVersion "37x1"	/* Current BLAT version number */
 
 #endif /* GENOFIND_H */
 

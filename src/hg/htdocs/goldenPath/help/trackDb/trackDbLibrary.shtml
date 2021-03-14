@@ -1849,22 +1849,26 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="maxWindowToDraw"><span class="types bed genepred bam rmsk narrowPeak broadPeak bigWig bedlogR"></span>
 <div class="format"><code>maxWindowToDraw &lt;integer&gt;</code></div>
-    <P>When too many individual bed items are shown in the Browser image (such as 
-    might occur when a large region of a chromosome is viewed), the
-    information is often better visualized as a summary in dense mode.  
-    Depending on the current visibility of the
-    bed track and which other tracks are being shown concurrently, the
-    Browser may automatically reduce the display to pack or dense mode.  This setting
-    allows you to force the data summarization at whatever display limit you consider
-    reasonable. Unlike the <code>maxItems</code> setting, which controls the display of
-    vertical space, this setting dictates the number of bases to be displayed horizontally 
-    in a window before the track is forced into dense mode.  There is no default for this 
-    setting, but the <code>maxItems</code> setting will ultimately prevent too many items from
-    being displayed.</P>
+    <p>When too many individual bed items might be shown in the Browser image
+    (such as might occur when a large region of a chromosome is viewed), a choice
+    to display a message to ask users to zoom in to a smaller region can be
+    triggered with <code>maxWindowToDraw</code>.</p>
+    <p>Depending on the current visibility
+    of the bed track and which other tracks are being shown concurrently, the
+    Browser may automatically reduce the display to pack or dense mode in some cases.
+    The <code>maxWindowToDraw</code> setting allows you to force users to zoom in
+    as an overriding message will block out the data display. Unlike the <code>maxItems</code>
+    setting, which controls the display of vertical space and forces a display to dense
+    when the maximum number of items is exceeded, the <code>maxWindowToDraw</code>
+    setting dictates the number of bases to be displayed in a window
+    before the track is obscured with a zoom-in message. Even without this setting,
+    there are browser operations that will ultimately prevent too many items from
+    being displayed by forcing a visualized summary in dense mode as noted.</p>
     <P><B>Example:</B></P>
-    <pre>   maxWindowToDraw 200000</pre>
-    <P>Browser images that show more then 200,000 bases will result in the track being 
-    displayed in dense mode.
+    <pre>   maxWindowToDraw 10000000</pre>
+    <p>Browser images that show more than 10,000,000 bases will result in the track data
+    being obscured with a note across the genomic range stating the message
+    <code>zoom in to <= 10,000,000 bases to view items</code>.</p>
 </DIV>
 
 <DIV class="minGrayLevel"><span class="types bed broadPeak narrowPeak bedLogR bigBed"></span>
