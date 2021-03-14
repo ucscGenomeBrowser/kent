@@ -7999,6 +7999,19 @@ if (differentString(curSessVisTracks, thisSessVisTracks))
 return isSessChanged;
 }
 
+static void printMultiRegionButton()
+/* Print button that launches multi-region configuration pop-up */
+{
+boolean isPressed = FALSE;
+if (differentString(virtModeType, "default"))
+    isPressed = TRUE;
+char buf[256];
+safef(buf, sizeof buf, "configure %s multi-region display mode", 
+                        isPressed ? "or exit" : "");
+hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf,
+            "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -8011,6 +8024,7 @@ boolean hideAll = cgiVarExists("hgt.hideAll");
 boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
+boolean multiRegionButtonTop = (cfgOption("multiRegionButtonTop") != NULL);
 long thisTime = 0, lastTime = 0;
 
 basesPerPixel = ((float)virtWinBaseCount) / ((float)fullInsideWidth);
@@ -8646,12 +8660,12 @@ if (!hideControls)
             printAssemblyListHtmlExtra(database, "change", javascript);
             }
 
-        /* Multi-region button on position line */
-        safef(buf, sizeof buf, "configure %s multi-region display mode", 
-                                sameString(virtModeType, "default") ? "in" : "or exit");
-        hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf,
-                    "popUpHgt.hgTracks('multi-region config'); return false;", FALSE);
-        hPrintf(" ");
+        // multi-region button on position line, initially under hg.conf control
+        if (multiRegionButtonTop)
+            {
+            printMultiRegionButton();
+            hPrintf(" ");
+            }
 
 	if (virtualSingleChrom()) // DISGUISE VMODE
 	    safef(buf, sizeof buf, "%s", windowsSpanPosition());
@@ -8659,7 +8673,10 @@ if (!hideControls)
 	    safef(buf, sizeof buf, "%s:%ld-%ld", virtChromName, virtWinStart+1, virtWinEnd);
 	
 	position = cloneString(buf);
-        char *pressedClass = "", *showVirtRegions = "";
+
+        // position box
+        char *pressedClass = "";
+        char *showVirtRegions = "";
         if (differentString(virtModeType, "default"))
             {
             pressedClass = "pressed";
@@ -8671,7 +8688,8 @@ if (!hideControls)
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, virtWinEnd - virtWinStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
-	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
+	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput'"
+                        " size='%d'>\n", multiRegionButtonTop ? 50 : 60);
 	hWrites(" ");
 	hButton("goButton", "go");
 
@@ -8853,6 +8871,11 @@ if (!hideControls)
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
     hPrintf(" ");
 
+    if (!multiRegionButtonTop)
+        {
+        printMultiRegionButton();
+        hPrintf(" ");
+        }
     hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
                            revCmplDisp ? "Show forward strand at this location"
                                        : "Show reverse strand at this location",
