@@ -12,7 +12,6 @@
 #include "dystring.h"
 #include "hui.h"
 #include "wiggle.h"
-#include "bigWig.h"
 
 
 #define correctOrder(min,max) if (max < min) \
@@ -168,24 +167,6 @@ if (isBedGraph)
 	missingAbsMax = TRUE;
     else
 	absMax = sqlDouble(tdbMax);
-    }
-else if (sameString(tdb->type, "bigWig"))
-    {
-    // bigWig: get default absMin and absMax from data
-    char *fileName = trackDbSetting(tdb, "bigDataUrl");
-    if (fileName)
-        {
-        struct bbiFile *bwf = bigWigFileOpen(hReplaceGbdb(fileName));
-        struct bbiSummaryElement sum = bbiTotalSummary(bwf);
-        absMin = sum.minVal;
-        absMax = sum.maxVal;
-        bigWigFileClose(&bwf);
-        }
-    else
-        {
-        missingAbsMin = TRUE;
-        missingAbsMax = TRUE;
-        }
     }
 else
     {

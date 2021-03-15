@@ -749,8 +749,10 @@ webStartWrapperDetailedNoArgs(cart, database, "", "", FALSE, FALSE, FALSE, FALSE
 
 cartSaveSession(cart);
 
-
-hPrintf("<BR>\n");
+hPrintf("Multi-region display 'slices' the genome to allow viewing discontinuous regions"
+                " together in the browser window."
+                "&nbsp;&nbsp;Select the desired viewing mode below.");
+hPrintf("<p></p>");
 
 hTableStart();
 

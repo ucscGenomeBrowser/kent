@@ -576,11 +576,13 @@ char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units")
 char *metric = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_METRIC, "");
 printf("<b>Maximum %s value: </b> %0.2f %s in %s<br>\n", 
                 metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
+printf("<b>Score: </b> %d<br>\n", chartItem->score); 
 printf("<b>Genomic position: "
                 "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
                     database, hgTracksPathAndSettings(), database, 
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd,
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd);
+printf("<b>Strand: </b> %s\n", chartItem->strand); 
 
 // print any remaining extra fields
 if (numColumns > 0)

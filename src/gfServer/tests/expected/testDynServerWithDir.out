@@ -44,7 +44,7 @@ end
 end
 0ddf270562684f29untransInfo crea extra/stuff/crea
 
-version 37x0
+version 37x1
 type nucleotide
 tileSize 11
 stepSize 11
