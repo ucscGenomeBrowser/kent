@@ -1809,7 +1809,7 @@ origAssembly hg17
 pennantIcon 17.jpg ../goldenPath/help/liftOver.html "lifted from hg17"
 
 track targetScanMiRnaSites
-release alpha
+release alpha,beta
 superTrack on
 shortLabel TS miRNA Targets
 pennantIcon Updated red
@@ -1818,7 +1818,7 @@ group regulation
 visibility hide
 
     track targetScanS
-    release alpha
+    release alpha,beta
     parent targetScanMiRnaSites
     shortLabel TS miRNA sites
     longLabel TargetScan miRNA Regulatory Sites (Release 5.1, April 2009)
@@ -1829,7 +1829,7 @@ visibility hide
     url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
 
     track targetScanMiRnaSitesV72
-    release alpha
+    release alpha,beta
     parent targetScanMiRnaSites
     shortLabel TS miRNA v7.2
     longLabel Predicted microRNA Target Sites from TargetScanHuman 7.2 (March 2018)
@@ -1844,7 +1844,7 @@ visibility hide
     bigDataUrl /gbdb/hg19/targetScan/targetScanSitesV72.bb
 
 track targetScanS
-release beta,public
+release public
 shortLabel TS miRNA sites
 longLabel TargetScan miRNA Regulatory Sites
 group regulation

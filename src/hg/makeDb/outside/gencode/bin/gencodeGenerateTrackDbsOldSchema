@@ -548,6 +548,8 @@ class GencodeParams(object):
             self.orgGrcRel = "GRCh37"
         elif orgHgDb == "mm10":
             self.orgGrcRel = "GRCm38"
+        elif orgHgDb == "mm39":
+            self.orgGrcRel = "GRCm39"
         else:
             raise Exception("not a GENCODE hgdb: {}".format(orgHgDb))
         self.gencodeVer = gencodeVer
@@ -651,6 +653,8 @@ def getGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
     elif orgHgDb == "hg19":
         return getHumanBackmapGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate)
     elif orgHgDb == "mm10":
+        return getMouseGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate)
+    elif orgHgDb == "mm39":
         return getMouseGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate)
     else:
         raise Exception("unknown GENCODE hg db: {}".format(orgHgDb))

@@ -284,7 +284,7 @@ for (id = ti->subtreeUserSampleIds->next;  id != NULL;  id = id->next)
     descLen += fprintf(ctF, ", %s", id->name);
     }
 int height = heightForSampleCount(fontHeight, slCount(ti->subtreeNameList));
-fprintf(ctF, " and nearest neighboring %s sequences' type=vcf visibility=pack "
+fprintf(ctF, " and nearest neighboring %s sequences' type=vcf visibility=dense "
         "hapClusterEnabled=on hapClusterHeight=%d hapClusterMethod='treeFile %s' "
         "highlightIds=%s",
         source, height, ti->subtreeTn->forHtml,
