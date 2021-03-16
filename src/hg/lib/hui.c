@@ -9880,6 +9880,7 @@ if (row != NULL)
     {
     puts("<b>Related tracks</b>\n");
     puts("<ul>\n");
+    struct hash *otherTracksAndDesc = hashNew(0);
     char *track1, *track2, *why, *otherTrack;
     for (; row != NULL; row = sqlNextRow(sr))
         {
@@ -9891,8 +9892,19 @@ if (row != NULL)
             otherTrack = track2;
         else
             otherTrack = track1;
+        // hopefully relatedTracks.ra doesn't have dupes but hash them just in case
+        hashReplace(otherTracksAndDesc, cloneString(otherTrack), cloneString(why));
+        }
 
+    struct hashEl *hel, *helList = hashElListHash(otherTracksAndDesc);
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+        char *otherTrack = (char *)hel->name;
+        char *why = (char *)hel->val;
         struct trackDb *otherTdb = hashFindVal(trackHash, otherTrack);
+        // super tracks are not in the hash:
+        if (!otherTdb)
+            otherTdb = tdbForTrack(database, otherTrack, NULL);
         if (otherTdb)
             {
             puts("<li>");
@@ -9901,7 +9913,7 @@ if (row != NULL)
             puts(why);
             }
         }
-    puts("</ul>\n");
+        puts("</ul>\n");
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
