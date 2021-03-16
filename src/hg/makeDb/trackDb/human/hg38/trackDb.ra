@@ -705,7 +705,7 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGeneV36.ra
+include knownGene.ra
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
