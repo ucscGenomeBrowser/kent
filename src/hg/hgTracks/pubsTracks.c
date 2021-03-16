@@ -510,7 +510,6 @@ struct hash *idToSeq = pubsLookupSequences(tg, conn, articleId, FALSE);
 // change track label 
 char *oldLabel = tg->longLabel;
 tg->longLabel = catTwoStrings("Individual matches for article ", dispLabel);
-freeMem(oldLabel);
 
 // filter and load items for this articleId
 char where[256];
