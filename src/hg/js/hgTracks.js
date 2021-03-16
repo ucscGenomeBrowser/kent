@@ -3282,6 +3282,11 @@ var popUpHgt = {
             $('#virtModeType[value="customUrl"]').attr('checked', true); });
         $('#singleAltHaploId').keyup(function() {
             $('#virtModeType[value="singleAltHaplo"]').attr('checked', true); });
+
+        // Make 'Cancel' button close dialog
+        $('input[name="Cancel"]').click(function() {
+                $('#hgTracksDialog').dialog('close');
+        });
     }
 };
 

@@ -1472,6 +1472,13 @@ void cgiMakeResetButton()
 printf("<INPUT TYPE=RESET NAME=\"Reset\" VALUE=\" Reset \">");
 }
 
+void cgiMakeCancelButton(char *label)
+/* Make button named 'Cancel' (for modal dialogs), with optional label (e.g. OK) */
+{
+char *buttonLabel = (label ? label : "Cancel");
+printf("<input type='button' name='Cancel' value='%s'>", buttonLabel);
+}
+
 void cgiMakeClearButton(char *form, char *field)
 /* Make button to clear a text field. */
 {
