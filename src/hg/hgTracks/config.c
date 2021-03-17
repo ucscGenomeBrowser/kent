@@ -750,8 +750,9 @@ webStartWrapperDetailedNoArgs(cart, database, "", "", FALSE, FALSE, FALSE, FALSE
 cartSaveSession(cart);
 
 hPrintf("Multi-region display 'slices' the genome to allow viewing discontinuous regions"
-                " together in the browser window."
-                "&nbsp;&nbsp;Select the desired viewing mode below.");
+                " together in the browser window. &nbsp;&nbsp;");
+// mode-specific message filled in by JS when dialog opened
+hPrintf("<span id='multiRegionConfigStatusMsg'></span>");
 hPrintf("<p></p>");
 
 hTableStart();
@@ -760,7 +761,8 @@ virtModeType = cartUsualString(cart, "virtModeType", virtModeType);
 
 hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "default", sameWord("default", virtModeType));
-hPrintf("</TD><TD>");
+hPrintf("</TD>");
+hPrintf("<TD id='virtModeTypeDefaultLabel'>");
 hPrintf("Exit multi-region mode");
 hPrintf("</TD></TR>\n");
 
