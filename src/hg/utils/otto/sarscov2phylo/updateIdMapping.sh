@@ -1,5 +1,5 @@
 #!/bin/bash
-set -beEu -x -o pipefail
+set -beEu -o pipefail
 
 #	Do not modify this script, modify the source tree copy:
 #	kent/src/hg/utils/otto/sarscov2phylo/updateIdMapping.sh
