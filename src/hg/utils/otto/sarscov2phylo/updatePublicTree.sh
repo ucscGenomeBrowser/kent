@@ -116,11 +116,14 @@ faSize $alignedFa
 renaming=oldAndNewNames
 tawk '{print $1, $1;}' prevNames > $renaming
 if (( $(fastaNames newCogUk.filtered.fa | wc -l) > 0 )) ; then
+    # This grep failed 2021-03-14, crashing the script.  I complained to COG-UK; tolerate.
+    set +o pipefail
     fastaNames newCogUk.filtered.fa \
     | grep -Fwf - $cogUkDir/cog_metadata.csv \
     | awk -F, '{print $1 "\t" $1 "|" $5;}' \
     | sed -re 's/20([0-9][0-9])(-[0-9-]+)?$/\1\2/;' \
         >> $renaming
+    set -o pipefail
 fi
 if (( $(fastaNames newGenBank.filtered.fa | wc -l) > 0 )) ; then
     fastaNames newGenBank.filtered.fa \
