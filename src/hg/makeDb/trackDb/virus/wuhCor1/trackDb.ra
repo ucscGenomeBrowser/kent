@@ -188,6 +188,8 @@ priority 5
 type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/bbi/swift.bb
 noScoreFilter on
+pennantIcon New red ../covid19.html "Released by UCSC on Mar. 16, 2021"
+
 
 # track removed as per David H email, authors got a track hub instead
 #track conticello
