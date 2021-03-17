@@ -52,9 +52,34 @@
 <!-- ============= 2021 archived news ============= -->
 <a name="2021"></a>
 
+<a name="031721"></a>
+<h2>Updated hg38 default gene track to GENCODE v36</h2>
+<p>
+We have updated the most recent human genome, GRCh38/hg38, with an updated default gene set,
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE v36</a>. This is part of our commitment
+to keep our annotation data as up-to-date as possible with the most 
+useful information, all versioned for maximum stability and reproducibility. This geneset 
+replaces our previous default, GENCODE v32, with a more recent dataset while retaining all 
+of the filters, viewing options, and data access abilities. The previous
+version can still be viewed in the <a href="../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper">
+All GENCODE</a> track. You can view the new default geneset at the following link:</p>
+<ul>
+<li><a href="../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack">GENCODE v36</a></li>
+</ul>
+<p>
+The default gene dataset is called &quot;knownGene&quot; internally at UCSC and is 
+used in many bioinformatics pipelines as a reference geneset. 
+The GRCh37/hg19 default geneset will stay the same.</p>
+
+<p>
+The UCSC Genome Browser would like to thank the <a href="https://www.gencodegenes.org/"
+ target="_blank">GENCODE consortium</a>
+and the internal development team at UCSC, including Daniel Schmelter and Brian Raney.</p>
+
 <a name="030421"></a>
 <h2>Mar. 4, 2021 &nbsp;&nbsp; Updated NCBI RefSeq Gene Tracks for 13 organisms</h2>
-<p>We are pleased to announce a combination of both updated and new
+<p>
+We are pleased to announce a combination of both updated and new
 <a href="https://www.ncbi.nlm.nih.gov/refseq/" target="_blank">
 NCBI RefSeq gene annotation</a> tracks for the
 following 13 assemblies. Most notably, we have updated both human assemblies and the new 
@@ -71,7 +96,7 @@ mouse assembly.</p><br>
   </div>
   <div class="col-sm-3">
   <ul>
-     <li>Fruitfly <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=dm6">(dm6)</a></li>
+     <li>Fruit fly <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=dm6">(dm6)</a></li>
      <li>Turkey <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=melGal5">(melGal5)</a></li>
      <li>Sheep <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=oviAri4">(oviAri4)</a></li>
      <li>Yeast <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=sacCer3">(sacCer3)</a></li>

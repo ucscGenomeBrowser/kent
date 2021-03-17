@@ -14,9 +14,9 @@ defaultLabelFields geneName
 itemRgb on
 #externalDb knownGeneV36
 maxItems 50000
-html knownGeneV36
+html knownGene
 searchIndex name
-pennantIcon Updated red ../goldenPath/newsarch.html#031721 "Updated by UCSC Mar. 17, 2020"
+pennantIcon Updated red ../goldenPath/newsarch.html#031721 "Uploaded by UCSC Mar. 17, 2020"
 
 
 searchName knownGeneAcc
