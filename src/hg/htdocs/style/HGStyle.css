@@ -532,6 +532,7 @@ input[type=color] { padding: 0px; }
 div.disabled  { border-color: gray; color: gray;  }
 input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
 span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
+td.disabled   { color: gray; }
 
 .positionDisplay {
     display: inline-block;

@@ -38,12 +38,12 @@ jq -c -r '[.accession, .biosample, .isolate.collectionDate, .location.geographic
 
 # Use EUtils (esearch) to get all SARS-CoV-2 BioSample GI# IDs:
 $scriptDir/searchAllSarsCov2BioSample.sh
+sort all.biosample.gids.txt > all.biosample.gids.sorted.txt
 
 # Copy yesterday's all.bioSample.txt so we don't have to refetch all the old stuff.
 if [ -e ../ncbi.$prevDate/all.bioSample.txt.xz ]; then
     xzcat ../ncbi.$prevDate/all.bioSample.txt.xz > all.bioSample.txt
-    grep ^Accession all.bioSample.txt | sed -re 's/^.*ID: //' | sort > ids.loaded
-    sort all.biosample.gids.txt > all.biosample.gids.sorted.txt
+    grep ^Accession all.bioSample.txt | sed -re 's/^.*ID: //' | sort -u > ids.loaded
     comm -23 all.biosample.gids.sorted.txt ids.loaded > ids.notLoaded
 else
     cp -p all.biosample.gids.txt ids.notLoaded
@@ -52,17 +52,15 @@ wc -l ids.notLoaded
 
 # Use EUtils (efetch) to get BioSample records for the GI# IDs that we don't have yet:
 time $scriptDir/bioSampleIdToText.sh < ids.notLoaded >> all.bioSample.txt
-gidCount=$(wc -l < all.biosample.gids.txt)
-accCount=$(grep ^Accession all.bioSample.txt | sort -u | wc -l)
-if [ $gidCount != $accCount ]; then
-    echo "Number of Accession lines ($accCount) does not match number of numeric IDs ($gidCount)"
-    grep ^Accession all.bioSample.txt | sed -re 's/^.*ID: //' | sort > ids.loaded
-    sort all.biosample.gids.txt > all.biosample.gids.sorted.txt
-    comm -23 all.biosample.gids.sorted.txt ids.loaded > ids.notLoaded
+
+grep ^Accession all.bioSample.txt | sed -re 's/^.*ID: //' | sort > ids.loaded
+comm -23 all.biosample.gids.sorted.txt ids.loaded > ids.notLoaded
+if [ -s ids.notLoaded ]; then
     echo Retrying queries for `wc -l < ids.notLoaded` IDs
     $scriptDir/bioSampleIdToText.sh < ids.notLoaded >> all.bioSample.txt
-    accCount=$(grep ^Accession all.bioSample.txt | sort -u | wc -l)
-    if [ $gidCount != $accCount ]; then
+    grep ^Accession all.bioSample.txt | sed -re 's/^.*ID: //' | sort > ids.loaded
+    comm -23 all.biosample.gids.sorted.txt ids.loaded > ids.notLoaded
+    if [ -s ids.notLoaded ]; then
         echo "Still have only $accCount accession lines after retrying; quitting."
         exit 1
     fi
