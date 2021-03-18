@@ -77,7 +77,7 @@ drawBoxPlot <- function(df) {
                         # erase y ticks
                         yaxt="n",
                         # with R versions 3.6 and later must suppress x-labels manually
-                        xlab="", ylab=""
+                        xlab="", ylab="",
                         # erase X axis labels (add later rotated)
                         names=rep(c(""), count))
         y1 <- par("usr")[1]
