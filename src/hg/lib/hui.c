@@ -355,7 +355,7 @@ boolean makeMultiRegionLink(char *db, struct trackDb *tdb, struct cart *cart)
  * The link switches to exit multi-region if browser is already in multi-region mode
  * based on regions defined for this track. */
 {
-char *regionUrl = trackDbSetting(tdb, MULTI_REGION_BED_URL);
+char *regionUrl = trackDbSetting(tdb, "multiRegionsBedUrl");
 if (isEmpty(regionUrl))
     return FALSE;
 
@@ -528,14 +528,15 @@ printf("<p>");
 printf("<a href='../cgi-bin/hgTracks?"
                 "virtMode=1&"
                 "virtModeType=customUrl&"
-                "virtWinFull=on&"
+                "%s=on&"
                 "virtShortDesc=%s&"
                 "multiRegionsBedUrl=%s&"
                 "%s=%s&"
                 "%s=%s&"
                 "%s=%s'>"
         "Display regions of interest (%d)</a>",
-                    tdb->track, cgiEncode(regionFile), tdb->track, hStringFromTv(vis),
+                    MULTI_REGION_BED_WIN_FULL, tdb->track, cgiEncode(regionFile), tdb->track, 
+                    hStringFromTv(vis),
                     CT_CUSTOM_DOC_TEXT_VAR, cgiEncode(customHtml),
                     CT_CUSTOM_TEXT_VAR, cgiEncode(dyStringCannibalize(&dsCustomText)), regionCount);
 printf(" in multi-region view (custom regions mode)");

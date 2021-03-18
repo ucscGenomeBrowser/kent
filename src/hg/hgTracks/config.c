@@ -749,8 +749,10 @@ webStartWrapperDetailedNoArgs(cart, database, "", "", FALSE, FALSE, FALSE, FALSE
 
 cartSaveSession(cart);
 
-hPrintf("Multi-region display 'slices' the genome to allow viewing discontinuous regions"
-                " together in the browser window. &nbsp;&nbsp;");
+hPrintf("<A HREF=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>"
+                "<b><em>Multi-region display</em></b></A>"
+            " 'slices' the genome to allow viewing discontinuous regions"
+            " together in the browser window. &nbsp;&nbsp;");
 // mode-specific message filled in by JS when dialog opened
 hPrintf("<span id='multiRegionConfigStatusMsg'></span>");
 hPrintf("<p></p>");
@@ -831,8 +833,18 @@ else
     }
 hPrintf("<TEXTAREA NAME='multiRegionsBedInput' ID='multiRegionsBedInput' rows='4' cols='58' style='white-space: pre;'>%s</TEXTAREA>",
     dyMultiRegionsBedInput->string);
-hPrintf("</TD></TR>\n");
 
+// option to set viewing window to show all regions.  This id also known to JS.
+if (cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, FALSE))
+    {
+    boolean isChecked = cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE);
+    hPrintf("&nbsp;&nbsp");
+    cgiMakeCheckBoxUtil(MULTI_REGION_BED_WIN_FULL, isChecked, 
+                            "If unchecked, when regions are changed here the view is zoomed in and does not display all regions", 
+                            MULTI_REGION_BED_WIN_FULL);
+    hPrintf("Show all");
+    hPrintf("</TD></TR>\n");
+}
 
 /* The AllChroms option will be released in future
 if (emGeneTable && sqlTableExists(conn, emGeneTable))
@@ -978,8 +990,6 @@ hPrintf("<TR><TD>");
 cgiMakeButton("topSubmit", "Submit");
 hPrintf("&nbsp;&nbsp");
 cgiMakeCancelButton("Cancel");
-hPrintf("</TD><TD align=right>");
-hPrintf("<A HREF=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>Help</A>\n");
 hPrintf("</TD></TR>\n");
 hPrintf("</TABLE>\n");
 

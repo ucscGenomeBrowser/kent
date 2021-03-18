@@ -984,8 +984,8 @@
     </pre>
 </div>
 
-<DIV class="multiRegionBedUrl"><span class="types all"></span>
-<div class="format"><code>multiRegionBedUrl &lt;url/relativePath&gt;</code></div>
+<DIV class="multiRegionsBedUrl"><span class="types all"></span>
+<div class="format"><code>multiRegionsBedUrl &lt;url/relativePath&gt;</code></div>
     <P>This setting causes a link to appear on the track configuration and items details pages to
 launch a 
 <a target="_blank" href="https://genome.ucsc.edu/goldenPath/help/multiRegionHelp.html">
@@ -1004,7 +1004,7 @@ highlight and title the displayed regions.
 If the name field (field 4) is present in the BED file, the name for each region 
 will be displayed in the custom track.
     <P><B>Example</B></P>
-    <pre>    multiRegionBedUrl covidMuts.regions.bed</pre>
+    <pre>    multiRegionsBedUrl covidMuts.regions.bed</pre>
 </DIV>
 
 <DIV class="wgEncode"><span class="types all"></span>

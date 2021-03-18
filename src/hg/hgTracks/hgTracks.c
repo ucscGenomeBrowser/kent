@@ -7991,10 +7991,6 @@ boolean isSessChanged = FALSE;
 if (differentString(curSessVisTracks, thisSessVisTracks))
     {
     isSessChanged = TRUE;
-    #ifdef DEBUG
-    uglyf("<br>curSess vis tracks: %s", curSessVisTracks);
-    uglyf("<br>thsSess vis tracks: %s", thisSessVisTracks);
-    #endif
     }
 return isSessChanged;
 }
@@ -8024,7 +8020,7 @@ boolean hideAll = cgiVarExists("hgt.hideAll");
 boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
-boolean multiRegionButtonTop = (cfgOption("multiRegionButtonTop") != NULL);
+boolean multiRegionButtonTop = cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, FALSE);
 long thisTime = 0, lastTime = 0;
 
 basesPerPixel = ((float)virtWinBaseCount) / ((float)fullInsideWidth);
@@ -9748,7 +9744,6 @@ else
     if (sameString(virtModeType,"default"))  // we are leaving virtMode
 	{
 	virtMode = FALSE;
-        cartRemove(cart, "virtWinFull");
         cartRemove(cart, "virtShortDesc");
 	}
     else
@@ -9766,7 +9761,7 @@ else
             sameString(virtModeType, "geneMostly") || 
             sameString(virtModeType, "kcGenes") ||
             (sameString(virtModeType, "customUrl") && 
-                    !cartUsualBoolean(cart, "virtWinFull", FALSE)))
+                    !cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE)))
 	    {
 	    // trying to find best vchrom location corresponding to chromName, winStart, winEnd);
 	    // try to find the nearest match
