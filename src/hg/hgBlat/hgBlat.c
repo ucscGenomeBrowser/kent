@@ -1765,7 +1765,7 @@ puts("<TABLE class='hgBlatTable' BORDER=0 WIDTH=80>\n");
 printf("<TR>\n");
 printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>Genome:");
 printf(" <INPUT TYPE=CHECKBOX id=allGenomes NAME=allGenomes VALUE=\"\">");
-printf(" <span id=searchAllText> Search all genomes on dedicated BLAT servers.<span>");
+printf(" <span id=searchAllText> Search all<span>");
 printf("</TD>");
 // clicking on the Search ALL text clicks the checkbox.
 jsOnEventById("click", "searchAllText", 
@@ -1848,9 +1848,7 @@ printf("%s",
 printf("%s", 
 "<P>The <b>Search all</b> checkbox allows you to search all genomes at the same time. "
 "Search all is only available for default assemblies and attached hubs with dedicated BLAT servers."
-"The new dynamic BLAT servers enable searching on unlimited numbers of genomes "
-"using a fixed amount of memory. However, because of the time required to swap, assemblies on dynamic servers are not searched, "
-"but are noted as skipped in the output.\n");
+"The new dynamic BLAT servers are not supported, and they are noted as skipped in the output.\n");
 
 printf("<P>The <b>All Results</b> checkbox disables minimum matches filtering so all results are seen." 
 " For example, with a human dna search, 20 is minimum matches required, based on the genome size, to filter out lower-quality results.\n"
@@ -2306,14 +2304,7 @@ else
 
 	    if (hubDynamicBlatServerCount > 0 || nonHubDynamicBlatServerCount > 0) 
 		{
-		printf("Dedicated static BLAT servers are fast but require lots of memory, processors and machines.<br>\n"
-		    "Dynamic BLAT servers only require disk space, and can support an unlimited numbers of genomes,<br>\n"
-		    "however they take time to swap indexes into memory and have limited parallelism.<br>\n"
-		    "The BLAT All Genomes feature does not currently support dynamic BLAT servers.<br>\n");
-		if (nonHubDynamicBlatServerCount > 0)
-		    printf( "Number of dynamic BLAT genomes at this site: %d<br>\n", nonHubDynamicBlatServerCount);
-		if (hubDynamicBlatServerCount > 0)
-	  	    printf( "Number of dynamic BLAT genomes on attached hubs: %d<br>\n", hubDynamicBlatServerCount);
+		printf("The BLAT All Genomes feature does not currently support dynamic BLAT servers.<br>\n");
 		}
 	    printf( "<br>\n");
 
