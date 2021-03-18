@@ -1848,7 +1848,9 @@ printf("%s",
 printf("%s", 
 "<P>The <b>Search all</b> checkbox allows you to search all genomes at the same time. "
 "Search all is only available for default assemblies and attached hubs with dedicated BLAT servers."
-"The new dynamic BLAT servers are not supported, and they are noted as skipped in the output.\n");
+"The new dynamic BLAT servers are not supported, and they are noted as skipped in the output. "
+"<b>See our <a href='/FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> for more information.</b>\n"
+);
 
 printf("<P>The <b>All Results</b> checkbox disables minimum matches filtering so all results are seen." 
 " For example, with a human dna search, 20 is minimum matches required, based on the genome size, to filter out lower-quality results.\n"
@@ -2304,7 +2306,8 @@ else
 
 	    if (hubDynamicBlatServerCount > 0 || nonHubDynamicBlatServerCount > 0) 
 		{
-		printf("The BLAT All Genomes feature does not currently support dynamic BLAT servers.<br>\n");
+		printf("The BLAT All Genomes feature does not currently support dynamic BLAT servers. "
+		"<b>See our <a href='/FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> for more information.</b><br>\n");
 		}
 	    printf( "<br>\n");
 
