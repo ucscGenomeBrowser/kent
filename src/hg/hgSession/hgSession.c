@@ -564,7 +564,7 @@ printf("<TR><TD colspan=4></TD></TR>\n");
 
 printf("<TR><TD colspan=4>Save Custom Tracks:</TD></TR>\n");
 printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD colspan=2>");
-printf("backup custom tracks to archive .tar.gz</TD>");
+printf("back up custom tracks to archive .tar.gz</TD>");
 printf("<TD>");
 printf("&nbsp;");
 cgiMakeButton(hgsShowDownloadPrefix, "submit");

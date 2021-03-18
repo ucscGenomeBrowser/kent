@@ -1449,7 +1449,7 @@ if (allGenomes)
 else
     getDbAndGenome(cart, &db, &genome, oldVars);
 
-char *output = cgiString("output");
+char *output = cgiOptionalString("output");
 boolean isJson= sameWordOk(output, "json");
 boolean isPslRaw= sameWordOk(output, "pslRaw");
 

@@ -3258,6 +3258,7 @@ var popUpHgt = {
                             ddcl.setup(this, 'noneIsAll');
                     }
                 );
+
             },
 
             close: function() {
@@ -3273,7 +3274,7 @@ var popUpHgt = {
         autocompleteCat.init($('#singleAltHaploId'),
                              { baseUrl: 'hgSuggest?db=' + getDb() + '&type=altOrPatch&prefix=',
                                enterSelectsIdentical: true });
-        // Make option inputs select their associated radio buttons
+        // Make multi-region option inputs select their associated radio buttons
         $('input[name="emPadding"]').keyup(function() {
             $('#virtModeType[value="exonMostly"]').attr('checked', true); });
         $('input[name="gmPadding"]').keyup(function() {
@@ -3282,6 +3283,39 @@ var popUpHgt = {
             $('#virtModeType[value="customUrl"]').attr('checked', true); });
         $('#singleAltHaploId').keyup(function() {
             $('#virtModeType[value="singleAltHaplo"]').attr('checked', true); });
+
+        // disable exit if not in MR mode
+        if (!hgTracks.virtModeType) {
+            $('#virtModeTypeDefaultLabel').addClass('disabled');
+            $('#virtModeType[value="exonMostly"]').attr('checked', true);
+            $('#virtModeType[value="default"]').attr('disabled', 'disabled');
+        } else {
+            $('#virtModeType[value="default"]').removeAttr('disabled');
+        }
+
+        // Customize message based on current mode
+        var msg = "<em>Select a multi-region viewing mode below.</em>";  // default
+        if (hgTracks.virtModeType) {
+            msg = "The display is currently in <em><b> ";
+            var mode = "unknown";
+            if (hgTracks.virtModeType === "exonMostly") {
+                msg += "exon";
+            } else if (hgTracks.virtModeType == "geneMostly") {
+                msg += "gene";
+            } else if (hgTracks.virtModeType == "customUrl") {
+                msg += "custom regions";
+            } else if (hgTracks.virtModeType == "singleAltHaplo") {
+                msg += "alt haplotype";
+            } 
+            msg += " </b></em> view. &nbsp;&nbsp;"
+                + "<em>Select a different viewing mode, or exit and return to normal view</em>.";
+        }
+        $('#multiRegionConfigStatusMsg').html(msg);
+
+        // Make 'Cancel' button close dialog
+        $('input[name="Cancel"]').click(function() {
+            $('#hgTracksDialog').dialog('close');
+        });
     }
 };
 

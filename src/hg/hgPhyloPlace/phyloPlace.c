@@ -1815,7 +1815,9 @@ static void writeOneTsvRow(FILE *f, char *sampleId, struct usherResults *results
                            struct seqWindow *gSeqWin, struct hash *spikeChanges)
 /* Write one row of tab-separate summary for sampleId.  Accumulate S gene AA change info. */
 {
-    struct placementInfo *info = hashFindVal(results->samplePlacements, sampleId);
+struct placementInfo *info = hashFindVal(results->samplePlacements, sampleId);
+if (info)
+    {
     // sample name / ID
     fprintf(f, "%s\t", sampleId);
     // nucleotide mutations
@@ -1895,6 +1897,7 @@ static void writeOneTsvRow(FILE *f, char *sampleId, struct usherResults *results
         fprintf(f, "\tn/a\tn/a\tn/a\tn/a\tn/a\tn/a\tn/a");
         }
     fputc('\n', f);
+    }
 }
 
 static void rWriteTsvSummaryTreeOrder(struct phyloTree *node, FILE *f, struct usherResults *results,

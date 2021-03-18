@@ -7991,12 +7991,21 @@ boolean isSessChanged = FALSE;
 if (differentString(curSessVisTracks, thisSessVisTracks))
     {
     isSessChanged = TRUE;
-    #ifdef DEBUG
-    uglyf("<br>curSess vis tracks: %s", curSessVisTracks);
-    uglyf("<br>thsSess vis tracks: %s", thisSessVisTracks);
-    #endif
     }
 return isSessChanged;
+}
+
+static void printMultiRegionButton()
+/* Print button that launches multi-region configuration pop-up */
+{
+boolean isPressed = FALSE;
+if (differentString(virtModeType, "default"))
+    isPressed = TRUE;
+char buf[256];
+safef(buf, sizeof buf, "configure %s multi-region display mode", 
+                        isPressed ? "or exit" : "");
+hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf,
+            "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -8011,6 +8020,7 @@ boolean hideAll = cgiVarExists("hgt.hideAll");
 boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
+boolean multiRegionButtonTop = cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, FALSE);
 long thisTime = 0, lastTime = 0;
 
 basesPerPixel = ((float)virtWinBaseCount) / ((float)fullInsideWidth);
@@ -8637,8 +8647,6 @@ if (!hideControls)
     /* Make line that says position. */
 	{
 	char buf[256];
-	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
-	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
         char *javascript = "document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;";
         if (containsStringNoCase(database, "zoo"))
             {
@@ -8646,12 +8654,12 @@ if (!hideControls)
             printAssemblyListHtmlExtra(database, "change", javascript);
             }
 
-        /* Multi-region button on position line */
-        safef(buf, sizeof buf, "configure %s multi-region display mode", 
-                                sameString(virtModeType, "default") ? "in" : "or exit");
-        hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf,
-                    "popUpHgt.hgTracks('multi-region config'); return false;", FALSE);
-        hPrintf(" ");
+        // multi-region button on position line, initially under hg.conf control
+        if (multiRegionButtonTop)
+            {
+            printMultiRegionButton();
+            hPrintf(" ");
+            }
 
 	if (virtualSingleChrom()) // DISGUISE VMODE
 	    safef(buf, sizeof buf, "%s", windowsSpanPosition());
@@ -8659,7 +8667,10 @@ if (!hideControls)
 	    safef(buf, sizeof buf, "%s:%ld-%ld", virtChromName, virtWinStart+1, virtWinEnd);
 	
 	position = cloneString(buf);
-        char *pressedClass = "", *showVirtRegions = "";
+
+        // position box
+        char *pressedClass = "";
+        char *showVirtRegions = "";
         if (differentString(virtModeType, "default"))
             {
             pressedClass = "pressed";
@@ -8671,7 +8682,8 @@ if (!hideControls)
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, virtWinEnd - virtWinStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
-	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
+	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput'"
+                        " size='%d'>\n", multiRegionButtonTop ? 50 : 60);
 	hWrites(" ");
 	hButton("goButton", "go");
 
@@ -8681,6 +8693,30 @@ if (!hideControls)
             if (assemblySupportsGeneSuggest(database))
                 hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
 	    }
+
+        // hg.conf controlled links
+
+        // database-specific link: 2 hg.conf settings, format <db>_TopLink{Label}
+        struct slName *dbLinks = cfgNamesWithPrefix(database);
+        struct slName *link;
+        char *dbTopLink = NULL, *dbTopLinkLabel = NULL;
+        for (link = dbLinks; link != NULL; link = link->next)
+            {
+            char *name = cloneString(link->name);
+            char *setting = chopPrefixAt(link->name, '_');
+            if (sameString(setting, "TopLink"))
+                dbTopLink = cfgOption(name);
+            else if (sameString(setting, "TopLinkLabel"))
+                dbTopLinkLabel = cfgOption(name);
+            }
+        if (dbTopLink && dbTopLinkLabel)
+            {
+            hPrintf("&nbsp;&nbsp;<a href='%s' target='_blank'><em><b>%s</em></b></a>\n",
+                dbTopLink, dbTopLinkLabel);
+            }
+        // generic link
+	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
+	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
 	if (survey && differentWord(survey, "off"))
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'>"
                     "<A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n",
@@ -8853,6 +8889,11 @@ if (!hideControls)
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
     hPrintf(" ");
 
+    if (!multiRegionButtonTop)
+        {
+        printMultiRegionButton();
+        hPrintf(" ");
+        }
     hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
                            revCmplDisp ? "Show forward strand at this location"
                                        : "Show reverse strand at this location",
@@ -9703,7 +9744,6 @@ else
     if (sameString(virtModeType,"default"))  // we are leaving virtMode
 	{
 	virtMode = FALSE;
-        cartRemove(cart, "virtWinFull");
         cartRemove(cart, "virtShortDesc");
 	}
     else
@@ -9721,7 +9761,7 @@ else
             sameString(virtModeType, "geneMostly") || 
             sameString(virtModeType, "kcGenes") ||
             (sameString(virtModeType, "customUrl") && 
-                    !cartUsualBoolean(cart, "virtWinFull", FALSE)))
+                    !cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE)))
 	    {
 	    // trying to find best vchrom location corresponding to chromName, winStart, winEnd);
 	    // try to find the nearest match

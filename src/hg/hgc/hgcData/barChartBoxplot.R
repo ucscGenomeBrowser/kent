@@ -60,7 +60,7 @@ drawBoxPlot <- function(df) {
         yLimit <- c(-(max*.02), max+ (max*.03))
         # by default, the order of horizontal barcharts is reversed compared to vertical barcharts
         # this is why we inverse the order with at=rev(...) and later for text() apply rev(...) on all y-coords
-        exprPlot <- boxplot(value ~ df$category, data=df, xlab=yLabel, ylim=yLimit, xlim=c(0, count),
+        exprPlot <- boxplot(value ~ df$category, data=df, ylim=yLimit, xlim=c(0, count),
                         at=rev(1:nlevels(df$category)),
                         main=title, 
                         horizontal=TRUE,
@@ -77,7 +77,7 @@ drawBoxPlot <- function(df) {
                         # erase y ticks
                         yaxt="n",
                         # with R versions 3.6 and later must suppress x-labels manually
-                        xlab="",
+                        xlab="", ylab="",
                         # erase X axis labels (add later rotated)
                         names=rep(c(""), count))
         y1 <- par("usr")[1]
