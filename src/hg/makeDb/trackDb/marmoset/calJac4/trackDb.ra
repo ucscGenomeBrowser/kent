@@ -20,4 +20,6 @@ include customRefSeqComposite.ra
 include trackDb.7way.ra alpha
 
 include trackDb.catV2.ra alpha
-include trackDb.isoseq.ra alpha
+include trackDb.uwIsoSeq.ra alpha
+
+

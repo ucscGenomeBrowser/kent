@@ -1,0 +1,65 @@
+<h2>Description</h2>
+
+<p>
+  These tracks show the Iso-Seq long read alignments of marmoset cDNAs to the
+  genome. The data set consists eleven tissue samples from two individuals.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+  These track use the <a href="/goldenPath/help/hgBamTrackHelp.html">BAM Display Conventions and Configuration</a>.
+</p>
+
+<h2>Methods</h2>
+<ol>
+  <li>Generation of Full Length cDNA and Library Preparation for Sequencing
+    <p>
+      Full-length cDNA was prepared and sequenced from total RNA isolated from various tissues of both a two year old male and a two year old female Callithrix jacchus. Iso-Seq library production was performed as per the Iso-Seq Express protocol (https://www.pacb.com/wp-content/uploads/Procedure-Checklist-IsoSeq-Express-Template-Preparation-for-Sequel-and-Sequel-II-Systems.pdf) and barcoded using barcoded adapters.  One library was generated for each tissue.
+    </p>
+  <li>Sequencing with the PacBio Sequel II Platform
+    <p>
+      Libraries were pooled equimolar and sequenced on 3 SMRT Cell 8M on the Sequel II platform with chemistry version 2EA. 
+    </p>
+  <li>Data Processing
+    <p>
+      Collected data was demultiplexed with lima (demultiplex barcoding), then analyzed with CCS with a requirement of 1 minimum pass and at least 0.9 identity (--minPasses 1 --min-rq 0.9). The Iso-Seq analysis pipeline was used to generate FLNC reads ensuring each has a poly-A tail, plus a single 3' and 5' primer signal for downstream analysis.
+    </p>
+  <li>Mapping
+    <p> Resulting reads were aligned to the marmoset genome with
+      <code>minimap2 2.17-r941</code> using the options 
+      <code>-t 12 -ax splice:hq -u</code>.
+    </p>
+</ol>
+
+<h2>Data Access</h2>
+
+<p>
+The genomic alignments are stored in a BAM file that can be obtained from the
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/uwIsoSeq/" target="_blank">download server</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+  Samples were provided from the New England Primate Research Center
+  by Ricardo del Rosario and Anna Newman of the Broad Institute.
+</p>
+<p>
+  Iso-Seq sequencing & FLNC analysis performed by: Evan Eichler, Alexandra
+  Lewis, Shwetha Murali, and Katherine Munson of the University of Washington.
+</p>
+
+<h2>References</h2>
+
+<p>
+Warren WC, Harris RA, Haukness M, Fiddes IT, Murali SC, Fernandes J, Dishuck PC, Storer JM,
+Raveendran M, Hillier LW <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33335035" target="_blank">
+Sequence diversity analyses of an improved rhesus macaque genome enhance its biomedical utility</a>.
+<em>Science</em>. 2020 Dec 18;370(6523).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33335035" target="_blank">33335035</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7818670/" target="_blank">PMC7818670</a>
+</p>
+
+
+
