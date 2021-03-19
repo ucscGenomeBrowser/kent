@@ -984,8 +984,8 @@
     </pre>
 </div>
 
-<DIV class="multiRegionBedUrl"><span class="types all"></span>
-<div class="format"><code>multiRegionBedUrl &lt;url/relativePath&gt;</code></div>
+<DIV class="multiRegionsBedUrl"><span class="types all"></span>
+<div class="format"><code>multiRegionsBedUrl &lt;url/relativePath&gt;</code></div>
     <P>This setting causes a link to appear on the track configuration and items details pages to
 launch a 
 <a target="_blank" href="https://genome.ucsc.edu/goldenPath/help/multiRegionHelp.html">
@@ -1004,7 +1004,7 @@ highlight and title the displayed regions.
 If the name field (field 4) is present in the BED file, the name for each region 
 will be displayed in the custom track.
     <P><B>Example</B></P>
-    <pre>    multiRegionBedUrl covidMuts.regions.bed</pre>
+    <pre>    multiRegionsBedUrl covidMuts.regions.bed</pre>
 </DIV>
 
 <DIV class="wgEncode"><span class="types all"></span>
@@ -1850,9 +1850,9 @@ There are no extra options that can appear on the type hic line.
 <DIV class="maxWindowToDraw"><span class="types bed genepred bam rmsk narrowPeak broadPeak bigWig bedlogR"></span>
 <div class="format"><code>maxWindowToDraw &lt;integer&gt;</code></div>
     <p>When too many individual bed items might be shown in the Browser image
-    (such as might occur when a large region of a chromosome is viewed), a choice
-    to display a message to ask users to zoom in to a smaller region can be
-    triggered with <code>maxWindowToDraw</code>.</p>
+    (such as might occur when a large region of a chromosome is viewed),
+    <code>maxWindowToDraw</code> will trigger a choice to display a message
+    asking users to zoom in to a smaller region.</p>
     <p>Depending on the current visibility
     of the bed track and which other tracks are being shown concurrently, the
     Browser may automatically reduce the display to pack or dense mode in some cases.
@@ -1861,7 +1861,8 @@ There are no extra options that can appear on the type hic line.
     setting, which controls the display of vertical space and forces a display to dense
     when the maximum number of items is exceeded, the <code>maxWindowToDraw</code>
     setting dictates the number of bases to be displayed in a window
-    before the track is obscured with a zoom-in message. Even without this setting,
+    before the track is obscured with a message explaining the
+    requirement for zooming-in. Even without this setting,
     there are browser operations that will ultimately prevent too many items from
     being displayed by forcing a visualized summary in dense mode as noted.</p>
     <P><B>Example:</B></P>

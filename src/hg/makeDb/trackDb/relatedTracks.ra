@@ -11,3 +11,4 @@ hg38 interactions omimGene2 test of duplicate line
 # hg19:
 hg19 omimGene2 interactions no good reason hg19
 hg19 clinVarCnv clinGenComp both structural variants
+hg19 targetScanMiRnaSites knownGene TS sites and gene annotation track

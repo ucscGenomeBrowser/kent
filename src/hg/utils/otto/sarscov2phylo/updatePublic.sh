@@ -43,3 +43,7 @@ cd $buildDir
 $scriptDir/updatePublicTree.sh $prevDate $problematicSitesVcf >& updatePublicTree.log
 
 cat hgPhyloPlace.description.txt
+
+$scriptDir/updateCombinedTree.sh $prevDate $problematicSitesVcf >& updateCombinedTree.log
+
+cat hgPhyloPlace.plusGisaid.description.txt

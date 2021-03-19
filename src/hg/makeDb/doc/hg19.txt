@@ -33843,7 +33843,7 @@ dos2unix UCSC.txt
 cat UCSC.txt | tawk '{$1="chr"$1; chrom=$1; start=$2; rsId=$3; ref=$4; alt=$5; zygo=$6; gene=$7; genotype=$8; inh=$9; end=$2+length(ref); print chrom, start, end, ref">"alt, "0", ".", start, end, "0,0,0", "1", length(ref), "0", ref, alt, rsId, zygo, gene, genotype, inh;}' | grep -v chrchr > covidMuts.bed
 bedSort covidMuts.bed covidMuts.bed
 bedToBigBed -tab covidMuts.bed ../../chrom.sizes covidMuts.bb -as=../../hg19/bed/covidMuts/covidMuts.as -type=bed12+
-#############################################################################
+<<<<<<< Updated upstream
 
 #############################################################################
 # gnomAD v2.1.1 update, ChrisL 12-2-2020
@@ -34213,7 +34213,44 @@ for all such files. Here's an example for the Roche - KAPA HyperExome Capture Pr
 Footprint file:
 
 cut -f1,2,3 sorted-KAPA_HyperExome_hg19_capture_targets.bed > sorted-cut-KAPA_HyperExome_hg19_capture_targets.bed
+
+
 #############################################################################
+# haploinsufficiency from DECIPHER - DONE 3/18/2021 Jonathan
+
+# Download latest predictions list from https://decipher.sanger.ac.uk/about/downloads/data
+mkdir -p /hive/data/outside/decipher/haploinsufficiency
+cd /hive/data/outside/decipher/haploinsufficiency
+wget https://decipher.sanger.ac.uk/files/downloads/HI_Predictions_Version3.bed.gz
+filePath=`pwd`/HI_Predictions_Version3.bed.gz
+
+# zcat | head shows the file is nearly ready to go, but could benefit from a bit of reorganization
+# (also floating point score values don't work for some bed processors)
+
+mkdir -p /hive/data/genomes/hg19/bed/decipherHaplo
+cd /hive/data/genomes/hg19/bed/decipherHaplo
+
+printf 'chomp;
+@fields = split /\t/;
+($gene, $score, $pct) = split /\|/, $fields[3];
+$fields[3] = $gene;
+$fields[4] = 0;
+$rgb = $fields[8];
+$rgb =~ s/^(\d+),(\d+),0$/$1,$2,$1/;  # change red/green to magenta/green
+$fields[8] = $rgb;
+push @fields, ($pct, $score);
+push @fields, ("$gene, HI: $pct");
+print join ("\t", @fields) . "\n";
+' > parse.pl
+
+zcat $filePath | tail -n +2 | perl -nf parse.pl | bedSort stdin HI_Predictions.bed
+
+bedToBigBed HI_Predictions.bed -type=bed9+2 -as=$HOME/kent/src/hg/lib/haploinsufficiency.as -tab ../../chrom.sizes haploinsufficiency.bb
+
+mkdir -p /gbdb/hg19/bbi/haploins/
+cd /gbdb/hg19/bbi/haploins/
+ln -s /hive/data/genomes/hg19/bed/decipherHaplo/haploinsufficiency.bb .
+
 
 #############################################################################
 # skinSoleBoldo JimK 01-14-2020

@@ -532,6 +532,7 @@ input[type=color] { padding: 0px; }
 div.disabled  { border-color: gray; color: gray;  }
 input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
 span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
+td.disabled   { color: gray; }
 
 .positionDisplay {
     display: inline-block;
@@ -542,17 +543,6 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 .positionDisplay:hover {
     cursor: default;
 }
-
-.positionDisplay.pressed {
-    background: #ebf0ff;
-    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
-    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
-    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
-    border-radius: 4px;
-}
-
-
 
 .positionInput {
         padding: 7px; -moz-border-radius: 3px; border-radius: 3px;
@@ -942,6 +932,24 @@ a:link img.sessionThumbnail {
 
 input[type="submit"].pressed {
     background: #d0dcff; 
+    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+
+input[type="button"].pressed {
+    background: #ebf0ff;
+    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+
+.positionDisplay.pressed {
+    background: #ebf0ff;
     webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
     moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
     box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);

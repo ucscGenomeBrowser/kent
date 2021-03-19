@@ -570,6 +570,9 @@ void cgiMakeSubmitButton();
 void cgiMakeResetButton();
 /* Make 'reset' type button. */
 
+void cgiMakeCancelButton(char *label);
+/* Make button named 'Cancel' (for modal dialogs), with optional label (e.g. OK) */
+
 void cgiMakeClearButton(char *form, char *field);
 /* Make button to clear a text field. */
 

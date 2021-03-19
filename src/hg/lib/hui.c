@@ -355,7 +355,7 @@ boolean makeMultiRegionLink(char *db, struct trackDb *tdb, struct cart *cart)
  * The link switches to exit multi-region if browser is already in multi-region mode
  * based on regions defined for this track. */
 {
-char *regionUrl = trackDbSetting(tdb, MULTI_REGION_BED_URL);
+char *regionUrl = trackDbSetting(tdb, "multiRegionsBedUrl");
 if (isEmpty(regionUrl))
     return FALSE;
 
@@ -528,14 +528,15 @@ printf("<p>");
 printf("<a href='../cgi-bin/hgTracks?"
                 "virtMode=1&"
                 "virtModeType=customUrl&"
-                "virtWinFull=on&"
+                "%s=on&"
                 "virtShortDesc=%s&"
                 "multiRegionsBedUrl=%s&"
                 "%s=%s&"
                 "%s=%s&"
                 "%s=%s'>"
         "Display regions of interest (%d)</a>",
-                    tdb->track, cgiEncode(regionFile), tdb->track, hStringFromTv(vis),
+                    MULTI_REGION_BED_WIN_FULL, tdb->track, cgiEncode(regionFile), tdb->track, 
+                    hStringFromTv(vis),
                     CT_CUSTOM_DOC_TEXT_VAR, cgiEncode(customHtml),
                     CT_CUSTOM_TEXT_VAR, cgiEncode(dyStringCannibalize(&dsCustomText)), regionCount);
 printf(" in multi-region view (custom regions mode)");
@@ -9880,6 +9881,7 @@ if (row != NULL)
     {
     puts("<b>Related tracks</b>\n");
     puts("<ul>\n");
+    struct hash *otherTracksAndDesc = hashNew(0);
     char *track1, *track2, *why, *otherTrack;
     for (; row != NULL; row = sqlNextRow(sr))
         {
@@ -9891,8 +9893,19 @@ if (row != NULL)
             otherTrack = track2;
         else
             otherTrack = track1;
+        // hopefully relatedTracks.ra doesn't have dupes but hash them just in case
+        hashReplace(otherTracksAndDesc, cloneString(otherTrack), cloneString(why));
+        }
 
+    struct hashEl *hel, *helList = hashElListHash(otherTracksAndDesc);
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+        char *otherTrack = (char *)hel->name;
+        char *why = (char *)hel->val;
         struct trackDb *otherTdb = hashFindVal(trackHash, otherTrack);
+        // super tracks are not in the hash:
+        if (!otherTdb)
+            otherTdb = tdbForTrack(database, otherTrack, NULL);
         if (otherTdb)
             {
             puts("<li>");
@@ -9901,7 +9914,7 @@ if (row != NULL)
             puts(why);
             }
         }
-    puts("</ul>\n");
+        puts("</ul>\n");
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);

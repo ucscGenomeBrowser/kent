@@ -49,6 +49,7 @@ source $scriptDir/util.sh
 expectedHeaderStart='sequence_name,country,adm1,pillar_2,sample_date,epi_week,lineage,'
 cogUkMetHeader=$(head -1 $cogUkDir/cog_metadata.csv | grep ^$expectedHeaderStart)
 # The grep will fail if they change one of the first 7 fields.
+# If it fails, update cog_metadata.csv column indices below and in getCogUk.sh too.
 
 mkdir -p $ottoDir/$today
 cd $ottoDir/$today
@@ -115,11 +116,14 @@ faSize $alignedFa
 renaming=oldAndNewNames
 tawk '{print $1, $1;}' prevNames > $renaming
 if (( $(fastaNames newCogUk.filtered.fa | wc -l) > 0 )) ; then
+    # This grep failed 2021-03-14, crashing the script.  I complained to COG-UK; tolerate.
+    set +o pipefail
     fastaNames newCogUk.filtered.fa \
     | grep -Fwf - $cogUkDir/cog_metadata.csv \
     | awk -F, '{print $1 "\t" $1 "|" $5;}' \
     | sed -re 's/20([0-9][0-9])(-[0-9-]+)?$/\1\2/;' \
         >> $renaming
+    set -o pipefail
 fi
 if (( $(fastaNames newGenBank.filtered.fa | wc -l) > 0 )) ; then
     fastaNames newGenBank.filtered.fa \
@@ -148,7 +152,7 @@ time $usher -u -T 50 \
     -o public-$today.all.notMasked.pb \
     >& usher.addNewUnmasked.log
 #~10 hours for 56k seqs, ~72m for 6k
-$matUtils convert -i public-$today.all.notMasked.pb -v public-$today.all.vcf
+$matUtils extract -i public-$today.all.notMasked.pb -v public-$today.all.vcf
 ls -l public-$today.all.vcf
 wc -l public-$today.all.vcf
 bgzip -f public-$today.all.vcf
@@ -168,7 +172,7 @@ time $usher -u -T 50 \
 mv uncondensed-final-tree.nh public-$today.all.nwk
 # Masked VCF that goes with the masked protobuf, for public distribution for folks who want
 # to run UShER and also have the VCF.
-$matUtils convert -i public-$today.all.masked.pb -v public-$today.all.masked.vcf
+$matUtils extract -i public-$today.all.masked.pb -v public-$today.all.masked.vcf
 gzip public-$today.all.masked.vcf
 
 # Make allele-frequency-filtered versions
@@ -330,6 +334,37 @@ time $matUtils annotate -T 50 \
 # Not all the Pangolin lineages can be assigned nodes so for now just use nextclade
 cp -p public-$today.all.masked.nextclade.pb public-$today.all.masked.pb
 
+# Divide up allele-frequency-filtered versions into quarterly versions
+set +o pipefail
+zcat public-$today.all.vcf.gz | head | grep ^#CHROM | sed -re 's/\t/\n/g' | tail -n+10 \
+| awk -F\| '{if ($3 == "") { print $2 "\t" $0; } else { print $3 "\t" $0;} }' \
+| egrep '^[0-9][0-9]-[0-9][0-9]' \
+| sed -re 's/^([0-9][0-9])-([0-9][0-9])(-[0-9][0-9])?(.*)/\1\t\2\4/;' \
+| tawk '($1 == 19 && $2 == 12) || ($1 > 19 && $2 > 0)' \
+| sort > samplesByDate
+set -o pipefail
+
+tawk '$1 < 20 || ($1 == 20 && $2 <= 3) { print $3, $3; }' samplesByDate \
+    > 20Q1.renaming
+tawk '$1 == 20 && $2 >= 4 && $2 <= 6 { print $3, $3; }' samplesByDate \
+    > 20Q2.renaming
+tawk '$1 == 20 && $2 >= 7 && $2 <= 9 { print $3, $3; }' samplesByDate \
+    > 20Q3.renaming
+tawk '$1 == 20 && $2 >= 10 { print $3, $3; }' samplesByDate \
+    > 20Q4.renaming
+tawk '$1 == 21 && $2 <= 3{ print $3, $3; }' samplesByDate \
+    > 21Q1.renaming
+
+for q in 20Q1 20Q2 20Q3 20Q4 21Q1; do
+    for af in 01 001; do
+        vcfRenameAndPrune public-$today.all.minAf.$af.vcf.gz $q.renaming \
+            public-$today.$q.minAf.$af.vcf
+        wc -l public-$today.$q.minAf.$af.vcf
+        bgzip public-$today.$q.minAf.$af.vcf
+        tabix -p vcf public-$today.$q.minAf.$af.vcf.gz
+    done
+done
+
 # Update gbdb links -- not every day, too much churn for getting releases out and the
 # tracks are getting unmanageably large for VCF.
 if false; then
@@ -346,6 +381,12 @@ ln -sf `pwd`/public-$today.lineageColors.gz \
 ln -sf `pwd`/public-$today.nextstrainColors.gz \
     /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.nextstrainColors.gz
 ln -sf `pwd`/version.txt /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
+for q in 20Q1 20Q2 20Q3 20Q4 21Q1; do
+    for af in 01 001; do
+        ln -sf `pwd`/public-$today.$q.minAf.$af.vcf.gz \
+            /gbdb/wuhCor1/sarsCov2PhyloPub/public.$q.minAf.$af.vcf.gz
+    done
+done
 fi
 
 # Link to public trees download directory hierarchy
