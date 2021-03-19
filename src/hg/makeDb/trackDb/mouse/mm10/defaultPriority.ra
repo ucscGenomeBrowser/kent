@@ -22,7 +22,7 @@ priority 0.5
 # If this priority changes, please change it here and there as well
 
 track rmsk override
-priority 14.2
+priority 2
 
 track joinedRmsk override
 group varRep
