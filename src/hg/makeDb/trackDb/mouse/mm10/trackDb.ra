@@ -287,7 +287,6 @@ shortLabel RetroGenes V6
 longLabel Retroposed Genes V6, Including Pseudogenes
 group genes
 type psl
-priority 37.14
 color 20,0,250
 visibility hide
 ucscRetroInfo ucscRetroInfo6
@@ -386,15 +385,12 @@ priority 11
 
 track genomicSuperDups override
 group varRep
-priority 15
 
 track simpleRepeat override
 group varRep
-priority 16
 
 track windowmaskerSdust override
 group varRep
-priority 17
 
 track spMut override
 group pub
