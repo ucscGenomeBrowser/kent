@@ -2871,4 +2871,13 @@ track clinGenCnv override
 filter.size 773:11309570
 filterLimits.size 773:11309570
 
-
+track decipherHaploIns
+type bigBed 9 +
+group phenDis
+shortLabel Haploinsufficiency
+longLabel Haploinsufficiency predictions for genes from DECIPHER
+bigDataUrl /gbdb/hg19/bbi/haploins/haploinsufficiency.bb
+itemRgb on
+skipFields mouseOver
+noScoreFilter on
+mouseOver $name, HI: $quantile
