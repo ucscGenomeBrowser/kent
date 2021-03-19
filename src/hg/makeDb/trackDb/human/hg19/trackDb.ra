@@ -1809,16 +1809,14 @@ origAssembly hg17
 pennantIcon 17.jpg ../goldenPath/help/liftOver.html "lifted from hg17"
 
 track targetScanMiRnaSites
-release alpha,beta
 superTrack on
 shortLabel TS miRNA Targets
-pennantIcon Updated red
+pennantIcon Updated red ../goldenPath/newsarch.html#031821 Released March 18, 2021
 longLabel TargetScan predicted microRNA target sites
 group regulation
 visibility hide
 
     track targetScanS
-    release alpha,beta
     parent targetScanMiRnaSites
     shortLabel TS miRNA sites
     longLabel TargetScan miRNA Regulatory Sites (Release 5.1, April 2009)
@@ -1829,7 +1827,6 @@ visibility hide
     url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
 
     track targetScanMiRnaSitesV72
-    release alpha,beta
     parent targetScanMiRnaSites
     shortLabel TS miRNA v7.2
     longLabel Predicted microRNA Target Sites from TargetScanHuman 7.2 (March 2018)
@@ -1838,22 +1835,10 @@ visibility hide
     type bigBed 12 +
     filter.targetScanScore -1
     filterLimits.targetScanScore -1:99
-    pennantIcon New red
+    pennantIcon Updated red ../goldenPath/newsarch.html#031821 Released March 18, 2021
     urlLabel View miRNA target at TargetScan
     url http://www.targetscan.org/cgi-bin/targetscan/vert_72/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
     bigDataUrl /gbdb/hg19/targetScan/targetScanSitesV72.bb
-
-track targetScanS
-release public
-shortLabel TS miRNA sites
-longLabel TargetScan miRNA Regulatory Sites
-group regulation
-visibility hide
-color 0,96,0
-scoreFilterMax 100
-type bed 6 .
-urlLabel TargetScan link:
-url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
 
 track ntHumChimpCodingDiff override
 origAssembly hg18
