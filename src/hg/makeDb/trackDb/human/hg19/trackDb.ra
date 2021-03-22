@@ -416,7 +416,6 @@ xrefQuery select ucscRetroInfo7.name, geneSymbol from %s where geneSymbol like '
 searchPriority 3.53
 
 track illuminaProbes override
-priority 17
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -435,7 +434,6 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 #not all have been lifted, do at subtrack level after adding new
 
 track sestanBrainAtlas override
-priority 21
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -1073,7 +1071,6 @@ hapmapPhase III
 codingAnnotations snp138CodingDbSnp,
 # Need to request new tag
 #codingAnnoLabel_snp138CodingDbSnp dbSNP
-priority 18.1
 
 track snp138Mult override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
@@ -1082,7 +1079,6 @@ chimpDb panTro4
 orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
-priority 23.1
 
 track snp138 override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
@@ -1091,7 +1087,6 @@ chimpDb panTro4
 orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
-priority 12.1
 
 track snp138Common override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
@@ -1101,7 +1096,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 visibility hide
-priority 6.1
 
 track snp137Flagged
 shortLabel Flagged SNPs(137)
@@ -2513,7 +2507,6 @@ searchPriority 50
 padding 250
 
 track qPcrPrimers override
-priority 19
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
@@ -2588,7 +2581,6 @@ type bed 12
 url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
 urlLabel Link to PeptideAtlas:
 group expression
-priority 18
 spectrum on
 minGrayLevel 4
 scoreMax 51
@@ -2726,11 +2718,9 @@ priority 8
 
 track gnfAtlas2 override
 group expression
-priority 14
 
 track gwipsvizRiboseq override
 group expression
-priority 16
 
 track phastBias override
 group compGeno
@@ -2814,6 +2804,7 @@ color 50,50,200
 exonArrows on
 dataVersion EPDNew Version 006 (May 2018)
 visibility hide
+priority 14.3
 
 include fetalGeneAtlas.ra
 include skinSoleBoldo.ra
@@ -2856,4 +2847,13 @@ track clinGenCnv override
 filter.size 773:11309570
 filterLimits.size 773:11309570
 
-
+track decipherHaploIns
+type bigBed 9 +
+group phenDis
+shortLabel Haploinsufficiency
+longLabel Haploinsufficiency predictions for genes from DECIPHER
+bigDataUrl /gbdb/hg19/bbi/haploins/haploinsufficiency.bb
+itemRgb on
+skipFields mouseOver
+noScoreFilter on
+mouseOver $name, HI: $quantile

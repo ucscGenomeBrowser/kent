@@ -19,7 +19,8 @@ done = TRUE;	/*	do not repeat this by mistake	*/
 
 char *analyticsKey = cfgOption("analyticsKey");
 
-// link tracking broke in Firefox once. In case this ever happens again, we can now switch off outlink tracking quickly
+// link tracking broke in Firefox once. In case this ever happens again, we can
+// now switch off outlink tracking quickly
 boolean trackClicks = cfgOptionBooleanDefault("analytics.trackClicks", TRUE);
 
 /*	if config is missing or empty, nothing happens here	*/
@@ -48,7 +49,8 @@ if (!scriptName)
     return;
 
 char* cgiName = basename(scriptName);
-if (sameWord(cgiName, "hgc") || sameWord(cgiName, "hgTracks") || sameWord(cgiName, "hgGene"))
+if (sameWord(cgiName, "hgc") || sameWord(cgiName, "hgTracks") || 
+        sameWord(cgiName, "hgGene") || sameWord(cgiName, "hgTrackUi"))
 {
     // see https://support.google.com/analytics/answer/1136920?hl=en
     jsInlineF(

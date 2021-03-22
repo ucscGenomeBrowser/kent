@@ -753,7 +753,18 @@ function warn(msg)
     if (!warnList)
         alert(msg);
     else {
-        $( warnList ).append('<li>'+msg+'</li>');
+        // don't add warnings that already exist:
+        var oldMsgs = [];
+        $('#warnList li').each(function(i, elem) {
+            oldMsgs.push(elem.innerHTML);
+        });
+        // make the would-be new message into an <li> element so the case and quotes
+        // match any pre-existing ones
+        var newNode = document.createElement('li');
+        newNode.innerHTML = msg;
+        if (oldMsgs.indexOf(newNode.innerHTML) === -1) {
+            $( warnList ).append(newNode);
+        }
         if ($.isFunction(showWarnBox))
             showWarnBox();
         else

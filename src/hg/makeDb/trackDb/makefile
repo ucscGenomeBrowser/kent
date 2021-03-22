@@ -221,6 +221,7 @@ update: ${DBS:%=%_update}
 	./checkMetaDb alpha metaDb_${USERTABLE} $*
 	# now build the relatedTracks table for each db
 	./buildRelatedTracks relatedTrack_${USERTABLE} $*
+	rm -rf /dev/shm/trackDbCache/$*.trackDb_${USERTABLE}
 
 #  if you want to test track search tool with your own trix file
 #	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb_${USERTABLE}.{ixx,ix}}
@@ -243,6 +244,7 @@ alpha_all: ${DBS:%=%_alpha}
 	./makeTrixLinks trackDb ${HIVE_TRIX} $*
 	# now build the relatedTracks table for each db
 	./buildRelatedTracks relatedTrack $*
+	rm -rf /dev/shm/trackDbCache/$*.trackDb
 
 onbeta:	/cluster/home/${USER}/.hg.conf.beta
 
@@ -270,6 +272,7 @@ beta_all: ${DBS:%=%_beta}
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
 	# now make files for hgwdev-beta (we share the tables with hgwbeta)
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
+	-ssh  ${BETA_MACHINE} rm -rf /dev/shm/trackDbCache/$*.trackDb
 
 publicTest: onbeta clean
 	${MAKE} publicTest_all
@@ -291,6 +294,7 @@ public_all: ${DBS:%=%_public}
 	rm -f $*.gbdbList.txt
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb public metaDb_public $*
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ${BUILD_TRIX} trackDb_public metaDb_public cv/public/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
+	-ssh  ${BETA_MACHINE} rm -rf /dev/shm/trackDbCache/$*.trackDb_public
 
 # this will fail if we are not in a beta checkout:
 checkbeta:

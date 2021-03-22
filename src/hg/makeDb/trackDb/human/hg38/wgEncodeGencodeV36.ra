@@ -1,6 +1,6 @@
 track wgEncodeGencodeV36
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V36
 longLabel All GENCODE annotations from V36 (Ensembl 102)
 group genes
@@ -30,7 +30,6 @@ wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV36
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV36
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV36
 wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV36
-pennantIcon New red ../goldenPath/newsarch.html#011321 "Updated Jan. 13, 2021"
 
     track wgEncodeGencodeV36ViewGenes
     shortLabel Genes

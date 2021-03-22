@@ -143,6 +143,9 @@ colorsHex <- paste("#",as.character(as.hexmode(colorDf$color)), sep="")
 
 # order categories as in colors file
 df <- read.table(dataFile, sep="\t", header=TRUE)
+# ensure colors df and data df have consistent spacing:
+colorDf$category <- gsub("_", " ", colorDf$category)
+df$category <- gsub("_", " ", df$category)
 df$category <- ordered(df$category, levels=colorDf$category)
 labels <- names(table(df$category))
 count <- length(labels)
