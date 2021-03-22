@@ -286,6 +286,7 @@ maxItems *
 maxLimit *
 maxScore broadPeak narrowPeak
 maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix vcfPhasedTrio factorSource
+maxWindowCoverage *
 maxWindowToQuery bigWig bed bedlogR
 metadata *
 mouseOverField big*
@@ -557,7 +558,6 @@ wibFile customTracks
 wigColorBy wig
 wigFile customTracks
 wiggle wigMaf
-wiggleWindow *
 windowingFunction *
 xrefDataUrl *
 yalePseudoAssoc *
