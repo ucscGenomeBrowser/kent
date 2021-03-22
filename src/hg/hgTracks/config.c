@@ -749,8 +749,8 @@ webStartWrapperDetailedNoArgs(cart, database, "", "", FALSE, FALSE, FALSE, FALSE
 
 cartSaveSession(cart);
 
-hPrintf("<A HREF=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>"
-                "<b><em>Multi-region display</em></b></A>"
+hPrintf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target='_blank' class='blueLink'>"
+                "<b>Multi-region display</b></a>"
             " 'slices' the genome to allow viewing discontinuous regions"
             " together in the browser window. &nbsp;&nbsp;");
 // mode-specific message filled in by JS when dialog opened
