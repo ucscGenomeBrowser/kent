@@ -22,6 +22,10 @@ a:link {
         text-decoration: underline
 }
 
+.blueLink {
+        color: #121E9A !important; 
+}
+
 span.link {
         color: #121E9A; 
         text-decoration: underline; 

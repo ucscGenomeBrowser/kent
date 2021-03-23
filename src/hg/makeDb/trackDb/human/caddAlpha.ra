@@ -73,7 +73,7 @@ visibility dense
 bigDataUrl /gbdb/$D/cadd/ins.bb
 mouseOver Mutation: $change CADD Phred score: $phred
 html caddSuper
-wiggleWindow 40000
+maxWindowCoverage 40000
 maxItems 1000000
 maxWindowToDraw 9000000
 scoreFilterLimits 0:100
@@ -87,7 +87,7 @@ visibility dense
 bigDataUrl /gbdb/$D/cadd/del.bb
 mouseOver Mutation: $change CADD Phred score: $phred
 html caddSuper
-wiggleWindow 40000
+maxWindowCoverage 40000
 maxItems 1000000
 maxWindowToDraw 9000000
 scoreFilterLimits 0:100

@@ -1847,6 +1847,18 @@ There are no extra options that can appear on the type hic line.
     <pre>   maxItems 25</pre>
 </DIV>
 
+<DIV class="maxWindowCoverage"><span class="types bed genepred bam rmsk narrowPeak broadPeak bigWig bedlogR"></span>
+<div class="format"><code>maxWindowCoverage &lt;integer&gt;</code></div>
+    <p>When too many individual bed items might be shown in the Browser image
+    (such as might occur when a large region of a chromosome is viewed),
+    <code>maxWindowCoverage</code> will switch the track into density covergage plot when
+    the window contains more than the specified number of bases.</p>
+    <P><B>Example:</B></P>
+    <pre>   maxWindowCoverage 10000000</pre>
+    <p>Browser images that show more than 10,000,000 bases will result in the track data
+    being displayed as a density coverage graph</code>.</p>
+</DIV>
+
 <DIV class="maxWindowToDraw"><span class="types bed genepred bam rmsk narrowPeak broadPeak bigWig bedlogR"></span>
 <div class="format"><code>maxWindowToDraw &lt;integer&gt;</code></div>
     <p>When too many individual bed items might be shown in the Browser image
