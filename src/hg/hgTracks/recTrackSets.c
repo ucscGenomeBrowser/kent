@@ -158,7 +158,9 @@ for (recTrackSet = recTrackSets; recTrackSet != NULL; recTrackSet = recTrackSet-
     }
 hPrintf("</ul>");
 
-hPrintf("<p>Return to <a href='./hgTracks?hgt.reset=on'>Default</a> browser tracks</p>\n");
+hPrintf("<p>Return to <a href='./hgTracks?hgt.reset=on'>Default</a> browser tracks.</p>\n");
+hPrintf("<p><small><em>This tool is for research use only. For personal medical or "
+                "genetic advising, consult a qualified physician.</small></em></p>\n");
 hPrintf("</div>\n");
 }
 
