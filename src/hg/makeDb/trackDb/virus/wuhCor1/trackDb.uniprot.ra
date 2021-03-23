@@ -31,7 +31,7 @@ longLabel Full-length SwissProt precursor protein sequences (before cleavage int
 priority 1
 type bigGenePred
 visibility pack
-bigDataUrl /gbdb/wuhCor1/uniprot/unipFullSeq.bb
+bigDataUrl /gbdb/$D/uniprot/unipFullSeqCoV2.bb
 searchIndex acc
 urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
 labelFields protShortNames,geneName,uniprotName,acc,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
@@ -96,7 +96,7 @@ longLabel Protease Cleavage Sites
 visibility hide
 type bigBed
 group uniprot
-bigDataUrl /gbdb/wuhCor1/uniprot/protease_sites.bb
+bigDataUrl /gbdb/$D/uniprot/protease_sitesCoV2.bb
 urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion Manually created based on April 2020 UniProt release
 exonNumbers off
