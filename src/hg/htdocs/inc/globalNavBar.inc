@@ -94,7 +94,7 @@
 <li><a href="../FAQ/">FAQs & Search</a></li>
 <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
 <li><a href="../training/index.html">Training</a></li>
-<li><a href="../contacts.html">Mailing Lists</a></li>
+<li><a href="../contacts.html">Contact Us</a></li>
 <li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
 </ul>
 </li>
@@ -108,7 +108,6 @@
 	<li class="even"><a href="../goldenPath/credits.html">Credits</a></li>
 	<li class="odd"><a href="../goldenPath/releaseLog.html">Release Log</a></li>
 	<li class="even"><a href="../staff.html">Staff</a></li>
-	<li class="odd"><a href="../contacts.html">Contact Us</a></li>
 	<li class="even"><a href="../conditions.html">Conditions of Use</a></li>
 	<li class="odd"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
 	<li class="even last"><a href="../license/">Licenses</a></li>
