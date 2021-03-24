@@ -898,3 +898,14 @@ track clinGenCnv override
 filter.size 773:11309456
 filterLimits.size 773:11309456
 
+track covidHct
+shortLabel Transcription response
+longLabel High-confidence SARS-CoV-2 infection transcriptional response target genes
+priority 100
+type bigBed 8 +
+color 150,20,20
+mouseOver $_mouseOver : $name - CQV: $cqv - Rank: $rank
+group covid
+bigDataUrl /gbdb/hg38/covidHct/covidHct.bb
+release alpha
+
