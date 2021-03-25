@@ -1784,7 +1784,7 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track wgRna override 
-dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
+dataVersion miRBase Version 20 (Oct. 2013) and snoRNABase Version 3
 
 include altSeqComposite5.ra alpha
 
