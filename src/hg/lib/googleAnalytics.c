@@ -35,7 +35,7 @@ jsInlineF(
 "  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n"
 "  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n"
 "  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n"
-"  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n"
+"  })(window,document,'script','//www.google-analytics.com/analytics_debug.js','ga');\n"
 "  ga('create', '%s', 'auto');\n"
 "  ga('require', 'displayfeatures');\n"
 "  ga('set', 'transport', 'beacon');\n" // default to beacons. Old browser cannot use them, so ga will use an alternative.
@@ -66,7 +66,8 @@ if (sameWord(cgiName, "hgc") || sameWord(cgiName, "hgTracks") ||
     "          if (hostname.indexOf('.ncbi.')!==-1)\n" // for NCBI, we keep the first part of the pathname, as all DBs share the base URL
     "              hostname = hostname+'/'+urlObj.pathname.split('/')[1];\n"
     "      }\n"
-    "      ga('send', 'event', 'hgc-outlink', hostname, url);\n" // beacon is default, see above.
+    "      ga('send', 'event', 'outlink', hostname, url);\n" // beacon is default, see above.
+    "\n"
     "      window.open(url);\n" // This may stop the previous ga event that is still running, but beacons should get through
     "      return false;\n"
     "  }\n"
