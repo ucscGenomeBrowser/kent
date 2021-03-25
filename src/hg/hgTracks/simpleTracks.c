@@ -370,7 +370,7 @@ boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 
 if (!doWiggle)
     {
-    char *setting = trackDbSetting(tg->tdb, "wiggleWindow" );
+    char *setting = trackDbSetting(tg->tdb, "maxWindowCoverage" );
     if (setting)
         {
         unsigned size = sqlUnsigned(setting);

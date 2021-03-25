@@ -58,10 +58,10 @@
 </li>
 <li class="menuparent" id="downloads"><span>Downloads</span>
 	<ul style="display: none; visibility: hidden;">
-	<li class="first"><a href="http://hgdownload.soe.ucsc.edu/downloads.html">Genome Data</a></li>
-	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
+	<li class="first"><a href="https://hgdownload.soe.ucsc.edu/downloads.html">Genome Data</a></li>
+	<li><a href="https://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
   <li><a href="https://genome-store.ucsc.edu">Genome Browser Store</a></li>
-	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
+	<li><a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
 	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
 	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
 	<li class="last"><a href="../goldenPath/help/api.html">REST API</a></li>
@@ -94,7 +94,7 @@
 <li><a href="../FAQ/">FAQs & Search</a></li>
 <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
 <li><a href="../training/index.html">Training</a></li>
-<li><a href="../contacts.html">Mailing Lists</a></li>
+<li><a href="../contacts.html">Contact Us</a></li>
 <li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
 </ul>
 </li>
@@ -108,7 +108,6 @@
 	<li class="even"><a href="../goldenPath/credits.html">Credits</a></li>
 	<li class="odd"><a href="../goldenPath/releaseLog.html">Release Log</a></li>
 	<li class="even"><a href="../staff.html">Staff</a></li>
-	<li class="odd"><a href="../contacts.html">Contact Us</a></li>
 	<li class="even"><a href="../conditions.html">Conditions of Use</a></li>
 	<li class="odd"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
 	<li class="even last"><a href="../license/">Licenses</a></li>

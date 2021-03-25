@@ -91,7 +91,7 @@ if (sameWord(cgiName, "hgc") || sameWord(cgiName, "hgTracks") ||
         "               a.onclick = onExtAnchorClick;" // addEventHandler would not work here, the default click stops propagation.
         "      };\n"
         "      // on hgTracks: send an event with the current db, so we can report popularity of assemblies to NIH\n"
-        "      if (typeof hgTracks !== undefined)\n"
+        "      if (typeof hgTracks !== 'undefined')\n"
         "          gaTrackDb(getDb());\n"
         "  });"
         );
