@@ -36,16 +36,14 @@
 <li class="menuparent" id="tools3"><span>Tools</span>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a id="blatMenuLink" href="../cgi-bin/hgBlat?command=start">Blat</a></li>
+	<li><a id="ispMenuLink" href="../cgi-bin/hgPcr">In-Silico PCR</a></li>
 	<li><a id="tableBrowserMenuLink" href="../cgi-bin/hgTables">Table Browser</a></li>
+	<li><a id="liftOverMenuLink" href="../cgi-bin/hgLiftOver">LiftOver</a></li>
+	<li><a id="gsMenuLink" href="../cgi-bin/hgNear">Gene Sorter</a></li>
 	<li><a id="vaiMenuLink" href="../cgi-bin/hgVai">Variant Annotation Integrator</a></li>
 	<li><a id="diMenuLink" href="../cgi-bin/hgIntegrator">Data Integrator</a></li>
-	<li><a title="Explore gene/protein interactions and pathways" id="interactionMenuLink" href="../cgi-bin/hgGeneGraph">Gene Interactions</a></li>
-	<li><a id="gsMenuLink" href="../cgi-bin/hgNear">Gene Sorter</a></li>
 	<li><a id="ggMenuLink" href="../cgi-bin/hgGenome">Genome Graphs</a></li>
-	<li><a id="ispMenuLink" href="../cgi-bin/hgPcr">In-Silico PCR</a></li>
-	<li><a id="liftOverMenuLink" href="../cgi-bin/hgLiftOver">LiftOver</a></li>
-	<li><a id="visiGeneMenuLink" href="../cgi-bin/hgVisiGene">VisiGene</a></li>
-	<li class="last"><a href="../util.html">Other Utilities</a></li>
+	<li class="last"><a href="../util.html">Other Tools</a></li>
 	</ul>
 </li>
 <li class="menuparent" id="mirrors"><span>Mirrors</span>
@@ -69,11 +67,11 @@
 </li>
 <li class="menuparent" id="myData"><span>My Data</span>
 	<ul style="display: none; visibility: hidden;">
-	<li><a id="sessionsMenuLink" href="../cgi-bin/hgSession?hgS_doMainPage=1">My Sessions</a></li>
-	<li><a id="publicSessionsMenuLink" href="../cgi-bin/hgPublicSessions">Public Sessions</a></li>
-	<li><a id="trackHubsMenuLink" href="../cgi-bin/hgHubConnect">Track Hubs</a></li>
 	<li><a id="customTracksMenuLink" href="../cgi-bin/hgCustom">Custom Tracks</a></li>
-	<li class="last"><a id="customCompositeMenuLink" href="../cgi-bin/hgCollection">Track Collection Builder</a></li>
+	<li><a id="sessionsMenuLink" href="../cgi-bin/hgSession?hgS_doMainPage=1">My Sessions</a></li>
+	<li><a id="trackHubsMenuLink" href="../cgi-bin/hgHubConnect">Track Hubs</a></li>
+	<li><a id="customCompositeMenuLink" href="../cgi-bin/hgCollection">Track Collection Builder</a></li>
+	<li class="last"><a id="publicSessionsMenuLink" href="../cgi-bin/hgPublicSessions">Public Sessions</a></li>
 	</ul>
 </li>
 
@@ -103,11 +101,11 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first odd"><a href="../goldenPath/newsarch.html">News</a></li>
 	<li class="even"><a href="../goldenPath/pubs.html">Publications</a></li>
-	<li class="even"><a href="http://genome.ucsc.edu/blog/">Blog</a></li>
-	<li class="odd"><a href="../cite.html">Cite Us</a></li>
-	<li class="even"><a href="../goldenPath/credits.html">Credits</a></li>
-	<li class="odd"><a href="../goldenPath/releaseLog.html">Release Log</a></li>
-	<li class="even"><a href="../staff.html">Staff</a></li>
+	<li class="odd"><a href="http://genome.ucsc.edu/blog/">Blog</a></li>
+	<li class="even"><a href="../cite.html">Cite Us</a></li>
+	<li class="odd"><a href="../goldenPath/credits.html">Credits</a></li>
+	<li class="even"><a href="../goldenPath/releaseLog.html">Release Log</a></li>
+	<li class="odd"><a href="../staff.html">Staff</a></li>
 	<li class="even"><a href="../conditions.html">Conditions of Use</a></li>
 	<li class="odd"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
 	<li class="even last"><a href="../license/">Licenses</a></li>
