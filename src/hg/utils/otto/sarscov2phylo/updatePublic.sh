@@ -28,22 +28,26 @@ $scriptDir/gisaidFromChunks.sh
 cogUkDir=$ottoDir/cogUk.$today
 mkdir -p $cogUkDir
 cd $cogUkDir
-$scriptDir/getCogUk.sh >& getCogUk.log
+time $scriptDir/getCogUk.sh >& getCogUk.log
 
 ncbiDir=$ottoDir/ncbi.$today
 mkdir -p $ncbiDir
 cd $ncbiDir
-$scriptDir/getNcbi.sh >& getNcbi.log
+time $scriptDir/getNcbi.sh >& getNcbi.log
 
-$scriptDir/updateIdMapping.sh $gisaidDir/{metadata_batch_$today.tsv.gz,sequences_batch_$today.fa.xz}
+time $scriptDir/updateIdMapping.sh \
+    $gisaidDir/{metadata_batch_$today.tsv.gz,sequences_batch_$today.fa.xz}
 
 buildDir=$ottoDir/$today
 mkdir -p $buildDir
 cd $buildDir
-$scriptDir/updatePublicTree.sh $prevDate $problematicSitesVcf >& updatePublicTree.log
+time $scriptDir/updatePublicTree.sh $prevDate $problematicSitesVcf >& updatePublicTree.log
 
 cat hgPhyloPlace.description.txt
 
-$scriptDir/updateCombinedTree.sh $prevDate $problematicSitesVcf >& updateCombinedTree.log
+time $scriptDir/updateCombinedTree.sh $prevDate $problematicSitesVcf >& updateCombinedTree.log
 
 cat hgPhyloPlace.plusGisaid.description.txt
+
+# Clean up
+nice xz -f new*fa &

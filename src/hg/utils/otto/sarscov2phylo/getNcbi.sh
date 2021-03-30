@@ -20,7 +20,7 @@ cd $ottoDir/ncbi.$today
 
 # This query gives a large zip file that includes extra stuff, and the download really slows
 # down after a point, but it does provide a consistent set of FASTA and metadata:
-time curl -s -X GET \
+time curl -sS -X GET \
     "https://api.ncbi.nlm.nih.gov/datasets/v1alpha/virus/taxon/2697049/genome/download?refseq_only=false&annotated_only=false&released_since=2020-01-01&complete_only=false&include_annotation_type=DEFAULT&filename=ncbi_dataset.$today.zip" \
     -H "Accept: application/zip" \
     > ncbi_dataset.zip

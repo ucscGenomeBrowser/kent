@@ -33,13 +33,15 @@ cd $ottoDir/$today
 
 prevProtobufMasked=$ottoDir/$prevDate/gisaidAndPublic.$prevDate.masked.pb
 
-# Use Yatish's latest usher and matUtils
 usherDir=~angie/github/yatish_usher
 usher=$usherDir/build/usher
 matUtils=$usherDir/build/matUtils
 
 # Make lists of sequences already in the tree.
-$matUtils summary -i $prevProtobufMasked -s >(tail -n+2 | cut -f 1 > prevNames)
+# matUtils creates full paths for output files, defaulting to current directory, so can't
+# output to named pipe because it becomes $cwd//dev/fd/63 ...
+$matUtils summary -i $prevProtobufMasked -s prevSamples
+tail -n+2 prevSamples | cut -f 1 > prevNames
 awk -F\| '{if ($3 == "") { print $1; } else { print $2; } }' prevNames \
 | grep -E '^[A-Z]{2}[0-9]{6}\.[0-9]' > prevGbAcc
 awk -F\| '{if ($3 == "") { print $1; } else { print $2; } }' prevNames \
@@ -52,6 +54,7 @@ grep -Fwf prevCogUk $epiToPublic | cut -f 1 >> prevGisaid
 wc -l prev*
 
 # Get new GenBank sequences with at least $minReal non-N bases.
+#*** TODO: exclude seqs already in tree in their GISAID forms
 xzcat $ncbiDir/genbank.fa.xz \
 | faSomeRecords -exclude stdin prevGbAcc newGenBank.fa
 faSize -veryDetailed newGenBank.fa \
@@ -224,9 +227,16 @@ cut -f 2 $renaming | grep -Fwf <(cut -f 1 idExemplarToLineage) \
 join -t$'\t' idExemplarToName idExemplarToLineage \
 | tawk '{print $3, $2;}' \
 | sort > lineageToName
-time $matUtils annotate -T 50 \
+linFile=lineageToName
+
+# Until pangoLEARN training is done, use pango-designation file for now.
+#linFile=/hive/users/angie/matLineages/linToPublicPlusGisaidName.2021-03-16
+
+#***
+##***time $matUtils annotate -T 50 \
+time ~angie/github/usher/build/matUtils annotate -T 50 \
     -i gisaidAndPublic.$today.masked.nextclade.pb \
-    -c lineageToName \
+    -c $linFile \
     -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb \
     >& annotate.pangolin.out
 
@@ -234,7 +244,8 @@ mv gisaidAndPublic.$today.masked{,.unannotated}.pb
 ln gisaidAndPublic.$today.masked.nextclade.pangolin.pb gisaidAndPublic.$today.masked.pb
 
 # Extract public samples from tree
-$matUtils summary -i gisaidAndPublic.$today.masked.pb -s >(tail -n+2 | cut -f 1 > newNames)
+$matUtils summary -i gisaidAndPublic.$today.masked.pb -s newSamples
+tail -n+2 newSamples | cut -f 1 > newNames
 grep -v EPI_ISL_ newNames > newPublicNames
 $matUtils extract -i gisaidAndPublic.$today.masked.pb \
     -s newPublicNames \
@@ -247,6 +258,4 @@ for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
     ln -sf `pwd`/hgPhyloPlace.plusGisaid.description.txt $dir/public.plusGisaid.latest.version.txt
 done
 
-# Clean up
-nice xz -f new*fa &
 
