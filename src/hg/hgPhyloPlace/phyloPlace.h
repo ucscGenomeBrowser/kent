@@ -90,6 +90,9 @@ struct placementInfo
     int bestNodeCount;                    // Number of equally parsimonious placements
     char *nextClade;                      // Nextstrain clade assigned by UShER
     char *pangoLineage;                   // Pango lineage assigned by UShER
+    // Fields above are parsed out of usher result files; below are added on later.
+    char *nearestNeighbor;                // Nearest neighbor in phylogenetic tree/NULL if not found
+    char *neighborLineage;                // Lineage of nearest neighbor/NULL if not found
     };
 
 struct subtreeInfo
