@@ -266,6 +266,7 @@ if (node->priv != NULL)
             dyStringPrintf(dy, ",%c%d%c", snc->parBase, snc->chromStart+1, snc->newBase);
         jsonWriteString(jw, "nuc mutations", dy->string);
         dyStringClear(dy);
+        struct dyString *dyS = dyStringNew(0);
         struct slPair *geneAaMut;
         for (geneAaMut = geneAaMutations;  geneAaMut != NULL;  geneAaMut = geneAaMut->next)
             {
@@ -275,10 +276,21 @@ if (node->priv != NULL)
                 dyStringAppendSep(dy, ",");
                 dyStringPrintf(dy, "%s:%s", geneAaMut->name, aaMut->name);
                 }
+            if (sameString("S", geneAaMut->name))
+                {
+                for (aaMut = geneAaMut->val;  aaMut != NULL;  aaMut = aaMut->next)
+                    {
+                    dyStringAppendSep(dyS, ",");
+                    dyStringPrintf(dyS, "%s:%s", geneAaMut->name, aaMut->name);
+                    }
+                }
             }
         if (isNotEmpty(dy->string))
             jsonWriteString(jw, "aa mutations", dy->string);
+        if (isNotEmpty(dyS->string))
+            jsonWriteString(jw, "Spike mutations", dyS->string);
         dyStringFree(&dy);
+        dyStringFree(&dyS);
         jsonWriteObjectEnd(jw);
         }
     jsonWriteObjectStart(jw, "mutations");
