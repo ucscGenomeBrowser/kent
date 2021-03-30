@@ -64,7 +64,7 @@ fputs("  ] , "
       "\"filters\": [ ], "
       "\"display_defaults\": { "
       "  \"branch_label\": \"none\", "
-      "  \"color_by\": \"userOrOld\" "
+      "  \"color_by\": \"Nextstrain_clade\" "
       "}, "
       , outF);
 fprintf(outF,
@@ -189,8 +189,17 @@ if (snc->chromStart < gi->psl->tEnd && snc->chromStart >= gi->psl->tStart)
         int codonOffset = vpTx->start.txOffset - codonStart;
         assert(codonOffset < sizeof newCodon);
         newCodon[codonOffset] = snc->newBase;
-        char oldAa = lookupCodon(gi->txSeq->dna + codonStart);
         char newAa = lookupCodon(newCodon);
+        char oldAa;
+        if (snc->parBase == snc->refBase)
+            oldAa = lookupCodon(gi->txSeq->dna + codonStart);
+        else
+            {
+            char oldCodon[4];
+            safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + codonStart, 3);
+            oldCodon[codonOffset] = snc->parBase;
+            oldAa = lookupCodon(oldCodon);
+            }
         if (newAa != oldAa)
             {
             isCodingChange = TRUE;
