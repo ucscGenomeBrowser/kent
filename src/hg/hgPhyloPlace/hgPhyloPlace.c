@@ -349,7 +349,7 @@ newPageStartStuff();
 hgBotDelay();
 
 // Allow 10 minutes for big sets of sequences
-lazarusLives(10 * 60);
+lazarusLives(15 * 60);
 
 puts("<div class='row'>"
      "  <div class='row gbSectionBanner'>\n"

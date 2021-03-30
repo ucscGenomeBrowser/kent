@@ -35,7 +35,7 @@ char *chrom = "NC_045512v2";
 int chromSize = 29903;
 
 // Parameter constants:
-int maxGenotypes = 100;        // Upper limit on number of samples user can upload at once.
+int maxGenotypes = 1000;        // Upper limit on number of samples user can upload at once.
 boolean showBestNodePaths = FALSE;
 boolean showParsimonyScore = FALSE;
 
@@ -645,6 +645,8 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
     int nCladeIx = stringArrayIx("Nextstrain_clade", headerWords, headerWordCount);
     int gCladeIx = stringArrayIx("GISAID_clade", headerWords, headerWordCount);
     int lineageIx = stringArrayIx("pangolin_lineage", headerWords, headerWordCount);
+    if (lineageIx < 0)
+        lineageIx = stringArrayIx("pango_lineage", headerWords, headerWordCount);
     int countryIx = stringArrayIx("country", headerWords, headerWordCount);
     int divisionIx = stringArrayIx("division", headerWords, headerWordCount);
     int locationIx = stringArrayIx("location", headerWords, headerWordCount);
@@ -2187,6 +2189,7 @@ if (vcfTn)
                                             &startTime);
     if (results->singleSubtreeInfo)
         {
+        puts("<p></p>");
         readQcThresholds(db);
         int subtreeCount = slCount(results->subtreeInfoList);
         // Sort subtrees by number of user samples (largest first).
@@ -2196,11 +2199,7 @@ if (vcfTn)
         struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
         struct seqWindow *gSeqWin = chromSeqWindowNew(db, chrom, 0, chromSize);
         struct hash *sampleMetadata = getSampleMetadata(metadataFile);
-        struct tempName *singleSubtreeJsonTn;
-        AllocVar(singleSubtreeJsonTn);
-        trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
-        treeToAuspiceJson(results->singleSubtreeInfo, db, geneInfoList, gSeqWin, sampleMetadata,
-                          singleSubtreeJsonTn->forCgi, source);
+        struct hash *sampleUrls = hashNew(0);
         struct tempName *jsonTns[subtreeCount];
         struct subtreeInfo *ti;
         int ix;
@@ -2210,10 +2209,20 @@ if (vcfTn)
             char subtreeName[512];
             safef(subtreeName, sizeof(subtreeName), "subtreeAuspice%d", ix+1);
             trashDirFile(jsonTns[ix], "ct", subtreeName, ".json");
-            treeToAuspiceJson(ti, db, geneInfoList, gSeqWin, sampleMetadata, jsonTns[ix]->forCgi,
-                              source);
+            treeToAuspiceJson(ti, db, geneInfoList, gSeqWin, sampleMetadata, NULL,
+                              jsonTns[ix]->forCgi, source);
+            // Add a link for every sample to this subtree, so the single-subtree JSON can
+            // link to subtree JSONs
+            char *subtreeUrl = nextstrainUrlFromTn(jsonTns[ix]);
+            struct slName *sample;
+            for (sample = ti->subtreeUserSampleIds;  sample != NULL;  sample = sample->next)
+                hashAdd(sampleUrls, sample->name, subtreeUrl);
             }
-        puts("<p></p>");
+        struct tempName *singleSubtreeJsonTn;
+        AllocVar(singleSubtreeJsonTn);
+        trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
+        treeToAuspiceJson(results->singleSubtreeInfo, db, geneInfoList, gSeqWin, sampleMetadata,
+                          sampleUrls, singleSubtreeJsonTn->forCgi, source);
         struct subtreeInfo *subtreeInfoForButtons = results->subtreeInfoList;
         if (seqCount > MAX_SEQ_DETAILS || subtreeCount > MAX_SUBTREE_BUTTONS)
             subtreeInfoForButtons = NULL;
