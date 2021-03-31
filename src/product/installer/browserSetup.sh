@@ -1645,11 +1645,12 @@ function cgiUpdate ()
    $RSYNC -avzP --exclude=*.{bb,bam,bai,bw,gz,2bit,bed} --exclude=ENCODE --exclude=trash $HGDOWNLOAD::htdocs/ $APACHEDIR/htdocs/ 
    # assign all downloaded files to a valid user. 
    chown -R $APACHEUSER:$APACHEUSER $APACHEDIR/*
+   updateBlatServers
 }
 
 function updateBrowser {
-   cgiUpdate
    echo
+   cgiUpdate
 
    DBS=$*
    # if none specified, update all
@@ -1673,8 +1674,6 @@ function updateBrowser {
    done
    startMysql
 
-   updateBlatServers
-    
    echo2 update finished
 }
 
