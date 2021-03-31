@@ -411,11 +411,9 @@ ln -f `pwd`/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata.ts
 ln -f `pwd`/hgPhyloPlace.description.txt $archiveRoot/public-latest.version.txt
 
 # Update 'latest' protobuf, metadata and desc in and cgi-bin{,-angie}/hgPhyloPlaceData/wuhCor1/
-for dir in /usr/local/apache/cgi-bin{-angie,-demo-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
+for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
     ln -sf `pwd`/public-$today.all.masked.pb $dir/public-latest.all.masked.pb
     ln -sf `pwd`/public-$today.metadata.tsv.gz $dir/public-latest.metadata.tsv.gz
     ln -sf `pwd`/hgPhyloPlace.description.txt $dir/public-latest.version.txt
 done
 
-# Clean up
-nice xz new*fa &

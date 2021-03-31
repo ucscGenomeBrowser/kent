@@ -46,7 +46,7 @@ cleanGenbank () {
     | sed -re 's@SARS-CoV-2/@@;' \
     | sed -re 's@BetaCoV/@@;' \
     | sed -re 's@Homo sapines/@@;' \
-    | sed -re 's@ \| @ \|@; s@ $@@; s@  @ @;' \
+    | sed -re 's@ \| @ \|@; s@ $@@; s@[:,]@ @g; s@  @ @g; s@[()]@@g;' \
     | sed -re 's@ \|@\t@;'
 # Got rid of this:   s/ ([^|])/_\1/g;
 }

@@ -35,7 +35,7 @@ char *chrom = "NC_045512v2";
 int chromSize = 29903;
 
 // Parameter constants:
-int maxGenotypes = 100;        // Upper limit on number of samples user can upload at once.
+int maxGenotypes = 1000;        // Upper limit on number of samples user can upload at once.
 boolean showBestNodePaths = FALSE;
 boolean showParsimonyScore = FALSE;
 
@@ -532,12 +532,55 @@ const struct phyloTree *nodeB = *(struct phyloTree * const *)b;
 return slCount(nodeA->priv) - slCount(nodeB->priv);
 }
 
-static struct slName *findNearestNeighbor(struct mutationAnnotatedTree *bigTree, char *sampleId,
-                                          struct variantPathNode *variantPath)
+static char *leafWithLeastMuts(struct phyloTree *node, struct mutationAnnotatedTree *bigTree)
+/* If node has a leaf child with no mutations of its own, return the name of that leaf.
+ * Otherwise, if node has leaf children, return the name of the leaf with the fewest mutations.
+ * Otherwise return NULL. */
+{
+char *leafName = NULL;
+int leafCount = 0;
+int i;
+for (i = 0;  i < node->numEdges;  i++)
+    {
+    struct phyloTree *kid = node->edges[i];
+    if (kid->numEdges == 0)
+        {
+        leafCount++;
+        struct singleNucChange *kidMuts = kid->priv;
+        if (!kidMuts)
+            {
+            struct slName *nodeList = hashFindVal(bigTree->condensedNodes, kid->ident->name);
+            if (nodeList)
+                leafName = cloneString(nodeList->name);
+            else
+                leafName = cloneString(kid->ident->name);
+            break;
+            }
+        }
+    }
+if (leafName == NULL && leafCount)
+    {
+    // Pick the leaf with the fewest mutations.
+    struct phyloTree *leafKids[leafCount];
+    int leafIx = 0;
+    for (i = 0;  i < node->numEdges;  i++)
+        {
+        struct phyloTree *kid = node->edges[i];
+        if (kid->numEdges == 0)
+                leafKids[leafIx++] = kid;
+        }
+    qsort(leafKids, leafCount, sizeof(leafKids[0]), mutCountCmp);
+    leafName = cloneString(leafKids[0]->ident->name);
+    }
+return leafName;
+}
+
+static char *findNearestNeighbor(struct mutationAnnotatedTree *bigTree, char *sampleId,
+                                 struct variantPathNode *variantPath)
 /* Use the sequence of mutations in variantPath to find sampleId's parent node in bigTree,
  * then look for most similar leaf sibling(s). */
 {
-struct slName *neighbors = NULL;
+char *nearestNeighbor = NULL;
 int bigTreeINodeCount = phyloCountInternalNodes(bigTree->tree);
 int minNewNode = bigTreeINodeCount + 1; // 1-based
 struct variantPathNode *lastOldNode = findLastInternalNode(variantPath, minNewNode);
@@ -550,48 +593,17 @@ if (node->numEdges == 0)
     {
     struct slName *nodeList = hashFindVal(bigTree->condensedNodes, node->ident->name);
     if (nodeList)
-        slNameAddHead(&neighbors, nodeList->name);
+        nearestNeighbor = cloneString(nodeList->name);
     else
-        slNameAddHead(&neighbors, node->ident->name);
+        nearestNeighbor = cloneString(node->ident->name);
     }
 else
     {
-    int leafCount = 0;
-    int i;
-    for (i = 0;  i < node->numEdges;  i++)
-        {
-        struct phyloTree *kid = node->edges[i];
-        if (kid->numEdges == 0)
-            {
-            leafCount++;
-            struct singleNucChange *kidMuts = kid->priv;
-            if (!kidMuts)
-                {
-                struct slName *nodeList = hashFindVal(bigTree->condensedNodes, kid->ident->name);
-                if (nodeList)
-                    slNameAddHead(&neighbors, nodeList->name);
-                else
-                    slNameAddHead(&neighbors, kid->ident->name);
-                break;
-                }
-            }
-        }
-    if (neighbors == NULL && leafCount)
-        {
-        // Pick the leaf with the fewest mutations.
-        struct phyloTree *leafKids[leafCount];
-        int leafIx = 0;
-        for (i = 0;  i < node->numEdges;  i++)
-            {
-            struct phyloTree *kid = node->edges[i];
-            if (kid->numEdges == 0)
-                leafKids[leafIx++] = kid;
-            }
-        qsort(leafKids, leafCount, sizeof(leafKids[0]), mutCountCmp);
-        neighbors = slNameNew(leafKids[0]->ident->name);
-        }
+    nearestNeighbor = leafWithLeastMuts(node, bigTree);
+    if (nearestNeighbor == NULL && node->parent != NULL)
+        nearestNeighbor = leafWithLeastMuts(node->parent, bigTree);
     }
-return neighbors;
+return nearestNeighbor;
 }
 
 static void printVariantPathNoNodeNames(FILE *f, struct variantPathNode *variantPath)
@@ -645,6 +657,8 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
     int nCladeIx = stringArrayIx("Nextstrain_clade", headerWords, headerWordCount);
     int gCladeIx = stringArrayIx("GISAID_clade", headerWords, headerWordCount);
     int lineageIx = stringArrayIx("pangolin_lineage", headerWords, headerWordCount);
+    if (lineageIx < 0)
+        lineageIx = stringArrayIx("pango_lineage", headerWords, headerWordCount);
     int countryIx = stringArrayIx("country", headerWords, headerWordCount);
     int divisionIx = stringArrayIx("division", headerWords, headerWordCount);
     int locationIx = stringArrayIx("location", headerWords, headerWordCount);
@@ -794,24 +808,33 @@ if (met)
 return lineage;
 }
 
-static void displayNearestNeighbors(struct mutationAnnotatedTree *bigTree, char *source,
-                                    struct placementInfo *info, struct hash *sampleMetadata)
+static void findNearestNeighbors(struct hash *samplePlacements, struct hash *sampleMetadata,
+                                 struct mutationAnnotatedTree *bigTree)
+/* For each placed sample, find the nearest neighbor in the bigTree and its assigned lineage,
+ * and fill in those two fields of placementInfo. */
+{
+if (!bigTree)
+    return;
+struct hashCookie cookie = hashFirst(samplePlacements);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct placementInfo *info = hel->val;
+    info->nearestNeighbor = findNearestNeighbor(bigTree, info->sampleId, info->variantPath);
+    if (isNotEmpty(info->nearestNeighbor))
+        info->neighborLineage = lineageForSample(sampleMetadata, info->nearestNeighbor);
+    }
+}
+
+static void displayNearestNeighbors(struct placementInfo *info, char *source)
 /* Use info->variantPaths to find sample's nearest neighbor(s) in tree. */
 {
-if (bigTree)
+if (isNotEmpty(info->nearestNeighbor))
     {
-    printf("<p>Nearest neighboring %s sequence already in phylogenetic tree: ", source);
-    struct slName *neighbors = findNearestNeighbor(bigTree, info->sampleId, info->variantPath);
-    struct slName *neighbor;
-    for (neighbor = neighbors;  neighbor != NULL;  neighbor = neighbor->next)
-        {
-        if (neighbor != neighbors)
-            printf(", ");
-        printf("%s", neighbor->name);
-        char *lineage = lineageForSample(sampleMetadata, neighbor->name);
-        if (isNotEmpty(lineage))
-            printf(": lineage %s", lineage);
-        }
+    printf("<p>Nearest neighboring %s sequence already in phylogenetic tree: %s",
+           source, info->nearestNeighbor);
+    if (isNotEmpty(info->neighborLineage))
+        printf(": lineage %s", info->neighborLineage);
     puts("</p>");
     }
 }
@@ -937,7 +960,7 @@ if (node->numEdges > 0)
 
 static void describeSamplePlacements(struct slName *sampleIds, struct hash *samplePlacements,
                                      struct phyloTree *subtree, struct hash *sampleMetadata,
-                                     struct mutationAnnotatedTree *bigTree, char *source)
+                                     char *source)
 /* Report how each sample fits into the big tree. */
 {
 // Sort sample placements by sampleMuts so we can group identical samples.
@@ -994,7 +1017,7 @@ while ((clumpSize = countIdentical(refsToGo)) > 0)
     displayVariantPath(info->variantPath, clumpSize == 1 ? info->sampleId : "samples");
     displayBestNodes(info, sampleMetadata);
     if (!showBestNodePaths)
-        displayNearestNeighbors(bigTree, source, info, sampleMetadata);
+        displayNearestNeighbors(info, source);
     if (showParsimonyScore && info->parsimonyScore > 0)
         printf("<p>Parsimony score added by your sample: %d</p>\n", info->parsimonyScore);
         //#*** TODO: explain parsimony score
@@ -1403,8 +1426,7 @@ if (si->nCountEnd)
 
 static void summarizeSequences(struct seqInfo *seqInfoList, boolean isFasta,
                                struct usherResults *ur, struct tempName *jsonTns[],
-                               struct hash *sampleMetadata, struct mutationAnnotatedTree *bigTree,
-                               struct dnaSeq *refGenome)
+                               struct hash *sampleMetadata, struct dnaSeq *refGenome)
 /* Show a table with composition & alignment stats for each sequence that passed basic QC. */
 {
 if (seqInfoList)
@@ -1545,11 +1567,9 @@ if (seqInfoList)
                 printf("<td>%s</td>", pi->nextClade ? pi->nextClade : "n/a");
             if (gotLineages)
                 printf("<td>%s</td>", pi->pangoLineage ? pi->pangoLineage : "n/a");
-            struct slName *neighbor = findNearestNeighbor(bigTree, pi->sampleId, pi->variantPath);
-            char *lineage = neighbor ?  lineageForSample(sampleMetadata, neighbor->name) : "?";
             printf("<td>%s</td><td>%s</td>",
-                   neighbor ? replaceChars(neighbor->name, "|", " | ") : "?",
-                   lineage ? lineage : "?");
+                   pi->nearestNeighbor ? replaceChars(pi->nearestNeighbor, "|", " | ") : "?",
+                   pi->neighborLineage ? pi->neighborLineage : "?");
             int imputedCount = slCount(pi->imputedBases);
             printf("<td class='%s'>%d",
                    qcClassForImputedBases(imputedCount), imputedCount);
@@ -1626,7 +1646,7 @@ for (mut = sampleMuts;  mut != NULL;  mut = mut->next)
     struct singleNucChange *snc;
     AllocVar(snc);
     snc->chromStart = pos-1;
-    snc->refBase = ref;
+    snc->refBase = snc->parBase = ref;
     snc->newBase = alt;
     slAddHead(&sncList, snc);
     }
@@ -1896,6 +1916,8 @@ if (info)
         warn("writeOneTsvRow: no sequenceInfo for sample '%s'", sampleId);
         fprintf(f, "\tn/a\tn/a\tn/a\tn/a\tn/a\tn/a\tn/a");
         }
+    fprintf(f, "\t%s", isNotEmpty(info->nearestNeighbor) ? info->nearestNeighbor : "n/a");
+    fprintf(f, "\t%s", isNotEmpty(info->neighborLineage) ? info->neighborLineage : "n/a");
     fputc('\n', f);
     }
 }
@@ -1945,6 +1967,7 @@ FILE *f = mustOpen(tsvTn->forCgi, "w");
 fprintf(f, "name\tnuc_mutations\taa_mutations\timputed_bases\tmutation_path"
         "\tplacement_count\tparsimony_score_increase\tlength\taligned_bases"
         "\tins_bases\tins_ranges\tdel_bases\tdel_ranges\tmasked_mutations"
+        "\tnearest_neighbor\tneighbor_lineage"
         "\n");
 struct hash *seqInfoHash = hashFromSeqInfoList(seqInfoList);
 if (sampleTree)
@@ -2179,14 +2202,12 @@ if (vcfTn)
     {
     fflush(stdout);
     int seqCount = slCount(seqInfoList);
-    // Don't make smaller subtrees when a large number of sequences are uploaded.
-    if (seqCount > MAX_SEQ_DETAILS)
-        subtreeSize = 0;
     struct usherResults *results = runUsher(usherPath, usherAssignmentsPath, vcfTn->forCgi,
                                             subtreeSize, sampleIds, bigTree->condensedNodes,
                                             &startTime);
     if (results->singleSubtreeInfo)
         {
+        puts("<p></p>");
         readQcThresholds(db);
         int subtreeCount = slCount(results->subtreeInfoList);
         // Sort subtrees by number of user samples (largest first).
@@ -2196,11 +2217,7 @@ if (vcfTn)
         struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
         struct seqWindow *gSeqWin = chromSeqWindowNew(db, chrom, 0, chromSize);
         struct hash *sampleMetadata = getSampleMetadata(metadataFile);
-        struct tempName *singleSubtreeJsonTn;
-        AllocVar(singleSubtreeJsonTn);
-        trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
-        treeToAuspiceJson(results->singleSubtreeInfo, db, geneInfoList, gSeqWin, sampleMetadata,
-                          singleSubtreeJsonTn->forCgi, source);
+        struct hash *sampleUrls = hashNew(0);
         struct tempName *jsonTns[subtreeCount];
         struct subtreeInfo *ti;
         int ix;
@@ -2210,18 +2227,30 @@ if (vcfTn)
             char subtreeName[512];
             safef(subtreeName, sizeof(subtreeName), "subtreeAuspice%d", ix+1);
             trashDirFile(jsonTns[ix], "ct", subtreeName, ".json");
-            treeToAuspiceJson(ti, db, geneInfoList, gSeqWin, sampleMetadata, jsonTns[ix]->forCgi,
-                              source);
+            treeToAuspiceJson(ti, db, geneInfoList, gSeqWin, sampleMetadata, NULL,
+                              jsonTns[ix]->forCgi, source);
+            // Add a link for every sample to this subtree, so the single-subtree JSON can
+            // link to subtree JSONs
+            char *subtreeUrl = nextstrainUrlFromTn(jsonTns[ix]);
+            struct slName *sample;
+            for (sample = ti->subtreeUserSampleIds;  sample != NULL;  sample = sample->next)
+                hashAdd(sampleUrls, sample->name, subtreeUrl);
             }
-        puts("<p></p>");
+        struct tempName *singleSubtreeJsonTn;
+        AllocVar(singleSubtreeJsonTn);
+        trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
+        treeToAuspiceJson(results->singleSubtreeInfo, db, geneInfoList, gSeqWin, sampleMetadata,
+                          sampleUrls, singleSubtreeJsonTn->forCgi, source);
         struct subtreeInfo *subtreeInfoForButtons = results->subtreeInfoList;
-        if (seqCount > MAX_SEQ_DETAILS || subtreeCount > MAX_SUBTREE_BUTTONS)
+        if (subtreeCount > MAX_SUBTREE_BUTTONS)
             subtreeInfoForButtons = NULL;
         makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeInfoForButtons, subtreeSize, isFasta);
         printf("<p>If you have metadata you wish to display, click a 'view subtree in "
                "Nextstrain' button, and then you can drag on a CSV file to "
                "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
                "</p>\n");
+
+        findNearestNeighbors(results->samplePlacements, sampleMetadata, bigTree);
 
         // Make custom tracks for uploaded samples and subtree(s).
         struct phyloTree *sampleTree = NULL;
@@ -2240,8 +2269,7 @@ if (vcfTn)
 
         if (seqCount <= MAX_SEQ_DETAILS)
             {
-            summarizeSequences(seqInfoList, isFasta, results, jsonTns, sampleMetadata, bigTree,
-                               refGenome);
+            summarizeSequences(seqInfoList, isFasta, results, jsonTns, sampleMetadata, refGenome);
             reportTiming(&startTime, "write summary table (including reading in lineages)");
             for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
                 {
@@ -2259,13 +2287,13 @@ if (vcfTn)
                 struct phyloTree *subtree = phyloOpenTree(ti->subtreeTn->forCgi);
                 subtree = phyloPruneToIds(subtree, ti->subtreeUserSampleIds);
                 describeSamplePlacements(ti->subtreeUserSampleIds, results->samplePlacements,
-                                         subtree, sampleMetadata, bigTree, source);
+                                         subtree, sampleMetadata, source);
                 }
             reportTiming(&startTime, "describe placements");
             }
         else
-            printf("<p>(Skipping details and subtrees; "
-                   "you uploaded %d sequences, and details/subtrees are shown only when "
+            printf("<p>(Skipping details; "
+                   "you uploaded %d sequences, and details are shown only when "
                    "you upload at most %d sequences.)</p>\n",
                    seqCount, MAX_SEQ_DETAILS);
 

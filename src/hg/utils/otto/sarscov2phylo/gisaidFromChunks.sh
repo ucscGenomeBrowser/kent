@@ -21,13 +21,12 @@ cd /hive/users/angie/gisaid
 # Also remove a stray comma in a name that caused Newick parsing error ("Hungary/US-32533w,/2020").
 # Keep the strain|epiId|date "full names".
 time xzcat chunks/gisaid_epi_isl_*.fa.xz \
-| sed -re 's@^>hCo[Vv]-19/@>@; s/ //g; s/,//;' \
+| sed -re 's@^>hCo[Vv]-19/+@>@; s/ //g; s/,//;  s/\r$//;' \
 | xz -T 50 \
     > gisaid_fullNames_$today.fa.xz
 
 # Make tmp files with a fullName key and various columns that we'll join together.
 fastaNames gisaid_fullNames_$today.fa.xz \
-| sed -e 's/\r$//' \
 | awk -F\| -vOFS="\t" '{print $0, $1, $2, $3;}' \
 | sort \
     > tmp.first3
