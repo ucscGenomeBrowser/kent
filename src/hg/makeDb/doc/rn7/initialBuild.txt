@@ -406,20 +406,11 @@ real    11m5.085s
     time (doGapOverlap.pl \
         -twoBit=/hive/data/genomes/rn7/rn7.unmasked.2bit rn7 ) \
         > do.log 2>&1 &
-XXX - running - Wed Feb  3 16:27:56 PST 2021
-    # real    0m54.302s
+    # real    1m49.039s
 
-    # there were not very many gaps, it only had to do one job and blat
-    # found nothing.
-
-    # this result does not exist:
     cat fb.rn7.gapOverlap.txt
-    # 608 bases of 2728222451 (0.000%) in intersection
+    # 3284 bases of 2647915728 (0.000%) in intersection
 
-    # manually finish off since it quit in the load step
-    doGapOverlap.pl -continue=cleanup \
-        -twoBit=/hive/data/genomes/rn7/rn7.unmasked.2bit rn7
-        
 #############################################################################
 # tandemDups (DONE - 2020-02-03 - Hiram)
     mkdir /hive/data/genomes/rn7/bed/tandemDups
@@ -427,11 +418,10 @@ XXX - running - Wed Feb  3 16:27:56 PST 2021
     time (~/kent/src/hg/utils/automation/doTandemDup.pl \
   -twoBit=/hive/data/genomes/rn7/rn7.unmasked.2bit rn7) \
         > do.log 2>&1 &
-XXX - running - Wed Feb  3 16:27:56 PST 2021
-    # real    193m21.761s
+    # real    415m56.286s
 
     cat fb.rn7.tandemDups.txt
-    # 80358205 bases of 2897824427 (2.773%) in intersection
+    # 92889085 bases of 2647915728 (3.508%) in intersection
 
     bigBedInfo rn7.tandemDups.bb | sed -e 's/^/#  /;'
 #  version: 4
@@ -440,16 +430,16 @@ XXX - running - Wed Feb  3 16:27:56 PST 2021
 #  isCompressed: yes
 #  isSwapped: 0
 #  extraIndexCount: 0
-#  itemCount: 1,402,773
-#  primaryDataSize: 36,657,311
-#  primaryIndexSize: 119,132
+#  itemCount: 1,172,090
+#  primaryDataSize: 30,363,941
+#  primaryIndexSize: 86,972
 #  zoomLevels: 9
-#  chromCount: 894
-#  basesCovered: 1,457,658,879
-#  meanDepth (of bases covered): 8.428920
+#  chromCount: 150
+#  basesCovered: 1,472,207,966
+#  meanDepth (of bases covered): 6.716224
 #  minDepth: 1.000000
-#  maxDepth: 344.000000
-#  std of depth: 18.274027
+#  maxDepth: 279.000000
+#  std of depth: 12.806697
 
 #########################################################################
 # ucscToINSDC and ucscToRefSeq table/track (DONE - 2021-02-03 - Hiram)
@@ -629,7 +619,6 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=hgwdev rn7) > do.log 2>&1
-XXX - running - Wed Feb  3 16:29:03 PST 2021
     # real    397m24.001s
 
     cat faSize.rmsk.txt
@@ -1066,19 +1055,53 @@ joinerCheck says:
 Error: 1 of 74755 elements (0.001%) of rn7.ncbiRefSeqLink.protAcc are not in key ncbiRefSeqPepTable.name line 8640 of all.joiner
 Example miss: NP_536324.1
 
+    # for some reason one of the proteins is missing from
+    # GCF_015227675.2_mRatBN7.2_protein.faa.gz
+    # however, it is in the GCF_015227675.2_mRatBN7.2_rna.gbff.gz file
+    # obtain it from that file, and create download/NP_536324.1.faa.gz
+    # then, add it to the table reload:
 
-    # XXX 2021-02-04 - ready for this after genbank runs
+export db=rn7
+export asmId=GCF_015227675.2_mRatBN7.2
+
+zcat download/${asmId}_protein.faa.gz download/NP_536324.1.faa.gz \
+   | sed -e 's/ .*//;' | faToTab -type=protein -keepAccSuffix stdin stdout \
+     | sort | join -t$'\t' $db.ncbiRefSeqLink.protAcc.list - \
+        > fixed.$db.ncbiRefSeqPepTable.tab
+
+hgLoadSqlTab $db ncbiRefSeqPepTable ~/kent/src/hg/lib/pepPred.sql \
+   fixed.$db.ncbiRefSeqPepTable.tab
+
+# Now both of these checks are quiet:
+joinerCheck -keys \
+    -identifier=ncbiRefSeqPepTable -database=$db \
+        /cluster/home/hiram/kent/src/hg/makeDb/schema/all.joiner
+
+Checking keys on database rn7
+ rn7.ncbiRefSeqLink.protAcc - hits 74755 of 74755 (100.000%) ok
+
+joinerCheck -keys \
+    -identifier=ncbiRefSeq -database=$db \
+        /cluster/home/hiram/kent/src/hg/makeDb/schema/all.joiner
+
+Checking keys on database rn7
+ rn7.ncbiRefSeqLink.id - hits 99139 of 99139 (100.000%) ok
+ rn7.ncbiRefSeqCurated.name - hits 18403 of 18403 (100.000%) ok
+ rn7.ncbiRefSeqPredicted.name - hits 80736 of 80736 (100.000%) ok
+ rn7.ncbiRefSeqPsl.qName - hits 99145 of 99145 (100.000%) ok
+ rn7.ncbiRefSeqCds.id - hits 74741 of 74741 (100.000%) ok
+ rn7.seqNcbiRefSeq.acc - hits 99139 of 99139 (100.000%) ok
 
     featureBits -enrichment rn7 refGene ncbiRefSeq 
- # refGene 0.402%, ncbiRefSeq 3.148%, both 0.402%, cover 99.90%, enrich 31.73x
+ # refGene 1.522%, ncbiRefSeq 4.103%, both 1.520%, cover 99.87%, enrich 24.34x
     featureBits -enrichment rn7 ncbiRefSeq refGene
- # ncbiRefSeq 3.148%, refGene 0.402%, both 0.402%, cover 12.76%, enrich 31.73x
+ # ncbiRefSeq 4.103%, refGene 1.522%, both 1.520%, cover 37.05%, enrich 24.34x
 
     featureBits -enrichment rn7 ncbiRefSeqCurated refGene
- # ncbiRefSeqCurated 0.401%, refGene 0.402%, both 0.400%, cover 99.66%, enrich 247.79x
+ # ncbiRefSeqCurated 1.529%, refGene 1.522%, both 1.514%, cover 99.03%, enrich 65.07x
 
     featureBits -enrichment rn7 refGene ncbiRefSeqCurated
- # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
+ # refGene 1.522%, ncbiRefSeqCurated 1.529%, both 1.514%, cover 99.49%, enrich 65.07x
 
 ##############################################################################
 # LIFTOVER TO rn6 (DONE - 2021-02-04 - Hiram)
@@ -1122,7 +1145,7 @@ Example miss: NP_536324.1
 	where name="rn7";' hgcentraltest
 
 ##############################################################################
-# crispr whole genome (TBD - 2020-09-04 -> 2020-09-10 - Hiram)
+# crispr whole genome (DONE - 2021-02-04 -> 2020-02-11 - Hiram)
     mkdir /hive/data/genomes/rn7/bed/crisprAll
     cd /hive/data/genomes/rn7/bed/crisprAll
 
@@ -1232,7 +1255,7 @@ Example miss: NP_536324.1
 # std of depth: 1.944611
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2021-03-31 - Hiram)
      # had incorrect orderKey specified in beginning rn6.config.ra
      # correct to 18019 by looking at the output of:
 # hgsql -e 'select name,organism,orderKey from dbDb order by orderKey;' \
@@ -1254,31 +1277,29 @@ Example miss: NP_536324.1
     cd $HOME/kent/src/hg/makeDb/schema
     # verify all the business is done for release
     ~/kent/src/hg/utils/automation/verifyBrowser.pl rn7
-# 66 tables in database rn7 - Dog, Canis lupus familiaris
-# verified 55 tables in database rn7, 11 extra tables, 14 optional tables
+# 79 tables in database rn7 - Rat, Rattus norvegicus
+# verified 77 tables in database rn7, 2 extra tables, 30 optional tables
+# NCBI RefSeq genes     10 optional tables
 # chainNetRBestHg38     3 optional tables
 # chainNetRBestMm10     3 optional tables
+# chainNetRBestMm39     3 optional tables
 # chainNetSynHg38       3 optional tables
 # chainNetSynMm10       3 optional tables
+# chainNetSynMm39       3 optional tables
 # gapOverlap    1 optional tables
 # tandemDups    1 optional tables
-# 1     chainCanFam3    - extra table
-# 2     chainCanFam3Link        - extra table
-# 3     chainRBestCanFam3       - extra table
-# 4     chainRBestCanFam3Link   - extra table
-# . . . etc . . .
-# 8     crisprAllTargets        - extra table
-# 9     netCanFam3      - extra table
-# 10    netRBestCanFam3 - extra table
-# 11    netSynCanFam3   - extra table
-# 13 genbank tables found
-# verified 28 required tables, 1 missing tables
-# 1     ucscToRefSeq    - missing table
+# 1     crisprAllRanges - extra table
+# 2     crisprAllTargets        - extra table
+# 15 genbank tables found
+# verified 32 required tables, 0 missing tables
 # hg38 chainNet to rn7 found 3 required tables
 # mm10 chainNet to rn7 found 3 required tables
+# mm39 chainNet to rn7 found 3 required tables
 # hg38 chainNet RBest and syntenic to rn7 found 6 optional tables
-# mm10 chainNet RBest and syntenic to rn7 found 3 optional tables
+# mm10 chainNet RBest and syntenic to rn7 found 6 optional tables
+# mm39 chainNet RBest and syntenic to rn7 found 6 optional tables
 # liftOver to previous versions: 1, from previous versions: 1
+# blatServers: rn7 blat1b 17910 1 0 0 rn7 blat1b 17911 0 1 0
 
     # fixup all.joiner until this is a clean output
     joinerCheck -database=rn7 -tableCoverage all.joiner
@@ -1293,13 +1314,13 @@ Example miss: NP_536324.1
 
     cd /hive/data/genomes/rn7
     time (makeDownloads.pl rn7) > downloads.log 2>&1
-    #  real    20m11.930s
+    # real    19m6.278s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/rn7/pushQ
     cd /hive/data/genomes/rn7/pushQ
  time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList rn7) > rn7.pushQ.sql 2> stderr.out
-    # real    13m21.313s
+    # real    18m30.674s
 
     # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.rn7.table.list
@@ -1307,31 +1328,25 @@ Example miss: NP_536324.1
     sed -i -e "/gapOverlap/d" redmine.rn7.table.list
     sed -i -e "/Gap Overlaps/d" redmine.rn7.releaseLog.txt
 
-    # remove the multiz7way tables:
-    sed -i -e "/multiz7way/d" redmine.rn7.table.list
-
-    # edit the file list and expand the wildcards: .../calJac*/...
+    # edit the file list and expand the directory wildcards, to find them:
+    grep "\*\/" redmine.rn7.file.list
+    # there were two, expand them via 'ls'
 
     #   check for errors in stderr.out, some are OK, e.g.:
-# redmine.rn7.releaseLog.txt
 WARNING: rn7 does not have seq
-WARNING: hgwdev does not have phyloPng-generated /usr/local/apache/htdocs/images/phylo/rn7_7way.gif (or png) for multiz7way.
+WARNING: rn7 does not have extFile
 
 WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
 supporting and genbank tables) which tracks to assign these tables to:
   chainRBestHg38
   chainRBestHg38Link
-  chainRBestMacFas5
-  chainRBestMacFas5Link
 ... etc
     crisprAllRanges
   gbLoaded
   netRBestHg38
-  netRBestMacFas5
   netRBestMm10
   netRBestMm39
   netSynHg38
-  netSynMacFas5
   netSynMm10
   netSynMm39
 
@@ -1344,11 +1359,11 @@ done
 
     # verify database tables, how many to expect:
     wc -l redmine.rn7.table.list
-    # 70 redmine.rn7.table.list
+    # 65 redmine.rn7.table.list
 
     # how many actual:
     awk -F'.' '{printf "hgsql -N %s -e '"'"'show table status like \"%s\";'"'"'\n", $1, $2}' redmine.rn7.table.list | sh | wc -l
-    # 70
+    # 65
 
     # would be a smaller number actual if some were missing
 
