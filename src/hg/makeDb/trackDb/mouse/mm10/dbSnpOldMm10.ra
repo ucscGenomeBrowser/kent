@@ -1,0 +1,47 @@
+# This is the flat, old version of dbSNP tracks for mm10
+# Daniel Schmelter 4/1/21
+#
+
+track snp142 override
+group varRep
+priority 6.3
+
+track snp142Mult override
+group varRep
+priority 12.3
+
+track snp138 override
+group varRep
+priority 6.2
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+
+track snp138Common override
+group varRep
+priority 8.2
+snpSeqFile /gbdb/mm10/snp/snp138.fa
+visibility hide
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+
+track snp138Mult override
+group varRep
+priority 12.2
+snpSeqFile /gbdb/mm10/snp/snp138.fa
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+
+track snp137Common override
+group varRep
+priority 8
+snpSeqFile /gbdb/mm10/snp/snp137.fa
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+
+track snp137Mult override
+group varRep
+priority 12
+snpSeqFile /gbdb/mm10/snp/snp137.fa
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+
+track snp137 override
+group varRep
+priority 6
+snpSeqFile /gbdb/mm10/snp/snp137.fa
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
