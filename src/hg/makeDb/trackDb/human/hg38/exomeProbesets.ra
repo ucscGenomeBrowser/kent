@@ -5,7 +5,6 @@ group map
 type bigBed
 visibility hide
 allButtonPair on
-pennantIcon New red ../goldenPath/newsarch.html#020321 "Released Feb. 3, 2021"
 compositeTrack on
 
 	track xGen_Research_Probes_V2

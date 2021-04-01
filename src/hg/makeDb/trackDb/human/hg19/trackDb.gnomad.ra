@@ -4,7 +4,6 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD) - Variants, Coverage, and Constraint
 group varRep
 html gnomad
-pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 2021"
 
     track gnomadCoverage
     compositeTrack on
@@ -477,7 +476,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     viewLimits 0:1
     visibility full
     html gnomadPext
-    pennantIcon New red ../goldenPath/newsarch.html#110320 "Released Nov. 3, 2020"
 
         track gnomADPextmean_proportion
         bigDataUrl /gbdb/hg19/gnomAD/pext/mean_proportion.bw
@@ -938,7 +936,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
     html gnomadExomesGenomes
-    pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 2021"
 
     track gnomadExomes
     shortLabel gnomAD Exomes Variants
@@ -965,7 +962,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
     html gnomadExomesGenomes
-    pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 2021"
 
 searchTable pliByTranscript
 searchType bigBed
