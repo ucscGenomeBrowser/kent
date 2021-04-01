@@ -1158,9 +1158,8 @@ function mysqlDbSetup ()
     $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hgcentral;'
     $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hgTemp;'
     $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hgFixed;' # empty db needed for gencode tracks
-    downloadFile http://$HGDOWNLOAD/admin/hgcentral.sql | $MYSQL hgcentral
-    # the blat servers don't have fully qualified dom names in the download data
-    $MYSQL hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu");'
+
+    updateBlatServers
     
     echo2
     echo2 "Will now grant permissions to browser database access users:"
@@ -1629,6 +1628,14 @@ function cleanTrash ()
     find -L $TRASHDIR -not -path $TRASHDIR/ct/\* -and -type f -atime +1 -exec rm -f {} \;
 }
 
+function updateBlatServers ()
+{
+   echo2 Creating or updating the BLAT servers table
+   downloadFile http://$HGDOWNLOAD/admin/hgcentral.sql | $MYSQL hgcentral
+   # the blat servers don't have fully qualified dom names in the download data
+   $MYSQL hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu");'
+}
+
 function cgiUpdate ()
 {
    # update the CGIs
@@ -1638,11 +1645,12 @@ function cgiUpdate ()
    $RSYNC -avzP --exclude=*.{bb,bam,bai,bw,gz,2bit,bed} --exclude=ENCODE --exclude=trash $HGDOWNLOAD::htdocs/ $APACHEDIR/htdocs/ 
    # assign all downloaded files to a valid user. 
    chown -R $APACHEUSER:$APACHEUSER $APACHEDIR/*
+   updateBlatServers
 }
 
 function updateBrowser {
-   cgiUpdate
    echo
+   cgiUpdate
 
    DBS=$*
    # if none specified, update all

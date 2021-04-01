@@ -35,8 +35,8 @@ else
 fputs("\", "
       "\"panels\": [ \"tree\"] , "
       "\"colorings\": [ "
-      "  { \"key\": \"pangolin_lineage\", "
-      "    \"title\": \"Pangolin lineage\", \"type\": \"categorical\" },"
+      "  { \"key\": \"pango_lineage\", "
+      "    \"title\": \"Pango lineage\", \"type\": \"categorical\" },"
       "  { \"key\": \"Nextstrain_clade\","
       "    \"scale\": [ [ \"19B\", \"#EC676D\" ], [ \"19A\", \"#F79E43\" ],"
       "        [ \"20A\", \"#B6D77A\" ], [ \"20C\", \"#8FD4ED\" ],"
@@ -61,9 +61,10 @@ fprintf(outF, "  { \"key\": \"userOrOld\", "
 fputs("  ] , "
 //#*** Filters didn't seem to work... maybe something about the new fetch feature, or do I need to spcify in some other way?
 //#***      "\"filters\": [ \"GISAID_clade\", \"region\", \"country\", \"division\", \"author\" ], "
+      "\"filters\": [ ], "
       "\"display_defaults\": { "
       "  \"branch_label\": \"none\", "
-      "  \"color_by\": \"userOrOld\" "
+      "  \"color_by\": \"Nextstrain_clade\" "
       "}, "
       , outF);
 fprintf(outF,
@@ -78,18 +79,26 @@ fputs("If you have metadata you wish to display, you can now drag on a CSV file 
       , outF);
 }
 
+static void jsonWriteObjectValueUrl(struct jsonWrite *jw, char *name, char *value, char *url)
+/* Write an object with member "value" set to value, and if url is non-empty, "url" set to url. */
+{
+jsonWriteObjectStart(jw, name);
+jsonWriteString(jw, "value", value);
+if (isNotEmpty(url))
+    jsonWriteString(jw, "url", url);
+jsonWriteObjectEnd(jw);
+}
+
 static void jsonWriteObjectValue(struct jsonWrite *jw, char *name, char *value)
 /* Write an object with one member, "value", set to value, as most Auspice node attributes are
  * formatted. */
 {
-jsonWriteObjectStart(jw, name);
-jsonWriteString(jw, "value", value);
-jsonWriteObjectEnd(jw);
+jsonWriteObjectValueUrl(jw, name, value, NULL);
 }
 
 static void jsonWriteLeafNodeAttributes(struct jsonWrite *jw, char *name,
                                         struct sampleMetadata *met, boolean isUserSample,
-                                        char *source,
+                                        char *source, struct hash *sampleUrls,
                                         char **retUserOrOld, char **retNClade, char **retGClade,
                                         char **retLineage)
 /* Write elements of node_attrs for a sample which may be preexisting and in our metadata hash,
@@ -115,7 +124,7 @@ if (isNotEmpty(*retGClade))
 *retLineage = isUserSample ? "uploaded sample" :
                              (met && met->lineage) ? met->lineage : NULL;
 if (isNotEmpty(*retLineage))
-    jsonWriteObjectValue(jw, "pangolin_lineage", *retLineage);
+    jsonWriteObjectValue(jw, "pango_lineage", *retLineage);
 if (met && met->epiId)
     jsonWriteObjectValue(jw, "gisaid_epi_isl", met->epiId);
 if (met && met->gbAcc)
@@ -136,6 +145,9 @@ if (met && met->subLab)
     jsonWriteObjectValue(jw, "submitting_lab", met->subLab);
 if (met && met->region)
     jsonWriteObjectValue(jw, "region", met->region);
+char *sampleUrl = (sampleUrls && name) ? hashFindVal(sampleUrls, name) : NULL;
+if (isNotEmpty(sampleUrl))
+    jsonWriteObjectValueUrl(jw, "subtree", sampleUrl, sampleUrl);
 }
 
 static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, char *userOrOld,
@@ -149,7 +161,7 @@ if (nClade)
 if (gClade)
     jsonWriteObjectValue(jw, "GISAID_clade", gClade);
 if (lineage)
-    jsonWriteObjectValue(jw, "pangolin_lineage", lineage);
+    jsonWriteObjectValue(jw, "pango_lineage", lineage);
 }
 
 static boolean changesProtein(struct singleNucChange *snc, struct geneInfo *gi,
@@ -177,8 +189,17 @@ if (snc->chromStart < gi->psl->tEnd && snc->chromStart >= gi->psl->tStart)
         int codonOffset = vpTx->start.txOffset - codonStart;
         assert(codonOffset < sizeof newCodon);
         newCodon[codonOffset] = snc->newBase;
-        char oldAa = lookupCodon(gi->txSeq->dna + codonStart);
         char newAa = lookupCodon(newCodon);
+        char oldAa;
+        if (snc->parBase == snc->refBase)
+            oldAa = lookupCodon(gi->txSeq->dna + codonStart);
+        else
+            {
+            char oldCodon[4];
+            safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + codonStart, 3);
+            oldCodon[codonOffset] = snc->parBase;
+            oldAa = lookupCodon(oldCodon);
+            }
         if (newAa != oldAa)
             {
             isCodingChange = TRUE;
@@ -245,6 +266,7 @@ if (node->priv != NULL)
             dyStringPrintf(dy, ",%c%d%c", snc->parBase, snc->chromStart+1, snc->newBase);
         jsonWriteString(jw, "nuc mutations", dy->string);
         dyStringClear(dy);
+        struct dyString *dyS = dyStringNew(0);
         struct slPair *geneAaMut;
         for (geneAaMut = geneAaMutations;  geneAaMut != NULL;  geneAaMut = geneAaMut->next)
             {
@@ -254,10 +276,21 @@ if (node->priv != NULL)
                 dyStringAppendSep(dy, ",");
                 dyStringPrintf(dy, "%s:%s", geneAaMut->name, aaMut->name);
                 }
+            if (sameString("S", geneAaMut->name))
+                {
+                for (aaMut = geneAaMut->val;  aaMut != NULL;  aaMut = aaMut->next)
+                    {
+                    dyStringAppendSep(dyS, ",");
+                    dyStringPrintf(dyS, "%s:%s", geneAaMut->name, aaMut->name);
+                    }
+                }
             }
         if (isNotEmpty(dy->string))
             jsonWriteString(jw, "aa mutations", dy->string);
+        if (isNotEmpty(dyS->string))
+            jsonWriteString(jw, "Spike mutations", dyS->string);
         dyStringFree(&dy);
+        dyStringFree(&dyS);
         jsonWriteObjectEnd(jw);
         }
     jsonWriteObjectStart(jw, "mutations");
@@ -289,6 +322,7 @@ struct auspiceJsonInfo
     struct geneInfo *geneInfoList;        // Transcript seq & alignment for predicting AA change
     struct seqWindow *gSeqWin;            // Reference genome seq for predicting AA change
     struct hash *sampleMetadata;          // Sample metadata for decorating tree
+    struct hash *sampleUrls;              // URLs for samples, if applicable
     int nodeNum;                          // For generating sequential node ID (in absence of name)
     char *source;                         // Source of non-user sequences in tree (GISAID or public)
     };
@@ -381,7 +415,7 @@ if (node->numEdges > 0)
 jsonWriteObjectStart(aji->jw, "node_attrs");
 jsonWriteDouble(aji->jw, "div", depth);
 if (node->numEdges == 0)
-    jsonWriteLeafNodeAttributes(aji->jw, name, met, isUserSample, aji->source,
+    jsonWriteLeafNodeAttributes(aji->jw, name, met, isUserSample, aji->source, aji->sampleUrls,
                                 retUserOrOld, retNClade, retGClade, retLineage);
 else if (retUserOrOld && retGClade && retLineage)
     jsonWriteBranchNodeAttributes(aji->jw, *retUserOrOld, *retNClade, *retGClade, *retLineage);
@@ -439,8 +473,8 @@ return geneInfoList;
 }
 
 void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneInfoList,
-                       struct seqWindow *gSeqWin, struct hash *sampleMetadata, char *jsonFile,
-                       char *source)
+                       struct seqWindow *gSeqWin, struct hash *sampleMetadata,
+                       struct hash *sampleUrls, char *jsonFile, char *source)
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 {
@@ -460,7 +494,7 @@ struct phyloTree *root = phyloTreeNewNode("wrapper");
 phyloAddEdge(root, tree);
 tree = root;
 struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
-                               sampleMetadata, nodeNum, source };
+                               sampleMetadata, sampleUrls, nodeNum, source };
 rTreeToAuspiceJson(tree, depth, &aji, NULL, NULL, NULL, NULL);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string, outF);
