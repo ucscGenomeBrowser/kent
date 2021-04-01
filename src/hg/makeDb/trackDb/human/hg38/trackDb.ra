@@ -500,54 +500,6 @@ xrefTable kgXref, ucscRetroInfo9
 xrefQuery select ucscRetroInfo9.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
-track snp141Mult override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp141.fa
-
-track snp141Flagged override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp141.fa
-
-track snp141Common override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp141.fa
-
-track snp141 override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp141.fa
-
-track snp142Mult override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp142.fa
-
-track snp142Flagged override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp142.fa
-
-track snp142Common override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp142.fa
-
-track snp142 override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp142.fa
-
-track snp144Mult override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp144.fa
-
-track snp144Flagged override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp144.fa
-
-track snp144Common override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp144.fa
-
-track snp144 override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp144.fa
-
 track tgpPhase3
 shortLabel 1000G Ph3 Vars
 longLabel 1000 Genomes Phase 3 Integrated Variant Calls from IGSR: SNVs and Indels
@@ -784,30 +736,6 @@ shortLabel GTEx Brain
 longLabel GTEx Brain Gene Expression in barChart track format
 group expression
 
-track snp147Mult override
-group varRep
-
-track snp147Flagged override
-group varRep
-
-track snp147Common override 
-group varRep
-
-track snp147 override
-group varRep
-
-track snp146Mult override
-group varRep
-
-track snp146Flagged override
-group varRep
-
-track snp146Common override
-group varRep
-
-track snp146 override
-group varRep
-
 track dgvPlus override
 group varRep
 
@@ -908,4 +836,7 @@ mouseOver $_mouseOver : $name - CQV: $cqv - Rank: $rank
 group covid
 bigDataUrl /gbdb/hg38/covidHct/covidHct.bb
 release alpha
+
+include dbSnpOldHg38.ra beta,public
+include dbSnpArchiveHg38.ra alpha
 
