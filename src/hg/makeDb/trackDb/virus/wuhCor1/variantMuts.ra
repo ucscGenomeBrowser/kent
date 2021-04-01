@@ -17,7 +17,7 @@ pennantIcon New red
 dataVersion Released Feb. 17, 2021
 visibility dense
 
-        track variantAaMuts_B.1.1.7
+        track variantAaMuts_B_1_1_7
         parent variantMuts on
         subGroups variant=B117 mutation=AA
         shortLabel B.1.1.7 AA Muts 
@@ -28,7 +28,7 @@ visibility dense
         color 255,117,53
         priority 1
 
-        track variantAaMuts_B.1.351
+        track variantAaMuts_B_1_351
         parent variantMuts on
         subGroups variant=B1351 mutation=AA
         shortLabel B.1.351 AA Muts
@@ -39,7 +39,7 @@ visibility dense
         color 255,170,63
         priority 2
 
-        track variantAaMuts_P.1
+        track variantAaMuts_P_1
         parent variantMuts on
         subGroups variant=P1 mutation=AA
         shortLabel P.1 AA Muts 
@@ -50,7 +50,7 @@ visibility dense
         color 249,53,41
         priority 3
 
-        track variantAaMuts_B.1.429
+        track variantAaMuts_B_1_429
         parent variantMuts on
         subGroups variant=B1429 mutation=AA
         shortLabel B.1.429 AA Muts 
@@ -61,7 +61,7 @@ visibility dense
         color 105,190,185
         priority 4
 
-        track variantNucMuts_B.1.1.7
+        track variantNucMuts_B_1_1_7
         parent variantMuts off
         subGroups variant=B117 mutation=NUC
         shortLabel B.1.1.7 Nuc Muts
@@ -72,7 +72,7 @@ visibility dense
         color 255,117,53
         priority 5
 
-        track variantNucMuts_B.1.351
+        track variantNucMuts_B_1_351
         parent variantMuts off
         subGroups variant=B1351 mutation=NUC
         shortLabel B.1.351 Nuc Muts
@@ -83,7 +83,7 @@ visibility dense
         color 255,170,63
         priority 2
 
-        track variantNucMuts_P.1
+        track variantNucMuts_P_1
         parent variantMuts off
         subGroups variant=P1 mutation=NUC
         shortLabel P.1 Nuc Muts 
@@ -94,7 +94,7 @@ visibility dense
         color 249,53,41
         priority 7
 
-        track variantNucMuts_B.1.429
+        track variantNucMuts_B_1_429
         parent variantMuts off
         subGroups variant=B1429 mutation=NUC
         shortLabel B.1.429 Nuc Muts 
