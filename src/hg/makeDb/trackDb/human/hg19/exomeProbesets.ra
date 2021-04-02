@@ -6,7 +6,6 @@ group map
 visibility hide
 allButtonPair on
 compositeTrack on
-pennantIcon New red ../goldenPath/newsarch.html#020321 "Released Feb. 3, 2021"
 
 	track xGen_Research_Probes
 	parent exomeProbesets off

@@ -1,0 +1,55 @@
+#This is an old version of the dbSNP tracks for hg38
+# Daniel Schmelter 4/1/21
+
+track snp141 override
+
+snpSeqFile /gbdb/hg38/snp/snp141.fa
+priority 1
+
+track snp142Mult override
+snpSeqFile /gbdb/hg38/snp/snp142.fa
+priority 1
+
+track snp142Flagged override
+snpSeqFile /gbdb/hg38/snp/snp142.fa
+priority 1
+
+track snp142Common override
+snpSeqFile /gbdb/hg38/snp/snp142.fa
+priority 1
+
+track snp142 override
+snpSeqFile /gbdb/hg38/snp/snp142.fa
+priority 1
+
+track snp144Mult override
+snpSeqFile /gbdb/hg38/snp/snp144.fa
+priority 1
+
+track snp144Flagged override
+snpSeqFile /gbdb/hg38/snp/snp144.fa
+priority 1
+
+track snp144Common override
+snpSeqFile /gbdb/hg38/snp/snp144.fa
+priority 1
+
+track snp144 override
+snpSeqFile /gbdb/hg38/snp/snp144.fa
+
+track snp147Mult override
+
+track snp147Flagged override
+
+track snp147Common override
+
+track snp147 override
+
+track snp146Mult override
+
+track snp146Flagged override
+
+track snp146Common override
+
+track snp146 override
+

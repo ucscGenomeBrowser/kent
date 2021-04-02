@@ -342,7 +342,6 @@ group varRep
 visibility hide
 priority 0.2
 dataVersion /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.version.txt
-#pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
@@ -385,7 +384,6 @@ group varRep
 visibility squish
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
-pennantIcon Updated red ../goldenPath/newsarch.html#012921 "Updated Jan. 29, 2021"
 release beta,public
 
     track sarsCov2PhyloPubAllMinAf01
@@ -432,7 +430,7 @@ group varRep
 visibility squish
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#011821 "Updated Jan. ??, 2021"
+pennantIcon New red ../goldenPath/newsarch.html#011821 "Updated January 2021"
 release alpha
 
     track sarsCov2PhyloPubAllMinAf01
@@ -473,7 +471,7 @@ group varRep
 priority 0.11
 bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.parsimony.bw
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Jan. ?, 2021"
+pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated January 2021"
 
 track problematicSites
 shortLabel Problematic Sites
@@ -513,7 +511,6 @@ type bigBed
 skipEmptyFields on
 group map
 dataVersion v4 (2020-12-22)
-pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 30, 2020"
 release alpha
 
     track problematicSitesMask
@@ -606,7 +603,6 @@ geneTrack ncbiGeneBGP
 vcfDoQual off
 vcfDoFilter off
 group varRep
-pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Jan. 7, 2021"
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
@@ -642,7 +638,6 @@ urls geographyChartsUrl="$$" nextstrainBuildUrl="$$"
 searchIndex name
 searchTrix /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.Feb21.ix
 group varRep
-pennantIcon Updated red ../goldenPath/newsarch.html "Updated Feb. 23, 2021"
 
 searchTable spikeMuts
 searchType bigBed
