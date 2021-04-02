@@ -35,7 +35,7 @@ jsInlineF(
 "  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n"
 "  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n"
 "  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n"
-"  })(window,document,'script','//www.google-analytics.com/analytics_debug.js','ga');\n"
+"  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n"
 "  ga('create', '%s', 'auto');\n"
 "  ga('require', 'displayfeatures');\n"
 "  ga('set', 'transport', 'beacon');\n" // default to beacons. Old browser cannot use them, so ga will use an alternative.
