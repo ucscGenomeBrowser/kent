@@ -40,6 +40,7 @@ boolean orgChange = FALSE;
 boolean dbChange = FALSE;
 boolean allGenomes = FALSE;
 boolean allResults = FALSE;
+static long enteredMainTime = 0;
 
 
 struct gfResult
@@ -1390,8 +1391,24 @@ for (;;)
     {
     if (netGetString(conn->fd, buf) == NULL)
 	{
-	warn("Error reading status information from %s:%s; gfServer maybe down or misconfigured, see system logs for details",
+	long et = clock1000() - enteredMainTime;
+	if (serve->isDynamic)
+	    {
+	    if (et > 110000)
+		warn("the dynamic blat service is taking too long to respond, probably overloaded at this time, try again later.  Error reading status information from %s:%s",
+		serve->host, serve->port);
+	    else if (et < 500)
+		warn("the dynamic blat service is returning an error immediately. it is probably overloaded at this time, try again later.  Error reading status information from %s:%s",
+		serve->host, serve->port);
+	    else
+		warn("the dynamic blat service is returning an error at this time, try again later.  Error reading status information from %s:%s",
+		serve->host, serve->port);
+	    }
+	else
+	    {
+	    warn("Error reading status information from %s:%s; gfServer maybe down or misconfigured, see system logs for details)",
              serve->host, serve->port);
+	    }
 	ret = -1;
         break;
 	}
@@ -2332,7 +2349,7 @@ char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-long enteredMainTime = clock1000();
+enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
