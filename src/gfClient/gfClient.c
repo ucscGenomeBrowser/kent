@@ -8,7 +8,8 @@
 #include "psl.h"
 #include "options.h"
 #include "fuzzyFind.h"
-
+#include "errCatch.h"
+#include "portable.h"
 
 static struct optionSpec optionSpecs[] = {
     {"prot", OPTION_BOOLEAN},
@@ -34,6 +35,8 @@ char *qType = "dna";
 char *tType = "dna";
 char *genome = NULL;
 char *genomeDataDir = NULL;
+boolean isDynamic = FALSE;
+long enterMainTime = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -106,52 +109,77 @@ enum gfType tType = gfTypeFromName(tTypeName);
 int dotMod = 0;
 char databaseName[256];
 struct hash *tFileCache = gfFileCacheNew();
+boolean gotConnection = FALSE;
 
 snprintf(databaseName, sizeof(databaseName), "%s:%s", hostName, portName);
 
 gvo = gfOutputAny(outputFormat,  round(minIdentity*10), qType == gftProt, tType == gftProt,
 	optionExists("nohead"), databaseName, 23, 3.0e9, minIdentity, out);
 gfOutputHead(gvo, out);
-struct gfConnection *conn = gfConnect(hostName, portName, genome, genomeDataDir);
-while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    if (dots != 0)
+    struct gfConnection *conn = gfConnect(hostName, portName, genome, genomeDataDir);
+    gotConnection = TRUE;
+    while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
         {
-	if (++dotMod >= dots)
-	    {
-	    dotMod = 0;
-            verboseDot();
-	    }
-	}
-    if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
-        {
-	gvo->reportTargetStrand = TRUE;
-	gfAlignTrans(conn, tSeqDir, &seq, minScore, tFileCache, gvo);
-	}
-    else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
-        {
-	gvo->reportTargetStrand = TRUE;
-	gfAlignTransTrans(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo, qType == gftRnaX);
-	if (qType == gftDnaX)
-	    {
-	    reverseComplement(seq.dna, seq.size);
-	    gfAlignTransTrans(conn, tSeqDir, &seq, TRUE, minScore, tFileCache, gvo, FALSE);
-	    }
-	}
-    else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
+        if (dots != 0)
+            {
+            if (++dotMod >= dots)
+                {
+                dotMod = 0;
+                verboseDot();
+                }
+            }
+        if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
+            {
+            gvo->reportTargetStrand = TRUE;
+            gfAlignTrans(conn, tSeqDir, &seq, minScore, tFileCache, gvo);
+            }
+        else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
+            {
+            gvo->reportTargetStrand = TRUE;
+            gfAlignTransTrans(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo, qType == gftRnaX);
+            if (qType == gftDnaX)
+                {
+                reverseComplement(seq.dna, seq.size);
+                gfAlignTransTrans(conn, tSeqDir, &seq, TRUE, minScore, tFileCache, gvo, FALSE);
+                }
+            }
+        else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
+            {
+            gfAlignStrand(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo);
+            reverseComplement(seq.dna, seq.size);
+            gfAlignStrand(conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo);
+            }
+        else
+            {
+            errAbort("Comparisons between %s queries and %s databases not yet supported",
+                    qTypeName, tTypeName);
+            }
+        gfOutputQuery(gvo, out);
+        }
+    gfDisconnect(&conn);
+    }	/*	if (errCatchStart(errCatch))	*/
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    if (isNotEmpty(errCatch->message->string))
+	warn("# error: %s", errCatch->message->string);
+    if (gotConnection && isDynamic)
 	{
-	gfAlignStrand(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo);
-	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo);
+	long et = clock1000() - enterMainTime;
+        if (et > NET_TIMEOUT_MS)
+	    errAbort("the dynamic server at %s:%s is taking too long to respond,\nperhaps overloaded at this time, try again later", hostName, portName);
+        else if (et < NET_QUICKEXIT_MS)
+	    errAbort("the dynamic server at %s:%s is returning an error immediately,\nperhaps overloaded at this time, try again later", hostName, portName);
+	else
+	    errAbort("the dynamic server at %s:%s is returning an error at this time,\ntry again later", hostName, portName);
 	}
     else
-        {
-	errAbort("Comparisons between %s queries and %s databases not yet supported",
-		qTypeName, tTypeName);
-	}
-    gfOutputQuery(gvo, out);
+	errAbort("gfClient error exit");
     }
-gfDisconnect(&conn);
+errCatchFree(&errCatch);
 
 if (out != stdout)
     printf("Output is in %s\n", outName);
@@ -180,8 +208,10 @@ if ((genomeDataDir != NULL) && (genome == NULL))
     errAbort("-genomeDataDir requires the -genome option");
 if ((genome != NULL) && (genomeDataDir == NULL))
     genomeDataDir = ".";
+if (genomeDataDir != NULL)
+    isDynamic = TRUE;
 
-
+enterMainTime = clock1000();
 /* set global for fuzzy find functions */
 setFfIntronMax(optionInt("maxIntron", ffIntronMaxDefault));
 gfClient(argv[1], argv[2], argv[3], argv[4], argv[5], tType, qType);
