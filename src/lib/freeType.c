@@ -21,6 +21,8 @@ errAbort("FreeType not enabled");
 }
 
 #else 
+FT_Face face;
+FT_Library library;
 
 int ftInitialize(char *fontFile)
 {

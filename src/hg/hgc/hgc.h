@@ -54,6 +54,7 @@ extern char *organism;		/* Colloquial name of organism. */
 extern char *genome;		/* common name, e.g. Mouse, Human */
 extern char *scientificName;	/* Scientific name of organism. */
 extern struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
+extern struct trackDb *tdb;
 
 
 void hgcStart(char *title);
@@ -420,7 +421,7 @@ void hgdpGeoFreqTable(struct hgdpGeo *geo);
 /* Print an HTML table of populations and allele frequencies. */
 
 void printOtherSnpMappings(char *table, char *name, int start,
-			   struct sqlConnection *conn, int rowOffset);
+			   struct sqlConnection *conn, int rowOffset, struct trackDb *tdb);
 /* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
 
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);

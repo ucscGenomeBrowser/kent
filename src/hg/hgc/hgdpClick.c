@@ -419,7 +419,7 @@ printCustomUrl(tdb, item, TRUE);
 bedPrintPos((struct bed *)geo, 4, tdb);
 printf("<B>Ancestral Allele:</B> %c<BR>\n", geo->ancestralAllele);
 printf("<B>Derived Allele:</B> %c<BR>\n", geo->derivedAllele);
-printOtherSnpMappings(tdb->table, item, start, conn, hasBin);
+printOtherSnpMappings(tdb->table, item, start, conn, hasBin, tdb);
 printf("<BR>\n");
 printf("<TABLE><TR><TD>\n");
 hgdpGeoFreqTable(geo);

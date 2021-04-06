@@ -7388,7 +7388,7 @@ else if (sqlTableExists(conn, gbCdnaInfoTable))
     }
 }
 
-void htcBigPslAli(char *acc)
+void htcBigPslAli(char *acc, struct trackDb *tdb)
 /* Show alignment for accession in bigPsl file. */
 {
 struct psl *psl;
@@ -7455,7 +7455,7 @@ if (pslIsProtein(psl))
 showSomeAlignment(psl, rnaSeq, type, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 }
 
-void htcBigPslAliInWindow(char *acc)
+void htcBigPslAliInWindow(char *acc, struct trackDb *tdb)
 /* Show alignment in window for accession in bigPsl file. */
 {
 struct psl *partPsl, *wholePsl;
@@ -18804,7 +18804,7 @@ if (sqlTableExists(conn, "mupitRanges"))
 }
 
 void printOtherSnpMappings(char *table, char *name, int start,
-			   struct sqlConnection *conn, int rowOffset)
+			   struct sqlConnection *conn, int rowOffset, struct trackDb *tdb)
 /* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
 {
 char query[512];
@@ -18863,7 +18863,7 @@ else
     errAbort("SNP %s not found at %s base %d", itemName, seqName, start);
 sqlFreeResult(&sr);
 
-printOtherSnpMappings(table, itemName, start, conn, rowOffset);
+printOtherSnpMappings(table, itemName, start, conn, rowOffset, tdb);
 puts("<BR>");
 // Make table for collapsible sections:
 puts("<TABLE>");
@@ -26498,11 +26498,11 @@ else if (sameWord(table, "htcChainTransAli"))
     }
 else if (sameWord(table, "htcBigPslAliInWindow"))
     {
-    htcBigPslAliInWindow(item);
+    htcBigPslAliInWindow(item, tdb);
     }
 else if (sameWord(table, "htcBigPslAli"))
     {
-    htcBigPslAli(item);
+    htcBigPslAli(item, tdb);
     }
 else if (sameWord(table, "htcCdnaAli"))
     {

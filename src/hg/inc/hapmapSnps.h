@@ -98,8 +98,8 @@ void hapmapSnpsOutput(struct hapmapSnps *el, FILE *f, char sep, char lastSep);
 #define HAP_PHASEIII_POPCOUNT 11
 #define HAP_ORTHO_COUNT 2
 
-char *hapmapPhaseIIPops[HAP_PHASEII_POPCOUNT];
-char *hapmapPhaseIIIPops[HAP_PHASEIII_POPCOUNT];
+extern char *hapmapPhaseIIPops[HAP_PHASEII_POPCOUNT];
+extern char *hapmapPhaseIIIPops[HAP_PHASEIII_POPCOUNT];
 
 /* Someday this should come from a trackDb setting: */
 extern char *hapmapOrthoSpecies[HAP_ORTHO_COUNT+1];
