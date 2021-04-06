@@ -22,3 +22,4 @@ include trackDb.chainNet.ra
 include trackDb.syntenicNet.ra alpha
 include trackDb.rbestNet.ra alpha
 include trackDb.gencode.ra
+include knownGene.ra
