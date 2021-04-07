@@ -336,6 +336,9 @@ browser.indelOptions=on
 #JKSQL_TRACE=on
 #JKSQL_PROF=on
 
+freeType=on
+freeTypeDir=../htdocs/urw-fonts
+
 EOF_HGCONF
 
 read -r -d '' HELP_STR << EOF_HELP

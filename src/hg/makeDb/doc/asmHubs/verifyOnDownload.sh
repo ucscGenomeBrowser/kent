@@ -2,8 +2,11 @@
 
 # set -beEu -o pipefail
 
-if [ $# -ne 1 ]; then
-  printf "usage: ./verifyOnDownload.sh <subset.orderList.tsv>\n" 1>&2
+if [ $# -ne 2 ]; then
+  printf "usage: ./verifyOnDownload.sh <host> <subset.orderList.tsv>\n" 1>&2
+  printf "where <host> is something like:\n" 1>&2
+  printf "api-test.gi.ucsc.edu - to use the hgwdev server\n" 1>&2
+  printf "apibeta.soe.ucsc.edu - to use the hgwbeta server\n" 1>&2
   exit 255
 fi
 
@@ -11,9 +14,15 @@ fi
 #	${toolsDir}/mkSendList.pl ${orderList} | while read F; do \
 #	  ${toolsDir}/verifyOnDownload.sh $$F < /dev/null; done
 
-export orderList=$1
+export host=$1
+export orderList=$2
 export successCount=0
 export doneCount=0
+
+export hubSource="hgdownload-test.gi.ucsc.edu"
+if [ "${host}" = "apibeta.soe.ucsc.edu" ]; then
+  hubSource="hgdownload.soe.ucsc.edu"
+fi
 
 for dirPath in `~/kent/src/hg/makeDb/doc/asmHubs/mkSendList.pl "${orderList}"`
 do
@@ -28,14 +37,14 @@ do
 # else
 #  printf "%d\t%s/hub.txt line count\n" "${hubCount}" "${dirPath}"
 
-  trackCount=`curl -L "https://api.genome.ucsc.edu/list/tracks?genome=$genome;trackLeavesOnly=1;hubUrl=https://hgdownload.soe.ucsc.edu/hubs/${dirPath}/hub.txt" \
+  trackCount=`curl -L "https://$host/list/tracks?genome=$genome;trackLeavesOnly=1;hubUrl=https://$hubSource/hubs/${dirPath}/hub.txt" \
       2> /dev/null | python -mjson.tool | egrep ": {$" \
        | tr -d '"' | sed -e 's/^ \+//; s/ {//;' | xargs echo | wc -w`
-  if [ "${trackCount}" -gt 16 ]; then
+  if [ "${trackCount}" -gt 14 ]; then
     ((successCount=successCount+1))
   fi
   printf "%03d\t%s\t%d tracks:\t" "${doneCount}" "${genome}" "${trackCount}"
-  curl -L "https://api.genome.ucsc.edu/list/hubGenomes?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/${dirPath}/hub.txt" 2> /dev/null \
+  curl -L "https://$host/list/hubGenomes?hubUrl=https://$hubSource/hubs/${dirPath}/hub.txt" 2> /dev/null \
      | python -mjson.tool | egrep "organism\":|description\":" | sed -e "s/'/_/g;" \
        | tr -d '"'  | xargs echo \
           | sed -e 's/genomes: //; s/description: //; s/organism: //; s/{ //g;'

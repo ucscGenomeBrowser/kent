@@ -7,7 +7,7 @@ use File::Basename;
 my $argc = scalar(@ARGV);
 if ($argc != 3) {
   printf STDERR "mkGenomes.pl blatHost blatPort [two column name list] > .../hub/genomes.txt\n";
-  printf STDERR "e.g.: mkGenomes.pl localhost 4040 vgp.primary.assemblies.tsv > .../vgp/genomes.txt\n";
+  printf STDERR "e.g.: mkGenomes.pl blat-backup 4040 vgp.primary.assemblies.tsv > .../vgp/genomes.txt\n";
   printf STDERR "e.g.: mkGenomes.pl hgwdev 4040 vgp.primary.assemblies.tsv > .../vgp/download.genomes.txt\n";
   printf STDERR "the name list is found in \$HOME/kent/src/hg/makeDb/doc/asmHubs/\n";
   printf STDERR "\nthe two columns are 1: asmId (accessionId_assemblyName)\n";
@@ -21,7 +21,7 @@ if ($argc != 3) {
 }
 
 my $downloadHost = "hgwdev";
-my @blatHosts = qw( localhost hgwdev );
+my @blatHosts = qw( blat-backup hgwdev );
 my @blatPorts = qw( 4040 4040 );
 
 ################### writing out hub.txt file, twice ##########################
@@ -147,7 +147,7 @@ foreach my $asmId (@orderList) {
   }
   ++$buildDone;
 printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessionId;
-  my $taxId=`grep -i "taxid:" $asmReport | head -1 | awk '{printf \$(NF)}'`;
+  my $taxId=`grep -i "taxid:" $asmReport | head -1 | awk '{printf \$(NF)}' | tr -d \$'\\r'`;
   chomp $taxId;
   my $descr=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.*organism name: *##i; s# (.*\$##;'`;
   chomp $descr;

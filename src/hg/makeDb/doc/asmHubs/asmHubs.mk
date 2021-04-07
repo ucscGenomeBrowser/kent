@@ -19,7 +19,7 @@ makeDirs:
 	mkdir -p ${destDir}
 
 mkGenomes::
-	${toolsDir}/mkGenomes.pl localhost 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
+	${toolsDir}/mkGenomes.pl blat-backup 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
 	${toolsDir}/mkGenomes.pl hgwdev 4040 ${orderList} > ${destDir}/download.${genomesTxt}.txt
 
 symLinks::
@@ -95,5 +95,8 @@ sendDownload::
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${genomesTxt}.txt \
 		qateam@hgdownload:/mirrordata/hubs/${name}/${genomesTxt}.txt
 
+verifyTestDownload:
+	${toolsDir}/verifyOnDownload.sh api-test.gi.ucsc.edu ${orderList}
+
 verifyDownload:
-	${toolsDir}/verifyOnDownload.sh ${orderList}
+	${toolsDir}/verifyOnDownload.sh apibeta.soe.ucsc.edu ${orderList}
