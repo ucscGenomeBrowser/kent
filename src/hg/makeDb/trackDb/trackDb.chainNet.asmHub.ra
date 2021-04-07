@@ -89,8 +89,8 @@ html chainNet
         shortLabel Chinese hamster Chain
         longLabel Chinese hamster (Jun. 2020 GCF_003668045.3_CriGri-PICRH-1.0) Chained Alignments
         type bigChain GCF_003668045.3
-        bigDataUrl /gbdb/$D//bbi/chainNet/chainGCF_003668045.3.bb
-        linkDataUrl /gbdb/$D//bbi/chainNet/chainGCF_003668045.3Link.bb
+        bigDataUrl /gbdb/$D/bbi/chainNet/chainGCF_003668045.3.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/chainGCF_003668045.3Link.bb
         html chainNet
 
     track mafNetGCF_003668045.3Viewnet
@@ -105,8 +105,8 @@ html chainNet
         shortLabel Chinese hamster mafNet
         longLabel Chinese hamster (Jun. 2020 GCF_003668045.3_CriGri-PICRH-1.0) mafNet Alignment
         type bigMaf
-        bigDataUrl /gbdb/$D//bbi/chainNet/$D/.GCF_003668045.3.net.bb
-        summary /gbdb/$D//bbi/chainNet/$D/.GCF_003668045.3.net.summary.bb
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_003668045.3.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_003668045.3.net.summary.bb
         speciesOrder GCF_003668045.3
         html chainNet
 
@@ -147,8 +147,8 @@ html chainNet
         shortLabel lance-tailed manakin Chain
         longLabel lance-tailed manakin (Jan. 2020 GCF_009829145.1_bChiLan1.pri) Chained Alignments
         type bigChain GCF_009829145.1
-        bigDataUrl /gbdb/$D//bbi/chainNet/chainGCF_009829145.1.bb
-        linkDataUrl /gbdb/$D//bbi/chainNet/chainGCF_009829145.1Link.bb
+        bigDataUrl /gbdb/$D/bbi/chainNet/chainGCF_009829145.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/chainGCF_009829145.1Link.bb
         html chainNet
 
     track mafNetGCF_009829145.1Viewnet
@@ -163,8 +163,66 @@ html chainNet
         shortLabel lance-tailed manakin mafNet
         longLabel lance-tailed manakin (Jan. 2020 GCF_009829145.1_bChiLan1.pri) mafNet Alignment
         type bigMaf
-        bigDataUrl /gbdb/$D//bbi/chainNet/$D/.GCF_009829145.1.net.bb
-        summary /gbdb/$D//bbi/chainNet/$D/.GCF_009829145.1.net.summary.bb
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_009829145.1.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_009829145.1.net.summary.bb
         speciesOrder GCF_009829145.1
+        html chainNet
+
+##############################################################################
+# GCF_002742125.1 - Rambouillet sheep - Ovis aries - taxId: 9940 - mammal
+##############################################################################
+track chainNetGCF_002742125.1
+compositeTrack on
+shortLabel Rambouillet sheep Chain/Net
+longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCF_002742125.1
+html chainNet
+
+    track chainNetGCF_002742125.1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_002742125.1
+    spectrum on
+
+        track chainGCF_002742125.1
+        parent chainNetGCF_002742125.1Viewchain
+        subGroups view=chain
+        shortLabel Rambouillet sheep Chain
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Chained Alignments
+        type bigChain GCF_002742125.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/chainGCF_002742125.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/chainGCF_002742125.1Link.bb
+        html chainNet
+
+    track mafNetGCF_002742125.1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCF_002742125.1
+
+        track netGCF_002742125.1
+        parent mafNetGCF_002742125.1Viewnet
+        subGroups view=net
+        shortLabel Rambouillet sheep mafNet
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.net.summary.bb
+        speciesOrder GCF_002742125.1
         html chainNet
 
