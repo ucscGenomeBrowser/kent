@@ -9096,15 +9096,24 @@ if (tdbIsSuperTrack(tdb))
 if (cart != NULL) // cart is optional
     {
     char *cartVis = cartOptionalString(cart, tdb->track);
+    boolean cgiVar = FALSE;
     // check hub tracks for visibility settings without the hub prefix
     if (startsWith("hub_", tdb->track) && (cartVis == NULL))
-        cartVis = cartOptionalString(cart, trackHubSkipHubName(tdb->track));
+        {
+        cartVis = cgiOptionalString( trackHubSkipHubName(tdb->track));
+        cgiVar = TRUE;
+        }
 
     if (cartVis != NULL)
         {
         vis = hTvFromString(cartVis);
         if (subtrackOverride != NULL && tdbIsContainerChild(tdb))
             *subtrackOverride = TRUE;
+        if (cgiVar)
+            {
+            cartSetString(cart, tdb->track, cartVis);   // add the decorated visibility to the cart
+            cartRemove(cart, trackHubSkipHubName(tdb->track)); // remove the undecorated version
+            }
         }
     }
 return vis;
