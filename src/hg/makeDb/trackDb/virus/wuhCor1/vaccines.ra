@@ -1,0 +1,18 @@
+
+track vaccinesDb
+shortLabel Vaccines
+longLabel COVID Vaccines BioNTech/Pfizer BNT-162b2 and mRNA-1273
+type bigPsl
+bigDataUrl /gbdb/wuhCor1/bbi/wuhCor1.vaccines.bb
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 30000.0
+showCdsMaxZoom 30000.0
+showCdsAllScales .
+baseColorDefault diffCodons
+pslSequence no
+baseColorUseSequence lfExtra
+baseColorUseCds table given
+color 0,0,0
+
