@@ -3,17 +3,28 @@
 This track shows the alignment of the mRNA sequence in three different
 mRNA vaccine sequences:
 <ol>
-<ul>The BioNTech/Pfizer BNT-162b2 sequence as published by WHO
-<ul>The BioNTech/Pfizer BNT-162b2 sequence as sequenced by the
+<li>The BioNTech/Pfizer BNT-162b2 sequence as published by WHO
+<li>The BioNTech/Pfizer BNT-162b2 sequence as sequenced by the
     <a href="https://firelab.sites.stanford.edu"
 target=_blank>Andrew Fire lab</a>, Stanford University School of Medicine
-<ul>The Moderna mRNA-1273 sequence as sequenced by the
+<li>The Moderna mRNA-1273 sequence as sequenced by the
     <a href="https://firelab.sites.stanford.edu"
 target=_blank>Andrew Fire lab</a>, Stanford University School of Medicine
 </ol>
 </p>
 
 <h2>Display Conventions and Configuration</h2>
+<p>
+The psl output from <em>blat</em> was converted to a <em>bigPsl</em>
+format file for display in this track.  Depending upon the size of the
+section of the genome in display, the track will draw black where
+nucleotides are identical between vaccine sequence and the SARS-CoV-2
+sequence.  Red lines indicate differences in nucleotides.  At viewpoints
+with smaller sections of the genome in view, setting the
+<em>Color track by codons or bases:</em> to <em>different mRNA bases</em>
+will show the nucleotides in the vaccine that are different than the
+SARS-CoV-2 sequence.
+</p>
 <h2>Methods</h2>
 <p>
 The mRNA sequences were obtained from the <em>MS WORD</em> documents as
@@ -21,7 +32,26 @@ mentioned in the <em>references</em> below.
 </p>
 <p>
 The PSL alignment file was obtained via the UCSC genome browser
-blat service with parameters <em>-t=dnax -q=rnax</em>
+blat service with parameters <em>-t=dnax -q=rnax</em> and filtered
+to allow only scores above 1000 to filter out the polyA match:
+<pre>
+  gfClient -maxIntron=10 -t=dnax -q=rnax &lt;host&gt; &lt;prot&gt; \
+     /gbdb/wuhCor1 threeVaccines.fa stdout \
+        | pslFilter -minScore=1000 stdin wuhCor1.vaccines.psl
+
+  pslScore wuhCor1.vaccines.psl
+
+  #tName          tStart  tEnd    qName:qStart-qEnd       score   percentIdent
+  NC_045512v2     21559   25384   ModernaMrna1273:54-3879  1419    68.60
+  NC_045512v2     21559   25384   StanfordBNT162b2:51-3876 1701    72.30
+  NC_045512v2     21559   25384   WHO_BNT162b2:51-3876     1701    72.30
+
+  pslToBigPsl -fa=threeVaccines.fa wuhCor1.vaccines.psl stdout \
+     | sort -k1,1 -k2,2n &gt; wuhCor1.vaccines.bigPsl
+
+  bedToBigBed -type=bed12+13 -tab -as=$HOME/kent/src/hg/lib/bigPsl.as \
+    wuhCor1.vaccines.bigPsl wuhCor1.chrom.sizes wuhCor1.vaccines.bb
+</pre>
 </p>
 
 <h2>Data Access</h2>
