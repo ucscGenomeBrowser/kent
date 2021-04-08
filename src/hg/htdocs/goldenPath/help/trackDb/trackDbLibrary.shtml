@@ -973,17 +973,6 @@
     </pre>
 </DIV>
 
-<DIV class="interact_example"><span class="types bigInteract"></span>
-<div class="format"><B>Example of an interact/bigInteract track</B></div>
-    <pre>
-    track snpGeneInteractions
-    type bigInteract
-    interactDirectional true
-    maxHeightPixels 300:150:20
-    bigDataUrl http://...
-    </pre>
-</div>
-
 <DIV class="multiRegionsBedUrl"><span class="types all"></span>
 <div class="format"><code>multiRegionsBedUrl &lt;url/relativePath&gt;</code></div>
     <P>This setting causes a link to appear on the track configuration and items details pages to
