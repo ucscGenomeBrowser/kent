@@ -49,7 +49,7 @@ to allow only scores above 1000 to filter out the polyA match:
   pslToBigPsl -fa=threeVaccines.fa wuhCor1.vaccines.psl stdout \
      | sort -k1,1 -k2,2n &gt; wuhCor1.vaccines.bigPsl
 
-  bedToBigBed -type=bed12+13 -tab -as=$HOME/kent/src/hg/lib/bigPsl.as \
+  bedToBigBed -type=bed12+13 -tab -as=HOME/kent/src/hg/lib/bigPsl.as \
     wuhCor1.vaccines.bigPsl wuhCor1.chrom.sizes wuhCor1.vaccines.bb
 </pre>
 </p>
