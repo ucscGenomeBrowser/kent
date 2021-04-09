@@ -128,7 +128,8 @@ pslScore wuhCor1.vaccines.psl
 # NC_045512v2     21559   25384   StanfordBNT162b2:51-3876        1701    72.30
 # NC_045512v2     21559   25384   WHO_BNT162b2:51-3876    1701    72.30
 
-pslToBigPsl -fa=threeVaccines.fa wuhCor1.vaccines.psl stdout \
+faCount threeVaccines.fa | tawk '{print $1,"1.."$2+1}' | head -4 | tail -3 > threeVaccines.cds
+pslToBigPsl -cds=threeVaccines.cds -fa=threeVaccines.fa wuhCor1.vaccines.psl stdout \
    | sort -k1,1 -k2,2n > wuhCor1.vaccines.bigPsl
 
 bedToBigBed -type=bed12+13 -tab -as=$HOME/kent/src/hg/lib/bigPsl.as \
