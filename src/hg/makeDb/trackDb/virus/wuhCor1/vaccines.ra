@@ -1,5 +1,6 @@
 
 track vaccines
+group immu
 shortLabel Vaccines
 longLabel COVID Vaccines BioNTech/Pfizer BNT-162b2 and mRNA-1273
 type bigPsl
