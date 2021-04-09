@@ -10,9 +10,9 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 30000.0
 showCdsMaxZoom 30000.0
 showCdsAllScales .
-baseColorDefault diffCodons
+baseColorDefault diffBases
 pslSequence no
 baseColorUseSequence lfExtra
 baseColorUseCds table given
 color 0,0,0
-
+html vaccines

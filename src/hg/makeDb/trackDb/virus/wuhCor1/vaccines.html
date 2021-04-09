@@ -1,9 +1,9 @@
 <h2>Description</h2>
 <p>
-This track shows the alignment of the mRNA sequence in three different
-mRNA vaccine sequences:
+This track shows the alignment of three different mRNA vaccine sequences
+to the SARS-CoV-2 genome:
 <ol>
-<li>The BioNTech/Pfizer BNT-162b2 sequence as published by WHO
+<li>The BioNTech/Pfizer BNT-162b2 sequence as published by the World Health Organization
 <li>The BioNTech/Pfizer BNT-162b2 sequence as sequenced by the
     <a href="https://firelab.sites.stanford.edu"
 target=_blank>Andrew Fire lab</a>, Stanford University School of Medicine
@@ -28,14 +28,20 @@ SARS-CoV-2 sequence.
 <h2>Methods</h2>
 <p>
 The mRNA sequences were obtained from the <em>MS WORD</em> documents as
-mentioned in the <em>references</em> below.
+mentioned in the <em>references</em> below.  And the
+<a href="https://firelab.sites.stanford.edu"
+target=_blank>Andrew Fire lab</a>
+<a href="https://github.com/NAalytics/Assemblies-of-putative-SARS-CoV2-spike-encoding-mRNA-sequences-for-vaccines-BNT-162b2-and-mRNA-1273"
+target=_blank>github</a> supplied the
+<a href="https://raw.githubusercontent.com/NAalytics/Assemblies-of-putative-SARS-CoV2-spike-encoding-mRNA-sequences-for-vaccines-BNT-162b2-and-mRNA-1273/main/Figure1Figure2_032321.fasta" target=_blank>fasta</a> sequencing result for
+the BioNTech/Pfizer BNT-162b2 and Moderna mRNA-1273 samples.
 </p>
 <p>
 The PSL alignment file was obtained via the UCSC genome browser
 blat service with parameters <em>-t=dnax -q=rnax</em> and filtered
 to allow only scores above 1000 to filter out the polyA match:
 <pre>
-  gfClient -maxIntron=10 -t=dnax -q=rnax &lt;host&gt; &lt;prot&gt; \
+  gfClient -maxIntron=10 -t=dnax -q=rnax &lt;host&gt; &lt;port&gt; \
      /gbdb/wuhCor1 threeVaccines.fa stdout \
         | pslFilter -minScore=1000 stdin wuhCor1.vaccines.psl
 
@@ -55,6 +61,25 @@ to allow only scores above 1000 to filter out the polyA match:
 </p>
 
 <h2>Data Access</h2>
+<p>
+The <em>fasta</em> file sequences and <em>psl</em> alignment file can be obtained from
+our download server at:
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/$db/vaccines/"
+target="blank">https://hgdownload.soe.ucsc.edu/goldenPath/$db/vaccines/</a>.
+</p>
+
+<p>
+The bigPsl alignment file used for the display of this track
+in the genome browser can be accessed from
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/$db.vaccines.bb"
+target="blank">https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/$db.vaccines.bb</a>.
+The <em>kent</em> command line access tool <tt>bigBedToBed</tt>,
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. 
+</p>
+
 <p>
 The protein encoded by the three sequences is the same as
 the SARS-CoV-2 S glycoprotein:
@@ -105,4 +130,14 @@ target=_blank>Pfizer-BioNTech COVID-19 vaccine</a>
 World Health Organization MedNet
 <a href="https://berthub.eu/articles/11889.doc"
 target=_blank>Messenger RNA encoding the full-length SARS-CoV-2 spike glycoprotein</a> Sept. 2020 document 11889
+</p>
+
+<h2>Credits</h2>
+<p>
+Thank you to the <a href="https://firelab.sites.stanford.edu"
+target=_blank>Andrew Fire lab</a>, Stanford University School of Medicine
+for providing the sequencing data of these vaccines.
+</p>
+
+<p> The presentation of this track was prepared by Hiram Clawson (<a href="mailto:&#104;&#99;la&#119;&#115;&#111;&#110;&#64;&#117;&#99;s&#99;.e&#100;&#117;">&#104;&#99;la&#119;&#115;&#111;&#110;&#64;&#117;&#99;s&#99;.e&#100;&#117;</a>).
 </p>
