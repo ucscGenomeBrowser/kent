@@ -1,5 +1,6 @@
 
-track vaccinesDb
+track vaccines
+group immu
 shortLabel Vaccines
 longLabel COVID Vaccines BioNTech/Pfizer BNT-162b2 and mRNA-1273
 type bigPsl
@@ -10,9 +11,9 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 30000.0
 showCdsMaxZoom 30000.0
 showCdsAllScales .
-baseColorDefault diffCodons
+baseColorDefault diffBases
 pslSequence no
 baseColorUseSequence lfExtra
 baseColorUseCds table given
 color 0,0,0
-
+html vaccines
