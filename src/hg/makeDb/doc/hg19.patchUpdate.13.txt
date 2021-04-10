@@ -70,6 +70,7 @@
       | gzip -c \
       > hg19.p13.gc5Base.wigVarStep.gz)
 #real    5m48.392s
+
     # Make a new gc5BaseBw.bw
     time wigToBigWig hg19.p13.gc5Base.wigVarStep.gz ../../chrom.sizes.p13 \
       hg19.p13.gc5Base.bw
@@ -87,6 +88,17 @@
 
     ln -sf /hive/data/genomes/hg19/bed/gc5Base/hg19.gc5Base.wigVarStep.gz \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/gc5Base/hg19.gc5Base.txt.gz
+
+    # Because of this symlink, browser track gc5BaseBw has been automatically updated:
+    # /gbdb/hg19/bbi/gc5Base.bw -> /hive/data/genomes/hg19/bed/gc5Base/hg19.gc5Base.bw
+
+    # For the first update only.  Don't do this next update!
+    # The .wib and .wig.gz are obsolete, remove them from the downloads.
+    rm /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/hg19.gc5Base.wib
+    rm /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/hg19.gc5Base.wig.gz
+    # link the bigwig to downloads
+    ln -sf /hive/data/genomes/hg19/bed/gc5Base/hg19.gc5Base.bw /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/hg19.gc5Base.bw
+    # End of first-update-only stuff
 
 
 
