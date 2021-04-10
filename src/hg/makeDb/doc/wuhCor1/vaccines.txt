@@ -1,0 +1,205 @@
+
+References:
+
+https://berthub.eu/articles/posts/reverse-engineering-source-code-of-the-biontech-pfizer-vaccine/
+
+https://en.wikipedia.org/wiki/Pfizer%E2%80%93BioNTech_COVID-19_vaccine
+
+The WHO document that first published the BioNTech sequence:
+
+https://mednet-communities.net/inn/db/media/docs/11889.doc
+
+The Stanford github source:
+
+https://github.com/NAalytics/Assemblies-of-putative-SARS-CoV2-spike-encoding-mRNA-sequences-for-vaccines-BNT-162b2-and-mRNA-1273
+
+The Stanford document:
+
+https://github.com/NAalytics/Assemblies-of-putative-SARS-CoV2-spike-encoding-mRNA-sequences-for-vaccines-BNT-162b2-and-mRNA-1273/blob/main/Assemblies%20of%20putative%20SARS-CoV2-spike-encoding%20mRNA%20sequences%20for%20vaccines%20BNT-162b2%20and%20mRNA-1273.docx.pdf
+
+It is a bit tricky to extract the sequence from these WORD documents.
+They won't save to text, and even copy and paste is a bit troublesome
+due to the coloring annotations in the paper.
+
+To format a fasta file better if it doesn't look clean:
+
+printf ">sequenceName\n" > betterFormat.fa
+grep -v "^>" badFormat.fa | xargs echo | tr -d ' ' | fold -w 60 \
+   >> betterFormat.fa
+
+And then verify nothing lost after conversio:
+
+faCount badFormat.fa betterFormat.fa
+
+# the sequences obtained from the documents:
+
+-rw-rw-r-- 1 4384 Mar 30 21:24 WHO_BNT162b2.fa
+-rw-rw-r-- 1 4088 Apr  1 23:19 ModernaMrna1273.fa
+-rw-rw-r-- 1 4263 Apr  1 23:40 StanfordBNT162b2.fa
+
+The github supplied a fasta file:
+
+  wget -O- "https://raw.githubusercontent.com/NAalytics/Assemblies-of-putative-SARS-CoV2-spike-encoding-mRNA-sequences-for-vaccines-BNT-162b2-and-mRNA-1273/main/Figure1Figure2_032321.fasta" | faCount stdin
+
+Figure1_032321_Spike-encoding_contig_assembled_from_BioNTech/Pfizer_BNT-162b2_vaccine   4175    1004    1313    1060    798     0       223
+Figure_2_32321_Spike-encoding_contig_assembled_from_Moderna_mRNA-1273_vaccine  4004     898     1364    1118    624     0       283
+total   8179    1902    2677    2178    1422    0       506
+
+
+faCount *.fa
+#seq    len     A       C       G       T       N       cpg
+ModernaMrna1273 4004    898     1364    1118    624     0       283
+StanfordBNT162b2        4175    1004    1313    1060    798     0       223
+WHO_BNT162b2    4284    1106    1315    1062    801     0       223
+
+Using the description of the coding region within the sequence, extract
+just the coding rna:
+
+-rw-rw-r-- 1 3916 Apr  1 12:22 WHO_BNT162b2.mRNA
+-rw-rw-r-- 1 3909 Apr  1 23:21 ModernaMrna1273.mRNA
+-rw-rw-r-- 1 3908 Apr  1 23:42 StanfordBNT162b2.mRNA
+
+#seq    len     A       C       G       T       N       cpg
+ModernaMrna1273 3828    852     1308    1074    594     0       276
+StanfordBNT162b2        3825    916     1186    993     730     0       211
+WHO_BNT162b2    3825    916     1186    993     730     0       211
+
+Note these all start with the ATG:
+
+head -2 *.mRNA
+==> ModernaMrna1273.mRNA <==
+>ModernaMrna1273
+ATGTTCGTGTTCCTGGTGCTGCTGCCCCTGGTGAGCAGCCAGTGCGTGAACCTGACCACCCGG
+
+==> StanfordBNT162b2.mRNA <==
+>StanfordBNT162b2
+ATGTTCGTG
+
+==> WHO_BNT162b2.mRNA <==
+>WHO_BNT162b2
+AUGUUCGUGUUCCUGGUGCUGCUGCCUCUGGUGUCCAGCCAGUGUG
+
+The extra bases in the Moderna sequnce is an extra TAG stop codon.
+
+When converted to protein, each of these three sequences produce the
+exact same protein
+
+for fa in WHO_BNT162b2 ModernaMrna1273 StanfordBNT162b2
+do
+  faTrans ${fa}.mRNA ${fa}.faa
+done
+
+-rw-rw-r-- 1 1315 Apr  7 11:11 WHO_BNT162b2.faa
+-rw-rw-r-- 1 1319 Apr  7 11:11 ModernaMrna1273.faa
+-rw-rw-r-- 1 1319 Apr  7 11:11 StanfordBNT162b2.faa
+
+The Moderna has an extra Z at the end:
+
+tail --lines 1 *.faa
+==> ModernaMrna1273.faa <==
+GSCCKFDEDDSEPVLKGVKLHYTZZZ
+
+==> StanfordBNT162b2.faa <==
+GSCCKFDEDDSEPVLKGVKLHYTZZ
+
+==> WHO_BNT162b2.faa <==
+GSCCKFDEDDSEPVLKGVKLHYTZZ
+
+Otherwise, they are idential AA sequences.
+
+############################################################################
+# construct alignment to wuhCor1
+############################################################################
+
+# Place all three sequences in one file:
+# The display works better when the U is a T, convert
+# the WHO sequence to T
+
+cat ModernaMrna1273.fa StanfordBNT162b2.fa > threeVaccines.fa
+cat WHO_BNT162b2.fa | tr 'U' 'T' >> threeVaccines.fa
+
+blat -tileSize=3 -stepSize=1 -minMatch=1 -t=dnax -q=rnax -noSimpRepMask \
+   -maxIntron=1 ../../wuhCor1.2bit threeVaccines.fa wuhCor1.vaccines.psl
+# Loaded 29903 letters in 1 sequences
+# Blatx 1 sequences in database, 1 files in query
+
+pslScore wuhCor1.vaccines.psl
+# NC_045512v2     22435   25384   ModernaMrna1273:930-3879        1105    68.80
+# NC_045512v2     21559   25384   StanfordBNT162b2:51-3876        1701    72.30
+# NC_045512v2     21559   25384   WHO_BNT162b2:51-3876    1701    72.30
+
+faCount threeVaccines.fa | tawk '{print $1,"1.."$2+1}' | head -4 | tail -3 > threeVaccines.cds
+pslToBigPsl -cds=threeVaccines.cds -fa=threeVaccines.fa wuhCor1.vaccines.psl stdout \
+   | sort -k1,1 -k2,2n > wuhCor1.vaccines.bigPsl
+
+bedToBigBed -type=bed12+13 -tab -as=$HOME/kent/src/hg/lib/bigPsl.as \
+  wuhCor1.vaccines.bigPsl ../../chrom.sizes wuhCor1.vaccines.bb
+
+gfClient -t=dnax -q=rnax blat1b 17900 /gbdb/wuhCor1 threeVaccines.fa stdout \
+   | pslFilter -minScore=1000 stdin wuhCor1.vaccines.psl
+
+pslScore  wuhCor1.vaccines.psl
+
+NC_045512v2     21559   25384   ModernaMrna1273:54-3879 1419    68.60
+NC_045512v2     21559   25384   StanfordBNT162b2:51-3876        1701    72.30
+NC_045512v2     21559   29903   WHO_BNT162b2:51-4246    1747    72.50
+
+root      8751     1  0  2020 ?        00:00:00 SCREEN -S wuhCor1-t /scratch/gfServer start blat1b 17900 -trans -mask -debugLog -seqLog -ipLog -log=gfServer.trans.log -tileSize=3 -stepSize=1 -minMatch=1 -noSimpRepMask wuhCor1.2bit
+root      8752  8751  0  2020 pts/44   00:01:22 /scratch/gfServer start blat1b 17900 -trans -mask -debugLog -seqLog -ipLog -log=gfServer.trans.log -tileSize=3 -stepSize=1 -minMatch=1 -noSimpRepMask wuhCor1.2bit
+root      8755     1  0  2020 ?        00:00:00 SCREEN -S wuhCor1-u /scratch/gfServer start blat1b 17901 -stepSize=5 -debugLog -seqLog -ipLog -log=gfServer.log -tileSize=3 -stepSize=1 -minMatch=1 -noSimpRepMask -tileSize=7 -stepSize=1 -minMatch=1 wuhCor1.2bit
+root      8756  8755  0  2020 pts/71   00:06:22 /scratch/gfServer start blat1b 17901 -stepSize=5 -debugLog -seqLog -ipLog -log=gfServer.log -tileSize=3 -stepSize=1 -minMatch=1 -noSimpRepMask -tileSize=7 -stepSize=1 -minMatch=1 wuhCor1.2bit
+qateam   31904 31849  0 11:52 pts/0    00:00:00 grep --color=auto wuhCor1
+
+
+gfClient -t=dnax -q=rnax blat-backup 4040 -genome=wuhCor1 -genomeDataDir=wuhCor1 /gbdb/wuhCor1 threeVaccines.ra a.wuhCor1.vaccines.psl
+
+# rm /gbdb/wuhCor1/bbi/vaccines.bigPsl.bb
+ln -s `pwd`/wuhCor1.vaccines.bb /gbdb/wuhCor1/bbi
+
+############################################################################
+# provide download file links
+############################################################################
+
+cd /hive/data/genomes/wuhCor1/bed/vaccines
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/vaccines
+ln -s `pwd`/StanfordBNT162b2.fa /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/vaccines
+ln -s `pwd`/WHO_BNT162b2.fa /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/vaccines
+ln -s `pwd`/ModernaMrna1273.fa /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/vaccines
+ln -s `pwd`/wuhCor1.vaccines.psl /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/vaccines
+
+
+gfServer status blat1b 17900
+
+version 36x9
+type translated
+host blat1b
+port 17900
+tileSize 3
+stepSize 1
+minMatch 1
+pcr requests 0
+blat requests 4729
+bases 247748
+aa 1156368
+misses 107
+noSig 4
+trimmed 6
+warnings 3
+
+gfServer status blat1b 17901
+
+version 36x9
+type nucleotide
+host blat1b
+port 17901
+tileSize 7
+stepSize 1
+minMatch 1
+pcr requests 8938
+blat requests 55355
+bases 74910106
+misses 176
+noSig 3
+trimmed 154
+warnings 153
+

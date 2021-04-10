@@ -3382,8 +3382,8 @@ chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 if (subChain != NULL && otherOrg != NULL)
     {
     qChainRangePlusStrand(subChain, &qs, &qe);
-    linkToOtherBrowser(otherDb, subChain->qName, qs-1, qe);
-    printf("Open %s browser</A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
+    linkToOtherBrowserExtra(otherDb, subChain->qName, qs-1, qe, cartSidUrlString(cart));
+    printf("Open %s browser</A> at position corresponding to the part of chain that is in this window.<BR>\n", trackHubSkipHubName(otherOrg));
     }
 chainFree(&toFree);
 }
@@ -3415,6 +3415,13 @@ if (startsWith("big", tdb->type))
     char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
     chain = chainLoadIdRangeHub(fileName, linkFileName, seqName, winStart, winEnd, atoi(item));
+
+    if (!hDbIsActive(otherDb)) // if this isn't a native database, check to see if it's a hub
+        {
+        struct trackHubGenome *genome = trackHubGetGenomeUndecorated(otherDb);
+        if (genome)
+            otherDb = genome->name;
+        }
     }
 else
     {
@@ -3467,7 +3474,7 @@ chainFree(&toFree);
 
 printf("<B>%s position:</B> <A HREF=\"%s?%s&db=%s&position=%s:%d-%d\">%s:%d-%d</A>"
        "  size: %d <BR>\n",
-       thisOrg, hgTracksName(), cartSidUrlString(cart), database,
+       trackHubSkipHubName(thisOrg), hgTracksName(), cartSidUrlString(cart), database,
        chain->tName, chain->tStart+1, chain->tEnd, chain->tName, chain->tStart+1, chain->tEnd,
        chain->tEnd-chain->tStart);
 printf("<B>Strand:</B> %c<BR>\n", chain->qStrand);
@@ -3548,10 +3555,10 @@ if (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) && chromSeqFileE
         printf("Zoom so that browser window covers 1,000,000 bases or less "
            "and return here to see alignment details.<BR>\n");
         }
-    if (!sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
-        {
-        chainToOtherBrowser(chain, otherDb, otherOrg);
-        }
+    }
+if (!sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
+    {
+    chainToOtherBrowser(chain, otherDb, otherOrg);
     }
 /*
 if (!sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))

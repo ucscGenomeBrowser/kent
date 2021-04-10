@@ -1,0 +1,163 @@
+<h2>Description</h2>
+<p>
+This track shows the alignment of three different mRNA vaccine sequences
+to the SARS-CoV-2 genome:
+<ol>
+<li>The BioNTech/Pfizer BNT-162b2 sequence as published by the World Health Organization
+<li>The BioNTech/Pfizer BNT-162b2 sequence as sequenced by the
+    <a href="https://firelab.sites.stanford.edu"
+target=_blank>Andrew Fire lab</a>, Stanford University School of Medicine
+<li>The Moderna mRNA-1273 sequence as sequenced by the
+    <a href="https://firelab.sites.stanford.edu"
+target=_blank>Andrew Fire lab</a>, Stanford University School of Medicine
+</ol>
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+The psl output from <em>blat</em> was converted to a <em>bigPsl</em>
+format file for display in this track.  Depending upon the size of the
+section of the genome in display, the track will draw black where
+nucleotides are identical between vaccine sequence and the SARS-CoV-2
+sequence.  Red lines indicate differences in nucleotides.  At viewpoints
+with smaller sections of the genome in view, setting the
+<em>Color track by codons or bases:</em> to <em>different mRNA bases</em>
+will show the nucleotides in the vaccine that are different than the
+SARS-CoV-2 sequence.
+</p>
+<h2>Methods</h2>
+<p>
+The mRNA sequences were obtained from the <em>MS WORD</em> documents as
+mentioned in the <em>references</em> below.  And the
+<a href="https://firelab.sites.stanford.edu"
+target=_blank>Andrew Fire lab</a>
+<a href="https://github.com/NAalytics/Assemblies-of-putative-SARS-CoV2-spike-encoding-mRNA-sequences-for-vaccines-BNT-162b2-and-mRNA-1273"
+target=_blank>github</a> supplied the
+<a href="https://raw.githubusercontent.com/NAalytics/Assemblies-of-putative-SARS-CoV2-spike-encoding-mRNA-sequences-for-vaccines-BNT-162b2-and-mRNA-1273/main/Figure1Figure2_032321.fasta" target=_blank>fasta</a> sequencing result for
+the BioNTech/Pfizer BNT-162b2 and Moderna mRNA-1273 samples.
+</p>
+<p>
+The PSL alignment file was obtained via the UCSC genome browser
+blat service with parameters <em>-t=dnax -q=rnax</em> and filtered
+to allow only scores above 1000 to filter out the polyA match:
+<pre>
+  gfClient -maxIntron=10 -t=dnax -q=rnax &lt;host&gt; &lt;port&gt; \
+     /gbdb/wuhCor1 threeVaccines.fa stdout \
+        | pslFilter -minScore=1000 stdin wuhCor1.vaccines.psl
+
+  pslScore wuhCor1.vaccines.psl
+
+  #tName          tStart  tEnd    qName:qStart-qEnd       score   percentIdent
+  NC_045512v2     21559   25384   ModernaMrna1273:54-3879  1419    68.60
+  NC_045512v2     21559   25384   StanfordBNT162b2:51-3876 1701    72.30
+  NC_045512v2     21559   25384   WHO_BNT162b2:51-3876     1701    72.30
+
+  faCount threeVaccines.fa | tawk '{print &#36;1,"1.."&#36;2+1}' \
+     | head -4 | tail -3 &gt; threeVaccines.cds
+  pslToBigPsl -cds=threeVaccines.cds -fa=threeVaccines.fa wuhCor1.vaccines.psl stdout \
+     | sort -k1,1 -k2,2n &gt; wuhCor1.vaccines.bigPsl
+
+  bedToBigBed -type=bed12+13 -tab -as=HOME/kent/src/hg/lib/bigPsl.as \
+    wuhCor1.vaccines.bigPsl wuhCor1.chrom.sizes wuhCor1.vaccines.bb
+</pre>
+</p>
+
+<h2>Data Access</h2>
+<p>
+The <em>fasta</em> file sequences and <em>psl</em> alignment file can be obtained from
+our download server at:
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/$db/vaccines/"
+target="blank">https://hgdownload.soe.ucsc.edu/goldenPath/$db/vaccines/</a>.
+</p>
+
+<p>
+The bigPsl alignment file used for the display of this track
+in the genome browser can be accessed from
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/$db.vaccines.bb"
+target="blank">https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/$db.vaccines.bb</a>.
+The <em>kent</em> command line access tool <tt>bigBedToBed</tt>,
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. 
+</p>
+
+<p>
+The protein encoded by the three sequences has two AA substitutions
+compared to the SARS-CoV-2 S glycoprotein.  Variations: S:K986P and S:V987P
+in the vaccine sequence.  See also:
+<a href="https://cen.acs.org/pharmaceuticals/vaccines/tiny-tweak-behind-COVID-19/98/i38"
+target=_blank>The tiny tweak behind COVID-19 vaccines</a>.
+<pre>
+&gt;BNT162b2
+MFVFLVLLPLVSSQCVNLTTRTQLPPAYTNSFTRGVYYPDKVFRSSVLHSTQDLFLPFFSNVTWFHAIHVSGTNGTKRFD
+NPVLPFNDGVYFASTEKSNIIRGWIFGTTLDSKTQSLLIVNNATNVVIKVCEFQFCNDPFLGVYYHKNNKSWMESEFRVY
+SSANNCTFEYVSQPFLMDLEGKQGNFKNLREFVFKNIDGYFKIYSKHTPINLVRDLPQGFSALEPLVDLPIGINITRFQT
+LLALHRSYLTPGDSSSGWTAGAAAYYVGYLQPRTFLLKYNENGTITDAVDCALDPLSETKCTLKSFTVEKGIYQTSNFRV
+QPTESIVRFPNITNLCPFGEVFNATRFASVYAWNRKRISNCVADYSVLYNSASFSTFKCYGVSPTKLNDLCFTNVYADSF
+VIRGDEVRQIAPGQTGKIADYNYKLPDDFTGCVIAWNSNNLDSKVGGNYNYLYRLFRKSNLKPFERDISTEIYQAGSTPC
+NGVEGFNCYFPLQSYGFQPTNGVGYQPYRVVVLSFELLHAPATVCGPKKSTNLVKNKCVNFNFNGLTGTGVLTESNKKFL
+PFQQFGRDIADTTDAVRDPQTLEILDITPCSFGGVSVITPGTNTSNQVAVLYQDVNCTEVPVAIHADQLTPTWRVYSTGS
+NVFQTRAGCLIGAEHVNNSYECDIPIGAGICASYQTQTNSPRRARSVASQSIIAYTMSLGAENSVAYSNNSIAIPTNFTI
+SVTTEILPVSMTKTSVDCTMYICGDSTECSNLLLQYGSFCTQLNRALTGIAVEQDKNTQEVFAQVKQIYKTPPIKDFGGF
+NFSQILPDPSKPSKRSFIEDLLFNKVTLADAGFIKQYGDCLGDIAARDLICAQKFNGLTVLPPLLTDEMIAQYTSALLAG
+TITSGWTFGAGAALQIPFAMQMAYRFNGIGVTQNVLYENQKLIANQFNSAIGKIQDSLSSTASALGKLQDVVNQNAQALN
+TLVKQLSSNFGAISSVLNDILSRLD<b><span style="color: #ff0000">PP</span></b>EAEVQIDRLITGRLQSLQTYVTQQLIRAAEIRASANLAATKMSECVLGQSKRV
+DFCGKGYHLMSFPQSAPHGVVFLHVTYVPAQEKNFTTAPAICHDGKAHFPREGVFVSNGTHWFVTQRNFYEPQIITTDNT
+FVSGNCDVVIGIVNNTVYDPLQPELDSFKEELDKYFKNHTSPDVDLGDISGINASVVNIQKEIDRLNEVAKNLNESLIDL
+QELGKYEQYIKWPWYIWLGFIAGLIAIVMVTIMLCCMTSCCSCLKGCCSCGSCCKFDEDDSEPVLKGVKLHYTZZ
+</pre>
+</p>
+
+<h2>References</h2>
+<p>
+Dae Eun Jeong, Matthew McCoy, Karen Artiles, Orkan Ilbay, Andrew Fire, Kari Nadeau, Helen Park, Brooke Betts, Scott Boyd, Ramona Hoh, and Massa Shoura
+<a href="https://github.com/NAalytics/Assemblies-of-putative-SARS-CoV2-spike-encoding-mRNA-sequences-for-vaccines-BNT-162b2-and-mRNA-1273/blob/main/Assemblies%20of%20putative%20SARS-CoV2-spike-encoding%20mRNA%20sequences%20for%20vaccines%20BNT-162b2%20and%20mRNA-1273.docx.pdf"
+target=_blank>Assemblies of putative SARS-CoV2-spike-encoding mRNA sequences for vaccines BNT-162b2 and mRNA-1273</a>
+obtained from <a href="https://github.com/NAalytics/Assemblies-of-putative-SARS-CoV2-spike-encoding-mRNA-sequences-for-vaccines-BNT-162b2-and-mRNA-1273"
+target=_blank>github</a>
+</p>
+
+<p>
+Bert Hubert
+<a href="https://berthub.eu/articles/posts/reverse-engineering-source-code-of-the-biontech-pfizer-vaccine/"
+target=_blank>Reverse Engineering the source code of the BioNTech/Pfizer SARS-CoV-2 Vaccine</a>
+25 Dec 2020
+</p>
+
+<p>
+WikiPedia
+<a href="https://en.wikipedia.org/wiki/Pfizer%E2%80%93BioNTech_COVID-19_vaccine"
+target=_blank>Pfizer-BioNTech COVID-19 vaccine</a>
+</p>
+
+<p>
+World Health Organization MedNet
+<a href="https://berthub.eu/articles/11889.doc"
+target=_blank>Messenger RNA encoding the full-length SARS-CoV-2 spike glycoprotein</a> Sept. 2020 document 11889
+</p>
+
+<p>
+Cyril Le Nou&euml;n, Peter L. Collins, and Ursula J. Buchholz
+<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6558635/"
+target=_blank>Attenuation of Human Respiratory Viruses by Synonymous Genome Recoding</a> <em>Frontiers in Immunology</em> 2019; 10: 1250. <a href="https://www.ncbi.nlm.nih.gov/pubmed/31231383"
+target=_blank>PMID: 31231383</a>
+</p>
+
+<p>
+Ryan Cross
+<a href="https://cen.acs.org/pharmaceuticals/vaccines/tiny-tweak-behind-COVID-19/98/i38"
+target=_blank>The tiny tweak behind COVID-19 vaccines</a>,
+<em>Chemical &amp; Engineering News</em> 29 September 2020 Vol 98, issue 38
+</p>
+
+<h2>Credits</h2>
+<p>
+Thank you to the <a href="https://firelab.sites.stanford.edu"
+target=_blank>Andrew Fire lab</a>, Stanford University School of Medicine
+for providing the sequencing data of these vaccines.
+</p>
+
+
+<p> The presentation of this track was prepared by Hiram Clawson (<a href="mailto:&#104;&#99;la&#119;&#115;&#111;&#110;&#64;&#117;&#99;s&#99;.e&#100;&#117;">&#104;&#99;la&#119;&#115;&#111;&#110;&#64;&#117;&#99;s&#99;.e&#100;&#117;</a>).
+</p>
