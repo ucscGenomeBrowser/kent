@@ -520,7 +520,7 @@ _EOF_
     $bossScript->add(<<_EOF_
 ${indent}  liftUp ${path}cat.out /dev/null carry ${path}???/*.out
 ${indent}  liftUp ${path}cat.align /dev/null carry ${path}???/*.align
-${indent}done
+done
 _EOF_
     );
     $indent =~ s/  //;
@@ -549,8 +549,8 @@ if [ -s "nestRep.err" ]; then
      fi
      export sedExpr=`grep "Undefined id, line" nestRep.err | cut -d' ' -f6 | sed -e 's/\$/d;/;' | xargs echo`
      export sedCmd="sed -i.broken -e '\$sedExpr'"
-     eval \$sedCmd $db.fa.out
-     ($Bin/extractNestedRepeats.pl $db.fa.out 2> nestRep2.err || true) | sort -k1,1 -k2,2n > $db.nestedRepeats.bed
+     eval \$sedCmd $db.sorted.fa.out
+     ($Bin/extractNestedRepeats.pl $db.sorted.fa.out 2> nestRep2.err || true) | sort -k1,1 -k2,2n > $db.nestedRepeats.bed
      if [ -s "nestRep2.err" ]; then
         printf "ERROR: the attempt of cleaning nestedRepeats did not work" 1>&2
         exit 255
