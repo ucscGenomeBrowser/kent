@@ -5505,7 +5505,7 @@ and is particularly useful for tracks with large numbers of categories.
     the order they appear in the <code>subGroup#</code> setting, regardless of whether
     the subtrack list is sorted by tags. Please also note that if a hub is not going to use
     the X,Y matrix, dimX should be the first dimension defined rather than dimA.
-    Also the setting <code>allButtonPair on</code> will prevent the matrix from displaying.</p>
+    Also, the setting <code>allButtonPair on</code> will prevent the matrix from displaying.</p>
 </DIV>
 
 <DIV class="filterComposite"><span class="types subGroups"></span>
