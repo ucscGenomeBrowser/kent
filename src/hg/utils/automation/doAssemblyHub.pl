@@ -1391,6 +1391,7 @@ sub doAddMask {
 
   $bossScript->add(<<_EOF_
 export asmId=$asmId
+export accessionId=`echo \$asmId | cut -d'_' -f1-2`
 
 if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   twoBitMask $src2BitToMask -type=.bed \\
@@ -1398,6 +1399,13 @@ if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   twoBitToFa \$asmId.masked.2bit stdout | faSize stdin > \$asmId.masked.faSize.txt
   touch -r \$asmId.masked.2bit \$asmId.masked.faSize.txt
   cp -p \$asmId.masked.faSize.txt ../../\$asmId.faSize.txt
+  ln \$asmId.masked.2bit \$accessionId.2bit
+  gfServer -trans index ../../\$accessionId.trans.gfidx \$accessionId.2bit &
+  gfServer -stepSize=5 index ../../\$accessionId.untrans.gfidx \$accessionId.2bit
+  wait
+  rm \$accessionId.2bit
+  touch -r \$asmId.masked.2bit ../../\$accessionId.trans.gfidx
+  touch -r \$asmId.masked.2bit ../../\$accessionId.untrans.gfidx
 else
   printf "# addMask step previously completed\\n" 1>&2
   exit 0
