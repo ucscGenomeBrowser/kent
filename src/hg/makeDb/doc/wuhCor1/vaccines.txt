@@ -35,7 +35,7 @@ faCount badFormat.fa betterFormat.fa
 
 -rw-rw-r-- 1 4384 Mar 30 21:24 WHO_BNT162b2.fa
 -rw-rw-r-- 1 4088 Apr  1 23:19 ModernaMrna1273.fa
--rw-rw-r-- 1 4263 Apr  1 23:40 StanfordBNT162b2.fa
+-rw-rw-r-- 1 4263 Apr  1 23:40 ReconstructedBNT162b2.fa
 
 The github supplied a fasta file:
 
@@ -49,7 +49,7 @@ total   8179    1902    2677    2178    1422    0       506
 faCount *.fa
 #seq    len     A       C       G       T       N       cpg
 ModernaMrna1273 4004    898     1364    1118    624     0       283
-StanfordBNT162b2        4175    1004    1313    1060    798     0       223
+ReconstructedBNT162b2        4175    1004    1313    1060    798     0       223
 WHO_BNT162b2    4284    1106    1315    1062    801     0       223
 
 Using the description of the coding region within the sequence, extract
@@ -57,11 +57,11 @@ just the coding rna:
 
 -rw-rw-r-- 1 3916 Apr  1 12:22 WHO_BNT162b2.mRNA
 -rw-rw-r-- 1 3909 Apr  1 23:21 ModernaMrna1273.mRNA
--rw-rw-r-- 1 3908 Apr  1 23:42 StanfordBNT162b2.mRNA
+-rw-rw-r-- 1 3908 Apr  1 23:42 ReconstructedBNT162b2.mRNA
 
 #seq    len     A       C       G       T       N       cpg
 ModernaMrna1273 3828    852     1308    1074    594     0       276
-StanfordBNT162b2        3825    916     1186    993     730     0       211
+ReconstructedBNT162b2        3825    916     1186    993     730     0       211
 WHO_BNT162b2    3825    916     1186    993     730     0       211
 
 Note these all start with the ATG:
@@ -71,8 +71,8 @@ head -2 *.mRNA
 >ModernaMrna1273
 ATGTTCGTGTTCCTGGTGCTGCTGCCCCTGGTGAGCAGCCAGTGCGTGAACCTGACCACCCGG
 
-==> StanfordBNT162b2.mRNA <==
->StanfordBNT162b2
+==> ReconstructedBNT162b2.mRNA <==
+>ReconstructedBNT162b2
 ATGTTCGTG
 
 ==> WHO_BNT162b2.mRNA <==
@@ -84,14 +84,14 @@ The extra bases in the Moderna sequnce is an extra TAG stop codon.
 When converted to protein, each of these three sequences produce the
 exact same protein
 
-for fa in WHO_BNT162b2 ModernaMrna1273 StanfordBNT162b2
+for fa in WHO_BNT162b2 ModernaMrna1273 ReconstructedBNT162b2
 do
   faTrans ${fa}.mRNA ${fa}.faa
 done
 
 -rw-rw-r-- 1 1315 Apr  7 11:11 WHO_BNT162b2.faa
 -rw-rw-r-- 1 1319 Apr  7 11:11 ModernaMrna1273.faa
--rw-rw-r-- 1 1319 Apr  7 11:11 StanfordBNT162b2.faa
+-rw-rw-r-- 1 1319 Apr  7 11:11 ReconstructedBNT162b2.faa
 
 The Moderna has an extra Z at the end:
 
@@ -99,7 +99,7 @@ tail --lines 1 *.faa
 ==> ModernaMrna1273.faa <==
 GSCCKFDEDDSEPVLKGVKLHYTZZZ
 
-==> StanfordBNT162b2.faa <==
+==> ReconstructedBNT162b2.faa <==
 GSCCKFDEDDSEPVLKGVKLHYTZZ
 
 ==> WHO_BNT162b2.faa <==
@@ -115,7 +115,7 @@ Otherwise, they are idential AA sequences.
 # The display works better when the U is a T, convert
 # the WHO sequence to T
 
-cat ModernaMrna1273.fa StanfordBNT162b2.fa > threeVaccines.fa
+cat ModernaMrna1273.fa ReconstructedBNT162b2.fa > threeVaccines.fa
 cat WHO_BNT162b2.fa | tr 'U' 'T' >> threeVaccines.fa
 
 blat -tileSize=3 -stepSize=1 -minMatch=1 -t=dnax -q=rnax -noSimpRepMask \
@@ -125,7 +125,7 @@ blat -tileSize=3 -stepSize=1 -minMatch=1 -t=dnax -q=rnax -noSimpRepMask \
 
 pslScore wuhCor1.vaccines.psl
 # NC_045512v2     22435   25384   ModernaMrna1273:930-3879        1105    68.80
-# NC_045512v2     21559   25384   StanfordBNT162b2:51-3876        1701    72.30
+# NC_045512v2     21559   25384   ReconstructedBNT162b2:51-3876   1701    72.30
 # NC_045512v2     21559   25384   WHO_BNT162b2:51-3876    1701    72.30
 
 faCount threeVaccines.fa | tawk '{print $1,"1.."$2+1}' | head -4 | tail -3 > threeVaccines.cds
@@ -141,13 +141,14 @@ gfClient -t=dnax -q=rnax blat1b 17900 /gbdb/wuhCor1 threeVaccines.fa stdout \
 pslScore  wuhCor1.vaccines.psl
 
 NC_045512v2     21559   25384   ModernaMrna1273:54-3879 1419    68.60
-NC_045512v2     21559   25384   StanfordBNT162b2:51-3876        1701    72.30
+NC_045512v2     21559   25384   ReconstructedBNT162b2:51-3876  1701    72.30
 NC_045512v2     21559   29903   WHO_BNT162b2:51-4246    1747    72.50
 
 root      8751     1  0  2020 ?        00:00:00 SCREEN -S wuhCor1-t /scratch/gfServer start blat1b 17900 -trans -mask -debugLog -seqLog -ipLog -log=gfServer.trans.log -tileSize=3 -stepSize=1 -minMatch=1 -noSimpRepMask wuhCor1.2bit
 root      8752  8751  0  2020 pts/44   00:01:22 /scratch/gfServer start blat1b 17900 -trans -mask -debugLog -seqLog -ipLog -log=gfServer.trans.log -tileSize=3 -stepSize=1 -minMatch=1 -noSimpRepMask wuhCor1.2bit
 root      8755     1  0  2020 ?        00:00:00 SCREEN -S wuhCor1-u /scratch/gfServer start blat1b 17901 -stepSize=5 -debugLog -seqLog -ipLog -log=gfServer.log -tileSize=3 -stepSize=1 -minMatch=1 -noSimpRepMask -tileSize=7 -stepSize=1 -minMatch=1 wuhCor1.2bit
 root      8756  8755  0  2020 pts/71   00:06:22 /scratch/gfServer start blat1b 17901 -stepSize=5 -debugLog -seqLog -ipLog -log=gfServer.log -tileSize=3 -stepSize=1 -minMatch=1 -noSimpRepMask -tileSize=7 -stepSize=1 -minMatch=1 wuhCor1.2bit
+
 qateam   31904 31849  0 11:52 pts/0    00:00:00 grep --color=auto wuhCor1
 
 
@@ -162,7 +163,7 @@ ln -s `pwd`/wuhCor1.vaccines.bb /gbdb/wuhCor1/bbi
 
 cd /hive/data/genomes/wuhCor1/bed/vaccines
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/vaccines
-ln -s `pwd`/StanfordBNT162b2.fa /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/vaccines
+ln -s `pwd`/ReconstructedBNT162b2.fa /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/vaccines
 ln -s `pwd`/WHO_BNT162b2.fa /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/vaccines
 ln -s `pwd`/ModernaMrna1273.fa /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/vaccines
 ln -s `pwd`/wuhCor1.vaccines.psl /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/vaccines
