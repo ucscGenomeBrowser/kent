@@ -91,10 +91,10 @@ switch(svtype) {
         color = "0,179,179"
         break
     case "DEL":
-        color = "0,0,255"
+        color = "255,0,0"
         break
     case "DUP":
-        color = "255,0,0"
+        color = "0,0,255"
         break
     case "INS":
         color = "255,165,0"
