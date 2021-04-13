@@ -930,13 +930,19 @@ for (ref = placementRefs;  ref != NULL;  ref = ref->next)
 return clumpCount;
 }
 
-static void asciiTree(struct phyloTree *node, char *indent, boolean isLast)
-/* Until we can make a real graphic, at least print an ascii tree. */
+static void asciiTree(struct phyloTree *node, char *indent, boolean isLast,
+                      struct dyString *dyLine, struct slPair **pRowList)
+/* Until we can make a real graphic, at least print an ascii tree build up a (reversed) list of
+ * lines so that we can add some text to the right later. */
 {
 if (isNotEmpty(indent) || isNotEmpty(node->ident->name))
     {
     if (node->ident->name && !isAllDigits(node->ident->name))
-        printf("%s %s\n", indent, node->ident->name);
+        {
+        dyStringPrintf(dyLine, "%s %s", indent, node->ident->name);
+        slPairAdd(pRowList, node->ident->name, cloneString(dyLine->string));
+        dyStringClear(dyLine);
+        }
     }
 int indentLen = strlen(indent);
 char indentForKids[indentLen+1];
@@ -954,8 +960,43 @@ if (node->numEdges > 0)
     safef(kidIndent, sizeof kidIndent, "%s%s", indentForKids, "+---");
     int i;
     for (i = 0;  i < node->numEdges;  i++)
-        asciiTree(node->edges[i], kidIndent, (i == node->numEdges - 1));
+        asciiTree(node->edges[i], kidIndent, (i == node->numEdges - 1), dyLine, pRowList);
     }
+}
+
+static void asciiTreeWithNeighborInfo(struct phyloTree *subtree, struct hash *samplePlacements)
+/* Print out an ascii tree with nearest neighbor & lineage to the right as suggested by Joe deRisi */
+{
+struct dyString *dy = dyStringNew(0);
+struct slPair *rowList = NULL;
+asciiTree(subtree, "", TRUE, dy, &rowList);
+slReverse(&rowList);
+int maxLen = 0;
+struct slPair *row;
+for (row = rowList;  row != NULL;  row = row->next)
+    {
+    char *asciiRow = row->val;
+    int len = strlen(asciiRow);
+    if (len > maxLen)
+        maxLen = len;
+    }
+for (row = rowList;  row != NULL;  row = row->next)
+    {
+    char *asciiRow = row->val;
+    char *neighbor = "?";
+    char *lineage = "?";
+    struct placementInfo *info = hashFindVal(samplePlacements, row->name);
+    if (info)
+        {
+        if (isNotEmpty(info->nearestNeighbor))
+            neighbor = info->nearestNeighbor;
+        if (isNotEmpty(info->neighborLineage))
+            lineage = info->neighborLineage;
+        }
+    printf("%-*s  %s  %s\n", maxLen, asciiRow, neighbor, lineage);
+    }
+slNameFreeList(&rowList);
+dyStringFree(&dy);
 }
 
 static void describeSamplePlacements(struct slName *sampleIds, struct hash *samplePlacements,
@@ -973,7 +1014,7 @@ if (clumpSize < relatedCount && relatedCount > 2)
     // Not all of the related sequences are identical, so they will be broken down into
     // separate "clumps".  List all related samples first to avoid confusion.
     puts("<pre>");
-    asciiTree(subtree, "", TRUE);
+    asciiTreeWithNeighborInfo(subtree, samplePlacements);
     puts("</pre>");
     }
 struct slRef *refsToGo = placementRefs;

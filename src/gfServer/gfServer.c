@@ -48,6 +48,8 @@ static struct optionSpec optionSpecs[] = {
     {"perSeqMax", OPTION_STRING},
     {"noSimpRepMask", OPTION_BOOLEAN},
     {"indexFile", OPTION_STRING},
+    {"genome", OPTION_STRING},
+    {"genomeDataDir", OPTION_STRING},
     {"timeout", OPTION_INT},
     {NULL, 0}
 };
@@ -71,6 +73,8 @@ boolean ipLog = FALSE;
 boolean doMask = FALSE;
 boolean canStop = FALSE;
 char *indexFile = NULL;
+char *genome = NULL;
+char *genomeDataDir = NULL;
 
 int timeout = 90;  // default timeout in seconds
 
@@ -97,8 +101,11 @@ errAbort(
   "      gfServer direct probe.fa file(s).2bit\n"
   "   To test PCR without starting server:\n"
   "      gfServer pcrDirect fPrimer rPrimer file(s).2bit\n"
-  "   To figure out usage level:\n"
+  "   To figure out if server is alive, on static instances get usage statics as well:\n"
   "      gfServer status host port\n"
+  "     For dynamic gfServer instances, specify -genome and optionally the -genomeDataDir\n"
+  "     to get information on an untranslated genome index. Include -trans to get about information\n"
+  "     about a translated genome index\n"
   "   To get input file list:\n"
   "      gfServer files host port\n"
   "   To generate a precomputed index:\n"
@@ -788,9 +795,12 @@ for (;;)
 	else
 	    logError("Ignoring quit message");
 	}
-    else if (sameString("status", command))
+    else if (sameString("status", command) || sameString("transInfo", command)
+             || sameString("untransInfo", command))
         {
 	sprintf(buf, "version %s", gfVersion);
+	errSendString(connectionHandle, buf);
+        errSendString(connectionHandle, "serverType static");
 	errSendString(connectionHandle, buf);
 	sprintf(buf, "type %s", (doTrans ? "translated" : "nucleotide"));
 	errSendString(connectionHandle, buf);
@@ -977,7 +987,12 @@ int ret = 0;
 
 /* Put together command. */
 sd = netMustConnectTo(hostName, portName);
-sprintf(buf, "%sstatus", gfSignature());
+if (genome == NULL)
+    sprintf(buf, "%sstatus", gfSignature());
+else
+    sprintf(buf, "%s%s %s %s", gfSignature(), (doTrans ? "transInfo" : "untransInfo"),
+            genome, genomeDataDir);
+
 mustWriteFd(sd, buf, strlen(buf));
 
 for (;;)
@@ -1259,6 +1274,7 @@ static int dynNextCommand(char* rootDir, struct dynSession *dynSession, char **a
  *
  * Commands are in the format:
  *  signature+command genome genomeDataDir [arg ...]
+ *  signature+status
  */
 {
 char *cmdStr = dynReadCommand(rootDir);
@@ -1268,6 +1284,9 @@ if (cmdStr == NULL)
 int numArgs = chopByWhite(cmdStr, args, DYN_CMD_MAX_ARGS);
 if (numArgs == 0)
     errAbort("empty command");
+if (sameWord(args[0], "status"))
+    return numArgs;  // special case; does not use an index.
+
 if (numArgs < 3)
     errAbort("expected at least 3 arguments for a dynamic server command");
 boolean isTrans = sameString("protQuery", args[0]) || sameString("transQuery", args[0])
@@ -1339,9 +1358,10 @@ netSendString(STDOUT_FILENO, "end");
 }
 
 static void dynamicServerInfo(struct dynSession *dynSession, int numArgs, char **args)
-/* handle one of the info commands
+/* handle one of the info or status commands commands
  *
- *  signature+command genome genomeDataDir
+ *  signature+untransInfo genome genomeDataDir
+ *  signature+transInfo genome genomeDataDir
  */
 {
 struct genoFindIndex *gfIdx = dynSession->gfIdx;
@@ -1352,6 +1372,7 @@ char buf[256];
 struct genoFind *gf = gfIdx->isTrans ? gfIdx->transGf[0][0] : gfIdx->untransGf;
 sprintf(buf, "version %s", gfVersion);
 netSendString(STDOUT_FILENO, buf);
+netSendString(STDOUT_FILENO, "serverType dynamic");
 sprintf(buf, "type %s", (gfIdx->isTrans ? "translated" : "nucleotide"));
 netSendString(STDOUT_FILENO, buf);
 sprintf(buf, "tileSize %d", gf->tileSize);
@@ -1360,6 +1381,22 @@ sprintf(buf, "stepSize %d", gf->stepSize);
 netSendString(STDOUT_FILENO, buf);
 sprintf(buf, "minMatch %d", gf->minMatch);
 netSendString(STDOUT_FILENO, buf);
+netSendString(STDOUT_FILENO, "end");
+}
+
+static void dynamicServerStatus(int numArgs, char **args)
+/* return enough information to indicate server is working without opening
+ * a genome index.
+ *
+ *  signature+status
+ */
+{
+if (numArgs != 1)
+    errAbort("expected 1 word in %s command, got %d", args[0], numArgs);
+char buf[256];
+sprintf(buf, "version %s", gfVersion);
+netSendString(STDOUT_FILENO, buf);
+netSendString(STDOUT_FILENO, "serverType dynamic");
 netSendString(STDOUT_FILENO, "end");
 }
 
@@ -1393,6 +1430,10 @@ if (sameString("query", args[0]) || sameString("protQuery", args[0])
     {
     dynamicServerQuery(dynSession, numArgs, args);
     }
+else if (sameString("status", args[0]))
+    {
+    dynamicServerStatus(numArgs, args);
+    }
 else if (sameString("untransInfo", args[0]) || sameString("transInfo", args[0]))
     {
     dynamicServerInfo(dynSession, numArgs, args);
@@ -1415,6 +1456,7 @@ static void dynamicServer(char* rootDir)
 {
 pushWarnHandler(dynWarnHandler);
 logDebug("dynamicServer connect");
+struct runTimes startTimes = getTimesInSeconds();
 
 // make sure errors are logged
 pushWarnHandler(dynWarnErrorVa);
@@ -1423,6 +1465,13 @@ ZeroVar(&dynSession);
 
 while (dynamicServerCommand(rootDir, &dynSession))
     continue;
+
+struct runTimes endTimes = getTimesInSeconds();
+logInfo("dynserver: exit: clock: %0.4f user: %0.4f system: %0.4f (seconds)",
+        endTimes.clockSecs - startTimes.clockSecs,
+        endTimes.userSecs - startTimes.userSecs,
+        endTimes.sysSecs - startTimes.sysSecs);
+
 logDebug("dynamicServer disconnect");
 }
 
@@ -1460,6 +1509,12 @@ doMask = optionExists("mask");
 canStop = optionExists("canStop");
 noSimpRepMask = optionExists("noSimpRepMask");
 indexFile = optionVal("indexFile", NULL);
+genome = optionVal("genome", NULL);
+genomeDataDir = optionVal("genomeDataDir", NULL);
+if ((genomeDataDir != NULL) && (genome == NULL))
+    errAbort("-genomeDataDir requires the -genome option");
+if ((genome != NULL) && (genomeDataDir == NULL))
+    genomeDataDir = ".";
 timeout = optionInt("timeout", timeout);
 if (argc < 2)
     usage();

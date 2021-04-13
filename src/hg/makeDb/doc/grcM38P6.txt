@@ -25,10 +25,10 @@
 
     # identify sequences not in existing genome db
     faCount ../genbank/GCA_000001635.8_GRCm38.p6_genomic.fna.gz \
-      > faCount.GRCm38.p13.txt
+      > faCount.GRCm38.p6.txt
     ~/kent/src/hg/makeDb/doc/mm10.scanAssemblyReport.pl \
       /hive/data/genomes/mm10/chrom.sizes \
-      faCount.GRCm38.p13.txt ../genbank/GCA_000001635.8_GRCm38.p6_assembly_report.txt \
+      faCount.GRCm38.p6.txt ../genbank/GCA_000001635.8_GRCm38.p6_assembly_report.txt \
     | grep -w new > new.sequences.list
     wc -l new.sequences.list
 #173 new.sequences.list
@@ -82,7 +82,7 @@
     # Must make photoReference.txt first -- copy from mm10
     cp /hive/data/genomes/mm10/photoReference.txt .
     $HOME/kent/src/hg/utils/automation/prepConfig.pl grcM38P6 haplotypes \
-        GRCm38.p13 genbank/*_assembly_report.txt > grcM38P6.config.ra
+        GRCm38.p6 genbank/*_assembly_report.txt > grcM38P6.config.ra
     # Edit grcM38P6.config.ra to avoid confusion with actual mm10
 assemblyDate Sep. 2017 p6
 
@@ -103,7 +103,7 @@ assemblyDate Sep. 2017 p6
 #fastaFiles /hive/data/genomes/grcM38P6/ucsc/*.fa.gz
 #agpFiles /hive/data/genomes/grcM38P6/ucsc/*.agp
 ## qualFiles none
-#dbDbSpeciesDir GRCm38.p13
+#dbDbSpeciesDir GRCm38.p6
 #photoCreditURL http://www.jax.org/
 #photoCreditName        Photo courtesy of The Jackson Laboratory
 #ncbiGenomeId 52

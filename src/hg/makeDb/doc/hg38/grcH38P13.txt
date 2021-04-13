@@ -1,0 +1,383 @@
+# for emacs: -*- mode: sh; -*-
+
+##############################################################################
+# GRCh38 patch 13 build: build basic tracks on separate database for new
+# sequences only (relative to hg38).
+##############################################################################
+
+##############################################################################
+# download or rather ln -s the patch release files (DONE - 2020-02-26 - Angie)
+
+    # Note: newer assemblies use refseq releases instead of genbank, but hg38 uses genbank
+    # so continue with that when building patches.
+    mkdir -p /hive/data/genomes/grcH38P13/genbank
+    cd /hive/data/genomes/grcH38P13/genbank
+
+    # Releases have already been downloaded to /hive/data/outside/ncbi/genomes/.
+    ln -s /hive/data/outside/ncbi/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.28_GRCh38.p13/* .
+
+
+##############################################################################
+# Set up fasta and agp with UCSC names (DONE - 2020-02-26 - Angie)
+
+    mkdir /hive/data/genomes/grcH38P13/ucsc
+    cd /hive/data/genomes/grcH38P13/ucsc
+
+    # identify sequences not in existing genome db
+    faCount ../genbank/GCA_000001405.28_GRCh38.p13_genomic.fna.gz \
+      > faCount.GRCh38.p13.txt
+    ~/kent/src/hg/makeDb/doc/hg38/scanAssemblyReport.pl \
+      /hive/data/genomes/hg38/chrom.sizes \
+      faCount.GRCh38.p13.txt ../genbank/GCA_000001405.28_GRCh38.p13_assembly_report.txt \
+    | grep -w new > new.sequences.list
+    wc -l new.sequences.list
+#45 new.sequences.list
+
+    # Extract UCSC-named FASTA for the new sequences
+    cut -f3 new.sequences.list > extract.new.list
+    awk '{printf "s/%s/%s/; ", $3,$1}' new.sequences.list > genbankToUCSC.sed
+    faSomeRecords ../genbank/GCA_000001405.28_GRCh38.p13_genomic.fna.gz extract.new.list stdout \
+    | sed -e 's/ .*//;' \
+    | sed -f genbankToUCSC.sed \
+    | gzip -c > grcH38P13.fa.gz
+    faSize grcH38P13.fa.gz
+#14769668 bases (0 N's 14769668 real 8821498 upper 5948170 lower) in 45 sequences in 1 files
+#Total size: mean 328214.8 sd 802643.1 min 7309 (chr13_ML143363v1_fix) max 5500449 (chr15_ML143371v1_fix) median 192531
+
+    # Compare faSize results for whole GCA_000001405.28_GRCh38.p13_genomic.fna.gz
+    # vs. concatenation of hg38 fasta and grcH38P13.fa.gz:
+    faSize ../genbank/GCA_000001405.28_GRCh38.p13_genomic.fna.gz
+#3272116950 bases (161368694 N's 3110748256 real 1928965269 upper 1181782987 lower) in 640 sequences in 1 files
+#Total size: mean 5112682.7 sd 26768936.7 min 970 (KI270394.1) max 248956422 (CM000663.2) median 166743
+
+    twoBitToFa /hive/data/genomes/hg38/hg38.2bit stdout \
+    | faSize grcH38P13.fa.gz stdin
+#3272116950 bases (161368694 N's 3110748256 real 1491934681 upper 1618813575 lower) in 640 sequences in 2 files
+#Total size: mean 5112682.7 sd 26768936.7 min 970 (chrUn_KI270394v1) max 248956422 (chr1) median 166743
+    # Good, everything in GCA_000001405.28_GRCh38.p13_genomic.fna.gz is accounted for
+    # between hg38.2bit and grcH38P13.fa.gz
+
+    # Make UCSC-named AGP:
+    zcat ../genbank/GCA_000001405.28_GRCh38.p13_assembly_structure/PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz \
+    | grep -Fwf extract.new.list \
+    | sed -f genbankToUCSC.sed > grcH38P13.agp
+
+    # construct 2bit file:
+    cd /hive/data/genomes/grcH38P13
+    faToTwoBit ucsc/grcH38P13.fa.gz grcH38P13.unmasked.2bit
+    twoBitInfo grcH38P13.unmasked.2bit stdout | sort -k2nr > chrom.sizes
+    # take a look at chrom.sizes to verify it looks OK.
+
+    # Make sure AGP and FASTA/2bit agree:
+    checkAgpAndFa ucsc/grcH38P13.agp grcH38P13.unmasked.2bit | tail -1
+#All AGP and FASTA entries agree - both files are valid
+
+
+##############################################################################
+# establish config.ra file (DONE - Angie - 2020-02-26)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/grcH38P13
+    # Must make photoReference.txt first -- copy from hg38
+    cp /hive/data/genomes/hg38/photoReference.txt .
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl grcH38P13 haplotypes \
+        GRCh38.p13 genbank/*_assembly_report.txt > grcH38P13.config.ra
+    # Edit grcH38P13.config.ra to avoid confusion with actual hg38
+assemblyDate Feb. 2019 p13
+orderKey 2001
+
+    sed -e 's/^/#/' grcH38P13.config.ra
+## config parameters for makeGenomeDb.pl:
+#db grcH38P13
+#clade haplotypes
+#scientificName Homo sapiens
+#commonName Human
+#assemblyDate Feb. 2019 p13
+#assemblyLabel Genome Reference Consortium
+#assemblyShortLabel GRCh38.p13
+#orderKey 2001
+## mitochondrial sequence included in refseq release
+## mitoAcc J01415.2
+#mitoAcc none
+#fastaFiles /hive/data/genomes/grcH38P13/ucsc/*.fa.gz
+#agpFiles /hive/data/genomes/grcH38P13/ucsc/*.agp
+## qualFiles none
+#dbDbSpeciesDir GRCh38.p13
+#photoCreditURL http://www.cbse.ucsc.edu/
+#photoCreditName        Graphic courtesy of CBSE
+#ncbiGenomeId 51
+#ncbiAssemblyId 2334371
+#ncbiAssemblyName GRCh38.p13
+#ncbiBioProject 31257
+#ncbiBioSample notFound
+#genBankAccessionID GCA_000001405.28
+#taxId 9606
+
+
+##############################################################################
+#  Initial database build (DONE - 2020-02-26 - Angie)
+
+    cd /hive/data/genomes/grcH38P13
+    # AGP and unmasked.2bit are already built and checked, so start at the db step:
+    mkdir jkStuff
+    $HOME/kent/src/hg/utils/automation/makeGenomeDb.pl grcH38P13.config.ra -debug
+#HgStepManager: executing from step 'seq' through step 'trackDb'.
+#HgStepManager: executing step 'seq' Wed Feb 26 16:55:27 2020.
+#seq: looks like this was run successfully already (/cluster/data/grcH38P13/chrom.sizes exists).  Either run with -continue agp or some later step, or move aside/remove /cluster/data/grcH38P13/chrom.sizes and run again.
+
+    # Make chromInfo.tab.
+    mkdir -p bed/chromInfo
+    awk '{print $1 "\t" $2 "\t/gbdb/grcH38P13/grcH38P13.2bit";}' chrom.sizes \
+      > bed/chromInfo/chromInfo.tab
+    # Make a link to the .agp file where makeGenomeDb.pl expects to find it.
+    ln -s ucsc/grcH38P13.agp .
+
+    # Skip 'seq' and 'agp' steps because those were done above.
+    time ($HOME/kent/src/hg/utils/automation/makeGenomeDb.pl \
+          -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+          -continue=db grcH38P13.config.ra) > db.log 2>&1 &
+    tail -f db.log
+#real    0m22.790s
+
+    # Ignore all the "NOTES -- STUFF THAT YOU WILL HAVE TO DO --" stuff because this is
+    # going to be folded into hg38.
+    # Now the gold, gap and gc5BaseBw tracks are built.
+
+
+#############################################################################
+# RepeatMasker (DONE - 2020-02-27 - Angie)
+    mkdir /hive/data/genomes/grcH38P13/bed/repeatMasker
+    cd /hive/data/genomes/grcH38P13/bed/repeatMasker
+    time  ($HOME/kent/src/hg/utils/automation/doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku grcH38P13) > do.log 2>&1 &
+    tail -f do.log
+#real    58m13.702s
+
+    egrep "bases|Total|masked" faSize.rmsk.txt \
+    | fold -w 95 -s | sed -e 's/^/# /;'
+# 14769668 bases (0 N's 14769668 real 6559203 upper 8210465 lower) in 45 sequences in 1 files
+# Total size: mean 328214.8 sd 802643.1 min 7309 (chr13_ML143363v1_fix) max 5500449 
+# (chr15_ML143371v1_fix) median 192531
+# %55.59 masked total, %55.59 masked real
+
+    egrep -i "versi|relea" do.log | sed -e 's/^/# /;'
+# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+# grep version of RepeatMasker$ /hive/data/staging/data/RepeatMasker/RepeatMasker
+# #    February 01 2017 (open-4-0-8) 1.332 version of RepeatMasker
+# grep RELEASE /hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+# CC    RepBase RELEASE 20181026;                                   *
+
+    featureBits -countGaps grcH38P13 rmsk
+#8210465 bases of 14769668 (55.590%) in intersection
+
+
+##########################################################################
+# running simple repeat (DONE - 2020-02-27 - Angie)
+
+    mkdir /hive/data/genomes/grcH38P13/bed/simpleRepeat
+    cd /hive/data/genomes/grcH38P13/bed/simpleRepeat
+    # using trf409 6 here like hg38
+    time ($HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl -buildDir=`pwd` \
+        -dbHost=hgwdev -workhorse=hgwdev -bigClusterHub=ku -smallClusterHub=ku \
+        -trf409 6 grcH38P13) > do.log 2>&1 &
+#real    6m49.141s
+
+    cat fb.simpleRepeat
+#1549326 bases of 14769668 (10.490%) in intersection
+
+    # adding this trfMask to .rmsk.2bit
+    cd /hive/data/genomes/grcH38P13
+    twoBitMask grcH38P13.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed grcH38P13.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa grcH38P13.2bit stdout | faSize stdin > faSize.grcH38P13.2bit.txt
+    egrep "bases|Total|masked" faSize.grcH38P13.2bit.txt \
+    | fold -w 95 -s  | sed -e 's/^/# /;'
+# 14769668 bases (0 N's 14769668 real 6528429 upper 8241239 lower) in 45 sequences in 1 files
+# Total size: mean 328214.8 sd 802643.1 min 7309 (chr13_ML143363v1_fix) max 5500449 
+# (chr15_ML143371v1_fix) median 192531
+# %55.80 masked total, %55.80 masked real
+
+    # reset the symlink
+    ln -sf `pwd`/grcH38P13.2bit /gbdb/grcH38P13/grcH38P13.2bit
+
+
+##########################################################################
+## WINDOWMASKER (DONE - 2020-02-27 - Angie)
+
+    mkdir /hive/data/genomes/grcH38P13/bed/windowMasker
+    cd /hive/data/genomes/grcH38P13/bed/windowMasker
+    time ($HOME/kent/src/hg/utils/automation/doWindowMasker.pl -buildDir=`pwd` \
+         -workhorse=hgwdev -dbHost=hgwdev grcH38P13) > do.log 2>&1
+# *** All done ! - Elapsed time: 0m47s
+
+    featureBits -countGaps grcH38P13 rmsk windowmaskerSdust \
+      > fb.grcH38P13.rmsk.windowmaskerSdust.txt 2>&1
+    cat fb.grcH38P13.rmsk.windowmaskerSdust.txt 
+#3364201 bases of 14769668 (22.778%) in intersection
+
+    # Masking statistics
+    egrep "bases|Total|masked" faSize.grcH38P13.cleanWMSdust.txt \
+    | fold -w 95 -s  | sed -e 's/^/# /;'
+# 14769668 bases (0 N's 14769668 real 10765455 upper 4004213 lower) in 45 sequences in 1 files
+# Total size: mean 328214.8 sd 802643.1 min 7309 (chr13_ML143363v1_fix) max 5500449 
+# (chr15_ML143371v1_fix) median 192531
+# %27.11 masked total, %27.11 masked real
+
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2020-02-27 - Angie)
+    mkdir /hive/data/genomes/grcH38P13/bed/cytoBand
+    cd /hive/data/genomes/grcH38P13/bed/cytoBand
+    makeCytoBandIdeo.csh grcH38P13
+
+
+#############################################################################
+# cpgIslands - (DONE - 2020-02-27 - Angie)
+    mkdir /hive/data/genomes/grcH38P13/bed/cpgIslands
+    cd /hive/data/genomes/grcH38P13/bed/cpgIslands
+    time ($HOME/kent/src/hg/utils/automation/doCpgIslands.pl -dbHost=hgwdev \
+      -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku grcH38P13) > do.log 2>&1 &
+# *** All done !  Elapsed time: 1m10s
+
+    cat fb.grcH38P13.cpgIslandExt.txt
+#232897 bases of 14769668 (1.577%) in intersection
+
+
+##############################################################################
+# genscan - (DONE - 2020-02-27 - Angie)
+    mkdir /hive/data/genomes/grcH38P13/bed/genscan
+    cd /hive/data/genomes/grcH38P13/bed/genscan
+    time ($HOME/kent/src/hg/utils/automation/doGenscan.pl -buildDir=`pwd` \
+       -workhorse=hgwdev -dbHost=hgwdev -bigClusterHub=ku grcH38P13) > do.log 2>&1 &
+# *** All done !  Elapsed time: 3m11s
+
+    cat fb.grcH38P13.genscan.txt
+#478205 bases of 14769668 (3.238%) in intersection
+
+    cat fb.grcH38P13.genscanSubopt.txt
+#442575 bases of 14769668 (2.997%) in intersection
+
+
+#############################################################################
+# augustus gene track (DONE - 2020-02-27 - Angie)
+
+    mkdir /hive/data/genomes/grcH38P13/bed/augustus
+    cd /hive/data/genomes/grcH38P13/bed/augustus
+    time ($HOME/kent/src/hg/utils/automation/doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -species=human -dbHost=hgwdev -workhorse=hgwdev grcH38P13) > do.log 2>&1 &
+# *** All done !  Elapsed time: 30m26s
+
+    cat fb.grcH38P13.augustusGene.txt
+#418904 bases of 14769668 (2.836%) in intersection
+
+
+##############################################################################
+# Download files (DONE - 2020-02-27 - Angie)
+    cd /hive/data/genomes/grcH38P13
+    time ($HOME/kent/src/hg/utils/automation/makeDownloads.pl -noChromFiles \
+      -workhorse=hgwdev grcH38P13) > downloads.log 2>&1 &
+# *** All done!
+#real    0m20.430s
+
+
+##############################################################################
+# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR LASTZ (DONE - 2020-02-27 - Angie)
+    mkdir /hive/data/genomes/grcH38P13/bed/linSpecRep
+    cd /hive/data/genomes/grcH38P13/bed/linSpecRep
+    #	create individual .out files from the master record in ../repeatMasker
+    # cluster job is perhaps overkill for just the patches, but it works
+    mkdir splitOut
+    cat <<'_EOF_' > split.csh
+#!/bin/csh -fe
+set C = $1
+head -3 ../repeatMasker/grcH38P13.sorted.fa.out > splitOut/${C}.out
+grep "${C} " ../repeatMasker/grcH38P13.sorted.fa.out >> splitOut/${C}.out
+_EOF_
+    chmod +x split.csh
+
+    cat << '_EOF_' > template
+#LOOP
+split.csh $(root1) {check out line+ splitOut/$(root1).out}
+#ENDLOOP
+_EOF_
+    # small ones first:
+    cut -f1 ../../chrom.sizes | tac > chrom.list
+    gensub2 chrom.list single template jobList
+    para make jobList
+    para time
+#Completed: 45 of 45 jobs
+#CPU time in finished jobs:          1s       0.01m     0.00h    0.00d  0.000 y
+#IO & Wait Time:                   132s       2.21m     0.04h    0.00d  0.000 y
+#Average job time:                   3s       0.05m     0.00h    0.00d
+#Longest finished job:               5s       0.08m     0.00h    0.00d
+#Submission to last job:            20s       0.33m     0.01h    0.00d
+
+    #	now, we can date and process each of those .out files
+    #	constructing the humanSpecific set of repeats
+    #   this means repeats found in human, and not in others
+    #   using mouse here for 'others' is good enough, a variety
+    #   of other species could be used (rat dog cow) where they all
+    #   produce the same result
+    mkdir dateRepeats
+    cd dateRepeats
+    cat << '_EOF_' > mkLSR
+#!/bin/bash
+set -beEu -o pipefail
+seq=$1
+rm -f $seq.out_mus-musculus
+ln -sf ../splitOut/$seq.out .
+/scratch/data/RepeatMasker/DateRepeats $seq.out -query human -comp 'mus musculus'
+rm $seq.out
+mkdir -p ../humanSpecific
+/cluster/bin/scripts/extractRepeats 1 $seq.out_mus-musculus \
+  > ../humanSpecific/$seq.out.spec
+_EOF_
+    chmod +x mkLSR
+
+    cat << '_EOF_' > template
+#LOOP
+./mkLSR $(path1) {check out line+ ../humanSpecific/$(path1).out.spec}
+#ENDLOOP
+_EOF_
+
+    gensub2 ../chrom.list single template jobList
+    para make jobList
+    para time
+#Completed: 45 of 45 jobs
+#CPU time in finished jobs:        893s      14.88m     0.25h    0.01d  0.000 y
+#IO & Wait Time:                    95s       1.59m     0.03h    0.00d  0.000 y
+#Average job time:                  22s       0.37m     0.01h    0.00d
+#Longest finished job:              26s       0.43m     0.01h    0.00d
+#Submission to last job:            59s       0.98m     0.02h    0.00d
+
+    # We also need the nibs for blastz runs with lineage specific repeats
+    mkdir /hive/data/genomes/grcH38P13/bed/nibs
+    cd /hive/data/genomes/grcH38P13/bed/nibs
+    cut -f1 ../../chrom.sizes | while read C
+do
+    twoBitToFa -seq=${C} ../../grcH38P13.2bit stdout \
+    | faToNib -softMask stdin ${C}.nib
+    echo "${C} done"
+done
+
+    # verify nothing lost
+    cat ../../chrom.sizes \
+     | awk '{printf "nibFrag -masked %s.nib 0 %d + stdout\n", $1, $2}' \
+        | sh | faSize stdin
+#14769668 bases (0 N's 14769668 real 6528429 upper 8241239 lower) in 45 sequences in 1 files
+#Total size: mean 328214.8 sd 802643.1 min 7309 (chr13_ML143363v1_fix.nib:0-7309) max 5500449 (chr15_ML143371v1_fix.nib:0-5500449) median 192531
+#N count: mean 0.0 sd 0.0
+#U count: mean 145076.2 sd 355830.6
+#L count: mean 183138.6 sd 450022.5
+#%55.80 masked total, %55.80 masked real
+
+    mkdir -p /hive/data/staging/data/grcH38P13/nib
+    rsync -a --progress ./ /hive/data/staging/data/grcH38P13/nib
+    rsync -a --progress /hive/data/genomes/grcH38P13/{grcH38P13.2bit,chrom.sizes} \
+      /hive/data/staging/data/grcH38P13/
+
+
+##############################################################################
