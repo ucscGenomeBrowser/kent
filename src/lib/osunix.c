@@ -15,6 +15,7 @@
 #include <sys/wait.h>
 #include <regex.h>
 #include <utime.h>
+#include <sys/resource.h>
 
 
 
@@ -786,4 +787,27 @@ void makeSymLink(char *oldName, char *newName)
 int err = symlink(oldName, newName);
 if (err < 0)
      errnoAbort("Couldn't make symbolic link from %s to %s\n", oldName, newName);
+}
+static double timevalToSeconds(struct timeval tv)
+/* convert a timeval structure to seconds */
+{
+return ((double)tv.tv_sec)  + (1.0e-6 * (double)tv.tv_usec);
+}
+
+struct runTimes getTimesInSeconds(void)
+/* get the current clock time since epoch, process user CPU, and system CPU times, all in
+ * seconds. */
+{
+struct runTimes rts;
+
+struct timeval tv;
+gettimeofday(&tv, NULL);
+rts.clockSecs = timevalToSeconds(tv);
+
+struct rusage usage;
+getrusage(RUSAGE_SELF, &usage);
+rts.userSecs = timevalToSeconds(usage.ru_utime);
+rts.sysSecs = timevalToSeconds(usage.ru_stime);
+
+return rts;
 }
