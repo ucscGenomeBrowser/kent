@@ -1456,6 +1456,7 @@ static void dynamicServer(char* rootDir)
 {
 pushWarnHandler(dynWarnHandler);
 logDebug("dynamicServer connect");
+struct runTimes startTimes = getTimesInSeconds();
 
 // make sure errors are logged
 pushWarnHandler(dynWarnErrorVa);
@@ -1464,6 +1465,13 @@ ZeroVar(&dynSession);
 
 while (dynamicServerCommand(rootDir, &dynSession))
     continue;
+
+struct runTimes endTimes = getTimesInSeconds();
+logInfo("dynserver: exit: clock: %0.4f user: %0.4f system: %0.4f (seconds)",
+        endTimes.clockSecs - startTimes.clockSecs,
+        endTimes.userSecs - startTimes.userSecs,
+        endTimes.sysSecs - startTimes.sysSecs);
+
 logDebug("dynamicServer disconnect");
 }
 
