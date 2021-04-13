@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="Genome Browser Trix Indices" -->
+<!--#set var="TITLE" value="trackDbIndexBb | UCSC Genome Browser" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<h1>trackDbIndexBb</h1> 
+<h1>trackDbIndexBb - A utility to support hideEmptySubtracks on Composite Tracks</h1> 
 <p>
 When there are many subtracks in a composite view, it may be useful to limit the 
 display to only those with data in the current viewing window. The trackDb setting, 
@@ -30,11 +30,11 @@ to be displayed alongside the bigBeds with data.</li>
 <p>
 To build the index files, first download the <code>trackDbIndexBb</code> utility. 
 For more information on downloading our command line utilities, see these 
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">instructions</a>.</p> 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">instructions</a>.</p>
 <p>
 There are three other programs needed to run <code>trackDbIndexBb</code>. Two of them,
 <code>bedToBigBed</code> and <code>bigBedToBed</code>, can be found
-in the same <a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">
+in the same <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">
 downloads directory</a>.
 The final dependency, <b>bedtools</b>, can be found on the <a target="_blank" 
 href="https://bedtools.readthedocs.io/en/latest/">bedtools site</a>.</p>
@@ -53,7 +53,7 @@ Below is a short description of the parameters:</p>
 <ul>
 <li><b>trackName</b> | The name of the composite containing the bigBed tracks
 to be indexed. Higher-level composite names may be used to build track associations.
-This means that all tracks in the heirarchy <em>below</em> trackName will be searched 
+This means that all tracks in the hierarchy <em>below</em> trackName will be searched 
 for indexing and associations.</li>
 <li><b>raFile</b> | The location of the trackDb.ra file containing the bigDataUrls
 of the bigBeds to be indexed.</li>
@@ -61,7 +61,8 @@ of the bigBeds to be indexed.</li>
 and sizes of the chromosomes for the working assembly. This can be generated from the 2bit genome, 
 downloaded from the respective assembly on our <a target="_blank" 
 href="http://hgdownload.soe.ucsc.edu/downloads.html">download server</a>, or fetched using the 
-<code>fetchChromSizes</code> utility found in the same directory as <code>trackDbIndexBb</code>.</li>
+<code>fetchChromSizes</code> utility found in the same directory as <code>trackDbIndexBb</code>.
+</li>
 <li><b>-o --out</b> | (Optional) Path to the output directory where the resulting files will 
 be placed. Defaults to current directory.</li>
 <li><b>-p --pathTools</b> | (Optional) Location where the dependent programs can be found. 
@@ -80,11 +81,11 @@ default, <em>view</em> is used, though this can change depending on data and org
 See example below for more information.</li>
 </ul>
 
-<h2>Example 1</h2>
+<h2>Example 1 - Building Index Files</h2>
 <p>
-In this first example, we are looking to build index files for a composite track
-containing 12 bigBed files. Index files are not required for performance
-reasons for a track with so few files, however, the steps would be the same
+In this first example, we will build index files for a composite track
+containing 12 bigBed files. Index files hardly improve performance
+on a track with so few files, however, the steps would be the same
 on a larger track.</p>
 <p>
 First, we can take a look at the header stanza for the composite. The complete
@@ -102,8 +103,8 @@ type bigBed 3 +
 </pre>
 <p>
 We can see that the <code>hideEmptySubtracks</code> setting is already enabled,
-set off by default. The index files we are building are not required, but instead
-improve the performance of the feature. The other key information here is
+set off by default. The index files we are building are not required, but instead,
+improve the performance of the feature. This also gives us
 the composite track name, <em>problematic</em>. We will want to pass this
 as our <b>trackName</b> variable.</p>
 <p>
@@ -115,30 +116,29 @@ and that the required dependencies are present in the path, we can run
 ./trackDbIndexBb problematic smallExampleTrackDb.ra hg19.chrom.sizes
 </pre>
 <p>
-This will result in two files being generated in the current directory:</p>
+This will generate two files in the current directory:</p>
 <pre>
 problematic.multiBed.bb
 problematic.multiBedSources.tab
 </pre>
 <p>
 We can then enable the use of these index files for <code>hideEmptySubtracks</code> by
-adding the following two lines to our trackDb.ra file, adjusting the path to the file
-if needed:</p>
+adding the following two lines to our trackDb.ra file, adjusting the path if needed:</p>
 <pre>
 hideEmptySubtracks off
 hideEmptySubtracksMultiBedUrl problematic.multiBed.bb
 hideEmptySubtracksSourcesUrl problematic.multiBedSources.tab
 </pre>
 
-<h2>Example 2</h2>
+<h2>Example 2 - Creating Track Associations</h2>
 <p>
 In this longer example, we are looking to build index files with track associations between 
-DNase-seq peak and signal tracks. There are 2 bigBed peak tracks, and 4 bigWig signal tracks.
+DNase-seq peak and signal tracks. There are 2 bigBed peak tracks and 4 bigWig signal tracks.
 The complete trackDb for the example can be found <a target=_blank" 
 href="/goldenPath/help/examples/trackDbIndexBb/exampleTrackDb.ra">here</a>.</p> 
 <p>
 Looking at the
-top level stanza, we see that the track is a composite track with two views, one for
+top level stanza, we see that this composite track has two views, one for
 peaks and one for signals. The data are associated with a few different subGroups:</p>
 <pre>
 track uniformDnase
@@ -172,23 +172,24 @@ the peak and signal stanzas we would like to associate are relevant:</p>
                 metadata cell=GM12878 lab=UW
 </pre>
 <p>
-The first track is the bigBed peaks track, part of the peaks view, and the second
-and third are bigWig signal tracks, part of the signal view. <code>hideEmptySubtracks</code>
+The first track is the bigBed peaks track (peaks view) and the second
+and third are bigWig signal tracks (signal view). <code>hideEmptySubtracks</code>
 allows for two optional variables to build track associations. The first, <b>-m --metaDataVar</b>,
 designates which trackDb variable will be used to build the association. In this example, the peaks
-are called on a combination of the signal tracks for each cell, because of this, we would like to
+are determined using a combination of the signal tracks, therefore, we would like to
 display both of the signal tracks whenever the peak track has data.</p>
 <p>
-At this point it is important to explain how <code>trackDbIndexBb</code> makes track associations.
+At this point, it is important to explain how <code>trackDbIndexBb</code> makes track associations.
 It will look at the stanza variable line designated by <b>-m --metaDataVar</b>, then look for
-identical matching lines in other stanzas. Since at least one parameter within the line will usually 
+identical matching lines in other stanzas. Since at least one parameter within will usually
 differ, such as the designation between peak and signal, <b>-s --subGroupRemove</b> can be used 
 to strip out one of the parameters in the line.</p>
 <p>
-The <b>subGroups</b> parameter could be used. However, we see that there are two variables that 
-differ between the peak and signal stanzas, <em>view</em> and <em>lab</em>. We would have to strip 
-both of those to have matching parameter variables and build an association. On the 
-other hand, we could use the <b>metaData</b> parameter. This parameter associates the tracks 
+The <b>subGroups</b> parameter could be used. However, we see that the two variables that 
+differ between the peak and signal stanzas are <em>view</em> and <em>lab</em>. 
+We would have to strip 
+both of those to have matching parameter variables and build an association. Alternatively, 
+we could use the <b>metaData</b> parameter. This parameter associates the tracks 
 by the <em>cell</em>, with only the <em>lab</em> variable differing. This would be the best 
 choice as only a single parameter would have to be stripped, <em>lab</em>, as opposed to two,
 <em>lab</em> and <em>view</em>, to have matching peak and signal parameters for related tracks.</p>
