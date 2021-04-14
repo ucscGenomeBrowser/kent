@@ -1661,7 +1661,8 @@ if (seqInfoList)
 }
 
 static struct singleNucChange *sncListFromSampleMutsAndImputed(struct slName *sampleMuts,
-                                                               struct baseVal *imputedBases)
+                                                               struct baseVal *imputedBases,
+                                                               struct seqWindow *gSeqWin)
 /* Convert a list of "<ref><pos><alt>" names to struct singleNucChange list.
  * However, if <alt> is ambiguous, skip it because variantProjector doesn't like it.
  * Add imputed base predictions. */
@@ -1694,10 +1695,12 @@ for (mut = sampleMuts;  mut != NULL;  mut = mut->next)
 struct baseVal *bv;
 for (bv = imputedBases;  bv != NULL;  bv = bv->next)
     {
+    char ref[2];
+    seqWindowCopy(gSeqWin, bv->chromStart, 1, ref, sizeof ref);
     struct singleNucChange *snc;
     AllocVar(snc);
     snc->chromStart = bv->chromStart;
-    snc->refBase = '?';
+    snc->refBase = snc->parBase = ref[0];
     snc->newBase = bv->val[0];
     slAddHead(&sncList, snc);
     }
@@ -1959,7 +1962,7 @@ if (info)
     fputc('\t', f);
     // AA mutations
     struct singleNucChange *sncList = sncListFromSampleMutsAndImputed(info->sampleMuts,
-                                                                      info->imputedBases);
+                                                                      info->imputedBases, gSeqWin);
     struct slPair *geneAaMutations = getAaMutations(sncList, geneInfoList, gSeqWin);
     struct slPair *geneAaMut;
     boolean first = TRUE;
