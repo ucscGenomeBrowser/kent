@@ -1766,7 +1766,10 @@ int aaMutInfoCmp(const void *a, const void *b)
 {
 const struct aaMutInfo *amiA = *(struct aaMutInfo * const *)a;
 const struct aaMutInfo *amiB = *(struct aaMutInfo * const *)b;
-return amiA->priority - amiB->priority;
+int dif = amiA->priority - amiB->priority;
+if (dif == 0)
+    dif = amiA->pos - amiB->pos;
+return dif;
 }
 
 // For now, hardcode SARS-CoV-2 Spike RBD coords and antibody escape positions (1-based).
