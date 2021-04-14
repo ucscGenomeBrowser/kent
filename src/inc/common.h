@@ -1593,4 +1593,16 @@ boolean haplotype(const char *name);
 char *shorterDouble(double value);
 /* Work around a "bug" in %g output that goes into scientific notation too early. */
 
+struct runTimes
+/* clock time since epoch, user CPU, and system CPU, in seconds */
+{
+    double clockSecs;
+    double userSecs;
+    double sysSecs;
+};
+
+struct runTimes getTimesInSeconds(void);
+/* get the current clock time since epoch, process user CPU, and system CPU times, all in
+ * seconds. */
+
 #endif /* COMMON_H */

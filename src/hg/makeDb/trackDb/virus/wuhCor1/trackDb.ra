@@ -646,3 +646,5 @@ searchMethod fuzzy
 padding 5
 
 include variantMuts.ra
+
+include vaccines.ra

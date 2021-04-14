@@ -3874,7 +3874,8 @@ var imageV2 = {
                 continue;
             if (newJsonRec.type === "remote")
                 continue;
-            if (oldJsonRec &&  oldJsonRec.visibility !== 0 && $('tr#tr_' + id).length === 1) {
+            var escapedId = id.replace('.', '\\.');
+            if (oldJsonRec &&  oldJsonRec.visibility !== 0 && $('tr#tr_' + escapedId).length === 1) {
                 // New track replacing old:
                 if (!imageV2.updateImgForId(response, id, true, newJsonRec))
                     warn("Couldn't parse out new image for id: " + id);

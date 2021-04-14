@@ -1394,10 +1394,10 @@ for (;;)
 	long et = clock1000() - enteredMainTime;
 	if (serve->isDynamic)
 	    {
-	    if (et > 110000)
+	    if (et > NET_TIMEOUT_MS)
 		warn("the dynamic blat service is taking too long to respond, probably overloaded at this time, try again later.  Error reading status information from %s:%s",
 		serve->host, serve->port);
-	    else if (et < 500)
+	    else if (et < NET_QUICKEXIT_MS)
 		warn("the dynamic blat service is returning an error immediately. it is probably overloaded at this time, try again later.  Error reading status information from %s:%s",
 		serve->host, serve->port);
 	    else

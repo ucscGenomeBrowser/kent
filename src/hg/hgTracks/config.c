@@ -110,12 +110,12 @@ char *emptyStyles[] = {
 void maybeNewFonts(struct hvGfx *hvg)
 /* Check to see if we want to use the alternate font engine (FreeType2). */
 {
-if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+if (sameString(cfgOptionDefault("freeType", "on"), "on"))
     {
     if (sameString(tl.textFont, "Bitmap"))
         return;
 
-    char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
+    char *fontDir = cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts");
     char buffer[4096];
 
     int ii;
@@ -603,7 +603,7 @@ if (trackLayoutInclFontExtras())
     }
 hPrintf("</TR>");
 
-if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+if (sameString(cfgOptionDefault("freeType", "on"), "on"))
     {
     hPrintf("<TR><TD>font:");
     hPrintf("<TD style=\"text-align: right\">");

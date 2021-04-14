@@ -871,7 +871,8 @@ if [ -d "/usr/local/apache/htdocs-hgdownload/goldenPath/archive" ]; then
 fi
 
 rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes/\$db.ncbiRefSeq.gtf.gz
- ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \\
+mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes
+ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \\
     /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes/\$db.ncbiRefSeq.gtf.gz
 
 featureBits \$db ncbiRefSeq > fb.ncbiRefSeq.\$db.txt 2>&1

@@ -1510,6 +1510,9 @@ if (newGbdbLoc==NULL)
 
 freeMem(path);
 path = replaceChars(fileName, "/gbdb/", newGbdbLoc);
+if (cfgOptionBooleanDefault("traceGbdb", FALSE))
+    fprintf(stderr, "REDIRECT gbdbLoc2 %s ", path);
+
 return path;
 }
 

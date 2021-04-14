@@ -388,7 +388,7 @@ const static char *insertHtmlRegex =
     "[[:space:]]*#insert[[:space:]]+file[[:space:]]*=[[:space:]]*"
     "\"([^/][^\"]+)\"[[:space:]]*-->";
 
-static char *readHtmlRecursive(char *fileName, char *database)
+static char *readHtmlRecursive(char *fileName, char *database, struct trackDb *tdb)
 /* Slurp in an html file.  Wherever it contains insertHtmlRegex, recursively slurp that in
  * and replace insertHtmlRegex with the contents. */
 {
@@ -416,12 +416,19 @@ while (regexMatchSubstr(html, insertHtmlRegex, substrs, ArraySize(substrs)))
 	safecpy(insertFileName, sizeof(insertFileName), dir);
 	safencat(insertFileName, sizeof(insertFileName), html+substrs[3].rm_so,
 		 (substrs[3].rm_eo - substrs[3].rm_so));
-	if (!fileExists(insertFileName))
-	    errAbort("readHtmlRecursive: relative path '%s' (#insert'ed in %s) not found",
-		     insertFileName, fileName);
-	char *insertedText = readHtmlRecursive(insertFileName, database);
-	dyStringAppend(dy, insertedText);
-	freez(&insertedText);
+        char *varSubFilename = hVarSubst("readHtmlRecursive: var substitution error",
+                                                tdb, database, insertFileName);
+        if (varSubFilename)
+            safecpy(insertFileName, sizeof(insertFileName), varSubFilename);
+        if (differentString(fileName, insertFileName)) // protect against infinite loop
+            {
+            if (!fileExists(insertFileName))
+                errAbort("readHtmlRecursive: relative path '%s' (#insert'ed in %s) not found",
+                         insertFileName, fileName);
+            char *insertedText = readHtmlRecursive(insertFileName, database, tdb);
+            dyStringAppend(dy, insertedText);
+            freez(&insertedText);
+            }
 	}
     // All text after the regex match:
     dyStringAppend(dy, html+substrs[0].rm_eo);
@@ -446,7 +453,7 @@ for (td = tdbList; td != NULL; td = td->next)
 	safef(fileName, sizeof(fileName), "%s/%s.html", dirName, htmlName);
 	if (fileExists(fileName))
             {
-	    td->html = readHtmlRecursive(fileName, database);
+	    td->html = readHtmlRecursive(fileName, database, td);
             // Check for note ASCII characters at higher levels of verboseness.
             // Normally, these are acceptable ISO-8859-1 characters
             if  ((verboseLevel() >= 2) && hasNonAsciiChars(td->html))
