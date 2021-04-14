@@ -1705,6 +1705,47 @@ slReverse(&sncList);
 return sncList;
 }
 
+enum spikeMutType
+/* Some categories of Spike mutation are more concerning than others. */
+{
+    smtNone,        // Just a spike mutation.
+    smtVoC,         // Thought to be the problematic mutation in a Variant of Concern.
+    smtEscape,      // Implicated in Antibody Escape experiments.
+    smtRbd,         // Receptor Binding Domain
+    smtCleavage,    // Furin cleavage site
+    smtD614G        // Went from rare to ~99% frequency in first half of 2020; old news.
+};
+
+static char *spikeMutTypeToString(enum spikeMutType smt)
+/* Returns a string version of smt.  Do not free the returned value. */
+{
+char *string = NULL;
+switch (smt)
+    {
+    case smtNone:
+        string = "spike";
+        break;
+    case smtVoC:
+        string = "VoC";
+        break;
+    case smtEscape:
+        string = "escape";
+        break;
+    case smtRbd:
+        string = "RBD";
+        break;
+    case smtCleavage:
+        string = "cleavage";
+        break;
+    case smtD614G:
+        string = "D614G";
+        break;
+    default:
+        errAbort("spikeMutTypeToString: Invalid value %d", smt);
+    }
+return string;
+}
+
 struct aaMutInfo
 // A protein change, who has it, and how important we think it is.
 {
@@ -1712,6 +1753,7 @@ struct aaMutInfo
     struct slName *sampleIds;   // The uploaded samples that have it
     int priority;               // For sorting; lower number means scarier.
     int pos;                    // 1-based position
+    enum spikeMutType spikeType;// If spike mutation, what kind?
     char oldAa;                 // Reference AA
     char newAa;                 // Alt AA
 };
@@ -1806,40 +1848,65 @@ escapeMutPos[530] = TRUE;
 escapeMutPos[531] = TRUE;
 }
 
-static int spikePriority(int pos, char newAa)
-/* Lower number for scarier spike mutation, per spike mutations track / RBD. */
+static int spikePriority(int pos, char newAa, enum spikeMutType *pSmt)
+/* Lower number for scarier spike mutation, per spike mutations track / RBD. */
 {
 if (escapeMutPos == NULL)
     initEscapeMutPos();
 int priority = 0;
+enum spikeMutType smt = smtNone;
 if (pos >= rbdStart && pos <= rbdEnd)
     {
     // Receptor binding domain
     priority = 100;
+    smt = smtRbd;
     // Antibody escape mutation in Variant of Concern/Interest
     if (pos == 484)
+        {
         priority = 10;
+        smt = smtVoC;
+        }
     else if (pos == 501)
+        {
         priority = 15;
+        smt = smtVoC;
+        }
     else if (pos == 452)
+        {
         priority = 20;
+        smt = smtVoC;
+        }
     // Other antibody escape mutations
     else if (pos == 439 || pos == 477)
+        {
         priority = 25;
+        smt = smtEscape;
+        }
     else if (escapeMutPos[pos])
+        {
         priority = 50;
+        smt = smtEscape;
+        }
     }
 else if (pos >= 675 && pos <= 681)
+    {
     // Furin cleavage site; circumstantial evidence for Q677{H,P} spread in US.
     // Interesting threads on SPHERES 2021-02-26 about P681H tradeoff between infectivity vs
     // range of cell types that can be infected and other observations about that region.
     priority = 110;
+    smt = smtCleavage;
+    }
 else if (pos == 614 && newAa == 'G')
+    {
     // Old hat
     priority = 1000;
+    smt = smtD614G;
+    }
 else
     // Somewhere else in Spike
     priority = 500;
+if (pSmt != NULL)
+    *pSmt = smt;
 return priority;
 }
 
@@ -1858,7 +1925,7 @@ if (hel == NULL)
     AllocVar(ami);
     ami->name = cloneString(aaMutStr);
     slNameAddHead(&ami->sampleIds, sampleId);
-    ami->priority = spikePriority(pos, newAa);
+    ami->priority = spikePriority(pos, newAa, &ami->spikeType);
     ami->pos = pos;
     ami->oldAa = oldAa;
     ami->newAa = newAa;
@@ -2035,7 +2102,7 @@ struct tempName *tsvTn = NULL;
 AllocVar(tsvTn);
 trashDirFile(tsvTn, "ct", "usher_S_muts", ".tsv");
 FILE *f = mustOpen(tsvTn->forCgi, "w");
-fprintf(f, "aa_mutation\tsample_count\tsample_frequency\tsample_ids"
+fprintf(f, "aa_mutation\tsample_count\tsample_frequency\tsample_ids\tcategory"
         "\n");
 struct aaMutInfo *sChanges[spikeChanges->elCount];
 struct hashCookie cookie = hashFirst(spikeChanges);
@@ -2063,6 +2130,7 @@ for (ix = 0;  ix < spikeChanges->elCount;  ix++)
     struct slName *sample;
     for (sample = ami->sampleIds->next;  sample != NULL;  sample = sample->next)
         fprintf(f, ",%s", sample->name);
+    fprintf(f, "\t%s", spikeMutTypeToString(ami->spikeType));
     fputc('\n', f);
     }
 carefulClose(&f);
