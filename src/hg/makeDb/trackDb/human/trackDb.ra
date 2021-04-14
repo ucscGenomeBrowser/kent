@@ -34,7 +34,10 @@ include trackDb.giab.ra
 
 # CADD scores
 include caddAlpha.ra alpha,beta
-include cadd.ra public
+include revel.ra public
+
+# Revel scores
+include revel.ra
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
