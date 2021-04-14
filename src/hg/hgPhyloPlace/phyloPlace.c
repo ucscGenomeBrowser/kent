@@ -930,13 +930,19 @@ for (ref = placementRefs;  ref != NULL;  ref = ref->next)
 return clumpCount;
 }
 
-static void asciiTree(struct phyloTree *node, char *indent, boolean isLast)
-/* Until we can make a real graphic, at least print an ascii tree. */
+static void asciiTree(struct phyloTree *node, char *indent, boolean isLast,
+                      struct dyString *dyLine, struct slPair **pRowList)
+/* Until we can make a real graphic, at least print an ascii tree build up a (reversed) list of
+ * lines so that we can add some text to the right later. */
 {
 if (isNotEmpty(indent) || isNotEmpty(node->ident->name))
     {
     if (node->ident->name && !isAllDigits(node->ident->name))
-        printf("%s %s\n", indent, node->ident->name);
+        {
+        dyStringPrintf(dyLine, "%s %s", indent, node->ident->name);
+        slPairAdd(pRowList, node->ident->name, cloneString(dyLine->string));
+        dyStringClear(dyLine);
+        }
     }
 int indentLen = strlen(indent);
 char indentForKids[indentLen+1];
@@ -954,8 +960,43 @@ if (node->numEdges > 0)
     safef(kidIndent, sizeof kidIndent, "%s%s", indentForKids, "+---");
     int i;
     for (i = 0;  i < node->numEdges;  i++)
-        asciiTree(node->edges[i], kidIndent, (i == node->numEdges - 1));
+        asciiTree(node->edges[i], kidIndent, (i == node->numEdges - 1), dyLine, pRowList);
     }
+}
+
+static void asciiTreeWithNeighborInfo(struct phyloTree *subtree, struct hash *samplePlacements)
+/* Print out an ascii tree with nearest neighbor & lineage to the right as suggested by Joe deRisi */
+{
+struct dyString *dy = dyStringNew(0);
+struct slPair *rowList = NULL;
+asciiTree(subtree, "", TRUE, dy, &rowList);
+slReverse(&rowList);
+int maxLen = 0;
+struct slPair *row;
+for (row = rowList;  row != NULL;  row = row->next)
+    {
+    char *asciiRow = row->val;
+    int len = strlen(asciiRow);
+    if (len > maxLen)
+        maxLen = len;
+    }
+for (row = rowList;  row != NULL;  row = row->next)
+    {
+    char *asciiRow = row->val;
+    char *neighbor = "?";
+    char *lineage = "?";
+    struct placementInfo *info = hashFindVal(samplePlacements, row->name);
+    if (info)
+        {
+        if (isNotEmpty(info->nearestNeighbor))
+            neighbor = info->nearestNeighbor;
+        if (isNotEmpty(info->neighborLineage))
+            lineage = info->neighborLineage;
+        }
+    printf("%-*s  %s  %s\n", maxLen, asciiRow, neighbor, lineage);
+    }
+slNameFreeList(&rowList);
+dyStringFree(&dy);
 }
 
 static void describeSamplePlacements(struct slName *sampleIds, struct hash *samplePlacements,
@@ -973,7 +1014,7 @@ if (clumpSize < relatedCount && relatedCount > 2)
     // Not all of the related sequences are identical, so they will be broken down into
     // separate "clumps".  List all related samples first to avoid confusion.
     puts("<pre>");
-    asciiTree(subtree, "", TRUE);
+    asciiTreeWithNeighborInfo(subtree, samplePlacements);
     puts("</pre>");
     }
 struct slRef *refsToGo = placementRefs;
@@ -1620,7 +1661,8 @@ if (seqInfoList)
 }
 
 static struct singleNucChange *sncListFromSampleMutsAndImputed(struct slName *sampleMuts,
-                                                               struct baseVal *imputedBases)
+                                                               struct baseVal *imputedBases,
+                                                               struct seqWindow *gSeqWin)
 /* Convert a list of "<ref><pos><alt>" names to struct singleNucChange list.
  * However, if <alt> is ambiguous, skip it because variantProjector doesn't like it.
  * Add imputed base predictions. */
@@ -1653,15 +1695,58 @@ for (mut = sampleMuts;  mut != NULL;  mut = mut->next)
 struct baseVal *bv;
 for (bv = imputedBases;  bv != NULL;  bv = bv->next)
     {
+    char ref[2];
+    seqWindowCopy(gSeqWin, bv->chromStart, 1, ref, sizeof ref);
     struct singleNucChange *snc;
     AllocVar(snc);
     snc->chromStart = bv->chromStart;
-    snc->refBase = '?';
+    snc->refBase = snc->parBase = ref[0];
     snc->newBase = bv->val[0];
     slAddHead(&sncList, snc);
     }
 slReverse(&sncList);
 return sncList;
+}
+
+enum spikeMutType
+/* Some categories of Spike mutation are more concerning than others. */
+{
+    smtNone,        // Just a spike mutation.
+    smtVoC,         // Thought to be the problematic mutation in a Variant of Concern.
+    smtEscape,      // Implicated in Antibody Escape experiments.
+    smtRbd,         // Receptor Binding Domain
+    smtCleavage,    // Furin cleavage site
+    smtD614G        // Went from rare to ~99% frequency in first half of 2020; old news.
+};
+
+static char *spikeMutTypeToString(enum spikeMutType smt)
+/* Returns a string version of smt.  Do not free the returned value. */
+{
+char *string = NULL;
+switch (smt)
+    {
+    case smtNone:
+        string = "spike";
+        break;
+    case smtVoC:
+        string = "VoC";
+        break;
+    case smtEscape:
+        string = "escape";
+        break;
+    case smtRbd:
+        string = "RBD";
+        break;
+    case smtCleavage:
+        string = "cleavage";
+        break;
+    case smtD614G:
+        string = "D614G";
+        break;
+    default:
+        errAbort("spikeMutTypeToString: Invalid value %d", smt);
+    }
+return string;
 }
 
 struct aaMutInfo
@@ -1671,6 +1756,7 @@ struct aaMutInfo
     struct slName *sampleIds;   // The uploaded samples that have it
     int priority;               // For sorting; lower number means scarier.
     int pos;                    // 1-based position
+    enum spikeMutType spikeType;// If spike mutation, what kind?
     char oldAa;                 // Reference AA
     char newAa;                 // Alt AA
 };
@@ -1680,7 +1766,10 @@ int aaMutInfoCmp(const void *a, const void *b)
 {
 const struct aaMutInfo *amiA = *(struct aaMutInfo * const *)a;
 const struct aaMutInfo *amiB = *(struct aaMutInfo * const *)b;
-return amiA->priority - amiB->priority;
+int dif = amiA->priority - amiB->priority;
+if (dif == 0)
+    dif = amiA->pos - amiB->pos;
+return dif;
 }
 
 // For now, hardcode SARS-CoV-2 Spike RBD coords and antibody escape positions (1-based).
@@ -1765,40 +1854,65 @@ escapeMutPos[530] = TRUE;
 escapeMutPos[531] = TRUE;
 }
 
-static int spikePriority(int pos, char newAa)
-/* Lower number for scarier spike mutation, per spike mutations track / RBD. */
+static int spikePriority(int pos, char newAa, enum spikeMutType *pSmt)
+/* Lower number for scarier spike mutation, per spike mutations track / RBD. */
 {
 if (escapeMutPos == NULL)
     initEscapeMutPos();
 int priority = 0;
+enum spikeMutType smt = smtNone;
 if (pos >= rbdStart && pos <= rbdEnd)
     {
     // Receptor binding domain
     priority = 100;
+    smt = smtRbd;
     // Antibody escape mutation in Variant of Concern/Interest
     if (pos == 484)
+        {
         priority = 10;
+        smt = smtVoC;
+        }
     else if (pos == 501)
+        {
         priority = 15;
+        smt = smtVoC;
+        }
     else if (pos == 452)
+        {
         priority = 20;
+        smt = smtVoC;
+        }
     // Other antibody escape mutations
     else if (pos == 439 || pos == 477)
+        {
         priority = 25;
+        smt = smtEscape;
+        }
     else if (escapeMutPos[pos])
+        {
         priority = 50;
+        smt = smtEscape;
+        }
     }
 else if (pos >= 675 && pos <= 681)
+    {
     // Furin cleavage site; circumstantial evidence for Q677{H,P} spread in US.
     // Interesting threads on SPHERES 2021-02-26 about P681H tradeoff between infectivity vs
     // range of cell types that can be infected and other observations about that region.
     priority = 110;
+    smt = smtCleavage;
+    }
 else if (pos == 614 && newAa == 'G')
+    {
     // Old hat
     priority = 1000;
+    smt = smtD614G;
+    }
 else
     // Somewhere else in Spike
     priority = 500;
+if (pSmt != NULL)
+    *pSmt = smt;
 return priority;
 }
 
@@ -1817,7 +1931,7 @@ if (hel == NULL)
     AllocVar(ami);
     ami->name = cloneString(aaMutStr);
     slNameAddHead(&ami->sampleIds, sampleId);
-    ami->priority = spikePriority(pos, newAa);
+    ami->priority = spikePriority(pos, newAa, &ami->spikeType);
     ami->pos = pos;
     ami->oldAa = oldAa;
     ami->newAa = newAa;
@@ -1851,7 +1965,7 @@ if (info)
     fputc('\t', f);
     // AA mutations
     struct singleNucChange *sncList = sncListFromSampleMutsAndImputed(info->sampleMuts,
-                                                                      info->imputedBases);
+                                                                      info->imputedBases, gSeqWin);
     struct slPair *geneAaMutations = getAaMutations(sncList, geneInfoList, gSeqWin);
     struct slPair *geneAaMut;
     boolean first = TRUE;
@@ -1994,7 +2108,7 @@ struct tempName *tsvTn = NULL;
 AllocVar(tsvTn);
 trashDirFile(tsvTn, "ct", "usher_S_muts", ".tsv");
 FILE *f = mustOpen(tsvTn->forCgi, "w");
-fprintf(f, "aa_mutation\tsample_count\tsample_frequency\tsample_ids"
+fprintf(f, "aa_mutation\tsample_count\tsample_frequency\tsample_ids\tcategory"
         "\n");
 struct aaMutInfo *sChanges[spikeChanges->elCount];
 struct hashCookie cookie = hashFirst(spikeChanges);
@@ -2022,6 +2136,7 @@ for (ix = 0;  ix < spikeChanges->elCount;  ix++)
     struct slName *sample;
     for (sample = ami->sampleIds->next;  sample != NULL;  sample = sample->next)
         fprintf(f, ",%s", sample->name);
+    fprintf(f, "\t%s", spikeMutTypeToString(ami->spikeType));
     fputc('\n', f);
     }
 carefulClose(&f);

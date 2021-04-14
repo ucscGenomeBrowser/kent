@@ -61,6 +61,7 @@
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
+static struct hash *hubAssemblyUndecoratedHash; // mapping of undecorated assembly name to genome struct
 static struct hash *hubOrgHash;   // mapping from organism name to hub pointer
 static struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
 static struct hash *trackHubHash;
@@ -106,7 +107,22 @@ for(; hubGenome; hubGenome=hubGenome->next)
 return NULL;
 }
 
+struct trackHubGenome *trackHubGetGenomeUndecorated(char *database)
+/* Get the genome structure for an undecorated genome name. */
+{
+if (hubAssemblyUndecoratedHash == NULL)
+    return NULL;
+
+struct hashEl *hel = hashLookup(hubAssemblyUndecoratedHash, database);
+
+if (hel == NULL)
+    return NULL;
+
+return (struct trackHubGenome *)hel->val;
+}
+
 struct trackHubGenome *trackHubGetGenome(char *database)
+/* get genome structure for an assembly in a trackHub */
 {
 if (hubAssemblyHash == NULL)
     errAbort("requesting hub genome with no hubs loaded");
@@ -619,6 +635,11 @@ if (hubAssemblyHash == NULL)
     hubAssemblyHash = newHash(5);
 if ((hel = hashLookup(hubAssemblyHash, genome->name)) == NULL)
     hashAdd(hubAssemblyHash, genome->name, genome);
+
+if (hubAssemblyUndecoratedHash == NULL)
+    hubAssemblyUndecoratedHash = newHash(5);
+if ((hel = hashLookup(hubAssemblyUndecoratedHash, trackHubSkipHubName(genome->name))) == NULL)
+    hashAdd(hubAssemblyUndecoratedHash, trackHubSkipHubName(genome->name), genome);
 }
 
 static char *addHubName(char *base, char *hubName)

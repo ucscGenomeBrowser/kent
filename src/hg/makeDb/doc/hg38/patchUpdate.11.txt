@@ -59,6 +59,7 @@
       | gzip -c \
       > hg38.p11.gc5Base.wigVarStep.gz)
 #real    8m10.061s
+
     # Make a new gc5BaseBw.bw
     time wigToBigWig hg38.p11.gc5Base.wigVarStep.gz ../../chrom.sizes.p11 \
       hg38.p11.gc5Base.bw
@@ -68,9 +69,22 @@
     cd /hive/data/genomes/hg38/bed/gc5Base/
     # For the first update only, move initial release files to .initial.  Don't do this next update!
     mv hg38.gc5Base.wigVarStep.gz hg38.initial.gc5Base.wigVarStep.gz
-    ln -s hg38.p11.gc5Base.wigVarStep.gz hg38.gc5Base.wigVarStep.gz
     mv hg38.gc5Base.bw hg38.initial.gc5Base.bw
+    # End of first-update-only stuff
+    
+    ln -s hg38.p11.gc5Base.wigVarStep.gz hg38.gc5Base.wigVarStep.gz
     ln -s hg38.p11.gc5Base.bw hg38.gc5Base.bw
+
+    # Because of this symlink, browser track gc5BaseBw has been automatically updated:
+    # /gbdb/hg38/bbi/gc5BaseBw/gc5Base.bw -> /cluster/data/hg38/bed/gc5Base/hg38.gc5Base.bw
+
+    # For the first update only.  Don't do this next update!
+    # The .wib and .wig.gz are obsolete, remove them from the downloads.
+    rm /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/hg38.gc5Base.wib
+    rm /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/hg38.gc5Base.wig.gz
+    # link the bigwig to downloads
+    ln -sf /hive/data/genomes/hg38/bed/gc5Base/hg38.gc5Base.bw /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/hg38.gc5Base.bw
+    # End of first-update-only stuff
 
 
 ##############################################################################

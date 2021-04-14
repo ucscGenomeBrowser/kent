@@ -196,7 +196,8 @@ gzip gisaidAndPublic.$today.metadata.tsv
 cncbDate=$(ls -l $cncbDir | sed -re 's/.*cncb\.([0-9]{4}-[0-9][0-9]-[0-9][0-9]).*/\1/')
 echo "sarscov2phylo release 13-11-20; GISAID, NCBI and COG-UK sequences downloaded $today; CNCB sequences downloaded $cncbDate" \
     > version.plusGisaid.txt
-sampleCountComma=$(echo $(wc -l < $renaming) \
+$matUtils extract -i gisaidAndPublic.$today.masked.pb -u samples.$today
+sampleCountComma=$(echo $(wc -l < samples.$today) \
                    | sed -re 's/([0-9]+)([0-9]{3})$/\1,\2/; s/([0-9]+)([0-9]{3},[0-9]{3})$/\1,\2/;')
 echo "$sampleCountComma genomes from GISAID, GenBank, COG-UK and CNCB ($today); sarscov2phylo 13-11-20 tree with newer sequences added by UShER" \
     > hgPhyloPlace.plusGisaid.description.txt
