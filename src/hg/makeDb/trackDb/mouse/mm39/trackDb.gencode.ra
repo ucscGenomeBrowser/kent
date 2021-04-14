@@ -9,3 +9,4 @@ pennantIcon Updated red ../goldenPath/newsarch.html#032321 "Updated Mar. 23, 202
 
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 include wgEncodeGencodeVM26.ra
+include wgEncodeGencodeVM27.ra

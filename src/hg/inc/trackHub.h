@@ -217,5 +217,8 @@ struct dbDb *trackHubGetPcrServers();
 
 boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort, char **pGenomeDataDir);
 /* Get the isPcr params from a trackHub genome. */
+
+struct trackHubGenome *trackHubGetGenomeUndecorated(char *database);
+/* Get the genome structure for an undecorated genome name. */
 #endif /* TRACKHUB_H */
 

@@ -16,6 +16,7 @@ end
 0ddf270562684f29untransInfo testPcr testDynServerPcr
 
 version XXX
+serverType dynamic
 type nucleotide
 tileSize 11
 stepSize 5

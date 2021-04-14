@@ -7,7 +7,7 @@ group singleCell
 
     track muscleDeMicheliCellType
     parent muscleDeMicheli
-    html muscleDeMicheliCellType
+    html muscleDeMicheli
     type bigBarChart
     visibility pack
     shortLabel Muscle Cells 
@@ -29,7 +29,7 @@ group singleCell
 
     track muscleDeMicheliSample
     parent muscleDeMicheli
-    html muscleDeMicheliSample
+    html muscleDeMicheli
     type bigBarChart
     visibility hide
     shortLabel Muscle Sample
