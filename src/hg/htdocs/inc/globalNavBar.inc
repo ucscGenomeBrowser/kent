@@ -17,7 +17,7 @@
 	<li><a href="../cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm39&amp;position=lastDbPos">Mouse GRCm39/mm39</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
-	<li><a href="https://hgdownload.soe.ucsc.edu/hubs/">Genome Assembly Hubs</a></li>
+	<li><a href="https://hgdownload.soe.ucsc.edu/hubs/">Genome Archive GenArk</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=wuhCor1&amp;position=lastDbPos">SARS-CoV-2 (COVID-19)</a></li>
 	<li class="last"><a href="../cgi-bin/hgGateway">Other</a></li>
         </ul>

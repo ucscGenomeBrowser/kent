@@ -22,7 +22,7 @@ searchPriority 8
 include customRefSeqComposite.ra
 include trackDb.7way.ra alpha
 
-include trackDb.catV2.ra alpha
-include trackDb.uwIsoSeq.ra alpha
+include trackDb.catV2.ra
+include trackDb.uwIsoSeq.ra
 
 
