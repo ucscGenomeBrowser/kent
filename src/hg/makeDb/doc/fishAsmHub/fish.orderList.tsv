@@ -11,12 +11,14 @@ GCF_900080235.1_BallGen_V1	ballan wrasse
 GCF_001640805.1_ASM164080v1	barramundi perch
 GCF_000690725.1_Stegastes_partitus-1.0.2	bicolor damselfish
 GCF_000735185.1_NC01	black rockcod
-GCF_005870065.1_ASM587006v1	blue tilapia
+GCF_005870065.1_ASM587006v1	blue tilapia (BGI-SZ)
+GCF_013358895.1_ZZ_aureus	blue tilapia (Guangdong)
 GCF_900634775.1_fGouWil2.1	blunt-snouted clingfish
 GCF_009829125.1_fPerMag1.pri	bony fishes
 GCF_000239415.1_AstBur1.0	Burton's mouthbrooder
 GCF_900634415.1_fCotGob3.1	channel bull blenny
 GCF_001660625.1_IpCoco_1.2	channel catfish
+GCF_900408965.1_fSimDia1.1	chichlid (S. diagramma)
 GCF_002872995.1_Otsh_v1.0	Chinook salmon
 GCF_012931545.1_Oket_V1	chum salmon
 GCF_900324465.1_fAnaTes1.1	climbing perch
@@ -27,6 +29,8 @@ GCF_900700375.1_fDenClu1.1	denticle herring
 GCF_900246225.1_fAstCal1.2	eastern happy
 GCF_003665695.1_Ee_SOAP_WITH_SSPACE	electric eel
 GCF_902827165.1_fTreBer1.1	emerald rockcod
+GCF_010015445.1_GENO_Pfluv_1.0	European perch
+GCF_016745375.1_EPA_FHM_2.0	fathead minnow
 GCF_007364275.1_fArcCen1	flier cichlid
 GCF_005281545.1_ASM528154v1	giant grouper
 GCF_900880675.1_fSpaAur1.1	gilthead seabream
@@ -87,7 +91,9 @@ GCF_003671635.1_VN_pangasius	striped catfish Vietnam
 GCF_009078355.1_GENO_Phyp_1.0	striped catfish Indonesia
 GCF_004916995.1_NCSU_SB_2.0	striped sea-bass
 GCF_001952655.1_M_albus_1.0	swamp eel
+GCF_016859285.1_ASM1685928v1	swordfish
 GCF_904425465.1_Colossoma_macropomum	tambaqui
+GCF_016920845.1_GAculeatus_UGA_version5	three-spined stickleback
 GCF_001891065.1_H_comes_QL1_v1	tiger tail seahorse
 GCF_000523025.1_Cse_v1.0	tongue sole
 GCF_901000725.2_fTakRub1.2	torafugu
