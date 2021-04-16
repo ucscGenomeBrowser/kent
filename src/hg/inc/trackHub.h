@@ -32,6 +32,8 @@ struct trackHub
     {
     struct trackHub *next;
 
+    struct hubConnectStatus *hubStatus;  /* Pointer to our hubConnectStatus structure, if any. */
+
     char *url;		/* URL of hub.ra file. */
     struct trackHubGenome *genomeList;	/* List of associated genomes. */
     struct hash *genomeHash;	/* Hash of genomeList keyed by genome name. */
