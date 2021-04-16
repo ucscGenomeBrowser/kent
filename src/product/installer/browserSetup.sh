@@ -1425,7 +1425,7 @@ function installBrowser ()
     echo2
     echo2 To finish the installation, you need to download genome data to the local
     echo2 disk. To download a genome assembly and all its files now, call this script again with
-    echo2 the parameters 'download "<assemblyName1> <assemblyName2> ..."', e.g. '"'bash $0 download mm10 hg19'"'
+    echo2 the parameters 'download "<assemblyName1> <assemblyName2> ..."', e.g. '"'bash $0 mirror mm10 hg19'"'
     echo2 
     showMyAddress
 }

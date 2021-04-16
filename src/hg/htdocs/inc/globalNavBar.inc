@@ -17,7 +17,7 @@
 	<li><a href="../cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm39&amp;position=lastDbPos">Mouse GRCm39/mm39</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
-	<li><a href="https://hgdownload.soe.ucsc.edu/hubs/">Genome Assembly Hubs</a></li>
+	<li><a href="https://hgdownload.soe.ucsc.edu/hubs/">Genome Archive GenArk</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=wuhCor1&amp;position=lastDbPos">SARS-CoV-2 (COVID-19)</a></li>
 	<li class="last"><a href="../cgi-bin/hgGateway">Other</a></li>
         </ul>
@@ -43,6 +43,7 @@
 	<li><a id="vaiMenuLink" href="../cgi-bin/hgVai">Variant Annotation Integrator</a></li>
 	<li><a id="diMenuLink" href="../cgi-bin/hgIntegrator">Data Integrator</a></li>
 	<li><a id="ggMenuLink" href="../cgi-bin/hgGenome">Genome Graphs</a></li>
+        <li><a title="Explore gene/protein interactions and pathways" id="interactionMenuLink" href="../cgi-bin/hgGeneGraph">Gene Interactions</a></li>
 	<li class="last"><a href="../util.html">Other Tools</a></li>
 	</ul>
 </li>
