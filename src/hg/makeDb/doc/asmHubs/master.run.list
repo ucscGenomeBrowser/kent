@@ -1135,7 +1135,6 @@
 ./runBuild GCF_013122585.1 GCF_013122585.1_ASM1312258v2 invertebrates Styela_clava
 ./runBuild GCF_013141755.1 GCF_013141755.1_UCI_ANSTEP_V1.0 invertebrate Anopheles_stephensi
 ./runBuild GCF_013265735.2 GCF_013265735.2_USDA_OmykA_1.1 fishes Oncorhynchus_mykiss
-
 ./runBuild GCF_013339695.1 GCF_013339695.1_ASM1333969v1 invertebrate Rhipicephalus_sanguineus
 ./runBuild GCF_013339725.1 GCF_013339725.1_ASM1333972v1 invertebrate Rhipicephalus_microplus
 ./runBuild GCF_013339745.1 GCF_013339745.1_ASM1333974v1 invertebrate Dermacentor_silvarum
@@ -1218,6 +1217,8 @@
 ./runBuild GCF_016545835.1 GCF_016545835.1_ASM1654583v1 vertebrate Crotalus_tigris
 ./runBuild GCF_016617805.1 GCF_016617805.1_CSIRO_BtryS06_freeze2 invertebrates Bactrocera_tryoni
 ./runBuild GCF_016699345.1 GCF_016699345.1_BCM_Sbol_2.0 primates Saimiri_boliviensis_boliviensis
+./runBuild GCF_016699485.2 GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b birds Gallus_gallus
+./runBuild GCF_016700215.1 GCF_016700215.1_bGalGal1.pat.whiteleghornlayer.GRCg7w birds Gallus_gallus
 ./runBuild GCF_016745375.1 GCF_016745375.1_EPA_FHM_2.0 fish Pimephales_promelas
 ./runBuild GCF_016746245.1 GCF_016746245.1_Prin_Dsan_1.0 invertebrates Drosophila_santomea
 ./runBuild GCF_016746365.1 GCF_016746365.1_Prin_Dyak_Tai18E2_2.0 invertebrates Drosophila_yakuba
@@ -1232,6 +1233,7 @@
 ./runBuild GCF_016920715.1 GCF_016920715.1_AaraD3 invertebrates Anopheles_arabiensis
 ./runBuild GCF_016920785.1 GCF_016920785.1_Ixodes_scapularus_ComboLowHiFi invertebrates Ixodes_scapularis
 ./runBuild GCF_016920845.1 GCF_016920845.1_GAculeatus_UGA_version5 fish Gasterosteus_aculeatus_aculeatus
+./runBuild GCF_017639655.1 GCF_017639655.1_bFalNau1.pat birds Falco_naumanni
 ./runBuild GCF_900007375.1 GCF_900007375.1_ASM90000737v1 fungi Fusarium_venenatum
 ./runBuild GCF_900067095.1 GCF_900067095.1_F._proliferatum_ET1_version_1 fungi Fusarium_proliferatum_ET1
 ./runBuild GCF_900067755.1 GCF_900067755.1_pvi1.1 vertebrate_other Pogona_vitticeps
