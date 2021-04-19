@@ -42,7 +42,7 @@ extern struct grp *fullGroupList;	/* List of all groups. */
 extern struct grp *curGroup;	/* Currently selected group. */
 extern struct customTrack *theCtList;	/* List of custom tracks. */
 extern char *curTable;	/* Current selected table. */
-struct joiner *allJoiner;	/* Info on how to join tables. */
+extern struct joiner *allJoiner;	/* Info on how to join tables. */
 
 #define GALAXY_URL_BASE "https://usegalaxy.org"
 #define GALAXY_URL_APP GALAXY_URL_BASE "/tool_runner"

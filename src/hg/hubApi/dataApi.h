@@ -106,7 +106,7 @@ extern struct slName *supportedTypes;
 
 /* for debugging purpose, current bot delay value */
 extern int botDelay;
-boolean debug;	/* can be set in URL debug=1, to turn off: debug=0 */
+extern boolean debug;	/* can be set in URL debug=1, to turn off: debug=0 */
 
 /* default is to list all trackDb entries, composite containers too.
  * This option will limit to only the actual track entries with data

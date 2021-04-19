@@ -46,7 +46,7 @@ int parseDelimitedString(char *inString, char delimiter, char *outString[], int 
 
     return arrayCount;
 }
-struct minGeneInfo* getGbProtCodeInfo(struct sqlConnection *conn, char* dbName, char *geneName)
+struct minGeneInfo* getGbProtCodeInfo(struct sqlConnection *conn, char *database, char* dbName, char *geneName)
 {
     char query[512];
     struct sqlResult *sr = NULL;

@@ -241,7 +241,6 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 #include "gwasCatalog.h"
-#include "parClick.h"
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 #include "itemDetailsHtml.h"
@@ -19037,7 +19036,7 @@ if (sqlTableExists(conn, "mupitRanges"))
 }
 
 void printOtherSnpMappings(char *table, char *name, int start,
-			   struct sqlConnection *conn, int rowOffset)
+			   struct sqlConnection *conn, int rowOffset, struct trackDb *tdb)
 /* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
 {
 char query[512];
@@ -19096,7 +19095,7 @@ else
     errAbort("SNP %s not found at %s base %d", itemName, seqName, start);
 sqlFreeResult(&sr);
 
-printOtherSnpMappings(table, itemName, start, conn, rowOffset);
+printOtherSnpMappings(table, itemName, start, conn, rowOffset, tdb);
 puts("<BR>");
 // Make table for collapsible sections:
 puts("<TABLE>");
