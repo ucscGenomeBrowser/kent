@@ -27,7 +27,7 @@ printf ">sequenceName\n" > betterFormat.fa
 grep -v "^>" badFormat.fa | xargs echo | tr -d ' ' | fold -w 60 \
    >> betterFormat.fa
 
-And then verify nothing lost after conversio:
+And then verify nothing lost after conversion:
 
 faCount badFormat.fa betterFormat.fa
 
