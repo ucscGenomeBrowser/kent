@@ -34,7 +34,7 @@ include trackDb.giab.ra
 
 # CADD scores
 include caddAlpha.ra alpha,beta
-include revel.ra public
+include cadd.ra public
 
 # Revel scores
 include revel.ra
