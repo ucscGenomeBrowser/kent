@@ -549,6 +549,40 @@ for (i=0; i<count; ++i)
     hPrintf("&nbsp;");
 }
 
+/* Stepwise instructions to guide users */
+
+#define STEP_MAX        4       // 1-based
+#define HELP_LABEL      "Help"
+
+static char *stepLabels[] = 
+{
+"Select dataset",
+"Define region of interest",
+"Define data attributes (optional)",
+"Retrieve and display data"
+};
+
+static char *stepHelpLinks[] =
+{
+"https://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html#GettingStarted",
+"https://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html#GettingStarted",
+"https://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html#Filter",
+"https://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html#OutputFormats"
+};
+
+static void printStep(int num)
+/* Print user guidance via steps */
+{
+if (num > STEP_MAX)
+    errAbort("Internal error: table browser help problem");
+hPrintf("<TR><TD>&nbsp;</TD></TR>");
+hPrintf("<TR><TD>");
+hPrintf("<B>Step %d: %s</B> &nbsp;&nbsp <A HREF='%s'TARGET='_BLANK'>%s</A>\n", 
+                num, stepLabels[num-1], stepHelpLinks[num-1], HELP_LABEL);
+hPrintf("</TD></TR>");
+hPrintf("<TR><TD>&nbsp;</TD></TR>");
+}
+
 void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
@@ -561,8 +595,12 @@ struct hTableInfo *hti = NULL;
 
 hPrintf("<TABLE BORDER=0>\n");
 
+int stepNumber = 1;
+printStep(stepNumber++);
+
 /* Print clade, genome and assembly line. */
     {
+
     if (gotClade)
         {
         hPrintf("<TR><TD><B>clade:</B>\n");
@@ -664,9 +702,10 @@ hPrintf("<tr><td><DIV style='background-color: #faf2bb; display:none; opacity:0.
         "Please see our <a href='../FAQ/FAQdownloads.html#snp'>Data Access FAQ</a> "
         "on how to download dbSNP data.</DIV></td></tr>");
 
-
 /* Region line */
 {
+printStep(stepNumber++);
+
 char *regionType;
 if (cartVarExists(cart, "hgFind.matches")) // coming back from a search
     regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeRange);
@@ -770,6 +809,8 @@ if (!isWig && getIdField(database, curTrack, curTable, hti) != NULL)
 
 /* microarray options */
 /*   button for option page here (median/log-ratio, etc)  */
+
+printStep(stepNumber++);
 
 /* Filter line. */
 {
@@ -876,6 +917,8 @@ if (correlateTrackTableOK(tdb, curTable))
     }
 
 /* Print output type line. */
+
+printStep(stepNumber++);
 showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, isArray, isHalSnake);
 
 /* Print output destination line. */
