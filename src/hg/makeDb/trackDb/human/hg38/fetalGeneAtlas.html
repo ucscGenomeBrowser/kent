@@ -43,6 +43,10 @@ for majority of the experiments and then nuclei extracted for sequencing. Sample
 from the kidney and digestive system were fixed after disassociation to deactivate endogenous
 RNases and proteases
 </p>
+<p>The cell/gene matrix and cell-level metadata was downloaded from the <a href="https://cells-test.gi.ucsc.edu/?ds=fetal-gene-atlas+genes+all">UCSC Cell Browser(fix URL)</A>.  The UCSC command line tool matrixClusterColumns, matrixToBarChart,
+and bedToBigBed were used to transform these into a bar chart format bigBed file that can be
+visualized.  The coloring was done by defining colors for the broad level cell classes and then
+using another UCSC tool, hcaColorCells, to interpolate the colors across all cell types.
 
 <H2>Credits</H2>
 <p>Thanks to the many authors who worked on producing and publishing this data set.  
