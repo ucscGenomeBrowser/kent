@@ -402,17 +402,17 @@ gzip -c public-$today.all.masked.pb > $archive/public-$today.all.masked.pb.gz
 ln `pwd`/public-$today.metadata.tsv.gz $archive/
 gzip -c public-$today.all.masked.nextclade.pangolin.pb \
     > $archive/public-$today.all.masked.nextclade.pangolin.pb.gz
-gzip -c cladeToPublicName $archive/cladeToPublicName.gz
-gzip -c lineageToPublicName $archive/lineageToPublicName.gz
+gzip -c cladeToPublicName > $archive/cladeToPublicName.gz
+gzip -c lineageToPublicName > $archive/lineageToPublicName.gz
 ln `pwd`/hgPhyloPlace.description.txt $archive/public-$today.version.txt
 
 # Update 'latest' in $archiveRoot
-ln -f $y/$m/$d/public-$today.all.nwk.gz $archiveRoot/public-latest.all.nwk.gz
-ln -f $y/$m/$d/public-$today.all.masked.pb $archiveRoot/public-latest.all.masked.pb
-ln -f $y/$m/$d/public-$today.all.masked.pb.gz $archiveRoot/public-latest.all.masked.pb.gz
-ln -f $y/$m/$d/public-$today.all.masked.vcf.gz $archiveRoot/public-latest.all.masked.vcf.gz
-ln -f $y/$m/$d/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata.tsv.gz
-ln -f $y/$m/$d/hgPhyloPlace.description.txt $archiveRoot/public-latest.version.txt
+ln -f $archive/public-$today.all.nwk.gz $archiveRoot/public-latest.all.nwk.gz
+ln -f $archive/public-$today.all.masked.pb $archiveRoot/public-latest.all.masked.pb
+ln -f $archive/public-$today.all.masked.pb.gz $archiveRoot/public-latest.all.masked.pb.gz
+ln -f $archive/public-$today.all.masked.vcf.gz $archiveRoot/public-latest.all.masked.vcf.gz
+ln -f $archive/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata.tsv.gz
+ln -f $archive/public-$today.version.txt $archiveRoot/public-latest.version.txt
 
 # Update 'latest' protobuf, metadata and desc in and cgi-bin{,-angie}/hgPhyloPlaceData/wuhCor1/
 for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
