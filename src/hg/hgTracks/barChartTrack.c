@@ -44,11 +44,14 @@ struct barChartTrack
 
     int squishHeight;           /* Height of item in squish mode (larger than typical) */
     int boxModelHeight;         /* Height of indicator box drawn under graph to show gene extent */
-    int modelHeight;            /* Height of box drawn under graph with padding */
+    int modelHeight;            /* Height of box drawn under graph with margin */
+    int margin;			/* Added to pixel height to help separate things */
+
+    // Individual bar dimensions
     double barWidth;               /* Width of individual bar in pixels */
-    int margin;
-    int padding;
-    int maxHeight;
+    int padding;		   /* Pixel width between bars */
+    int maxHeight;		   /* Maximum bar height. */
+    boolean stretchToItem;	   /* If item is wider than chart, stretch to fit? */
     };
 
 struct barChartItem
@@ -385,9 +388,13 @@ static int chartWidth(struct track *tg, struct barChartItem *itemInfo)
 /* How wide is the chart? */
 {
 struct bed *bed = itemInfo->bed;
-int geneSize = windowsTotalIntersection(windows, bed->chrom, bed->chromStart, bed->chromEnd);
+int itemSize = windowsTotalIntersection(windows, bed->chrom, bed->chromStart, bed->chromEnd);
 int standardSize =  chartStandardWidth(tg, itemInfo);
-return max(standardSize, geneSize);
+struct barChartTrack *extras = tg->extraUiData;
+if (extras->stretchToItem)
+    return max(standardSize, itemSize);
+else
+    return standardSize;
 }
 
 static void barChartLoadItems(struct track *tg)
@@ -540,6 +547,7 @@ else
 extras->modelHeight =  extras->boxModelHeight + 3;
 extras->margin = 1;
 extras->squishHeight = tl.fontHeight - tl.fontHeight/2;
+extras->stretchToItem = trackDbSettingOn(tg->tdb, "barChartStretchToItem");
 
 while (bed != NULL)
     {
