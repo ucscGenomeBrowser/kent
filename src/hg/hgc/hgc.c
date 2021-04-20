@@ -7403,9 +7403,7 @@ char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
 struct sqlConnection *conn = NULL;
-
-if (!trackHubDatabase(database))
-    conn = hAllocConnTrack(database, tdb);
+struct trackDb *tdb = NULL;
 
 aliTable = cartString(cart, "aliTable");
 if (isCustomTrack(aliTable))
@@ -7415,6 +7413,10 @@ if (isCustomTrack(aliTable))
     }
 else
     tdb = hashFindVal(trackHash, aliTable);
+
+if (!trackHubDatabase(database))
+    conn = hAllocConnTrack(database, tdb);
+
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", acc, aliTable);
 htmlFramesetStart(title);
@@ -7469,6 +7471,7 @@ struct psl *partPsl, *wholePsl;
 char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
+struct trackDb *tdb = NULL;
 
 aliTable = cartString(cart, "aliTable");
 if (isCustomTrack(aliTable))
@@ -18829,7 +18832,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (snpCount == 0)
 	    printf("<B>This SNP maps to these additional locations:</B><BR><BR>\n");
 	snpCount++;
-	bedPrintPos((struct bed *)snp, 3, tdb);
+	bedPrintPos((struct bed *)snp, 3, NULL);
 	}
     }
 sqlFreeResult(&sr);
