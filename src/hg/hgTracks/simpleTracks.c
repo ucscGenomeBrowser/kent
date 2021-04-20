@@ -1190,8 +1190,8 @@ if (x < xEnd)
             }
         else
             {
-            hPrintf("HREF=\"%s&db=%s&c=%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
-                hgcNameAndSettings(), database, chromName, start, end, encodedTrack, encodedItem,
+            hPrintf("HREF=\"%s&c=%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
+                hgcNameAndSettings(), chromName, start, end, encodedTrack, encodedItem,
                     chromName, winStart, winEnd,
                     database, tl.picWidth);
             }
