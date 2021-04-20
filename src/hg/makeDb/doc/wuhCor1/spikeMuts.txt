@@ -1,0 +1,185 @@
+# Spike mutations from hodcroftlab and Wikipeda
+# January 2020, Kate
+
+# RM #26782
+
+cd /hive/data/genomes/wuhCor1/bed/spikeMuts
+
+# Manually screenscrape from these URL'
+
+# Compute chromStart
+
+# 14 total
+
+foreach m (222 477 501 69 439 453 98 484 80 626 112 701 681 614)
+    @ start = ( ($m * 3) + 21559)
+    @ end = ( $start + 3 )
+    echo "$m	$start	        $end"
+end
+
+222    22225          22228
+477    22990          22993
+501    23062          23065
+69    21766          21769
+439    22876          22879
+453    22918          22921
+98    21853          21856
+484    23011          23014
+80    21799          21802
+626    23437          23440
+112    21895          21898
+701    23662          23665
+681    23602          23605
+614    23401          23404
+
+
+# download spreadsheet to spikeMuts.tsv and make into BED 4+6
+dos2unix spikeMuts.tab
+
+# edit to populate N501S and N501T (using N501Y)
+
+chrom, start, end, name
+
+with extra fields:
+
+source, clinicalNotes, geographyNotes, geographyChartsUrl, nextstrainBuildUrl, publicationsUrls
+
+# strip first line
+
+awk -F"\t" '{OFS="\t"; print "NC_045512v2", $3, $3 + 3, $1, $2, $5, $4, $8, $7, $6}' spikeMuts.tab > spikeMuts.bed 
+
+# correct H69- chromEnd (add 3)
+
+bedSort spikeMuts.bed spikeMuts.sorted.bed
+bedToBigBed -tab -type=bed4+5 -as=spikeMuts.as spikeMuts.sorted.bed ../../chrom.sizes spikeMuts.bb
+
+mkdir /gbdb/wuhCor1/spikeMuts
+ln -s `pwd`/spikeMuts.bb /gbdb/wuhCor1/spikeMuts/spikeMuts.bb
+
+##### add first detection date (outside China) from hodcroftlab, wikipedia, the web.  Assign
+# colors:  blue for old (Jan-June 2020), red for new (fall/winter 2020-2021) and purple for between (summer 2020)
+
+# create BED 9+7, with extra fields:
+# seqDate, source, clinicalNotes, geographyNotes, geographyChartsUrl, nextstrainBuildUrl, publicationsUrls
+
+awk -F"\t" '{OFS="\t"; print $3, $4, $5, $6, "0", ".", $4, $5, $1, $2, $7, $8, $9, $10, $11, $12}' spikeMuts.new.tab > spikeMuts.bed 
+bedSort spikeMuts.bed spikeMuts.sorted.bed
+bedToBigBed -tab -type=bed9+7 -as=spikeMuts.as spikeMuts.sorted.bed ../../chrom.sizes spikeMuts.bb
+
+bedToBigBed -extraIndex=name -tab -type=bed9+7 -as=spikeMuts.as spikeMuts.sorted.bed ../../chrom.sizes spikeMuts.bb
+
+# create trix file for searches on variations of mutation name
+
+awk '{print $4}' spikeMuts.bed > spikeMutsSearch.txt
+# NOTE: adding original name to aliases list
+# edit to add aliases
+ixIxx spikeMutsSearch.txt spikeMutsSearch.ix spikeMutsSearch.ixx
+
+ln -s `pwd`/spikeMutsSearch.ix /gbdb/wuhCor1/spikeMuts
+ln -s `pwd`/spikeMutsSearch.ixx /gbdb/wuhCor1/spikeMuts
+
+
+################################################################
+# February update  (kate)
+
+# Update to include:
+#       1. New mutations at Hodcroft site
+#       2 Mutations in VOC track
+# Change color scheme (by 'danger')
+# Add mut nicknames
+
+# Edit spikeMuts.bed file
+
+cd /hive/data/genomes/wuhCor1/bed/spikeMuts
+mkdir feb21
+cd feb21
+
+cp ../spikeMuts.bed .
+wc -l spikeMuts.bed
+# 14 spikeMuts.bed
+
+# New from covariants.org:  L452R
+
+chromStart = (452 * 3) + 21559 = 22915
+chromEnd = 22918
+
+CLinical notes: In a study co-incubating psueotyped virus with SARS-CoV-2 spike proteins and monocolonal antibodies, viruses with S:L452R mutations escaped neutralization by monoclonal antibodies SARS2-01, SARS-02, and SARS2-32 and some convalescent sera. Additionally, this study found modest increase in infectivity as measured by soluble mACE2 
+
+Geographic notes:
+First sequenced in the US. On January 17, the California Dept. of Public Health announced that an L452R variant is increasingly being identified by viral genomic sequencing in multiple counties across the state.
+
+Link to charts:
+https://github.com/hodcroftlab/covariants/blob/master/cluster_tables/S.L452R_table.md
+
+Nextstrain link: https://nextstrain.org/groups/neherlab/ncov/S.L452R
+
+Refs: https://www.biorxiv.org/content/10.1101/2020.11.06.372037v1
+https://www.medrxiv.org/content/10.1101/2021.01.18.21249786v1
+
+bedSort spikeMuts.bed spikeMuts.sorted.bed
+
+bedToBigBed -extraIndex=name -tab -type=bed9+7 -as=../spikeMuts.as spikeMuts.sorted.bed \
+        ../../../chrom.sizes spikeMuts.Feb21.bb
+#ln -s `pwd`/spikeMuts.Feb21.bb /gbdb/wuhCor1/spikeMuts
+
+# edit to recolor:  red for RBD colocated, with overlap to Bloom antibody escape, 
+# purple for RBD alone, blue for outside RBD
+
+mv spikeMuts.Feb21.bb spikeMuts.Feb21.colorByDate.bb
+bedToBigBed -extraIndex=name -tab -type=bed9+7 -as=../spikeMuts.as spikeMuts.danger.sorted.bed \
+        ../../../chrom.sizes spikeMuts.Feb21.colorByDanger.bb
+rm /gbdb/wuhCor1/spikeMuts/spikeMuts.Feb21.bb
+ln -s spikeMuts.Feb21.colorByDanger.bb spikeMuts.Feb21.bb
+ln -s `pwd`/spikeMuts.Feb21.bb /gbdb/wuhCor1/spikeMuts
+
+
+Mutation nicknames
+https://twitter.com/andrewjpage/status/1360152742707265540
+
+D614G (Doug)
+D614N (Dan)
+E484K (Eeek)
+F888L (Fidel)
+N501Y (Nelly)
+P681H (Pooh)
+N439K (Nick), K417N (Karen), L18F (Leif)
+B.1.1.7 + E484K (Bleek)
+
+cp ../spikeMutsSearch.txt .
+# edit to add L425R entry, and nicknames (Doug, Eeek, Nelly, Pooh,Nick
+
+ixIxx spikeMutsSearch.txt spikeMutsSearch.ix spikeMutsSearch.ixx
+ln -s `pwd`/spikeMutsSearch.ix /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.Feb21.ix
+ln -s `pwd`/spikeMutsSearch.ixx /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.Feb21.ixx
+
+
+# Moving older version to archive dir
+
+# Find older version on download server:
+http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/spikeMuts/
+
+# Files are .bb, .ix and .ixx
+# Just save .bb
+
+cd /data/apache/htdocs-hgdownload/goldenPath/archive
+mkdir -p wuhCor1/2020-01-12
+cd wuhCor1/2020-01-12
+ln -s /hive/data/gbdb/wuhCor1/spikeMuts/spikeMuts.bb .
+ln -s /hive/data/gbdb/wuhCor1/spikeMuts/spikeMutsSearch.ix .
+ln -s /hive/data/gbdb/wuhCor1/spikeMuts/spikeMutsSearch.ixx .
+
+# roll back trackDb to get older version for download
+# dump to downloads file
+hgsql wuhCor1 -e "select * from trackDb_kate where tableName='spikeMuts'" > spikeMuts.trackDb.tab
+gzip spikeMuts.trackDb.tab
+
+####################
+# Fix typo in L452R (L453R)
+
+(2021-03-10 kate)
+
+# edit manually
+vim spikeMuts.danger.sorted.bed
+bedToBigBed -extraIndex=name -tab -type=bed9+7 -as=../spikeMuts.as spikeMuts.danger.sorted.bed \
+        ../../../chrom.sizes spikeMuts.Feb21.colorByDanger.bb
+

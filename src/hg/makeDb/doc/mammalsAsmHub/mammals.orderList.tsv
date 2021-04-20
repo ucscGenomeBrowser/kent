@@ -10,6 +10,7 @@ GCA_900108605.1_NNQGG.v01	American mink
 GCF_000464555.1_PanTig1.0	Amur tiger
 GCF_000803125.2_CamDro3	Arabian camel
 GCF_003426925.1_ASM342692v1	Arctic ground squirrel
+GCF_015852505.1_mTacAcu1.pri	Australian echidna
 GCF_001305755.1_ASM130575v1	ass
 GCF_000767855.1_Ca_bactrianus_MBC_1.0	Bactrian camel
 GCF_000327345.1_ASM32734v1	David's myotis bat
@@ -37,7 +38,9 @@ GCF_000743615.1_DMR_v1.0	Damara mole-rat DMR 1.0
 GCF_012274545.1_DMR_v1.0_HiC	Damara mole-rat DMR 1.0 HiC
 GCF_000260255.1_OctDeg1.0	degu
 GCF_012295265.1_UNSW_AlpineDingo_1.0	dingo
-GCF_000002285.3_CanFam3.1	dog
+GCF_000002285.3_CanFam3.1	dog (boxer Tasha 2011)
+GCF_000002285.5_Dog10K_Boxer_Tasha	dog (boxer Tasha 2020)
+GCF_014441545.1_ROS_Cfam_1.0	dog (labrador)
 GCF_000181335.3_Felis_catus_9.0	domestic cat
 GCF_000215625.1_MusPutFur1.0	domestic ferret
 GCF_000151735.1_Cavpor3.0	domestic guinea pig
@@ -58,6 +61,8 @@ GCF_014824575.1_WHU_Shon_v2	Honduran yellow-shouldered bat
 GCF_002863925.1_EquCab3.0	horse
 GCF_000001635.27_GRCm39	house mouse
 GCF_014898055.1_MPIMG_talOcc4	Iberian mole
+GCF_902729225.1_Ma_sr-lr_union100	Indian flying fox
+GCF_014898765.1_PumYag	jaguarundi
 GCF_014825515.1_WHU_Ajam_v2	Jamaican fruit-eating bat
 GCF_000331955.2_Oorc_1.1	killer whale
 GCF_002099425.1_phaCin_unsw_v4.1	koala
@@ -79,7 +84,7 @@ GCF_003265705.1_ASM326570v1	northern fur seal
 GCF_010015895.1_GSC_riverotter_1.0	Northern American river otter
 GCF_000001895.5_Rnor_6.0	Norway rat Rnor6.0
 GCF_000002265.2_Rn_Celera	Norway rat celera
-GCA_015227675.2_mRatBN7.2	Norway rat BN7
+GCF_015227675.2_mRatBN7.2	Norway rat BN7.2
 GCA_015244455.1_mRatBN7.1_alternate_haplotype	Norway rat BN7 haplotype
 GCF_000151885.1_Dord_2.0	Ord's kangaroo rat
 GCF_000321225.1_Oros_1.0	Pacific walrus
@@ -87,7 +92,7 @@ GCF_003676395.1_ASM367639v1	Pacific white-sided dolphin
 GCF_004126475.1_mPhyDis1_v1.p	pale spear-nosed bat
 GCF_014108415.1_mMolMol1.p	Pallas's mastiff bat
 GCF_000003025.6_Sscrofa11.1	pig
-GCF_004115215.1_mOrnAna1.p.v1	platypus
+GCF_004115215.2_mOrnAna1.pri.v4	platypus (2020 v4)
 GCF_000687225.1_UrsMar_1.0	polar bear
 GCF_000500345.1_Pman_1.0	prairie deer mouse
 GCF_000317375.1_MicOch1.0	prairie vole
@@ -97,6 +102,7 @@ GCF_000003625.3_OryCun2.0	rabbit
 GCF_003160815.1_VulVul2.2	red fox
 GCF_004785775.1_NIH_TR_1.0	woodland thicket rat
 GCF_900094665.1_CAROLI_EIJ_v1.1	Ryukyu mouse
+GCF_014754425.2_SCBI_Odam_1.1	scimitar-horned oryx
 GCF_002288905.1_ASM228890v2	sea otter
 GCF_002742125.1_Oar_rambouillet_v1.0	Rambouillet sheep
 GCF_900095145.1_PAHARI_EIJ_v1.1	shrew mouse
@@ -107,9 +113,10 @@ GCF_000283155.1_CerSimSim1.0	southern white rhinoceros
 GCF_002837175.2_ASM283717v2	sperm whale
 GCF_000260355.1_ConCri1.0	star-nosed mole
 GCF_004028035.1_ASM402803v1	Steller sea lion
+GCF_003009895.1_ASM300989v1	striped hyena
 GCF_000696425.1_G_variegatus-3.0.2	Sunda flying lemur
 GCF_902635505.1_mSarHar1.11	Tasmanian devil
-GCF_000236235.1_SpeTri2.0	thirteen-lined ground squirrel
+GCF_016881025.1_HiC_Itri_2	thirteen-lined ground squirrel (2021 HiC)
 GCF_000622305.1_S.galili_v1.0	Upper Galilee mountains blind mole rat
 GCF_003121395.1_ASM312139v1	water buffalo
 GCF_000349705.1_LepWed1.0	Weddell seal

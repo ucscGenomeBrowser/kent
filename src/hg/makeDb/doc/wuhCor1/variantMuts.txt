@@ -1,0 +1,50 @@
+# Mutations in in COVID variants of interest, from Nick Keener and Angie Hinrichs
+# 2/8/21 Kate
+
+# Files from Nick Keener, UCSC GI (grad student).  His notes:
+Here are the BED files that have the changes we discussed today. There's two for each strain, one with the nucleotide mutations and indels and one with amino acids mutations and indels. I decided to just drop the protein names from the name column since some of the other protein names are pretty long and they'll be able to see what gene it's in by looking at the protein track. But if you want to have the protein names except for spike let me know and I can add them back in. For indels I named them with the format : del_[1-based genome coordinate of 1st deleted nucleotide] or ins_[1-based genome coordinate of nucleotide after insertion site]. I'll list the sequence counts for each lineage below. Let me know if you need anything else or want me to make any changes. Enjoy your weekend!
+
+Sequence Counts:
+B.1.1.7: 9838
+B.1.351: 793
+B.1.429: 1360
+P.1: 78
+
+# 4 strains, 2 BEDs for each (AA and Nuc mutations).  BED4 format
+
+# Format BED 9 to color by potential deleteriousness.  Initially:
+#       bright for spike rbp, medium for other spike, light for other
+# Later: integrate with antibody escape annotations
+
+cd /hive/data/genomes/wuhCor1/bed/strains/keener3
+
+$ wc -l *.aa.bed
+  24 gisaid_B.1.1.7_2021_02_05_aa.bed
+  16 gisaid_B.1.351_2021_02_05_aa.bed
+  10 gisaid_B.1.429_2021_02_05_aa.bed
+  25 gisaid_P.1_2021_02_05_aa.bed
+
+$ wc -l *.nuc.bed
+  32 gisaid_B.1.1.7_2021_02_05_nuc.bed
+  20 gisaid_B.1.351_2021_02_05_nuc.bed
+  14 gisaid_B.1.429_2021_02_05_nuc.bed
+  35 gisaid_P.1_2021_02_05_nuc.bed
+
+# Add # to header lines (and notify Nick)
+
+cat > load.csh << 'EOF'
+foreach v (B.1.1.7 B.1.351 B.1.429 P.1)
+    echo $v
+    set d = 2021_02_05
+    foreach t (aa nuc)
+        set f = ${v}_${d}_${t}
+        echo $f
+        bedToBigBed -type=bed4 gisaid_$f.bed ../../../chrom.sizes variantMuts_$f.bb
+        ln -s `pwd`/variantMuts_${f}.bb /gbdb/wuhCor1/strainMuts
+    end
+end
+'EOF'
+
+csh load.csh >&! load.out
+
+    

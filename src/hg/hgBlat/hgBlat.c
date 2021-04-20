@@ -40,6 +40,7 @@ boolean orgChange = FALSE;
 boolean dbChange = FALSE;
 boolean allGenomes = FALSE;
 boolean allResults = FALSE;
+static long enteredMainTime = 0;
 
 
 struct gfResult
@@ -73,12 +74,13 @@ struct genomeHits
     char *faName;       /* fasta name */
     char *dna;          /* query dna */
     int dnaSize;        /* query dna size */
-    int sd;             /* Connection */
     char *type;         /* query type = query, protQuery, transQuery */
     char *xType;        /* query type = dna, prot, rnax, dnax */
     boolean queryRC;    /* is the query reverse-complemented */
     boolean complex;    /* is the query complex */
     boolean isProt;     /* is the protein query */
+    boolean isDynamic;  /* is a dynamic server */
+    char *genomeDataDir; /* dynamic server root-relative directory */
    
     int maxGeneHits;    /* Highest gene hit-count */
     char *maxGeneChrom; /* Target Chrom for gene with max gene hits */
@@ -279,11 +281,18 @@ for (pfd = pfdDone; pfd; pfd = pfd->next)
     if (pfd->error)
         ++errCount;
     }
+slCat(pfdDone, pfdRunning);
+pfdRunning = NULL;
+slCat(pfdDone, pfdNeverStarted);
+pfdNeverStarted = NULL;
 pthread_mutex_unlock( &pfdMutex );
 return errCount;
 }
 
 // ==================
+
+int nonHubDynamicBlatServerCount = 0;
+int hubDynamicBlatServerCount   = 0;
 
 struct serverTable
 /* Information on a server. */
@@ -297,6 +306,8 @@ struct serverTable
     int tileSize;       /* gfServer -tileSize */
     int stepSize;       /* gfServer -stepSize */
     int minMatch;       /* gfServer -minMatch */
+    boolean isDynamic;  /* is a dynamic server */
+    char* genomeDataDir; /* genome name for dynamic gfServer  */
     };
 
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
@@ -304,47 +315,11 @@ char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
 int minMatchShown = 0;
 
-static struct serverTable *trackHubServerTable(char *db, boolean isTrans)
-/* Find out if database is a track hub with a blat server */
+static struct serverTable *databaseServerTable(char *db, boolean isTrans)
+/* Load blat table for a database */
 {
-char *host, *port;
-
-if (!trackHubGetBlatParams(db, isTrans, &host, &port))
-    return NULL;
-
-struct serverTable *st;
-
-AllocVar(st);
-
-st->db = cloneString(db);
-st->genome = cloneString(hGenome(db));
-st->isTrans = isTrans;
-st->host = host; 
-st->port = port;
-struct trackHubGenome *genome = trackHubGetGenome(db);
-st->nibDir = cloneString(genome->twoBitPath);
-char *ptr = strrchr(st->nibDir, '/');
-// we only want the directory name
-if (ptr != NULL)
-    *ptr = 0;
-return st;
-}
-
-struct serverTable *findServer(char *db, boolean isTrans)
-/* Return server for given database.  Db can either be
- * database name or description. */
-{
-if (trackHubDatabase(db))
-    {
-    struct serverTable *hubSt = trackHubServerTable(db, isTrans);
-    if (hubSt != NULL)
-	return hubSt;
-    errAbort("Cannot get blat server parameters for track hub with database %s\n", db);
-    }
-
-static struct serverTable st;
 struct sqlConnection *conn = hConnectCentral();
-char query[256];
+char query[512];
 struct sqlResult *sr;
 char **row;
 char dbActualName[32];
@@ -358,12 +333,22 @@ if (!sqlExists(conn, query))
         db = dbActualName;
     }
 
-/* Do a little join to get data to fit into the serverTable and grab dbDb.nibPath too. */
-sqlSafef(query, sizeof(query), "select dbDb.name,dbDb.description,blatServers.isTrans,"
-               "blatServers.host,blatServers.port,dbDb.nibPath "
-	       "from dbDb,blatServers where blatServers.isTrans = %d and "
-	       "dbDb.name = '%s' and dbDb.name = blatServers.db", 
-	       isTrans, db);
+struct serverTable *st;
+AllocVar(st);
+
+/* Do a little join to get data to fit into the serverTable and grab
+ * dbDb.nibPath too.  Check for newer dynamic flag and allow with or without
+ * it.
+ * For debugging, one set the variable blatServersTbl to some db.table to
+ * pick up settings from somewhere other than dbDb.blatServers.
+ */
+char *blatServersTbl = cfgOptionDefault("blatServersTbl", "blatServers");
+boolean haveDynamic = sqlColumnExists(conn, blatServersTbl, "dynamic");
+sqlSafef(query, sizeof(query), "select dbDb.name, dbDb.description, blatServers.isTrans,"
+         "blatServers.host, blatServers.port, dbDb.nibPath, %s "
+         "from dbDb, %s blatServers where blatServers.isTrans = %d and "
+         "dbDb.name = '%s' and dbDb.name = blatServers.db", 
+         (haveDynamic ? "blatServers.dynamic" : "0"), blatServersTbl, isTrans, db);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     {
@@ -373,16 +358,64 @@ if ((row = sqlNextRow(sr)) == NULL)
 	     (isTrans ? "translated" : "DNA"), db,
 	     cartSidUrlString(cart), hDefaultDb());
     }
-st.db = cloneString(row[0]);
-st.genome = cloneString(row[1]);
-st.isTrans = atoi(row[2]);
-st.host = cloneString(row[3]);
-st.port = cloneString(row[4]);
-st.nibDir = hReplaceGbdbSeqDir(row[5], st.db);
+st->db = cloneString(row[0]);
+st->genome = cloneString(row[1]);
+st->isTrans = atoi(row[2]);
+st->host = cloneString(row[3]);
+st->port = cloneString(row[4]);
+st->nibDir = hReplaceGbdbSeqDir(row[5], st->db);
+if (atoi(row[6]))
+    {
+    st->isDynamic = TRUE;
+    st->genomeDataDir = cloneString(st->db);  // directories by database name for database genomes
+    ++nonHubDynamicBlatServerCount;
+    }
 
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
-return &st;
+return st;
+}
+
+static struct serverTable *trackHubServerTable(char *db, boolean isTrans)
+/* Load blat table for a hub */
+{
+char *host, *port;
+char *genomeDataDir;
+
+if (!trackHubGetBlatParams(db, isTrans, &host, &port, &genomeDataDir))
+    errAbort("Cannot get blat server parameters for track hub with database %s", db);
+
+struct serverTable *st;
+AllocVar(st);
+
+st->db = cloneString(db);
+st->genome = cloneString(hGenome(db));
+st->isTrans = isTrans;
+st->host = host; 
+st->port = port;
+struct trackHubGenome *genome = trackHubGetGenome(db);
+st->nibDir = cloneString(genome->twoBitPath);
+char *ptr = strrchr(st->nibDir, '/');
+// we only want the directory name
+if (ptr != NULL)
+    *ptr = 0;
+if (genomeDataDir != NULL)
+    {
+    st->isDynamic = TRUE;
+    st->genomeDataDir = cloneString(genomeDataDir);
+    ++hubDynamicBlatServerCount;
+    }
+return st;
+}
+
+struct serverTable *findServer(char *db, boolean isTrans)
+/* Return server for given database.  Db can either be
+ * database name or description. */
+{
+if (trackHubDatabase(db))
+    return trackHubServerTable(db, isTrans);
+else
+    return databaseServerTable(db, isTrans);
 }
 
 void findClosestServer(char **pDb, char **pOrg)
@@ -506,6 +539,8 @@ char unhideTrack[64];
 char *sort = cartUsualString(cart, "sort", pslSortList[0]);
 char *output = cartUsualString(cart, "output", outputList[0]);
 boolean pslOut = startsWith("psl", output);
+boolean pslRawOut = sameWord("pslRaw", output);
+boolean jsonOut = sameWord(output, "json");
 
 sprintf(uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 
@@ -550,13 +585,23 @@ if(feelingLucky)
     }
 else if (pslOut)
     {
-    printf("<TT><PRE>");
+    if (!pslRawOut)
+        printf("<TT><PRE>");
     if (!sameString(output, "psl no header"))
 	pslxWriteHead(stdout, qType, tType);
+
     for (psl = pslList; psl != NULL; psl = psl->next)
 	pslTabOut(psl, stdout);
+
+    if (pslRawOut)
+        exit(0);
+    printf("<TT><PRE>");
     printf("</PRE></TT>");
     }
+else if (jsonOut)  {
+        pslWriteAllJson(pslList, stdout, database, TRUE);
+        exit(0);
+}
 else  // hyperlink
     {
     printf("<H2>BLAT Search Results</H2>");
@@ -860,10 +905,11 @@ else
 }
 
 void queryServer(char *host, char *port, char *db, struct dnaSeq *seq, char *type, char *xType,
-    boolean complex, boolean isProt, boolean queryRC, int seqNumber)
-/* Send simple query to server and report results.
+    boolean complex, boolean isProt, boolean queryRC, int seqNumber, char *genomeDataDir)
+/* Send simple query to server and report results. (no, it doesn't do this)
  * queryRC is true when the query has been reverse-complemented */
 {
+
 struct genomeHits *gH;
 AllocVar(gH);
 
@@ -880,9 +926,25 @@ gH->xType = cloneString(xType);
 gH->queryRC = queryRC;
 gH->complex = complex;
 gH->isProt = isProt;
-
+gH->isDynamic = (genomeDataDir != NULL);
+gH->genomeDataDir = genomeDataDir;
 gH->dbg = dyStringNew(256);
-slAddHead(&pfdList, gH);
+
+/* SKIP DYNAMIC SERVERS
+ * xinetd throttles by refusing more connections, which causes queries to fail
+ * when the configured limit is reached.  Rather than trying to throttle in the
+ * client, dynamic servers are excluded. See issue #26658.
+ */
+if (gH->isDynamic)
+    {
+    gH->error = TRUE;
+    gH->networkErrMsg = cloneString("Skipped Dynamic Server");
+    slAddHead(&pfdDone, gH);
+    }
+else
+    {
+    slAddHead(&pfdList, gH);
+    }
 }
 
 void findBestGene(struct genomeHits *gH, int queryFrame)
@@ -987,26 +1049,14 @@ for(gfR=gH->gfList; gfR; gfR=gfR->next)
     }
 }
 
-int gfConnectEx(char *host, char *port)
-/* Try to connect to gfServer */
-{
-int conn = -1;
-if (allGenomes)
-    conn = gfMayConnect(host, port); // returns -1 on failure
-else
-    conn = gfConnect(host, port);  // errAborts on failure.
-return conn;
-}
-
-
 void queryServerFinish(struct genomeHits *gH)
 /* Report results from gfServer. */
 {
 char buf[256];
 int matchCount = 0;
 
-gH->sd = gfConnectEx(gH->host, gH->port);
-if (gH->sd == -1)
+struct gfConnection *conn = gfMayConnect(gH->host, gH->port, trackHubDatabaseToGenome(gH->db), gH->genomeDataDir);
+if (conn == NULL)
     {
     gH->error = TRUE;
     gH->networkErrMsg = "Connection to gfServer failed.";
@@ -1016,18 +1066,23 @@ if (gH->sd == -1)
 dyStringPrintf(gH->dbg,"query strand %s qsize %d<br>\n", gH->queryRC ? "-" : "+", gH->dnaSize);
 
 /* Put together query command. */
-safef(buf, sizeof buf, "%s%s %d", gfSignature(), gH->type, gH->dnaSize);
-mustWriteFd(gH->sd, buf, strlen(buf));
+if (gH->isDynamic)
+    safef(buf, sizeof buf, "%s%s %s %s %d", gfSignature(), gH->type,
+          conn->genome, conn->genomeDataDir, gH->dnaSize);
+else
+    safef(buf, sizeof buf, "%s%s %d", gfSignature(), gH->type, gH->dnaSize);
+gfBeginRequest(conn);
+mustWriteFd(conn->fd, buf, strlen(buf));
 
-if (read(gH->sd, buf, 1) < 0)
+if (read(conn->fd, buf, 1) < 0)
     errAbort("queryServerFinish: read failed: %s", strerror(errno));
 if (buf[0] != 'Y')
     errAbort("Expecting 'Y' from server, got %c", buf[0]);
-mustWriteFd(gH->sd, gH->dna, gH->dnaSize);  // Cannot shifted earlier for speed. must wait for Y confirmation.
+mustWriteFd(conn->fd, gH->dna, gH->dnaSize);  // Cannot shifted earlier for speed. must wait for Y confirmation.
 
 if (gH->complex)
     {
-    char *s = netRecieveString(gH->sd, buf);
+    char *s = netRecieveString(conn->fd, buf);
     if (!s)
 	errAbort("expected response from gfServer with tileSize");
     dyStringPrintf(gH->dbg,"%s<br>\n", s);  // from server: tileSize 4
@@ -1035,7 +1090,7 @@ if (gH->complex)
 
 for (;;)
     {
-    if (netGetString(gH->sd, buf) == NULL)
+    if (netGetString(conn->fd, buf) == NULL)
         break;
     if (sameString(buf, "end"))
         {
@@ -1128,7 +1183,7 @@ for (;;)
 	
         if (gH->complex)
             {
-            char *s = netGetLongString(gH->sd);
+            char *s = netGetLongString(conn->fd);
             if (s == NULL)
                 break;
             dyStringPrintf(gH->dbg,"%s<br>\n", s); //dumps out qstart1 tstart1 qstart2 tstart2 ...  
@@ -1250,8 +1305,7 @@ if (gH->complex && !gH->isProt)  // rnax, dnax
 
     }
 
-
-close(gH->sd);
+gfDisconnect(&conn);
 }
 
 int findMinMatch(long genomeSize, boolean isProt)
@@ -1316,26 +1370,45 @@ return genomeSize;
 }
 
 
-int findGenomeParams(struct serverTable *serve)
+int findGenomeParams(struct gfConnection *conn, struct serverTable *serve)
 /* Send status message to server arnd report result.
  * Get tileSize stepSize and minMatch.
  */
-
 {
 char buf[256];
-int sd = 0;
 int ret = 0;
 
 /* Put together command. */
-sd = gfConnectEx(serve->host, serve->port);
-sprintf(buf, "%sstatus", gfSignature());
-mustWriteFd(sd, buf, strlen(buf));
+gfBeginRequest(conn);
+if (serve->isDynamic)
+    sprintf(buf, "%s%s %s %s", gfSignature(), (serve->isTrans ? "transInfo" : "untransInfo"),
+            conn->genome, conn->genomeDataDir);
+else
+    sprintf(buf, "%sstatus", gfSignature());
+mustWriteFd(conn->fd, buf, strlen(buf));
 
 for (;;)
     {
-    if (netGetString(sd, buf) == NULL)
+    if (netGetString(conn->fd, buf) == NULL)
 	{
-	warn("Error reading status information from %s:%s",serve->host, serve->port);
+	long et = clock1000() - enteredMainTime;
+	if (serve->isDynamic)
+	    {
+	    if (et > NET_TIMEOUT_MS)
+		warn("the dynamic blat service is taking too long to respond, probably overloaded at this time, try again later.  Error reading status information from %s:%s",
+		serve->host, serve->port);
+	    else if (et < NET_QUICKEXIT_MS)
+		warn("the dynamic blat service is returning an error immediately. it is probably overloaded at this time, try again later.  Error reading status information from %s:%s",
+		serve->host, serve->port);
+	    else
+		warn("the dynamic blat service is returning an error at this time, try again later.  Error reading status information from %s:%s",
+		serve->host, serve->port);
+	    }
+	else
+	    {
+	    warn("Error reading status information from %s:%s; gfServer maybe down or misconfigured, see system logs for details)",
+             serve->host, serve->port);
+	    }
 	ret = -1;
         break;
 	}
@@ -1357,7 +1430,7 @@ for (;;)
 	    }
         }
     }
-close(sd);
+gfEndRequest(conn);
 return(ret); 
 }
 
@@ -1372,7 +1445,7 @@ char *genome, *db;
 char *type = cgiString("type");
 char *seqLetters = cloneString(userSeq);
 struct serverTable *serve;
-int conn;
+struct gfConnection *conn = NULL;
 int oneSize, totalSize = 0, seqCount = 0;
 boolean isTx = FALSE;
 boolean isTxTx = FALSE;
@@ -1393,8 +1466,11 @@ if (allGenomes)
 else
     getDbAndGenome(cart, &db, &genome, oldVars);
 
+char *output = cgiOptionalString("output");
+boolean isJson= sameWordOk(output, "json");
+boolean isPslRaw= sameWordOk(output, "pslRaw");
 
-if(!feelingLucky && !allGenomes)
+if (!feelingLucky && !allGenomes && !isJson && !isPslRaw)
     cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), db);
 
 /* Load user sequence and figure out if it is DNA or protein. */
@@ -1561,8 +1637,10 @@ else
     if (allResults)
 	minMatchShown = 0;
 
-    // read tileZize stepSize minMatch from server status
-    findGenomeParams(serve);
+    conn = gfConnect(serve->host, serve->port, trackHubDatabaseToGenome(serve->db), serve->genomeDataDir);
+
+    // read tileSize stepSize minMatch from server status
+    findGenomeParams(conn, serve);
 
     int minLucky = (serve->minMatch * serve->stepSize + (serve->tileSize - serve->stepSize)) * xlat;
 
@@ -1615,51 +1693,51 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	if (isTxTx)
 	    {
 	    if (allGenomes)
-		queryServer(serve->host, serve->port, db, seq, "transQuery", xType, TRUE, FALSE, FALSE, seqNumber);
+		queryServer(serve->host, serve->port, db, seq, "transQuery", xType, TRUE, FALSE, FALSE, seqNumber,
+                            serve->genomeDataDir);
 	    else
 		{
-		conn = gfConnectEx(serve->host, serve->port);
-		gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, tFileCache, gvo, !txTxBoth);
+		gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 5, tFileCache, gvo, !txTxBoth);
 		}
 	    if (txTxBoth)
 		{
 		reverseComplement(seq->dna, seq->size);
 		if (allGenomes)
-		    queryServer(serve->host, serve->port, db, seq, "transQuery", xType, TRUE, FALSE, TRUE, seqNumber);
+		    queryServer(serve->host, serve->port, db, seq, "transQuery", xType, TRUE, FALSE, TRUE, seqNumber,
+                                serve->genomeDataDir);
 		else
 		    {
-		    conn = gfConnectEx(serve->host, serve->port);
-		    gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, tFileCache, gvo, FALSE);
+		    gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 5, tFileCache, gvo, FALSE);
 		    }
 		}
 	    }
 	else
 	    {
 	    if (allGenomes)
-		queryServer(serve->host, serve->port, db, seq, "protQuery", xType, TRUE, TRUE, FALSE, seqNumber);
+		queryServer(serve->host, serve->port, db, seq, "protQuery", xType, TRUE, TRUE, FALSE, seqNumber,
+                            serve->genomeDataDir);
 	    else
 		{
-		conn = gfConnectEx(serve->host, serve->port);
-		gfAlignTrans(&conn, serve->nibDir, seq, 5, tFileCache, gvo);
+		gfAlignTrans(conn, serve->nibDir, seq, 5, tFileCache, gvo);
 		}
 	    }
 	}
     else
 	{
 	if (allGenomes)
-	    queryServer(serve->host, serve->port, db, seq, "query", xType, FALSE, FALSE, FALSE, seqNumber);
+	    queryServer(serve->host, serve->port, db, seq, "query", xType, FALSE, FALSE, FALSE, seqNumber,
+                        serve->genomeDataDir);
 	else
 	    {
-	    conn = gfConnectEx(serve->host, serve->port);
-	    gfAlignStrand(&conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo);
+	    gfAlignStrand(conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo);
 	    }
 	reverseComplement(seq->dna, seq->size);
 	if (allGenomes)
-	    queryServer(serve->host, serve->port, db, seq, "query", xType, FALSE, FALSE, TRUE, seqNumber);
+	    queryServer(serve->host, serve->port, db, seq, "query", xType, FALSE, FALSE, TRUE, seqNumber,
+                        serve->genomeDataDir);
 	else
 	    {
-	    conn = gfConnectEx(serve->host, serve->port);
-	    gfAlignStrand(&conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo);
+	    gfAlignStrand(conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo);
 	    }
 	}
     gfOutputQuery(gvo, f);
@@ -1785,8 +1863,11 @@ printf("%s",
 "is <tt>GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG</tt> (human SOD1).\n</P>\n");
 
 printf("%s", 
-"<P>The <b>Search all</b> checkbox allows you to search all\n"
-"genomes at the same time. It will query the default assembly of every organism and BLAT servers of attached hubs.\n");
+"<P>The <b>Search all</b> checkbox allows you to search all genomes at the same time. "
+"Search all is only available for default assemblies and attached hubs with dedicated BLAT servers."
+"The new dynamic BLAT servers are not supported, and they are noted as skipped in the output. "
+"<b>See our <a href='/FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> for more information.</b>\n"
+);
 
 printf("<P>The <b>All Results</b> checkbox disables minimum matches filtering so all results are seen." 
 " For example, with a human dna search, 20 is minimum matches required, based on the genome size, to filter out lower-quality results.\n"
@@ -1884,7 +1965,7 @@ for (;gH1; gH1 = gH2->next)
 	gH1->hide = TRUE;
     else if (!gH1->error && gH2->error)
 	gH2->hide = TRUE;
-    else  // keep the best scoring or the pair, hide the other
+    else  // keep the best scoring of the pair, hide the other
 	{
 	if (gH2->maxGeneHits > gH1->maxGeneHits)
 	    gH1->hide = TRUE;
@@ -2063,6 +2144,9 @@ else
 	char *saveOrg = organism;
 	struct sqlConnection *conn = hConnectCentral();
 	int dbCount = 0;
+	nonHubDynamicBlatServerCount = 0;
+	hubDynamicBlatServerCount   = 0;
+
 	for(this = dbList; this; this = this->next)
 	    {
 	    db = this->name;
@@ -2232,10 +2316,17 @@ else
 	    
 		printf("</TR>\n");
 		}
-	    printf("</TABLE><br><br>\n");
+	    printf("</TABLE><br>\n");
 
 	    if (debuggingGfResults)
 		printDebugging();
+
+	    if (hubDynamicBlatServerCount > 0 || nonHubDynamicBlatServerCount > 0) 
+		{
+		printf("The BLAT All Genomes feature does not currently support dynamic BLAT servers. "
+		"<b>See our <a href='/FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> for more information.</b><br>\n");
+		}
+	    printf( "<br>\n");
 
 	    fakeAskForSeqForm(organism, db);
 	    }
@@ -2258,7 +2349,7 @@ char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-long enteredMainTime = clock1000();
+enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 

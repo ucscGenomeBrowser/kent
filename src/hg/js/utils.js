@@ -753,7 +753,18 @@ function warn(msg)
     if (!warnList)
         alert(msg);
     else {
-        $( warnList ).append('<li>'+msg+'</li>');
+        // don't add warnings that already exist:
+        var oldMsgs = [];
+        $('#warnList li').each(function(i, elem) {
+            oldMsgs.push(elem.innerHTML);
+        });
+        // make the would-be new message into an <li> element so the case and quotes
+        // match any pre-existing ones
+        var newNode = document.createElement('li');
+        newNode.innerHTML = msg;
+        if (oldMsgs.indexOf(newNode.innerHTML) === -1) {
+            $( warnList ).append(newNode);
+        }
         if ($.isFunction(showWarnBox))
             showWarnBox();
         else
@@ -1252,7 +1263,7 @@ function waitMaskSetup(timeOutInMs)
     var  waitMask = normed($('#waitMask'));
     if (!waitMask) {
         // create the waitMask
-        $("body").append("<div id='waitMask' class='waitMask');'></div>");
+        $("body").append("<div id='waitMask' class='waitMask'></div>");
         waitMask = normed($('#waitMask'));
     }
     $(waitMask).css({opacity:0.0,display:'block',top: '0px', 
@@ -1852,7 +1863,7 @@ function filterByMaxHeight(multiSel)
         }
     }
     var maxHeight = $(window).height() - pos;
-    var selHeight = $(multiSel).children().length * 21;
+    var selHeight = ($(multiSel).children().length + 1) * 22;
     if (maxHeight > selHeight)
         maxHeight = null;
 

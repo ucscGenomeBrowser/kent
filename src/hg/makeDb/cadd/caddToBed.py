@@ -25,12 +25,16 @@ for line in subprocess.Popen(['zcat', inFname], stdout=subprocess.PIPE, encoding
         name = str(insLen)
         desc = "ins."+alt[1:]
         ofh = insFh
+        start = str(pos+1)
+        end = str(pos+1)
     else:
         delLen = len(ref)-1
         name = str(delLen)
         desc = "del."+ref[1:]
         ofh = delFh
+        start = str(pos+1)
+        end = str(pos+1+delLen)
 
-    bed = [chrom, str(pos), str(pos+1), name, str(round(phred)), ".", str(pos), str(pos+1), "0", desc, str(phred)]
+    bed = [chrom, start, end, name, str(round(phred)), ".", start, end, "0", desc, str(phred)]
     ofh.write("\t".join(bed))
     ofh.write("\n")

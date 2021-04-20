@@ -62,7 +62,7 @@ char *fontType = "medium";
 boolean fontExtras = trackLayoutInclFontExtras();
 if (fontExtras)
     fontType = cartUsualString(cart, "fontType", fontType);
-if (cfgOptionBooleanDefault("freeType", FALSE))
+if (cfgOptionBooleanDefault("freeType", TRUE))
     {
     tl->textFont = cartUsualString(cart, textFontVar, cfgOptionDefault("freeTypeFont","Bitmap"));
     char *style =  cartUsualString(cart, textStyleVar, "Normal");

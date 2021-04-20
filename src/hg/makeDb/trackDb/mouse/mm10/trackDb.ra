@@ -82,50 +82,6 @@ group regulation
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
-track snp142 override
-group varRep
-priority 4
-
-track snp142Mult override
-group varRep
-priority 12
-
-track snp138 override
-group varRep
-priority 5
-url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
-
-track snp138Common override
-group varRep
-priority 8
-snpSeqFile /gbdb/mm10/snp/snp138.fa
-visibility hide
-url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
-
-track snp138Mult override
-group varRep
-priority 13
-snpSeqFile /gbdb/mm10/snp/snp138.fa
-url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
-
-track snp137Common override
-group varRep
-priority 9
-snpSeqFile /gbdb/mm10/snp/snp137.fa
-url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
-
-track snp137Mult override
-group varRep
-priority 14
-snpSeqFile /gbdb/mm10/snp/snp137.fa
-url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
-
-track snp137 override
-group varRep
-priority 6
-snpSeqFile /gbdb/mm10/snp/snp137.fa
-url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
-
 track ucscRetroAli2
 shortLabel Retroposed Genes
 longLabel Retroposed Genes V2, Including Pseudogenes
@@ -287,7 +243,6 @@ shortLabel RetroGenes V6
 longLabel Retroposed Genes V6, Including Pseudogenes
 group genes
 type psl
-priority 37.14
 color 20,0,250
 visibility hide
 ucscRetroInfo ucscRetroInfo6
@@ -386,15 +341,12 @@ priority 11
 
 track genomicSuperDups override
 group varRep
-priority 15
 
 track simpleRepeat override
 group varRep
-priority 16
 
 track windowmaskerSdust override
 group varRep
-priority 17
 
 track spMut override
 group pub
@@ -438,3 +390,5 @@ exonArrows on
     color 180,0,134
     priority 2
 
+include dbSnpOldMm10.ra beta,public
+include dbSnpArchiveMm10.ra alpha

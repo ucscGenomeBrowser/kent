@@ -416,7 +416,6 @@ xrefQuery select ucscRetroInfo7.name, geneSymbol from %s where geneSymbol like '
 searchPriority 3.53
 
 track illuminaProbes override
-priority 17
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -435,7 +434,6 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 #not all have been lifted, do at subtrack level after adding new
 
 track sestanBrainAtlas override
-priority 21
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -1012,241 +1010,6 @@ priority 2
 track genomicSuperDups override
 group rep
 
-track snp141Flagged override
-snpSeqFile /gbdb/hg19/snp/snp141.fa
-
-track snp141Common override
-snpSeqFile /gbdb/hg19/snp/snp141.fa
-
-track snp141 override
-snpSeqFile /gbdb/hg19/snp/snp141.fa
-
-track snp142Mult override
-snpSeqFile /gbdb/hg19/snp/snp142.fa
-
-track snp142Flagged override
-snpSeqFile /gbdb/hg19/snp/snp142.fa
-
-track snp142Common override
-snpSeqFile /gbdb/hg19/snp/snp142.fa
-
-track snp142 override
-snpSeqFile /gbdb/hg19/snp/snp142.fa
-
-track snp144Mult override
-snpSeqFile /gbdb/hg19/snp/snp144.fa
-
-track snp144Flagged override
-snpSeqFile /gbdb/hg19/snp/snp144.fa
-
-track snp144Common override
-snpSeqFile /gbdb/hg19/snp/snp144.fa
-
-track snp144 override
-snpSeqFile /gbdb/hg19/snp/snp144.fa
-
-track snp137Common override
-snpSeqFile /gbdb/hg19/snp/snp137.fa
-chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-
-track snp138Flagged
-shortLabel Flagged SNPs(138)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Flagged by dbSNP as Clinically Assoc
-group varRep
-visibility hide
-url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-snpSeq snp138Seq
-snpExceptionDesc snp138ExceptionDesc
-defaultGeneTracks knownGene
-type bed 6 +
-snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro4
-orangDb ponAbe2
-macaqueDb rheMac3
-hapmapPhase III
-codingAnnotations snp138CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp138CodingDbSnp dbSNP
-priority 18.1
-
-track snp138Mult override
-snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro4
-orangDb ponAbe2
-macaqueDb rheMac3
-hapmapPhase III
-priority 23.1
-
-track snp138 override
-snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro4
-orangDb ponAbe2
-macaqueDb rheMac3
-hapmapPhase III
-priority 12.1
-
-track snp138Common override
-snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro4
-orangDb ponAbe2
-macaqueDb rheMac3
-hapmapPhase III
-visibility hide
-priority 6.1
-
-track snp137Flagged
-shortLabel Flagged SNPs(137)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Flagged by dbSNP as Clinically Assoc
-group varRep
-visibility hide
-url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-snpSeq snp137Seq
-snpExceptionDesc snp137ExceptionDesc
-defaultGeneTracks knownGene
-type bed 6 +
-snpSeqFile /gbdb/hg19/snp/snp137.fa
-chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp137CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp137CodingDbSnp dbSNP
-
-
-track snp137Mult override
-snpSeqFile /gbdb/hg19/snp/snp137.fa
-chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-
-track snp137 override
-snpSeqFile /gbdb/hg19/snp/snp137.fa
-chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-
-track snp135Common override
-snpSeqFile /gbdb/hg19/snp/snp135.fa
-chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp135CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp135CodingDbSnp dbSNP
-
-track snp135Flagged override
-snpSeqFile /gbdb/hg19/snp/snp135.fa
-chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp135CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp135CodingDbSnp dbSNP
-
-track snp135Mult override
-snpSeqFile /gbdb/hg19/snp/snp135.fa
-chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp135CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp135CodingDbSnp dbSNP
-
-track snp135 override
-chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp135CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp135CodingDbSnp dbSNP
-
-track snp132Common override
-snpSeqFile /gbdb/hg19/snp/snp132.fa
-chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp132CodingDbSnp,
-codingAnnoLabel_snp132CodingDbSnp dbSNP
-
-track snp132Flagged override
-snpSeqFile /gbdb/hg19/snp/snp132.fa
-chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp132CodingDbSnp,
-codingAnnoLabel_snp132CodingDbSnp dbSNP
-
-track snp132Mult override
-snpSeqFile /gbdb/hg19/snp/snp132.fa
-chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp132CodingDbSnp,
-codingAnnoLabel_snp132CodingDbSnp dbSNP
-
-track snp132 override
-chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp132CodingDbSnp,
-codingAnnoLabel_snp132CodingDbSnp dbSNP
-
-track snp131 override
-chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp131CodingDbSnp,
-codingAnnoLabel_snp131CodingDbSnp dbSNP
-
-track snp130 override
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 130 - Provisional Mapping to GRCh37)
-visibility hide
-chimpOrangMacOrthoTable snp130OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp130CodingDbSnp,
-codingAnnoLabel_snp130CodingDbSnp dbSNP
-pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
-# Use hg18 file so we don't have to duplicate the 18G:
-snpSeqFile /gbdb/hg18/snp/snp130.fa
-origAssembly hg18
-
 track hapmapSnps override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
@@ -1790,7 +1553,7 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track wgRna override 
-dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
+dataVersion miRBase Version 20 (Oct. 2013) and snoRNABase Version 3
 
 include altSeqComposite5.ra alpha
 
@@ -1811,7 +1574,7 @@ pennantIcon 17.jpg ../goldenPath/help/liftOver.html "lifted from hg17"
 track targetScanMiRnaSites
 superTrack on
 shortLabel TS miRNA Targets
-pennantIcon Updated red
+pennantIcon Updated red ../goldenPath/newsarch.html#031821 Released March 18, 2021
 longLabel TargetScan predicted microRNA target sites
 group regulation
 visibility hide
@@ -1828,7 +1591,6 @@ visibility hide
 
     track targetScanMiRnaSitesV72
     parent targetScanMiRnaSites
-    release alpha
     shortLabel TS miRNA v7.2
     longLabel Predicted microRNA Target Sites from TargetScanHuman 7.2 (March 2018)
     visibility pack
@@ -1836,7 +1598,7 @@ visibility hide
     type bigBed 12 +
     filter.targetScanScore -1
     filterLimits.targetScanScore -1:99
-    pennantIcon New red
+    pennantIcon Updated red ../goldenPath/newsarch.html#031821 Released March 18, 2021
     urlLabel View miRNA target at TargetScan
     url http://www.targetscan.org/cgi-bin/targetscan/vert_72/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
     bigDataUrl /gbdb/hg19/targetScan/targetScanSitesV72.bb
@@ -2514,7 +2276,6 @@ searchPriority 50
 padding 250
 
 track qPcrPrimers override
-priority 19
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
@@ -2589,7 +2350,6 @@ type bed 12
 url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
 urlLabel Link to PeptideAtlas:
 group expression
-priority 18
 spectrum on
 minGrayLevel 4
 scoreMax 51
@@ -2727,39 +2487,13 @@ priority 8
 
 track gnfAtlas2 override
 group expression
-priority 14
 
 track gwipsvizRiboseq override
 group expression
-priority 16
 
 track phastBias override
 group compGeno
 priority 6
-
-track snp147Flagged override
-group varRep
-
-track snp147Mult override
-group varRep
-
-track snp147Common override
-group varRep
-
-track snp147 override
-group varRep
-
-track snp146Mult override
-group varRep
-
-track snp146Flagged override
-group varRep
-
-track snp146 override
-group varRep
-
-track snp146Common override
-group varRep
 
 track hgdpGeo override
 group varRep
@@ -2815,6 +2549,7 @@ color 50,50,200
 exonArrows on
 dataVersion EPDNew Version 006 (May 2018)
 visibility hide
+priority 14.3
 
 include fetalGeneAtlas.ra
 include skinSoleBoldo.ra
@@ -2857,4 +2592,16 @@ track clinGenCnv override
 filter.size 773:11309570
 filterLimits.size 773:11309570
 
+track decipherHaploIns
+type bigBed 9 +
+group phenDis
+shortLabel Haploinsufficiency
+longLabel Haploinsufficiency predictions for genes from DECIPHER
+bigDataUrl /gbdb/hg19/bbi/haploins/haploinsufficiency.bb
+itemRgb on
+skipFields mouseOver
+noScoreFilter on
+mouseOver $name, HI: $quantile
 
+include dbSnpOldHg19.ra beta,public
+include dbSnpArchiveHg19.ra alpha

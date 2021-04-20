@@ -4,7 +4,6 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD) - Variants, Coverage, and Constraint
 group varRep
 html gnomad
-pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 2021"
 
     track gnomadCoverage
     compositeTrack on
@@ -35,8 +34,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
             track gnomadGenomesMeanCoverage
             shortLabel Mean Coverage
             longLabel gnomAD Mean Genome Sample Coverage
-            parent gnomadGenomesAvgCoverage off
-            visibility dense
+            parent gnomadGenomesAvgCoverage on
             color 255,0,0
             bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.genomes.coverage.mean.bw
             subGroups view=gAvg
@@ -161,7 +159,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
             track gnomadExomesMeanCoverage
             shortLabel Mean Coverage
             longLabel gnomAD Mean Exome Sample Coverage
-            parent gnomadExomesAvgCoverage off
+            parent gnomadExomesAvgCoverage on
             color 255,0,0
             bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.exomes.coverage.mean.bw
             subGroups view=eAvg
@@ -454,8 +452,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
 
         track gnomadMissense
         parent gnomadPLI off
-        shortLabel gnomAD Regional Constraint
-        longLabel gnomAD Predicted Constraint Metrics By Transcript Regions (O/E scores)
+        shortLabel gnomAD Regional Missense Constraint  (ExAc Dataset) 
+        longLabel gnomAD Predicted Regional Missense Constraint Metrics (O/E scores from ExAc Dataset)
         bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
         itemRgb on
         labelFields name,geneName
@@ -478,7 +476,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     viewLimits 0:1
     visibility full
     html gnomadPext
-    pennantIcon New red ../goldenPath/newsarch.html#110320 "Released Nov. 3, 2020"
 
         track gnomADPextmean_proportion
         bigDataUrl /gbdb/hg19/gnomAD/pext/mean_proportion.bw
@@ -915,12 +912,13 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
 
     track gnomadGenomes
     shortLabel gnomAD Genomes Variants
-    longLabel Genome Aggregation Database (gnomAD) Whole Genome Variants
+    longLabel Genome Aggregation Database (gnomAD) Genome Variants v2.1.1
     itemRgb on
     type bigBed 9 +
     bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.genomes.bb
     parent gnomadSuper
     visibility squish
+    dataVersion Release 2.1.1
     labelFields name,rsId
     defaultLabelFields name
     sepFields AC_afr
@@ -938,16 +936,16 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
     html gnomadExomesGenomes
-    pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 2021"
 
     track gnomadExomes
     shortLabel gnomAD Exomes Variants
-    longLabel Genome Aggregation Database (gnomAD) Exome Variants
+    longLabel Genome Aggregation Database (gnomAD) Exome Variants v2.1.1
     itemRgb on
     type bigBed 9 +
     bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.exomes.bb
     parent gnomadSuper
     visibility squish
+    dataVersion Release 2.1.1
     labelFields name,rsId
     defaultLabelFields name
     filterValues.annot pLoF,missense,synonymous,other
@@ -964,7 +962,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
     html gnomadExomesGenomes
-    pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 2021"
 
 searchTable pliByTranscript
 searchType bigBed

@@ -5,6 +5,7 @@
 #include "common.h"
 #include "botDelay.h"
 #include "cart.h"
+#include "cgiApoptosis.h"
 #include "cheapcgi.h"
 #include "hCommon.h"
 #include "hash.h"
@@ -153,7 +154,7 @@ webEndJWest();
     "if ($fileInput && $fileInput[0] && $fileInput[0].files && !$fileInput[0].files.length) {" \
       " alert('Please choose a file first, then click the upload button.');" \
       " return false; " \
-    "} else { return true; } }"
+    "} else { loadingImage.run(); return true; } }"
 
 static void inputForm()
 /* Ask the user for FASTA or VCF. */
@@ -188,6 +189,24 @@ puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most si
      "which supports "
      "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' "
      "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.</p>\n");
+puts("</div>");
+puts("</div>");
+puts("<div class='readableWidth'>");
+puts("<div class='gbControl col-md-12'>\n"
+     "<div style='float:left; margin-right: 10px;'>"
+     "<iframe width='267' height='150' src='https://www.youtube.com/embed/humQ1NyZOUM' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>\n"
+     "</div><p>"
+     "The <a href='https://www.cdc.gov/amd/training/covid-19-gen-epi-toolkit.html' target=_blank>"
+     "CDC COVID-19 Genomic Epidemiology Toolkit</a> now includes a training module for UShER!\n"
+     "Module 3.3 includes a <a href='https://youtu.be/humQ1NyZOUM' target=_blank>video</a>, "
+     "slides (<a href='https://www.cdc.gov/amd/pdf/slidesets/toolkit-module-3.3-usher.pdf' "
+     "target=_blank>PDF</a>), and links to more resources.\n"
+     "</p>"
+     );
+puts("</div>");
+puts("</div>");
+puts("<div class='readableWidth'>");
+puts("  <div class='gbControl col-md-12'>");
 puts("<p><b>Note:</b> "
      "Please do not upload any files that contain "
      "<a href='https://en.wikipedia.org/wiki/Protected_health_information#United_States' "
@@ -225,11 +244,20 @@ puts("</p><p>");
 printf("Number of samples per subtree showing sample placement: ");
 int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
 cgiMakeIntVarWithLimits("subtreeSize", subtreeSize,
- "Number of samples in subtree showing neighborhood of placement",
- 5, 10, 1000);
+                        "Number of samples in subtree showing neighborhood of placement",
+                        5, 10, 2000);
 puts("</p><p>");
 cgiMakeOnClickSubmitButton(CHECK_FILE_INPUT_JS, "submit", "upload");
 puts("</p>");
+// Add a loading image to reassure people that we're working on it when they upload a big file
+printf("<div><img id='loadingImg' src='../images/loading.gif' />\n");
+printf("<span id='loadingMsg'></span></div>\n");
+jsInline("$(document).ready(function() {\n"
+         "    loadingImage.init($('#loadingImg'), $('#loadingMsg'), "
+         "'<p style=\"color: red; font-style: italic;\">Uploading and processing your sequences "
+         "may take some time. Please leave this window open while we work on your sequences.</p>');"
+         "});\n");
+
 puts("  </div>");
 puts("</form>");
 }
@@ -282,6 +310,8 @@ static void mainPage(char *db)
 {
 // Start web page with new-style header
 webStartGbNoBanner(cart, db, "UShER: Upload");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("ajax.js", NULL);
 newPageStartStuff();
 
 puts("<div class='row'>"
@@ -318,6 +348,9 @@ newPageStartStuff();
 
 hgBotDelay();
 
+// Allow 10 minutes for big sets of sequences
+lazarusLives(15 * 60);
+
 puts("<div class='row'>"
      "  <div class='row gbSectionBanner'>\n"
      "    <div class='col-md-11'>UShER: Ultrafast Sample placement on Existing tRee</div>\n"
@@ -330,6 +363,7 @@ printf("<form action='%s' name='resultsForm' method=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 puts("  <div class='gbControl col-md-12'>");
+fflush(stdout);
 
 if (lf != NULL)
     {

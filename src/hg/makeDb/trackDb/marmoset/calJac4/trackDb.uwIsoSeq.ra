@@ -1,0 +1,235 @@
+track uwIsoSeq
+shortLabel UW Iso-Seq
+longLabel University of Washington Iso-Seq Mappings
+compositeTrack off
+group rna
+type bam
+dragAndDrop subTracks
+indelDoubleInsert on
+indelQueryInsert on
+showNames off
+bamColorMode gray
+bamGrayMode aliQual
+priority 100
+pennantIcon New red ./hgTrackUi?db=calJac4&g=uwIsoSeq "Released at UCSC Apr. 14, 2021"
+
+    track uwIsoSeq_SRR11734396_2
+    parent uwIsoSeq
+    shortLabel Iso-Seq Cerebellum (2)
+    longLabel UW Iso-Seq Cerebellum SRR11734396 (SMRTCell 2)
+    group rna
+    visibility hide
+    type bam
+    priority 1
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734396_2.bam
+
+
+    track uwIsoSeq_SRR11734396_3
+    parent uwIsoSeq
+    shortLabel Iso-Seq Cerebellum (3)
+    longLabel UW Iso-Seq Cerebellum SRR11734396 (SMRTCell 3)
+    group rna
+    visibility hide
+    type bam
+    priority 2
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734396_3.bam
+
+
+    track uwIsoSeq_SRR11734177_1
+    parent uwIsoSeq
+    shortLabel Iso-Seq Hippocampus (1)
+    longLabel UW Iso-Seq Hippocampus SRR11734177 (SMRTCell 1)
+    group rna
+    visibility hide
+    type bam
+    priority 3
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734177_1.bam
+
+
+    track uwIsoSeq_SRR11734177_3
+    parent uwIsoSeq
+    shortLabel Iso-Seq Hippocampus (3)
+    longLabel UW Iso-Seq Hippocampus SRR11734177 (SMRTCell 3)
+    group rna
+    visibility hide
+    type bam
+    priority 4
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734177_3.bam
+
+
+    track uwIsoSeq_SRR11734138_1
+    parent uwIsoSeq
+    shortLabel Iso-Seq Prefrontalcortex (1)
+    longLabel UW Iso-Seq Prefrontalcortex SRR11734138 (SMRTCell 1)
+    group rna
+    visibility hide
+    type bam
+    priority 5
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734138_1.bam
+
+
+    track uwIsoSeq_SRR11734138_3
+    parent uwIsoSeq
+    shortLabel Iso-Seq Prefrontalcortex (3)
+    longLabel UW Iso-Seq Prefrontalcortex SRR11734138 (SMRTCell 3)
+    group rna
+    visibility hide
+    type bam
+    priority 6
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734138_3.bam
+
+
+    track uwIsoSeq_SRR11735653_1
+    parent uwIsoSeq
+    shortLabel Iso-Seq Striatum (1)
+    longLabel UW Iso-Seq Striatum SRR11735653 (SMRTCell 1)
+    group rna
+    visibility hide
+    type bam
+    priority 7
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11735653_1.bam
+
+
+    track uwIsoSeq_SRR11735653_3
+    parent uwIsoSeq
+    shortLabel Iso-Seq Striatum (3)
+    longLabel UW Iso-Seq Striatum SRR11735653 (SMRTCell 3)
+    group rna
+    visibility hide
+    type bam
+    priority 8
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11735653_3.bam
+
+
+    track uwIsoSeq_SRR11734242_2
+    parent uwIsoSeq
+    shortLabel Iso-Seq Thalamus (2)
+    longLabel UW Iso-Seq Thalamus SRR11734242 (SMRTCell 2)
+    group rna
+    visibility hide
+    type bam
+    priority 9
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734242_2.bam
+
+
+    track uwIsoSeq_SRR11734242_3
+    parent uwIsoSeq
+    shortLabel Iso-Seq Thalamus (3)
+    longLabel UW Iso-Seq Thalamus SRR11734242 (SMRTCell 3)
+    group rna
+    visibility hide
+    type bam
+    priority 10
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734242_3.bam
+
+
+    track uwIsoSeq_SRR11734146_1
+    parent uwIsoSeq
+    shortLabel Iso-Seq Visualcortex (1)
+    longLabel UW Iso-Seq Visualcortex SRR11734146 (SMRTCell 1)
+    group rna
+    visibility hide
+    type bam
+    priority 11
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734146_1.bam
+
+
+    track uwIsoSeq_SRR11734146_3
+    parent uwIsoSeq
+    shortLabel Iso-Seq Visualcortex (3)
+    longLabel UW Iso-Seq Visualcortex SRR11734146 (SMRTCell 3)
+    group rna
+    visibility hide
+    type bam
+    priority 12
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734146_3.bam
+
+
+    track uwIsoSeq_SRR11734243_2
+    parent uwIsoSeq
+    shortLabel Iso-Seq Heart (2)
+    longLabel UW Iso-Seq Heart SRR11734243 (SMRTCell 2)
+    group rna
+    visibility hide
+    type bam
+    priority 13
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734243_2.bam
+
+
+    track uwIsoSeq_SRR11734243_3
+    parent uwIsoSeq
+    shortLabel Iso-Seq Heart (3)
+    longLabel UW Iso-Seq Heart SRR11734243 (SMRTCell 3)
+    group rna
+    visibility hide
+    type bam
+    priority 14
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734243_3.bam
+
+
+    track uwIsoSeq_SRR11734145_2
+    parent uwIsoSeq
+    shortLabel Iso-Seq Kidney (2)
+    longLabel UW Iso-Seq Kidney SRR11734145 (SMRTCell 2)
+    group rna
+    visibility hide
+    type bam
+    priority 15
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734145_2.bam
+
+
+    track uwIsoSeq_SRR11734145_3
+    parent uwIsoSeq
+    shortLabel Iso-Seq Kidney (3)
+    longLabel UW Iso-Seq Kidney SRR11734145 (SMRTCell 3)
+    group rna
+    visibility hide
+    type bam
+    priority 16
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734145_3.bam
+
+
+    track uwIsoSeq_SRR11734136_1
+    parent uwIsoSeq
+    shortLabel Iso-Seq Liver (1)
+    longLabel UW Iso-Seq Liver SRR11734136 (SMRTCell 1)
+    group rna
+    visibility hide
+    type bam
+    priority 17
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734136_1.bam
+
+
+    track uwIsoSeq_SRR11734136_3
+    parent uwIsoSeq
+    shortLabel Iso-Seq Liver (3)
+    longLabel UW Iso-Seq Liver SRR11734136 (SMRTCell 3)
+    group rna
+    visibility hide
+    type bam
+    priority 18
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734136_3.bam
+
+
+    track uwIsoSeq_SRR11734395_2
+    parent uwIsoSeq
+    shortLabel Iso-Seq Muscle (2)
+    longLabel UW Iso-Seq Muscle SRR11734395 (SMRTCell 2)
+    group rna
+    visibility hide
+    type bam
+    priority 19
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734395_2.bam
+
+
+    track uwIsoSeq_SRR11734395_3
+    parent uwIsoSeq
+    shortLabel Iso-Seq Muscle (3)
+    longLabel UW Iso-Seq Muscle SRR11734395 (SMRTCell 3)
+    group rna
+    visibility hide
+    type bam
+    priority 20
+    bigDataUrl /gbdb/calJac4/uwIsoSeq/SRR11734395_3.bam
+
+

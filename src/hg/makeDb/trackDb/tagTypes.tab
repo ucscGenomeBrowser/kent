@@ -27,6 +27,7 @@ bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
 barChartColors barChart bigBarChart
 barChartCategoryUrl barChart bigBarChart
+multiRegionsBedUrl *
 barChartFacets barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 barChartStatsUrl barChart bigBarChart
@@ -286,6 +287,7 @@ maxItems *
 maxLimit *
 maxScore broadPeak narrowPeak
 maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix vcfPhasedTrio factorSource
+maxWindowCoverage *
 maxWindowToQuery bigWig bed bedlogR
 metadata *
 mouseOverField big*

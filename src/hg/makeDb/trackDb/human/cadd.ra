@@ -1,29 +1,12 @@
 track caddSuper
 shortLabel CADD
 longLabel CADD 1.6 Score for all single-basepair mutations and selected insertions/deletions
-superTrack on show
+superTrack on hide
 type bed
 visibility hide
 group phenDis
 color 100,130,160
-
-        track caddIns
-        shortLabel Insertions
-        longLabel CADD Score: Insertions - label is length of insertion
-        type bigBed 9 +
-        parent caddSuper
-        visibility dense
-        bigDataUrl /gbdb/$D/cadd/ins.bb
-        mouseOver Mutation: $change CADD Phred score: $phred
-
-        track caddDel
-        shortLabel Deletions
-        longLabel CADD Score: Deletions - label is length of deletion
-        type bigBed 9 +
-        parent caddSuper
-        visibility dense
-        bigDataUrl /gbdb/$D/cadd/del.bb
-        mouseOver Mutation: $change CADD Phred score: $phred
+pennantIcon New red ../goldenPath/newsarch.html#030221 "Released Mar. 03, 2021"
 
 track cadd
 shortLabel CADD
@@ -35,10 +18,12 @@ visibility dense
 #maxWindowToQuery 500000
 group phenDis
 color 100,130,160
+html caddSuper
+maxWindowToDraw 10000000
 
         track caddA
         shortLabel Mutation: A
-        longLabel CADD Score: Mutation is A
+        longLabel CADD 1.6 Score: Mutation is A
         type bigWig
         parent cadd on
         visibility dense
@@ -49,7 +34,7 @@ color 100,130,160
 
         track caddC
         shortLabel Mutation: C
-        longLabel CADD Score: Mutation is C
+        longLabel CADD 1.6 Score: Mutation is C
         type bigWig
         parent cadd on
         visibility dense
@@ -60,7 +45,7 @@ color 100,130,160
 
         track caddG
         shortLabel Mutation: G
-        longLabel CADD Score: Mutation is G
+        longLabel CADD 1.6 Score: Mutation is G
         type bigWig
         parent cadd on
         visibility dense
@@ -71,7 +56,7 @@ color 100,130,160
 
         track caddT
         shortLabel Mutation: T
-        longLabel CADD Score: Mutation is T
+        longLabel CADD 1.6 Score: Mutation is T
         type bigWig
         parent cadd on
         visibility dense
@@ -79,3 +64,31 @@ color 100,130,160
         maxHeightPixels 128:20:8
         viewLimits 0:30
         viewLimitsMax 0:100
+
+track caddIns
+shortLabel Insertions
+longLabel CADD 1.6 Score: Insertions - label is length of insertion
+type bigBed 9 +
+parent caddSuper
+visibility dense
+bigDataUrl /gbdb/$D/cadd/ins.bb
+mouseOver Mutation: $change CADD Phred score: $phred
+html caddSuper
+scoreFilterLimits 0:100
+maxWindowCoverage 40000
+maxItems 100000
+maxWindowToDraw 9000000
+
+track caddDel
+shortLabel Deletions
+longLabel CADD 1.6 Score: Deletions - label is length of deletion
+type bigBed 9 +
+parent caddSuper
+visibility dense
+bigDataUrl /gbdb/$D/cadd/del.bb
+mouseOver Mutation: $change CADD Phred score: $phred
+html caddSuper
+scoreFilterLimits 0:100
+maxWindowCoverage 40000
+maxItems 100000
+maxWindowToDraw 9000000

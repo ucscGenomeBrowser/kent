@@ -16,6 +16,8 @@ GCA_902459495.1_aGeoSer1.1_alternate_haplotype	Gaboon caecilian
 GCA_009762295.1_mZalCal1.alt	California sea lion
 GCA_007474575.1_mLynCan4_v1.alt	Canada lynx
 GCA_009819585.1_bMerNub1.alt	carmine bee-eater
+GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b	chicken (matHap)
+GCF_016700215.1_bGalGal1.pat.whiteleghornlayer.GRCg7w	chicken (patHap)
 GCA_900650485.1_fAnaTes1.2_alternate_haplotype	climbing perch
 GCA_011100645.1_mTriVul1.alt	common brushtail
 GCA_009819645.1_bSteHir1.alt	common tern
@@ -36,6 +38,7 @@ GCA_902148835.1_fSalaFa1.1_alternate_haplotype	jewelled blenny
 GCA_004011185.1_bStrHab1_v1.h	Kakapo
 GCA_009829205.1_bChiLan1.alt	lance-tailed manakin
 GCA_009762595.1_rDerCor1.alt	leatherback sea turtle
+GCF_017639655.1_bFalNau1.pat	lesser kestrel (patHap)
 GCA_900963505.1_fEcheNa1.1_alternate_haplotype	live sharksucker
 GCA_009769515.1_fCycLum1.alt	lumpfish
 GCA_902362175.1_fChaCha1.1_alternate_haplotype	milkfish

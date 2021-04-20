@@ -42,6 +42,13 @@ errAbort(
   "      bed - tab delimited format. Fields: chrom/start/end/name/score/strand\n"
   "      psl - blat format.\n"
   "   -name=XXX - Name to use in bed output.\n"
+  "   -genome=name  When using a dynamic gfServer, The genome name is used to \n"
+  "                 find the data files relative to the dynamic gfServer root, named \n"
+  "                 in the form $genome.2bit, and $genome.untrans.gfidx.\n"
+  "   -genomeDataDir=path\n"
+  "                 When using a dynamic gfServer, this is the dynamic gfServer root directory\n"
+  "                 that contained the genome data files.  Defaults to being the root directory.\n"
+  "                \n"
   , gfVersion, maxSize, minPerfect, minGood
   );
 }
@@ -52,6 +59,8 @@ static struct optionSpec options[] = {
    {"minGood", OPTION_INT},
    {"out", OPTION_STRING},
    {"name", OPTION_STRING},
+   {"genome", OPTION_STRING},
+   {"genomeDataDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -62,6 +71,8 @@ int main(int argc, char *argv[])
 struct gfPcrInput *inList = NULL;
 struct gfPcrOutput *outList = NULL;
 char *host, *port, *seqDir, *outFile = NULL;
+char *genome, *genomeDataDir = NULL;
+
 optionInit(&argc, argv, options);
 maxSize = optionInt("maxSize", maxSize);
 minPerfect = optionInt("minPerfect", minPerfect);
@@ -88,7 +99,15 @@ else
 host = argv[1];
 port = argv[2];
 seqDir = argv[3];
-outList = gfPcrViaNet(host, port, seqDir, inList, maxSize, minPerfect, minGood);
+genome = optionVal("genome", NULL);
+genomeDataDir = optionVal("genomeDataDir", NULL);
+if ((genomeDataDir != NULL) && (genome == NULL))
+    errAbort("-genomeDataDir requires the -genome option");
+if ((genome != NULL) && (genomeDataDir == NULL))
+    genomeDataDir = ".";
+struct gfConnection *conn = gfConnect(host, port, genome, genomeDataDir);
+outList = gfPcrViaNet(conn, seqDir, inList, maxSize, minPerfect, minGood);
+gfDisconnect(&conn);
 gfPcrOutputWriteAll(outList, clOut, NULL, outFile);
 gfPcrOutputFreeList(&outList);
 gfPcrInputFreeList(&inList);

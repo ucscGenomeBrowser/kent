@@ -12,6 +12,9 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 chainMinScore 5000
 chainLinearGap loose
 
+track chainNetMm10 override
+shortLabel $o_db ChainNet
+
 searchTable gold
 shortCircuit 1
 termRegex [NP][CIZ_]+[0-9]{6}[0-9]*(v1_[0-9]+)?

@@ -255,6 +255,15 @@ if apt-cache policy curl | grep "Installed: .none." > /dev/null; then
 fi
 
 echo
+
+# Feb 2021: cgi-bin and htdocs are now too big for the root partition. Moving both to the data partition:
+if [ ! -L /usr/local/apache/htdocs ] ; then
+ rsync -avp /usr/local/apache/htdocs/ /data/htdocs/ && rm -rf /usr/local/apache/htdocs && ln -s /data/htdocs /usr/local/apache/htdocs 
+fi
+if [ ! -L /usr/local/apache/cgi-bin ] ; then
+ rsync -avp /usr/local/apache/cgi-bin/ /data/cgi-bin/ && rm -rf /usr/local/apache/cgi-bin && ln -s  /data/cgi-bin /usr/local/apache/cgi-bin
+fi
+
 echo - Updating the genome browser software via rsync:
 
 # CGI-BIN and HTDOCS:
@@ -305,13 +314,6 @@ if [ "$1" == "hgwdev" ] ; then
 
 # normal public updates from hgdownload are easier, not many excludes necessary
 else
-   # Feb 2021: cgi-bin and htdocs are now too big for the root partition. Moving both to the data partition.
-   if [ ! -L /usr/local/apache/htdocs ] ; then
-     rsync -avp /usr/local/apache/htdocs/ /data/htdocs/ && rm -rf /usr/local/apache/htdocs && ln -s /data/htdocs /usr/local/apache/htdocs 
-   fi
-   if [ ! -L /usr/local/apache/cgi-bin ] ; then
-     rsync -avp /usr/local/apache/cgi-bin/ /data/cgi-bin/ && rm -rf /usr/local/apache/cgi-bin && ln -s  /data/cgi-bin /usr/local/apache/cgi-bin
-   fi
 
     # update CGIs
     echo - Updating CGIs...
@@ -424,7 +426,7 @@ if [ "$1" != "hgwdev" ] ; then
   echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.soe.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
   
   echo updating hgcentral database, make sure to always overwrite
-  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz --existing rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
+  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/ --exclude hubSearch* --exclude tableDescriptions* --exclude hubSearchText* --exclude gbNode* --exclude geoIp* ; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
   # update blat servers
   mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu") WHERE host not like "%ucsc.edu"'
   # the box does not officially support the HAL right now, remove the ecoli hubs

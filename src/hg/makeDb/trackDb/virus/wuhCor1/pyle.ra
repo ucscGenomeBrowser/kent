@@ -6,7 +6,6 @@ type bigWig
 group rna
 priority 1
 compositeTrack on
-pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 5, 2020"
 
   track SHAPE
   parent pyle

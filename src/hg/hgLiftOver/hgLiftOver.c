@@ -74,12 +74,13 @@ char *chainString = chainStringVal(chain);
 cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
     "between assemblies.&nbsp;&nbsp;"
-    "The input data can be pasted into the text box, or uploaded from a file.&nbsp;&nbsp;"
-    "If a pair of assemblies cannot be selected from the pull-down menus,"
-    " a direct lift between them is unavailable.&nbsp;&nbsp;"
-    "However, a sequential lift may be possible.&nbsp;&nbsp;"
-    "Example: lift from Mouse, May 2004, to Mouse, Feb. 2006, and then from Mouse, "
-    "Feb. 2006 to Mouse, July 2007 to achieve a lift from mm5 to mm9.&nbsp;&nbsp;"
+    "The input data can be pasted into the text box or uploaded from a file.&nbsp;&nbsp;"
+    "For more information, please see our "
+    "<a href=\"../goldenPath/help/hgTracksHelp.html#Liftover\">LiftOver documentation</a>."
+    "&nbsp;&nbsp;If a pair of assemblies cannot be selected from the pull-down menus,"
+    " a sequential lift may still be possible.&nbsp;&nbsp;"
+    "For example, to lift from mm9 to mm39, lift from Mouse mm9 to mm10 and then from"
+    " mm10 to mm39.&nbsp;&nbsp;"
     "");
 
 /* create HMTL form */

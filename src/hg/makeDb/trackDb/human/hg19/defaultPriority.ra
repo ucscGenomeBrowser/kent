@@ -15,7 +15,7 @@ priority 1
 
 track mrna override
 group rna
-priority 0.5
+priority 5.1
 visibility hide
 
 track intronEst override

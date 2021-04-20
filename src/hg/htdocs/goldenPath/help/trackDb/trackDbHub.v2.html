@@ -196,7 +196,7 @@ in the sections below.</I>
         <div class="format"><code class="level-base">visibility</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="meta"><A name="meta"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-base">meta</code></div>
+        <div class="format"><code class="level-full">meta</code></div>
     </TD></TR>
 </TABLE>
 <BR>
@@ -245,6 +245,9 @@ in the sections below.</I>
     </TD></TR>
     <TR VALIGN=TOP><TD class="mouseOverField"><A name="mouseOverField"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">mouseOverField &lt;fieldName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="multiRegionsBedUrl"><A name="multiRegionsBedUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code>multiRegionsBedUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="otherDb"><A name="otherDb"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">otherDb &lt;otherDb&gt;</code></div>
@@ -379,6 +382,7 @@ are described below along with settings specific to their types.</P>
             <P>Additional settings
             found in the "Item or region tracks" section are also
             available for displaying bam tags.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowCoverage</A>,
             <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="bam_example"><IMG class='toggle detail'>
@@ -510,6 +514,10 @@ are described below along with settings specific to their types.</P>
     </TD></TR>
     <TR VALIGN=TOP><TD class="maxItems"><A name="maxItems"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">maxItems &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxWindowCoverage">
+        <A name="maxWindowCoverage"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">maxWindowCoverage &lt;integer&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="maxWindowToDraw">
         <A name="maxWindowToDraw"></A><IMG class='toggle detail'>
@@ -674,7 +682,7 @@ are described below along with settings specific to their types.</P>
 <table class="settingsTable" id="bigInteract">
 <thead><tr><td><div ID="bigInteract_intro" class="intro"></div></td></tr></thead>
 <tr valign=top><th><img class='toggle oneSection'>
-    &nbsp;bigInteract - Pairwise interaction display"
+    &nbsp;bigInteract - Pairwise interaction display
 </th></tr>
 <tr valign=top><td class="bigInteract"><img class='toggle detail'>
     <div class="format"> <code>type bigInteract</code></div>
@@ -882,27 +890,27 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
-    <tr valign=top><td class="noStems"><img class='toggle detail'>
-        <div class="format"><code class="level-required">noStems &lt;on/off&gt;</code>
+    <tr valign=top><td class="noStems"><a name="noStems"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-new">noStems &lt;on/off&gt;</code>
         </div>
     </td></tr>
-    <tr valign=top><td class="lollySizeField"><img class='toggle detail'>
-        <div class="format"><code class="level-required">lollySizeField &lt;integer&gt;</code>
+    <tr valign=top><td class="lollySizeField"><a name="lollySizeField"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-new">lollySizeField &lt;integer&gt;</code>
         </div>
     </td></tr>
-    <tr valign=top><td class="lollyMaxSize"><img class='toggle detail'>
-        <div class="format"><code class="level-required">lollyMaxSize &lt;integer&gt;</code>
+    <tr valign=top><td class="lollyMaxSize"><a name="lollyMaxSize"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-new">lollyMaxSize &lt;integer&gt;</code>
         </div>
     </td></tr>
-    <tr valign=top><td class="lollyField"><img class='toggle detail'>
-        <div class="format"><code class="level-required">lollyField &lt;integer&gt;</code>
+    <tr valign=top><td class="lollyField"><a name="lollyField"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-new">lollyField &lt;integer&gt;</code>
         </div>
     </td></tr>
-    <tr valign=top><td class="yAxisLabel"><img class='toggle detail'>
-        <div class="format"><code class="level-full"><code>yAxisLabel.&lt;integer&gt; &lt;integer&gt; &lt;on/off&gt; &lt;R,G,B&gt; &lt;string&gt; </code></div>
+    <tr valign=top><td class="yAxisLabel"><a name="yAxisLabel"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-full">yAxisLabel.&lt;integer&gt; &lt;integer&gt; &lt;on/off&gt; &lt;R,G,B&gt; &lt;string&gt; </code></div>
     </td></tr>
-    <tr valign=top><td class="yAxisNumLabels"><img class='toggle detail'>
-        <div class="format"><code class="level-required">yAxisNumLabels &lt;on/off&gt;</code>
+    <tr valign=top><td class="yAxisNumLabels"><a name="yAxisNumLabels"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-new">yAxisNumLabels &lt;on/off&gt;</code>
         </div>
     </td></tr>
 </TABLE>
@@ -1027,6 +1035,7 @@ are described below along with settings specific to their types.</P>
             <P>Additional settings found in the "Item or
             region tracks" section are also available for displaying
             Variant Call Format tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowCoverage</A>
             <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>
         </DIV>
     </TD></TR>
@@ -1049,8 +1058,8 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="vcfChildSample"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">vcfChildSample &lt;sampleName|altName&gt;</code></div>
+    <TR VALIGN=TOP><TD class="vcfChildSample"><a name="vcfChildSample"</a><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">vcfChildSample &lt;sampleName|altName&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bigDataIndex"><IMG class='toggle detail'>
         <div class="format"><code class="level-full">bigDataIndex &lt;url/relativePath&gt;</code></div>
@@ -1071,13 +1080,14 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="vcfDoQual"><A NAME="vcfDoQual"><IMG class='toggle detail'>
         <div class="format"><code class="level-new">vcfDoQual &lt;on/off&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="vcfDoMaf"><A NAME="vcfDoQual"><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">vcfDoQual &lt;on/off&gt;</code></div>
+    <TR VALIGN=TOP><TD class="vcfDoMaf"><A NAME="vcfDoMaf"><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">vcfDoMaf &lt;on/off&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD>
             <P>Additional settings found in the "Item or
             region tracks" section are also available for displaying
             Variant Call Format tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowCoverage</A>
             <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>
         </DIV>
     </TD></TR>

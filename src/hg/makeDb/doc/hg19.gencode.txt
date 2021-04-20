@@ -789,6 +789,54 @@ edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
     # commit all
     make alpha DBS=hg19
 
-wgEncodeGencodeTranscriptSourceV36lift37
+##############################################################################
+2021-03-12: import of UCSC GENCODE group processing of GENCODE V37lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV37lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV37lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbsOldSchema hg19 37lift37 103 'Feb 2021'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release.
+
+    # edit human/hg19/trackDb.gencode.ra to add new .ra file include
+    jkmake DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV37lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV37lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    problem:
+    Error: 1 of 236066 elements (0.000%) of hg19.wgEncodeGencodeAttrsV37lift37.transcriptId are not in key wgEncodeGencodeTranscriptSourceV37lift37.transcriptId line 4248 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
+    Error: 1 of 236066 elements (0.000%) of hg19.wgEncodeGencodeAttrsV37lift37.geneId are not in key wgEncodeGencodeGeneSourceV37lift37.geneId line 4212 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
+    Error: 1 of 236066 elements (0.000%) of hg19.wgEncodeGencodeAttrsV37lift37.geneId are not in key wgEncodeGencodeGeneSourceV37lift37.geneId line 4212 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
+    Error: 1 of 236066 elements (0.000%) of hg19.wgEncodeGencodeAttrsV37lift37.transcriptId are not in key wgEncodeGencodeTranscriptSourceV37lift37.transcriptId line 4248 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
+
+    The gene/transcript pair is missing from metadata:
+       ENSG00000168939.6 / ENST00000302805.2
+    These are missing from
+	 data/release_37lift37/gencode.v37lift37.metadata.Transcript_source.gz
+         data/release_37lift37/gencode.v37lift37.metadata.Gene_source.gz
+
+      this is the weird cases of SPRV3 which has now has a transcript past the PAR
+
+      echo -e 'ENST00000302805.2\tensembl_havana_transcript_homo_sapiens' >> tables/wgEncodeGencodeTranscriptSourceV37lift37.tab 
+      echo -e 'ENSG00000168939.6\tensembl_havana_transcript_homo_sapiens' >> tables/wgEncodeGencodeGeneSourceV37lift37.tab 
+
+      (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.4.out&
+
+      make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+      
+    # commit all
+    jkmake alpha DBS=hg19
 
 ##############################################################################

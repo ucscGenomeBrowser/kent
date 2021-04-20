@@ -7,7 +7,6 @@ subGroup1 view Views trios=Trios sv=Structural_Variants
 type bed 3
 group varRep
 html giab
-pennantIcon New red /goldenPath/newsarch.html#111620 "Released Nov. 16, 2020"
 
     track svView
     shortLabel Structural Variants

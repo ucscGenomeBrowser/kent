@@ -33,7 +33,10 @@ include trackDb.clinGen.ra
 include trackDb.giab.ra
 
 # CADD scores
-include cadd.ra alpha
+include cadd.ra
+
+# Revel scores
+include revel.ra
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -977,7 +980,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
-priority 6
 
 
 track snp141Flagged
@@ -997,7 +999,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
-priority 18
 
 
 track snp141Mult
@@ -1019,7 +1020,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
-priority 24
 
 track snp141
 shortLabel All SNPs(141)
@@ -1037,7 +1037,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
-priority 12
 
 
 track snp142Common
@@ -1059,7 +1058,6 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Common_bugFix
-priority 5
 
 
 track snp142Flagged
@@ -1080,7 +1078,6 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Flagged_bugFix
-priority 17
 
 track snp142Mult
 shortLabel Mult. SNPs(142)
@@ -1102,7 +1099,6 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Mult_bugFix
-priority 23
 
 
 track snp142
@@ -1122,7 +1118,6 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142_bugFix
-priority 11
 
 
 track snp144Common
@@ -1144,7 +1139,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
-priority 4
 
 
 track snp144Flagged
@@ -1165,7 +1159,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
-priority 16
 
 track snp144Mult
 shortLabel Mult. SNPs(144)
@@ -1187,7 +1180,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
-priority 22
 
 
 track snp144
@@ -1207,7 +1199,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
-priority 10
 
 
 track snp146Common
@@ -1229,7 +1220,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
-priority 3
 
 
 track snp146Flagged
@@ -1250,7 +1240,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
-priority 15
 
 
 track snp146Mult
@@ -1273,7 +1262,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
-priority 21
 
 
 track snp146
@@ -1293,7 +1281,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
-priority 9
 
 
 track snp147Common
@@ -1315,7 +1302,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
-priority 2
 
 
 track snp147Flagged
@@ -1336,7 +1322,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
-priority 14
 
 
 track snp147Mult
@@ -1359,7 +1344,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
-priority 20
 
 
 track snp147
@@ -1379,7 +1363,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
-priority 8
 
 
 track snp149Common
@@ -1479,7 +1462,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
-priority 1
 
 track snp150Flagged
 shortLabel Flagged SNPs(150)
@@ -1499,7 +1481,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
-priority 13
 
 track snp150Mult
 shortLabel Mult. SNPs(150)
@@ -1521,7 +1502,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
-priority 19
 
 track snp150
 shortLabel All SNPs(150)
@@ -1540,7 +1520,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
-priority 7
 
 
 track snp151Common
@@ -1562,7 +1541,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
-priority 0.9
 
 track snp151Flagged
 shortLabel Flagged SNPs(151)
@@ -1582,7 +1560,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
-priority 12.9
 
 track snp151Mult
 shortLabel Mult. SNPs(151)
@@ -1603,7 +1580,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
-priority 18.9
 
 track snp151
 shortLabel All SNPs(151)
@@ -1622,28 +1598,27 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
-priority 6.9
 
-track dbSnp152
-shortLabel All dbSNP (152)
-longLabel Short Genetic Variants from dbSNP release 152
-bigDataUrl /gbdb/$D/snp/dbSnp152.bb
-detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp152Details.tab.gz
-group varRep
-visibility hide
-url https://www.ncbi.nlm.nih.gov/snp/$$
-urlLabel dbSNP: 
-type bigDbSnp
-freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,GnomAD,ExAC,GoESP,ALSPAC,TWINSUK,Estonian
-maxWindowToDraw 1000000
-classFilterValues snv,mnv,ins,del,delins,identity
-classFilterType multipleListOr
-ucscNotesFilterValues |(nothing noted),classMismatch|Variant class/type is inconsistent with allele sizes,clinvar|Present in ClinVar,clusterError|Overlaps a variant with the same type/class and position,commonAll|MAF >= 1% in all projects that report frequencies,commonSome|MAF >= 1% in at least one project that reports frequencies,delMismatch|Deleted sequence mismatches genomic reference sequence,diffMajor|Different projects report different major alleles,multiMap|Variant is placed in more than one genomic position,overlapDiffClass|Variant overlaps other variant(s) of different type/class,overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,refIsMinor|Genomic reference allele is minor allele in at least one project that reports frequencies,refIsRare|Genomic reference allele frequency is <1% in at least one project,refIsSingleton|Genomic reference frequency is 0 in all projects reporting frequencies,revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
-ucscNotesFilterType multipleListOr
-maxFuncImpactFilterValues 0|(not annotated),0865|frameshift,1587|stop_gained,1574|splice_acceptor_variant,1575|splice_donor_variant,1821|inframe_insertion,1583|missense_variant,1590|terminator_codon_variant,1819|synonymous_variant,1580|coding_sequence_variant,1623|5_prime_UTR_variant,1624|3_prime_UTR_variant,1619|nc_transcript_variant,2153|genic_upstream_transcript_variant,1986|upstream_transcript_variant,2152|genic_downstream_transcript_variant,1987|downstream_transcript_variant,1627|intron_variant
-maxFuncImpactFilterType multipleListOr
-priority 6.8
-release alpha
+#track dbSnp152
+#shortLabel All dbSNP (152)
+#longLabel Short Genetic Variants from dbSNP release 152
+#bigDataUrl /gbdb/$D/snp/dbSnp152.bb
+#detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp152Details.tab.gz
+#group varRep
+#visibility hide
+#url https://www.ncbi.nlm.nih.gov/snp/$$
+#urlLabel dbSNP: 
+#type bigDbSnp
+#freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,GnomAD,ExAC,GoESP,ALSPAC,TWINSUK,Estonian
+#maxWindowToDraw 1000000
+#classFilterValues snv,mnv,ins,del,delins,identity
+#classFilterType multipleListOr
+#ucscNotesFilterValues |(nothing noted),classMismatch|Variant class/type is inconsistent with allele sizes,clinvar|Present in ClinVar,clusterError|Overlaps a variant with the same type/class and position,commonAll|MAF >= 1% in all projects that report frequencies,commonSome|MAF >= 1% in at least one project that reports frequencies,delMismatch|Deleted sequence mismatches genomic reference sequence,diffMajor|Different projects report different major alleles,multiMap|Variant is placed in more than one genomic position,overlapDiffClass|Variant overlaps other variant(s) of different type/class,overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,refIsMinor|Genomic reference allele is minor allele in at least one project that reports frequencies,refIsRare|Genomic reference allele frequency is <1% in at least one project,refIsSingleton|Genomic reference frequency is 0 in all projects reporting frequencies,revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
+#ucscNotesFilterType multipleListOr
+#maxFuncImpactFilterValues 0|(not annotated),0865|frameshift,1587|stop_gained,1574|splice_acceptor_variant,1575|splice_donor_variant,1821|inframe_insertion,1583|missense_variant,1590|terminator_codon_variant,1819|synonymous_variant,1580|coding_sequence_variant,1623|5_prime_UTR_variant,1624|3_prime_UTR_variant,1619|nc_transcript_variant,2153|genic_upstream_transcript_variant,1986|upstream_transcript_variant,2152|genic_downstream_transcript_variant,1987|downstream_transcript_variant,1627|intron_variant
+#maxFuncImpactFilterType multipleListOr
+#priority 6.8
+#release alpha
 
 track dbSnp153Composite
 compositeTrack on
@@ -5470,7 +5445,7 @@ group covid
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
-pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 12, 2020"
+multiRegionsBedUrl /gbdb/hg19/covidMuts/covidMuts.regions.bed
  
 
 

@@ -10,7 +10,7 @@
 
 
 
-char *blatServersCommaSepFieldNames = "db,host,port,isTrans,canPcr";
+char *blatServersCommaSepFieldNames = "db,host,port,isTrans,canPcr,dynamic";
 
 void blatServersStaticLoad(char **row, struct blatServers *ret)
 /* Load a row from blatServers table into ret.  The contents of ret will
@@ -22,6 +22,7 @@ ret->host = row[1];
 ret->port = sqlSigned(row[2]);
 ret->isTrans = sqlSigned(row[3]);
 ret->canPcr = sqlSigned(row[4]);
+ret->dynamic = sqlSigned(row[5]);
 }
 
 struct blatServers *blatServersLoad(char **row)
@@ -36,6 +37,7 @@ ret->host = cloneString(row[1]);
 ret->port = sqlSigned(row[2]);
 ret->isTrans = sqlSigned(row[3]);
 ret->canPcr = sqlSigned(row[4]);
+ret->dynamic = sqlSigned(row[5]);
 return ret;
 }
 
@@ -45,7 +47,7 @@ struct blatServers *blatServersLoadAll(char *fileName)
 {
 struct blatServers *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[6];
 
 while (lineFileRow(lf, row))
     {
@@ -63,7 +65,7 @@ struct blatServers *blatServersLoadAllByChar(char *fileName, char chopper)
 {
 struct blatServers *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[6];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -89,6 +91,7 @@ ret->host = sqlStringComma(&s);
 ret->port = sqlSignedComma(&s);
 ret->isTrans = sqlSignedComma(&s);
 ret->canPcr = sqlSignedComma(&s);
+ret->dynamic = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -134,6 +137,8 @@ fputc(sep,f);
 fprintf(f, "%d", el->isTrans);
 fputc(sep,f);
 fprintf(f, "%d", el->canPcr);
+fputc(sep,f);
+fprintf(f, "%d", el->dynamic);
 fputc(lastSep,f);
 }
 

@@ -330,13 +330,18 @@ boolean rename = optionExists("rename");
 struct hash *excludeChromPos = getExcludeChromPos();
 struct dyString *dyScratch = dyStringNew(0);
 int headerColCount = 0;
+// VCF with >1M samples (for SARS-CoV-2) causes stack problems / SEGV if we declare words on stack,
+// so allocate it once we know how many columns to expect:
+char **words = NULL;
 char *line;
 while (lineFileNext(lf, &line, NULL))
     {
-    char *words[512 * 1024];
     if (startsWith("#CHROM", line))
         {
-        headerColCount = chopTabs(line, words);
+        headerColCount = chopString(line, "\t", NULL, 0);
+        lineFileExpectAtLeast(lf, VCF_NUM_COLS_BEFORE_GENOTYPES+1, headerColCount);
+        AllocArray(words, headerColCount+1);
+        chopByChar(line, '\t', words, headerColCount+1);
         printWords(words, headerColCount);
         }
     else if (line[0] == '#')
@@ -347,7 +352,7 @@ while (lineFileNext(lf, &line, NULL))
         {
         if (headerColCount < VCF_MIN_COLUMNS)
             errAbort("Error: missing a tab-separated #CHROM line in vcf header.");
-        int wordCount = chopTabs(line, words);
+        int wordCount = chopByChar(line, '\t', words, headerColCount+1);
         lineFileExpectWords(lf, headerColCount, wordCount);
         if (excludeChromPos && chromPosAreExcluded(excludeChromPos, words))
             continue;

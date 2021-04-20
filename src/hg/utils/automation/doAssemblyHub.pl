@@ -807,17 +807,18 @@ sub doSequence {
 
   ###########  non-nuclear scaffold unlocalized sequence  ################
   my $nonNucChr2scaf = "$nonNucAsm/unlocalized_scaffolds/unlocalized.chr2scaf";
+  my $agpSource = "$nonNucAsm/unlocalized_scaffolds/AGP";
   if ( -s $nonNucChr2scaf ) {
     my $agpOutput = "$runDir/$asmId.nonNucUnlocalized.agp.gz";
     my $agpNames = "$runDir/$asmId.nonNucUnlocalized.names";
     my $fastaOut = "$runDir/$asmId.nonNucUnlocalized.fa.gz";
     $partsDone += 1;
     if (needsUpdate($nonNucChr2scaf, $agpOutput)) {
-      compositeAgp($nonNucChr2scaf, $agpSource, $agpOutput, $agpNames);
+      unlocalizedAgp($nonNucChr2scaf, $agpSource, $agpOutput, $agpNames);
       `touch -r $nonNucChr2scaf $agpOutput`;
     }
     if (needsUpdate($twoBitFile, $fastaOut)) {
-      compositeFasta($nonNucChr2scaf, $twoBitFile, $fastaOut);
+      unlocalizedFasta($nonNucChr2scaf, $twoBitFile, $fastaOut);
       `touch -r $twoBitFile $fastaOut`;
     }
   }
@@ -1390,6 +1391,7 @@ sub doAddMask {
 
   $bossScript->add(<<_EOF_
 export asmId=$asmId
+export accessionId=`echo \$asmId | cut -d'_' -f1-2`
 
 if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   twoBitMask $src2BitToMask -type=.bed \\
@@ -1397,6 +1399,13 @@ if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   twoBitToFa \$asmId.masked.2bit stdout | faSize stdin > \$asmId.masked.faSize.txt
   touch -r \$asmId.masked.2bit \$asmId.masked.faSize.txt
   cp -p \$asmId.masked.faSize.txt ../../\$asmId.faSize.txt
+  ln \$asmId.masked.2bit \$accessionId.2bit
+  gfServer -trans index ../../\$accessionId.trans.gfidx \$accessionId.2bit &
+  gfServer -stepSize=5 index ../../\$accessionId.untrans.gfidx \$accessionId.2bit
+  wait
+  rm \$accessionId.2bit
+  touch -r \$asmId.masked.2bit ../../\$accessionId.trans.gfidx
+  touch -r \$asmId.masked.2bit ../../\$accessionId.untrans.gfidx
 else
   printf "# addMask step previously completed\\n" 1>&2
   exit 0

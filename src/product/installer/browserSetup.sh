@@ -336,6 +336,9 @@ browser.indelOptions=on
 #JKSQL_TRACE=on
 #JKSQL_PROF=on
 
+freeType=on
+freeTypeDir=../htdocs/urw-fonts
+
 EOF_HGCONF
 
 read -r -d '' HELP_STR << EOF_HELP
@@ -359,6 +362,8 @@ command is one of:
                bedSort, ... to /usr/local/bin
                This has to be run after the browser has been installed, other-
                wise these packages may be missing: libpng zlib libmysqlclient
+  mysql      - Patch my.cnf and recreate Mysql users. This can fix
+               a broken Mysql server after an update to Mysql 8. 
                
 
 parameters for 'minimal', 'mirror' and 'update':
@@ -489,6 +494,27 @@ function waitKey ()
     read -n 1
     echo2
 }
+
+function mysqlAllowOldPasswords
+# mysql >= 8 does not allow the old passwords anymore. But our client is still compiled
+# with the old, non-SHA256 encryption. So we must deactivate this new feature.
+# What will MariaDB do?
+{
+echo2 'Checking for Mysql version >= 8'
+MYSQLMAJ=`mysql -e 'SHOW VARIABLES LIKE "version";' -NB | cut -f2 | cut -d. -f1`
+if [ "$MYSQLMAJ" -ge 8 ] ; then
+    echo2 'Mysql >= 8 found, checking if default-authentication allows native passwords'
+    if grep -q default-authentication /etc/mysql/my.cnf; then
+        echo2 'default-authentication already set in /etc/mysql/my.cnf'
+    else
+	echo2 Changing /etc/mysql/my.cnf to allow native passwords and restarting Mysql
+	echo '[mysqld]' >> /etc/mysql/my.cnf
+        echo 'default-authentication-plugin=mysql_native_password' >> /etc/mysql/my.cnf
+	service mysql restart
+    fi
+fi
+}
+
 
 # oracle's mysql install e.g. on redhat distros does not secure mysql by default, so do this now
 # this is copied from Oracle's original script, on centos /usr/bin/mysql_secure_installation
@@ -711,7 +737,7 @@ function installRedhat () {
     # So we install python2, the mysql libraries and fix up my_config.h manually
     # This is strange, but I was unable to find a different working solution. MariaDB does not have my_config.h
     else
-            yum install -y python2 mysql-devel python2-devel wget
+            yum install -y python2 mysql-devel python2-devel wget gcc
             if [ -f /usr/include/mysql/my_config.h ]; then
                     echo my_config.h found
             else
@@ -870,7 +896,23 @@ function installDebian ()
     # imagemagick for the session gallery
     # r-base-core for the gtex tracks
     # python-mysqldb for hgGeneGraph
-    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core python-mysqldb curl gsfonts
+    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core curl gsfonts
+    # python-mysqldb has been removed in newer distros
+    if apt-cache policy python-mysqldb | grep "Candidate: .none." > /dev/null; then 
+	    echo2 The package python-mysqldb is not available anymore. Working around it
+	    echo2 by installing python2 and MySQL-python with pip2
+            apt-get install --assume-yes python2 libmysqlclient-dev python2-dev wget gcc
+	    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
+	    python2 /tmp/get-pip.py
+            if [ -f /usr/include/mysql/my_config.h ]; then
+                    echo my_config.h found
+            else
+                wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
+            fi
+            pip2 install MySQL-python
+    else
+	    apt-get --assume-yes install python-mysqldb
+    fi
 
     if [ ! -f $APACHECONF ]; then
         echo2
@@ -1151,6 +1193,8 @@ function mysqlDbSetup ()
     # -------------------
     # Mysql db setup
     # -------------------
+    mysqlAllowOldPasswords
+
     echo2
     echo2 Creating Mysql databases customTrash, hgTemp and hgcentral
     waitKey
@@ -1158,9 +1202,8 @@ function mysqlDbSetup ()
     $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hgcentral;'
     $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hgTemp;'
     $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hgFixed;' # empty db needed for gencode tracks
-    downloadFile http://$HGDOWNLOAD/admin/hgcentral.sql | $MYSQL hgcentral
-    # the blat servers don't have fully qualified dom names in the download data
-    $MYSQL hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu");'
+
+    updateBlatServers
     
     echo2
     echo2 "Will now grant permissions to browser database access users:"
@@ -1172,9 +1215,10 @@ function mysqlDbSetup ()
     #  Full access to all databases for the user 'browser'
     #       This would be for browser developers that need read/write access
     #       to all database tables.  
-    $MYSQL -e "CREATE USER browser@localhost IDENTIFIED BY 'genome';"
+    #$MYSQL -e "DROP USER IF EXISTS browser@localhost"
+    #$MYSQL -e "CREATE USER browser@localhost "
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, DELETE, FILE, "\
-"CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on *.* TO browser@localhost; "
+"CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on *.* TO browser@localhost IDENTIFIED BY 'genome';"
     
     # FILE permission for this user to all databases to allow DB table loading with
     #       statements such as: "LOAD DATA INFILE file.tab"
@@ -1184,16 +1228,18 @@ function mysqlDbSetup ()
     $MYSQL -e "GRANT FILE on *.* TO browser@localhost;" 
     
     #   Read only access to genome databases for the browser CGI binaries
-    $MYSQL -e "CREATE USER readonly@localhost IDENTIFIED BY 'access';"
+    #$MYSQL -e "DROP USER IF EXISTS readonly@localhost"
+    #$MYSQL -e "CREATE USER readonly@localhost IDENTIFIED BY 'access';"
     $MYSQL -e "GRANT SELECT, CREATE TEMPORARY TABLES on "\
-"*.* TO readonly@localhost;"
+"*.* TO readonly@localhost IDENTIFIED BY 'access';"
     $MYSQL -e "GRANT SELECT, INSERT, CREATE TEMPORARY TABLES on hgTemp.* TO "\
 "readonly@localhost;"
     
     # Readwrite access to hgcentral for browser CGI binaries to keep session state
-    $MYSQL -e "CREATE USER readwrite@localhost IDENTIFIED BY 'update';"
+    #$MYSQL -e "DROP USER IF EXISTS readwrite@localhost"
+    #$MYSQL -e "CREATE USER readwrite@localhost IDENTIFIED BY 'update';"
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, "\
-"DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost; "
+"DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost IDENTIFIED BY 'update'; "
     
     # create /gbdb and let the apache user write to it
     # hgConvert will download missing liftOver files on the fly and needs write
@@ -1202,9 +1248,10 @@ function mysqlDbSetup ()
     chown $APACHEUSER:$APACHEUSER $GBDBDIR
     
     # the custom track database needs it own user and permissions
-    $MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
+    #$MYSQL -e "DROP USER IF EXISTS ctdbuser@localhost"
+    #$MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
     $MYSQL -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX "\
-"on customTrash.* TO ctdbuser@localhost;"
+"on customTrash.* TO ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
     
     # removed these now for the new hgGateway page, Apr 2016
     # by default hgGateway needs an empty hg19 database, will crash otherwise
@@ -1334,7 +1381,7 @@ function installBrowser ()
     ucscspeed=$( (time -p (for i in `seq 10`; do curl -sSI genome.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
     if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$eurospeed $ucscspeed") -eq 1 ]]; then
        echo genome-euro seems to be closer
-       echo modifying mirror to pull data from genome-euro instead of genome
+       echo modifying hg.conf to pull data from genome-euro instead of genome
        sed -i s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ $CGIBINDIR/hg.conf
        sed -i "s#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#" $CGIBINDIR/hg.conf
        HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
@@ -1369,16 +1416,16 @@ function installBrowser ()
     touch $COMPLETEFLAG
 
     echo2 Install complete. You should now be able to point your web browser to this machine
-    echo2 and use your UCSC Genome Browser mirror.
+    echo2 and test your UCSC Genome Browser mirror. It will be too slow for practical use.
     echo2
     echo2 Notice that this mirror is still configured to use Mysql and data files loaded
     echo2 through the internet from UCSC. From most locations on the world, this is very slow.
     echo2 It also requires an open outgoing TCP port 3306 for Mysql to genome-mysql.soe.ucsc.edu/genome-euro-mysql.soe.ucsc.edu,
     echo2 and open TCP port 80 to hgdownload.soe.ucsc.edu/hgdownload-euro.soe.ucsc.edu.
     echo2
-    echo2 To speed up the installation, you need to download genome data to the local
+    echo2 To finish the installation, you need to download genome data to the local
     echo2 disk. To download a genome assembly and all its files now, call this script again with
-    echo2 the parameters 'download "<assemblyName1> <assemblyName2> ..."', e.g. '"'bash $0 download mm10 hg19'"'
+    echo2 the parameters 'download "<assemblyName1> <assemblyName2> ..."', e.g. '"'bash $0 mirror mm10 hg19'"'
     echo2 
     showMyAddress
 }
@@ -1597,6 +1644,7 @@ function downloadMinimal
             mysql $db -e 'DELETE from hgFindSpec WHERE searchTable="'$track'"'
         done
     done
+
     echo2 
     echo2 The mirror should be functional now. It contains some basic assembly tables 
     echo2 and will download missing data from the UCSC servers. This requires
@@ -1629,6 +1677,14 @@ function cleanTrash ()
     find -L $TRASHDIR -not -path $TRASHDIR/ct/\* -and -type f -atime +1 -exec rm -f {} \;
 }
 
+function updateBlatServers ()
+{
+   echo2 Creating or updating the BLAT servers table
+   downloadFile http://$HGDOWNLOAD/admin/hgcentral.sql | $MYSQL hgcentral
+   # the blat servers don't have fully qualified dom names in the download data
+   $MYSQL hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu");'
+}
+
 function cgiUpdate ()
 {
    # update the CGIs
@@ -1638,11 +1694,12 @@ function cgiUpdate ()
    $RSYNC -avzP --exclude=*.{bb,bam,bai,bw,gz,2bit,bed} --exclude=ENCODE --exclude=trash $HGDOWNLOAD::htdocs/ $APACHEDIR/htdocs/ 
    # assign all downloaded files to a valid user. 
    chown -R $APACHEUSER:$APACHEUSER $APACHEDIR/*
+   updateBlatServers
 }
 
 function updateBrowser {
-   cgiUpdate
    echo
+   cgiUpdate
 
    DBS=$*
    # if none specified, update all
@@ -1863,6 +1920,9 @@ elif [ "${1:-}" == "clean" ]; then
 
 elif [ "${1:-}" == "addTools" ]; then
     addTools
+
+elif [ "${1:-}" == "mysql" ]; then
+    mysqlDbSetup
 
 else
    echo Unknown command: $1

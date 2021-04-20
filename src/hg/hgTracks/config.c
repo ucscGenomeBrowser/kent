@@ -110,12 +110,12 @@ char *emptyStyles[] = {
 void maybeNewFonts(struct hvGfx *hvg)
 /* Check to see if we want to use the alternate font engine (FreeType2). */
 {
-if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+if (sameString(cfgOptionDefault("freeType", "on"), "on"))
     {
     if (sameString(tl.textFont, "Bitmap"))
         return;
 
-    char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
+    char *fontDir = cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts");
     char buffer[4096];
 
     int ii;
@@ -603,7 +603,7 @@ if (trackLayoutInclFontExtras())
     }
 hPrintf("</TR>");
 
-if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+if (sameString(cfgOptionDefault("freeType", "on"), "on"))
     {
     hPrintf("<TR><TD>font:");
     hPrintf("<TD style=\"text-align: right\">");
@@ -749,8 +749,13 @@ webStartWrapperDetailedNoArgs(cart, database, "", "", FALSE, FALSE, FALSE, FALSE
 
 cartSaveSession(cart);
 
-
-hPrintf("<BR>\n");
+hPrintf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target='_blank' class='blueLink'>"
+                "<b>Multi-region display</b></a>"
+            " 'slices' the genome to allow viewing discontinuous regions"
+            " together in the browser window. &nbsp;&nbsp;");
+// mode-specific message filled in by JS when dialog opened
+hPrintf("<span id='multiRegionConfigStatusMsg'></span>");
+hPrintf("<p></p>");
 
 hTableStart();
 
@@ -758,7 +763,8 @@ virtModeType = cartUsualString(cart, "virtModeType", virtModeType);
 
 hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "default", sameWord("default", virtModeType));
-hPrintf("</TD><TD>");
+hPrintf("</TD>");
+hPrintf("<TD id='virtModeTypeDefaultLabel'>");
 hPrintf("Exit multi-region mode");
 hPrintf("</TD></TR>\n");
 
@@ -804,7 +810,7 @@ if (conn && sqlTableExists(conn,"knownCanonical"))
 hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "customUrl", sameWord("customUrl", virtModeType));
 hPrintf("</TD><TD>");
-hPrintf("Enter Custom regions as BED, or a URL to them:<br>");
+hPrintf("Enter custom regions as BED, or a URL to them:<br>");
 multiRegionsBedUrl = cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
 struct dyString *dyMultiRegionsBedInput = dyStringNew(256);
 if (strstr(multiRegionsBedUrl,"://"))
@@ -827,8 +833,18 @@ else
     }
 hPrintf("<TEXTAREA NAME='multiRegionsBedInput' ID='multiRegionsBedInput' rows='4' cols='58' style='white-space: pre;'>%s</TEXTAREA>",
     dyMultiRegionsBedInput->string);
-hPrintf("</TD></TR>\n");
 
+// option to set viewing window to show all regions.  This id also known to JS.
+if (cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, FALSE))
+    {
+    boolean isChecked = cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE);
+    hPrintf("&nbsp;&nbsp");
+    cgiMakeCheckBoxUtil(MULTI_REGION_BED_WIN_FULL, isChecked, 
+                            "If unchecked, when regions are changed here the view is zoomed in and does not display all regions", 
+                            MULTI_REGION_BED_WIN_FULL);
+    hPrintf("Show all");
+    hPrintf("</TD></TR>\n");
+}
 
 /* The AllChroms option will be released in future
 if (emGeneTable && sqlTableExists(conn, emGeneTable))
@@ -971,9 +987,9 @@ hPrintf("</TABLE>\n");
 hPrintf("<BR>\n");
 hPrintf("<TABLE style=\"border:0px;width:650px \">\n");
 hPrintf("<TR><TD>");
-cgiMakeButton("topSubmit", "submit");
-hPrintf("</TD><TD align=right>");
-hPrintf("<A HREF=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>Help</A>\n");
+cgiMakeButton("topSubmit", "Submit");
+hPrintf("&nbsp;&nbsp");
+cgiMakeCancelButton("Cancel");
 hPrintf("</TD></TR>\n");
 hPrintf("</TABLE>\n");
 

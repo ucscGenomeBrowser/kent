@@ -1,44 +1,23 @@
-
-track knownGene 
-shortLabel GENCODE v32
-longLabel  GENCODE v32 Comprehensive Transcript Set (only Basic displayed by default)
-group genes
-visibility pack
+track knownGene
+shortLabel GENCODE V36
+longLabel GENCODE V36
 priority 1
-color 12,12,120
-type genePred knownGenePep knownGeneMrna
-exonNumbers on
-idXref kgAlias kgID alias
-hgGene on
-hgsid on
-directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-baseColorUseCds given
+visibility pack
+type bigGenePred
+bigDataUrl /gbdb/hg38/gencode/gencodeV36.bb
 baseColorDefault genomicCodons
-defaultLinkedTables kgXref
-intronGap 12
-html knownGene
-isGencode2 on
-bigGeneDataUrl /gbdb/hg38/knownGene32.bb
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track knownGeneOld11
-shortLabel Old UCSC Genes
-longLabel Previous Version of UCSC Genes
 group genes
-visibility hide
-color 82,82,160
-type genePred
-hgsid on
-oldToNew kg11ToKg12
-baseColorUseCds given
-baseColorDefault genomicCodons
+isGencode3 on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+labelFields geneName,name,geneName2,name2
+defaultLabelFields geneName
+itemRgb on
+#externalDb knownGeneV36
+maxItems 50000
+html knownGene
+searchIndex name
+pennantIcon Updated red ../goldenPath/newsarch.html#031721 "Uploaded by UCSC Mar. 17, 2021"
 
-searchName knownGeneOld11
-searchTable knownGeneOld11
-searchDescription Previous Version of UCSC Genes
-searchMethod fuzzy
-query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
-searchPriority 3.53
 
 searchName knownGeneAcc
 searchTable knownGene
@@ -48,4 +27,24 @@ shortCircuit 1
 semiShortCircuit 1
 termRegex ENST[0-9.]+
 searchPriority 9
+
+track knownGeneOld12
+shortLabel Old UCSC Genes
+longLabel Previous Version of UCSC Genes
+group genes
+visibility hide
+color 82,82,160
+type genePred
+hgsid on
+oldToNew kg12ToKg13
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchName knownGeneFast
+searchTable knownGene
+searchType knownGeneFast
+shortCircuit 1
+searchPriority 1
+searchTrix /gbdb/hg38/knownGeneFastV36.ix
+doPage 1
 

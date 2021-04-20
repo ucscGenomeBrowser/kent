@@ -2,12 +2,14 @@
 # ucscDb track1 track2 reason
 
 # hg38:
-hg38 omimGene2 interactions no good reason
-hg38 omimGene2 dbSnp153Composite no good reason either
-hg38 omimGene2 ncbiRefSeqCurated no reason
-hg38 interactions omimGene2 test of duplicate line
+hg38 omimGene2 interactions interactions relates to omimGene2 because ...
+hg38 interactions omimGene2 omimGene2 relates to interactions because ...
 
 
 # hg19:
 hg19 omimGene2 interactions no good reason hg19
+hg19 interactions omimGene2 no good reason hg19
 hg19 clinVarCnv clinGenComp both structural variants
+hg19 clinGenComp clinVarCnv  both structural variants
+hg19 targetScanMiRnaSites knownGene TS sites and gene annotation track
+hg19 knownGene targetScanMiRnaSites TS sites and gene annotation track

@@ -1,0 +1,78 @@
+##############################################################################
+2021-03-12: import of UCSC GENCODE group processing of GENCODE VM26 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm39/bed/gencodeVM26
+    pushd /hive/data/genomes/mm39/bed/gencodeVM26
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbsOldSchema mm39 M26 103 'Feb 2021'
+
+    # If being pushed public, update 'Release Notes' in
+    # mouse/mm39/wgEncodeGencodeSuper.html
+
+    # edit human/mm39/trackDb.gencode.ra to add new .ra file include
+    jkmake DBS=mm39
+
+    ## only if being pushed to RR:
+    # edit all.joiner to add ~/tmp/gencodeVM26.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm39/bed/gencodeVM26
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+       Error: 55597 of 140725 elements (39.508%) of mm39.wgEncodeGencodeAttrsVM26.transcriptId are not in key wgEncodeGencodeExonSupportVM26.transcriptId line 5880 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
+       Error: 55597 of 140725 elements (39.508%) of mm39.wgEncodeGencodeAttrsVM26.transcriptId are not in key wgEncodeGencodeExonSupportVM26.transcriptId line 5880 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
+
+    # however, these are not currently used by the browser, so modify joiner check. Check
+    # with GENCODE is this is expected, might be a cleanup on move to mm39
+
+
+    # check tracks in browser sandbox
+    # commit all
+    make DBS=mm39 alpha
+    # if pushing public: add ticket and MARK QA READY
+
+##############################################################################
+2021-04-06: import of UCSC GENCODE group processing of GENCODE VM27 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm39/bed/gencodeVM27Pre
+    pushd /hive/data/genomes/mm39/bed/gencodeVM27Pre
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbsOldSchema mm39 M27 104 'Apr 2021'
+
+    # If being pushed public, update 'Release Notes' in
+    # mouse/mm39/wgEncodeGencodeSuper.html
+
+    # edit human/mm39/trackDb.gencode.ra to add new .ra file include
+    jkmake DBS=mm39
+
+    ## only if being pushed to RR:
+    # edit all.joiner to add ~/tmp/gencodeVM27.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm39/bed/gencodeVM27Pre
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # however, these are not currently used by the browser, so modify joiner check. Check
+    # with GENCODE is this is expected, might be a cleanup on move to mm39
+
+
+    # check tracks in browser sandbox
+    # commit all
+    make DBS=mm39 alpha
+    # if pushing public: add ticket and MARK QA READY
+
+##############################################################################

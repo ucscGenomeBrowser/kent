@@ -46,6 +46,7 @@
 <li><a href="#download34">Name of fourth column in BED output</a></li>
 <li><a href="#download36">Track data access</a></li>
 <li><a href="#snp">How do I download dbSNP data?</a></li>
+<li><a href="#snpAlleles">Why doesn't this SNP have two alleles?</a></li>
 <li><a href="#download37">Known issues with Table Browser GTF output</a></li>
 <li><a href="#download38">Table Browser output file not ordered</a></li>
 <li><a href="#download39">'Permisssion denied' error when trying to use command-line utilities</a></li>
@@ -1042,6 +1043,33 @@ for more information and example queries. We also have information on
 <a href="http://genome.ucsc.edu/blog/?s=programmatic"> Accessing the Genome Browser Programmatically</a>
 to acquire data.
 </p>
+
+<a name="snpAlleles"></a>
+<h2>Why doesn't this SNP have two alleles?</h2>
+<p>
+When using the SNP tracks, some records may contain information about one or more alleles instead of
+the usual two alleles for the SNP. The following information should explain how this is
+possible.</p>
+<dl>
+  <dt>One allele (i.e. reference only):</dt>
+  <dd>
+    The human genome reference has gone through many different assembly versions. The reference
+    genome has always been a mosaic of sequences from multiple individuals, so it contains some
+    rare or singleton mutations and is not entirely free of errors. Some SNPs were discovered on
+    previous assembly versions, and the latest assembly version has the corrected or common allele,
+    which turns out to be the only observed allele (so the SNP was an artifact of the reference
+    assembly having a rare mutation or error in the past, not a real SNP).</dd>
+  <dt>Three alleles:</dt>
+  <dd>
+    It's rare, but possible, for the same base to be mutated to different values in different
+    people.</dd>
+  <dt>Four alleles:</dt>
+  <dd>
+    This would be even rarer than three alleles. In the past, it has often been a symptom of strand
+    errors, for example, the same variant is reported separately as A/G on the forward strand and
+    C/T on the reverse strand, but then the strand information being lost in processing and the
+    reports merged to A/C/G/T.</dd>
+</dl>
 
 <a name="download37"></a>
 <h2>Obtaining GTF (Gene Transfer Format)</h2>

@@ -3131,7 +3131,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
         // we're assuming that if there are multiple psl's with the same id that
         // they are the same query sequence so we only put out one set of sequences
-        if (firstTime  && !isEmpty(seq))    // if there is a query sequence
+        if (differentString(item, "PrintAllSequences") && firstTime && !isEmpty(seq))    // if there is a query sequence
             {
             firstTime = FALSE;
             printf("<H3>Links to sequence:</H3>\n");
@@ -3277,7 +3277,7 @@ void printTrackHtml(struct trackDb *tdb)
 if (!isCustomTrack(tdb->track))
     {
     printRelatedTracks(database, trackHash, tdb, cart);
-    extraUiLinks(database, tdb);
+    extraUiLinks(database, tdb, cart);
     printTrackUiLink(tdb);
     printOrigAssembly(tdb);
     printDataVersion(database, tdb);
@@ -3382,8 +3382,8 @@ chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 if (subChain != NULL && otherOrg != NULL)
     {
     qChainRangePlusStrand(subChain, &qs, &qe);
-    linkToOtherBrowser(otherDb, subChain->qName, qs-1, qe);
-    printf("Open %s browser</A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
+    linkToOtherBrowserExtra(otherDb, subChain->qName, qs-1, qe, cartSidUrlString(cart));
+    printf("Open %s browser</A> at position corresponding to the part of chain that is in this window.<BR>\n", trackHubSkipHubName(otherOrg));
     }
 chainFree(&toFree);
 }
@@ -3415,6 +3415,13 @@ if (startsWith("big", tdb->type))
     char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
     chain = chainLoadIdRangeHub(fileName, linkFileName, seqName, winStart, winEnd, atoi(item));
+
+    if (!hDbIsActive(otherDb)) // if this isn't a native database, check to see if it's a hub
+        {
+        struct trackHubGenome *genome = trackHubGetGenomeUndecorated(otherDb);
+        if (genome)
+            otherDb = genome->name;
+        }
     }
 else
     {
@@ -3467,7 +3474,7 @@ chainFree(&toFree);
 
 printf("<B>%s position:</B> <A HREF=\"%s?%s&db=%s&position=%s:%d-%d\">%s:%d-%d</A>"
        "  size: %d <BR>\n",
-       thisOrg, hgTracksName(), cartSidUrlString(cart), database,
+       trackHubSkipHubName(thisOrg), hgTracksName(), cartSidUrlString(cart), database,
        chain->tName, chain->tStart+1, chain->tEnd, chain->tName, chain->tStart+1, chain->tEnd,
        chain->tEnd-chain->tStart);
 printf("<B>Strand:</B> %c<BR>\n", chain->qStrand);
@@ -3548,10 +3555,10 @@ if (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) && chromSeqFileE
         printf("Zoom so that browser window covers 1,000,000 bases or less "
            "and return here to see alignment details.<BR>\n");
         }
-    if (!sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
-        {
-        chainToOtherBrowser(chain, otherDb, otherOrg);
-        }
+    }
+if (!sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
+    {
+    chainToOtherBrowser(chain, otherDb, otherOrg);
     }
 /*
 if (!sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
@@ -4823,7 +4830,7 @@ if (sameString(casing, "upper"))
 if (*casing != 0)
     cartSetString(cart, "hgSeq.casing", casing);
 
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcName());
+printf("<FORM ACTION=\"%s\" METHOD=\"%s\">\n\n", hgcName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna3");
 
@@ -5446,6 +5453,19 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                     }
                 sqlFreeResult(&sr);
                 hFreeConn(&conn);
+                }
+            else if (sameString(ct->dbTrackType, "bigBed"))
+                {
+                struct lm *lm = lmInit(0);
+                struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(ct->bbiFile, seqName, winStart, winEnd, 0, lm);
+                char *bedRow[32];
+                char startBuf[16], endBuf[16];
+                for (bb = bbList; bb != NULL; bb = bb->next)
+                    {
+                    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+                    struct bed *bed = bedLoadN(bedRow, ct->bbiFile->definedFieldCount);
+                    slAddHead(&ctBedList, bed);
+                    }
                 }
             else
                 {
@@ -7383,9 +7403,7 @@ char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
 struct sqlConnection *conn = NULL;
-
-if (!trackHubDatabase(database))
-    conn = hAllocConnTrack(database, tdb);
+struct trackDb *tdb = NULL;
 
 aliTable = cartString(cart, "aliTable");
 if (isCustomTrack(aliTable))
@@ -7395,6 +7413,10 @@ if (isCustomTrack(aliTable))
     }
 else
     tdb = hashFindVal(trackHash, aliTable);
+
+if (!trackHubDatabase(database))
+    conn = hAllocConnTrack(database, tdb);
+
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", acc, aliTable);
 htmlFramesetStart(title);
@@ -7449,6 +7471,7 @@ struct psl *partPsl, *wholePsl;
 char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
+struct trackDb *tdb = NULL;
 
 aliTable = cartString(cart, "aliTable");
 if (isCustomTrack(aliTable))
@@ -7619,17 +7642,11 @@ hFreeConn(&conn);
 void htcCdnaAliInWindow(char *acc)
 /* Show part of alignment in browser window for accession. */
 {
-char query[256];
-char table[64];
-struct sqlConnection *conn;
-struct sqlResult *sr;
-char **row;
 struct psl *wholePsl, *partPsl;
 struct dnaSeq *rnaSeq;
 char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
-boolean hasBin;
 char accChopped[512] ;
 safef(accChopped, sizeof(accChopped), "%s",acc);
 chopSuffix(accChopped);
@@ -7642,9 +7659,6 @@ char *accForTitle = startsWith("ncbiRefSeq", aliTable) ? acc : accChopped;
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", accForTitle, aliTable);
 htmlFramesetStart(title);
-
-conn = hAllocConn(database);
-getCdsStartAndStop(conn, acc, aliTable, &cdsStart, &cdsEnd);
 
 if (startsWith("user", aliTable))
     {
@@ -7705,12 +7719,19 @@ if (startsWith("user", aliTable))
 else
     {
     /* Look up alignments in database */
+    struct sqlConnection *conn = hAllocConn(database);
+    getCdsStartAndStop(conn, acc, aliTable, &cdsStart, &cdsEnd);
+
+    char table[64];
+    boolean hasBin;
     if (!hFindSplitTable(database, seqName, aliTable, table, sizeof table, &hasBin))
 	errAbort("aliTable %s not found", aliTable);
+    char query[256];
     sqlSafef(query, sizeof(query),
          "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d", 
          table, acc, seqName, start);
-    sr = sqlGetResult(conn, query);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
     if ((row = sqlNextRow(sr)) == NULL)
 	errAbort("Couldn't find alignment for %s at %d", acc, start);
     wholePsl = pslLoad(row+hasBin);
@@ -7740,6 +7761,7 @@ else
 	else
 	    rnaSeq = hRnaSeq(database, acc);
 	}
+    hFreeConn(&conn);
     }
 /* Get partial psl for part of alignment in browser window: */
 if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
@@ -7752,7 +7774,6 @@ if (startsWith("xeno", aliTable))
 else
     showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
 				NULL, cdsStart, cdsEnd);
-hFreeConn(&conn);
 }
 
 void htcChainAli(char *item)
@@ -18811,7 +18832,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (snpCount == 0)
 	    printf("<B>This SNP maps to these additional locations:</B><BR><BR>\n");
 	snpCount++;
-	bedPrintPos((struct bed *)snp, 3, tdb);
+	bedPrintPos((struct bed *)snp, 3, NULL);
 	}
     }
 sqlFreeResult(&sr);
@@ -25649,7 +25670,7 @@ else
     twoBitDir = buf;
     }
 
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -verbose=0 -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed9+16  %s %s %s",  
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -verbose=0 -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed12+13  %s %s %s",  
         udcDefaultDir(), bigPslFile, twoBitDir, outputBigBed);
 system(cmdBuffer);
 unlink(bigPslFile);
