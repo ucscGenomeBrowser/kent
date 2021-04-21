@@ -123,6 +123,7 @@ UCSC_APPS = \
 	faGapLocs \
 	faGapSizes \
 	faNcbiToUcsc \
+	faRenameRecords \
 	faSimplify \
 	faToNib \
 	faTrimPolyA \
