@@ -48,7 +48,7 @@ while (<>) {
   if ($c =~ m/^HSCHR/) {
     # Mapping is not alt/fix to chrom, but fix to alt; convert alt accession to UCSC format:
     $chr = $cAcc;
-    if ($opt_db && $opt_db eq 'hg19') {
+    if ($opt_db && ($opt_db eq 'hg19' || $opt_db eq 'mm10')) {
       $chr =~ s/^(\w+)\.\d+/$1/ || die "Unexpected cAcc ($cAcc)";
       $chr = lc($chr);
     } else {
@@ -57,7 +57,7 @@ while (<>) {
     $chrBase =~ s/HSCHR([A-Z0-9]+)_.*/$1/;
     $chr = "${chrBase}_${chr}_alt";
   }
-  if ($opt_db && $opt_db eq 'hg19') {
+  if ($opt_db && ($opt_db eq 'hg19' || $opt_db eq 'mm10')) {
     $altAcc =~ s/^(\w+)\.\d+/$1/ || die "Unexpected altAcc ($altAcc)";
     $altAcc = lc($altAcc);
   } else {
