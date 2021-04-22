@@ -18,10 +18,11 @@ make
 cd /hive/users/angie/gisaid
 # Glom all the chunks together.
 # Remove initial "hCoV-19/" and remove spaces a la nextmeta (e.g. "Hong Kong" -> "HongKong").
+# Strip single quotes (e.g. "Cote d'Ivoire" --> "CotedIvoire").
 # Also remove a stray comma in a name that caused Newick parsing error ("Hungary/US-32533w,/2020").
 # Keep the strain|epiId|date "full names".
 time xzcat chunks/gisaid_epi_isl_*.fa.xz \
-| sed -re 's@^>hCo[Vv]-19/+@>@; s/ //g; s/,//;  s/\r$//;' \
+| sed -re 's@^>hCo[Vv]-19/+@>@;  s/[ '"'"',()]//g;  s/\r$//;' \
 | xz -T 50 \
     > gisaid_fullNames_$today.fa.xz
 
