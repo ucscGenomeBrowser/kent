@@ -31,6 +31,7 @@ multiRegionsBedUrl *
 barChartFacets barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 barChartStatsUrl barChart bigBarChart
+barChartStretchToItem barChart bigBarChart
 # below for backwards compatibility during QA. 
 barChartDataUrl barChart bigBarChart
 barChartLimit barChart bigBarChart

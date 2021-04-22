@@ -14,6 +14,7 @@ group singleCell
     longLabel Muscle RNA binned by cell type from De Micheli et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
+    barChartLabel Cell type
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/muscleDeMicheli/cell_type.bb

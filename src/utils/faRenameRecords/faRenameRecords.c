@@ -21,12 +21,13 @@ errAbort(
   "The oldToNew.tab is a two column file with the first column being the old name and\n"
   "the second column the new name.\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -pass      Keep records from in.fa whose names are not found in oldToNew.tab\n"
   );
 }
 
 static struct optionSpec options[] = {
-   {NULL, 0},
+    {"pass", OPTION_BOOLEAN},
+    {NULL, 0},
 };
 
 void faRenameRecords(char *inFa, char *oldToNew, char *outFa)
@@ -35,6 +36,7 @@ void faRenameRecords(char *inFa, char *oldToNew, char *outFa)
 struct hash *subHash = hashTwoColumnFile(oldToNew);
 struct lineFile *lf = lineFileOpen(inFa, TRUE);
 FILE *f = mustOpen(outFa, "w");
+boolean pass = optionExists("pass");
 DNA *dna;
 int size;
 char *name;
@@ -42,7 +44,12 @@ while (faMixedSpeedReadNext(lf, &dna, &size, &name))
     {
     char *newName = hashFindVal(subHash, name);
     if (newName == NULL)
-        errAbort("%s is in %s but not %s", name, inFa, oldToNew);
+        {
+        if (pass)
+            newName = name;
+        else
+            errAbort("%s is in %s but not %s", name, inFa, oldToNew);
+        }
     faWriteNext(f, newName, dna, size);
     }
 carefulClose(&f);
