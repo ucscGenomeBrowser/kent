@@ -1254,6 +1254,13 @@ Checking keys on database rn7
 # maxDepth: 33.000000
 # std of depth: 1.944611
 
+    # hive cleaning 2021-04-25 - Hiram
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup rn7 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    221m15.143s
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2021-03-31 - Hiram)
      # had incorrect orderKey specified in beginning rn6.config.ra

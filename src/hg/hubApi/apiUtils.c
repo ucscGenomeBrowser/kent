@@ -1,6 +1,5 @@
 /* utility functions for data API business */
 
-#include "trackHub.h"
 #include "dataApi.h"
 
 /* when measureTiming is used */
@@ -307,7 +306,11 @@ struct trackDb *tdb = NULL;
 if (db)
     tdb = hTrackDb(db);
 else
-    tdb = trackHubAddTracksGenome(genome);
+    {
+    tdb = trackHubTracksForGenome(genome->trackHub, genome, NULL);
+    tdb = trackDbLinkUpGenerations(tdb);
+    tdb = trackDbPolishAfterLinkup(tdb, genome->name);
+    }
 slSort(tdb, trackDbTrackCmp);
 // slSort(&tdb, trackDbCmp);
 return tdb;

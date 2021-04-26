@@ -2,72 +2,37 @@
 Downloads for data in this track are available:
 <ul>
 <li>
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz100way/">Multiz alignments</a> (MAF format), and phylogenetic trees
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus241way/">Cactus alignments</a> (MAF format), and phylogenetic trees
 <li>
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/">PhyloP conservation</a> (WIG format)
-<li>
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/">PhastCons conservation</a> (WIG format)
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP241way/">PhyloP conservation</a> (WIG format)
 </ul>
 
 <h2>Description</h2>
 <p>
-This track shows multiple alignments of 100 vertebrate
-species and measurements of evolutionary conservation using
-two methods (<em>phastCons</em> and <em>phyloP</em>) from the
-<a href="http://compgen.cshl.edu/phast/" target="_BLANK">
-PHAST package</a>, for all species.
-The multiple alignments were generated using multiz and
-other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
-target=_blank>Penn State Bioinformatics</a>
-comparative genomics alignment pipeline.
-Conserved elements identified by phastCons are also displayed in
-this track.
-PHAST/Multiz are built from chains ("alignable") and nets ("syntenic"),                                                                                        see the documentation of the Chain/Net tracks for a description of the complete
-alignment process.
+This track shows multiple alignments of 241 vertebrate
+species and measurements of evolutionary conservation
+from the <a href="https://zoonomiaproject.org/the-project/">Zoonomia Project</a>.
 </p>
-<p>
-PhastCons is a hidden Markov model-based method that estimates the probability that each
-nucleotide belongs to a conserved element, based on the multiple alignment.
-It considers not just each individual alignment column, but also its
-flanking columns.  By contrast, phyloP separately measures conservation at
-individual columns, ignoring the effects of their neighbors.  As a
-consequence, the phyloP plots have a less smooth appearance than the
-phastCons plots, with more "texture" at individual sites.  The two methods
-have different strengths and weaknesses.  PhastCons is sensitive to "runs"
-of conserved sites, and is therefore effective for picking out conserved
-elements.  PhyloP, on the other hand, is more appropriate for evaluating
-signatures of selection at particular nucleotides or classes of nucleotides
-(e.g., third codon positions, or first positions of miRNA target sites).
-</p>
-<p>
-Another important difference is that phyloP can measure acceleration
-(faster evolution than expected under neutral drift) as well as
-conservation (slower than expected evolution).  In the phyloP plots, sites
-predicted to be conserved are assigned positive scores (and shown in blue),
-while sites predicted to be fast-evolving are assigned negative scores (and
-shown in red).  The absolute values of the scores represent -log p-values
-under a null hypothesis of neutral evolution.  The phastCons scores, by
-contrast, represent probabilities of negative selection and range between 0
-and 1.
-</p>
-<p>
-Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
-missing data, and both were run with the same parameters.
-</p>
-<P>
-See also: <A HREF="http://genomewiki.ucsc.edu/index.php/Hg38_100-way_conservation_alignment"
-TARGET=_blank>lastz parameters</A> and other details
-and chain <A HREF="http://genomewiki.ucsc.edu/index.php/Hg38_100-way_Genome_size_statistics"
-TARGET=_blank>minimum score and gap</A> parameters used in these alignments.
-</P>
 
 <p>
-UCSC has repeatmasked and aligned all genome assemblies, and
-provides all the sequences for download.  For genome assemblies
-not available in the genome browser, there are alternative assembly hub
-genome browsers.  Missing sequence in any assembly
-is highlighted in the track display by regions of yellow when
-zoomed out and by Ns when displayed at base level (see <em>Gap Annotation</em>, below).</p>
+The multiple alignments were generated using the
+<a href="https://github.com/ComparativeGenomicsToolkit/cactus/" target=_blank>Cactus</a> comparative genomics alignment system.
+Cactus produces reference-free, whole-genome multiple alignments.
+<p>
+
+
+<p>
+The base-wise conservation scores are computed using <em>phyloP</em> from the
+<a href="http://compgen.cshl.edu/phast/" target="_BLANK"> PHAST package</a>, for all species.
+This version was prepared by Michael Dong (Uppsala U) with an improved neutral
+model incorporating better versions of ancestral repeats.
+</p>
+
+<p>
+For genome assemblies not available in the genome browser, there are
+alternative assembly hub genome browsers.  Missing sequence in any assembly is
+highlighted in the track display by regions of yellow when zoomed out and by
+Ns when displayed at base level (see <em>Gap Annotation</em>, below).</p>
 <p>
 <blockquote>
 <table border=1 class='stdTbl'>
@@ -2368,57 +2333,41 @@ Codon translation uses the following gene tracks as the basis for translation:
 
 <h2>Methods</h2>
 <p>
-Pairwise alignments with the $organism genome were generated for
-each species using lastz from repeat-masked genomic sequence.
-Lineage-specific repeats were removed prior to alignment, then reinserted.
-Pairwise alignments were then linked into chains using a dynamic programming
-algorithm that finds maximally scoring chains of gapless subsections
-of the alignments organized in a kd-tree.
-The scoring matrix and parameters for pairwise alignment and chaining
-were tuned for each species based on phylogenetic distance from the reference.
-High-scoring chains were then placed along the genome, with
-gaps filled by lower-scoring chains, to produce an alignment net.
-For more information about the chaining and netting process and
-parameters for each species, see the description pages for the Chain and Net
-tracks.</p>
+The Zoonomia alignment was composed of two sets of mammalian genomes: newly
+assembled DISCOVAR assemblies and GenBank assemblies. The DISCOVAR genomes
+were masked with RepeatMasker (commit 2d947604), using Repbase version
+20170127 as the repeat library and CrossMatch as the alignment engine. The
+pipeline used is available at
+<a href="https://github.com/joelarmstrong/repeatMaskerPipeline">repeatMaskerPipeline</a>
+(commit a6ad966). The
+guide-tree topology was taken from the TimeTree database (using release
+current in October 2018), and the branch lengths were estimated using the
+least-squares-fit mode of <a href="http://evolution.genetics.washington.edu/phylip/getme-new1.html">PHYLIP</a>, version
+3.695.. The distance matrix used was largely based on distances from the 4d
+site trees from the UCSC browser. To add those species not present in the
+UCSC tree, approximate distances estimated by <a href="https://github.com/marbl/Mash">Mash</a> (commit 541971b)
+to the closest UCSC species
+were added to the distance between the two closest UCSC species. We used the
+<a href="https://github.com/ComparativeGenomicsToolkit/hal">HAL package</a>  (commit 68db41d)
+produce the HAL file.
+</p>
 <p>
-An additional filtering step was introduced in the generation of the 100-way
-conservation track to reduce the number of paralogs and pseudogenes from the
-high-quality assemblies and the suspect alignments from the low-quality
-assemblies:
-the pairwise alignments of high-quality mammalian
-sequences (placental and marsupial) were filtered based on synteny;
-those for 2X mammalian genomes were filtered to retain only
-alignments of best quality in both the target and query (&quot;reciprocal
-best&quot;).</p>
+</p>
 <p>
-The resulting best-in-genome pairwise alignments
-were progressively aligned using multiz/autoMZ,
-following the tree topology diagrammed above, to produce multiple alignments.
-The multiple alignments were post-processed to
-add annotations indicating alignment gaps, genomic breaks,
-and base quality of the component sequences.
-The annotated multiple alignments, in MAF format, are available for
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz100way"
-target=_blank>bulk download</a>.
-An alignment summary table containing an entry for each
-alignment block in each species was generated to improve
-track display performance at large scales.
-Framing tables were constructed to enable
-visualization of codons in the multiple alignment display.</p>
+</p>
 
 <h3> Phylogenetic Tree Model</h3>
 <p>
-Both <em>phastCons</em> and <em>phyloP</em> are phylogenetic methods that rely
+The <em>phyloP</em> are phylogenetic methods that rely
 on a tree model containing the tree topology, branch lengths representing
 evolutionary distance at neutrally evolving sites, the background distribution
 of nucleotides, and a substitution rate matrix.
 The
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/hg38.phastCons100way.mod"
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons241way/hg38.phastCons241way.mod"
 target=_blank>all-species tree model</a> for this track was
 generated using the <em>phyloFit</em> program from the PHAST package
 (REV model, EM algorithm, medium precision) using multiple alignments of
-4-fold degenerate sites extracted from the 100-way alignment
+4-fold degenerate sites extracted from the 241-way alignment
 (msa_view).  The 4d sites were derived from the RefSeq (Reviewed+Coding) gene
 set, filtered to select single-coverage long transcripts.
 </p>
@@ -2426,33 +2375,9 @@ set, filtered to select single-coverage long transcripts.
 This same tree model was used in the phyloP calculations; however, the
 background frequencies were modified to maintain reversibility.
 The resulting tree model:
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/hg38.phyloP100way.mod"
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP241way/hg38.phyloP241way.mod"
 target=_blank>all species</a>.
 </p>
-<h3> PhastCons Conservation </h3>
-<p>
-The phastCons program computes conservation scores based on a phylo-HMM, a
-type of probabilistic model that describes both the process of DNA
-substitution at each site in a genome and the way this process changes from
-one site to the next (Felsenstein and Churchill 1996, Yang 1995, Siepel and
-Haussler 2005).  PhastCons uses a two-state phylo-HMM, with a state for
-conserved regions and a state for non-conserved regions.  The value plotted
-at each site is the posterior probability that the corresponding alignment
-column was "generated" by the conserved state of the phylo-HMM.  These
-scores reflect the phylogeny (including branch lengths) of the species in
-question, a continuous-time Markov model of the nucleotide substitution
-process, and a tendency for conservation levels to be autocorrelated along
-the genome (i.e., to be similar at adjacent sites).  The general reversible
-(REV) substitution model was used.  Unlike many conservation-scoring programs,
-phastCons does not rely on a sliding window
-of fixed size; therefore, short highly-conserved regions and long moderately
-conserved regions can both obtain high scores.
-More information about
-phastCons can be found in Siepel <em>et al</em>. 2005.</p>
-<p>
-The phastCons parameters used were: expected-length=45,
-target-coverage=0.3, rho=0.3.</p>
-
 <h3> PhyloP Conservation </h3>
 <p>
 The phyloP program supports several different methods for computing
@@ -2466,123 +2391,42 @@ performing a likelihood ratio test at each alignment column (--method LRT),
 and scores for both conservation and acceleration were produced (--mode
 CONACC).
 </p>
-<h3> Conserved Elements </h3>
-<p>
-The conserved elements were predicted by running phastCons with the
---viterbi option.  The predicted elements are segments of the alignment
-that are likely to have been "generated" by the conserved state of the
-phylo-HMM. Each element is assigned a log-odds score equal to its log
-probability under the conserved model minus its log probability under the
-non-conserved model. The "score" field associated with this track contains
-transformed log-odds scores, taking values between 0 and 1000. (The scores
-are transformed using a monotonic function of the form a * log(x) + b.) The
-raw log odds scores are retained in the "name" field and can be seen on the
-details page or in the browser when the track's display mode is set to
-"pack" or "full".
-</p>
-
-<h2>Credits</h2>
-<p> This track was created using the following programs:
-<ul>
-<li> Alignment tools: lastz (formerly blastz) and multiz by Minmei Hou, Scott Schwartz and Webb
-Miller of the <a href="http://www.bx.psu.edu/miller_lab/"
-target=_blank>Penn State Bioinformatics Group</a>
-<li> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
-<li> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
-other programs in PHAST by
-<a href="http://siepellab.labsites.cshl.edu/"
-target=_blank>Adam Siepel</a> at Cold Spring Harbor Laboratory (original development
-done at the Haussler lab at UCSC).
-<li> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
-by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
-<li> Tree image generator: phyloPng by Galt Barber, UCSC
-<li> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle
-display), and Brian Raney (gap annotation and codon framing) at UCSC
-</ul>
-</p>
-<p>The phylogenetic tree is based on Murphy <em>et al</em>. (2001) and general
-consensus in the vertebrate phylogeny community.  Thanks to Giacomo Bernardi for
-help with the fish relationships.
-</p>
 
 <h2>References</h2>
 
-<h3>Phylo-HMMs, phastCons, and phyloP:</h3>
+
+<h3>Zoonomia:</h3>
 <p>
-Felsenstein J, Churchill GA.
-<a href="https://academic.oup.com/mbe/article/13/1/93/1055515/A-Hidden-Markov-Model-approach-to-
-variation-among" target="_blank">A Hidden Markov Model approach to variation among sites in rate of
-evolution</a>. <em>Mol Biol Evol</em>. 1996 Jan;13(1):93-104.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/8583911" target="_blank">8583911</a>
+Zoonomia Consortium..
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33177664" target="_blank">
+A comparative genomics multitool for scientific discovery and conservation</a>.
+<em>Nature</em>. 2020 Nov;587(7833):240-245.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33177664" target="_blank">33177664</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7759459/" target="_blank">PMC7759459</a>;
+DOI: <a href="https://doi.org/10.1038/s41586-020-2876-6" target="_blank">10.1038/s41586-020-2876-6</a>
+</p>
+
+
+<h3>Cactus:</h3>
+<p>
+Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q, Xie D, Feng S, Stiller J
+<em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">
+Progressive Cactus is a multiple-genome aligner for the thousand-genome era</a>.
+<em>Nature</em>. 2020 Nov;587(7833):246-251.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">33177663</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7673649/" target="_blank">PMC7673649</a>;
+DOI: <a href="https://doi.org/10.1038/s41586-020-2871-y" target="_blank">10.1038/s41586-020-2871-y</a>
 </p>
 
 <p>
-Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
-<a href="https://genome.cshlp.org/content/20/1/110.long" target="_blank">
-Detection of nonneutral substitution rates on mammalian phylogenies</a>.
-<em>Genome Res</em>. 2010 Jan;20(1):110-21.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19858363" target="_blank">19858363</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2798823/" target="_blank">PMC2798823</a>
-</p>
-
-<p>
-Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
-Clawson H, Spieth J, Hillier LW, Richards S, <em>et al.</em>
-<a href="https://genome.cshlp.org/content/15/8/1034"
-target="_blank">Evolutionarily conserved elements in vertebrate, insect, worm,
-and yeast genomes</a>.
-<em>Genome Res</em>. 2005 Aug;15(8):1034-50.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16024819" target="_blank">16024819</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1182216/" target="_blank">PMC1182216</a>
-</p>
-
-<p>
-Siepel A, Haussler D.
-<a href="http://compgen.cshl.edu/~acs/phylohmm.pdf"
-target="_blank">Phylogenetic Hidden Markov Models</a>.
-In: Nielsen R, editor. Statistical Methods in Molecular Evolution.
-New York: Springer; 2005. pp. 325-351.
-</p>
-
-<p>
-Yang Z.
-<a href="https://www.genetics.org/content/139/2/993"
-target="_blank">A space-time process model for the evolution of DNA
-sequences</a>.
-<em>Genetics</em>. 1995 Feb;139(2):993-1005.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/7713447" target="_blank">7713447</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1206396/" target="_blank">PMC1206396</a>
-</p>
-
-<h3>Chain/Net:</h3>
-<p>
-Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
-<a href="https://www.pnas.org/content/100/20/11484"
-target="_blank">Evolution's cauldron:
-duplication, deletion, and rearrangement in the mouse and human genomes</a>.
-<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
-</p>
-
-<h3>Multiz:</h3>
-<p>
-Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
-Baertsch R, Rosenbloom K, Clawson H, Green ED, <em>et al.</em>
-<a href="https://genome.cshlp.org/content/14/4/708.abstract"
-target="_blank">Aligning multiple genomic sequences with the threaded blockset aligner</a>.
-<em>Genome Res</em>. 2004 Apr;14(4):708-15.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15060014" target="_blank">15060014</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC383317/" target="_blank">PMC383317</a>
-</p>
-
-<h3>Lastz (formerly Blastz):</h3>
-<p>
-Chiaromonte F, Yap VB, Miller W.
-<a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
-target="_blank">Scoring pairwise genomic sequence alignments</a>.
-<em>Pac Symp Biocomput</em>. 2002:115-26.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+Paten B, Earl D, Nguyen N, Diekhans M, Zerbino D, Haussler D.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">
+Cactus: Algorithms for genome multiple sequence alignment</a>.
+<em>Genome Res</em>. 2011 Sep;21(9):1512-28.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">21665927</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3166836/" target="_blank">PMC3166836</a>;
+DOI: <a href="https://doi.org/10.1101/gr.123356.111" target="_blank">10.1101/gr.123356.111</a>
 </p>
 
 <p>
@@ -2592,23 +2436,39 @@ target="_blank">Improved pairwise alignment of genomic DNA</a>.
 <em>Ph.D. Thesis</em>. Pennsylvania State University, USA. 2007.
 </p>
 
+<h3>PhyloP:</h3>
 <p>
-Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
-Haussler D, Miller W.
-<a href="https://genome.cshlp.org/content/13/1/103.abstract"
-target="_blank">Human-mouse alignments with BLASTZ</a>.
-<em>Genome Res</em>. 2003 Jan;13(1):103-7.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
+Cooper GM, Stone EA, Asimenos G, NISC Comparative Sequencing Program., Green ED, Batzoglou S, Sidow
+A.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/15965027" target="_blank">
+Distribution and intensity of constraint in mammalian genomic sequence</a>.
+<em>Genome Res</em>. 2005 Jul;15(7):901-13.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15965027" target="_blank">15965027</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1172034/" target="_blank">PMC1172034</a>;
+DOI: <a href="https://doi.org/10.1101/gr.3577405" target="_blank">10.1101/gr.3577405</a>
 </p>
 
-
-<h3>Phylogenetic Tree:</h3>
 <p>
-Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
-Ryder OA, Stanhope MJ, de Jong WW, Springer MS.
-<a href="https://science.sciencemag.org/content/294/5550/2348"
-target="_blank">Resolution of the early placental mammal radiation using Bayesian phylogenetics</a>.
-<em>Science</em>. 2001 Dec 14;294(5550):2348-51.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11743200" target="_blank">11743200</a>
+Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
+<a href="https://genome.cshlp.org/content/20/1/110.long" target="_blank">
+Detection of nonneutral substitution rates on mammalian phylogenies</a>.
+<em>Genome Res</em>. 2010 Jan;20(1):110-21.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19858363" target="_blank">19858363</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2798823/" target="_blank">PMC2798823</a>
+</p>
+
+<p>
+Siepel A, Haussler D.
+<a href="http://compgen.cshl.edu/~acs/phylohmm.pdf"
+target="_blank">Phylogenetic Hidden Markov Models</a>.
+In: Nielsen R, editor. Statistical Methods in Molecular Evolution.
+New York: Springer; 2005. pp. 325-351.
+DOI: <a href="https://doi.org/10.1101/10.1007/0-387-27733-1" target="_blank">10.1007/0-387-27733-1</a>
+</p>
+
+<p>
+Siepel A, Pollard KS, and Haussler D. New methods for detecting
+lineage-specific selection. In Proceedings of the 10th International
+Conference on Research in Computational Molecular Biology (RECOMB 2006), pp. 190-205.
+DOI: <a href="https://doi.org/10.1101/10.1007/11732990" target="_blank">10.1007/11732990</a>
 </p>
