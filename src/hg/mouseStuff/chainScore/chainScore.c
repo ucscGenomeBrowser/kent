@@ -171,7 +171,6 @@ if (sameString(newName, *pName))
     }
 else
     {
-    char fileName[512];
     *pName = newName;
     *pSeq = seq = hashFindVal(faHash, newName);
     *pStrand = strand;
@@ -203,10 +202,6 @@ errAbort(
 
   );
 }
-
-static struct optionSpec options[] = {
-   {NULL, 0},
-};
 
 int gapCost(int dq, int dt)
 /* Figure out gap costs. */
@@ -249,7 +244,7 @@ double scoreBlock(char *q, char *t, int size, int matrix[256][256])
 double score = 0;
 int i;
 for (i=0; i<size; ++i)
-    score += matrix[q[i]][t[i]];
+    score += matrix[(unsigned char)q[i]][(unsigned char)t[i]];
 return score;
 }
 
@@ -277,7 +272,6 @@ void scorePair(struct seqPair *sp,
 /* Chain up blocks and output. */
 {
 struct chain  *chain, *next;
-struct cBlock *b;
 
 /* Set up info for connect function. */
 scoreData.qSeq = qSeq;
@@ -312,13 +306,9 @@ struct dnaSeq *qSeq = NULL, *tSeq = NULL;
 char *qName = "",  *tName = "";
 FILE *f = mustOpen(chainOut, "w");
 struct chain *chainList = NULL, *chain;
-struct chain *inputChains, *next;
-FILE *details = NULL;
-struct lineFile *lf = NULL;
 struct dnaSeq *seq, *seqList = NULL;
 struct hash *faHash = newHash(0);
 struct hash *chainHash = newHash(0);
-char comment[1024];
 FILE *faF;
 struct seqPair *spList = NULL, *sp;
 struct dyString *dy = newDyString(512);
@@ -403,7 +393,7 @@ if (gapFileName != NULL)
     AllocArray(gapInitQGap,tableSize);
     AllocArray(gapInitTGap,tableSize);
     AllocArray(gapInitBothGap,tableSize);
-    while (count = lineFileChopNext(lf, words, tableSize+1))
+    while ((count = lineFileChopNext(lf, words, tableSize+1)))
         {
         if (sameString(words[0],"smallSize"))
             {
