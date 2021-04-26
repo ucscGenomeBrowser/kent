@@ -983,6 +983,14 @@ Submission to last job:        274925s    4582.08m    76.37h    3.18d
 # Longest finished job:              53s       0.88m     0.01h    0.00d
 # Submission to last job:          4266s      71.10m     1.19h    0.05d
 
+    # running cleanup 2021-04-23 - Hiram
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup gorGor6 \
+	-tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    352m33.810s
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema

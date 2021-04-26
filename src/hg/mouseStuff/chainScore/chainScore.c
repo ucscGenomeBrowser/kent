@@ -8,7 +8,7 @@
 #include "options.h"
 #include "dystring.h"
 #include "dnaseq.h"
-#include "nib.h"
+#include "twoBit.h"
 #include "fa.h"
 #include "axt.h"
 #include "psl.h"
@@ -17,7 +17,6 @@
 #include "portable.h"
 
 int minScore = 1000;
-char *detailsName = NULL;
 char *gapFileName = NULL;
 
 struct scoreData
@@ -126,7 +125,7 @@ if (dif == 0)
 return dif;
 }
 
-void loadIfNewSeq(char *nibDir, char *newName, char strand, 
+void loadIfNewSeq(struct twoBitFile *tbf, char *newName, char strand,
 	char **pName, struct dnaSeq **pSeq, char *pStrand)
 /* Load sequence unless it is already loaded.  Reverse complement
  * if necessary. */
@@ -143,15 +142,13 @@ if (sameString(newName, *pName))
     }
 else
     {
-    char fileName[512];
     freeDnaSeq(pSeq);
-    snprintf(fileName, sizeof(fileName), "%s/%s.nib", nibDir, newName);
     *pName = newName;
-    *pSeq = seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
+    *pSeq = seq = twoBitReadSeqFrag(tbf, newName, 0, 0);
     *pStrand = strand;
     if (strand == '-')
         reverseComplement(seq->dna, seq->size);
-    uglyf("Loaded %d bases in %s\n", seq->size, fileName);
+    verbose(2, "Loaded %d bases of %s in %s\n", seq->size, newName, tbf->fileName);
     }
 }
 void loadFaSeq(struct hash *faHash, char *newName, char strand, 
@@ -176,7 +173,7 @@ else
     *pStrand = strand;
     if (strand == '-')
         reverseComplement(seq->dna, seq->size);
-    uglyf("Loaded %d bases from %s fa\n", seq->size, newName);
+    verbose(2, "Loaded %d bases from %s fa\n", seq->size, newName);
     }
 }
 
@@ -186,7 +183,7 @@ void usage()
 errAbort(
   "chainScore - score chains\n"
   "usage:\n"
-  "   chainScore in.chain tNibDir qNibDir out.chain\n"
+  "   chainScore in.chain t.2bit q.2bit out.chain\n"
   "options:\n"
   "   -minScore=N  Minimum score for chain, default %d\n"
   "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file\n"
@@ -202,6 +199,13 @@ errAbort(
 
   );
 }
+
+static struct optionSpec options[] = {
+    { "minScore",    OPTION_INT },
+    { "linearGap",   OPTION_STRING },
+    { "scoreScheme", OPTION_STRING },
+    {NULL, 0},
+};
 
 int gapCost(int dq, int dt)
 /* Figure out gap costs. */
@@ -299,7 +303,7 @@ for (chain = chainList; chain != NULL; chain = next)
     }
 }
 
-void doChainScore(char *chainIn, char *tNibDir, char *qNibDir, char *chainOut)
+void doChainScore(char *chainIn, char *tTwoBitFile, char *qTwoBitFile, char *chainOut)
 {
 char qStrand = 0, tStrand = 0;
 struct dnaSeq *qSeq = NULL, *tSeq = NULL;
@@ -313,6 +317,8 @@ FILE *faF;
 struct seqPair *spList = NULL, *sp;
 struct dyString *dy = newDyString(512);
 struct lineFile *chainsLf = lineFileOpen(chainIn, TRUE);
+struct twoBitFile *tTbf = twoBitOpen(tTwoBitFile);
+struct twoBitFile *qTbf = NULL;
 
 while ((chain = chainRead(chainsLf)) != NULL)
     {
@@ -335,7 +341,7 @@ lineFileClose(&chainsLf);
 
 if (optionExists("faQ"))
     {
-    faF = mustOpen(qNibDir, "r");
+    faF = mustOpen(qTwoBitFile, "r");
     while ( faReadMixedNext(faF, TRUE, NULL, TRUE, NULL, &seq))
         {
         hashAdd(faHash, seq->name, seq);
@@ -343,6 +349,8 @@ if (optionExists("faQ"))
         }
     fclose(faF);
     }
+else
+    qTbf = twoBitOpen(qTwoBitFile);
 for (sp = spList; sp != NULL; sp = sp->next)
     {
     if (optionExists("faQ"))
@@ -351,8 +359,8 @@ for (sp = spList; sp != NULL; sp = sp->next)
         loadFaSeq(faHash, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
         }
     else
-        loadIfNewSeq(qNibDir, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
-    loadIfNewSeq(tNibDir, sp->tName, '+', &tName, &tSeq, &tStrand);
+        loadIfNewSeq(qTbf, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
+    loadIfNewSeq(tTbf, sp->tName, '+', &tName, &tSeq, &tStrand);
     scorePair(sp, qSeq, tSeq, &chainList, sp->chain);
     }
 
@@ -393,7 +401,7 @@ if (gapFileName != NULL)
     AllocArray(gapInitQGap,tableSize);
     AllocArray(gapInitTGap,tableSize);
     AllocArray(gapInitBothGap,tableSize);
-    while ((count = lineFileChopNext(lf, words, tableSize+1)))
+    while ((count = lineFileChopNext(lf, words, tableSize+1)) > 0)
         {
         if (sameString(words[0],"smallSize"))
             {
@@ -497,9 +505,8 @@ else
 int main(int argc, char *argv[])
 {
 char *scoreSchemeName = NULL;
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 minScore = optionInt("minScore", minScore);
-detailsName = optionVal("details", NULL);
 gapFileName = optionVal("linearGap", NULL);
 scoreSchemeName = optionVal("scoreScheme", NULL);
 if (scoreSchemeName != NULL)
