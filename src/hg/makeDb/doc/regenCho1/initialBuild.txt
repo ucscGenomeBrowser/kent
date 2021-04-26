@@ -1029,6 +1029,13 @@ memory usage 168030208, utime 102 s/100, stime 9
 	> load.log
     # real    307m41.143s
 
+    # cleaning 2021-04-24 - Hiram
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup regenCho1 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    354m51.815s
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - (TBD - 2018-10-17 - Hiram)
 xyz

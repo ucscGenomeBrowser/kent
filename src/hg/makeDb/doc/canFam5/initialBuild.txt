@@ -1128,6 +1128,13 @@ canFam5.perChromTables = no
 # Longest finished job:              53s       0.88m     0.01h    0.00d
 # Submission to last job:          4617s      76.95m     1.28h    0.05d
 
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup canFam5 \
+	-tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    375m19.820s
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
