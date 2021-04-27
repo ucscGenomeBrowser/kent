@@ -32671,6 +32671,12 @@ EOF
 	> do.log 2>&1
     # real    5896m44.643s
 
+    # hive cleaning 2021-04-26
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+     -continue=cleanup -buildDir=`pwd` -smallClusterHub=hgwdev hg19 \
+          -fileServer=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku
+            -workhorse=hgwdev) > cleanup.log 2>&1 &
+
 ##############################################################################
 # LASTZ human/hg19 vs. chimp/panTro6 - (DONE - 2018-12-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPanTro6.2018-12-14

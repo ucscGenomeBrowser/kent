@@ -53,4 +53,10 @@ real    35m17.468s
 
 # real    15m24.369s
 
+    # hive cleaning 2021-04-27
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup hg38 -fileServer=hgwdev -buildDir=`pwd` \
+         -smallClusterHub=hgwdev -bigClusterHub=ku -workhorse=hgwdev) \
+             > cleanup.log 2>&1
+
 ###############################################################################

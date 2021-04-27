@@ -38,5 +38,12 @@
       -workhorse=hgwdev) > load.log 2>&1
     # real    1085m38.773s
 
+    # cleaning up 2021-04-24 - Hiram
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup \
+    hg38 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+
 #########################################################################
 
