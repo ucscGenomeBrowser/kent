@@ -35,7 +35,7 @@ html chainNet
         otherDb rn7
 
         track chainRn6
-        subTrack gliresChainNetViewchain on
+        subTrack gliresChainNetViewchain off
         subGroups view=chain species=bBRat clade=aRodent
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -114,7 +114,7 @@ html chainNet
         otherDb rn7
 
         track netRn6
-        subTrack gliresChainNetViewnet on
+        subTrack gliresChainNetViewnet off
         subGroups view=net species=bBRat clade=aRodent
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net

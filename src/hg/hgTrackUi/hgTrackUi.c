@@ -2810,6 +2810,8 @@ boolean parentLevel = isNameAtParentLevel(tdb, name);
 if (parentLevel)
     return;
 char *fileName = trackDbSetting(tdb, "bigDataUrl");
+if (fileName == NULL)
+    errAbort("bigDataUrl track setting not found for HAL track %s", tdb->track);
 char *errString;
 int handle = halOpenLOD(fileName, &errString);
 struct hal_species_t *speciesList, *sp;
