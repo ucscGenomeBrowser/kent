@@ -13084,8 +13084,8 @@ TMPDIR=/dev/shm
 
 ##############################################################################
 # LASTZ Rambouillet sheep GCF_002742125.1 (DONE - 2021-04-05 - Hiram)
-    mkdir /hive/data/genomes/mm39/bed/lastzGCF_002742125.1.2021-04-05
-    cd /hive/data/genomes/mm39/bed/lastzGCF_002742125.1.2021-04-05
+    mkdir /hive/data/genomes/hg38/bed/lastzGCF_002742125.1.2021-04-05
+    cd /hive/data/genomes/hg38/bed/lastzGCF_002742125.1.2021-04-05
 
     printf '# GCF_002742125.1 vs hg38
 BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz

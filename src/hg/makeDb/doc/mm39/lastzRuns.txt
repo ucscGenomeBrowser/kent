@@ -1991,7 +1991,6 @@ grep -w real rbest.log | sed -e 's/^/    # /;'
 sed -e 's/^/    # /;' fb.$targetDb.chainRBest.$asmId.txt
     # 52282223 bases of 2728222451 (1.916%) in intersection
 
-### XXX haven't done this yet
 export target="mm39"
 export Target="Mm39"
 export query="GCF_009829145.1"
@@ -2006,22 +2005,25 @@ time (doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 -swapDir=`pwd` \
   -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
     -swap -chainMinScore=3000 -chainLinearGap=medium) >> swap.log 2>&1
 grep -w real swap.log | sed -e 's/^/    # /;'
-    # real      70m57.610s
+    # real      5m33.993s
 
 sed -e 's/^/    # /;' fb.${query}.chain.${Target}Link.txt
-    # 1021869459 bases of 2518306565 (40.578%) in intersection
+    # 56730326 bases of 1089631598 (5.206%) in intersection
 sed -e 's/^/    # /;' fb.${query}.chainSyn.${Target}Link.txt
-    # 879061651 bases of 2518306565 (34.907%) in intersection
+    # 12678262 bases of 1089631598 (1.164%) in intersection
 
 time (doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
 -target2Bit="/hive/data/genomes/asmHubs/$gcPath/${query}/${query}.2bit" \
 -targetSizes="/hive/data/genomes/asmHubs/$gcPath/${query}/${query}.chrom.sizes.txt" \
 $query $target) >> rbest.log 2>&1
 grep -w real rbest.log | sed -e 's/^/    # /;'
-    # real      294m45.010s
+    # real      288m55.058s
 
 sed -e 's/^/    # /;' fb.${query}.chainRBest.${Target}.txt
-    # 913513030 bases of 2518306565 (36.275%) in intersection
+    # 51851922 bases of 1089631598 (4.759%) in intersection
+
+    # overall time for all swap
+    # real    294m29.066s
 
 ##############################################################################
 # LASTZ  Chinese hamster CHO GCF_003668045.3 (DONE - 2020-12-08 - Hiram)

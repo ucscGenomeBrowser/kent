@@ -797,6 +797,12 @@ enhLutNer1.refseq.mrna.xeno.load  = yes
 	> load.log
     # real    393m15.373s
 
+    # hive cleaning 2021-04-26 - Hiram - 10.86 Tb
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup enhLutNer1 -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - (TBD - 2019-07-03,08-30 - Jonathan)
 xyz

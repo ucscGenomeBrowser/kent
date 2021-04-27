@@ -10891,7 +10891,7 @@ if (cartOptionalString(cart, "udcTimeout"))
     {
     warn("The Genome Browser cart currently includes the \"udcTimeout\" string. "
 	"While this is useful for debugging hubs, it may negatively impact "
-	"performance.   To clear this variable, click "
+	"performance.   To turn this off, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
     }
 }

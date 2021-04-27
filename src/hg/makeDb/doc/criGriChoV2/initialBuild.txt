@@ -787,8 +787,7 @@ Submission to last job:       1104699s   18411.65m   306.86h   12.79d
     time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=load \
 	-stop=load -buildDir=`pwd` criGriChoV2 ensGene) \
 	> load.log 2>&1
-XXX - running - Tue Feb 27 12:27:24 PST 2018
-    # real    13m52.830s
+    # real    62m59.558s
 
     featureBits -countGaps criGriChoV2 crispr10KRanges
     # 147498676 bases of 264974304 (55.665%) in intersection
@@ -804,6 +803,12 @@ Usage: bedBetween [options] inSortedBedFile outfile (stdout ok): given sorted fe
 
 bedBetween: error: no such option: -m
 
+    # cleaning hive - 2021-04-26 - Hiram
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup criGriChoV2 -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    100m50.151s
 
 ##############################################################################
 
