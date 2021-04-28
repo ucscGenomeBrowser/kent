@@ -1350,7 +1350,7 @@ include trackDb.canFam5.ra alpha
         otherDb regenRn0
 
         track netRn6
-        subTrack placentalChainNetViewnet on
+        subTrack placentalChainNetViewnet off
         subGroups view=net species=s024d clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net

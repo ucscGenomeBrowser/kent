@@ -2810,8 +2810,12 @@ boolean parentLevel = isNameAtParentLevel(tdb, name);
 if (parentLevel)
     return;
 char *fileName = trackDbSetting(tdb, "bigDataUrl");
+if (fileName == NULL)
+     return;
 char *errString;
 int handle = halOpenLOD(fileName, &errString);
+if (handle < 0)
+    errAbort("can't open HAL file: %s", fileName);
 struct hal_species_t *speciesList, *sp;
 char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
 extern char *database;
