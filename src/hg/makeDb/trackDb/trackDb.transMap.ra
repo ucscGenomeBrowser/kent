@@ -1,3 +1,6 @@
+#############################################################################
+# V4
+#############################################################################
 track transMap
 superTrack on
 shortLabel TransMap
@@ -128,6 +131,10 @@ searchType bigPsl
 searchTable transMapEstV4
 searchType bigPsl
 
+#############################################################################
+# V5
+#############################################################################
+
 track transMapV5
 superTrack on
 shortLabel TransMap V5
@@ -250,4 +257,132 @@ searchType bigPsl
     searchIndex name,srcTransId
 
 searchTable transMapEstV5
+searchType bigPsl
+
+#############################################################################
+# V6
+#############################################################################
+
+track transMapV6
+superTrack on
+shortLabel TransMap V6
+longLabel TransMap Alignments Version 5
+html transMapV6
+group genes
+
+    track transMapEnsemblV6
+    superTrack transMapV6 pack
+    shortLabel TransMap Ensembl
+    longLabel TransMap Ensembl and GENCODE Mappings Version 5
+    html transMapEnsembl
+    transMapSrcSet ensembl
+    group genes
+    type bigPsl
+    priority 10.001
+    color 0,100,0
+    canPack on
+    visibility pack
+    baseColorDefault diffCodons
+    baseColorUseCds given
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName,geneId,geneType,transcriptType
+    defaultLabelFields orgAbbrev,geneName
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V6/$D.ensembl.transMapV6.bigPsl
+    searchIndex name,srcTransId,geneName,geneId
+
+searchTable transMapEnsemblV6
+searchType bigPsl
+
+    track transMapRefSeqV6
+    superTrack transMapV6 pack
+    shortLabel TransMap RefGene
+    longLabel TransMap RefSeq Gene Mappings Version 5
+    html transMapRefSeq
+    transMapSrcSet refseq
+    group genes
+    type bigPsl
+    priority 10.003
+    color 0,100,0
+    canPack on
+    visibility pack
+    baseColorDefault diffCodons
+    baseColorUseCds given
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName,geneId
+    defaultLabelFields orgAbbrev,geneName
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V6/$D.refseq.transMapV6.bigPsl
+    searchIndex name,srcTransId,geneName,geneId
+
+searchTable transMapRefSeqV6
+searchType bigPsl
+
+    track transMapRnaV6
+    superTrack transMapV6 hide
+    shortLabel TransMap RNA
+    longLabel TransMap GenBank RNA Mappings Version 5
+    html transMapRna
+    transMapSrcSet rna
+    group genes
+    type bigPsl
+    priority 10.004
+    color 0,100,0
+    canPack on
+    visibility hide
+    baseColorDefault diffCodons
+    baseColorUseCds given
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName
+    defaultLabelFields orgAbbrev,srcTransId
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V6/$D.rna.transMapV6.bigPsl
+    searchIndex name,srcTransId,geneName
+
+searchTable transMapRnaV6
+searchType bigPsl
+
+    track transMapEstV6
+    superTrack transMapV6 hide
+    shortLabel TransMap ESTs
+    longLabel TransMap EST Mappings Version 5
+    html transMapEst
+    transMapSrcSet est
+    group genes
+    type bigPsl
+    priority 10.005
+    color 0,100,0
+    canPack on
+    visibility hide
+    baseColorDefault none
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name
+    defaultLabelFields orgAbbrev,srcTransId
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V6/$D.est.transMapV6.bigPsl
+    searchIndex name,srcTransId
+
+searchTable transMapEstV6
 searchType bigPsl
