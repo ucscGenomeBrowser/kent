@@ -627,7 +627,7 @@ fprintf(f,"<center>"
 dyStringPrintf(dy,"function showWarnBox() {"
             "document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';"
             "var warnBox=document.getElementById('warnBox');"
-            "warnBox.style.display=''; warnBox.style.width='65%%';"
+            "warnBox.style.display='';"
             "document.getElementById('warnHead').innerHTML='Warning/Error(s):';"
             "window.scrollTo(0, 0);"
           "}\n");
