@@ -1,4 +1,28 @@
 #########################################################################
+# Zoonomia phyloP for 241-way from (2021-04-24 MarkD)
+
+  cd /hive/data/genomes/hg38/bed/cactus241way/phyloP
+
+  # Obtain phylogP scores computed by Michael Dong (Uppsala U).  Since Broad
+  # has had their ftp and http sharing of files turned off, they were placed
+  # in google drive (LoL)
+
+  # download from https://drive.google.com/drive/u/0/folders/1Xc215oxu0cvBZOarxFv2L3HAjPmiZ-0A
+  # to directory uppsala
+
+  # format is, so convert with awk
+  chr1	10074	10075	id-1	0.053000
+  chr1	10075	10076	id-2	0.064000
+  chr1	10076	10077	id-3	0.064000
+
+  # convert to wig and wib
+  zcat uppsala/chr*.bed.gz  | tawk '{print $1,$2,$3,$5}' | wigEncode stdin phyloP241way.wig phyloP241way.wib
+
+  ln -s $(pwd)/phyloP241way.wib /gbdb/hg38/cactus241way/
+  hgLoadWiggle -pathPrefix=/gbdb/hg38/cactus241way hg38 phyloP241way phyloP241way.wig 
+
+
+########################################################################
 # phastCons 241-way (TBD - 2015-05-07 - Hiram)
     # split 241way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
@@ -691,7 +715,7 @@ done
 
     md5sum *.mod *.bw > md5sum.txt
 
-    # obtain the README.txt from hg38/phyloP20way and update for this
+    # Obtain The README.txt from hg38/phyloP20way and update for this
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phyloP241way/hg38.241way.phyloP
     cd hg38.241way.phyloP
     ln -s `pwd`/* \

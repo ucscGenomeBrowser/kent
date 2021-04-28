@@ -707,10 +707,14 @@ body.oldStaticPage .sectionContent {
 #warnBox {
     background-color: Beige;
     border: 3px ridge DarkRed;
-    width:640px;
     padding:10px; 
     margin:10px;
     text-align:left;
+    position: absolute;
+    top: 80px;
+    left: 10px;
+    z-index: 10000;
+    width: 350px;
 }
 
 #warnHead {

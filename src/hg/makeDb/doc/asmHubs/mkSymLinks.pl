@@ -80,6 +80,7 @@ foreach my $asmId (@orderList) {
   }
   `rm -f "${destDir}/bbi"`;
   `rm -f "${destDir}/ixIxx"`;
+  `rm -f "${destDir}/genesGtf"`;
   `rm -fr "${destDir}/html"`;
   `mkdir -p "${destDir}/html"`;
   `rm -f "${destDir}/${accessionId}.2bit"`;
@@ -99,6 +100,7 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/groups.txt"`;
   `ln -s "${buildDir}/bbi" "${destDir}/bbi"` if (-d "${buildDir}/bbi");
   `ln -s "${buildDir}/ixIxx" "${destDir}/ixIxx"` if (-d "${buildDir}/ixIxx");
+  `ln -s "${buildDir}/genesGtf" "${destDir}/genesGtf"` if (-d "${buildDir}/genesGtf");
   `ln -s ${buildDir}/html/*.html "${destDir}/html/"` if (-d "${buildDir}/html");
    my $jpgFiles =`ls ${buildDir}/html/*.jpg 2> /dev/null | wc -l`;
    chomp $jpgFiles;
