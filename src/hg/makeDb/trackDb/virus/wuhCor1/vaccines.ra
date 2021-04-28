@@ -11,7 +11,7 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 30000.0
 showCdsMaxZoom 30000.0
 showCdsAllScales .
-baseColorDefault diffBases
+baseColorDefault diffCodons
 pslSequence no
 baseColorUseSequence lfExtra
 baseColorUseCds table given
