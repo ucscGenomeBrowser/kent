@@ -1,0 +1,73 @@
+#############################################################################
+# LASTZ rat/rn7 vs. cow bosTau9 (WORKING - 2021-04-28 - Hiram)
+
+    mkdir /hive/data/genomes/rn7/bed/lastzBosTau9.2021-04-28
+    cd /hive/data/genomes/rn7/bed/lastzBosTau9.2021-04-28
+
+    printf '# Rat vs. cow bosTau9
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/hive/data/staging/data/blastz/HoxD55.q
+
+# TARGET: Rat Rn7
+SEQ1_DIR=/hive/data/genomes/rn7/rn7.2bit
+SEQ1_LEN=/hive/data/genomes/rn7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: cow bosTau9
+SEQ2_DIR=/hive/data/genomes/bosTau9/bosTau9.2bit
+SEQ2_LEN=/hive/data/genomes/bosTau9/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/rn7/bed/lastzBosTau9.2021-04-28
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium -workhorse=hgwdev \
+           -smallClusterHub=hgwdev -bigClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real    798m53.424s
+
+    cat fb.rn7.chainBosTau9.txt
+    # 1717059254 bases of 2729860805 (62.899%) in intersection
+    cat fb.rn7.chainSynBosTau9.txt
+    # 1453767990 bases of 2729860805 (53.254%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	rn7 bosTau9) > rbest.log 2>&1 &
+    # real    1789m7.359s
+
+    cat fb.rn7.chainRBest.BosTau9.txt
+    # 1436075393 bases of 2729860805 (52.606%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bosTau9/bed/blastz.rn7.swap
+    cd /hive/data/genomes/bosTau9/bed/blastz.rn7.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/rn7/bed/lastzBosTau9.2021-04-28/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    79m18.904s
+
+    cat fb.bosTau9.chainRn7Link.txt
+    # 1694175880 bases of 2266312740 (74.755%) in intersection
+    cat fb.bosTau9.chainSynRn7Link.txt
+    # 1402196536 bases of 2266312740 (61.871%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	bosTau9 rn7) > rbest.log 2>&1 &
+    # real    1687m33.035s
+
+    cat fb.bosTau9.chainRBest.Rn7.txt
+    # 1435220608 bases of 2266312740 (63.328%) in intersection
+
+##############################################################################
