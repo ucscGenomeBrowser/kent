@@ -2602,6 +2602,7 @@ itemRgb on
 skipFields mouseOver
 noScoreFilter on
 mouseOver $name, HI: $quantile
+pennantIcon New red ../goldenPath/newsarch.html#041321 "Released Apr. 13, 2021"
 
 include dbSnpOldHg19.ra beta,public
 include dbSnpArchiveHg19.ra alpha
