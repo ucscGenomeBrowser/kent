@@ -558,8 +558,17 @@ static char *stepLabels[] =
 {
 "Select dataset",
 "Define region of interest",
-"Define data attributes (optional)",
+"Subset, combine, compare with another track (options)",
 "Retrieve and display data"
+};
+
+static char *stepHelp[] = 
+{
+"Specify the genome, track and data table to be used as the data source.",
+"Specify whole genome or restrict to a single or set of genomic regions, "
+        "defined by coordinates or identifiers.",
+"Press 'create' button and select parameters for desired optional operations",
+"Specify output options and press the 'get output' button"
 };
 
 static char *stepHelpLinks[] =
@@ -575,12 +584,24 @@ static void printStep(int num)
 {
 if (num > STEP_MAX)
     errAbort("Internal error: table browser help problem");
-hPrintf("<TR><TD>&nbsp;</TD></TR>");
+hPrintf("<TR height='16px'><TD></TD></TR>");
 hPrintf("<TR><TD>");
-hPrintf("<B>Step %d: %s</B> &nbsp;&nbsp <A HREF='%s'TARGET='_BLANK'>%s</A>\n", 
-                num, stepLabels[num-1], stepHelpLinks[num-1], HELP_LABEL);
+hPrintf(" <div class='tooltip'>");
+hPrintf("<span class='tooltipLabel' style='background: #EFEFEF; padding: 5px;'>"
+                "<b>%s</b></span>"
+                , stepLabels[num-1]);
+hPrintf("<span class='tooltiptext'>%s"
+    " <a target='_blank' href='%s'>%s</a>\n",
+        stepHelp[num-1], stepHelpLinks[num-1], HELP_LABEL);
+hPrintf("</span></div>");
 hPrintf("</TD></TR>");
-hPrintf("<TR><TD>&nbsp;</TD></TR>");
+hPrintf("<TR height='6px'><TD></TD></TR>");
+}
+
+static void printStyle()
+{
+hPrintf("<STYLE>");
+hPrintf("</STYLE>");
 }
 
 void showMainControlTable(struct sqlConnection *conn)
@@ -593,6 +614,7 @@ boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
+printStyle();
 hPrintf("<TABLE BORDER=0>\n");
 
 int stepNumber = 1;
@@ -807,7 +829,6 @@ if (!isWig && getIdField(database, curTrack, curTable, hti) != NULL)
     }
 }
 
-/* microarray options */
 /*   button for option page here (median/log-ratio, etc)  */
 
 printStep(stepNumber++);
@@ -1019,9 +1040,14 @@ void mainPageAfterOpen(struct sqlConnection *conn)
  * will happen in calling routine. */
 {
 hPrintf(
-  "Use this program to retrieve the data associated with a track in text "
+  "Use this program to retrieve data associated with a track in text "
   "format, to calculate intersections between tracks, and to retrieve "
-  "DNA sequence covered by a track. For help in using this application "
+  "DNA sequence covered by a track."
+);
+hPrintf(" <span id='tbHelpMore' class='blueLink'>More...</span>");
+hPrintf(
+  "<span id='tbHelp' style='display:none'>"
+  "For help in using this application "
   "see <A HREF=\"#Help\">Using the Table Browser</A> for a description "
   "of the controls in this form, and the "
   "<A HREF=\"../goldenPath/help/hgTablesHelp.html\">User's Guide</A> for "
@@ -1039,9 +1065,25 @@ hPrintf(
   "contributors and usage restrictions associated with these data. "
   "All tables can be downloaded in their entirety from the "
   "<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html\""
-  ">Sequence and Annotation Downloads</A> page."
+  ">Sequence and Annotation Downloads</A> page.</span>"
    , getGenomeSpaceText()
-   );
+);
+hPrintf(" <span id='tbHelpLess' class='blueLink' style='display:none'>Less...</a></span>");
+
+// Show more or less intro text
+char jsText[1024];
+safef(jsText, sizeof jsText,
+        "$('#tbHelpMore').hide();"
+        "$('#tbHelp').show();"
+        "$('#tbHelpLess').show();"
+        );
+jsOnEventById("click", "tbHelpMore", jsText);
+safef(jsText, sizeof jsText,
+        "$('#tbHelpMore').show();"
+        "$('#tbHelp').hide();"
+        "$('#tbHelpLess').hide();"
+        );
+jsOnEventById("click", "tbHelpLess", jsText);
 
 // When GREAT is selected, disable the other checkboxes and force output to BED
 jsInline(
@@ -1105,7 +1147,10 @@ void doMainPage(struct sqlConnection *conn)
 /* Put up the first page user sees. */
 {
 htmlOpen("Table Browser");
+webIncludeResourceFile("jquery-ui.css");
 mainPageAfterOpen(conn);
 htmlClose();
 }
+
+
 

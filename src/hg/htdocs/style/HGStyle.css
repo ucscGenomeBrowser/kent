@@ -985,3 +985,28 @@ span.gbSessionLabelText {
 span.gbSessionChanged {
     color: darkslategray !important;
 }
+
+.tooltip {
+    display: inline-block;
+}
+
+.tooltiptext {
+    visibility: hidden;
+    font-style: italic;
+    font-size: smaller;
+    z-index: 1;
+    opacity: 0;
+    width: 220px;
+    padding: 5px;
+    left: 105%;
+    transition: opacity .6s;
+    line-height: 1em;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: .9;
+}
+
+
+
