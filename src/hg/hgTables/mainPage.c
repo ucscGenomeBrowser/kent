@@ -649,23 +649,6 @@ printStep(stepNumber++);
     nbSpaces(3);
     curTrack = showTrackField(selGroup, hgtaTrack, "change", onChangeGroupOrTrack(), FALSE);
     nbSpaces(3);
-    boolean hasCustomTracks = FALSE;
-    struct trackDb *t;
-    for (t = fullTrackList;  t != NULL;  t = t->next)
-        {
-        if (isCustomTrack(t->table))
-            {
-            hasCustomTracks = TRUE;
-            break;
-            }
-        }
-    hOnClickButton("showMainCtlTbl_Ct", "document.customTrackForm.submit();return false;",
-                   hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
-
-    hPrintf(" ");
-    if (hubConnectTableExists())
-	hOnClickButton("showMainCtlTbl_Hub", "document.trackHubForm.submit();return false;", "track hubs");
-
     hPrintf("</TD></TR>\n");
     }
 
@@ -1127,16 +1110,6 @@ hPrintf("</FORM>\n");
       hgtaRange, hgtaOutputType, hgtaOutFileName};
     jsCreateHiddenForm(cart, getScriptName(), saveVars, ArraySize(saveVars));
     }
-
-/* Hidden form for jumping to custom tracks CGI. */
-hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
-cartSaveSession(cart);
-hPrintf("</FORM>\n");
-
-/* Hidden form for jumping to track hub manager CGI. */
-hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
-cartSaveSession(cart);
-hPrintf("</FORM>\n");
 
 webNewSection("<A NAME=\"Help\"></A>Using the Table Browser\n");
 printMainHelp();
