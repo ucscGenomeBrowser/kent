@@ -1,6 +1,6 @@
 #!/bin/bash
 
-### XXX set -beEu -o pipefail
+set -beEu -o pipefail
 
 if [ $# != 4 ]; then
   printf "usage: pairLastz.sh <target> <query> <tClade> <qClade>
@@ -308,10 +308,11 @@ printf "#!/bin/bash
 set -beEu -o pipefail
 
 export targetDb=\"${tAsmId}\"
+export queryDb=\"${qAsmId}\"
 export QueryDb=\"${Query}\"
 
 cd ${buildDir}
-time (doBlastzChainNet.pl ${trackHub} -verbose=2 \`pwd\`/DEF -syntenicNet \\
+time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -verbose=2 \`pwd\`/DEF -syntenicNet \\
   -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \\
     -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > do.log 2>&1
 
@@ -320,15 +321,18 @@ grep -w real do.log | sed -e 's/^/    # /;'
 sed -e 's/^/    # /;' fb.\${targetDb}.chain\${QueryDb}Link.txt
 sed -e 's/^/    # /;' fb.\${targetDb}.chainSyn\${QueryDb}Link.txt
 
-time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
+time (~/kent/src/hg/utils/automation/doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
    ${tRbestArgs} \\
-   \${targetDb} \${QueryDb}) > rbest.log 2>&1
+   \${targetDb} \${queryDb}) > rbest.log 2>&1
 
 grep -w real rbest.log | sed -e 's/^/    # /;'
 
 sed -e 's/^/    #/;' fb.\${targetDb}.chainRBest.\${QueryDb}.txt
 " > ${buildDir}/run.sh
 chmod +x ${buildDir}/run.sh
+
+### run the primary alignment
+time (${buildDir}/run.sh) >> ${buildDir}/do.log 2>&1
 
 #### print out the makeDoc.txt to this point into buildDir/makeDoc.txt
 
@@ -340,7 +344,7 @@ printf "########################################################################
     printf '${defString}
 ' > DEF
 
-time (doBlastzChainNet.pl ${trackHub} -verbose=2 \`pwd\`/DEF -syntenicNet \\
+time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -verbose=2 \`pwd\`/DEF -syntenicNet \\
   -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \\
     -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > do.log 2>&1
 grep -w real do.log | sed -e 's/^/    # /;'
@@ -353,9 +357,9 @@ sed -e 's/^/    # /;' $buildDir/fb.${tAsmId}.chain${Query}Link.txt >> ${buildDir
 printf "sed -e 's/^/    # /;' fb.${tAsmId}.chainSyn${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
 sed -e 's/^/    # /;' $buildDir/fb.${tAsmId}.chainSyn${Query}Link.txt >> ${buildDir}/makeDoc.txt
 
-printf "\ntime (doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
+printf "\ntime (~/kent/src/hg/utils/automation/doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
    ${tRbestArgs} \\
-   ${tAsmId} ${Query}) > rbest.log 2>&1
+   ${tAsmId} ${qAsmId}) > rbest.log 2>&1
 
 grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
 grep -w real $buildDir/rbest.log | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
@@ -365,8 +369,6 @@ sed -e 's/^/    #/;' ${buildDir}/fb.${tAsmId}.chainRBest.${Query}.txt >> ${build
 printf "\n### and for the swap\n" >> ${buildDir}/makeDoc.txt
 
 cat ${buildDir}/makeDoc.txt
-
-### XXX time (${buildDir}/run.sh) >> ${buildDir}/do.log 2>&1
 
 printf "# swap into: ${swapDir}\n" 1>&2
 
@@ -381,7 +383,7 @@ export Target=\"${Target}\"
 export queryDb=\"${qAsmId}\"
 
 cd ${swapDir}
-time (doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
+time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
   ${buildDir}/DEF \\
   -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \\
     -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > swap.log 2>&1
@@ -390,7 +392,7 @@ grep -w real do.log | sed -e 's/^/    # /;'
 
 sed -e 's/^/    # /;' fb.\${queryDb}.chain\${Target}Link.txt
 sed -e 's/^/    # /;' fb.\${queryDb}.chainSyn\${Target}Link.txt
-time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
+time (~/kent/src/hg/utils/automation/doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
    ${swapRbestArgs} \\
    \${queryDb} \${targetDb}) > rbest.log 2>&1
 
@@ -401,12 +403,12 @@ sed -e 's/^/    # /;' fb.\${queryDb}.chainRBest.\${Target}.txt
 
 chmod +x  ${swapDir}/runSwap.sh
 
-### XXX time (${swapDir}/runSwap.sh) >> ${swapDir}/swap.log 2>&1
+time (${swapDir}/runSwap.sh) >> ${swapDir}/swap.log 2>&1
 
 ### continue the make doc
 printf "\ncd ${swapDir}\n" >> ${buildDir}/makeDoc.txt
 
-printf "\ntime (doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
+printf "\ntime (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
   ${buildDir}/DEF \\
   -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \\
     -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > swap.log 2>&1
@@ -420,7 +422,7 @@ sed -e 's/^/    # /;' ${swapDir}/fb.${tAsmId}.chain${Target}Link.txt >> ${buildD
 printf "sed -e 's/^/    # /;' fb.${qAsmId}.chainSyn${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
 sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chainSyn${Target}Link.txt >> ${buildDir}/makeDoc.txt
 
-printf "\ntime (doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
+printf "\ntime (~/kent/src/hg/utils/automation/doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
    ${swapRbestArgs} \\
    ${qAsmId} ${tAsmId}) > rbest.log 2>&1
 
@@ -431,4 +433,3 @@ sed -e 's/^/    #/;' ${swapDir}/fb.${qAsmId}.chainRBest.${Target}.txt >> ${build
 
 ### XXX ####
 cat ${buildDir}/makeDoc.txt
-
