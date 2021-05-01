@@ -22,7 +22,7 @@ Will set up a DEF file there, and a run.sh script to run all steps
 AND MORE, it will run the swap operation into the corresponding
   blastz.target.swap directory in the query genome work space.
 
-e.g.: pairLastz.sh rn7 papAnu4 -qClade=mammal -tClade=primate\n" 1>&2
+e.g.: pairLastz.sh rn7 papAnu4 mammal primate\n" 1>&2
   exit 255
 fi
 
