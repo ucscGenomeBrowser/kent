@@ -882,7 +882,7 @@ if (genome == NULL)
 
 struct trackHub *trackHub = genome->trackHub;
 
-if (trackHub != NULL)
+if ((trackHub != NULL) && (trackHub->hubStatus != NULL))
     return trackHub->hubStatus->id;
 return 0;
 }

@@ -4529,6 +4529,7 @@ var mouseOver = {
     visible: false,     // keeping track of popUp window visibility
     tracks: {}, // tracks[trackName] - number of data items for this track
     trackType: {},	// key is track name, value is track type from hgTracks
+    mouseOverFunction: {}, // key is track name, value mouseOverFunction string
     jsonUrl: {},       // list of json files from hidden DIV elements
     maximumWidth: {},   // maximumWidth[trackName] - largest string to display
     popUpDelay: 200,   // 0.2 second delay before popUp appears
@@ -4540,6 +4541,7 @@ var mouseOver = {
     measureTextBox: null,
     noDataString: "no&nbsp;data",	// message for no data at this position
     noDataSize: 0,	// will be set to size of text 'no data'
+    noAverageString: "&nbsp;zoom&nbsp;in&nbsp;to&nbsp;see&nbsp;values&nbsp;",	// "noAverage" function
 
     // items{} - key name is track name, value is an array of data items
     //           where the format of each item can be different for different
@@ -4706,6 +4708,9 @@ var mouseOver = {
     }
     // can show 'no data' when not found
     var mouseOverValue = mouseOver.noDataString;
+    if (mouseOver.mouseOverFunction[trackName] === "noAverage") {
+       mouseOverValue = mouseOver.noAverageString;
+    }
     if (foundIdx > -1) { // value to display
       if (mouseOver.items[trackName][foundIdx].c > 1) {
         mouseOverValue = "&nbsp;~&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
@@ -4830,6 +4835,11 @@ var mouseOver = {
       if (mouseOver.tracks[trackName]) {mouseOver.tracks[trackName] = 0;}
       mouseOver.items[trackName] = [];      // start array
       mouseOver.trackType[trackName] = arr[trackName].t;
+      if (arr[trackName].hasOwnProperty('mo')) {
+         mouseOver.mouseOverFunction[trackName] = arr[trackName].mo;
+      } else {
+         delete mouseOver.mouseOverFunction[trackName];
+      }
       // add a 'mousemove' and 'mouseout' event listener to each track
       //     display object
       var tdData = "td_data_" + trackName;
@@ -4861,6 +4871,9 @@ var mouseOver = {
          mouseOverValue = "&nbsp;~&nbsp;" + longestNumber + "&nbsp;";
       } else {
          mouseOverValue = "&nbsp;" + longestNumber + "&nbsp;";
+      }
+      if (mouseOver.mouseOverFunction[trackName] === "noAverage") {
+         mouseOverValue = mouseOver.noAverageString;
       }
       $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
       var maximumWidth = mouseOver.getWidthOfText(mouseOverValue);

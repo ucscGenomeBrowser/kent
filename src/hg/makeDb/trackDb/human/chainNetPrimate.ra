@@ -539,7 +539,7 @@ priority 7
 
         track netPanPan3
         subTrack primateChainNetViewnet off
-        subGroups view=net species=s007a clade=c00
+        subGroups view=net species=s007b clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign panPan3 chainPanPan3
