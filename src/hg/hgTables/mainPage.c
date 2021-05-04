@@ -1031,7 +1031,7 @@ hPrintf(" <span id='tbHelpMore' class='blueLink'>More...</span>");
 hPrintf(
   "<span id='tbHelp' style='display:none'>"
   "For a description of the controls below, "
-  "see <A HREF=\"#Help\">Using the Table Browser</A>. "
+  "see <A HREF=\"#Help\">Using the Table Browser</A> (below). "
   "General information and sample queries are available from the "
   "<A HREF=\"../goldenPath/help/hgTablesHelp.html\">Table Browser User's Guide</A>. "
   "For more complex queries, we recommend "
