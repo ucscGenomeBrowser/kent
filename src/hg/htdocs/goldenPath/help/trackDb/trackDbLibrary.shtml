@@ -2584,6 +2584,17 @@ There are no extra options that can appear on the type hic line.
     <pre>   transformFunc LOG</pre>
 </DIV>
 
+<DIV class="mouseOverFunction"><span class="types wig bigWig bedGraph"></span>
+<div class="format"><code>mouseOverFunction &lt;noAverage&gt;</code></div>
+    <P>Limit mouse over value display to only display the fundamental values
+    without any averaging of multiple data points.  Display will show
+    "zoom in to see values" when fundamental individual values can not
+    be shown.  Useful for tracks where averaging values together is not a
+    valid operation.</P>
+    <P><B>Example:</B></P>
+    <pre>   mouseOverFunction noAverage</pre>
+</DIV>
+
 <DIV class="viewLimits"><span class="types wig bigWig bedGraph"></span>
 <div class="format">
     <code>viewLimits &lt;lower:upper&gt;</code><BR>
