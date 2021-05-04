@@ -1023,19 +1023,18 @@ void mainPageAfterOpen(struct sqlConnection *conn)
  * will happen in calling routine. */
 {
 hPrintf(
-  "Use this program to retrieve data associated with a track in text "
-  "format, to calculate intersections between tracks, and to retrieve "
-  "DNA sequence covered by a track."
+  "Use this tool to retrieve and export data from the Genome Browser annotation track database. "
+  "You can limit retrieval based on data attributes and intersect or merge with data from "
+  "another track, or retrieve DNA sequence covered by a track."
 );
 hPrintf(" <span id='tbHelpMore' class='blueLink'>More...</span>");
 hPrintf(
   "<span id='tbHelp' style='display:none'>"
-  "For help in using this application "
-  "see <A HREF=\"#Help\">Using the Table Browser</A> for a description "
-  "of the controls in this form, and the "
-  "<A HREF=\"../goldenPath/help/hgTablesHelp.html\">User's Guide</A> for "
-  "general information and sample queries. "
-  "For more complex queries, you may want to use "
+  "For a description of the controls below, "
+  "see <A HREF=\"#Help\">Using the Table Browser</A>. "
+  "General information and sample queries are available from the "
+  "<A HREF=\"../goldenPath/help/hgTablesHelp.html\">Table Browser User's Guide</A>. "
+  "For more complex queries, we recommend "
   "<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A> or "
   "our <A HREF=\"../goldenPath/help/mysql.html\">public "
   "MySQL server</A>. "
@@ -1046,7 +1045,7 @@ hPrintf(
   "Refer to the "
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data. "
-  "All tables can be downloaded in their entirety from the "
+  "Bulk download of track data is available from the "
   "<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html\""
   ">Sequence and Annotation Downloads</A> page.</span>"
    , getGenomeSpaceText()
