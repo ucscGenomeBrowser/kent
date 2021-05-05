@@ -123,13 +123,15 @@ export querySizes="/hive/data/genomes/${query}/chrom.sizes"
 export target2bit="/hive/data/genomes/${target}/${target}.2bit"
 export query2bit="/hive/data/genomes/${query}/${query}.2bit"
 export trackHub=""
+export rBestTrackHub=""
 export tRbestArgs=""
 export qRbestArgs=""
-
+export swapRbestArgs=""
 
 #  override those specifications if assembly hub
 case $target in
      GC[AF]_*) trackHub="-trackHub -noDbNameCheck"
+       rBestTrackHub="-trackHub"
        buildDir="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData/lastz${Query}.${DS}"
        symLink="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData/lastz${qAsmId}.${DS}"
        targetExists="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData"
@@ -144,6 +146,7 @@ esac
 
 case $query in
      GC[AF]_*) trackHub="-trackHub -noDbNameCheck"
+       rBestTrackHub="-trackHub"
        swapDir="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData/blastz.${tAsmId}.swap"
        swapLink="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData/lastz.${tAsmId}"
        queryExists="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData"
@@ -321,7 +324,7 @@ grep -w real do.log | sed -e 's/^/    # /;'
 sed -e 's/^/    # /;' fb.\${targetDb}.chain\${QueryDb}Link.txt
 sed -e 's/^/    # /;' fb.\${targetDb}.chainSyn\${QueryDb}Link.txt
 
-time (~/kent/src/hg/utils/automation/doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
+time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=hgwdev -buildDir=\`pwd\` \\
    ${tRbestArgs} \\
    \${targetDb} \${queryDb}) > rbest.log 2>&1
 
@@ -357,7 +360,7 @@ sed -e 's/^/    # /;' $buildDir/fb.${tAsmId}.chain${Query}Link.txt >> ${buildDir
 printf "sed -e 's/^/    # /;' fb.${tAsmId}.chainSyn${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
 sed -e 's/^/    # /;' $buildDir/fb.${tAsmId}.chainSyn${Query}Link.txt >> ${buildDir}/makeDoc.txt
 
-printf "\ntime (~/kent/src/hg/utils/automation/doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
+printf "\ntime (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=hgwdev -buildDir=\`pwd\` \\
    ${tRbestArgs} \\
    ${tAsmId} ${qAsmId}) > rbest.log 2>&1
 
@@ -384,15 +387,15 @@ export queryDb=\"${qAsmId}\"
 
 cd ${swapDir}
 time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
-  ${buildDir}/DEF \\
+  ${buildDir}/DEF -swapDir=\`pwd\` \\
   -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \\
     -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > swap.log 2>&1
 
-grep -w real do.log | sed -e 's/^/    # /;'
+grep -w real swap.log | sed -e 's/^/    # /;'
 
 sed -e 's/^/    # /;' fb.\${queryDb}.chain\${Target}Link.txt
 sed -e 's/^/    # /;' fb.\${queryDb}.chainSyn\${Target}Link.txt
-time (~/kent/src/hg/utils/automation/doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
+time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=hgwdev -buildDir=\`pwd\` \\
    ${swapRbestArgs} \\
    \${queryDb} \${targetDb}) > rbest.log 2>&1
 
@@ -409,7 +412,7 @@ time (${swapDir}/runSwap.sh) >> ${swapDir}/swap.log 2>&1
 printf "\ncd ${swapDir}\n" >> ${buildDir}/makeDoc.txt
 
 printf "\ntime (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
-  ${buildDir}/DEF \\
+  ${buildDir}/DEF -swapDir=\`pwd\` \\
   -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \\
     -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > swap.log 2>&1
 grep -w real swap.log | sed -e 's/^/    # /;'
@@ -422,7 +425,7 @@ sed -e 's/^/    # /;' ${swapDir}/fb.${tAsmId}.chain${Target}Link.txt >> ${buildD
 printf "sed -e 's/^/    # /;' fb.${qAsmId}.chainSyn${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
 sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chainSyn${Target}Link.txt >> ${buildDir}/makeDoc.txt
 
-printf "\ntime (~/kent/src/hg/utils/automation/doRecipBest.pl -load -workhorse=hgwdev -buildDir=\`pwd\` \\
+printf "\ntime (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=hgwdev -buildDir=\`pwd\` \\
    ${swapRbestArgs} \\
    ${qAsmId} ${tAsmId}) > rbest.log 2>&1
 
@@ -430,6 +433,8 @@ grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
 grep -w real ${swapDir}/rbest.log | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
 printf "\nsed -e 's/^/    #/;' fb.${qAsmId}.chainRBest.${Target}.txt\n" >> ${buildDir}/makeDoc.txt
 sed -e 's/^/    #/;' ${swapDir}/fb.${qAsmId}.chainRBest.${Target}.txt >> ${buildDir}/makeDoc.txt
+
+printf "\n##############################################################################\n" >> ${buildDir}/makeDoc.txt
 
 ### XXX ####
 cat ${buildDir}/makeDoc.txt
