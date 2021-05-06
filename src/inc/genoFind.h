@@ -33,6 +33,16 @@
 #include "axt.h"
 #endif
 
+/* for use in deciding what type of error message to output, typical
+ *  network connection timeout is 120 seconds, if elapsed time to this
+ *  error exit is > NET_TIMEOUT_MS, something is taking too long.
+ *  On the other hand, if the QUICKEXIT time of < 500 ms is noted, then
+ *  something else is wrong about the connection.
+ *  (these are used in gfClient and hgBlat for dynamic blat server messages)
+ */
+#define NET_TIMEOUT_MS	110000
+#define NET_QUICKEXIT_MS	500
+
 struct gfConnection
 /* connection to a gfServer.  This supports reuse of the connection for dynamic 
  * servers and reopening a connection for static server. */

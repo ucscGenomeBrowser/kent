@@ -28,7 +28,7 @@ pennantIcon New red ../goldenPath/newsarch.html#033021 "Released Mar. 30, 2021"
     spectrum on
 
         track chainRn7
-        subTrack mm39ChainNetViewchain off
+        subTrack mm39ChainNetViewchain on
         subGroups view=chain species=s000a clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -36,7 +36,7 @@ pennantIcon New red ../goldenPath/newsarch.html#033021 "Released Mar. 30, 2021"
         otherDb rn7
 
         track chainRn6
-        subTrack mm39ChainNetViewchain on
+        subTrack mm39ChainNetViewchain off
         subGroups view=chain species=s000b clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -350,7 +350,7 @@ pennantIcon New red ../goldenPath/newsarch.html#033021 "Released Mar. 30, 2021"
     subTrack mm39ChainNet
 
         track netRn7
-        subTrack mm39ChainNetViewnet off
+        subTrack mm39ChainNetViewnet on
         subGroups view=net species=s000a clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -358,7 +358,7 @@ pennantIcon New red ../goldenPath/newsarch.html#033021 "Released Mar. 30, 2021"
         otherDb rn7
 
         track netRn6
-        subTrack mm39ChainNetViewnet on
+        subTrack mm39ChainNetViewnet off
         subGroups view=net species=s000b clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net

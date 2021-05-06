@@ -32671,6 +32671,12 @@ EOF
 	> do.log 2>&1
     # real    5896m44.643s
 
+    # hive cleaning 2021-04-26
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+     -continue=cleanup -buildDir=`pwd` -smallClusterHub=hgwdev hg19 \
+          -fileServer=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku
+            -workhorse=hgwdev) > cleanup.log 2>&1 &
+
 ##############################################################################
 # LASTZ human/hg19 vs. chimp/panTro6 - (DONE - 2018-12-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPanTro6.2018-12-14
@@ -34507,4 +34513,18 @@ miRNA
     # rename wgRnaNew table:
     hgsqlSwapTables -dropTable3 hg19 wgRnaNew wgRna wgRnaOld
 
+##############################################################################
+# Add Revel track, Max, Thu Apr 15 03:33:49 PDT 2021
+cd /hive/data/genomes/hg19/bed/revel
+aria2c https://rothsj06.u.hpc.mssm.edu/revel_grch38_all_chromosomes.csv.zip
+unzip revel_grch38_all_chromosomes.csv.zip
+# make sure that no weird chroms and no weird multi-nucleotide changes
+cat revel_grch38_all_chromosomes.csv  | tr ',' '\t' | cut -f5 | grep -v alt | awk '{print length($1)}' | uniq > lens.tmp &
+cut -d, revel_grch38_all_chromosomes.csv -f1 | uniq | sort | uniq -c > chroms.tmp &
+pigz revel_grch38_all_chromosomes.csv
+time python revelToWig.py revel_grch38_all_chromosomes.csv.gz hg19
+wigToBigWig t.wig ../../chrom.sizes t.bw &
+wigToBigWig c.wig ../../chrom.sizes c.bw  &
+wigToBigWig a.wig ../../chrom.sizes a.bw &
+wigToBigWig g.wig ../../chrom.sizes g.bw &
 ##############################################################################

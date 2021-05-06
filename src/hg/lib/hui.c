@@ -9880,7 +9880,7 @@ if (!sqlTableExists(conn, relatedTrackTable))
 
 char query[256];
 sqlSafef(query, sizeof(query),
-    "select track1, track2, why from %s where track1='%s' or track2='%s'", relatedTrackTable, tdb->track, tdb->track);
+    "select track2, why from %s where track1='%s'", relatedTrackTable, tdb->track);
 
 char **row;
 struct sqlResult *sr;
@@ -9891,17 +9891,11 @@ if (row != NULL)
     puts("<b>Related tracks</b>\n");
     puts("<ul>\n");
     struct hash *otherTracksAndDesc = hashNew(0);
-    char *track1, *track2, *why, *otherTrack;
+    char *why, *otherTrack;
     for (; row != NULL; row = sqlNextRow(sr))
         {
-        track1 = row[0];
-        track2 = row[1];
-        why    = row[2];
-
-        if (sameWord(track1, tdb->track))
-            otherTrack = track2;
-        else
-            otherTrack = track1;
+        otherTrack = row[0];
+        why = row[1];
         // hopefully relatedTracks.ra doesn't have dupes but hash them just in case
         hashReplace(otherTracksAndDesc, cloneString(otherTrack), cloneString(why));
         }

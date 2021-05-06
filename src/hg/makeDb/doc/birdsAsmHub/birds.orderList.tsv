@@ -4,8 +4,9 @@ GCF_000691975.1_ASM69197v1	American crow
 GCF_003957555.1_bCalAnn1_v1.p	Anna's hummingbird
 GCF_000737465.1_Haliaeetus_leucocephalus-4.0	bald eagle
 GCF_000703405.1_ASM70340v1	bar-tailed trogon
-GCF_000687205.1_ASM68720v1	barn owl BGI_N341
-GCF_902150015.1_genome_assembly_l500	barn owl
+GCF_000687205.1_ASM68720v1	barn owl BGI_N341 (2014)
+GCF_902150015.1_genome_assembly_l500	barn owl (2020)
+GCF_015227805.1_bHirRus1.pri.v2	barn swallow
 GCF_005870125.1_lonStrDom2	Bengalese finch
 GCF_013377495.1_Cygnus_atratus_primary_v1.0	black swan
 GCF_002901205.1_cyaCae2	blue tit
@@ -31,12 +32,13 @@ GCF_000699005.1_ASM69900v1	downy woodpecker
 GCF_000709895.1_ASM70989v1	East African grey crowned-crane
 GCF_000699145.1_ASM69914v1	emperor penguin
 GCF_003342905.1_droNov1	emu
+GCF_014805655.1_ASM1480565v1	Eurasian tree sparrow
 GCF_001715985.3_ASM171598v3	golden-collared manakin
 GCF_000708925.1_ASM70892v1	great cormorant
 GCF_001522545.3_Parus_major1.1	Great Tit
 GCF_002078875.1_NumMel1.0	helmeted guineafowl
 GCF_000692075.1_ASM69207v1	hoatzin
-GCF_000738735.2_ASM73873v2	hooded crow
+GCF_000738735.5_ASM73873v5	hooded crow (2021)
 GCF_001577835.2_Coturnix_japonica_2.1	Japanese quail
 GCF_004027225.1_bStrHab1_v1.p	kakapo
 GCF_000696875.1_ASM69687v1	kea
@@ -73,6 +75,6 @@ GCF_000687285.1_ASM68728v1	white-tailed tropicbird
 GCF_000385455.1_Zonotrichia_albicollis-1.0.1	white-throated sparrow
 GCF_000705375.1_ASM70537v2	white-throated tinamou
 GCF_003031625.1_ASM303162v1	willow flycatcher
-GCF_003945595.1_ASM394559v1	wire-tailed manakin
+GCF_003945595.2_ASM394559v2	wire-tailed manakin (2020)
 GCF_000699245.1_ASM69924v1	yellow-throated sandgrouse
 GCF_003957565.1_bTaeGut1_v1.p	zebra finch

@@ -31,6 +31,7 @@ multiRegionsBedUrl *
 barChartFacets barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 barChartStatsUrl barChart bigBarChart
+barChartStretchToItem barChart bigBarChart
 # below for backwards compatibility during QA. 
 barChartDataUrl barChart bigBarChart
 barChartLimit barChart bigBarChart
@@ -289,8 +290,6 @@ maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepr
 maxWindowCoverage *
 maxWindowToQuery bigWig bed bedlogR
 metadata *
-mouseOverField big*
-mouseOver bigLolly bigBed bigPsl
 mergeSpannedItems bigBed
 mgiUrl bed
 mgiUrlLabel bed
@@ -305,6 +304,9 @@ motifPwmTable factorSource bed6FloatScore
 motifMapTable factorSource
 motifMaxWindow factorSource
 motifDrawDefault factorSource
+mouseOverField big*
+mouseOver bigLolly bigBed bigPsl
+mouseOverFunction bigWig
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
 negateValues wigMaf bigWig bedGraph wig

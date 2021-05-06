@@ -1215,10 +1215,10 @@ function mysqlDbSetup ()
     #  Full access to all databases for the user 'browser'
     #       This would be for browser developers that need read/write access
     #       to all database tables.  
-    $MYSQL -e "DROP USER IF EXISTS browser@localhost"
-    $MYSQL -e "CREATE USER browser@localhost IDENTIFIED BY 'genome';"
+    #$MYSQL -e "DROP USER IF EXISTS browser@localhost"
+    #$MYSQL -e "CREATE USER browser@localhost "
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, DELETE, FILE, "\
-"CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on *.* TO browser@localhost; "
+"CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on *.* TO browser@localhost IDENTIFIED BY 'genome';"
     
     # FILE permission for this user to all databases to allow DB table loading with
     #       statements such as: "LOAD DATA INFILE file.tab"
@@ -1228,18 +1228,18 @@ function mysqlDbSetup ()
     $MYSQL -e "GRANT FILE on *.* TO browser@localhost;" 
     
     #   Read only access to genome databases for the browser CGI binaries
-    $MYSQL -e "DROP USER IF EXISTS readonly@localhost"
-    $MYSQL -e "CREATE USER readonly@localhost IDENTIFIED BY 'access';"
+    #$MYSQL -e "DROP USER IF EXISTS readonly@localhost"
+    #$MYSQL -e "CREATE USER readonly@localhost IDENTIFIED BY 'access';"
     $MYSQL -e "GRANT SELECT, CREATE TEMPORARY TABLES on "\
-"*.* TO readonly@localhost;"
+"*.* TO readonly@localhost IDENTIFIED BY 'access';"
     $MYSQL -e "GRANT SELECT, INSERT, CREATE TEMPORARY TABLES on hgTemp.* TO "\
 "readonly@localhost;"
     
     # Readwrite access to hgcentral for browser CGI binaries to keep session state
-    $MYSQL -e "DROP USER IF EXISTS readwrite@localhost"
-    $MYSQL -e "CREATE USER readwrite@localhost IDENTIFIED BY 'update';"
+    #$MYSQL -e "DROP USER IF EXISTS readwrite@localhost"
+    #$MYSQL -e "CREATE USER readwrite@localhost IDENTIFIED BY 'update';"
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, "\
-"DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost; "
+"DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost IDENTIFIED BY 'update'; "
     
     # create /gbdb and let the apache user write to it
     # hgConvert will download missing liftOver files on the fly and needs write
@@ -1248,10 +1248,10 @@ function mysqlDbSetup ()
     chown $APACHEUSER:$APACHEUSER $GBDBDIR
     
     # the custom track database needs it own user and permissions
-    $MYSQL -e "DROP USER IF EXISTS ctdbuser@localhost"
-    $MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
+    #$MYSQL -e "DROP USER IF EXISTS ctdbuser@localhost"
+    #$MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
     $MYSQL -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX "\
-"on customTrash.* TO ctdbuser@localhost;"
+"on customTrash.* TO ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
     
     # removed these now for the new hgGateway page, Apr 2016
     # by default hgGateway needs an empty hg19 database, will crash otherwise
@@ -1425,7 +1425,7 @@ function installBrowser ()
     echo2
     echo2 To finish the installation, you need to download genome data to the local
     echo2 disk. To download a genome assembly and all its files now, call this script again with
-    echo2 the parameters 'download "<assemblyName1> <assemblyName2> ..."', e.g. '"'bash $0 download mm10 hg19'"'
+    echo2 the parameters 'download "<assemblyName1> <assemblyName2> ..."', e.g. '"'bash $0 mirror mm10 hg19'"'
     echo2 
     showMyAddress
 }

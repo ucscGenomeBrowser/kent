@@ -60,6 +60,7 @@ use vars qw/
     $opt_noLoadChainSplit
     $opt_loadChainSplit
     $opt_swapDir
+    $opt_asmId
     $opt_skipDownload
     $opt_trackHub
     /;
@@ -129,6 +130,8 @@ print STDERR <<_EOF_
     -loadChainSplit       load split chain tables, default is not split tables
     -swapDir path         directory to work in for swap, default:
                           /hive/data/genomes/qDb/bed/blastz.tDb.swap/
+    -asmId assemblyHubId  full name for assembly hub,
+                          e.g.: GCF_007474595.1_mLynCan4_v1.p
     -skipDownload         do not construct the downloads directory
     -trackHub             construct big* files for track hub
 _EOF_
@@ -268,7 +271,7 @@ BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
 # Globals:
 my %defVars = ();
 my ($DEF, $tDb, $qDb, $QDb, $isSelf, $selfSplit, $buildDir, $fileServer);
-my ($swapDir, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists, $qDbExists);
+my ($swapDir, $asmId, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists, $qDbExists);
 
 sub isInDirList {
   # Return TRUE if $dir is under (begins with) something in dirList.
@@ -315,6 +318,7 @@ sub checkOptions {
                       "noLoadChainSplit",
                       "loadChainSplit",
                       "swapDir=s",
+                      "asmId=s",
                       "skipDownload",
                       "trackHub"
 		     );
@@ -1136,7 +1140,7 @@ bedToBigBed -type=bed4+1 -as=bigLink.as -tab chain${QDb}Link.tab $defVars{SEQ1_L
 set totalBases = `ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
 set basesCovered = `bedSingleCover.pl chain${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
 set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chain.${QDb}Link.txt
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chain${QDb}Link.txt
 rm -f link.tab
 rm -f chain.tab
 _EOF_
@@ -1218,6 +1222,9 @@ over.chain file in the liftOver dir.";
   my $over = $tDb . "To$QDb.over.chain.gz";
   my $altOver = "$tDb.$qDb.over.chain.gz";
   my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
+  if ($tDb =~ m/^GC/) {
+     $liftOverDir = &HgAutomate::asmHubBuildDir($asmId) . "/liftOver";
+  }
   $bossScript->add(<<_EOF_
 mkdir -p $liftOverDir
 md5sum $tDb.$qDb.all.chain.gz $net > md5sum.txt
@@ -1236,7 +1243,7 @@ _EOF_
     );
   }
   $bossScript->execute();
-}
+}	#	sub makeDownloads
 
 sub getBlastzParams {
   my %vars;
@@ -1350,7 +1357,14 @@ sub dumpDownloadReadme {
   # Write a file (README.txt) describing the download files.
   my ($file) = @_;
   my $fh = &HgAutomate::mustOpen(">$file");
-  my ($tGenome, $tDate, $tSource) = &HgAutomate::getAssemblyInfo($dbHost, $tDb);
+  my ($tGenome, $tDate, $tSource, $tAsmName);
+  if ($tDb =~ m/^GC/) {
+    ($tGenome, $tDate, $tSource) = &HgAutomate::getAssemblyInfo($dbHost, $asmId);
+    $tAsmName = $asmId;
+  } else {
+    ($tGenome, $tDate, $tSource) = &HgAutomate::getAssemblyInfo($dbHost, $tDb);
+    $tAsmName = $tDb;
+  }
   my ($qGenome, $qDate, $qSource) = &HgAutomate::getAssemblyInfo($dbHost, $qDb);
   my $dir = $splitRef ? 'axtNet/*.' : '';
   my $synNet = $splitRef ?
@@ -1392,7 +1406,7 @@ Penn State.";
 "This directory contains alignments of the following assemblies:
 
   - target/reference: $tGenome
-    ($tDb, $tDate,
+    ($tAsmName, $tDate,
     $tSource)
 
   - query: $qGenome
@@ -1438,8 +1452,8 @@ information about the $qDb-referenced lastz and chaining process.
 ";
   } else {
     print $fh ($isSelf ?
-"The $tDb assembly was aligned to itself" :
-"The $tDb and $qDb assemblies were aligned");
+"The $tAsmName assembly was aligned to itself" :
+"The $tAsmName and $qDb assemblies were aligned");
   my $chainMinScore = $opt_chainMinScore ? "$opt_chainMinScore" :
 	$defaultChainMinScore;
   my $chainLinearGap = $opt_chainLinearGap ? "$opt_chainLinearGap" :
@@ -1541,10 +1555,14 @@ sub installDownloads {
     die "installDownloads: looks like previous stage was not successful " .
       "(can't find $successFile).\n";
   }
+  my $goldenPath = $HgAutomate::goldenPath;
+  if ($tDb =~ m/^GC/) {
+     $goldenPath = &HgAutomate::asmHubDownloadDir($tDb);
+  }
   &dumpDownloadReadme("$runDir/README.txt");
   my $over = $tDb . "To$QDb.over.chain.gz";
   my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
-  my $gpLiftOverDir = "$HgAutomate::goldenPath/$tDb/liftOver";
+  my $gpLiftOverDir = "$goldenPath/$tDb/liftOver";
   my $gbdbLiftOverDir = "$HgAutomate::gbdb/$tDb/liftOver";
   my $andNets = $isSelf ? "." :
     ", nets and axtNet,\n" .
@@ -1553,10 +1571,10 @@ sub installDownloads {
   my $bossScript = new HgRemoteScript("$runDir/installDownloads.csh", $dbHost,
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
-mkdir -p $HgAutomate::goldenPath/$tDb
-rm -rf $HgAutomate::goldenPath/$tDb/vs$QDb
-mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb
-cd $HgAutomate::goldenPath/$tDb/vs$QDb
+mkdir -p $goldenPath/$tDb
+rm -rf $goldenPath/$tDb/vs$QDb
+mkdir -p $goldenPath/$tDb/vs$QDb
+cd $goldenPath/$tDb/vs$QDb
 ln -s $runDir/$tDb.$qDb.all.chain.gz .
 ln -s $runDir/README.txt .
 ln -s $runDir/md5sum.txt .
@@ -1580,12 +1598,20 @@ $axt
 mkdir -p $gpLiftOverDir
 rm -f $gpLiftOverDir/$over
 ln -s $liftOverDir/$over $gpLiftOverDir/$over
+_EOF_
+      );
+    if ($tDb !~ m/^GC/) {
+      $bossScript->add(<<_EOF_
 mkdir -p $gbdbLiftOverDir
 rm -f $gbdbLiftOverDir/$over
 ln -s $liftOverDir/$over $gbdbLiftOverDir/$over
 hgAddLiftOverChain -minMatch=0.1 -multiple -path=$gbdbLiftOverDir/$over \\
   $tDb $qDb
+_EOF_
+      );
+    }
 
+    $bossScript->add(<<_EOF_
 # Update (or create) liftOver/md5sum.txt with the new .over.chain.gz.
 if (-e $gpLiftOverDir/md5sum.txt) then
   set tmpFile = `mktemp -t tmpMd5.XXXXXX`
@@ -1761,7 +1787,7 @@ if (\$lineCount > 0) then
   set totalBases = `ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
   set basesCovered = `bedSingleCover.pl chainSyn${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
   set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-  printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainSyn.${QDb}Link.txt
+  printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainSyn${QDb}Link.txt
 netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
   | hgLoadNet -test -noBin -warn -verbose=0 $tDb netSyn$QDb stdin
 mv align.tab netSyn$QDb.tab
@@ -1865,6 +1891,9 @@ my $seq1IsSplit = (`wc -l < $defVars{SEQ1_LEN}` <=
 		   $HgAutomate::splitThreshold);
 my $seq2IsSplit = (`wc -l < $defVars{SEQ2_LEN}` <=
 		   $HgAutomate::splitThreshold);
+
+# might be an assembly hub build
+$asmId = $opt_asmId ? $opt_asmId : "";
 
 # Undocumented option for quickly generating a README from DEF:
 if ($opt_readmeOnly) {

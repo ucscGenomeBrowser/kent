@@ -1163,8 +1163,8 @@ if (x < xEnd)
             {
 	    // NOTE: chopped out winStart/winEnd
 	    // NOTE: Galt added winStart/winEnd back in for multi-region
-            safef(link,sizeof(link),"%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s",
-                hgcNameAndSettings(), chromName, winStart, winEnd, start, end, encodedTrack, encodedItem);
+            safef(link,sizeof(link),"%s&db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s",
+                hgcNameAndSettings(), database, chromName, winStart, winEnd, start, end, encodedTrack, encodedItem);
             }
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
@@ -1190,8 +1190,8 @@ if (x < xEnd)
             }
         else
             {
-            hPrintf("HREF=\"%s&c=%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
-                hgcNameAndSettings(), chromName, start, end, encodedTrack, encodedItem,
+            hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
+                hgcNameAndSettings(), start, end, encodedTrack, encodedItem,
                     chromName, winStart, winEnd,
                     database, tl.picWidth);
             }

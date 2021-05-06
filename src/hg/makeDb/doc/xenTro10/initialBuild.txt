@@ -1329,6 +1329,12 @@ Checking keys on database xenTro10
 # maxDepth: 32.000000
 # std of depth: 2.066347
 
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup xenTro10 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    100m50.151s
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2021-03-31 - Hiram)
      # had incorrect orderKey specified in beginning rn6.config.ra

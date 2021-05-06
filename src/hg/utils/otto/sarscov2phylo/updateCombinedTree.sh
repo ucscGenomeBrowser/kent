@@ -33,7 +33,7 @@ cd $ottoDir/$today
 
 prevProtobufMasked=$ottoDir/$prevDate/gisaidAndPublic.$prevDate.masked.pb
 
-usherDir=~angie/github/yatish_usher
+usherDir=~angie/github/usher
 usher=$usherDir/build/usher
 matUtils=$usherDir/build/matUtils
 
@@ -211,6 +211,8 @@ time $matUtils annotate -T 50 \
     -l \
     -i gisaidAndPublic.$today.masked.pb \
     -c cladeToName \
+    -m mutations.nextclade \
+    -D details.nextclade \
     -o gisaidAndPublic.$today.masked.nextclade.pb \
     >& annotate.nextclade.out
 
@@ -233,11 +235,11 @@ linFile=lineageToName
 # Until pangoLEARN training is done, use pango-designation file for now.
 #linFile=/hive/users/angie/matLineages/linToPublicPlusGisaidName.2021-03-16
 
-#***
-##***time $matUtils annotate -T 50 \
-time ~angie/github/usher/build/matUtils annotate -T 50 \
+time $matUtils annotate -T 50 \
     -i gisaidAndPublic.$today.masked.nextclade.pb \
     -c $linFile \
+    -m mutations.pangolin \
+    -D details.pangolin \
     -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb \
     >& annotate.pangolin.out
 

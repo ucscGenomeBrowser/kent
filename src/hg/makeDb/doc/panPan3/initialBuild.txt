@@ -986,6 +986,13 @@ panPan3.genbank.est.native.load = no
 # Longest finished job:             157s       2.62m     0.04h    0.00d
 # Submission to last job:          5940s      99.00m     1.65h    0.07d
 
+    # cleaning 2021-04-24 - Hiram
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup panPan3 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    473m37.404s
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2020-06-15 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema

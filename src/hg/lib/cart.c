@@ -2307,6 +2307,8 @@ cartWriteCookie(cart, cookieName);
 if (doContentType && !cartDidContentType)
     {
     puts("Content-Type:text/html");
+    // disable web browsers from caching CGI responses:
+    puts("Cache-Control: no-store");
     puts("\n");
     cartDidContentType = TRUE;
     }

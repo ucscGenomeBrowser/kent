@@ -430,9 +430,9 @@ char *encodedMapName = cgiEncode(mapName);
 char buf[2048];
 char *hgTrackUi = hTrackUiForTrack(mapName);
 if(chromName == NULL)
-    safef(buf, sizeof(buf), "%s?%s=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&db=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), database, encodedMapName);
 else
-    safef(buf, sizeof(buf), "%s?%s=%s&c=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&db=%s&c=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), database, chromName, encodedMapName);
 freeMem(encodedMapName);
 return(cloneString(buf));
 }
@@ -10891,7 +10891,7 @@ if (cartOptionalString(cart, "udcTimeout"))
     {
     warn("The Genome Browser cart currently includes the \"udcTimeout\" string. "
 	"While this is useful for debugging hubs, it may negatively impact "
-	"performance.   To clear this variable, click "
+	"performance.   To turn this off, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
     }
 }

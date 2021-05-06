@@ -1569,10 +1569,12 @@ if (botDelay > 0)
 
 setGlobalCgiVars();
 
+#ifdef NOTUSED // the argument processing doesn't allow udcTimeout
 int timeout = cgiOptionalInt("udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
-knetUdcInstall();
+#endif
+setUdcCacheDir();
 
 initSupportedTypes();
 

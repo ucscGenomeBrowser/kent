@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -beEux -o pipefail
+set -beEu -o pipefail
 
 if [ $# -ne 2 ]; then
   printf "usage: trackDb.sh <asmId> <pathTo/assembly hub build directory> > trackDb.txt\n" 1>&2
@@ -13,6 +13,11 @@ export asmId=$1
 export buildDir=$2
 export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
 export accessionId=`echo "$asmId" | awk -F"_" '{printf "%s_%s", $1, $2}'`
+export gcX=`echo $asmId | cut -c1-3`
+export d0=`echo $asmId | cut -c5-7`
+export d1=`echo $asmId | cut -c8-10`
+export d2=`echo $asmId | cut -c11-13`
+export hubPath="$gcX/$d0/$d1/$d2/$asmId"
 
 export scriptDir="$HOME/kent/src/hg/utils/automation"
 
@@ -710,4 +715,18 @@ fi
 ###################################################################
 # check for lastz/chain/net available
 
-# export lz=`ls -d ${buildDir}/trackData/lastz.* 2> /dev/null | wc -l`
+export lz=`ls -d ${buildDir}/trackData/lastz.* 2> /dev/null | wc -l`
+
+if [ "${lz}" -gt 0 ]; then
+  if [ "${lz}" -eq 1 ]; then
+    export lastzDir=`ls -d ${buildDir}/trackData/lastz.*`
+    export oOrganism=`basename "${lastzDir}" | sed -e 's/lastz.//;'`
+    # single chainNet here, no need for a composite track, does the symLinks too
+    ~/kent/src/hg/utils/automation/asmHubChainNetTrackDb.sh $asmId $buildDir
+    $scriptDir/asmHubChainNet.pl $asmId $buildDir/html/$asmId.names.tab $oOrganism $hubPath > $buildDir/html/$asmId.chainNet.html
+  else
+    # multiple chainNets here, create composite track, does the symLinks too
+    ~/kent/src/hg/utils/automation/asmHubChainNetTrackDb.pl $buildDir
+  fi
+fi
+

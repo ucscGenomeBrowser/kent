@@ -951,16 +951,19 @@ searchPriority 8
     time (~/kent/src/hg/utils/automation/doCrispr.pl \
    -stop=load -buildDir=`pwd` -smallClusterHub=hgwdev-101 bosTau9 ncbiRefSeq) \
 	> do.log 2>&1
-XXX - running - Fri Nov 16 08:34:10 PST 2018
-    # real    5896m44.643s
-
+    # real    1192m19.444s
+    # broke down, fixed, manually completed specScores
     time find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
     # real    329m49.271s
+    # effScores: real      1410m36.918s
+    # offTargets: real     99m35.115s
+    # load: real   132m24.530s
 
-    # after is appears to be correct, cleanup:
-    time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=cleanup \
-   -buildDir=`pwd` -smallClusterHub=hgwdev-101 cotJap2 ncbiRefSeq) \
-	> do.log 2>&1
+    # hive cleaning - 2021-04-26 - Hiram
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+     -continue=cleanup -buildDir=`pwd` -smallClusterHub=hgwdev bosTau9 \
+          -fileServer=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku
+            -workhorse=hgwdev) > cleanup.log 2>&1 &
 
 ##############################################################################
 # GENBANK AUTO UPDATE (DONE - 2018-11-08 - Hiram)
