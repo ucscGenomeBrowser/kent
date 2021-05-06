@@ -567,8 +567,8 @@ static char *stepHelp[] =
 "Specify the genome, track and data table to be used as the data source.",
 "Specify whole genome or restrict to a single or set of genomic regions, "
         "defined by coordinates or identifiers.",
-"Press 'create' button and select parameters for desired optional operations",
-"Specify output options and press the 'get output' button"
+"Press 'create' button and select parameters for desired optional operations.",
+"Specify output options and press the 'get output' button."
 };
 
 static char *stepHelpLinks[] =
@@ -584,24 +584,16 @@ static void printStep(int num)
 {
 if (num > STEP_MAX)
     errAbort("Internal error: table browser help problem");
-hPrintf("<TR height='16px'><TD></TD></TR>");
-hPrintf("<TR><TD>");
-hPrintf(" <div class='tooltip'>");
-hPrintf("<span class='tooltipLabel' style='background: #EFEFEF; padding: 5px;'>"
-                "<b>%s</b></span>"
-                , stepLabels[num-1]);
-hPrintf("<span class='tooltiptext'>%s"
-    " <a target='_blank' href='%s'>%s</a>\n",
-        stepHelp[num-1], stepHelpLinks[num-1], HELP_LABEL);
-hPrintf("</span></div>");
-hPrintf("</TD></TR>");
-hPrintf("<TR height='6px'><TD></TD></TR>");
-}
-
-static void printStyle()
-{
-hPrintf("<STYLE>");
-hPrintf("</STYLE>");
+hPrintf("<tr height='16px'><td></td></tr>");
+hPrintf("<tr><td>");
+hPrintf(" <div class='tbTooltip'>");
+hPrintf("<span class='tbTooltipLabel'><b>%s</b></span>",
+            stepLabels[num-1]);
+hPrintf("<span class='tbTooltiptext'>%s <a target='_blank' href='%s'>%s</a></span>\n",
+            stepHelp[num-1], stepHelpLinks[num-1], HELP_LABEL);
+hPrintf("</div>");
+hPrintf("</td></tr>");
+hPrintf("<tr height='6px'><td></td></tr>");
 }
 
 void showMainControlTable(struct sqlConnection *conn)
@@ -614,7 +606,6 @@ boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
-printStyle();
 hPrintf("<TABLE BORDER=0>\n");
 
 int stepNumber = 1;
@@ -657,11 +648,9 @@ printStep(stepNumber++);
     hPrintf("<TR><TD>");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
     if (isHubTrack(curTable) || (strchr(curTable, '.') == NULL))  /* In same database */
-        {
-        hti = getHti(database, curTable, conn);
-        isPositional = htiIsPositional(hti);
-        }
-    isLongTabix = isLongTabixTable( curTable);
+    {
+    hti = getHti(database, curTable, conn); isPositional = htiIsPositional(hti);
+        } isLongTabix = isLongTabixTable( curTable);
     isBam = isBamTable(curTable);
     isHic = isHicTable(curTable);
     isVcf = isVcfTable(curTable, NULL);
@@ -1119,7 +1108,7 @@ void doMainPage(struct sqlConnection *conn)
 /* Put up the first page user sees. */
 {
 htmlOpen("Table Browser");
-webIncludeResourceFile("jquery-ui.css");
+//webIncludeResourceFile("jquery-ui.css");
 mainPageAfterOpen(conn);
 htmlClose();
 }
