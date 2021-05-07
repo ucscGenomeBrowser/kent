@@ -3116,6 +3116,7 @@ if (tdbParent->html)
     printf("<p><table>");  // required by jsCollapsible
     jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
                                             "medium");
+    // TODO: better done with regex
     char *html = replaceChars(tdbParent->html, "<H", "<h");
     html = replaceChars(html, "</H", "</h");
 

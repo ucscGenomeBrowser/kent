@@ -168,11 +168,17 @@ General steps for setup, only done once:
   # create push lists for databases and gbdb files for genomes on hgwbeta:
     ${tmdir}/bin/mkPushList ${tmdir}/etc/transMapBuildConf.py db.push.lst gbdb.push.lst
 
+   # make collect QC data and plots
+   ${tmdir}/bin/transMapStatsQCPlot --countChangeTsv=transMap-V5-V6.stats.tsv ../V5/stats/overall.stats.tsv ../V5/db.push.lst stats/overall.stats.tsv db.push.lst transMap-V5-V6.stats.pdf
+   ${tmdir}/bin/transMapDetailsCmp ../V5/stats/detailed stats/detailed transMap-V5-V6.detailed.tsv
+
   # update tracks
   # add  transMapV6.html
   # update  trackDb.transMap.ra
 
   cd src/hg/makeDb/trackDb
   make -j 64
+
+
 
 ##############################################################################################

@@ -383,7 +383,7 @@ char *host, *port;
 char *genomeDataDir;
 
 if (!trackHubGetBlatParams(db, isTrans, &host, &port, &genomeDataDir))
-    errAbort("Cannot get blat server parameters for track hub with database %s", db);
+    return NULL;
 
 struct serverTable *st;
 AllocVar(st);
@@ -2105,6 +2105,8 @@ if (orgChange)
     }
 getDbAndGenome(cart, &db, &organism, oldVars);
 char *oldDb = cloneString(db);
+
+// n.b. this changes to default db if db doesn't have BLAT
 findClosestServer(&db, &organism);
 
 allResults = cartUsualBoolean(cart, "allResults", allResults);

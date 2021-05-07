@@ -888,7 +888,7 @@
     <P>
     If the field contains a "|" symbol, the part before the symbol is used to
     replace the $$ wildcard and the part after it as the label. This is similar
-    to how Wikpedia markup encodes links. In the example below, a value for the
+    to how Wikipedia markup encodes links. In the example below, a value for the
     field pmid of "115330|Doe, J. et al" would create a link with the URL
     https://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J. et al" .
     </P>
@@ -2385,7 +2385,8 @@ There are no extra options that can appear on the type hic line.
 <!-- - - - - - - - WIG/BIGWIG settings - - - - - - - -->
 <DIV class="wig_intro">
 <H3>wig, bigWig, and bedGraph: Signal graphing tracks </H3>
-    <P>Another set of common track types is one that graphs a density signal along
+    <P>
+    Another set of common track types is one that graphs a density signal along
     the genome. The graph can be a continuously varying density plot or
     one that displays a density signal in only certain regions.  The
     oldest and simplest of these is of <code>wig</code> format. This type has been

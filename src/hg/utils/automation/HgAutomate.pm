@@ -33,7 +33,8 @@ use File::Spec;
     # General-purpose utility routines:
     qw( checkCleanSlate checkExistsUnlessDebug closeStdin
 	getAssemblyInfo getSpecies gensub2 machineHasFile databaseExists
-	makeGsub mustMkdir mustOpen nfsNoodge paraRun run verbose
+	makeGsub mustMkdir asmHubBuildDir asmHubDownloadDir mustOpen
+	nfsNoodge paraRun run verbose
       ),
     # Hardcoded paths/commands/constants:
     qw( $centralDbSql $git
@@ -628,16 +629,79 @@ sub closeStdin {
   open(STDIN, '/dev/null');
 }
 
+sub asmHubDownloadDir {
+  # return path to assembly hub build directory
+  my ($asmId) = @_;
+  confess "Must have exactly 1 argument" if (scalar(@_) != 1);
+  confess "must supply GC[AF]_... assembly ID" if ($asmId !~ m/^GC/);
+  my $gcX = substr($asmId,0,3);
+  my $d0 = substr($asmId,4,3);
+  my $d1 = substr($asmId,7,3);
+  my $d2 = substr($asmId,10,3);
+  my $downloadDir = $goldenPath . "/$gcX/$d0/$d1/$d2";
+  return $downloadDir;
+}
+
+sub asmHubBuildDir {
+  # return path to assembly hub build directory
+  my ($asmId) = @_;
+  confess "Must have exactly 1 argument" if (scalar(@_) != 1);
+  confess "must supply GC[AF]_... assembly ID" if ($asmId !~ m/^GC/);
+  my $gcX = substr($asmId,0,3);
+  my $d0 = substr($asmId,4,3);
+  my $d1 = substr($asmId,7,3);
+  my $d2 = substr($asmId,10,3);
+  my $buildDir = "/hive/data/genomes/asmHubs/allBuild/$gcX/$d0/$d1/$d2/$asmId";
+  return $buildDir;
+}
+
+sub asmHubSubmitter {
+  # common name is in (parens) in the assembly_report 'Organism name:' line
+  my ($asmReport) = @_;
+  my $submitter = `grep -i "submitter" $asmReport | head -1 | tr -d '\r'`;
+  chomp $submitter;
+  $submitter =~ s/.*ubmitter:\s+//i;
+  return $submitter;
+}
+
+sub asmHubDate {
+  # common name is in (parens) in the assembly_report 'Organism name:' line
+  my ($asmReport) = @_;
+  my $date = `grep -i "date:" $asmReport | head -1 | tr -d '\r'`;
+  chomp $date;
+  $date =~ s/.*ate:\s+//i;
+  return $date;
+}
+
+sub asmHubCommonName {
+  # common name is in (parens) in the assembly_report 'Organism name:' line
+  my ($asmReport) = @_;
+  my $names = `grep -i "organism name:" $asmReport | head -1 | tr -d '\r'`;
+  chomp $names;
+  $names =~ s/.*\(//;
+  $names =~ s/\).*//;
+  return $names;
+}
+
 sub getAssemblyInfo {
   # Do a quick dbDb lookup to get assembly descriptive info for README.txt.
   my ($dbHost, $db) = @_;
   confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
-  my $query = "select genome,description,sourceName from dbDb " .
+  if ($db =~ m/^GC/) {
+    my $asmReport = asmHubBuildDir($db) . "/download/${db}_assembly_report.txt";
+    confess "Can not find $asmReport" if ( ! -s "${asmReport}" );
+    my $genome = asmHubCommonName($asmReport);
+    my $date = asmHubDate($asmReport);
+    my $source = asmHubSubmitter($asmReport);
+    return ($genome, $date, $source);
+  } else {
+    my $query = "select genome,description,sourceName from dbDb " .
               "where name = \"$db\";";
-  my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;
-  chomp $line;
-  my ($genome, $date, $source) = split("\t", $line);
-  return ($genome, $date, $source);
+    my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;
+    chomp $line;
+    my ($genome, $date, $source) = split("\t", $line);
+    return ($genome, $date, $source);
+  }
 }
 
 sub getSpecies {

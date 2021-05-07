@@ -712,9 +712,9 @@ body.oldStaticPage .sectionContent {
     text-align:left;
     position: absolute;
     top: 80px;
-    left: 10px;
+    left: 50px;
     z-index: 10000;
-    width: 350px;
+    width: 400px;
 }
 
 #warnHead {
@@ -989,3 +989,28 @@ span.gbSessionLabelText {
 span.gbSessionChanged {
     color: darkslategray !important;
 }
+
+/* Table browser styles */
+
+.tbTooltip {
+    display: inline-block;
+}
+
+.tbTooltipLabel {
+    background: #EFEFEF;
+    padding: 5px;
+}
+
+.tbTooltiptext {
+    visibility: hidden;
+    font-style: italic;
+    font-size: smaller;
+    padding: 5px;
+}
+
+.tbTooltip:hover .tbTooltiptext {
+    visibility: visible;
+}
+
+
+
