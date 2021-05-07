@@ -558,7 +558,7 @@ static char *stepLabels[] =
 {
 "Select dataset",
 "Define region of interest",
-"Subset, combine, compare with another track (optional)",
+"Optional: Subset, combine, compare with another track",
 "Retrieve and display data"
 };
 
@@ -985,6 +985,7 @@ hPrintf("</TABLE>\n");
     cgiMakeButton(hgtaDoTest, "test");
 #endif /* SOMETIMES */
     }
+hPrintf("<P></P>");
 }
 
 static char *getGenomeSpaceText()
