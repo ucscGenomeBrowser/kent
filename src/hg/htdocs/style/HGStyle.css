@@ -712,9 +712,9 @@ body.oldStaticPage .sectionContent {
     text-align:left;
     position: absolute;
     top: 80px;
-    left: 10px;
+    left: 50px;
     z-index: 10000;
-    width: 350px;
+    width: 400px;
 }
 
 #warnHead {
