@@ -558,7 +558,7 @@ static char *stepLabels[] =
 {
 "Select dataset",
 "Define region of interest",
-"Subset, combine, compare with another track (options)",
+"Optional: Subset, combine, compare with another track",
 "Retrieve and display data"
 };
 
@@ -567,7 +567,7 @@ static char *stepHelp[] =
 "Specify the genome, track and data table to be used as the data source.",
 "Specify whole genome or restrict to a single or set of genomic regions, "
         "defined by coordinates or identifiers.",
-"Press 'create' button and select parameters for desired optional operations.",
+"Press 'create' button and select parameters for optional operations.",
 "Specify output options and press the 'get output' button."
 };
 
@@ -920,7 +920,7 @@ showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, is
 	cartUsualString(cart, hgtaCompressType, textOutCompressNone);
     char *fileName = cartUsualString(cart, hgtaOutFileName, "");
     hPrintf("<TR><TD>\n");
-    hPrintf("<B>output file:</B>&nbsp;");
+    hPrintf("<B>output filename:</B>&nbsp;");
     cgiMakeTextVar(hgtaOutFileName, fileName, 29);
     hPrintf("&nbsp;(leave blank to keep output in browser)</TD></TR>\n");
     hPrintf("<TR><TD>\n");
@@ -985,11 +985,7 @@ hPrintf("</TABLE>\n");
     cgiMakeButton(hgtaDoTest, "test");
 #endif /* SOMETIMES */
     }
-hPrintf("<P>"
-	"To reset <B>all</B> user cart settings (including custom tracks), \n"
-	"<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
-	getScriptName());
-
+hPrintf("<P></P>");
 }
 
 static char *getGenomeSpaceText()
