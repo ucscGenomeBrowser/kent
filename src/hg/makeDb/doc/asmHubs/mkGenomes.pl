@@ -7,7 +7,7 @@ use File::Basename;
 my $argc = scalar(@ARGV);
 if ($argc != 3) {
   printf STDERR "mkGenomes.pl blatHost blatPort [two column name list] > .../hub/genomes.txt\n";
-  printf STDERR "e.g.: mkGenomes.pl blat-backup 4040 vgp.primary.assemblies.tsv > .../vgp/genomes.txt\n";
+  printf STDERR "e.g.: mkGenomes.pl dynablat-01 4040 vgp.primary.assemblies.tsv > .../vgp/genomes.txt\n";
   printf STDERR "e.g.: mkGenomes.pl hgwdev 4040 vgp.primary.assemblies.tsv > .../vgp/download.genomes.txt\n";
   printf STDERR "the name list is found in \$HOME/kent/src/hg/makeDb/doc/asmHubs/\n";
   printf STDERR "\nthe two columns are 1: asmId (accessionId_assemblyName)\n";
@@ -21,7 +21,7 @@ if ($argc != 3) {
 }
 
 my $downloadHost = "hgwdev";
-my @blatHosts = qw( blat-backup hgwdev );
+my @blatHosts = qw( dynablat-01 dynablat-01 );
 my @blatPorts = qw( 4040 4040 );
 
 ################### writing out hub.txt file, twice ##########################

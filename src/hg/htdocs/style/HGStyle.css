@@ -707,10 +707,14 @@ body.oldStaticPage .sectionContent {
 #warnBox {
     background-color: Beige;
     border: 3px ridge DarkRed;
-    width:640px;
     padding:10px; 
     margin:10px;
     text-align:left;
+    position: absolute;
+    top: 80px;
+    left: 50px;
+    z-index: 10000;
+    width: 400px;
 }
 
 #warnHead {
@@ -985,3 +989,28 @@ span.gbSessionLabelText {
 span.gbSessionChanged {
     color: darkslategray !important;
 }
+
+/* Table browser styles */
+
+.tbTooltip {
+    display: inline-block;
+}
+
+.tbTooltipLabel {
+    background: #EFEFEF;
+    padding: 5px;
+}
+
+.tbTooltiptext {
+    visibility: hidden;
+    font-style: italic;
+    font-size: smaller;
+    padding: 5px;
+}
+
+.tbTooltip:hover .tbTooltiptext {
+    visibility: visible;
+}
+
+
+

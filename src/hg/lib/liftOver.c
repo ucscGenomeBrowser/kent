@@ -76,7 +76,7 @@ static struct binElement *findRange(struct hash *chainHash,
 struct chromMap *map = hashFindVal(chainHash, chrom);
 if (map == NULL)
     return NULL;
-return binKeeperFind(map->bk, start, end);
+return binKeeperFind(map->bk, start, (end == start) ? end + 1 : end);
 }
 
 static int chainAliSize(struct chain *chain)

@@ -789,6 +789,16 @@ ln -s `pwd`/ncbiSearch.ixx /gbdb/wuhCor1/
                 > load.log 2>&1
     # real    3m29.601s
 
+    # hive cleaning - 2021-04-25 - Hiram
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+       -continue=cleanup -buildDir=`pwd` -smallClusterHub=hgwdev \
+         -buildDir=`pwd` -tableName=crisprAll -fileServer=hgwdev \
+           -verbose=2 -bigClusterHub=ku wuhCor1) > cleanup.log 2>&1
+     egrep "hive|real" cleanup.log
+#  hivedev         2.3P  1.9P  387T  84% /hive
+#  hivedev         2.3P  1.9P  387T  84% /hive
+#  real    0m17.809s
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2020-01-30 - Hiram)
 xyz

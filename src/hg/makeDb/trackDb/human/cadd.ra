@@ -20,6 +20,7 @@ group phenDis
 color 100,130,160
 html caddSuper
 maxWindowToDraw 10000000
+mouseOverFunction noAverage
 
         track caddA
         shortLabel Mutation: A

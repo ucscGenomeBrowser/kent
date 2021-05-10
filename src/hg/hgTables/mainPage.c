@@ -549,6 +549,53 @@ for (i=0; i<count; ++i)
     hPrintf("&nbsp;");
 }
 
+/* Stepwise instructions to guide users */
+
+#define STEP_MAX        4       // 1-based
+#define HELP_LABEL      "Help"
+
+static char *stepLabels[] = 
+{
+"Select dataset",
+"Define region of interest",
+"Optional: Subset, combine, compare with another track",
+"Retrieve and display data"
+};
+
+static char *stepHelp[] = 
+{
+"Specify the genome, track and data table to be used as the data source.",
+"Specify whole genome or restrict to a single or set of genomic regions, "
+        "defined by coordinates or identifiers.",
+"Press 'create' button and select parameters for optional operations.",
+"Specify output options and press the 'get output' button."
+};
+
+static char *stepHelpLinks[] =
+{
+"https://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html#GettingStarted",
+"https://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html#GettingStarted",
+"https://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html#Filter",
+"https://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html#OutputFormats"
+};
+
+static void printStep(int num)
+/* Print user guidance via steps */
+{
+if (num > STEP_MAX)
+    errAbort("Internal error: table browser help problem");
+hPrintf("<tr height='16px'><td></td></tr>");
+hPrintf("<tr><td>");
+hPrintf(" <div class='tbTooltip'>");
+hPrintf("<span class='tbTooltipLabel'><b>%s</b></span>",
+            stepLabels[num-1]);
+hPrintf("<span class='tbTooltiptext'>%s <a target='_blank' href='%s'>%s</a></span>\n",
+            stepHelp[num-1], stepHelpLinks[num-1], HELP_LABEL);
+hPrintf("</div>");
+hPrintf("</td></tr>");
+hPrintf("<tr height='6px'><td></td></tr>");
+}
+
 void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
@@ -561,8 +608,12 @@ struct hTableInfo *hti = NULL;
 
 hPrintf("<TABLE BORDER=0>\n");
 
+int stepNumber = 1;
+printStep(stepNumber++);
+
 /* Print clade, genome and assembly line. */
     {
+
     if (gotClade)
         {
         hPrintf("<TR><TD><B>clade:</B>\n");
@@ -589,23 +640,6 @@ hPrintf("<TABLE BORDER=0>\n");
     nbSpaces(3);
     curTrack = showTrackField(selGroup, hgtaTrack, "change", onChangeGroupOrTrack(), FALSE);
     nbSpaces(3);
-    boolean hasCustomTracks = FALSE;
-    struct trackDb *t;
-    for (t = fullTrackList;  t != NULL;  t = t->next)
-        {
-        if (isCustomTrack(t->table))
-            {
-            hasCustomTracks = TRUE;
-            break;
-            }
-        }
-    hOnClickButton("showMainCtlTbl_Ct", "document.customTrackForm.submit();return false;",
-                   hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
-
-    hPrintf(" ");
-    if (hubConnectTableExists())
-	hOnClickButton("showMainCtlTbl_Hub", "document.trackHubForm.submit();return false;", "track hubs");
-
     hPrintf("</TD></TR>\n");
     }
 
@@ -614,11 +648,9 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("<TR><TD>");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
     if (isHubTrack(curTable) || (strchr(curTable, '.') == NULL))  /* In same database */
-        {
-        hti = getHti(database, curTable, conn);
-        isPositional = htiIsPositional(hti);
-        }
-    isLongTabix = isLongTabixTable( curTable);
+    {
+    hti = getHti(database, curTable, conn); isPositional = htiIsPositional(hti);
+        } isLongTabix = isLongTabixTable( curTable);
     isBam = isBamTable(curTable);
     isHic = isHicTable(curTable);
     isVcf = isVcfTable(curTable, NULL);
@@ -664,9 +696,10 @@ hPrintf("<tr><td><DIV style='background-color: #faf2bb; display:none; opacity:0.
         "Please see our <a href='../FAQ/FAQdownloads.html#snp'>Data Access FAQ</a> "
         "on how to download dbSNP data.</DIV></td></tr>");
 
-
 /* Region line */
 {
+printStep(stepNumber++);
+
 char *regionType;
 if (cartVarExists(cart, "hgFind.matches")) // coming back from a search
     regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeRange);
@@ -768,8 +801,9 @@ if (!isWig && getIdField(database, curTrack, curTable, hti) != NULL)
     }
 }
 
-/* microarray options */
 /*   button for option page here (median/log-ratio, etc)  */
+
+printStep(stepNumber++);
 
 /* Filter line. */
 {
@@ -876,6 +910,8 @@ if (correlateTrackTableOK(tdb, curTable))
     }
 
 /* Print output type line. */
+
+printStep(stepNumber++);
 showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, isArray, isHalSnake);
 
 /* Print output destination line. */
@@ -884,7 +920,7 @@ showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, is
 	cartUsualString(cart, hgtaCompressType, textOutCompressNone);
     char *fileName = cartUsualString(cart, hgtaOutFileName, "");
     hPrintf("<TR><TD>\n");
-    hPrintf("<B>output file:</B>&nbsp;");
+    hPrintf("<B>output filename:</B>&nbsp;");
     cgiMakeTextVar(hgtaOutFileName, fileName, 29);
     hPrintf("&nbsp;(leave blank to keep output in browser)</TD></TR>\n");
     hPrintf("<TR><TD>\n");
@@ -949,11 +985,7 @@ hPrintf("</TABLE>\n");
     cgiMakeButton(hgtaDoTest, "test");
 #endif /* SOMETIMES */
     }
-hPrintf("<P>"
-	"To reset <B>all</B> user cart settings (including custom tracks), \n"
-	"<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
-	getScriptName());
-
+hPrintf("<P></P>");
 }
 
 static char *getGenomeSpaceText()
@@ -976,14 +1008,18 @@ void mainPageAfterOpen(struct sqlConnection *conn)
  * will happen in calling routine. */
 {
 hPrintf(
-  "Use this program to retrieve the data associated with a track in text "
-  "format, to calculate intersections between tracks, and to retrieve "
-  "DNA sequence covered by a track. For help in using this application "
-  "see <A HREF=\"#Help\">Using the Table Browser</A> for a description "
-  "of the controls in this form, and the "
-  "<A HREF=\"../goldenPath/help/hgTablesHelp.html\">User's Guide</A> for "
-  "general information and sample queries. "
-  "For more complex queries, you may want to use "
+  "Use this tool to retrieve and export data from the Genome Browser annotation track database. "
+  "You can limit retrieval based on data attributes and intersect or merge with data from "
+  "another track, or retrieve DNA sequence covered by a track."
+);
+hPrintf(" <span id='tbHelpMore' class='blueLink'>More...</span>");
+hPrintf(
+  "<span id='tbHelp' style='display:none'>"
+  "For a description of the controls below, "
+  "see <A HREF=\"#Help\">Using the Table Browser</A> (below). "
+  "General information and sample queries are available from the "
+  "<A HREF=\"../goldenPath/help/hgTablesHelp.html\">Table Browser User's Guide</A>. "
+  "For more complex queries, we recommend "
   "<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A> or "
   "our <A HREF=\"../goldenPath/help/mysql.html\">public "
   "MySQL server</A>. "
@@ -994,11 +1030,27 @@ hPrintf(
   "Refer to the "
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data. "
-  "All tables can be downloaded in their entirety from the "
+  "Bulk download of track data is available from the "
   "<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html\""
-  ">Sequence and Annotation Downloads</A> page."
+  ">Sequence and Annotation Downloads</A> page.</span>"
    , getGenomeSpaceText()
-   );
+);
+hPrintf(" <span id='tbHelpLess' class='blueLink' style='display:none'>Less...</a></span>");
+
+// Show more or less intro text
+char jsText[1024];
+safef(jsText, sizeof jsText,
+        "$('#tbHelpMore').hide();"
+        "$('#tbHelp').show();"
+        "$('#tbHelpLess').show();"
+        );
+jsOnEventById("click", "tbHelpMore", jsText);
+safef(jsText, sizeof jsText,
+        "$('#tbHelpMore').show();"
+        "$('#tbHelp').hide();"
+        "$('#tbHelpLess').hide();"
+        );
+jsOnEventById("click", "tbHelpLess", jsText);
 
 // When GREAT is selected, disable the other checkboxes and force output to BED
 jsInline(
@@ -1043,16 +1095,6 @@ hPrintf("</FORM>\n");
     jsCreateHiddenForm(cart, getScriptName(), saveVars, ArraySize(saveVars));
     }
 
-/* Hidden form for jumping to custom tracks CGI. */
-hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
-cartSaveSession(cart);
-hPrintf("</FORM>\n");
-
-/* Hidden form for jumping to track hub manager CGI. */
-hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
-cartSaveSession(cart);
-hPrintf("</FORM>\n");
-
 webNewSection("<A NAME=\"Help\"></A>Using the Table Browser\n");
 printMainHelp();
 cartFlushHubWarnings();
@@ -1062,7 +1104,10 @@ void doMainPage(struct sqlConnection *conn)
 /* Put up the first page user sees. */
 {
 htmlOpen("Table Browser");
+//webIncludeResourceFile("jquery-ui.css");
 mainPageAfterOpen(conn);
 htmlClose();
 }
+
+
 
