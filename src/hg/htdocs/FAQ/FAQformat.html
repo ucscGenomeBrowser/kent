@@ -40,6 +40,7 @@
       <li><a href="#format20">HAL format</a></li>
       <li><a href="#format23">Hic format</a></li>
       <li><a href="#format22">Interact and bigInteract format</a></li>
+      <li><a href="#format24">Longrange longTabix format</a></li>
       <li><a href="#format5">MAF format</a></li>
       <li><a href="#format6.5">Microarray format</a></li>
       <li><a href="../goldenPath/help/net.html">Net format</a></li>
@@ -539,7 +540,6 @@ target="_blank">Aiden Lab</a> at <a href="https://www.bcm.edu"
 target="_blank">Baylor College of Medicine</a>.
 </p>
 
-
 <a name="format22"></a>
 <h2>Interact format</h2>
 <p>
@@ -553,6 +553,20 @@ It is not suitable for high-density chromatin data such as Hi-C.</p>
 <p>
 Click <a href="../goldenPath/help/interact.html">here</a> for more information on the interact and
 bigInteract formats.</p>
+
+<a name="format24"></a>
+<h2>Longrange longTabix format</h2>
+<p>
+The longrange track is a bed format-like file type. Each row contains columns
+that define chromosome, start position (0-based), and end position (not included),
+and interaction target in this format chr2:333-444,55. For examples,
+see the  source of this format
+at <a href="https://epigenomegateway.readthedocs.io/en/latest/tracks.html#longrange"
+target="_blank">WashU Epigenome Browser</a>.</p>
+<p>
+Also, review the enhanced  <a href="../goldenPath/help/interact.html">interact</a> format
+for information on how to visualize pairwise interactions as arcs or in the browser.
+</p>
 
 <a name="format5"></a>
 <h2>MAF format</h2> 
