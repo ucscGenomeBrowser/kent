@@ -120,7 +120,7 @@ compositeTrack on
 	type bigBed
 	color 120,94,240
 
-	track Agilent_Human_Exon_V6+UTRs_Regions
+	track Agilent_Human_Exon_V6_UTRs_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07604624_Regions.bb
 	shortLabel SureSelect SureSel. V6+UTR T
@@ -128,7 +128,7 @@ compositeTrack on
 	type bigBed
 	color 120,94,240
 
-	track Agilent_Human_Exon_V6+UTRs_Covered
+	track Agilent_Human_Exon_V6_UTRs_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07604624_Covered.bb
 	shortLabel SureSel. V6+UTR P
@@ -152,7 +152,7 @@ compositeTrack on
 	type bigBed
 	color 120,94,240
 
-	track Agilent_Human_Exon_V6+COSMIC_Regions
+	track Agilent_Human_Exon_V6_COSMIC_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07604715_Regions.bb
 	shortLabel SureSel. V6+COSMIC T
@@ -160,7 +160,7 @@ compositeTrack on
 	type bigBed
 	color 120,94,240
 
-	track Agilent_Human_Exon_V6+COSMIC_Covered
+	track Agilent_Human_Exon_V6_COSMIC_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S07604715_Covered.bb
 	shortLabel SureSel. V6+COSMIC P
@@ -216,7 +216,7 @@ compositeTrack on
 	type bigBed
 	color 120,94,240
 
-	track Agilent_Human_Exon_V5+UTRs_Regions
+	track Agilent_Human_Exon_V5_UTRs_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S04380219_Regions.bb
 	shortLabel SureSel. V5+UTR T
@@ -224,7 +224,7 @@ compositeTrack on
 	type bigBed
 	color 120,94,240
 
-	track Agilent_Human_Exon_V5+UTRs_Covered
+	track Agilent_Human_Exon_V5_UTRs_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S04380219_Covered.bb
 	shortLabel SureSel. V5+UTR P
@@ -232,7 +232,7 @@ compositeTrack on
 	type bigBed
 	color 120,94,240
 
-	track Agilent_Human_Exon_V4+UTRs_Regions
+	track Agilent_Human_Exon_V4_UTRs_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S03723424_Regions.bb
 	shortLabel SureSel. V4+UTR T
@@ -240,7 +240,7 @@ compositeTrack on
 	type bigBed
 	color 120,94,240
 
-	track Agilent_Human_Exon_V4+UTRs_Covered
+	track Agilent_Human_Exon_V4_UTRs_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/S03723424_Covered.bb
 	shortLabel SureSel. V4+UTR P
