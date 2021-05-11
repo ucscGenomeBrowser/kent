@@ -87,32 +87,32 @@ compositeTrack on
 	track Agilent_Human_Exon_V5_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S04380110_Covered.bb
-	shortLabel SureSel. V4 UTR P
-	longLabel Agilent - SureSelect All Exon V4 UTRs Covered by Probes
+	shortLabel SureSel. V4+UTR P
+	longLabel Agilent - SureSelect All Exon V4 + UTRs Covered by Probes
 	type bigBed
 	color 255,36,36
 
 	track Agilent_Human_Exon_V5_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S04380110_Regions.bb
-	shortLabel SureSel. V4 UTR T
-	longLabel Agilent - SureSelect All Exon V4 UTRs Target Regions
+	shortLabel SureSel. V4+UTR T
+	longLabel Agilent - SureSelect All Exon V4 + UTRs Target Regions
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V5_UTRs_Covered
+	track Agilent_Human_Exon_V5+UTRs_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S04380219_Covered.bb
-	shortLabel SureSel. V5 UTR P
-	longLabel Agilent - SureSelect All Exon V5 UTRs Covered by Probes
+	shortLabel SureSel. V5+UTR P
+	longLabel Agilent - SureSelect All Exon V5 + UTRs Covered by Probes
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V5_UTRs_Regions
+	track Agilent_Human_Exon_V5+UTRs_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S04380219_Regions.bb
-	shortLabel SureSel. V5 UTR T
-	longLabel Agilent - SureSelect All Exon V5 UTRs Target Regions
+	shortLabel SureSel. V5+UTR T
+	longLabel Agilent - SureSelect All Exon V5 + UTRs Target Regions
 	type bigBed
 	color 255,36,36
 
@@ -132,35 +132,35 @@ compositeTrack on
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V6_COSMIC_Covered
+	track Agilent_Human_Exon_V6+COSMIC_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S07604715_Covered.bb
-	shortLabel SureSel. V6 COSMIC P
-	longLabel Agilent - SureSelect All Exon V6 COSMIC r2 Covered by Probes
+	shortLabel SureSel. V6+COSMIC P
+	longLabel Agilent - SureSelect All Exon V6 + COSMIC r2 Covered by Probes
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V6_COSMIC_Regions
+	track Agilent_Human_Exon_V6+COSMIC_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S07604715_Regions.bb
-	shortLabel SureSel. V6 COSMIC T
-	longLabel Agilent - SureSelect All Exon V6 COSMIC r2 Target Regions
+	shortLabel SureSel. V6+COSMIC T
+	longLabel Agilent - SureSelect All Exon V6 + COSMIC r2 Target Regions
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V6_UTRs_Covered
+	track Agilent_Human_Exon_V6+UTRs_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S07604624_Covered.bb
-	shortLabel SureSel. V6 UTR P
-	longLabel Agilent - SureSelect All Exon V6 UTR r2 Covered by Probes
+	shortLabel SureSel. V6+UTR P
+	longLabel Agilent - SureSelect All Exon V6 + UTR r2 Covered by Probes
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V6_UTRs_Regions
+	track Agilent_Human_Exon_V6+UTRs_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S07604624_Regions.bb
-	shortLabel SureSel. V6  UTR T
-	longLabel Agilent - SureSelect All Exon V6 UTR r2 Target Regions
+	shortLabel SureSel. V6 +UTR T
+	longLabel Agilent - SureSelect All Exon V6 + UTR r2 Target Regions
 	type bigBed
 	color 255,36,36
 
@@ -215,16 +215,16 @@ compositeTrack on
 	track SeqCap-EZ_MedExomePlusMito_hg19_capture_targets
 	parent exomeProbesets on
 	bigDataUrl /gbdb/hg38/exomeProbesets/SeqCap_EZ_MedExomePlusMito_hg38_capture_targets.bb
-	shortLabel SeqCap EZ Med Mito P
-	longLabel Roche - SeqCap EZ MedExome Mito Capture Probe Footprint
+	shortLabel SeqCap EZ Med+Mito P
+	longLabel Roche - SeqCap EZ MedExome + Mito Capture Probe Footprint
 	type bigBed
 	color 100,143,255
 
 	track SeqCap-EZ_MedExomePlusMito_hg19_empirical_targets
 	parent exomeProbesets on
 	bigDataUrl /gbdb/hg38/exomeProbesets/SeqCap_EZ_MedExomePlusMito_hg38_empirical_targets.bb
-	shortLabel SeqCap EZ Med Mito T
-	longLabel Roche - SeqCap EZ MedExome Mito Empirical Target Regions
+	shortLabel SeqCap EZ Med+Mito T
+	longLabel Roche - SeqCap EZ MedExome + Mito Empirical Target Regions
 	type bigBed
 	color 100,143,255
 
