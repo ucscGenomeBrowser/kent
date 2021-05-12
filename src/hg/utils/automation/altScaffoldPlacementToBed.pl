@@ -50,7 +50,9 @@ while (<>) {
     $chr = $cAcc;
     if ($opt_db && ($opt_db eq 'hg19' || $opt_db eq 'mm10')) {
       $chr =~ s/^(\w+)\.\d+/$1/ || die "Unexpected cAcc ($cAcc)";
-      $chr = lc($chr);
+      if ($opt_db && ($opt_db eq 'hg19')) {
+	$chr = lc($chr);
+      }
     } else {
       $chr =~ s/^(\w+)\.(\d+)/$1v$2/ || die "Unexpected cAcc ($cAcc)";
     }
@@ -64,7 +66,9 @@ while (<>) {
   }
   if ($opt_db && ($opt_db eq 'hg19' || $opt_db eq 'mm10')) {
     $altAcc =~ s/^(\w+)\.\d+/$1/ || die "Unexpected altAcc ($altAcc)";
-    $altAcc = lc($altAcc);
+    if ($opt_db && ($opt_db eq 'hg19')) {
+      $altAcc = lc($altAcc);
+    }
   } else {
     $altAcc =~ s/^(\w+)\.(\d+)/$1v$2/ || die "Unexpected altAcc ($altAcc)";
   }
