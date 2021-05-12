@@ -53,6 +53,20 @@ if (_hubPublicTableName == NULL)
 return _hubPublicTableName;
 }
 
+static char *_genArkTableName = NULL;
+
+static char *genArkTableName()
+/* return the genark table name from the environment, 
+ * or hg.conf, or use the default.  Cache the result */
+{
+if (_genArkTableName == NULL)
+    _genArkTableName = cfgOptionEnvDefault("HGDB_GENARK_STATUS_TABLE",
+	    genArkTableConfVariable, defaultGenArkTableName);
+
+return _genArkTableName;
+}
+
+
 boolean hubConnectTableExists()
 /* Return TRUE if the hubStatus table exists. */
 {
@@ -892,6 +906,9 @@ static boolean lookForLonelyHubs(struct cart *cart, struct hubConnectStatus  *hu
 // that is NOT currently loaded, but we know a URL to load it.
 {
 struct sqlConnection *conn = hConnectCentral();
+if (!sqlTableExists(conn, genArkTableName()))
+    return FALSE;
+
 boolean added = FALSE;
 
 struct hubConnectStatus  *hub;
@@ -917,7 +934,7 @@ for(hub = hubList; hub; hub = hub->next)
                 {
                 // see if genark has this assembly
                 char query[4096];
-                sqlSafef(query, sizeof query, "select hubUrl from genark where gcAccession='%s'", name);
+                sqlSafef(query, sizeof query, "select hubUrl from %s where gcAccession='%s'", genArkTableName(), name);
                 if (sqlQuickQuery(conn, query, buffer, sizeof buffer))
                     {
                     char url[4096];
