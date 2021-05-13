@@ -15,7 +15,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     bed12wSeq.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bigBedFind.o bigBedLabel.o \
     bigDbSnp.o bigGenePred.o bigPsl.o bigTransMap.o bioImage.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o\
-    cart.o cartDb.o cartJson.o cartTrackDb.o cdsEvidence.o cdsOrtho.o cdsPick.o cdsSpec.o \
+    cart.o cartDb.o cartJson.o cartTrackDb.o cartRewrite.o cdsEvidence.o cdsOrtho.o cdsPick.o cdsSpec.o \
     ccdsInfo.o ccdsNotes.o ccdsGeneMap.o celeraCoverage.o \
     celeraDupPositive.o cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgh.o chainCart.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \

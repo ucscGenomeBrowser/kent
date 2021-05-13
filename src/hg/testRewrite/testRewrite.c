@@ -3,7 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include <regex.h>
+#include "cartRewrite.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -11,17 +11,21 @@ void usage()
 errAbort(
   "testRewrite - Test harness for cart rewrite tool\n"
   "usage:\n"
-  "   testRewrite script input output\n"
+  "   testRewrite input output\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -script=sed-like script\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"script", OPTION_STRING},
    {NULL, 0},
 };
 
+char *script;
+
+#ifdef NOTNOW
 struct snippet
 {
 struct snippet *next;
@@ -183,32 +187,44 @@ for(; edits; edits = edits->next)
 fputs(outString, f);
 fclose(f);
 }
+#endif
 
-void testRewrite(char *script, char *inputFile, char *outputFile)
+void testRewrite(char *inputFile, char *outputFile)
 /* testRewrite - Test harness for cart rewrite tool. */
 {
-struct lineFile *lf = lineFileOpen(script, TRUE);
-char *start;
-int size;
-struct edit *edits = NULL;
-
-while (lineFileNext(lf, &start, &size))
+/*
+if (script)
     {
-    slAddHead(&edits, parseEdit(start, script, lf->lineIx));
+    struct lineFile *lf = lineFileOpen(script, TRUE);
+    char *start;
+    int size;
+    struct edit *edits = NULL;
+
+    while (lineFileNext(lf, &start, &size))
+        {
+        slAddHead(&edits, parseEdit(start, script, lf->lineIx));
+        }
+    slReverse(&edits);
+    lineFileClose(&lf);
     }
+else
+*/
 
-slReverse(&edits);
-
-lineFileClose(&lf);
 
 int count = 0;
-lf = lineFileOpen(inputFile, TRUE);
+    char *start;
+    int size;
+FILE *f = mustOpen(outputFile, "w");
+struct lineFile * lf = lineFileOpen(inputFile, TRUE);
 while (lineFileNext(lf, &start, &size))
     {
     if (count)
         errAbort("input should have only one line with name=value pairs separated by ampersands.");
 
-    doEdits(edits, start, outputFile);
+//    doEdits(edits, start, outputFile);
+    char *output = regexEdit(cartRewrites[0].editArray,cartRewrites[0].numEdits , start, FALSE);
+    fputs(output, f);
+    
     count++;
     }
 }
@@ -217,8 +233,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 3)
     usage();
-testRewrite(argv[1], argv[2], argv[3]);
+script = optionVal("script", NULL);
+testRewrite(argv[1], argv[2]);
 return 0;
 }

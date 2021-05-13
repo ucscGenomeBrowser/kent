@@ -423,11 +423,10 @@ agpFiles /hive/data/genomes/canFam6/ucsc/canFam6.fake.agp
     time (~/kent/src/hg/utils/automation/doTandemDup.pl \
   -twoBit=/hive/data/genomes/canFam6/canFam6.unmasked.2bit canFam6) \
         > do.log 2>&1 &
-XXX - running - Wed May 12 14:25:31 PDT 2021
-    # real    96m40.950s
+    # real    172m17.400s
 
     cat fb.canFam6.tandemDups.txt
-    # 38911424 bases of 2343218756 (1.661%) in intersection
+    # 38991000 bases of 2312802198 (1.686%) in intersection
 
     bigBedInfo canFam6.tandemDups.bb | sed -e 's/^/#  /;'
 #  version: 4
@@ -436,19 +435,19 @@ XXX - running - Wed May 12 14:25:31 PDT 2021
 #  isCompressed: yes
 #  isSwapped: 0
 #  extraIndexCount: 0
-#  itemCount: 587,116
-#  primaryDataSize: 15,889,460
-#  primaryIndexSize: 62,440
+#  itemCount: 657,594
+#  primaryDataSize: 17,541,691
+#  primaryIndexSize: 53,796
 #  zoomLevels: 8
-#  chromCount: 543
-#  basesCovered: 1,405,259,423
-#  meanDepth (of bases covered): 4.102433
+#  chromCount: 84
+#  basesCovered: 1,396,340,438
+#  meanDepth (of bases covered): 4.667856
 #  minDepth: 1.000000
-#  maxDepth: 178.000000
-#  std of depth: 5.480960
+#  maxDepth: 251.000000
+#  std of depth: 8.938384
 
 #########################################################################
-# ucscToINSDC and ucscToRefSeq table/track (TBD - 2020-07-17 - Hiram)
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2021-05-13 - Hiram)
     # construct idKeys for the genbank sequence
     mkdir /hive/data/genomes/canFam6/refseq/idKeys
     cd /hive/data/genomes/canFam6/refseq/idKeys
@@ -487,10 +486,15 @@ XXX - running - Wed May 12 14:25:31 PDT 2021
             | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
                | sort -k1,1 -k2,2n > ucscToRefSeq.bed
 
+    # lookup the genbank accession for chrM NC_002008.4 -> U96639.2
+    # add it to the INSDC names:
+    printf "chrM\t0\t16727\tU96639.2\n" >> ucscToINSDC.bed
+
     # should be same line counts throughout:
     wc -l * ../../chrom.sizes
-    #	794 ucscToINSDC.bed
-    #	794 ../../chrom.sizes
+    #	147 ucscToINSDC.bed
+    #	147 ucscToRefSeq.bed
+    #	147 ../../chrom.sizes
 
     export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
@@ -498,39 +502,56 @@ XXX - running - Wed May 12 14:25:31 PDT 2021
     # use the $chrSize in this sed
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab canFam6 ucscToINSDC stdin ucscToINSDC.bed
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab canFam6 ucscToRefSeq stdin ucscToRefSeq.bed
 
     # should be quiet for all OK
-    checkTableCoords canFam6
+    checkTableCoords canFam6 ucscToINSDC
+    checkTableCoords canFam6 ucscToRefSeq
 
     # should cover %100 entirely:
     featureBits -countGaps canFam6 ucscToINSDC
-    # 2343218756 bases of 2343218756 (100.000%) in intersection
+    #  2312802198 bases of 2312802198 (100.000%) in intersection
+    featureBits -countGaps canFam6 ucscToRefSeq
+    #  2312802198 bases of 2312802198 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2020-07-29 - Hiram)
+# add chromAlias table (DONE - 2021-05-13 - Hiram)
 
     mkdir /hive/data/genomes/canFam6/bed/chromAlias
     cd /hive/data/genomes/canFam6/bed/chromAlias
 
+    grep -v "^#" ../../refseq/G*_assembly_report.txt \
+        | awk '{printf "%s\t%s\n", $5,$1}' | sort > ncbi.genbank.txt
+    grep -v "^#" ../../refseq/G*_assembly_report.txt \
+        | awk '{printf "%s\t%s\n", $7,$1}' | sort > ncbi.refseq.txt
+
     hgsql -N -e 'select chrom,name from ucscToINSDC;' canFam6 \
         | sort -k1,1 > ucsc.genbank.tab
-    grep -v "^#" ../../genbank/G*a_assembly_report.txt \
-      | awk '{printf "%s\t%s\n", $5,$1}' | sort > insdc.assembly.txt
-    awk '{printf "%s\t%s\n", $4,$1}' ucscToINSDC.bed  | sort > insdc.ucsc.txt
-    join insdc.assembly.txt insdc.ucsc.txt  | awk '$2 != $3' \
-       | awk '{printf "%s\t%s\n", $3,$2}' | sort > ucsc.assembly.tab
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' canFam6 \
+        | sort -k1,1 > ucsc.refseq.tab
 
-    wc -l *.tab ../../chrom.sizes
-    #	754 ucsc.assembly.tab
-    #	794 ucsc.genbank.tab
-    #	794 ../../chrom.sizes
+    # the awk removes lines where the UCSC name is identical to the NCBI name
+    join -t$'\t' -1 2 <(sort -k2,2 ucsc.refseq.tab) ncbi.refseq.txt \
+      | cut -f2-3 | awk '$1 != $2' | sort > ucsc.assembly.tab
+
+    wc -l * ../../chrom.sizes
+    #   147 ncbi.genbank.txt
+    #   147 ncbi.refseq.txt
+    #   147 ucsc.assembly.tab
+    #   147 ucsc.genbank.tab
+    #   147 ucsc.refseq.tab
+    #   147 ../../chrom.sizes
 
     # assembly counts are smaller since equivalence has been eliminated
 
     ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
         > canFam6.chromAlias.tab
 
-for t in genbank assembly
+for t in refseq genbank assembly
 do
   c0=`cat ucsc.$t.tab | wc -l`
   c1=`grep $t canFam6.chromAlias.tab | wc -l`
@@ -540,45 +561,46 @@ do
   fi
   printf "# checking $t: $c0 =? $c1 $ok\n"
 done
-# checking genbank: 794 =? 794 OK
-# checking assembly: 754 =? 754 OK
+# checking refseq: 147 =? 147 OK
+# checking genbank: 147 =? 147 OK
+# checking assembly: 147 =? 147 OK
 
     # verify chrM is here properly:
     grep chrM canFam6.chromAlias.tab 
-# CM022001.1      chrM    genbank
-    # that genbank identifier does not yet have a RefSeq identifier
-    # otherwise would add a refseq.tab file for chrM
+# MT      chrM    assembly
+# NC_002008.4     chrM    refseq
+# U96639.2        chrM    genbank
 
     hgLoadSqlTab canFam6 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         canFam6.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2020-07-17 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2021-05-13 - Hiram)
     cd ~/kent/src/hg/makeDb/trackDb/dog/canFam6
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" canFam6 \
       | sed -e 's/[0-9_.]\+//;' | sort | uniq -c 
-   1037 CM
-    758 REHQ
+   1174 AAEX
+      1 NC
 
-    # implies a rule: '[CR][ME][HQ0-9]+(\.[0-9_]+)?'
+    # implies a rule: '[AN][AC][EX0-9_]+(\.[0-9_]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" canFam6 | wc -l
-    # 1795
+    # 1175
 
     hgsql -N -e "select frag from gold;" canFam6 \
-       | egrep -e '[CR][ME][HQ0-9]+(\.[0-9_]+)?' | wc -l
-    # 1795
+       | egrep -e '[AN][AC][EX0-9_]+(\.[0-9_]+)?' | wc -l
+    # 1175
 
     hgsql -N -e "select frag from gold;" canFam6 \
-       | egrep -v -e '[CR][ME][HQ0-9]+(\.[0-9_]+)?' | wc -l
+       | egrep -v -e '[AN][AC][EX0-9_]+(\.[0-9_]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/rhesus/canFam6/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [CR][ME][HQ0-9]+(\.[0-9_]+)?
+termRegex [AN][AC][EX0-9_]+(\.[0-9_]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -594,21 +616,19 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku canFam6) > do.log 2>&1
-XXX - running - Wed May 12 14:16:59 PDT 2021
-    # real    827m31.483s
+    # real    294m16.121s
 
     cat faSize.rmsk.txt
-# 2343218756 bases (6087522 N's 2337131234 real 1361455376 upper
-#	975675858 lower) in 794 sequences in 1 files
-# Total size: mean 2951157.1 sd 13874454.0 min 1091 (chrUn_REHQ01000052v1)
-#	max 122894117 (chr1) median 13386
-# %41.64 masked total, %41.75 masked real
-
+# 2312802198 bases (58852 N's 2312743346 real 1340725791 upper
+#	972017555 lower) in 147 sequences in 1 files
+# Total size: mean 15733348.3 sd 28607349.9 min 551 (chrUn_NW_023329752v1)
+#	max 122014068 (chr1) median 7637
+# %42.03 masked total, %42.03 masked real
 
     egrep -i "versi|relea" do.log
 # RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
 # CC    Dfam_Consensus RELEASE 20181026;                            *
-# CC    RepBase RELEASE 20181026; 
+# CC    RepBase RELEASE 20181026;           
 
     sed -e 's/^/# /;' versionInfo.txt 
 # The repeat files provided for this assembly were generated using RepeatMasker.
@@ -632,8 +652,8 @@ XXX - running - Wed May 12 14:16:59 PDT 2021
 # /hive/data/staging/data/RepeatMasker/RepeatMasker -engine crossmatch -s -align -species 'Canis lupus familiaris'
 
     time featureBits -countGaps canFam6 rmsk
-    # 975676256 bases of 2343218756 (41.638%) in intersection
-    # real    0m33.765s
+    # 972021595 bases of 2312802198 (42.028%) in intersection
+    # real    0m34.798s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -642,8 +662,8 @@ XXX - running - Wed May 12 14:16:59 PDT 2021
     # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' canFam6 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    #  total 975676256.000000
-    #  real    0m20.267s
+    # total 972021595.000000
+    # real    0m21.176s
 
 ##########################################################################
 # running simple repeat (DONE - 2021-05-12 - Hiram)
@@ -653,10 +673,10 @@ XXX - running - Wed May 12 14:16:59 PDT 2021
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409=6 canFam6) > do.log 2>&1
-    # real    7m53.400s
+    # real    73m21.349s
 
     cat fb.simpleRepeat
-    # 42156507 bases of 2337131234 (1.804%) in intersection
+    # 47306497 bases of 2312743346 (2.045%) in intersection
 
     cd /hive/data/genomes/canFam6
     # if using the Window Masker result:
@@ -671,17 +691,17 @@ XXX - running - Wed May 12 14:16:59 PDT 2021
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa canFam6.2bit stdout | faSize stdin > faSize.canFam6.2bit.txt
     cat faSize.canFam6.2bit.txt
-# 2343218756 bases (6087522 N's 2337131234 real 1359905780 upper
-#	977225454 lower) in 794 sequences in 1 files
-# Total size: mean 2951157.1 sd 13874454.0 min 1091 (chrUn_REHQ01000052v1)
-#	max 122894117 (chr1) median 13386
-# %41.70 masked total, %41.81 masked real
+# 2312802198 bases (58852 N's 2312743346 real 1338850957 upper
+#	973892389 lower) in 147 sequences in 1 files
+# Total size: mean 15733348.3 sd 28607349.9 min 551 (chrUn_NW_023329752v1)
+#	max 122014068 (chr1) median 7637
+# %42.11 masked total, %42.11 masked real
 
     rm /gbdb/canFam6/canFam6.2bit
     ln -s `pwd`/canFam6.2bit /gbdb/canFam6/canFam6.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2020-07-28 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2021-05-12 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/canFam6/bed/microsat
     cd /cluster/data/canFam6/bed/microsat
@@ -690,45 +710,51 @@ XXX - running - Wed May 12 14:16:59 PDT 2021
          ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed canFam6 microsat microsat.bed
-    # Read 57870 elements of size 4 from microsat.bed
+    # Read 56108 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2020-07-28 - Hiram)
+## WINDOWMASKER (DONE - 2021-05-12 - Hiram)
 
     mkdir /hive/data/genomes/canFam6/bed/windowMasker
     cd /hive/data/genomes/canFam6/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev canFam6) > do.log 2>&1
-    # real    88m35.943s
+    # real    89m33.579s
 
     # Masking statistics
     cat faSize.canFam6.cleanWMSdust.txt
-# 2343218756 bases (6087522 N's 2337131234 real 1573472737 upper
-#	763658497 lower) in 794 sequences in 1 files
-# Total size: mean 2951157.1 sd 13874454.0 min 1091 (chrUn_REHQ01000052v1)
-#	max 122894117 (chr1) median 13386
-# %32.59 masked total, %32.68 masked real
+# 2312802198 bases (58852 N's 2312743346 real 1546969439 upper
+#	765773907 lower) in 147 sequences in 1 files
+# Total size: mean 15733348.3 sd 28607349.9 min 551 (chrUn_NW_023329752v1)
+#	max 122014068 (chr1) median 7637
+# %33.11 masked total, %33.11 masked real
 
+    featureBits -countGaps canFam6 rmsk windowmaskerSdust \
+       2> fb.canFam6.rmsk.windowmaskerSdust.txt
     cat fb.canFam6.rmsk.windowmaskerSdust.txt
-    # 514628122 bases of 2343218756 (21.962%) in intersection
+    # 517620731 bases of 2312802198 (22.381%) in intersection
+
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=cleanup -dbHost=hgwdev canFam6) > cleanup.log 2>&1
 
 ##########################################################################
-# cpgIslands - (TBD - 2020-07-28 - Hiram)
+# cpgIslands - (DONE - 2021-05-13 - Hiram)
     mkdir /hive/data/genomes/canFam6/bed/cpgIslands
     cd /hive/data/genomes/canFam6/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku canFam6) > do.log 2>&1
-    # real    3m21.080s
+    # real    2m52.170s
 
     cat fb.canFam6.cpgIslandExt.txt
-    # 45080636 bases of 2337131234 (1.929%) in intersection
+    # 44591675 bases of 2312743346 (1.928%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2020-07-28 - Hiram)
+# genscan - (DONE - 2021-05-13 - Hiram)
     mkdir /hive/data/genomes/canFam6/bed/genscan
     cd /hive/data/genomes/canFam6/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku canFam6) > do.log 2>&1
+XXX - running - Thu May 13 10:38:58 PDT 2021
     # real    43m47.630s
 
 # four jobs failed, running manually on hgwdev:
@@ -751,19 +777,19 @@ wait
     # 48016592 bases of 2337131234 (2.055%) in intersection
 
 #########################################################################
-# Create kluster run files (TBD - 2020-07-28 - Hiram)
+# Create kluster run files (DONE - 2021-05-13 - Hiram)
 
     # numerator is canFam6 gapless bases "real" as reported by:
     featureBits -noRandom -noHap canFam6 gap
-    # 6036826 bases of 2320309602 (0.260%) in intersection
+    # 58852 bases of 2310615395 (0.003%) in intersection
     #                      ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2320309602 / 2861349177 \) \* 1024
-    #  ( 2320309602 / 2861349177 ) * 1024 = 830.376471
+    calc \( 2310615395 / 2861349177 \) \* 1024
+    #  ( 2310615395 / 2861349177 ) * 1024 = 826.907175
 
     # ==> use -repMatch=800 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
@@ -771,8 +797,11 @@ wait
     time blat canFam6.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/canFam6.11.ooc \
         -repMatch=800
-    # Wrote 28510 overused 11-mers to jkStuff/canFam6.11.ooc
-    # real    0m20.727s
+    # Wrote 28074 overused 11-mers to jkStuff/canFam6.11.ooc
+    # real    0m24.061s
+
+    # canFam5 at repMatch=800:
+    #   Wrote 28510 overused 11-mers to jkStuff/canFam5.11.ooc
 
     # canFam4 at repMatch=800:
     #	Wrote 34718 overused 11-mers to jkStuff/canFam4.11.ooc
@@ -790,37 +819,50 @@ wait
     # survey gap sizes:
     hgsql -N -e 'select size from gap where bridge="yes" order by size;' \
        canFam6  | ave stdin | sed -e 's/^/# /;'
-# Q1 100.000000
-# median 5000.000000
-# Q3 5000.000000
-# average 6081.440559
-# min 4.000000
-# max 144464.000000
-# count 1001
-# total 6087522.000000
-# standard deviation 11814.767347
+# Q1 25.000000
+# median 25.000000
+# Q3 100.000000
+# average 57.249027
+# min 1.000000
+# max 100.000000
+# count 1028
+# total 58852.000000
+# standard deviation 37.486982
 
-    # and survey the bridged gaps over 5,000 bases:
-    hgsql -N -e 'select size from gap where bridge="yes" and size > 4999;' \
-	canFam6  | sort | uniq -c | sort -k2,2n | sed -e 's/^/# /;'
+    # and survey these gaps:
+     hgsql -N -e \
+       'select size from gap where bridge="yes" order by size;' canFam6 \
+          | sort | uniq -c | sed -e 's/^/# /;'
+#      13 1
+#       4 10
+#     444 100
+#       1 19
+#     556 25
+#       1 31
+#       1 34
+#       1 38
+#       1 40
+#       1 50
+#       1 54
+#       1 56
+#       1 57
+#       2 60
 
     # using ordinary gaps to make a lift file
-    # minimum gap size at 5000 produces a reasonable number of lifts
-    gapToLift -allowBridged -verbose=2 -minGap=5000 canFam6 \
-	jkStuff/canFam6.5Kgaps.lft -bedFile=jkStuff/canFam6.5Kgaps.bed
-    wc -l jkStuff/ambMex*
-    # minimum gap size at 10000 produces a reasonable number of lifts
-    gapToLift -verbose=2 -minGap=10000 canFam6 jkStuff/canFam6.10Kgaps.lft \
-        -bedFile=jkStuff/canFam6.10Kgaps.bed
-    wc -l jkStuff/*10K*
-    # 794 jkStuff/canFam6.10Kgaps.bed
-    # 794 jkStuff/canFam6.10Kgaps.lft
+    # with minimum gap size at 100
+    gapToLift -allowBridged -verbose=2 -minGap=100 canFam6 \
+	jkStuff/canFam6.gaps.lft -bedFile=jkStuff/canFam6.gaps.bed
+
+    wc -l jkStuff/*gaps*
+    # 591 jkStuff/canFam6.gaps.bed
+    # 591 jkStuff/canFam6.gaps.lft
 
     # to see the gaps used:
-    bedInvert.pl chrom.sizes jkStuff/canFam6.5Kgaps.bed | less
+    bedInvert.pl chrom.sizes jkStuff/canFam6.gaps.bed | less
     # and their sizes:
-    bedInvert.pl chrom.sizes jkStuff/canFam6.5Kgaps.bed \
+    bedInvert.pl chrom.sizes jkStuff/canFam6.gaps.bed \
 	| cut -f4 | sort -n | uniq -c | less
+    #     444 100
 
 ########################################################################
 # lastz/chain/net swap human/hg38 (TBD - 2020-07-29 - Hiram)
@@ -927,7 +969,7 @@ wait
     # 739648625 bases of 2337131234 (31.648%) in intersection
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2020-07-29 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2021-05-13 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -935,7 +977,7 @@ wait
     # organism       mrnaCnt estCnt  refSeqCnt
     # Canis latrans   2       0       0
     # Canis lupus     36      0       0
-    # Canis lupus familiaris  3358    382639  1721
+    # Canis lupus familiaris  3371    382652  1723
     # Canis lupus laniger     2       0       0
     # Canis lupus lupus       2       0       0
     # Canis mesomelas 1       0       0
@@ -945,12 +987,12 @@ wait
     # is the Black-backed jackal from Africa and the langier is the Tibetan wolf
     # lupus lupus is the Eurasian wolf
 
-    # edit etc/genbank.conf to add canFam6 just after canFam4
+    # edit etc/genbank.conf to add canFam6 just after canFam5
 
-# canFam6 (Great Dane - GCA_005444595.1 - UMICH_Zoey_3.1) 
+# canFam6 (GCF_000002285.5 Dog10K Boxer Tasha)
 canFam6.serverGenome = /hive/data/genomes/canFam6/canFam6.2bit
 canFam6.ooc = /hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc
-canFam6.lift = /hive/data/genomes/canFam6/jkStuff/canFam6.10Kgaps.lft
+canFam6.lift = /hive/data/genomes/canFam6/jkStuff/canFam6.gaps.lft
 canFam6.align.unplacedChroms = chrUn_*
 canFam6.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
 canFam6.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
@@ -967,9 +1009,9 @@ canFam6.perChromTables = no
 
     # verify the files specified exist before checking in the file:
   grep ^canFam6 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
-# -rw-rw-r-- 1 615551503 Jul 28 09:03 /hive/data/genomes/canFam6/canFam6.2bit
-# -rw-rw-r-- 1    114048 Jul 28 09:17 /hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc
-# -rw-rw-r-- 1     65851 Jul 31 12:34 /hive/data/genomes/canFam6/jkStuff/canFam6.5Kgaps.lft
+# -rw-rw-r-- 1 607528981 May 12 22:06 /hive/data/genomes/canFam6/canFam6.2bit
+# -rw-rw-r-- 1    112304 May 13 10:40 /hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc
+# -rw-rw-r-- 1     24204 May 13 10:48 /hive/data/genomes/canFam6/jkStuff/canFam6.gaps.lft
 
     git commit -m "Added canFam6 dog; refs #27546" etc/genbank.conf
     git push
@@ -989,21 +1031,21 @@ canFam6.perChromTables = no
     # Notify Chris Lee this is ready to go.  Magic will happen.
 
 #############################################################################
-# augustus gene track (TBD - 2020-07-29 - Hiram)
+# augustus gene track (DONE - 2021-05-13 - Hiram)
 
     mkdir /hive/data/genomes/canFam6/bed/augustus
     cd /hive/data/genomes/canFam6/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev canFam6) > do.log 2>&1
+XXX - running - Thu May 13 11:47:52 PDT 2021
     # real    189m35.455s
 
     cat fb.canFam6.augustusGene.txt
     # 48256052 bases of 2337131234 (2.065%) in intersection
 
 #########################################################################
-# ncbiRefSeq (TBD - 2019-11-20 - Hiram)
-    ### XXX ### Not available on GCA/genbank assemblies
+# ncbiRefSeq (DONE - 2021-05-13 - Hiram)
 
     mkdir /hive/data/genomes/canFam6/bed/ncbiRefSeq
     cd /hive/data/genomes/canFam6/bed/ncbiRefSeq
@@ -1011,31 +1053,28 @@ canFam6.perChromTables = no
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       -bigClusterHub=ku -dbHost=hgwdev \
       -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Gorilla_gorilla \
-      GCA_008122165.1_Kamilah_GGO_v0 canFam6) > download.log 2>&1
-    # real    1m37.523s
+      GCF_000002285.5_Dog10K_Boxer_Tasha canFam6) > download.log 2>&1
+    # real    2m5.429s
 
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       -continue=process -bigClusterHub=ku -dbHost=hgwdev \
       -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Gorilla_gorilla \
-      GCF_008122165.1_Kamilah_GGO_v0 canFam6) > process.log 2>&1
-    # real    2m9.450s
+      GCF_000002285.5_Dog10K_Boxer_Tasha canFam6) > process.log 2>&1
+    # real    3m31.265s
 
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       -continue=load -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Gorilla_gorilla \
-      GCF_008122165.1_Kamilah_GGO_v0 canFam6) > load.log 2>&1
-    # real    0m21.982s
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      GCF_000002285.5_Dog10K_Boxer_Tasha canFam6) > load.log 2>&1
+    # real    0m47.905s
 
     cat fb.ncbiRefSeq.canFam6.txt
-    #  74279781 bases of 2999027915 (2.477%) in intersection
+    #  88916188 bases of 2312743346 (3.845%) in intersection
 
     # add: include ../../refSeqComposite.ra alpha
-    # to the gorilla/canFam6/trackDb.ra to turn on the track in the browser
+    # to the dog/canFam6/trackDb.ra to turn on the track in the browser
 
-    # XXX 2019-11-20 - ready for this after genbank runs
+    # XXX 2021-05-13 - ready for this after genbank runs
 
     featureBits -enrichment canFam6 refGene ncbiRefSeq 
  # refGene 0.402%, ncbiRefSeq 3.148%, both 0.402%, cover 99.90%, enrich 31.73x
@@ -1049,10 +1088,28 @@ canFam6.perChromTables = no
  # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
 
 #########################################################################
-# LIFTOVER TO canFam4 (TBD - 2020-07-28 - Hiram)
+# LIFTOVER TO canFam5 (DONE - 2021-05-13 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/canFam6/bed/blat.canFam4.2020-07-28
-    cd /hive/data/genomes/canFam6/bed/blat.canFam4.2020-07-28
+    mkdir /hive/data/genomes/canFam6/bed/blat.canFam5.2021-05-13
+    cd /hive/data/genomes/canFam6/bed/blat.canFam5.2021-05-13
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc \
+         canFam6 canFam5
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc \
+         canFam6 canFam5) > doLiftOverToCanFam5.log 2>&1
+XXX - running - Thu May 13 11:34:24 PDT 2021
+    # real    299m34.538s
+
+    # see if the liftOver menus function in the browser from canFam6 to canFam5
+
+#########################################################################
+# LIFTOVER TO canFam4 (DONE - 2021-05-13 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/canFam6/bed/blat.canFam4.2021-05-13
+    cd /hive/data/genomes/canFam6/bed/blat.canFam4.2021-05-13
     doSameSpeciesLiftOver.pl -verbose=2 \
         -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc \
@@ -1061,15 +1118,16 @@ canFam6.perChromTables = no
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc \
          canFam6 canFam4) > doLiftOverToCanFam4.log 2>&1
+XXX - running - Thu May 13 11:34:24 PDT 2021
     # real    299m34.538s
 
-    # see if the liftOver menus function in the browser from canFam6 to canFam3
+    # see if the liftOver menus function in the browser from canFam6 to canFam4
 
 #########################################################################
-# LIFTOVER TO canFam3 (TBD - 2020-07-28 - Hiram)
+# LIFTOVER TO canFam3 (DONE - 2021-05-13 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/canFam6/bed/blat.canFam3.2020-07-28
-    cd /hive/data/genomes/canFam6/bed/blat.canFam3.2020-07-28
+    mkdir /hive/data/genomes/canFam6/bed/blat.canFam3.2021-05-13
+    cd /hive/data/genomes/canFam6/bed/blat.canFam3.2021-05-13
     doSameSpeciesLiftOver.pl -verbose=2 \
         -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc \
@@ -1078,42 +1136,69 @@ canFam6.perChromTables = no
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc \
          canFam6 canFam3) > doLiftOverToCanFam3.log 2>&1
+XXX - running - Thu May 13 11:34:24 PDT 2021
     # real    278m52.252s
 
     # see if the liftOver menus function in the browser from canFam6 to canFam3
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2020-07-31 - Hiram)
-#	After getting a blat server assigned by the Blat Server Gods,
-    ssh hgwdev
+#  BLATSERVERS ENTRY (DONE - 2021-05-13 - Hiram)
+    mkdir /hive/data/genomes/canFam6/dynamicBlat
+    cd /hive/data/genomes/canFam6/dynamicBlat
 
-    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("canFam6", "blat1b", "17906", "1", "0"); \
-	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("canFam6", "blat1b", "17907", "0", "1");' \
+    time gfServer -trans index canFam6.trans.gfidx ../canFam6.2bit &
+    # real    5m27.906s
+    time gfServer -stepSize=5 index canFam6.untrans.gfidx ../canFam6.2bit
+    # real    3m3.944s
+
+    rsync -a -P ../canFam6.2bit qateam@dynablat-01:/scratch/hubs/canFam6/
+    rsync -a -P canFam6.untrans.gfidx qateam@dynablat-01:/scratch/hubs/canFam6/
+    rsync -a -P canFam6.trans.gfidx qateam@dynablat-01:/scratch/hubs/canFam6/
+
+ hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr, dynamic) \
+	VALUES ("canFam6", "dynablat-01", "4040", "1", "0", "1"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr, dynamic) \
+	VALUES ("canFam6", "dynablat-01", "4040", "0", "1", "1");' \
 	    hgcentraltest
-    #	test it with some sequence
+    #	test it with some sequence, for example ACE2:
+
+>hg38_ACE2
+MSSSSWLLLSLVAVTAAQSTIEEQAKTFLDKFNHEAEDLFYQSSLASWNYNTNITEENVQ
+NMNNAGDKWSAFLKEQSTLAQMYPLQEIQNLTVKLQLQALQQNGSSVLSEDKSKRLNTIL
+NTMSTIYSTGKVCNPDNPQECLLLEPGLNEIMANSLDYNERLWAWESWRSEVGKQLRPLY
+EEYVVLKNEMARANHYEDYGDYWRGDYEVNGVDGYDYSRGQLIEDVEHTFEEIKPLYEHL
+HAYVRAKLMNAYPSYISPIGCLPAHLLGDMWGRFWTNLYSLTVPFGQKPNIDVTDAMVDQ
+AWDAQRIFKEAEKFFVSVGLPNMTQGFWENSMLTDPGNVQKAVCHPTAWDLGKGDFRILM
+CTKVTMDDFLTAHHEMGHIQYDMAYAAQPFLLRNGANEGFHEAVGEIMSLSAATPKHLKS
+IGLLSPDFQEDNETEINFLLKQALTIVGTLPFTYMLEKWRWMVFKGEIPKDQWMKKWWEM
+KREIVGVVEPVPHDETYCDPASLFHVSNDYSFIRYYTRTLYQFQFQEALCQAAKHEGPLH
+KCDISNSTEAGQKLFNMLRLGKSEPWTLALENVVGAKNMNVRPLLNYFEPLFTWLKDQNK
+NSFVGWSTDWSPYADQSIKVRISLKSALGDKAYEWNDNEMYLFRSSVAYAMRQYFLKVKN
+QMILFGEEDVRVANLKPRISFNFFVTAPKNVSDIIPRTEVEKAIRMSRSRINDAFRLNDN
+SLEFLGIQPTLGPPNQPPVSIWLIVFGVVMGVIVVGIVILIFTGIRDRKKKNKARSGENP
+YASIDISKGENNPGFQNTDDVQTSF
 
 ############################################################################
 ## reset default position to gene: ACE2 as found by blat of human protein
-##  (TBD - 2020-07-31 - Hiram)
+##  (DONE - 2021-05-13 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chrX:11818981-11859716"
+    hgsql -e 'update dbDb set defaultPos="chrX:11706333-11735291"
 	where name="canFam6";' hgcentraltest
 
 ##############################################################################
-# crispr whole genome (TBD - 2020-09-08 - Hiram)
+# crispr whole genome (DONE - 2021-05-13 - Hiram)
     mkdir /hive/data/genomes/canFam6/bed/crisprAll
     cd /hive/data/genomes/canFam6/bed/crisprAll
 
     # the large shoulder argument will cause the entire genome to be scanned
     # this takes a while for a new genome to get the bwa indexing done
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
-    canFam6 augustusGene -shoulder=250000000 -tableName=crisprAll \
+    canFam6 -tableName=crisprAll \
     -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > ranges.log 2>&1
+XXX - running - Thu May 13 11:38:41 PDT 2021
     # real    58m27.340s
 
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
