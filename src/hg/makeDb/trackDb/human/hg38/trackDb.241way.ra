@@ -1,8 +1,8 @@
 track cons241way
 compositeTrack on
-shortLabel Zoonomia 241-way
-longLabel Zoonomia Mammalian Cactus Alignment & Conservation (241 Species)
-subGroup1 view Views align=Multiz_Alignments phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+shortLabel Cactus 241-way
+longLabel Cactus Alignment & Conservation of Placental Mammals from Zoonomia Project (241 Species)
+subGroup1 view Views align=Cactus_Alignments phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
 # subGroup2 clade Clade glires=Glires euarchontoglires=Euarchontoglires placental=Placental all=All_species
 subGroup2 clade Clade primate=Primate carnivore=Carnivore cetartiodactyla=Cetartiodactyla chiroptera=Chiroptera rodents=Rodents mammals=Mammals all=All_species
 dragAndDrop subTracks
@@ -22,7 +22,7 @@ priority 1
         track cactus241way
         subTrack cons241wayViewalign on
         shortLabel Cactus Align
-        longLabel Cactus Alignments of Zoonomia 241 Mammals
+        longLabel Cactus Alignments of Zoonomia 241 Placental Mammals
         subGroups view=align clade=mammals
         noInherit on
 #        irows on
@@ -57,7 +57,7 @@ priority 1
         subTrack cons241wayViewphyloP on
         subGroups view=phyloP clade=all
         shortLabel Basewise Cons
-        longLabel Zoonomia 241 Mammals Basewise Conservation by PhyloP
+        longLabel PhyloP Basewise Conservation of Zoonomia 241 Placental Mammals
         noInherit on
         configurable on
         type wig -20 7.532
