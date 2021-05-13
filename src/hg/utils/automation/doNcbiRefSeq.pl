@@ -571,11 +571,17 @@ sub doLoad {
     $genePredCheckDb = "genePredCheck";
   }
 
+  my $verString = `cat $buildDir/process/ncbiRefSeqVersion.txt`;
+  chomp $verString;
+  $verString =~ s/.*elease //;
+  $verString =~ s/ .*//;
+
   $bossScript->add(<<_EOF_
 # establish all variables to use here
 
-export db=$db
-export asmId=$asmId
+export db="$db"
+export asmId="$asmId"
+export verString="$verString"
 
 _EOF_
   );
@@ -863,11 +869,10 @@ if [ -s process/\$asmId.rna.cds ]; then
 fi
 
 if [ -d "/usr/local/apache/htdocs-hgdownload/goldenPath/archive" ]; then
- gtfFile=`ls \$db.*.ncbiRefSeq.gtf.gz`
- mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq
- rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$gtfFile
+ mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$verString
+ rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$verString/\$db.\$verString.ncbiRefSeq.gtf.gz
  ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \\
-   /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/
+   /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$verString/\$db.\$verString.ncbiRefSeq.gtf.gz
 fi
 
 rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes/\$db.ncbiRefSeq.gtf.gz
