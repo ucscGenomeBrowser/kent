@@ -357,7 +357,7 @@ html gnomad
         filterByRange._pli on
         parent gnomadPLI on
         priority 1
-        release beta,public
+        release alpha
 
         track pliByTranscript
         shortLabel gnomAD Transcript Constraint
@@ -375,7 +375,7 @@ html gnomad
         filterByRange._pli on
         parent gnomadPLI off
         priority 2
-        release beta,public
+        release alpha
 
         track pliByGene
         shortLabel gnomAD Gene LoF Constraint
@@ -394,7 +394,7 @@ html gnomad
         filterByRange._pli on
         parent gnomadPLI on
         priority 1
-        release alpha
+        release beta,public
 
         track missenseByGene
         shortLabel gnomAD Gene Missense Constraint
@@ -412,7 +412,7 @@ html gnomad
         filterByRange._zscore on
         parent gnomadPLI off
         priority 2
-        release alpha
+        release beta,public
 
         track pliByTranscript
         shortLabel gnomAD Transcript LoF Constraint
@@ -430,7 +430,7 @@ html gnomad
         filterByRange._pli on
         parent gnomadPLI off
         priority 2
-        release alpha
+        release beta,public
 
         track missenseByTranscript
         shortLabel gnomAD Transcript Missense Constraint
@@ -448,7 +448,7 @@ html gnomad
         filterByRange._zscore on
         parent gnomadPLI off
         priority 2
-        release alpha
+        release beta,public
 
         track gnomadMissense
         parent gnomadPLI off
