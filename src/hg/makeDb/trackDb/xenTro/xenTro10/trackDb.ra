@@ -14,7 +14,7 @@ track mrna override
 priority 1
 
 track intronEst override
-priority 1
+priority 2
 
 track chainNetMm10 override
 shortLabel $o_db ChainNet
