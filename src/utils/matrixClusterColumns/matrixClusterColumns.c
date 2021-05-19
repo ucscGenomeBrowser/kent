@@ -15,16 +15,14 @@ errAbort(
   "matrixClusterColumns - Group the columns of a matrix into clusters, and output a matrix with\n"
   "the same number of rows and generally much fewer columns. Combines columns by taking mean.\n"
   "usage:\n"
-  "   matrixClusterColumns input meta.tsv cluster outMatrix.tsv outStats.tsv [cluster2 outMatrix2.tsv outStats2.tsv ... ]\n"
+  "   matrixClusterColumns inMatrix.tsv meta.tsv cluster outMatrix.tsv outStats.tsv [cluster2 outMatrix2.tsv outStats2.tsv ... ]\n"
   "where:\n"
-  "   input is a file either in tsv format or in mtx (matrix mart sorted) format\n"
+  "   inMatrix.tsv is a file in tsv format with cell labels in first row and gene labels in first column\n"
   "   meta.tsv is a table where the first row is field labels and the first column is sample ids\n"
   "   cluster is the name of the field with the cluster names\n"
   "You can produce multiple clusterings in the same pass through the input matrix by specifying\n"
   "additional cluster/outMatrix/outStats triples in the command line.\n"
   "options:\n"
-  "   -columnLabels=file.txt - a file with a line for each column, required for mtx inputs\n"
-  "   -rowLabels=file.txt - a file with a label for each row, also required for mtx inputs\n"
   "   -makeIndex=index.tsv - output index tsv file with <matrix-col1><input-file-pos><line-len>\n"
   "   -median if set ouput median rather than mean cluster value\n"
   );
@@ -32,8 +30,6 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {"columnLabels", OPTION_STRING},
-   {"rowLabels", OPTION_STRING},
    {"makeIndex", OPTION_STRING},
    {"median", OPTION_BOOLEAN},
    {NULL, 0},
