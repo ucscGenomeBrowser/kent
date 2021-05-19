@@ -41,6 +41,7 @@ src/dnaDust \
 src/fuse \
 src/gfClient \
 src/gfServer \
+src/isPcr \
 src/index \
 src/makefile \
 src/meta \
