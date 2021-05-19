@@ -999,6 +999,7 @@ span.gbSessionChanged {
 .tbTooltipLabel {
     background: #EFEFEF;
     padding: 5px;
+    cursor: pointer;
 }
 
 .tbTooltiptext {
