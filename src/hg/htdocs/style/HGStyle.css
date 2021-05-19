@@ -24,6 +24,7 @@ a:link {
 
 .blueLink {
         color: #121E9A !important; 
+        cursor: pointer;
 }
 
 span.link {
