@@ -40,6 +40,8 @@ DbConnector cartDefaultConnector = hConnectCart;
 DbDisconnect cartDefaultDisconnector = hDisconnectCart;
 static boolean cartDidContentType = FALSE;
 
+struct slPair *httpHeaders = NULL; // A list of headers to output before the content-type
+
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
  * in hash.  Override existing hash item with that name if any.
@@ -2291,6 +2293,18 @@ cartExclude(cart, sessionVar);
 return cart;
 }
 
+static void addHttpHeaders()
+/* CGIs can initialize the global variable httpHeaders to control their own HTTP
+ * headers. This allows, for example, to prevent web browser caching of hgTracks
+ * responses, but implicitly allow web browser caching everywhere else */
+{
+struct slPair *h;
+for (h = httpHeaders; h != NULL; h = h->next)
+    {
+    printf("%s: %s\n", h->name, (char *)h->val);
+    }
+}
+
 struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
                                    struct hash *oldVars, boolean doContentType)
 /* Load cart from cookie and session cgi variable.  Write cookie
@@ -2306,9 +2320,8 @@ popAbortHandler();
 cartWriteCookie(cart, cookieName);
 if (doContentType && !cartDidContentType)
     {
+    addHttpHeaders();
     puts("Content-Type:text/html");
-    // disable web browsers from caching CGI responses:
-    puts("Cache-Control: no-cache");
     puts("\n");
     cartDidContentType = TRUE;
     }

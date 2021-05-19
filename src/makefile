@@ -75,7 +75,7 @@ blatSuite: topLibs hgLib
 # all of these application makefiles have been updated to include use
 #	of DESTDIR and BINDIR
 
-BLAT_APPLIST = blat gfClient gfServer
+BLAT_APPLIST = blat gfClient gfServer isPcr
 
 userApps: topLibs hgLib destBin
 	cd utils/stringify && echo utils/stringify && ${MAKE}

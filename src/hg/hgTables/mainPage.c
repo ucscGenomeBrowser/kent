@@ -1035,7 +1035,7 @@ hPrintf(
   ">Sequence and Annotation Downloads</A> page.</span>"
    , getGenomeSpaceText()
 );
-hPrintf(" <span id='tbHelpLess' class='blueLink' style='display:none'>Less...</a></span>");
+hPrintf(" <span id='tbHelpLess' class='blueLink' style='display:none'>Less...</span>");
 
 // Show more or less intro text
 char jsText[1024];
