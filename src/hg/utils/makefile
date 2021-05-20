@@ -100,8 +100,6 @@ TEST_DIRS = \
 	hgvsToVcf \
 	hubCheck \
 	overlapSelect \
-	pslMap \
-	pslRc \
 	pslToBigPsl \
 	refSeqGet \
 	transMapPslToGenePred \
