@@ -1,5 +1,5 @@
 kentSrc = ../../..
-include ../../../inc/common.mk
+include ${kentSrc}/inc/common.mk
 
 pslSwap = ${DESTBINDIR}/pslSwap
 pslCheck = ${DESTBINDIR}/pslCheck

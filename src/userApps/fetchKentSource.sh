@@ -177,7 +177,6 @@ src/hg/pslSimp \
 src/hg/pslSortAcc \
 src/hg/pslSplitOnTarget \
 src/hg/pslStats \
-src/hg/pslSwap \
 src/hg/pslToBed \
 src/hg/pslUnpile \
 src/hg/pslxToFa \
