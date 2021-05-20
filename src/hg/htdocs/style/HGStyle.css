@@ -24,6 +24,7 @@ a:link {
 
 .blueLink {
         color: #121E9A !important; 
+        cursor: pointer;
 }
 
 span.link {
@@ -999,6 +1000,7 @@ span.gbSessionChanged {
 .tbTooltipLabel {
     background: #EFEFEF;
     padding: 5px;
+    cursor: pointer;
 }
 
 .tbTooltiptext {

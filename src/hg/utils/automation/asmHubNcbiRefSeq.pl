@@ -208,7 +208,7 @@ if ( -s "$trackDataDir/ncbiRefSeq/${asmId}.ncbiRefSeqCurated.stats.txt" ) {
 <p>
 <b>Curated gene count: </b>$itemCount<br>
 <b>Bases in curated genes: </b>$basesCovered<br>
-<b>Percent genome coverage: </b>% $percentCoverage<br>
+<b>Percent genome coverage: </b>%% $percentCoverage<br>
 </p>
 _EOF_
 } else {
@@ -230,7 +230,7 @@ if ( -s "$trackDataDir/ncbiRefSeq/${asmId}.ncbiRefSeqPredicted.stats.txt" ) {
 <p>
 <b>Predicted gene count: </b>$itemCount<br>
 <b>Bases in genes: </b>$basesCovered<br>
-<b>Percent genome coverage: </b>% $percentCoverage<br>
+<b>Percent genome coverage: </b>%% $percentCoverage<br>
 </p>
 _EOF_
 } else {
@@ -252,7 +252,7 @@ if ( -s "$trackDataDir/ncbiRefSeq/${asmId}.ncbiRefSeqOther.stats.txt" ) {
 <p>
 <b>Other annotation count: </b>$itemCount<br>
 <b>Bases in other annotations: </b>$basesCovered<br>
-<b>Percent genome coverage: </b>% $percentCoverage<br>
+<b>Percent genome coverage: </b>%% $percentCoverage<br>
 </p>
 _EOF_
 }

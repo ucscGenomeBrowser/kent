@@ -1650,6 +1650,7 @@ sub cleanup {
   my $baseName = basename($buildDir);
   my $dirName = dirname($buildDir);
   $doSymLink = 1 if ($dirName =~ m#.*/$tDb/bed$#);
+  $doSymLink = 1 if ($dirName =~ m#.*/trackData$#);
   my $whatItDoes =
 "It cleans up files after a successful blastz/chain/net/install series.
 It uses rm -f so failures should be ignored (e.g. if a partial cleanup has
@@ -1713,6 +1714,10 @@ too distant from the reference.  Suppressed unless -syntenicNet is included.";
       die "doSyntenicNet: looks like previous stage was not successful " .
           "(can't find $successFile).\n";
   }
+  my $goldenPath = $HgAutomate::goldenPath;
+  if ($tDb =~ m/^GC/) {
+     $goldenPath = &HgAutomate::asmHubDownloadDir($tDb);
+  }
   my $bossScript = new HgRemoteScript("$runDir/netSynteny.csh", $workhorse,
                                     $runDir, $whatItDoes, $DEF);
   if ($opt_loadChainSplit && $splitRef) {
@@ -1741,8 +1746,8 @@ _EOF_
 
     if (! $opt_skipDownload) {
        $bossScript->add(<<_EOF_
-mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb/mafSynNet
-cd $HgAutomate::goldenPath/$tDb/vs$QDb/mafSynNet
+mkdir -p $goldenPath/$tDb/vs$QDb/mafSynNet
+cd $goldenPath/$tDb/vs$QDb/mafSynNet
 ln -s $buildDir/mafSynNet/* .
 _EOF_
        );
@@ -1838,9 +1843,11 @@ _EOF_
 
     if (! $opt_skipDownload) {
       $bossScript->add(<<_EOF_
-mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb
-cd $HgAutomate::goldenPath/$tDb/vs$QDb
+mkdir -p $goldenPath/$tDb/vs$QDb
+cd $goldenPath/$tDb/vs$QDb
 if (-s $runDir/synNet.md5sum.txt ) then
+  rm -f $tDb.$qDb.syn.net.gz
+  rm -f $tDb.$qDb.synNet.maf.gz
   ln -s $runDir/$tDb.$qDb.syn.net.gz .
   ln -s $runDir/$tDb.$qDb.synNet.maf.gz .
   cat $runDir/synNet.md5sum.txt >> md5sum.txt
