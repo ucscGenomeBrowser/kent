@@ -1,4 +1,4 @@
-kentSrc = ../../..
+kentSrc = ../..
 A = pslMap
 include ${kentSrc}/inc/userApp.mk
 

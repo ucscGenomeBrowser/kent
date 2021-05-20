@@ -77,9 +77,13 @@ UTILS_APPLIST = \
 	paraFetch \
 	paraSync \
 	pslLiftSubrangeBlat \
+	pslMap \
+	pslMapPostChain \
 	pslPosTarget \
+	pslRc \
 	pslRemoveFrameShifts \
 	pslScore \
+	pslSwap \
 	pslToPslx \
 	randomLines \
 	raSqlQuery \

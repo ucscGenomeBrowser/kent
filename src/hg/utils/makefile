@@ -51,9 +51,6 @@ UTILS_APPLIST = \
 	overlapSelect \
 	positionalTblCheck \
 	pslToBigPsl \
-	pslMap \
-	pslMapPostChain \
-	pslRc \
 	tdbQuery \
 	transMapPslToGenePred \
 	twoBitMask

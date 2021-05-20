@@ -1,4 +1,4 @@
-kentSrc = ../../../..
+kentSrc = ../../..
 include ${kentSrc}/inc/common.mk
 
 pslMapPostChain = ${DESTBINDIR}/pslMapPostChain
