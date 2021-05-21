@@ -344,7 +344,11 @@ sub doDownload {
   my $bossScript = new HgRemoteScript("$runDir/doRBDownload.csh", $dbHost,
 				      $runDir, $whatItDoes);
 
-  my $downloadDir = "$HgAutomate::goldenPath/$tDb/vs$QDb";
+  my $goldenPath = $HgAutomate::goldenPath;
+  if ($tDb =~ m/^GC/) {
+     $goldenPath = &HgAutomate::asmHubDownloadDir($tDb);
+  }
+  my $downloadDir = "$goldenPath/$tDb/vs$QDb";
   &HgAutomate::checkExistsUnlessDebug("recipBest", "download",
 				      "$runDir/$tDb.$qDb.rbest.net.gz",
 				      $downloadDir);
@@ -352,6 +356,7 @@ sub doDownload {
   &makeRbestReadme($readme);
 
   $bossScript->add(<<_EOF_
+rm -fr $downloadDir/reciprocalBest
 mkdir $downloadDir/reciprocalBest
 cd $downloadDir/reciprocalBest
 ln -s $runDir/*.rbest.*.gz .

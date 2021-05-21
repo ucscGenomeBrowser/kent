@@ -1,4 +1,4 @@
-include ../../../../inc/common.mk
+include ../../../inc/common.mk
 
 pslRc = ${DESTBINDIR}/pslRc
 pslCheck = ${DESTBINDIR}/pslCheck
@@ -6,7 +6,7 @@ pslCheck = ${DESTBINDIR}/pslCheck
 diff = diff -u
 
 # use pslSwap input files
-indir = ../../../pslSwap/tests/input/
+indir = ../../pslSwap/tests/input/
 
 test: mrnaTest withSeqTest transTest
 	${MAKE} clean

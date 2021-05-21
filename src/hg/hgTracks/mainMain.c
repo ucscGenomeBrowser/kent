@@ -59,7 +59,10 @@ if (cgiVarExists("hgt.redirectTool"))
     extToolRedirect(cart, cgiString("hgt.redirectTool"));
     }
 else
+    {
+    httpHeaders = slPairNew("Cache-Control", "no-store");
     cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
+    }
 
 // TODO: better place for this ?
 puts("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css\">\n");

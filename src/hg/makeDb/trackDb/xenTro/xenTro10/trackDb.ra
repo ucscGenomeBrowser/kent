@@ -5,6 +5,19 @@ html gold
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap
+priority 1
+
+track xenoRefGene override
+priority 3
+
+track mrna override
+priority 1
+
+track intronEst override
+priority 2
+
+track chainNetMm10 override
+shortLabel $o_db ChainNet
 
 searchTable gold
 shortCircuit 1

@@ -341,7 +341,7 @@ export gff3ToRefLink=$gff3ToRefLink
 export gbffToCds=$gbffToCds
 export dateStamp=`date "+%F"`
 
-export annotationRelease=`zcat \$ncbiGffGz | head -100 | grep ^#.annotation-source | sed -e 's/.*annotation-source //'`
+export annotationRelease=`zcat \$ncbiGffGz | head -100 | grep ^#.annotation-source | sed -e 's/.*annotation-source //; s/ Updated Annotation Release//;'`
 if [ "\$annotationRelease" == "" ]; then
   export annotationRelease=\$asmId
 fi
@@ -574,6 +574,7 @@ sub doLoad {
   my $verString = `cat $buildDir/process/ncbiRefSeqVersion.txt`;
   chomp $verString;
   $verString =~ s/.*elease //;
+  $verString =~ s/^[^0-9]*//;
   $verString =~ s/ .*//;
 
   $bossScript->add(<<_EOF_

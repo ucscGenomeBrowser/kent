@@ -21,6 +21,9 @@ struct cart;         // forward definition for use in trackDb.h
 #define CART_VAR_EMPTY "[]"
 #define IS_CART_VAR_EMPTY(var) ((var) == NULL || sameString(var,CART_VAR_EMPTY))
 
+// A list of headers each CGI can use to control their own HTTP headers
+extern struct slPair *httpHeaders;
+
 typedef struct sqlConnection *(*DbConnector)();
 /* funtion type used to get a connection to database */
 
