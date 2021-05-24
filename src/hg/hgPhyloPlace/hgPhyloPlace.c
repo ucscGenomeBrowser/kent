@@ -150,7 +150,7 @@ webIncludeFile("inc/gbFooter.html");
 webEndJWest();
 }
 
-#define CHECK_FILE_INPUT_JS "{ var $fileInput = $('input[name="seqFileVar"]');  " \
+#define CHECK_FILE_INPUT_JS(varName) "{ var $fileInput = $('input[name="varName"]');  " \
     "if ($fileInput && $fileInput[0] && $fileInput[0].files && !$fileInput[0].files.length) {" \
       " alert('Please choose a file first, then click the upload button.');" \
       " return false; " \
@@ -181,7 +181,7 @@ puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most si
      "Placement is performed by\n"
      "<a href='https://github.com/yatisht/usher' target=_blank>"
      "Ultrafast Sample placement on Existing tRee (UShER)</a> "
-     "(<a href='https://www.biorxiv.org/content/10.1101/2020.09.26.314971v1' target=_blank>"
+     "(<a href='https://www.nature.com/articles/s41588-021-00862-7' target=_blank>"
      "Turakhia <em>et al.</em></a>).  UShER also generates local subtrees to show samples "
      "in the context of the most closely related sequences.  The subtrees can be visualized "
      "as Genome Browser custom tracks and/or using "
@@ -227,9 +227,8 @@ puts("<p><b>Note:</b> "
 puts("</div>");
 puts("  </div>");
 puts("  <div class='gbControl col-md-12'>");
-printf("<p>Select your FASTA or VCF file: ");
-printf("<input type='file' id='%s' name='%s' "
-       "accept='.fa, .fasta, .vcf, .vcf.gz, .fa.gz, .fasta.gz'>",
+printf("<p>Select your FASTA, VCF or list of sequence names/IDs: ");
+printf("<input type='file' id='%s' name='%s'>",
        seqFileVar, seqFileVar);
 struct treeChoices *treeChoices = loadTreeChoices(db);
 if (treeChoices)
@@ -245,9 +244,9 @@ printf("Number of samples per subtree showing sample placement: ");
 int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
 cgiMakeIntVarWithLimits("subtreeSize", subtreeSize,
                         "Number of samples in subtree showing neighborhood of placement",
-                        5, 10, 2000);
+                        5, 10, 5000);
 puts("</p><p>");
-cgiMakeOnClickSubmitButton(CHECK_FILE_INPUT_JS, "submit", "upload");
+cgiMakeOnClickSubmitButton(CHECK_FILE_INPUT_JS(seqFileVar), "submit", "upload");
 puts("</p>");
 // Add a loading image to reassure people that we're working on it when they upload a big file
 printf("<div><img id='loadingImg' src='../images/loading.gif' />\n");
@@ -373,8 +372,9 @@ if (lf != NULL)
     // Do our best to place the user's samples, make custom tracks if successful:
     char *phyloPlaceTree = cartOptionalString(cart, "phyloPlaceTree");
     int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
+    boolean success = FALSE;
     char *ctFile = phyloPlaceSamples(lf, db, phyloPlaceTree, measureTiming, subtreeSize,
-                                     tl.fontHeight);
+                                     tl.fontHeight, &success);
     if (ctFile)
         {
         cgiMakeHiddenVar(CT_CUSTOM_TEXT_VAR, ctFile);
@@ -384,8 +384,9 @@ if (lf != NULL)
         puts("  </div>");
         puts("</form>");
         }
-    else
+    else if (! success)
         {
+        puts("<p></p>");
         puts("  </div>");
         puts("</form>");
         // Let the user upload something else and try again:

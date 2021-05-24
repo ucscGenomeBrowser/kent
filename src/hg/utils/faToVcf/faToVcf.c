@@ -115,7 +115,9 @@ struct dnaSeq *seq;
 for (seq = sequences->next;  seq != NULL;  seq = seq->next)
     if (seq->size != seqSize)
         errAbort("faToVcf: first sequence in %s (%s) has size %d, but sequence %s has size %d. "
-                 "All sequences must have the same size.",
+                 "All sequences must have the same size.  "
+                 "(Does the input contain non-IUPAC characters?  Non-IUPAC characters are ignored.  "
+                 "Masked bases are expected to be 'N'.  Gaps are expected to be '-'.)",
                  faFile, sequences->name, seqSize, seq->name, seq->size);
 
 char *refName = optionVal("ref", sequences->name);
