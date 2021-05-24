@@ -107,26 +107,37 @@ char *emptyStyles[] = {
 "Normal"
 };
 
+static boolean freeTypeOn()
+{
+#ifdef USE_FREETYPE
+char *defaultState = "on";
+#else // USE_FREETYPE
+char *defaultState = "off";
+#endif // USE_FREETYPE
+
+return sameString(cfgOptionDefault("freeType", defaultState), "on");
+}
+
 void maybeNewFonts(struct hvGfx *hvg)
 /* Check to see if we want to use the alternate font engine (FreeType2). */
 {
-if (sameString(cfgOptionDefault("freeType", "on"), "on"))
-    {
-    if (sameString(tl.textFont, "Bitmap"))
-        return;
+if (!freeTypeOn())
+    return;
 
-    char *fontDir = cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts");
-    char buffer[4096];
+if (sameString(tl.textFont, "Bitmap"))
+    return;
 
-    int ii;
-    for(ii=0; ii < ArraySize(freeTypeFontNames); ii++)
-        if (sameString(freeTypeFontNames[ii], tl.textFont))
-            break;
-    char *fontFile = freeTypeFontFiles[ii];
-    char *fontName = freeTypeFontNames[ii];
-    safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
-    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
-    }
+char *fontDir = cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts");
+char buffer[4096];
+
+int ii;
+for(ii=0; ii < ArraySize(freeTypeFontNames); ii++)
+    if (sameString(freeTypeFontNames[ii], tl.textFont))
+        break;
+char *fontFile = freeTypeFontFiles[ii];
+char *fontName = freeTypeFontNames[ii];
+safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
+hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
 }
 
 static void textFontDropDown()
@@ -603,7 +614,7 @@ if (trackLayoutInclFontExtras())
     }
 hPrintf("</TR>");
 
-if (sameString(cfgOptionDefault("freeType", "on"), "on"))
+if (freeTypeOn())
     {
     hPrintf("<TR><TD>font:");
     hPrintf("<TD style=\"text-align: right\">");
