@@ -754,27 +754,12 @@ searchPriority 8
     cd /hive/data/genomes/canFam6/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku canFam6) > do.log 2>&1
-XXX - running - Thu May 13 10:38:58 PDT 2021
-    # real    43m47.630s
+    # real    48m34.968s
 
-# four jobs failed, running manually on hgwdev:
-./runGsBig2M.csh chr22 000 gtf/000/chr22.gtf pep/000/chr22.pep subopt/000/chr22.bed &
-./runGsBig2M.csh chr15 000 gtf/000/chr15.gtf pep/000/chr15.pep subopt/000/chr15.bed &
-./runGsBig2M.csh chr20 000 gtf/000/chr20.gtf pep/000/chr20.pep subopt/000/chr20.bed &
-./runGsBig2M.csh chr3 000 gtf/000/chr3.gtf pep/000/chr3.pep subopt/000/chr3.bed
-wait
-    # real    23m28.061s
-
-    # continuing:
-    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
-      -continue=makeBed -bigClusterHub=ku canFam6) > makeBed.log 2>&1
-    # real    0m54.356s
-
-    cat fb.canFam6.genscan.txt
-    # 55250288 bases of 2337131234 (2.364%) in intersection
-
-    cat fb.canFam6.genscanSubopt.txt
-    # 48016592 bases of 2337131234 (2.055%) in intersection
+    sed -e 's/^/    # /;' fb.canFam6.genscan.txt
+    # 54159469 bases of 2312743346 (2.342%) in intersection
+    sed -e 's/^/    # /;' fb.canFam6.genscanSubopt.txt
+    # 46763127 bases of 2312743346 (2.022%) in intersection
 
 #########################################################################
 # Create kluster run files (DONE - 2021-05-13 - Hiram)
@@ -1038,11 +1023,10 @@ canFam6.perChromTables = no
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev canFam6) > do.log 2>&1
-XXX - running - Thu May 13 11:47:52 PDT 2021
-    # real    189m35.455s
+    # real    114m7.669s
 
-    cat fb.canFam6.augustusGene.txt
-    # 48256052 bases of 2337131234 (2.065%) in intersection
+    sed -e 's/^/    # /;' fb.canFam6.augustusGene.txt
+    # 47489256 bases of 2312743346 (2.053%) in intersection
 
 #########################################################################
 # ncbiRefSeq (DONE - 2021-05-13 - Hiram)
@@ -1074,18 +1058,14 @@ XXX - running - Thu May 13 11:47:52 PDT 2021
     # add: include ../../refSeqComposite.ra alpha
     # to the dog/canFam6/trackDb.ra to turn on the track in the browser
 
-    # XXX 2021-05-13 - ready for this after genbank runs
-
     featureBits -enrichment canFam6 refGene ncbiRefSeq 
- # refGene 0.402%, ncbiRefSeq 3.148%, both 0.402%, cover 99.90%, enrich 31.73x
+# refGene 0.138%, ncbiRefSeq 3.845%, both 0.136%, cover 99.15%, enrich 25.79x
     featureBits -enrichment canFam6 ncbiRefSeq refGene
- # ncbiRefSeq 3.148%, refGene 0.402%, both 0.402%, cover 12.76%, enrich 31.73x
-
+# ncbiRefSeq 3.845%, refGene 0.138%, both 0.136%, cover 3.55%, enrich 25.79x
     featureBits -enrichment canFam6 ncbiRefSeqCurated refGene
- # ncbiRefSeqCurated 0.401%, refGene 0.402%, both 0.400%, cover 99.66%, enrich 247.79x
-
+# ncbiRefSeqCurated 0.152%, refGene 0.138%, both 0.133%, cover 87.51%, enrich 636.15x
     featureBits -enrichment canFam6 refGene ncbiRefSeqCurated
- # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
+ # refGene 0.138%, ncbiRefSeqCurated 0.152%, both 0.133%, cover 96.65%, enrich 636.15x
 
 #########################################################################
 # LIFTOVER TO canFam5 (DONE - 2021-05-13 - Hiram)
@@ -1100,8 +1080,7 @@ XXX - running - Thu May 13 11:47:52 PDT 2021
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc \
          canFam6 canFam5) > doLiftOverToCanFam5.log 2>&1
-XXX - running - Thu May 13 11:34:24 PDT 2021
-    # real    299m34.538s
+    # real    179m37.613s
 
     # see if the liftOver menus function in the browser from canFam6 to canFam5
 
@@ -1118,8 +1097,7 @@ XXX - running - Thu May 13 11:34:24 PDT 2021
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc \
          canFam6 canFam4) > doLiftOverToCanFam4.log 2>&1
-XXX - running - Thu May 13 11:34:24 PDT 2021
-    # real    299m34.538s
+    # real    960m7.335s
 
     # see if the liftOver menus function in the browser from canFam6 to canFam4
 
@@ -1136,8 +1114,7 @@ XXX - running - Thu May 13 11:34:24 PDT 2021
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc \
          canFam6 canFam3) > doLiftOverToCanFam3.log 2>&1
-XXX - running - Thu May 13 11:34:24 PDT 2021
-    # real    278m52.252s
+    # real    2695m19.425s
 
     # see if the liftOver menus function in the browser from canFam6 to canFam3
 
@@ -1197,59 +1174,53 @@ YASIDISKGENNPGFQNTDDVQTSF
     canFam6 -tableName=crisprAll \
     -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
-      -workhorse=hgwdev) > ranges.log 2>&1
-XXX - running - Thu May 13 11:38:41 PDT 2021
+      -workhorse=hgwdev) > indexFa.log 2>&1
     # real    58m27.340s
+    # that command failed, finished the final command manually, it needed
+    # the gene table on the python command
 
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
-       -continue=guides -stop=load canFam6 augustusGene \
-	-shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -continue=ranges canFam6 -tableName=crisprAll \
+    -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
-      -workhorse=hgwdev) > load.log 2>&1
-    # zreal    6831m11.040s
+      -workhorse=hgwdev) > ranges.log 2>&1
+    # real    8554m11.613s
 
     cat guides/run.time | sed -e 's/^/# /;'
 # Completed: 100 of 100 jobs
-# CPU time in finished jobs:      17641s     294.01m     4.90h    0.20d  0.001 y
-# IO & Wait Time:                  1178s      19.64m     0.33h    0.01d  0.000 y
-# Average job time:                 188s       3.14m     0.05h    0.00d
-# Longest finished job:             356s       5.93m     0.10h    0.00d
-# Submission to last job:           362s       6.03m     0.10h    0.00d
+# CPU time in finished jobs:      10613s     176.88m     2.95h    0.12d  0.000 y
+# IO & Wait Time:                   318s       5.30m     0.09h    0.00d  0.000 y
+# Average job time:                 109s       1.82m     0.03h    0.00d
+# Longest finished job:             269s       4.48m     0.07h    0.00d
+# Submission to last job:           272s       4.53m     0.08h    0.00d
 
     cat specScores/run.time | sed -e 's/^/# /;'
-# Completed: 3079567 of 3079567 jobs
-# CPU time in finished jobs:  249034274s 4150571.23m 69176.19h 2882.34d  7.897 y
-# IO & Wait Time:               6571097s  109518.28m  1825.30h   76.05d  0.208 y
-# Average job time:                  83s       1.38m     0.02h    0.00d
-# Longest finished job:             338s       5.63m     0.09h    0.00d
-# Submission to last job:        288453s    4807.55m    80.13h    3.34d
+# Completed: 3079460 of 3079460 jobs
+# CPU time in finished jobs:  246730604s 4112176.74m 68536.28h 2855.68d  7.824 y
+# IO & Wait Time:               5517084s   91951.39m  1532.52h   63.86d  0.175 y
+# Average job time:                  82s       1.37m     0.02h    0.00d
+# Longest finished job:             160s       2.67m     0.04h    0.00d
+# Submission to last job:        276754s    4612.57m    76.88h    3.20d
 
-    grep "Number of" load.log | grep Scores | grep "^#"
-# Number of specScores: 231816384
-# Number of effScores: 252358865
+    grep "Number of" ranges.log | grep Scores | grep "^#"
+# Number of specScores: 231915228
+# Number of effScores: 253445228
 
     cat effScores/run.time | sed -e 's/^/# /;'
-# Completed: 25231 of 25231 jobs
-# CPU time in finished jobs:   12713218s  211886.96m  3531.45h  147.14d  0.403 y
-# IO & Wait Time:                150199s    2503.32m    41.72h    1.74d  0.005 y
-# Average job time:                 510s       8.50m     0.14h    0.01d
-# Longest finished job:            6617s     110.28m     1.84h    0.08d
-# Submission to last job:         14126s     235.43m     3.92h    0.16d
+# Completed: 25340 of 25340 jobs
+# CPU time in finished jobs:   13149467s  219157.78m  3652.63h  152.19d  0.417 y
+# IO & Wait Time:                145678s    2427.97m    40.47h    1.69d  0.005 y
+# Average job time:                 525s       8.74m     0.15h    0.01d
+# Longest finished job:           97897s    1631.62m    27.19h    1.13d
+# Submission to last job:        110740s    1845.67m    30.76h    1.28d
 
     cat offTargets/run.time | sed -e 's/^/# /;'
-# Completed: 153979 of 153979 jobs
-# CPU time in finished jobs:    1739935s   28998.91m   483.32h   20.14d  0.055 y
-# IO & Wait Time:               2672538s   44542.31m   742.37h   30.93d  0.085 y
-# Average job time:                  29s       0.48m     0.01h    0.00d
-# Longest finished job:              53s       0.88m     0.01h    0.00d
-# Submission to last job:          4617s      76.95m     1.28h    0.05d
-
-    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
-       -continue=cleanup canFam6 \
-	-tableName=crisprAll -fileServer=hgwdev \
-    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
-      -workhorse=hgwdev) > cleanup.log 2>&1
-    # real    375m19.820s
+# Completed: 153974 of 153974 jobs
+# CPU time in finished jobs:    1850764s   30846.07m   514.10h   21.42d  0.059 y
+# IO & Wait Time:               1927940s   32132.33m   535.54h   22.31d  0.061 y
+# Average job time:                  25s       0.41m     0.01h    0.00d
+# Longest finished job:              64s       1.07m     0.02h    0.00d
+# Submission to last job:          3954s      65.90m     1.10h    0.05d
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
@@ -1297,13 +1268,14 @@ XXX - running - Thu May 13 11:38:41 PDT 2021
 
     cd /hive/data/genomes/canFam6
     time (makeDownloads.pl canFam6) > downloads.log 2>&1
-    #  real    15m31.624s
+    #  real    16m39.750s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/canFam6/pushQ
     cd /hive/data/genomes/canFam6/pushQ
  time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList canFam6) > canFam6.pushQ.sql 2> stderr.out
-    # real    11m11.758s
+XXX - running - Mon May 24 11:47:51 PDT 2021
+    # real    15m12.083s
 
     # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.canFam6.table.list
@@ -1312,12 +1284,6 @@ XXX - running - Thu May 13 11:38:41 PDT 2021
     sed -i -e "/Gap Overlaps/d" redmine.canFam6.releaseLog.txt
 
     #   check for errors in stderr.out, some are OK, e.g.:
-  # WARNING: canFam6 does not have ucscToRefSeq
-  # WARNING: hgwdev does not have /gbdb/canFam6/ncbiRefSeq/ncbiRefSeqVersion.txt
-  # WARNING: hgwdev does not have /gbdb/canFam6/ncbiRefSeq/ncbiRefSeqOther.bb
-  # WARNING: hgwdev does not have /gbdb/canFam6/ncbiRefSeq/ncbiRefSeqOther.ix
-  # WARNING: hgwdev does not have /gbdb/canFam6/ncbiRefSeq/ncbiRefSeqOther.ixx
-  # WARNING: hgwdev does not have /gbdb/canFam6/ncbiRefSeq/seqNcbiRefSeq.rna.fa
   # WARNING: canFam6 does not have seq
   # WARNING: canFam6 does not have extFile
 
@@ -1330,11 +1296,11 @@ done
 
     # verify database tables, how many to expect:
     wc -l redmine.canFam6.table.list
-    # 57 redmine.canFam6.table.list
+    # 63 redmine.canFam6.table.list
 
     # how many actual:
     awk -F'.' '{printf "hgsql -N %s -e '"'"'show table status like \"%s\";'"'"'\n", $1, $2}' redmine.canFam6.table.list | sh | wc -l
-    # 57
+    # 63
 
     # would be a smaller number actual if some were missing
 
