@@ -1,6 +1,6 @@
 #!/bin/bash
 source ~/.bashrc
-set -beEu -o pipefail
+set -beEu -o -x pipefail
 
 # Download SARS-CoV-2 GenBank FASTA and metadata using NCBI Datasets API.
 # Use E-Utils to get SARS-CoV-2 metadata from BioSample.
@@ -109,7 +109,16 @@ for chunkFa in $splitDir/chunk*.fa; do
 done
 wc -l nextclade.tsv
 rm -rf $splitDir nextclade.fa
+
 conda activate pangolin
+runPangolin() {
+    fa=$1
+    out=$fa.pangolin.csv
+    logfile=$(mktemp)
+    pangolin $fa --outfile $out > $logfile 2>&1
+    rm $logfile
+}
+export -f runPangolin
 if [ -e ../ncbi.$prevDate/lineage_report.csv ]; then
     cp ../ncbi.$prevDate/lineage_report.csv linRepYesterday
     tail -n+2 linRepYesterday | sed -re 's/^([A-Z]+[0-9]+\.[0-9]+).*/\1/' | sort \
@@ -119,11 +128,21 @@ if [ -e ../ncbi.$prevDate/lineage_report.csv ]; then
     pangolin pangolin.fa >& pangolin.log
     tail -n+2 lineage_report.csv >> linRepYesterday
     mv linRepYesterday lineage_report.csv
+    rm -f pangolin.fa
 else
-    pangolin <(xzcat genbank.fa.xz) >& pangolin.log
+    splitDir=splitForPangolin
+    rm -rf $splitDir
+    mkdir $splitDir
+    faSplit about <(xzcat genbank.fa.xz) 30000000 $splitDir/chunk
+    find $splitDir -name chunk\*.fa \
+    | parallel -j 10 "runPangolin {}"
+    head -1 $(ls -1 $splitDir/chunk*.csv | head -1) > lineage_report.csv
+    for f in $splitDir/chunk*.csv; do
+        tail -n+2 $f >> lineage_report.csv
+    done
+    rm -rf $splitDir
 fi
 wc -l lineage_report.csv
-rm -f pangolin.fa
 
 rm -f $ottoDir/ncbi.latest
 ln -s ncbi.$today $ottoDir/ncbi.latest
