@@ -18376,3 +18376,71 @@ sed -e 's/^/    # /;' fb.${query}.chainRBest.${Target}.txt
     # real    367m14.987s
 
 ##############################################################################
+# LASTZ dog boxer Tasha canFam6 (DONE - 2021-05-17 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm10/bed/lastzCanFam6.2021-05-17
+    cd /hive/data/genomes/mm10/bed/lastzCanFam6.2021-05-17
+
+    printf '# boxer Tasha canFam6 vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: boxer Tasha canFam6
+SEQ2_DIR=/hive/data/genomes/canFam6/canFam6.2bit
+SEQ2_LEN=/hive/data/genomes/canFam6/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzCanFam6.2021-05-17
+TMPDIR=/dev/shm
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    276m30.999s
+
+    sed -e 's/^/    # /;' fb.mm10.chainCanFam6Link.txt
+    # 791039766 bases of 2739603606 (28.874%) in intersection
+    sed -e 's/^/    # /;' fb.mm10.chainSynCanFam6Link.txt
+    # 747308674 bases of 2739603606 (27.278%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 canFam6 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    260m22.664s
+
+    sed -e 's/^/    # /;' fb.mm10.chainRBest.CanFam6.txt
+    # 731553248 bases of 2739603606 (26.703%) in intersection
+
+    mkdir /hive/data/genomes/canFam6/bed/blastz.mm10.swap
+    cd /hive/data/genomes/canFam6/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCanFam6.2021-05-17/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #   real    48m21.892s
+
+    sed -e 's/^/    # /;' fb.canFam6.chainMm10Link.txt
+    # 747891292 bases of 2312743346 (32.338%) in intersection
+    sed -e 's/^/    # /;' fb.canFam6.chainSynMm10Link.txt
+    # 721253430 bases of 2312743346 (31.186%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev canFam6 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    165m54.013s
+
+    sed -e 's/^/    # /;' fb.canFam6.chainRBest.Mm10.txt
+    # 730713145 bases of 2312743346 (31.595%) in intersection
+
+##############################################################################

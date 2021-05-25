@@ -860,3 +860,43 @@ results->subtreeInfoList = results->subtreeInfoList->next;
 return results;
 }
 
+struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protobufPath,
+                                                int subtreeSize, struct slName *sampleIds,
+                                                struct hash *condensedNodes, int *pStartTime)
+/* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
+ * containing sampleIds, save resulting subtrees to trash files, return subtree results.
+ * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
+{
+struct usherResults *results = usherResultsNew();
+char subtreeSizeStr[16];
+safef(subtreeSizeStr, sizeof subtreeSizeStr, "%d", subtreeSize);
+char *numThreadsStr = "16";
+struct tempName tnSamples;
+trashDirFile(&tnSamples, "ct", "matUtilsExtractSamples", ".txt");
+FILE *f = mustOpen(tnSamples.forCgi, "w");
+struct slName *sample;
+for (sample = sampleIds;  sample != NULL;  sample = sample->next)
+    fprintf(f, "%s\n", sample->name);
+carefulClose(&f);
+struct tempName tnOutDir;
+trashDirFile(&tnOutDir, "ct", "matUtils_outdir", ".dir");
+char *cmd[] = { matUtilsPath, "extract", "-i", protobufPath, "-d", tnOutDir.forCgi,
+                "-s", tnSamples.forCgi,
+                "-x", subtreeSizeStr, "-X", SINGLE_SUBTREE_SIZE, "-T", numThreadsStr,
+                NULL };
+char **cmds[] = { cmd, NULL };
+struct tempName tnStderr;
+trashDirFile(&tnStderr, "ct", "matUtils_stderr", ".txt");
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi);
+pipelineClose(&pl);
+reportTiming(pStartTime, "run matUtils");
+struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
+struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
+int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn, &singleSubtreeMuts,
+                                      subtreeTns, subtreeMuts, MAX_SUBTREES);
+results->subtreeInfoList = parseSubtrees(subtreeCount, singleSubtreeTn, singleSubtreeMuts,
+                                         subtreeTns, subtreeMuts, sampleIds, condensedNodes);
+results->singleSubtreeInfo = results->subtreeInfoList;
+results->subtreeInfoList = results->subtreeInfoList->next;
+return results;
+}

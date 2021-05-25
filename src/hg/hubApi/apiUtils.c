@@ -653,6 +653,8 @@ else
 	char *tbOff = trackDbSetting(tdb, "tableBrowser");
 	if (tbOff && startsWithWord("off", tbOff))
 	    ret = TRUE;
+	if (tbOff && startsWithWord("noGenome", tbOff))
+	    ret = TRUE;
 	}
     }
 return ret;
