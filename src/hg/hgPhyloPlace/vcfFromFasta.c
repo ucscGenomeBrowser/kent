@@ -214,6 +214,41 @@ slReverse(retFailedPsls);
 return filteredPsls;
 }
 
+static void removeUnalignedSeqs(struct seqInfo **pSeqs, struct psl *alignments,
+                                struct slPair **pFailedSeqs)
+/* If any seqs were not aligned, then remove them from *pSeqs and add them to *pFailedSeqs. */
+{
+struct seqInfo *alignedSeqs = NULL;
+struct slPair *newFailedSeqs = NULL;
+struct seqInfo *seq, *nextSeq;
+for (seq = *pSeqs;  seq != NULL;  seq = nextSeq)
+    {
+    nextSeq = seq->next;
+    boolean found = FALSE;
+    struct psl *psl;
+    for (psl = alignments;  psl != NULL;  psl = psl->next)
+        {
+        if (sameString(psl->qName, seq->seq->name))
+            {
+            found = TRUE;
+            break;
+            }
+        }
+    if (found)
+        slAddHead(&alignedSeqs, seq);
+    else
+        {
+        struct dyString *dy = dyStringCreate("Sequence %s could not be aligned to the reference; "
+                                             "skipping", seq->seq->name);
+        slPairAdd(&newFailedSeqs, dyStringCannibalize(&dy), seq);
+        }
+    }
+slReverse(&alignedSeqs);
+slReverse(&newFailedSeqs);
+*pSeqs = alignedSeqs;
+*pFailedSeqs = slCat(*pFailedSeqs, newFailedSeqs);
+}
+
 struct snvInfo
 /* Summary of SNV with sample genotypes (position and samples are externally defined) */
     {
@@ -561,6 +596,7 @@ if (filteredSeqs)
     {
     struct psl *alignments = alignSequences(db, refGenome, filteredSeqs, pStartTime);
     struct psl *filteredAlignments = checkAlignments(alignments, filteredSeqs, retFailedPsls);
+    removeUnalignedSeqs(&filteredSeqs, filteredAlignments, retFailedSeqs);
     if (filteredAlignments)
         {
         AllocVar(tn);

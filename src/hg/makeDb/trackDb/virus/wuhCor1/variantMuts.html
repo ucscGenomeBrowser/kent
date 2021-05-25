@@ -55,20 +55,29 @@ Insertions and deletions in both tracks are named:
 
 <h2>Methods</h2>
 <p>
-For each virus variant, SARS-CoV-2 sequences containing all characteristic
-mutations of the lineage were downloaded from GISAID.
-SNPs were called by first aligning the sequences using the
-profile alignment script at the
-<a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> repository (
+For each virus variant, SARS-CoV-2 genome sequences containing all characteristic
+mutations of the lineage were downloaded from GISAID using the lineage search feature
+(restricting to complete, high-coverage genomes, and restricting to earliest sample
+collection dates when there were too many results for the download limit of 10,000
+sequences per query).
+Sequences were aligned to the
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2">
+SARS-CoV-2 reference genome</a>
+using the
 <a href="https://github.com/roblanf/sarscov2phylo/blob/master/scripts/global_profile_alignment.sh" target="_blank">
 global_profile_alignment.sh</a>
-), then calling SNPs variants using the UCSC <em>faToVcf</em> script
+script from the
+<a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> repository.
+Single-nucleotide substitutions were extracted from the alignment using the UCSC tool
+<em>faToVcf</em>
 (available on the download server
-<a target="_blank" href="https://hgdownload.soe.ucsc.edu/admin/exe/">here</a>) and
+<a target="_blank" href="https://hgdownload.soe.ucsc.edu/admin/exe/">here</a>
+or from <a target="_blank" href="https://anaconda.org/bioconda/ucsc-fatovcf">bioconda</a>;
+also requires the
 <a target="_blank" href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2">
-the SARS-CoV-2 reference sequence</a>.
-SNPs present at a frequency
-above 0.95 are retained while all others are discarded.
+SARS-CoV-2 reference sequence</a>).
+Single nucleotide substitutions present at a frequency
+of at least 0.95 were retained while all others are discarded.
 <p>
 For indel detection, the 
 <a target="_blank" href="https://github.com/lh3/minimap2">Minimap2</a> 
@@ -78,11 +87,11 @@ suite of tools was used as follows:
         minimap2 --cs [Reference Sequence] [Set of Unaligned Sequences] | paftools.js call -L 10000 -
 </pre>
 
-Indels present at a frequency less than 0.85 were retained.</p>
+Indels present at a frequency of at least 0.85 were retained.</p>
 <p>
-The results were then combined and formatted by the  
+The results were then combined and formatted by
 <a target="blank" href="https://github.com/nickeener/sarscov2lineages/blob/main/scripts/lineageVariants.py">lineageVariants.py</a>. 
-The entire pipeline was run using the 
+The entire pipeline was run using
 <a target="blank" href="https://github.com/nickeener/sarscov2lineages/blob/main/lineageVariants.sh">
 lineageVariants.sh</a>.
 <p>

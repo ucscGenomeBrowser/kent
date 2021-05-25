@@ -520,7 +520,7 @@ if (isNotEmpty(userName))
 	   "</TD></TR>\n"
 	   "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>name:</TD><TD>\n");
     cgiMakeOnKeypressTextVar(hgsNewSessionName,
-			     cartUsualString(cart, "db", NULL),
+			     hubConnectSkipHubPrefix(cartUsualString(cart, "db", "mySession")),
 			     20, jsPressOnEnter(hgsDoNewSession));
     printf("&nbsp;&nbsp;&nbsp;");
     cgiMakeCheckBox(hgsNewSessionShare,

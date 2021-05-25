@@ -87,6 +87,17 @@ else if (abortIfNotFound)
 return NULL;
 }
 
+char *getMatUtilsPath(boolean abortIfNotFound)
+/* Return hgPhyloPlaceData/matUtils if it exists, else NULL.  Do not free the returned value. */
+{
+char *matUtilsPath = PHYLOPLACE_DATA_DIR "/matUtils";
+if (fileExists(matUtilsPath))
+    return matUtilsPath;
+else if (abortIfNotFound)
+    errAbort("Missing required file %s", matUtilsPath);
+return NULL;
+}
+
 char *getUsherAssignmentsPath(char *db, boolean abortIfNotFound)
 /* If <db>/config.ra specifies the file for use by usher --load-assignments and the file exists,
  * return the path, else NULL.  Do not free the returned value. */
@@ -132,13 +143,14 @@ if (isNotEmpty(filename) && fileExists(filename))
     AllocArray(treeChoices->metadataFiles, maxChoices);
     AllocArray(treeChoices->sources, maxChoices);
     AllocArray(treeChoices->descriptions, maxChoices);
+    AllocArray(treeChoices->aliasFiles, maxChoices);
     struct lineFile *lf = lineFileOpen(filename, TRUE);
     char *line;
     while (lineFileNextReal(lf, &line))
         {
-        char *words[5];
+        char *words[6];
         int wordCount = chopTabs(line, words);
-        lineFileExpectWords(lf, 4, wordCount);
+        lineFileExpectAtLeast(lf, 4, wordCount);
         if (treeChoices->count >= maxChoices)
             {
             warn("File %s has too many lines, only showing first %d phylogenetic tree choices",
@@ -161,6 +173,11 @@ if (isNotEmpty(filename) && fileExists(filename))
             }
         else
             treeChoices->descriptions[treeChoices->count] = cloneString(words[3]);
+        if (wordCount > 4)
+            {
+            addPathIfNecessary(dy, db, words[4]);
+            treeChoices->aliasFiles[treeChoices->count] = cloneString(dy->string);
+            }
         treeChoices->count++;
         dyStringFree(&dy);
         }
@@ -1192,13 +1209,15 @@ makeNextstrainButton("viewNextstrainSingleSubtree", tn, "view single subtree in 
 }
 
 static void makeButtonRow(struct tempName *singleSubtreeJsonTn, struct tempName *jsonTns[],
-                          struct subtreeInfo *subtreeInfoList, int subtreeSize, boolean isFasta)
+                          struct subtreeInfo *subtreeInfoList, int subtreeSize, boolean isFasta,
+                          boolean offerCustomTrack)
 /* Russ's suggestion: row of buttons at the top to view results in GB, Nextstrain, Nextclade. */
 {
 puts("<p>");
-cgiMakeButtonWithMsg("submit", "view in Genome Browser",
-                     "view your uploaded sequences, their phylogenetic relationship and their "
-                     "mutations along with many other datasets available in the Genome Browser");
+if (offerCustomTrack)
+    cgiMakeButtonWithMsg("submit", "view in Genome Browser",
+                         "view your uploaded sequences, their phylogenetic relationship and their "
+                         "mutations along with many other datasets available in the Genome Browser");
 if (nextstrainHost())
     {
     printf("&nbsp;");
@@ -2218,59 +2237,277 @@ struct subtreeInfo *tiB = *(struct subtreeInfo **)pb;
 return slCount(tiB->subtreeUserSampleIds) - slCount(tiA->subtreeUserSampleIds);
 }
 
-char *phyloPlaceSamples(struct lineFile *lf, char *db, char *defaultProtobuf,
-                        boolean doMeasureTiming, int subtreeSize, int fontHeight)
-/* Given a lineFile that contains either FASTA or VCF, prepare VCF for usher;
- * if that goes well then run usher, report results, make custom track files
- * and return the top-level custom track file; otherwise return NULL. */
+static void getProtobufMetadataSource(char *db, char *protobufFile, char **retProtobufPath,
+                                      char **retMetadataFile, char **retSource, char **retAliasFile)
+/* If the config file specifies a list of tree choices, and protobufFile is a valid choice, then
+ * set ret* to the files associated with that choice.  Otherwise fall back on older conf settings.
+ * Return the selected treeChoice if there is one. */
 {
-char *ctFile = NULL;
-measureTiming = doMeasureTiming;
-int startTime = clock1000();
-struct tempName *vcfTn = NULL;
-struct slName *sampleIds = NULL;
-char *usherPath = getUsherPath(TRUE);
-char *usherAssignmentsPath = NULL;
-char *source = NULL;
-char *metadataFile = NULL;
 struct treeChoices *treeChoices = loadTreeChoices(db);
 if (treeChoices)
     {
-    usherAssignmentsPath = defaultProtobuf;
-    if (isEmpty(usherAssignmentsPath))
-        usherAssignmentsPath = treeChoices->protobufFiles[0];
+    *retProtobufPath = protobufFile;
+    if (isEmpty(*retProtobufPath))
+        *retProtobufPath = treeChoices->protobufFiles[0];
     int i;
     for (i = 0;  i < treeChoices->count;  i++)
-        if (sameString(treeChoices->protobufFiles[i], usherAssignmentsPath))
+        if (sameString(treeChoices->protobufFiles[i], *retProtobufPath))
             {
-            metadataFile = treeChoices->metadataFiles[i];
-            source = treeChoices->sources[i];
+            *retMetadataFile = treeChoices->metadataFiles[i];
+            *retSource = treeChoices->sources[i];
+            *retAliasFile = treeChoices->aliasFiles[i];
             break;
             }
     if (i == treeChoices->count)
         {
-        usherAssignmentsPath = treeChoices->protobufFiles[0];
-        metadataFile = treeChoices->metadataFiles[0];
-        source = treeChoices->sources[0];
+        *retProtobufPath = treeChoices->protobufFiles[0];
+        *retMetadataFile = treeChoices->metadataFiles[0];
+        *retSource = treeChoices->sources[0];
+        *retAliasFile = treeChoices->aliasFiles[0];
         }
     }
 else
     {
     // Fall back on old settings
-    usherAssignmentsPath = getUsherAssignmentsPath(db, TRUE);
-    metadataFile = phyloPlaceDbSettingPath(db, "metadataFile");
-    source = "GISAID";
+    *retProtobufPath = getUsherAssignmentsPath(db, TRUE);
+    *retMetadataFile = phyloPlaceDbSettingPath(db, "metadataFile");
+    *retSource = "GISAID";
+    *retAliasFile = NULL;
     }
-struct mutationAnnotatedTree *bigTree = parseParsimonyProtobuf(usherAssignmentsPath);
+}
+
+static void addNameAndComponents(struct hash *nameHash, char *fullName)
+/* Add entries to nameHash mapping fullName to itself, and components of fullName to fullName. */
+{
+char *fullNameHashStored = hashStoreName(nameHash, fullName);
+// Now that we have hash storage for fullName, make it point to itself.
+struct hashEl *hel = hashLookup(nameHash, fullName);
+if (hel == NULL)
+    errAbort("Can't look up '%s' right after adding it", fullName);
+hel->val = fullNameHashStored;
+char *words[4];
+char copy[strlen(fullName)+1];
+safecpy(copy, sizeof copy, fullName);
+int wordCount = chopString(copy, "|", words, ArraySize(words));
+if (wordCount == 3)
+    {
+    // name|ID|date
+    hashAdd(nameHash, words[0], fullNameHashStored);
+    hashAdd(nameHash, words[1], fullNameHashStored);
+    }
+else if (wordCount == 2)
+    {
+    // ID|date
+    hashAdd(nameHash, words[0], fullNameHashStored);
+    }
+}
+
+static void rAddLeafNames(struct phyloTree *node, struct hash *condensedNodes, struct hash *nameHash)
+/* Recursively descend tree, adding leaf node names to nameHash (including all names of condensed
+ * leaf nodes).  Also map components of full names (country/isolate/year|ID|date) to full names. */
+{
+if (node->numEdges == 0)
+    {
+    char *leafName = node->ident->name;
+    struct slName *nodeList = hashFindVal(condensedNodes, leafName);
+    if (nodeList)
+        {
+        struct slName *sample;
+        for (sample = nodeList;  sample != NULL;  sample = sample->next)
+            addNameAndComponents(nameHash, sample->name);
+        }
+    else
+        addNameAndComponents(nameHash, leafName);
+    }
+else
+    {
+    int i;
+    for (i = 0;  i < node->numEdges;  i++)
+        rAddLeafNames(node->edges[i], condensedNodes, nameHash);
+    }
+}
+
+static void addAliases(struct hash *nameHash, char *aliasFile)
+/* If there is an aliasFile, then add its mappings of ID/alias to full tree name to nameHash. */
+{
+if (isNotEmpty(aliasFile) && fileExists(aliasFile))
+    {
+    struct lineFile *lf = lineFileOpen(aliasFile, TRUE);
+    int missCount = 0;
+    char *missExample = NULL;
+    char *line;
+    while (lineFileNextReal(lf, &line))
+        {
+        char *words[3];
+        int wordCount = chopTabs(line, words);
+        lineFileExpectWords(lf, 2, wordCount);
+        char *fullName = hashFindVal(nameHash, words[1]);
+        if (fullName)
+            hashAdd(nameHash, words[0], fullName);
+        else
+            {
+            missCount++;
+            if (missExample == NULL)
+                missExample = cloneString(words[1]);
+            }
+        }
+    lineFileClose(&lf);
+    if (missCount > 0)
+        fprintf(stderr, "aliasFile %s: %d values in second column were not found in tree, "
+                "e.g. '%s'", aliasFile, missCount, missExample);
+    }
+}
+
+static struct hash *getTreeNames(struct mutationAnnotatedTree *bigTree, char *aliasFile)
+/* Make a hash of full names of leaves of bigTree; also map components of those names to the
+ * full names in case the user gives us partial names. */
+{
+int nodeCount = bigTree->nodeHash->elCount;
+struct hash *nameHash = hashNew(digitsBaseTwo(nodeCount) + 3);
+rAddLeafNames(bigTree->tree, bigTree->condensedNodes, nameHash);
+addAliases(nameHash, aliasFile);
+return nameHash;
+}
+
+static char *matchName(struct hash *nameHash, char *name)
+/* Look for a possibly partial name or ID provided by the user in nameHash.  Return the result,
+ * possibly NULL.  If the full name doesn't match, try components of the name. */
+{
+name = trimSpaces(name);
+// GISAID fasta headers all have hCoV-19/country/isolate/year|EPI_ISL_#|date; strip the hCoV-19
+// because Nextstrain strips it in nextmeta/nextfasta download files, and so do I when building
+// UCSC's tree.
+if (startsWithNoCase("hCoV-19/", name))
+    name += strlen("hCoV-19/");
+char *match = hashFindVal(nameHash, name);
+int minWordSize=5;
+if (match == NULL && strchr(name, '|'))
+    {
+    // GISAID fasta headers have name|ID|date, and so do our tree IDs; try ID and name separately.
+    char *words[4];
+    char copy[strlen(name)+1];
+    safecpy(copy, sizeof copy, name);
+    int wordCount = chopString(copy, "|", words, ArraySize(words));
+    if (wordCount == 3)
+        {
+        // name|ID|date; try ID first.
+        if (strlen(words[1]) > minWordSize)
+            match = hashFindVal(nameHash, words[1]);
+        if (match == NULL && strlen(words[0]) > minWordSize)
+            {
+            match = hashFindVal(nameHash, words[0]);
+            // Sometimes country/isolate names have spaces... strip out if present.
+            if (match == NULL && strchr(words[0], ' '))
+                {
+                stripChar(words[0], ' ');
+                match = hashFindVal(nameHash, words[0]);
+                }
+            }
+        }
+    else if (wordCount == 2)
+        {
+        // ID|date
+        if (strlen(words[0]) > minWordSize)
+             match = hashFindVal(nameHash, words[0]);
+        }
+    }
+else if (match == NULL && strchr(name, ' '))
+    {
+    // GISAID sequence names may include spaces, in both country names ("South Korea") and
+    // isolate names.  That messes up FASTA headers, so Nextstrain strips out spaces when
+    // making the nextmeta and nextfasta download files for GISAID.  Try stripping out spaces:
+    char copy[strlen(name)+1];
+    safecpy(copy, sizeof copy, name);
+    stripChar(copy, ' ');
+    match = hashFindVal(nameHash, copy);
+    }
+return match;
+}
+
+static struct slName *readSampleIds(struct lineFile *lf, struct mutationAnnotatedTree *bigTree,
+                                    char *aliasFile)
+/* Read a file of sample names/IDs from the user; typically these will not be exactly the same
+ * as the protobuf's (UCSC protobuf names are typically country/isolate/year|ID|date), so attempt
+ * to find component matches if an exact match isn't found. */
+{
+struct slName *sampleIds = NULL;
+struct slName *unmatched = NULL;
+struct hash *nameHash = getTreeNames(bigTree, aliasFile);
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    // If tab-sep or comma-sep, just try first word in line
+    char *tab = strchr(line, '\t');
+    if (tab)
+        *tab = '\0';
+    else
+        {
+        char *comma = strchr(line, ',');
+        if (comma)
+            *comma = '\0';
+        }
+    char *match = matchName(nameHash, line);
+    if (match)
+        slNameAddHead(&sampleIds, match);
+    else
+        slNameAddHead(&unmatched, line);
+    }
+if (unmatched)
+    {
+    struct dyString *firstFew = dyStringNew(0);
+    int maxExamples = 5;
+    struct slName *example;
+    int i;
+    for (i = 0, example = unmatched;  example != NULL && i < maxExamples;
+         i++, example = example->next)
+        {
+        dyStringAppendSep(firstFew, ", ");
+        dyStringPrintf(firstFew, "'%s'", example->name);
+        }
+    warn("Unable to find %d of your sequences in the tree, e.g. %s",
+         slCount(unmatched), firstFew->string);
+    dyStringFree(&firstFew);
+    }
+else if (sampleIds == NULL)
+    warn("Could not find any names in input; empty file uploaded?");
+slNameFreeList(&unmatched);
+return sampleIds;
+}
+
+char *phyloPlaceSamples(struct lineFile *lf, char *db, char *defaultProtobuf,
+                        boolean doMeasureTiming, int subtreeSize, int fontHeight,
+                        boolean *retSuccess)
+/* Given a lineFile that contains either FASTA, VCF, or a list of sequence names/ids:
+ * If FASTA/VCF, then prepare VCF for usher; if that goes well then run usher, report results,
+ * make custom track files and return the top-level custom track file.
+ * If list of seq names/ids, then attempt to find their full names in the protobuf, run matUtils
+ * to make subtrees, show subtree results, and return NULL.  Set retSuccess to TRUE if we were
+ * able to get at least some results for the user's input. */
+{
+char *ctFile = NULL;
+if (retSuccess)
+    *retSuccess = FALSE;
+measureTiming = doMeasureTiming;
+int startTime = clock1000();
+struct tempName *vcfTn = NULL;
+struct slName *sampleIds = NULL;
+char *usherPath = getUsherPath(TRUE);
+char *protobufPath = NULL;
+char *source = NULL;
+char *metadataFile = NULL;
+char *aliasFile = NULL;
+getProtobufMetadataSource(db, defaultProtobuf, &protobufPath, &metadataFile, &source, &aliasFile);
+struct mutationAnnotatedTree *bigTree = parseParsimonyProtobuf(protobufPath);
 reportTiming(&startTime, "parse protobuf file");
 if (! bigTree)
     {
-    warn("Problem parsing %s; can't make subtree subtracks.", usherAssignmentsPath);
+    warn("Problem parsing %s; can't make subtree subtracks.", protobufPath);
     }
 lineFileCarefulNewlines(lf);
 struct slName **maskSites = getProblematicSites(db);
 struct dnaSeq *refGenome = hChromSeq(db, chrom, 0, chromSize);
 boolean isFasta = FALSE;
+boolean subtreesOnly = FALSE;
 struct seqInfo *seqInfoList = NULL;
 if (lfLooksLikeFasta(lf))
     {
@@ -2307,81 +2544,99 @@ else if (lfLooksLikeVcf(lf))
     }
 else
     {
-    if (isNotEmpty(lf->fileName))
-        warn("Sorry, can't recognize your file %s as FASTA or VCF.\n", lf->fileName);
-    else
-        warn("Sorry, can't recognize your uploaded data as FASTA or VCF.\n");
+    subtreesOnly = TRUE;
+    sampleIds = readSampleIds(lf, bigTree, aliasFile);
     }
 lineFileClose(&lf);
+if (sampleIds == NULL)
+    {
+    return ctFile;
+    }
+struct usherResults *results = NULL;
 if (vcfTn)
     {
     fflush(stdout);
-    int seqCount = slCount(seqInfoList);
-    struct usherResults *results = runUsher(usherPath, usherAssignmentsPath, vcfTn->forCgi,
-                                            subtreeSize, sampleIds, bigTree->condensedNodes,
-                                            &startTime);
-    if (results->singleSubtreeInfo)
+    results = runUsher(usherPath, protobufPath, vcfTn->forCgi,
+                       subtreeSize, sampleIds, bigTree->condensedNodes,
+                       &startTime);
+    }
+else if (subtreesOnly)
+    {
+    char *matUtilsPath = getMatUtilsPath(TRUE);
+    results = runMatUtilsExtractSubtrees(matUtilsPath, protobufPath, subtreeSize,
+                                         sampleIds, bigTree->condensedNodes,
+                                         &startTime);
+    }
+if (results && results->singleSubtreeInfo)
+    {
+    if (retSuccess)
+        *retSuccess = TRUE;
+    puts("<p></p>");
+    readQcThresholds(db);
+    int subtreeCount = slCount(results->subtreeInfoList);
+    // Sort subtrees by number of user samples (largest first).
+    slSort(&results->subtreeInfoList, subTreeInfoUserSampleCmp);
+    // Make Nextstrain/auspice JSON file for each subtree.
+    char *bigGenePredFile = phyloPlaceDbSettingPath(db, "bigGenePredFile");
+    struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
+    struct seqWindow *gSeqWin = chromSeqWindowNew(db, chrom, 0, chromSize);
+    struct hash *sampleMetadata = getSampleMetadata(metadataFile);
+    struct hash *sampleUrls = hashNew(0);
+    struct tempName *jsonTns[subtreeCount];
+    struct subtreeInfo *ti;
+    int ix;
+    for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
         {
-        puts("<p></p>");
-        readQcThresholds(db);
-        int subtreeCount = slCount(results->subtreeInfoList);
-        // Sort subtrees by number of user samples (largest first).
-        slSort(&results->subtreeInfoList, subTreeInfoUserSampleCmp);
-        // Make Nextstrain/auspice JSON file for each subtree.
-        char *bigGenePredFile = phyloPlaceDbSettingPath(db, "bigGenePredFile");
-        struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
-        struct seqWindow *gSeqWin = chromSeqWindowNew(db, chrom, 0, chromSize);
-        struct hash *sampleMetadata = getSampleMetadata(metadataFile);
-        struct hash *sampleUrls = hashNew(0);
-        struct tempName *jsonTns[subtreeCount];
-        struct subtreeInfo *ti;
-        int ix;
-        for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
-            {
-            AllocVar(jsonTns[ix]);
-            char subtreeName[512];
-            safef(subtreeName, sizeof(subtreeName), "subtreeAuspice%d", ix+1);
-            trashDirFile(jsonTns[ix], "ct", subtreeName, ".json");
-            treeToAuspiceJson(ti, db, geneInfoList, gSeqWin, sampleMetadata, NULL,
-                              jsonTns[ix]->forCgi, source);
-            // Add a link for every sample to this subtree, so the single-subtree JSON can
-            // link to subtree JSONs
-            char *subtreeUrl = nextstrainUrlFromTn(jsonTns[ix]);
-            struct slName *sample;
-            for (sample = ti->subtreeUserSampleIds;  sample != NULL;  sample = sample->next)
-                hashAdd(sampleUrls, sample->name, subtreeUrl);
-            }
-        struct tempName *singleSubtreeJsonTn;
-        AllocVar(singleSubtreeJsonTn);
-        trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
-        treeToAuspiceJson(results->singleSubtreeInfo, db, geneInfoList, gSeqWin, sampleMetadata,
-                          sampleUrls, singleSubtreeJsonTn->forCgi, source);
-        struct subtreeInfo *subtreeInfoForButtons = results->subtreeInfoList;
-        if (subtreeCount > MAX_SUBTREE_BUTTONS)
-            subtreeInfoForButtons = NULL;
-        makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeInfoForButtons, subtreeSize, isFasta);
-        printf("<p>If you have metadata you wish to display, click a 'view subtree in "
-               "Nextstrain' button, and then you can drag on a CSV file to "
-               "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
-               "</p>\n");
+        AllocVar(jsonTns[ix]);
+        char subtreeName[512];
+        safef(subtreeName, sizeof(subtreeName), "subtreeAuspice%d", ix+1);
+        trashDirFile(jsonTns[ix], "ct", subtreeName, ".json");
+        treeToAuspiceJson(ti, db, geneInfoList, gSeqWin, sampleMetadata, NULL,
+                          jsonTns[ix]->forCgi, source);
+        // Add a link for every sample to this subtree, so the single-subtree JSON can
+        // link to subtree JSONs
+        char *subtreeUrl = nextstrainUrlFromTn(jsonTns[ix]);
+        struct slName *sample;
+        for (sample = ti->subtreeUserSampleIds;  sample != NULL;  sample = sample->next)
+            hashAdd(sampleUrls, sample->name, subtreeUrl);
+        }
+    struct tempName *singleSubtreeJsonTn;
+    AllocVar(singleSubtreeJsonTn);
+    trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
+    treeToAuspiceJson(results->singleSubtreeInfo, db, geneInfoList, gSeqWin, sampleMetadata,
+                      sampleUrls, singleSubtreeJsonTn->forCgi, source);
+    struct subtreeInfo *subtreeInfoForButtons = results->subtreeInfoList;
+    if (subtreeCount > MAX_SUBTREE_BUTTONS)
+        subtreeInfoForButtons = NULL;
+    makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeInfoForButtons, subtreeSize, isFasta,
+                  !subtreesOnly);
+    printf("<p>If you have metadata you wish to display, click a 'view subtree in "
+           "Nextstrain' button, and then you can drag on a CSV file to "
+           "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
+           "</p>\n");
 
+    struct tempName *tsvTn = NULL, *sTsvTn = NULL;
+    struct tempName *zipTn = makeSubtreeZipFile(results, jsonTns, singleSubtreeJsonTn,
+                                                &startTime);
+    struct tempName *ctTn = NULL;
+    if (! subtreesOnly)
+        {
         findNearestNeighbors(results->samplePlacements, sampleMetadata, bigTree);
 
         // Make custom tracks for uploaded samples and subtree(s).
         struct phyloTree *sampleTree = NULL;
-        struct tempName *ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree->tree,
-                                                  source, fontHeight, &sampleTree, &startTime);
+        ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree->tree,
+                                 source, fontHeight, &sampleTree, &startTime);
 
         // Make a sample summary TSV file and accumulate S gene changes
         struct hash *spikeChanges = hashNew(0);
-        struct tempName *tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
+        tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
                                                  geneInfoList, gSeqWin, spikeChanges, &startTime);
-        struct tempName *sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
-        struct tempName *zipTn = makeSubtreeZipFile(results, jsonTns, singleSubtreeJsonTn,
-                                                    &startTime);
+        sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
         downloadsRow(results->bigTreePlusTn->forHtml, tsvTn->forHtml, sTsvTn->forHtml,
                      zipTn->forHtml);
 
+        int seqCount = slCount(seqInfoList);
         if (seqCount <= MAX_SEQ_DETAILS)
             {
             summarizeSequences(seqInfoList, isFasta, results, jsonTns, sampleMetadata, refGenome);
@@ -2411,48 +2666,54 @@ if (vcfTn)
                    "you uploaded %d sequences, and details are shown only when "
                    "you upload at most %d sequences.)</p>\n",
                    seqCount, MAX_SEQ_DETAILS);
+        }
 
-        // Offer big tree w/new samples for download
-        puts("<h3>Downloads</h3>");
+    puts("<h3>Downloads</h3>");
+    if (! subtreesOnly)
+        {
         puts("<ul>");
+        // Offer big tree w/new samples for download
         printf("<li><a href='%s' download>SARS-CoV-2 phylogenetic tree "
                "with your samples (Newick file)</a>\n", results->bigTreePlusTn->forHtml);
         printf("<li><a href='%s' download>TSV summary of sequences and placements</a>\n",
                tsvTn->forHtml);
         printf("<li><a href='%s' download>TSV summary of S (Spike) gene changes</a>\n",
                sTsvTn->forHtml);
-        printf("<li><a href='%s' download>ZIP archive of subtree Newick and JSON files</a>\n",
-               zipTn->forHtml);
-        // For now, leave in the individual links so I don't break anybody's pipeline that's
-        // scraping this page...
-        for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
+        }
+    printf("<li><a href='%s' download>ZIP archive of subtree Newick and JSON files</a>\n",
+           zipTn->forHtml);
+    // For now, leave in the individual links so I don't break anybody's pipeline that's
+    // scraping this page...
+    for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
+        {
+        int subtreeUserSampleCount = slCount(ti->subtreeUserSampleIds);
+        printf("<li><a href='%s' download>Subtree with %s", ti->subtreeTn->forHtml,
+               ti->subtreeUserSampleIds->name);
+        if (subtreeUserSampleCount > 10)
+            printf(" and %d other samples", subtreeUserSampleCount - 1);
+        else
             {
-            int subtreeUserSampleCount = slCount(ti->subtreeUserSampleIds);
-            printf("<li><a href='%s' download>Subtree with %s", ti->subtreeTn->forHtml,
-                   ti->subtreeUserSampleIds->name);
-            if (subtreeUserSampleCount > 10)
-                printf(" and %d other samples", subtreeUserSampleCount - 1);
-            else
-                {
-                struct slName *sln;
-                for (sln = ti->subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
-                    printf(", %s", sln->name);
-                }
-            puts(" (Newick file)</a>");
-            printf("<li><a href='%s' download>Auspice JSON for subtree with %s",
-                   jsonTns[ix]->forHtml, ti->subtreeUserSampleIds->name);
-            if (subtreeUserSampleCount > 10)
-                printf(" and %d other samples", subtreeUserSampleCount - 1);
-            else
-                {
-                struct slName *sln;
-                for (sln = ti->subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
-                    printf(", %s", sln->name);
-                }
-            puts(" (JSON file)</a>");
+            struct slName *sln;
+            for (sln = ti->subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
+                printf(", %s", sln->name);
             }
-        puts("</ul>");
+        puts(" (Newick file)</a>");
+        printf("<li><a href='%s' download>Auspice JSON for subtree with %s",
+               jsonTns[ix]->forHtml, ti->subtreeUserSampleIds->name);
+        if (subtreeUserSampleCount > 10)
+            printf(" and %d other samples", subtreeUserSampleCount - 1);
+        else
+            {
+            struct slName *sln;
+            for (sln = ti->subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
+                printf(", %s", sln->name);
+            }
+        puts(" (JSON file)</a>");
+        }
+    puts("</ul>");
 
+    if (!subtreesOnly)
+        {
         // Notify in opposite order of custom track creation.
         puts("<h3>Custom tracks for viewing in the Genome Browser</h3>");
         printf("<p>Added custom track of uploaded samples.</p>\n");
@@ -2461,10 +2722,10 @@ if (vcfTn)
                    subtreeCount, (subtreeCount > 1 ? "s" : ""));
         ctFile = urlFromTn(ctTn);
         }
-    else
-        {
-        warn("No subtree output from usher.\n");
-        }
+    }
+else
+    {
+    warn("No subtree output from usher.\n");
     }
 return ctFile;
 }

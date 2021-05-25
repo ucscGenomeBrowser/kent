@@ -51,9 +51,6 @@ UTILS_APPLIST = \
 	overlapSelect \
 	positionalTblCheck \
 	pslToBigPsl \
-	pslMap \
-	pslMapPostChain \
-	pslRc \
 	tdbQuery \
 	transMapPslToGenePred \
 	twoBitMask
@@ -103,8 +100,6 @@ TEST_DIRS = \
 	hgvsToVcf \
 	hubCheck \
 	overlapSelect \
-	pslMap \
-	pslRc \
 	pslToBigPsl \
 	refSeqGet \
 	transMapPslToGenePred \
