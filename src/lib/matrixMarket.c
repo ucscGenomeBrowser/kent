@@ -32,6 +32,17 @@ if (differentString(row[0], "%%MatrixMarket"))
 if (differentWord(row[1], "matrix"))
     errAbort("%s is not a MatrixMarket matrix", fileName);
 
+/* Skip over other lines that start with % */
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    if (line[0] != '%')
+        {
+	lineFileReuse(lf);
+	break;
+	}
+    }
+
 /* Allocate our return object and fill in what we can from the header line */
 struct matrixMarket *mm;
 AllocVar(mm);
