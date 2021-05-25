@@ -628,8 +628,6 @@ boolean ret = FALSE;
  */
 if (sameOk(tableName, "cosmicRegions"))
   ret = TRUE;
-else if (startsWith("omim", tableName))
-  ret = TRUE;
 else if (sameOk(tableName, "decipherRaw"))
   ret = TRUE;
 else if (sameOk(tableName, "knownToDecipher"))
@@ -654,6 +652,8 @@ else
 	{
 	char *tbOff = trackDbSetting(tdb, "tableBrowser");
 	if (tbOff && startsWithWord("off", tbOff))
+	    ret = TRUE;
+	if (tbOff && startsWithWord("noGenome", tbOff))
 	    ret = TRUE;
 	}
     }
