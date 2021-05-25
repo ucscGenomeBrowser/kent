@@ -70,6 +70,7 @@ UTILS_APPLIST = \
 	findMotif \
 	headRest \
 	htmlCheck \
+	matrixMarketToTsv \
 	newProg \
 	newPythonProg \
 	nibFrag \
