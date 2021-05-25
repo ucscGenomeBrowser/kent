@@ -628,6 +628,8 @@ boolean ret = FALSE;
  */
 if (sameOk(tableName, "cosmicRegions"))
   ret = TRUE;
+else if (startsWith("omim", tableName))
+  ret = TRUE;
 else if (sameOk(tableName, "decipherRaw"))
   ret = TRUE;
 else if (sameOk(tableName, "knownToDecipher"))
