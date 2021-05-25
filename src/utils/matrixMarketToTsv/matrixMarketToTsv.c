@@ -6,6 +6,8 @@
 #include "matrixMarket.h"
 #include "obscure.h"
 
+int dotMod = 100;  // Put out an I'm alive dot every so often
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -54,10 +56,10 @@ while (matrixMarketNext(mm))
     {
     rows[mm->x][mm->y] = mm->val;
     }
-verbose(1, "Done reading matrix\n");
 matrixMarketClose(&mm);
 
 /* Open output */
+verbose(1, "Writing output matrix\n");
 FILE *f = mustOpen(outMatrix, "w");
 
 /* Write first line */
@@ -70,7 +72,9 @@ for (i=0; i<sampleCount; ++i)
 fprintf(f, "\n");
 
 /* Write out rest of lines */
-dotForUserInit(100);
+if (geneCount >= dotMod)
+    verbose(1, "Showing one dot for every dotMod genes output\n");
+dotForUserInit(dotMod);
 name = geneList;
 for (i=0; i<geneCount; ++i)
     {
@@ -84,6 +88,8 @@ for (i=0; i<geneCount; ++i)
     fprintf(f, "\n");
     dotForUser();
     }
+if (geneCount >= dotMod)
+    fprintf(stderr, "\n");  /* To avoid ragged end of dots */
 carefulClose(&f);
 }
 
