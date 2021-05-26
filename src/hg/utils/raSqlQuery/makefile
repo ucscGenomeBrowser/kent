@@ -1,4 +1,4 @@
-kentSrc = ../..
+kentSrc = ../../..
 A = raSqlQuery
 preMyLibs += $(kentSrc)/lib/$(MACHTYPE)/jkhgap.a
 extraObjects = raRecord.o

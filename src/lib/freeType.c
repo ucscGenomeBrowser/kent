@@ -4,20 +4,20 @@
 #ifndef USE_FREETYPE
 int ftInitialize()
 {
-errAbort("FreeType not enabled");
+errAbort("FreeType not enabled. Install FreeType and recompile, or add freeType=off to hg.conf");
 return 0;
 }
 
 int ftWidth(MgFont *font, unsigned char *chars, int charCount)
 {
-errAbort("FreeType not enabled");
+errAbort("FreeType not enabled. Install FreeType and recompile, or add freeType=off to hg.conf");
 return 0;
 }
 
 void ftText(struct memGfx *mg, int x, int y, Color color, 
 	MgFont *font, char *text)
 {
-errAbort("FreeType not enabled");
+errAbort("FreeType not enabled. Install FreeType and recompile, or add freeType=off to hg.conf");
 }
 
 #else 

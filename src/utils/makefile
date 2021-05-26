@@ -77,7 +77,6 @@ UTILS_APPLIST = \
 	nibSize \
 	paraFetch \
 	paraSync \
-	pslLiftSubrangeBlat \
 	pslMap \
 	pslMapPostChain \
 	pslPosTarget \
@@ -87,7 +86,6 @@ UTILS_APPLIST = \
 	pslSwap \
 	pslToPslx \
 	randomLines \
-	raSqlQuery \
 	raToTab \
 	raToLines \
 	rmFaDups \
@@ -143,7 +141,6 @@ UCSC_APPS = \
 	lineCount \
 	nt4Frag \
 	pslToXa \
-	scaffoldFaToAgp \
 	scrambleFa \
 	subs \
 	tableSum \

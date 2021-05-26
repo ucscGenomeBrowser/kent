@@ -59,6 +59,13 @@
 #define DEFAULT_GENOME "Human"
 #endif
 
+static unsigned trackDbCartVersion = 0;
+
+unsigned hdbGetTrackCartVersion()
+/* Get the cart version that our current trackDb wants to use. */
+{
+return trackDbCartVersion;
+}
 
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
 static struct sqlConnCache *centralCc = NULL;
@@ -3943,8 +3950,9 @@ boolean trackDataAccessibleHash(char *database, struct trackDb *tdb, struct hash
  *
  * if gbdbHash is not NULL, use it when looking for the file */
 {
-if (startsWith("mathWig", tdb->type))
+if (startsWith("mathWig", tdb->type) || startsWith("cartVersion", tdb->type)) 
     return TRUE; // assume mathWig data is available.  Fail at load time if it isn't
+    // cartVersion is a pseudo trackDb entry with no data
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 if (bigDataUrl != NULL)
     {
@@ -4240,7 +4248,11 @@ if (doCache)
         struct trackDb *cacheTdb = trackDbCache(db, tdbPathString, newestTime);
 
         if (cacheTdb != NULL)
-            return cacheTdb;
+            {
+            if (sameString(cacheTdb->track, "cartVersion"))
+                trackDbCartVersion = -cacheTdb->priority;
+            return cacheTdb->next;
+            }
 
         memCheckPoint(); // we want to know how much memory is used to build the tdbList
         }
@@ -4253,7 +4265,9 @@ tdbList = trackDbPolishAfterLinkup(tdbList, db);
 if (doCache)
     trackDbCloneTdbListToSharedMem(db, tdbPathString, tdbList, memCheckPoint());
 
-return tdbList;
+if (sameString(tdbList->track, "cartVersion"))
+    trackDbCartVersion = -tdbList->priority;
+return tdbList->next;
 }
 
 static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn,
