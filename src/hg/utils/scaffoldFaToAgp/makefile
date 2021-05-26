@@ -1,4 +1,4 @@
-kentSrc = ../..
+kentSrc = ../../..
 A = scaffoldFaToAgp
 preMyLibs += $(kentSrc)/lib/$(MACHTYPE)/jkhgap.a
 include $(kentSrc)/inc/userApp.mk
