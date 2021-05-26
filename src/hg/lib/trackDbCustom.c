@@ -23,6 +23,15 @@
 #include "fieldedTable.h"
 #include "tagRepo.h"
 
+static int cartVersion = 0;
+
+int trackDbGetCartVersion()
+/* Get the highest cart version that a set of trackDb entries has specified. */
+{
+return cartVersion;
+}
+
+
 struct trackDb *trackDbNew()
 /* Allocate a new trackDb with just very minimal stuff filled in. */
 {
@@ -133,6 +142,13 @@ if (startsWith("subGroup", var))
     hashAdd(bt->viewHash, value, storeValue);
     if (ptr)
         *ptr = ' ';
+    }
+
+if (startsWith("cartVersion", var))
+    {
+    unsigned thisCartVersion = sqlUnsigned(value);
+    if (thisCartVersion > cartVersion)
+        cartVersion = thisCartVersion;
     }
 
 hashAdd(bt->settingsHash, var, storeValue);

@@ -72,6 +72,8 @@ int regexSubstringInt(const char *string, const regmatch_t substr);
  * If substr was not matched, return 0; you can check first with regexSubstrMatched() if
  * that's not the desired behavior for unmatched substr. */
 
+#ifdef NOTNOW
 char *regexEdit(struct regexEdit *editArray, unsigned numEdits, char *input, boolean quiet);
 /* Perform a list of edits on a string. */
+#endif
 #endif // REGEXHELPER_H

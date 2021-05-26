@@ -6944,6 +6944,11 @@ registerTrackHandlers();
 /* Load regular tracks, blatted tracks, and custom tracks.
  * Best to load custom last. */
 loadFromTrackDb(&trackList);
+if (hdbGetTrackCartVersion() > cartGetVersion(cart))
+    {
+    cartRewrite(cart, hdbGetTrackCartVersion(), cartGetVersion(cart));
+    }
+
 if (measureTiming)
     measureTime("Time after trackDbLoad ");
 if (pcrResultParseCart(database, cart, NULL, NULL, NULL))

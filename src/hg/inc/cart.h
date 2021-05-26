@@ -660,5 +660,13 @@ void cartTdbFetchMinMaxPixels(struct cart *theCart, struct trackDb *tdb,
  *      Initial height and limits may be defined in trackDb with the maxHeightPixels string,
  *      Or user requested limits are defined in the cart. */
 
+unsigned cartGetVersion(struct cart *cart);
+/* Get the current version of the cart, which is stored in the variable "cartVersion" */
+
+void cartSetVersion(struct cart *cart, unsigned version);
+/* Set the current version of the cart, which is stored in the variable "cartVersion" */
+
+void cartRewrite(struct cart *cart, unsigned trackDbCartVersion, unsigned cartVersion);
+/* Rewrite the cart to update it to expectations of trackDb. */
 #endif /* CART_H */
 
