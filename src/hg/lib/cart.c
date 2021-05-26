@@ -3657,3 +3657,15 @@ defaultHeight = max(minHeightPixels, defaultHeight);
 freeMem(tdbDefault);
 } 
 
+unsigned cartGetVersion(struct cart *cart)
+/* Get the current version of the cart, which is stored in the variable "cartVersion" */
+{
+unsigned ret = cartUsualInt(cart, "cartVersion", 0);
+return ret;
+}
+
+void cartSetVersion(struct cart *cart, unsigned version)
+/* Set the current version of the cart, which is stored in the variable "cartVersion" */
+{
+cartSetInt(cart, "cartVersion", version);
+}

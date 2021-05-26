@@ -136,6 +136,11 @@ else
 return val;
 }
 
+#ifdef NOTNOW
+/* THIS CODE DOESN'T PARSE REGULAR EXPRESSIONS CORRECTLY IN THAT
+ * IT ASSUMES THAT THE ORDER OF PARENTHETICAL EXPRESSIONS IN THE OUTPUT
+ * IS THE SAME ORDER THEY APPEAR IN THE INPUT
+ */
 static struct regexSnippet *parseSnippets(char *input)
 /* Generate a data structure that describes how the parenthetical
  * regular expressions should be substituted in the output.
@@ -294,3 +299,4 @@ for(; numEdits && outString; compiledEdits++, numEdits--)
 
 return outString;
 }
+#endif

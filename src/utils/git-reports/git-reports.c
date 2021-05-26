@@ -31,7 +31,9 @@ char *outDir = NULL;
 char *outPrefix = NULL;
 int  contextSize;
 
-char gitCmd[1024];
+// command to filter out commits from non-GB members:
+char *getUsersCmd = "getent group kentcommit | cut -d':' -f4 | sed -e 's/^\\|,/ --author=/g'";
+char gitCmd[4096];
 char *tempMakeDiffName = NULL;
 
 struct files
@@ -106,8 +108,8 @@ struct commit* getCommits()
 {
 int numCommits = 0;
 safef(gitCmd,sizeof(gitCmd), ""
-"git log %s..%s --name-status > commits.tmp"
-, startTag, endTag);
+"validUsers=$(%s); git log %s..%s --name-status --color=never ${validUsers} > commits.tmp"
+, getUsersCmd, startTag, endTag);
 runShell(gitCmd);
 struct lineFile *lf = lineFileOpen("commits.tmp", TRUE);
 int lineSize;

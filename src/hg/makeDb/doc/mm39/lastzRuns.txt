@@ -2171,3 +2171,70 @@ TMPDIR=/dev/shm
     # 37509757 bases of 1448461978 (2.590%) in intersection
 
 ##############################################################################
+# LASTZ boxer Tasha canFam6 (DONE - 2021-05-18 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm39/bed/lastzCanFam6.2021-05-18
+    cd /hive/data/genomes/mm39/bed/lastzCanFam6.2021-05-18
+
+    printf '# boxer Tasha canFam6 vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: boxer Tasha canFam6
+SEQ2_DIR=/hive/data/genomes/canFam6/canFam6.2bit
+SEQ2_LEN=/hive/data/genomes/canFam6/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm39/bed/lastzCanFam6.2021-05-18
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #  real    218m56.391s
+
+    sed -e 's/^/    # /;' fb.mm39.chainCanFam6Link.txt
+    # 769381640 bases of 2654624157 (28.983%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainSynCanFam6Link.txt
+    # 727357801 bases of 2654624157 (27.400%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm39 canFam6 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    227m46.230s
+
+    sed -e 's/^/    # /;' fb.mm39.chainRBest.CanFam6.txt
+    # 732010764 bases of 2654624157 (27.575%) in intersection
+
+    mkdir /hive/data/genomes/canFam6/bed/blastz.mm39.swap
+    cd /hive/data/genomes/canFam6/bed/blastz.mm39.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm39/bed/lastzCanFam6.2021-05-18/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    45m15.626s
+
+    sed -e 's/^/    # /;' fb.canFam6.chainMm39Link.txt
+    # 749339105 bases of 2312743346 (32.400%) in intersection
+    sed -e 's/^/    # /;' fb.canFam6.chainSynMm39Link.txt
+    # 721148735 bases of 2312743346 (31.182%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev canFam6 mm39 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    204m49.212s
+
+    sed -e 's/^/    # /;' fb.canFam6.chainRBest.Mm39.txt
+    # 730973192 bases of 2312743346 (31.606%) in intersection
+
+##############################################################################

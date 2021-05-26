@@ -32,6 +32,7 @@ struct treeChoices
     char **metadataFiles;      // Sample metadata a la GISAID's nextmeta download option
     char **sources;            // GISAID or public
     char **descriptions;       // Menu labels to describe the options to the user
+    char **aliasFiles;         // Two-column files associating IDs/aliases with full tree names
     int count;                 // Number of choices (and size of each array)
 };
 
@@ -160,6 +161,13 @@ struct usherResults *runUsher(char *usherPath, char *usherAssignmentsPath, char 
  * subtrees to trash files, return list of slRef to struct tempName for the trash files
  * and parse other results out of stderr output. */
 
+struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protobufPath,
+                                                int subtreeSize, struct slName *sampleIds,
+                                                struct hash *condensedNodes, int *pStartTime);
+/* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
+ * containing sampleIds, save resulting subtrees to trash files, return subtree results.
+ * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
+
 struct slPair *getAaMutations(struct singleNucChange *sncList, struct geneInfo *geneInfoList,
                               struct seqWindow *gSeqWin);
 /* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }. */
@@ -203,9 +211,13 @@ boolean hgPhyloPlaceEnabled();
 /* Return TRUE if hgPhyloPlace is enabled in hg.conf and db wuhCor1 exists. */
 
 char *phyloPlaceSamples(struct lineFile *lf, char *db, char *defaultProtobuf,
-                        boolean doMeasureTiming, int subtreeSize, int fontHeight);
-/* Given a lineFile that contains either FASTA or VCF, prepare VCF for usher;
- * if that goes well then run usher, report results, make custom track files
- * and return the top-level custom track file; otherwise return NULL. */
+                        boolean doMeasureTiming, int subtreeSize, int fontHeight,
+                        boolean *retSuccess);
+/* Given a lineFile that contains either FASTA, VCF, or a list of sequence names/ids:
+ * If FASTA/VCF, then prepare VCF for usher; if that goes well then run usher, report results,
+ * make custom track files and return the top-level custom track file.
+ * If list of seq names/ids, then attempt to find their full names in the protobuf, run matUtils
+ * to make subtrees, show subtree results, and return NULL.  Set retSuccess to TRUE if we were
+ * able to get at least some results for the user's input. */
 
 #endif //_PHYLO_PLACE_H_

@@ -1074,4 +1074,6 @@ boolean trackDataAccessibleHash(char *database, struct trackDb *tdb, struct hash
  *
  * if gbdbHash is not NULL, use it when looking for the file */
 
+unsigned hdbGetTrackCartVersion();
+/* Get the cart version that our current trackDb wants to use. */
 #endif /* HDB_H */

@@ -61,7 +61,7 @@
 ./runBuild GCA_009819845.1 GCA_009819845.1_bAytFul2.alt birds Aythya_fuligula
 ./runBuild GCA_009829125.1 GCA_009829125.1_fPerMag1.pri fish Periophthalmus_magnuspinnatus
 ./runBuild GCA_009829135.1 GCA_009829135.1_fPerMag1.alt fish Periophthalmus_magnuspinnatus
-./runBuild GCA_009829165.1 GCA_009829165.1_mMusErm1.alt mammals ustela_erminea
+./runBuild GCA_009829165.1 GCA_009829165.1_mMusErm1.alt mammals Mustela_erminea
 ./runBuild GCA_009829205.1 GCA_009829205.1_bChiLan1.alt birds Chiroxiphia_lanceolata
 ./runBuild GCA_009859025.1 GCA_009859025.1_bTaeGut2.p.v1.alt birds Taeniopygia_guttata
 ./runBuild GCA_009859065.2 GCA_009859065.2_bTaeGut2.pri.v2 birds Taeniopygia_guttata
@@ -84,9 +84,9 @@
 ./runBuild GCA_011762535.1 GCA_011762535.1_mTurTru1.mat mammals Tursiops_truncatus
 ./runBuild GCA_011762545.1 GCA_011762545.1_mArvNil1.pat mammals Arvicanthis_niloticus
 ./runBuild GCA_011762595.1 GCA_011762595.1_mTurTru1.mat.Y mammals Tursiops_truncatus
-./runBuild GCA_012275265.1 GCA_012275265.1_bMelUnd1.mat birds elopsittacus_undulatus
-./runBuild GCA_012275275.1 GCA_012275275.1_bMelUnd1.pat birds elopsittacus_undulatus
-./runBuild GCA_012275295.1 GCA_012275295.1_bMelUnd1.mat.Z birds elopsittacus_undulatus
+./runBuild GCA_012275265.1 GCA_012275265.1_bMelUnd1.mat birds Melopsittacus_undulatus
+./runBuild GCA_012275275.1 GCA_012275275.1_bMelUnd1.pat birds Melopsittacus_undulatus
+./runBuild GCA_012275295.1 GCA_012275295.1_bMelUnd1.mat.Z birds Melopsittacus_undulatus
 ./runBuild GCA_900324465.2 GCA_900324465.2_fAnaTes1.2 fish Anabas_testudineus
 ./runBuild GCA_900634415.1 GCA_900634415.1_fCotGob3.1 vertebrate Cottoperca_gobio
 ./runBuild GCA_900634435.1 GCA_900634435.1_fCotGob3.1_alternate_haplotype fish Cottoperca_gobio
@@ -108,8 +108,8 @@
 ./runBuild GCA_901699165.1 GCA_901699165.1_bStrTur1.1_alternate_haplotype birds Streptopelia_turtur
 ./runBuild GCA_901709675.1 GCA_901709675.1_fSynAcu1.1 fish Syngnathus_acus
 ./runBuild GCA_901709685.1 GCA_901709685.1_fSynAcu1.1_alternate_haplotype fish Syngnathus_acus
-./runBuild GCA_901765105.1 GCA_901765105.1_aMicUni1.1_alternate_haplotype vertebrate icrocaecilia_unicolor
-./runBuild GCA_902148815.1 GCA_902148815.1_fMyrMur1.1_alternate_haplotype fish yripristis_murdjan
+./runBuild GCA_901765105.1 GCA_901765105.1_aMicUni1.1_alternate_haplotype vertebrate Microcaecilia_unicolor
+./runBuild GCA_902148815.1 GCA_902148815.1_fMyrMur1.1_alternate_haplotype fish Myripristis_murdjan
 ./runBuild GCA_902148825.1 GCA_902148825.1_fSphaOr1.1_alternate_haplotype fish Sphaeramia_orbicularis
 ./runBuild GCA_902148835.1 GCA_902148835.1_fSalaFa1.1_alternate_haplotype fish Salarias_fasciatus
 ./runBuild GCA_902153765.1 GCA_902153765.1_bAquChr1.2_alternate_haplotype birds Aquila_chrysaetos_chrysaetos
@@ -964,7 +964,7 @@
 ./runBuild GCF_004011695.1 GCF_004011695.1_Arabiei_Me14 fungi Ascochyta_rabiei
 ./runBuild GCF_004022145.1 GCF_004022145.1_Paevar1 fungi Byssochlamys_spectabilis
 ./runBuild GCF_004027225.1 GCF_004027225.1_bStrHab1_v1.p vertebrate_other Strigops_habroptila
-./runBuild GCF_004027225.2 GCF_004027225.2_bStrHab1.2.pri birds Strigops_habroptilus
+./runBuild GCF_004027225.2 GCF_004027225.2_bStrHab1.2.pri birds Strigops_habroptila
 ./runBuild GCF_004028035.1 GCF_004028035.1_ASM402803v1 vertebrate_mammalian Eumetopias_jubatus
 ./runBuild GCF_004115215.1 GCF_004115215.1_mOrnAna1.p.v1 vertebrate_mammalian Ornithorhynchus_anatinus
 ./runBuild GCF_004115215.2 GCF_004115215.2_mOrnAna1.pri.v4 mammals Ornithorhynchus_anatinus

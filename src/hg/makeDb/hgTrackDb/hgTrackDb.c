@@ -798,6 +798,27 @@ slReverse(&tdbList);
 return tdbList;
 }
 
+static struct trackDb *makeCartVersionTrack()
+/* Build a trackDb entry for the cartVersion pseudo track that keeps track of the
+ * highest cartVersion used in this trackDb list.  
+ */
+{
+struct trackDb *cartVerTdb;
+
+AllocVar(cartVerTdb);
+cartVerTdb->track = cloneString("cartVersion");
+cartVerTdb->priority = -trackDbGetCartVersion();
+cartVerTdb->shortLabel = cloneString("cartVersion");
+cartVerTdb->longLabel = cloneString("cartVersion");
+cartVerTdb->html = cloneString("cartVersion");
+cartVerTdb->type = cloneString("cartVersion");
+cartVerTdb->url = cloneString("cartVersion");
+cartVerTdb->grp = cloneString("cartVersion");
+cartVerTdb->settings = cloneString("cartVersion");
+
+return cartVerTdb;
+}
+
 void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
                boolean strict)
 /* hgTrackDb - Create trackDb table from text files. */
@@ -808,6 +829,7 @@ char *tab = rTempName(getTempDir(), trackDbName, ".tab");
 struct trackDb *tdbList = buildTrackDb(org, database, hgRoot, strict);
 tdbList = flatten(tdbList);
 slSort(&tdbList, trackDbCmp);
+slAddTail(&tdbList, makeCartVersionTrack());
 verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 
 /* Write to tab-separated file; hold off on html, since it must be encoded */

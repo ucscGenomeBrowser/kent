@@ -754,5 +754,8 @@ char *labelAsFiltered(char *label);
 
 char *labelAsFilteredNumber(char *label, unsigned number);
 /* add text to label to indicate filter is active */
+
+int trackDbGetCartVersion();
+/* Get the highest cart version that a set of trackDb entries has specified. */
 #endif /* TRACKDB_H */
 
