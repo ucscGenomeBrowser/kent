@@ -266,14 +266,14 @@ searchType bigPsl
 track transMapV6
 superTrack on
 shortLabel TransMap V6
-longLabel TransMap Alignments Version 5
+longLabel TransMap Alignments Version 6
 html transMapV6
 group genes
 
     track transMapEnsemblV6
     superTrack transMapV6 pack
     shortLabel TransMap Ensembl
-    longLabel TransMap Ensembl and GENCODE Mappings Version 5
+    longLabel TransMap Ensembl and GENCODE Mappings Version 6
     html transMapEnsembl
     transMapSrcSet ensembl
     group genes
@@ -303,7 +303,7 @@ searchType bigPsl
     track transMapRefSeqV6
     superTrack transMapV6 pack
     shortLabel TransMap RefGene
-    longLabel TransMap RefSeq Gene Mappings Version 5
+    longLabel TransMap RefSeq Gene Mappings Version 6
     html transMapRefSeq
     transMapSrcSet refseq
     group genes
@@ -333,7 +333,7 @@ searchType bigPsl
     track transMapRnaV6
     superTrack transMapV6 hide
     shortLabel TransMap RNA
-    longLabel TransMap GenBank RNA Mappings Version 5
+    longLabel TransMap GenBank RNA Mappings Version 6
     html transMapRna
     transMapSrcSet rna
     group genes
@@ -363,7 +363,7 @@ searchType bigPsl
     track transMapEstV6
     superTrack transMapV6 hide
     shortLabel TransMap ESTs
-    longLabel TransMap EST Mappings Version 5
+    longLabel TransMap EST Mappings Version 6
     html transMapEst
     transMapSrcSet est
     group genes
