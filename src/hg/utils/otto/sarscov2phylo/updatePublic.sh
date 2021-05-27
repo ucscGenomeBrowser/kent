@@ -6,16 +6,15 @@ set -beEu -x -o pipefail
 #	kent/src/hg/utils/otto/sarscov2phylo/updatePublic.sh
 
 usage() {
-    echo "usage: $0 prevDate problematicSitesVcf"
+    echo "usage: $0 problematicSitesVcf"
 }
 
-if [ $# != 2 ]; then
+if [ $# != 1 ]; then
   usage
   exit 1
 fi
 
-prevDate=$1
-problematicSitesVcf=$2
+problematicSitesVcf=$1
 
 ottoDir=/hive/data/outside/otto/sarscov2phylo
 gisaidDir=/hive/users/angie/gisaid
@@ -41,12 +40,12 @@ time $scriptDir/updateIdMapping.sh \
 buildDir=$ottoDir/$today
 mkdir -p $buildDir
 cd $buildDir
-time $scriptDir/updatePublicTree.sh $prevDate $problematicSitesVcf >& updatePublicTree.log
 
-cat hgPhyloPlace.description.txt
-
+prevDate=$(date -d yesterday +%F)
 time $scriptDir/updateCombinedTree.sh $prevDate $problematicSitesVcf >& updateCombinedTree.log
 
+echo ""
+cat hgPhyloPlace.description.txt
 cat hgPhyloPlace.plusGisaid.description.txt
 
 # Clean up
