@@ -4,10 +4,11 @@ shortLabel Liver MacParland
 longLabel Liver single cell sequencing from MacParland et al 2018
 visibility hide
 group singleCell
-
+release alpha
 
     track liverMacParlandCellType
     parent liverMacParland
+    html liverMacParland
     type bigBarChart
     visibility pack
     shortLabel Liver Cells
@@ -38,6 +39,7 @@ group singleCell
 
     track liverMacParlandBroadCellType
     parent liverMacParland
+    html liverMacParland
     type bigBarChart
     visibility hide
     shortLabel Liver Broad
@@ -62,6 +64,7 @@ group singleCell
 
     track liverMacParlandDonor
     parent liverMacParland
+    html liverMacParland
     type bigBarChart
     visibility hide
     shortLabel Liver Donor
