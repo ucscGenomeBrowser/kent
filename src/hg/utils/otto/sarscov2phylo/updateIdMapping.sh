@@ -64,12 +64,13 @@ tail -n+2 ~/github/ncov-ingest/source-data/accessions.tsv \
 | tawk '{print $2, $1;}' \
 | sort > ncovEpiToGb
 wc -l latestEpiToGb ncovEpiToGb
-# Replace disagreeing IDs with ncov-ingest IDs.
+# But allow version updates (e.g. .1 --> .2)
 join -t$'\t' ncovEpiToGb latestEpiToGb \
-| tawk '$2 != $3 {print "s/"$3"/"$2"/;";}' \
-| sed -re 's/\./\\./;' \
-    > fix.sed
-sed -f fix.sed epiToPublicAndDate.$today > tmp
+| tawk '{ ncovNoDot = substr($2, 0, index($2, ".")-1);
+          latestNoDot = substr($3, 0, index($3, ".")-1);
+          if (ncovNoDot != latestNoDot) {print $3, $2;} }' \
+    > latestToNcov.sub
+subColumn -miss=/dev/null 2 epiToPublicAndDate.$today latestToNcov.sub tmp
 mv tmp epiToPublicAndDate.$today
 
 ln -sf epiToPublicAndDate.$today epiToPublicAndDate.latest
@@ -87,6 +88,6 @@ zcat $nextmeta \
 | sort \
     >> tmp
 wc -l tmp
-gzip -c tmp > $nextmeta
-rm tmp
+gzip tmp
+mv tmp.gz $nextmeta
 zcat $nextmeta | cut -f 4 | grep ... | wc -l

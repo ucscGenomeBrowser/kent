@@ -28,6 +28,7 @@ boolean measureTiming = FALSE; // Print out how long things take
 char *leftLabelWidthForLongNames = "55";// Leave plenty of room for tree and long virus strain names
 
 #define seqFileVar "sarsCoV2File"
+#define pastedIdVar "namesOrIds"
 #define remoteFileVar "remoteFile"
 
 static struct lineFile *lineFileFromFileInput(struct cart *cart, char *fileVar)
@@ -150,11 +151,21 @@ webIncludeFile("inc/gbFooter.html");
 webEndJWest();
 }
 
-#define CHECK_FILE_INPUT_JS(varName) "{ var $fileInput = $('input[name="varName"]');  " \
-    "if ($fileInput && $fileInput[0] && $fileInput[0].files && !$fileInput[0].files.length) {" \
-      " alert('Please choose a file first, then click the upload button.');" \
-      " return false; " \
-    "} else { loadingImage.run(); return true; } }"
+#define CHECK_FILE_OR_PASTE_INPUT_JS(fileVarName, pasteVarName) \
+    "{ var $fileInput = $('input[name="fileVarName"]');" \
+    "  var $pasteInput = $('textarea[name="pasteVarName"]');" \
+    "  if ($fileInput && $fileInput[0] && $fileInput[0].files && !$fileInput[0].files.length &&" \
+    "      $pasteInput && !$pasteInput.val()) {" \
+    "     alert('Please either choose a file or paste in sequence names/IDs first, ' +" \
+    "           'and then click the upload button.');" \
+    "     return false; " \
+    "   } else if ($fileInput && $fileInput[0] && $fileInput[0].files && " \
+    "              !!$fileInput[0].files.length &&" \
+    "              $pasteInput && !!$pasteInput.val()) {" \
+    "     alert('Sorry, unable to process both a file and pasted-in sequence names/IDs at the ' +" \
+    "            'same time.  Please clear one or the other and then click the upload button.');" \
+    "     return false; " \
+    "   } else { loadingImage.run(); return true; } }"
 
 static void inputForm()
 /* Ask the user for FASTA or VCF. */
@@ -230,6 +241,8 @@ puts("  <div class='gbControl col-md-12'>");
 printf("<p>Select your FASTA, VCF or list of sequence names/IDs: ");
 printf("<input type='file' id='%s' name='%s'>",
        seqFileVar, seqFileVar);
+printf("</p><p>or paste in sequence names/IDs:<br>\n");
+cgiMakeTextArea(pastedIdVar, "", 10, 70);
 struct treeChoices *treeChoices = loadTreeChoices(db);
 if (treeChoices)
     {
@@ -246,7 +259,8 @@ cgiMakeIntVarWithLimits("subtreeSize", subtreeSize,
                         "Number of samples in subtree showing neighborhood of placement",
                         5, 10, 5000);
 puts("</p><p>");
-cgiMakeOnClickSubmitButton(CHECK_FILE_INPUT_JS(seqFileVar), "submit", "upload");
+cgiMakeOnClickSubmitButton(CHECK_FILE_OR_PASTE_INPUT_JS(seqFileVar, pastedIdVar),
+                           "submit", "upload");
 puts("</p>");
 // Add a loading image to reassure people that we're working on it when they upload a big file
 printf("<div><img id='loadingImg' src='../images/loading.gif' />\n");
@@ -437,6 +451,12 @@ else if (cgiOptionalString(remoteFileVar))
     struct lineFile *lf = netLineFileOpen(url);
     resultsPage(db, lf);
     }
+else if (isNotEmpty(trimSpaces(cgiOptionalString(pastedIdVar))))
+    {
+    char *pastedIds = cgiString(pastedIdVar);
+    struct lineFile *lf = lineFileOnString("pasted names/IDs", TRUE, pastedIds);
+    resultsPage(db, lf);
+    }
 else if (cgiOptionalString(seqFileVar) || cgiOptionalString(seqFileVar "__filename"))
     {
     struct lineFile *lf = lineFileFromFileInput(cart, seqFileVar);
@@ -474,6 +494,7 @@ int main(int argc, char *argv[])
 /* Null terminated list of CGI Variables we don't want to save to cart */
 char *excludeVars[] = {"submit", "Submit",
                        seqFileVar, seqFileVar "__binary", seqFileVar "__filename",
+                       pastedIdVar,
                        NULL};
 long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
