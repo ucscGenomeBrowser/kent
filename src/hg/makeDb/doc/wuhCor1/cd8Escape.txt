@@ -1,0 +1,6 @@
+# Max, Thu May 27 06:37:05 PDT 2021
+# pyton code written by Santrupti Nerli, grad student of David Haussler at UCSC
+cd /hive/data/genomes/wuhCor1/bed/cd8escape/
+cp ~/kent/src/hg/makeDb/scripts/cd8escape/*.as ./
+python ~/kent/src/hg/makeDb/scripts/cd8escape/process_epitopes.py -xslx abg6461_Table_S2.xlsx
+
