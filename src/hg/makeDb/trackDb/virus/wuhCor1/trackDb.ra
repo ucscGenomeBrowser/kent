@@ -78,8 +78,16 @@ exonArrows off
 exonNumbers off
 bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
 
+track cd8escape
+shortLabel CD8 Escape Muts
+longLabel T-Cell MHCI CD8+ Escape Mutations from Angerer et al. Sci Immun 2020
+group immu
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/cd8escape/cd8escape.bb
+noScoreFilter on
+
 track epiValid
-shortLabel Validated Epitopes
+shortLabel Valid. SARS1 Epitopes
 longLabel Validated Epitopes from SARS 2003 outbreak
 group immu
 type bigBed 4 +
@@ -604,26 +612,6 @@ vcfDoQual off
 vcfDoFilter off
 group varRep
 
-include trackDb.119way.ra
-include trackDb.strainName119way.ra
-include epitopes.ra
-include trackDb.44way.ra
-include trackDb.strainName44way.ra
-include trackDb.uniprot.ra
-include trackDb.nextstrain.ra
-include kim2020.ra
-include trackDb.7way.ra
-include phylocsf.ra
-include addgene.ra
-include pond.ra
-include weizmanOrfs.ra
-include pyle.ra
-include treangen.ra
-include pbm.ra
-include pbmShanghai.ra
-include abEscape.ra
-include bloom.ra
-
 track spikeMuts
 shortLabel Spike Mutations
 longLabel Spike protein mutations from community annotation (Feb 2021)
@@ -645,6 +633,24 @@ searchDescription Spike protein mutations
 searchMethod fuzzy
 padding 5
 
+include trackDb.119way.ra
+include trackDb.strainName119way.ra
+include epitopes.ra
+include trackDb.44way.ra
+include trackDb.strainName44way.ra
+include trackDb.uniprot.ra
+include trackDb.nextstrain.ra
+include kim2020.ra
+include trackDb.7way.ra
+include phylocsf.ra
+include addgene.ra
+include pond.ra
+include weizmanOrfs.ra
+include pyle.ra
+include treangen.ra
+include pbm.ra
+include pbmShanghai.ra
+include abEscape.ra
+include bloom.ra
 include variantMuts.ra
-
 include vaccines.ra

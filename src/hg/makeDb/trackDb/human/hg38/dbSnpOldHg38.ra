@@ -2,7 +2,6 @@
 # Daniel Schmelter 4/1/21
 
 track snp141 override
-
 snpSeqFile /gbdb/hg38/snp/snp141.fa
 priority 1
 
