@@ -54,6 +54,7 @@ errAbort(
   "  -settings - for trackDb scanning, output table name, type line,\n"
   "            -  and settings hash to stderr while loading everything.\n"
   "  -gbdbList - list of files to confirm existance of bigDataUrl files\n"
+  "  -addVersion - add cartVersion pseudo-table\n"
   );
 }
 
@@ -63,6 +64,7 @@ static struct optionSpec optionSpecs[] = {
     {"release", OPTION_STRING},
     {"settings", OPTION_BOOLEAN},
     {"gbdbList", OPTION_STRING},
+    {"addVersion", OPTION_BOOLEAN},
     {NULL,      0}
 };
 
@@ -72,6 +74,7 @@ static char *release = "alpha";
 
 static char *gbdbList = NULL;
 static struct hash *gbdbHash = NULL;
+static boolean addVersion = FALSE;
 
 // release tags
 #define RELEASE_ALPHA  (1 << 0)
@@ -829,7 +832,8 @@ char *tab = rTempName(getTempDir(), trackDbName, ".tab");
 struct trackDb *tdbList = buildTrackDb(org, database, hgRoot, strict);
 tdbList = flatten(tdbList);
 slSort(&tdbList, trackDbCmp);
-slAddTail(&tdbList, makeCartVersionTrack());
+if (addVersion)
+    slAddTail(&tdbList, makeCartVersionTrack());
 verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 
 /* Write to tab-separated file; hold off on html, since it must be encoded */
@@ -956,6 +960,7 @@ if (strchr(raName, '/') != NULL)
 release = optionVal("release", release);
 releaseBit = getReleaseBit(release);
 gbdbList = optionVal("gbdbList", gbdbList);
+addVersion = optionExists("addVersion");
 
 if (gbdbList)
     gbdbHash = hashLines(gbdbList);

@@ -363,7 +363,8 @@ else
 fi
 genePredCheck \$asmId.gp
 
-zcat \$ncbiGffGz | egrep 'tag=(RefSeq|MANE) Select' || true > before.cut9.txt
+rm -f \$asmId.refseqSelectTranscripts.txt
+zegrep 'tag=(RefSeq|MANE) Select' \$ncbiGffGz > before.cut9.txt || true
 
 if [ -s before.cut9.txt ]; then
   cut -f9- before.cut9.txt | tr ';' '\\n' \\
@@ -411,12 +412,23 @@ rm -f ncbiRefSeq.\$dateStamp
 # may not be any curated genes
 if [ ! -s \$db.curated.gp ]; then
   rm -f \$db.curated.gp
-elif [ -s \$asmId.refseqSelectTranscripts.txt ]; then
-  cat \$db.curated.gp | fgrep -f \$asmId.refseqSelectTranscripts.txt - \\
-    > \$db.refseqSelect.curated.gp
-  # may not be any refseqSelect.curated genes
-  if [ ! -s \$db.refseqSelect.curated.gp ]; then
-    rm -f \$db.refseqSelect.curated.gp
+  rm -f \$db.refseqSelect.curated.gp
+  rm -f hgmd.curated.gp
+else
+  if [ -s \$asmId.refseqSelectTranscripts.txt ]; then
+    cat \$db.curated.gp | fgrep -f \$asmId.refseqSelectTranscripts.txt - \\
+      > \$db.refseqSelect.curated.gp
+    # may not be any refseqSelect.curated genes
+    if [ ! -s \$db.refseqSelect.curated.gp ]; then
+      rm -f \$db.refseqSelect.curated.gp
+    fi
+  fi
+  if [ \$db = "hg19" -o \$db = "hg38" ]; then
+     hgmdFile=`ls /hive/data/outside/hgmd/20*.4-hgmd-public_hg38.tsv | tail -1`
+     if [ -s "\$hgmdFile" ]; then
+       cut -f7 "\$hgmdFile" | cut -d. -f1 | sort -u | awk '{printf "%s.\\n", \$1}' > hgmdTranscripts.txt
+       fgrep -f hgmdTranscripts.txt \$db.curated.gp > hgmd.curated.gp
+     fi
   fi
 fi
 
@@ -433,6 +445,9 @@ if [ -s \$db.curated.gp ]; then
   $genePredCheckDb \$db.curated.gp
   if [ -s \$db.refseqSelect.curated.gp ]; then
      $genePredCheckDb \$db.refseqSelect.curated.gp
+  fi
+  if [ -s hgmd.curated.gp ]; then
+     $genePredCheckDb hgmd.curated.gp
   fi
 fi
 if [ -s \$db.predicted.gp ]; then
@@ -641,6 +656,21 @@ if [ -s process/\$db.curated.gp ]; then
     ixIxx \$asmId.ncbiRefSeqSelectCurated.ix.txt \$asmId.ncbiRefSeqSelectCurated.ix{,x}
     rm -f \$asmId.ncbiRefSeqSelectCurated.ix.txt
   fi
+### and hgmd if exists (a subset of curated)
+  if [ -s process/hgmd.curated.gp ]; then
+    genePredToBigGenePred process/hgmd.curated.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqHgmd.bigGp
+    bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+    \$db.ncbiRefSeqHgmd.bigGp \$db.chrom.sizes \\
+      \$db.ncbiRefSeqHgmd.bb
+    rm -f \$db.ncbiRefSeqHgmd.bigGp
+    bigBedInfo \$db.ncbiRefSeqHgmd.bb | egrep "^itemCount:|^basesCovered:" \\
+      | sed -e 's/,//g' > \$db.ncbiRefSeqHgmd.stats.txt
+    LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqHgmd %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqHgmd.stats.txt` | xargs echo
+    ~/kent/src/hg/utils/automation/gpToIx.pl process/hgmd.curated.gp \\
+      | sort -u > \$asmId.ncbiRefSeqHgmd.ix.txt
+    ixIxx \$asmId.ncbiRefSeqHgmd.ix.txt \$asmId.ncbiRefSeqHgmd.ix{,x}
+    rm -f \$asmId.ncbiRefSeqHgmd.ix.txt
+  fi
 fi
 
 ### predicted only if present
@@ -785,6 +815,10 @@ if [ -s process/\$db.curated.gp ]; then
   if [ -s process/\$db.refseqSelect.curated.gp ]; then
     hgLoadGenePred -genePredExt \$db ncbiRefSeqSelect process/\$db.refseqSelect.curated.gp
     $genePredCheckDb ncbiRefSeqSelect
+  fi
+  if [ -s process/hgmd.curated.gp ]; then
+    hgLoadGenePred -genePredExt \$db ncbiRefSeqHgmd process/hgmd.curated.gp
+    $genePredCheckDb ncbiRefSeqHgmd
   fi
 fi
 
