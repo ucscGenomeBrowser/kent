@@ -41,16 +41,17 @@ update the Genome Browser CGIs, and remove temporary files (aka &ldquo;trash cle
 </p>
 
 <p>
-The GBiC program has been tested with Ubuntu 14/16 LTS, Centos 6/6.7/7.2, and Fedora 20.
-</p>
+The GBiC program has been tested with Ubuntu 14/16/18/20 LTS, Centos 6/6.7/7.2/8, and Fedora 20.
+It has been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft
+Azure (Ubuntu).</p>
 
-<p>
-It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft
-Azure (Ubuntu). If you want to load data on the fly from UCSC, you need to select the
+<p>If you want to load data on the fly from UCSC, you need to select the
 data centers &ldquo;US West (N. California)&rdquo; (Amazon) or &ldquo;West US&rdquo; (Microsoft) for best performance.
 Other data centers (e.g. East Coast) will require a local copy of the genome assembly, which
-requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum
-size of a single Amazon EBS volume.
+requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the
+current maximum size of a single Amazon EBS volume, so you may need to use RAID
+striping of multiple EBS volumes, or Amazon EFS for the /gbdb files and Amazon
+Aurora for the MySQL tables.
 </p>
 
 <a name='quick-start-instructions'></a>
