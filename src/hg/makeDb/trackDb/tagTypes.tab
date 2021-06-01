@@ -139,6 +139,7 @@ expTable bed expRatio
 extTable *
 externalDb bigGenePred
 extraDetailsTable bigBed
+extraTableFields bigBed
 fieldCount customTracks
 filePos *
 fileSortOrder *

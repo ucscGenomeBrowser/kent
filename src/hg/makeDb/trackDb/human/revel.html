@@ -26,23 +26,31 @@ of the outputs of the 13 tools.
 </p>
 
 <p>
-<b>Single nucleotide variants (SNV):</b> For SNVs, at every
+For single nucleotide variants (SNV), at every
 genome position, there are three values per position, one for every possible
 nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing 
 the reference allele, e.g. A to A, is always set to zero.
 <br>
 When using this track, zoom in until you can see every basepair at the
 top of the display. Otherwise, there are several nucleotides per pixel under 
-your mouse cursor and instead of an actual score, the tooltip text will show
-the average score of all nucleotides under the cursor. This is indicated by
-the prefix &quot;~&quot; in the mouseover. Averages of scores are not useful for any
-application of REVEL.
+your mouse cursor and no score will be shown on the mouseover tooltip.
+</p>
+
+<p>For hg38, note that the data was converted from the hg19 data using the UCSC
+liftOver program, by the REVEL authors. This can lead to missing values or
+duplicated values. When a hg38 position is annotated with two scores due to the
+lifting, the authors removed all the scores for this position. They did the same when
+due to a reference change a mutation in hg19 is not a mutation in hg38 anymore, but the 
+reference nucleotide. Also, on hg38, the track has the "lifted" icon to indicate
+this. You can double-check if a nucleotide
+position is possibly affected by the lifting procedure by activating the track
+"Hg19 Mapping" under "Mapping and Sequencing".
 </p>
 
 <h2>Data access</h2>
 <p>
 REVEL scores are available at the 
-<a href="https://sites.google.com/site/revelgenomics/ target="_blank">
+<a href="https://sites.google.com/site/revelgenomics/" target="_blank">
 REVEL website</a>.  
 The site provides precomputed REVEL scores for all possible human missense variants 
 to facilitate the identification of pathogenic variants among the large number of 
@@ -73,12 +81,15 @@ The tools can also be used to obtain features confined to given range, e.g.
 <p>
 Data were converted from the files provided on
 <a href="https://sites.google.com/site/revelgenomics/downloads?authuser=0" 
-target = "_blank">the REVEL Downloads website</a>.
+target = "_blank">the REVEL Downloads website</a>. As with all other tracks,
+a full log of all commands used for the conversion is available in our 
+<a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/">source repository</a>, for <a target=_blank href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">hg19</a> and <a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/revel.txt">hg38</a>. The release used for each assembly is shown on the track description page.
+
 </p>
 
 <h2>Credits</h2>
 <p>
-Thanks to the REVEL development team for providing precomputed data.
+Thanks to the REVEL development team for providing precomputed data and fixing duplicated values in the hg38 files.
 </p>
 
 <h2>References</h2>

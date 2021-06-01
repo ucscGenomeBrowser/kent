@@ -2,7 +2,8 @@
 # This is the dbSNP archive composite track
 
 track dbSnpArchive
-compositeTrack on
+superTrack on
+cartVersion 1
 shortLabel dbSNP Archive
 longLabel dbSNP Archive Composite Track
 group varRep
