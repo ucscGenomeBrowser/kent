@@ -7,6 +7,7 @@ hg38 nonCodingRNAs miRnaAtlas View expression of cleaved miRnas
 hg38 caddSuper gnomad View associated variants
 hg38 gnomad caddSuper View CADD scores for this variant and region
 hg38 revel liftHg19 Compare liftOver "chain" alignment from hg38 to hg19
+hg38 liftHg19 revel Revel scores were lifted using normal liftOver chains from hg19
 hg38 revel caddSuper Show CADD, a similar deleteriousness score, one of the inputs of REVEL
 hg38 caddSuper revel Show REVEL, a similar deleteriousness score, which is using CADD as an input
 
