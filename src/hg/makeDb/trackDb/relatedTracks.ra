@@ -6,6 +6,9 @@ hg38 miRnaAtlas nonCodingRNAs View associated precursor miRnas
 hg38 nonCodingRNAs miRnaAtlas View expression of cleaved miRnas
 hg38 caddSuper gnomad View associated variants
 hg38 gnomad caddSuper View CADD scores for this variant and region
+hg38 revel liftHg19 Compare liftOver "chain" alignment from hg38 to hg19
+hg38 revel caddSuper Show CADD, a similar deleteriousness score, one of the inputs of REVEL
+hg38 caddSuper revel Show REVEL, a similar deleteriousness score, which is using CADD as an input
 
 
 # hg19:
@@ -13,3 +16,5 @@ hg19 caddSuper gnomad View associated variants
 hg19 gnomad caddSuper View CADD scores for this variant and region
 hg19 decipherHaploIns gnomadPLI Compare haploinsufficiency metrics as defined by gnomAD
 hg19 gnomadPLI decipherHaploIns Compare constraint metrics as defined by DECIPHER
+hg19 revel caddSuper Show CADD, a similar deleteriousness score, one of the inputs of REVEL
+hg19 caddSuper revel Show REVEL, a similar deleteriousness score, which is using CADD as an input
