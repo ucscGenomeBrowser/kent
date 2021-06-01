@@ -662,7 +662,7 @@ include knownGene.ra
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
 
-include trackDb.241way.ra alpha
+include trackDb.241way.ra alpha,beta
 
 # track multiz145way
 # shortLabel 145way maf
