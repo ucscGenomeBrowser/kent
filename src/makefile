@@ -27,8 +27,10 @@ optLib:
 	cd optimalLeaf && ${MAKE}
 
 hgLib:
+ifneq ($(wildcard src/hg/makefile),)
 	@./hg/sqlEnvTest.sh
 	cd hg/lib && ${MAKE}
+endif
 
 libs: topLibs hgLib optLib
 
@@ -163,7 +165,9 @@ utils: libs destBin
             fi ;\
 	done
 	cd utils && ${MAKE}
+ifneq ($(wildcard src/jkOwnLib/*),)
 	cd hg && ${MAKE} utils
+endif
 
 utils-alpha: check-alpha libs destBin
 	${MKDIR} ${SCRIPTS}
@@ -177,7 +181,13 @@ utils-alpha: check-alpha libs destBin
 	cd utils && ${MAKE}
 	cd hg && ${MAKE} utils
 
+
+ifneq ($(wildcard src/jkOwnLib/*),)
 DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm tabFile
+else
+DIRS = ameme index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm tabFile
+endif
+
 
 ##  cellar archive for obsolete programs
 
