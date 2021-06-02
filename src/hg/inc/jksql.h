@@ -795,6 +795,6 @@ struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *tab
 /* Get list of fields including their names and types.  The type currently is
  * just a MySQL type string. */
 
-
-
+const char *sqlLastError(struct sqlConnection *sc);
+/* Return the last error from a sql connection. */
 #endif /* JKSQL_H */

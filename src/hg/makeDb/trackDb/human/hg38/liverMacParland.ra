@@ -36,6 +36,7 @@ release alpha
     #barChartColors #e26873 #8f8ffe #cec2df #af01b0 #e91720 #5a98d8 #5a8feb #e06974 #e56872 #b47195 #57d15b #c1d1d7 #d31d2e #db6a78 #c26f8a
     transformFunc NONE
     barChartLimit 1.5
+    release alpha
 
     track liverMacParlandBroadCellType
     parent liverMacParland
@@ -61,6 +62,7 @@ release alpha
     barChartColors #dc7b91 #908ffd #075bdb #d3c4db #af01af #d92b07 #e7cbbe #eb364f
     transformFunc NONE
     barChartLimit 1.5
+    release alpha
 
     track liverMacParlandDonor
     parent liverMacParland
@@ -85,4 +87,4 @@ release alpha
     barChartColors #ae3f5a #9112a6 #ad03ae #dd3751 #d63856
     transformFunc NONE
     barChartLimit 1.5
-
+    release alpha

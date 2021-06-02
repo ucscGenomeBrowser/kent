@@ -217,7 +217,7 @@ USERTABLE = $(shell echo ${USER} | sed -e 's/-/_/g')
 update: ${DBS:%=%_update}
 	${MKDIR} ${CGI_BIN}-${USER}/encode
 %_update:
-	./loadTracks ${EXTRA} trackDb_${USERTABLE} hgFindSpec_${USERTABLE} $*
+	./loadTracks -addVersion ${EXTRA} trackDb_${USERTABLE} hgFindSpec_${USERTABLE} $*
 	./checkMetaDb alpha metaDb_${USERTABLE} $*
 	# now build the relatedTracks table for each db
 	./buildRelatedTracks relatedTrack_${USERTABLE} $*
@@ -237,7 +237,7 @@ alpha: clean
 alpha_all: ${DBS:%=%_alpha}
 
 %_alpha:
-	./loadTracks ${EXTRA} -release=alpha trackDb hgFindSpec $*
+	./loadTracks -addVersion ${EXTRA} -release=alpha trackDb hgFindSpec $*
 	./checkMetaDb alpha metaDb $*
 	rm -f ${HIVE_TRIX}/$*_trackDb.{ixx,ix}}
 	HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/alpha/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
