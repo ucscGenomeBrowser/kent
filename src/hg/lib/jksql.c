@@ -4478,3 +4478,9 @@ sqlFreeResult(&sr);
 slReverse(&list);
 return list;
 }
+
+const char *sqlLastError(struct sqlConnection *sc)
+/* Return the last error from a sql connection. */
+{
+return mysql_error(sc->conn);
+}

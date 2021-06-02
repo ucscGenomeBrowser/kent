@@ -439,12 +439,25 @@ struct sqlConnection *conn = hConnectCentral();
 char query[4096];
 char *statusTable = getHubStatusTableName();
 
-if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
-    sqlSafef(query, sizeof(query), "insert into %s (hubUrl,shortLabel,longLabel,dbCount,dbList,status,lastOkTime,lastNotOkTime,errorMessage,firstAdded) values (\"%s\",\"\",\"\",0,NULL,0,\"\",\"\",\"\",now())", statusTable, url);
-else
-    sqlSafef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
+        sqlSafef(query, sizeof(query), "insert into %s (hubUrl,shortLabel,longLabel,dbCount,dbList,status,lastOkTime,lastNotOkTime,errorMessage,firstAdded) values (\"%s\",\"\",\"\",0,NULL,0,\"\",\"\",\"\",now())", statusTable, url);
+    else
+        sqlSafef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
 	statusTable, url);
-sqlUpdate(conn, query);
+    sqlUpdate(conn, query);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    // if we got a duplicate error, it means this hubUrl is already in the 
+    // hubStatus table.
+    const char *error = sqlLastError(conn);
+    if (!startsWith("Duplicate entry", error))
+        errAbort("%s", error);
+    }
 hDisconnectCentral(&conn);
 }
 
