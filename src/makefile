@@ -17,7 +17,9 @@ topLibs:
 	@./checkUmask.sh
 	@MACHTYPE=${MACHTYPE} ./machTest.sh
 	cd lib && ${MAKE}
+ifneq ($(wildcard src/jkOwnLib/*),)
 	cd jkOwnLib && ${MAKE}
+endif
 	cd parasol/lib && ${MAKE}
 	cd htslib && ${MAKE}
 
@@ -25,8 +27,10 @@ optLib:
 	cd optimalLeaf && ${MAKE}
 
 hgLib:
+ifneq ($(wildcard src/hg/makefile),)
 	@./hg/sqlEnvTest.sh
 	cd hg/lib && ${MAKE}
+endif
 
 libs: topLibs hgLib optLib
 
@@ -105,7 +109,9 @@ clean:
 	cd lib && ${MAKE} clean 
 	cd hg && ${MAKE} clean
 	cd hg && ${MAKE} clean_utils
+ifneq ($(wildcard src/jkOwnLib/*),)
 	cd jkOwnLib && ${MAKE} clean
+endif
 	cd htslib && ${MAKE} clean
 	cd utils && ${MAKE} clean
 	if test -d webBlat ; then cd webBlat && ${MAKE} clean ; fi
@@ -159,7 +165,9 @@ utils: libs destBin
             fi ;\
 	done
 	cd utils && ${MAKE}
+ifneq ($(wildcard src/jkOwnLib/*),)
 	cd hg && ${MAKE} utils
+endif
 
 utils-alpha: check-alpha libs destBin
 	${MKDIR} ${SCRIPTS}
@@ -173,7 +181,13 @@ utils-alpha: check-alpha libs destBin
 	cd utils && ${MAKE}
 	cd hg && ${MAKE} utils
 
+
+ifneq ($(wildcard src/jkOwnLib/*),)
 DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm tabFile
+else
+DIRS = ameme index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm tabFile
+endif
+
 
 ##  cellar archive for obsolete programs
 

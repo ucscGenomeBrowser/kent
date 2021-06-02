@@ -52,6 +52,7 @@ if ("$HOST" == "hgwdev") then
 	case ${DESTDIR}${BINDIR}/blat:
 	case ${DESTDIR}${BINDIR}/gfClient:
 	case ${DESTDIR}${BINDIR}/gfServer:
+	case ${DESTDIR}${BINDIR}/gfPcr:
 	case ${DESTDIR}${BINDIR}/isPcr:
 	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
@@ -67,6 +68,10 @@ if ("$HOST" == "hgwdev") then
     endsw
   end
 endif
+
+# because blat/FOOTER.txt is not updated automatically, 
+# on rare occasions when you add new blat utilities, you can do it manually,
+# refer to NOTES-for-manually-updating-BLAT-FOOTER.txt
 
 echo "userApps $MACHTYPE built on $HOST and scp'd to hgdownload and genome-euro [${0}: START=${ScriptStart} END=`date`]"
 
