@@ -17,7 +17,9 @@ topLibs:
 	@./checkUmask.sh
 	@MACHTYPE=${MACHTYPE} ./machTest.sh
 	cd lib && ${MAKE}
+ifneq ($(wildcard src/jkOwnLib/*),)
 	cd jkOwnLib && ${MAKE}
+endif
 	cd parasol/lib && ${MAKE}
 	cd htslib && ${MAKE}
 
@@ -105,7 +107,9 @@ clean:
 	cd lib && ${MAKE} clean 
 	cd hg && ${MAKE} clean
 	cd hg && ${MAKE} clean_utils
+ifneq ($(wildcard src/jkOwnLib/*),)
 	cd jkOwnLib && ${MAKE} clean
+endif
 	cd htslib && ${MAKE} clean
 	cd utils && ${MAKE} clean
 	if test -d webBlat ; then cd webBlat && ${MAKE} clean ; fi
