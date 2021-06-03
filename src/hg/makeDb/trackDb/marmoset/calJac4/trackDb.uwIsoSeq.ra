@@ -11,7 +11,6 @@ showNames off
 bamColorMode gray
 bamGrayMode aliQual
 priority 100
-pennantIcon New red ./hgTrackUi?db=calJac4&g=uwIsoSeq "Released at UCSC Apr. 14, 2021"
 
     track uwIsoSeq_SRR11734396_2
     parent uwIsoSeq

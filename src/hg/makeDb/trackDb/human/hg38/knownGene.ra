@@ -16,7 +16,6 @@ itemRgb on
 maxItems 50000
 html knownGene
 searchIndex name
-pennantIcon Updated red ../goldenPath/newsarch.html#031721 "Uploaded by UCSC Mar. 17, 2021"
 
 
 searchName knownGeneAcc

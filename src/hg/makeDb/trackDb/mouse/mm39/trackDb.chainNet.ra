@@ -18,7 +18,6 @@ dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on
 html mm39ChainNet
-pennantIcon New red ../goldenPath/newsarch.html#033021 "Released Mar. 30, 2021"
 
     track mm39ChainNetViewchain
     shortLabel  Chains

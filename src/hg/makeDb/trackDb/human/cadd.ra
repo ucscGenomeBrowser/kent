@@ -6,7 +6,6 @@ type bed
 visibility hide
 group phenDis
 color 100,130,160
-pennantIcon New red ../goldenPath/newsarch.html#030221 "Released Mar. 03, 2021"
 
 track cadd
 shortLabel Single-bp mutations
