@@ -1574,7 +1574,6 @@ pennantIcon 17.jpg ../goldenPath/help/liftOver.html "lifted from hg17"
 track targetScanMiRnaSites
 superTrack on
 shortLabel TS miRNA Targets
-pennantIcon Updated red ../goldenPath/newsarch.html#031821 Released March 18, 2021
 longLabel TargetScan predicted microRNA target sites
 group regulation
 visibility hide
@@ -1598,7 +1597,6 @@ visibility hide
     type bigBed 12 +
     filter.targetScanScore -1
     filterLimits.targetScanScore -1:99
-    pennantIcon Updated red ../goldenPath/newsarch.html#031821 Released March 18, 2021
     urlLabel View miRNA target at TargetScan
     url http://www.targetscan.org/cgi-bin/targetscan/vert_72/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
     bigDataUrl /gbdb/hg19/targetScan/targetScanSitesV72.bb
@@ -2602,7 +2600,6 @@ itemRgb on
 skipFields mouseOver
 noScoreFilter on
 mouseOver $name, HI: $quantile
-pennantIcon New red ../goldenPath/newsarch.html#041321 "Released Apr. 13, 2021"
 
 include dbSnpOldHg19.ra beta,public
 include dbSnpArchiveHg19.ra alpha

@@ -4,7 +4,7 @@ trackHandler wgEncodeGencode
 group genes
 shortLabel All GENCODE
 longLabel All GENCODE transcripts, including comprehensive set and previous version
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"; Updated red ../goldenPath/newsarch.html#032321 "Updated Mar. 23, 2021"
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 # don't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 include wgEncodeGencodeV19.ra
