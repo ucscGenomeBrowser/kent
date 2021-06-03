@@ -19,10 +19,15 @@ As far as the UCSC Genome Browser is concerned, the raw table data and binary
 files used to create the graphics by the browser is freely available for both
 public and commercial use.  The README.txt file in the download directory of
 each assembly shows the use original restrictions pertaining to the genome
-sequence itself by the original authors. Conditions for individual annotation
-tracks, which depend on the original authors, can be found in the track
-description pages.</p> 
-<br>
+sequence itself by the original authors, most assemblies do not have restrictions.
+As for genome annotation data, a handful of tracks, mostly on the human
+genome and in the domain of clinical genetics, have specific restrictions, 
+usually the data has to be obtained from the source database directly in the 
+original format or licensed. Examples are HGMD, LOVD, OMIM, Decipher,
+Genomenom, Genehancer and COSMIC, as well as any GISAID-derived data on viral
+genomes. Please see the respective track documentation pages on these
+assemblies for more details, by selecting the assembly and clicking the track
+title in the genome browser.</p> <br>
 
 <h1>Software: Commercial use of the Genome Browser software and related tools available from our website and source code repository</h1>
 <p>As written above, when using applications from the Genome Browser tool suite, including LiftOver and BLAT, or
@@ -33,8 +38,14 @@ please cite one of our <a href="../goldenPath/pubs.html">publications</a>.
 </p>
 <p>
 The Genome Browser binaries and source code are freely available for academic, nonprofit, and 
-personal use. A license is required for commercial download and installation of most Genome Browser 
-binaries and source code, with the exception of the items in the section below, notably BLAT.
+personal use. A license is required for commercial download and installation of
+most Genome Browser binaries and source code, with the exception of the items
+in the section <a href="#free">"Software: Tools and directories freely
+available for all uses"</a> below. BLAT and isPCR, if needed, are covered by a
+separate license (see below).
+</p>
+
+<p>
 To purchase a commercial license for Genome Browser source code, LiftOver, GBiB, or GBiC, please 
 visit the <a href="https://genome-store.ucsc.edu">Genome Browser store</a>. </p>
 
@@ -64,8 +75,13 @@ For information about commercial licensing of the Blat and In-Silico PCR tools, 
 <a href="http://www.kentinformatics.com" target=_blank>Kent Informatics</a> website or contact 
 <a href="mailto:&#107;&#101;&#110;t&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;&#100;u">&#107;&#101;&#110;t&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;&#100;u</a>.</p>
 <!-- above address is kent at soe.ucsc.edu --> 
+<p>
+See the LICENSE file in the top level of our source code for a listing of licenses and directories that they apply to: 
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/LICENSE">https://github.com/ucscGenomeBrowser/kent/blob/master/LICENSE</a>.
+<p>
+
 <br>
-<h1>Software: Tools and directories freely available for all uses</h1>
+<h1 id="free">Software: Tools and directories freely available for all uses</h1>
 <p>
 The following directories are available without a license for all uses, academic, 
 non-profit, and commercial: </p>
@@ -88,8 +104,10 @@ non-profit, and commercial: </p>
   kent/src/hg/autoXml</li>
 </ul>
 
+<p>
 See the LICENSE file in the top level of our source code for a listing of licenses and directories that they apply to: 
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/LICENSE">https://github.com/ucscGenomeBrowser/kent/blob/master/LICENSE</a>.
+</p>
 
 <p>When you use the UCSC Genome Browser in your work, please cite one of 
 our <a href="../goldenPath/pubs.html">publications</a>.</p>
