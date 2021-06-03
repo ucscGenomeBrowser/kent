@@ -28,20 +28,25 @@ UNAME_S := $(shell uname -s)
 # to check for builds on hgwdev
 HOSTNAME = $(shell uname -n)
 
+ifeq (${HOSTNAME},hgwdev)
+  IS_HGWDEV = yes
+else
+  IS_HGWDEV = no
+endif
+
 FREETYPECFLAGS = $(shell freetype-config --cflags  2> /dev/null)
+
+# we use our static library on dev
+ifeq (${IS_HGWDEV},no) 
 FREETYPELIBS =  $(shell freetype-config --libs 2> /dev/null )
+endif
+
 ifneq (${FREETYPECFLAGS},)
 FREETYPECFLAGS += -DUSE_FREETYPE
 endif
 
 HG_INC += ${FREETYPECFLAGS}
 L += ${FREETYPELIBS}
-
-ifeq (${HOSTNAME},hgwdev)
-  IS_HGWDEV = yes
-else
-  IS_HGWDEV = no
-endif
 
 ifeq (${IS_HGWDEV},yes)
   FULLWARN = yes
