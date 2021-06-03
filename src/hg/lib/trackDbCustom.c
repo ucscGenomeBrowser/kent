@@ -1033,10 +1033,15 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 	char *parentName = cloneFirstWord(subtrackSetting);
 	struct trackDb *parent = hashFindVal(trackHash, parentName);
 	if (parent != NULL)
-	    {
-	    slAddHead(&parent->subtracks, tdb); // composite/multiWig children are ONLY subtracks
-	    tdb->parent = parent;
-	    }
+        {
+        if (trackDbLocalSetting(tdb, "container"))
+            {
+            errAbort("Composite track '%s' cannot have child track '%s',"
+                " which is a container  multiWig.", parentName, tdb->track);
+            }
+        slAddHead(&parent->subtracks, tdb); // composite/multiWig children are ONLY subtracks
+        tdb->parent = parent;
+        }
 	else
 	    {
 	    errAbort("Parent track %s of child %s doesn't exist", parentName, tdb->track);
