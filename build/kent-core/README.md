@@ -16,9 +16,12 @@ http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/FOOTER.txt
 Here are a few selected tools that are useful when building track and assembly hubs:
 
 bedToBigBed - create a bigBed file for rectangle-shaped annotations (genes, enhancers, promoters, etc)
-bigBedToBed - the inverse of bedToBigBed
-bigBedInfo - Show information about a bigBed file. Can extract .autoSql field definitions.
 
-wigToBigWig - create a bigWig file for signal (barchart) annotations from a .wig file
-bigWigToWig - the inverse of wigToBigWig
-bigWigInfo - show information about bigWig files
+|Tool   |Description   |
+|---|---|
+|bedToBigBed | create a bigBed file for rectangle-shaped annotations (genes, enhancers, promoters, etc)   |
+|bigBedToBed | the inverse of bedToBigBed |
+|bigBedInfo  | Show information about a bigBed file. Can extract .autoSql field definitions |
+|wigToBigWig | create a bigWig file for signal (barchart) annotations from a .wig file |
+|bigWigToWig | the inverse of wigToBigWig |
+|bigWigInfo | show information about bigWig files |
