@@ -17,7 +17,7 @@ topLibs:
 	@./checkUmask.sh
 	@MACHTYPE=${MACHTYPE} ./machTest.sh
 	cd lib && ${MAKE}
-ifneq ($(wildcard src/jkOwnLib/*),)
+ifneq ($(wildcard jkOwnLib/*),)
 	cd jkOwnLib && ${MAKE}
 endif
 	cd parasol/lib && ${MAKE}
@@ -27,7 +27,7 @@ optLib:
 	cd optimalLeaf && ${MAKE}
 
 hgLib:
-ifneq ($(wildcard src/hg/makefile),)
+ifneq ($(wildcard hg/makefile),)
 	@./hg/sqlEnvTest.sh
 	cd hg/lib && ${MAKE}
 endif
