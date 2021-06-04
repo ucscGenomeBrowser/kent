@@ -109,7 +109,7 @@ defaultGeneTracks bed
 defaultLabelFields big*
 defaultMaf wigMaf
 defaultMaxWeight bed
-defaultLinkedTables genePred
+defaultLinkedTables genePred bigGenePred
 denseCoverage bigBed
 densePack bed bigBed
 dimensionAchecked *
@@ -223,7 +223,7 @@ html *
 htmlFile customTracks
 htmlUrl customTracks
 idInUrlSql altGraphX genePred chain factorSource bed  bigChain
-idXref genePred psl
+idXref genePred psl bigGenePred
 iframeUrl *
 iframeOptions *
 indelDoubleInsert psl bam bigBed bigPsl
@@ -244,7 +244,7 @@ inputTableFieldUrls factorSource
 interactDirectional interact bigInteract
 interactUp interact bigInteract
 interactMultiRegion interact bigInteract
-intronGap psl genePred bigPsl
+intronGap psl genePred bigPsl bigGenePred
 irows wigMaf
 isGencode3 genePred bigGenePred
 isGencode2 genePred bigGenePred
