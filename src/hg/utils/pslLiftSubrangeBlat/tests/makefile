@@ -1,5 +1,5 @@
-kentSrc = ../../..
-include ../../../inc/common.mk
+kentSrc = ../../../..
+include ../../../../inc/common.mk
 
 pslLiftSubrangeBlat=${DESTBINDIR}/pslLiftSubrangeBlat
 pslCheck=${DESTBINDIR}/pslCheck

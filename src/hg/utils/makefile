@@ -53,6 +53,9 @@ UTILS_APPLIST = \
 	pslToBigPsl \
 	tdbQuery \
 	transMapPslToGenePred \
+	scaffoldFaToAgp \
+	raSqlQuery \
+	pslLiftSubrangeBlat \
 	twoBitMask
 
 USER_APP_SCRIPTS = \

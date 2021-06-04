@@ -68,8 +68,8 @@ fname = sys.argv[2]
 outFhs = {
         0 : open("a.wig", "w"),
         1 : open("c.wig", "w"),
-        2 : open("t.wig", "w"),
-        3 : open("g.wig", "w")
+        2 : open("g.wig", "w"),
+        3 : open("t.wig", "w")
         }
 
 chromSizes = parseChromSizes(chromSizesFname)
