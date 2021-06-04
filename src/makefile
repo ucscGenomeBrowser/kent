@@ -109,7 +109,7 @@ clean:
 	cd lib && ${MAKE} clean 
 	cd hg && ${MAKE} clean
 	cd hg && ${MAKE} clean_utils
-ifneq ($(wildcard src/jkOwnLib/*),)
+ifneq ($(wildcard jkOwnLib/*),)
 	cd jkOwnLib && ${MAKE} clean
 endif
 	cd htslib && ${MAKE} clean
@@ -165,7 +165,7 @@ utils: libs destBin
             fi ;\
 	done
 	cd utils && ${MAKE}
-ifneq ($(wildcard src/jkOwnLib/*),)
+ifneq ($(wildcard jkOwnLib/*),)
 	cd hg && ${MAKE} utils
 endif
 
@@ -182,7 +182,7 @@ utils-alpha: check-alpha libs destBin
 	cd hg && ${MAKE} utils
 
 
-ifneq ($(wildcard src/jkOwnLib/*),)
+ifneq ($(wildcard jkOwnLib/*),)
 DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm tabFile
 else
 DIRS = ameme index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm tabFile
