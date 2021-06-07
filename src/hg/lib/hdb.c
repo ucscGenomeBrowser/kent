@@ -4311,7 +4311,12 @@ if (tdbList == NULL || *tdbList == NULL)
 	struct hash *hash = hashNew(0);
         // NOTE: cart is not even used!
 	theTdbs = hubConnectAddHubForTrackAndFindTdb(db, track, tdbList, hash);
-        return hashFindVal(hash, track); // leaks tdbList and hash
+
+        // need to "fix" this track name
+        char *fixTrackName = cloneString(track);
+        trackHubFixName(fixTrackName);
+
+        return hashFindVal(hash, fixTrackName); // leaks tdbList and hash
 	}
     else
 	{

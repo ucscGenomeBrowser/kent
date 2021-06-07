@@ -10,7 +10,7 @@ dimensions dimensionX=clade
 visibility hide
 type bed 4
 group compGeno
-priority 1
+priority 2
 
     track cons241wayViewalign
     shortLabel Cactus Alignments
