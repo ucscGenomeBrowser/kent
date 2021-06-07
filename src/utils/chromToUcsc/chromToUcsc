@@ -167,7 +167,7 @@ def chromToUcsc(aliasFname, fieldIdx, skipUnknown, ifh, ofh):
                     continue
             if isSam:
                 mateChrom = row[6]
-                if mateChrom!="=":
+                if mateChrom not in ("=", "*"):
                     row[6] = toUcsc[mateChrom]
 
             row[fieldIdx] = ucscChrom
