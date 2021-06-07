@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1265.21">
+  <style type="text/css">
+    p.p1 {margin: 0.0pt 0.0pt 0.0pt 0.0pt; font: 18.0pt Helvetica; min-height: 22.0pt}
+    p.p2 {margin: 0.0pt 0.0pt 0.0pt 0.0pt; font: 18.0pt Helvetica}
+    p.p3 {margin: 0.0pt 0.0pt 0.0pt 0.0pt; font: 12.0pt Helvetica; min-height: 14.0pt}
+    p.p4 {margin: 0.0pt 0.0pt 0.0pt 0.0pt; font: 12.0pt Helvetica}
+    p.p5 {margin: 0.0pt 0.0pt 0.0pt 0.0pt; font: 12.0pt Times}
+    li.li4 {margin: 10.0pt 0.0pt 0.0pt 0.0pt; font: 12.0pt Helvetica}
+    span.s1 {text-decoration: underline ; color: #0000ee}
+    span.s2 {text-decoration: underline}
+    span.s3 {font: 12.0pt Helvetica}
+    span.s4 {color: #0000ee}
+    table.t1 {border-collapse: collapse}
+    td.td1 {width: 79.0pt; border-style: solid; border-width: 1.0pt 1.0pt 1.0pt 1.0pt; border-color: #cbcbcb #cbcbcb #cbcbcb #cbcbcb; padding: 0.0pt 5.0pt 0.0pt 5.0pt}
+    td.td2 {width: 123.0pt; border-style: solid; border-width: 1.0pt 1.0pt 1.0pt 1.0pt; border-color: #cbcbcb #cbcbcb #cbcbcb #cbcbcb; padding: 0.0pt 5.0pt 0.0pt 5.0pt}
+    td.td3 {width: 328.0pt; border-style: solid; border-width: 1.0pt 1.0pt 1.0pt 1.0pt; border-color: #cbcbcb #cbcbcb #cbcbcb #cbcbcb; padding: 0.0pt 5.0pt 0.0pt 5.0pt}
+    ul.ul1 {list-style-type: disc}
+  </style>
+</head>
+<body>
+<p class="p1" style="text-align:center"><b>SARS-CoV-2 Conservation Track Hub</b><br><br></p>
+<p class="p2"><b>Description</b></p>
+<p class="p3"><br></p>
+<p class="p4">These tracks provide information about conservation in the <i>Sarbecovirus</i> subgenus to aid in classification of single nucleotide variants (SNVs) in SARS-CoV-2, based on the fact that potential variants that have been excluded by purifying selection during the evolution of the subgenus are more likely to have a functional phenotypic effect in the current population <a href="https://www.nature.com/articles/s41467-021-22905-7" title="Jungreis I, Sealfon R, Kellis M (2021). SARS-CoV-2 gene content and COVID-19 mutation impact by comparing 44 Sarbecovirus genomes. Nature Communications 12(1), 1-20."><span class="s4">[1]</span></a>. There are four tracks:
+<ul class="ul1">
+  <li class="li4">
+      The ConservedAAs track shows amino acid residues have been perfectly conserved among 44 <i>Sarbecovirus</i> strains.
+  </li>
+  <li class="li4">
+      The SynConsCodons track shows codons have been under synonymous constraint in the <i>Sarbecovirus</i> subgenus.
+  </li>
+  <li class="li4">
+      The SNVcons2020-05 track shows 2696 SNVs from Nextstrain <a href="https://academic.oup.com/bioinformatics/article/34/23/4121/5001388" title="Hadfield J, Megill C, Bell SM, Huddleston J, Potter B, Callender C, Sagulenko P, Bedford T, Neher RA. (2018). Nextstrain: real-time tracking of pathogen evolution. Bioinformatics 34: 4121–4123"><span class="s4">[2]</span></a> obtained 2020-05-09, classified as non-coding (black), synonymous in synonymously-constrained codons (<span style="color:#00ff00;">dark green</span>), synonymous in synonymously-unconstrained codons (<span style="color:#aaffaa;">light green</span>), missense in conserved amino acids (<span style="color:#ff0000;">dark red</span>), or missense in non-conserved amino acids (<span style="color:#ffc8c8;">light red</span>).
+      <br><br>
+      The details page for each SNV provides additional information including the position; reference and alternate nucleotide and amino acid; number of Nextstrain genomes containing the variant and Nextstrain’s classification; our classification as noncoding, synonymous, or non-synonymous; nonsynonymous rate for nonsynonymous SNVs; synonymous rate, p-value, FDR, localFDR, and containment in a Synonymous Constraint Element (SCE) <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4376164/" title="Sealfon RS, Lin MF, Jungreis I, Wolf MY, Kellis M, Sabeti PC (2015). FRESCo: finding regions of excess synonymous constraint in diverse viruses. Genome Biol. 16(1): 38."><span class="s4">[3]</span></a> for synonymous SNVs; and links to view the <i>Sarbecovirus</i> alignment of the SNV in CodAlignView <a href="http://data.broadinstitute.org/compbio1/cav.php" title="Jungreis I, Lin MF, Chan CS, Kellis M (2016). CodAlignView: The Codon Alignment Viewer"><span class="s4">[4]</span></a> with 25 codons of context on each side.
+  </li>
+  <li class="li4">
+      The SNVcons2020-04 track is like the SNVcons2020-05 track except it shows 1874 SNVs obtained 2020-04-18. This track is provided for reproducibility of results reported in <a href="https://www.nature.com/articles/s41467-021-22905-7" title="Jungreis I, Sealfon R, Kellis M (2021). SARS-CoV-2 gene content and COVID-19 mutation impact by comparing 44 Sarbecovirus genomes. Nature Communications 12(1), 1-20."><span class="s4">[1]</span></a>, but for other uses the SNVcons2020-05 track is preferred.
+  </li>
+</ul>
+</p>
+<p class="p2"><b>Methods</b></p>
+<ul class="ul1">
+<li class="li4">
+  SNVs were obtained from the “Nextstrain Vars” track in the UCSC Table Browser.
+</li>
+<li class="li4">
+  The 2020-05 SNVs were classified with respect to the "PhyloCSF Genes" gene annotations <a href="https://www.nature.com/articles/s41467-021-22905-7" title="Jungreis I, Sealfon R, Kellis M (2021). SARS-CoV-2 gene content and COVID-19 mutation impact by comparing 44 Sarbecovirus genomes. Nature Communications 12(1), 1-20."><span class="s4">[1]</span></a>, which include ORFs 1a, 1ab, S, 3a, 3c, E, M, 6, 7a, 7b, 8, N, and 9b, and exclude 2b, 3d, 3d-2, 3b, 9c, and 10 (see <a href="https://www.sciencedirect.com/science/article/pii/S0042682221000532" title="Jungreis, I., Nelson, C. W., Ardern, Z., Finkel, Y., Krogan, N. J., Sato, K., ... & Kellis, M. (2021). Conflicting and ambiguous names of overlapping ORFs in the SARS-CoV-2 genome: A homology-based resolution. Virology 558, 145-151."><span>[5]</span></a> for resolution of ambiguous ORF names). SNVs in ORF3c or ORF9b, which overlap ORF3a and N, respectively, are classified with respect to the ORF for which the SNV has larger effect on the amino acid sequence based on BLOSUM62 score.</p>
+</li>
+<li class="li4">
+ The 2020-04 SNVs were classified with respect to NCBI annotations, which include ORF10 and lack ORFs 3c and 9b.</p>
+</li>
+<li class="li4">
+  Amino acid residues and codons in the ConservedAAs and SynConsCodons tracks are those in PhyloCSF Genes, except that positions that lie in two overlapping genes are classified with respect to the larger one.</p>
+</li>
+<li class="li4">
+  Codons were defined to be synonymously constrained if the rate of synonymous substitions is less than the gene-wide average, and p-value less than 0.034, which corresponds to a false discovery rate of 0.125, as calculated by FRESCo <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4376164/" title="Sealfon RS, Lin MF, Jungreis I, Wolf MY, Kellis M, Sabeti PC (2015). FRESCo: finding regions of excess synonymous constraint in diverse viruses. Genome Biol. 16(1): 38."><span class="s4">[3]</span></a> on 1-codon windows.</p>
+</li>
+<li class="li4">
+  Further details of the classification may be found in <a href="https://www.nature.com/articles/s41467-021-22905-7" title="Jungreis I, Sealfon R, Kellis M (2021). SARS-CoV-2 gene content and COVID-19 mutation impact by comparing 44 Sarbecovirus genomes. Nature Communications 12(1), 1-20."><span class="s4">[1]</span></a></p>
+</li>
+</ul>
+<p class="p2"><b>Credits</b></p>
+<p class="p3"><br></p>
+<p class="p4">Questions should be directed to <a href="mailto:iljungr@csail.mit.edu"><span class="s1">Irwin Jungreis</span></a>.</p>
+<p class="p3"><br></p>
+<p class="p4">In this resource, we have augmented variant data made available by UCSC with our own annotations. UCSC data came from nextstrain.org <a href="https://academic.oup.com/bioinformatics/article/34/23/4121/5001388"  title="Hadfield J, Megill C, Bell SM, Huddleston J, Potter B, Callender C, Sagulenko P, Bedford T, Neher RA. (2018). Nextstrain: real-time tracking of pathogen evolution. Bioinformatics 34: 4121–4123"><span class="s4">[2]</span></a>, which was derived from genome sequences deposited in GISAID <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/gch2.1018" title="Elbe S, Buckland-Merrett G (2017). Data, disease and diplomacy: GISAID’s innovative contribution to global health. Glob Chall 1: 33–46."><span class="s4">[6]</span></a>. Right of use and publication of the underlying sequences is entirely controlled by the authors of the original resource and the contributors of individual sequences, who are acknowledged in the nextstrain metadata file included with the supplemental materials of <a href="https://www.nature.com/articles/s41467-021-22905-7" title="Jungreis I, Sealfon R, Kellis M (2021). SARS-CoV-2 gene content and COVID-19 mutation impact by comparing 44 Sarbecovirus genomes. Nature Communications 12(1), 1-20."><span class="s4">[1]</span></a>. Our analysis provides an additional layer of annotation on their work rather than replicating or replacing it.</p>
+<p class="p3"><br></p>
+<p class="p4">Original data usage policy as provided by UCSC:</p>
+<BLOCKQUOTE><p class="p4">The data presented here is intended to rapidly disseminate analysis of important pathogens. Unpublished data is included with permission of the data generators, and does not impact their right to publish. Please contact the respective authors (available via the Nextstrain metadata.tsv file) if you intend to carry out further research using their data. Derived data, such as phylogenies, can be downloaded from nextstrain.org (see "DOWNLOAD DATA" link at bottom of page) - please contact the relevant authors where appropriate.</p></BLOCKQUOTE>
+<p class="p3"><br></p>
+<p class="p2"><b>Citing the SARS-CoV-2 Conservation Track Hub</b></p>
+<p class="p3"><br></p>
+<p class="p4">If you use the SARS-CoV-2 Conservation tracks, please cite Jungreis et al. 2021 <a href="https://www.nature.com/articles/s41467-021-22905-7" title="Jungreis I, Sealfon R, Kellis M (2021). SARS-CoV-2 gene content and COVID-19 mutation impact by comparing 44 Sarbecovirus genomes. Nature Communications 12(1), 1-20."><span class="s4">[1]</span></a>.</p>
+<p class="p3"><br></p>
+<p class="p2"><b>References</b></p>
+<p class="p3"><br></p>
+
+<p class="p5"><span class="s3">[1] </span>Jungreis I, Sealfon R, Kellis M (2021). SARS-CoV-2 gene content and COVID-19 mutation impact by comparing 44 <i>Sarbecovirus</i> genomes. <i>Nature Communications</i> 12(1), 1-20. <a href="https://www.nature.com/articles/s41467-021-22905-7"><span class="s4">doi:10.1038/s41467-021-22905-7</span></a></p><br>
+
+<p class="p5"><span class="s3">[2] </span>Hadfield J, Megill C, Bell SM, Huddleston J, Potter B, Callender C, Sagulenko P, Bedford T, Neher RA. (2018). Nextstrain: real-time tracking of pathogen evolution. <i>Bioinformatics</i> 34: 4121–4123 <a href="https://academic.oup.com/bioinformatics/article/34/23/4121/5001388"><span class="s4">doi:10.1093/bioinformatics/bty407</span></a></p><br>
+
+<p class="p5"><span class="s3">[3] </span>Sealfon RS, Lin MF, Jungreis I, Wolf MY, Kellis M, Sabeti PC (2015). FRESCo: finding regions of excess synonymous constraint in diverse viruses. <i>Genome Biol.</i> 16(1): 38. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4376164/"><span class="s4">doi:10.1186/s13059-015-0603-7</span></a></p><br>
+
+<p class="p5"><span class="s3">[4] </span>Jungreis I, Lin MF, Chan CS, Kellis M (2016). CodAlignView: The Codon Alignment Viewer [Internet]. Available from: <a href="http://data.broadinstitute.org/compbio1/cav.php"><span class="s4">http://data.broadinstitute.org/compbio1/cav.php</span></a></p><br>
+
+<p class="p5"><span class="s3">[5] </span>Jungreis, I., Nelson, C. W., Ardern, Z., Finkel, Y., Krogan, N. J., Sato, K., ... & Kellis, M. (2021). Conflicting and ambiguous names of overlapping ORFs in the SARS-CoV-2 genome: A homology-based resolution. <i>Virology</i> 558, 145-151. <a href="https://www.sciencedirect.com/science/article/pii/S0042682221000532"><span>doi.org/10.1016/j.virol.2021.02.013</span></a></p><br>
+
+<p class="p5"><span class="s3">[6] </span>Elbe S, Buckland-Merrett G (2017). Data, disease and diplomacy: GISAID’s innovative contribution to global health. <i>Glob Chall</i> 1: 33–46. <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/gch2.1018"><span class="s4">doi:10.1002/gch2.1018</span></a></p><br>
+
+
+
+
+</body>
+</html>
