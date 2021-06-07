@@ -1,6 +1,6 @@
 track revel
 shortLabel REVEL
-longLabel REVEL Score for all possible single-basepair mutations (zoom in to show exact score on mouse over, reference nucleotide = score 0.0)
+longLabel REVEL Score for all possible single-basepair mutations - Mouse over to show score - Reference nucleotide or synonymous: score = 0.0)
 type bigWig
 compositeTrack on
 visibility dense

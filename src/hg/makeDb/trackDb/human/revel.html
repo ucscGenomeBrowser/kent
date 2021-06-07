@@ -29,7 +29,9 @@ of the outputs of the 13 tools.
 For single nucleotide variants (SNV), at every
 genome position, there are three values per position, one for every possible
 nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing 
-the reference allele, e.g. A to A, is always set to zero.
+the reference allele, e.g. A to A, is always set to zero, "0.0". REVEL only 
+takes into account amino acid changes, so a nucleotide change that results in no
+amino acid change (synonymous) also receives the score "0.0".
 <br>
 When using this track, zoom in until you can see every basepair at the
 top of the display. Otherwise, there are several nucleotides per pixel under 
