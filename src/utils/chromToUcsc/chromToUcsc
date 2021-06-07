@@ -42,6 +42,7 @@ def parseArgs():
     parser.add_option("-i", "--in", dest="inFname", action="store", help="input filename, default: /dev/stdin")
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("-s", "--skipUnknown", dest="skipUnknown", action="store_true", help="skip unknown sequence rather than generate an error.")
     parser.add_option("-k", "--field", dest="fieldNo", action="store", type="int", \
             help="index of field to convert, default is %default (first field is 1). This works for BED, bedGraph, GTF, wiggle, VCF. For genePred, set this option to 2, for PSL use 10 (target) or 14 (query), for Chain use 2 (target) or 7 (query). If any line starts with @ (SAM format), this field is automatically set to 2.", default=1)
 
@@ -104,9 +105,21 @@ def parseAlias(fname):
         toUcsc[row[0]] = row[1]
     return toUcsc
 
-def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
+
+def handledUnmappedChrom(chrom, skipUnknown, skipWarned, message):
+    "either generate an error or warning when an unknown chromosome is encountered."
+    if skipUnknown:
+        if chrom not in skipWarned:
+            logging.warning(message)
+            skipWarned.add(chrom)
+    else:
+        logging.error(message)
+        exit(1)
+
+def chromToUcsc(aliasFname, fieldIdx, skipUnknown, ifh, ofh):
     " convert column number fieldIdx to UCSC-style chrom names "
     toUcsc = parseAlias(aliasFname)
+    skipWarned = set()
 
     ucscChroms = set(toUcsc.values())
     isSam = False
@@ -137,8 +150,9 @@ def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
                 if chrom not in ucscChroms:
                     ucscChrom = toUcsc.get(chrom)
                     if ucscChrom is None:
-                        logging.error("SAM format, header line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
-                        exit(1)
+                        handledUnmappedChrom(chrom, skipUnknown, skipWarned,
+                                             "SAM format, header line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
+                        continue
                     row[1] = "SN:%s" % ucscChrom
         else:
             # just pass through any UCSC chrom names
@@ -148,8 +162,9 @@ def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
             else:
                 ucscChrom = toUcsc.get(chrom)
                 if ucscChrom is None:
-                    logging.error("line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
-                    exit(1)
+                    handledUnmappedChrom(chrom, skipUnknown, skipWarned,
+                                         "line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
+                    continue
             if isSam:
                 mateChrom = row[6]
                 if mateChrom!="=":
@@ -169,7 +184,7 @@ def download(db):
         data = StringIO(gzData)
     else:
         data = BytesIO(gzData)
-    
+
     data = gzip.GzipFile(fileobj=data).read().decode()
     outFname = db+".chromAlias.tsv"
     open(outFname, "w").write(data)
@@ -183,6 +198,7 @@ def main():
     aliasFname = options.aliasFname
     inFname = options.inFname
     outFname = options.outFname
+    skipUnknown = options.skipUnknown
 
     if options.downloadDb:
         download(options.downloadDb)
@@ -206,6 +222,6 @@ def main():
         ofh = open(outFname, "w")
 
     fieldIdx = options.fieldNo-1
-    chromToUcsc(aliasFname, fieldIdx, ifh, ofh)
+    chromToUcsc(aliasFname, fieldIdx, skipUnknown, ifh, ofh)
 
 main()
