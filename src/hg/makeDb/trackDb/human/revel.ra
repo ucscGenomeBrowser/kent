@@ -3,7 +3,7 @@ shortLabel REVEL
 longLabel REVEL Score for all possible single-basepair mutations - Mouse over to show score - Reference nucleotide or synonymous: score = 0.0)
 type bigWig
 compositeTrack on
-visibility dense
+visibility hide
 #maxWindowToQuery 500000
 group phenDis
 color 150,80,200
