@@ -208,3 +208,19 @@ hg38.cactus241way
 hg38.cactus241wayFrames
 hg38.cactus241waySummary
 hg38.phyloP241way
+
+#############################################################################
+# markd 2020/12/23
+
+bigMaf was built from files in:
+    /hive/data/genomes/hg38/bed/cactus241way/ucscNames/
+
+creating
+    /hive/data/genomes/hg38/bed/cactus241way/241-mammalian-2020v2.ucsc.bigMaf
+
+Exact commands were not recorded, since this was originally not intended for release.
+It consisted of concatenating the MAFs in sort ordered (using file names) and
+then doing a standard bigMaf build.  Recall it took about five days.
+
+
+#############################################################################
