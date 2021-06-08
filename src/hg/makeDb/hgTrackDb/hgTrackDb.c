@@ -801,7 +801,25 @@ slReverse(&tdbList);
 return tdbList;
 }
 
-static struct trackDb *makeCartVersionTrack()
+static int findMaxCartVersion(struct trackDb *tdbList)
+/* Search the track list for the maximum cartVersion. */
+{
+struct trackDb *tdb;
+int maxVal = 0;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char *value;
+    if ((value = hashFindVal(tdb->settingsHash, "cartVersion")) != NULL)
+        {
+        int check = sqlUnsigned(value);
+        if (check > maxVal)
+            maxVal = check;
+        }
+    }
+return maxVal;
+}
+
+static struct trackDb *makeCartVersionTrack(struct trackDb *tdbList)
 /* Build a trackDb entry for the cartVersion pseudo track that keeps track of the
  * highest cartVersion used in this trackDb list.  
  */
@@ -809,8 +827,11 @@ static struct trackDb *makeCartVersionTrack()
 struct trackDb *cartVerTdb;
 
 AllocVar(cartVerTdb);
+
+/* we negate cartVersion so the priority puts it first on the list. */
+cartVerTdb->priority = -findMaxCartVersion(tdbList);
+
 cartVerTdb->track = cloneString("cartVersion");
-cartVerTdb->priority = -trackDbGetCartVersion();
 cartVerTdb->shortLabel = cloneString("cartVersion");
 cartVerTdb->longLabel = cloneString("cartVersion");
 cartVerTdb->html = cloneString("cartVersion");
@@ -832,8 +853,9 @@ char *tab = rTempName(getTempDir(), trackDbName, ".tab");
 struct trackDb *tdbList = buildTrackDb(org, database, hgRoot, strict);
 tdbList = flatten(tdbList);
 slSort(&tdbList, trackDbCmp);
+
 if (addVersion)
-    slAddTail(&tdbList, makeCartVersionTrack());
+    slAddHead(&tdbList, makeCartVersionTrack(tdbList));
 verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 
 /* Write to tab-separated file; hold off on html, since it must be encoded */

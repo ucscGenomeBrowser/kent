@@ -547,6 +547,9 @@ struct trackDb *hTrackDb(char *db);
  *	NOTE: this result is cached, do not free it !
  */
 
+struct trackDb *hTrackDbWithCartVersion(char *db, int *retCartVersion);
+/* Do hTrackDb AND return cartVersion. */
+
 struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList);
 /* Load trackDb object for a track. If track is composite, its subtracks
  * will also be loaded and inheritance will be handled; if track is a

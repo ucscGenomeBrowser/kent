@@ -59,14 +59,6 @@
 #define DEFAULT_GENOME "Human"
 #endif
 
-static unsigned trackDbCartVersion = 0;
-
-unsigned hdbGetTrackCartVersion()
-/* Get the cart version that our current trackDb wants to use. */
-{
-return trackDbCartVersion;
-}
-
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
 static struct sqlConnCache *centralCc = NULL;
 static char *centralDb = NULL;
@@ -4206,7 +4198,7 @@ slSort(&tdbList, trackDbCmp);
 return tdbList;
 }
 
-struct trackDb *hTrackDb(char *db)
+struct trackDb *hTrackDbWithCartVersion(char *db, int *retCartVersion)
 /* Load tracks associated with current db.
  * Supertracks are loaded as a trackDb, but are not in the returned list,
  * but are accessible via the parent pointers of the member tracks.  Also,
@@ -4250,8 +4242,13 @@ if (doCache)
         if (cacheTdb != NULL)
             {
             if (sameString(cacheTdb->track, "cartVersion"))
-                trackDbCartVersion = -cacheTdb->priority;
-            return cacheTdb->next;
+                {
+                // Convert negative cartVersion (for priority-ordering) back to positive cartVersion
+                if (retCartVersion)
+                    *retCartVersion = -cacheTdb->priority;
+                cacheTdb = cacheTdb->next;
+                }
+            return cacheTdb;
             }
 
         memCheckPoint(); // we want to know how much memory is used to build the tdbList
@@ -4265,9 +4262,21 @@ tdbList = trackDbPolishAfterLinkup(tdbList, db);
 if (doCache)
     trackDbCloneTdbListToSharedMem(db, tdbPathString, tdbList, memCheckPoint());
 
+// Store negative cartVersion in priority field so that cartVersion "track" is first in tdbList
 if (sameString(tdbList->track, "cartVersion"))
-    trackDbCartVersion = -tdbList->priority;
+    {
+    if (retCartVersion)
+        *retCartVersion = -tdbList->priority;
+    tdbList = tdbList->next;
+    }
+
 return tdbList->next;
+}
+
+struct trackDb *hTrackDb(char *db)
+/* see hTrackDbWithCartVersion above. */
+{
+return hTrackDbWithCartVersion(db, NULL);
 }
 
 static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn,
