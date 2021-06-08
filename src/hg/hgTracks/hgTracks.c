@@ -5887,13 +5887,16 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     }
 }
 
-void loadFromTrackDb(struct track **pTrackList)
+int loadFromTrackDb(struct track **pTrackList)
 /* Load tracks from database, consulting handler list. */
+/* returns cartVersion desired. */
 {
 char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
 struct trackDb *tdbList;
+int trackDbCartVersion = 0;
+
 if(trackNameFilter == NULL)
-    tdbList = hTrackDb(database);
+    tdbList = hTrackDbWithCartVersion(database, &trackDbCartVersion);
 else
     {
     tdbList = hTrackDbForTrack(database, trackNameFilter);
@@ -5910,6 +5913,7 @@ else
         }
     }
 addTdbListToTrackList(tdbList, trackNameFilter, pTrackList);
+return trackDbCartVersion;
 }
 
 static int getScoreFilter(char *trackName)
@@ -6943,11 +6947,12 @@ struct track *track, *trackList = NULL;
 registerTrackHandlers();
 /* Load regular tracks, blatted tracks, and custom tracks.
  * Best to load custom last. */
-loadFromTrackDb(&trackList);
-if (hdbGetTrackCartVersion() > cartGetVersion(cart))
-    {
-    cartRewrite(cart, hdbGetTrackCartVersion(), cartGetVersion(cart));
-    }
+
+// load the track list and check to see if we need to rewrite the cart
+int cartVersionFromTrackDb = loadFromTrackDb(&trackList);
+int cartVersionFromCart = cartGetVersion(cart);
+if (cartVersionFromTrackDb > cartVersionFromCart)
+    cartRewrite(cart, cartVersionFromTrackDb, cartVersionFromCart);
 
 if (measureTiming)
     measureTime("Time after trackDbLoad ");
