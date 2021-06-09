@@ -5313,7 +5313,7 @@ if (withLeftLabels)
             }
 
         boolean doWiggle = checkIfWiggling(cart, track);
-        if (doWiggle)
+        if (doWiggle && isEmpty(track->networkErrMsg))
             track->drawLeftLabels = wigLeftLabels;
     #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
         if (theImgBox && track->limitedVis != tvDense)
