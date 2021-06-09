@@ -8027,6 +8027,7 @@ struct group *group;
 struct track *track;
 char *freezeName = NULL;
 boolean hideAll = cgiVarExists("hgt.hideAll");
+boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
 boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
@@ -8553,7 +8554,7 @@ if (!hideControls)
     char *oldDb = hashFindVal(oldVars, "db");
     if (sessionLabel)
         {
-        if (defaultTracks || hideAll || 
+        if (defaultTracks || hideAll || hideTracks ||
             (oldDb && differentString(database, oldDb)) ||
             !hasRecTrackSet(cart) ||
             sameString(sessionLabel, "off"))

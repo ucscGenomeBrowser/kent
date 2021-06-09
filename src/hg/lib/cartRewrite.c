@@ -157,7 +157,7 @@ static struct cartRewrite cartRewrites[] =
 void cartRewrite(struct cart *cart, unsigned trackDbCartVersion, unsigned cartVersion)
 /* Rewrite the cart to update it to expectations of trackDb. */
 {
-if (sameString(cfgOptionDefault("cartVersion", "on"), "off"))
+if (sameString(cfgOptionDefault("cartVersion", "off"), "off"))
     return;
 
 if (trackDbCartVersion > ArraySize(cartRewrites))
