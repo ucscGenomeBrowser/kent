@@ -1,6 +1,7 @@
 
 #include "common.h"
 #include "cart.h"
+#include "hgConfig.h"
 
 static char *edit0Mm10tracks[] =
 {
@@ -111,7 +112,7 @@ for(ii = 0; ii < numTracks; ii++)
 
     if (vis)
         {
-        if (sameString(vis, "dense") || sameString(vis, "pack") || sameString(vis, "full") )
+        if (differentString(vis, "hide"))
             {
             // Turn on the super track since one of its subtracks was visible before
             turnOnSuper = TRUE;
@@ -156,8 +157,14 @@ static struct cartRewrite cartRewrites[] =
 void cartRewrite(struct cart *cart, unsigned trackDbCartVersion, unsigned cartVersion)
 /* Rewrite the cart to update it to expectations of trackDb. */
 {
+if (sameString(cfgOptionDefault("cartVersion", "on"), "off"))
+    return;
+
 if (trackDbCartVersion > ArraySize(cartRewrites))
-    errAbort("Do not have cart rewrite rules to bring it up to version %d\n", trackDbCartVersion);
+    {
+    fprintf(stderr,"CartRewriteError: do not have cart rewrite rules to bring it up to version %d requested by trackDb\n", trackDbCartVersion);
+    return;
+    }
 
 // call the rewrite functions to bring us up to the trackDb cart version
 int ii;

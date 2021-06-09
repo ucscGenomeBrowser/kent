@@ -1153,7 +1153,13 @@ utility returns a failure message.</p>
 <p>
 The liftOver tool is useful if you wish to convert a large number of coordinate ranges between 
 assemblies. This tool is available in both web-based and command line forms, and supports 
-forward/reverse conversions as well as conversions between species.</p>
+forward/reverse conversions as well as conversions between species. You can use the
+<a href="../../FAQ/FAQformat.html#format1">BED format</a> (e.g. &quot;chr4 100000 100001&quot;,
+0-based) or directly paste text from the position box (&quot;chr4:100,001-100,001&quot;, 1-based).
+See our <a href="http://genome.ucsc.edu/blog/patches/">Coordinate Counting</a> blog post
+for a discussion of the difference. If the coordinates do not cover a single base pair e.g.
+&quot;chr4 100000 100000&quot; (BED) or &quot;chr4:100,001-100,000&quot; (text), this tool
+automatically extends them to at least one base pair.</p>
 
 <h3>Web-based coordinate lifting</h3>
 <p> 
