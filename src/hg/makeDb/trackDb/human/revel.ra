@@ -1,17 +1,19 @@
 track revel
 shortLabel REVEL
-longLabel REVEL Feb 2020 Score for all possible single-basepair mutations (zoom in to show exact score on mouse over, same basepair = score 0.0)
+longLabel REVEL Score for all possible single-basepair mutations - Mouse over to show score - Reference nucleotide or synonymous: score = 0.0)
 type bigWig
 compositeTrack on
-visibility dense
+visibility hide
 #maxWindowToQuery 500000
 group phenDis
 color 150,80,200
 #maxWindowToDraw 10000000
+mouseOverFunction noAverage
+dataVersion /gbdb/$D/revel/version.txt
 
         track revelA
         shortLabel Mutation: A
-        longLabel Revel Feb 2020 Score: Mutation is A
+        longLabel Revel: Mutation is A
         type bigWig
         parent revel on
         visibility dense
@@ -22,7 +24,7 @@ color 150,80,200
 
         track revelC
         shortLabel Mutation: C
-        longLabel Revel Feb 2020 Score: Mutation is C
+        longLabel Revel: Mutation is C
         type bigWig
         parent revel on
         visibility dense
@@ -33,7 +35,7 @@ color 150,80,200
 
         track revelG
         shortLabel Mutation: G
-        longLabel Revel Feb 2020 Score: Mutation is G
+        longLabel Revel: Mutation is G
         type bigWig
         parent revel on
         visibility dense
@@ -44,7 +46,7 @@ color 150,80,200
 
         track revelT
         shortLabel Mutation: T
-        longLabel Revel Feb 2020 Score: Mutation is T
+        longLabel Revel: Mutation is T
         type bigWig
         parent revel on
         visibility dense

@@ -18,7 +18,8 @@ my $returnEmail = ' lrnassar@ucsc.edu';
 my @victims;
 my %victimEmail;
 
-open (FH, "git log v${lastNN}_base..v${branchNN}_base --name-status | grep Author | sort | uniq|") or die "can not git log v${lastNN}_base..v${branchNN}_base --name-status";
+my $authorFilter = `getent group kentcommit | cut -d':' -f4 | sed -e 's/^\\|,/ --author=/g'`;
+open (FH, "git log v${lastNN}_base..v${branchNN}_base --name-status ${authorFilter} | grep Author | sort | uniq|") or die "can not git log v${lastNN}_base..v${branchNN}_base --name-status";
 while (my $line = <FH>) {
   chomp $line;
   if ($line =~ m/^Author:/) {

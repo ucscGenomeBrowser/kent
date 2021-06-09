@@ -22,6 +22,7 @@ fputs(
   "   -maskSites=file       Exclude variants in positions recommended for masking in file\n"
   "                         (typically https://github.com/W-L/ProblematicSites_SARS-CoV2/raw/master/problematic_sites_sarsCov2.vcf)\n"
   "   -minAc=N              Ignore alternate alleles observed fewer than N times\n"
+  "   -minAf=F              Ignore alternate alleles observed in less than F of non-N bases\n"
   "   -noGenotypes          Output 8-column VCF, without the sample genotype columns\n"
   "   -ref=seqName          Use seqName as the reference sequence; must be present in faFile\n"
   "                         (default: first sequence in faFile)\n"
@@ -46,6 +47,7 @@ static struct optionSpec options[] = {
     { "includeRef", OPTION_BOOLEAN },
     { "maskSites", OPTION_STRING },
     { "minAc", OPTION_INT },
+    { "minAf", OPTION_DOUBLE },
     { "noGenotypes", OPTION_BOOLEAN },
     { "ref", OPTION_STRING },
     { "resolveAmbiguous", OPTION_BOOLEAN },
@@ -115,7 +117,9 @@ struct dnaSeq *seq;
 for (seq = sequences->next;  seq != NULL;  seq = seq->next)
     if (seq->size != seqSize)
         errAbort("faToVcf: first sequence in %s (%s) has size %d, but sequence %s has size %d. "
-                 "All sequences must have the same size.",
+                 "All sequences must have the same size.  "
+                 "(Does the input contain non-IUPAC characters?  Non-IUPAC characters are ignored.  "
+                 "Masked bases are expected to be 'N'.  Gaps are expected to be '-'.)",
                  faFile, sequences->name, seqSize, seq->name, seq->size);
 
 char *refName = optionVal("ref", sequences->name);
@@ -244,7 +248,7 @@ for (baseIx = 0, chromStart = 0;  baseIx < seqSize;  baseIx++, chromStart++)
     memset(altAlleles, 0, sizeof(altAlleles));
     memset(genotypes, 0, sizeof(int) * gtCount);
     memset(missing, 0, sizeof(boolean) * gtCount);
-    int nonNCount = seqCount;
+    int nonNCount = gtCount;
     struct dnaSeq *seq;
     int gtIx;
     for (seq = seqsForGt, gtIx = 0;  seq != NULL;  seq = seq->next, gtIx++)
@@ -295,16 +299,19 @@ for (baseIx = 0, chromStart = 0;  baseIx < seqSize;  baseIx++, chromStart++)
             }
         }
     int minAc = optionInt("minAc", 0);
-    if (minAc > 0)
+    double minAf = optionDouble("minAf", 0.0);
+    if (minAc > 0 || minAf > 0.0)
         {
         int oldToNewIx[altCount];
         char newAltAlleles[altCount];
         int newAltAlleleCounts[altCount];
         int newAltCount = 0;
+        double nonNDouble = nonNCount;
         int altIx;
         for (altIx = 0;  altIx < altCount;  altIx++)
             {
-            if (altAlleleCounts[altIx] >= minAc)
+            if (altAlleleCounts[altIx] >= minAc &&
+                (altAlleleCounts[altIx] / nonNDouble) >= minAf)
                 {
                 // This alt passes the filter.
                 int newAltIx = newAltCount++;

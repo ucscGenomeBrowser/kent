@@ -51,6 +51,105 @@
 
 <!-- ============= 2021 archived news ============= -->
 <a name="2021"></a>
+
+<a name="060121"></a>
+<h2>Jun. 1, 2021 &nbsp;&nbsp; Genome Archive (GenArk) hubs and Dynamic BLAT</h2>
+<p>
+Do you have a favorite species or a research organism for which you'd like to visualize
+the genomic sequence? With the recent addition of genomic assemblies for more than 1,300
+species, it's possible that your favorite is now available in the UCSC Genome Browser.
+Check <a  href=https://hgdownload.soe.ucsc.edu/hubs/>this list</a> of new assemblies 
+to see if yours is a click away. Each of these Genome Browser assembly hubs comes pre-loaded 
+with several annotation tracks, gene models, and the ability to align genomic sequence to 
+the reference assembly using the <a  href= http://genome.ucsc.edu/FAQ/FAQblat.html>BLAT</a> 
+alignment tool. You can add your own data to your view of the assembly hub by uploading a 
+<a  href=https://genome.ucsc.edu/goldenPath/help/customTrack.html>custom track</a> 
+or creating a <a  href=https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html>track hub</a>.</p>
+<p>
+We call this group of assembly hubs, the <a href=https://hgdownload.soe.ucsc.edu/hubs/>
+Genome Archive (GenArk)</a>. The genomes in the GenArk are sourced from 
+<a href=https://www.ncbi.nlm.nih.gov/refseq/ target="_blank">NCBI RefSeq</a>, 
+the  <a href="https://vertebrategenomesproject.org/" target="_blank">Vertebrate Genomes Project (VGP)</a> 
+and other projects. See the complete list of assembly hubs <a target="_blank"
+href="https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt">here</a>.</p>
+<p>
+GenArk assemblies can be found by searching the common name (e.g.
+ <a href="https://genome.ucsc.edu/h/GCF_001984765.1">American Beaver</a>) or GCA/GCF accession
+(e.g. <a href="https://genome.ucsc.edu/h/GCF_001984765.1">GCF_001984765.1</a>) directly on the
+<a href="http://genome.ucsc.edu/cgi-bin/hgGateway">Genome Browser Gateway page</a>.
+A full list can also be seen on the <a 
+href="https://hgdownload.soe.ucsc.edu/hubs">GenArk portal</a> which
+is organized by phylogenetic groups and projects:<br>
+
+<div align="left">
+<table class="stdTbl">
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/primates/index.html">Primates</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/primates/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/primates/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/mammals/index.html">Mammals</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/mammals/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/mammals/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/birds/index.html">Birds</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/birds/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/birds/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fish/index.html">Fishes</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fish/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fish/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/vertebrate/index.html">Vertebrates</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/vertebrate/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/vertebrate/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/invertebrate/index.html">Invertebrates</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/invertebrate/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/invertebrate/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fungi/index.html">Fungi</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fungi/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fungi/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/plants/index.html">Plants</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/plants/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/plants/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/VGP/index.html">VGP</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/VGP/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/VGP/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/legacy/index.html">Legacy</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/legacy/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/legacy/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/globalReference/index.html">Global Reference</a></td>
+ <td><a></a></td>
+ <td><a></a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hubIndex.html">Mouse Strains</a></td>
+ <td><a></a></td>
+ <td><a></a></td></tr>
+
+</table></div></p>
+<p>
+The number of NCBI RefSeq assemblies has been increasing each year, and we expect the trend to continue as assemblies 
+from VGP, and other projects are released. Our next step is to add additional clades to GenArk including archaea,
+viruses, and bacteria.</p>
+
+<p>
+As mentioned above, assembly hubs in the GenArk allow for sequence alignment using the BLAT tool. We extended our traditional
+<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?command=start">BLAT tool</a> to accommodate these assembly hubs and we call it Dynamic BLAT. Dynamic BLAT
+pre-computes index genomes files, which allows assemblies to have a BLAT server without needing it to be resident in the 
+computer's memory. Dynamic BLAT allows us to offer BLAT services on nearly all of our GenArk assemblies, with a few exceptions
+due to excessive genome size.</p>
+
+<p>
+We would like to thank NCBI RefSeq and Vertebrate Genome Project (VGP) for making these assemblies available. We would also 
+like to thank Hiram Clawson, Mark Diekhans, Galt Barber, Lou Nassar, and Gerardo Perez, and the rest of the Browser team 
+for their work on building the assembly hubs, creating GenArk, and extending BLAT to include these new assembly hubs.</p>
+
+
 <a name="051121"></a>
 <h2>May. 11, 2021 &nbsp;&nbsp; Vaccines track available for the SARS-CoV-2 Genome Browser</h2>
 <p>
@@ -72,8 +171,10 @@ to the coronavirus genome:
     University School of Medicine</li>
 </ol>
 <p>
-The protein encoded by the three sequences has two AA substitutions compared to the SARS-CoV-2 S
-glycoprotein. Variations: S:K986P and S:V987P in the vaccine sequence. See also:
+The protein encoded by the three sequences has two amino acid substitutions compared to the
+SARS-CoV-2 S glycoprotein. These vaccines include two variations compared to the reference Spike
+sequence to stabilize the shape into a pre-infection structure that delivers a better immune
+response, S:K986P and S:V987P. See also:
 <a href="https://cen.acs.org/pharmaceuticals/vaccines/tiny-tweak-behind-COVID-19/98/i38"
 target="_blank">The tiny tweak behind COVID-19 vaccines</a>. More information about this track can
 be found on the <a href="../cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=vaccines">description

@@ -54,6 +54,7 @@ errAbort(
   "  -settings - for trackDb scanning, output table name, type line,\n"
   "            -  and settings hash to stderr while loading everything.\n"
   "  -gbdbList - list of files to confirm existance of bigDataUrl files\n"
+  "  -addVersion - add cartVersion pseudo-table\n"
   );
 }
 
@@ -63,6 +64,7 @@ static struct optionSpec optionSpecs[] = {
     {"release", OPTION_STRING},
     {"settings", OPTION_BOOLEAN},
     {"gbdbList", OPTION_STRING},
+    {"addVersion", OPTION_BOOLEAN},
     {NULL,      0}
 };
 
@@ -72,6 +74,7 @@ static char *release = "alpha";
 
 static char *gbdbList = NULL;
 static struct hash *gbdbHash = NULL;
+static boolean addVersion = FALSE;
 
 // release tags
 #define RELEASE_ALPHA  (1 << 0)
@@ -798,6 +801,48 @@ slReverse(&tdbList);
 return tdbList;
 }
 
+static int findMaxCartVersion(struct trackDb *tdbList)
+/* Search the track list for the maximum cartVersion. */
+{
+struct trackDb *tdb;
+int maxVal = 0;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char *value;
+    if ((value = hashFindVal(tdb->settingsHash, "cartVersion")) != NULL)
+        {
+        int check = sqlUnsigned(value);
+        if (check > maxVal)
+            maxVal = check;
+        }
+    }
+return maxVal;
+}
+
+static struct trackDb *makeCartVersionTrack(struct trackDb *tdbList)
+/* Build a trackDb entry for the cartVersion pseudo track that keeps track of the
+ * highest cartVersion used in this trackDb list.  
+ */
+{
+struct trackDb *cartVerTdb;
+
+AllocVar(cartVerTdb);
+
+/* we negate cartVersion so the priority puts it first on the list. */
+cartVerTdb->priority = -findMaxCartVersion(tdbList);
+
+cartVerTdb->track = cloneString("cartVersion");
+cartVerTdb->shortLabel = cloneString("cartVersion");
+cartVerTdb->longLabel = cloneString("cartVersion");
+cartVerTdb->html = cloneString("cartVersion");
+cartVerTdb->type = cloneString("cartVersion");
+cartVerTdb->url = cloneString("cartVersion");
+cartVerTdb->grp = cloneString("cartVersion");
+cartVerTdb->settings = cloneString("cartVersion");
+
+return cartVerTdb;
+}
+
 void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
                boolean strict)
 /* hgTrackDb - Create trackDb table from text files. */
@@ -808,6 +853,9 @@ char *tab = rTempName(getTempDir(), trackDbName, ".tab");
 struct trackDb *tdbList = buildTrackDb(org, database, hgRoot, strict);
 tdbList = flatten(tdbList);
 slSort(&tdbList, trackDbCmp);
+
+if (addVersion)
+    slAddHead(&tdbList, makeCartVersionTrack(tdbList));
 verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 
 /* Write to tab-separated file; hold off on html, since it must be encoded */
@@ -934,6 +982,7 @@ if (strchr(raName, '/') != NULL)
 release = optionVal("release", release);
 releaseBit = getReleaseBit(release);
 gbdbList = optionVal("gbdbList", gbdbList);
+addVersion = optionExists("addVersion");
 
 if (gbdbList)
     gbdbHash = hashLines(gbdbList);

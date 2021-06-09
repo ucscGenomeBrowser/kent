@@ -28,7 +28,8 @@ larger GWAS.
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-There are six subtracks of this track: four for every possible single nucleotide mutation, 
+There are six subtracks of this track: four for single-nucleotide mutations,
+one for each base, showing all possible substitutions, 
 one for insertions and one for deletions. All subtracks show the CADD Phred
 score on mouseover.</p>
 <p>
@@ -43,13 +44,14 @@ parameters, etc.
 <p>
 <b>Single nucleotide variants (SNV):</b> For SNVs, at every
 genome position, there are three values per position, one for every possible
-nucleotide mutation. The fourth value, &quot;no mutation&quot;, e.g. A to A, is always
-set to zero.<br>
-When using this track, please zoom in until you can see every basepair at the
-top of the display. Otherwise, there are several nucleotides under your mouse
-cursor per pixel and instead of an actual score, the tooltip text can only show
-the average score of all nucleotides under the cursor, which is indicated by
-the prefix &quot;~&quot; in the mouseover and averages of scores are not useful for any
+nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing 
+the reference allele, e.g. A to A, is always set to zero.
+<br>
+When using this track, zoom in until you can see every basepair at the
+top of the display. Otherwise, there are several nucleotides per pixel under 
+your mouse cursor and instead of an actual score, the tooltip text will show
+the average score of all nucleotides under the cursor. This is indicated by
+the prefix &quot;~&quot; in the mouseover. Averages of scores are not useful for any
 application of CADD.
 </p>
 
@@ -77,11 +79,11 @@ For automated download and analysis, the genome annotation is stored at UCSC in 
 files that can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/" target="_blank">our download server</a>.
 The files for this track are called <tt>a.bw, c.bw, g.bw, t.bw, ins.bb and del.bb</tt>. Individual
-regions or the whole genome annotation can be obtained using our tool <tt>bigWigToWig</tt>
+regions or the whole genome annotation can be obtained using our tools <tt>bigWigToWig</tt>
 or <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
-The tools can also be used to obtain only features within a given range, e.g.
+The tools can also be used to obtain features confined to a given range, e.g.
 <br>
 <tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/a.bw stdout</tt>
 <br>

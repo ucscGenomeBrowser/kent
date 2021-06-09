@@ -542,7 +542,6 @@ _EOF_
   if ($dbExists && !$forHub) {
     $bossScript->add(<<_EOF_
 hgBbiDbLink $db ${tableName}Targets /gbdb/$db/$tableName/crispr.bb
-hgLoadBed $db ${tableName}Ranges ranges/crisprRanges.bed
 _EOF_
     );
   }
@@ -576,27 +575,29 @@ if [ -s "specScores/$db.fa.gz" ]; then
 fi
 printf "#\tdisk space before cleaning\\n"
 df -h .
-rm -fr ranges/tmp
-rm -fr guides/err
-rm -fr guides/tmp
-rm -f guides/batch.bak
-rm -f specScores/batch.bak
-rm -fr specScores/err
-rm -fr specScores/tmp
-rm -fr effScores/err
-rm -fr effScores/tmp
-rm -f effScores/batch.bak
-rm -fr offTargets/err
-rm -fr offTargets/tmp
-rm -f offTargets/batch.bak
-gzip specScores.tab effScores.tab offtargets.offsets.tab
-ssh $bigClusterHub parasol list machines | awk '{print \$1}' | sort -u | while read M
+rm -fr ranges/tmp &
+rm -fr ranges/ranges.fa &
+rm -fr guides/err &
+rm -fr guides/tmp &
+rm -f guides/batch.bak &
+rm -f specScores/batch.bak &
+rm -f specScores/$db.fa specScores/$db.fa.fai &
+rm -f indexFa/$db.fa indexFa/$db.fa.fai &
+rm -fr specScores/err &
+rm -fr specScores/tmp &
+rm -fr effScores/err &
+rm -fr effScores/tmp &
+rm -f effScores/batch.bak &
+rm -fr offTargets/err &
+rm -fr offTargets/tmp &
+rm -f offTargets/batch.bak &
+gzip specScores.tab effScores.tab offtargets.offsets.tab &
+wait
+ssh $bigClusterHub parasol list machines | grep -v dead | awk '{print \$1}' | sort -u | while read M
 do
   ssh "\${M}" "rm -fr /dev/shm/crispr10K.$db" < /dev/null
 done
 ssh $bigClusterHub "rm -fr /dev/shm/crispr10K.$db" < /dev/null
-rm -f specScores/$db.fa specScores/$db.fa.fai
-rm -f indexFa/$db.fa indexFa/$db.fa.fai
 printf "#\tdisk space after cleaning\\n"
 df -h .
 _EOF_

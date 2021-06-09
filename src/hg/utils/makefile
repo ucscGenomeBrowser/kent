@@ -51,11 +51,11 @@ UTILS_APPLIST = \
 	overlapSelect \
 	positionalTblCheck \
 	pslToBigPsl \
-	pslMap \
-	pslMapPostChain \
-	pslRc \
 	tdbQuery \
 	transMapPslToGenePred \
+	scaffoldFaToAgp \
+	raSqlQuery \
+	pslLiftSubrangeBlat \
 	twoBitMask
 
 USER_APP_SCRIPTS = \
@@ -103,8 +103,6 @@ TEST_DIRS = \
 	hgvsToVcf \
 	hubCheck \
 	overlapSelect \
-	pslMap \
-	pslRc \
 	pslToBigPsl \
 	refSeqGet \
 	transMapPslToGenePred \

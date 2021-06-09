@@ -2,7 +2,7 @@ kentSrc = ../../..
 A = bedToBigBed
 include ../../../inc/common.mk
 
-test: testRgb testNotSorted testMultiInsAtEnd itemsRgb
+test: testRgb testNotSorted testMultiInsAtEnd itemsRgb tabSep
 
 testRgb: outputDir
 	${BINDIR}/${A} -type=bed9 -as=input/itemRgb.as input/itemRgb.bed input/chrom.sizes output/itemRgb.bb 2> /dev/null
@@ -43,6 +43,12 @@ itemsRgb: outputDir
 	${BINDIR}/${A} -type=bed12 -as=input/itemRgbBed12.as input/itemRgbBed12.bed input/chrom.sizes output/itemRgbBed12.bb 2> /dev/null
 	bigBedToBed output/itemRgbBed12.bb output/test_itemRgbBed12.bed
 	diff input/itemRgbBed12.bed output/test_itemRgbBed12.bed
+
+tabSep: outputDir
+	${BINDIR}/${A} -tab -type=bed4 -as=input/tabSep.as input/tabSep.bed input/chrom.sizes output/tabSep.bb 2> /dev/null
+	bigBedToBed output/tabSep.bb output/test_tabSep.bed
+	diff input/tabSep.bed output/test_tabSep.bed
+
 
 clean::
 	@rm -rf output

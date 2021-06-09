@@ -302,6 +302,18 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
     padding-right: 5px;
 }
 
+/* Used by hgc json tables */
+TABLE.jsonTable, TABLE.jsonTable td, TABLE.jsonTable td {
+    border: 1px solid #909090;
+    border-collapse: collapse;
+    text-align: left;
+    vertical-align: top;
+    padding: 5px;
+}
+
+TABLE.jsonTable thead tr td {
+    font-weight: bold;
+}
 
 /* hgTrackUi page formatting */
 label.trackUiHicLabel
@@ -712,10 +724,11 @@ body.oldStaticPage .sectionContent {
     margin:10px;
     text-align:left;
     position: absolute;
-    top: 80px;
-    left: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 10000;
-    width: 400px;
+    width: 600px;
 }
 
 #warnHead {

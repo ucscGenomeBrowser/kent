@@ -2,7 +2,8 @@
 # Daniel Schmelter 4/1/21
 
 track dbSnpArchive
-compositeTrack on
+cartVersion 1
+superTrack on
 shortLabel dbSNP Archive
 longLabel dbSNP Archive Composite Track
 group varRep

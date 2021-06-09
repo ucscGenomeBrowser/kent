@@ -70,19 +70,22 @@ UTILS_APPLIST = \
 	findMotif \
 	headRest \
 	htmlCheck \
+	matrixMarketToTsv \
 	newProg \
 	newPythonProg \
 	nibFrag \
 	nibSize \
 	paraFetch \
 	paraSync \
-	pslLiftSubrangeBlat \
+	pslMap \
+	pslMapPostChain \
 	pslPosTarget \
+	pslRc \
 	pslRemoveFrameShifts \
 	pslScore \
+	pslSwap \
 	pslToPslx \
 	randomLines \
-	raSqlQuery \
 	raToTab \
 	raToLines \
 	rmFaDups \
@@ -138,7 +141,6 @@ UCSC_APPS = \
 	lineCount \
 	nt4Frag \
 	pslToXa \
-	scaffoldFaToAgp \
 	scrambleFa \
 	subs \
 	tableSum \

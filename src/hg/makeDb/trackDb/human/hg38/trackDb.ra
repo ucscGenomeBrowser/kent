@@ -153,6 +153,10 @@ track coriellDelDup override
 origAssembly hg19 
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19" 
 
+track revel override
+origAssembly hg19 
+pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19" 
+
 include nonCodingRNAs.ra
 
 #track wgRna override 
@@ -662,7 +666,7 @@ include knownGene.ra
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
 
-include trackDb.241way.ra alpha
+include trackDb.241way.ra alpha,beta
 
 # track multiz145way
 # shortLabel 145way maf

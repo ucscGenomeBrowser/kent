@@ -78,8 +78,16 @@ exonArrows off
 exonNumbers off
 bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
 
+track cd8escape
+shortLabel CD8 Escape Muts
+longLabel T-Cell MHCI CD8+ Escape Mutations from Angerer et al. Sci Immun 2020
+group immu
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/cd8escape/cd8escape.bb
+noScoreFilter on
+
 track epiValid
-shortLabel Validated Epitopes
+shortLabel Valid. SARS1 Epitopes
 longLabel Validated Epitopes from SARS 2003 outbreak
 group immu
 type bigBed 4 +
@@ -188,7 +196,6 @@ priority 5
 type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/bbi/swift.bb
 noScoreFilter on
-pennantIcon New red ../covid19.html "Released by UCSC on Mar. 16, 2021"
 
 
 # track removed as per David H email, authors got a track hub instead
@@ -381,7 +388,7 @@ vcfDoQual off
 vcfDoFilter off
 geneTrack ncbiGeneBGP
 group varRep
-visibility squish
+visibility hide
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
 release beta,public
@@ -430,7 +437,6 @@ group varRep
 visibility squish
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#011821 "Updated January 2021"
 release alpha
 
     track sarsCov2PhyloPubAllMinAf01
@@ -471,7 +477,6 @@ group varRep
 priority 0.11
 bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.parsimony.bw
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated January 2021"
 
 track problematicSites
 shortLabel Problematic Sites
@@ -604,26 +609,6 @@ vcfDoQual off
 vcfDoFilter off
 group varRep
 
-include trackDb.119way.ra
-include trackDb.strainName119way.ra
-include epitopes.ra
-include trackDb.44way.ra
-include trackDb.strainName44way.ra
-include trackDb.uniprot.ra
-include trackDb.nextstrain.ra
-include kim2020.ra
-include trackDb.7way.ra
-include phylocsf.ra
-include addgene.ra
-include pond.ra
-include weizmanOrfs.ra
-include pyle.ra
-include treangen.ra
-include pbm.ra
-include pbmShanghai.ra
-include abEscape.ra
-include bloom.ra
-
 track spikeMuts
 shortLabel Spike Mutations
 longLabel Spike protein mutations from community annotation (Feb 2021)
@@ -645,6 +630,25 @@ searchDescription Spike protein mutations
 searchMethod fuzzy
 padding 5
 
+include trackDb.119way.ra
+include trackDb.strainName119way.ra
+include epitopes.ra
+include trackDb.44way.ra
+include trackDb.strainName44way.ra
+include trackDb.uniprot.ra
+include trackDb.nextstrain.ra
+include kim2020.ra
+include trackDb.7way.ra
+include phylocsf.ra
+include addgene.ra
+include pond.ra
+include weizmanOrfs.ra
+include pyle.ra
+include treangen.ra
+include pbm.ra
+include pbmShanghai.ra
+include abEscape.ra
+include bloom.ra
 include variantMuts.ra
-
 include vaccines.ra
+include mutCons.ra

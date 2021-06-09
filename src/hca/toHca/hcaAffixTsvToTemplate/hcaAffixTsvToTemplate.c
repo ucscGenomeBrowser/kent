@@ -45,7 +45,7 @@ void affixToTemplate(char *inSheet, char *inTemplate, char *outSheet)
 struct fieldedTable *smallSheet = fieldedTableFromTabFile(inSheet, inSheet, NULL, 0);
 struct fieldedTable *template = fieldedTableFromTabFile(inTemplate, inTemplate, NULL, 0);
 if (template->rowCount < 4)
-    errAbort("Expecting at least three rows in template %s, got %d", inTemplate, template->rowCount);
+    errAbort("Expecting at least four rows in template %s, got %d", inTemplate, template->rowCount);
 struct fieldedRow *computerNamesFr = slElementFromIx(template->rowList, 2);
 assert(computerNamesFr != NULL);
 char **computerNames = computerNamesFr->row;
@@ -68,7 +68,7 @@ char *outRow[template->fieldCount];
 for (i=0; i<template->fieldCount; ++i)
     outRow[i] = "";
 
-/* Create output table with same fields and same first three rows as template */
+/* Create output table with same fields and same first four rows as template */
 struct fieldedTable *outTable = fieldedTableNew(outSheet, template->fields, template->fieldCount);
 struct fieldedRow *fr;
 for (i=0, fr=template->rowList; i<4; ++i, fr = fr->next)

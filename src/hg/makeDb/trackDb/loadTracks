@@ -4,6 +4,7 @@ usage='loadTracks [options] trackDb hgFindSpec db0 ...
 options:
    -release=release
    -strict
+   -addVersion -- add cartVersion pseudo-table 
    -raName=trackDb.ra  - base name of ra file
    -grpSql=grp.sql - create a grp table using this sql file
    -sqlDir=../../lib - directory containg trackDb.sql and hgFindSpec.sql
@@ -25,6 +26,8 @@ while [[ $1 == -* ]] ; do
             release=$(echo $1 | sed 's/-release=//') ;;
         -strict)
             strict=yes;;
+        -addVersion)
+            addVersion=yes;;
         -settings)
             settings="yes";;
         -raName=*)
@@ -83,6 +86,9 @@ loadDbTracks() {
         topts="$topts -release=$release"
         fopts="$fopts -release=$release"
         qopts="$qopts -release=$release"
+    fi
+    if [ -n "$addVersion" ] ; then
+        topts="$topts -addVersion"
     fi
     if [ -n "$strict" ] ; then
         topts="$topts -strict"

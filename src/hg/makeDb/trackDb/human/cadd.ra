@@ -6,11 +6,10 @@ type bed
 visibility hide
 group phenDis
 color 100,130,160
-pennantIcon New red ../goldenPath/newsarch.html#030221 "Released Mar. 03, 2021"
 
 track cadd
-shortLabel CADD
-longLabel CADD 1.6 Score for all possible single-basepair mutations (zoom in to show exact score on mouse over, same basepair = score 0.0)
+shortLabel Single-bp mutations
+longLabel CADD 1.6 Score for all possible single-basepair mutation - Mouse over to show score - Reference nucleotide: score = 0.0)
 type bigWig
 compositeTrack on
 parent caddSuper

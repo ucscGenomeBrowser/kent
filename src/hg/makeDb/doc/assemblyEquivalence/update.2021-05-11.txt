@@ -1,0 +1,309 @@
+
+idKeys for Ensembl assemblies were
+calculated in:  /hive/data/outside/ensembl/genomes/release-104/
+
+New assemblies have been built for genbank, refseq and ucsc
+
+Working in:
+mkdir /hive/data/inside/assemblyEquivalence/2021-05-11
+cd /hive/data/inside/assemblyEquivalence/2021-05-11
+
+mkdir ensembl refseq genbank ucsc
+
+###########  refseq keys  ##################
+cd refseq
+
+find /hive/data/genomes/asmHubs/refseqBuild/GCF \
+    -maxdepth 4 -mindepth 4 -type d | while read buildDir
+do
+  asmId=`basename "${buildDir}"`
+  keySig="${buildDir}/idKeys/${asmId}.keySignature.txt"
+  idKeysDir=`dirname "${keySig}"`
+  if [ -s "${keySig}" ]; then
+     idKeys="$idKeysDir/$asmId.idKeys.txt"
+     fullCount=`cat $idKeys | wc -l`
+     uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+     keySig=`cat "${keySig}"`
+  printf "%s\t%s\t%d\t%d\n" "${keySig}" "${asmId}" "${fullCount}" "${uniqueCount}"
+  fi
+done | sort -k1,1 > refseq.keySignatures.txt
+
+###########  genbank keys  ##################
+cd ../genbank
+
+find /hive/data/genomes/asmHubs/genbankBuild/GCA \
+    -maxdepth 4 -mindepth 4 -type d | while read buildDir
+do
+  asmId=`basename "${buildDir}"`
+  keySig="${buildDir}/idKeys/${asmId}.keySignature.txt"
+  idKeysDir=`dirname "${keySig}"`
+  if [ -s "${keySig}" ]; then
+     idKeys="$idKeysDir/$asmId.idKeys.txt"
+     fullCount=`cat $idKeys | wc -l`
+     uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+     keySig=`cat "${keySig}"`
+ printf "%s\t%s\t%d\t%d\n" "${keySig}" "${asmId}" "${fullCount}" "${uniqueCount}"
+  fi
+done | sort -k1,1 > genbank.keySignatures.txt
+
+###########  UCSC keys  ##################
+cd ../ucsc
+
+ls -d /hive/data/genomes/* | while read dbDir
+do
+  db=`basename "${dbDir}"`
+  keySig="${dbDir}/bed/idKeys/${db}.keySignature.txt"
+  idKeysDir=`dirname "${keySig}"`
+  if [ -s "${keySig}" ]; then
+     idKeys="$idKeysDir/$db.idKeys.txt"
+     fullCount=`cat $idKeys | wc -l`
+     uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+     keySig=`cat "${keySig}"`
+   printf "%s\t%s\t%d\t%d\n" "${keySig}" "${db}" "${fullCount}" "${uniqueCount}"
+  fi
+done | sort -k1,1 > ucsc.keySignatures.txt
+
+cd /hive/data/inside/assemblyEquivalence/2021-05-11
+ln -s /cluster/home/hiram/kent/src/hg/makeDb/doc/assemblyEquivalence/exact.sh .
+
+###########  Ensembl keys  ##################
+cd ../ensembl
+
+# does not always work, use the wget instead
+# rsync -av --stats \
+# rsync://ftp.ensembl.org/ensembl/pub/release-104/species_EnsemblVertebrates.txt \
+#    ./
+
+wget --timestamping  \
+ftp://ftp.ensembl.org/pub/release-104/species_EnsemblVertebrates.txt
+
+# extract the GCx assembly names:
+
+awk -F$'\t' '{printf "%s_%s\n", $6,$5}' species_EnsemblVertebrates.txt \
+   | grep "^G" | sort > ensembl.v104.asmId.txt
+
+# compare this to the ones we have on hand here
+
+cut -f2 ../genbank/genbank.keySignatures.txt  | sort > genbank.asmId.here.txt
+
+wc -l ensembl.v104.asmId.txt genbank.asmId.here.txt | sed -e 's/^/# /;'
+#   295 ensembl.v104.asmId.txt
+#  1448 genbank.asmId.here.txt
+
+comm -12 ensembl.v104.asmId.txt genbank.asmId.here.txt | wc -l
+#	288
+
+# will need to catch up the assembly hubs for these missing 7:
+comm -23 ensembl.v104.asmId.txt genbank.asmId.here.txt
+# GCA_000001215.4_BDGP6.32
+# GCA_000004035.1_Meug_1.0
+# GCA_000090745.2_AnoCar2.0v2
+# GCA_000224145.1_KH
+# GCA_000409795.2_ChlSab1.1
+# GCA_013347765.1_ASM1334776v1
+# GCA_900186095.1_CHOK1GS_HDv1
+# checking the listings, it isn't clear all these are needed, appears to
+# be outdated versions at Ensembl, and perhaps only one new one for
+# GCA_013347765.1_ASM1334776v1
+# it exists as a GCF assembly
+
+find -L /hive/data/outside/ensembl/genomes/release-104/idKeys -type f \
+  | grep keySignature.txt | while read K
+do
+  idKeysDir=`dirname "${K}"`
+  id=`basename "${K}" | sed -e 's/.keySignature.txt//;'`
+  idKeys="$idKeysDir/$id.idKeys.txt"
+  fullCount=`cat $idKeys | wc -l`
+  uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+  keySig=`cat "${K}"`
+  printf "%s\t%s\t%d\t%d\n" "${keySig}" "${id}" "${fullCount}" "${uniqueCount}"
+done | sort -k1,1 > ensembl-104.keySignatures.txt
+
+find -L /hive/data/outside/ensembl/genomes/release-103/idKeys -type f \
+  | grep keySignature.txt | while read K
+do
+  idKeysDir=`dirname "${K}"`
+  id=`basename "${K}" | sed -e 's/.keySignature.txt//;'`
+  idKeys="$idKeysDir/$id.idKeys.txt"
+  fullCount=`cat $idKeys | wc -l`
+  uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+  keySig=`cat "${K}"`
+  printf "%s\t%s\t%d\t%d\n" "${keySig}" "${id}" "${fullCount}" "${uniqueCount}"
+done | sort -k1,1 > ensembl-103.keySignatures.txt
+
+find -L /hive/data/outside/ensembl/genomes/release-101/idKeys -type f \
+  | grep keySignature.txt | while read K
+do
+  idKeysDir=`dirname "${K}"`
+  id=`basename "${K}" | sed -e 's/.keySignature.txt//;'`
+  idKeys="$idKeysDir/$id.idKeys.txt"
+  fullCount=`cat $idKeys | wc -l`
+  uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+  keySig=`cat "${K}"`
+  printf "%s\t%s\t%d\t%d\n" "${keySig}" "${id}" "${fullCount}" "${uniqueCount}"
+done | sort -k1,1 > ensembl-101.keySignatures.txt
+
+find /hive/data/outside/ensembl/genomes/release-100/idKeys -type f \
+  | grep keySignature.txt | while read K
+do
+  idKeysDir=`dirname "${K}"`
+  id=`basename "${K}" | sed -e 's/.keySignature.txt//;'`
+  idKeys="$idKeysDir/$id.idKeys.txt"
+  fullCount=`cat $idKeys | wc -l`
+  uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+  keySig=`cat "${K}"`
+  printf "%s\t%s\t%d\t%d\n" "${keySig}" "${id}" "${fullCount}" "${uniqueCount}"
+done | sort -k1,1 > ensembl-100.keySignatures.txt
+
+find /hive/data/outside/ensembl/genomes/release-99/idKeys -type f \
+  | grep keySignature.txt | while read K
+do
+  idKeysDir=`dirname "${K}"`
+  id=`basename "${K}" | sed -e 's/.keySignature.txt//;'`
+  idKeys="$idKeysDir/$id.idKeys.txt"
+  fullCount=`cat $idKeys | wc -l`
+  uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+  keySig=`cat "${K}"`
+  printf "%s\t%s\t%d\t%d\n" "${keySig}" "${id}" "${fullCount}" "${uniqueCount}"
+done | sort -k1,1 > ensembl-99.keySignatures.txt
+
+# something is odd with three of these.  Their names changed between
+# versions but the sum stayed the same.  Can't have this.
+# Find them via
+cut -f1 ensembl.keySignatures.txt | sort | uniq -c | sort -rn | head
+      2 2e374245cf85b32eddf186cf50f28f82
+      2 298de0770996a131c6f90a49ebebebb8
+      2 0eec31acf1f1120af29d62874cdd9952
+      1 ffb6ffd6b48667dd28ac3a2364b6c10e
+egrep -h "2e374245cf85b32eddf186cf50f28f82|298de0770996a131c6f90a49ebebebb8|0eec31acf1f1120af29d62874cdd9952" *.txt | cut -f2 | sort | uniq -c
+      5 Anolis_carolinensis.AnoCar2.0
+      2 Anolis_carolinensis.AnoCar2.0v2
+      2 Canis_familiaris.CanFam3.1
+      5 Canis_lupus_familiaris.CanFam3.1
+      4 Drosophila_melanogaster.BDGP6.28
+      3 Drosophila_melanogaster.BDGP6.32
+
+    # Eliminate the old ones:
+sort -u ensembl-10?.keySignatures.txt \
+  ensembl-99.keySignatures.txt \
+    | egrep -v -w "Anolis_carolinensis.AnoCar2.0|Canis_familiaris.CanFam3.1|Drosophila_melanogaster.BDGP6.28" \
+      > ensembl.keySignatures.txt
+
+###########  Exact matches  ##################
+
+cd /hive/data/inside/assemblyEquivalence/2021-05-11
+./exact.sh
+
+~/kent/src/hg/makeDb/doc/assemblyEquivalence/exactTableTsv.pl \
+  | sort > table.2021-05-11.tsv
+
+###########  Near matches  ##################
+
+mkdir /hive/data/inside/assemblyEquivalence/2021-05-11/notExact
+cd /hive/data/inside/assemblyEquivalence/2021-05-11/notExact
+
+sed -e 's/release-99/release-104/;' \
+  /cluster/home/hiram/kent/src/hg/makeDb/doc/assemblyEquivalence/runOne > runOne
+chmod +x runOne
+
+time (~/kent/src/hg/makeDb/doc/assemblyEquivalence/allByAll.sh) > all.log 2>&1
+# real    17m52.128s
+
+sed -e 's/\tcount A .*//;' results/match.*.txt > notExact.table.2021-05-11.tsv
+wc -l notExact.table.2021-05-11.tsv
+# 1200 notExact.table.2021-05-11.tsv
+
+###########  Table contents to load  ##################
+
+sort -u notExact.table.2021-05-11.tsv ../table.2021-05-11.tsv \
+    > hgFixed.asmEquivalent.tsv
+
+### Compare to existing:
+hgsql -N -e 'select * from asmEquivalent;' hgFixed | sort \
+   > existing.2021-05-11.tsv
+
+wc -l hgFixed.asmEquivalent.tsv existing.2021-05-11.tsv
+  2594 hgFixed.asmEquivalent.tsv
+  2546 existing.2021-05-11.tsv
+
+### How about the important ones:
+
+egrep "mm10|mm39|hg38|hg19" hgFixed.asmEquivalent.tsv
+
+GCA_000001405.27_GRCh38.p12     hg38    genbank ucsc    595     595     595
+GCA_000001635.8_GRCm38.p6       mm10    genbank ucsc    239     239     239
+GCA_000001635.9_GRCm39  mm39    genbank ucsc    61      61      61
+GCF_000001635.26_GRCm38.p6      mm10    refseq  ucsc    239     239     239
+GCF_000001635.27_GRCm39 mm39    refseq  ucsc    61      61      61
+Mus_musculus.GRCm39     mm39    ensembl ucsc    61      61      61
+hg38    GCA_000001405.27_GRCh38.p12     ucsc    genbank 595     595     595
+mm10    GCA_000001635.8_GRCm38.p6       ucsc    genbank 239     239     239
+mm10    GCF_000001635.26_GRCm38.p6      ucsc    refseq  239     239     239
+mm39    GCA_000001635.9_GRCm39  ucsc    genbank 61      61      61
+mm39    GCF_000001635.27_GRCm39 ucsc    refseq  61      61      61
+mm39    Mus_musculus.GRCm39     ucsc    ensembl 61      61      61
+
+### most should be identical to before
+join hgFixed.asmEquivalent.tsv existing.2021-05-11.tsv | wc -l
+         5473
+
+### probably should *not* be losing any from before:
+join -v 2 hgFixed.asmEquivalent.tsv existing.2021-05-11.tsv | wc -l
+      7
+# if not 0, investigate.  Sometimes a new assembly is now an
+# exact match to something where it was a near match before to
+# a previous assembly of that organism.
+# In this case, it is the different names same idKeys that were eliminated
+#  this time that weren't taken care of before:
+
+    join -t$'\t' -v 2 hgFixed.asmEquivalent.tsv existing.2021-05-11.tsv \
+       | cut -f1-3
+Anolis_carolinensis.AnoCar2.0   GCA_000090745.2_AnoCar2.0       ensembl
+Anolis_carolinensis.AnoCar2.0   GCF_000090745.1_AnoCar2.0       ensembl
+Anolis_carolinensis.AnoCar2.0   anoCar2 ensembl
+Canis_familiaris.CanFam3.1      GCF_000002285.3_CanFam3.1       ensembl
+Canis_familiaris.CanFam3.1      canFam3 ensembl
+Drosophila_melanogaster.BDGP6.28        GCF_000001215.4_Release_6_plus_ISO1_MT ensembl
+Drosophila_melanogaster.BDGP6.28        dm6     ensembl
+
+### note previous comments:
+### ### Showing 5 this time:
+### ### This is because the nearMiss calculation is only taking place on the
+### ### most recent Ensembl release, not all the past ones.  These two assemblies
+### ### have new version in ens104 release, thus these older Ensembl assemblies
+### ### are not being checked for near miss.  For now, going to leave these
+### ### missing from the table.  Can't maintain all older Ensembl equivalents.
+
+### Esox_lucius.Eluc_V3 GCA_000721915.3_Eluc_V3 ensembl genbank 1018 1019 1018
+### GCA_000721915.3_Eluc_V3 Esox_lucius.Eluc_V3 genbank ensembl 1018 1018 1019
+### Sarcophilus_harrisii.DEVIL7.0 GCA_000189315.1_Devil_ref_v7.0 ensembl genbank 35974 35975 35974
+### Sarcophilus_harrisii.DEVIL7.0 GCF_000189315.1_Devil_ref_v7.0 ensembl refseq 35974 35975 35974
+### Sarcophilus_harrisii.DEVIL7.0 sarHar1 ensembl ucsc 35974 35975 35974
+
+### there should be some new ones
+join -v 1 hgFixed.asmEquivalent.tsv existing.2021-05-11.tsv | wc -l
+         42
+
+### There should be no duplicate equivalents:
+cut -f1,2 hgFixed.asmEquivalent.tsv | sort | uniq -c | sort -rn | head
+      1 zonAlb1 Zonotrichia_albicollis.Zonotrichia_albicollis-1.0.1
+      1 zonAlb1 GCF_000385455.1_Zonotrichia_albicollis-1.0.1
+      1 zonAlb1 GCA_000385455.1_Zonotrichia_albicollis-1.0.1
+      1 xipMac1 GCA_000241075.1_Xiphophorus_maculatus-4.4.2
+      1 xenTro9 Xenopus_tropicalis.Xenopus_tropicalis_v9.1
+... etc ...
+
+#### To load up new table contents:
+hgLoadSqlTab hgFixed asmEquivalent ~/kent/src/hg/lib/asmEquivalent.sql \
+   hgFixed.asmEquivalent.tsv
+
+hgsql -N -e 'select * from asmEquivalent;' hgFixed \
+   | sort > updated.2021-05-11.tsv
+
+wc -l updated.2021-05-11.tsv existing.2021-05-11.tsv
+  2594 updated.2021-05-11.tsv
+  2546 existing.2021-05-11.tsv
+
+# Previously:
+  2546 updated.2021-03-10.tsv
+  2344 existing.2021-03-10.tsv
