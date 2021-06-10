@@ -379,7 +379,7 @@ if (!doWiggle)
         }
     }
 
-if (doWiggle)
+if (doWiggle && isEmpty(tg->networkErrMsg))
     {
     tg->drawLeftLabels = wigLeftLabels;
     tg->colorShades = shadesOfGray;
@@ -4187,7 +4187,14 @@ if (vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
 		s, e, textX, y, w, heightPer);
 	}
     }
-
+#ifdef NOTYET
+else if (vis == tvSquish)
+    {
+    int w = x2-textX;
+    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+            s, e, textX, y, w, heightPer);
+    }
+#endif
 else if (vis == tvFull)
     {
     int geneMapBoxX = insideX;

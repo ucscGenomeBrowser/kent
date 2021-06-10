@@ -26,7 +26,7 @@ if (version == "V8") {
 colorVersion <- if (version == "V8") "V8" else "V4"
 colorFile <- paste0("hgcData/gtexColors", colorVersion, ".R")
 source(colorFile)
-# sets colorsHex, darkerColorsHex
+# sets colorsHex, darkerColorsHex, tissueOrder
 
 df <- read.table(dataFile, sep="\t", header=TRUE)
 labels <- names(table(df$tissue))
@@ -44,7 +44,10 @@ if (isScoreOrder) {
     labels <- as.vector(dfOrderedColors$orderedLevels)
     tissueFactor <- tissueMedian
 } else {
-    tissueFactor <- df$tissue
+    # the gtexColorVX.R file has the tissue colors in a particular order, so match
+    # that up with the labels and data frame if we aren't sorting on median
+    labels <- labels[order(match(labels, tissueOrder))]
+    tissueFactor <- ordered(df$tissue, levels=labels)
 }
 
 # draw graph

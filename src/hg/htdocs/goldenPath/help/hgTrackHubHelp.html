@@ -994,6 +994,11 @@ Please direct any questions about CyVerse or the Discovery Environment to their
 <a href="https://cyverse.org/contact" target="_blank">Contact Us</a> page or &quot;Chat with
 Cyverse support&quot; staff directly via the blue question box icon on the top right of the
 Discovery Environment page.</p>
+<p>
+Note, if you need to replace files once they have been uploaded into CyVerse's DE and Public links
+have already been created you will need to force update the CyVerse cache by hitting Control-Shift-R
+in your browser to force reload the file or by sending Cache-Control: no-cache header: <code>curl
+--head --header 'Cache-Control: no-cache' https://data.cyverse.org/.../dataFile.bam</code></p>
 <!-- Galaxy stub
 <h3>Hosting Hubs on Galaxy</h3>
 <p>
