@@ -127,17 +127,15 @@ SEE ALSO: http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads
 4. Execute make in the directory containing the
    application you wish to build.
 5. See also: http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads
-   and more documentation in this source tree about setting up
-   a working browser in README files:
-       kent/src/product/README.building.source
-       kent/src/product/README.local.git.source
-       kent/src/product/README.mysql.setup
-       kent/src/product/README.install
-       kent/src/product/README.trackDb
-       kent/src/hg/makeDb/trackDb/README
+   and more documentation about setting up
+   a working browser:
+       Overview https://genome.ucsc.edu/goldenPath/help/mirror.html
+       Manual installation https://genome.ucsc.edu/goldenPath/help/mirrorManual.html
+       TrackDb documentation https://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html
+       Rare TrackDb statements kent/src/hg/makeDb/trackDb/README
    There are numerous README files in the source tree describing
    functions or modules in that area of the source tree.
    The kent/src/README in particular should be read by anyone modifying
-   the C source code, and python/README by anyone modifying the Python.
+   the C source code.
 
 
