@@ -1,0 +1,110 @@
+genome GCA_003601015.1_HG03807_prelim_1.0
+trackDb genomes/GCA_003601015.1_HG03807_prelim_1.0/GCA_003601015.1_HG03807_prelim_1.0.trackDb.txt
+groups groups.txt
+description Bengali, Bangladesh
+twoBitPath genomes/GCA_003601015.1_HG03807_prelim_1.0/GCA_003601015.1_HG03807_prelim_1.0.2bit
+organism Homo sapiens
+defaultPos RAIB01000807v1:16862869-16872869
+orderKey 1
+scientificName Homo sapiens
+htmlPath genomes/GCA_003601015.1_HG03807_prelim_1.0/html/GCA_003601015.1_HG03807_prelim_1.0.description.html
+
+genome GCA_003574075.1_HG02818_prelim_1.0
+trackDb genomes/GCA_003574075.1_HG02818_prelim_1.0/GCA_003574075.1_HG02818_prelim_1.0.trackDb.txt
+groups groups.txt
+description Gambia, Gambia
+twoBitPath genomes/GCA_003574075.1_HG02818_prelim_1.0/GCA_003574075.1_HG02818_prelim_1.0.2bit
+organism Homo sapiens
+defaultPos QYBF01000001v1:27043087-27053087
+orderKey 3
+scientificName Homo sapiens
+htmlPath genomes/GCA_003574075.1_HG02818_prelim_1.0/html/GCA_003574075.1_HG02818_prelim_1.0.description.html
+
+genome GCA_003086635.1_HG03486_prelim_1.0
+trackDb genomes/GCA_003086635.1_HG03486_prelim_1.0/GCA_003086635.1_HG03486_prelim_1.0.trackDb.txt
+groups groups.txt
+description Mende, Sierra Leone
+twoBitPath genomes/GCA_003086635.1_HG03486_prelim_1.0/GCA_003086635.1_HG03486_prelim_1.0.2bit
+organism Homo sapiens
+defaultPos QEMZ01000892v1:7666092-7676092
+orderKey 5
+scientificName Homo sapiens
+htmlPath genomes/GCA_003086635.1_HG03486_prelim_1.0/html/GCA_003086635.1_HG03486_prelim_1.0.description.html
+
+genome GCA_003070785.1_HG02059_prelim_1.0
+trackDb genomes/GCA_003070785.1_HG02059_prelim_1.0/GCA_003070785.1_HG02059_prelim_1.0.trackDb.txt
+groups groups.txt
+description Vietnamese, Vietnam
+twoBitPath genomes/GCA_003070785.1_HG02059_prelim_1.0/GCA_003070785.1_HG02059_prelim_1.0.2bit
+organism Homo sapiens
+defaultPos QDDK01000003v1:25272283-25282283
+orderKey 7
+scientificName Homo sapiens
+htmlPath genomes/GCA_003070785.1_HG02059_prelim_1.0/html/GCA_003070785.1_HG02059_prelim_1.0.description.html
+
+genome GCA_002872155.1_NA19434_prelim_1.0
+trackDb genomes/GCA_002872155.1_NA19434_prelim_1.0/GCA_002872155.1_NA19434_prelim_1.0.trackDb.txt
+groups groups.txt
+description Luhya, Kenya
+twoBitPath genomes/GCA_002872155.1_NA19434_prelim_1.0/GCA_002872155.1_NA19434_prelim_1.0.2bit
+organism Homo sapiens
+defaultPos POCD01000001v1:30671592-30681592
+orderKey 9
+scientificName Homo sapiens
+htmlPath genomes/GCA_002872155.1_NA19434_prelim_1.0/html/GCA_002872155.1_NA19434_prelim_1.0.description.html
+
+genome GCA_002209525.2_HG01352_prelim_2.1
+trackDb genomes/GCA_002209525.2_HG01352_prelim_2.1/GCA_002209525.2_HG01352_prelim_2.1.trackDb.txt
+groups groups.txt
+description Columbian, Colombia
+twoBitPath genomes/GCA_002209525.2_HG01352_prelim_2.1/GCA_002209525.2_HG01352_prelim_2.1.2bit
+organism Homo sapiens
+defaultPos NKHJ01000001v1:21647487-21657487
+orderKey 11
+scientificName Homo sapiens
+htmlPath genomes/GCA_002209525.2_HG01352_prelim_2.1/html/GCA_002209525.2_HG01352_prelim_2.1.description.html
+
+genome GCA_002208065.1_HG00733_prelim_1.0
+trackDb genomes/GCA_002208065.1_HG00733_prelim_1.0/GCA_002208065.1_HG00733_prelim_1.0.trackDb.txt
+groups groups.txt
+description Puerto Rican, Puerto Rico
+twoBitPath genomes/GCA_002208065.1_HG00733_prelim_1.0/GCA_002208065.1_HG00733_prelim_1.0.2bit
+organism Homo sapiens
+defaultPos NJRJ01000001v1:25191877-25201877
+orderKey 13
+scientificName Homo sapiens
+htmlPath genomes/GCA_002208065.1_HG00733_prelim_1.0/html/GCA_002208065.1_HG00733_prelim_1.0.description.html
+
+genome GCA_002180035.3_HG00514_prelim_3.0
+trackDb genomes/GCA_002180035.3_HG00514_prelim_3.0/GCA_002180035.3_HG00514_prelim_3.0.trackDb.txt
+groups groups.txt
+description Southern Han Chinese, China
+twoBitPath genomes/GCA_002180035.3_HG00514_prelim_3.0/GCA_002180035.3_HG00514_prelim_3.0.2bit
+organism Homo sapiens
+defaultPos chr1:83008419-83018419
+orderKey 15
+scientificName Homo sapiens
+htmlPath genomes/GCA_002180035.3_HG00514_prelim_3.0/html/GCA_002180035.3_HG00514_prelim_3.0.description.html
+
+genome GCA_002077035.3_NA12878_prelim_3.0
+trackDb genomes/GCA_002077035.3_NA12878_prelim_3.0/GCA_002077035.3_NA12878_prelim_3.0.trackDb.txt
+groups groups.txt
+description Utah/Mormon, USA
+twoBitPath genomes/GCA_002077035.3_NA12878_prelim_3.0/GCA_002077035.3_NA12878_prelim_3.0.2bit
+organism Homo sapiens
+defaultPos chr1:83093578-83103578
+orderKey 17
+scientificName Homo sapiens
+htmlPath genomes/GCA_002077035.3_NA12878_prelim_3.0/html/GCA_002077035.3_NA12878_prelim_3.0.description.html
+
+genome GCA_001524155.4_NA19240_prelim_3.0
+trackDb genomes/GCA_001524155.4_NA19240_prelim_3.0/GCA_001524155.4_NA19240_prelim_3.0.trackDb.txt
+groups groups.txt
+description Yoruban, Nigeria
+twoBitPath genomes/GCA_001524155.4_NA19240_prelim_3.0/GCA_001524155.4_NA19240_prelim_3.0.2bit
+organism Homo sapiens
+defaultPos chr1:82995534-83005534
+orderKey 19
+scientificName Homo sapiens
+htmlPath genomes/GCA_001524155.4_NA19240_prelim_3.0/html/GCA_001524155.4_NA19240_prelim_3.0.description.html
+
