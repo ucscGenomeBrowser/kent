@@ -6432,7 +6432,6 @@ else if (sameString(type, "hic"))
     {
     tg = trackFromTrackDb(tdb);
     hicCtMethods(tg);
-    tg->customPt = ct;
     }
 else
     {
