@@ -4,6 +4,7 @@ shortLabel Muscle De Micheli
 longLabel Muscle single cell data from De Micheli et al 2020
 visibility hide
 group singleCell
+release alpha
 
     track muscleDeMicheliCellType
     parent muscleDeMicheli
@@ -27,6 +28,7 @@ group singleCell
     barChartLimit 2
     url http://cells.ucsc.edu/?ds=muscle-cell-atlas&gene=$$ 
     urlLabel UCSC Cell Browser:
+    release alpha
 
     track muscleDeMicheliSample
     parent muscleDeMicheli
@@ -49,4 +51,4 @@ group singleCell
     barChartLimit 2
     url http://cells.ucsc.edu/?ds=muscle-cell-atlas&gene=$$
     urlLabel UCSC Cell Browser:
-
+    release alpha

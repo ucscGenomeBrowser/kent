@@ -150,13 +150,14 @@ jWestBanner.h: jWestBanner.html
 
 web.o: jWestHeader.h jWestBanner.h
 
-straw.o: straw/straw.cpp straw/straw.h
-	cd straw && ${MAKE} straw.o
+straw.o: straw/straw.cpp straw/straw.h straw/cStraw.cpp
+	cd straw && ${MAKE} straw
 
 clean:
 	rm -f $(O);
 	rm -f jWestHeader.h jWestBanner.h
 	rm -f ../../lib/$(MACHTYPE)/jkhgap.a;
+	cd straw && ${MAKE} clean
 
 ctags:
 	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c ../inc/encode/*.h ../lib/encode/*.c

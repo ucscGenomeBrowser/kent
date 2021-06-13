@@ -95,7 +95,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
-            "sortExp", "sortSim", "hideTracks", "ignoreCookie",
+            "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",
             NULL };
 
 boolean genomeIsRna = FALSE;    // is genome RNA instead of DNA
@@ -6432,7 +6432,6 @@ else if (sameString(type, "hic"))
     {
     tg = trackFromTrackDb(tdb);
     hicCtMethods(tg);
-    tg->customPt = ct;
     }
 else
     {
@@ -8134,6 +8133,15 @@ for (track = trackList; track != NULL; track = track->next)
         }
     }
 
+if (cartUsualBoolean(cart, "dumpTracks", FALSE))
+    {
+    struct dyString *dy = newDyString(1024);
+    logTrackList(dy, trackList);
+
+    printf("Content-type: text/html\n\n");
+    printf("%s\n", dy->string);
+    exit(0);
+    }
 
 if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
     logTrackVisibilities(cartSessionId(cart), trackList, position);
