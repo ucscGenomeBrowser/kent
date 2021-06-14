@@ -142,7 +142,7 @@ for (recTrackSet = recTrackSets; recTrackSet != NULL; recTrackSet = recTrackSet-
     {
 // TODO: consider libifying hgSession.c:add/getSessionLink() and using that
     hPrintf("<li><a class='recTrackSetLink' href='./hgTracks?"
-                    "pix=%d&textSize=%s"  // preserve these user settings 
+                    "pix=%d&textSize=%s&textFont=%s"  // preserve these user settings 
                     "&" hgsOtherUserName "=%s"
                     "&" hgsOtherUserSessionName "=%s"
                     "&" hgsOtherUserSessionLabel "=%s"
@@ -151,7 +151,7 @@ for (recTrackSet = recTrackSets; recTrackSet != NULL; recTrackSet = recTrackSet-
                     "&position="        // JS fills in position
                     "'>" 
                 "%s</a>: <small>%s</small></li>",
-                    tl.picWidth, tl.textSize,
+                    tl.picWidth, tl.textSize, tl.textFont,
                     recTrackSet->userName, recTrackSet->sessionName, 
                     recTrackSet->label, recTrackSet->description, 
                     recTrackSet->label, recTrackSet->description);
