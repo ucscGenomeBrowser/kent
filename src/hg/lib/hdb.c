@@ -4263,14 +4263,14 @@ if (doCache)
     trackDbCloneTdbListToSharedMem(db, tdbPathString, tdbList, memCheckPoint());
 
 // Store negative cartVersion in priority field so that cartVersion "track" is first in tdbList
-if (sameString(tdbList->track, "cartVersion"))
+if ((tdbList != NULL) && sameString(tdbList->track, "cartVersion"))
     {
     if (retCartVersion)
         *retCartVersion = -tdbList->priority;
     tdbList = tdbList->next;
     }
 
-return tdbList->next;
+return tdbList;
 }
 
 struct trackDb *hTrackDb(char *db)
