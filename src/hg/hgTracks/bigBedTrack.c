@@ -148,7 +148,7 @@ struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, 
 /* Add a bigBed filter using a trackDb filterBy statement. */
 {
 struct bigBedFilter *filter;
-char *setting = getFilterType(cart, tdb, field,  FILTERBY_SINGLE);
+char *setting = getFilterType(cart, tdb, field,  FILTERBY_DEFAULT);
 
 AllocVar(filter);
 filter->fieldNum =  getFieldNum(bbi, field);

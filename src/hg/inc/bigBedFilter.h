@@ -7,15 +7,16 @@
 #define BIGBEDFILTER_H
 
 /* the values legal for *FilterType */
-#define FILTERBY_SINGLE            "single"
-#define FILTERBY_MULTIPLE          "multiple"
-#define FILTERBY_SINGLE_LIST       "singleList"
-#define FILTERBY_MULTIPLE_LIST_OR  "multipleListOr"
+#define FILTERBY_SINGLE                 "single"
+#define FILTERBY_MULTIPLE               "multiple"
+#define FILTERBY_SINGLE_LIST            "singleList"
+#define FILTERBY_MULTIPLE_LIST_OR       "multipleListOr"
 #define FILTERBY_MULTIPLE_LIST_ONLY_OR  "multipleListOnlyOr"
-#define FILTERBY_MULTIPLE_LIST_ONLY_AND  "multipleListOnlyAnd"
-#define FILTERBY_MULTIPLE_LIST_AND "multipleListAnd"
-#define FILTERTEXT_WILDCARD        "wildcard"
-#define FILTERTEXT_REGEXP          "regexp"
+#define FILTERBY_MULTIPLE_LIST_ONLY_AND "multipleListOnlyAnd"
+#define FILTERBY_MULTIPLE_LIST_AND      "multipleListAnd"
+#define FILTERBY_DEFAULT                FILTERBY_SINGLE
+#define FILTERTEXT_WILDCARD             "wildcard"
+#define FILTERTEXT_REGEXP               "regexp"
 
 /* cart and tdb variables */
 #define FILTER_NUMBER_NAME_LOW    "filter"
