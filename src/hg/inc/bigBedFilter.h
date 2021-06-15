@@ -14,7 +14,7 @@
 #define FILTERBY_MULTIPLE_LIST_ONLY_OR  "multipleListOnlyOr"
 #define FILTERBY_MULTIPLE_LIST_ONLY_AND "multipleListOnlyAnd"
 #define FILTERBY_MULTIPLE_LIST_AND      "multipleListAnd"
-#define FILTERBY_DEFAULT                FILTERBY_SINGLE
+#define FILTERBY_DEFAULT                FILTERBY_MULTIPLE
 #define FILTERTEXT_WILDCARD             "wildcard"
 #define FILTERTEXT_REGEXP               "regexp"
 
