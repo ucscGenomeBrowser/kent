@@ -59,18 +59,31 @@ etc.
 <a name="genestrans"></a>
 <h6>What is a transcript and how is it related to a gene? </h6>
 <p>
+In the Genome Browser, transcript tracks often end with the word
+&quot;Genes&quot;, e.g. &quot;Ensembl Genes&quot;, &quot;NCBI RefSeq Genes&quot; or &quot;UCSC 
+Genes&quot;, but they really represent transcripts on chromosomes of a genome assembly.</p>
+<p>
 Transcripts are defined as RNA molecules that are made from a DNA template.
 Databases like the ones at the National Library of Medicine's NCBI or the
 European Bioinformatics Institute (EBI) collect these transcript sequences from
 biologists working on a gene. Every transcript has a 
 unique identifier (accession), a gene that it is assigned to, a sequence, and
-a list of exon chrom/start/end coordinates on a chromosome. 
-Usually every transcript is assigned to only a single gene. In the Genome Browser, transcript
-tracks often end with the word
-&quot;Genes&quot;, e.g. &quot;Ensembl Genes&quot;, &quot;NCBI RefSeq Genes&quot; or &quot;UCSC 
-Genes&quot;, but they really represent transcripts on chromosomes of a genome assembly.</p>
+a list of exon chrom/start/end coordinates on a chromosome. </p>
+
+<p>A gene usually has multiple transcripts. Some of these differ in only the
+"untranslated region" (UTR), and the coding sequence and protein stay the same.
+Some of the transcripts may stop in the middle of a coding exon, so they
+change the protein.
+Some transcripts of the same gene differ in the way the exons are put together,
+and some exons are skipped entirely, so the transcript contains parts of the
+coding sequence of other transcripts, as a new combination in the same order.
+</p>
+
 <p>
-For example, using the databases by NCBI, the gene
+So almost every human gene has multiple transcripts, but, at least in
+databases, every transcript is assigned to only a single gene.  For example,
+using the databases
+by NCBI, the gene
 with the gene symbol <a target=_blank
 href="https://www.ncbi.nlm.nih.gov/gene/672#">BRCA1</a> has 5 protein-coding
 transcripts or isoforms. The first transcript has the NCBI accession number <a
