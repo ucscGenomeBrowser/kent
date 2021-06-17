@@ -103,14 +103,14 @@ while (<>) {
       print ">$acc |$name\n";
     } else {
       print STDERR "No metadata for $acc\n";
-      s/ /\|/;
+      s/ / \|/;
       print;
     }
   } elsif (/^[A-Z]+$/) {
     print;
   } else {
     if (/^>/) {
-      s/ /\|/;
+      s/ / \|/;
     } else {
       warn "Passing through weird line:\n$_";
     }

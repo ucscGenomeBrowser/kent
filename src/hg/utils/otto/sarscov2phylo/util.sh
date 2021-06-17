@@ -61,3 +61,13 @@ cleanCncb () {
 }
 export -f cleanCncb
 
+vcfSamples () {
+    set +o pipefail
+    xcat $1 \
+    | head \
+    | grep ^#CHROM \
+    | sed -re 's/\t/\n/g;' \
+    | tail -n+10
+    set -o pipefail
+}
+export -f vcfSamples

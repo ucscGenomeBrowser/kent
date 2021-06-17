@@ -4,10 +4,12 @@
 #define HIC_H
 
 #include "interact.h"
+#include "cStraw.h"
 
 /* Metadata associated with a Hi-C track */
 struct hicMeta
 {
+Straw *strawObj;
 char *filename;
 char *fileAssembly;
 int nChroms;

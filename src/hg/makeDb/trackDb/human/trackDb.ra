@@ -21,7 +21,8 @@ include trackDb.gtex.ra
 include trackDb.geneHancer.ra
 
 # NCBI ClinVar
-include trackDb.clinvar.ra
+include trackDb.clinvar.ra beta,public
+include trackDb.clinvar.alpha.ra alpha
 
 # NCBI dbVar
 include trackDb.dbVar.ra
@@ -33,8 +34,8 @@ include trackDb.clinGen.ra
 include trackDb.giab.ra
 
 # CADD scores
-include cadd.ra beta,public
-include caddAlpha.ra alpha
+include cadd.ra alpha
+include caddAlpha.ra beta,public
 
 # Revel scores
 include revel.ra

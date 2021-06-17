@@ -114,6 +114,7 @@ boolean issueBotWarning;
 
 int main(int argc, char *argv[])
 {
+cgiSpoof(&argc, argv);
 if(argc == 1)
     {
     enteredMainTime = clock1000();

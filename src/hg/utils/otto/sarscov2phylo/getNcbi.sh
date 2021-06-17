@@ -1,6 +1,6 @@
 #!/bin/bash
 source ~/.bashrc
-set -beEu -o -x pipefail
+set -beEu -x -o pipefail
 
 # Download SARS-CoV-2 GenBank FASTA and metadata using NCBI Datasets API.
 # Use E-Utils to get SARS-CoV-2 metadata from BioSample.
@@ -11,20 +11,20 @@ scriptDir=$(dirname "${BASH_SOURCE[0]}")
 source $scriptDir/util.sh
 
 today=$(date +%F)
-prevDate=$(date -d yesterday +%F)
 
 ottoDir=/hive/data/outside/otto/sarscov2phylo
 
 mkdir -p $ottoDir/ncbi.$today
 cd $ottoDir/ncbi.$today
 
-# This query gives a large zip file that includes extra stuff, and the download really slows
-# down after a point, but it does provide a consistent set of FASTA and metadata:
-time curl -sS -X GET \
-    "https://api.ncbi.nlm.nih.gov/datasets/v1alpha/virus/taxon/2697049/genome/download?refseq_only=false&annotated_only=false&released_since=2020-01-01&complete_only=false&include_annotation_type=DEFAULT&filename=ncbi_dataset.$today.zip" \
-    -H "Accept: application/zip" \
-    > ncbi_dataset.zip
-
+datasets download virus genome taxon 2697049 \
+    --exclude-cds \
+    --exclude-protein \
+    --exclude-gpff \
+    --exclude-pdb \
+    --filename ncbi_dataset.zip \
+|& tail -50 \
+    > datasets.log
 rm -rf ncbi_dataset
 unzip ncbi_dataset.zip
 # Creates ./ncbi_dataset/
@@ -41,8 +41,12 @@ $scriptDir/searchAllSarsCov2BioSample.sh
 sort all.biosample.gids.txt > all.biosample.gids.sorted.txt
 
 # Copy yesterday's all.bioSample.txt so we don't have to refetch all the old stuff.
-if [ -e ../ncbi.$prevDate/all.bioSample.txt.xz ]; then
-    xzcat ../ncbi.$prevDate/all.bioSample.txt.xz > all.bioSample.txt
+if [ -e ../ncbi.latest/all.bioSample.txt.xz ]; then
+    xzcat ../ncbi.latest/all.bioSample.txt.xz > all.bioSample.txt
+    grep ^Accession all.bioSample.txt | sed -re 's/^.*ID: //' | sort -u > ids.loaded
+    comm -23 all.biosample.gids.sorted.txt ids.loaded > ids.notLoaded
+elif [ -e ../ncbi.latest/all.bioSample.txt ]; then
+    cp ../ncbi.latest/all.bioSample.txt all.bioSample.txt
     grep ^Accession all.bioSample.txt | sed -re 's/^.*ID: //' | sort -u > ids.loaded
     comm -23 all.biosample.gids.sorted.txt ids.loaded > ids.notLoaded
 else
@@ -90,14 +94,14 @@ time cleanGenbank < ncbi_dataset/data/genomic.fna \
     > genbank.fa.xz
 
 # Run pangolin and nextclade on sequences that are new since yesterday
-fastaNames genbank.fa.xz | awk '{print $1;}' | sort > gb.names
+fastaNames genbank.fa.xz | awk '{print $1;}' | sed -re 's/\|.*//' | sort > gb.names
 splitDir=splitForNextclade
 rm -rf $splitDir
 mkdir $splitDir
-if [ -e ../ncbi.$prevDate/nextclade.tsv ]; then
-    cp ../ncbi.$prevDate/nextclade.tsv .
-    cut -f 1 ../ncbi.$prevDate/nextclade.tsv | sort > nextclade.$prevDate.names
-    comm -23 gb.names nextclade.$prevDate.names > nextclade.names
+if [ -e ../ncbi.latest/nextclade.tsv ]; then
+    cp ../ncbi.latest/nextclade.tsv .
+    cut -f 1 ../ncbi.latest/nextclade.tsv | sort > nextclade.prev.names
+    comm -23 gb.names nextclade.prev.names > nextclade.names
     faSomeRecords <(xzcat genbank.fa.xz) nextclade.names nextclade.fa
     faSplit about nextclade.fa 30000000 $splitDir/chunk
 else
@@ -119,11 +123,11 @@ runPangolin() {
     rm $logfile
 }
 export -f runPangolin
-if [ -e ../ncbi.$prevDate/lineage_report.csv ]; then
-    cp ../ncbi.$prevDate/lineage_report.csv linRepYesterday
+if [ -e ../ncbi.latest/lineage_report.csv ]; then
+    cp ../ncbi.latest/lineage_report.csv linRepYesterday
     tail -n+2 linRepYesterday | sed -re 's/^([A-Z]+[0-9]+\.[0-9]+).*/\1/' | sort \
-        > pangolin.$prevDate.names
-    comm -23 gb.names pangolin.$prevDate.names > pangolin.names
+        > pangolin.prev.names
+    comm -23 gb.names pangolin.prev.names > pangolin.names
     faSomeRecords <(xzcat genbank.fa.xz) pangolin.names pangolin.fa
     pangolin pangolin.fa >& pangolin.log
     tail -n+2 lineage_report.csv >> linRepYesterday
