@@ -33,7 +33,8 @@ struct lineFile *lf = lineFileOpen(vcfInFile, TRUE);
 FILE *outF = mustOpen(vcfOutFile, "w");
 int headerColCount = 0;
 int keeperCountMax = hashNumEntries(renaming);
-int keeperColumns[keeperCountMax];
+int *keeperColumns;
+AllocArray(keeperColumns, keeperCountMax);
 int keeperCount = 0;
 int keeperIx = 0;
 // VCF with >1M samples (for SARS-CoV-2) causes stack problems / SEGV if we declare words on stack,

@@ -8,8 +8,8 @@ group phenDis
 color 100,130,160
 
 track cadd
-shortLabel Single-bp mutations
-longLabel CADD 1.6 Score for all possible single-basepair mutation - Mouse over to show score - Reference nucleotide: score = 0.0)
+shortLabel CADD
+longLabel CADD 1.6 Score for all possible single-basepair mutations (zoom in to show exact score on mouse over, same basepair = score 0.0)
 type bigWig
 compositeTrack on
 parent caddSuper
@@ -75,9 +75,9 @@ bigDataUrl /gbdb/$D/cadd/ins.bb
 mouseOver Mutation: $change CADD Phred score: $phred
 html caddSuper
 scoreFilterLimits 0:100
-maxWindowCoverage 40000
-maxItems 100000
-maxWindowToDraw 9000000
+#maxWindowCoverage 40000
+#maxItems 100000
+#maxWindowToDraw 9000000
 
 track caddDel
 shortLabel Deletions
@@ -89,6 +89,6 @@ bigDataUrl /gbdb/$D/cadd/del.bb
 mouseOver Mutation: $change CADD Phred score: $phred
 html caddSuper
 scoreFilterLimits 0:100
-maxWindowCoverage 40000
-maxItems 100000
-maxWindowToDraw 9000000
+#maxWindowCoverage 40000
+#maxItems 100000
+#maxWindowToDraw 9000000
