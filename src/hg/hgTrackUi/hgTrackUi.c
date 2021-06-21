@@ -59,6 +59,11 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   0.25    /* standard penalty is 1.0 for most CGIs */
+                                /* this one is 0.25 */
+boolean issueBotWarning = FALSE;
+
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
 char *chromosome = NULL;        /* Chromosome. */
@@ -3576,7 +3581,15 @@ char *track;
 struct customTrack *ct = NULL, *ctList = NULL;
 char *ignored;
 
-hgBotDelayFrac(0.25);
+/* used to have hgBotDelayFrac(0.25) here, replaced with earlyBotCheck()
+ * at the beginning of main() to output message here if in delay time
+ * 2021-06-21 - Hiram
+ */
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 
 cart = theCart;
 track = cartString(cart, "g");
@@ -3663,6 +3676,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgGene", delayFraction, 0, 0, "html");
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 cgiExitTime("hgTrackUi", enteredMainTime);
