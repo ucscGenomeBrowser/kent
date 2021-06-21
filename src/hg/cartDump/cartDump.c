@@ -12,6 +12,9 @@
 #include "hui.h"
 #include "botDelay.h"
 
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   1.0     /* standard penalty for most CGIs */
+static boolean issueBotWarning = FALSE;
 
 #define CART_DUMP_REMOVE_VAR "n/a"
 struct hash *oldVars = NULL;
@@ -63,7 +66,15 @@ if (cgiVarExists("noDisplay"))
     }
 
 // To discourage hacking, call bottleneck
-hgBotDelay();
+/* used to have hgBotDelay() here, replaced with earlyBotCheck()
+ * at the beginning of main() to output message here if in delay time
+ * 2021-06-21 - Hiram
+ */
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 
 if (asTable)
     {
@@ -122,6 +133,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "cartDump", delayFraction, 0, 0, "html");
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
 cartHtmlShell("Cart Dump", doMiddle, hUserCookie(), excludeVars, oldVars);
