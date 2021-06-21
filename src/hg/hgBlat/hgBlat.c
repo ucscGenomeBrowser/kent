@@ -42,6 +42,10 @@ boolean allGenomes = FALSE;
 boolean allResults = FALSE;
 static long enteredMainTime = 0;
 
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   0.5    /* standard penalty is 1.0 for most CGIs */
+                                /* this one is 0.5 */
+static boolean issueBotWarning = FALSE;
 
 struct gfResult
 /* Detailed gfServer results, this is a span of several nearby tiles, minimum 2 for dna. */
@@ -1655,8 +1659,16 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     oneSize = realSeqSize(seq, !isTx);
     // Impose half the usual bot delay per sequence
     
-    if (dbCount == 0)
-	hgBotDelayFrac(0.5);
+/* used to have hgBotDelayFrac(0.5) here, replaced with earlyBotCheck()
+ * at the beginning of main() to output message here if in delay time
+ * 2021-06-21 - Hiram
+ */
+    if (dbCount == 0 && issueBotWarning)
+        {
+        char *ip = getenv("REMOTE_ADDR");
+        botDelayMessage(ip, botDelayMillis);
+        }
+
     if (++seqCount > maxSeqCount)
         {
 	warn("More than %d input sequences, stopping at %s<br>(see also: cgi-bin/hg.conf hgBlat.maxSequenceCount setting).",
@@ -2352,6 +2364,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgBlat", delayFraction, 0, 0, "html");
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
