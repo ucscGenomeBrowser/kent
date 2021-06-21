@@ -1659,10 +1659,6 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     oneSize = realSeqSize(seq, !isTx);
     // Impose half the usual bot delay per sequence
     
-/* used to have hgBotDelayFrac(0.5) here, replaced with earlyBotCheck()
- * at the beginning of main() to output message here if in delay time
- * 2021-06-21 - Hiram
- */
     if (dbCount == 0 && issueBotWarning)
         {
         char *ip = getenv("REMOTE_ADDR");

@@ -696,10 +696,6 @@ void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now
  * set up the globals and make a web page. */
 {
-/* used to have hgBotDelay() here, replaced with earlyBotCheck()
- * at the beginning of main() to output message here if in delay time
- * 2021-06-21 - Hiram
- */
 if (issueBotWarning)
     {
     char *ip = getenv("REMOTE_ADDR");

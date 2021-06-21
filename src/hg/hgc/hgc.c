@@ -25866,10 +25866,6 @@ char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
 
-/* used to have hgBotDelayFrac(0.5) here, replaced with earlyBotCheck()
- * at the beginning of main() to output message here if in delay time
- * 2021-06-21 - Hiram
- */
 if (issueBotWarning)
     {
     char *ip = getenv("REMOTE_ADDR");
