@@ -276,6 +276,11 @@ char *organism;		/* Colloquial name of organism. */
 char *genome;		/* common name, e.g. Mouse, Human */
 char *scientificName;	/* Scientific name of organism. */
 
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   0.5    /* standard penalty is 1.0 for most CGIs */
+                                /* this one is 0.5 */
+boolean issueBotWarning = FALSE;
+
 struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
 void printLines(FILE *f, char *s, int lineSize);
@@ -25861,7 +25866,11 @@ char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
 
-hgBotDelayFrac(0.5);
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 
 /*	database and organism are global variables used in many places	*/
 getDbAndGenome(cart, &database, &genome, NULL);
@@ -27244,6 +27253,8 @@ char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "addp", "pred",
 int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgc", delayFraction, 0, 0, "html");
 pushCarefulMemHandler(LIMIT_2or6GB);
 cgiSpoof(&argc,argv);
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
