@@ -66,10 +66,6 @@ if (cgiVarExists("noDisplay"))
     }
 
 // To discourage hacking, call bottleneck
-/* used to have hgBotDelay() here, replaced with earlyBotCheck()
- * at the beginning of main() to output message here if in delay time
- * 2021-06-21 - Hiram
- */
 if (issueBotWarning)
     {
     char *ip = getenv("REMOTE_ADDR");
