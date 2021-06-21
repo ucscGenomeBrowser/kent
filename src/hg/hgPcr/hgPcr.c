@@ -36,6 +36,10 @@
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   1.0     /* standard penalty for most CGIs */
+static boolean issueBotWarning = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -645,7 +649,16 @@ boolean doPcr(struct pcrServer *server, struct targetPcrServer *targetServer,
 struct errCatch *errCatch = errCatchNew();
 boolean ok = FALSE;
 
-hgBotDelay();
+/* used to have hgBotDelay() here, replaced with earlyBotCheck()
+ * at the beginning of main() to output message here if in delay time
+ * 2021-06-21 - Hiram
+ */
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
+
 if (flipReverse)
     reverseComplement(rPrimer, strlen(rPrimer));
 if (errCatchStart(errCatch))
@@ -750,6 +763,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgPcr", delayFraction, 0, 0, "html");
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
