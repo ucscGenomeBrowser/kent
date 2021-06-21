@@ -49,7 +49,7 @@ int measureTiming = FALSE;
 
 /* for earlyBotCheck() function at the beginning of main() */
 #define delayFraction   1.0     /* standard penalty for most CGIs */
-boolean issueBotWarning = FALSE;
+static boolean issueBotWarning = FALSE;
 
 void usage()
 /* Explain usage and exit. */

@@ -62,7 +62,7 @@
 /* for earlyBotCheck() function at the beginning of main() */
 #define delayFraction   0.25    /* standard penalty is 1.0 for most CGIs */
                                 /* this one is 0.25 */
-boolean issueBotWarning = FALSE;
+static boolean issueBotWarning = FALSE;
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -3677,7 +3677,7 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 /* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
-issueBotWarning = earlyBotCheck(enteredMainTime, "hgGene", delayFraction, 0, 0, "html");
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgTrackUi", delayFraction, 0, 0, "html");
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 cgiExitTime("hgTrackUi", enteredMainTime);
