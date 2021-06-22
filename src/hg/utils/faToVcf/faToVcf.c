@@ -21,6 +21,7 @@ fputs(
   "                         (default: omitted as redundant)\n"
   "   -maskSites=file       Exclude variants in positions recommended for masking in file\n"
   "                         (typically https://github.com/W-L/ProblematicSites_SARS-CoV2/raw/master/problematic_sites_sarsCov2.vcf)\n"
+  "   -maxDiff=N            Exclude sequences with more than N mismatches with the reference\n"
   "   -minAc=N              Ignore alternate alleles observed fewer than N times\n"
   "   -minAf=F              Ignore alternate alleles observed in less than F of non-N bases\n"
   "   -noGenotypes          Output 8-column VCF, without the sample genotype columns\n"
@@ -46,6 +47,7 @@ static struct optionSpec options[] = {
     { "excludeFile", OPTION_STRING },
     { "includeRef", OPTION_BOOLEAN },
     { "maskSites", OPTION_STRING },
+    { "maxDiff", OPTION_INT },
     { "minAc", OPTION_INT },
     { "minAf", OPTION_DOUBLE },
     { "noGenotypes", OPTION_BOOLEAN },
@@ -99,6 +101,51 @@ if (excludeFile)
 return sequences;
 }
 
+static int countDiffs(struct dnaSeq *ref, struct dnaSeq *seq)
+/* Return the number of bases that differ between ref and seq ignoring 'N'. */
+{
+if (ref->size != seq->size)
+    errAbort("countDiffs: expecting equally sized sequences but %s size %d != %s size %d",
+             ref->name, ref->size, seq->name, seq->size);
+int diffs = 0;
+int i;
+for (i = 0;  i < ref->size;  i++)
+    {
+    char refBase = toupper(ref->dna[i]);
+    char seqBase = toupper(seq->dna[i]);
+    if (refBase != 'N' && seqBase != 'N' && seqBase != refBase)
+        diffs++;
+    }
+return diffs;
+}
+
+static struct dnaSeq *filterMaxDiff(struct dnaSeq *sequences)
+/* If -maxDiff was passed in, remove any sequences with more than that number of differences
+ * from the reference (ignoring Ns but not IUPAC ambiguous bases). */
+{
+int maxDiff = optionInt("maxDiff", 0);
+if (maxDiff > 0)
+    {
+    int excludeCount = 0;
+    struct dnaSeq *ref = sequences;
+    struct dnaSeq *newList = NULL, *seq, *nextSeq = NULL;
+    for (seq = sequences;  seq != NULL;  seq = nextSeq)
+        {
+        nextSeq = seq->next;
+        int diff = countDiffs(ref, seq);
+        if (diff > maxDiff)
+            excludeCount++;
+        else
+            slAddHead(&newList, seq);
+        }
+    slReverse(&newList);
+    sequences = newList;
+    verbose(2, "Excluded %d sequences with >%d differences with the reference (%d sequences remaining including reference)\n",
+            excludeCount, maxDiff, slCount(sequences));
+    }
+return sequences;
+}
+
 static struct dnaSeq *readSequences(char *faFile)
 /* Read all sequences in faFile.  Make sure there are at least 2 sequences and that
  * all have the same length.  If a reference sequence is specified and is not the first
@@ -143,6 +190,7 @@ if (differentString(sequences->name, refName))
     }
 
 sequences = removeExcludedSequences(sequences);
+sequences = filterMaxDiff(sequences);
 return sequences;
 }
 
