@@ -18,6 +18,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 
+extern boolean issueBotWarning;
 
 #define ADDEXONCAPITAL
 
@@ -490,7 +491,11 @@ winStart, winEnd, winStart, database, tdb->track, label);
 static void mafOrAxtClick2(struct sqlConnection *conn, struct sqlConnection *conn2, struct trackDb *tdb, char *axtOtherDb, char *fileName)
 /* Display details for MAF or AXT tracks. */
 {
-hgBotDelay();
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 if (winEnd - winStart > 30000)
     {
     printf("Zoom so that window is 30,000 bases or less to see alignments and conservation statistics\n");

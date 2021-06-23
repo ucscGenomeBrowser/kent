@@ -820,8 +820,8 @@ track ncbiRefSeqSelect
 parent refSeqComposite off
 priority 8
 type genePred
-shortLabel RefSeq Select
-longLabel NCBI RefSeq Select: One representative transcript per protein-coding gene
+shortLabel RefSeq Select and MANE
+longLabel NCBI RefSeq Select and MANE subset: A single representative transcript
 trackHandler ncbiRefSeq
 idXref ncbiRefSeqLink mrnaAcc name
 color 20,20,160

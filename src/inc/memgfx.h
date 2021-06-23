@@ -35,6 +35,7 @@ typedef unsigned int Color;
 #define COLOR_32_RED(c) (((c)>>24)&0xff)
 #define COLOR_32_GREEN(c) (((c)>>16)&0xff)
 #define COLOR_32_BLUE(c) (((c)>>8)&0xff)
+#define COLOR_32_ALPHA(c) (((c))&0xff)
 
 #else
 
@@ -55,6 +56,7 @@ typedef unsigned int Color;
 #define COLOR_32_RED(c) ((c)&0xff)
 #define COLOR_32_GREEN(c) (((c)>>8)&0xff)
 #define COLOR_32_BLUE(c) (((c)>>16)&0xff)
+#define COLOR_32_ALPHA(c) (((c)>>24)&0xff)
 #endif
 
 #define MG_WRITE_MODE_NORMAL    0
@@ -418,11 +420,28 @@ if ((x < img->clipMinX) || (x >= img->clipMaxX) || (y < img->clipMinY) || (y >= 
     return;
 
 Color *pt = _mgPixAdr(img,x,y);
-float invFrac = 1 - frac;
 
-int r = COLOR_32_RED(*pt) * invFrac + COLOR_32_RED(col) * frac;
-int g = COLOR_32_GREEN(*pt) * invFrac + COLOR_32_GREEN(col) * frac;
-int b = COLOR_32_BLUE(*pt) * invFrac + COLOR_32_BLUE(col) * frac;
-mgPutDot(img,x,y,MAKECOLOR_32(r,g,b));
+/* algorithm borrowed from https://en.wikipedia.org/wiki/Alpha_compositing */
+int aA = frac * 255;
+int rA = COLOR_32_RED(col);
+int gA = COLOR_32_GREEN(col);
+int bA = COLOR_32_BLUE(col);
+
+int aB = COLOR_32_ALPHA(*pt);
+int rB = COLOR_32_RED(*pt);
+int gB = COLOR_32_GREEN(*pt);
+int bB = COLOR_32_BLUE(*pt);
+
+int aOut = aA + (aB * (255 - aA) / 255);
+int rOut, gOut, bOut;
+if (aOut == 0)
+    rOut = gOut = bOut = 0;
+else
+    {
+    rOut = (rA * aA + rB * aB * (255 - aA) / 255)/aOut ;
+    gOut = (gA * aA + gB * aB * (255 - aA) / 255)/aOut ;
+    bOut = (bA * aA + bB * aB * (255 - aA) / 255)/aOut ;
+    }
+mgPutDot(img,x,y,MAKECOLOR_32_A(rOut,gOut,bOut,aOut));
 }
 #endif /* MEMGFX_H */

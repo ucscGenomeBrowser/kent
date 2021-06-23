@@ -19,27 +19,36 @@ errAbort(
 void faFrag(char *inName, int start, int end, char *outName, boolean mixed)
 /* faFrag - Extract a piece of DNA from a .fa file.. */
 {
-struct dnaSeq *seq;
-char name[512];
-
+FILE *outF = mustOpen(outName, "w");
 if (start >= end)
     usage();
+struct dnaSeq *seqList, *seq;
 if (mixed)
-    seq = faReadAllMixed(inName);
+    seqList = faReadAllMixed(inName);
 else
-    seq = faReadAllDna(inName);
-if (seq->next != NULL)
-    warn("More than one sequence in %s, just using first\n", inName);
-if (end > seq->size)
+    seqList = faReadAllDna(inName);
+int seqCount = 0;
+for (seq = seqList;  seq != NULL;  seq = seq->next)
     {
-    warn("%s only has %d bases, truncating", seq->name, seq->size);
-    end = seq->size;
-    if (start >= end)
-        errAbort("Sorry, no sequence left after truncating");
+    int clippedEnd = end;
+    if (end > seq->size)
+        {
+        clippedEnd = seq->size;
+        if (start >= clippedEnd)
+            warn("Sorry, %s is too short (%d bases), skipping", seq->name, seq->size);
+        else
+            warn("%s only has %d bases, truncating", seq->name, seq->size);
+        }
+    if (start < clippedEnd)
+        {
+        char name[512];
+        safef(name, sizeof(name), "%s:%d-%d", seq->name, start, clippedEnd);
+        faWriteNext(outF, name, seq->dna + start, clippedEnd-start);
+        seqCount++;
+        }
     }
-sprintf(name, "%s:%d-%d", seq->name, start, end);
-faWrite(outName, name, seq->dna + start, end-start);
-printf("Wrote %d bases to %s\n", end-start, outName);
+carefulClose(&outF);
+verbose(2, "Wrote %d bases from %d sequences to %s\n", end-start, seqCount, outName);
 }
 
 int main(int argc, char *argv[])
