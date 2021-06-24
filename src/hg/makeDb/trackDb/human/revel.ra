@@ -1,6 +1,6 @@
 track revel
 shortLabel REVEL Scores
-longLabel REVEL Pathegenicity Score for single-base mutations (zoom for exact score)
+longLabel REVEL Pathegenicity Score for single-base coding mutations (zoom for exact score)
 type bigWig
 compositeTrack on
 visibility hide
