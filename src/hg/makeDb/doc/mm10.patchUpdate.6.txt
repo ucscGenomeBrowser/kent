@@ -1,0 +1,661 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how mm10 was extended with patch sequences and annotations from grcM38P6
+
+##############################################################################
+# Extend main database 2bit, chrom.sizes, chromInfo (DONE - 2021-04-08 - Galt)
+
+
+    cd /hive/data/genomes/mm10
+    # main 2bit
+    time faToTwoBit <(twoBitToFa mm10.2bit stdout) \
+           <(twoBitToFa /hive/data/genomes/grcM38P6/grcM38P6.2bit stdout) \
+           mm10.p6.2bit
+#real    1m52.859s
+
+    # unmasked 2bit
+    time twoBitMask -type=.bed mm10.p6.2bit /dev/null mm10.p6.unmasked.2bit
+#real    0m3.104s
+
+    # chrom.sizes
+    sort -k2nr,2nr chrom.sizes /hive/data/genomes/grcM38P6/chrom.sizes > chrom.sizes.p6
+    # chromInfo
+    cd /hive/data/genomes/mm10/bed/chromInfo
+    awk '{print $1 "\t" $2 "\t/gbdb/mm10/mm10.2bit";}' ../../chrom.sizes.p6 \
+      > chromInfo.p6.tab
+    wc -l chromInfo*.tab
+#  239 chromInfo.p6.tab
+#   66 chromInfo.tab
+
+
+    # Install
+    cd /hive/data/genomes/mm10
+
+    # For the first update only, move initial release files to .initial.  Don't do this next update!
+    mv mm10.2bit mm10.initial.2bit
+    mv mm10.unmasked.2bit mm10.initial.unmasked.2bit
+    mv chrom.sizes chrom.sizes.initial
+    # End of first-update-only stuff
+
+    ln -sf mm10.p6.2bit mm10.2bit
+    ln -sf mm10.p6.unmasked.2bit mm10.unmasked.2bit
+    ln -sf chrom.sizes.p6 chrom.sizes
+
+    cd /hive/data/genomes/mm10/bed/chromInfo
+    hgLoadSqlTab mm10 chromInfo $HOME/kent/src/hg/lib/chromInfo.sql chromInfo.p6.tab
+
+
+##############################################################################
+# Extend main database tables for fileless tracks (DONE - 2021-04-08 - Galt)
+    # Just add the patch table rows to the main database tables
+    for table in gap gold rmsk simpleRepeat windowmaskerSdust cpgIslandExt genscan augustusGene; do
+      echo $table
+      hgsql mm10 -e "insert into mm10.$table select * from grcM38P6.$table"
+    done
+
+
+##############################################################################
+# Extend main database gc5BaseBw.bw (DONE - 2021-04-10 - Galt)
+
+    cd /hive/data/genomes/mm10/bed/gc5Base/
+    # Concatenate original assembly results with grcM38P6 results
+    time (zcat mm10.gc5Base.wigVarStep.gz \
+        /hive/data/genomes/grcM38P6/bed/gc5Base/grcM38P6.gc5Base.wigVarStep.gz \
+      | gzip -c \
+      > mm10.p6.gc5Base.wigVarStep.gz)
+#real    5m33.429s
+
+    # Make a new gc5BaseBw.bw
+    time wigToBigWig mm10.p6.gc5Base.wigVarStep.gz ../../chrom.sizes.p6 \
+      mm10.p6.gc5Base.bw
+#real    11m51.723s
+
+    # Install
+    cd /hive/data/genomes/mm10/bed/gc5Base/
+
+    # For the first update only, move initial release files to .initial.  Don't do this next update!
+    mv mm10.gc5Base.wigVarStep.gz mm10.initial.gc5Base.wigVarStep.gz
+    mv mm10.gc5Base.bw mm10.initial.gc5Base.bw
+    # Not used since bigWig makes wiggle obsolete, but set aside.
+    mv mm10.gc5Base.wib mm10.initial.gc5Base.wib
+    mv mm10.gc5Base.wig.gz mm10.initial.gc5Base.wig.gz
+    # The .wib and .wig.gz are obsolete, remove them from the downloads.
+    rm /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/bigZips/mm10.gc5Base.wib
+    rm /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/bigZips/mm10.gc5Base.wig.gz
+    # End of first-update-only stuff
+
+    ln -sf mm10.p6.gc5Base.wigVarStep.gz mm10.gc5Base.wigVarStep.gz
+    ln -sf mm10.p6.gc5Base.bw mm10.gc5Base.bw
+
+    # Because of this symlink, browser track gc5BaseBw has been automatically updated:
+    # /gbdb/mm10/bbi/gc5Base.bw -> /cluster/data/mm10/bed/gc5Base/mm10.gc5Base.bw
+
+
+
+
+##############################################################################
+# Extend main database download files (DONE - 2021-04-19 - Galt)
+
+    cd /hive/data/genomes/mm10/goldenPath/bigZips
+
+
+    # FIRST TIME ONLY SECTION
+    # mm10 was made so long ago that several things are missing from downloads.
+
+    # mm10.agp.gz was missing, so here it is.
+    cat /hive/data/genomes/mm10/mm10.agp | gzip -c > mm10.agp.gz
+    # link the agp to downloads
+    ln -sf /hive/data/genomes/mm10/goldenPath/bigZips/mm10.agp.gz /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/bigZips/mm10.agp.gz
+
+    # mm10.fa.gz was missing, so here it is.
+    twoBitToFa ../../mm10.initial.2bit stdout \
+    | gzip -c > mm10.fa.gz
+
+    # mm10.fa.masked.gz was missing, so here it is.
+    twoBitToFa ../../mm10.initial.2bit stdout \
+    | maskOutFa stdin hard stdout \
+    | gzip -c > mm10.fa.masked.gz
+    # link the fa.masked.gz to downloads
+    ln -sf /hive/data/genomes/mm10/goldenPath/bigZips/mm10.fa.masked.gz /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/bigZips/mm10.fa.masked.gz
+
+    # mm10.fa.out.gz RepeatMasker .out was missing:
+    rm -rf out && mkdir out && cd out
+    tar xvzf ../chromOut.tar.gz
+    head -3 1/chr1.fa.out > ../mm10.fa.out
+    for f in */*.fa.out; do
+      tail -n +4 $f >> ../mm10.fa.out
+    done
+    gzip ../mm10.fa.out 
+    cd ..
+    rm -r out
+    ln -sf /hive/data/genomes/mm10/goldenPath/bigZips/mm10.fa.out.gz /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/bigZips/mm10.fa.out.gz
+
+    # mm10.trf.bed.gz TRF output was missing:
+    rm -rf trfMaskChrom
+    rm -f m10.trf.bed
+    tar xvzf chromTrf.tar.gz
+    cd trfMaskChrom
+    for f in *.bed; do
+      cat $f >> ../mm10.trf.bed
+    done
+    gzip ../mm10.trf.bed
+    cd ..
+    rm -r trfMaskChrom
+    ln -sf /hive/data/genomes/mm10/goldenPath/bigZips/mm10.trf.bed.gz /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/bigZips/mm10.trf.bed.gz
+
+    # RepeatMasker .align file was missing:
+    ln -s /hive/data/genomes/mm10/bed/repeatMasker/mm10.fa.align.gz .
+    ln -sf /hive/data/genomes/mm10/goldenPath/bigZips/mm10.fa.align.gz /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/bigZips/mm10.fa.align.gz
+
+    # END FIRST TIME ONLY SECTION
+
+    mkdir p6
+    # mm10.2bit and chrom.sizes were already extended above.
+    ln -sf /hive/data/genomes/mm10/mm10.p6.2bit p6/
+    ln -sf /hive/data/genomes/mm10/chrom.sizes.p6 p6/mm10.p6.chrom.sizes
+
+    # AGP:
+    zcat mm10.agp.gz \
+         /hive/data/genomes/grcM38P6/goldenPath/bigZips/grcM38P6.agp.gz \
+    | grep -v ^# \
+    | gzip -c > p6/mm10.p6.agp.gz
+
+    # FASTA
+    twoBitToFa ../../mm10.p6.2bit stdout \
+    | gzip -c > p6/mm10.p6.fa.gz
+
+    twoBitToFa ../../mm10.p6.2bit stdout \
+    | maskOutFa stdin hard stdout \
+    | gzip -c > p6/mm10.p6.fa.masked.gz
+
+
+    # RepeatMasker (don't include header of patch file):
+    cat <(zcat mm10.fa.out.gz) \
+        <(zcat /hive/data/genomes/grcM38P6/goldenPath/bigZips/grcM38P6.fa.out.gz | tail -n +4) \
+    | gzip -c > p6/mm10.p6.fa.out.gz
+
+    # SimpleRepeats/TRF:
+    zcat mm10.trf.bed.gz \
+         /hive/data/genomes/grcM38P6/goldenPath/bigZips/grcM38P6.trf.bed.gz \
+    | gzip -c > p6/mm10.p6.trf.bed.gz
+    # We don't expect a complete set of chroms to have simpleRepeats, but at least an increase:
+    zcat mm10.trf.bed.gz | cut -f 1 | uniq | wc -l
+#62
+    zcat p6/mm10.p6.trf.bed.gz | cut -f 1 | uniq | wc -l
+#235
+
+    # mm10 also has download files with the old tar-bundle structure -- update those too.
+    # Per-chrom AGP:
+    rm -rf agp && mkdir agp && cd agp
+    tar xvzf ../chromAgp.tar.gz
+
+    splitFileByColumn -chromDirs -ending=.agp \
+      /hive/data/genomes/grcM38P6/goldenPath/bigZips/grcM38P6.agp.gz .
+    tar cvzf ../p6/mm10.p6.chromAgp.tar.gz *
+    cd ..
+    rm -r agp
+
+    # Per-chrom soft-masked FASTA:
+    rm -rf chroms && mkdir chroms && cd chroms
+    tar xvzf ../chromFa.tar.gz
+    cd ..
+    faSplit byname /hive/data/genomes/grcM38P6/goldenPath/bigZips/grcM38P6.fa.gz chroms/
+    ls -1 chroms | wc -l
+#239
+    tar cvzf p6/mm10.p6.chromFa.tar.gz ./chroms
+    rm -r chroms
+
+    # Per-chrom hard-masked FASTA:
+    rm -rf maskedChroms && mkdir maskedChroms && cd maskedChroms
+    tar xvzf ../chromFaMasked.tar.gz
+    cd ..
+    faSplit byname /hive/data/genomes/grcM38P6/goldenPath/bigZips/grcM38P6.fa.masked.gz maskedChroms/
+    cd maskedChroms
+    for f in *.fa; do
+      mv $f $f.masked
+    done
+    cd ..
+    ls -1 maskedChroms | wc -l
+#239
+    tar cvzf p6/mm10.p6.chromFaMasked.tar.gz ./maskedChroms
+    rm -r maskedChroms
+
+    # Per-chrom RepeatMasker .out:
+    rm -rf out && mkdir out && cd out
+    tar xvzf ../chromOut.tar.gz
+    zcat /hive/data/genomes/grcM38P6/goldenPath/bigZips/grcM38P6.fa.out.gz \
+    | head -3 > RepeatMaskerHeader.txt
+    zcat /hive/data/genomes/grcM38P6/goldenPath/bigZips/grcM38P6.fa.out.gz \
+    | tail -n +4 \
+    | splitFileByColumn -col=5 -chromDirs -head=RepeatMaskerHeader.txt -ending=.out \
+      stdin .
+    rm RepeatMaskerHeader.txt
+    tar cvzf ../p6/mm10.p6.chromOut.tar.gz *
+    cd ..
+    rm -r out
+
+    # Per-chrom TRF output:
+    rm -rf trfMaskChrom
+    tar xvzf chromTrf.tar.gz
+    cd trfMaskChrom
+    splitFileByColumn -ending=.bed \
+      /hive/data/genomes/grcM38P6/goldenPath/bigZips/grcM38P6.trf.bed.gz .
+    cd ..
+    tar cvzf p6/mm10.p6.chromTrf.tar.gz ./trfMaskChrom
+    rm -rf trfMaskChrom
+
+    # RepeatMasker .align files:
+    zcat mm10.fa.align.gz /hive/data/genomes/grcM38P6/bed/repeatMasker/grcM38P6.fa.align.gz \
+    | gzip -c > p6/mm10.p6.fa.align.gz
+
+    ln -sf /hive/data/genomes/mm10/bed/gc5Base/mm10.p6.gc5Base.bw p6/mm10.p6.gc5Base.bw
+    ln -sf /hive/data/genomes/mm10/bed/gc5Base/mm10.p6.gc5Base.wigVarStep.gz p6/mm10.p6.gc5Base.wigVarStep.gz
+
+    # TODO: regenerate upstream* files for p6
+          # note skipping since these were never updated for hg19 and hg38.
+
+    # Make new md5sum.txt
+    cd p6
+    md5sum mm10.* > md5sum.txt
+
+    # p6 is now the latest
+    # Update latest subdir
+    cd /hive/data/genomes/mm10/goldenPath/bigZips
+    mv latest latest.bak
+    mkdir latest
+    cd latest
+    for f in ../p6/*; do
+      noV=$(basename $(echo $f | sed -re 's/\.p6//;'))
+      ln -s $f $noV
+    done
+    rm md5sum.txt
+    cat ../p6/md5sum.txt | sed -e 's/\.p6//;' > md5sum.txt
+    echo "GRCm38.p6" > LATEST_VERSION
+    cd ..
+    rm -rf latest.bak
+
+
+    # Install
+    cd /hive/data/genomes/mm10/goldenPath/bigZips
+
+    # For the first update only, move initial release files to initial/.  Don't do this next update!
+    mkdir initial
+    mv chrom* mm10.* up* md5sum.txt initial/
+    ln -sf /hive/data/genomes/mm10/mm10.initial.2bit initial/mm10.2bit
+    ln -sf /hive/data/genomes/mm10/chrom.sizes.initial initial/mm10.chrom.sizes
+    ln -sf /hive/data/genomes/mm10/bed/repeatMasker/mm10.fa.align.gz initial/mm10.fa.align.gz
+    ln -sf /hive/data/genomes/mm10/bed/gc5Base/mm10.initial.gc5Base.bw initial/mm10.gc5Base.bw
+    ln -sf /hive/data/genomes/mm10/bed/gc5Base/mm10.initial.gc5Base.wigVarStep.gz initial/mm10.gc5Base.wigVarStep.gz
+    # Make new md5sum.txt  # since we created many new files
+    cd initial
+    md5sum chrom* mm10.* up* > md5sum.txt
+    cd ..
+    # Replace top-level files with links to files
+    ln -sf initial/* .
+    # End of first-update-only stuff
+
+    # Edit README.txt
+    cp README.txt README.txt.1
+    vi README.txt
+
+    # Update /htdocs-hgdownload files with links
+    ln -sf /hive/data/genomes/mm10/goldenPath/bigZips/* /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/bigZips/
+
+    rm /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/bigZips/README.txt.*
+
+    # TODO: /hive/data/genomes/mm10/goldenPath/chromosomes/
+          # note skipping since these were never updated for hg19 and hg38.
+
+
+
+#############################################################################
+# NO analysisSet
+#   Because NCBI defines the analysis sets for full and no_alts for hg19 and hg38,
+#   yet no such sets exist for mouse mm10.p6 or mm39, there is no need for the analysis set.
+#############################################################################
+
+
+
+#############################################################################
+# Build perSeqMax file for gfServer (hgBlat) (DONE 2021-04-20 Galt)
+    # When the blat server is restarted with the updated mm10.2bit file,
+    # mm10.altsAndFixes needs to be copied over along with the new mm10.2bit file,
+    # and gfServer needs to be restarted with -perSeqMax=mm10.altsAndFixes.
+    cd /hive/data/genomes/mm10
+    cut -f 1 chrom.sizes.p6 \
+    | grep -E '_(alt|fix|hap.*)$' \
+    | sed -re 's/^/mm10.2bit:/;' \
+      > mm10.altsAndFixes.p6
+    # Link for blat server installation convenience:
+    ln -sf mm10.altsAndFixes.p6 altsAndFixes
+
+
+#############################################################################
+# Extend cytoBandIdeo (DONE 2021-04-20 Galt)
+    cd /hive/data/genomes/mm10/bed/cytoband
+    tawk '{print $1, 0, $2, "", "gneg";}' /hive/data/genomes/grcM38P6/chrom.sizes \
+      > cytoBand.p6.tab
+    hgLoadSqlTab -oldTable mm10 cytoBandIdeo - cytoBand.p6.tab
+
+
+#########################################################################
+# Regenerate idKeys with extended mm10 (DONE - 2021-04-20 - Galt)
+    mkdir /hive/data/genomes/mm10/bed/idKeys.p6
+    cd /hive/data/genomes/mm10/bed/idKeys.p6
+    time ($HOME/kent/src/hg/utils/automation/doIdKeys.pl \
+      -twoBit=/hive/data/genomes/mm10/mm10.p6.unmasked.2bit \
+      -bigClusterHub=ku -smallClusterHub=ku \
+        -buildDir=`pwd` mm10) > do.log 2>&1 &
+    tail -f do.log
+#real    0m53.546s
+    cat mm10.keySignature.txt
+#b0ae7eaccca6031259f2c64be217338f
+
+    # Install
+    # For the first update only, move initial release files to .initial.  Don't do this next update!
+    mv /hive/data/genomes/mm10/bed/idKeys{,.initial}
+
+    cd /hive/data/genomes/mm10/bed/
+    rm -f idKeys
+    ln -s idKeys.p6 idKeys
+
+
+##############################################################################
+# UCSC to RefSeq, INSDC, Assembly; chromAlias (DONE 2021-04-21 Galt)
+
+    # need to have idKeys for the genbank and refseq assemblies:
+    mkdir -p /hive/data/genomes/mm10/bed/ucscToINSDC/genbankP6
+    cd /hive/data/genomes/mm10/bed/ucscToINSDC/genbankP6
+
+    # NOTE genbank subversion is .8 but refseq subversion is .26
+
+    ln -s /hive/data/genomes/grcM38P6/genbank/GCA_000001635.8_GRCm38.p6_genomic.fna.gz .
+    faToTwoBit GCA_000001635.8_GRCm38.p6_genomic.fna.gz genbankP6.2bit
+    time ($HOME/kent/src/hg/utils/automation/doIdKeys.pl -buildDir=`pwd` -twoBit=genbankP6.2bit \
+        -bigClusterHub=ku -smallClusterHub=ku \
+        genbankP6) > do.log 2>&1
+#real    0m58.734s
+
+    mkdir /hive/data/genomes/mm10/bed/ucscToINSDC/refseqP6
+    cd /hive/data/genomes/mm10/bed/ucscToINSDC/refseqP6
+    ln -s /hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Mus_musculus/all_assembly_versions/GCF_000001635.26_GRCm38.p6/GCF_000001635.26_GRCm38.p6_genomic.fna.gz ./
+    faToTwoBit GCF_000001635.26_GRCm38.p6_genomic.fna.gz refseqP6.2bit
+    time ($HOME/kent/src/hg/utils/automation/doIdKeys.pl -buildDir=`pwd` -twoBit=refseqP6.2bit \
+        -bigClusterHub=ku -smallClusterHub=ku \
+        refseqP6) > do.log 2>&1
+#real    0m55.019s
+
+    # with the three idKeys available, join them to make the table bed files:
+    cd /hive/data/genomes/mm10/bed/ucscToINSDC
+    sed -re 's/gi\|[0-9]+\|gb\|([A-Z0-9.]+)\|/\1/' genbankP6/genbankP6.idKeys.txt \
+    | join -t$'\t' ../idKeys/mm10.idKeys.txt - \
+    | cut -f2- | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+    | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+    | sort -k1,1 -k2,2n > ucscToINSDC.p6.bed
+
+    join -t$'\t' ../idKeys/mm10.idKeys.txt refseqP6/refseqP6.idKeys.txt \
+    | cut -f2- | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+    | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+    | sort -k1,1 -k2,2n > ucscToRefSeq.p6.bed
+
+    # loading tables:
+    export db=mm10
+
+    export chrSize=`cut -f1 ucscToINSDC.p6.bed | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    | hgLoadSqlTab ${db} ucscToINSDC stdin ucscToINSDC.p6.bed
+
+    export chrSize=`cut -f1 ucscToRefSeq.p6.bed | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    | sed -e 's/INSDC/RefSeq/g;' \
+    | hgLoadSqlTab ${db} ucscToRefSeq stdin ucscToRefSeq.p6.bed
+
+    # must be exactly 100% coverage
+    featureBits -countGaps ${db} ucscToINSDC
+#2818974548 bases of 2818974548 (100.000%) in intersection
+
+    # except for chrM (no refSeq):
+    featureBits -countGaps ${db} ucscToRefSeq
+#2818974548 bases of 2818974548 (100.000%) in intersection
+
+    # construct chromAlias:
+    cd /hive/data/genomes/mm10/bed/chromAlias
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' ${db} \
+    | sort -k1,1 > ucsc.refseq.p6.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' ${db} \
+    | sort -k1,1 > ucsc.genbank.p6.tab
+    # add NCBI sequence names from assembly report
+    grep -v ^# \
+      /hive/data/genomes/grcM38P6/genbank/GCA_000001635.8_GRCm38.p6_assembly_report.txt \
+    | tawk '{print $5, $1;}' | sort \
+      > genbankToAssembly.txt
+    tawk '{print $2, $1;}' ucsc.genbank.p6.tab | sort \
+    | join -t$'\t' -o 1.2,2.2 - genbankToAssembly.txt \
+    | sort -k1,1 > ucsc.assembly.p6.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.p6.tab \
+    | sed -re 's/\.p6//;' \
+        > ${db}.chromAlias.p6.tab
+
+    # verify all there:
+    for t in refseq genbank assembly
+do
+  c0=`cat ucsc.$t.p6.tab | wc -l`
+  c1=`grep $t mm10.chromAlias.p6.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 239 =? 239 OK
+# checking genbank: 239 =? 239 OK
+# checking assembly: 239 =? 239 OK
+
+    hgLoadSqlTab mm10 chromAlias $HOME/kent/src/hg/lib/chromAlias.sql ${db}.chromAlias.p6.tab
+
+
+############################################################################
+# altLocations and fixLocations (DONE - 2021-04-21 - Galt)
+
+    # indicate corresponding locations between haplotypes and reference
+
+    mkdir /hive/data/genomes/mm10/bed/altLocations.p6
+    cd /hive/data/genomes/mm10/bed/altLocations.p6
+
+    # NOTE below the ALT_* directories ONLY appear if the initial genome release had Alt haps.  mm10 did NOT.
+    #  {ALT_*,PATCHES}
+
+    # NOTE I modified this one to treat mm10 like hg19, i.e. haplotypes IDs have no subversion e.g. v1, v2, v3 ...
+    # I also added some code to handle mouse scaffold MMCHR pattern. Also, hg19 users lower case ids, but not mm10.
+    ~/kent/src/hg/utils/automation/altScaffoldPlacementToBed.pl 
+    # I committed and pushed my changes.
+
+    ~/kent/src/hg/utils/automation/altScaffoldPlacementToBed.pl \
+      -db=mm10 \
+      /hive/data/genomes/grcM38P6/genbank/GCA_000001635.8_GRCm38.p6_assembly_structure/PATCHES/alt_scaffolds/alt_scaffold_placement.txt \
+    | sort -k1,1 -k2n,2n \
+      > altAndFixLocations.bed
+    wc -l altAndFixLocations.bed
+#148 altAndFixLocations.bed
+    grep _alt altAndFixLocations.bed > altLocations.bed
+    grep _fix altAndFixLocations.bed > fixLocations.bed
+    hgLoadBed mm10 altLocations{,.bed}
+#Read 20 elements of size 4 from altLocations.bed
+    hgLoadBed mm10 fixLocations{,.bed}
+#Read 130 elements of size 4 from fixLocations.bed
+    featureBits -countGaps mm10 altLocations
+#6171331 bases of 2818974548 (0.219%) in intersection
+    featureBits -countGaps mm10 fixLocations
+#45238554 bases of 2818974548 (1.605%) in intersection
+
+#############################################################################
+# Check for new chrX alts/patches to add to par 
+# The mouse PAR is not as easy to characterize as the human PARs, skipping.
+
+
+##############################################################################
+# altSeqLiftOver (DONE 2021-04-23 Galt)
+    mkdir /hive/data/genomes/mm10/bed/altSeqLiftOver.p6
+    cd /hive/data/genomes/mm10/bed/altSeqLiftOver.p6
+    # Use chromAlias to make a .sed file to substitute Genbank accessions to UCSC names
+    hgsql mm10 -NBe 'select alias,chrom from chromAlias where find_in_set("genbank", source);' \
+    | awk '{print "s@" $1 "@" $2 "@;";}' > gbToUcsc.sed
+    cp /dev/null altToChrom.noScore.psl
+    for f in /hive/data/genomes/grcM38P6/genbank/GCA_000001635.8_GRCm38.p6_assembly_structure/PATCHES/alt_scaffolds/alignments/*.gff; do
+      e=$(basename $f .gff | sed -e 's/_/|/g;')
+      s=$(grep -E $e gbToUcsc.sed)
+      sed -re "$s" $f | gff3ToPsl ../../chrom.sizes{,} stdin stdout \
+        | pslPosTarget stdin stdout \
+        >> altToChrom.noScore.psl
+    done
+    pslCheck altToChrom.noScore.psl
+#checked: 90 failed: 0 errors: 0
+    time pslRecalcMatch altToChrom.noScore.psl ../../mm10.2bit{,} altToChrom.psl
+#real    0m35.138s
+    pslSwap altToChrom.psl stdout | pslPosTarget stdin chromToAlt.psl
+    sort -k14,14 -k16n,16n -k10,10 -k12n,12n altToChrom.psl chromToAlt.psl \
+      > altAndPatches.psl
+    grep _alt altAndPatches.psl > altSeqLiftOver.psl
+    grep _fix altAndPatches.psl > fixSeqLiftOver.psl
+
+
+    # Load tables
+    hgLoadPsl mm10 -table=altSeqLiftOverPsl altSeqLiftOver.psl
+    hgLoadPsl mm10 -table=fixSeqLiftOverPsl fixSeqLiftOver.psl
+
+    # Make chrom-to-alt PSL file for genbank process.
+    ln -f -s `pwd`/chromToAlt.psl \
+      /hive/data/genomes/mm10/jkStuff/mm10.p6.alt.psl
+
+    # Make a liftOver chain file for mapping annotations on main chroms to new patch sequences
+    # Exclude alts that were already in mm10 before p6.
+    cut -f 1 ../../chrom.sizes.initial | grep _ \
+    | grep -vwf - chromToAlt.psl \
+    | pslToChain stdin stdout \
+    | chainScore stdin ../../mm10.2bit{,} ../../jkStuff/mm10.mainToPatch.p6.over.chain
+    grep chain ../../jkStuff/mm10.mainToPatch.p6.over.chain | wc -l
+#90
+
+    # also make a liftOver that includes the original alts, for tracks that have
+    # annotations only on main chromosomes.  Exclude alt-to-fix alignments.
+    # This is necessary only for the first time we add a patch update.
+    awk '($14 !~ /_/)' chromToAlt.psl \
+    | pslToChain stdin stdout \
+    | chainScore stdin ../../mm10.2bit{,} ../../jkStuff/mm10.mainToAllAltPatch.p6.over.chain
+    grep chain ../../jkStuff/mm10.mainToAllAltPatch.p6.over.chain | wc -l
+#88
+
+
+#########################################################################
+# ncbiRefSeq.p6 Genes (DONE - 2021-04-22 - Galt)
+
+    mkdir /hive/data/genomes/mm10/bed/ncbiRefSeq.p6.2021-04-22
+    cd /hive/data/genomes/mm10/bed/ncbiRefSeq.p6.2021-04-22
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      GCF_000001635.26_GRCm38.p6 mm10) > do.log 2>&1 &
+    tail -f do.log
+# *** All done !  Elapsed time: 5m14s
+#real    11m4.338s
+
+    cat fb.ncbiRefSeq.mm10.txt
+#123082179 bases of 2739603606 (4.493%) in intersection
+
+##############################################################################
+# Extend ENCODE Registry of Candidate cis-Regulatory Elements (DONE - 2021-05-26 - Galt)
+#
+#
+# From ENCODE 3 Data Analysis Center at U Mass Med Center (Zlab)
+# Data contacts:  Henry Pratt, Jill Moore, Zhiping Weng PI
+#
+# RM #24668
+#
+#   http://gcp.wenglab.org/hubs/integrative1/data/mm10/cta/mm10-ccres.bigbed
+# for Scores
+#   https://users.wenglab.org/moorej3/mouse-maxz-dnase.txt.gz  
+
+cd /hive/data/outside/encode3/ccre/mouse
+
+f=encodeCcreCombined
+lib=~/kent/src/hg/lib
+
+# input is $f.bed
+liftOver -tab -multiple -bedPlus=9 -noSerial $f.bed \
+  /hive/data/genomes/mm10/jkStuff/mm10.mainToAllAltPatch.p6.over.chain \
+  $f.p6.bed /dev/null
+sort -k1,1 -k2n,2n $f.bed $f.p6.bed > $f.plusP6.bed
+
+bedToBigBed -tab -type=bed9+6 -as=$lib/$f.as $f.plusP6.bed /hive/data/genomes/mm10/chrom.sizes $f.bb
+
+ln -fs `pwd`/$f.bb /gbdb/mm10/encode3/ccre
+
+
+
+##############################################################################
+# Extend Single Cell RNA-Seq Gene Expression from Tabula Muris  (DONE - 2021-06-15 - Galt)
+#
+# REJECTED this is Max's track and he did not think it is worth the effort.
+
+
+##############################################################################
+# GRC Incident Database (TODO - 2021-06-15 - Galt)
+
+    # Wait until the updated mm10 files have been pushed to RR because GRC Incident update is
+    # automated.  Then update the file used to map GRC's RefSeq accessions to our names:
+    hgsql mm10 -NBe 'select alias,chrom from chromAlias where source = "refseq" order by alias;' \
+      > /hive/data/outside/grc/incidentDb/GRCm38/refSeq.chromNames.tab
+
+
+##############################################################################
+We do not have to liftoever wgEncodeGencode* tables.
+They are automatically updated by some process,
+yet neither hg19 nor hg38 have Gencode data on their non-initial alts,
+so we do not have to do it either.
+
+
+##############################################################################
+# PUSH TABLES and FILES
+
+
+Use this RM for the push.
+ https://redmine.soe.ucsc.edu/issues/25045
+We do not use my qaPushQ tool anymore.
+
+Note the downloads should be getting synced by QA.
+Include these download files for qa pushing:
+rsync
+hgwdev:/data/apache/htdocs-hgdownload/goldenPath/mm10/bigZips/
+to
+hgdownload:/home/qateam/htdocs/goldenPath/mm10/bigZips/
+
+push to hgnfs1 or beta (and rr)?
+/gbdb/mm10/mm10.2bit
+
+mm10 tables to push:
+
+gap gold rmsk simpleRepeat windowmaskerSdust cpgIslandExt genscan augustusGene
+
+gc5Base   # may have some dependent files or .bw that should get pushed with it?
+   /gbdb/mm10/bbi/gc5Base.bw 
+    push to hgnfs1 or beta (and rr)?
+
+chromInfo
+chromAlias
+cytoBandIdeo
+altLocations
+fixLocations
+altSeqLiftOverPsl
+fixSeqLiftOverPsl
+
+other files, not download?
+
+combined cCREs track lifted
+/gbdb/mm10/encode3/ccre/encodeCcreCombined.bb
+
+mm10.2bit # have on download, # TODO blat new version to update
+mm10.altsAndFixes.p6
+ add to startBlat.pl:  -perSeqMax=mm10.altsAndFixes
+
+
+##############################################################################
