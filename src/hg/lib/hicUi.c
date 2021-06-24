@@ -9,7 +9,7 @@
 #include "web.h"
 #include "trackDb.h"
 #include "hicUi.h"
-#include "Cstraw.h"
+#include "cStraw.h"
 #include "regexHelper.h"
 #include "obscure.h"
 #include "htmshell.h"

@@ -160,17 +160,19 @@ void cartRewrite(struct cart *cart, unsigned trackDbCartVersion, unsigned cartVe
 if (sameString(cfgOptionDefault("cartVersion", "off"), "off"))
     return;
 
-if (trackDbCartVersion > ArraySize(cartRewrites))
+// call the rewrite functions to bring us up to the trackDb cart version
+for(; cartVersion < trackDbCartVersion; cartVersion++)
     {
-    fprintf(stderr,"CartRewriteError: do not have cart rewrite rules to bring it up to version %d requested by trackDb\n", trackDbCartVersion);
-    return;
+    // if we don't have a rewrite for this increment, bail out
+    // with a warning in the error_log
+    if (cartVersion >= ArraySize(cartRewrites))
+        {
+        fprintf(stderr,"CartRewriteError: do not have cart rewrite rules to bring it up to version %d requested by trackDb. Reached level %d\n", trackDbCartVersion, cartVersion);
+        break;
+        }
+    (cartRewrites[cartVersion].func)(cart);
     }
 
-// call the rewrite functions to bring us up to the trackDb cart version
-int ii;
-for(ii = cartVersion; ii < trackDbCartVersion; ii++)
-    (cartRewrites[ii].func)(cart);
-
-cartSetVersion(cart, trackDbCartVersion);
+cartSetVersion(cart, cartVersion);
 }
 

@@ -7,7 +7,7 @@
 #include "hic.h"
 #include "hdb.h"
 #include "trackHub.h"
-#include "Cstraw.h"
+#include "cStraw.h"
 #include "hash.h"
 #include "chromAlias.h"
 #include "interact.h"
@@ -38,12 +38,14 @@ char *genome;
 char **chromosomes, **bpResolutions, **attributes;
 int *chromSizes, nChroms, nBpRes, nAttributes;
 
-char *errMsg = CstrawHeader(filename, &genome, &chromosomes, &chromSizes, &nChroms, &bpResolutions, &nBpRes, NULL, NULL, &attributes, &nAttributes);
+Straw *newStraw = cStrawOpen(filename);
+char *errMsg = cStrawHeader(newStraw, &genome, &chromosomes, &chromSizes, &nChroms, &bpResolutions, &nBpRes, NULL, NULL, &attributes, &nAttributes);
 if (errMsg != NULL)
     return errMsg;
 
 struct hicMeta *newMeta = NULL;
 AllocVar(newMeta);
+newMeta->strawObj = newStraw;
 newMeta->fileAssembly = genome;
 newMeta->nRes = nBpRes;
 newMeta->resolutions = bpResolutions;
@@ -175,7 +177,7 @@ if (fileInfo->ucscToAlias != NULL)
 dyStringPrintf(leftWindowPos, "%s:%d:%d", leftChromName, start1, end1);
 dyStringPrintf(rightWindowPos, "%s:%d:%d", rightChromName, start2, end2);
 
-char *networkErrMsg = Cstraw(normalization, fileInfo->filename, resolution, dyStringContents(leftWindowPos),
+char *networkErrMsg = cStraw(fileInfo->strawObj, normalization, resolution, dyStringContents(leftWindowPos),
          dyStringContents(rightWindowPos), "BP", &x, &y, &counts, &numRecords);
 
 int i=0;

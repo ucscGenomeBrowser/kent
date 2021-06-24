@@ -47,6 +47,10 @@ int measureTiming = FALSE;
 
 //#include "rgdInfo.c"
 
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   1.0     /* standard penalty for most CGIs */
+static boolean issueBotWarning = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -692,7 +696,11 @@ void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now
  * set up the globals and make a web page. */
 {
-hgBotDelay();
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 cart = theCart;
 getDbAndGenome(cart, &database, &genome, oldVars);
 initGenbankTableNames(database);
@@ -785,6 +793,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgGene", delayFraction, 0, 0, "html");
+
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)

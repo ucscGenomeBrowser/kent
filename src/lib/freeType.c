@@ -21,6 +21,8 @@ errAbort("FreeType not enabled. Install FreeType and recompile, or add freeType=
 }
 
 #else 
+FT_Library    library;
+FT_Face       face;
 
 int ftInitialize(char *fontFile)
 {

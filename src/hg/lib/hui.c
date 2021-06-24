@@ -4242,20 +4242,22 @@ if (filterBy->styleFollows)
 printf(">%s</OPTION>\n",label);
 }
 
-static boolean filterByColumnIsList(struct cart *cart, struct trackDb *tdb,  char *setting)
-/* Is this filter setting expecting a list of items (e.g. has checkboxes) */
-{
-return (sameString(setting, FILTERBY_SINGLE_LIST) ||
-        sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||
-        sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
-}
-
 static boolean filterByColumnIsMultiple(struct cart *cart, struct trackDb *tdb,  char *setting)
-/* Is this filter setting for a comma separated column. */
+/* Is this filter setting expecting multiple items (e.g. has checkboxes in the UI) */
 {
 return (sameString(setting, FILTERBY_MULTIPLE) ||
         sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND) ||
         sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
+}
+
+static boolean advancedFilter(struct cart *cart, struct trackDb *tdb, char *setting)
+{
+if (!tdbIsBigBed(tdb))
+    return FALSE;
+
+return  sameString(setting, FILTERBY_MULTIPLE_LIST_OR) || sameString(setting, FILTERBY_MULTIPLE_LIST_AND);
 }
 
 void filterBySetCfgUiGuts(struct cart *cart, struct trackDb *tdb,
@@ -4301,8 +4303,8 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
     {
     puts("<TD>");
     char selectStatement[4096];
-    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_SINGLE_LIST);
-    if (filterByColumnIsList(cart, tdb, setting))
+    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_DEFAULT);
+    if (filterByColumnIsMultiple(cart, tdb, setting))
         safef(selectStatement, sizeof selectStatement, " (select multiple items - %s)", FILTERBY_HELP_LINK);
     else
         selectStatement[0] = 0;
@@ -4316,8 +4318,8 @@ puts("</tr><tr>");
 for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
     {
     puts("<td>");
-    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_SINGLE_LIST);
-    if (filterByColumnIsMultiple(cart, tdb, setting) && filterByColumnIsList(cart, tdb, setting) && tdbIsBigBed(tdb))
+    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_DEFAULT);
+    if (advancedFilter(cart, tdb, setting))
         {
         char cartSettingString[4096];
         safef(cartSettingString, sizeof cartSettingString, "%s.%s.%s", prefix,FILTER_TYPE_NAME_LOW, filterBy->column);
@@ -4334,11 +4336,11 @@ puts("</tr><tr>");
 int ix=0;
 for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next, ix++)
     {
-    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_SINGLE_LIST);
+    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_DEFAULT);
     puts("<td>");
     // value is always "All", even if label is different, to simplify javascript code
     int valIx = 1;
-    if (filterByColumnIsList(cart, tdb, setting))
+    if (filterByColumnIsMultiple(cart, tdb, setting))
         printf( "<SELECT id='%s%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n", selectIdPrefix,ix,filterBy->htmlName);
     else
         printf( "<SELECT id='%s%d' name='%s' style='font-size:.9em;'<BR>\n", selectIdPrefix,ix,filterBy->htmlName);

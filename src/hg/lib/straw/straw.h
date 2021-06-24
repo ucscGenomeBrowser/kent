@@ -32,6 +32,16 @@
 #include <fstream>
 #include <set>
 #include <vector>
+#include <stdexcept>
+
+/* Simple exception wrapper class */
+class strawException : public std::runtime_error {
+  public:
+  strawException(const std::string& error):
+    std::runtime_error(error) {
+  }
+};
+
 
 // pointer structure for reading blocks or matrices, holds the size and position 
 struct indexEntry {
@@ -46,17 +56,90 @@ struct contactRecord {
   float counts;
 };
 
-bool readMagicString(std::ifstream& fin);
-long readHeader(std::istream& fin, std::string chr1, std::string chr2, int &c1pos1, int &c1pos2, int &c2pos1, int &c2pos2, int &chr1ind, int &chr2ind);
-void readFooter(std::istream& fin, long master, int c1, int c2, std::string norm, std::string unit, int resolution, long &myFilePos, indexEntry &c1NormEntry, indexEntry &c2NormEntry);
-bool readMatrixZoomData(std::istream& fin, std::string myunit, int mybinsize, int &myBlockBinCount, int &myBlockColumnCount);
-void readMatrix(std::istream& fin, int myFilePosition, std::string unit, int resolution, int &myBlockBinCount, int &myBlockColumnCount);
-std::set<int> getBlockNumbersForRegionFromBinPosition(int* regionIndices, int blockBinCount, int blockColumnCount, bool intra);
-std::vector<contactRecord> readBlock(std::istream& fin, int blockNumber);
-std::vector<double> readNormalizationVector(std::istream& fin, indexEntry entry);
-void straw(std::string norm, std::string fname, int binsize, std::string chr1loc, std::string chr2loc, std::string unit, std::vector<int>& xActual, std::vector<int>& yActual, std::vector<float>& counts);
+// The combination of chrom index, normalization, unit, and resolution that serves as an index
+// into the block map.
+class normVector {
+  public:
+  int chrIdx;
+  std::string normtype;
+  std::string unit;
+  int resolution;
 
-extern "C" char* Cstraw (char *norm, char *fname, int binsize, char *chr1loc, char *chr2loc, char *unit, int **xActual, int **yActual, double **counts, int *numRecords);
+  normVector(int c, std::string n, std::string u, int r) {
+    chrIdx = c;
+    normtype = n;
+    unit = u;
+    resolution = r;
+  }
+  bool operator <(const normVector &other) const {
+    if (chrIdx != other.chrIdx)
+      return chrIdx < other.chrIdx;
+    else if (normtype != other.normtype)
+      return normtype < other.normtype;
+    else if (unit != other.unit)
+      return unit < other.unit;
+    else
+      return resolution < other.resolution;
+  }
+};
 
-extern "C" char *CstrawHeader (char *filename, char **genome, char ***chromNames, int **chromSizes, int *nChroms, char ***bpResolutions, int *nBpRes, char ***fragResolutions, int *nFragRes, char ***attributes, int *nAttributes);
+class Straw {
+    private:
+    // map of block numbers to pointers
+    std::map <int, indexEntry> blockMap;
+    bool haveReadFooter;
+    std::map <std::string, long> chrchrMap;
+    std::map <normVector, std::pair<long,int>> normVectors;
+
+    long master;
+    std::string fileName;
+
+    int fileIsOpen();
+    bool readMagicString();
+
+    public:
+    // version number
+    int version;
+    long total_bytes;
+    std::string genome;
+    int nChrs;
+    std::vector<std::string> chrNames;
+    std::vector<int> chrSizes;
+    std::map <std::string, std::string> attributes;
+    std::vector<int> bpResolutions;
+    std::vector<int> fragResolutions;
+
+
+    void loadHeader();
+    bool readMatrixZoomData(std::istream& fin, std::string myunit, int mybinsize, int &myBlockBinCount, int &myBlockColumnCount);
+    bool readMatrixZoomDataHttp(char *url, long &myFilePosition, std::string myunit, int mybinsize, int &myBlockBinCount, int &myBlockColumnCount);
+    void readMatrixHttp(char *url, long myFilePosition, std::string unit, int resolution, int &myBlockBinCount, int &myBlockColumnCount);
+    void readMatrix(std::istream& fin, long myFilePosition, std::string unit, int resolution, int &myBlockBinCount, int &myBlockColumnCount);
+    std::set<int> getBlockNumbersForRegionFromBinPosition(int* regionIndices, int blockBinCount, int blockColumnCount, bool intra);
+    std::vector<contactRecord> readBlock(std::istream& fin, char *url, bool isHttp, int blockNumber);
+    std::vector<double> readNormalizationVector(std::istream& bufferin);
+
+    Straw(std::string fname) {
+        master = 0;
+        fileName = "";
+        genome = "";
+        chrNames.clear();
+        chrSizes.clear();
+        attributes.clear();
+        blockMap.clear();
+        haveReadFooter = false;
+        open(fname);
+    }
+
+    ~Straw() {
+    }
+
+    int open(std::string fname);
+    void close();
+    void getChrInfo(std::string chr1, std::string chr2, int &c1pos1, int &c1pos2, int &c2pos1, int &c2pos2, int &chr1ind, int &chr2ind);
+    void readFooter(std::istream& fin, long master, int c1, int c2, std::string norm, std::string unit, int resolution, long &myFilePos, indexEntry &c1NormEntry, indexEntry &c2NormEntry);
+    void straw(std::string norm, int binsize, std::string chr1loc, std::string chr2loc, std::string unit, std::vector<int> &xActual, std::vector<int> &yActual, std::vector<float> &counts);
+
+}; // Cstraw class
+
 #endif

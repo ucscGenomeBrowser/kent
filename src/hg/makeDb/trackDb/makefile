@@ -261,12 +261,12 @@ beta_all: ${DBS:%=%_beta}
 
 %_betaTest:
 	# now do loads on hgwbeta
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -remoteLogin=${BETA_MACHINE} -release=beta trackDb_betaTest hgFindSpec_betaTest $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -remoteLogin=${BETA_MACHINE} -release=beta trackDb_betaTest hgFindSpec_betaTest $*
 
 %_beta:
 	# now do loads on hgwbeta
 	-ssh  ${BETA_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=beta trackDb hgFindSpec $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=beta trackDb hgFindSpec $*
 	rm  -f $*.gbdbList.txt
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb beta metaDb $*
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*

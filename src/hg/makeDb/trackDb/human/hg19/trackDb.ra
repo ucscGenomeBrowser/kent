@@ -1266,7 +1266,8 @@ urlLabel Exome Variant Server:
 vcfDoQual off
 vcfDoFilter off
 
-include trackDb.gnomad.ra
+include trackDb.gnomad.ra beta,public
+include trackDb.gnomad.alpha.ra alpha
 
 track exac
 compositeTrack on

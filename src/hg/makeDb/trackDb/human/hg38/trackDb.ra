@@ -667,6 +667,7 @@ include trackDb.100way.ra
 include trackDb.145way.ra alpha
 
 include trackDb.241way.ra alpha,beta
+include trackDb.241wayBM.ra alpha
 
 # track multiz145way
 # shortLabel 145way maf
@@ -776,7 +777,8 @@ include wgEncodeReg.dev.ra alpha
 
 include hic.ra
 
-include gnomad.ra
+include gnomad.ra beta,public
+include gnomad.alpha.ra alpha
 
 include platinumGenomes.ra
 
@@ -818,8 +820,8 @@ track ncbiRefSeqSelect
 parent refSeqComposite off
 priority 8
 type genePred
-shortLabel RefSeq Select+MANE
-longLabel NCBI RefSeq Select+MANE subset: one representative transcript per protein-coding gene
+shortLabel RefSeq Select and MANE
+longLabel NCBI RefSeq Select and MANE subset: A single representative transcript
 trackHandler ncbiRefSeq
 idXref ncbiRefSeqLink mrnaAcc name
 color 20,20,160
