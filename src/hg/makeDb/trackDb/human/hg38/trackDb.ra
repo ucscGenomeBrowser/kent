@@ -155,7 +155,8 @@ pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 
 track revel override
 origAssembly hg19 
-pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19" 
+pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; New red ../goldenPath/newsarch.html#062421 "Released by UCSC June 24, 2021"
+
 
 include nonCodingRNAs.ra
 
@@ -821,7 +822,7 @@ parent refSeqComposite off
 priority 8
 type genePred
 shortLabel RefSeq Select and MANE
-longLabel NCBI RefSeq Select and MANE subset: one representative transcript per protein-coding gene
+longLabel NCBI RefSeq Select and MANE subset: A single representative transcript
 trackHandler ncbiRefSeq
 idXref ncbiRefSeqLink mrnaAcc name
 color 20,20,160
