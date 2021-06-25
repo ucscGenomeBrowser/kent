@@ -29,19 +29,25 @@ for tagStorm and tabSep files.</p>
 <h2>Previous metadata versions</h2>
 <p>
 Currently, in order to add metadata to your tracks, you must specify all of the metadata key-value
-pairs in each stanza of a track that includes metadata, like the last line of the following example:<br>
+pairs in each stanza of a track that includes metadata, like the last line of the following example:
+</p>
 <pre>
-    track oneA-1
-    bigDataUrl http://genome-test.soe.ucsc.edu/~chmalee/tagStormHubs/test2/bbi/one-a1.bb
-    parent oneA off
-    type bigBed 3
-    shortLabel oneA-1
-    longLabel oneA-1
-    color 250,108,0
-    visilibility dense
-    metadata  differentiation=10hour treatment=X donor=A lab=UCSC data_set_id=ucscTest1 access=group assay=long-RNA-seq enriched_in=exon life_stage=postpartum species="Homo sapiens" ucsc_db=hg38
+track experiment1
+shortLabel Donor A
+longLabel Donor A's Metadata Experiment
+type bigWig
+bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw
+parent treatmentX on
+subGroups view=X
+metadata differentiation="10 hour" treatment=X donor=A lab="List Meta Lab" data_set_id=ucscTest1 access=group assay=long-RNA-seq enriched_in=exon life_stage=postpartum species="Homo sapiens" ucsc_db=hg38
 </pre>
-Each track must have a separate <em>metadata</em> field and its own list of key-values, which can become cumbersome when each track in a group all share a common subset of metadata. For instance, if there are 10 tracks in a composite or multiWig, where each subtrack only differs in the &quot;differentiation&quot; tag, it would be more convenient to have a shared set of metadata and then specify the differences for each track. This is the motivation behind the tagStorm format, described below.
+<p>
+Each track must have a separate <em>metadata</em> field and its own list of key-values, which can
+become cumbersome when each track in a group all share a common subset of metadata. For instance, if
+there are 10 tracks in a composite or multiWig, where each subtrack only differs in the
+&quot;differentiation&quot; tag, it would be more convenient to have a shared set of metadata and
+then specify the differences for each track. This is the motivation behind the tagStorm format,
+described below.
 </p>
 
 <a name="tagstorm"></a>
