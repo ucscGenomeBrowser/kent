@@ -10924,6 +10924,7 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"performance. To clear the setting, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
     notify(buf);
+    }
 }
 
 void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)
