@@ -63,7 +63,9 @@ The tagStorm format is a plaintext file similar to the <em>trackDb.txt</em> file
 the tracks in a <a href="hgTrackHubHelp.html">track hub</a>, in that both are files where the
 first word in a  line is the tag and the rest of the line is the value, and different stanza's are
 line delimited. TagStorm's are also similar to a spreadsheet, where a tag corresponds to a column
-and a stanza to an entire row. Here is a canonical tagStorm example:
+and a stanza to an entire row. The tagStorm format is easy for computers to parse, reduce the
+redundancy of a tab-separated file, and they are human readable. Here is a canonical tagStorm
+example:
 </p>
 <pre>
 lab tagStorm Lab
@@ -125,6 +127,8 @@ https://genome.ucsc.edu/s/PublicSessions/tagStorm_metadata</a>.
 <h2>Tab-separated metadata</h2>
 <p>
 Column or tab-separated metadata can be useful to store computer readable information as an array.
+While this format is very easy for a computer to parse, it can be bit confusing or difficult for
+humans to read and interpret.
 </p>
 <pre>
 #lab	data_set_id	access	assay	enriched_in	life_stage	species	ucsc_db	treatment	donor	differentiation	meta
