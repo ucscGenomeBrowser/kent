@@ -117,7 +117,20 @@ ucsc_db hg38
 Each stanza, such as &quot;donor B&quot;, inherits from any stanzas above it at the right
 indentation level, and is a parent to stanzas beneath.</p>
 <p>
-You can find an example of a hub using the tagStorm metadata above
+A trackDb stanza using the tagStorm metadata can be seen in the following example:
+</p>
+<pre>
+track experiment1
+shortLabel Donor A
+longLabel Donor A's TagStorm Experiment
+type bigWig
+bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw
+parent treatmentX on
+subGroups view=X
+meta ucsc1_1
+</pre>
+<p>
+You can find the complete example of the hub using the tagStorm metadata
 <a href="/goldenPath/help/examples/hubExamples/hubMetadata/tagStormHub.txt">here</a> and you can
 load the following session to view the hub,
 <a href="https://genome.ucsc.edu/s/PublicSessions/tagStorm_metadata">
@@ -143,7 +156,20 @@ tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	C	1 d
 tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	C	5 days	ucsc1_9
 </pre>
 <p>
-You can find an example of a hub using the tab-separated metadata above
+A trackDb stanza using the tab-separated metadata can be seen in the following example:
+</p>
+<pre>
+track experiment1
+shortLabel Donor A
+longLabel Donor A's Tab Separated Experiment
+type bigWig
+bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw
+parent treatmentX on
+subGroups view=X
+meta ucsc1_1
+</pre>
+<p>
+You can find the complete example of the hub using the tab-separated metadata
 <a href="/goldenPath/help/examples/hubExamples/hubMetadata/tabSepHub.txt">here</a> and you can load
 the following session to view the hub,
 <a href="https://genome.ucsc.edu/s/PublicSessions/TabSeparated_metadata">
