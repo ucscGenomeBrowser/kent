@@ -723,6 +723,12 @@ body.oldStaticPage .sectionContent {
     padding:10px; 
     margin:10px;
     text-align:left;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    width: 800px;
 }
 
 #warnHead {
