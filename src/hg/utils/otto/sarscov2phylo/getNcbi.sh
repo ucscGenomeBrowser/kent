@@ -108,10 +108,21 @@ else
     cp /dev/null nextclade.tsv
     faSplit about <(xzcat genbank.fa.xz) 30000000 $splitDir/chunk
 fi
+nDataDir=~angie/github/nextclade/data/sars-cov-2
+outDir=$(mktemp -d)
+outTsv=$(mktemp)
 for chunkFa in $splitDir/chunk*.fa; do
-    nextclade -j 50 -i $chunkFa -t >(cut -f 1,2 | tail -n+2 >> nextclade.tsv) >& nextclade.log
+    nextclade -j 50 -i $chunkFa \
+        --input-root-seq $nDataDir/reference.fasta \
+        --input-tree $nDataDir/tree.json \
+        --input-qc-config $nDataDir/qc.json \
+        --output-dir $outDir \
+        --output-tsv $outTsv >& nextclade.log
+    cut -f 1,2 $outTsv | tail -n+2 >> nextclade.tsv
+    rm $outTsv
 done
 wc -l nextclade.tsv
+rm -rf $outDir
 rm -rf $splitDir nextclade.fa
 
 conda activate pangolin
