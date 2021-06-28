@@ -19,8 +19,8 @@ makeDirs:
 	mkdir -p ${destDir}
 
 mkGenomes::
-	${toolsDir}/mkGenomes.pl blat-backup 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
-	${toolsDir}/mkGenomes.pl hgwdev 4040 ${orderList} > ${destDir}/download.${genomesTxt}.txt
+	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
+	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/download.${genomesTxt}.txt
 
 symLinks::
 	${toolsDir}/mkSymLinks.pl ${orderList}
@@ -100,3 +100,7 @@ verifyTestDownload:
 
 verifyDownload:
 	${toolsDir}/verifyOnDownload.sh apibeta.soe.ucsc.edu ${orderList}
+
+verifyDynamicBlat:
+	cut -d'_' -f1-2 ${orderList} | while read asmId; do \
+	  ${toolsDir}/testDynBlat.sh $$asmId < /dev/null; done
