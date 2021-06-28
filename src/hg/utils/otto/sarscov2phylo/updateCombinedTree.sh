@@ -41,6 +41,10 @@ usherDir=~angie/github/usher
 usher=$usherDir/build/usher
 matUtils=$usherDir/build/matUtils
 
+renaming=oldAndNewNames
+
+if [ ! -s new.masked.vcf.gz ]; then
+
 # Make lists of sequences already in the tree.
 $matUtils extract -i $prevProtobufMasked -u prevNames
 
@@ -100,13 +104,22 @@ join -t$'\t' epiToPrevName <(grep -vFwf epiToNewNameAlreadyInTree epiToNewName) 
     >> prevTree.renaming
 cp /dev/null dupsToRemove
 if [ -s epiToNewNameAlreadyInTree ]; then
+    set +o pipefail
     grep -Fwf <(cut -d\| -f 1 epiToNewNameAlreadyInTree) prevNames \
     | grep EPI_ISL \
+    | cat \
         >> dupsToRemove
+    set -o pipefail
 fi
+# Don't rename if the final name is already in the tree; remove the dup with the old name.
+set +o pipefail
+cut -f 2 prevTree.renaming \
+| grep -Fwf - prevNames | cat \
+    > alreadyThere
+grep -Fwf alreadyThere prevTree.renaming | cut -f 1 \
+    >> dupsToRemove
 # And finally, sometimes there are duplicates due to country or date being corrected in COG-UK
 # metadata.
-set +o pipefail
 grep -vFwf dupsToRemove prevTree.renaming \
 | cut -f 2 | sort | uniq -c | awk '$1 > 1 {print $2;}' \
 | cut -d/ -f 2 \
@@ -219,7 +232,6 @@ time bash ~angie/github/sarscov2phylo/scripts/global_profile_alignment.sh \
 faSize $alignedFa
 
 # Now make a renaming that keeps all the prevNames and adds full names for the new seqs.
-renaming=oldAndNewNames
 tawk '{print $1, $1;}' prevNames > $renaming
 if [ -s newCogUk.filtered.fa ]; then
     # Sometimes all of the new COG-UK sequences are missing from cog_metadata.csv -- complained.
@@ -265,12 +277,15 @@ tawk '{ if ($1 ~ /^#/) { print; } else if ($7 == "mask") { $1 = "NC_045512v2"; p
     $problematicSitesVcf > mask.vcf
 # Add masked VCF to previous protobuf
 time cat <(twoBitToFa $ref2bit stdout) $alignedFa \
-| faToVcf stdin stdout \
+| faToVcf -maxDiff=1000 -excludeFile=../tooManyEpps.ids -verbose=2 stdin stdout \
 | vcfRenameAndPrune stdin $renaming stdout \
 | vcfFilter -excludeVcf=mask.vcf stdin \
 | gzip -c \
     > new.masked.vcf.gz
-time $usher -u -T 50 \
+
+fi # if [ ! -s new.masked.vcf.gz ]
+
+time $usher -u -T 80 \
     -A \
     -e 5 \
     -v new.masked.vcf.gz \
@@ -278,6 +293,12 @@ time $usher -u -T 50 \
     -o gisaidAndPublic.$today.masked.preTrim.pb \
     >& usher.addNew.log
 mv uncondensed-final-tree.nh gisaidAndPublic.$today.preTrim.nwk
+
+# Exclude sequences with a very high number of EPPs from future runs
+grep ^Current usher.addNew.log \
+| awk '$16 >= 10 {print $8;}' \
+| awk -F\| '{ if ($3 == "") { print $1; } else { print $2; } }' \
+    >> ../tooManyEpps.ids
 
 # Prune samples with too many private mutations and internal branches that are too long.
 $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.pb \
@@ -380,8 +401,8 @@ echo "$sampleCountComma genomes from GISAID, GenBank, COG-UK and CNCB ($today); 
 # Add nextclade annotations to protobuf
 zcat gisaidAndPublic.$today.metadata.tsv.gz \
 | tail -n+2 | tawk '$8 != "" {print $8, $1;}' \
-| sed -re 's/^20E \(EU1\)/20E.EU1/;' \
-    > cladeToName
+| subColumn -miss=/dev/null 1 stdin ../nextcladeToShort cladeToName
+
 time $matUtils annotate -T 50 \
     -l \
     -i gisaidAndPublic.$today.masked.pb \
