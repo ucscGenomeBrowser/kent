@@ -1684,7 +1684,7 @@ There are no extra options that can appear on the type hic line.
 <div class="format">
     <code>filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
     <code>filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
-    <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
+    <code>filterType.&lt;fieldName&gt; &lt;single/singleList/multiple/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
     </div>
 <!-- 
     <P>There are a number of different filters available for bed data, see also the 
@@ -1699,15 +1699,27 @@ There are no extra options that can appear on the type hic line.
     values as categories, choosing to display only items that
     belong to one, any, or at least one of the selected values. By default, the user
     can select multiple values from this list and the filter lets pass any features
-    with at least one of these values (<code>multipleListOr</code>).</P>
+    with at least one of these values (<code>multiple</code>).</P>
     <P>In order to choose the default selection behavior, the optional parameter
     <code>filterType.&lt;fieldName&gt;</code> may be used. If this parameter is not passed,
     by default the selection will be set to &quot;one or more match&quot; which is the same
-    as having <code>filterType.fieldName multipleListOr</code>. If the user should
+    as having <code>filterType.fieldName multiple</code>. If the user should
     only be able to select a single value, 
-    <code>singleList</code> can be passed instead. Another option,
+    <code>single</code> can be passed instead. Another option,
     <code>multipleListAnd</code>, means that the user can select multiple categories,
     but the filter will let pass only features where all of these categories are present.
+    </p>
+    <p>
+    Both <code>single</code> and <code>multiple</code> have &quot;list&quot; options. These options
+    split the bigBed field values by commas, meaning that they should only be used when items can
+    contain multiple values at once in the desired filter field. For example, if my data is 
+    classifying variants, and they can only be a SNV, insertion, or deletion, I will want to
+    use <code>single</code> and <code>multiple</code>. However, if instead the filter will be
+    on a field classifying functional impact, there can be many values for each item. For 
+    example, variant rs11541299, which is both a synonymous variant and a 
+    coding sequence variant. In this case, I would want to use one of the &quot;list&quot;
+    options. Most simply <code>singleList</code> or <code>multipleList</code>, or one of
+    the additional varieties of <code>multipleList</code> depending on the desired options.
     </p>
     <p>
     <code>multipleListOr</code> and <code>multipleListAnd</code> both still let the user
