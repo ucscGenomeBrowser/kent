@@ -124,7 +124,15 @@ if (isNotEmpty(*retGClade))
 *retLineage = isUserSample ? "uploaded sample" :
                              (met && met->lineage) ? met->lineage : NULL;
 if (isNotEmpty(*retLineage))
-    jsonWriteObjectValue(jw, "pango_lineage", *retLineage);
+    {
+    char lineageUrl[1024];
+    if (sameString(*retLineage, "uploaded sample"))
+        safecpy(lineageUrl, sizeof lineageUrl, *retLineage);
+    else
+        safef(lineageUrl, sizeof lineageUrl, "https://outbreak.info/situation-reports?pango=%s",
+              *retLineage);
+    jsonWriteObjectValueUrl(jw, "pango_lineage", *retLineage, lineageUrl);
+    }
 if (met && met->epiId)
     jsonWriteObjectValue(jw, "gisaid_epi_isl", met->epiId);
 if (met && met->gbAcc)
@@ -147,7 +155,19 @@ if (met && met->region)
     jsonWriteObjectValue(jw, "region", met->region);
 char *sampleUrl = (sampleUrls && name) ? hashFindVal(sampleUrls, name) : NULL;
 if (isNotEmpty(sampleUrl))
-    jsonWriteObjectValueUrl(jw, "subtree", sampleUrl, sampleUrl);
+    {
+    char *p = strstr(sampleUrl, "subtreeAuspice");
+    char *subtreeNum = p + strlen("subtreeAuspice");
+    if (p && isdigit(*subtreeNum))
+        {
+        int num = atoi(subtreeNum);
+        char subtreeLabel[1024];
+        safef(subtreeLabel, sizeof subtreeLabel, "view subtree %d", num);
+        jsonWriteObjectValueUrl(jw, "subtree", subtreeLabel, sampleUrl);
+        }
+    else
+        jsonWriteObjectValueUrl(jw, "subtree", sampleUrl, sampleUrl);
+    }
 }
 
 static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, char *userOrOld,
