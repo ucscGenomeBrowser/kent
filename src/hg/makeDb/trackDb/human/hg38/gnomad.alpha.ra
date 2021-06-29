@@ -90,6 +90,7 @@ html gnomadV3_1
     dataVersion Release v3.1.1 (March 20, 2021) and v3.1 chrM Release (November 17, 2020)
     type bigBed 9 +
     itemRgb on
+    searchIndex name,_displayName,rsId
     html gnomadV3_1
     bigDataUrl /gbdb/hg38/gnomAD/v3.1.1/genomes.bb
     priority 1
@@ -113,3 +114,7 @@ html gnomadV3_1
     extraTableFields _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
     detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
     pennantIcon Updated red
+
+searchTable gnomadGenomesVariantsV3_1_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
