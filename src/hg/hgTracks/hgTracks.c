@@ -10919,7 +10919,7 @@ if (measureTiming)
 if (cartOptionalString(cart, "udcTimeout"))
     {
     char buf[5000];
-    safef(buf, sizeof(buf), "A \"udcTimeout\" setting is active. "
+    safef(buf, sizeof(buf), "A hub refresh (udcTimeout) setting is active. "
 	"This is useful when developing hubs, but it reduces "
 	"performance. To clear the setting, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
