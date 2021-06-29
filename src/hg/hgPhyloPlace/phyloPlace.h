@@ -24,6 +24,7 @@
 #define SINGLE_SUBTREE_SIZE "1000"
 
 #define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
+#define OUTBREAK_INFO_URLBASE "https://outbreak.info/situation-reports?pango="
 
 struct treeChoices
 /* Phylogenetic tree versions for the user to choose from. */

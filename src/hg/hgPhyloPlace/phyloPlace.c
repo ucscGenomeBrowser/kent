@@ -843,6 +843,20 @@ while ((hel = hashNext(&cookie)) != NULL)
     }
 }
 
+static void printLineageUrl(char *lineage)
+/* If lineage is not empty/NULL, print ": lineage <lineage>" and link to outbreak.info
+ * (unless lineage is "None") */
+{
+if (isNotEmpty(lineage))
+    {
+    if (differentString(lineage, "None"))
+        printf(": lineage <a href='"OUTBREAK_INFO_URLBASE"%s' target=_blank>%s</a>",
+               lineage, lineage);
+    else
+        printf(": lineage %s", lineage);
+    }
+}
+
 static void displayNearestNeighbors(struct placementInfo *info, char *source)
 /* Use info->variantPaths to find sample's nearest neighbor(s) in tree. */
 {
@@ -850,8 +864,7 @@ if (isNotEmpty(info->nearestNeighbor))
     {
     printf("<p>Nearest neighboring %s sequence already in phylogenetic tree: %s",
            source, info->nearestNeighbor);
-    if (isNotEmpty(info->neighborLineage))
-        printf(": lineage %s", info->neighborLineage);
+    printLineageUrl(info->neighborLineage);
     puts("</p>");
     }
 }
@@ -883,8 +896,7 @@ if (showBestNodePaths && info->bestNodes)
             printf("%s ", bn->name);
         printVariantPathNoNodeNames(stdout, bn->variantPath);
         char *lineage = lineageForSample(sampleMetadata, bn->name);
-        if (isNotEmpty(lineage))
-            printf(": lineage %s", lineage);
+        printLineageUrl(lineage);
         }
     if (info->bestNodeCount > 1)
         puts("</ul>");
@@ -1484,6 +1496,17 @@ if (si->nCountEnd)
     dyStringPrintf(dy, "%d N bases at end", si->nCountEnd);
 }
 
+static void printLineageTd(char *lineage, char *alt)
+/* Print a table cell with lineage (& link to outbreak.info if not 'None') or alt if no lineage. */
+{
+if (lineage && differentString(lineage, "None"))
+    printf("<td><a href='"OUTBREAK_INFO_URLBASE"%s' target=_blank>%s</a></td>", lineage, lineage);
+else if (lineage)
+    printf("<td>%s</td>", lineage);
+else
+    printf("<td>%s</td>", alt);
+}
+
 static void summarizeSequences(struct seqInfo *seqInfoList, boolean isFasta,
                                struct usherResults *ur, struct tempName *jsonTns[],
                                struct hash *sampleMetadata, struct dnaSeq *refGenome)
@@ -1626,10 +1649,10 @@ if (seqInfoList)
             if (gotClades)
                 printf("<td>%s</td>", pi->nextClade ? pi->nextClade : "n/a");
             if (gotLineages)
-                printf("<td>%s</td>", pi->pangoLineage ? pi->pangoLineage : "n/a");
-            printf("<td>%s</td><td>%s</td>",
-                   pi->nearestNeighbor ? replaceChars(pi->nearestNeighbor, "|", " | ") : "?",
-                   pi->neighborLineage ? pi->neighborLineage : "?");
+                printLineageTd(pi->pangoLineage, "n/a");
+            printf("<td>%s</td>",
+                   pi->nearestNeighbor ? replaceChars(pi->nearestNeighbor, "|", " | ") : "?");
+            printLineageTd(pi->neighborLineage, "?");
             int imputedCount = slCount(pi->imputedBases);
             printf("<td class='%s'>%d",
                    qcClassForImputedBases(imputedCount), imputedCount);

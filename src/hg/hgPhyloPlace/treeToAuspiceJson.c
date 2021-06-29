@@ -129,7 +129,7 @@ if (isNotEmpty(*retLineage))
     if (sameString(*retLineage, "uploaded sample"))
         safecpy(lineageUrl, sizeof lineageUrl, *retLineage);
     else
-        safef(lineageUrl, sizeof lineageUrl, "https://outbreak.info/situation-reports?pango=%s",
+        safef(lineageUrl, sizeof lineageUrl, OUTBREAK_INFO_URLBASE "%s",
               *retLineage);
     jsonWriteObjectValueUrl(jw, "pango_lineage", *retLineage, lineageUrl);
     }
