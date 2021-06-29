@@ -33842,6 +33842,21 @@ ln -s `pwd`/split/*.bw /gbdb/hg19/gnomAD/pext/
   # 93720294 bases of 2991710746 (3.133%) in intersection
 
 #############################################################################
+# test update 2021-05-17 (DONE - Hiram - 2021-05-17)
+
+  mkdir /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2021-05-17
+  cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2021-05-17
+
+  time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=hgwdev -workhorse=hgwdev \
+      GCF_000001405.25_GRCh37.p13 hg19) > do.log 2>&1 &
+  # real    7m42.506s
+
+  cat fb.ncbiRefSeq.hg19.txt
+  # 95470885 bases of 2991710746 (3.191%) in intersection
+
+#############################################################################
 # Covid-19 rare mutations, Max, Fri Oct 30 08:40:34 PDT 2020
 # received table from qzhang02@rockefeller.edu, wrote to UCSC.txt
 cd /hive/data/genomes/hg19/bed/covidMuts/
@@ -33950,7 +33965,7 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg19 bosTau9) > rbest.log 2>&1 &
     #	real    274m55.811s
 
-    cat fb.hg19.chainRBest.BosTau9.txt
+    sed -e 's/^/    # /;' fb.hg19.chainRBest.BosTau9.txt
     #	1290531802 bases of 2991710746 (43.137%) in intersection
 
     #   running the swap
@@ -33969,11 +33984,10 @@ TMPDIR=/dev/shm
     #	1305558878 bases of 2715853792 (48.072%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` bosTau9 hg19) > rbest.log 2>&1 &
-XXX - running - Tue Dec  8 09:13:34 PST 2020
-    # real    272m15.176s
+    # real    297m58.059s
 
-    cat fb.bosTau9.chainRBest.Hg19.txt
-    # 1290810412 bases of 2715853792 (47.529%) in intersection
+    sed -e 's/^/    # /;' fb.bosTau9.chainRBest.Hg19.txt
+    # 1291348753 bases of 2715853792 (47.549%) in intersection
 
 #############################################################################
 # Exome Probesets composite track
