@@ -24,6 +24,7 @@
 #include "barChartUi.h"
 #include "hgConfig.h"
 #include "facetedBar.h"
+#include "pipeline.h"
 
 #define EXTRA_FIELDS_SIZE 256
 
@@ -367,9 +368,15 @@ trashDirFile(&pngTn, "hgc", "barChart", ".png");
 bool useOldFonts = cgiBoolean("oldFonts");
 
 /* Exec R in quiet mode, without reading/saving environment or workspace */
-dyStringPrintf(cmd, "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s '%s' %s %s %s %s %d",
+char *pipeCmd[] = {"Rscript","--vanilla","--slave","hgcData/barChartBoxplot.R", 
+    item, units, colorFile, df, pngTn.forHtml, 
+    isEmpty(name2) ? "n/a" : name2, useOldFonts ? "1" : "0"};
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+int ret = pipelineWait(pl);
+
+/* put command in string in case of error. */
+dyStringPrintf(cmd, "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s '%s' %s %s %s %s %d",       
                                 item, units, colorFile, df, pngTn.forHtml, isEmpty(name2) ? "n/a" : name2, useOldFonts);
-int ret = system(cmd->string);
 if (ret == 0)
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
 else
