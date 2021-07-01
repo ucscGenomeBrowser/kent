@@ -1,3 +1,9 @@
+/* cartRewrite -- routines to enable cart rewrites. Carts and trackDbs
+ * have a version number and this code knows how to make the cart compatble
+ * with trackDb. */
+
+/* Copyright (C) 2021 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 
 #include "common.h"
 #include "cart.h"
