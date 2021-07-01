@@ -56,7 +56,7 @@ if (sameString(source, "GISAID"))
           , outF);
 fprintf(outF, "  { \"key\": \"userOrOld\", "
         "    \"scale\": [ [ \"uploaded sample\", \"#CC0000\"] , [ \"%s\", \"#000000\"] ],"
-        "    \"title\": \"Sample type\", \"type\": \"categorical\" },   {\"key\": \"gt\",\"title\": \"Genotype\",\"type\": \"categorical\"},{\"key\": \"country\",\"title\": \"Country\",\"type\": \"categorical\"}]"
+        "    \"title\": \"Sample type\", \"type\": \"categorical\" },   {\"key\": \"gt\",\"title\": \"Genotype\",\"type\": \"categorical\"},{\"key\": \"country\",\"title\": \"Country\",\"type\": \"categorical\"}"
         , source);
 fputs("  ] , "
 //#*** Filters didn't seem to work... maybe something about the new fetch feature, or do I need to spcify in some other way?
