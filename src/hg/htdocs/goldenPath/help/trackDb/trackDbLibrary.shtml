@@ -262,7 +262,8 @@
     table specified in either metaDb or metaTab in the genomes.txt file. The meta tag can be 
     any alphanumeric string. Each meta tag should appear in a trackDb stanza AND in either the 
     tab-separated file specified by metaTab, or tagStorm file specified by metaDb in the 
-    hub's genomes.txt file.
+    hub's genomes.txt file. Examples on how to include metadata in your hubs can be found
+    on the following <a href="/goldenPath/help/metadata.html">metadata guide</a>.
 </DIV>
 
 <DIV class="visibility"><span class="types all"></span>
