@@ -527,20 +527,25 @@ href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/">hg38 downloads d
 or by using the <a target="_blank" href="../cgi-bin/hgTables">Table Browser</a>.</p>
 
 <p>
-<b>NCBI RefSeq (hg19/hg38)</b>: NCBI manually selects few, usually one,
+<b>NCBI RefSeq (hg19/hg38)</b>: On this track, there are three subtracks with slightly 
+different aims, all of which show only a single transcript (or less) for each gene.
+<ul>
+    <li> RefSeq Select: NCBI manually selects few, usually one,
 transcript per gene called "RefSeq Select", based on <a target=_blank
 href="https://www.ncbi.nlm.nih.gov/refseq/refseq_select/">various criteria</a>.
 Example use cases are comparative genomics and variant reporting. This subset
-is available in the RefSeq Select track under NCBI RefSeq.  RefSeq and the EBI
+is available in the RefSeq Select track under NCBI RefSeq.
+<li>MANE: RefSeq and the EBI
 also select one transcript for every protein coding gene that is annotated exactly 
 the same in both Gencode and RefSeq, a project called <a
 href="https://ncbiinsights.ncbi.nlm.nih.gov/2019/03/12/mane-select-v0-5/"
 target=_blank>"MANE select"</a>, which is another subtrack of NCBI RefSeq. 
-For the special case of clinical diagnostics
+<li>HGMD: For the special case of clinical diagnostics
 where an even more reduced number of transcripts simplifies visual inspection,
 we also provide another subtrack, "RefSeq HGMD". It contains
 (usually) a single transcript only for genes known to cause human genetic diseases and
-the transcript is the one to which all reported clinical variants can be mapped to.
+the transcript is the one to which all reported HGMD clinical variants can be mapped to.
+</ul>
 
 <a name="whatdo"></a>
 <h2>This is rather complicated. Can you tell me which gene transcript track I should use?</h2>
