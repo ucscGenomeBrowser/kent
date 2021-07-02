@@ -599,7 +599,7 @@ ln -fs `pwd`/$f.bb /gbdb/mm10/encode3/ccre
 
 
 ##############################################################################
-# GRC Incident Database (TODO - 2021-06-15 - Galt)
+# GRC Incident Database (DONE - 2021-06-15 - Galt)
 
     # Wait until the updated mm10 files have been pushed to RR because GRC Incident update is
     # automated.  Then update the file used to map GRC's RefSeq accessions to our names:
