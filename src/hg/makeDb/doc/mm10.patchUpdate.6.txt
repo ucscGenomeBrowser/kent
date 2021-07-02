@@ -2,6 +2,29 @@
 
 # This file describes how mm10 was extended with patch sequences and annotations from grcM38P6
 
+ALTS FROM OTHER MOUSE STRAINS IN NCBI RELEASE CONSIDERATIONS
+
+The original NBCI release grcM38 (which we used for the initial mm10 release)
+had dozens alt-scaffolds on 14 mouse strains. Whoever did that assembly manually removed
+those sequences from other strains. When we ran the patch6, we went back to the NCBI source
+and ran our standard build tools. We did not realize that 99 out of 108 scaffolds were
+from the other 14 strains. It did have 9 alt-scaffolds for the native strain C57BL/6J too.
+We did not catch the issue until too late when QA had pushed already and we received message from a researcher.
+
+Since it would be a lot of work to go back and re-do all the patch6 without the extra mouse strain alts,
+we have decided to proceed. We have updated README and the mm10 main html page
+to reflect these changes and note the additional non-native strain sequences that appear in patch 6 release.
+This can be justified since we are having to deal with alt scaffolds anyway
+in our increasingly complex world, and this makes our release more similar to NCBIs.
+Those alt-scaffolds were chosen because they can be useful, e.g. genes from other strains
+that have important medical research.
+
+Currently we have no table to map the alts to their respective strains,
+but it is easy to tell the native from non-native alts since
+all the IDS for the native C57BL/6J alts have the letter K in them.
+Our convention is that the ID follows the chrom they are located on,
+so the native alts look like chrN_KK* or chrN_KZ*.
+
 ##############################################################################
 # Extend main database 2bit, chrom.sizes, chromInfo (DONE - 2021-04-08 - Galt)
 
@@ -599,7 +622,7 @@ ln -fs `pwd`/$f.bb /gbdb/mm10/encode3/ccre
 
 
 ##############################################################################
-# GRC Incident Database (TODO - 2021-06-15 - Galt)
+# GRC Incident Database (DONE - 2021-06-15 - Galt)
 
     # Wait until the updated mm10 files have been pushed to RR because GRC Incident update is
     # automated.  Then update the file used to map GRC's RefSeq accessions to our names:
