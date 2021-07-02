@@ -13,7 +13,7 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 html ../../dbSnpArchive
-pennantIcon New red
+pennantIcon New red ../goldenPath/newsarch.html#063021 "Archived June 30, 2021"
 
         track snp151Common override
         parent dbSnpArchive
