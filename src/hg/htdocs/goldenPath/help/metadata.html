@@ -18,12 +18,15 @@
 <h2>Adding metadata to tracks</h2>
 <p>
 Adding metadata to your tracks about cell lines, experimental protocols, or assays can be
-accomplished in a number of ways, via the newly supported <em>metaDb</em> or <em>metaTab</em>
-trackDb fields, or via the older style <em>metadata</em> trackDb field. The <em>metaDb</em> and
-<em>metaTab</em> fields link external tagStorm or tabSep metadata files to the data in the hub. The
-new formats are preferred over the older <em>metadata</em> field, although the <em>metadata</em>
-lines will continue to be supported for track hubs, but no new features will be added as they will
-for tagStorm and tabSep files.</p>
+accomplished in a number of ways, via the newly supported
+<a href="../../goldenPath/help/trackDb/trackDbHub.html#metaDb"><em>metaDb</em></a> or
+<a href="../../goldenPath/help/trackDb/trackDbHub.html#metaTab"><em>metaTab</em></a>
+trackDb fields, or via the older style
+<a href="../../goldenPath/help/trackDb/trackDbHub.html#metadata"><em>metadata</em></a> trackDb field.
+The <em>metaDb</em> and <em>metaTab</em> fields link external tagStorm or tabSep metadata files to
+the data in the hub. The new formats are preferred over the older <em>metadata</em> field, although
+the <em>metadata</em> lines will continue to be supported for track hubs, but no new features will
+be added as they will for tagStorm and tabSep files.</p>
 
 <p>
 The following is an example of a genomes.txt file calling the tagStorm metadata file:
@@ -39,9 +42,10 @@ genome hg38
 metaTab relativePath/to/tabSep.txt</pre>
 
 <p>
-When using tab-separated or tagStorm metadata, a <em>meta</em> column or line will be needed to
-specify which metadata information is applied to a track. The <em>meta</em> value should be a unique
-alphanumeric string.
+When using tab-separated or tagStorm metadata, a
+<a href="../../goldenPath/help/trackDb/trackDbHub.html#meta"><em>meta</em></a> column or line will
+be needed to specify which metadata information is applied to a track. The <em>meta</em> value
+should be a unique alphanumeric string.
 </p>
 
 <a name="metadata"></a>
