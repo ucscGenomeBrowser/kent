@@ -52,8 +52,57 @@
 <!-- ============= 2021 archived news ============= -->
 <a name="2021"></a>
 
+<a name="062821"></a>
+<h2>June 28, 2021 &nbsp;&nbsp; Version 3 of Track Database Definition Document Released</h2>
+<p>
+The <a href="help/trackDb/trackDbHub.html" target="_blank">Track Database Definition Document</a>
+defining hub settings has been updated from version two to version three. This document primarily
+serves as a library of settings that users can refer to when they are setting up and configuring
+their own track hubs. The update in the version is to account for two new sections that highlight
+the new <a href="help/bigLolly.html">bigLolly</a> type specialized for variant data and the new
+<a href="help/vcf.html#trio" >vcfPhasedTrio</a> type specialized for phased VCF data.</p>
+<p>
+The new specifications for these types are included in their relevant
+sections such as <code>vcfChildSample</code> and
+<code>vcfUseAltSampleNames</code> for the new <a href="help/trackDb/trackDbHub.html#vcfPhasedTrio"
+target="_blank">vcfPhasedTrio settings</a>, or <code>lollySizeField</code> and <code>lollyField</code>
+for the new  <a href="help/trackDb/trackDbHub.html#bigLolly" target="_blank">bigLolly settings</a>
+with full descriptions in the document.</p>
+<p>
+The Track Database Definition Document also serves a second function beyond defining settings as
+providing a versioned specification for those sites that support and display data from track hubs
+such as Ensembl and NCBI. See this <a href="http://genome.ucsc.edu/blog/how-portable-is-your-track-hub-use-hubcheck-to-find-out/"
+target="_blank">blog post</a> to learn more about this second element of the document and using the
+hubCheck utility to gain an idea of how your hub's settings might work on different sites.</p>
+
+<a name="062421"></a>
+<h2>June 24, 2021 &nbsp;&nbsp; New REVEL missense scores track for hg38 and hg19</h2>
+<p>
+The UCSC Genome Browser has just added the REVEL tracks to the hg38 and hg19 reference genomes. 
+This much requested clinical dataset is now visualized and interactive on the Genome Browser. 
+REVEL scores predict the pathogenicity of missense variants for every possible 
+basepair change across the entire genome's coding sequences. 
+This dataset bases its scores on 13 individual tools
+to produce high predictive performance of common and rare mutations. To learn more about the
+REVEL dataset, please visit their site below:</p>
+<ul>
+  <li><a href="https://sites.google.com/site/revelgenomics/" target="_blank">
+  https://sites.google.com/site/revelgenomics</a></li>
+</ul>
+<p>
+To access these tracks on the Genome Browser, please visit their description pages below 
+and change the tracks' visibility.</p>
+<ul>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=revel">REVEL track on hg38</a></li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg19&g=revel">REVEL track on hg19</a></li>
+</ul>
+<p>
+Thanks to REVEL for providing these annotations, as well as
+Max Haeussler and Dan Schmelter of the UCSC Genome Browser group for their
+work in creating and releasing these tracks.</p>
+
 <a name="061421"></a>
-<h2>Jun. 14, 2021 &nbsp;&nbsp; Updated Ensembl gene tracks for 48 assemblies (v104)</h2>
+<h2>June 14, 2021 &nbsp;&nbsp; Updated Ensembl gene tracks for 48 assemblies (v104)</h2>
 <p>
 We are pleased to announce updated
 <a href="http://uswest.ensembl.org/info/genome/genebuild/index.html" target="_blank">
@@ -173,13 +222,13 @@ Hiram Clawson and Lou Nassar of the UCSC Genome Browser group for their
 work in creating and releasing these tracks.</p>
 
 <a name="061021"></a>
-<h2>Jun. 10, 2021 &nbsp;&nbsp; Updated data for NCBI RefSeq tracks for human assembly hg19</h2>
+<h2>June 10, 2021 &nbsp;&nbsp; Updated data for NCBI RefSeq tracks for human assembly hg19</h2>
 <p>
 We are pleased to announce the updated  <a href="https://www.ncbi.nlm.nih.gov/genome/annotation_euk/
 Homo_sapiens/109.20190905/#:~:text=NCBI%20Homo%20sapiens%20Updated%20Annotation%20Release%
 20105.20201022&text=Updated%20Annotation%20Release%20105.20201022%20is,to%20update%20the%20annotated%20features"
 target="_blank">NCBI RefSeq Annotation Release 105.20201022</a> tracks for the
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=refSeqComposite&position=default">hg19/GRCh37</a>
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=refSeqComposite&position=default">hg19/GRCh37</a>
 assembly. For all of these tracks, the alignments and coordinates are provided by RefSeq.
 These tracks are organized in a composite track that includes:</p>
 <ul>
@@ -197,18 +246,18 @@ We would also like to thank Hiram Clawson, Lou Nassar, and Gerardo Perez for dev
 </p>
 
 <a name="060121"></a>
-<h2>Jun. 1, 2021 &nbsp;&nbsp; Genome Archive (GenArk) hubs and Dynamic BLAT</h2>
+<h2>June 1, 2021 &nbsp;&nbsp; Genome Archive (GenArk) hubs and Dynamic BLAT</h2>
 <p>
 Do you have a favorite species or a research organism for which you'd like to visualize
 the genomic sequence? With the recent addition of genomic assemblies for more than 1,300
 species, it's possible that your favorite is now available in the UCSC Genome Browser.
-Check <a  href=https://hgdownload.soe.ucsc.edu/hubs/>this list</a> of new assemblies 
+Check <a  href="https://hgdownload.soe.ucsc.edu/hubs/">this list</a> of new assemblies 
 to see if yours is a click away. Each of these Genome Browser assembly hubs comes pre-loaded 
 with several annotation tracks, gene models, and the ability to align genomic sequence to 
-the reference assembly using the <a  href= http://genome.ucsc.edu/FAQ/FAQblat.html>BLAT</a> 
+the reference assembly using the <a  href="/FAQ/FAQblat.html">BLAT</a> 
 alignment tool. You can add your own data to your view of the assembly hub by uploading a 
-<a  href=https://genome.ucsc.edu/goldenPath/help/customTrack.html>custom track</a> 
-or creating a <a  href=https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html>track hub</a>.</p>
+<a  href="help/customTrack.html">custom track</a> 
+or creating a <a href="help/hgTrackHubHelp.html">track hub</a>.</p>
 <p>
 We call this group of assembly hubs, the <a href=https://hgdownload.soe.ucsc.edu/hubs/>
 Genome Archive (GenArk)</a>. The genomes in the GenArk are sourced from 
@@ -218,9 +267,9 @@ and other projects. See the complete list of assembly hubs <a target="_blank"
 href="https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt">here</a>.</p>
 <p>
 GenArk assemblies can be found by searching the common name (e.g.
- <a href="https://genome.ucsc.edu/h/GCF_001984765.1">American Beaver</a>) or GCA/GCF accession
-(e.g. <a href="https://genome.ucsc.edu/h/GCF_001984765.1">GCF_001984765.1</a>) directly on the
-<a href="http://genome.ucsc.edu/cgi-bin/hgGateway">Genome Browser Gateway page</a>.
+ <a href="../h/GCF_001984765.1">American Beaver</a>) or GCA/GCF accession
+(e.g. <a href="../h/GCF_001984765.1">GCF_001984765.1</a>) directly on the
+<a href="/cgi-bin/hgGateway">Genome Browser Gateway page</a>.
 A full list can also be seen on the <a 
 href="https://hgdownload.soe.ucsc.edu/hubs">GenArk portal</a> which
 is organized by phylogenetic groups and projects:<br>
@@ -283,7 +332,7 @@ viruses, and bacteria.</p>
 
 <p>
 As mentioned above, assembly hubs in the GenArk allow for sequence alignment using the BLAT tool. We extended our traditional
-<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?command=start">BLAT tool</a> to accommodate these assembly hubs and we call it Dynamic BLAT. Dynamic BLAT
+<a href="../cgi-bin/hgBlat?command=start">BLAT tool</a> to accommodate these assembly hubs and we call it Dynamic BLAT. Dynamic BLAT
 pre-computes index genomes files, which allows assemblies to have a BLAT server without needing it to be resident in the 
 computer's memory. Dynamic BLAT allows us to offer BLAT services on nearly all of our GenArk assemblies, with a few exceptions
 due to excessive genome size.</p>
@@ -295,7 +344,7 @@ for their work on building the assembly hubs, creating GenArk, and extending BLA
 
 
 <a name="051121"></a>
-<h2>May. 11, 2021 &nbsp;&nbsp; Vaccines track available for the SARS-CoV-2 Genome Browser</h2>
+<h2>May 11, 2021 &nbsp;&nbsp; Vaccines track available for the SARS-CoV-2 Genome Browser</h2>
 <p>
 We are happy to announce the release of the
 <a href="../cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=vaccines">Vaccines</a> track for the UCSC
@@ -329,7 +378,7 @@ Stanford University School of Medicine for providing the sequencing data of thes
 want to thank Hiram Clawson and Jairo Navarro for the creation and release of this track.</p>
 
 <a name="050421"></a>
-<h2>May. 04, 2021 &nbsp;&nbsp; New Genome Browser: Rat, rn7 (<em>Rattus norvegicus</em>)</h2>
+<h2>May 04, 2021 &nbsp;&nbsp; New Genome Browser: Rat, rn7 (<em>Rattus norvegicus</em>)</h2>
 <p>
 A genome browser is now available for the <em>Rattus norvegicus</em> assembly released in Nov. 2020 by the
 <a href="https://www.darwintreeoflife.org/" target="_blank"> Darwin Tree of Life Project</a> at the
@@ -2493,8 +2542,7 @@ For a timeline and pictures, please visit the
 20th-anniversary-of-publishing-the-human-genome-to-the-internet/">
 Genomics Institute's article on the anniversary</a> as well as this short video
 commemorating the occasion:</p>
-<p><iframe width="560" height="315" src="https://www.youtube.com/embed/_6caCfvMIiY" 
-?rel=0" 
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/_6caCfvMIiY?rel=0" 
 frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 allowfullscreen></iframe></p>
 
@@ -2596,8 +2644,8 @@ below:</p>
 <th><a href='https://hgdownload.soe.ucsc.edu/hubs/VGP/vgpAltData.html'>alternate/haplotype</a></th>
 <th><a href='https://hgdownload.soe.ucsc.edu/hubs/VGP/vgpTrioData.html'>trio mat/pat</a></th>
 <th><a href='https://hgdownload.soe.ucsc.edu/hubs/VGP/vgpLegacyData.html'>legacy/superseded</a></th>
-</tr><tr>
-</tr></thead>
+</tr>
+</thead>
 </table></p>
 
 <p>
@@ -3177,8 +3225,7 @@ NCBI RefSeq</a> for providing these annotations. We would also like to thank Hir
 and Lou Nassar of the UCSC Genome Browser group for their
 work in creating and releasing these tracks.</p>
 
-<a name="042820"></a
->
+<a name="042820"></a>
 <h2>Apr. 28, 2020 &nbsp;&nbsp; gnomAD Constraint Metrics and Structural Variants data now available
 on human (GRCh37/hg19) assembly</h2>
 
@@ -6671,7 +6718,7 @@ We would like to thank Hiram Clawson, Maximilian Haeussler, Christopher Lee, and
 the development and release of these tracks.</p>
 
 <a name="071417"></a>
-<h2>Jul. 14, 2017 &nbsp;&nbsp; New alternative mouse strain hub and strain-specific annotations</h3>
+<h2>Jul. 14, 2017 &nbsp;&nbsp; New alternative mouse strain hub and strain-specific annotations</h2>
 <p>
 A mouse strain assembly hub is now available and shows an alignment of 16 assembled laboratory mice
 strains, including the reference mouse (mm10) as well as the reference rat (rn6). This hub contains
@@ -8637,7 +8684,7 @@ annotation tracks were generated by UCSC and collaborators worldwide. See the
 <a href="/goldenPath/credits.html#cow_credits">Credits</a> page for a detailed list of the 
 organizations and individuals who contributed to this release.</p>
  
-<a name="121214">
+<a name="121214"></a>
 <h2>Dec. 12, 2014 &nbsp;&nbsp; New <em>D. melanogaster</em> (dm6) assembly now available</h2>
 <p>
 We are pleased to announce the release of a Genome Browser for the August 2014 assembly of 

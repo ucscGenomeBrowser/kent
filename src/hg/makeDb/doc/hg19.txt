@@ -33842,6 +33842,21 @@ ln -s `pwd`/split/*.bw /gbdb/hg19/gnomAD/pext/
   # 93720294 bases of 2991710746 (3.133%) in intersection
 
 #############################################################################
+# test update 2021-05-17 (DONE - Hiram - 2021-05-17)
+
+  mkdir /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2021-05-17
+  cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2021-05-17
+
+  time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=hgwdev -workhorse=hgwdev \
+      GCF_000001405.25_GRCh37.p13 hg19) > do.log 2>&1 &
+  # real    7m42.506s
+
+  cat fb.ncbiRefSeq.hg19.txt
+  # 95470885 bases of 2991710746 (3.191%) in intersection
+
+#############################################################################
 # Covid-19 rare mutations, Max, Fri Oct 30 08:40:34 PDT 2020
 # received table from qzhang02@rockefeller.edu, wrote to UCSC.txt
 cd /hive/data/genomes/hg19/bed/covidMuts/
@@ -33950,7 +33965,7 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg19 bosTau9) > rbest.log 2>&1 &
     #	real    274m55.811s
 
-    cat fb.hg19.chainRBest.BosTau9.txt
+    sed -e 's/^/    # /;' fb.hg19.chainRBest.BosTau9.txt
     #	1290531802 bases of 2991710746 (43.137%) in intersection
 
     #   running the swap
@@ -33969,11 +33984,10 @@ TMPDIR=/dev/shm
     #	1305558878 bases of 2715853792 (48.072%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` bosTau9 hg19) > rbest.log 2>&1 &
-XXX - running - Tue Dec  8 09:13:34 PST 2020
-    # real    272m15.176s
+    # real    297m58.059s
 
-    cat fb.bosTau9.chainRBest.Hg19.txt
-    # 1290810412 bases of 2715853792 (47.529%) in intersection
+    sed -e 's/^/    # /;' fb.bosTau9.chainRBest.Hg19.txt
+    # 1291348753 bases of 2715853792 (47.549%) in intersection
 
 #############################################################################
 # Exome Probesets composite track
@@ -34527,4 +34541,83 @@ wigToBigWig t.wig ../../chrom.sizes t.bw &
 wigToBigWig c.wig ../../chrom.sizes c.bw  &
 wigToBigWig a.wig ../../chrom.sizes a.bw &
 wigToBigWig g.wig ../../chrom.sizes g.bw &
+##############################################################################
+# LASTZ human/hg19 Gorilla/gorGor6 - (DONE - 2021-06-28 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28/
+    cd /hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28/
+
+    printf '# human vs gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: gorilla gorGor6
+SEQ2_DIR=/hive/data/genomes/gorGor6/gorGor6.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    113m7.350s
+
+    cat fb.hg19.chainGorGor6Link.txt
+    # 2874362387 bases of 2991710746 (96.078%) in intersection
+
+    cat fb.hg19.chainSynGorGor6Link.txt
+    # 2854800888 bases of 2991710746 (95.424%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg19 gorGor6) > rbest.log 2>&1 &
+    # real    67m18.231s
+
+    sed -e 's/^/ # /;' fb.hg19.chainRBest.GorGor6.txt
+     # 2691356356 bases of 2991710746 (89.960%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/gorGor6/bed/blastz.hg19.swap
+    cd /hive/data/genomes/gorGor6/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28/DEF \
+        -swap -syntenicNet -workhorse=hgwdev  \
+         -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -chainMinScore=3000 -chainLinearGap=medium)  > swap.log 2>&1 &
+    # real 69m32.058s
+
+    cat fb.gorGor6.chainHg19Link.txt
+    2735990533 bases of 2999027915 (91.229%) in intersection
+
+    cat fb.gorGor6.chainSynHg19Link.txt
+    2726237067 bases of 2999027915 (90.904%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` gorGor6 hg19) > rbest.log 2>&1 &
+    # real    70m15.001s
+
+    sed -e 's/^/    # /;' fb.gorGor6.chainRBest.Hg19.txt
+    # 2694784811 bases of 2999027915 (89.855%) in intersection
+
 ##############################################################################

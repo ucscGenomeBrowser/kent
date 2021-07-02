@@ -288,11 +288,13 @@ public: onbeta clean
 public_all: ${DBS:%=%_public}
 
 %_publicTest:
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -remoteLogin=${PUBLIC_MACHINE} -release=public trackDb_publicTest hgFindSpecTest_publicTest $*
+	-ssh  ${PUBLIC_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=public trackDb_publicTest hgFindSpecTest_publicTest $*
+	rm -f $*.gbdbList.txt
 
 %_public:
 	-ssh  ${PUBLIC_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=public trackDb_public hgFindSpec_public $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=public trackDb_public hgFindSpec_public $*
 	rm -f $*.gbdbList.txt
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb public metaDb_public $*
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ${BUILD_TRIX} trackDb_public metaDb_public cv/public/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*

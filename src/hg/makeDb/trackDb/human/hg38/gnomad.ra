@@ -80,7 +80,3 @@ html gnomadV3_1
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
-
-searchTable gnomadGenomesVariantsV3_1_1
-searchType bigBed
-searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1

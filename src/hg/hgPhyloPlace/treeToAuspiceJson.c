@@ -56,12 +56,28 @@ if (sameString(source, "GISAID"))
           , outF);
 fprintf(outF, "  { \"key\": \"userOrOld\", "
         "    \"scale\": [ [ \"uploaded sample\", \"#CC0000\"] , [ \"%s\", \"#000000\"] ],"
-        "    \"title\": \"Sample type\", \"type\": \"categorical\" }"
+        "    \"title\": \"Sample type\", \"type\": \"categorical\" },"
+        "  {\"key\": \"gt\", \"title\": \"Genotype\", \"type\": \"categorical\"},"
+        "  {\"key\": \"country\", \"title\": \"Country\", \"type\": \"categorical\"}"
         , source);
 fputs("  ] , "
 //#*** Filters didn't seem to work... maybe something about the new fetch feature, or do I need to spcify in some other way?
 //#***      "\"filters\": [ \"GISAID_clade\", \"region\", \"country\", \"division\", \"author\" ], "
       "\"filters\": [ ], "
+      "\"genome_annotations\":"
+      "{\"E\":{\"end\":26472,\"start\":26245,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"M\":{\"end\":27191,\"start\":26523,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"N\":{\"end\":29533,\"start\":28274,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"ORF1a\":{\"end\":13468,\"start\":266,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"ORF1b\":{\"end\":21555,\"start\":13468,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"ORF3a\":{\"end\":26220,\"start\":25393,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"ORF6\":{\"end\":27387,\"start\":27202,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"ORF7a\":{\"end\":27759,\"start\":27394,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"ORF7b\":{\"end\":27887,\"start\":27756,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"ORF8\":{\"end\":28259,\"start\":27894,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"ORF9b\":{\"end\":28577,\"start\":28284,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"S\":{\"end\":25384,\"start\":21563,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"nuc\":{\"end\":29903,\"start\":1,\"strand\":\"+\",\"type\":\"source\"}},"
       "\"display_defaults\": { "
       "  \"branch_label\": \"none\", "
       "  \"color_by\": \"Nextstrain_clade\" "
@@ -124,7 +140,15 @@ if (isNotEmpty(*retGClade))
 *retLineage = isUserSample ? "uploaded sample" :
                              (met && met->lineage) ? met->lineage : NULL;
 if (isNotEmpty(*retLineage))
-    jsonWriteObjectValue(jw, "pango_lineage", *retLineage);
+    {
+    char lineageUrl[1024];
+    if (sameString(*retLineage, "uploaded sample"))
+        safecpy(lineageUrl, sizeof lineageUrl, *retLineage);
+    else
+        safef(lineageUrl, sizeof lineageUrl, OUTBREAK_INFO_URLBASE "%s",
+              *retLineage);
+    jsonWriteObjectValueUrl(jw, "pango_lineage", *retLineage, lineageUrl);
+    }
 if (met && met->epiId)
     jsonWriteObjectValue(jw, "gisaid_epi_isl", met->epiId);
 if (met && met->gbAcc)
@@ -147,7 +171,19 @@ if (met && met->region)
     jsonWriteObjectValue(jw, "region", met->region);
 char *sampleUrl = (sampleUrls && name) ? hashFindVal(sampleUrls, name) : NULL;
 if (isNotEmpty(sampleUrl))
-    jsonWriteObjectValueUrl(jw, "subtree", sampleUrl, sampleUrl);
+    {
+    char *p = strstr(sampleUrl, "subtreeAuspice");
+    char *subtreeNum = p + strlen("subtreeAuspice");
+    if (p && isdigit(*subtreeNum))
+        {
+        int num = atoi(subtreeNum);
+        char subtreeLabel[1024];
+        safef(subtreeLabel, sizeof subtreeLabel, "view subtree %d", num);
+        jsonWriteObjectValueUrl(jw, "subtree", subtreeLabel, sampleUrl);
+        }
+    else
+        jsonWriteObjectValueUrl(jw, "subtree", sampleUrl, sampleUrl);
+    }
 }
 
 static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, char *userOrOld,

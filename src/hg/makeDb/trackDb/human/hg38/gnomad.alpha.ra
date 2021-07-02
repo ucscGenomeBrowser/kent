@@ -20,7 +20,7 @@ html gnomadV3_1
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     dataVersion Release 2.1.1 (March 6, 2019)
     html gnomadV3_1
-    priority 3
+    priority 4
     visibility hide
 
         track gnomadGenomesVariantsV2
@@ -48,7 +48,7 @@ html gnomadV3_1
     maxWindowToDraw 200000
     html gnomad
     bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r3.0.sites.vcf.gz
-    priority 2
+    priority 3
     visibility hide
     url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r3&ignore=$$
     urlLabel gnomAD:
@@ -63,7 +63,7 @@ html gnomadV3_1
     itemRgb on
     html gnomadV3_1
     bigDataUrl /gbdb/hg38/gnomAD/v3.1/variants/genomes.bb
-    priority 1
+    priority 2
     labelFields name,rsId
     defaultLabelFields name
     sepFields AC_afr
@@ -90,6 +90,7 @@ html gnomadV3_1
     dataVersion Release v3.1.1 (March 20, 2021) and v3.1 chrM Release (November 17, 2020)
     type bigBed 9 +
     itemRgb on
+    searchIndex name,_displayName,rsId
     html gnomadV3_1
     bigDataUrl /gbdb/hg38/gnomAD/v3.1.1/genomes.bb
     priority 1
@@ -113,3 +114,7 @@ html gnomadV3_1
     extraTableFields _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
     detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
     pennantIcon Updated red
+
+searchTable gnomadGenomesVariantsV3_1_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1

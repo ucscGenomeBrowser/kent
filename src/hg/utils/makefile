@@ -53,7 +53,6 @@ UTILS_APPLIST = \
 	pslToBigPsl \
 	tdbQuery \
 	transMapPslToGenePred \
-	scaffoldFaToAgp \
 	raSqlQuery \
 	pslLiftSubrangeBlat \
 	twoBitMask
@@ -87,6 +86,7 @@ DIRS = ${buildRefresh} \
 	pslUniq \
 	refSeqGet \
 	safePush \
+	scaffoldFaToAgp \
 	toDev64 \
 	vcfRenameAndPrune \
 	vcfToHgvs \

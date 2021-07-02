@@ -838,12 +838,13 @@ cd kent/src/hg/makeDb/trackDb
     jkmake DBS=hg38 alpha
     # if pushing public: create ticket and MARK QA READY
 #########################################################################
-2021-04-06: (PRE-RELEASE) import of UCSC GENCODE group processing of GENCODE V38 for hgc all gencode  (markd)
+2021-06-28: import of UCSC GENCODE group processing of GENCODE V38 for hgc all gencode  (markd)
+    # replace pre-release from 2021-04-06
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
 
     # download, build and load tables
-    mkdir -p /hive/data/genomes/hg38/bed/gencodeV38Pre/hgcImport
-    pushd /hive/data/genomes/hg38/bed/gencodeV38Pre/hgcImport
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV38/hgcImport
+    pushd /hive/data/genomes/hg38/bed/gencodeV38/hgcImport
 
     (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
 
@@ -852,7 +853,7 @@ cd kent/src/hg/makeDb/trackDb
 
     # generate trackDb and joiner blurb
     pushd ~/kent/src/hg/makeDb/trackDb
-    ../outside/gencode/bin/gencodeGenerateTrackDbsOldSchema hg38 38 104 'Apr 2021'
+    ../outside/gencode/bin/gencodeGenerateTrackDbsOldSchema hg38 38 104 'May 2021'
 
     # Update 'Release Notes' (for final)
     # human/hg38/wgEncodeGencodeSuper.html
@@ -862,7 +863,7 @@ cd kent/src/hg/makeDb/trackDb
 
     # edit all.joiner to add ~/tmp/gencodeV38.joiner
     # verify with:
-    pushd /hive/data/genomes/hg38/bed/gencodeV38Pre/hgcImport
+    pushd /hive/data/genomes/hg38/bed/gencodeV38/hgcImport
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
     # check tracks in browser sandbox

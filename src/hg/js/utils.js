@@ -706,6 +706,15 @@ if (debug)
 return content;
 }
 
+function notifBoxShow() {
+    /* move the notification bar div under '#TrackHeaderForm' */
+    var notifEl = document.getElementById("notifBox");
+    var parentEl = document.getElementById('TrackHeaderForm');
+    parentEl.appendChild(notifEl);
+    notifEl.style.display = 'block';
+    //document.getElementById('notifOK').onclick = notifBoxHide;
+}
+
 function warnBoxJsSetup()
 {   // Sets up warnBox if not already established.  This is duplicated from htmshell.c
     var html = "";

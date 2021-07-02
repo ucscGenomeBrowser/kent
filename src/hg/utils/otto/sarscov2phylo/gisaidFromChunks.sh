@@ -13,7 +13,8 @@ today=$(date +%F)
 
 # Run pangolin and nextclade on any chunks that need it
 cd /hive/users/angie/gisaid/chunks
-make
+make nextclade.tsv
+make -j10
 
 cd /hive/users/angie/gisaid
 # Glom all the chunks together.
