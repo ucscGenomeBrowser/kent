@@ -2602,5 +2602,4 @@ skipFields mouseOver
 noScoreFilter on
 mouseOver $name, HI: $quantile
 
-include dbSnpOldHg19.ra beta,public
-include dbSnpArchiveHg19.ra alpha
+include dbSnpArchiveHg19.ra 

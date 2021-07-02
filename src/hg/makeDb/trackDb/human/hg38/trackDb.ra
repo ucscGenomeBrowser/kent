@@ -844,6 +844,4 @@ group covid
 bigDataUrl /gbdb/hg38/covidHct/covidHct.bb
 release alpha
 
-include dbSnpOldHg38.ra beta,public
-include dbSnpArchiveHg38.ra alpha
-
+include dbSnpArchiveHg38.ra
