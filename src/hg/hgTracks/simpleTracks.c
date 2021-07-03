@@ -8229,9 +8229,10 @@ for(ii=0; ii < 52; ii++)
     for(jj=0; jj < width + 2; jj++)
 	{
 	if (buf[jj] == 255) colors[jj] = MG_WHITE;
-	else if (buf[jj] == 0x44) colors[jj] = MG_RED;
-	else if (buf[jj] == 0x69) colors[jj] = greenColor;
-	else if (buf[jj] == 0x5e) colors[jj] = blueColor;
+	else if (buf[jj] == 0x87) colors[jj] = MG_RED;
+	else if (buf[jj] == 0x60) colors[jj] = greenColor;
+	else if (buf[jj] == 0x7f) colors[jj] = blueColor;
+	else if (buf[jj] == 0x62) colors[jj] = orangeColor;
 	}
 
     hvGfxVerticalSmear(hvg,xOff,yOff+ii,width ,1, colors,TRUE);
