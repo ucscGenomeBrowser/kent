@@ -390,5 +390,4 @@ exonArrows on
     color 180,0,134
     priority 2
 
-include dbSnpOldMm10.ra beta,public
-include dbSnpArchiveMm10.ra alpha
+include dbSnpArchiveMm10.ra 

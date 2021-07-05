@@ -17,10 +17,13 @@ fputs(
   "options:\n"
   "   -ambiguousToN         Treat all IUPAC ambiguous bases (N, R, V etc) as N (no call).\n"
   "   -excludeFile=file     Exclude sequences named in file which has one sequence name per line\n"
+  "   -includeNoAltN        Include base positions with no alternate alleles observed, but at\n"
+  "                         least one N (missing base / no-call)\n"
   "   -includeRef           Include the reference in the genotype columns\n"
   "                         (default: omitted as redundant)\n"
   "   -maskSites=file       Exclude variants in positions recommended for masking in file\n"
   "                         (typically https://github.com/W-L/ProblematicSites_SARS-CoV2/raw/master/problematic_sites_sarsCov2.vcf)\n"
+  "   -maxDiff=N            Exclude sequences with more than N mismatches with the reference\n"
   "   -minAc=N              Ignore alternate alleles observed fewer than N times\n"
   "   -minAf=F              Ignore alternate alleles observed in less than F of non-N bases\n"
   "   -noGenotypes          Output 8-column VCF, without the sample genotype columns\n"
@@ -44,8 +47,10 @@ exit(exitCode);
 static struct optionSpec options[] = {
     { "ambiguousToN", OPTION_BOOLEAN },
     { "excludeFile", OPTION_STRING },
+    { "includeNoAltN", OPTION_BOOLEAN },
     { "includeRef", OPTION_BOOLEAN },
     { "maskSites", OPTION_STRING },
+    { "maxDiff", OPTION_INT },
     { "minAc", OPTION_INT },
     { "minAf", OPTION_DOUBLE },
     { "noGenotypes", OPTION_BOOLEAN },
@@ -99,6 +104,51 @@ if (excludeFile)
 return sequences;
 }
 
+static int countDiffs(struct dnaSeq *ref, struct dnaSeq *seq)
+/* Return the number of bases that differ between ref and seq ignoring 'N'. */
+{
+if (ref->size != seq->size)
+    errAbort("countDiffs: expecting equally sized sequences but %s size %d != %s size %d",
+             ref->name, ref->size, seq->name, seq->size);
+int diffs = 0;
+int i;
+for (i = 0;  i < ref->size;  i++)
+    {
+    char refBase = toupper(ref->dna[i]);
+    char seqBase = toupper(seq->dna[i]);
+    if (refBase != 'N' && seqBase != 'N' && seqBase != refBase)
+        diffs++;
+    }
+return diffs;
+}
+
+static struct dnaSeq *filterMaxDiff(struct dnaSeq *sequences)
+/* If -maxDiff was passed in, remove any sequences with more than that number of differences
+ * from the reference (ignoring Ns but not IUPAC ambiguous bases). */
+{
+int maxDiff = optionInt("maxDiff", 0);
+if (maxDiff > 0)
+    {
+    int excludeCount = 0;
+    struct dnaSeq *ref = sequences;
+    struct dnaSeq *newList = NULL, *seq, *nextSeq = NULL;
+    for (seq = sequences;  seq != NULL;  seq = nextSeq)
+        {
+        nextSeq = seq->next;
+        int diff = countDiffs(ref, seq);
+        if (diff > maxDiff)
+            excludeCount++;
+        else
+            slAddHead(&newList, seq);
+        }
+    slReverse(&newList);
+    sequences = newList;
+    verbose(2, "Excluded %d sequences with >%d differences with the reference (%d sequences remaining including reference)\n",
+            excludeCount, maxDiff, slCount(sequences));
+    }
+return sequences;
+}
+
 static struct dnaSeq *readSequences(char *faFile)
 /* Read all sequences in faFile.  Make sure there are at least 2 sequences and that
  * all have the same length.  If a reference sequence is specified and is not the first
@@ -143,6 +193,7 @@ if (differentString(sequences->name, refName))
     }
 
 sequences = removeExcludedSequences(sequences);
+sequences = filterMaxDiff(sequences);
 return sequences;
 }
 
@@ -350,29 +401,34 @@ for (baseIx = 0, chromStart = 0;  baseIx < seqSize;  baseIx++, chromStart++)
                 }
             }
         }
-    if (altCount)
+    if (altCount || (optionExists("includeNoAltN") && nonNCount < gtCount))
         {
         int pos = chromStart + startOffset + 1;
         fprintf(outF, "%s\t%d\t", vcfChrom, pos);
-        int altIx;
-        for (altIx = 0;  altIx < altCount;  altIx++)
-            fprintf(outF, "%s%c%d%c", (altIx > 0) ? "," : "",
-                    ref, pos, altAlleles[altIx]);
-        fprintf(outF, "\t%c\t", ref);
-        for (altIx = 0;  altIx < altCount;  altIx++)
+        if (altCount == 0)
+            fprintf(outF, "%c%d%c\t%c\t*\t.\t.\tAC=0;AN=%d", ref, pos, ref, ref, nonNCount);
+        else
             {
-            if (altIx > 0)
-                fprintf(outF, ",");
-            fprintf(outF, "%c", altAlleles[altIx]);
+            int altIx;
+            for (altIx = 0;  altIx < altCount;  altIx++)
+                fprintf(outF, "%s%c%d%c", (altIx > 0) ? "," : "",
+                        ref, pos, altAlleles[altIx]);
+            fprintf(outF, "\t%c\t", ref);
+            for (altIx = 0;  altIx < altCount;  altIx++)
+                {
+                if (altIx > 0)
+                    fprintf(outF, ",");
+                fprintf(outF, "%c", altAlleles[altIx]);
+                }
+            fprintf(outF, "\t.\t.\tAC=");
+            for (altIx = 0;  altIx < altCount;  altIx++)
+                {
+                if (altIx > 0)
+                    fprintf(outF, ",");
+                fprintf(outF, "%d", altAlleleCounts[altIx]);
+                }
+            fprintf(outF, ";AN=%d", nonNCount);
             }
-        fprintf(outF, "\t.\t.\tAC=");
-        for (altIx = 0;  altIx < altCount;  altIx++)
-            {
-            if (altIx > 0)
-                fprintf(outF, ",");
-            fprintf(outF, "%d", altAlleleCounts[altIx]);
-            }
-        fprintf(outF, ";AN=%d", nonNCount);
         if (!noGenotypes)
             {
             fputs("\tGT", outF);

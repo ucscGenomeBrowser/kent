@@ -357,6 +357,8 @@ static void resultsPage(char *db, struct lineFile *lf)
  * and display results. */
 {
 webStartGbNoBanner(cart, db, "UShER: Results");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("ajax.js", NULL);
 newPageStartStuff();
 
 hgBotDelay();

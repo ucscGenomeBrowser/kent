@@ -42,6 +42,10 @@ boolean allGenomes = FALSE;
 boolean allResults = FALSE;
 static long enteredMainTime = 0;
 
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   0.5    /* standard penalty is 1.0 for most CGIs */
+                                /* this one is 0.5 */
+static boolean issueBotWarning = FALSE;
 
 struct gfResult
 /* Detailed gfServer results, this is a span of several nearby tiles, minimum 2 for dna. */
@@ -615,7 +619,7 @@ else  // hyperlink
         char *trackDescription = NULL;
         getCustomName(database, cart, pslList, &trackName, &trackDescription);
         psl = pslList;
-        printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"POST\" NAME=\"customTrackForm\">\n", hgcUrl);
+        printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl,cartUsualString(cart, "formMethod", "POST"));
         printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
         printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",psl->tEnd);
         printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
@@ -1655,8 +1659,12 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     oneSize = realSeqSize(seq, !isTx);
     // Impose half the usual bot delay per sequence
     
-    if (dbCount == 0)
-	hgBotDelayFrac(0.5);
+    if (dbCount == 0 && issueBotWarning)
+        {
+        char *ip = getenv("REMOTE_ADDR");
+        botDelayMessage(ip, botDelayMillis);
+        }
+
     if (++seqCount > maxSeqCount)
         {
 	warn("More than %d input sequences, stopping at %s<br>(see also: cgi-bin/hg.conf hgBlat.maxSequenceCount setting).",
@@ -2352,6 +2360,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgBlat", delayFraction, 0, 0, "html");
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 

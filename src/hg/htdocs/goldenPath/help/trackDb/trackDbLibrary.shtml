@@ -262,7 +262,8 @@
     table specified in either metaDb or metaTab in the genomes.txt file. The meta tag can be 
     any alphanumeric string. Each meta tag should appear in a trackDb stanza AND in either the 
     tab-separated file specified by metaTab, or tagStorm file specified by metaDb in the 
-    hub's genomes.txt file.
+    hub's genomes.txt file. Examples on how to include metadata in your hubs can be found
+    on the following <a href="/goldenPath/help/metadata.html">metadata guide</a>.
 </DIV>
 
 <DIV class="visibility"><span class="types all"></span>
@@ -1684,7 +1685,7 @@ There are no extra options that can appear on the type hic line.
 <div class="format">
     <code>filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
     <code>filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
-    <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
+    <code>filterType.&lt;fieldName&gt; &lt;single/singleList/multiple/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
     </div>
 <!-- 
     <P>There are a number of different filters available for bed data, see also the 
@@ -1699,15 +1700,27 @@ There are no extra options that can appear on the type hic line.
     values as categories, choosing to display only items that
     belong to one, any, or at least one of the selected values. By default, the user
     can select multiple values from this list and the filter lets pass any features
-    with at least one of these values (<code>multipleListOr</code>).</P>
+    with at least one of these values (<code>multiple</code>).</P>
     <P>In order to choose the default selection behavior, the optional parameter
     <code>filterType.&lt;fieldName&gt;</code> may be used. If this parameter is not passed,
     by default the selection will be set to &quot;one or more match&quot; which is the same
-    as having <code>filterType.fieldName multipleListOr</code>. If the user should
+    as having <code>filterType.fieldName multiple</code>. If the user should
     only be able to select a single value, 
-    <code>singleList</code> can be passed instead. Another option,
+    <code>single</code> can be passed instead. Another option,
     <code>multipleListAnd</code>, means that the user can select multiple categories,
     but the filter will let pass only features where all of these categories are present.
+    </p>
+    <p>
+    Both <code>single</code> and <code>multiple</code> have &quot;list&quot; options. These options
+    split the bigBed field values by commas, meaning that they should only be used when items can
+    contain multiple values at once in the desired filter field. For example, if my data is 
+    classifying variants, and they can only be a SNV, insertion, or deletion, I will want to
+    use <code>single</code> and <code>multiple</code>. However, if instead the filter will be
+    on a field classifying functional impact, there can be many values for each item. For 
+    example, variant rs11541299, which is both a synonymous variant and a 
+    coding sequence variant. In this case, I would want to use one of the &quot;list&quot;
+    options. Most simply <code>singleList</code> or <code>multipleList</code>, or one of
+    the additional varieties of <code>multipleList</code> depending on the desired options.
     </p>
     <p>
     <code>multipleListOr</code> and <code>multipleListAnd</code> both still let the user
@@ -3939,6 +3952,90 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
+<DIV class="extraDetailsTable"><span class="types bigBed"></span>
+<div class="format"><code>extraDetailsTable &lt;url/relativePath&gt;</code></div>
+    <p>
+    Provides a template to a tab separated text file where $&lt;fieldName&gt;
+    strings will be substituted for data in the bigBed and displayed as an HTML
+    table. For an example of this, please see the following text file:
+    <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt">http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt</a>, where
+    the strings such as &quot;${AC_afr}&quot; will be substituted for the data in that
+    field for the particular item from the bigBed.
+    </p>
+    <p>
+    Note that the same size table is displayed for every item of the bigBed, even
+    if there is missing data in that field for a particular item. For variable
+    size tables, please see <a href="#extraTableFields">extraTableFields</a>.
+    </p>
+</DIV>
+
+<DIV class="extraTableFields"><span class="types bigBed"></span>
+<div class="format"><code>extraTableFields &lt;fieldName1|table title,fieldName2|table title,...&gt;</code></div>
+    <p>
+    Tells the system that the data in &lt;fieldName1,...&gt; contains an <em>encoded</em> table
+    that should be turned into a standard HTML table on the details page for that item. If
+    the &lt;fieldName&gt; starts with &quot;_json&quot; or &quot;json&quot;, then the system
+    expects the data in &lt;fieldName&gt; to be valid JSON. If the field name starts with
+    anything else, then the table is formatted using &quot;|&quot; and &quot;;&quot; as field
+    and new row separators. The &quot;table title&quot; part of the statment is optional, if
+    present it will be used as the title for the table, if not, then the title will be taken
+    from the autoSql description of the field name, or if there is no autoSql because the data
+    is from an external file, then the field name will be used.
+
+    <p>An example of both formats is shown below, along with the
+    corresponding trackDb statements:<br>
+    <br>
+    trackDb line:
+    <pre>extraDetailsTable _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example</pre>
+    the two columns from the bigBed (or external file):<br>
+    <pre>_jsonField1	tableField2
+{key:val, key1: val1, key2: val2}	key|val;key1|val1;key2:val2
+    </pre>
+    And when clicking on an item in the browser, the following would be displayed:<br>
+    <table class='bedExtraTbl'>
+        <tr><td>JSON Title Example</td><td>
+            <table class='bedExtraTbl'>
+                <tr><td>key</td><td>val</td>
+                <tr><td>key1</td><td>val1</td>
+                <tr><td>key2</td><td>val2</td>
+            </table></td></tr>
+        <tr><td>NON-JSON Title Example</td><td>
+            <table class='bedExtraTbl'>
+                <tr><td>key</td><td>val</td>
+                <tr><td>key1</td><td>val1</td>
+                <tr><td>key2</td><td>val2</td>
+            </table></td></tr>
+    </table>
+    Note that the number of columns and rows is variable per item, meaning some items
+    can have different sized tables than other items, contrasting with the extraDetailsTable
+    statement, which enforces the same table size per item. For instance, in the above
+    example, a 3 rows by 2 columns table is created for each field, but if our JSON was
+    instead:
+<pre>{"transcript1": {annot1: val1, annot2: val2}, "transcript2": {annot3: val3}}</pre>
+    then the following nested table would be shown on the details page:
+    <table class='bedExtraTbl'>
+        <tr><td>JSON Title Example</td><td>
+            <table class='jsonTable'>
+                <tr>
+                  <td>transcript1</td><td>
+                    <table class='jsonTable'>
+                        <tr><td>annot1</td><td>val1</td></tr>
+                        <tr><td>annot2</td><td>val2</td></tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td>transcript2</td><td>
+                    <table class='jsonTable'>
+                        <tr><td>annot3</td><td>val3</td></tr>
+                    </table>
+                  </td>
+                </tr>
+            </table></td></tr>
+    </table>
+    </p>
+</DIV>
+
 
 <!-- - - - - - - - SNP settings - - - - - - - -->
 <DIV class="snp_intro">
@@ -4248,21 +4345,21 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
-<DIV class="vcfDoFilter"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
+<DIV class="vcfDoFilter"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoFilter &lt;on/off&gt;</code></div>
     <p>
     Turn on/off the FILTER options available by default for VCF tracks
     </p>
 </DIV>
 
-<DIV class="vcfDoQual"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
+<DIV class="vcfDoQual"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoQual &lt;on/off&gt;</code></div>
     <p>
     Turns on/off the QUAL filter options available by default for VCF tracks
     </p>
 </DIV>
 
-<DIV class="vcfDoMaf"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
+<DIV class="vcfDoMaf"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoMaf &lt;on/off&gt;</code></div>
     <p>
     Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks
@@ -5069,21 +5166,21 @@ For the complete bigBarChart format definitions please see the
         Colors are specified as RGB values (255,255,255 or #FFFFFF) or by name 
         (the 16 HTML color names defined in HTML 4.01).  
         The named HTML colors are: <div class='dot' style='background: #000000'></div>black,
-            <div class='dot'style='background: silver'></div>silver,
-            <div class='dot'style='background: gray'></div>gray,
-            <div class='dot'style='height: 8px; width: 8px; background: white; border: 1px solid black'></div>white,
-            <div class='dot'style='background: maroon'></div>maroon,
-            <div class='dot'style='background: red'></div>red,
-            <div class='dot'style='background: purple'></div>purple,
-            <div class='dot'style='background: fuchsia'></div>fuchsia,
-            <div class='dot'style='background: green'></div>green,
-            <div class='dot'style='background: lime'></div>lime,
-            <div class='dot'style='background: olive'></div>olive,
-            <div class='dot'style='background: yellow'></div>yellow,
-            <div class='dot'style='background: navy'></div>navy,
-            <div class='dot'style='background: blue'></div>blue,
-            <div class='dot'style='background: teal'></div>teal,
-            <div class='dot'style='background: aqua'></div>aqua.
+            <div class='dot' style='background: silver'></div>silver,
+            <div class='dot' style='background: gray'></div>gray,
+            <div class='dot' style='height: 8px; width: 8px; background: white; border: 1px solid black'></div>white,
+            <div class='dot' style='background: maroon'></div>maroon,
+            <div class='dot' style='background: red'></div>red,
+            <div class='dot' style='background: purple'></div>purple,
+            <div class='dot' style='background: fuchsia'></div>fuchsia,
+            <div class='dot' style='background: green'></div>green,
+            <div class='dot' style='background: lime'></div>lime,
+            <div class='dot' style='background: olive'></div>olive,
+            <div class='dot' style='background: yellow'></div>yellow,
+            <div class='dot' style='background: navy'></div>navy,
+            <div class='dot' style='background: blue'></div>blue,
+            <div class='dot' style='background: teal'></div>teal,
+            <div class='dot' style='background: aqua'></div>aqua.
     </P>
 </DIV>
 
@@ -6183,6 +6280,7 @@ and is particularly useful for tracks with large numbers of categories.
 <div class="format"><code>htmlUrl</code></div>
     <P>Internal only &ndash; user does not set.
     Filled with user entered URL for track
+</DIV>
 <DIV class="initialPos"><span class="types customTracks"></span>
 <div class="format"><code>initialPos</code></div>
     <P>Internal only &ndash; user does not set.

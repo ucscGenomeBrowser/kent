@@ -6432,7 +6432,6 @@ else if (sameString(type, "hic"))
     {
     tg = trackFromTrackDb(tdb);
     hicCtMethods(tg);
-    tg->customPt = ct;
     }
 else
     {
@@ -10636,6 +10635,16 @@ if (newHighlight)
     }
 }
 
+void notify (char *msg)
+/* print a message into a hidden DIV tag, and call Javascript to move the DIV under the
+ * tableHeaderForm element and un-hide it. Less obtrusive than a warn() message but still hard to miss. */
+{
+puts("<div style='display:none' id='notifBox'>");
+puts(msg);
+puts("</div>");
+jsInline("notifBoxShow();\n");
+}
+
 extern boolean issueBotWarning;
 
 void doMiddle(struct cart *theCart)
@@ -10909,10 +10918,12 @@ if (measureTiming)
 
 if (cartOptionalString(cart, "udcTimeout"))
     {
-    warn("The Genome Browser cart currently includes the \"udcTimeout\" string. "
-	"While this is useful for debugging hubs, it may negatively impact "
-	"performance.   To turn this off, click "
+    char buf[5000];
+    safef(buf, sizeof(buf), "A hub refresh (udcTimeout) setting is active. "
+	"This is useful when developing hubs, but it reduces "
+	"performance. To clear the setting, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
+    notify(buf);
     }
 }
 

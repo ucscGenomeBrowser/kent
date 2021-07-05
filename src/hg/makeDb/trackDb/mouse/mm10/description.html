@@ -77,5 +77,42 @@ For information about the process used to assemble this version, see the
 <A HREF="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/mouse/" 
 TARGET=_blank>GRC website</A>. For a glossary of assembly-related terms, see the GRC
 <A HREF="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/definitions.shtml"
-TARGET="_blank">Assembly Terminology</A> page.
-Note that the UCSC mm10 database contains only the reference strain C57BL/6J.</P>
+TARGET="_blank">Assembly Terminology</A> page.<p>
+
+Note that the UCSC mm10 patch level 6 contains 9 alternate scaoffolds from the reference strain C57BL/6J.
+The native alts can be found with this SQL command: select chrom from chromInfo where chrom like "%_K%_alt"<p>
+<UL style="list-style-type:none;">
+ <LI>chr1_KK082441_alt  
+ <LI>chr11_KZ289080_alt 
+ <LI>chr11_KZ289074_alt 
+ <LI>chr11_KZ289078_alt 
+ <LI>chr11_KZ289081_alt 
+ <LI>chr11_KZ289079_alt 
+ <LI>chr11_KZ289075_alt 
+ <LI>chr11_KZ289073_alt 
+ <LI>chr11_KZ289077_alt 
+</UL>
+<p>
+
+It also contains 99 alternate scaffolds from 14 other mouse strains which are included in the NCBI release GRC MM38.<p>
+Other Mouse Strains:<p>
+<UL style="list-style-type:none;">
+ <LI>129P2/OlaHsd
+ <LI>129S1/SvImJ
+ <LI>129S2/SvPas
+ <LI>129S6/SvEvTac
+ <LI>129X1/SvJ
+ <LI>A/J
+ <LI>AKR/J
+ <LI>BALB/c
+ <LI>CAST/Ei
+ <LI>NOD/MrkTac
+ <LI>NOD/ShiLtJ
+ <LI>RIII
+ <LI>UNKNOWN
+ <LI>129S7/SvEvBrd-Hprt-b-m2
+</UL>
+
+</P>
+
+

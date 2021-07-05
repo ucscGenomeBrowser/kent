@@ -263,6 +263,7 @@
 #include "errCatch.h"
 #include "htslib/bgzf.h"
 #include "htslib/kstring.h"
+#include "pipeline.h"
 
 static char *rootDir = "hgcData";
 
@@ -275,6 +276,11 @@ char *database;		/* Name of mySQL database. */
 char *organism;		/* Colloquial name of organism. */
 char *genome;		/* common name, e.g. Mouse, Human */
 char *scientificName;	/* Scientific name of organism. */
+
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   0.5    /* standard penalty is 1.0 for most CGIs */
+                                /* this one is 0.5 */
+boolean issueBotWarning = FALSE;
 
 struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
@@ -25794,9 +25800,14 @@ static void makeBigPsl(char *pslName, char *faName, char *db, char *outputBigBed
 {
 char *bigPslFile = replaceSuffix(outputBigBed, "bigPsl");
 
-char cmdBuffer[4096];
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/pslToBigPsl %s -fa=%s stdout | sort -k1,1 -k2,2n  > %s", pslName, faName, bigPslFile);  
-system(cmdBuffer);
+char faNameBuffer[strlen("-fa=") + strlen(faName) + 1];
+safef(faNameBuffer, sizeof faNameBuffer, "-fa=%s", faName);
+char *cmd11[] = {"loader/pslToBigPsl", pslName,  faNameBuffer, "stdout", NULL};
+char *cmd12[] = {"sort","-k1,1","-k2,2n", NULL};
+char **cmds1[] = { cmd11, cmd12, NULL};
+struct pipeline *pl = pipelineOpen(cmds1, pipelineWrite, bigPslFile, NULL);
+pipelineWait(pl);
+
 char buf[4096];
 char *twoBitDir;
 if (trackHubDatabase(db))
@@ -25812,9 +25823,12 @@ else
     twoBitDir = buf;
     }
 
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -verbose=0 -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed12+13  %s %s %s",  
-        udcDefaultDir(), bigPslFile, twoBitDir, outputBigBed);
-system(cmdBuffer);
+char udcDir[strlen(udcDefaultDir()) + strlen("-udcDir=") + 1];
+safef(udcDir, sizeof udcDir, "-udcDir=%s", udcDefaultDir());
+char *cmd2[] = {"loader/bedToBigBed","-verbose=0",udcDir,"-extraIndex=name","-sizesIs2Bit", "-tab", "-as=loader/bigPsl.as","-type=bed12+13", bigPslFile, twoBitDir, outputBigBed, NULL};
+pl = pipelineOpen1(cmd2, pipelineRead, NULL, NULL);
+pipelineWait(pl);
+
 unlink(bigPslFile);
 }
 
@@ -25861,7 +25875,11 @@ char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
 
-hgBotDelayFrac(0.5);
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 
 /*	database and organism are global variables used in many places	*/
 getDbAndGenome(cart, &database, &genome, NULL);
@@ -27244,6 +27262,8 @@ char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "addp", "pred",
 int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgc", delayFraction, 0, 0, "html");
 pushCarefulMemHandler(LIMIT_2or6GB);
 cgiSpoof(&argc,argv);
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);

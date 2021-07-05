@@ -1266,7 +1266,8 @@ urlLabel Exome Variant Server:
 vcfDoQual off
 vcfDoFilter off
 
-include trackDb.gnomad.ra
+include trackDb.gnomad.ra beta,public
+include trackDb.gnomad.alpha.ra alpha
 
 track exac
 compositeTrack on
@@ -2601,5 +2602,4 @@ skipFields mouseOver
 noScoreFilter on
 mouseOver $name, HI: $quantile
 
-include dbSnpOldHg19.ra beta,public
-include dbSnpArchiveHg19.ra alpha
+include dbSnpArchiveHg19.ra 

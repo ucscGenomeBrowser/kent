@@ -39,11 +39,12 @@
     # if pushing public: add ticket and MARK QA READY
 
 ##############################################################################
-2021-04-06: import of UCSC GENCODE group processing of GENCODE VM27 (markd)
+2021-06-29: import of UCSC GENCODE group processing of GENCODE VM27 (markd)
+    update from pre-release
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
     # download, build and load tables
-    mkdir -p /hive/data/genomes/mm39/bed/gencodeVM27Pre
-    pushd /hive/data/genomes/mm39/bed/gencodeVM27Pre
+    mkdir -p /hive/data/genomes/mm39/bed/gencodeVM27
+    pushd /hive/data/genomes/mm39/bed/gencodeVM27
 
     (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
 
@@ -52,9 +53,9 @@
 
     # generate trackDb and joiner blurb
     pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbsOldSchema mm39 M27 104 'Apr 2021'
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbsOldSchema mm39 M27 104 'May 2021'
 
-    # If being pushed public, update 'Release Notes' in
+    # Update 'Release Notes' in
     # mouse/mm39/wgEncodeGencodeSuper.html
 
     # edit human/mm39/trackDb.gencode.ra to add new .ra file include
@@ -63,7 +64,7 @@
     ## only if being pushed to RR:
     # edit all.joiner to add ~/tmp/gencodeVM27.joiner
     # verify with:
-    pushd /hive/data/genomes/mm39/bed/gencodeVM27Pre
+    pushd /hive/data/genomes/mm39/bed/gencodeVM27
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
     # however, these are not currently used by the browser, so modify joiner check. Check

@@ -13,134 +13,144 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 html ../../dbSnpArchive
-pennantIcon New red
+pennantIcon New red ../goldenPath/newsarch.html#063021 "Archived June 30, 2021"
 
-	track snp151Flagged override
+        track snp151Common override
+        parent dbSnpArchive
+        priority 0.09	
+        visibility pack
+
+        track snp151 override
         parent dbSnpArchive off
-	priority 1
+        priority 0.1
+        visibility dense
+
+        track snp151Flagged override
+        parent dbSnpArchive off
+	priority 0.1
 
 	track snp151Mult override
         parent dbSnpArchive off
-	priority 1
+	priority 0.1
 
         track snp150Mult override
         parent dbSnpArchive off
-        priority 1
+        priority 0.2
 
         track snp150Flagged override
         parent dbSnpArchive off
-        priority 1
+        priority 0.2
 
         track snp150 override
         parent dbSnpArchive off
-        priority 1
+        priority 0.2
 
         track snp150Common override
         parent dbSnpArchive on
-        priority 1
+        priority 0.2
 
         track snp149Mult override
         parent dbSnpArchive off
-        priority 1
+        priority 0.3
 
         track snp149Flagged override
         parent dbSnpArchive off
-        priority 1
+        priority 0.3
 
         track snp149 override
         parent dbSnpArchive off
-        priority 1
+        priority 0.3
 
         track snp149Common override
         parent dbSnpArchive off
-        priority 1
+        priority 0.3
 
         track snp147Flagged override
         parent dbSnpArchive off
-        priority 1
+        priority 0.4
 
         track snp147Mult override
         parent dbSnpArchive off
-        priority 1
+        priority 0.4
 
         track snp147Common override
         parent dbSnpArchive off
-        priority 1
+        priority 0.4
 
         track snp147 override
         parent dbSnpArchive off
-        priority 1
+        priority 0.4
 
         track snp146Mult override
         parent dbSnpArchive off
-        priority 1
+        priority 0.5
 
         track snp146Flagged override
         parent dbSnpArchive off
-        priority 1
+        priority 0.5
 
         track snp146 override
         parent dbSnpArchive off
-        priority 1
+        priority 0.5
 
         track snp146Common override
         parent dbSnpArchive off
-        priority 1
+        priority 0.5
 
         track snp144Mult override
         parent dbSnpArchive off
         snpSeqFile /gbdb/hg19/snp/snp144.fa
-        priority 1
+        priority 0.6
 
         track snp144Flagged override
         parent dbSnpArchive off
         snpSeqFile /gbdb/hg19/snp/snp144.fa
-        priority 1
+        priority 0.6
 
         track snp144Common override
         parent dbSnpArchive off
         snpSeqFile /gbdb/hg19/snp/snp144.fa
-        priority 1
+        priority 0.6
 
         track snp144 override
         parent dbSnpArchive off
         snpSeqFile /gbdb/hg19/snp/snp144.fa
-        priority 1
+        priority 0.6
 
         track snp142Mult override
         snpSeqFile /gbdb/hg19/snp/snp142.fa
         parent dbSnpArchive off
-        priority 1
+        priority 0.7
 
         track snp142Flagged override
         snpSeqFile /gbdb/hg19/snp/snp142.fa
         parent dbSnpArchive off
-        priority 1
+        priority 0.7
 
         track snp142Common override
         snpSeqFile /gbdb/hg19/snp/snp142.fa
         parent dbSnpArchive off
-        priority 1
+        priority 0.7
 
         track snp142 override
         parent dbSnpArchive off
         snpSeqFile /gbdb/hg19/snp/snp142.fa
-        priority 1
+        priority 0.7
 
         track snp141Flagged override
         snpSeqFile /gbdb/hg19/snp/snp141.fa
         parent dbSnpArchive off
-        priority 1
+        priority 0.8
 
 	track snp141Common override
 	snpSeqFile /gbdb/hg19/snp/snp141.fa
         parent dbSnpArchive off
-        priority 1
+        priority 0.8
 
         track snp141 override
         snpSeqFile /gbdb/hg19/snp/snp141.fa
         parent dbSnpArchive off
-        priority 1
+        priority 0.8
 
         track snp138Flagged
         shortLabel Flagged SNPs(138)
@@ -161,7 +171,7 @@ pennantIcon New red
         macaqueDb rheMac3
         hapmapPhase III
         codingAnnotations snp138CodingDbSnp,
-        priority 1
+        priority 0.9
 
         track snp138Mult override
         parent dbSnpArchive off
@@ -171,7 +181,7 @@ pennantIcon New red
         orangDb ponAbe2
         macaqueDb rheMac3
         hapmapPhase III
-        priority 1
+        priority 0.9
 
         track snp138 override
         parent dbSnpArchive off
@@ -181,7 +191,7 @@ pennantIcon New red
         orangDb ponAbe2
         macaqueDb rheMac3
         hapmapPhase III
-        priority 1
+        priority 0.9
 
         track snp138Common override
         parent dbSnpArchive off
@@ -192,7 +202,7 @@ pennantIcon New red
         macaqueDb rheMac3
         hapmapPhase III
         visibility hide
-        priority 1
+        priority 0.9
 
         track snp137Common override
         parent dbSnpArchive off
@@ -202,7 +212,7 @@ pennantIcon New red
         orangDb ponAbe2
         macaqueDb rheMac2
         hapmapPhase III
-        priority 1
+        priority 1.0
 
         track snp137Flagged
         shortLabel Flagged SNPs(137)
@@ -223,7 +233,7 @@ pennantIcon New red
         macaqueDb rheMac2
         hapmapPhase III
         codingAnnotations snp137CodingDbSnp,
-        priority 1
+        priority 1.0
 
         track snp137Mult override
         parent dbSnpArchive off
@@ -233,7 +243,7 @@ pennantIcon New red
         orangDb ponAbe2
         macaqueDb rheMac2
         hapmapPhase III
-        priority 1
+        priority 1.0
 
         track snp137 override
         parent dbSnpArchive off
@@ -243,7 +253,7 @@ pennantIcon New red
         orangDb ponAbe2
         macaqueDb rheMac2
         hapmapPhase III
-        priority 1
+        priority 1.0
 
         track snp135Common override
         parent dbSnpArchive off
@@ -254,7 +264,7 @@ pennantIcon New red
         macaqueDb rheMac2
         hapmapPhase III
         codingAnnotations snp135CodingDbSnp,
-        priority 1
+        priority 1.1
 
         track snp135Flagged override
         parent dbSnpArchive off
@@ -265,7 +275,7 @@ pennantIcon New red
         macaqueDb rheMac2
         hapmapPhase III
         codingAnnotations snp135CodingDbSnp,
-        priority 1
+        priority 1.1
 
         track snp135Mult override
         parent dbSnpArchive off
@@ -276,7 +286,7 @@ pennantIcon New red
         macaqueDb rheMac2
         hapmapPhase III
         codingAnnotations snp135CodingDbSnp,
-        priority 1
+        priority 1.1
 
         track snp135 override
         parent dbSnpArchive off
@@ -286,7 +296,7 @@ pennantIcon New red
         macaqueDb rheMac2
         hapmapPhase III
         codingAnnotations snp135CodingDbSnp,
-        priority 1
+        priority 1.1
 
         track snp132Common override
         parent dbSnpArchive off
@@ -298,7 +308,7 @@ pennantIcon New red
         hapmapPhase III
         codingAnnotations snp132CodingDbSnp,
         codingAnnoLabel_snp132CodingDbSnp dbSNP
-        priority 1
+        priority 1.2
 
         track snp132Flagged override
         parent dbSnpArchive off
@@ -310,7 +320,7 @@ pennantIcon New red
         hapmapPhase III
         codingAnnotations snp132CodingDbSnp,
         codingAnnoLabel_snp132CodingDbSnp dbSNP
-        priority 1
+        priority 1.2
 
         track snp132Mult override
         parent dbSnpArchive off
@@ -322,7 +332,7 @@ pennantIcon New red
         hapmapPhase III
         codingAnnotations snp132CodingDbSnp,
         codingAnnoLabel_snp132CodingDbSnp dbSNP
-        priority 1
+        priority 1.2
 
         track snp132 override
         parent dbSnpArchive off
@@ -333,7 +343,7 @@ pennantIcon New red
         hapmapPhase III
         codingAnnotations snp132CodingDbSnp,
         codingAnnoLabel_snp132CodingDbSnp dbSNP
-        priority 1
+        priority 1.2
 
         track snp131 override
         parent dbSnpArchive off
@@ -344,7 +354,7 @@ pennantIcon New red
         hapmapPhase III
         codingAnnotations snp131CodingDbSnp,
         codingAnnoLabel_snp131CodingDbSnp dbSNP
-        priority 1
+        priority 1.3
 
         track snp130 override
         parent dbSnpArchive off
@@ -360,7 +370,7 @@ pennantIcon New red
         pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
         snpSeqFile /gbdb/hg18/snp/snp130.fa
         origAssembly hg18
-        priority 1
+        priority 1.4
 
 #END OF SNP ARCHIVE
 

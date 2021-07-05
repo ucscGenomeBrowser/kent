@@ -21,7 +21,7 @@ source $scriptDir/util.sh
 
 today=$(date +%F)
 ottoDir=/hive/data/outside/otto/sarscov2phylo
-mapScriptDir=~/chris_ncov
+mapScriptDir=~angie/chris_ncov
 # Should use a better location than this...
 installDir=/hive/users/angie/gisaid
 
@@ -51,7 +51,7 @@ cogUkToDate=$cogUkDir/cogUkToDate
 cncbToDate=$cncbDir/cncbToDate
 
 join -t$'\t' -a 1 -1 2 -o 1.1,1.2,1.3,2.2 \
-    <(sort -k2,2 ~/chris_ncov/epiToPublicIdName.$today.txt) \
+    <(sort -k2,2 $mapScriptDir/epiToPublicIdName.$today.txt) \
     <(sort $gbToDate $cncbToDate $cogUkToDate) \
 | sort -u adders - \
     > epiToPublicAndDate.$today

@@ -1,15 +1,16 @@
 track revel
-shortLabel REVEL
-longLabel REVEL Score for all possible single-basepair mutations - Mouse over to show score - Reference nucleotide or synonymous: score = 0.0)
+shortLabel REVEL Scores
+longLabel REVEL Pathegenicity Score for single-base coding mutations (zoom for exact score)
 type bigWig
 compositeTrack on
 visibility hide
-#maxWindowToQuery 500000
+maxWindowToQuery 500000
 group phenDis
 color 150,80,200
-#maxWindowToDraw 10000000
+maxWindowToDraw 10000000
 mouseOverFunction noAverage
 dataVersion /gbdb/$D/revel/version.txt
+pennantIcon New red ../goldenPath/newsarch.html#062421 "Released by UCSC June 24, 2021"
 
         track revelA
         shortLabel Mutation: A
