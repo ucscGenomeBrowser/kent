@@ -921,9 +921,10 @@ if (suppressConvert != NULL && sameString(suppressConvert, "on"))
 char *convertPath = cfgOption("sessionThumbnail.convertPath");
 if (convertPath == NULL)
     convertPath = cloneString("convert");
-char convertTestCmd[4096];
-safef(convertTestCmd, sizeof(convertTestCmd), "which %s > /dev/null", convertPath);
-int convertTestResult = system(convertTestCmd);
+char *whichCmd[] = {"which", convertPath, NULL};
+struct pipeline *pl = pipelineOpen1(whichCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+int convertTestResult = pipelineWait(pl);
+
 if (convertTestResult != 0)
     {
     dyStringPrintf(dyMessage,

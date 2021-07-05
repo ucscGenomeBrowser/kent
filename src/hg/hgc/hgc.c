@@ -263,6 +263,7 @@
 #include "errCatch.h"
 #include "htslib/bgzf.h"
 #include "htslib/kstring.h"
+#include "pipeline.h"
 
 static char *rootDir = "hgcData";
 
@@ -25799,9 +25800,14 @@ static void makeBigPsl(char *pslName, char *faName, char *db, char *outputBigBed
 {
 char *bigPslFile = replaceSuffix(outputBigBed, "bigPsl");
 
-char cmdBuffer[4096];
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/pslToBigPsl %s -fa=%s stdout | sort -k1,1 -k2,2n  > %s", pslName, faName, bigPslFile);  
-system(cmdBuffer);
+char faNameBuffer[strlen("-fa=") + strlen(faName) + 1];
+safef(faNameBuffer, sizeof faNameBuffer, "-fa=%s", faName);
+char *cmd11[] = {"loader/pslToBigPsl", pslName,  faNameBuffer, "stdout", NULL};
+char *cmd12[] = {"sort","-k1,1","-k2,2n", NULL};
+char **cmds1[] = { cmd11, cmd12, NULL};
+struct pipeline *pl = pipelineOpen(cmds1, pipelineWrite, bigPslFile, NULL);
+pipelineWait(pl);
+
 char buf[4096];
 char *twoBitDir;
 if (trackHubDatabase(db))
@@ -25817,9 +25823,12 @@ else
     twoBitDir = buf;
     }
 
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -verbose=0 -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed12+13  %s %s %s",  
-        udcDefaultDir(), bigPslFile, twoBitDir, outputBigBed);
-system(cmdBuffer);
+char udcDir[strlen(udcDefaultDir()) + strlen("-udcDir=") + 1];
+safef(udcDir, sizeof udcDir, "-udcDir=%s", udcDefaultDir());
+char *cmd2[] = {"loader/bedToBigBed","-verbose=0",udcDir,"-extraIndex=name","-sizesIs2Bit", "-tab", "-as=loader/bigPsl.as","-type=bed12+13", bigPslFile, twoBitDir, outputBigBed, NULL};
+pl = pipelineOpen1(cmd2, pipelineRead, NULL, NULL);
+pipelineWait(pl);
+
 unlink(bigPslFile);
 }
 

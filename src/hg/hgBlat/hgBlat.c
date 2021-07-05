@@ -619,7 +619,7 @@ else  // hyperlink
         char *trackDescription = NULL;
         getCustomName(database, cart, pslList, &trackName, &trackDescription);
         psl = pslList;
-        printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"POST\" NAME=\"customTrackForm\">\n", hgcUrl);
+        printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl,cartUsualString(cart, "formMethod", "POST"));
         printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
         printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",psl->tEnd);
         printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");

@@ -33,6 +33,7 @@
 
 #include "wiggle.h"
 
+#include "pipeline.h"
 
 #define UCSC_GB_BACKUP_VERSION_FILENAME "UCSC_GB_BACKUP_VERSION"
 
@@ -1135,9 +1136,17 @@ updateProgessFile(backgroundProgress, dyProg);
 lazarusLives(20 * 60);
 
 // create the archive
-char cmd[2048];
-safef(cmd, sizeof cmd, "cd %s; tar -cpzhf %s *", tempOutRand, archiveName);
-mustSystem(cmd);
+char *cwd = cloneString(getCurrentDir());
+setCurrentDir(tempOutRand);
+char excludeBuf[4096];
+safef(excludeBuf, sizeof excludeBuf, "--exclude=%s", archiveName);
+char *pipeCmd1[] = { "tar", "-zcphf", archiveName, ".", excludeBuf, NULL};
+struct pipeline *pl = pipelineOpen1(pipeCmd1, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+int sysVal = pipelineWait(pl);
+setCurrentDir(cwd);
+
+if (!((sysVal == 0) || (sysVal == 1)))  // we tolerate 1 because tar doesn't like us creating the archive in the directory we're backing up
+    errAbort("System call returned %d for:\n  %s", sysVal, pipelineDesc(pl));
 
 dyProg->stringSize = saveDySize;  // restore prev size, popping.
 dyProg->string[dyProg->stringSize] = 0;
