@@ -11,6 +11,7 @@ fi
 
 export asmId=$1
 export buildDir=$2
+# hubLinks is for mouseStrains specific hub only
 export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
 export accessionId=`echo "$asmId" | awk -F"_" '{printf "%s_%s", $1, $2}'`
 export gcX=`echo $asmId | cut -c1-3`
@@ -706,6 +707,10 @@ fi
 
 if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
   printf "include rnaSeqData/%s.trackDb.txt\n\n" "${asmId}"
+fi
+##  for mouse strain hubs only
+if [ -s "${buildDir}/$asmId.bigMaf.trackDb.txt" ]; then
+  printf "include %s.bigMaf.trackDb.txt\n\n" "${asmId}"
 fi
 
 if [ -s "${buildDir}/$asmId.userTrackDb.txt" ]; then
