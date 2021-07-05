@@ -30,7 +30,7 @@ cd /hive/data/genomes/gorGor5
 printf "https://commons.wikimedia.org/wiki/User:Arpingstone
 Wikimedia Commons/Adrian Pingstone\n" > photoReference.txt
 
-# this information is from the top of 
+# this information is from the top of
 #    genbank/*_assembly_report.txt
 #    (aka: genbank/GCA_900006655.1_GSMRT3_assembly_report.txt)
 
@@ -183,7 +183,7 @@ taxId 9595
     cd ~/kent/src/hg/makeDb/trackDb/gorilla/gorGor5
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" gorGor5 \
-      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
 #    15997 CYUIv1_1
 #        1 LN.1
 
@@ -593,5 +593,97 @@ gorGor5.downloadDir = gorGor5
     # real    697m29.645s
 
     # see if the liftOver menus function in the browser from gorGor5 to gorGor6
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2021-07-02 - Hiram)
+    # construct idKeys for the genbank sequence
+
+    mkdir -p /hive/data/genomes/gorGor5/genbank/idKeys
+    cd /hive/data/genomes/gorGor5/genbank/idKeys
+    faToTwoBit ../GCA_900006655.1_GSMRT3_genomic.fna.gz gorGor5.genbank.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/gorGor5.genbank.2bit gorGor5Genbank) > do.log 2>&1 &
+    # real    0m41.551s
+
+
+    cat gorGor5Genbank.keySignature.txt
+    #  9939b7dbae923d899d2fe82dccf7ebd0
+
+    mkdir /hive/data/genomes/gorGor5/bed/chromAlias
+    cd /hive/data/genomes/gorGor5/bed/chromAlias
+
+    join -t$'\t' ../idKeys/gorGor5.idKeys.txt \
+        ../../genbank/idKeys/gorGor5Genbank.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    # and the chrM genbank name and size is:
+    grep chrM ../../*.agp | cut -f3,6
+    #	16372   LN611626.1
+
+    printf "chrM\t0\t16372\tLN611626.1\n" >> ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    #	15998 ucscToINSDC.bed
+    #	15998 ../../chrom.sizes
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 14
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab gorGor5 ucscToINSDC stdin ucscToINSDC.bed
+
+    # should be quiet for all OK
+    checkTableCoords gorGor5 ucscToINSDC
+
+    # should cover %100 entirely:
+    featureBits -countGaps gorGor5 ucscToINSDC
+    #  3080431298 bases of 3080431298 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2021-07-02 - Hiram)
+
+    mkdir /hive/data/genomes/gorGor5/bed/chromAlias
+    cd /hive/data/genomes/gorGor5/bed/chromAlias
+
+
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' gorGor5 \
+        | sort -k1,1 > ucsc.genbank.tab
+
+    wc -l * ../../chrom.sizes
+    #	15998 ucsc.genbank.tab
+    #	15998 ucscToINSDC.bed
+    #	15998 ../../chrom.sizes
+
+    # make up an MT entry, call it 'assembly' type:
+    printf "chrM\tMT\n" > ucsc.assembly.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+        > gorGor5.chromAlias.tab
+
+for t in genbank assembly
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t gorGor5.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking genbank: 15998 =? 15998 OK
+# checking assembly: 1 =? 1 OK
+
+    # verify chrM is here properly:
+    grep chrM gorGor5.chromAlias.tab
+# LN611626.1      chrM    genbank
+# MT      chrM    assembly
+
+    hgLoadSqlTab gorGor5 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        gorGor5.chromAlias.tab
 
 #########################################################################
