@@ -78,18 +78,64 @@ foreach my $queryDb (@queryList) {
   `rm -f $buildDir/bbi/$targetDb.chain${QueryDb}Link.bb`;
   `ln -s ../trackData/lastz.$queryDb/axtChain/chain${QueryDb}.bb  $buildDir/bbi/$targetDb.chain${QueryDb}.bb`;
   `ln -s ../trackData/lastz.$queryDb/axtChain/chain${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chain${QueryDb}Link.bb`;
+  my $queryDate = "some date";
+  if ( $queryDb !~ m/^GC/ ) {
+    $queryDate = `hgsql -N -e 'select description from dbDb where name="$queryDb"' hgcentraltest | sed -e 's/ (.*//;'`;
+    chomp $queryDate;
+  }
   printf "
         track chain%s
         subTrack %sChainNetViewchain off
         subGroups view=chain species=s%03d clade=c00
         shortLabel %s Chain
-        longLabel %s (some date) Chained Alignments
+        longLabel %s (%s) Chained Alignments
         type bigChain %s
         bigDataUrl bbi/%s.chain%s.bb
         linkDataUrl bbi/%s.chain%sLink.bb
         otherDb %s
-", $QueryDb, $targetDb, $N++, $queryDb, $queryDb, $queryDb, $targetDb,
+", $QueryDb, $targetDb, $N, $queryDb, $queryDb, $queryDate, $queryDb, $targetDb,
      $QueryDb, $targetDb, $QueryDb, $queryDb;
+
+  if ( -s "$buildDir/trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}.bb" ) {
+    `rm -f $buildDir/bbi/$targetDb.chainSyn${QueryDb}.bb`;
+    `rm -f $buildDir/bbi/$targetDb.chainSyn${QueryDb}Link.bb`;
+    `ln -s ../trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}.bb  $buildDir/bbi/$targetDb.chainSyn${QueryDb}.bb`;
+    `ln -s ../trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainSyn${QueryDb}Link.bb`;
+  printf "
+        track chainSyn%s
+        subTrack %sChainNetViewchain off
+        subGroups view=chain species=s%03d clade=c00
+        shortLabel %s synChain
+        longLabel %s (%s) Syntenic Chained Alignments
+        type bigChain %s
+        bigDataUrl bbi/%s.chainSyn%s.bb
+        linkDataUrl bbi/%s.chainSyn%sLink.bb
+        otherDb %s
+", $QueryDb, $targetDb, $N, $queryDb, $queryDb, $queryDate, $queryDb, $targetDb,
+     $QueryDb, $targetDb, $QueryDb, $queryDb;
+
+  }
+
+  if ( -s "$buildDir/trackData/lastz.$queryDb/axtChain/chainRBest${QueryDb}.bb" ) {
+    `rm -f $buildDir/bbi/$targetDb.chainRBest${QueryDb}.bb`;
+    `rm -f $buildDir/bbi/$targetDb.chainRBest${QueryDb}Link.bb`;
+    `ln -s ../trackData/lastz.$queryDb/axtChain/chainRBest${QueryDb}.bb  $buildDir/bbi/$targetDb.chainRBest${QueryDb}.bb`;
+    `ln -s ../trackData/lastz.$queryDb/axtChain/chainRBest${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainRBest${QueryDb}Link.bb`;
+  printf "
+        track chainRBest%s
+        subTrack %sChainNetViewchain off
+        subGroups view=chain species=s%03d clade=c00
+        shortLabel %s synChain
+        longLabel %s (%s) Reciprocal Best Chained Alignments
+        type bigChain %s
+        bigDataUrl bbi/%s.chainRBest%s.bb
+        linkDataUrl bbi/%s.chainRBest%sLink.bb
+        otherDb %s
+", $QueryDb, $targetDb, $N, $queryDb, $queryDb, $queryDate, $queryDb, $targetDb,
+     $QueryDb, $targetDb, $QueryDb, $queryDb;
+
+  }
+  $N++;
 }
 
 printf "
@@ -109,16 +155,62 @@ foreach my $queryDb (@queryList) {
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb  $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
+  my $queryDate = "some date";
+  if ( $queryDb !~ m/^GC/ ) {
+    $queryDate = `hgsql -N -e 'select description from dbDb where name="$queryDb"' hgcentraltest | sed -e 's/ (.*//;'`;
+    chomp $queryDate;
+  }
     printf "
         track net%s
         parent %sMafNetViewnet
         subGroups view=net species=s%03d clade=c00
         shortLabel %s mafNet
-        longLabel %s (some date) mafNet Alignment
+        longLabel %s (%s) mafNet Alignment
         type bigMaf
         bigDataUrl bbi/%s.%s.net.bb
         summary bbi/%s.%s.net.summary.bb
         speciesOrder %s
         html html/%s.chainNet
-", $QueryDb, $targetDb, $N++, $queryDb, $queryDb, $targetDb, $queryDb, $targetDb, $queryDb, $queryDb, $targetDb;
+", $QueryDb, $targetDb, $N, $queryDb, $queryDb, $queryDate, $targetDb, $queryDb, $targetDb, $queryDb, $queryDb, $targetDb;
+
+  if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.bb" ) {
+  `rm -f $buildDir/bbi/$targetDb.${queryDb}.synNet.bb`;
+  `rm -f $buildDir/bbi/$targetDb.${queryDb}.synNet.summary.bb`;
+  `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.bb  $buildDir/bbi/$targetDb.${queryDb}.synNet.bb`;
+  `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.synNet.summary.bb`;
+    printf "
+        track synNet%s
+        parent %sMafNetViewnet
+        subGroups view=net species=s%03d clade=c00
+        shortLabel %s synNet
+        longLabel %s (%s) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl bbi/%s.%s.synNet.bb
+        summary bbi/%s.%s.synNet.summary.bb
+        speciesOrder %s
+        html html/%s.chainNet
+", $QueryDb, $targetDb, $N, $queryDb, $queryDb, $queryDate, $targetDb, $queryDb, $targetDb, $queryDb, $queryDb, $targetDb;
+
+  }
+
+  if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.bb" ) {
+  `rm -f $buildDir/bbi/$targetDb.${queryDb}.rbestNet.bb`;
+  `rm -f $buildDir/bbi/$targetDb.${queryDb}.rbestNet.summary.bb`;
+  `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.bb  $buildDir/bbi/$targetDb.${queryDb}.rbestNet.bb`;
+  `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.rbestNet.summary.bb`;
+    printf "
+        track rbestNet%s
+        parent %sMafNetViewnet
+        subGroups view=net species=s%03d clade=c00
+        shortLabel %s rbestNet
+        longLabel %s (%s) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl bbi/%s.%s.rbestNet.bb
+        summary bbi/%s.%s.rbestNet.summary.bb
+        speciesOrder %s
+        html html/%s.chainNet
+", $QueryDb, $targetDb, $N, $queryDb, $queryDb, $queryDate, $targetDb, $queryDb, $targetDb, $queryDb, $queryDb, $targetDb;
+
+  }
+  $N++;
 }
