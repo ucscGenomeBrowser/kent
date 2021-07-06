@@ -151,7 +151,7 @@ UCSC_APPS = \
 	vcfFilter \
 	venn \
 	verticalSplitSqlTable \
-	weedLines \ 
+	weedLines \
 	hubPublicMail
 
 
