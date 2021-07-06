@@ -147,7 +147,8 @@ UCSC_APPS = \
 	vcfFilter \
 	venn \
 	verticalSplitSqlTable \
-	weedLines
+	weedLines \ 
+	hubPublicMail
 
 
 # list of scripts to install
