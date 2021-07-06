@@ -5,7 +5,7 @@ track dbSnpArchive
 cartVersion 1
 superTrack on
 shortLabel dbSNP Archive
-longLabel dbSNP Archive Composite
+longLabel dbSNP Track Archive
 group varRep
 url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
