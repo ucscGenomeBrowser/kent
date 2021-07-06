@@ -23,6 +23,7 @@
 #include "fieldedTable.h"
 #include "tagRepo.h"
 #include "htmlPage.h"
+#include "hubConnect.h"
 
 struct trackDb *trackDbNew()
 /* Allocate a new trackDb with just very minimal stuff filled in. */
@@ -125,7 +126,7 @@ if (sameString(var, "track"))
 // need to expand the url relative to the include statement, and
 // not later where the url will be expanded relative to the parent
 // of the include statement
-if (trackSettingIsFile(var))
+if (isHubTrack(bt->track) && trackSettingIsFile(var))
     subbedUrl = htmlExpandUrl(lf->fileName, value);
 if (bt->settingsHash == NULL)
     bt->settingsHash = hashNew(7);
