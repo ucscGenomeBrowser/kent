@@ -657,7 +657,8 @@ if (cds != NULL)
 cdsSpecFreeList(&cdsSpec);
 }
 
-static void getPslCds(struct psl *psl, struct track *tg, struct genbankCds *cds)
+static void getPslCds(struct psl *psl, struct track *tg, struct linkedFeatures *lf,
+                      struct genbankCds *cds)
 /* get CDS defintion for a PSL */
 {
 ZeroVar(cds);
@@ -668,6 +669,11 @@ if (pslIsProtein(psl))
     cds->end=psl->qSize*3;
     cds->startComplete = TRUE;
     cds->endComplete = TRUE; 
+    }
+else if (startsWith("bigPsl", tg->tdb->type))
+    {
+    if (lf->cds)
+        genbankCdsParse(lf->cds, cds);
     }
 else 
     {
@@ -726,13 +732,7 @@ else
      * genomic codons, this is letting the query sequence define the frame.
      */
     struct genbankCds cds;
-    if (startsWith("bigPsl", tg->tdb->type))
-        {
-        if (lf->cds)
-            genbankCdsParse(lf->cds, &cds);
-        }
-    else
-	getPslCds(psl, tg, &cds);
+    getPslCds(psl, tg, lf, &cds);
 
     int insertMergeSize = -1;
     unsigned opts = genePredCdsStatFld|genePredExonFramesFld;
@@ -1159,9 +1159,7 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 
     bool altColor = FALSE;
     unsigned cds5Prime = posStrand ? cdsStart : cdsEnd;
-    int width = winEnd - winStart;
-    // width cutoff really should be based on (a) how many codons this gene has, (2) the current font and (3) image width.
-    int codonIndex = !codonNumbering || width > 60 ? 0 : 1;
+    int codonIndex = !codonNumbering || !zoomedToCodonNumberLevel ? 0 : 1;
     for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
 	{
         int exonStart = starts[i];
@@ -1579,7 +1577,7 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
 {
 char codon[64] = " ";
 Color color = colorAndCodonFromGrayIx(hvg, codon, grayIx, originalColor);
-if (sf->codonIndex)
+if (sf->codonIndex && ( e - s >= 3))  // don't put exon numbers on split codons because there isn't space.
     safef(codon, sizeof(codon), "%c %d", codon[0], sf->codonIndex);
 /* When we are zoomed out far enough so that multiple bases/codons share the 
  * same pixel, we have to draw differences in a separate pass (baseColorOverdrawDiff)
@@ -2021,7 +2019,7 @@ void baseColorSetCdsBounds(struct linkedFeatures *lf, struct psl *psl,
  * for codon or base coloring, but still want to render CDS bounds */
 {
 struct genbankCds cds;
-getPslCds(psl, tg, &cds);
+getPslCds(psl, tg, lf, &cds);
 if (cds.start < cds.end)
     {
     struct genbankCds genomeCds = genbankCdsToGenome(&cds, psl);

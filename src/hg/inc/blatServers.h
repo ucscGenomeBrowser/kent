@@ -5,7 +5,7 @@
 #ifndef BLATSERVERS_H
 #define BLATSERVERS_H
 
-#define BLATSERVERS_NUM_COLS 5
+#define BLATSERVERS_NUM_COLS 6
 
 extern char *blatServersCommaSepFieldNames;
 
@@ -18,6 +18,7 @@ struct blatServers
     int port;	/* TCP/IP port on host */
     signed char isTrans;	/* 0 for nucleotide/1 for translated nucleotide */
     signed char canPcr;	/* 1 for use with PCR, 0 for not */
+    signed char dynamic;	/* 1 for if gfServer is dynamic under xinetd, 0 for not */
     };
 
 void blatServersStaticLoad(char **row, struct blatServers *ret);

@@ -1,0 +1,181 @@
+<h2>Description</h2>
+<p>
+The <strong>Genome Aggregation Database (gnomAD) - Genome and Exome Variants</strong> tracks 
+show single nucleotide variants (SNVs) and small insertion/deletion variants of &lt;50 nucleotides
+(indels) from 125,748 exomes and 15,708 whole genomes of unrelated individuals, short variant 
+release 2.1.1. For more information on the processing pipeline and population annotations, see the following
+<a target="_blank" href="https://macarthurlab.org/2018/10/17/gnomad-v2-1/">blog post</a> and the 
+2.1.1 <a href="https://storage.googleapis.com/gnomad-public/release/2.1.1/README.txt" target="_blank">README</a>.
+</p>
+
+<p>
+There are two tracks making up this data set:
+<ol>
+  <li><b>gnomAD Exome Variants:</b> short variants of 125,748 exomes, release 2.1.1.</li>
+  <li><b>gnomAD Genome Variants:</b> short variants of 15,708 genomes, release 2.1.1.</li>
+</ol>
+</p>
+
+<p>
+VCF files were downloaded according to the 
+<a href="https://gnomad.broadinstitute.org/downloads" target="_blank">gnomAD instructions</a> and
+transformed into one bigBed file per data set, as described in <a href="#UCSCMethods">UCSC Methods</a>.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<h3>Display conventions</h3>
+<p>
+By default, a maximum of 50,000 variants can be displayed at a time (before applying the filters
+described below), before the track switches to dense display mode.
+</p>
+
+<p>
+Mouse hover on an item will display many details about each variant, including the affected gene(s),
+the variant type, and annotation (missense, synonymous, etc).
+</p>
+
+<p>
+Clicking on an item will display additional details on the variant, including a population frequency
+table showing allele count in each sub-population.
+</p>
+
+<p>
+Following the conventions on the gnomAD browser, items are shaded according to their Annotation
+type:
+<table class="stdTbl">
+    <tr><td>pLoF</td><td width="50px" style="background: rgb(255,32,0)"></td></tr>
+    <tr><td>Missense</td><td width="50px" style="background: rgb(247,189,0)"></td></tr>
+    <tr><td>Synonymous</td><td style="background: rgb(4,255,0)"></td></tr>
+    <tr><td>Other</td><td style="background: rgb(95,95,95)"></td></tr>
+</table>
+</p>
+
+<h3>Label Options</h3>
+<p>
+By default, variants are labeled according to their chromosomal position followed by the reference
+and alternate alleles, for example &quot;chr1:1234-1235 T/CAG&quot;. 
+</p>
+
+<p>
+dbSNP rsID's are also available as an additional label, if the variant is present in dbSnp.
+</p>
+
+<h3>Filtering Options</h3>
+<p>
+Three filters are available for these tracks:
+</p>
+
+<ol>
+    <li>FILTER: Used to exclude/include variants that failed Random Forest
+    (RF), Inbreeding Coefficient (Inbreeding Coeff), or Allele Count (AC0) filters. The
+    PASS option is used to include/exclude variants that pass all of the RF,
+    InbreedingCoeff, and AC0 filters, as denoted in the original VCF.
+    <li>Annotation type: Used to exclude/include variants that are annotated as
+    Probability Loss of Function (pLoF), Missense, Synonymous, or Other, as
+    annotated by VEP version 85 (GENCODE v19).
+    <li>Variant Type: Used to exclude/include variants according to the type of
+    variation, as annotated by VEP v85.
+</ol>
+
+<p>
+As an individual variant can possess multiple FILTER and Variant Type values,
+it is important to select any options of interest (or rather deselect if trying
+to filter out variants from the display).
+</p>
+
+<a name="UCSCMethods">
+<h2>UCSC Methods</h2>
+<p>
+In order to cut down on the amount of displayed data, the following variant
+types have been filtered out, but are still viewable in the gnomAD browser:
+<ul>
+    <li>Regulatory Region Variants
+    <li>Downstream/Upstream Gene Variants
+    <li>Transcription Factor Binding Site Variants
+</ul>
+</p>
+
+<p>
+Annotations from the <a
+href="https://gnomad.broadinstitute.org/downloads#v2-lof-curation-results"
+target="_blank">Loss-of-function curation results</a> has been added where
+appropriate to variants in both the exomes and genomes data.
+</p>
+
+<p>
+For the full steps used to create the track at UCSC, please see the section
+denoted &quot;gnomAD v2.1.1 update&quot; in the <a
+href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt"
+target="_blank">hg19 makedoc</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a target="_blank"
+href="../cgi-bin/hgTables"> Table Browser</a> or the <a target="_blank"
+href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis, the
+data may be queried from our <a target="_blank"
+href="/goldenPath/help/api.html">REST API</a> or downloaded as files from our
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/variants/"
+target="_blank">download server</a>, subject to the conditions set forth by the
+gnomAD consortium (see below). Please refer to our 
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome" target="_blank">
+mailing list archives</a> for questions or our 
+<a target="_blank" href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> 
+for more information.</p>
+
+<p>
+More information about using and understanding the gnomAD data can be found in the
+<a target="_blank" href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a> site.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
+Database Consortium</a> for making these data available. The data are released under the <a
+href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License
+(OBdL)</a> as described <a href="https://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
+</p>
+
+<h2>References</h2>
+
+<p>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">
+Analysis of protein-coding genetic variation in 60,706 humans</a>.
+<em>Nature</em>. 2016 Aug 18;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>
+
+<p>
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alf&#246;ldi J, Wang Q, Collins RL, Laricchia KM,
+Ganna A, Birnbaum DP <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">
+The mutational constraint spectrum quantified from variation in 141,456 humans</a>.
+<em>Nature</em>. 2020 May;581(7809):434-443.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">32461654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334197/" target="_blank">PMC7334197</a>
+</p>
+
+<p>
+Collins RL, Brand H, Karczewski KJ, Zhao X, Alf&#246;ldi J, Francioli LC, Khera AV, Lowther C,
+Gauthier LD, Wang H <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">
+A structural variation reference for medical and population genetics</a>.
+<em>Nature</em>. 2020 May;581(7809):444-451.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">32461652</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334194/" target="_blank">PMC7334194</a>
+</p>
+
+<p>
+Cummings BB, Karczewski KJ, Kosmicki JA, Seaby EG, Watts NA, Singer-Berk M, Mudge JM, Karjalainen J,
+Satterstrom FK, O'Donnell-Luria AH <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">
+Transcript expression-aware annotation improves rare variant interpretation</a>.
+<em>Nature</em>. 2020 May;581(7809):452-458.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">32461655</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334198/" target="_blank">PMC7334198</a>
+</p>
+

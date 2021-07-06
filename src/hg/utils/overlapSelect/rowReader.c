@@ -8,7 +8,7 @@
 #include "psl.h"
 
 
-struct rowReader *rowReaderOpen(char *fileName, boolean isPslFile)
+struct rowReader *rowReaderOpen(char *fileName, int maxParsedCols, boolean isPslFile)
 /* create a row reader for a file */
 {
 struct rowReader *rr;
@@ -17,6 +17,7 @@ if (isPslFile)
     rr->lf = pslFileOpen(fileName); // handles psl headers
 else
     rr->lf = lineFileOpen(fileName, TRUE);
+rr->maxParsedCols = maxParsedCols;
 rr->colSpace = 32;
 AllocArray(rr->row, rr->colSpace);
 return rr;

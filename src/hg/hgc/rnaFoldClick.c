@@ -18,6 +18,7 @@
 #include "rnaSecStr.h"
 #include "memalloc.h"
 #include "hgConfig.h"
+#include "pipeline.h"
 
 
 /* Taken from hgc.c (should probably be in hgc.h)*/
@@ -385,7 +386,6 @@ seq->dna[strlen(item->secStr)] = 0;
 char *rnaPlotPath = cfgOptionDefault("rnaPlotPath", "../cgi-bin/RNAplot");
 mkdirTrashDirectory(table);
 
-char command[512];
 char psName[512];
 safef(psName, sizeof(psName), "../trash/%s/%s_%s.ps", table, table, item->name);
 FILE *of = popen(rnaPlotPath, "w");
@@ -402,9 +402,13 @@ char *rootName = cloneString(psName);
 chopSuffix(rootName);
 safef(pngName, sizeof(pngName), "%s.png", rootName);
 
-safef(command, sizeof(command),
-    "gs -g768x768 -sDEVICE=png16m -sOutputFile=%s -dBATCH -dNOPAUSE -q %s" , pngName, psName);
-mustSystem(command);
+char outputBuf[1024];
+safef(outputBuf, sizeof outputBuf, "-sOutputFile=%s", pngName);
+char *pipeCmd[] = {"gs", "-sDEVICE=png16m", outputBuf, "-dBATCH","-dNOPAUSE","-q", psName, NULL};
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+int sysRet = pipelineWait(pl);
+if (sysRet != 0)
+    errAbort("System call returned %d for:\n  %s", sysRet, pipelineDesc(pl));
 
 printf("<a target=blank href='http://pseudoviewer.inha.ac.kr/WSPV_quickSender.asp?seq=%s&str=%s&start=%d'>Display on PseudoViewer</a><BR>", seq->dna, item->secStr, start);
 htmlHorizontalLine();

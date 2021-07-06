@@ -53,6 +53,20 @@ if (_hubPublicTableName == NULL)
 return _hubPublicTableName;
 }
 
+static char *_genArkTableName = NULL;
+
+static char *genArkTableName()
+/* return the genark table name from the environment, 
+ * or hg.conf, or use the default.  Cache the result */
+{
+if (_genArkTableName == NULL)
+    _genArkTableName = cfgOptionEnvDefault("HGDB_GENARK_STATUS_TABLE",
+	    genArkTableConfVariable, defaultGenArkTableName);
+
+return _genArkTableName;
+}
+
+
 boolean hubConnectTableExists()
 /* Return TRUE if the hubStatus table exists. */
 {
@@ -197,6 +211,8 @@ if (row != NULL)
 	{
 	char *errorMessage = NULL;
 	hub->trackHub = fetchHub( hub, &errorMessage);
+        if (hub->trackHub)
+            hub->trackHub->hubStatus = hub;
 	hub->errorMessage = cloneString(errorMessage);
 	hubUpdateStatus( hub->errorMessage, hub);
 	if (!isEmpty(hub->errorMessage))
@@ -371,7 +387,7 @@ struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database,
 unsigned hubId = hubIdFromTrackName(trackName);
 struct hubConnectStatus *hub = hubFromId(hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
-struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome);
+struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome, NULL);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
 //this next line causes warns to print outside of warn box on hgTrackUi
@@ -423,12 +439,25 @@ struct sqlConnection *conn = hConnectCentral();
 char query[4096];
 char *statusTable = getHubStatusTableName();
 
-if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
-    sqlSafef(query, sizeof(query), "insert into %s (hubUrl,shortLabel,longLabel,dbCount,dbList,status,lastOkTime,lastNotOkTime,errorMessage,firstAdded) values (\"%s\",\"\",\"\",0,NULL,0,\"\",\"\",\"\",now())", statusTable, url);
-else
-    sqlSafef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
+        sqlSafef(query, sizeof(query), "insert into %s (hubUrl,shortLabel,longLabel,dbCount,dbList,status,lastOkTime,lastNotOkTime,errorMessage,firstAdded) values (\"%s\",\"\",\"\",0,NULL,0,\"\",\"\",\"\",now())", statusTable, url);
+    else
+        sqlSafef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
 	statusTable, url);
-sqlUpdate(conn, query);
+    sqlUpdate(conn, query);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    // if we got a duplicate error, it means this hubUrl is already in the 
+    // hubStatus table.
+    const char *error = sqlLastError(conn);
+    if (!startsWith("Duplicate entry", error))
+        errAbort("%s", error);
+    }
 hDisconnectCentral(&conn);
 }
 
@@ -760,14 +789,15 @@ if (trackHub != NULL)
             memCheckPoint(); // we want to know how much memory is used to build the tdbList
             }
 
-        tdbList = trackHubTracksForGenome(trackHub, hubGenome);
+        struct dyString *incFiles = newDyString(4096);
+        tdbList = trackHubTracksForGenome(trackHub, hubGenome, incFiles);
         tdbList = trackDbLinkUpGenerations(tdbList);
         tdbList = trackDbPolishAfterLinkup(tdbList, database);
         trackDbPrioritizeContainerItems(tdbList);
         trackHubPolishTrackNames(trackHub, tdbList);
 
         if (doCache)
-            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint());
+            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint(), incFiles->string);
 	}
     }
 return tdbList;
@@ -869,12 +899,101 @@ for (status = globalHubList;  status != NULL;  status = status->next)
 return NULL;
 }
 
+static unsigned lookForUndecoratedDb(char *name)
+// Look for this undecorated in the attached assembly hubs
+{
+struct trackHubGenome *genome = trackHubGetGenomeUndecorated(name);
+
+if (genome == NULL)
+    return FALSE;
+
+struct trackHub *trackHub = genome->trackHub;
+
+if ((trackHub != NULL) && (trackHub->hubStatus != NULL))
+    return trackHub->hubStatus->id;
+return 0;
+}
+
+static boolean lookForLonelyHubs(struct cart *cart, struct hubConnectStatus  *hubList, char **newDatabase, char *genarkPrefix)
+// We go through the hubs and see if any of them reference an assembly
+// that is NOT currently loaded, but we know a URL to load it.
+{
+struct sqlConnection *conn = hConnectCentral();
+if (!sqlTableExists(conn, genArkTableName()))
+    return FALSE;
+
+boolean added = FALSE;
+
+struct hubConnectStatus  *hub;
+for(hub = hubList; hub; hub = hub->next)
+    {
+    struct trackHub *tHub = hub->trackHub;
+    if (tHub == NULL)
+        continue;
+
+    struct trackHubGenome *genomeList = tHub->genomeList, *genome;
+
+    for(genome = genomeList; genome; genome = genome->next)
+        {
+        char *name = genome->name;
+
+        if (!hDbIsActive(name) )
+            {
+            char buffer[4096];
+            unsigned newId = 0;
+
+            // look with undecorated name for an attached assembly hub
+            if (!(newId = lookForUndecoratedDb(name)))
+                {
+                // see if genark has this assembly
+                char query[4096];
+                sqlSafef(query, sizeof query, "select hubUrl from %s where gcAccession='%s'", genArkTableName(), name);
+                if (sqlQuickQuery(conn, query, buffer, sizeof buffer))
+                    {
+                    char url[4096];
+                    safef(url, sizeof url, "%s/%s", genarkPrefix, buffer);
+
+                    struct hubConnectStatus *status = getAndSetHubStatus( cart, url, TRUE);
+
+                    if (status)
+                        {
+                        newId = status->id;
+                        added = TRUE;
+                        }
+                    }
+                }
+
+            // if we found an id, change some names to use it as a decoration
+            if (newId)
+                {
+                safef(buffer, sizeof buffer, "hub_%d_%s", newId, name);
+
+                genome->name = cloneString(buffer);
+    
+                // if our new database is an undecorated db, decorate it
+                if (*newDatabase && sameString(*newDatabase, name))
+                    *newDatabase = cloneString(buffer);
+                }
+
+            }
+        }
+    }
+
+hDisconnectCentral(&conn);
+return added;
+}
+
 char *hubConnectLoadHubs(struct cart *cart)
 /* load the track data hubs.  Set a static global to remember them */
 {
 char *newDatabase = checkForNew( cart);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart);
+
+char *genarkPrefix = cfgOption("genarkHubPrefix");
+if (genarkPrefix && lookForLonelyHubs(cart, hubList, &newDatabase, genarkPrefix))
+    hubList = hubConnectStatusListFromCart(cart);
+
 globalHubList = hubList;
 
 return newDatabase;

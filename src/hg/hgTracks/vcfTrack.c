@@ -960,7 +960,7 @@ if (fileName == NULL)
     fileName = cloneString(trackDbSetting(gTdb, "bigGeneDataUrl"));
 if (isNotEmpty(fileName))
     {
-    struct bbiFile *bbi = bigBedFileOpen(fileName);
+    struct bbiFile *bbi = bigBedFileOpen(hReplaceGbdb(fileName));
     struct lm *lm = lmInit(0);
     struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chromName, winStart,
                                                         winEnd, 0, lm);
@@ -1983,7 +1983,7 @@ static Color rDrawPhyloTreeInLabelArea(struct phyloTree *node, struct hvGfx *hvg
                                        struct hash *highlightSamples, struct hash *sampleColors)
 /* Recursively draw the tree in the left label area. */
 {
-const int branchW = 4;
+const int branchW = 8;
 int labelEnd = leftLabelX + leftLabelWidth;
 Color color = MG_BLACK;
 if (!sampleColors)
@@ -2153,6 +2153,12 @@ struct txInfo *txiList;
 if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode, &gSeqWin, &txiList))
     return;
 struct phyloTree *tree = getTreeFromFile(tg->tdb);
+if (tree == NULL)
+    {
+    warn("No tree in file '%s'", trackDbSetting(tg->tdb, VCF_HAP_METHOD_VAR));
+    vcfGtHapFileOrderDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+    return;
+    }
 int gtHapCount;
 unsigned int *leafOrderToHapOrderStart, *leafOrderToHapOrderEnd;
 unsigned int *gtHapOrder = gtHapOrderFromTree(vcff, tree,

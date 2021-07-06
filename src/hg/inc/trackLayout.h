@@ -13,7 +13,7 @@ struct trackLayout
     char *textSize;		/* Symbolic name of text size. */
     char *textFont;		/* Symbolic name of text size. */
     MgFont *font;		/* What font to use. */
-    int leftLabelWidth;		/* Width of left labels. */
+    int leftLabelWidth;		/* Width of left label area in pixels. */
     int trackWidth;		/* Width of tracks. */
     int picWidth;		/* Width of entire picture. */
     int mWidth;			/* Width of 'M' in font. */
@@ -21,6 +21,7 @@ struct trackLayout
     int fontHeight;		/* Height of font. */
     int barbHeight;		/* Height of arrows on introns. */
     int barbSpacing;		/* Space between arrows on introns. */
+    int leftLabelWidthChars;    /* Width of left label area in characters. */
     };
 
 void trackLayoutInit(struct trackLayout *tl, struct cart *cart);
@@ -34,8 +35,12 @@ boolean trackLayoutInclFontExtras();
 /* Check if fonts.extra is set to use "yes" in the config.  This enables
  * extra fonts and related options that are not part of the public browser */
 
+#define leftLabelWidthVar "hgt.labelWidth"
+#define leftLabelWidthDefaultChars 20   /* default number of characters allowed for left label */
 #define textSizeVar "textSize"	/* Variable name used for text size. */
 #define textFontVar "textFont"	/* Variable name used for text font. */
+#define textStyleVar "textStyle"	/* Variable name used for text font style. */
+#define trackTabWidth 11        /* Mini-button width */
 #define MAX_DISPLAY_PIXEL_WIDTH 5000
 
 #endif /* TRACKLAYOUT_H */

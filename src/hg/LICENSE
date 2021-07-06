@@ -1,0 +1,11 @@
+The Genome Browser binaries and source code in this directory and subdirectories
+are freely available for academic, nonprofit, and personal use. A license is
+required for commercial download and installation of most Genome Browser
+binaries and source code, with the exception of the items in the section below.
+To purchase a commercial license for Genome Browser source code, LiftOver,
+GBiB, or GBiC, please visit the Genome Browser store: https://genome-store.ucsc.edu/
+
+For licenses with > 20 seats and more details please see https://genome.ucsc.edu/license/
+
+There are two tools in this directory that are available under an MIT license:
+src/hg/autoSql and sc/hg/autoXml. Please see the respective LICENSE files in these directories.

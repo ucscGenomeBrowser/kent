@@ -237,6 +237,8 @@ else if (sameString(varName, "chainLinearGap"))
     substLinearGap(tdb, dest);
 else if (sameString(varName, "downloadsServer"))
     dyStringAppend(dest, hDownloadsServer());
+else if (sameString(varName, "track"))
+    dyStringAppend(dest, tdb->track);
 else
     dyStringAppend(dest, lookupTrackDbSubVar(desc, tdb, varName, varName));
 }

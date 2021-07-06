@@ -15,7 +15,11 @@ except ImportError:
 # ==== functions =====
 def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
-    parser = optparse.OptionParser("""usage: %prog [options] filename - change NCBI or Ensembl chromosome names to UCSC names using the chromAlias table of the genome browser.
+    parser = optparse.OptionParser("""usage: %prog [options] filename - change NCBI or Ensembl chromosome names to UCSC names in tabular or wiggle files, using a chromAlias table.
+
+    Supports these UCSC file formats:
+    BED, genePred, PSL, wiggle (all formats), bedGraph, VCF, SAM, GTF, Chain
+    ... or any other csv or tsv format where the sequence (chromosome) name is a separate field.
 
     Requires a <genome>.chromAlias.tsv file which can be downloaded like this:
         %prog --get hg19              # download the file hg19.chromAlias.tsv into current directory
@@ -28,16 +32,19 @@ def parseArgs():
         %prog -i in.bed -o out.bed -a https://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromAlias.txt.gz
     Or in pipes, like this:
         cat test.bed | %prog -a mm10.chromAlias.tsv > test.ucsc.bed
+    For BAM files use in a pipe with samtools:
+        samtools view -h in.bam | ./chromToUcsc -a mm10.chromAlias.tsv | samtools -bS > out.bam
 
     """)
 
     parser.add_option("", "--get", dest="downloadDb", action="store", help="download a chrom alias table from UCSC for the genomeDb into the current directory and exit")
-    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias file in tab-sep format. or a URL to one")
+    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias file in tab-sep format or the http/https URL to one")
     parser.add_option("-i", "--in", dest="inFname", action="store", help="input filename, default: /dev/stdin")
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("-s", "--skipUnknown", dest="skipUnknown", action="store_true", help="skip unknown sequence rather than generate an error.")
     parser.add_option("-k", "--field", dest="fieldNo", action="store", type="int", \
-            help="index of field to convert, default is %default (1-based), for most formats, e.g. BED. For genePred, the chromosome is field 2, for PSL it is 10 or 14.", default=1)
+            help="index of field to convert, default is %default (first field is 1). This works for BED, bedGraph, GTF, wiggle, VCF. For genePred, set this option to 2, for PSL use 10 (target) or 14 (query), for Chain use 2 (target) or 7 (query). If any line starts with @ (SAM format), this field is automatically set to 2.", default=1)
 
     (options, args) = parser.parse_args()
 
@@ -55,18 +62,28 @@ def parseArgs():
 def splitLines(ifh):
     " yield (chromName, restOfLine) for all lines of ifh "
     sep = -1
-    #if (sys.version_info > (3, 0)):
     lineNo = 0
     for line in ifh:
-        if sep==-1:
-            if "\t" in line:
-                sep = "\t"
-            else:
-                sep = None # = split on any whitespace, consec. whitespc counts as one
-        #chrom, rest = line.split(sep, 1)
-        row = line.rstrip("\n\t").split(sep)
         lineNo += 1
-        yield lineNo, sep, row
+        if line.startswith("#"):
+            yield lineNo, None, None, line.rstrip("\n\r")
+        else:
+            if line.startswith("fixedStep") or line.startswith("variableStep"):
+                row = line.split()
+                yield lineNo, " ", row, line # *step lines are always space-separated
+            else:
+                if sep==-1:
+                    # why test first for space? Because after fixedStep, the lines are just single numbers
+                    if "\t" in line:
+                        sep = "\t"
+                    elif " " in line:
+                        sep = None # = split on any whitespace, consec. whitespc counts as one
+                    else:
+                        sep = "\t" # default is to split on tab
+                row = line.rstrip("\n\r").split(sep)
+                if sep is None:
+                    sep = " "
+                yield lineNo, sep, row, line
 
 def parseAlias(fname):
     " parse tsv file with at least two columns, orig chrom name and new chrom name "
@@ -77,7 +94,7 @@ def parseAlias(fname):
             data = gzip.GzipFile(fileobj=ifh).read().decode()
             ifh = data.splitlines()
     elif fname.endswith(".gz"):
-        ifh = gzip.open(fname)
+        ifh = gzip.open(fname, "rt")
     else:
         ifh = open(fname)
 
@@ -88,26 +105,75 @@ def parseAlias(fname):
         toUcsc[row[0]] = row[1]
     return toUcsc
 
-def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
+
+def handledUnmappedChrom(chrom, skipUnknown, skipWarned, message):
+    "either generate an error or warning when an unknown chromosome is encountered."
+    if skipUnknown:
+        if chrom not in skipWarned:
+            logging.warning(message)
+            skipWarned.add(chrom)
+    else:
+        logging.error(message)
+        exit(1)
+
+def chromToUcsc(aliasFname, fieldIdx, skipUnknown, ifh, ofh):
     " convert column number fieldIdx to UCSC-style chrom names "
     toUcsc = parseAlias(aliasFname)
+    skipWarned = set()
 
     ucscChroms = set(toUcsc.values())
+    isSam = False
 
-    for lineNo, sep, row in splitLines(ifh):
-        # just pass through any UCSC chrom names
-        chrom = row[fieldIdx]
-        if row[0].startswith("#") or chrom in ucscChroms:
-            ucscChrom = chrom
-        else:
+    for lineNo, sep, row, line in splitLines(ifh):
+        if line.startswith("#"):
+            ofh.write(line) # comments (e.g. gtf) are just passed through
+            ofh.write("\n")
+            continue
+        elif len(row)<=2:
+            pass   # fixedStep or variableStep value lines are passed through
+        elif row[0]=="fixedStep" or row[0]=="variableStep":
+            # fixedStep chrom=NC_033660.1 start=15778865 step=1
+            key, chrom = row[1].split("=")
+            assert(key=="chrom") # we assume that the first field has the chrom, that saves a lot of time
             ucscChrom = toUcsc.get(chrom)
             if ucscChrom is None:
                 logging.error("line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
                 exit(1)
-                continue
+            row[1] = "chrom="+ucscChrom
 
-        row[fieldIdx] = ucscChrom
-        ofh.write(sep.join(row))
+        elif row[0][0]== "@":
+            fieldIdx = 2 # SAM format detected
+            isSam = True
+            if row[0]=="@SQ":
+                # @SQ     SN:1    LN:195471971
+                chrom = row[1].split(":")[1]
+                if chrom not in ucscChroms:
+                    ucscChrom = toUcsc.get(chrom)
+                    if ucscChrom is None:
+                        handledUnmappedChrom(chrom, skipUnknown, skipWarned,
+                                             "SAM format, header line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
+                        continue
+                    row[1] = "SN:%s" % ucscChrom
+        else:
+            # just pass through any UCSC chrom names
+            chrom = row[fieldIdx]
+            if row[0].startswith("#") or chrom in ucscChroms or chrom=="*":
+                ucscChrom = chrom
+            else:
+                ucscChrom = toUcsc.get(chrom)
+                if ucscChrom is None:
+                    handledUnmappedChrom(chrom, skipUnknown, skipWarned,
+                                         "line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
+                    continue
+            if isSam:
+                mateChrom = row[6]
+                if mateChrom not in ("=", "*"):
+                    row[6] = toUcsc[mateChrom]
+
+            row[fieldIdx] = ucscChrom
+
+        line = sep.join(row)
+        ofh.write(line)
         ofh.write("\n")
 
 def download(db):
@@ -118,7 +184,7 @@ def download(db):
         data = StringIO(gzData)
     else:
         data = BytesIO(gzData)
-    
+
     data = gzip.GzipFile(fileobj=data).read().decode()
     outFname = db+".chromAlias.tsv"
     open(outFname, "w").write(data)
@@ -132,6 +198,7 @@ def main():
     aliasFname = options.aliasFname
     inFname = options.inFname
     outFname = options.outFname
+    skipUnknown = options.skipUnknown
 
     if options.downloadDb:
         download(options.downloadDb)
@@ -142,15 +209,19 @@ def main():
 
     if inFname is None:
         ifh = stdin
+    elif inFname.endswith(".gz"):
+        ifh = gzip.open(inFname, "rt")
     else:
         ifh = open(inFname)
 
     if outFname is None:
         ofh = stdout
+    elif outFname.endswith(".gz"):
+        ofh = gzip.open(outFname, "wt")
     else:
         ofh = open(outFname, "w")
 
     fieldIdx = options.fieldNo-1
-    chromToUcsc(aliasFname, fieldIdx, ifh, ofh)
+    chromToUcsc(aliasFname, fieldIdx, skipUnknown, ifh, ofh)
 
 main()

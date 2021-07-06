@@ -39,11 +39,19 @@ struct fieldedRow *fieldedTableAdd(struct fieldedTable *table,  char **row, int 
 struct fieldedRow *fieldedTableAddHead(struct fieldedTable *table, char **row, int rowSize, int id);
 /* Create a new row and add it to start of table.  Return row. */
 
-struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *url, char *requiredFields[], int requiredCount);
+struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *url, 
+    char *requiredFields[], int requiredCount);
 /* Read table from tab-separated file with a #header line that defines the fields.  Ensures
  * all requiredFields (if any) are present.  The url is just used for error reporting and 
  * should be the same as fileName for most purposes.  This is used by edwSubmit though which
  * first copies to a local file, and we want to report errors from the url. */
+
+struct fieldedTable *fieldedTableReadTabHeader(struct lineFile *lf, 
+    char *requiredFields[], int requiredCount);
+/* Read in first line of file treating it as a fieldedTable header line. 
+ * Use lineFileNextRowTab(lf, row, table->fieldCount)  on a row you provide
+ * that is table->fieldCount sized */
+
 
 void fieldedTableToTabFile(struct fieldedTable *table, char *fileName);
 /* Write out a fielded table back to file */
@@ -55,6 +63,10 @@ void fieldedTableToTabFileWithId(struct fieldedTable *table, char *fileName,
 
 boolean fieldedTableColumnIsNumeric(struct fieldedTable *table, int fieldIx);
 /* Return TRUE if field has numeric values wherever non-null */
+
+double fieldedTableMaxInCol(struct fieldedTable *table, int colIx);
+/* Figure out total and count columns from context and use them to figure
+ * out maximum mean value */
 
 int fieldedTableMaxColChars(struct fieldedTable *table, int colIx);
 /* Calculate the maximum number of characters in a cell for a column */

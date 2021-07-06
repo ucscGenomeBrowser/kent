@@ -142,7 +142,8 @@ for (recTrackSet = recTrackSets; recTrackSet != NULL; recTrackSet = recTrackSet-
     {
 // TODO: consider libifying hgSession.c:add/getSessionLink() and using that
     hPrintf("<li><a class='recTrackSetLink' href='./hgTracks?"
-                    "pix=%d&textSize=%s"  // preserve these user settings 
+                    // preserve these user settings 
+                    "pix=%d&textSize=%s&textFont=%s&hgt.labelWidth=%d"
                     "&" hgsOtherUserName "=%s"
                     "&" hgsOtherUserSessionName "=%s"
                     "&" hgsOtherUserSessionLabel "=%s"
@@ -151,14 +152,16 @@ for (recTrackSet = recTrackSets; recTrackSet != NULL; recTrackSet = recTrackSet-
                     "&position="        // JS fills in position
                     "'>" 
                 "%s</a>: <small>%s</small></li>",
-                    tl.picWidth, tl.textSize,
+                    tl.picWidth, tl.textSize, tl.textFont, tl.leftLabelWidthChars,
                     recTrackSet->userName, recTrackSet->sessionName, 
                     recTrackSet->label, recTrackSet->description, 
                     recTrackSet->label, recTrackSet->description);
     }
 hPrintf("</ul>");
 
-hPrintf("<p>Return to <a href='./hgTracks?hgt.reset=on'>Default</a> browser tracks</p>\n");
+hPrintf("<p>Return to <a href='./hgTracks?hgt.reset=on'>Default</a> browser tracks.</p>\n");
+hPrintf("<p><small><em>This tool is for research use only. For personal medical or "
+                "genetic advising, consult a qualified physician.</small></em></p>\n");
 hPrintf("</div>\n");
 }
 

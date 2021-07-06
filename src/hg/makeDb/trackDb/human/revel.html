@@ -1,0 +1,107 @@
+<h2>Description</h2>
+
+<p> This track collection shows <a href="https://sites.google.com/site/revelgenomics/"
+target="_blank">Rare Exome Variant Ensemble Learner</a> (REVEL) scores for predicting
+the deleteriousness of each nucleotide change in the genome.
+</p>
+
+<p>
+REVEL is an ensemble method for predicting the pathogenicity of missense variants 
+based on a combination of scores from 13 individual tools: MutPred, FATHMM v2.3, 
+VEST 3.0, PolyPhen-2, SIFT, PROVEAN, MutationAssessor, MutationTaster, LRT, GERP++, 
+SiPhy, phyloP, and phastCons.  REVEL was trained using recently discovered pathogenic 
+and rare neutral missense variants, excluding those previously used to train its 
+constituent tools.  The REVEL score for an individual missense variant can range 
+from 0 to 1, with higher scores reflecting greater likelihood that the variant is 
+disease-causing. 
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+There are four subtracks for this track: one for every nucleotide showing
+a score for the mutation represented by a mutation from the reference to that
+nucleotide. All subtracks show the REVEL ensemble score on mouseover, representing
+each of the possible &#126;9 billion SNVs in the genome. The score is an aggregation 
+of the outputs of the 13 tools.  
+</p>
+
+<p>
+For single nucleotide variants (SNV), at every
+genome position, there are three values per position, one for every possible
+nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing 
+the reference allele, e.g. A to A, is always set to zero, "0.0". REVEL only 
+takes into account amino acid changes, so a nucleotide change that results in no
+amino acid change (synonymous) also receives the score "0.0".
+<br>
+When using this track, zoom in until you can see every basepair at the
+top of the display. Otherwise, there are several nucleotides per pixel under 
+your mouse cursor and no score will be shown on the mouseover tooltip.
+</p>
+
+<p>For hg38, note that the data was converted from the hg19 data using the UCSC
+liftOver program, by the REVEL authors. This can lead to missing values or
+duplicated values. When a hg38 position is annotated with two scores due to the
+lifting, the authors removed all the scores for this position. They did the same when
+the reference allele has changed from hg19 to hg38.  Also, on hg38, the track has
+the "lifted" icon to indicate
+this. You can double-check if a nucleotide
+position is possibly affected by the lifting procedure by activating the track
+"Hg19 Mapping" under "Mapping and Sequencing".
+</p>
+
+<h2>Data access</h2>
+<p>
+REVEL scores are available at the 
+<a href="https://sites.google.com/site/revelgenomics/" target="_blank">
+REVEL website</a>.  
+The site provides precomputed REVEL scores for all possible human missense variants 
+to facilitate the identification of pathogenic variants among the large number of 
+rare variants discovered in sequencing studies.
+
+</p>
+
+<p>
+The REVEL data on the UCSC Genome Browser can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated download and analysis, the genome annotation is stored at UCSC in bigWig
+files that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/revel/" target="_blank">our download server</a>.
+The files for this track are called <tt>a.bw, c.bw, g.bw, t.bw</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigWigToWig</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tools can also be used to obtain features confined to given range, e.g.
+<br>&nbsp;
+<br>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/revel/a.bw stdout</tt>
+<br>
+
+<h2>Methods</h2>
+
+<p>
+Data were converted from the files provided on
+<a href="https://sites.google.com/site/revelgenomics/downloads?authuser=0" 
+target = "_blank">the REVEL Downloads website</a>. As with all other tracks,
+a full log of all commands used for the conversion is available in our 
+<a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/">source repository</a>, for <a target=_blank href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">hg19</a> and <a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/revel.txt">hg38</a>. The release used for each assembly is shown on the track description page.
+
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the REVEL development team for providing precomputed data and fixing duplicated values in the hg38 files.
+</p>
+
+<h2>References</h2>
+<p>
+Ioannidis NM, Rothstein JH, Pejaver V, Middha S, McDonnell SK, Baheti S, 
+Musolf A, Li Q, Holzinger E, Karyadi D, et al.
+<a href="https://doi.org/10.1016/j.ajhg.2016.08.016" target = _blank">
+REVEL: An Ensemble Method for Predicting the Pathogenicity of Rare Missense Variants</a>
+<em>Am J Hum Genet</em>. 2016 Oct 6;99(4):877-885.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27666373" target="_blank">27666373</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5065685/" target="_blank">PMC5065685</a>
+</p>
+

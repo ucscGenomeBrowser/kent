@@ -21,21 +21,25 @@ The metrics include:
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-There are two &quot;groups&quot; of tracks in this set:
+There are three &quot;groups&quot; of tracks in this set:
 <ol>
-  <li><b>Gene/Transcript Constraint tracks</b>: Predicted constraint metrics at the whole gene
+  <li><b>Gene/Transcript LoF Constraint tracks</b>: Predicted constraint metrics at the whole gene
     level or whole transcript level for three different types of variation: missense, synonymous,
-    and predicted loss-of-function. The Gene Constraint track displays metrics for a canonical 
+    and predicted loss of function. The Gene Constraint track displays metrics for a canonical 
     transcript per gene defined as the longest isoform. The Transcript Constraint track displays 
     metrics for all transcript isoforms. Items on both tracks are shaded according to the pLI score,
     with outlier items shaded in grey.
-  <br><img src="../images/pLIscoreLegend.png"  width='33%'alt="pLI score legend"><br>
+  <br><img src="../images/gnomAD_LOEUFkey.png"  width='33%'alt="LOEUF score legend"><br>
+  <li><b>Gene/Transcript Missense Constraint tracks</b>: The missense constraint tracks are built
+    similarly to the LoF constraint tracks, however the items displayed are based on 
+    <a href="https://gnomad.broadinstitute.org/help/constraint" target="_blank">missense Z scores</a>.
+    All items are colored black, and individual Z scores can be seen on mouseover. 
   <li><b>Regional Constraint track</b>: Missense-variation constrained regions at the sub-genic
     level. This track displays metrics for transcripts that have two or more regions with 
     significantly different levels of missense constraint. All items are colored black.
 </ol>
 All tracks follow the general configuration settings for bigBed tracks. Mouseover on the 
-Gene/Transcript Constraint tracks shows the <b>pLI score</b> and the loss-of-function 
+Gene/Transcript Constraint tracks shows the <b>pLI score</b> and the loss of function 
 observed/expected upper bound fraction <b>(LOEUF)</b>, while mouseover on the Regional
 Constraint track shows only the missense <b>O/E ratio</b>. Clicking on items in any track brings
 up a table of constraint metrics.
@@ -77,7 +81,7 @@ assist interpretation of the scores.
 When evaluating how constrained a gene is, <b>it is essential to consider the CI when using O/E</b>. In 
 research and clinical interpretation of Mendelian cases, <b>pLI > 0.9</b> has widely been used for 
 filtering. Accordingly, the Gnomad team suggests using the upper bound of the O/E confidence interval
-<b>LOEUF < 0.35</b> as a threshold if needed.
+<b>LOEUF &lt; 0.35</b> as a threshold if needed.
 <p>
 Please see the Methods section below for more information about how the scores were calculated.
 </p>

@@ -61,6 +61,7 @@
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
+static struct hash *hubAssemblyUndecoratedHash; // mapping of undecorated assembly name to genome struct
 static struct hash *hubOrgHash;   // mapping from organism name to hub pointer
 static struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
 static struct hash *trackHubHash;
@@ -106,7 +107,22 @@ for(; hubGenome; hubGenome=hubGenome->next)
 return NULL;
 }
 
+struct trackHubGenome *trackHubGetGenomeUndecorated(char *database)
+/* Get the genome structure for an undecorated genome name. */
+{
+if (hubAssemblyUndecoratedHash == NULL)
+    return NULL;
+
+struct hashEl *hel = hashLookup(hubAssemblyUndecoratedHash, database);
+
+if (hel == NULL)
+    return NULL;
+
+return (struct trackHubGenome *)hel->val;
+}
+
 struct trackHubGenome *trackHubGetGenome(char *database)
+/* get genome structure for an assembly in a trackHub */
 {
 if (hubAssemblyHash == NULL)
     errAbort("requesting hub genome with no hubs loaded");
@@ -126,6 +142,13 @@ if (hubAssemblyHash == NULL)
     return FALSE;
 
 return trackHubGetGenome(database) != NULL;
+}
+
+char *trackHubDatabaseToGenome(char *db)
+/* get a database name that is either a genome database or a trackHub
+ * database, return the genome assembly */
+{
+return trackHubDatabase(db) ? trackHubAssemblyField(db, "genome") : db;
 }
 
 char *trackHubAssemblyField(char *database, char *field)
@@ -192,6 +215,34 @@ for(;trackHub; trackHub = trackHub->next)
     clade->val = cloneString(trackHub->shortLabel);
     }
 return cladeList;
+}
+
+struct dbDb *trackHubGetPcrServers()
+/* Look through attached trackHubs to see which of them have "isPcr" line in them. */
+{
+struct dbDb *db, *dbList = NULL;
+
+if (globalAssemblyHubList != NULL)
+    {
+    struct trackHub *trackHub = globalAssemblyHubList;
+
+    for(;trackHub; trackHub = trackHub->next)
+	{
+	struct trackHubGenome *hubGenome = trackHub->genomeList;
+	for(; hubGenome; hubGenome = hubGenome->next)
+	    {
+            if (hashFindVal(hubGenome->settingsHash,"isPcr") != NULL)
+		{
+		db = makeDbDbFromAssemblyGenome(hubGenome);
+		slAddHead(&dbList, db);
+		}
+	    }
+	}
+    }
+
+slReverse(&dbList);
+slSort(&dbList, hDbDbCmpOrderKey);
+return dbList;
 }
 
 static struct dbDb *getDbDbs(char *clade, boolean blatEnabled)
@@ -584,6 +635,11 @@ if (hubAssemblyHash == NULL)
     hubAssemblyHash = newHash(5);
 if ((hel = hashLookup(hubAssemblyHash, genome->name)) == NULL)
     hashAdd(hubAssemblyHash, genome->name, genome);
+
+if (hubAssemblyUndecoratedHash == NULL)
+    hubAssemblyUndecoratedHash = newHash(5);
+if ((hel = hashLookup(hubAssemblyUndecoratedHash, trackHubSkipHubName(genome->name))) == NULL)
+    hashAdd(hubAssemblyUndecoratedHash, trackHubSkipHubName(genome->name), genome);
 }
 
 static char *addHubName(char *base, char *hubName)
@@ -874,16 +930,14 @@ static void expandBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome
 	struct trackDb *tdb)
 /* Expand bigDataUrls so that no longer relative to genome->trackDbFile */
 {
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataIndex");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "frames");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "summary");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "linkDataUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "searchTrix");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartSampleUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartMatrixUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, SUBTRACK_HIDE_EMPTY_MULTIBED_URL);
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, SUBTRACK_HIDE_EMPTY_SOURCES_URL);
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(tdb->settingsHash);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    char *name = hel->name;
+    if (trackSettingIsFile(name))
+	expandOneUrl(tdb->settingsHash, genome->trackDbFile, name);
+    }
 }
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)
@@ -1058,12 +1112,13 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome)
+struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles)
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
- * types.  Do a few other quick checks to catch errors early. */
+ * types.  Do a few other quick checks to catch errors early. If incFiles is not NULL,
+ * put the list of included files in there. */
 {
 struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
-struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL, incFiles);
 lineFileClose(&lf);
 
 char *tabMetaName = hashFindVal(genome->settingsHash, "metaTab");
@@ -1275,7 +1330,7 @@ struct trackDb *tdbList = NULL;
 if (trackHubDatabase(db))
     {
     struct trackHubGenome *genome = trackHubGetGenome(db);
-    tdbList = trackHubTracksForGenome(genome->trackHub, genome);
+    tdbList = trackHubTracksForGenome(genome->trackHub, genome, NULL);
     }
 else
     tdbList = hubCollectTracks(db, NULL);
@@ -1283,29 +1338,45 @@ else
 findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
 }
 
-boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort)
+static void parseBlatPcrParams(char *database, char *type, char *setting,
+                               char **pHost, char **pPort, char **pGenomeDataDir)
+/* parser parameters for either blat or pcr */
 {
-char *hostPort;
+char *conf = trimSpaces(cloneString(setting));
+int numWords = chopByWhite(conf, NULL, 5);
+if ((numWords < 2) || (numWords > 4))
+    errAbort("invalid configuration for hub %s server, expect 2 or 4 arguments: %s", type, setting);
+char *words[4];
+chopByWhite(conf, words, numWords);
 
-if (isTrans)
+*pHost = words[0];
+*pPort = words[1];
+if (numWords > 2)
     {
-    hostPort = trackHubAssemblyField(database, "transBlat");
+    if (!sameString(words[2], "dynamic"))
+        errAbort("invalid configuration for hub %s server, third argument should be 'dynamic' or omitted, got: %s", type, words[2]);
+    *pGenomeDataDir = words[3];
     }
 else
-    {
-    hostPort = trackHubAssemblyField(database, "blat");
-    }
+    *pGenomeDataDir = NULL;
+}
 
-if (hostPort == NULL)
+boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort, char **pGenomeDataDir)
+/* Get the isPcr params from a trackHub genome. */
+{
+char *type = "isPcr";
+char *setting = trackHubAssemblyField(database, type);
+parseBlatPcrParams(database, type, setting, pHost, pPort, pGenomeDataDir);
+return TRUE;
+}
+
+boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort, char **pGenomeDataDir)
+{
+char *type = isTrans ? "transBlat" : "blat";
+char *setting = trackHubAssemblyField(database, type);
+if (setting == NULL)
     return FALSE;
-   
-hostPort = cloneString(hostPort);
-
-*pHost = nextWord(&hostPort);
-if (hostPort == NULL)
-    return FALSE;
-*pPort = hostPort;
-
+parseBlatPcrParams(database, type, setting, pHost, pPort, pGenomeDataDir);
 return TRUE;
 }
 

@@ -235,6 +235,14 @@ function DisplayMath(s)
   return "\\[" .. escape(s) .. "\\]"
 end
 
+function SingleQuoted(s)
+  return "&lsquo;" .. s .. "&rsquo;"
+end
+
+function DoubleQuoted(s)
+  return "&ldquo;" .. s .. "&rdquo;"
+end
+
 function Note(s)
   local num = #notes + 1
   -- insert the back reference right before the final closing tag.
@@ -402,6 +410,14 @@ function Table(caption, aligns, widths, headers, rows)
   end
   add('</table')
   return table.concat(buffer,'\n')
+end
+
+function RawBlock(format, str)
+  if format == "html" then
+    return str
+  else
+    return ''
+  end
 end
 
 function Div(s, attr)

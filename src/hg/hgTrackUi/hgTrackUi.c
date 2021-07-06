@@ -59,6 +59,11 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   0.25    /* standard penalty is 1.0 for most CGIs */
+                                /* this one is 0.25 */
+static boolean issueBotWarning = FALSE;
+
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
 char *chromosome = NULL;        /* Chromosome. */
@@ -2810,8 +2815,12 @@ boolean parentLevel = isNameAtParentLevel(tdb, name);
 if (parentLevel)
     return;
 char *fileName = trackDbSetting(tdb, "bigDataUrl");
+if (fileName == NULL)
+     return;
 char *errString;
 int handle = halOpenLOD(fileName, &errString);
+if (handle < 0)
+    errAbort("can't open HAL file: %s", fileName);
 struct hal_species_t *speciesList, *sp;
 char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
 extern char *database;
@@ -2851,6 +2860,7 @@ char *track = tdb->track;
 // NOTE: Developer, please try to use cfgTypeFromTdb()/cfgByCfgType().
 
 boolean boxed = trackDbSettingClosestToHomeOn(tdb, "boxedCfg");
+boolean isGencode3 = trackDbSettingOn(tdb, "isGencode3");
 // UI precedence:
 // 1) supers to get them out of the way: they have no controls
 // 2) special cases based upon track name (developer please avoid)
@@ -2898,7 +2908,7 @@ else if (startsWith("transMapAln", track) && (trackDbSetting(tdb, "bigDataUrl") 
     transMapUI(tdb);
 else if (sameString(track, "rgdGene2"))
     rgdGene2UI(tdb);
-else if (sameString(track, "knownGene"))
+else if (sameString(track, "knownGene") && !isGencode3)
     knownGeneUI(tdb);
 else if (sameString(track, "omimLocation"))
     omimLocationUI(tdb);
@@ -3045,7 +3055,7 @@ if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrack
         hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
 
     // Additional special case navigation links may be added
-    extraUiLinks(database,tdb);
+    extraUiLinks(database, tdb, cart);
     }
 }
 
@@ -3111,6 +3121,7 @@ if (tdbParent->html)
     printf("<p><table>");  // required by jsCollapsible
     jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
                                             "medium");
+    // TODO: better done with regex
     char *html = replaceChars(tdbParent->html, "<H", "<h");
     html = replaceChars(html, "</H", "</h");
 
@@ -3570,7 +3581,15 @@ char *track;
 struct customTrack *ct = NULL, *ctList = NULL;
 char *ignored;
 
-hgBotDelayFrac(0.25);
+/* used to have hgBotDelayFrac(0.25) here, replaced with earlyBotCheck()
+ * at the beginning of main() to output message here if in delay time
+ * 2021-06-21 - Hiram
+ */
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 
 cart = theCart;
 track = cartString(cart, "g");
@@ -3657,6 +3676,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgTrackUi", delayFraction, 0, 0, "html");
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 cgiExitTime("hgTrackUi", enteredMainTime);

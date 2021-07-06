@@ -7,6 +7,9 @@ track gap override
 visibility hide
 html gap
 
+track chainNetMm10 override
+shortLabel $o_db ChainNet
+
 searchTable gold
 shortCircuit 1
 termRegex [AN][MC][GL0-9_]+(\.[0-9]+)?

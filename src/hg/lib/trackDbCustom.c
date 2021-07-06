@@ -22,6 +22,7 @@
 #include "regexHelper.h"
 #include "fieldedTable.h"
 #include "tagRepo.h"
+#include "htmlPage.h"
 
 struct trackDb *trackDbNew()
 /* Allocate a new trackDb with just very minimal stuff filled in. */
@@ -116,13 +117,21 @@ static void trackDbAddInfo(struct trackDb *bt,
         char *var, char *value, struct lineFile *lf)
 /* Add info from a variable/value pair to browser table. */
 {
+char *subbedUrl = NULL;
 if (sameString(var, "track"))
     parseTrackLine(bt, value, lf);
+
+// Since we may have gotten here from an include statement, we
+// need to expand the url relative to the include statement, and
+// not later where the url will be expanded relative to the parent
+// of the include statement
+if (trackSettingIsFile(var))
+    subbedUrl = htmlExpandUrl(lf->fileName, value);
 if (bt->settingsHash == NULL)
     bt->settingsHash = hashNew(7);
 if (bt->viewHash == NULL)
     bt->viewHash = hashNew(7);
-char *storeValue = cloneString(value);
+char *storeValue = cloneString(subbedUrl != NULL ? subbedUrl : value);
 
 // squirrel away views
 if (startsWith("subGroup", var))
@@ -300,9 +309,10 @@ else
     return NULL;
 }
 
-struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag)
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag, struct dyString *incFiles)
 /* Load track info from ra file already opened as lineFile into list.  If releaseTag is
- * non-NULL then only load tracks that mesh with release. */
+ * non-NULL then only load tracks that mesh with release. If incFiles is not-NULL, put
+ * list of included files in there. */
 {
 char *raFile = lf->fileName;
 char *line, *word;
@@ -334,8 +344,10 @@ for (;;)
                 trackDbCheckValidRelease(subRelease);
             if (releaseTag && subRelease && !sameString(subRelease, releaseTag))
                 errAbort("Include with release %s inside include with release %s line %d of %s", subRelease, releaseTag, lf->lineIx, lf->fileName);
-            struct trackDb *incTdb = trackDbFromRa(incFile, subRelease);
+            struct trackDb *incTdb = trackDbFromRa(incFile, subRelease, incFiles);
             btList = slCat(btList, incTdb);
+            if (incFiles)
+                dyStringPrintf(incFiles, "%s\n", incFile);
             }
 	}
     if (done)
@@ -397,12 +409,13 @@ for(ii=0; ii < count; ii++)
 return TRUE;
 }
 
-struct trackDb *trackDbFromRa(char *raFile, char *releaseTag)
+struct trackDb *trackDbFromRa(char *raFile, char *releaseTag, struct dyString *incFiles)
 /* Load track info from ra file into list.  If releaseTag is non-NULL
- * then only load tracks that mesh with release. */
+ * then only load tracks that mesh with release. if incFiles is non-null, 
+ * add included file names to it.*/
 {
 struct lineFile *lf = udcWrapShortLineFile(raFile, NULL, 16*1024*1024);
-struct trackDb *tdbList = trackDbFromOpenRa(lf, releaseTag);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, releaseTag, incFiles);
 lineFileClose(&lf);
 return tdbList;
 }
@@ -1013,10 +1026,15 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 	char *parentName = cloneFirstWord(subtrackSetting);
 	struct trackDb *parent = hashFindVal(trackHash, parentName);
 	if (parent != NULL)
-	    {
-	    slAddHead(&parent->subtracks, tdb); // composite/multiWig children are ONLY subtracks
-	    tdb->parent = parent;
-	    }
+        {
+        if (trackDbLocalSetting(tdb, "container"))
+            {
+            errAbort("Composite track '%s' cannot have child track '%s',"
+                " which is a container  multiWig.", parentName, tdb->track);
+            }
+        slAddHead(&parent->subtracks, tdb); // composite/multiWig children are ONLY subtracks
+        tdb->parent = parent;
+        }
 	else
 	    {
 	    errAbort("Parent track %s of child %s doesn't exist", parentName, tdb->track);
@@ -1565,6 +1583,18 @@ if (metadataInTdb)
     return convertNameValueString(metadataInTdb);
 
 return NULL;
+}
+
+boolean trackSettingIsFile(char *setting)
+/* Returns TRUE if setting found in trackDb stanza is a file setting that
+ * would benefit from directory $D substitution among other things - looks for
+ * settings that ends in "Url" and a few others. */
+{
+return endsWith(setting, "Url") ||
+    sameString(setting, "bigDataIndex") ||
+    sameString(setting, "frames") ||
+    sameString(setting, "summary") ||
+    sameString(setting, "searchTrix");
 }
 
 char *labelAsFilteredNumber(char *label, unsigned numOut)

@@ -13,12 +13,19 @@ with -in* apply to inFile.
 
 Options:
   -selectFmt=fmt - specify selectFile format:
-          psl - PSL format (default for *.psl files).
-          pslq - PSL format, using query instead of target
-          genePred - genePred format (default for *.gp or
-                     *.genePred files).
+          psl - PSL format (default for *.psl files).  Additional columns
+                are copied as-is.
+          pslq - PSL format, using query instead of target.  Additional columns
+                 are copied as-is.
+          genePred - genePred format (default for *.gp or *.genePred files).  Additional
+                     columns are copied as-is.
           bed - BED format (default for *.bed files).
-                If BED doesn't have blocks, the bed range is used. 
+                If BED doesn't have blocks, the bed range is used. If it has more
+                than 12 columns, the remainder of the columns are copied as-is.
+          bed3+ - BED format where only the first three columns are used as the
+                  range, the remainder are copied as-is.
+          bed6+ - BED format where only the first six columns are used as the
+                  range and strange, the remainder are copied as-is.
           chain - chain file format (default from .chain files)
           chainq - chain file format, using query instead of target
   -selectCoordCols=spec - selectFile is tab-separate with coordinates

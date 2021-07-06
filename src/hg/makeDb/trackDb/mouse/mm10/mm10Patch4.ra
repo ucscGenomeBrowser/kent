@@ -6,7 +6,6 @@ subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
 dragAndDrop subTracks
 # sortOrder view=+
 visibility hide
-priority 2
 type bed 4
 noInherit on
 group map

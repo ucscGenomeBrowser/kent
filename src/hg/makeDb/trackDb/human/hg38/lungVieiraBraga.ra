@@ -1,0 +1,24 @@
+track lungVieiraBraga
+superTrack on
+shortLabel Lung Vieira Braga
+longLabel Lung single cell data from Vieira Braga et al 2019
+visibility hide
+group singleCell
+
+    track lungVieiraBragaCellType
+    parent lungVieiraBraga
+    type bigBarChart
+    visibility pack
+    shortLabel Lung Cells
+    longLabel Lung RNA binned by cell type from Vieira Braga et al 2019
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/lungVieiraBraga/cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/lungVieiraBraga/cell_type.stats
+    #barChartColors #ff0000 #ff1a00 #ff3400 #ff4f00 #ff6900 #ff8200 #ff9000 #ff9f00 #ffb100 #ffc400 #ffd700 #ffe900 #fffc00 #efff00 #dcff00 #c9ff00 #b6ff00 #a4ff00 #95ff00 #86ff00 #61ff00 #2dff00 #00ff07 #00ff3c #00ff70 #00ff8a #00ff99 #00ffa9 #00ffbc #00ffcf #00ffe1 #00fff4 #00f7ff #00e4ff #00d2ff #00bfff #00acff #009bff #008cff #007cff #0061ff #0047ff #002dff #0012ff #0700ff #2100ff #3c00ff #5600ff #7000ff #8600ff #9500ff #a300ff #b600ff #c900ff #dc00ff #ef00ff #ff00fc #ff00e9 #ff00d7 #ff00c4 #ff00b1 #ff009f #ff0090 #ff0082 #ff0069 #ff004f #ff0034 #ff001a
+    barChartColors #d5e5ee #97c7e1 #cfe3f5 #0770d0 #d4dff5 #f1c0c2 #0c55ec #0b54ef #d8dff0 #eed9dc #128cb6 #0e8abd #0771d1 #0770d0 #0c55ec #0c55ec #0b54ef #6892e3 #4a649a #8499bc #de7277 #ea1c1f #05bc05 #f46e27 #dd2328 #92a87b #e66e72 #e39c7b #e51f23 #d05ccf #d2292e #dba7ae #138cb6 #0e8abd #0771d1 #b8d4f1 #0c55ec #e32024 #0fb310 #f4bea3 #b9cdf7 #b8cdf8 #6892e2 #e36f74 #e1e2df #ebdade #f5d6d7 #efd1ef #ecdadd #f2bfc1 #dbe3e9 #d8e4ec #5f9fdb #d7e1ee #c1cfed #e81e21 #0fb30e #f26e28 #dd2328 #92a87b #e66e72 #e39c7b #e51f23 #cf5ecd #d2292f #4a649a #8499bc
+    barChartBars Nasal_basal_1 Nasal_basal_2 Nasal_ciliated_1 Nasal_ciliated_2 Nasal_club Nasal_dendritic_cells Nasal_goblet_2 Nasal_goblet_1 Nasal_ionocytes Nasal_neutrophils Epithelial_basal_1 Epithelial_basal_2 Epithelial_ciliated_1 Epithelial_ciliated_2 Epithelial_club Epithelial_goblet_2 Epithelial_goblet_1 Epithelial_ionocytes Epithelial_type_2_alveolar Epithelial_type_1_alveolar Other_B_cells Other_dendritic_cells Other_endothelial Other_fibroblasts Other_luminal_macrophages Other_lymphatic Other_mast_cells Other_mesothelium Other_neutrophils Other_smooth_muscle Other_T_and_NK_cells Bronchi_B_cells Bronchi_basal_1 Bronchi_basal_2 Bronchi_ciliated_1 Bronchi_ciliated_2 Bronchi_club Bronchi_dendritic_cells Bronchi_endothelial Bronchi_fibroblasts Bronchi_goblet_2 Bronchi_goblet_1 Bronchi_ionocytes Bronchi_luminal_macrophages Bronchi_lymphatic Bronchi_mast_cells Bronchi_Neutrophils Bronchi_smooth_muscle Bronchi_T_and_NK_cells Paranchyma/alv._B_cells Paranchyma/alv._basal_1 Paranchyma/alv._basal_2 Paranchyma/alv._ciliated_1 Paranchyma/alv._ciliated_2 Paranchyma/alv._club Paranchyma/alv._dendritic_cells Paranchyma/alv._endothelial Paranchyma/alv._fibroblasts Paranchyma/alv._luminal_macrophages Paranchyma/alv._lymphatic Paranchyma/alv._mast_cells Paranchyma/alv._mesothelium Paranchyma/alv._neutrophils Paranchyma/alv._smooth_muscle Paranchyma/alv._T_and_NK Paranchyma/alv._type_2_alveolar Paranchyma/alv._type_1_alveolar
+    transformFunc NONE
+    barChartLimit 3

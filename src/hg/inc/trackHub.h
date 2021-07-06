@@ -32,6 +32,8 @@ struct trackHub
     {
     struct trackHub *next;
 
+    struct hubConnectStatus *hubStatus;  /* Pointer to our hubConnectStatus structure, if any. */
+
     char *url;		/* URL of hub.ra file. */
     struct trackHubGenome *genomeList;	/* List of associated genomes. */
     struct hash *genomeHash;	/* Hash of genomeList keyed by genome name. */
@@ -79,9 +81,10 @@ struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName
 /* Return trackHubGenome of given name associated with hub.  Return NULL if no
  * such genome. */
 
-struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome);
+struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles);
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
- * types.  Do a few other quick checks to catch errors early. */
+ * types.  Do a few other quick checks to catch errors early. If incFiles is not NULL,
+ * put the list of included files in there. */
 
 void trackHubAddNamePrefix(char *hubName, struct trackDb *tdbList);
 /* For a hub named "xyz" add the prefix "hub_xyz_" to each track and parent field. 
@@ -116,6 +119,10 @@ char *trackHubCladeToGenome(char *clade);
 
 boolean trackHubDatabase(char *database);
 /* Is this an assembly from an Assembly Data hub? */
+
+char *trackHubDatabaseToGenome(char *db);
+/* get a database name that is either a genome database or a trackHub
+ * database, return the genome assembly */
 
 char *trackHubDefaultChrom(char *database);
 /* Return the default chromosome for this track hub assembly. */
@@ -193,7 +200,7 @@ struct trackHubGenome *trackHubGetGenome(char *database);
 /* get genome structure for an assembly in a trackHub */
 
 boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost,
-    char **pPort);
+    char **pPort, char **pGenomeDataDir);
 /* get "blat" and "transBlat" entries (if any) for an assembly hub */
 
 struct dbDb *trackHubGetBlatDbDbs();
@@ -207,5 +214,13 @@ void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
     struct trackDb *tdb);
 /* Check remote file exists and is of correct type. Wrap this in error catcher */
 
+struct dbDb *trackHubGetPcrServers();
+/* Look through attached trackHubs to see which of them have "isPcr" line in them. */
+
+boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort, char **pGenomeDataDir);
+/* Get the isPcr params from a trackHub genome. */
+
+struct trackHubGenome *trackHubGetGenomeUndecorated(char *database);
+/* Get the genome structure for an undecorated genome name. */
 #endif /* TRACKHUB_H */
 

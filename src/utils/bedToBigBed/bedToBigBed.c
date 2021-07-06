@@ -405,6 +405,10 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	int end = range->end;
 	bits32 size = end - start;
 
+        // we want to make sure we count zero size elements
+        if (size == 0)
+            size = 1;
+
 	/* Add to total summary. */
 	if (firstTime)
 	    {

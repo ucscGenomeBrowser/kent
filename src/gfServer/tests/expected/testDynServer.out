@@ -1,0 +1,53 @@
+0ddf270562684f29query crea crea 1540
+
+2	310	crea.2bit:hCreaGeno	242	550	28
+1304	1524	crea.2bit:hCreaGeno	5346	5566	20
+613	822	crea.2bit:hCreaGeno	2046	2255	19
+311	509	crea.2bit:hCreaGeno	1155	1353	18
+316	514	crea.2bit:mCreatGeno	3311	3509	15
+1040	1172	crea.2bit:hCreaGeno	4378	4510	12
+919	1040	crea.2bit:hCreaGeno	2596	2717	11
+1177	1298	crea.2bit:hCreaGeno	5016	5137	11
+611	820	crea.2bit:mCreatGeno	4268	4477	9
+515	603	crea.2bit:hCreaGeno	1562	1650	8
+836	913	crea.2bit:hCreaGeno	2398	2475	7
+1070	1158	crea.2bit:mCreatGeno	6248	6336	6
+919	1040	crea.2bit:mCreatGeno	4818	4939	5
+1303	1502	crea.2bit:mCreatGeno	7040	7238	5
+166	221	crea.2bit:mCreatGeno	2574	2629	3
+523	567	crea.2bit:mCreatGeno	3685	3729	3
+850	894	crea.2bit:mCreatGeno	4631	4675	3
+1180	1246	crea.2bit:mCreatGeno	6523	6589	3
+1528	1540	crea.2bit:mCreatGeno	4092	4103	2
+end
+0ddf270562684f29query crea crea 1606
+
+3	355	crea.2bit:mCreatGeno	2365	2717	32
+1352	1583	crea.2bit:mCreatGeno	7040	7271	21
+660	869	crea.2bit:mCreatGeno	4268	4477	19
+365	563	crea.2bit:mCreatGeno	3311	3509	18
+360	558	crea.2bit:hCreaGeno	1155	1353	15
+1086	1218	crea.2bit:mCreatGeno	6215	6347	12
+968	1089	crea.2bit:mCreatGeno	4818	4939	11
+1229	1350	crea.2bit:mCreatGeno	6523	6644	11
+662	871	crea.2bit:hCreaGeno	2046	2255	8
+561	649	crea.2bit:mCreatGeno	3674	3762	8
+888	965	crea.2bit:mCreatGeno	4620	4697	7
+968	1089	crea.2bit:hCreaGeno	2596	2717	5
+1122	1210	crea.2bit:hCreaGeno	4411	4499	5
+1237	1303	crea.2bit:hCreaGeno	5027	5093	4
+1397	1550	crea.2bit:hCreaGeno	5390	5544	4
+213	268	crea.2bit:hCreaGeno	407	462	3
+885	940	crea.2bit:hCreaGeno	2398	2453	3
+575	597	crea.2bit:hCreaGeno	1573	1595	2
+1588	1606	crea.2bit:mCreatGeno	4092	4103	8
+end
+0ddf270562684f29untransInfo crea crea
+
+version XXX
+serverType dynamic
+type nucleotide
+tileSize 11
+stepSize 11
+minMatch 2
+end

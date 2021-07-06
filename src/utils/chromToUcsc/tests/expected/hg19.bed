@@ -1,2 +1,9 @@
 chr1	10	30	testFeat
 chrMT	10	50	Test2
+fixedStep chrom=chrMT start=47 step=1
+3.000000
+4.000000
+4.000000
+4.000000
+4.000000
+4.000000

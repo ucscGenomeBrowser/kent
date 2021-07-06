@@ -40,6 +40,8 @@ DbConnector cartDefaultConnector = hConnectCart;
 DbDisconnect cartDefaultDisconnector = hDisconnectCart;
 static boolean cartDidContentType = FALSE;
 
+struct slPair *httpHeaders = NULL; // A list of headers to output before the content-type
+
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
  * in hash.  Override existing hash item with that name if any.
@@ -251,6 +253,23 @@ else
        }
     return cdb;
     }
+}
+
+static char *getDefaultCart(struct sqlConnection *conn)
+/* Get the default cart if any. */
+{
+char *contents = "";
+char *table = defaultCartTable();
+if (sqlTableExists(conn, table))
+    {
+    char buffer[16 * 1024];
+    char query[1024];
+
+    sqlSafef(query, sizeof query, "select contents from %s", table);
+    sqlQuickQuery(conn, query, buffer, sizeof buffer);
+    contents = cloneString(buffer);
+    }
+return contents;
 }
 
 struct cartDb *loadDb(struct sqlConnection *conn, char *table, char *secureId, boolean *found)
@@ -1327,6 +1346,11 @@ if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
 else if (userIdFound)
     cartParseOverHash(cart, cart->userInfo->contents);
+else
+    {
+    char *defaultCartContents = getDefaultCart(conn);
+    cartParseOverHash(cart, defaultCartContents);
+    }
 char when[1024];
 safef(when, sizeof(when), "open %s %s", userId, sessionId);
 cartTrace(cart, when, conn);
@@ -2153,7 +2177,8 @@ if (!secureId)
 struct dyString *query = dyStringNew(256);
 char *sessionKey = NULL;	    
 unsigned int id = cartDbParseId(secureId, &sessionKey);
-sqlDyStringPrintf(query, "update %s set contents='' where id=%u", table, id);
+char *defaultCartContents = getDefaultCart(conn);
+sqlDyStringPrintf(query, "update %s set contents='%s' where id=%u", table, defaultCartContents, id);
 if (cartDbUseSessionKey())
     {
     if (!sessionKey)
@@ -2268,6 +2293,18 @@ cartExclude(cart, sessionVar);
 return cart;
 }
 
+static void addHttpHeaders()
+/* CGIs can initialize the global variable httpHeaders to control their own HTTP
+ * headers. This allows, for example, to prevent web browser caching of hgTracks
+ * responses, but implicitly allow web browser caching everywhere else */
+{
+struct slPair *h;
+for (h = httpHeaders; h != NULL; h = h->next)
+    {
+    printf("%s: %s\n", h->name, (char *)h->val);
+    }
+}
+
 struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
                                    struct hash *oldVars, boolean doContentType)
 /* Load cart from cookie and session cgi variable.  Write cookie
@@ -2283,6 +2320,7 @@ popAbortHandler();
 cartWriteCookie(cart, cookieName);
 if (doContentType && !cartDidContentType)
     {
+    addHttpHeaders();
     puts("Content-Type:text/html");
     puts("\n");
     cartDidContentType = TRUE;
@@ -3452,7 +3490,9 @@ struct cart *lastDbPosCart = cartOfNothing();
 boolean gotCart = FALSE;
 char dbPosKey[256];
 safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
-if (sameOk(cgiOptionalString("position"), "lastDbPos"))
+
+// use cartCgiUsualString in case request is coming via ajax call from hgGateway
+if (sameOk(cartCgiUsualString(cart, "position", NULL), "lastDbPos"))
     {
     char *dbLocalPosContent = cartUsualString(cart, dbPosKey, NULL);
     if (dbLocalPosContent)
@@ -3617,3 +3657,15 @@ defaultHeight = max(minHeightPixels, defaultHeight);
 freeMem(tdbDefault);
 } 
 
+unsigned cartGetVersion(struct cart *cart)
+/* Get the current version of the cart, which is stored in the variable "cartVersion" */
+{
+unsigned ret = cartUsualInt(cart, "cartVersion", 0);
+return ret;
+}
+
+void cartSetVersion(struct cart *cart, unsigned version)
+/* Set the current version of the cart, which is stored in the variable "cartVersion" */
+{
+cartSetInt(cart, "cartVersion", version);
+}

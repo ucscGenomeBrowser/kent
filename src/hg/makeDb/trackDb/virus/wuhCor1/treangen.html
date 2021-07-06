@@ -1,27 +1,28 @@
 <H2>Description</H2>
-<p>This track shows iSNP's (intrahost SNP's).  These are SNPs that have
-evidence for variation within one host. For instance, one patient can have
-variation in the viral sequences within their cells. This variation is lost
-when a single consensus genome sequence is reported for a patient.  The data
-was published in Sapoval et al, 2020 <a target="_blank" href =
+<p>This track shows iSNPs (intrahost SNPs).  These are SNPs that have
+evidence for variation within one host. That is, a single patient can 
+have variation among the various SARS-CoV-2 viruses infecting their cells. 
+This variation is lost
+when a single consensus genome sequence is reported for a patient. The data
+were published in Sapoval <em>et al</em>, 2020 <a target="_blank" href =
 "https://www.biorxiv.org/content/10.1101/2020.07.02.184481v1">"Hidden genomic
 diversity of SARS-CoV-2: implications for qRT-PCR diagnostics and
 transmission"</a>.</p> 
-<p>In this track, iSNP's (intrahost SNP's) of human patients
+<p>In this track, iSNPs (intrahost SNP's) of human patients
 from New York City and Houston are shown.</p>
 
 <H2>Display Conventions and Configuration</H2>
-<p>The track contains list of iSNP's found in patient data from New York City 
-and Houston with base and amino acid changes. One feature per variant. The 
+<p>The track contains a list of iSNPs found in patient data from New York City 
+and Houston with nucleotide and amino acid changes, one feature per variant. The 
 name field in this track represents the median observed allele frequency for 
-patients meeting inclusion criteria in the VCF’s provided by Sapoval et al. 
+patients meeting inclusion criteria in the VCFs provided by Sapoval <em>et al</em>. 
 Finally, bedToBigBed was used to create the BigBed track.</p>
 <p>Interested users may wish to inspect each of the individual VCFs; for 
 this track we have chosen to show a condensed version of all VCFs (see Methods).</p>
 
 <H2>Methods</H2>
 <p>VCF files were downloaded from the Rice University data repository. SARS-CoV-2 
-iSNP's from New York City and Houston patient data were parsed, and if the base 
+iSNPs from New York City and Houston patient data were parsed, and if the base 
 position was modified in more than one sample then it was included. The frequency 
 of observing a particular base (A,C,G,T) at the position when a change was recorded 
 was then included, and the dominant base change was used to determine whether the 

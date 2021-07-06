@@ -61,6 +61,11 @@
 
 #define BIGBEDMAXIMUMITEMS 100000
 
+#define MULTI_REGION_VIRTUAL_CHROM_NAME "multi"
+// original name was 'virt'
+
+#define MULTI_REGION_CFG_BUTTON_TOP     "multiRegionButtonTop"
+
 /* for botDelay call, 10 second for warning, 20 second for immediate exit */
 #define delayFraction   0.25
 extern long enteredMainTime;
@@ -461,6 +466,19 @@ struct positionMatch
  long virtEnd;
  };
 
+/* mouseOver business declared in hgTracks.c */
+extern boolean enableMouseOver;
+extern struct tempName *mouseOverJsonFile;
+extern struct jsonWrite *mouseOverJson;
+
+struct wigMouseOver
+    {
+    struct wigMouseOver *next;
+    int x1;	/* beginning of a rectangle for this value */
+    int x2;	/* end of the rectangle */
+    double value;	/* data value for this region */
+    int valueCount;	/* number of data values in this rectangle */
+    };
 
 extern struct virtRegion *virtRegionList;
 extern struct virtChromRegionPos *virtChrom; // Array
@@ -528,9 +546,6 @@ extern int winStart;	  /* Start of window in sequence. */
 extern int winEnd;	  /* End of window in sequence. */
 extern int maxItemsInFullTrack;  /* Maximum number of items displayed in full */
 extern char *position; 		/* Name of position. */
-extern int leftLabelWidthDefaultChars;   /* default number of characters allowed for left label */
-extern int leftLabelWidthChars;   /* number of characters allowed for left label */
-extern int trackTabWidth;
 extern int gfxBorder;		/* Width of graphics border. */
 extern int insideWidth;		/* Width of area to draw tracks in in pixels. */
 extern int insideX;		/* Start of area to draw track in in pixels. */
@@ -548,6 +563,7 @@ extern int winBaseCount;  /* Number of bases in window. */
 extern float basesPerPixel;       /* bases covered by a pixel; a measure of zoom */
 extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
 extern boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codon text in genePreds*/
+extern boolean zoomedToCodonNumberLevel; /* TRUE if zoomed so we can print codons and exon number text in genePreds*/
 extern boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we cancolor each codon*/
 
 extern char *ctFileName;	/* Custom track file. */
@@ -569,6 +585,7 @@ extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black
                                    * Red is put at end to alert overflow. */
 extern Color shadesOfBrown[10+1]; /* 10 shades of brown from tan to tar. */
 extern struct rgbColor guidelineColor;
+extern struct rgbColor multiRegionAltColor;
 extern struct rgbColor undefinedYellowColor;
 extern Color darkGreenColor;
 
@@ -1610,8 +1627,8 @@ int tgCmpPriority(const void *va, const void *vb);
 void printMenuBar();
 /* Put up the menu bar. */
 
-void checkIfWiggling(struct cart *cart, struct track *tg);
-/* Check to see if a linkedFeatures track should be drawing as a wiggle. */
+boolean checkIfWiggling(struct cart *cart, struct track *tg);
+/* Check to see if a track should be drawing as a wiggle. */
 
 boolean isTypeBedLike(struct track *track);
 /* Check if track type is BED-like packable thing (but not rmsk or joinedRmsk) */
@@ -1724,5 +1741,7 @@ Color colorFromSoTerm(enum soTerm term);
 /* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for
  * UTR/noncoding, black otherwise. */
 
+void maybeNewFonts(struct hvGfx *hvg);
+/* Check to see if we want to use the alternate font engine (FreeType2). */
 #endif /* HGTRACKS_H */
 

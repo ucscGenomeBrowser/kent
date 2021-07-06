@@ -1,0 +1,69 @@
+<h2>Description</h2>
+
+<p>
+This track shows intensities of a microarray spotted with short peptides
+derived from the entire proteome of SARS-CoV-2. Sera from 10 COVID-19
+patients (early stage) and 12 healthy controls were screened on the
+peptide microarray for both IgG and IgM responses. 
+Note that the infections
+here were in the early stage, unlike the other microarray track shown on this genome browser.</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Genomic locations of peptides that were spotted on the array are highlighted. Because these peptides
+overlap, the tracks default to dense mode and the sequence is shown as labels drawn onto the
+rectangles, but only visible on high zoom levels. Put any track into pack mode to fully see all
+probe sequences.</p>
+
+<p>
+The color is assigned based on the Z-Score, without any other normalization. Blue with decreasing
+intensity is assigned to the values -5 to 0, white is 0, and red colors with increasing intensity
+are used for the values 0-3.5, exactly as in the original publication figures.</p>
+
+<p>
+There are also two wiggle/signal style tracks to summary the information, they
+show the sum of Z-scores across all peptides, as one score per nucleotide.
+</p>
+
+<h2>Methods</h2>
+<p>
+Supplemental files were converted from Excel, rearranged and run through the command line script
+bigHeat to create a heatmap-like display, with multiplication factors of 2 for negative values,
+0.285 for positive values. For better visibility, colormap seismic from matplotlib was used from 0.1
+to 0.9 and the range of values after multiplication were restricted to the limits -1 to 1 to address
+outliers. Like all tracks, the exact commands are documented in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/wuhCor1/pbm.txt"
+target="_blank">makeDoc text files</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="hgTables">Table Browser</a> or combined
+with other datasets in the <a href="hgIntegrator">Data Integrator</a> tool. For automated analysis,
+the genome annotation is stored in a bigBed file that can be downloaded from
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/pbm/">the download server</a>.</p>
+<p>
+Annotations can be converted from binary to ASCII text by our command-line tool bigBedToBed.
+Instructions for downloading this command can be found on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">utilities page</a>. The tool can also be used to obtain features within a given
+range without downloading the file, for example:</p>
+<code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/pbm/IgG_Z-score-_COVID-19_patients/P52.bb -chrom=NC_045512v2 -start=0 -end=29902 stdout</code>
+<p>
+Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our
+<a href="../../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a> for more
+information.</p>
+
+<h2>References</h2>
+<p>
+Hongye Wang, Xian Wu, Xiaomei Zhang, Xin Hou, Te Liang, Dan Wang, Fei Teng, Jiayu Dai, Hu Duan,
+Shubin Guo, Yongzhe Li, and Xiaobo Yu
+<a href="https://pubs.acs.org/doi/pdf/10.1021/acscentsci.0c00742" target="_blank">SARS-CoV-2
+Proteome Microarray for Mapping COVID-19 Antibody Interactions at Amino Acid Resolution</a>.
+<em>ACS Central Science</em>. 2020
+DOI: <a href="http://dx.doi.org/10.1021/acscentsci.0c00742"
+target="_blank">10.1021/acscentsci.0c00742</a>
+</p>
+

@@ -1,7 +1,9 @@
 #ifndef FACETFIELD_H
 #define FACETFIELD_H
 
-#define FacetFieldLimit 20   // maximum facet values to show before displaying the See More link 
+#ifndef FIELDEDTABLE
+#include "fieldedTable.h"
+#endif
 
 struct facetVal
 /* Keep track of number of uses of a field value */
@@ -59,6 +61,11 @@ void facetFieldsFromSqlTableFinish(struct facetField *ffList, int (*compare )(co
 struct facetField *facetFieldsFromSqlTable(struct sqlConnection *conn, char *table, char *fields[], int fieldCount, 
     char *nullVal, char *where, char *selectedFields, int *pSelectedRowCount);
 /* Return a list of facetField, one for each field of given table */
+
+struct fieldedTable *facetFieldsFromFieldedTable(struct fieldedTable *ft, char *selectedFields,
+    struct facetField *ffArray[]);
+/* Return a list of facetField, one for each selected field of given table.  It'll
+ * scan through table to do this and optionally you can get the count of selected rows. */
 
 struct facetVal *facetValMajorPlusOther(struct facetVal *list, double minRatio);
 /* Return a list of only the tags that are over minRatio of total tags.

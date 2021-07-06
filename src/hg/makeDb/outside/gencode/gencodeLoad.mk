@@ -31,47 +31,46 @@ mach = $(shell uname -m)
 ##
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
-#
-# - ensemblPrevVersion is use to get chrom name mappings for pre-release,
-#   as this doesn't change between release.
 ##
+preRelease = no
+#preRelease = yes
 #db = hg38
 db = hg19
+#db = mm39
 #db = mm10
-#preRelease = no
-preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
-    ver = M25
+    verBase = M25
     prevVer = M24
+    backmapTargetVer = M25
+    ver = ${verBase}lift37
+    gencodeOrg = Gencode_mouse
+    ftpReleaseSubdir = release_${verBase}/GRCm38_mapping
+    annGffTypeName = chr_patch_hapl_scaff.annotation
+    isBackmap = yes
+else ifeq (${db},mm39)
+    grcRefAssembly = GRCm39
+    ver = M27
+    prevVer = M26
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 100_38
-    ensemblPrevVer = 99_38
-    ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 35
-    prevVer = 34
+    ver = 38
+    prevVer = 37
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 101_38
-    ensemblPrevVer = 100_38
-    ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 35
+    verBase = 38
     ver = ${verBase}lift37
+    prevVer = 37lift37
     backmapTargetVer = 19
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
-    prevVer = 35lift37
     gencodeOrg = Gencode_human
     annGffTypeName = annotation
-    ensemblVer = 74_37      # only used to get genome chromsome name mappings, don't change
-    ensemblPrevVer = ${ensemblVer}  # doesn't change
-    ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
     isBackmap = yes
 else
     $(error unimplement genome database: ${db})
@@ -102,7 +101,7 @@ gencodeExonSupportToTable = ${ccdsBinDir}/gencodeExonSupportToTable
 gencodeGxfToGenePred = ${ccdsBinDir}/gencodeGxfToGenePred
 gencodePolyaGxfToGenePred = ${ccdsBinDir}/gencodePolyaGxfToGenePred
 gencodeGxfToAttrs = ${ccdsBinDir}/gencodeGxfToAttrs
-ensToUcscChromMap = ${ccdsBinDir}/ensToUcscChromMap
+ensToUcscMkLift = ${HOME}/kent/src/hg/makeDb/outside/gencode/bin/ensToUcscMkLift
 gencodeBackMapMetadataIds = ${ccdsBinDir}/gencodeBackMapMetadataIds
 encodeAutoSqlDir = ${HOME}/kent/src/hg/lib/encode
 
@@ -295,7 +294,7 @@ ${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta} ${gencodeTsv}
 
 ${ensemblToUcscChain}:
 	@mkdir -p $(dir $@)
-	${ensToUcscChromMap} ${ensemblCDnaDb} ${grcRefAssembly} ${db} /dev/stdout | pslSwap stdin stdout | pslToChain stdin $@.${tmpExt}
+	${ensToUcscMkLift} ${db} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 # other tab files, just copy to name following convention to make load rules

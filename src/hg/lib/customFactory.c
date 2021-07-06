@@ -2859,6 +2859,8 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 
 setBbiViewLimits(track);
+track->dbTrackType = cloneString("bigBed");
+track->fieldCount = track->bbiFile->definedFieldCount;
 return track;
 }
 
@@ -3454,6 +3456,8 @@ if (hasUnprintable(line, 6))
 	    type = "bam";
 	else if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed"))
 	    type = "bigBed";
+	else if (endsWith(fileName, ".inter.bb") || endsWith(fileName, ".inter.bigBed"))
+	    type = "bigInteract";
 	else if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig"))
 	    type = "bigWig";
 	}

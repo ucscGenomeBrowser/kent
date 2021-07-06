@@ -1,0 +1,226 @@
+#########################################################################
+# Zoonomia phyloP for 241-way from (2021-04-24 MarkD)
+
+  cd /hive/data/genomes/hg38/bed/cactus241way/phyloP
+
+  # Obtain phylogP scores computed by Michael Dong (Uppsala U).  Since Broad
+  # has had their ftp and http sharing of files turned off, they were placed
+  # in google drive (LoL)
+
+  # download from https://drive.google.com/drive/u/0/folders/1Xc215oxu0cvBZOarxFv2L3HAjPmiZ-0A
+  # to directory uppsala
+
+  # format is, so convert with awk
+  chr1	10074	10075	id-1	0.053000
+  chr1	10075	10076	id-2	0.064000
+  chr1	10076	10077	id-3	0.064000
+
+  # convert to wig and wib
+  zcat uppsala/chr*.bed.gz  | tawk '{print $1,$2,$3,$5}' | wigEncode stdin phyloP241way.wig phyloP241way.wib
+
+  ln -s $(pwd)/phyloP241way.wib /gbdb/hg38/cactus241way/
+  hgLoadWiggle -pathPrefix=/gbdb/hg38/cactus241way hg38 phyloP241way phyloP241way.wig 
+
+############################################################################
+## adding frames ( DONE - 2021-04-29 - Hiram )
+
+  mkdir /hive/data/genomes/hg38/bed/cactus241way/frames
+  cd /hive/data/genomes/hg38/bed/cactus241way/frames
+  mkdir genes
+
+  hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" hg38 \
+        | genePredSingleCover stdin stdout | gzip -2c \
+          > genes/hg38.gp.gz
+
+  genePredCheck -db=hg38 genes/hg38.gp.gz
+
+  #  checked: 19328 failed: 0
+
+  ls ../ucscNames | sed -e 's/.maf//;' > chr.list
+  ls genes | sed -e 's/.gp.gz//;' > gene.list
+
+  printf '#!/bin/bash
+
+set -beEu -o pipefail
+
+export C=$1
+export G=$2
+
+cat ../ucscNames/${C}.maf | genePredToMafFrames hg38 stdin stdout \
+  "${G}" genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
+
+' > runOne
+
+  chmod +x rnOne
+
+  printf '#LOOP
+./runOne $(root1) $(root2) parts/$(root1).$(root2).mafFrames.gz
+#ENDLOOP
+' > template
+
+  gensub2 chr.list gene.list template perl.jobList
+
+  time ($HOME/kent/src/hg/utils/automation/perlPara.pl 4 perl.jobList) \
+    >> do.log 2>&1 &
+
+  tail do.log
+
+# Completed: 454 of 454 jobs
+# CPU time in finished jobs:      91822s    1530.37m    25.51h    1.06d  0.003y
+# Average job time:                 202s       3.37m     0.06h    0.00d
+# Longest finished job:            7570s     126.17m     2.10h    0.09d
+
+  # real    417m27.701s
+
+  time find ./parts -type f | while read F
+do
+    echo "${F}" 1>&2
+    zcat ${F}
+done | sort -k1,1 -k2,2n | gzip -c > cactus241wayFrames.bed.gz
+
+  # real    0m3.178s
+
+  hgLoadMafFrames hg38 cactus241wayFrames cactus241wayFrames.bed.gz
+
+  featureBits -countGaps hg38 cactus241wayFrames
+
+  # 33621579 bases of 3272116950 (1.028%) in intersection
+
+############################################################################
+
+
+#############################################################################
+# construct download files for 241-way (TBD - 2015-04-15 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/cactus241way
+    mkdir /hive/data/genomes/hg38/bed/cactus241way/downloads
+    cd /hive/data/genomes/hg38/bed/cactus241way/downloads
+    mkdir maf
+    for F in `ls ../ucscNames`
+do
+  gzip -c ../ucscNames/$F > maf/${F}.gz
+done
+   # running 10 of those simultaneously in an hgwdev perlPara.pl job:
+   # real    537m54.983s
+
+   time md5sum *.maf.gz > md5sum.txt 
+
+real    46m43.423s
+user    39m29.707s
+sys     6m41.942s
+
+    ln -s ../cactus241way.nh hg38.cactus241way.nh
+    ln -s ../before.nameChange.nh hg38.cactus241way.scientificNames.nh
+
+    # convert the phyloP bed files to bedGraph file:
+
+    zcat ../phyloP/uppsala/*.bed.gz \
+      | awk '{printf "%s\t%d\t%d\t%s\n", $1,$2,$3,$5}' \
+         | sort -k1,1 -k2,2n > phyloP.bedGraph
+
+    # Convert the bedGraph phyloP data to wigFixedStep via a perl script:
+
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $chr = "";
+my $start = 0;
+my $prevStart = 0;
+
+open (FH, "<phyloP.bedGraph") or die "can not open phyloP.bedGraph";
+  while (my $line = <FH>) {
+    chomp $line;
+    my ($name, $chrStart, $chrEnd, $value) = split('\s+', $line);
+    if ( ($name ne $chr) || (($chrStart - $prevStart) > 1) ) {
+       printf "fixedStep chrom=%s start=%d step=1 span=1\n", $name, $chrStart+1;
+    }
+    printf "%s\n", $value;
+    $prevStart = $chrStart;
+    $chr = $name;
+  }
+close (FH);
+
+    time (./phyloP.sh > phyloP.bedGraph) >> phyloP.log 2>&1
+    # real    232m54.489s
+
+    # verify the wigEncode and wigToBigWig have the same result:
+    wigEncode cactus241way.phyloP.wigFix.gz hg38.cactus241way.wig \
+      hg38.cactus241way.wib
+    # Converted cactus241way.phyloP.wigFix.gz, upper limit 9.28,
+    #    lower limit -20.00
+# -rw-rw-r-- 1  2852623265 May 10 12:07 hg38.cactus241way.wib
+# -rw-rw-r-- 1   307726912 May 10 12:07 hg38.cactus241way.wig
+
+    wigToBigWig cactus241way.phyloP.wigFix.gz ../../../chrom.sizes \
+      cactus241way.phyloP.bw
+# -rw-rw-r-- 1  9644660543 May 10 12:28 cactus241way.phyloP.bw
+
+    bigWigInfo cactus241way.phyloP.bw | sed -e 's/^/    # /;'
+    # version: 4
+    # isCompressed: yes
+    # isSwapped: 0
+    # primaryDataSize: 7,469,351,053
+    # primaryIndexSize: 89,516,524
+    # zoomLevels: 10
+    # chromCount: 24
+    # basesCovered: 2,852,623,265
+    # mean: 0.128264
+    # min: -20.000000
+    # max: 9.280000
+    # std: 1.252659
+
+    # compared to the loaded table:
+    time wigTableStats.sh hg38 phyloP241way
+# db.table          min  max     mean      count    sumData  stdDev
+# hg38.phyloP241way -20 9.28 0.128264 2852623265 3.6589e+08 1.25266
+#  viewLimits=-6.13503:6.39156
+
+# real    0m15.185s
+
+    md5sum hg38.cactus* > md5sum.txt
+
+    # construct a README.txt file
+
+    # link to download:
+   mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/cactus241way/maf
+    ln -s  `pwd`/hg38.*.nh \
+       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/cactus241way/
+    ln -s  `pwd`/md5sum.txt \
+       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/cactus241way/
+    ln -s  `pwd`/README.txt \
+       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/cactus241way/
+    ln -s  `pwd`/hg38*.wigFix.gz \
+       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/cactus241way/
+    
+    ln -s  `pwd`/maf/* \
+       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/cactus241way/maf
+
+    # file list for redmine 27519
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/cactus241way/*.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/cactus241way/hg38.cactus241way.*
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/cactus241way/maf/*
+/gbdb/hg38/cactus241way/maf/*
+/gbdb/hg38/cactus241way/phyloP241way.wib
+
+    # table list for redmine 27519
+hg38.cactus241way
+hg38.cactus241wayFrames
+hg38.cactus241waySummary
+hg38.phyloP241way
+
+#############################################################################
+# markd 2020/12/23
+
+bigMaf was built from files in:
+    /hive/data/genomes/hg38/bed/cactus241way/ucscNames/
+
+creating
+    /hive/data/genomes/hg38/bed/cactus241way/241-mammalian-2020v2.ucsc.bigMaf
+
+Exact commands were not recorded, since this was originally not intended for release.
+It consisted of concatenating the MAFs in sort ordered (using file names) and
+then doing a standard bigMaf build.  Recall it took about five days.
+
+
+#############################################################################

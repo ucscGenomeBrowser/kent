@@ -1,12 +1,13 @@
 track IgG_Z-score-_COVID-19_patients
-shortLabel IgG Z-score- COVID-19 patients
-longLabel Proteome Microarray - IgG - COVID-19 patients
+shortLabel IgG Z-score- early COVID-19 patients
+longLabel Proteome Peptide Microarray - IgG - early COVID-19 patients
 type bed 9
 compositeTrack on
 visibility dense
 labelOnFeature on
 parent pbm
 itemRgb on
+html pbm
 
     track P4
     shortLabel P4

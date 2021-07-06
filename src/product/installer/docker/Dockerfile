@@ -1,5 +1,5 @@
 # UCSC Genome Browser Website Dockerfile
-FROM phusion/baseimage:latest
+FROM phusion/baseimage:0.10.1
 MAINTAINER Maximilian Haeussler <max@soe.ucsc.edu>
 ADD http://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh /root/browserSetup.sh
 ADD mysql.service /etc/service/mysqld/run

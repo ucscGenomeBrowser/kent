@@ -35,6 +35,10 @@ What to do to update:
   1. In the makefile in this directory you will need to update
   CURRENT_HUB_SPEC=v#old  to be CURRENT_HUB_SPEC=v#new  (change v1 to v2)
   and change HUB_SPEC_FILES= to include the new trackDbHub.v#.html
+  update goldenPath/help/trackDb/makefile
+      +               trackDbHub.vPrev#.html \
+      +               trackDbHub.vNew#.html
+  This is an easy step to FORGET, please remember to add the new file in the makefile.
 
   2. Update trackDbHub.html to point to the new html file.
   <!--#include virtual="trackDbHub.v#.html"-->

@@ -1,6 +1,44 @@
-Copyright (C) 2001 UC Regents
+The default license of this repository is the MIT License, but LICENSE files in
+subdirectories override the text of this LICENSE file.
 
-LICENSE files in subdirectories override the text of this LICENSE file.
+Therefore the code in this repository is covered by five different licenses:
+
+FREE Licenses:
+
+1. the default MIT license (attached below) for code in src/ and most subdirectories
+  - this directory includes all code to build and use tools and libraries to
+    read and write the Genome Browser file formats, such as bigBed and bigWig, and
+    the command line tools for these, bedToBigBed, wigToBigWig and the tagStorm
+    tools and the parasol job scheduler.
+  - also, third-party code from open-source projects bundled for convenience,
+    in src/htslib (MIT), and ./src/optimalLeaf (public domain, with attribution).
+  - the directories src/hg/autoSql and src/hg/autoXml have MIT LICENSE files, so they are also 
+    under the MIT License
+2. A modified BSD license for src/htslib/cram/, see src/htslib/LICENSE. 
+   Copyright (C) 2012-2014 Genome Research Ltd.
+3. Public domain "with attribution" license, see src/optimalLeaf/LICENSE
+
+NON-COMMERCIAL licenses:
+
+4. A non-commercial license from UC for the genome browser website code in src/hg/ 
+   and subdirectories (see src/hg/LICENSE), see https://genome.ucsc.edu/license/
+5. A non-commercial license from Kent Informatics for the BLAT and isPCR code in src/blat/ and
+   src/jkOwnLib/, for more information see https://genome.ucsc.edu/license/ and http://www.kentinformatics.com/
+
+See https://genome.ucsc.edu/license/ for more details and on how to obtain a license
+for commercial use for the cases (4) and (5). Commercial users should contact
+kent@soe.ucsc.edu for access to other modules including jkOwnLib and blat.
+
+Commercial users interested in the UCSC Genome Browser in particular please see
+    http://genome.ucsc.edu/license/.
+
+The code in src/htslib is distributed with two licenses as noted in the LICENSE
+file in that directory.
+---- 
+
+MIT License
+
+Copyright (C) 2001 UC Regents
 
 Permission is hereby granted, free of charge, to any person or non-commercial
 entity obtaining a copy of this software and associated documentation files (the
@@ -19,11 +57,3 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Commercial users should contact kent@soe.ucsc.edu for access to other modules
-including jkOwnLib and blat.
-
-Commercial users interested in the UCSC Genome Browser in particular please see
-    http://genome.ucsc.edu/license/.
-
-The code in /src/htslib is distributed with two licenses as noted in the LICENSE
-file in that directory.

@@ -68,7 +68,8 @@ do
   ln -s ../genemap2.txt ./genemap2.txt
   ln -s ../allelicVariants.txt ./allelicVariants.txt
   ln -s ../mim2gene.txt ./mim2gene.txt
-  ln -s ../../doOmimPhenotype.pl ./doOmimPhenotype.pl
+  #ln -s ../../doOmimPhenotype.pl ./doOmimPhenotype.pl
+  ln -s ../../doOmimPhenotypeNew ./doOmimPhenotypeNew
 
   ../../buildOmimTracks.sh $db
   ../../flagOmimGene.py $db > omimGene2.prev.flagged
@@ -88,18 +89,17 @@ do
     mkdir -p ${WORKDIR}/archive/${db}
   fi
   cd ${WORKDIR}/archive/${db}
-  mkdir ${today}
+  mkdir -p ${today}
   cd ${today}
-  printf "This directory contains a backup of the OMIM track data tables built on %s\n" "${today}" > README
+  printf "This directory contains a backup of the OMIM track data tables built on %s\n" "${today}" > README 
   for i in `cat ${WORKDIR}/omim.tables`
   do
     hgsql --raw -Ne "show create table ${i}" ${db} > ${i}.sql
     hgsql -Ne "select * from ${i}" ${db} | gzip >  ${i}.txt.gz
   done
   cd ${WORKDIR}/${today}
-
+  
 done
-
 
 rm -f "${WORKDIR}"/prev.md5sum.txt
 cp -p "${WORKDIR}/${today}"/md5sum.txt "${WORKDIR}"/prev.md5sum.txt

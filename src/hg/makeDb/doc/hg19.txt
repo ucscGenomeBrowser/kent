@@ -14179,6 +14179,39 @@ ln -s /gbdb/hg19/evoFold /usr/local/apache/htdocs/evoFold/hg19
     # kent/src/hg/makeDb/trackDb/human/hg19
 
 ##########################################################################
+# Update targetScanS track to Version 7.2 - (DONE 2021-02-03 Brittney & Kate)
+
+cd /hive/data/genomes/hg19/bed/targetScanS
+mkdir vert_72
+
+wget --header="accept-encoding: gzip" http://www.targetscan.org/vert_72/vert_72_data_download/Predicted_Target_Locations.default_predictions.hg19.bed.zip
+
+unzip Predicted_Target_Locations.default_predictions.hg19.bed.zip
+
+# The downloaded file is a BED12. The score column has values between -1 and 100.
+# Everything else looks good.
+# Create a new BED12+1 file with this score value as field 13 and change the score values
+# to 0 in column 5.
+
+awk 'OFS="\t" {c=$5; $5="0"; print $0, c}' \
+        < Predicted_Target_Locations.default_predictions.hg19.bed
+        > bed12+1_targetScanSitesV72.bed
+
+# copy "bedDetail.as" from ~/kent/src/hg/lib and rename to targetScanS.as and edit to
+# match our new BED12+1 file.
+cp ~/kent/src/hg/lib/bedDetail.as .
+mv bedDetail.as targetScanS.as
+
+bedToBigBed -type=bed12+1 -as=targetScanS.as bed12+1_targetScanSitesV72.bed \
+        ../../../chrom.sizes targetScanSitesV72.bb
+
+# Link bigBed file into /gbdb directory for access by browser
+cd /gbdb/hg19
+mkdir targetScan
+cd targetScan
+ln -s /hive/data/genomes/hg19/bed/targetScanS/vert_72/targetScanSitesV72.bb .
+
+##########################################################################
 # Neandertal tracks for hg19 (DONE - 2010-12-14 - Hiram)
     # data supplied by Ed Green into /hive/data/outside/homNea/hg19
     # add Neandertal group to hg19 grp
@@ -32150,9 +32183,10 @@ csh $bin/getxEqtlLoadTissues.csh UCSC_output >&! loadTissuesV2.log &
 ###########################################################################
 # HGMD (updated 12/10/19 max)
 # HGMD (updated 01/25/18 max)
-# got hgmd 2017 from Frank Schacherer Frank.Schacherer@qiagen.com and Rupert Yip Rupert.Yip@qiagen.com
+# HGMD (updated 12/12/20 max)
+# got hgmd from Frank Schacherer Frank.Schacherer@qiagen.com and Rupert Yip Rupert.Yip@qiagen.com
 # see also the file hg38/hgmd.txt
-year=2019
+year=2020
 cd /hive/data/genomes/hg19/bed/hgmd
 cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg19.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-1; end=$4+1; col="100,100,100"} else if ($5=="D") {start=$4-1; end=$4; col="170,170,170"} else {start=$4-1; end=$4; col="0,0,0"}; print "chr"$3,start,end,$2":"$1,0,".",start,end,col,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
 bedToBigBed hgmd.bed /hive/data/genomes/hg19/chrom.sizes hgmd.bb -type=bed9+ -as=hgmd.as -tab
@@ -32160,9 +32194,24 @@ ln -s /hive/data/genomes/hg19/bed/hgmd/hgmd.bb /gbdb/hg19/bbi/hgmd.bb
 hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
 # Forgot, finally done Oct 24: also updated hgBeacon
 bigBedToBed /gbdb/hg19/bbi/hgmd.bb /tmp/temp.bed
-/usr/local/apache/cgi-bin/hgBeacon -f hgmd temp.bed hgmd
+python2 /usr/local/apache/cgi-bin/hgBeacon -f hgmd /tmp/temp.bed hgmd
 # Forgot, finally done June 26: updated GBIB as qateam
 scp /gbdb/hg19/bbi/hgmd.bb hgdownload:/usr/local/apache/gbib/prot/
+# next restrict RefSeq down to HGMD subset
+
+# addition of HGMD-restricted subset, Max, Jan 29 2019, updated Dec 10 2019
+cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-10-27/
+year=2019
+# change in 2019: ignore the version numbers, otherwise only 1815 transcripts left, big update by HGMD in 2019
+# adding "." so NM_123 doesn't match NM_123123
+cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | cut -d. -f1 | sort -u | awk '{print $1"."}' > hgmdTranscripts.txt
+cat process/hg19.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
+hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
+$ wc -l hgmd.curated.gp
+7965 hgmd.curated.gp in 2019
+8971 hgmd.curated.gp in 2020
+
+# now continue the process at ../hg38/hgmd.txt
 
 #############################################################################
 # LASTZ human/hg19 vs. pig/susScr11 - (DONE - 2018-04-02 - Hiram)
@@ -32622,6 +32671,12 @@ EOF
 	> do.log 2>&1
     # real    5896m44.643s
 
+    # hive cleaning 2021-04-26
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+     -continue=cleanup -buildDir=`pwd` -smallClusterHub=hgwdev hg19 \
+          -fileServer=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku
+            -workhorse=hgwdev) > cleanup.log 2>&1 &
+
 ##############################################################################
 # LASTZ human/hg19 vs. chimp/panTro6 - (DONE - 2018-12-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPanTro6.2018-12-14
@@ -32788,18 +32843,6 @@ TMPDIR=/dev/shm
     cat fb.ponAbe3.chainRBest.Hg19.txt
     # 2641865423 bases of 3043444524 (86.805%) in intersection
 
-##############################################################################
-# addition of HGMD-restricted subset, Max, Jan 29 2019, updated Dec 10 2019
-cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2019-11-21/
-year=2019
-#cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | sort -u > hgmdTranscripts.txt
-# change in 2019: ignore the version numbers, otherwise only 1815 transcripts left, big update by HGMD in 2019
-# adding "." so NM_123 doesn't match NM_123123
-cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | cut -d. -f1 | sort -u | awk '{print $1"."}' > hgmdTranscripts.txt
-cat process/hg19.curated.gp | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
-hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
-$ wc -l hgmd.curated.gp 
-7965 hgmd.curated.gp
 #############################################################################
 # genomenom mastermind track, Max, Feb 2019
 cd /hive/data/genomes/hg19/bed/mastermind/
@@ -33005,7 +33048,7 @@ cp /hive/data/inside/pubs/text/medline/articles.db /dev/shm/max/
 bedAppendPaperInfo avada.s.bed avadaPapers.bed  --db /dev/shm/max --geneIdx=9
 bedSort avadaPapers.bed avadaPapers.bed
 cat avadaPapers.bed | uniq > avadaPapers.u.bed
-bedToBigBed avadaPapers.u.bed /hive/data/genomes/hg19/chrom.sizes -as=${HOME}/kent/src/hg/makeDb/avada/avada.as  -tab avada.bb -type=bed9+   
+bedToBigBed avadaPapers.u.bed /hive/data/genomes/hg19/chrom.sizes -as=${HOME}/kent/src/hg/makeDb/avada/avada.as  -tab avada.bb -type=bed9+
 rm /dev/shm/max/articles.db
 cd /gbdb/hg19/bbi
 ln -s /hive/data/genomes/hg19/bed/avada/avada.bb
@@ -33530,14 +33573,14 @@ table doseSensitivity
 
     for f in *.bed.gz; do out=${f/.bed.gz/}; zcat $f | tail -n +2 | cut -f1-4,18-28,31,32,36-38,41-42 | tawk '{$1="chr"$1; print $0}'> $out.bed4Plus; done
     # variant types:
-    zcat gnomad_v2.1_sv.sites.bed.gz | cut -f32 | sort | uniq -c       
+    zcat gnomad_v2.1_sv.sites.bed.gz | cut -f32 | sort | uniq -c
       52604 BND y
-       4778 CPX x 
+       4778 CPX x
           8 CTX y
-     169635 DEL x 
-      49571 DUP x 
-     109025 INS x 
-        748 INV x 
+     169635 DEL x
+      49571 DUP x
+     109025 INS x
+        748 INV x
        1108 MCNV x
           1 SVTYPE
 
@@ -33546,7 +33589,7 @@ table doseSensitivity
 
     chromSizes=/hive/data/genomes/hg19/chrom.sizes
     for f in *.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+19 -as=gnomadSv.as -extraIndex=name $f $chromSizes $out.bb; done
-    mkdir -p /gbdb/hg19/gnomAD/structuralVariants/ 
+    mkdir -p /gbdb/hg19/gnomAD/structuralVariants/
     cd /gbdb/hg19/gnomAD/structuralVariants/
     cp -s /hive/data/outside/gnomAD.2/structuralVariants/*.bb .
 
@@ -33595,7 +33638,7 @@ for i in orig/*.bed; do out=`echo $i | sed -e 's|orig/VQSRv2.18_||g'`; out=`base
 for i in bed/filter*.bed; do echo $i; bedSort $i $i; bedToBigBed $i /hive/data/genomes/hg19/chrom.sizes bb/`basename $i .bed`.bed -type=bed3; done
 cd /gbdb/hg19/bbi/special;
 for i in /hive/data/genomes/hg19/bed/specialRegions/bb/filter*.bb;  do ln -s $i; done
-bedSort orig/hg19-blacklist.v2.bed orig/hg19-blacklist.v2.bed 
+bedSort orig/hg19-blacklist.v2.bed orig/hg19-blacklist.v2.bed
 bedToBigBed orig/hg19-blacklist.v2.bed /hive/data/genomes/hg19/chrom.sizes  bb/encBlacklist.bb -tab
 
 #############################################################################
@@ -33632,13 +33675,13 @@ wc -l gtexGeneV8.tab
 #54481 gtexGeneV8.tab
 
 # 1070 genes not found in GencodeAttrs table
-# e.g. 
+# e.g.
 Can't find geneId ENSG00000278267 in wgEncodeGencodeAttrsV26lift37
 #from Ensembl page for MIR6859-1:
 #Stable ID ENSG00000278267 not present in GRCh37.
 
 # 650 genes not found in modelHash
-# e.g. 
+# e.g.
 Can't find gene ENSG00000279928.2 in modelHash
 # From Ensembl
 Gene: FO538757.1 ENSG00000279928
@@ -33709,14 +33752,16 @@ hgLoadBed hg19 -noBin -tab -type=bed6+4 \
     ln -sf `pwd`/$pre.bb /gbdb/hg19/ncbiRefSeq/$pre.bb
 
 #############################################################################
-# clinvarSubLolly track  IN PROGRESS BRANEY 10/17/2020
+# clinvarSubLolly track  DONE BRANEY 12/14/2020
 mkdir /cluster/data/hg19/bed/clinvarSubLolly
 cd /cluster/data/hg19/bed/clinvarSubLolly
 bigBedToBed /gbdb/hg19/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$2+1,$4}' | sort  -S 40g > sort.main.bed
 hgsql hg19 -Ne "select varId,clinSign,scv from clinvarSub" | sort  -S 40g  > clinvarSubSub.txt
 
 join -t $'\t' sort.main.bed clinvarSubSub.txt | tawk '{print $2,$3,$4,$5,$6,$1, $7}' | sort -S 40g -k1,1 -k2,2n -k5,5 | tawk -f makeFranklin   | tawk -f assignColors > tmp1
-tawk '{print $1":"$2 + 1"-"$3"←Variants (submissions):"$11}' tmp1 > tmp2
+# add the line break after v409
+#tawk '{print $1":"$2 + 1"-"$3" <br>Variants (submissions):"$11}' tmp1 > tmp2
+tawk '{print $1":"$2 + 1"-"$3" Variants (submissions):"$11}' tmp1 > tmp2
 paste tmp1 tmp2 > bigBedInput.bed
 
 bedToBigBed -as=$HOME/kent/src/hg/lib/clinvarSubLolly.as -type=bed9+5 -tab bigBedInput.bed /cluster/data/hg19/chrom.sizes clinvarSubLolly.bb
@@ -33797,6 +33842,21 @@ ln -s `pwd`/split/*.bw /gbdb/hg19/gnomAD/pext/
   # 93720294 bases of 2991710746 (3.133%) in intersection
 
 #############################################################################
+# test update 2021-05-17 (DONE - Hiram - 2021-05-17)
+
+  mkdir /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2021-05-17
+  cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2021-05-17
+
+  time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=hgwdev -workhorse=hgwdev \
+      GCF_000001405.25_GRCh37.p13 hg19) > do.log 2>&1 &
+  # real    7m42.506s
+
+  cat fb.ncbiRefSeq.hg19.txt
+  # 95470885 bases of 2991710746 (3.191%) in intersection
+
+#############################################################################
 # Covid-19 rare mutations, Max, Fri Oct 30 08:40:34 PDT 2020
 # received table from qzhang02@rockefeller.edu, wrote to UCSC.txt
 cd /hive/data/genomes/hg19/bed/covidMuts/
@@ -33804,4 +33864,760 @@ dos2unix UCSC.txt
 cat UCSC.txt | tawk '{$1="chr"$1; chrom=$1; start=$2; rsId=$3; ref=$4; alt=$5; zygo=$6; gene=$7; genotype=$8; inh=$9; end=$2+length(ref); print chrom, start, end, ref">"alt, "0", ".", start, end, "0,0,0", "1", length(ref), "0", ref, alt, rsId, zygo, gene, genotype, inh;}' | grep -v chrchr > covidMuts.bed
 bedSort covidMuts.bed covidMuts.bed
 bedToBigBed -tab covidMuts.bed ../../chrom.sizes covidMuts.bb -as=../../hg19/bed/covidMuts/covidMuts.as -type=bed12+
+<<<<<<< Updated upstream
+
 #############################################################################
+# gnomAD v2.1.1 update, ChrisL 12-2-2020
+#############################################################################
+# See /hive/data/inside/gnomAD/v2.1.1/run.sh for more information, listed
+# here are the important steps:
+WORKDIR=/hive/data/inside/gnomAD/v2.1.1/
+cd $WORKDIR
+db="hg19"
+cd $db
+
+time parallel -j15 --joblog exomes.run.log --plus "vcfToBed -fields=${fields} {} exomes/{/..}.bed" ::: /hive/data/outside/gnomAD.2/v2.1.1/exomes/*.bgz
+# real    16m42.939s
+# user    172m26.966s
+# sys 1m41.186s
+
+# now turn into a single bed
+time cat hg19/exomes/*.bed | ./gnomadVcfBedToBigBed stdin stdout | sort -k1,1 -k2,2n > gnomad.v2.1.1.exomes.bed
+# real    21m44.331s
+# user    20m24.018s
+# sys 3m5.405s
+time bedToBigBed -type=bed9+50 -tab -as=exomes.as gnomad.v2.1.1.exomes.bed /hive/data/genomes/hg19/chrom.sizes exomes.bb
+# pass1 - making usageList (24 chroms): 11485 millis
+# pass2 - checking and writing primary data (17209972 records, 57 fields): 339555 millis
+#
+# real    6m45.792s
+# user    6m7.880s
+# sys 0m11.924s
+
+# same for genomes
+cd $db
+time parallel -j15 --joblog genomes.run.log --plus "vcfToBed -fields=${fields} {} genomes/{/..}.bed" ::: /hive/data/outside/gnomAD.2/v2.1.1/genomes/*.bgz
+# real  134m40.184s
+# user    1559m44.664s
+# sys 12m0.858s
+cd ..
+time cat hg19/genomes/*.bed | ./gnomadVcfBedToBigBed stdin stdout | sort -k1,1 -k2,2n > gnomad.v2.1.1.genomes.bed
+# real    199m48.619s
+# user    186m49.769s
+# sys 29m12.841s
+
+# now South Asian variants in the genomes file, change type:
+time bedToBigBed -type=bed9+47 -tab -as=genomes.as gnomad.v2.1.1.genomes.bed /hive/data/genomes/hg19/chrom.sizes genomes.bb
+# pass1 - making usageList (23 chroms): 165336 millis
+# pass2 - checking and writing primary data (253556152 records, 55 fields): 4909106 millis
+#
+# real    89m3.165s
+# user    86m41.554s
+# sys 2m15.722s
+
+#############################################################################
+# LASTZ Cow bosTau9 (ONE - 2020-12-07 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07
+    cd /hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07
+
+    printf '# human vs Cow
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau9
+SEQ2_DIR=/hive/data/genomes/bosTau9/bosTau9.2bit
+SEQ2_LEN=/hive/data/genomes/bosTau9/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    239m35.175s
+
+    cat fb.hg19.chainBosTau9Link.txt
+    # 1407432462 bases of 2991710746 (47.044%) in intersection
+
+    cat fb.hg19.chainSynBosTau9Link.txt
+    # 1354159575 bases of 2991710746 (45.264%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg19 bosTau9) > rbest.log 2>&1 &
+    #	real    274m55.811s
+
+    sed -e 's/^/    # /;' fb.hg19.chainRBest.BosTau9.txt
+    #	1290531802 bases of 2991710746 (43.137%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/bosTau9/bed/blastz.hg19.swap
+    cd /hive/data/genomes/bosTau9/bed/blastz.hg19.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzBosTau9.2020-12-07/DEF \
+        -swap  -syntenicNet -workhorse=hgwdev \
+	-smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #   real    72m28.826s
+
+    cat fb.bosTau9.chainHg19Link.txt
+    #   1342159887 bases of 2715853792 (49.419%) in intersection
+    cat fb.bosTau9.chainSynHg19Link.txt
+    #	1305558878 bases of 2715853792 (48.072%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` bosTau9 hg19) > rbest.log 2>&1 &
+    # real    297m58.059s
+
+    sed -e 's/^/    # /;' fb.bosTau9.chainRBest.Hg19.txt
+    # 1291348753 bases of 2715853792 (47.549%) in intersection
+
+#############################################################################
+# Exome Probesets composite track
+# Tue Jan  5 02:25:06 PST 2021 Made by Ana, Tiana, Pranav, Beagan, reviewed and committed by Max
+# Download data for hg19:
+cd /hive/data/genomes/hg19/bed/exomeProbesets
+We made tracks for the main Exome Kit Vendors: IDT, Twist Biosciences, MGI, Agilent, Roche, and Illumina.
+
+Note: IDT, Agilent and Roche have bed files for the Probes and for the Target Regions. Twist, MGI, and Illumina have bed files for the Target Regions (but not for Probes).
+
+Data downloaded in my windows desktop and copied to hgwdev:
+scp <file.bed> ana@hgwdev.gi.ucsc.edu://hive/data/genomes/hg19/bed/exonArrays/raw/idt
+
+# IDT Datasets:
+
+Track: IDT - xGen Exome Research Panel Probes
+Download: https://sfvideo.blob.core.windows.net/sitefinity/docs/default-source/supplementary-product-info/xgen-exome-research-panel-probesbe255a1532796e2eaa53ff00001c1b3c.bed?sfvrsn=425c3407_7&download=true
+File name: xgen-exome-research-panel-probes-hg19.bed
+
+Track: IDT - xGen Exome Research Panel Target Regions
+Download: https://sfvideo.blob.core.windows.net/sitefinity/docs/default-source/supplementary-product-info/xgen-exome-research-panel-targetsae255a1532796e2eaa53ff00001c1b3c.bed?sfvrsn=435c3407_7&download=true
+File name: xgen-exome-research-panel-targets-hg19.bed
+
+Track: IDT - xGen Exome Research Panel V2 Probes
+Download: https://sfvideo.blob.core.windows.net/sitefinity/docs/default-source/supplementary-product-info/xgen-exome-research-panel-v2-probes-hg1952a5791532796e2eaa53ff00001c1b3c.bed?sfvrsn=1dd1707_6&download=true
+File name: xgen-exome-research-panel-v2-probes-hg19.bed
+
+Track: IDT - xGen Exome Research Panel V2 Target Regions
+Download: https://sfvideo.blob.core.windows.net/sitefinity/docs/default-source/supplementary-product-info/xgen-exome-research-panel-v2-targets-hg1902a5791532796e2eaa53ff00001c1b3c.bed?sfvrsn=6dd1707_10&download=true
+File name: xgen-exome-research-panel-v2-targets-hg19.bed
+
+# Twist Biosciences Datasets:
+
+Track: Twist - RefSeq Exome Panel Target Regions
+Download: https://www.twistbioscience.com/sites/default/files/resources/2019-09/Twist_Exome_RefSeq_targets_hg19_0.bed
+File name: Twist_Exome_RefSeq_targets_hg19_0.bed
+
+Track: Twist - Core Exome Panel Target Regions
+Download: https://www.twistbioscience.com/sites/default/files/resources/2018-09/Twist_Exome_Target_hg19.bed
+File name: Twist_Exome_Target_hg19.bed
+
+Track: Twist - Comprehensive Exome Panel Target Regions
+Download: https://www.twistbioscience.com/sites/default/files/resources/2020-09/Twist_ComprehensiveExome_targets_hg19.bed
+File name: Twist_ComprehensiveExome_targets_hg19.bed
+
+# MGI Datasets:
+
+Track: MGI - Easy Exome Capture V4 Target Regions
+Download: https://en.mgitech.cn/Uploads/Temp/file/20191225/5e03126e808a0.zip
+File name: MGI_Exome_Capture_V4.bed
+
+Track: MGI - Easy Exome Capture V5 Target Regions
+Download: https://en.mgitech.cn/Uploads/Temp/file/20191225/5e0312a7be43e.zip
+File name: MGI_Exome_Capture_V5.bed
+
+# Agilent Datasets:
+Download for all Agilent files: https://earray.chem.agilent.com/suredesign/ - Password needed (from Ana)
+
+Track: Agilent - SureSelect Clinical Research Exome Covered by Probes
+File name: S06588914_Covered.bed
+
+Track: Agilent - SureSelect Clinical Research Exome Target Regions
+File name: S06588914_Regions.bed
+
+Track: Agilent - SureSelect Clinical Research Exome V2 Covered by Probes
+File name: S30409818_Covered.bed
+
+Track: Agilent - SureSelect Clinical Research Exome V2 Target Regions
+File name: S30409818_Regions.bed
+
+Track: Agilent - SureSelect Focused Exome Covered by Probes
+File name: S07084713_Covered.bed
+
+Track: Agilent - SureSelect Focused Exome Target Regions
+File name: S07084713_Regions.bed
+
+Track: Agilent - SureSelect All Exon V4 Covered by Probes
+File name: S03723314_Covered.bed
+
+Track: Agilent - SureSelect All Exon V4 Target Regions
+File name: S03723314_Regions.bed
+
+Track: Agilent - SureSelect All Exon V4 + UTRs Covered by Probes
+File name: S03723424_Covered.bed
+
+Track: Agilent - SureSelect All Exon V4 + UTRs Target Regions
+File name: S03723424_Regions.bed
+
+Track: Agilent - SureSelect All Exon V5 Covered by Probes
+File name: S04380110_Covered.bed
+
+Track: Agilent - SureSelect All Exon V5 Target Regions
+File name: S04380110_Regions.bed
+
+Track: Agilent - SureSelect All Exon V5 + UTRs Covered by Probes
+File name: S04380219_Covered.bed
+
+Track: Agilent - SureSelect All Exon V5 + UTRs Target Regions
+File name: S04380219_Regions.bed
+
+Track: Agilent - SureSelect All Exon V6 r2 Covered by Probes
+File name: S07604514_Covered.bed
+
+Track: Agilent - SureSelect All Exon V6 r2 Target Regions
+File name: S07604514_Regions.bed
+
+Track: Agilent - SureSelect All Exon V6 + COSMIC r2 Covered by Probes
+File name: S07604715_Covered.bed
+
+Track: Agilent - SureSelect All Exon V6 + COSMIC r2 Target Regions
+File name: S07604715_Regions.bed
+
+Track: Agilent - SureSelect All Exon V6 + UTR r2 Covered by Probes
+File name: S07604624_Covered.bed
+
+Track: Agilent - SureSelect All Exon V6 + UTR r2 Target Regions
+File name: S07604624_Regions.bed
+
+Track: Agilent - SureSelect All Exon V7 Covered by Probes
+File name: S31285117_Covered.bed
+
+Track: Agilent - SureSelect All Exon V7 Target Regions
+File name: S31285117_Regions.bed
+
+# Roche Datasets:
+
+Track: Roche - KAPA HyperExome Capture Probe Footprint
+Download: https://sequencing.roche.com/content/dam/rochesequence/worldwide/design-files/KAPA%20HyperExome%20Design%20files%20hg19.zip
+File name: KAPA_HyperExome_hg19_capture_targets.bed
+
+Track: Roche - KAPA HyperExome Primary Target Regions
+Download:
+https://sequencing.roche.com/content/dam/rochesequence/worldwide/design-files/KAPA%20HyperExome%20Design%20files%20hg19.zip
+File name: KAPA_HyperExome_hg19_primary_targets.bed
+
+Track: Roche - SeqCap EZ Exome V3 Capture Probe Footprint
+Download: https://sequencing.roche.com/content/dam/rochesequence/worldwide/shared-designs/SeqCapEZ_Exome_v3.0_Design_Annotation_files.zip
+File name: SeqCap_EZ_Exome_v3_hg19_capture_targets.bed
+
+Track: Roche - SeqCap EZ Exome V3 Primary Target Regions
+Download: https://sequencing.roche.com/content/dam/rochesequence/worldwide/shared-designs/SeqCapEZ_Exome_v3.0_Design_Annotation_files.zip
+File name: SeqCap_EZ_Exome_v3_hg19_primary_targets.bed
+
+Track: Roche - SeqCap EZ Exome V3 + UTR Capture Probe Footprint
+Download: https://sequencing.roche.com/content/dam/rochesequence/worldwide/shared-designs/Exome_UTR_Design_Annotation_Files.zip
+File name: SeqCap_EZ_ExomeV3_Plus_UTR_hg19_capture_annotated.bed
+
+Track: Roche - SeqCap EZ Exome V3 + UTR Primary Target Regions
+Download: https://sequencing.roche.com/content/dam/rochesequence/worldwide/shared-designs/Exome_UTR_Design_Annotation_Files.zip
+File name: SeqCap_EZ_ExomeV3_Plus_UTR_hg19_primary_annotated.bed
+
+Track: Roche - SeqCap EZ MedExome Capture Probe Footprint
+Download: https://sequencing.roche.com/content/dam/rochesequence/worldwide/shared-designs/MedExome_design_files.zip
+File name: SeqCap_EZ_MedExome_hg19_capture_targets.bed
+
+Track: Roche - SeqCap EZ MedExome Empirical Target Regions
+Download: https://sequencing.roche.com/content/dam/rochesequence/worldwide/shared-designs/MedExome_design_files.zip
+File name: SeqCap_EZ_MedExome_hg19_empirical_targets.bed
+
+Track: Roche - SeqCap EZ MedExome + Mito Capture Probe Footprint
+Download: https://sequencing.roche.com/content/dam/rochesequence/worldwide/shared-designs/MedExomePlusMito_design_files.zip
+File name: SeqCap_EZ_MedExomePlusMito_hg19_capture_targets.bed
+
+Track: Roche - SeqCap EZ MedExome + Mito Empirical Target Regions
+Download: https://sequencing.roche.com/content/dam/rochesequence/worldwide/shared-designs/MedExomePlusMito_design_files.zip
+File name: SeqCap_EZ_MedExomePlusMito_hg19_empirical_targets.bed
+
+# Illumina Datasets:
+
+Track: Illumina - Nextera DNA Exome V1.2 Target Regions
+Download: https://support.illumina.com/content/dam/illumina-support/documents/downloads/productfiles/nextera-dna-exome/nextera-dna-exome-targeted-regions-manifest-bed.zip
+File name: nextera-dna-exome-targeted-regions-manifest-v1-2.bed
+
+Track: Illumina - Nextera Rapid Capture Exome Target Regions
+Download: https://support.illumina.com/softwaredownload.html?assetId=d2c2bc7e-75e5-4f20-bfb7-780839390565&assetDetails=nexterarapidcapture_exome_targetedregions.bed - Password needed (from Ana)
+File name: nexterarapidcapture_exome_targetedregions.bed
+
+Track: Illumina - Nextera Rapid Capture Exome V1.2 Target Regions
+Download: https://support.illumina.com/softwaredownload.html?assetId=197e4b2b-161d-4576-a52f-1204833567c5&assetDetails=nexterarapidcapture_exome_targetedregions_v1.2.bed - Password needed (from Ana)
+File name: nexterarapidcapture_exome_targetedregions_v1.2.bed
+
+Track: Illumina - Nextera Rapid Capture Expanded Exome Target Regions
+Download: https://support.illumina.com/softwaredownload.html?assetId=f020d708-dad9-44e4-8c7c-439add28536c&assetDetails=nexterarapidcapture_expandedexome_targetedregions.bed - Password needed (from Ana)
+File name: nexterarapidcapture_expandedexome_targetedregions.bed
+
+Track: Illumina - TruSeq DNA Exome V1.2 Target Regions
+Download: https://support.illumina.com/content/dam/illumina-support/documents/downloads/productfiles/truseq/truseq-dna-exome/truseq-dna-exome-targeted-regions-manifest-v1-2-bed.zip
+File name: truseq-dna-exome-targeted-regions-manifest-v1-2.bed
+
+Track: Illumina - TruSeq Rapid Exome V1.2 Target Regions
+Download: https://support.illumina.com/content/dam/illumina-support/documents/downloads/productfiles/truseq/truseq-rapid-exome-targeted-regions-manifest-v1-2-bed.zip
+File name: truseq-rapid-exome-targeted-regions-manifest-v1-2.bed
+
+Track: Illumina - TruSight ONE V1.1 Target Regions
+Download: https://support.illumina.com/content/dam/illumina-support/documents/downloads/productfiles/trusight/trusight-one-file-for-ucsc-browser-v1-1.zip
+File name: TruSight_One_v1.1.bed
+
+Track: Illumina - TruSight ONE Expanded V2.0 Target Regions
+Download: https://support.illumina.com/content/dam/illumina-support/documents/downloads/productfiles/nextera/nextera-flex-for-enrichment/trusight-one-expanded-targeted-regions-v2-0.zip
+File name: TSOne_Expanded_Final_TargetedRegions_v2
+
+Track: Illumina - TruSight Exome Target Regions
+Download: https://support.illumina.com/content/dam/illumina-support/documents/documentation/chemistry_documentation/trusight/trusight_exome_manifest_a.bed
+File name: trusight_exome_manifest_a.bed
+
+Track: Illumina - AmpliSeq Exome Panel Target Regions
+Download: https://support.illumina.com/content/dam/illumina-support/documents/downloads/productfiles/ampliseq-for-illumina/ampliseq-for-illumina-exome-panel-manifest-file-bed.zip
+File name: Exome.dna_manifest.20180509.bed
+
+# Converting bed files for hg19:
+
+All files were converted from bed to bigBed using the Genome Browser documentation. All of the files underwent the following steps, with the exception of a few files that are described below. (NOTE: the documentation includes a step to remove any header lines -- only a couple files had headers, and those were simply removed within vi/vim.)
+
+1. Sort all bed files
+sort -k1,1 -k2,2n unsorted.bed > input.bed
+
+2. fetchChromSizes (run once)
+fetchChromSizes hg19 > hg19.chrom.sizes
+
+Note: this only needs to be run once, since ione hg19.chrom.sizes files can be used for all bedToBigBed runs.
+
+3. bedToBigBed for all files
+bedToBigBed input.bed hg19.chrom.sizes myBigBed.bb
+
+Here's an example using the MGI Exome Capture V4 file:
+
+sort -k1,1 -k2,2n MGI_Exome_Capture_V4.bed > sorted_MGI_Exome_Capture_V4.bed
+
+fetchChromSizes hg19 > hg19.chrom.sizes
+
+bedToBigBed sorted_MGI_Exome_Capture_V4.bed hg19.chrom.sizes MGI_Exome_Capture_V4.bb
+
+--
+
+The following files from Roche had long entries in col4, causing these files to have rows that were too long for bedToBigBed. Therefore, all the input bed files had col4 cut. (Note: these were just the ensembl and ccds ids, which did not provide any other substantial information.)
+
+We ran the command
+
+> cut -f1,2,3
+
+for all such files. Here's an example for the Roche - KAPA HyperExome Capture Probe:
+
+Footprint file:
+
+cut -f1,2,3 sorted-KAPA_HyperExome_hg19_capture_targets.bed > sorted-cut-KAPA_HyperExome_hg19_capture_targets.bed
+
+
+#############################################################################
+# haploinsufficiency from DECIPHER - DONE 3/18/2021 Jonathan
+
+# Download latest predictions list from https://decipher.sanger.ac.uk/about/downloads/data
+mkdir -p /hive/data/outside/decipher/haploinsufficiency
+cd /hive/data/outside/decipher/haploinsufficiency
+wget https://decipher.sanger.ac.uk/files/downloads/HI_Predictions_Version3.bed.gz
+filePath=`pwd`/HI_Predictions_Version3.bed.gz
+
+# zcat | head shows the file is nearly ready to go, but could benefit from a bit of reorganization
+# (also floating point score values don't work for some bed processors)
+
+mkdir -p /hive/data/genomes/hg19/bed/decipherHaplo
+cd /hive/data/genomes/hg19/bed/decipherHaplo
+
+printf 'chomp;
+@fields = split /\t/;
+($gene, $score, $pct) = split /\|/, $fields[3];
+$fields[3] = $gene;
+$fields[4] = 0;
+$rgb = $fields[8];
+$rgb =~ s/^(\d+),(\d+),0$/$1,$2,$1/;  # change red/green to magenta/green
+$fields[8] = $rgb;
+push @fields, ($pct, $score);
+push @fields, ("$gene, HI: $pct");
+print join ("\t", @fields) . "\n";
+' > parse.pl
+
+zcat $filePath | tail -n +2 | perl -nf parse.pl | bedSort stdin HI_Predictions.bed
+
+bedToBigBed HI_Predictions.bed -type=bed9+2 -as=$HOME/kent/src/hg/lib/haploinsufficiency.as -tab ../../chrom.sizes haploinsufficiency.bb
+
+mkdir -p /gbdb/hg19/bbi/haploins/
+cd /gbdb/hg19/bbi/haploins/
+ln -s /hive/data/genomes/hg19/bed/decipherHaplo/haploinsufficiency.bb .
+
+
+#############################################################################
+# skinSoleBoldo JimK 01-14-2020
+# This describes how we got the skinSoleBoldo data set into the
+# Genome Browser from the Cell Browser.
+#############################################################################
+
+# Create working directory and go there
+mkdir /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo
+cd /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo
+
+# Create output dir for binaries
+mkdir bbi
+
+# Downloaded files from the UCSC cell browser's as so
+wget https://cells.ucsc.edu/aging-human-skin/meta.tsv
+wget https://cells.ucsc.edu/aging-human-skin/exprMatrix.tsv.gz
+
+# Get the first line (fields) out of meta.tsv and also make stats on it
+head -1 meta.tsv > meta.fields
+tabInfo meta.tsv -vals=20 > meta.20
+
+
+# Make a bunch of smaller matrices by clustering columns.  Mostly we'll use the cluster one
+# but some of the others are good to look at sometimes too.  This is the time consuming step.
+mkdir clust
+matrixClusterColumns -makeIndex=clust/exprMatrix.ix  exprMatrix.tsv.gz meta.tsv \
+    Celltype clust/cell_type.matrix bbi/cell_type.stats \
+    subj clust/donor.matrix bbi/donor.stats \
+    age	clust/age.matrix bbi/age.stats \
+    Celltype_and_Age clust/age_cell_type.matrix bbi/age_cell_type.stats
+
+# Get the first column (the genes) out of expression matrix.
+cut -f 1 clust/cell_type.matrix > gene.lst
+
+# Figure out the geneset they used and generate mapping file
+gencodeVersionForGenes gene.lst /hive/data/inside/geneSymVerTx.tsv -bed=mapping.bed
+# best is gencodeV19 as sym on hg19 with 21217 of 21353 (99.3631%) hits
+
+# Turn some into barChart, and then bigBarChart
+foreach s (cell_type donor age age_cell_type)
+    matrixToBarChartBed clust/$s.matrix mapping.bed clust/$s.bed -stats=bbi/$s.stats -trackDb=clust/$s.ra
+    bedSort clust/$s.bed clust/$s.bed
+    bedToBigBed clust/$s.bed /hive/data/genomes/hg19/chrom.sizes bbi/$s.bb -type=bed6+3 -as=/cluster/home/kent/src/hg/lib/simpleBarChartBed.as
+end
+
+# Make up special colors for cell_type.  First manually create two column
+# file that relates at least some of sample labels to cell types we have colors for.
+# Call this file clust/cell_type.labels.
+matrixClusterColumns clust/cell_type.matrix clust/cell_type.labels cluster clust/cell_type.unnormed clust/cell_type.restats
+matrixNormalize column sum clust/cell_type.unnormed clust/cell_type.ref
+
+# Use same colors for sample
+foreach s (cell_type donor age age_cell_type)
+    hcaColorCells clust/cell_type.ref ../typeColors.tsv clust/$s.matrix clust/$s.refStats -trackDb=clust/$s.colors -stats=bbi/$s.stats
+end
+
+# Link files needed by browser at runtime to the /gbdb dir
+mkdir /gbdb/hg19/bbi/skinSoleBoldo
+foreach s (cell_type donor age age_cell_type)
+    ln -s /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo/bbi/$s.bb /gbdb/hg19/bbi/skinSoleBoldo/
+    ln -s /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo/bbi/$s.stats /gbdb/hg19/bbi/skinSoleBoldo/
+end
+
+# Add the bits from clust/*.ra and clust/*.colors to hg19/trackDb.ra and you should be good.
+rm -f tracks.ra
+foreach s (cell_type donor age age_cell_type)
+    grep -v barChartColors clust/$s.ra >>tracks.ra
+    cat clust/$s.colors >> tracks.ra
+    echo transformFunc NONE >> tracks.ra
+    echo barChartLimit 2 >> tracks.ra
+    echo "" >> tracks.ra
+end
+
+
+#############################################################################
+# fetalGeneAtlas JimK 01-19-2020
+############################################################################
+# This is the RNA-seq part of the data set described in
+# "A human cell atlas of fetal gene expression" by Cao, Day et al
+# Science 13 Nove 2020.   This was imported from Cell Browser
+
+# Create directory for work.
+
+mkdir -p /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas
+cd /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas
+
+# Create output dir for binaries
+mkdir bbi
+
+# link in in files from cell browser
+ln -s /hive/data/inside/cells/datasets/fetal-gene-atlas/genes/all/meta.tsv .
+ln -s /hive/data/inside/cells/datasets/fetal-gene-atlas/genes/all/exprMatrix.tsv.gz .
+
+# Get the first line (fields) out of meta.tsv and also make stats on it
+head -1 meta.tsv > meta.fields
+tabInfo meta.tsv -vals=20 > meta.20
+
+
+# Make a bunch of smaller matrices by clustering columns.  Mostly we'll use the cluster one
+# but some of the others are good to look at sometimes too.  This is the time consuming step.
+mkdir clust
+matrixClusterColumns -makeIndex=clust/exprMatrix.ix  exprMatrix.tsv.gz meta.tsv \
+    Main_cluster_name clust/cell_type.matrix bbi/cell_type.stats \
+    Assay clust/Assay.matrix bbi/Assay.stats \
+    Experiment_batch clust/Experiment_batch.matrix bbi/Experiment_batch.stats \
+    Fetus_id clust/donor.matrix bbi/donor.stats \
+    Organ clust/Organ.matrix bbi/Organ.stats \
+    Organ_cell_lineage clust/Organ_cell_lineage.matrix bbi/Organ_cell_lineage.stats \
+    RT_group clust/RT_group.matrix bbi/RT_group.stats \
+    sex clust/sex.matrix bbi/sex.stats
+
+# Get the first column (the genes) out of expression matrix.
+cut -f 1 clust/cell_type.matrix > gene.lst
+
+
+# Figure out the geneset they used and generate mapping file
+gencodeVersionForGenes gene.lst /hive/data/inside/geneSymVerTx.tsv -bed=mapping.bed
+# best is gencodeV19 as id on hg19 with 60284 of 63562 (94.8428%) hits
+
+
+# Turn some into barChart, and then bigBarChart
+foreach s (cell_type Assay Experiment_batch donor Organ Organ_cell_lineage RT_group sex)
+    matrixToBarChartBed clust/$s.matrix mapping.bed clust/$s.bed -stats=bbi/$s.stats -trackDb=clust/$s.ra
+    bedSort clust/$s.bed clust/$s.bed
+    bedToBigBed clust/$s.bed /hive/data/genomes/hg19/chrom.sizes bbi/$s.bb -type=bed6+3 -as=/cluster/home/kent/src/hg/lib/simpleBarChartBed.as
+end
+
+# Make up special colors for cell_type.  First manually create two column
+# file that relates at least some of sample labels to cell types we have colors for.
+# Call this file cell_type.labels.
+matrixClusterColumns clust/cell_type.matrix cell_type.labels cluster clust/cell_type.unnormed clust/cell_type.restats
+matrixNormalize column sum clust/cell_type.unnormed clust/cell_type.ref
+#hcaColorCells clust/cell_type.ref ../typeColors.tsv clust/cell_type.matrix clust/cell_type.refStats -trackDb=clust/cell_type.colors -stats=bbi/cell_type.stats
+
+# Use same colors for some others
+foreach s (cell_type Assay Experiment_batch donor Organ Organ_cell_lineage RT_group sex)
+    hcaColorCells clust/cell_type.ref ../typeColors.tsv clust/$s.matrix clust/$s.refStats -trackDb=clust/$s.colors -stats=bbi/$s.stats
+end
+
+# Link files needed by browser at runtime to the /gbdb dir
+mkdir /gbdb/hg19/bbi/fetalGeneAtlas
+foreach s (cell_type Assay Experiment_batch donor Organ Organ_cell_lineage RT_group sex)
+    ln -s /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas/bbi/$s.bb /gbdb/hg19/bbi/fetalGeneAtlas/
+    ln -s /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas/bbi/$s.stats /gbdb/hg19/bbi/fetalGeneAtlas/
+end
+
+
+hgBbiDbLink hg19 fetalGeneAtlasCellTypes /gbdb/hg19/bbi/fetalGeneAtlas/cell_type.bb
+hgBbiDbLink hg19 fetalGeneAtlasDonor /gbdb/hg19/bbi/fetalGeneAtlas/donor.bb
+hgBbiDbLink hg19 fetalGeneAtlasAssay /gbdb/hg19/bbi/fetalGeneAtlas/Assay.bb
+hgBbiDbLink hg19 fetalGeneAtlasExperiment /gbdb/hg19/bbi/fetalGeneAtlas/Experiment_batch.bb
+hgBbiDbLink hg19 fetalGeneAtlasOrgan /gbdb/hg19/bbi/fetalGeneAtlas/Organ.bb
+hgBbiDbLink hg19 fetalGeneAtlasOrganCellLineage /gbdb/hg19/bbi/fetalGeneAtlas/Organ_cell_lineage.bb
+hgBbiDbLink hg19 fetalGeneAtlasRtGroup /gbdb/hg19/bbi/fetalGeneAtlas/RG_group.bb
+hgBbiDbLink hg19 fetalGeneAtlasSex /gbdb/hg19/bbi/fetalGeneAtlas/sex.bb
+
+# Add the bits from clust/*.ra and clust/*.colors to hg19/trackDb.ra and you should be good.
+foreach s (cell_type Assay Experiment_batch donor Organ Organ_cell_lineage RT_group sex)
+    echo >> clust/$s.ra
+end
+cat clust/*.ra > tracks.ra
+
+#############################################################################
+# CADD, max Wed Feb 10 06:08:01 PST 2021
+# note for the next release / archiving, procedure as per team meeting and Chris Lee:
+# don't forget to copy the new files to /usr/local/apache/htdocs-hgdownload/goldenPath/archive/hg19/cadd/<version>
+# and update the "current" symlink
+# also add a section "Archived Data" to the docs page with a link to the hgdownload archive directory
+# If motivated, also add a hub.txt
+cd /hive/data/genomes/hg19/bed/cadd/
+wget https://krishna.gs.washington.edu/download/CADD/v1.6/GRCh37/InDels.tsv.gz
+wget https://krishna.gs.washington.edu/download/CADD/v1.6/GRCh37/whole_genome_SNVs.tsv.gz
+time python ~/kent/src/hg/makeDb/cadd/caddToBed.py InDels.tsv.gz
+time python ~/kent/src/hg/makeDb/cadd/caddToWig.py
+wigToBigWig a.wig ../../chrom.sizes a.bw  &
+wigToBigWig c.wig ../../chrom.sizes c.bw  &
+wigToBigWig a.wig ../../chrom.sizes a.bw &
+wigToBigWig g.wig ../../chrom.sizes g.bw &
+bedToBigBed ins.bed ../../chrom.sizes ins.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as
+bedToBigBed del.bed ../../chrom.sizes del.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as
+rm -f *.wig *.bed
+##############################################################################
+#  update sno/miRNA TRACK (WORKING - 2021-02-18 - Hiram)
+    # last release for GRCh37 was version 20: 2013-06-13
+
+    # The data in this track is out of date so update the track.
+    mkdir /hive/data/genomes/hg19/bed/wgRna-2013-06-13
+    cd /hive/data/genomes/hg19/bed/wgRna-2013-06-13
+
+    wget --timestamping \
+         ftp://mirbase.org/pub/mirbase/20/genomes/hsa.gff3
+
+    # examine chromosome list:
+    grep -v "^#" hsa.gff3 | cut -f1 | sort | uniq -c > chr.list
+
+    # Only select the primary transcripts, make coords 0-based so they match
+    # gencode and refseq tracks, and remove ID and Alias entries in column 9:
+    grep -v "^#" hsa.gff3 | grep -c "miRNA_primary_transcript"
+    # 1871
+    tawk '{if ($3 == "miRNA_primary_transcript") {$4-=1; print;}}' hsa.gff3 \
+        | grep -v '^#' | tr ';' '\t' | tr '=' '\t' | cut -f1-8,14 \
+           > hsa.primaryCleaned.gff3
+    wc -l hsa.primaryCleaned.gff3
+    # 1971
+
+    # now get into bed format, with type="miRNA"
+    tawk '{print $1, $4, $5, $9, 0, $7, 0, 0, "miRNA";}' \
+       hsa.primaryCleaned.gff3 > miRNA.bed
+
+    # get snoRNA entries from current wgRNA table:
+    hgsql -Ne "select * from wgRna where type != 'miRNA'" hg19 \
+      | cut -f2- > wgRna.other.bed
+
+        # combine and load:
+    cat miRNA.bed wgRna.other.bed > wgRna2021-02-18.bed
+    hgLoadBed -tab -renameSqlTable -verbose=4 \
+        -sqlTable=$HOME/kent/src/hg/lib/wgRna.sql \
+        -as=$HOME/kent/src/hg/lib/wgRna.as hg19 wgRnaNew wgRna2021-02-18.bed
+# ### kent source version 410 ###
+# Reading wgRna2021-02-18.bed
+# Read 2273 elements of size 9 from wgRna2021-02-18.bed
+# Loading hg19
+
+    # compare old and new tables:
+    hgsql -Ne "select type, count(*) from wgRna group by type" hg19
++---------+-----+
+| CDBox   | 269 |
+| HAcaBox | 112 |
+| miRNA   | 939 |
+| scaRna  |  21 |
++---------+-----+
+    hgsql -Ne "select type, count(*) from wgRnaNew group by type" hg19
++---------+------+
+| CDBox   |  269 |
+| HAcaBox |  112 |
+| miRNA   | 1871 |
+| scaRna  |   21 |
++---------+------+
+    # compared to hg38:
+    hgsql -Ne "select type, count(*) from wgRna group by type" hg38
++---------+------+
+| CDBox   |  269 |
+| HAcaBox |  112 |
+| miRNA   | 1918 |
+| scaRna  |   21 |
++---------+------+
+
+    # backup old table and compare to new one before rename. Should be only miRNA update:
+    hgsql -Ne "select * from wgRna" hg19 | cut -f2- > wgRna.backup
+    comm -23 <(sort -k1 -k2n wgRna2021-02-18.bed) <(sort -k1 -k2n wgRna.backup) | cut -f9 | sort -u
+miRNA
+
+    # rename wgRnaNew table:
+    hgsqlSwapTables -dropTable3 hg19 wgRnaNew wgRna wgRnaOld
+
+##############################################################################
+# Add Revel track, Max, Thu Apr 15 03:33:49 PDT 2021
+cd /hive/data/genomes/hg19/bed/revel
+aria2c https://rothsj06.u.hpc.mssm.edu/revel_grch38_all_chromosomes.csv.zip
+unzip revel_grch38_all_chromosomes.csv.zip
+# make sure that no weird chroms and no weird multi-nucleotide changes
+cat revel_grch38_all_chromosomes.csv  | tr ',' '\t' | cut -f5 | grep -v alt | awk '{print length($1)}' | uniq > lens.tmp &
+cut -d, revel_grch38_all_chromosomes.csv -f1 | uniq | sort | uniq -c > chroms.tmp &
+pigz revel_grch38_all_chromosomes.csv
+time python revelToWig.py revel_grch38_all_chromosomes.csv.gz hg19
+wigToBigWig t.wig ../../chrom.sizes t.bw &
+wigToBigWig c.wig ../../chrom.sizes c.bw  &
+wigToBigWig a.wig ../../chrom.sizes a.bw &
+wigToBigWig g.wig ../../chrom.sizes g.bw &
+##############################################################################
+# LASTZ human/hg19 Gorilla/gorGor6 - (DONE - 2021-06-28 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28/
+    cd /hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28/
+
+    printf '# human vs gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: gorilla gorGor6
+SEQ2_DIR=/hive/data/genomes/gorGor6/gorGor6.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    113m7.350s
+
+    cat fb.hg19.chainGorGor6Link.txt
+    # 2874362387 bases of 2991710746 (96.078%) in intersection
+
+    cat fb.hg19.chainSynGorGor6Link.txt
+    # 2854800888 bases of 2991710746 (95.424%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg19 gorGor6) > rbest.log 2>&1 &
+    # real    67m18.231s
+
+    sed -e 's/^/ # /;' fb.hg19.chainRBest.GorGor6.txt
+     # 2691356356 bases of 2991710746 (89.960%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/gorGor6/bed/blastz.hg19.swap
+    cd /hive/data/genomes/gorGor6/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28/DEF \
+        -swap -syntenicNet -workhorse=hgwdev  \
+         -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -chainMinScore=3000 -chainLinearGap=medium)  > swap.log 2>&1 &
+    # real 69m32.058s
+
+    cat fb.gorGor6.chainHg19Link.txt
+    2735990533 bases of 2999027915 (91.229%) in intersection
+
+    cat fb.gorGor6.chainSynHg19Link.txt
+    2726237067 bases of 2999027915 (90.904%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` gorGor6 hg19) > rbest.log 2>&1 &
+    # real    70m15.001s
+
+    sed -e 's/^/    # /;' fb.gorGor6.chainRBest.Hg19.txt
+    # 2694784811 bases of 2999027915 (89.855%) in intersection
+
+##############################################################################

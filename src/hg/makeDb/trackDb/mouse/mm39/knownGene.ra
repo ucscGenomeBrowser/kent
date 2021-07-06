@@ -1,0 +1,50 @@
+
+track knownGene
+shortLabel GENCODE VM26
+longLabel GENCODE VM26
+priority 1
+visibility pack
+type bigGenePred
+bigDataUrl /gbdb/mm39/gencode/gencodeVM26.bb
+baseColorDefault genomicCodons
+group genes
+isGencode3 on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+labelFields geneName,name,geneName2,name2
+defaultLabelFields geneName
+itemRgb on
+#externalDb knownGeneVM26
+maxItems 50000
+html knownGene
+searchIndex name
+
+
+searchName knownGeneAcc
+searchTable knownGene
+searchMethod exact
+searchType knownGene
+shortCircuit 1
+semiShortCircuit 1
+termRegex ENST[0-9.]+
+searchPriority 9
+
+track knownGeneOld12
+shortLabel Old UCSC Genes
+longLabel Previous Version of UCSC Genes
+group genes
+visibility hide
+color 82,82,160
+type genePred
+hgsid on
+oldToNew kg12ToKg13
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchName knownGeneFast
+searchTable knownGene
+searchType knownGeneFast
+shortCircuit 1
+searchPriority 1
+searchTrix /gbdb/mm39/knownGeneFastVM26.ix
+doPage 1
+

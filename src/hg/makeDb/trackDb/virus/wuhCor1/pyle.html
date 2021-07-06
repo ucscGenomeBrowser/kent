@@ -1,26 +1,28 @@
 <H2>Description</H2>
-<p>Genome-wide RNA Secondary Structure Measurements and Prediction</p>
-<p>This track shows data from Anna Pyle's lab describing the secondary 
-structure of the SARS-CoV-2 RNA genome. The authors perform in-silico analyses 
-as well as experimental measurements using SHAPE (selective 2 hydroxyl acylation) 
-to experimentally analyze the RNA structure of the SARS-CoV-2 genome.</p>
-<p>This data is described in depth in <a target="_blank" 
-href="https://www.biorxiv.org/content/10.1101/2020.07.06.190660v1.">de Cesaris Araujo Tavares <em>et al</em></a> 
-for Shanon entropy values and <a target="_blank" 
-href="https://www.biorxiv.org/content/10.1101/2020.07.10.197079v1.full.pdf">Huston, Wan, <em>et al</em></a> for SHAPE data.
+<p>This track shows data from Anna Pyle's lab at Yale University describing the RNA secondary 
+structure of the SARS-CoV-2 genome. The authors performed experimental
+measurements using SHAPE (selective 2-hydroxyl acylation) as well as in-silico analysis.
+</p>
+
+<p>These data are described in depth in 
+<a target="_blank" href="https://www.biorxiv.org/content/10.1101/2020.07.06.190660v1.">de Cesaris Araujo Tavares <em>et al</em></a> 
+and <a target="_blank" href="https://www.biorxiv.org/content/10.1101/2020.07.10.197079v1.full.pdf">Huston, Wan, <em>et al</em></a>.</p>
 
 <H2>Display Conventions and Configuration</H2>
 
 <p>Two tracks are available:</p>
-<p><b>Full Length Shannon Entropy:</b> A genome-wide Shannon entropy profile derived
-from base pairing probabilities was computed using SuperFold.  A low Shannon
-entropy (near 0) is evidence for RNA structure.</p>
-<p><b>SHAPE reactivity:</b> In-vivo SHAPE reactivity per nucleotide of SARS-CoV2
-genome. A high positive score indicates that the nucleotide is accessible (not
-base-paired).  A low score (close to 0) indicates the nucleotide is not
-accessible (base-paired). A score of -999 means no data for that nucleotide was
-recovered experimentally. For visualization purposes the minimum display value
-has been set to -1 and the max has been set to 10.</p>
+<p><b>SHAPE reactivity:</b> A low SHAPE score (&lt;0.4) indicates that the nucleotide is
+not accessible (folded between complementary regions - base-paired). A mid 
+(0.4&lt;SHAPE&lt;0.85) or high SHAPE reactivity
+(&gt;0.85) indicates the nucleotide is flexible (single-stranded). A score of -999
+means no data for that nucleotide was recovered experimentally. For
+visualization purposes the minimum display value has been set to -0.5 and the
+max has been set to 4.</p>
+
+<p><b>Full Length Shannon Entropy:</b> A genome-wide Shannon entropy profile derived from 
+base pairing probabilities was computed using SuperFold with in vivo SHAPE reactivity as 
+constraints . A low Shannon entropy (near 0) is evidence for well-determined RNA conformation.
+</p>
 
 <p>Note that the authors provide further data (including secondary structure 
 predictions) at their github repository.</p>
@@ -49,4 +51,11 @@ Huston NC, Wan H, Araujo Tavares RC, Wilen C, Pyle AM.
 <em>bioRxiv</em>. 2020 Jul 10;.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32676598" target="_blank">32676598</a>; PMC: <a
     href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7359520/" target="_blank">PMC7359520</a>
+</p>
+<p>
+Araujo Tavares RC, Mahadeshwar G, Pyle AM.
+<a href="https://www.biorxiv.org/content/10.1101/2020.07.06.190660v1." target="_blank">
+    The global and local distribution of RNA structure throughout the SARS-CoV-2 genome</a>.
+<em>bioRxiv</em>. 2020 Jul 7;.
+doi: <a href="https://doi.org/10.1101/2020.07.06.190660" target="_blank">190660</a>
 </p>

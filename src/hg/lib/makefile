@@ -15,7 +15,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     bed12wSeq.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bigBedFind.o bigBedLabel.o \
     bigDbSnp.o bigGenePred.o bigPsl.o bigTransMap.o bioImage.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o\
-    cart.o cartDb.o cartJson.o cartTrackDb.o cdsEvidence.o cdsOrtho.o cdsPick.o cdsSpec.o \
+    cart.o cartDb.o cartJson.o cartTrackDb.o cartRewrite.o cdsEvidence.o cdsOrtho.o cdsPick.o cdsSpec.o \
     ccdsInfo.o ccdsNotes.o ccdsGeneMap.o celeraCoverage.o \
     celeraDupPositive.o cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgh.o chainCart.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
@@ -49,7 +49,8 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     encode3/encode2Manifest.o encode3/encode3Valid.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
-    estPair.o exoFish.o expData.o expRecord.o exprBed.o facetField.o factorSource.o \
+    estPair.o exoFish.o expData.o expRecord.o exprBed.o \
+    facetedTable.o facetField.o factorSource.o \
     fbTables.o featureBits.o fileUi.o findKGAlias.o findKGProtAlias.o fishClones.o \
     flyBase2004Xref.o \
     flyBaseSwissProt.o flyreg.o flyreg2.o gbExtFile.o gbWarn.o gbMiscDiff.o gbProtAnn.o gcPercent.o gbSeq.o \
@@ -83,7 +84,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o ncbiRefLink.o \
     ncbiRefSeqLink.o netAlign.o netCart.o nonCodingUi.o omimTitle.o ooUtils.o \
     orthoAlleles.o pal.o pbStamp.o pcrResult.o pepPred.o \
-    peptideAtlasPeptide.o plasEndPairs.o polyGenotype.o protFeat.o pscreen.o \
+    peptideAtlasPeptide.o plasEndPairs.o polyGenotype.o protFeat.o protobuf.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rangeTreeFile.o rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
@@ -149,13 +150,14 @@ jWestBanner.h: jWestBanner.html
 
 web.o: jWestHeader.h jWestBanner.h
 
-straw.o: straw/straw.cpp straw/straw.h
-	cd straw && ${MAKE} straw.o
+straw.o: straw/straw.cpp straw/straw.h straw/cStraw.cpp
+	cd straw && ${MAKE} straw
 
 clean:
 	rm -f $(O);
 	rm -f jWestHeader.h jWestBanner.h
 	rm -f ../../lib/$(MACHTYPE)/jkhgap.a;
+	cd straw && ${MAKE} clean
 
 ctags:
 	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c ../inc/encode/*.h ../lib/encode/*.c

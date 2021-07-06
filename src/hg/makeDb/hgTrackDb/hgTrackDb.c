@@ -1,5 +1,6 @@
 /* hgTrackDb - Create trackDb table from text files. */
 
+
 /* Copyright (C) 2013 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 #include "common.h"
@@ -16,7 +17,6 @@
 #include "portable.h"
 #include "dystring.h"
 #include "regexHelper.h"
-
 
 
 void usage()
@@ -52,7 +52,9 @@ errAbort(
   "   for the ra files.\n"
   "  -release=alpha|beta|public - Include trackDb entries with this release tag only.\n"
   "  -settings - for trackDb scanning, output table name, type line,\n"
-  "            -  and settings hash to stderr while loading everything."
+  "            -  and settings hash to stderr while loading everything.\n"
+  "  -gbdbList - list of files to confirm existance of bigDataUrl files\n"
+  "  -addVersion - add cartVersion pseudo-table\n"
   );
 }
 
@@ -61,12 +63,18 @@ static struct optionSpec optionSpecs[] = {
     {"strict", OPTION_BOOLEAN},
     {"release", OPTION_STRING},
     {"settings", OPTION_BOOLEAN},
+    {"gbdbList", OPTION_STRING},
+    {"addVersion", OPTION_BOOLEAN},
     {NULL,      0}
 };
 
 static char *raName = "trackDb.ra";
 
 static char *release = "alpha";
+
+static char *gbdbList = NULL;
+static struct hash *gbdbHash = NULL;
+static boolean addVersion = FALSE;
 
 // release tags
 #define RELEASE_ALPHA  (1 << 0)
@@ -124,7 +132,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
 	slAddHead(&newList, tdb);
 	}
-    else if (trackDataAccessible(db, tdb) || tdbIsDownloadsOnly(tdb))
+    else if (tdbIsDownloadsOnly(tdb) || trackDataAccessibleHash(db, tdb, gbdbHash)) 
         {
         slAddHead(&newList, tdb);
         }
@@ -283,7 +291,7 @@ static void addVersionRa(boolean strict, char *database, char *dirName, char *ra
 /* Read in tracks from raName and add them to table, pruning as required. Call
  * top-down so that track override will work. */
 {
-struct trackDb *tdbList = trackDbFromRa(raName, NULL), *tdb;
+struct trackDb *tdbList = trackDbFromRa(raName, NULL, NULL), *tdb;
 /* prune records of the incorrect release */
 tdbList= pruneRelease(tdbList);
 
@@ -292,15 +300,15 @@ tdbList= pruneRelease(tdbList);
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     if (tdb->overrides != NULL)
-    {
+	{
         verbose(3,"# override '%s'\n", tdb->track);
 	applyOverride(trackHash, tdb);
-    }
+	}
     else
-    {
+	{
         verbose(3,"# track '%s'\n", tdb->track);
 	hashStore(trackHash, tdb->track)->val = tdb;
-    }
+	}
     }
 }
 
@@ -383,7 +391,7 @@ const static char *insertHtmlRegex =
     "[[:space:]]*#insert[[:space:]]+file[[:space:]]*=[[:space:]]*"
     "\"([^/][^\"]+)\"[[:space:]]*-->";
 
-static char *readHtmlRecursive(char *fileName, char *database)
+static char *readHtmlRecursive(char *fileName, char *database, struct trackDb *tdb)
 /* Slurp in an html file.  Wherever it contains insertHtmlRegex, recursively slurp that in
  * and replace insertHtmlRegex with the contents. */
 {
@@ -411,12 +419,19 @@ while (regexMatchSubstr(html, insertHtmlRegex, substrs, ArraySize(substrs)))
 	safecpy(insertFileName, sizeof(insertFileName), dir);
 	safencat(insertFileName, sizeof(insertFileName), html+substrs[3].rm_so,
 		 (substrs[3].rm_eo - substrs[3].rm_so));
-	if (!fileExists(insertFileName))
-	    errAbort("readHtmlRecursive: relative path '%s' (#insert'ed in %s) not found",
-		     insertFileName, fileName);
-	char *insertedText = readHtmlRecursive(insertFileName, database);
-	dyStringAppend(dy, insertedText);
-	freez(&insertedText);
+        char *varSubFilename = hVarSubst("readHtmlRecursive: var substitution error",
+                                                tdb, database, insertFileName);
+        if (varSubFilename)
+            safecpy(insertFileName, sizeof(insertFileName), varSubFilename);
+        if (differentString(fileName, insertFileName)) // protect against infinite loop
+            {
+            if (!fileExists(insertFileName))
+                errAbort("readHtmlRecursive: relative path '%s' (#insert'ed in %s) not found",
+                         insertFileName, fileName);
+            char *insertedText = readHtmlRecursive(insertFileName, database, tdb);
+            dyStringAppend(dy, insertedText);
+            freez(&insertedText);
+            }
 	}
     // All text after the regex match:
     dyStringAppend(dy, html+substrs[0].rm_eo);
@@ -441,7 +456,7 @@ for (td = tdbList; td != NULL; td = td->next)
 	safef(fileName, sizeof(fileName), "%s/%s.html", dirName, htmlName);
 	if (fileExists(fileName))
             {
-	    td->html = readHtmlRecursive(fileName, database);
+	    td->html = readHtmlRecursive(fileName, database, td);
             // Check for note ASCII characters at higher levels of verboseness.
             // Normally, these are acceptable ISO-8859-1 characters
             if  ((verboseLevel() >= 2) && hasNonAsciiChars(td->html))
@@ -455,11 +470,11 @@ static char *subsituteVariables(struct hashEl *el, char *database)
 /* substitute variables where supported */
 {
 char* val = (char*)el->val;
+char *name = el->name;
 /* Only some attribute support variable substitution, at least for now
  * Just leak memory when doing substitution.
  */
-if (sameString(el->name, "bigDataUrl") || sameString(el->name, "searchTrix") ||
-    sameString(el->name, "xrefDataUrl"))
+if (trackSettingIsFile(name))
     {
     val = replaceChars(val, "$D", database);
     }
@@ -751,6 +766,7 @@ if (strict)
 tdbList = pruneEmptyContainers(tdbList);
 checkSubGroups(database,tdbList,strict);
 trackDbPrioritizeContainerItems(tdbList);
+
 return tdbList;
 }
 
@@ -785,6 +801,48 @@ slReverse(&tdbList);
 return tdbList;
 }
 
+static int findMaxCartVersion(struct trackDb *tdbList)
+/* Search the track list for the maximum cartVersion. */
+{
+struct trackDb *tdb;
+int maxVal = 0;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char *value;
+    if ((value = hashFindVal(tdb->settingsHash, "cartVersion")) != NULL)
+        {
+        int check = sqlUnsigned(value);
+        if (check > maxVal)
+            maxVal = check;
+        }
+    }
+return maxVal;
+}
+
+static struct trackDb *makeCartVersionTrack(struct trackDb *tdbList)
+/* Build a trackDb entry for the cartVersion pseudo track that keeps track of the
+ * highest cartVersion used in this trackDb list.  
+ */
+{
+struct trackDb *cartVerTdb;
+
+AllocVar(cartVerTdb);
+
+/* we negate cartVersion so the priority puts it first on the list. */
+cartVerTdb->priority = -findMaxCartVersion(tdbList);
+
+cartVerTdb->track = cloneString("cartVersion");
+cartVerTdb->shortLabel = cloneString("cartVersion");
+cartVerTdb->longLabel = cloneString("cartVersion");
+cartVerTdb->html = cloneString("cartVersion");
+cartVerTdb->type = cloneString("cartVersion");
+cartVerTdb->url = cloneString("cartVersion");
+cartVerTdb->grp = cloneString("cartVersion");
+cartVerTdb->settings = cloneString("cartVersion");
+
+return cartVerTdb;
+}
+
 void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
                boolean strict)
 /* hgTrackDb - Create trackDb table from text files. */
@@ -795,6 +853,9 @@ char *tab = rTempName(getTempDir(), trackDbName, ".tab");
 struct trackDb *tdbList = buildTrackDb(org, database, hgRoot, strict);
 tdbList = flatten(tdbList);
 slSort(&tdbList, trackDbCmp);
+
+if (addVersion)
+    slAddHead(&tdbList, makeCartVersionTrack(tdbList));
 verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 
 /* Write to tab-separated file; hold off on html, since it must be encoded */
@@ -872,6 +933,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	    }
 	}
 
+    sqlUpdate(conn, NOSQLINJ "flush tables");
     sqlDisconnect(&conn);
     verbose(1, "Loaded database %s\n", database);
     }
@@ -895,6 +957,18 @@ errAbort("release must be alpha, beta, or public");
 return 0;  /* make compiler happy */
 }
 
+struct hash *hashLines(char *fileName)
+/* Read all lines in file and put them in a hash. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[1];
+struct hash *hash = newHash(0);
+while (lineFileRow(lf, row))
+    hashAdd(hash, row[0], NULL);
+lineFileClose(&lf);
+return hash;
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -907,6 +981,11 @@ if (strchr(raName, '/') != NULL)
     errAbort("-raName value should be a file name without directories");
 release = optionVal("release", release);
 releaseBit = getReleaseBit(release);
+gbdbList = optionVal("gbdbList", gbdbList);
+addVersion = optionExists("addVersion");
+
+if (gbdbList)
+    gbdbHash = hashLines(gbdbList);
 
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5], optionExists("strict"));
 return 0;

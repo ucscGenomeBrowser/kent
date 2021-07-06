@@ -1,11 +1,12 @@
 track IgM_Z-score-Healthy_Controls
 shortLabel IgM Z-score-Healthy Controls
-longLabel Proteome Microarray - IgM - Healthy Controls
+longLabel Proteome Peptide Microarray - IgM - Healthy Controls
 type bed 9
 compositeTrack on
 visibility dense
 labelOnFeature on
 itemRgb on
+parent pbm
 
     track IgM_Z-score-Healthy_Controls_1-015
     shortLabel 1-015

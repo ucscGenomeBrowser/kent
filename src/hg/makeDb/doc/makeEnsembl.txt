@@ -5,6 +5,55 @@
 #	Robert's experiments with an automated process.
 #
 ############################################################################
+# ensembl 104 update (DONE - 2021-05-11 - Hiram)
+############################################################################
+# when all done, reset the dateReference:  (DONE - 2021-06-02 - Hiram)
+     # next time, this first one will be 104 at 'may2021'
+     hgsql -e \
+'update trackVersion set dateReference="aug2020" where name="ensGene" AND version="101";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="current" where name="ensGene" AND version="104";' hgFixed
+
+# Prepare for asmEquivalent construction
+  cd /cluster/home/hiram/kent/src/hg/utils/automation
+  ./findEnsFtpNames.sh  104
+  # constructs files:
+# -rw-rw-r-- 1   149366 May 11 09:50 release.104.gtf.ls-lR
+# -rw-rw-r-- 1    22739 May 11 09:50 release.104.gtf.names
+# -rw-rw-r-- 1 10922563 May 11 09:52 release.104.MySQL.ls-lR
+# -rw-rw-r-- 1    12686 May 11 09:52 release.104.MySQL.names
+# -rw-rw-r-- 1  2173791 May 11 09:52 release.104.fasta.ls-lR
+# -rw-rw-r-- 1    25090 May 11 09:52 release.104.fasta.names
+
+  mkdir /hive/data/outside/ensembl/genomes/release-104
+  cd /hive/data/outside/ensembl/genomes/release-104
+  sed -e 's/103/104/;' ../release-103/fromPepNames.sh > fromPepNames.sh
+  ./fromPepNames.sh > dnaTopLevel.list
+  wc -l *.list
+  # 310 dnaTopLevel.list
+  diff dnaTopLevel.list ../release-103/dnaTopLevel.list
+# 104c104
+# < ficedula_albicollis/dna/Ficedula_albicollis.FicAlb1.5.dna.toplevel.fa.gz
+# ---
+# > ficedula_albicollis/dna/Ficedula_albicollis.FicAlb_1.4.dna.toplevel.fa.gz
+# 259c259
+# < scophthalmus_maximus/dna/Scophthalmus_maximus.ASM1334776v1.dna.toplevel.fa.gz
+# ---
+# > scophthalmus_maximus/dna/Scophthalmus_maximus.ASM318616v1.dna.toplevel.fa.gz
+
+  sed -e 's/103/104/; s/101/103/;' ../release-103/fetch.sh > fetch.sh
+  time (./fetch.sh) >> fetch.log 2>&1
+
+
+
+############################################################################
+# ensembl 103 update (DONE - 2021-03-12 - Hiram)
+############################################################################
+# The asmEquivalent table needs to be brought up to date first
+# following the instructions in: assemblyEquivalence/update.2021-03-10.txt
+# to perform that update
+
+############################################################################
 # ensembl 101 update (DONE - 2020-08-31 - Hiram)
 ############################################################################
 # when all done, reset the dateReference:  (DONE - 2020-09-01 - Hiram)
@@ -1931,25 +1980,25 @@ liftUp /hive/data/genomes/zonAlb1/jkStuff/ensToUcsc.lift
     # lots of new stuff in this one
 
     # Assemblies that have moved forward to new versions:
-# astMex1->astMex2 bosTau6->bosTau9 equCab2->equCab3 felCat8->felCat9 fr2->fr3 
+# astMex1->astMex2 bosTau6->bosTau9 equCab2->equCab3 felCat8->felCat9 fr2->fr3
 # galGal5->galGal6 oryLat2->oryLat4->oryLat5->oryLat6 xipMac1->xipMac2
 
 # The oryLat[456] sequences are one new version of Medaka, plus two new
 # assemblies of different strains.
 
     # completely new assemblies in this release:
-# acaPol1 ampCit1 ampOce1 ampPer1 anaTes1 astCal1 canLupDin1 chrPic2 cynSem1 
-# cypVar1 eptBur1 equAsi1 esoLuc2 funHet1 gamAff1 gopAga1 hapBur1 hipCom1 
-# ictPun1 kryMar1 labBer1 masArm1 mayZeb2 molMol1 monAlb1 neoBri1 oryMel1 
-# panPar1 panTig1 parKin1 perMag1 phaCin1 poeLat1 poeMex1 poeRet1 
-# pteVam1 punNye1 pygNat1 sclFor1 scoMax1 serDor1 serDum1 sphPun1 stePar1 
+# acaPol1 ampCit1 ampOce1 ampPer1 anaTes1 astCal1 canLupDin1 chrPic2 cynSem1
+# cypVar1 eptBur1 equAsi1 esoLuc2 funHet1 gamAff1 gopAga1 hapBur1 hipCom1
+# ictPun1 kryMar1 labBer1 masArm1 mayZeb2 molMol1 monAlb1 neoBri1 oryMel1
+# panPar1 panTig1 parKin1 perMag1 phaCin1 poeLat1 poeMex1 poeRet1
+# pteVam1 punNye1 pygNat1 sclFor1 scoMax1 serDor1 serDum1 sphPun1 stePar1
 # ursAme1 ursMar1 vulVul1 xipCou1
 
     # need new browsers for these assemblies:
-# acaPol1 ampCit1 ampOce1 ampPer1 anaTes1 canLupDin1 eptBur1 equAsi1 esoLuc2 
-# funHet1 gamAff1 gopAga1 hipCom1 ictPun1 kryMar1 labBer1 masArm1 mayZeb2 
-# molMol1 monAlb1 oryMel1 panPar1 parKin1 perMag1 phaCin1 poeLat1 poeMex1 
-# pygNat1 sclFor1 scoMax1 serDor1 serDum1 sphPun1 ursAme1 vulVul1 xipCou1 
+# acaPol1 ampCit1 ampOce1 ampPer1 anaTes1 canLupDin1 eptBur1 equAsi1 esoLuc2
+# funHet1 gamAff1 gopAga1 hipCom1 ictPun1 kryMar1 labBer1 masArm1 mayZeb2
+# molMol1 monAlb1 oryMel1 panPar1 parKin1 perMag1 phaCin1 poeLat1 poeMex1
+# pygNat1 sclFor1 scoMax1 serDor1 serDum1 sphPun1 ursAme1 vulVul1 xipCou1
 # astMex2 oryLat4 oryLat5 oryLat6 xipMac2
 
     # after the full runUpdate.sh script was done, a few needed attention:

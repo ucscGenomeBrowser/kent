@@ -311,6 +311,16 @@ if (cartDbUseSessionKey())
 fputc(lastSep,f);
 }
 
+char *defaultCartTable()
+/* Return the name of the defaultCart table. */
+{
+static char *defaultCartTable = NULL;
+if (defaultCartTable == NULL)
+    defaultCartTable = cfgOptionEnvDefault("HGDB_DEFAULTCARTTABLE",
+	    defaultCartTableConfVariable, defaultDefaultCartTableName);
+return defaultCartTable;
+}
+
 char *userDbTable()
 /* Return the name of the userDb table. */
 {

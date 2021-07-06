@@ -56,6 +56,12 @@
 #include "hubConnect.h"
 #include "bigBedFilter.h"
 
+// TODO: these should go away after refactoring of multi-region link
+#include "hex.h"
+#include "net.h"
+#include "trashDir.h"
+#include <openssl/sha.h>
+
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
@@ -341,9 +347,210 @@ printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->track, metada
 return TRUE;
 }
 
-void extraUiLinks(char *db,struct trackDb *tdb)
+/* Multi-region UI */
+
+boolean makeMultiRegionLink(char *db, struct trackDb *tdb, struct cart *cart)
+/* Make a link to launch browser in multi-region custom URL mode, based on
+ * track setting. This includes creating a custom track displaying the regions.
+ * The link switches to exit multi-region if browser is already in multi-region mode
+ * based on regions defined for this track. */
+{
+char *regionUrl = trackDbSetting(tdb, "multiRegionsBedUrl");
+if (isEmpty(regionUrl))
+    return FALSE;
+
+// make custom track for regions, alternating colors
+
+// TODO: truncate CT name and label at word boundary
+// TODO: fix bedPackDense to work with multi-region
+// TODO: limit number of regions ?
+struct dyString *dsCustomText = dyStringCreate(
+            "track name=\'%s ROI\' description=\'[Regions of Interest] %s' "
+            "visibility=dense bedPackDense=on labelOnFeature=on itemRgb=on noScoreFilter=on\n",
+                tdb->shortLabel, tdb->longLabel);
+
+#ifdef LATER
+// TODO: libify
+struct dyString *ds = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    int sd = netUrlOpen(regionUrl);
+    if (sd >= 0)
+        {
+        char *newUrl = NULL;
+        int newSd = 0;
+        if (netSkipHttpHeaderLinesHandlingRedirect(sd, regionUrl, &newSd, &newUrl))
+            {
+            if (newUrl) /* redirect can modify the url */
+                {
+                freeMem(newUrl);
+                sd = newSd;
+                }
+
+            ds = netSlurpFile(sd);
+            close(sd);
+            }
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    warn("%s", errCatch->message->string);
+
+// how come no warning if bad file ?
+errCatchFree(&errCatch);
+#endif
+
+// TODO: support $D, etc. in URL
+int sd = netUrlOpen(regionUrl);
+if (sd < 0)
+    return FALSE;
+struct dyString *dsRegionBed = netSlurpFile(sd);
+close(sd);
+if (!dsRegionBed)
+    return FALSE;
+char *regionBedTxt = dyStringCannibalize(&dsRegionBed);
+
+// count fields in BED. Accept up to BED9 (user-spec colors)
+char *bedTxt = cloneString(regionBedTxt);
+struct lineFile *lf = lineFileOnString(NULL, TRUE, bedTxt);
+char *words[9];
+int bedSize = lineFileChopNext(lf, words, sizeof words);
+lineFileClose(&lf);
+freeMem(bedTxt);
+
+lf = lineFileOnString(NULL, TRUE, regionBedTxt);
+
+// TODO: refactor with interact multi-region
+
+static char *colorLight = "184,201,255";       // blue
+static char *colorDark = "0,0,0";              // black
+char *color = colorLight;
+boolean doLightColor = TRUE;
+
+int id = 1;
+char name[100];
+char userColor[10];
+struct bed *region;
+
+struct tempName mrTn;
+trashDirFile(&mrTn, "hgt", "custRgn_track", ".bed");
+FILE *f = fopen(mrTn.forCgi, "w");
+if (f == NULL)
+    errAbort("can't create temp file %s", mrTn.forCgi);
+char regionInfo[1024];
+char *regionFile = cloneString(mrTn.forCgi);
+
+// TODO: trackDb setting ?
+#define MULTI_REGION_BED_DEFAULT_PADDING        1000
+int padding = MULTI_REGION_BED_DEFAULT_PADDING;
+safef(regionInfo, sizeof regionInfo, "#padding %d\n", padding);
+mustWrite(f, regionInfo, strlen(regionInfo));
+
+#ifdef LATER
+safef(regionInfo, sizeof regionInfo, "#shortDesc %s\n", name);
+mustWrite(f, regionInfo, strlen(regionInfo));
+#endif
+
+// write to trash file and custom track
+int regionCount = 0;
+while (lineFileChopNext(lf, words, bedSize))
+    {
+    region = bedLoadN(words, bedSize);
+    if (bedSize < 9)
+        {
+        // assign alternating light/dark color
+        color = doLightColor ? colorLight : colorDark;
+        doLightColor = !doLightColor;
+        }
+    else
+        {
+        // no lib ? sigh
+        int colorIx = (int)region->itemRgb;
+        struct rgbColor rgb = colorIxToRgb(colorIx);
+        safef(userColor, sizeof userColor, "%d,%d,%d", rgb.b, rgb.g, rgb.r);
+
+        // or this ? -- uglier but deeper in code
+        //safef(userColor, sizeof userColor, "%d,%d,%d", (region->itemRgb & 0xff0000) >> 16,
+            //(region->itemRgb & 0xff00) >> 8, (region->itemRgb & 0xff));
+        }
+    if (bedSize < 4)
+        {
+        // region label based on chrom and an item number
+        safef(name, sizeof name, "r%d/%s", id++, region->chrom);
+        }
+    else
+        {
+        strcpy(name, region->name);
+        }
+    // write to trash file
+    safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n",
+                    region->chrom, region->chromStart, region->chromEnd);
+    mustWrite(f, regionInfo, strlen(regionInfo));
+
+    // write to custom track
+    int start = max(region->chromStart - padding, 0);
+    int end = min(region->chromEnd + padding, hChromSize(db, region->chrom));
+    dyStringPrintf(dsCustomText, "%s\t%d\t%d\t%s\t"
+                        "0\t.\t%d\t%d\t%s\n",
+                            region->chrom, start, end,  name,
+                            start, end, color);
+    regionCount++;
+    }
+lineFileClose(&lf);
+fclose(f);
+
+// create SHA1 file; used to see if file has changed
+unsigned char hash[SHA_DIGEST_LENGTH];
+SHA1((const unsigned char *)regionInfo, strlen(regionInfo), hash);
+char newSha1[(SHA_DIGEST_LENGTH + 1) * 2];
+hexBinaryString(hash, SHA_DIGEST_LENGTH, newSha1, (SHA_DIGEST_LENGTH + 1) * 2);
+char sha1File[1024];
+safef(sha1File, sizeof sha1File, "%s.sha1", mrTn.forCgi);
+f = mustOpen(sha1File, "w");
+mustWrite(f, newSha1, strlen(newSha1));
+carefulClose(&f);
+
+char customHtml[1000];
+safef(customHtml, sizeof customHtml, "<h2>Description</h2>\n"
+    "<p>This custom track displays regions of interest for the "
+    "<a href='../cgi-bin/hgTrackUi?db=%s&g=%s'><em>%s</em> track</a>.</p>",
+        db, tdb->track, tdb->shortLabel);
+
+// TODO: support #padding in custom regions file
+
+enum trackVisibility vis =
+                hTvFromString(cartUsualString(cart, tdb->track, hStringFromTv(tdb->visibility)));
+if (vis == tvHide)
+    vis = tvDense;
+
+printf("<p>");
+printf("<a href='../cgi-bin/hgTracks?"
+                "virtMode=1&"
+                "virtModeType=customUrl&"
+                "%s=on&"
+                "virtShortDesc=%s&"
+                "multiRegionsBedUrl=%s&"
+                "%s=%s&"
+                "%s=%s&"
+                "%s=%s'>"
+        "Display regions of interest (%d)</a>",
+                    MULTI_REGION_BED_WIN_FULL, tdb->track, cgiEncode(regionFile), tdb->track, 
+                    hStringFromTv(vis),
+                    CT_CUSTOM_DOC_TEXT_VAR, cgiEncode(customHtml),
+                    CT_CUSTOM_TEXT_VAR, cgiEncode(dyStringCannibalize(&dsCustomText)), regionCount);
+printf(" in multi-region view (custom regions mode)");
+printf("&nbsp;&nbsp;&nbsp;");
+printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
+printf("</p>");
+return TRUE;
+}
+
+void extraUiLinks(char *db, struct trackDb *tdb, struct cart *cart)
 // Show metadata, and downloads, schema links where appropriate
 {
+makeMultiRegionLink(db, tdb, cart);
+
 struct slPair *pairs = trackDbMetaPairs(tdb);
 if (pairs != NULL)
     printf("<b>Metadata:</b><br>%s\n", pairsAsHtmlTable( pairs, tdb, FALSE, FALSE));
@@ -4035,20 +4242,22 @@ if (filterBy->styleFollows)
 printf(">%s</OPTION>\n",label);
 }
 
-static boolean filterByColumnIsList(struct cart *cart, struct trackDb *tdb,  char *setting)
-/* Is this filter setting expecting a list of items (e.g. has checkboxes) */
-{
-return (sameString(setting, FILTERBY_SINGLE_LIST) ||
-        sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||
-        sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
-}
-
 static boolean filterByColumnIsMultiple(struct cart *cart, struct trackDb *tdb,  char *setting)
-/* Is this filter setting for a comma separated column. */
+/* Is this filter setting expecting multiple items (e.g. has checkboxes in the UI) */
 {
 return (sameString(setting, FILTERBY_MULTIPLE) ||
         sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND) ||
         sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
+}
+
+static boolean advancedFilter(struct cart *cart, struct trackDb *tdb, char *setting)
+{
+if (!tdbIsBigBed(tdb))
+    return FALSE;
+
+return  sameString(setting, FILTERBY_MULTIPLE_LIST_OR) || sameString(setting, FILTERBY_MULTIPLE_LIST_AND);
 }
 
 void filterBySetCfgUiGuts(struct cart *cart, struct trackDb *tdb,
@@ -4094,8 +4303,8 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
     {
     puts("<TD>");
     char selectStatement[4096];
-    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_SINGLE_LIST);
-    if (filterByColumnIsList(cart, tdb, setting))
+    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_DEFAULT);
+    if (filterByColumnIsMultiple(cart, tdb, setting))
         safef(selectStatement, sizeof selectStatement, " (select multiple items - %s)", FILTERBY_HELP_LINK);
     else
         selectStatement[0] = 0;
@@ -4109,8 +4318,8 @@ puts("</tr><tr>");
 for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
     {
     puts("<td>");
-    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_SINGLE_LIST);
-    if (filterByColumnIsMultiple(cart, tdb, setting) && filterByColumnIsList(cart, tdb, setting) && tdbIsBigBed(tdb))
+    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_DEFAULT);
+    if (advancedFilter(cart, tdb, setting))
         {
         char cartSettingString[4096];
         safef(cartSettingString, sizeof cartSettingString, "%s.%s.%s", prefix,FILTER_TYPE_NAME_LOW, filterBy->column);
@@ -4127,11 +4336,11 @@ puts("</tr><tr>");
 int ix=0;
 for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next, ix++)
     {
-    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_SINGLE_LIST);
+    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_DEFAULT);
     puts("<td>");
     // value is always "All", even if label is different, to simplify javascript code
     int valIx = 1;
-    if (filterByColumnIsList(cart, tdb, setting))
+    if (filterByColumnIsMultiple(cart, tdb, setting))
         printf( "<SELECT id='%s%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n", selectIdPrefix,ix,filterBy->htmlName);
     else
         printf( "<SELECT id='%s%d' name='%s' style='font-size:.9em;'<BR>\n", selectIdPrefix,ix,filterBy->htmlName);
@@ -4513,6 +4722,7 @@ switch(cType)
                 {
                 labelCfgUi(db, cart, tdb, prefix);
                 mergeSpanCfgUi(cart, tdb, prefix);
+                wigOption(cart, prefix, title, tdb);
                 }
 			}
 			break;
@@ -7030,6 +7240,8 @@ char *geneLabel = cartUsualStringClosestToHome(cart, tdb,parentLevel, "label", "
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 labelCfgUi(db, cart, tdb, name);
+boolean isGencode3 = trackDbSettingOn(tdb, "isGencode3");
+
 if (sameString(name, "acembly"))
     {
     char *acemblyClass = cartUsualStringClosestToHome(cart,tdb,parentLevel,"type",
@@ -7038,7 +7250,7 @@ if (sameString(name, "acembly"))
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
     }
-else if (startsWith("gencodeV", name))
+else if (isGencode3)
     {
     newGencodeShowOptions(cart, tdb);
     }
@@ -8886,15 +9098,24 @@ if (tdbIsSuperTrack(tdb))
 if (cart != NULL) // cart is optional
     {
     char *cartVis = cartOptionalString(cart, tdb->track);
+    boolean cgiVar = FALSE;
     // check hub tracks for visibility settings without the hub prefix
     if (startsWith("hub_", tdb->track) && (cartVis == NULL))
-        cartVis = cartOptionalString(cart, trackHubSkipHubName(tdb->track));
+        {
+        cartVis = cgiOptionalString( trackHubSkipHubName(tdb->track));
+        cgiVar = TRUE;
+        }
 
     if (cartVis != NULL)
         {
         vis = hTvFromString(cartVis);
         if (subtrackOverride != NULL && tdbIsContainerChild(tdb))
             *subtrackOverride = TRUE;
+        if (cgiVar)
+            {
+            cartSetString(cart, tdb->track, cartVis);   // add the decorated visibility to the cart
+            cartRemove(cart, trackHubSkipHubName(tdb->track)); // remove the undecorated version
+            }
         }
     }
 return vis;
@@ -9252,7 +9473,7 @@ if (tableName)
     {
     char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
     if (date != NULL)
-	printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", date);
+	printf("<B>Data last updated at UCSC:&nbsp;</B>%s<BR>\n", date);
     }
 hFreeConn(&conn);
 }
@@ -9260,7 +9481,7 @@ hFreeConn(&conn);
 void printBbiUpdateTime(time_t *timep)
 /* for bbi files, print out the timep value */
 {
-    printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", sqlUnixTimeToDate(timep, FALSE));
+    printf("<B>Data last updated at UCSC:&nbsp;</B>%s<BR>\n", sqlUnixTimeToDate(timep, FALSE));
 }
 
 static boolean tableDescriptionsExists(struct sqlConnection *conn)
@@ -9643,7 +9864,7 @@ if (version == NULL)
     }
 
 if (isNotEmpty(version))
-    printf("<B>Data version:</B> %s <BR>\n", version);
+    printf("<B>Source data version:</B> %s <BR>\n", version);
 }
 
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart)
@@ -9661,7 +9882,7 @@ if (!sqlTableExists(conn, relatedTrackTable))
 
 char query[256];
 sqlSafef(query, sizeof(query),
-    "select track1, track2, why from %s where track1='%s' or track2='%s'", relatedTrackTable, tdb->track, tdb->track);
+    "select track2, why from %s where track1='%s'", relatedTrackTable, tdb->track);
 
 char **row;
 struct sqlResult *sr;
@@ -9671,19 +9892,25 @@ if (row != NULL)
     {
     puts("<b>Related tracks</b>\n");
     puts("<ul>\n");
-    char *track1, *track2, *why, *otherTrack;
+    struct hash *otherTracksAndDesc = hashNew(0);
+    char *why, *otherTrack;
     for (; row != NULL; row = sqlNextRow(sr))
         {
-        track1 = row[0];
-        track2 = row[1];
-        why    = row[2];
+        otherTrack = row[0];
+        why = row[1];
+        // hopefully relatedTracks.ra doesn't have dupes but hash them just in case
+        hashReplace(otherTracksAndDesc, cloneString(otherTrack), cloneString(why));
+        }
 
-        if (sameWord(track1, tdb->track))
-            otherTrack = track2;
-        else
-            otherTrack = track1;
-
+    struct hashEl *hel, *helList = hashElListHash(otherTracksAndDesc);
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+        char *otherTrack = (char *)hel->name;
+        char *why = (char *)hel->val;
         struct trackDb *otherTdb = hashFindVal(trackHash, otherTrack);
+        // super tracks are not in the hash:
+        if (!otherTdb)
+            otherTdb = tdbForTrack(database, otherTrack, NULL);
         if (otherTdb)
             {
             puts("<li>");
@@ -9692,7 +9919,7 @@ if (row != NULL)
             puts(why);
             }
         }
-    puts("</ul>\n");
+        puts("</ul>\n");
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);

@@ -1,0 +1,112 @@
+track cons35way
+compositeTrack on
+shortLabel Conservation
+longLabel Vertebrate Multiz Alignment & Conservation (35 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+# subGroup2 clade Clade glires=Glires euarchontoglires=Euarchontoglires placental=Placental all=All_species
+subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate all=All_species
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility full
+type bed 4
+group compGeno
+priority 1
+
+    track cons35wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons35way
+
+        track multiz35way
+        subTrack cons35wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 35 Vertebrates
+        subGroups view=align clade=vert
+        noInherit on
+        irows on
+        summary multiz35waySummary
+        frames multiz35wayFrames
+        group compGeno
+        color 0, 10, 35
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault mm39
+        speciesGroups Glires Euarchontoglires Placental_Mammal Vertebrate
+        sGroup_Glires rn6 GCF_003668045.3 casCan1 cavPor3 speTri2 oryCun2 ochPri3
+        sGroup_Euarchontoglires galVar1 hg38 panPan3 panTro6 gorGor6 rheMac10 calJac4 tarSyr2 otoGar3 tupBel1
+        sGroup_Placental_Mammal manPen1 equCab3 turTru2 canFam4 susScr3 loxAfr3 oviAri4 neoSch1 bosTau9 eriEur2 echTel2 sorAra2
+        sGroup_Vertebrate monDom5 xenTro9 galGal6 danRer11 petMar3
+        speciesDefaultOn rn6 cavPor3 speTri2 oryCun2 ochPri3 hg38 rheMac10 manPen1 oviAri4 canFam4 monDom5
+        speciesDefaultOff galVar1 panPan3 panTro6 gorGor6 calJac4 tarSyr2 otoGar3 tupBel1 susScr3 turTru2 neoSch1 bosTau9 equCab3 eriEur2 sorAra2 loxAfr3 echTel2 galGal6 xenTro9 danRer11 petMar3 GCF_003668045.3 casCan1
+        defaultMaf multiz35wayDefault
+        itemFirstCharCase noChange
+        treeImage phylo/mm39_35way.png
+        priority 35
+
+    # PhyloP conservation
+    track cons35wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons35way
+    viewLimits -13.709:4.632
+    viewLimitsMax -13.71:4.64
+
+        track phyloP35way
+        subTrack cons35wayViewphyloP on
+        subGroups view=phyloP clade=all
+        shortLabel Cons 35 Verts
+        longLabel 35 vertebrates Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -13.709 4.643
+        maxHeightPixels 35:50:11
+        viewLimits -4.1:4.28
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons35wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons35way
+
+        track phastCons35way
+        subTrack cons35wayViewphastcons off
+        subGroups view=phastcons clade=all
+        shortLabel Cons 35 Verts
+        longLabel 35 vertebrates conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 35:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons35wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons35way
+
+        track phastConsElements35way
+        subTrack cons35wayViewelements off
+        subGroups view=elements clade=all
+        shortLabel 35 Vert. El
+        longLabel 35 vertebrates Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

@@ -5,6 +5,7 @@
 #ifndef TABLESTABLES_H
 #define TABLESTABLES_H
 
+#include "fieldedTable.h"
 #include "facetField.h"
 
 void webTableBuildQuery(struct cart *cart, char *from, char *initialWhere, 
@@ -36,10 +37,11 @@ struct fieldedTableSegment
     };
 
 void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table, 
-    char *returnUrl, char *varPrefix,
+    char *visibleFieldList, char *returnUrl, char *varPrefix,
     int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, 
-    int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
+    boolean withFilters, char *pluralInstruction, 
+    int pageSize, int facetUsualSize,
+    struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
     struct facetField **ffArray, char *visibleFacetList,
     void (*addFunc)(int) );
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
@@ -48,15 +50,25 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
  * Pass in 0 for no max. */
 
 
-void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn, 
-    char *fields, char *from, char *initialWhere,  
-    char *returnUrl, char *varPrefix, int maxFieldWidth, 
-    struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, char *visibleFacetList,
-    void (*addFunc)(int) );
-/* Given a query to the database in conn that is basically a select query broken into
- * separate clauses, construct and display an HTML table around results. This HTML table has
- * column names that will sort the table, and optionally (if withFilters is set)
+void webFilteredSqlTable(struct cart *cart,    /* User set preferences here */
+    struct sqlConnection *conn,		       /* Connection to database */
+    char *fields, char *from, char *initialWhere,  /* Our query in three parts */
+    char *returnUrl, char *varPrefix,	       /* Url to get back to us, and cart var prefix */
+    int maxFieldWidth,			       /* How big do we let fields get in characters */
+    struct hash *tagOutWrappers,	       /* A hash full of callbacks, one for each column */
+    void *wrapperContext,		       /* Gets passed to callbacks in tagOutWrappers */
+    boolean withFilters,	/* If TRUE put up filter controls under labels */
+    char *pluralInstructions,   /* If non-NULL put up instructions and clear/search buttons */
+    int pageSize,		/* How many items per page */
+    int facetUsualSize,		/* How many items in a facet before opening */
+    struct hash *suggestHash,	/* If using filter can put suggestions for categorical items here */
+    char *visibleFacetList,     /* Comma separated list of fields to facet on */
+    void (*addFunc)(int) );     /* Callback relevant with pluralInstructions only */
+/* Turn sql query into a nice interactive table, possibly with facets.  It constructs
+ * a query to the database in conn that is basically a select query broken into
+ * separate clauses, construct and display an HTML table around results. Optionally table
+ * may have a faceted search to the left or fields that can filter under the labels.  The table 
+ * has column names that will sort the table, and optionally (if withFilters is set)
  * it will also allow field-by-field wildcard queries on a set of controls it draws above
  * the labels. 
  *    Much of the functionality rests on the call to webFilteredFieldedTable.  This function

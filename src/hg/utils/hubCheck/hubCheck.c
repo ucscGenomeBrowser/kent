@@ -41,6 +41,7 @@ errAbort(
   "   -extra=[file|url]     - accept settings in this file (or url)\n"
   "   -level=base|required  - reject settings below this support level\n"
   "   -settings             - just list settings with support level\n"
+  "   -genome=genome        - only check this genome\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                                     Will create this directory if not existing\n"
   "   -printMeta            - print the metadata for each track\n"
@@ -57,6 +58,7 @@ static struct optionSpec options[] = {
    {"noTracks", OPTION_BOOLEAN},
    {"settings", OPTION_BOOLEAN},
    {"checkSettings", OPTION_BOOLEAN},
+   {"genome", OPTION_STRING},
    {"test", OPTION_BOOLEAN},
    {"printMeta", OPTION_BOOLEAN},
    {"udcDir", OPTION_STRING},
@@ -77,6 +79,7 @@ struct trackHubCheckOptions
     char *specHost;             /* server hosting hub spec */
     char *level;                /* check hub is valid to this support level */
     char *extraFile;            /* name of extra file/url with additional settings to accept */
+    char *genome;               /* only check this genome */
     /* intermediate data */
     struct hash *settings;      /* supported settings for this version */
     struct hash *extra;         /* additional trackDb settings to accept */
@@ -736,6 +739,16 @@ if (tdbIsSuper(tdb) || tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsCo
         errAbort("Track \"%s\" is declared superTrack, compositeTrack, view or "
             "container, and also has a bigDataUrl", tdb->track);
         }
+
+    // multiWigs cannot be the child of a composite
+    if (tdbIsContainer(tdb) &&
+            (tdb->parent != NULL &&
+            (tdbIsComposite(tdb->parent) || tdbIsCompositeView(tdb->parent))))
+        {
+        errAbort("Track \"%s\" is declared container multiWig and has parent \"%s\"."
+            " Container multiWig tracks cannot be children of composites or views",
+            tdb->track, tdb->parent->track);
+        }
     }
 else if (tdb->subtracks != NULL)
     {
@@ -812,9 +825,12 @@ if (errCatchStart(errCatch))
 
     if (options->checkFiles)
         hubCheckBigDataUrl(hub, genome, tdb);
-    trackHubAddDescription(genome->trackDbFile, tdb);
-    if (!tdb->html)
-        warn("warning: missing description page for track: '%s'", tdb->track);
+    if (!sameString(tdb->track, "cytoBandIdeo"))
+        {
+        trackHubAddDescription(genome->trackDbFile, tdb);
+        if (!tdb->html)
+            warn("warning: missing description page for track: '%s'", tdb->track);
+        }
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError || errCatch->gotWarning)
@@ -859,6 +875,7 @@ struct errCatch *errCatch = errCatchNew();
 struct trackDb *tdbList = NULL;
 int genomeErrorCount = 0;
 boolean openedGenome = FALSE;
+verbose(3, "checking genome %s\n", trackHubSkipHubName(genome->name));
 
 if (errCatchStart(errCatch))
     {
@@ -881,7 +898,7 @@ if (errCatchStart(errCatch))
         else if (!extFileExists(htmlPath))
             warn("warning: '%s' htmlPath file does not exist or is not accessible: '%s'", genome->name, htmlPath);
         }
-    tdbList = trackHubTracksForGenome(hub, genome);
+    tdbList = trackHubTracksForGenome(hub, genome, NULL);
     tdbList = trackDbLinkUpGenerations(tdbList);
     tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
     trackHubPolishTrackNames(hub, tdbList);
@@ -937,6 +954,26 @@ dyStringPrintf(errors, "%s", tdbDyString->string);
 dyStringClear(tdbDyString);
 
 return genomeErrorCount;
+}
+
+void checkGenomeRestriction(struct trackHubCheckOptions *options, struct trackHub *hub)
+/* check the a genome restriction from the command line is a valid genome */
+{
+if (options->genome == NULL)
+    return;  // OK
+for (struct trackHubGenome *genome = hub->genomeList; genome != NULL; genome = genome->next)
+    {
+    if (sameString(trackHubSkipHubName(genome->name), options->genome))
+        return;  // OK
+    }
+errAbort("Genome %s not found in hub", options->genome);
+}
+
+boolean shouldCheckGenomes(struct trackHubCheckOptions *options, struct trackHubGenome *genome)
+/* should this genome be check based on command line restrictions */
+{
+return (options->genome == NULL) ||
+    sameString(trackHubSkipHubName(genome->name), options->genome);
 }
 
 
@@ -1003,22 +1040,25 @@ if (options->checkSettings)
     retVal |= hubSettingsCheckInit(hub, options, errors);
 
 struct trackHubGenome *genome;
-int numGenomeErrors = 0;
+checkGenomeRestriction(options, hub);
 char genomeTitleString[128];
 struct dyString *genomeErrors = dyStringNew(0);
 for (genome = hub->genomeList; genome != NULL; genome = genome->next)
     {
-    numGenomeErrors = hubCheckGenome(hub, genome, options, genomeErrors);
-    if (options->htmlOut)
+    if (shouldCheckGenomes(options, genome))
         {
-        char *genomeName = trackHubSkipHubName(genome->name);
-        safef(genomeTitleString, sizeof(genomeTitleString),
-            "%s (%d configuration error%s)", genomeName, numGenomeErrors,
-            numGenomeErrors == 1 ? "" : "s");
-        dyStringPrintf(errors, "%s,", makeFolderObjectString(genomeName, genomeTitleString, "#",
-            "Click to open node", TRUE, numGenomeErrors > 0 ? TRUE : FALSE));
+        int numGenomeErrors = hubCheckGenome(hub, genome, options, genomeErrors);
+        if (options->htmlOut)
+            {
+            char *genomeName = trackHubSkipHubName(genome->name);
+            safef(genomeTitleString, sizeof(genomeTitleString),
+                  "%s (%d configuration error%s)", genomeName, numGenomeErrors,
+                  numGenomeErrors == 1 ? "" : "s");
+            dyStringPrintf(errors, "%s,", makeFolderObjectString(genomeName, genomeTitleString, "#",
+                           "Click to open node", TRUE, numGenomeErrors > 0 ? TRUE : FALSE));
+            }
+        retVal |= numGenomeErrors;
         }
-    retVal |= numGenomeErrors;
     }
 if (options->htmlOut)
     {
@@ -1094,6 +1134,7 @@ checkOptions->specHost = optionVal("specHost", checkOptions->specHost);
 checkOptions->printMeta = optionExists("printMeta");
 checkOptions->checkFiles = !optionExists("noTracks");
 checkOptions->checkSettings = optionExists("checkSettings");
+checkOptions->genome = optionVal("genome", NULL);
 
 struct trackHubSettingSpec *setting = NULL;
 AllocVar(setting);

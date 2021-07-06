@@ -547,6 +547,9 @@ struct trackDb *hTrackDb(char *db);
  *	NOTE: this result is cached, do not free it !
  */
 
+struct trackDb *hTrackDbWithCartVersion(char *db, int *retCartVersion);
+/* Do hTrackDb AND return cartVersion. */
+
 struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList);
 /* Load trackDb object for a track. If track is composite, its subtracks
  * will also be loaded and inheritance will be handled; if track is a
@@ -1065,4 +1068,15 @@ char *hdbDefaultKnownDb(char *db);
 
 char *hdbGetMasterGeneTrack(char *knownDb);
 /* Get the native gene track for a knownGene database. */
+
+boolean trackDataAccessibleHash(char *database, struct trackDb *tdb, struct hash *gbdbHash);
+/* Return TRUE if underlying data are accessible - meaning the track has either
+ * a bigDataUrl with remote URL (http:// etc), a bigDataUrl with an existing local file,
+ * or a database table with the same name.
+ * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. 
+ *
+ * if gbdbHash is not NULL, use it when looking for the file */
+
+unsigned hdbGetTrackCartVersion();
+/* Get the cart version that our current trackDb wants to use. */
 #endif /* HDB_H */

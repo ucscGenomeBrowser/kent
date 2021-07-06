@@ -39,7 +39,7 @@ else
 }
 
 // The maximum number of words per line that can be lifted:
-#define LIFTOVER_MAX_WORDS 64
+#define LIFTOVER_MAX_WORDS 2048
 
 void readLiftOverMap(char *fileName, struct hash *chainHash)
 /* Read map file into hashes. */
@@ -76,7 +76,7 @@ static struct binElement *findRange(struct hash *chainHash,
 struct chromMap *map = hashFindVal(chainHash, chrom);
 if (map == NULL)
     return NULL;
-return binKeeperFind(map->bk, start, end);
+return binKeeperFind(map->bk, start, (end == start) ? end + 1 : end);
 }
 
 static int chainAliSize(struct chain *chain)
@@ -381,7 +381,7 @@ if (wordCount <= 0)
 return wordCount;
 }
 
-static int bedOverSmallEnds(struct lineFile *lf,
+static int bedOverSmallEnds(struct lineFile *lf, int refCount,
                         struct hash *chainHash, double minMatch, int minSizeT, 
                         int minSizeQ, int minChainT, int minChainQ, 
                         FILE *mapped, FILE *unmapped, bool multiple, bool noSerial,
@@ -395,7 +395,8 @@ static int bedOverSmallEnds(struct lineFile *lf,
  * ENCODE region mapping */  
 {
 int i, wordCount, s, e;
-char *words[LIFTOVER_MAX_WORDS], *chrom;
+char *words[LIFTOVER_MAX_WORDS+1];   // +1 to detect overflow
+char *chrom;
 char strand = '.', strandString[2];
 char *error, *error2 = NULL;
 int ct = 0;
@@ -421,6 +422,14 @@ if (chainTable)
 while ((wordCount = 
             lineFileChopBin(lf, words, ArraySize(words), hasBin, tabSep)) != 0)
     {
+    if (wordCount < 3)
+	errAbort(
+	"ERROR: At least 3 fields are required, chrom, start, end on line %d of bed file %s\n", 
+	    lf->lineIx, lf->fileName);
+    if (wordCount != refCount)
+	errAbort(
+	"ERROR: Has %s%d fields, should have %d fields on line %d of bed file %s\n", 
+	    (wordCount > LIFTOVER_MAX_WORDS) ? "at least ":"", wordCount, refCount, lf->lineIx, lf->fileName);
     FILE *f = mapped;
     chrom = words[0];
     s = lineFileNeedFullNum(lf, words, 1);
@@ -1134,7 +1143,7 @@ static int bedOverBig(struct lineFile *lf, int refCount,
 /* Do a bed with block-list. */
 {
 int wordCount, bedCount;
-char *line, *words[LIFTOVER_MAX_WORDS];
+char *line, *words[LIFTOVER_MAX_WORDS+1];  // plus one so it can detect overflow past the end.
 char *whyNot = NULL;
 int ct = 0;
 int errs = 0;
@@ -1151,6 +1160,10 @@ while (lineFileNextReal(lf, &line))
     {
     struct bed *bed;
     wordCount = chopLineBin(line, words, ArraySize(words), hasBin, tabSep);
+    if (wordCount < 3)
+        errAbort(
+        "ERROR: At least 3 fields are required, chrom, start, end on line %d of bed file %s\n",
+            lf->lineIx, lf->fileName);
     if (refCount != wordCount)
 	lineFileExpectWords(lf, refCount, wordCount);
     if (wordCount == bedPlus)
@@ -1208,16 +1221,21 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int wordCount;
 int bedFieldCount = bedPlus;
 char *line;
-char *words[LIFTOVER_MAX_WORDS];
 int ct = 0;
 
 if (lineFileNextReal(lf, &line))
     {
     line = cloneString(line);
     if (tabSep)
-        wordCount = chopByChar(line, '\t', words, ArraySize(words));
+	{
+        wordCount = chopByChar(line, '\t', NULL, LIFTOVER_MAX_WORDS);
+	}
     else
-        wordCount = chopLine(line, words);
+        wordCount = chopLine(line, NULL);
+
+    if (wordCount > LIFTOVER_MAX_WORDS)
+	errAbort("Too many fields. Fieldcount %d > maximum fields %d in file %s", wordCount, LIFTOVER_MAX_WORDS, fileName);
+
     if (hasBin)
         wordCount--;
     lineFileReuse(lf);
@@ -1228,7 +1246,7 @@ if (lineFileNextReal(lf, &line))
         bedFieldCount = wordCount;
     if (bedFieldCount <= 10)
 	{
-        ct = bedOverSmallEnds(lf, chainHash, minMatch,
+        ct = bedOverSmallEnds(lf, wordCount, chainHash, minMatch,
                               minSizeT, minSizeQ, minChainT, minChainQ, f, unmapped, 
                               multiple, noSerial, chainTable, bedPlus, hasBin, tabSep, ends, errCt);
 	}

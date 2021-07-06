@@ -7,12 +7,14 @@
 #include "errAbort.h"
 #include "errCatch.h"
 #include "hCommon.h"
+#include "hgConfig.h"
 #include "dystring.h"
 #include "jksql.h"
 #include "linefile.h"
 #include "dnautil.h"
 #include "fa.h"
 #include "psl.h"
+#include "genoFind.h"
 #include "gfPcrLib.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
@@ -27,10 +29,16 @@
 #include "web.h"
 #include "botDelay.h"
 #include "oligoTm.h"
+#include "trackHub.h"
+#include "hubConnect.h"
 
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
+
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   1.0     /* standard penalty for most CGIs */
+static boolean issueBotWarning = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -54,6 +62,8 @@ struct pcrServer
    char *host;		/* Name of machine hosting server. */
    char *port;		/* Port that hosts server. */
    char *seqDir;	/* Directory of sequence files. */
+   boolean isDynamic;   /* is a dynamic server */
+   char* genomeDataDir; /* genome name for dynamic gfServer  */
    };
 
 struct targetPcrServer
@@ -66,6 +76,32 @@ struct targetPcrServer
    struct targetDb *targetDb;     /* All of the info about the target. */
    };
 
+struct pcrServer *getTrackHubServers()
+/* Get the list of track hubs that have PCR services. */
+{
+struct pcrServer *serverList = NULL, *server;
+
+struct dbDb *dbDbList = trackHubGetPcrServers();
+
+for(; dbDbList; dbDbList = dbDbList->next)
+    {
+    AllocVar(server);
+    server->db = dbDbList->name;
+    server->genome = dbDbList->organism;
+    server->description = dbDbList->description;
+    trackHubGetPcrParams(server->db, &server->host, &server->port, &server->genomeDataDir);
+    struct trackHubGenome *genome = trackHubGetGenome(server->db);
+    server->seqDir = cloneString(genome->twoBitPath);
+    char *ptr = strrchr(server->seqDir, '/');
+    // we only want the directory name
+    if (ptr != NULL)
+         *ptr = 0;
+    slAddHead(&serverList, server);
+    }
+
+return serverList;
+}
+
 struct pcrServer *getServerList()
 /* Get list of available servers. */
 {
@@ -74,13 +110,23 @@ struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr;
 char **row;
 
-/* Do a little join to get data to fit into the pcrServer. */
-sr = sqlGetResult(conn, 
-   NOSQLINJ "select dbDb.name,dbDb.genome,dbDb.description,blatServers.host,"
-   "blatServers.port,dbDb.nibPath "
-   "from dbDb,blatServers where "
-   "dbDb.name = blatServers.db "
-   "and blatServers.canPcr = 1 order by dbDb.orderKey" );
+serverList = getTrackHubServers();
+
+/* Do a little join to get data to fit into the pcrServer.  Check for newer
+ * dynamic flag and allow with or without it.  For debugging, one set the
+ * variable blatServersTbl to some db.table to pick up settings from somewhere
+ * other than dbDb.blatServers. */
+char *blatServersTbl = cfgOptionDefault("blatServersTbl", "blatServers");
+boolean haveDynamic = sqlColumnExists(conn, blatServersTbl, "dynamic");
+char query[512];
+sqlSafef(query, sizeof(query),
+         "select dbDb.name,dbDb.genome,dbDb.description,blatServers.host,"
+         "blatServers.port,dbDb.nibPath, %s "
+         "from dbDb, %s blatServers where "
+         "dbDb.name = blatServers.db "
+         "and blatServers.canPcr = 1 order by dbDb.orderKey",
+         (haveDynamic ? "blatServers.dynamic" : "0"), blatServersTbl);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(server);
@@ -90,6 +136,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     server->host = cloneString(row[3]);
     server->port = cloneString(row[4]);
     server->seqDir = hReplaceGbdbSeqDir(row[5], server->db);
+    if (atoi(row[6]))
+        {
+        server->isDynamic = TRUE;
+        server->genomeDataDir = cloneString(server->db);  // directories by database name for database genomes
+        }
     slAddHead(&serverList, server);
     }
 sqlFreeResult(&sr);
@@ -118,6 +169,8 @@ struct targetPcrServer *getTargetServerList(char *db, char *name)
 /* Get list of available non-genomic-assembly target pcr servers associated 
  * with db (and name, if not NULL).  There may be none -- that's fine. */
 {
+if (trackHubDatabase(db))
+    return NULL;
 struct targetPcrServer *serverList = NULL, *server;
 struct sqlConnection *conn = hConnectCentral();
 struct sqlConnection *conn2 = hAllocConn(db);
@@ -237,7 +290,7 @@ for (server = serverList; server != NULL; server = server->next)
 	hashAdd(uniqHash, server->genome, NULL);
 	printf("  <OPTION%s VALUE=\"%s\">%s</OPTION>\n", 
 	    (sameWord(genome, server->genome) ? " SELECTED" : ""), 
-	    server->genome, server->genome);
+	    server->genome, hubConnectSkipHubPrefix(server->genome));
 	}
     }
 printf("</SELECT>\n");
@@ -343,6 +396,7 @@ redoDbAndOrgIfNoServer(serverList, &db, &organism);
 struct sqlConnection *conn = hConnectCentral();
 boolean gotTargetDb = sqlTableExists(conn, "targetDb");
 hDisconnectCentral(&conn);
+
 
 printf("<FORM ACTION=\"../cgi-bin/hgPcr\" METHOD=\"GET\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
@@ -470,14 +524,55 @@ else
 cartSetString(cart, cartVar, buf);
 }
 
+static void printHelpLinks(struct gfPcrOutput *gpoList) {
+    /* print links to our docs for special chromosome names */
+    // if you modify this, also modify hgBlat.c:showAliPlaces, which implements a similar feature, for hgBlat
+    boolean isAlt = FALSE;
+    boolean isFix = FALSE;
+    boolean isRandom = FALSE;
+    boolean isChrUn = FALSE;
+
+    if (gpoList != NULL)
+        {
+        struct gfPcrOutput *gpo;
+        for (gpo = gpoList;  gpo != NULL;  gpo = gpo->next)
+            {
+            char *seq = gpo->seqName;
+            if (endsWith(seq, "_fix"))
+                isFix = TRUE;
+            else if (endsWith(seq, "_alt"))
+                isAlt = TRUE;
+            else if (endsWith(seq, "_random"))
+                isRandom = TRUE;
+            else if (startsWith(seq, "chrUn"))
+                isChrUn = TRUE;
+            }
+        }
+
+    if (isFix || isRandom || isAlt || isChrUn)
+        webNewSection("Notes on the results above");
+
+    if (isFix)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#downloadFix\">What is chrom_fix?</A><BR>");
+    if (isAlt)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#downloadAlt\">What is chrom_alt?</A><BR>");
+    if (isRandom)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#download10\">What is chrom_random?</A><BR>");
+    if (isChrUn)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#download11\">What is a chrUn sequence?</A><BR>");
+}
 
 void doQuery(struct pcrServer *server, struct gfPcrInput *gpi,
 	     int maxSize, int minPerfect, int minGood)
 /* Send a query to a genomic assembly PCR server and print the results. */
 {
+struct gfConnection *conn = gfConnect(server->host, server->port,
+                                      trackHubDatabaseToGenome(server->db), server->genomeDataDir);
 struct gfPcrOutput *gpoList =
-    gfPcrViaNet(server->host, server->port, server->seqDir, gpi,
+    gfPcrViaNet(conn, server->seqDir, gpi,
 		maxSize, minPerfect, minGood);
+
+
 if (gpoList != NULL)
     {
     char urlFormat[2048];
@@ -487,6 +582,8 @@ if (gpoList != NULL)
     printf("<TT><PRE>");
     gfPcrOutputWriteAll(gpoList, "fa", urlFormat, "stdout");
     printf("</PRE></TT>");
+    
+    printHelpLinks(gpoList);
     writePcrResultTrack(gpoList, server->db, NULL);
     }
 else
@@ -494,19 +591,21 @@ else
     printf("No matches to %s %s in %s %s", gpi->fPrimer, gpi->rPrimer, 
 	   server->genome, server->description);
     }
+gfDisconnect(&conn);
 }
 
 void doTargetQuery(struct targetPcrServer *server, struct gfPcrInput *gpi,
 		   int maxSize, int minPerfect, int minGood)
 /* Send a query to a non-genomic target PCR server and print the results. */
 {
+struct gfConnection *conn = gfConnect(server->host, server->port, NULL, NULL);
 struct gfPcrOutput *gpoList;
 char seqDir[PATH_LEN];
 splitPath(server->targetDb->seqFile, seqDir, NULL, NULL);
 if (endsWith("/", seqDir))
     seqDir[strlen(seqDir) - 1] = '\0';
-gpoList = gfPcrViaNet(server->host, server->port, seqDir, gpi,
-		      maxSize, minPerfect, minGood);
+gpoList = gfPcrViaNet(conn, seqDir, gpi, maxSize, minPerfect, minGood);
+
 if (gpoList != NULL)
     {
     struct gfPcrOutput *gpo;
@@ -530,6 +629,7 @@ if (gpoList != NULL)
 	gfPcrOutputWriteOne(gpo, "fa", urlFormat, stdout);
 	printf("\n");
 	}
+
     printf("</PRE></TT>");
     writePcrResultTrack(gpoList, server->targetDb->db, server->targetDb->name);
     }
@@ -538,6 +638,7 @@ else
     printf("No matches to %s %s in %s", gpi->fPrimer, gpi->rPrimer, 
 	   server->targetDb->description);
     }
+gfDisconnect(&conn);
 }
 
 boolean doPcr(struct pcrServer *server, struct targetPcrServer *targetServer,
@@ -548,7 +649,12 @@ boolean doPcr(struct pcrServer *server, struct targetPcrServer *targetServer,
 struct errCatch *errCatch = errCatchNew();
 boolean ok = FALSE;
 
-hgBotDelay();
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
+
 if (flipReverse)
     reverseComplement(rPrimer, strlen(rPrimer));
 if (errCatchStart(errCatch))
@@ -653,6 +759,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgPcr", delayFraction, 0, 0, "html");
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);

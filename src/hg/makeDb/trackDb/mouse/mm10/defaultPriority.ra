@@ -4,7 +4,6 @@ track ensGene override
 visibility hide
 
 track xenoRefGene override
-priority 3
 visibility hide
 
 # mRNA and EST
@@ -27,4 +26,3 @@ priority 2
 
 track joinedRmsk override
 group varRep
-priority 3

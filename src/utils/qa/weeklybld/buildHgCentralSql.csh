@@ -28,7 +28,7 @@ hgsqldump --skip-add-drop-table --skip-lock-tables --no-data ${IGNORE_TABLES} \
     > /tmp/hgcentraltemp.sql 
 
 ### Creates and fills (replacing entirely) these tables
-set REPLACE_ENTIRELY="blatServers dbDb dbDbArch gdbPdb liftOverChain" 
+set REPLACE_ENTIRELY="blatServers dbDb dbDbArch defaultCart gdbPdb liftOverChain" 
 set CREATE_OR_LIST=`echo "${REPLACE_ENTIRELY}" | sed -e "s/ /|/g"`
 set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
      | egrep -v -w "${CREATE_OR_LIST}" | xargs echo \
@@ -95,6 +95,9 @@ endif
 # push to hgdownload
 ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
 scp -p hgcentral.sql qateam@hgdownload:/mirrordata/apache/htdocs/admin/
+
+ssh -n qateam@hgdownload2 "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
+scp -p hgcentral.sql qateam@hgdownload2:/mirrordata/apache/htdocs/admin/
 
 ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
 scp -p hgcentral.sql qateam@genome-euro:/mirrordata/apache/htdocs/admin/

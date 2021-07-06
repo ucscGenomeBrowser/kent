@@ -41,6 +41,7 @@ src/dnaDust \
 src/fuse \
 src/gfClient \
 src/gfServer \
+src/isPcr \
 src/index \
 src/makefile \
 src/meta \
@@ -176,7 +177,6 @@ src/hg/pslSimp \
 src/hg/pslSortAcc \
 src/hg/pslSplitOnTarget \
 src/hg/pslStats \
-src/hg/pslSwap \
 src/hg/pslToBed \
 src/hg/pslUnpile \
 src/hg/pslxToFa \

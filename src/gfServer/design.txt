@@ -1,0 +1,48 @@
+Dynamic gfServer design:
+
+The standard method of running gfServer is as an in-memory TCP/IP server.
+This results in fast response times. However, this can result in a high cost
+for many infrequently used genomes. With one pair of servers per genome,
+frequently used genomes serialize requests while seldom used servers are
+mostly idle. Indexing a genome on startup may take over five minutes, which is
+prohibitive for on-demand startup.
+
+The dynamic mode of gfServer pre-indexes a genome and saves the index to a
+file. When the server starts, the index is map into gfServer's virtual memory
+and accessed directly. If the index has recently been accessed, it will still
+be in memory. If not, it is paged into memory.
+
+Dynamic gfServer runs via the xinetd super-server. When a client connects to
+xinetd, it starts a gfServer process to handle the request. The number of
+parallel process can be limited in the xinetd configuration. The server is
+given a root directory, and each request is passed a directory (genomeDataDir)
+relative to the root and a genome name. The genomeDataDir contains the 2bit
+file, translates and untranslated indices for the genome, and must follow this
+naming convention:
+
+     $rootdir/$genomeDataDir/$genome.2bit
+     $rootdir/$genomeDataDir/$genome.untrans.gfidx
+     $rootdir/$genomeDataDir/$genome.trans.gfidx
+
+All search parameters, such as tileSize, are store in the index file and can
+not be changed at runtime.
+
+To allow the index file mapping into virtual memory at any address, they
+contain offsets and arrays, not pointers.  The file starts with a header,
+defined by struct genoFindIndexFileHdr in jkOwnLib/genoFind.c.
+
+Untranslated indexes have a single set of hash arrays, and translated indexes
+contain six sets of hash arrays. Each set of hash arrays starts with a section
+defined by struct genoFindFileHdr.
+
+When an index is opened, the entire file is mapped into virtual memory using
+the mmap system call, and a struct genoFindIndex object build with points into
+the file's address space.  A madvise system call informs the kernel that the
+entire file will be accessed randomly.
+
+The static server protocol only handles one command per connection. A
+translated DNA query is implemented as six requests to the server. To
+implement the "I'm feeling luckly", hgBlat makes an addition status query. To
+avoid loading the index multiple time for a given client task, gfServer
+supports multiple commands over a single connection.
+

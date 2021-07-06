@@ -10,39 +10,71 @@
 <h2>Contents</h2>
 
 <h6><a href="#intro">Adding metadata to tracks</a></h6>
-<h6><a href="#tagstom">Tagstorm metadata</a></h6>
-<h6><a href="#tabsep">Tab Sep metadata</a></h6>
 <h6><a href="#metadata">Previous metadata versions</a></h6>
+<h6><a href="#tagstorm">Tagstorm metadata</a></h6>
+<h6><a href="#tabsep">Tab-separated metadata</a></h6>
 
 <a name="intro"></a>
 <h2>Adding metadata to tracks</h2>
 <p>
 Adding metadata to your tracks about cell lines, experimental protocols, or assays can be
-accomplished in a number of ways, via the newly supported <em>metadb</em> or <em>metatab</em>
-trackDb fields, or via the older style <em>metadata</em> trackDb field. The <em>metadb</em> and
-<em>metatab</em> fields link external tagStorm or tabSep metadata files to the data in the hub. The
+accomplished in a number of ways, via the newly supported <em>metaDb</em> or <em>metaTab</em>
+trackDb fields, or via the older style <em>metadata</em> trackDb field. The <em>metaDb</em> and
+<em>metaTab</em> fields link external tagStorm or tabSep metadata files to the data in the hub. The
 new formats are preferred over the older <em>metadata</em> field, although the <em>metadata</em>
 lines will continue to be supported for track hubs, but no new features will be added as they will
 for tagStorm and tabSep files.</p>
+
+<p>
+The following is an example of a genomes.txt file calling the tagStorm metadata file:
+</p>
+<pre>
+genome hg38
+metaDb relativePath/to/tagStorm.txt</pre>
+
+<p>
+and specifying a tab-separated metadata file:</p>
+<pre>
+genome hg38
+metaTab relativePath/to/tabSep.txt</pre>
+
+<p>
+When using tab-separated or tagStorm metadata, a
+<a href="/goldenPath/help/trackDb/trackDbHub.html#meta"><em>meta</em></a> column or line will
+be needed to specify which metadata information is applied to a track. The <em>meta</em> value
+should be a unique alphanumeric string.
+</p>
 
 <a name="metadata"></a>
 <h2>Previous metadata versions</h2>
 <p>
 Currently, in order to add metadata to your tracks, you must specify all of the metadata key-value
-pairs in each stanza of a track that includes metadata, like the last line of the following example:<br>
-<pre>
-    track oneA-1
-    bigDataUrl http://genome-test.soe.ucsc.edu/~chmalee/tagStormHubs/test2/bbi/one-a1.bb
-    parent oneA off
-    type bigBed 3
-    shortLabel oneA-1
-    longLabel oneA-1
-    color 250,108,0
-    visilibility dense
-    metadata  differentiation=10hour treatment=X donor=A lab=UCSC data_set_id=ucscTest1 access=group assay=long-RNA-seq enriched_in=exon life_stage=postpartum species="Homo sapiens" ucsc_db=hg38
-</pre>
-Each track must have a separate <em>metadata</em> field and its own list of key-values, which can become cumbersome when each track in a group all share a common subset of metadata. For instance, if there are 10 tracks in a composite or multiWig, where each subtrack only differs in the &quot;differentiation&quot; tag, it would be more convenient to have a shared set of metadata and then specify the differences for each track. This is the motivation behind the tagStorm format, described below.
+pairs in each stanza of a track that includes metadata, like the last line of the following example:
 </p>
+<pre>
+track experiment1
+shortLabel Donor A
+longLabel Donor A's Metadata Experiment
+type bigWig
+bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw
+parent treatmentX on
+subGroups view=X
+metadata differentiation="10 hour" treatment=X donor=A lab="List Meta Lab" data_set_id=ucscTest1 access=group assay=long-RNA-seq enriched_in=exon life_stage=postpartum species="Homo sapiens" ucsc_db=hg38
+</pre>
+<p>
+Each track must have a separate <em>metadata</em> field and its own list of key-values, which can
+become cumbersome when each track in a group all share a common subset of metadata. For instance, if
+there are 10 tracks in a composite or multiWig, where each subtrack only differs in the
+&quot;differentiation&quot; tag, it would be more convenient to have a shared set of metadata and
+then specify the differences for each track. This is the motivation behind the tagStorm format,
+described below.
+</p>
+<p>
+You can find an example of a hub using the metadata example above
+<a href="/goldenPath/help/examples/hubExamples/hubMetadata/metadataHub.txt">here</a> and you can
+load the following session to view the hub,
+<a href="https://genome.ucsc.edu/s/PublicSessions/metadata_field">
+https://genome.ucsc.edu/s/PublicSessions/metadata_field</a>.
 
 <a name="tagstorm"></a>
 <h2>Tagstorm metadata</h2>
@@ -51,9 +83,12 @@ The tagStorm format is a plaintext file similar to the <em>trackDb.txt</em> file
 the tracks in a <a href="hgTrackHubHelp.html">track hub</a>, in that both are files where the
 first word in a  line is the tag and the rest of the line is the value, and different stanza's are
 line delimited. TagStorm's are also similar to a spreadsheet, where a tag corresponds to a column
-and a stanza to an entire row. Here is a canonical tagStorm example:<br>
+and a stanza to an entire row. The tagStorm format is easy for computers to parse, reduce the
+redundancy of a tab-separated file, and they are human readable. Here is a canonical tagStorm
+example:
+</p>
 <pre>
-lab UCSC
+lab tagStorm Lab
 data_set_id ucscTest1
 access group
 assay long-RNA-seq
@@ -99,19 +134,66 @@ ucsc_db hg38
             meta ucsc1_9
 </pre>
 <p>
-Each stanza, such as &quot;donor B&quot;, inherits from any stanzas above it at the right indentation level, and is a parent to
-stanzas beneath.</p>
+Each stanza, such as &quot;donor B&quot;, inherits from any stanzas above it at the right
+indentation level, and is a parent to stanzas beneath.</p>
+<p>
+A trackDb stanza using the tagStorm metadata can be seen in the following example:
+</p>
+<pre>
+track experiment1
+shortLabel Donor A
+longLabel Donor A's TagStorm Experiment
+type bigWig
+bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw
+parent treatmentX on
+subGroups view=X
+meta ucsc1_1
+</pre>
+<p>
+You can find the complete example of the hub using the tagStorm metadata
+<a href="/goldenPath/help/examples/hubExamples/hubMetadata/tagStormHub.txt">here</a> and you can
+load the following session to view the hub,
+<a href="https://genome.ucsc.edu/s/PublicSessions/tagStorm_metadata">
+https://genome.ucsc.edu/s/PublicSessions/tagStorm_metadata</a>.
 
 <a name="tabsep"></a>
-<h2>Tab sep metadata</h2>
+<h2>Tab-separated metadata</h2>
 <p>
+Column or tab-separated metadata can be useful to store computer readable information as an array.
+While this format is very easy for a computer to parse, it can be bit confusing or difficult for
+humans to read and interpret. As you can see in the example below, many columns become redundant as
+they repeat the same information on each line. 
 </p>
-
-<a name="License"></a>
-<h2>Licensing information</h2>
+<pre>
+#lab	data_set_id	access	assay	enriched_in	life_stage	species	ucsc_db	treatment	donor	differentiation	meta
+tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	X	A	10 hour	ucsc1_1
+tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	X	A	1 day	ucsc1_4
+tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	X	A	5 days	ucsc1_7
+tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	B	10 hour	ucsc1_2
+tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	B	1 day	ucsc1_5
+tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	B	5 days	ucsc1_8
+tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	C	10 hour	ucsc1_3
+tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	C	1 day	ucsc1_6
+tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	C	5 days	ucsc1_9
+</pre>
 <p>
-GBiB is free for non-profit academic research and for personal use. Corporate use requires a
-license, setup fee and annual payment. To purchase a license or download the GBiB, visit the
-<a href="//genome-store.ucsc.edu/" target="_blank">Genome Browser store</a>.</p>
+A trackDb stanza using the tab-separated metadata can be seen in the following example:
+</p>
+<pre>
+track experiment1
+shortLabel Donor A
+longLabel Donor A's Tab Separated Experiment
+type bigWig
+bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw
+parent treatmentX on
+subGroups view=X
+meta ucsc1_1
+</pre>
+<p>
+You can find the complete example of the hub using the tab-separated metadata
+<a href="/goldenPath/help/examples/hubExamples/hubMetadata/tabSepHub.txt">here</a> and you can load
+the following session to view the hub,
+<a href="https://genome.ucsc.edu/s/PublicSessions/TabSeparated_metadata">
+https://genome.ucsc.edu/s/PublicSessions/TabSeparated_metadata</a>.
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

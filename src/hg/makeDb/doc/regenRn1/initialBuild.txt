@@ -989,4 +989,11 @@ Average job time:                  34s       0.56m     0.01h    0.00d
 Longest finished job:              77s       1.28m     0.02h    0.00d
 Submission to last job:          4643s      77.38m     1.29h    0.05d
 
+    # cleaning 2021-04-24 - Hiram
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup regenRn1 -tableName=crisprAll -fileServer=hgwdev \
+            -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+               -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    286m17.939s
+
 #########################################################################

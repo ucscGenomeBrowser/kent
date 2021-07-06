@@ -48,7 +48,18 @@ while ((ali = mafNext(mf)) != NULL)
     char *chrom = dot + 1;
 
     if (differentString(referenceDb, master->src))
-        errAbort("reference databases (%s) must be first component of every block on line %d", referenceDb, mf->lf->lineIx);
+        {
+        // there might be a dot in the organism name
+        *dot = '.';
+        dot = strchr(dot + 1, '.');
+        if (dot != NULL)
+            {
+            *dot = 0;
+            chrom = dot + 1;
+            }
+        if ((dot == NULL) || differentString(referenceDb, master->src))
+            errAbort("reference databases (%s) must be first component of every block on line %d", referenceDb, mf->lf->lineIx);
+        }
 
     if (master->strand != '+')
         errAbort("reference sequence has to be on positive strand on line %d", mf->lf->lineIx);

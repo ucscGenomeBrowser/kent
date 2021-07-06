@@ -1,6 +1,6 @@
 track wgEncodeGencodeV32
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V32
 longLabel All GENCODE annotations from V32 (Ensembl 98)
 group genes
@@ -141,13 +141,6 @@ searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.26501
 
-searchName wgEncodeGencodeBasicGeneSymV32
-searchTable wgEncodeGencodeBasicV32
-searchMethod exact
-searchType genePred
-searchPriority 2.26502
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
-
 searchName wgEncodeGencodeBasicGeneV32
 searchTable wgEncodeGencodeBasicV32
 searchMethod prefix
@@ -191,13 +184,6 @@ searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.26508
-
-searchName wgEncodeGencodeCompGeneSymV32
-searchTable wgEncodeGencodeCompV32
-searchMethod exact
-searchType genePred
-searchPriority 2.26509
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodeCompGeneV32
 searchTable wgEncodeGencodeCompV32
@@ -243,13 +229,6 @@ searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.26514
 
-searchName wgEncodeGencodePseudoGeneGeneSymV32
-searchTable wgEncodeGencodePseudoGeneV32
-searchMethod exact
-searchType genePred
-searchPriority 2.26515
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
-
 searchName wgEncodeGencodePseudoGeneGeneV32
 searchTable wgEncodeGencodePseudoGeneV32
 searchMethod prefix
@@ -284,3 +263,4 @@ searchMethod exact
 searchType genePred
 termRegex PGOHUM[0-9.]+
 searchPriority 2.26519
+

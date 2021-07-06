@@ -207,6 +207,8 @@ sub checkOptions {
 		      'augustusSpecies=s',
 		      'xenoRefSeq=s',
 		      'asmHubName=s',
+		      'noXenoRefSeq',
+		      'noAugustus',
 		      'ucscNames',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -805,17 +807,18 @@ sub doSequence {
 
   ###########  non-nuclear scaffold unlocalized sequence  ################
   my $nonNucChr2scaf = "$nonNucAsm/unlocalized_scaffolds/unlocalized.chr2scaf";
+  my $agpSource = "$nonNucAsm/unlocalized_scaffolds/AGP";
   if ( -s $nonNucChr2scaf ) {
     my $agpOutput = "$runDir/$asmId.nonNucUnlocalized.agp.gz";
     my $agpNames = "$runDir/$asmId.nonNucUnlocalized.names";
     my $fastaOut = "$runDir/$asmId.nonNucUnlocalized.fa.gz";
     $partsDone += 1;
     if (needsUpdate($nonNucChr2scaf, $agpOutput)) {
-      compositeAgp($nonNucChr2scaf, $agpSource, $agpOutput, $agpNames);
+      unlocalizedAgp($nonNucChr2scaf, $agpSource, $agpOutput, $agpNames);
       `touch -r $nonNucChr2scaf $agpOutput`;
     }
     if (needsUpdate($twoBitFile, $fastaOut)) {
-      compositeFasta($nonNucChr2scaf, $twoBitFile, $fastaOut);
+      unlocalizedFasta($nonNucChr2scaf, $twoBitFile, $fastaOut);
       `touch -r $twoBitFile $fastaOut`;
     }
   }
@@ -849,7 +852,7 @@ hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c >
 twoBitInfo ../download/\$asmId.2bit stdout | cut -f1 \\
   | sed -e "s/\\.\\([0-9]\\+\\)/v\\1/;" \\
     | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\$\\)/.\\1/;' \\
-      | awk '{printf "%s\\t%s\\n", \$2, \$1}' > \$asmId.fake.names
+      | awk '{printf "%s\\t%s\\n", \$1, \$2}' | sort > \$asmId.fake.names
 _EOF_
       );
     }
@@ -994,7 +997,7 @@ export asmId=$asmId
 export sizeCount=`cat ../../\${asmId}.chrom.sizes | wc -l`
 export aliasCount=`grep -v "^#" \${asmId}.chromAlias.txt | wc -l`
 if [ "\${sizeCount}" -ne "\${aliasCount}" ]; then
-  printf "ERROR: chromAlias: incorrect number of aliases %d != %d\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
+  printf "ERROR: chromAlias: incorrect number of aliases chromSizes %d > %d aliasCount\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
   exit 255
 fi
 
@@ -1138,6 +1141,10 @@ sub doRepeatMasker {
      if ( -s "$buildDir/download/${asmId}_rm.out.gz" ) {
        $rmskOpts = " \\
   -ncbiRmsk=\"$buildDir/download/${asmId}_rm.out.gz\" ";
+       if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
+         $rmskOpts .= " \\
+  -dupList=\"${buildDir}/download/${asmId}.remove.dups.list\" ";
+       }
        if ($ucscNames) {
          $rmskOpts .= " \\
   -liftSpec=\"$buildDir/sequence/$asmId.ncbiToUcsc.lift\"";
@@ -1384,6 +1391,7 @@ sub doAddMask {
 
   $bossScript->add(<<_EOF_
 export asmId=$asmId
+export accessionId=`echo \$asmId | cut -d'_' -f1-2`
 
 if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   twoBitMask $src2BitToMask -type=.bed \\
@@ -1391,6 +1399,13 @@ if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   twoBitToFa \$asmId.masked.2bit stdout | faSize stdin > \$asmId.masked.faSize.txt
   touch -r \$asmId.masked.2bit \$asmId.masked.faSize.txt
   cp -p \$asmId.masked.faSize.txt ../../\$asmId.faSize.txt
+  ln \$asmId.masked.2bit \$accessionId.2bit
+  gfServer -trans index ../../\$accessionId.trans.gfidx \$accessionId.2bit &
+  gfServer -stepSize=5 index ../../\$accessionId.untrans.gfidx \$accessionId.2bit
+  wait
+  rm \$accessionId.2bit
+  touch -r \$asmId.masked.2bit ../../\$accessionId.trans.gfidx
+  touch -r \$asmId.masked.2bit ../../\$accessionId.untrans.gfidx
 else
   printf "# addMask step previously completed\\n" 1>&2
   exit 0
@@ -1607,6 +1622,11 @@ sub doNcbiGene {
   my $bossScript = newBash HgRemoteScript("$runDir/doNcbiGene.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  my $dupList = "";
+  if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
+    $dupList = " | grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\" ";
+  }
+
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 export gffFile=$gffFile
@@ -1620,7 +1640,7 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
   (gff3ToGenePred -warnAndContinue -useName \\
     -attrsOut=\$asmId.geneAttrs.ncbi.txt \$gffFile stdout \\
       2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter stdin stdout \\
-        | gzip -c > \$asmId.ncbiGene.genePred.gz
+        $dupList | gzip -c > \$asmId.ncbiGene.genePred.gz
   genePredCheck \$asmId.ncbiGene.genePred.gz
   export howMany=`genePredCheck \$asmId.ncbiGene.genePred.gz 2>&1 | grep "^checked" | awk '{print \$2}'`
   if [ "\${howMany}" -eq 0 ]; then

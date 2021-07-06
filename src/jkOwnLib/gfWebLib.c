@@ -25,13 +25,64 @@ if (cgiVarExists(varName))
 return server;
 }
 
+static void checkForDup(struct gfServerAt *server, char *type, struct lineFile *lf,
+                        struct hash *hash)
+/* check for duplicate server specification and record this one */
+{
+if (hashLookup(hash, server->name))
+    errAbort("Duplicate %s name %s line %d of %s",
+             type, server->name, lf->lineIx, lf->fileName);
+hashAdd(hash, server->name, NULL);
+}
+
+static void addServer(struct gfWebConfig *cfg, char *type, struct lineFile *lf,
+                      char *line, struct hash *uniqHash, struct hash *uniqTransHash)
+/* add a server parsed from the config */
+{
+struct gfServerAt *server;
+boolean isDynamic = sameString(type, "dynServer");
+char *dupe = cloneString(line);
+AllocVar(server);
+server->host = nextWord(&dupe);
+server->port = nextWord(&dupe);
+if (isDynamic)
+    {
+    server->genome = nextWord(&dupe);
+    server->dynGenomeDir = nextWord(&dupe);
+    }
+server->seqDir = nextWord(&dupe);
+server->name = trimSpaces(dupe);
+if (server->name == NULL || server->name[0] == 0)
+    errAbort("Badly formed gfServer command line %d of %s:\n%s",
+        lf->lineIx, lf->fileName, line);
+if (isDynamic)
+    {
+    slAddTail(&cfg->serverList, server);
+    checkForDup(server, type, lf, uniqHash);
+    struct gfServerAt *serverCp = cloneMem(server, sizeof(struct gfServerAt));
+    slAddTail(&cfg->transServerList, serverCp);
+    checkForDup(serverCp, type, lf, uniqTransHash);
+    }
+else if (sameString("gfServerTrans", type))
+    {
+    slAddTail(&cfg->transServerList, server);
+    checkForDup(server, type, lf, uniqTransHash);
+    }
+else
+    {
+    slAddTail(&cfg->serverList, server);
+    checkForDup(server, type, lf, uniqHash);
+    }
+}
+
+
 struct gfWebConfig *gfWebConfigRead(char *fileName)
 /* Read configuration file into globals. */
 {
 struct gfWebConfig *cfg;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
-struct hash *uniqHash = newHash(0), *uniqTransHash = newHash(0), *hash;
+struct hash *uniqHash = newHash(0), *uniqTransHash = newHash(0);
 
 AllocVar(cfg);
 cfg->company = "";
@@ -42,32 +93,9 @@ while (lineFileNextReal(lf, &line))
         {
 	cfg->company = cloneString(trimSpaces(line));
 	}
-    else if (sameWord("gfServer", word) || sameWord("gfServerTrans", word))
+    else if (sameWord("gfServer", word) || sameWord("gfServerTrans", word) || sameWord("dynServer", word))
         {
-	struct gfServerAt *server;
-	char *dupe = cloneString(line);
-	AllocVar(server);
-	server->host = nextWord(&dupe);
-	server->port = nextWord(&dupe);
-	server->seqDir = nextWord(&dupe);
-	server->name = trimSpaces(dupe);
-	if (server->name == NULL || server->name[0] == 0)
-	    errAbort("Badly formed gfServer command line %d of %s:\n%s",
-	    	lf->lineIx, fileName, line);
-	if (sameString("gfServerTrans", word))
-	    {
-	    slAddTail(&cfg->transServerList, server);
-	    hash = uniqTransHash;
-	    }
-	else
-	    {
-	    slAddTail(&cfg->serverList, server);
-	    hash = uniqHash;
-	    }
-	if (hashLookup(hash, server->name))
-	    errAbort("Duplicate %s name %s line %d of %s",
-	    	word, server->name, lf->lineIx, fileName);
-	hashAdd(hash, server->name, NULL);
+        addServer(cfg, word, lf, line, uniqHash, uniqTransHash);
 	}
     else if (sameWord("tempDir", word))
         {

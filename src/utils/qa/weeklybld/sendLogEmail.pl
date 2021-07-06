@@ -12,13 +12,14 @@ if ($argc != 2) {
 my $lastNN = shift;
 my $branchNN = shift;
 
-my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'} . ',azweig@ucsc.edu,brianlee@soe.ucsc.edu';
-my $returnEmail = ' brianlee@soe.ucsc.edu';
+my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'} . ',azweig@ucsc.edu,lrnassar@ucsc.edu';
+my $returnEmail = ' lrnassar@ucsc.edu';
 
 my @victims;
 my %victimEmail;
 
-open (FH, "git log v${lastNN}_base..v${branchNN}_base --name-status | grep Author | sort | uniq|") or die "can not git log v${lastNN}_base..v${branchNN}_base --name-status";
+my $authorFilter = `getent group kentcommit | cut -d':' -f4 | sed -e 's/^\\|,/ --author=/g'`;
+open (FH, "git log v${lastNN}_base..v${branchNN}_base --name-status ${authorFilter} | grep Author | sort | uniq|") or die "can not git log v${lastNN}_base..v${branchNN}_base --name-status";
 while (my $line = <FH>) {
   chomp $line;
   if ($line =~ m/^Author:/) {
@@ -53,9 +54,9 @@ foreach my $victim (sort keys %victimEmail) {
        printf STDERR "# sending email to $toAddr\n";
        open (SH, "| /usr/sbin/sendmail -t -oi") or die "can not run sendmail";
        printf SH "To: %s\n", $toAddr;
-       printf SH "From: \"Brian Lee\" <brianlee\@soe.ucsc.edu>\n";
+       printf SH "From: \"Lou Nassar\" <lrnassar\@ucsc.edu>\n";
        printf SH "Subject: Code summaries are due for %s\n", $victim;
-       printf SH "Cc: \"Brian Lee\" <brianlee\@soe.ucsc.edu>\n";
+       printf SH "Cc: \"Lou Nassar\" <lrnassar\@ucsc.edu>\n";
        printf SH "\n";
        print SH `./summaryEmail.sh $victim`;
   }

@@ -1,3 +1,7 @@
+38:
+     o (in 37x1) Added Dynamic BLAT using virtual memory mapped precreated indexes on disk.
+       This allows gfServer to be launched on-demand by xinetd.
+
 37:
      o (in 36x1) Fixed problem with -fastMap option that made it put in gaps in the
        allignment sometimes when a short mismatch would be a better choice.

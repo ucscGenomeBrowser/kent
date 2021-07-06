@@ -21,6 +21,9 @@ struct cart;         // forward definition for use in trackDb.h
 #define CART_VAR_EMPTY "[]"
 #define IS_CART_VAR_EMPTY(var) ((var) == NULL || sameString(var,CART_VAR_EMPTY))
 
+// A list of headers each CGI can use to control their own HTTP headers
+extern struct slPair *httpHeaders;
+
 typedef struct sqlConnection *(*DbConnector)();
 /* funtion type used to get a connection to database */
 
@@ -657,5 +660,13 @@ void cartTdbFetchMinMaxPixels(struct cart *theCart, struct trackDb *tdb,
  *      Initial height and limits may be defined in trackDb with the maxHeightPixels string,
  *      Or user requested limits are defined in the cart. */
 
+unsigned cartGetVersion(struct cart *cart);
+/* Get the current version of the cart, which is stored in the variable "cartVersion" */
+
+void cartSetVersion(struct cart *cart, unsigned version);
+/* Set the current version of the cart, which is stored in the variable "cartVersion" */
+
+void cartRewrite(struct cart *cart, unsigned trackDbCartVersion, unsigned cartVersion);
+/* Rewrite the cart to update it to expectations of trackDb. */
 #endif /* CART_H */
 

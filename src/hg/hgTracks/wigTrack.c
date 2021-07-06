@@ -25,8 +25,6 @@
 #include "trashDir.h"
 #include "jsonWrite.h"
 
-extern boolean enableMouseOver;
-
 struct wigItem
 /* A wig track item. */
     {
@@ -728,25 +726,25 @@ if ((autoScale == wiggleScaleAuto) || (autoScale == wiggleScaleCumulative))
             {
             *graphUpperLimit = overallUpperLimit;
             *graphLowerLimit = 0.0;
-            } 
-        else if (overallUpperLimit < 0.0) 
+            }
+        else if (overallUpperLimit < 0.0)
             {
             *graphUpperLimit = 0.0;
             *graphLowerLimit = overallUpperLimit;
-            } 
-        else 
+            }
+        else
             {
             *graphUpperLimit = 1.0;
             *graphLowerLimit = -1.0;
             }
-        } 
-    else 
+        }
+    else
         {
         *graphUpperLimit = overallUpperLimit;
         *graphLowerLimit = overallLowerLimit;
         }
-    } 
-else 
+    }
+else
     {
     *graphUpperLimit = maxY;
     *graphLowerLimit = minY;
@@ -810,7 +808,7 @@ hvGfxBox(image, x, y, 1, height, color);
 }
 
 Color somewhatLighterColor32(Color color)
-/* Get a somewhat lighter shade of a color - 1/3 of the way towards white. 
+/* Get a somewhat lighter shade of a color - 1/3 of the way towards white.
  * Specialized here to bypass image parameter requirement.*/
 {
 struct rgbColor rgbColor =  mgColorIxToRgb(NULL, color);
@@ -846,26 +844,12 @@ wgo->yOff = yOff;
 return wgo;
 }
 
-/* prototype version of mouseOverData using this static array,
- *   will alter this to be a private linked list
- */
-static struct wigMouseOver *mouseOverData = NULL;
-static int mouseOverIdx = -1;
-
-struct wigMouseOver
-    {
-    int x1;	/* beginning of a rectangle for this value */
-    int x2;	/* end of the rectangle */
-    double value;	/* data value for this region */
-    int valueCount;	/* number of data values in this rectangle */
-    };
-
-void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
+struct wigMouseOver *graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
     struct track *tg, void *image, WigVerticalLineVirtual vLine, int xOff, int yOff, double *yOffsets, int numTrack,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
     double epsilon, Color *colorArray, enum trackVisibility vis,
     struct wigCartOptions *wigCart, struct pixelCountBin *pixelBins)
-/*	graph the preDraw array */
+/*	graph the preDraw array, returns mouse over data, or NULL */
 {
 int x1;
 int h = tg->lineHeight;	/*	the height of our drawing window */
@@ -878,22 +862,21 @@ enum wiggleTransformFuncEnum transformFunc = wigCart->transformFunc;
 enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
 boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers
 			&& width < winEnd-winStart);
+struct wigMouseOver *mouseOverData = NULL;
+	/* list of mouse over data, if created here */
 
-/* start new data for a new track, freez old data if exists */
-if (enableMouseOver)
-    {
-    if (mouseOverData)
-	{
-	mouseOverIdx = -1;
-	freez(&mouseOverData);
-	}
-    AllocArray(mouseOverData, width);
-    }
-
+boolean skipMouseOvers = TRUE;	/* assuming not using */
 int mouseOverX2 = -1;
 double previousValue = 0;
-boolean skipMouseOvers = FALSE;
-#define epsilonLimit 1.0e-6
+if (enableMouseOver)
+    skipMouseOvers = FALSE;
+
+boolean noAverage = FALSE;
+boolean dropMouseOverData = FALSE;	// will become TRUE if noAverage
+					// condition is encountered
+char *mouseOverFunction = trackDbSetting(tg->tdb, "mouseOverFunction");
+if (sameOk(mouseOverFunction, "noAverage"))
+    noAverage = TRUE;
 
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements could draw boxes where pixels
@@ -905,35 +888,41 @@ for (x1 = 0; x1 < width; ++x1)
     int preDrawIndex = x1 + preDrawZero;
     struct preDrawElement *p = &preDraw[preDrawIndex];
     /* ===== mouseOver calculations===== */
-    if (enableMouseOver)
+    if (enableMouseOver && !dropMouseOverData)
         {
-        if (!skipMouseOvers && (p->count > 0)) /* checking mouseOver construction */
+        /* checking if mouseOver construction is allowed */
+        if (!skipMouseOvers && (p->count > 0) && !(noAverage && p->count>1))
             {
             if (p->count > 0)	/* allow any number of values to display */
                 {
-                double thisValue = p->sumData/p->count;	/* average if 2 */
+                double thisValue = p->sumData/p->count;	/*average if count > 1*/
                 if (mouseOverX2 < 0)    /* first valid data found */
                     {
-                    ++mouseOverIdx;
+		    struct wigMouseOver *dataItem;
+		    AllocVar(dataItem);
                     mouseOverX2 = x1+1;
-                    mouseOverData[mouseOverIdx].x1 = x1;
-                    mouseOverData[mouseOverIdx].x2 = mouseOverX2;
-                    mouseOverData[mouseOverIdx].value = thisValue;
-		    mouseOverData[mouseOverIdx].valueCount = p->count;
+                    dataItem->x1 = x1;
+                    dataItem->x2 = mouseOverX2;
+                    dataItem->value = thisValue;
+		    dataItem->valueCount = p->count;
+		    slAddHead(&mouseOverData, dataItem);
                     previousValue = thisValue;
                     }
                 else	/* see if we need a new item */
                     {
+#define epsilonLimit 1.0e-6
                     if (fabs(thisValue - previousValue) > epsilonLimit)
                         {
-                        /* finish off the existing run of data */
-                        mouseOverData[mouseOverIdx].x2 = mouseOverX2;
+                        /* finish off the existing run of data (list head)*/
+                        mouseOverData->x2 = mouseOverX2;
                         mouseOverX2 = x1+1;
-                        ++mouseOverIdx;
-                        mouseOverData[mouseOverIdx].x1 = x1;
-                        mouseOverData[mouseOverIdx].x2 = mouseOverX2;
-                        mouseOverData[mouseOverIdx].value = thisValue;
-			mouseOverData[mouseOverIdx].valueCount = p->count;
+			struct wigMouseOver *dataItem;
+			AllocVar(dataItem);
+                        dataItem->x1 = x1;
+                        dataItem->x2 = mouseOverX2;
+                        dataItem->value = thisValue;
+			dataItem->valueCount = p->count;
+			slAddHead(&mouseOverData, dataItem);
                         previousValue = thisValue;
                         }
                     else	/* continue run of same data value */
@@ -943,21 +932,25 @@ for (x1 = 0; x1 < width; ++x1)
             else
                 skipMouseOvers = TRUE;	/* has become too dense to make sense */
             }
-        else  /* perhaps entered region without values after some data already */
+        else /* perhaps entered region without values after some data already */
             {
-            if (mouseOverX2 > 0)	/* yes, been in data, end it here */
+
+            if (noAverage && p->count>1)
+              dropMouseOverData = TRUE;
+            else if (mouseOverX2 > 0)	/* yes, been in data, end it here */
                 {
-                mouseOverData[mouseOverIdx].x2 = mouseOverX2;
-                mouseOverX2 = -1;	/* start over with new data when found */
+		mouseOverData->x2 = mouseOverX2;
+                mouseOverX2 = -1;	/* start over with new data when found*/
                 }
             }
         /* potentially end the last mouseOver box */
-        if (mouseOverX2 > 0 && mouseOverX2 > mouseOverData[mouseOverIdx].x2)
-                mouseOverData[mouseOverIdx].x2 = mouseOverX2;
+        if (mouseOverX2 > 0 && mouseOverX2 > mouseOverData->x2)
+                mouseOverData->x2 = mouseOverX2;
 
         }       //      if (enableMouseOver)
     else
 	skipMouseOvers = TRUE;
+
     /* ===== done with mouseOver calculations===== */
 
     assert(x1/pixelBins->binSize < pixelBins->binCount);
@@ -1171,19 +1164,14 @@ for (x1 = 0; x1 < width; ++x1)
 	}	/*	if (preDraw[].count)	*/
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
 
-    if (enableMouseOver)
-        {
-	if (skipMouseOvers || mouseOverIdx < 0)
-	    {
-	    mouseOverIdx = -1;
-	    freez(&mouseOverData);
-	    }
-        }
+if (dropMouseOverData)
+    slFreeList(&mouseOverData);
+return(mouseOverData);
 }	/*	graphPreDraw()	*/
 
-static void graphPreDrawContainer(struct preDrawContainer *preDrawContainer, 
-    int preDrawZero, int width, struct track *tg, struct hvGfx *hvg, 
-    int xOff, int yOff, double graphUpperLimit, double graphLowerLimit, 
+static struct wigMouseOver *graphPreDrawContainer(struct preDrawContainer *preDrawContainer,
+    int preDrawZero, int width, struct track *tg, struct hvGfx *hvg,
+    int xOff, int yOff, double graphUpperLimit, double graphLowerLimit,
     double graphRange, enum trackVisibility vis, struct wigCartOptions *wigCart)
 /* Draw the graphs for all tracks in container. */
 {
@@ -1191,14 +1179,14 @@ double epsilon = graphRange / tg->lineHeight;
 struct preDrawElement *preDraw = preDrawContainer->preDraw;
 Color *colorArray = makeColorArray(preDraw, width, preDrawZero, wigCart, tg, hvg);
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
-graphPreDraw(preDraw, preDrawZero, width,
-	tg, wgo->image, wgo->vLine, wgo->xOff, wgo->yOff, wgo->yOffsets, wgo->numTrack,
-	graphUpperLimit, graphLowerLimit, graphRange,
+struct wigMouseOver *mouseOverData = graphPreDraw(preDraw, preDrawZero, width,
+	tg, wgo->image, wgo->vLine, wgo->xOff, wgo->yOff, wgo->yOffsets,
+	wgo->numTrack, graphUpperLimit, graphLowerLimit, graphRange,
 	epsilon, colorArray, vis, wigCart, wgo->pixelBins);
 
 freez(&colorArray);
+return mouseOverData;
 }
-
 
 void drawZeroLine(enum trackVisibility vis,
     enum wiggleGridOptEnum horizontalGrid,
@@ -1290,7 +1278,7 @@ if (tg->mapsSelf)
         char *title = NULL;
         if (trackDbSetting(tg->tdb, "hoverMetadata"))
             title = trackDbSetting(tg->tdb, "metadata");
-        mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->track, 
+        mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->track,
                         itemName, title);
         }
     freeMem(itemName);
@@ -1436,8 +1424,8 @@ if (wigCart->autoScale == wiggleScaleCumulative)
     tg->graphUpperLimit = graphUpperLimit = tg->tdb->parent->tdbExtras->minMax->max;
     }
 
-/* if we're autoscaling and the range is 0 this implies that all values 
- * in the given range are the same.  We create a bottom of the scale  
+/* if we're autoscaling and the range is 0 this implies that all values
+ * in the given range are the same.  We create a bottom of the scale
  * by subtracting one from the only value.
  * This results in drawing a box that fills the range. */
 if (graphUpperLimit == graphLowerLimit)
@@ -1446,9 +1434,10 @@ if (graphUpperLimit == graphLowerLimit)
     }
 graphRange = graphUpperLimit - graphLowerLimit;
 
-wigTrackSetGraphOutputDefault(tg, xOff, yOff, width, hvg); 
+wigTrackSetGraphOutputDefault(tg, xOff, yOff, width, hvg);
 
-graphPreDrawContainer(preContainer, preDrawZero, width, tg, hvg, xOff, yOff, 
+struct wigMouseOver *mouseOverData = graphPreDrawContainer(preContainer,
+    preDrawZero, width, tg, hvg, xOff, yOff,
     graphUpperLimit, graphLowerLimit, graphRange, vis, wigCart);
 
 drawZeroLine(vis, wigCart->horizontalGrid,
@@ -1462,52 +1451,37 @@ drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
 
 if (enableMouseOver && mouseOverData)
     {
-    static boolean beenHereDoneThat = FALSE;
-    struct tempName jsonData;
-    trashDirFile(&jsonData, "hgt", tg->track, ".json");
-    FILE *trashJson = mustOpen(jsonData.forCgi, "w");
-    struct jsonWrite *jw = jsonWriteNew();
-    jsonWriteObjectStart(jw, NULL);
-    jsonWriteListStart(jw, tg->track);
-    int i;
-    /* could put up a 'no data' box when these items are not contiguous
-     *    e.g. when gaps interrupt the track data
-     */
-    for (i = 0; i <= mouseOverIdx; ++i)
+    jsonWriteObjectStart(mouseOverJson, tg->track);
+    jsonWriteString(mouseOverJson, "t", tg->tdb->type);
+    jsonWriteListStart(mouseOverJson, "d");
+    slReverse(&mouseOverData);
+    struct wigMouseOver *dataItem = mouseOverData;
+    for (; dataItem; dataItem = dataItem->next)
         {
-        jsonWriteObjectStart(jw, NULL);
-        jsonWriteNumber(jw, "x1", (long long)mouseOverData[i].x1);
-        jsonWriteNumber(jw, "x2", (long long)mouseOverData[i].x2);
-        jsonWriteDouble(jw, "v", mouseOverData[i].value);
-        jsonWriteNumber(jw, "c", mouseOverData[i].valueCount);
-        jsonWriteObjectEnd(jw);
+        jsonWriteObjectStart(mouseOverJson, NULL);
+        jsonWriteNumber(mouseOverJson, "x1", (long long)dataItem->x1);
+        jsonWriteNumber(mouseOverJson, "x2", (long long)dataItem->x2);
+        jsonWriteDouble(mouseOverJson, "v", dataItem->value);
+        jsonWriteNumber(mouseOverJson, "c", dataItem->valueCount);
+        jsonWriteObjectEnd(mouseOverJson);
         }
-    jsonWriteListEnd(jw);
-    jsonWriteObjectEnd(jw);
-    fputs(jw->dy->string,trashJson);
-    carefulClose(&trashJson);
-    mouseOverIdx = -1;
-    freez(&mouseOverData);
-    if (! beenHereDoneThat )
-        {
-        hPrintf("<div id='mouseOverVerticalLine' class='mouseOverVerticalLine'></div>\n");
-        hPrintf("<div id='mouseOverText' class='mouseOverText'></div>\n");
-// hPrintf("<div id='mouseDbg'><span id='debugMsg'><p>. . . mouseDbg</p></span></div>\n");
-        beenHereDoneThat = TRUE;
-        }
-    // hidden element to pass along jsonData file name and also the trigger
+    jsonWriteListEnd(mouseOverJson);
+    jsonWriteObjectEnd(mouseOverJson);
+    slFreeList(&mouseOverData);
+    // hidden element to pass along jsonUrl file name and also the trigger
     // that this track has data to display.
-    hPrintf("<div id='mouseOver_%s' name='%s' class='hiddenText mouseOverData' jsonData='%s'></div>\n", tg->track, tg->track, jsonData.forCgi);
+    hPrintf("<div id='mouseOver_%s' name='%s' class='hiddenText mouseOverData' jsonUrl='%s'></div>\n", tg->track, tg->track, mouseOverJsonFile->forCgi);
     }
-// Might need something like this later for other purposes
-// else if (enableMouseOver)       // system enabled, but no data for this track
-//     {
-    /* signal to indicate zoom in required to see data */
-//     hPrintf("<div id='mouseOver_%s' name='%s' class='hiddenText mouseOverData'></div>\n", tg->track, tg->track);
-//     }
+else if (enableMouseOver)
+    {
+    jsonWriteObjectStart(mouseOverJson, tg->track);
+    jsonWriteString(mouseOverJson, "t", tg->tdb->type);
+    jsonWriteString(mouseOverJson, "mo", "noAverage");
+    jsonWriteObjectEnd(mouseOverJson);
+    }
 
 wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
-}
+}	/*	void wigDrawPredraw()	*/
 
 struct preDrawContainer *wigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
 /* Do bits that load the predraw buffer tg->preDrawContainer. */
@@ -1602,10 +1576,10 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
          *      no need to walk through it, just use the block's specified
          *      max/min.  It is OK if these end up + or - values, we do want to
          *      keep track of pixels before and after the screen for
-         *      later smoothing operations.
+         *      later smoothing operations.  x1d,x2d are pixel coordinates
          */
 double x1d = (double)(wi->start - seqStart) * pixelsPerBase;
-        x1 = round(x1d);
+	x1 = round(x1d);
 double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
 	x2 = round(x2d);
 
@@ -1622,13 +1596,21 @@ double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixels
 	    readData = (unsigned char *) needMem((size_t) (wi->count + 1));
 	    udcRead(wibFH, readData,
 		(size_t) wi->count * (size_t) sizeof(unsigned char));
-	    /*	walk through all the data in this block	*/
+	    /*	walk through all the data in this wiggle data block	*/
 	    for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)
 		{
 		unsigned char datum = readData[dataOffset];
 		if (datum != WIG_NO_DATA)
 		    {
+		    /* (wi->start-seqStart) == base where this wiggle data block
+		     *	begins.  Add to that (dataOffset * usingDataSpan) which
+		     *	is how many bases this specific datum is from the start
+		     *	of this wiggle data block.
+		     * x1,x2 are the pixel begin and end for this data item */
 		    x1 = ((wi->start-seqStart) + (dataOffset * usingDataSpan)) * pixelsPerBase;
+		    /* (usingDataSpan * pixelsPerBase) is the number of pixels
+		     *	occupied by this one data item
+		     */
 		    x2 = x1 + (usingDataSpan * pixelsPerBase);
 		    for (i = x1; i <= x2; ++i)
 			{

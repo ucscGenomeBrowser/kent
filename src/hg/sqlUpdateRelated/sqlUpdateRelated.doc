@@ -31,7 +31,7 @@ sandles	havaina luxury thongs
 loafers	urban polish
 
 We'd like to do this, because hey, we aren't in the database, we don't know what all the id's are,
-and also one table is easir to write than two.  With sqlUpdateRelated it's not quite as simple, but not much harder.  We just have to encode a little info about the foreign key relationship in the
+and also one table is easier to write than two.  With sqlUpdateRelated it's not quite as simple, but not much harder.  We just have to encode a little info about the foreign key relationship in the
 field name, which we do with @ signs:
 
 

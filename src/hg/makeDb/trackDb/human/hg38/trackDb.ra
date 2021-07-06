@@ -6,13 +6,30 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
-include mane.ra public
-include mane.alpha.ra alpha,beta
+include mane.ra 
 
 include gdcCancer.ra
 
-include gencodeV35.ra alpha
+include cortexVelmeshev.ra
+include heartCellAtlas.ra
+include kidneyStewart.ra
+include muscleDeMicheli.ra
+#include lungVieiraBraga.ra
+include fetalGeneAtlas.ra
+include bloodHao.ra
+include lungTravaglini2020.ra
+include skinSoleBoldo.ra
+include liverMacParland.ra
+include pancreasBaron.ra
+include ileumWang.ra
+include colonWang.ra
+include rectumWang.ra
+include placentaVentoTormo.ra
+include singleCellMerged.ra
+#include lungMadissoon.ra
+
 include liftOver.ra
+include exomeProbesets.ra
 
 track miRnaAtlas
 compositeTrack on
@@ -135,6 +152,11 @@ searchDescription COSMIC Regions
 track coriellDelDup override
 origAssembly hg19 
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19" 
+
+track revel override
+origAssembly hg19 
+pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; New red ../goldenPath/newsarch.html#062421 "Released by UCSC June 24, 2021"
+
 
 include nonCodingRNAs.ra
 
@@ -352,9 +374,9 @@ group x
 
 include trackDb.4way.ra alpha
 include trackDb.5way.ra alpha
-include trackDb.7way.ra
+include trackDb.7way.ra alpha
 include trackDb.17way.ra alpha
-include trackDb.20way.ra
+include trackDb.20way.ra alpha
 include trackDb.27way.ra alpha
 include trackDb.30way.ra
 include trackDb.10way.ra
@@ -483,54 +505,6 @@ xrefTable kgXref, ucscRetroInfo9
 xrefQuery select ucscRetroInfo9.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
-track snp141Mult override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp141.fa
-
-track snp141Flagged override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp141.fa
-
-track snp141Common override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp141.fa
-
-track snp141 override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp141.fa
-
-track snp142Mult override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp142.fa
-
-track snp142Flagged override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp142.fa
-
-track snp142Common override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp142.fa
-
-track snp142 override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp142.fa
-
-track snp144Mult override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp144.fa
-
-track snp144Flagged override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp144.fa
-
-track snp144Common override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp144.fa
-
-track snp144 override
-group varRep
-snpSeqFile /gbdb/hg38/snp/snp144.fa
-
 track tgpPhase3
 shortLabel 1000G Ph3 Vars
 longLabel 1000 Genomes Phase 3 Integrated Variant Calls from IGSR: SNVs and Indels
@@ -555,8 +529,6 @@ vcfDoQual off
 vcfDoMaf off
 compositeTrack on
 geneTrack ncbiRefSeqCurated
-pennantIcon New red ../goldenPath/newsarch.html#092520 "Released Jul. 21, 2020"
-
 
     track tgpNA19685_m011_MXL
     parent tgpTrios
@@ -690,10 +662,13 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra beta,public
+include knownGene.ra
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
+
+include trackDb.241way.ra alpha,beta
+include trackDb.241wayBM.ra alpha
 
 # track multiz145way
 # shortLabel 145way maf
@@ -767,30 +742,6 @@ shortLabel GTEx Brain
 longLabel GTEx Brain Gene Expression in barChart track format
 group expression
 
-track snp147Mult override
-group varRep
-
-track snp147Flagged override
-group varRep
-
-track snp147Common override 
-group varRep
-
-track snp147 override
-group varRep
-
-track snp146Mult override
-group varRep
-
-track snp146Flagged override
-group varRep
-
-track snp146Common override
-group varRep
-
-track snp146 override
-group varRep
-
 track dgvPlus override
 group varRep
 
@@ -827,7 +778,8 @@ include wgEncodeReg.dev.ra alpha
 
 include hic.ra
 
-include gnomad.ra
+include gnomad.ra beta,public
+include gnomad.alpha.ra alpha
 
 include platinumGenomes.ra
 
@@ -869,8 +821,8 @@ track ncbiRefSeqSelect
 parent refSeqComposite off
 priority 8
 type genePred
-shortLabel RefSeq Select+MANE
-longLabel NCBI RefSeq Select+MANE subset: one representative transcript per protein-coding gene
+shortLabel RefSeq Select and MANE
+longLabel NCBI RefSeq Select and MANE subset: A single representative transcript
 trackHandler ncbiRefSeq
 idXref ncbiRefSeqLink mrnaAcc name
 color 20,20,160
@@ -881,3 +833,15 @@ track clinGenCnv override
 filter.size 773:11309456
 filterLimits.size 773:11309456
 
+track covidHct
+shortLabel Transcription response
+longLabel High-confidence SARS-CoV-2 infection transcriptional response target genes
+priority 100
+type bigBed 8 +
+color 150,20,20
+mouseOver $_mouseOver : $name - CQV: $cqv - Rank: $rank
+group covid
+bigDataUrl /gbdb/hg38/covidHct/covidHct.bb
+release alpha
+
+include dbSnpArchiveHg38.ra

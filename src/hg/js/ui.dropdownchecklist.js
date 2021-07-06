@@ -263,6 +263,12 @@
 				item.addClass("ui-state-disabled");
 			}
 	        label.click(function(e) {e.stopImmediatePropagation();});
+
+            var span = $("<span/>");
+            span.css( { cursor: "default" });
+            span.html(" (0)");
+            label.append(span);
+
             item.append(label);
 
            	// active items display themselves with hover

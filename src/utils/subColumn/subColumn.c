@@ -3,6 +3,7 @@
 /* Copyright (C) 2011 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 #include "common.h"
+#include "localmem.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
@@ -60,10 +61,29 @@ return dy->string;
 
 int missCount = 0;
 
+struct hash *hashTwoColumnTsv(char *fileName)
+/* Given a two column file (key, value) return a hash. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *hash = hashNew(16);
+char *row[3];
+int fields = 0;
+while ((fields = lineFileChopTab(lf, row)) != 0)
+    {
+    lineFileExpectWords(lf, 2, fields);
+    char *name = row[0];
+    char *value = lmCloneString(hash->lm, row[1]);
+    hashAdd(hash, name, value);
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+
 void subColumn(char *asciiColumn, char *inFile, char *subFile, char *outFile)
 /* subColumn - Substitute one column in a tab-separated file.. */
 {
-struct hash *subHash = hashTwoColumnFile(subFile);
+struct hash *subHash = hashTwoColumnTsv(subFile);
 int column = atoi(asciiColumn);
 if (column == 0)
     usage();

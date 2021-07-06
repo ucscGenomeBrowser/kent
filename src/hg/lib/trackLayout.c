@@ -62,8 +62,21 @@ char *fontType = "medium";
 boolean fontExtras = trackLayoutInclFontExtras();
 if (fontExtras)
     fontType = cartUsualString(cart, "fontType", fontType);
+if (cfgOptionBooleanDefault("freeType", TRUE))
+    {
+    tl->textFont = cartUsualString(cart, textFontVar, cfgOptionDefault("freeTypeFont","Bitmap"));
+    char *style =  cartUsualString(cart, textStyleVar, "Normal");
 
-tl->textFont = cartUsualString(cart, textFontVar, cfgOptionDefault("freeTypeFont","Helvetica"));
+    if (differentString(style, "Normal"))
+        {
+        char buffer[4096];
+        safef(buffer, sizeof buffer, "%s-%s",tl->textFont, style);
+        tl->textFont = cloneString(buffer);
+        }
+    }
+else
+    tl->textFont = cartUsualString(cart, textFontVar, "Helvetica");
+
 tl->textSize = mgFontSizeBackwardsCompatible(cartUsualString(cart, textSizeVar, cfgOptionDefault(textSizeVar,"small")));
 MgFont *font = mgFontForSizeAndStyle(tl->textSize, fontType);
 tl->font = font;
@@ -74,4 +87,16 @@ tl->barbHeight = tl->fontHeight/4;
 tl->barbSpacing = (tl->fontHeight+1)/2;
 tl->picWidth = hgDefaultPixWidth;
 trackLayoutSetPicWidth(tl, cartOptionalString(cart, "pix"));
+// label width, but don't exceed 1/2 of image
+tl->leftLabelWidthChars = cartUsualInt(cart, leftLabelWidthVar, leftLabelWidthDefaultChars);
+if (tl->leftLabelWidthChars < 2)
+    tl->leftLabelWidthChars = leftLabelWidthDefaultChars;
+tl->leftLabelWidth = tl->leftLabelWidthChars*tl->nWidth + trackTabWidth + 3;
+int maxLabelWidth = 0.5*tl->picWidth;
+if (tl->leftLabelWidth  > maxLabelWidth)
+    {
+    // overflow, force to 1/2 width
+    tl->leftLabelWidthChars = maxLabelWidth/tl->nWidth;
+    tl->leftLabelWidth = tl->leftLabelWidthChars * tl->nWidth;
+    }
 }

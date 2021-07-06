@@ -25,8 +25,10 @@
 #define BAR_CHART_MAX_VIEW_LIMIT             "maxViewLimit"
 #define BAR_CHART_MAX_VIEW_LIMIT_DEFAULT     50
 
+#define BAR_CHART_LIMIT	"barChartLimit"
+
 /* Category (bar) info */
-#define BAR_CHART_MAX_CATEGORIES        1000
+#define BAR_CHART_MAX_CATEGORIES        2000
 
 /* Category filter */
 #define BAR_CHART_CATEGORY_SELECT      "categories"
@@ -38,6 +40,9 @@
 
 /* Colors for categories */
 #define BAR_CHART_CATEGORY_COLORS        "barChartColors"
+
+/* Labels and colors */
+#define BAR_CHART_CATEGORY_URL          "barChartCategoryUrl"
 
 /* Units to display on bar mouseover */
 #define BAR_CHART_UNIT                   "barChartUnit"
@@ -74,6 +79,12 @@ void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char 
     "uint expCount;      \"Number of categories\"\n" \
     "float[expCount] expScores; \"Comma separated list of category values\"\n" \
     ")\n"
+
+double barChartCurViewMax(struct cart *cart, char *trackName, struct trackDb *tdb);
+/* Look up max value to scale for this bar chart - consults both cart and trackDb defaults. */
+
+boolean barChartIsLogTransformed(struct cart *cart, char *trackName, struct trackDb *tdb);
+/* Return TRUE if bar chart needs to be log transformed */
 
 double barChartUiMaxMedianScore();
 /* Max median score, for scaling */

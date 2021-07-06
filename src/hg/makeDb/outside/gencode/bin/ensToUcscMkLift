@@ -10,11 +10,6 @@ from pycbio.db import mysqlOps
 from pycbio.hgdata import hgDb
 from pycbio.hgdata.chromInfo import ChromInfoTbl
 
-##
-# N.B. EnsSeqs.__ignoredSpecialCase* functions identify cases to ignore are not worth coding around in
-# a more general way.
-##
-
 ucscDbToRefAsm = {
     "hg19": "GRCh37",
     "hg38": "GRCh38",

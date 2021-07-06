@@ -11,6 +11,7 @@
 #include "psPoly.h"
 #include "psGfx.h"
 #include "linefile.h"
+#include "pipeline.h"
 
 
 static void psFloatOut(FILE *f, double x)
@@ -197,7 +198,7 @@ fprintf(f, "closepath\n");
 fprintf(f, "fill\n");
 }
 
-void psSetFont(struct psGfx *ps, char *fontName)
+void psSetFont(struct psGfx *ps, char *fontName, double size)
 {
 FILE *f = ps->f;
 fprintf(f, "/%s findfont ", fontName);
@@ -205,7 +206,8 @@ fprintf(f, "/%s findfont ", fontName);
 /* Note the 1.2 and the 1.0 below seem to get it to 
  * position about where the stuff developed for pixel
  * based systems expects it.  It is all a kludge though! */
-fprintf(f, "%f scalefont setfont\n", -(1/0.8)*ps->fontHeight*ps->yScale*1.5);
+fprintf(f, "%f scalefont setfont\n", -size*ps->yScale*1.2);
+ps->fontHeight = size*0.8;
 }
 
 void psTimesFont(struct psGfx *ps, double size)
@@ -443,7 +445,6 @@ char * convertEpsToPdf(char *epsFile)
 /* Convert EPS to PDF and return filename, or NULL if failure. */
 {
 char *pdfTmpName = NULL, *pdfName=NULL;
-char cmdBuffer[2048];
 int sysVal = 0;
 struct lineFile *lf = NULL;
 char *line;
@@ -469,9 +470,12 @@ lineFileClose(&lf);
 /* Do conversion. */
 chopSuffix(pdfTmpName);
 pdfName = addSuffix(pdfTmpName, ".pdf");
-safef(cmdBuffer, sizeof(cmdBuffer), "ps2pdf -dDEVICEWIDTHPOINTS=%d -dDEVICEHEIGHTPOINTS=%d %s %s", 
-      round(width), round(height), epsFile, pdfName);
-sysVal = system(cmdBuffer);
+char widthBuff[1024], heightBuff[1024];
+safef(widthBuff, sizeof widthBuff, "-dDEVICEWIDTHPOINTS=%d", round(width));
+safef(heightBuff, sizeof heightBuff, "-dDEVICEHEIGHTPOINTS=%d", round(height));
+char *pipeCmd[] = { "ps2pdf", widthBuff, heightBuff, epsFile, pdfName, NULL } ;
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite, "/dev/null", NULL);
+sysVal = pipelineWait(pl);
 if(sysVal != 0)
     freez(&pdfName);
 freez(&pdfTmpName);

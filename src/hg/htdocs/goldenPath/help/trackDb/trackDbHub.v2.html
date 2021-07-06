@@ -135,7 +135,6 @@ in the sections below.</I>
         <LI><A HREF="#bigChain_-_Pairwise_Alignments">bigChain</A>: Genome-wide Pairwise Alignments</LI>
         <LI><A HREF="#bigGenePred_-_Gene_Annotations">bigGenePred</A>: Gene Annotations</LI>
         <LI><A HREF="#bigInteract">bigInteract</A>: Pairwise interactions</LI>
-        <LI><A HREF="#bigLolly">bigLolly</A>: Lollipops</LI>
         <LI><A HREF="#bigNarrowPeak_-_Peaks">bigNarrowPeak</A>: Peaks</LI>
         <LI><A HREF="#bigMaf_-_Multiple_Alignments">bigMaf</A>: Mulitple Alignments</LI>
         <LI><A HREF="#bigPsl_-_Pairwise_Alignments">bigPsl</A>: Pairwise Alignments</LI>
@@ -143,7 +142,6 @@ in the sections below.</I>
         <LI><A HREF="#hic">hic</A>: Hi-C contact matrices</LI>
         <LI><A HREF="#halSnake">halSnake</A>: HAL Snake Format</LI>
         <LI><A HREF="#vcfTabix">vcfTabix</A>: Variant Call Format</LI>
-        <LI><A HREF="#vcfPhasedTrio">vcfPhasedTrio</A>: Variant Call Format Trios</LI>
     </UL></LI>
     <LI><A HREF="#groupingTracks">Grouping tracks into sets and hierarchies</A>
         &ndash; with examples
@@ -239,9 +237,6 @@ in the sections below.</I>
     </TD></TR>
     <TR VALIGN=TOP><TD class="iframeOptions"><A name="iframeOptions"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">iframeOptions &lt;string&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="mouseOver"><A name="mouseOver"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">mouseOver &lt;pattern&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="mouseOverField"><A name="mouseOverField"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">mouseOverField &lt;fieldName&gt;</code></div>
@@ -568,7 +563,7 @@ are described below along with settings specific to their types.</P>
         <div class="format">
             <code class="level-new">filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
             <span class="filterValuesDefault"><code class="level-new">filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code></span><BR>
-            <span class="filterType"><code class="level-new">filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd&gt;</code></span></div>
+            <span class="filterType"><code class="level-new">filterType.&lt;fieldName&gt; &lt;single/singleList/multiple/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="filterLabel"><A name="filterLabel"></A>
             <A name="filterLabel.fieldName"></A><IMG class='toggle detail'>
@@ -653,10 +648,6 @@ are described below along with settings specific to their types.</P>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="baseColorDefault"><A name="baseColorDefault"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">
-        baseColorDefault &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="labelFields"><IMG class='toggle detail'>
         <div class="format"><code class="level-full">labelFields &lt;fieldName[,fieldName]&gt;</code></div>
@@ -869,45 +860,6 @@ are described below along with settings specific to their types.</P>
 </TABLE>
 <BR><BR>
 
-<A name="bigLolly"></A>
-<TABLE class="settingsTable" id="bigLolly - Lollipop charts">
-<THEAD><TR><TD><DIV ID="bigLolly_intro" class="intro"></DIV></TD></TR></THEAD>
-    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
-        &nbsp;bigLolly - lollipop graphs
-    </TH></TR>
-    <TR VALIGN=TOP><TD class="bigLolly"><IMG class='toggle detail'>
-        <div class="format">
-            <code>type bigLolly</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
-    </TD></TR>
-    <tr valign=top><td class="noStems"><img class='toggle detail'>
-        <div class="format"><code class="level-required">noStems &lt;on/off&gt;</code>
-        </div>
-    </td></tr>
-    <tr valign=top><td class="lollySizeField"><img class='toggle detail'>
-        <div class="format"><code class="level-required">lollySizeField &lt;integer&gt;</code>
-        </div>
-    </td></tr>
-    <tr valign=top><td class="lollyMaxSize"><img class='toggle detail'>
-        <div class="format"><code class="level-required">lollyMaxSize &lt;integer&gt;</code>
-        </div>
-    </td></tr>
-    <tr valign=top><td class="lollyField"><img class='toggle detail'>
-        <div class="format"><code class="level-required">lollyField &lt;integer&gt;</code>
-        </div>
-    </td></tr>
-    <tr valign=top><td class="yAxisLabel"><img class='toggle detail'>
-        <div class="format"><code class="level-full"><code>yAxisLabel.&lt;integer&gt; &lt;integer&gt; &lt;on/off&gt; &lt;R,G,B&gt; &lt;string&gt; </code></div>
-    </td></tr>
-    <tr valign=top><td class="yAxisNumLabels"><img class='toggle detail'>
-        <div class="format"><code class="level-required">yAxisNumLabels &lt;on/off&gt;</code>
-        </div>
-    </td></tr>
-</TABLE>
-<BR><BR>
-
 <A name="hic"></A>
 <TABLE class="settingsTable" id="hic_-_Hi-C contact matrices">
 <THEAD><TR><TD><DIV ID="hic_intro" class="intro"></DIV></TD></TR></THEAD>
@@ -921,27 +873,6 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
-    <tr valign=top><td class="color"><img class='toggle detail'>
-        <div class="format"><code class="level-base">color &lt;red,green,blue&gt;</code></div>
-    </td></tr>
-    <tr valign=top><td class="drawMode"><a name="drawMode"></a><img class='toggle detail'>
-        <div class="format"><code class="level-new">drawMode &lt;triangle|square|arc&gt;</code></div>
-    </td></tr>
-    <tr valign=top><td class="normalization"><a name="normalization"></a><img class='toggle detail'>
-        <div class="format"><code class="level-new">normalization &lt;NONE|VC|VC_SQRT|KR&gt;</code></div>
-    </td></tr>
-    <tr valign=top><td class="resolution"><a name="resolution"></a><img class='toggle detail'>
-        <div class="format"><code class="level-new">resolution &lt;Auto|integer&gt;</code></div>
-    </td></tr>
-    <tr valign=top><td class="saturationScore"><a name="saturationScore"></a><img class='toggle detail'>
-        <div class="format"><code class="level-new">saturationScore &lt;float&gt;</code></div>
-    </td></tr>
-    <tr valign=top><td class="autoScale"><a name="autoScale"></a><img class='toggle detail'>
-        <div class="format"><code class="level-base">autoScale &lt;off/on/group&gt;</code></div>
-    </td></tr>
-    <tr class="examples" valign=top><td class="hic_example"><img class='toggle detail'>
-        <div class="format"><b>Example of a hic track</b></div>
-    </td></tr>
 </TABLE>
 <BR><BR>
 
@@ -987,14 +918,8 @@ are described below along with settings specific to their types.</P>
         <div class="format"><I>Related settings:</I><BR>
 	  <code class="level-full">hapClusterEnabled &lt;true|false&gt;</code></div>
     </TD></TR>
-    <TR class="related" VALIGN=TOP><TD class="hapClusterMethod"><A NAME="hapClusterMethod"><IMG class='toggle detail setF'>
-        <div class="format"><code class="level-full">hapClusterMethod &lt;centerWeighted|fileOrder|treeFile <em>url</em>&gt;</code></div>
-    </TD></TR>
     <TR class="related" VALIGN=TOP><TD class="hapClusterColorBy"><A NAME="hapClusterColorBy"><IMG class='toggle detail setF'>
-        <div class="format"><code class="level-full">hapClusterColorBy &lt;altOnly|function|refAlt|base&gt;</code></div>
-    </TD></TR>
-    <TR class="related" VALIGN=TOP><TD class="geneTrack"><A NAME="geneTrack"><IMG class='toggle detail setF'>
-        <div class="format"><code class="level-new">geneTrack &lt;<em>track</em>&gt;</code></div>
+        <div class="format"><code class="level-full">hapClusterColorBy &lt;altOnly|refAlt|base&gt;</code></div>
     </TD></TR>
     <TR class="related" VALIGN=TOP><TD class="hapClusterTreeAngle"><A NAME="hapClusterTreeAngle"><IMG class='toggle detail setF'>
         <div class="format"><code class="level-full">hapClusterTreeAngle &lt;triangle|rectangle&gt;</code></div>
@@ -1014,15 +939,6 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="minFreq"><A NAME="minFreq"><IMG class='toggle detail'>
         <div class="format"><code class="level-full">minFreq &lt;<EM>F</EM>&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="vcfDoFilter"><A NAME="vcfDoFilter"><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">vcfDoFilter &lt;on/off&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="vcfDoQual"><A NAME="vcfDoQual"><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">vcfDoQual &lt;on/off&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="vcfDoMaf"><A NAME="vcfDoQual"><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">vcfDoQual &lt;on/off&gt;</code></div>
-    </TD></TR>
     <TR VALIGN=TOP><TD>
             <P>Additional settings found in the "Item or
             region tracks" section are also available for displaying
@@ -1036,56 +952,6 @@ are described below along with settings specific to their types.</P>
     </TD></TR>
 </TABLE>
 <BR><BR>
-
-<A name="vcfPhasedTrio"></A>
-<TABLE class="settingsTable" id="vcfPhasedTrio_-_Variant_Call_Format_Track_Settings">
-<THEAD><TR><TD><DIV ID="vcfPhasedTrio_intro" class="intro"></DIV></TD></TR></THEAD>
-    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'/>
-        &nbsp;vcfPhasedTrio - Variant Call Format Trio track settings
-    </TH></TR>
-    <TR VALIGN=TOP><TD class="vcfPhasedTrio"><IMG class='toggle detail'>
-        <div class="format"><code>type vcfPhasedTrio</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="vcfChildSample"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">vcfChildSample &lt;sampleName|altName&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="bigDataIndex"><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">bigDataIndex &lt;url/relativePath&gt;</code></div>
-    </TD></TR>
-
-    <TR VALIGN=TOP><TD class="vcfParentSamples"><A NAME="vcfParentSamples"><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">vcfParentSamples &lt;sampleName|altName,sampleName|altName&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="vcfUseAltSampleNames"><A NAME="vcfUseAltSampleNames"><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">vcfUseAltSampleNames &lt;on/off&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="geneTrack"><A NAME="geneTrack"><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">geneTrack &lt;track&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="vcfDoFilter"><A NAME="vcfDoFilter"><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">vcfDoFilter &lt;on/off&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="vcfDoQual"><A NAME="vcfDoQual"><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">vcfDoQual &lt;on/off&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="vcfDoMaf"><A NAME="vcfDoQual"><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">vcfDoQual &lt;on/off&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD>
-            <P>Additional settings found in the "Item or
-            region tracks" section are also available for displaying
-            Variant Call Format tracks.</P>
-            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>
-        </DIV>
-    </TD></TR>
-    <TR class="examples" VALIGN=TOP><TD class="vcfPhasedTrio_example">
-        <IMG class='toggle detail'>
-        <div class="format"><B>Example of a VCF Phased Trio track</B></div>
-    </TD></TR>
-</TABLE>
 
 </div></div>
 

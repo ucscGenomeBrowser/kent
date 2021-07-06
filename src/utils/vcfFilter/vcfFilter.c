@@ -20,6 +20,8 @@ errAbort(
   "                   Discard variants with no remaining alleles.\n"
   "                   Update AC in INFO column; if input has genotypes then\n"
   "                   update AN in INFO column and recode genotypes.\n"
+  "                   Note: if input has genotypes, then incoming AC and AN\n"
+  "                   are ignored, i.e. genotypes are trusted more than AC/AN.\n"
   "   -rename         Replace the ID value with a comma-separated list of\n"
   "                   <ref><pos><alt> names, one for each alt (after -minAc)\n"
   );
@@ -225,7 +227,8 @@ int newAn = wordCount - VCF_NUM_COLS_BEFORE_GENOTYPES - missingCount;
 int oldToNewIx[altCount+1];
 for (i = 0;  i < altCount;  i++)
     {
-    // Default to reference (ix = 0) for discarded alleles.
+    // Default to reference (ix = 0) for discarded alleles, because that is effectively what we
+    // do when we discard the whole variant because no allele passes the minAc threshold.
     int newIx = 0;
     int j;
     for (j = 0;  j < newAltCount;  j++)
@@ -327,13 +330,18 @@ boolean rename = optionExists("rename");
 struct hash *excludeChromPos = getExcludeChromPos();
 struct dyString *dyScratch = dyStringNew(0);
 int headerColCount = 0;
+// VCF with >1M samples (for SARS-CoV-2) causes stack problems / SEGV if we declare words on stack,
+// so allocate it once we know how many columns to expect:
+char **words = NULL;
 char *line;
 while (lineFileNext(lf, &line, NULL))
     {
-    char *words[512 * 1024];
     if (startsWith("#CHROM", line))
         {
-        headerColCount = chopTabs(line, words);
+        headerColCount = chopString(line, "\t", NULL, 0);
+        lineFileExpectAtLeast(lf, VCF_NUM_COLS_BEFORE_GENOTYPES+1, headerColCount);
+        AllocArray(words, headerColCount+1);
+        chopByChar(line, '\t', words, headerColCount+1);
         printWords(words, headerColCount);
         }
     else if (line[0] == '#')
@@ -344,12 +352,14 @@ while (lineFileNext(lf, &line, NULL))
         {
         if (headerColCount < VCF_MIN_COLUMNS)
             errAbort("Error: missing a tab-separated #CHROM line in vcf header.");
-        int wordCount = chopTabs(line, words);
+        int wordCount = chopByChar(line, '\t', words, headerColCount+1);
         lineFileExpectWords(lf, headerColCount, wordCount);
         if (excludeChromPos && chromPosAreExcluded(excludeChromPos, words))
             continue;
         if (minAc > 0)
             {
+            // Renaming happens (if specified) after filtering alleles by minAc,
+            // while printing output, inside these functions:
             if (wordCount > VCF_NUM_COLS_BEFORE_GENOTYPES)
                 filterMinAcFromGenotypes(words, wordCount, minAc, rename);
             else

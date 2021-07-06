@@ -28,6 +28,7 @@
 #include "trix.h"
 #include "net.h"
 #include "hubSearchText.h"
+#include "pipeline.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -384,23 +385,17 @@ printf("</div>");
 void doValidateNewHub(char *hubUrl)
 /* Run hubCheck on a hub. */
 {
-struct dyString *cmd = dyStringNew(0);
 udcSetCacheTimeout(1);
-dyStringPrintf(cmd, "loader/hubCheck -htmlOut -noTracks %s", hubUrl);
 printf("<div id=\"validateHubResult\" class=\"hubTdbTree\" style=\"overflow: auto\"></div>");
-FILE *f = popen(cmd->string, "r");
-if (f == NULL)
-    errAbort("popen: error running command: \"%s\"", cmd->string);
-char buf[1024];
-while (fgets(buf, sizeof(buf), f))
-    {
-    jsInlineF("%s", buf);
-    }
-if (pclose(f) == -1)
-    errAbort("pclose: error for command \"%s\"", cmd->string);
+char *cmd[] = {"loader/hubCheck", "-htmlOut", "-noTracks", hubUrl, NULL};
+struct pipeline *pl = pipelineOpen1(cmd, pipelineRead | pipelineNoAbort, NULL, NULL);
+struct lineFile *lf = pipelineLineFile(pl);
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    jsInlineF("%s", line);
+pipelineClose(&pl);
 // the 'false' below prevents a few hub-search specific jstree configuration options
 jsInline("hubSearchTree.init(false);");
-dyStringFree(&cmd);
 }
 
 void hgHubConnectDeveloperMode()
@@ -1556,7 +1551,7 @@ for(; genomeList; genomeList = genomeList->next)
     if (!firstTime)
 	hPrintf(",");
     firstTime = FALSE;
-    hPrintf("<A href=\"../cgi-bin/hgTracks?db=%s&%s\">%s</A>",genomeList->name, 
+    hPrintf("<A href=\"../cgi-bin/hgTracks?db=%s&%s&position=lastDbPos\">%s</A>",genomeList->name, 
 	cartSidUrlString(cart),trackHubSkipHubName(genomeList->name));
     }
 hPrintf("<BR><BR>");

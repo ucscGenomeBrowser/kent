@@ -341,7 +341,7 @@ export gff3ToRefLink=$gff3ToRefLink
 export gbffToCds=$gbffToCds
 export dateStamp=`date "+%F"`
 
-export annotationRelease=`zcat \$ncbiGffGz | head -100 | grep ^#.annotation-source | sed -e 's/.*annotation-source //'`
+export annotationRelease=`zcat \$ncbiGffGz | head -100 | grep ^#.annotation-source | sed -e 's/.*annotation-source //; s/ Updated Annotation Release//;'`
 if [ "\$annotationRelease" == "" ]; then
   export annotationRelease=\$asmId
 fi
@@ -350,13 +350,21 @@ echo "\$annotationRelease (\$versionDate)" > ncbiRefSeqVersion.txt
 
 # this produces the genePred in NCBI coordinates
 # 8/23/17: gff3ToGenePred quits over illegal attribute SO_type... make it legal (so_type):
-zcat \$ncbiGffGz \\
-  | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
-  | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
-      -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
+  zcat \$ncbiGffGz | grep -v -f ../../../download/\${asmId}.remove.dups.list \\
+    | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
+      | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
+        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+else
+  zcat \$ncbiGffGz \\
+    | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
+      | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
+        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+fi
 genePredCheck \$asmId.gp
 
-zcat \$ncbiGffGz | egrep 'tag=(RefSeq|MANE) Select' || true > before.cut9.txt
+rm -f \$asmId.refseqSelectTranscripts.txt
+zegrep 'tag=(RefSeq|MANE) Select' \$ncbiGffGz > before.cut9.txt || true
 
 if [ -s before.cut9.txt ]; then
   cut -f9- before.cut9.txt | tr ';' '\\n' \\
@@ -404,12 +412,23 @@ rm -f ncbiRefSeq.\$dateStamp
 # may not be any curated genes
 if [ ! -s \$db.curated.gp ]; then
   rm -f \$db.curated.gp
-elif [ -s \$asmId.refseqSelectTranscripts.txt ]; then
-  cat \$db.curated.gp | fgrep -f \$asmId.refseqSelectTranscripts.txt - \\
-    > \$db.refseqSelect.curated.gp
-  # may not be any refseqSelect.curated genes
-  if [ ! -s \$db.refseqSelect.curated.gp ]; then
-    rm -f \$db.refseqSelect.curated.gp
+  rm -f \$db.refseqSelect.curated.gp
+  rm -f hgmd.curated.gp
+else
+  if [ -s \$asmId.refseqSelectTranscripts.txt ]; then
+    cat \$db.curated.gp | fgrep -f \$asmId.refseqSelectTranscripts.txt - \\
+      > \$db.refseqSelect.curated.gp
+    # may not be any refseqSelect.curated genes
+    if [ ! -s \$db.refseqSelect.curated.gp ]; then
+      rm -f \$db.refseqSelect.curated.gp
+    fi
+  fi
+  if [ \$db = "hg19" -o \$db = "hg38" ]; then
+     hgmdFile=`ls /hive/data/outside/hgmd/20*.4-hgmd-public_hg38.tsv | tail -1`
+     if [ -s "\$hgmdFile" ]; then
+       cut -f7 "\$hgmdFile" | cut -d. -f1 | sort -u | awk '{printf "%s.\\n", \$1}' > hgmdTranscripts.txt
+       fgrep -f hgmdTranscripts.txt \$db.curated.gp > hgmd.curated.gp
+     fi
   fi
 fi
 
@@ -427,6 +446,9 @@ if [ -s \$db.curated.gp ]; then
   if [ -s \$db.refseqSelect.curated.gp ]; then
      $genePredCheckDb \$db.refseqSelect.curated.gp
   fi
+  if [ -s hgmd.curated.gp ]; then
+     $genePredCheckDb hgmd.curated.gp
+  fi
 fi
 if [ -s \$db.predicted.gp ]; then
   $genePredCheckDb \$db.predicted.gp
@@ -441,17 +463,25 @@ join -t\$'\\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRef
 
 # Make bigBed with attributes in extra columns for ncbiRefSeqOther:
 twoBitInfo $dbTwoBit stdout | sort -k2,2n > \$db.chrom.sizes
-genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
-$ncbiRefSeqOtherAttrs \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
-bedToBigBed -type=bed12+13 -as=ncbiRefSeqOther.as -tab \\
-  -extraIndex=name \\
-  \$db.other.extras.bed \$db.chrom.sizes \$db.other.bb
 
-# Make trix index for ncbiRefSeqOther
-$ncbiRefSeqOtherIxIxx \\
-  ncbiRefSeqOther.as \$db.other.extras.bed > ncbiRefSeqOther.ix.tab
+if [ -s \$db.other.gp ]; then
+  if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
+    genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n \\
+      | grep -v -f ../../../download/\${asmId}.remove.dups.list > \$db.other.bed
+  else
+    genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
+  fi
+  $ncbiRefSeqOtherAttrs \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
+  bedToBigBed -type=bed12+13 -as=ncbiRefSeqOther.as -tab \\
+    -extraIndex=name \\
+    \$db.other.extras.bed \$db.chrom.sizes \$db.other.bb
 
-ixIxx ncbiRefSeqOther.ix.tab ncbiRefSeqOther.ix{,x}
+  # Make trix index for ncbiRefSeqOther
+  $ncbiRefSeqOtherIxIxx \\
+    ncbiRefSeqOther.as \$db.other.extras.bed > ncbiRefSeqOther.ix.tab
+
+  ixIxx ncbiRefSeqOther.ix.tab ncbiRefSeqOther.ix{,x}
+fi
 
 # PSL data will be loaded into a psl type track to show the alignments
 (zgrep "^#" \$ncbiGffGz | head || true) > gffForPsl.gff
@@ -556,11 +586,18 @@ sub doLoad {
     $genePredCheckDb = "genePredCheck";
   }
 
+  my $verString = `cat $buildDir/process/ncbiRefSeqVersion.txt`;
+  chomp $verString;
+  $verString =~ s/.*elease //;
+  $verString =~ s/^[^0-9]*//;
+  $verString =~ s/ .*//;
+
   $bossScript->add(<<_EOF_
 # establish all variables to use here
 
-export db=$db
-export asmId=$asmId
+export db="$db"
+export asmId="$asmId"
+export verString="$verString"
 
 _EOF_
   );
@@ -618,6 +655,21 @@ if [ -s process/\$db.curated.gp ]; then
       | sort -u > \$asmId.ncbiRefSeqSelectCurated.ix.txt
     ixIxx \$asmId.ncbiRefSeqSelectCurated.ix.txt \$asmId.ncbiRefSeqSelectCurated.ix{,x}
     rm -f \$asmId.ncbiRefSeqSelectCurated.ix.txt
+  fi
+### and hgmd if exists (a subset of curated)
+  if [ -s process/hgmd.curated.gp ]; then
+    genePredToBigGenePred process/hgmd.curated.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqHgmd.bigGp
+    bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+    \$db.ncbiRefSeqHgmd.bigGp \$db.chrom.sizes \\
+      \$db.ncbiRefSeqHgmd.bb
+    rm -f \$db.ncbiRefSeqHgmd.bigGp
+    bigBedInfo \$db.ncbiRefSeqHgmd.bb | egrep "^itemCount:|^basesCovered:" \\
+      | sed -e 's/,//g' > \$db.ncbiRefSeqHgmd.stats.txt
+    LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqHgmd %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqHgmd.stats.txt` | xargs echo
+    ~/kent/src/hg/utils/automation/gpToIx.pl process/hgmd.curated.gp \\
+      | sort -u > \$asmId.ncbiRefSeqHgmd.ix.txt
+    ixIxx \$asmId.ncbiRefSeqHgmd.ix.txt \$asmId.ncbiRefSeqHgmd.ix{,x}
+    rm -f \$asmId.ncbiRefSeqHgmd.ix.txt
   fi
 fi
 
@@ -764,6 +816,10 @@ if [ -s process/\$db.curated.gp ]; then
     hgLoadGenePred -genePredExt \$db ncbiRefSeqSelect process/\$db.refseqSelect.curated.gp
     $genePredCheckDb ncbiRefSeqSelect
   fi
+  if [ -s process/hgmd.curated.gp ]; then
+    hgLoadGenePred -genePredExt \$db ncbiRefSeqHgmd process/hgmd.curated.gp
+    $genePredCheckDb ncbiRefSeqHgmd
+  fi
 fi
 
 if [ -s process/\$db.predicted.gp ]; then
@@ -848,12 +904,16 @@ if [ -s process/\$asmId.rna.cds ]; then
 fi
 
 if [ -d "/usr/local/apache/htdocs-hgdownload/goldenPath/archive" ]; then
- gtfFile=`ls \$db.*.ncbiRefSeq.gtf.gz`
- mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq
- rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$gtfFile
+ mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$verString
+ rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$verString/\$db.\$verString.ncbiRefSeq.gtf.gz
  ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \\
-   /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/
+   /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$verString/\$db.\$verString.ncbiRefSeq.gtf.gz
 fi
+
+rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes/\$db.ncbiRefSeq.gtf.gz
+mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes
+ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \\
+    /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes/\$db.ncbiRefSeq.gtf.gz
 
 featureBits \$db ncbiRefSeq > fb.ncbiRefSeq.\$db.txt 2>&1
 cat fb.ncbiRefSeq.\$db.txt 2>&1

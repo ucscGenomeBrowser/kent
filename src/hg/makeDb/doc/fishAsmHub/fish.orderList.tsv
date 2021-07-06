@@ -1,25 +1,26 @@
 GCF_000485575.1_Poecilia_formosa-5.1.2	Amazon molly
+GCF_001266775.1_Austrofundulus_limnaeus-1.0	annual killifish
 GCF_002910315.2_ASM291031v2	Arctic char
+GCF_013103735.1_CSU_Ecrag_1.0	Arkansas darter
 GCF_900964775.1_fSclFor1.1	Asian bonytongue
 GCF_902167405.1_gadMor3.0	Atlantic cod
+GCF_009819705.1_fHipHip1.pri	Atlantic halibut
 GCF_900700415.1_Ch_v2.0.2	Atlantic herring
 GCF_000233375.1_ICSASG_v2	Atlantic salmon
 GCF_900080235.1_BallGen_V1	ballan wrasse
 GCF_001640805.1_ASM164080v1	barramundi perch
 GCF_000690725.1_Stegastes_partitus-1.0.2	bicolor damselfish
 GCF_000735185.1_NC01	black rockcod
-GCF_005870065.1_ASM587006v1	blue tilapia
+GCF_005870065.1_ASM587006v1	blue tilapia (BGI-SZ)
+GCF_013358895.1_ZZ_aureus	blue tilapia (Guangdong)
 GCF_900634775.1_fGouWil2.1	blunt-snouted clingfish
-GCF_000239375.1_PunNye1.0	bony fishes
-GCF_001266775.1_Austrofundulus_limnaeus-1.0	bony fishes
-GCF_001515605.1_SAMN03320099.WGS_v1.1	bony fishes
-GCF_001515625.1_SAMN03320098_v1.1	bony fishes
-GCF_001515645.1_SAMN03320097.WGS_v1.1	bony fishes
-GCF_002872115.1_PKINGS_0.1	bony fishes
-GCF_900634415.1_fCotGob3.1	bony fishes
+GCF_009829125.1_fPerMag1.pri	bony fishes
 GCF_000239415.1_AstBur1.0	Burton's mouthbrooder
+GCF_900634415.1_fCotGob3.1	channel bull blenny
 GCF_001660625.1_IpCoco_1.2	channel catfish
+GCF_900408965.1_fSimDia1.1	chichlid (S. diagramma)
 GCF_002872995.1_Otsh_v1.0	Chinook salmon
+GCF_012931545.1_Oket_V1	chum salmon
 GCF_900324465.1_fAnaTes1.1	climbing perch
 GCF_002776465.1_AmpOce1.0	clown anemonefish
 GCF_002021735.2_Okis_V2	coho salmon
@@ -27,49 +28,82 @@ GCF_000951615.1_common_carp_genome	common carp
 GCF_900700375.1_fDenClu1.1	denticle herring
 GCF_900246225.1_fAstCal1.2	eastern happy
 GCF_003665695.1_Ee_SOAP_WITH_SSPACE	electric eel
+GCF_902827165.1_fTreBer1.1	emerald rockcod
+GCF_010015445.1_GENO_Pfluv_1.0	European perch
+GCF_016745375.1_EPA_FHM_2.0	fathead minnow
 GCF_007364275.1_fArcCen1	flier cichlid
+GCF_005281545.1_ASM528154v1	giant grouper
 GCF_900880675.1_fSpaAur1.1	gilthead seabream
+GCF_001515645.1_SAMN03320097.WGS_v1.1	golden-line barbel
 GCF_003368295.1_ASM336829v1	goldfish
 GCF_000788275.1_BP.fa	great blue-spotted mudskipper
 GCF_002260705.1_Sdu_1.0	greater amberjack
+GCF_901709675.1_fSynAcu1.2	greater pipefish
+GCF_003331165.1_Xiphophorus_hellerii-4.1	green swordtail
 GCF_000633615.1_Guppy_female_1.0_MT	guppy
+GCF_015220745.1_fSebUmb1.pri	honeycomb rockfish
+GCF_001515625.1_SAMN03320098_v1.1	horned golden-line barbel
 GCF_900634625.1_fParRan2.1	Indian glassy fish
-GCF_002922805.1_Om_v0.7.RACA	Indian medaka
+GCF_002922805.2_ASM292280v2	Indian medaka
 GCF_001970005.1_Flounder_ref_guided_V1.0	Japanese flounder
 GCF_002234675.1_ASM223467v1	Japanese medaka
 GCF_902148845.1_fSalaFa1.1	jewelled blenny
+GCF_016432855.1_SaNama_1.0	lake trout
 GCF_000972845.2_L_crocea_2.0	large yellow croaker
+GCF_014851395.1_ASM1485139v1	largemouth bass
 GCF_900963305.1_fEcheNa1.1	live sharksucker
+GCF_009769545.1_fCycLum1.pri	lumpfish
 GCF_000239395.1_NeoBri1.0	lyretail cichlid
-GCF_001649575.1_ASM164957v1	mangrove rivulus
+GCF_001649575.2_ASM164957v2	mangrove rivulus
 GCF_000372685.2_Astyanax_mexicanus-2.0	Mexican tetra
 GCF_902362185.1_fChaCha1.1	milkfish
 GCF_001444195.1_X_couchianus-1.0	Monterrey platyfish
-GCF_000826765.1_Fundulus_heteroclitus-3.0.2	mummichog
+GCF_000826765.1_Fundulus_heteroclitus-3.0.2	mummichog (Maine)
+GCF_011125445.2_MU-UCD_Fhet_4.1	mummichog (U. Missouri)
+GCF_009762535.1_fNotCel1.pri	Zealand spotty
 GCF_001858045.2_O_niloticus_UMD_NMBU	Nile tilapia
+GCF_000239375.1_PunNye1.0	P.nyererei 1_Seehausen
+GCF_902500615.1_NSP_V7	ninespine stickleback
 GCF_004634155.1_Eluc_v4	northern pike
+GCF_002872115.1_PKINGS_0.1	Old Calabar mormyrid
+GCF_008692095.1_UIUC_Espe_1.0	orangethroat darter
 GCF_902148855.1_fSphaOr1.1	orbiculate cardinalfish
-GCF_008315115.1_SLUC_FBN_1	pike-perch
+GCF_013339905.1_IPHC_HiSten_1.0	Pacific halibut
+GCF_008315115.2_SLUC_FBN_1.2	pike-perch
 GCF_902150065.1_fMyrMur1.1	pinecone soldierfish
-GCF_002163495.1_Omyk_1.0	rainbow trout
+GCF_902827175.1_fGymAcu1.1	ploughfish
+GCF_902500255.1_fThaAma1.1	prehistoric monster fish
+GCF_002163495.1_Omyk_1.0	rainbow trout (Swanson)
+GCF_013265735.2_USDA_OmykA_1.1	rainbow trout (Arlee)
 GCF_001682695.1_Pygocentrus_nattereri-1.0.2	red-bellied piranha
+GCF_014905685.1_NemWhi1	Rio pearlfish
 GCF_901001165.1_fSalTru1.1	river trout
 GCF_001443285.1_P_latipinna-1.0	sailfin molly
 GCF_000732505.1_C_variegatus-1.0	sheepshead minnow
 GCF_001443325.1_P_mexicana-1.0	shortfin molly
 GCF_900634795.2_fBetSpl5.2	Siamese fighting fish
 GCF_006149115.1_Oner_1.0	sockeye salmon
+GCF_902827115.1_fPseGeo1.1	South Georgia icefish
 GCF_002775205.1_X_maculatus-5.0-male	southern platyfish
+GCF_001515605.1_SAMN03320099.WGS_v1.1	Southwestern China cavefish
 GCF_002109545.1_ASM210954v1	spiny chromis
-GCF_003671635.1_VN_pangasius	striped catfish
+GCF_003671635.1_VN_pangasius	striped catfish Vietnam
+GCF_009078355.1_GENO_Phyp_1.0	striped catfish Indonesia
+GCF_004916995.1_NCSU_SB_2.0	striped sea-bass
 GCF_001952655.1_M_albus_1.0	swamp eel
+GCF_016859285.1_ASM1685928v1	swordfish
+GCF_904425465.1_Colossoma_macropomum	tambaqui
+GCF_016920845.1_GAculeatus_UGA_version5	three-spined stickleback
 GCF_001891065.1_H_comes_QL1_v1	tiger tail seahorse
 GCF_000523025.1_Cse_v1.0	tongue sole
 GCF_901000725.2_fTakRub1.2	torafugu
+GCF_013347765.1_ASM1334776v1	turbot
 GCF_001465895.1_Nfu_20140520	turquoise killifish
+GCF_016077235.1_ASM1607723v1	White Sands pupfish
 GCF_004355925.1_GSC_Weel_1.0	wolf-eel
 GCF_003724035.1_ASM372403v1	yellow catfish
 GCF_004354835.1_PFLA_1.0	yellow perch
+GCF_904848185.1_fAcaLat1.1	yellowfin seabream
 GCF_002814215.1_Sedor1	yellowtail amberjack
 GCF_000238955.4_M_zebra_UMD2a	zebra mbuna
 GCF_000002035.6_GRCz11	zebrafish

@@ -188,7 +188,7 @@ var genomePos = {
             }
         }
         //  return new virt undisguised position as a string
-        var newPos = "virt:" + (newStart+1) + "-" + newEnd;
+        var newPos = "multi:" + (newStart+1) + "-" + newEnd;
         return newPos;
     },
 
@@ -280,11 +280,12 @@ var genomePos = {
         //warn("genomePos.set() called "+obj.stack);
 
         position = position.replace(/,/g, ""); // strip out any commas
+        position.replace("virt:", "multi:");
 
         if (position) {
             // DISGUISE VMODE
             //warn("genomePos.set() called, position = "+position);
-            if (hgTracks.virtualSingleChrom && (position.search("virt:")===0)) {
+            if (hgTracks.virtualSingleChrom && (position.search("multi:")===0)) {
                 var newPosition = genomePos.disguisePosition(position);
                 //warn("genomePos.set() position = "+position+", newPosition = "+newPosition);
                 position = newPosition;
@@ -308,7 +309,7 @@ var genomePos = {
             $('#positionDisplay').text(commaPosition);
         }
         if (size) {
-            if (hgTracks.virtualSingleChrom && (position.search("virt:")!==0)) {
+            if (hgTracks.virtualSingleChrom && (position.search("multi:")!==0)) {
                 var newSize = genomePos.disguiseSize(position);
                 //warn("genomePos.set() position = "+position+", newSize = "+newSize);
                 if (newSize > 0)
@@ -556,6 +557,7 @@ var genomePos = {
     // Show the virtual and real positions of the windows
     {   
         var position = genomePos.get();
+        position.replace("virt:", "multi:");
         var positionDialog = $("#positionDialog")[0];
         if (!positionDialog) {
             $("body").append("<div id='positionDialog'><span id='positionDisplayPosition'></span>");
@@ -563,24 +565,38 @@ var genomePos = {
         }
         if (hgTracks.windows) {
             var i, len, end;
-            var matches = /^virt:[0-9]+-([0-9]+)/.exec(position);
-            var str = position;
+            var matches = /^multi:[0-9]+-([0-9]+)/.exec(position);
+            var modeType = (hgTracks.virtModeType === "customUrl" ? "Custom regions on virtual chromosome" :
+                            (hgTracks.virtModeType === "exonMostly" ? "Exon view of" :
+                            (hgTracks.virtModeType === "geneMostly" ? "Gene view of" :
+                            (hgTracks.virtModeType === "singleAltHaplo" ? "Alternate haplotype as virtual chromosome" :
+                                        "Unknown mode"))));
+            var str = modeType + "&nbsp;" + position;
             if (matches) {
                 end = matches[1];
                 if (end < hgTracks.chromEnd) {
-                    str += "<br>(full virtual region is virt:1-" + hgTracks.chromEnd + ")";
+                    str += ". Full virtual region is multi:1-" + hgTracks.chromEnd + ". Zoom out to view.";
                 }
             }
             if (!(hgTracks.virtualSingleChrom && (hgTracks.windows.length === 1))) {
-                str += "<br>\n";
-                str += "<br>\n";
-                str += "<ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
-                for (i=0,len=hgTracks.windows.length; i < len; ++i) {
-                    var w = hgTracks.windows[i];
-                    str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd +
-                                "&nbsp;&nbsp;&nbsp;" + (w.winEnd - w.winStart) + " bp" + "</li>\n";
+                var w;
+                if (hgTracks.windows.length <= 10) {
+                    str += "<p><table>\n";
+                    for (i=0,len=hgTracks.windows.length; i < len; ++i) {
+                        w = hgTracks.windows[i];
+                        str += "<tr><td>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd + "</td><td>" + 
+                                    (w.winEnd - w.winStart) + " bp" + "</td></tr>\n";
+                    }
+                    str += "</table></p>\n";
+                } else {
+                    str += "<br><ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
+                    for (i=0,len=hgTracks.windows.length; i < len; ++i) {
+                        w = hgTracks.windows[i];
+                        str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd +
+                                    "&nbsp;&nbsp;&nbsp;" + (w.winEnd - w.winStart) + " bp" + "</li>\n";
+                    }
+                    str += "</ul>\n";
                 }
-                str += "</ul>\n";
             }
             $("#positionDisplayPosition").html(str);
         } else {
@@ -588,21 +604,12 @@ var genomePos = {
         }
         $(positionDialog).dialog({
                 modal: true,
-                title: "Multi-region position ranges",
+                title: "Multi-Region Position Ranges",
                 closeOnEscape: true,
                 resizable: false,
                 autoOpen: false,
                 minWidth: 400,
                 minHeight: 40,
-                buttons: {  
-                    "OK": function() {
-                        $(this).dialog("close");
-                    }
-                },
-
-                open: function () { // Make OK the focus/default action
-                   $(this).parents('.ui-dialog-buttonpane button:eq(0)').focus(); 
-                },
 
                 close: function() {
                     // All exits to dialog should go through this
@@ -1052,6 +1059,7 @@ var dragSelect = {
     highlightThisRegion: function(newPosition, doAdd, hlColor)
     // set highlighting newPosition in server-side cart and apply the highlighting in local UI.
     {
+        newPosition.replace("virt:", "multi:");
         var hlColorName = hlColor; // js convention: do not assign to argument variables
         if (hlColor==="" || hlColor===null || hlColor===undefined)
             hlColorName = dragSelect.hlColor;
@@ -1112,6 +1120,7 @@ var dragSelect = {
     selectionEndDialog: function (newPosition)
     // Let user choose between zoom-in and highlighting.
     {   
+        newPosition.replace("virt:", "multi:");
         // if the user hit Escape just before, do not show this dialo
         if (dragSelect.startTime===null)
             return;
@@ -1167,7 +1176,7 @@ var dragSelect = {
         if (hgTracks.windows) {
             var i,len;
             var newerPosition = newPosition;
-            if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+            if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
                 newerPosition = genomePos.disguisePosition(newPosition);
             }
             var str = newerPosition + "<br>\n";
@@ -1212,7 +1221,7 @@ var dragSelect = {
                         if ($("#disableDragHighlight").attr('checked'))
                             hgTracks.enableHighlightingDialog = false;
                         if (imageV2.inPlaceUpdate) {
-                            if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+                            if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
                                 newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
                             }
                             var params = "position=" + newPosition;
@@ -1301,6 +1310,7 @@ var dragSelect = {
                               || dragSelect.startTime === null
                               || (now.getTime() - dragSelect.startTime) < 100);
             var newPosition = genomePos.update(img, selection, singleClick);
+            newPosition.replace("virt:", "multi:");
             if (newPosition) {
                 if (event.altKey) {
                     // with the alt-key, only highlight the region, do not zoom
@@ -1314,7 +1324,7 @@ var dragSelect = {
                         // in every other case, show the dialog
                         $(imageV2.imgTbl).imgAreaSelect({hide:true});
                         if (imageV2.inPlaceUpdate) {
-                            if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+                            if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
                                 newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
                             }
                             imageV2.navigateInPlace("position=" + newPosition, null, true);
@@ -2740,6 +2750,7 @@ var rightClick = {
                     if (title.length > maxLength) {
                         title = title.substring(0, maxLength) + "...";
                     }
+
                     if ((isGene || isHgc || id === "wikiTrack") && href.indexOf("i=mergedItem") === -1) {
                         // Add "Open details..." item
                         var displayItemFunctions = false;
@@ -2763,14 +2774,25 @@ var rightClick = {
                                 }
                             }
                         }
-                        if (isHgc && href.indexOf('g=gtexGene') !== -1) {
-                            // For GTEx gene mouseovers, replace title (which may be a tissue name) with 
-                            // item (gene) name
+
+                        // when "exonNumbers on", the mouse over text is not a good item description for the right-click menu
+                        // "exonNumbers on" is the default for genePred/bigGenePred tracks but can also be actived for bigBed and others
+                        // We don't have the value of "exonNumbers" here, so just use a heuristic to see if it's on
+                        if (title.search(/, strand [+-], (Intron|Exon) /)!==-1) {
+                            title = title.split(",")[0];
+                        }
+
+                        else if (isHgc && ( href.indexOf('g=gtexGene')!== -1 
+                                            || href.indexOf('g=unip') !== -1 
+                                            || href.indexOf('g=knownGene') !== -1 )) {
+                            // For GTEx gene and UniProt mouseovers, replace title (which may be a tissue name) with 
+                            // item (gene) name. Also need to unescape the urlencoded characters and the + sign.
                             a = /i=([^&]+)/.exec(href);
                             if (a && a[1]) {
-                                title = a[1];
+                                title = decodeURIComponent(a[1].replace(/\+/g, " "));
                             }
                         }
+
                         if (displayItemFunctions) {
                             o[rightClick.makeImgTag("magnify.png") + " Zoom to " +  title] = {
                                 onclick: function(menuItemClicked, menuObject) {
@@ -3236,6 +3258,7 @@ var popUpHgt = {
                             ddcl.setup(this, 'noneIsAll');
                     }
                 );
+
             },
 
             close: function() {
@@ -3251,7 +3274,7 @@ var popUpHgt = {
         autocompleteCat.init($('#singleAltHaploId'),
                              { baseUrl: 'hgSuggest?db=' + getDb() + '&type=altOrPatch&prefix=',
                                enterSelectsIdentical: true });
-        // Make option inputs select their associated radio buttons
+        // Make multi-region option inputs select their associated radio buttons
         $('input[name="emPadding"]').keyup(function() {
             $('#virtModeType[value="exonMostly"]').attr('checked', true); });
         $('input[name="gmPadding"]').keyup(function() {
@@ -3260,6 +3283,39 @@ var popUpHgt = {
             $('#virtModeType[value="customUrl"]').attr('checked', true); });
         $('#singleAltHaploId').keyup(function() {
             $('#virtModeType[value="singleAltHaplo"]').attr('checked', true); });
+
+        // disable exit if not in MR mode
+        if (!hgTracks.virtModeType) {
+            $('#virtModeTypeDefaultLabel').addClass('disabled');
+            $('#virtModeType[value="exonMostly"]').attr('checked', true);
+            $('#virtModeType[value="default"]').attr('disabled', 'disabled');
+        } else {
+            $('#virtModeType[value="default"]').removeAttr('disabled');
+        }
+
+        // Customize message based on current mode
+        var msg = "<em>Select a multi-region viewing mode below.</em>";  // default
+        if (hgTracks.virtModeType) {
+            msg = "The display is currently in <em><b> ";
+            var mode = "unknown";
+            if (hgTracks.virtModeType === "exonMostly") {
+                msg += "exon";
+            } else if (hgTracks.virtModeType == "geneMostly") {
+                msg += "gene";
+            } else if (hgTracks.virtModeType == "customUrl") {
+                msg += "custom regions";
+            } else if (hgTracks.virtModeType == "singleAltHaplo") {
+                msg += "alt haplotype";
+            } 
+            msg += " </b></em> view. &nbsp;&nbsp;"
+                + "<em>Select a different viewing mode, or exit and return to normal view</em>.";
+        }
+        $('#multiRegionConfigStatusMsg').html(msg);
+
+        // Make 'Cancel' button close dialog
+        $('input[name="Cancel"]').click(function() {
+            $('#hgTracksDialog').dialog('close');
+        });
     }
 };
 
@@ -3329,7 +3385,7 @@ function addKeyboardHelpEntries() {
 // View DNA
 function gotoGetDnaPage() {
     var position = hgTracks.chromName+":"+hgTracks.winStart+"-"+hgTracks.winEnd;
-    if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") === 0)) {
+    if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") === 0)) {
         position = genomePos.get().replace(/,/g,'');
     } else if (hgTracks.windows && hgTracks.nonVirtPosition) {
         position = hgTracks.nonVirtPosition;
@@ -3346,11 +3402,12 @@ function gotoGetDnaPage() {
 function zoomTo(zoomSize) {
     var flankSize = Math.floor(zoomSize/2);
     var pos = parsePosition(genomePos.get());
+    pos.replace("virt:", "multi:");
     var mid = pos.start+(Math.floor((pos.end-pos.start)/2));
     var newStart = Math.max(mid - flankSize, 0);
     var newEnd = mid + flankSize - 1;
     var newPos = genomePos.setByCoordinates(pos.chrom, newStart, newEnd);
-    if (hgTracks.virtualSingleChrom && (newPos.search("virt:")===0))
+    if (hgTracks.virtualSingleChrom && (newPos.search("multi:")===0))
         newPos = genomePos.disguisePosition(newPosition); // DISGUISE?
     imageV2.navigateInPlace("position="+newPos, null, true);
 }
@@ -3795,7 +3852,7 @@ var imageV2 = {
                         vis.update(id, vis.enumOrder[newJsonRec.visibility]);
                 }
                 // hg.conf will turn this on 2020-10 - Hiram
-                if (window.mouseOverEnabled) { mouseOver.updateMouseOver(id); }
+                if (window.mouseOverEnabled) { mouseOver.updateMouseOver(id, newJsonRec); }
                 return true;
             }
         }
@@ -3817,7 +3874,8 @@ var imageV2 = {
                 continue;
             if (newJsonRec.type === "remote")
                 continue;
-            if (oldJsonRec &&  oldJsonRec.visibility !== 0 && $('tr#tr_' + id).length === 1) {
+            var escapedId = id.replace('.', '\\.');
+            if (oldJsonRec &&  oldJsonRec.visibility !== 0 && $('tr#tr_' + escapedId).length === 1) {
                 // New track replacing old:
                 if (!imageV2.updateImgForId(response, id, true, newJsonRec))
                     warn("Couldn't parse out new image for id: " + id);
@@ -3962,8 +4020,8 @@ var imageV2 = {
 
         var oldJson = hgTracks;
         var valid = false;
+        var stripped = {};
         if (!newJson) {
-            var stripped = {};
             stripJsEmbedded(response, true, stripped);
             if ( ! stripped.warnMsg )
                 warn("hgTracks object is missing from the response");
@@ -3992,6 +4050,9 @@ var imageV2 = {
             } else {
                 valid = true;
             }
+            // the ajax request may have generated an error or warning in the warnbox
+            // so make sure those warnings still get to the user
+            stripJsEmbedded(response, false, stripped);
         }
         if (valid) {
             if (imageV2.enabled
@@ -4216,7 +4277,7 @@ var imageV2 = {
     {
         pos = parsePositionWithDb(position);
         // DISGUISE
-        if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") === 0)) {
+        if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") === 0)) {
             var positionStr = pos.chrom+":"+pos.start+"-"+pos.end;
             var newPosition = genomePos.disguisePosition(positionStr);
             var newPos = parsePosition(newPosition);
@@ -4231,7 +4292,7 @@ var imageV2 = {
     // undisguise highlight pos
     {
         // UN-DISGUISE
-        if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") !== 0)) {
+        if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") !== 0)) {
             var position = pos.chrom+":"+pos.start+"-"+pos.end;
             var newPosition = genomePos.undisguisePosition(position);
             var newPos = parsePosition(newPosition);
@@ -4464,18 +4525,27 @@ var imageV2 = {
 ///////////////////////////////////////
 var mouseOver = {
 
-    spans: {},
-    visible: false,
-    tracks: {},
-    maximumWidth: {},
-    popUpDelay: 1000,   // one second delay before popUp appears
+    items: {},  // items[trackName][] - data for each item in this track
+    visible: false,     // keeping track of popUp window visibility
+    tracks: {}, // tracks[trackName] - number of data items for this track
+    trackType: {},	// key is track name, value is track type from hgTracks
+    mouseOverFunction: {}, // key is track name, value mouseOverFunction string
+    jsonUrl: {},       // list of json files from hidden DIV elements
+    maximumWidth: {},   // maximumWidth[trackName] - largest string to display
+    popUpDelay: 200,   // 0.2 second delay before popUp appears
     popUpTimer: null,// handle from setTimeout to use in clearTimout(popUpTimer)
     delayDone: true,   // mouse has not left element, still receiving move evts
-    delayInProgress: false,        // true if working with delay timer done
-    mostRecentMouseEvt: null,
-    browserTextSize: 12,
+    delayInProgress: false,        // true while waiting for delay timer
+    mostRecentMouseEvt: null,   // to use when mouse delay is finished
+    browserTextSize: 12,        // default if not found otherwise
+    measureTextBox: null,
+    noDataString: "no&nbsp;data",	// message for no data at this position
+    noDataSize: 0,	// will be set to size of text 'no data'
+    noAverageString: "&nbsp;zoom&nbsp;in&nbsp;to&nbsp;see&nbsp;values&nbsp;",	// "noAverage" function
 
-    // spans{} - key name is track name, value is an array of
+    // items{} - key name is track name, value is an array of data items
+    //           where the format of each item can be different for different
+    //           data tracks.  For example, the wiggle track is an array of:
     //                   objects: {x1, x2, v, c}
     //           where [x1..x2) is the array index where the value 'v'
     //           is found, and 'c' is the data value count in this value
@@ -4484,45 +4554,52 @@ var mouseOver = {
     //           shouldn't need to do this here, the window knows if it
     //           is visible or not, just ask it for status
     // tracks{}  - tracks that were set up initially, key is track name
-    //             value is the number of boxes (for debugging)
+    //             value is the number of items (for debugging)
     // maximumWidth{} - key is track name, value is length of longest
-    //                         number string as measured when rendered
+    //                  number string as measured when rendered
 
-    // given hgt_....png file name, change to trackName_....json file name
-    jsonFileName: function(imgElement, trackName)
+    // given hgt_....png file name, change to hgt_....json file name
+    jsonFileName: function(imgDataId)
     {
-      var jsonFile=imgElement.src.replace("hgt/hgt_", "hgt/" + trackName + "_");
-      jsonFile = jsonFile.replace(".png", ".json");
+      var jsonFile=imgDataId.src.replace(".png", ".json");
       return jsonFile;
     },
 
     // called from: updateImgForId when it has updated a track in place
     // need to refresh the event handlers and json data
-    updateMouseOver: function (trackName)
+    updateMouseOver: function (trackName, trackDb)
     {
+      var trackType = null;
+      var hasChildren = null;
+      if (trackDb) {
+	trackType = trackDb.type;
+	hasChildren = trackDb.hasChildren;
+      } else if (hgTracks.trackDb && hgTracks.trackDb[trackName]) {
+	trackType = hgTracks.trackDb[trackName].type;
+      } else if (mouseOver.trackType[trackName]) {
+	trackType = mouseOver.trackType[trackName];
+      }
       var tdData = "td_data_" + trackName;
       var tdDataId  = document.getElementById(tdData);
       var imgData = "img_data_" + trackName;
-      var imgElement  = document.getElementById(imgData);
-      if (mouseOver.tracks[trackName]) {
-        if (tdDataId) {
-          $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
-          $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-          if (imgElement) {
-            mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
-          }
-        }
-      } else {
-        var trackType = hgTracks.trackDb[trackName].type;
-        var validType = false;
-        if (trackType.indexOf("wig") === 0) { validType = true; }
-        if (trackType.indexOf("bigWig") === 0) { validType = true; }
-        if (validType) {
-          if (tdDataId) {
+      var imgDataId  = document.getElementById(imgData);
+      if (imgDataId && tdDataId) {
+	var url = mouseOver.jsonFileName(imgDataId);
+        if (mouseOver.tracks[trackName]) {  // > 0 -> seen before in receiveData
             $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
             $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-            if (imgElement) {
-              mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
+            mouseOver.fetchJsonData(url);  // may be a refresh, don't know
+        } else {
+	  if (trackType) {
+            var validType = false;
+            if (trackType.indexOf("wig") === 0) { validType = true; }
+            if (trackType.indexOf("bigWig") === 0) { validType = true; }
+            if (trackType.indexOf("wigMaf") === 0) { validType = false; }
+            if (hasChildren) { validType = false; }
+            if (validType) {
+              $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
+              $( tdDataId ).mouseout(mouseOver.popUpDisappear);
+              mouseOver.fetchJsonData(url);
             }
           }
         }
@@ -4534,6 +4611,10 @@ var mouseOver = {
     // returning -1 when not found
     // if we knew the array was sorted on x1 we could get out early
     //   when x < x1
+    // Note, different track types could have different intersection
+    //       procedures.  For example, the HiC track will need to intersect
+    //       the mouse position within the diamond/square defined by the
+    //       items in the display.
     findRange: function (x, rects)
     {
       var answer = -1;  // assmume not found
@@ -4604,32 +4685,37 @@ var mouseOver = {
     var tdRect = tdId.getBoundingClientRect();
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
-    var tdHeight = Math.floor(tdRect.height);
+//    if (tdTop < 0) { return; }  // track is scrolled off top of screen
     var tdWidth = Math.floor(tdRect.width);
-    var rightSide = tdLeft + tdWidth;
+    var tdHeight = Math.floor(tdRect.height);
+    var tdRight = tdLeft + tdWidth;
     // clientX is the X coordinate of the mouse hot spot
     var clientX = Math.floor(evt.clientX);
-    // the graphOffset is the index (x coordinate) into the 'spans' definitions
+    var clientY = Math.floor(evt.clientY);
+    // the graphOffset is the index (x coordinate) into the 'items' definitions
     //  of the data value boxes for the graph.  The magic number three
     //   is used elsewhere in this code, note the comment on the constant
     //   LEFTADD.
     var graphOffset = Math.max(0, clientX - tdLeft - 3);
     if (hgTracks.revCmplDisp) {
-       graphOffset = Math.max(0, rightSide - clientX);
+       graphOffset = Math.max(0, tdRight - clientX);
     }
 
     var windowUp = false;     // see if window is supposed to become visible
     var foundIdx = -1;
-    if (mouseOver.spans[trackName]) {
-       foundIdx = mouseOver.findRange(graphOffset, mouseOver.spans[trackName]);
+    if (mouseOver.items[trackName]) {
+       foundIdx = mouseOver.findRange(graphOffset, mouseOver.items[trackName]);
     }
     // can show 'no data' when not found
-    var mouseOverValue = "no&nbsp;data";
+    var mouseOverValue = mouseOver.noDataString;
+    if (mouseOver.mouseOverFunction[trackName] === "noAverage") {
+       mouseOverValue = mouseOver.noAverageString;
+    }
     if (foundIdx > -1) { // value to display
-      if (mouseOver.spans[trackName][foundIdx].c > 1) {
-        mouseOverValue = "&nbsp;&mu;&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+      if (mouseOver.items[trackName][foundIdx].c > 1) {
+        mouseOverValue = "&nbsp;~&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
       } else {
-        mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+        mouseOverValue = "&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
       }
     }
     $('#mouseOverText').html(mouseOverValue);
@@ -4637,12 +4723,25 @@ var mouseOver = {
     $('#mouseOverText').width(msgWidth);
     var msgHeight = Math.ceil($('#mouseOverText').height());
     var lineHeight = Math.max(0, tdHeight - msgHeight);
-    var lineTop = Math.max(0, tdTop + msgHeight);
-    var msgLeft = Math.max(0, clientX - (msgWidth/2) - 3); // with magic 3
+    if (tdTop < 0) {
+       lineHeight = Math.max(0, tdHeight + tdTop - msgHeight);
+    }
+    var msgLeft = Math.max(tdLeft, clientX - (msgWidth/2) - 3); // with magic 3
+    var msgTop = Math.max(0, tdTop);
+    var lineTop = Math.max(0, msgTop + msgHeight);
     var lineLeft = Math.max(0, clientX - 3);  // with magic 3
-    $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
+    if (clientY < msgTop + msgHeight) {	// cursor overlaps with the msg box
+      msgLeft = clientX - msgWidth - 6;     // to the left of the cursor
+      if (msgLeft < tdLeft || msgLeft < 0) {   // hits left edge, switch
+        msgLeft = clientX;         // to right of cursor
+      }
+    } else {	// apply limits to left and right edges, window or image
+      msgLeft = Math.min(msgLeft, tdRight - msgWidth);  // image right limit
+      msgLeft = Math.min(msgLeft, $(window).width() - msgWidth); // window right
+      msgLeft = Math.max(0, msgLeft);  // left window edge limit
+    }
+    $('#mouseOverText').css('top',msgTop + "px");
     $('#mouseOverText').css('left',msgLeft + "px");
-    $('#mouseOverText').css('top',tdTop + "px");
     $('#mouseOverVerticalLine').css('left',lineLeft + "px");
     $('#mouseOverVerticalLine').css('top',lineTop + "px");
     $('#mouseOverVerticalLine').css('height',lineHeight + "px");
@@ -4692,6 +4791,20 @@ var mouseOver = {
       mouseOver.popUpTimer = setTimeout(mouseOver.delayCompleted, mouseOver.popUpDelay);
     },
 
+    // given a string of text, return width of rendered text size
+    // using an off-screen span element that is created here first time through
+    getWidthOfText: function (measureThis)
+    {
+    if(mouseOver.measureTextBox === null){  // set up first time only
+        mouseOver.measureTextBox = document.createElement('span');
+        var cssText = "position: fixed; width: auto; display: block; text-align: right; left:-999px; top:-999px; font-style:normal; font-size:" + mouseOver.browserTextSize + "px; font-family:" + jQuery('body').css('font-family');
+        mouseOver.measureTextBox.style.cssText = cssText;
+        document.body.appendChild(mouseOver.measureTextBox);
+    }
+    mouseOver.measureTextBox.innerHTML = measureThis;
+    return Math.ceil(mouseOver.measureTextBox.clientWidth);
+    },
+
     // =======================================================================
     // receiveData() callback for successful JSON request, receives incoming
     //             JSON data and gets it into global variables for use here.
@@ -4707,17 +4820,30 @@ var mouseOver = {
     //        and s is the value string to display
     //     Will need to get them sorted on x1 for efficient searching as
     //     they accumulate in the local data structure here.
+    //  2020-11-24 more generalized incoming data structure, don't care
+    //             what the structure is for each item, this will vary
+    //             depending upon the type of track.  trackType now remembered
+    //             in mouseOver.trackType[trackName]
     // =======================================================================
     receiveData: function (arr)
     {
-      mouseOver.visible = false;
+      mouseOver.popUpDisappear();
       for (var trackName in arr) {
-      mouseOver.spans[trackName] = [];      // start array
+	// clear these variables if they existed before
+      if (mouseOver.trackType[trackName]) {mouseOver.trackType[trackName] = undefined;}
+      if (mouseOver.items[trackName]) {mouseOver.items[trackName] = undefined;}
+      if (mouseOver.tracks[trackName]) {mouseOver.tracks[trackName] = 0;}
+      mouseOver.items[trackName] = [];      // start array
+      mouseOver.trackType[trackName] = arr[trackName].t;
+      if (arr[trackName].hasOwnProperty('mo')) {
+         mouseOver.mouseOverFunction[trackName] = arr[trackName].mo;
+      } else {
+         delete mouseOver.mouseOverFunction[trackName];
+      }
       // add a 'mousemove' and 'mouseout' event listener to each track
       //     display object
       var tdData = "td_data_" + trackName;
       var tdDataId  = document.getElementById(tdData);
-      if (! tdDataId) { return; } // not sure why objects are not always found
 // from jQuery doc:
 //  As the .mousemove() method is just a shorthand
 //    for .on( "mousemove", handler ), detaching is possible
@@ -4725,50 +4851,61 @@ var mouseOver = {
       $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
       $( tdDataId ).mouseout(mouseOver.popUpDisappear);
       var itemCount = 0;	// just for monitoring purposes
-      // save incoming x1,x2,v data into the mouseOver.spans[trackName][] array
+      // save incoming x1,x2,v data into the mouseOver.items[trackName][] array
       var lengthLongestNumberString = 0;
       var longestNumber = 0;
       var hasMean = false;
-      for (var span in arr[trackName]) {
-         if (arr[trackName][span].c > 1) { hasMean = true; }
-         var lenV = arr[trackName][span].v.toString().length;
+      for (var datum in arr[trackName].d) {      // .d is the data array
+         if (arr[trackName].d[datum].c > 1) { hasMean = true; }
+         var lenV = arr[trackName].d[datum].v.toString().length;
          if (lenV > lengthLongestNumberString) {
 	   lengthLongestNumberString = lenV;
-	   longestNumber = arr[trackName][span].v;
+	   longestNumber = arr[trackName].d[datum].v;
          }
-        mouseOver.spans[trackName].push(arr[trackName][span]);
+        mouseOver.items[trackName].push(arr[trackName].d[datum]);
        ++itemCount;
       }
-      mouseOver.tracks[trackName] = itemCount;	// merely for debugging watch
+      mouseOver.tracks[trackName] = itemCount;	// != 0 -> indicates valid track
       var mouseOverValue = "";
       if (hasMean) {
-         mouseOverValue = "&nbsp;&mu;&nbsp;" + longestNumber + "&nbsp;";
+         mouseOverValue = "&nbsp;~&nbsp;" + longestNumber + "&nbsp;";
       } else {
          mouseOverValue = "&nbsp;" + longestNumber + "&nbsp;";
       }
-      $('#mouseOverText').html(mouseOverValue);	// see how big as rendered
+      if (mouseOver.mouseOverFunction[trackName] === "noAverage") {
+         mouseOverValue = mouseOver.noAverageString;
+      }
       $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
-      var maximumWidth = Math.ceil($('#mouseOverText').width());
-      $('#mouseOverText').html("no&nbsp;data");	// might be bigger
-      if (Math.ceil($('#mouseOverText').width() > maximumWidth)) {
-          maximumWidth = Math.ceil($('#mouseOverText').width());
+      var maximumWidth = mouseOver.getWidthOfText(mouseOverValue);
+      if ( 0 === mouseOver.noDataSize) {  // only need to do this once
+        mouseOver.noDataSize = mouseOver.getWidthOfText(mouseOver.noDataString);
+      }
+      if (mouseOver.noDataSize > maximumWidth) {
+          maximumWidth = mouseOver.noDataSize;
       }
       mouseOver.maximumWidth[trackName] = maximumWidth;
       }
     },  //      receiveData: function (arr)
 
-    failedRequest: function(trackName)
-    {   // failed request to get json data, remove it from the track list
-      if (mouseOver.tracks[trackName]) {
-        delete mouseOver.tracks[trackName];
+    failedRequest: function(url)
+    {   // failed request to get json data, remove it from the URL list
+      if (mouseOver.jsonUrl[url]) {
+        delete mouseOver.jsonUrl[url];
       }
     },
 
     // =========================================================================
-    // fetchMapData() sends JSON request, callback to receiveData() upon return
+    // fetchJsonData() sends JSON request, callback to receiveData() upon return
     // =========================================================================
-    fetchMapData: function (url, trackName)
+    fetchJsonData: function (url)
     {
+       // avoid fetching the same URL multiple times.  Multiple track data
+       // can be in a single json file
+       if (mouseOver.jsonUrl[url]) {
+          mouseOver.jsonUrl[url] += 1;
+          return;
+       }
+       mouseOver.jsonUrl[url] = 1;     // remember already done this one
        var xmlhttp = new XMLHttpRequest();
        xmlhttp.onreadystatechange = function() {
          if (4 === this.readyState && 200 === this.status) {
@@ -4776,7 +4913,7 @@ var mouseOver = {
             mouseOver.receiveData(mapData);
          } else {
             if (4 === this.readyState && 404 === this.status) {
-               mouseOver.failedRequest(trackName);
+               mouseOver.failedRequest(url);
             }
          }
        };
@@ -4789,13 +4926,13 @@ var mouseOver = {
     getData: function ()
     {
       // check for the hidden div elements for mouseOverData
+      // single file version can find many trackNames, but will all
+      // be the same URL
       var trackList = document.getElementsByClassName("mouseOverData");
       for (var i = 0; i < trackList.length; i++) {
         var trackName = trackList[i].getAttribute('name');
-        var jsonData = trackList[i].getAttribute('jsonData');
-        if (jsonData) {
-          mouseOver.fetchMapData(jsonData, trackName);
-        }
+        var jsonFileUrl = trackList[i].getAttribute('jsonUrl');
+        if (jsonFileUrl) { mouseOver.fetchJsonData(jsonFileUrl); }
       }
     },
 

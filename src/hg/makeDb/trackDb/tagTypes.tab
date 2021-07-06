@@ -26,9 +26,15 @@ bamGrayMode bam
 bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
 barChartColors barChart bigBarChart
+barChartCategoryUrl barChart bigBarChart
+multiRegionsBedUrl *
+barChartFacets barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
+barChartStatsUrl barChart bigBarChart
+barChartStretchToItem barChart bigBarChart
 # below for backwards compatibility during QA. 
 barChartDataUrl barChart bigBarChart
+barChartLimit barChart bigBarChart
 #
 barChartLabel barChart bigBarChart
 barChartMetric barChart bigBarChart
@@ -50,6 +56,7 @@ blastRef psl bigPsl
 boxedCfg *
 browserLines customTracks
 canPack *
+cartVersion *
 cdnaTable psl bigPsl
 cdsDrawDefault psl bed genePred bigPsl
 cdsDrawOptions psl bigPsl
@@ -59,8 +66,8 @@ cell bed bedGraph
 centerLabelsDense *
 centerLabelsPack *
 chainColor chain bigChain
-chainLinearGap netAlign chain bed psl bigPsl bigChain
-chainMinScore netAlign chain bed psl bigPsl bigChain
+chainLinearGap netAlign chain bed psl bigPsl bigChain bigMaf
+chainMinScore netAlign chain bed psl bigPsl bigChain bigMaf
 chainNormScoreAvailable netAlign bed chain bigChain
 chimpDb bed
 chimpMacaqueOrthoTable bed
@@ -102,7 +109,7 @@ defaultGeneTracks bed
 defaultLabelFields big*
 defaultMaf wigMaf
 defaultMaxWeight bed
-defaultLinkedTables genePred
+defaultLinkedTables genePred bigGenePred
 denseCoverage bigBed
 densePack bed bigBed
 dimensionAchecked *
@@ -131,6 +138,8 @@ expStep bed expRatio
 expTable bed expRatio
 extTable *
 externalDb bigGenePred
+extraDetailsTable bigBed
+extraTableFields bigBed
 fieldCount customTracks
 filePos *
 fileSortOrder *
@@ -214,7 +223,7 @@ html *
 htmlFile customTracks
 htmlUrl customTracks
 idInUrlSql altGraphX genePred chain factorSource bed  bigChain
-idXref genePred psl
+idXref genePred psl bigGenePred
 iframeUrl *
 iframeOptions *
 indelDoubleInsert psl bam bigBed bigPsl
@@ -235,8 +244,9 @@ inputTableFieldUrls factorSource
 interactDirectional interact bigInteract
 interactUp interact bigInteract
 interactMultiRegion interact bigInteract
-intronGap psl genePred bigPsl
+intronGap psl genePred bigPsl bigGenePred
 irows wigMaf
+isGencode3 genePred bigGenePred
 isGencode2 genePred bigGenePred
 isGencode genePred
 itemAttrTbl genePred
@@ -246,7 +256,7 @@ itemClassNameColumn genePred
 itemClassClassColumn genePred
 itemCount customTracks
 itemDetailsHtmlTable genePred psl bed bigPsl
-itemFirstCharCase wigMafProt wigMaf
+itemFirstCharCase wigMafProt wigMaf bigMaf
 itemImagePath bed
 itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract bigGenePred bigLolly
 lfPslTable bed
@@ -271,18 +281,17 @@ mafFile customTracks
 mafShowSnp wigMaf
 mafTrack bed
 mapDispatcher expRatio
-matrix netAlign bed chain psl bigPsl bigChain
-matrixHeader netAlign bed chain psl bigPsl bigChain
+matrix netAlign bed chain psl bigPsl bigChain bigMaf
+matrixHeader netAlign bed chain psl bigPsl bigChain bigMaf
 maxChromName customTracks
 maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak narrowPeak
 maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix vcfPhasedTrio factorSource
+maxWindowCoverage *
 maxWindowToQuery bigWig bed bedlogR
 metadata *
-mouseOverField big*
-mouseOver bigLolly bigBed bigPsl
 mergeSpannedItems bigBed
 mgiUrl bed
 mgiUrlLabel bed
@@ -297,6 +306,9 @@ motifPwmTable factorSource bed6FloatScore
 motifMapTable factorSource
 motifMaxWindow factorSource
 motifDrawDefault factorSource
+mouseOverField big*
+mouseOver bigLolly bigBed bigPsl
+mouseOverFunction bigWig
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
 negateValues wigMaf bigWig bedGraph wig
@@ -358,6 +370,9 @@ sGroup_Birds wigMaf
 sGroup_Brachycera wigMaf
 sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
+sGroup_Carnivore wigMaf
+sGroup_Cetartiodactyla wigMaf
+sGroup_Chiroptera wigMaf
 sGroup_CoV_2019 wigMaf
 sGroup_CoV wigMaf
 sGroup_SARS-CoV-2_sequences wigMaf
@@ -409,6 +424,7 @@ sGroup_Primates wigMaf
 sGroup_Reptiles wigMaf
 sGroup_Reston_1989-90 wigMaf
 sGroup_Rhabditina wigMaf
+sGroup_Rodents wigMaf
 sGroup_Sarcopterygii wigMaf
 sGroup_Spirurina wigMaf
 sGroup_Strongylida wigMaf
@@ -468,7 +484,7 @@ speciesCodonDefault wigMafProt wigMaf
 speciesDefaultOff wigMaf
 speciesDefaultOn wigMaf
 speciesGroups wigMafProt wigMaf
-speciesOrder bed maf wigMaf
+speciesOrder bed maf wigMaf bigMaf
 speciesTarget wigMaf
 speciesTree wigMaf
 speciesUseFile wigMafProt wigMaf
@@ -487,7 +503,7 @@ subGroups *
 subGroupMetaTables *
 subTrack *
 subgroups bed
-summary wigMaf
+summary wigMaf bigMaf
 superTrack *
 symbolTable bed genePred
 pubsArticleTable bed psl bigPsl
@@ -505,7 +521,7 @@ transMapInfo psl bigPsl
 transMapSrc psl bigPsl
 transMapTypeDesc psl bigPsl
 transMapSrcSet psl bigPsl
-transformFunc bed bedGraph wig bigWig
+transformFunc bed bigBed bedGraph wig bigWig barChart bigBarChart
 treeImage wigMaf
 txInfo genePred
 type *

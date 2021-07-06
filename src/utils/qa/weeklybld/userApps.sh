@@ -10,20 +10,29 @@ cd /hive/groups/browser/newBuild/v${BRANCHNN}_branch/kent/src
 tar cvzf ./userApps.src.tgz ./userApps/
 
 # note that hard links are used below
+downloadDir=/mirrordata/apache/htdocs/admin/exe
+versionedTgz=userApps.v${BRANCHNN}.src.tgz
 
 # hgwdownload
-ssh -n qateam@hgdownload.soe.ucsc.edu "rm -f /mirrordata/apache/htdocs/admin/exe/userApps.src.tgz"
+ssh -n qateam@hgdownload "rm -f $downloadDir/userApps.src.tgz"
 # in case the script was already run before:
-ssh -n qateam@hgdownload.soe.ucsc.edu "rm -f /mirrordata/apache/htdocs/admin/exe/userApps.v${BRANCHNN}.src.tgz"
-scp -p userApps.src.tgz qateam@hgdownload.soe.ucsc.edu:/mirrordata/apache/htdocs/admin/exe/
-ssh -n qateam@hgdownload.soe.ucsc.edu "cd /mirrordata/apache/htdocs/admin/exe; ln userApps.src.tgz ./userApps.v${BRANCHNN}.src.tgz"
+ssh -n qateam@hgdownload "rm -f $downloadDir/userApps.archive/$versionedTgz"
+scp -p userApps.src.tgz qateam@hgdownload:$downloadDir/
+ssh -n qateam@hgdownload "cd $downloadDir/userApps.archive/; ln ../userApps.src.tgz $versionedTgz"
+
+# hgwdownload2
+ssh -n qateam@hgdownload2 "rm -f $downloadDir/userApps.src.tgz"
+# in case the script was already run before:
+ssh -n qateam@hgdownload2 "rm -f $downloadDir/userApps.archive/$versionedTgz"
+scp -p userApps.src.tgz qateam@hgdownload2:$downloadDir/
+ssh -n qateam@hgdownload2 "cd $downloadDir/userApps.archive/; ln ../userApps.src.tgz $versionedTgz"
 
 # genome-euro
-ssh -n qateam@genome-euro "rm -f /mirrordata/apache/htdocs/admin/exe/userApps.src.tgz"
+ssh -n qateam@genome-euro "rm -f $downloadDir/userApps.src.tgz"
 # in case the script was already run before:
-ssh -n qateam@genome-euro "rm -f /mirrordata/apache/htdocs/admin/exe/userApps.v${BRANCHNN}.src.tgz"
-scp -p userApps.src.tgz qateam@genome-euro:/mirrordata/apache/htdocs/admin/exe/
-ssh -n qateam@genome-euro "cd /mirrordata/apache/htdocs/admin/exe; ln userApps.src.tgz ./userApps.v${BRANCHNN}.src.tgz"
+ssh -n qateam@genome-euro "rm -f $downloadDir/userApps.archive/$versionedTgz"
+scp -p userApps.src.tgz qateam@genome-euro:$downloadDir/
+ssh -n qateam@genome-euro "cd $downloadDir/userApps.archive/; ln ../userApps.src.tgz $versionedTgz"
 
 rm -f userApps.src.tgz
 cd /hive/groups/browser/newBuild/v${BRANCHNN}_branch/kent/src/userApps
