@@ -7,6 +7,30 @@
 
 var debug = false;
 
+
+// Google Analytics helper functions to send events, see src/hg/lib/googleAnalytics.c
+
+function gaOnButtonClick(ev) {
+/* user clicked a button: send event to GA, then execute the old handler */
+    var button = ev.currentTarget;
+    var buttonName = button.name;
+    ga('send', 'event', 'buttonClick', buttonName);
+    button.oldOnClick(ev);
+}
+
+function gaTrackButtons() {
+  /* replace the click handler on all buttons with one the sends a GA event first, then handles the click */
+  if (!window.ga || ga.loaded) // When using an Adblocker, the ga object does not exist
+      return;
+  var buttons = document.querySelectorAll('input[type=submit],input[type=button]');
+  for (var i = 0; i < buttons.length; i++) {
+       var b = buttons[i];
+       b.oldOnClick = b.onclick;
+       b.onclick = gaOnButtonClick; // addEventHandler would not work here, the default click stops propagation.
+  }
+}
+// end Google Analytics helper functions
+
 function clickIt(obj,state,force)
 {
 // calls click() for an object, and click();click() if force
