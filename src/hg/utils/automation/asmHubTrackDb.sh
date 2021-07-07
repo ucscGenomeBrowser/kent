@@ -647,7 +647,12 @@ fi
 if [ -s ${buildDir}/trackData/xenoRefGene/${asmId}.xenoRefGene.bb ]; then
 rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
 rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ixx
-rm -f ${buildDir}/bbi/${asmId}.xenoRefGene.bb
+rm -f $buildDir/bbi/${asmId}.xenoRefGene.bb
+rm -f $buildDir/genes/${asmId}.xenoRefGene.gtf.gz
+  if [ -s ${buildDir}/trackData/xenoRefGene/${asmId}.xenoRefGene.gtf.gz ]; then
+    mkdir -p $buildDir/genes
+    ln -s ../trackData/xenoRefGene/${asmId}.xenoRefGene.gtf.gz ${buildDir}/genes/${asmId}.xenoRefGene.gtf.gz
+  fi
 ln -s ../trackData/xenoRefGene/${asmId}.xenoRefGene.bb ${buildDir}/bbi/${asmId}.xenoRefGene.bb
 ln -s ../trackData/xenoRefGene/$asmId.xenoRefGene.ix $buildDir/ixIxx/${asmId}.xenoRefGene.ix
 ln -s ../trackData/xenoRefGene/$asmId.xenoRefGene.ixx $buildDir/ixIxx/${asmId}.xenoRefGene.ixx
