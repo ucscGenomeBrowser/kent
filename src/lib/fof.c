@@ -9,6 +9,8 @@
 #include "fof.h"
 
 
+static const struct fofPos FOF_POS_INIT = {NULL, 0, 0, 0, NULL};
+
 struct fofRecord
 /* This holds a record of an index file. */
     {
@@ -290,7 +292,7 @@ void *fofFetch(struct fof *fof, char *name, int *retSize)
  * it.  Returns buffer with element in it, which should be
  * freeMem'd when done. Aborts if element isn't there. */
 {
-struct fofPos pos;
+struct fofPos pos = FOF_POS_INIT;
 void *s;
 
 if (!fofFind(fof, name, &pos))
@@ -307,7 +309,7 @@ char *fofFetchString(struct fof *fof, char *name, int *retSize)
  * Returns zero terminated string with element in it, which 
  * should be freeMem'd when done. Aborts if element isn't there. */
 {
-struct fofPos pos;
+struct fofPos pos = FOF_POS_INIT;
 char *s;
 
 if (!fofFind(fof, name, &pos))
