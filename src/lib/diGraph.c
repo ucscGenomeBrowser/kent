@@ -688,7 +688,7 @@ void dgSwapEdges(struct diGraph *dg, struct dgEdgeRef *erList)
 struct dgEdgeRef *er;
 struct dgEdge *edge;
 struct dgNode *a, *b;
-struct dgConnection *con1, *con2;
+struct dgConnection *con1 = NULL, *con2 = NULL;
 
 /* Remove edges from next and previous list of all
  * involved nodes and swap nodes in edge itself. */
