@@ -183,7 +183,9 @@ The remaining values are OPTIONAL:</p>
 <p>
 For a list of additional options, see the <a href="bigWig.html#optional">bigWig format</a> page.
 Note that bigWig files created from bedGraph cannot be converted to wiggle using <code>bigWigToWig</code>
-and instead will be reverted back to their original bedGraph format.</p>
+and instead will be reverted back to their original bedGraph format. Also, for tracks using <code>altColor</code>
+with the windowing function &quot;mean+whiskers&quot; the shading of colors will be impacted with lighter shades for values
+a standard deviation around the mean, most noticeable when zoomed out and average calculations are taking place.</p>
 
 <h2>Examples</h2>
 <p>
