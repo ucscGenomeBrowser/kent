@@ -77,10 +77,17 @@ For information about the process used to assemble this version, see the
 <A HREF="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/mouse/" 
 TARGET=_blank>GRC website</A>. For a glossary of assembly-related terms, see the GRC
 <A HREF="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/definitions.shtml"
-TARGET="_blank">Assembly Terminology</A> page.<p>
+TARGET="_blank">Assembly Terminology</A> page.</p>
 
-Note that the UCSC mm10 patch level 6 contains 9 alternate scaoffolds from the reference strain C57BL/6J.
-The native alts can be found with this SQL command: select chrom from chromInfo where chrom like "%_K%_alt"<p>
+<p>
+mm10 has been updated with patches since its release in 2012. GRC patch releases do not change any
+previously existing sequences; they simply add new sequences for fix patches or alternate haplotypes
+that correspond to specific regions of the main chromosome sequences. For most users, the patches
+are unlikely to make a difference and may complicate the analysis as they introduce more
+duplication. Note that the UCSC mm10 patch level 6 contains 9 alternate scaoffolds from the
+reference strain C57BL/6J. The native alts can be found with this SQL command: <code>select chrom
+from chromInfo where chrom like "%_K%_alt"</code></p>
+
 <UL style="list-style-type:none;">
  <LI>chr1_KK082441_alt  
  <LI>chr11_KZ289080_alt 
