@@ -474,7 +474,11 @@
     setting to display the weaker islands, while the stronger ones are rendered in
     <code>color</code>.  If <code>altColor</code> is not specified, the system will
     use a color halfway between that specified in the <code>color</code> tag
-    and white instead.</P>
+    and white instead. Tracks using <code>altColor</code> with the windowing function
+    &quot;mean+whiskers&quot; will see the shading of colors impacted, with lighter
+    shades for values a standard deviation around the mean, most noticeable when zoomed out
+    and average calculations are taking place.</p>
+</P>
     <P><B>Example:</B></P>
     <pre>   altColor 0,0,255</pre>
     <P>This example sets the alternate color to blue.</P>
@@ -2558,7 +2562,11 @@ There are no extra options that can appear on the type hic line.
 <DIV class="negateValues"><span class="types wig bigWig bedGraph"></span>
 <div class="format"><code>negateValues &lt;on&gt;</code></div>
     <P>Negate the values in the wiggle, meaning that positive values become negative and vice-versa.
-    This is useful for wiggles representing transcription or other activities on the Crick strand.  Be aware that wiggles with negative values are drawn in <B>altColor</B>  not <B>color</B> as positive values are.
+    This is useful for wiggles representing transcription or other activities on the Crick strand.
+    Be aware that wiggles with negative values are drawn in <B>altColor</B> not <B>color</B> as
+    positive values are. Also, tracks using the windowing function "mean+whiskers" will see the
+    shading of colors impacted, with lighter shades for values a standard deviation around the mean,
+    most noticeable when zoomed out and average calculations are taking place.</p>
 </DIV>
 
 <DIV class="spanList"><span class="types wig"></span>

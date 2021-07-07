@@ -318,7 +318,7 @@ if ((graph = *pGraph) != NULL)
 boolean tripleCanFollow(struct ffAli *a, struct ffAli *b, aaSeq *qSeq, struct trans3 *t3List)
 /* Figure out if a can follow b in any one of three reading frames of haystack. */
 {
-int ahStart, ahEnd, bhStart, bhEnd;
+int ahStart = 0, ahEnd = 0, bhStart = 0, bhEnd = 0;
 trans3Offsets(t3List, a->hStart, a->hEnd, &ahStart, &ahEnd);
 trans3Offsets(t3List, b->hStart, b->hEnd, &bhStart, &bhEnd);
 return  (a->nStart < b->nStart && a->nEnd < b->nEnd && ahStart < bhStart && ahEnd < bhEnd);
@@ -386,7 +386,7 @@ for (mid = ffList, midIx=1; mid != NULL; mid = mid->right, ++midIx)
 	    nGap = mid->nStart - ff->nEnd;
 	    if (t3List)
 	        {
-		int fhStart, fhEnd;
+		int fhStart = 0, fhEnd = 0;
 		trans3Offsets(t3List, ff->hStart, ff->hEnd, &fhStart, &fhEnd);
 		hGap = mhStart - fhEnd;
 		}

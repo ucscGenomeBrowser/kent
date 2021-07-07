@@ -153,6 +153,8 @@ UCSC_APPS = \
 	verticalSplitSqlTable \
 	weedLines
 
+#	hubPublicMail
+
 
 # list of scripts to install
 

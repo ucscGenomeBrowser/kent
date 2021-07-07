@@ -11,6 +11,7 @@
 #include "psPoly.h"
 #include "psGfx.h"
 #include "linefile.h"
+#include "pipeline.h"
 
 
 static void psFloatOut(FILE *f, double x)
@@ -444,7 +445,6 @@ char * convertEpsToPdf(char *epsFile)
 /* Convert EPS to PDF and return filename, or NULL if failure. */
 {
 char *pdfTmpName = NULL, *pdfName=NULL;
-char cmdBuffer[2048];
 int sysVal = 0;
 struct lineFile *lf = NULL;
 char *line;
@@ -470,9 +470,12 @@ lineFileClose(&lf);
 /* Do conversion. */
 chopSuffix(pdfTmpName);
 pdfName = addSuffix(pdfTmpName, ".pdf");
-safef(cmdBuffer, sizeof(cmdBuffer), "ps2pdf -dDEVICEWIDTHPOINTS=%d -dDEVICEHEIGHTPOINTS=%d %s %s", 
-      round(width), round(height), epsFile, pdfName);
-sysVal = system(cmdBuffer);
+char widthBuff[1024], heightBuff[1024];
+safef(widthBuff, sizeof widthBuff, "-dDEVICEWIDTHPOINTS=%d", round(width));
+safef(heightBuff, sizeof heightBuff, "-dDEVICEHEIGHTPOINTS=%d", round(height));
+char *pipeCmd[] = { "ps2pdf", widthBuff, heightBuff, epsFile, pdfName, NULL } ;
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite, "/dev/null", NULL);
+sysVal = pipelineWait(pl);
 if(sysVal != 0)
     freez(&pdfName);
 freez(&pdfTmpName);
