@@ -261,6 +261,8 @@ def parseRa(text):
     for l in lines:
         if len(l)==0:
             continue
+        if " " not in l:
+            continue
         key, val = string.split(l, " ", maxsplit=1)
         data[key] = val
     return data
