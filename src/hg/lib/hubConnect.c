@@ -441,7 +441,7 @@ char *statusTable = getHubStatusTableName();
 
 sqlGetLockWithTimeout(conn, "central_hubStatus", 15);
 
-// Try to grab a row right before we lock
+// Try to grab a row right before we insert but after the lock.
 sqlSafef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", statusTable, url);
 struct sqlResult *sr = sqlGetResult(conn, query);
 
