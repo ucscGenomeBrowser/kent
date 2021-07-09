@@ -92,14 +92,16 @@ for (side = 0; side < ArraySize(names); ++side)
                 }
             else
                 {
-                f = popen(rnaPlotPath, "w");
+                char *plotCmd[] = {rnaPlotPath, NULL};
+                struct pipeline *plStruct = pipelineOpen1(plotCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+                f = pipelineFile(plStruct);
                 if (f != NULL)
                     {
                     fprintf(f, ">%s\n", psName);	/* This tells where to put file. */
                     fprintf(f, "%s\n%s\n", fold.seq, fold.fold);
-                    pclose(f);
                     plotDone = TRUE;
                     }
+                pipelineClose(&plStruct);
                 }
             }
 
