@@ -439,8 +439,13 @@ struct sqlConnection *conn = hConnectCentral();
 char query[4096];
 char *statusTable = getHubStatusTableName();
 
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
+sqlGetLockWithTimeout(conn, "central_hubStatus", 15);
+
+// Try to grab a row right before we insert but after the lock.
+sqlSafef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", statusTable, url);
+struct sqlResult *sr = sqlGetResult(conn, query);
+
+if (sqlNextRow(sr) == NULL)  // if we got something from this query, someone added it right before we locked it
     {
     if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
         sqlSafef(query, sizeof(query), "insert into %s (hubUrl,shortLabel,longLabel,dbCount,dbList,status,lastOkTime,lastNotOkTime,errorMessage,firstAdded) values (\"%s\",\"\",\"\",0,NULL,0,\"\",\"\",\"\",now())", statusTable, url);
@@ -449,15 +454,8 @@ if (errCatchStart(errCatch))
 	statusTable, url);
     sqlUpdate(conn, query);
     }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    // if we got a duplicate error, it means this hubUrl is already in the 
-    // hubStatus table.
-    const char *error = sqlLastError(conn);
-    if (!startsWith("Duplicate entry", error))
-        errAbort("%s", error);
-    }
+sqlFreeResult(&sr);
+sqlReleaseLock(conn, "central_hubStatus");
 hDisconnectCentral(&conn);
 }
 
