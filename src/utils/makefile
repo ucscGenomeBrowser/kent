@@ -151,11 +151,7 @@ UCSC_APPS = \
 	vcfFilter \
 	venn \
 	verticalSplitSqlTable \
-	weedLines \
-	hubPublicMail \
-	browserRace
-
-
+	weedLines
 
 # list of scripts to install
 
@@ -209,6 +205,8 @@ SCRIPT_FILES = \
 	bedAppendPaperInfo \
 	googleSheetToBigBed \
 	doClinvarLift \
+	hubPublicMail \
+	browserRace \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build
