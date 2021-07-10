@@ -19,6 +19,10 @@ priority 2
 track chainNetMm10 override
 shortLabel $o_db ChainNet
 
+track chainNetMm39 override
+chainMinScore 5000
+chainLinearGap loose
+
 searchTable gold
 shortCircuit 1
 termRegex [AN][AC][CM0-9_]+(\.[0-9_]+)?
