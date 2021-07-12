@@ -1214,9 +1214,10 @@ dyStringFree(&dyMo);
 static void makeNsSingleTreeButton(struct tempName *tn)
 /* Make a button to view single subtree (with all uploaded samples) in Nextstrain. */
 {
-makeNextstrainButton("viewNextstrainSingleSubtree", tn, "view single subtree in Nextstrain",
+makeNextstrainButton("viewNextstrainSingleSubtree", tn,
+                     "view downsampled global tree in Nextstrain",
                      "view one subtree that includes all of your uploaded sequences plus "
-                     SINGLE_SUBTREE_SIZE" randomly selected sequences from the phylogenetic "
+                     SINGLE_SUBTREE_SIZE" randomly selected sequences from the global phylogenetic "
                      "tree for context");
 }
 
