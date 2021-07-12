@@ -6,7 +6,7 @@ superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
-html gnomadV3_1
+html gnomadV3_1_1
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -19,7 +19,7 @@ html gnomadV3_1
     maxWindowToDraw 200000
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     dataVersion Release 2.1.1 (March 6, 2019)
-    html gnomadV3_1
+    html gnomadV3_1_1
     priority 4
     visibility hide
 
@@ -61,7 +61,7 @@ html gnomadV3_1
     dataVersion Release 3.1 (October 29, 2020)
     type bigBed 9 +
     itemRgb on
-    html gnomadV3_1
+    html gnomadV3_1_1
     bigDataUrl /gbdb/hg38/gnomAD/v3.1/variants/genomes.bb
     priority 2
     labelFields name,rsId
@@ -91,7 +91,7 @@ html gnomadV3_1
     type bigBed 9 +
     itemRgb on
     searchIndex name,_displayName,rsId
-    html gnomadV3_1
+    html gnomadV3_1_1
     bigDataUrl /gbdb/hg38/gnomAD/v3.1.1/genomes.bb
     priority 1
     labelFields rsId,_displayName
