@@ -95,7 +95,7 @@ time cleanGenbank < ncbi_dataset/data/genomic.fna \
 
 # Run pangolin and nextclade on sequences that are new since yesterday
 export TMPDIR=/dev/shm
-fastaNames genbank.fa.xz | awk '{print $1;}' | sed -re 's/\|.*//' | sort > gb.names
+fastaNames genbank.fa.xz | awk '{print $1;}' | sed -re 's/\|.*//' | grep -vx pdb | sort > gb.names
 splitDir=splitForNextclade
 rm -rf $splitDir
 mkdir $splitDir
@@ -161,6 +161,13 @@ else
     rm -rf $splitDir
 fi
 wc -l lineage_report.csv
+
+# It turns out that sometimes new sequences sneak into ncbi_dataset.tsv before they're included in
+# genomic.fna.  Filter those out so we don't have missing pangolin and nextclade for just-added
+# COG-UK sequences.  (https://github.com/theosanderson/taxodium/issues/10#issuecomment-876800176)
+grep -Fwf gb.names ncbi_dataset.plusBioSample.tsv > tmp
+wc -l tmp ncbi_dataset.plusBioSample.tsv
+mv tmp ncbi_dataset.plusBioSample.tsv
 
 rm -f $ottoDir/ncbi.latest
 ln -s ncbi.$today $ottoDir/ncbi.latest
