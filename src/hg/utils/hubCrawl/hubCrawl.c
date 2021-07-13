@@ -257,7 +257,7 @@ if (genome->settingsHash && (hel = hashLookup(genome->settingsHash, "htmlPath"))
     }
 
 /* Write out trackDb search text */
-struct trackDb *tdbList = trackHubTracksForGenome(hub, genome);
+struct trackDb *tdbList = trackHubTracksForGenome(hub, genome,NULL);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
 trackHubPolishTrackNames(hub, tdbList);

@@ -78,6 +78,7 @@ DIRS = ${buildRefresh} \
 	buildReleaseLog \
 	checkUrlsInTable \
 	geoMirrorNode \
+	hubCrawl \
 	makeTrackIndex \
 	mysqlSecurityCheck \
 	phyloRenameAndPrune \
