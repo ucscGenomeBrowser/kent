@@ -52,9 +52,9 @@ xzcat chunks/gisaid_epi_isl_*.fa.xz \
 
 # Join locally computed fields and sort by EPI ID for joining with latest real nextmeta
 join -t$'\t' -a 1 tmp.first3 tmp.lengths \
-| join -t$'\t' -a 1 - tmp.clade \
-| join -t$'\t' -a 1 - tmp.lineage \
-| join -t$'\t' -a 1 - tmp.country \
+| join -t$'\t' -a 1 -o 1.1,1.2,1.3,1.4,1.5,2.2 - tmp.clade \
+| join -t$'\t' -a 1 -o 1.1,1.2,1.3,1.4,1.5,1.6,2.2 - tmp.lineage \
+| join -t$'\t' -a 1 -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,2.2 - tmp.country \
 | tawk '{print $3, $2, $4, $5, $6, $7, $8;}' \
 | sort \
     > tmp.epiToLocalMeta

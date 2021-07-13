@@ -1145,15 +1145,16 @@ if (ti == NULL)
 return ti;
 }
 
-static void lookForCladesAndLineages(struct seqInfo *seqInfoList, struct hash *samplePlacements,
+static void lookForCladesAndLineages(struct hash *samplePlacements,
                                      boolean *retGotClades, boolean *retGotLineages)
 /* See if UShER has annotated any clades and/or lineages for seqs. */
 {
 boolean gotClades = FALSE, gotLineages = FALSE;
-struct seqInfo *si;
-for (si = seqInfoList;  si != NULL;  si = si->next)
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(samplePlacements);
+while ((hel = hashNext(&cookie)) != NULL)
     {
-    struct placementInfo *pi = hashFindVal(samplePlacements, si->seq->name);
+    struct placementInfo *pi = hel->val;
     if (pi)
         {
         if (isNotEmpty(pi->nextClade))
@@ -1508,6 +1509,27 @@ else
     printf("<td>%s</td>", alt);
 }
 
+static void printSubtreeTd(struct subtreeInfo *subtreeInfoList, struct tempName *jsonTns[],
+                           char *seqName)
+/* Print a table cell with subtree (& link if possible) if found. */
+{
+int ix;
+struct subtreeInfo *ti = subtreeInfoForSample(subtreeInfoList, seqName, &ix);
+if (ix < 0)
+    //#*** Probably an error.
+    printf("<td>n/a</td>");
+else
+    {
+    printf("<td>%d", ix+1);
+    if (ti && nextstrainHost())
+        {
+        char *nextstrainUrl = nextstrainUrlFromTn(jsonTns[ix]);
+        printf(" (<a href='%s' target=_blank>view in Nextstrain<a>)", nextstrainUrl);
+        }
+    printf("</td>");
+    }
+}
+
 static void summarizeSequences(struct seqInfo *seqInfoList, boolean isFasta,
                                struct usherResults *ur, struct tempName *jsonTns[],
                                struct hash *sampleMetadata, struct dnaSeq *refGenome)
@@ -1517,7 +1539,7 @@ if (seqInfoList)
     {
     puts("<table class='seqSummary'>");
     boolean gotClades = FALSE, gotLineages = FALSE;
-    lookForCladesAndLineages(seqInfoList, ur->samplePlacements, &gotClades, &gotLineages);
+    lookForCladesAndLineages(ur->samplePlacements, &gotClades, &gotLineages);
     printSummaryHeader(isFasta, gotClades, gotLineages);
     puts("<tbody>");
     struct dyString *dy = dyStringNew(0);
@@ -1682,25 +1704,71 @@ if (seqInfoList)
                 printf("<td>n/a></td>");
             printf("<td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td>");
             }
-        int ix;
-        struct subtreeInfo *ti = subtreeInfoForSample(ur->subtreeInfoList, si->seq->name, &ix);
-        if (ix < 0)
-            //#*** Probably an error.
-            printf("<td>n/a</td>");
-        else
-            {
-            printf("<td>%d", ix+1);
-            if (ti && nextstrainHost())
-                {
-                char *nextstrainUrl = nextstrainUrlFromTn(jsonTns[ix]);
-                printf(" (<a href='%s' target=_blank>view in Nextstrain<a>)", nextstrainUrl);
-                }
-            printf("</td>");
-            }
+        printSubtreeTd(ur->subtreeInfoList, jsonTns, si->seq->name);
         puts("</tr>");
         }
     puts("</tbody></table><p></p>");
     }
+}
+
+static void summarizeSubtrees(struct slName *sampleIds, struct usherResults *results,
+                              struct hash *sampleMetadata, struct tempName *jsonTns[],
+                              struct mutationAnnotatedTree *bigTree)
+/* Print a summary table of pasted/uploaded identifiers and subtrees */
+{
+boolean gotClades = FALSE, gotLineages = FALSE;
+lookForCladesAndLineages(results->samplePlacements, &gotClades, &gotLineages);
+puts("<table class='seqSummary'><tbody>");
+puts("<tr><th>Sequence</th>");
+if (gotClades)
+    puts("<th>Nextstrain clade (UShER)"
+     TOOLTIP("The <a href='https://nextstrain.org/blog/2021-01-06-updated-SARS-CoV-2-clade-naming' "
+             "target=_blank>Nextstrain clade</a> "
+             "assigned to the sequence by UShER according to its place in the phylogenetic tree")
+         "</th>");
+if (gotLineages)
+    puts("<th>Pango lineage (UShER)"
+         TOOLTIP("The <a href='https://cov-lineages.org/' "
+                 "target=_blank>Pango lineage</a> "
+                 "assigned to the sequence by UShER according to its place in the phylogenetic tree")
+         "</th>");
+puts("<th>Pango lineage (pangolin)"
+     TOOLTIP("The <a href='https://cov-lineages.org/' target=_blank>"
+             "Pango lineage</a> assigned to the sequence by "
+             "<a href='https://github.com/cov-lineages/pangolin/' target=_blank>pangolin</a>")
+     "</th>"
+     "<th>subtree</th></tr>");
+struct slName *si;
+for (si = sampleIds;  si != NULL;  si = si->next)
+    {
+    puts("<tr>");
+    printf("<th>%s</td>", replaceChars(si->name, "|", " | "));
+    struct placementInfo *pi = hashFindVal(results->samplePlacements, si->name);
+    if (pi)
+        {
+        if (gotClades)
+            printf("<td>%s</td>", pi->nextClade ? pi->nextClade : "n/a");
+        if (gotLineages)
+            printLineageTd(pi->pangoLineage, "n/a");
+        }
+    else
+        {
+        if (gotClades)
+            printf("<td>n/a></td>");
+        if (gotLineages)
+            printf("<td>n/a></td>");
+        }
+    // pangolin-assigned lineage
+    char *lineage = lineageForSample(sampleMetadata, si->name);
+    if (isNotEmpty(lineage))
+        printf("<td><a href='"OUTBREAK_INFO_URLBASE"%s' target=_blank>%s</a></td>",
+               lineage, lineage);
+    else
+        printf("<td>n/a></td>");
+    // Maybe also #mutations with mouseover to show mutation path?
+    printSubtreeTd(results->subtreeInfoList, jsonTns, si->name);
+    }
+puts("</tbody></table><p></p>");
 }
 
 static struct singleNucChange *sncListFromSampleMutsAndImputed(struct slName *sampleMuts,
@@ -2643,7 +2711,12 @@ if (results && results->singleSubtreeInfo)
     struct tempName *zipTn = makeSubtreeZipFile(results, jsonTns, singleSubtreeJsonTn,
                                                 &startTime);
     struct tempName *ctTn = NULL;
-    if (! subtreesOnly)
+    if (subtreesOnly)
+        {
+        summarizeSubtrees(sampleIds, results, sampleMetadata, jsonTns, bigTree);
+        reportTiming(&startTime, "describe subtrees");
+        }
+    else
         {
         findNearestNeighbors(results->samplePlacements, sampleMetadata, bigTree);
 
