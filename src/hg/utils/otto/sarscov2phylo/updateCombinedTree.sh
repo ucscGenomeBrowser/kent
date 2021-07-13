@@ -325,7 +325,7 @@ grep COG-UK/ $ncbiDir/ncbi_dataset.plusBioSample.tsv \
 # NCBI metadata for non-COG-UK (strip colon-separated location after country if present):
 grep -v COG-UK/ $ncbiDir/ncbi_dataset.plusBioSample.tsv \
 | tawk '$8 >= '$minReal' { print $1, $3, $4, $5, $6, $8; }' \
-| sed -re 's/\t([A-Za-z -]+):[A-Za-z0-9 ,()_-]+\t/\t\1\t/;' \
+| sed -re 's@\t([A-Za-z -]+):[A-Za-z0-9 .,()_/-]+\t@\t\1\t@;' \
 | perl -wpe '@w = split("\t"); $w[4] =~ s/ /_/g; $_ = join("\t", @w);' \
 | cleanGenbank \
 | sort tmp - > gb.metadata
@@ -365,7 +365,8 @@ else
 fi
 #*** Could also add sequence length to metadata from faSizes output...
 tail -n+2 $cogUkDir/cog_metadata.csv \
-| awk -F, -v 'OFS=\t' '{print $1, "", $5, $2, "", "", "", $7; }' \
+| awk -F, -v 'OFS=\t' '{print $1, "", $5, $3, "", "", "", $7; }' \
+| sed -re 's/UK-ENG/England/; s/UK-NIR/Northern Ireland/; s/UK-SCT/Scotland/; s/UK-WLS/Wales/;' \
 | sort \
 | join -t$'\t' -a 1 -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,2.2,1.8 - cogUkToNextclade \
 | join -t$'\t' -o 1.2,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9 idToName - \
@@ -417,6 +418,7 @@ time $matUtils annotate -T 50 \
 tail -n+2 ~angie/github/pango-designation/lineages.metadata.csv \
 | grep -vFwf $ottoDir/clades.blackList \
 | awk -F, '{print $9 "\t" $2;}' \
+| sed -re 's/B\.1\.1\.464\.1/AW.1/;  s/B\.1\.526\.[0-9]+/B.1.526/;' \
 | sort > epiExemplarToLineage
 subColumn -miss=/dev/null 1 epiExemplarToLineage \
     <(cut -f 1,2 $epiToPublic) stdout \
@@ -440,8 +442,16 @@ grep -Fwf <(cut -f 1 exemplarNameNotFoundToLineage) samples.$today \
 | sort > exemplarNameNotFoundToFullName
 join -t$'\t' exemplarNameNotFoundToLineage exemplarNameNotFoundToFullName \
 | cut -f 2,3 \
-| sort -u lineageToName - ../lineageToName.newLineages > tmp
+| sort -u lineageToName - ../lineageToName.newLineages \
+| sed -re 's/B\.1\.1\.464\.1/AW.1/;' \
+> tmp
 mv tmp lineageToName
+
+# Yatish's suggestion: use pangolin/pangoLEARN assignments instead of lineages.csv
+zcat gisaidAndPublic.$today.metadata.tsv.gz \
+| tail -n+2 | tawk '$9 != "" && $9 != "None" {print $9, $1;}' \
+| grep -vFwf $ottoDir/clades.blackList \
+    > lineageToName.assigned
 
 time $matUtils annotate -T 50 \
     -i gisaidAndPublic.$today.masked.nextclade.pb \
@@ -468,8 +478,7 @@ for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
 done
 
 # Extract public samples from tree
-$matUtils extract -i gisaidAndPublic.$today.masked.pb -u newNames
-grep -v EPI_ISL_ newNames > newPublicNames
+grep -v EPI_ISL_ samples.$today > newPublicNames
 $matUtils extract -i gisaidAndPublic.$today.masked.pb \
     -s newPublicNames \
     -O -o public-$today.all.masked.pb
