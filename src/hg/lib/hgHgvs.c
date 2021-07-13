@@ -95,7 +95,8 @@ if (pHgvs && *pHgvs)
 
 // Protein substitution regex
 #define aa3Exp "Ala|Arg|Asn|Asp|Cys|Gln|Glu|Gly|His|Ile|Leu|Lys|Met|Phe|Pro|Ser|Thr|Trp|Tyr|Val|Ter"
-#define hgvsAminoAcidExp "[ARNDCQEGHILKMFPSTWYVX*]|" aa3Exp
+#define aa3ExpLower "ala|arg|asn|asp|cys|gln|glu|gly|his|ile|leu|lys|met|phe|pro|ser|thr|trp|tyr|val|ter"
+#define hgvsAminoAcidExp "[ARNDCQEGHILKMFPSTWYVX*]|" aa3Exp "|" aa3ExpLower
 #define hgvsAminoAcidSubstExp "(" hgvsAminoAcidExp ")" posIntExp "(" hgvsAminoAcidExp "|=)"
 #define hgvsPDotSubstExp "p\\.\\(?" hgvsAminoAcidSubstExp "\\)?"
 //                                 ...                                  // original sequence
