@@ -838,7 +838,10 @@ cartVerTdb->html = cloneString("cartVersion");
 cartVerTdb->type = cloneString("cartVersion");
 cartVerTdb->url = cloneString("cartVersion");
 cartVerTdb->grp = cloneString("cartVersion");
-cartVerTdb->settings = cloneString("cartVersion");
+
+char buffer[1024];
+safef(buffer, sizeof buffer, "cartVersion %d", (int)-cartVerTdb->priority);
+cartVerTdb->settings = cloneString(buffer);
 
 return cartVerTdb;
 }
