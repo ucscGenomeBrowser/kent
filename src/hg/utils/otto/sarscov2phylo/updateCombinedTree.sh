@@ -478,8 +478,7 @@ for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
 done
 
 # Extract public samples from tree
-$matUtils extract -i gisaidAndPublic.$today.masked.pb -u newNames
-grep -v EPI_ISL_ newNames > newPublicNames
+grep -v EPI_ISL_ samples.$today > newPublicNames
 $matUtils extract -i gisaidAndPublic.$today.masked.pb \
     -s newPublicNames \
     -O -o public-$today.all.masked.pb
