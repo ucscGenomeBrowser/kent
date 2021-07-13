@@ -778,8 +778,8 @@ include wgEncodeReg.dev.ra alpha
 
 include hic.ra
 
-include gnomad.ra beta,public
-include gnomad.alpha.ra alpha
+include gnomad.ra public
+include gnomad.alpha.ra alpha,beta
 
 include platinumGenomes.ra
 
