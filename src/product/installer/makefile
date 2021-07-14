@@ -4,6 +4,9 @@ include ../../inc/common.mk
 GIT = git
 GITUP = ${GIT} pull
 
+alpha:
+	cp browserSetup.sh /usr/local/apache/htdocs/gbic/
+
 user:
 	${MAKE} doInstall destDir=${kentSrc}/hg/htdocs/goldenPath/help
 	@echo ""
