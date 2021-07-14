@@ -1,0 +1,48 @@
+#!/bin/bash
+set -eEu -o pipefail
+
+recipients="cluster-admin@soe.ucsc.edu,browser-qa@soe.ucsc.edu,mhaeussl@ucsc.edu"
+wiggleRoom=$(date +%s -d"30 days");  # Flag for renewal within 30 days of expiry, sec past epoch
+
+output=""
+
+for site in \
+genome.ucsc.edu \
+genome.soe.ucsc.edu \
+genome-euro.ucsc.edu \
+genome-asia.ucsc.edu \
+genome-preview.ucsc.edu \
+genome-test.soe.ucsc.edu \
+genome-test.gi.ucsc.edu \
+genome-store.ucsc.edu \
+genome-store.soe.ucsc.edu \
+cells.ucsc.edu \
+hgdownload.soe.ucsc.edu \
+hgdownload2.gi.ucsc.edu \
+hgdownload2.soe.ucsc.edu \
+hgdownload-test.gi.ucsc.edu \
+gi.ucsc.edu \
+hgwdev.gi.ucsc.edu \
+hgwalpha.soe.ucsc.edu \
+hgwbeta.soe.ucsc.edu \
+hgwbeta.cse.ucsc.edu \
+hgwbeta-public.soe.ucsc.edu \
+api.ucsc.edu \
+api.genome.ucsc.edu \
+apibeta.soe.ucsc.edu \
+hgw0.soe.ucsc.edu \
+hgw1.soe.ucsc.edu \
+hgw2.soe.ucsc.edu
+do 
+	expiryDate=$(echo -n | openssl s_client -servername app.domain.com -connect $site:443 2>/dev/null | openssl x509 -noout -dates | grep After | sed -e "s/23:59:59\|\=\|notAfter\|GMT\|//g")
+	expiryEpoch=$(date -d"$expiryDate" +%s)
+        if (("$wiggleRoom" > "$expiryEpoch"))
+        then
+            output="$output$site certificate expires on $expiryDate\n"
+        fi
+done
+
+if [ -n "$output" ]
+then
+    echo -e "$output" | mail -s "Site Certificates expiring in < 30 days" -S 'from=Reply All Includes All QA <browser-qa@soe.ucsc.edu>' "$recipients"
+fi
