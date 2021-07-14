@@ -7,6 +7,7 @@ shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
 html gnomadV3_1_1
+pennantIcon Updated red ../goldenPath/newsarch.html#071421 "v3.1.1 released July 14, 2021"
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -113,7 +114,7 @@ html gnomadV3_1_1
     urlLabel View this variant at gnomAD
     extraTableFields _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
     detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
-    pennantIcon Updated red
+    pennantIcon Updated red ../goldenPath/newsarch.html#071421 "Released July 14, 2021"
 
 searchTable gnomadGenomesVariantsV3_1_1
 searchType bigBed
