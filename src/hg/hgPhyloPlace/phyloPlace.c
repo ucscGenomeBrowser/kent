@@ -2368,8 +2368,39 @@ else
     }
 }
 
-static void addNameAndComponents(struct hash *nameHash, char *fullName)
-/* Add entries to nameHash mapping fullName to itself, and components of fullName to fullName. */
+static void addModVersion(struct hash *nameHash, char *id, char *fullName)
+/* Map id to fullName.  If id has .version, strip that (modifying id!) and map versionless id
+ * to fullName. */
+{
+hashAdd(nameHash, id, fullName);
+char *p = strchr(id, '.');
+if (p)
+    {
+    *p = '\0';
+    hashAdd(nameHash, id, fullName);
+    }
+}
+
+static void maybeAddIsolate(struct hash *nameHash, char *name, char *fullName)
+/* If name looks like country/isolate/year and isolate looks sufficiently distinctive
+ * then also map isolate to fullName. */
+{
+regmatch_t substrs[2];
+if (regexMatchSubstr(name, "^[A-Za-z _]+/(.*)/[0-9]{4}$", substrs, ArraySize(substrs)))
+    {
+    char isolate[substrs[1].rm_eo - substrs[1].rm_so + 1];
+    regexSubstringCopy(name, substrs[1], isolate, sizeof isolate);
+    if (! isAllDigits(isolate) &&
+        (regexMatch(isolate, "[A-Za-z0-9]{4}") ||
+         regexMatch(isolate, "[A-Za-z0-9][A-Za-z0-9]+[-_][A-Za-z0-9][A-Za-z0-9]+")))
+        {
+        hashAdd(nameHash, isolate, fullName);
+        }
+    }
+}
+static void addNameMaybeComponents(struct hash *nameHash, char *fullName, boolean addComponents)
+/* Add entries to nameHash mapping fullName to itself, and components of fullName to fullName.
+ * If addComponents and fullName is |-separated name|ID|date, add name and ID to nameHash. */
 {
 char *fullNameHashStored = hashStoreName(nameHash, fullName);
 // Now that we have hash storage for fullName, make it point to itself.
@@ -2377,24 +2408,31 @@ struct hashEl *hel = hashLookup(nameHash, fullName);
 if (hel == NULL)
     errAbort("Can't look up '%s' right after adding it", fullName);
 hel->val = fullNameHashStored;
-char *words[4];
-char copy[strlen(fullName)+1];
-safecpy(copy, sizeof copy, fullName);
-int wordCount = chopString(copy, "|", words, ArraySize(words));
-if (wordCount == 3)
+if (addComponents)
     {
-    // name|ID|date
-    hashAdd(nameHash, words[0], fullNameHashStored);
-    hashAdd(nameHash, words[1], fullNameHashStored);
-    }
-else if (wordCount == 2)
-    {
-    // ID|date
-    hashAdd(nameHash, words[0], fullNameHashStored);
+    char *words[4];
+    char copy[strlen(fullName)+1];
+    safecpy(copy, sizeof copy, fullName);
+    int wordCount = chopString(copy, "|", words, ArraySize(words));
+    if (wordCount == 3)
+        {
+        // name|ID|date
+        hashAdd(nameHash, words[0], fullNameHashStored);
+        maybeAddIsolate(nameHash, words[0], fullNameHashStored);
+        addModVersion(nameHash, words[1], fullNameHashStored);
+        }
+    else if (wordCount == 2)
+        {
+        // ID|date
+        addModVersion(nameHash, words[0], fullNameHashStored);
+        // ID might be a COG-UK country/isolate/year
+        maybeAddIsolate(nameHash, words[0], fullNameHashStored);
+        }
     }
 }
 
-static void rAddLeafNames(struct phyloTree *node, struct hash *condensedNodes, struct hash *nameHash)
+static void rAddLeafNames(struct phyloTree *node, struct hash *condensedNodes, struct hash *nameHash,
+                          boolean addComponents)
 /* Recursively descend tree, adding leaf node names to nameHash (including all names of condensed
  * leaf nodes).  Also map components of full names (country/isolate/year|ID|date) to full names. */
 {
@@ -2406,16 +2444,16 @@ if (node->numEdges == 0)
         {
         struct slName *sample;
         for (sample = nodeList;  sample != NULL;  sample = sample->next)
-            addNameAndComponents(nameHash, sample->name);
+            addNameMaybeComponents(nameHash, sample->name, addComponents);
         }
     else
-        addNameAndComponents(nameHash, leafName);
+        addNameMaybeComponents(nameHash, leafName, addComponents);
     }
 else
     {
     int i;
     for (i = 0;  i < node->numEdges;  i++)
-        rAddLeafNames(node->edges[i], condensedNodes, nameHash);
+        rAddLeafNames(node->edges[i], condensedNodes, nameHash, addComponents);
     }
 }
 
@@ -2450,13 +2488,14 @@ if (isNotEmpty(aliasFile) && fileExists(aliasFile))
     }
 }
 
-static struct hash *getTreeNames(struct mutationAnnotatedTree *bigTree, char *aliasFile)
-/* Make a hash of full names of leaves of bigTree; also map components of those names to the
- * full names in case the user gives us partial names. */
+static struct hash *getTreeNames(struct mutationAnnotatedTree *bigTree, char *aliasFile,
+                                 boolean addComponents)
+/* Make a hash of full names of leaves of bigTree; if addComponents, also map components of those
+ * names to the full names in case the user gives us partial names/IDs. */
 {
 int nodeCount = bigTree->nodeHash->elCount;
 struct hash *nameHash = hashNew(digitsBaseTwo(nodeCount) + 3);
-rAddLeafNames(bigTree->tree, bigTree->condensedNodes, nameHash);
+rAddLeafNames(bigTree->tree, bigTree->condensedNodes, nameHash, addComponents);
 addAliases(nameHash, aliasFile);
 return nameHash;
 }
@@ -2524,7 +2563,7 @@ static struct slName *readSampleIds(struct lineFile *lf, struct mutationAnnotate
 {
 struct slName *sampleIds = NULL;
 struct slName *unmatched = NULL;
-struct hash *nameHash = getTreeNames(bigTree, aliasFile);
+struct hash *nameHash = getTreeNames(bigTree, aliasFile, TRUE);
 char *line;
 while (lineFileNext(lf, &line, NULL))
     {
@@ -2606,7 +2645,8 @@ if (lfLooksLikeFasta(lf))
     boolean *informativeBases = informativeBasesFromTree(bigTree->tree, maskSites);
     struct slPair *failedSeqs;
     struct slPair *failedPsls;
-    vcfTn = vcfFromFasta(lf, db, refGenome, informativeBases, maskSites,
+    struct hash *treeNames = getTreeNames(bigTree, NULL, FALSE);
+    vcfTn = vcfFromFasta(lf, db, refGenome, informativeBases, maskSites, treeNames,
                          &sampleIds, &seqInfoList, &failedSeqs, &failedPsls, &startTime);
     if (failedSeqs)
         {
@@ -2819,10 +2859,6 @@ if (results && results->singleSubtreeInfo)
                    subtreeCount, (subtreeCount > 1 ? "s" : ""));
         ctFile = urlFromTn(ctTn);
         }
-    }
-else
-    {
-    warn("No subtree output from usher.\n");
     }
 return ctFile;
 }
