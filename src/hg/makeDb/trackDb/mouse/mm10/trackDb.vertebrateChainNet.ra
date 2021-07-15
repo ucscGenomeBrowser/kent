@@ -138,13 +138,13 @@ html vertebrateChainNet
         type chain thaSir1
         otherDb thaSir1
 
-        track chainXenTro9
+        track chainXenTro10
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=kbFrog clade=cEutel
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain xenTro9
-        otherDb xenTro9
+        type chain xenTro10
+        otherDb xenTro10
 
         track chainXenTro3
         subTrack vertebrateChainNetViewchain off
@@ -362,13 +362,13 @@ include chainNetGalGal6.ra
         type netAlign xenTro9 chainThaSir1
         otherDb thaSir1
 
-        track netXenTro9
+        track netXenTro10
         subTrack vertebrateChainNetViewnet on
         subGroups view=net species=kbFrog clade=cEutel
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign xenTro9 chainXenTro9
-        otherDb xenTro9
+        type netAlign xenTro10 chainXenTro10
+        otherDb xenTro10
 
         track netXenTro3
         subTrack vertebrateChainNetViewnet on
