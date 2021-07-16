@@ -36,8 +36,11 @@ int gfMinScore = 50;
 int gfIMinMatch = 30;
 
 
-static struct seqInfo *checkSequences(struct dnaSeq *seqs, struct slPair **retFailedSeqs)
+static struct seqInfo *checkSequences(struct dnaSeq *seqs, struct hash *treeNames,
+                                      struct slPair **retFailedSeqs)
 /* Return a list of sequences that pass basic QC checks (appropriate size etc).
+ * If any sequences have names that are already in the tree, add a prefix so usher doesn't
+ * reject them.
  * Set retFailedSeqs to the list of sequences that failed checks. */
 {
 struct seqInfo *filteredSeqs = NULL;
@@ -46,9 +49,6 @@ struct hash *uniqNames = hashNew(0);
 struct dnaSeq *seq, *nextSeq;
 for (seq = seqs;  seq != NULL;  seq = nextSeq)
     {
-    //#*** TODO: if the user uploads a sample with the same ID as one already in the
-    //#*** saved assignment file, then usher will ignore it!
-    //#*** Better check for that and warn the user.
     boolean passes = TRUE;
     nextSeq = seq->next;
     if (seq->size < minSeqSize)
@@ -121,6 +121,16 @@ for (seq = seqs;  seq != NULL;  seq = nextSeq)
             }
         else
             {
+            if (isAllDigits(seq->name) || hashLookup(treeNames, seq->name))
+                {
+                // Internal nodes of tree have numeric IDs, so usher may reject numeric name
+                // as a conflict.  usher will definitely reject a sequence name already in the tree.
+                // Add a prefix so usher won't reject the sequence.
+                char newName[strlen(seq->name)+32];
+                safef(newName, sizeof newName, "uploaded_%s", seq->name);
+                freeMem(seq->name);
+                seq->name = cloneString(newName);
+                }
             struct seqInfo *si;
             AllocVar(si);
             si->seq = seq;
@@ -580,6 +590,7 @@ for (si = filteredSeqs;  si != NULL;  si = si->next)
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
                               boolean *informativeBases, struct slName **maskSites,
+                              struct hash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
                               int *pStartTime)
@@ -590,7 +601,7 @@ struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refG
 struct tempName *tn = NULL;
 struct slName *sampleIds = NULL;
 struct dnaSeq *allSeqs = faReadAllMixedInLf(lf);
-struct seqInfo *filteredSeqs = checkSequences(allSeqs, retFailedSeqs);
+struct seqInfo *filteredSeqs = checkSequences(allSeqs, treeNames, retFailedSeqs);
 reportTiming(pStartTime, "read and check uploaded FASTA");
 if (filteredSeqs)
     {

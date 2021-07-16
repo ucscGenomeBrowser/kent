@@ -135,7 +135,13 @@ ucsc_db hg38
 </pre>
 <p>
 Each stanza, such as &quot;donor B&quot;, inherits from any stanzas above it at the right
-indentation level, and is a parent to stanzas beneath.</p>
+indentation level, and is a parent to stanzas beneath. In the example above, Treatment Y applies to
+both &quot;donor B&quot; and &quot;donor C&quot;. Treatment X only applies to &quot;donor A&quot; as
+they are at the same indentation level. There are three differentiation times that apply to each of
+the donors and they can be referenced in the trackDb stanza using the
+<a href="/goldenPath/help/trackDb/trackDbHub.html#meta"><em>meta</em></a> line in the tagStorm file,
+i.e., <code>meta ucsc1_1</code>.
+</p>
 <p>
 A trackDb stanza using the tagStorm metadata can be seen in the following example:
 </p>
