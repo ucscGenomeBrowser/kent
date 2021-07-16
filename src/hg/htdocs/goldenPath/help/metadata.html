@@ -183,6 +183,14 @@ tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	C	1 d
 tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	C	5 days	ucsc1_9
 </pre>
 <p>
+To reference a line in the TSV or CSV file in the trackDb stanza, a <em>meta</em> column must
+contain a unique alpha-numeric string. For example, <em>ucsc1_4</em> would reference the following
+metadata in your track:
+</p>
+<pre>
+tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	X	A	1 day	ucsc1_4
+</pre>
+<p>
 A trackDb stanza using the tab-separated metadata can be seen in the following example:
 </p>
 <pre>
