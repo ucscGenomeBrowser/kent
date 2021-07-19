@@ -325,7 +325,7 @@ grep COG-UK/ $ncbiDir/ncbi_dataset.plusBioSample.tsv \
 # NCBI metadata for non-COG-UK (strip colon-separated location after country if present):
 grep -v COG-UK/ $ncbiDir/ncbi_dataset.plusBioSample.tsv \
 | tawk '$8 >= '$minReal' { print $1, $3, $4, $5, $6, $8; }' \
-| sed -re 's@\t([A-Za-z -]+):[A-Za-z0-9 .,()_/-]+\t@\t\1\t@;' \
+| sed -re 's@\t([A-Za-z -]+):[^\t]+\t@\t\1\t@;' \
 | perl -wpe '@w = split("\t"); $w[4] =~ s/ /_/g; $_ = join("\t", @w);' \
 | cleanGenbank \
 | sort tmp - > gb.metadata
@@ -400,66 +400,17 @@ echo "$sampleCountComma genomes from GISAID, GenBank, COG-UK and CNCB ($today); 
     > hgPhyloPlace.plusGisaid.description.txt
 
 # Add nextclade annotations to protobuf
-zcat gisaidAndPublic.$today.metadata.tsv.gz \
-| tail -n+2 | tawk '$8 != "" {print $8, $1;}' \
-| subColumn -miss=/dev/null 1 stdin ../nextcladeToShort cladeToName
-
 time $matUtils annotate -T 50 \
     -l \
     -i gisaidAndPublic.$today.masked.pb \
-    -c cladeToName \
-    -u mutations.nextclade \
-    -D details.nextclade \
-    -o gisaidAndPublic.$today.masked.nextclade.pb \
-    >& annotate.nextclade.out
+    -P ../nextstrain.clade-paths.tsv \
+    -o gisaidAndPublic.$today.masked.nextclade.pb
 
-# Add pangolin lineage annotations to protobuf.  Use pangoLEARN training samples;
-# convert EPI IDs to public to match tree IDs.
-tail -n+2 ~angie/github/pango-designation/lineages.metadata.csv \
-| grep -vFwf $ottoDir/clades.blackList \
-| awk -F, '{print $9 "\t" $2;}' \
-| sed -re 's/B\.1\.1\.464\.1/AW.1/;  s/B\.1\.526\.[0-9]+/B.1.526/;' \
-| sort > epiExemplarToLineage
-subColumn -miss=/dev/null 1 epiExemplarToLineage \
-    <(cut -f 1,2 $epiToPublic) stdout \
-| sort > idExemplarToLineage
-grep -Fwf <(cut -f 1 idExemplarToLineage) samples.$today \
-| awk -F\| '{ if ($3 == "") { print $1 "\t" $0 } else { print $2 "\t" $0; } }' \
-| sort > idExemplarToName
-join -t$'\t' idExemplarToName idExemplarToLineage \
-| tawk '{print $3, $2;}' \
-| sort > lineageToName
-# $epiToPublic maps some cogUkInGenBank EPI IDs to their COG-UK names not GenBank IDs unfortunately
-# so some of those don't match between idExemplarToLineage and idExemplarToName.  Find missing
-# sequences and try a different means of adding those.
-comm -13 <( cut -f 1 idExemplarToName | sort) <(cut -f 1 idExemplarToLineage| sort) \
-| grep -Fwf - ~angie/github/pango-designation/lineages.metadata.csv \
-| sed -re 's/Northern_/Northern/;' \
-| awk -F, '{print $1 "\t" $2;}' \
-| sort > exemplarNameNotFoundToLineage
-grep -Fwf <(cut -f 1 exemplarNameNotFoundToLineage) samples.$today \
-| awk -F\| '{print $1 "\t" $0;}' \
-| sort > exemplarNameNotFoundToFullName
-join -t$'\t' exemplarNameNotFoundToLineage exemplarNameNotFoundToFullName \
-| cut -f 2,3 \
-| sort -u lineageToName - ../lineageToName.newLineages \
-| sed -re 's/B\.1\.1\.464\.1/AW.1/;' \
-> tmp
-mv tmp lineageToName
-
-# Yatish's suggestion: use pangolin/pangoLEARN assignments instead of lineages.csv
-zcat gisaidAndPublic.$today.metadata.tsv.gz \
-| tail -n+2 | tawk '$9 != "" && $9 != "None" {print $9, $1;}' \
-| grep -vFwf $ottoDir/clades.blackList \
-    > lineageToName.assigned
-
+# Add pangolin lineage annotations to protobuf.
 time $matUtils annotate -T 50 \
     -i gisaidAndPublic.$today.masked.nextclade.pb \
-    -c lineageToName \
-    -u mutations.pangolin \
-    -D details.pangolin \
-    -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb \
-    >& annotate.pangolin.out
+    -P ../pango.clade-paths.tsv \
+    -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb
 
 mv gisaidAndPublic.$today.masked{,.unannotated}.pb
 ln gisaidAndPublic.$today.masked.nextclade.pangolin.pb gisaidAndPublic.$today.masked.pb
@@ -492,31 +443,21 @@ zcat gisaidAndPublic.$today.metadata.tsv.gz \
 | gzip -c \
     > public-$today.metadata.tsv.gz
 
-grep -v EPI_ISL_ cladeToName > cladeToPublicName
-grep -v EPI_ISL_ lineageToName > lineageToPublicName
-
 # Add nextclade annotations to public protobuf
 time $matUtils annotate -T 50 \
     -l \
     -i public-$today.all.masked.pb \
-    -c cladeToPublicName \
-    -u mutations.nextclade.public \
-    -D details.nextclade.public \
-    -o public-$today.all.masked.nextclade.pb \
-    >& annotate.nextclade.public.out
+    -P ../nextstrain.clade-paths.public.tsv \
+    -o public-$today.all.masked.nextclade.pb
 
 # Add pangolin lineage annotations to public protobuf
 time $matUtils annotate -T 50 \
     -i public-$today.all.masked.nextclade.pb \
-    -c lineageToPublicName \
-    -u mutations.pangolin.public \
-    -D details.pangolin.public \
-    -o public-$today.all.masked.nextclade.pangolin.pb \
-    >& annotate.pangolin.public.out
+    -P ../pango.clade-paths.public.tsv \
+    -o public-$today.all.masked.nextclade.pangolin.pb
 
-# Not all the Pangolin lineages can be assigned nodes so for now just use nextclade
 rm public-$today.all.masked.pb
-ln public-$today.all.masked.nextclade.pb public-$today.all.masked.pb
+ln -f public-$today.all.masked.nextclade.pangolin.pb public-$today.all.masked.pb
 
 cncbDate=$(ls -l $cncbDir | sed -re 's/.*cncb\.([0-9]{4}-[0-9][0-9]-[0-9][0-9]).*/\1/')
 echo "sarscov2phylo release 13-11-20; NCBI and COG-UK sequences downloaded $today; CNCB sequences downloaded $cncbDate" \
@@ -539,8 +480,8 @@ gzip -c public-$today.all.masked.pb > $archive/public-$today.all.masked.pb.gz
 ln `pwd`/public-$today.metadata.tsv.gz $archive/
 gzip -c public-$today.all.masked.nextclade.pangolin.pb \
     > $archive/public-$today.all.masked.nextclade.pangolin.pb.gz
-gzip -c cladeToPublicName > $archive/cladeToPublicName.gz
-gzip -c lineageToPublicName > $archive/lineageToPublicName.gz
+gzip -c ../nextstrain.clade-paths.public.tsv > $archive/nextstrain.clade-paths.public.tsv.gz
+gzip -c ../pango.clade-paths.public.tsv > $archive/pango.clade-paths.public.tsv.gz
 ln `pwd`/hgPhyloPlace.description.txt $archive/public-$today.version.txt
 
 # Update 'latest' in $archiveRoot
