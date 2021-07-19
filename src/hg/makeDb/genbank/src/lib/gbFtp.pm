@@ -190,7 +190,7 @@ sub ftpSafeGet($$) {
         die("size at end of download ($remSize) does not match size at start ($startRemSize) for ftp://$gbFtp::host/$remFile");
     }
     if ($localSize != $remSize) {
-        dir("size of just downloaded file $localTmp ($localSize) does not match ftp://$gbFtp::host/$remFile ($remSize)");
+        die("size of just downloaded file $localTmp ($localSize) does not match ftp://$gbFtp::host/$remFile ($remSize)");
         return 0;
     }
     
