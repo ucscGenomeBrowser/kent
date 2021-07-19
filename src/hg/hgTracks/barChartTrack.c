@@ -863,10 +863,13 @@ height = tgFixedTotalHeightOptionalOverflow(tg, vis, lineHeight, heightPer, FALS
 
 if ((vis == tvPack) || (vis == tvFull))
     {
+    struct spaceSaver *ss = findSpaceSaver(tg, vis); // ss is a list now
+    assert(ss); // viz matches, we have the right one
+
     // set variable height rows
-    if (tg->ss && tg->ss->rowCount)
+    if (ss && ss->rowCount)
         {
-        if (!tg->ss->rowSizes)
+        if (!ss->rowSizes)
 	    {
 	    // collect the rowSizes data across all windows
 	    assert(currentWindow==windows); // first window
@@ -886,8 +889,6 @@ if ((vis == tvPack) || (vis == tvFull))
 		}
 	    tg = tgSave;
 	    }
-	struct spaceSaver *ss = findSpaceSaver(tg, vis); // ss is a list now
-	assert(ss); // viz matches, we have the right one
 	height = spaceSaverGetRowHeightsTotal(ss);
         }
     }

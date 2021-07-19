@@ -15,7 +15,8 @@ function gaOnButtonClick(ev) {
     var button = ev.currentTarget;
     var buttonName = button.name;
     ga('send', 'event', 'buttonClick', buttonName);
-    button.oldOnClick(ev);
+    if (button.oldOnClick) // most buttons did not have an onclick function at all (the default click is a listener)
+        button.oldOnClick(ev);
 }
 
 function gaTrackButtons() {

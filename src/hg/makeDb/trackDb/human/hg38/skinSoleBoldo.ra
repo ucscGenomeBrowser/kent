@@ -8,6 +8,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track skinSoleBoldoCellType
     parent skinSoleBoldo
+    html skinSoleBoldo
     type bigBarChart
     visibility pack
     shortLabel Skin Cell
@@ -26,6 +27,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track skinSoleBoldoDonor
     parent skinSoleBoldo
+    html skinSoleBoldo
     type bigBarChart
     visibility hide
     shortLabel Skin Donor
@@ -45,6 +47,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track skinSoleBoldoAge
     parent skinSoleBoldo
+    html skinSoleBoldo
     type bigBarChart
     visibility hide
     shortLabel Skin Age
@@ -64,6 +67,7 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
 
     track skinSoleBoldoAgeCellType
     parent skinSoleBoldo
+    html skinSoleBoldo
     type bigBarChart
     visibility hide
     shortLabel Skin Cell+Age

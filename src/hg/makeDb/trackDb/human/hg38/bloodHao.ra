@@ -7,6 +7,7 @@ group singleCell
 
     track bloodHaoCellType
     parent bloodHao
+    html bloodHao    
     type bigBarChart
     visibility pack
     shortLabel Blood PBMC Cells
@@ -23,6 +24,7 @@ group singleCell
 
     track bloodHaoL2
     parent bloodHao
+    html bloodHao
     type bigBarChart
     visibility hide
     shortLabel Blood PBMC Cells 2
@@ -40,6 +42,7 @@ group singleCell
 
     track bloodHaoL3
     parent bloodHao
+    html bloodHao
     type bigBarChart
     visibility hide
     shortLabel Blood PBMC Cells 3
@@ -60,6 +63,7 @@ group singleCell
 
     track bloodHaoDonor
     parent bloodHao
+    html bloodHao
     type bigBarChart
     visibility hide
     shortLabel Blood PBMC Donor
@@ -79,6 +83,7 @@ group singleCell
 
     track bloodHaoTime
     parent bloodHao
+    html bloodHao
     type bigBarChart
     visibility hide
     shortLabel Blood PBMC Time
@@ -97,6 +102,7 @@ group singleCell
 
     track bloodHaoPhase
     parent bloodHao
+    html bloodHao
     type bigBarChart
     visibility hide
     shortLabel Blood PBMC Phase

@@ -7,6 +7,7 @@ group singleCell
 
     track colonWangCellType
     parent colonWang
+    html colonWang
     type bigBarChart
     visibility pack
     shortLabel Colon Cells
@@ -27,6 +28,7 @@ group singleCell
 
     track colonWangDonor
     parent colonWang
+    html colonWang
     type bigBarChart
     visibility hide
     shortLabel Colon Donor

@@ -853,6 +853,12 @@ struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
 struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
 int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn, &singleSubtreeMuts,
                                       subtreeTns, subtreeMuts, MAX_SUBTREES);
+if (singleSubtreeTn == NULL)
+    {
+    warn("Sorry, there was a problem running usher.  "
+         "Please ask genome-www@soe.ucsc.edu to take a look at %s.", tnStderr.forCgi);
+    return NULL;
+    }
 results->subtreeInfoList = parseSubtrees(subtreeCount, singleSubtreeTn, singleSubtreeMuts,
                                          subtreeTns, subtreeMuts, userSampleIds, condensedNodes);
 results->singleSubtreeInfo = results->subtreeInfoList;

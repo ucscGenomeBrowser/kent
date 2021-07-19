@@ -476,7 +476,7 @@
     use a color halfway between that specified in the <code>color</code> tag
     and white instead. Tracks using <code>altColor</code> with the windowing function
     &quot;mean+whiskers&quot; will see the shading of colors impacted, with lighter
-    shades for values a standard deviation around the mean, most noticeable when zoomed out
+    shades for values within a standard deviation around the mean, most noticeable when zoomed out
     and average calculations are taking place.</p>
 </P>
     <P><B>Example:</B></P>

@@ -148,6 +148,7 @@ struct geneInfo
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
                               boolean *informativeBases, struct slName **maskSites,
+                              struct hash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
                               int *pStartTime);
