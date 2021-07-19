@@ -7,6 +7,7 @@ group singleCell
 
     track pancreasBaronCellType
     parent pancreasBaron
+    html pancreasBaron
     type bigBarChart
     visibility pack
     shortLabel Pancreas Cells
@@ -24,6 +25,7 @@ group singleCell
 
     track pancreasBaronDetailedCellType
     parent pancreasBaron
+    html pancreasBaron
     type bigBarChart
     visibility hide
     shortLabel Pancreas Details
@@ -41,6 +43,7 @@ group singleCell
 
     track pancreasBaronBatch
     parent pancreasBaron
+    html pancreasBaron
     type bigBarChart
     visibility hide
     shortLabel Pancreas Batch
@@ -63,6 +66,7 @@ group singleCell
 
     track pancreasBaronDonor
     parent pancreasBaron
+    html pancreasBaron
     type bigBarChart
     visibility hide
     shortLabel Pancreas Donor
