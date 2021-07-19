@@ -226,3 +226,60 @@ html chainNet
         speciesOrder GCF_002742125.1
         html chainNet
 
+##############################################################################
+# GCA_018400075.1 - Zebrafish T5D - Danio rerio - taxId: 7955 - fish
+##############################################################################
+track chainNetGCA_018400075.1
+compositeTrack on
+shortLabel Zebrafish T5D Chain/Net
+longLabel Zebrafish T5D (May 2021 GCA_018400075.1_ASM1840007v1), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 5000
+chainLinearGap loose
+matrixHeader A, C, G, T
+otherDb GCA_018400075.1
+html chainNet
+
+    track chainNetGCA_018400075.1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCA_018400075.1
+    spectrum on
+
+        track chainGCA_018400075.1
+        parent chainNetGCA_018400075.1Viewchain
+        subGroups view=chain
+        shortLabel Zebrafish T5D Chain
+        longLabel Zebrafish T5D (May 2021 GCA_018400075.1_ASM1840007v1) Chained Alignments
+        type bigChain GCA_018400075.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/chainGCA_018400075.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/chainGCA_018400075.1Link.bb
+        html chainNet
+
+    track mafNetGCA_018400075.1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCA_018400075.1
+
+        track netGCA_018400075.1
+        parent mafNetGCA_018400075.1Viewnet
+        subGroups view=net
+        shortLabel Zebrafish T5D mafNet
+        longLabel Zebrafish T5D (May 2021 GCA_018400075.1_ASM1840007v1) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_018400075.1.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCA_018400075.1.net.summary.bb
+        speciesOrder GCA_018400075.1
+        html chainNet

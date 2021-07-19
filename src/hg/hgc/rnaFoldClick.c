@@ -388,13 +388,15 @@ mkdirTrashDirectory(table);
 
 char psName[512];
 safef(psName, sizeof(psName), "../trash/%s/%s_%s.ps", table, table, item->name);
-FILE *of = popen(rnaPlotPath, "w");
+char *plotCmd[] = {rnaPlotPath, NULL};
+struct pipeline *plStruct = pipelineOpen1(plotCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+FILE *of = pipelineFile(plStruct);
 if (of != NULL)
     {
     fprintf(of, ">%s\n", psName);        /* This tells where to put file. */
     fprintf(of, "%s\n%s\n", seq->dna, item->secStr);
-    pclose(of);
     }
+pipelineClose(&plStruct);
 
 char pngName[256];
 char *rootName = cloneString(psName);

@@ -100,7 +100,7 @@ int trans3GenoPos(char *pt, bioSeq *seq, struct trans3 *t3List, boolean isEnd)
  * t3List to genomic offset. If t3List is NULL then just use seq
  * instead. */
 {
-int offset, frame;
+int offset = 0, frame = 0;
 if (t3List != NULL)
     {
     /* Special processing at end. The end coordinate is

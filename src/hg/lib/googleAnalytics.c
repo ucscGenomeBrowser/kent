@@ -22,6 +22,7 @@ char *analyticsKey = cfgOption("analyticsKey");
 // link tracking broke in Firefox once. In case this ever happens again, we can
 // now switch off outlink tracking quickly
 boolean trackClicks = cfgOptionBooleanDefault("analytics.trackClicks", TRUE);
+boolean trackButtons = cfgOptionBooleanDefault("analytics.trackButtons", TRUE);
 
 /*	if config is missing or empty, nothing happens here	*/
 if (isEmpty(analyticsKey))
@@ -96,6 +97,10 @@ if (sameWord(cgiName, "hgc") || sameWord(cgiName, "hgTracks") ||
         "          gaTrackDb(getDb());\n"
         "  });"
         );
+    if (trackButtons)
+        jsInlineF(
+        "  $(document).ready(function() {\n"
+        "      gaTrackButtons();\n" // see utils.js
+        "  });");
 }
-
 }

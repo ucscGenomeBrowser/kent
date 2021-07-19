@@ -3686,7 +3686,7 @@ int chromSize = -1;
 char lastChromSizeChrom[256] = "";
 boolean firstTime = TRUE;
 boolean isEOF = FALSE;
-struct kce *kceList = NULL, *bestKce, *prevKce;
+struct kce *kceList = NULL, *bestKce = NULL, *prevKce = NULL;
 struct genePred *gene = NULL;
 while (1)
     {

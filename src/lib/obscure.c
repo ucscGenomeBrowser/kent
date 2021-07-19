@@ -561,7 +561,7 @@ struct slName *stringToSlNames(char *string)
 {
 struct slName *list = NULL, *name;
 char *dupe = cloneString(string);
-char c, *s = dupe, *e;
+char c, *s = dupe, *e = NULL;
 
 for (;;)
     {

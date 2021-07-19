@@ -8,13 +8,22 @@
 
 set -u -e -o pipefail # fail on unset vars and all errors, also in pipes
 
-function errorHandler {
+exitHandler() {
+    if [ "$1" == "100" -o "$1" == "0" ] ; then
+       exit 1 # all fine, a specific error message has already been output
+    fi
+
+    # somehow this script exited with an unknown type of error code
+    echo Exit error $1 occurred on line $2
     echo The UCSC Genome Browser installation script exited with an error.
     echo Please contact us at genome-mirror@soe.ucsc.edu and send us an output log 
     echo of the command prefixed with '"bash -x"', e.g.
     echo 'bash -x browserSetup.sh install 2>&1 > install.log'
 }
-trap errorHandler ERR
+
+# only trap the exit, not the errors 
+# see https://medium.com/@dirk.avery/the-bash-trap-trap-ce6083f36700
+trap 'exitHandler $? $LINENO' EXIT
 
 # ---- GLOBAL DEFAULT SETTINGS ----
 
@@ -760,7 +769,7 @@ function installOsx ()
        echo2 'Please install XCode from https://developer.apple.com/xcode/downloads/'
        echo2 'Start XCode once and accept the Apple license.'
        echo2 'Then run this script again.'
-       exit 101
+       exit 100
    fi
 
    # make sure that the xcode command line tools are installed
@@ -1083,7 +1092,7 @@ function mysqlChangeRootPwd ()
    # paranoia check
    if [[ "$MYSQLROOTPWD" == "" ]]; then
        echo2 Error: could not generate a random Mysql root password
-       exit 111
+       exit 100
    fi
 
    echo2
@@ -1117,7 +1126,7 @@ function mysqlChangeRootPwd ()
        echo2 user=root
        echo2 password=PASSWORD
        echo2 run chmod 600 ~/.my.cnf and restart this script.
-       exit 123
+       exit 100
    fi
 }
 
@@ -1147,7 +1156,7 @@ else
     fi
        
     echo2 "Then run this script again."
-    exit 200
+    exit 100
 fi
 }
    
@@ -1215,10 +1224,10 @@ function mysqlDbSetup ()
     #  Full access to all databases for the user 'browser'
     #       This would be for browser developers that need read/write access
     #       to all database tables.  
-    #$MYSQL -e "DROP USER IF EXISTS browser@localhost"
-    #$MYSQL -e "CREATE USER browser@localhost "
+    $MYSQL -e "DROP USER IF EXISTS browser@localhost"
+    $MYSQL -e "CREATE USER browser@localhost IDENTIFIED BY 'genome'"
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, DELETE, FILE, "\
-"CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on *.* TO browser@localhost IDENTIFIED BY 'genome';"
+"CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on *.* TO browser@localhost"
     
     # FILE permission for this user to all databases to allow DB table loading with
     #       statements such as: "LOAD DATA INFILE file.tab"
@@ -1228,18 +1237,18 @@ function mysqlDbSetup ()
     $MYSQL -e "GRANT FILE on *.* TO browser@localhost;" 
     
     #   Read only access to genome databases for the browser CGI binaries
-    #$MYSQL -e "DROP USER IF EXISTS readonly@localhost"
-    #$MYSQL -e "CREATE USER readonly@localhost IDENTIFIED BY 'access';"
+    $MYSQL -e "DROP USER IF EXISTS readonly@localhost"
+    $MYSQL -e "CREATE USER readonly@localhost IDENTIFIED BY 'access';"
     $MYSQL -e "GRANT SELECT, CREATE TEMPORARY TABLES on "\
-"*.* TO readonly@localhost IDENTIFIED BY 'access';"
+"*.* TO readonly@localhost;"
     $MYSQL -e "GRANT SELECT, INSERT, CREATE TEMPORARY TABLES on hgTemp.* TO "\
 "readonly@localhost;"
     
     # Readwrite access to hgcentral for browser CGI binaries to keep session state
-    #$MYSQL -e "DROP USER IF EXISTS readwrite@localhost"
-    #$MYSQL -e "CREATE USER readwrite@localhost IDENTIFIED BY 'update';"
+    $MYSQL -e "DROP USER IF EXISTS readwrite@localhost"
+    $MYSQL -e "CREATE USER readwrite@localhost IDENTIFIED BY 'update';"
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, "\
-"DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost IDENTIFIED BY 'update'; "
+"DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost; "
     
     # create /gbdb and let the apache user write to it
     # hgConvert will download missing liftOver files on the fly and needs write
@@ -1248,10 +1257,10 @@ function mysqlDbSetup ()
     chown $APACHEUSER:$APACHEUSER $GBDBDIR
     
     # the custom track database needs it own user and permissions
-    #$MYSQL -e "DROP USER IF EXISTS ctdbuser@localhost"
-    #$MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
+    $MYSQL -e "DROP USER IF EXISTS ctdbuser@localhost"
+    $MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
     $MYSQL -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX "\
-"on customTrash.* TO ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
+"on customTrash.* TO ctdbuser@localhost;"
     
     # removed these now for the new hgGateway page, Apr 2016
     # by default hgGateway needs an empty hg19 database, will crash otherwise
@@ -1267,7 +1276,7 @@ function installBrowser ()
 {
     if [ -f $COMPLETEFLAG ]; then
         echo2 error: the file $COMPLETEFLAG exists. It seems that you have installed the browser already.
-        exit 246
+        exit 100
     fi
 
     echo '--------------------------------'
@@ -1324,7 +1333,7 @@ function installBrowser ()
         # test if an apache file is already present
         if [ -f "$APACHEDIR" ]; then
             echo2 error: please remove the file $APACHEDIR, then restart the script with "bash $0".
-            exit 249
+            exit 100
         fi
     fi
 
@@ -1334,7 +1343,7 @@ function installBrowser ()
         echo2 error: the directory $APACHEDIR already exists.
         echo2 This installer has to overwrite it, so please move it to a different name
         echo2 or remove it. Then start the installer again with "bash $0 install"
-        exit 250
+        exit 100
     fi
 
     mysqlDbSetup
@@ -1437,7 +1446,7 @@ function downloadGenomes
     GENBANKTBLS=""
     if [ "$DBS" == "" ] ; then
         echo2 Argument error: the '"download"' command requires at least one assembly name, like hg19 or mm10.
-        exit 1
+        exit 100
     fi
 
     echo2
@@ -1603,7 +1612,7 @@ function downloadMinimal
     DBS=$*
     if [ "$DBS" == "" ] ; then
         echo2 Argument error: the '"minimal"' command requires at least one assembly name, like hg19 or mm10.
-        exit 1
+        exit 100
     fi
 
     echo2
@@ -1787,7 +1796,7 @@ while getopts ":baeut:hof" opt; do
           ONLYGENOMES=1 # do not download hgFixed,go,proteome etc
       else
           echo "Unrecognized -t value. Please read the help message, by running bash $0 -h"
-          exit 1
+          exit 100
       fi
       ;;
     u)
@@ -1830,7 +1839,7 @@ DIST=none
 
 if [[ "$unameStr" == MINGW32_NT* ]] ; then
     echo Sorry Windows/CYGWIN is not supported
-    exit 1
+    exit 100
 fi
 
 # set a few very basic variables we need to function
@@ -1877,7 +1886,7 @@ fi
 if [ "$DIST" == "none" ]; then
     echo Sorry, unable to detect your linux distribution. 
     echo Currently only Debian and Redhat-style distributions are supported.
-    exit 3
+    exit 100
 fi
 
 lastArg=${*: -1:1}
@@ -1885,19 +1894,19 @@ if [[ "$#" -gt "1" && ( "${2:0:1}" == "-" ) || ( "${lastArg:0:1}" == "-" )  ]]; 
   echo "Error: The options have to be specified before the command, not after it."
   echo
   echo "$HELP_STR"
-  exit 1
+  exit 100
 fi
 
 if uname -m | grep -vq _64; then
   echo "Your machine does not seem to be a 64bit system"
   echo "Sorry, the Genome Browser requires a 64bit linux."
-  exit 1
+  exit 100
 fi
 
 if [[ "$EUID" != "0" ]]; then
   echo "This script must be run as root or with sudo like this:"
   echo "sudo -H $0"
-  exit 1
+  exit 100
 fi
 
 if [ "${1:-}" == "install" ]; then
@@ -1927,5 +1936,5 @@ elif [ "${1:-}" == "mysql" ]; then
 else
    echo Unknown command: $1
    echo "$HELP_STR"
-   exit 1
+   exit 100
 fi

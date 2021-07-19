@@ -60,7 +60,8 @@ use vars qw/
     $opt_noLoadChainSplit
     $opt_loadChainSplit
     $opt_swapDir
-    $opt_asmId
+    $opt_tAsmId
+    $opt_qAsmId
     $opt_skipDownload
     $opt_trackHub
     /;
@@ -130,7 +131,9 @@ print STDERR <<_EOF_
     -loadChainSplit       load split chain tables, default is not split tables
     -swapDir path         directory to work in for swap, default:
                           /hive/data/genomes/qDb/bed/blastz.tDb.swap/
-    -asmId assemblyHubId  full name for assembly hub,
+    -tAsmId assemblyHubId  full name for assembly hub as target:
+                          e.g.: GCF_007474595.1_mLynCan4_v1.p
+    -qAsmId assemblyHubId  full name for assembly hub as target:
                           e.g.: GCF_007474595.1_mLynCan4_v1.p
     -skipDownload         do not construct the downloads directory
     -trackHub             construct big* files for track hub
@@ -271,7 +274,7 @@ BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
 # Globals:
 my %defVars = ();
 my ($DEF, $tDb, $qDb, $QDb, $isSelf, $selfSplit, $buildDir, $fileServer);
-my ($swapDir, $asmId, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists, $qDbExists);
+my ($swapDir, $tAsmId, $qAsmId, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists, $qDbExists);
 
 sub isInDirList {
   # Return TRUE if $dir is under (begins with) something in dirList.
@@ -318,7 +321,8 @@ sub checkOptions {
                       "noLoadChainSplit",
                       "loadChainSplit",
                       "swapDir=s",
-                      "asmId=s",
+                      "tAsmId=s",
+                      "qAsmId=s",
                       "skipDownload",
                       "trackHub"
 		     );
@@ -933,8 +937,9 @@ sub swapGlobals {
     $defVars{"SEQ2_$var"} = $tmp;
   }
   $defVars{'BASE'} = $swapDir;
+  $tAsmId = $opt_qAsmId ? $opt_qAsmId : "";
+  $qAsmId = $opt_tAsmId ? $opt_tAsmId : "";
 }
-
 
 sub doChainMerge {
   # If -swap, swap chains from other org;  otherwise, merge the results
@@ -1223,7 +1228,7 @@ over.chain file in the liftOver dir.";
   my $altOver = "$tDb.$qDb.over.chain.gz";
   my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
   if ($tDb =~ m/^GC/) {
-     $liftOverDir = &HgAutomate::asmHubBuildDir($asmId) . "/liftOver";
+     $liftOverDir = &HgAutomate::asmHubBuildDir($tAsmId) . "/liftOver";
   }
   $bossScript->add(<<_EOF_
 mkdir -p $liftOverDir
@@ -1359,13 +1364,20 @@ sub dumpDownloadReadme {
   my $fh = &HgAutomate::mustOpen(">$file");
   my ($tGenome, $tDate, $tSource, $tAsmName);
   if ($tDb =~ m/^GC/) {
-    ($tGenome, $tDate, $tSource) = &HgAutomate::getAssemblyInfo($dbHost, $asmId);
-    $tAsmName = $asmId;
+    ($tGenome, $tDate, $tSource) = &HgAutomate::getAssemblyInfo($dbHost, $tAsmId);
+    $tAsmName = $tAsmId;
   } else {
     ($tGenome, $tDate, $tSource) = &HgAutomate::getAssemblyInfo($dbHost, $tDb);
     $tAsmName = $tDb;
   }
-  my ($qGenome, $qDate, $qSource) = &HgAutomate::getAssemblyInfo($dbHost, $qDb);
+  my ($qGenome, $qDate, $qSource, $qAsmName);
+  if ($qDb =~ m/^GC/) {
+  ($qGenome, $qDate, $qSource) = &HgAutomate::getAssemblyInfo($dbHost, $qAsmId);
+    $qAsmName = $qAsmId;
+  } else {
+     ($qGenome, $qDate, $qSource) = &HgAutomate::getAssemblyInfo($dbHost, $qDb);
+    $qAsmName = $qDb;
+  }
   my $dir = $splitRef ? 'axtNet/*.' : '';
   my $synNet = $splitRef ?
   "mafSynNet/*.maf.gz - filtered net files for syntenic alignments
@@ -1410,7 +1422,7 @@ Penn State.";
     $tSource)
 
   - query: $qGenome
-    ($qDb, $qDate,
+    ($qAsmName, $qDate,
     $qSource)";
 
   print $fh "$desc
@@ -1453,7 +1465,7 @@ information about the $qDb-referenced lastz and chaining process.
   } else {
     print $fh ($isSelf ?
 "The $tAsmName assembly was aligned to itself" :
-"The $tAsmName and $qDb assemblies were aligned");
+"The $tAsmName and $qAsmName assemblies were aligned");
   my $chainMinScore = $opt_chainMinScore ? "$opt_chainMinScore" :
 	$defaultChainMinScore;
   my $chainLinearGap = $opt_chainLinearGap ? "$opt_chainLinearGap" :
@@ -1562,6 +1574,10 @@ sub installDownloads {
   &dumpDownloadReadme("$runDir/README.txt");
   my $over = $tDb . "To$QDb.over.chain.gz";
   my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
+  if ($tDb =~ m/^GC/) {
+     $liftOverDir = &HgAutomate::asmHubBuildDir($tAsmId) . "/liftOver";
+  }
+printf STDERR "# DBG: tDb '%s' have liftOverDir: '%s'\n", $tDb, $liftOverDir;
   my $gpLiftOverDir = "$goldenPath/$tDb/liftOver";
   my $gbdbLiftOverDir = "$HgAutomate::gbdb/$tDb/liftOver";
   my $andNets = $isSelf ? "." :
@@ -1900,7 +1916,8 @@ my $seq2IsSplit = (`wc -l < $defVars{SEQ2_LEN}` <=
 		   $HgAutomate::splitThreshold);
 
 # might be an assembly hub build
-$asmId = $opt_asmId ? $opt_asmId : "";
+$tAsmId = $opt_tAsmId ? $opt_tAsmId : "";
+$qAsmId = $opt_qAsmId ? $opt_qAsmId : "";
 
 # Undocumented option for quickly generating a README from DEF:
 if ($opt_readmeOnly) {

@@ -34542,7 +34542,7 @@ wigToBigWig c.wig ../../chrom.sizes c.bw  &
 wigToBigWig a.wig ../../chrom.sizes a.bw &
 wigToBigWig g.wig ../../chrom.sizes g.bw &
 ##############################################################################
-# LASTZ human/hg19 Gorilla/gorGor6 - (DONE - 2021-06-28 - Hiram)
+# LASTZ human/hg19 Gorilla/gorGor6 - (DONE - 2021-06-28 - Gerardo)
     mkdir /hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28/
     cd /hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28/
 

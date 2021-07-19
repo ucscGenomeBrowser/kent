@@ -11,6 +11,7 @@ fi
 
 export asmId=$1
 export buildDir=$2
+# hubLinks is for mouseStrains specific hub only
 export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
 export accessionId=`echo "$asmId" | awk -F"_" '{printf "%s_%s", $1, $2}'`
 export gcX=`echo $asmId | cut -c1-3`
@@ -646,7 +647,12 @@ fi
 if [ -s ${buildDir}/trackData/xenoRefGene/${asmId}.xenoRefGene.bb ]; then
 rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
 rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ixx
-rm -f ${buildDir}/bbi/${asmId}.xenoRefGene.bb
+rm -f $buildDir/bbi/${asmId}.xenoRefGene.bb
+rm -f $buildDir/genes/${asmId}.xenoRefGene.gtf.gz
+  if [ -s ${buildDir}/trackData/xenoRefGene/${asmId}.xenoRefGene.gtf.gz ]; then
+    mkdir -p $buildDir/genes
+    ln -s ../trackData/xenoRefGene/${asmId}.xenoRefGene.gtf.gz ${buildDir}/genes/${asmId}.xenoRefGene.gtf.gz
+  fi
 ln -s ../trackData/xenoRefGene/${asmId}.xenoRefGene.bb ${buildDir}/bbi/${asmId}.xenoRefGene.bb
 ln -s ../trackData/xenoRefGene/$asmId.xenoRefGene.ix $buildDir/ixIxx/${asmId}.xenoRefGene.ix
 ln -s ../trackData/xenoRefGene/$asmId.xenoRefGene.ixx $buildDir/ixIxx/${asmId}.xenoRefGene.ixx
@@ -706,6 +712,10 @@ fi
 
 if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
   printf "include rnaSeqData/%s.trackDb.txt\n\n" "${asmId}"
+fi
+##  for mouse strain hubs only
+if [ -s "${buildDir}/$asmId.bigMaf.trackDb.txt" ]; then
+  printf "include %s.bigMaf.trackDb.txt\n\n" "${asmId}"
 fi
 
 if [ -s "${buildDir}/$asmId.userTrackDb.txt" ]; then

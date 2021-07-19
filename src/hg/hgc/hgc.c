@@ -14400,9 +14400,9 @@ return psl;
 struct psl *loadPslFromRangePair(char *track, char *rangePair)
 /* Load a specific psl given 'qName:qStart-qEnd tName:tStart-tEnd' in rangePair. */
 {
-char *qRange, *tRange;
-char *qName, *tName;
-int qStart, qEnd, tStart, tEnd;
+char *qRange = NULL, *tRange = NULL;
+char *qName = NULL, *tName = NULL;
+int qStart = 0, qEnd = 0, tStart = 0, tEnd = 0;
 qRange = nextWord(&rangePair);
 tRange = nextWord(&rangePair);
 if (tRange == NULL)

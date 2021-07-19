@@ -1145,15 +1145,16 @@ if (ti == NULL)
 return ti;
 }
 
-static void lookForCladesAndLineages(struct seqInfo *seqInfoList, struct hash *samplePlacements,
+static void lookForCladesAndLineages(struct hash *samplePlacements,
                                      boolean *retGotClades, boolean *retGotLineages)
 /* See if UShER has annotated any clades and/or lineages for seqs. */
 {
 boolean gotClades = FALSE, gotLineages = FALSE;
-struct seqInfo *si;
-for (si = seqInfoList;  si != NULL;  si = si->next)
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(samplePlacements);
+while ((hel = hashNext(&cookie)) != NULL)
     {
-    struct placementInfo *pi = hashFindVal(samplePlacements, si->seq->name);
+    struct placementInfo *pi = hel->val;
     if (pi)
         {
         if (isNotEmpty(pi->nextClade))
@@ -1214,9 +1215,10 @@ dyStringFree(&dyMo);
 static void makeNsSingleTreeButton(struct tempName *tn)
 /* Make a button to view single subtree (with all uploaded samples) in Nextstrain. */
 {
-makeNextstrainButton("viewNextstrainSingleSubtree", tn, "view single subtree in Nextstrain",
+makeNextstrainButton("viewNextstrainSingleSubtree", tn,
+                     "view downsampled global tree in Nextstrain",
                      "view one subtree that includes all of your uploaded sequences plus "
-                     SINGLE_SUBTREE_SIZE" randomly selected sequences from the phylogenetic "
+                     SINGLE_SUBTREE_SIZE" randomly selected sequences from the global phylogenetic "
                      "tree for context");
 }
 
@@ -1507,6 +1509,27 @@ else
     printf("<td>%s</td>", alt);
 }
 
+static void printSubtreeTd(struct subtreeInfo *subtreeInfoList, struct tempName *jsonTns[],
+                           char *seqName)
+/* Print a table cell with subtree (& link if possible) if found. */
+{
+int ix;
+struct subtreeInfo *ti = subtreeInfoForSample(subtreeInfoList, seqName, &ix);
+if (ix < 0)
+    //#*** Probably an error.
+    printf("<td>n/a</td>");
+else
+    {
+    printf("<td>%d", ix+1);
+    if (ti && nextstrainHost())
+        {
+        char *nextstrainUrl = nextstrainUrlFromTn(jsonTns[ix]);
+        printf(" (<a href='%s' target=_blank>view in Nextstrain<a>)", nextstrainUrl);
+        }
+    printf("</td>");
+    }
+}
+
 static void summarizeSequences(struct seqInfo *seqInfoList, boolean isFasta,
                                struct usherResults *ur, struct tempName *jsonTns[],
                                struct hash *sampleMetadata, struct dnaSeq *refGenome)
@@ -1516,7 +1539,7 @@ if (seqInfoList)
     {
     puts("<table class='seqSummary'>");
     boolean gotClades = FALSE, gotLineages = FALSE;
-    lookForCladesAndLineages(seqInfoList, ur->samplePlacements, &gotClades, &gotLineages);
+    lookForCladesAndLineages(ur->samplePlacements, &gotClades, &gotLineages);
     printSummaryHeader(isFasta, gotClades, gotLineages);
     puts("<tbody>");
     struct dyString *dy = dyStringNew(0);
@@ -1681,25 +1704,71 @@ if (seqInfoList)
                 printf("<td>n/a></td>");
             printf("<td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td>");
             }
-        int ix;
-        struct subtreeInfo *ti = subtreeInfoForSample(ur->subtreeInfoList, si->seq->name, &ix);
-        if (ix < 0)
-            //#*** Probably an error.
-            printf("<td>n/a</td>");
-        else
-            {
-            printf("<td>%d", ix+1);
-            if (ti && nextstrainHost())
-                {
-                char *nextstrainUrl = nextstrainUrlFromTn(jsonTns[ix]);
-                printf(" (<a href='%s' target=_blank>view in Nextstrain<a>)", nextstrainUrl);
-                }
-            printf("</td>");
-            }
+        printSubtreeTd(ur->subtreeInfoList, jsonTns, si->seq->name);
         puts("</tr>");
         }
     puts("</tbody></table><p></p>");
     }
+}
+
+static void summarizeSubtrees(struct slName *sampleIds, struct usherResults *results,
+                              struct hash *sampleMetadata, struct tempName *jsonTns[],
+                              struct mutationAnnotatedTree *bigTree)
+/* Print a summary table of pasted/uploaded identifiers and subtrees */
+{
+boolean gotClades = FALSE, gotLineages = FALSE;
+lookForCladesAndLineages(results->samplePlacements, &gotClades, &gotLineages);
+puts("<table class='seqSummary'><tbody>");
+puts("<tr><th>Sequence</th>");
+if (gotClades)
+    puts("<th>Nextstrain clade (UShER)"
+     TOOLTIP("The <a href='https://nextstrain.org/blog/2021-01-06-updated-SARS-CoV-2-clade-naming' "
+             "target=_blank>Nextstrain clade</a> "
+             "assigned to the sequence by UShER according to its place in the phylogenetic tree")
+         "</th>");
+if (gotLineages)
+    puts("<th>Pango lineage (UShER)"
+         TOOLTIP("The <a href='https://cov-lineages.org/' "
+                 "target=_blank>Pango lineage</a> "
+                 "assigned to the sequence by UShER according to its place in the phylogenetic tree")
+         "</th>");
+puts("<th>Pango lineage (pangolin)"
+     TOOLTIP("The <a href='https://cov-lineages.org/' target=_blank>"
+             "Pango lineage</a> assigned to the sequence by "
+             "<a href='https://github.com/cov-lineages/pangolin/' target=_blank>pangolin</a>")
+     "</th>"
+     "<th>subtree</th></tr>");
+struct slName *si;
+for (si = sampleIds;  si != NULL;  si = si->next)
+    {
+    puts("<tr>");
+    printf("<th>%s</td>", replaceChars(si->name, "|", " | "));
+    struct placementInfo *pi = hashFindVal(results->samplePlacements, si->name);
+    if (pi)
+        {
+        if (gotClades)
+            printf("<td>%s</td>", pi->nextClade ? pi->nextClade : "n/a");
+        if (gotLineages)
+            printLineageTd(pi->pangoLineage, "n/a");
+        }
+    else
+        {
+        if (gotClades)
+            printf("<td>n/a></td>");
+        if (gotLineages)
+            printf("<td>n/a></td>");
+        }
+    // pangolin-assigned lineage
+    char *lineage = lineageForSample(sampleMetadata, si->name);
+    if (isNotEmpty(lineage))
+        printf("<td><a href='"OUTBREAK_INFO_URLBASE"%s' target=_blank>%s</a></td>",
+               lineage, lineage);
+    else
+        printf("<td>n/a></td>");
+    // Maybe also #mutations with mouseover to show mutation path?
+    printSubtreeTd(results->subtreeInfoList, jsonTns, si->name);
+    }
+puts("</tbody></table><p></p>");
 }
 
 static struct singleNucChange *sncListFromSampleMutsAndImputed(struct slName *sampleMuts,
@@ -2299,8 +2368,39 @@ else
     }
 }
 
-static void addNameAndComponents(struct hash *nameHash, char *fullName)
-/* Add entries to nameHash mapping fullName to itself, and components of fullName to fullName. */
+static void addModVersion(struct hash *nameHash, char *id, char *fullName)
+/* Map id to fullName.  If id has .version, strip that (modifying id!) and map versionless id
+ * to fullName. */
+{
+hashAdd(nameHash, id, fullName);
+char *p = strchr(id, '.');
+if (p)
+    {
+    *p = '\0';
+    hashAdd(nameHash, id, fullName);
+    }
+}
+
+static void maybeAddIsolate(struct hash *nameHash, char *name, char *fullName)
+/* If name looks like country/isolate/year and isolate looks sufficiently distinctive
+ * then also map isolate to fullName. */
+{
+regmatch_t substrs[2];
+if (regexMatchSubstr(name, "^[A-Za-z _]+/(.*)/[0-9]{4}$", substrs, ArraySize(substrs)))
+    {
+    char isolate[substrs[1].rm_eo - substrs[1].rm_so + 1];
+    regexSubstringCopy(name, substrs[1], isolate, sizeof isolate);
+    if (! isAllDigits(isolate) &&
+        (regexMatch(isolate, "[A-Za-z0-9]{4}") ||
+         regexMatch(isolate, "[A-Za-z0-9][A-Za-z0-9]+[-_][A-Za-z0-9][A-Za-z0-9]+")))
+        {
+        hashAdd(nameHash, isolate, fullName);
+        }
+    }
+}
+static void addNameMaybeComponents(struct hash *nameHash, char *fullName, boolean addComponents)
+/* Add entries to nameHash mapping fullName to itself, and components of fullName to fullName.
+ * If addComponents and fullName is |-separated name|ID|date, add name and ID to nameHash. */
 {
 char *fullNameHashStored = hashStoreName(nameHash, fullName);
 // Now that we have hash storage for fullName, make it point to itself.
@@ -2308,24 +2408,31 @@ struct hashEl *hel = hashLookup(nameHash, fullName);
 if (hel == NULL)
     errAbort("Can't look up '%s' right after adding it", fullName);
 hel->val = fullNameHashStored;
-char *words[4];
-char copy[strlen(fullName)+1];
-safecpy(copy, sizeof copy, fullName);
-int wordCount = chopString(copy, "|", words, ArraySize(words));
-if (wordCount == 3)
+if (addComponents)
     {
-    // name|ID|date
-    hashAdd(nameHash, words[0], fullNameHashStored);
-    hashAdd(nameHash, words[1], fullNameHashStored);
-    }
-else if (wordCount == 2)
-    {
-    // ID|date
-    hashAdd(nameHash, words[0], fullNameHashStored);
+    char *words[4];
+    char copy[strlen(fullName)+1];
+    safecpy(copy, sizeof copy, fullName);
+    int wordCount = chopString(copy, "|", words, ArraySize(words));
+    if (wordCount == 3)
+        {
+        // name|ID|date
+        hashAdd(nameHash, words[0], fullNameHashStored);
+        maybeAddIsolate(nameHash, words[0], fullNameHashStored);
+        addModVersion(nameHash, words[1], fullNameHashStored);
+        }
+    else if (wordCount == 2)
+        {
+        // ID|date
+        addModVersion(nameHash, words[0], fullNameHashStored);
+        // ID might be a COG-UK country/isolate/year
+        maybeAddIsolate(nameHash, words[0], fullNameHashStored);
+        }
     }
 }
 
-static void rAddLeafNames(struct phyloTree *node, struct hash *condensedNodes, struct hash *nameHash)
+static void rAddLeafNames(struct phyloTree *node, struct hash *condensedNodes, struct hash *nameHash,
+                          boolean addComponents)
 /* Recursively descend tree, adding leaf node names to nameHash (including all names of condensed
  * leaf nodes).  Also map components of full names (country/isolate/year|ID|date) to full names. */
 {
@@ -2337,16 +2444,16 @@ if (node->numEdges == 0)
         {
         struct slName *sample;
         for (sample = nodeList;  sample != NULL;  sample = sample->next)
-            addNameAndComponents(nameHash, sample->name);
+            addNameMaybeComponents(nameHash, sample->name, addComponents);
         }
     else
-        addNameAndComponents(nameHash, leafName);
+        addNameMaybeComponents(nameHash, leafName, addComponents);
     }
 else
     {
     int i;
     for (i = 0;  i < node->numEdges;  i++)
-        rAddLeafNames(node->edges[i], condensedNodes, nameHash);
+        rAddLeafNames(node->edges[i], condensedNodes, nameHash, addComponents);
     }
 }
 
@@ -2381,13 +2488,14 @@ if (isNotEmpty(aliasFile) && fileExists(aliasFile))
     }
 }
 
-static struct hash *getTreeNames(struct mutationAnnotatedTree *bigTree, char *aliasFile)
-/* Make a hash of full names of leaves of bigTree; also map components of those names to the
- * full names in case the user gives us partial names. */
+static struct hash *getTreeNames(struct mutationAnnotatedTree *bigTree, char *aliasFile,
+                                 boolean addComponents)
+/* Make a hash of full names of leaves of bigTree; if addComponents, also map components of those
+ * names to the full names in case the user gives us partial names/IDs. */
 {
 int nodeCount = bigTree->nodeHash->elCount;
 struct hash *nameHash = hashNew(digitsBaseTwo(nodeCount) + 3);
-rAddLeafNames(bigTree->tree, bigTree->condensedNodes, nameHash);
+rAddLeafNames(bigTree->tree, bigTree->condensedNodes, nameHash, addComponents);
 addAliases(nameHash, aliasFile);
 return nameHash;
 }
@@ -2455,7 +2563,7 @@ static struct slName *readSampleIds(struct lineFile *lf, struct mutationAnnotate
 {
 struct slName *sampleIds = NULL;
 struct slName *unmatched = NULL;
-struct hash *nameHash = getTreeNames(bigTree, aliasFile);
+struct hash *nameHash = getTreeNames(bigTree, aliasFile, TRUE);
 char *line;
 while (lineFileNext(lf, &line, NULL))
     {
@@ -2537,7 +2645,8 @@ if (lfLooksLikeFasta(lf))
     boolean *informativeBases = informativeBasesFromTree(bigTree->tree, maskSites);
     struct slPair *failedSeqs;
     struct slPair *failedPsls;
-    vcfTn = vcfFromFasta(lf, db, refGenome, informativeBases, maskSites,
+    struct hash *treeNames = getTreeNames(bigTree, NULL, FALSE);
+    vcfTn = vcfFromFasta(lf, db, refGenome, informativeBases, maskSites, treeNames,
                          &sampleIds, &seqInfoList, &failedSeqs, &failedPsls, &startTime);
     if (failedSeqs)
         {
@@ -2642,7 +2751,12 @@ if (results && results->singleSubtreeInfo)
     struct tempName *zipTn = makeSubtreeZipFile(results, jsonTns, singleSubtreeJsonTn,
                                                 &startTime);
     struct tempName *ctTn = NULL;
-    if (! subtreesOnly)
+    if (subtreesOnly)
+        {
+        summarizeSubtrees(sampleIds, results, sampleMetadata, jsonTns, bigTree);
+        reportTiming(&startTime, "describe subtrees");
+        }
+    else
         {
         findNearestNeighbors(results->samplePlacements, sampleMetadata, bigTree);
 
@@ -2745,10 +2859,6 @@ if (results && results->singleSubtreeInfo)
                    subtreeCount, (subtreeCount > 1 ? "s" : ""));
         ctFile = urlFromTn(ctTn);
         }
-    }
-else
-    {
-    warn("No subtree output from usher.\n");
     }
 return ctFile;
 }

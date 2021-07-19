@@ -22,7 +22,6 @@
 #include "regexHelper.h"
 #include "fieldedTable.h"
 #include "tagRepo.h"
-#include "htmlPage.h"
 
 struct trackDb *trackDbNew()
 /* Allocate a new trackDb with just very minimal stuff filled in. */
@@ -117,21 +116,14 @@ static void trackDbAddInfo(struct trackDb *bt,
         char *var, char *value, struct lineFile *lf)
 /* Add info from a variable/value pair to browser table. */
 {
-char *subbedUrl = NULL;
 if (sameString(var, "track"))
     parseTrackLine(bt, value, lf);
 
-// Since we may have gotten here from an include statement, we
-// need to expand the url relative to the include statement, and
-// not later where the url will be expanded relative to the parent
-// of the include statement
-if (trackSettingIsFile(var))
-    subbedUrl = htmlExpandUrl(lf->fileName, value);
 if (bt->settingsHash == NULL)
     bt->settingsHash = hashNew(7);
 if (bt->viewHash == NULL)
     bt->viewHash = hashNew(7);
-char *storeValue = cloneString(subbedUrl != NULL ? subbedUrl : value);
+char *storeValue = cloneString(value);
 
 // squirrel away views
 if (startsWith("subGroup", var))

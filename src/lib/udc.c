@@ -432,10 +432,28 @@ return TRUE;
 /********* Section for http protocol **********/
 
 static char *defaultDir = "/tmp/udcCache";
+static bool udcInitialized = FALSE;
+
+static void initializeUdc()
+/* Use the $TMPDIR environment variable, if set, to amend the default location
+ * of the cache */
+{
+if (udcInitialized)
+    return;
+char *tmpDir = getenv("TMPDIR");
+if (isNotEmpty(tmpDir))
+    {
+    char buffer[2048];
+    safef(buffer, sizeof(buffer), "%s/udcCache", tmpDir);
+    udcSetDefaultDir(buffer);
+    }
+}
 
 char *udcDefaultDir()
 /* Get default directory for cache */
 {
+if (!udcInitialized)
+    initializeUdc();
 return defaultDir;
 }
 
@@ -443,12 +461,14 @@ void udcSetDefaultDir(char *path)
 /* Set default directory for cache.  */
 {
 defaultDir = cloneString(path);
+udcInitialized = TRUE;
 }
 
 void udcDisableCache()
 /* Switch off caching. Re-enable with udcSetDefaultDir */
 {
 defaultDir = NULL;
+udcInitialized = TRUE;
 }
 
 static bool udcCacheEnabled()
