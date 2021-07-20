@@ -78,8 +78,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-//fetchUrlTest(argv[1]);
-fetchUrlBody(argv[1]);
+fetchUrlTest(argv[1]);
+//fetchUrlBody(argv[1]);
 return 0;
 }
 
