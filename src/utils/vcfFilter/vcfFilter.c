@@ -339,7 +339,7 @@ while (lineFileNext(lf, &line, NULL))
     if (startsWith("#CHROM", line))
         {
         headerColCount = chopString(line, "\t", NULL, 0);
-        lineFileExpectAtLeast(lf, VCF_NUM_COLS_BEFORE_GENOTYPES+1, headerColCount);
+        lineFileExpectAtLeast(lf, VCF_MIN_COLUMNS, headerColCount);
         AllocArray(words, headerColCount+1);
         chopByChar(line, '\t', words, headerColCount+1);
         printWords(words, headerColCount);
