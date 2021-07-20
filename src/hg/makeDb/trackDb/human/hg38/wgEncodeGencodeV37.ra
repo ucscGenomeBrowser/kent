@@ -1,6 +1,6 @@
 track wgEncodeGencodeV37
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide 
 shortLabel All GENCODE V37
 longLabel All GENCODE annotations from V37 (Ensembl 103)
 group genes
