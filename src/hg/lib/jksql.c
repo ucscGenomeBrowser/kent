@@ -1255,7 +1255,8 @@ static struct sqlConnection *sqlConnProfile(struct sqlProfile* sp, char *databas
 /* Connect to database using the profile.  Database maybe NULL to connect to
  * the server. Optionally abort on failure. */
 {
-fprintf(stderr, "SQL_CONNECT_PROFILE %s %s %s\n", sp->name, sp->host, database);
+if (monitorFlags & JKSQL_TRACE)
+    fprintf(stderr, "SQL_CONNECT_PROFILE %s %s %s\n", sp->name, sp->host, database);
 bool mainAbort = abort;
 struct sqlConnection *sc;
 
