@@ -860,9 +860,12 @@ while (1)
     }
 
 int reply = atoi(startLastLine);
+if (retCode)
+    *retCode = reply;
 if ((reply < 200) || (reply > 399))
     {
-    warn("ftp server error on cmd=[%s] response=[%s]",cmd,rs->string);
+    if (!(sameString(cmd,"PASV\r\n") && reply==501))
+	warn("ftp server error on cmd=[%s] response=[%s]",cmd,rs->string);
     return FALSE;
     }
     
@@ -870,8 +873,6 @@ if (retReply)
     *retReply = rs;
 else
     dyStringFree(&rs);
-if (retCode)
-    *retCode = reply;
 return TRUE;
 }
 
@@ -897,6 +898,23 @@ wordCount = chopString(rsStart, ",", words, ArraySize(words));
 if (wordCount != 6)
     errAbort("PASV reply does not parse correctly");
 result = atoi(words[4])*256+atoi(words[5]);    
+return result;
+}    
+
+static int parseEpsvPort(char *rs)
+/* parse EPSV reply to get the port and return it */
+{
+char *words[6];
+int wordCount;
+char *rsStart = strchr(rs,'(');
+char *rsEnd = strchr(rs,')');
+int result = 0;
+rsStart++;
+*rsEnd=0;
+wordCount = chopString(rsStart, "|", words, ArraySize(words));
+if (wordCount != 1)
+    errAbort("EPSV reply does not parse correctly");
+result = atoi(words[0]); // multiple separators treated as one.   
 return result;
 }    
 
@@ -1144,19 +1162,35 @@ else
 if (sd == -1)
     return -1;
 
+int retCode = 0;
 struct dyString *rs = NULL;
-if (!sendFtpCommand(sd, "PASV\r\n", &rs, NULL))
+sendFtpCommand(sd, "PASV\r\n", &rs, &retCode);
+/* 227 Entering Passive Mode (128,231,210,81,222,250) */  
+boolean isIpv6 = FALSE;
+if (retCode == 501)
+    {
+
+    if (!sendFtpCommand(sd, "EPSV\r\n", &rs, NULL))
+    /* 229 Entering Extended Passive Mode (|||44022|) */
+	{
+	close(sd);
+	return -1;
+	}
+    isIpv6 = TRUE;
+
+    }
+else if (retCode != 227)
     {
     close(sd);
     return -1;
     }
-/* 227 Entering Passive Mode (128,231,210,81,222,250) */
 
 if (npu.byteRangeStart != -1)
     {
     safef(cmd,sizeof(cmd),"REST %lld\r\n", (long long) npu.byteRangeStart);
     if (!sendFtpCommand(sd, cmd, NULL, NULL))
 	{
+	dyStringFree(&rs);
 	close(sd);
 	return -1;
 	}
@@ -1167,10 +1201,7 @@ safef(cmd,sizeof(cmd),"%s %s\r\n",((npu.file[strlen(npu.file)-1]) == '/') ? "LIS
 sendFtpCommandOnly(sd, cmd);
 
 int sdata = -1;
-if (proxyUrl)
-    sdata = netConnect(pxy.host, parsePasvPort(rs->string));
-else
-    sdata = netConnect(npu.host, parsePasvPort(rs->string));
+sdata = netConnect(proxyUrl ? pxy.host : npu.host, isIpv6 ? parseEpsvPort(rs->string) : parsePasvPort(rs->string));
 dyStringFree(&rs);
 if (sdata < 0)
     {
