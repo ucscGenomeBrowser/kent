@@ -6,6 +6,31 @@
 #include "common.h"
 #include <regex.h>
 
+struct regexSnippet
+/* A data structure to capture the parenthetical regular expressions. */
+{
+struct regexSnippet *next;
+int num;                // the position of the parenthetical expressionA
+                        // 0 if there are now expressions
+char *precursor;        // the text before the parenthetical expressio
+int precursorLen;       // the length of the above text
+};
+
+struct regexCompiledEdit
+/* A data structure to capture one regex edit. */
+{
+regex_t *compiledExp;           // the compiled regex expression
+struct regexSnippet *snippets;  // the pieces of the substitution 
+                                // broken up by parenthetical expressios
+};
+
+struct regexEdit
+/* A definition of a regex edit with the matching string and its substitution.*/
+{
+char *query;            // the expression to match
+char *substitution;     // the text to put in place of the above match. 
+};
+
 const regex_t *regexCompile(const char *exp, const char *description, int compileFlags);
 /* Compile exp (or die with an informative-as-possible error message).
  * Cache pre-compiled regex's internally (so don't free result after use). */
@@ -47,4 +72,8 @@ int regexSubstringInt(const char *string, const regmatch_t substr);
  * If substr was not matched, return 0; you can check first with regexSubstrMatched() if
  * that's not the desired behavior for unmatched substr. */
 
+#ifdef NOTNOW
+char *regexEdit(struct regexEdit *editArray, unsigned numEdits, char *input, boolean quiet);
+/* Perform a list of edits on a string. */
+#endif
 #endif // REGEXHELPER_H

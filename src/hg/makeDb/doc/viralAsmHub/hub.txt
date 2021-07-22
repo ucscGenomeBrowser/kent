@@ -1,0 +1,6 @@
+hub viral genome assemblies
+shortLabel viral assemblies
+longLabel Viral genome assemblies
+genomesFile genomes.txt
+email hclawson@ucsc.edu
+descriptionUrl index.html

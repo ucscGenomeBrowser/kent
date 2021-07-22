@@ -32,6 +32,8 @@ struct trackHub
     {
     struct trackHub *next;
 
+    struct hubConnectStatus *hubStatus;  /* Pointer to our hubConnectStatus structure, if any. */
+
     char *url;		/* URL of hub.ra file. */
     struct trackHubGenome *genomeList;	/* List of associated genomes. */
     struct hash *genomeHash;	/* Hash of genomeList keyed by genome name. */
@@ -217,5 +219,8 @@ struct dbDb *trackHubGetPcrServers();
 
 boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort, char **pGenomeDataDir);
 /* Get the isPcr params from a trackHub genome. */
+
+struct trackHubGenome *trackHubGetGenomeUndecorated(char *database);
+/* Get the genome structure for an undecorated genome name. */
 #endif /* TRACKHUB_H */
 

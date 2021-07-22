@@ -36,7 +36,7 @@ total size is 14,654,961,664  speedup is 1.00
 
 real    4m15.891s
 
-# this information is from the top of 
+# this information is from the top of
 #    mm39/genbank/*_assembly_report.txt
 #    (aka: mm39/genbank/GCA_000001635.9_GRCm39_assembly_report.txt
 
@@ -604,9 +604,52 @@ done
 # checking genbank: 61 =? 61 OK
 
     # verify chrM is here properly:
-    grep chrM mm39.chromAlias.tab 
+    grep chrM mm39.chromAlias.tab
 # AY172335.1      chrM    genbank
 # MT      chrM    assembly
+# NC_005089.1     chrM    refseq
+
+    hgLoadSqlTab mm39 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        mm39.chromAlias.tab
+`
+    # Adding Ensembl 2021-03-12 upon release of v103.
+    # And refseq names exist now too
+
+    cd /hive/data/genomes/mm39/bed/chromAlias
+    hgsql -N -e 'select * from ucscToEnsembl;' mm39 > ucsc.ensembl.tab
+
+    join -t$'\t' ../idKeys/mm39.idKeys.txt \
+ /hive/data/genomes/asmHubs/refseqBuild/GCF/000/001/635/GCF_000001635.27_GRCm39/idKeys/GCF_000001635.27_GRCm39.idKeys.txt \
+      | cut -f2-3 | sort > ucsc.refseq.tab
+
+    mv mm39.chromAlias.tab mm39.chromAlias.tab.0
+
+     ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+         > mm39.chromAlias.tab
+# working: assembly
+# working: ensembl
+# working: genbank
+# working: refseq
+
+for t in assembly ensembl genbank refseq
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t mm39.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking assembly: 61 =? 61 OK
+# checking ensembl: 61 =? 61 OK
+# checking genbank: 61 =? 61 OK
+# checking refseq: 61 =? 61 OK
+
+    # verify chrM is here properly:
+    grep chrM mm39.chromAlias.tab
+# AY172335.1      chrM    genbank
+# MT      chrM    assembly,ensembl
 # NC_005089.1     chrM    refseq
 
     hgLoadSqlTab mm39 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
@@ -687,17 +730,17 @@ searchPriority 8
 # CC    Artefacts RELEASE 20190301;
 # CC    Dfam RELEASE Dfam_3.1;
 
-    sed -e 's/^/# /;' versionInfo.txt 
+    sed -e 's/^/# /;' versionInfo.txt
 # The repeat files provided for this assembly were generated using RepeatMasker.
 #   Smit, AFA, Hubley, R & Green, P.,
 #   RepeatMasker Open-4.1.
 #   1996-2010 <http://www.repeatmasker.org>.
-# 
+#
 # VERSION:
 # RepeatMasker version 4.1.0
 # Search Engine: Crossmatch [ 1.090518 ]
 # Master RepeatMasker Database: /hive/data/staging/data/RepeatMasker191030/Libraries/RepeatMaskerLib.embl ( Complete Database: CONS-Dfam_3.1 )
-# 
+#
 # Building general libraries in: /hive/data/staging/data/RepeatMasker191030/Libraries/CONS-Dfam_3.1/general
 # Building species libraries in: /hive/data/staging/data/RepeatMasker191030/Libraries/CONS-Dfam_3.1/mus_musculus
 #    - 1259 ancestral and ubiquitous sequence(s) for mus musculus
@@ -707,7 +750,7 @@ searchPriority 8
 # CC    Dfam RELEASE Dfam_3.1;                                      *
 # # RepeatMasker engine: -engine crossmatch -s
 # # RepeatMasker library options: -species 'Mus musculus'
-# 
+#
 # PARAMETERS:
 # /hive/data/staging/data/RepeatMasker191030/RepeatMasker -engine crossmatch -s -align -species 'Mus musculus'
 
@@ -1086,7 +1129,7 @@ mm39.upstreamGeneTbl = refGene
 
     # XXX 2019-11-20 - ready for this after genbank runs
 
-    featureBits -enrichment mm39 refGene ncbiRefSeq 
+    featureBits -enrichment mm39 refGene ncbiRefSeq
  # refGene 0.402%, ncbiRefSeq 3.148%, both 0.402%, cover 99.90%, enrich 31.73x
     featureBits -enrichment mm39 ncbiRefSeq refGene
  # ncbiRefSeq 3.148%, refGene 0.402%, both 0.402%, cover 12.76%, enrich 31.73x
@@ -1222,6 +1265,13 @@ chr12:56,741,761-56,761,390
 # maxDepth: 32.000000
 # std of depth: 1.944181
 
+    # cleaning up 2021-04-24 - Hiram
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup mm39 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    448m39.782s
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
@@ -1290,7 +1340,7 @@ chr12:56,741,761-56,761,390
        /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/bigZips/
 
 
-    
+
     cd ..
     md5sum mm39.chromFa.tar.gz >> md5sum.txt
     # add comments about these items to README.txt
@@ -1355,4 +1405,31 @@ done
   cat fb.ncbiRefSeq.mm39.txt
   # 128640844 bases of 2654624157 (4.846%) in intersection
 
+#############################################################################
+# create ucscToEnsembl name mapping (DONE - 2021-03-12 - Hiram)
+    # this allows the "ensembl" blue bar button to appear
+    mkdir /hive/data/genomes/mm39/bed/ucscToEnsembl
+    cd /hive/data/genomes/mm39/bed/ucscToEnsembl
+
+    join -t$'\t' ../idKeys/mm39.idKeys.txt  \
+/hive/data/outside/ensembl/genomes/release-103/idKeys/Mus_musculus/Mus_musculus.GRCm39.idKeys.txt \
+  | cut -f2-3 | sort > ucscToEnsembl.tab
+
+    # determine size of PRIMARY KEY index
+    awk '{print length($1)}' *.tab | sort -n | tail
+    #  22
+
+    printf '# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(22))
+);
+' > ucscToEnsembl.sql
+
+    hgLoadSqlTab mm39 ucscToEnsembl ucscToEnsembl.sql ucscToEnsembl.tab
+
+    # verify the blue bar "ensembl" link is now available under the 'View'
+    # tab
 #############################################################################

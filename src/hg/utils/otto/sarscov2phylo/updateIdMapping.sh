@@ -1,5 +1,5 @@
 #!/bin/bash
-set -beEu -x -o pipefail
+set -beEu -o pipefail
 
 #	Do not modify this script, modify the source tree copy:
 #	kent/src/hg/utils/otto/sarscov2phylo/updateIdMapping.sh
@@ -21,7 +21,7 @@ source $scriptDir/util.sh
 
 today=$(date +%F)
 ottoDir=/hive/data/outside/otto/sarscov2phylo
-mapScriptDir=~/chris_ncov
+mapScriptDir=~angie/chris_ncov
 # Should use a better location than this...
 installDir=/hive/users/angie/gisaid
 
@@ -51,7 +51,7 @@ cogUkToDate=$cogUkDir/cogUkToDate
 cncbToDate=$cncbDir/cncbToDate
 
 join -t$'\t' -a 1 -1 2 -o 1.1,1.2,1.3,2.2 \
-    <(sort -k2,2 ~/chris_ncov/epiToPublicIdName.$today.txt) \
+    <(sort -k2,2 $mapScriptDir/epiToPublicIdName.$today.txt) \
     <(sort $gbToDate $cncbToDate $cogUkToDate) \
 | sort -u adders - \
     > epiToPublicAndDate.$today
@@ -64,12 +64,13 @@ tail -n+2 ~/github/ncov-ingest/source-data/accessions.tsv \
 | tawk '{print $2, $1;}' \
 | sort > ncovEpiToGb
 wc -l latestEpiToGb ncovEpiToGb
-# Replace disagreeing IDs with ncov-ingest IDs.
+# But allow version updates (e.g. .1 --> .2)
 join -t$'\t' ncovEpiToGb latestEpiToGb \
-| tawk '$2 != $3 {print "s/"$3"/"$2"/;";}' \
-| sed -re 's/\./\\./;' \
-    > fix.sed
-sed -f fix.sed epiToPublicAndDate.$today > tmp
+| tawk '{ ncovNoDot = substr($2, 0, index($2, ".")-1);
+          latestNoDot = substr($3, 0, index($3, ".")-1);
+          if (ncovNoDot != latestNoDot) {print $3, $2;} }' \
+    > latestToNcov.sub
+subColumn -miss=/dev/null 2 epiToPublicAndDate.$today latestToNcov.sub tmp
 mv tmp epiToPublicAndDate.$today
 
 ln -sf epiToPublicAndDate.$today epiToPublicAndDate.latest
@@ -87,6 +88,6 @@ zcat $nextmeta \
 | sort \
     >> tmp
 wc -l tmp
-gzip -c tmp > $nextmeta
-rm tmp
+gzip tmp
+mv tmp.gz $nextmeta
 zcat $nextmeta | cut -f 4 | grep ... | wc -l

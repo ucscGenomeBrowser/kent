@@ -960,7 +960,7 @@ if (fileName == NULL)
     fileName = cloneString(trackDbSetting(gTdb, "bigGeneDataUrl"));
 if (isNotEmpty(fileName))
     {
-    struct bbiFile *bbi = bigBedFileOpen(fileName);
+    struct bbiFile *bbi = bigBedFileOpen(hReplaceGbdb(fileName));
     struct lm *lm = lmInit(0);
     struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chromName, winStart,
                                                         winEnd, 0, lm);

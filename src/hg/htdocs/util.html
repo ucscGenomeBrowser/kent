@@ -1,21 +1,45 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="Genome Browser Utilities" -->
+<!--#set var="TITLE" value="Other Tools - UCSC Genome Browser" -->
 <!--#set var="ROOT" value="." -->
 
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<h1>UCSC Genome Browser Utilities</h1>
+<h1>Other Tools from the UCSC Genome Browser</h1>
 <p>
-The following tools and utilities created by the UCSC Genome Browser Group are available for 
-public use:</p>
+The UCSC Genome Browser team develops and updates the following main tools:
+the <a href="../cgi-bin/hgTracks">Genome Browser</a>,
+<a href="../cgi-bin/hgBlat">BLAT</a>, <a href="../cgi-bin/hgPcr">In-Silico PCR</a>, 
+<a href="../cgi-bin/hgTables">Table Browser</a>, and <a href="../cgi-bin/hgLiftOver">LiftOver</a>.
+We maintain the following less-used tools: <a href="../cgi-bin/hgNear">Gene Sorter</a>,
+<a href="../cgi-bin/hgGenome">Genome Graphs</a>, and
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+These are available from the &quot;Tools&quot; dropdown menu at the top of the site.</p>
+
+<p>
+We also offer command-line utilities for many file conversions and basic bioinformatics functions.
+You can learn more and download these utilities through the 
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">utilities section</a>
+of our downloads page.</p>
+
+<p>
+The following tools and utilities created by the UCSC Genome Browser Group are also available 
+for public use:</p>
 <ul class="gbsNoBullet">
-  <li>
-  <strong><a href="cgi-bin/hgLiftOver">Batch Coordinate Conversion (liftOver)</a></strong> - 
-  converts genome coordinates and genome annotation files between assemblies. The current version 
-  supports both forward and reverse conversions, as well as conversions between selected 
-  species.</li>
-  <li>
+   <li>
+   <strong><a href="../cgi-bin/hgPhyloPlace">UShER</a> (for SARS-CoV-2 only)</strong> - 
+   allows placement of SARS-CoV-2 sequences onto existing phylogenetic trees for tracing strains
+   and transmission events.</li>
+   <li>
+   <strong><a title="Explore gene/protein interactions and pathways" 
+   href="../cgi-bin/hgGeneGraph">Gene Interactions</a></strong> - 
+   displays a gene interaction and pathway graph based on data from curated protein-interaction 
+   databases and text mining of PubMed abstracts.</li>   
+   <li>
+   <strong><a id="visiGeneMenuLink" href="../cgi-bin/hgVisiGene">VisiGene</a></strong> -
+   displays high-quality images of in-situ mouse and frogs with gene mRNA hybridization 
+   probes and transcription factors.</li>
+   <li>
   <strong><a href="http://users.soe.ucsc.edu/~kent/dnaDust/dnadust.html">DNA Duster</a></strong> - 
   removes formatting characters and other non-sequence-related characters from an input sequence. 
   Offers several configuration options for the output format, including translated protein.</li>
@@ -25,8 +49,8 @@ public use:</p>
   from an input sequence. Offers several configuration options for the output format.</li>
   <li>
   <strong><a href="cgi-bin/phyloPng">Phylogenetic Tree PNG Maker</a></strong> - creates a PNG image 
-  from the phylogenetic tree specification given. Offers several configuration options for branch 
-  lengths, normalized lengths, branch labels, legend etc.</li>
+  from phylogenetic tree specification given; several configuration options for branch 
+  lengths, normalized lengths, branch labels, legend, etc.</li>
   <li>
   <strong><a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Executable and 
   Source Code Downloads</a></strong> - executable and source code downloads of the Genome Browser, 

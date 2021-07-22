@@ -8,6 +8,7 @@ group singleCell
 
     track heartAtlasCellTypes
     parent heartCellAtlas
+    html heartCellAtlas
     type bigBarChart
     visibility pack
     shortLabel Heart HCA Cells
@@ -28,6 +29,7 @@ group singleCell
 
     track heartAtlasRegion
     parent heartCellAtlas
+    html heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Region
@@ -46,6 +48,7 @@ group singleCell
 
     track heartAtlasAgeGroup
     parent heartCellAtlas
+    html heartCellAtlas    
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Age
@@ -64,6 +67,7 @@ group singleCell
 
     track heartAtlasCellStates
     parent heartCellAtlas
+    html heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA State
@@ -84,6 +88,7 @@ group singleCell
 
     track heartAtlasDonor
     parent heartCellAtlas
+    html heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Donor
@@ -102,6 +107,7 @@ group singleCell
 
     track heartAtlasSex
     parent heartCellAtlas
+    html heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Sex
@@ -120,6 +126,7 @@ group singleCell
 
     track heartAtlasSource
     parent heartCellAtlas
+    html heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Source
@@ -138,6 +145,7 @@ group singleCell
 
     track heartAtlasSample
     parent heartCellAtlas
+    html heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Sample
@@ -171,6 +179,7 @@ group singleCell
 
     track heartAtlasVersion
     parent heartCellAtlas
+    html heartCellAtlas
     type bigBarChart
     visibility hide
     shortLabel Heart HCA Version

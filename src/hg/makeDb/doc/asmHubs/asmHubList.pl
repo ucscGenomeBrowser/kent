@@ -63,6 +63,8 @@ while (my $path = <FH>) {
     close (GE);
     my $acc = basename($path);
     printf "%s\t%s\t%s\t%s\t%s\n", $acc, $asmName, $sciName, $descr, $taxId;
+  } else {
+    printf STDERR "# missing '%s'\n", $genomes;
   }
 }
 close (FH);

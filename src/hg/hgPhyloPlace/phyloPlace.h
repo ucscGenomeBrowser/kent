@@ -20,7 +20,11 @@
 #define MAX_SEQ_DETAILS 100
 #define MAX_SUBTREE_CTS 10
 
+// For usher's -K option (single subtree):
+#define SINGLE_SUBTREE_SIZE "1000"
+
 #define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
+#define OUTBREAK_INFO_URLBASE "https://outbreak.info/situation-reports?pango="
 
 struct treeChoices
 /* Phylogenetic tree versions for the user to choose from. */
@@ -29,6 +33,7 @@ struct treeChoices
     char **metadataFiles;      // Sample metadata a la GISAID's nextmeta download option
     char **sources;            // GISAID or public
     char **descriptions;       // Menu labels to describe the options to the user
+    char **aliasFiles;         // Two-column files associating IDs/aliases with full tree names
     int count;                 // Number of choices (and size of each array)
 };
 
@@ -87,6 +92,9 @@ struct placementInfo
     int bestNodeCount;                    // Number of equally parsimonious placements
     char *nextClade;                      // Nextstrain clade assigned by UShER
     char *pangoLineage;                   // Pango lineage assigned by UShER
+    // Fields above are parsed out of usher result files; below are added on later.
+    char *nearestNeighbor;                // Nearest neighbor in phylogenetic tree/NULL if not found
+    char *neighborLineage;                // Lineage of nearest neighbor/NULL if not found
     };
 
 struct subtreeInfo
@@ -140,6 +148,7 @@ struct geneInfo
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
                               boolean *informativeBases, struct slName **maskSites,
+                              struct hash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
                               int *pStartTime);
@@ -154,6 +163,13 @@ struct usherResults *runUsher(char *usherPath, char *usherAssignmentsPath, char 
  * subtrees to trash files, return list of slRef to struct tempName for the trash files
  * and parse other results out of stderr output. */
 
+struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protobufPath,
+                                                int subtreeSize, struct slName *sampleIds,
+                                                struct hash *condensedNodes, int *pStartTime);
+/* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
+ * containing sampleIds, save resulting subtrees to trash files, return subtree results.
+ * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
+
 struct slPair *getAaMutations(struct singleNucChange *sncList, struct geneInfo *geneInfoList,
                               struct seqWindow *gSeqWin);
 /* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }. */
@@ -162,8 +178,8 @@ struct geneInfo *getGeneInfoList(char *bigGenePredFile, struct dnaSeq *refGenome
 /* If config.ra has a source of gene annotations, then return the gene list. */
 
 void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneInfoList,
-                       struct seqWindow *gSeqWin, struct hash *sampleMetadata, char *jsonFile,
-                       char *source);
+                       struct seqWindow *gSeqWin, struct hash *sampleMetadata,
+                       struct hash *sampleUrls, char *jsonFile, char *source);
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 
@@ -197,9 +213,13 @@ boolean hgPhyloPlaceEnabled();
 /* Return TRUE if hgPhyloPlace is enabled in hg.conf and db wuhCor1 exists. */
 
 char *phyloPlaceSamples(struct lineFile *lf, char *db, char *defaultProtobuf,
-                        boolean doMeasureTiming, int subtreeSize, int fontHeight);
-/* Given a lineFile that contains either FASTA or VCF, prepare VCF for usher;
- * if that goes well then run usher, report results, make custom track files
- * and return the top-level custom track file; otherwise return NULL. */
+                        boolean doMeasureTiming, int subtreeSize, int fontHeight,
+                        boolean *retSuccess);
+/* Given a lineFile that contains either FASTA, VCF, or a list of sequence names/ids:
+ * If FASTA/VCF, then prepare VCF for usher; if that goes well then run usher, report results,
+ * make custom track files and return the top-level custom track file.
+ * If list of seq names/ids, then attempt to find their full names in the protobuf, run matUtils
+ * to make subtrees, show subtree results, and return NULL.  Set retSuccess to TRUE if we were
+ * able to get at least some results for the user's input. */
 
 #endif //_PHYLO_PLACE_H_

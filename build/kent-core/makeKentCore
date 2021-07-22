@@ -1,0 +1,13 @@
+#!/bin/bash
+# creates ~/kent-core and fills it with files from the current dir
+if [ ! -e src/codelog.c ] ; then
+        echo this script must be run from a clean kent/ directory checkout.
+        exit 1
+fi
+rsync -avzp --filter "merge ${HOME}/kent/build/kent-core/makeKentCore.rules" ./ ~/kent-core/ --prune-empty-dirs --delete-excluded --delete
+cp src/tagStorm/LICENSE ~/kent-core/
+cp build/kent-core/README ~/kent-core/
+#cd ~/kent-core/
+#git add -A
+#git commit -m 'all changes of current release'
+##git push

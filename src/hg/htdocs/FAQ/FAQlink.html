@@ -127,7 +127,7 @@ parameters</a> section of the Custom Tracks User's Guide.</p>
 <li><code>&lt;trackName&gt;=hide|dense|pack|full</code> - sets specified track or subtrack to a
 chosen visibility</li>
 <li><code>textSize=&lt;number&gt;</code> - sets browser text size to either 6, 8, 10, 12, 14, 18,
-24, or 34. Default is a textSize of 8.</li>
+24, or 34. Default is a textSize of 12.</li>
 <li><code>&lt;trackName&gt;.heightPer=&lt;###&gt;</code> - sets a bigWig track's height to a 
 particular number of pixels (between 20-100)</li>
 <li><code>ignoreCookie=1</code> - removes pre-existing user settings like track selection, custom
@@ -162,6 +162,8 @@ track's default subtracks (refSeqComposite_hideKids=1), turns on one specific su
 <h3>Loading Custom Track data with the URL</h3>
 <h6>How do I create a link to my custom track data?</h6>
 <p>
+If you have a custom track on a web-accessible server, you can use the location of the file
+to load it directly as part of a URL.
 You can combine the URL visibility settings with the <code>hgct_customText=</code> parameter using
 a track line you would otherwise put in the <a href="../cgi-bin/hgCustom">custom track 
 input box</a>. The following example shows the <code>hgct_customText</code> parameter accepting
@@ -242,7 +244,9 @@ expression profile, and links to additional information for the gene TP53.
 <h6>What is the hgsid parameter and should I include it in Genome Browser links?</h6>
 <p>The hgsid is a temporary user ID that stores setting and custom track information in the URL.
 Including it in any shared URLs is a privacy concern, and it should be removed when
-constructing any links to the Genome Browser. Creating
+constructing any links to the Genome Browser. Most significantly, it will change after
+you share it. Anyone using it will see that last thing you did, not what you thought
+you were sharing.  Creating
 <a href="../goldenPath/help/hgSessionHelp.html#Create">Saved Sessions</a> is the recommended way to
 share Genome Browser information.
 </p>

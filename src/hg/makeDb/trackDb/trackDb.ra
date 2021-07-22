@@ -20,7 +20,8 @@ include trackDb.transMap.ra
 
 include trackDb.nt.ra
 include trackDb.genbank.ra 
-include trackDb.uniprot.ra
+include trackDb.uniprot.ra public
+include uniprot.alpha.ra alpha,beta
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
@@ -563,6 +564,7 @@ exonNumbers on
 visibility hide
 color 150,0,0
 type genePred ensPep
+pennantIcon Updated red ../goldenPath/newsarch.html#061421 "Updated June 14, 2021"
 
 track ensEstGene
 shortLabel Ensembl EST Genes

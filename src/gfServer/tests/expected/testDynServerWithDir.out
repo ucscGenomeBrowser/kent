@@ -44,7 +44,8 @@ end
 end
 0ddf270562684f29untransInfo crea extra/stuff/crea
 
-version 37x0
+version XXX
+serverType dynamic
 type nucleotide
 tileSize 11
 stepSize 11

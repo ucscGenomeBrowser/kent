@@ -36,8 +36,11 @@ int gfMinScore = 50;
 int gfIMinMatch = 30;
 
 
-static struct seqInfo *checkSequences(struct dnaSeq *seqs, struct slPair **retFailedSeqs)
+static struct seqInfo *checkSequences(struct dnaSeq *seqs, struct hash *treeNames,
+                                      struct slPair **retFailedSeqs)
 /* Return a list of sequences that pass basic QC checks (appropriate size etc).
+ * If any sequences have names that are already in the tree, add a prefix so usher doesn't
+ * reject them.
  * Set retFailedSeqs to the list of sequences that failed checks. */
 {
 struct seqInfo *filteredSeqs = NULL;
@@ -46,9 +49,6 @@ struct hash *uniqNames = hashNew(0);
 struct dnaSeq *seq, *nextSeq;
 for (seq = seqs;  seq != NULL;  seq = nextSeq)
     {
-    //#*** TODO: if the user uploads a sample with the same ID as one already in the
-    //#*** saved assignment file, then usher will ignore it!
-    //#*** Better check for that and warn the user.
     boolean passes = TRUE;
     nextSeq = seq->next;
     if (seq->size < minSeqSize)
@@ -121,6 +121,16 @@ for (seq = seqs;  seq != NULL;  seq = nextSeq)
             }
         else
             {
+            if (isAllDigits(seq->name) || hashLookup(treeNames, seq->name))
+                {
+                // Internal nodes of tree have numeric IDs, so usher may reject numeric name
+                // as a conflict.  usher will definitely reject a sequence name already in the tree.
+                // Add a prefix so usher won't reject the sequence.
+                char newName[strlen(seq->name)+32];
+                safef(newName, sizeof newName, "uploaded_%s", seq->name);
+                freeMem(seq->name);
+                seq->name = cloneString(newName);
+                }
             struct seqInfo *si;
             AllocVar(si);
             si->seq = seq;
@@ -157,8 +167,8 @@ for (si = seqs;  si != NULL;  si = si->next)
     {
     // Positive strand only; we're expecting a mostly complete match to the reference
     gfLongDnaInMem(si->seq, gf, FALSE, gfMinScore, NULL, gvo, FALSE, FALSE);
-    reportTiming(pStartTime, "gfLongDnaInMem");
     }
+reportTiming(pStartTime, "gfLongDnaInMem all");
 gfOutputFree(&gvo);
 carefulClose(&f);
 alignments = pslLoadAll(pslTn.forCgi);
@@ -212,6 +222,41 @@ hashFree(&userSeqsByName);
 slReverse(&filteredPsls);
 slReverse(retFailedPsls);
 return filteredPsls;
+}
+
+static void removeUnalignedSeqs(struct seqInfo **pSeqs, struct psl *alignments,
+                                struct slPair **pFailedSeqs)
+/* If any seqs were not aligned, then remove them from *pSeqs and add them to *pFailedSeqs. */
+{
+struct seqInfo *alignedSeqs = NULL;
+struct slPair *newFailedSeqs = NULL;
+struct seqInfo *seq, *nextSeq;
+for (seq = *pSeqs;  seq != NULL;  seq = nextSeq)
+    {
+    nextSeq = seq->next;
+    boolean found = FALSE;
+    struct psl *psl;
+    for (psl = alignments;  psl != NULL;  psl = psl->next)
+        {
+        if (sameString(psl->qName, seq->seq->name))
+            {
+            found = TRUE;
+            break;
+            }
+        }
+    if (found)
+        slAddHead(&alignedSeqs, seq);
+    else
+        {
+        struct dyString *dy = dyStringCreate("Sequence %s could not be aligned to the reference; "
+                                             "skipping", seq->seq->name);
+        slPairAdd(&newFailedSeqs, dyStringCannibalize(&dy), seq);
+        }
+    }
+slReverse(&alignedSeqs);
+slReverse(&newFailedSeqs);
+*pSeqs = alignedSeqs;
+*pFailedSeqs = slCat(*pFailedSeqs, newFailedSeqs);
 }
 
 struct snvInfo
@@ -545,6 +590,7 @@ for (si = filteredSeqs;  si != NULL;  si = si->next)
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
                               boolean *informativeBases, struct slName **maskSites,
+                              struct hash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
                               int *pStartTime)
@@ -555,12 +601,13 @@ struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refG
 struct tempName *tn = NULL;
 struct slName *sampleIds = NULL;
 struct dnaSeq *allSeqs = faReadAllMixedInLf(lf);
-struct seqInfo *filteredSeqs = checkSequences(allSeqs, retFailedSeqs);
+struct seqInfo *filteredSeqs = checkSequences(allSeqs, treeNames, retFailedSeqs);
 reportTiming(pStartTime, "read and check uploaded FASTA");
 if (filteredSeqs)
     {
     struct psl *alignments = alignSequences(db, refGenome, filteredSeqs, pStartTime);
     struct psl *filteredAlignments = checkAlignments(alignments, filteredSeqs, retFailedPsls);
+    removeUnalignedSeqs(&filteredSeqs, filteredAlignments, retFailedSeqs);
     if (filteredAlignments)
         {
         AllocVar(tn);

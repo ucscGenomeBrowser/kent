@@ -8,7 +8,11 @@ visibility hide
 html gap
 
 track chainNetMm10 override
+shortLabel $o_db ChainNet
 visibility pack
+
+track chainNetHg19 override
+shortLabel $o_db ChainNet
 
 track gc5BaseBw override
 visibility full

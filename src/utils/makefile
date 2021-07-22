@@ -70,19 +70,22 @@ UTILS_APPLIST = \
 	findMotif \
 	headRest \
 	htmlCheck \
+	matrixMarketToTsv \
 	newProg \
 	newPythonProg \
 	nibFrag \
 	nibSize \
 	paraFetch \
 	paraSync \
-	pslLiftSubrangeBlat \
+	pslMap \
+	pslMapPostChain \
 	pslPosTarget \
+	pslRc \
 	pslRemoveFrameShifts \
 	pslScore \
+	pslSwap \
 	pslToPslx \
 	randomLines \
-	raSqlQuery \
 	raToTab \
 	raToLines \
 	rmFaDups \
@@ -123,6 +126,7 @@ UCSC_APPS = \
 	faGapLocs \
 	faGapSizes \
 	faNcbiToUcsc \
+	faRenameRecords \
 	faSimplify \
 	faToNib \
 	faTrimPolyA \
@@ -137,7 +141,6 @@ UCSC_APPS = \
 	lineCount \
 	nt4Frag \
 	pslToXa \
-	scaffoldFaToAgp \
 	scrambleFa \
 	subs \
 	tableSum \
@@ -149,7 +152,6 @@ UCSC_APPS = \
 	venn \
 	verticalSplitSqlTable \
 	weedLines
-
 
 # list of scripts to install
 
@@ -203,6 +205,8 @@ SCRIPT_FILES = \
 	bedAppendPaperInfo \
 	googleSheetToBigBed \
 	doClinvarLift \
+	hubPublicMail \
+	browserRace \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build

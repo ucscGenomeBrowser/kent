@@ -6,16 +6,15 @@ set -beEu -x -o pipefail
 #	kent/src/hg/utils/otto/sarscov2phylo/updatePublic.sh
 
 usage() {
-    echo "usage: $0 prevDate problematicSitesVcf"
+    echo "usage: $0 problematicSitesVcf"
 }
 
-if [ $# != 2 ]; then
+if [ $# != 1 ]; then
   usage
   exit 1
 fi
 
-prevDate=$1
-problematicSitesVcf=$2
+problematicSitesVcf=$1
 
 ottoDir=/hive/data/outside/otto/sarscov2phylo
 gisaidDir=/hive/users/angie/gisaid
@@ -28,21 +27,26 @@ $scriptDir/gisaidFromChunks.sh
 cogUkDir=$ottoDir/cogUk.$today
 mkdir -p $cogUkDir
 cd $cogUkDir
-$scriptDir/getCogUk.sh >& getCogUk.log
+time $scriptDir/getCogUk.sh >& getCogUk.log
 
 ncbiDir=$ottoDir/ncbi.$today
 mkdir -p $ncbiDir
 cd $ncbiDir
-$scriptDir/getNcbi.sh >& getNcbi.log
+time $scriptDir/getNcbi.sh >& getNcbi.log
 
-$scriptDir/nextcladeNcbi.sh &
-$scriptDir/pangolinNcbi.sh
-
-$scriptDir/updateIdMapping.sh $gisaidDir/{metadata_batch_$today.tsv.gz,sequences_batch_$today.fa.xz}
+time $scriptDir/updateIdMapping.sh \
+    $gisaidDir/{metadata_batch_$today.tsv.gz,sequences_batch_$today.fa.xz}
 
 buildDir=$ottoDir/$today
 mkdir -p $buildDir
 cd $buildDir
-$scriptDir/updatePublicTree.sh $prevDate $problematicSitesVcf >& updatePublicTree.log
 
+prevDate=$(date -d yesterday +%F)
+time $scriptDir/updateCombinedTree.sh $prevDate $problematicSitesVcf >& updateCombinedTree.log
+
+echo ""
 cat hgPhyloPlace.description.txt
+cat hgPhyloPlace.plusGisaid.description.txt
+
+# Clean up
+nice xz -f new*fa &

@@ -19,6 +19,12 @@ visibility hide
 track nscanGene override
 informant Rabbit N-SCAN used human (hg19) as the informant for conservation.
 
+track chainNetMm10 override
+shortLabel $o_db ChainNet
+
+track chainNetHg19 override
+shortLabel $o_db ChainNet
+
 searchTable geneid
 searchType genePred
 searchMethod prefix

@@ -1,0 +1,20 @@
+Because the script makeUserApps.csh does not update blat FOOTER.txt automatically,
+when this cahnges on rare occasions, do this to update it.
+
+# update hgdownload
+scp -p /hive/groups/browser/newBuild/userApps/kent/src/utils/userApps/mkREADME.sh qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/linux.x86_64/blat/
+ssh qateam@hgdownload
+cd /mirrordata/apache/htdocs/admin/exe/linux.x86_64/blat
+./mkREADME.sh . FOOTER.txt
+rm mkREADME.sh
+exit
+
+# update hgdownload-euro
+scp -p /hive/groups/browser/newBuild/userApps/kent/src/utils/userApps/mkREADME.sh qateam@hgdownload-euro:/mirrordata/apache/htdocs/admin/exe/linux.x86_64/blat/
+ssh qateam@hgdownload-euro
+cd /mirrordata/apache/htdocs/admin/exe/linux.x86_64/blat
+./mkREADME.sh . FOOTER.txt
+rm mkREADME.sh
+exit
+
+

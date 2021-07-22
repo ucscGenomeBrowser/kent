@@ -370,7 +370,7 @@ boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 
 if (!doWiggle)
     {
-    char *setting = trackDbSetting(tg->tdb, "wiggleWindow" );
+    char *setting = trackDbSetting(tg->tdb, "maxWindowCoverage" );
     if (setting)
         {
         unsigned size = sqlUnsigned(setting);
@@ -379,7 +379,7 @@ if (!doWiggle)
         }
     }
 
-if (doWiggle)
+if (doWiggle && isEmpty(tg->networkErrMsg))
     {
     tg->drawLeftLabels = wigLeftLabels;
     tg->colorShades = shadesOfGray;
@@ -1163,8 +1163,8 @@ if (x < xEnd)
             {
 	    // NOTE: chopped out winStart/winEnd
 	    // NOTE: Galt added winStart/winEnd back in for multi-region
-            safef(link,sizeof(link),"%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s",
-                hgcNameAndSettings(), chromName, winStart, winEnd, start, end, encodedTrack, encodedItem);
+            safef(link,sizeof(link),"%s&db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s",
+                hgcNameAndSettings(), database, chromName, winStart, winEnd, start, end, encodedTrack, encodedItem);
             }
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
@@ -1190,8 +1190,8 @@ if (x < xEnd)
             }
         else
             {
-            hPrintf("HREF=\"%s&c=%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
-                hgcNameAndSettings(), chromName, start, end, encodedTrack, encodedItem,
+            hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
+                hgcNameAndSettings(), start, end, encodedTrack, encodedItem,
                     chromName, winStart, winEnd,
                     database, tl.picWidth);
             }
@@ -4187,7 +4187,12 @@ if (vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
 		s, e, textX, y, w, heightPer);
 	}
     }
-
+else if (vis == tvSquish)
+    {
+    int w = x2-textX;
+    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+            s, e, textX, y, w, heightPer);
+    }
 else if (vis == tvFull)
     {
     int geneMapBoxX = insideX;
@@ -8224,9 +8229,10 @@ for(ii=0; ii < 52; ii++)
     for(jj=0; jj < width + 2; jj++)
 	{
 	if (buf[jj] == 255) colors[jj] = MG_WHITE;
-	else if (buf[jj] == 0x44) colors[jj] = MG_RED;
-	else if (buf[jj] == 0x69) colors[jj] = greenColor;
-	else if (buf[jj] == 0x5e) colors[jj] = blueColor;
+	else if (buf[jj] == 0x87) colors[jj] = MG_RED;
+	else if (buf[jj] == 0x60) colors[jj] = greenColor;
+	else if (buf[jj] == 0x7f) colors[jj] = blueColor;
+	else if (buf[jj] == 0x62) colors[jj] = orangeColor;
 	}
 
     hvGfxVerticalSmear(hvg,xOff,yOff+ii,width ,1, colors,TRUE);

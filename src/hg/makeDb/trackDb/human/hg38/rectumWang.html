@@ -1,0 +1,86 @@
+<h2> Description</h2>
+<p>
+This track shows data from <a href="https://pubmed.ncbi.nlm.nih.gov/31753849/">
+<em>Single-cell transcriptome analysis reveals differential nutrient absorption
+functions in human intestine</em></a>. Droplet-based single-cell RNA sequencing 
+(scRNA-seq) was used to survey gene expression profiles of the epithelium in
+the human ileum, colon, and rectum.  A total of 7 cell clusters were identified
+including enterocytes (EC), goblet cells (G), paneth-like cells (PLC),
+enteroendocrine cells (EEC), progenitor cells (PRO), transient-amplifying cells
+(TA) and stem cells (SC).</p>
+
+<p>
+There are two bar chart tracks in this track collection with rectum cells
+grouped by either cell type (Rectum Cells) and donor (Rectum Donor). The
+default track displayed is Rectum Cells.</p>
+
+<h2>Display Conventions</h2>
+<p>
+The cell types are colored by which class they belong to according to the following table.</p>
+
+<p>
+<table cellpadding='2'>
+  <thead><tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;">Cell classification</th>
+  </tr></thead>
+  <tr><td style="background-color: #0099C0;"></td><td>epithelial</td></tr>
+  <tr><td style="background-color: #0050FF;"></td><td>secretory</td></tr>
+  <tr><td style="background-color: #707070;"></td><td>stem cell</td></tr>
+</table>
+</p>
+
+<p>
+Cells that fall into multiple classes will be colored by blending the colors associated
+with those classes.</p>
+
+<h2>Method</h2>
+<p>
+Using scRNA-seq, RNA profiles of intestinal epithelial cells were obtained for
+3,898 cells from two human rectum samples. Tissue samples belonged to two
+female donors diagnosed with Adenocarcinoma age 66 (Rectum-1) and age 50
+(Rectum-2). The healthy intestinal mucous membranes used for each sample were
+cut away from the tumor border in surgically removed rectal tissue.
+Additionally, the intestinal tissues were washed in Hank's balanced salt
+solution (HBSS) to remove mucus, blood cells, and muscle tissue. The sample was
+enriched for epithelial cells through centrifugation before being dissociated
+with Tryple to obtain single-cell suspensions. RNA-seq libraries were prepared
+using 10x Genomics 3' v2 kit and sequenced on an Illumina Hiseq X Ten
+PE150.</p>
+
+<p>
+The cell/gene matrix and cell-level metadata was downloaded from the <a
+href="http://cells.ucsc.edu/?ds=covid19atlas%2Fc19a-wang20%2Frectum">UCSC Cell Browser</a>.
+The UCSC command line tool matrixClusterColumns, matrixToBarChart, and bedToBigBed were used
+to transform these into a bar chart format bigBed file that can be visualized. The coloring
+was done by defining colors for the broad level cell classes and then using another UCSC tool,
+hcaColorCells, to interpolate the colors across all cell types.</p>
+
+<h2>Credit</h2>
+<p>
+Thanks to Yalong Wang, Wanlu Song, and to the many authors who worked on
+producing and publishing this data set. The data was integrated into the UCSC
+Genome Browser by Jim Kent and Brittney Wick. The UCSC work was paid for by the
+Chan Zuckerberg Initiative.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw <a href="/goldenPath/help/barChart.html">bar chart</a> data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>,
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis, the data may
+be queried from our <a href="/goldenPath/help/api.html">REST API</a>. Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our <a href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.
+</p>
+
+<h2>References</h2>
+
+<p>
+Wang Y, Song W, Wang J, Wang T, Xiong X, Qi Z, Fu W, Yang X, Chen YG.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31753849" target="_blank">
+Single-cell transcriptome analysis reveals differential nutrient absorption functions in human
+intestine</a>.
+<em>J Exp Med</em>. 2020 Feb 3;217(2).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31753849" target="_blank">31753849</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7041720/" target="_blank">PMC7041720</a>
+</p>

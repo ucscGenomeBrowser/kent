@@ -120,52 +120,6 @@ but can be changed to get the size for a particular assembly:
   
     rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/mysql/ | egrep "Number of files:|total size is"
 
-# Local Git repository
-Use the following procedures to create your own personal copy of the kent source
-tree where you can have your own edits that are not part of the development at
-UCSC.  This is useful for mirror sites that have their own customizations in
-the source tree for local circumstances.
- 
-Install Git software version 1.6.2.2 or later. See the Git Community Handbook
- installation (<https://git-scm.com/book/en/v2/Getting-Started-Installing-Git>) and setup
- (<href='https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup>) instructions, as well
- as our Installing Git (<http://genomewiki.ucsc.edu/index.php/Installing_git>)
- Genomewiki page.
-
-Start an initial Git local repository:
-
-    git clone git://genome-source.soe.ucsc.edu/kent.git
- 
-or, if a firewall prevents git daemon port 9418, use:
- 
-    git clone http://genome-source.soe.ucsc.edu/kent.git
- 
-The kent source tree will be imported to the current working directory in a
-directory named ./kent/.
-
-Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
- the browser. To create a beta tracking branch:
- 
-    cd kent
-    git checkout -t -b beta origin/beta
- 
-The -b creates a local branch with name "beta", and checks it out.
-The -t makes it a tracking branch, so that 'git pull' brings in updates from
-origin/beta, the "real" beta branch in our public central read-only repository.
-
-To get the latest UCSC release, from anywhere within the kent source tree:
- 
-    git pull
-
-Updates: UCSC generally updates the origin/beta branch every three weeks. If you are 
- updating database tables for a mirror site, we recommend that you update the
- source at the same time, as source code is sometimes modified to include
- operations on new columns that have been added to database tables.
- 
-For instructions on keeping local tracks separate from UCSC Genome Browser
-tracks created at UCSC and mirrored from there, see the section "Adding tracks
-to the browser" below.
-
 # Installing the UCSC Genome browser
 
 Note: we offer Genome-Browser-in-a-Box (GBIB), a fully configured virtual
@@ -570,7 +524,7 @@ command which can be built in the source-tree at:
         hgsql -e "show grants;" hgcentral
 
 
-5. Configuring MySQL SSL connections:
+5. Configuring MySQL SSL connections (entirely optional, only needed if your IT department requires it):
 
     MySQL is typically compiled with SSL capability from OpenSSL or yaSSL.
     To see if your server supports ssl, login to mysql and run this command:
@@ -725,7 +679,233 @@ command which can be built in the source-tree at:
     Further MySQL SSL documentation is available from 
 <https://dev.mysql.com/doc/refman/5.6/en/creating-ssl-files-using-openssl.html> 
 
-# Adding a custom genome to the browser
+# Local Git repository (aka: "the source tree")
+
+Use the following procedures to create your own personal copy of the kent source
+tree where you can have your own edits that are not part of the development at
+UCSC.  This is useful for mirror sites that have their own customizations in
+the source tree for local circumstances. It will also be necessary if you want to 
+add your own tracks to your mirror (see next section).
+ 
+Install Git software version 1.6.2.2 or later. See the Git Community Handbook
+ installation (<https://git-scm.com/book/en/v2/Getting-Started-Installing-Git>) and setup
+ (<href='https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup>) instructions, as well
+ as our Installing Git (<http://genomewiki.ucsc.edu/index.php/Installing_git>)
+ Genomewiki page.
+
+Start an initial Git local repository:
+
+    git clone git://genome-source.soe.ucsc.edu/kent.git
+ 
+or, if a firewall prevents git daemon port 9418, use:
+ 
+    git clone http://genome-source.soe.ucsc.edu/kent.git
+ 
+The kent source tree will be imported to the current working directory in a
+directory named ./kent/.
+
+Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
+ the browser. To create a beta tracking branch:
+ 
+    cd kent
+    git checkout -t -b beta origin/beta
+ 
+The -b creates a local branch with name "beta", and checks it out.
+The -t makes it a tracking branch, so that 'git pull' brings in updates from
+origin/beta, the "real" beta branch in our public central read-only repository.
+
+To get the latest UCSC release, from anywhere within the kent source tree:
+ 
+    git pull
+
+Updates: UCSC generally updates the origin/beta branch every three weeks. If you are 
+ updating database tables for a mirror site, we recommend that you update the
+ source at the same time, as source code is sometimes modified to include
+ operations on new columns that have been added to database tables.
+ 
+For instructions on keeping local tracks separate from UCSC Genome Browser
+tracks created at UCSC and mirrored from there, see the section "Adding tracks
+to the browser" below.
+
+# Adding your own track groups to the browser
+
+If you want to add your own tracks (see next section), you probably want to put them into 
+a separate track group, so they are visually separated from the tracks provided by UCSC.
+
+The MySQL table `grp` contains the list of all track groups. If you rsync the data
+from UCSC on a regular schedule, the table would be overwritten each time. To avoid this,
+you can create an empty table with the same schema, e.g. in the database hg38:
+
+    CREATE TABLE grp_local LIKE grp;
+    
+You can then use the MySQL INSERT statement to add a new track group to this
+table, specify the name, label, priority and whether the group should be closed
+by default (most are open by default).
+
+Then, edit cgi-bin/hg.conf and add a line like this:
+
+    db.grp=grp_local,grp
+
+This means that grp_local is added to the contents of grp and grp_local has higher priority, so you can override
+the UCSC-provided default groups, if needed.
+
+This will not have any effect yet. First you need to add a new track that uses your new group.
+You can use your new group's `name` using the "group" statement in trackDb (see the next section).
+
+All tracks with a group not in the grp table will end up in the group "Experimental" at the bottom of the page.
+
+# Adding your own tracks to the browser
+
+A track needs two items to make it exist in the browser:
+
+1.  A database table with the track data
+2.  An entry in a database table: trackDb_localTracks
+    Built from track specifications in your trackDb.ra file.
+    The format of the trackDb.ra file is explained at
+    <http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbDoc.html>
+    The correspondence between the database table and the trackDb.ra
+    definition is in the name used on the 'track' line in the
+    trackDb.ra file.  Your database table name is defined by the 'track'
+    definition line.
+
+To direct the genome browser to this trackDb_localTracks table to use as extra trackDb
+definitions, add this line to your cgi-bin/hg.conf file:
+
+    db.trackDb=trackDb_localTracks,trackDb
+
+The order matters. Any definitions for tracks
+in trackDb_localTracks will override any definitions for the
+same named tracks in trackDb.  You can then override the
+standard definitions for UCSC-defined tracks.
+The usual case will be that your tracks are unique to your
+local installation.
+
+Almost all of the database tables have specific loader
+programs to load the track data.  The loader programs
+also verify the data before it is added to the table,
+and they create the proper indexes on the table to allow
+efficient display by the genome browser.
+
+By far the most common format of track data is the BED format.
+See also: <http://genome.ucsc.edu/FAQ/FAQformat.html#format1>
+for a description of BED file formats.
+
+A typical BED file format is loaded into a database table with
+the loader: hgLoadBed
+For example, to load the data from the file: data.bed into
+the table named: bedExample
+
+    hgLoadBed hg17 bedExample data.bed
+
+You then add a section that starts with the line "track bedExample" to your trackDb.ra file,
+run hgTrackDb to create the trackDb_localTracks database table and the table should appear, 
+as long as trackDb_localTracks has been added to hg.conf as explained before.
+
+There are a variety of file formats: GFF, GTF, PSL, WIG, MAF as well as
+a variety of specialized data types.  All the loader programs can be seen
+in the source tree as subdirectories in: src/hg/makeDb/
+
+    cd src/hg/makeDb
+    ls -d hg*
+
+The build instructions for the browser code do not include
+instructions for building all of the loaders, or other utilities
+in the kent source tree.  This is because there are literally
+hundreds of utilities,  345 at last count, that are not needed
+for ordinary browser development.  In most cases a developer will
+need only a couple of the loaders and utilities.  Since the libraries
+were built for the CGI binaries, to build any utility or
+loader, simply go into its directory and run a 'make'. If you do not have 
+the kent tree source repository cloned with git yet onto your own disk,
+please go back to the previous section and do that now.
+
+For our purposes here, we need for example, for BED format tracks:
+
+1. hgLoadBed
+2. hgTrackDb
+3. hgFindSpec
+
+To build the three loaders mentioned, go to the three directories in the kent git source repository:
+
+    src/hg/makeDb/hgTrackDb/
+    src/hg/makeDb/hgFindSpec/
+    src/hg/makeDb/hgLoadBed/
+
+And run a 'make' in each one.  The resulting binary is placed
+in: $HOME/bin/$MACHTYPE
+This binary directory should be in your PATH, or make this directory
+be a symlink to some binary directory that is in your PATH
+and you have write permission to.
+
+See also: new assistant scripts as of March 2010 in the src/product/scripts/
+	directory here to fetch and build the source tree.
+
+If you want to build all the utilities and all database
+loaders now, perform the following 'make' commands in your source tree:
+
+    cd src
+    make clean
+    make libs
+    cd hg
+    make
+    cd ../utils
+    make
+
+This builds everything cleanly, all CGI binaries, all database
+loaders, all utilities.  Perform this sequence each time you
+do a 'git pull' on your source tree.  The 'make clean' step
+is especially important since the makefile hierarchy does not
+have built in dependencies and will not rebuild items that
+depend upon each other.  The traditional dependency on the
+source tree libraries is taken care of because a make in any
+directory that produces a binary will always re-link the
+binary every time, thus always picking up any potentially new
+library.
+
+With those three loader programs built, you can now load BED
+format tracks, and build the trackDb_localTracks table as
+mentioned next.
+
+The hgTrackDb and hgFindSpec loaders are used to build the trackDb and
+hgFindSpec tables in the database. You can obtain example
+trackDb entries from the source tree hierarchy: src/hg/makeDb/trackDb/
+in any of the *.ra files.  And you will need to refer to the README
+file in that directory for information about options you can use with
+each track type or use our full trackDb.ra documentation at 
+<http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbDoc.html>.
+
+To work independently of the UCSC source tree,
+establish your own trackDb.ra files outside the UCSC source tree in
+a directory of your choice under your control.  Then, to load them
+into the database, run the hgTrackDb command with this
+simple makefile in the directory where your .ra file exists:
+	
+    trackDbSql=/path/to/kent/source/tree/src/hg/lib/trackDb.sql
+    DB=hg19
+
+    all::
+            hgTrackDb . ${DB} trackDb_localTracks ${trackDbSql} .
+
+This hgTrackDb command reads your trackDb.ra file and converts it
+into row entries for each track specified in it into row contents
+in this new table trackDb_localTracks.
+
+The DB= specification is your database of interest, this example: hg19
+This loads your local specific table trackDb_localTracks in the database.
+This name trackDb_localTracks is not special, just different than
+the ordinary trackDb table.  It should have some meaning to anyone
+in your environment and not be the same name as any UCSC database
+table.  The two '.' arguments in the command above refer
+to directory names.  Since you have no hierarchy of levels in this
+single directory, unlike in the source tree trackDb hierarchy, the
+'.' arguments refer to the current directory.
+
+See also:
+
+* A similar overview: <http://genomewiki.ucsc.edu/index.php/Local_tracks_at_mirror_sites>
+* TrackDb.ra track configuration format: <http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbDoc.html>
+
+# Adding a new, custom (non-UCSC) genome to the browser
     
 Please note that setting up an [assembly hub](http://genomewiki.ucsc.edu/index.php/Assembly_Hubs) 
 is a lot easier than adding a genome to a local mirror.
@@ -825,16 +1005,17 @@ release should be as easy as this:
 
 # Custom Track Database
 
-A new feature of the genome browser as of March 2007 is the ability to
-use a data base for custom tracks. Up to this date, custom track data
-has been kept in files in the /trash/ct/ directory. This article
-discusses the steps required to enable this function.
+Without any specific hg.conf configuration, custom track data
+is kept in flat files in the /trash/ct/ directory. 
+It is much more efficient to load them into a MySQL database.
+This article discusses the steps required to enable this function.
 
 1. Summary configuration
 
     * database loader binaries hgLoadBed, hgLoadWiggle and wigEncode are
 	installed in /cgi-bin/loader/ - these are installed via the normal
-	'make cgi' in the source tree kent/src/hg/ directory.
+	'make cgi' in the source tree kent/src/hg/ directory or via rsync.
+        They are probably aleady in your cgi-bin directory.
     * an empty customTrash database has been created on the MySQL host -
 	create this manually once, the MySQL host name is a configuration
 	item, the database name customTrash is not a configuration item
@@ -1190,153 +1371,6 @@ Your proxy server should have its own logging features.
 
 net.c also responds to environment variables http_proxy, https_proxy, ftp_proxy, no_proxy and log_proxy.
 
-
-# Adding tracks to the browser
-
-See also:
-
-* <http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbDoc.html>
-* <http://genomewiki.ucsc.edu/index.php/Local_tracks_at_mirror_sites>
-
-A track needs two items to make it exist in the browser:
-
-1.  A database table with the track data
-2.  An entry in a database table: trackDb_localTracks
-    Built from track specifications in your trackDb.ra file.
-    Please note the description of trackDb.ra entries in the
-    source tree: src/hg/makeDb/trackDb/README
-    The correspondence between the database table and the trackDb.ra
-    definition is in the name used on the 'track' line in the
-    trackDb.ra file.  Your database table name is used on the 'track'
-    definition line.
-
-Almost all of the database tables have specific loader
-programs to load the track data.  The loader programs
-also verify the data before it is added to the table,
-and they create the proper indexes on the table to allow
-efficient display by the genome browser.
-
-By far the most common format of track data is the BED format.
-See also: <http://genome.ucsc.edu/FAQ/FAQformat.html#format1>
-for a description of BED file formats.
-
-A typical BED file format is loaded into a database table with
-the loader: hgLoadBed
-For example, to load the data from the file: data.bed into
-the table named: bedExample
-
-    hgLoadBed hg17 bedExample data.bed
-
-There are a variety of file formats: GFF, GTF, PSL, WIG, MAF as well as
-a variety of specialized data types.  All the loader programs can be seen
-in the source tree as subdirectories in: src/hg/makeDb/
-
-    cd src/hg/makeDb
-    ls -d hg*
-
-The build instructions for the browser code do not include
-instructions for building all of the loaders, or other utilities
-in the kent source tree.  This is because there are literally
-hundreds of utilities,  345 at last count, that are not needed
-for ordinary browser development.  In most cases a developer will
-need only a couple of the loaders and utilities.  Since the libraries
-were built for the CGI binaries, to build any utility or
-loader, simply go into its directory and run a 'make'
-
-For our purposes here, we need for example, for BED format tracks:
-
-1. hgLoadBed
-2. hgTrackDb
-3. hgFindSpec
-
-To build the three loaders mentioned, go to the three directories:
-
-    src/hg/makeDb/hgTrackDb/
-    src/hg/makeDb/hgFindSpec/
-    src/hg/makeDb/hgLoadBed/
-
-And run a 'make' in each one.  The resulting binary is placed
-in: $HOME/bin/$MACHTYPE
-This binary directory should be in your PATH, or make this directory
-be a symlink to some binary directory that is in your PATH
-and you have write permission to.
-
-With those three loader programs built, you can now load BED
-format tracks, and build the trackDb_localTracks table as
-mentioned next.
-
-The hgTrackDb and hgFindSpec loaders are used to build the trackDb and
-hgFindSpec tables in the database.  Older instructions used to mention
-using the trackDb file hierarchy in the source tree.  This is no longer
-necessary and is not recommended.  You can certainly obtain example
-trackDb entries from the source tree hierarchy: src/hg/makeDb/trackDb/
-in any of the *.ra files.  And you will need to refer to the README
-file in that directory for information about options you can use with
-each track type.  To work independently of the UCSC source tree,
-establish your own trackDb.ra files outside the UCSC source tree in
-a directory of your choice under your control.  Then, to load them
-into the database, run the hgTrackDb command with this
-simple makefile in the directory where your .ra file exists:
-	
-    trackDbSql=/path/to/kent/source/tree/src/hg/lib/trackDb.sql
-    DB=hg19
-
-    all::
-            hgTrackDb . ${DB} trackDb_localTracks ${trackDbSql} .
-
-This hgTrackDb command reads your trackDb.ra file and converts it
-into row entries for each track specified in it into row contents
-in this new table trackDb_localTracks.
-
-The DB= specification is your database of interest, this example: hg19
-This loads your local specific table trackDb_localTracks in the database.
-This name trackDb_localTracks is not special, just different than
-the ordinary trackDb table.  It should have some meaning to anyone
-in your environment and not be the same name as any UCSC database
-table.  The two '.' arguments in the command above refer
-to directory names.  Since you have no hierarchy of levels in this
-single directory, unlike in the source tree trackDb hierarchy, the
-'.' arguments refer to the current directory.
-
-To direct the genome browser to this table to use as extra trackDb
-definitions, add to the specification in your cgi-bin/hg.conf file:
-
-    db.trackDb=trackDb_localTracks,trackDb
-
-Beware of the specified order of the tables if there are tracks
-by the same name in each table.  Any definitions for tracks
-in trackDb_localTracks will override any definitions for the
-same named tracks in trackDb.  You could thus override the
-standard definitions for tracks from the trackDb table.
-Your usual case will be that your tracks are unique to your
-local installation.
-
-See also: new assistant scripts as of March 2010 in the src/product/scripts/
-	directory here to fetch and build the source tree.
-
-Older instructions about building the source tree remain valid:
-
-If you really do want to build all the utilities and all database
-loaders, perform the following 'make' commands in your source tree:
-
-    cd src
-    make clean
-    make libs
-    cd hg
-    make
-    cd ../utils
-    make
-
-This builds everything cleanly, all CGI binaries, all database
-loaders, all utilities.  Perform this sequence each time you
-do a 'git pull' on your source tree.  The 'make clean' step
-is especially important since the makefile hierarchy does not
-have built in dependencies and will not rebuild items that
-depend upon each other.  The traditional dependency on the
-source tree libraries is taken care of because a make in any
-directory that produces a binary will always re-link the
-binary every time, thus always picking up any potentially new
-library.
 
 # The UDC local cache directory
 

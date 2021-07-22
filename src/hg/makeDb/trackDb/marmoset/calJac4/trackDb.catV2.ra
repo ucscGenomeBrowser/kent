@@ -11,4 +11,3 @@ bigDataUrl /gbdb/calJac4/catV2/consensus.bb
 labelFields name,name2,txId,geneName,sourceGene,sourceTranscript,alignmentId
 defaultLabelFields name
 labelSeparator " "
-

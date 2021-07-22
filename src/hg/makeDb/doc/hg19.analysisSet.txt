@@ -50,4 +50,4 @@ tar cvzf hg19.p13.plusMT.no_alt_analysis_set.hisat2_index.tar.gz hg19/*.ht2
 # copy stuff to webserver
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/chromAlias -p
 mv *.2bit hg19.*.gz /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/
-mv *toUcsc.txt /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/chromAlias/
+mv *ToUcsc.txt /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/chromAlias/

@@ -1,6 +1,9 @@
 track quality override
 type wig 0 63
 
+track chainNetMm10 override
+shortLabel $o_db ChainNet
+
 searchTable geneid
 searchType genePred
 searchMethod prefix

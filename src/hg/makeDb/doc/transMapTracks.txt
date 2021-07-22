@@ -129,3 +129,56 @@ General steps for setup, only done once:
 
 
 ##############################################################################################
+# TransMap V6 tracks (2021-04-26 markd)
+##
+  - Build code is here:
+       /cluster/home/markd/compbio/repos/git/transMap.git
+    which also requires
+      /cluster/home/markd/compbio/repos/git/pycbio.git
+      git@github.com:diekhans/pipettor.git
+
+  - Build process:
+    # IMPORTANT: SET VERSION IN transMap-dev/etc/transMapBuildConf.py
+    tmdir=~markd/compbio/projs/transMap/transMap
+    mkdir -p  /hive/data/inside/transMap/V6/logs
+    pushd /hive/data/inside/transMap/V6
+    # must start in foreground then background, as $(idate) is an alias that bash doesn't find
+    (time nice ${tmdir}/bin/luigiTransMap --workers=64 --logConfFile=${tmdir}/etc/logging.conf ${tmdir}/etc/transMapBuildConf.py) >&logs/$(idate).log
+    ^Z bg
+
+    # takes maybe a day or more,  at the end, check for parasol jobs
+    # that are lost (using one or two stranglers for a few batches), then do
+    para stop -batch=/the/batch/name
+    para push -batch=/the/batch/name
+    # now wait for luigiTransMap to complete.  Review check log.
+
+  # compare to stats/detailed of previous to see if all make sense
+  (cd ../V5/stats/detailed && find -type f)  | sort >V5.stats.lst
+  (cd ../V6/stats/detailed && find -type f)  | sort >V6.stats.lst
+  diff V5.stats.lst V6.stats.lst >&stats.lst.diff
+
+  # all removed genomes have been deactivated as they have been moved to
+  # assembly hubs.  these are not public hubs.
+
+  # create symlinks to /gbdb for bigPsl files
+    ${tmdir}/bin/linkToGbdb  ${tmdir}/etc/transMapBuildConf.py
+
+  # add trackDb entries at top level by editing:
+    src/hg/makeDb/trackDb/trackDb.transMap.ra 
+  # create push lists for databases and gbdb files for genomes on hgwbeta:
+    ${tmdir}/bin/mkPushList ${tmdir}/etc/transMapBuildConf.py db.push.lst gbdb.push.lst
+
+   # make collect QC data and plots
+   ${tmdir}/bin/transMapStatsQCPlot --countChangeTsv=transMap-V5-V6.stats.tsv ../V5/stats/overall.stats.tsv ../V5/db.push.lst stats/overall.stats.tsv db.push.lst transMap-V5-V6.stats.pdf
+   ${tmdir}/bin/transMapDetailsCmp ../V5/stats/detailed stats/detailed transMap-V5-V6.detailed.tsv
+
+  # update tracks
+  # add  transMapV6.html
+  # update  trackDb.transMap.ra
+
+  cd src/hg/makeDb/trackDb
+  make -j 64
+
+
+
+##############################################################################################

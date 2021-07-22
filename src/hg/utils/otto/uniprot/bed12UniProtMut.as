@@ -13,6 +13,7 @@ table bed12UniProtMut
     int blockCount;    "Number of blocks"
     int[blockCount] blockSizes; "Comma separated list of block sizes"
     int[blockCount] chromStarts; "Start positions relative to chromStart"
+    string status;     "Status"
     lstring varType;        "Variant Type"
     lstring diseases;       "Diseases"
     lstring mutation;       "Coding seq. mutation"

@@ -11,7 +11,6 @@ visibility hide
 dataVersion January 2019 (V2: Corrections to Experiment field)
 group regulation
 tableBrowser noGenome
-priority 1.5
 
     track ghGeneTss
     type bigBed 9

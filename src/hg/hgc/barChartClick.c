@@ -24,6 +24,7 @@
 #include "barChartUi.h"
 #include "hgConfig.h"
 #include "facetedBar.h"
+#include "pipeline.h"
 
 #define EXTRA_FIELDS_SIZE 256
 
@@ -358,7 +359,6 @@ static void printBoxplot(char *df, char *item, char *name2, char *units, char *c
 /* Plot data frame to image file and include in HTML */
 {
 struct tempName pngTn;
-struct dyString *cmd = dyStringNew(0);
 trashDirFile(&pngTn, "hgc", "barChart", ".png");
 
 // to help with QAing the change, we add the "oldFonts" CGI parameter so QA can compare
@@ -367,13 +367,16 @@ trashDirFile(&pngTn, "hgc", "barChart", ".png");
 bool useOldFonts = cgiBoolean("oldFonts");
 
 /* Exec R in quiet mode, without reading/saving environment or workspace */
-dyStringPrintf(cmd, "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s '%s' %s %s %s %s %d",
-                                item, units, colorFile, df, pngTn.forHtml, isEmpty(name2) ? "n/a" : name2, useOldFonts);
-int ret = system(cmd->string);
+char *pipeCmd[] = {"Rscript","--vanilla","--slave","hgcData/barChartBoxplot.R", 
+    item, units, colorFile, df, pngTn.forHtml, 
+    isEmpty(name2) ? "n/a" : name2, useOldFonts ? "1" : "0", NULL};
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+int ret = pipelineWait(pl);
+
 if (ret == 0)
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
 else
-    warn("Error creating boxplot from sample data with command: %s", cmd->string);
+    warn("Error creating boxplot from sample data with command: %s", pipelineDesc(pl));
 }
 
 static double estimateStringWidth(char *s)
@@ -576,11 +579,13 @@ char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units")
 char *metric = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_METRIC, "");
 printf("<b>Maximum %s value: </b> %0.2f %s in %s<br>\n", 
                 metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
+printf("<b>Score: </b> %d<br>\n", chartItem->score); 
 printf("<b>Genomic position: "
                 "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
                     database, hgTracksPathAndSettings(), database, 
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd,
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd);
+printf("<b>Strand: </b> %s\n", chartItem->strand); 
 
 // print any remaining extra fields
 if (numColumns > 0)

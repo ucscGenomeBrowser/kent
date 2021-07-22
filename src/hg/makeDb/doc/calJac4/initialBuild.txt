@@ -1182,6 +1182,16 @@ calJac4.genbank.mrna.xeno.load  = yes
 # maxDepth: 29.000000
 # std of depth: 1.956870
 
+    # the command has changed since running it above, fewer arguments,
+    # running this 2021-04-23 - Hiram
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+    calJac4 -tableName=crisprAll \
+    -continue=cleanup -stop=cleanup -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) >> cleanup.log 2>&1
+    # real    401m40.332s
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema

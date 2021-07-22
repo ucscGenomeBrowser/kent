@@ -13,6 +13,7 @@
 #include "portable.h"
 #include "hgGene.h"
 #include "hgConfig.h"
+#include "pipeline.h"
 
 
 static void rnaTrashDirsInit(char **tables, int count)
@@ -91,14 +92,16 @@ for (side = 0; side < ArraySize(names); ++side)
                 }
             else
                 {
-                f = popen(rnaPlotPath, "w");
+                char *plotCmd[] = {rnaPlotPath, NULL};
+                struct pipeline *plStruct = pipelineOpen1(plotCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+                f = pipelineFile(plStruct);
                 if (f != NULL)
                     {
                     fprintf(f, ">%s\n", psName);	/* This tells where to put file. */
                     fprintf(f, "%s\n%s\n", fold.seq, fold.fold);
-                    pclose(f);
                     plotDone = TRUE;
                     }
+                pipelineClose(&plStruct);
                 }
             }
 
@@ -223,20 +226,24 @@ else if (sameString(how, "picture"))
     hPrintf("<H2>%s (%s) %s energy %1.2f</H2>\n", 
     	geneName, geneId, table, fold->energy);
     if (!fileExists(pdfName))
-         {
-	 char command[512];
-	 safef(command, sizeof(command), "ps2pdf %s %s" , psFile, pdfName);
-	 mustSystem(command);
-	 }
+        {
+        char *command[] = { "ps2pdf", psFile, pdfName, NULL};
+        struct pipeline *pl = pipelineOpen1(command, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+        int sysRet = pipelineWait(pl);
+        if (sysRet != 0)
+            errAbort("System call returned %d for:\n  %s", sysRet, pipelineDesc(pl));
+        }
     hPrintf("Click <A HREF=\"%s\">here for PDF version</A><BR>", pdfName);
     if (!fileExists(pngName))
-         {
-	 char command[512];
-	 safef(command, sizeof(command),
-	 	"gs -sDEVICE=png16m -sOutputFile=%s -dBATCH -dNOPAUSE -q %s"
-		, pngName, psFile);
-	 mustSystem(command);
-	 }
+        {
+        char outputBuf[1024];
+        safef(outputBuf, sizeof outputBuf, "-sOutputFile=%s", pngName);
+        char *command[] = { "gs","-sDEVICE=png16m", outputBuf,"-dBATCH","-dNOPAUSE","-q", psFile, NULL};
+        struct pipeline *pl = pipelineOpen1(command, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+        int sysRet = pipelineWait(pl);
+        if (sysRet != 0)
+            errAbort("System call returned %d for:\n  %s", sysRet, pipelineDesc(pl));
+        }
     hPrintf("<IMG SRC=\"%s\">", pngName);
     }
 }

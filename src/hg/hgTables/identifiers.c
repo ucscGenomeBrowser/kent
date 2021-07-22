@@ -319,8 +319,10 @@ static struct hash *getAllPossibleIds(struct sqlConnection *conn,
  * make a hash of all identifiers in curTable (and alias tables if specified)
  * so that we can check the validity of pasted/uploaded identifiers. */
 {
+// I don't think this if statement should be here, but lest I break stuff,
+// I'm just opting knownGene out of it
 if (isCustomTrack(curTable) || isLongTabixTable(curTable) || isBamTable(curTable) || isVcfTable(curTable, NULL) ||
-    isBigBed(database, curTable, curTrack, ctLookupName))
+    (differentString("knownGene", curTable) && isBigBed(database, curTable, curTrack, ctLookupName)))
     return NULL;
 
 struct hash *matchHash = hashNew(20);

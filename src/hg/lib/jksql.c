@@ -1255,6 +1255,8 @@ static struct sqlConnection *sqlConnProfile(struct sqlProfile* sp, char *databas
 /* Connect to database using the profile.  Database maybe NULL to connect to
  * the server. Optionally abort on failure. */
 {
+if (monitorFlags & JKSQL_TRACE)
+    fprintf(stderr, "SQL_CONNECT_PROFILE %s %s %s\n", sp->name, sp->host, database);
 bool mainAbort = abort;
 struct sqlConnection *sc;
 
@@ -1270,10 +1272,30 @@ if (failoverProf==NULL)
     // the default case, without a failover connection: just return sc, can be NULL
     return sc;
 
-// we still have a failover profile to setup:
-
+// local-only databases must never use the failover connection
+// The alternative would be to not use a failover connection for any database that does not have a
+// a tableList table, but then if the UCSC admins ever forget to create
+// tableList tables, there would be no error and users would simply not see the
+// remote tables anymore. We prefer a clear config statement where the local
+// admin has to list the databases that do not exist on the public mysql
+// server.
+// Another alternative would be keep the main connection "hanging" (see below), but that would
+// cost time at some point later. It's fastest to never connect at all for local-only assemblies.
+char cfgName[255];
+safef(cfgName, sizeof(cfgName), "%s.excludeDbs", failoverProf->name);
+char *failOverExclude = cfgOption(cfgName);
+if (failOverExclude)
+{
+    struct slName *noFoDbs = slNameListFromString(failOverExclude, ',');
+    if (slNameInList(noFoDbs, database))
+    {
+        fprintf(stderr, "SQL_CONNECT_IS_EXCLUDED %s\n", database);
+        slNameFree(noFoDbs);
+        return sc;
+    }
+}
 // if the requested database exists only on the failover connection, then the main connect 
-// failed. We just connect again without a database, but note the database
+// failed. We just connect again without a database, and store the database name
 if (sc==NULL)
     {
     if (monitorFlags & JKSQL_TRACE)
@@ -4477,4 +4499,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&list);
 return list;
+}
+
+const char *sqlLastError(struct sqlConnection *sc)
+/* Return the last error from a sql connection. */
+{
+return mysql_error(sc->conn);
 }

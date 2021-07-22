@@ -33,9 +33,13 @@ struct lineFile *lf = lineFileOpen(vcfInFile, TRUE);
 FILE *outF = mustOpen(vcfOutFile, "w");
 int headerColCount = 0;
 int keeperCountMax = hashNumEntries(renaming);
-int keeperColumns[keeperCountMax];
+int *keeperColumns;
+AllocArray(keeperColumns, keeperCountMax);
 int keeperCount = 0;
 int keeperIx = 0;
+// VCF with >1M samples (for SARS-CoV-2) causes stack problems / SEGV if we declare words on stack,
+// so allocate it once we know how many columns to expect:
+char **words = NULL;
 char *line;
 while (lineFileNext(lf, &line, NULL))
     {
@@ -44,8 +48,8 @@ while (lineFileNext(lf, &line, NULL))
         // Parse & replace sample names, build array of genotype columns that we're keeping
         headerColCount = chopString(line, "\t", NULL, 0);
         lineFileExpectAtLeast(lf, VCF_NUM_COLS_BEFORE_GENOTYPES+1, headerColCount);
-        char *words[headerColCount];
-        chopTabs(line, words);
+        AllocArray(words, headerColCount+1);
+        chopByChar(line, '\t', words, headerColCount+1);
         fputs(words[0], outF);
         int i;
         for (i = 1;  i < VCF_NUM_COLS_BEFORE_GENOTYPES;  i++)
@@ -81,8 +85,7 @@ while (lineFileNext(lf, &line, NULL))
         // Data line: print out only the genotype columns that we're keeping
         if (headerColCount == 0)
             lineFileAbort(lf, "Missing #CHROM header line -- can't rename.");
-        char *words[headerColCount+1];
-        int wordCount = chopTabs(line, words);
+        int wordCount = chopByChar(line, '\t', words, headerColCount+1);
         lineFileExpectWords(lf, headerColCount, wordCount);
         // Recompute the counts of reference and alternate alleles in genotypes that we're keeping.
         // Keep only the alternate alleles that have a nonzero count.

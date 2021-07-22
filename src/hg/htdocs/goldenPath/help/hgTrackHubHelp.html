@@ -54,7 +54,7 @@
   <input type="hidden" name="num" value="10"> 
   <input type="hidden" name="filter" value="0"> 
   <input type=text name=qq size=30 maxlength=255 value=""> 
-  <input type="submit" value="Submit"> 
+  <input type="submit" value="Submit"></p>
 </form> 
 </div> 
 <p> 
@@ -232,7 +232,9 @@ although it's possible to manipulate smaller data sets using Mac OS-X as well.</
 <p>
 <b>Note:</b> there is now a <code>useOneFile on</code> hub setting that allows the hub
 properties to be specified in a single file. More information about this setting can be found on the
-<a href="./hgTracksHelp.html#UseOneFile" target="_blank">Genome Browser User Guide</a>.</p>
+<a href="./hgTracksHelp.html#UseOneFile" target="_blank">Genome Browser User Guide</a>. If you would
+like to add metadata to your track hub, the following <a href="./metadata.html">metadata guide</a>
+contains examples of how to include the information in your tracks.</p>
 <p>
 <strong><em>Example 1:</em></strong> Directory hierarchy for a hub containing DNase and RNAseq data 
 for the hg18 and hg19 human genome assemblies. The hg18/ and hg19/ subdirectories contain the 
@@ -442,18 +444,19 @@ shown in <em>Example 1</em>.</p>
 <strong>email</strong> genome@soe.ucsc.edu
 <strong>descriptionUrl</strong> ucscHub.html </code></pre>
 <hr>
+<a name="genomes.txt"></a>
 <p>
 <strong>Step 5. Create the genomes.txt file</strong><br>
 Create a genomes.txt file within the track hub directory that contains a two-line stanza that must 
 be separated by a line for each genome assembly that is supported by the hub data. Each stanza shows
 the location of the trackDb file that defines display properties for each track in that
 assembly, as well as an optional metadata storage file</p>
-<pre><code><strong>genome</strong> <em>assembly_database_1</em>
+<pre><strong>genome</strong> <em>assembly_database_1</em>
 <strong>trackDb</strong> <em>assembly_1_path/trackDb.txt</em>
-<strong>metaTab</strong> <em>assembly_1_path/tabSeparatedFile.txt</em> </code></pre>
+<strong>metaTab</strong> <em>assembly_1_path/tabSeparatedFile.txt</em></pre>
 <pre><strong>genome</strong> <em>assembly_database_2</em>
-<strong>trackDb</strong> <em>assembly_2_path/trackDb.txt</em> </code>
-<strong>metaDb</strong> <em>assembly_2_path/tagStormFile.txt</em> </code></pre>
+<strong>trackDb</strong> <em>assembly_2_path/trackDb.txt</em>
+<strong>metaDb</strong> <em>assembly_2_path/tagStormFile.txt</em></pre>
 <p>
 <em>genome</em> - a valid UCSC database name. Each stanza must begin with this tag and each stanza 
 must be separated by an empty line.</p> 
@@ -686,7 +689,6 @@ and "Display load times" checked:</p>
 alt="The Hub Development tool checks config setting" width="749" height="249">
   <p class='gbsCaption text-center'>The Hub Development tool checks for proper configuration 
 files and track hub settings, and allows access to debugging settings.</p>
-</p>
 
 <h3>Check hub settings using hubCheck utility</h3>
 <p>
@@ -695,7 +697,7 @@ first bring it online and whenever you make significant changes. This utility by
 that the files in the hub are correctly formatted, but it can also be configured to check a few
 other things including that various trackDb settings are correctly spelled and that they are
 supported by the UCSC Genome Browser. You can read more about using hubCheck to check the
-compatibility of your hub with other genome browsers <a href="#Compatibility"</a>below</a>.
+compatibility of your hub with other genome browsers <a href="#Compatibility"</a>below</a>.</p>
 
 <p>
 Here is the usage statement for the hubCheck utility:
@@ -711,7 +713,7 @@ options:
    -settings             - just list settings with support level
                            Will create this directory if not existing
    -noTracks             - don't check remote files for tracks, just trackDb (faster)
-   -udcDir=/dir/to/cache - place to put cache for remote bigBeds and bigWigs </code></pre>
+   -udcDir=/dir/to/cache - place to put cache for remote bigBeds and bigWigs </code></pre></p>
 <p>
 Note that you will have to use the udcDir if /tmp/udcCache is not writable on your machine.</p>
 <p>
@@ -857,7 +859,7 @@ trackDb settings, you would then specify this extra settings file on the command
 </code></pre>
 <p>
 (Note: The settings listed here in the &quot;extra&quot; file are
-just examples and do not represent real trackDb variables for hubs at Ensembl.)
+just examples and do not represent real trackDb variables for hubs at Ensembl.)</p>
 
 <!-- ========== Where to host your data ============================== -->
 <a name="Hosting"></a>
@@ -921,7 +923,7 @@ also want to review this discussion about issues with
 target="_blank">distributed storage servers</a>. <b>These services are external
 to UCSC and may change.</b></p>
 
-</p><b>Free webspace:</b> If you do not want to pay for web space,
+<p><b>Free webspace:</b> If you do not want to pay for web space,
 and your institution does not provide a data location supporting byte-range requests,
 we know of at least the following sites where you can host
 research data and configuration files for free:
@@ -931,6 +933,7 @@ research data and configuration files for free:
   <li><a href="https://github.com/" target="_blank">Github</a> - files limited to 100MB, but very fast</li>
   <li><a href="https://figshare.com/" target="_blank">Figshare</a> - not limited and fast, but every file needs to be uploaded individually and cannot be changed. Optimal for very stable links, e.g. in publications.</li>
 </ul>
+<p>
 Each of the providers above has a slightly different approach to hosting data for
 compatibility with the UCSC Genome Browser, and may have different advantages and disadvantages,
 such as size limitations, usage statistics, and version control integration. Additionally, as 
@@ -946,58 +949,59 @@ needs. Data hosting by CyVerse is free for academic groups and they support byte
 so they can be used for track hubs. However, Cyverse is sometimes slow, 
 and may result in error messages if your hub includes many tracks that are 
 meant to be shown at the same time by your users.</p>
-
-<p>In order to host your data on CyVerse, you first must create an account and then use their
-<a href="https://de.cyverse.org/de" target="_blank">Discovery Environment</a> to upload data. After creating an 
-account, use the &quot;Upload&quot; and &quot;Simple Upload&quot; buttons to upload files 
-individually as shown below:
+<p>
+In order to host your data on CyVerse, you first must create an account and then use their
+<a href="https://de.cyverse.org/de" target="_blank">Discovery Environment</a> to upload data.
+After creating an account and signing in, access the data screen by clicking the second icon
+on the left.  Use the &quot;Upload&quot; button on the far right to import data from a URL or
+locally from your machine.
 <div class="text-center">
-  <img height="400px" src="../../images/cyverseUploadButton.png">
-</div>
+  <img height="150px" src="../../images/cyverseUploadButton.png">
+</div></p>
 <p>
 You can also use the command line utility
-<a href="https://pods.iplantcollaborative.org/wiki/display/DS/Setting+Up+iCommands" target="_blank">iCommands</a> 
-to facilitate bulk transfer of data (best used for large files in the 2-100 GB range), or use 
-<a href="https://pods.iplantcollaborative.org/wiki/display/DS/Using+Cyberduck+for+Uploading+and+Downloading+to+the+Data+Store" target="_blank">
-Cyberduck</a> to bulk transfer up to 80 GB of data in one go.</p>
-
+<a href="https://cyverse.atlassian.net/wiki/spaces/DS/pages/241869823/Setting+Up+iCommands"
+target="_blank">iCommands</a>  to facilitate bulk transfer of data (best used for
+large files in the 2-100 GB range), or use
+<a href="https://cyverse.atlassian.net/wiki/spaces/DS/pages/241869843/Using+Cyberduck+for+Uploading+and+Downloading+to+the+Data+Store"
+target="_blank">Cyberduck</a> to bulk transfer up to 80 GB of data in one go.</p>
 <p>
-After uploading some data, check the &quot;Info-Type&quot; of your BAM, bigWig, bigBed, etc. files.
-If an Info-Type has not been selected automatically or if it is incorrect, make sure it 
-is correct. If uploading an assembly hub, assign the Info-Type &quot;bed&quot; to the 2bit file, as
-well as any text files, like your trackDb.txt, groups.txt, or description.html.
-</p>
-
-<p>
-After giving an appropriate type (like &quot;bam&quot;) to your binary files, you must update any
-text files to point to CyVerse locations. For example, your <em>hub.txt</em> will contain a line
-like:
-<pre><code>genomesFile genomes.txt</code></pre>
-<p>Which must be edited to point to a CyVerse URL such as:</p>
-<pre><code>genomesFile https://data.cyverse.org/dav-anon/iplant/home/...</code></pre>
-<p>Luckily, CyVerse allows you to edit these text files after uploading them, so you can create a 
-&quot;Send To: Genome Browser&quot; link:</p>
+Once your file is available use the three dots on the far right to click the &quot;Public
+Links(s)&quot; option.</p>
 <div class="text-center">
-  <img height="400px" src="../../images/cyverseSendToGenomeBrowser.png">
+  <img height="250px" src="../../images/cyverseCreatePublicLink.png">
 </div>
-<p>And then edit the fields of your <em>hub.txt</em>, <em>genomes.txt</em>, and <em>trackDb.txt</em> 
-files like so:</p>
-<div class="text-center">
-  <img height="500px" width="1000px" src="../../images/cyverseEditedPaths.png">
-</div>
-<p>To get the correct links to bigData files, again be sure to use the &quot;Send To: Genome 
-Browser&quot; links in the menu.
-</p>
-
 <p>
-Please see the <a href="https://wiki.cyverse.org/wiki/display/DEmanual/Viewing+Genome+Files+in+a+Genome+Browser" target="_blank">
-Viewing Genome Files in a Genome Browser</a> wiki page on the CyVerse wiki for more information
-(please note the difference of the Data Commons for final curated publication material,
-and the Discovery Environment for developing data).
+Select this option for all the files you will be using with the Genome Browser, whether they
+are text-based files (trackDb.txt, groups.txt, description.html, etc.) or binary-indexed files
+(BAM, bigWig, bigBed, etc.) requiring byte-range access. Note, if you have a dataFile.bam,
+you  must also have a dataFile.bam.bai file of the matching name and both must have public
+links created.</p>
+<p>
+After creating public links to your binary files, you must ensure your text files (i.e., trackDb.txt)
+point to the CyVerse locations for the files.  For instance, the bigDataUrl setting, will need to point
+to the location of the BAM, bigWig, or bigBed (i.e., <code>bigDataUrl https://data.cyverse.org/...
+/dataFile.bam</code>).</p>
+<div class="text-center">
+  <img height="200px" src="../../images/cyverseCreatePublicLink2.png">
+</div>
+<p>
+The hub.txt file (if not using the <a href="hgTracksHelp.html#UseOneFile"
+target="_blank">useOneFile on</a> setting) will need to point the related
+genomes.txt location, which in turn points to the trackDb.txt location
+using these full https://data.cyverse.org/... links as well.</p>
+<p>
+Please see the <a href="https://cyverse.atlassian.net/wiki/spaces/DEmanual/pages/242027070/Using+the+Discovery+Environment"
+target="_blank">Using the Discovery Environment</a> wiki page on the CyVerse wiki for more information.
 Please direct any questions about CyVerse or the Discovery Environment to their 
-<a href="http://www.cyverse.org/learning-center/ask-cyverse" target="_blank">Ask CyVerse</a> page or contact
-Cyverse support staff directly via the blue Intercom button on the bottom right of the
-Discovery Environment page.
+<a href="https://cyverse.org/contact" target="_blank">Contact Us</a> page or &quot;Chat with
+Cyverse support&quot; staff directly via the blue question box icon on the top right of the
+Discovery Environment page.</p>
+<p>
+Note, if you need to replace files once they have been uploaded into CyVerse's DE and Public links
+have already been created you will need to force update the CyVerse cache by hitting Control-Shift-R
+in your browser to force reload the file or by sending Cache-Control: no-cache header: <code>curl
+--head --header 'Cache-Control: no-cache' https://data.cyverse.org/.../dataFile.bam</code></p>
 <!-- Galaxy stub
 <h3>Hosting Hubs on Galaxy</h3>
 <p>

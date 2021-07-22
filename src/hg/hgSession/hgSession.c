@@ -520,7 +520,7 @@ if (isNotEmpty(userName))
 	   "</TD></TR>\n"
 	   "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>name:</TD><TD>\n");
     cgiMakeOnKeypressTextVar(hgsNewSessionName,
-			     cartUsualString(cart, "db", NULL),
+			     hubConnectSkipHubPrefix(cartUsualString(cart, "db", "mySession")),
 			     20, jsPressOnEnter(hgsDoNewSession));
     printf("&nbsp;&nbsp;&nbsp;");
     cgiMakeCheckBox(hgsNewSessionShare,
@@ -564,7 +564,7 @@ printf("<TR><TD colspan=4></TD></TR>\n");
 
 printf("<TR><TD colspan=4>Save Custom Tracks:</TD></TR>\n");
 printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD colspan=2>");
-printf("backup custom tracks to archive .tar.gz</TD>");
+printf("back up custom tracks to archive .tar.gz</TD>");
 printf("<TD>");
 printf("&nbsp;");
 cgiMakeButton(hgsShowDownloadPrefix, "submit");
@@ -921,9 +921,10 @@ if (suppressConvert != NULL && sameString(suppressConvert, "on"))
 char *convertPath = cfgOption("sessionThumbnail.convertPath");
 if (convertPath == NULL)
     convertPath = cloneString("convert");
-char convertTestCmd[4096];
-safef(convertTestCmd, sizeof(convertTestCmd), "which %s > /dev/null", convertPath);
-int convertTestResult = system(convertTestCmd);
+char *whichCmd[] = {"which", convertPath, NULL};
+struct pipeline *pl = pipelineOpen1(whichCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+int convertTestResult = pipelineWait(pl);
+
 if (convertTestResult != 0)
     {
     dyStringPrintf(dyMessage,

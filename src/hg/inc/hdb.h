@@ -547,6 +547,9 @@ struct trackDb *hTrackDb(char *db);
  *	NOTE: this result is cached, do not free it !
  */
 
+struct trackDb *hTrackDbWithCartVersion(char *db, int *retCartVersion);
+/* Do hTrackDb AND return cartVersion. */
+
 struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList);
 /* Load trackDb object for a track. If track is composite, its subtracks
  * will also be loaded and inheritance will be handled; if track is a
@@ -1074,4 +1077,6 @@ boolean trackDataAccessibleHash(char *database, struct trackDb *tdb, struct hash
  *
  * if gbdbHash is not NULL, use it when looking for the file */
 
+unsigned hdbGetTrackCartVersion();
+/* Get the cart version that our current trackDb wants to use. */
 #endif /* HDB_H */

@@ -7,7 +7,8 @@ genePredCheck = ${DESTBINDIR}/genePredCheck
 all:
 
 test: basic srcPre dups impliedStop ensembl geneNameAsName2 splitStop \
-	ignoreGroupWithoutExons ensemblSplicedStop ensemblWithVersions ensemblWithVersionsGeneName2
+	ignoreGroupWithoutExons ensemblSplicedStop ensemblWithVersions ensemblWithVersionsGeneName2 \
+	noFrame
 
 # basic conversion
 basic: mkdirs
@@ -79,6 +80,14 @@ ensemblWithVersionsGeneName2: mkdirs
 	${genePredCheck} -verbose=0 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 	diff expected/$@.info output/$@.info
+
+# 
+noFrame: mkdirs
+	${gtfToGenePred} -genePredExt -geneNameAsName2 -includeVersion -infoOut=output/$@.info input/noFrame.gtf output/$@.gp
+	${genePredCheck} -verbose=0 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+	diff expected/$@.info output/$@.info
+
 
 mkdirs:
 	mkdir -p output

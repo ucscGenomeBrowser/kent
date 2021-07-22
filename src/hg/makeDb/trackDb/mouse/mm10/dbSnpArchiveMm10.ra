@@ -1,0 +1,69 @@
+# This is the composite, new version of dbSNP tracks for mm10
+# Daniel Schmelter 4/1/21
+
+track dbSnpArchive
+superTrack on
+cartVersion 1
+shortLabel dbSNP Archive
+longLabel dbSNP Track Archive 
+group varRep
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+html ../../dbSnpArchive
+pennantIcon New red ../goldenPath/newsarch.html#063021 "Archived June 30, 2021"
+
+	track snp142 override
+	group varRep
+	parent dbSnpArchive
+        visibility dense
+	priority 1
+
+	track snp142Mult override
+	group varRep
+	parent dbSnpArchive off
+	priority 1
+
+	track snp138 override
+	group varRep
+	parent dbSnpArchive off
+	priority 2
+	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+
+	track snp138Common override
+	group varRep
+	priority 2
+	snpSeqFile /gbdb/mm10/snp/snp138.fa
+	visibility hide
+	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+	parent dbSnpArchive off
+
+	track snp138Mult override
+	group varRep
+	priority 2
+	snpSeqFile /gbdb/mm10/snp/snp138.fa
+	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+	parent dbSnpArchive off
+
+	track snp137Common override
+	group varRep
+	priority 3
+	snpSeqFile /gbdb/mm10/snp/snp137.fa
+	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+	parent dbSnpArchive off
+
+	track snp137Mult override
+	group varRep
+	priority 3
+	snpSeqFile /gbdb/mm10/snp/snp137.fa
+	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+	parent dbSnpArchive off
+
+	track snp137 override
+	group varRep
+	priority 3
+	snpSeqFile /gbdb/mm10/snp/snp137.fa
+	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+	parent dbSnpArchive off

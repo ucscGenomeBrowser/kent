@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aWallaby=Wallaby bTDevil=Tasmanian_devil cOpossum=Opossum dPlatypus=Platypus e0GroundFinch=Medium_ground_finch e1Budgerigar=Budgerigar fZFinch=Zebra_finch gChicken=Chicken hTurkey=Turkey h1GEagle=Goldlen_eagle iLizard=Lizard jTurtle=Turtle kaAxolotl=Axolotl kbFrog=Frog lCoelacanth=Coelacanth  mACod=Atlantic_cod nZebrafish=Zebrafish oStickleback=Stickleback pFugu=Fugu qTetraodon=Tetraodon rTilapia=Tilapia sMedaka=Medaka tLamprey=Lamprey
+subGroup2 species Species aWallaby=Wallaby bTDevil=Tasmanian_devil cOpossum=Opossum dPlatypus=Platypus e0GroundFinch=Medium_ground_finch e1Budgerigar=Budgerigar fZFinch=Zebra_finch gChicken=Chicken hTurkey=Turkey h1GEagle=Goldlen_eagle iLizard=Lizard jTurtle=Turtle kaAxolotl=Axolotl kbFrog=Frog kcSnake=Snake lCoelacanth=Coelacanth  mACod=Atlantic_cod nZebrafish=Zebrafish oStickleback=Stickleback pFugu=Fugu qTetraodon=Tetraodon rTilapia=Tilapia sMedaka=Medaka tLamprey=Lamprey
 subGroup3 clade Clade aMamm=Mammalia bAves=Aves cEutel=Euteleostomi dTeleostei=Teleostei ePerco=Percomorpha fPetro=Petromyzon
 dragAndDrop subTracks
 visibility hide
@@ -130,13 +130,21 @@ html vertebrateChainNet
         type chain xenLae2
         otherDb xenLae2
 
-        track chainXenTro9
+        track chainThaSir1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=kcSnake clade=cEutel
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain thaSir1
+        otherDb thaSir1
+
+        track chainXenTro10
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=kbFrog clade=cEutel
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain xenTro9
-        otherDb xenTro9
+        type chain xenTro10
+        otherDb xenTro10
 
         track chainXenTro3
         subTrack vertebrateChainNetViewchain off
@@ -346,13 +354,21 @@ include chainNetGalGal6.ra
         type netAlign xenLae2 chainXenLae2
         otherDb xenLae2
 
-        track netXenTro9
+        track netThaSir1
+        subTrack vertebrateChainNetViewnet on
+        subGroups view=net species=kcSnake clade=cEutel
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign xenTro9 chainThaSir1
+        otherDb thaSir1
+
+        track netXenTro10
         subTrack vertebrateChainNetViewnet on
         subGroups view=net species=kbFrog clade=cEutel
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign xenTro9 chainXenTro9
-        otherDb xenTro9
+        type netAlign xenTro10 chainXenTro10
+        otherDb xenTro10
 
         track netXenTro3
         subTrack vertebrateChainNetViewnet on

@@ -78,8 +78,16 @@ exonArrows off
 exonNumbers off
 bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
 
+track cd8escape
+shortLabel CD8 Escape Muts
+longLabel T-Cell MHCI CD8+ Escape Mutations from Angerer et al. Sci Immun 2020
+group immu
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/cd8escape/cd8escape.bb
+noScoreFilter on
+
 track epiValid
-shortLabel Validated Epitopes
+shortLabel Valid. SARS1 Epitopes
 longLabel Validated Epitopes from SARS 2003 outbreak
 group immu
 type bigBed 4 +
@@ -165,19 +173,30 @@ longLabel ARTIC Oxford Nanopore sequencing primers
 visibility hide
 group map
 priority 5
-type bigBed 4 +
+type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/bbi/artic.bb
 noScoreFilter on
 
 track rapid
-shortLabel RAPID Primers
-longLabel RAPID Oxford Nanopore sequencing primers
+shortLabel RAPID/Midnight Primers
+longLabel RAPID/Midnight 1200bp amplicon Oxford Nanopore sequencing primers
 visibility hide
 group map
 priority 5
 type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/bbi/rapid.bb
 noScoreFilter on
+
+track swift
+shortLabel Swift Primers
+longLabel Swift BioSciences sequencing primers
+visibility hide
+group map
+priority 5
+type bigBed 6 +
+bigDataUrl /gbdb/wuhCor1/bbi/swift.bb
+noScoreFilter on
+
 
 # track removed as per David H email, authors got a track hub instead
 #track conticello
@@ -330,7 +349,6 @@ group varRep
 visibility hide
 priority 0.2
 dataVersion /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.version.txt
-#pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 04, 2020"
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
@@ -370,10 +388,9 @@ vcfDoQual off
 vcfDoFilter off
 geneTrack ncbiGeneBGP
 group varRep
-visibility squish
+visibility hide
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
-pennantIcon Updated red ../goldenPath/newsarch.html#012921 "Updated Jan. 29, 2021"
 release beta,public
 
     track sarsCov2PhyloPubAllMinAf01
@@ -420,7 +437,6 @@ group varRep
 visibility squish
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#011821 "Updated Jan. ??, 2021"
 release alpha
 
     track sarsCov2PhyloPubAllMinAf01
@@ -461,7 +477,6 @@ group varRep
 priority 0.11
 bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.parsimony.bw
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
-pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Jan. ?, 2021"
 
 track problematicSites
 shortLabel Problematic Sites
@@ -501,7 +516,6 @@ type bigBed
 skipEmptyFields on
 group map
 dataVersion v4 (2020-12-22)
-pennantIcon New red ../goldenPath/newsarch.html#010821 "Updated Dec. 30, 2020"
 release alpha
 
     track problematicSitesMask
@@ -583,7 +597,7 @@ bigDataUrl /hive/data/outside/otto/sarscov2phylo/26-10-20/danishMink.vcf.gz
 
 track lineageB_1_1_7_US
 shortLabel B.1.1.7 in USA
-longLabel Lineage B.1.1.7 (a.k.a. 501Y.V1, VOC 202012/01) Sequences in the United States: SNVs and Deletions
+longLabel Early Lineage B.1.1.7 (a.k.a. 501Y.V1, VOC 202012/01) Sequences in the United States: SNVs and Deletions
 type vcfTabix
 bigDataUrl /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first9.vcf.gz
 hapClusterEnabled on
@@ -594,7 +608,27 @@ geneTrack ncbiGeneBGP
 vcfDoQual off
 vcfDoFilter off
 group varRep
-pennantIcon New red ../goldenPath/newsarch.html#010821 "Released Jan. 7, 2021"
+
+track spikeMuts
+shortLabel Spike Mutations
+longLabel Spike protein mutations from community annotation (Feb 2021)
+html spikeMuts.Feb21
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/spikeMuts/spikeMuts.Feb21.bb
+itemRgb on
+bedNameLabel Mutation
+mouseOver $name $clinicalNotes
+noScoreFilter on
+urls geographyChartsUrl="$$" nextstrainBuildUrl="$$"
+searchIndex name
+searchTrix /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.Feb21.ix
+group varRep
+
+searchTable spikeMuts
+searchType bigBed
+searchDescription Spike protein mutations
+searchMethod fuzzy
+padding 5
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
@@ -615,27 +649,6 @@ include pbm.ra
 include pbmShanghai.ra
 include abEscape.ra
 include bloom.ra
-
-track spikeMuts
-shortLabel Spike Mutations
-longLabel Spike protein mutations from community annotation (Feb 2021)
-html spikeMuts.Feb21
-type bigBed 9 +
-bigDataUrl /gbdb/wuhCor1/spikeMuts/spikeMuts.Feb21.bb
-itemRgb on
-bedNameLabel Mutation
-mouseOver $name $clinicalNotes
-noScoreFilter on
-urls geographyChartsUrl="$$" nextstrainBuildUrl="$$"
-searchIndex name
-searchTrix /gbdb/wuhCor1/spikeMuts/spikeMutsSearch.Feb21.ix
-group varRep
-pennantIcon Updated red ../goldenPath/newsarch.html "Updated Feb. 23, 2021"
-
-searchTable spikeMuts
-searchType bigBed
-searchDescription Spike protein mutations
-searchMethod fuzzy
-padding 5
-
 include variantMuts.ra
+include vaccines.ra
+include mutCons.ra

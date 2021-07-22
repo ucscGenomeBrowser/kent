@@ -28,6 +28,7 @@ boolean measureTiming = FALSE; // Print out how long things take
 char *leftLabelWidthForLongNames = "55";// Leave plenty of room for tree and long virus strain names
 
 #define seqFileVar "sarsCoV2File"
+#define pastedIdVar "namesOrIds"
 #define remoteFileVar "remoteFile"
 
 static struct lineFile *lineFileFromFileInput(struct cart *cart, char *fileVar)
@@ -150,11 +151,21 @@ webIncludeFile("inc/gbFooter.html");
 webEndJWest();
 }
 
-#define CHECK_FILE_INPUT_JS "{ var $fileInput = $('input[name="seqFileVar"]');  " \
-    "if ($fileInput && $fileInput[0] && $fileInput[0].files && !$fileInput[0].files.length) {" \
-      " alert('Please choose a file first, then click the upload button.');" \
-      " return false; " \
-    "} else { loadingImage.run(); return true; } }"
+#define CHECK_FILE_OR_PASTE_INPUT_JS(fileVarName, pasteVarName) \
+    "{ var $fileInput = $('input[name="fileVarName"]');" \
+    "  var $pasteInput = $('textarea[name="pasteVarName"]');" \
+    "  if ($fileInput && $fileInput[0] && $fileInput[0].files && !$fileInput[0].files.length &&" \
+    "      $pasteInput && !$pasteInput.val()) {" \
+    "     alert('Please either choose a file or paste in sequence names/IDs first, ' +" \
+    "           'and then click the upload button.');" \
+    "     return false; " \
+    "   } else if ($fileInput && $fileInput[0] && $fileInput[0].files && " \
+    "              !!$fileInput[0].files.length &&" \
+    "              $pasteInput && !!$pasteInput.val()) {" \
+    "     alert('Sorry, unable to process both a file and pasted-in sequence names/IDs at the ' +" \
+    "            'same time.  Please clear one or the other and then click the upload button.');" \
+    "     return false; " \
+    "   } else { loadingImage.run(); return true; } }"
 
 static void inputForm()
 /* Ask the user for FASTA or VCF. */
@@ -181,7 +192,7 @@ puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most si
      "Placement is performed by\n"
      "<a href='https://github.com/yatisht/usher' target=_blank>"
      "Ultrafast Sample placement on Existing tRee (UShER)</a> "
-     "(<a href='https://www.biorxiv.org/content/10.1101/2020.09.26.314971v1' target=_blank>"
+     "(<a href='https://www.nature.com/articles/s41588-021-00862-7' target=_blank>"
      "Turakhia <em>et al.</em></a>).  UShER also generates local subtrees to show samples "
      "in the context of the most closely related sequences.  The subtrees can be visualized "
      "as Genome Browser custom tracks and/or using "
@@ -189,6 +200,24 @@ puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most si
      "which supports "
      "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' "
      "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.</p>\n");
+puts("</div>");
+puts("</div>");
+puts("<div class='readableWidth'>");
+puts("<div class='gbControl col-md-12'>\n"
+     "<div style='float:left; margin-right: 10px;'>"
+     "<iframe width='267' height='150' src='https://www.youtube.com/embed/humQ1NyZOUM' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>\n"
+     "</div><p>"
+     "The <a href='https://www.cdc.gov/amd/training/covid-19-gen-epi-toolkit.html' target=_blank>"
+     "CDC COVID-19 Genomic Epidemiology Toolkit</a> now includes a training module for UShER!\n"
+     "Module 3.3 includes a <a href='https://youtu.be/humQ1NyZOUM' target=_blank>video</a>, "
+     "slides (<a href='https://www.cdc.gov/amd/pdf/slidesets/toolkit-module-3.3-usher.pdf' "
+     "target=_blank>PDF</a>), and links to more resources.\n"
+     "</p>"
+     );
+puts("</div>");
+puts("</div>");
+puts("<div class='readableWidth'>");
+puts("  <div class='gbControl col-md-12'>");
 puts("<p><b>Note:</b> "
      "Please do not upload any files that contain "
      "<a href='https://en.wikipedia.org/wiki/Protected_health_information#United_States' "
@@ -209,10 +238,11 @@ puts("<p><b>Note:</b> "
 puts("</div>");
 puts("  </div>");
 puts("  <div class='gbControl col-md-12'>");
-printf("<p>Select your FASTA or VCF file: ");
-printf("<input type='file' id='%s' name='%s' "
-       "accept='.fa, .fasta, .vcf, .vcf.gz, .fa.gz, .fasta.gz'>",
+printf("<p>Select your FASTA, VCF or list of sequence names/IDs: ");
+printf("<input type='file' id='%s' name='%s'>",
        seqFileVar, seqFileVar);
+printf("</p><p>or paste in sequence names/IDs:<br>\n");
+cgiMakeTextArea(pastedIdVar, "", 10, 70);
 struct treeChoices *treeChoices = loadTreeChoices(db);
 if (treeChoices)
     {
@@ -227,9 +257,10 @@ printf("Number of samples per subtree showing sample placement: ");
 int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
 cgiMakeIntVarWithLimits("subtreeSize", subtreeSize,
                         "Number of samples in subtree showing neighborhood of placement",
-                        5, 10, 2000);
+                        5, 10, 5000);
 puts("</p><p>");
-cgiMakeOnClickSubmitButton(CHECK_FILE_INPUT_JS, "submit", "upload");
+cgiMakeOnClickSubmitButton(CHECK_FILE_OR_PASTE_INPUT_JS(seqFileVar, pastedIdVar),
+                           "submit", "upload");
 puts("</p>");
 // Add a loading image to reassure people that we're working on it when they upload a big file
 printf("<div><img id='loadingImg' src='../images/loading.gif' />\n");
@@ -326,12 +357,14 @@ static void resultsPage(char *db, struct lineFile *lf)
  * and display results. */
 {
 webStartGbNoBanner(cart, db, "UShER: Results");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("ajax.js", NULL);
 newPageStartStuff();
 
 hgBotDelay();
 
 // Allow 10 minutes for big sets of sequences
-lazarusLives(10 * 60);
+lazarusLives(15 * 60);
 
 puts("<div class='row'>"
      "  <div class='row gbSectionBanner'>\n"
@@ -355,8 +388,9 @@ if (lf != NULL)
     // Do our best to place the user's samples, make custom tracks if successful:
     char *phyloPlaceTree = cartOptionalString(cart, "phyloPlaceTree");
     int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
+    boolean success = FALSE;
     char *ctFile = phyloPlaceSamples(lf, db, phyloPlaceTree, measureTiming, subtreeSize,
-                                     tl.fontHeight);
+                                     tl.fontHeight, &success);
     if (ctFile)
         {
         cgiMakeHiddenVar(CT_CUSTOM_TEXT_VAR, ctFile);
@@ -366,8 +400,9 @@ if (lf != NULL)
         puts("  </div>");
         puts("</form>");
         }
-    else
+    else if (! success)
         {
+        puts("<p></p>");
         puts("  </div>");
         puts("</form>");
         // Let the user upload something else and try again:
@@ -418,6 +453,12 @@ else if (cgiOptionalString(remoteFileVar))
     struct lineFile *lf = netLineFileOpen(url);
     resultsPage(db, lf);
     }
+else if (isNotEmpty(trimSpaces(cgiOptionalString(pastedIdVar))))
+    {
+    char *pastedIds = cgiString(pastedIdVar);
+    struct lineFile *lf = lineFileOnString("pasted names/IDs", TRUE, pastedIds);
+    resultsPage(db, lf);
+    }
 else if (cgiOptionalString(seqFileVar) || cgiOptionalString(seqFileVar "__filename"))
     {
     struct lineFile *lf = lineFileFromFileInput(cart, seqFileVar);
@@ -455,6 +496,7 @@ int main(int argc, char *argv[])
 /* Null terminated list of CGI Variables we don't want to save to cart */
 char *excludeVars[] = {"submit", "Submit",
                        seqFileVar, seqFileVar "__binary", seqFileVar "__filename",
+                       pastedIdVar,
                        NULL};
 long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);

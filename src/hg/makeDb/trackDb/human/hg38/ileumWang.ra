@@ -7,6 +7,7 @@ group singleCell
 
     track ileumWangCellType
     parent ileumWang
+    html ileumWang
     type bigBarChart
     visibility pack
     shortLabel Ileum Cells
@@ -25,6 +26,7 @@ group singleCell
 
     track ileumWangDonor
     parent ileumWang
+    html ileumWang
     type bigBarChart
     visibility hide
     shortLabel Ileum Donor

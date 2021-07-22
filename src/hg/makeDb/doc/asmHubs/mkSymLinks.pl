@@ -79,7 +79,10 @@ foreach my $asmId (@orderList) {
     `mkdir -p "${destDir}"`;
   }
   `rm -f "${destDir}/bbi"`;
+  `rm -f "${destDir}/genes"`;
   `rm -f "${destDir}/ixIxx"`;
+  `rm -f "${destDir}/genesGtf"`;
+  `rm -f "${destDir}/liftOver"`;
   `rm -fr "${destDir}/html"`;
   `mkdir -p "${destDir}/html"`;
   `rm -f "${destDir}/${accessionId}.2bit"`;
@@ -98,7 +101,10 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/download.hub.txt"`;
   `rm -f "${destDir}/groups.txt"`;
   `ln -s "${buildDir}/bbi" "${destDir}/bbi"` if (-d "${buildDir}/bbi");
+  `ln -s "${buildDir}/genes" "${destDir}/genes"` if (-d "${buildDir}/genes");
   `ln -s "${buildDir}/ixIxx" "${destDir}/ixIxx"` if (-d "${buildDir}/ixIxx");
+  `ln -s "${buildDir}/genesGtf" "${destDir}/genesGtf"` if (-d "${buildDir}/genesGtf");
+  `ln -s "${buildDir}/liftOver" "${destDir}/liftOver"` if (-d "${buildDir}/liftOver");
   `ln -s ${buildDir}/html/*.html "${destDir}/html/"` if (-d "${buildDir}/html");
    my $jpgFiles =`ls ${buildDir}/html/*.jpg 2> /dev/null | wc -l`;
    chomp $jpgFiles;

@@ -15,7 +15,8 @@ testPcr.2bit:22_50k_plus	25050	25935	-
 end
 0ddf270562684f29untransInfo testPcr testDynServerPcr
 
-version 37x0
+version XXX
+serverType dynamic
 type nucleotide
 tileSize 11
 stepSize 5

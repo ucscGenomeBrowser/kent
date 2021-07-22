@@ -36,19 +36,53 @@ do
   fi
   rm -f $buildDir/bbi/${asmId}.chain$OtherDb.bb
   rm -f $buildDir/bbi/${asmId}.chain${OtherDb}Link.bb
+  rm -f $buildDir/bbi/${asmId}.chainSyn$OtherDb.bb
+  rm -f $buildDir/bbi/${asmId}.chainSyn${OtherDb}Link.bb
+  rm -f $buildDir/bbi/${asmId}.chainRBest$OtherDb.bb
+  rm -f $buildDir/bbi/${asmId}.chainRBest${OtherDb}Link.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.net.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.net.summary.bb
+  rm -f $buildDir/bbi/${asmId}.$otherDb.synNet.bb
+  rm -f $buildDir/bbi/${asmId}.$otherDb.synNet.summary.bb
+  rm -f $buildDir/bbi/${asmId}.$otherDb.rbestNet.bb
+  rm -f $buildDir/bbi/${asmId}.$otherDb.rbestNet.summary.bb
   ln -s ../trackData/$lastzDir/axtChain/chain${OtherDb}.bb $buildDir/bbi/${asmId}.chain$OtherDb.bb
   ln -s ../trackData/$lastzDir/axtChain/chain${OtherDb}Link.bb $buildDir/bbi/${asmId}.chain${OtherDb}Link.bb
   ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.net.bb $buildDir/bbi/${asmId}.$otherDb.net.bb
   ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.net.summary.bb $buildDir/bbi/${asmId}.$otherDb.net.summary.bb
+  if [ -s "$buildDir/trackData/$lastzDir/axtChain/chainSyn${OtherDb}.bb" ]; then
+    ln -s ../trackData/$lastzDir/axtChain/chainSyn${OtherDb}.bb $buildDir/bbi/${asmId}.chainSyn$OtherDb.bb
+    ln -s ../trackData/$lastzDir/axtChain/chainSyn${OtherDb}Link.bb $buildDir/bbi/${asmId}.chainSyn${OtherDb}Link.bb
+    ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.synNet.bb $buildDir/bbi/${asmId}.$otherDb.synNet.bb
+    ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.synNet.summary.bb $buildDir/bbi/${asmId}.$otherDb.synNet.summary.bb
+  fi
+  if [ -s "$buildDir/trackData/$lastzDir/axtChain/chainRBest${OtherDb}.bb" ]; then
+    ln -s ../trackData/$lastzDir/axtChain/chainRBest${OtherDb}.bb $buildDir/bbi/${asmId}.chainRBest$OtherDb.bb
+    ln -s ../trackData/$lastzDir/axtChain/chainRBest${OtherDb}Link.bb $buildDir/bbi/${asmId}.chainRBest${OtherDb}Link.bb
+    ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.rbestNet.bb $buildDir/bbi/${asmId}.$otherDb.rbestNet.bb
+    ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.rbestNet.summary.bb $buildDir/bbi/${asmId}.$otherDb.rbestNet.summary.bb
+  fi
 
   otherPrefix=`echo $otherDb | cut -c1-2`
   if [ "${otherPrefix}" = "GC" ]; then
-    sciName=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "" | sed -e 's/.*organism name: *//i; s/ *(.*//;'`
-    organism=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "" | sed -e 's/.*organism name: *.*(//i; s/).*//;'`
-    taxId=`grep -i 'taxid' ${asmReport} | head -1 | tr -d "" | sed -e 's/.*taxid: *//i;'`
-    ymd=`grep -i 'date' ${asmReport} | head -1 | tr -d "" | sed -e 's/.*date: *//i;'`
+    sciName=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r | sed -e 's/.*organism name: *//i; s/ *(.*//;'`
+    organism=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *.*(//i; s/).*//;'`
+    taxId=`grep -i 'taxid' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*taxid: *//i;'`
+    ymd=`grep -i 'date' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
+  else
+    organism=`hgsql -N -e "select organism from dbDb where name=\"$otherDb\"" hgcentraltest`
+    sciName=`hgsql -N -e "select scientificName from dbDb where name=\"$otherDb\"" hgcentraltest`
+    taxId=`hgsql -N -e "select taxId from dbDb where name=\"$otherDb\"" hgcentraltest`
+    o_date=`hgsql -N -e "select description from dbDb where name=\"$otherDb\"" hgcentraltest`
+    matrix=`~/kent/src/hg/utils/phyloTrees/findScores.pl $otherDb $targetDb 2>&1 | grep matrix`
+  fi
+
+  otherPrefix=`echo $otherDb | cut -c1-2`
+  if [ "${otherPrefix}" = "GC" ]; then
+    sciName=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *//i; s/ *(.*//;'`
+    organism=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *.*(//i; s/).*//;'`
+    taxId=`grep -i 'taxid' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*taxid: *//i;'`
+    ymd=`grep -i 'date' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
   else
     organism=`hgsql -N -e "select organism from dbDb where name=\"$otherDb\"" hgcentraltest`
     sciName=`hgsql -N -e "select scientificName from dbDb where name=\"$otherDb\"" hgcentraltest`
@@ -84,7 +118,7 @@ $minScore
 $linGap
 matrixHeader A, C, G, T
 otherDb $otherDb
-html chainNet
+html html/$asmId.chainNet
 
 "
 printf "    track chainNet${OtherDb}Viewchain
@@ -102,9 +136,36 @@ printf "    track chainNet${OtherDb}Viewchain
         type bigChain $otherDb
         bigDataUrl bbi/$asmId.chain$OtherDb.bb
         linkDataUrl bbi/$asmId.chain${OtherDb}Link.bb
-        html html/$asmId.chainNet
 
 "
+
+if [ -s "$buildDir/bbi/${asmId}.chainSyn$OtherDb.bb" ]; then
+
+printf "        track chainSyn$OtherDb
+        parent chainNet${OtherDb}Viewchain
+        subGroups view=chain
+        shortLabel $organism synChain
+        longLabel $organism ($o_date) Syntenic Chained Alignments
+        type bigChain $otherDb
+        bigDataUrl bbi/$asmId.chainSyn$OtherDb.bb
+        linkDataUrl bbi/$asmId.chainSyn${OtherDb}Link.bb
+
+"
+fi
+
+if [ -s "$buildDir/bbi/${asmId}.chainRBest$OtherDb.bb" ]; then
+
+printf "        track chainRBest$OtherDb
+        parent chainNet${OtherDb}Viewchain
+        subGroups view=chain
+        shortLabel $organism syChain
+        longLabel $organism ($o_date) Reciprocal Best Chained Alignments
+        type bigChain $otherDb
+        bigDataUrl bbi/$asmId.chainRBest$OtherDb.bb
+        linkDataUrl bbi/$asmId.chainRBest${OtherDb}Link.bb
+
+"
+fi
 
 printf "    track mafNet${OtherDb}Viewnet
     shortLabel Net
@@ -115,64 +176,43 @@ printf "    track mafNet${OtherDb}Viewnet
         track net$OtherDb
         parent mafNet${OtherDb}Viewnet
         subGroups view=net
-        shortLabel $organism mafNet
-        longLabel $organism ($o_date) mafNet Alignment
+        shortLabel $organism net
+        longLabel $organism ($o_date) Net Alignment
         type bigMaf
         bigDataUrl bbi/$asmId.$otherDb.net.bb
         summary bbi/$asmId.$otherDb.net.summary.bb
         speciesOrder $otherDb
-        html chainNet
 
 "
 
+if [ -s "$buildDir/bbi/${asmId}.$otherDb.synNet.summary.bb" ]; then
+
+printf "        track synNet$OtherDb
+        parent mafNet${OtherDb}Viewnet
+        subGroups view=net
+        shortLabel $organism synNet
+        longLabel $organism ($o_date) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl bbi/$asmId.$otherDb.synNet.bb
+        summary bbi/$asmId.$otherDb.synNet.summary.bb
+        speciesOrder $otherDb
+
+"
+fi
+
+if [ -s "$buildDir/bbi/${asmId}.$otherDb.rbestNet.summary.bb" ]; then
+
+printf "        track rbestNet$OtherDb
+        parent mafNet${OtherDb}Viewnet
+        subGroups view=net
+        shortLabel $organism rbestNet
+        longLabel $organism ($o_date) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl bbi/$asmId.$otherDb.rbestNet.bb
+        summary bbi/$asmId.$otherDb.rbestNet.summary.bb
+        speciesOrder $otherDb
+
+"
+fi
+
 done
-
-exit 255
-
-# may or may not have a searchTrix for assembly, assume none
-export searchTrix=""
-# check to see if there is a searchTrix assembly index
-if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.assembly.ix ]; then
-  rm -f $buildDir/ixIxx/${asmId}.assembly.ix*
-  ln -s ../trackData/assemblyGap/${asmId}.assembly.ix $buildDir/ixIxx
-  ln -s ../trackData/assemblyGap/${asmId}.assembly.ixx $buildDir/ixIxx
-  searchTrix="
-searchTrix ixIxx/${asmId}.assembly.ix"
-fi
-
-if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.assembly.bb ]; then
-rm -f $buildDir/bbi/${asmId}.assembly.bb
-ln -s ../trackData/assemblyGap/${asmId}.assembly.bb $buildDir/bbi/${asmId}.assembly.bb
-printf "track assembly
-longLabel Assembly
-shortLabel Assembly
-visibility pack
-colorByStrand 150,100,30 230,170,40
-color 150,100,30
-altColor 230,170,40
-bigDataUrl bbi/%s.assembly.bb
-type bigBed 6
-html html/%s.assembly
-searchIndex name%s
-url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
-urlLabel NCBI Nucleotide database
-group map\n\n" "${asmId}" "${asmId}" "${searchTrix}"
-$scriptDir/asmHubAssembly.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz https://hgdownload.soe.ucsc.edu/hubs/VGP/genomes/$asmId > $buildDir/html/$asmId.assembly.html
-fi
-
-if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.gap.bb ]; then
-rm -f $buildDir/bbi/${asmId}.gap.bb
-ln -s ../trackData/assemblyGap/${asmId}.gap.bb $buildDir/bbi/${asmId}.gap.bb
-printf "track gap
-longLabel AGP gap
-shortLabel Gap (AGP defined)
-visibility dense
-color 0,0,0
-bigDataUrl bbi/%s.gap.bb
-type bigBed 4
-group map
-html html/%s.gap\n\n" "${asmId}" "${asmId}"
-$scriptDir/asmHubGap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz https://hgdownload.soe.ucsc.edu/hubs/VGP/genomes/$asmId > $buildDir/html/$asmId.gap.html
-fi
-
-

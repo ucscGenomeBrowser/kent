@@ -739,6 +739,16 @@ if (tdbIsSuper(tdb) || tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsCo
         errAbort("Track \"%s\" is declared superTrack, compositeTrack, view or "
             "container, and also has a bigDataUrl", tdb->track);
         }
+
+    // multiWigs cannot be the child of a composite
+    if (tdbIsContainer(tdb) &&
+            (tdb->parent != NULL &&
+            (tdbIsComposite(tdb->parent) || tdbIsCompositeView(tdb->parent))))
+        {
+        errAbort("Track \"%s\" is declared container multiWig and has parent \"%s\"."
+            " Container multiWig tracks cannot be children of composites or views",
+            tdb->track, tdb->parent->track);
+        }
     }
 else if (tdb->subtracks != NULL)
     {

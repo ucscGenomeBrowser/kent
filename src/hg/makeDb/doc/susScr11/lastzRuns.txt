@@ -1,0 +1,102 @@
+##############################################################################
+# LASTZ sheep GCA_002844635.1 (DONE - 2021-04-20 - Hiram)
+    mkdir /hive/data/genomes/susScr11/bed/lastzGCA_002844635.1.2021-04-20
+    cd /hive/data/genomes/susScr11/bed/lastzGCA_002844635.1.2021-04-20
+
+    printf '# GCA_002844635.1 vs hg38
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: sheep GCA_002844635.1
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/002/742/125/GCA_002844635.1/GCA_002844635.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/002/742/125/GCA_002844635.1/GCA_002844635.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg38/bed/lastzGCA_002844635.1.2021-04-20
+TMPDIR=/dev/shm
+' > DEF
+
+export targetDb="hg38"
+export asmId="GCA_002844635.1"
+export gcPath="GCA/002/844/635"
+cd /hive/data/genomes/$targetDb/bed/lastz${asmId}.2021-04-20
+time (doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF \
+   -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+     -syntenicNet -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+cat fb.${targetDb}.chain.${asmId}Link.txt
+cat fb.${targetDb}.chainSyn.${asmId}Link.txt
+
+grep -w real do.log | sed -e 's/^/    # /;'
+    # real      318m24.582s
+
+sed -e 's/^/    # /;' fb.$targetDb.chain.${asmId}Link.txt
+    # 2431952924 bases of 2501912388 (97.204%) in intersection
+sed -e 's/^/    # /;' fb.$targetDb.chainSyn.${asmId}Link.txt
+    # 2409981908 bases of 2501912388 (96.326%) in intersection
+
+time (doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+-query2Bit="/hive/data/genomes/asmHubs/$gcPath/${asmId}/${asmId}.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/$gcPath/${asmId}/${asmId}.chrom.sizes.txt" \
+$targetDb ${asmId}) >> rbest.log 2>&1
+grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real      93m2.731s
+
+sed -e 's/^/    # /;' fb.$targetDb.chainRBest.$asmId.txt
+    # 2381230203 bases of 2501912388 (95.176%) in intersection
+
+## Overall time for the above:
+# real    411m27.346s
+
+### the swap to the assembly hub
+export target="susScr11"
+export Target="SusScr11"
+export query="GCA_002844635.1"
+export asmId="GCA_002844635.1_USMARCv1.0"
+export gcPath="GCA/002/844/635"
+
+mkdir -p /hive/data/genomes/asmHubs/refseqBuild/$gcPath/$asmId/trackData/blastz.$target.swap
+cd /hive/data/genomes/asmHubs/refseqBuild/$gcPath/$asmId/trackData/blastz.$target.swap
+
+time (doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 -swapDir=`pwd` \
+    /hive/data/genomes/${target}/bed/lastz.${query}/DEF -syntenicNet \
+  -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -swap -chainMinScore=3000 -chainLinearGap=medium) >> swap.log 2>&1
+grep -w real swap.log | sed -e 's/^/    # /;'
+    # real      90m38.556s
+
+sed -e 's/^/    # /;' fb.${query}.chain.${Target}Link.txt
+    # 2543057365 bases of 2755438182 (92.292%) in intersection
+sed -e 's/^/    # /;' fb.${query}.chainSyn.${Target}Link.txt
+    # 2514166037 bases of 2755438182 (91.244%) in intersection
+
+time (doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+-target2Bit="/hive/data/genomes/asmHubs/$gcPath/${query}/${query}.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/$gcPath/${query}/${query}.chrom.sizes.txt" \
+$query $target) >> rbest.log 2>&1
+grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real      86m43.960s
+
+sed -e 's/^/    # /;' fb.${query}.chainRBest.${Target}.txt
+    # 2388751543 bases of 2755438182 (86.692%) in intersection
+
+# Complete run time for all the swap operation:
+    # real    285m1.340s
+
+##############################################################################

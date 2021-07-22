@@ -27,10 +27,11 @@ bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
 barChartColors barChart bigBarChart
 barChartCategoryUrl barChart bigBarChart
-multiRegionBedUrl *
+multiRegionsBedUrl *
 barChartFacets barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 barChartStatsUrl barChart bigBarChart
+barChartStretchToItem barChart bigBarChart
 # below for backwards compatibility during QA. 
 barChartDataUrl barChart bigBarChart
 barChartLimit barChart bigBarChart
@@ -55,6 +56,7 @@ blastRef psl bigPsl
 boxedCfg *
 browserLines customTracks
 canPack *
+cartVersion *
 cdnaTable psl bigPsl
 cdsDrawDefault psl bed genePred bigPsl
 cdsDrawOptions psl bigPsl
@@ -107,7 +109,7 @@ defaultGeneTracks bed
 defaultLabelFields big*
 defaultMaf wigMaf
 defaultMaxWeight bed
-defaultLinkedTables genePred
+defaultLinkedTables genePred bigGenePred
 denseCoverage bigBed
 densePack bed bigBed
 dimensionAchecked *
@@ -137,6 +139,7 @@ expTable bed expRatio
 extTable *
 externalDb bigGenePred
 extraDetailsTable bigBed
+extraTableFields bigBed
 fieldCount customTracks
 filePos *
 fileSortOrder *
@@ -220,7 +223,7 @@ html *
 htmlFile customTracks
 htmlUrl customTracks
 idInUrlSql altGraphX genePred chain factorSource bed  bigChain
-idXref genePred psl
+idXref genePred psl bigGenePred
 iframeUrl *
 iframeOptions *
 indelDoubleInsert psl bam bigBed bigPsl
@@ -241,7 +244,7 @@ inputTableFieldUrls factorSource
 interactDirectional interact bigInteract
 interactUp interact bigInteract
 interactMultiRegion interact bigInteract
-intronGap psl genePred bigPsl
+intronGap psl genePred bigPsl bigGenePred
 irows wigMaf
 isGencode3 genePred bigGenePred
 isGencode2 genePred bigGenePred
@@ -286,10 +289,9 @@ maxItems *
 maxLimit *
 maxScore broadPeak narrowPeak
 maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix vcfPhasedTrio factorSource
+maxWindowCoverage *
 maxWindowToQuery bigWig bed bedlogR
 metadata *
-mouseOverField big*
-mouseOver bigLolly bigBed bigPsl
 mergeSpannedItems bigBed
 mgiUrl bed
 mgiUrlLabel bed
@@ -304,6 +306,9 @@ motifPwmTable factorSource bed6FloatScore
 motifMapTable factorSource
 motifMaxWindow factorSource
 motifDrawDefault factorSource
+mouseOverField big*
+mouseOver bigLolly bigBed bigPsl
+mouseOverFunction bigWig
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
 negateValues wigMaf bigWig bedGraph wig
@@ -557,7 +562,6 @@ wibFile customTracks
 wigColorBy wig
 wigFile customTracks
 wiggle wigMaf
-wiggleWindow *
 windowingFunction *
 xrefDataUrl *
 yalePseudoAssoc *

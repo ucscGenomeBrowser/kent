@@ -1,0 +1,12 @@
+# for emacs: -*- mode: sh; -*-
+#########################################################################
+# UW Marmoset Iso-Seq   (2021-03-15 - MarkD)
+
+# 20 Iso_seq BAMs were previously obtained from Eichler Lab at the
+# University of Washington.  These were used in the CAT annotation run.
+# They are verified as being in the SRA before adding to browser
+
+#Copy these to /hive/data/genomes/calJac4/bed/uwIsoSeq/
+mkdir /gbdb/calJac4/uwIsoSeq/
+
+

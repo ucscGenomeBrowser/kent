@@ -355,7 +355,7 @@ boolean makeMultiRegionLink(char *db, struct trackDb *tdb, struct cart *cart)
  * The link switches to exit multi-region if browser is already in multi-region mode
  * based on regions defined for this track. */
 {
-char *regionUrl = trackDbSetting(tdb, MULTI_REGION_BED_URL);
+char *regionUrl = trackDbSetting(tdb, "multiRegionsBedUrl");
 if (isEmpty(regionUrl))
     return FALSE;
 
@@ -528,14 +528,15 @@ printf("<p>");
 printf("<a href='../cgi-bin/hgTracks?"
                 "virtMode=1&"
                 "virtModeType=customUrl&"
-                "virtWinFull=on&"
+                "%s=on&"
                 "virtShortDesc=%s&"
                 "multiRegionsBedUrl=%s&"
                 "%s=%s&"
                 "%s=%s&"
                 "%s=%s'>"
         "Display regions of interest (%d)</a>",
-                    tdb->track, cgiEncode(regionFile), tdb->track, hStringFromTv(vis),
+                    MULTI_REGION_BED_WIN_FULL, tdb->track, cgiEncode(regionFile), tdb->track, 
+                    hStringFromTv(vis),
                     CT_CUSTOM_DOC_TEXT_VAR, cgiEncode(customHtml),
                     CT_CUSTOM_TEXT_VAR, cgiEncode(dyStringCannibalize(&dsCustomText)), regionCount);
 printf(" in multi-region view (custom regions mode)");
@@ -4241,20 +4242,22 @@ if (filterBy->styleFollows)
 printf(">%s</OPTION>\n",label);
 }
 
-static boolean filterByColumnIsList(struct cart *cart, struct trackDb *tdb,  char *setting)
-/* Is this filter setting expecting a list of items (e.g. has checkboxes) */
-{
-return (sameString(setting, FILTERBY_SINGLE_LIST) ||
-        sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||
-        sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
-}
-
 static boolean filterByColumnIsMultiple(struct cart *cart, struct trackDb *tdb,  char *setting)
-/* Is this filter setting for a comma separated column. */
+/* Is this filter setting expecting multiple items (e.g. has checkboxes in the UI) */
 {
 return (sameString(setting, FILTERBY_MULTIPLE) ||
         sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND) ||
         sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
+}
+
+static boolean advancedFilter(struct cart *cart, struct trackDb *tdb, char *setting)
+{
+if (!tdbIsBigBed(tdb))
+    return FALSE;
+
+return  sameString(setting, FILTERBY_MULTIPLE_LIST_OR) || sameString(setting, FILTERBY_MULTIPLE_LIST_AND);
 }
 
 void filterBySetCfgUiGuts(struct cart *cart, struct trackDb *tdb,
@@ -4300,8 +4303,8 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
     {
     puts("<TD>");
     char selectStatement[4096];
-    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_SINGLE_LIST);
-    if (filterByColumnIsList(cart, tdb, setting))
+    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_DEFAULT);
+    if (filterByColumnIsMultiple(cart, tdb, setting))
         safef(selectStatement, sizeof selectStatement, " (select multiple items - %s)", FILTERBY_HELP_LINK);
     else
         selectStatement[0] = 0;
@@ -4315,8 +4318,8 @@ puts("</tr><tr>");
 for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
     {
     puts("<td>");
-    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_SINGLE_LIST);
-    if (filterByColumnIsMultiple(cart, tdb, setting) && filterByColumnIsList(cart, tdb, setting) && tdbIsBigBed(tdb))
+    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_DEFAULT);
+    if (advancedFilter(cart, tdb, setting))
         {
         char cartSettingString[4096];
         safef(cartSettingString, sizeof cartSettingString, "%s.%s.%s", prefix,FILTER_TYPE_NAME_LOW, filterBy->column);
@@ -4333,11 +4336,11 @@ puts("</tr><tr>");
 int ix=0;
 for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next, ix++)
     {
-    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_SINGLE_LIST);
+    char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_DEFAULT);
     puts("<td>");
     // value is always "All", even if label is different, to simplify javascript code
     int valIx = 1;
-    if (filterByColumnIsList(cart, tdb, setting))
+    if (filterByColumnIsMultiple(cart, tdb, setting))
         printf( "<SELECT id='%s%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n", selectIdPrefix,ix,filterBy->htmlName);
     else
         printf( "<SELECT id='%s%d' name='%s' style='font-size:.9em;'<BR>\n", selectIdPrefix,ix,filterBy->htmlName);
@@ -9095,15 +9098,24 @@ if (tdbIsSuperTrack(tdb))
 if (cart != NULL) // cart is optional
     {
     char *cartVis = cartOptionalString(cart, tdb->track);
+    boolean cgiVar = FALSE;
     // check hub tracks for visibility settings without the hub prefix
     if (startsWith("hub_", tdb->track) && (cartVis == NULL))
-        cartVis = cartOptionalString(cart, trackHubSkipHubName(tdb->track));
+        {
+        cartVis = cgiOptionalString( trackHubSkipHubName(tdb->track));
+        cgiVar = TRUE;
+        }
 
     if (cartVis != NULL)
         {
         vis = hTvFromString(cartVis);
         if (subtrackOverride != NULL && tdbIsContainerChild(tdb))
             *subtrackOverride = TRUE;
+        if (cgiVar)
+            {
+            cartSetString(cart, tdb->track, cartVis);   // add the decorated visibility to the cart
+            cartRemove(cart, trackHubSkipHubName(tdb->track)); // remove the undecorated version
+            }
         }
     }
 return vis;
@@ -9870,7 +9882,7 @@ if (!sqlTableExists(conn, relatedTrackTable))
 
 char query[256];
 sqlSafef(query, sizeof(query),
-    "select track1, track2, why from %s where track1='%s' or track2='%s'", relatedTrackTable, tdb->track, tdb->track);
+    "select track2, why from %s where track1='%s'", relatedTrackTable, tdb->track);
 
 char **row;
 struct sqlResult *sr;
@@ -9880,19 +9892,25 @@ if (row != NULL)
     {
     puts("<b>Related tracks</b>\n");
     puts("<ul>\n");
-    char *track1, *track2, *why, *otherTrack;
+    struct hash *otherTracksAndDesc = hashNew(0);
+    char *why, *otherTrack;
     for (; row != NULL; row = sqlNextRow(sr))
         {
-        track1 = row[0];
-        track2 = row[1];
-        why    = row[2];
+        otherTrack = row[0];
+        why = row[1];
+        // hopefully relatedTracks.ra doesn't have dupes but hash them just in case
+        hashReplace(otherTracksAndDesc, cloneString(otherTrack), cloneString(why));
+        }
 
-        if (sameWord(track1, tdb->track))
-            otherTrack = track2;
-        else
-            otherTrack = track1;
-
+    struct hashEl *hel, *helList = hashElListHash(otherTracksAndDesc);
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+        char *otherTrack = (char *)hel->name;
+        char *why = (char *)hel->val;
         struct trackDb *otherTdb = hashFindVal(trackHash, otherTrack);
+        // super tracks are not in the hash:
+        if (!otherTdb)
+            otherTdb = tdbForTrack(database, otherTrack, NULL);
         if (otherTdb)
             {
             puts("<li>");
@@ -9901,7 +9919,7 @@ if (row != NULL)
             puts(why);
             }
         }
-    puts("</ul>\n");
+        puts("</ul>\n");
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);

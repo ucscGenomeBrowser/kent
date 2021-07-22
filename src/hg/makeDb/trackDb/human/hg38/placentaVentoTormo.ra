@@ -7,6 +7,7 @@ group singleCell
 
     track placentaVentoTormoCellType10x
     parent placentaVentoTormo
+    html placentaVentoTormo
     type bigBarChart
     visibility pack
     shortLabel Placenta Cells
@@ -24,6 +25,7 @@ group singleCell
 
     track placentaVentoTormoCellDetailed10x
     parent placentaVentoTormo
+    html placentaVentoTormo
     type bigBarChart
     visibility hide
     shortLabel Placenta Detail
@@ -41,6 +43,7 @@ group singleCell
 
     track placentaVentoTormoLocation10x
     parent placentaVentoTormo
+    html placentaVentoTormo
     type bigBarChart
     visibility pack
     shortLabel Placenta Loc
@@ -58,6 +61,7 @@ group singleCell
 
     track placentaVentoTormoStage10x
     parent placentaVentoTormo
+    html placentaVentoTormo
     type bigBarChart
     visibility hide
     shortLabel Placenta Stage
@@ -75,6 +79,7 @@ group singleCell
 
     track placentaVentoTormoMatFet10x
     parent placentaVentoTormo
+    html placentaVentoTormo
     type bigBarChart
     visibility hide
     shortLabel Placenta Mat/Fet
@@ -92,6 +97,7 @@ group singleCell
 
     track placentaVentoTormoCellTypeSs2
     parent placentaVentoTormo
+    html placentaVentoTormo
     type bigBarChart
     visibility hide
     shortLabel Placenta Cells Ss2
@@ -109,6 +115,7 @@ group singleCell
 
     track placentaVentoTormoCellDetailedSs2
     parent placentaVentoTormo
+    html placentaVentoTormo
     type bigBarChart
     visibility hide
     shortLabel Placenta Detail Ss2
@@ -126,6 +133,7 @@ group singleCell
 
     track placentaVentoTormoLocationSs2
     parent placentaVentoTormo
+    html placentaVentoTormo
     type bigBarChart
     visibility pack
     shortLabel Placenta Loc Ss2
@@ -143,6 +151,7 @@ group singleCell
 
     track placentaVentoTormoMatFetSs2
     parent placentaVentoTormo
+    html placentaVentoTormo
     type bigBarChart
     visibility hide
     shortLabel Placenta Mat/Fet Ss2

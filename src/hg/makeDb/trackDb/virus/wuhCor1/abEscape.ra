@@ -5,7 +5,6 @@ type bigBed
 group immu
 priority 30
 superTrack on show
-pennantIcon Updated red ../goldenPath/newsarch.html#012921 "Updated Jan. 29, 2021"
 
 include bloomEsc.ra
 

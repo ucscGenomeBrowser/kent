@@ -566,23 +566,37 @@ var genomePos = {
         if (hgTracks.windows) {
             var i, len, end;
             var matches = /^multi:[0-9]+-([0-9]+)/.exec(position);
-            var str = position;
+            var modeType = (hgTracks.virtModeType === "customUrl" ? "Custom regions on virtual chromosome" :
+                            (hgTracks.virtModeType === "exonMostly" ? "Exon view of" :
+                            (hgTracks.virtModeType === "geneMostly" ? "Gene view of" :
+                            (hgTracks.virtModeType === "singleAltHaplo" ? "Alternate haplotype as virtual chromosome" :
+                                        "Unknown mode"))));
+            var str = modeType + "&nbsp;" + position;
             if (matches) {
                 end = matches[1];
                 if (end < hgTracks.chromEnd) {
-                    str += "<br>(full virtual region is multi:1-" + hgTracks.chromEnd + ")";
+                    str += ". Full virtual region is multi:1-" + hgTracks.chromEnd + ". Zoom out to view.";
                 }
             }
             if (!(hgTracks.virtualSingleChrom && (hgTracks.windows.length === 1))) {
-                str += "<br>\n";
-                str += "<br>\n";
-                str += "<ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
-                for (i=0,len=hgTracks.windows.length; i < len; ++i) {
-                    var w = hgTracks.windows[i];
-                    str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd +
-                                "&nbsp;&nbsp;&nbsp;" + (w.winEnd - w.winStart) + " bp" + "</li>\n";
+                var w;
+                if (hgTracks.windows.length <= 10) {
+                    str += "<p><table>\n";
+                    for (i=0,len=hgTracks.windows.length; i < len; ++i) {
+                        w = hgTracks.windows[i];
+                        str += "<tr><td>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd + "</td><td>" + 
+                                    (w.winEnd - w.winStart) + " bp" + "</td></tr>\n";
+                    }
+                    str += "</table></p>\n";
+                } else {
+                    str += "<br><ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
+                    for (i=0,len=hgTracks.windows.length; i < len; ++i) {
+                        w = hgTracks.windows[i];
+                        str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd +
+                                    "&nbsp;&nbsp;&nbsp;" + (w.winEnd - w.winStart) + " bp" + "</li>\n";
+                    }
+                    str += "</ul>\n";
                 }
-                str += "</ul>\n";
             }
             $("#positionDisplayPosition").html(str);
         } else {
@@ -590,21 +604,12 @@ var genomePos = {
         }
         $(positionDialog).dialog({
                 modal: true,
-                title: "Multi-region position ranges",
+                title: "Multi-Region Position Ranges",
                 closeOnEscape: true,
                 resizable: false,
                 autoOpen: false,
                 minWidth: 400,
                 minHeight: 40,
-                buttons: {  
-                    "OK": function() {
-                        $(this).dialog("close");
-                    }
-                },
-
-                open: function () { // Make OK the focus/default action
-                   $(this).parents('.ui-dialog-buttonpane button:eq(0)').focus(); 
-                },
 
                 close: function() {
                     // All exits to dialog should go through this
@@ -2773,7 +2778,7 @@ var rightClick = {
                         // when "exonNumbers on", the mouse over text is not a good item description for the right-click menu
                         // "exonNumbers on" is the default for genePred/bigGenePred tracks but can also be actived for bigBed and others
                         // We don't have the value of "exonNumbers" here, so just use a heuristic to see if it's on
-                        if (title.search(/, strand [+-], Intron /)!==-1) {
+                        if (title.search(/, strand [+-], (Intron|Exon) /)!==-1) {
                             title = title.split(",")[0];
                         }
 
@@ -3253,6 +3258,7 @@ var popUpHgt = {
                             ddcl.setup(this, 'noneIsAll');
                     }
                 );
+
             },
 
             close: function() {
@@ -3268,7 +3274,7 @@ var popUpHgt = {
         autocompleteCat.init($('#singleAltHaploId'),
                              { baseUrl: 'hgSuggest?db=' + getDb() + '&type=altOrPatch&prefix=',
                                enterSelectsIdentical: true });
-        // Make option inputs select their associated radio buttons
+        // Make multi-region option inputs select their associated radio buttons
         $('input[name="emPadding"]').keyup(function() {
             $('#virtModeType[value="exonMostly"]').attr('checked', true); });
         $('input[name="gmPadding"]').keyup(function() {
@@ -3277,6 +3283,39 @@ var popUpHgt = {
             $('#virtModeType[value="customUrl"]').attr('checked', true); });
         $('#singleAltHaploId').keyup(function() {
             $('#virtModeType[value="singleAltHaplo"]').attr('checked', true); });
+
+        // disable exit if not in MR mode
+        if (!hgTracks.virtModeType) {
+            $('#virtModeTypeDefaultLabel').addClass('disabled');
+            $('#virtModeType[value="exonMostly"]').attr('checked', true);
+            $('#virtModeType[value="default"]').attr('disabled', 'disabled');
+        } else {
+            $('#virtModeType[value="default"]').removeAttr('disabled');
+        }
+
+        // Customize message based on current mode
+        var msg = "<em>Select a multi-region viewing mode below.</em>";  // default
+        if (hgTracks.virtModeType) {
+            msg = "The display is currently in <em><b> ";
+            var mode = "unknown";
+            if (hgTracks.virtModeType === "exonMostly") {
+                msg += "exon";
+            } else if (hgTracks.virtModeType == "geneMostly") {
+                msg += "gene";
+            } else if (hgTracks.virtModeType == "customUrl") {
+                msg += "custom regions";
+            } else if (hgTracks.virtModeType == "singleAltHaplo") {
+                msg += "alt haplotype";
+            } 
+            msg += " </b></em> view. &nbsp;&nbsp;"
+                + "<em>Select a different viewing mode, or exit and return to normal view</em>.";
+        }
+        $('#multiRegionConfigStatusMsg').html(msg);
+
+        // Make 'Cancel' button close dialog
+        $('input[name="Cancel"]').click(function() {
+            $('#hgTracksDialog').dialog('close');
+        });
     }
 };
 
@@ -3346,7 +3385,7 @@ function addKeyboardHelpEntries() {
 // View DNA
 function gotoGetDnaPage() {
     var position = hgTracks.chromName+":"+hgTracks.winStart+"-"+hgTracks.winEnd;
-    if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") === 0)) {
+    if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") === 0)) {
         position = genomePos.get().replace(/,/g,'');
     } else if (hgTracks.windows && hgTracks.nonVirtPosition) {
         position = hgTracks.nonVirtPosition;
@@ -3835,7 +3874,8 @@ var imageV2 = {
                 continue;
             if (newJsonRec.type === "remote")
                 continue;
-            if (oldJsonRec &&  oldJsonRec.visibility !== 0 && $('tr#tr_' + id).length === 1) {
+            var escapedId = id.replace('.', '\\.');
+            if (oldJsonRec &&  oldJsonRec.visibility !== 0 && $('tr#tr_' + escapedId).length === 1) {
                 // New track replacing old:
                 if (!imageV2.updateImgForId(response, id, true, newJsonRec))
                     warn("Couldn't parse out new image for id: " + id);
@@ -4237,7 +4277,7 @@ var imageV2 = {
     {
         pos = parsePositionWithDb(position);
         // DISGUISE
-        if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") === 0)) {
+        if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") === 0)) {
             var positionStr = pos.chrom+":"+pos.start+"-"+pos.end;
             var newPosition = genomePos.disguisePosition(positionStr);
             var newPos = parsePosition(newPosition);
@@ -4252,7 +4292,7 @@ var imageV2 = {
     // undisguise highlight pos
     {
         // UN-DISGUISE
-        if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") !== 0)) {
+        if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") !== 0)) {
             var position = pos.chrom+":"+pos.start+"-"+pos.end;
             var newPosition = genomePos.undisguisePosition(position);
             var newPos = parsePosition(newPosition);
@@ -4489,6 +4529,7 @@ var mouseOver = {
     visible: false,     // keeping track of popUp window visibility
     tracks: {}, // tracks[trackName] - number of data items for this track
     trackType: {},	// key is track name, value is track type from hgTracks
+    mouseOverFunction: {}, // key is track name, value mouseOverFunction string
     jsonUrl: {},       // list of json files from hidden DIV elements
     maximumWidth: {},   // maximumWidth[trackName] - largest string to display
     popUpDelay: 200,   // 0.2 second delay before popUp appears
@@ -4500,6 +4541,7 @@ var mouseOver = {
     measureTextBox: null,
     noDataString: "no&nbsp;data",	// message for no data at this position
     noDataSize: 0,	// will be set to size of text 'no data'
+    noAverageString: "&nbsp;zoom&nbsp;in&nbsp;to&nbsp;see&nbsp;values&nbsp;",	// "noAverage" function
 
     // items{} - key name is track name, value is an array of data items
     //           where the format of each item can be different for different
@@ -4666,6 +4708,9 @@ var mouseOver = {
     }
     // can show 'no data' when not found
     var mouseOverValue = mouseOver.noDataString;
+    if (mouseOver.mouseOverFunction[trackName] === "noAverage") {
+       mouseOverValue = mouseOver.noAverageString;
+    }
     if (foundIdx > -1) { // value to display
       if (mouseOver.items[trackName][foundIdx].c > 1) {
         mouseOverValue = "&nbsp;~&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
@@ -4790,6 +4835,11 @@ var mouseOver = {
       if (mouseOver.tracks[trackName]) {mouseOver.tracks[trackName] = 0;}
       mouseOver.items[trackName] = [];      // start array
       mouseOver.trackType[trackName] = arr[trackName].t;
+      if (arr[trackName].hasOwnProperty('mo')) {
+         mouseOver.mouseOverFunction[trackName] = arr[trackName].mo;
+      } else {
+         delete mouseOver.mouseOverFunction[trackName];
+      }
       // add a 'mousemove' and 'mouseout' event listener to each track
       //     display object
       var tdData = "td_data_" + trackName;
@@ -4821,6 +4871,9 @@ var mouseOver = {
          mouseOverValue = "&nbsp;~&nbsp;" + longestNumber + "&nbsp;";
       } else {
          mouseOverValue = "&nbsp;" + longestNumber + "&nbsp;";
+      }
+      if (mouseOver.mouseOverFunction[trackName] === "noAverage") {
+         mouseOverValue = mouseOver.noAverageString;
       }
       $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
       var maximumWidth = mouseOver.getWidthOfText(mouseOverValue);

@@ -51,6 +51,762 @@
 
 <!-- ============= 2021 archived news ============= -->
 <a name="2021"></a>
+
+<a name="072021"></a>
+<h2>July 20, 2021 &nbsp;&nbsp; Updated GENCODE tracks released for hg38, hg19, and mm39</h2>
+<p>
+We have updated our GENCODE gene datasets to the latest releases; v38 
+for human (hg38 &amp; hg19) and v27 for the mouse genome assembly (mm39). 
+These new annotation data were released by GENCODE in May 2021 
+and correspond to the Ensembl Genes 104 dataset. 
+</p>
+<p>
+These tracks can be found in our All GENCODE super-track folder, 
+with subset tracks and abundant filter options. This super-track
+contains many previous versions of the GENCODE genes for easy 
+comparison. From the 
+<a href="https://www.gencodegenes.org/human/stats.html">
+GENCODE stats page</a>,
+this updated dataset has approximately 60.6k genes and 237k transcripts on 
+the human hg38 assembly.</p>
+<p>
+For more information or to visualize the data, 
+you can visit the following track description pages:</p>
+<ul>
+<li><a href="../../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeV38">
+All GENCODE v38 for hg38</a></li>
+<li><a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeV38lift37">
+GENCODE lifted Annotations V38lift37 for hg19</a></li>
+<li><a href="../../cgi-bin/hgTrackUi?db=mm39&g=wgEncodeGencodeVM27">
+All GENCODE annotations VM27 for mm39</a></li>
+</ul>
+
+<a name="071421"></a>
+<h2>July 14, 2021 &nbsp;&nbsp; gnomAD v3.1.1 track available for hg38</h2>
+<p>
+We are happy to announce an update to the Genome Aggregation Database (gnomAD) variants track for
+the <a href="/cgi-bin/hgGateway?db=hg38">hg38/GRCh38</a> assembly. The
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=gnomadGenomesVariantsV3_1_1">gnomAD v3.1.1 variants</a>
+track contains the same underlying data as v3.1, but with minor corrections to the VEP annotations
+and dbSNP rsIDs. In this update, we have now included the mitochondrial chromosome data that was
+released as part of gnomAD v3.1 but after the UCSC version of the track was created and released.
+For more information about gnomAD v3.1.1, please see the related
+<a href="https://gnomad.broadinstitute.org/news/2021-03-gnomad-v3-1-1/"
+target="_blank">changelog</a>.
+</p>
+<p>
+We would like to thank the <a href="http://gnomad.broadinstitute.org/" target="_blank">Genome
+Aggregation Database</a> team at the BROAD institute for releasing the underlying data. We would
+also like to thank Chris Lee and Jairo Navarro for the creation and release of the UCSC Genome
+Browser track.</p>
+
+<a name="070821"></a>
+<h2>July 08, 2021 &nbsp;&nbsp; Updated data for NCBI RefSeq tracks for human assembly hg38</h2>
+<p>
+We are pleased to announce the updated  <a href="https://www.ncbi.nlm.nih.gov/genome/annotation_euk/
+Homo_sapiens/109.20210514/?utm_source=blog&utm_medium=referral&utm_campaign=RefSeq-release-206&
+utm_term=homo-sapiens&utm_content=20210527link1"
+target="_blank">NCBI RefSeq Annotation Release 109.20210514</a> tracks for the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite&position=default">hg38/GRCh38</a>
+assembly. To keep up with the periodic version releases, we will update the NCBI RefSeq tracks
+automatically for both hg19/GRCh37 and hg38/GRCh38. For all of these tracks, the alignments
+and coordinates are provided by RefSeq. These tracks are organized in a composite track that
+includes:</p>
+<ul>
+  <li><b>RefSeq All</b> &ndash; all annotations from the curated and predicted sets
+  <li><b>RefSeq Curated</b> &ndash; curated annotations beginning with NM, NR, or NP
+  <li><b>RefSeq Other</b> &ndash; all other RefSeq annotations not included in RefSeq All
+  <li><b>RefSeq Alignments</b> &ndash; alignments of transcripts to the genome provided by RefSeq
+  <li><b>RefSeq Diffs</b> &ndash; alignment differences between the human reference genome(s) and RefSeq transcripts
+  <li><b>RefSeq Select and MANE</b> &ndash; a single Select transcript representative for each protein-coding gene
+  <li><b>RefSeq HGMD</b> &ndash; transcripts with clinical variants in Human Gene Mutation Database
+</ul>
+<p>
+We would like to thank NCBI and the RefSeq Annotation database for collecting and curating these data.
+We would also like to thank Hiram Clawson, Lou Nassar, and Gerardo Perez for developing and releasing these tracks.
+</p>
+
+
+<a name="063021"></a>
+<h2>June 30, 2021 &nbsp;&nbsp; Older dbSNP tracks archived into a super track folder: dbSNP Archive</h2>
+<p>
+The UCSC Genome Browser's list of genetic variation datasets is now more organized, 
+with a new folder supertrack for previous dbSNP versions. We have listened to requests 
+and have simplified our tracks listing. This change adds a new track link and 
+clears up older versions of dbSNP links (for mm10, hg19, and hg38) while retaining 
+all functionality of filters and saved sessions.
+The previous versions of dbSNP can be accessed and visualized by the new dbSNP Archive supertrack.</p>
+<ul>
+<li><a href="../../cgi-bin/hgTrackUi?db=hg38&g=dbSnpArchive">dbSNP Archive for hg38</a></li>
+<li><a href="../../cgi-bin/hgTrackUi?db=hg19&g=dbSnpArchive">dbSNP Archive for hg19</a></li>
+<li><a href="../../cgi-bin/hgTrackUi?db=mm10&g=dbSnpArchive">dbSNP Archive for mm10</a></li>
+</ul>
+
+<p class="text-center">
+  <img class='text-center' src="../images/dbSnp.Archive.png"  width='100%' alt="The 
+variation section now has the dbSNP Archive track.">
+</p>
+
+<a name="062821"></a>
+<h2>June 28, 2021 &nbsp;&nbsp; Version 3 of Track Database Definition Document Released</h2>
+<p>
+The <a href="help/trackDb/trackDbHub.html" target="_blank">Track Database Definition Document</a>
+defining hub settings has been updated from version two to version three. This document primarily
+serves as a library of settings that users can refer to when they are setting up and configuring
+their own track hubs. The update in the version is to account for two new sections that highlight
+the new <a href="help/bigLolly.html">bigLolly</a> type specialized for variant data and the new
+<a href="help/vcf.html#trio" >vcfPhasedTrio</a> type specialized for phased VCF data.</p>
+<p>
+The new specifications for these types are included in their relevant
+sections such as <code>vcfChildSample</code> and
+<code>vcfUseAltSampleNames</code> for the new <a href="help/trackDb/trackDbHub.html#vcfPhasedTrio"
+target="_blank">vcfPhasedTrio settings</a>, or <code>lollySizeField</code> and <code>lollyField</code>
+for the new  <a href="help/trackDb/trackDbHub.html#bigLolly" target="_blank">bigLolly settings</a>
+with full descriptions in the document.</p>
+<p>
+The Track Database Definition Document also serves a second function beyond defining settings as
+providing a versioned specification for those sites that support and display data from track hubs
+such as Ensembl and NCBI. See this <a href="http://genome.ucsc.edu/blog/how-portable-is-your-track-hub-use-hubcheck-to-find-out/"
+target="_blank">blog post</a> to learn more about this second element of the document and using the
+hubCheck utility to gain an idea of how your hub's settings might work on different sites.</p>
+
+<a name="062421"></a>
+<h2>June 24, 2021 &nbsp;&nbsp; New REVEL missense scores track for hg38 and hg19</h2>
+<p>
+The UCSC Genome Browser has just added the REVEL tracks to the hg38 and hg19 reference genomes. 
+This much requested clinical dataset is now visualized and interactive on the Genome Browser. 
+REVEL scores predict the pathogenicity of missense variants for every possible 
+basepair change across the entire genome's coding sequences. 
+This dataset bases its scores on 13 individual tools
+to produce high predictive performance of common and rare mutations. To learn more about the
+REVEL dataset, please visit their site below:</p>
+<ul>
+  <li><a href="https://sites.google.com/site/revelgenomics/" target="_blank">
+  https://sites.google.com/site/revelgenomics</a></li>
+</ul>
+<p>
+To access these tracks on the Genome Browser, please visit their description pages below 
+and change the tracks' visibility.</p>
+<ul>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=revel">REVEL track on hg38</a></li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg19&g=revel">REVEL track on hg19</a></li>
+</ul>
+<p>
+Thanks to REVEL for providing these annotations, as well as
+Max Haeussler and Dan Schmelter of the UCSC Genome Browser group for their
+work in creating and releasing these tracks.</p>
+
+<a name="061421"></a>
+<h2>June 14, 2021 &nbsp;&nbsp; Updated Ensembl gene tracks for 48 assemblies (v104)</h2>
+<p>
+We are pleased to announce updated
+<a href="http://uswest.ensembl.org/info/genome/genebuild/index.html" target="_blank">
+Ensembl gene annotation</a> tracks corresponding to <strong>v104</strong> for the
+following assemblies:</p><br>
+<div class="container">
+  <div class="row">
+  <div class="col-sm-4">
+  <ul>
+        <li>Armadillo <a href="../cgi-bin/hgTrackUi?db=dasNov3&g=ensGene&position=default"
+         target=_blank>(dasNov3)</a></li>
+        <li>Baboon <a href="../cgi-bin/hgTrackUi?db=papAnu4&g=ensGene&position=default"
+         target=_blank>(papAnu4)</a></li>
+        <li>Bison <a href="../cgi-bin/hgTrackUi?db=bisBis1&g=ensGene&position=default"
+         target=_blank>(bisBis1)</a></li>
+        <li>Bonobo <a href="../cgi-bin/hgTrackUi?db=panPan2&g=ensGene&position=default"
+         target=_blank>(panPan2)</a></li>
+        <li>Budgerigar <a href="../cgi-bin/hgTrackUi?db=melUnd1&g=ensGene&position=default"
+         target=_blank>(melUnd1)</a></li>
+        <li>Bushbaby <a href="../cgi-bin/hgTrackUi?db=otoGar3&g=ensGene&position=default"
+         target=_blank>(otoGar3)</a></li>
+        <li>C. elegans <a href="../cgi-bin/hgTrackUi?db=ce11&g=ensGene&position=default"
+         target=_blank>(ce11)</a></li>
+        <li>C. intestinalis <a href="../cgi-bin/hgTrackUi?db=ci3&g=ensGene&position=default"
+         target=_blank>(ci3)</a></li>
+        <li>Cat <a href="../cgi-bin/hgTrackUi?db=felCat9&g=ensGene&position=default"
+         target=_blank>(felCat9)</a></li>
+        <li>Chicken <a href="../cgi-bin/hgTrackUi?db=galGal6&g=ensGene&position=default"
+         target=_blank>(galGal6)</a></li>
+        <li>Chimp <a href="../cgi-bin/hgTrackUi?db=panTro5&g=ensGene&position=default"
+         target=_blank>(panTro5)</a></li>
+        <li>Chinese hamster <a href="../cgi-bin/hgTrackUi?db=criGriChoV1&g=ensGene&position=default"
+         target=_blank>(criGriChoV1)</a></li>
+        <li>Chinese hamster <a href="../cgi-bin/hgTrackUi?db=criGriChoV2&g=ensGene&position=default"
+         target=_blank>(criGriChoV2)</a></li>
+        <li>Coelacanth <a href="../cgi-bin/hgTrackUi?db=latCha1&g=ensGene&position=default"
+         target=_blank>(latCha1)</a></li>
+        <li>Cow <a href="../cgi-bin/hgTrackUi?db=bosTau9&g=ensGene&position=default"
+         target=_blank>(bosTau9)</a></li>
+        <li>D. melanogaster <a href="../cgi-bin/hgTrackUi?db=dm6&g=ensGene&position=default"
+         target=_blank>(dm6)</a></li>
+  </ul></div>
+  <div class="col-sm-4">
+  <ul>
+        <li>Dog <a href="../cgi-bin/hgTrackUi?db=canFam3&g=ensGene&position=default"
+         target=_blank>(canFam3)</a></li>
+        <li>Dog <a href="../cgi-bin/hgTrackUi?db=canFam5&g=ensGene&position=default"
+         target=_blank>(canFam5)</a></li>
+        <li>Elephant <a href="../cgi-bin/hgTrackUi?db=loxAfr3&g=ensGene&position=default"
+         target=_blank>(loxAfr3)</a></li>
+        <li>Elephant shark <a href="../cgi-bin/hgTrackUi?db=calMil1&g=ensGene&position=default"
+         target=_blank>(calMil1)</a></li>
+        <li>Ferret <a href="../cgi-bin/hgTrackUi?db=musFur1&g=ensGene&position=default"
+         target=_blank>(musFur1)</a></li>
+        <li>Gibbon <a href="../cgi-bin/hgTrackUi?db=nomLeu3&g=ensGene&position=default"
+         target=_blank>(nomLeu3)</a></li>
+        <li>Golden snub-nosed monkey <a href="../cgi-bin/hgTrackUi?db=rhiRox1&g=ensGene&position=default"
+         target=_blank>(rhiRox1)</a></li>
+        <li>Gorilla <a href="../cgi-bin/hgTrackUi?db=gorGor4&g=ensGene&position=default"
+         target=_blank>(gorGor4)</a></li>
+        <li>Green monkey <a href="../cgi-bin/hgTrackUi?db=chlSab2&g=ensGene&position=default"
+         target=_blank>(chlSab2)</a></li>
+        <li>Guinea pig <a href="../cgi-bin/hgTrackUi?db=cavPor3&g=ensGene&position=default"
+         target=_blank>(cavPor3)</a></li>
+        <li>Horse <a href="../cgi-bin/hgTrackUi?db=equCab3&g=ensGene&position=default"
+         target=_blank>(equCab3)</a></li>
+        <li>Lamprey <a href="../cgi-bin/hgTrackUi?db=petMar2&g=ensGene&position=default"
+         target=_blank>(petMar2)</a></li>
+        <li>Lizard <a href="../cgi-bin/hgTrackUi?db=anoCar2&g=ensGene&position=default"
+         target=_blank>(anoCar2)</a></li>
+        <li>Medium ground finch <a href="../cgi-bin/hgTrackUi?db=geoFor1&g=ensGene&position=default"
+         target=_blank>(geoFor1)</a></li>
+        <li>Microbat <a href="../cgi-bin/hgTrackUi?db=myoLuc2&g=ensGene&position=default"
+         target=_blank>(myoLuc2)</a></li>
+        <li>Mouse <a href="../cgi-bin/hgTrackUi?db=mm39&g=ensGene&position=default"
+         target=_blank>(mm39)</a></li>
+  </ul></div>
+  <div class="col-sm-4">
+  <ul>
+        <li>Naked mole-rat <a href="../cgi-bin/hgTrackUi?db=hetGla1&g=ensGene&position=default"
+         target=_blank>(hetGla1)</a></li>
+        <li>Naked mole-rat <a href="../cgi-bin/hgTrackUi?db=hetGla2&g=ensGene&position=default"
+         target=_blank>(hetGla2)</a></li>
+        <li>Orangutan <a href="../cgi-bin/hgTrackUi?db=ponAbe2&g=ensGene&position=default"
+         target=_blank>(ponAbe2)</a></li>
+        <li>Panda <a href="../cgi-bin/hgTrackUi?db=ailMel1&g=ensGene&position=default"
+         target=_blank>(ailMel1)</a></li>
+        <li>Pig <a href="../cgi-bin/hgTrackUi?db=susScr11&g=ensGene&position=default"
+         target=_blank>(susScr11)</a></li>
+        <li>Rabbit <a href="../cgi-bin/hgTrackUi?db=oryCun2&g=ensGene&position=default"
+         target=_blank>(oryCun2)</a></li>
+        <li>Rat <a href="../cgi-bin/hgTrackUi?db=rn6&g=ensGene&position=default"
+         target=_blank>(rn6)</a></li>
+        <li>Rhesus <a href="../cgi-bin/hgTrackUi?db=rheMac10&g=ensGene&position=default"
+         target=_blank>(rheMac10)</a></li>
+        <li>S. cerevisiae <a href="../cgi-bin/hgTrackUi?db=sacCer3&g=ensGene&position=default"
+         target=_blank>(sacCer3)</a></li>
+        <li>Sheep <a href="../cgi-bin/hgTrackUi?db=oviAri3&g=ensGene&position=default"
+         target=_blank>(oviAri3)</a></li>
+        <li>Squirrel <a href="../cgi-bin/hgTrackUi?db=speTri2&g=ensGene&position=default"
+         target=_blank>(speTri2)</a></li>
+        <li>Squirrel monkey <a href="../cgi-bin/hgTrackUi?db=saiBol1&g=ensGene&position=default"
+         target=_blank>(saiBol1)</a></li>
+        <li>Tarsier <a href="../cgi-bin/hgTrackUi?db=tarSyr2&g=ensGene&position=default"
+         target=_blank>(tarSyr2)</a></li>
+        <li>Tetraodon <a href="../cgi-bin/hgTrackUi?db=tetNig2&g=ensGene&position=default"
+         target=_blank>(tetNig2)</a></li>
+        <li>Turkey <a href="../cgi-bin/hgTrackUi?db=melGal5&g=ensGene&position=default"
+         target=_blank>(melGal5)</a></li>
+        <li>X. tropicalis <a href="../cgi-bin/hgTrackUi?db=xenTro9&g=ensGene&position=default"
+         target=_blank>(xenTro9)</a></li>
+  </ul></div>
+</div></div>
+<p>
+Thanks to Ensembl for providing these annotations, as well as
+Hiram Clawson and Lou Nassar of the UCSC Genome Browser group for their
+work in creating and releasing these tracks.</p>
+
+<a name="061021"></a>
+<h2>June 10, 2021 &nbsp;&nbsp; Updated data for NCBI RefSeq tracks for human assembly hg19</h2>
+<p>
+We are pleased to announce the updated  <a href="https://www.ncbi.nlm.nih.gov/genome/annotation_euk/
+Homo_sapiens/109.20190905/#:~:text=NCBI%20Homo%20sapiens%20Updated%20Annotation%20Release%
+20105.20201022&text=Updated%20Annotation%20Release%20105.20201022%20is,to%20update%20the%20annotated%20features"
+target="_blank">NCBI RefSeq Annotation Release 105.20201022</a> tracks for the
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=refSeqComposite&position=default">hg19/GRCh37</a>
+assembly. For all of these tracks, the alignments and coordinates are provided by RefSeq.
+These tracks are organized in a composite track that includes:</p>
+<ul>
+  <li><b>RefSeq All</b> &ndash; all annotations from the curated and predicted sets
+  <li><b>RefSeq Curated</b> &ndash; curated annotations beginning with NM, NR, or NP
+  <li><b>RefSeq Other</b> &ndash; all other RefSeq annotations not included in RefSeq All
+  <li><b>RefSeq Alignments</b> &ndash; alignments of transcripts to the genome provided by RefSeq
+  <li><b>RefSeq Diffs</b> &ndash; alignment differences between the human reference genome(s) and RefSeq transcripts
+  <li><b>RefSeq Select</b> &ndash; a single Select transcript representative for each protein-coding gene
+  <li><b>RefSeq HGMD</b> &ndash; transcripts with clinical variants in Human Gene Mutation Database
+</ul>
+<p>
+We would like to thank NCBI and the RefSeq Annotation database for collecting and curating these data.
+We would also like to thank Hiram Clawson, Lou Nassar, and Gerardo Perez for developing and releasing these tracks.
+</p>
+
+<a name="060121"></a>
+<h2>June 1, 2021 &nbsp;&nbsp; Genome Archive (GenArk) hubs and Dynamic BLAT</h2>
+<p>
+Do you have a favorite species or a research organism for which you'd like to visualize
+the genomic sequence? With the recent addition of genomic assemblies for more than 1,300
+species, it's possible that your favorite is now available in the UCSC Genome Browser.
+Check <a  href="https://hgdownload.soe.ucsc.edu/hubs/">this list</a> of new assemblies 
+to see if yours is a click away. Each of these Genome Browser assembly hubs comes pre-loaded 
+with several annotation tracks, gene models, and the ability to align genomic sequence to 
+the reference assembly using the <a  href="/FAQ/FAQblat.html">BLAT</a> 
+alignment tool. You can add your own data to your view of the assembly hub by uploading a 
+<a  href="help/customTrack.html">custom track</a> 
+or creating a <a href="help/hgTrackHubHelp.html">track hub</a>.</p>
+<p>
+We call this group of assembly hubs, the <a href=https://hgdownload.soe.ucsc.edu/hubs/>
+Genome Archive (GenArk)</a>. The genomes in the GenArk are sourced from 
+<a href=https://www.ncbi.nlm.nih.gov/refseq/ target="_blank">NCBI RefSeq</a>, 
+the  <a href="https://vertebrategenomesproject.org/" target="_blank">Vertebrate Genomes Project (VGP)</a> 
+and other projects. See the complete list of assembly hubs <a target="_blank"
+href="https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt">here</a>.</p>
+<p>
+GenArk assemblies can be found by searching the common name (e.g.
+ <a href="../h/GCF_001984765.1">American Beaver</a>) or GCA/GCF accession
+(e.g. <a href="../h/GCF_001984765.1">GCF_001984765.1</a>) directly on the
+<a href="/cgi-bin/hgGateway">Genome Browser Gateway page</a>.
+A full list can also be seen on the <a 
+href="https://hgdownload.soe.ucsc.edu/hubs">GenArk portal</a> which
+is organized by phylogenetic groups and projects:<br>
+
+<div align="left">
+<table class="stdTbl">
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/primates/index.html">Primates</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/primates/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/primates/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/mammals/index.html">Mammals</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/mammals/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/mammals/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/birds/index.html">Birds</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/birds/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/birds/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fish/index.html">Fishes</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fish/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fish/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/vertebrate/index.html">Vertebrates</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/vertebrate/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/vertebrate/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/invertebrate/index.html">Invertebrates</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/invertebrate/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/invertebrate/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fungi/index.html">Fungi</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fungi/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/fungi/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/plants/index.html">Plants</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/plants/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/plants/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/VGP/index.html">VGP</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/VGP/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/VGP/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/legacy/index.html">Legacy</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/legacy/asmStats.html">Assembly statistics</a></td>
+ <td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/legacy/trackData.html">Track statistics</a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/globalReference/index.html">Global Reference</a></td>
+ <td><a></a></td>
+ <td><a></a></td></tr>
+
+ <tr><td><a target="_blank" href="https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hubIndex.html">Mouse Strains</a></td>
+ <td><a></a></td>
+ <td><a></a></td></tr>
+
+</table></div></p>
+<p>
+The number of NCBI RefSeq assemblies has been increasing each year, and we expect the trend to continue as assemblies 
+from VGP, and other projects are released. Our next step is to add additional clades to GenArk including archaea,
+viruses, and bacteria.</p>
+
+<p>
+As mentioned above, assembly hubs in the GenArk allow for sequence alignment using the BLAT tool. We extended our traditional
+<a href="../cgi-bin/hgBlat?command=start">BLAT tool</a> to accommodate these assembly hubs and we call it Dynamic BLAT. Dynamic BLAT
+pre-computes index genomes files, which allows assemblies to have a BLAT server without needing it to be resident in the 
+computer's memory. Dynamic BLAT allows us to offer BLAT services on nearly all of our GenArk assemblies, with a few exceptions
+due to excessive genome size.</p>
+
+<p>
+We would like to thank NCBI RefSeq and Vertebrate Genome Project (VGP) for making these assemblies available. We would also 
+like to thank Hiram Clawson, Mark Diekhans, Galt Barber, Lou Nassar, and Gerardo Perez, and the rest of the Browser team 
+for their work on building the assembly hubs, creating GenArk, and extending BLAT to include these new assembly hubs.</p>
+
+
+<a name="051121"></a>
+<h2>May 11, 2021 &nbsp;&nbsp; Vaccines track available for the SARS-CoV-2 Genome Browser</h2>
+<p>
+We are happy to announce the release of the
+<a href="../cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=vaccines">Vaccines</a> track for the UCSC
+SARS-CoV-2 Genome Browser. This track shows the alignment of three different mRNA vaccine sequences
+to the coronavirus genome:
+</p>
+<ol>
+  <li>
+    The BioNTech/Pfizer BNT-162b2 sequence as published by the World Health Organization (WHO)</li>
+  <li>
+    The reconstructed BioNTech/Pfizer BNT-162b2 RNA as sequenced by the
+    <a href="https://firelab.sites.stanford.edu/" target="_blank">Andrew Fire lab</a>, Stanford
+    University School of Medicine</li>
+  <li>
+    The Moderna mRNA-1273 sequence as sequenced by the
+    <a href="https://firelab.sites.stanford.edu/" target="_blank">Andrew Fire lab</a>, Stanford
+    University School of Medicine</li>
+</ol>
+<p>
+The protein encoded by the three sequences has two amino acid substitutions compared to the
+SARS-CoV-2 S glycoprotein. These vaccines include two variations compared to the reference Spike
+sequence to stabilize the shape into a pre-infection structure that delivers a better immune
+response, S:K986P and S:V987P. See also:
+<a href="https://cen.acs.org/pharmaceuticals/vaccines/tiny-tweak-behind-COVID-19/98/i38"
+target="_blank">The tiny tweak behind COVID-19 vaccines</a>. More information about this track can
+be found on the <a href="../cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=vaccines">description
+page</a>.
+<p>
+We want to thank the <a href="https://twitter.com/Fire__Lab" target="_blank">Andrew Fire lab</a>,
+Stanford University School of Medicine for providing the sequencing data of these vaccines. We also
+want to thank Hiram Clawson and Jairo Navarro for the creation and release of this track.</p>
+
+<a name="050421"></a>
+<h2>May 04, 2021 &nbsp;&nbsp; New Genome Browser: Rat, rn7 (<em>Rattus norvegicus</em>)</h2>
+<p>
+A genome browser is now available for the <em>Rattus norvegicus</em> assembly released in Nov. 2020 by the
+<a href="https://www.darwintreeoflife.org/" target="_blank"> Darwin Tree of Life Project</a> at the
+<a href="https://www.sanger.ac.uk/" target="_blank"> Wellcome Sanger Institute</a> (mRatBN7.2).
+<h3>About the assembly:</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b>  <a href="../../cgi-bin/hgGateway?db=rn7" 
+  target="_blank">rn7</a></li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="https://www.sanger.ac.uk/"
+  target="_blank">Wellcome Sanger Institute</a></li>
+  <li><b>Assembly date:</b> Nov. 2020</li>
+  <li><B>Accession ID:</B> GCF_015227675.2</li>
+  <li><B>NCBI Genome ID:</B> <A HREF='https://www.ncbi.nlm.nih.gov/genome/73'
+TARGET='_blank'>73</A> (<em>Rattus norvegicus</em>)</li>
+  <li><B>NCBI Assembly ID:</B> <A HREF='https://www.ncbi.nlm.nih.gov/assembly/9079111'
+TARGET='_blank'>9079111</A></li>
+  <li><B>NCBI BioProject ID:</B> <A HREF='https://www.ncbi.nlm.nih.gov/bioproject/662791'
+TARGET='_blank'>662791</A></li>
+  <li><B>NCBI BioSample ID:</B> <A HREF='https://www.ncbi.nlm.nih.gov/biosample/SAMN16261960'
+TARGET='_blank'>SAMN16261960</A></li>
+  <li><b>Scaffold count: </b>176</li>
+  <li><b>Total size: </b>2,647,915,728</li>
+  <li><a href="../goldenPath/credits.html#rat_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+  <li><a href="../goldenPath/credits.html#rat_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+  <li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/rn7/" 
+target="_blank" >FTP</a></li>
+  <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#rat"
+target="_blank" >Downloads page</a></li>
+</ul>
+</p>
+<p>
+We would like to thank the Darwin Tree of Life Project at the Wellcome Sanger Institute for 
+creating this new rat assembly. We would also like to thank Hiram Clawson, Lou Nassar, and 
+Gerardo Perez for the development and release of the rn7 genome browser.
+</p>
+
+<a name="041321"></a>
+<h2>Apr. 13, 2021 &nbsp;&nbsp; New Haploinsufficiency predictions for human (hg19)</h2>
+<p>
+We are happy to announce a new haploinsufficiency predictions track for human assembly
+<a href="/cgi-bin/hgTrackUi?db=hg19&c=chrX&g=decipherHaploIns">GRCh37/hg19</a>. This track displays
+haploinsufficiency predictions for human genes from
+<a href="https://www.deciphergenomics.org/" target="_blank">DECIPHER</a>. Human cells have two
+copies of most genes, one from each parent. If a mutation alters one allele, or copy, the other is
+usually still sufficient to maintain proper gene function. For haploinsufficient genes, however,
+both copies must be functioning for the organism to have a normal life. Haploinsufficiency is
+implicated in a number of health disorders.
+</p>
+<p>
+Moving the mouse cursor over any gene in the track will display a pop-up box with the gene name
+and &alpha;-upper quantile for the prediction. The genes in this track are also color-coded
+according to quantile:
+</p>
+<ul>
+  <li>
+    <b><span style='color: #AA00AA'>Magenta</span></b> shades indicate a higher expectation of being
+    haploinsufficient</li>
+  <li>
+    <b><span style='color: #00AA00'>Green</span></b> shades indicate a lower expectation of being
+    haploinsufficient</li>
+</ul>
+<p>
+We would like to thank the DECIPHER team for making the haploinsufficiency prediction data
+available. We also want to thank Jonathan Casper and Jairo Navarro for the creation and release of
+this track.
+</p>
+
+<a name="040121"></a>
+<h2>Apr. 01, 2021 &nbsp;&nbsp; Update to sno/miRNA track for human (hg19)</h2>
+<p>
+We are happy to announce an update to the sno/miRNA track for human assembly
+<a href="/cgi-bin/hgTrackUi?db=hg19&c=chrX&g=wgRna">GRCh37/hg19</a>. With this update, the miRBase
+database was updated to version 20. The four different types of RNA and their counts in the human
+genome are listed below.
+</p>
+<ul>
+  <li>
+  C/D box small nucleolar RNAs (C/D box snoRNAs): 269</li>
+  <li>
+  H/ACA box snoRNAs: 112</li>
+  <li>
+  precursor forms of microRNAs (pre-miRNAs): 1871</li>
+  <li>
+  small Cajal body-specific RNAs (scaRNAs): 21</li>
+</ul>
+<p>
+We would like to thank Hiram Clawson and Jairo Navarro for the creation and release of this update.
+</p>
+
+<a name="033021"></a>
+<h2>Mar. 30, 2021 &nbsp;&nbsp; Updated Chain/Net tracks for Mouse (mm39/GRCm39)</h2>
+<p>We are pleased to announce the update to the <a target="_blank"
+href="../../cgi-bin/hgTrackUi?db=mm39&g=mm39ChainNet&position=default">Chain/Net</a> tracks
+for the recently released mouse assembly
+<a target="_blank" href="../../cgi-bin/hgTracks?db=mm39" >mm39/GRCm39</a>.
+The chain track shows alignments of the mouse assembly to 29 other
+organisms using a gap scoring system that allows longer gaps than traditional affine gap scoring
+systems. The net track shows the best mouse/other chain for every part of the other genome.</p><br>
+<div class="container">
+ <div class="row">
+  <div class="col-sm-4">
+  <ul>
+     <li>Bonobo <a href="../cgi-bin/hgTrackUi?db=panPan3&g=chainNetMm39&position=default"
+     target=_blank>(panPan3)</a></li>
+     <li>Bushbaby <a href="../cgi-bin/hgTrackUi?db=otoGar3&g=chainNetMm39&position=default"
+     target=_blank>(otoGar3)</a></li>
+     <li>Chicken <a href="../cgi-bin/hgTrackUi?db=galGal6&g=chainNetMm39&position=default"
+     target=_blank>(galGal6)</a></li>
+     <li>Chimp <a href="../cgi-bin/hgTrackUi?db=panTro6&g=chainNetMm39&position=default"
+     target=_blank>(panTro6)</a></li>
+     <li>Chinese pangolin <a href="../cgi-bin/hgTrackUi?db=manPen1&g=chainNetMm39&position=default"
+     target=_blank>(manPen1)</a></li>
+     <li>Cow <a href="../cgi-bin/hgTrackUi?db=bosTau9&g=chainNetMm39&position=default"
+     target=_blank>(bosTau9)</a></li>
+     <li>Dolphin <a href="../cgi-bin/hgTrackUi?db=turTru2&g=chainNetMm39&position=default"
+     target=_blank>(turTru2)</a></li>
+     <li>Elephant <a href="../cgi-bin/hgTrackUi?db=loxAfr3&g=chainNetMm39&position=default"
+     target=_blank>(loxAfr3)</a></li>
+     <li>Gorilla <a href="../cgi-bin/hgTrackUi?db=gorGor6&g=chainNetMm39&position=default"
+     target=_blank>(gorGor6)</a></li>
+     <li>Guinea pig <a href="../cgi-bin/hgTrackUi?db=cavPor3&g=chainNetMm39&position=default"
+     target=_blank>(cavPor3)</a></li>
+  </ul>
+  </div>
+  <div class="col-sm-4">
+  <ul>
+     <li>Hawaiian monk seal <a href="../cgi-bin/hgTrackUi?db=neoSch1&g=chainNetMm39&position=default"
+     target=_blank>(neoSch1)</a></li>
+     <li>Hedgehog <a href="../cgi-bin/hgTrackUi?db=eriEur2&g=chainNetMm39&position=default"
+     target=_blank>(eriEur2)</a></li>
+     <li>Horse <a href="../cgi-bin/hgTrackUi?db=equCab3&g=chainNetMm39&position=default"
+     target=_blank>(equCab3)</a></li>
+     <li>Lamprey <a href="../cgi-bin/hgTrackUi?db=petMar3&g=chainNetMm39&position=default"
+     target=_blank>(petMar3)</a></li>
+     <li>Malayan flying lemur <a href="../cgi-bin/hgTrackUi?db=galVar1&g=chainNetMm39&position=default"
+     target=_blank>(galVar1)</a></li>
+     <li>Opossum <a href="../cgi-bin/hgTrackUi?db=monDom5&g=chainNetMm39&position=default"
+     target=_blank>(monDom5)</a></li>
+     <li>Pig <a href="../cgi-bin/hgTrackUi?db=susScr3&g=chainNetMm39&position=default"
+     target=_blank>(susScr3)</a></li>
+     <li>Pika <a href="../cgi-bin/hgTrackUi?db=ochPri3&g=chainNetMm39&position=default"
+     target=_blank>(ochPri3)</a></li>
+     <li>Rabbit <a href="../cgi-bin/hgTrackUi?db=oryCun2&g=chainNetMm39&position=default"
+     target=_blank>(oryCun2)</a></li>
+     <li>Rat <a href="../cgi-bin/hgTrackUi?db=rn6&g=chainNetMm39&position=default"
+     target=_blank>(rn6)</a></li>
+  </ul>
+  </div>
+  <div class="col-sm-4">
+  <ul>
+     <li>Rhesus <a href="../cgi-bin/hgTrackUi?db=rheMac10&g=chainNetMm39&position=default"
+     target=_blank>(rheMac10)</a></li>
+     <li>Sheep <a href="../cgi-bin/hgTrackUi?db=oviAri4&g=chainNetMm39&position=default"
+     target=_blank>(oviAri4)</a></li>
+     <li>Shrew <a href="../cgi-bin/hgTrackUi?db=sorAra2&g=chainNetMm39&position=default"
+     target=_blank>(sorAra2)</a></li>
+     <li>Squirrel <a href="../cgi-bin/hgTrackUi?db=speTri2&g=chainNetMm39&position=default"
+     target=_blank>(speTri2)</a></li>
+     <li>Tarsier <a href="../cgi-bin/hgTrackUi?db=tarSyr2&g=chainNetMm39&position=default"
+     target=_blank>(tarSyr2)</a></li>
+     <li>Tenrec <a href="../cgi-bin/hgTrackUi?db=echTel2&g=chainNetMm39&position=default"
+     target=_blank>(echTel2)</a></li>
+     <li>Tree shrew <a href="../cgi-bin/hgTrackUi?db=tupBel1&g=chainNetMm39&position=default"
+     target=_blank>(tupBel1)</a></li>
+     <li>X. tropicalis <a href="../cgi-bin/hgTrackUi?db=xenTro9&g=chainNetMm39&position=default"
+     target=_blank>(xenTro9)</a></li>
+     <li>Zebrafish <a href="../cgi-bin/hgTrackUi?db=danRer11&g=chainNetMm39&position=default"
+     target=_blank>(danRer11)</a></li>
+  </ul>
+  </div>
+ </div>
+</div>
+
+<p>
+We would like to thank Angie Hinrichs, Hiram Clawson, Lou Nassar, and Gerardo Perez for the
+development and release of these tracks.</p>
+
+<a name="032321"></a>
+<h2>Mar. 23, 2021 &nbsp;&nbsp; New GENCODE gene tracks: Human V37 (hg19/hg38) - Mouse M26 
+(mm39)</h2>
+<p>
+We are pleased to announce new GENCODE Gene annotation tracks, which correspond
+to <a href="https://www.ensembl.info/2021/02/15/ensembl-103-has-been-released/"
+target="_blank">Ensembl 103</a>, for three assemblies: <a target="_blank" 
+href="../../cgi-bin/hgTrackUi?db=hg19&c=chr21&g=wgEncodeGencodeV37lift37">hg19/GRCh37</a>,
+<a target="_blank" href="../../cgi-bin/hgTrackUi?db=hg38&c=chr1&g=wgEncodeGencodeV37">hg38/GRCh38</a>,
+and <a target="_blank" href="../../cgi-bin/hgTrackUi?db=mm39&c=chr12&g=wgEncodeGencodeVM26">mm39/GRCm39</a>.
+For human, the GENCODE V37 annotations were mapped to hg38/GRCh38 and then back-mapped
+to the hg19/GRCh37 assembly. For all three assemblies, the gene sets contain the following
+tracks:</p>
+<ul>
+  <li>Basic - a subset of the <em>Comprehensive set</em>.</li>
+  <li>Comprehensive - all GENCODE coding and non-coding transcript annotations, including
+      polymorphic pseudogenes. This includes both manual and automatic annotations.</li>
+  <li>Pseudogenes - all annotations except polymorphic pseudogenes.</li></ul>
+<p>
+The hg38 and mm39 assemblies also include the following tracks that are not available on hg19:
+</p>
+<ul>
+  <li>2-way Pseudogenes - pseudogenes predicted by both the Yale Pseudopipe and UCSC
+      Retrofinder pipelines.</li>
+  <li>PolyA - polyA signals and sites manually annotated on the genome based on transcribed
+      evidence (ESTs and cDNAs) of 3' end of transcripts containing at least 3 A's not matching the
+      genome.</li></ul>
+<p>
+Details on each release can be found on the <a target="_blank" 
+href="https://www.gencodegenes.org/">GENCODE site</a>. This includes <a target="_blank" 
+href="https://www.gencodegenes.org/human/stats.html">statistics on each release</a>.
+<p>We would like to thank the <a target="_blank" 
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these
+annotations. We would also like to thank Mark Diekhans and Lou Nassar for the development and
+release of these tracks.</p>
+
+<a name="031821"></a>
+<h2>Mar. 18, 2021 &nbsp;&nbsp; Updated transcription start miRNA sites for human</h2>
+<p>
+We are happy to announce an update to the TS miRNA Targets track for human,
+<a href="/cgi-bin/hgTrackUi?db=hg19&c=chrX&g=targetScanMiRnaSitesV72" >GRCh37/hg19</a>.
+This track shows conserved mammalian microRNA regulatory target sites for conserved microRNA
+families in the 3' UTR regions of Refseq Genes, as predicted by TargetScanHuman 7.2.</p>
+
+<p>
+The track items are colored based on the four classes of target sites identified in Agarwal
+<em>et al.</em>, 2015.</p>
+<table cellpadding="2">
+  <tbody>
+    <tr>
+      <td>Purple</td>
+      <td style="background-color: #800080; padding-left: 20px"></td>
+      <td>8mer</td>
+    </tr>
+    <tr>
+      <td>Red</td>
+      <td style="background-color: #ff0000; padding-left: 20px"></td>
+      <td>7mer-m8</td>
+    </tr>
+    <tr>
+      <td>Blue</td>
+      <td style="background-color: #1e90ff; padding-left: 20px"></td>
+      <td>7mer-A1</td>
+    </tr>
+    <tr>
+      <td>Green</td>
+      <td style="background-color: #00ff00; padding-left: 20px"></td>
+      <td>Non-canonical</td>
+    </tr>
+  </tbody>
+</table>
+<p>
+Thanks to George Bell of
+<a href="http://barc.wi.mit.edu/" target="_blank">Bioinformatics and Research Computing</a> at the
+Whitehead Institute for providing this annotation, which was generated in collaboration with the
+labs of David Bartel and Chris Burge. Additional information on microRNA target prediction is
+available on the <a href="http://www.targetscan.org/" target="_blank">TargetScan</A> website. We
+would also like to thank UCSC Genome Browser team members Brittney Wick, Kate Rosenbloom, and Jairo
+Navarro for the development and release of this track.</p>
+
+<a name="031721"></a>
+<h2>Mar. 17, 2021 &nbsp;&nbsp; Updated hg38 default gene track to GENCODE v36</h2>
+<p>
+We have updated the most recent human genome, GRCh38/hg38, with an updated default gene set,
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE v36</a>. This is part of our commitment
+to keep our annotation data as up-to-date as possible with the most 
+useful information, all versioned for stability and reproducibility. This geneset 
+replaces our previous default, GENCODE v32, with a more recent dataset while retaining all 
+of the filters, viewing options, and data access abilities. GENCODE v32 can still be 
+viewed in the <a href="../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper">
+All GENCODE</a> track. You can view the new default geneset at the following link:
+<a href="../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack">GENCODE v36</a></p>
+
+<p>
+The default gene dataset is called &quot;knownGene&quot; internally at UCSC and is 
+used in many bioinformatics pipelines as a reference geneset. 
+The GRCh37/hg19 default geneset will stay the same.
+The UCSC Genome Browser would like to thank the <a href="https://www.gencodegenes.org/"
+ target="_blank">GENCODE consortium</a>
+and the internal development team at UCSC, including Daniel Schmelter and Brian Raney.</p>
+
+<a name="030421"></a>
+<h2>Mar. 4, 2021 &nbsp;&nbsp; Updated NCBI RefSeq Gene Tracks for 13 organisms</h2>
+<p>
+We are pleased to announce a combination of both updated and new
+<a href="https://www.ncbi.nlm.nih.gov/refseq/" target="_blank">
+NCBI RefSeq gene annotation</a> tracks for the
+following 13 assemblies. Most notably, we have updated both human assemblies and the new 
+mouse assembly.</p><br>
+<div class="container">
+ <div class="row">
+  <div class="col-sm-3">
+  <ul>
+     <li>Human <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=hg19">(hg19)</a></li>
+     <li>Human <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=hg38">(hg38)</a></li>
+     <li>Mouse <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=mm39">(mm39)</a></li>
+     <li>Worm <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=ce11">(ce11)</a></li>
+  </ul>
+  </div>
+  <div class="col-sm-3">
+  <ul>
+     <li>Fruit fly <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=dm6">(dm6)</a></li>
+     <li>Turkey <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=melGal5">(melGal5)</a></li>
+     <li>Sheep <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=oviAri4">(oviAri4)</a></li>
+     <li>Yeast <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=sacCer3">(sacCer3)</a></li>
+  </ul>
+  </div>
+  <div class="col-sm-3">
+  <ul>
+     <li>Frog <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=xenTro9">(xenTro9)</a></li>
+     <li>Pig <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=susScr11">(susScr11)</a></li>
+     <li>Chimp <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=panTro5">(panTro5)</a></li>
+     <li>Green Monkey <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=chlSab2">(chlSab2)</a></li>
+  </ul>
+  </div>
+  <div class="col-sm-3">     
+  <ul>
+     <li>Chinese Hamster Ovary <a href="../cgi-bin/hgTrackUi?g=refSeqComposite&db=criGriChoV1">(criGriChoV1)</a></li>
+  </ul>
+  </div>
+ </div>
+</div>
+
+<p>
+Thanks to <a target="_blank" href="https://www.ncbi.nlm.nih.gov/refseq/">
+NCBI RefSeq</a> for providing these annotations. We would also like to thank Hiram Clawson
+and Daniel Schmelter of the UCSC Genome Browser group for their
+work in creating and releasing these tracks.</p>
+
 <a name="030221"></a>
 <h2>Mar. 02, 2021 &nbsp;&nbsp; CADD Scores now available for hg19 and hg38</h2>
 <p>
@@ -970,7 +1726,7 @@ predicted gene models, and data supporting them.</li>
 icSHAPE RNA Structure</a> - This track shows normalized icSHAPE reactivity data of 
 in vivo and in vitro SARS-CoV-2 experiments.</li>	
 <li>
-<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=icshape">
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=iedb">
 Validated epitopes from IEDB</a> - This track shows epitope sequences displayed by 
 various class I MHC alleles as annotated by National Institute for Allergy and 
 Infectious Diseases (NIAID) <a href="https://www.iedb.org/" target="_blank">
@@ -1414,7 +2170,7 @@ the track description page and VCF help page:
 <ul>
 <li><a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=tgpTrios">
 1000 Genomes Trios on GRCh38/hg38</a></li>
-<li><a href="https://genome.ucsc.edu/goldenPath/help/vcf.html#trio">VCF track format</a></li>
+<li><a href="help/vcf.html#trio">VCF track format</a></li>
 </ul>
 
 <div class="text-center">
@@ -1648,9 +2404,9 @@ Thanks to Robert Kuhn for production and to the Browser staff for all the featur
 
 
 <a name="072420"></a>
-<h2>Jul. 24, 2020 &nbsp;&nbsp; New RefSeq Diffs tracks on 54 assemblies</h2>
+<h2>Jul. 24, 2020 &nbsp;&nbsp; New RefSeq Diffs tracks on 51 assemblies</h2>
 <p>
-We have generated RefSeq Diffs tracks for 54 new assemblies. These tracks
+We have generated RefSeq Diffs tracks for 51 new assemblies. These tracks
 show alignment differences between the reference genome and RefSeq transcripts.
 This track can be found as part of the NCBI RefSeq composite track. Click the 
 assembly links below to go to the respective assembly RefSeq composite page:</p><br>
@@ -1881,8 +2637,7 @@ For a timeline and pictures, please visit the
 20th-anniversary-of-publishing-the-human-genome-to-the-internet/">
 Genomics Institute's article on the anniversary</a> as well as this short video
 commemorating the occasion:</p>
-<p><iframe width="560" height="315" src="https://www.youtube.com/embed/_6caCfvMIiY" 
-?rel=0" 
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/_6caCfvMIiY?rel=0" 
 frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 allowfullscreen></iframe></p>
 
@@ -1984,8 +2739,8 @@ below:</p>
 <th><a href='https://hgdownload.soe.ucsc.edu/hubs/VGP/vgpAltData.html'>alternate/haplotype</a></th>
 <th><a href='https://hgdownload.soe.ucsc.edu/hubs/VGP/vgpTrioData.html'>trio mat/pat</a></th>
 <th><a href='https://hgdownload.soe.ucsc.edu/hubs/VGP/vgpLegacyData.html'>legacy/superseded</a></th>
-</tr><tr>
-</tr></thead>
+</tr>
+</thead>
 </table></p>
 
 <p>
@@ -2565,8 +3320,7 @@ NCBI RefSeq</a> for providing these annotations. We would also like to thank Hir
 and Lou Nassar of the UCSC Genome Browser group for their
 work in creating and releasing these tracks.</p>
 
-<a name="042820"></a
->
+<a name="042820"></a>
 <h2>Apr. 28, 2020 &nbsp;&nbsp; gnomAD Constraint Metrics and Structural Variants data now available
 on human (GRCh37/hg19) assembly</h2>
 
@@ -6059,7 +6813,7 @@ We would like to thank Hiram Clawson, Maximilian Haeussler, Christopher Lee, and
 the development and release of these tracks.</p>
 
 <a name="071417"></a>
-<h2>Jul. 14, 2017 &nbsp;&nbsp; New alternative mouse strain hub and strain-specific annotations</h3>
+<h2>Jul. 14, 2017 &nbsp;&nbsp; New alternative mouse strain hub and strain-specific annotations</h2>
 <p>
 A mouse strain assembly hub is now available and shows an alignment of 16 assembled laboratory mice
 strains, including the reference mouse (mm10) as well as the reference rat (rn6). This hub contains
@@ -8025,7 +8779,7 @@ annotation tracks were generated by UCSC and collaborators worldwide. See the
 <a href="/goldenPath/credits.html#cow_credits">Credits</a> page for a detailed list of the 
 organizations and individuals who contributed to this release.</p>
  
-<a name="121214">
+<a name="121214"></a>
 <h2>Dec. 12, 2014 &nbsp;&nbsp; New <em>D. melanogaster</em> (dm6) assembly now available</h2>
 <p>
 We are pleased to announce the release of a Genome Browser for the August 2014 assembly of 

@@ -59,7 +59,6 @@
 #define DEFAULT_GENOME "Human"
 #endif
 
-
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
 static struct sqlConnCache *centralCc = NULL;
 static char *centralDb = NULL;
@@ -1510,6 +1509,9 @@ if (newGbdbLoc==NULL)
 
 freeMem(path);
 path = replaceChars(fileName, "/gbdb/", newGbdbLoc);
+if (cfgOptionBooleanDefault("traceGbdb", FALSE))
+    fprintf(stderr, "REDIRECT gbdbLoc2 %s ", path);
+
 return path;
 }
 
@@ -3940,8 +3942,9 @@ boolean trackDataAccessibleHash(char *database, struct trackDb *tdb, struct hash
  *
  * if gbdbHash is not NULL, use it when looking for the file */
 {
-if (startsWith("mathWig", tdb->type))
+if (startsWith("mathWig", tdb->type) || startsWith("cartVersion", tdb->type)) 
     return TRUE; // assume mathWig data is available.  Fail at load time if it isn't
+    // cartVersion is a pseudo trackDb entry with no data
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 if (bigDataUrl != NULL)
     {
@@ -4195,7 +4198,7 @@ slSort(&tdbList, trackDbCmp);
 return tdbList;
 }
 
-struct trackDb *hTrackDb(char *db)
+struct trackDb *hTrackDbWithCartVersion(char *db, int *retCartVersion)
 /* Load tracks associated with current db.
  * Supertracks are loaded as a trackDb, but are not in the returned list,
  * but are accessible via the parent pointers of the member tracks.  Also,
@@ -4237,7 +4240,16 @@ if (doCache)
         struct trackDb *cacheTdb = trackDbCache(db, tdbPathString, newestTime);
 
         if (cacheTdb != NULL)
+            {
+            if (sameString(cacheTdb->track, "cartVersion"))
+                {
+                // Convert negative cartVersion (for priority-ordering) back to positive cartVersion
+                if (retCartVersion)
+                    *retCartVersion = -cacheTdb->priority;
+                cacheTdb = cacheTdb->next;
+                }
             return cacheTdb;
+            }
 
         memCheckPoint(); // we want to know how much memory is used to build the tdbList
         }
@@ -4250,7 +4262,21 @@ tdbList = trackDbPolishAfterLinkup(tdbList, db);
 if (doCache)
     trackDbCloneTdbListToSharedMem(db, tdbPathString, tdbList, memCheckPoint());
 
+// Store negative cartVersion in priority field so that cartVersion "track" is first in tdbList
+if ((tdbList != NULL) && sameString(tdbList->track, "cartVersion"))
+    {
+    if (retCartVersion)
+        *retCartVersion = -tdbList->priority;
+    tdbList = tdbList->next;
+    }
+
 return tdbList;
+}
+
+struct trackDb *hTrackDb(char *db)
+/* see hTrackDbWithCartVersion above. */
+{
+return hTrackDbWithCartVersion(db, NULL);
 }
 
 static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn,
@@ -4294,7 +4320,12 @@ if (tdbList == NULL || *tdbList == NULL)
 	struct hash *hash = hashNew(0);
         // NOTE: cart is not even used!
 	theTdbs = hubConnectAddHubForTrackAndFindTdb(db, track, tdbList, hash);
-        return hashFindVal(hash, track); // leaks tdbList and hash
+
+        // need to "fix" this track name
+        char *fixTrackName = cloneString(track);
+        trackHubFixName(fixTrackName);
+
+        return hashFindVal(hash, fixTrackName); // leaks tdbList and hash
 	}
     else
 	{

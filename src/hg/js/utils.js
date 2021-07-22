@@ -7,6 +7,31 @@
 
 var debug = false;
 
+
+// Google Analytics helper functions to send events, see src/hg/lib/googleAnalytics.c
+
+function gaOnButtonClick(ev) {
+/* user clicked a button: send event to GA, then execute the old handler */
+    var button = ev.currentTarget;
+    var buttonName = button.name;
+    ga('send', 'event', 'buttonClick', buttonName);
+    if (button.oldOnClick) // most buttons did not have an onclick function at all (the default click is a listener)
+        button.oldOnClick(ev);
+}
+
+function gaTrackButtons() {
+  /* replace the click handler on all buttons with one the sends a GA event first, then handles the click */
+  if (!window.ga || ga.loaded) // When using an Adblocker, the ga object does not exist
+      return;
+  var buttons = document.querySelectorAll('input[type=submit],input[type=button]');
+  for (var i = 0; i < buttons.length; i++) {
+       var b = buttons[i];
+       b.oldOnClick = b.onclick;
+       b.onclick = gaOnButtonClick; // addEventHandler would not work here, the default click stops propagation.
+  }
+}
+// end Google Analytics helper functions
+
 function clickIt(obj,state,force)
 {
 // calls click() for an object, and click();click() if force
@@ -706,6 +731,15 @@ if (debug)
 return content;
 }
 
+function notifBoxShow() {
+    /* move the notification bar div under '#TrackHeaderForm' */
+    var notifEl = document.getElementById("notifBox");
+    var parentEl = document.getElementById('TrackHeaderForm');
+    parentEl.appendChild(notifEl);
+    notifEl.style.display = 'block';
+    //document.getElementById('notifOK').onclick = notifBoxHide;
+}
+
 function warnBoxJsSetup()
 {   // Sets up warnBox if not already established.  This is duplicated from htmshell.c
     var html = "";
@@ -753,7 +787,18 @@ function warn(msg)
     if (!warnList)
         alert(msg);
     else {
-        $( warnList ).append('<li>'+msg+'</li>');
+        // don't add warnings that already exist:
+        var oldMsgs = [];
+        $('#warnList li').each(function(i, elem) {
+            oldMsgs.push(elem.innerHTML);
+        });
+        // make the would-be new message into an <li> element so the case and quotes
+        // match any pre-existing ones
+        var newNode = document.createElement('li');
+        newNode.innerHTML = msg;
+        if (oldMsgs.indexOf(newNode.innerHTML) === -1) {
+            $( warnList ).append(newNode);
+        }
         if ($.isFunction(showWarnBox))
             showWarnBox();
         else

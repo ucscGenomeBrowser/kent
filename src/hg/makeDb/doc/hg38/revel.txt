@@ -1,0 +1,9 @@
+#sed -i 's/chrom=/chrom=chr/' *.wig
+wget 'https://www.google.com/url?q=https%3A%2F%2Frothsj06.u.hpc.mssm.edu%2Frevel-v1.3_all_chromosomes.zip&sa=D&sntz=1&usg=AFQjCNHuQrCvuq--CoiCGwtDvQhBnTYj2Q'
+unzip revel-v1.3_all_chromosomes.zip
+time python ~/kent/src/hg/makeDb/revel/revelToWig-hg38.py ../../chrom.sizes revel_with_transcript_ids 
+wigToBigWig a.wig ../../chrom.sizes a.bw &
+wigToBigWig t.wig ../../chrom.sizes t.bw &
+wigToBigWig c.wig ../../chrom.sizes c.bw  &
+wigToBigWig g.wig ../../chrom.sizes g.bw &
+rm *.wig -f

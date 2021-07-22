@@ -60,7 +60,7 @@ DBS = \
 	caeSp91 \
 	calJac1 calJac3 calJac4 \
 	calMil1 \
-	canFam1 canFam2 canFamPoodle1 canFam3 canFam4 canFam5 \
+	canFam1 canFam2 canFamPoodle1 canFam3 canFam4 canFam5 canFam6 \
 	casCan1 \
 	cavApe1 cavPor3 \
 	cb1 cb2 cb3 cb4 \
@@ -217,10 +217,11 @@ USERTABLE = $(shell echo ${USER} | sed -e 's/-/_/g')
 update: ${DBS:%=%_update}
 	${MKDIR} ${CGI_BIN}-${USER}/encode
 %_update:
-	./loadTracks ${EXTRA} trackDb_${USERTABLE} hgFindSpec_${USERTABLE} $*
+	./loadTracks -addVersion ${EXTRA} trackDb_${USERTABLE} hgFindSpec_${USERTABLE} $*
 	./checkMetaDb alpha metaDb_${USERTABLE} $*
 	# now build the relatedTracks table for each db
 	./buildRelatedTracks relatedTrack_${USERTABLE} $*
+	rm -rf /dev/shm/trackDbCache/$*.trackDb_${USERTABLE}
 
 #  if you want to test track search tool with your own trix file
 #	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb_${USERTABLE}.{ixx,ix}}
@@ -236,13 +237,14 @@ alpha: clean
 alpha_all: ${DBS:%=%_alpha}
 
 %_alpha:
-	./loadTracks ${EXTRA} -release=alpha trackDb hgFindSpec $*
+	./loadTracks -addVersion ${EXTRA} -release=alpha trackDb hgFindSpec $*
 	./checkMetaDb alpha metaDb $*
 	rm -f ${HIVE_TRIX}/$*_trackDb.{ixx,ix}}
 	HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/alpha/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
 	./makeTrixLinks trackDb ${HIVE_TRIX} $*
 	# now build the relatedTracks table for each db
 	./buildRelatedTracks relatedTrack $*
+	rm -rf /dev/shm/trackDbCache/$*.trackDb
 
 onbeta:	/cluster/home/${USER}/.hg.conf.beta
 
@@ -259,17 +261,20 @@ beta_all: ${DBS:%=%_beta}
 
 %_betaTest:
 	# now do loads on hgwbeta
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -remoteLogin=${BETA_MACHINE} -release=beta trackDb_betaTest hgFindSpec_betaTest $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -remoteLogin=${BETA_MACHINE} -release=beta trackDb_betaTest hgFindSpec_betaTest $*
 
 %_beta:
 	# now do loads on hgwbeta
 	-ssh  ${BETA_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=beta trackDb hgFindSpec $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=beta trackDb hgFindSpec $*
 	rm  -f $*.gbdbList.txt
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb beta metaDb $*
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
 	# now make files for hgwdev-beta (we share the tables with hgwbeta)
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
+	# now build the relatedTracks table for each db
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./buildRelatedTracks relatedTrack $*
+	-ssh  ${BETA_MACHINE} rm -rf /dev/shm/trackDbCache/$*.trackDb
 
 publicTest: onbeta clean
 	${MAKE} publicTest_all
@@ -283,14 +288,19 @@ public: onbeta clean
 public_all: ${DBS:%=%_public}
 
 %_publicTest:
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -remoteLogin=${PUBLIC_MACHINE} -release=public trackDb_publicTest hgFindSpecTest_publicTest $*
+	-ssh  ${PUBLIC_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=public trackDb_publicTest hgFindSpecTest_publicTest $*
+	rm -f $*.gbdbList.txt
 
 %_public:
 	-ssh  ${PUBLIC_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=public trackDb_public hgFindSpec_public $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=public trackDb_public hgFindSpec_public $*
 	rm -f $*.gbdbList.txt
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb public metaDb_public $*
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ${BUILD_TRIX} trackDb_public metaDb_public cv/public/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
+	# now build the relatedTracks table for each db
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./buildRelatedTracks relatedTrack $*
+	-ssh  ${BETA_MACHINE} rm -rf /dev/shm/trackDbCache/$*.trackDb_public
 
 # this will fail if we are not in a beta checkout:
 checkbeta:

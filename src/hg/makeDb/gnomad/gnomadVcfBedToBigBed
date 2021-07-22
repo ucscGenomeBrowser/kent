@@ -20,22 +20,52 @@ Example format for the v2.1.1 version of gnomAD:
         |MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE|LoF|LoF_filter|LoF_flags|LoF_info">
 """
 
-import sys, argparse
-from collections import defaultdict,namedtuple
+import sys, argparse, hashlib,json
+from collections import defaultdict,namedtuple,OrderedDict
 
 # which version of gnomAD for parsing VEP string
-versions = ["v2.1.1", "v3.1"]
+versions = ["v2.1.1", "v3.1", "v3.1_chrM", "v3.1.1"]
 
 # the number of fields in the VEP string (depends on version):
 # how to count:
 #   bcftools view -h in.vcf.gz | grep "^##INFO=<ID=vep" | grep -o "Format:.*" \
 #   | tr '|' '\t' | tl0 | wc -l
-numVepFields = {"v2.1.1" : 68, "v3.1": 45}
+numVepFields = {"v2.1.1" : 68, "v3.1": 45, "v3.1_chrM": 45, "v3.1.1": 45}
 # the different pipe separated fields in the VEP struct
 # how to get:
 #   bcftools view -h in.vcf.gz | grep "^##INFO=<ID=vep" | grep -o "Format: .*" \
 #   | cut -d' ' -f2- | cut -d'"' -f1 | sed -e 's/^/"/' -e 's/$/"/' -e 's/|/", "/g'
 versionVepFields = {
+    "v3.1.1": [
+        "Allele", "Consequence", "IMPACT", "SYMBOL", "Gene", "Feature_type", "Feature",
+        "BIOTYPE", "EXON", "INTRON", "HGVSc", "HGVSp", "cDNA_position", "CDS_position",
+        "Protein_position", "Amino_acids", "Codons", "ALLELE_NUM", "DISTANCE", "STRAND",
+        "VARIANT_CLASS", "MINIMISED", "SYMBOL_SOURCE", "HGNC_ID", "CANONICAL", "TSL",
+        "APPRIS", "CCDS", "ENSP", "SWISSPROT", "TREMBL", "UNIPARC", "GENE_PHENO",
+        "SIFT", "PolyPhen", "DOMAINS", "HGVS_OFFSET", "MOTIF_NAME", "MOTIF_POS",
+        "HIGH_INF_POS", "MOTIF_SCORE_CHANGE", "LoF", "LoF_filter", "LoF_flags",
+        "LoF_info"
+    ],
+    "v3.1_chrM": [
+        "Allele", "Consequence", "IMPACT", "SYMBOL", "Gene", "Feature_type", "Feature",
+        "BIOTYPE", "EXON", "INTRON", "HGVSc", "HGVSp", "cDNA_position", "CDS_position",
+        "Protein_position", "Amino_acids", "Codons", "ALLELE_NUM", "DISTANCE", "STRAND",
+        "VARIANT_CLASS", "MINIMISED", "SYMBOL_SOURCE", "HGNC_ID", "CANONICAL", "TSL",
+        "APPRIS", "CCDS", "ENSP", "SWISSPROT", "TREMBL", "UNIPARC", "GENE_PHENO",
+        "SIFT", "PolyPhen", "DOMAINS", "HGVS_OFFSET", "MOTIF_NAME", "MOTIF_POS",
+        "HIGH_INF_POS", "MOTIF_SCORE_CHANGE", "LoF", "LoF_filter", "LoF_flags",
+        "LoF_info"
+    ],
+    "v3.1": [
+        "Allele", "Consequence", "IMPACT", "SYMBOL", "Gene", "Feature_type", "Feature",
+        "BIOTYPE", "EXON", "INTRON", "HGVSc", "HGVSp", "cDNA_position", "CDS_position",
+        "Protein_position", "Amino_acids", "Codons", "ALLELE_NUM", "DISTANCE", "STRAND",
+        "VARIANT_CLASS", "MINIMISED", "SYMBOL_SOURCE", "HGNC_ID", "CANONICAL", "TSL",
+        "APPRIS", "CCDS", "ENSP", "SWISSPROT", "TREMBL", "UNIPARC", "GENE_PHENO",
+        "SIFT", "PolyPhen", "DOMAINS", "HGVS_OFFSET", "MOTIF_NAME", "MOTIF_POS",
+        "HIGH_INF_POS", "MOTIF_SCORE_CHANGE", "LoF", "LoF_filter", "LoF_flags",
+        "LoF_info"
+    ],
     "v2.1.1": [
         "Allele", "Consequence", "IMPACT", "SYMBOL", "Gene", "Feature_type",
         "Feature", "BIOTYPE", "EXON", "INTRON", "HGVSc", "HGVSp", "cDNA_position",
@@ -49,17 +79,54 @@ versionVepFields = {
         "ExAC_OTH_MAF", "ExAC_SAS_MAF", "CLIN_SIG", "SOMATIC", "PHENO", "PUBMED",
         "MOTIF_NAME", "MOTIF_POS", "HIGH_INF_POS", "MOTIF_SCORE_CHANGE", "LoF",
         "LoF_filter", "LoF_flags", "LoF_info"
-    ],
-    "v3.1": [
-        "Allele", "Consequence", "IMPACT", "SYMBOL", "Gene", "Feature_type", "Feature",
-        "BIOTYPE", "EXON", "INTRON", "HGVSc", "HGVSp", "cDNA_position", "CDS_position",
-        "Protein_position", "Amino_acids", "Codons", "ALLELE_NUM", "DISTANCE", "STRAND",
-        "VARIANT_CLASS", "MINIMISED", "SYMBOL_SOURCE", "HGNC_ID", "CANONICAL", "TSL",
-        "APPRIS", "CCDS", "ENSP", "SWISSPROT", "TREMBL", "UNIPARC", "GENE_PHENO",
-        "SIFT", "PolyPhen", "DOMAINS", "HGVS_OFFSET", "MOTIF_NAME", "MOTIF_POS",
-        "HIGH_INF_POS", "MOTIF_SCORE_CHANGE", "LoF", "LoF_filter", "LoF_flags",
-        "LoF_info"
     ]
+}
+
+versionPops = {
+    "v3.1.1": ["afr", "ami", "amr", "asj", "eas", "fin", "mid", "nfe", "sas", "oth", "XX", "XY"],
+    "v3.1_chrM": ['afr', 'ami', 'amr', 'asj', 'eas', 'fin', 'nfe', 'oth', 'sas', 'mid'],
+    "v3.1": ["afr", "amr", "asj", "eas", "fin", "mid", "ami", "nfe", "sas", "oth", "XX", "XY"],
+    "v2.1.1":["afr", "amr", "asj", "eas", "fin", "nfe", "sas", "oth"]
+}
+
+chrM_haplo_groups = [
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'HV', 'I', 'J', 'K', 'L0', 'L1', 'L2',
+    'L3', 'L4', 'L5', 'M', 'N', 'P', 'R', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+]
+
+# the fields that MUST be in the bigBed (for filters, etc)
+versionAutoSql = {
+    "v3.1.1": ["chrom", "chromStart", "chromEnd", "name", "score", "strand",
+        "thickStart", "thickEnd", "itemRgb", "ref", "alt", "FILTER", "AC",
+        "AN", "AF", "faf95", "nhomalt", "rsId", "genes", "annot", "variation_type",
+        "_startPos", "displayName"],
+    "v3.1_chrM": ["chrom", "chromStart", "chromEnd", "name", "score", "strand",
+        "thickStart", "thickEnd", "itemRgb", "ref", "alt", "FILTER", "AC",
+        "AN", "AF", "faf95", "nhomalt", "rsId", "genes", "annot", "variation_type",
+        "_startPos", "displayName"],
+    "v3.1": ["chrom", "chromStart", "chromEnd", "name", "score", "strand",
+        "thickStart", "thickEnd", "itemRgb", "ref", "alt", "FILTER", "AC",
+        "AN", "AF", "faf95", "nhomalt", "rsId", "genes", "annot", "variation_type",
+        "_startPos", "displayName"],
+    "v2.1.1": ["chrom", "chromStart", "chromEnd", "name", "score", "strand",
+        "thickStart", "thickEnd", "itemRgb", "ref", "alt", "FILTER", "AC",
+        "AN", "AF", "faf95", "nhomalt", "rsId", "genes", "annot", "variation_type",
+        "pLoF", "lofFlags", "lofCuration", "pLoFCurationFlags", "_startPos", "displayName"]
+}
+
+# the fields in the extra tab file, specify order here so we have the same order
+# across different runs for different chromosomes
+versionExtraFields = {
+    "v3.1.1": ["_key", "_jsonVep", "_jsonPopTable", "cadd_phred", "revel_score", "splice_ai_max_ds",
+        "splice_ai_consequence", "primate_ai_score"],
+    "v3.1_chrM": ["_key", "_jsonVep", "_jsonPopTable", "_jsonHapTable"],
+    "v3.1": ["hgvsc", "hgvsp", "popmax", *[x + "_" + y for y in ["popmax", "afr", "ami", "amr",
+        "asj", "eas", "fin", "mid", "nfe", "sas", "oth", "XX", "XY"] for x in ["AC", "AN",
+        "AF", "nhomalt"]], "cadd_phred", "revel_score", "splice_ai_max_ds",
+        "splice_ai_consequence", "primate_ai_score"],
+    "v2.1.1": ["hgvsc", "hgvsp", "popmax", *[x + "_" + y for y in ["popmax", "afr", "amr",
+        "asj", "eas", "fin", "nfe", "oth", "female", "male"] for x in ["AC", "AN", "AF",
+        "nhomalt"]]]
 }
 
 # determines the color of the variant in the browser
@@ -91,14 +158,31 @@ def parseCommandLine():
     parser.add_argument("-v", "--version", action="store", help="Version of gnomAD. Each \
             version of gnomAD tends to have slightly different VEP annotations or populations, \
             so you can specify what you are working with here. Current supported versions: %s" % ", ".join(versions))
+    parser.add_argument("-e", "--extra-output-file", action="store", help="Output fields not necessary for display to this extra file instead")
     parser.add_argument("outfile", help="Output bed file name, use 'stdout' to write to stdout")
     args = parser.parse_args()
     if not args.version or args.version not in versions: 
         sys.stderr.write("ERROR: missing version or wrong version. Please supply -v VERSION where VERSION is one of: [%s]\n" % ", ".join(versions))
         sys.exit(255)
+    if args.extra_output_file and args.extra_output_file == "stdout" and args.extra_output_file == args.infile:
+        sys.stderr.write("ERROR: Only one of infile and --extra-output-file can be stdout.")
+        sys.exit(255)
     return args
 
-def parseHeader(headerStr, infh, outfh):
+def writeHeaders(version, outfh, extrafh):
+    """Write out the field names"""
+    outfh.write("#" + "\t".join(x for x in versionAutoSql[version]))
+    if extrafh:
+        if version == "v3.1.1" or version == "v3.1_chrM":
+            extrafh.write("#" + "\t".join(versionExtraFields["v3.1.1"] + ["_jsonHapTable"]))
+        else:
+            extrafh.write("#" + "\t".join(versionExtraFields[version]))
+        extrafh.write("\n")
+    else:
+        outfh.write("\t" + "#" + "\t".join(versionExtraFields[version]))
+    outfh.write("\n")
+
+def parseHeader(headerStr, infh, outfh, extraFh):
     """Parse the field names out of a header string"""
     global header
     headerStr = headerStr[1:] # chop off '#'
@@ -106,8 +190,8 @@ def parseHeader(headerStr, infh, outfh):
     if not header:
         header = fields
         outfh.write("#%s\n" % ("\t".join(header[:17] + 
-            ["rsID","genes","annot","variation_type","hgvs_c","hgvs_p", "pLoF"] 
-            + header[18:] + ["_pos"])))
+            ["rsID","genes","annot","variation_type","_startPos"] +
+            ["hgvsc", "hgvsp"]+ header[18:])))
     elif fields != header:
         sys.stderr.write("Header differs from others: '%s'\n" % infh.name)
         sys.exit(1)
@@ -161,15 +245,75 @@ def getLofCuration(lofDict, version, ucscChrom, unshiftedStart, ref, alt):
             flags = flagsForVar(lofDict, key)
         curation = lofCurationStrs[curation]
     return [curation, flags]
-        
+
+def buildMitoStructs(versionPopNames, extraFieldList):
+    """Turn the chrM specific fields into the data structures we want to show"""
+    hapDict = OrderedDict()
+    popDict = OrderedDict()
+    i = 0
+    hapDict["Haplogroup"] = ["Allele Number", "Homoplasmic AC", "Homoplasmic AF",
+        "Heteroplasmic AC", "Heteroplasmic AF"]
+    hap_an = extraFieldList[0].split("|")
+    hap_ac_het = extraFieldList[1].split("|")
+    hap_ac_hom = extraFieldList[2].split("|")
+    hap_af_hom = extraFieldList[3].split("|")
+    hap_af_het = extraFieldList[4].split("|")
+    for ix, hapName in enumerate(chrM_haplo_groups):
+        hapDict[hapName] = [hap_an[ix], hap_ac_hom[ix], hap_af_hom[ix], hap_ac_het[ix], hap_af_het[ix]]
+    hap_an = sum([int(x) for x in hap_an])
+    total_hap_ac_hom = sum([int(x) for x in hap_ac_hom])
+    total_hap_ac_het = sum([int(x) for x in hap_ac_het])
+    hapDict["Total"] = [hap_an, total_hap_ac_hom, total_hap_ac_hom/hap_an, total_hap_ac_het, total_hap_ac_het/hap_an]
+    pop_an = extraFieldList[9].split("|")
+    pop_ac_het = extraFieldList[10].split("|")
+    pop_ac_hom = extraFieldList[11].split("|")
+    pop_af_hom = extraFieldList[12].split("|")
+    pop_af_het = extraFieldList[13].split("|")
+    popDict["Populations"] = ["Allele Number", "Homoplasmic AC", "Homoplasmic AF",
+        "Heteroplasmic AC", "Heteroplasmic AF"]
+    for ix, popName in enumerate(versionPopNames):
+        popDict[popName] = [pop_an[ix], pop_ac_hom[ix], pop_af_hom[ix], pop_ac_het[ix], pop_af_het[ix]]
+    hom_af, het_af = extraFieldList[16].split("/")
+    hom_ac, het_ac = extraFieldList[14].split("/")
+    popDict["Total"] = [extraFieldList[15], hom_ac, hom_af, het_ac, het_af]
+    other = hapDict
+    return popDict, other
+
+def convertExtraFields(extraFieldList, version):
+    """Split the population data from the other extra fields and return the population
+        data as a json blob and the other fields as a list"""
+    versionPopNames = []
+    for x in versionPops[version]:
+        if x in popAbbr:
+            versionPopNames.append(popAbbr[x])
+        else:
+            versionPopNames.append(x)
+    if version == "v3.1.1":
+        versionPopNames.append("Total")
+        popData = extraFieldList[4:-9] + extraFieldList[-4:]
+        popDict = OrderedDict() # for keeping the header line first and total line last
+                                # in the final bigBed
+        popDict["Populations"] = ["Allele Count", "Allele Number", "Allele Frequency",
+            "Number of Homozygotes"]
+        i = 0
+        for popName in versionPopNames:
+            val = popData[i:i+4]
+            key = popAbbr[popName] if popName in popAbbr else popName
+            popDict[key] = val
+            i += 4
+        # Add an extra field for the chrM only haplogroup table
+        other = extraFieldList[-9:-4] + [""]
+    else:
+        popDict, other = buildMitoStructs(versionPopNames, extraFieldList)
+    return popDict,other
         
 def splitVepField(vep, version):
-    """Commas both delimit the multiple annotations of a single variant,
+    """Split the VEP string into a list of strings for each annotation.
+        Because commas both delimit the multiple annotations of a single variant,
         and can be part of the pipe separated strings that make up a
-        single annotation, so can't just split on ',' like normal"""
+        single annotation, we can't just split on ',' like normal"""
     ret = []
-    # at the 46th '|', go back until we find a comma and replace that comma
-    # with a tab and then split on tab:
+    # at the versionSpecific index '|', go back until we find a comma or | and split there
     ix = 1
     copy = vep.split('|')
     try:
@@ -179,15 +323,28 @@ def splitVepField(vep, version):
             supported versions: [%s]\n" % ", ".join(versions))
         sys.exit(255)
     for i in range(round(len(copy) / numFields)):
-        start = (i*numFields) - (i*1)
+        start = 0
+        # I think there is a bug in the version of VEP used to annotate chrM where
+        # the comma separating annotations is stripped, leaving the indexing off by one
+        if version == "v3.1_chrM":
+            start = i*numFields
+        else:
+            start = (i*numFields) - (i*1)
         end = numFields + (numFields*i) - i
+        #print("start = %d, end = %d" % (start,end))
         thisElem = copy[start:end]
         if thisElem:
-            # fix up the first element which will contain part of the previous annotation
+            # fix up the first element which may contain part of the previous annotation
+            #print("1. thisElem[0]: %s, thisElem[-1]: %s" % (thisElem[0], thisElem[-1]))
             if i != 0 and ',' in thisElem[0]:
                 thisElem[0] = thisElem[0].split(',')[-1]
-            # the last element will always contain part of the next annotation
-            thisElem[-1] = ",".join(thisElem[-1].split(',')[:-1])
+            #print("2. thisElem[0]: %s, thisElem[-1]: %s" % (thisElem[0], thisElem[-1]))
+            # NON-chrM: the last element will always contain part of the next annotation
+            # if the last elem was empty then it is just the start of the next annotation
+            if thisElem[-1]:
+                thisElem[-1] = ",".join(thisElem[-1].split(',')[:-1])
+            #print("3. thisElem[0]: %s, thisElem[-1]: %s" % (thisElem[0], thisElem[-1]))
+            #assert(len(thisElem) == numFields)
             ret.append("|".join(thisElem))
     return ret
 
@@ -205,7 +362,8 @@ def parseVep(vep, version):
         if "regulatory_region_variant" in consList \
                 or "downstream_gene_variant" in consList \
                 or "upstream_gene_variant" in consList \
-                or "TF_binding_site_variant" in consList: 
+                or "TF_binding_site_variant" in consList \
+                or "intergenic_variant" in consList:
             continue
         vepFields = dict(zip(versionVepFields[version],group)) 
         gene = vepFields["SYMBOL"]
@@ -243,54 +401,103 @@ def parseVep(vep, version):
             genes[gene]["hgvsp"] = set(hgvsp) if hgvsp else set()
             genes[gene]["pLoF"] = set(lof) if lof else set()
             genes[gene]["Flag"] = set(lof) if lofFlags else set()
+    for gene in genes:
+        genes[gene]["cons"] = list(genes[gene]["cons"])
+        genes[gene]["hgvsc"] = list(genes[gene]["hgvsc"])
+        genes[gene]["hgvsp"] = list(genes[gene]["hgvsp"])
+        genes[gene]["pLoF"] = list(genes[gene]["pLoF"])
+        genes[gene]["Flag"] = list(genes[gene]["Flag"])
     return genes
 
-def gnomadVcfBedToBigBed(infh, outfh, version, lofDict):
+def gnomadVcfBedToBigBed(infh, outfh, extraFh, version, lofDict):
     """Read from already opened infh, convert to more compact bed format, then write
-        to already opened outfh."""
+        to already opened outfh, optionally use extraFh for non-necessary bed fields."""
+    writeHeaders(version, outfh, extraFh)
     for line in infh:
         genes = defaultdict(dict)
         extraInfo = []
         if line.startswith("#"):
-            parseHeader(line, infh, outfh)
             continue
+            #parseHeader(line, infh, outfh, extraFh)
+            #continue
         fixedLine = line.strip('\n').split('\t')
-        vep = fixedLine[17]
-        bed8Fields = fixedLine[:8]
+        chrom, chromStart, chromEnd, bedName, score, strand, thickStart, thickEnd = fixedLine[:8]
         color = fixedLine[8] # defaults to black
-        firstExtra = fixedLine[9:17]
-        filterTag = firstExtra[2]
-        firstExtra[2] = filterTag.replace(";",",") # replace so trackDb filterValues works
-        savedPostFields = [x if x else "N/A" for x in fixedLine[18:]]
-        savedPostFields[0] = popAbbr[savedPostFields[0]] if savedPostFields[0] in popAbbr else 'N/A'
-        for ix in range(len(savedPostFields)):
-            if not savedPostFields[ix]:
-                savedPostFields[ix] = "N/A"
+        ref, alt, filterTag = fixedLine[9:12]
+        filterTag  = filterTag.replace(";",",") # replace so trackDb filterValues works
+        if "chrM" not in version:
+            vep = fixedLine[17]
+            ac, an, af, faf95, nhomalt = fixedLine[12:17]
+            maybeExtraFields = [x if x else "N/A" for x in fixedLine[18:]]
+        else:
+            vep = fixedLine[12]
+            # ac and af are really AC_hom/AC_het and AF_hom/AF_het
+            ac = fixedLine[14] + "/" + fixedLine[15]
+            af = fixedLine[18] + "/" + fixedLine[19]
+            an = fixedLine[13]
+            faf95 = ""
+            nhomalt = ""
+            maybeExtraFields = fixedLine[16:18] + fixedLine[20:]
         if vep != "":
             genes = parseVep(vep, version)
-        for gene in genes:
-            annot,color = pickColor(genes[gene]["cons"])
-            consList = [",".join(list(genes[gene]["cons"]))]
-            hgvscList = [", ".join(list(genes[gene]["hgvsc"]))]
-            hgvspList = [", ".join(list(genes[gene]["hgvsp"]))]
-            pLoFList = [", ".join(list(genes[gene]["pLoF"]))]
-            pLoFFlags = [", ".join(list(genes[gene]["Flag"]))]
+
+        # Now that we've parsed all the incoming fields from vcfToBed, write
+        # output to final bed, and maybe to extra tab file:
+        if genes:
+            consList = []
+            for gene in genes:
+                consList += list(genes[gene]["cons"])
+            annot,color = pickColor(consList)
             rsId = ""
-            name = bed8Fields[3]
-            if bed8Fields[3].startswith("rs"):
-                rsId = bed8Fields[3]
-            name = bed8Fields[0]+":"+bed8Fields[1]+"-"+bed8Fields[2] + " ("
-            ref = firstExtra[0]
-            alt = firstExtra[1]
-            name += ref[:10]+"..." if len(ref) > 13 else ref
-            name += "/"
-            name += alt[:10]+"..." if len(alt) > 13 else alt
-            name += ")"
-            unshiftedStart = unshiftLeftPad(int(bed8Fields[1]), ref, alt)
-            pLoFCuration = getLofCuration(lofDict, version, bed8Fields[0], str(unshiftedStart), ref, alt)
-            savedPreFields = bed8Fields[:3] + [name] + bed8Fields[4:] + [color] + firstExtra
-            outfh.write("\t".join(savedPreFields + [rsId] + [gene] + [annot] + \
-                    consList + hgvscList + hgvspList + pLoFList + pLoFFlags + pLoFCuration + savedPostFields + [str(unshiftedStart)]) + "\n")
+            if bedName.startswith("rs"):
+                rsId = bedName
+            unshiftedStart = unshiftLeftPad(int(chromStart), ref, alt)
+            displayName = chrom + "-" + str(unshiftedStart) + "-"
+            displayName += ref[:10]+"..." if len(ref) > 13 else ref
+            displayName += "-"
+            displayName += alt[:10]+"..." if len(alt) > 13 else alt
+            name = hashlib.md5(str.encode(chrom+chromStart+chromEnd+ref+alt)).hexdigest()
+            if version == "v3.1.1" or version == "v3.1_chrM":
+                outfh.write("\t".join([chrom, chromStart, chromEnd, name, score, strand,
+                    thickStart, thickEnd, color, ref, alt, filterTag, ac, an, af, faf95, nhomalt,
+                    rsId, ", ".join(genes.keys()), annot, ",".join(consList), str(unshiftedStart), displayName]))
+                popTable, otherFields = convertExtraFields(maybeExtraFields + [ac, an, af, nhomalt], version)
+                if version == "v3.1_chrM":
+                    # otherFields is the haplotype table plus empties for the v3.1.1 fields:
+                    otherFields = ["" for i in range(5)] + [json.dumps(otherFields)]
+                if extraFh:
+                    extraFh.write("\t".join([name, json.dumps(genes), json.dumps(popTable)] + otherFields))
+                    extraFh.write("\n")
+                else:
+                    outfh.write("\t" + "\t".join([name] + [json.dumps(genes), json.dumps(popTable)] + otherFields))
+                outfh.write("\n")
+            elif version == "v3.1":
+                hgvscList = [", ".join(list(genes[gene]["hgvsc"]))]
+                hgvspList = [", ".join(list(genes[gene]["hgvsp"]))]
+                pLoFList = [", ".join(list(genes[gene]["pLoF"]))]
+                pLoFFlags = [", ".join(list(genes[gene]["Flag"]))]
+                outfh.write("\t".join([chrom, chromStart, chromEnd, name, score, strand,
+                    thickStart, thickEnd, color, ref, alt, filterTag, ac, an, af, faf95, nhomalt,
+                    rsId, gene, annot, *consList, str(unshiftedStart), displayName]))
+                if extraFh:
+                    extraFh.write("\t".join([name] + hgvscList + hgvspList + maybeExtraFields))
+                    extraFh.write("\n")
+                else:
+                    outfh.write("\t" + "\t".join([name] + hgvscList + hgvspList + maybeExtraFields))
+                outfh.write("\n")
+            else:
+                pLoFCuration = getLofCuration(lofDict, version, bed8Fields[0],
+                    str(unshiftedStart), ref, alt)
+                outfh.write("\t".join([chrom, chromStart, chromEnd, name, score, strand,
+                    thickStart, thickEnd, color, ref, alt, filterTag, ac, an, af, faf95, nhomalt,
+                    rsId, gene, annot, *consList, displayName]))
+                outfh.write("\t" + "\t".join(pLoFCuration, [str(unshiftedStart)]))
+                if extraFh:
+                    extraFh.write("\t".join(name + hgvscList + hgvspList + maybeExtraFields))
+                    extraFh.write("\n")
+                else:
+                    outfh.write("\t" + "\t".join([name] + hgvscList + hgvspList + maybeExtraFields))
+                outfh.write("\n")
 
 def parseLofFile(fpath):
     """Make a struct of the different loss of function flags for a curated variant."""
@@ -311,6 +518,7 @@ def main():
     args = parseCommandLine()
     lofDict = {}
     lofFile = args.lofFilePath
+    extraFh = None
     if lofFile:
         lofDict = parseLofFile(lofFile)
     if args.infile == "stdin":
@@ -321,7 +529,12 @@ def main():
         outfh = sys.stdout
     else:
         outfh = open(args.outfile, "w")
-    gnomadVcfBedToBigBed(infh, outfh, args.version, lofDict)
+    if args.extra_output_file:
+        if args.extra_output_file == "stdout":
+            extraFh = sys.stdout
+        else:
+            extraFh = open(args.extra_output_file, "w")
+    gnomadVcfBedToBigBed(infh, outfh, extraFh, args.version, lofDict)
     infh.close()
     outfh.close()
 

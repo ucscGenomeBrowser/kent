@@ -10,6 +10,7 @@
 #include "gtexInfo.h"
 #include "gtexTissue.h"
 #include "gtexSampleData.h"
+#include "pipeline.h"
 
 struct tissueSampleVals
 /* RPKM expression values for multiple samples */
@@ -132,15 +133,15 @@ fclose(f);
 if (!pngTn)
     return FALSE;
 trashDirFile(pngTn, "hgc", "gtexGene", ".png");
-char cmd[256];
 
 /* Exec R in quiet mode, without reading/saving environment or workspace */
-safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/gtexBoxplot.R %s %s %s %s %s %s",  
-                                geneName, dfTn.forCgi, pngTn->forHtml, 
-                                doLogTransform ? "log=TRUE" : "log=FALSE", "order=alpha", version);
+char *pipeCmd[] = {"Rscript","--vanilla","--slave","hgcData/gtexBoxplot.R", 
+    geneName, dfTn.forCgi, pngTn->forHtml, 
+    doLogTransform ? "log=TRUE" : "log=FALSE", "order=alpha", version, NULL};
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+int ret = pipelineWait(pl);
 //NOTE: use "order=score" to order bargraph by median RPKM, descending
 
-int ret = system(cmd);
 if (ret == 0)
     return TRUE;
 return FALSE;

@@ -44,11 +44,14 @@ struct barChartTrack
 
     int squishHeight;           /* Height of item in squish mode (larger than typical) */
     int boxModelHeight;         /* Height of indicator box drawn under graph to show gene extent */
-    int modelHeight;            /* Height of box drawn under graph with padding */
+    int modelHeight;            /* Height of box drawn under graph with margin */
+    int margin;			/* Added to pixel height to help separate things */
+
+    // Individual bar dimensions
     double barWidth;               /* Width of individual bar in pixels */
-    int margin;
-    int padding;
-    int maxHeight;
+    int padding;		   /* Pixel width between bars */
+    int maxHeight;		   /* Maximum bar height. */
+    boolean stretchToItem;	   /* If item is wider than chart, stretch to fit? */
     };
 
 struct barChartItem
@@ -385,9 +388,13 @@ static int chartWidth(struct track *tg, struct barChartItem *itemInfo)
 /* How wide is the chart? */
 {
 struct bed *bed = itemInfo->bed;
-int geneSize = windowsTotalIntersection(windows, bed->chrom, bed->chromStart, bed->chromEnd);
+int itemSize = windowsTotalIntersection(windows, bed->chrom, bed->chromStart, bed->chromEnd);
 int standardSize =  chartStandardWidth(tg, itemInfo);
-return max(standardSize, geneSize);
+struct barChartTrack *extras = tg->extraUiData;
+if (extras->stretchToItem)
+    return max(standardSize, itemSize);
+else
+    return standardSize;
 }
 
 static void barChartLoadItems(struct track *tg)
@@ -540,6 +547,7 @@ else
 extras->modelHeight =  extras->boxModelHeight + 3;
 extras->margin = 1;
 extras->squishHeight = tl.fontHeight - tl.fontHeight/2;
+extras->stretchToItem = trackDbSettingOn(tg->tdb, "barChartStretchToItem");
 
 while (bed != NULL)
     {
@@ -671,21 +679,27 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit, 
                                         extras->maxHeight, extras->doLogTransform);
+    boolean isClipped = (!extras->doLogTransform && expScore > extras->maxViewLimit);
+    int barTop = yZero - height + 1;
     if (extras->padding == 0 || sameString(colorScheme, BAR_CHART_COLORS_USER))
 	{
 	int cStart = barsDrawn * graphWidth * invCount;
 	int cEnd = (barsDrawn+1) * graphWidth * invCount;
-        hvGfxBox(hvg, cStart + x0, yZero-height+1, cEnd-cStart - extras->padding, height, fillColorIx);
+	x1 = cStart + x0;
+	barWidth = cEnd - cStart - extras->padding;
+        hvGfxBox(hvg, x1, barTop, barWidth, height, fillColorIx);
+	if (isClipped)
+	    hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
 	barsDrawn += 1;
 	}
     else
 	{
-        hvGfxOutlinedBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx, lineColorIx);
+        hvGfxOutlinedBox(hvg, x1, barTop, barWidth, height, fillColorIx, lineColorIx);
+	// mark clipped bar with magenta tip
+	if (isClipped)
+	    hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
 	x1 = x1 + barWidth + extras->padding;
 	}
-    // mark clipped bar with magenta tip
-    if (!extras->doLogTransform && expScore > extras->maxViewLimit)
-        hvGfxBox(hvg, x1, yZero-height+1, barWidth, 2, clipColor);
     }
 }
 
@@ -849,10 +863,13 @@ height = tgFixedTotalHeightOptionalOverflow(tg, vis, lineHeight, heightPer, FALS
 
 if ((vis == tvPack) || (vis == tvFull))
     {
+    struct spaceSaver *ss = findSpaceSaver(tg, vis); // ss is a list now
+    assert(ss); // viz matches, we have the right one
+
     // set variable height rows
-    if (tg->ss && tg->ss->rowCount)
+    if (ss && ss->rowCount)
         {
-        if (!tg->ss->rowSizes)
+        if (!ss->rowSizes)
 	    {
 	    // collect the rowSizes data across all windows
 	    assert(currentWindow==windows); // first window
@@ -872,8 +889,6 @@ if ((vis == tvPack) || (vis == tvFull))
 		}
 	    tg = tgSave;
 	    }
-	struct spaceSaver *ss = findSpaceSaver(tg, vis); // ss is a list now
-	assert(ss); // viz matches, we have the right one
 	height = spaceSaverGetRowHeightsTotal(ss);
         }
     }

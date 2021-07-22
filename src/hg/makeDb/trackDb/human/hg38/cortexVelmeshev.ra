@@ -7,6 +7,7 @@ group singleCell
 
     track cortexVelmeshevCellType
     parent cortexVelmeshev
+    html cortexVelmeshev
     type bigBarChart
     visibility pack
     shortLabel Cortex Cells
@@ -26,6 +27,7 @@ group singleCell
 
     track cortexVelmeshevDiagnosis
     parent cortexVelmeshev
+    html cortexVelmeshev
     type bigBarChart
     visibility hide
     shortLabel Cortex Diagnosis
@@ -44,6 +46,7 @@ group singleCell
 
     track cortexVelmeshevDonor
     parent cortexVelmeshev
+    html cortexVelmeshev
     type bigBarChart
     visibility hide
     shortLabel Cortex Donor
@@ -62,6 +65,7 @@ group singleCell
 
     track cortexVelmeshevSample
     parent cortexVelmeshev
+    html cortexVelmeshev
     type bigBarChart
     visibility hide
     shortLabel Cortex Sample
@@ -81,6 +85,7 @@ group singleCell
 
     track cortexVelmeshevSex
     parent cortexVelmeshev
+    html cortexVelmeshev
     type bigBarChart
     visibility hide
     shortLabel Cortex Sex

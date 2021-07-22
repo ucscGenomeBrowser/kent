@@ -162,8 +162,8 @@ char *hTrackUiForTrack(char *trackName);
 #define MULTI_REGION_CHROM      "multi"
 #define OLD_MULTI_REGION_CHROM  "virt"
 
-#define MULTI_REGION_BED_URL    "multiRegionBedUrl"
 #define MULTI_REGION_BED_PADDING    "multiRegionBedPadding"
+#define MULTI_REGION_BED_WIN_FULL   "virtWinFull"
  
 void netUi(struct trackDb *tdb);
 

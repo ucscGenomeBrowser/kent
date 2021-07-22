@@ -22,6 +22,7 @@ UTILS_APPLIST = \
 	chainMergeSort \
 	chainNet \
 	chainPreNet \
+	chainScore \
 	chainSort \
 	chainSplit \
 	chainStitchId \

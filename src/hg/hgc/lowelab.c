@@ -2,6 +2,7 @@
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
+#ifdef LOWELAB
 #include "common.h"
 #include "obscure.h"
 #include "hCommon.h"
@@ -3910,3 +3911,4 @@ else
     return FALSE;
 return TRUE;
 }
+#endif //LOWELAB

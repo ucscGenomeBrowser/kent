@@ -14,7 +14,8 @@ CURRENT_HUB_SPEC=v2
 
 HUB_SPEC_FILES= trackDbHub.v0.html \
 		trackDbHub.v1.html \
-		trackDbHub.v2.html
+		trackDbHub.v2.html \
+		trackDbHub.v3.html
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \

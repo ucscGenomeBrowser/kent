@@ -12,7 +12,6 @@ longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 d
 type bed 6 +
 html gtexGeneExpr
 group expression
-priority 10.1
 maxItems 200
 spectrum on
 visibility hide
@@ -60,7 +59,6 @@ maxItems 300
 defaultLabelFields name2, name
 labelFields name2, name
 group expression
-priority 1.1
 
 # Older, in progress, and experimental
 
@@ -76,8 +74,7 @@ priority 10.1
 track gtexGeneV8
 shortLabel GTEx Gene V8
 longLabel Gene Expression in 54 tissues from GTEx RNA-seq of 17382 samples, 948 donors (V8, Aug 2019)
-#type bed 6 +
-type barChart
+type bed 6 +
 group expression
 maxItems 200
 spectrum on

@@ -11,44 +11,13 @@
 #include "htslib/bgzf.h"
 #include "soTerm.h"
 
-static char *readMaybeBgzip(char *fileOrUrl, bits64 offset, bits64 len)
-/* If fileOrUrl is bgzip-compressed and indexed, then use htslib's bgzf functions to
- * retrieve uncompressed data from offset; otherwise (plain text) use udc. */
-{
-char *line = needMem(len+1);
-if (endsWith(fileOrUrl, ".gz"))
-    {
-    BGZF *fp = bgzf_open(fileOrUrl, "r");
-    if (bgzf_index_load(fp, fileOrUrl, ".gzi") < 0)
-        errAbort("bgzf_index_load failed to load .gzi index for %s", fileOrUrl);
-    if (bgzf_useek(fp, offset, SEEK_SET) < 0)
-        errAbort("bgzf_useek failed to seek to uncompressed offset %lld in %s", offset, fileOrUrl);
-    bits64 count = bgzf_read(fp, line, len);
-    if (count != len)
-        errAbort("bgzf_read failed to read %lld bytes at uncompressed offset %lld in %s, got %lld",
-                 len, offset, fileOrUrl, count);
-    bgzf_close(fp);
-    }
-else
-    {
-    struct udcFile *udcF = udcFileOpen(fileOrUrl, NULL);
-    udcSeek(udcF, offset);
-    bits64 count = udcRead(udcF, line, len);
-    if (count != len)
-        errAbort("expected %Ld bytes at offset %Ld in %s, got %Ld. ",
-                 len, offset, fileOrUrl, count);
-    udcFileClose(&udcF);
-    }
-return line;
-}
-
 static struct dbSnpDetails *getDetails(struct bigDbSnp *bds, char *detailsFileOrUrl)
 /* Seek to the offset for this variant in detailsFileOrUrl, read the line and load as
  * struct dbSnpDetails.  */
 {
 bits64 offset = bds->_dataOffset;
 bits64 len = bds->_dataLen;
-char *line = readMaybeBgzip(detailsFileOrUrl, offset, len);
+char *line = readOneLineMaybeBgzip(detailsFileOrUrl, offset, len);
 // Newline must be trimmed or else it messes up parsing of final column if empty!
 if (line[len-1] == '\n')
     line[len-1] = '\0';

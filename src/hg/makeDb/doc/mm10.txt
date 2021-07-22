@@ -14953,6 +14953,11 @@ TMPDIR=/scratch/tmp
       -stop=load -buildDir=`pwd` mm10 ensGene
     # real    235m41.378s
 
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup mm10 -fileServer=hgwdev -buildDir=`pwd` \
+         -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    100m50.151s
     ##########################################################################
     # FIXUP broken files (working - Max and Hiram - 2018-04,05)
 
@@ -17482,6 +17487,13 @@ IO & Wait Time:               2663355s   44389.25m   739.82h   30.83d  0.084 y
 Average job time:                  33s       0.55m     0.01h    0.00d
 Longest finished job:              68s       1.13m     0.02h    0.00d
 
+    # cleaning up 2021-04-24 - Hiram
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup mm10 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    430m18.499s
+
 #########################################################################
 
 # For ENCODE 3 tracks, see doc/encode3/mouse.txt
@@ -18260,4 +18272,175 @@ TMPDIR=/dev/shm
     sed -e 's/^/    # /;' fb.xenTro10.chainRBest.Mm10.txt
     # 58901471 bases of 1448461978 (4.066%) in intersection
 
-#########################################################################
+##############################################################################
+# LASTZ Ryukyu mouse GCF_900094665.1 (DONE - 2021-04-26 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzGCF_900094665.1.2021-04-26
+    cd /hive/data/genomes/mm10/bed/lastzGCF_900094665.1.2021-04-26
+
+    printf '# GCF_900094665.1 Mus caroli (Ryukyu mouse) vs mm10
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+
+# QUERY: Mus croli - Ryukyu mouse GCF_900094665.1
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/900/094/665/GCF_900094665.1/GCF_900094665.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/900/094/665/GCF_900094665.1/GCF_900094665.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/mm10/bed/lastzGCF_900094665.1.2021-04-26
+TMPDIR=/dev/shm
+' > DEF
+
+export targetDb="mm10"
+export asmId="GCF_900094665.1"
+export gcPath="GCF/900/094/665"
+cd /hive/data/genomes/$targetDb/bed/lastz${asmId}.2021-04-26
+time (doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF \
+   -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+     -syntenicNet -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+cat fb.${targetDb}.chain.${asmId}Link.txt
+cat fb.${targetDb}.chainSyn.${asmId}Link.txt
+
+grep -w real do.log | sed -e 's/^/    # /;'
+    # real      207m59.745s
+
+sed -e 's/^/    # /;' fb.$targetDb.chain.${asmId}Link.txt
+    # 2303277151 bases of 2818974548 (81.706%) in intersection
+sed -e 's/^/    # /;' fb.$targetDb.chainSyn.${asmId}Link.txt
+    # 2187910131 bases of 2818974548 (77.614%) in intersection
+
+time (doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+-query2Bit="/hive/data/genomes/asmHubs/$gcPath/${asmId}/${asmId}.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/$gcPath/${asmId}/${asmId}.chrom.sizes.txt" \
+$targetDb ${asmId}) >> rbest.log 2>&1
+grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real      274m57.907s
+
+sed -e 's/^/    # /;' fb.$targetDb.chainRBest.$asmId.txt
+    # 2074680070 bases of 2818974548 (73.597%) in intersection
+
+# total time for all the above:
+    # real    482m57.733s
+
+#######################################
+### the swap to the assembly hub
+export target="mm10"
+export Target="Mm10"
+export query="GCF_900094665.1"
+export asmId="GCF_900094665.1_CAROLI_EIJ_v1.1"
+export gcPath="GCF/900/094/665"
+
+mkdir -p /hive/data/genomes/asmHubs/refseqBuild/$gcPath/$asmId/trackData/blastz.$target.swap
+cd /hive/data/genomes/asmHubs/refseqBuild/$gcPath/$asmId/trackData/blastz.$target.swap
+
+time (doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 -swapDir=`pwd` \
+    /hive/data/genomes/${target}/bed/lastz.${query}/DEF -syntenicNet \
+  -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -swap -chainMinScore=3000 -chainLinearGap=medium) >> swap.log 2>&1
+grep -w real swap.log | sed -e 's/^/    # /;'
+    # real    554m2.489s
+
+sed -e 's/^/    # /;' fb.${query}.chain.${Target}Link.txt
+    # 2116460904 bases of 2553121441 (82.897%) in intersection
+sed -e 's/^/    # /;' fb.${query}.chainSyn.${Target}Link.txt
+    # 2081173211 bases of 2553121441 (81.515%) in intersection
+
+time (doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+-target2Bit="/hive/data/genomes/asmHubs/$gcPath/${query}/${query}.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/$gcPath/${query}/${query}.chrom.sizes.txt" \
+$query $target) >> rbest.log 2>&1
+grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real      246m55.342s
+
+sed -e 's/^/    # /;' fb.${query}.chainRBest.${Target}.txt
+    # 2078102689 bases of 2553121441 (81.395%) in intersection
+
+# Complete run time for all the swap operation:
+    # real    367m14.987s
+
+##############################################################################
+# LASTZ dog boxer Tasha canFam6 (DONE - 2021-05-17 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm10/bed/lastzCanFam6.2021-05-17
+    cd /hive/data/genomes/mm10/bed/lastzCanFam6.2021-05-17
+
+    printf '# boxer Tasha canFam6 vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: boxer Tasha canFam6
+SEQ2_DIR=/hive/data/genomes/canFam6/canFam6.2bit
+SEQ2_LEN=/hive/data/genomes/canFam6/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzCanFam6.2021-05-17
+TMPDIR=/dev/shm
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    276m30.999s
+
+    sed -e 's/^/    # /;' fb.mm10.chainCanFam6Link.txt
+    # 791039766 bases of 2739603606 (28.874%) in intersection
+    sed -e 's/^/    # /;' fb.mm10.chainSynCanFam6Link.txt
+    # 747308674 bases of 2739603606 (27.278%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 canFam6 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    260m22.664s
+
+    sed -e 's/^/    # /;' fb.mm10.chainRBest.CanFam6.txt
+    # 731553248 bases of 2739603606 (26.703%) in intersection
+
+    mkdir /hive/data/genomes/canFam6/bed/blastz.mm10.swap
+    cd /hive/data/genomes/canFam6/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCanFam6.2021-05-17/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #   real    48m21.892s
+
+    sed -e 's/^/    # /;' fb.canFam6.chainMm10Link.txt
+    # 747891292 bases of 2312743346 (32.338%) in intersection
+    sed -e 's/^/    # /;' fb.canFam6.chainSynMm10Link.txt
+    # 721253430 bases of 2312743346 (31.186%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev canFam6 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    165m54.013s
+
+    sed -e 's/^/    # /;' fb.canFam6.chainRBest.Mm10.txt
+    # 730713145 bases of 2312743346 (31.595%) in intersection
+
+##############################################################################

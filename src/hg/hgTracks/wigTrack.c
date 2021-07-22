@@ -871,6 +871,13 @@ double previousValue = 0;
 if (enableMouseOver)
     skipMouseOvers = FALSE;
 
+boolean noAverage = FALSE;
+boolean dropMouseOverData = FALSE;	// will become TRUE if noAverage
+					// condition is encountered
+char *mouseOverFunction = trackDbSetting(tg->tdb, "mouseOverFunction");
+if (sameOk(mouseOverFunction, "noAverage"))
+    noAverage = TRUE;
+
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements could draw boxes where pixels
  *	are all the same height in a run.
@@ -881,9 +888,10 @@ for (x1 = 0; x1 < width; ++x1)
     int preDrawIndex = x1 + preDrawZero;
     struct preDrawElement *p = &preDraw[preDrawIndex];
     /* ===== mouseOver calculations===== */
-    if (enableMouseOver)
+    if (enableMouseOver && !dropMouseOverData)
         {
-        if (!skipMouseOvers && (p->count > 0)) /* checking mouseOver construction */
+        /* checking if mouseOver construction is allowed */
+        if (!skipMouseOvers && (p->count > 0) && !(noAverage && p->count>1))
             {
             if (p->count > 0)	/* allow any number of values to display */
                 {
@@ -926,7 +934,10 @@ for (x1 = 0; x1 < width; ++x1)
             }
         else /* perhaps entered region without values after some data already */
             {
-            if (mouseOverX2 > 0)	/* yes, been in data, end it here */
+
+            if (noAverage && p->count>1)
+              dropMouseOverData = TRUE;
+            else if (mouseOverX2 > 0)	/* yes, been in data, end it here */
                 {
 		mouseOverData->x2 = mouseOverX2;
                 mouseOverX2 = -1;	/* start over with new data when found*/
@@ -1152,6 +1163,9 @@ for (x1 = 0; x1 < width; ++x1)
             }   /*	vis == tvDense || vis == tvSquish	*/
 	}	/*	if (preDraw[].count)	*/
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
+
+if (dropMouseOverData)
+    slFreeList(&mouseOverData);
 return(mouseOverData);
 }	/*	graphPreDraw()	*/
 
@@ -1173,7 +1187,6 @@ struct wigMouseOver *mouseOverData = graphPreDraw(preDraw, preDrawZero, width,
 freez(&colorArray);
 return mouseOverData;
 }
-
 
 void drawZeroLine(enum trackVisibility vis,
     enum wiggleGridOptEnum horizontalGrid,
@@ -1459,15 +1472,16 @@ if (enableMouseOver && mouseOverData)
     // that this track has data to display.
     hPrintf("<div id='mouseOver_%s' name='%s' class='hiddenText mouseOverData' jsonUrl='%s'></div>\n", tg->track, tg->track, mouseOverJsonFile->forCgi);
     }
-// Might need something like this later for other purposes
-// else if (enableMouseOver)       // system enabled, but no data for this track
-//     {
-    /* signal to indicate zoom in required to see data */
-//     hPrintf("<div id='mouseOver_%s' name='%s' class='hiddenText mouseOverData'></div>\n", tg->track, tg->track);
-//     }
+else if (enableMouseOver)
+    {
+    jsonWriteObjectStart(mouseOverJson, tg->track);
+    jsonWriteString(mouseOverJson, "t", tg->tdb->type);
+    jsonWriteString(mouseOverJson, "mo", "noAverage");
+    jsonWriteObjectEnd(mouseOverJson);
+    }
 
 wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
-}
+}	/*	void wigDrawPredraw()	*/
 
 struct preDrawContainer *wigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
 /* Do bits that load the predraw buffer tg->preDrawContainer. */

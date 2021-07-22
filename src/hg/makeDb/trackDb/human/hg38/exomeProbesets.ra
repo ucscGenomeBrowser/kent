@@ -5,7 +5,6 @@ group map
 type bigBed
 visibility hide
 allButtonPair on
-pennantIcon New red ../goldenPath/newsarch.html#020321 "Released Feb. 3, 2021"
 compositeTrack on
 
 	track xGen_Research_Probes_V2
@@ -85,7 +84,7 @@ compositeTrack on
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V5_Covered
+	track Agilent_Human_Exon_V4_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S04380110_Covered.bb
 	shortLabel SureSel. V4+UTR P
@@ -93,7 +92,7 @@ compositeTrack on
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V5_Regions
+	track Agilent_Human_Exon_V4_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S04380110_Regions.bb
 	shortLabel SureSel. V4+UTR T
@@ -101,7 +100,7 @@ compositeTrack on
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V5+UTRs_Covered
+	track Agilent_Human_Exon_V5_UTRs_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S04380219_Covered.bb
 	shortLabel SureSel. V5+UTR P
@@ -109,7 +108,7 @@ compositeTrack on
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V5+UTRs_Regions
+	track Agilent_Human_Exon_V5_UTRs_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S04380219_Regions.bb
 	shortLabel SureSel. V5+UTR T
@@ -133,7 +132,7 @@ compositeTrack on
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V6+COSMIC_Covered
+	track Agilent_Human_Exon_V6_COSMIC_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S07604715_Covered.bb
 	shortLabel SureSel. V6+COSMIC P
@@ -141,7 +140,7 @@ compositeTrack on
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V6+COSMIC_Regions
+	track Agilent_Human_Exon_V6_COSMIC_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S07604715_Regions.bb
 	shortLabel SureSel. V6+COSMIC T
@@ -149,7 +148,7 @@ compositeTrack on
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V6+UTRs_Covered
+	track Agilent_Human_Exon_V6_UTRs_Covered
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S07604624_Covered.bb
 	shortLabel SureSel. V6+UTR P
@@ -157,7 +156,7 @@ compositeTrack on
 	type bigBed
 	color 255,36,36
 
-	track Agilent_Human_Exon_V6+UTRs_Regions
+	track Agilent_Human_Exon_V6_UTRs_Regions
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/S07604624_Regions.bb
 	shortLabel SureSel. V6 +UTR T

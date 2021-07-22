@@ -4,7 +4,6 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD) - Variants, Coverage, and Constraint
 group varRep
 html gnomad
-pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 2021"
 
     track gnomadCoverage
     compositeTrack on
@@ -342,43 +341,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     visibility pack
 
         track pliByGene
-        shortLabel gnomAD Gene Constraint
-        longLabel gnomAD Predicted Constraint Metrics By Gene (pLI and Z-scores)
-        type bigBed 12 +
-        mouseOverField _mouseOver
-        itemRgb on
-        searchIndex name,geneName
-        bigDataUrl /gbdb/hg19/gnomAD/pLI/pliByGene.bb
-        url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
-        urlLabel View this Gene on the gnomAD browser
-        labelFields name,geneName
-        defaultLabelFields geneName
-        filter._pli 0:1
-        filterLabel._pli Show only items between this pLI range
-        filterByRange._pli on
-        parent gnomadPLI on
-        priority 1
-        release beta,public
-
-        track pliByTranscript
-        shortLabel gnomAD Transcript Constraint
-        longLabel gnomAD Predicted Constraint Metrics By Transcript (pLI and Z-scores)
-        type bigBed 12 +
-        mouseOverField _mouseOver
-        itemRgb on
-        searchIndex name,geneName
-        bigDataUrl /gbdb/hg19/gnomAD/pLI/pliByTranscript.bb
-        url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
-        urlLabel View this Transcript on the gnomAD browser
-        labelFields name,geneName
-        filter._pli 0:1
-        filterLabel._pli Show only items between this pLI range
-        filterByRange._pli on
-        parent gnomadPLI off
-        priority 2
-        release beta,public
-
-        track pliByGene
         shortLabel gnomAD Gene LoF Constraint
         longLabel gnomAD Predicted Loss of Function Constraint Metrics By Gene (pLI)
         type bigBed 12 +
@@ -395,7 +357,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
         filterByRange._pli on
         parent gnomadPLI on
         priority 1
-        release alpha
 
         track missenseByGene
         shortLabel gnomAD Gene Missense Constraint
@@ -413,7 +374,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
         filterByRange._zscore on
         parent gnomadPLI off
         priority 2
-        release alpha
 
         track pliByTranscript
         shortLabel gnomAD Transcript LoF Constraint
@@ -431,7 +391,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
         filterByRange._pli on
         parent gnomadPLI off
         priority 2
-        release alpha
 
         track missenseByTranscript
         shortLabel gnomAD Transcript Missense Constraint
@@ -449,12 +408,11 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
         filterByRange._zscore on
         parent gnomadPLI off
         priority 2
-        release alpha
 
         track gnomadMissense
         parent gnomadPLI off
-        shortLabel gnomAD Regional Constraint
-        longLabel gnomAD Predicted Constraint Metrics By Transcript Regions (O/E scores)
+        shortLabel gnomAD Regional Missense Constraint  (ExAc Dataset) 
+        longLabel gnomAD Predicted Regional Missense Constraint Metrics (O/E scores from ExAc Dataset)
         bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
         itemRgb on
         labelFields name,geneName
@@ -477,7 +435,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     viewLimits 0:1
     visibility full
     html gnomadPext
-    pennantIcon New red ../goldenPath/newsarch.html#110320 "Released Nov. 3, 2020"
 
         track gnomADPextmean_proportion
         bigDataUrl /gbdb/hg19/gnomAD/pext/mean_proportion.bw
@@ -938,7 +895,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
     html gnomadExomesGenomes
-    pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 2021"
 
     track gnomadExomes
     shortLabel gnomAD Exomes Variants
@@ -965,7 +921,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 202
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
     html gnomadExomesGenomes
-    pennantIcon Updated red ../goldenPath/newsarch.html#012221 "Updated Jan. 22, 2021"
 
 searchTable pliByTranscript
 searchType bigBed

@@ -7,6 +7,7 @@ group singleCell
 
     track kidneyStewartCellType
     parent kidneyStewart
+    html kidneyStewart
     type bigBarChart
     visibility pack
     shortLabel Kidney Cells
@@ -24,6 +25,7 @@ group singleCell
 
     track kidneyStewartBroadCellType
     parent kidneyStewart
+    html kidneyStewart
     type bigBarChart
     visibility hide
     shortLabel Kidney Broad CT
@@ -43,6 +45,7 @@ group singleCell
 
     track kidneyStewartCompartment
     parent kidneyStewart
+    html kidneyStewart
     type bigBarChart
     visibility hide
     shortLabel Kidney Compartment
@@ -62,6 +65,7 @@ group singleCell
 
     track kidneyStewartDetailedCellType
     parent kidneyStewart
+    html kidneyStewart
     type bigBarChart
     visibility hide
     shortLabel Kidney Details
@@ -79,6 +83,7 @@ group singleCell
 
     track kidneyStewartExperiment
     parent kidneyStewart
+    html kidneyStewart
     type bigBarChart
     visibility hide
     shortLabel Kidney Experiment
@@ -97,6 +102,7 @@ group singleCell
 
     track kidneyStewartProject
     parent kidneyStewart
+    html kidneyStewart
     type bigBarChart
     visibility hide
     shortLabel Kidney Project

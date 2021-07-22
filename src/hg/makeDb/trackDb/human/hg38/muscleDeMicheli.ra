@@ -4,15 +4,18 @@ shortLabel Muscle De Micheli
 longLabel Muscle single cell data from De Micheli et al 2020
 visibility hide
 group singleCell
+release alpha
 
     track muscleDeMicheliCellType
     parent muscleDeMicheli
+    html muscleDeMicheli
     type bigBarChart
     visibility pack
     shortLabel Muscle Cells 
     longLabel Muscle RNA binned by cell type from De Micheli et al 2020
     barChartMetric mean
     barChartUnit UMI/cell
+    barChartLabel Cell type
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/muscleDeMicheli/cell_type.bb
@@ -23,9 +26,13 @@ group singleCell
     barChartBars ACTA1+_Mature_skeletal_muscle ACTA2+_MYH11+_MYL9+_Smooth_muscle_cells APOD+_CFD+_PLAC9+_Adipocytes C1QA+_CD74+_Macrophages CD36+_VWF+_Platelets CLDN5+_PECAM1+_Endothelial COL1A1+_Fibroblasts DCN+_GSN+_MYOC+_Fibroblasts FBN1+_MFAP5+_CD55+_Fibroblasts HBA1+_Erythroblasts ICAM1+_SELE+_VCAM1+_Endothelial IL7R+_PTPRC+_NKG7+_B/T/NK_cells PAX7+_DLK1+_MuSCs_and_progenitors PAX7low_MYF5+_MuSCs_and_progenitors RGS5+_MYL9+_Pericytes S100A9+_LYZ+_Inflammatory_macrophages
     transformFunc NONE
     barChartLimit 2
+    url http://cells.ucsc.edu/?ds=muscle-cell-atlas&gene=$$ 
+    urlLabel UCSC Cell Browser:
+    release alpha
 
     track muscleDeMicheliSample
     parent muscleDeMicheli
+    html muscleDeMicheli
     type bigBarChart
     visibility hide
     shortLabel Muscle Sample
@@ -42,4 +49,6 @@ group singleCell
     barChartBars hu01_061419 hu02_062419 hu03_062719 hu04_080619 hu05_111418 hu06_120518 hu07_021219 hu08_092618 hu09_092718 hu10_101018
     transformFunc NONE
     barChartLimit 2
-
+    url http://cells.ucsc.edu/?ds=muscle-cell-atlas&gene=$$
+    urlLabel UCSC Cell Browser:
+    release alpha

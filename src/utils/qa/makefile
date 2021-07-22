@@ -10,6 +10,8 @@ install:
 	cp -p --remove-destination activeGenbank.csh       ${SCRIPTS}
 	cp -p --remove-destination alertBqueue.csh         ${SCRIPTS}
 	cp -p --remove-destination allowTraffic.csh        ${SCRIPTS}
+	cp -p --remove-destination assemblyStatsCron.py    ${SCRIPTS}
+	cp -p --remove-destination assemblyStatsCronSaveStats.py ${SCRIPTS}
 	cp -p --remove-destination backupCentral.csh       ${SCRIPTS}
 	cp -p --remove-destination bamToBedGraph.csh       ${SCRIPTS}
 	cp -p --remove-destination bamToBigWig.csh         ${SCRIPTS}
@@ -27,6 +29,7 @@ install:
 	cp -p --remove-destination checkGbdbDiffs.csh      ${SCRIPTS}
 	cp -p --remove-destination checkGenomeMysql        ${SCRIPTS}
 	cp -p --remove-destination checkHitter.csh         ${SCRIPTS}
+	cp -p --remove-destination checkHTTPS              ${SCRIPTS}
 	cp -p --remove-destination checkMachineName.csh    ${SCRIPTS}
 	cp -p --remove-destination checkMetaData.csh       ${SCRIPTS}
 	cp -p --remove-destination checkMetaAday.csh       ${SCRIPTS}
@@ -37,6 +40,7 @@ install:
 	cp -p --remove-destination checkStoreUnits.csh     ${SCRIPTS}
 	cp -p --remove-destination checkSync.csh           ${SCRIPTS}
 	cp -p --remove-destination checkSyncAll.csh        ${SCRIPTS}
+	cp -p --remove-destination checkSyncAndMetaDataAll.py ${SCRIPTS}
 	cp -p --remove-destination checkTableStatus.csh    ${SCRIPTS}
 	cp -p --remove-destination checkTrackUiLinks.csh   ${SCRIPTS}
 	cp -p --remove-destination checkWigFiles.csh       ${SCRIPTS}
@@ -99,6 +103,7 @@ install:
 	cp -p --remove-destination getVersion.csh          ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
 	cp -p --remove-destination graph.csh               ${SCRIPTS}
+	cp -p --remove-destination hubSearchUpdate         ${SCRIPTS}
 	cp -p --remove-destination igtc.csh                ${SCRIPTS}
 	cp -p --remove-destination idHitter.csh            ${SCRIPTS}
 	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}

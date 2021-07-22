@@ -1,0 +1,58 @@
+track revel
+shortLabel REVEL Scores
+longLabel REVEL Pathegenicity Score for single-base coding mutations (zoom for exact score)
+type bigWig
+compositeTrack on
+visibility hide
+maxWindowToQuery 500000
+group phenDis
+color 150,80,200
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+dataVersion /gbdb/$D/revel/version.txt
+pennantIcon New red ../goldenPath/newsarch.html#062421 "Released by UCSC June 24, 2021"
+
+        track revelA
+        shortLabel Mutation: A
+        longLabel Revel: Mutation is A
+        type bigWig
+        parent revel on
+        visibility dense
+        bigDataUrl /gbdb/$D/revel/a.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+
+        track revelC
+        shortLabel Mutation: C
+        longLabel Revel: Mutation is C
+        type bigWig
+        parent revel on
+        visibility dense
+        bigDataUrl /gbdb/$D/revel/c.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+
+        track revelG
+        shortLabel Mutation: G
+        longLabel Revel: Mutation is G
+        type bigWig
+        parent revel on
+        visibility dense
+        bigDataUrl /gbdb/$D/revel/g.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+
+        track revelT
+        shortLabel Mutation: T
+        longLabel Revel: Mutation is T
+        type bigWig
+        parent revel on
+        visibility dense
+        bigDataUrl /gbdb/$D/revel/t.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+

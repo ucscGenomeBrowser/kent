@@ -54,6 +54,7 @@ errAbort(
   "  -settings - for trackDb scanning, output table name, type line,\n"
   "            -  and settings hash to stderr while loading everything.\n"
   "  -gbdbList - list of files to confirm existance of bigDataUrl files\n"
+  "  -addVersion - add cartVersion pseudo-table\n"
   );
 }
 
@@ -63,6 +64,7 @@ static struct optionSpec optionSpecs[] = {
     {"release", OPTION_STRING},
     {"settings", OPTION_BOOLEAN},
     {"gbdbList", OPTION_STRING},
+    {"addVersion", OPTION_BOOLEAN},
     {NULL,      0}
 };
 
@@ -72,6 +74,7 @@ static char *release = "alpha";
 
 static char *gbdbList = NULL;
 static struct hash *gbdbHash = NULL;
+static boolean addVersion = FALSE;
 
 // release tags
 #define RELEASE_ALPHA  (1 << 0)
@@ -388,7 +391,7 @@ const static char *insertHtmlRegex =
     "[[:space:]]*#insert[[:space:]]+file[[:space:]]*=[[:space:]]*"
     "\"([^/][^\"]+)\"[[:space:]]*-->";
 
-static char *readHtmlRecursive(char *fileName, char *database)
+static char *readHtmlRecursive(char *fileName, char *database, struct trackDb *tdb)
 /* Slurp in an html file.  Wherever it contains insertHtmlRegex, recursively slurp that in
  * and replace insertHtmlRegex with the contents. */
 {
@@ -416,12 +419,19 @@ while (regexMatchSubstr(html, insertHtmlRegex, substrs, ArraySize(substrs)))
 	safecpy(insertFileName, sizeof(insertFileName), dir);
 	safencat(insertFileName, sizeof(insertFileName), html+substrs[3].rm_so,
 		 (substrs[3].rm_eo - substrs[3].rm_so));
-	if (!fileExists(insertFileName))
-	    errAbort("readHtmlRecursive: relative path '%s' (#insert'ed in %s) not found",
-		     insertFileName, fileName);
-	char *insertedText = readHtmlRecursive(insertFileName, database);
-	dyStringAppend(dy, insertedText);
-	freez(&insertedText);
+        char *varSubFilename = hVarSubst("readHtmlRecursive: var substitution error",
+                                                tdb, database, insertFileName);
+        if (varSubFilename)
+            safecpy(insertFileName, sizeof(insertFileName), varSubFilename);
+        if (differentString(fileName, insertFileName)) // protect against infinite loop
+            {
+            if (!fileExists(insertFileName))
+                errAbort("readHtmlRecursive: relative path '%s' (#insert'ed in %s) not found",
+                         insertFileName, fileName);
+            char *insertedText = readHtmlRecursive(insertFileName, database, tdb);
+            dyStringAppend(dy, insertedText);
+            freez(&insertedText);
+            }
 	}
     // All text after the regex match:
     dyStringAppend(dy, html+substrs[0].rm_eo);
@@ -446,7 +456,7 @@ for (td = tdbList; td != NULL; td = td->next)
 	safef(fileName, sizeof(fileName), "%s/%s.html", dirName, htmlName);
 	if (fileExists(fileName))
             {
-	    td->html = readHtmlRecursive(fileName, database);
+	    td->html = readHtmlRecursive(fileName, database, td);
             // Check for note ASCII characters at higher levels of verboseness.
             // Normally, these are acceptable ISO-8859-1 characters
             if  ((verboseLevel() >= 2) && hasNonAsciiChars(td->html))
@@ -791,6 +801,51 @@ slReverse(&tdbList);
 return tdbList;
 }
 
+static int findMaxCartVersion(struct trackDb *tdbList)
+/* Search the track list for the maximum cartVersion. */
+{
+struct trackDb *tdb;
+int maxVal = 0;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char *value;
+    if ((value = hashFindVal(tdb->settingsHash, "cartVersion")) != NULL)
+        {
+        int check = sqlUnsigned(value);
+        if (check > maxVal)
+            maxVal = check;
+        }
+    }
+return maxVal;
+}
+
+static struct trackDb *makeCartVersionTrack(struct trackDb *tdbList)
+/* Build a trackDb entry for the cartVersion pseudo track that keeps track of the
+ * highest cartVersion used in this trackDb list.  
+ */
+{
+struct trackDb *cartVerTdb;
+
+AllocVar(cartVerTdb);
+
+/* we negate cartVersion so the priority puts it first on the list. */
+cartVerTdb->priority = -findMaxCartVersion(tdbList);
+
+cartVerTdb->track = cloneString("cartVersion");
+cartVerTdb->shortLabel = cloneString("cartVersion");
+cartVerTdb->longLabel = cloneString("cartVersion");
+cartVerTdb->html = cloneString("cartVersion");
+cartVerTdb->type = cloneString("cartVersion");
+cartVerTdb->url = cloneString("cartVersion");
+cartVerTdb->grp = cloneString("cartVersion");
+
+char buffer[1024];
+safef(buffer, sizeof buffer, "cartVersion %d", (int)-cartVerTdb->priority);
+cartVerTdb->settings = cloneString(buffer);
+
+return cartVerTdb;
+}
+
 void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
                boolean strict)
 /* hgTrackDb - Create trackDb table from text files. */
@@ -801,6 +856,9 @@ char *tab = rTempName(getTempDir(), trackDbName, ".tab");
 struct trackDb *tdbList = buildTrackDb(org, database, hgRoot, strict);
 tdbList = flatten(tdbList);
 slSort(&tdbList, trackDbCmp);
+
+if (addVersion)
+    slAddHead(&tdbList, makeCartVersionTrack(tdbList));
 verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 
 /* Write to tab-separated file; hold off on html, since it must be encoded */
@@ -927,6 +985,7 @@ if (strchr(raName, '/') != NULL)
 release = optionVal("release", release);
 releaseBit = getReleaseBit(release);
 gbdbList = optionVal("gbdbList", gbdbList);
+addVersion = optionExists("addVersion");
 
 if (gbdbList)
     gbdbHash = hashLines(gbdbList);

@@ -15,12 +15,12 @@ if ($thisMachine ne "hgdownload") {
 #############################################################################
 sub startHtml() {
 printf '<!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="U.C. Santa Cruz Genomics Institute Assembly and Track hubs" -->
+<!--#set var="TITLE" value="GenArk: UCSC Genome Archive" -->
 <!--#set var="ROOT" value=".." -->
 
 <!--#include virtual="$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>U.C. Santa Cruz Genomics Institute Assembly and Track hubs</h1>
+<h1>GenArk: UCSC Genome Archive</h1>
 
 '
 }
@@ -47,6 +47,8 @@ my %expectedList = (
  "mammals" => 1,
  "primates" => 1,
  "vertebrate" => 1,
+ "invertebrate" => 1,
+ "fungi" => 1,
  "legacy" => 1,
  "plants" => 1,
 );
@@ -59,6 +61,8 @@ my %titles = (
  "mammals" => "NCBI mammal genomes",
  "primates" => "NCBI primate genomes",
  "vertebrate" => "NCBI other vertebrate genomes",
+ "invertebrate" => "NCBI invertebrate genomes",
+ "fungi" => "NCBI fungi genomes",
  "legacy" => "NCBI genomes legacy/superseded by newer versions",
  "plants" => "NCBI plant genomes",
  "gtexAnalysis" => "Genotype-Tissue Expression (GTEx) Project analysis results track hub, V6 October 2015",
@@ -66,8 +70,6 @@ my %titles = (
  "mouseStrains" => "16 mouse strain assembly and track hub, May 2017",
  "neuroDiffCrispr" => "Structurally conserved primate cerebral cortex lincRNAs track hub, December 2018",
 );
-
-my %newDirectories;
 
 my %otherTopLevels = (
   "GCA" => 1,
@@ -86,11 +88,13 @@ my @orderOutHubs = (
  "birds",
  "fish",
  "vertebrate",
- "legacy",
+ "invertebrate",
+ "fungi",
  "plants",
  "VGP",
  "globalReference",
  "mouseStrains",
+ "legacy",
 );
 
 my @orderOutTracks = (
@@ -105,6 +109,8 @@ my %indexPage = (
  "birds" => "index.html",
  "fish" => "index.html",
  "vertebrate" => "index.html",
+ "invertebrate" => "index.html",
+ "fungi" => "index.html",
  "legacy" => "index.html",
  "plants" => "index.html",
  "VGP" => "index.html",
@@ -122,7 +128,6 @@ while (my $dirPath = <FH>) {
   my $fileDirName = basename($dirPath);
   if (! (defined($expectedList{$fileDirName}) || defined($otherTopLevels{$fileDirName})) ) {
     printf STDERR "# something new: %s\n", $fileDirName;
-    $newDirectories{$fileDirName} = 1;
   }
 }
 
@@ -135,17 +140,15 @@ my $genomeCount = `grep -h ^genome /mirrordata/hubs/VGP/*enomes.txt | wc -l`;
 chomp $genomeCount;
 $genomeCounts{"VGP"} = $genomeCount;
 
-my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', 'globalReference');
+my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'globalReference');
 
-foreach my $genome (@checkList) {
-  $genomeCount = `grep -h ^genome /mirrordata/hubs/$genome/genomes.txt | wc -l`;
+foreach my $hubSet (@checkList) {
+  $genomeCount = `grep -h ^genome /mirrordata/hubs/$hubSet/genomes.txt | wc -l`;
   chomp $genomeCount;
-  $genomeCounts{$genome} = $genomeCount;
+  $genomeCounts{$hubSet} = $genomeCount;
 }
 
 my $hubCount = 0;
-
-printf "<h2>Assembly hubs</h2>\n\n";
 
 printf "<table class='sortable' border='1'>\n";
 printf "<thead>\n";
@@ -178,33 +181,4 @@ printf "<p>\n";
 printf "Please note: text file <a href='UCSC_GI.assemblyHubList.txt' target=_blank>listing</a> of %d NCBI/VGP genome assembly hubs\n", $totalAsmHubs;
 printf "</p>\n";
 
-printf "\n<h2>Track hubs</h2>\n\n";
-
-printf "<table class='sortable' border='1'>\n";
-printf "<thead>\n";
-printf "  <th>hub&nbsp;gateway</th>\n";
-printf "  <th>description</th>\n";
-printf "</tr></thead><tbody>\n";
-
-# construct table
-foreach my $orderUp (@orderOutTracks) {
-  printf "<tr>\n";
-  ++$hubCount;
-  if ($orderUp eq "fish") {
-     printf "    <td><a href='%s/%s' target=_blank>fishes</a></td>\n", $orderUp, $indexPage{$orderUp};
-  } else {
-     printf "    <td><a href='%s/%s' target=_blank>%s</a></td>\n", $orderUp, $indexPage{$orderUp}, $orderUp;
-  }
-  if (defined($genomeCounts{$orderUp})) {
-    printf "    <td>%s (%d assemblies)</td>\n", $titles{$orderUp}, $genomeCounts{$orderUp};
-  } else {
-    printf "    <td>%s</td>\n", $titles{$orderUp};
-  }
-  printf "</tr>\n";
-}
-
-printf "</tbody></table>\n";
-
 endHtml;
-
-

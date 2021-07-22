@@ -19,13 +19,13 @@ makeDirs:
 	mkdir -p ${destDir}
 
 mkGenomes::
-	${toolsDir}/mkGenomes.pl localhost 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
-	${toolsDir}/mkGenomes.pl hgwdev 4040 ${orderList} > ${destDir}/download.${genomesTxt}.txt
+	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
+	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/download.${genomesTxt}.txt
 
 symLinks::
 	${toolsDir}/mkSymLinks.pl ${orderList}
 	@[ -d ${hubsDownload} ] && true || mkdir ${hubsDownload}
-	@for html in index asmStats trackData ; do \
+	@for html in ${indexName} ${statsName} ${dataName} ; do \
 [ -L ${hubsDownload}/$${html}.html ] && true || ln -s ${asmHubSrc}/$${html}.html ${hubsDownload} ; \
 [ -L ${hubsDownload}/download.$${html}.html ] && true || ln -s ${asmHubSrc}/download.$${html}.html ${hubsDownload} ; \
 done
@@ -36,7 +36,7 @@ done
 hubIndex::
 	rm -f ${destDir}/${testIndexName}.html ${destDir}/${indexName}.html ${destDir}/download.${indexName}.html
 	${toolsDir}/mkHubIndex.pl ${Name} ${name} ${defaultAssembly} ${orderList} | sed -e 's#${name}/hub.txt#${name}/${hubFile}.txt#;' > ${destDir}/download.${indexName}.html
-	sed -e "s#genome.ucsc.edu/h/#genome-test.gi.ucsc.edu/h/#g; s/hgdownload.soe/hgdownload-test.gi/g;" ${destDir}/download.${indexName}.html > ${destDir}/${indexName}.html
+	sed -e "s#genome.ucsc.edu/h/#genome-test.gi.ucsc.edu/h/#g; s/hgdownload.soe/hgdownload-test.gi/g; s#genome.ucsc.edu#genome-test.gi.ucsc.edu#;" ${destDir}/download.${indexName}.html > ${destDir}/${indexName}.html
 	chmod +x ${destDir}/${indexName}.html ${destDir}/download.${indexName}.html
 
 asmStats::
@@ -95,3 +95,12 @@ sendDownload::
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${genomesTxt}.txt \
 		qateam@hgdownload:/mirrordata/hubs/${name}/${genomesTxt}.txt
 
+verifyTestDownload:
+	${toolsDir}/verifyOnDownload.sh api-test.gi.ucsc.edu ${orderList}
+
+verifyDownload:
+	${toolsDir}/verifyOnDownload.sh apibeta.soe.ucsc.edu ${orderList}
+
+verifyDynamicBlat:
+	cut -d'_' -f1-2 ${orderList} | while read asmId; do \
+	  ${toolsDir}/testDynBlat.sh $$asmId < /dev/null; done

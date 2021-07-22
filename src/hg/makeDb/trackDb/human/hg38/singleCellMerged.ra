@@ -11,6 +11,7 @@ labelFields name,name2
 bigDataUrl /gbdb/hg38/bbi/singleCellMerged/normBarChart.bb
 barChartStatsUrl /gbdb/hg38/bbi/singleCellMerged/barChart.stats
 barChartFacets organ,cell_class,stage,cell_type
+barChartStretchToItem on
 transformFunc NONE
 barChartLimit 1200
 group singleCell

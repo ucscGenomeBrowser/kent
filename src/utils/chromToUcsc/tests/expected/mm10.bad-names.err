@@ -1,0 +1,3 @@
+WARNING:root:line 2: chrom name 'NCC-1701' is not in chromAlias table
+WARNING:root:line 4: chrom name 'NCC-1701-D' is not in chromAlias table
+WARNING:root:line 5: chrom name 'NCC-1701-E' is not in chromAlias table

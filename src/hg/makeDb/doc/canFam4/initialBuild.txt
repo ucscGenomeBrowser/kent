@@ -897,6 +897,23 @@ canFam4.perChromTables = no
  # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
 
 #########################################################################
+# LIFTOVER TO canFam6 (DONE - 2021-05-17 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/canFam4/bed/blat.canFam6.2021-05-17
+    cd /hive/data/genomes/canFam4/bed/blat.canFam6.2021-05-17
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc \
+         canFam4 canFam6
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc \
+         canFam4 canFam6) > doLiftOverToCanFam6.log 2>&1
+    # real    231m10.701s
+
+    # see if the liftOver menus function in the browser from canFam4 to canFam6
+
+#########################################################################
 # LIFTOVER TO canFam5 (DONE - 2020-07-28 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/canFam4/bed/blat.canFam5.2020-07-28
@@ -1012,6 +1029,15 @@ canFam4.perChromTables = no
 # Average job time:                  32s       0.53m     0.01h    0.00d
 # Longest finished job:             273s       4.55m     0.08h    0.00d
 # Submission to last job:          5337s      88.95m     1.48h    0.06d
+
+    # running clean-up 2021-04-23 - Hiram
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup canFam4 \
+	-tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
+    # real    390m3.373s
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)

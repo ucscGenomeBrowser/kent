@@ -30,6 +30,9 @@ while (<>) {
     if (isReal($val)) {
       $attribs{$attr} = $val;
     }
+  } elsif (/^    \/([^=]+)=""$/) {
+    # empty value; ignore.
+    next;
   } elsif (/^    \//) {
     die "Can't parse attribute line $.:\n$_\t";
   } elsif (/^(EPI_ISL_\d+)/) {

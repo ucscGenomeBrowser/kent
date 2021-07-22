@@ -95,7 +95,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
-            "sortExp", "sortSim", "hideTracks", "ignoreCookie",
+            "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",
             NULL };
 
 boolean genomeIsRna = FALSE;    // is genome RNA instead of DNA
@@ -430,9 +430,9 @@ char *encodedMapName = cgiEncode(mapName);
 char buf[2048];
 char *hgTrackUi = hTrackUiForTrack(mapName);
 if(chromName == NULL)
-    safef(buf, sizeof(buf), "%s?%s=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&db=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), database, encodedMapName);
 else
-    safef(buf, sizeof(buf), "%s?%s=%s&c=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&db=%s&c=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), database, chromName, encodedMapName);
 freeMem(encodedMapName);
 return(cloneString(buf));
 }
@@ -3686,7 +3686,7 @@ int chromSize = -1;
 char lastChromSizeChrom[256] = "";
 boolean firstTime = TRUE;
 boolean isEOF = FALSE;
-struct kce *kceList = NULL, *bestKce, *prevKce;
+struct kce *kceList = NULL, *bestKce = NULL, *prevKce = NULL;
 struct genePred *gene = NULL;
 while (1)
     {
@@ -5313,7 +5313,7 @@ if (withLeftLabels)
             }
 
         boolean doWiggle = checkIfWiggling(cart, track);
-        if (doWiggle)
+        if (doWiggle && isEmpty(track->networkErrMsg))
             track->drawLeftLabels = wigLeftLabels;
     #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
         if (theImgBox && track->limitedVis != tvDense)
@@ -5887,13 +5887,16 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     }
 }
 
-void loadFromTrackDb(struct track **pTrackList)
+int loadFromTrackDb(struct track **pTrackList)
 /* Load tracks from database, consulting handler list. */
+/* returns cartVersion desired. */
 {
 char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
 struct trackDb *tdbList;
+int trackDbCartVersion = 0;
+
 if(trackNameFilter == NULL)
-    tdbList = hTrackDb(database);
+    tdbList = hTrackDbWithCartVersion(database, &trackDbCartVersion);
 else
     {
     tdbList = hTrackDbForTrack(database, trackNameFilter);
@@ -5910,6 +5913,7 @@ else
         }
     }
 addTdbListToTrackList(tdbList, trackNameFilter, pTrackList);
+return trackDbCartVersion;
 }
 
 static int getScoreFilter(char *trackName)
@@ -6428,7 +6432,6 @@ else if (sameString(type, "hic"))
     {
     tg = trackFromTrackDb(tdb);
     hicCtMethods(tg);
-    tg->customPt = ct;
     }
 else
     {
@@ -6943,7 +6946,13 @@ struct track *track, *trackList = NULL;
 registerTrackHandlers();
 /* Load regular tracks, blatted tracks, and custom tracks.
  * Best to load custom last. */
-loadFromTrackDb(&trackList);
+
+// load the track list and check to see if we need to rewrite the cart
+int cartVersionFromTrackDb = loadFromTrackDb(&trackList);
+int cartVersionFromCart = cartGetVersion(cart);
+if (cartVersionFromTrackDb > cartVersionFromCart)
+    cartRewrite(cart, cartVersionFromTrackDb, cartVersionFromCart);
+
 if (measureTiming)
     measureTime("Time after trackDbLoad ");
 if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
@@ -7991,12 +8000,21 @@ boolean isSessChanged = FALSE;
 if (differentString(curSessVisTracks, thisSessVisTracks))
     {
     isSessChanged = TRUE;
-    #ifdef DEBUG
-    uglyf("<br>curSess vis tracks: %s", curSessVisTracks);
-    uglyf("<br>thsSess vis tracks: %s", thisSessVisTracks);
-    #endif
     }
 return isSessChanged;
+}
+
+static void printMultiRegionButton()
+/* Print button that launches multi-region configuration pop-up */
+{
+boolean isPressed = FALSE;
+if (differentString(virtModeType, "default"))
+    isPressed = TRUE;
+char buf[256];
+safef(buf, sizeof buf, "configure %s multi-region display mode", 
+                        isPressed ? "or exit" : "");
+hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf,
+            "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -8008,9 +8026,11 @@ struct group *group;
 struct track *track;
 char *freezeName = NULL;
 boolean hideAll = cgiVarExists("hgt.hideAll");
+boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
 boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
+boolean multiRegionButtonTop = cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, FALSE);
 long thisTime = 0, lastTime = 0;
 
 basesPerPixel = ((float)virtWinBaseCount) / ((float)fullInsideWidth);
@@ -8113,6 +8133,15 @@ for (track = trackList; track != NULL; track = track->next)
         }
     }
 
+if (cartUsualBoolean(cart, "dumpTracks", FALSE))
+    {
+    struct dyString *dy = newDyString(1024);
+    logTrackList(dy, trackList);
+
+    printf("Content-type: text/html\n\n");
+    printf("%s\n", dy->string);
+    exit(0);
+    }
 
 if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
     logTrackVisibilities(cartSessionId(cart), trackList, position);
@@ -8460,6 +8489,7 @@ if (virtMode)
     jsonObjectAdd(jsonForClient, "nonVirtPosition", newJsonString(cartString(cart, "nonVirtPosition")));
     jsonObjectAdd(jsonForClient, "virtChromChanged", newJsonBoolean(virtChromChanged));
     jsonObjectAdd(jsonForClient, "virtualSingleChrom", newJsonBoolean(virtualSingleChrom())); // DISGUISE POS
+    jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(virtModeType));
     }
 
 char dbPosKey[256];
@@ -8532,7 +8562,7 @@ if (!hideControls)
     char *oldDb = hashFindVal(oldVars, "db");
     if (sessionLabel)
         {
-        if (defaultTracks || hideAll || 
+        if (defaultTracks || hideAll || hideTracks ||
             (oldDb && differentString(database, oldDb)) ||
             !hasRecTrackSet(cart) ||
             sameString(sessionLabel, "off"))
@@ -8636,8 +8666,6 @@ if (!hideControls)
     /* Make line that says position. */
 	{
 	char buf[256];
-	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
-	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
         char *javascript = "document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;";
         if (containsStringNoCase(database, "zoo"))
             {
@@ -8645,24 +8673,12 @@ if (!hideControls)
             printAssemblyListHtmlExtra(database, "change", javascript);
             }
 
-        /* Multi-region button on position line */
-        if (sameString(virtModeType, "default"))
+        // multi-region button on position line, initially under hg.conf control
+        if (multiRegionButtonTop)
             {
-            hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region",
-                    "Configure view in multi-region display mode",
-                    "popUpHgt.hgTracks('multi-region config'); return false;", FALSE);
+            printMultiRegionButton();
+            hPrintf(" ");
             }
-        else
-            {
-            char buf[100];
-            safef(buf, sizeof buf, "exit multi-region (%s) mode and return to normal display",
-                (sameString(virtModeType, "exonMostly") ? "exon-only" :
-                (sameString(virtModeType, "geneMostly") ? "gene-only" :
-                (sameString(virtModeType, "singleAltHaplo") ? "alternative haplotype":
-                                                "custom regions"))));
-            hButtonWithMsg("hgt.exitMultiRegion", "exit multi-region", buf);
-            }
-        hPrintf(" ");
 
 	if (virtualSingleChrom()) // DISGUISE VMODE
 	    safef(buf, sizeof buf, "%s", windowsSpanPosition());
@@ -8670,7 +8686,10 @@ if (!hideControls)
 	    safef(buf, sizeof buf, "%s:%ld-%ld", virtChromName, virtWinStart+1, virtWinEnd);
 	
 	position = cloneString(buf);
-        char *pressedClass = "", *showVirtRegions = "";
+
+        // position box
+        char *pressedClass = "";
+        char *showVirtRegions = "";
         if (differentString(virtModeType, "default"))
             {
             pressedClass = "pressed";
@@ -8682,15 +8701,41 @@ if (!hideControls)
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, virtWinEnd - virtWinStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
-	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
+	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput'"
+                        " size='%d'>\n", multiRegionButtonTop ? 50 : 60);
 	hWrites(" ");
 	hButton("goButton", "go");
+
 	if (!trackHubDatabase(database))
 	    {
             jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
             if (assemblySupportsGeneSuggest(database))
                 hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
 	    }
+
+        // hg.conf controlled links
+
+        // database-specific link: 2 hg.conf settings, format <db>_TopLink{Label}
+        struct slName *dbLinks = cfgNamesWithPrefix(database);
+        struct slName *link;
+        char *dbTopLink = NULL, *dbTopLinkLabel = NULL;
+        for (link = dbLinks; link != NULL; link = link->next)
+            {
+            char *name = cloneString(link->name);
+            char *setting = chopPrefixAt(link->name, '_');
+            if (sameString(setting, "TopLink"))
+                dbTopLink = cfgOption(name);
+            else if (sameString(setting, "TopLinkLabel"))
+                dbTopLinkLabel = cfgOption(name);
+            }
+        if (dbTopLink && dbTopLinkLabel)
+            {
+            hPrintf("&nbsp;&nbsp;<a href='%s' target='_blank'><em><b>%s</em></b></a>\n",
+                dbTopLink, dbTopLinkLabel);
+            }
+        // generic link
+	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
+	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
 	if (survey && differentWord(survey, "off"))
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'>"
                     "<A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n",
@@ -8863,6 +8908,11 @@ if (!hideControls)
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
     hPrintf(" ");
 
+    if (!multiRegionButtonTop)
+        {
+        printMultiRegionButton();
+        hPrintf(" ");
+        }
     hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
                            revCmplDisp ? "Show forward strand at this location"
                                        : "Show reverse strand at this location",
@@ -9531,13 +9581,6 @@ if (!positionIsVirt)
         return;
     }
 
-if  (cgiVarExists("hgt.exitMultiRegion"))
-    {
-    cartRemove(cart, "hgt.exitMultiRegion");
-    cartSetString(cart, "virtModeType", "default");
-    cartSetBoolean(cart, "virtMode", FALSE);
-    }
-
 virtMode = cartUsualBoolean(cart, "virtMode", FALSE);
 
 /* Figure out basic dimensions of display.  This
@@ -9720,7 +9763,6 @@ else
     if (sameString(virtModeType,"default"))  // we are leaving virtMode
 	{
 	virtMode = FALSE;
-        cartRemove(cart, "virtWinFull");
         cartRemove(cart, "virtShortDesc");
 	}
     else
@@ -9738,7 +9780,7 @@ else
             sameString(virtModeType, "geneMostly") || 
             sameString(virtModeType, "kcGenes") ||
             (sameString(virtModeType, "customUrl") && 
-                    !cartUsualBoolean(cart, "virtWinFull", FALSE)))
+                    !cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE)))
 	    {
 	    // trying to find best vchrom location corresponding to chromName, winStart, winEnd);
 	    // try to find the nearest match
@@ -10593,6 +10635,16 @@ if (newHighlight)
     }
 }
 
+void notify (char *msg)
+/* print a message into a hidden DIV tag, and call Javascript to move the DIV under the
+ * tableHeaderForm element and un-hide it. Less obtrusive than a warn() message but still hard to miss. */
+{
+puts("<div style='display:none' id='notifBox'>");
+puts(msg);
+puts("</div>");
+jsInline("notifBoxShow();\n");
+}
+
 extern boolean issueBotWarning;
 
 void doMiddle(struct cart *theCart)
@@ -10866,10 +10918,12 @@ if (measureTiming)
 
 if (cartOptionalString(cart, "udcTimeout"))
     {
-    warn("The Genome Browser cart currently includes the \"udcTimeout\" string. "
-	"While this is useful for debugging hubs, it may negatively impact "
-	"performance.   To clear this variable, click "
+    char buf[5000];
+    safef(buf, sizeof(buf), "A hub refresh (udcTimeout) setting is active. "
+	"This is useful when developing hubs, but it reduces "
+	"performance. To clear the setting, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
+    notify(buf);
     }
 }
 

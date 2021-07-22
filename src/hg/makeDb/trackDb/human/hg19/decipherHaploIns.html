@@ -1,0 +1,49 @@
+<h2>Description</h2>
+<p>
+This track displays haploinsufficiency predictions for human genes (Huang 2010).
+Human cells have two copies of most genes (one from each parent).  If a mutation
+alters one copy, the other is usually still sufficient to maintain gene function.
+For haploinsufficient genes, however, both copies must be functioning for the
+organism to have a normal life.  Haploinsufficiency is implicated in a number of
+health disorders.  
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Predictions in this track are provided on a per-gene basis and are displayed in blocks
+corresponding to each gene's position in the genome (and labeled with that gene's name).
+The raw prediction scores range from 0 to 1, where 0 is very unlikely to be
+haploinsufficient and 1 is very likely.  Because many of the predicted scores fall toward
+the lower end of the spectrum, the authors also grouped those scores by quantile.  The
+quantile for each gene is shown as &alpha;-upper percentile, which shows the percentage
+of genes with a higher predicted score than this one.  A gene with a relatively strong
+prediction of being haploinsufficient will have a quantile close to 0%.  A gene with a very low
+comparative prediction of being haploinsufficient will have a quantile close to 100%.
+</p><p>
+Moving the mouse cursor over any gene will display a pop-up box with the gene name
+and &alpha;-upper quantile for the prediction.  The genes in this track
+are also color-coded according to quantile:
+<ul>
+<li><b><span style='color: #AA00AA'>Magenta</span></b> shades indicate a higher
+expectation of being haploinsufficient</li>
+<li><b><span style='color: #00AA00'>Green</span></b> shades indicate a lower
+expectation of being haploinsufficient</li>
+</ul>
+</p>
+
+<h2>Credits</h2>
+<p>
+Data for this track were generously provided by the DECIPHER project at
+<a href="https://decipher.sanger.ac.uk/about/downloads/data"
+ target=_blank>https://decipher.sanger.ac.uk/about/downloads/data</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Huang N, Lee I, Marcotte EM, Hurles ME.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/20976243" target="_blank">
+Characterising and predicting haploinsufficiency in the human genome</a>.
+<em>PLoS Genet</em>. 2010 Oct 14;6(10):e1001154.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/20976243" target="_blank">20976243</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2954820/" target="_blank">PMC2954820</a>
+</p>
