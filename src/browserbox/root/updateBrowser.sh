@@ -358,6 +358,11 @@ touch /data/mysql/hgFixed/gtexTissue.{MYI,MYD,frm}
 
 # -- END JUNE 2017
 
+# add gtex v8 data, which is now a default track, #27854:
+touch /data/mysql/hg38/gtexGeneModelV8.{MYI,MYD,frm}
+touch /data/mysql/hg38/gtexGeneV8.{MYI,MYD,frm}
+touch /data/mysql/hgFixed/gtexTissueV8.{MYI,MYD,frm}
+
 # Feb 2021, knownCds is required for knownGene display
 for db in hg38 mm10; do
     if [ -e "/data/mysql/$db" ] ; then
