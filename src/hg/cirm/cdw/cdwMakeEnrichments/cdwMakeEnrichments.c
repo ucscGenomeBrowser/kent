@@ -444,6 +444,7 @@ char *ignoredFormats[] = {
 	"html",
 	"csv",
 	"tsv",
+	"pdf",
 	"unknown",
 	};
 
@@ -508,7 +509,7 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown") && !isEmpty(vf-
 	else if (sameString(format, "vcf"))
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 	else if (stringIx(format, ignoredFormats) >= 0)
-	    verbose(2, "Ignoring %s %s in doEnrichments, that's ok", format, ef->cdwFileName);
+	    verbose(2, "Ignoring %s %s in doEnrichments, that's ok\n", format, ef->cdwFileName);
 	else
 	    errAbort("Unrecognized format %s in doEnrichments(%s)", format, path);
 	}
