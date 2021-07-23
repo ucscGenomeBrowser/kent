@@ -52,3 +52,16 @@ ln -s `pwd`/swift.bb /gbdb/wuhCor1/bbi/
 
 
 #########################################################################
+# ARTIC V4 (DONE 2021-07-22 angie)
+
+mkdir /hive/data/genomes/wuhCor1/bed/artic/v4
+cd /hive/data/genomes/wuhCor1/bed/artic/v4
+wget https://raw.githubusercontent.com/artic-network/artic-ncov2019/master/primer_schemes/nCoV-2019/V4/SARS-CoV-2.primer.bed
+tawk '{ print "NC_045512v2", $2, $3, $4, 0, $6, $5; }' SARS-CoV-2.primer.bed \
+| sort -k2n,2n \
+    > articV4.bed
+bedToBigBed -type=bed6+1 -as=../artic.as -tab articV4.bed ../../../chrom.sizes articV4.bb
+ln -s `pwd`/articV4.bb /gbdb/wuhCor1/bbi/
+
+
+#########################################################################
