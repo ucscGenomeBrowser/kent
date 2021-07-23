@@ -168,13 +168,23 @@ mouseOverField name2
 html poranHla1
 
 track artic
-shortLabel ARTIC Primers
-longLabel ARTIC Oxford Nanopore sequencing primers
+shortLabel ARTIC Primers V3
+longLabel ARTIC V3 Oxford Nanopore sequencing primers
 visibility hide
 group map
 priority 5
 type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/bbi/artic.bb
+noScoreFilter on
+
+track articV4
+shortLabel ARTIC Primers V4
+longLabel ARTIC V4 Oxford Nanopore sequencing primers
+visibility hide
+group map
+priority 5
+type bigBed 6 +
+bigDataUrl /gbdb/wuhCor1/bbi/articV4.bb
 noScoreFilter on
 
 track rapid
