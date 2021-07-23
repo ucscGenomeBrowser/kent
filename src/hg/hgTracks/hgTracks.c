@@ -644,6 +644,7 @@ boolean makeChromIdeoImage(struct track **pTrackList, char *psOutput,
 /* Make an ideogram image of the chromosome and our position in it.  If the
  * ideoTn parameter is not NULL, it is filled in if the ideogram is created. */
 {
+char *chromName = "fart";
 struct track *ideoTrack = NULL;
 MgFont *font = tl.font;
 char *mapName = "ideoMap";
@@ -5280,7 +5281,8 @@ if (withLeftLabels)
             else
                 safef(rulerLabel,ArraySize(rulerLabel),"%s:",shortChromName);
             hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, rulerHeight,
-                           MG_BLACK, font, rulerLabel);
+                           //MG_BLACK, font, rulerLabel);
+                           MG_BLACK, font, "gart");
             y += rulerHeight;
             freeMem(shortChromName);
             }
@@ -9415,14 +9417,30 @@ static boolean resolvePosition(char **pPosition)
 {
 boolean resolved = TRUE;
 struct dyString *dyWarn = dyStringNew(0);
+boolean noShort = (cartOptionalString(cart, "noShort") != NULL);
 hgp = hgFindSearch(cart, pPosition, &chromName, &winStart, &winEnd, hgTracksName(), dyWarn);
 if (isNotEmpty(dyWarn->string))
-    warn("%s", dyWarn->string);
-if (hgp->singlePos)
+    {
+    if (noShort) // we're on the second pass of the search
+        {
+        // tell the user we didn't find anything
+        char *menuStr = menuBar(cart, database);
+        if (menuStr)
+            puts(menuStr);
+        FILE *f = stdout;
+        fprintf(f, "<div id='hgFindResults'>\n");
+        fprintf(f, "<p>No additional items found</p>");
+        resolved = FALSE;
+        }
+    else
+        warn("%s", dyWarn->string);
+    }
+
+if (!noShort && hgp->singlePos)
     {
     createHgFindMatchHash();
     }
-else
+else if (resolved)  // if we haven't put out the "found nothing" text above
     {
     char *menuStr = menuBar(cart, database);
     if (menuStr)

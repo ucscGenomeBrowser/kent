@@ -2017,8 +2017,9 @@ for (table = hgp->tableList; table != NULL; table = table->next)
         if(!containerDivPrinted)
             {
             fprintf(f, "<div id='hgFindResults'>\n");
-            fprintf(f, "<p>Your search resulted in multiple matches.  "
-                    "Please select a position:</p>\n");
+            if (hgp->singlePos == NULL) // we might be called with only one result
+                fprintf(f, "<p>Your search resulted in multiple matches.  "
+                        "Please select a position:</p>\n");
             containerDivPrinted = TRUE;
             }
 	if (table->htmlStart) 
