@@ -5280,8 +5280,7 @@ if (withLeftLabels)
             else
                 safef(rulerLabel,ArraySize(rulerLabel),"%s:",shortChromName);
             hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, rulerHeight,
-                           //MG_BLACK, font, rulerLabel);
-                           MG_BLACK, font, "gart");
+                           MG_BLACK, font, rulerLabel);
             y += rulerHeight;
             freeMem(shortChromName);
             }
