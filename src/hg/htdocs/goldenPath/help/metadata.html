@@ -79,7 +79,8 @@ https://genome.ucsc.edu/s/PublicSessions/metadata_field</a>.
 <a name="tagstorm"></a>
 <h2>Tagstorm metadata</h2>
 <p>
-The tagStorm format is a plain text file similar to the <em>trackDb.txt</em> file that describes all
+The tagStorm format is a plain text file similar to a
+<a href="trackDb/trackDbHub.html"<em>trackDb</em></a> file that describes all
 of the tracks in a <a href="hgTrackHubHelp.html">track hub</a>, in that both are files where the
 first word in a  line is the tag and the rest of the line is the value, and different stanza's are
 line delimited. TagStorm's are also similar to a spreadsheet, where a tag corresponds to a column
@@ -148,7 +149,17 @@ i.e., <code>meta ucsc1_1</code>.
 <p>
 The <code>meta ucsc1_1</code> line would reference the following metadata:</p>
 <pre>
-tagStorm Lab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	X	A	10 hour	ucsc1_1
+lab tagStorm Lab
+data_set_id ucscTest1
+access group
+assay long-RNA-seq
+enriched_in exon
+life_stage postpartum
+species Homo sapiens
+ucsc_db hg38
+treatment X
+donor A
+differentiation 10 hour
 </pre>
 
 <p>
@@ -181,8 +192,9 @@ stanza example can be seem below.</p>
 <p>
 Column or tab-separated metadata can be useful to store computer readable information as an array.
 While this format is very easy for a computer to parse, it can be bit confusing or difficult for
-humans to read and interpret. As you can see in the example below, many columns become redundant as
-they repeat the same information on each line. 
+humans to read and interpret. As you can see in the
+<a href="/goldenPath/help/examples/hubExamples/hubMetadata/tabSep.txt">example</a> below, many
+columns become redundant as they repeat the same information on each line.
 </p>
 <pre>
 #lab	data_set_id	access	assay	enriched_in	life_stage	species	ucsc_db	treatment	donor	differentiation	meta
@@ -197,15 +209,19 @@ tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	C	1 d
 tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	C	5 days	ucsc1_9
 </pre>
 <p>
-To reference a line in the TSV or CSV file in the trackDb stanza, a <em>meta</em> column must
+To reference a line in the TSV or CSV file in the trackDb stanza, a
+<a href="/goldenPath/help/trackDb/trackDbHub.html#meta"><em>meta</em></a> column must
 contain a unique alpha-numeric string. For example, <em>ucsc1_1</em> would reference the following
 metadata in your track:
 </p>
 <pre>
+#lab	data_set_id	access	assay	enriched_in	life_stage	species	ucsc_db	treatment	donor	differentiation	meta
 tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	X	A	10 hour	ucsc1_1
 </pre>
 <p>
-A trackDb stanza using the tab-separated metadata can be seen in the following example:
+A trackDb stanza using the
+<a href="/goldenPath/help/examples/hubExamples/hubMetadata/tabSep.txt">tab-separated metadata</a>
+can be seen in the following example:
 </p>
 <pre>
 track experiment1
