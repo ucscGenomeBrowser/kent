@@ -3401,8 +3401,9 @@ function gotoGetDnaPage() {
 // A function for the keyboard shortcuts "zoom to x bp"
 function zoomTo(zoomSize) {
     var flankSize = Math.floor(zoomSize/2);
-    var pos = parsePosition(genomePos.get());
-    pos.replace("virt:", "multi:");
+    var posStr = genomePos.get();
+    posStr = posStr.replace("virt:", "multi:");
+    var pos = parsePosition(posStr);
     var mid = pos.start+(Math.floor((pos.end-pos.start)/2));
     var newStart = Math.max(mid - flankSize, 0);
     var newEnd = mid + flankSize - 1;

@@ -662,8 +662,8 @@ if (hgvs == NULL)
 return hgvs;
 }
 
-static char *npForGeneSymbol(char *db, char *geneSymbol)
-/* Given a gene symbol, look up and return its NP_ accession; if not found return NULL. */
+static struct slName *npForGeneSymbol(char *db, char *geneSymbol)
+/* Given a gene symbol, look up and return a list of NP_ accessions; if not found return NULL. */
 {
 char query[2048];
 if (hDbHasNcbiRefSeq(db))
@@ -684,7 +684,7 @@ else if (hTableExists(db, "refGene"))
 else
     return NULL;
 struct sqlConnection *conn = hAllocConn(db);
-char *npAcc = sqlQuickString(conn, query);
+struct slName *npAcc = sqlQuickList(conn, query);
 hFreeConn(&conn);
 return npAcc;
 }
@@ -884,7 +884,8 @@ return base;
 }
 
 struct hgvsVariant *hgvsParsePseudoHgvs(char *db, char *term)
-/* Attempt to parse things that are not strict HGVS, but that people might intend as HGVS: */
+/* Attempt to parse things that are not strict HGVS, but that people might intend as HGVS:
+ * Return a list of struct hgvsVariant that may be what was intended  */
 // Note: this doesn't support non-coding gene symbol terms (which should have nt alleles)
 {
 struct hgvsVariant *hgvs = NULL;
@@ -929,17 +930,22 @@ else if ((isSubst = regexMatchSubstr(term, pseudoHgvsGeneSymbolProtSubstExp,
     int len = substrs[geneSymbolIx].rm_eo - substrs[geneSymbolIx].rm_so;
     char geneSymbol[len+1];
     safencpy(geneSymbol, sizeof(geneSymbol), term, len);
-    char *npAcc = npForGeneSymbol(db, geneSymbol);
-    if (isNotEmpty(npAcc))
+    struct slName *npAccList = npForGeneSymbol(db, geneSymbol);
+    if (npAccList != NULL)
         {
-        // Make it a real HGVS term with the NP and pass that on to the usual parser.
-        int descStartIx = 2;
-        char *description = term + substrs[descStartIx].rm_so;
-        struct dyString *npTerm = dyStringCreate("%s(%s):p.%s",
-                                                 npAcc, geneSymbol, description);
-        hgvs = hgvsParseTerm(npTerm->string);
-        dyStringFree(&npTerm);
-        freeMem(npAcc);
+        struct slName *npItem = NULL;
+        for (npItem = npAccList; npItem != NULL; npItem = npItem->next)
+            {
+            char *npAcc = npItem->name;
+            // Make it a real HGVS term with the NP and pass that on to the usual parser.
+            int descStartIx = 2;
+            char *description = term + substrs[descStartIx].rm_so;
+            struct dyString *npTerm = dyStringCreate("%s(%s):p.%s",
+                                                     npAcc, geneSymbol, description);
+            slAddHead(&hgvs, hgvsParseTerm(npTerm->string));
+            dyStringFree(&npTerm);
+            //freeMem(npAcc);
+            }
         }
     }
 else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolProtPosExp, substrs, ArraySize(substrs)))
@@ -947,19 +953,24 @@ else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolProtPosExp, substrs, ArraySi
     int len = substrs[geneSymbolIx].rm_eo - substrs[geneSymbolIx].rm_so;
     char geneSymbol[len+1];
     safencpy(geneSymbol, sizeof(geneSymbol), term, len);
-    char *npAcc = npForGeneSymbol(db, geneSymbol);
-    if (isNotEmpty(npAcc))
+    struct slName *npAccList = npForGeneSymbol(db, geneSymbol);
+    if (npAccList != NULL)
         {
-        // Only position was provided, no change.  Look up ref base and make a synonymous subst
-        // so it's parseable HGVS.
-        int posIx = 2;
-        int pos = regexSubstringInt(term, substrs[posIx]);
-        char refBase = refBaseForNp(db, npAcc, pos);
-        struct dyString *npTerm = dyStringCreate("%s(%s):p.%c%d=",
-                                                 npAcc, geneSymbol, refBase, pos);
-        hgvs = hgvsParseTerm(npTerm->string);
-        dyStringFree(&npTerm);
-        freeMem(npAcc);
+        struct slName *npItem = NULL;
+        for (npItem = npAccList; npItem != NULL; npItem = npItem->next)
+            {
+            char *npAcc = npItem->name;
+            // Only position was provided, no change.  Look up ref base and make a synonymous subst
+            // so it's parseable HGVS.
+            int posIx = 2;
+            int pos = regexSubstringInt(term, substrs[posIx]);
+            char refBase = refBaseForNp(db, npAcc, pos);
+            struct dyString *npTerm = dyStringCreate("%s(%s):p.%c%d=",
+                                                     npAcc, geneSymbol, refBase, pos);
+            slAddHead(&hgvs, hgvsParseTerm(npTerm->string));
+            dyStringFree(&npTerm);
+            //freeMem(npAcc);
+            }
         }
     }
 else if (regexMatchSubstr(term, pseudoHgvsGeneSympolCDotPosExp, substrs, ArraySize(substrs)))

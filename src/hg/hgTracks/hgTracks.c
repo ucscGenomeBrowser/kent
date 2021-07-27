@@ -644,7 +644,6 @@ boolean makeChromIdeoImage(struct track **pTrackList, char *psOutput,
 /* Make an ideogram image of the chromosome and our position in it.  If the
  * ideoTn parameter is not NULL, it is filled in if the ideogram is created. */
 {
-char *chromName = "fart";
 struct track *ideoTrack = NULL;
 MgFont *font = tl.font;
 char *mapName = "ideoMap";
@@ -5281,8 +5280,7 @@ if (withLeftLabels)
             else
                 safef(rulerLabel,ArraySize(rulerLabel),"%s:",shortChromName);
             hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, rulerHeight,
-                           //MG_BLACK, font, rulerLabel);
-                           MG_BLACK, font, "gart");
+                           MG_BLACK, font, rulerLabel);
             y += rulerHeight;
             freeMem(shortChromName);
             }
