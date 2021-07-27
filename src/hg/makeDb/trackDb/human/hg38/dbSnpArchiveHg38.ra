@@ -21,146 +21,146 @@ pennantIcon New red ../goldenPath/newsarch.html#063021 "Archived June 30, 2021"
         priority 0.09
 
         track snp151 override
-        parent dbSnpArchive off
+        parent dbSnpArchive
         priority 0.1
 
         track snp151Flagged override
-        parent dbSnpArchive off
+        parent dbSnpArchive on
         priority 0.1
 
         track snp151Mult override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.1
 
         track snp150Mult override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.2
 
         track snp150 override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.2
 
         track snp150Common override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.2
 
         track snp150Flagged override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.2
 
         track snp149Mult override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.3
 
         track snp149 override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.3
 
         track snp149Common override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.3
 
         track snp149Flagged override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.3
 
 	track snp147Mult override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.4
 
 	track snp147Flagged override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.4
 
 	track snp147Common override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.4
 	
 	track snp147 override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.4
 
 	track snp146Mult override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.5
 
         track snp146Flagged override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.5
 
         track snp146Common override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.5
 
         track snp146 override
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.5
 
         track snp144Mult override
         snpSeqFile /gbdb/hg38/snp/snp144.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.6
 
         track snp144Flagged override
         snpSeqFile /gbdb/hg38/snp/snp144.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.6
 
         track snp144Common override
         snpSeqFile /gbdb/hg38/snp/snp144.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.6
 
         track snp144 override
         snpSeqFile /gbdb/hg38/snp/snp144.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.6
 
         track snp142Mult override
         group varRep
         snpSeqFile /gbdb/hg38/snp/snp142.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.7
 
         track snp142Flagged override
         group varRep
         snpSeqFile /gbdb/hg38/snp/snp142.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.7
 
         track snp142Common override
         group varRep
         snpSeqFile /gbdb/hg38/snp/snp142.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.7
 
         track snp142 override
         group varRep
         snpSeqFile /gbdb/hg38/snp/snp142.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.7
         
         track snp141Mult override
         snpSeqFile /gbdb/hg38/snp/snp141.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.8
 
         track snp141Flagged override
         group varRep
         snpSeqFile /gbdb/hg38/snp/snp141.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.8
 
         track snp141Common override
         group varRep
         snpSeqFile /gbdb/hg38/snp/snp141.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.8
 
         track snp141 override
         group varRep
         snpSeqFile /gbdb/hg38/snp/snp141.fa
-        parent dbSnpArchive off
+        parent dbSnpArchive 
         priority 0.8
 
 
