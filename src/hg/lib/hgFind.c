@@ -2749,10 +2749,20 @@ if (hgvsList)
     struct dyString *dyWarn = dyStringNew(0);
     for (hgvs = hgvsList; hgvs != NULL; hgvs = hgvs->next)
         {
+        dyStringClear(dyWarn);
         char *pslTable = NULL;
         struct bed *mapping = hgvsValidateAndMap(hgvs, db, term, dyWarn, &pslTable);
-        if (hgvsListLen == 1 && dyStringLen(dyWarn) > 0)
-            warn("%s", dyStringContents(dyWarn));
+        if (dyStringLen(dyWarn) > 0)
+            {
+            if (hgvsListLen == 1)
+                {
+                warn("%s", dyStringContents(dyWarn));
+                }
+            else
+                {
+                continue;
+                }
+            }
         if (mapping)
             {
             int padding = 5;
