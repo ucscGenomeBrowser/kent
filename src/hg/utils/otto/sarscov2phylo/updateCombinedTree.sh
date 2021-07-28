@@ -29,9 +29,6 @@ scriptDir=$(dirname "${BASH_SOURCE[0]}")
 source $scriptDir/util.sh
 
 today=$(date +%F)
-y=$(date +%Y)
-m=$(date +%m)
-d=$(date +%d)
 
 cd $ottoDir/$today
 
@@ -387,7 +384,7 @@ zcat $gisaidDir/metadata_batch_$today.tsv.gz \
 | tawk '{print $1 "|" $3 "|" $5, "", $5, $7, $15, $13, $14, $18, $19;}' \
     >> gisaidAndPublic.$today.metadata.tsv
 wc -l gisaidAndPublic.$today.metadata.tsv
-gzip gisaidAndPublic.$today.metadata.tsv
+gzip -f gisaidAndPublic.$today.metadata.tsv
 
 # version/description files
 cncbDate=$(ls -l $cncbDir | sed -re 's/.*cncb\.([0-9]{4}-[0-9][0-9]-[0-9][0-9]).*/\1/')
@@ -413,7 +410,7 @@ time $matUtils annotate -T 50 \
     -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb
 
 mv gisaidAndPublic.$today.masked{,.unannotated}.pb
-ln gisaidAndPublic.$today.masked.nextclade.pangolin.pb gisaidAndPublic.$today.masked.pb
+ln -f gisaidAndPublic.$today.masked.nextclade.pangolin.pb gisaidAndPublic.$today.masked.pb
 
 # EPI_ISL_ ID to public sequence name mapping, so if users upload EPI_ISL IDs for which we have
 # public names & IDs, we can match them.
@@ -428,77 +425,4 @@ for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
     ln -sf `pwd`/epiToPublic.latest $dir/
 done
 
-# Extract public samples from tree
-grep -v EPI_ISL_ samples.$today > newPublicNames
-$matUtils extract -i gisaidAndPublic.$today.masked.pb \
-    -s newPublicNames \
-    -O -o public-$today.all.masked.pb
-# Extract Newick and VCF from public-only tree
-$matUtils extract -i public-$today.all.masked.pb \
-    -t public-$today.all.nwk \
-    -v public-$today.all.masked.vcf
-gzip -f public-$today.all.masked.vcf
-zcat gisaidAndPublic.$today.metadata.tsv.gz \
-| grep -v EPI_ISL_ \
-| gzip -c \
-    > public-$today.metadata.tsv.gz
-
-# Add nextclade annotations to public protobuf
-time $matUtils annotate -T 50 \
-    -l \
-    -i public-$today.all.masked.pb \
-    -P ../nextstrain.clade-paths.public.tsv \
-    -o public-$today.all.masked.nextclade.pb
-
-# Add pangolin lineage annotations to public protobuf
-time $matUtils annotate -T 50 \
-    -i public-$today.all.masked.nextclade.pb \
-    -P ../pango.clade-paths.public.tsv \
-    -o public-$today.all.masked.nextclade.pangolin.pb
-
-rm public-$today.all.masked.pb
-ln -f public-$today.all.masked.nextclade.pangolin.pb public-$today.all.masked.pb
-
-cncbDate=$(ls -l $cncbDir | sed -re 's/.*cncb\.([0-9]{4}-[0-9][0-9]-[0-9][0-9]).*/\1/')
-echo "sarscov2phylo release 13-11-20; NCBI and COG-UK sequences downloaded $today; CNCB sequences downloaded $cncbDate" \
-    > version.txt
-
-$matUtils extract -i public-$today.all.masked.pb -u samples.public.$today
-sampleCountComma=$(echo $(wc -l < samples.public.$today) \
-                   | sed -re 's/([0-9]+)([0-9]{3})$/\1,\2/; s/([0-9]+)([0-9]{3},[0-9]{3})$/\1,\2/;')
-echo "$sampleCountComma genomes from GenBank, COG-UK and CNCB ($today); sarscov2phylo 13-11-20 tree with newer sequences added by UShER" \
-    > hgPhyloPlace.description.txt
-
-
-# Link to public trees download directory hierarchy
-archiveRoot=/hive/users/angie/publicTrees
-archive=$archiveRoot/$y/$m/$d
-mkdir -p $archive
-gzip -c public-$today.all.nwk > $archive/public-$today.all.nwk.gz
-ln `pwd`/public-$today.all.masked.{pb,vcf.gz} $archive/
-gzip -c public-$today.all.masked.pb > $archive/public-$today.all.masked.pb.gz
-ln `pwd`/public-$today.metadata.tsv.gz $archive/
-gzip -c public-$today.all.masked.nextclade.pangolin.pb \
-    > $archive/public-$today.all.masked.nextclade.pangolin.pb.gz
-gzip -c ../nextstrain.clade-paths.public.tsv > $archive/nextstrain.clade-paths.public.tsv.gz
-gzip -c ../pango.clade-paths.public.tsv > $archive/pango.clade-paths.public.tsv.gz
-ln `pwd`/hgPhyloPlace.description.txt $archive/public-$today.version.txt
-
-# Update 'latest' in $archiveRoot
-ln -f $archive/public-$today.all.nwk.gz $archiveRoot/public-latest.all.nwk.gz
-ln -f $archive/public-$today.all.masked.pb $archiveRoot/public-latest.all.masked.pb
-ln -f $archive/public-$today.all.masked.pb.gz $archiveRoot/public-latest.all.masked.pb.gz
-ln -f $archive/public-$today.all.masked.vcf.gz $archiveRoot/public-latest.all.masked.vcf.gz
-ln -f $archive/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata.tsv.gz
-ln -f $archive/public-$today.version.txt $archiveRoot/public-latest.version.txt
-
-# Update hgdownload-test link for archive
-mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/UShER_SARS-CoV-2/$y/$m
-ln -sf $archive /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/UShER_SARS-CoV-2/$y/$m
-
-# Update links to latest public protobuf and metadata in hgwdev cgi-bin directories
-for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
-    ln -sf `pwd`/public-$today.all.masked.pb $dir/public-latest.all.masked.pb
-    ln -sf `pwd`/public-$today.metadata.tsv.gz $dir/public-latest.metadata.tsv.gz
-    ln -sf `pwd`/hgPhyloPlace.description.txt $dir/public-latest.version.txt
-done
+$scriptDir/extractPublicTree.sh $today
