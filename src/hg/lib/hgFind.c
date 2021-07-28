@@ -2728,49 +2728,119 @@ if (foundIt)
 return foundIt;
 }
 
+// a little data structure for combining multiple transcripts that resolve
+// to the same hgvs change. This struct can be used to fill out a struct hgPos
+struct hgvsHelper
+    {
+    struct hgvsHelper *next;
+    char *chrom; // chromosome name of position
+    int chromStart; // start of position
+    int chromEnd; // end of position
+    struct slName *validTranscripts; // valid transcripts/protein accessions for this position
+    char *label; // corresponding hgvs term
+    char *table; // type of match, LRG, NCBI, etc
+    };
+
 static boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPositions *hgp)
-/* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature */
-/* See http://varnomen.hgvs.org/ */
+/* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature
+ * See http://varnomen.hgvs.org/
+ * If search term is a pseudo hgvs term like GeneName AminoAcidPosition (RUNX2 Arg155) and
+ * matches more than one transcript, fill out the hgp with the potential matches so the user
+ * can choose where to go, otherwise return a singlePos */
 {
 boolean foundIt = FALSE;
-struct hgvsVariant *hgvs = hgvsParseTerm(term);
-if (hgvs == NULL)
-    hgvs = hgvsParsePseudoHgvs(db, term);
-if (hgvs)
+struct hgvsVariant *hgvsList = hgvsParseTerm(term);
+if (hgvsList == NULL)
+    hgvsList = hgvsParsePseudoHgvs(db, term);
+if (hgvsList)
     {
+    struct hgvsVariant *hgvs = NULL;
+    int hgvsListLen = slCount(hgvs);
+    struct hgPosTable *table;
+    AllocVar(table);
+    table->description = "HGVS";
+    int padding = 5;
     struct dyString *dyWarn = dyStringNew(0);
-    char *pslTable = NULL;
-    struct bed *mapping = hgvsValidateAndMap(hgvs, db, term, dyWarn, &pslTable);
-    if (dyStringLen(dyWarn) > 0)
-        warn("%s", dyStringContents(dyWarn));
-    if (mapping)
+    struct hgvsHelper *helper = NULL;
+    struct hash *uniqHgvsPos = hashNew(0);
+    struct dyString *chromPosIndex = dyStringNew(0);
+    for (hgvs = hgvsList; hgvs != NULL; hgvs = hgvs->next)
         {
-        int padding = 5;
-        char *trackTable;
-        if (isEmpty(pslTable))
-            trackTable = "chromInfo";
-        else if (startsWith("lrg", pslTable))
-            trackTable = "lrgTranscriptAli";
-        else if (startsWith("wgEncodeGencode", pslTable))
-            trackTable = pslTable;
-        else if (startsWith("ncbiRefSeqPsl", pslTable))
+        dyStringClear(dyWarn);
+        dyStringClear(chromPosIndex);
+        char *pslTable = NULL;
+        struct bed *mapping = hgvsValidateAndMap(hgvs, db, term, dyWarn, &pslTable);
+        if (dyStringLen(dyWarn) > 0)
             {
-            if (startsWith("NM_", hgvs->seqAcc) || startsWith("NR_", hgvs->seqAcc) ||
-                startsWith("NP_", hgvs->seqAcc) || startsWith("YP_", hgvs->seqAcc))
-                trackTable = "ncbiRefSeqCurated";
-            else if (startsWith("XM_", hgvs->seqAcc) || startsWith("XR_", hgvs->seqAcc) ||
-                     startsWith("XP_", hgvs->seqAcc))
-                trackTable = "ncbiRefSeqPredicted";
+            if (hgvsListLen == 1)
+                {
+                warn("%s", dyStringContents(dyWarn));
+                }
             else
-                trackTable = "ncbiRefSeq";
+                {
+                continue;
+                }
             }
-        else
-            trackTable = "refGene";
-        singlePos(hgp, "HGVS", NULL, trackTable, term, "",
-                  mapping->chrom, mapping->chromStart-padding, mapping->chromEnd+padding);
+        if (mapping)
+            {
+            char *trackTable;
+            if (isEmpty(pslTable))
+                trackTable = "chromInfo";
+            else if (startsWith("lrg", pslTable))
+                trackTable = "lrgTranscriptAli";
+            else if (startsWith("wgEncodeGencode", pslTable))
+                trackTable = pslTable;
+            else if (startsWith("ncbiRefSeqPsl", pslTable))
+                {
+                if (startsWith("NM_", hgvs->seqAcc) || startsWith("NR_", hgvs->seqAcc) ||
+                    startsWith("NP_", hgvs->seqAcc) || startsWith("YP_", hgvs->seqAcc))
+                    trackTable = "ncbiRefSeqCurated";
+                else if (startsWith("XM_", hgvs->seqAcc) || startsWith("XR_", hgvs->seqAcc) ||
+                         startsWith("XP_", hgvs->seqAcc))
+                    trackTable = "ncbiRefSeqPredicted";
+                else
+                    trackTable = "ncbiRefSeq";
+                }
+            else
+                trackTable = "refGene";
+            dyStringPrintf(chromPosIndex, "%s%s%d%d", trackTable, mapping->chrom,
+                    mapping->chromStart-padding, mapping->chromStart+padding);
+            if ((helper = hashFindVal(uniqHgvsPos, chromPosIndex->string)) != NULL)
+                {
+                slNameAddHead(&helper->validTranscripts, hgvs->seqAcc);
+                }
+            else
+                {
+                AllocVar(helper);
+                helper->chrom = mapping->chrom;
+                helper->chromStart = mapping->chromStart;
+                helper->chromEnd = mapping->chromEnd;
+                helper->validTranscripts = slNameNew(hgvs->seqAcc);
+                helper->label = cloneString(term);
+                helper->table = trackTable;
+                hashAdd(uniqHgvsPos, chromPosIndex->string, helper);
+                }
+            }
+        }
+    struct hashEl *hel, *helList= hashElListHash(uniqHgvsPos);
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+        if (hgp->tableList == NULL)
+            hgp->tableList = table;
+        helper = (struct hgvsHelper *)hel->val;
+        table->name = helper->table;
+        struct hgPos *pos;
+        AllocVar(pos);
+        pos->chrom = helper->chrom;
+        pos->chromStart = helper->chromStart - padding;
+        pos->chromEnd = helper->chromEnd + padding;
+        pos->name = slNameListToString(helper->validTranscripts, '/');
+        pos->description = cloneString(helper->label);
+        pos->browserName = "";
+        slAddHead(&table->posList, pos);
         // highlight the mapped bases to distinguish from padding
-        hgp->tableList->posList->highlight = addHighlight(db, mapping->chrom,
-                                                          mapping->chromStart, mapping->chromEnd);
+        hgp->tableList->posList->highlight = addHighlight(db, helper->chrom,
+                                                helper->chromStart, helper->chromEnd);
         foundIt = TRUE;
         }
     dyStringFree(&dyWarn);
