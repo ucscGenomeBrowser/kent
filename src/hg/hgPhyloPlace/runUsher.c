@@ -866,6 +866,21 @@ results->subtreeInfoList = results->subtreeInfoList->next;
 return results;
 }
 
+static void addEmptyPlacements(struct slName *sampleIds, struct hash *samplePlacements)
+/* Parsing an usher-style clades.txt file from matUtils extract requires samplePlacements to
+ * have placementInfo for each sample.  When running usher, those are added when we parse
+ * usher stderr; when running matUtils, just allocate one for each sample. */
+{
+struct slName *sample;
+for (sample = sampleIds;  sample != NULL;  sample = sample->next)
+    {
+    struct placementInfo *info;
+    AllocVar(info);
+    hashAdd(samplePlacements, sample->name, info);
+    info->sampleId = cloneString(sample->name);
+    }
+}
+
 struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protobufPath,
                                                 int subtreeSize, struct slName *sampleIds,
                                                 struct hash *condensedNodes, int *pStartTime)
@@ -889,13 +904,14 @@ trashDirFile(&tnOutDir, "ct", "matUtils_outdir", ".dir");
 char *cmd[] = { matUtilsPath, "extract", "-i", protobufPath, "-d", tnOutDir.forCgi,
                 "-s", tnSamples.forCgi,
                 "-x", subtreeSizeStr, "-X", SINGLE_SUBTREE_SIZE, "-T", numThreadsStr,
-                NULL };
+                "--usher-clades-txt", NULL };
 char **cmds[] = { cmd, NULL };
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "matUtils_stderr", ".txt");
 struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi);
 pipelineClose(&pl);
 reportTiming(pStartTime, "run matUtils");
+addEmptyPlacements(sampleIds, results->samplePlacements);
 struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
 struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
 int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn, &singleSubtreeMuts,
