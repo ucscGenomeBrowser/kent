@@ -65,8 +65,7 @@ my %fixup = ( 'ITA' => 'Italy',
             );
 
 while (<>) {
-  chomp; chomp;
-  $_ =~ s/\r$//;
+  s/[\r\n]+$//;
   my $wholeName = $_;
   $wholeName =~ s/[ ',()]//g;
   if (/^([a-z ]+\/|North America\/)?([A-Z][a-zA-Z '_-]+)\//) {
