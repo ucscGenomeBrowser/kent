@@ -18,38 +18,46 @@ displays a phylogenetic tree of the first B.1.1.7 variant sequences collected in
 <p>
 Track colors are based on 
 <a href="https://github.com/cov-lineages/pangolin/" target=_blank>Pangolin</a>
-lineage (Rambaut <em>et al.</em>) conventions at the time this track was generated:
+lineage (Rambaut <em>et al.</em>) conventions at the time this track was generated.
+The Greek-letter names as defined by the World Health Organization (WHO) and published by
+the <a href = "https://www.cdc.gov/coronavirus/2019-ncov/variants/variant-info.html"
+target = _blank>CDC</a> are listed in the table.
 
 <table style="border-spacing: 20px 2px;">
   <tr>
-    <th>Color</th><th>Variant</th></tr>
+    <th>Color</th><th>Variant</th>
+    <th>WHO name</th></tr>
   <tr>
     <td><span style="background-color: #F93529;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-    <td>P.1</td></tr>
+    <td>P.1</td>
+    <td>Gamma</td></tr>
   <tr>
     <td><span style="background-color: #FF7535;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-    <td>B.1.1.7</td></tr>
+    <td>B.1.1.7</td>
+    <td>Alpha  </td></tr>
   <tr>
     <td><span style="background-color: #FFAA3F;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-    <td>B.1.351</td></tr>
+    <td>B.1.351</td>
+    <td>Beta   </td></tr>
   <tr>
     <td><span style="background-color: #69BEB9;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-    <td>B.429</td></tr>
+    <td>B.429</td>
+    <td>Epsilon</td></tr>
 </table>
 </p>
 <p>
 Mutations in the amino acid track are named with the format: 
 <pre>
-        [Reference amino acid][1-based coordinate in peptide][Alternate amino acid]
+        [Reference amino acid][1-based coordinate in peptide][Alternate amino acid]. E.g., L452R
 </pre>  
 <p>
 Mutations in the nucleotide track are named with the format: 
 <pre>
-        [Reference nucleotide][1-based coordinate in genome][Alternate nucleotide]
+        [Reference nucleotide][1-based coordinate in genome][Alternate nucleotide]. E.g., T22918G
 </pre>
 Insertions and deletions in both tracks are named: 
 <pre>
-        [del/ins]_[1-based genomic coordinate of first affected nucleotide]
+        [del/ins]_[1-based genomic coordinate of first affected nucleotide].  E.g., del_21991
 </pre>
 </p>
 
