@@ -1,29 +1,41 @@
+#!/bin/sh -ex
+# Let's make sure we didn't already add this version to the knownId table
+version=`hgsql hgFixed -Ne "select releaseNotes from knownId where releaseNotes='$db ${GENCODE_VERSION}'"`
+if test "$version" != ""
+then 
+    echo "This version ($version) already exists in hgFixed.knownId"
+    echo "To delete: hgsql hgFixed -Ne \"delete from knownId where releaseNotes='$db ${GENCODE_VERSION}'\""
+fi
+
 # Start by extracting the models from the wgEncodeGencode tables
 hgsql -e "select * from wgEncodeGencodeComp$GENCODE_VERSION" --skip-column-names $db | cut -f 2-16 |  genePredToBed stdin tmp
 hgsql -e "select * from wgEncodeGencodePseudoGene$GENCODE_VERSION" --skip-column-names $db | cut -f 2-16 |  genePredToBed stdin tmp2
 sort -k1,1 -k2,2n tmp tmp2 | gzip -c > gencode${GENCODE_VERSION}.bed.gz
 rm tmp tmp2
 
+# generate UC id's for the models along with mapping from ENST to uc (txToAcc.tab)
+# update hgFixed.knownId with id range
 # get current list of ids
 zcat gencode${GENCODE_VERSION}.bed.gz |  awk '{print $4}' | sort > newGencodeName.txt
-
 # grab ENST to UC map from the previous set
 hgsql $oldDb -Ne "select name,alignId from knownGene" | sort > EnstToUC.txt
-
-# get lastId from last run of the geneset   (human V36)
-# lastId 5075761
-kgAllocId EnstToUC.txt newGencodeName.txt 5075761 stdout | sort -u >  txToAcc.tab
-# lastId 5078938
-
-echo "create database $tempDb" | hgsql ""
+# get the last id from last build of the geneset   (human V36)
+lastEndId=`hgsql hgFixed -Ne "select end+1 from knownId where end = (select maX(end) from knownId)"`
+kgAllocId EnstToUC.txt newGencodeName.txt $lastEndId stdout 2> out.txt | sort -u >  txToAcc.tab
+newEndId=`awk '{print $2}' out.txt`
+hgsql hgFixed -Ne "insert into knownId values ($lastEndId, $newEndId, \"$db ${GENCODE_VERSION}\")"
+rm EnstToUC.txt newGencodeName.txt out.txt
 
 # makes knownGene and knownGeneExt
+echo "create database $tempDb" | hgsql ""
 makeGencodeKnownGene -justKnown $db $tempDb $GENCODE_VERSION txToAcc.tab
 
-hgLoadSqlTab -notOnServer $tempDb knownGene $kent/src/hg/lib/knownGene.sql knownGene.gp
-#hgsql $db -Ne "create view $tempDb.all_mrna as select * from all_mrna"
+# need these two views in the knownGene database
 hgsql $db -Ne "create view $tempDb.chromInfo as select * from chromInfo"
 hgsql $db -Ne "create view $tempDb.trackDb as select * from trackDb"
+
+# load various tables
+hgLoadSqlTab -notOnServer $tempDb knownGene $kent/src/hg/lib/knownGene.sql knownGene.gp
 hgLoadGenePred -genePredExt $tempDb  knownGeneExt knownGeneExt.gp
 hgMapToGene -geneTableType=genePred  -type=psl -all -tempDb=$tempDb $db all_mrna knownGene knownToMrna
 hgMapToGene -geneTableType=genePred  -tempDb=$tempDb $db refGene knownGene knownToRefSeq
@@ -36,7 +48,7 @@ hgLoadSqlTab -notOnServer $tempDb kgXref $kent/src/hg/lib/kgXref.sql kgXref.tab
 hgLoadSqlTab -notOnServer $tempDb knownCanonical $kent/src/hg/lib/knownCanonical.sql knownCanonical.tab
 sort knownIsoforms.tab | uniq | hgLoadSqlTab -notOnServer $tempDb knownIsoforms $kent/src/hg/lib/knownIsoforms.sql stdin
 
-# kgColor.tab is "old style" colors
+# kgColor.tab built above is "old style" colors, we want gencode colors
 cat  << __EOF__  > colors.sed
 s/coding/12\t12\t120/
 s/nonCoding/0\t100\t0/
@@ -47,9 +59,14 @@ __EOF__
 hgsql $db -Ne "select * from wgEncodeGencodeAttrs$GENCODE_VERSION" | tawk '{print $5,$13}' | sed -f colors.sed > colors.txt
 hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql colors.txt
 
+# knownGenePep
 genePredToProt knownGeneExt.gp /cluster/data/$db/$db.2bit tmp.faa
 faFilter -uniq tmp.faa ucscGenes.faa
 hgPepPred $tempDb generic knownGenePep ucscGenes.faa
+
+# knownGeneMrna
+twoBitToFa -noMask /cluster/data/$db/$db.2bit -bed=ucscGenes.bed stdout | faFilter -uniq stdin  ucscGenes.fa
+hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 
 hgsql -e "select * from wgEncodeGencodeComp$GENCODE_VERSION" --skip-column-names $db | cut -f 2-16 |  tawk '{print $1,$13,$14,$8,$15}' | sort | uniq > knownCds.tab
 hgLoadSqlTab -notOnServer $tempDb knownCds $kent/src/hg/lib/knownCds.sql knownCds.tab
@@ -88,6 +105,7 @@ hgLoadSqlTab -notOnServer $tempDb kg${lastVer}ToKg${curVer} $kent/src/hg/lib/kg1
 hgsql $tempDb -Ne "select kgId, geneSymbol, spID from kgXref" > geneNames.txt
 genePredToBigGenePred -colors=colors.txt -geneNames=geneNames.txt -known -cds=knownCds.tab   knownGene.gp  stdout | sort -k1,1 -k2,2n >  gencodeAnnot$GENCODE_VERSION.bgpInput
 
+# build bigGenePred
 tawk '{print $4,$0}' gencodeAnnot$GENCODE_VERSION.bgpInput | sort > join1
 hgsql $db -Ne "select transcriptId, transcriptClass from wgEncodeGencodeAttrs$GENCODE_VERSION" |  sed 's/problem/nonCoding/'| sort > attrs.txt
 join -t $'\t'   join1 attrs.txt > join2
@@ -108,5 +126,29 @@ cut -f 2- -d $'\t' join7 | sort -k1,1 -k2,2n > bgpInput.txt
 
 bedToBigBed -extraIndex=name -type=bed12+16 -tab -as=$HOME/kent/src/hg/lib/gencodeBGP.as bgpInput.txt /cluster/data/$db/chrom.sizes $db.gencode$GENCODE_VERSION.bb
 
+rm -f  /gbdb/$db/gencode/gencode$GENCODE_VERSION.bb
 ln -s `pwd`/$db.gencode$GENCODE_VERSION.bb /gbdb/$db/gencode/gencode$GENCODE_VERSION.bb
+
+# search trix files
+hgKgGetText $tempDb stdout | sort > tempSearch2.txt
+tawk '{split($2,a,"."); printf "%s\t", $1;for(ii = 1; ii <= a[2]; ii++) printf "%s ",a[1] "." ii; printf "\n" }' txToAcc.tab | sort > tempSearch3.txt
+join tempSearch2.txt tempSearch3.txt | sort > knownGene.txt
+rm tempSearch2.txt tempSearch3.txt
+
+ixIxx knownGene.txt knownGene${GENCODE_VERSION}.ix knownGene${GENCODE_VERSION}.ixx
+rm -rf /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx
+ln -s `pwd`/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene.ix
+ln -s `pwd`/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene.ixx
+#rm -rf /gbdb/$db/knownGene${GENCODE_VERSION}.ix /gbdb/$db/knownGene${GENCODE_VERSION}.ixx
+#ln -s `pwd`/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene${GENCODE_VERSION}.ix
+#ln -s `pwd`/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene${GENCODE_VERSION}.ixx
+
+# fast search trix
+tawk '{print $5}' knownCanonical.tab | sort > knownCanonicalId.txt
+tawk '$11 == "pseudo" {print $1}' knownAttrs.tab | sort > pseudo.txt
+join knownCanonicalId.txt knownGene.txt | join -v 1 /dev/stdin pseudo.txt > knownGeneFast.txt
+ixIxx knownGeneFast.txt knownGeneFast${GENCODE_VERSION}.ix knownGeneFast${GENCODE_VERSION}.ixx
+rm -rf /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ix /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ixx
+ln -s $dir/knownGeneFast${GENCODE_VERSION}.ix  /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ix
+ln -s $dir/knownGeneFast${GENCODE_VERSION}.ixx /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ixx
 
