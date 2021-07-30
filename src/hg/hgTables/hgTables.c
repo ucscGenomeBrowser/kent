@@ -1707,8 +1707,10 @@ if (sameOk(backgroundExec,"gsSendToDM"))
 /* Init track and group lists and figure out what page to put up. */
 initGroupsTracksTables();
 struct dyString *dyWarn = dyStringNew(0);
+boolean noShort = (cartOptionalString(cart, "noShort") != NULL); // is this the second page of results
+char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
 struct hgPositions *hgp = lookupPosition(dyWarn);
-if (hgp->singlePos && isEmpty(dyWarn->string))
+if (hgp->singlePos && isEmpty(dyWarn->string) && !noShort)
     {
     if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
 	doGetGreatOutput(dispatch);
@@ -1719,9 +1721,17 @@ else
     {
     cartWebStartHeader(cart, database, "Table Browser");
     if (isNotEmpty(dyWarn->string))
-        warn("%s", dyWarn->string);
-    if (hgp->posCount > 1)
+        {
+        if (noShort) // we're on the second page of results
+            hgp->posCount = 0;  // hgFindSearch gives us a bogus hgp if the warn string is set
+        else
+            warn("%s", dyWarn->string);
+        }
+    if ((hgp->posCount > 1) || noShort) // if we're on the second page we want to put out HTML even if there are no results.
+        {
         hgPositionsHtml(database, hgp, hgTablesName(), cart);
+        cartSetString(cart, hgtaRange, range); // we need to reset the position because lookupPosition above trashes it
+        }
     else
         {
         struct sqlConnection *conn = NULL;

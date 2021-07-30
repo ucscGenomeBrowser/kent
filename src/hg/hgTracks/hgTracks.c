@@ -9420,16 +9420,7 @@ hgp = hgFindSearch(cart, pPosition, &chromName, &winStart, &winEnd, hgTracksName
 if (isNotEmpty(dyWarn->string))
     {
     if (noShort) // we're on the second pass of the search
-        {
-        // tell the user we didn't find anything
-        char *menuStr = menuBar(cart, database);
-        if (menuStr)
-            puts(menuStr);
-        FILE *f = stdout;
-        fprintf(f, "<div id='hgFindResults'>\n");
-        fprintf(f, "<p>No additional items found</p>");
-        resolved = FALSE;
-        }
+        hgp->posCount = 0; // hgFindSearch gives us a bogus hgp if the warn string is set
     else
         warn("%s", dyWarn->string);
     }
@@ -9438,7 +9429,7 @@ if (!noShort && hgp->singlePos)
     {
     createHgFindMatchHash();
     }
-else if (resolved)  // if we haven't put out the "found nothing" text above
+else 
     {
     char *menuStr = menuBar(cart, database);
     if (menuStr)

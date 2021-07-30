@@ -1997,6 +1997,13 @@ struct trackDb *tdbList = NULL;
 // This used to be an argument, but only stdout was used:
 FILE *f = stdout;
 
+if (hgp->posCount == 0)
+    {
+    fprintf(f, "<div id='hgFindResults'>\n");
+    fprintf(f, "<p>No additional items found</p>");
+    fprintf(f, "</div>\n");
+    return;
+    }
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
     if (table->posList != NULL)
@@ -2090,7 +2097,13 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 if(containerDivPrinted)
     {
     if (hgp->shortCircuited)
-        fprintf(f, "<A HREF=\"%s?%s&noShort=1\"> More results...</A>", hgTracksName(), getenv("QUERY_STRING"));
+        {
+        char *queryString = getenv("QUERY_STRING");
+        char *addString = "&noShort=1";
+        if (isEmpty(queryString))
+            addString = "noShort=1";
+        fprintf(f, "<A HREF=\"%s?%s%s\"> More results...</A>", hgAppName, queryString, addString);
+        }
     fprintf(f, "</div>\n");
     }
 }
