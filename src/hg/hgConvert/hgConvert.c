@@ -346,7 +346,8 @@ cart = theCart;
 getDbAndGenome(cart, &database, &organism, oldVars);
 
 // Try to deal with virt chrom position used by hgTracks.
-if (startsWith("virt:", cartUsualString(cart, "position", "")))
+if (startsWith(    MULTI_REGION_CHROM, cartUsualString(cart, "position", ""))
+ || startsWith(OLD_MULTI_REGION_CHROM, cartUsualString(cart, "position", "")))
     cartSetString(cart, "position", cartUsualString(cart, "nonVirtPosition", ""));
 
 if (cartVarExists(cart, HGLFT_DO_CONVERT))
