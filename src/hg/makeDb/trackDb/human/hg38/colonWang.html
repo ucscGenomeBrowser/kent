@@ -1,13 +1,13 @@
 <h2> Description</h2>
 <p>
-This track shows data from <a href="https://pubmed.ncbi.nlm.nih.gov/31753849/">
-<em>Single-cell transcriptome analysis reveals differential nutrient absorption
-functions in human intestine</em></a>. Droplet-based single-cell RNA sequencing
-(scRNA-seq) was used to survey gene expression profiles of the epithelium in
-the human ileum, colon, and rectum.  A total of 7 cell clusters were identified
-including enterocytes (EC), goblet cells (G), paneth-like cells (PLC),
-enteroendocrine cells (EEC), progenitor cells (PRO), transient-amplifying cells
-(TA) and stem cells (SC).</p>
+This track shows data from <a href="https://pubmed.ncbi.nlm.nih.gov/31753849/"
+target="_blank"><em>Single-cell transcriptome analysis reveals differential
+nutrient absorption functions in human intestine</em></a>. Droplet-based
+single-cell RNA sequencing (scRNA-seq) was used to survey gene expression
+profiles of the epithelium in the human ileum, colon, and rectum. A total of 7
+cell clusters were identified: enterocytes (EC), goblet cells (G), paneth-like
+cells (PLC), enteroendocrine cells (EEC), progenitor cells (PRO),
+transient-amplifying cells (TA) and stem cells (SC).</p>
 
 <p>
 This track collection contains two bar chart tracks of RNA expression in colon 
@@ -36,30 +36,31 @@ with those classes.</p>
 
 <h2>Method</h2>
 <p>
-Using scRNA-seq, RNA profiles of intestinal epithelial cells
-were obtained for 4,472 cells from two human colon samples. Tissue samples
-belonged to a male donor age 54 (Colon-1) and a female donor age 67 (Colon-2)
-both diagnosed with Adenocarcinoma. The healthy intestinal mucous membranes
-used for each sample were cut away from the tumor border in surgically removed
-ascending colon tissue. Additionally, the intestinal tissues were washed in
-Hank's balanced salt solution (HBSS) to remove mucus, blood cells, and muscle
-tissue. The sample was enriched for epithelial cells through centrifugation
-before being dissociated with Tryple to obtain single-cell suspensions. RNA-seq
-libraries were prepared using 10x Genomics 3' v2 kit and sequenced on an
-Illumina Hiseq X Ten PE150.</p>
+Using scRNA-seq, RNA profiles of intestinal epithelial cells were obtained for 
+4,472 cells from two human colon samples. Tissue samples belonged to a male 
+donor age 54 (Colon-1) and a female donor age 67 (Colon-2) both diagnosed with 
+Adenocarcinoma. The healthy intestinal mucous membranes used for each sample 
+were cut away from the tumor border in surgically removed ascending colon tissue. 
+Additionally, the intestinal tissues were washed in Hank's balanced salt solution 
+(HBSS) to remove mucus, blood cells, and muscle tissue. The sample was enriched 
+for epithelial cells through centrifugation before being dissociated with Tryple 
+to obtain single-cell suspensions. RNA-seq libraries were prepared using 10x 
+Genomics 3' v2 kit and sequenced on an Illumina Hiseq X Ten PE150.</p>
 
 
 <p>The cell/gene matrix and cell-level metadata was downloaded from the <a
-href="http://cells.ucsc.edu/?ds=covid19atlas%2Fc19a-wang20%2Fcolon">UCSC Cell Browser</a>.
+href="http://cells.ucsc.edu/?ds=covid19atlas%2Fc19a-wang20%2Fcolon" target="_blank">UCSC Cell Browser</a>.
 The UCSC command line tool matrixClusterColumns, matrixToBarChart, and bedToBigBed were used 
 to transform these into a bar chart format bigBed file that can be visualized. The coloring 
 was done by defining colors for the broad level cell classes and then using another UCSC tool,
-hcaColorCells, to interpolate the colors across all cell types.</p>
+hcaColorCells, to interpolate the colors across all cell types. The UCSC tools can be found on 
+our download server: <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">hgdownload</a></p>
 
 <h2>Credit</h2>
 <p>
 Thanks to the many authors who worked on producing and publishing this data
-set. The data was integrated into the UCSC Genome Browser by Jim Kent and 
+set. The data were integrated into the UCSC Genome Browser by Jim Kent and 
 Brittney Wick. The UCSC work was paid for by the Chan Zuckerberg Initiative.</p>
 
 <h2>Data Access</h2>

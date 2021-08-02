@@ -1,13 +1,13 @@
 <h2> Description</h2>
 <p>
-This track shows data from <a href="https://pubmed.ncbi.nlm.nih.gov/31753849/">
-<em>Single-cell transcriptome analysis reveals differential nutrient absorption
-functions in human intestine</em></a>. Droplet-based single-cell RNA sequencing 
-(scRNA-seq) was used to survey gene expression profiles of the epithelium in
-the human ileum, colon, and rectum.  A total of 7 cell clusters were identified
-including enterocytes (EC), goblet cells (G), paneth-like cells (PLC),
-enteroendocrine cells (EEC), progenitor cells (PRO), transient-amplifying cells
-(TA) and stem cells (SC).</p>
+This track shows data from <a href="https://pubmed.ncbi.nlm.nih.gov/31753849/"
+target="_blank"><em>Single-cell transcriptome analysis reveals differential
+nutrient absorption functions in human intestine</em></a>. Droplet-based
+single-cell RNA sequencing (scRNA-seq) was used to survey gene expression
+profiles of the epithelium in the human ileum, colon, and rectum.  A total of 7
+cell clusters were identified: enterocytes (EC), goblet cells (G), paneth-like
+cells (PLC), enteroendocrine cells (EEC), progenitor cells (PRO),
+transient-amplifying cells (TA) and stem cells (SC).</p>
 
 <p>
 There are two bar chart tracks in this track collection with rectum cells
@@ -32,7 +32,9 @@ The cell types are colored by which class they belong to according to the follow
 
 <p>
 Cells that fall into multiple classes will be colored by blending the colors associated
-with those classes.</p>
+with those classes. The colors will be purest in the Skin Cell subtrack, where the bars 
+represent relatively pure cell types. They can give an overview of the cell composition 
+within other categories in other subtracks as well.</p>
 
 <h2>Method</h2>
 <p>
@@ -50,16 +52,20 @@ PE150.</p>
 
 <p>
 The cell/gene matrix and cell-level metadata was downloaded from the <a
-href="http://cells.ucsc.edu/?ds=covid19atlas%2Fc19a-wang20%2Frectum">UCSC Cell Browser</a>.
-The UCSC command line tool matrixClusterColumns, matrixToBarChart, and bedToBigBed were used
-to transform these into a bar chart format bigBed file that can be visualized. The coloring
-was done by defining colors for the broad level cell classes and then using another UCSC tool,
-hcaColorCells, to interpolate the colors across all cell types.</p>
+href="http://cells.ucsc.edu/?ds=covid19atlas%2Fc19a-wang20%2Frectum"
+target="_blank">UCSC Cell Browser</a>. The UCSC command line tool
+matrixClusterColumns, matrixToBarChart, and bedToBigBed were used to transform
+these into a bar chart format bigBed file that can be visualized. The coloring
+was done by defining colors for the broad level cell classes and then using
+another UCSC tool, hcaColorCells, to interpolate the colors across all cell
+types. The UCSC tools can be found on our download server: <a
+href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">hgdownload</a></p>
 
 <h2>Credit</h2>
 <p>
 Thanks to Yalong Wang, Wanlu Song, and to the many authors who worked on
-producing and publishing this data set. The data was integrated into the UCSC
+producing and publishing this data set. The data were integrated into the UCSC
 Genome Browser by Jim Kent and Brittney Wick. The UCSC work was paid for by the
 Chan Zuckerberg Initiative.</p>
 
