@@ -20,13 +20,14 @@
 Adding metadata to your tracks about cell lines, experimental protocols, or assays can be
 accomplished in a number of ways, via the newly supported <em>metaDb</em> or <em>metaTab</em>
 trackDb fields, or via the older style <em>metadata</em> trackDb field. The <em>metaDb</em> and
-<em>metaTab</em> fields link external tagStorm or tabSep metadata files to the data in the hub. The
+<em>metaTab</em> fields link external tagStorm or tab-separated metadata files to the data in the hub. The
 new formats are preferred over the older <em>metadata</em> field, although the <em>metadata</em>
 lines will continue to be supported for track hubs, but no new features will be added as they will
-for tagStorm and tabSep files.</p>
+for tagStorm and tab-separated files.</p>
 
 <p>
-The following is an example of a genomes.txt file calling the tagStorm metadata file:
+The following is an example of a <a href="hgTrackHubHelp.html#genomes.txt">genomes.txt</a> file
+calling the tagStorm metadata file:
 </p>
 <pre>
 genome hg38
@@ -70,7 +71,7 @@ then specify the differences for each track. This is the motivation behind the t
 described below.
 </p>
 <p>
-You can find an example of a hub using the metadata example above
+You can find an example of a hub using the metadata example
 <a href="/goldenPath/help/examples/hubExamples/hubMetadata/metadataHub.txt">here</a> and you can
 load the following session to view the hub,
 <a href="https://genome.ucsc.edu/s/PublicSessions/metadata_field">
@@ -79,7 +80,8 @@ https://genome.ucsc.edu/s/PublicSessions/metadata_field</a>.
 <a name="tagstorm"></a>
 <h2>Tagstorm metadata</h2>
 <p>
-The tagStorm format is a plain text file similar to the <em>trackDb.txt</em> file that describes all
+The tagStorm format is a plain text file similar to a
+<a href="trackDb/trackDbHub.html"<em>trackDb</em></a> file that describes all
 of the tracks in a <a href="hgTrackHubHelp.html">track hub</a>, in that both are files where the
 first word in a  line is the tag and the rest of the line is the value, and different stanza's are
 line delimited. TagStorm's are also similar to a spreadsheet, where a tag corresponds to a column
@@ -135,15 +137,36 @@ ucsc_db hg38
 </pre>
 <p>
 Each stanza, such as &quot;donor B&quot;, inherits from any stanzas above it at the right
-indentation level, and is a parent to stanzas beneath. In the example above, Treatment Y applies to
-both &quot;donor B&quot; and &quot;donor C&quot;. Treatment X only applies to &quot;donor A&quot; as
-they are at the same indentation level. There are three differentiation times that apply to each of
-the donors and they can be referenced in the trackDb stanza using the
-<a href="/goldenPath/help/trackDb/trackDbHub.html#meta"><em>meta</em></a> line in the tagStorm file,
+indentation level, and is a parent to stanzas beneath. In the
+<a href="/goldenPath/help/examples/hubExamples/hubMetadata/tagStorm.txt">example</a> above,
+Treatment Y applies to both &quot;donor B&quot; and &quot;donor C&quot;. Treatment X only applies to
+&quot;donor A&quot; as they are at the same indentation level. There are three differentiation times
+that apply to each of the donors and they can be referenced in the trackDb stanza using the
+<a href="/goldenPath/help/trackDb/trackDbHub.html#meta"><em>meta</em></a> line in the
+<a href="/goldenPath/help/examples/hubExamples/hubMetadata/tagStorm.txt">tagStorm file</a>,
 i.e., <code>meta ucsc1_1</code>.
 </p>
+
 <p>
-A trackDb stanza using the tagStorm metadata can be seen in the following example:
+The <code>meta ucsc1_1</code> line would reference the following metadata:</p>
+<pre>
+lab tagStorm Lab
+data_set_id ucscTest1
+access group
+assay long-RNA-seq
+enriched_in exon
+life_stage postpartum
+species Homo sapiens
+ucsc_db hg38
+treatment X
+donor A
+differentiation 10 hour
+</pre>
+
+<p>
+A trackDb stanza using the
+<a href="/goldenPath/help/examples/hubExamples/hubMetadata/tagStorm.txt">tagStorm metadata</a> can
+be seen in the following example:
 </p>
 <pre>
 track experiment1
@@ -160,8 +183,11 @@ You can find the complete example of the hub using the tagStorm metadata
 <a href="/goldenPath/help/examples/hubExamples/hubMetadata/tagStormHub.txt">here</a> and you can
 load the following session to view the hub,
 <a href="https://genome.ucsc.edu/s/PublicSessions/tagStorm_metadata">
-https://genome.ucsc.edu/s/PublicSessions/tagStorm_metadata</a>. The details page for the trackDb
-stanza example can be seem below.</p>
+https://genome.ucssc.edu/s/PublicSessions/tagStorm_metadata</a>. The hub uses a composite track, so
+if you are unfamiliar with composite tracks, the
+<a href="/goldenpath/help/hubQuickStartGroups.html#composite">Quick Start Guide</a> on composites
+can explain how the tracks are organized. The details page for the trackDb stanza example (Donor A)
+can be seen below.</p>
 <p>
 <img class="gbsInlineImg" src="../../images/tagStorm.png">
 </p>
@@ -172,8 +198,9 @@ stanza example can be seem below.</p>
 <p>
 Column or tab-separated metadata can be useful to store computer readable information as an array.
 While this format is very easy for a computer to parse, it can be bit confusing or difficult for
-humans to read and interpret. As you can see in the example below, many columns become redundant as
-they repeat the same information on each line. 
+humans to read and interpret. As you can see in the
+<a href="/goldenPath/help/examples/hubExamples/hubMetadata/tabSep.txt">example</a> below, many
+columns become redundant as they repeat the same information on each line.
 </p>
 <pre>
 #lab	data_set_id	access	assay	enriched_in	life_stage	species	ucsc_db	treatment	donor	differentiation	meta
@@ -188,15 +215,19 @@ tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	C	1 d
 tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	Y	C	5 days	ucsc1_9
 </pre>
 <p>
-To reference a line in the TSV or CSV file in the trackDb stanza, a <em>meta</em> column must
-contain a unique alpha-numeric string. For example, <em>ucsc1_4</em> would reference the following
+To reference a line in the TSV or CSV file in the trackDb stanza, a
+<a href="/goldenPath/help/trackDb/trackDbHub.html#meta"><em>meta</em></a> column must
+contain a unique alpha-numeric string. For example, <code>ucsc1_1</code> would reference the following
 metadata in your track:
 </p>
 <pre>
-tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	X	A	1 day	ucsc1_4
+#lab	data_set_id	access	assay	enriched_in	life_stage	species	ucsc_db	treatment	donor	differentiation	meta
+tabSepLab	ucscTest1	group	long-RNA-seq	exon	postpartum	Homo sapiens	hg38	X	A	10 hour	ucsc1_1
 </pre>
 <p>
-A trackDb stanza using the tab-separated metadata can be seen in the following example:
+A trackDb stanza using the
+<a href="/goldenPath/help/examples/hubExamples/hubMetadata/tabSep.txt">tab-separated metadata</a>
+can be seen in the following example:
 </p>
 <pre>
 track experiment1
@@ -213,8 +244,11 @@ You can find the complete example of the hub using the tab-separated metadata
 <a href="/goldenPath/help/examples/hubExamples/hubMetadata/tabSepHub.txt">here</a> and you can load
 the following session to view the hub,
 <a href="https://genome.ucsc.edu/s/PublicSessions/TabSeparated_metadata">
-https://genome.ucsc.edu/s/PublicSessions/TabSeparated_metadata</a>. The details page for the trackDb
-stanza can be seem below.</p>
+https://genome.ucsc.edu/s/PublicSessions/TabSeparated_metadata</a>. The hub uses a composite track,
+so if you are unfamiliar with composite tracks, the
+<a href="/goldenpath/help/hubQuickStartGroups.html#composite">Quick Start Guide</a> on composites
+can explain how the tracks are organized. The details page for the trackDb stanza example (Donor A)
+can be seen below.</p>
 <p>
 <img class="gbsInlineImg" src="../../images/tabSep.png">
 </p>

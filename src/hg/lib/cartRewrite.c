@@ -74,6 +74,8 @@ static char *edit0Hg19tracks[] =
 
 static char *edit0Hg38tracks[] =
 {
+"snp151",
+"snp151Common",
 "snp151Flagged",
 "snp151Mult",
 "snp150Mult",

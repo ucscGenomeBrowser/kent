@@ -3401,8 +3401,9 @@ function gotoGetDnaPage() {
 // A function for the keyboard shortcuts "zoom to x bp"
 function zoomTo(zoomSize) {
     var flankSize = Math.floor(zoomSize/2);
-    var pos = parsePosition(genomePos.get());
-    pos.replace("virt:", "multi:");
+    var posStr = genomePos.get();
+    posStr = posStr.replace("virt:", "multi:");
+    var pos = parsePosition(posStr);
     var mid = pos.start+(Math.floor((pos.end-pos.start)/2));
     var newStart = Math.max(mid - flankSize, 0);
     var newEnd = mid + flankSize - 1;
@@ -3630,6 +3631,18 @@ var popUp = {
                 $(event.target).parent().css('position', 'fixed');
                 $(event.target).parent().css('top', '18%');
                 $(event.target).parent().css('left', '30%');
+                var containerHeight = $(event.target).parent().height();
+                var offsetTop = $(event.target).parent()[0].offsetTop;
+                // from popMaxHeight calculation above:
+                var offsetBottom = 40;
+                var maxContainerHeight = $(window).height() - offsetTop - offsetBottom;
+                if (containerHeight > maxContainerHeight) {
+                    $(event.target).parent().css('height', maxContainerHeight);
+                    // the 100 below accounts for the buttons, and label, there is
+                    // probably a better way to get the exact size of the container
+                    // with no content
+                    $(event.target).css('height', maxContainerHeight - 100);
+                }
 
                 if (!popUp.trackDescriptionOnly) {
                     $('#hgTrackUiDialog').find('.filterBy,.filterComp').each(

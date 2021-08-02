@@ -3034,7 +3034,8 @@ else
     cart = cartAndCookie(hUserCookie(), excludeVars, oldVars);
 
 // Try to deal with virt chrom position used by hgTracks.
-if (startsWith("virt:", cartUsualString(cart, "position", "")))
+if (startsWith(    MULTI_REGION_CHROM, cartUsualString(cart, "position", ""))
+ || startsWith(OLD_MULTI_REGION_CHROM, cartUsualString(cart, "position", "")))
     cartSetString(cart, "position", cartUsualString(cart, "nonVirtPosition", ""));
 
 /* Set up global variables. */
@@ -3053,8 +3054,9 @@ char *range = trimSpaces(windowsToAscii(cartUsualString(cart, hgvaRange, "")));
 cartSetLastPosition(cart, range, oldVars);
 cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
 struct dyString *dyWarn = dyStringNew(0);
+boolean noShort = (cartOptionalString(cart, "noShort") != NULL); // is this the second page of results
 struct hgPositions *hgp = lookupPosition(dyWarn);
-if (hgp->singlePos && isEmpty(dyWarn->string))
+if (hgp->singlePos && isEmpty(dyWarn->string) && !noShort)
     {
     if (startQuery)
 	doQuery();
@@ -3069,9 +3071,17 @@ else
     else
         cartWebStart(cart, database, "Variant Annotation Integrator");
     if (isNotEmpty(dyWarn->string))
-        warn("%s", dyWarn->string);
-    if (hgp->posCount > 1)
+        {
+        if (noShort) // we're on the second page of results
+            hgp->posCount = 0;  // hgFindSearch gives us a bogus hgp if the warn string is set
+        else
+            warn("%s", dyWarn->string);
+        }
+    if ((hgp->posCount > 1) || noShort) // if we're on the second page we want to put out HTML even if there are no results.
+        {
         hgPositionsHtml(database, hgp, hgVaiName(), cart);
+        cartSetString(cart, hgvaRange, range); // we need to reset the position because lookupPosition above trashes it
+        }
     else
         doMainPage();
     cartWebEnd();

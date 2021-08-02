@@ -1,6 +1,6 @@
 track wgEncodeGencodeVM26
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE VM26
 longLabel All GENCODE annotations from VM26 (Ensembl 103)
 group genes

@@ -1699,9 +1699,9 @@ if (seqInfoList)
         else
             {
             if (gotClades)
-                printf("<td>n/a></td>");
+                printf("<td>n/a</td>");
             if (gotLineages)
-                printf("<td>n/a></td>");
+                printf("<td>n/a</td>");
             printf("<td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td>");
             }
         printSubtreeTd(ur->subtreeInfoList, jsonTns, si->seq->name);
@@ -1754,9 +1754,9 @@ for (si = sampleIds;  si != NULL;  si = si->next)
     else
         {
         if (gotClades)
-            printf("<td>n/a></td>");
+            printf("<td>n/a</td>");
         if (gotLineages)
-            printf("<td>n/a></td>");
+            printf("<td>n/a</td>");
         }
     // pangolin-assigned lineage
     char *lineage = lineageForSample(sampleMetadata, si->name);
@@ -1764,7 +1764,7 @@ for (si = sampleIds;  si != NULL;  si = si->next)
         printf("<td><a href='"OUTBREAK_INFO_URLBASE"%s' target=_blank>%s</a></td>",
                lineage, lineage);
     else
-        printf("<td>n/a></td>");
+        printf("<td>n/a</td>");
     // Maybe also #mutations with mouseover to show mutation path?
     printSubtreeTd(results->subtreeInfoList, jsonTns, si->name);
     }

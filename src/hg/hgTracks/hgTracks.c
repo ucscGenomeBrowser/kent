@@ -9415,14 +9415,21 @@ static boolean resolvePosition(char **pPosition)
 {
 boolean resolved = TRUE;
 struct dyString *dyWarn = dyStringNew(0);
+boolean noShort = (cartOptionalString(cart, "noShort") != NULL);
 hgp = hgFindSearch(cart, pPosition, &chromName, &winStart, &winEnd, hgTracksName(), dyWarn);
 if (isNotEmpty(dyWarn->string))
-    warn("%s", dyWarn->string);
-if (hgp->singlePos)
+    {
+    if (noShort) // we're on the second pass of the search
+        hgp->posCount = 0; // hgFindSearch gives us a bogus hgp if the warn string is set
+    else
+        warn("%s", dyWarn->string);
+    }
+
+if (!noShort && hgp->singlePos)
     {
     createHgFindMatchHash();
     }
-else
+else 
     {
     char *menuStr = menuBar(cart, database);
     if (menuStr)
