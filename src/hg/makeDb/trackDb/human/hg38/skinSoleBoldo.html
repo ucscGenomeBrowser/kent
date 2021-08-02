@@ -1,0 +1,88 @@
+<h2>Description</h2>
+<p>
+This track displays data from <a
+href="https://pubmed.ncbi.nlm.nih.gov/32327715/"
+target="_blank"><em>Single-cell transcriptomes of the human skin reveal
+age-related loss of fibroblast priming</em></a>. Single cell RNA sequencing (scRNA-seq) 
+was performed on sun-protected skin samples prepared using droplet-sequencing 
+(drop-seq). RNA profiles were generated for 15,457 cells after quality control 
+and subsequent clustering identified 17 clusters with distinct expression profiles
+as found in Sol&#233;-Boldo <em>et al</em>., 2020. 
+</p>
+
+<p>
+This track collection contains four bar chart tracks of RNA expression in the
+human skin where cells are grouped by cell type (Skin Cell), age (Skin Age),
+donor (Skin Donor), and cell type and donor's age (Skin Cell+Age). The default
+track displayed is Skin Cell.</p>
+
+<h2>Display Conventions</h2>
+<p>
+The cell types are colored by which class they belong to according to the following table.</p>
+
+<p>
+<table cellpadding='2'>
+  <thead><tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;">Cell classification</th>
+  </tr></thead>
+  <tr><td style="background-color: #B05020;"></td><td>fibroblast</td></tr>
+  <tr><td style="background-color: #F01111;"></td><td>immune</td></tr>
+  <tr><td style="background-color: #0099C0;"></td><td>epithelial</td></tr>
+  <tr><td style="background-color: #00C000;"></td><td>endothelial</td></tr>
+</table>
+</p>
+
+<p>
+Cells that fall into multiple classes will be colored by blending the colors associated
+with those classes. The colors will be purest in the Skin Cell subtrack, where
+the bars represent relatively pure cell types. They can give an overview of the
+cell composition within other categories in other subtracks as well.</p>
+
+
+<h2>Method</h2>
+
+<p>
+Healthy skin samples were obtained from whole-skin specimens belonging to 5
+male donors (ages 25-70) with fair skin. Donors underwent full body skin
+examinations by a dermatologist and medical records were checked for skin
+diseases and/or comorbidities that affect the skin. 4-mm punch biopsies were
+taken from surgically removed skin belonging to the inguinal region of the body
+also known as the groin. Skin samples were kept in MACS Tissue Storage Solution
+for less than 1 hour to avoid necrosis and apoptosis. Enzymatical and
+mechanical dissociation was done using the Miltenyi Biotec Whole Skin
+Dissociation kit for human material and the Miltenyi Biotec Gentle MACS
+dissociator. Drop-seq libraries were prepared using a 10x Genomics 3' v2 kit
+and sequenced on an Illumina HiSeq4000.</p>
+
+
+<p>
+The cell/gene matrix and cell-level metadata was downloaded from the <a
+href="http://cells.ucsc.edu/?ds=aging-human-skin" target="_blank">UCSC Cell Browser</a>. 
+The UCSC command line tool matrixClusterColumns, matrixToBarChart, and bedToBigBed
+were used to transform these into a bar chart format bigBed file that can be
+visualized. The coloring was done by defining colors for the broad level cell
+classes and then using another UCSC tool, hcaColorCells, to interpolate the
+colors across all cell types. The UCSC tools can be found on our download
+server: <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">hgdownload</a></p>
+
+<h2>Credit</h2>
+<p>
+Thanks to Lloren&#231 Sol&#233-Boldo and to the many authors who worked on
+producing and publishing this data set. The data were integrated into the UCSC
+Genome Browser by Jim Kent and Brittney Wick. The UCSC work was paid for by the
+Chan Zuckerberg Initiative.</p>
+
+<h2>References</h2>
+<p>
+Sol&#233;-Boldo L, Raddatz G, Sch&#252;tz S, Mallm JP, Rippe K, Lonsdorf AS, Rodr&#237;guez-Paredes
+M, Lyko F.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32327715" target="_blank">
+Single-cell transcriptomes of the human skin reveal age-related loss of fibroblast priming</a>.
+<em>Commun Biol</em>. 2020 Apr 23;3(1):188.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32327715" target="_blank">32327715</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7181753/" target="_blank">PMC7181753</a>
+</p>
+
+
