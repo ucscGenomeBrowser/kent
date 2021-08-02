@@ -7,6 +7,7 @@ group singleCell
 
     track lungTravaglini2020CellType10x
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility pack
     shortLabel Lung Cells
@@ -24,6 +25,7 @@ group singleCell
 
     track lungTravaglini2020HalfDetailedCellType10x
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Half Det
@@ -42,6 +44,7 @@ group singleCell
 
     track lungTravaglini2020DetailedCellType10x
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Detail
@@ -64,6 +67,7 @@ group singleCell
 
     track lungTravaglini2020Compartment10x
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Compart
@@ -84,6 +88,7 @@ group singleCell
 
     track lungTravaglini2020Donor10x
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Donor
@@ -104,6 +109,7 @@ group singleCell
 
     track lungTravaglini2020Location10x
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Locat
@@ -124,6 +130,7 @@ group singleCell
 
     track lungTravaglini2020MagneticSelection10x
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Mag Sel
@@ -144,6 +151,7 @@ group singleCell
 
     track lungTravaglini2020Organ10x
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Organ
@@ -164,6 +172,7 @@ group singleCell
 
     track lungTravaglini2020Sample10x
     parent lungTravaglini2020
+    html lungTravaglini2020 
     type bigBarChart
     visibility hide
     shortLabel Lung Sample
@@ -184,6 +193,7 @@ group singleCell
 
     track lungTravaglini2020CellTypeFacs
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Cells FACS
@@ -201,6 +211,7 @@ group singleCell
 
     track lungTravaglini2020HalfDetailedFacs
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Half Det FACS
@@ -218,6 +229,7 @@ group singleCell
 
     track lungTravaglini2020DetailedCellTypeFacs
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Detail FACS
@@ -236,6 +248,7 @@ group singleCell
 
     track lungTravaglini2020OrganFacs
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Organ FACS
@@ -254,6 +267,7 @@ group singleCell
 
     track lungTravaglini2020LabelFacs
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Label FACS
@@ -272,6 +286,7 @@ group singleCell
 
     track lungTravaglini2020DonorFacs
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Donor FACS
@@ -290,6 +305,7 @@ group singleCell
 
     track lungTravaglini2020LocationFacs
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Locat FACS
@@ -308,6 +324,7 @@ group singleCell
 
     track lungTravaglini2020GatingFacs
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Gating FACS
@@ -326,6 +343,7 @@ group singleCell
 
     track lungTravaglini2020CompartmentFacs
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Compart FACS
@@ -344,6 +362,7 @@ group singleCell
 
     track lungTravaglini2020SampleFacs
     parent lungTravaglini2020
+    html lungTravaglini2020
     type bigBarChart
     visibility hide
     shortLabel Lung Sample FACS

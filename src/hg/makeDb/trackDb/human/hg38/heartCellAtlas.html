@@ -1,0 +1,92 @@
+<h2>Description</h2>
+<p>
+This track displays data from <a
+href="https://pubmed.ncbi.nlm.nih.gov/32971526/" target="_blank">
+<em>Cells of the adult human heart</em></a>. Single-cell and single-nucleus RNA
+sequencing was used to profile transcriptomes from six regions of the heart:
+the interventricular septum (SP), apex (AX), left ventricle (LV), right
+ventricle (RV), left atrium (LA), and right atrium (RA). A total of 11 cardiac
+cell types were identified along with their marker genes after uniform manifold
+approximation and projection (UMAP) embedding of 487,106 cells.</p>
+
+<p>
+This track collection contains nine bar chart tracks of RNA expression in the 
+human heart where cells are grouped by cell type (Heart HCA Cells), age (Heart
+HCA Age), donor (Heart HCA Donor), region of the heart (Heart HCA Region),
+sample (Heart HCA Sample), sex (Heart HCA Sex), source (Heart HCA Source), cell
+state (Heart HCA State), and 10x chemistry version (Heart HCA Version). The
+default track displayed is Heart HCA Cells.</p>
+
+<h2>Display Conventions</h2>
+<p>
+The cell types are colored by which class they belong to according to the following table.</p>
+
+<p>
+<table cellpadding='2'>
+  <thead><tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;">Cell classification</th>
+  </tr></thead>
+  <tr><td style='background-color: #F0C000;'></td><td>neural</td></tr>
+  <tr><td style="background-color: #FF8838;"></td><td>adipose</td></tr>
+  <tr><td style="background-color: #B05020;"></td><td>fibroblast</td></tr>
+  <tr><td style="background-color: #F01111;"></td><td>immune</td></tr>
+  <tr><td style="background-color: #C000C0;"></td><td>muscle</td></tr>
+  <tr><td style="background-color: #FF334A;"></td><td>lymphoid</td></tr>
+  <tr><td style="background-color: #0099C0;"></td><td>epithelial</td></tr>
+  <tr><td style="background-color: #00C000;"></td><td>endothelial</td></tr>
+</table>
+</p>
+
+<p>
+Cells that fall into multiple classes will be colored by blending the colors associated
+with those classes. The colors will be purest in the Heart HCA Cells subtrack, where the 
+bars represent relatively pure cell types. They can give an overview of the cell composition 
+within other categories in other subtracks as well.</p>
+
+<h2>Method</h2>
+<p>
+Healthy heart tissues were obtained from 14 UK and North American transplant
+organ donors ages 40-75. Tissues were taken from deceased donors after
+circulatory death (DCD) and after brain death (DBD). To minimize
+transcriptional degradation, heart tissues were stored and transported on ice
+until freezing or tissue dissociation. Single nuclei were isolated from
+flash-frozen tissue using mechanical homogenization with a glass Dounce tissue
+grinder. Fresh heart tissues were enzymatically dissociated and automatically
+digested using gentleMACS Octo Dissociator. Next, Hoechst-positive single
+nuclei were FACS sorted prior to library preparation. In parallel, Cell
+suspensions from fresh heart tissue were enriched for CD45+ cells using MACS LS
+columns. Libraries of single cell and single nuclei were prepared using 10x
+Genomics 3' v2 or v3. 3' gene expression libraries were sequenced on an
+Illumina HiSeq4000 and NextSeq500. In total 45,870 cells, 78,023 CD45+ enriched
+cells, and 363,213 nuclei were profiled for 11 major cell types of the heart.</p>
+
+<p>
+The cell/gene matrix and cell-level metadata was downloaded from the <a
+href="http://cells.ucsc.edu/?ds=heart-cell-atlas" target="_blank">UCSC Cell Browser</a>.
+The UCSC command line tool matrixClusterColumns, matrixToBarChart, and bedToBigBed
+were used to transform these into a bar chart format bigBed file that can be
+visualized. The coloring was done by defining colors for the broad level cell
+classes and then using another UCSC tool, hcaColorCells, to interpolate the
+colors across all cell types. The UCSC tools can be found on our download server: 
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">hgdownload</a></p>
+
+<h2>Credit</h2>
+<p>
+Thanks to Monika Litvi<span>&#328</span>ukov<span>&#225</span>, Carlos
+Talavera-L<span>&#243</span>, and to the many authors who worked on
+producing and publishing this data set. The data were integrated into the UCSC
+Genome Browser by Jim Kent and Brittney Wick. The UCSC work was paid for by the
+Chan Zuckerberg Initiative.</p>
+
+<h2>References</h2>
+<p>
+Litvi&#328;ukov&#225; M, Talavera-L&#243;pez C, Maatz H, Reichart D, Worth CL, Lindberg EL, Kanda M,
+Polanski K, Heinig M, Lee M <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32971526" target="_blank">
+Cells of the adult human heart</a>.
+<em>Nature</em>. 2020 Dec;588(7838):466-472.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32971526" target="_blank">32971526</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7681775/" target="_blank">PMC7681775</a>
+</p>
