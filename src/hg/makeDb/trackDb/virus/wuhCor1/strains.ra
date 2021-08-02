@@ -7,7 +7,6 @@ group varRep
 visibility dense
 compositeTrack on
 type vcfTabix
-pennantIcon new red
 html ucscStrainMuts
 hapClusterEnabled on
 hapClusterColorBy function
@@ -52,7 +51,6 @@ group varRep
 visibility hide
 compositeTrack on
 type bigBed 4
-pennantIcon new red
 bedNameLabel Mutation
 darkerLabels on
 noScoreFilter on
@@ -99,7 +97,6 @@ group varRep
 visibility hide
 compositeTrack on
 type bigBed 4
-pennantIcon new red
 bedNameLabel Mutation
 darkerLabels on
 noScoreFilter on
