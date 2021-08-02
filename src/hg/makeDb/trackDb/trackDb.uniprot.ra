@@ -70,7 +70,7 @@ hideEmptySubtracks on
         bigDataUrl /gbdb/$D/uniprot/unipLocSignal.bb
         color 255,0,150
         itemRgb off
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipLocExtra
         shortLabel Extracellular
@@ -82,7 +82,7 @@ hideEmptySubtracks on
         bigDataUrl /gbdb/$D/uniprot/unipLocExtra.bb
         color 0,150,255
         itemRgb off
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipLocTransMemb
         shortLabel Transmembrane
@@ -94,7 +94,7 @@ hideEmptySubtracks on
         bigDataUrl /gbdb/$D/uniprot/unipLocTransMemb.bb
         color 0,150,0
         itemRgb off
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipLocCytopl
         shortLabel Cytoplasmic
@@ -106,7 +106,7 @@ hideEmptySubtracks on
         bigDataUrl /gbdb/$D/uniprot/unipLocCytopl.bb
         color 255,150,0
         itemRgb off
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipChain
         shortLabel Chains
@@ -117,7 +117,7 @@ hideEmptySubtracks on
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipChain.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipInterest
         shortLabel Interest
@@ -128,7 +128,7 @@ hideEmptySubtracks on
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipInterest.bb
         itemRgb off
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipDomain
         shortLabel Domains
@@ -139,7 +139,7 @@ hideEmptySubtracks on
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipDomain.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipDisulfBond
         shortLabel Disulf. Bonds
@@ -149,7 +149,7 @@ hideEmptySubtracks on
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipDisulfBond.bb
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipModif
         shortLabel AA Modifications
@@ -160,7 +160,7 @@ hideEmptySubtracks on
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipModif.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipMut
         shortLabel Mutations
@@ -182,7 +182,7 @@ hideEmptySubtracks on
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipStruct.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipOther
         shortLabel Other Annot.
@@ -193,7 +193,7 @@ hideEmptySubtracks on
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipOther.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipRepeat
         shortLabel Repeats
@@ -204,7 +204,7 @@ hideEmptySubtracks on
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipRepeat.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
         track unipConflict
         shortLabel Seq. Conflicts
@@ -215,7 +215,7 @@ hideEmptySubtracks on
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipConflict.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        filterValues.dbName Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
 searchTable unipAliSwissprot
 searchType bigBed
