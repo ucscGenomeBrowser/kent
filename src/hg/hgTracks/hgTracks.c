@@ -2211,7 +2211,12 @@ if(highlightDef)
             // long to handle virt chrom coordinates
             h->chromStart = atol(chromStart);
             h->chromEnd   = atol(chromEnd);
-            h->chromStart--; // Not zero based
+            // Typically not zero based, unless we have previously saved the highlight
+            // as a result of the multi-region code
+            if (h->chromStart > 0)
+                {
+                h->chromStart--;
+                }
             slAddHead(&hlList, h);
             }
         }
