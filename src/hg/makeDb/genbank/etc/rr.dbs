@@ -9,6 +9,7 @@ hg19
 mm39
 mm10
 rn6
+rn7
 # 
 # Most recent assembly for each org
 #
@@ -30,7 +31,7 @@ caePb2
 caeRem3
 calJac4
 calMil1
-canFam3
+canFam5
 cavPor3
 cb3
 ce11
@@ -65,7 +66,7 @@ galGal6
 galVar1
 gasAcu1
 geoFor1
-gorGor5
+gorGor6
 hetGla2
 hg18
 latCha1
@@ -82,6 +83,7 @@ musFur1
 myoLuc2
 nanPar1
 nasLar1
+neoSch1
 nomLeu3
 ochPri3
 oreNil2
@@ -91,7 +93,7 @@ oryLat2
 otoGar3
 oviAri3
 oviAri4
-panPan2
+panPan3
 panTro6
 papAnu2
 papHam1
@@ -133,6 +135,8 @@ caePb1
 caeRem2
 calJac3
 calJac1
+canFam4
+canFam3
 canFam2
 canFam1
 cb1
@@ -167,6 +171,7 @@ galGal5
 galGal4
 galGal3
 galGal2
+gorGor5
 gorGor4
 gorGor3
 hetGla1
@@ -182,6 +187,7 @@ nomLeu1
 ochPri2
 ornAna1
 oviAri1
+panPan2
 panPan1
 panTro5
 panTro4
