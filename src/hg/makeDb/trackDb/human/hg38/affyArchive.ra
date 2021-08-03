@@ -1,0 +1,19 @@
+track affyArchive
+cartVersion 2
+superTrack on
+shortLabel Affy Archive
+longLabel Affymetrix Track Archive
+group expression
+type psl .
+
+    track affyGnf1h override
+    parent affyArchive
+    visibility pack
+
+    track affyU133 override
+    parent affyArchive
+    visibility pack
+
+    track affyU95 override
+    parent affyArchive
+    visibility pack
