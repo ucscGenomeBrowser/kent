@@ -1,0 +1,34 @@
+track genePredArchive
+cartVersion 2
+superTrack on
+shortLabel Prediction Archive
+longLabel Gene Prediction Track Archive
+group genes
+type genePred
+
+    track augustusGene override
+    parent genePredArchive
+    color 180,0,0
+    pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+    track sibGene override
+    parent genePredArchive
+    color 195,90,0
+    url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg38&query_str=$$
+    urlLabel SIB link:
+
+    track sgpGene override
+    parent genePredArchive
+    color 0,90,100
+    type genePred sgpPep
+
+    track geneid override
+    parent genePredArchive
+    color 0,90,100
+    type genePred geneidPep
+
+    track genscan override
+    parent genePredArchive
+    color 170,100,0
+    type genePred genscanPep
+    pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"

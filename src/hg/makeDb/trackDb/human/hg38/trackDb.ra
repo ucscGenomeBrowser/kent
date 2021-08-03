@@ -505,101 +505,10 @@ xrefTable kgXref, ucscRetroInfo9
 xrefQuery select ucscRetroInfo9.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
-track tgpPhase3
-shortLabel 1000G Ph3 Vars
-longLabel 1000 Genomes Phase 3 Integrated Variant Calls from IGSR: SNVs and Indels
-type vcfTabix
-group varRep
-visibility hide
-maxWindowToDraw 5000000
-showHardyWeinberg on
-geneTrack ncbiRefSeqCurated
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-
-track tgpTrios
-type vcfPhasedTrio
-group varRep
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-maxWindowToDraw 5000000
-shortLabel 1000 Genomes Trios
-longLabel Thousand Genomes Project Family VCF Trios
-vcfUseAltSampleNames on
-vcfDoFilter off
-vcfDoQual off
-vcfDoMaf off
-compositeTrack on
-geneTrack ncbiRefSeqCurated
-
-    track tgpNA19685_m011_MXL
-    parent tgpTrios
-    type vcfPhasedTrio
-    shortLabel m011 MXL Trio
-    longLabel 1000 Genomes m011 Mexican Ancestry from Los Angeles Trio
-    vcfChildSample NA19685|child
-    vcfParentSamples NA19660|mother,NA19661|father
-    visibility full
-
-    track tgpNA19675_m004_MXL
-    parent tgpTrios
-    type vcfPhasedTrio
-    shortLabel m004 MXL Trio
-    longLabel 1000 Genomes m004 Mexican Ancestry from Los Angeles Trio
-    vcfChildSample NA19675|child
-    vcfParentSamples NA19678|mother,NA19679|father
-    visibility full
-
-    track tgpNA19240_Y117_YRI
-    parent tgpTrios
-    type vcfPhasedTrio
-    shortLabel Y117 YRI Trio
-    longLabel 1000 Genomes Yoruban in Ibadan, Nigeria Trio
-    vcfChildSample NA19240|child
-    vcfParentSamples NA19238|mother,NA19239|father
-    visibility full
-
-    track tgpNA12878_1463_CEU
-    parent tgpTrios
-    type vcfPhasedTrio
-    shortLabel 1463 CEU Trio
-    longLabel 1000 Genomes Utah CEPH Trio
-    vcfChildSample NA12878|child
-    vcfParentSamples NA12892|mother,NA12891|father
-    visibility full
-
-    track tgpHG02024_VN049_KHV
-    parent tgpTrios
-    type vcfPhasedTrio
-    shortLabel VN049 KHV Trio
-    longLabel 1000 Genomes Kinh in Ho Chi Minh City, Vietnam Trio
-    vcfChildSample HG02024|child
-    vcfParentSamples HG02025|mother,HG02026|father
-    visibility full
-
-    track tgpHG00733_PR05_PUR
-    parent tgpTrios
-    type vcfPhasedTrio
-    shortLabel PR05 PUR Trio
-    longLabel 1000 Genomes Puerto Ricans from Puerto Rico Trio
-    vcfChildSample HG00733|child
-    vcfParentSamples HG00732|mother,HG00731|father
-    visibility full
-
-    track tgpHG00702_SH089_CHS
-    parent tgpTrios
-    type vcfPhasedTrio
-    shortLabel SH089 CHS Trio
-    longLabel 1000 Genomes Southern Han Chinese Trio
-    vcfChildSample HG00702|child
-    vcfParentSamples HG00657|mother,HG00656|father
-    visibility full
 
 track genomicSuperDups override
 group rep
 priority 5
-
-track sibGene override
-url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg38&query_str=$$
-urlLabel SIB link:
 
 track sibTxGraph override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg38&species=H.+sapiens&tromer=$$
@@ -623,12 +532,6 @@ track xenoMrna override
 pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 track xenoEst override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track augustusGene override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track genscan override
 pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 track ucscGenePfam override
@@ -844,3 +747,6 @@ bigDataUrl /gbdb/hg38/covidHct/covidHct.bb
 release alpha
 
 include dbSnpArchiveHg38.ra
+include affyArchive.ra alpha
+include genePredArchive.ra alpha
+include tgpArchive.ra alpha
