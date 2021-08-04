@@ -126,7 +126,7 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/detailed_cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/detailed_cell_type.stats
-    barChartBars CD4+_T CD8+_T EVT Endo MAIT Myeloid NK Other_immune SCT VCT dP dS fFB
+    barChartBars DC1 DC2 EVT Endo_(m) Endo_L Granulocytes HB ILC3 MAIT MO NK_CD16+ NK_CD16- PB_Naive_CD4_ PB_Naive_CD8 PB_clonal_CD8 Plasma SCT Treg VCT dM1 dM2 dM3 dNK_p dNK1 dNK2 dNK3 dP1 dP2 dS1 dS2 dS3 dT_CD4 dT_CD8 fFB1
     barChartColors #f6bcbd #f6bcbc #906de0 #90e18f #dbe7d5 #f2bfc4 #f4c0b6 #fac0c5 #fa7685 #e67061 #f77684 #fbc2c8 #f73146 #f87684 #f97685 #f6bcbd #cebef2 #fabec2 #e66b76 #db2a06 #e6715b #f4c0b7 #f8c2c8 #f27684 #f77685 #f97685 #e4c0d8 #e8bcdf #d458d0 #d458d1 #eab9e4 #fa7684 #f83248 #efdcd3
     transformFunc NONE
     barChartLimit 2
@@ -162,6 +162,7 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/mom_child.bb
     barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/mom_child.stats
+    barChartBars fetal maternal
     barChartColors #936ddc #f0232e
     transformFunc NONE
     barChartLimit 2
