@@ -944,7 +944,6 @@ else if ((isSubst = regexMatchSubstr(term, pseudoHgvsGeneSymbolProtSubstExp,
                                                      npAcc, geneSymbol, description);
             slAddHead(&hgvs, hgvsParseTerm(npTerm->string));
             dyStringFree(&npTerm);
-            //freeMem(npAcc);
             }
         }
     }
@@ -969,7 +968,6 @@ else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolProtPosExp, substrs, ArraySi
                                                      npAcc, geneSymbol, refBase, pos);
             slAddHead(&hgvs, hgvsParseTerm(npTerm->string));
             dyStringFree(&npTerm);
-            //freeMem(npAcc);
             }
         }
     }
