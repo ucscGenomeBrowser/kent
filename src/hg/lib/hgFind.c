@@ -2817,7 +2817,7 @@ if (hgvsList)
             else
                 trackTable = "refGene";
             dyStringPrintf(chromPosIndex, "%s%s%d%d", trackTable, mapping->chrom,
-                    mapping->chromStart-padding, mapping->chromStart+padding);
+                    mapping->chromStart-padding, mapping->chromEnd+padding);
             if ((helper = hashFindVal(uniqHgvsPos, chromPosIndex->string)) != NULL)
                 {
                 slNameAddHead(&helper->validTranscripts, hgvs->seqAcc);

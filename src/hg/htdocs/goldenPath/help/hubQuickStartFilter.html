@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Track Hub Quick Start Filter" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>Track Hub Filters Quick Start Guide</h1> 
+<p>
+Track Hubs are a method of displaying remotely-hosted annotation data quickly and flexibly on any 
+UCSC assembly or remotely-hosted sequence. There are different filtering options available for 
+bigBed files depending on the kind of data the filter will be applied to. These filters are also 
+described in the <a target="_blank" href="trackDb/trackDbHub.html#filter">trackDb help doc</a>.
+
+<h2>Contents</h2>
+
+<h6><a href="#filter">filter.fieldName - Used for numerical data</a></h6>
+<h6><a href="#filterText">filterText.fieldName - Used for text filtering</a></h6>
+<h6><a href="#filterValues">filterValues.fieldName - Used for filtering by prespecified values 
+or categories in data</a></h6>
+
+<a id="filter"></a>
+<h2>filter.fieldName</h2>
+<p><code>filter.fieldName</code> is used to enable numerical filtering within a 
+field or column. It is often seen as a filter on data that contains a <code>score</code> field.
+It requires a default parameter to be passed, often this parameter is 0.</p>
+<p>By default, the range of values will be 0 to 1000. However, this range can be modified with the
+<code>filterLimits.fieldName</code> parameter. Additionally, the filter can be modified to take in a
+range of values with the <code>filterByRange.fieldName on</code> parameter.</p>
+<p>For more information on <code>filter.fieldName</code>, see the <a target="_blank"
+href="trackDb/trackDbHub.html#filter">trackDb help doc entry</a>.
+
+<a name="filterExample1"></a>
+<h3>filter Example 1</h3>
+
+<p>In this first example, we have a simple track with 10 items. The data looks
+as follows:</p>
+<pre>
+chr7    127000000  127000005 1 1
+chr7    127000010  127000015 2 2
+chr7    127000020  127000025 3 3
+chr7    127000030  127000035 4 4
+chr7    127000040  127000045 5 5
+chr7    127000050  127000055 6 6
+chr7    127000060  127000065 7 7
+chr7    127000070  127000075 8 8
+chr7    127000080  127000085 9 9
+chr7    127000090  127000095 10 10
+</pre>
+<p>
+In this case, we have duplicated the <code>name</code> and <code>score</code> fields for
+clarity. We will be applying a default filter of 4 to the <code>score</code> field. This
+will mean that by default only items 4-10 will display. This filter is enabled with the
+line <code>filter.score 4</code>. The hub.txt looks as follows:</p>
+<pre>
+track filterScore4
+shortLabel filter.fieldNameDefault 4
+longLabel Numerical filter with a default value of 4 passed
+visibility pack
+type bigBed 5 .
+filter.score 4
+bigDataUrl example1.bb
+</pre>
+<p>
+Below are all the materials for example 1:</p>
+<ul>
+<li><a href="examples/hubQuickStartFilter/example1.bed">bed file</a></li>
+<li><a href="examples/hubQuickStartFilter/example1.bb">bigBed file</a></li>
+<li><a href="examples/hubQuickStartFilter/filterNumerical1.as">.as file</a></li>
+<li><a href="examples/hubQuickStartFilter/hubExample1.txt">hub.txt file</a></li>
+<li><a href="http://genome.ucsc.edu/s/Lou/filterExample1">Example session</a></li>
+</ul>
+<p>
+The example session will display an image like the following, which hides items 1-3 and
+displays items 4-10. The three filtered items are also noted on the longLabel above the
+track as <b>(3 items filtered)</b>. If we just want to enable filtering, but pass no
+default value, we can use <code>filter.score 0</code>.</p>
+<p class='text-center'>
+  <img class='text-center' src="examples/hubQuickStartFilter/filterExample1.png" 
+  width='80%' alt="Numerical filter enabled on bigBed">
+</p>
+
+<a id="filterExample2"></a>
+<h3>filter Example 2</h3>
+<p>In this second example we have four tracks with <code>filter.fieldName</code> to
+allow numerical filtering, <code>filterByRange.fieldName on</code> 
+to enable range filtering, and <code>filterLimits.fieldName</code> to designate upper 
+and lower range boundaries. <code>filter.fieldName</code> will be used on two
+separate fields to demonstrate multiple filters. Lastly, <code>filterLabel.fieldName</code>
+will be used to change the default filter message. The data used is the same as example 1 
+above:</p>
+<pre>
+chr7    127000000  127000005 1 1
+chr7    127000010  127000015 2 2
+chr7    127000020  127000025 3 3
+chr7    127000030  127000035 4 4
+chr7    127000040  127000045 5 5
+chr7    127000050  127000055 6 6
+chr7    127000060  127000065 7 7
+chr7    127000070  127000075 8 8
+chr7    127000080  127000085 9 9
+chr7    127000090  127000095 10 10
+</pre>
+<p>
+The data are organized as a bed5. Standard filtering will be enabled in the 4th <code>name</code>
+field, and filtering by ranges on the 5th <code>score</code> field. The <code>score</code> field
+will also be given a custom label with the <code>filterLabel</code> parameter. Here is an 
+example of the first track stanza:
+<pre>
+track filteringByRangeAllValues
+shortLabel filteringByRangeDefault
+longLabel Filter by range enabled with default score including all values
+visibility pack
+type bigBed 5 .
+filter.name 0
+filter.score 0:10
+filterByRange.score on
+filterLimits.score 0:10
+filterLabel.score Value range to filter
+bigDataUrl example2.bb
+</pre>
+<p>
+Below are all the materials for example 2:</p>
+<ul>
+<li><a href="examples/hubQuickStartFilter/example2.bed">bed file</a></li>
+<li><a href="examples/hubQuickStartFilter/example2.bb">bigBed file</a></li>
+<li><a href="examples/hubQuickStartFilter/filterNumerical2.as">.as file</a></li>
+<li><a href="examples/hubQuickStartFilter/hubExample2.txt">hub.txt file</a></li>
+<li><a href="http://genome.ucsc.edu/s/Lou/filterExample2">Example session</a></li>
+</ul>
+
+<p>Enabling range filters for the <code>score</code> field as well as the standard filter for
+the <code>name</code> field, we see the following options in the track description page.
+Any number of filters can be enabled on a track simultaneously.</p>
+
+<p class='text-center'>
+  <img class='text-center' src="examples/hubQuickStartFilter/filterExample2.1.png">
+</p>
+
+<p>Going to the example session will display a browser image like so:</p>
+
+<p class='text-center'>
+  <img class='text-center' src="examples/hubQuickStartFilter/filterExample2.2.png" 
+  width='80%' alt="Range filters enabled on bigBed">
+</p>
+
+<p>
+Each of the tracks is filtering by a different value, and in the final track two separate filters
+are enabled.</p>
+<ul>
+<li>The first track (5-10) displays only items with scores 5-10.</li>
+<li>The second track (3-8) displays only items with scores 3-8.</li>
+<li>The third track has two filters. A range filter (3-8) and a second filter (5). Only the
+values that pass both filters are seen.</li>
+<li>The fourth track has a filter inclusive of all values passed(0-10), so all items 
+are displayed.</li>
+</ul>
+
+<a id="filterExample3"></a>
+<h3>filter Example 3</h3>
+
+<p>
+This third example explores how the numerical filters interact with non-numerical characters.</p>
+
+<p>
+The data is comprised of 10 items as a bed5, with the same coordinates as the examples above, a 
+name field, and an arbitrary score field. The name field contains a mix of 
+numerical and non-numerical characters.</p>
+
+<pre>
+chr7    127000000  127000005 0 0 
+chr7    127000010  127000015 -1 0
+chr7    127000020  127000025 2% 0
+chr7    127000030  127000035 -3 0
+chr7    127000040  127000045 4 0
+chr7    127000050  127000055 5n 0
+chr7    127000060  127000065 5 0
+chr7    127000070  127000075 NA 0
+chr7    127000080  127000085 . 0
+chr7    127000090  127000095 &lt;&gt; 0
+</pre>
+<p>
+Filtering will be enabled on the 4th <code>name</code> field.
+The trackDb stanza looks as follows:</p>
+
+<pre>
+track filteringNonNumerical
+shortLabel filteringNonNumerical
+longLabel Using numerical filters on a field with both numerical and non-numerical values
+visibility pack
+type bigBed 5 .
+filter.name 0
+bigDataUrl example3.bb
+</pre>
+
+<p>
+Below are all the materials for example 2:</p>
+<ul>
+<li><a href="examples/hubQuickStartFilter/example3.bed">bed file</a></li>
+<li><a href="examples/hubQuickStartFilter/example3.bb">bigBed file</a></li>
+<li><a href="examples/hubQuickStartFilter/filterNumerical3.as">.as file</a></li>
+<li><a href="examples/hubQuickStartFilter/hubExample3.txt">hub.txt file</a></li>
+<li><a href="http://genome.ucsc.edu/s/Lou/filterExample3">Example session</a></li>
+</ul>
+
+<p>
+The filter is being passed on the <code>name</code> field, with a default value of 0. The 
+example session will show which items still display with this default value:</p>
+
+<p class='text-center'>
+  <img class='text-center' src="examples/hubQuickStartFilter/filterExample3.1.png" 
+  width='80%' alt="Filtering on non-numerical characters">
+</p>
+
+<p>
+The only items being filtered are the negative values, -1 and -3. Entirely non-numerical
+characters are interpreted as 0. If we instead change the filter to be 2, we see the
+following:
+
+<p class='text-center'>
+  <img class='text-center' src="examples/hubQuickStartFilter/filterExample3.2.png" 
+  width='80%' alt="Filtering on non-numerical characters">
+</p>
+
+<p>
+In this case we see the items that start with non-numerical characters get filtered. Items
+that start with a number, and are following by another character, are treated as the number.
+This can be seen with the <code>2%</code> value, which remains visible with the filter active.
+It is important to keep in mind that non-numerical values, such as <code>NA</code>, will be visible
+when the default 0 filter is active, but will be removed when any positive numerical filter
+is activated.</p>
+
+<a id="filterText"></a>
+<h2>filterText.fieldName</h2>
+<p><code>filterText.fieldName</code> is used to enable text searching in the specified fieldName. 
+This will display any items passed which match exactly the searched term, or only part 
+of the search term. Two types of searching are supported, wildcard searching (*) or regular 
+expression searching (regexp). The mode between the two types can be freely changed in the track
+description page, or a default passed using the <code>filterType.fieldName</code> parameter. Lastly,
+the filter label will be the description of the field as specified by the autoSql (.as) file. 
+This label can be customized with the <code>filterLabel.fieldName</code> parameter.</p>
+
+<p>A value can be passed with this setting to enable a specific filter by default. Also, the
+default search type is wildcard (*).</p>
+
+<p>For more information on <code>filterText.fieldName</code>, see the <a target="_blank"
+href="trackDb/trackDbHub.html#filterText">trackDb help doc entry</a>.</p>
+
+<a id="filterText1"></a>
+<h3>filterText Example 1</h3>
+
+<p>
+In this first example, we have 10 genes with arbitrary coordinates as follows:</p>
+<pre>
+chr7    127000000  127000005 EGFR 1
+chr7    127000010  127000015 VEGFA 2
+chr7    127000020  127000025 APOE 3
+chr7    127000030  127000035 IL6 4
+chr7    127000040  127000045 TGFBI 5
+chr7    127000050  127000055 BRCA1 6
+chr7    127000060  127000065 BRCA2 7
+chr7    127000070  127000075 MTHFR 8
+chr7    127000080  127000085 ESR1 9
+chr7    127000090  127000095 AKT1 10
+</pre>
+
+<p>
+By default, we would like our data to display only BRCA1 and BRCA2. The easiest way to accomplish
+this is to enable a <code>filterText</code> wildcard filter. We will be filtering on the 
+<code>name</code> field using the following setting: <code>filterText.name BRCA*</code></p>
+<p>The hub.txt looks as follows:</p>
+<pre>
+track filterTextDefaultBRCA
+shortLabel filterTextBRCA
+longLabel Wildcard filterText with default BRCA value
+visibility pack
+type bigBed 5 .
+filterText.name BRCA*
+bigDataUrl filterTextExample1.bb
+</pre>
+
+<p>
+Below are all the materials for example 1:</p>
+<ul>
+<li><a href="examples/hubQuickStartFilter/filterTextExample1.bed">bed file</a></li>
+<li><a href="examples/hubQuickStartFilter/filterTextExample1.bb">bigBed file</a></li>
+<li><a href="examples/hubQuickStartFilter/filterTextHubExample1.txt">hub.txt file</a></li>
+<li><a href="https://genome.ucsc.edu/s/Lou/filterTextExample1">Example session</a></li>
+</ul>
+<p>
+The example session will display an image like the following, showing only the BRCA items.
+The eight filtered items are also noted on the longLabel above the
+track as <b>(8 items filtered)</b>. If we just want to enable filtering, but pass no
+default value, we can use <code>filterText.name *</code>.</p>
+
+<p class='text-center'>
+  <img class='text-center' src="examples/hubQuickStartFilter/filterTextExample1.1.png" 
+  width='65%' alt="filterText filter enabled on bigBed">
+</p>
+
+<p>We can also change the filter type or filter value (or remove values) by going to the
+track description page, which will show the following:</p>
+
+<p class='text-center'>
+  <img class='text-center' src="examples/hubQuickStartFilter/filterTextExample1.2.png" 
+  width='50%' alt="filterText filter track description page">
+</p>
+
+<p>
+See the <a target="_blank"
+href="trackDb/trackDbHub.html#filterText">trackDb help doc entry</a> for additional
+information including an example using regexp.</p>
+
+<a id="filterValues"></a>
+<h2>filterValues.fieldName</h2>
+<p>
+<code>filterValues.fieldName</code> is used to enable filtering by pre-specified values within 
+a field. It can be used on fields that can contain one text value or a list of comma-separated 
+values of text, like "classA,classB". Usually, these are category names. The option requires 
+at least one value to filter on.</p>
+<p>
+Every individual possible value that can ever occur in the field must be passed in a comma 
+separated list. You will then be able to select those values as categories, choosing to display 
+only items that belong to one, any, or at least one of the selected values. By default, the user 
+can select multiple values from this list and the filter lets pass any features with at least 
+one of these values (<code>multipleListOr</code>). The type of selection can be designated by
+passing the optional <code>filterType.fieldName</code> parameter. Possible options are:</p>
+<ul>
+<li><code>single</code> - Allows selection of a single item from dropdown menu.</li>
+<li><code>singleList</code> - Allows selection of a single item from dropdown menu. Accepts 
+comma-separated values in the bigBed field.</li>
+<li><code>multiple</code> - Allows selection of any number of items from dropdown menu. Shows 
+items that contain at least one of the selections.</li>
+<li><code>multipleListOr</code> - Allows selection of any number of items 
+from dropdown menu. Shows items that contain at least one of the selections. Accepts
+comma-separated values in the bigBed field. Enables the radio button that allows swapping 
+of filter type in the track description page.</li>
+<li><code>multipleListOnlyOr</code> - Same as <code>multipleListOr</code> except it disables the
+option to change the filter type from the browser interface.</li>
+<li><code>multipleListAnd</code> - Allows selection of any number of items
+from dropdown menu. Displays only items containing all of the selections. Accepts
+comma-separated values in the bigBed field. Enables the radio button that allows swapping 
+of filter type in the track description page.</li>
+<li><code>multipleListOnlyAnd</code> - Same as <code>multipleListAnd</code> except it disables the 
+option to change the filter type from the browser interface.</li>
+</ul>
+<p>
+As with other filters, default values can be passed to <code>filterValues</code> using the
+<code>filterValuesDefault.fieldName</code> parameter. It can take a comma-separated list 
+just like <code>filterValues.fieldName</code>, and any items included will be automatically selected.</p>
+<p>
+The labels in the menu shown to the user can be configured to display a different name/label 
+than the one present in the bigBed field. This can be helpful when the data values are 
+written in short form, but you want a longer more descriptive name to show up in the UI. 
+The format for this substitution is as follows:</p>
+<pre>
+filterValues.fieldName fieldValue1|alternativeName1,fieldValue2|alternativeName2...</pre>
+<p>
+In this example, the bigBed could have value <b>AML</b>, but we would like the
+menu to display <b>Acute Myeloid Leukemia</b>. This can also be used to reduce the size
+of bigBed files.</p>
+<p>
+The <a href="http://genome.ucsc.edu/s/Lou/filterValuesAllSettings" target="_blank">
+following session</a> contains a hub with example tracks of all 
+the possible <code>filterValues</code> settings. It can be used to explore the differences
+and restrictions of each of the settings.</p>
+
+<a name="filterValuesExample1"></a>
+<h3>filterValues Example 1</h3>
+<p>
+In this first example, we have a small track with 10 items. The score and names of the items
+are the same, and there is an additional field added which labels the score as either an
+even or odd number, making our file a bigBed 5+1:</p>
+<pre>
+chr7    127000000  127000005 1 1 odd
+chr7    127000010  127000015 2 2 even
+chr7    127000020  127000025 3 3 odd
+chr7    127000030  127000035 4 4 even
+chr7    127000040  127000045 5 5 odd
+chr7    127000050  127000055 6 6 even
+chr7    127000060  127000065 7 7 odd
+chr7    127000070  127000075 8 8 even
+chr7    127000080  127000085 9 9 odd
+chr7    127000090  127000095 10 10 even
+</pre>
+We wish to add a filter which allows selection on whether the item is even or odd. This
+is enabled by the line <code>filterValues.OddEven odd,even</code>. Remember that all
+possible values need to be listed. We also wish for only a single selection
+to be possible, which we will do with the following setting 
+<code>filterType.OddEven singleList</code>. Below is the track stanza in the hub.txt:</p>
+<pre>
+track filteValuesOddEven
+shortLabel filterValues.OddEven odd,even
+longLabel filterValues categorical filter on odd and even values
+visibility pack
+type bigBed 5 + 1
+filterValues.OddEven odd,even
+filterType.OddEven singleList
+bigDataUrl filterValuesExample1.bb
+</pre>
+<p>
+Below are all the materials for this example:</p>
+<ul>
+<li><a href="examples/hubQuickStartFilter/filterValuesExample1.bed">bed file</a></li>
+<li><a href="examples/hubQuickStartFilter/filterValuesExample1.bb">bigBed file</a></li>
+<li><a href="examples/hubQuickStartFilter/filterValuesExample1.as">.as file</a></li>
+<li><a href="examples/hubQuickStartFilter/filterValuesHubExample1.txt">hub.txt file</a></li>
+<li><a href="http://genome.ucsc.edu/s/Lou/filterValuesExample1">Example session</a></li>
+</ul>
+
+
+
+<a name="filterValuesExample2"></a>
+<h3>filterValues Example 2</h3>
+<p>
+In this second example, we have signal data on 10 items, and want to enable filtering on any
+number of annotation type. Note that the annotation type is written in shorthand:</p>
+<pre>
+chr7    127000000  127000005 signal1 0 DNA-BR,AH
+chr7    127000010  127000015 signal2 0 AS,BS
+chr7    127000020  127000025 signal3 0 BS
+chr7    127000030  127000035 signal4 0 BS
+chr7    127000040  127000045 signal5 0 DNA-BR
+chr7    127000050  127000055 signal6 0 DNA-BR,BS
+chr7    127000060  127000065 signal7 0 AS
+chr7    127000070  127000075 signal8 0 BS
+chr7    127000080  127000085 signal9 0 AS,AH
+chr7    127000090  127000095 signal10 0 DNA-BR,BS
+</pre>
+<p>
+In this case, the annotations represent the following:</p>
+<ul>
+<li>DNA-BR - DNA-binding region</li>
+<li>AS - active site</li>
+<li>AH - alpha helix</li>
+<li>BS - beta strand</li>
+</ul>
+<p>
+Some signals contain more than one type of annotation. We will enable the categorical filter 
+using the <code>filterValues.annotationType</code> setting, including all the possible values.
+We will also substitute the complete annotation type names by using the pipe "|" character.
+We work with researchers most interested in DNA-binding regions that are also beta strands,
+so we will want the default behavior to display only those items. For this we will use
+<code>filterType.annotationType multipleListAnd</code> to require matching on all selections,
+and <code>filterValuesDefault.annotationType DNA-BR,BS</code> to pass the default values.
+Note that we do not use the type <code>multipleListOnlyAnd</code>, as that would not allow
+users to change selection type. Below is the complete track stanza of the hub.txt file:</p>
+<pre>
+track filteValuesAnnotationType
+shortLabel filterValues.annotationType
+longLabel filterValues categorical filter on multiple annotation types
+visibility pack
+type bigBed 5 + 1
+filterValues.annotationType DNA-BR|DNA-binding region,AS|active site,AH|alpha helix,BS|beta strand
+filterType.annotationType multipleListAnd
+filterValuesDefault.annotationType DNA-BR,BS
+bigDataUrl filterValuesExample2.bb
+</pre>
+<p>
+Below are all the materials for this example:</p>
+<ul>
+<li><a href="examples/hubQuickStartFilter/filterValuesExample2.bed">bed file</a></li>
+<li><a href="examples/hubQuickStartFilter/filterValuesExample2.bb">bigBed file</a></li>
+<li><a href="examples/hubQuickStartFilter/filterValuesExample2.as">.as file</a></li>
+<li><a href="examples/hubQuickStartFilter/filterValuesHubExample2.txt">hub.txt file</a></li>
+<li><a href="http://genome.ucsc.edu/s/Lou/filterValuesExample2">Example session</a></li>
+</ul>
+<p>
+Going to the example session will result in a browser image as such:</p>
+
+<p class='text-center'>
+  <img class='text-center' src="examples/hubQuickStartFilter/filterValuesExample2.1.png" 
+  width='75%' alt="filterValues filter enabled on bigBed">
+</p>
+
+<p>
+Note that only <b>signal6</b> and <b>signal10</b> are displayed by default. That is because they are
+the only two items that have both DNA-BR (DNA-binding region) and BS (beta strand) as their 
+<b>type of annotation</b>. If we click into the track, we see additional filter options. In the
+image below we have switched the filter to <b>one or more match</b>, meaning that if the items
+contain any of the selected items they will display. We have also expanded the selection to include
+ AH (alpha-helix). Lastly, note that the menu displays the alternative long names instead of the
+shorthand:</p>
+
+<p class='text-center'>
+  <img class='text-center' src="examples/hubQuickStartFilter/filterValuesExample2.2.png" 
+  width='45%' alt="filterValues filter enabled on bigBed">
+</p>
+
+<p>
+This will result in all items being displayed except for <b>signal 7</b>. This is because it is 
+the only item that contains none of the selected categories, with its only annotation 
+being AS (active site):</p>
+
+<p class='text-center'>
+  <img class='text-center' src="examples/hubQuickStartFilter/filterValuesExample2.3.png" 
+  width='75%' alt="filterValues filter enabled on bigBed">
+</p>
+
+<h2>Additional Resources</h2>
+<ul>
+  <li>
+  <strong><a href="hgTrackHubHelp.html" target="_blank">Track Hub User
+Guide</a></strong></li>
+  <li>
+  <strong><a href="hgTracksHelp.html#UseOneFile" target="_blank">Guide To useOneFile setting</a></strong></li>
+  <li>
+  <a href="trix.html" target="_blank">Search file .ix documentation</a></li>
+  <li>
+  <a href="https://groups.google.com/a/soe.ucsc.edu/d/msg/genome/MUFeQDLgEpk/2I1yYVOaCSYJ" 
+  target="_blank">Mailing list question with searchable Track Hub</a></li>
+  <li>
+  <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!msg/genome/1ZWq30-89fw/JXzvb99Q5VQJ"
+   target="_blank">Mailing list question with searchable Custom Tracks</a></li>
+  <li>
+  <strong><a href="trackDb/trackDbHub.html#searchTrix" target="_blank">Track Database (trackDb) searchTrix 
+  Definition</a></strong></li> 
+  <li>
+  <strong><a href="hubQuickStartGroups.html" target="_blank">Quick Start Guide to Organizing Track 
+  Hubs into Groupings</a></strong></li>
+  <li>
+  <strong><a href="hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Track 
+  Hubs</a></strong></li>
+</ul>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

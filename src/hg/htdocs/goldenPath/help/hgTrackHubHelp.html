@@ -16,6 +16,7 @@
 <h6><a href="#Setup">Setting up a Track Hub</a></h6>
 <h6><a href="#Debug">Debugging Track Hubs</a></h6>
 <h6><a href="#Search">Setting up item search</a></h6>
+<h6><a href="#Filters">Adding filters to your Track Hub</a></h6>
 <h6><a href="#Register">Registering a Track Hub with UCSC</a></h6>
 <h6><a href="#Compatibility">Checking Hub settings and compatibility</a></h6>
 <h6><a href="#Hosting">Where to host your data</a></h6>
@@ -44,6 +45,8 @@
   <a href="hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs with 
   Blat</a></li> 
   <li><a href="hubQuickStartSearch.html" target="_blank">Quick Start Guide to Searchable Track 
+  Hubs</a></li>
+  <li><a href="hubQuickStartFilter.html" target="_blank">Quick Start Guide to adding Filters to 
   Hubs</a></li>
 </ul> 
 <div> 
@@ -749,6 +752,21 @@ the input BED data to be case-senstive sorted (<code>sort -k1,1 -k2,2n</code>). 
 either the example UNIX <code>sort</code> command or the <code>bedSort</code> utility available
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">here</a>. See an example
 <a href="examples/hubExamples/hubIndexedBigBedSearchable/" target="_blank">searchable hub</a>.</p>
+
+<!-- ========== Adding Filters to Track Hub ============================== -->
+<a name="Filters"></a>
+<h2>Adding Filters to your Track Hub</h2>
+<p>
+The Genome Browser supports three varieties of data filter options for bigBed data.
+These can improve data usability in many ways, such as displaying specific data by default 
+(e.g. only items that pass certain quality scores), allow for filtering based on 
+pre-specified categories (e.g designate only LINE repetitive elements from a list of options) 
+and more.</p>
+<p>
+For more information on the options available and examples on how to set up filters, see our
+<a href="hubQuickStartFilter.html" target="_blank">Track Hub Filters Quick Start Guide</a>
+and the filter entries in the <a href="trackDb/trackDbHub.html#filter" target="_blank">
+Track Database Definition Document</a>.</p>
 
 <!-- ========== Registering a Track Hub with UCSC ==================== -->
 <a name="Register"></a>
