@@ -2,7 +2,7 @@ track affyArchive
 cartVersion 2
 superTrack on
 shortLabel Affy Archive
-longLabel Affymetrix Track Archive
+longLabel Affymetrix Archive
 group expression
 type psl .
 
