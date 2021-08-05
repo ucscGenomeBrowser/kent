@@ -14,6 +14,11 @@ function gaOnButtonClick(ev) {
 /* user clicked a button: send event to GA, then execute the old handler */
     var button = ev.currentTarget;
     var buttonName = button.name;
+    if (buttonName==="")
+        buttonName = button.id;
+    if (buttonName==="")
+        buttonName = button.value;
+
     ga('send', 'event', 'buttonClick', buttonName);
     if (button.oldOnClick) // most buttons did not have an onclick function at all (the default click is a listener)
         button.oldOnClick(ev);
