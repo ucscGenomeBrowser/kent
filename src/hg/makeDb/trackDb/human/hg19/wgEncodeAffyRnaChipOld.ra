@@ -1,7 +1,6 @@
 # Affymetrix RNA-chip (wrangler: braney/cricket)
 
 track wgEncodeAffyRnaChip
-parent affyArchive
 compositeTrack on
 shortLabel Affy RNA Loc
 longLabel RNA Subcellular Localization by Tiling Microarray from ENCODE Affymetrix/CSHL

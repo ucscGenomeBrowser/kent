@@ -1399,6 +1399,7 @@ maxLimit 100
 html gc5Base
 
 track affyExonArray
+release beta,public
 compositeTrack on
 group expression
 priority 1.5
@@ -1415,11 +1416,13 @@ noInherit on
 type bed 12
 
     track affyExonProbeset
+    release beta,public
     parent affyExonArray
     view v1Probeset
     visibility dense
 
         track affyExonProbesetCore
+        release beta,public
         parent affyExonProbeset
         subGroups view=v1Probeset level=L1Core
         shortLabel Core PS
@@ -1428,6 +1431,7 @@ type bed 12
         color 65,105,225
 
         track affyExonProbesetExtended
+        release beta,public
         parent affyExonProbeset
         subGroups view=v1Probeset level=L2Extended
         shortLabel Extended PS
@@ -1436,6 +1440,7 @@ type bed 12
         color 139,69,19
 
         track affyExonProbesetFull
+        release beta,public
         parent affyExonProbeset off
         subGroups view=v1Probeset level=L3Full
         shortLabel Full PS
@@ -1444,6 +1449,7 @@ type bed 12
         color 205,96,144
 
         track affyExonProbesetFree 
+        release beta,public
         parent affyExonProbeset off
         subGroups view=v1Probeset level=L4Free
         shortLabel Free PS
@@ -1452,6 +1458,7 @@ type bed 12
         color 0,100,0
 
         track affyExonProbesetAmbiguous 
+        release beta,public
         parent affyExonProbeset off
         subGroups view=v1Probeset level=L5Ambiguous
         shortLabel Ambiguous PS
@@ -1460,11 +1467,13 @@ type bed 12
         color 218,112,214	
 
     track affyExonProbe
+    release beta,public
     parent affyExonArray
     view v2Probe
     visibility dense
 
         track affyExonProbeCore 
+        release beta,public
         parent affyExonProbe off
         subGroups view=v2Probe level=L1Core
         shortLabel Core Probes
@@ -1474,6 +1483,7 @@ type bed 12
         type bed 10
 
         track affyExonProbeExtended 
+        release beta,public
         parent affyExonProbe off
         subGroups view=v2Probe level=L2Extended
         shortLabel Extended Probes
@@ -1483,6 +1493,7 @@ type bed 12
         type bed 10
 
         track affyExonProbeFull 
+        release beta,public
         parent affyExonProbe off
         subGroups view=v2Probe level=L3Full
         shortLabel Full Probes
@@ -1492,6 +1503,7 @@ type bed 12
         type bed 10
 
         track affyExonProbeFree 
+        release beta,public
         parent affyExonProbe off
         subGroups view=v2Probe level=L4Free
         shortLabel Free Probes
@@ -1501,6 +1513,7 @@ type bed 12
         type bed 10
 
         track affyExonProbeAmbiguous 
+        release beta,public
         parent affyExonProbe off
         subGroups view=v2Probe level=L5Ambiguous
         shortLabel Ambiguous Probes
@@ -2461,18 +2474,22 @@ group rna
 priority 13
 
 track affyGnf1h override
+release beta,public
 group expression
 priority 2
 
 track affyU95 override
+release beta,public
 group expression
 priority 4
 
 track affyU133 override
+release beta,public
 group expression
 priority 5
 
 track affyU133Plus2 override
+release beta,public
 group expression
 priority 6
 
@@ -2603,3 +2620,4 @@ noScoreFilter on
 mouseOver $name, HI: $quantile
 
 include dbSnpArchiveHg19.ra 
+include affyArchive.ra alpha
