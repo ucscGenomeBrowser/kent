@@ -35,11 +35,11 @@ def parseArgs():
     For BAM files use this program in a pipe with samtools:
         samtools view -h in.bam | ./chromToUcsc -a mm10.chromAlias.tsv | samtools -bS > out.bam
 
-    By default, this script expects the chromosome name in the first field, but you can change the field with -k.
-    This works for BED, bedGraph, GTF, wiggle, VCF.
+    By default, this script expects the chromosome name in the first field.
+    The default works for BED, bedGraph, GTF, wiggle, VCF.
     For the following file formats, you will need to set the -k option to these values manually:
     genePred: 2 -- PSL 10 (target) or 14 (query) -- chain: 2 (target) or 7 (query) -- SAM: 2
-    If any line starts with @ (SAM format), -k is automatically set to 2.
+    (If a line starts with @ (SAM format), -k is automatically set to 2.)
     """)
 
     parser.add_option("", "--get", dest="downloadDb", action="store", help="download a chrom alias table from UCSC for the genomeDb into the current directory and exit")
