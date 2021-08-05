@@ -315,7 +315,7 @@ struct serverTable
     };
 
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
-char *outputList[] = {"hyperlink", "psl", "psl no header"};
+char *outputList[] = {"hyperlink", "psl", "psl no header", "JSON"};
 
 int minMatchShown = 0;
 
