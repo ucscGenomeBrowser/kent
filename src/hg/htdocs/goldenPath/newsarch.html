@@ -52,6 +52,51 @@
 <!-- ============= 2021 archived news ============= -->
 <a name="2021"></a>
 
+<a name="080421"></a>
+<h2>Aug. 04, 2021 &nbsp;&nbsp; Addition of GRCm38 patch sequences to mm10</h2>
+<p>
+We are pleased to announce the addition of GRCm38 patch release 6 to the mm10 assembly. mm10 has
+been updated with patches since its release in 2012. The GRC patch releases do not change any
+previously existing sequences; they simply add new sequences for fix patches or alternate haplotypes
+that correspond to specific regions of the main chromosome sequences. For most users, the patches
+are unlikely to make a difference and may complicate the analysis as they introduce more
+duplication.</p>
+
+<p>
+More information on how patch sequences are incorporated can be found on the
+<a href="http://genome.ucsc.edu/blog/patches/" target="_blank">Patching up the Genome</a> blog post.
+The blog post contains details about the new
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/latest/"
+target="_blank">/latest</a>,
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/initial/"
+target="_blank">/initial</a>, and
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/p6/" target="_blank">/p6</a>
+download directories on the downloads server. With the addition of new sequences to mm10, we can
+expect to see BLAT return more matches to the genome.</p>
+
+<ul>
+  <li>
+    The <b>initial/</b> subdirectory contains files for the initial release of GRCm38, which has 66
+    sequences, and no original alternate sequences and no fix sequences. It is the same as the
+    parent download directory. This is probably the best genome file for aligners and most analysis
+    tasks, a version called &quot;analysisSet&quot; for the human genome.
+  </li>
+  <li>
+    The <b>p6/</b> subdirectory contains files for GRCm38.p6 (patch release 6). It has 239 sequences
+    including alternate and fix sequences. Note that these patches includes
+    &quot;strain-specific&quot; sequences. You may want to check with the authors of your aligner if
+    the software can recognize these sequences.
+  </li>
+  <li>
+    The <b>latest/</b> symbolic link points to the subdirectory for the most recent patch version.
+  </li>
+</ul>
+
+<p>
+We would like to thank the <a href="https://www.ncbi.nlm.nih.gov/grc" target="_blank">Genome
+Research Consortium</a> for creating the patches for mm10. We would also like to thank Galt Barber
+and Jairo Navarro at UCSC for implementing and testing the latest patch to the mm10 genome.</p>
+
 <a name="080221"></a>
 <h2>Aug. 02, 2021 &nbsp;&nbsp; New Genome Browser: X. tropicalis, xenTro10 (<em>Xenopus tropicalis</em>)</h2>
 <p>
