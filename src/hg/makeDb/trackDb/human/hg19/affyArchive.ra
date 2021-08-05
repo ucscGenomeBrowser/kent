@@ -140,4 +140,4 @@ type psl .
     group expression
     priority 6
 
-    include wgEncodeAffyRnaChip.ra
+    include wgEncodeAffyRnaChip.ra alpha
