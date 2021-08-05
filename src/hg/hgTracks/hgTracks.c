@@ -10901,7 +10901,8 @@ jsInline(dy->string);
 dyStringFree(&dy);
 
 dy = dyStringNew(1024);
-if (enableMouseOver)
+// do not have a JsonFile available when PDF/PS output
+if (enableMouseOver && isNotEmpty(mouseOverJsonFile->forCgi))
     {
     jsonWriteObjectEnd(mouseOverJson);
     /* if any data was written, it is longer than 4 bytes */
