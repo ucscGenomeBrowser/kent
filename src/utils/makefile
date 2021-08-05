@@ -215,7 +215,7 @@ ALL_APPS = $(UTILS_APPLIST) $(UCSC_APPS)
 
 # all: builds all utilities here
 
-all: $(ALL_APPS:%=%.all)
+all: $(ALL_APPS:%=%.all) $(USER_APP_SCRIPTS:%=%.userAppScript)
 
 %.all:
 	cd $* && echo $* && $(MAKE)
