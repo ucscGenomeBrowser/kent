@@ -1186,6 +1186,7 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track tgpPhase1
+release beta,public
 shortLabel 1000G Ph1 Vars
 longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, Indels, SVs
 type vcfTabix
@@ -1196,6 +1197,7 @@ showHardyWeinberg on
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 track tgpPhase1Accessibility
+release beta,public
 compositeTrack on
 shortLabel 1000G Ph1 Accsbl
 longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions
@@ -1205,12 +1207,14 @@ group varRep
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
 
     track tgpPhase1AccessibilityPilotCriteria
+    release beta,public
     subTrack tgpPhase1Accessibility
     shortLabel 1000G Accs Pilot
     longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions - Pilot Criteria
     color 100,100,100
 
     track tgpPhase1AccessibilityStrictCriteria
+    release beta,public
     subTrack tgpPhase1Accessibility
     shortLabel 1000G Accs Strict
     longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions - Strict Criteria
@@ -1221,6 +1225,7 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track tgpPhase3
+release beta,public
 shortLabel 1000G Ph3 Vars
 longLabel 1000 Genomes Phase 3 Integrated Variant Calls: SNVs, Indels, SVs
 type vcfTabix
@@ -1232,6 +1237,7 @@ geneTrack ncbiRefSeqCurated
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 track tgpPhase3Accessibility
+release beta,public
 compositeTrack on
 shortLabel 1000G Ph3 Accsbl
 longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions
@@ -1241,6 +1247,7 @@ group varRep
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
 
     track tgpPhase3AccessibilityPilotCriteria
+    release beta,public
     subTrack tgpPhase3Accessibility
     shortLabel 1000G Accs Pilot
     longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions - Pilot Criteria
@@ -1248,6 +1255,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr
     color 100,100,100
 
     track tgpPhase3AccessibilityStrictCriteria
+    release beta,public
     subTrack tgpPhase3Accessibility
     shortLabel 1000G Accs Strict
     longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions - Strict Criteria
@@ -2624,3 +2632,4 @@ mouseOver $name, HI: $quantile
 include dbSnpArchiveHg19.ra 
 include affyArchive.ra alpha
 include genePredArchive.ra alpha
+include tgpArchive.ra alpha
