@@ -18,6 +18,9 @@ for db in allDbs:
     elif db == 'hg19':
         if '  0 hgw1.only' not in str(checkSyncResults) and '  5 hgwbeta.only' not in str(checkSyncResults):
             troubleDbs.append(db)
+    elif db == 'hg38':
+        if '  0 hgw1.only' not in str(checkSyncResults) and '  3 hgwbeta.only' not in str(checkSyncResults):
+            troubleDbs.append(db)
     else:
         if '  0 hgw1.only' not in str(checkSyncResults) and '  2 hgwbeta.only' not in str(checkSyncResults):
             troubleDbs.append(db)
