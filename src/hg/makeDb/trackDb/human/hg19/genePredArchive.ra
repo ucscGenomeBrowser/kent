@@ -1,0 +1,32 @@
+track genePredArchive
+cartVersion 2
+superTrack on
+shortLabel Prediction Archive
+longLabel Gene Prediction Archive
+group genes
+type genePred
+
+    track augustusGene override
+    parent genePredArchive
+
+    track geneid override
+    parent genePredArchive
+
+    track genscan override
+    parent genePredArchive
+
+    track sgpGene override
+    parent genePredArchive
+
+    track sibGene override
+    parent genePredArchive
+    url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg19&query_str=$$
+    urlLabel SIB link:
+
+    track acembly override
+    parent genePredArchive
+
+    track nscanGene override
+    parent genePredArchive
+    informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterative pseudogene masking.
+
