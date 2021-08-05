@@ -32,9 +32,14 @@ def parseArgs():
         %prog -i in.bed -o out.bed -a https://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromAlias.txt.gz
     Or in pipes, like this:
         cat test.bed | %prog -a mm10.chromAlias.tsv > test.ucsc.bed
-    For BAM files use in a pipe with samtools:
+    For BAM files use this program in a pipe with samtools:
         samtools view -h in.bam | ./chromToUcsc -a mm10.chromAlias.tsv | samtools -bS > out.bam
 
+    By default, this script expects the chromosome name in the first field.
+    The default works for BED, bedGraph, GTF, wiggle, VCF.
+    For the following file formats, you will need to set the -k option to these values manually:
+    genePred: 2 -- PSL 10 (target) or 14 (query) -- chain: 2 (target) or 7 (query) -- SAM: 2
+    (If a line starts with @ (SAM format), -k is automatically set to 2.)
     """)
 
     parser.add_option("", "--get", dest="downloadDb", action="store", help="download a chrom alias table from UCSC for the genomeDb into the current directory and exit")
@@ -44,7 +49,7 @@ def parseArgs():
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
     parser.add_option("-s", "--skipUnknown", dest="skipUnknown", action="store_true", help="skip unknown sequence rather than generate an error.")
     parser.add_option("-k", "--field", dest="fieldNo", action="store", type="int", \
-            help="index of field to convert, default is %default (first field is 1). This works for BED, bedGraph, GTF, wiggle, VCF. For genePred, set this option to 2, for PSL use 10 (target) or 14 (query), for Chain use 2 (target) or 7 (query). If any line starts with @ (SAM format), this field is automatically set to 2.", default=1)
+            help="index of field to convert, default is %default (first field is 1). ", default=1)
 
     (options, args) = parser.parse_args()
 

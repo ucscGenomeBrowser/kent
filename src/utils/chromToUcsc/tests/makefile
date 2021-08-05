@@ -24,7 +24,7 @@ all:
 	diff out/mm10.gtf expected/mm10.gtf
 	python3 ${DESTBINDIR}/chromToUcsc  -i in/grc38.100.gtf.gz -a mm10.chromAlias.tsv -o out/mm10.gtf 2>> out/test.err
 	diff out/mm10.gtf expected/mm10.gtf
-	python3 /cluster/home/markd/kent/bin/x86_64/chromToUcsc -s -i in/mm10.bad-names.bed -a mm10.chromAlias.tsv -o out/mm10.bad-names.bed >& out/mm10.bad-names.err
+	python3 ${DESTBINDIR}/chromToUcsc -s -i in/mm10.bad-names.bed -a mm10.chromAlias.tsv -o out/mm10.bad-names.bed >& out/mm10.bad-names.err
 	diff expected/mm10.bad-names.err out/mm10.bad-names.err
 	diff expected/mm10.bad-names.bed out/mm10.bad-names.bed
 
