@@ -1,7 +1,5 @@
 User-agent: *
+Crawl-delay: 2 
 Disallow: /admin/stats/
 Disallow: /goldenPath/certificate.html
 Disallow: /goldenPath/certificates/
-
-User-agent: Riddler
-Disallow: /
