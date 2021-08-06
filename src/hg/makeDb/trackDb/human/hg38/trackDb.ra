@@ -573,8 +573,8 @@ include knownGene.ra
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
 
+include trackDb.241wayT.ra alpha
 include trackDb.241way.ra alpha,beta
-include trackDb.241wayBM.ra alpha
 
 # track multiz145way
 # shortLabel 145way maf
