@@ -2873,6 +2873,10 @@ if (hgvsList)
         // all of the positions mapped incorrectly, so the term was bad. However, we may
         // be able to still go to a general area around the term, so build that, warn the
         // user about their bad search term, and warn that this is not an exactly correct position
+        // NOTE: There is a bug here in general, in that when mapping an hgvs term we don't
+        // consider alternate haplotypes, and thus below we will always get at least some range
+        // on the same chromosome within a gene, but if the mapping code were to change in the
+        // future, we might end up with some weird coordinates
         {
         struct hashEl *hel, *helList= hashElListHash(uniqHgvsPos);
         if (hgp->tableList == NULL)
@@ -2881,7 +2885,7 @@ if (hgvsList)
         table->name = helper->table;
         struct hgPos *pos;
         AllocVar(pos);
-        char *chrom;
+        char *chrom = NULL;
         int spanStart = INT_MAX, spanEnd = 0;
         for (hel = helList; hel != NULL; hel = hel->next)
             {
