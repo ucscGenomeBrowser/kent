@@ -102,6 +102,7 @@
 ./runBuild GCA_012275265.1 GCA_012275265.1_bMelUnd1.mat birds Melopsittacus_undulatus
 ./runBuild GCA_012275275.1 GCA_012275275.1_bMelUnd1.pat birds Melopsittacus_undulatus
 ./runBuild GCA_012275295.1 GCA_012275295.1_bMelUnd1.mat.Z birds Melopsittacus_undulatus
+./runBuild GCA_018400075.1 GCA_018400075.1_ASM1840007v1 fish Danio_rerio
 ./runBuild GCA_900324465.2 GCA_900324465.2_fAnaTes1.2 fish Anabas_testudineus
 ./runBuild GCA_900634415.1 GCA_900634415.1_fCotGob3.1 vertebrate Cottoperca_gobio
 ./runBuild GCA_900634435.1 GCA_900634435.1_fCotGob3.1_alternate_haplotype fish Cottoperca_gobio
