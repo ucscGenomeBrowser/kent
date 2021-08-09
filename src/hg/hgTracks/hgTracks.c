@@ -8023,8 +8023,7 @@ if (track->hasUi)
     // Print an icon before the title when one is defined
     hPrintPennantIcon(track->tdb);
 
-    struct dyString *dsMouseOver = dyStringCreate("%s", 
-longLabel);
+    struct dyString *dsMouseOver = dyStringCreate("%s", longLabel);
     struct trackDb *tdb = track->tdb;
 
     if (tdb->children)
@@ -8044,11 +8043,9 @@ longLabel);
     freeMem(longLabel);
     }
 
-//if (tdbIsSuper(track->tdb) || tdbIsComposite(track->tdb))
-    //hPrintf("<i id='folderIcon' class='fa fa-folder-o'></i>");
-if (tdbIsSuper(track->tdb))
-    hPrintf("<i id='folderIcon' class='fa fa-folder-o'></i>");
-if (tdbIsComposite(track->tdb))
+// show the folder icon from the font-awesome collection.
+// the icon collection also contains a "fa fa-folder-o" icon, which is the outline. It was decided to use only the filled out icon for now.
+if (tdbIsSuper(track->tdb) || tdbIsComposite(track->tdb))
     hPrintf("<i id='folderIcon' class='fa fa-folder'></i>");
 
 hPrintf(" %s", track->shortLabel);
