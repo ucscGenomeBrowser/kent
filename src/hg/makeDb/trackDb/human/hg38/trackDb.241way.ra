@@ -1,6 +1,6 @@
 track cons241way
 compositeTrack on
-shortLabel bigMaf Cactus 241-way
+shortLabel Cactus 241-way
 longLabel Cactus Alignment & Conservation of Placental Mammals from Zoonomia Project (241 Species)
 subGroup1 view Views align=Cactus_Alignments phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
 subGroup2 clade Clade primate=Primate carnivore=Carnivore cetartiodactyla=Cetartiodactyla chiroptera=Chiroptera rodents=Rodents mammals=Mammals all=All_species
@@ -57,8 +57,8 @@ html cons241way
         track phyloP241wayBW
         subTrack cons241wayViewphyloP
         subGroups view=phyloP clade=all
-        shortLabel bigWig Basewise Cons
-        longLabel bigWig PhyloP Basewise Conservation of Zoonomia 241 Placental Mammals
+        shortLabel Basewise Cons
+        longLabel PhyloP Basewise Conservation of Zoonomia 241 Placental Mammals
         configurable on
         type bigWig -20 7.532
         bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus241way/cactus241way.phyloP.bw
