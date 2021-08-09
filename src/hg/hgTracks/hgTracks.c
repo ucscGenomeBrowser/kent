@@ -8028,12 +8028,12 @@ if (track->hasUi)
 
     if (tdb->children)
         {
-        dyStringPrintf(dsMouseOver, " - %d subtracks of different types (super track)",
+        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of different types (super track)",
             slCount(tdb->children));
         }
     else if (tdb->subtracks)
         {
-        dyStringPrintf(dsMouseOver, " - %d subtracks of similar types (composite)",
+        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of similar types (composite track)",
             slCount(tdb->subtracks));
         }
 
