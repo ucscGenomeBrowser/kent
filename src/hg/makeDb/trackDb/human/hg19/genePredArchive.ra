@@ -3,6 +3,7 @@ superTrack on
 shortLabel Prediction Archive
 longLabel Gene Prediction Archive
 group genes
+visibility hide
 type genePred
 
     track augustusGene override

@@ -2,6 +2,7 @@ track tgpArchive
 superTrack on
 shortLabel 1000G Archive
 longLabel 1000 Genomes Archive
+visibility hide
 group varRep
 
     track tgpPhase1Accessibility
