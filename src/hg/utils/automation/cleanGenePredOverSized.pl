@@ -9,10 +9,11 @@ use warnings;
 my $argc = scalar(@ARGV);
 
 if ($argc != 2) {
-  printf STDERR "usage: cleanGenePredOverSized.pl chrom.sizes genePred > clean.genePred\n";
+  printf STDERR "usage: cleanGenePredOverSized.pl chrom.sizes genePred > clean.gp 2> dropped.gp\n";
   printf STDERR "\nScan a genePred vs. chrom.sizes and eliminate any oversized records.\n";
   printf STDERR "Typically genes on circular genomes that wrap past end coordinate.\n";
   printf STDERR "Either input file can be .gz or not.\n";
+  printf STDERR "Lines eliminated will print to stderr\n";
   exit 255;
 }
 
@@ -44,7 +45,7 @@ while (my $line = <FH>) {
   my @a = split('\t', $line);
   my $chrSize = $chromSizes{$a[1]};
   if (($a[3] > $chrSize) || ($a[4] > $chrSize)) {
-    printf STDERR "# dropped: %s %s %s %d %d (> %d)\n", $a[0], $a[1], $a[2], $a[3], $a[4], $chrSize;
+    printf STDERR "%s\n", $line;
   } else {
     printf "%s\n", $line;
   }
