@@ -2787,13 +2787,7 @@ if (hgvsList)
         char *pslTable = NULL;
         struct bed *mapping = hgvsValidateAndMap(hgvs, db, term, dyWarn, &pslTable);
         if (dyStringLen(dyWarn) > 0)
-            {
             mapErrCnt++;
-            if (hgvsListLen == 1)
-                {
-                warn("%s", dyStringContents(dyWarn));
-                }
-            }
         if (mapping)
             {
             char *trackTable;
@@ -2879,32 +2873,37 @@ if (hgvsList)
         // future, we might end up with some weird coordinates
         {
         struct hashEl *hel, *helList= hashElListHash(uniqHgvsPos);
-        if (hgp->tableList == NULL)
-            hgp->tableList = table;
-        foundIt = TRUE;
-        table->name = helper->table;
-        struct hgPos *pos;
-        AllocVar(pos);
-        char *chrom = NULL;
-        int spanStart = INT_MAX, spanEnd = 0;
-        for (hel = helList; hel != NULL; hel = hel->next)
+        if (helList)
             {
-            helper = (struct hgvsHelper *)hel->val;
-            chrom = helper->chrom;
-            spanStart = helper->chromStart < spanStart ? helper->chromStart : spanStart;
-            spanEnd = helper->chromEnd > spanEnd ? helper->chromEnd : spanEnd;
+            if (hgp->tableList == NULL)
+                hgp->tableList = table;
+            foundIt = TRUE;
+            struct hgPos *pos;
+            AllocVar(pos);
+            char *chrom = NULL;
+            int spanStart = INT_MAX, spanEnd = 0;
+            for (hel = helList; hel != NULL; hel = hel->next)
+                {
+                helper = (struct hgvsHelper *)hel->val;
+                chrom = helper->chrom;
+                spanStart = helper->chromStart < spanStart ? helper->chromStart : spanStart;
+                spanEnd = helper->chromEnd > spanEnd ? helper->chromEnd : spanEnd;
+                table->name = helper->table;
+                }
+            pos->chrom = cloneString(chrom);
+            pos->chromStart = spanStart-padding;
+            pos->chromEnd = spanEnd + padding;
+            pos->name = "Approximate area";
+            pos->description = term;
+            pos->browserName = term;
+            slAddHead(&table->posList, pos);
+            // highlight the 'mapped' bases to distinguish from padding
+            hgp->tableList->posList->highlight = addHighlight(db, helper->chrom, spanStart, spanEnd);
+            warn("%s", dyStringContents(allWarnings));
+            warn("Sorry, couldn't locate %s, moving to general location", term);
             }
-        pos->chrom = cloneString(chrom);
-        pos->chromStart = spanStart-padding;
-        pos->chromEnd = spanEnd + padding;
-        pos->name = "Approximate area";
-        pos->description = term;
-        pos->browserName = term;
-        slAddHead(&table->posList, pos);
-        // highlight the 'mapped' bases to distinguish from padding
-        hgp->tableList->posList->highlight = addHighlight(db, helper->chrom, spanStart, spanEnd);
-        warn("%s", dyStringContents(allWarnings));
-        warn("Sorry, couldn't locate %s, moving to general location", term);
+        else
+            warn("%s", dyStringContents(dyWarn));
         }
     dyStringFree(&dyWarn);
     dyStringFree(&allWarnings);
