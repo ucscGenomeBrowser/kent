@@ -815,6 +815,7 @@
 ./runBuild GCF_002102565.1 GCF_002102565.1_Kocim1 fungi Kockovaella_imperatae
 ./runBuild GCF_002104995.1 GCF_002104995.1_Linpe1 fungi Linderina_pennispora
 ./runBuild GCF_002105095.1 GCF_002105095.1_Pseve2 fungi Pseudomassariella_vexata
+./runBuild GCF_002105105.1 GCF_002105105.1_Prola1 fungi Protomyces_lactucae-debilis
 ./runBuild GCF_002105155.1 GCF_002105155.1_Lobtra1 fungi Lobosporangium_transversale
 ./runBuild GCF_002109545.1 GCF_002109545.1_ASM210954v1 vertebrate_other Acanthochromis_polyacanthus
 ./runBuild GCF_002113885.1 GCF_002113885.1_ASM211388v2 invertebrate Mizuhopecten_yessoensis
@@ -1074,6 +1075,7 @@
 ./runBuild GCF_008694065.1 GCF_008694065.1_Dalch_JS-1345 fungi Daldinia_childiae
 ./runBuild GCF_008704595.1 GCF_008704595.1_ASM870459v1 fungi Diutina_rugosa
 ./runBuild GCF_008728515.1 GCF_008728515.1_Panubis1.0 vertebrate_mammalian Papio_anubis
+./runBuild GCF_008729295.1 GCF_008729295.1_YSFRI_Pleo_2.0 fish Plectropomus_leopardus
 ./runBuild GCF_008802855.1 GCF_008802855.1_Ppyr1.3 invertebrate Photinus_pyralis
 ./runBuild GCF_008822105.2 GCF_008822105.2_bTaeGut2.pat.W.v2 birds Taeniopygia_guttata
 ./runBuild GCF_008831285.1 GCF_008831285.1_ASM883128v1 plants Nymphaea_colorata
@@ -1099,6 +1101,7 @@
 ./runBuild GCF_009764565.2 GCF_009764565.2_rDerCor1.pri.v3 vertebrate Dermochelys_coriacea
 ./runBuild GCF_009769535.1 GCF_009769535.1_rThaEle1.pri vertebrate Thamnophis_elegans
 ./runBuild GCF_009769545.1 GCF_009769545.1_fCycLum1.pri fish Cyclopterus_lumpus
+./runBuild GCF_009769625.2 GCF_009769625.2_bCygOlo1.pri.v2 birds Cygnus_olor
 ./runBuild GCF_009771025.1 GCF_009771025.1_ASM977102v1 fungi Colletotrichum_fructicola
 ./runBuild GCF_009819535.1 GCF_009819535.1_rLacAgi1.pri vertebrate Lacerta_agilis
 ./runBuild GCF_009819705.1 GCF_009819705.1_fHipHip1.pri fish Hippoglossus_hippoglossus
@@ -1188,6 +1191,7 @@
 ./runBuild GCF_013347765.1 GCF_013347765.1_ASM1334776v1 fish Scophthalmus_maximus
 ./runBuild GCF_013347855.1 GCF_013347855.1_fAngAng1.pri vertebrate Anguilla_anguilla
 ./runBuild GCF_013357705.1 GCF_013357705.1_ASM1335770v1 invertebrate Chelonus_insularis
+./runBuild GCF_013358625.1 GCF_013358625.1_SCU_Mint_v3 plants Macadamia_integrifolia
 ./runBuild GCF_013358815.1 GCF_013358815.1_fEleEle1.pri fishes Electrophorus_electricus
 ./runBuild GCF_013358895.1 GCF_013358895.1_ZZ_aureus fish Oreochromis_aureus
 ./runBuild GCF_013368585.1 GCF_013368585.1_fMegCyp1.pri vertebrate Megalops_cyprinoides
@@ -1291,6 +1295,7 @@
 ./runBuild GCF_016920705.1 GCF_016920705.1_AcolMOP1 invertebrates Anopheles_coluzzii
 ./runBuild GCF_016920715.1 GCF_016920715.1_AaraD3 invertebrates Anopheles_arabiensis
 ./runBuild GCF_016920785.1 GCF_016920785.1_Ixodes_scapularus_ComboLowHiFi invertebrates Ixodes_scapularis
+./runBuild GCF_016920785.2 GCF_016920785.2_ASM1692078v2 invertebrates Ixodes_scapularis
 ./runBuild GCF_016920845.1 GCF_016920845.1_GAculeatus_UGA_version5 fish Gasterosteus_aculeatus_aculeatus
 ./runBuild GCF_017311325.1 GCF_017311325.1_ASM1731132v1 mammals Ursus_maritimus
 ./runBuild GCF_017562075.2 GCF_017562075.2_AmerM5.1 invertebrates Anopheles_merus
@@ -1298,6 +1303,7 @@
 ./runBuild GCF_017590135.1 GCF_017590135.1_ASM1759013v1 birds Pyrgilauda_ruficollis
 ./runBuild GCF_017591425.1 GCF_017591425.1_NIBS_Ocur_1.0 mammals Ochotona_curzoniae
 ./runBuild GCF_017639235.1 GCF_017639235.1_C.kubaryi_AGA036_p1.0 birds Corvus_kubaryi
+./runBuild GCF_017639515.1 GCF_017639515.1_sCarCar2.pri vertebrate Carcharodon_carcharias
 ./runBuild GCF_017639655.1 GCF_017639655.1_bFalNau1.pat birds Falco_naumanni
 ./runBuild GCF_017639655.2 GCF_017639655.2_bFalNau1.pat birds Falco_naumanni
 ./runBuild GCF_017639745.1 GCF_017639745.1_fMelBoe1.pri fish Melanotaenia_boesemani
@@ -1306,6 +1312,7 @@
 ./runBuild GCF_017654675.1 GCF_017654675.1_Xenopus_laevis_v10.1 vertebrate Xenopus_laevis
 ./runBuild GCF_017976325.1 GCF_017976325.1_fCheRos1.pri fish Chelmon_rostratus
 ./runBuild GCF_017976425.1 GCF_017976425.1_fToxJac2.pri fish Toxotes_jaculatrix
+./runBuild GCF_018143015.1 GCF_018143015.1_Lvar_3.0 invertebrates Lytechinus_variegatus
 ./runBuild GCF_018151105.1 GCF_018151105.1_ASM1815110v1 invertebrates Drosophila_obscura
 ./runBuild GCF_018152505.1 GCF_018152505.1_ASM1815250v1 invertebrates Drosophila_elegans
 ./runBuild GCF_018152535.1 GCF_018152535.1_ASM1815253v1 invertebrates Drosophila_kikkawai
@@ -1316,6 +1323,7 @@
 ./runBuild GCF_018345385.1 GCF_018345385.1_ASM1834538v1 mammals Vulpes_lagopus
 ./runBuild GCF_018398535.1 GCF_018398535.1_NCSU_Asbu1 fish Haplochromis_burtoni
 ./runBuild GCF_018398675.1 GCF_018398675.1_ASM1839867v1 fish Coregonus_clupeaformis
+./runBuild GCF_018446385.1 GCF_018446385.1_Zo_v1.1 plants Zingiber_officinale
 ./runBuild GCF_018492685.1 GCF_018492685.1_fAloSap1.pri fish Alosa_sapidissima
 ./runBuild GCF_018977255.1 GCF_018977255.1_IMCB_Cmil_1.0 vertebrate Callorhinchus_milii
 ./runBuild GCF_018991925.1 GCF_018991925.1_GMGI_Hamer_2.0 invertebrates Homarus_americanus
