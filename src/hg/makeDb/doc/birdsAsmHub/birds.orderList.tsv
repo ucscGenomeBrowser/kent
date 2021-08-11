@@ -4,22 +4,22 @@ GCF_000691975.1_ASM69197v1	American crow
 GCF_003957555.1_bCalAnn1_v1.p	Anna's hummingbird
 GCF_000737465.1_Haliaeetus_leucocephalus-4.0	bald eagle
 GCF_000703405.1_ASM70340v1	bar-tailed trogon
-GCF_000687205.1_ASM68720v1	barn owl BGI_N341 (2014)
 GCF_902150015.1_genome_assembly_l500	barn owl (2020)
+GCF_000687205.1_ASM68720v1	barn owl BGI_N341 (2014)
 GCF_015227805.1_bHirRus1.pri.v2	barn swallow
 GCF_005870125.1_lonStrDom2	Bengalese finch
 GCF_013377495.1_Cygnus_atratus_primary_v1.0	black swan
 GCF_002901205.1_cyaCae2	blue tit
 GCF_001604755.1_Lepidothrix_coronata-1.0	blue-crowned manakin
 GCF_012460135.1_BPBGC_Mater_1.0	brown headed cowbird
-GCF_000695765.1_ASM69576v1	brown roatelo
 GCF_001039765.1_AptMant0	brown kiwi
+GCF_000695765.1_ASM69576v1	brown roatelo
 GCF_000238935.1_Melopsittacus_undulatus_6.3	budgerigar
 GCF_003259725.1_athCun1	burrowing owl
 GCF_000691845.1_ASM69184v1	carmine bee-eater
 GCF_000002315.6_GRCg6a	chicken
-GCF_000747805.1_ChaPel_1.0	chimney swift
 GCF_003342845.1_notPer1	Chilean tinamou
+GCF_000747805.1_ChaPel_1.0	chimney swift
 GCF_000700745.1_ASM70074v1	chuck-will's-widow
 GCF_000247815.1_FicAlb1.5	collared flycatcher
 GCF_007115625.1_cibio_Scana_2019	common canary
@@ -34,6 +34,7 @@ GCF_000699145.1_ASM69914v1	emperor penguin
 GCF_003342905.1_droNov1	emu
 GCF_014805655.1_ASM1480565v1	Eurasian tree sparrow
 GCF_001715985.3_ASM171598v3	golden-collared manakin
+GCF_900496995.4_bAquChr1.4	golden eagle
 GCF_000708925.1_ASM70892v1	great cormorant
 GCF_001522545.3_Parus_major1.1	Great Tit
 GCF_002078875.1_NumMel1.0	helmeted guineafowl
@@ -43,11 +44,14 @@ GCF_001577835.2_Coturnix_japonica_2.1	Japanese quail
 GCF_004027225.1_bStrHab1_v1.p	kakapo
 GCF_000696875.1_ASM69687v1	kea
 GCF_000708025.1_ASM70802v2	killdeer
+GCF_017639655.2_bFalNau1.pat	lesser kestrel
 GCF_000687185.1_ASM68718v1	little egret
 GCF_000695195.1_ASM69519v1	Macqueen's bustard
 GCF_003850225.1_IASCAAS_PekingDuck_PBH1.5	mallard PBH1.5
 GCF_015476345.1_ZJU1.0	mallard ZJU1.0
+GCF_017639235.1_C.kubaryi_AGA036_p1.0	Mariana crow
 GCF_000277835.1_GeoFor_1.0	medium ground-finch
+GCF_009769625.2_bCygOlo1.pri.v2	mute swan
 GCF_000690835.1_ASM69083v1	Northern fulmar
 GCF_003343035.1_aptRow1	Okarito brown kiwi
 GCF_000337955.1_F_peregrinus_v1.0	peregrine falcon
@@ -60,6 +64,7 @@ GCF_004143745.1_ASM414374v1	ring-necked pheasant
 GCF_000337935.1_Cliv_1.0	rock pigeon
 GCF_011077185.1_BPBGC_Ojam_1.0	ruddy duck
 GCF_001431845.1_ASM143184v1	ruff
+GCF_017590135.1_ASM1759013v1	rufous-necked snowfinch
 GCF_003984885.1_ASM398488v2	saffron-crested tyrant-manakin
 GCF_000337975.1_F_cherrug_v1.0	Saker falcon
 GCF_901933205.1_STF_HiC	small tree finch
@@ -70,6 +75,7 @@ GCF_000331425.1_PseHum1.0	Tibetan ground-tit
 GCF_000146605.3_Turkey_5.1	turkey
 GCF_015832195.1_Motacilla_alba_V1.0_pri	white wagtail
 GCF_003945725.1_ASM394572v1	white-ruffed manakin
+GCF_017590055.1_ASM1759005v1	white-rumped snowfinch
 GCF_000691405.1_ASM69140v1	white-tailed eagle
 GCF_000687285.1_ASM68728v1	white-tailed tropicbird
 GCF_000385455.1_Zonotrichia_albicollis-1.0.1	white-throated sparrow
@@ -77,4 +83,4 @@ GCF_000705375.1_ASM70537v2	white-throated tinamou
 GCF_003031625.1_ASM303162v1	willow flycatcher
 GCF_003945595.2_ASM394559v2	wire-tailed manakin (2020)
 GCF_000699245.1_ASM69924v1	yellow-throated sandgrouse
-GCF_003957565.1_bTaeGut1_v1.p	zebra finch
+GCF_003957565.2_bTaeGut1.4.pri	zebra finch (v1.4 2021)
