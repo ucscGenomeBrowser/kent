@@ -205,6 +205,7 @@
 ./runBuild GCF_000027005.1 GCF_000027005.1_ASM2700v1 fungi Komagataella_phaffii_GS115
 ./runBuild GCF_000090745.1 GCF_000090745.1_AnoCar2.0 vertebrate_other Anolis_carolinensis
 ./runBuild GCF_000090795.1 GCF_000090795.1_v1.0 invertebrate Amphimedon_queenslandica
+./runBuild GCF_000090985.2 GCF_000090985.2_ASM9098v2 plants Micromonas_commoda
 ./runBuild GCF_000091025.4 GCF_000091025.4_ASM9102v4 fungi Eremothecium_gossypii_ATCC_10895
 ./runBuild GCF_000091045.1 GCF_000091045.1_ASM9104v1 fungi Cryptococcus_neoformans_var._neoformans_JEC21
 ./runBuild GCF_000091225.1 GCF_000091225.1_ASM9122v1 fungi Encephalitozoon_cuniculi_GB-M1
@@ -1029,11 +1030,13 @@
 ./runBuild GCF_004354835.1 GCF_004354835.1_PFLA_1.0 vertebrate_other Perca_flavescens
 ./runBuild GCF_004355905.1 GCF_004355905.1_ASM435590v1 fungi Pyricularia_grisea
 ./runBuild GCF_004355925.1 GCF_004355925.1_GSC_Weel_1.0 vertebrate_other Anarrhichthys_ocellatus
+./runBuild GCF_004379255.1 GCF_004379255.1_SspV2 plants Salvia_splendens
 ./runBuild GCF_004382145.1 GCF_004382145.1_ASM438214v1 invertebrate Drosophila_mauritiana
 ./runBuild GCF_004382195.1 GCF_004382195.1_ASM438219v1 invertebrate Drosophila_sechellia
 ./runBuild GCF_004634155.1 GCF_004634155.1_Eluc_v4 vertebrate_other Esox_lucius
 ./runBuild GCF_004664715.1 GCF_004664715.1_Pero_0.1 vertebrate_mammalian Peromyscus_leucopus
 ./runBuild GCF_004664715.2 GCF_004664715.2_UCI_PerLeu_2.1 mammals Peromyscus_leucopus
+./runBuild GCF_004785595.1 GCF_004785595.1_Jm3101_v1.0 plants Juglans_microcarpa_x_Juglans_regia
 ./runBuild GCF_004785775.1 GCF_004785775.1_NIH_TR_1.0 vertebrate_mammalian Grammomys_surdaster
 ./runBuild GCF_004799145.1 GCF_004799145.1_ASM479914v1 plants Prosopis_alba
 ./runBuild GCF_004916995.1 GCF_004916995.1_NCSU_SB_2.0 fish Morone_saxatilis
