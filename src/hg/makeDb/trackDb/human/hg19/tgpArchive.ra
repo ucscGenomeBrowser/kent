@@ -3,6 +3,7 @@ superTrack on
 shortLabel 1000G Archive
 longLabel 1000 Genomes Archive
 cartVersion 2
+visibility hide
 group varRep
 
     track tgpPhase1Accessibility

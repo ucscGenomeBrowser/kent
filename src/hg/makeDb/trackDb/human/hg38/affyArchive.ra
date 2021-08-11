@@ -4,6 +4,7 @@ shortLabel Affy Archive
 longLabel Affymetrix Archive
 group expression
 cartVersion 2
+visibility hide
 type psl .
 
     track affyGnf1h override
