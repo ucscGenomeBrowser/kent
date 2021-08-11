@@ -2,6 +2,7 @@ track tgpArchive
 superTrack on
 shortLabel 1000G Archive
 longLabel 1000 Genomes Archive
+cartVersion 2
 group varRep
 
     track tgpPhase3
