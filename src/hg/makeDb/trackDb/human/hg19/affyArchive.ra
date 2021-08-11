@@ -5,6 +5,7 @@ longLabel Affymetrix Archive
 group expression
 visibility hide
 type psl .
+html ../affyArchive
 
     track affyExonArray
     parent affyArchive

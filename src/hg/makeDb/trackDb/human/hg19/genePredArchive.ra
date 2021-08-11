@@ -5,6 +5,7 @@ longLabel Gene Prediction Archive
 group genes
 visibility hide
 type genePred
+html ../genePredArchive
 
     track augustusGene override
     parent genePredArchive

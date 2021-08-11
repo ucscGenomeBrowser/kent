@@ -4,6 +4,7 @@ shortLabel 1000G Archive
 longLabel 1000 Genomes Archive
 visibility hide
 group varRep
+html ../tgpArchive
 
     track tgpPhase3
     parent tgpArchive
