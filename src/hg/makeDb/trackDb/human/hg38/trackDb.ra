@@ -848,3 +848,5 @@ geneTrack ncbiRefSeqCurated
     vcfChildSample HG00702|child
     vcfParentSamples HG00657|mother,HG00656|father
     visibility full
+
+include spliceAi.ra
