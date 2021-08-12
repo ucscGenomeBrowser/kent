@@ -5,6 +5,7 @@ longLabel 1000 Genomes Archive
 cartVersion 2
 visibility hide
 group varRep
+html ../tgpArchive
 
     track tgpPhase3
     parent tgpArchive

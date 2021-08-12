@@ -6,6 +6,7 @@ group expression
 cartVersion 2
 visibility hide
 type psl .
+html ../affyArchive
 
     track affyGnf1h override
     parent affyArchive
