@@ -2,6 +2,7 @@ GCF_000005575.2_AgamP3	African malaria mosquito
 GCF_000002995.3_ASM299v2	agent of lymphatic filariasis
 GCF_000220905.1_MROT_1.0	alfalfa leafcutting bee
 GCF_003710045.1_USU_Nmel_1.2	Alkali bee
+GCF_018991925.1_GMGI_Hamer_2.0	American lobster
 GCF_000764305.1_Hazt_2.0	amphipods H.azetca
 GCF_000143395.1_Attacep1.0	ant A.cephalotes
 GCF_001594045.1_Acol1.0	ant A.colombica
@@ -46,14 +47,15 @@ GCF_000648695.1_Otau_2.0	beetle O.taurus
 GCF_001625305.1_Haploidv18h27	Belcher's lancelet
 GCF_902652985.1_xPecMax1.1	bivalves P.maximus
 GCF_015228065.1_NSTDA_Pmon_1	black tiger shrimp
-GCF_016920785.1_Ixodes_scapularus_ComboLowHiFi	black-legged tick (2021)
-GCF_002892825.2_ISE6_asm2.2_deduplicated	black-legged tick (2018)
+GCF_002892825.2_ISE6_asm2.2_deduplicated	black-legged tick (JCVI 2018)
+GCF_016920785.2_ASM1692078v2	black-legged tick (U.Maryland v2 2021)
 GCF_000457365.1_ASM45736v1	bloodfluke planorb
 GCF_001039355.2_LinAna2.0	brachiopods L.anatina
+GCF_905147365.1_ilAriAges1.1	brown argus
 GCF_013339695.1_ASM1333969v1	brown dog tick
 GCF_000696795.2_Hhal_2.0	brown marmorated stink bug
-GCF_000757685.1_NilLug1.0	brown planthopper (NLH13 2014)
 GCF_014356525.1_ASM1435652v1	brown planthopper (BPH 2020)
+GCF_000757685.1_NilLug1.0	brown planthopper (NLH13 2014)
 GCF_000214255.1_Bter_1.0	buff-tailed bumblebee
 GCF_002938995.1_ASM293899v1	butterflies V.tameamea
 GCF_003590095.1_tn1	cabbage looper
@@ -101,22 +103,26 @@ GCF_001654025.1_ASM165402v1	fly D.arizonae
 GCF_000233415.1_Dbia_2.0	fly D.biarmipes
 GCF_000236285.1_Dbip_2.0	fly D.bipectinata
 GCF_011750605.1_ASM1175060v1	fly D.busckii
-GCF_000224195.1_Dele_2.0	fly D.elegans
+GCF_000224195.1_Dele_2.0	fly D.elegans (Baylor 2013)
+GCF_018152505.1_ASM1815250v1	fly D.elegans (Stanford 2021)
 GCF_003286155.1_DereRS2	fly D.erecta
-GCF_000236325.1_Deug_2.0	fly D.eugracilis
+GCF_000236325.1_Deug_2.0	fly D.eugracilis (modENCODE 2013)
+GCF_018153835.1_ASM1815383v1	fly D.eugracilis (Stanford 2021)
 GCF_000220665.1_Dfic_2.0	fly D.ficusphila
 GCF_000005155.2_dgri_caf1	fly D.grimshawi
 GCF_900245975.1_DGUA_6	fly D.guanche
 GCF_003285905.1_DhydRS2	fly D.hydei
 GCF_004354385.1_UK_Dinn_1.0	fly D.innubila
-GCF_000224215.1_Dkik_2.0	fly D.kikkawai
+GCF_000224215.1_Dkik_2.0	fly D.kikkawai (Baylor 2013)
+GCF_018152535.1_ASM1815253v1	fly D.kikkawai (Stanford 2021)
 GCF_004382145.1_ASM438214v1	fly D.mauritiana
 GCF_000001215.4_Release_6_plus_ISO1_MT	fly D.melanogaster
 GCF_003369915.1_D.miranda_PacBio2.1	fly D.miranda
 GCF_000005175.2_dmoj_caf1	fly D.mojavensis
 GCF_001654015.2_UFRJ_Dnav_4.2	fly D.navojoa
 GCF_003285875.2_DnovRS2.1	fly D.novamexicana
-GCF_002217835.1_Dobs_1.0	fly D.obscura
+GCF_018151105.1_ASM1815110v1	fly D.obscura (Stanford 2021)
+GCF_002217835.1_Dobs_1.0	fly D.obscura 14011-0151.01
 GCF_003286085.1_DperRS2	fly D.persimilis
 GCF_009870125.1_UCI_Dpse_MV25	fly D.pseudoobscura
 GCF_000236305.1_Drho_2.0	fly D.rhopaloa
@@ -134,10 +140,12 @@ GCF_016746365.1_Prin_Dyak_Tai18E2_2.0	fly D.yakuba (2021)
 GCF_905115235.1_iHerIll2.2.curated.20191125	fly H.illucens
 GCF_003285725.1_SlebRS2	fly S.lebanonensis
 GCF_002237135.1_ASM223713v2	fly T.dalmanni
+GCF_016097555.1_Gae_host_genome	gastropods G.aegis
 GCF_003073045.1_ASM307304v1	gastropods P.canaliculata
 GCF_000469605.1_Apis_dorsata_1.3	giant honeybee
 GCF_003640425.2_ASM364042v2	greater wax moth
 GCF_001856785.1_MPER_G0061.0	green peach aphid
+GCF_018143015.1_Lvar_3.0	green sea urchin
 GCF_000003605.2_Skow_1.1	hemichordates S.kowalevskii
 GCF_003254395.2_Amel_HAv3.1	honey bee
 GCF_002443255.1_Vdes_3.0	honeybee mite
@@ -156,6 +164,7 @@ GCF_009731565.1_Dplex_v4	monarch butterfly
 GCF_013758885.1_VT_AalbS3_pri_1.0	mosquito A.albimanus
 GCF_016920715.1_AaraD3	mosquito A.arabiensis
 GCF_016920705.1_AcolMOP1	mosquito A.coluzzi
+GCF_017562075.2_AmerM5.1	mosquito A.merus MAF
 GCF_001186105.1_ASM118610v1	moth A.transitella
 GCF_003589595.1_ASM358959v1	moth H.kahamanoa
 GCF_002706865.1_ASM270686v1	moth S.litura
@@ -190,6 +199,7 @@ GCF_002938485.1_Soryzae_2.0	rice weevil
 GCF_902806685.1_iAphHyp1.1	ringlet
 GCF_000002985.6_WBcel235	roundworm
 GCF_001186385.1_Dnoxia_1.0	Russian wheat aphid
+GCF_016086655.2_UVic_Lsal_1.1	salmon louse
 GCF_001417965.1_Aiptasia_genome_1.1	sea anemones
 GCF_000326865.1_Helobdella_robusta_v1.0	segmented worms
 GCF_001937115.1_Atum_1.0	small hive beetle
