@@ -474,14 +474,15 @@ struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end
 struct mafAli *mafList = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    // the MAF block in the record as \001 instead of newlines 
-    char *mafText = replaceChars(bb->rest, ";","\n");
+    // the MAF block in the bigBed record has a semi-colon instead of newlines 
+    replaceChar(bb->rest, ';','\n');
 
     struct mafFile mf;
-    mf.lf = lineFileOnString(NULL, TRUE, mafText);
+    mf.lf = lineFileOnString(NULL, TRUE, bb->rest);
 
     struct mafAli *maf = mafNext(&mf);
     slAddHead(&mafList, maf);
     }
+slReverse(&mafList);
 return mafList;
 }
