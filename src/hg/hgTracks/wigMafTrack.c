@@ -1941,7 +1941,7 @@ hFreeConn(&conn);
 return mfList;
 }
 
-static struct mafFrames *getFramesFromBb(  char *framesTable, char *chromName, int seqStart, int seqEnd)
+static struct mafFrames *getFramesFromBb(  char *framesTable, char *chromName, int seqStart, int seqEnd, char *component)
 {
 struct lm *lm = lmInit(0);
 struct bbiFile *bbi =  bigBedFileOpen(framesTable);
@@ -1953,8 +1953,11 @@ struct mafFrames *mfList = NULL, *mf;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    mf = mafFramesLoad( bedRow );
-    slAddHead(&mfList, mf);
+    if (sameString(bedRow[3], component))
+        {
+        mf = mafFramesLoad( bedRow );
+        slAddHead(&mfList, mf);
+        }
     }
 
 bbiFileClose(&bbi);
@@ -2437,14 +2440,19 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
 	else
 	    errAbort("unknown codon translation mode %s",codonTransMode);
 tryagain:
-        if (track->isBigBed)
-            mfList = getFramesFromBb(  framesTable, chromName, seqStart, seqEnd);
-        else
-            if (differentStringNullOk(extraPrevious, extra))
-		{
-		mfList = getFramesFromSql(  framesTable, chromName, seqStart, seqEnd, extra, newTableType);
-		extraPrevious = cloneString(extra);
-		}
+        if (differentStringNullOk(extraPrevious, extra))
+            {
+            if (track->isBigBed)
+                {
+                char *species = mi->db;
+                if (sameString("codonDefault", codonTransMode))
+                    species = defaultCodonSpecies;
+                mfList = getFramesFromBb(  framesTable, chromName, seqStart, seqEnd, species);
+                }
+            else
+                mfList = getFramesFromSql(  framesTable, chromName, seqStart, seqEnd, extra, newTableType);
+            }
+        extraPrevious = cloneString(extra);
 
         if (mfList != NULL)
             found = TRUE;
