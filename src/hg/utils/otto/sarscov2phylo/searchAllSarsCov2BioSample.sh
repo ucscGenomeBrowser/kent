@@ -11,7 +11,7 @@ email="$USER%40soe.ucsc.edu"
 
 # Assemble the esearch URL
 base="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
-url="${base}esearch.fcgi?db=biosample&term=$query&tool=$tool&email=$email&retmax=1000000"
+url="${base}esearch.fcgi?db=biosample&term=$query&tool=$tool&email=$email&retmax=10000000"
 
 curl -s -S "$url" \
 | grep "<Id>" \

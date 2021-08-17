@@ -26,7 +26,7 @@ datasets download virus genome taxon 2697049 \
 |& tail -50 \
     > datasets.log
 rm -rf ncbi_dataset
-unzip ncbi_dataset.zip
+unzip -o ncbi_dataset.zip
 # Creates ./ncbi_dataset/
 
 # This makes something just like ncbi.datasets.tsv from the /table/ API query:
