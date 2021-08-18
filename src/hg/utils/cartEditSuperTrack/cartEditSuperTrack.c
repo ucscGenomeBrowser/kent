@@ -10,7 +10,7 @@ void usage()
 errAbort(
   "cartEditSuperTrack - make a cart edit to put tracks into a supertrack\n"
   "usage:\n"
-  "   cartEditSuperTrack tracks.txt cartVersion#\n"
+  "   cartEditSuperTrack tracks.txt cartVersion# outputFile\n"
   "where tracks.txt is a tab-separated two column file with a list of tracks and the supertrack they're moving to.\n"
   "options:\n"
   "   -xxx=XXX\n"
