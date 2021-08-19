@@ -2317,7 +2317,7 @@ if (startsWith("knownGene", hfs->searchType))
     {
     char *knownDatabase = hdbDefaultKnownDb(db);
     char *name = (sameString(knownDatabase, db)) ? "knownGene" : knownDatabase;
-    char *indexPath = hgFindSpecSetting(hfs, "searchTrix");
+    char *indexPath = hReplaceGbdb(hgFindSpecSetting(hfs, "searchTrix"));
     if (indexPath == NULL)
         indexPath = makeIndexPath(db, name);
     if (gotFullText(db, indexPath))
