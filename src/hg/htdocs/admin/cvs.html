@@ -5,51 +5,11 @@
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<h1>Anonymous CVS Access to Browser Code</h1> 
+<h1>CVS Access to Browser Code</h1> 
 <p>
-We switched our source code control system from CVS to git on June 12, 2010.  This page is 
-<strong>OBSOLETE</strong>. For more details, please see 
-<a href="http://genomewiki.ucsc.edu/index.php/CVS_to_Git_Migration" target=_blank>CVS to Git 
-Migration</a>.</p> 
+We switched our source code control system from CVS to git on June 12, 2010.
+please see <a href="git.html" target=_blank>our page about git access</a>.</p> 
 
-<p>
-<strong>csh or tcsh:</strong></p> 
-<pre><code>setenv CVSROOT :pserver:anonymous@genome-test.soe.ucsc.edu:/cbse</code></pre> 
-<p> 
-<strong>bash or sh:</strong></p> 
-<pre><code>export CVSROOT=:pserver:anonymous@genome-test.soe.ucsc.edu:/cbse</code></pre> 
-<pre><code>cvs login 
-Logging in to :pserver:anonymous@genome-test.soe.ucsc.edu:2401/cbse 
-CVS password: <em>genome</em> 
-cvs co -P -rbeta kent 
-cvs server: Updating kent 
-cvs server: Updating kent/cvsTest 
-U kent/cvsTest/.cvsignore 
-U kent/cvsTest/README 
-U kent/cvsTest/makefile 
-U kent/cvsTest/test.c 
-U kent/cvsTest/test.doc 
-U kent/cvsTest/test.h 
-cvs server: Updating kent/src 
-U kent/src/README 
-etc...
-</code></pre> 
-<p> 
-To update an existing source tree, use the command: <em> cvs update -A -d -P -rbeta</em>.
-At a minimum, you should update your source tree biweekly. The Genome Browser is under continual 
-development; as a result, significant enhancements and new features are added on a regular basis. 
-A new beta tag marks The new release of the code, usually every two weeks, is marked with a new 
-beta tag.</p> 
-<p> 
-After an update the source tree can be rebuilt with the sequence: 
-<pre><code>cd kent/src
-make clean
-make cgi </code></pre>
-<p>
-The &quot;make clean&quot; step is important.</p> 
-<p> 
-See also: the README files in the source tree directory <em>src/product/README.*</em>.</p> 
-<p>
 For comments or questions, contact <a href="mailto:&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du">&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du</a>.
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
