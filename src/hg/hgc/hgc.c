@@ -8729,7 +8729,7 @@ return gpList;
 struct genePred *getGenePredForPositionBigGene(struct trackDb *tdb,  char *geneName)
 /* Find the genePred to the current gene using a bigGenePred. */
 {
-char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
