@@ -1018,8 +1018,7 @@ struct bbiFile *bbi = NULL;
 char fileName[1024];
 safef(fileName, sizeof(fileName), "/gbdb/%s/bbi/lrg.bb", db);
 char *fileNameRep = hReplaceGbdb(fileName);
-if (fileExists(fileNameRep))
-    bbi = bigBedFileOpen(fileNameRep);
+bbi = bigBedFileOpen(fileNameRep);
 freeMem(fileNameRep);
 return bbi;
 }
