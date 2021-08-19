@@ -31,6 +31,44 @@ grep -v EPI_ISL_ samples.$today > newPublicNames
 $matUtils extract -i gisaidAndPublic.$today.masked.pb \
     -s newPublicNames \
     -O -o public-$today.all.masked.pb
+
+# Add nextclade annotations to public protobuf
+if [ -s cladeToName ]; then
+    # Use combined tree's clade assignments to annotate clades on public tree
+    grep -v EPI_ISL cladeToName > cladeToPublicName
+    time $matUtils annotate -T 50 \
+        -l \
+        -i public-$today.all.masked.pb \
+        -c cladeToPublicName \
+        -f 0.95 \
+        -D details.nextclade.public \
+        -o public-$today.all.masked.nextclade.pb \
+        >& annotate.nextclade.public
+else
+    time $matUtils annotate -T 50 \
+        -l \
+        -i public-$today.all.masked.pb \
+        -P ../nextstrain.clade-paths.public.tsv \
+        -o public-$today.all.masked.nextclade.pb
+fi
+
+# Add pangolin lineage annotations to public protobuf
+if [ -s lineageToName ]; then
+    grep -v EPI_ISL lineageToName > lineageToPublicName
+    time $matUtils annotate -T 50 \
+        -i public-$today.all.masked.nextclade.pb \
+        -c lineageToPublicName \
+        -f 0.95 \
+        -D details.pango.public \
+        -o public-$today.all.masked.nextclade.pangolin.pb \
+        >& annotate.pango.public
+else
+    time $matUtils annotate -T 50 \
+        -i public-$today.all.masked.nextclade.pb \
+        -P ../pango.clade-paths.public.tsv \
+        -o public-$today.all.masked.nextclade.pangolin.pb
+fi
+
 # Extract Newick and VCF from public-only tree
 time $matUtils extract -i public-$today.all.masked.pb \
     -t public-$today.all.nwk \
@@ -40,19 +78,6 @@ zcat gisaidAndPublic.$today.metadata.tsv.gz \
 | grep -v EPI_ISL_ \
 | gzip -c \
     > public-$today.metadata.tsv.gz
-
-# Add nextclade annotations to public protobuf
-time $matUtils annotate -T 50 \
-    -l \
-    -i public-$today.all.masked.pb \
-    -P ../nextstrain.clade-paths.public.tsv \
-    -o public-$today.all.masked.nextclade.pb
-
-# Add pangolin lineage annotations to public protobuf
-time $matUtils annotate -T 50 \
-    -i public-$today.all.masked.nextclade.pb \
-    -P ../pango.clade-paths.public.tsv \
-    -o public-$today.all.masked.nextclade.pangolin.pb
 
 rm public-$today.all.masked.pb
 ln -f public-$today.all.masked.nextclade.pangolin.pb public-$today.all.masked.pb
@@ -74,14 +99,22 @@ read y m d < <(echo $today | sed -re 's/-/ /g')
 archive=$archiveRoot/$y/$m/$d
 mkdir -p $archive
 gzip -c public-$today.all.nwk > $archive/public-$today.all.nwk.gz
-ln `pwd`/public-$today.all.masked.{pb,vcf.gz} $archive/
+ln -f `pwd`/public-$today.all.masked.{pb,vcf.gz} $archive/
 gzip -c public-$today.all.masked.pb > $archive/public-$today.all.masked.pb.gz
-ln `pwd`/public-$today.metadata.tsv.gz $archive/
+ln -f `pwd`/public-$today.metadata.tsv.gz $archive/
 gzip -c public-$today.all.masked.nextclade.pangolin.pb \
     > $archive/public-$today.all.masked.nextclade.pangolin.pb.gz
-gzip -c ../nextstrain.clade-paths.public.tsv > $archive/nextstrain.clade-paths.public.tsv.gz
-gzip -c ../pango.clade-paths.public.tsv > $archive/pango.clade-paths.public.tsv.gz
-ln `pwd`/hgPhyloPlace.description.txt $archive/public-$today.version.txt
+if [ -s lineageToPublicName ]; then
+    gzip -c lineageToPublicName > $archive/lineageToPublicName.tsv.gz
+else
+    gzip -c ../nextstrain.clade-paths.public.tsv > $archive/nextstrain.clade-paths.public.tsv.gz
+fi
+if [ -s cladeToPublicName ]; then
+    gzip -c cladeToPublicName > $archive/cladeToPublicName.tsv.gz
+else
+    gzip -c ../pango.clade-paths.public.tsv > $archive/pango.clade-paths.public.tsv.gz
+fi
+ln -f `pwd`/hgPhyloPlace.description.txt $archive/public-$today.version.txt
 
 # Update 'latest' in $archiveRoot
 ln -f $archive/public-$today.all.nwk.gz $archiveRoot/public-latest.all.nwk.gz

@@ -15,7 +15,26 @@ cogUrlBase=https://cog-uk.s3.climb.ac.uk/phylogenetics/latest
 mkdir -p $ottoDir/cogUk.$today
 cd $ottoDir/cogUk.$today
 
-curl -S -s $cogUrlBase/cog_all.fasta | xz -T 50 > cog_all.fasta.xz
+# Sometimes the curl fails with a DNS error, regardless of whether my previous cron job with
+# curl -I succeeded.  Do multiple retries for the first URL; once it's working, it should
+# continue to work for the other URLs (she said hopefully).
+attempt=0
+maxAttempts=5
+retryDelay=60
+while [[ $((++attempt)) -le $maxAttempts ]]; do
+    echo "curl attempt $attempt"
+    if curl -S -s $cogUrlBase/cog_all.fasta | xz -T 50 > cog_all.fasta.xz; then
+        break
+    else
+        echo "FAILED; will try again after $retryDelay seconds"
+        rm -f cog_all.fasta.xz
+        sleep $retryDelay
+    fi
+done
+if [[ ! -f cog_all.fasta.xz ]]; then
+    echo "curl failed $maxAttempts times; quitting."
+    exit 1
+fi
 curl -S -s $cogUrlBase/cog_metadata.csv > cog_metadata.csv
 curl -S -s $cogUrlBase/cog_global_tree.newick > cog_global_tree.newick
 
