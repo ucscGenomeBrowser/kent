@@ -17,14 +17,32 @@ ottoDir=/hive/data/outside/otto/sarscov2phylo
 mkdir -p $ottoDir/ncbi.$today
 cd $ottoDir/ncbi.$today
 
-datasets download virus genome taxon 2697049 \
-    --exclude-cds \
-    --exclude-protein \
-    --exclude-gpff \
-    --exclude-pdb \
-    --filename ncbi_dataset.zip \
-|& tail -50 \
-    > datasets.log
+attempt=0
+maxAttempts=5
+retryDelay=300
+while [[ $((++attempt)) -le $maxAttempts ]]; do
+    echo "datasets attempt $attempt"
+    if datasets download virus genome taxon 2697049 \
+            --exclude-cds \
+            --exclude-protein \
+            --exclude-gpff \
+            --exclude-pdb \
+            --filename ncbi_dataset.zip \
+        |& tail -50 \
+            > datasets.log.$attempt; then
+        break;
+    else
+        echo "FAILED; will try again after $retryDelay seconds"
+        rm -f ncbi_dataset.zip
+        sleep $retryDelay
+        # Double the delay to give NCBI progressively more time
+        retryDelay=$(($retryDelay * 2))
+    fi
+done
+if [[ ! -f ncbi_dataset.zip ]]; then
+    echo "datasets command failed $maxAttempts times; quitting."
+    exit 1
+fi
 rm -rf ncbi_dataset
 unzip -o ncbi_dataset.zip
 # Creates ./ncbi_dataset/
