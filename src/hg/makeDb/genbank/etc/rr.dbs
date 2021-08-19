@@ -16,15 +16,14 @@ rn7
 ailMel1
 allMis1
 anoCar2
-anoGam1
+anoGam3
 apiMel2
 aplCal1
 aptMan1
 aquChr2
 balAcu1
 bisBis1
-bosTau7
-bosTau8
+bosTau9
 braFlo1
 caeJap1
 caePb2
@@ -41,7 +40,7 @@ choHof1
 chrPic1
 ci2
 criGri1
-criGriChoV1
+criGriChoV2
 danRer11
 dasNov3
 dipOrd1
@@ -57,9 +56,9 @@ droSim1
 droVir2
 droYak2
 echTel2
-equCab2
+equCab3
 eriEur2
-felCat8
+felCat9
 fr3
 gadMor1
 galGal6
@@ -74,7 +73,7 @@ loxAfr3
 macEug2
 macFas5
 manPen1
-melGal1
+melGal5
 melUnd1
 micMur2
 mm9
@@ -95,7 +94,7 @@ oviAri3
 oviAri4
 panPan3
 panTro6
-papAnu2
+papAnu4
 papHam1
 petMar3
 ponAbe2
@@ -103,7 +102,7 @@ ponAbe3
 priPac1
 proCap1
 pteVam1
-rheMac8
+rheMac10
 rhiRox1
 sacCer3
 saiBol1
@@ -116,17 +115,21 @@ susScr3
 taeGut2
 tarSyr2
 tetNig2
+thaSir1
 triMan1
 tupBel1
 turTru2
 vicPac2
 xenLae2
-xenTro9
+xenTro10
 #
 # this is the beginning of the list of secondary assemblies
 #
 anoCar1
+anoGam1
 apiMel1
+bosTau8
+bosTau7
 bosTau6
 bosTau4
 bosTau3
@@ -145,6 +148,7 @@ ce6
 ce4
 ce2
 ci1
+criGriChoV1
 danRer10
 danRer7
 danRer6
@@ -160,8 +164,10 @@ droMoj1
 droVir1
 droYak1
 echTel1
+equCab2
 equCab1
 eriEur1
+felCat8
 felCat5
 felCat4
 felCat3
@@ -177,6 +183,7 @@ gorGor3
 hetGla1
 hg17
 hg16
+melGal1
 micMur1
 mm8
 mm7
@@ -194,9 +201,12 @@ panTro4
 panTro3
 panTro2
 panTro1
+papAnu2
 petMar2
 petMar1
+rheMac8
 rheMac3
+rheMac2
 rn5
 rn4
 rn3
@@ -210,6 +220,7 @@ tarSyr1
 tetNig1
 vicPac1
 wuhCor1
+xenTro9
 xenTro7
 xenTro3
 xenTro2

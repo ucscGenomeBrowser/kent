@@ -839,7 +839,7 @@ char *numThreadsStr = "16";
 struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "usher_outdir", ".dir");
 char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOutDir.forCgi,
-                "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE, "-T", numThreadsStr, "-u", "-l",
+                "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE, "-T", numThreadsStr, "-u",
                 NULL };
 char **cmds[] = { cmd, NULL };
 struct tempName tnStderr;

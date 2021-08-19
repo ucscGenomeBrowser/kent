@@ -1,0 +1,21 @@
+track affyArchive
+superTrack on
+shortLabel Affy Archive
+longLabel Affymetrix Archive
+group expression
+cartVersion 2
+visibility hide
+type psl .
+html ../affyArchive
+
+    track affyGnf1h override
+    parent affyArchive
+    visibility pack
+
+    track affyU133 override
+    parent affyArchive
+    visibility pack
+
+    track affyU95 override
+    parent affyArchive
+    visibility pack

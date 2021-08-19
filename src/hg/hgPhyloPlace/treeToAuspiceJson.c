@@ -436,8 +436,9 @@ if (node->numEdges > 0)
     char *kidNClade[node->numEdges];
     char *kidGClade[node->numEdges];
     char *kidLineage[node->numEdges];
+    // Step through children in reverse order because nextstrain/Auspice draws upside-down. :)
     int i;
-    for (i = 0;  i < node->numEdges;  i++)
+    for (i = node->numEdges - 1;  i >= 0;  i--)
         {
         jsonWriteObjectStart(aji->jw, NULL);
         rTreeToAuspiceJson(node->edges[i], depth, aji,

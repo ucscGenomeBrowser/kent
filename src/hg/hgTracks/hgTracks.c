@@ -2211,7 +2211,12 @@ if(highlightDef)
             // long to handle virt chrom coordinates
             h->chromStart = atol(chromStart);
             h->chromEnd   = atol(chromEnd);
-            h->chromStart--; // Not zero based
+            // Typically not zero based, unless we have previously saved the highlight
+            // as a result of the multi-region code
+            if (h->chromStart > 0)
+                {
+                h->chromStart--;
+                }
             slAddHead(&hlList, h);
             }
         }
@@ -8894,13 +8899,12 @@ if (!hideControls)
     hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
             hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
             hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
-    jsOnEventById("click", "ct_add", "document.customTrackForm.submit();return false;");
+    jsOnEventById("click", "ct_add", "document.customTrackForm.submit(); return false;");
 
     hPrintf(" ");
     if (hubConnectTableExists())
         {
-        hPrintf("<INPUT TYPE='button' id='th_form' VALUE='track hubs'"
-                "return false;' title='Import tracks from hubs'>");
+        hPrintf("<INPUT TYPE='button' id='th_form' VALUE='track hubs' title='Import tracks from hubs'>");
 	jsOnEventById("click", "th_form", "document.trackHubForm.submit();");
         hPrintf(" ");
         }
@@ -10897,7 +10901,8 @@ jsInline(dy->string);
 dyStringFree(&dy);
 
 dy = dyStringNew(1024);
-if (enableMouseOver)
+// do not have a JsonFile available when PDF/PS output
+if (enableMouseOver && isNotEmpty(mouseOverJsonFile->forCgi))
     {
     jsonWriteObjectEnd(mouseOverJson);
     /* if any data was written, it is longer than 4 bytes */

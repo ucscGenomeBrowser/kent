@@ -2752,6 +2752,7 @@ struct hgvsHelper
     struct slName *validTranscripts; // valid transcripts/protein accessions for this position
     char *label; // corresponding hgvs term
     char *table; // type of match, LRG, NCBI, etc
+    boolean mapError; // does this hgvs mapping result in a map error?
     };
 
 static boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPositions *hgp)
@@ -2768,15 +2769,17 @@ if (hgvsList == NULL)
 if (hgvsList)
     {
     struct hgvsVariant *hgvs = NULL;
-    int hgvsListLen = slCount(hgvs);
+    int hgvsListLen = slCount(hgvsList);
     struct hgPosTable *table;
     AllocVar(table);
     table->description = "HGVS";
     int padding = 5;
+    int mapErrCnt = 0;
     struct dyString *dyWarn = dyStringNew(0);
     struct hgvsHelper *helper = NULL;
     struct hash *uniqHgvsPos = hashNew(0);
     struct dyString *chromPosIndex = dyStringNew(0);
+    struct dyString *allWarnings = dyStringNew(0);
     for (hgvs = hgvsList; hgvs != NULL; hgvs = hgvs->next)
         {
         dyStringClear(dyWarn);
@@ -2784,16 +2787,7 @@ if (hgvsList)
         char *pslTable = NULL;
         struct bed *mapping = hgvsValidateAndMap(hgvs, db, term, dyWarn, &pslTable);
         if (dyStringLen(dyWarn) > 0)
-            {
-            if (hgvsListLen == 1)
-                {
-                warn("%s", dyStringContents(dyWarn));
-                }
-            else
-                {
-                continue;
-                }
-            }
+            mapErrCnt++;
         if (mapping)
             {
             char *trackTable;
@@ -2817,7 +2811,7 @@ if (hgvsList)
             else
                 trackTable = "refGene";
             dyStringPrintf(chromPosIndex, "%s%s%d%d", trackTable, mapping->chrom,
-                    mapping->chromStart-padding, mapping->chromStart+padding);
+                    mapping->chromStart-padding, mapping->chromEnd+padding);
             if ((helper = hashFindVal(uniqHgvsPos, chromPosIndex->string)) != NULL)
                 {
                 slNameAddHead(&helper->validTranscripts, hgvs->seqAcc);
@@ -2833,30 +2827,86 @@ if (hgvsList)
                 helper->table = trackTable;
                 hashAdd(uniqHgvsPos, chromPosIndex->string, helper);
                 }
+            if (dyStringLen(dyWarn) > 0)
+                {
+                helper->mapError = TRUE;
+                dyStringPrintf(allWarnings, "%s%s", dyStringLen(allWarnings) > 0 ? "\n" : "", dyStringContents(dyWarn));
+                }
             }
         }
-    struct hashEl *hel, *helList= hashElListHash(uniqHgvsPos);
-    for (hel = helList; hel != NULL; hel = hel->next)
+    if (mapErrCnt < hgvsListLen)
+        // at least one of the hgvs terms mapped sucessfully, so we can go to that spot
+        // or let the user pick a location
         {
-        if (hgp->tableList == NULL)
-            hgp->tableList = table;
-        helper = (struct hgvsHelper *)hel->val;
-        table->name = helper->table;
-        struct hgPos *pos;
-        AllocVar(pos);
-        pos->chrom = helper->chrom;
-        pos->chromStart = helper->chromStart - padding;
-        pos->chromEnd = helper->chromEnd + padding;
-        pos->name = slNameListToString(helper->validTranscripts, '/');
-        pos->description = cloneString(helper->label);
-        pos->browserName = "";
-        slAddHead(&table->posList, pos);
-        // highlight the mapped bases to distinguish from padding
-        hgp->tableList->posList->highlight = addHighlight(db, helper->chrom,
-                                                helper->chromStart, helper->chromEnd);
-        foundIt = TRUE;
+        struct hashEl *hel, *helList= hashElListHash(uniqHgvsPos);
+        for (hel = helList; hel != NULL; hel = hel->next)
+            {
+            helper = (struct hgvsHelper *)hel->val;
+            if (!helper->mapError)
+                {
+                if (hgp->tableList == NULL)
+                    hgp->tableList = table;
+                foundIt = TRUE;
+                table->name = helper->table;
+                struct hgPos *pos;
+                AllocVar(pos);
+                pos->chrom = helper->chrom;
+                pos->chromStart = helper->chromStart - padding;
+                pos->chromEnd = helper->chromEnd + padding;
+                pos->name = slNameListToString(helper->validTranscripts, '/');
+                pos->description = cloneString(helper->label);
+                pos->browserName = "";
+                slAddHead(&table->posList, pos);
+                // highlight the mapped bases to distinguish from padding
+                hgp->tableList->posList->highlight = addHighlight(db, helper->chrom,
+                                                        helper->chromStart, helper->chromEnd);
+                }
+            }
+        }
+    else
+        // all of the positions mapped incorrectly, so the term was bad. However, we may
+        // be able to still go to a general area around the term, so build that, warn the
+        // user about their bad search term, and warn that this is not an exactly correct position
+        // NOTE: There is a bug here in general, in that when mapping an hgvs term we don't
+        // consider alternate haplotypes, and thus below we will always get at least some range
+        // on the same chromosome within a gene, but if the mapping code were to change in the
+        // future, we might end up with some weird coordinates
+        {
+        struct hashEl *hel, *helList= hashElListHash(uniqHgvsPos);
+        if (helList)
+            {
+            if (hgp->tableList == NULL)
+                hgp->tableList = table;
+            foundIt = TRUE;
+            struct hgPos *pos;
+            AllocVar(pos);
+            char *chrom = NULL;
+            int spanStart = INT_MAX, spanEnd = 0;
+            for (hel = helList; hel != NULL; hel = hel->next)
+                {
+                helper = (struct hgvsHelper *)hel->val;
+                chrom = helper->chrom;
+                spanStart = helper->chromStart < spanStart ? helper->chromStart : spanStart;
+                spanEnd = helper->chromEnd > spanEnd ? helper->chromEnd : spanEnd;
+                table->name = helper->table;
+                }
+            pos->chrom = cloneString(chrom);
+            pos->chromStart = spanStart-padding;
+            pos->chromEnd = spanEnd + padding;
+            pos->name = "Approximate area";
+            pos->description = term;
+            pos->browserName = term;
+            slAddHead(&table->posList, pos);
+            // highlight the 'mapped' bases to distinguish from padding
+            hgp->tableList->posList->highlight = addHighlight(db, helper->chrom, spanStart, spanEnd);
+            warn("%s", dyStringContents(allWarnings));
+            warn("Sorry, couldn't locate %s, moving to general location", term);
+            }
+        else
+            warn("%s", dyStringContents(dyWarn));
         }
     dyStringFree(&dyWarn);
+    dyStringFree(&allWarnings);
     }
 return foundIt;
 }

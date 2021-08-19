@@ -1,0 +1,36 @@
+name human
+db hg38
+geneUrl ../cgi-bin/hgGene?org=Human&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=Human&near_search=%s
+
+name mouse
+geneUrl ../cgi-bin/hgGene?org=Mouse&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=Mouse&near_search=%s
+
+name zebrafish
+db danRer10
+
+name drosophila
+db dm6
+pepTable ensPep
+geneTable ensGene
+otherName Ensembl
+otherUrl http://www.ensembl.org/Drosophila_melanogaster/transview?transcript=%s
+
+name rat
+db rn6
+pepTable ensPep
+geneTable ensGene
+otherName RGD
+otherIdSql select value from ensToRgd where name = '%s'
+otherUrl http://rgd.mcw.edu/query/query.cgi?id=%s
+
+name cElegans
+db ce11
+pepTable ws245GenesPeptide
+geneTable ws245Genes
+
+name yeast
+db sacCer3
+geneUrl ../cgi-bin/hgGene?org=S.+cerevisiae&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=S.+cerevisiae&near_search=%s
