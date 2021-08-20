@@ -6962,3 +6962,14 @@ _EOF_
 
 
 #########################################################################
+
+# JASPAR Track integration by Daniel 8/20/21
+    cd /gbdb/hg38
+    mkdir jaspar
+    cd jaspar
+    wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2018/hg38/JASPAR2018_hg38_all_chr.bb
+    wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2020/JASPAR2020_hg38.bb
+    mv JASPAR2020_hg38.bb JASPAR2020.bb
+    mv JASPAR2018_hg38_all_chr.bb JASPAR2018.bb
+
+###############################################################################i
