@@ -504,22 +504,43 @@ function waitKey ()
     echo2
 }
 
+# set MYCNF to the path to my.cnf
+function setMYCNF ()
+{
+    if [ -f /etc/my.cnf ] ; then
+	# Centos 6-8
+    	MYCNF=/etc/my.cnf
+    elif [ -f /etc/mysql/my.cnf ] ; then
+        # Ubuntu 14
+    	MYCNF=/etc/mysql/my.cnf
+    elif [ -f /etc/mysql/mysql.conf.d/mysqld.cnf ] ; then
+	# Ubuntu 16, 18, 20
+    	MYCNF=/etc/mysql/mysql.conf.d/mysqld.cnf
+    else
+    	echo Could not find my.cnf. Adapt 'setMYCNF()' in browserSetup.sh and/or contact us.
+    	exit 1
+    fi
+}
+
 function mysqlAllowOldPasswords
 # mysql >= 8 does not allow the old passwords anymore. But our client is still compiled
 # with the old, non-SHA256 encryption. So we must deactivate this new feature.
 # What will MariaDB do?
 {
 echo2 'Checking for Mysql version >= 8'
+
 MYSQLMAJ=`mysql -e 'SHOW VARIABLES LIKE "version";' -NB | cut -f2 | cut -d. -f1`
+setMYCNF
 if [ "$MYSQLMAJ" -ge 8 ] ; then
     echo2 'Mysql >= 8 found, checking if default-authentication allows native passwords'
-    if grep -q default-authentication /etc/mysql/my.cnf; then
-        echo2 'default-authentication already set in /etc/mysql/my.cnf'
+    if grep -q default-authentication $MYCNF; then
+        echo2 "default-authentication already set in $MYCNF"
     else
-	echo2 Changing /etc/mysql/my.cnf to allow native passwords and restarting Mysql
-	echo '[mysqld]' >> /etc/mysql/my.cnf
-        echo 'default-authentication-plugin=mysql_native_password' >> /etc/mysql/my.cnf
-	service mysql restart
+	echo2 Changing $MYCNF to allow native passwords and restarting Mysql
+	echo '[mysqld]' >> $MYCNF
+        echo 'default-authentication-plugin=mysql_native_password' >> $MYCNF
+	stopMysql
+	startMysql
     fi
 fi
 }
@@ -650,7 +671,7 @@ function installRedhat () {
     # imagemagick is required for the session gallery
     yum -y update
     yum -y install epel-release
-    yum -y install ghostscript rsync ImageMagick R-core curl urw-fonts
+    yum -y install ghostscript rsync ImageMagick R-core curl
 
     # centos 7 and fedora 20 do not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -675,7 +696,7 @@ function installRedhat () {
         echo2 Apache already installed
     fi
     
-    # download the apache config
+    # create the apache config
     if [ ! -f $APACHECONF ]; then
         echo2
         echo2 Creating the Apache2 config file $APACHECONF
@@ -969,13 +990,8 @@ function installDebian ()
         export DEBIAN_FRONTEND=noninteractive
         apt-get --assume-yes install mysql-server
         # make sure that missing values do not trigger errors, #18368
-        if [ -f /etc/mysql/mysql.conf.d/mysqld.cnf ]; then
-            # Ubuntu 16
-            sed -i '/^.mysqld.$/a sql_mode=' /etc/mysql/mysql.conf.d/mysqld.cnf
-        else
-            # Ubuntu 14
-            sed -i '/^.mysqld.$/a sql_mode=' /etc/mysql/my.cnf
-        fi
+	setMYCNF
+        sed -i '/^.mysqld.$/a sql_mode=' $MYCNF
         # flag so script will set mysql root password later to a random value
         SET_MYSQL_ROOT=1
     fi
@@ -1817,6 +1833,7 @@ while getopts ":baeut:hof" opt; do
     f)
       if [ ! -f $APACHEDIR/cgi-bin/hg.conf ]; then
          echo Please install a browser first, then switch the data loading mode.
+	 exit 0
       fi
 
       goOnline
