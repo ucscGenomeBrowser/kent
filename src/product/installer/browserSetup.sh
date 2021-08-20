@@ -1258,7 +1258,13 @@ function mysqlDbSetup ()
     #  Full access to all databases for the user 'browser'
     #       This would be for browser developers that need read/write access
     #       to all database tables.  
-    $MYSQL -e "DROP USER IF EXISTS browser@localhost"
+    # $MYSQL -e "DROP USER IF EXISTS browser@localhost" # centos7 uses mysql 5.6 which doesn't have IF EXISTS so work around that here
+    # $MYSQL -e "DROP USER IF EXISTS readonly@localhost"
+    # $MYSQL -e "DROP USER IF EXISTS ctdbuser@localhost"
+    # $MYSQL -e "DROP USER IF EXISTS readwrite@localhost"
+    $MYSQL -e 'DELETE from mysql.user where User="browser" or User="readonly" or User="readwrite" or User="ctdbuser"'
+    $MYSQL -e "FLUSH PRIVILEGES;"
+
     $MYSQL -e "CREATE USER browser@localhost IDENTIFIED BY 'genome'"
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, DELETE, FILE, "\
 "CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on *.* TO browser@localhost"
@@ -1271,7 +1277,6 @@ function mysqlDbSetup ()
     $MYSQL -e "GRANT FILE on *.* TO browser@localhost;" 
     
     #   Read only access to genome databases for the browser CGI binaries
-    $MYSQL -e "DROP USER IF EXISTS readonly@localhost"
     $MYSQL -e "CREATE USER readonly@localhost IDENTIFIED BY 'access';"
     $MYSQL -e "GRANT SELECT, CREATE TEMPORARY TABLES on "\
 "*.* TO readonly@localhost;"
@@ -1279,7 +1284,6 @@ function mysqlDbSetup ()
 "readonly@localhost;"
     
     # Readwrite access to hgcentral for browser CGI binaries to keep session state
-    $MYSQL -e "DROP USER IF EXISTS readwrite@localhost"
     $MYSQL -e "CREATE USER readwrite@localhost IDENTIFIED BY 'update';"
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, "\
 "DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost; "
@@ -1291,7 +1295,6 @@ function mysqlDbSetup ()
     chown $APACHEUSER:$APACHEUSER $GBDBDIR
     
     # the custom track database needs it own user and permissions
-    $MYSQL -e "DROP USER IF EXISTS ctdbuser@localhost"
     $MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
     $MYSQL -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX "\
 "on customTrash.* TO ctdbuser@localhost;"
