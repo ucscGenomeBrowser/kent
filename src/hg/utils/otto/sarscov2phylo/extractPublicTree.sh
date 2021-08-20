@@ -92,6 +92,16 @@ sampleCountComma=$(echo $(wc -l < samples.public.$today) \
 echo "$sampleCountComma genomes from GenBank, COG-UK and CNCB ($today); sarscov2phylo 13-11-20 tree with newer sequences added by UShER" \
     > hgPhyloPlace.description.txt
 
+# Make Taxodium-formatted protobuf for display
+zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz > ncbiGenes.gtf
+zcat public-$today.metadata.tsv.gz > metadata.tmp.tsv
+time $matUtils extract -i public-$today.all.masked.pb \
+    -f reference.fa \
+    -g ncbiGenes.gtf \
+    -M metadata.tmp.tsv \
+    --write-taxodium public-$today.all.masked.taxodium.pb
+rm metadata.tmp.tsv
+gzip public-$today.all.masked.taxodium.pb
 
 # Link to public trees download directory hierarchy
 archiveRoot=/hive/users/angie/publicTrees
@@ -115,6 +125,7 @@ else
     gzip -c ../pango.clade-paths.public.tsv > $archive/pango.clade-paths.public.tsv.gz
 fi
 ln -f `pwd`/hgPhyloPlace.description.txt $archive/public-$today.version.txt
+ln -f `pwd`/public-$today.all.masked.taxodium.pb.gz $archive/
 
 # Update 'latest' in $archiveRoot
 ln -f $archive/public-$today.all.nwk.gz $archiveRoot/public-latest.all.nwk.gz
@@ -123,6 +134,8 @@ ln -f $archive/public-$today.all.masked.pb.gz $archiveRoot/public-latest.all.mas
 ln -f $archive/public-$today.all.masked.vcf.gz $archiveRoot/public-latest.all.masked.vcf.gz
 ln -f $archive/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata.tsv.gz
 ln -f $archive/public-$today.version.txt $archiveRoot/public-latest.version.txt
+ln -f $archive/public-$today.all.masked.taxodium.pb.gz \
+    $archiveRoot/public-latest.all.masked.taxodium.pb.gz
 
 # Update hgdownload-test link for archive
 mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/UShER_SARS-CoV-2/$y/$m

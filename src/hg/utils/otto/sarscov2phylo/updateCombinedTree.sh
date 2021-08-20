@@ -462,4 +462,15 @@ for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
     ln -sf `pwd`/epiToPublic.latest $dir/
 done
 
+# Make Taxodium-formatted protobuf for display
+zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz > ncbiGenes.gtf
+zcat gisaidAndPublic.$today.metadata.tsv.gz > metadata.tmp.tsv
+time $matUtils extract -i gisaidAndPublic.$today.masked.pb \
+    -f reference.fa \
+    -g ncbiGenes.gtf \
+    -M metadata.tmp.tsv \
+    --write-taxodium gisaidAndPublic.$today.masked.taxodium.pb
+rm metadata.tmp.tsv
+gzip gisaidAndPublic.$today.masked.taxodium.pb
+
 $scriptDir/extractPublicTree.sh $today
