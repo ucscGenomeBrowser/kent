@@ -238,7 +238,8 @@ if (node->numEdges > 0)
 
 static boolean *informativeBasesFromTree(struct phyloTree *bigTree, struct slName **maskSites)
 /* Return an array indexed by reference position with TRUE at positions that have a non-leaf
- * variant in bigTree. */
+ * variant in bigTree.  If a position is in maskSites but is informative in bigTree then remove
+ * it from maskSites because it was not masked (yet) back when the tree was built. */
 {
 boolean *informativeBases;
 AllocArray(informativeBases, chromSize);
@@ -248,12 +249,8 @@ if (bigTree)
     int i;
     for (i = 0;  i < chromSize;  i++)
         {
-        struct slName *maskedReasons = maskSites[i];
-        if (maskedReasons && informativeBases[i])
-            {
-            warn("protobuf tree contains masked mutation at %d (%s)", i+1, maskedReasons->name);
-            informativeBases[i] = FALSE;
-            }
+        if (maskSites[i] && informativeBases[i])
+            maskSites[i] = NULL;
         }
     }
 return informativeBases;
@@ -2636,13 +2633,13 @@ if (! bigTree)
     }
 lineFileCarefulNewlines(lf);
 struct slName **maskSites = getProblematicSites(db);
+boolean *informativeBases = informativeBasesFromTree(bigTree->tree, maskSites);
 struct dnaSeq *refGenome = hChromSeq(db, chrom, 0, chromSize);
 boolean isFasta = FALSE;
 boolean subtreesOnly = FALSE;
 struct seqInfo *seqInfoList = NULL;
 if (lfLooksLikeFasta(lf))
     {
-    boolean *informativeBases = informativeBasesFromTree(bigTree->tree, maskSites);
     struct slPair *failedSeqs;
     struct slPair *failedPsls;
     struct hash *treeNames = getTreeNames(bigTree, NULL, FALSE);
