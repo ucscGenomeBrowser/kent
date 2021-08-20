@@ -670,10 +670,17 @@ function installRedhat () {
     # make sure we have and EPEL and ghostscript and rsync (not installed on vagrant boxes)
     # imagemagick is required for the session gallery
     yum -y update
-    yum -y install epel-release
+
+    # Fedora doesn't have or need EPEL, however, it does not include chkconfig by default
+    if cat /etc/redhat-release | grep edora > /dev/null; then
+	yum -y install chkconfig
+    else
+        yum -y install epel-release
+    fi
+
     yum -y install ghostscript rsync ImageMagick R-core curl
 
-    # centos 7 and fedora 20 do not provide libpng by default
+    # centos 7 does not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
         echo2 libpng12 found
     else
@@ -773,6 +780,17 @@ function installRedhat () {
             else
                 wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
             fi
+
+	    # this is very strange, but was necessary on Fedora https://github.com/DefectDojo/django-DefectDojo/issues/407
+	    sed '/st_mysql_options options;/a unsigned int reconnect;' /usr/include/mysql/mysql.h -i.bkp
+
+	    # fedora > 34 doesn't have any pip2 package anymore
+	    if ! type "pip2" > /dev/null; then
+                 wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+		 python2 get-pip.py
+		 mv /usr/bin/pip /usr/bin/pip2
+
+	    fi
             pip2 install MySQL-python
     fi
 
