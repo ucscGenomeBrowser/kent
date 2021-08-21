@@ -4063,6 +4063,9 @@ var imageV2 = {
             } else {
                 valid = true;
             }
+
+            suggestBox.restoreWatermark(getDb(), $("#suggestTrack").length > 0);
+
             // the ajax request may have generated an error or warning in the warnbox
             // so make sure those warnings still get to the user
             stripJsEmbedded(response, false, stripped);
