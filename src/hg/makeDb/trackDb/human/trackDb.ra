@@ -1,3 +1,5 @@
+#JASPAR tracks
+include jaspar.ra alpha
 
 # ENCODE tracks
 include trackDb.encode.ra
