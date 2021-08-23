@@ -3,19 +3,19 @@
 
 track jaspar
 compositeTrack on
-shortLabel JASPAR TF Binding Sites
-longLabel JASPAR Transcription Factor Binding Sites
+shortLabel JASPAR Transcription Factors
+longLabel JASPAR Transcription Factor Binding Site Database
 group regulation
 visibility hide
-type bed 6 +
+type bed 6
+pennantIcon New red ../goldenPath/newsarch.html#082621 "Released Aug. 26, 2021"
 
 	track jasparTfbs2020
 	parent jaspar on
 	shortLabel JASPAR 2020 TFBS
-	longLabel JASPAR CORE 2020 - Curated and validated Transcription Factor Binding Sites
+	longLabel JASPAR CORE 2020 - Predicted Transcription Factor Binding Sites
 	html jaspar.html
 	type bigBed 6 +
-	labelFields name
 	defaultLabelFields name
 	searchIndex name
 	visibility pack
@@ -28,11 +28,10 @@ type bed 6 +
 
 	track JASPAR2018
 	parent jaspar off
-	shortLabel JASPAR2018 TFBS hg38
-	longLabel TFBS predictions in Homo sapiens (hg38) for all profiles in the JASPAR CORE vertebrates collection (2018)
+	shortLabel JASPAR 2018 TFBS 
+	longLabel JASPAR CORE 2018 - Predicted Transcription Factor Binding Sites
 	html jaspar.html 
 	type bigBed 6 +
-	labelFields name
 	defaultLabelFields name
 	searchIndex name
 	visibility pack
