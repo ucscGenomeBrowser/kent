@@ -4,27 +4,39 @@
 # hg38:
 hg38 miRnaAtlas nonCodingRNAs View associated precursor miRnas
 hg38 nonCodingRNAs miRnaAtlas View expression of cleaved miRnas
+
 hg38 caddSuper gnomad View associated variants
 hg38 gnomad caddSuper View CADD scores for this variant and region
+
 hg38 revel liftHg38 Revel is based on hg19 and lifted to hg38. liftOver "chain" alignment from hg19 to hg38
 hg38 liftHg38 revel Revel scores were lifted using UCSC liftOver chains from hg38
+
 hg38 revel caddSuper CADD, a similar deleteriousness score, and not used as an input by REVEL
 hg38 caddSuper revel REVEL, a similar deleteriousness score
+
 hg38 liftOverHg38 grcIncidentDb GRC Incident database, to explore reasons why the assembly was changed
-hg38 grcIncidentDb liftOverHg19 LiftOver alignments between hg19 and hg38 to explore how the GRC incident assembly changes affect whole-genome alignments between hg19 and hg38 used for lifting data from hg19
+hg38 grcIncidentDb liftOverHg38 LiftOver for hg38, explores how incident regions aligned between human assemblies
+
+hg38 grcIncidentDb liftOverHg19 LiftOver alignments between hg19 and hg38, to explore how the GRC incident assembly changes affect whole-genome alignments between hg19 and hg38 used for lifting data from hg19
+hg38 liftOverHg19 grcIncidentDb GRC IncidentDb shows version issues, to explore alignment between human assemblies
 
 
 # hg19:
 hg19 caddSuper gnomad View associated variants
 hg19 gnomad caddSuper View CADD scores for this variant and region
+
 hg19 decipherHaploIns gnomadPLI Compare haploinsufficiency metrics as defined by gnomAD
 hg19 gnomadPLI decipherHaploIns Compare constraint metrics as defined by DECIPHER
+
 hg19 revel caddSuper CADD, a similar deleteriousness score, and not used as an input by REVEL
 hg19 caddSuper revel REVEL, a similar deleteriousness score
+
 hg19 liftOverHg38 grcIncidentDb GRC Incident database, to explore reasons why the assembly was changed
 hg19 grcIncidentDb liftOverHg38 LiftOver alignments between hg38 and hg38 to explore how the GRC incident assembly changes affect whole-genome alignments between hg19 and hg38 used for lifting data from hg19
+
 hg19 fixSeqLiftOverPsl liftOverHg38 Investigate how patches affect the whole-genome alignment used for liftOver
 hg19 liftOverHg38 fixSeqLiftOverPsl Investigate how assembly patches affect the liftOver alignment
+
 hg19 liftOverHg38 hg38ContigDiff Hg38 Diff shows contigs that were changed from hg19 to hg38
 hg19 hg38ContigDiff liftOverHg38 Investigate how contig changes affect the liftOver alignments
 
