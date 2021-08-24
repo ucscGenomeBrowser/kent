@@ -31,6 +31,7 @@ html ../tgpArchive
     vcfDoMaf off
     compositeTrack on
     geneTrack ncbiRefSeqCurated
+    visibility pack
 
         track tgpNA19685_m011_MXL
         parent tgpTrios

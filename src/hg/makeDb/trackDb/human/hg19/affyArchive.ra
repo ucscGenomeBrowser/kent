@@ -21,7 +21,7 @@ html ../affyArchive
     dimensions dimensionX=level dimensionY=view
     dragAndDrop subTracks
     color 0,0,0
-    visibility hide
+    visibility pack
     noInherit on
     type bed 12
 
@@ -142,4 +142,4 @@ html ../affyArchive
     group expression
     priority 6
 
-    include wgEncodeAffyRnaChip.ra alpha
+    include wgEncodeAffyRnaChip.ra
