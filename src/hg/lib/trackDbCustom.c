@@ -1593,7 +1593,7 @@ char *labelAsFilteredNumber(char *label, unsigned numOut)
 /* add text to label to indicate filter is active */
 {
 char buffer[2048];
-safef(buffer, sizeof buffer, " (%d items filtered)", numOut);
+safef(buffer, sizeof buffer, " (%d items filtered out)", numOut);
 return catTwoStrings(label, buffer);
 }
 
