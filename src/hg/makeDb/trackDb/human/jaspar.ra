@@ -16,6 +16,8 @@ pennantIcon New red ../goldenPath/newsarch.html#082621 "Released Aug. 26, 2021"
 	longLabel JASPAR CORE 2020 - Predicted Transcription Factor Binding Sites
 	html jaspar.html
 	type bigBed 6 +
+	exonArrows on
+	maxWindowCoverage 10000
 	defaultLabelFields name
 	searchIndex name
 	visibility pack
@@ -32,6 +34,8 @@ pennantIcon New red ../goldenPath/newsarch.html#082621 "Released Aug. 26, 2021"
 	longLabel JASPAR CORE 2018 - Predicted Transcription Factor Binding Sites
 	html jaspar.html 
 	type bigBed 6 +
+        exonArrows on
+        maxWindowCoverage 10000
 	defaultLabelFields name
 	searchIndex name
 	visibility pack
