@@ -40,8 +40,9 @@ include wgEncodeHaibGenotype.release2.ra
 # BU Orchid (wrangler: cricket)
 include wgEncodeBuOrchid.ra
 
+# (no longer needed since the track is in the affyArchive supertrack)
 # Affy Rna Chip (wrangler: cricket)
-include wgEncodeAffyRnaChipOld.ra beta,public
+# include wgEncodeAffyRnaChipOld.ra public
 
 # Chromatin Interactions ------
 

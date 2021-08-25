@@ -8022,6 +8022,47 @@ hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf
             "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
 }
 
+static void printTrackLink(struct track *track)
+/* print a link hgTrackUi with shortLabel and various icons and mouseOvers */
+{
+if (track->hasUi)
+    {
+    char *url = trackUrl(track->track, chromName);
+    char *longLabel = replaceChars(track->longLabel, "\"", "&quot;");
+    // Print an icon before the title when one is defined
+    hPrintPennantIcon(track->tdb);
+
+    struct dyString *dsMouseOver = dyStringCreate("%s", longLabel);
+    struct trackDb *tdb = track->tdb;
+
+    if (tdb->children)
+        {
+        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of different types (super track)",
+            slCount(tdb->children));
+        }
+    else if (tdb->subtracks)
+        {
+        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of similar types (composite track)",
+            slCount(tdb->subtracks));
+        }
+
+    hPrintf("<A HREF=\"%s\" title=\"%s\">", url, dyStringCannibalize(&dsMouseOver));
+
+    freeMem(url);
+    freeMem(longLabel);
+    }
+
+// show the folder icon from the font-awesome collection.
+// the icon collection also contains a "fa fa-folder-o" icon, which is the outline. It was decided to use only the filled out icon for now.
+if (tdbIsSuper(track->tdb) || tdbIsComposite(track->tdb))
+    hPrintf("<i id='folderIcon' class='fa fa-folder'></i>");
+
+hPrintf(" %s", track->shortLabel);
+hPrintf("<BR> ");
+if (track->hasUi)
+    hPrintf("</A>");
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -9051,7 +9092,7 @@ if (!hideControls)
 		freeMem(url);
 		}
 
-	    /* Add supertracks to  track list, sort by priority and
+	    /* Add supertracks to track list, sort by priority and
 	     * determine if they have visible member tracks */
 	    groupTrackListAddSuper(cart, group);
 
@@ -9063,24 +9104,8 @@ if (!hideControls)
 		    /* don't display supertrack members */
 		    continue;
 		myControlGridStartCell(cg, isOpen, group->name);
-		if (track->hasUi)
-		    {
-		    char *url = trackUrl(track->track, chromName);
-		    char *longLabel = replaceChars(track->longLabel, "\"", "&quot;");
-                    hPrintPennantIcon(track->tdb);
 
-                    // Print an icon before the title when one is defined
-                    hPrintf("<A HREF=\"%s\" title=\"%s\">", url, longLabel);
-
-                    freeMem(url);
-                    freeMem(longLabel);
-                    }
-		hPrintf(" %s", track->shortLabel);
-		if (tdbIsSuper(track->tdb))
-		    hPrintf("...");
-		hPrintf("<BR> ");
-		if (track->hasUi)
-		    hPrintf("</A>");
+                printTrackLink(track);
 
 		if (hTrackOnChrom(track->tdb, chromName))
 		    {
@@ -10799,6 +10824,8 @@ if(!trackImgOnly)
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
+
+    webIncludeResourceFile("font-awesome.min.css");
 
     cartFlushHubWarnings();
     }
