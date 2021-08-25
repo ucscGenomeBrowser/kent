@@ -1,0 +1,33 @@
+
+track knownGeneOld
+superTrack on
+shortLabel KnownGene Archive
+longLabel KnownGene Archive
+group genes
+type bed 6 +
+
+
+    track knownGeneV36
+    #table knownGene
+    shortLabel GENCODE V36
+    longLabel GENCODE V36
+    parent knownGeneOld
+    priority 1
+    visibility pack
+    type bigGenePred
+    bigDataUrl /gbdb/hg38/gencode/gencodeV36.bb
+    baseColorDefault genomicCodons
+    group genes
+    isGencode3 on
+    directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+    labelFields geneName,name,geneName2,name2
+    defaultLabelFields geneName
+    itemRgb on
+    externalDb knownGeneV36
+    maxItems 50000
+    html knownGene
+    searchIndex name
+    idXref kgAlias kgID alias
+    intronGap 12
+    defaultLinkedTables kgXref
+
