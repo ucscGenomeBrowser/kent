@@ -34621,3 +34621,19 @@ TMPDIR=/dev/shm
     # 2694784811 bases of 2999027915 (89.855%) in intersection
 
 ##############################################################################
+
+# JASPAR Track integration by Daniel 8/20/21
+    cd ~/kent/src/hg/makeDb/trackDb 
+    v human/jaspar.ra 
+    curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/hg19/trackDb.txt >> human/jaspar.ra 
+    cd /gbdb/hg19
+    mkdir jaspar
+    cd jaspar
+    wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2018/hg19/JASPAR2018_hg19_all_chr.bb
+    wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2020/JASPAR2020_hg19.bb
+    mv JASPAR2020_hg19.bb JASPAR2020.bb
+    mv JASPAR2018_hg19_all_chr.bb JASPAR2018.bb
+    v human/jaspar.html  
+    curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/JASPAR2018_TFBS_help.html >> human/jaspar.html 
+
+###############################################################################

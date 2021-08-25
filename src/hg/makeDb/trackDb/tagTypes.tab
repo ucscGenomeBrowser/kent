@@ -481,8 +481,8 @@ sortOrder *
 sourceTable factorSource bed
 spanList *
 speciesCodonDefault wigMafProt wigMaf bigMaf
-speciesDefaultOff wigMaf
-speciesDefaultOn wigMaf
+speciesDefaultOff wigMaf bigMaf
+speciesDefaultOn wigMaf bigMaf
 speciesGroups wigMafProt wigMaf bigMaf
 speciesOrder bed maf wigMaf bigMaf
 speciesTarget wigMaf

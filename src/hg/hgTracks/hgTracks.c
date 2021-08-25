@@ -8022,6 +8022,47 @@ hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf
             "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
 }
 
+static void printTrackLink(struct track *track)
+/* print a link hgTrackUi with shortLabel and various icons and mouseOvers */
+{
+if (track->hasUi)
+    {
+    char *url = trackUrl(track->track, chromName);
+    char *longLabel = replaceChars(track->longLabel, "\"", "&quot;");
+    // Print an icon before the title when one is defined
+    hPrintPennantIcon(track->tdb);
+
+    struct dyString *dsMouseOver = dyStringCreate("%s", longLabel);
+    struct trackDb *tdb = track->tdb;
+
+    if (tdb->children)
+        {
+        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of different types (super track)",
+            slCount(tdb->children));
+        }
+    else if (tdb->subtracks)
+        {
+        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of similar types (composite track)",
+            slCount(tdb->subtracks));
+        }
+
+    hPrintf("<A HREF=\"%s\" title=\"%s\">", url, dyStringCannibalize(&dsMouseOver));
+
+    freeMem(url);
+    freeMem(longLabel);
+    }
+
+// show the folder icon from the font-awesome collection.
+// the icon collection also contains a "fa fa-folder-o" icon, which is the outline. It was decided to use only the filled out icon for now.
+if (tdbIsSuper(track->tdb) || tdbIsComposite(track->tdb))
+    hPrintf("<i id='folderIcon' class='fa fa-folder'></i>");
+
+hPrintf(" %s", track->shortLabel);
+hPrintf("<BR> ");
+if (track->hasUi)
+    hPrintf("</A>");
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -8899,13 +8940,12 @@ if (!hideControls)
     hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
             hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
             hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
-    jsOnEventById("click", "ct_add", "document.customTrackForm.submit();return false;");
+    jsOnEventById("click", "ct_add", "document.customTrackForm.submit(); return false;");
 
     hPrintf(" ");
     if (hubConnectTableExists())
         {
-        hPrintf("<INPUT TYPE='button' id='th_form' VALUE='track hubs'"
-                "return false;' title='Import tracks from hubs'>");
+        hPrintf("<INPUT TYPE='button' id='th_form' VALUE='track hubs' title='Import tracks from hubs'>");
 	jsOnEventById("click", "th_form", "document.trackHubForm.submit();");
         hPrintf(" ");
         }
@@ -9052,7 +9092,7 @@ if (!hideControls)
 		freeMem(url);
 		}
 
-	    /* Add supertracks to  track list, sort by priority and
+	    /* Add supertracks to track list, sort by priority and
 	     * determine if they have visible member tracks */
 	    groupTrackListAddSuper(cart, group);
 
@@ -9064,24 +9104,8 @@ if (!hideControls)
 		    /* don't display supertrack members */
 		    continue;
 		myControlGridStartCell(cg, isOpen, group->name);
-		if (track->hasUi)
-		    {
-		    char *url = trackUrl(track->track, chromName);
-		    char *longLabel = replaceChars(track->longLabel, "\"", "&quot;");
-                    hPrintPennantIcon(track->tdb);
 
-                    // Print an icon before the title when one is defined
-                    hPrintf("<A HREF=\"%s\" title=\"%s\">", url, longLabel);
-
-                    freeMem(url);
-                    freeMem(longLabel);
-                    }
-		hPrintf(" %s", track->shortLabel);
-		if (tdbIsSuper(track->tdb))
-		    hPrintf("...");
-		hPrintf("<BR> ");
-		if (track->hasUi)
-		    hPrintf("</A>");
+                printTrackLink(track);
 
 		if (hTrackOnChrom(track->tdb, chromName))
 		    {
@@ -10801,6 +10825,8 @@ if(!trackImgOnly)
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
 
+    webIncludeResourceFile("font-awesome.min.css");
+
     cartFlushHubWarnings();
     }
 
@@ -10902,7 +10928,8 @@ jsInline(dy->string);
 dyStringFree(&dy);
 
 dy = dyStringNew(1024);
-if (enableMouseOver)
+// do not have a JsonFile available when PDF/PS output
+if (enableMouseOver && isNotEmpty(mouseOverJsonFile->forCgi))
     {
     jsonWriteObjectEnd(mouseOverJson);
     /* if any data was written, it is longer than 4 bytes */

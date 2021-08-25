@@ -29,7 +29,7 @@ mouseOverFunction noAverage
         visibility dense
         bigDataUrl /gbdb/$D/cadd/a.bw
         maxHeightPixels 128:20:8
-        viewLimits 0:30
+        viewLimits 10:50
         viewLimitsMax 0:100
 
         track caddC
@@ -40,7 +40,7 @@ mouseOverFunction noAverage
         visibility dense
         bigDataUrl /gbdb/$D/cadd/c.bw
         maxHeightPixels 128:20:8
-        viewLimits 0:30
+        viewLimits 10:50
         viewLimitsMax 0:100
 
         track caddG
@@ -51,7 +51,7 @@ mouseOverFunction noAverage
         visibility dense
         bigDataUrl /gbdb/$D/cadd/g.bw
         maxHeightPixels 128:20:8
-        viewLimits 0:30
+        viewLimits 10:50
         viewLimitsMax 0:100
 
         track caddT
@@ -62,7 +62,7 @@ mouseOverFunction noAverage
         visibility dense
         bigDataUrl /gbdb/$D/cadd/t.bw
         maxHeightPixels 128:20:8
-        viewLimits 0:30
+        viewLimits 10:50
         viewLimitsMax 0:100
 
 track caddIns
@@ -74,7 +74,10 @@ visibility dense
 bigDataUrl /gbdb/$D/cadd/ins.bb
 mouseOver Mutation: $change CADD Phred score: $phred
 html caddSuper
-scoreFilterLimits 0:100
+filter.score 10:100
+filterByRange.score on
+filterLabel.score Show only items with PHRED scale score of
+filterLimits.score 0:100
 #maxWindowCoverage 40000
 #maxItems 100000
 #maxWindowToDraw 9000000
@@ -88,7 +91,10 @@ visibility dense
 bigDataUrl /gbdb/$D/cadd/del.bb
 mouseOver Mutation: $change CADD Phred score: $phred
 html caddSuper
-scoreFilterLimits 0:100
+filter.score 10:100
+filterByRange.score on
+filterLabel.score Show only items with PHRED scale score of
+filterLimits.score 0:100
 #maxWindowCoverage 40000
 #maxItems 100000
 #maxWindowToDraw 9000000

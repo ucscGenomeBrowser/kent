@@ -504,22 +504,43 @@ function waitKey ()
     echo2
 }
 
+# set MYCNF to the path to my.cnf
+function setMYCNF ()
+{
+    if [ -f /etc/my.cnf ] ; then
+	# Centos 6-8
+    	MYCNF=/etc/my.cnf
+    elif [ -f /etc/mysql/my.cnf ] ; then
+        # Ubuntu 14
+    	MYCNF=/etc/mysql/my.cnf
+    elif [ -f /etc/mysql/mysql.conf.d/mysqld.cnf ] ; then
+	# Ubuntu 16, 18, 20
+    	MYCNF=/etc/mysql/mysql.conf.d/mysqld.cnf
+    else
+    	echo Could not find my.cnf. Adapt 'setMYCNF()' in browserSetup.sh and/or contact us.
+    	exit 1
+    fi
+}
+
 function mysqlAllowOldPasswords
 # mysql >= 8 does not allow the old passwords anymore. But our client is still compiled
 # with the old, non-SHA256 encryption. So we must deactivate this new feature.
 # What will MariaDB do?
 {
 echo2 'Checking for Mysql version >= 8'
+
 MYSQLMAJ=`mysql -e 'SHOW VARIABLES LIKE "version";' -NB | cut -f2 | cut -d. -f1`
+setMYCNF
 if [ "$MYSQLMAJ" -ge 8 ] ; then
     echo2 'Mysql >= 8 found, checking if default-authentication allows native passwords'
-    if grep -q default-authentication /etc/mysql/my.cnf; then
-        echo2 'default-authentication already set in /etc/mysql/my.cnf'
+    if grep -q default-authentication $MYCNF; then
+        echo2 "default-authentication already set in $MYCNF"
     else
-	echo2 Changing /etc/mysql/my.cnf to allow native passwords and restarting Mysql
-	echo '[mysqld]' >> /etc/mysql/my.cnf
-        echo 'default-authentication-plugin=mysql_native_password' >> /etc/mysql/my.cnf
-	service mysql restart
+	echo2 Changing $MYCNF to allow native passwords and restarting Mysql
+	echo '[mysqld]' >> $MYCNF
+        echo 'default-authentication-plugin=mysql_native_password' >> $MYCNF
+	stopMysql
+	startMysql
     fi
 fi
 }
@@ -649,10 +670,17 @@ function installRedhat () {
     # make sure we have and EPEL and ghostscript and rsync (not installed on vagrant boxes)
     # imagemagick is required for the session gallery
     yum -y update
-    yum -y install epel-release
-    yum -y install ghostscript rsync ImageMagick R-core curl urw-fonts
 
-    # centos 7 and fedora 20 do not provide libpng by default
+    # Fedora doesn't have or need EPEL, however, it does not include chkconfig by default
+    if cat /etc/redhat-release | grep edora > /dev/null; then
+	yum -y install chkconfig
+    else
+        yum -y install epel-release
+    fi
+
+    yum -y install ghostscript rsync ImageMagick R-core curl
+
+    # centos 7 does not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
         echo2 libpng12 found
     else
@@ -675,7 +703,7 @@ function installRedhat () {
         echo2 Apache already installed
     fi
     
-    # download the apache config
+    # create the apache config
     if [ ! -f $APACHECONF ]; then
         echo2
         echo2 Creating the Apache2 config file $APACHECONF
@@ -752,6 +780,17 @@ function installRedhat () {
             else
                 wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
             fi
+
+	    # this is very strange, but was necessary on Fedora https://github.com/DefectDojo/django-DefectDojo/issues/407
+	    sed '/st_mysql_options options;/a unsigned int reconnect;' /usr/include/mysql/mysql.h -i.bkp
+
+	    # fedora > 34 doesn't have any pip2 package anymore
+	    if ! type "pip2" > /dev/null; then
+                 wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+		 python2 get-pip.py
+		 mv /usr/bin/pip /usr/bin/pip2
+
+	    fi
             pip2 install MySQL-python
     fi
 
@@ -969,13 +1008,8 @@ function installDebian ()
         export DEBIAN_FRONTEND=noninteractive
         apt-get --assume-yes install mysql-server
         # make sure that missing values do not trigger errors, #18368
-        if [ -f /etc/mysql/mysql.conf.d/mysqld.cnf ]; then
-            # Ubuntu 16
-            sed -i '/^.mysqld.$/a sql_mode=' /etc/mysql/mysql.conf.d/mysqld.cnf
-        else
-            # Ubuntu 14
-            sed -i '/^.mysqld.$/a sql_mode=' /etc/mysql/my.cnf
-        fi
+	setMYCNF
+        sed -i '/^.mysqld.$/a sql_mode=' $MYCNF
         # flag so script will set mysql root password later to a random value
         SET_MYSQL_ROOT=1
     fi
@@ -1224,7 +1258,13 @@ function mysqlDbSetup ()
     #  Full access to all databases for the user 'browser'
     #       This would be for browser developers that need read/write access
     #       to all database tables.  
-    $MYSQL -e "DROP USER IF EXISTS browser@localhost"
+    # $MYSQL -e "DROP USER IF EXISTS browser@localhost" # centos7 uses mysql 5.6 which doesn't have IF EXISTS so work around that here
+    # $MYSQL -e "DROP USER IF EXISTS readonly@localhost"
+    # $MYSQL -e "DROP USER IF EXISTS ctdbuser@localhost"
+    # $MYSQL -e "DROP USER IF EXISTS readwrite@localhost"
+    $MYSQL -e 'DELETE from mysql.user where User="browser" or User="readonly" or User="readwrite" or User="ctdbuser"'
+    $MYSQL -e "FLUSH PRIVILEGES;"
+
     $MYSQL -e "CREATE USER browser@localhost IDENTIFIED BY 'genome'"
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, DELETE, FILE, "\
 "CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on *.* TO browser@localhost"
@@ -1237,7 +1277,6 @@ function mysqlDbSetup ()
     $MYSQL -e "GRANT FILE on *.* TO browser@localhost;" 
     
     #   Read only access to genome databases for the browser CGI binaries
-    $MYSQL -e "DROP USER IF EXISTS readonly@localhost"
     $MYSQL -e "CREATE USER readonly@localhost IDENTIFIED BY 'access';"
     $MYSQL -e "GRANT SELECT, CREATE TEMPORARY TABLES on "\
 "*.* TO readonly@localhost;"
@@ -1245,7 +1284,6 @@ function mysqlDbSetup ()
 "readonly@localhost;"
     
     # Readwrite access to hgcentral for browser CGI binaries to keep session state
-    $MYSQL -e "DROP USER IF EXISTS readwrite@localhost"
     $MYSQL -e "CREATE USER readwrite@localhost IDENTIFIED BY 'update';"
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, "\
 "DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost; "
@@ -1257,7 +1295,6 @@ function mysqlDbSetup ()
     chown $APACHEUSER:$APACHEUSER $GBDBDIR
     
     # the custom track database needs it own user and permissions
-    $MYSQL -e "DROP USER IF EXISTS ctdbuser@localhost"
     $MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
     $MYSQL -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX "\
 "on customTrash.* TO ctdbuser@localhost;"
@@ -1817,6 +1854,7 @@ while getopts ":baeut:hof" opt; do
     f)
       if [ ! -f $APACHEDIR/cgi-bin/hg.conf ]; then
          echo Please install a browser first, then switch the data loading mode.
+	 exit 0
       fi
 
       goOnline

@@ -1,9 +1,11 @@
 track tgpArchive
-cartVersion 2
 superTrack on
 shortLabel 1000G Archive
 longLabel 1000 Genomes Archive
+cartVersion 2
+visibility hide
 group varRep
+html ../tgpArchive
 
     track tgpPhase3
     parent tgpArchive
@@ -29,6 +31,7 @@ group varRep
     vcfDoMaf off
     compositeTrack on
     geneTrack ncbiRefSeqCurated
+    visibility pack
 
         track tgpNA19685_m011_MXL
         parent tgpTrios

@@ -62,24 +62,11 @@ var suggestBox = {
         this.initialized = true;
         var lastSelected = null; // this is the last value entered by the user via a suggestion (used to distinguish manual entry in the same field)
         var $posInput = $('#positionInput');
-        var waterMark;
-        if (assemblySupportsGeneSuggest) {
-            if (db.match(/^hg[0-9]+/)) {
-                // Mention HGVS variant notation for human assemblies only, although it should work
-                // with any assembly that has refGene or ncbiRefSeq.
-                waterMark = "enter position, gene symbol, HGVS or search terms";
-            } else {
-                waterMark = "enter position, gene symbol or search terms";
-            }
-        } else {
-            waterMark = "enter position or search terms";
-        }
-
         if ($posInput[0] !== document.activeElement) {
             // Reset value before adding watermark -- only if user is not already typing here
             $posInput.val("");
         }
-        $posInput.Watermark(waterMark, '#686868');
+        var waterMark = suggestBox.restoreWatermark(db, assemblySupportsGeneSuggest);
         if (assemblySupportsGeneSuggest) {
             $('#positionInput').autocomplete({
                 delay: 500,
@@ -148,5 +135,27 @@ var suggestBox = {
                 genomePos.positionDisplayDialog();
                 }
         });
-    }
+    },
+
+    restoreWatermark: function(db, assemblySupportsGeneSuggest) {
+        var waterMark;
+        var $posInput = $('#positionInput');
+        if (assemblySupportsGeneSuggest) {
+            if (db.match(/^hg[0-9]+/)) {
+                // Mention HGVS variant notation for human assemblies only, although it should work
+                // with any assembly that has refGene or ncbiRefSeq.
+                waterMark = "enter position, gene symbol, HGVS or search terms";
+            } else {
+                waterMark = "enter position, gene symbol or search terms";
+            }
+        } else {
+            waterMark = "enter position or search terms";
+        }
+            //$('input[name="hgt.positionInput"]').val("");
+        $posInput.val("");
+        $posInput.Watermark(waterMark, '#686868');
+
+        return waterMark;
+    }, 
+
 };

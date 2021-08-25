@@ -20,13 +20,13 @@ scoreLabel ClinVar Star-Rating (0-4)
         priority 1
         type bigBed 12 +
         showCfg on
-        filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
-        filterType._clinSignCode singleList
-        filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
-        filterType._originCode singleList
+        filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other,VUS|vus
+        filterType._clinSignCode multiple
+        filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,UNK|unknown
+        filterType._originCode multiple
         filterLabel._originCode Alelle Origin
         filterValues._allTypeCode SNV|single nucleotide variant - SNV,INS|insertion - INS,DEL|deletion - DEL,INDEL|insertion-deletion - INDEL,dupl|duplication - DUPL,OTH|other - OTH
-        filterType._allTypeCode singleList
+        filterType._allTypeCode multiple
         filter._varLen 0
         filterByRange._varLen on
         filterLimits._varLen 0:49
@@ -47,12 +47,12 @@ scoreLabel ClinVar Star-Rating (0-4)
         group phenDis
         priority 2
         filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
-        filterType._originCode singleList
+        filterType._originCode multiple
         filterLabel._originCode Alelle Origin
         filterValues._allTypeCode INS|insertion - INS,DEL|deletion - DEL,INDEL|insertion-deletion - INDEL,dupl|duplication - DUPL,OTH|other - OTH
-        filterType._allTypeCode singleList
+        filterType._allTypeCode multiple
         filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
-        filterType._clinSign singleList
+        filterType._clinSignCode multiple
         filter._varLen 50:999999999
         filterByRange._varLen on
         filterLimits._varLen 50:999999999

@@ -575,6 +575,12 @@ td.disabled   { color: gray; }
     vertical-align: text-top;
 }
 
+i#folderIcon {
+        text-decoration: underline;
+        font-size: 80%;
+}
+
+
 /*
    Styles for hgHubConnect (formerly in separate .css)
    by Greg Roe

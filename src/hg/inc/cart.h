@@ -668,5 +668,10 @@ void cartSetVersion(struct cart *cart, unsigned version);
 
 void cartRewrite(struct cart *cart, unsigned trackDbCartVersion, unsigned cartVersion);
 /* Rewrite the cart to update it to expectations of trackDb. */
+
+void cartTurnOnSuper(struct cart *cart, char **trackNames, unsigned numTracks, char *superTrackName);
+/* Turn on a supertrack if any of the subtracks are not hidden.  ASSUMES ALL TRACKS ARE HIDDEN
+ * by default.
+ */
 #endif /* CART_H */
 

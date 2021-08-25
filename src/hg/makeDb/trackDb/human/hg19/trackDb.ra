@@ -1021,9 +1021,6 @@ track hapmapLdPh override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
-track nscanGene override
-informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterative pseudogene masking.
-
 track chainNetVenter override
 priority 450
 
@@ -1184,74 +1181,9 @@ track pgLucier override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
-track tgpPhase1
-shortLabel 1000G Ph1 Vars
-longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, Indels, SVs
-type vcfTabix
-group varRep
-visibility hide
-maxWindowToDraw 5000000
-showHardyWeinberg on
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-
-track tgpPhase1Accessibility
-compositeTrack on
-shortLabel 1000G Ph1 Accsbl
-longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions
-type bigBed 3
-visibility hide
-group varRep
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
-
-    track tgpPhase1AccessibilityPilotCriteria
-    subTrack tgpPhase1Accessibility
-    shortLabel 1000G Accs Pilot
-    longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions - Pilot Criteria
-    color 100,100,100
-
-    track tgpPhase1AccessibilityStrictCriteria
-    subTrack tgpPhase1Accessibility
-    shortLabel 1000G Accs Strict
-    longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions - Strict Criteria
-    color 0,0,0
-
 track tgpRecombRate override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
-
-track tgpPhase3
-shortLabel 1000G Ph3 Vars
-longLabel 1000 Genomes Phase 3 Integrated Variant Calls: SNVs, Indels, SVs
-type vcfTabix
-group varRep
-visibility hide
-maxWindowToDraw 5000000
-showHardyWeinberg on
-geneTrack ncbiRefSeqCurated
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-
-track tgpPhase3Accessibility
-compositeTrack on
-shortLabel 1000G Ph3 Accsbl
-longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions
-type bigBed 3
-visibility hide
-group varRep
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
-
-    track tgpPhase3AccessibilityPilotCriteria
-    subTrack tgpPhase3Accessibility
-    shortLabel 1000G Accs Pilot
-    longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions - Pilot Criteria
-    bigDataUrl /gbdb/hg19/1000Genomes/phase3/20141020.pilot_mask.whole_genome.bb
-    color 100,100,100
-
-    track tgpPhase3AccessibilityStrictCriteria
-    subTrack tgpPhase3Accessibility
-    shortLabel 1000G Accs Strict
-    longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions - Strict Criteria
-    bigDataUrl /gbdb/hg19/1000Genomes/phase3/20141020.strict_mask.whole_genome.bb
-    color 0,0,0
 
 track evsEsp6500
 shortLabel EVS Variants
@@ -1397,118 +1329,6 @@ type bigWig 0 100
 minLimit 0
 maxLimit 100
 html gc5Base
-
-track affyExonArray
-compositeTrack on
-group expression
-priority 1.5
-shortLabel Affy Exon Array
-longLabel Affymetrix $Organism Exon Array Probes and Probesets
-subGroup1 view Views v1Probeset=Probeset v2Probe=Probe
-subGroup2 level Level L1Core=Core L2Extended=Extended L3Full=Full L4Free=Free L5Ambiguous=Ambiguous 
-sortOrder level=+ view=+ 
-dimensions dimensionX=level dimensionY=view
-dragAndDrop subTracks
-color 0,0,0
-visibility hide
-noInherit on
-type bed 12
-
-    track affyExonProbeset
-    parent affyExonArray
-    view v1Probeset
-    visibility dense
-
-        track affyExonProbesetCore
-        parent affyExonProbeset
-        subGroups view=v1Probeset level=L1Core
-        shortLabel Core PS
-        longLabel Affymetrix $Organism Exon Array Core Probesets 
-        # royalblue
-        color 65,105,225
-
-        track affyExonProbesetExtended
-        parent affyExonProbeset
-        subGroups view=v1Probeset level=L2Extended
-        shortLabel Extended PS
-        longLabel Affymetrix $Organism Exon Array Extended Probesets
-        # chocolate 4
-        color 139,69,19
-
-        track affyExonProbesetFull
-        parent affyExonProbeset off
-        subGroups view=v1Probeset level=L3Full
-        shortLabel Full PS
-        longLabel Affymetrix $Organism Exon Array Full Probesets
-        # deeppink
-        color 205,96,144
-
-        track affyExonProbesetFree 
-        parent affyExonProbeset off
-        subGroups view=v1Probeset level=L4Free
-        shortLabel Free PS
-        longLabel Affymetrix $Organism Exon Array Free Probesets
-        # darkgreen
-        color 0,100,0
-
-        track affyExonProbesetAmbiguous 
-        parent affyExonProbeset off
-        subGroups view=v1Probeset level=L5Ambiguous
-        shortLabel Ambiguous PS
-        longLabel Affymetrix $Organism Exon Array Ambiguous Probesets
-        # orchid 
-        color 218,112,214	
-
-    track affyExonProbe
-    parent affyExonArray
-    view v2Probe
-    visibility dense
-
-        track affyExonProbeCore 
-        parent affyExonProbe off
-        subGroups view=v2Probe level=L1Core
-        shortLabel Core Probes
-        longLabel Affymetrix $Organism Exon Array Core Probes
-        # royalblue
-        color 65,105,225
-        type bed 10
-
-        track affyExonProbeExtended 
-        parent affyExonProbe off
-        subGroups view=v2Probe level=L2Extended
-        shortLabel Extended Probes
-        longLabel Affymetrix $Organism Exon Array Extended Probes
-        # chocolate 4
-        color 139,69,19
-        type bed 10
-
-        track affyExonProbeFull 
-        parent affyExonProbe off
-        subGroups view=v2Probe level=L3Full
-        shortLabel Full Probes
-        longLabel Affymetrix $Organism Exon Array Full Probes
-        # deep pink
-        color 205,96,144
-        type bed 10
-
-        track affyExonProbeFree 
-        parent affyExonProbe off
-        subGroups view=v2Probe level=L4Free
-        shortLabel Free Probes
-        longLabel Affymetrix $Organism Exon Array Free Probes
-        # darkgreen
-        color 0,100,0
-        type bed 10
-
-        track affyExonProbeAmbiguous 
-        parent affyExonProbe off
-        subGroups view=v2Probe level=L5Ambiguous
-        shortLabel Ambiguous Probes
-        longLabel Affymetrix $Organism Exon Array Ambiguous Probes
-        # orchid
-        color 218,112,214	
-        type bed 10
-
 
 searchTable haplotypeLocations
 searchMethod exact
@@ -2258,10 +2078,6 @@ searchPriority 3.53
 
 include lincRNAs.ra
 
-track sibGene override
-url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg19&query_str=$$
-urlLabel SIB link:
-
 track sibTxGraph override
 priority 11
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg19&species=H.+sapiens&tromer=$$
@@ -2460,22 +2276,6 @@ track uniGene_3 override
 group rna
 priority 13
 
-track affyGnf1h override
-group expression
-priority 2
-
-track affyU95 override
-group expression
-priority 4
-
-track affyU133 override
-group expression
-priority 5
-
-track affyU133Plus2 override
-group expression
-priority 6
-
 track allenBrainAli override
 group expression
 priority 7
@@ -2603,3 +2403,6 @@ noScoreFilter on
 mouseOver $name, HI: $quantile
 
 include dbSnpArchiveHg19.ra 
+include affyArchive.ra
+include genePredArchive.ra
+include tgpArchive.ra

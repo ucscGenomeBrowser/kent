@@ -33,6 +33,7 @@ today=$(date +%F)
 cd $ottoDir/$today
 
 prevProtobufMasked=$ottoDir/$prevDate/gisaidAndPublic.$prevDate.masked.pb
+prevMeta=$ottoDir/$prevDate/public-$prevDate.metadata.tsv.gz
 
 usherDir=~angie/github/usher
 usher=$usherDir/build/usher
@@ -273,10 +274,14 @@ wc -l $renaming
 tawk '{ if ($1 ~ /^#/) { print; } else if ($7 == "mask") { $1 = "NC_045512v2"; print; } }' \
     $problematicSitesVcf > mask.vcf
 # Add masked VCF to previous protobuf
+#*** With horrible hack for time being, to mask 21987 (because it messes up the Delta branch)...
+#*** TODO: make hgPhyloPlace handle protobufs that don't have all of the latest problematic sites
+#*** masked more gracefully, and update the Problematic Sites track.
 time cat <(twoBitToFa $ref2bit stdout) $alignedFa \
 | faToVcf -maxDiff=1000 -excludeFile=../tooManyEpps.ids -verbose=2 stdin stdout \
 | vcfRenameAndPrune stdin $renaming stdout \
 | vcfFilter -excludeVcf=mask.vcf stdin \
+| tawk '$2 != 21987' \
 | gzip -c \
     > new.masked.vcf.gz
 
@@ -397,20 +402,52 @@ echo "$sampleCountComma genomes from GISAID, GenBank, COG-UK and CNCB ($today); 
     > hgPhyloPlace.plusGisaid.description.txt
 
 # Add nextclade annotations to protobuf
-time $matUtils annotate -T 50 \
-    -l \
-    -i gisaidAndPublic.$today.masked.pb \
-    -P ../nextstrain.clade-paths.tsv \
-    -o gisaidAndPublic.$today.masked.nextclade.pb
+if [ -s $ottoDir/$prevDate/cladeToName ]; then
+    # Use yesterday's clade assignments to annotate clades on today's tree
+    time $matUtils annotate -T 50 \
+        -l \
+        -i gisaidAndPublic.$today.masked.pb \
+        -c $ottoDir/$prevDate/cladeToName \
+        -f 0.95 \
+        -D details.nextclade \
+        -o gisaidAndPublic.$today.masked.nextclade.pb \
+        >& annnotate.nextclade
+else
+    time $matUtils annotate -T 50 \
+        -l \
+        -i gisaidAndPublic.$today.masked.pb \
+        -P ../nextstrain.clade-paths.tsv \
+        -o gisaidAndPublic.$today.masked.nextclade.pb
+fi
 
 # Add pangolin lineage annotations to protobuf.
-time $matUtils annotate -T 50 \
-    -i gisaidAndPublic.$today.masked.nextclade.pb \
-    -P ../pango.clade-paths.tsv \
-    -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb
+if [ -s $ottoDir/$prevDate/lineageToName ]; then
+    time $matUtils annotate -T 50 \
+        -i gisaidAndPublic.$today.masked.nextclade.pb \
+        -c $ottoDir/$prevDate/lineageToName \
+        -f 0.95 \
+        -D details.pango \
+        -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb \
+        >& annotate.pango
+else
+    time $matUtils annotate -T 50 \
+        -i gisaidAndPublic.$today.masked.nextclade.pb \
+        -P ../pango.clade-paths.tsv \
+        -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb
+fi
 
+# Replace protobuf with annotated protobuf.
 mv gisaidAndPublic.$today.masked{,.unannotated}.pb
 ln -f gisaidAndPublic.$today.masked.nextclade.pangolin.pb gisaidAndPublic.$today.masked.pb
+
+# Save clade & lineage annotations for use tomorrow.
+$matUtils summary -i gisaidAndPublic.$today.masked.pb -C sample-clades
+tail -n+2 sample-clades \
+| tawk '{print $2, $1;}' \
+| sort > cladeToName
+tail -n+2 sample-clades \
+| tawk '{print $3, $1;}' \
+| sort > lineageToName
 
 # EPI_ISL_ ID to public sequence name mapping, so if users upload EPI_ISL IDs for which we have
 # public names & IDs, we can match them.
@@ -424,5 +461,16 @@ for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
     ln -sf `pwd`/hgPhyloPlace.plusGisaid.description.txt $dir/public.plusGisaid.latest.version.txt
     ln -sf `pwd`/epiToPublic.latest $dir/
 done
+
+# Make Taxodium-formatted protobuf for display
+zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz > ncbiGenes.gtf
+zcat gisaidAndPublic.$today.metadata.tsv.gz > metadata.tmp.tsv
+time $matUtils extract -i gisaidAndPublic.$today.masked.pb \
+    -f reference.fa \
+    -g ncbiGenes.gtf \
+    -M metadata.tmp.tsv \
+    --write-taxodium gisaidAndPublic.$today.masked.taxodium.pb
+rm metadata.tmp.tsv
+gzip gisaidAndPublic.$today.masked.taxodium.pb
 
 $scriptDir/extractPublicTree.sh $today
