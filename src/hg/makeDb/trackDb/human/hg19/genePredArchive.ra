@@ -10,6 +10,7 @@ html ../genePredArchive
 
     track augustusGene override
     parent genePredArchive
+    visibility pack
 
     track geneid override
     parent genePredArchive

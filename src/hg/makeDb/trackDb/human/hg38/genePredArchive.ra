@@ -12,6 +12,7 @@ html ../genePredArchive
     parent genePredArchive
     color 180,0,0
     pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+    visibility pack
 
     track sibGene override
     parent genePredArchive
