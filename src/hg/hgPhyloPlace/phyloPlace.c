@@ -482,6 +482,15 @@ else
 puts("</p>");
 }
 
+boolean isInternalNodeName(char *nodeName, int minNewNode)
+/* Return TRUE if nodeName looks like an internal node ID from the protobuf tree, i.e. is numeric
+ * or <USHER_NODE_PREFIX>_<number> and, if minNewNode > 0, number is less than minNewNode. */
+{
+if (startsWith(USHER_NODE_PREFIX, nodeName))
+    nodeName += strlen(USHER_NODE_PREFIX);
+return isAllDigits(nodeName) && (minNewNode <= 0 || (atoi(nodeName) < minNewNode));
+}
+
 static void variantPathPrint(struct variantPathNode *variantPath)
 /* Print out a variantPath; print nodeName only if non-numeric
  * (i.e. a sample ID not internal node) */
@@ -491,7 +500,7 @@ for (vpn = variantPath;  vpn != NULL;  vpn = vpn->next)
     {
     if (vpn != variantPath)
         printf(" > ");
-    if (!isAllDigits(vpn->nodeName))
+    if (!isInternalNodeName(vpn->nodeName, 0))
         printf("%s: ", vpn->nodeName);
     struct singleNucChange *snc;
     for (snc = vpn->sncList;  snc != NULL;  snc = snc->next)
@@ -516,13 +525,6 @@ if (variantPath)
 else
     puts("(None; your sample was placed at the root of the phylogenetic tree)");
 puts("</p>");
-}
-
-static boolean isInternalNodeName(char *nodeName, int minNewNode)
-/* Return TRUE if nodeName looks like an internal node ID from the protobuf tree, i.e. is numeric
- * and less than minNewNode. */
-{
-return isAllDigits(nodeName) && (atoi(nodeName) < minNewNode);
 }
 
 static struct variantPathNode *findLastInternalNode(struct variantPathNode *variantPath,
@@ -601,7 +603,13 @@ struct variantPathNode *lastOldNode = findLastInternalNode(variantPath, minNewNo
 struct phyloTree *node = lastOldNode ? hashFindVal(bigTree->nodeHash, lastOldNode->nodeName) :
                                        bigTree->tree;
 if (lastOldNode && !node)
-    errAbort("Can't find last internal node for sample %s", sampleId);
+    {
+    if (startsWith(USHER_NODE_PREFIX, lastOldNode->nodeName))
+        // protobuf still has number even if usher prepends USHER_NODE_PREFIX when parsing.
+        node = hashFindVal(bigTree->nodeHash, lastOldNode->nodeName+strlen(USHER_NODE_PREFIX));
+    if (node == NULL)
+        errAbort("Can't find last internal node %s for sample %s", lastOldNode->nodeName, sampleId);
+    }
 // Look for a leaf kid with no mutations relative to the parent, should be closest.
 if (node->numEdges == 0)
     {
@@ -882,14 +890,14 @@ if (showBestNodePaths && info->bestNodes)
                  info->bestNodeCount, slCount(info->bestNodes));
     if (info->bestNodeCount > 1)
         printf("<ul><li><b>used for placement</b>: ");
-    if (differentString(info->bestNodes->name, "?") && !isAllDigits(info->bestNodes->name))
+    if (differentString(info->bestNodes->name, "?") && !isInternalNodeName(info->bestNodes->name, 0))
         printf("%s ", info->bestNodes->name);
     printVariantPathNoNodeNames(stdout, info->bestNodes->variantPath);
     struct bestNodeInfo *bn;
     for (bn = info->bestNodes->next;  bn != NULL;  bn = bn->next)
         {
         printf("\n<li>");
-        if (differentString(bn->name, "?") && !isAllDigits(bn->name))
+        if (differentString(bn->name, "?") && !isInternalNodeName(bn->name, 0))
             printf("%s ", bn->name);
         printVariantPathNoNodeNames(stdout, bn->variantPath);
         char *lineage = lineageForSample(sampleMetadata, bn->name);
@@ -963,7 +971,7 @@ static void asciiTree(struct phyloTree *node, char *indent, boolean isLast,
 {
 if (isNotEmpty(indent) || isNotEmpty(node->ident->name))
     {
-    if (node->ident->name && !isAllDigits(node->ident->name))
+    if (node->ident->name && !isInternalNodeName(node->ident->name, 0))
         {
         dyStringPrintf(dyLine, "%s %s", indent, node->ident->name);
         slPairAdd(pRowList, node->ident->name, cloneString(dyLine->string));
@@ -2140,6 +2148,8 @@ if (info)
         }
     fprintf(f, "\t%s", isNotEmpty(info->nearestNeighbor) ? info->nearestNeighbor : "n/a");
     fprintf(f, "\t%s", isNotEmpty(info->neighborLineage) ? info->neighborLineage : "n/a");
+    fprintf(f, "\t%s", isNotEmpty(info->nextClade) ? info->nextClade : "n/a");
+    fprintf(f, "\t%s", isNotEmpty(info->pangoLineage) ? info->pangoLineage : "n/a");
     fputc('\n', f);
     }
 }
@@ -2189,7 +2199,7 @@ FILE *f = mustOpen(tsvTn->forCgi, "w");
 fprintf(f, "name\tnuc_mutations\taa_mutations\timputed_bases\tmutation_path"
         "\tplacement_count\tparsimony_score_increase\tlength\taligned_bases"
         "\tins_bases\tins_ranges\tdel_bases\tdel_ranges\tmasked_mutations"
-        "\tnearest_neighbor\tneighbor_lineage"
+        "\tnearest_neighbor\tneighbor_lineage\tnextstrain_clade\tpango_lineage"
         "\n");
 struct hash *seqInfoHash = hashFromSeqInfoList(seqInfoList);
 if (sampleTree)
@@ -2387,7 +2397,7 @@ if (regexMatchSubstr(name, "^[A-Za-z _]+/(.*)/[0-9]{4}$", substrs, ArraySize(sub
     {
     char isolate[substrs[1].rm_eo - substrs[1].rm_so + 1];
     regexSubstringCopy(name, substrs[1], isolate, sizeof isolate);
-    if (! isAllDigits(isolate) &&
+    if (! isInternalNodeName(isolate, 0) &&
         (regexMatch(isolate, "[A-Za-z0-9]{4}") ||
          regexMatch(isolate, "[A-Za-z0-9][A-Za-z0-9]+[-_][A-Za-z0-9][A-Za-z0-9]+")))
         {
