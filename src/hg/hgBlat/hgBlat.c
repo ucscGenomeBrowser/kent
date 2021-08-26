@@ -562,11 +562,11 @@ while ((psl = pslNext(lf)) != NULL)
 	slAddHead(&pslList, psl);
     }
 lineFileClose(&lf);
-if (pslList == NULL)
+if (pslList == NULL && !jsonOut)
     {
     printf("<table><tr><td><hr>Sorry, no matches found");
     if (!allResults)
-	printf(" (with score at least %d)", minMatchShown);
+	printf(" (with a score of at least %d)", minMatchShown);
     printf("<hr><td></tr></table>\n");
     return;
     }
@@ -602,10 +602,13 @@ else if (pslOut)
     printf("<TT><PRE>");
     printf("</PRE></TT>");
     }
-else if (jsonOut)  {
-        pslWriteAllJson(pslList, stdout, database, TRUE);
-        exit(0);
-}
+else if (jsonOut)  
+    {
+    webStartText();
+    pslWriteAllJson(pslList, stdout, database, TRUE);
+    webEndText();
+    exit(0);
+    }
 else  // hyperlink
     {
     printf("<H2>BLAT Search Results</H2>");
