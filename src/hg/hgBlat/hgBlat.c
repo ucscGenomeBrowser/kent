@@ -606,7 +606,7 @@ else if (jsonOut)
     {
     webStartText();
     pslWriteAllJson(pslList, stdout, database, TRUE);
-    webEndText();
+    webEnd();
     exit(0);
     }
 else  // hyperlink
