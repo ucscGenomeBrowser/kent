@@ -26,6 +26,10 @@
 #define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
 #define OUTBREAK_INFO_URLBASE "https://outbreak.info/situation-reports?pango="
 
+// usher now preprends "node_" to node numbers when parsing protobuf, although they're still stored
+// numeric in the protobuf.
+#define USHER_NODE_PREFIX "node_"
+
 struct treeChoices
 /* Phylogenetic tree versions for the user to choose from. */
 {
@@ -184,7 +188,7 @@ void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneI
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 
 struct tempName *writeCustomTracks(struct tempName *vcfTn, struct usherResults *ur,
-                                   struct slName *sampleIds, struct phyloTree *bigTree,
+                                   struct slName *sampleIds, struct mutationAnnotatedTree *bigTree,
                                    char *source, int fontHeight, struct phyloTree **retSampleTree,
                                    int *pStartTime);
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
@@ -205,6 +209,10 @@ char *phyloPlaceDbSettingPath(char *db, char *settingName);
 
 struct treeChoices *loadTreeChoices(char *db);
 /* If <db>/config.ra specifies a treeChoices file, load it up, else return NULL. */
+
+boolean isInternalNodeName(char *nodeName, int minNewNode);
+/* Return TRUE if nodeName looks like an internal node ID from the protobuf tree, i.e. is numeric
+ * or <USHER_NODE_PREFIX>_<number> and, if minNewNode > 0, number is less than minNewNode. */
 
 void reportTiming(int *pStartTime, char *message);
 /* Print out a report to stderr of how much time something took. */

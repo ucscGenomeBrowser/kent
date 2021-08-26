@@ -121,11 +121,10 @@ for (seq = seqs;  seq != NULL;  seq = nextSeq)
             }
         else
             {
-            if (isAllDigits(seq->name) || hashLookup(treeNames, seq->name))
+            if (isInternalNodeName(seq->name, 0) || hashLookup(treeNames, seq->name))
                 {
-                // Internal nodes of tree have numeric IDs, so usher may reject numeric name
-                // as a conflict.  usher will definitely reject a sequence name already in the tree.
-                // Add a prefix so usher won't reject the sequence.
+                // usher will reject any sequence whose name is already in the tree, even a
+                // numeric internal node name.  Add a prefix so usher won't reject sequence.
                 char newName[strlen(seq->name)+32];
                 safef(newName, sizeof newName, "uploaded_%s", seq->name);
                 freeMem(seq->name);
