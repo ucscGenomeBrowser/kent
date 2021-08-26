@@ -147,7 +147,7 @@ filterBy genePred bed factorSource
 filterComposite *
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
 firstItemPos customTracks
-frames wigMaf
+frames wigMaf bigMaf
 freqSourceOrder bigDbSnp
 forceFirstCharLowerCase wigMaf
 ensemblTranscriptIdUrl genePred
@@ -370,9 +370,9 @@ sGroup_Birds wigMaf
 sGroup_Brachycera wigMaf
 sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
-sGroup_Carnivore wigMaf
-sGroup_Cetartiodactyla wigMaf
-sGroup_Chiroptera wigMaf
+sGroup_Carnivore wigMaf bigMaf
+sGroup_Cetartiodactyla wigMaf bigMaf
+sGroup_Chiroptera wigMaf bigMaf
 sGroup_CoV_2019 wigMaf
 sGroup_CoV wigMaf
 sGroup_SARS-CoV-2_sequences wigMaf
@@ -394,7 +394,7 @@ sGroup_Human wigMaf
 sGroup_Laurasiatheria wigMaf
 sGroup_Mammal wigMaf
 sGroup_mammal wigMaf
-sGroup_Mammals wigMaf
+sGroup_Mammals wigMaf bigMaf
 sGroup_Marburg_1987 wigMaf
 sGroup_Nematocera wigMaf
 sGroup_Nematode wigMaf
@@ -417,14 +417,14 @@ sGroup_Placental_Mammal wigMaf
 sGroup_Placental_Mammals wigMaf
 sGroup_Platyhelminthes wigMaf
 sGroup_Plectida wigMaf
-sGroup_Primate wigMaf
+sGroup_Primate wigMaf bigMaf
 sGroup_Primates wigMaf
 sGroup_primate wigMaf
 sGroup_Primates wigMaf
 sGroup_Reptiles wigMaf
 sGroup_Reston_1989-90 wigMaf
 sGroup_Rhabditina wigMaf
-sGroup_Rodents wigMaf
+sGroup_Rodents wigMaf bigMaf
 sGroup_Sarcopterygii wigMaf
 sGroup_Spirurina wigMaf
 sGroup_Strongylida wigMaf
@@ -480,10 +480,10 @@ snpVersion bed
 sortOrder *
 sourceTable factorSource bed
 spanList *
-speciesCodonDefault wigMafProt wigMaf
-speciesDefaultOff wigMaf
-speciesDefaultOn wigMaf
-speciesGroups wigMafProt wigMaf
+speciesCodonDefault wigMafProt wigMaf bigMaf
+speciesDefaultOff wigMaf bigMaf
+speciesDefaultOn wigMaf bigMaf
+speciesGroups wigMafProt wigMaf bigMaf
 speciesOrder bed maf wigMaf bigMaf
 speciesTarget wigMaf
 speciesTree wigMaf

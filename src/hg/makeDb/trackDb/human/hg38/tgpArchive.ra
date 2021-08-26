@@ -1,12 +1,14 @@
-track 1000GenomeArchive
-cartVersion 2
+track tgpArchive
 superTrack on
 shortLabel 1000G Archive
-longLabel 1000 Genomes Track Archive
+longLabel 1000 Genomes Archive
+cartVersion 2
+visibility hide
 group varRep
+html ../tgpArchive
 
     track tgpPhase3
-    parent 1000GenomeArchive
+    parent tgpArchive
     shortLabel 1000G Ph3 Vars
     longLabel 1000 Genomes Phase 3 Integrated Variant Calls from IGSR: SNVs and Indels
     type vcfTabix
@@ -17,7 +19,7 @@ group varRep
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
     track tgpTrios
-    parent 1000GenomeArchive
+    parent tgpArchive
     type vcfPhasedTrio
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     maxWindowToDraw 5000000
@@ -29,6 +31,7 @@ group varRep
     vcfDoMaf off
     compositeTrack on
     geneTrack ncbiRefSeqCurated
+    visibility pack
 
         track tgpNA19685_m011_MXL
         parent tgpTrios

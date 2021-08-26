@@ -142,7 +142,7 @@ else
 static char *getBigDataIndexName(struct trackDb *tdb)
 /* Get tbi/bai URL for a BAM/VCF from trackDb or custom track. */
 {
-char *bigIndexUrl = trackDbSetting(tdb, "bigDataIndex");
+char *bigIndexUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataIndex"));
 if (isNotEmpty(bigIndexUrl))
     return bigIndexUrl;
 return NULL;
@@ -151,7 +151,7 @@ return NULL;
 static char *getBigDataFileName(char *db, struct trackDb *tdb, char *selTable, char *chrom)
 /* Get fileName from bigBed/bigWig/BAM/VCF database table, or bigDataUrl from custom track. */
 {
-char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+char *bigDataUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (isNotEmpty(bigDataUrl))
     {
     return bigDataUrl;
@@ -318,7 +318,7 @@ boolean primaryIsVariants = (primaryAsObj != NULL &&
                              (asObjectsMatch(primaryAsObj, pgSnpAsObj()) ||
                               asObjectsMatch(primaryAsObj, pgSnpFileAsObj()) ||
                               asObjectsMatch(primaryAsObj, vcfAsObj())));
-char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+char *bigDataUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 char *indexUrl = getBigDataIndexName(tdb);
 if (bigDataUrl != NULL)
     {

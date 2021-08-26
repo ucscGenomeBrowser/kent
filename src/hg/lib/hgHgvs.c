@@ -944,7 +944,6 @@ else if ((isSubst = regexMatchSubstr(term, pseudoHgvsGeneSymbolProtSubstExp,
                                                      npAcc, geneSymbol, description);
             slAddHead(&hgvs, hgvsParseTerm(npTerm->string));
             dyStringFree(&npTerm);
-            //freeMem(npAcc);
             }
         }
     }
@@ -969,7 +968,6 @@ else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolProtPosExp, substrs, ArraySi
                                                      npAcc, geneSymbol, refBase, pos);
             slAddHead(&hgvs, hgvsParseTerm(npTerm->string));
             dyStringFree(&npTerm);
-            //freeMem(npAcc);
             }
         }
     }
@@ -1020,8 +1018,7 @@ struct bbiFile *bbi = NULL;
 char fileName[1024];
 safef(fileName, sizeof(fileName), "/gbdb/%s/bbi/lrg.bb", db);
 char *fileNameRep = hReplaceGbdb(fileName);
-if (fileExists(fileNameRep))
-    bbi = bigBedFileOpen(fileNameRep);
+bbi = bigBedFileOpen(fileNameRep);
 freeMem(fileNameRep);
 return bbi;
 }

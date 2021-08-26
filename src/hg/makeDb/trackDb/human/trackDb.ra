@@ -1,3 +1,5 @@
+#JASPAR tracks
+include jaspar.ra alpha
 
 # ENCODE tracks
 include trackDb.encode.ra
@@ -21,8 +23,7 @@ include trackDb.gtex.ra
 include trackDb.geneHancer.ra
 
 # NCBI ClinVar
-include trackDb.clinvar.ra beta,public
-include trackDb.clinvar.alpha.ra alpha
+include trackDb.clinvar.ra 
 
 # NCBI dbVar
 include trackDb.dbVar.ra

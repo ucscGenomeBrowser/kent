@@ -503,7 +503,7 @@ char **row;
 int  rowOffset = 0;
 char *mafTrack = trackDbSetting(tdb, "mafTrack");
 int start = cartInt(cart, "o");
-struct mafAli *maf;
+struct mafAli *maf = NULL;
 char option[128];
 char *speciesOrder = NULL;
 boolean hasConf = sqlColumnExists(conn, table, "conf");

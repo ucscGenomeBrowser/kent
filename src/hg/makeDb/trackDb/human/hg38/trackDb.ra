@@ -535,7 +535,10 @@ track xenoEst override
 pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 track ucscGenePfam override
+shortLabel Pfam in GENCODE
+longLabel Pfam Domains in GENCODE Genes
 pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+html gencodePfam
 
 track orfeomeMrna override
 pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
@@ -565,13 +568,16 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra
+include knownGene.ra beta,public
+include knownGene.alpha.ra alpha
+#include knownGene.ra
+include oldKnownGene.ra alpha
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
 
+include trackDb.241wayT.ra alpha
 include trackDb.241way.ra alpha,beta
-include trackDb.241wayBM.ra alpha
 
 # track multiz145way
 # shortLabel 145way maf
@@ -747,6 +753,7 @@ bigDataUrl /gbdb/hg38/covidHct/covidHct.bb
 release alpha
 
 include dbSnpArchiveHg38.ra
-include affyArchive.ra alpha
-include genePredArchive.ra alpha
-include tgpArchive.ra alpha
+include affyArchive.ra
+include genePredArchive.ra
+include tgpArchive.ra
+include spliceAi.ra

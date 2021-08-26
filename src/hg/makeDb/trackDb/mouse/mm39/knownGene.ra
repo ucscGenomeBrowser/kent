@@ -12,7 +12,7 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 labelFields geneName,name,geneName2,name2
 defaultLabelFields geneName
 itemRgb on
-externalDb knownGeneVM27
+#externalDb knownGeneVM27
 maxItems 50000
 html knownGene
 searchIndex name

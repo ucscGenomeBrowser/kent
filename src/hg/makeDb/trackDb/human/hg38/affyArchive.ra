@@ -1,10 +1,12 @@
 track affyArchive
-cartVersion 2
 superTrack on
 shortLabel Affy Archive
-longLabel Affymetrix Track Archive
+longLabel Affymetrix Archive
 group expression
+cartVersion 2
+visibility hide
 type psl .
+html ../affyArchive
 
     track affyGnf1h override
     parent affyArchive

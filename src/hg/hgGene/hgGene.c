@@ -776,7 +776,7 @@ else
         isGencode = trackDbSettingOn(tdb, "isGencode");
         isGencode2 = trackDbSettingOn(tdb, "isGencode2");
         isGencode3 = trackDbSettingOn(tdb, "isGencode3");
-	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index",
+	cartWebStart(cart, database, "%s Gene %s (%s)",
 	    genome, curGeneName, isGencode2 || isGencode3 ? curGeneId : curAlignId);
 	webMain(conn, tdb);
 	cartWebEnd();

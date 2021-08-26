@@ -38,7 +38,11 @@ FREETYPECFLAGS = $(shell freetype-config --cflags  2> /dev/null)
 
 # we use our static library on dev
 ifeq (${IS_HGWDEV},no) 
-FREETYPELIBS =  $(shell freetype-config --libs 2> /dev/null )
+  ifeq ($(UNAME_S),Darwin)
+    FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a /usr/local/opt/bzip2/lib/libbz2.a
+  else
+    FREETYPELIBS =  $(shell freetype-config --libs 2> /dev/null )
+  endif
 endif
 
 ifneq (${FREETYPECFLAGS},)

@@ -14,9 +14,18 @@ function gaOnButtonClick(ev) {
 /* user clicked a button: send event to GA, then execute the old handler */
     var button = ev.currentTarget;
     var buttonName = button.name;
+    if (buttonName==="")
+        buttonName = button.id;
+    if (buttonName==="")
+        buttonName = button.value;
+    // add the original label, makes logs a lot easier to read
+    buttonName = button.value + " / "+buttonName;
+
     ga('send', 'event', 'buttonClick', buttonName);
     if (button.oldOnClick) // most buttons did not have an onclick function at all (the default click is a listener)
+    {
         button.oldOnClick(ev);
+    }
 }
 
 function gaTrackButtons() {
@@ -24,8 +33,13 @@ function gaTrackButtons() {
   if (!window.ga || ga.loaded) // When using an Adblocker, the ga object does not exist
       return;
   var buttons = document.querySelectorAll('input[type=submit],input[type=button]');
+  var isFF = theClient.isFirefox();
   for (var i = 0; i < buttons.length; i++) {
        var b = buttons[i];
+       // some old Firefox versions <= 78 do not allow submit buttons to also send AJAX requests
+       // so Zoom/Move buttons are skipped in FF (even though newer versions allow it again, certainly FF >= 90)
+       if (isFF && b.name.match(/\.out|\.in|\.left|\.right/))
+           continue;
        b.oldOnClick = b.onclick;
        b.onclick = gaOnButtonClick; // addEventHandler would not work here, the default click stops propagation.
   }
