@@ -30,8 +30,11 @@ errAbort(
   "                    - helps speed up the dup check but not thorough\n"
   "   -dots=N          - output progress dot(.) every N alignments processed\n"
   "\n"
-  "note: a chromAlias file can be obtained from a UCSC database, e.g.:\n"
-  " hgsql -N -e 'select alias,chrom from chromAlias;' hg38 > hg38.chromAlias.tab"
+  "Note: a chromAlias file can be obtained from a UCSC database, e.g.:\n"
+  " hgsql -N -e 'select alias,chrom from chromAlias;' hg38 > hg38.chromAlias.tab\n"
+  " Or from the downloads server:\n"
+  "  wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/chromAlias.txt.gz\n"
+  "See also our tool chromToUcsc\n"
   );
 }
 
