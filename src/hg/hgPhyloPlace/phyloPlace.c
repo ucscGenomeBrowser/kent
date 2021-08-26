@@ -2769,7 +2769,7 @@ if (results && results->singleSubtreeInfo)
 
         // Make custom tracks for uploaded samples and subtree(s).
         struct phyloTree *sampleTree = NULL;
-        ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree->tree,
+        ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree,
                                  source, fontHeight, &sampleTree, &startTime);
 
         // Make a sample summary TSV file and accumulate S gene changes

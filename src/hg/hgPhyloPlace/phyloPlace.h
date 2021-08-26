@@ -188,7 +188,7 @@ void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneI
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 
 struct tempName *writeCustomTracks(struct tempName *vcfTn, struct usherResults *ur,
-                                   struct slName *sampleIds, struct phyloTree *bigTree,
+                                   struct slName *sampleIds, struct mutationAnnotatedTree *bigTree,
                                    char *source, int fontHeight, struct phyloTree **retSampleTree,
                                    int *pStartTime);
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
