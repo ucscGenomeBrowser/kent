@@ -18,7 +18,8 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/cell_type.stats
-    barChartBars CD4+_T CD8+_T EVT Endo MAIT Myeloid NK Other_immune SCT VCT dP dS fFB
+    #barChartBars CD4+_T CD8+_T EVT Endo MAIT Myeloid NK Other_immune SCT VCT dP dS fFB
+    barChartBars T_cell_CD4+ T_cell_CD8+ extravillous_trophoblast_(EVT) endothelial_cell T_cell_mucosal_(MAIT) myeloid_cell natural_killer_cell_(NK) other_immune_cell syncytiotrophoblast_(SCT) villous_cytotrophoblast_(VCT) dP decidual_stromal_cell_(dS) fFB
     barChartColors #f63247 #fa3248 #6026c2 #06bb03 #f73247 #de2903 #f03142 #ee1313 #5823d1 #5923cf #a1288a #be03bb #af4f22
     transformFunc NONE
     barChartLimit 2
