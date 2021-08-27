@@ -110,6 +110,7 @@ indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .
 color 72,167,38
+searchIndex name
 
 track gad
 shortLabel GAD View
@@ -3153,6 +3154,7 @@ color 54,125,29
 urlLabel Link to LRG transcript
 url http://ftp.ebi.ac.uk/pub/databases/lrgex/$<_lrgParent>.xml#transcripts_anchor
 bigDataUrl /gbdb/$D/bbi/lrgBigPsl.bb
+searchIndex name
 release alpha
 
 track lrgTranscriptAli
@@ -4033,6 +4035,14 @@ searchMethod exact
 searchType psl
 termRegex HIT[0-9]{9,9}
 searchPriority 50
+
+searchTable lrg
+searchMethod exact
+searchType bigBed
+termRegex LRG_[0-9]+
+semiShortCircuit 1
+searchPriority 49
+release alpha
 
 searchTable lrgBigPsl
 searchMethod exact

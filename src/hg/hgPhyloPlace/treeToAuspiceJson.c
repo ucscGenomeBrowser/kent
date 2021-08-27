@@ -494,7 +494,7 @@ if (isNotEmpty(bigGenePredFile) && fileExists(bigGenePredFile))
         int ex;
         for (ex = 0;  ex < gp->exonCount;  ex++)
             txLen += (gp->exonEnds[ex] - gp->exonStarts[ex]);
-        char *seq = needMem(txLen);
+        char *seq = needMem(txLen+1);
         int txOffset = 0;
         for (ex = 0;  ex < gp->exonCount;  ex++)
             {

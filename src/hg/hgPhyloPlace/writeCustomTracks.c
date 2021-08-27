@@ -341,9 +341,13 @@ else
     {
     // Leaf node: if in sampleToIx, then for each mutation (beware back-mutations),
     // set refBase if it has not already been set and set sample allele.
+    boolean allocdHere = FALSE;
     struct slName *nameList = hashFindVal(condensedNodes, node->ident->name);
     if (nameList == NULL)
+        {
         nameList = slNameNew(node->ident->name);
+        allocdHere = TRUE;
+        }
     struct slName *name;
     for (name = nameList;  name != NULL;  name = name->next)
         {
@@ -366,7 +370,8 @@ else
                 }
             }
         }
-    slFreeList(&nameList);
+    if (allocdHere)
+        slFreeList(&nameList);
     }
 if (node->priv != NULL)
     slFreeList(&nodeMuts);

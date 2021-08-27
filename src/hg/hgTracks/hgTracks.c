@@ -8063,6 +8063,17 @@ if (track->hasUi)
     hPrintf("</A>");
 }
 
+void printSearchHelpLink()
+/* print the little search help link next to the go button */
+{
+char *url = cfgOption("searchHelpUrl");
+char *label = cfgOptionDefault("searchHelpLabel", "Search Help");
+if (!url)
+    return;
+
+printf("<div id='searchHelp'><a target=_blank title='Documentation on what you can enter into the Genome Browser search box' href='%s'>%s</a></div>", url, label);
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -8751,6 +8762,9 @@ if (!hideControls)
                         " size='%d'>\n", multiRegionButtonTop ? 50 : 60);
 	hWrites(" ");
 	hButton("goButton", "go");
+
+        printSearchHelpLink();
+
 
 	if (!trackHubDatabase(database))
 	    {

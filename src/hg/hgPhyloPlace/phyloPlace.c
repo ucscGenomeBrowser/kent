@@ -83,7 +83,7 @@ char *usherPath = PHYLOPLACE_DATA_DIR "/usher";
 if (fileExists(usherPath))
     return usherPath;
 else if (abortIfNotFound)
-    errAbort("Missing required file %s", usherPath);
+    errAbort("Missing usher executable (expected to be at %s)", usherPath);
 return NULL;
 }
 
@@ -94,7 +94,7 @@ char *matUtilsPath = PHYLOPLACE_DATA_DIR "/matUtils";
 if (fileExists(matUtilsPath))
     return matUtilsPath;
 else if (abortIfNotFound)
-    errAbort("Missing required file %s", matUtilsPath);
+    errAbort("Missing matUtils executable (expected to be at %s)", matUtilsPath);
 return NULL;
 }
 
@@ -106,7 +106,8 @@ char *usherAssignmentsPath = phyloPlaceDbSettingPath(db, "usherAssignmentsFile")
 if (isNotEmpty(usherAssignmentsPath) && fileExists(usherAssignmentsPath))
     return usherAssignmentsPath;
 else if (abortIfNotFound)
-    errAbort("Missing required file %s", usherAssignmentsPath);
+    errAbort("Missing usher protobuf file (config setting in "
+             PHYLOPLACE_DATA_DIR "/%s/config.ra = %s", db, usherAssignmentsPath);
 return NULL;
 }
 
