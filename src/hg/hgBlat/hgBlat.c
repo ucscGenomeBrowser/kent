@@ -1926,7 +1926,10 @@ printf("%s",
 "\n"
 "<P>For more information on the graphical version of BLAT, click the Help \n"
 "button on the top menu bar");
-printf(" or see the Genome Browser <A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
+printf(" or see the Genome Browser <A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n"
+"<P>Kent WJ. <a href=\"http://www.genome.org/cgi/content/abstract/12/4/656\" \n"
+"target=_blank>BLAT - the BLAST-like alignment tool</a>. \n" 
+"Genome Res. 2002 Apr;12(4):656-64. PMID: 11932250</p>");
 
 }
 
