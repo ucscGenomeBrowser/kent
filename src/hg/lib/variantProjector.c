@@ -312,16 +312,19 @@ for (ix = 0;  ix < txAli->blockCount;  ix++)
         break;
     int tBlkEnd = tBlkStart + txAli->blockSizes[ix];
     appendOverlap(gSeqWin, tBlkStart, tBlkEnd, gStart, gEnd, buf, bufSize, &splicedLen);
-    int tNextBlkStart = txAli->tStarts[ix+1];
-    if (checkIntrons && ix < txAli->blockCount - 1 && gEnd >= tBlkEnd && gStart <= tNextBlkStart &&
-        pslIntronTooShort(txAli, ix, MIN_INTRON))
+    if (checkIntrons && ix < txAli->blockCount - 1 && gEnd >= tBlkEnd)
         {
-        // It's an indel between genome and transcript, not an intron -- add genomic sequence
-        int len = tNextBlkStart - tBlkEnd;
-        if (len > 0)
+        int tNextBlkStart = txAli->tStarts[ix+1];
+        if (gStart <= tNextBlkStart &&
+            pslIntronTooShort(txAli, ix, MIN_INTRON))
             {
-            seqWindowCopy(gSeqWin, tBlkEnd, len, buf+splicedLen, bufSize-splicedLen);
-            splicedLen += len;
+            // It's an indel between genome and transcript, not an intron -- add genomic sequence
+            int len = tNextBlkStart - tBlkEnd;
+            if (len > 0)
+                {
+                seqWindowCopy(gSeqWin, tBlkEnd, len, buf+splicedLen, bufSize-splicedLen);
+                splicedLen += len;
+                }
             }
         }
     }
