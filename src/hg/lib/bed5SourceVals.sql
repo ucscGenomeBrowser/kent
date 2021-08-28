@@ -14,5 +14,5 @@ CREATE TABLE bed5SourceVals (
     sourceIds longblob not null,	# Source ids
     sourceScores longblob not null,	# Source scores
               #Indices
-    PRIMARY KEY(chrom)
+    KEY `name` (`name`(16))
 );
