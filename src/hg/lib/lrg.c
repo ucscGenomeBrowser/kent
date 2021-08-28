@@ -399,23 +399,36 @@ for (diff = indels;  diff != NULL;  diff = diff->next)
     {
     // now we know the size of the previous block:
     int lrgStartPosStrand = isRc ? (lrg->lrgSize - diff->lrgEnd) : diff->lrgStart;
-    psl->blockSizes[blockIx-1] = calcBlockSize(diff->chromStart, lrgStartPosStrand, psl, blockIx-1);
-    alignedBaseCount += psl->blockSizes[blockIx-1];
-    // Insertion on t or q?
+    // Insertion on t or q, or both?
     int lrgLen = diff->lrgEnd - diff->lrgStart;
     int refLen = diff->chromEnd - diff->chromStart;
-    if (lrgLen > refLen)
-	{
-	psl->qNumInsert++;
-	psl->qBaseInsert += (lrgLen - refLen);
-	}
-    else if (refLen > lrgLen)
-	{
-	psl->tNumInsert++;
-	psl->tBaseInsert += (refLen - lrgLen);
-	}
-    psl->qStarts[blockIx] = lrgStartPosStrand + lrgLen;
+    if (refLen == 0 || lrgLen == 0) // insertion only on t or q
+        {
+        if (refLen == 0)
+            {
+            psl->qNumInsert++;
+            psl->qBaseInsert += (lrgLen - refLen);
+            }
+        else if (lrgLen == 0)
+            {
+            psl->tNumInsert++;
+            psl->tBaseInsert += (refLen - lrgLen);
+            }
+        psl->qStarts[blockIx] = lrgStartPosStrand + lrgLen;
+        psl->tStarts[blockIx] = diff->chromEnd;
+        }
+    else // double sided insertion
+        {
+        psl->tNumInsert++;
+        psl->tBaseInsert += refLen;
+        psl->qNumInsert++;
+        psl->qBaseInsert += lrgLen;
+        // the qStart needs to account for the lrg insertion AND the prev block
+        psl->qStarts[blockIx] = diff->lrgStart + lrgLen;
+        }
     psl->tStarts[blockIx] = diff->chromEnd;
+    psl->blockSizes[blockIx-1] = calcBlockSize(diff->chromStart, lrgStartPosStrand, psl, blockIx-1);
+    alignedBaseCount += psl->blockSizes[blockIx-1];
     blockIx++;
     }
 // size of last block:

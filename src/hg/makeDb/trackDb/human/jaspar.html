@@ -1,6 +1,5 @@
 
 <h2>Description</h2>
-
 <p>
 This track represents genome-wide predicted binding sites for TF 
 (transcription factor) binding profiles in the 
@@ -9,24 +8,24 @@ CORE collection</a>. This open-source database contains a curated, non-redundant
 set of binding profiles derived from published collections of experimentally 
 defined transcription factor binding sites for eukaryotes.</p>
 
-
 <h2>Display Conventions and Configuration</h2>
 <p>
-Shaded boxes represent predicted binding sites for each of the TF profiles in the 
-JASPAR CORE collection.
-
-The shading of the boxes indicates the p-value of the profile's match to that position 
-(scaled between 0-1000 scores, where 0 corresponds to a p-value of 1 and 1000 to a 
-p-value &le; 10<sup>-10</sup>). Thus, the darker the shade, the lower (better) the p-value.</p>
+Shaded boxes represent predicted binding sites for each of the TF profiles
+in the JASPAR CORE collection. The shading of the boxes indicates 
+the p-value of the profile's match to that position (scaled between 
+0-1000 scores, where 0 corresponds to a p-value of 1 and 1000 to a 
+p-value &le; 10<sup>-10</sup>). Thus, the darker the shade, the 
+lower (better) the p-value.</p>
 
 <p>
 The default view only shows predicted binding sites with scores of 400 or greater. 
-This can be adjusted by adjusting the track settings. Multi-select filters allow viewing of
+This can be adjusted in the track settings. Multi-select filters allow viewing of
 particular transcription factors. At window sizes of greater than
-10,000 base pairs, this track turns to density graph mode. Zoom in to see detail.</p>
+10,000 base pairs, this track turns to density graph mode. 
+Zoom to a smaller region and click into an item to see more detail.</p>
 
 <p>
-<em>From <a href="../../FAQ/FAQformat.html#format1">https://genome.ucsc.edu/FAQ/FAQformat.html#format1</a>:
+<em>From <a href="../../FAQ/FAQformat.html#format1">BED format documentation</a>:
   </em>
 <table style="box-sizing: border-box; border-collapse: collapse; border-spacing: 0px; border: 2px solid gray; margin-top: 10px; margin-left: 15px; font-size: 13px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial;">
   <tbody style="box-sizing: border-box;">
@@ -58,78 +57,61 @@ particular transcription factors. At window sizes of greater than
 </table>
 
 <p><em>Conversion table:</em></p>
-<table cellspacing="0" cellpadding="0">
-  <col width="87" />
-  <col width="87" />
+<table border="2" style="padding: 10px; border: 1px solid black; border-collapse: collapse;">
   <tr>
-    <td width="107"><div align="center"><strong>Track score</strong></div></td>
-    <td width="107"><div align="center"><strong>p-value</strong></div></td>
-  </tr>
+    <td style="padding:10px"><strong>Item score</strong></td>
+    <td style="padding:10px">0</td>
+    <td style="padding:10px">100</td>
+    <td style="padding:10px">131</td>
+    <td style="padding:10px">200</td>
+    <td style="padding:10px">300</td>
+    <td style="padding:10px">400</td>
+    <td style="padding:10px">500</td>
+    <td style="padding:10px">600</td>
+    <td style="padding:10px">700</td>
+    <td style="padding:10px">800</td>
+    <td style="padding:10px">900</td>
+    <td style="padding:10px">1000</td>
+  </tr> 
   <tr>
-    <td align="right"><div align="center">0</div></td>
-    <td><div align="center">1</div></td>
-  </tr>
-  <tr>
-    <td align="right"><div align="center">100</div></td>
-    <td><div align="center">0.1</div></td>
-  </tr>
-  <tr>
-    <td align="right"><div align="center">131</div></td>
-    <td><div align="center">0.049</div></td>
-  </tr>
-  <tr>
-    <td align="right"><div align="center">200</div></td>
-    <td><div align="center">10<sup>-2</sup></div></td>
-  </tr>
-  <tr>
-    <td align="right"><div align="center">300</div></td>
-    <td><div align="center">10<sup>-3</sup></div></td>
-  </tr>
-  <tr>
-    <td align="right"><div align="center">400</div></td>
-    <td><div align="center">10<sup>-4</sup></div></td>
-  </tr>
-  <tr>
-    <td align="right"><div align="center">500</div></td>
-    <td><div align="center">10<sup>-5</sup></div></td>
-  </tr>
-  <tr>
-    <td align="right"><div align="center">600</div></td>
-    <td><div align="center">10<sup>-6</sup></div></td>
-  </tr>
-  <tr>
-    <td align="right"><div align="center">700</div></td>
-    <td><div align="center">10<sup>-7</sup></div></td>
-  </tr>
-  <tr>
-    <td align="right"><div align="center">800</div></td>
-    <td><div align="center">10<sup>-8</sup></div></td>
-  </tr>
-  <tr>
-    <td align="right"><div align="center">900</div></td>
-    <td><div align="center">10<sup>-9</sup></div></td>
-  </tr>
-  <tr>
-    <td align="right"><div align="center">1000</div></td>
-    <td><div align="center">&le; 10<sup>-10</sup></div></td>
+    <td style="padding:10px"><strong>p-value</strong></td>
+    <td style="padding:10px">1</td>
+    <td style="padding:10px">0.1</td>
+    <td style="padding:10px">0.049</td>
+    <td style="padding:10px">10<sup>-2</sup></td>
+    <td style="padding:10px">10<sup>-3</sup></td>
+    <td style="padding:10px">10<sup>-4</sup></td>
+    <td style="padding:10px">10<sup>-5</sup></td>
+    <td style="padding:10px">10<sup>-6</sup></td>
+    <td style="padding:10px">10<sup>-7</sup></td>
+    <td style="padding:10px">10<sup>-8</sup></td>
+    <td style="padding:10px">10<sup>-9</sup></td>
+    <td style="padding:10px">&le; 10<sup>-10</sup></td>
   </tr>
 </table>
 
 <h2>Methods</h2>
 <p>
-For each TF binding profile in the JASPAR CORE  collection,  genomes were 
-scanned in parallel using the TFBS Perl module (Lenhard and Wasserman 2002) 
+For each TF binding profile in the JASPAR CORE  collection, genomes were 
+scanned in parallel using the best software available at the time.</p>
+<p> 
+JASPAR 2018 used the TFBS Perl module (Lenhard and Wasserman 2002) 
 and FIMO (Grant, Bailey, and Noble 2011), as distributed within the MEME suite 
-(version 4.11.2) (Bailey et al. 2009).</p> 
-<p>
-For scanning genomes with the 
-BioPerl TFBS module, we converted profiles to PWMs and kept matches with a 
+(version 4.11.2) (Bailey et al. 2009). For scanning genomes with the 
+BioPerl TFBS module, profiles were converted to PWMs and matches were kept with a 
 relative score &ge; 0.8. For the FIMO scan, profiles were reformatted to MEME motifs 
 and matches with a p-value &lt; 0.05 were kept. TFBS predictions that were not 
 consistent between the two methods (TFBS Perl module and FIMO) were removed. The 
-remaining TFBS predictions were converted to genome tracks and colored according 
+remaining TFBS predictions were colored according 
 to their FIMO p-value to allow for comparison of prediction confidence between 
 different profiles.</p>
+<p>
+For JASPAR 2020, DNA sequences were scanned with JASPAR CORE TF-binding profiles 
+for each taxa independently using PWMScan (24). We selected TFBS predictions 
+with a PWM relative score &ge; 0.8 and a p-value &lt; 0.05. P-values were scaled 
+between 0 (corresponding to a p-value of 1) and 1000 (p-value &le; 10<sup>-10</sup>) for 
+colouring of the genome tracks and to allow for comparison of prediction 
+confidence between different profiles.</p>
 
 <p>
 Please refer to the JASPAR 2020 and 2018 publication for more details (citation below).</p>
@@ -148,9 +130,7 @@ command line utilities. Please be aware that these download files are very large
 between 75Gb and 86Gb.</p>
 
 <p> 
-All data is freely available.</p>
-
-<p>
+All data is freely available.
 Additional resources are available directly from the JASPAR group:</p>
 <ul>
 <li>Binding site predictions for all and individual TF profiles are available 
@@ -217,13 +197,13 @@ href="../cgi-bin/hgTracks?db=sacCer3&hubUrl=http://expdata.cmmt.ubc.ca/JASPAR/UC
 <p>
 The JASPAR database is a joint effort between several labs 
 (please see the latest JASPAR paper, below). 
-Binding site predictions and UCSC tracks were computed by the Wasserman Lab and 
-are maintained by David Arenillas 
-(<a href="mailto:dave@cmmt.ubc.ca" target="_blank">dave@cmmt.ubc.ca</a>). For 
-enquiries about the data please contact Oriol Fornes (<a href="mailto:oriol@cmmt.ubc.ca" 
-target="_blank">oriol@cmmt.ubc.ca</a>) and Robin van der Lee 
-(<a href="mailto:rvdlee@cmmt.ubc.ca" target="_blank">rvdlee@cmmt.ubc.ca</a>).
-</p>
+Binding site predictions and UCSC tracks were computed by the Wasserman Lab. For 
+enquiries about the data please contact Oriol Fornes 
+(<A HREF="mailto:&#111;&#114;&#105;&#111;l&#64;&#99;&#109;&#109;&#116;.
+u&#98;&#99;.c&#97;">
+&#111;&#114;&#105;&#111;l&#64;&#99;&#109;&#109;&#116;.
+u&#98;&#99;.c&#97;</A>
+<!-- above address is oriol at cmmt.ubc.ca -->).</p>
 
 <blockquote>
   <p><em><a href="http://www.cmmt.ubc.ca/wasserman-lab/">Wasserman Lab</a></em><br/>
