@@ -205,7 +205,8 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/facs/cell_type.bb
     barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/facs/cell_type.stats
-    barChartBars Airway_Smooth_Muscle Alveolar_Epithelial_Type_1 Alveolar_Epithelial_Type_2 Artery_or_Vein Basal Basophil/Mast Bronchial_Vessel Capillary Ciliated Club Dendretic Fibroblast Goblet Lymphatic Lymphocyte Macrophage_or_Monocyte Neutrophil Other/Rare Pericyte Vascular_Smooth_Muscle
+    #barChartBars Airway_Smooth_Muscle Alveolar_Epithelial_Type_1 Alveolar_Epithelial_Type_2 Artery_or_Vein Basal Basophil/Mast Bronchial_Vessel Capillary Ciliated Club Dendretic Fibroblast Goblet Lymphatic Lymphocyte Macrophage_or_Monocyte Neutrophil Other/Rare Pericyte Vascular_Smooth_Muscle
+    barChartBars smooth_muscle_(airway)_cell alveolar_Type_1_cell alveolar_Type_2_cell artery/vein_endothelial_cell airway_basal_cell basophil/mast_cell bronchial_vessel_cell capillary_endothelial_cell ciliated_cell club_cell dendritic_cell fibroblast goblet_cell lymphatic_cell lymphocyte macrophage/monocyte mucous_cell other/rare_cell pericyte smooth_muscle_(vascular)_cell
     barChartColors #be04bb #a63276 #0497be #23a218 #a33b7b #e5171b #7a555b #02be01 #0272d5 #2450d5 #d02a1e #af5021 #0750f6 #7e5164 #fd334a #df2901 #c5341d #bd356d #b514a7 #be04bb
     barChartLimit 900
     transformFunc NONE
