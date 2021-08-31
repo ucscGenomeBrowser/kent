@@ -22,8 +22,8 @@ group singleCell
     barChartColors #f1803d #c1229a #07bc02 #b5562a #eb1613 #1494b3 #de2b02 #e6af0e #c12792 #c15f4e #b06a5a #c1229b #d69f85
     #barChartColors #e97c36 #c5249a #06bd02 #f4702a #fa1613 #1495b4 #a5591c #dcb10e #c82a92 #d6684d #ba715a #c5249a #dfa484
     #barChartBars Adipocytes Atrial_Cardiomyocyte Endothelial Fibroblast \
-        Lymphoid Mesothelial Myeloid Neuronal NotAssigned Pericytes Smooth_muscle_cells \
-        Ventricular_Cardiomyocyte doublets
+        #Lymphoid Mesothelial Myeloid Neuronal NotAssigned Pericytes Smooth_muscle_cells \
+        #Ventricular_Cardiomyocyte doublets
     barChartBars adipocyte atrial_cardiomyocyte endothelial fibroblast \
     	lymphoid mesothelial myeloid neuronal not_assigned pericyte smooth_muscle_cell \
 	ventricular_cardiomyocyte doublet
