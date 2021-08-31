@@ -17,7 +17,8 @@ group singleCell
     defaultLabelFields name
     bigDataUrl /gbdb/$D/bbi/bloodHao/cell_type.bb
     barChartStatsUrl /gbdb/$D/bbi/bloodHao/cell_type.stats
-    barChartBars B CD4_T CD8_T DC Mono NK other other_T
+    #barChartBars B CD4_T CD8_T DC Mono NK other other_T
+    barChartBars B_cell T_cell_CD4+ T_cell_CD8+ dendritic_cell_(DC) monocyte natural_killer_cell_(NK) other T_cell_other
     barChartColors #fe3247 #fe3248 #fe3248 #e92812 #e02900 #fb2e3e #f01111 #fe3247
     transformFunc NONE
     barChartLimit 2
