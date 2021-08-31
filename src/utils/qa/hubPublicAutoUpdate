@@ -36,7 +36,7 @@ def parseArgs():
         print("\nGiven a server (dev/hgwbeta/rr) will query hubPublic table URLs and verify that\n" + \
               "the shortLabel, longLabel, dbCount and dbList matches what is in the hubPublic table.\n" + \
               "Any inconsistencies will be automatically updated. Will print out the commands as\n" + \
-              "well as run them\n" + \
+              "well as run them.\n\n" + \
               "Can optionally be run in test mode where it will only print commands without executing.\n\n" + \
               "Example run:\n" + \
               "    hubPublicAutoUpdate dev\n" + \
