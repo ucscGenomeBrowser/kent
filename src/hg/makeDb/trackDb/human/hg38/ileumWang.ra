@@ -18,7 +18,8 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/ileumWang/cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/ileumWang/cell_type.stats
-    barChartBars Enteriendocrine Enterocyte Goblet Paneth-like Progenitor Stem_Cell TA
+    #barChartBars Enteriendocrine Enterocyte Goblet Paneth-like Progenitor Stem_Cell TA
+    barChartBars enteroendocrine_cell enterocyte goblet_cell paneth-like_cell progenitor_cell stem_cell transit-amplifying_cell
     #barChartColors #c4d2ec #0198c0 #578bfd #6e9fd9 #867f68 #e8b562 #cdaf7e
     barChartColors #bcd0f3 #0198c0 #568bfd #629be4 #436ca1 #9ea0a1 #919eb1
     transformFunc NONE

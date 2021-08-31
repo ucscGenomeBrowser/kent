@@ -19,7 +19,8 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/skinSoleBoldo/cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/skinSoleBoldo/cell_type.stats
-    barChartBars Diff._Keratinocytes EpSC_and_undiff._progenitors Erythrocytes Lymphatic_EC Macrophages+DC Melanocytes Mesenchymal Pericytes Pro-inflammatory Secretory-papilliary Secretory-reticular T_cells Vascular_EC
+    #barChartBars Diff._Keratinocytes EpSC_and_undiff._progenitors Erythrocytes Lymphatic_EC Macrophages+DC Melanocytes Mesenchymal Pericytes Pro-inflammatory Secretory-papilliary Secretory-reticular T_cells Vascular_EC
+    barChartBars keratinocyte epidermal_stem_(EpSC)_and__progenitor_cell erythrocyte endothelial_lymphatic_cell macrophage/dendritic_cell melanocyte fibroblast_(mesenchymal) pericyte fibroblast_(pro-inflammatory) fibroblast_(secretory-papilliary) fibroblast_(secretory-reticular) T_cell endothelial_vascular_cell
     barChartColors #0298be #1293ac #b1987c #4b9021 #df2a01 #62b7c6 #9e5d22 #3d9c12 #aa5421 #ac5321 #ad5221 #fa3549 #05bd02
     #barChartColors #0198bf #0c94b3 #98989b #339437 #de2a02 #5db7cb #2160ba #329d1e #1158dc #0a54ed #0551f7 #fa354a #04bd03
     transformFunc NONE
