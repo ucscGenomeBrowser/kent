@@ -103,6 +103,7 @@ install:
 	cp -p --remove-destination getVersion.csh          ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
 	cp -p --remove-destination graph.csh               ${SCRIPTS}
+	cp -p --remove-destination hubPublicAutoUpdate     ${SCRIPTS}
 	cp -p --remove-destination hubSearchUpdate         ${SCRIPTS}
 	cp -p --remove-destination igtc.csh                ${SCRIPTS}
 	cp -p --remove-destination idHitter.csh            ${SCRIPTS}

@@ -1,0 +1,159 @@
+#!/usr/bin/env python3
+#Lou Aug 2021
+"""
+Given a server (dev/hgwbeta/rr) will query hubPublic table URLs and verify that the shortLabel,
+longLabel, dbCount and dbList matches what is in the hubPublic table. Any inconsistencies will be
+automatically updated. Will print out the commands as well as run them.
+
+Can optionally be run in test mode where it will only print commands without executing.
+
+Example run:
+    hubPublicAutoUpdate dev
+    hubPublicAutoUpdate hgwbeta -t
+    hubPublicAutoUpdate rr
+    
+"""
+
+import subprocess,requests,sys,argparse
+
+def parseArgs():
+    """
+    Parse the command line arguments.
+    """
+    parser = argparse.ArgumentParser(description = __doc__, 
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    optional = parser._action_groups.pop()
+    
+    required = parser.add_argument_group('required arguments')
+    
+    required.add_argument ("server",
+        help = "Server from which to query the hubPublic table. Can be dev, hgwbeta, or rr.")
+    optional.add_argument ("-t", "--test", dest = "testMode", default = False, action = "store_true",
+        help = "Optional: Run in test mode. Print out any discrepancies but do not run any " + \
+            "commands.")
+    if (len(sys.argv) == 1):
+        parser.print_usage()
+        print("\nGiven a server (dev/hgwbeta/rr) will query hubPublic table URLs and verify that\n" + \
+              "the shortLabel, longLabel, dbCount and dbList matches what is in the hubPublic table.\n" + \
+              "Any inconsistencies will be automatically updated. Will print out the commands as\n" + \
+              "well as run them\n" + \
+              "Can optionally be run in test mode where it will only print commands without executing.\n\n" + \
+              "Example run:\n" + \
+              "    hubPublicAutoUpdate dev\n" + \
+              "    hubPublicAutoUpdate hgwbeta -t\n" + \
+              "    hubPublicAutoUpdate rr\n")
+        exit(0)
+    parser._action_groups.append(optional)
+    options = parser.parse_args()
+    return  options
+
+def evaluateServer(serverToQuery):
+    """Evaluate the input server, ensure it is valid and return corresponding hgsqlInputs"""
+    if serverToQuery == 'dev':
+        hgsqlInput = ['','hgcentraltest']
+    elif serverToQuery == 'hgwbeta':
+        hgsqlInput = ['-h hgwbeta ','hgcentralbeta']
+    elif serverToQuery == 'rr':
+        hgsqlInput = ['-h genome-centdb ','hgcentral']
+    else:
+        sys.exit("Server called must be either 'dev', 'hgwbeta', or 'rr'")
+    return(hgsqlInput)
+
+def buildPubHubDic(hgsqlInput):
+    """Build a dictionary out of the requested server's hubPublic table"""
+    hubPublicDic = {}    
+    hubPublic = subprocess.run("hgsql "+hgsqlInput[0]+"-e 'select * from hubPublic' "+hgsqlInput[1],\
+                         check=True, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
+    hubPublicOutput = hubPublic.stdout.split('\n')[1:-1]
+
+    for hub in hubPublicOutput:
+        hub = hub.split('\t')
+        hubPublicDic[hub[0]] = {}
+        hubPublicDic[hub[0]] = {'hubUrl':hub[0],'shortLabel':hub[1],'longLabel':hub[2],\
+                            'registrationTime':hub[3],'dbCount':hub[4],\
+                            'dbList':hub[5],'descriptionUrl':hub[5]}
+    return(hubPublicDic)
+
+def buildCurrentHubTxtDic(hub):
+    """Query hub.txt file and build dic of values"""
+    currentHub = {}
+    response = requests.get(hub).text
+    for line in response.splitlines():
+        if "\t" in line.rstrip():
+            line = line.split("\t")
+            currentHub[line[0]] = line[1]
+        else:
+            line = line.split(" ")
+            currentHub[line[0]] = " ".join(line[1:])
+    return(currentHub)
+                    
+def queryHubTxt(currentHub,hub):
+    """Query genomes.txt file and fill out dbList and dbCount values"""
+    
+    currentHub['dbList'] = []
+    genomeFileLocation = currentHub['genomesFile'].rstrip().lstrip()
+    if genomeFileLocation.startswith("http"):
+        genomeUrl = genomeFileLocation
+    else:
+        genomeUrl = "/".join(hub.split('/')[:-1])+"/"+genomeFileLocation
+    genomeInfo = requests.get(genomeUrl).text
+    
+    for line in genomeInfo.splitlines():
+        if "\t" in line:
+            line = line.split("\t")
+            if line[0].rstrip().lstrip() == 'genome':
+                while "" in line:
+                    line.remove("")
+                currentHub['dbList'].append(line[1].rstrip().lstrip())
+        else:
+            line = line.split(" ")
+            if line[0].rstrip().lstrip() == 'genome':
+                while "" in line:
+                    line.remove("")
+                currentHub['dbList'].append(line[1].rstrip().lstrip())
+    currentHub['dbCount'] = len(currentHub['dbList'])
+    return(currentHub)
+
+def printHgsql(hub,varToEdit,newVarValue,hgsqlInput,testMode):
+    """hgsql command to fix the difference"""
+    cmd = "hgsql "+hgsqlInput[0]+"-e \"update hubPublic set "+varToEdit+" = '"+str(newVarValue)+ \
+    "' where hubUrl = '"+hub+"'\" "+hgsqlInput[1]
+    if not testMode:
+        subprocess.run(cmd, check=True, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
+    print(cmd)
+
+def compareResults(hubPublicDic,currentHub,hub,hgsqlInput,testMode):
+    """Compare the hubPublic values to the queried currentHub values and report"""
+
+    if hubPublicDic[hub]['shortLabel'] != currentHub['shortLabel'].rstrip().lstrip():
+        printHgsql(hub,'shortLabel',currentHub['shortLabel'].rstrip().lstrip(),hgsqlInput,testMode)
+        
+    if hubPublicDic[hub]['longLabel'] != currentHub['longLabel'].rstrip().lstrip():     
+        printHgsql(hub,'longLabel',currentHub['longLabel'].rstrip().lstrip(),hgsqlInput,testMode)
+
+    if int(hubPublicDic[hub]['dbCount']) != int(currentHub['dbCount']):
+        printHgsql(hub,'dbCount',currentHub['dbCount'],hgsqlInput,testMode)
+        
+    if set(hubPublicDic[hub]['dbList'][:-1].split(',')) != set(currentHub['dbList']):
+        printHgsql(hub,'dbList',",".join(currentHub['dbList'])+",",hgsqlInput,testMode)
+    
+def hubPublicCompare(hubPublicDic,hgsqlInput,testMode):
+    """Query hub.txt files and compare values to hubPublic values"""
+    for hub in hubPublicDic.keys():
+        try: #Try for timeout connections
+            currentHub = buildCurrentHubTxtDic(hub)
+            currentHub = queryHubTxt(currentHub,hub)
+            compareResults(hubPublicDic,currentHub,hub,hgsqlInput,testMode)
+        except:
+            print("The following hub has an error or is not responsive: "+str(hub))            
+            
+def main():
+    """Initialize options and call other functions"""
+    options = parseArgs()
+    serverToQuery = options.server
+    testMode = options.testMode
+    hgsqlInput = evaluateServer(serverToQuery)
+    hubPublicDic = buildPubHubDic(hgsqlInput)
+    hubPublicCompare(hubPublicDic,hgsqlInput,testMode)
+
+main()
