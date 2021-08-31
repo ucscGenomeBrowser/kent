@@ -163,7 +163,6 @@ track encodeRegions override
 shortLabel ENCODE Pilot
 longLabel Regions Used for ENCODE Pilot Project (1%)
 group map
-pennantIcon encodeThumbnail.jpg ../ENCODE "encode project"
 
 track switchDbTss override
 origAssembly hg17
