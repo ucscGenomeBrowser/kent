@@ -7,7 +7,7 @@ shortLabel JASPAR Transcription Factors
 longLabel JASPAR Transcription Factor Binding Site Database
 group regulation
 visibility hide
-type bed 6
+type bed 6 +
 pennantIcon New red ../goldenPath/newsarch.html#082621 "Released Aug. 26, 2021"
 
 	track jaspar2020
