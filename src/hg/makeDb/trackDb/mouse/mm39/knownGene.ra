@@ -19,6 +19,7 @@ searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
 defaultLinkedTables kgXref
+pennantIcon New red ../../goldenPath/newsarch.html#083121 "Released Aug. 31th 2021"
 
 searchName knownGeneAcc
 searchTable knownGene

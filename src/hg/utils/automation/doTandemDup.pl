@@ -137,6 +137,7 @@ sub doKmers {
 		$paraHub, $runDir, $whatItDoes);
 
   my $paraRun = &HgAutomate::paraRun();
+
   $bossScript->add(<<_EOF_
 twoBitInfo $twoBit stdout | cut -f1 > part.list
 printf '#!/bin/bash
@@ -187,7 +188,12 @@ sub doPairedEnds {
   my $bossScript = newBash HgRemoteScript("$runDir/runPairedEnds.bash",
 		$paraHub, $runDir, $whatItDoes);
 
-  my $paraRun = &HgAutomate::paraRun();
+  # trying 16G ram to see if jobs will not fail
+  my $paraRun = "para make -ram=16g jobList
+para check
+para time > run.time
+cat run.time\n";
+
   $bossScript->add(<<_EOF_
 ln -s $prevRunDir/part.list .
 printf '#!/bin/bash
@@ -239,7 +245,12 @@ sub doCollapsePairedEnds {
   my $bossScript = newBash HgRemoteScript("$runDir/runCollapsePairedEnds.bash",
 		$paraHub, $runDir, $whatItDoes);
 
-  my $paraRun = &HgAutomate::paraRun();
+  # trying 16G ram to see if jobs will not fail
+  my $paraRun = "para make -ram=16g jobList
+para check
+para time > run.time
+cat run.time\n";
+
   $bossScript->add(<<_EOF_
 ln -s $prevRunDir/part.list .
 printf '#!/bin/bash

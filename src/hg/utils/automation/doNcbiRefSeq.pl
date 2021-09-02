@@ -354,12 +354,14 @@ if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
   zcat \$ncbiGffGz | grep -v -f ../../../download/\${asmId}.remove.dups.list \\
     | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
       | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
-        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin stdout \\
+      | genePredFilter -chromSizes=../../../\$asmId.chrom.sizes stdin \$asmId.gp
 else
   zcat \$ncbiGffGz \\
     | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
       | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
-        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin stdout \\
+      | genePredFilter -chromSizes=../../../\$asmId.chrom.sizes stdin \$asmId.gp
 fi
 genePredCheck \$asmId.gp
 

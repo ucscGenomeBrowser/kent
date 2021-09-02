@@ -789,8 +789,8 @@ sub doSequence {
   ###########  non-nuclear chromosome sequence  ################
   my $nonNucAsm = "$buildDir/download/${asmId}_assembly_structure/non-nuclear";
   my $nonNucChr2acc = "$nonNucAsm/assembled_chromosomes/chr2acc";
-  my $agpSource = "$nonNucAsm/assembled_chromosomes/AGP";
   if ( -s $nonNucChr2acc ) {
+    my $agpSource = "$nonNucAsm/assembled_chromosomes/AGP";
     my $agpOutput = "$runDir/$asmId.nonNucChr.agp.gz";
     my $agpNames = "$runDir/$asmId.nonNucChr.names";
     my $fastaOut = "$runDir/$asmId.nonNucChr.fa.gz";
@@ -807,8 +807,8 @@ sub doSequence {
 
   ###########  non-nuclear scaffold unlocalized sequence  ################
   my $nonNucChr2scaf = "$nonNucAsm/unlocalized_scaffolds/unlocalized.chr2scaf";
-  my $agpSource = "$nonNucAsm/unlocalized_scaffolds/AGP";
   if ( -s $nonNucChr2scaf ) {
+    my $agpSource = "$nonNucAsm/unlocalized_scaffolds/AGP";
     my $agpOutput = "$runDir/$asmId.nonNucUnlocalized.agp.gz";
     my $agpNames = "$runDir/$asmId.nonNucUnlocalized.names";
     my $fastaOut = "$runDir/$asmId.nonNucUnlocalized.fa.gz";
@@ -1639,7 +1639,8 @@ function cleanUp() {
 if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
   (gff3ToGenePred -warnAndContinue -useName \\
     -attrsOut=\$asmId.geneAttrs.ncbi.txt \$gffFile stdout \\
-      2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter stdin stdout \\
+      2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter \\
+         -chromSizes=../../\$asmId.chrom.sizes stdin stdout \\
         $dupList | gzip -c > \$asmId.ncbiGene.genePred.gz
   genePredCheck \$asmId.ncbiGene.genePred.gz
   export howMany=`genePredCheck \$asmId.ncbiGene.genePred.gz 2>&1 | grep "^checked" | awk '{print \$2}'`
@@ -1925,10 +1926,10 @@ if (length($species) < 1) {
      $species =~ s/.*organism\s+name:\s+//i;
      $species =~ s/\s+\(.*//;
   } else {
-     die "no -species specified and can not find $asmReport";
+     die "ERROR: no -species specified and can not find $asmReport";
   }
   if (length($species) < 1) {
-     die "no -species specified and can not find Organism name: in $asmReport";
+     die "ERROR: no -species specified and can not find Organism name: in $asmReport";
   }
 }
 
