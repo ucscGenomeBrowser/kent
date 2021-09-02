@@ -15,7 +15,6 @@ dragAndDrop subTracks
 noInherit on
 priority 0
 type bed 3
-wgEncode 1
 
     track wgEncodeUwRepliSeqViewPeaks
     shortLabel Peaks

@@ -15,7 +15,6 @@ canPack On
 priority 0
 type broadPeak
 maxItems 20
-wgEncode 1
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Astrocy
     subTrack wgEncodeDukeAffyExonArray off

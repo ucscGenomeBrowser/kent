@@ -23,7 +23,6 @@ controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExt
 dragAndDrop subTracks
 priority 0
 type bed 3
-wgEncode 1
 noInherit on
 
     track wgEncodeHudsonalphaRnaSeqViewAligns

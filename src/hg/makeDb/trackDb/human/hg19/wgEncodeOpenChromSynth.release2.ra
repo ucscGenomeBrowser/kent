@@ -14,7 +14,6 @@ fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession geo
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 type bed 9 +
-wgEncode 1
 #noInherit on
 itemRgb on
 boxedCfg on

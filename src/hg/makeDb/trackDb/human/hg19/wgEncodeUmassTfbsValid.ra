@@ -8,4 +8,3 @@ shortLabel Umass TFBS Valid
 longLabel TFBS Validation from ENCODE/Univ. Massachusettes 
 group regulation
 fileSortOrder cell=Cell_Line view=View replicate=Replicate region=Region dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-wgEncode 1

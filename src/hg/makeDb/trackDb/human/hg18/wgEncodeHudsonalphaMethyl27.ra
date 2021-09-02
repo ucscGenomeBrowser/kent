@@ -16,7 +16,6 @@ settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0
 priority 0
 itemRgb on
 type bed 12
-wgEncode 1
 
     track wgEncodeHudsonalphaMethyl27HepG2r1
     subTrack wgEncodeHudsonalphaMethyl27

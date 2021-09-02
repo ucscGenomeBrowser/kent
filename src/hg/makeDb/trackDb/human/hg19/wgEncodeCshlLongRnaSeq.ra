@@ -19,7 +19,6 @@ dimensionZchecked PAP,TOTAL
 dimensionAchecked rep1,Pooled
 priority 0
 type bed 3
-wgEncode 1
 noInherit on
 
 

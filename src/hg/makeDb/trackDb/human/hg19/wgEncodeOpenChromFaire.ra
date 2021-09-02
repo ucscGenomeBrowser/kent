@@ -20,7 +20,6 @@ configurable on
 useScore 0
 priority 3
 type bed 3
-wgEncode 1
 dataVersion through the ENCODE Jan 2011 Freeze
 
     track wgEncodeOpenChromFaireViewPeaks

@@ -14,7 +14,6 @@ dragAndDrop subTracks
 visibilityViewDefaults  RbpAssocRna=hide
 priority 0
 type bed 3
-wgEncode 1
 origAssembly hg19
 noInherit on
 superTrack wgEncodeRbpSuper dense

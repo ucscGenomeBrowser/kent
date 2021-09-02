@@ -45,7 +45,6 @@ controlledVocabulary encode/cv.ra cellType=cell rnaExtract=rnaExtract age=age
 dragAndDrop subTracks
 priority 0
 type bed 3
-wgEncode 1
 noInherit on
 html wgEncodeCshlLongRnaSeq.release2
 

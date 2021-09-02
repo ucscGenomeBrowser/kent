@@ -56,7 +56,6 @@ scoreMax 150
 #minGrayLevel 4
 priority 2.6
 dataVersion ENCODE Jan 2011 Freeze (Sept 2012 Analysis Pubs)
-wgEncode 1
 
         track wgEncodeAwgDnaseDuke8988tUniPk
         parent wgEncodeAwgDnaseUniform off

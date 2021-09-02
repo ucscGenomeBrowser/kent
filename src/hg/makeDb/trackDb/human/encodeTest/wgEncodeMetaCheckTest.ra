@@ -13,7 +13,6 @@ dragAndDrop subTracks
 visibilityViewDefaults Regions=hide
 priority 0
 type bed 3
-wgEncode 1
 
         track wgEncodeMetaCheckTestA549RegionsRep1
         parent wgEncodeMetaCheckTestViewRegions off

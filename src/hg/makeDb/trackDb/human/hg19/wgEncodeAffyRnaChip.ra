@@ -19,7 +19,6 @@ dragAndDrop subTracks
 noInherit on
 priority 3
 type bed 3
-wgEncode 1
 origAssembly hg18
 
     track wgEncodeAffyRnaChipViewFiltTransfrags

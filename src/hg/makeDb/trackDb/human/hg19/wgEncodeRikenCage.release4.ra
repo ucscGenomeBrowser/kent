@@ -20,7 +20,6 @@ dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
 type bed 3
-wgEncode 1
 html wgEncodeRikenCage.release4
 
     track wgEncodeRikenCageViewPlusSignal
