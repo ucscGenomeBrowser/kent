@@ -1515,7 +1515,7 @@ mv $tmpFile.psl $result
     para -maxJob=100 create jobList
 # 6486 jobs in batch
     para try ... check ... push ... etc
-
+# Completed: 6486 of 6486 jobs
 # CPU time in finished jobs:       2206s      36.77m     0.61h    0.03d  0.000 y
 # IO & Wait Time:                 16505s     275.08m     4.58h    0.19d  0.001 y
 # Average job time:                   3s       0.05m     0.00h    0.00d
@@ -34626,7 +34626,7 @@ TMPDIR=/dev/shm
     cd ~/kent/src/hg/makeDb/trackDb 
     v human/jaspar.ra 
     curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/hg19/trackDb.txt >> human/jaspar.ra 
-    cg /hive/data/genomes/hg19/bed
+    cd /hive/data/genomes/hg19/bed
     mkdir jaspar
     cd jaspar
     wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2018/hg19/JASPAR2018_hg19_all_chr.bb
