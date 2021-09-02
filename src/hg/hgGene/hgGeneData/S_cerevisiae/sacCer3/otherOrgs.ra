@@ -2,7 +2,7 @@ name human
 db hg38
 
 name mouse
-db mm10
+db mm39
 
 name rat
 db rn4
