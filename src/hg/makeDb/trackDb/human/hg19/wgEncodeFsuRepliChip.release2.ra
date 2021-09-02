@@ -17,7 +17,6 @@ maxHeightPixels 100:32:16
 type bigWig
 windowingFunction mean+whiskers
 viewLimits -2:2
-wgEncode 1
 html wgEncodeFsuRepliChip.release2
 
     track wgEncodeFsuRepliChipH1hescWaveSignalRep3

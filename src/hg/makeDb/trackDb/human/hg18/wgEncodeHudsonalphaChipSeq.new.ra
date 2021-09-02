@@ -34,7 +34,6 @@ noInherit on
 type bed 3
 priority 0
 nextItemButton on
-wgEncode 1
 dataVersion through the ENCODE Jan 2010 Freeze
 html wgEncodeHudsonalphaChipSeq.new
 

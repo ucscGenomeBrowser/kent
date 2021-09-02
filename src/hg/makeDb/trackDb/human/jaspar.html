@@ -91,13 +91,10 @@ Zoom to a smaller region and click into an item to see more detail.</p>
 </table>
 
 <h2>Methods</h2>
-<p>
-For each TF binding profile in the JASPAR CORE  collection, genomes were 
-scanned in parallel using the best software available at the time.</p>
 <p> 
 JASPAR 2018 used the TFBS Perl module (Lenhard and Wasserman 2002) 
 and FIMO (Grant, Bailey, and Noble 2011), as distributed within the MEME suite 
-(version 4.11.2) (Bailey et al. 2009). For scanning genomes with the 
+(version 4.11.2) (Bailey <em>et al.</em> 2009). For scanning genomes with the 
 BioPerl TFBS module, profiles were converted to PWMs and matches were kept with a 
 relative score &ge; 0.8. For the FIMO scan, profiles were reformatted to MEME motifs 
 and matches with a p-value &lt; 0.05 were kept. TFBS predictions that were not 
@@ -107,8 +104,8 @@ to their FIMO p-value to allow for comparison of prediction confidence between
 different profiles.</p>
 <p>
 For JASPAR 2020, DNA sequences were scanned with JASPAR CORE TF-binding profiles 
-for each taxa independently using PWMScan (24). We selected TFBS predictions 
-with a PWM relative score &ge; 0.8 and a p-value &lt; 0.05. P-values were scaled 
+for each taxa independently using PWMScan. TFBS predictions were selected with 
+a PWM relative score &ge; 0.8 and a p-value &lt; 0.05. P-values were scaled 
 between 0 (corresponding to a p-value of 1) and 1000 (p-value &le; 10<sup>-10</sup>) for 
 colouring of the genome tracks and to allow for comparison of prediction 
 confidence between different profiles.</p>
@@ -130,7 +127,7 @@ command line utilities. Please be aware that these download files are very large
 between 75Gb and 86Gb.</p>
 
 <p> 
-All data is freely available.
+All data are freely available.
 Additional resources are available directly from the JASPAR group:</p>
 <ul>
 <li>Binding site predictions for all and individual TF profiles are available 
@@ -217,17 +214,27 @@ u&#98;&#99;.c&#97;</A>
 
 <h2>References</h2>
 <p>
-Fornes O, Castro-Mondragon JA, Khan A, van der Lee R, Zhang X, Richmond PA, Modi BP, 
-Correard S, Gheorghe M, Baranasic D, Santana-Garcia W, Tan G, Cheneby J, Ballester B,
- Parcy F, Sandelin A, Lenhard B, Wasserman WW, Mathelier A. 
-<strong>JASPAR 2020: update of the open-access database of transcription factor binding 
-profiles.</strong> <em>Nucleic Acids Res.</em> 2020 .
-<a href="https://pubmed.ncbi.nlm.nih.gov/31701148/" target="_blank">PMID 31701148</a></p>
+Fornes O, Castro-Mondragon JA, Khan A, van der Lee R, Zhang X, Richmond PA, 
+Modi BP, Correard S, Gheorghe M, Barana&#353;i&#263; D <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31701148" target="_blank">
+JASPAR 2020: update of the open-access database of transcription factor 
+binding profiles</a>.
+<em>Nucleic Acids Res</em>. 2020 Jan 8;48(D1):D87-D92.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31701148" 
+target="_blank">31701148</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7145627/" 
+target="_blank">PMC7145627</a>
+</p>
 
 <p>
 Khan A, Fornes O, Stigliani A, Gheorghe M, Castro-Mondragon JA, van der Lee R, 
-Bessy A, Cheneby J, Kulkarni SR, Tan G, Baranasic D, Arenillas DJ, Sandelin A,
-Vandepoele K, Lenhard B, Ballester B, Wasserman WW, Parcy F, Mathelier A. 
-<strong>JASPAR 2018: update of the open-access database of transcription factor 
-binding profiles and its web framework</strong>. <em>Nucleic Acids Research</em>. 
-2018. <a href="https://www.ncbi.nlm.nih.gov/pubmed/29140473">PMID 29140473</a></p>
+Bessy A, Ch&#232;neby J, Kulkarni SR, Tan G <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/29140473" target="_blank">
+JASPAR 2018: update of the open-access database of transcription factor 
+binding profiles and its web framework</a>.
+<em>Nucleic Acids Res</em>. 2018 Jan 4;46(D1):D260-D266.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29140473" 
+target="_blank">29140473</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5753243/" 
+target="_blank">PMC5753243</a>
+</p>

@@ -17,7 +17,6 @@ controlledVocabulary encode/cv.ra cellType=cell obtainedBy=obtainedBy treatment=
 dragAndDrop subTracks
 priority 0
 type bed 9
-wgEncode 1
 itemRgb on
 #visibility dense
 #canPack On

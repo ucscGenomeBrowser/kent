@@ -19,7 +19,6 @@ configurable on
 useScore 0
 priority 0
 type bed 3
-wgEncode 1
 
     track wgEncodeChromatinMapViewPeaks
     shortLabel Peaks

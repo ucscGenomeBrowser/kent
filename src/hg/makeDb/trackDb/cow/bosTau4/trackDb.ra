@@ -19,7 +19,6 @@ priority 0
 noScoreFilter on
 #scoreFilterByRange on
 compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05)
-wgEncode 1
 
 track nscanGene override
 informant Cow N-SCAN uses mouse (mm9) as the informant.

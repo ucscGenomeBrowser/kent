@@ -2,7 +2,6 @@ track encode3Reg
 superTrack on
 shortLabel ENCODE Regulation
 longLabel Integrated Regulation from ENCODE
-wgEncode 1
 group regulation
 
 include encode3.chromHmm.ra

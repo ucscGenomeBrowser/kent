@@ -10,7 +10,6 @@ sortOrder view=+
 controlledVocabulary encode/cv.ra
 priority 0
 type bed
-wgEncode 1
 maxWindowToQuery 10000000
 dragAndDrop subTracks
 noInherit on

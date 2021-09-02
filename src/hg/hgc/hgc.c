@@ -9204,7 +9204,7 @@ static struct bed *getBedsFromBigBedRange(struct trackDb *tdb, char *geneName)
 /* get a list of beds from a bigBed in the current range */
 {
 struct bbiFile *bbi;
-char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+char *fileName = cloneString(hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl")));
 bbi = bigBedFileOpen(fileName);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);

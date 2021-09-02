@@ -18,7 +18,6 @@ visibility hide
 priority 0
 type bed 3
 noInherit on
-wgEncode 1
 superTrack wgEncodeExonArraySuper dense
 html wgEncodeDukeAffyExon.release3
 viewUi on

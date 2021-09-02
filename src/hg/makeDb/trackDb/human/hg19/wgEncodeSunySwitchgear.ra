@@ -15,7 +15,6 @@ noInherit on
 useScore 0
 priority 0
 type bed 3
-wgEncode 1
 #pValueFilter 0.0
 #pValueFilterLimits 0:5
 #scoreFilter 100

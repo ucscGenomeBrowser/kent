@@ -272,7 +272,6 @@ visibility dense
 scoreFilter 0
 scoreFilterLimits 0:1000
 dataVersion ENCODE March 2012 Freeze
-wgEncode 1 
 
     track wgEncodeAwgTfbsBroadDnd41CtcfUniPk
     parent wgEncodeAwgTfbsUniform off
