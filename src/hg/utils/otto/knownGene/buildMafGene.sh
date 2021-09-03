@@ -1,6 +1,8 @@
 #!/bin/sh -ex
 cd $dir
 {
+. ./buildEnv.sh
+
 if test "$multizDir" == ""
 then
 echo "Must set multizDir to directory with multiz files in it"
