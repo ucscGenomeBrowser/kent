@@ -8035,12 +8035,12 @@ if (track->hasUi)
     struct dyString *dsMouseOver = dyStringCreate("%s", longLabel);
     struct trackDb *tdb = track->tdb;
 
-    if (tdb->children)
+    if (tdbIsSuper(tdb))
         {
         dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of different types (super track)",
             slCount(tdb->children));
         }
-    else if (tdb->subtracks)
+    else if (tdbIsComposite(tdb))
         {
         dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of similar types (composite track)",
             slCount(tdb->subtracks));
