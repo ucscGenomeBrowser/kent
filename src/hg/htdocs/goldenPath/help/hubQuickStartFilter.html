@@ -88,10 +88,10 @@ default value, we can use <code>filter.score 0</code>.</p>
 <p>In this second example we have four tracks with <code>filter.fieldName</code> to
 allow numerical filtering, <code>filterByRange.fieldName on</code> 
 to enable range filtering, and <code>filterLimits.fieldName</code> to designate upper 
-and lower range boundaries. <code>filter.fieldName</code> will be used on two
-separate fields to demonstrate multiple filters. Lastly, <code>filterLabel.fieldName</code>
-will be used to change the default filter message. The data used is the same as example 1 
-above:</p>
+and lower range boundaries. <code>filter.fieldName</code> will be used on two separate fields
+(score and name) to demonstrate multiple filters. Lastly, <code>filterLabel.fieldName</code>
+will be used to change the default filter message to instead &quot;Value range to filter&quot;
+for the score field. The data used is the same as example 1 above:</p>
 <pre>
 chr7    127000000  127000005 1 1
 chr7    127000010  127000015 2 2
@@ -311,10 +311,14 @@ track description page, which will show the following:</p>
 </p>
 
 <p>
-See the <a target="_blank"
-href="trackDb/trackDbHub.html#filterText">trackDb help doc entry</a> for additional
-information including an example using regexp.</p>
-
+Changing the filter from <code>BRCA*</code> to <code>*A*</code> would expand the wildcard
+match to all items with A.
+</p>
+<p>See the <a target="_blank" href="trackDb/trackDbHub.html#filterText">trackDb help doc entry</a> for
+additional information including an example using regexp. For instance, with wildcard changed to a
+regexp type of search, putting in <code>.*A\|B.*</code> will match any items with an A or B in it,
+while <code>.*[0-9]</code>; will match any item ending in a number.
+</p>
 <a id="filterValues"></a>
 <h2>filterValues.fieldName</h2>
 <p>
@@ -360,9 +364,11 @@ The format for this substitution is as follows:</p>
 <pre>
 filterValues.fieldName fieldValue1|alternativeName1,fieldValue2|alternativeName2...</pre>
 <p>
-In this example, the bigBed could have value <b>AML</b>, but we would like the
-menu to display <b>Acute Myeloid Leukemia</b>. This can also be used to reduce the size
-of bigBed files.</p>
+In this example, a bigBed could have value <b>AML</b> in a field called Disease, but we would
+like the menu to display <b>Acute Myeloid Leukemia</b> so the line could be
+<code>filterValues.Disease AML|Acute Myeloid Leukemia,MSC|Melanoma Skin Cancer...</code> where
+the filter display would have the full disease names, while the data instead in the bigBed
+was the abbreviation. This can also be used to reduce the size of bigBed files.</p>
 <p>
 The <a href="http://genome.ucsc.edu/s/Lou/filterValuesAllSettings" target="_blank">
 following session</a> contains a hub with example tracks of all 
@@ -432,7 +438,7 @@ chr7    127000080  127000085 signal9 0 AS,AH
 chr7    127000090  127000095 signal10 0 DNA-BR,BS
 </pre>
 <p>
-In this case, the annotations represent the following:</p>
+In this case, the annotations (the sixth annotationType column) represent the following:</p>
 <ul>
 <li>DNA-BR - DNA-binding region</li>
 <li>AS - active site</li>
