@@ -45,7 +45,6 @@ dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
 visibilityViewDefaults Peaks=pack  Signal=full
 noInherit on
-wgEncode 1
 html wgEncodeSydhHistone.release3
 
     #Peak Track SYDH Histone#

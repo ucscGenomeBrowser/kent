@@ -16,7 +16,6 @@ controlledVocabulary encode/cv.ra cellType=cell
 priority 0
 type bed 9
 itemRgb on
-wgEncode 1
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12891
     subTrack wgEncodeHudsonalphaMethylSeq off

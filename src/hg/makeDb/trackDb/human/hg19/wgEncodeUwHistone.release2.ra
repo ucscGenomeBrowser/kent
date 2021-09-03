@@ -67,7 +67,6 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
 type bed 3
-wgEncode 1
 dataVersion through the ENCODE Jun 2010 Freeze
 noInherit on
 html wgEncodeUwHistone.release2

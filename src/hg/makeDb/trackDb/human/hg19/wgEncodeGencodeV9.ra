@@ -25,7 +25,6 @@ sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred 
 configurable off
-wgEncode 1
 wgEncodeGencodeVersion 9
 wgEncodeGencodeAttrs wgEncodeGencodeAttrsV9
 wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV9

@@ -18,7 +18,6 @@ visibility hide
 canPack On
 priority 0
 type broadPeak
-wgEncode 1
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1SkmcV2
     subTrack wgEncodeUwAffyExonArray off

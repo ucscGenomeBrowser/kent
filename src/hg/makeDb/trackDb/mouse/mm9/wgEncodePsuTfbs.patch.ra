@@ -50,7 +50,6 @@ visibilityViewDefaults  Peaks=pack Signal=full
 noInherit on
 priority 0
 type bed 3
-wgEncode 1
 
 	#####Peak Tracks###########
 	track wgEncodePsuTfbsViewPeaks

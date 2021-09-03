@@ -4,6 +4,7 @@ use warnings;
 use strict;
 
 my %fixup = ( 'ITA' => 'Italy',
+              'DRC' => 'Democratic Republic of the Congo',
               'FRANCE' => 'France',
               'FRance' => 'France',
               'MAlta' => 'Malta',

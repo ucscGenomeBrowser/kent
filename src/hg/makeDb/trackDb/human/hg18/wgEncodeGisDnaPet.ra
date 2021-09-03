@@ -13,7 +13,6 @@ controlledVocabulary encode/cv.ra cellType=cell fragSize=fragSize
 dragAndDrop subTracks
 type bed 3
 noInherit on
-wgEncode 1
 
     track wgEncodeGisDnaPetViewAlignments
     shortLabel Alignments

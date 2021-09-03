@@ -65,7 +65,6 @@ html wgEncodeUwDnase.release3
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 priority 4
 type bed 3 +
-wgEncode 1
 
     track wgEncodeUwDnaseViewHot
     shortLabel Hot Spots

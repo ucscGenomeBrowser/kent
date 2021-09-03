@@ -961,7 +961,6 @@ if (numAdded >= 0)
         if (botCheckMult < 1)   // protect against negative value
 	    botCheckMult = 1;   // default is 1, no maximum check here
 	}
-    fprintf(stderr, "customTrack: new %d from %s\n", numAdded, customText);
     printSaveList = TRUE;
     /* add penalty in relation to number of tracks created
      * the default delayFraction here is 1, can be hg.conf specified
@@ -971,6 +970,7 @@ if (numAdded >= 0)
      * Other CGIs besides hgTracks can be calling here.
      */
     botDelayMillis = hgBotDelayTimeFrac((double)((numAdded + 1)*botCheckMult));
+    fprintf(stderr, "customTrack: new %d from %s botDelay %d millis\n", numAdded, customText, botDelayMillis);
     }
 
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
