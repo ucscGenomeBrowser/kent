@@ -30,6 +30,8 @@ cd $ottoDir/$today
 grep -v EPI_ISL_ samples.$today > newPublicNames
 $matUtils extract -i gisaidAndPublic.$today.masked.pb \
     -s newPublicNames \
+    --max-parsimony 20 \
+    --max-branch-length 30 \
     -O -o public-$today.all.masked.pb
 
 # Add nextclade annotations to public protobuf
