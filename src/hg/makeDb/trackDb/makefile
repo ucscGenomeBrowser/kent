@@ -299,7 +299,7 @@ public_all: ${DBS:%=%_public}
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb public metaDb_public $*
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ${BUILD_TRIX} trackDb_public metaDb_public cv/public/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
 	# now build the relatedTracks table for each db
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./buildRelatedTracks relatedTrack $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./buildRelatedTracks relatedTrack_public $*
 	-ssh  ${BETA_MACHINE} rm -rf /dev/shm/trackDbCache/$*.trackDb_public
 
 # this will fail if we are not in a beta checkout:
