@@ -46,7 +46,6 @@ cd $dir/hgNearBlastp/run.$tempDb.$tempDb
 # builds knownBlastTab
 ./loadPairwise.csh
 
-# Load human and rat
 cd $dir/hgNearBlastp/run.$tempDb.$xdb
 hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
 cd $dir/hgNearBlastp/run.$tempDb.$ratDb
