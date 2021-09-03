@@ -278,7 +278,9 @@ tawk '{ if ($1 ~ /^#/) { print; } else if ($7 == "mask") { $1 = "NC_045512v2"; p
 #*** TODO: make hgPhyloPlace handle protobufs that don't have all of the latest problematic sites
 #*** masked more gracefully, and update the Problematic Sites track.
 time cat <(twoBitToFa $ref2bit stdout) $alignedFa \
-| faToVcf -maxDiff=1000 -excludeFile=../tooManyEpps.ids -verbose=2 stdin stdout \
+| faToVcf -maxDiff=1000 \
+    -excludeFile=<(cat ../tooManyEpps.ids ../badBranchSeed.ids) \
+    -verbose=2 stdin stdout \
 | vcfRenameAndPrune stdin $renaming stdout \
 | vcfFilter -excludeVcf=mask.vcf stdin \
 | tawk '$2 != 21987' \
@@ -290,6 +292,7 @@ fi # if [ ! -s new.masked.vcf.gz ]
 time $usher -u -T 80 \
     -A \
     -e 5 \
+    --max-parsimony-per-sample 20 \
     -v new.masked.vcf.gz \
     -i prevRenamed.pb \
     -o gisaidAndPublic.$today.masked.preTrim.pb \
@@ -304,7 +307,6 @@ grep ^Current usher.addNew.log \
 
 # Prune samples with too many private mutations and internal branches that are too long.
 $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.pb \
-    -a 20 \
     -b 30 \
     -O -o gisaidAndPublic.$today.masked.pb
 
