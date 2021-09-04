@@ -12,6 +12,7 @@
 #include "bigBed.h"
 #include "hui.h"
 #include "subText.h"
+#include "web.h"
 
 static void bigGenePredLinks(char *track, char *item)
 /* output links to genePred driven sequence dumps */
@@ -476,6 +477,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	time_t timep = bbiUpdateTime(bbi);
 	printBbiUpdateTime(&timep);
 	}
+    char *motifPwmTable = trackDbSetting(tdb, "motifPwmTable");
+    if (motifPwmTable)
+        {
+        struct dnaSeq *seq = hDnaFromSeq(database, bed->chrom, bed->chromStart, bed->chromEnd, dnaLower);
+        if (bed->strand[0] == '-')
+            reverseComplement(seq->dna, seq->size);
+        struct dnaMotif *motif = loadDnaMotif(bed->name, motifPwmTable);
+        motifHitSection(seq, motif);
+        webEndSection();
+        }
     }
 if (!found)
     {
