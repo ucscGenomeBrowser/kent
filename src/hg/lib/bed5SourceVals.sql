@@ -5,6 +5,7 @@
 
 #BED5+ with a count, list of sources, and list of source scores for combined data
 CREATE TABLE bed5SourceVals (
+    bin int unsigned not null,	# Bin number for browser speedup
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -14,5 +15,5 @@ CREATE TABLE bed5SourceVals (
     sourceIds longblob not null,	# Source ids
     sourceScores longblob not null,	# Source scores
               #Indices
-    KEY `name` (`name`(16))
+    INDEX (chrom,bin)
 );
