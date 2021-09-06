@@ -951,7 +951,7 @@ numAdded = slCount(newCts);
 /* add delay even if numAdded==0 because that can be when the loading
  * of the custom tracks failed.  The try is worth the penalty.
  */
-if (numAdded >= 0)
+if (numAdded > 0)
     {
     static int botCheckMult = 0;
     if (0 == botCheckMult)      // only on first time through here

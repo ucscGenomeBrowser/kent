@@ -85,7 +85,7 @@ if ($vgpIndex) {
   } elsif ($orderList =~ m/vgp.legacy/) {
      $vgpSubset = "(set of legacy/superseded assemblies)";
   }
-  print <<"END"
+  print <<"END";
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hub" -->
 <!--#set var="ROOT" value="../.." -->
@@ -104,7 +104,7 @@ Vertebrate Genomes Project.</a> $vgpSubset
 
 END
 } else {
-  print <<"END"
+  print <<"END";
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="$Name genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
@@ -119,7 +119,7 @@ Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 END
 }
 
-print <<"END"
+print <<"END";
 <h3>How to view the hub</h3>
 <p>
 Options:
@@ -174,9 +174,19 @@ The <em>common name and view in browser</em> will attach only that single assemb
 the genome browser.<br>
 The <em>scientific name and data download</em> link provides access to the files for that one
 assembly hub.<br>
+END
+
+  if ($vgpIndex) {
+    print <<"END";
 The <em>class VGP link</em> provides access to the VGP GenomeArk page for that genome.<br>
+END
+
+  }
+
+print <<"END";
 The other links provide access to NCBI resources for these assemblies.
 END
+
 }	#	sub startHtml()
 
 ##############################################################################
@@ -204,7 +214,7 @@ print "</tr></thead><tbody>\n";
 ##############################################################################
 sub endTable() {
 
-print <<"END"
+print <<"END";
 
 </tbody>
 </table>

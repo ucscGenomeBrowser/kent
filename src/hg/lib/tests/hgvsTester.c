@@ -52,13 +52,13 @@ while (lineFileNext(lf, &line, NULL))
         {
         struct hgvsVariant *hgvs = NULL;
         struct hash *bedHash = hashNew(0);
+        int okCount = 0;
         for (hgvs = hgvsList; hgvs != NULL; hgvs = hgvs->next)
             {
             struct bed *region = hgvsMapToGenome(db, hgvs, NULL);
-            if (region == NULL)
-                printf("# Failed to map '%s' to %s assembly\n", term, db);
-            else
+            if (region != NULL)
                 {
+                okCount++;
                 // Now that hgvsParsePsuedoHgvs returns a list of valid positions
                 // we only want to print the unique ones in the list
                 dyStringClear(dy);;
@@ -68,6 +68,9 @@ while (lineFileNext(lf, &line, NULL))
                     hashAdd(bedHash, cloneString(dy->string), region);
                 }
             }
+        // Complain only if none of the HGVS terms in the list could be mapped
+        if (okCount == 0)
+            printf("# Failed to map '%s' to %s assembly\n", term, db);
         struct hashEl *hel, *helList = hashElListHash(bedHash);
         for (hel = helList; hel != NULL; hel = hel->next)
             {

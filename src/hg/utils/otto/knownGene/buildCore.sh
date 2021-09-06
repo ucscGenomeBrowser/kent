@@ -104,7 +104,7 @@ hgLoadSqlTab -notOnServer $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpA
 
 
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
-txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq | bedClip stdin /cluster/data/mm39/chrom.sizes  ucscSplice.bed
+txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq | bedClip stdin /cluster/data/$db/chrom.sizes  ucscSplice.bed
 hgLoadBed $tempDb knownAlt ucscSplice.bed
 
 txGeneExplainUpdate2 $oldGeneBed ucscGenes.bed kgOldToNew.tab
