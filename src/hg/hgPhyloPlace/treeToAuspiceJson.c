@@ -308,6 +308,18 @@ if (node->priv != NULL)
             dyStringPrintf(dy, ",%c%d%c", snc->parBase, snc->chromStart+1, snc->newBase);
         jsonWriteString(jw, "nuc mutations", dy->string);
         dyStringClear(dy);
+        for (snc = sncList;  snc != NULL;  snc = snc->next)
+            {
+            char ref[2];
+            seqWindowCopy(gSeqWin, snc->chromStart, 1, ref, sizeof(ref));
+            if (snc->newBase == ref[0])
+                {
+                dyStringAppendSep(dy, ",");
+                dyStringPrintf(dy, "%c%d%c", snc->parBase, snc->chromStart+1, snc->newBase);
+                }
+            }
+        jsonWriteString(jw, "back-mutations", dy->string);
+        dyStringClear(dy);
         struct dyString *dyS = dyStringNew(0);
         struct slPair *geneAaMut;
         for (geneAaMut = geneAaMutations;  geneAaMut != NULL;  geneAaMut = geneAaMut->next)
