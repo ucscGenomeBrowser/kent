@@ -110,9 +110,17 @@ def dateFromAttrs(attrs):
         date = receiptDate
     return date
 
-def labFromAttrs(attrs):
-    return tryAttrs(attrs, ['collecting institution', 'collected by', 'INSDC center name',
-                            'collected_by'])
+def labFromRecordAttrs(record, attrs):
+    lab = tryAttrs(attrs, ['collecting institution', 'collected by', 'INSDC center name',
+                           'collected_by'])
+    # HT Jover Lee https://github.com/nextstrain/ncov-ingest/pull/208
+    if not lab and record.get('owner') and record['owner'].get('name') and \
+        record['owner']['name'] == "European Bioinformatics Institute":
+        if record.get('sampleIds'):
+            for sidBlob in record['sampleIds']:
+                if sidBlob.get('label') == "Sample name":
+                    lab = sidBlob['db']
+    return lab
 
 def authorFromAttrs(attrs):
     return tryAttrs(attrs, ['collector name'])
@@ -172,7 +180,7 @@ extract relevant attributes, and output TSV.
             gi = ""
             name = nameFromRecordAttrs(record, attrs)
             date = dateFromAttrs(attrs)
-            lab = labFromAttrs(attrs)
+            lab = labFromRecordAttrs(record, attrs)
             author = authorFromAttrs(attrs)
             country = countryFromAttrs(attrs)
             country, locale = localeFromAttrs(attrs, country)

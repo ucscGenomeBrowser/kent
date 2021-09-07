@@ -9,6 +9,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility pack
     shortLabel Lung Cells
     longLabel Lung cells 10x method binned by merged cell type from Travaglini et al 2020
@@ -28,6 +30,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Half Det
     longLabel Lung cells 10x method binned by halfway detailed cell type from Travaglini et al 2020
@@ -47,6 +51,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Detail
     longLabel Lung cells 10x method binned by detailed cell type from Travaglini et al 2020
@@ -70,6 +76,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Compart
     longLabel Lung cells 10x method binned by compartment from Travaglini et al 2020
@@ -91,6 +99,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Donor
     longLabel Lung cells 10x method binned by organ donor from Travaglini et al 2020
@@ -112,6 +122,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Locat
     longLabel Lung cells 10x method binned by location from Travaglini et al 2020
@@ -133,6 +145,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Mag Sel
     longLabel Lung cells 10x method binned by magnetic.selection from Travaglini et al 2020
@@ -154,6 +168,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Organ
     longLabel Lung cells 10x method binned by organ from Travaglini et al 2020
@@ -175,6 +191,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020 
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Sample
     longLabel Lung cells 10x method binned by sample from Travaglini et al 2020
@@ -196,6 +214,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Cells FACS
     longLabel Lung cells FACS method binned by merged cell type from Travaglini et al 2020
@@ -215,6 +235,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Half Det FACS
     longLabel Lung cells FACS method binned by merged cell type from Travaglini et al 2020
@@ -233,6 +255,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Detail FACS
     longLabel Lung cells FACS method binned by detailed cell type from Travaglini et al 2020
@@ -252,6 +276,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Organ FACS
     longLabel Lung cells FACS method binned by organ from Travaglini et al 2020
@@ -271,6 +297,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Label FACS
     longLabel Lung cells FACS method binned by label from Travaglini et al 2020
@@ -290,6 +318,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Donor FACS
     longLabel Lung cells FACS method binned by organ donor from Travaglini et al 2020
@@ -309,6 +339,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Locat FACS
     longLabel Lung cells FACS method binned by location from Travaglini et al 2020
@@ -328,6 +360,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Gating FACS
     longLabel Lung cells FACS method binned by gating from Travaglini et al 2020
@@ -347,6 +381,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Compart FACS
     longLabel Lung cells FACS method binned by compartment from Travaglini et al 2020
@@ -366,6 +402,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Sample FACS
     longLabel Lung cells FACS method binned by sample from Travaglini et al 2020
