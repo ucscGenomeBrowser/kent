@@ -9,6 +9,8 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
+    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility pack
     shortLabel Pancreas Cells
     longLabel Pancreas cells binned by cell type from Baron et al 2016
@@ -28,6 +30,8 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
+    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Details
     longLabel Pancreas cells binned by detailed cell type from Baron et al 2016
@@ -46,6 +50,8 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
+    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Batch
     longLabel Pancreas cells binned by batch from Baron et al 2016
@@ -69,6 +75,8 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
+    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Donor
     longLabel Pancreas cells binned by organ donor from Baron et al 2016

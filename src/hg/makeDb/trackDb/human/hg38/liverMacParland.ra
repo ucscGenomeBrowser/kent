@@ -10,6 +10,8 @@ release alpha
     parent liverMacParland
     html liverMacParland
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=covid19atlas+c19a-macparland18&gene=$$
+    urlLabel View on the UCSC Cell Browser:    
     visibility pack
     shortLabel Liver Cells
     longLabel Liver cells binned by cell type from MacParland et al 2018
@@ -43,6 +45,8 @@ release alpha
     parent liverMacParland
     html liverMacParland
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=covid19atlas+c19a-macparland18&gene=$$
+    urlLabel View on the UCSC Cell Browser:    
     visibility hide
     shortLabel Liver Broad
     longLabel Liver cells binned by broad cell type from MacParland et al 2018
@@ -69,6 +73,8 @@ release alpha
     parent liverMacParland
     html liverMacParland
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=covid19atlas+c19a-macparland18&gene=$$
+    urlLabel View on the UCSC Cell Browser:    
     visibility hide
     shortLabel Liver Donor
     longLabel Liver cells binned by organ donor from MacParland et al 2018

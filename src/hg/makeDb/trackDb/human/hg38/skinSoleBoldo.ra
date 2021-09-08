@@ -10,6 +10,8 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     parent skinSoleBoldo
     html skinSoleBoldo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=aging-human-skin&gene=$$
+    urlLabel View on the UCSC Cell Browser:   
     visibility pack
     shortLabel Skin Cell
     longLabel Skin single cell RNA binned by cell type from Sole-Boldo et al 2020
@@ -30,6 +32,8 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     parent skinSoleBoldo
     html skinSoleBoldo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=aging-human-skin&gene=$$
+    urlLabel View on the UCSC Cell Browser:   
     visibility hide
     shortLabel Skin Donor
     longLabel Skin single cell RNA binned by skin donor from Sole-Boldo et al 2020
@@ -50,6 +54,8 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     parent skinSoleBoldo
     html skinSoleBoldo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=aging-human-skin&gene=$$
+    urlLabel View on the UCSC Cell Browser:   
     visibility hide
     shortLabel Skin Age
     longLabel Skin single cell RNA binned by skin donor's age from Sole-Boldo et al 2020
@@ -70,6 +76,8 @@ pennantIcon 19.jpg liftover.html "lifted from hg19"
     parent skinSoleBoldo
     html skinSoleBoldo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=aging-human-skin&gene=$$
+    urlLabel View on the UCSC Cell Browser:   
     visibility hide
     shortLabel Skin Cell+Age
     longLabel Skin single cell RNA binned by cell type and donor's age from Sole-Boldo et all 2020
