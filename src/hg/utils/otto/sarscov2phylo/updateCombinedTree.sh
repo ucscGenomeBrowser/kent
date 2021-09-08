@@ -5,17 +5,18 @@ set -beEu -x -o pipefail
 #	kent/src/hg/utils/otto/sarscov2phylo/updateCombinedTree.sh
 
 usage() {
-    echo "usage: $0 prevDate problematicSitesVcf"
+    echo "usage: $0 prevDate today problematicSitesVcf"
     echo "This assumes that ncbi.latest and cogUk.latest links/directories have been updated."
 }
 
-if [ $# != 2 ]; then
+if [ $# != 3 ]; then
   usage
   exit 1
 fi
 
 prevDate=$1
-problematicSitesVcf=$2
+today=$2
+problematicSitesVcf=$3
 
 ottoDir=/hive/data/outside/otto/sarscov2phylo
 ncbiDir=$ottoDir/ncbi.latest
@@ -28,8 +29,7 @@ epiToPublic=$gisaidDir/epiToPublicAndDate.latest
 scriptDir=$(dirname "${BASH_SOURCE[0]}")
 source $scriptDir/util.sh
 
-today=$(date +%F)
-
+mkdir -p $ottoDir/$today
 cd $ottoDir/$today
 
 prevProtobufMasked=$ottoDir/$prevDate/gisaidAndPublic.$prevDate.masked.pb
@@ -310,14 +310,15 @@ $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.pb \
     -b 30 \
     -O -o gisaidAndPublic.$today.masked.pb
 
+$matUtils extract -i gisaidAndPublic.$today.masked.pb -u samples.$today
+
 # Metadata for hgPhyloPlace:
 # Header names same as nextmeta (with strain first) so hgPhyloPlace recognizes them:
 echo -e "strain\tgenbank_accession\tdate\tcountry\thost\tcompleteness\tlength\tNextstrain_clade\tpangolin_lineage" \
     > gisaidAndPublic.$today.metadata.tsv
 # It's not always possible to recreate both old and new names correctly from metadata,
 # so make a file to translate accession or COG-UK to the name used in VCF, tree and protobufs.
-cut -f 2 $renaming \
-| awk -F\| '{ if ($3 == "") { print $1 "\t" $0; } else { print $2 "\t" $0; } }' \
+awk -F\| '{ if ($3 == "") { print $1 "\t" $0; } else { print $2 "\t" $0; } }' samples.$today \
 | sort \
     > idToName
 # NCBI metadata for COG-UK: strip COG-UK/ & United Kingdom:, add country & year to name
@@ -387,7 +388,7 @@ tail -n+2 $cncbDir/cncb.metadata.tsv \
     >> gisaidAndPublic.$today.metadata.tsv
 wc -l gisaidAndPublic.$today.metadata.tsv
 zcat $gisaidDir/metadata_batch_$today.tsv.gz \
-| grep -Fwf <(cut -f 2 $renaming | grep EPI_ISL | cut -d\| -f 2) \
+| grep -Fwf <(grep EPI_ISL samples.$today | cut -d\| -f 2) \
 | tawk '{print $1 "|" $3 "|" $5, "", $5, $7, $15, $13, $14, $18, $19;}' \
     >> gisaidAndPublic.$today.metadata.tsv
 wc -l gisaidAndPublic.$today.metadata.tsv
@@ -397,7 +398,6 @@ gzip -f gisaidAndPublic.$today.metadata.tsv
 cncbDate=$(ls -l $cncbDir | sed -re 's/.*cncb\.([0-9]{4}-[0-9][0-9]-[0-9][0-9]).*/\1/')
 echo "sarscov2phylo release 13-11-20; GISAID, NCBI and COG-UK sequences downloaded $today; CNCB sequences downloaded $cncbDate" \
     > version.plusGisaid.txt
-$matUtils extract -i gisaidAndPublic.$today.masked.pb -u samples.$today
 sampleCountComma=$(echo $(wc -l < samples.$today) \
                    | sed -re 's/([0-9]+)([0-9]{3})$/\1,\2/; s/([0-9]+)([0-9]{3},[0-9]{3})$/\1,\2/;')
 echo "$sampleCountComma genomes from GISAID, GenBank, COG-UK and CNCB ($today); sarscov2phylo 13-11-20 tree with newer sequences added by UShER" \
@@ -451,6 +451,20 @@ tail -n+2 sample-clades \
 | tawk '{print $3, $1;}' \
 | sort > lineageToName
 
+# Add clade & lineage from tree to metadata.
+zcat gisaidAndPublic.$today.metadata.tsv.gz \
+| tail -n+2 \
+| sort > tmp1
+tail -n+2 sample-clades \
+| sort > tmp2
+paste <(zcat gisaidAndPublic.$today.metadata.tsv.gz | head -1) \
+      <(echo -e "Nextstrain_clade_usher\tpango_lineage_usher") \
+    > gisaidAndPublic.$today.metadata.tsv
+join -t$'\t' tmp1 tmp2 \
+    >> gisaidAndPublic.$today.metadata.tsv
+gzip -f gisaidAndPublic.$today.metadata.tsv
+rm tmp1 tmp2
+
 # EPI_ISL_ ID to public sequence name mapping, so if users upload EPI_ISL IDs for which we have
 # public names & IDs, we can match them.
 cut -f 1,3 $epiToPublic > epiToPublic.latest
@@ -466,13 +480,14 @@ done
 
 # Make Taxodium-formatted protobuf for display
 zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz > ncbiGenes.gtf
+zcat /hive/data/genomes/wuhCor1/wuhCor1.fa.gz > wuhCor1.fa
 zcat gisaidAndPublic.$today.metadata.tsv.gz > metadata.tmp.tsv
 time $matUtils extract -i gisaidAndPublic.$today.masked.pb \
-    -f reference.fa \
+    -f wuhCor1.fa \
     -g ncbiGenes.gtf \
     -M metadata.tmp.tsv \
     --write-taxodium gisaidAndPublic.$today.masked.taxodium.pb
-rm metadata.tmp.tsv
+rm metadata.tmp.tsv wuhCor1.fa
 gzip gisaidAndPublic.$today.masked.taxodium.pb
 
 $scriptDir/extractPublicTree.sh $today
