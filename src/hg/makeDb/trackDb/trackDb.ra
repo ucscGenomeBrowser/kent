@@ -2086,7 +2086,7 @@ searchName snpMapShort
 searchTable snpMap
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12.999
@@ -2096,7 +2096,7 @@ searchName snpShort
 searchTable snp
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12.998
@@ -2105,7 +2105,7 @@ padding 250
 searchTable snp125
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9]+)
 searchPriority 12.997
 padding 250
@@ -2113,7 +2113,7 @@ padding 250
 searchTable snp126
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.996
 padding 250
@@ -2121,7 +2121,7 @@ padding 250
 searchTable snp127
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.995
 padding 250
@@ -2129,7 +2129,7 @@ padding 250
 searchTable snp128
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.994
 padding 250
@@ -2137,7 +2137,7 @@ padding 250
 searchTable snp129
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.993
 padding 250
@@ -2145,7 +2145,7 @@ padding 250
 searchTable snp130
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.992
 padding 250
@@ -2153,7 +2153,7 @@ padding 250
 searchTable snp131
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.991
 padding 250
@@ -2161,7 +2161,7 @@ padding 250
 searchTable snp132Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9901
 padding 250
@@ -2169,7 +2169,7 @@ padding 250
 searchTable snp132Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9902
 padding 250
@@ -2177,7 +2177,7 @@ padding 250
 searchTable snp132Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9903
 padding 250
@@ -2185,7 +2185,7 @@ padding 250
 searchTable snp132
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9904
 padding 250
@@ -2193,7 +2193,7 @@ padding 250
 searchTable snp135Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9891
 padding 250
@@ -2201,7 +2201,7 @@ padding 250
 searchTable snp135Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9892
 padding 250
@@ -2209,7 +2209,7 @@ padding 250
 searchTable snp135Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9893
 padding 250
@@ -2217,7 +2217,7 @@ padding 250
 searchTable snp135
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9894
 padding 250
@@ -2225,7 +2225,7 @@ padding 250
 searchTable snp137Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9885
 padding 250
@@ -2233,7 +2233,7 @@ padding 250
 searchTable snp137Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9886
 padding 250
@@ -2241,7 +2241,7 @@ padding 250
 searchTable snp137Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9887
 padding 250
@@ -2249,7 +2249,7 @@ padding 250
 searchTable snp137
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9888
 padding 250
@@ -2257,7 +2257,7 @@ padding 250
 searchTable snp138Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9875
 padding 250
@@ -2265,7 +2265,7 @@ padding 250
 searchTable snp138Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9876
 padding 250
@@ -2273,7 +2273,7 @@ padding 250
 searchTable snp138Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9877
 padding 250
@@ -2281,7 +2281,7 @@ padding 250
 searchTable snp138
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9878
 padding 250
@@ -2289,7 +2289,7 @@ padding 250
 searchTable snp147Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9846
 padding 250
@@ -2297,7 +2297,7 @@ padding 250
 searchTable snp147Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9847
 padding 250
@@ -2305,7 +2305,7 @@ padding 250
 searchTable snp147Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9848
 padding 250
@@ -2313,7 +2313,7 @@ padding 250
 searchTable snp147
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.953
 padding 250
@@ -2321,7 +2321,7 @@ padding 250
 searchTable snp148Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9843
 padding 250
@@ -2329,7 +2329,7 @@ padding 250
 searchTable snp148Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9844
 padding 250
@@ -2337,7 +2337,7 @@ padding 250
 searchTable snp148Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9845
 padding 250
@@ -2345,7 +2345,7 @@ padding 250
 searchTable snp148
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.952
 padding 250
@@ -2491,7 +2491,7 @@ searchName snpMapLong
 searchTable snpMap
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 searchPriority 16.999
@@ -2501,7 +2501,7 @@ searchName snpLong
 searchTable snp
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 searchPriority 16.998
