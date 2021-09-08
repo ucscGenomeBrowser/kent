@@ -23,6 +23,8 @@ var debug = false;
  * int imgBox*            // various drag-scroll values
  * boolean measureTiming  // true if measureTiming is on
  * Object trackDb         // hash of trackDb entries for tracks which are visible on current page
+ * string highlight       // highlight string, in format chrom#start#end#color|chrom2#start2#end2#color2|...
+ * string prevHlColor     // the last highlight color that the user picked
  */
 
 /* IE11 compatibility - IE doesn't have string startsWith and never will */
@@ -971,7 +973,7 @@ var vis = {
                 // else Would be nice to hide subtracks as well but that may be overkill
                 $(document.getElementById('tr_' + track)).remove();
                 cart.updateSessionPanel();
-                imageV2.highlightRegion();
+                imageV2.drawHighlights();
                 $(this).attr('class', 'hiddenText');
             } else
                 $(this).attr('class', 'normalText');
@@ -1034,7 +1036,7 @@ var dragSelect = {
 
     findHighlightIdxForPos : function(findPos) {
         // return the index of the highlight string e.g. hg19.chrom1:123-345#AABBDCC that includes a chrom range findPos
-        // mostly copied from highlightRegion()
+        // mostly copied from drawHighlights()
         var currDb = getDb();
         if (hgTracks.highlight) {
             var hlArray = hgTracks.highlight.split("|"); // support multiple highlight items
@@ -1056,13 +1058,39 @@ var dragSelect = {
         return null;
     },
 
+    saveHlColor : function (hlColor) 
+    // save the current hlColor to the object and also the cart variable hlColor and return it.
+    // hlColor is a 6-character hex string prefixed by #
+    {
+            dragSelect.hlColor = hlColor;
+            cart.setVars(["prevHlColor"], [dragSelect.hlColor]);
+            hgTracks.prevHlColor = hlColor; // cart.setVars does not update the hgTracks-variables. The cart-variable system is a problem.
+            return hlColor;
+    },
+
+    loadHlColor : function () 
+    // load hlColor from prevHlColor in the cart, or use default color, set and return it
+    // color is a 6-char hex string prefixed by #
+    {
+        if (hgTracks.prevHlColor)
+            dragSelect.hlColor = hgTracks.prevHlColor;
+        else
+            dragSelect.hlColor = dragSelect.hlColorDefault;
+        return dragSelect.hlColor;
+    },
+
     highlightThisRegion: function(newPosition, doAdd, hlColor)
     // set highlighting newPosition in server-side cart and apply the highlighting in local UI.
+    // hlColor can be undefined, in which case it defaults to the last used color or the default light blue
+    // if hlColor is set, it is also saved into the cart.
+    // if doAdd is true, the highlight is added to the current list. If it is false, all old highlights are deleted.
     {
         newPosition.replace("virt:", "multi:");
-        var hlColorName = hlColor; // js convention: do not assign to argument variables
+        var hlColorName = null;
         if (hlColor==="" || hlColor===null || hlColor===undefined)
-            hlColorName = dragSelect.hlColor;
+            hlColorName = dragSelect.loadHlColor();
+        else
+            hlColorName = dragSelect.saveHlColor( hlColor );
 
         var pos = parsePosition(newPosition);
         var start = pos.start;
@@ -1114,7 +1142,7 @@ var dragSelect = {
         }
         // TODO if not virt, do we need to erase cart nonVirtHighlight ?
         cart.setVarsObj(cartSettings);
-        imageV2.highlightRegion();
+        imageV2.drawHighlights();
     },
 
     selectionEndDialog: function (newPosition)
@@ -1129,13 +1157,14 @@ var dragSelect = {
             $("body").append("<div id='dragSelectDialog'>" + 
                              "<p><ul>"+
                              "<li>Hold <b>Shift+drag</b> to show this dialog" +
-                             "<li>Hold <b>Alt+drag</b> to add a highlight" +
+                             "<li>Hold <b>Alt+drag</b> (Windows) or <b>Option+drag</b> (Mac) to add a highlight" +
                              "<li>Hold <b>Ctrl+drag</b> (Windows) or <b>Cmd+drag</b> (Mac) to zoom" +
-                             "<li>To cancel, press <tt>Esc</tt> anytime or drag mouse outside image" +
-                             "<li>Highlight the current position with <tt>h then m</tt>" +
+                             "<li>To cancel, press <tt>Esc</tt> anytime during the drag" +
+                             "<li>Using the keyboard, highlight the current position with <tt>h then m</tt>" +
                              "<li>Clear all highlights with View - Clear Highlights or <tt>h then c</tt>" +
+                             "<li>To merely save the color for the next keyboard or right-click &gt; Highlight operations, click 'Save Color' below" +
                              "</ul></p>" +
-                             "<p>Highlight color: <input type='text' style='width:70px' id='hlColorInput' value='"+dragSelect.hlColor+"'>" +
+                             "<p>Highlight color: <input type='text' style='width:70px' id='hlColorInput' value='"+dragSelect.loadHlColor()+"'>" +
                              //"<span id='hlColorBox' style='width:20px'></span>" + 
                              "&nbsp;&nbsp;<input id='hlColorPicker'>" + 
                              "&nbsp;&nbsp;<a href='#' id='hlReset'>Reset</a></p>" + 
@@ -1146,8 +1175,10 @@ var dragSelect = {
             dragSelectDialog = $("#dragSelectDialog")[0];
             // reset value
             $('#hlReset').click(function() { 
-                $('#hlColorInput').val(dragSelect.hlColorDefault);
-                $("#hlColorPicker").spectrum("set", dragSelect.hlColorDefault);
+                var hlDefault = dragSelect.hlColorDefault;
+                $('#hlColorInput').val(hlDefault);
+                $("#hlColorPicker").spectrum("set", hlDefault);
+                dragSelect.saveHlColor(hlDefault);
             });
             // allow to click checkbox by clicking on the label
             $('#hlNotShowAgainMsg').click(function() { $('#disableDragHighlight').click();});
@@ -1213,7 +1244,7 @@ var dragSelect = {
                 resizable: false,
                 autoOpen: false,
                 revertToOriginalPos: true,
-                minWidth: 500,
+                minWidth: 550,
                 buttons: {  
                     "Zoom In": function() {
                         // Zoom to selection
@@ -1241,16 +1272,21 @@ var dragSelect = {
                         $(imageV2.imgTbl).imgAreaSelect({hide:true});
                         if ($("#disableDragHighlight").attr('checked'))
                             hgTracks.enableHighlightingDialog = false;
-                        dragSelect.hlColor = $("#hlColorInput").val();
-                        dragSelect.highlightThisRegion(newPosition, false);
+                        var hlColor = $("#hlColorInput").val();
+                        dragSelect.highlightThisRegion(newPosition, false, hlColor);
                         $(this).dialog("close");
                     },
                     "Add Highlight": function() {
                         // Highlight selection
                         if ($("#disableDragHighlight").attr('checked'))
                             hgTracks.enableHighlightingDialog = false;
-                        dragSelect.hlColor = $("#hlColorInput").val();
-                        dragSelect.highlightThisRegion(newPosition, true);
+                        var hlColor = $("#hlColorInput").val();
+                        dragSelect.highlightThisRegion(newPosition, true, hlColor);
+                        $(this).dialog("close");
+                    },
+                    "Save Color": function() {
+                        var hlColor = $("#hlColorInput").val();
+                        dragSelect.saveHlColor( hlColor );
                         $(this).dialog("close");
                     },
                     "Cancel": function() {
@@ -1384,7 +1420,7 @@ var dragSelect = {
             // hide and redraw all current highlights when the browser window is resized
             $(window).resize(function() {
                 $(imageV2.imgTbl).imgAreaSelect({hide:true});
-                imageV2.highlightRegion();
+                imageV2.drawHighlights();
             });
 
         }
@@ -1881,7 +1917,7 @@ jQuery.fn.panImages = function(){
                 $(".panImg").css( {'left': oldPos });
                 $('.tdData').css( {'backgroundPosition': oldPos } );
                 if (highlightAreas)
-                    imageV2.highlightRegion();
+                    imageV2.drawHighlights();
                 return true;
             }
 
@@ -2265,7 +2301,7 @@ var rightClick = {
                             if (result.chromStart != -1)
                                 {
                                 var newPos2 = hgTracks.chromName+":"+(result.chromStart+1)+"-"+result.chromEnd;
-                                dragSelect.highlightThisRegion(newPos2, true, dragSelect.hlColorDefault);
+                                dragSelect.highlightThisRegion(newPos2, true);
                                 }
 
                         } else {
@@ -2274,7 +2310,7 @@ var rightClick = {
                                 newChrom = hgTracks.windows[0].chromName;
                             }
                             var newPos3 = newChrom+":"+(parseInt(chromStart))+"-"+parseInt(chromEnd);
-                            dragSelect.highlightThisRegion(newPos3, true, dragSelect.hlColorDefault);
+                            dragSelect.highlightThisRegion(newPos3, true);
                         }
                     } else {
                         var newPosition = genomePos.setByCoordinates(chrom, chromStart, chromEnd);
@@ -2545,7 +2581,7 @@ var rightClick = {
             highlights.splice(rightClick.clickedHighlightIdx, 1); // splice = remove element from array
             hgTracks.highlight = highlights.join("|");
             cart.setVarsObj({'highlight' : hgTracks.highlight});
-            imageV2.highlightRegion();
+            imageV2.drawHighlights();
         } else if (cmd === 'toggleMerge') {
             // toggle both the cart (if the user goes to trackUi)
             // and toggle args[key], if the user doesn't leave hgTracks
@@ -3424,7 +3460,7 @@ function highlightCurrentPosition(mode) {
         hgTracks.highlight = "";
         var cartSettings = {'highlight': ""};
         cart.setVarsObj(cartSettings);
-        imageV2.highlightRegion();
+        imageV2.drawHighlights();
     }
 }
 
@@ -3784,7 +3820,7 @@ var imageV2 = {
     {   // Standard things to do when manipulations change image without ajax update.
         dragReorder.init();
         dragSelect.load(false);
-        imageV2.highlightRegion();
+        imageV2.drawHighlights();
         if (dirty)
             imageV2.markAsDirtyPage();
     },
@@ -3805,7 +3841,7 @@ var imageV2 = {
         if (imageV2.backSupport) {
             if (id) { // The remainder is only needed for full reload
                 imageV2.markAsDirtyPage(); // vis of cfg change
-                imageV2.highlightRegion();
+                imageV2.drawHighlights();
                 return;
             }
         }
@@ -3813,7 +3849,7 @@ var imageV2 = {
         imageV2.loadRemoteTracks();
         makeItemsByDrag.load();
         imageV2.loadSuggestBox();
-        imageV2.highlightRegion();
+        imageV2.drawHighlights();
 
         if (imageV2.backSupport) {
             imageV2.setInHistory(false);    // Set this new position into History stack
@@ -4320,11 +4356,16 @@ var imageV2 = {
         }
     },
 
-    highlightRegion: function()
+    drawHighlights: function()
     // highlight vertical region in imgTbl based on hgTracks.highlight (#709).
+    // For PDF/hgRenderTracks output, the highlights are drawn by hgTracks.c:drawHighlights()
     {
         var pos;
         var hexColor = dragSelect.hlColorDefault;
+        // if possible, re-use the color that the user picked last time
+        if (hgTracks.prevHlColor)
+            hexColor = hgTracks.prevHlColor;
+
         $('.highlightItem').remove();
         if (hgTracks.highlight) {
             var hlArray = hgTracks.highlight.split("|"); // support multiple highlight items
@@ -5120,14 +5161,14 @@ $(document).ready(function()
         makeItemsByDrag.load();
         
         // Any highlighted region must be shown and warnBox must play nice with it.
-        imageV2.highlightRegion();
+        imageV2.drawHighlights();
         // When warnBox is dismissed, any image highlight needs to be redrawn.
-        $('#warnOK').click(function (e) { imageV2.highlightRegion();});
+        $('#warnOK').click(function (e) { imageV2.drawHighlights();});
         // Also extend the function that shows the warn box so that it too redraws the highlight.
         showWarnBox = (function (oldShowWarnBox) {
             function newShowWarnBox() {
                 oldShowWarnBox.apply();
-                imageV2.highlightRegion();
+                imageV2.drawHighlights();
             }
             return newShowWarnBox;
         })(showWarnBox);

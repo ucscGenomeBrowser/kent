@@ -326,4 +326,7 @@ void loadAndValidateBedExt(char *row[], int bedFieldCount, int fieldCount, struc
 
 int itemRgbColumn(char *column9);
 /* Convert color specification to internal format. */
+
+#define BAD_BLOCKS "BED blocks must span chromStart to chromEnd.  (chromStart + blockStarts[last] + blockSizes[last]) must equal chromEnd."
+
 #endif /* BASICBED_H */

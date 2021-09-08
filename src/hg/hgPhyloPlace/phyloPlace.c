@@ -690,6 +690,8 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
     int origLabIx = stringArrayIx("originating_lab", headerWords, headerWordCount);
     int subLabIx = stringArrayIx("submitting_lab", headerWords, headerWordCount);
     int regionIx = stringArrayIx("region", headerWords, headerWordCount);
+    int nCladeUsherIx = stringArrayIx("Nextstrain_clade_usher", headerWords, headerWordCount);
+    int lineageUsherIx = stringArrayIx("pango_lineage_usher", headerWords, headerWordCount);
     while (lineFileNext(lf, &line, NULL))
         {
         char *words[headerWordCount];
@@ -729,6 +731,10 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
             met->subLab = cloneString(words[subLabIx]);
         if (regionIx >= 0)
             met->region = cloneString(words[regionIx]);
+        if (nCladeUsherIx >= 0)
+            met->nCladeUsher = cloneString(words[nCladeUsherIx]);
+        if (lineageUsherIx >= 0)
+            met->lineageUsher = cloneString(words[lineageUsherIx]);
         // If epiId and/or genbank ID is included, we'll probably be using that to look up items.
         if (epiIdIx >= 0 && !isEmpty(words[epiIdIx]))
             hashAdd(sampleMetadata, words[epiIdIx], met);
