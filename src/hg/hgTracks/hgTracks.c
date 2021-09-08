@@ -2227,9 +2227,10 @@ if(highlightDef)
 return hlList;
 }
 
-static void highlightRegions(struct cart *cart, struct hvGfx *hvg, int imagePixelHeight)
-// Highlights regions in the image.  Only done if theImgBox is not defined.
-// Thus it is done for ps/pdf and view image but the hgTracks image is highlighted via js
+static void drawHighlights(struct cart *cart, struct hvGfx *hvg, int imagePixelHeight)
+// Draw the highlight regions in the image.  Only done if theImgBox is not defined.
+// Thus it is done for ps/pdf and view image but for html output the highlights are drawn 
+// on the javascript client by hgTracks.js > imageV2 > drawHighlights()
 {
 struct highlightVar *hlList = parseHighlightInfo();
 
@@ -5098,7 +5099,7 @@ initColors(hvg);
 hPrintf("<MAP id='map' Name=%s>\n", mapName);
 
 if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does pdf and view-image highlight
-    highlightRegions(cart, hvg, imagePixelHeight);
+    drawHighlights(cart, hvg, imagePixelHeight);
 
 for (window=windows; window; window=window->next)
     {
@@ -10589,7 +10590,7 @@ dyStringPrintf(dy,"Mousetrap.bind('t c', function() { document.editHubForm.submi
 dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').submit().click(); }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').submit().click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('v d', gotoGetDnaPage); \n");
+dyStringPrintf(dy,"Mousetrap.bind('v d', function() { gotoGetDnaPage() }); \n"); // anon. function because gotoGetDnaPage is sometimes not loaded yet.
 
 // highlight
 dyStringPrintf(dy,"Mousetrap.bind('h c', function() { highlightCurrentPosition('clear'); }); \n");
@@ -10598,11 +10599,11 @@ dyStringPrintf(dy,"Mousetrap.bind('h m', function() { highlightCurrentPosition('
 
 // focus
 dyStringPrintf(dy,"Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
-dyStringPrintf(dy,"Mousetrap.bind('?', showHotkeyHelp);\n");
+dyStringPrintf(dy,"Mousetrap.bind('?', function() { showHotkeyHelp() } );\n");
 
 // menu
 if (gotExtTools)
-    dyStringPrintf(dy,"Mousetrap.bind('s t', showExtToolDialog); \n");
+    dyStringPrintf(dy,"Mousetrap.bind('s t', function() { showExtToolDialog() } ); \n");
 
 // multi-region views
 dyStringPrintf(dy,"Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtModeType=exonMostly'; });  \n",
@@ -10933,6 +10934,11 @@ checkAddHighlight(); // call again in case tracksDisplay's call to resolvePositi
 char *highlightDef = cartOptionalString(cart, "highlight");
 if (highlightDef)
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));
+
+char *prevColor = cartOptionalString(cart, "prevHlColor");
+if (prevColor)
+    jsonObjectAdd(jsonForClient, "prevHlColor", newJsonString(prevColor));
+
 jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 	      newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));
 
