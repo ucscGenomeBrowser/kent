@@ -581,11 +581,7 @@ if (wordCount > 11)
     i = bed->blockCount-1;
     if ((bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i]) !=
 	bed->chromEnd)
-	{
-	lineFileAbort(lf,
-	    "BED blocks must span chromStart to chromEnd.  (chromStart + "
-	    "chromStarts[last] + blockSizes[last]) must equal chromEnd.");
-	}
+	lineFileAbort(lf, BAD_BLOCKS);
     }
 if (wordCount > 12)
     // get the microarray/colored-exon fields

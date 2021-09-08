@@ -1585,10 +1585,7 @@ printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", line
     // last block-end must match chromEnd
     i = bed->blockCount-1;
     if ((bed->chromStart + chromStarts[i] + blockSizes[i]) != bed->chromEnd)
-	{
-	lineFileAbort(lf, "BED blocks must span chromStart to chromEnd.  (chromStart + "
-			  "chromStarts[last] + blockSizes[last]) must equal chromEnd.");
-	}
+	lineFileAbort(lf, BAD_BLOCKS);
     }
 
 if (bedFieldCount > 12)
