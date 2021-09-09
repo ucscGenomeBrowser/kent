@@ -6538,13 +6538,14 @@ if (trackDbFilters)
     hFreeConn(&conn);
     while ((filter = slPopHead(&trackDbFilters)) != NULL)
         {
+        char *trackDbLabel = getLabelSetting(cart, tdb, filter->fieldName);
         char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filter->name, filter->setting);
         struct asColumn *asCol = asColumnFind(as, filter->fieldName);
         if (asCol == NULL)
             errAbort("Building filter on field %s which is not in AS file.", filter->fieldName);
 
         count++;
-        printf("<P><B>Filter items in '%s' field:</B> ", filter->fieldName);
+        printf("<P><B>Filter items in '%s' field:</B> ", trackDbLabel);
 
         char cgiVar[128];
         safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,filter->name);
