@@ -6544,7 +6544,7 @@ if (trackDbFilters)
             errAbort("Building filter on field %s which is not in AS file.", filter->fieldName);
 
         count++;
-        printf("<P><B>Filter items in '%s' field: ", filter->fieldName);
+        printf("<P><B>Filter items in '%s' field:</B> ", filter->fieldName);
 
         char cgiVar[128];
         safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,filter->name);
