@@ -12,7 +12,6 @@ pennantIcon New red . "Supertrack created Aug. 27th 2021"
     track augustusGene override
     parent genePredArchive
     color 180,0,0
-    pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
     visibility pack
 
     track sibGene override
@@ -35,4 +34,3 @@ pennantIcon New red . "Supertrack created Aug. 27th 2021"
     parent genePredArchive
     color 170,100,0
     type genePred genscanPep
-    pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
