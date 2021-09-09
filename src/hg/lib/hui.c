@@ -6540,9 +6540,19 @@ if (trackDbFilters)
         {
         char *trackDbLabel = getLabelSetting(cart, tdb, filter->fieldName);
         char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filter->name, filter->setting);
-        struct asColumn *asCol = asColumnFind(as, filter->fieldName);
-        if (asCol == NULL)
-            errAbort("Building filter on field %s which is not in AS file.", filter->fieldName);
+        if (as != NULL)
+            {
+            struct asColumn *asCol = asColumnFind(as, filter->fieldName);
+            if (asCol != NULL)
+                {
+                if (trackDbLabel == NULL)
+                    trackDbLabel = asCol->comment;
+                }
+            else if (defaultFieldLocation(filter->fieldName) < 0)
+                errAbort("Building filter on field %s which is not in AS file.", filter->fieldName);
+            }
+        if (trackDbLabel == NULL)
+            trackDbLabel = filter->fieldName;
 
         count++;
         printf("<P><B>Filter items in '%s' field:</B> ", trackDbLabel);
