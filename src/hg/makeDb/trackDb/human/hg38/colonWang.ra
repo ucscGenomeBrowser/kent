@@ -9,6 +9,8 @@ group singleCell
     parent colonWang
     html colonWang
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=human-intestine+colon&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility pack
     shortLabel Colon Cells
     longLabel Colon cells binned by cell type from Wang et al 2020
@@ -31,6 +33,8 @@ group singleCell
     parent colonWang
     html colonWang
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=human-intestine+colon&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Colon Donor
     longLabel Colon cells binned by organ donor from Wang et al 2020

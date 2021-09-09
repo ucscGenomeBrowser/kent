@@ -129,9 +129,9 @@ struct sampleMetadata
     char *gbAcc;        // GenBank accession
     char *date;         // Sample collection date
     char *author;       // Author(s) to credit
-    char *nClade;       // Nextstrain year-letter clade
+    char *nClade;       // Nextstrain year-letter clade assigned by nextclade
     char *gClade;       // GISAID amino acid change clade
-    char *lineage;      // Pangolin lineage
+    char *lineage;      // Pango lineage assigned by pangolin
     char *country;      // Country in which sample was collected
     char *division;     // Administrative division in which sample was collected (country or state)
     char *location;     // Location in which sample was collected (city)
@@ -140,6 +140,8 @@ struct sampleMetadata
     char *origLab;      // Originating lab
     char *subLab;       // Submitting lab
     char *region;       // Continent on which sample was collected
+    char *nCladeUsher;  // Nextstrain clade according to annotated tree
+    char *lineageUsher; // Pango lineage according to annotated tree
     };
 
 struct geneInfo

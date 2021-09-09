@@ -407,11 +407,7 @@ if ((pt == gappedPeak) || (pt == encodePeak))
     i = peak->blockCount-1;
     if ((peak->chromStart + peak->blockStarts[i] + peak->blockSizes[i]) !=
 	peak->chromEnd)
-	{
-	lineFileAbort(lf, 
-	    "BED blocks must span chromStart to chromEnd.  (chromStart + "
-	    "blockStarts[last] + blockSizes[last]) must equal chromEnd.");
-	}
+	lineFileAbort(lf, BAD_BLOCKS);
     }
 if (pt == gappedPeak)
     /* deal with final three columns of a gappedPeak */

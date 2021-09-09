@@ -28,6 +28,8 @@ include placentaVentoTormo.ra
 include singleCellMerged.ra
 #include lungMadissoon.ra
 
+include gtexEqtl.ra
+
 include liftOver.ra
 include exomeProbesets.ra
 
@@ -186,7 +188,6 @@ visibility hide
 track windowmaskerSdust override
 group rep
 priority 8
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 track nestedRepeats override
 group rep
@@ -195,7 +196,6 @@ priority 2
 track simpleRepeat override
 group rep
 priority 7
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 track rmskJoinedBaseline override
 group rep
@@ -217,7 +217,6 @@ termRegex [A-Z][A-Z0-9]+(\.[0-9]+)?
 track gap override
 html gap
 visibility hide
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 include rmskTracks.ra
 
@@ -513,56 +512,13 @@ priority 5
 track sibTxGraph override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg38&species=H.+sapiens&tromer=$$
 
-track altSeqLiftOverPsl override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track fixSeqLiftOverPsl override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
 track gtexGene override
-pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track cpgIslandSuper override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track est override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track xenoMrna override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track xenoEst override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 
 track ucscGenePfam override
 shortLabel Pfam in GENCODE
 longLabel Pfam Domains in GENCODE Genes
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 html gencodePfam
-
-track orfeomeMrna override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track mgcFullMrna override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track xenoRefGene override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track knownAlt override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track cytoBand override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track gc5BaseBw override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track ucscToRefSeq override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
-
-track ucscToINSDC override
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 include trackDb.cloneEnd.ra
 

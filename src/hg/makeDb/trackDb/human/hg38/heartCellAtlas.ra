@@ -10,6 +10,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility pack
     shortLabel Heart HCA Cells
     longLabel Heart cell RNA binned by cell type from https://heartcellatlas.org
@@ -34,6 +36,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Region
     longLabel Heart cell RNA binned by region of collection from https://heartcellatlas.org
@@ -53,6 +57,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas    
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Age
     longLabel Heart cell RNA binned by age group of donor from https://heartcellatlas.org
@@ -72,6 +78,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA State
     longLabel Heart cell RNA binned by cell state from https://heartcellatlas.org
@@ -93,6 +101,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Donor
     longLabel Heart cell RNA binned by organ donor from https://heartcellatlas.org
@@ -112,6 +122,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Sex
     longLabel Heart cell RNA binned by sex of donor from https://heartcellatlas.org
@@ -131,6 +143,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Source
     longLabel Heart cell RNA binned by source (nucleus vs whole cell) from https://heartcellatlas.org
@@ -150,6 +164,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Sample
     longLabel Heart cell RNA binned by biosample from https://heartcellatlas.org
@@ -184,6 +200,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Version
     longLabel Heart cell RNA binned by 10x chemistry version from https://heartcellatlas.org

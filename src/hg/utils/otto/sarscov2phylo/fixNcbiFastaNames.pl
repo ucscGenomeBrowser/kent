@@ -18,14 +18,18 @@ sub makeName($$$$) {
   if ($host) {
     push @components, $host;
   }
-  if ($country) {
-    push @components, $country;
-  }
-  if ($isolate) {
+  if ($isolate =~ m@^[A-Za-z]+/.*/\d+$@) {
     push @components, $isolate;
-  }
-  if ($year) {
-    push @components, $year;
+  } else {
+    if ($country) {
+      push @components, $country;
+    }
+    if ($isolate) {
+      push @components, $isolate;
+    }
+    if ($year) {
+      push @components, $year;
+    }
   }
   return join('/', @components);
 }
