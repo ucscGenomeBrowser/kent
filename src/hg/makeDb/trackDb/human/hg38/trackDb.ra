@@ -16,15 +16,15 @@ include kidneyStewart.ra
 include muscleDeMicheli.ra
 #include lungVieiraBraga.ra
 include fetalGeneAtlas.ra
-include bloodHao.ra
+include bloodHao.ra alpha,beta
 include lungTravaglini2020.ra
 include skinSoleBoldo.ra
 include liverMacParland.ra
-include pancreasBaron.ra
+include pancreasBaron.ra alpha,beta
 include ileumWang.ra
 include colonWang.ra
 include rectumWang.ra
-include placentaVentoTormo.ra
+include placentaVentoTormo.ra alpha,beta
 include singleCellMerged.ra
 #include lungMadissoon.ra
 
