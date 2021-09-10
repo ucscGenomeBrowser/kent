@@ -13,3 +13,4 @@ filterText.targetName *
 #mouseOver $name; CPP: $value
 #urls sourceName="https://www.ncbi.nlm.nih.gov/snp/$$" targetName="https://gtexportal.org/home/locusBrowserPage/$$"
 group regulation
+interactDirectional offsetTarget

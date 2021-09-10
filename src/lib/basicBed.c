@@ -1555,8 +1555,8 @@ if (bedFieldCount > 11)
     if (chromStarts[0] != 0)
 	lineFileAbort(lf,
 	    "BED blocks must span chromStart to chromEnd.  "
-	    "BED chromStarts[0] = %d, must be 0 so that (chromStart + "
-	    "chromStarts[0]) equals chromStart.", chromStarts[0]);
+	    "BED blockStarts[0] = %d, must be 0 so that (chromStart + "
+	    "blockStarts[0]) equals chromStart.", chromStarts[0]);
 
     for (i=1; i < bed->blockCount;  i++)
 	{
