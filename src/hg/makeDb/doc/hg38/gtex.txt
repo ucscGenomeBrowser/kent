@@ -140,3 +140,54 @@ hgLoadBed hg38 -noBin -tab -type=bed6+4 \
 ### TODO 
 # Add GTEx to Gene Sorter (2016-08-18 kate)
 # See hg/near/makeNear.doc
+
+#############################################################################
+# GTEx V8 cis-eQTLs CAVIAR High Confidence (Sept 2021) Matt
+
+# Tar files were downloaded from https://gtexportal.org/home/datasets#filesetFilesDiv15
+# Then unpacked
+
+# Used this file: CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz
+# Description from GTEx_v8_finemapping_CAVIAR/README.txt
+***CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz --> is a single file for all GTEx tissues and all eGene where we report
+all the high causal variants (variants that have posterior probability of > 0.1).
+# Started with this as it seems this is the data Kate used for hg19 eQTL tracks
+
+# Sample line from file
+#TISSUE  GENE    eQTL    CHROM   POS     Probability
+#Brain_Caudate_basal_ganglia     ENSG00000248485.1       1_161274374     1       161274374       0.157456
+
+# Wrote script to help build interact-format tracks from CAVIAR files:
+buildInteract
+# Script takes in eQTL, SNP info, and GENCODE genepred file
+# Uses this information to build an interact line for each item in the eQTL file
+# Not sure if script is that generalizable since each eQTL file seems to have its own format
+# Will see if I can do it though
+
+# Need to convert GTF to genePredExt
+# (Kate had converted GTF to genePred for GTEx V8 expression track work, but that didn't include gene name as I was hoping)
+gtfToGenePred -genePredExt -geneNameAsName2 -includeVersion gencode.v26.GRCh38.genes.gtf gencode.v26.GRCh38.genes.gpExt 
+
+# Command to build interact files
+./buildInteract CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz ../gencode.v26.GRCh38.genes.gpExt ../GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz > gtexCaviar.interact.txt
+
+# Sort resulting bed file
+bedSort gtexCaviar.interact.txt gtexCaviar.interact.sorted.txt 
+
+# Build bigInteract
+bedToBigBed -as=../interact.as -type=bed5+13 gtexCaviar.interact.sorted.txt /hive/data/genomes/hg38/chrom.sizes gtexCaviar.interact.bb
+
+## Add colors
+# Make list of tissues in V8 file
+zcat GTEx_v8_finemapping_CAVIAR/CAVIAR_Results_v8_GTEx_LD_ALL_NOCUTOFF.txt.gz | cut -f1 -d$'\t' |sort -u |grep -v TISSUE> gtexTissuesV8.txt
+
+# Using GTEx V6p colors, manually match up to names in V8 file
+ln -s /hive/data/outside/GTEx/V6p/eQtl/Caviar2/gtexTissueColor.tab 
+gtexTissueColor.v8.tab 
+
+# Write script to add colors from this file to the interact file
+addColors
+./addColors gtexCaviar.interact.sorted.txt ../gtexTissueColor.v8.tab > gtexCaviar.interact.sorted.colors.txt
+
+# Rebuild bigInteract file
+bedToBigBed -as=../interact.as -type=bed5+13 gtexCaviar.interact.sorted.colors.txt /hive/data/genomes/hg38/chrom.sizes gtexCaviar.interact.colors.bb
