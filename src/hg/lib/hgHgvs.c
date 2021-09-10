@@ -942,7 +942,9 @@ else if ((isSubst = regexMatchSubstr(term, pseudoHgvsGeneSymbolProtSubstExp,
             char *description = term + substrs[descStartIx].rm_so;
             struct dyString *npTerm = dyStringCreate("%s(%s):p.%s",
                                                      npAcc, geneSymbol, description);
-            slAddHead(&hgvs, hgvsParseTerm(npTerm->string));
+            struct hgvsVariant *newTerm = hgvsParseTerm(npTerm->string);
+            if (newTerm)
+                slAddHead(&hgvs, newTerm);
             dyStringFree(&npTerm);
             }
         }
@@ -966,7 +968,9 @@ else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolProtPosExp, substrs, ArraySi
             char refBase = refBaseForNp(db, npAcc, pos);
             struct dyString *npTerm = dyStringCreate("%s(%s):p.%c%d=",
                                                      npAcc, geneSymbol, refBase, pos);
-            slAddHead(&hgvs, hgvsParseTerm(npTerm->string));
+            struct hgvsVariant *newTerm = hgvsParseTerm(npTerm->string);
+            if (newTerm)
+                slAddHead(&hgvs, newTerm);
             dyStringFree(&npTerm);
             }
         }
