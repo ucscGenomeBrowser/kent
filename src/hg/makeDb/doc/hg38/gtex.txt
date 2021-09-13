@@ -707,3 +707,77 @@ table bed
 
 # Build bigBed
 bedToBigBed -as=dapg.as -type=bed12+9 gtexDapg.sorted.colors.bed /hive/data/genomes/hg38/chrom.sizes gtexDapg.bb
+
+#############################################################################
+# GTEx V9 Single Nuclei Expression August 31, 2022 ChrisL
+#############################################################################
+For building single cell rna-seq tracks from this paper:
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9383269/
+
+Files:
+https://storage.googleapis.com/gtex_analysis_v9/snrna_seq_data/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad
+
+WORKDIR=/hive/data/outside/GTEx/V9/snRnaSeq/
+mkdir -p $WORKDIR && cd $WORKDIR
+
+wget https://storage.googleapis.com/gtex_analysis_v9/snrna_seq_data/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad
+
+# Turn scanpy files into matrices and metadata:
+time hcaUnpack5 GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad atlasOut
+# Data on 209126 cells x 17695 genes
+# Sparse matrix with 173681687 elements
+# outputting 17695 row matrix, a dot every 100 rows
+# 
+# real    3m24.718s
+# user    2m39.348s
+# sys 0m27.629s
+
+# Look at the column summaries to see what is interesting:
+./getSimpleMetaStats atlasOut/meta.tsv | less -S
+cd atlasOut
+mkdir bbi
+mkdir clust
+~/bin/x86_64/matrixClusterColumns -makeIndex=clust/exprMatrix.ix exprMatrix.tsv meta.tsv \
+    prep clust/prepMatrix.tsv clust/prepStats.tsv \
+    "Tissue Composition" clust/TissueCompMatrix.tsv clust/TissueCompStats.tsv \
+    "Tissue Site Detail" clust/TissueSiteDetailMatrix.tsv clust/TissueSiteDetailStats.tsv \
+    "Sample Ischemic Time (mins)" clust/SampleIschemicTimeMatrix.tsv clust/SampleIschemicTimeStats.tsv \
+    "Granular cell type" clust/GranularMatrix.tsv clust/GranularStats.tsv \
+    "Broad cell type" clust/BroadCellTypeMatrix.tsv clust/BroadCellTypeStats.tsv \
+    Age_bin clust/Age_binMatrix.tsv clust/Age_binStats.tsv \
+    Sex clust/SexMatrix.tsv clust/SexStats.tsv
+
+# Figure out gene set
+gencodeVersionForGenes gene.lst /hive/data/inside/geneSymVerTx.tsv -bed=mapping.bed
+
+# Turn into bigBarCharts
+for s in prep TissueComp TissueSiteDetail SampleIschemicTime Granular BroadCellType Age_bin Sex
+do
+    matrixToBarChartBed clust/${s}Matrix.tsv mapping.bed clust/${s}.bed -stats=clust/${s}Stats.tsv -trackDb=clust/${s}.ra
+    bedSort clust/${s}.bed clust/${s}.bed
+    bedToBigBed clust/${s}.bed /hive/data/genomes/hg38/chrom.sizes bbi/${s}.bb -type=bed6+3 -as=${HOME}/kent/src/hg/lib/simpleBarChartBed.as
+done
+
+# Make a combined column for facetting
+tawk '{print $0,$31 "-" $46}' meta.tsv > meta.tsv.plusCombined
+~/bin/x86_64/matrixClusterColumns exprMatrix.tsv meta.tsv.plusCombined \
+    "Tissue-Broad cell type" clust/combined.tsv clust/combinedStats.tsv
+matrixToBarChartBed clust/combined.tsv mapping.bed clust/combined.bed -stats=clust/combinedStats.tsv -trackDb=clust/combined.ra
+bedSort clust/combined.bed clust/combined.bed 
+bedToBigBed clust/combined.bed /hive/data/genomes/hg38/chrom.sizes bbi/combined.bb -type=bed6+3 -as=${HOME}/kent/src/hg/lib/simpleBarChartBed.as
+
+# now un extract the original combined columns back into the counted up meta.tsv
+# which will give you the columns to facet on
+echo -e "#Organ and Cell Type	count	total	Organ	Broad_Cell_Type" > combinedStats.withFacets
+paste <(tail -n +2 clust/combinedStats.tsv) <(tail -n +2 meta.tsv | cut -f31,46 | sort -u) >> combinedStats.withFacets
+# manually make cells.colors by taking colors for Broad Cell Type from the paper
+# make categories file for trackDb
+join -t$'\t' -1 5 -2 1 <(grep -v "^#" combinedStats.withFacets | sort -t$'\t' -k5) ../cells.colors | cut -f2,6 | sort > atlasOut.categories
+# Make stats file for trackDb 
+echo -e "#Organ and Cell Type      count   total   Organ   Broad_Cell_Type color" > combinedStats.withFacets.withColors.tsv
+join -t$'\t' -1 5 -2 1 <(grep -v "^#" combinedStats.withFacets | sort -t$'\t' -k5) ../cells.colors | tawk '{print $2,$3,$4,$5,$1,$6}' | sort >> combinedStats.withFacets.withColors.tsv 
+
+# link the tracks
+cd /gbdb/hg38/gtex
+mkdir snRnaSeq
+ln -s /hive/data/outside/gtex/V9/snRnaSeq/atlasOut/bbi/*.bb .
