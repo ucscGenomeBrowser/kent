@@ -3744,7 +3744,7 @@ padding 50
 searchTable snpediaText
 searchMethod exact
 searchType bed
-#semiShortCircuit 1
+semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 11.001
 padding 50
@@ -4366,7 +4366,7 @@ searchPriority 30
 searchTable gwasCatalog
 searchMethod exact
 searchType bed
-#semiShortCircuit 1
+semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 11
 padding 250
