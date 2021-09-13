@@ -10,6 +10,7 @@ group genes
 labelFields geneName2,name,ensemblProtAcc,geneName,ncbiId,ncbiProtAcc,ncbiGene
 defaultLabelFields geneName2
 maxItems 5000
+skipFields cdsStartStat,cdsEndStat,exonFrames,geneType,type
 
 searchTable mane
 searchType bigBed
