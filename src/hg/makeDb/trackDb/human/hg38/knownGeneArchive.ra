@@ -1,17 +1,18 @@
 
-track knownGeneOld
+track knownGeneArchive
 superTrack on
-shortLabel KnownGene Archive
-longLabel KnownGene Archive
+shortLabel GENCODE Archive
+longLabel GENCODE Archive
 group genes
 type bed 6 +
+html ../../knownGeneArchive
 
 
     track knownGeneV36
     #table knownGene
     shortLabel GENCODE V36
     longLabel GENCODE V36
-    parent knownGeneOld
+    parent knownGeneArchive
     priority 1
     visibility pack
     type bigGenePred
