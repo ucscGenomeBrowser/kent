@@ -13,7 +13,8 @@ html gap
 #priority 2.02
 
 track xenoRefGene override
-priority 2.03
+visibility hide
+#priority 2.03
 
 track mrna override
 priority 2.1
