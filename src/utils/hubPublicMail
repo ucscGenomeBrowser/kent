@@ -15,12 +15,12 @@ fromEmail="genome-www@soe.ucsc.edu"
 
 emailTemplate = """Dear UCSC Public Hub author,
 
-this is an automated email sent by the UCSC Genome Browser Group's hubPublicMail system to alert you
-that your public track hub at the address
+This is an automated email sent by the UCSC Genome Browser Group's hubPublicMail system to alert you
+that your public track hub at the address:
 
 %s
 
-has been inaccessible for 24 hours. If it continues to be offline, we may need to remove it
+Has been inaccessible for 24 hours. If it continues to be offline, we may need to remove it
 from our public hubs list at https://genome.ucsc.edu/cgi-bin/hgHubConnect
 
 Do not hesitate to let us know if we can help you resolve this situation, e.g. by updating the URL
@@ -28,8 +28,8 @@ where the hub is hosted or possibly hosting the files on our servers.
 
 You can reach us at genome-www@soe.ucsc.edu.
 
-Your
-UCSC Genome Browser Group
+Thank you for your interest and contributions,
+The UCSC Genome Browser Group
 """
 # ==== functions =====
     

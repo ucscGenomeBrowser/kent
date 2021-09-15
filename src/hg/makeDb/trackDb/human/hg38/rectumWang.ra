@@ -9,6 +9,8 @@ group singleCell
     parent rectumWang
     html rectumWang
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=human-intestine+rectum&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility pack
     shortLabel Rectum Cells
     longLabel Rectum cells binned by cell type from Wang et al 2020
@@ -29,6 +31,8 @@ group singleCell
     parent rectumWang
     html rectumWang
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=human-intestine+rectum&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Rectum Donor
     longLabel Rectum cells binned by organ donor from Wang et al 2020

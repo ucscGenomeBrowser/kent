@@ -17,7 +17,7 @@ do
     mkdir -p $db
     cd $db
     echo "building LRG for $db"
-    ~/kent/src/hg/utils/automation/parseLrgXml.pl $grc ../
+    ${WORKDIR}/parseLrgXml.pl $grc ../
     set +e
     genePredCheck lrgTranscriptsUnmapped.gp 2>genePred.failed
     set -e
@@ -72,6 +72,12 @@ do
     echo $oldCount $newCount | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on LRG BigBed failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
     echo LRG PSL rowcounts: old $oldPslCount new: $newPslCount
     echo $oldPslCount $newPslCount | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on DECIPHER CNV failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
+
+    # now archive this new release:
+    archiveDir="/usr/local/apache/htdocs-hgdownload/goldenPath/archive/${db}/lrg/${today}"
+    mkdir -p ${archiveDir}
+    cp lrg.bb ${archiveDir}
+    cp lrgBigPsl.bb ${archiveDir}
     
     cp lrg.bb ${WORKDIR}/release/${db}/
     cp lrgBigPsl.bb ${WORKDIR}/release/${db}/

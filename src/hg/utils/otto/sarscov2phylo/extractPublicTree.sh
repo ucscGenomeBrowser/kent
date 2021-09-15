@@ -28,8 +28,12 @@ cd $ottoDir/$today
 
 # Extract public samples from tree
 grep -v EPI_ISL_ samples.$today > newPublicNames
+# Dunno why, but when I tried using -s together with the filtering params, it ran for 3 hours
+# and I killed it -- stuck in a loop?  Run two commands:
 $matUtils extract -i gisaidAndPublic.$today.masked.pb \
     -s newPublicNames \
+    -o public-$today.all.masked.preTrim.pb
+$matUtils extract -i public-$today.all.masked.preTrim.pb \
     --max-parsimony 20 \
     --max-branch-length 30 \
     -O -o public-$today.all.masked.pb
@@ -96,13 +100,14 @@ echo "$sampleCountComma genomes from GenBank, COG-UK and CNCB ($today); sarscov2
 
 # Make Taxodium-formatted protobuf for display
 zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz > ncbiGenes.gtf
+zcat /hive/data/genomes/wuhCor1/wuhCor1.fa.gz > wuhCor1.fa
 zcat public-$today.metadata.tsv.gz > metadata.tmp.tsv
 time $matUtils extract -i public-$today.all.masked.pb \
-    -f reference.fa \
+    -f wuhCor1.fa \
     -g ncbiGenes.gtf \
     -M metadata.tmp.tsv \
     --write-taxodium public-$today.all.masked.taxodium.pb
-rm metadata.tmp.tsv
+rm metadata.tmp.tsv wuhCor1.fa
 gzip public-$today.all.masked.taxodium.pb
 
 # Link to public trees download directory hierarchy

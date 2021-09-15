@@ -9,6 +9,8 @@ group singleCell
     parent ileumWang
     html ileumWang
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=human-intestine+ileum&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility pack
     shortLabel Ileum Cells
     longLabel Ileum cells binned by cell type from Wang et al 2020
@@ -29,6 +31,8 @@ group singleCell
     parent ileumWang
     html ileumWang
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=human-intestine+ileum&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Ileum Donor
     longLabel Ileum cells binned by organ donor from Wang et al 2020

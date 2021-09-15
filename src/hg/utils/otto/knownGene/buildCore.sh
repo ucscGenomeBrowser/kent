@@ -107,8 +107,8 @@ txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq | bedClip stdin /cluster/data/$db/chrom.sizes  ucscSplice.bed
 hgLoadBed $tempDb knownAlt ucscSplice.bed
 
-txGeneExplainUpdate2 $oldGeneBed ucscGenes.bed kgOldToNew.tab
-hgLoadSqlTab -notOnServer $tempDb kg${lastVer}ToKg${curVer} $kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
+#txGeneExplainUpdate2 $oldGeneBed ucscGenes.bed kgOldToNew.tab
+#hgLoadSqlTab -notOnServer $tempDb kg${lastVer}ToKg${GENCODE_VERSION} $kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
 
 
 hgsql $tempDb -Ne "select kgId, geneSymbol, spID from kgXref" > geneNames.txt
@@ -182,16 +182,16 @@ hgsql $tempDb -N -e 'select kgId,geneSymbol from kgXref' \
 # 2. Get a file of per-transcript fasta sequences that contain the sequences of each UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.   Convert that file to TwoBit format and soft-link it into /gbdb/hg38/targetDb/
 awk '{if (!found[$4]) print; found[$4]=1 }' ucscGenes.bed > nodups.bed
 subColumn 4 nodups.bed idSub.txt ucscGenesIdSubbed.bed
-sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout  | faToTwoBit stdin ${db}KgSeq${curVer}.2bit
+sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout  | faToTwoBit stdin ${db}KgSeq${GENCODE_VERSION}.2bit
 mkdir -p /gbdb/$db/targetDb/
-rm -f /gbdb/$db/targetDb/${db}KgSeq${curVer}.2bit
-ln -s $dir/${db}KgSeq${curVer}.2bit /gbdb/$db/targetDb/
+rm -f /gbdb/$db/targetDb/${db}KgSeq${GENCODE_VERSION}.2bit
+ln -s $dir/${db}KgSeq${GENCODE_VERSION}.2bit /gbdb/$db/targetDb/
 # Load the table kgTargetAli, which shows where in the genome these targets are.
 #cut -f 1-10 knownGene.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
 #hgLoadPsl $tempDb kgTargetAli.psl
 
 # 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on
-# /gbdb/$db/targetDb/${db}KgSeq${curVer}.2bit
+# /gbdb/$db/targetDb/${db}KgSeq${GENCODE_VERSION}.2bit
 
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the

@@ -969,7 +969,10 @@ if (numAdded > 0)
      * happen upon the next execution for the next CGI from that IP address.
      * Other CGIs besides hgTracks can be calling here.
      */
-    botDelayMillis = hgBotDelayTimeFrac((double)((numAdded + 1)*botCheckMult));
+//  multiply by numAdded might be too much for ordinary users who are loading
+//  lots of tracks.  For now, only use the number in from botCheckMult.
+//  botDelayMillis = hgBotDelayTimeFrac((double)((numAdded + 1)*botCheckMult));
+    botDelayMillis = hgBotDelayTimeFrac((double)botCheckMult);
     fprintf(stderr, "customTrack: new %d from %s botDelay %d millis\n", numAdded, customText, botDelayMillis);
     }
 
