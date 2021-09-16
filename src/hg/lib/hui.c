@@ -6103,12 +6103,37 @@ if (setting)
 return FALSE;
 }
 
+static void setAsNewFilterType(struct trackDb *tdb, char *name, char *field)
+/* put the full name of the trackDb variable in a hash of field names if it's specified in the "new" way */
+{
+struct hash *hash = tdb->isNewFilterHash;
+
+if (hash == NULL)
+    hash = tdb->isNewFilterHash = newHash(5);
+
+hashAdd(hash, field, name);
+}
+
+static char *isNewFilterType(struct trackDb *tdb, char *name)
+/* check to see if a field name is in the "new" hash.  If it is, return the full trackDb variable name */
+{
+if ((tdb == NULL) || (tdb->isNewFilterHash == NULL))
+    return NULL;
+
+struct hashEl *hel = hashLookup(tdb->isNewFilterHash, name);
+
+if (hel == NULL)
+    return NULL;
+
+return hel->val;
+}
+
 char *getScoreNameAdd(struct trackDb *tdb, char *scoreName, char *add)
 // Add a suffix to a filter for more information
 {
 char scoreLimitName[1024];
 char *name = cloneString(scoreName);
-if (tdb->isNewFilterType)
+if (isNewFilterType(tdb, scoreName) != NULL)
     {
     char *dot = strchr(name, '.');
     *dot++ = 0;
@@ -6344,13 +6369,12 @@ if (filterSettings)
     struct slName *filter = NULL;
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
-        tdb->isNewFilterType = TRUE;
-
         AllocVar(tdbFilter);
         slAddHead(&trackDbFilterList, tdbFilter);
         tdbFilter->name = cloneString(filter->name);
         tdbFilter->setting = trackDbSetting(tdb, filter->name);
         tdbFilter->fieldName = extractFieldNameNew(filter->name, lowName);
+        setAsNewFilterType(tdb, tdbFilter->name, tdbFilter->fieldName);
         }
     }
 filterSettings = trackDbSettingsWildMatch(tdb, capWild);
@@ -6363,13 +6387,14 @@ if (filterSettings)
         {
         if (differentString(filter->name,NO_SCORE_FILTER))
             {
-            if (tdb->isNewFilterType)
-                errAbort("browser doesn't support specifying filters in both old and new format.");
             AllocVar(tdbFilter);
             slAddHead(&trackDbFilterList, tdbFilter);
             tdbFilter->name = cloneString(filter->name);
             tdbFilter->setting = trackDbSetting(tdb, filter->name);
             tdbFilter->fieldName = extractFieldNameOld(filter->name, capName);
+            char *name;
+            if ((name = isNewFilterType(tdb, tdbFilter->fieldName) ) != NULL)
+                errAbort("error specifying a field's filters in both old (%s) and new format (%s).", tdbFilter->name, name);
             }
         }
     }
