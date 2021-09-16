@@ -9,11 +9,12 @@ html gap
 #track chainNetCalJac4 override
 #chainMinScore 3000
 
-track ensGene override
-priority 2.02
+#track ensGene override
+#priority 2.02
 
 track xenoRefGene override
-priority 2.03
+visibility hide
+#priority 2.03
 
 track mrna override
 priority 2.1

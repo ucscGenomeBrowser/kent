@@ -17,9 +17,6 @@
 #define sampleIdPrefix "Sample name:"
 #define pScorePrefix "Parsimony score:"
 #define numPlacementsPrefix "Number of parsimony-optimal placements:"
-#define bestNodePrefix "Best node ("
-#define mutationsPrefix "Mutations: "
-#define sampleMutsPrefix "Sample mutations:"
 #define imputedMutsPrefix "Imputed mutations:"
 
 static void parseSampleIdAndParsimonyScore(char **words, char **retSampleId,
@@ -72,105 +69,6 @@ if (regexMatchSubstr(sncStr, "^([ACGT])([0-9]+)([ACGT])$", substrs, ArraySize(su
     snc = sncNew(chromStart, '\0', sncStr[0], sncStr[substrs[3].rm_so]);
     }
 return snc;
-}
-
-static struct variantPathNode *parsePipeyPath(char *pipeyPath)
-/* Parse something like "|C8782T|T28144C| > |C29095T|  > |G2494A|T11083G|C18501T|"
- * into a variant path with unknown node names. */
-{
-if (isEmpty(pipeyPath))
-    return NULL;
-struct variantPathNode *variantPath = NULL;
-char *words[strlen(pipeyPath) / 5];
-int wordCount = chopString(pipeyPath, " > ", words, ArraySize(words));
-int i;
-for (i = 0;  i < wordCount;  i++)
-    {
-    struct variantPathNode *vpn;
-    AllocVar(vpn);
-    vpn->nodeName = cloneString("?");
-    char *mutStr = words[i];
-    // Trim first and last pipes
-    if (mutStr[0] == '|')
-        mutStr++;
-    if (mutStr[strlen(mutStr)-1] == '|')
-        mutStr[strlen(mutStr)-1] = '\0';
-    // Split by pipe
-    char *muts[strlen(mutStr) / 4];
-    int sncCount = chopString(mutStr, "|", muts, ArraySize(muts));
-    int j;
-    for (j = 0;  j < sncCount;  j++)
-        {
-        struct singleNucChange *snc = parseSnc(muts[j]);
-        if (!snc)
-            errAbort("Expected single-nucleotide change but got '%s' when parsing pipe-separated "
-                     "best node path", muts[j]);
-        slAddHead(&vpn->sncList, snc);
-        }
-    slReverse(&vpn->sncList);
-    slAddHead(&variantPath, vpn);
-    }
-slReverse(&variantPath);
-return variantPath;
-}
-
-static boolean parseBestNode(char **words, struct placementInfo *info)
-/* If the line starts with "Best node", parse out the name and path of the node
- * (or one of the nodes) with the lowest parsimony distance from the sample being placed;
- * add to info->bestNodes and return TRUE. */
-{
-// Example line (* means this node was chosen for placement):
-// words[0] = Best node (child)*: 1239
-// words[1] = Mutations: |C8782T|T28144C| > |C29095T| > |T8782C| > |T29095C| > |C28144T|
-// or
-// words[0] = Best node (sibling): SomeLeafName
-// words[1] = Mutations: |C8782T|T28144C| > |C29095T| > |T8782C| > |T29095C| > |C28144T| > |G11083T| > |G2494A|T11083G|C18501T|
-boolean matches = FALSE;
-if (stringIn(bestNodePrefix, words[0]))
-    {
-    matches = TRUE;
-    struct bestNodeInfo *bn;
-    AllocVar(bn);
-    char *p = words[0] + strlen(bestNodePrefix);
-    if (startsWith("sibling", p))
-        bn->isSibling = TRUE;
-    boolean isChosen = (stringIn(")*:", words[0]) != NULL);
-    p = stringIn(": ", words[0]);
-    if (p)
-        bn->name = cloneString(p + strlen(": "));
-    else
-        errAbort("parseBestNode: expected first column to have ': ' followed by name, but got '%s'",
-                 words[0]);
-    if (startsWith(mutationsPrefix, words[1]))
-        bn->variantPath = parsePipeyPath(words[1] + strlen(mutationsPrefix));
-    else
-        errAbort("parseBestNode: expected second column to have '" mutationsPrefix"' followed by "
-                 "path, but got '%s'", words[1]);
-    if (isChosen)
-        slAddHead(&info->bestNodes, bn);
-    else
-        slAddTail(&info->bestNodes, bn);
-    }
-return matches;
-}
-
-
-static boolean parseSampleMutations(char **words, struct placementInfo *info)
-/* If words[] looks like it defines the sample mutations relative to the reference genome,
- * then parse out the list and add to info->sampleMuts and return TRUE. */
-{
-// Example line:
-// words[0] = Sample mutations:
-// words[1] = |C241T| |C3037T| |C14408T| |A23403G|
-boolean matches = FALSE;
-if (stringIn(sampleMutsPrefix, words[0]))
-    {
-    matches = TRUE;
-    char *mutStr = words[1];
-    stripChar(mutStr, '|');
-    info->sampleMuts = slNameListFromString(mutStr, ' ');
-    }
-return matches;
 }
 
 static boolean parseImputedMutations(char **words, struct placementInfo *info)
@@ -246,9 +144,7 @@ while (lineFileNext(lf, &line, &size))
         if (!info)
             errAbort("Problem parsing stderr output of usher: "
                      "Can't find placement info for sample '%s'", sampleId);
-        if (! parseBestNode(words, info) &&
-            ! parseSampleMutations(words, info))
-            parseImputedMutations(words, info);
+        parseImputedMutations(words, info);
         }
     }
 }
