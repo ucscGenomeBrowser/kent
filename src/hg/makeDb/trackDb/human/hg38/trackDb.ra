@@ -6,8 +6,7 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
-include mane.alpha.ra alpha
-include mane.ra beta,public
+include mane.ra 
 
 include gdcCancer.ra
 
@@ -528,7 +527,7 @@ include hg38Patch11.ra alpha
 include knownGene.ra beta,public
 include knownGene.alpha.ra alpha
 #include knownGene.ra
-include oldKnownGene.ra alpha
+include knownGeneArchive.ra alpha
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha

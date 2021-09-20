@@ -467,7 +467,7 @@ showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
 signalFilter bed narrowPeak broadPeak
 signalFilterLimits bed narrowPeak broadPeak
-skipFields bigBed bigPsl
+skipFields bigBed bigPsl bigGenePred
 skipEmptyFields bigBed bigPsl
 smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed

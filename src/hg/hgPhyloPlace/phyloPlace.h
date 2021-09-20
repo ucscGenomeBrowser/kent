@@ -68,14 +68,6 @@ struct variantPathNode
     struct singleNucChange *sncList;  // One or more single nucleotide changes associated with node
     };
 
-struct bestNodeInfo
-    {
-    struct bestNodeInfo *next;
-    char *name;                           // Node name
-    struct variantPathNode *variantPath;  // Mutations assigned to nodes along path from root->node
-    boolean isSibling;                    // Placement would be as sibling of node (not child)
-    };
-
 struct baseVal
 /* List of imputed base positions and values */
     {
@@ -89,8 +81,10 @@ struct placementInfo
     {
     char *sampleId;                       // Sample name from FASTA or VCF header
     struct slName *sampleMuts;            // Differences with the reference genome
+                                          // -- NOTE: runUsher used to make this from stderr of
+                                          // usher compiled with -DDEBUG=1; now caller must add it.
+                                          // (struct seqInfo sncList has the same info)
     struct variantPathNode *variantPath;  // Mutations assigned to nodes along path from root
-    struct bestNodeInfo *bestNodes;       // Other nodes identified as equally parsimonious
     struct baseVal *imputedBases;         // Ambiguous bases imputed to ref/alt [ACGT]
     int parsimonyScore;                   // Parsimony cost of placing sample
     int bestNodeCount;                    // Number of equally parsimonious placements
