@@ -5,6 +5,22 @@
 /* Copyright (C) 2004 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
+void botDelayCgi(char *host, int port, boolean noWarn, double fraction);
+/* Connect with bottleneck server and sleep the
+ * amount it suggests for IP address calling CGI script. */
+
+void hgBotDelay();
+/* High level bot delay call - for use with regular webpage output */ 
+
+void hgBotDelayFrac(double fraction);
+/* Like hgBotDelay, but imposes a fraction of the standard access penalty */ 
+
+void hgBotDelayNoWarn();
+/* High level bot delay call without warning - for use with non-webpage output */
+
+void hgBotDelayNoWarnFrac(double fraction);
+/* Like hgBotDelayNoWarn, but imposes a fraction of the standard access penalty */
+
 int botDelayTime(char *host, int port, char *ip);
 /* Figure out suggested delay time for ip address in
  * milliseconds. */
