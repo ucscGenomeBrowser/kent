@@ -9428,6 +9428,26 @@ slReverse(&list);
 return list;
 }
 
+void hPrintIcons(struct trackDb *tdb) 
+/* prints optional folder and pennants icons and a space, if any icons were printed */
+{
+bool hasIcon = hPrintPennantIcon(tdb);
+if (tdbIsSuper(tdb) || tdbIsComposite(tdb))
+    {
+    // this is the folder.svg icon from the font-awesome collection.
+    // the icon collection also contains a "fa fa-folder-o" icon, which is the outlined version 
+    // It was decided to use only the filled out icon for now and use the same icon for super
+    // and composite tracks. Adding the SVG removes a dependency and makes the icons show up instantly,
+    // instead of the short delay when using fonts. Github uses icons like this.
+    hPrintf("<svg class='folderIcon' viewBox='0 0 512 512'><path fill='#00457c' "
+            "d='M464 128H272l-64-64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 "
+            "0 48-21.49 48-48V176c0-26.51-21.49-48-48-48z'/></svg>");
+    hasIcon = TRUE;
+    }
+if (hasIcon)
+    hPrintf(" ");
+}
+
 boolean hPrintPennantIcon(struct trackDb *tdb)
 // Returns TRUE and prints out the "pennantIcon" when found.
 // Example: ENCODE tracks in hgTracks config list.
@@ -9442,6 +9462,7 @@ boolean gotPennant = (list != NULL);
 for (el = list;  el != NULL;  el = el->next)
     hPrintf("%s\n", el->name);
 slPairFreeValsAndList(&list);
+
 return gotPennant;
 }
 
@@ -9906,7 +9927,7 @@ if (isNotEmpty(version))
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart)
 /* Maybe print a "related track" section */
 {
-if (!cfgOption("db.relatedTrack") || trackHubDatabase(database))
+if (trackHubDatabase(database))
     return;
 char *relatedTrackTable = cfgOptionDefault("db.relatedTrack","relatedTrack");
 struct sqlConnection *conn = hAllocConn(database);
