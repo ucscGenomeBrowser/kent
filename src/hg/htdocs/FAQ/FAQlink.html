@@ -9,17 +9,46 @@
 
 <h2>Topics</h2>
 
+<div class="row">
+<div class="col-md-5">
+<h6> <a href="#link1">Creating a sharable URL to view specific tracks</a> </h6>
+<h6> <a href="#link2">Linking to the Browser at a specific position, or default position</a> </h6>
+<h6> <a href="#zoomVariant">Zooming in or out using a link to an HGVS identifier</a> </h6>
+<h6> <a href="#trackViz">Setting track visibility via URL</a> </h6>
+<h6> <a href="#custUrl">Loading Custom Tracks with the URL</a> </h6>
+<h6> <a href="#hubUrl">Loading Track Hubs and Assembly Hubs with the URL</a> </h6>
+<h6> <a href="#genes">Linking to gene-specific information</a> </h6>
+<h6> <a href="#hgsid">The hgsid parameter</a> </h6>
+<h6> <a href="#moreInfo">Additional URL parameters</a> </h6>
+
+<h6><a href="#Videos">Video demonstrations of making links</a></h6>
 <ul>
-<li><a href="#link1">Creating a sharable URL to view specific tracks</a></li>
-<li><a href="#link2">Linking to the Browser at a specific position, or default position</a></li>
-<li><a href="#zoomVariant">Zooming in or out using a link to an HGVS identifier</a></li>
-<li><a href="#trackViz">Setting track visibility via URL</a></li>
-<li><a href="#custUrl">Loading Custom Tracks with the URL</a></li>
-<li><a href="#hubUrl">Loading Track Hubs and Assembly Hubs with the URL</a></li>
-<li><a href="#genes">Linking to gene-specific information</a></li>
-<li><a href="#hgsid">The hgsid parameter</a></li>
-<li><a href="#moreInfo">Additional URL parameters</a></li>
+  <li><a href="#LinkVid1"><strong> Understanding the URL</strong></a></li>
+  <li><a href="#LinkVid2"><strong> Jump into genes</strong></a></li>
+  <li><a href="#LinkVid3"><strong> Composites, custom tracks, spreadsheets</strong></a></li>
+
 </ul>
+
+</div>
+<div class="col-md-7">
+
+<form name="googleForm1" method="GET" action="https://www.google.com/search"
+onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+
+'   site:genome.ucsc.edu/goldenPath/help';">
+<p>
+  Search the Genome Browser help pages: &nbsp;
+  <input type="hidden" name="q" value="">
+  <input type="hidden" name="num" value="10">
+  <input type="hidden" name="filter" value="0">
+  <input type=text name=qq size=30 maxlength=255 value="">
+  <input type="submit" value="Submit">
+</form>
+</p>
+<p><a href="../../contacts.html">Questions and feedback are welcome</a>.</p>
+
+ </div>
+</div>
+
 
 <a name="link1"></a>
 <h2>Creating a sharable URL to view specific tracks</h2>
@@ -104,7 +133,7 @@ The following lists the zoom levels of each number, applicable to zooming in or 
 <ul>
 <li><code>hgt.out1=submit</code> zooms out 1.5x</li>
 <li><code>hgt.out2=submit</code> zooms out 3x</li>
-<li><code>hgt.out3=submit</code> zooms out 10x
+<li><code>hgt.out3=submit</code> zooms out 10x</li>
 <li><code>hgt.out4=submit</code> zooms out 100x</li>
 </ul>
 <p>
@@ -152,7 +181,7 @@ display</li>
 <p>For example, the following URL hides all tracks (hideTracks=1), hides a specific composite
 track's default subtracks (refSeqComposite_hideKids=1), turns on one specific subtrack 
 (ncbiRefSeqCurated=full), and checks a box to display that subtrack 
-(ncbiRefSeqCurated_sel=1).
+(ncbiRefSeqCurated_sel=1).</p>
 
 <pre><a href="../cgi-bin/hgTracks?db=hg38&hideTracks=1&refSeqComposite_hideKids=1&ncbiRefSeqCurated=full&ncbiRefSeqCurated_sel=1" target="_blank">https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&refSeqComposite_hideKids=1&ncbiRefSeqCurated=full&ncbiRefSeqCurated_sel=1</a></pre>
 
@@ -176,7 +205,7 @@ If you want to add more information to the Custom Track, you can do so using the
 <code>hgct_customText</code> parameter. Since this is a URL, you must use "%20" to encode
 for spaces and "%0A" for a new line character. For example, the following example shows Custom
 Track input pasted in the <a href="../cgi-bin/hgCustom">custom track input box</a> and the 
-equivalent input in the URL:
+equivalent input in the URL:</p>
 
 <pre>browser position chr21:33038946-33039092
 track type=bam bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/bamExample.bam name=Example description=ExampleBAM</pre>
@@ -265,4 +294,59 @@ you may send it instead to <a href="mailto:&#103;e&#110;&#111;&#109;&#101;&#45;&
 &#64;&#115;&#111;&#101;.u&#99;&#115;c.&#101;&#100;&#117;">
 &#103;e&#110;&#111;&#109;&#101;&#45;&#119;w&#119;&#64;&#115;&#111;&#101;.
 u&#99;&#115;c.&#101;&#100;&#117;</a></p>
+
+<a name="Videos"></a>
+<p>
+</p>
+<h2>Videos</h2>
+
+<a name="LinkVid1"></a>
+<p>
+</p>
+<h3>Video demonstration: Links: Understanding the URL </h3>
+<p>
+
+</p><p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/p6TPvHDmpJk?rel=0"
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen></iframe>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Visit our
+<a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+target="_blank">YouTube channel</a>.
+</p>
+
+<a name="LinkVid2"></a>
+<p>
+</p>
+<h3>Video demonstration: Links: Jump into genes </h3>
+<p>
+</p><p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/xmcyz2GyRKA?rel=0"
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen></iframe>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Visit our
+<a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+target="_blank">YouTube channel</a>.
+</p>
+ 
+
+<a name="LinkVid3"></a>
+<br>
+<h3>Video demonstration: Links: Composites, custom tracks, spreadsheets</h3>
+<br>
+<p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Yy4UmepYs2Q?rel=0"
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen></iframe>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Visit our
+<a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+target="_blank">YouTube channel</a>.
+</p>
+
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

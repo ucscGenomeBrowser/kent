@@ -16,7 +16,6 @@ dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 priority 1
 type bed 9 +
-wgEncode 1
 #noInherit on
 itemRgb on
 boxedCfg on

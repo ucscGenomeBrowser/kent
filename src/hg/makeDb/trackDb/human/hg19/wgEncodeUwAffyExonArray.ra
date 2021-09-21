@@ -17,7 +17,6 @@ boxedCfg on
 canPack On
 priority 0
 type bed 6 +
-wgEncode 1
 superTrack wgEncodeExonArraySuper dense
 
     track wgEncodeUwAffyExonArrayCaco2SimpleSignalRep1

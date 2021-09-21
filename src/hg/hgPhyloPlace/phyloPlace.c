@@ -36,7 +36,6 @@ int chromSize = 29903;
 
 // Parameter constants:
 int maxGenotypes = 1000;        // Upper limit on number of samples user can upload at once.
-boolean showBestNodePaths = FALSE;
 boolean showParsimonyScore = FALSE;
 
 
@@ -463,6 +462,35 @@ for (si = seqInfoList;  si != NULL;  si = si->next)
 return tn;
 }
 
+static void addSampleMutsFromSeqInfo(struct hash *samplePlacements, struct hash *seqInfoHash)
+/* We used to get placementInfo->sampleMuts from DEBUG mode usher output in runUsher.c, but
+ * the DEBUG mode output went away with the change to server-mode usher.  Instead, now we fill
+ * it in from seqInfo->sncList which has the same info. */
+{
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(samplePlacements);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct placementInfo *pi = hel->val;
+    struct seqInfo *si = hashFindVal(seqInfoHash, pi->sampleId);
+    if (si)
+        {
+        struct slName *sampleMuts = NULL;
+        struct singleNucChange *snc;
+        for (snc = si->sncList;  snc != NULL;  snc = snc->next)
+            {
+            char mutStr[64];
+            safef(mutStr, sizeof mutStr, "%c%d%c", snc->refBase, snc->chromStart+1, snc->newBase);
+            slNameAddHead(&sampleMuts, mutStr);
+            }
+        slReverse(&sampleMuts);
+        pi->sampleMuts = sampleMuts;
+        }
+    else
+        errAbort("addSampleMutsFromSeqInfo: no seqInfo for placed sequence '%s'", pi->sampleId);
+    }
+}
+
 static void displaySampleMuts(struct placementInfo *info)
 {
 printf("<p>Differences from the reference genome "
@@ -690,6 +718,8 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
     int origLabIx = stringArrayIx("originating_lab", headerWords, headerWordCount);
     int subLabIx = stringArrayIx("submitting_lab", headerWords, headerWordCount);
     int regionIx = stringArrayIx("region", headerWords, headerWordCount);
+    int nCladeUsherIx = stringArrayIx("Nextstrain_clade_usher", headerWords, headerWordCount);
+    int lineageUsherIx = stringArrayIx("pango_lineage_usher", headerWords, headerWordCount);
     while (lineFileNext(lf, &line, NULL))
         {
         char *words[headerWordCount];
@@ -729,6 +759,10 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
             met->subLab = cloneString(words[subLabIx]);
         if (regionIx >= 0)
             met->region = cloneString(words[regionIx]);
+        if (nCladeUsherIx >= 0)
+            met->nCladeUsher = cloneString(words[nCladeUsherIx]);
+        if (lineageUsherIx >= 0)
+            met->lineageUsher = cloneString(words[lineageUsherIx]);
         // If epiId and/or genbank ID is included, we'll probably be using that to look up items.
         if (epiIdIx >= 0 && !isEmpty(words[epiIdIx]))
             hashAdd(sampleMetadata, words[epiIdIx], met);
@@ -871,41 +905,6 @@ if (isNotEmpty(info->nearestNeighbor))
     printf("<p>Nearest neighboring %s sequence already in phylogenetic tree: %s",
            source, info->nearestNeighbor);
     printLineageUrl(info->neighborLineage);
-    puts("</p>");
-    }
-}
-
-static void displayBestNodes(struct placementInfo *info, struct hash *sampleMetadata)
-/* Show the node(s) most closely related to sample. */
-{
-if (info->bestNodeCount == 1)
-    printf("<p>The placement in the tree is unambiguous; "
-           "there are no other parsimony-optimal placements in the phylogenetic tree.</p>\n");
-else if (info->bestNodeCount > 1)
-    printf("<p>This placement is not the only parsimony-optimal placement in the tree; "
-           "%d other placements exist.</p>\n", info->bestNodeCount - 1);
-if (showBestNodePaths && info->bestNodes)
-    {
-    if (info->bestNodeCount != slCount(info->bestNodes))
-        errAbort("Inconsistent bestNodeCount (%d) and number of bestNodes (%d)",
-                 info->bestNodeCount, slCount(info->bestNodes));
-    if (info->bestNodeCount > 1)
-        printf("<ul><li><b>used for placement</b>: ");
-    if (differentString(info->bestNodes->name, "?") && !isInternalNodeName(info->bestNodes->name, 0))
-        printf("%s ", info->bestNodes->name);
-    printVariantPathNoNodeNames(stdout, info->bestNodes->variantPath);
-    struct bestNodeInfo *bn;
-    for (bn = info->bestNodes->next;  bn != NULL;  bn = bn->next)
-        {
-        printf("\n<li>");
-        if (differentString(bn->name, "?") && !isInternalNodeName(bn->name, 0))
-            printf("%s ", bn->name);
-        printVariantPathNoNodeNames(stdout, bn->variantPath);
-        char *lineage = lineageForSample(sampleMetadata, bn->name);
-        printLineageUrl(lineage);
-        }
-    if (info->bestNodeCount > 1)
-        puts("</ul>");
     puts("</p>");
     }
 }
@@ -1091,9 +1090,7 @@ while ((clumpSize = countIdentical(refsToGo)) > 0)
         puts("</p>");
         }
     displayVariantPath(info->variantPath, clumpSize == 1 ? info->sampleId : "samples");
-    displayBestNodes(info, sampleMetadata);
-    if (!showBestNodePaths)
-        displayNearestNeighbors(info, source);
+    displayNearestNeighbors(info, source);
     if (showParsimonyScore && info->parsimonyScore > 0)
         printf("<p>Parsimony score added by your sample: %d</p>\n", info->parsimonyScore);
         //#*** TODO: explain parsimony score
@@ -2186,7 +2183,7 @@ return hash;
 }
 
 static struct tempName *writeTsvSummary(struct usherResults *results, struct phyloTree *sampleTree,
-                                        struct slName *sampleIds, struct seqInfo *seqInfoList,
+                                        struct slName *sampleIds, struct hash *seqInfoHash,
                                         struct geneInfo *geneInfoList, struct seqWindow *gSeqWin,
                                         struct hash *spikeChanges, int *pStartTime)
 /* Write a tab-separated summary file for download.  If the user uploaded enough samples to make
@@ -2202,7 +2199,6 @@ fprintf(f, "name\tnuc_mutations\taa_mutations\timputed_bases\tmutation_path"
         "\tins_bases\tins_ranges\tdel_bases\tdel_ranges\tmasked_mutations"
         "\tnearest_neighbor\tneighbor_lineage\tnextstrain_clade\tpango_lineage"
         "\n");
-struct hash *seqInfoHash = hashFromSeqInfoList(seqInfoList);
 if (sampleTree)
     {
     rWriteTsvSummaryTreeOrder(sampleTree, f, results, seqInfoHash, geneInfoList, gSeqWin,
@@ -2215,7 +2211,6 @@ else
         writeOneTsvRow(f, sample->name, results, seqInfoHash, geneInfoList, gSeqWin, spikeChanges);
     }
 carefulClose(&f);
-hashFree(&seqInfoHash);
 reportTiming(pStartTime, "write tsv summary");
 return tsvTn;
 }
@@ -2688,6 +2683,7 @@ else
     sampleIds = readSampleIds(lf, bigTree, aliasFile);
     }
 lineFileClose(&lf);
+struct hash *seqInfoHash = hashFromSeqInfoList(seqInfoList);
 if (sampleIds == NULL)
     {
     return ctFile;
@@ -2699,6 +2695,7 @@ if (vcfTn)
     results = runUsher(usherPath, protobufPath, vcfTn->forCgi,
                        subtreeSize, sampleIds, bigTree->condensedNodes,
                        &startTime);
+    addSampleMutsFromSeqInfo(results->samplePlacements, seqInfoHash);
     }
 else if (subtreesOnly)
     {
@@ -2775,7 +2772,7 @@ if (results && results->singleSubtreeInfo)
 
         // Make a sample summary TSV file and accumulate S gene changes
         struct hash *spikeChanges = hashNew(0);
-        tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
+        tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoHash,
                                                  geneInfoList, gSeqWin, spikeChanges, &startTime);
         sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
         downloadsRow(results->bigTreePlusTn->forHtml, tsvTn->forHtml, sTsvTn->forHtml,

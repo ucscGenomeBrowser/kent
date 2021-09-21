@@ -359,8 +359,8 @@ tawk '{split($2,a,"."); printf "%s\t", $1;for(ii = 1; ii <= a[2]; ii++) printf "
 join tempSearch2.txt tempSearch3.txt | sort > knownGene.txt
 ixIxx knownGene.txt knownGene${GENCODE_VERSION}.ix knownGene${GENCODE_VERSION}.ixx
  rm -rf /gbdb/$db/knownGene${GENCODE_VERSION}.ix /gbdb/$db/knownGene${GENCODE_VERSION}.ixx
-ln -s $dir/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene${GENCODE_VERSION}.ix
-ln -s $dir/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene${GENCODE_VERSION}.ixx  
+ln -s `pwd`/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene${GENCODE_VERSION}.ix
+ln -s `pwd`/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene${GENCODE_VERSION}.ixx  
 tawk '{print $5}' knownCanonical.tab | sort > knownCanonicalId.txt
 join knownCanonicalId.txt knownGene.txt | join -v 1 /dev/stdin pseudo.txt > knownGeneFast.txt
 ixIxx knownGeneFast.txt knownGeneFast${GENCODE_VERSION}.ix knownGeneFast${GENCODE_VERSION}.ixx
@@ -392,7 +392,7 @@ mkdir -p /gbdb/$db/targetDb/
 rm -f /gbdb/$db/targetDb/${db}KgSeq${curVer}.2bit
 ln -s $dir/${db}KgSeq${curVer}.2bit /gbdb/$db/targetDb/
 # Load the table kgTargetAli, which shows where in the genome these targets are.
-cut -f 1-10 knownGene.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
+#cut -f 1-10 knownGene.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
 hgLoadPsl $tempDb kgTargetAli.psl
 
 # 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on       
@@ -403,10 +403,10 @@ hgLoadPsl $tempDb kgTargetAli.psl
 # blatServer by the keyword "$db"Kg with the version number appended
 # untrans gfServer for hg38KgSeq12 on host blat1b, port 17897
 hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("hg38KgSeq13", "blat1b", 1909, 0, 1);'
+      'INSERT into blatServers values ("hg38KgSeq13", "blat1b", 17909, 0, 1,"");'
 hgsql hgcentraltest -e \
             'INSERT into targetDb values("hg38KgSeq13", "GENCODE Genes", \
-                     "hg38", "knownGeneV35.kgTargetAli", "", "", \
+                     "hg38", "kgTargetAli", "", "", \
                               "/gbdb/hg38/targetDb/hg38KgSeq13.2bit", 1, now(), "");'
 
 for i in  $tempFa $xdbFa $ratFa $fishFa $flyFa $wormFa $yeastFa

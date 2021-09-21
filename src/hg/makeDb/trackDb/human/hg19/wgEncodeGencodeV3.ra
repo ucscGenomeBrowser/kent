@@ -15,7 +15,6 @@ hgGene on
 hgsid on
 baseColorUseCds given
 baseColorDefault genomicCodons
-wgEncode 1
 cdsDrawDefault genomic\ codons
 itemClassTbl wgEncodeGencodeClassesV3
 yalePseudoAssoc wgEncodeSangerGencodeYalePseudo

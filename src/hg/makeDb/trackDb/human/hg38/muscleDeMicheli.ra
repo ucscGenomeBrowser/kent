@@ -4,12 +4,13 @@ shortLabel Muscle De Micheli
 longLabel Muscle single cell data from De Micheli et al 2020
 visibility hide
 group singleCell
-release alpha
 
     track muscleDeMicheliCellType
     parent muscleDeMicheli
     html muscleDeMicheli
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=muscle-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility pack
     shortLabel Muscle Cells 
     longLabel Muscle RNA binned by cell type from De Micheli et al 2020
@@ -23,16 +24,16 @@ release alpha
     #barChartColors #ff4c4c #ff7000 #ffbb00 #f3ff00 #a4ff00 #20ff00 #00ff92 #00ffdd #00d2ff #4cacff #0020ff #5000ff #a400ff #f300ff #ff00bb #ff0070
     #barChartColors #d459cf #b615a3 #eb6929 #f61814 #906329 #0bb804 #ed6d25 #fa6d23 #fb6e22 #ca8980 #20aa0a #c73427 #e33329 #876618 #13b209 #f51915
     barChartColors #d55acd #bb1b98 #fd8738 #da2f08 #b6513e #11b606 #b65928 #b35024 #b25023 #cf8b7e #419916 #fc344a #d33e3f #98672c #1dad0c #dc2c04
-    barChartBars ACTA1+_Mature_skeletal_muscle ACTA2+_MYH11+_MYL9+_Smooth_muscle_cells APOD+_CFD+_PLAC9+_Adipocytes C1QA+_CD74+_Macrophages CD36+_VWF+_Platelets CLDN5+_PECAM1+_Endothelial COL1A1+_Fibroblasts DCN+_GSN+_MYOC+_Fibroblasts FBN1+_MFAP5+_CD55+_Fibroblasts HBA1+_Erythroblasts ICAM1+_SELE+_VCAM1+_Endothelial IL7R+_PTPRC+_NKG7+_B/T/NK_cells PAX7+_DLK1+_MuSCs_and_progenitors PAX7low_MYF5+_MuSCs_and_progenitors RGS5+_MYL9+_Pericytes S100A9+_LYZ+_Inflammatory_macrophages
+    #barChartBars ACTA1+_Mature_skeletal_muscle ACTA2+_MYH11+_MYL9+_Smooth_muscle_cells APOD+_CFD+_PLAC9+_Adipocytes C1QA+_CD74+_Macrophages CD36+_VWF+_Platelets CLDN5+_PECAM1+_Endothelial COL1A1+_Fibroblasts DCN+_GSN+_MYOC+_Fibroblasts FBN1+_MFAP5+_CD55+_Fibroblasts HBA1+_Erythroblasts ICAM1+_SELE+_VCAM1+_Endothelial IL7R+_PTPRC+_NKG7+_B/T/NK_cells PAX7+_DLK1+_MuSCs_and_progenitors PAX7low_MYF5+_MuSCs_and_progenitors RGS5+_MYL9+_Pericytes S100A9+_LYZ+_Inflammatory_macrophages
+    barChartBars skeletal_muscle_cell_ACTA1+ smooth_muscle_cell_ACTA2+_MYH11+_MYL9+ adipocyte_APOD+_CFD+_PLAC9+ macrophage_C1QA+_CD74+ platelet_CD36+_VWF+ endothelial_cell_CLDN5+_PECAM1+ fibroblast_COL1A1+ fibroblast_DCN+_GSN+_MYOC+ fibroblast_FBN1+_MFAP5+_CD55+ erythroblast_HBA1+ endothelial_cell_HBA1+ B/T/NK_cell_IL7R+_PTPRC+_NKG7+ muscle_stem_cell_PAX7+_DLK1+_(MuSC1) muscle_stem_cell_PAX7-_MYF5+_(MuSC2) pericyte_RGS5+_MYL9+ macrophage_(inflammatory)_S100A9+_LYZ+
     transformFunc NONE
     barChartLimit 2
-    url http://cells.ucsc.edu/?ds=muscle-cell-atlas&gene=$$ 
-    urlLabel UCSC Cell Browser:
-    release alpha
 
     track muscleDeMicheliSample
     parent muscleDeMicheli
     html muscleDeMicheli
+    url http://cells.ucsc.edu/?ds=muscle-cell-atlas&gene=$$ 
+    urlLabel UCSC Cell Browser:
     type bigBarChart
     visibility hide
     shortLabel Muscle Sample
@@ -49,6 +50,3 @@ release alpha
     barChartBars hu01_061419 hu02_062419 hu03_062719 hu04_080619 hu05_111418 hu06_120518 hu07_021219 hu08_092618 hu09_092718 hu10_101018
     transformFunc NONE
     barChartLimit 2
-    url http://cells.ucsc.edu/?ds=muscle-cell-atlas&gene=$$
-    urlLabel UCSC Cell Browser:
-    release alpha

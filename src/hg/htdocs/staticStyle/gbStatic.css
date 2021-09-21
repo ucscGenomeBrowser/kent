@@ -70,6 +70,10 @@
     font-weight: bold;
 }
 
+.gbsPage h2:target {
+    border: 3px solid black;
+}
+
 /* Subsection header */
 .gbsPage h3 {
     display: inline-block;      /* limits item width so background color doesn't span window */

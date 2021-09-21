@@ -54,6 +54,8 @@ jq -c -r '[.accession, .biosample, .isolate.collectionDate, .location.geographic
 | sort \
     > ncbi_dataset.tsv
 
+# TODO: get rid of all this eutils cruft when biosample.jsonl is stable:
+
 # Use EUtils (esearch) to get all SARS-CoV-2 BioSample GI# IDs:
 $scriptDir/searchAllSarsCov2BioSample.sh
 sort all.biosample.gids.txt > all.biosample.gids.sorted.txt
@@ -94,12 +96,21 @@ $scriptDir/bioSampleTextToTab.pl < all.bioSample.txt  > all.bioSample.tab
 # Extract BioSample tab-sep lines just for BioSample accessions included in the ncbi_dataset data:
 tawk '$2 != "" {print $2;}' ncbi_dataset.tsv \
 | grep -Fwf - all.bioSample.tab \
-    > gb.bioSample.tab
+    > gb.bioSample.eutils.tab
+
+time $scriptDir/bioSampleJsonToTab.py ncbi_dataset/data/biosample.jsonl > gb.bioSample.tab
+
+# TODO: get rid of this when bioSample json is stable
+comm -23 <(cut -f 2 gb.bioSample.eutils.tab | sort) <(cut -f 2 gb.bioSample.tab | sort) \
+    > bioSample.missingFromJson.txt
+wc -l bioSample.missingFromJson.txt
+grep -Fwf bioSample.missingFromJson.txt gb.bioSample.eutils.tab \
+    >> gb.bioSample.tab
 
 # Use BioSample metadata to fill in missing pieces of GenBank metadata and report conflicting
 # sample collection dates:
 $scriptDir/gbMetadataAddBioSample.pl gb.bioSample.tab ncbi_dataset.tsv \
-    > ncbi_dataset.plusBioSample.tsv
+    > ncbi_dataset.plusBioSample.tsv 2>gbMetadataAddBioSample.log
 
 # Make a file for joining collection date with ID:
 tawk '$3 != "" {print $1, $3;}' ncbi_dataset.plusBioSample.tsv \
@@ -113,13 +124,13 @@ time cleanGenbank < ncbi_dataset/data/genomic.fna \
 
 # Run pangolin and nextclade on sequences that are new since yesterday
 export TMPDIR=/dev/shm
-fastaNames genbank.fa.xz | awk '{print $1;}' | sed -re 's/\|.*//' | grep -vx pdb | sort > gb.names
+fastaNames genbank.fa.xz | awk '{print $1;}' | sed -re 's/\|.*//' | grep -vx pdb | sort -u > gb.names
 splitDir=splitForNextclade
 rm -rf $splitDir
 mkdir $splitDir
 if [ -e ../ncbi.latest/nextclade.tsv ]; then
     cp ../ncbi.latest/nextclade.tsv .
-    cut -f 1 ../ncbi.latest/nextclade.tsv | sort > nextclade.prev.names
+    cut -f 1 nextclade.tsv | sort -u > nextclade.prev.names
     comm -23 gb.names nextclade.prev.names > nextclade.names
     faSomeRecords <(xzcat genbank.fa.xz) nextclade.names nextclade.fa
     faSplit about nextclade.fa 30000000 $splitDir/chunk

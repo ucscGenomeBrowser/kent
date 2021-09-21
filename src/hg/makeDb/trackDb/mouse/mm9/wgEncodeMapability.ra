@@ -17,7 +17,6 @@ autoScale off
 windowingFunction mean+whiskers
 maxHeightPixels 100:32:16
 visibility hide
-wgEncode 1
 
     track wgEncodeCrgMapabilityAlign36mer
     parent wgEncodeMapability

@@ -18,7 +18,6 @@ priority 0
 noInherit on
 type bed 3
 visibility hide
-wgEncode 1
 
     track wgEncodeMapabilityViewDuniq
     shortLabel Duke Uniqueness

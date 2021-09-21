@@ -10,9 +10,11 @@ cells (PLC), enteroendocrine cells (EEC), progenitor cells (PRO),
 transient-amplifying cells (TA) and stem cells (SC).</p>
 
 <p>
-There are two bar chart tracks in this track collection with rectum cells
-grouped by either cell type (Rectum Cells) and donor (Rectum Donor). The
-default track displayed is Rectum Cells.</p>
+This track collection contains two bar chart tracks of RNA expression in rectum
+cells where cells are grouped by cell type
+(<a href="hgTrackUi?g=rectumWangCellType">Rectum Cells</a>) or donor
+(<a href="hgTrackUi?g=rectumWangDonor">Rectum Donor</a>). The default track
+displayed is <a href="hgTrackUi?g=rectumWangCellType">Rectum Cells</a>.</p>
 
 <h2>Display Conventions</h2>
 <p>
@@ -32,9 +34,7 @@ The cell types are colored by which class they belong to according to the follow
 
 <p>
 Cells that fall into multiple classes will be colored by blending the colors associated
-with those classes. The colors will be purest in the Skin Cell subtrack, where the bars 
-represent relatively pure cell types. They can give an overview of the cell composition 
-within other categories in other subtracks as well.</p>
+with those classes.</p>
 
 <h2>Method</h2>
 <p>
@@ -52,7 +52,7 @@ PE150.</p>
 
 <p>
 The cell/gene matrix and cell-level metadata was downloaded from the <a
-href="http://cells.ucsc.edu/?ds=covid19atlas%2Fc19a-wang20%2Frectum"
+href="http://cells.ucsc.edu/?ds=human-intestine+rectum"
 target="_blank">UCSC Cell Browser</a>. The UCSC command line tool
 matrixClusterColumns, matrixToBarChart, and bedToBigBed were used to transform
 these into a bar chart format bigBed file that can be visualized. The coloring

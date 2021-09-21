@@ -34626,13 +34626,18 @@ TMPDIR=/dev/shm
     cd ~/kent/src/hg/makeDb/trackDb 
     v human/jaspar.ra 
     curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/hg19/trackDb.txt >> human/jaspar.ra 
-    cd /gbdb/hg19
+    cd /hive/data/genomes/hg19/bed
     mkdir jaspar
     cd jaspar
     wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2018/hg19/JASPAR2018_hg19_all_chr.bb
     wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2020/JASPAR2020_hg19.bb
     mv JASPAR2020_hg19.bb JASPAR2020.bb
     mv JASPAR2018_hg19_all_chr.bb JASPAR2018.bb
+    cd /gbdb/hg19
+    mkdir jaspar
+    cd jaspar
+    ln -s /hive/data/genomes/hg19/bed/jaspar/JASPAR2018.bb .
+    ln -s /hive/data/genomes/hg19/bed/jaspar/JASPAR2020.bb .
     v human/jaspar.html  
     curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/JASPAR2018_TFBS_help.html >> human/jaspar.html 
 

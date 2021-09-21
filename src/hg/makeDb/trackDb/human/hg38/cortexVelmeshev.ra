@@ -9,6 +9,8 @@ group singleCell
     parent cortexVelmeshev
     html cortexVelmeshev
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=autism&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility pack
     shortLabel Cortex Cells
     longLabel Cerebral cortex RNA binned by cell type from Velmeshev et al 2019
@@ -21,7 +23,8 @@ group singleCell
     barChartColors #81ce00 #81cd00 #01c000 #ebbf00 #ebbf00 #eabe00 #ebbf00 #ecbf00 #ecbf00 #ecbf00 #edbf00 #ef1211 #c8b701 #c5b701 #ebbf00 #c5be01 #86c601
     #barChartColors #81ce00 #81cd00 #01c000 #dcbf00 #dcbf00 #dbbe00 #dcbf00 #ddbf00 #ddbf00 #ddbf00 #ddbf00 #fe1211 #bdb701 #bab701 #dcbf00 #bbbe01 #85c601
     #barChartColors #ff0000 #ff6900 #ffb100 #fffc00 #b6ff00 #61ff00 #00ff70 #00ffbc #00f7ff #00acff #0061ff #0700ff #7000ff #b600ff #ff00fc #ff00b1 #ff0069
-    barChartBars AST-FB AST-PP Endothelial IN-PV IN-SST IN-SV2C IN-VIP L2/3 L4 L5/6 L5/6-CC Microglia Neu-NRGN-I Neu-NRGN-II Neu-mat OPC Oligodendrocytes
+    #barChartBars AST-FB AST-PP Endothelial IN-PV IN-SST IN-SV2C IN-VIP L2/3 L4 L5/6 L5/6-CC Microglia Neu-NRGN-I Neu-NRGN-II Neu-mat OPC Oligodendrocytes
+    barChartBars astrocyte_(fibrous) astrocyte_(protoplasmic) endothelial_cell interneuron_PVALB+ interneuron_SST+ interneuron_SV2C+ interneuron_VIP+ neuron_L2/3_cortex neuron_L4_cortex neuron_L5/6_corticofugal neuron_L5/6_cortico-cortical microglial_cell neuron_NRGN+_I neuron_NRGN+_II neuron_maturing oligodendrocyte_precursor oligodendrocyte
     transformFunc NONE
     barChartLimit 4
 
@@ -29,6 +32,8 @@ group singleCell
     parent cortexVelmeshev
     html cortexVelmeshev
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=autism&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Cortex Diagnosis
     longLabel Cerebral cortex RNA binned by ASD/control diagnosis from Velmeshev et al 2019
@@ -48,6 +53,8 @@ group singleCell
     parent cortexVelmeshev
     html cortexVelmeshev
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=autism&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Cortex Donor
     longLabel Cerebral cortex RNA binned by organ donor from Velmeshev et al 2019
@@ -67,6 +74,8 @@ group singleCell
     parent cortexVelmeshev
     html cortexVelmeshev
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=autism&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Cortex Sample
     longLabel Cerebral cortex RNA binned by biosample from Velmeshev et al 2019
@@ -87,6 +96,8 @@ group singleCell
     parent cortexVelmeshev
     html cortexVelmeshev
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=autism&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Cortex Sex
     longLabel Cerebral cortex RNA binned by sex of donor from Velmeshev et al 2019

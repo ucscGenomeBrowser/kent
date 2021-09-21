@@ -18,7 +18,6 @@ controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExt
 dragAndDrop subTracks
 type bed 3
 noInherit on
-wgEncode 1
 html wgEncodeGisRnaPet.release2
 
     track wgEncodeGisRnaPetViewClusters

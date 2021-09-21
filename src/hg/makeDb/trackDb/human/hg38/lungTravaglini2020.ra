@@ -9,6 +9,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility pack
     shortLabel Lung Cells
     longLabel Lung cells 10x method binned by merged cell type from Travaglini et al 2020
@@ -18,7 +20,8 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/cell_type.bb
     barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/droplet/cell_type.stats
-    barChartBars Airway_Smooth_Muscle Alveolar_Epithelial_Type_1 Alveolar_Epithelial_Type_2 Artery_or_Vein Basal Basophil/Mast Bronchial_Vessel Capillary Ciliated Club Dendretic Fibroblast Goblet Lymphatic Lymphocyte Macrophage_or_Monocyte Mucous Other/Rare Pericyte Vascular_Smooth_Muscle
+    #barChartBars Airway_Smooth_Muscle Alveolar_Epithelial_Type_1 Alveolar_Epithelial_Type_2 Artery_or_Vein Basal Basophil/Mast Bronchial_Vessel Capillary Ciliated Club Dendretic Fibroblast Goblet Lymphatic Lymphocyte Macrophage_or_Monocyte Mucous Other/Rare Pericyte Vascular_Smooth_Muscle
+    barChartBars smooth_muscle_(airway)_cell alveolar_Type_1_cell alveolar_Type_2_cell artery/vein_endothelial_cell airway_basal_cell basophil/mast_cell bronchial_vessel_cell capillary_endothelial_cell ciliated_cell club_cell dendritic_cell fibroblast goblet_cell lymphatic_cell lymphocyte macrophage/monocyte mucous_cell other/rare_cell pericyte smooth_muscle_(vascular)_cell
     barChartColors #be04bb #905d31 #0695bc #339a1b #4a4eb4 #c82c38 #c74050 #04bd03 #0371d4 #1451e7 #e41819 #af5022 #0950f5 #ab435d #fb344b #df2901 #2652d0 #3b4ebb #a05331 #bd05b9
     transformFunc NONE
     barChartLimit 5
@@ -27,6 +30,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Half Det
     longLabel Lung cells 10x method binned by halfway detailed cell type from Travaglini et al 2020
@@ -46,6 +51,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Detail
     longLabel Lung cells 10x method binned by detailed cell type from Travaglini et al 2020
@@ -69,6 +76,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Compart
     longLabel Lung cells 10x method binned by compartment from Travaglini et al 2020
@@ -90,6 +99,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Donor
     longLabel Lung cells 10x method binned by organ donor from Travaglini et al 2020
@@ -111,6 +122,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Locat
     longLabel Lung cells 10x method binned by location from Travaglini et al 2020
@@ -132,6 +145,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Mag Sel
     longLabel Lung cells 10x method binned by magnetic.selection from Travaglini et al 2020
@@ -153,6 +168,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Organ
     longLabel Lung cells 10x method binned by organ from Travaglini et al 2020
@@ -174,6 +191,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020 
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+droplet&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Sample
     longLabel Lung cells 10x method binned by sample from Travaglini et al 2020
@@ -195,6 +214,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Cells FACS
     longLabel Lung cells FACS method binned by merged cell type from Travaglini et al 2020
@@ -204,7 +225,8 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/lungTravaglini2020/facs/cell_type.bb
     barChartStatsUrl /gbdb/$D/bbi/lungTravaglini2020/facs/cell_type.stats
-    barChartBars Airway_Smooth_Muscle Alveolar_Epithelial_Type_1 Alveolar_Epithelial_Type_2 Artery_or_Vein Basal Basophil/Mast Bronchial_Vessel Capillary Ciliated Club Dendretic Fibroblast Goblet Lymphatic Lymphocyte Macrophage_or_Monocyte Neutrophil Other/Rare Pericyte Vascular_Smooth_Muscle
+    #barChartBars Airway_Smooth_Muscle Alveolar_Epithelial_Type_1 Alveolar_Epithelial_Type_2 Artery_or_Vein Basal Basophil/Mast Bronchial_Vessel Capillary Ciliated Club Dendretic Fibroblast Goblet Lymphatic Lymphocyte Macrophage_or_Monocyte Neutrophil Other/Rare Pericyte Vascular_Smooth_Muscle
+    barChartBars smooth_muscle_(airway)_cell alveolar_Type_1_cell alveolar_Type_2_cell artery/vein_endothelial_cell airway_basal_cell basophil/mast_cell bronchial_vessel_cell capillary_endothelial_cell ciliated_cell club_cell dendritic_cell fibroblast goblet_cell lymphatic_cell lymphocyte macrophage/monocyte mucous_cell other/rare_cell pericyte smooth_muscle_(vascular)_cell
     barChartColors #be04bb #a63276 #0497be #23a218 #a33b7b #e5171b #7a555b #02be01 #0272d5 #2450d5 #d02a1e #af5021 #0750f6 #7e5164 #fd334a #df2901 #c5341d #bd356d #b514a7 #be04bb
     barChartLimit 900
     transformFunc NONE
@@ -213,6 +235,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Half Det FACS
     longLabel Lung cells FACS method binned by merged cell type from Travaglini et al 2020
@@ -231,6 +255,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Detail FACS
     longLabel Lung cells FACS method binned by detailed cell type from Travaglini et al 2020
@@ -250,6 +276,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Organ FACS
     longLabel Lung cells FACS method binned by organ from Travaglini et al 2020
@@ -269,6 +297,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Label FACS
     longLabel Lung cells FACS method binned by label from Travaglini et al 2020
@@ -288,6 +318,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Donor FACS
     longLabel Lung cells FACS method binned by organ donor from Travaglini et al 2020
@@ -307,6 +339,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Locat FACS
     longLabel Lung cells FACS method binned by location from Travaglini et al 2020
@@ -326,6 +360,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Gating FACS
     longLabel Lung cells FACS method binned by gating from Travaglini et al 2020
@@ -345,6 +381,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Compart FACS
     longLabel Lung cells FACS method binned by compartment from Travaglini et al 2020
@@ -364,6 +402,8 @@ group singleCell
     parent lungTravaglini2020
     html lungTravaglini2020
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=stanford-czb-hlca+facs&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Lung Sample FACS
     longLabel Lung cells FACS method binned by sample from Travaglini et al 2020

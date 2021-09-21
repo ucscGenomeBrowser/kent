@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 {
-. buildEnv.sh
+. ./buildEnv.sh
 cd $dir
 
 buildCore.sh
@@ -11,7 +11,7 @@ buildFoldUtr.sh &
 #buildKegg.sh &
 buildPfamScop.sh &
 buildTo.sh &
-buildMafGene &
+# buildMafGene.sh &
 wait
 echo "BuildKnown successfully finished"
 } > doKnown.log < /dev/null 2>&1

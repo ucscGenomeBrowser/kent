@@ -9,6 +9,8 @@ group singleCell
     parent rectumWang
     html rectumWang
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=human-intestine+rectum&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility pack
     shortLabel Rectum Cells
     longLabel Rectum cells binned by cell type from Wang et al 2020
@@ -18,7 +20,8 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/rectumWang/cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/rectumWang/cell_type.stats
-    barChartBars Enteriendocrine Enterocyte Goblet Paneth-like Progenitor Stem_Cell TA
+    #barChartBars Enteriendocrine Enterocyte Goblet Paneth-like Progenitor Stem_Cell TA
+    barChartBars enteroendocrine_cell enterocyte goblet_cell paneth-like_cell progenitor_cell stem_cell transit-amplifying_cell
     barChartColors #c7d2e5 #0198c0 #0251fc #7197d7 #4d689b #9e9fa2 #949dae
     #barChartColors #dad8d4 #0298bf #0352fb #69b1cd #9e874e #e7b463 #ab8743
     transformFunc NONE
@@ -28,6 +31,8 @@ group singleCell
     parent rectumWang
     html rectumWang
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=human-intestine+rectum&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Rectum Donor
     longLabel Rectum cells binned by organ donor from Wang et al 2020

@@ -380,7 +380,6 @@ url https://screen.encodeproject.org/search/?q=$$&assembly=GRCh38
     scoreFilter 0
     scoreFilterLimits 0:1000
     dataVersion ENCODE 3 Nov 2018
-    wgEncode 1 
     priority 1.91
     parent wgEncodeReg
     subGroup1 cellType Cell_Type \

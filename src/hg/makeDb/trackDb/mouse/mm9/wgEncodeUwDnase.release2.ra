@@ -65,7 +65,6 @@ dragAndDrop subTracks
 noInherit on
 priority 0
 type bed 3
-wgEncode 1
 html wgEncodeUwDnase.release2
 
     track wgEncodeUwDnaseViewHotspots
