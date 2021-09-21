@@ -67,7 +67,6 @@ UTILS_APPLIST = \
 	faToTab \
 	faToTwoBit \
 	faTrans \
-	findMotif \
 	headRest \
 	htmlCheck \
 	matrixMarketToTsv \
@@ -111,6 +110,11 @@ UTILS_APPLIST = \
 	wigCorrelate \
 	wigToBigWig \
 	wordLine \
+
+# doesn't work on arm64 due to use of SSE
+ifneq (${MACHTYPE},arm64)
+UTILS_APPLIST += findMotif
+endif
 
 # list of utilities to build of interest only at UCSC
 

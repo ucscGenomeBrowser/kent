@@ -349,8 +349,9 @@ if (botDelayMillis > 0)
 	    hogExit(cgiName, enteredMainTime, exitType, retryAfterSeconds);
 	else
 	    issueWarning = TRUE;
+
+        sleep1000(botDelayMillis); /* sleep when > warnMs and < exitMs */
 	}
-    sleep1000(botDelayMillis); /* sleeping while still < exitMs */
     }
 return issueWarning;	/* caller can decide on their type of warning */
 }	/*	boolean earlyBotCheck()	*/

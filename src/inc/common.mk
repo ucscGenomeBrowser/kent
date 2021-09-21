@@ -37,12 +37,26 @@ endif
 FREETYPECFLAGS = $(shell freetype-config --cflags  2> /dev/null)
 
 # we use our static library on dev
-ifeq (${IS_HGWDEV},no) 
-  ifeq ($(UNAME_S),Darwin)
-    FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a /usr/local/opt/bzip2/lib/libbz2.a
-  else
-    FREETYPELIBS =  $(shell freetype-config --libs 2> /dev/null )
+ifeq (${FREETYPELIBS},)
+  ifeq (${IS_HGWDEV},no)
+    ifeq ($(UNAME_S),Darwin)
+	ifneq ($(wildcard /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a),)
+          ifneq ($(wildcard /usr/local/opt/bzip2/lib/libbz2.a),)
+            FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a /usr/local/opt/bzip2/lib/libbz2.a
+          else
+            FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a -lbz2
+          endif
+        else
+          ifneq ($(wildcard /opt/local/lib/libfreetype.a),)
+            FREETYPELIBS=/opt/local/lib/libfreetype.a /opt/local/lib/libbz2.a /opt/local/lib/libbrotlidec-static.a /opt/local/lib/libbrotlienc-static.a /opt/local/lib/libbrotlicommon-static.a
+          endif
+        endif
+    endif
   endif
+endif
+
+ifeq (${FREETYPELIBS},)
+  FREETYPELIBS =  $(shell freetype-config --libs 2> /dev/null )
 endif
 
 ifneq (${FREETYPECFLAGS},)
@@ -246,9 +260,13 @@ ifneq ($(MAKECMDGOALS),clean)
     endif
   endif
   ifeq (${MYSQLLIBS},)
-   ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a),)
+    ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a),)
+          MYSQLLIBS+=/usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a
+    else
+      ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a),)
           MYSQLLIBS+=/usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a
-     endif
+       endif
+    endif
   endif
   ifeq (${MYSQLLIBS},)
     ifneq ($(wildcard /opt/local/lib/mysql57/mysql/libmysqlclient.a),)
@@ -341,8 +359,12 @@ L += $(kentSrc)/htslib/libhts.a
 
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
-ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/include/mysql/mysql.h),)
-  HG_INC+=-I/usr/local/Cellar/mariadb/10.4.12/include/mysql
+ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/include/mysql/mysql.h),)
+  HG_INC+=-I/usr/local/Cellar/mariadb/10.6.4/include/mysql
+else
+  ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/include/mysql/mysql.h),)
+    HG_INC+=-I/usr/local/Cellar/mariadb/10.4.12/include/mysql
+  endif
 endif
 ifneq ($(wildcard /usr/local/opt/openssl/include/openssl/hmac.h),)
   HG_INC+=-I/usr/local/opt/openssl/include
