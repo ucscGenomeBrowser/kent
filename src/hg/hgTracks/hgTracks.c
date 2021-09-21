@@ -8030,22 +8030,19 @@ if (track->hasUi)
     {
     char *url = trackUrl(track->track, chromName);
     char *longLabel = replaceChars(track->longLabel, "\"", "&quot;");
-    // Print an icon before the title when one is defined
-    hPrintPennantIcon(track->tdb);
 
     struct dyString *dsMouseOver = dyStringCreate("%s", longLabel);
     struct trackDb *tdb = track->tdb;
 
     if (tdbIsSuper(tdb))
-        {
-        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of different types (super track)",
-            slCount(tdb->children));
-        }
+        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of different types "
+                "(super track)", slCount(tdb->children));
     else if (tdbIsComposite(tdb))
-        {
-        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of similar types (composite track)",
-            slCount(tdb->subtracks));
-        }
+        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of similar types "
+                "(composite track)", slCount(tdb->subtracks));
+
+    // Print icons before the title when any are defined
+    hPrintIcons(track->tdb);
 
     hPrintf("<A HREF=\"%s\" title=\"%s\">", url, dyStringCannibalize(&dsMouseOver));
 
@@ -8053,15 +8050,10 @@ if (track->hasUi)
     freeMem(longLabel);
     }
 
-// show the folder icon from the font-awesome collection.
-// the icon collection also contains a "fa fa-folder-o" icon, which is the outline. It was decided to use only the filled out icon for now.
-if (tdbIsSuper(track->tdb) || tdbIsComposite(track->tdb))
-    hPrintf("<i id='folderIcon' class='fa fa-folder'></i>");
-
-hPrintf(" %s", track->shortLabel);
-hPrintf("<BR> ");
+hPrintf("%s", track->shortLabel);
 if (track->hasUi)
     hPrintf("</A>");
+hPrintf("<BR>");
 }
 
 void printSearchHelpLink()
@@ -8754,7 +8746,7 @@ if (!hideControls)
             showVirtRegions = "show multi-region position ranges and ";
             }
 	hPrintf("<span class='positionDisplay %s' id='positionDisplay' "
-                "title='click to %s copy position to input box'>%s</span>", 
+                "title='click to %s copy chromosome range to input box'>%s</span>", 
                         pressedClass, showVirtRegions, addCommasToPos(database, position));
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, virtWinEnd - virtWinStart);
@@ -10839,8 +10831,6 @@ if(!trackImgOnly)
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
-
-    webIncludeResourceFile("font-awesome.min.css");
 
     cartFlushHubWarnings();
     }
