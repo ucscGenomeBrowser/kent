@@ -398,8 +398,7 @@ for (group = groupList; group != NULL; group = group->next)
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 
-        // Print an icon before the title when one is defined
-        hPrintPennantIcon(tdb);
+        hPrintIcons(tdb);
 
         if (track->hasUi)
             hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%s&g=%s&hgTracksConfigPage=configure'>",
@@ -408,8 +407,6 @@ for (group = groupList; group != NULL; group = group->next)
                     hTrackUiForTrack(tdb->track),
                     cartSessionVarName(), cartSessionId(cart), track->track);
         hPrintf(" %s", tdb->shortLabel);
-        if (tdbIsSuper(tdb))
-            hPrintf("...");
         if (track->hasUi)
 	    hPrintf("</A>");
 	hPrintf("</TD><TD NOWRAP>");
