@@ -413,7 +413,7 @@ if [ -s $ottoDir/$prevDate/cladeToName ]; then
         -f 0.95 \
         -D details.nextclade \
         -o gisaidAndPublic.$today.masked.nextclade.pb \
-        >& annnotate.nextclade
+        >& annotate.nextclade
 else
     time $matUtils annotate -T 50 \
         -l \
@@ -488,6 +488,6 @@ time $matUtils extract -i gisaidAndPublic.$today.masked.pb \
     -M metadata.tmp.tsv \
     --write-taxodium gisaidAndPublic.$today.masked.taxodium.pb
 rm metadata.tmp.tsv wuhCor1.fa
-gzip gisaidAndPublic.$today.masked.taxodium.pb
+gzip -f gisaidAndPublic.$today.masked.taxodium.pb
 
 $scriptDir/extractPublicTree.sh $today
