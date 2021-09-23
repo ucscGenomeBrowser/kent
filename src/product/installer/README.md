@@ -17,14 +17,19 @@ default Apache htdocs/cgi folders, it is best run on a new machine, or at least 
 already used as a web server. The tool can also download full or partial assembly databases,
 update the Genome Browser CGIs, and remove temporary files (aka "trash cleaning").
 
-The GBiC program has been tested with Ubuntu 14/16 LTS, Centos 6/6.7/7.2, and Fedora 20.
+The GBiC program has been tested with Ubuntu 18/20 LTS, Centos 7.2/8, and Fedora 20.
 
-It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft 
-Azure (Ubuntu). If you want to load data on the fly from UCSC, you need to select the 
+It has also been tested on virtual machines in Amazon EC2 (Centos 6) and Microsoft Azure (Ubuntu).
+
+If you want to load data on the fly from UCSC, you need to select the 
 data centers "US West (N. California)" (Amazon) or "West US" (Microsoft) for best performance. 
 Other data centers (e.g&period; East Coast) will require a local copy of the genome assembly, which 
-requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum 
-size of a single Amazon EBS volume.
+requires 2TB-7TB of storage for the hg19 assembly. Note that if you mirror multiple assemblies, this
+may in rare cases exceed 16TB, the current maximum size of a single Amazon EBS volume. In these
+cases, you may need to use RAID striping of multiple EBS volumes, or use Amazon EFS for the /gbdb
+files and Amazon Aurora for the MySQL tables. We have had one report from a user that the MySQL
+performance is better when served from Aurora instead of being served from the same EC2 instance;
+the cost may be higher in Aurora, depending on the type of usage.
 
 # Quick Start Instructions
 
