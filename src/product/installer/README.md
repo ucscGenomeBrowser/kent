@@ -19,7 +19,7 @@ update the Genome Browser CGIs, and remove temporary files (aka "trash cleaning"
 
 The GBiC program has been tested with Ubuntu 18/20 LTS, Centos 7.2/8, and Fedora 20.
 
-It has also been tested on virtual machines in Amazon EC2 (Centos 6) and Microsoft Azure (Ubuntu).
+It has also been tested on virtual machines in Amazon EC2 (Centos) and Microsoft Azure (Ubuntu).
 
 If you want to load data on the fly from UCSC, you need to select the 
 data centers "US West (N. California)" (Amazon) or "West US" (Microsoft) for best performance. 
