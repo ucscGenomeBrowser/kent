@@ -27181,10 +27181,6 @@ else if (sameString("lrg", table))
     {
     doLrg(tdb, item);
     }
-else if (sameString("lrgTranscriptAli", table))
-    {
-    doLrgTranscriptPsl(tdb, item);
-    }
 else if (sameWord(table, "htcLrgCdna"))
     {
     htcLrgCdna(item);
