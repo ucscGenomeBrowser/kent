@@ -582,8 +582,9 @@ td.disabled   { color: gray; }
 }
 
 i#folderIcon {
-        text-decoration: underline;
+        /* text-decoration: underline; */
         font-size: 80%;
+        color: #00457c; 
 }
 
 

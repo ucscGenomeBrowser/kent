@@ -3012,8 +3012,6 @@ else if (sameString(track, "all_mrna")
     mrnaCfgUi(cart, tdb, tdb->track, NULL, boxed);
 else if (sameString(track, "lrg"))
     lrgCfgUi(cart, tdb, tdb->track, NULL, boxed);
-else if (sameString(track, "lrgTranscriptAli"))
-    lrgTranscriptAliCfgUi(cart, tdb, tdb->track, NULL, boxed);
 else if (startsWithWord("hic", tdb->type) && tdbIsComposite(tdb))
     hicCfgUiComposite(cart, tdb, tdb->track, NULL, boxed); // Some hic options aren't available at this level
 else if (tdb->type != NULL)
