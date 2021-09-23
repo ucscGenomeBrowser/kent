@@ -3129,7 +3129,7 @@ url2Label miRBase:
 url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
-track lrgBigPsl
+track lrgTranscriptAli
 shortLabel LRG Transcripts
 longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
 group genes
