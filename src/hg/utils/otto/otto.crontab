@@ -5,37 +5,53 @@
 ###################### OTTO ###########################
 #######################################################
 
-#  for otto
-SHELL=/bin/sh
-PATH=/cluster/bin/scripts:/cluster/bin/x86_64:/usr/local/bin:/bin:/usr/bin
-MAILTO=lrnassar@ucsc.edu
-
-# otto stuff
+#ISCA - Deprecated
 31 4 * * *  /hive/data/outside/otto/isca/iscaWrapper.sh 2>&1
+
+#OMIM
 MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
 17 4 * * *  /hive/data/outside/otto/omim/omimWrapper.sh 2>&1
+
+#Update check
 MAILTO=lrnassar@ucsc.edu
 0 5 1 */3 * mail -s "OMIM/GWAS CHECK - DID DBSNP UPDATE?" lrnassar@ucsc.edu < /cluster/home/chmalee/crontabs/dbSnpCheck.txt
-#11 4 * * *  /hive/data/outside/otto/decipher/decipherWrapper.sh
-41 4 * * 3  /hive/data/outside/otto/gwas/gwasWrapper.sh
-00 8 * * 2 /hive/data/outside/otto/geneReviews/geneReviewsWrapper.sh
-#57 9 * * tue /hive/data/outside/otto/lrg/lrgWrapper.sh
 
-# took over MAX's otto cronjobs Aug 8 2019
+#DECIPHER
+#11 4 * * *  /hive/data/outside/otto/decipher/decipherWrapper.sh
+
+#GWAS Catalog
+41 4 * * 3  /hive/data/outside/otto/gwas/gwasWrapper.sh
+
+#GeneReviews
+00 8 * * 2 /hive/data/outside/otto/geneReviews/geneReviewsWrapper.sh
+
+#LRG
+57 9 1 * * /hive/data/outside/otto/lrg/lrgWrapper.sh
+
+#ClinVar
 MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
 08 00 8 * * umask 002; /hive/data/outside/otto/clinvar/doUpdate.sh
+
+#LOVD
 14 13 * * mon /hive/data/outside/otto/lovd/doUpdate.sh
+
+#User annotations
 #* * * * * ~max/miniconda3/envs/py3/bin/python ~max/usr/scripts/tsvSafeToBigBed /cluster/home/max/.user-annots-browser-track-c513a43ffff8.json https://docs.google.com/spreadsheets/d/1l38ypTcQH2AP2hlBmQ7kIXz1G4e33RPX-iFH1vu-utU/edit#gid=0 ~max/public_html/userAnnots/public.bb
+
+#Mastermind
 MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
 05 8 8  */3 * /hive/data/outside/otto/mastermind/buildMastermind.sh
+#
+#dbVar
 MAILTO=lrnassar@ucsc.edu
 13 8 2 * * /hive/data/outside/otto/dbVar/dbVarWrapper.sh
 
+#OMIM Upload
 HGDB_CONF=/cluster/home/lrnassar/.hg.conf.beta
 MAILTO=lrnassar@ucsc.edu
 15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh
 
-# New ClinGen jobs, different from the ISCA tracks
+#ClinGen
 MAILTO=abenet@ucsc.edu,lrnassar@ucsc.edu
 00 9 * * * /hive/data/outside/otto/clinGen/clinGenWrapper.sh
 
