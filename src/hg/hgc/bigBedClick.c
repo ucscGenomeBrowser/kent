@@ -485,7 +485,6 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             reverseComplement(seq->dna, seq->size);
         struct dnaMotif *motif = loadDnaMotif(bed->name, motifPwmTable);
         motifHitSection(seq, motif);
-        webEndSection();
         }
     }
 if (!found)
