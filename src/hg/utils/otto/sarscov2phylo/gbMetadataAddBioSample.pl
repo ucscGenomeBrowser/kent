@@ -63,8 +63,8 @@ while (<>) {
       if (! $gbDate || length($bDate) > length($gbDate)) {
         $gbDate = $bDate;
       } elsif ($bDate && $gbDate ne $bDate) {
-        print STDERR "CONFLICT: Genbank date ($gbAcc $gbName) = $gbDate, " .
-          "BioSample date ($bAcc $bName) = $bDate\n";
+        print STDERR join("\t", "dateMismatch", $gbAcc, $gbName, $gbDate, $bAcc, $bName, $bDate) .
+          "\n";
       }
       if (! $gbName) {
         $gbName = $bName;
