@@ -108,7 +108,7 @@ time $matUtils extract -i public-$today.all.masked.pb \
     -M metadata.tmp.tsv \
     --write-taxodium public-$today.all.masked.taxodium.pb
 rm metadata.tmp.tsv wuhCor1.fa
-gzip public-$today.all.masked.taxodium.pb
+gzip -f public-$today.all.masked.taxodium.pb
 
 # Link to public trees download directory hierarchy
 archiveRoot=/hive/users/angie/publicTrees

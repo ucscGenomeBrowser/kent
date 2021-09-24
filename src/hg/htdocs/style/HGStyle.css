@@ -581,10 +581,10 @@ td.disabled   { color: gray; }
     vertical-align: text-top;
 }
 
-i#folderIcon {
-        /* text-decoration: underline; */
-        font-size: 80%;
-        color: #00457c; 
+.folderIcon {
+        /* color: #00457c;  color of SVG must be set via fill attribute, see hui.c:printIcons() */
+        height: 13px;
+        vertical-align: top;
 }
 
 
