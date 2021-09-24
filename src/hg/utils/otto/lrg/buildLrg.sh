@@ -73,6 +73,13 @@ do
     echo LRG PSL rowcounts: old $oldPslCount new: $newPslCount
     echo $oldPslCount $newPslCount | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on DECIPHER CNV failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
 
+    # Lastly check and see if we even changed anything for this release:
+    if [ "$oldCount" = "$newCount" ] && [ "$oldPslCount" = "$newPslCount" ]; then
+        echo "No change since last release, skipping update for assembly $db"
+        cd ${WORKDIR}/${today}
+        continue
+    fi
+
     # now archive this new release:
     archiveDir="/usr/local/apache/htdocs-hgdownload/goldenPath/archive/${db}/lrg/${today}"
     mkdir -p ${archiveDir}
