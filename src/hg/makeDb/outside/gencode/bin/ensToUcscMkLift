@@ -9,6 +9,9 @@ import argparse
 from pycbio.db import mysqlOps
 from pycbio.hgdata import hgDb
 from pycbio.hgdata.chromInfo import ChromInfoTbl
+from pycbio.ncbi.assembly import AssemblyReport
+
+DEBUG = False
 
 ucscDbToRefAsm = {
     "hg19": "GRCh37",
@@ -30,6 +33,8 @@ with the exclusion of chrM on GRCh37.
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("ucscDbName", choices=ucscDbToRefAsm.keys(),
                         help="UCSC daatbase name for reference assembly name")
+    parser.add_argument("assemblyReportFile",
+                        help="NCBI assembly report file")
     parser.add_argument("ensToUcscLift",
                         help="GENCODE/Ensembl to UCSC to liftOver chains")
     return parser.parse_args()
@@ -52,16 +57,74 @@ hg19ChrMChain = """chain 16493 {qName} 16569 + 0 16569 chrM 16571 + 0 16571 {cha
 380
 """
 
-class UcscToEnsemblMap(object):
-    def __init__(self, conn):
-        self.ucscToEnsembl = {}
-        self.ensemblToUcsc = {}
-        for row in mysqlOps.query(conn, "SELECT ucsc, ensembl FROM ucscToEnsembl"):
-            self.ucscToEnsembl[row[0]] = row[1]
-            self.ensemblToUcsc[row[1]] = row[0]
+def loadUcscChroms(ucscDbName):
+    mysqlOps.mySqlSetErrorOnWarn()
+    with hgDb.connect(ucscDbName) as conn:
+        return ChromInfoTbl.loadDb(conn)
+
+def buildAccessionMap(asmReport):
+    """"build map of GenBank accession without version, mapped to
+    asmReport record.  This is done even when a UCSC name is there, as
+    mm10 assembly report doesn't match UCSC. """
+    accMap = {}
+    for rec in asmReport.seqs:
+        accMap[rec.genBankAccn.split('.')[0]] = rec
+    return accMap
+
+def usccNameToAcc(ucscName):
+    """attempt to convert a UCSC name to an accession without a version"""
+    # mm10 has a chrna_
+    m = re.match("^chr([0-9]+|X|Y|Un|na)_([A-Za-z]{2}[0-9]+)(v[0-9+])?(_alt|_fix|_random)?$", ucscName)
+    if m is None:
+        return None
+    else:
+        return m.group(2).upper()
+
+def findAsmRecForUcsc(asmReport, accMap, ucscDbName, ucscChrom):
+    if (ucscDbName == "hg19") and (ucscChrom.chrom == "chrM"):
+        return None
+    elif (ucscDbName == "hg19") and (ucscChrom.chrom == "chrMT"):
+        return asmReport.bySequenceName["MT"]
+
+    asmRec = asmReport.byUcscStyleName.get(ucscChrom.chrom)
+    if asmRec is None:
+        acc = usccNameToAcc(ucscChrom.chrom)
+        if DEBUG:
+            print("usccNameToAcc", ucscChrom.chrom, '->', acc, file=sys.stderr)
+        if acc is not None:
+            asmRec = accMap.get(acc)
+    if asmRec is None:
+        raise Exception(f"can not map UCSC chrom name '{ucscChrom.chrom}' to a GENCODE chrom name")
+    return asmRec
+
+def addGencodeToUcscMapping(asmReport, accMap, ucscDbName, ucscChrom, gencodeUcscMap):
+    asmRec = findAsmRecForUcsc(asmReport, accMap, ucscDbName, ucscChrom)
+    if asmRec is not None:
+        if asmRec.sequenceLength != ucscChrom.size:
+            raise Exception(f"UCSC chrom '{ucscChrom.chrom}' size {ucscChrom.size} does not match NCBI '{asmRec.sequenceName}' size {asmRec.sequenceLength}")
+        if isPrimaryChrom(ucscChrom.chrom):
+            gencodeUcscMap[ucscChrom.chrom] = ucscChrom
+        else:
+            gencodeUcscMap[asmRec.genBankAccn] = ucscChrom
+
+
+def buildGencodeUcscMap(assemblyReportFile, ucscDbName):
+    """Building mapping; primary chroms use UCSC names.  Alts use GenBank accession in GENCODE.
+    This is complicated by hg19 patches not being in UCSC-style-name column and having names like
+    chrX_jh806600_fix, while hg38 has chr9_ML143353v1_fix.   We build a map to try both.
+    For hg19, chrMT matches assembly, chrM doesn't and is handles with a hard-coded lift.
+    """
+    ucscChroms = loadUcscChroms(ucscDbName)
+    asmReport = AssemblyReport(assemblyReportFile)
+    accMap = buildAccessionMap(asmReport)
+
+    gencodeUcscMap = {}
+    for ucscChrom in ucscChroms.values():
+        addGencodeToUcscMapping(asmReport, accMap, ucscDbName, ucscChrom, gencodeUcscMap)
+    return gencodeUcscMap
 
 def isPrimaryChrom(chrom):
-    return re.match("^chr(([1-9][0-9]?)|[XYM])$", chrom)
+    return re.match("^chr(([1-9][0-9]?)|[XYM]|MT)$", chrom)
 
 def writeHg19ChrM(nextChainId, fh):
     for chrMName in hg19ChrMQNames:
@@ -69,39 +132,22 @@ def writeHg19ChrM(nextChainId, fh):
         nextChainId += 1
     return nextChainId
 
-def writeStdChain(ucscDbName, ucscChrom, ucscToEnsemblMap, nextChainId, fh):
-    ensChrom = ucscToEnsemblMap.ucscToEnsembl.get(ucscChrom.chrom)
-    if ensChrom is not None:
-        fh.write(chainTmpl.format(size=ucscChrom.size, qName=ensChrom, tName=ucscChrom.chrom, chainId=nextChainId))
-        nextChainId += 1
-    if isPrimaryChrom(ucscChrom.chrom):
-        fh.write(chainTmpl.format(size=ucscChrom.size, qName=ucscChrom.chrom, tName=ucscChrom.chrom, chainId=nextChainId))
-        nextChainId += 1
-    return nextChainId
+def writeChain(gencodeName, ucscChrom, nextChainId, fh):
+    fh.write(chainTmpl.format(size=ucscChrom.size, qName=gencodeName, tName=ucscChrom.chrom, chainId=nextChainId))
+    return nextChainId + 1
 
-
-def writeChain(ucscDbName, ucscChrom, ucscToEnsemblMap, nextChainId, fh):
-    if (ucscDbName == "hg19") and (ucscChrom.chrom == "chrM"):
-        return writeHg19ChrM(nextChainId, fh)
-    else:
-        return writeStdChain(ucscDbName, ucscChrom, ucscToEnsemblMap, nextChainId, fh)
-
-
-def writeChains(ucscDbName, ucscChroms, ucscToEnsemblMap, fh):
+def writeChains(ucscDbName, gencodeUcscMap, fh):
     nextChainId = 1
-    for ucscChrom in ucscChroms.values():
-        nextChainId = writeChain(ucscDbName, ucscChrom, ucscToEnsemblMap, nextChainId, fh)
-
+    for gencodeName in sorted(gencodeUcscMap.keys()):
+        nextChainId = writeChain(gencodeName, gencodeUcscMap[gencodeName], nextChainId, fh)
+    if ucscDbName == "hg19":
+        writeHg19ChrM(nextChainId, fh)
 
 def ensToUcscMkLift(opts):
-    conn = hgDb.connect(opts.ucscDbName)
-    ucscChroms = ChromInfoTbl.loadDb(conn)
-    ucscToEnsemblMap = UcscToEnsemblMap(conn)
-    conn.close
+    gencodeUcscMap = buildGencodeUcscMap(opts.assemblyReportFile, opts.ucscDbName)
 
     with open(opts.ensToUcscLift, "w") as fh:
-        writeChains(opts.ucscDbName, ucscChroms, ucscToEnsemblMap, fh)
+        writeChains(opts.ucscDbName, gencodeUcscMap, fh)
 
 
-mysqlOps.mySqlSetErrorOnWarn()
 ensToUcscMkLift(parseArgs())

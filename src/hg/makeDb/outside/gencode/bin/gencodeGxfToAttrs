@@ -32,6 +32,7 @@ into the table.
                         help="""write tags to this file""")
     return parser.parse_args()
 
+
 unused = ""
 
 def emptyIfNone(v):

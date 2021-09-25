@@ -19,6 +19,10 @@ ucscGenomeDbHs37 = hg19
 ucscGenomeDbHs38 = hg38
 ucscGenomeDbMm38 = mm10
 
+hg37AsmReport = input/GCF_000001405.25_GRCh37.p13_assembly_report.txt
+hg38AsmReport = input/GCF_000001405.39_GRCh38.p13_assembly_report.txt 
+mm38AsmReport = input/GCF_000001635.26_GRCm38.p6_assembly_report.txt
+
 ensToUcscMappingChainHg37 = output/ensToUcscMappingHg37.chain
 ensToUcscMappingChainHg38 = output/ensToUcscMappingHg38.chain
 
@@ -100,6 +104,9 @@ attrsPseudoGff3Tests: mkdirs
 
 ###
 # ensembl/gencode to UCSC liftover
+#
+# Note: these tests compare hgwdev chromInfo to the assembly reports files in input.  If
+# chromInfo has been updated because of a new path, the assembly reports needs to be updated.
 ###
 ensToUcscMkLiftTests: \
 	ensToUcscMkLiftHs37Test \
@@ -108,18 +115,18 @@ ensToUcscMkLiftTests: \
 
 # hg19/GRCh37
 ensToUcscMkLiftHs37Test: mkdirs
-	${ensToUcscMkLift} ${ucscGenomeDbHs37} output/$@.chain
+	${ensToUcscMkLift} ${ucscGenomeDbHs37} ${hg37AsmReport} output/$@.chain
 	${diff} expected/$@.chain output/$@.chain
 
 # hg38/GRCh38
 ensToUcscMkLiftHs38Test: mkdirs
-	${ensToUcscMkLift} ${ensemblCDnaDbHs38} ${grcRefAssemblyHs38} ${ucscGenomeDbHs38} output/$@.chain
+	${ensToUcscMkLift} ${ucscGenomeDbHs38} ${hg38AsmReport} output/$@.chain
 	chainStats output/$@.chain >/dev/null
 	${diff} expected/$@.chain output/$@.chain
 
 # mm10/GRCm38
 ensToUcscMkLiftMm38Test: mkdirs
-	${ensToUcscMkLift} ${ensemblCDnaDbMm38} ${grcRefAssemblyMm38} ${ucscGenomeDbMm38} output/$@.chain
+	${ensToUcscMkLift} ${ucscGenomeDbMm38} ${mm38AsmReport} output/$@.chain
 	chainStats output/$@.chain >/dev/null
 	${diff} expected/$@.chain output/$@.chain
 
@@ -158,11 +165,11 @@ exonSupport1Test: ${ensToUcscMappingChainHg37}
 ##
 testChains: ${ensToUcscMappingChainHg37} ${ensToUcscMappingChainHg38}
 ${ensToUcscMappingChainHg37}: mkdirs
-	${ensToUcscMkLift} ${ucscGenomeDbHs37} $@.${tmpExt}
+	${ensToUcscMkLift} ${ucscGenomeDbHs37} ${hg37AsmReport} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${ensToUcscMappingChainHg38}: mkdirs
-	${ensToUcscMkLift} ${ucscGenomeDbHs38}  $@.${tmpExt}
+	${ensToUcscMkLift} ${ucscGenomeDbHs38} ${hg38AsmReport} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 mkdirs:
