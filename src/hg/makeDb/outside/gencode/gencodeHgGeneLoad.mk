@@ -102,14 +102,14 @@ autoSqlDir = ${kentDir}/hg/lib
 gencodeExonSupportToTable = ${gencodeBinDir}/gencodeExonSupportToTable
 gencodeGxfToGenePred = ${gencodeBinDir}/gencodeGxfToGenePred
 gencodeGxfToAttrs = ${gencodeBinDir}/gencodeGxfToAttrs
-ensToUcscMkLift = ${gencodeBinDir}/ensToUcscMkLift
+buildGencodeToUcscLift = ${gencodeBinDir}/buildGencodeToUcscLift
 gencodeBackMapMetadataIds = ${gencodeBinDir}/gencodeBackMapMetadataIds
 
 ##
 # intermediate data not loaded into tracks
 ##
 gencodeAttrsTsv = ${dataDir}/gencodeAttrs.tsv
-ensemblToUcscChain = ${dataDir}/ensemblToUcsc.chain
+gencodeToUcscChain = ${dataDir}/gencodeToUcsc.chain
 
 # flag indicating fetch was done
 fetchDone = ${relDir}/done
@@ -237,9 +237,9 @@ ${tableToEntrezGeneMeta}: ${fetchDone}
 mkTables: ${genePredExtTables:%=${tableDir}/%.gp} \
 	  ${tabTables:%=${tableDir}/%.tab}
 
-${tableAnnotGp}: ${annotationGff} ${ensemblToUcscChain}
+${tableAnnotGp}: ${annotationGff} ${gencodeToUcscChain}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToGenePred} ${db} ${annotationGff} ${ensemblToUcscChain} $@.${tmpExt}
+	${gencodeGxfToGenePred} ${db} ${annotationGff} ${gencodeToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tableToUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta} ${gencodeAttrsTsv}
@@ -247,9 +247,9 @@ ${tableToUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta} ${gencodeAttrsTsv
 	((${metaFilterCmdGz} ${tableSwissProtMeta} | tawk '{print $$0,"SwissProt"}') && (${metaFilterCmdGz}  ${tableTrEMBLMeta} | tawk '{print $$0,"TrEMBL"}')) | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${ensemblToUcscChain}:
+${gencodeToUcscChain}:
 	@mkdir -p $(dir $@)
-	${ensToUcscMkLift} ${db} $@.${tmpExt}
+	${buildGencodeToUcscLift} ${db} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 # other tab files, just copy to name following convention to make load rules
@@ -280,9 +280,9 @@ ${tableTranscriptSourceTab}: ${tableTranscriptSourceMeta} ${metaFilterDepend}
 	${copyMetadataTabGz}
 ${tableTranscriptSupportTab}: ${tableTranscriptSupportMeta} ${metaFilterDepend}
 	${copyMetadataTabGz}
-${tableExonSupportTab}: ${tableExonSupportMeta} ${ensemblToUcscChain} ${metaFilterDepend}
+${tableExonSupportTab}: ${tableExonSupportMeta} ${gencodeToUcscChain} ${metaFilterDepend}
 	@mkdir -p $(dir $@)
-	${gencodeExonSupportToTable} ${tableExonSupportMeta} ${ensemblToUcscChain} $@.${tmpExt}
+	${gencodeExonSupportToTable} ${tableExonSupportMeta} ${gencodeToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 ${tableToGeneSymbolTab}: ${tableToGeneSymbolMeta} ${metaFilterDepend}
 	${copyMetadataTabGz}

@@ -35,8 +35,8 @@ with the exclusion of chrM on GRCh37.
                         help="UCSC daatbase name for reference assembly name")
     parser.add_argument("assemblyReportFile",
                         help="NCBI assembly report file")
-    parser.add_argument("ensToUcscLift",
-                        help="GENCODE/Ensembl to UCSC to liftOver chains")
+    parser.add_argument("gencodeToUcscLift",
+                        help="GENCODE to UCSC to liftOver chains")
     return parser.parse_args()
 
 
@@ -143,11 +143,11 @@ def writeChains(ucscDbName, gencodeUcscMap, fh):
     if ucscDbName == "hg19":
         writeHg19ChrM(nextChainId, fh)
 
-def ensToUcscMkLift(opts):
+def buildGencodeToUcscLift(opts):
     gencodeUcscMap = buildGencodeUcscMap(opts.assemblyReportFile, opts.ucscDbName)
 
-    with open(opts.ensToUcscLift, "w") as fh:
+    with open(opts.gencodeToUcscLift, "w") as fh:
         writeChains(opts.ucscDbName, gencodeUcscMap, fh)
 
 
-ensToUcscMkLift(parseArgs())
+buildGencodeToUcscLift(parseArgs())
