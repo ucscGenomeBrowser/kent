@@ -7,6 +7,22 @@
 
 var debug = false;
 
+function cfgPageOnVisChange(ev) {
+    /* configuration page event listener when user changes visibility in dropdown */
+    if (ev.target.value === 'hide')
+        ev.target.classList.replace("normalText", "hiddenText");
+    else
+        ev.target.classList.replace("hiddenText", "normalText");
+}
+
+function cfgPageAddListeners() {
+    /* add event listener to dropdowns */
+    var els = document.querySelectorAll(".trackVis");
+    for (var i=0; i < els.length; i++) {
+        var el = els[i];
+        el.addEventListener("change", cfgPageOnVisChange );
+    }
+}
 
 // Google Analytics helper functions to send events, see src/hg/lib/googleAnalytics.c
 

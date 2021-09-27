@@ -334,7 +334,7 @@ for (group = groupList; group != NULL; group = group->next)
                 chromName, RULER_TRACK_NAME);
         hPrintf("%s</A>", RULER_TRACK_LABEL);
 	hPrintf("</TD><TD>");
-	hTvDropDownClass("ruler", rulerMode, FALSE, rulerMode ? "normalText" : "hiddenText");
+	hTvDropDownClass("ruler", rulerMode, FALSE, rulerMode ? "normalText trackVis" : "hiddenText trackVis");
 	hPrintf("</TD><TD>");
 	hPrintf("Chromosome position in bases.  (Clicks here zoom in 3x)");
 	hPrintf("</TD></TR>\n");
@@ -431,7 +431,7 @@ for (group = groupList; group != NULL; group = group->next)
                 /* check for option of limiting visibility to one mode */
                 hTvDropDownClassVisOnly(track->track, track->visibility,
                                         rTdbTreeCanPack(track->tdb),
-                                        (track->visibility == tvHide) ? "hiddenText" : "normalText",
+                                        (track->visibility == tvHide) ? "hiddenText trackVis" : "normalText trackVis",
                                         trackDbSetting(track->tdb, "onlyVisibility"));
                 }
 	    }
@@ -446,6 +446,8 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("</td></tr>\n");
     }
 hPrintf("</TABLE>\n");
+
+jsInline("$(document).ready( cfgPageAddListeners )");
 }
 
 static int addDownloadOnlyTracks(char *db,struct group **pGroupList,struct track **pTrackList)
