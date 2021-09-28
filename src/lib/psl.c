@@ -552,8 +552,10 @@ static void pslLabelColumnsJson(FILE *f)
 /* Write column info as a JSON array */
 {
 fputs("[\"matches\", \"misMatches\", \"repMatches\", \"nCount\", \"qNumInsert\", \"qBaseInsert\", "
-        "\"tNumInsert\", \"tBaseInsert\", \"strand\", \"qName\", \"qSize\", \"qStart\", \"qEnd\", \"tName\", "
-        "\"tSize\", \"tEnd\", \"blockCount\", \"blockSizes\", \"qStarts\", \"tStarts\"]", f);
+        "\"tNumInsert\", \"tBaseInsert\", \"strand\", "
+        "\"qName\", \"qSize\", \"qStart\", \"qEnd\", "
+        "\"tName\", \"tSize\", \"tStart\", \"tEnd\", "
+	"\"blockCount\", \"blockSizes\", \"qStarts\", \"tStarts\"]", f);
 }
 
 void pslxWriteHead(FILE *f, enum gfType qType, enum gfType tType)

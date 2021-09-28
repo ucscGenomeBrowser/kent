@@ -34,8 +34,8 @@ mach = $(shell uname -m)
 ##
 preRelease = no
 #preRelease = yes
-#db = hg38
-db = hg19
+db = hg38
+#db = hg19
 #db = mm39
 #db = mm10
 ifeq (${db},mm10)
@@ -48,6 +48,7 @@ ifeq (${db},mm10)
     ftpReleaseSubdir = release_${verBase}/GRCm38_mapping
     annGffTypeName = chr_patch_hapl_scaff.annotation
     isBackmap = yes
+    asmReptUrl = https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/GCF_000001635.26_GRCm38.p6/GCF_000001635.26_GRCm38.p6_assembly_report.txt
 else ifeq (${db},mm39)
     grcRefAssembly = GRCm39
     ver = M27
@@ -55,6 +56,7 @@ else ifeq (${db},mm39)
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
+    asmReptUrl = https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/GCF_000001635.27_GRCm39/GCF_000001635.27_GRCm39_assembly_report.txt
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
     ver = 38
@@ -62,6 +64,7 @@ else ifeq (${db},hg38)
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
+    asmReptUrl = https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.39_GRCh38.p13/GCF_000001405.39_GRCh38.p13_assembly_report.txt
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
     verBase = 38
@@ -72,6 +75,7 @@ else ifeq (${db},hg19)
     gencodeOrg = Gencode_human
     annGffTypeName = annotation
     isBackmap = yes
+    asmReptUrl = https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.39_GRCh38.p13/GCF_000001405.39_GRCh38.p13_assembly_report.txt
 else
     $(error unimplement genome database: ${db})
 endif
@@ -101,7 +105,7 @@ gencodeExonSupportToTable = ${ccdsBinDir}/gencodeExonSupportToTable
 gencodeGxfToGenePred = ${ccdsBinDir}/gencodeGxfToGenePred
 gencodePolyaGxfToGenePred = ${ccdsBinDir}/gencodePolyaGxfToGenePred
 gencodeGxfToAttrs = ${ccdsBinDir}/gencodeGxfToAttrs
-ensToUcscMkLift = ${HOME}/kent/src/hg/makeDb/outside/gencode/bin/ensToUcscMkLift
+buildGencodeToUcscLift = ${HOME}/kent/src/hg/makeDb/outside/gencode/bin/buildGencodeToUcscLift
 gencodeBackMapMetadataIds = ${ccdsBinDir}/gencodeBackMapMetadataIds
 encodeAutoSqlDir = ${HOME}/kent/src/hg/lib/encode
 
@@ -110,7 +114,8 @@ encodeAutoSqlDir = ${HOME}/kent/src/hg/lib/encode
 ##
 gencodeGp = ${dataDir}/gencode.gp
 gencodeTsv = ${dataDir}/gencode.tsv
-ensemblToUcscChain = ${dataDir}/ensemblToUcsc.chain
+gencodeToUcscChain = ${dataDir}/gencodeToUcsc.chain
+asmRept = ${dataDir}/$(notdir asmReptUrl)
 
 # flag indicating fetch was done
 fetchDone = ${relDir}/done
@@ -282,9 +287,9 @@ ${table2WayConsPseudoGp}: ${pseudo2WayGff}
 	gff3ToGenePred -allowMinimalGenes $< $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${tablePolyAGp}: ${polyAGff} ${ensemblToUcscChain}
+${tablePolyAGp}: ${polyAGff} ${gencodeToUcscChain}
 	@mkdir -p $(dir $@)
-	${gencodePolyaGxfToGenePred} $< ${ensemblToUcscChain} $@.${tmpExt}
+	${gencodePolyaGxfToGenePred} $< ${gencodeToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta} ${gencodeTsv}
@@ -292,9 +297,14 @@ ${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta} ${gencodeTsv}
 	((${metaFilterCmdGz} ${tableSwissProtMeta} | tawk '{print $$0,"SwissProt"}') && (${metaFilterCmdGz}  ${tableTrEMBLMeta} | tawk '{print $$0,"TrEMBL"}')) | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${ensemblToUcscChain}:
+${gencodeToUcscChain}: ${asmRept}
 	@mkdir -p $(dir $@)
-	${ensToUcscMkLift} ${db} $@.${tmpExt}
+	${buildGencodeToUcscLift} ${db} ${asmRept} $@.${tmpExt}
+	mv -f $@.${tmpExt} $@
+
+${asmRept}:
+	@mkdir -p $(dir $@)
+	wget -nv -O $@.${tmpExt} ${asmReptUrl}
 	mv -f $@.${tmpExt} $@
 
 # other tab files, just copy to name following convention to make load rules
@@ -325,9 +335,9 @@ ${tableTranscriptSourceTab}: ${tableTranscriptSourceMeta} ${metaFilterDepend}
 	${copyMetadataTabGz}
 ${tableTranscriptSupportTab}: ${tableTranscriptSupportMeta} ${metaFilterDepend}
 	${copyMetadataTabGz}
-${tableExonSupportTab}: ${tableExonSupportMeta} ${ensemblToUcscChain} ${metaFilterDepend}
+${tableExonSupportTab}: ${tableExonSupportMeta} ${gencodeToUcscChain} ${metaFilterDepend}
 	@mkdir -p $(dir $@)
-	${gencodeExonSupportToTable} ${tableExonSupportMeta} ${ensemblToUcscChain} $@.${tmpExt}
+	${gencodeExonSupportToTable} ${tableExonSupportMeta} ${gencodeToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 ${tableGeneSymbolTab}: ${tableGeneSymbolMeta} ${metaFilterDepend}
 	${copyMetadataTabGz}
@@ -361,9 +371,9 @@ ${tableEntrezGeneTab}: ${tableEntrezGeneMeta} ${metaFilterDepend}
 ##
 # intermediate data for ensembl/havana, not loaded into databases
 ##
-${gencodeGp}: ${annotationGff} ${ensemblToUcscChain}
+${gencodeGp}: ${annotationGff} ${gencodeToUcscChain}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToGenePred} ${db} ${annotationGff} ${ensemblToUcscChain} $@.${tmpExt}
+	${gencodeGxfToGenePred} ${db} ${annotationGff} ${gencodeToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tableTranscriptionSupportLevelData}: ${metaFilterDepend}

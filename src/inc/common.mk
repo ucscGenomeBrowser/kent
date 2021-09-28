@@ -37,26 +37,25 @@ endif
 FREETYPECFLAGS = $(shell freetype-config --cflags  2> /dev/null)
 
 # we use our static library on dev
-ifeq (${FREETYPELIBS},)
-  ifeq (${IS_HGWDEV},no)
+ifeq (${IS_HGWDEV},no)
+  ifeq (${FREETYPELIBS},)
     ifeq ($(UNAME_S),Darwin)
-	ifneq ($(wildcard /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a),)
-          ifneq ($(wildcard /usr/local/opt/bzip2/lib/libbz2.a),)
-            FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a /usr/local/opt/bzip2/lib/libbz2.a
-          else
-            FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a -lbz2
-          endif
+      ifneq ($(wildcard /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a),)
+        ifneq ($(wildcard /usr/local/opt/bzip2/lib/libbz2.a),)
+          FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a /usr/local/opt/bzip2/lib/libbz2.a
         else
-          ifneq ($(wildcard /opt/local/lib/libfreetype.a),)
-            FREETYPELIBS=/opt/local/lib/libfreetype.a /opt/local/lib/libbz2.a /opt/local/lib/libbrotlidec-static.a /opt/local/lib/libbrotlienc-static.a /opt/local/lib/libbrotlicommon-static.a
-          endif
+          FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a -lbz2
         endif
+      else
+        ifneq ($(wildcard /opt/local/lib/libfreetype.a),)
+          FREETYPELIBS=/opt/local/lib/libfreetype.a /opt/local/lib/libbz2.a /opt/local/lib/libbrotlidec-static.a /opt/local/lib/libbrotlienc-static.a /opt/local/lib/libbrotlicommon-static.a
+        endif
+      endif
+    endif
+    ifeq (${FREETYPELIBS},)
+      FREETYPELIBS =  $(shell freetype-config --libs 2> /dev/null )
     endif
   endif
-endif
-
-ifeq (${FREETYPELIBS},)
-  FREETYPELIBS =  $(shell freetype-config --libs 2> /dev/null )
 endif
 
 ifneq (${FREETYPECFLAGS},)

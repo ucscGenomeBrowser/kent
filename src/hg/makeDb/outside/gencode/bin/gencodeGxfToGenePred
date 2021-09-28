@@ -20,8 +20,7 @@ In the case of GRCh37 backmap, annotations are generate to both chrM and chrMT.
 The chrMT sequence was add to the UCSC browser and matches what GENCODE annotated,
 so we just do a special pass to get these.
 
-The chains can be generated with
-  ensToUcscMkLift hg19 ensemblToUcscChain
+The chains can be generated with buildGencodeToUcscLift
 """
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("--verbose", dest="verbose", action="store_true", default=False,
@@ -34,7 +33,7 @@ The chains can be generated with
                         help="UCSC genome database name.")
     parser.add_argument("inGxf",
                         help="input GENCODE GTF or GFF3")
-    parser.add_argument("ensemblToUcscChain",
+    parser.add_argument("gencodeToUcscChain",
                         help="chain file to lift over to UCSC chromosome names")
     parser.add_argument("outGenePred",
                         help="output GenePred file")
@@ -85,7 +84,7 @@ def convert(hgdb, inGxf, liftFile, outGenePred, unmappedGenePred, verbose, warnA
     os.unlink(tmpGp)
 
 def gencodeGxfToGenePred(opts):
-    convert(opts.hgdb, opts.inGxf, opts.ensemblToUcscChain, opts.outGenePred, opts.unmappedGenePred,
+    convert(opts.hgdb, opts.inGxf, opts.gencodeToUcscChain, opts.outGenePred, opts.unmappedGenePred,
             opts.verbose, opts.warnAndContinue)
 
 

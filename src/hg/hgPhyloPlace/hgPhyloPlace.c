@@ -27,6 +27,11 @@ struct hash *oldVars = NULL;   // Old contents of cart before it was updated by 
 boolean measureTiming = FALSE; // Print out how long things take
 char *leftLabelWidthForLongNames = "55";// Leave plenty of room for tree and long virus strain names
 
+/* for botDelay call, 10 second for warning, 20 second for immediate exit */
+#define delayFraction   0.25
+static boolean issueBotWarning = FALSE;
+static long enteredMainTime = 0;
+
 #define seqFileVar "sarsCoV2File"
 #define pastedIdVar "namesOrIds"
 #define remoteFileVar "remoteFile"
@@ -365,7 +370,11 @@ jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 newPageStartStuff();
 
-hgBotDelay();
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 
 // Allow 10 minutes for big sets of sequences
 lazarusLives(15 * 60);
@@ -502,7 +511,9 @@ char *excludeVars[] = {"submit", "Submit",
                        seqFileVar, seqFileVar "__binary", seqFileVar "__filename",
                        pastedIdVar,
                        NULL};
-long enteredMainTime = clock1000();
+enteredMainTime = clock1000();
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgPhyloPlace", delayFraction, 0, 0, "html");
+
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
 addLdLibraryPath();
