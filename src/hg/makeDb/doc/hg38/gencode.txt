@@ -870,4 +870,12 @@ cd kent/src/hg/makeDb/trackDb
     # commit all
     jkmake DBS=hg38 alpha
     # if pushing public: create ticket and MARK QA READY
+
+2021-09-25:
+    It was discovered that most of the alt/patch sequence were missing
+    this was due switching over to use the ensemblToUcsc table to map
+    GENCODE chromosome names for mm39 pre-release.  The code was modified
+    to use the assembly report to make the chromosome names and the
+    track rebuilt.
+    
 #########################################################################

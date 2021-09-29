@@ -1,4 +1,4 @@
-track knownGeneNew
+track knownGene
 shortLabel GENCODE V38lift37
 longLabel GENCODE V38lift37
 priority 1
@@ -26,7 +26,7 @@ searchMethod exact
 searchType knownGene
 shortCircuit 1
 semiShortCircuit 1
-termRegex ENST[0-9.]+
+termRegex ENST[0-9._]+
 searchPriority 9
 
 searchName knownGeneFast

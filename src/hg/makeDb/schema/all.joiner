@@ -7013,7 +7013,7 @@ identifier knownGeneId dependency
     $ccdsDb.ccdsKgMap.geneId
     $kgDb2,!rn4.knownGenePep.name full
     $kgDb3.knownGenePep.name
-    $kgDb3,!hg38,!mm10.knownCanonical.protein exclude=
+    $kgDb3,!hg38,!mm10,!hg19.knownCanonical.protein exclude=
     $kgDb3.kgProtMap2.qName
     $kgDb.keggPathway.kgID
     $hg.humanHprdP2P.query
@@ -7027,7 +7027,7 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.oldId minCheck=0.5 exclude=
     $kgDb.kg3ToKg4.newId minCheck=0.5 exclude=
     $kgDb,!hg19.kg4ToKg5.newId minCheck=0.5 exclude=
-    $kgDb,!mm10.kg5ToKg6.newId exclude=
+    $kgDb,!mm10,!hg19.kg5ToKg6.newId exclude=
     $kgDb,!mm10.kg6ToKg7.newId exclude=
     $kgDb,!mm10.kg7ToKg8.newId exclude=
     $kgDb,!mm10.kg8ToKg9.newId exclude=
