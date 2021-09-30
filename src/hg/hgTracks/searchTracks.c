@@ -914,17 +914,6 @@ else
             hTvDropDownClassWithJavascript(NULL, id, track->visibility,track->canPack,
                                            "normalText seenVis",event);
             }
-        char *hubId = NULL;
-        if (isHubTrack(track->track))
-            {
-            char *trackNameCopy = cloneString(track->track);
-            hubId = strchr(trackNameCopy, '_');
-            hubId += 1;
-            char *ptr2 = strchr(hubId, '_');
-            if (ptr2 == NULL)
-                errAbort("hub track '%s' not in correct format", track->track);
-            *ptr2 = '\0';
-            }
 
         // If this is a container track, allow configuring...
         if (tdbIsContainer(track->tdb) || tdbIsFolder(track->tdb))
