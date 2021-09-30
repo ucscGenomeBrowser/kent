@@ -298,7 +298,9 @@ void getHubSearchResults(struct sqlConnection *conn, char *hubSearchTableName,
         struct hash **searchResultHashRet, struct slName **hubsToPrintRet, char *extra)
 /* Find hubs, genomes, and tracks that match the provided search terms.
  * Return all hits that satisfy the (optional) supplied assembly filter.
- * if checkLongText is FALSE, skip searching within the long description text entries */
+ * if checkLongText is FALSE, skip searching within the long description text entries
+ * the string 'extra' is used for additional mysql filter(s) by the caller and
+ * must be escaped by them */
 {
 char *cleanSearchTerms = cloneString(hubSearchTerms);
 if (isNotEmpty(cleanSearchTerms))
@@ -310,25 +312,23 @@ struct dyString *query = dyStringNew(100);
 char *noLongText = NULL;
 
 if (!checkLongText)
-    noLongText = cloneString("textLength = 'Short' and");
+    noLongText = cloneString("textLength = 'Short'");
 else
     noLongText = cloneString("");
 
 sqlDyStringPrintf(query, "select * from %s where ", hubSearchTableName);
-// sqlDyStringPrintf complains about spaces in %s strings and
-// extra has already been escaped so add it on here
-dyStringPrintf(query, "%s %s", noLongText, extra);
+// caller has manually escaped extra, so safe to dyStringPrintf:
+if (isNotEmpty(extra))
+    dyStringPrintf(query, "%s %s", extra,
+        (isNotEmpty(noLongText) || isNotEmpty(modifiedSearchTerms)) ? "and ": "");
+if (isNotEmpty(noLongText))
+    dyStringPrintf(query, "%s %s", noLongText, isNotEmpty(modifiedSearchTerms) ? "and " : "");
 if (isNotEmpty(modifiedSearchTerms))
     {
-    if (isNotEmpty(extra))
-        {
-        sqlDyStringPrintf(query, " and ");
-        }
     sqlDyStringPrintf(query, "match(text) against ('%s' in boolean mode)"
         " order by match(text) against ('%s' in boolean mode)",
         modifiedSearchTerms, modifiedSearchTerms);
     }
-
 struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)

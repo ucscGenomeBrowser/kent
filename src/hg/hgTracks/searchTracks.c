@@ -46,6 +46,11 @@
 // the list of found tracks
 struct slRef *tracks = NULL;
 
+// for advanced search only:
+// associates hub id's to hub urls that have search results,
+// used to get huburls onto hgTrackUi links
+struct hash *hubIdsToUrls = NULL;
+
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
 {
@@ -308,8 +313,8 @@ errCatchEnd(errCatch);
 return NULL;
 }
 
-static void hubSearchHashToPfdList(struct hash *searchResultsHash, struct hash *hubLookup,
-                                    struct sqlConnection *conn)
+static void hubSearchHashToPfdList(char *descSearch, struct hash *searchResultsHash,
+                                    struct hash *hubLookup, struct sqlConnection *conn)
 /* getHubSearchResults() returned a hash of search hits to various hubs, convert that
  * into something we can work on in parallel */
 {
@@ -325,7 +330,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     struct hubEntry *hubInfo = (struct hubEntry *) hashFindVal(hubLookup, hst->hubUrl);
     if (isNotEmpty(hubInfo->errorMessage))
         continue;
-    // if we were already checking out this hub, then it's search hits
+    // if we were already connected to this hub, then it's search hits
     // were already taken care of by the regular search code
     char hubId[256];
     safef(hubId, sizeof(hubId), "%d", hubInfo->id);
@@ -340,6 +345,9 @@ while ((hel = hashNext(&cookie)) != NULL)
         // don't add results for matches to the hub descriptionUrl, only to track names/descs
         if (isNotEmpty(hst->track) && hst->textLength != hubSearchTextMeta)
             {
+            // hst->textLength=hubSearchTextLong denotes hits to track description
+            if (isNotEmpty(descSearch) && hst->textLength != hubSearchTextLong)
+                continue;
             if (!found)
                 {
                 AllocVar(found);
@@ -349,6 +357,7 @@ while ((hel = hashNext(&cookie)) != NULL)
                 found->hubId = hubInfo->id;
                 slAddHead(&ret, found);
                 hashAdd(hubUrlsToTrackList, hst->hubUrl, found);
+                hashAdd(hubIdsToUrls, hubId, hst->hubUrl);
                 }
             dyStringPrintf(trackName, "%s%d_%s", hubTrackPrefix, hubInfo->id, hst->track);
             slNameStore(&found->searchedTracks, cloneString(trackName->string));
@@ -453,7 +462,6 @@ if (lockStatus == 0)
 void addHubSearchResults(struct slName *nameList, char *descSearch)
 /* add public hubs to the track list */
 {
-// set to something large so we always use the udc cache
 struct sqlConnection *conn = hConnectCentral();
 char *hubSearchTableName = hubSearchTextTableName();
 char *publicTable = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE",
@@ -464,9 +472,12 @@ struct dyString *extra = dyStringNew(0);
 if (nameList)
     {
     struct slName *tmp = NULL;
+    char escapedInput[512];
     for (tmp = nameList; tmp != NULL; tmp = tmp->next)
         {
-        dyStringPrintf(extra, "label like '%%%s%%'", tmp->name);
+        // escape user input manually:
+        sqlSafefFrag(escapedInput, sizeof(escapedInput), "%s", tmp->name);
+        dyStringPrintf(extra, "label like '%%%s%%'", escapedInput);
         if (tmp->next)
             dyStringPrintf(extra, " and ");
         }
@@ -481,8 +492,8 @@ if (sqlTableExists(conn, hubSearchTableName))
     struct hash *hubLookup = buildPublicLookupHash(conn, publicTable, statusTable, &pHash);
     char *db = cloneString(trackHubSkipHubName(database));
     tolowers(db);
-    getHubSearchResults(conn, hubSearchTableName, descSearch, descSearch != NULL, db, hubLookup, &searchResultsHash, &hubsToPrint, extra->string);
-    hubSearchHashToPfdList(searchResultsHash, hubLookup, conn);
+    getHubSearchResults(conn, hubSearchTableName, descSearch, isNotEmpty(descSearch), db, hubLookup, &searchResultsHash, &hubsToPrint, dyStringCannibalize(&extra));
+    hubSearchHashToPfdList(descSearch, searchResultsHash, hubLookup, conn);
     if (measureTiming)
         measureTime("after querying hubSearchText table and ready to start threads");
     int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));
@@ -825,6 +836,7 @@ else
     int trackCount=0;
     boolean containerTrackCount = 0;
     struct slRef *ptr;
+    struct slName *connectedHubIds = hubConnectHubsInCart(cart);
     while((ptr = slPopHead(&tracks)))
         {
         if (++trackCount > MAX_FOUND_TRACKS)
@@ -832,6 +844,23 @@ else
 
         struct track *track = (struct track *) ptr->val;
         jsonTdbSettingsBuild(jsonTdbVars, track, FALSE); // FALSE: No config from track search
+        char *hubId = NULL;
+        if (isHubTrack(track->track))
+            {
+            char *trackNameCopy = cloneString(track->track);
+            hubId = strchr(trackNameCopy, '_');
+            hubId += 1;
+            char *ptr2 = strchr(hubId, '_');
+            if (ptr2 == NULL)
+                errAbort("hub track '%s' not in correct format", track->track);
+            *ptr2 = '\0';
+            char *hubUrl = hashFindVal(hubIdsToUrls, hubId);
+            if (hubUrl != NULL)
+                {
+                struct jsonElement *ele = jsonFindNamedField(jsonTdbVars, "", track->track);
+                jsonObjectAdd(ele, "hubUrl", newJsonString(hubUrl));
+                }
+            }
 
         if (tdbIsFolder(track->tdb)) // supertrack
             hPrintf("<tr class='bgLevel4' valign='top' class='found'>\n");
@@ -852,6 +881,10 @@ else
             // Checked is only if subtrack level vis is also set!
             checked = (checked && ( track->visibility != tvHide ));
             }
+        // if we haven't already connected to this hub, then by default
+        // we need to unselect every checkbox
+        if (isHubTrack(track->track) && !slNameInList(connectedHubIds, hubId))
+            checked = FALSE;
 
         // Setup the check box
         #define CB_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s_sel' VALUE='%s'>"
@@ -881,6 +914,17 @@ else
             hTvDropDownClassWithJavascript(NULL, id, track->visibility,track->canPack,
                                            "normalText seenVis",event);
             }
+        char *hubId = NULL;
+        if (isHubTrack(track->track))
+            {
+            char *trackNameCopy = cloneString(track->track);
+            hubId = strchr(trackNameCopy, '_');
+            hubId += 1;
+            char *ptr2 = strchr(hubId, '_');
+            if (ptr2 == NULL)
+                errAbort("hub track '%s' not in correct format", track->track);
+            *ptr2 = '\0';
+            }
 
         // If this is a container track, allow configuring...
         if (tdbIsContainer(track->tdb) || tdbIsFolder(track->tdb))
@@ -889,8 +933,16 @@ else
             hPrintf("&nbsp;<IMG SRC='../images/folderWrench.png' style='cursor:pointer;' "
                     "id='%s_confSet' title='Configure this track container...' "
                     ">&nbsp;", track->track);
-	    safef(id, sizeof id, "%s_confSet", track->track); // XSS Filter?
-	    jsOnEventByIdF("click", id, "findTracks.configSet(\"%s\");", track->track);  
+            safef(id, sizeof id, "%s_confSet", track->track); // XSS Filter?
+            char hubConfigUrl[4096];
+            safef(hubConfigUrl, sizeof(hubConfigUrl), "%s", track->track);
+            if (isHubTrack(track->track))
+                {
+                char *hubUrl = hashFindVal(hubIdsToUrls, hubId);
+                if (hubUrl != NULL)
+                    safefcat(hubConfigUrl, sizeof(hubConfigUrl), "&hubUrl=%s", hubUrl);
+                }
+            jsOnEventByIdF("click", id, "findTracks.configSet(\"%s\");", hubConfigUrl);
             }
 //#define SHOW_PARENT_FOLDER
 #ifdef SHOW_PARENT_FOLDER
@@ -907,11 +959,19 @@ else
         hPrintf("</td>\n");
 
         // shortLabel has description popup and longLabel has "..." metadata
+        char hgTrackUiUrl[4096];
+        safef(hgTrackUiUrl, sizeof(hgTrackUiUrl), "%s", trackUrl(track->track, NULL));
+        if (isHubTrack(track->track))
+            {
+            char *hubUrl = hashFindVal(hubIdsToUrls, hubId);
+            if (hubUrl != NULL)
+                safefcat(hgTrackUiUrl, sizeof(hgTrackUiUrl), "&hubUrl=%s", hubUrl);
+            }
         hPrintf("<td><a target='_top' id='%s_dispFndTrk' "
                 "href='%s' title='Display track details'>%s</a></td>\n",
-                track->track, trackUrl(track->track, NULL), track->shortLabel);
-	safef(id, sizeof id, "%s_dispFndTrk", track->track);
-	jsOnEventByIdF("click", id, "popUp.hgTrackUi('%s',true); return false;", track->track);
+                track->track, hgTrackUiUrl, track->shortLabel);
+        safef(id, sizeof id, "%s_dispFndTrk", track->track);
+        jsOnEventByIdF("click", id, "popUp.hgTrackUi('%s',true); return false;", track->track);
         hPrintf("<td>%s", track->longLabel);
         compositeMetadataToggle(database, track->tdb, NULL, TRUE, FALSE);
         hPrintf("</td></tr>\n");
@@ -1148,6 +1208,8 @@ if (doSearch)
     {
     // Now search
     long startTime = clock1000();
+    if (hubIdsToUrls == NULL)
+        hubIdsToUrls = hashNew(0);
     if (selectedTab==simpleTab && !isEmpty(simpleEntry))
         simpleSearchForTracks(simpleEntry);
     else if (selectedTab==advancedTab)
