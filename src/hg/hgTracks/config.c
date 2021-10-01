@@ -210,7 +210,7 @@ dyStringPrintf(dy, "$(\"[name='textStyle']\").val('%s');\n", currentStyle);
 jsInline(dy->string);
 
 hDropList(textFontVar, faceNames, numFonts, currentFontName);
-jsInline("$('[name=\"textFont\"]')[0].style.width='15em');\n"); // hDropList has no 'style' nor 'id' argument <-> no opt args in C
+jsInline("$('[name=\"textFont\"]')[0].style.width='15em';\n"); // hDropList has no 'style' nor 'id' argument <-> no opt args in C
 }
 
 static void textStyleDropDown()
