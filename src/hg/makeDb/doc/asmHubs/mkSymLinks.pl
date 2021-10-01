@@ -139,4 +139,8 @@ foreach my $asmId (@orderList) {
    }
   `ln -s "${buildDir}/${asmId}.groups.txt" "${destDir}/groups.txt"` if (-s "${buildDir}/${asmId}.groups.txt");
   `ln -s "${buildDir}/${asmId}.userTrackDb.txt" "${destDir}/${accessionId}.userTrackDb.txt"` if ( -s "${buildDir}/${asmId}.userTrackDb.txt");
+   if (-s "${buildDir}/${asmId}.bigMaf.trackDb.txt") {
+     `rm -f "${destDir}/${asmId}.bigMaf.trackDb.txt"`;
+     `ln -s "${buildDir}/${asmId}.bigMaf.trackDb.txt" "${destDir}/${asmId}.bigMaf.trackDb.txt"`;
+   }
 }

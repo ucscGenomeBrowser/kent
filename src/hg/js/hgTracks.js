@@ -143,7 +143,6 @@ var genomePos = {
     {
     // undo changes to position (i.e. after user aborts a drag-and-select).
         this.set(this.original, this.originalSize);
-        this.original = this.originalSize = null;         // not sure if this is necessary.
     },
 
     undisguisePosition: function(position) // UN-DISGUISE VMODE

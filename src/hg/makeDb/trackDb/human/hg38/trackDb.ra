@@ -15,7 +15,7 @@ include heartCellAtlas.ra
 include kidneyStewart.ra
 include muscleDeMicheli.ra
 #include lungVieiraBraga.ra
-include fetalGeneAtlas.ra
+include fetalGeneAtlas.ra alpha,beta
 include bloodHao.ra alpha,beta
 include lungTravaglini2020.ra
 include skinSoleBoldo.ra

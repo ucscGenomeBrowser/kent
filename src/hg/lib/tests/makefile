@@ -8,13 +8,14 @@ BIN_DIR = bin/${MACHTYPE}
 
 all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/pslReaderTester \
-	${BIN_DIR}/annoGratorTester \
+#	${BIN_DIR}/annoGratorTester \
 	${BIN_DIR}/binTest \
 	${BIN_DIR}/customTrackTester \
 	${BIN_DIR}/hgvsTester \
 	${BIN_DIR}/sqlCheck 
 
-test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
+#test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
+test: binTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
 	rm -r output
 	echo tested all
 
@@ -42,8 +43,8 @@ genePredTest: ${BIN_DIR}/genePredTester mkdirs
 pslReaderTest: ${BIN_DIR}/pslReaderTester mkdirs
 	${MAKE} -f pslReaderTests.mk test
 
-annoGratorTest: ${BIN_DIR}/annoGratorTester mkdirs
-	${MAKE} -f annoGratorTests.mk test
+#annoGratorTest: ${BIN_DIR}/annoGratorTester mkdirs
+#	${MAKE} -f annoGratorTests.mk test
 
 customTrackTest: ${BIN_DIR}/customTrackTester loaders mkdirs
 	${MAKE} -f customTrackTests.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output

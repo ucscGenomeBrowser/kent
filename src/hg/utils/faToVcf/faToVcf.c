@@ -7,10 +7,13 @@
 #include "iupac.h"
 #include "options.h"
 
+// Command line option defaults
+#define DEFAULT_MIN_AMBIG_IN_WINDOW 2
+
 void usage(int exitCode)
 /* Explain usage and exit. */
 {
-fputs(
+fprintf(stderr,
   "faToVcf - Convert a FASTA alignment file to Variant Call Format (VCF) single-nucleotide diffs\n"
   "usage:\n"
   "   faToVcf in.fa out.vcf\n"
@@ -24,8 +27,12 @@ fputs(
   "   -maskSites=file       Exclude variants in positions recommended for masking in file\n"
   "                         (typically https://github.com/W-L/ProblematicSites_SARS-CoV2/raw/master/problematic_sites_sarsCov2.vcf)\n"
   "   -maxDiff=N            Exclude sequences with more than N mismatches with the reference\n"
+  "                         (if -windowSize is used, sequences are masked accordingly first)\n"
   "   -minAc=N              Ignore alternate alleles observed fewer than N times\n"
   "   -minAf=F              Ignore alternate alleles observed in less than F of non-N bases\n"
+  "   -minAmbigInWindow=N   When -windowSize is provided, mask any base for which there are at\n"
+  "                         least this many N, ambiguous or gap characters within the window.\n"
+  "                         (default: %d)\n"
   "   -noGenotypes          Output 8-column VCF, without the sample genotype columns\n"
   "   -ref=seqName          Use seqName as the reference sequence; must be present in faFile\n"
   "                         (default: first sequence in faFile)\n"
@@ -34,9 +41,13 @@ fputs(
   "                         non-reference base.  Otherwise convert it to N.\n"
   "   -startOffset=N        Add N bases to each position (for trimmed alignments)\n"
   "   -vcfChrom=seqName     Use seqName for the CHROM column in VCF (default: ref sequence)\n"
+  "   -windowSize=N         Mask any base for which there are at least -minAmbigWindow bases in a\n"
+  "                         window of +-N bases around the base.  Masking approach adapted from\n"
+  "                         https://github.com/roblanf/sarscov2phylo/ file scripts/mask_seq.py\n"
+  "                         Use -windowSize=7 for same results.\n"
   "in.fa must contain a series of sequences with different names and the same length.\n"
   "Both N and - are treated as missing information.\n"
-  , stderr
+  , DEFAULT_MIN_AMBIG_IN_WINDOW
   );
 exit(exitCode);
 }
@@ -53,11 +64,13 @@ static struct optionSpec options[] = {
     { "maxDiff", OPTION_INT },
     { "minAc", OPTION_INT },
     { "minAf", OPTION_DOUBLE },
+    { "minAmbigInWindow", OPTION_INT },
     { "noGenotypes", OPTION_BOOLEAN },
     { "ref", OPTION_STRING },
     { "resolveAmbiguous", OPTION_BOOLEAN },
     { "startOffset", OPTION_INT},
     { "vcfChrom", OPTION_STRING },
+    { "windowSize", OPTION_INT },
     { "h", OPTION_BOOLEAN },
     { "-help", OPTION_BOOLEAN },
     { NULL, 0 },
@@ -149,6 +162,61 @@ if (maxDiff > 0)
 return sequences;
 }
 
+INLINE boolean isAmbig(char c)
+/* Return TRUE if c is '-' or upper or lowercase IUPAC ambiguous including N. */
+{
+return (c == '-' || isIupacAmbiguous(c));
+}
+
+static void maskAmbigInWindow(struct dnaSeq *sequences)
+/* If -windowSize was passed in (possibly with -minAmbigInWindow), mask any base with at least
+ * minAmbigInWindow N/ambiguous/gap characters within +- windowSize bases.
+ * Adapted from https://github.com/roblanf/sarscov2phylo/ file scripts/mask_seq.py which has
+ * a windowSize of 7, minAmbigInWindow of 2, counts only gap or N (not other ambiguous bases),
+ * and also masks the first and last 30 non-N bases. */
+{
+int windowSize = optionInt("windowSize", 0);
+if (windowSize > 0)
+    {
+    int minAmbigInWindow = optionInt("minAmbigInWindow", DEFAULT_MIN_AMBIG_IN_WINDOW);
+    struct dnaSeq *seq;
+    for (seq = sequences->next;  seq != NULL;  seq = seq->next)
+        {
+        char *newSeq = needMem(seq->size + 1);
+        int numAmbig = 0;
+        int i;
+        // Initialize numAmbig
+        for (i = 0;  i <= windowSize;  i++)
+            {
+            if (isAmbig(seq->dna[i]))
+                numAmbig++;
+            }
+        // Decide whether to mask each base in seq
+        for (i = 0;  i < seq->size;  i++)
+            {
+            if (numAmbig >= minAmbigInWindow)
+                {
+                if (seq->dna[i] == '-')
+                    newSeq[i] = '-';
+                else
+                    newSeq[i] = 'N';
+                }
+            else
+                newSeq[i] = seq->dna[i];
+            // Remove the leftmost base from numAmbig unless it's before the start of seq
+            if (i >= windowSize && isAmbig(seq->dna[i - windowSize]))
+                numAmbig--;
+            // Add the rightmost base for the next iteration unless it's past the end of seq
+            if (i < seq->size - windowSize - 1 && isAmbig(seq->dna[i + 1 + windowSize]))
+                numAmbig++;
+            }
+        safecpy(seq->dna, seq->size + 1, newSeq);
+        freeMem(newSeq);
+        }
+    }
+}
+
+
 static struct dnaSeq *readSequences(char *faFile)
 /* Read all sequences in faFile.  Make sure there are at least 2 sequences and that
  * all have the same length.  If a reference sequence is specified and is not the first
@@ -193,6 +261,7 @@ if (differentString(sequences->name, refName))
     }
 
 sequences = removeExcludedSequences(sequences);
+maskAmbigInWindow(sequences);
 sequences = filterMaxDiff(sequences);
 return sequences;
 }
