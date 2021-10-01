@@ -65,10 +65,13 @@ do
 
   otherPrefix=`echo $otherDb | cut -c1-2`
   if [ "${otherPrefix}" = "GC" ]; then
-    sciName=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r | sed -e 's/.*organism name: *//i; s/ *(.*//;'`
+    sciName=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *//i; s/ *(.*//;'`
     organism=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *.*(//i; s/).*//;'`
     taxId=`grep -i 'taxid' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*taxid: *//i;'`
-    ymd=`grep -i 'date' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
+    o_date=`grep -i 'date' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
+    matrix=""
+    linGap=""
+    minScore=""
   else
     organism=`hgsql -N -e "select organism from dbDb where name=\"$otherDb\"" hgcentraltest`
     sciName=`hgsql -N -e "select scientificName from dbDb where name=\"$otherDb\"" hgcentraltest`
@@ -82,7 +85,10 @@ do
     sciName=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *//i; s/ *(.*//;'`
     organism=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *.*(//i; s/).*//;'`
     taxId=`grep -i 'taxid' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*taxid: *//i;'`
-    ymd=`grep -i 'date' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
+    o_date=`grep -i 'date' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
+    matrix=""
+    linGap=""
+    minScore=""
   else
     organism=`hgsql -N -e "select organism from dbDb where name=\"$otherDb\"" hgcentraltest`
     sciName=`hgsql -N -e "select scientificName from dbDb where name=\"$otherDb\"" hgcentraltest`
@@ -113,6 +119,12 @@ altColor 100,50,0
 type bed 3
 sortOrder view=+
 "
+  if [ "x${matrix}y" = "xy" ]; then
+printf "otherDb $otherDb
+html html/$asmId.chainNet
+
+"
+else
 printf "$matrix
 $minScore
 $linGap
@@ -121,6 +133,7 @@ otherDb $otherDb
 html html/$asmId.chainNet
 
 "
+fi
 printf "    track chainNet${OtherDb}Viewchain
     shortLabel Chain
     view chain

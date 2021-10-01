@@ -2857,6 +2857,8 @@ var findTracks = {
         var hiddenVis = $("input[name='"+trackName+"']");
         var tr = $(selCb).parents('tr.found');
         var tdb = tdbGetJsonRecord(trackName);
+        var isHub = trackName.slice(0,4) === "hub_";
+        var hubUrl = isHub ? tdb.hubUrl : "";
         var needSel = (typeof(tdb.parentTrack) === 'string' && tdb.parentTrack !== '');
         var shouldPack = tdb.canPack && tdb.kindOfParent === 0; // If parent then not pack but full
         if (shouldPack
@@ -2905,6 +2907,30 @@ var findTracks = {
                     $(hiddenSel).val('0');  // Can't set it to [] because it means default is used.
                 $(hiddenSel).attr('disabled',false);
             }
+        }
+
+        // if we selected a track in a public hub that is unconnected, we need to get the
+        // hubUrl into the form so the genome browser knows to load that hub. If the hub
+        // was already a connected hub, then we don't need to specify anything because it
+        // will already be in the cart and we handle the visibility settings like normal.
+        // The hubUrl field present in the json indicates this is an unconnected hub
+        if (justClicked && hubUrl !== undefined) {
+            var form = $("form[id='searchResults'");
+            var newHubInput = document.createElement("input");
+            // if we are a subtrack we need to explicitly hide the parent
+            // track so ALL subtracks of the parent don't show up unexpectedly
+            if (needSel) {
+                var parentTrack = tdb.parentTrack;
+                var parentTrackInput = document.createElement("input");
+                parentTrackInput.setAttribute("type", "hidden");
+                parentTrackInput.setAttribute("name", parentTrack);
+                parentTrackInput.setAttribute("value", "hide");
+                form.append(parentTrackInput);
+            }
+            newHubInput.setAttribute("type", "hidden");
+            newHubInput.setAttribute("name", "hubUrl");
+            newHubInput.setAttribute("value", hubUrl);
+            form.append(newHubInput);
         }
 
         // The "view in browser" button should be enabled/disabled

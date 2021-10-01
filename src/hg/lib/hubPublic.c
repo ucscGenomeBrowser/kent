@@ -9,7 +9,6 @@
 #include "hubPublic.h"
 
 
-
 char *hubPublicCommaSepFieldNames = "hubUrl,shortLabel,longLabel,registrationTime,dbCount,dbList,descriptionUrl";
 
 void hubPublicStaticLoad(char **row, struct hubPublic *ret)
@@ -257,3 +256,20 @@ fputc('}',f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+
+struct hubEntry *hubEntryTextLoad(char **row, bool hasDescription)
+{
+struct hubEntry *ret;
+AllocVar(ret);
+ret->hubUrl = cloneString(row[0]);
+ret->shortLabel = cloneString(row[1]);
+ret->longLabel = cloneString(row[2]);
+ret->dbList = cloneString(row[3]);
+ret->errorMessage = cloneString(row[4]);
+ret->id = sqlUnsigned(row[5]);
+if (hasDescription)
+    ret->descriptionUrl = cloneString(row[6]);
+else
+    ret->descriptionUrl = NULL;
+return ret;
+}

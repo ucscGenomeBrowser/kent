@@ -36,26 +36,20 @@ if [ ! -s new.masked.vcf.gz ]; then
     $scriptDir/makeNewMaskedVcf.sh $prevDate $today $problematicSitesVcf
 fi
 
-time $usher -u -T 80 \
-    -A \
-    -e 5 \
-    --max-parsimony-per-sample 20 \
-    -v new.masked.vcf.gz \
-    -i prevRenamed.pb \
-    -o gisaidAndPublic.$today.masked.preTrim.pb \
-    >& usher.addNew.log
-mv uncondensed-final-tree.nh gisaidAndPublic.$today.preTrim.nwk
+if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
+    $scriptDir/usherClusterRun.sh $today
+    # Prune samples with too many private mutations and internal branches that are too long.
+    $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.pb \
+        -b 30 \
+        -O -o gisaidAndPublic.$today.masked.pb
+fi
 
 # Exclude sequences with a very high number of EPPs from future runs
 grep ^Current usher.addNew.log \
 | awk '$16 >= 10 {print $8;}' \
 | awk -F\| '{ if ($3 == "") { print $1; } else { print $2; } }' \
-    >> ../tooManyEpps.ids
-
-# Prune samples with too many private mutations and internal branches that are too long.
-$matUtils extract -i gisaidAndPublic.$today.masked.preTrim.pb \
-    -b 30 \
-    -O -o gisaidAndPublic.$today.masked.pb
+    > tooManyEpps.ids
+cat tooManyEpps.ids >> ../tooManyEpps.ids
 
 $matUtils extract -i gisaidAndPublic.$today.masked.pb -u samples.$today
 

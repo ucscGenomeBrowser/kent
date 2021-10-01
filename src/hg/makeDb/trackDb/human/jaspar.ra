@@ -10,7 +10,7 @@ visibility hide
 type bigBed 6 .
 pennantIcon New red ../goldenPath/newsarch.html#092721 "Released Sep. 27, 2021"
 url http://jaspar.genereg.net/search?q=$$&collection=all&tax_group=all&tax_id=all&type=all&class=all&family=all&version=all
-urlLabel JASPAR website link:
+urlLabel View on JASPAR:
 filter.score 400
 filterByRange.score 0:1000
 maxItems 100000

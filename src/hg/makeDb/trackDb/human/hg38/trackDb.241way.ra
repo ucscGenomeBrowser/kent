@@ -61,10 +61,10 @@ pennantIcon New red ../goldenPath/newsarch.html#091321 "Released Sep. 13, 2021"
         shortLabel Basewise Cons
         longLabel PhyloP Basewise Conservation of Zoonomia 241 Placental Mammals
         configurable on
-        type bigWig -20 7.532
+        type bigWig -20 9.28
         bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus241way/cactus241way.phyloP.bw
         maxHeightPixels 100:50:11
-        viewLimits -4.5:4.88
+        viewLimits -4.5:7.5
         autoScale off
         spanList 1
         windowingFunction mean

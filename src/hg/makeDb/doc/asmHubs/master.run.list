@@ -1,3 +1,4 @@
+./runBuild GCA_001624185.1 GCA_001624185.1_129S1_SvImJ_v1 mammals Mus_musculus
 ./runBuild GCA_001624215.1 GCA_001624215.1_A_J_v1 mammals Mus_musculus
 ./runBuild GCA_001624295.1 GCA_001624295.1_AKR_J_v1 mammals Mus_musculus
 ./runBuild GCA_001624445.1 GCA_001624445.1_CAST_EiJ_v1 mammals Mus_musculus_castaneus
@@ -302,6 +303,7 @@
 ./runBuild GCF_000204515.1 GCF_000204515.1_Aech_3.9 invertebrate Acromyrmex_echinatior
 ./runBuild GCF_000208655.1 GCF_000208655.1_Dasnov3.0 vertebrate_mammalian Dasypus_novemcinctus
 ./runBuild GCF_000208745.1 GCF_000208745.1_Criollo_cocoa_genome_V2 plants Theobroma_cacao
+./runBuild GCF_000209065.1 GCF_000209065.1_ASM20906v1 invertebrate Trypanosoma_cruzi
 ./runBuild GCF_000209165.1 GCF_000209165.1_ASM20916v1 fungi Scheffersomyces_stipitis_CBS_6054
 ./runBuild GCF_000209225.1 GCF_000209225.1_ASM20922v1 invertebrate Nematostella_vectensis
 ./runBuild GCF_000213175.1 GCF_000213175.1_v2.0 fungi Neurospora_tetrasperma_FGSC_2508
