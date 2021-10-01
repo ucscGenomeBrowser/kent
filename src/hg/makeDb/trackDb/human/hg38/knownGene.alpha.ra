@@ -14,7 +14,7 @@ defaultLabelFields geneName
 itemRgb on
 #externalDb knownGeneV38
 maxItems 50000
-html knownGene
+html knownGeneV38
 searchIndex name
 idXref kgAlias kgID alias
 intronGap 12

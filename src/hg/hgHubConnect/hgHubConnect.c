@@ -29,6 +29,7 @@
 #include "net.h"
 #include "hubSearchText.h"
 #include "pipeline.h"
+#include "hubPublic.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -72,37 +73,6 @@ struct tdbOutputStructure
     struct tdbOutputStructure *children;
     int childCount;
     };
-
-struct hubEntry
-// for entries pulled from hubPublic
-    {
-    struct hubEntry *next;
-    char *hubUrl;
-    char *shortLabel;
-    char *longLabel;
-    char *dbList;
-    char *errorMessage;
-    int id;
-    char *descriptionUrl;
-    bool tableHasDescriptionField;
-    };
-
-struct hubEntry *hubEntryTextLoad(char **row, bool hasDescription)
-{
-struct hubEntry *ret;
-AllocVar(ret);
-ret->hubUrl = cloneString(row[0]);
-ret->shortLabel = cloneString(row[1]);
-ret->longLabel = cloneString(row[2]);
-ret->dbList = cloneString(row[3]);
-ret->errorMessage = cloneString(row[4]);
-ret->id = sqlUnsigned(row[5]);
-if (hasDescription)
-    ret->descriptionUrl = cloneString(row[6]);
-else
-    ret->descriptionUrl = NULL;
-return ret;
-}
 
 
 static void ourCellStart()
@@ -506,132 +476,6 @@ jsOnEventById("click", "hubLoadMaybeTiming",
     );
 }
 
-static void addPublicHubsToHubStatus(struct sqlConnection *conn, char *publicTable, char  *statusTable)
-/* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
-{
-char query[1024];
-sqlSafef(query, sizeof(query),
-        "select %s.hubUrl from %s left join %s on %s.hubUrl = %s.hubUrl where %s.hubUrl is NULL",
-        publicTable, publicTable, statusTable, publicTable, statusTable, statusTable); 
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *errorMessage = NULL;
-    char *url = row[0];
-
-    // add this url to the hubStatus table
-    hubFindOrAddUrlInStatusTable(database, cart, url, &errorMessage);
-    }
-}
-
-
-char *modifyTermsForHubSearch(char *hubSearchTerms, bool isStrictSearch)
-/* This won't exactly be pretty.  MySQL treats any sequence of alphanumerics and underscores
- * as a word, and single apostrophes are allowed as long as they don't come back-to-back.
- * Cut down to those characters, then add initial + (for requiring word) and * (for word
- * expansion) as appropriate. */
-{
-char *cloneTerms = cloneString(hubSearchTerms);
-struct dyString *modifiedTerms = dyStringNew(0);
-if (isNotEmpty(cloneTerms))
-    {
-    int i;
-    for (i=0; i<strlen(cloneTerms); i++)
-        {
-        // allowed punctuation is underscore and apostrophe, and we'll do special handling for hyphen
-        if (!isalnum(cloneTerms[i]) && cloneTerms[i] != '_' && cloneTerms[i] != '\'' &&
-                cloneTerms[i] != '-')
-            cloneTerms[i] = ' ';
-        }
-    char *splitTerms[1024];
-    int termCount = chopByWhite(cloneTerms, splitTerms, sizeof(splitTerms));
-    for (i=0; i<termCount; i++)
-        {
-        char *hyphenatedTerms[1024];
-        int hyphenTerms = chopString(splitTerms[i], "-", hyphenatedTerms, sizeof(hyphenatedTerms));
-        int j;
-        for (j=0; j<hyphenTerms-1; j++)
-            {
-            dyStringPrintf(modifiedTerms, "+%s ", hyphenatedTerms[j]);
-            }
-        if (isStrictSearch)
-            dyStringPrintf(modifiedTerms, "+%s ", hyphenatedTerms[j]);
-        else
-            {
-            dyStringPrintf(modifiedTerms, "+%s* ", hyphenatedTerms[j]);
-            }
-        }
-    }
-return dyStringCannibalize(&modifiedTerms);
-}
-
-
-struct hubSearchText *getHubSearchResults(struct sqlConnection *conn, char *hubSearchTableName,
-        char *hubSearchTerms, bool checkLongText, char *dbFilter, struct hash *hubLookup)
-/* Find hubs, genomes, and tracks that match the provided search terms.
- * Return all hits that satisfy the (optional) supplied assembly filter.
- * if checkLongText is FALSE, skip searching within the long description text entries */
-{
-char *cleanSearchTerms = cloneString(hubSearchTerms);
-if (isNotEmpty(cleanSearchTerms))
-    tolowers(cleanSearchTerms);
-bool isStrictSearch = FALSE;
-char *modifiedSearchTerms = modifyTermsForHubSearch(cleanSearchTerms, isStrictSearch);
-struct hubSearchText *hubSearchResultsList = NULL;
-struct dyString *query = dyStringNew(100);
-char *noLongText = NULL;
-
-if (!checkLongText)
-    noLongText = cloneString("textLength = 'Short' and");
-else
-    noLongText = cloneString("");
-
-sqlDyStringPrintf(query, "select * from %s where %s match(text) against ('%s' in boolean mode)"
-        " order by match(text) against ('%s' in boolean mode)",
-        hubSearchTableName, noLongText, modifiedSearchTerms, modifiedSearchTerms);
-
-struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hubSearchText *hst = hubSearchTextLoadWithNullGiveContext(row, cleanSearchTerms);
-    // Skip rows where the long text matched the more lax MySQL search (punctuation just
-    // splits terms into two words, so "rna-seq" finds "rna" and "seq" separately, but
-    // not the more strict rules used to find context for the search terms.
-    if ((hst->textLength == hubSearchTextLong) && isEmpty(hst->text))
-        continue;
-    char *hubUrl = hst->hubUrl;
-    struct hubEntry *hubInfo = hashFindVal(hubLookup, hubUrl);
-    if (hubInfo == NULL)
-        continue; // Search table evidently includes a hub that's not on this server.  Skip it.
-    char *db = cloneString(hst->db);
-    tolowers(db);
-    if (isNotEmpty(dbFilter))
-        {
-        if (isNotEmpty(db))
-            {
-            if (stringIn(dbFilter, db) == NULL)
-                continue;
-            }
-        else
-            {
-            // no db in the hubSearchText means this is a top-level hub hit.
-            // filter by the db list associated with the hub instead
-            char *dbList = cloneString(hubInfo->dbList);
-            tolowers(dbList);
-            if (stringIn(dbFilter, dbList) == NULL)
-                continue;
-            }
-        }
-    // Add hst to the list to be returned
-    slAddHead(&hubSearchResultsList, hst);
-    }
-slReverse(&hubSearchResultsList);
-return hubSearchResultsList;
-}
-
-
 void printSearchAndFilterBoxes(int searchEnabled, char *hubSearchTerms, char *dbFilter)
 /* Create the text boxes for search and database filtering along with the required
  * javscript */
@@ -698,40 +542,6 @@ printf("<table id=\"publicHubsTable\" class=\"hubList\"> "
             "<th>Assemblies</th> "
         "</tr></thead></table>\n");
 }
-
-
-struct hash *buildPublicLookupHash(struct sqlConnection *conn, char *publicTable, char *statusTable,
-        struct hash **pHash)
-/* Return a hash linking hub URLs to struct hubEntries.  Also make pHash point to a hash that just stores
- * the names of the public hubs (for use later when determining if hubs were added by the user) */
-{
-struct hash *hubLookup = newHash(5);
-struct hash *publicLookup = newHash(5);
-char query[512];
-bool hasDescription = sqlColumnExists(conn, publicTable, "descriptionUrl");
-if (hasDescription)
-    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,"
-            "s.errorMessage,s.id,p.descriptionUrl from %s p,%s s where p.hubUrl = s.hubUrl", 
-	    publicTable, statusTable); 
-else
-    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,"
-            "s.errorMessage,s.id from %s p,%s s where p.hubUrl = s.hubUrl", 
-	    publicTable, statusTable); 
-
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hubEntry *hubInfo = hubEntryTextLoad(row, hasDescription);
-    hubInfo->tableHasDescriptionField = hasDescription;
-    hashAddUnique(hubLookup, hubInfo->hubUrl, hubInfo);
-    hashStore(publicLookup, hubInfo->hubUrl);
-    }
-sqlFreeResult(&sr);
-*pHash = publicLookup;
-return hubLookup;
-}
-
 
 void outputPublicTableRow(struct hubEntry *hubInfo, int count)
 /* Prints out a table row with basic information about a hub and a button
@@ -1394,14 +1204,14 @@ if (isNotEmpty(lcDbFilter))
     tolowers(lcDbFilter);
 
 // make sure all the public hubs are in the hubStatus table.
-addPublicHubsToHubStatus(conn, publicTable, statusTable);
+addPublicHubsToHubStatus(cart, conn, publicTable, statusTable);
 
 // build full public hub lookup hash, taking each URL to struct hubEntry * for that hub
 struct hash *hubLookup = buildPublicLookupHash(conn, publicTable, statusTable, pHash);
 
 printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
 
-char *hubSearchTableName = cfgOptionDefault("hubSearchTextTable", "hubSearchText");
+char *hubSearchTableName = hubSearchTextTableName();
 int searchEnabled = sqlTableExists(conn, hubSearchTableName);
 
 printSearchAndFilterBoxes(searchEnabled, hubSearchTerms, dbFilter);
@@ -1414,28 +1224,9 @@ if (searchEnabled && !isEmpty(hubSearchTerms))
     // Forcing checkDescriptions to TRUE right now, but we might want to add this as a
     // checkbox option for users in the near future.
     bool checkDescriptions = TRUE;
-    struct hubSearchText *hubSearchResults = getHubSearchResults(conn, hubSearchTableName,
-            hubSearchTerms, checkDescriptions, lcDbFilter, hubLookup);
     searchResultHash = newHash(5);
-    struct hubSearchText *hst = hubSearchResults;
-    while (hst != NULL)
-        {
-        struct hubSearchText *nextHst = hst->next;
-        hst->next = NULL;
-        struct hashEl *hubHashEnt = hashLookup(searchResultHash, hst->hubUrl);
-        if (hubHashEnt == NULL)
-            {
-            slNameAddHead(&hubsToPrint, hst->hubUrl);
-            hashAdd(searchResultHash, hst->hubUrl, hst);
-            }
-        else
-            slAddHead(&(hubHashEnt->val), hst);
-        hst = nextHst;
-        }
-    struct hashEl *hel;
-    struct hashCookie cookie = hashFirst(searchResultHash);
-    while ((hel = hashNext(&cookie)) != NULL)
-        slReverse(&(hel->val));
+    getHubSearchResults(conn, hubSearchTableName,
+            hubSearchTerms, checkDescriptions, lcDbFilter, hubLookup, &searchResultHash, &hubsToPrint, NULL);
     }
 else
     {
@@ -1516,7 +1307,7 @@ if (hub == NULL)
 char headerText[1024];
 
 char *errorMessage;
-hubFindOrAddUrlInStatusTable(database, cart, hub->hubUrl, &errorMessage);
+hubFindOrAddUrlInStatusTable(cart, hub->hubUrl, &errorMessage);
 
 // if there is an error message, we stay in hgHubConnect
 if (errorMessage != NULL)
