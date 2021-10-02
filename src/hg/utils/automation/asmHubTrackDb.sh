@@ -174,6 +174,15 @@ export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb | 
 export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb | wc -l) || true`
 
 if [ "${rmskCount}" -gt 0 ]; then
+
+if [ ! -s "$buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.gz" ]; then
+  printf "ERROR: can not find trackData/repeatMasker/$asmId.sorted.fa.out.gz\n" 1>&2
+  exit 255
+fi
+
+rm -f $buildDir/$asmId.repeatMasker.out.gz
+ln -s trackData/repeatMasker/$asmId.sorted.fa.out.gz $buildDir/$asmId.repeatMasker.out.gz
+
 printf "track repeatMasker
 compositeTrack on
 shortLabel RepeatMasker

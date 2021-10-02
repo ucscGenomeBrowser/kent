@@ -12,9 +12,9 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 labelFields geneName,name,geneName2,name2
 defaultLabelFields geneName
 itemRgb on
-externalDb knownGeneV38lift37
+#externalDb knownGeneV38lift37
 maxItems 50000
-html knownGene
+html knownGeneV38lift37
 searchIndex name
 idXref kgAlias kgID alias
 intronGap 12

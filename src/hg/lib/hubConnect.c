@@ -23,6 +23,7 @@
 #include "hgConfig.h"
 #include "grp.h"
 #include "udc.h"
+#include "hubPublic.h"
 
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
@@ -542,8 +543,7 @@ if (set)
 return hub;
 }
 
-unsigned hubFindOrAddUrlInStatusTable(char *database, struct cart *cart,
-    char *url, char **errorMessage)
+unsigned hubFindOrAddUrlInStatusTable(struct cart *cart, char *url, char **errorMessage)
 /* find this url in the status table, and return its id and errorMessage (if an errorMessage exists) */
 {
 int id = 0;
@@ -1007,4 +1007,55 @@ struct sqlConnection *conn = hConnectCentral();
 char *name = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
 return name;
+}
+
+void addPublicHubsToHubStatus(struct cart *cart, struct sqlConnection *conn, char *publicTable, char  *statusTable)
+/* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
+{
+char query[1024];
+sqlSafef(query, sizeof(query),
+        "select %s.hubUrl from %s left join %s on %s.hubUrl = %s.hubUrl where %s.hubUrl is NULL",
+        publicTable, publicTable, statusTable, publicTable, statusTable, statusTable);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *errorMessage = NULL;
+    char *url = row[0];
+
+    // add this url to the hubStatus table
+    hubFindOrAddUrlInStatusTable(cart, url, &errorMessage);
+    }
+}
+
+struct hash *buildPublicLookupHash(struct sqlConnection *conn, char *publicTable, char *statusTable,
+        struct hash **pHash)
+/* Return a hash linking hub URLs to struct hubEntries.  Also make pHash point to a hash that just stores
+ * the names of the public hubs (for use later when determining if hubs were added by the user) */
+{
+struct hash *hubLookup = newHash(5);
+struct hash *publicLookup = newHash(5);
+char query[512];
+bool hasDescription = sqlColumnExists(conn, publicTable, "descriptionUrl");
+if (hasDescription)
+    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,"
+            "s.errorMessage,s.id,p.descriptionUrl from %s p,%s s where p.hubUrl = s.hubUrl",
+	    publicTable, statusTable);
+else
+    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,"
+            "s.errorMessage,s.id from %s p,%s s where p.hubUrl = s.hubUrl",
+	    publicTable, statusTable);
+
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hubEntry *hubInfo = hubEntryTextLoad(row, hasDescription);
+    hubInfo->tableHasDescriptionField = hasDescription;
+    hashAddUnique(hubLookup, hubInfo->hubUrl, hubInfo);
+    hashStore(publicLookup, hubInfo->hubUrl);
+    }
+sqlFreeResult(&sr);
+*pHash = publicLookup;
+return hubLookup;
 }
