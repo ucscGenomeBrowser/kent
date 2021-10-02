@@ -18,7 +18,7 @@ O=HInv.o affy10KDetails.o affy120KDetails.o ancientRref.o annoFormatVep.o annoGr
   gencodeToUniProt.o gencodeTranscriptSource.o gencodeTranscriptSupport.o gencodeTranscriptionSupportLevel.o \
   geneSimilarities.o genoLay.o genomicDups.o genomicSuperDups.o growthCondition.o gtexBoxplot.o \
   gtexEqtlCluster.o gv.o gvUi.o gwasCatalog.o hAnno.o hCytoBand.o haplotypes.o hapmapAllelesSummary.o \
-  hashJoin.o hgBam.o hgExp.o hgSeq.o hgdpGeo.o hubPublic.o humanParalog.o hvGfx.o isochores.o itemConf.o \
+  hashJoin.o hgBam.o hgExp.o hgSeq.o hgdpGeo.o humanParalog.o hvGfx.o isochores.o itemConf.o \
   itemDetailsHtml.o jaxOrtholog.o jaxQTL.o jaxQTL3.o joinMixer.o kg1ToKg2.o ld.o ld2.o lsSnpPdbChimera.o \
   mammalPsg.o mapSts.o mathWig.o mcnBreakpoints.o mouseOrtho.o mouseSyn.o mouseSynWhd.o ncRna.o \
   ncbiRefSeqLink.o nonCodingUi.o omicia.o omimTitle.o oreganno.o oregannoUi.o pal.o pcrResult.o \
