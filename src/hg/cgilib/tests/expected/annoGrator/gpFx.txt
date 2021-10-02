@@ -1,0 +1,49 @@
+## ENSEMBL VARIANT EFFECT PREDICTOR format (UCSC Variant Annotation Integrator)
+## Connected to UCSC database hg19
+## Variants: some more variants (input/annoGrator/moreVariants.pgSnp.tab)
+## Transcripts: UCSC Genes of course (hg19.knownGene)
+## dbSNP: now snp137. (hg19.snp137)
+## Keys for Extra column items:
+## SIFT: SIFT score from dbNSFP
+Uploaded Variation	Location	Allele	Gene	Feature	Feature type	Consequence	Position in cDNA	Position in CDS	Position in protein	Amino acid change	Codon change	Co-located Variation	Extra
+chr19_45405966_C/A	chr19:45405966	A	O96008	ENST00000405636.6_1	Transcript	intron_variant	-	-	-	-	-	-	INTRON=9/9
+chr19_45405966_C/A	chr19:45405966	A	O96008	ENST00000252487.9_1	Transcript	intron_variant	-	-	-	-	-	-	INTRON=9/9
+chr19_45405966_C/A	chr19:45405966	A	O96008	ENST00000592434.5_1	Transcript	3_prime_UTR_variant	2438	-	-	-	-	-	EXON=9/9
+chr19_45405966_C/A	chr19:45405966	A	O96008	ENST00000426677.7_1	Transcript	intron_variant	-	-	-	-	-	-	INTRON=8/8
+chr19_45405966_C/A	chr19:45405966	A	K7EKG4	ENST00000592041.1_1	Transcript	NMD_transcript_variant	-	-	-	-	-	-	INTRON=5/5
+chr19_45405966_C/A	chr19:45405966	A	E9PEV4	ENST00000446996.5_1	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=3082
+chr19_45405966_C/A	chr19:45405966	A	-	ENST00000485628.2_1	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=3087
+chr19_45405966_C/A	chr19:45405966	A	P02649	ENST00000252486.9_1	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=3087
+chr19_45405966_C/A	chr19:45405966	A	H0Y7L5	ENST00000434152.5_1	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=3103
+chr19_45405966_C/A	chr19:45405966	A	E7ERP7	ENST00000425718.1_1	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=3651
+chr19_45406350_C/T	chr19:45406350	C	O96008	ENST00000405636.6_1	Transcript	missense_variant	1114	1010	337	L/P	cTg/cCg	-	SIFT=D(0.010000);EXON=10/10
+chr19_45406350_C/T	chr19:45406350	C	O96008	ENST00000252487.9_1	Transcript	missense_variant	1111	1010	337	L/P	cTg/cCg	-	SIFT=D(0.010000);EXON=10/10
+chr19_45406350_C/T	chr19:45406350	C	O96008	ENST00000592434.5_1	Transcript	3_prime_UTR_variant	2822	-	-	-	-	-	EXON=9/9
+chr19_45406350_C/T	chr19:45406350	C	O96008	ENST00000426677.7_1	Transcript	missense_variant	1172	1010	337	L/P	cTg/cCg	-	SIFT=D(0.010000);EXON=9/9
+chr19_45406350_C/T	chr19:45406350	C	K7EKG4	ENST00000592041.1_1	Transcript	NMD_transcript_variant	668	-	-	-	-	-	EXON=6/6
+chr19_45406350_C/T	chr19:45406350	C	E9PEV4	ENST00000446996.5_1	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=2698
+chr19_45406350_C/T	chr19:45406350	C	-	ENST00000485628.2_1	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=2703
+chr19_45406350_C/T	chr19:45406350	C	P02649	ENST00000252486.9_1	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=2703
+chr19_45406350_C/T	chr19:45406350	C	H0Y7L5	ENST00000434152.5_1	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=2719
+chr19_45406350_C/T	chr19:45406350	C	E7ERP7	ENST00000425718.1_1	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=3267
+chr19_45417440_A/G	chr19:45417440	G	P02649	ENST00000252486.9_1	Transcript	downstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=4790
+chr19_45417440_A/G	chr19:45417440	G	-	ENST00000623895.1_1	Transcript	non_coding_transcript_exon_variant	4809	-	-	-	-	rs111575056	EXON=1/1
+chr19_45417440_A/G	chr19:45417440	G	P02654	ENST00000588750.5_1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=64
+chr19_45417440_A/G	chr19:45417440	G	P02654	ENST00000588802.5_1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=142
+chr19_45417440_A/G	chr19:45417440	G	K7ERI9	ENST00000592535.6_1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=425
+chr19_45417440_A/G	chr19:45417440	G	K7EPF9	ENST00000592885.5_1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=520
+chr19_45417440_A/G	chr19:45417440	G	K7EPR9	ENST00000589781.1_1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=527
+chr19_45417440_A/G	chr19:45417440	G	K7EKP1	ENST00000589078.1_1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=657
+chr19_45417440_A/G	chr19:45417440	G	K7EJI9	ENST00000590334.5_1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=686
+chr19_45417440_A/G	chr19:45417440	G	K7ELM9	ENST00000586638.5_1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=686
+chr19_45417440_A/G	chr19:45417440	G	K7ELU7	ENST00000592176.1_1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=686
+chr19_45419476_G/A	chr19:45419476	A	-	ENST00000623895.1_1	Transcript	downstream_gene_variant	-	-	-	-	-	rs72654455	DISTANCE=1251
+chr19_45419476_G/A	chr19:45419476	A	P02654	ENST00000588750.5_1	Transcript	missense_variant	413	88	30	V/I	Gtc/Atc	rs72654455	SIFT=T(0.840000);EXON=4/5
+chr19_45419476_G/A	chr19:45419476	A	P02654	ENST00000588802.5_1	Transcript	missense_variant	273	88	30	V/I	Gtc/Atc	rs72654455	SIFT=T(0.840000);EXON=3/4
+chr19_45419476_G/A	chr19:45419476	A	K7ERI9	ENST00000592535.6_1	Transcript	missense_variant	234	88	30	V/I	Gtc/Atc	rs72654455	SIFT=T(0.840000);EXON=3/4
+chr19_45419476_G/A	chr19:45419476	A	K7EPF9	ENST00000592885.5_1	Transcript	missense_variant	139	88	30	V/I	Gtc/Atc	rs72654455	SIFT=T(0.840000);EXON=3/4
+chr19_45419476_G/A	chr19:45419476	A	K7EPR9	ENST00000589781.1_1	Transcript	intron_variant	-	-	-	-	-	rs72654455	INTRON=2/2
+chr19_45419476_G/A	chr19:45419476	A	K7EKP1	ENST00000589078.1_1	Transcript	missense_variant	140	88	30	V/I	Gtc/Atc	rs72654455	SIFT=T(0.840000);EXON=2/2
+chr19_45419476_G/A	chr19:45419476	A	K7EJI9	ENST00000590334.5_1	Transcript	NMD_transcript_variant	111	88	30	V/I	Gtc/Atc	rs72654455	SIFT=T(0.840000);EXON=2/4
+chr19_45419476_G/A	chr19:45419476	A	K7ELM9	ENST00000586638.5_1	Transcript	missense_variant	111	88	30	V/I	Gtc/Atc	rs72654455	SIFT=T(0.840000);EXON=2/3
+chr19_45419476_G/A	chr19:45419476	A	K7ELU7	ENST00000592176.1_1	Transcript	NMD_transcript_variant	231	-	-	-	-	rs72654455	EXON=3/4

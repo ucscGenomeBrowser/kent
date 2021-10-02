@@ -24,7 +24,7 @@ ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
 endif
 
 
-TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
+TEST_DIRS = lib cgilib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToBed genePredToGtf \
 	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross liftOver \
             mouseStuff mrnaToGene pslCDnaFilter pslDiff pslHisto \
@@ -227,6 +227,7 @@ all::    cgi utils
 
 hgLib:
 	cd lib && ${MAKE}
+	cd cgilib && ${MAKE}
 
 userApps: $(UTILS_APPLIST:%=%.userApp)
 	cd altSplice/lib && $(MAKE)

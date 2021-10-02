@@ -5,7 +5,7 @@ cgiApi = /usr/local/apache/cgi-bin-api
 
 L += ${HALLIBS} $(MYSQLLIBS) -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkhgapcgi.a $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hubApi
 O = hubApi.o getData.o apiUtils.o list.o
