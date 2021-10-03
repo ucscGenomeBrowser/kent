@@ -14,8 +14,8 @@ include ../../inc/cgi_build_rules.mk
 # phyloPng is both a utilitiy that can be run from the commandline, and a CGI.
 
 my:: compile
-	if [ -d "${BINDIR}" ] && [ ! ${CGI_BIN}-${USER}/$A -ef ${DESTDIR}${BINDIR}/$A ] ; then \
-	    cp ${CGI_BIN}-${USER}/$A ${DESTDIR}${BINDIR}/; \
+	if [ -d "${BINDIR}" ] && [ ! ${CGI_BIN_DEST}/$A -ef ${DESTDIR}${BINDIR}/$A ] ; then \
+	    cp ${CGI_BIN_DEST}/$A ${DESTDIR}${BINDIR}/; \
 	fi
 
 compile: $O
