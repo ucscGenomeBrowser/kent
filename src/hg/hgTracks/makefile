@@ -51,7 +51,7 @@ compile: compileMain ${RENDERA}
 
 compileMain: $O
 	${CC} ${CFLAGS} -o $A $O ${MYLIBS} ${L}
-	cp extTools.ra ${CGI-BIN_DEST}
+	cp extTools.ra ${CGI_BIN_DEST}
 
 ${RENDERA}: ${RENDERO}
 	${MAKE} -f makefile.hgRenderTracks ${MAKECMDGOALS}
