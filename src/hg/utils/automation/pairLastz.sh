@@ -379,7 +379,7 @@ printf "########################################################################
     grep -w real do.log | sed -e 's/^/    # /;'
 " > ${buildDir}/makeDoc.txt
 
-(grep -w real $buildDir/do.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
+(grep -w real $buildDir/do.log || true) | sed -e 's/^/    # /;' | head -1 >> ${buildDir}/makeDoc.txt
 
 printf "\n    sed -e 's/^/    # /;' fb.${tAsmId}.chain${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
 sed -e 's/^/    # /;' $buildDir/fb.${tAsmId}.chain${Query}Link.txt >> ${buildDir}/makeDoc.txt
@@ -399,7 +399,7 @@ printf "\n    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHu
 printf "\n    sed -e 's/^/    # /;' fb.${tAsmId}.chainRBest.${Query}.txt\n" >> ${buildDir}/makeDoc.txt
 (sed -e 's/^/    # /;' ${buildDir}/fb.${tAsmId}.chainRBest.${Query}.txt || true) >> ${buildDir}/makeDoc.txt
 
-printf "\n### and for the swap\n" >> ${buildDir}/makeDoc.txt
+printf "\n    ### and for the swap\n" >> ${buildDir}/makeDoc.txt
 
 cat ${buildDir}/makeDoc.txt
 
@@ -447,31 +447,32 @@ fi      ### if [ "$swapDone" -eq 0 ]; then
 
 ### continue the make doc
 
-printf "\ncd ${swapDir}\n" >> ${buildDir}/makeDoc.txt
+printf "\n    cd ${swapDir}\n" >> ${buildDir}/makeDoc.txt
 
-printf "\ntime (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
+printf "\n   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -swap -verbose=2 \\
   ${tFullName} ${qFullName} ${buildDir}/DEF -swapDir=\`pwd\` \\
   -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \\
     -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > swap.log 2>&1
-grep -w real swap.log | sed -e 's/^/    # /;'
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
 " >> ${buildDir}/makeDoc.txt
 
 (grep -w real ${swapDir}/swap.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
 
-printf "\nsed -e 's/^/    # /;' fb.${qAsmId}.chain${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
+printf "\n    sed -e 's/^/    # /;' fb.${qAsmId}.chain${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
 sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chain${Target}Link.txt >> ${buildDir}/makeDoc.txt
 
-printf "sed -e 's/^/    # /;' fb.${qAsmId}.chainSyn${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
+printf "    sed -e 's/^/    # /;' fb.${qAsmId}.chainSyn${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
 sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chainSyn${Target}Link.txt >> ${buildDir}/makeDoc.txt
 
-printf "\ntime (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=hgwdev -buildDir=\`pwd\` \\
+printf "\    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=hgwdev -buildDir=\`pwd\` \\
    ${tSwapRbestArgs} \\
    ${qSwapRbestArgs} \\
    ${qAsmId} ${tAsmId}) > rbest.log 2>&1
 
-grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
+    grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
 (grep -w real ${swapDir}/rbest.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
-printf "\nsed -e 's/^/    # /;' fb.${qAsmId}.chainRBest.${Target}.txt\n" >> ${buildDir}/makeDoc.txt
+printf "\n    sed -e 's/^/    # /;' fb.${qAsmId}.chainRBest.${Target}.txt\n" >> ${buildDir}/makeDoc.txt
 (sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chainRBest.${Target}.txt || true) >> ${buildDir}/makeDoc.txt
 
 printf "\n##############################################################################\n" >> ${buildDir}/makeDoc.txt
