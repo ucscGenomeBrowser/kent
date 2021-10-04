@@ -329,6 +329,7 @@ sub doProcess {
 
   my $dbTwoBit = "$HgAutomate::clusterData/$db/$db.2bit";
   $dbTwoBit = $target2bit if (-s "$target2bit");
+  my $localSizes = "$HgAutomate::clusterData/$db/chrom.sizes";
 
   $bossScript->add(<<_EOF_
 # establish all variables to use here
@@ -337,9 +338,16 @@ export asmId=$asmId
 export downloadDir=$downloadDir
 export ncbiGffGz=\$downloadDir/\${asmId}_genomic.gff.gz
 export db=$db
+export chromSizes="$localSizes"
 export gff3ToRefLink=$gff3ToRefLink
 export gbffToCds=$gbffToCds
 export dateStamp=`date "+%F"`
+if [ -s "../../../\$asmId.chrom.sizes" ]; then
+  chromSizes="../../../\$asmId.chrom.sizes"
+fi
+if [ -s "../download/\$asmId.ncbi.chrom.sizes" ]; then
+  chromSizes="../download/\$asmId.ncbi.chrom.sizes"
+fi
 
 export annotationRelease=`zcat \$ncbiGffGz | head -100 | grep ^#.annotation-source | sed -e 's/.*annotation-source //; s/ Updated Annotation Release//;'`
 if [ "\$annotationRelease" == "" ]; then
@@ -354,12 +362,14 @@ if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
   zcat \$ncbiGffGz | grep -v -f ../../../download/\${asmId}.remove.dups.list \\
     | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
       | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
-        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin stdout \\
+      | genePredFilter -chromSizes=\$chromSizes stdin \$asmId.gp
 else
   zcat \$ncbiGffGz \\
     | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
       | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
-        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+        -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin stdout \\
+      | genePredFilter -chromSizes=\$chromSizes stdin \$asmId.gp
 fi
 genePredCheck \$asmId.gp
 

@@ -10,6 +10,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility pack
     shortLabel Heart HCA Cells
     longLabel Heart cell RNA binned by cell type from https://heartcellatlas.org
@@ -21,9 +23,12 @@ group singleCell
     barChartStatsUrl /gbdb/$D/bbi/heartCellAtlas/cell_type.stats
     barChartColors #f1803d #c1229a #07bc02 #b5562a #eb1613 #1494b3 #de2b02 #e6af0e #c12792 #c15f4e #b06a5a #c1229b #d69f85
     #barChartColors #e97c36 #c5249a #06bd02 #f4702a #fa1613 #1495b4 #a5591c #dcb10e #c82a92 #d6684d #ba715a #c5249a #dfa484
-    barChartBars Adipocytes Atrial_Cardiomyocyte Endothelial Fibroblast \
-    	Lymphoid Mesothelial Myeloid Neuronal NotAssigned Pericytes Smooth_muscle_cells \
-	Ventricular_Cardiomyocyte doublets
+    #barChartBars Adipocytes Atrial_Cardiomyocyte Endothelial Fibroblast \
+        #Lymphoid Mesothelial Myeloid Neuronal NotAssigned Pericytes Smooth_muscle_cells \
+        #Ventricular_Cardiomyocyte doublets
+    barChartBars adipocyte atrial_cardiomyocyte endothelial fibroblast \
+    	lymphoid mesothelial myeloid neuronal not_assigned pericyte smooth_muscle_cell \
+	ventricular_cardiomyocyte doublet
     transformFunc NONE
     barChartLimit 3
 
@@ -31,6 +36,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Region
     longLabel Heart cell RNA binned by region of collection from https://heartcellatlas.org
@@ -50,6 +57,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas    
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Age
     longLabel Heart cell RNA binned by age group of donor from https://heartcellatlas.org
@@ -69,6 +78,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA State
     longLabel Heart cell RNA binned by cell state from https://heartcellatlas.org
@@ -90,6 +101,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Donor
     longLabel Heart cell RNA binned by organ donor from https://heartcellatlas.org
@@ -109,6 +122,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Sex
     longLabel Heart cell RNA binned by sex of donor from https://heartcellatlas.org
@@ -128,6 +143,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Source
     longLabel Heart cell RNA binned by source (nucleus vs whole cell) from https://heartcellatlas.org
@@ -147,6 +164,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Sample
     longLabel Heart cell RNA binned by biosample from https://heartcellatlas.org
@@ -181,6 +200,8 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Version
     longLabel Heart cell RNA binned by 10x chemistry version from https://heartcellatlas.org

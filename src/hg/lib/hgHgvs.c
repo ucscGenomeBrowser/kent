@@ -942,7 +942,9 @@ else if ((isSubst = regexMatchSubstr(term, pseudoHgvsGeneSymbolProtSubstExp,
             char *description = term + substrs[descStartIx].rm_so;
             struct dyString *npTerm = dyStringCreate("%s(%s):p.%s",
                                                      npAcc, geneSymbol, description);
-            slAddHead(&hgvs, hgvsParseTerm(npTerm->string));
+            struct hgvsVariant *newTerm = hgvsParseTerm(npTerm->string);
+            if (newTerm)
+                slAddHead(&hgvs, newTerm);
             dyStringFree(&npTerm);
             }
         }
@@ -966,7 +968,9 @@ else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolProtPosExp, substrs, ArraySi
             char refBase = refBaseForNp(db, npAcc, pos);
             struct dyString *npTerm = dyStringCreate("%s(%s):p.%c%d=",
                                                      npAcc, geneSymbol, refBase, pos);
-            slAddHead(&hgvs, hgvsParseTerm(npTerm->string));
+            struct hgvsVariant *newTerm = hgvsParseTerm(npTerm->string);
+            if (newTerm)
+                slAddHead(&hgvs, newTerm);
             dyStringFree(&npTerm);
             }
         }
@@ -1907,8 +1911,10 @@ else
 return txAli;
 }
 
-static struct bed *hgvsMapNucToGenome(char *db, struct hgvsVariant *hgvs, char **retPslTable)
+static struct bed *hgvsMapNucToGenome(char *db, struct hgvsVariant *hgvs, char **retPslTable,
+                                      boolean mustBeCds)
 /* Return a bed6 with the variant's span on the genome and strand, or NULL if unable to map.
+ * If mustBeCds, but we can't find cds or the variant coords are outside of it, return NULL.
  * If successful and retPslTable is not NULL, set it to the name of the PSL table used. */
 {
 if (hgvs->type == hgvstGenomic)
@@ -1921,6 +1927,9 @@ char *pslTable = NULL;
 struct genbankCds cds;
 struct psl *txAli = getPslAndCds(db, hgvs, &acc, &cds, &pslTable);
 boolean gotCds = (cds.end > cds.start);
+if (mustBeCds &&
+    (!gotCds || hgvs->type != hgvstCoding || hgvs->start1-1 >= (cds.end - cds.start)))
+    return NULL;
 if (txAli && (hgvs->type != hgvstCoding || gotCds))
     {
     int upstream = 0, downstream = 0;
@@ -1979,7 +1988,7 @@ if (txAcc)
     cDot.start1 = ((hgvs->start1 - 1) * 3) + 1;
     cDot.end = ((hgvs->end - 1) * 3) + 3;
     cDot.changes = hgvs->changes;
-    region = hgvsMapNucToGenome(db, &cDot, retPslTable);
+    region = hgvsMapNucToGenome(db, &cDot, retPslTable, TRUE);
     freeMem(txAcc);
     }
 return region;
@@ -1995,7 +2004,7 @@ struct bed *region = NULL;
 if (hgvs->type == hgvstProtein)
     region = hgvsMapPDotToGenome(db, hgvs, retPslTable);
 else
-    region = hgvsMapNucToGenome(db, hgvs, retPslTable);
+    region = hgvsMapNucToGenome(db, hgvs, retPslTable, FALSE);
 return region;
 }
 

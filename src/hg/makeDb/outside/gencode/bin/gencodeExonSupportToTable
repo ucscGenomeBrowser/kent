@@ -14,15 +14,14 @@ def parseArgs():
     desc = """Convert GENCODE exon support to a table.  This deals with exon coordinates
 mappings.
 
-The chains can be generated with
-  ensToUcscMkLift hg19 ensemblToUcscChain
+The chains can be generated with buildGencodeToUcscLift
 """
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("--verbose", dest="verbose", action="store_true", default=False,
                         help="verbose output for debugging")
     parser.add_argument("exonSupportIn",
                         help="Exon support metadata from GENCODE distribution.  Maybe compressed.")
-    parser.add_argument("ensemblToUcscChain",
+    parser.add_argument("gencodeToUcscChain",
                         help="chain file to lift over to UCSC chromosome names")
     parser.add_argument("exonSupportTab",
                         help="mapped exon support file")
@@ -50,7 +49,7 @@ def convert(liftFile, exonSupportIn, exonSupportTab, verbose):
 
 
 def gencodeExonSupportToTable(opts):
-    convert(opts.ensemblToUcscChain, opts.exonSupportIn, opts.exonSupportTab, opts.verbose)
+    convert(opts.gencodeToUcscChain, opts.exonSupportIn, opts.exonSupportTab, opts.verbose)
 
 
 gencodeExonSupportToTable(parseArgs())

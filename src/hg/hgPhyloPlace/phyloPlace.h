@@ -26,6 +26,10 @@
 #define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
 #define OUTBREAK_INFO_URLBASE "https://outbreak.info/situation-reports?pango="
 
+// usher now preprends "node_" to node numbers when parsing protobuf, although they're still stored
+// numeric in the protobuf.
+#define USHER_NODE_PREFIX "node_"
+
 struct treeChoices
 /* Phylogenetic tree versions for the user to choose from. */
 {
@@ -64,14 +68,6 @@ struct variantPathNode
     struct singleNucChange *sncList;  // One or more single nucleotide changes associated with node
     };
 
-struct bestNodeInfo
-    {
-    struct bestNodeInfo *next;
-    char *name;                           // Node name
-    struct variantPathNode *variantPath;  // Mutations assigned to nodes along path from root->node
-    boolean isSibling;                    // Placement would be as sibling of node (not child)
-    };
-
 struct baseVal
 /* List of imputed base positions and values */
     {
@@ -85,8 +81,10 @@ struct placementInfo
     {
     char *sampleId;                       // Sample name from FASTA or VCF header
     struct slName *sampleMuts;            // Differences with the reference genome
+                                          // -- NOTE: runUsher used to make this from stderr of
+                                          // usher compiled with -DDEBUG=1; now caller must add it.
+                                          // (struct seqInfo sncList has the same info)
     struct variantPathNode *variantPath;  // Mutations assigned to nodes along path from root
-    struct bestNodeInfo *bestNodes;       // Other nodes identified as equally parsimonious
     struct baseVal *imputedBases;         // Ambiguous bases imputed to ref/alt [ACGT]
     int parsimonyScore;                   // Parsimony cost of placing sample
     int bestNodeCount;                    // Number of equally parsimonious placements
@@ -125,9 +123,9 @@ struct sampleMetadata
     char *gbAcc;        // GenBank accession
     char *date;         // Sample collection date
     char *author;       // Author(s) to credit
-    char *nClade;       // Nextstrain year-letter clade
+    char *nClade;       // Nextstrain year-letter clade assigned by nextclade
     char *gClade;       // GISAID amino acid change clade
-    char *lineage;      // Pangolin lineage
+    char *lineage;      // Pango lineage assigned by pangolin
     char *country;      // Country in which sample was collected
     char *division;     // Administrative division in which sample was collected (country or state)
     char *location;     // Location in which sample was collected (city)
@@ -136,6 +134,8 @@ struct sampleMetadata
     char *origLab;      // Originating lab
     char *subLab;       // Submitting lab
     char *region;       // Continent on which sample was collected
+    char *nCladeUsher;  // Nextstrain clade according to annotated tree
+    char *lineageUsher; // Pango lineage according to annotated tree
     };
 
 struct geneInfo
@@ -184,7 +184,7 @@ void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneI
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 
 struct tempName *writeCustomTracks(struct tempName *vcfTn, struct usherResults *ur,
-                                   struct slName *sampleIds, struct phyloTree *bigTree,
+                                   struct slName *sampleIds, struct mutationAnnotatedTree *bigTree,
                                    char *source, int fontHeight, struct phyloTree **retSampleTree,
                                    int *pStartTime);
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
@@ -205,6 +205,10 @@ char *phyloPlaceDbSettingPath(char *db, char *settingName);
 
 struct treeChoices *loadTreeChoices(char *db);
 /* If <db>/config.ra specifies a treeChoices file, load it up, else return NULL. */
+
+boolean isInternalNodeName(char *nodeName, int minNewNode);
+/* Return TRUE if nodeName looks like an internal node ID from the protobuf tree, i.e. is numeric
+ * or <USHER_NODE_PREFIX>_<number> and, if minNewNode > 0, number is less than minNewNode. */
 
 void reportTiming(int *pStartTime, char *message);
 /* Print out a report to stderr of how much time something took. */

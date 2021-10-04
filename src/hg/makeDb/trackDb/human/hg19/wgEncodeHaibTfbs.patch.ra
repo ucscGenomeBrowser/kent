@@ -24,7 +24,6 @@ dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protocol treatment=treatment
 priority 0
 type bed 3
-wgEncode 1
 nextItemButton on
 noInherit on
 #dataVersion through the ENCODE Jan 2010 Freeze

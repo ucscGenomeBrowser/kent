@@ -112,35 +112,6 @@ else
 return botCheckString;
 }
 
-void botDelayCgi(char *host, int port, boolean noWarn, double fraction)
-/* Connect with bottleneck server and sleep the
- * amount it suggests for IP address calling CGI script,
- * after imposing the specified fraction of the access penalty. */
-{
-int millis;
-char *ip = getenv("REMOTE_ADDR");
-if (ip != NULL)
-    {
-    char *botCheckString = getBotCheckString(ip, fraction);
-    millis = botDelayTime(host, port, botCheckString);
-    freeMem(botCheckString);
-    if (millis > 0)
-	{
-	if (millis > 10000)
-	    {
-	    if (millis > 20000)
-	        botTerminateMessage(ip, millis);
-	    else
-		{
-		if (!noWarn)
-		    botDelayMessage(ip, millis);
-		}
-	    }
-	sleep1000(millis);
-	}
-    }
-}
-
 boolean botException()
 /* check if the remote ip address is on the exceptions list */
 {
@@ -168,44 +139,6 @@ if (exceptIps)
 	}
     }
 return FALSE;
-}
-
-static void hgBotDelayExt(boolean noWarn, double fraction)
-/* High level bot delay call - looks up bottleneck server
- * in hg.conf. */
-{
-if (botException())
-    return;
-
-char *host = cfgOption("bottleneck.host");
-char *port = cfgOption("bottleneck.port");
-
-if (host != NULL && port != NULL)
-    botDelayCgi(host, atoi(port), noWarn, fraction);
-}
-
-void hgBotDelay()
-/* High level bot delay call - for use with regular webpage output */
-{
-hgBotDelayExt(FALSE, defaultDelayFrac);
-}
-
-void hgBotDelayFrac(double fraction)
-/* Like hgBotDelay, but imposes a fraction of the standard access penalty */
-{
-hgBotDelayExt(FALSE, fraction);
-}
-
-void hgBotDelayNoWarn()
-/* High level bot delay call without warning - for use with non-webpage outputs */
-{
-hgBotDelayExt(TRUE, defaultDelayFrac);
-}
-
-void hgBotDelayNoWarnFrac(double fraction)
-/* Like hgBotDelayNoWarn, but imposes a fraction of the standard access penalty */
-{
-hgBotDelayExt(TRUE, fraction);
 }
 
 int hgBotDelayTime()
@@ -315,7 +248,7 @@ exit(0);
 }       /*      static void hogExit()   */
 
 boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int warnMs, int exitMs, char *exitType)
-/* similar to botDelayCgi but for use before the CGI has started any
+/* replaces the former botDelayCgi now in use before the CGI has started any
  * output or setup the cart of done any MySQL operations.  The boolean
  * return is used later in the CGI after it has done all its setups and
  * started output so it can issue the warning.  Pass in delayFrac 0.0
@@ -349,8 +282,9 @@ if (botDelayMillis > 0)
 	    hogExit(cgiName, enteredMainTime, exitType, retryAfterSeconds);
 	else
 	    issueWarning = TRUE;
+
+        sleep1000(botDelayMillis); /* sleep when > warnMs and < exitMs */
 	}
-    sleep1000(botDelayMillis); /* sleeping while still < exitMs */
     }
 return issueWarning;	/* caller can decide on their type of warning */
 }	/*	boolean earlyBotCheck()	*/

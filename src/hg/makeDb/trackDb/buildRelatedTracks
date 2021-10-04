@@ -27,6 +27,7 @@ for db in $*; do
         uniqTables=$(comm -3 <(grep -w "^$db" relatedTracks.ra | cut -d' ' -f2 | sort) <(grep -w "^$db" relatedTracks.ra | cut -d' ' -f3 | sort) | wc -l)
         if [ $uniqTables -gt 0 ]; then
             printf "ERROR: mismatched primary and secondary related tracks for '%s'\n" "$db"
+            echo "Tracks:" $(comm -3 <(grep -w "^$db" relatedTracks.ra | cut -d' ' -f2 | sort) <(grep -w "^$db" relatedTracks.ra | cut -d' ' -f3 | sort))
             exit 255
         fi
         grep -w "^$db" relatedTracks.ra | cut -d' ' -f2- \

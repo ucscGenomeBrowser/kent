@@ -19,7 +19,6 @@ dragAndDrop subTracks
 noInherit on
 priority 9
 type bed 3
-wgEncode 1
 html wgEncodeCshlShortRnaSeq.release3
 
     track wgEncodeCshlShortRnaSeqViewMinusSignal

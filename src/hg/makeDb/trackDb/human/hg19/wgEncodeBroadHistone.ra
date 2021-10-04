@@ -51,7 +51,6 @@
 # fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 # group regulation
 # priority 0
-# wgEncode 1
 # dataVersion through the ENCODE Jan 2013 Freeze
 
 track wgEncodeBroadHistone
@@ -70,7 +69,6 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
 type bed 3
-wgEncode 1
 nextItemButton on
 useScore 0
 noInherit on

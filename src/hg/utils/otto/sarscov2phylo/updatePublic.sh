@@ -42,7 +42,7 @@ mkdir -p $buildDir
 cd $buildDir
 
 prevDate=$(date -d yesterday +%F)
-time $scriptDir/updateCombinedTree.sh $prevDate $problematicSitesVcf >& updateCombinedTree.log
+time $scriptDir/updateCombinedTree.sh $prevDate $today $problematicSitesVcf >& updateCombinedTree.log
 
 echo ""
 cat hgPhyloPlace.description.txt

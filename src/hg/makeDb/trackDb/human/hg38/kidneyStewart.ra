@@ -9,6 +9,8 @@ group singleCell
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility pack
     shortLabel Kidney Cells
     longLabel Kidney RNA binned by merged cell type from Stewart et al 2019
@@ -18,7 +20,8 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/kidneyStewart/cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/kidneyStewart/cell_type.stats
-    barChartBars Ascending_vasa_recta_endothelium B_cell CD4_T_cell CD8_T_cell Connecting_tubule Descending_vasa_recta_endothelium Epithelial_progenitor_cell Fibroblast Glomerular_endothelium Intercalated_cell MNP NK_cell Other_immune Pelvic_epithelium Peritubular_capillary_endothelium Podocyte Principal_cell Proximal_tubule Thick_ascending_limb_of_Loop_of_Henle Transitional_urothelium
+   #barChartBars Ascending_vasa_recta_endothelium B_cell CD4_T_cell CD8_T_cell Connecting_tubule Descending_vasa_recta_endothelium Epithelial_progenitor_cell Fibroblast Glomerular_endothelium Intercalated_cell MNP NK_cell Other_immune Pelvic_epithelium Peritubular_capillary_endothelium Podocyte Principal_cell Proximal_tubule Thick_ascending_limb_of_Loop_of_Henle Transitional_urothelium
+    barChartBars ascending_vasa_recta_endothelial_cell B_cell T_cell_CD4+ T_cell_CD8+ connecting_tubule_cell descending_vasa_recta_endothelial_cell epithelial_progenitor_cell fibroblast glomerular_endothelial_cell intercalated_cell mononuclear_phagocyte natural_killer_cell other_immune_cell pelvic_epithelial_cell peritubular_capillary_endothelial_cell podocyte principal_cell proximal_tubule_cell thick_ascending_loop_of_Henle transitional_urothelium_cell
     barChartColors #5bd05a #ec374a #f7354b #f7354b #5f66ed #5fcd5b #60afce #c98b6b #0ab707 #181dda #de2a02 #f1374b #e7a69c #5cb6cf #05bb04 #9f968b #6496d4 #0e0ceb #181cd9 #bfd7e4
     transformFunc NONE
     barChartLimit 2
@@ -27,6 +30,8 @@ group singleCell
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Kidney Broad CT
     longLabel Kidney RNA binned by broad cell type from Stewart et al 2019
@@ -47,6 +52,8 @@ group singleCell
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Kidney Compartment
     longLabel Kidney RNA binned by compartment from Stewart et al 2019
@@ -67,6 +74,8 @@ group singleCell
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Kidney Details
     longLabel Kidney RNA binned by detailed cell type from Stewart et al 2019
@@ -85,6 +94,8 @@ group singleCell
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Kidney Experiment
     longLabel Kidney RNA binned by Experiment from Stewart et al 2019
@@ -104,6 +115,8 @@ group singleCell
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Kidney Project
     longLabel Kidney RNA binned by project from Stewart et al 2019

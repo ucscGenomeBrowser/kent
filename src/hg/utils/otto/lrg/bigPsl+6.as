@@ -34,6 +34,7 @@ table lrgBigPsl
     string ensemblTranscript;     "Ensembl transcript name"
     string ncbiProtein;           "NCBI protein name"
     string ensemblProtein;        "Ensembl protein name"
+    string _lrgParent;            "LRG ID without transcript decoration"
     string geneName;              "Corresponding gene name for this transcript"
     string mouseOver;             "NCBI and Ensembl transcripts and proteins"
     )

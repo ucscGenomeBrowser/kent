@@ -10,6 +10,8 @@ release alpha
     parent liverMacParland
     html liverMacParland
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=covid19atlas+c19a-macparland18&gene=$$
+    urlLabel View on the UCSC Cell Browser:    
     visibility pack
     shortLabel Liver Cells
     longLabel Liver cells binned by cell type from MacParland et al 2018
@@ -19,7 +21,8 @@ release alpha
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/liverMacParland/cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/liverMacParland/cell_type.stats
-    barChartBars B_cell Cholangiocyte Erythroid Hepatocyte Inflammatory_Macs LSEC_1 LSEC_2,3 NK-like Non-inflammatory_Macs Plasma Portal_endothelial Stellate abT_cell gdT_cell_1 gdT_cell_2
+    #barChartBars B_cell Cholangiocyte Erythroid Hepatocyte Inflammatory_Macs LSEC_1 LSEC_2,3 NK-like Non-inflammatory_Macs Plasma Portal_endothelial Stellate abT_cell gdT_cell_1 gdT_cell_2
+    barChartBars B_cell cholangiocyte erythroid_cell hepatocyte macrophage_(inflammatory) liver_sinusoidal_endothelial_1_(LSEC_1) liver_sinusoidal_endothelial_2,3_(LSEC_2,3) natural_killer_like macrophage_(non-inflammatory) plasma_B_cell portal_endothelial_cell stellate_cell T_cell_alpha/beta T_cell_gamma/delta_1 T_cell_gamma/delta_2
     barChartColors #f1798a #908ffd #d3c4db #af01af #d42c0d #5e97d5 #5d8fe8 #f0798a #e3725c #c27d9a #58d05c #e7cbbe #e93650 #e87a8c #cc7d95
     #barChartColors #da6973 #8f8ffd #cfc3dd #af01af #da1820 #5c97d5 #5b8fea #d86a74 #dc6971 #b17391 #57d15b #e7cbbe #c61f2d #d36c77 #bc7187
     #barChartColors #eb6a6a #c2afb6 #d3cccf #55586d #ef1818 #5a99d7 #5990eb #e96b6b #eb696a #c9787b #56d25a #c2d6d1 #df1f20 #e56c6d #d47474
@@ -42,6 +45,8 @@ release alpha
     parent liverMacParland
     html liverMacParland
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=covid19atlas+c19a-macparland18&gene=$$
+    urlLabel View on the UCSC Cell Browser:    
     visibility hide
     shortLabel Liver Broad
     longLabel Liver cells binned by broad cell type from MacParland et al 2018
@@ -68,6 +73,8 @@ release alpha
     parent liverMacParland
     html liverMacParland
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=covid19atlas+c19a-macparland18&gene=$$
+    urlLabel View on the UCSC Cell Browser:    
     visibility hide
     shortLabel Liver Donor
     longLabel Liver cells binned by organ donor from MacParland et al 2018

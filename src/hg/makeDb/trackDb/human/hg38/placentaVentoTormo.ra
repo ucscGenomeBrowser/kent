@@ -9,6 +9,8 @@ group singleCell
     parent placentaVentoTormo
     html placentaVentoTormo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=placenta-decidua+10x&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility pack
     shortLabel Placenta Cells
     longLabel Placenta and decidua cells binned by cell type 10x from Vento-Tormo et al 2018
@@ -18,7 +20,8 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/10x/cell_type.stats
-    barChartBars CD4+_T CD8+_T EVT Endo MAIT Myeloid NK Other_immune SCT VCT dP dS fFB
+    #barChartBars CD4+_T CD8+_T EVT Endo MAIT Myeloid NK Other_immune SCT VCT dP dS fFB
+    barChartBars T_cell_CD4+ T_cell_CD8+ extravillous_trophoblast_(EVT) endothelial_cell T_cell_mucosal_(MAIT) myeloid_cell natural_killer_cell_(NK) other_immune_cell syncytiotrophoblast_(SCT) villous_cytotrophoblast_(VCT) decidual_perivascular_cell_(dP) decidual_stromal_cell_(dS) fetal_fibroblast_(fFB)
     barChartColors #f63247 #fa3248 #6026c2 #06bb03 #f73247 #de2903 #f03142 #ee1313 #5823d1 #5923cf #a1288a #be03bb #af4f22
     transformFunc NONE
     barChartLimit 2
@@ -27,6 +30,8 @@ group singleCell
     parent placentaVentoTormo
     html placentaVentoTormo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=placenta-decidua+10x&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Placenta Detail
     longLabel Placenta and decidua cells binned by detailed cell type 10x from Vento-Tormo et al 2018
@@ -45,6 +50,8 @@ group singleCell
     parent placentaVentoTormo
     html placentaVentoTormo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=placenta-decidua+10x&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility pack
     shortLabel Placenta Loc
     longLabel Placenta and decidua cells binned by cell location 10x from Vento-Tormo et al 2018
@@ -63,6 +70,8 @@ group singleCell
     parent placentaVentoTormo
     html placentaVentoTormo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=placenta-decidua+10x&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Placenta Stage
     longLabel Placenta and decidua cells binned by placental stage 10x from Vento-Tormo et al 2018
@@ -81,6 +90,8 @@ group singleCell
     parent placentaVentoTormo
     html placentaVentoTormo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=placenta-decidua+10x&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Placenta Mat/Fet
     longLabel Placenta and decidua cells binned by maternal/fetal 10x from Vento-Tormo et al 2018
@@ -98,17 +109,20 @@ group singleCell
     track placentaVentoTormoCellTypeSs2
     parent placentaVentoTormo
     html placentaVentoTormo
+    url https://cells.ucsc.edu/?ds=placenta-decidua+ss2&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     type bigBarChart
     visibility hide
     shortLabel Placenta Cells Ss2
-    longLabel Placenta and decidua cells binned by cell type smart-seq2 10x from Vento-Tormo et al 2018
+    longLabel Placenta and decidua cells binned by cell type smart-seq2 from Vento-Tormo et al 2018
     barChartMetric mean
     barChartUnit units/cell
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/placentaVentoTormo/ss2/cell_type.stats
-    barChartBars CD4+_T CD8+_T EVT Endo MAIT Myeloid NK Other_immune SCT VCT dP dS fFB
+    #barChartBars CD4+_T CD8+_T EVT Endo MAIT Myeloid NK Other_immune SCT VCT dP dS fFB
+    barChartBars T_cell_CD4+ T_cell_CD8+ extravillous_trophoblast_(EVT) endothelial_cell T_cell_mucosal_(MAIT) myeloid_cell natural_killer_cell_(NK) other_immune_cell syncytiotrophoblast_(SCT) villous_cytotrophoblast_(VCT) decidual_perivascular_cell_(dP) decidual_stromal_cell_(dS) fetal_fibroblast_(fFB)
     barChartColors #f83147 #fa3249 #906de0 #90e28f #fa7685 #df2902 #f63248 #f46162 #cebef2 #e66b76 #c76bb1 #d456d3 #efdcd3
     transformFunc NONE
     barChartLimit 2
@@ -117,9 +131,11 @@ group singleCell
     parent placentaVentoTormo
     html placentaVentoTormo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=placenta-decidua+ss2&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Placenta Detail Ss2
-    longLabel Placenta and decidua cells binned by detailed cell type smart-seq2 10x from Vento-Tormo et al 2018
+    longLabel Placenta and decidua cells binned by detailed cell type smart-seq2 from Vento-Tormo et al 2018
     barChartMetric mean
     barChartUnit units/cell
     defaultLabelFields name
@@ -135,9 +151,11 @@ group singleCell
     parent placentaVentoTormo
     html placentaVentoTormo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=placenta-decidua+ss2&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility pack
     shortLabel Placenta Loc Ss2
-    longLabel Placenta and decidua cells binned by cell location smart-seq2 10x from Vento-Tormo et al 2018
+    longLabel Placenta and decidua cells binned by cell location smart-seq2 from Vento-Tormo et al 2018
     barChartMetric mean
     barChartUnit units/cell
     defaultLabelFields name
@@ -153,9 +171,11 @@ group singleCell
     parent placentaVentoTormo
     html placentaVentoTormo
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=placenta-decidua+ss2&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Placenta Mat/Fet Ss2
-    longLabel Placenta and decidua cells -seq2binned by maternal/fetal smart-seq2 10x from Vento-Tormo et al 2018
+    longLabel Placenta and decidua cells binned by maternal/fetal smart-seq2 from Vento-Tormo et al 2018
     barChartMetric mean
     barChartUnit units/cell
     defaultLabelFields name

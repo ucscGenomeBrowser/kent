@@ -74,7 +74,9 @@
     (<code>bigBed 3</code>) tells the Browser the type of format the
     data is in, defines how to display it, and determines
     which options are available for fine control of that display.
-    </P>
+    For some configurable features, like <a href="#filter">filters</a>, an additional
+    period or plus may be needed (<code>bigBed 5 .</code>) or (<code>bigBed 9 +</code>).
+</P>
 
     <P>While there are over 100 settings (providing a high level of flexibility for track
     display) defined in this document and supported at UCSC, only the above five
@@ -503,7 +505,7 @@ are described below along with settings specific to their types.</P>
         </div>
     </td></tr>
     <tr valign=top><td class="extraTableFields"><a name="extraTableFields"></a><img class='toggle detail'>
-        <div class="format"><code class="level-new">extraTableFields &lt;url/relativePath&gt;</code>
+        <div class="format"><code class="level-new">extraTableFields &lt;fieldName1|table title,fieldName2|table title,...&gt;</code>
         </div>
     </td></tr>
     <TR VALIGN=TOP><TD class="exonArrows"><A name="exonArrows"></A><IMG class='toggle detail'>

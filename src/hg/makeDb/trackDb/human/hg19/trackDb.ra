@@ -140,6 +140,9 @@ searchPriority 2.07207
 searchType bigBed
 searchDescription COSMIC Regions
 
+# knownGene archive
+include knownGeneArchive.ra
+
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.denisova.ra
@@ -163,7 +166,6 @@ track encodeRegions override
 shortLabel ENCODE Pilot
 longLabel Regions Used for ENCODE Pilot Project (1%)
 group map
-pennantIcon encodeThumbnail.jpg ../ENCODE "encode project"
 
 track switchDbTss override
 origAssembly hg17
@@ -2031,6 +2033,7 @@ baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
 bigGeneDataUrl /gbdb/hg19/knownGene.bb
+release beta,public
 
 #
 # This is a temporary track constructed for the purpose of helping Brooke QA
@@ -2076,6 +2079,7 @@ searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
 searchPriority 3.53
 
+include knownGene.alpha.ra alpha
 include lincRNAs.ra
 
 track sibTxGraph override

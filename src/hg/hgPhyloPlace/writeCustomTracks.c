@@ -315,8 +315,8 @@ for (ref = inList;  ref != NULL;  ref = ref->next)
 return outList;
 }
 
-static void treeToBaseAlleles(struct phyloTree *node, char *refBases, char **sampleBases,
-                              struct hash *sampleToIx, struct slRef *parentMuts)
+static void treeToBaseAlleles(struct phyloTree *node, struct hash *condensedNodes, char *refBases,
+                              char **sampleBases, struct hash *sampleToIx, struct slRef *parentMuts)
 /* Traverse tree, building up an array of reference bases indexed by position, and an array
  * (indexed by pos) of sample allele arrays indexed by sampleToIx. */
 {
@@ -334,30 +334,44 @@ if (node->numEdges > 0)
     {
     int i;
     for (i = 0;  i < node->numEdges;  i++)
-        treeToBaseAlleles(node->edges[i], refBases, sampleBases, sampleToIx, nodeMuts);
+        treeToBaseAlleles(node->edges[i], condensedNodes, refBases, sampleBases, sampleToIx,
+                          nodeMuts);
     }
 else
     {
     // Leaf node: if in sampleToIx, then for each mutation (beware back-mutations),
     // set refBase if it has not already been set and set sample allele.
-    int ix = hashIntValDefault(sampleToIx, node->ident->name, -1);
-    if (ix >= 0)
+    boolean allocdHere = FALSE;
+    struct slName *nameList = hashFindVal(condensedNodes, node->ident->name);
+    if (nameList == NULL)
         {
-        struct slRef *mlRef;
-        for (mlRef = nodeMuts;  mlRef != NULL;  mlRef = mlRef->next)
+        nameList = slNameNew(node->ident->name);
+        allocdHere = TRUE;
+        }
+    struct slName *name;
+    for (name = nameList;  name != NULL;  name = name->next)
+        {
+        int ix = hashIntValDefault(sampleToIx, name->name, -1);
+        if (ix >= 0)
             {
-            struct singleNucChange *snc, *sncs = mlRef->val;
-            for (snc = sncs;  snc != NULL;  snc = snc->next)
+            struct slRef *mlRef;
+            for (mlRef = nodeMuts;  mlRef != NULL;  mlRef = mlRef->next)
                 {
-                // Don't let a back-mutation overwrite the true ref value:
-                if (!refBases[snc->chromStart])
-                    refBases[snc->chromStart] = snc->refBase;
-                if (sampleBases[snc->chromStart] == NULL)
-                    AllocArray(sampleBases[snc->chromStart], sampleToIx->elCount);
-                sampleBases[snc->chromStart][ix] = snc->newBase;
+                struct singleNucChange *snc, *sncs = mlRef->val;
+                for (snc = sncs;  snc != NULL;  snc = snc->next)
+                    {
+                    // Don't let a back-mutation overwrite the true ref value:
+                    if (!refBases[snc->chromStart])
+                        refBases[snc->chromStart] = snc->refBase;
+                    if (sampleBases[snc->chromStart] == NULL)
+                        AllocArray(sampleBases[snc->chromStart], sampleToIx->elCount);
+                    sampleBases[snc->chromStart][ix] = snc->newBase;
+                    }
                 }
             }
         }
+    if (allocdHere)
+        slFreeList(&nameList);
     }
 if (node->priv != NULL)
     slFreeList(&nodeMuts);
@@ -510,7 +524,7 @@ for (chromStart = 0;  chromStart < baseCount;  chromStart++)
 }
 
 static void writeSubtreeVcf(FILE *f, struct hash *sampleToIx,
-                            struct vcfFile *userVcf, struct phyloTree *bigTree)
+                            struct vcfFile *userVcf, struct mutationAnnotatedTree *bigTree)
 /* Write rows of VCF with genotypes for samples in sampleToIx (with order determined by sampleToIx)
  * with some samples found in userVcf and the rest found in bigTree which has been annotated
  * with single-nucleotide variants. */
@@ -519,7 +533,7 @@ char refBases[chromSize];
 memset(refBases, 0, sizeof refBases);
 char *sampleBases[chromSize];
 memset(sampleBases, 0, sizeof sampleBases);
-treeToBaseAlleles(bigTree, refBases, sampleBases, sampleToIx, NULL);
+treeToBaseAlleles(bigTree->tree, bigTree->condensedNodes, refBases, sampleBases, sampleToIx, NULL);
 vcfToBaseAlleles(userVcf, refBases, sampleBases, sampleToIx);
 int sampleCount = sampleToIx->elCount;
 baseAllelesToVcf(refBases, sampleBases, chromSize, sampleCount, f);
@@ -529,7 +543,8 @@ for (i = 0;  i < chromSize;  i++)
 }
 
 static void addSubtreeCustomTracks(FILE *ctF, char *userVcfFile, struct subtreeInfo *subtreeInfoList,
-                                   struct hash *samplePlacements, struct phyloTree *bigTree,
+                                   struct hash *samplePlacements,
+                                   struct mutationAnnotatedTree *bigTree,
                                    char *source, int fontHeight, int *pStartTime)
 /* For each subtree trashfile, write VCF+treeFile custom track text to ctF. */
 {
@@ -555,7 +570,7 @@ reportTiming(pStartTime, "write subtree custom tracks");
 }
 
 struct tempName *writeCustomTracks(struct tempName *vcfTn, struct usherResults *ur,
-                                   struct slName *sampleIds, struct phyloTree *bigTree,
+                                   struct slName *sampleIds, struct mutationAnnotatedTree *bigTree,
                                    char *source, int fontHeight, struct phyloTree **retSampleTree,
                                    int *pStartTime)
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */

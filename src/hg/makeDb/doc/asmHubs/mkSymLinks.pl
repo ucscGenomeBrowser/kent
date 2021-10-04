@@ -93,6 +93,7 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/${accessionId}.chrom.sizes.txt"`;
   `rm -f "${destDir}/${accessionId}.chromAlias.txt"`;
   `rm -f "${destDir}/${accessionId}_assembly_report.txt"`;
+  `rm -f "${destDir}/${accessionId}.repeatMasker.out.gz"`;
   `rm -f "${destDir}/${accessionId}.userTrackDb.txt"`;
   `rm -f "${destDir}/trackDb.txt"`;
   `rm -f "${destDir}/genomes.txt"`;
@@ -125,7 +126,8 @@ foreach my $asmId (@orderList) {
   `ln -s "${buildDir}/${asmId}.agp.gz" "${destDir}/${accessionId}.agp.gz"` if (-s "${buildDir}/${asmId}.agp.gz");
   `ln -s "${buildDir}/${asmId}.chrom.sizes" "${destDir}/${accessionId}.chrom.sizes.txt"` if (-s "${buildDir}/${asmId}.chrom.sizes");
   `ln -s "${buildDir}/${asmId}.chromAlias.txt" "${destDir}/${accessionId}.chromAlias.txt"` if (-s "${buildDir}/${asmId}.chromAlias.txt");
-  `ln -s "${buildDir}/download/${asmId}_assembly_report.txt" "${destDir}/${accessionId}_assembly_report.txt"` if (-s "${buildDir}/${asmId}_assembly_report.txt");
+  `ln -s "${buildDir}/${asmId}.repeatMasker.out.gz" "${destDir}/${accessionId}.repeatMasker.out.gz"` if (-s "${buildDir}/${asmId}.repeatMasker.out.gz");
+  `ln -s "${buildDir}/download/${asmId}_assembly_report.txt" "${destDir}/${accessionId}_assembly_report.txt"` if (-s "${buildDir}/download/${asmId}_assembly_report.txt");
   # trackDb.txt still needed for use by top-level genomes.txt file
   `ln -s "${buildDir}/${asmId}.trackDb.txt" "${destDir}/trackDb.txt"` if (-s "${buildDir}/${asmId}.trackDb.txt");
   # genomes.txt obsolete now with single file
@@ -139,4 +141,8 @@ foreach my $asmId (@orderList) {
    }
   `ln -s "${buildDir}/${asmId}.groups.txt" "${destDir}/groups.txt"` if (-s "${buildDir}/${asmId}.groups.txt");
   `ln -s "${buildDir}/${asmId}.userTrackDb.txt" "${destDir}/${accessionId}.userTrackDb.txt"` if ( -s "${buildDir}/${asmId}.userTrackDb.txt");
+   if (-s "${buildDir}/${asmId}.bigMaf.trackDb.txt") {
+     `rm -f "${destDir}/${asmId}.bigMaf.trackDb.txt"`;
+     `ln -s "${buildDir}/${asmId}.bigMaf.trackDb.txt" "${destDir}/${asmId}.bigMaf.trackDb.txt"`;
+   }
 }

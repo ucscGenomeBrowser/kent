@@ -15,12 +15,12 @@ fromEmail="genome-www@soe.ucsc.edu"
 
 emailTemplate = """Dear UCSC Public Hub author,
 
-this is an automated email sent by the UCSC Genome Browser Group's hubPublicMail system to alert you
-that your public track hub at the address
+This is an automated email sent by the UCSC Genome Browser Group's hubPublicMail system to alert you
+that your public track hub at the address:
 
 %s
 
-has been inaccessible for 24 hours. If it continues to be offline, we may need to remove it
+Has been inaccessible for 24 hours. If it continues to be offline, we may need to remove it
 from our public hubs list at https://genome.ucsc.edu/cgi-bin/hgHubConnect
 
 Do not hesitate to let us know if we can help you resolve this situation, e.g. by updating the URL
@@ -28,18 +28,19 @@ where the hub is hosted or possibly hosting the files on our servers.
 
 You can reach us at genome-www@soe.ucsc.edu.
 
-Your
-UCSC Genome Browser Group
+Thank you for your interest and contributions,
+The UCSC Genome Browser Group
 """
 # ==== functions =====
     
 def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
     parser = optparse.OptionParser("""usage: %prog [options] hgcentralname statusFile - send email if public hub is down
-    Get the list of all public hubs
-    Try to get their URLs and write all to statusFile.
-    If a hub fails, increase count in statusFile.
-    If count is > 24, send an email to hub email and set the failCount to -48.
+    Goes through the following steps:
+    1) Get the list of all public hubs
+    2) Try to get their URLs and write all to statusFile.
+    3) If a hub fails, increase count in statusFile.
+    4) If count is > 24, send an email to hub email and set the failCount to -48.
 
     Example:
        hubPublicMail hgcentraltest /tmp/hubPublicStatus.tab
@@ -102,10 +103,10 @@ def downloadUrls(urls, emails):
         else:
             # FTP
             try:
-                f = urllib.request.urlopen(url)
+                f = urllib.request.urlopen(url, timeout=10)
+                text = f.read().decode("utf8")
             except:
                 reqFailed = True
-            text = f.read().decode("utf8")
 
         if reqFailed:
             logging.info("URL %s failed." % url)
@@ -154,6 +155,9 @@ def readStatus(fname):
         if line.startswith("#"):
             continue
         row = line.rstrip("\n").split("\t")
+        if len(row)!=3:
+            logging.error("Cannot parse line in status file: %s" % repr(line))
+            assert(False)
         hubUrl, email, failCount = row
         hubs[hubUrl] = (email, int(failCount))
     return hubs
@@ -196,12 +200,15 @@ def sendEmails(urlInfo):
 
 def writeStatus(urlInfo, statusFname):
     " write new status file "
-    logging.debug("Writing %s" % statusFname)
-    with open(statusFname, "wt") as ofh:
+    statusTmp = statusFname+".tmp"
+    logging.debug("Writing %s" % statusTmp)
+    with open(statusTmp, "wt") as ofh:
         ofh.write("#url\temail\tfailCount\n")
         for url, (email, failCount) in urlInfo.items():
             ofh.write("\t".join([url, email, str(failCount)]))
             ofh.write("\n")
+    logging.debug("Renaming %s to %s" % (statusTmp, statusFname))
+    os.rename(statusTmp, statusFname)
 
 def createLockFile(statusFname):
     """ when downloading files, weird things can happen. even wget sometimes gets stuck. So make

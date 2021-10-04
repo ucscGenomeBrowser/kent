@@ -38,7 +38,7 @@ struct minMax
 /* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
 /* This number is tacked onto the end of cached trackDb entries to make sure we
  * don't use a cached structure that has different contents. */
-#define TRACKDB_VERSION 3 
+#define TRACKDB_VERSION 4
 
 struct trackDb
 /* This describes an annotation track.  */
@@ -93,7 +93,7 @@ struct trackDb
     struct tdbExtras *tdbExtras;// This struct allows storing extra values which may be used
                                 // multiple times within a single cgi. An example is the metadata
                                 // looked up once in the metaDb and used again and again.
-    boolean isNewFilterType;    // are we using the new filter variables on this track
+    struct hash *isNewFilterHash;    // if a field is specified in the "new" way, the trackDb variable will be in this hash
 /* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
     };
 

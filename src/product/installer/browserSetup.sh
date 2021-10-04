@@ -772,7 +772,7 @@ function installRedhat () {
             yum -y install MySQL-python
     # Centos 8 defaults to python3 and it does not have a package MySQL-python anymore
     # So we install python2, the mysql libraries and fix up my_config.h manually
-    # This is strange, but I was unable to find a different working solution. MariaDB does not have my_config.h
+    # This is strange, but I was unable to find a different working solution. MariaDB simply does not have my_config.h
     else
             yum install -y python2 mysql-devel python2-devel wget gcc
             if [ -f /usr/include/mysql/my_config.h ]; then
@@ -782,9 +782,14 @@ function installRedhat () {
             fi
 
 	    # this is very strange, but was necessary on Fedora https://github.com/DefectDojo/django-DefectDojo/issues/407
-	    sed '/st_mysql_options options;/a unsigned int reconnect;' /usr/include/mysql/mysql.h -i.bkp
+            # somehow the mysql.h does not have the "reconnect" field anymore in Fedora
+            if grep -q "bool reconnect;" /usr/include/mysql/mysql.h ; then
+                echo /usr/include/mysql/mysql.h already has reconnect attribute
+            else
+                sed '/st_mysql_options options;/a    bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
+            fi
 
-	    # fedora > 34 doesn't have any pip2 package anymore
+	    # fedora > 34 doesn't have any pip2 package anymore so install it now
 	    if ! type "pip2" > /dev/null; then
                  wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
 		 python2 get-pip.py

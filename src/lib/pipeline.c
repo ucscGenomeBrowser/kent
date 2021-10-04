@@ -418,7 +418,7 @@ close(STDIN_FILENO);
 close(STDOUT_FILENO);
 closeNonStdDescriptors();
 groupWait(pl);
-exit(0);
+_exit(0);
 }
 
 static int groupLeaderWait(struct pipeline *pl)

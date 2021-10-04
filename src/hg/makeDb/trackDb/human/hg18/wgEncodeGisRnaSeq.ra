@@ -19,7 +19,6 @@ dragAndDrop subtracks
 priority 0
 type bed 3
 noInherit on
-wgEncode 1
 
     track wgEncodeGisRnaSeqView1PlusRawSignal
     shortLabel Plus Raw Signal

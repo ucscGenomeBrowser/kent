@@ -60,7 +60,35 @@ if (sameString(source, "GISAID"))
       "        [ \"GR\", \"#A692C3\" ] ],"
       "    \"title\": \"GISAID Clade\", \"type\": \"categorical\" },"
           , outF);
-fprintf(outF, "  { \"key\": \"userOrOld\", "
+fprintf(outF,
+      "  { \"key\": \"pango_lineage_usher\", "
+      "    \"title\": \"Pango lineage assigned by UShER\", \"type\": \"categorical\" },"
+      "  { \"key\": \"Nextstrain_clade_usher\","
+      "    \"scale\": [ "
+      "        [ \"20H(Beta, V2)\", \"#3F47C9\" ],"
+      "        [ \"20I(Alpha, V1)\", \"#4274CE\" ],"
+      "        [ \"20J(Gamma, V3)\", \"#4F97BB\" ],"
+      "        [ \"21A(Delta)\", \"#64AC99\" ],"
+      "        [ \"21B(Kappa)\", \"#7EB976\" ],"
+      "        [ \"21C(Epsilon)\", \"#9EBE5A\" ],"
+      "        [ \"21D(Eta)\", \"#BEBB48\" ],"
+      "        [ \"21E(Theta)\", \"#D9AE3E\" ],"
+      "        [ \"21F(Iota)\", \"#E69036\" ],"
+      "        [ \"21G(Lambda)\", \"#E35F2D\" ],"
+      "        [ \"20H (Beta, V2)\", \"#3F47C9\" ],"
+      "        [ \"20I (Alpha, V1)\", \"#4274CE\" ],"
+      "        [ \"20J (Gamma, V3)\", \"#4F97BB\" ],"
+      "        [ \"21A (Delta)\", \"#64AC99\" ],"
+      "        [ \"21B (Kappa)\", \"#7EB976\" ],"
+      "        [ \"21C (Epsilon)\", \"#9EBE5A\" ],"
+      "        [ \"21D (Eta)\", \"#BEBB48\" ],"
+      "        [ \"21E (Theta)\", \"#D9AE3E\" ],"
+      "        [ \"21F (Iota)\", \"#E69036\" ],"
+      "        [ \"21G (Lambda)\", \"#E35F2D\" ],"
+      "        [ \"21H\", \"#DB2823\" ],"
+      "        [ \"uploaded sample\", \"#FF0000\" ] ],"
+      "    \"title\": \"Nextstrain Clade assigned by UShER\", \"type\": \"categorical\" },"
+        "  { \"key\": \"userOrOld\", "
         "    \"scale\": [ [ \"uploaded sample\", \"#CC0000\"] , [ \"%s\", \"#000000\"] ],"
         "    \"title\": \"Sample type\", \"type\": \"categorical\" },"
         "  {\"key\": \"gt\", \"title\": \"Genotype\", \"type\": \"categorical\"},"
@@ -118,11 +146,22 @@ static void jsonWriteObjectValue(struct jsonWrite *jw, char *name, char *value)
 jsonWriteObjectValueUrl(jw, name, value, NULL);
 }
 
+static void makeLineageUrl(char *lineage, char *lineageUrl, size_t lineageUrlSize)
+/* If lineage is not "uploaded sample", make an outbreak.info link to it, otherwise just copy
+ * lineage. */
+{
+if (sameString(lineage, "uploaded sample"))
+    safecpy(lineageUrl, lineageUrlSize, lineage);
+else
+    safef(lineageUrl, lineageUrlSize, OUTBREAK_INFO_URLBASE "%s", lineage);
+}
+
 static void jsonWriteLeafNodeAttributes(struct jsonWrite *jw, char *name,
                                         struct sampleMetadata *met, boolean isUserSample,
                                         char *source, struct hash *sampleUrls,
                                         char **retUserOrOld, char **retNClade, char **retGClade,
-                                        char **retLineage)
+                                        char **retLineage,
+                                        char **retNCladeUsher, char **retLineageUsher)
 /* Write elements of node_attrs for a sample which may be preexisting and in our metadata hash,
  * or may be a new sample from the user.  Set rets for color categories so parent branches can
  * determine their color categories. */
@@ -148,11 +187,7 @@ if (isNotEmpty(*retGClade))
 if (isNotEmpty(*retLineage))
     {
     char lineageUrl[1024];
-    if (sameString(*retLineage, "uploaded sample"))
-        safecpy(lineageUrl, sizeof lineageUrl, *retLineage);
-    else
-        safef(lineageUrl, sizeof lineageUrl, OUTBREAK_INFO_URLBASE "%s",
-              *retLineage);
+    makeLineageUrl(*retLineage, lineageUrl, sizeof lineageUrl);
     jsonWriteObjectValueUrl(jw, "pango_lineage", *retLineage, lineageUrl);
     }
 if (met && met->epiId)
@@ -175,6 +210,18 @@ if (met && met->subLab)
     jsonWriteObjectValue(jw, "submitting_lab", met->subLab);
 if (met && met->region)
     jsonWriteObjectValue(jw, "region", met->region);
+*retNCladeUsher = isUserSample ? "uploaded sample" :
+                                 (met && met->nCladeUsher) ? met->nCladeUsher : NULL;
+if (isNotEmpty(*retNCladeUsher))
+    jsonWriteObjectValue(jw, "Nextstrain_clade_usher", *retNCladeUsher);
+*retLineageUsher = isUserSample ? "uploaded sample" :
+                                  (met && met->lineageUsher) ? met->lineageUsher : NULL;
+if (isNotEmpty(*retLineageUsher))
+    {
+    char lineageUrl[1024];
+    makeLineageUrl(*retLineageUsher, lineageUrl, sizeof lineageUrl);
+    jsonWriteObjectValueUrl(jw, "pango_lineage_usher", *retLineageUsher, lineageUrl);
+    }
 char *sampleUrl = (sampleUrls && name) ? hashFindVal(sampleUrls, name) : NULL;
 if (isNotEmpty(sampleUrl))
     {
@@ -193,7 +240,8 @@ if (isNotEmpty(sampleUrl))
 }
 
 static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, char *userOrOld,
-                                          char *nClade, char *gClade, char *lineage)
+                                          char *nClade, char *gClade, char *lineage,
+                                          char *nCladeUsher, char *lineageUsher)
 /* Write elements of node_attrs for a branch. */
 {
 if (userOrOld)
@@ -204,6 +252,10 @@ if (gClade)
     jsonWriteObjectValue(jw, "GISAID_clade", gClade);
 if (lineage)
     jsonWriteObjectValue(jw, "pango_lineage", lineage);
+if (nCladeUsher)
+    jsonWriteObjectValue(jw, "Nextstrain_clade_usher", nCladeUsher);
+if (lineageUsher)
+    jsonWriteObjectValue(jw, "pango_lineage_usher", lineageUsher);
 }
 
 static boolean changesProtein(struct singleNucChange *snc, struct geneInfo *gi,
@@ -308,6 +360,18 @@ if (node->priv != NULL)
             dyStringPrintf(dy, ",%c%d%c", snc->parBase, snc->chromStart+1, snc->newBase);
         jsonWriteString(jw, "nuc mutations", dy->string);
         dyStringClear(dy);
+        for (snc = sncList;  snc != NULL;  snc = snc->next)
+            {
+            char ref[2];
+            seqWindowCopy(gSeqWin, snc->chromStart, 1, ref, sizeof(ref));
+            if (snc->newBase == ref[0])
+                {
+                dyStringAppendSep(dy, ",");
+                dyStringPrintf(dy, "%c%d%c", snc->parBase, snc->chromStart+1, snc->newBase);
+                }
+            }
+        jsonWriteString(jw, "back-mutations", dy->string);
+        dyStringClear(dy);
         struct dyString *dyS = dyStringNew(0);
         struct slPair *geneAaMut;
         for (geneAaMut = geneAaMutations;  geneAaMut != NULL;  geneAaMut = geneAaMut->next)
@@ -411,7 +475,7 @@ return (maxRunLength > (arraySize >> 1)) ? maxRunVal : NULL;
 
 static void rTreeToAuspiceJson(struct phyloTree *node, int depth, struct auspiceJsonInfo *aji,
                                char **retUserOrOld, char **retNClade, char **retGClade,
-                               char **retLineage)
+                               char **retLineage, char **retNCladeUsher, char **retLineageUsher)
 /* Write Augur/Auspice V2 JSON for tree.  Enclosing object start and end are written by caller. */
 {
 if (node->priv)
@@ -436,13 +500,16 @@ if (node->numEdges > 0)
     char *kidNClade[node->numEdges];
     char *kidGClade[node->numEdges];
     char *kidLineage[node->numEdges];
+    char *kidNCladeUsher[node->numEdges];
+    char *kidLineageUsher[node->numEdges];
     // Step through children in reverse order because nextstrain/Auspice draws upside-down. :)
     int i;
     for (i = node->numEdges - 1;  i >= 0;  i--)
         {
         jsonWriteObjectStart(aji->jw, NULL);
         rTreeToAuspiceJson(node->edges[i], depth, aji,
-                           &kidUserOrOld[i], &kidNClade[i], &kidGClade[i], &kidLineage[i]);
+                           &kidUserOrOld[i], &kidNClade[i], &kidGClade[i], &kidLineage[i],
+                           &kidNCladeUsher[i], &kidLineageUsher[i]);
         jsonWriteObjectEnd(aji->jw);
         }
     jsonWriteListEnd(aji->jw);
@@ -454,14 +521,20 @@ if (node->numEdges > 0)
         *retGClade = majorityMaybe(kidGClade, node->numEdges);
     if (retLineage)
         *retLineage = majorityMaybe(kidLineage, node->numEdges);
+    if (retNCladeUsher)
+        *retNCladeUsher = majorityMaybe(kidNCladeUsher, node->numEdges);
+    if (retLineageUsher)
+        *retLineageUsher = majorityMaybe(kidLineageUsher, node->numEdges);
     }
 jsonWriteObjectStart(aji->jw, "node_attrs");
 jsonWriteDouble(aji->jw, "div", depth);
 if (node->numEdges == 0)
     jsonWriteLeafNodeAttributes(aji->jw, name, met, isUserSample, aji->source, aji->sampleUrls,
-                                retUserOrOld, retNClade, retGClade, retLineage);
+                                retUserOrOld, retNClade, retGClade, retLineage,
+                                retNCladeUsher, retLineageUsher);
 else if (retUserOrOld && retGClade && retLineage)
-    jsonWriteBranchNodeAttributes(aji->jw, *retUserOrOld, *retNClade, *retGClade, *retLineage);
+    jsonWriteBranchNodeAttributes(aji->jw, *retUserOrOld, *retNClade, *retGClade, *retLineage,
+                                  *retNCladeUsher, *retLineageUsher);
 jsonWriteObjectEnd(aji->jw);
 }
 
@@ -494,7 +567,7 @@ if (isNotEmpty(bigGenePredFile) && fileExists(bigGenePredFile))
         int ex;
         for (ex = 0;  ex < gp->exonCount;  ex++)
             txLen += (gp->exonEnds[ex] - gp->exonStarts[ex]);
-        char *seq = needMem(txLen);
+        char *seq = needMem(txLen+1);
         int txOffset = 0;
         for (ex = 0;  ex < gp->exonCount;  ex++)
             {
@@ -538,7 +611,7 @@ phyloAddEdge(root, tree);
 tree = root;
 struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
                                sampleMetadata, sampleUrls, nodeNum, source };
-rTreeToAuspiceJson(tree, depth, &aji, NULL, NULL, NULL, NULL);
+rTreeToAuspiceJson(tree, depth, &aji, NULL, NULL, NULL, NULL, NULL, NULL);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string, outF);
 jsonWriteFree(&jw);

@@ -18,7 +18,6 @@ intronGap 12
 html knownGene
 isGencode2 on
 bigGeneDataUrl /gbdb/hg38/knownGene32.bb
-pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 track knownGeneOld11
 shortLabel Old UCSC Genes

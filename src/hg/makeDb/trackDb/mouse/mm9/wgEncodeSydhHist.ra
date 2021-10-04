@@ -50,7 +50,6 @@ fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control treatme
 visibilityViewDefaults  Peaks=dense Signal=full
 noInherit on
 #dataVersion through the ENCODE Jan 2010 Freeze
-wgEncode 1
 
 	#####Peak Tracks###########
 	track wgEncodeSydhHistViewPeaks

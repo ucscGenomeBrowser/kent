@@ -13,9 +13,7 @@ chr11	112088970	112088973	NP_002993.1:p.Asp92Glu	0	+
 chr11	112088970	112088973	NP_002993.1:p.D92E	0	+
 
 # This is not HGVS but seems to be a commonly requested format and is easy to transform into the internal representation of HGVS:
-chr2	29190400	29190403	ALK G1494E	0	-
 chr2	29193604	29193607	ALK G1494E	0	-
-chr2	29190757	29190760	ALK G1494E	0	-
 
 # More gene symbol HGVS-ish
 chr1	8358598	8358601	RERE:Thr758Serfs	0	-

@@ -2,12 +2,18 @@
 <!--#set var="TITLE" value="Genome Browser User's Guide" -->
 <!--#set var="ROOT" value="../.." -->
 
+<!--#include virtual="$ROOT/redmineWidget.html" -->
+
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>Genome Browser User Guide</h1>
 
 <h2>Contents</h2>
+
+<div class="row">
+<div class="col-md-4">
+
 
 <h6><a href="#What">What does the Genome Browser do?</a></h6> 
 <h6><a href="#FineTuning">Configuring the Genome Browser display</a></h6> 
@@ -28,8 +34,11 @@
 <h6><a href="#TrackHubs">Getting started on Track Hubs</a></h6> 
 <h6><a href="#UseOneFile">Track Hubs in a single file</a></h6>
 <h6><a href="#VisiGeneHelp">Using the VisiGene Image Browser</a></h6>
-<hr>
-<form name="googleForm1" method="get" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">
+
+</div>
+<div class="col-md-8">
+
+<form name="googleForm1" method="get" action="https://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">
   <p> 
   Search the Genome Browser help pages: &nbsp; 
   <input type="hidden" name="q" value=""> 
@@ -40,7 +49,7 @@
   </p>
 </form> 
 
-<form name="googleForm2" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+'   site:genome.ucsc.edu/';">
+<form name="googleForm2" method="GET" action="https://www.google.com/search" onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+'   site:genome.ucsc.edu/';">
   <p> 
   Search the entire Genome Browser website: &nbsp; 
   <input type="hidden" name="q" value=""> 
@@ -56,6 +65,9 @@
 the Genome Browser mailing list.</p>  
 <p> 
 <a href="../../contacts.html">Questions and feedback are welcome</a>.</p>
+
+ </div>
+</div>
 
 <!-- =======What does the Genome Browser do?======= --> 
 <a name="What"></a>
@@ -739,6 +751,7 @@ resulting screen shot may not display correctly. If you encounter this problem, 
 Browser font size using the <a href="#TRACK_CONFIG">Configuration utility</a>, then repeat the 
 save/print process.</p>
 
+<!-- =======BLAT======= -->
 <a name="BLATAlign"></a>
 <h2>Using BLAT alignments</h2>
 <p>
@@ -1382,6 +1395,7 @@ alignment files used to produce cross-species annotations. For more information,
 READMEs in these directories and the description of the 
 <a href "../../FAQformat.html#format5">Multiple Alignment Format</a> (MAF).</p>
 
+<!-- =======Custom tracks======= -->
 <a name="CustomTracks"></a>
 <h2>Creating custom annotation tracks</h2>
 <!--#include virtual="customTrackText.html"--> 

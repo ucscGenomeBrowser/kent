@@ -5,7 +5,7 @@ shortLabel Variants of Concern
 longLabel  Mutations in Variants of Concern (VOC) or Interest (VOI) identified from GISAID sequences (Feb 5, 2021)
 compositeTrack on
 subGroup1 mutation Mutations AA=Amino_Acid NUC=Nucleotide
-subGroup2 variant Variants B117=B.1.1.7_(UK) B1351=B.1.351_(South_Africa) P1=P.1_(Brazil) B1429=B.1.429_(California)
+subGroup2 variant Variants B117=Alpha B1351=Beta, P1=Gamma, B1429=Epsilon
 sortOrder mutation=+ variant=+
 bedNameLabel Mutation
 type bigBed 4

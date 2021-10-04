@@ -58,7 +58,6 @@ dragAndDrop subTracks
 visibilityViewDefaults  Peaks=pack Signal=full
 priority 0
 type bed 3
-wgEncode 1
 noInherit on
 html wgEncodeCaltechTfbs.release2
 

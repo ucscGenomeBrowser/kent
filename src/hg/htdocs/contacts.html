@@ -2,6 +2,8 @@
 <!--#set var="TITLE" value="Genome Browser Contacts" -->
 <!--#set var="ROOT" value="." -->
 
+<!--#include virtual="$ROOT/redmineWidget.html" -->
+
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
@@ -67,7 +69,7 @@ send, as this can cause your personal settings to change unexpectedly.
 Read more about making <a href = "FAQ/FAQlink.html#link1">links</a> in our documentation.</p>
 <p>
 <form name="googleForm1"
-  method="GET" action="http://www.google.com/search"
+  method="GET" action="https://www.google.com/search"
   onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/';">
   <p>Search the Genome Browser website: &nbsp;
   <input type="hidden" name="q" value="">
@@ -77,7 +79,7 @@ Read more about making <a href = "FAQ/FAQlink.html#link1">links</a> in our docum
   <input type="submit" value="Submit"></p>
 </form>
 <form name="googleForm4"
-  method="GET" action="http://www.google.com/search" 
+  method="GET" action="https://www.google.com/search" 
   onSubmit="document.googleForm4.q.value=document.googleForm4.qq.value+'   site:genomewiki.ucsc.edu/index.php';">
   <p>Search the Genome Browser Wiki Site: &nbsp;
   <input type="hidden" name="q" value="">

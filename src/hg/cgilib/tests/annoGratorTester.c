@@ -152,7 +152,7 @@ void pgSnpKgDbToTabOutShort(struct annoAssembly *assembly)
 char *sqlDb = assembly->name;
 struct streamerInfo pgSnpInfo = { NULL, assembly, sqlDb, "pgNA12878", arWords, pgSnpAsObj() };
 struct streamerInfo kgInfo = { NULL, assembly, sqlDb, "knownGene", arWords,
-                               asParseFile("../knownGene.as") };
+                               asParseFile("../../lib/knownGene.as") };
 pgSnpInfo.next = &kgInfo;
 dbToTabOut(&pgSnpInfo, "stdout", "chr1", 705881, 752721, FALSE);
 }
@@ -170,7 +170,7 @@ void snpConsDbToTabOutShort(struct annoAssembly *assembly)
 {
 char *sqlDb = assembly->name;
 struct streamerInfo snp135Info = { NULL, assembly, sqlDb, "snp135", arWords,
-                                   asParseFile("../snp132Ext.as") };
+                                   asParseFile("../../lib/snp132Ext.as") };
 struct streamerInfo phyloPInfo = { NULL, assembly, sqlDb, "phyloP46wayPlacental", arWigSingle,
                                    NULL };
 snp135Info.next = &phyloPInfo;
@@ -182,7 +182,7 @@ void snpConsDbToTabOutLong(struct annoAssembly *assembly)
 {
 char *sqlDb = assembly->name;
 struct streamerInfo snp135Info = { NULL, assembly, sqlDb, "snp135", arWords,
-                                   asParseFile("../snp132Ext.as") };
+                                   asParseFile("../../lib/snp132Ext.as") };
 struct streamerInfo phyloPInfo = { NULL, assembly, sqlDb, "phyloP46wayPlacental", arWigSingle,
                                    NULL };
 snp135Info.next = &phyloPInfo;
@@ -215,7 +215,7 @@ struct streamerInfo pg2SnpInfo = { NULL, assembly, NULL,
                                    "input/annoGrator/pgForTestingGpFx.pgSnp.tab",
                                    arWords, pgSnpAsObj() };
 struct streamerInfo kgInfo = { NULL, assembly, sqlDb, "knownGene", arWords,
-                               asParseFile("../knownGene.as") };
+                               asParseFile("../../lib/knownGene.as") };
 pg2SnpInfo.next = &kgInfo;
 dbToTabOut(&pg2SnpInfo, "stdout", NULL, 0, 0, TRUE);
 
@@ -240,7 +240,7 @@ void snpBigWigToTabOut(struct annoAssembly *assembly)
 {
 char *sqlDb = assembly->name;
 struct streamerInfo snp135Info = { NULL, assembly, sqlDb, "snp135", arWords,
-                                   asParseFile("../snp132Ext.as") };
+                                   asParseFile("../../lib/snp132Ext.as") };
 struct streamerInfo bigWigInfo = { NULL, assembly, NULL,
                                "http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw",
                                    arWigSingle, NULL };
@@ -254,11 +254,11 @@ void vepOut(struct annoAssembly *assembly)
 char *sqlDb = assembly->name;
 struct streamerInfo vepSamplePgSnp = { NULL, assembly, NULL,
                                        "input/annoGrator/vepSample.pgSnp.tab",
-                                       arWords, asParseFile("../pgSnp.as") };
+                                       arWords, asParseFile("../../lib/pgSnp.as") };
 struct streamerInfo ensGInfo = { NULL, assembly, sqlDb, "ensGene", arWords,
-                               asParseFile("../genePredExt.as") };
+                               asParseFile("../../lib/genePredExt.as") };
 struct streamerInfo snpInfo = { NULL, assembly, sqlDb, "snp135", arWords,
-                                asParseFile("../snp132Ext.as") };
+                                asParseFile("../../lib/snp132Ext.as") };
 vepSamplePgSnp.next = &ensGInfo;
 ensGInfo.next = &snpInfo;
 // Instead of dbToTabOut, we need to make a VEP config data structure and
@@ -288,7 +288,7 @@ struct streamerInfo indelTrimVcf = { NULL, assembly, NULL,
                                      "input/annoGrator/indelTrim.vcf",
                                      arWords, vcfAsObj() };
 struct streamerInfo gencodeInfo = { NULL, assembly, sqlDb, "wgEncodeGencodeBasicV19", arWords,
-                                    asParseFile("../genePredExt.as") };
+                                    asParseFile("../../lib/genePredExt.as") };
 indelTrimVcf.next = &gencodeInfo;
 // Instead of dbToTabOut, we need to make a VEP config data structure and
 // use it to create an annoFormatVep.
@@ -312,11 +312,11 @@ void gpFx(struct annoAssembly *assembly)
 char *sqlDb = assembly->name;
 struct streamerInfo variants = { NULL, assembly, NULL,
                                  "input/annoGrator/moreVariants.pgSnp.tab",
-                                 arWords, asParseFile("../pgSnp.as") };
+                                 arWords, asParseFile("../../lib/pgSnp.as") };
 struct streamerInfo kgInfo = { NULL, assembly, sqlDb, "knownGene", arWords,
-                               asParseFile("../knownGene.as") };
+                               asParseFile("../../lib/knownGene.as") };
 struct streamerInfo snpInfo = { NULL, assembly, sqlDb, "snp137", arWords,
-                                asParseFile("../snp132Ext.as") };
+                                asParseFile("../../lib/snp132Ext.as") };
 struct asObject *dbNsfpSeqChangeAs =
     bigBedAsFromFileName("/gbdb/hg19/dbNsfp/dbNsfpSeqChange.bb");
 struct streamerInfo dbNsfpSeqChange =
@@ -372,7 +372,7 @@ void insertions(struct annoAssembly *assembly)
 // Test corner cases of intersection of zero-length insertions with regular items (length > 0)
 // and with different search regions to make sure that insertions at edges are included.
 {
-struct asObject *bed4AS = asParseFile("../bed.as");
+struct asObject *bed4AS = asParseFile("../../lib/bed.as");
 struct streamerInfo primary = { NULL, assembly, NULL,
                                 "input/annoGrator/insertionsPrimary.bed",
                                 arWords, bed4AS };

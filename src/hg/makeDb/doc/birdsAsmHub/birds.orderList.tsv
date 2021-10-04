@@ -5,7 +5,7 @@ GCF_003957555.1_bCalAnn1_v1.p	Anna's hummingbird
 GCF_000737465.1_Haliaeetus_leucocephalus-4.0	bald eagle
 GCF_000703405.1_ASM70340v1	bar-tailed trogon
 GCF_902150015.1_genome_assembly_l500	barn owl (2020)
-GCF_000687205.1_ASM68720v1	barn owl BGI_N341 (2014)
+GCF_018691265.1_T.alba_DEE_v4.0	barn owl (U. Lausanne 2021)
 GCF_015227805.1_bHirRus1.pri.v2	barn swallow
 GCF_005870125.1_lonStrDom2	Bengalese finch
 GCF_013377495.1_Cygnus_atratus_primary_v1.0	black swan
@@ -37,6 +37,7 @@ GCF_001715985.3_ASM171598v3	golden-collared manakin
 GCF_900496995.4_bAquChr1.4	golden eagle
 GCF_000708925.1_ASM70892v1	great cormorant
 GCF_001522545.3_Parus_major1.1	Great Tit
+GCF_019232065.1_USGS_Curo_1.0	greater sage-grouse
 GCF_002078875.1_NumMel1.0	helmeted guineafowl
 GCF_000692075.1_ASM69207v1	hoatzin
 GCF_000738735.5_ASM73873v5	hooded crow (2021)
@@ -70,6 +71,7 @@ GCF_000337975.1_F_cherrug_v1.0	Saker falcon
 GCF_901933205.1_STF_HiC	small tree finch
 GCF_000690715.1_ASM69071v1	speckled mousebird
 GCF_000690775.1_ASM69077v1	sunbittern
+GCF_009819885.2_bCatUst1.pri.v2	Swainson's thrush
 GCF_000971095.1_AnsCyg_PRJNA183603_v1.0	swan goose
 GCF_000331425.1_PseHum1.0	Tibetan ground-tit
 GCF_000146605.3_Turkey_5.1	turkey
@@ -77,6 +79,7 @@ GCF_015832195.1_Motacilla_alba_V1.0_pri	white wagtail
 GCF_003945725.1_ASM394572v1	white-ruffed manakin
 GCF_017590055.1_ASM1759005v1	white-rumped snowfinch
 GCF_000691405.1_ASM69140v1	white-tailed eagle
+GCF_019238085.1_USGS_WTPT01	white-tailed ptarmigan
 GCF_000687285.1_ASM68728v1	white-tailed tropicbird
 GCF_000385455.1_Zonotrichia_albicollis-1.0.1	white-throated sparrow
 GCF_000705375.1_ASM70537v2	white-throated tinamou

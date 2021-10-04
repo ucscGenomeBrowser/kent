@@ -54,7 +54,6 @@ dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatment
 #visibilityViewDefaults  Signal=full
 noInherit on
-wgEncode 1
 html wgEncodeSydhTfbs.release4
 
     #####Peak Tracks###########

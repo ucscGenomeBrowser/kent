@@ -9,6 +9,8 @@ group singleCell
     parent bloodHao
     html bloodHao    
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility pack
     shortLabel Blood PBMC Cells
     longLabel Blood (PBMCs) binned by cell type (level 1) from Hao et al 2020
@@ -17,7 +19,8 @@ group singleCell
     defaultLabelFields name
     bigDataUrl /gbdb/$D/bbi/bloodHao/cell_type.bb
     barChartStatsUrl /gbdb/$D/bbi/bloodHao/cell_type.stats
-    barChartBars B CD4_T CD8_T DC Mono NK other other_T
+    #barChartBars B CD4_T CD8_T DC Mono NK other other_T
+    barChartBars B_cell T_cell_CD4+ T_cell_CD8+ dendritic_cell_(DC) monocyte natural_killer_cell_(NK) other T_cell_other
     barChartColors #fe3247 #fe3248 #fe3248 #e92812 #e02900 #fb2e3e #f01111 #fe3247
     transformFunc NONE
     barChartLimit 2
@@ -26,6 +29,8 @@ group singleCell
     parent bloodHao
     html bloodHao
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Blood PBMC Cells 2
     longLabel Blood PBMCs binned by cell type (level 2) from Hao et al 2020
@@ -44,6 +49,8 @@ group singleCell
     parent bloodHao
     html bloodHao
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Blood PBMC Cells 3
     longLabel Blood PBMCs binned by cell type (level 3) from Hao et al 2020
@@ -65,6 +72,8 @@ group singleCell
     parent bloodHao
     html bloodHao
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Blood PBMC Donor
     longLabel Blood PBMCs binned by blood donor from Hao et al 2020
@@ -85,6 +94,8 @@ group singleCell
     parent bloodHao
     html bloodHao
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Blood PBMC Time
     longLabel Blood PBMCs binned by time into experiment from Hao et al 2020
@@ -104,6 +115,8 @@ group singleCell
     parent bloodHao
     html bloodHao
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Blood PBMC Phase
     longLabel Blood PBMCs binned by phase of cell cycle from Hao et al 2020

@@ -34,6 +34,20 @@ ncbiMetadata=ncbi.authors.20-11-13.csv
 cogUkMetadata=filereport_read_run_PRJEB37886_tsv.2020-11-13.txt
 
 
+# Actually BioSample has this for COG-UK:
+# xzcat $ncbiDir/all.bioSample.tab.xz \
+# | grep COG-UK \
+# | sed -re 's@COG-UK/@@; s/(\t202[01])[0-9-]+/\1/;' \
+# | tawk '{print $8 "/" $3 "/" $4, $5;}' \
+# | sort > cogToLab
+# -- although some entries break it down like this:
+# Wales/QEUH-B2C4CB/2020  Originating lab: Wales Specialist Virology Centre Sequencing lab: Pathogen Genomics Unit
+# -- well, I guess just that one:
+# g : cogToLab | cut -f 2 | sort | uniq -c | sort -nr | less
+#  38415 Originating lab: Wales Specialist Virology Centre Sequencing lab: Pathogen Genomics Unit
+
+
+
 # Author credits file... strip GenBank version numbers because NCBI metadata doesn't have those
 cut -f 2 treeToPublic \
 | cut -d \| -f 2 \

@@ -299,7 +299,6 @@ priority 0
 #scoreFilterByRange on
 #noScoreFilter on
 compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
-wgEncode 1
 filterBy score:Annotation=800|A)_UCSC_genes,600|B)_GenBank_mRNA_annotations,400|C)_spliced_ESTs
 
 # NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
@@ -320,7 +319,6 @@ noInherit on
 priority 0
 chromosomes chr7
 type bed 3
-wgEncode 1
 
     track wgEncodeNhgriNreViewSI
     shortLabel Silencers
@@ -374,7 +372,6 @@ track wgEncodeReg
 superTrack on show
 shortLabel ENCODE Regulation
 longLabel ENCODE Integrated Regulation
-wgEncode 1
 group regulation
 priority 1
 canPack On
@@ -851,7 +848,6 @@ canPack On
 #itemImagePath /goldenPath/hg18/encode/images/UwSoutherns/jpg jpg
 #itemBigImagePath /goldenPath/hg18/encode/images/UwSoutherns/gel gel
 #type bed 4 .
-#wgEncode 1
 
 # 5C super track  (wrangler: braney)
       track encodeUw5cSuper
@@ -989,7 +985,6 @@ useScore 1
 noInherit on
 priority 0
 type bed 3
-wgEncode 1
 
     track wgEncodeSunyalbanyRnaGeneChipViewRbpAssocRna
     shortLabel RBP Assoc RNA
@@ -1077,7 +1072,6 @@ hgGene on
 hgsid on
 baseColorUseCds given
 baseColorDefault genomicCodons
-wgEncode 1
 cdsDrawDefault genomic\ codons
 itemClassTbl wgEncodeGencodeClassesV3
 geneClasses Validated_coding Validated_processed Validated_processed_pseudogene Validated_unprocessed_pseudogene Validated_pseudogene Havana_coding Havana_nonsense Havana_non_coding Havana_processed_pseudogene Havana_unprocessed_pseudogene Havana_pseudogene Havana_TEC Havana_polyA Ensembl_coding Ensembl_non_coding Ensembl_processed_pseudogene Ensembl_unprocessed_pseudogene Ensembl_pseudogene Ensembl_RNA
@@ -1211,7 +1205,6 @@ controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 priority 0
 type bed 3
-wgEncode 1
 
     track wgEncodeUmasshaTfbsValidViewTestedSites
     release alpha

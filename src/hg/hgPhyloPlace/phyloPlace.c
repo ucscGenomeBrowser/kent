@@ -36,7 +36,6 @@ int chromSize = 29903;
 
 // Parameter constants:
 int maxGenotypes = 1000;        // Upper limit on number of samples user can upload at once.
-boolean showBestNodePaths = FALSE;
 boolean showParsimonyScore = FALSE;
 
 
@@ -83,7 +82,7 @@ char *usherPath = PHYLOPLACE_DATA_DIR "/usher";
 if (fileExists(usherPath))
     return usherPath;
 else if (abortIfNotFound)
-    errAbort("Missing required file %s", usherPath);
+    errAbort("Missing usher executable (expected to be at %s)", usherPath);
 return NULL;
 }
 
@@ -94,7 +93,7 @@ char *matUtilsPath = PHYLOPLACE_DATA_DIR "/matUtils";
 if (fileExists(matUtilsPath))
     return matUtilsPath;
 else if (abortIfNotFound)
-    errAbort("Missing required file %s", matUtilsPath);
+    errAbort("Missing matUtils executable (expected to be at %s)", matUtilsPath);
 return NULL;
 }
 
@@ -106,7 +105,8 @@ char *usherAssignmentsPath = phyloPlaceDbSettingPath(db, "usherAssignmentsFile")
 if (isNotEmpty(usherAssignmentsPath) && fileExists(usherAssignmentsPath))
     return usherAssignmentsPath;
 else if (abortIfNotFound)
-    errAbort("Missing required file %s", usherAssignmentsPath);
+    errAbort("Missing usher protobuf file (config setting in "
+             PHYLOPLACE_DATA_DIR "/%s/config.ra = %s", db, usherAssignmentsPath);
 return NULL;
 }
 
@@ -462,6 +462,35 @@ for (si = seqInfoList;  si != NULL;  si = si->next)
 return tn;
 }
 
+static void addSampleMutsFromSeqInfo(struct hash *samplePlacements, struct hash *seqInfoHash)
+/* We used to get placementInfo->sampleMuts from DEBUG mode usher output in runUsher.c, but
+ * the DEBUG mode output went away with the change to server-mode usher.  Instead, now we fill
+ * it in from seqInfo->sncList which has the same info. */
+{
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(samplePlacements);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct placementInfo *pi = hel->val;
+    struct seqInfo *si = hashFindVal(seqInfoHash, pi->sampleId);
+    if (si)
+        {
+        struct slName *sampleMuts = NULL;
+        struct singleNucChange *snc;
+        for (snc = si->sncList;  snc != NULL;  snc = snc->next)
+            {
+            char mutStr[64];
+            safef(mutStr, sizeof mutStr, "%c%d%c", snc->refBase, snc->chromStart+1, snc->newBase);
+            slNameAddHead(&sampleMuts, mutStr);
+            }
+        slReverse(&sampleMuts);
+        pi->sampleMuts = sampleMuts;
+        }
+    else
+        errAbort("addSampleMutsFromSeqInfo: no seqInfo for placed sequence '%s'", pi->sampleId);
+    }
+}
+
 static void displaySampleMuts(struct placementInfo *info)
 {
 printf("<p>Differences from the reference genome "
@@ -482,6 +511,15 @@ else
 puts("</p>");
 }
 
+boolean isInternalNodeName(char *nodeName, int minNewNode)
+/* Return TRUE if nodeName looks like an internal node ID from the protobuf tree, i.e. is numeric
+ * or <USHER_NODE_PREFIX>_<number> and, if minNewNode > 0, number is less than minNewNode. */
+{
+if (startsWith(USHER_NODE_PREFIX, nodeName))
+    nodeName += strlen(USHER_NODE_PREFIX);
+return isAllDigits(nodeName) && (minNewNode <= 0 || (atoi(nodeName) < minNewNode));
+}
+
 static void variantPathPrint(struct variantPathNode *variantPath)
 /* Print out a variantPath; print nodeName only if non-numeric
  * (i.e. a sample ID not internal node) */
@@ -491,7 +529,7 @@ for (vpn = variantPath;  vpn != NULL;  vpn = vpn->next)
     {
     if (vpn != variantPath)
         printf(" > ");
-    if (!isAllDigits(vpn->nodeName))
+    if (!isInternalNodeName(vpn->nodeName, 0))
         printf("%s: ", vpn->nodeName);
     struct singleNucChange *snc;
     for (snc = vpn->sncList;  snc != NULL;  snc = snc->next)
@@ -516,13 +554,6 @@ if (variantPath)
 else
     puts("(None; your sample was placed at the root of the phylogenetic tree)");
 puts("</p>");
-}
-
-static boolean isInternalNodeName(char *nodeName, int minNewNode)
-/* Return TRUE if nodeName looks like an internal node ID from the protobuf tree, i.e. is numeric
- * and less than minNewNode. */
-{
-return isAllDigits(nodeName) && (atoi(nodeName) < minNewNode);
 }
 
 static struct variantPathNode *findLastInternalNode(struct variantPathNode *variantPath,
@@ -601,7 +632,13 @@ struct variantPathNode *lastOldNode = findLastInternalNode(variantPath, minNewNo
 struct phyloTree *node = lastOldNode ? hashFindVal(bigTree->nodeHash, lastOldNode->nodeName) :
                                        bigTree->tree;
 if (lastOldNode && !node)
-    errAbort("Can't find last internal node for sample %s", sampleId);
+    {
+    if (startsWith(USHER_NODE_PREFIX, lastOldNode->nodeName))
+        // protobuf still has number even if usher prepends USHER_NODE_PREFIX when parsing.
+        node = hashFindVal(bigTree->nodeHash, lastOldNode->nodeName+strlen(USHER_NODE_PREFIX));
+    if (node == NULL)
+        errAbort("Can't find last internal node %s for sample %s", lastOldNode->nodeName, sampleId);
+    }
 // Look for a leaf kid with no mutations relative to the parent, should be closest.
 if (node->numEdges == 0)
     {
@@ -681,6 +718,8 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
     int origLabIx = stringArrayIx("originating_lab", headerWords, headerWordCount);
     int subLabIx = stringArrayIx("submitting_lab", headerWords, headerWordCount);
     int regionIx = stringArrayIx("region", headerWords, headerWordCount);
+    int nCladeUsherIx = stringArrayIx("Nextstrain_clade_usher", headerWords, headerWordCount);
+    int lineageUsherIx = stringArrayIx("pango_lineage_usher", headerWords, headerWordCount);
     while (lineFileNext(lf, &line, NULL))
         {
         char *words[headerWordCount];
@@ -720,6 +759,10 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
             met->subLab = cloneString(words[subLabIx]);
         if (regionIx >= 0)
             met->region = cloneString(words[regionIx]);
+        if (nCladeUsherIx >= 0)
+            met->nCladeUsher = cloneString(words[nCladeUsherIx]);
+        if (lineageUsherIx >= 0)
+            met->lineageUsher = cloneString(words[lineageUsherIx]);
         // If epiId and/or genbank ID is included, we'll probably be using that to look up items.
         if (epiIdIx >= 0 && !isEmpty(words[epiIdIx]))
             hashAdd(sampleMetadata, words[epiIdIx], met);
@@ -866,41 +909,6 @@ if (isNotEmpty(info->nearestNeighbor))
     }
 }
 
-static void displayBestNodes(struct placementInfo *info, struct hash *sampleMetadata)
-/* Show the node(s) most closely related to sample. */
-{
-if (info->bestNodeCount == 1)
-    printf("<p>The placement in the tree is unambiguous; "
-           "there are no other parsimony-optimal placements in the phylogenetic tree.</p>\n");
-else if (info->bestNodeCount > 1)
-    printf("<p>This placement is not the only parsimony-optimal placement in the tree; "
-           "%d other placements exist.</p>\n", info->bestNodeCount - 1);
-if (showBestNodePaths && info->bestNodes)
-    {
-    if (info->bestNodeCount != slCount(info->bestNodes))
-        errAbort("Inconsistent bestNodeCount (%d) and number of bestNodes (%d)",
-                 info->bestNodeCount, slCount(info->bestNodes));
-    if (info->bestNodeCount > 1)
-        printf("<ul><li><b>used for placement</b>: ");
-    if (differentString(info->bestNodes->name, "?") && !isAllDigits(info->bestNodes->name))
-        printf("%s ", info->bestNodes->name);
-    printVariantPathNoNodeNames(stdout, info->bestNodes->variantPath);
-    struct bestNodeInfo *bn;
-    for (bn = info->bestNodes->next;  bn != NULL;  bn = bn->next)
-        {
-        printf("\n<li>");
-        if (differentString(bn->name, "?") && !isAllDigits(bn->name))
-            printf("%s ", bn->name);
-        printVariantPathNoNodeNames(stdout, bn->variantPath);
-        char *lineage = lineageForSample(sampleMetadata, bn->name);
-        printLineageUrl(lineage);
-        }
-    if (info->bestNodeCount > 1)
-        puts("</ul>");
-    puts("</p>");
-    }
-}
-
 static int placementInfoRefCmpSampleMuts(const void *va, const void *vb)
 /* Compare slRef->placementInfo->sampleMuts lists.  Shorter lists first.  Using alpha sort
  * to distinguish between different sampleMuts contents arbitrarily; the purpose is to
@@ -963,7 +971,7 @@ static void asciiTree(struct phyloTree *node, char *indent, boolean isLast,
 {
 if (isNotEmpty(indent) || isNotEmpty(node->ident->name))
     {
-    if (node->ident->name && !isAllDigits(node->ident->name))
+    if (node->ident->name && !isInternalNodeName(node->ident->name, 0))
         {
         dyStringPrintf(dyLine, "%s %s", indent, node->ident->name);
         slPairAdd(pRowList, node->ident->name, cloneString(dyLine->string));
@@ -1082,9 +1090,7 @@ while ((clumpSize = countIdentical(refsToGo)) > 0)
         puts("</p>");
         }
     displayVariantPath(info->variantPath, clumpSize == 1 ? info->sampleId : "samples");
-    displayBestNodes(info, sampleMetadata);
-    if (!showBestNodePaths)
-        displayNearestNeighbors(info, source);
+    displayNearestNeighbors(info, source);
     if (showParsimonyScore && info->parsimonyScore > 0)
         printf("<p>Parsimony score added by your sample: %d</p>\n", info->parsimonyScore);
         //#*** TODO: explain parsimony score
@@ -2140,6 +2146,8 @@ if (info)
         }
     fprintf(f, "\t%s", isNotEmpty(info->nearestNeighbor) ? info->nearestNeighbor : "n/a");
     fprintf(f, "\t%s", isNotEmpty(info->neighborLineage) ? info->neighborLineage : "n/a");
+    fprintf(f, "\t%s", isNotEmpty(info->nextClade) ? info->nextClade : "n/a");
+    fprintf(f, "\t%s", isNotEmpty(info->pangoLineage) ? info->pangoLineage : "n/a");
     fputc('\n', f);
     }
 }
@@ -2175,7 +2183,7 @@ return hash;
 }
 
 static struct tempName *writeTsvSummary(struct usherResults *results, struct phyloTree *sampleTree,
-                                        struct slName *sampleIds, struct seqInfo *seqInfoList,
+                                        struct slName *sampleIds, struct hash *seqInfoHash,
                                         struct geneInfo *geneInfoList, struct seqWindow *gSeqWin,
                                         struct hash *spikeChanges, int *pStartTime)
 /* Write a tab-separated summary file for download.  If the user uploaded enough samples to make
@@ -2189,9 +2197,8 @@ FILE *f = mustOpen(tsvTn->forCgi, "w");
 fprintf(f, "name\tnuc_mutations\taa_mutations\timputed_bases\tmutation_path"
         "\tplacement_count\tparsimony_score_increase\tlength\taligned_bases"
         "\tins_bases\tins_ranges\tdel_bases\tdel_ranges\tmasked_mutations"
-        "\tnearest_neighbor\tneighbor_lineage"
+        "\tnearest_neighbor\tneighbor_lineage\tnextstrain_clade\tpango_lineage"
         "\n");
-struct hash *seqInfoHash = hashFromSeqInfoList(seqInfoList);
 if (sampleTree)
     {
     rWriteTsvSummaryTreeOrder(sampleTree, f, results, seqInfoHash, geneInfoList, gSeqWin,
@@ -2204,7 +2211,6 @@ else
         writeOneTsvRow(f, sample->name, results, seqInfoHash, geneInfoList, gSeqWin, spikeChanges);
     }
 carefulClose(&f);
-hashFree(&seqInfoHash);
 reportTiming(pStartTime, "write tsv summary");
 return tsvTn;
 }
@@ -2387,7 +2393,7 @@ if (regexMatchSubstr(name, "^[A-Za-z _]+/(.*)/[0-9]{4}$", substrs, ArraySize(sub
     {
     char isolate[substrs[1].rm_eo - substrs[1].rm_so + 1];
     regexSubstringCopy(name, substrs[1], isolate, sizeof isolate);
-    if (! isAllDigits(isolate) &&
+    if (! isInternalNodeName(isolate, 0) &&
         (regexMatch(isolate, "[A-Za-z0-9]{4}") ||
          regexMatch(isolate, "[A-Za-z0-9][A-Za-z0-9]+[-_][A-Za-z0-9][A-Za-z0-9]+")))
         {
@@ -2677,6 +2683,7 @@ else
     sampleIds = readSampleIds(lf, bigTree, aliasFile);
     }
 lineFileClose(&lf);
+struct hash *seqInfoHash = hashFromSeqInfoList(seqInfoList);
 if (sampleIds == NULL)
     {
     return ctFile;
@@ -2688,6 +2695,7 @@ if (vcfTn)
     results = runUsher(usherPath, protobufPath, vcfTn->forCgi,
                        subtreeSize, sampleIds, bigTree->condensedNodes,
                        &startTime);
+    addSampleMutsFromSeqInfo(results->samplePlacements, seqInfoHash);
     }
 else if (subtreesOnly)
     {
@@ -2759,12 +2767,12 @@ if (results && results->singleSubtreeInfo)
 
         // Make custom tracks for uploaded samples and subtree(s).
         struct phyloTree *sampleTree = NULL;
-        ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree->tree,
+        ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree,
                                  source, fontHeight, &sampleTree, &startTime);
 
         // Make a sample summary TSV file and accumulate S gene changes
         struct hash *spikeChanges = hashNew(0);
-        tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoList,
+        tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoHash,
                                                  geneInfoList, gSeqWin, spikeChanges, &startTime);
         sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
         downloadsRow(results->bigTreePlusTn->forHtml, tsvTn->forHtml, sTsvTn->forHtml,

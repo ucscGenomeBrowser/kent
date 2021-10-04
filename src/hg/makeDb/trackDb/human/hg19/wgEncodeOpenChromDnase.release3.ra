@@ -19,7 +19,6 @@ noInherit on
 configurable on
 useScore 0
 type bed 3
-wgEncode 1
 html wgEncodeOpenChromDnase.release3
 dataVersion ENCODE July 2012 Freeze
 

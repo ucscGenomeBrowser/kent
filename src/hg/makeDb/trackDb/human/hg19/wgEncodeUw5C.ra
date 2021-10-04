@@ -9,5 +9,4 @@ shortLabel UW 5C
 longLabel Chromatin Interactions by 5C from ENCODE/University of Washington
 group regulation
 fileSortOrder cell=Cell_Line view=View replicate=Replicate region=Region dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-wgEncode 1
 

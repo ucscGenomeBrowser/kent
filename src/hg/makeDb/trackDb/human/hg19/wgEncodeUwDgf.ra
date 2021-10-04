@@ -40,7 +40,6 @@ controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 priority 5
 type bed 3
-wgEncode 1
 
     track wgEncodeUwDgfViewHotspots
     shortLabel Hotspots

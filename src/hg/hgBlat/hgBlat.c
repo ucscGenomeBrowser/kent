@@ -562,11 +562,11 @@ while ((psl = pslNext(lf)) != NULL)
 	slAddHead(&pslList, psl);
     }
 lineFileClose(&lf);
-if (pslList == NULL)
+if (pslList == NULL && !jsonOut)
     {
     printf("<table><tr><td><hr>Sorry, no matches found");
     if (!allResults)
-	printf(" (with score at least %d)", minMatchShown);
+	printf(" (with a score of at least %d)", minMatchShown);
     printf("<hr><td></tr></table>\n");
     return;
     }
@@ -602,10 +602,12 @@ else if (pslOut)
     printf("<TT><PRE>");
     printf("</PRE></TT>");
     }
-else if (jsonOut)  {
-        pslWriteAllJson(pslList, stdout, database, TRUE);
-        exit(0);
-}
+else if (jsonOut)  
+    {
+    webStartText();
+    pslWriteAllJson(pslList, stdout, database, TRUE);
+    exit(0);
+    }
 else  // hyperlink
     {
     printf("<H2>BLAT Search Results</H2>");
@@ -1924,7 +1926,10 @@ printf("%s",
 "\n"
 "<P>For more information on the graphical version of BLAT, click the Help \n"
 "button on the top menu bar");
-printf(" or see the Genome Browser <A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
+printf(" or see the Genome Browser <A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n"
+"<P>Kent WJ. <a href=\"https://genome.cshlp.org/content/12/4/656.abstract\" \n"
+"target=_blank>BLAT - the BLAST-like alignment tool</a>. \n" 
+"Genome Res. 2002 Apr;12(4):656-64. PMID: 11932250</p>");
 
 }
 

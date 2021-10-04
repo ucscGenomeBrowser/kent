@@ -3,7 +3,7 @@ include ../../inc/common.mk
 
 L += $(MYSQLLIBS) -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkOwnLib.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgapcgi.a ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkOwnLib.a ${MYLIBDIR}/jkweb.a
 
 COMMONO = phyloPlace.o parsimonyProto.o runUsher.o treeToAuspiceJson.o vcfFromFasta.o \
 	  writeCustomTracks.o

@@ -9,6 +9,8 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
+    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility pack
     shortLabel Pancreas Cells
     longLabel Pancreas cells binned by cell type from Baron et al 2016
@@ -18,7 +20,8 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/pancreasBaron/cell_type.bb
     barChartStatsUrl /gbdb/hg38/bbi/pancreasBaron/cell_type.stats
-    barChartBars acinar activated_stellate alpha beta delta ductal endothelial epsilon gamma other quiescent_stellate
+    #barChartBars acinar activated_stellate alpha beta delta ductal endothelial epsilon gamma other quiescent_stellate
+    barChartBars acinar_cell stellate_(activated)_cell islet_alpha_cell islet_beta_cell islet_delta_cell ductal_cell endothelial_cell islet_epsilon_cell islet_gamma_cell other stellate_(quiescent)_cell
     barChartColors #0d55e6 #c68c6e #2a58bc #1754d9 #2457c4 #0298be #57d457 #c2cfe7 #7290d0 #f9b9b9 #c58c6e
     transformFunc NONE
     barChartLimit 2.5
@@ -27,6 +30,8 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
+    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Details
     longLabel Pancreas cells binned by detailed cell type from Baron et al 2016
@@ -45,6 +50,8 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
+    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Batch
     longLabel Pancreas cells binned by batch from Baron et al 2016
@@ -68,6 +75,8 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
+    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Donor
     longLabel Pancreas cells binned by organ donor from Baron et al 2016

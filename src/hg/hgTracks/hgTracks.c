@@ -2227,9 +2227,10 @@ if(highlightDef)
 return hlList;
 }
 
-static void highlightRegions(struct cart *cart, struct hvGfx *hvg, int imagePixelHeight)
-// Highlights regions in the image.  Only done if theImgBox is not defined.
-// Thus it is done for ps/pdf and view image but the hgTracks image is highlighted via js
+static void drawHighlights(struct cart *cart, struct hvGfx *hvg, int imagePixelHeight)
+// Draw the highlight regions in the image.  Only done if theImgBox is not defined.
+// Thus it is done for ps/pdf and view image but for html output the highlights are drawn 
+// on the javascript client by hgTracks.js > imageV2 > drawHighlights()
 {
 struct highlightVar *hlList = parseHighlightInfo();
 
@@ -5098,7 +5099,7 @@ initColors(hvg);
 hPrintf("<MAP id='map' Name=%s>\n", mapName);
 
 if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does pdf and view-image highlight
-    highlightRegions(cart, hvg, imagePixelHeight);
+    drawHighlights(cart, hvg, imagePixelHeight);
 
 for (window=windows; window; window=window->next)
     {
@@ -8029,22 +8030,19 @@ if (track->hasUi)
     {
     char *url = trackUrl(track->track, chromName);
     char *longLabel = replaceChars(track->longLabel, "\"", "&quot;");
-    // Print an icon before the title when one is defined
-    hPrintPennantIcon(track->tdb);
 
     struct dyString *dsMouseOver = dyStringCreate("%s", longLabel);
     struct trackDb *tdb = track->tdb;
 
-    if (tdb->children)
-        {
-        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of different types (super track)",
-            slCount(tdb->children));
-        }
-    else if (tdb->subtracks)
-        {
-        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of similar types (composite track)",
-            slCount(tdb->subtracks));
-        }
+    if (tdbIsSuper(tdb))
+        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of different types "
+                "(super track)", slCount(tdb->children));
+    else if (tdbIsComposite(tdb))
+        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of similar types "
+                "(composite track)", slCount(tdb->subtracks));
+
+    // Print icons before the title when any are defined
+    hPrintIcons(track->tdb);
 
     hPrintf("<A HREF=\"%s\" title=\"%s\">", url, dyStringCannibalize(&dsMouseOver));
 
@@ -8052,15 +8050,21 @@ if (track->hasUi)
     freeMem(longLabel);
     }
 
-// show the folder icon from the font-awesome collection.
-// the icon collection also contains a "fa fa-folder-o" icon, which is the outline. It was decided to use only the filled out icon for now.
-if (tdbIsSuper(track->tdb) || tdbIsComposite(track->tdb))
-    hPrintf("<i id='folderIcon' class='fa fa-folder'></i>");
-
-hPrintf(" %s", track->shortLabel);
-hPrintf("<BR> ");
+hPrintf("%s", track->shortLabel);
 if (track->hasUi)
     hPrintf("</A>");
+hPrintf("<BR>");
+}
+
+void printSearchHelpLink()
+/* print the little search help link next to the go button */
+{
+char *url = cfgOption("searchHelpUrl");
+char *label = cfgOptionDefault("searchHelpLabel", "Search Help");
+if (!url)
+    return;
+
+printf("<div id='searchHelp'><a target=_blank title='Documentation on what you can enter into the Genome Browser search box' href='%s'>%s</a></div>", url, label);
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -8742,7 +8746,7 @@ if (!hideControls)
             showVirtRegions = "show multi-region position ranges and ";
             }
 	hPrintf("<span class='positionDisplay %s' id='positionDisplay' "
-                "title='click to %s copy position to input box'>%s</span>", 
+                "title='click to %s copy chromosome range to input box'>%s</span>", 
                         pressedClass, showVirtRegions, addCommasToPos(database, position));
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, virtWinEnd - virtWinStart);
@@ -8751,6 +8755,9 @@ if (!hideControls)
                         " size='%d'>\n", multiRegionButtonTop ? 50 : 60);
 	hWrites(" ");
 	hButton("goButton", "go");
+
+        printSearchHelpLink();
+
 
 	if (!trackHubDatabase(database))
 	    {
@@ -10575,7 +10582,7 @@ dyStringPrintf(dy,"Mousetrap.bind('t c', function() { document.editHubForm.submi
 dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').submit().click(); }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').submit().click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('v d', gotoGetDnaPage); \n");
+dyStringPrintf(dy,"Mousetrap.bind('v d', function() { gotoGetDnaPage() }); \n"); // anon. function because gotoGetDnaPage is sometimes not loaded yet.
 
 // highlight
 dyStringPrintf(dy,"Mousetrap.bind('h c', function() { highlightCurrentPosition('clear'); }); \n");
@@ -10584,11 +10591,11 @@ dyStringPrintf(dy,"Mousetrap.bind('h m', function() { highlightCurrentPosition('
 
 // focus
 dyStringPrintf(dy,"Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
-dyStringPrintf(dy,"Mousetrap.bind('?', showHotkeyHelp);\n");
+dyStringPrintf(dy,"Mousetrap.bind('?', function() { showHotkeyHelp() } );\n");
 
 // menu
 if (gotExtTools)
-    dyStringPrintf(dy,"Mousetrap.bind('s t', showExtToolDialog); \n");
+    dyStringPrintf(dy,"Mousetrap.bind('s t', function() { showExtToolDialog() } ); \n");
 
 // multi-region views
 dyStringPrintf(dy,"Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtModeType=exonMostly'; });  \n",
@@ -10825,8 +10832,6 @@ if(!trackImgOnly)
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
 
-    webIncludeResourceFile("font-awesome.min.css");
-
     cartFlushHubWarnings();
     }
 
@@ -10919,6 +10924,11 @@ checkAddHighlight(); // call again in case tracksDisplay's call to resolvePositi
 char *highlightDef = cartOptionalString(cart, "highlight");
 if (highlightDef)
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));
+
+char *prevColor = cartOptionalString(cart, "prevHlColor");
+if (prevColor)
+    jsonObjectAdd(jsonForClient, "prevHlColor", newJsonString(prevColor));
+
 jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 	      newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));
 

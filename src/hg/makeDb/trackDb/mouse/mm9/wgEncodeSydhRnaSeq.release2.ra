@@ -16,7 +16,6 @@ controlledVocabulary encode/cv.ra cellType=cell treatment=treatment rnaExtract=r
 dragAndDrop subTracks
 priority 0
 type bed 3
-wgEncode 1
 noInherit on
 html wgEncodeSydhRnaSeq.release2
 

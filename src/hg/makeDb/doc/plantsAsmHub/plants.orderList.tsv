@@ -33,6 +33,7 @@ GCF_007990345.1_Gossypium_hirsutum_v2.1	cotton G.hirsutum (HudsonAlpha 2021)
 GCF_000327365.1_Graimondii2_0	cotton G.raimondii
 GCF_004118075.1_ASM411807v1	cowpea
 GCF_002738365.1_Cmos_1.0	crookneck pumpkin
+GCF_000004075.3_Cucumber_9930_V3	cucumber
 GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p	date palm (Barhee BC4 2019)
 GCF_000413155.1_DPV01	date palm (Khalas 2013)
 GCF_002303985.1_Duzib1.0	durian
@@ -52,7 +53,7 @@ GCF_002575655.1_Aet_v4.0	goatgrass A.strangulata
 GCF_001957025.1_Aet_MR_1.0	goatgrass A.tauschii
 GCF_000733215.1_ASM73321v1	green algae A.protothecoides 0710
 GCF_002220235.1_ASM222023v1	green algae B.prasinos RCC1105
-GCF_000002595.1_v3.0	green algae C.reinhardtii CC-503 cw92
+GCF_000002595.2_Chlamydomonas_reinhardtii_v5.5	green algae C.reinhardtii CC-503 cw92 (v2 2018)
 GCF_000258705.1_Coccomyxa_subellipsoidae_v2.0	green algae C.subellipsoidea C-169
 GCF_000147415.1_v_1.0	green algae C.variabilis NC64A
 GCF_000090985.2_ASM9098v2	green algae M.commoda RCC299
@@ -63,11 +64,12 @@ GCF_000214015.3_version_140606	green algae O.tauri RCC4221
 GCF_000143455.1_v1.0	green algae V.carteri Eve
 GCF_005286985.1_Setaria_viridis_v2.0	green foxtail
 GCF_002211085.1_PHallii_v3.1	Hall's panicgrass
+GCF_010389155.1_C_canadensis_v1	horseweed
 GCF_003935025.1_Abrus_2018	Indian licorice
 GCF_000346735.1_P.mume_V1.0	Japanese apricot
 GCF_001879475.1_Asagao_1.1	Japanese morning glory
 GCF_001433935.1_IRGSP-1.0	Japanese rice
-GCF_002870075.1_Lsat_Salinas_v7	lettuce
+GCF_002870075.2_Lsat_Salinas_v7	lettuce (Salinas v2 2020)
 GCF_000004255.2_v.1.0	lyrate rockcress
 GCF_013358625.1_SCU_Mint_v3	macadamia nut
 GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0	maize
@@ -83,6 +85,7 @@ GCF_001263595.1_ASM126359v1	orchid P.equestris
 GCF_000150535.2_Papaya1.0	papaya
 GCF_000346465.2_Prunus_persica_NCBIv2	peach
 GCF_003086295.2_arahy.Tifrunner.gnm1.KYV3	peanut
+GCF_018687715.1_C.illinoinensisPawnee_v1	pecan
 GCF_000340665.1_C.cajan_V1.0	pigeon pea
 GCF_001540865.1_ASM154086v1	pineapple
 GCF_000375325.1_Caprub1_0	pink shepherd's-purse
@@ -119,7 +122,7 @@ GCF_000390325.2_Ntom_v01	tobacco N.tomentosiformis
 GCF_000188115.4_SL3.0	tomato
 GCF_000612285.1_Gossypium_arboreum_v1.0	tree cotton
 GCF_003576645.1_ASM357664v1	trilobed morning glory
-GCF_001633185.1_ValleyOak3.0	valley oak
+GCF_001633185.2_ValleyOak3.2	valley oak (v3.2 2019)
 GCF_002806865.1_ASM280686v2	vegetable marrow
 GCF_009727055.1_ASM972705v1	wax gourd
 GCF_009730915.1_TDr96_F1_v2_PseudoChromosome.rev07_lg8_w22_25.fasta	white yam

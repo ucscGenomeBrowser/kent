@@ -9,5 +9,4 @@ longLabel DNaseI Hypersensitivity Combined Footprints from ENCODE/Analysis
 type bigBed 3
 color 150,150,50
 priority 2.7
-wgEncode 1
 spectrum on

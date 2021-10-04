@@ -3,19 +3,24 @@
 This group of tracks shows data from <a
 href="https://science.sciencemag.org/content/370/6518/eaba7721" target="_blank">
 <i>A human cell atlas of fetal gene expression</i></a>. This is a collection of
-single cell and single nucleus droplet-based RNA-seq data covering 4 million
+single cell and single nucleus combinatorial indexing-based RNA-seq data covering 4 million
 cells from 15 organs obtained during mid-gestation. The cells were sequenced in
 a highly multiplexed fashion and then clustered with annotations as described
-in the paper.</p> 
+in Cao <em>et al</em>., 2020.</p>
 
 <p>
-The Fetal Cells subtrack contains the data organized by cell type, with RNA
-signals from all cells of a given type pooled and averaged into one bar for
-each cell type.  The Fetal Lineage subtrack shows similar data, but with the
-cell types subdivided more finely and by organ. Additional bar chart subtracks
-pool the cell by other characteristics such as by sex (Fetal Sex), assay (Fetal 
-Assay), donor (Fetal Donor ID), experiment (Fetal Exp), organ (Fetal Organ), 
-and reverse transcription group (Fetal RT Group).</p> 
+The <a href="hgTrackUi?g=fetalGeneAtlasCellType">Fetal Cells</a> subtrack contains the 
+data organized by cell type, with RNA signals from all cells of a given type pooled 
+and averaged into one bar for each cell type. The 
+<a href="hgTrackUi?g=fetalGeneAtlasOrganCellLineage">Fetal Lineage</a> subtrack shows 
+similar data, but with the cell types subdivided more finely and by organ. Additional 
+bar chart subtracks pool the cell by other characteristics such as by sex 
+(<a href="hgTrackUi?g=fetalGeneAtlasSex">Fetal Sex</a>), assay 
+(<a href="hgTrackUi?g=fetalGeneAtlasAssay">FetalAssay</a>), donor 
+(<a href="hgTrackUi?g=fetalGeneAtlasDonor">Fetal Donor ID</a>), experiment 
+(<a href="hgTrackUi?g=fetalGeneAtlasExperiment">Fetal Exp</a>), organ 
+(<a href="hgTrackUi?g=fetalGeneAtlasOrgan">Fetal Organ</a>), and reverse transcription group 
+(<a href="hgTrackUi?g=fetalGeneAtlasRtGroup">Fetal RT Group</a>).</p>
 
 <p>
 Please see <a
@@ -27,8 +32,10 @@ further interactive displays and additional data.</p>
 The cell types are colored by which class they belong to according to the following table.
 The coloring algorithm allows cells that show some blended characteristics to show blended
 colors so there will be some color variation within a class. The colors will be purest in
-the Fetal Cells subtrack, where the bars represent relatively pure cell types. They can
-give an overview of the cell composition within other categories in other subtracks as well.
+the <a href="hgTrackUi?g=fetalGeneAtlasCellType">Fetal Cells</a> subtrack, where the bars 
+represent relatively pure cell types. They can give an overview of the cell composition 
+within other categories in other subtracks as well.
+
 <p>
 <table cellpadding='2'>
   <thead><tr>
@@ -77,18 +84,37 @@ target="_blank">hgdownload</a></p>
 The data were integrated into the UCSC Genome Browser by Jim Kent and Brittney Wick.
 The UCSC work was paid for by the Chan Zuckerberg Initiative.</p>
 
+<h2>Data Access</h2>
+<p>
+The raw <a href="/goldenPath/help/barChart.html">bar chart</a> data can be
+explored interactively with the <a href="../cgi-bin/hgTables">Table
+Browser</a>, or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a
+href="/goldenPath/help/api.html">REST API</a>. Please refer to our <a
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing
+list archives</a> for questions, or our <a
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.</p>
+
 <h2>References</h2>
-<ul>
-<li>Junyue Cao, Diana R. O'Day, Hannah A. Pliner, Paul D. Kingsley, Mei Deng, Riza M. Daza,
-Michael A. Zager, Kimberly A. Aldinger, Ronnie Blecher-Gonen, Fan Zhang, Malte Spielmann,
-James Palis, Dan Doherty, Frank J. Steemers, Ian A. Glass, Cole Trapnell, Jay Shendure
-<a href='https://science.sciencemag.org/content/370/6518/eaba7721.full'>A human
-cell atlas of fetal gene expression</a> Science 2020
-<li> J. Cao, M. Spielmann, X. Qiu, X. Huang, D. M. Ibrahim, A. J. Hill, F.
-Zhang, S. Mundlos, L. Christiansen, F. J. Steemers, C. Trapnell, J. Shendure, 
-<a href='https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6434952/'>The single-cell
-transcriptional landscape of mammalian organogenesis.</a> Nature 2019
-</ul>
+<p>
+Cao J, O'Day DR, Pliner HA, Kingsley PD, Deng M, Daza RM, Zager MA, Aldinger KA, Blecher-Gonen R,
+Zhang F <em>et al</em>.
+<a href="https://www.science.org/doi/10.1126/science.aba7721" target="_blank">
+A human cell atlas of fetal gene expression</a>.
+<em>Science</em>. 2020 Nov 13;370(6518).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33184181" target="_blank">33184181</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7780123/" target="_blank">PMC7780123</a>
+</p>
+<p>
+Cao J, Spielmann M, Qiu X, Huang X, Ibrahim DM, Hill AJ, Zhang F, Mundlos S, Christiansen L,
+Steemers FJ <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30787437" target="_blank">
+The single-cell transcriptional landscape of mammalian organogenesis</a>.
+<em>Nature</em>. 2019 Feb;566(7745):496-502.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30787437" target="_blank">30787437</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6434952/" target="_blank">PMC6434952</a>
+</p>
 
 <!-- seize control of background color -->
 <style>

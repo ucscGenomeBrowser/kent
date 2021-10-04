@@ -47,4 +47,76 @@ end
 
 csh load.csh >&! load.out
 
+########################
+# Add Delta, Mu, Lambda (Maybe Eta, Iota, Kappa)
+# Sept 2021 Kate
+
+VOC
+Alpha   B.1.1.7
+Beta    B.1.351
+Gamma   P.1
+Delta   B.1617.2
+
+VOI
+Lambda  C.37
+Mu      B.1.621
+
+VUM (formerly VOI)
+Epsilon B.1.429
+Eta     B.1.525
+Iota    B.1.526
+Kappa   B.1.617.1
+
+
+cd /hive/data/genomes/wuhCor1/bed/strains/2021-09-10/test
+
+wc -l *aa.bed
+  18 B.1.525_aa.bed
+  12 B.1.526_aa.bed
+  13 B.1.617.1_aa.bed
+  12 B.1.617.2_aa.bed
+  17 B.1.621_aa.bed
+  18 C.37_aa.bed
+
+wc -l *nuc.bed
+  30 B.1.525_nuc.bed
+  16 B.1.526_nuc.bed
+  18 B.1.617.1_nuc.bed
+  16 B.1.617.2_nuc.bed
+  25 B.1.621_nuc.bed
+  27 C.37_nuc.bed
+
+
+cat > load.csh << 'EOF'
+foreach v (B.1.617.2 B.1.621 C.37 B.1.617.1 B.1.525 B.1.526 )
+    echo $v
+    set d = 2021_09_10
+    foreach t (aa nuc)
+        set if = ${v}_${t}.bed
+        set T = `perl -e "print ucfirst($t)"`
+        set of = variant${T}Muts_${v}_${d}
+        # fix chrom name and strip protein prefix from variant identifiers
+        sed -e 's/NC_045512.2/NC_045512v2/' -e 's/\t[^\t]*:/\t/' < $if > $of.bed
+        bedToBigBed -type=bed4 $of.bed /hive/data/genomes/wuhCor1/chrom.sizes $of.bb
+        ln -s `pwd`/$of /gbdb/wuhCor1/strainMuts
+    end
+end
+'EOF'
     
+csh load.csh >&! load.log &
+
+# run delta with lower cutoffs, and load up
+
+cd delta_70_50
+set v = B.1.617.2
+set d = 2021_09_10
+    foreach t (aa nuc)
+        set if = ${v}_${t}.bed
+        set T = `perl -e "print ucfirst($t)"`
+        set of = variant${T}Muts_${v}_${d}
+        # fix chrom name and strip protein prefix from variant identifiers
+        sed -e 's/NC_045512.2/NC_045512v2/' -e 's/\t[^\t]*:/\t/' < $if > $of.bed
+        bedToBigBed -type=bed4 $of.bed /hive/data/genomes/wuhCor1/chrom.sizes $of.bb
+        ln -s `pwd`/$of.bb /gbdb/wuhCor1/strainMuts
+    end
+

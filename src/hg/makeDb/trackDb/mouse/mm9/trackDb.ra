@@ -806,7 +806,6 @@ priority 0
 noScoreFilter on
 #scoreFilterByRange on
 compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
-wgEncode 1
 
 track nscanGene override
 informant Mouse N-SCAN uses human (hg18) as the informant and iterative pseudogene masking.

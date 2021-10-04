@@ -11,7 +11,7 @@ tmpExt = ${host}.${ppid}.tmp
 diff = diff -u
 
 gencodeGxfToAttrs = ../bin/gencodeGxfToAttrs
-ensToUcscMkLift = ../bin/ensToUcscMkLift
+buildGencodeToUcscLift = ../bin/buildGencodeToUcscLift
 gencodeGxfToGenePred = ../bin/gencodeGxfToGenePred
 gencodeExonSupportToTable = ../bin/gencodeExonSupportToTable
 
@@ -19,12 +19,16 @@ ucscGenomeDbHs37 = hg19
 ucscGenomeDbHs38 = hg38
 ucscGenomeDbMm38 = mm10
 
-ensToUcscMappingChainHg37 = output/ensToUcscMappingHg37.chain
-ensToUcscMappingChainHg38 = output/ensToUcscMappingHg38.chain
+hg37AsmReport = input/GCF_000001405.25_GRCh37.p13_assembly_report.txt
+hg38AsmReport = input/GCF_000001405.39_GRCh38.p13_assembly_report.txt 
+mm38AsmReport = input/GCF_000001635.26_GRCm38.p6_assembly_report.txt
+
+gencodeToUcscMappingChainHg37 = output/gencodeToUcscMappingHg37.chain
+gencodeToUcscMappingChainHg38 = output/gencodeToUcscMappingHg38.chain
 
 all::
 
-test::  attrsTests ensToUcscMkLiftTests genePredTests exonSupportTests
+test::  attrsTests buildGencodeToUcscLiftTests genePredTests exonSupportTests
 
 ##
 # attributes tests
@@ -99,27 +103,30 @@ attrsPseudoGff3Tests: mkdirs
 	${diff} expected/$@.tags output/$@.tags
 
 ###
-# ensembl/gencode to UCSC liftover
+# GENCODE to UCSC liftover
+#
+# Note: these tests compare hgwdev chromInfo to the assembly reports files in input.  If
+# chromInfo has been updated because of a new path, the assembly reports needs to be updated.
 ###
-ensToUcscMkLiftTests: \
-	ensToUcscMkLiftHs37Test \
-	ensToUcscMkLiftHs38Test \
-	ensToUcscMkLiftMm38Test
+buildGencodeToUcscLiftTests: \
+	buildGencodeToUcscLiftHs37Test \
+	buildGencodeToUcscLiftHs38Test \
+	buildGencodeToUcscLiftMm38Test
 
 # hg19/GRCh37
-ensToUcscMkLiftHs37Test: mkdirs
-	${ensToUcscMkLift} ${ucscGenomeDbHs37} output/$@.chain
+buildGencodeToUcscLiftHs37Test: mkdirs
+	${buildGencodeToUcscLift} ${ucscGenomeDbHs37} ${hg37AsmReport} output/$@.chain
 	${diff} expected/$@.chain output/$@.chain
 
 # hg38/GRCh38
-ensToUcscMkLiftHs38Test: mkdirs
-	${ensToUcscMkLift} ${ensemblCDnaDbHs38} ${grcRefAssemblyHs38} ${ucscGenomeDbHs38} output/$@.chain
+buildGencodeToUcscLiftHs38Test: mkdirs
+	${buildGencodeToUcscLift} ${ucscGenomeDbHs38} ${hg38AsmReport} output/$@.chain
 	chainStats output/$@.chain >/dev/null
 	${diff} expected/$@.chain output/$@.chain
 
 # mm10/GRCm38
-ensToUcscMkLiftMm38Test: mkdirs
-	${ensToUcscMkLift} ${ensemblCDnaDbMm38} ${grcRefAssemblyMm38} ${ucscGenomeDbMm38} output/$@.chain
+buildGencodeToUcscLiftMm38Test: mkdirs
+	${buildGencodeToUcscLift} ${ucscGenomeDbMm38} ${mm38AsmReport} output/$@.chain
 	chainStats output/$@.chain >/dev/null
 	${diff} expected/$@.chain output/$@.chain
 
@@ -128,19 +135,19 @@ ensToUcscMkLiftMm38Test: mkdirs
 ###
 genePredTests: set1AnnotTest ummappingWarnHs38Test specialCases1Test
 
-set1AnnotTest: ${set1Gp} ${ensToUcscMappingChainHg37} mkdirs
-	${gencodeGxfToGenePred} ${ucscGenomeDbHs37} input/set1.gtf ${ensToUcscMappingChainHg37} output/$@.gp
+set1AnnotTest: ${set1Gp} ${gencodeToUcscMappingChainHg37} mkdirs
+	${gencodeGxfToGenePred} ${ucscGenomeDbHs37} input/set1.gtf ${gencodeToUcscMappingChainHg37} output/$@.gp
 	${diff} expected/$@.gp output/$@.gp
 
-ummappingWarnHs38Test: ${ensToUcscMappingChainHg38}
-	${gencodeGxfToGenePred} ${ucscGenomeDbHs38} input/mappingErrorsHs38.gtf ${ensToUcscMappingChainHg38} output/$@.gp --unmapped=output/$@.unmapped.gp >output/$@.out 2>&1
+ummappingWarnHs38Test: ${gencodeToUcscMappingChainHg38}
+	${gencodeGxfToGenePred} ${ucscGenomeDbHs38} input/mappingErrorsHs38.gtf ${gencodeToUcscMappingChainHg38} output/$@.gp --unmapped=output/$@.unmapped.gp >output/$@.out 2>&1
 	${diff} expected/$@.out output/$@.out
 	${diff} expected/$@.gp output/$@.gp
 	${diff} expected/$@.unmapped.gp output/$@.unmapped.gp
 
 # chrM, PAR, mapped and unmapped haplotypes and patches
-specialCases1Test: ${ensToUcscMappingChainHg37} mkdirs
-	${gencodeGxfToGenePred} --unmapped=output/$@.unmapped.gp ${ucscGenomeDbHs37} input/specialCases1.gtf ${ensToUcscMappingChainHg37} output/$@.gp
+specialCases1Test: ${gencodeToUcscMappingChainHg37} mkdirs
+	${gencodeGxfToGenePred} --unmapped=output/$@.unmapped.gp ${ucscGenomeDbHs37} input/specialCases1.gtf ${gencodeToUcscMappingChainHg37} output/$@.gp
 	${diff} expected/$@.gp output/$@.gp
 	${diff} expected/$@.unmapped.gp output/$@.unmapped.gp
 
@@ -149,20 +156,20 @@ specialCases1Test: ${ensToUcscMappingChainHg37} mkdirs
 ##
 exonSupportTests: exonSupport1Test
 
-exonSupport1Test: ${ensToUcscMappingChainHg37}
-	${gencodeExonSupportToTable} input/examples1.Exon_supporting_feature ${ensToUcscMappingChainHg37} output/$@.exons
+exonSupport1Test: ${gencodeToUcscMappingChainHg37}
+	${gencodeExonSupportToTable} input/examples1.Exon_supporting_feature ${gencodeToUcscMappingChainHg37} output/$@.exons
 	${diff} expected/$@.exons output/$@.exons
 
 ##
 # mapping chains for tests
 ##
-testChains: ${ensToUcscMappingChainHg37} ${ensToUcscMappingChainHg38}
-${ensToUcscMappingChainHg37}: mkdirs
-	${ensToUcscMkLift} ${ucscGenomeDbHs37} $@.${tmpExt}
+testChains: ${gencodeToUcscMappingChainHg37} ${gencodeToUcscMappingChainHg38}
+${gencodeToUcscMappingChainHg37}: mkdirs
+	${buildGencodeToUcscLift} ${ucscGenomeDbHs37} ${hg37AsmReport} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${ensToUcscMappingChainHg38}: mkdirs
-	${ensToUcscMkLift} ${ucscGenomeDbHs38}  $@.${tmpExt}
+${gencodeToUcscMappingChainHg38}: mkdirs
+	${buildGencodeToUcscLift} ${ucscGenomeDbHs38} ${hg38AsmReport} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 mkdirs:

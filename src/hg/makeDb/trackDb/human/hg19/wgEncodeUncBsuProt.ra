@@ -18,7 +18,6 @@ priority 0
 type bed 6 +
 noInherit on
 useScore 1
-wgEncode 1
 scoreFilter 200
 scoreFilterLimits 200:1000
 visibility hide

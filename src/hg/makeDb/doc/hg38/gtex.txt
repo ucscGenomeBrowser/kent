@@ -140,3 +140,228 @@ hgLoadBed hg38 -noBin -tab -type=bed6+4 \
 ### TODO 
 # Add GTEx to Gene Sorter (2016-08-18 kate)
 # See hg/near/makeNear.doc
+
+#############################################################################
+# GTEx V8 cis-eQTLs CAVIAR High Confidence (Sept 2021) Matt
+
+cd /hive/data/genomes/hg38/bed/gtex/V8/eQtl/finemap_CAVIAR
+
+# Tar files were downloaded from https://gtexportal.org/home/datasets#filesetFilesDiv15
+# This file was used for this track:
+wget https://storage.googleapis.com/gtex_analysis_v8/single_tissue_qtl_data/GTEx_v8_finemapping_CAVIAR.tar
+# Then unpacked
+
+# Used this file: CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz
+# Description from GTEx_v8_finemapping_CAVIAR/README.txt
+***CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz --> is a single file for all GTEx tissues and all eGene where we report
+all the high causal variants (variants that have posterior probability of > 0.1).
+# Started with this as it seems this is the data Kate used for hg19 eQTL tracks
+
+# Sample line from file
+#TISSUE  GENE    eQTL    CHROM   POS     Probability
+#Brain_Caudate_basal_ganglia     ENSG00000248485.1       1_161274374     1       161274374       0.157456
+
+# There seem to 31 duplicate eQTLs, meaning that the two lines for these entries are duplicated (probability values, etc.)
+# These will essentially be collapsed into a single entry by the buildInteract script
+zcat CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz | sort | uniq -c | sort -k1,1nr | awk '$1 > 1' > dupe_eQtls.txt
+wc -l dupe_eQtls.txt
+31 dupe_eQtls.txt
+
+# Wrote buildInteract script to help build interact-format tracks from CAVIAR files:
+cat << '_EOF_' > buildInteract
+#!/usr/bin/env python3
+
+import sys, gzip
+
+qtlFile = sys.argv[1]
+gpFile = sys.argv[2]
+alleleFile = sys.argv[3]
+
+# Open up all of our files
+qfh = gzip.open(qtlFile,"r") # QTL file
+gfh = open(gpFile,"r") # genePred file
+afh = gzip.open(alleleFile,"r") # allele file
+
+# Set up dicts for each
+qtlDict = dict()
+gpDict = dict()
+alleleDict = dict()
+
+# Process eQTL file
+for line in qfh:
+    qtlLine = line.decode('ASCII').strip().split("\t")
+    # Skip header line in file
+    if "TISSUE" not in qtlLine:
+        tissue = qtlLine[0]
+        gene = qtlLine[1]
+        e_qtl = qtlLine[2]
+        # each of these elements on their own aren't unique, but together they are
+        qtlKey = e_qtl + "|" + tissue + "|" + gene
+        # Put these into a dict where key is unique name we've made
+        qtlDict[qtlKey] = qtlLine
+
+# Process genePred file
+for line in gfh:
+    gpLine = line.strip().split("\t")
+    gene_id = gpLine[0]
+    # Put into dict with key on ENSG* ID
+    gpDict[gene_id] = gpLine
+
+# Process allele file from GTEx
+for line in afh:
+    # gzip file, so we need to decode to asii first
+    aLine = line.decode('ASCII').strip().split("\t")
+
+    allele = aLine[0]
+    chrom = aLine[1].replace("chr","")
+    pos = aLine[2]
+    # Create key from combination of chrom + position
+    # In theory this should match the keys from the eQTL dict
+    alleleDict[chrom + "_" + pos] = aLine
+    #7 is rsID
+
+for entry in qtlDict:
+    # Create list to store elements that will become a single interact line
+    # Interact format: http://genome.ucsc.edu/goldenPath/help/interact.html
+
+    # Get gene information from the genePred dict
+    # eQTL file/dict has ENSG id in it
+    gene_id = qtlDict[entry][1]
+    if gene_id in gpDict.keys():
+        gene_sym = gpDict[gene_id][11]
+        gene_chrom = gpDict[gene_id][1]
+        gene_strand = gpDict[gene_id][2]
+        gene_start = int(gpDict[gene_id][3])
+        gene_end = int(gpDict[gene_id][4])
+    # Check if eQTL is in allele/eQTL dictionary so that we can grab the rsID
+    var_pos = qtlDict[entry][2]
+    if var_pos in alleleDict.keys():
+        rsID = alleleDict[var_pos][6]
+    var_start = int(qtlDict[entry][4])
+
+    # Do some things to make sure start isn't ever greater than end for items
+    # Deals with case where eQTL is internal to gene
+    if var_start > gene_start and var_start < gene_end:
+        chromStart = gene_start
+        chromEnd = gene_end
+    # Deals with case where eQTL is downstream
+    elif var_start > gene_end:
+        chromStart = gene_start
+        chromEnd = var_start
+    # Deals with case where eQTL is upstream
+    elif var_start < gene_start:
+        chromStart = var_start - 1
+        chromEnd = gene_end
+
+    interactLine = list()
+    interactLine.append("chr" + qtlDict[entry][3]) # chrom
+    interactLine.append(chromStart) # chrStart
+    interactLine.append(chromEnd) # chrEnd
+    interactLine.append(rsID + "/" + gene_sym + "/" + qtlDict[entry][0]) # name
+    interactLine.append(int("1000")) # Maybe I should scale up to 0-1000 range? # score
+    interactLine.append(qtlDict[entry][5]) # value
+    interactLine.append(qtlDict[entry][0]) # exp
+    interactLine.append("0,0,0") #color - eventually replaced by 'addColor' script
+    interactLine.append(interactLine[0]) # sourceChrom
+    interactLine.append(var_start - 1) # sourceStart
+    interactLine.append(var_start) # sourceEnd
+    interactLine.append(rsID) # sourceName
+    interactLine.append(".") # sourceStrand
+    interactLine.append(gene_chrom) # targetChrom
+    interactLine.append(gene_start) # targetStart
+    interactLine.append(gene_end) # targetEnd
+    interactLine.append(gene_sym) # targetEnd
+    interactLine.append(gene_strand) # targetStrand
+
+    # Print interact line to stdout, can redirect to a file to save it
+    print(*interactLine, sep="\t")
+'_EOF_'
+
+# Script takes in eQTL, SNP info, and GENCODE genepred file
+# Uses this information to build an interact line for each item in the eQTL file
+
+# Need to convert GTF to genePredExt
+# (Kate had converted GTF to genePred for GTEx V8 expression track work, but that didn't include gene name as I was hoping)
+gtfToGenePred -genePredExt -geneNameAsName2 -includeVersion gencode.v26.GRCh38.genes.gtf gencode.v26.GRCh38.genes.gpExt 
+
+# Build interact files and sort resulting bed file
+./buildInteract CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz ../gencode.v26.GRCh38.genes.gpExt \
+  ../GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz | \
+    bedSort stdin gtexCaviar.interact.sorted.txt
+
+## Add colors
+# Make list of tissues in V8 file
+zcat GTEx_v8_finemapping_CAVIAR/CAVIAR_Results_v8_GTEx_LD_ALL_NOCUTOFF.txt.gz | cut -f1 -d$'\t' |sort -u |grep -v TISSUE> gtexTissuesV8.txt
+
+# Using GTEx V6p colors, manually match up to names in V8 file
+ln -s /hive/data/outside/GTEx/V6p/eQtl/Caviar2/gtexTissueColor.tab 
+gtexTissueColor.v8.tab 
+
+# Write addColors script to add colors from this file to the interact file:
+cat << '_EOF_' > addColors
+####
+# Intially created interact file w/o colors
+# Wrote this quick script to automatically add them to the interact format
+####
+#!/usr/bin/env python3
+
+import sys
+
+interactFile = sys.argv[1]
+colorFile = sys.argv[2]
+
+# Read in color file from gtexTisseColor.v8.tab
+cfh = open(colorFile, "r")
+# Process this file and turn it into a dictionary
+colors = dict()
+for line in cfh:
+    splitLine = line.strip().split("\t")
+    # Keys in dictionary are tissue
+    colors[splitLine[0]] = splitLine
+
+# Read in interact file
+ifh = open(interactFile, "r")
+for line in ifh:
+    splitLine = line.strip().split("\t")
+    # Extract tisue information from interact file
+    tissue = splitLine[6]
+    # If tissue is in color dict keys, then we're good
+    if tissue in colors.keys():
+        color = colors[tissue][2]
+        # Set color field equal to tissue color
+        splitLine[7] = color
+    # Output modified line to stdout, can save to file by redirecting stdout to a file
+    print(*splitLine, sep="\t")
+'_EOF_'
+
+# Run script to add colors
+./addColors gtexCaviar.interact.sorted.txt ../gtexTissueColor.v8.tab > gtexCaviar.interact.sorted.colors.txt
+
+# Create custom as file for this bigBed:
+cat << '_EOF_' > gtexInteract.as
+table interact
+"Interaction between an eQTL and a target gene"
+    (
+        string chrom;       "Chromosome (or contig, scaffold, etc.). For interchromosomal, use 2 records"
+        uint chromStart;    "Start position of eQTL."
+        uint chromEnd;      "End position of gene."
+        string name;        "Name of item for display, dbSNP rsID/Gene Symbol/Tissue."
+        uint score;         "Not used, always 1000."
+        double cpp;         "Causal Posterior Probability (CPP) that quantifies the probability of each variant to be causal."
+        string tissue;      "Tissue"
+        string color;       "Item color, based on GTEx Gene expression track colors."
+        string eqtlChrom;   "Chromosome of eQTL."
+        uint eqtlStart;     "Start position of eQTL."
+        uint eqtlEnd;       "End position of eQTL."
+        string eqtlName;    "eQTL name, which is a dbSNP identifier."
+        string eqtlStrand;  "Not applicable, always '.'"
+        string geneChrom;   "Chromosome of target gene."
+        uint geneStart;     "Start position of target gene."
+        uint geneEnd;       "End position of target gene."
+        string geneName;    "Gene symbol of target gene."
+        string geneStrand;  "Strand of target gene."
+        )
+'_EOF_'
+
+# Build bigInteract file with colors
+bedToBigBed -as=../gtexInteract.as -type=bed5+13 gtexCaviar.interact.sorted.colors.txt /hive/data/genomes/hg38/chrom.sizes gtexCaviar.interact.colors.bb
