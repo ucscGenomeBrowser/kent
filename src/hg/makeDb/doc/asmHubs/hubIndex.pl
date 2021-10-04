@@ -181,4 +181,8 @@ printf "<p>\n";
 printf "Please note: text file <a href='UCSC_GI.assemblyHubList.txt' target=_blank>listing</a> of %d NCBI/VGP genome assembly hubs\n", $totalAsmHubs;
 printf "</p>\n";
 
+printf "<p>\n";
+printf "Please note, the <em>invertebrate</em> category contains more than just <em>invertebrate</em> animals.  Until these clades are sorted out, with extra categories created, you will also find parasites, protozoa, and other single celled eukaryotes in the <em>invertebrate</em> grouping.\n";
+printf "</p>\n";
+
 endHtml;
