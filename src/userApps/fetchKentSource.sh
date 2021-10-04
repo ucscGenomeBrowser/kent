@@ -72,6 +72,7 @@ src/hg/bedSplitOnChrom \
 src/hg/bedToGenePred \
 src/hg/blastToPsl \
 src/hg/borfBig \
+src/hg/cgilib \
 src/hg/checkCoverageGaps \
 src/hg/checkHgFindSpec \
 src/hg/checkTableCoords \
