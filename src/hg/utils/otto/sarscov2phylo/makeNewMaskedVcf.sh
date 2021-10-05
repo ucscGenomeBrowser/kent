@@ -5,11 +5,11 @@ set -beEu -x -o pipefail
 #	kent/src/hg/utils/otto/sarscov2phylo/makeNewMaskedVcf.sh
 
 usage() {
-    echo "usage: $0 prevDate today problematicSitesVcf"
+    echo "usage: $0 prevDate today problematicSitesVcf [baseProtobuf]"
     echo "This assumes that ncbi.latest and cogUk.latest links/directories have been updated."
 }
 
-if [ $# != 3 ]; then
+if [ $# != 3 && $# != 4]; then
   usage
   exit 1
 fi
@@ -17,6 +17,7 @@ fi
 prevDate=$1
 today=$2
 problematicSitesVcf=$3
+baseProtobuf=$4
 
 ottoDir=/hive/data/outside/otto/sarscov2phylo
 ncbiDir=$ottoDir/ncbi.latest
@@ -33,7 +34,6 @@ mkdir -p $ottoDir/$today
 cd $ottoDir/$today
 
 prevProtobufMasked=$ottoDir/$prevDate/gisaidAndPublic.$prevDate.masked.pb
-prevMeta=$ottoDir/$prevDate/public-$prevDate.metadata.tsv.gz
 
 usherDir=~angie/github/usher
 usher=$usherDir/build/usher
@@ -41,8 +41,12 @@ matUtils=$usherDir/build/matUtils
 
 renaming=oldAndNewNames
 
+if [ "$baseProtobuf" == "" ]; then
+    baseProtobuf=$prevProtobufMasked
+fi
+
 # Make lists of sequences already in the tree.
-$matUtils extract -i $prevProtobufMasked -u prevNames
+$matUtils extract -i $baseProtobuf -u prevNames
 
 # Before updating the tree with new sequences, update the names used in the tree:
 # * Sequences that are already in the tree with EPI_ IDs, but that have been mapped to public IDs
@@ -129,10 +133,10 @@ grep -Fwf cogUkIsolateStillDup prevNames \
 | cat \
     >> dupsToRemove
 set -o pipefail
-startingProtobuf=$prevProtobufMasked
+startingProtobuf=$baseProtobuf
 if [ -s dupsToRemove ]; then
     startingProtobuf=prevDupTrimmed.pb
-    $matUtils extract -i $prevProtobufMasked -p -s dupsToRemove -o $startingProtobuf
+    $matUtils extract -i $baseProtobuf -p -s dupsToRemove -o $startingProtobuf
 fi
 
 if [ -s prevTree.renaming ]; then

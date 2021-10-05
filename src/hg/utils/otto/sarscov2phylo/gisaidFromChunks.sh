@@ -27,7 +27,7 @@ cd /hive/users/angie/gisaid
 # Keep the strain|epiId|date "full names".
 time xzcat chunks/gisaid_epi_isl_*.fa.xz \
 | sed -re 's@^>hCo[Vv]-19/+@>@;  s/[ '"'"',()]//g;  s/\r$//;' \
-| xz -T 50 \
+| xz -T 8 \
     > gisaid_fullNames_$today.fa.xz
 
 # Make tmp files with a fullName key and various columns that we'll join together.
@@ -87,7 +87,7 @@ gzip -f metadata_batch_$today.tsv
 # Make fasta with strain-name headers a la nextfasta.
 xzcat gisaid_fullNames_$today.fa.xz \
 | sed -re 's/\|.*//' \
-| xz -T 50 \
+| xz -T 8 \
     > sequences_batch_$today.fa.xz
 
 # Clean up
