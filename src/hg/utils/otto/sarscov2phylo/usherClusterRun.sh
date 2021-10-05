@@ -65,7 +65,7 @@ for ((i=0;  $i < $jobCount;  i++)); do
     echo "./runUsher.sh new.$i.masked.vcf.gz prevRenamed.pb {check out exists preTrim.$i.pb} usher.addNew.$i.log" >> jobList
 done
 
-ssh ku "cd $ottoDir/$today && para -cpu=$threadCount -priority=100 make jobList"
+ssh ku "cd $ottoDir/$today && para -cpu=$threadCount -priority=10 make jobList"
 
 # Make a combined log (updateCombinedTree.sh looks there for sequences with excessively high EPPs)
 cat usher.addNew.*.log > usher.addNew.log

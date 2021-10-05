@@ -23,7 +23,7 @@ maxAttempts=5
 retryDelay=60
 while [[ $((++attempt)) -le $maxAttempts ]]; do
     echo "curl attempt $attempt"
-    if curl -S -s $cogUrlBase/cog_all.fasta | xz -T 50 > cog_all.fasta.xz; then
+    if curl -S -s $cogUrlBase/cog_all.fasta | xz -T 8 > cog_all.fasta.xz; then
         break
     else
         echo "FAILED; will try again after $retryDelay seconds"
