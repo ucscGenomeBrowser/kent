@@ -3155,30 +3155,6 @@ urlLabel Link to LRG transcript
 url http://ftp.ebi.ac.uk/pub/databases/lrgex/$<_lrgParent>.xml#transcripts_anchor
 bigDataUrl /gbdb/$D/bbi/lrgBigPsl.bb
 searchIndex name
-release alpha
-
-track lrgTranscriptAli
-shortLabel LRG Transcripts
-longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
-group genes
-visibility hide
-type psl .
-cdsTable lrgCds
-cdnaTable lrgCdna
-pepTable lrgPep
-baseColorDefault diffCodons
-baseColorUseCds table lrgCds
-baseColorUseSequence table lrgCdna
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-color 54,125,29
-urlLabel Link to LRG transcript:
-url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
-release beta,public
 
 track affyHuEx1
 shortLabel Affy HuEx 1.0
