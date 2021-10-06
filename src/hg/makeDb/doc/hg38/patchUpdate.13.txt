@@ -164,6 +164,83 @@
 
 
 #############################################################################
+# Put correct gc5Base files in downloads (DONE 2021-10-05 galt)
+# I found that there were nice versioned files made by the patch process,
+# but that they had never been correctly used, and in fact, the lastest one w
+
+cd /hive/data/genomes/hg38/goldenPath/bigZips/initial
+
+ln -s /hive/data/genomes/hg38/bed/gc5Base/hg38.initial.gc5Base.bw hg38.gc5Base.bw
+ln -s /hive/data/genomes/hg38/bed/gc5Base/hg38.initial.gc5Base.wigVarStep.gz hg38.gc5Base.wigVarStep.gz
+
+md5sum hg38.* > md5sum.txt
+diff md5sum.txt md5sum.txt2
+md5sum hg38.* > md5sum.txt2
+rm md5ssum.txt2
+
+cd /hive/data/genomes/hg38/goldenPath/bigZips
+ln -s initial/hg38.chrom.sizes hg38.chrom.sizes 
+ln -s initial/hg38.gc5Base.bw hg38.gc5Base.bw
+ln -s initial/hg38.gc5Base.wigVarStep.gz hg38.gc5Base.wigVarStep.gz
+
+cd /hive/data/genomes/hg38/goldenPath/bigZips/p11
+
+ln -s /hive/data/genomes/hg38/bed/gc5Base/hg38.p11.gc5Base.bw hg38.p11.gc5Base.bw
+ln -s /hive/data/genomes/hg38/bed/gc5Base/hg38.p11.gc5Base.wigVarStep.gz hg38.p11.gc5Base.wigVarStep.gz
+ln -s /hive/data/genomes/hg38/chrom.sizes.p11 hg38.p11.chrom.sizes
+
+md5sum hg38.p11.gc5Base.* >> md5sum.txt2
+diff md5sum.txt md5sum.txt2
+md5sum hg38.* > md5sum.txt2
+rm md5ssum.txt2
+
+cd /hive/data/genomes/hg38/goldenPath/bigZips/p12
+
+ln -s /hive/data/genomes/hg38/bed/gc5Base/hg38.p12.gc5Base.bw hg38.p12.gc5Base.bw
+ln -s /hive/data/genomes/hg38/bed/gc5Base/hg38.p12.gc5Base.wigVarStep.gz hg38.p12.gc5Base.wigVarStep.gz
+
+md5sum hg38.p12.gc5Base.* >> md5sum.txt
+
+md5sum hg38.* > md5sum.txt2
+diff md5sum.txt md5sum.txt2
+rm md5sum.txt2
+
+cd /hive/data/genomes/hg38/goldenPath/bigZips/p13
+
+ln -s /hive/data/genomes/hg38/bed/gc5Base/hg38.p13.gc5Base.bw hg38.p13.gc5Base.bw
+ln -s /hive/data/genomes/hg38/bed/gc5Base/hg38.p13.gc5Base.wigVarStep.gz hg38.p13.gc5Base.wigVarStep.gz
+
+md5sum hg38.p13.gc5Base.* >> md5sum.txt
+
+md5sum hg38.* > md5sum.txt2
+diff md5sum.txt md5sum.txt2
+rm md5sum.txt2
+
+cd /hive/data/genomes/hg38/goldenPath/bigZips/latest
+
+ln -s ../p13/hg38.p13.chrom.sizes hg38.chrom.sizes
+
+ln -s ../p13/hg38.p13.gc5Base.bw hg38.gc5Base.bw
+ln -s ../p13/hg38.p13.gc5Base.wigVarStep.gz hg38.gc5Base.wigVarStep.gz
+
+md5sum hg38.* > md5sum.txt2
+
+sed -e 's/.p13//' ../p13/md5sum.txt > md5sum.p13
+
+diff md5sum.p13 md5sum.txt2
+rm md5sum.p13
+rm md5sum.txt2
+
+-
+
+cd /data/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
+rm hg38.chrom.sizes
+ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.chrom.sizes hg38.chrom.sizes
+ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.gc5Base.bw hg38.gc5Base.bw
+ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.gc5Base.wigVarStep.gz hg38.gc5Base.wigVarStep.gz
+
+
+#############################################################################
 # Build perSeqMax file for gfServer (hgBlat) (DONE 2021-08-26 galt)
     # When the blat server is restarted with the updated hg38.2bit file,
     # hg38.altsAndFixes needs to be copied over along with the new hg38.2bit file,
@@ -339,8 +416,10 @@ done
 
 
 ##############################################################################
-# UCSC to Ensembl (TODO 2020-08-10 galt)
-# doc??
+# UCSC to Ensembl (TODO 2021-09-18 galt)
+# Ask Hiram to update ensembleToUcsc and ensemblLift tables.
+# FYI ensemblLift offset shows how many Ns were inserted by Ensembl to give the right coordinate to alts and fixes.
+#
 
 
 ############################################################################
