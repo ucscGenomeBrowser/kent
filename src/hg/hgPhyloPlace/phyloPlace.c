@@ -2695,7 +2695,8 @@ if (vcfTn)
     results = runUsher(usherPath, protobufPath, vcfTn->forCgi,
                        subtreeSize, sampleIds, bigTree->condensedNodes,
                        &startTime);
-    addSampleMutsFromSeqInfo(results->samplePlacements, seqInfoHash);
+    if (results)
+        addSampleMutsFromSeqInfo(results->samplePlacements, seqInfoHash);
     }
 else if (subtreesOnly)
     {
