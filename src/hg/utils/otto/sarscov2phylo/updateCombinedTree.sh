@@ -17,7 +17,11 @@ fi
 prevDate=$1
 today=$2
 problematicSitesVcf=$3
-baseProtobuf=$4
+if [ $# == 4 ]; then
+    baseProtobuf=$4
+else
+    baseProtobuf=
+fi
 
 ottoDir=/hive/data/outside/otto/sarscov2phylo
 cncbDir=$ottoDir/cncb.latest
