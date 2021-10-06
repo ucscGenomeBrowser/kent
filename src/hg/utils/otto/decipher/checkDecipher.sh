@@ -49,18 +49,23 @@ then
     gpg --batch --passphrase-file "../gpg.pwd.new" ${CNV}
     gpg --batch --passphrase-file "../gpg.pwd.new" ${SNV}
 
-    mkdir -p ${WORKDIR}/release/hg19
+    mkdir -p ${WORKDIR}/release/{hg38,hg19}
 
     # build the new DECIPHER track tables (builds bigBed for cnv's)
     ../buildDecipher `basename $CNV .gpg` `basename $SNV .gpg`
-    ../validateDecipher.sh hg19
+    ../validateDecipher.sh hg38
+    #../validateDecipher.sh hg19
 
     # now install
-    for i in `cat ../decipher.tables`
-    do 
-	n=$i"New"
-	o=$i"Old"
-	hgsqlSwapTables hg19 $n $i $o -dropTable3
+    #for db in hg38 hg19
+    for db in hg38
+    do
+        for i in `cat ../decipher.tables`
+        do 
+        n=$i"New"
+        o=$i"Old"
+        hgsqlSwapTables $db $n $i $o -dropTable3
+        done
     done
 
     echo "DECIPHER Installed `date`" 
