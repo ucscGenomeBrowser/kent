@@ -119,7 +119,7 @@ tawk '$3 != "" {print $1, $3;}' ncbi_dataset.plusBioSample.tsv \
 # Replace FASTA headers with reconstructed names from enhanced metadata.
 time cleanGenbank < ncbi_dataset/data/genomic.fna \
 | $scriptDir/fixNcbiFastaNames.pl ncbi_dataset.plusBioSample.tsv \
-| xz -T 50 \
+| xz -T 8 \
     > genbank.fa.xz
 
 # Run pangolin and nextclade on sequences that are new since yesterday

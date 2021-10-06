@@ -53,7 +53,7 @@ $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
 	ar rcus $(MACHTYPE)/jkweb.a $(O)
 
 $(MACHTYPE):
-	mkdir $(MACHTYPE)
+	mkdir -p $(MACHTYPE)
 
 test:
 	cd tests && ${MAKE} test

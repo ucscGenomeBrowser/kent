@@ -4,7 +4,7 @@ include ../../inc/common.mk
 HG_INC += -I../../optimalLeaf
 L += ${HALLIBS} ${MYSQLLIBS}
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/optimalLeaf.a
+MYLIBS =  ${MYLIBDIR}/jkhgapcgi.a ${MYLIBDIR}/jkhgap.a  ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/optimalLeaf.a
 COPT = -ggdb
 
 A = hgTracks

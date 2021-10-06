@@ -3,128 +3,39 @@ include ../../inc/localEnvironment.mk
 include ../../inc/common.mk
 XINC = -I$(MYSQLINC)
 
-O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
-    affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
-    altGraphX.o ancientRref.o \
-    annoFormatVep.o annoGratorGpVar.o annoGrateWigDb.o \
-    annoStreamDb.o annoStreamDbFactorSource.o annoStreamDbPslPlus.o annoStreamWig.o \
-    api.o atomDb.o autoUpgrade.o axtInfo.o axtLib.o bactigPos.o hgBam.o \
-    barChartBed.o barChartCategory.o barChartUi.o barChartData.o barChartSample.o \
-    baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
-    bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o  bed8Attrs.o bed12Source.o \
-    bed12wSeq.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bigBedFind.o bigBedLabel.o \
-    bigDbSnp.o bigGenePred.o bigPsl.o bigTransMap.o bioImage.o \
-    blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o\
-    cart.o cartDb.o cartEdit0.o cartEdit1.o cartJson.o cartTrackDb.o cartRewrite.o cdsEvidence.o cdsOrtho.o cdsPick.o cdsSpec.o \
-    ccdsInfo.o ccdsNotes.o ccdsGeneMap.o celeraCoverage.o \
-    celeraDupPositive.o cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgh.o chainCart.o \
-    chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
-    chicken13kInfo.o chromBins.o chromAlias.o chr18deletions.o \
-    chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o chromKeeper.o \
-    clinvarSub.o clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
-    contigAcc.o coordConv.o \
-    cnpIafrate.o cnpIafrate2.o cnpLocke.o cnpRedon.o cnpSebat.o cnpSebat2.o \
-    cnpSharp2.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
-    cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customComposite.o \
-    bedDetail.o cgiApoptosis.o customAdjacency.o \
-    customFactory.o customPp.o customTrack.o cutter.o cv.o cytoBand.o \
-    dbDb.o dbRIP.o dbSnpDetails.o dbSnpRs.o defaultDb.o delConrad2.o delHinds2.o \
-    dgv.o dgvPlus.o dless.o dnaMotifSql.o dnaMarkovSql.o dnaProbe.o \
-    dv.o dvBed.o dvXref2.o \
-    easyGene.o ec.o ecCode.o ecAttribute.o ecAttributeCode.o \
-    encode/encodeErge.o encode/encodeErgeHssCellLines.o \
-    encode/encodeHapMapAlleleFreq.o encode/encodeIndels.o encode/encodePeak.o \
-    encode/encodeRegionInfo.o encode/encodeRegionInfoCustom.o encode/encodeRna.o \
-    encode/encodeStanfordPromoters.o encode/encodeStanfordPromotersAverage.o \
-    encode/pairedTagAlign.o encode/peptideMapping.o encode/tagAlign.o  \
-    encode/wgEncodeGencodeAttrs.o encode/wgEncodeGencodeExonSupport.o \
-    encode/wgEncodeGencodeEntrezGene.o encode/wgEncodeGencodeTag.o  \
-    encode/wgEncodeGencodeGeneSymbol.o encode/wgEncodeGencodePdb.o encode/wgEncodeGencodePubMed.o \
-    encode/wgEncodeGencodeRefSeq.o encode/wgEncodeGencodeGeneSource.o encode/wgEncodeGencodeTranscriptSource.o \
-    encode/wgEncodeGencodeTranscriptSupport.o encode/wgEncodeGencodeTranscriptionSupportLevel.o \
-    encode/wgEncodeGencodeUniProt.o \
-    encode/wgEncodeGencodePolyAFeature.o encode/wgEncodeGencodeAnnotationRemark.o \
-    encode/wgEncodeCell.o \
-    encode/encodeExp.o \
-    encode3/encode2Manifest.o encode3/encode3Valid.o \
-    ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
-    est3.o estOrientInfo.o \
-    estPair.o exoFish.o expData.o expRecord.o exprBed.o \
-    facetedTable.o facetField.o factorSource.o \
-    fbTables.o featureBits.o fileUi.o findKGAlias.o findKGProtAlias.o fishClones.o \
-    flyBase2004Xref.o \
-    flyBaseSwissProt.o flyreg.o flyreg2.o gbExtFile.o gbWarn.o gbMiscDiff.o gbProtAnn.o gcPercent.o gbSeq.o \
-    genbank.o genbankBlackList.o gencodeGeneClass.o gencodeIntron.o genMapDb.o \
-    geneBands.o geneCheck.o geneCheckDetails.o geneCheckWidget.o \
-    geneGraph.o genePred.o genePredReader.o geneSimilarities.o genoLay.o \
-    genomeRangeTreeFile.o genomicDups.o \
-    genomicSuperDups.o geoMirror.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
-    ggTypes.o glDbRep.o goa.o goaPart.o googleAnalytics.o gpFx.o \
-    growthCondition.o grp.o \
-    gtexAse.o gtexBoxplot.o gtexEqtlCluster.o gtexInfo.o gtexDonor.o gtexGeneBed.o gtexSample.o \
-    gtexSampleData.o gtexTissue.o gtexTissueData.o gtexTissueMedian.o gtexUi.o \
-    gwasCatalog.o hAnno.o haplotypes.o \
-    hapmapAllelesOrtho.o hapmapAllelesSummary.o hapmapPhaseIIISummary.o \
-    hapmapSnps.o hapmapSnpsCombined.o \
-    hashJoin.o hCommon.o \
-    hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
-    hgFindSpec.o hgFindSpecCustom.o hgHgvs.o hgHgvsParse.o \
-    hgGene.o hic.o hicUi.o hgMaf.o hgRelate.o hgSeq.o hgdpGeo.o hPrint.o hVarSubst.o hvGfx.o \
-    HInv.o hubConnect.o hubPublic.o hubSearchText.o hui.o humanParalog.o \
-    imageClone.o indelShift.o interact.o interactUi.o isochores.o ispyTables.o \
-    itemAttr.o itemConf.o itemDetailsHtml.o jalview.o \
-    jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
-    jgiGene.o joinMixer.o \
-    kgAlias.o kgColor.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
-    lav.o ld.o ld2.o lfs.o liftOver.o liftOverChain.o liftUp.o \
-    llaInfo.o longRange.o lrg.o lsSnpPdb.o lsSnpPdbChimera.o mafFrames.o mafGene.o mafSummary.o \
-    makeItemsItem.o mammalPsg.o mapSts.o mathWig.o \
-    mcnBreakpoints.o mdb.o metaChromGraph.o microarray.o \
-    minChromSize.o minGeneInfo.o mrnaMisMatch.o \
-    mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o ncbiRefLink.o \
-    ncbiRefSeqLink.o netAlign.o netCart.o nonCodingUi.o omimTitle.o ooUtils.o \
-    orthoAlleles.o pal.o pbStamp.o pcrResult.o pepPred.o \
-    peptideAtlasPeptide.o plasEndPairs.o polyGenotype.o protFeat.o protobuf.o pscreen.o \
-    pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
-    rangeTreeFile.o rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
-    refLink.o refSeqStatus.o \
-    rgdQtl.o riken.o rhMapZfishInfo.o rikenBest.o rikenCluster.o rmskOut.o \
-    rmskAlign.o rmskJoined.o rmskOut2.o \
-    rnaFold.o rnaGene.o rnaGroup.o rnaHybridization.o rnaPLFold.o tRNAs.o gbRNAs.o snoRNAs.o lowelabPfamHit.o lowelabArkinOperonScore.o lowelabTIGROperonScore.o \
-    rnaSecStr.o tfbsConsFactors.o \
-    roughAli.o transMapStuff.o transMapInfo.o transMapGene.o transMapSrc.o \
-    sage.o sageCounts.o sageExp.o samAlignment.o sample.o \
-    sanger22extra.o sangerGene.o sangerGeneToWBGeneID.o  sargassoSeaXra.o \
-    scopDes.o scoredRef.o search.o seqWindow.o sessionThumbnail.o sgdAbundance.o \
-    sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o snakeUi.o \
-    snp.o snp125.o snp125CodingCoordless.o snp132Ext.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
-    snpUi.o snp125Exceptions.o snp125Ui.o softPromoter.o softberryHom.o soTerm.o \
-    spDb.o splignAlign.o sqlSanity.o stanMad.o stsAlias.o \
-    stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
-    stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o suggest.o \
-    switchDbTss.o synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
-    sqlProg.o tfbsCons.o tfbsConsSites.o tablesTables.o \
-    tableDescriptions.o tableStatus.o targetDb.o tfbsConsMap.o tagRepo.o \
-    taxonDivision.o taxonGeneticCode.o taxonName.o taxonNode.o taxonXref.o \
-    tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
-    trackDbCustom.o trackDbCache.o trackHub.o trackLayout.o trackTable.o trackVersion.o trashDir.o \
-    transRegCode.o transRegCodeCondition.o \
-    transRegCodeProbe.o txAliDiff.o txCluster.o txCommon.o txEdgeBed.o \
-    txEdgeOrtho.o txGraph.o txInfo.o txRnaAccs.o ucscRetroInfo.o ucscRetroOrtho.o \
-    variant.o variantProjector.o vcfUi.o \
-    vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
-    wabAli.o web.o ncRna.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
-    wiggleCart.o wiggleUtils.o wikiLink.o wikiTrack.o yaleGencodeAssoc.o \
-    zdobnovSynt.o oreganno.o \
-    oregannoUi.o gvUi.o gv.o omicia.o protVar.o pgSnp.o \
-    alignInfo.o cddInfo.o loweutils.o cddDesc.o arCOGs.o arcogdesc.o geneTree.o \
-    megablastInfo.o pgPhenoAssoc.o pgSiftPred.o pgPolyphenPred.o userRegions.o variome.o \
-    gencodeAnnotationRemark.o gencodeAttrs.o gencodeToEntrezGene.o \
-    gencodeExonSupport.o gencodeGeneSource.o gencodeToGeneSymbol.o gencodeToPdb.o \
-    gencodeToPubMed.o gencodeToRefSeq.o gencodeTag.o \
-    gencodeTranscriptionSupportLevel.o gencodeTranscriptSource.o \
-    gencodeTranscriptSupport.o gencodeToUniProt.o
-
+O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o autoUpgrade.o axtInfo.o \
+  barChartBed.o barChartUi.o bed.o bedDetail.o bigBedFind.o bigBedLabel.o bigDbSnp.o bigGenePred.o \
+  bigPsl.o blastTab.o borf.o botDelay.o cart.o cartDb.o cdsEvidence.o cdsOrtho.o cdsPick.o \
+  cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgiApoptosis.o chainCart.o chainDb.o chainLink.o chainNet.o \
+  chainNetDbLoad.o chromAlias.o chromBins.o chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o \
+  chromKeeper.o clonePos.o cpgIsland.o ctgPos.o customAdjacency.o customComposite.o customFactory.o \
+  customPp.o customTrack.o cv.o cytoBand.o dbDb.o defaultDb.o dnaMotifSql.o \
+  encode/encodeErge.o encode/encodeErgeHssCellLines.o encode/encodeExp.o encode/encodeHapMapAlleleFreq.o \
+  encode/encodeIndels.o encode/encodePeak.o encode/encodeRegionInfoCustom.o encode/encodeRna.o \
+  encode/encodeStanfordPromoters.o encode/encodeStanfordPromotersAverage.o encode/peptideMapping.o \
+  encode/wgEncodeGencodeAnnotationRemark.o encode/wgEncodeGencodeAttrs.o encode/wgEncodeGencodeEntrezGene.o \
+  encode/wgEncodeGencodeExonSupport.o encode/wgEncodeGencodeGeneSource.o encode/wgEncodeGencodePdb.o \
+  encode/wgEncodeGencodePubMed.o encode/wgEncodeGencodeRefSeq.o encode/wgEncodeGencodeTag.o \
+  encode/wgEncodeGencodeTranscriptSource.o encode/wgEncodeGencodeTranscriptSupport.o \
+  encode/wgEncodeGencodeTranscriptionSupportLevel.o encode/wgEncodeGencodeUniProt.o encode3/encode3Valid.o \
+  estOrientInfo.o expData.o expRecord.o facetField.o facetedTable.o featureBits.o findKGAlias.o \
+  findKGProtAlias.o gcPercent.o genbank.o genbankBlackList.o gencodeAttrs.o gencodeToRefSeq.o geneGraph.o \
+  genePred.o genePredReader.o geoMirror.o ggCluster.o ggDump.o ggGraph.o ggMrnaAli.o ggTypes.o glDbRep.o \
+  googleAnalytics.o gpFx.o grp.o gtexAse.o gtexDonor.o gtexGeneBed.o gtexInfo.o gtexSample.o \
+  gtexSampleData.o gtexTissue.o gtexTissueMedian.o gtexUi.o hCommon.o hPrint.o hVarSubst.o \
+  hapmapAllelesOrtho.o hapmapPhaseIIISummary.o hapmapSnps.o hdb.o hgColors.o hgConfig.o hgFind.o \
+  hgFindSpec.o hgFindSpecCustom.o hgHgvs.o hgHgvsParse.o hgMaf.o hgRelate.o hic.o hicUi.o hubConnect.o hubPublic.o \
+  hubSearchText.o hui.o imageClone.o indelShift.o interact.o interactUi.o itemAttr.o jksql.o joiner.o \
+  jsHelper.o kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o lav.o lfs.o liftOver.o liftOverChain.o \
+  liftUp.o longRange.o lrg.o lsSnpPdb.o mafFrames.o mafGene.o mafSummary.o makeItemsItem.o mdb.o \
+  microarray.o minChromSize.o netAlign.o netCart.o pepPred.o pgPhenoAssoc.o pgSnp.o pslReader.o qaSeq.o \
+  rankProp.o refLink.o rikenCluster.o rmskOut.o rmskOut2.o rnaGene.o sage.o sageCounts.o samAlignment.o \
+  sample.o sanger22extra.o scoredRef.o seqWindow.o snakeUi.o snp.o snpExceptions.o soTerm.o spDb.o sqlProg.o \
+  sqlSanity.o stanMad.o stsAlias.o stsInfo2.o stsMap.o stsMarker.o tableStatus.o tablesTables.o \
+  tagRepo.o tfbsCons.o tigrCmrGene.o traceInfo.o trackDb.o trackDbCache.o trackDbCustom.o trackHub.o \
+  trackVersion.o trashDir.o txAliDiff.o txCluster.o txCommon.o txEdgeBed.o txGraph.o txInfo.o txRnaAccs.o \
+  variantProjector.o vcfUi.o vegaInfo.o web.o wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o \
+  wiggleUtils.o wikiLink.o
 
 ifeq (${USE_HIC}, 1)
   O += straw.o
@@ -139,8 +50,11 @@ endif
 %.o: %.c
 	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
 
-../../lib/$(MACHTYPE)/jkhgap.a: $(O)
+../../lib/$(MACHTYPE)/jkhgap.a: $(O) libDir
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
+
+libDir:
+	mkdir -p ../../lib/$(MACHTYPE)
 
 jWestHeader.h: jWestHeader.html
 	sed -e 's/\\/\\\\/g; s/"/\\"/g; s/^/"/; s/$$/\\n"/;' jWestHeader.html > jWestHeader.h
