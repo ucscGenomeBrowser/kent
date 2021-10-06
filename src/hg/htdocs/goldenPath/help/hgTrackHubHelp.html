@@ -1016,8 +1016,13 @@ Please direct any questions about CyVerse or the Discovery Environment to their
 Cyverse support&quot; staff directly via the blue question box icon on the top right of the
 Discovery Environment page.</p>
 <p>
+<div class="text-center">
+  <img height="200px" src="../../images/cyverseRefresh.png">
+</div>
+<p>
 Note, if you need to replace files once they have been uploaded into CyVerse's DE and Public links
-have already been created you will need to force update the CyVerse cache by hitting Control-Shift-R
+have already been created you will need to force update the CyVerse cache. One way is to go back to the
+Public links section and find &quot;Refresh Cache&quot; button. Another way is by hitting Control-Shift-R
 in your browser to force reload the file or by sending Cache-Control: no-cache header: <code>curl
 --head --header 'Cache-Control: no-cache' https://data.cyverse.org/.../dataFile.bam</code></p>
 <!-- Galaxy stub
