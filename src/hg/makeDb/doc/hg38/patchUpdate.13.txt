@@ -71,6 +71,14 @@
     ln -sf hg38.p13.gc5Base.bw hg38.gc5Base.bw
 
 
+########################################
+#
+# BIGZIPS POLICY
+# Note about downloads directory policy under bigZips/
+# We want that top-level bigZips/ files to be the same as bigZips/initial/ files.
+# We do not want the top-level to have a mix of some newer files plus old files.
+# Even if "initial" dir is redundant, at least people will know what it means.
+#
 ##############################################################################
 # Extend main database download files (DONE - 2021-04-08 - Angie)
 
@@ -166,7 +174,8 @@
 #############################################################################
 # Put correct gc5Base files in downloads (DONE 2021-10-05 galt)
 # I found that there were nice versioned files made by the patch process,
-# but that they had never been correctly used, and in fact, the lastest one w
+# but that they had never been correctly used, and in fact, the lastest one 
+# was accidentally in the top level.
 
 cd /hive/data/genomes/hg38/goldenPath/bigZips/initial
 
@@ -238,6 +247,85 @@ rm hg38.chrom.sizes
 ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.chrom.sizes hg38.chrom.sizes
 ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.gc5Base.bw hg38.gc5Base.bw
 ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.gc5Base.wigVarStep.gz hg38.gc5Base.wigVarStep.gz
+
+
+#############################################################################
+# Correctly versioned hg38.chromAlias.txt files in downloads (DONE 2021-10-06 galt)
+# I made nice versioned files and installed them in the right location.
+# Now we did not have the problem where the lastest one was in the top level dir.
+
+cd /hive/data/genomes/hg38/goldenPath/bigZips
+
+# do not do this in the future, beyond p13 since it has already been done
+mv hg38.chromAlias.txt hg38.p12.chromAlias.txt.old
+
+~/kent/src/hg/utils/automation/chromAliasToTxt.pl hg38 > hg38.p13.chromAlias.txt
+
+# do not do this in the future, beyond p13 since it has already been done
+hgsql grcH38P13 -BNe 'select chrom from chromInfo' > p13.chroms
+hgsql grcH38P12 -BNe 'select chrom from chromInfo' > p12.chroms
+hgsql grcH38P11 -BNe 'select chrom from chromInfo' > p11.chroms
+
+# do not do this in the future, beyond p13 since it has already been done
+grep -v --file=p13.chroms hg38.p13.chromAlias.txt > hg38.p12.chromAlias.txt
+grep -v --file=p12.chroms hg38.p12.chromAlias.txt > hg38.p11.chromAlias.txt
+grep -v --file=p11.chroms hg38.p11.chromAlias.txt > hg38.initial.chromAlias.txt
+
+# do not do this in the future, beyond p13 since it has already been done
+diff hg38.p12.chromAlias.txt hg38.p12.chromAlias.txt.old
+#580a581
+#> chrUn_KI270752v1      HSCHRUN_RANDOM_CTG29    KI270752.1
+
+# FYI KI270752.1 is the discontinued non-human contig
+
+# added this to the README.txt
+KI270752.1 is no longer part of the RefSeq assembly it's hamster sequence
+derived from the human-hamster CHO cell line.
+https://www.ncbi.nlm.nih.gov/grc/human/issues/HG-2587
+
+wc -l hg38.*.chromAlias.txt*
+   455 hg38.initial.chromAlias.txt
+   578 hg38.p11.chromAlias.txt
+   595 hg38.p12.chromAlias.txt
+   596 hg38.p12.chromAlias.txt.old
+   640 hg38.p13.chromAlias.txt
+
+---------
+
+# do not do this in the future, beyond p13 since it has already been done
+cd /hive/data/genomes/hg38/goldenPath/bigZips/initial
+ln -s ../hg38.initial.chromAlias.txt hg38.chromAlias.txt
+md5sum hg38.chromAlias.txt >> md5sum.txt
+
+# do not do this in the future, beyond p13 since it has already been done
+cd /hive/data/genomes/hg38/goldenPath/bigZips
+ln -s initial/hg38.chromAlias.txt hg38.chromAlias.txt
+
+# do not do this in the future, beyond p13 since it has already been done
+cd /hive/data/genomes/hg38/goldenPath/bigZips/p11
+ln -s ../hg38.p11.chromAlias.txt hg38.p11.chromAlias.txt
+md5sum hg38.p11.chromAlias.txt >> md5sum.txt
+
+# do not do this in the future, beyond p13 since it has already been done
+cd /hive/data/genomes/hg38/goldenPath/bigZips/p12
+ln -s ../hg38.p12.chromAlias.txt hg38.p12.chromAlias.txt
+md5sum hg38.p12.chromAlias.txt >> md5sum.txt
+
+# do not do this in the future, beyond p13 since it has already been done
+# but in future make a copy of this block and rename stuff for p14 etc.
+cd /hive/data/genomes/hg38/goldenPath/bigZips/p13
+ln -s ../hg38.p13.chromAlias.txt hg38.p13.chromAlias.txt
+md5sum hg38.p13.chromAlias.txt >> md5sum.txt
+
+cd /hive/data/genomes/hg38/goldenPath/bigZips/latest
+# adapt to whatever the most recent patch is
+ln -s ../p13/hg38.p13.chromAlias.txt hg38.chromAlias.txt
+md5sum hg38.chromAlias.txt >> md5sum.txt
+
+# do not do this in the future, beyond p13 since it has already been done
+cd /data/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
+rm hg38.chromAlias.txt
+ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.chromAlias.txt hg38.chromAlias.txt
 
 
 #############################################################################
