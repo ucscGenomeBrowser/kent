@@ -1,0 +1,98 @@
+
+##############################################################################
+# LASTZ tardigrades GCA_001949185.1 (DONE - 2021-10-06 - Hiram)
+
+# should be able to run this from anywhere, this time it was run from:
+    cd kent/src/hg/utils/automation
+  
+  time (/hive/data/genomes/asmHubs/allBuild/GCA/001/949/185/GCA_001949185.1_Rvar_4.0/trackData/lastzGCA_002082055.1.2021-10-06/run.sh) \
+      >> /hive/data/genomes/asmHubs/allBuild/GCA/001/949/185/GCA_001949185.1_Rvar_4.0/trackData/lastzGCA_002082055.1.2021-10-06/do.log 2>&1
+
+    grep -w real do.log | tail -1 | sed -e 's/^/    # /;'
+    # real    10m31.512s
+
+    # this command outputs this makeDoc text:
+
+    cat kent/src/hg/utils/automation/liftOverTest.log
+
+##############################################################################
+# LASTZ tardigrades GCA_001949185.1 vs. tardigrades GCA_002082055.1 (DONE - 2021-10-06 - Hiram)
+    mkdir /hive/data/genomes/asmHubs/allBuild/GCA/001/949/185/GCA_001949185.1_Rvar_4.0/trackData/lastzGCA_002082055.1.2021-10-06
+    cd /hive/data/genomes/asmHubs/allBuild/GCA/001/949/185/GCA_001949185.1_Rvar_4.0/trackData/lastzGCA_002082055.1.2021-10-06
+
+    printf '# tardigrades GCA_002082055.1 vs. tardigrades GCA_001949185.1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: tardigrades GCA_001949185.1
+SEQ1_DIR=/hive/data/genomes/asmHubs/GCA/001/949/185/GCA_001949185.1/GCA_001949185.1.2bit
+SEQ1_LEN=/hive/data/genomes/asmHubs/GCA/001/949/185/GCA_001949185.1/GCA_001949185.1.chrom.sizes.txt
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: tardigrades GCA_002082055.1
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCA/002/082/055/GCA_002082055.1/GCA_002082055.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCA/002/082/055/GCA_002082055.1/GCA_002082055.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/asmHubs/allBuild/GCA/001/949/185/GCA_001949185.1_Rvar_4.0/trackData/lastzGCA_002082055.1.2021-10-06
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+      -tAsmId GCA_001949185.1_Rvar_4.0 -qAsmId GCA_002082055.1_nHd_3.1 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real      10m31.512s
+
+    sed -e 's/^/    # /;' fb.GCA_001949185.1.chainGCA_002082055.1Link.txt
+    # 14450772 bases of 55842812 (25.878%) in intersection
+    sed -e 's/^/    # /;' fb.GCA_001949185.1.chainSynGCA_002082055.1Link.txt
+    # 6694962 bases of 55842812 (11.989%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+      -target2Bit="/hive/data/genomes/asmHubs/GCA/001/949/185/GCA_001949185.1/GCA_001949185.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCA/001/949/185/GCA_001949185.1/GCA_001949185.1.chrom.sizes.txt" \
+      -query2Bit="/hive/data/genomes/asmHubs/GCA/002/082/055/GCA_002082055.1/GCA_002082055.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCA/002/082/055/GCA_002082055.1/GCA_002082055.1.chrom.sizes.txt" \
+        GCA_001949185.1 GCA_002082055.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real      1m39.278s
+
+    sed -e 's/^/    # /;' fb.GCA_001949185.1.chainRBest.GCA_002082055.1.txt
+    # 12952644 bases of 55842812 (23.195%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCA/002/082/055/GCA_002082055.1_nHd_3.1/trackData/blastz.GCA_001949185.1.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+  -tAsmId GCA_001949185.1_Rvar_4.0 -qAsmId GCA_002082055.1_nHd_3.1 /hive/data/genomes/asmHubs/allBuild/GCA/001/949/185/GCA_001949185.1_Rvar_4.0/trackData/lastzGCA_002082055.1.2021-10-06/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real      2m1.276s
+
+    sed -e 's/^/    # /;' fb.GCA_002082055.1.chainGCA_001949185.1Link.txt
+    # 15159345 bases of 104154999 (14.555%) in intersection
+    sed -e 's/^/    # /;' fb.GCA_002082055.1.chainSynGCA_001949185.1Link.txt
+    # 7022280 bases of 104154999 (6.742%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+   -query2bit="/hive/data/genomes/asmHubs/GCA/001/949/185/GCA_001949185.1/GCA_001949185.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCA/001/949/185/GCA_001949185.1/GCA_001949185.1.chrom.sizes.txt" \
+   -target2bit="/hive/data/genomes/asmHubs/GCA/002/082/055/GCA_002082055.1/GCA_002082055.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCA/002/082/055/GCA_002082055.1/GCA_002082055.1.chrom.sizes.txt" \
+   GCA_002082055.1 GCA_001949185.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real      1m39.919s
+
+    sed -e 's/^/    # /;' fb.GCA_002082055.1.chainRBest.GCA_001949185.1.txt
+    # 13053514 bases of 104154999 (12.533%) in intersection
+
+##############################################################################
