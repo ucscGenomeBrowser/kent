@@ -482,9 +482,9 @@ char *makeFolderObjectString(char *id, char *text, char *parent, char *title, bo
 {
 struct dyString *folderString = dyStringNew(0);
 dyStringPrintf(folderString, "{icon: '../../images/folderC.png', id: '%s', "
-    "text:\"%s\", parent:'%s',"
+    "text:'%s', parent:'%s',"
     "li_attr:{title:'%s'}, children:%s, state: {opened: %s}}",
-    htmlEncode(id), text, htmlEncode(parent), title, children ? "true" : "false", openFolder ? "true" : "false");
+    htmlEncode(id), htmlEncode(text), htmlEncode(parent), title, children ? "true" : "false", openFolder ? "true" : "false");
 return dyStringCannibalize(&folderString);
 }
 
@@ -496,7 +496,7 @@ struct dyString *item = dyStringNew(0);
 dyStringPrintf(item, "{icon: 'fa fa-plus', id:'%s', li_attr:{class: 'hubError', title: '%s', "
         "shortLabel: '%s', longLabel: '%s', color: '%s', name:'%s'}, "
         "text:'%s', parent: '%s', state: {opened: true}}",
-        htmlEncode(id), title, shortLabel, longLabel, color, name, replaceChars(text, "'", "\\'"), htmlEncode(parent));
+        htmlEncode(id), title, htmlEncode(shortLabel), htmlEncode(longLabel), color, name, htmlEncode(text), htmlEncode(parent));
 return dyStringCannibalize(&item);
 }
 

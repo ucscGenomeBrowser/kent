@@ -2752,6 +2752,13 @@ if (results && results->singleSubtreeInfo)
            "Nextstrain' button, and then you can drag on a CSV file to "
            "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
            "</p>\n");
+    puts("<p><em>Note: "
+         "The Nextstrain subtree views, and Download files below, are temporary files and will "
+         "expire within two days.  "
+         "Please download the Nextstrain subtree JSON files if you will want to view them "
+         "again in the future.  The JSON files can be drag-dropped onto "
+         "<a href='https://auspice.us/' target=_blank>https://auspice.us/</a>."
+         "</em></p>");
 
     struct tempName *tsvTn = NULL, *sTsvTn = NULL;
     struct tempName *zipTn = makeSubtreeZipFile(results, jsonTns, singleSubtreeJsonTn,
