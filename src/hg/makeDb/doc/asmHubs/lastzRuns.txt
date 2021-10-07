@@ -1,22 +1,28 @@
-
 ##############################################################################
-# LASTZ tardigrades GCA_001949185.1 (DONE - 2021-10-06 - Hiram)
+# LASTZ tardigrades GCA_001949185.1 (DONE - 2021-10-06 - Gerardo)
 
 # should be able to run this from anywhere, this time it was run from:
     cd kent/src/hg/utils/automation
   
-  time (/hive/data/genomes/asmHubs/allBuild/GCA/001/949/185/GCA_001949185.1_Rvar_4.0/trackData/lastzGCA_002082055.1.2021-10-06/run.sh) \
-      >> /hive/data/genomes/asmHubs/allBuild/GCA/001/949/185/GCA_001949185.1_Rvar_4.0/trackData/lastzGCA_002082055.1.2021-10-06/do.log 2>&1
+  time (~/kent/src/hg/utils/automation/pairLastz.sh \
+        GCA_001949185.1_Rvar_4.0 GCA_002082055.1_nHd_3.1 other other) \
+	   > liftOverTest.log 2>&1
+  # check the total time
+  grep -w real liftOverTest.log  | tail -1 | sed -e 's/^/    # /;'
+    # real      15m52.438s
 
-    grep -w real do.log | tail -1 | sed -e 's/^/    # /;'
-    # real    10m31.512s
+  # this liftOverTest log file happens to have a copy of the make doc, as well
+  # as the copy of the make doc left in the target assembly directory:
+# /hive/data/genomes/asmHubs/allBuild/GCA/001/949/185/GCA_001949185.1_Rvar_4.0/trackData/lastzGCA_002082055.1.2021-10-06/makeDoc.txt
 
     # this command outputs this makeDoc text:
 
     cat kent/src/hg/utils/automation/liftOverTest.log
 
 ##############################################################################
-# LASTZ tardigrades GCA_001949185.1 vs. tardigrades GCA_002082055.1 (DONE - 2021-10-06 - Hiram)
+# LASTZ tardigrades GCA_001949185.1 vs. tardigrades GCA_002082055.1
+#	(DONE - 2021-10-06 - Gerardo)
+
     mkdir /hive/data/genomes/asmHubs/allBuild/GCA/001/949/185/GCA_001949185.1_Rvar_4.0/trackData/lastzGCA_002082055.1.2021-10-06
     cd /hive/data/genomes/asmHubs/allBuild/GCA/001/949/185/GCA_001949185.1_Rvar_4.0/trackData/lastzGCA_002082055.1.2021-10-06
 

@@ -365,8 +365,10 @@ fi      ###     if [ $primaryDone -eq 0 ]; then
 
 #### print out the makeDoc.txt to this point into buildDir/makeDoc.txt
 
+export userName="`whoami`"
+
 printf "##############################################################################
-# LASTZ ${tOrgName} ${Target} vs. $qOrgName ${Query} (DONE - $DS - Hiram)
+# LASTZ ${tOrgName} ${Target} vs. $qOrgName ${Query} (DONE - $DS - $userName)
     mkdir $buildDir
     cd $buildDir
 
