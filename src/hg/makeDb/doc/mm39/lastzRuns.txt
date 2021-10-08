@@ -2246,6 +2246,9 @@ TMPDIR=/dev/shm
   time (~/kent/src/hg/utils/automation/pairLastz.sh mm39 hg19 mammal primate) \
       > mm39.hg19.log 2>&1
 
+    grep -w real mm39.hg19.log | tail -1 | sed -e 's/^/    # /;'
+    # real    1200m57.924s
+
     # this command outputs this makeDoc text:
 
     cat lastz.hg19/makeDoc.txt
