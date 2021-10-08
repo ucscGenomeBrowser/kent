@@ -14,7 +14,7 @@ Example run:
     
 """
 
-import subprocess,requests,sys,argparse
+import subprocess,sys,argparse
 
 def parseArgs():
     """
@@ -74,10 +74,25 @@ def buildPubHubDic(hgsqlInput):
                             'dbList':hub[5],'descriptionUrl':hub[5]}
     return(hubPublicDic)
 
+def escapeDoubleQuotesOnLabels(label):
+    """Look for single and double quotes in labels"""
+    if '"' in label:
+        label = label.replace('"','\\"')
+    if "'" in label:
+        label = label.replace("'","\\'")
+    return(label)
+
+def curl(url):
+    """Run curl command on URL - for http + ftp support"""
+    rawCurlOutput = subprocess.run("curl -skL "+url,\
+                         check=True, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
+    curlStdout = rawCurlOutput.stdout
+    return(curlStdout)
+
 def buildCurrentHubTxtDic(hub):
     """Query hub.txt file and build dic of values"""
     currentHub = {}
-    response = requests.get(hub).text
+    response = curl(hub)
     for line in response.splitlines():
         if "\t" in line.rstrip():
             line = line.split("\t")
@@ -96,7 +111,7 @@ def queryHubTxt(currentHub,hub):
         genomeUrl = genomeFileLocation
     else:
         genomeUrl = "/".join(hub.split('/')[:-1])+"/"+genomeFileLocation
-    genomeInfo = requests.get(genomeUrl).text
+    genomeInfo = curl(genomeUrl)
     
     for line in genomeInfo.splitlines():
         if "\t" in line:
@@ -126,10 +141,10 @@ def compareResults(hubPublicDic,currentHub,hub,hgsqlInput,testMode):
     """Compare the hubPublic values to the queried currentHub values and report"""
 
     if hubPublicDic[hub]['shortLabel'] != currentHub['shortLabel'].rstrip().lstrip():
-        printHgsql(hub,'shortLabel',currentHub['shortLabel'].rstrip().lstrip(),hgsqlInput,testMode)
+        printHgsql(hub,'shortLabel',escapeDoubleQuotesOnLabels(currentHub['shortLabel'].rstrip().lstrip()),hgsqlInput,testMode)
         
     if hubPublicDic[hub]['longLabel'] != currentHub['longLabel'].rstrip().lstrip():     
-        printHgsql(hub,'longLabel',currentHub['longLabel'].rstrip().lstrip(),hgsqlInput,testMode)
+        printHgsql(hub,'longLabel',escapeDoubleQuotesOnLabels(currentHub['longLabel'].rstrip().lstrip()),hgsqlInput,testMode)
 
     if int(hubPublicDic[hub]['dbCount']) != int(currentHub['dbCount']):
         printHgsql(hub,'dbCount',currentHub['dbCount'],hgsqlInput,testMode)
