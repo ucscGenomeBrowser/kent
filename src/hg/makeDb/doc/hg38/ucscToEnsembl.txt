@@ -1,0 +1,222 @@
+
+###########################################################################
+### obtain the Ensembl sequence to create idKeys
+###########################################################################
+
+mkdir -p /hive/data/genomes/hg38/bed/chromAlias/update.2021-09-20/ensemblRecent
+cd /hive/data/genomes/hg38/bed/chromAlias/update.2021-09-20/ensemblRecent
+
+wget --timestamping \
+http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz
+
+# alternate sequences are too large to place everything into one 2bit file
+
+faSplit byname Homo_sapiens.GRCh38.dna.toplevel.fa.gz split/
+
+# make 2bit files for each sequence
+
+mkdir -p twoBit
+
+for F in split/*
+do
+  echo $F | sed -e 's/.fa$//; s#split/##;' | while read C
+  do
+     printf "faToTwoBit ${F} twoBit/${C}.2bit\n"
+  done
+done
+
+# create twoBitDup idKeys for each sequence
+mkdir -p keys
+
+for F in twoBit/*
+do
+  echo $F | sed -e 's/.2bit$//; s#twoBit/##;' | while read C
+  do
+     twoBitDup ${F} -keyList=keys/${C}.txt
+  done
+done
+
+# put all those keys together into one idKeys.txt file:
+
+cat keys/* | sort > ensembl.GRCh38.p13.idKeys.txt
+
+###########################################################################
+# ready to match idKeys
+###########################################################################
+
+# chrY doesn't match since Ensembl has masked the PAR on Y
+# but it is the same length sequence and does match except for the PAR
+# the 'grep -v 270752' eliminates the contamination sequence
+
+cd /hive/data/genomes/hg38/bed/chromAlias
+( printf "chrY\tY\n"
+join -t$'\t' ../idKeys.p13/hg38.idKeys.txt \
+  ./update.2021-09-20/ensemblRecent/ensembl.GRCh38.p13.idKeys.txt \
+    | cut -f2- ) | grep -v 270752 | sort > perfect.ucsc.ensembl.tsv
+
+# the ones that don't match are because of the construction of the alt
+# sequence at Ensembl:
+
+join -v2 -t$'\t' ../idKeys.p13/hg38.idKeys.txt \
+  ./update.2021-09-20/ensemblRecent/ensembl.GRCh38.p13.idKeys.txt \
+    | grep -v -w "Y" | cut -f2- | sort > noKeyMatch.ucsc.ensembl.tsv
+
+###########################################################################
+# Extract the alt sequences from the artifical Ensembl chromosomes
+###########################################################################
+
+cd /hive/data/genomes/hg38/bed/chromAlias/update.2021-09-20/ensemblRecent
+
+# this script will remove the leading and trailing N sequences from
+# the fasta, and it will measure the leading N length to get the lift
+# coordinate
+
+printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+  printf STDERR "usage: ./trimEnds.pl file.fa > file.fa 2> lift.file\n";
+  exit 255;
+}
+
+my $skipBeginning = 1;
+my @endTrim;
+my $liftOffset = 0;
+my $inFile = shift;
+my $seqName = $inFile;
+$seqName =~ s/.fa//;
+$seqName =~ s#split/##;
+open (FH, "<$inFile") or die "can not read $inFile";
+while (my $line = <FH>) {
+  chomp $line;
+  if ($line =~ m/^>/) {
+    printf "%s\n", $line;
+  } elsif ($skipBeginning && ($line =~ m/^NN*N$/)) {
+    $liftOffset += length($line);
+  } elsif ($skipBeginning) {
+       $skipBeginning = 0;
+       my $lineLength = length($line);
+       $line =~ s/^N+//;
+       $liftOffset += $lineLength - length($line);
+       printf STDERR "%s\t%d\n", $seqName, $liftOffset;
+       push @endTrim, $line;
+  } else {
+       push @endTrim, $line;
+  }
+}
+close (FH);
+
+my $endTrimmed = 0;
+my $arrayLength = scalar(@endTrim);
+for (my $i = $arrayLength - 1; $endTrimmed < 1 && $i > 0; --$i) {
+  if ($endTrim[$i] =~ m/^$/) {
+     delete $endTrim[$i];
+  } elsif ($endTrim[$i] =~ m/^N*$/) {
+     delete $endTrim[$i];
+  } else {
+     $endTrimmed = 1;
+     $endTrim[$i] =~ s/N+$//;
+  }
+}
+
+$arrayLength = scalar(@endTrim);
+for (my $i = 0; $i < $arrayLength; ++$i) {
+  printf "%s\n", $endTrim[$i];
+}
+' > trimEnds.pl
+
+chmod +x trimEnds.pl
+
+mkdir -p noNs
+
+cut -f2 ../../noKeyMatch.ucsc.ensembl.tsv | grep -v -w Y | while read C
+do
+  if [ -s "noNs/${C}.fa" ]; then
+    printf "# done ${C}\n"
+  else
+    printf "# working ${C}\n"
+    ./trimEnds.pl split/${C}.fa > noNs/${C}.fa
+  fi
+done 2> ensemblLift.tsv
+
+### and make up a 2bit file with all these trimmed sequences
+faToTwoBit noNs/*.fa noNs.2bit
+### and idKeys via twoBitDup
+twoBitDup -keyList=stdout noNs.2bit | sort > noNs.idKeys.txt
+
+###########################################################################
+# continue to match idKeys for these alternate sequences
+###########################################################################
+
+cd /hive/data/genomes/hg38/bed/chromAlias
+
+join -t$'\t' ../idKeys.p13/hg38.idKeys.txt \
+   ./update.2021-09-20/ensemblRecent/noNs.idKeys.txt \
+    | cut -f2- | sort > alts.OK.ucsc.ensembl.tsv
+
+# the outstanding mis-matches are due to Ensembl reversed sequence
+
+comm -23 <(cut -f2 ../idKeys.p13/hg38.idKeys.txt | sort) \
+  <(cut -f1 alts.OK.ucsc.ensembl.tsv perfect.ucsc.ensembl.tsv | sort) \
+     | grep -v 270752 > to.be.determined.ucsc.ensembl.txt
+
+# reverse those UCSC sequences:
+
+mkdir -p ucscRc
+
+for C in `cat to.be.determined.ucsc.ensembl.txt`
+do
+   twoBitToFa ../../hg38.p13.2bit:${C} stdout | faRc stdin ucscRc/${C}_r.fa
+done
+
+faToTwoBit ucscRc/*_r.fa ./ucscRc.2bit
+twoBitDup -keyList=stdout ucscRc.2bit | sort > ucscRc.idKeys.txt
+
+join -t$'\t' ucscRc.idKeys.txt ./update.2021-09-20/ensemblRecent/noNs.idKeys \
+  | cut -f2- | sed -e 's/RC_//;' > reversedAlts.ucsc.ensembl.tsv
+
+### and finally, all together now:
+
+sort alts.OK.ucsc.ensembl.tsv perfect.ucsc.ensembl.tsv \
+   reversedAlts.ucsc.ensembl.tsv > ucscToEnsembl.hg38.p13.tsv
+
+### after all this, there is one sequence in UCSC: chr15_KN538374v1_fix
+### which can not be found in Ensembl.  I don't know why.  When I blat
+### it at Ensembl, it says it is a section of chr15.  This sequence
+### is also highly related to chr15_KI270905v1_alt
+
+# load the ucscToEnsembl table:
+
+printf '
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(23))
+);
+' > ucscToEnsembl.sql
+
+hgsql hg38 -e 'drop table ucscToEnsembl;'
+hgsql hg38 < ucscToEnsembl.sql
+hgsql hg38 \
+  -e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.hg38.p13.tsv" INTO TABLE ucscToEnsembl'
+
+printf '
+CREATE TABLE ensemblLift (
+    chrom varchar(255) not null,      # Ensembl chromosome name
+    offset int unsigned not null,     # offset to add to UCSC position
+              #Indices
+    PRIMARY KEY(chrom(38))
+);
+' > ensemblLift.sql
+
+hgsql hg38 -e 'drop table ensemblLift;'
+hgsql hg38 < ensemblLift.sql
+hgsql hg38 \
+  -e 'LOAD DATA LOCAL INFILE "update.2021-09-20/ensemblRecent/ensemblLift.tsv" INTO TABLE ensemblLift'
+
