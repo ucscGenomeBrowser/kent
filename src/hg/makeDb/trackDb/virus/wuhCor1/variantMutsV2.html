@@ -1,28 +1,38 @@
 <h2>Description</h2>
 <p>
-This track displays amino acid and nucleotide mutations in SARS-CoV-2 Variants of 
-Concern or Interest, as defined in late September 2021 by the World Health Organization
-(see <a target='_blank' href='https://www.who.int/en/activities/tracking-SARS-CoV-2-variants/'>
-Tracking SARS-CoV-2 variants</a>).
+This track displays amino acid and nucleotide mutations in SARS-CoV-2 variants
+as defined in September 2021 by the World Health Organization (WHO). 
+See their page on <a target='_blank' 
+href='https://www.who.int/en/activities/tracking-SARS-CoV-2-variants/'>
+tracking SARS-CoV-2 variants</a> for more information on the WHO variant 
+classification system. Note that the 
+<a href="https://www.cdc.gov/coronavirus/2019-ncov/variants/variant-info.html" 
+target="_blank">Center for Disesase Control (CDC) classification</a> of SARS-CoV-2 
+variants is slightly different than the WHO.</p>
+
+<p>
 Mutations in this track were identified from viral sequences at 
 <a href="https://gisaid.org" target=_blank>GISAID</a>.
 Variant incidence and geographic distribution information is available from links to the 
 <a target="_blank" href="https://Outbreak.info">Outbreak.info</a> web resource
-on the track details pages.</p>
+on the mutation details pages.</p>
+
 <p>
-A <b>Variant of Concern</b> (VOC) evidences increased transmissibility, virulence, and/or decreased
-diagnostic, therapeutic, or vaccine efficacy.
-<br>A <b>Variant of Interest</b> (VOI) contains mutations suspected or confirmed to cause a change in
-transmissibility, virulence, or diagnostic / therapeutic / vaccine efficacy, plus community 
-transmission, a cluster of cases, or detection in multiple countries.
-<br>A <b>Variants under Monitoring</b> (VUM) track includes variants previously identified as
-Variants of Interest, now classified at a lower level of concern.
+A <b>Variant of Concern</b> (VOC) has evidence for increased transmissibility, 
+virulence, and/or decreased diagnostic, therapeutic, or vaccine efficacy.
+<br>A <b>Variant of Interest</b> (VOI) contains mutations suspected or confirmed 
+to cause a change in transmissibility, virulence, or diagnostic / therapeutic / 
+vaccine efficacy, plus evidence of significant community transmission, 
+a cluster of cases, or detection in multiple countries.
+<br>A <b>Variant under Monitoring</b> (VUM) includes variants with unclear 
+epidemiological impact. This track includes only the four VUMs which were previously 
+identified as Variants of Interest, now reclassified as this lower level of concern.
 </p>
 
 <p>
 The related track
 <a target="_blank" href="../cgi-bin/hgTrackUi?db=wuhCor1&g=lineageB_1_1_7_US"> B.1.1.7 in USA</a>
-displays a phylogenetic tree of the first B.1.1.7 variant sequences collected in the United States.
+displays a phylogenetic tree of the first B.1.1.7 (Alpha) variant sequences collected in the United States.
 </p>
 
 <h2>Display Conventions</h2>
@@ -35,9 +45,8 @@ at <a target="_blank" href="https://nextstrain.org/ncov/gisaid/global">Nextstrai
 <img style="margin: 8px; border: 1.5px solid; width: 1013px; height: 628" 
         src="../images/nextstrain.sep30-2021.png">
 <p>
-The Greek-letter names assigned by the World Health Organization (WHO) and published by
-the <a href = "https://www.cdc.gov/coronavirus/2019-ncov/variants/variant-info.html"
-target = _blank>CDC</a> are listed in this table, along with lineage and clade designations:
+The Greek-letter names assigned by the World Health Organization (WHO) are listed 
+in this table, along with lineage and clade designations:
 
 <table style="border-spacing: 20px 2px;">
   <tr>
@@ -192,13 +201,13 @@ script from the
 <a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> repository.
 Single-nucleotide substitutions were extracted from the alignment using the UCSC tool
 <em>faToVcf</em>
-(available on the download server
-<a target="_blank" href="https://hgdownload.soe.ucsc.edu/admin/exe/">here</a>
+(available on <a target="_blank" 
+href="https://hgdownload.soe.ucsc.edu/admin/exe/">the UCSC download server</a>
 or from <a target="_blank" href="https://anaconda.org/bioconda/ucsc-fatovcf">bioconda</a>;
 also requires the
 <a target="_blank" href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2">
 SARS-CoV-2 reference sequence</a>).
-Single nucleotide substitutions present at a frequency
+Single-nucleotide substitutions present at a frequency
 of at least 0.95 (.70 for Delta) were retained while all others are discarded.
 <p>
 For indel detection, the 
@@ -235,16 +244,16 @@ accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
 Version 2 of this track adds one new Variant of Concern (Delta), two new Variants of 
 Interest (Lambda, Mu), and three named variants previously VOI, now designated as less 
 concerning Variants under Monitoring (Eta, Iota, Kappa).  
-The track labels of all variants have been updated to include WHO labels, and track colors 
+The track labels of all variants have been updated to include WHO labels. Track colors 
 reflect Nextstrain conventions at the time of track data  update (September 10, 2021).
 </p>
 
 <h2>Credits</h2>
 <p>
-<p>This work is made possible by the open sharing of genetic data by research
+This work is made possible by the open sharing of genetic data by research
 groups from all over the world. We gratefully acknowledge their contributions.
 We thank 
-<a taret="_blank" href="https://www.robertlanfear.com/">Rob Lanfear</a> 
+<a target="_blank" href="https://www.robertlanfear.com/">Rob Lanfear</a> 
 at the Australia National University for developing and maintaining the
 <a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> web resource.
 We also thank 
@@ -265,7 +274,7 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32669681" target="_blank">326
 Rambaut A, Loman N, Pybus O, Barclay W, Barrett J,
 Carabelli A, Connor T, Peacock T, Robertson DL, Volz E, <em>et al.</em>
 <a href="https://virological.org/t/preliminary-genomic-characterisation-of-an-emergent-sars-cov-2-lineage-in-the-uk-defined-by-a-novel-set-of-spike-mutations/563"
-   target=_blank>Preliminary genomic characterisation of an emergent SARS-CoV-2 lineage in the UK
+   target=_blank>Preliminary genomic characterization of an emergent SARS-CoV-2 lineage in the UK
   defined by a novel set of spike mutations</a>.
 <em>Virological</em>.  2020 Dec 18.
 </p>
@@ -273,19 +282,20 @@ Carabelli A, Connor T, Peacock T, Robertson DL, Volz E, <em>et al.</em>
 <p>
 Volz E, Mishra S, Chand M, Barrett JC, Johnson E,
 Geidelberg L, Hinsley WR, Laydon DJ, Dabrera G, O'Toole &#193;, <em>et al.</em>
-<a href="https://virological.org/t/transmission-of-sars-cov-2-lineage-b-1-1-7-in-england-insights-from-linking-epidemiological-and-genetic-data/576"
-   target=_blank>Transmission of SARS-CoV-2 Lineage B.1.1.7 in England: Insights from linking
-  epidemiological and genetic data</a>.
-  <em>Virological</em>.  2020 Dec 31.
-</p>
+<a href="https://virological.org/t/transmission-of-sars-cov-2-lineage-b-1-1-7-in-england-insights-from-linking-epidemiological-and-genetic-data/576" target=_blank>
+Transmission of SARS-CoV-2 Lineage B.1.1.7 in England: Insights from linking 
+epidemiological and genetic data</a>.
+<em>Virological</em>.  2020 Dec 31.</p>
 
+<p>
 Tegally <em>et al</em>, December 21, 2020.
 <a target="_blank" href="https://www.medrxiv.org/content/10.1101/2020.12.21.20248640v1">
 Emergence and rapid spread of a new severe acute respiratory syndrome-related coronavirus 2 (SARS-CoV-2) lineage with multiple spike mutations in South Africa</a> medRxiv preprint.
-
 Zhang <em> al</em>, January 20, 2021.
 <a target="_blank" href="https://www.medrxiv.org/content/10.1101/2021.01.18.21249786v1">
-Emergence of a novel SARS-CoV-2 strain in Southern California, USA</a> medRxiv preprint.
+Emergence of a novel SARS-CoV-2 strain in Southern California, USA</a> 
+medRxiv preprint.
+</p>
 
 <p>
 Voloch <em>et al</em>, December 26, 2020. 
@@ -297,6 +307,7 @@ Genomic characterization of a novel SARS-CoV-2 lineage from Rio de Janeiro, Braz
 Lanfear, Rob (2020). A global phylogeny of SARS-CoV-2 sequences from GISAID. Zenodo DOI:
 <a href="https://zenodo.org/record/4289383" target=_blank>10.5281/zenodo.3958883</a>
 </p>
+
 <p>
 Li Heng
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/29750242" target="_blank">
@@ -305,10 +316,10 @@ Minimap2: pairwise alignment for nucleotide sequences</a>.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29750242" target="_blank">29750242</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6137996/" target="_blank">PMC6137996</a>
 </p>
+
 <p>
-Gangavarapu, Karthik; Alkuzweny, Manar; Cano, Marco; Haag, Emily; Latif, Alaa Abdel; Mullen, Julia L.; Rush, Benjamin; Tsueng, Ginger; Zhou, Jerry; Andersen, Kristian G.; Wu, Chunlei; Su, Andrew I.; Hughes, Laura D. <a target="_blank" href="https://outbreak.info/">Outbreak.info</a>
+Gangavarapu, Karthik; Alkuzweny, Manar; Cano, Marco; Haag, Emily; Latif, Alaa Abdel; 
+Mullen, Julia L.; Rush, Benjamin; Tsueng, Ginger; Zhou, Jerry; Andersen, Kristian G.; 
+Wu, Chunlei; Su, Andrew I.; Hughes, Laura D. 
+<a target="_blank" href="https://outbreak.info/">Outbreak.info</a>
 </p>
-</p>
-
-
-
