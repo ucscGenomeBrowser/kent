@@ -141,15 +141,9 @@ var suggestBox = {
         var waterMark;
         var $posInput = $('#positionInput');
         if (assemblySupportsGeneSuggest) {
-            if (db.match(/^hg[0-9]+/)) {
-                // Mention HGVS variant notation for human assemblies only, although it should work
-                // with any assembly that has refGene or ncbiRefSeq.
-                waterMark = "enter position, gene symbol, HGVS or search terms";
-            } else {
-                waterMark = "enter position, gene symbol or search terms";
-            }
+                waterMark = "gene, chromosome range or other position, see examples";
         } else {
-            waterMark = "enter position or search terms";
+            waterMark = "chromosome range or search terms, see examples";
         }
             //$('input[name="hgt.positionInput"]').val("");
         $posInput.val("");

@@ -62,7 +62,7 @@ def evaluateServer(serverToQuery):
 def buildPubHubDic(hgsqlInput):
     """Build a dictionary out of the requested server's hubPublic table"""
     hubPublicDic = {}    
-    hubPublic = subprocess.run("hgsql "+hgsqlInput[0]+"-e 'select * from hubPublic' "+hgsqlInput[1],\
+    hubPublic = subprocess.run("/cluster/bin/x86_64/hgsql "+hgsqlInput[0]+"-e 'select * from hubPublic' "+hgsqlInput[1],\
                          check=True, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
     hubPublicOutput = hubPublic.stdout.split('\n')[1:-1]
 
@@ -131,7 +131,7 @@ def queryHubTxt(currentHub,hub):
 
 def printHgsql(hub,varToEdit,newVarValue,hgsqlInput,testMode):
     """hgsql command to fix the difference"""
-    cmd = "hgsql "+hgsqlInput[0]+"-e \"update hubPublic set "+varToEdit+" = '"+str(newVarValue)+ \
+    cmd = "/cluster/bin/x86_64/hgsql "+hgsqlInput[0]+"-e \"update hubPublic set "+varToEdit+" = '"+str(newVarValue)+ \
     "' where hubUrl = '"+hub+"'\" "+hgsqlInput[1]
     if not testMode:
         subprocess.run(cmd, check=True, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
