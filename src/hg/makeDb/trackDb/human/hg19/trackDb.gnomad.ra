@@ -893,7 +893,7 @@ html gnomad
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); Genes: $genes; Type: $annot; Tag: $FILTER; Allele Frequency: $AF ($AC/$AN)
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
+    detailsStaticTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
     html gnomadExomesGenomes
 
     track gnomadExomes
@@ -919,7 +919,7 @@ html gnomad
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); Genes: $genes; Type: $annot; Tag: $FILTER; Allele Frequency: $AF ($AC/$AN)
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
+    detailsStaticTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
     html gnomadExomesGenomes
 
 searchTable pliByTranscript

@@ -81,7 +81,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071421 "v3.1.1 released July
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); Genes: $genes; Type: $annot; Tag: $FILTER; Allele Frequency: $AF ($AC/$AN)
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraDetailsTable Population Frequencies|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
+    detailsStaticTable Population Frequencies|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
 
     track gnomadGenomesVariantsV3_1_1
     parent gnomadVariants
@@ -112,8 +112,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071421 "v3.1.1 released July
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraTableFields _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
-    detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
+    detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
+    detailsUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
     pennantIcon Updated red ../goldenPath/newsarch.html#071421 "Released July 14, 2021"
 
 searchTable gnomadGenomesVariantsV3_1_1
