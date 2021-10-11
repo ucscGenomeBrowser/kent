@@ -186,7 +186,9 @@ set d = 2021_09_10
 
 
 ################
-# Sanity check from earlier runs.
+# Sanity check from earlier runs.  Just here for historical reasons, as RM wasn't updated during
+# track dev.
+
 # Noting that Angie wants to keep non-delta SNV cutoff at .95, so we will miss some 
 # outbreak listed variants as they use .75 cutoff.
 
