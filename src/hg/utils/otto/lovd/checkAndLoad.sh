@@ -55,8 +55,10 @@ do
     newLongLc=`wc -l lovd.${db}.long.bed.sorted | cut -d' ' -f1`
     echo ${db} short rowcount: old $oldShortLc new: $newShortLc
     echo ${db} long rowcount: old $oldLongLc new: $newLongLc
-    echo $oldShortLc $newShortLc | awk -v d=${db} '{if (($2-$1)/$1 > 0.1) {printf "validate on %s LOVD short failed: old count: %d, new count: %d\n", d,$1,$2; exit 1;}}'
-    echo $oldLongLc $newLongLc | awk -v d=${db} '{if (($2-$1)/$1 > 0.1) {printf "validate on %s LOVD long failed: old count: %d, new count: %d\n", d,$1,$2; exit 1;}}'
+    if [ $oldShortLc -ne "0" ] ; then
+            echo $oldShortLc $newShortLc | awk -v d=${db} '{if (($2-$1)/$1 > 0.1) {printf "validate on %s LOVD short failed: old count: %d, new count: %d\n", d,$1,$2; exit 1;}}'
+            echo $oldLongLc $newLongLc | awk -v d=${db} '{if (($2-$1)/$1 > 0.1) {printf "validate on %s LOVD long failed: old count: %d, new count: %d\n", d,$1,$2; exit 1;}}'
+    fi
 
     bedToBigBed -type=bed4+3 -tab -as=../lovd.short.as lovd.${db}.short.bed.sorted /cluster/data/${db}/chrom.sizes lovd.${db}.short.bb
     bedToBigBed -type=bed9+3 -tab -as=../lovd.long.as lovd.${db}.long.bed.sorted /cluster/data/${db}/chrom.sizes lovd.${db}.long.bb
