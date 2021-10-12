@@ -1704,7 +1704,7 @@ void getExtraTableFields(struct trackDb *tdb, struct slName **retFieldNames, str
  * and fill out a hash keyed on the bigBed field name (which may be in an external file
  * and not in the bigBed itself) to a helper struct for storing user defined tables. */
 {
-struct slName *tmp; *embeddedTblSetting = slNameListFromComma(trackDbSetting(tdb, TDB_DYNAMICTABLE_SETTING));
+struct slName *tmp, *embeddedTblSetting = slNameListFromComma(trackDbSetting(tdb, TDB_DYNAMICTABLE_SETTING));
 struct slName *embeddedTblSetting2 = slNameListFromComma(trackDbSetting(tdb, TDB_DYNAMICTABLE_SETTING_2));
 char *title = NULL, *fieldName = NULL;
 for (tmp = embeddedTblSetting; tmp != NULL; tmp = tmp->next)
