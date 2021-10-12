@@ -1,7 +1,7 @@
 # Mutations in variants of concern or interest - September 2021 update
 
 track variantMuts
-shortLabel Variants of Concern, Interest, or Monitoring
+shortLabel Variants of Concern and others
 longLabel  Mutations in Variants of Concern (VOC), Interest (VOI), or Under Monitoring (VUM) from GISAID sequences
 compositeTrack on
 subGroup1 mutation Mutations AA=Amino_Acid NUC=Nucleotide
