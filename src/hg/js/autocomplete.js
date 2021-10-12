@@ -141,9 +141,9 @@ var suggestBox = {
         var waterMark;
         var $posInput = $('#positionInput');
         if (assemblySupportsGeneSuggest) {
-                waterMark = "gene, chromosome range or other position, see examples";
+                waterMark = "gene, chromosome range, or other position, see examples";
         } else {
-            waterMark = "chromosome range or search terms, see examples";
+            waterMark = "chromosome range, or search terms, see examples";
         }
             //$('input[name="hgt.positionInput"]').val("");
         $posInput.val("");
