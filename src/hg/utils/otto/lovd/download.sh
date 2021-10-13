@@ -22,7 +22,7 @@ cd $today
 # http request needs to come from hgwdev IP address otherwise file not found error
 for db in hg38 hg19
 do
-    ~max/miniconda3/bin/curl -sk 'https://varcache.lovd.nl/bed/'${db}'?add_id_ncbi=1&add_annotation=1' | \
+    ~max/miniconda3/bin/curl -s 'https://varcache.lovd.nl/bed/'${db}'?add_id_ncbi=1&add_annotation=1' | \
         grep -v track | grep -v ^$ | sed -e s/^/chr/g | \
         tawk '{gsub(";",FS,$6); gsub("effect:|lovd_count:","",$6); print }' | \
         sort -k1,1 -k2,2n > lovd.${db}.bed

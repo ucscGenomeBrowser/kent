@@ -504,11 +504,12 @@ done
 
 
 ##############################################################################
-# UCSC to Ensembl (TODO 2021-09-18 galt)
+# UCSC to Ensembl (DONE 2021-09-18 galt)
 # Ask Hiram to update ensembleToUcsc and ensemblLift tables.
 # FYI ensemblLift offset shows how many Ns were inserted by Ensembl to give the right coordinate to alts and fixes.
 #
-
+I asked Hiram to update them and he did.
+However, some questions remain about how best to handle the 57 reversed sequences found on Ensembl chroms.
 
 ############################################################################
 # altLocations and patchLocations (DONE 2021-08-27 galt)
@@ -882,7 +883,7 @@ _EOF_
 
 
 ##############################################################################
-# GRC Incident Database (TODO 2021-? galt)
+# GRC Incident Database (DONE 2021-10-12 galt)
 
     # Wait until the updated hg38 files have been pushed to RR because GRC Incident update is
     # automated.  Then update the file used to map GRC's RefSeq accessions to our names:
