@@ -113,7 +113,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071421 "v3.1.1 released July
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
     detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
-    detailsUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
+    detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
     pennantIcon Updated red ../goldenPath/newsarch.html#071421 "Released July 14, 2021"
 
 searchTable gnomadGenomesVariantsV3_1_1

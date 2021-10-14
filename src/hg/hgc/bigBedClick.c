@@ -297,6 +297,8 @@ struct slPair *parseDetailsTablUrls(struct trackDb *tdb)
 {
 char *detailsUrlsStr = trackDbSetting(tdb, "detailsUrls");
 if (!detailsUrlsStr)
+    detailsUrlsStr = trackDbSetting(tdb, "detailsTabUrls");
+if (!detailsUrlsStr)
     return NULL;
 
 struct slPair *detailsUrls = slPairListFromString(detailsUrlsStr, TRUE);

@@ -8752,7 +8752,7 @@ if (!hideControls)
 	sprintLongWithCommas(buf, virtWinEnd - virtWinStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
 	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput'"
-                        " size='%d'>\n", multiRegionButtonTop ? 50 : 60);
+                        " size='%d'>\n", multiRegionButtonTop ? 51 : 61);
 	hWrites(" ");
 	hButton("goButton", "go");
 
