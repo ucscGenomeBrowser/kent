@@ -850,8 +850,11 @@ else if (vis == tvSquish)
     {
     // for visibility, set larger than the usual squish, which is half font height
     struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
-    heightPer = extras->squishHeight * 2;  // the squish packer halves this
-    lineHeight=heightPer+1;
+    if (extras)  // has it been initialized yet?
+	{
+	heightPer = extras->squishHeight * 2;  // the squish packer halves this
+	lineHeight=heightPer+1;
+	}
     }
 else if ((vis == tvPack) || (vis == tvFull))
     {
