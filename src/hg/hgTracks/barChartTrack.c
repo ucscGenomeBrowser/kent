@@ -863,34 +863,38 @@ height = tgFixedTotalHeightOptionalOverflow(tg, vis, lineHeight, heightPer, FALS
 
 if ((vis == tvPack) || (vis == tvFull))
     {
-    struct spaceSaver *ss = findSpaceSaver(tg, vis); // ss is a list now
-    assert(ss); // viz matches, we have the right one
-
     // set variable height rows
-    if (ss && ss->rowCount)
-        {
-        if (!ss->rowSizes)
+
+    if (tg->ss)  // got past trackLoadingInProgress
+	{
+	struct spaceSaver *ss = findSpaceSaver(tg, vis); // ss is a list now
+	assert(ss); // viz matches, we have the right one
+
+	if (ss && ss->rowCount != 0)
 	    {
-	    // collect the rowSizes data across all windows
-	    assert(currentWindow==windows); // first window
-	    assert(tg->ss->vis == vis); // viz matches, we have the right one
-	    struct spaceSaver *ssHold; 
-	    AllocVar(ssHold);
-	    struct track *tgSave = tg;
-	    for(tg=tgSave; tg; tg=tg->nextWindow)
+	    if (!ss->rowSizes)
 		{
-		assert(tgSave->ss->vis == tg->ss->vis); // viz matches, we have the right one
-		spaceSaverSetRowHeights(tg->ss, ssHold, getBarChartHeight);
+		// collect the rowSizes data across all windows
+		assert(currentWindow==windows); // first window
+		assert(tg->ss->vis == vis); // viz matches, we have the right one
+		struct spaceSaver *ssHold; 
+		AllocVar(ssHold);
+		struct track *tgSave = tg;
+		for(tg=tgSave; tg; tg=tg->nextWindow)
+		    {
+		    assert(tgSave->ss->vis == tg->ss->vis); // viz matches, we have the right one
+		    spaceSaverSetRowHeights(tg->ss, ssHold, getBarChartHeight);
+		    }
+		// share the rowSizes data across all windows
+		for(tg=tgSave; tg; tg=tg->nextWindow)
+		    {
+		    tg->ss->rowSizes = ssHold->rowSizes;
+		    }
+		tg = tgSave;
 		}
-	    // share the rowSizes data across all windows
-	    for(tg=tgSave; tg; tg=tg->nextWindow)
-		{
-		tg->ss->rowSizes = ssHold->rowSizes;
-		}
-	    tg = tgSave;
+	    height = spaceSaverGetRowHeightsTotal(ss);
 	    }
-	height = spaceSaverGetRowHeightsTotal(ss);
-        }
+	}
     }
 tg->height = height;
 
