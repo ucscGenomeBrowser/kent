@@ -1606,7 +1606,7 @@ codingAnnotations snp151CodingDbSnp,
 #shortLabel All dbSNP (152)
 #longLabel Short Genetic Variants from dbSNP release 152
 #bigDataUrl /gbdb/$D/snp/dbSnp152.bb
-#detailsUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp152Details.tab.gz
+#detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp152Details.tab.gz
 #group varRep
 #visibility hide
 #url https://www.ncbi.nlm.nih.gov/snp/$$
@@ -1641,7 +1641,7 @@ priority 0.8
     shortLabel Variants
     visibility dense
     type bigDbSnp
-    detailsUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz
+    detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz
     freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
     classFilterValues snv,mnv,ins,del,delins,identity
     classFilterType multipleListOr

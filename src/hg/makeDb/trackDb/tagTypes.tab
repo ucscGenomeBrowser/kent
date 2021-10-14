@@ -105,6 +105,7 @@ dbPrefixLabels bigBed bed bigPsl genePred psl
 dbProfile *
 dbTrackType customTracks
 detailsUrls big*
+detailsTabUrls big*
 defaultGeneTracks bed
 defaultLabelFields big*
 defaultMaf wigMaf
