@@ -151,7 +151,10 @@ cd /hive/data/genomes/hg38/bed/gtex/V8/eQtl/finemap_CAVIAR
 wget https://storage.googleapis.com/gtex_analysis_v8/single_tissue_qtl_data/GTEx_v8_finemapping_CAVIAR.tar
 # Then unpacked
 # Other files used:
-
+# Lookup table for all variants genotyped in GTEx
+wget https://storage.googleapis.com/gtex_analysis_v8/reference/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz
+# Gene-level model based on the GENCODE 26 transcript model, where isoforms were collapsed to a single transcript per gene.
+wget https://storage.googleapis.com/gtex_analysis_v8/reference/gencode.v26.GRCh38.genes.gtf
 
 # Initially planned to use this file: # CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz
 # as it seemed to be a filtered subset of eQTLs
