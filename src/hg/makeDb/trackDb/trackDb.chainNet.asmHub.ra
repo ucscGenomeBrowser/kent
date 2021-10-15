@@ -283,3 +283,97 @@ html chainNet
         summary /gbdb/$D/bbi/chainNet/$D.GCA_018400075.1.net.summary.bb
         speciesOrder GCA_018400075.1
         html chainNet
+
+##############################################################################
+# GCF_016699485.2 - chicken (matMap) - Gallus gallus - taxId: 9031 - birds
+##############################################################################
+track chainNetGCF_016699485.2
+compositeTrack on
+shortLabel Chicken Chain/Net
+longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 5000
+chainLinearGap loose
+matrixHeader A, C, G, T
+otherDb GCF_016699485.2
+html chainNet
+
+    track chainNetGCF_016699485.2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_016699485.2
+    spectrum on
+
+        track chainGCF_016699485.2
+        parent chainNetGCF_016699485.2Viewchain
+        subGroups view=chain
+        shortLabel Chicken Chain
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Chained Alignments
+        type bigChain GCF_016699485.2
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_016699485.2.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_016699485.2Link.bb
+
+        track chainSynGCF_016699485.2
+        parent chainNetGCF_016699485.2Viewchain
+        subGroups view=chain
+        shortLabel Chicken synChain
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Syntenic Chained Alignments
+        type bigChain GCF_016699485.2
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_016699485.2.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_016699485.2Link.bb
+
+        track chainRBestGCF_016699485.2
+        parent chainNetGCF_016699485.2Viewchain
+        subGroups view=chain
+        shortLabel Chicken syChain
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Reciprocal Best Chained Alignments
+        type bigChain GCF_016699485.2
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_016699485.2.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_016699485.2Link.bb
+
+    track mafNetGCF_016699485.2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCF_016699485.2
+
+        track netGCF_016699485.2
+        parent mafNetGCF_016699485.2Viewnet
+        subGroups view=net
+        shortLabel Chicken net
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.net.summary.bb
+        speciesOrder GCF_016699485.2
+
+        track synNetGCF_016699485.2
+        parent mafNetGCF_016699485.2Viewnet
+        subGroups view=net
+        shortLabel Chicken synNet
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.synNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.synNet.summary.bb
+        speciesOrder GCF_016699485.2
+
+        track rbestNetGCF_016699485.2
+        parent mafNetGCF_016699485.2Viewnet
+        subGroups view=net
+        shortLabel Chicken rbestNet
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.rbestNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.rbestNet.summary.bb
+        speciesOrder GCF_016699485.2

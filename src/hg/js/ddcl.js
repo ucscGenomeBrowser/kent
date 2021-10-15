@@ -109,12 +109,12 @@ var ddcl = {
                 // "exclude" items based upon the exclude tag of the true options
                 allCheckboxes.each(function(index) {
                     var item = $(this).parent();
-		    // GREY OUT
+                    // GREY OUT
                     if ($(selectOptions[index]).hasClass('excluded')) {
                         $(item).addClass("ui-state-excluded");
                     } else { 
                         $(item).removeClass("ui-state-excluded");
-		    }
+                    }
                 });
             }
         }
@@ -125,49 +125,51 @@ var ddcl = {
             allCheckboxes.each(function(index) {
                 if (index > 0) {
                     $(this).attr('checked',false);
-		}
+                }
             });
         }
 
 
-	var hideCount = 0;
+        var hideCount = 0;
         var itemHeight = 0;
 
         // update the facetCounts
-	allCheckboxes.each(function(index) {
-	    var item = $(this).parent();
+        allCheckboxes.each(function(index) {
+            var item = $(this).parent();
 
             if (index === 0) {
                 itemHeight = item[0].clientHeight;
-	    }
+            }
 
-	    var facetSpan=$(item).find('span');
-	    var facetCount = selectOptions[index].facetCount;
-	    if (index === 0 || facetCount === 0 || facetCount === undefined) {  // Al
-		$(facetSpan).html('');
-	    } else {
-		$(facetSpan).html(' ('+facetCount+')');
+            var facetSpan=$(item).find('span');
+            var facetCount = selectOptions[index].facetCount;
+            if (index === 0 || facetCount === 0 || facetCount === undefined) {  // Al
+                $(facetSpan).html('');
+            } else {
+                $(facetSpan).html(' ('+facetCount+')');
             }
             // facetSpan and item and this did not work to get it to hide:
-	    if (index === 0 || (facetCount !== 0) || $(this).attr('checked')) {
-	    	$(item).show();
-	    } else {
-		$(item).hide();
-		++hideCount;
-	    }
-	});
+            if (index === 0 || (facetCount !== 0) || $(this).attr('checked')) {
+                    $(item).show();
+            } else {
+                $(item).hide();
+                ++hideCount;
+            }
+        });
 
 
-        // make dynamic height based on current window size
-        var maxDropHeight = $(window).height() - 80;
+        // make dynamic height based on current window size, but make sure we
+        // don't take into account we may already be far down the page if there
+        // are many config options on hgTrackUi or we are in a popup
+        var maxDropHeight = $(window).height() - this.getBoundingClientRect().top - 80;
         if (maxDropHeight < 49)
-	    maxDropHeight = 49;
+            maxDropHeight = 49;
 
-	// each element 22 high plus one Close panel at bottom
+        // each element 22 high plus one Close panel at bottom
         var dropHeight = ($(multiSelect).children().length - hideCount + 1) * itemHeight;  
 
         if (dropHeight > maxDropHeight)
-	    dropHeight = maxDropHeight;
+            dropHeight = maxDropHeight;
         $(dropWrapper).css({
             height: dropHeight + "px",
         });
