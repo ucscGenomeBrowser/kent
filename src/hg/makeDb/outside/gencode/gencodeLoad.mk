@@ -32,8 +32,8 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-preRelease = no
-#preRelease = yes
+#preRelease = no
+preRelease = yes
 db = hg38
 #db = hg19
 #db = mm39
@@ -59,8 +59,8 @@ else ifeq (${db},mm39)
     asmReptUrl = https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/GCF_000001635.27_GRCm39/GCF_000001635.27_GRCm39_assembly_report.txt
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 38
-    prevVer = 37
+    ver = 39
+    prevVer = 38
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
@@ -84,10 +84,10 @@ endif
 
 ifeq (${preRelease},yes)
     # pre-release
-    baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/havana/gencode_pre
+    baseUrl = rsync://ftp.ebi.ac.uk/pub/databases/havana/gencode_pre
 else
     # official release
-    baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/gencode
+    baseUrl = rsync://ftp.ebi.ac.uk/pub/databases/gencode
 endif
 
 rel = V${ver}
@@ -115,7 +115,7 @@ encodeAutoSqlDir = ${HOME}/kent/src/hg/lib/encode
 gencodeGp = ${dataDir}/gencode.gp
 gencodeTsv = ${dataDir}/gencode.tsv
 gencodeToUcscChain = ${dataDir}/gencodeToUcsc.chain
-asmRept = ${dataDir}/$(notdir asmReptUrl)
+asmRept = ${dataDir}/$(notdir ${asmReptUrl})
 
 # flag indicating fetch was done
 fetchDone = ${relDir}/done
@@ -239,9 +239,7 @@ all: fetch mkTables loadTables checkSanity cmpRelease listTables
 ##
 fetch: ${fetchDone}
 ${fetchDone}:
-	@mkdir -p $(dir $@) ${dataDir}
-	wget -nv --cut-dirs=4 --directory-prefix=${relDir} -np "${releaseUrl}/*"
-	chmod a-w ${relDir}/*
+	rsync -a --include='gencode.*' --exclude='*' '${releaseUrl}/' ${relDir}
 	touch $@
 
 ##
@@ -304,7 +302,7 @@ ${gencodeToUcscChain}: ${asmRept}
 
 ${asmRept}:
 	@mkdir -p $(dir $@)
-	wget -nv -O $@.${tmpExt} ${asmReptUrl}
+	wget -nv -o /dev/stderr -O $@.${tmpExt} ${asmReptUrl}
 	mv -f $@.${tmpExt} $@
 
 # other tab files, just copy to name following convention to make load rules
