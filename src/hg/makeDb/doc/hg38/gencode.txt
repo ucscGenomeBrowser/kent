@@ -894,7 +894,7 @@ cd kent/src/hg/makeDb/trackDb
 
     # generate trackDb and joiner blurb
     pushd ~/kent/src/hg/makeDb/trackDb
-    ../outside/gencode/bin/gencodeGenerateTrackDbs  hg38 39 105 'Sept 2021'
+    ../outside/gencode/bin/gencodeGenerateTrackDbs  hg38 39 105 'Oct 2021'
 
     # Update 'Release Notes' (for final)
     # human/hg38/wgEncodeGencodeSuper.html
