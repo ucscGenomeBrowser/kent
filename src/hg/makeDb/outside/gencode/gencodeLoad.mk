@@ -34,9 +34,9 @@ mach = $(shell uname -m)
 ##
 #preRelease = no
 preRelease = yes
-db = hg38
+#db = hg38
 #db = hg19
-#db = mm39
+db = mm39
 #db = mm10
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
@@ -48,15 +48,13 @@ ifeq (${db},mm10)
     ftpReleaseSubdir = release_${verBase}/GRCm38_mapping
     annGffTypeName = chr_patch_hapl_scaff.annotation
     isBackmap = yes
-    asmReptUrl = https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/GCF_000001635.26_GRCm38.p6/GCF_000001635.26_GRCm38.p6_assembly_report.txt
 else ifeq (${db},mm39)
     grcRefAssembly = GRCm39
-    ver = M27
-    prevVer = M26
+    ver = M28
+    prevVer = M27
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    asmReptUrl = https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/GCF_000001635.27_GRCm39/GCF_000001635.27_GRCm39_assembly_report.txt
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
     ver = 39
@@ -64,7 +62,6 @@ else ifeq (${db},hg38)
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    asmReptUrl = https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.39_GRCh38.p13/GCF_000001405.39_GRCh38.p13_assembly_report.txt
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
     verBase = 38
@@ -75,7 +72,6 @@ else ifeq (${db},hg19)
     gencodeOrg = Gencode_human
     annGffTypeName = annotation
     isBackmap = yes
-    asmReptUrl = https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.39_GRCh38.p13/GCF_000001405.39_GRCh38.p13_assembly_report.txt
 else
     $(error unimplement genome database: ${db})
 endif
@@ -115,7 +111,6 @@ encodeAutoSqlDir = ${HOME}/kent/src/hg/lib/encode
 gencodeGp = ${dataDir}/gencode.gp
 gencodeTsv = ${dataDir}/gencode.tsv
 gencodeToUcscChain = ${dataDir}/gencodeToUcsc.chain
-asmRept = ${dataDir}/$(notdir ${asmReptUrl})
 
 # flag indicating fetch was done
 fetchDone = ${relDir}/done
@@ -295,14 +290,9 @@ ${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta} ${gencodeTsv}
 	((${metaFilterCmdGz} ${tableSwissProtMeta} | tawk '{print $$0,"SwissProt"}') && (${metaFilterCmdGz}  ${tableTrEMBLMeta} | tawk '{print $$0,"TrEMBL"}')) | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${gencodeToUcscChain}: ${asmRept}
+${gencodeToUcscChain}:
 	@mkdir -p $(dir $@)
-	${buildGencodeToUcscLift} ${db} ${asmRept} $@.${tmpExt}
-	mv -f $@.${tmpExt} $@
-
-${asmRept}:
-	@mkdir -p $(dir $@)
-	wget -nv -o /dev/stderr -O $@.${tmpExt} ${asmReptUrl}
+	${buildGencodeToUcscLift} ${db} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 # other tab files, just copy to name following convention to make load rules
