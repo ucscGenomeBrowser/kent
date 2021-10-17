@@ -35,8 +35,8 @@ mach = $(shell uname -m)
 #preRelease = no
 preRelease = yes
 #db = hg38
-#db = hg19
-db = mm39
+db = hg19
+#db = mm39
 #db = mm10
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
@@ -64,9 +64,9 @@ else ifeq (${db},hg38)
     annGffTypeName = chr_patch_hapl_scaff.annotation
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 38
+    verBase = 39
     ver = ${verBase}lift37
-    prevVer = 37lift37
+    prevVer = 38lift37
     backmapTargetVer = 19
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
     gencodeOrg = Gencode_human

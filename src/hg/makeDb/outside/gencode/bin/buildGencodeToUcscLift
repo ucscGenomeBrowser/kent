@@ -87,7 +87,9 @@ def writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh):
     if (ucscDbName == "hg19") and (ucscChrom.chrom == "chrM"):
         nextChainId = writeHg19ChrM(nextChainId, fh)
     elif (ucscDbName == "hg19") and (ucscChrom.chrom == "chrMT"):
-        nextChainId = writeStdChain("chrM", 'chrMT', nextChainId, fh)
+        # don't create a constant lift for chrM -> chrMT, this is handled by gencodeGxfToGenePred
+        # since liftOver can't handle multiple lifts
+        pass
     elif isPrimaryChrom(ucscChrom.chrom):
         nextChainId = writeStdChain(ucscChrom.chrom, ucscChrom, nextChainId, fh)
     else:
