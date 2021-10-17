@@ -62,7 +62,7 @@ def isPrimaryChrom(chrom):
 def loadChromAlias(conn):
     # other ucsc sources
     chromAliases = defaultdict(set)
-    for row in mysqlOps.query(conn, 'SELECT alias, chrom FROM chromAlias WHERE source = "ensembl,genbank"'):
+    for row in mysqlOps.query(conn, 'SELECT alias, chrom FROM chromAlias'):
         chromAliases[row[1]].add(row[0])
     chromAliases.default_factory = None
     return chromAliases
@@ -78,6 +78,8 @@ def writeStdChain(chromName, ucscChrom, nextChainId, fh):
     return nextChainId + 1
 
 def writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh):
+    if ucscChrom.chrom not in chromAliases:
+        raise Exception(f"UCSC chrom {ucscChrom.chrom} not in chromAlias table")
     if (ucscDbName == "hg19") and (ucscChrom.chrom == "chrM"):
         nextChainId = writeHg19ChrM(nextChainId, fh)
     elif (ucscDbName == "hg19") and (ucscChrom.chrom == "chrMT"):
