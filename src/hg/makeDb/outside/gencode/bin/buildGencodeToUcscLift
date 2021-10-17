@@ -22,6 +22,10 @@ ucscDbToRefAsm = {
     "mm39": "GRCm39",
 }
 
+badChroms = frozenset([
+    "chrUn_KI270752v1"   # contamination in GRCh38
+])
+
 def parseArgs():
     desc = """Generate liftOver chains of GENCODE chromosome names to UCSC chromosomes.
 
@@ -94,7 +98,8 @@ def writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh):
 def writeChains(ucscDbName, chromInfos, chromAliases, fh):
     nextChainId = 1
     for ucscChrom in chromInfos.values():
-        nextChainId = writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh)
+        if ucscChrom.chrom not in badChroms:
+            nextChainId = writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh)
 
 def buildGencodeToUcscLift(opts):
     with hgDb.connect(opts.ucscDbName) as conn:
