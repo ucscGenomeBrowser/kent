@@ -920,7 +920,7 @@ edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
 
     # generates joiner errors
     The gene/transcript pair is missing from metadata:
-       ENSG00000168939.6 / ENST00000302805.2 / SPRV3
+       ENSG00000168939.6 / ENST00000302805.2 / SPRY3
     These are missing from
 	 data/release_39lift37/gencode.v39lift37.metadata.Transcript_source.gz
          data/release_39lift37/gencode.v39lift37.metadata.Gene_source.gz
