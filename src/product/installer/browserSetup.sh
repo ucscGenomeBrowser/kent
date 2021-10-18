@@ -729,9 +729,11 @@ function installRedhat () {
     # MYSQL INSTALL ON REDHAT, quite involved, as MariaDB is increasingly the default
 
     # centos7 provides only a package called mariadb-server
-    if yum list mysql-server 2> /dev/null ; then
-        MYSQLPKG=mysql-server
-    elif yum list mariadb-server 2> /dev/null ; then
+    # Mysql 8 does not allow copying MYISAM files anymore into the DB. 
+    # -> we cannot support Mysql 8 anymore
+    #if yum list mysql-server 2> /dev/null ; then
+       #MYSQLPKG=mysql-server
+    if yum list mariadb-server 2> /dev/null ; then
         MYSQLPKG=mariadb-server
     else
         echo2 Cannot find a mysql-server package in the current yum repositories
@@ -1011,7 +1013,10 @@ function installDebian ()
 
         # do not prompt in apt-get, will set an empty mysql root password
         export DEBIAN_FRONTEND=noninteractive
-        apt-get --assume-yes install mysql-server
+	# Debian / Ubuntu 20 defaults to Mysql 8 and Mysql 8 does not allow rsync of myisam anymore
+	# -> we require mariaDb now
+        # apt-get --assume-yes install mysql-server
+        apt-get --assume-yes install mariadb-server
         # make sure that missing values do not trigger errors, #18368
 	setMYCNF
         sed -i '/^.mysqld.$/a sql_mode=' $MYCNF
