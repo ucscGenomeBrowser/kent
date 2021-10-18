@@ -150,20 +150,47 @@ cd /hive/data/genomes/hg38/bed/gtex/V8/eQtl/finemap_CAVIAR
 # This file was used for this track:
 wget https://storage.googleapis.com/gtex_analysis_v8/single_tissue_qtl_data/GTEx_v8_finemapping_CAVIAR.tar
 # Then unpacked
+# Other files used:
+# Lookup table for all variants genotyped in GTEx
+wget https://storage.googleapis.com/gtex_analysis_v8/reference/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz
+# Gene-level model based on the GENCODE 26 transcript model, where isoforms were collapsed to a single transcript per gene.
+wget https://storage.googleapis.com/gtex_analysis_v8/reference/gencode.v26.GRCh38.genes.gtf
 
-# Used this file: CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz
+# Initially planned to use this file: # CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz
+# as it seemed to be a filtered subset of eQTLs
 # Description from GTEx_v8_finemapping_CAVIAR/README.txt
-***CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz --> is a single file for all GTEx tissues and all eGene where we report
-all the high causal variants (variants that have posterior probability of > 0.1).
-# Started with this as it seems this is the data Kate used for hg19 eQTL tracks
+# ***CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz --> is a single file for all GTEx tissues and all eGene where we report
+# all the high causal variants (variants that have posterior probability of > 0.1).
 
-# Sample line from file
-#TISSUE  GENE    eQTL    CHROM   POS     Probability
-#Brain_Caudate_basal_ganglia     ENSG00000248485.1       1_161274374     1       161274374       0.157456
+# Sample header line:
+# TISSUE  GENE    eQTL    CHROM   POS     Probability
+# Brain_Caudate_basal_ganglia     ENSG00000248485.1       1_161274374     1       161274374       0.157456
+
+# However, the names/positions in the eQTL column are not unique meaning
+# We want file with unique variant/eQTL names that match those in the GTEx
+# variant mapping file: GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz
+# Looks like the CAVIAR_Results_v8_GTEx_LD_ALL_NOCUTOFF_with_Allele.txt.gz has names 
+# that match the names in the variant/eQTL mapping file
+
+# Description from GTEx_v8_finemapping_CAVIAR/README.txt
+# ***CAVIAR_Results_v8_GTEx_LD_ALL_NOCUTOFF_with_Allele.txt.gz  —> is a single file for all GTEx tissues and all eGenes where we reported
+# the CPP (Causal Posterior Probability). Each eQTL contains the allele information. Sample header file:
+
+# TISSUE  GENE    eQTL    CHROM   POS Probability
+# Brain_Caudate_basal_ganglia ENSG00000248485.1   chr1_161274374_G_A_b38  1   161274374   0.157456
+
+# So, take NOCUTOFF_with_Allele file and then filter for probability >0.1 (which is how HighConfidentVariants file was created according to GTEx README)
+zcat CAVIAR_Results_v8_GTEx_LD_ALL_NOCUTOFF_with_Allele.txt.gz | awk '$6 > 0.1' | gzip -c > CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants_with_Allele.gz
+
+# Confirm that it has the same size as original HighConfidentVariants file
+zcat CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz | wc -l
+1257158
+zcat CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants_with_Allele.gz | wc -l
+1257158
 
 # There seem to 31 duplicate eQTLs, meaning that the two lines for these entries are duplicated (probability values, etc.)
 # These will essentially be collapsed into a single entry by the buildInteract script
-zcat CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz | sort | uniq -c | sort -k1,1nr | awk '$1 > 1' > dupe_eQtls.txt
+zcat CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants_with_Allele.gz | sort | uniq -c | sort -k1,1nr | awk '$1 > 1' > dupe_eQtls.txt
 wc -l dupe_eQtls.txt
 31 dupe_eQtls.txt
 
@@ -176,6 +203,8 @@ import sys, gzip
 qtlFile = sys.argv[1]
 gpFile = sys.argv[2]
 alleleFile = sys.argv[3]
+qtlIdCol = sys.argv[4] # Column name in file header, e.g. eQTL
+probCol = sys.argv[5] # Column name in file header, e.g. Probability
 
 # Open up all of our files
 qfh = gzip.open(qtlFile,"r") # QTL file
@@ -187,6 +216,11 @@ qtlDict = dict()
 gpDict = dict()
 alleleDict = dict()
 
+# Get indices of eQTL and probability fields
+header = qfh.readline().decode('ASCII').rstrip().split("\t")
+qtl_col = header.index(qtlIdCol)
+prob_col = header.index(probCol)
+
 # Process eQTL file
 for line in qfh:
     qtlLine = line.decode('ASCII').strip().split("\t")
@@ -194,7 +228,7 @@ for line in qfh:
     if "TISSUE" not in qtlLine:
         tissue = qtlLine[0]
         gene = qtlLine[1]
-        e_qtl = qtlLine[2]
+        e_qtl = qtlLine[qtl_col]
         # each of these elements on their own aren't unique, but together they are
         qtlKey = e_qtl + "|" + tissue + "|" + gene
         # Put these into a dict where key is unique name we've made
@@ -213,11 +247,7 @@ for line in afh:
     aLine = line.decode('ASCII').strip().split("\t")
 
     allele = aLine[0]
-    chrom = aLine[1].replace("chr","")
-    pos = aLine[2]
-    # Create key from combination of chrom + position
-    # In theory this should match the keys from the eQTL dict
-    alleleDict[chrom + "_" + pos] = aLine
+    alleleDict[allele] = aLine
     #7 is rsID
 
 for entry in qtlDict:
@@ -259,7 +289,7 @@ for entry in qtlDict:
     interactLine.append(chromEnd) # chrEnd
     interactLine.append(rsID + "/" + gene_sym + "/" + qtlDict[entry][0]) # name
     interactLine.append(int("1000")) # Maybe I should scale up to 0-1000 range? # score
-    interactLine.append(qtlDict[entry][5]) # value
+    interactLine.append(qtlDict[entry][prob_col]) # value
     interactLine.append(qtlDict[entry][0]) # exp
     interactLine.append("0,0,0") #color - eventually replaced by 'addColor' script
     interactLine.append(interactLine[0]) # sourceChrom
@@ -285,8 +315,8 @@ for entry in qtlDict:
 gtfToGenePred -genePredExt -geneNameAsName2 -includeVersion gencode.v26.GRCh38.genes.gtf gencode.v26.GRCh38.genes.gpExt 
 
 # Build interact files and sort resulting bed file
-./buildInteract CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants.gz ../gencode.v26.GRCh38.genes.gpExt \
-  ../GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz | \
+./buildInteract CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants_with_Allele.gz ../gencode.v26.GRCh38.genes.gpExt \
+  ../GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz eQTL Probability| \
     bedSort stdin gtexCaviar.interact.sorted.txt
 
 ## Add colors
