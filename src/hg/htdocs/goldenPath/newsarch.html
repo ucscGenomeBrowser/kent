@@ -52,6 +52,51 @@
 <!-- ============= 2021 archived news ============= -->
 <a name="2021"></a>
 
+<a name="101221"></a>
+<h2>Oct. 18, 2021 &nbsp;&nbsp; Addition of GRCh38 patch 13 sequences to hg38</h2>
+<p>
+We are pleased to announce the addition of GRCh38 patch release 13 to the
+<a href="../../cgi-bin/hgGateway?db=hg38">hg38</a> assembly. hg38 has been updated with patches
+since its release in 2013. The GRC patch releases do not change any previously existing
+sequences; they simply add new sequences for fix patches or alternate haplotypes that correspond
+to specific regions of the main chromosome sequences. For most users, the patches are unlikely
+to make a difference and may complicate the analysis as they introduce more duplication.</p>
+
+<p>
+More information on how patch sequences are incorporated can be found on the
+<a href="http://genome.ucsc.edu/blog/patches/" target="_blank">Patching up the Genome</a> blog post.
+The blog post contains details about the new
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/latest/"
+target="_blank">/latest</a>,
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/initial/"
+target="_blank">/initial</a>, and
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/p13/" target="_blank">/p13</a>
+download directories on the downloads server. With the addition of new sequences to hg38, we can
+expect to see BLAT return more matches to the genome.</p>
+
+<ul>
+  <li>
+    The <b>initial/</b> subdirectory contains files for the initial release of GRCh38, which has 455
+    sequences, 261 alternate sequences, and no fix sequences. It is the same as the
+    parent download directory. This is probably the best genome file for aligners and most analysis
+    tasks, a version called &quot;analysisSet&quot; for the human genome.
+  </li>
+  <li>
+    The <b>p13/</b> subdirectory contains files for GRCh38.p13 (patch release 13). It has 640 sequences
+    including alternate and fix sequences.
+  </li>
+  <li>
+    The <b>latest/</b> symbolic link points to the subdirectory for the most recent patch version.
+  </li>
+</ul>
+
+<p>
+We would like to thank the <a href="https://www.ncbi.nlm.nih.gov/grc" target="_blank">Genome
+Research Consortium</a> for creating the patches for hg38. We would also like to thank Galt Barber,
+Jairo Navarro, and Gerardo Perez at UCSC for implementing and testing the latest patch to the
+hg38 genome.</p>
+
+
 <a name="101521"></a>
 <h2>Oct. 15, 2021</h2>
 <p>The UCSC Genom Browser is proud to share our latest update to the 
