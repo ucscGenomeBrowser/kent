@@ -890,3 +890,49 @@ edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
     jkmake alpha DBS=hg19
 
 ##############################################################################
+2021-10-16: import of UCSC GENCODE group processing of GENCODE V39lift37 (markd)
+    pre-release
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV39lift37/hgcImportPre
+    pushd /hive/data/genomes/hg19/bed/gencodeV39lift37/hgcImportPre
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbs hg19 39lift37 105 'Oct 2021'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release.
+
+    # edit human/hg19/trackDb.gencode.ra to add new .ra file include
+    jkmake DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV39lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV39lift37/hgcImportPre
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # generates joiner errors
+    The gene/transcript pair is missing from metadata:
+       ENSG00000168939.6 / ENST00000302805.2 / SPRY3
+    These are missing from
+	 data/release_39lift37/gencode.v39lift37.metadata.Transcript_source.gz
+         data/release_39lift37/gencode.v39lift37.metadata.Gene_source.gz
+
+     this is the weird cases of SPRV3 which has now has a transcript past the PAR
+
+      echo -e 'ENST00000302805.2\tensembl_havana_transcript_homo_sapiens' >> tables/wgEncodeGencodeTranscriptSourceV39lift37.tab 
+      echo -e 'ENSG00000168939.6\tensembl_havana_transcript_homo_sapiens' >> tables/wgEncodeGencodeGeneSourceV39lift37.tab 
+      rm loaded/wgEncodeGencode*Support*
+      (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.4.out&
+
+    # commit all
+    jkmake alpha DBS=hg19
+
+##############################################################################

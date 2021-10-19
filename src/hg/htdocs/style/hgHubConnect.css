@@ -1,13 +1,35 @@
 /* 
    Style Sheet for hgHubConnect
-   by Greg Roe                   
-   Last update: 2011-7-18 (greg)   
 */
+
+ul {
+        margin: 4px;
+}
 
 #tabs {
 	font-size: 100%;
 	margin-top: 5px;
 }
+
+.tabSection {
+        /* background: #fffee8; */
+        padding-top: 10px;
+        padding-left: 8px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid grey;
+}
+
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button, button {
+        font-size: 80%;
+}
+
+h4 {
+        margin: 0px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+}
+
+
 
 .hubList table {
     width: 1000px;
@@ -24,6 +46,7 @@
 .hubList table#unlistedHubsTable tr td:last-child {text-align: center;}
 .hubList th, .hubList td {padding: 2px 8px; text-align: left;}
 .hubList th {background-color: #e5dfb1; height: 1.6em; vertical-align: middle;}
+.hubList th .assemblyClickNote { font-size: 80%; font-weight: normal; display: block }
 
 .hubList table tbody tr {background-color: #fffef8;}
 .hubTdbTree {font-size: 0.9em;}
@@ -60,13 +83,11 @@
     text-align: center;
 }
 
-.roundCorners {
-    -webkit-border-top-left-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topright: 5px;
-    border-top-right-radius: 5px;
+
+.help {
+    /* font-size: 0.9em; */
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .addHubBar {
@@ -92,27 +113,3 @@
     cursor: pointer;
 }
 
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
-}
-
-.tooltip .tooltiptext {
-    visibility: hidden;
-    background-color: lightgray;
-    text-align: center;
-    position: absolute;
-    z-index: 1;
-    opacity: 0;
-    width: 220px;
-    padding: 5px;
-    left: 105%;
-    transition: opacity .6s;
-    line-height: 1em;
-}
-
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: .9;
-}

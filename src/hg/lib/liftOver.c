@@ -238,7 +238,11 @@ for (chain = chainsHit; chain != NULL; chain = next)
     boolean expanded = FALSE;
     
     // see above.  Add fudge factor and remember that we did so.
-    if (start == end) end++;
+    if (start == end)
+        {
+        expanded = TRUE;
+        end++;
+        }
 
     next = chain->next;
     verbose(3,"hit chain %s:%d %s:%d-%d %c (%d)\n",
