@@ -17,33 +17,37 @@ Variant incidence and geographic distribution information is available from link
 <a target="_blank" href="https://Outbreak.info">Outbreak.info</a> web resource
 on the mutation details pages.</p>
 
-<p>
-A <b>Variant of Concern</b> (VOC) has evidence for increased transmissibility, 
-virulence, and/or decreased diagnostic, therapeutic, or vaccine efficacy.
-<br>A <b>Variant of Interest</b> (VOI) contains mutations suspected or confirmed 
+<p><ul>
+<li><b>Variants of Concern</b> (VOC) have evidence for increased transmissibility, 
+virulence, and/or decreased diagnostic, therapeutic, or vaccine efficacy.</li>
+<li><b>Variants of Interest</b> (VOI) contain mutations suspected or confirmed 
 to cause a change in transmissibility, virulence, or diagnostic / therapeutic / 
 vaccine efficacy, plus evidence of significant community transmission, 
-a cluster of cases, or detection in multiple countries.
-<br>A <b>Variant under Monitoring</b> (VUM) includes variants with unclear 
+a cluster of cases, or detection in multiple countries.</li>
+<li><b>Variants under Monitoring</b> (VUM) include variants with unclear 
 epidemiological impact. This track includes only the four VUMs which were previously 
-identified as Variants of Interest, now reclassified as this lower level of concern.
+identified as Variants of Interest, now reclassified as this lower level of concern.</li>
+</ul>
 </p>
 
 <p>
 The related track
 <a target="_blank" href="../cgi-bin/hgTrackUi?db=wuhCor1&g=lineageB_1_1_7_US"> B.1.1.7 in USA</a>
-displays a phylogenetic tree of the first B.1.1.7 (Alpha) variant sequences collected in the United States.
+displays a phylogenetic tree of the first B.1.1.7 (Alpha) variant sequences collected 
+in the United States.
 </p>
 
 <h2>Display Conventions</h2>
 <p>
 Track colors are based on 
-<a href="https://github.com/cov-lineages/pangolin/" target=_blank>Pangolin</a>
+<a href="https://github.com/cov-lineages/pangolin/" target="_blank">Pangolin</a>
 lineage (Rambaut <em>et al.</em>) color conventions used in the phylogeny graphics
 at <a target="_blank" href="https://nextstrain.org/ncov/gisaid/global">Nextstrain.org</a>:
 </p>
+
 <img style="margin: 8px; border: 1.5px solid; width: 1013px; height: 628" 
         src="../images/nextstrain.sep30-2021.png">
+
 <p>
 The Greek-letter names assigned by the World Health Organization (WHO) are listed 
 in this table, along with lineage and clade designations:
@@ -190,6 +194,7 @@ mutations of the lineage were downloaded from GISAID using the lineage search fe
 collection dates when there were too many results for the download limit of 10,000
 sequences per query).
 </p>
+
 <p>
 Sequences were aligned to the
 <a target="_blank" href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2">
@@ -209,20 +214,22 @@ also requires the
 SARS-CoV-2 reference sequence</a>).
 Single-nucleotide substitutions present at a frequency
 of at least 0.95 (.70 for Delta) were retained while all others are discarded.
+</p>
 <p>
 For indel detection, the 
 <a target="_blank" href="https://github.com/lh3/minimap2">Minimap2</a> 
 suite of tools was used as follows:
-
+</p>
 <pre>
         minimap2 --cs [Reference Sequence] [Set of Unaligned Sequences] | paftools.js call -L 10000 -
 </pre>
-
-Indels present at a frequency of at least 0.85 (.50 for Delta) were retained.  Less stringent cutoffs were applied 
-to Delta variant sequences due to low quality of early sequences.</p>
+<p>
+Indels present at a frequency of at least 0.85 (.50 for Delta) were retained. Less stringent 
+cutoffs were applied to Delta variant sequences due to low quality of early sequences.</p>
 <p>
 The results were then combined and formatted by
-<a target="blank" href="https://github.com/nickeener/sarscov2lineages/blob/main/scripts/lineageVariants.py">lineageVariants.py</a>. 
+<a target="blank" 
+href="https://github.com/nickeener/sarscov2lineages/blob/main/scripts/lineageVariants.py">lineageVariants.py</a>. 
 The entire pipeline was run using
 <a target="blank" href="https://github.com/nickeener/sarscov2lineages/blob/main/lineageVariants.sh">
 lineageVariants.sh</a>.
@@ -232,7 +239,7 @@ lineageVariants.sh</a>.
 <p>
 You can download the data files for this track from the
 <a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/variantMuts/"
-   target=_blank>UCSC Download Server</a>.
+target=_blank>UCSC Download Server</a>.
 The data can be explored interactively with the
 <a href="hgTables">Table Browser</a>
 or the <a href="hgIntegrator">Data Integrator</a>. The data can be
@@ -243,9 +250,9 @@ accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
 <p>
 Version 2 of this track adds one new Variant of Concern (Delta), two new Variants of 
 Interest (Lambda, Mu), and three named variants previously VOI, now designated as less 
-concerning Variants under Monitoring (Eta, Iota, Kappa).  
+concerning Variants under Monitoring (Eta, Iota, Kappa). 
 The track labels of all variants have been updated to include WHO labels. Track colors 
-reflect Nextstrain conventions at the time of track data  update (September 10, 2021).
+reflect Nextstrain conventions at the time of track data update (September 10, 2021).
 </p>
 
 <h2>Credits</h2>
@@ -257,7 +264,10 @@ We thank
 at the Australia National University for developing and maintaining the
 <a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> web resource.
 We also thank 
-the <a href="http://sulab.org/" rel="noreferrer" target="_blank">Su</a>, <a href="http://wulab.io/" rel="noreferrer" target="_blank">Wu</a>, and <a href="https://andersen-lab.com/" rel="noreferrer" target="_blank">Andersen</a> labs at Scripps Research for creating the 
+the <a href="http://sulab.org/" rel="noreferrer" target="_blank">Su</a>, 
+<a href="http://wulab.io/" rel="noreferrer" target="_blank">Wu</a>, 
+and <a href="https://andersen-lab.com/" rel="noreferrer" 
+target="_blank">Andersen</a> labs at Scripps Research for creating the 
 <a target="_blank" href="https://Outbreak.info">Outbreak.info</a> resource.
 The lineageVariants scripts were developed and run at UCSC by Nick Keener.
 </p>
