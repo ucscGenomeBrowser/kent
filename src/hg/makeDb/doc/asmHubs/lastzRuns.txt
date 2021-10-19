@@ -102,3 +102,246 @@ TMPDIR=/dev/shm
     # 13053514 bases of 104154999 (12.533%) in intersection
 
 ##############################################################################
+# GCF_900094665.1_CAROLI_EIJ_v1.1 GCF_900095145.1_PAHARI_EIJ_v1.1
+#  (DONE - 2021-10-08 - Hiram)
+
+    # to verify the sizes of the genomes to decide on target query
+    #  (this function could be folded into the pairLastz.sh script)
+
+    # using the 'goto' shell function from Hiram's ~/.bashrc.hiram
+    goto GCF_900094665.1
+    n50.pl *.sizes
+#       reading: GCF_900094665.1_CAROLI_EIJ_v1.1.chrom.sizes
+#       contig count: 3162, total size: 2553121441, one half size: 1276560720
+# cumulative    N50 count       contig  contig size
+1253753066      8       chr5    145277780
+1276560720 one half size
+1376380316      9       chr10   122627250
+
+
+    goto GCF_900095145.1
+    n50.pl *.sizes
+#       reading: GCF_900095145.1_PAHARI_EIJ_v1.1.chrom.sizes
+#       contig count: 2581, total size: 2475012951, one half size: 1237506475
+# cumulative    N50 count       contig  contig size
+1192339185      8       chr7    113323912
+1237506475 one half size
+1303745413      9       chr8    111406228
+
+    # in this case, choosing the larger genome GCF_900094665.1_CAROLI_EIJ_v1.1
+    # as target
+
+    cd /cluster/home/hiram/kent/src/hg/makeDb/doc/asmHubs
+    # the single command to run everything:
+
+ time (~/kent/src/hg/utils/automation/pairLastz.sh \
+	GCF_900094665.1_CAROLI_EIJ_v1.1 \
+	GCF_900095145.1_PAHARI_EIJ_v1.1 mammal mammal) >> mice.lastz.log 2>&1 &
+
+    # copy of makeDoc from /hive/data/genomes/asmHubs/refseqBuild/GCF/900/094/665/GCF_900094665.1_CAROLI_EIJ_v1.1/trackData/lastzGCF_900095145.1.2021-10-08/makeDoc.txt
+
+##############################################################################
+# LASTZ Ryukyu mouse GCF_900094665.1 vs. shrew mouse GCF_900095145.1
+#	(DONE - 2021-10-08 - hiram)
+
+    mkdir /hive/data/genomes/asmHubs/allBuild/GCF/900/094/665/GCF_900094665.1_CAROLI_EIJ_v1.1/trackData/lastzGCF_900095145.1.2021-10-08
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/900/094/665/GCF_900094665.1_CAROLI_EIJ_v1.1/trackData/lastzGCF_900095145.1.2021-10-08
+
+    printf '# shrew mouse GCF_900095145.1 vs. Ryukyu mouse GCF_900094665.1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Ryukyu mouse GCF_900094665.1
+SEQ1_DIR=/hive/data/genomes/asmHubs/GCF/900/094/665/GCF_900094665.1/GCF_900094665.1.2bit
+SEQ1_LEN=/hive/data/genomes/asmHubs/GCF/900/094/665/GCF_900094665.1/GCF_900094665.1.chrom.sizes.txt
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: shrew mouse GCF_900095145.1
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/900/095/145/GCF_900095145.1/GCF_900095145.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/900/095/145/GCF_900095145.1/GCF_900095145.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/asmHubs/allBuild/GCF/900/094/665/GCF_900094665.1_CAROLI_EIJ_v1.1/trackData/lastzGCF_900095145.1.2021-10-08
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+      -tAsmId GCF_900094665.1_CAROLI_EIJ_v1.1 -qAsmId GCF_900095145.1_PAHARI_EIJ_v1.1 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	547m27.209s
+
+    sed -e 's/^/    # /;' fb.GCF_900094665.1.chainGCF_900095145.1Link.txt
+    # 2044833501 bases of 2553121441 (80.092%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_900094665.1.chainSynGCF_900095145.1Link.txt
+    # 1909243125 bases of 2553121441 (74.781%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+      -target2Bit="/hive/data/genomes/asmHubs/GCF/900/094/665/GCF_900094665.1/GCF_900094665.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/900/094/665/GCF_900094665.1/GCF_900094665.1.chrom.sizes.txt" \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/900/095/145/GCF_900095145.1/GCF_900095145.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/900/095/145/GCF_900095145.1/GCF_900095145.1.chrom.sizes.txt" \
+        GCF_900094665.1 GCF_900095145.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	844m36.808s
+
+    sed -e 's/^/    # /;' fb.GCF_900094665.1.chainRBest.GCF_900095145.1.txt
+    # 1922295923 bases of 2553121441 (75.292%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/900/095/145/GCF_900095145.1_PAHARI_EIJ_v1.1/trackData/blastz.GCF_900094665.1.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+  -tAsmId GCF_900094665.1_CAROLI_EIJ_v1.1 -qAsmId GCF_900095145.1_PAHARI_EIJ_v1.1 /hive/data/genomes/asmHubs/allBuild/GCF/900/094/665/GCF_900094665.1_CAROLI_EIJ_v1.1/trackData/lastzGCF_900095145.1.2021-10-08/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	284m47.765s
+
+    sed -e 's/^/    # /;' fb.GCF_900095145.1.chainGCF_900094665.1Link.txt
+    # 2030243186 bases of 2475012951 (82.030%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_900095145.1.chainSynGCF_900094665.1Link.txt
+    # 1904468244 bases of 2475012951 (76.948%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+   -query2bit="/hive/data/genomes/asmHubs/GCF/900/094/665/GCF_900094665.1/GCF_900094665.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/900/094/665/GCF_900094665.1/GCF_900094665.1.chrom.sizes.txt" \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/900/095/145/GCF_900095145.1/GCF_900095145.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/900/095/145/GCF_900095145.1/GCF_900095145.1.chrom.sizes.txt" \
+   GCF_900095145.1 GCF_900094665.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	798m20.989s
+
+    sed -e 's/^/    # /;' fb.GCF_900095145.1.chainRBest.GCF_900094665.1.txt
+    # 1922376371 bases of 2475012951 (77.671%) in intersection
+
+##############################################################################
+# GCF_000413155.1_DPV01 GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p
+#  (DONE - 2021-10-08 - Hiram)
+
+    # to verify the sizes of the genomes to decide on target query
+    #  (this function could be folded into the pairLastz.sh script)
+
+    # using the 'goto' shell function from Hiram's ~/.bashrc.hiram
+    goto GCF_000413155.1
+    n50.pl *.sizes
+n50.pl *.sizes
+#       reading: GCF_000413155.1_DPV01.chrom.sizes
+#       contig count: 80317, total size: 556480649, one half size: 278240324
+# cumulative    N50 count       contig  contig size
+278069349       324     NW_008246829.1  335344
+278240324 one half size
+278404638       325     NW_008246830.1  335289
+
+    goto GCF_009389715.1
+    n50.pl *.sizes
+#   reading: GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p.chrom.sizes
+#       contig count: 2391, total size: 773189301, one half size: 386594650
+# cumulative    N50 count       contig  contig size
+385590432       18      NC_052409.1     9812533
+386594650 one half size
+390318775       19      NW_024067666.1  4728343
+
+    # in this case, choosing the larger genome
+    #	GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p
+    # as target and GCF_000413155.1_DPV01 as query
+
+    cd /cluster/home/hiram/kent/src/hg/makeDb/doc/asmHubs
+    # the single command to run everything:
+
+ time (~/kent/src/hg/utils/automation/pairLastz.sh \
+	GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p \
+	GCF_000413155.1_DPV01 other other) >> datePalm.lastz.log 2>&1 &
+
+#  real	585m49.200s
+#  user	0m3.435s
+#  sys	0m6.165s
+
+##############################################################################
+# LASTZ date palm GCF_009389715.1 vs. date palm GCF_000413155.1 (DONE - 2021-10-18 - hiram)
+    mkdir /hive/data/genomes/asmHubs/allBuild/GCF/009/389/715/GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p/trackData/lastzGCF_000413155.1.2021-10-18
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/009/389/715/GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p/trackData/lastzGCF_000413155.1.2021-10-18
+
+    printf '# date palm GCF_000413155.1 vs. date palm GCF_009389715.1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: date palm GCF_009389715.1
+SEQ1_DIR=/hive/data/genomes/asmHubs/GCF/009/389/715/GCF_009389715.1/GCF_009389715.1.2bit
+SEQ1_LEN=/hive/data/genomes/asmHubs/GCF/009/389/715/GCF_009389715.1/GCF_009389715.1.chrom.sizes.txt
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: date palm GCF_000413155.1
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/000/413/155/GCF_000413155.1/GCF_000413155.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/000/413/155/GCF_000413155.1/GCF_000413155.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/asmHubs/allBuild/GCF/009/389/715/GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p/trackData/lastzGCF_000413155.1.2021-10-18
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+      -tAsmId GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p -qAsmId GCF_000413155.1_DPV01 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	316m4.783s
+
+    sed -e 's/^/    # /;' fb.GCF_009389715.1.chainGCF_000413155.1Link.txt
+    # 611238317 bases of 773189301 (79.054%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_009389715.1.chainSynGCF_000413155.1Link.txt
+    # 426120778 bases of 773189301 (55.112%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+      -target2Bit="/hive/data/genomes/asmHubs/GCF/009/389/715/GCF_009389715.1/GCF_009389715.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/009/389/715/GCF_009389715.1/GCF_009389715.1.chrom.sizes.txt" \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/000/413/155/GCF_000413155.1/GCF_000413155.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/000/413/155/GCF_000413155.1/GCF_000413155.1.chrom.sizes.txt" \
+        GCF_009389715.1 GCF_000413155.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	18m42.901s
+
+    sed -e 's/^/    # /;' fb.GCF_009389715.1.chainRBest.GCF_000413155.1.txt
+    # 394043180 bases of 773189301 (50.963%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/000/413/155/GCF_000413155.1_DPV01/trackData/blastz.GCF_009389715.1.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+  -tAsmId GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p -qAsmId GCF_000413155.1_DPV01 /hive/data/genomes/asmHubs/allBuild/GCF/009/389/715/GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p/trackData/lastzGCF_000413155.1.2021-10-18/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	217m53.130s
+
+    sed -e 's/^/    # /;' fb.GCF_000413155.1.chainGCF_009389715.1Link.txt
+    # 470755615 bases of 556480649 (84.595%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_000413155.1.chainSynGCF_009389715.1Link.txt
+    # 386385047 bases of 556480649 (69.434%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+   -query2bit="/hive/data/genomes/asmHubs/GCF/009/389/715/GCF_009389715.1/GCF_009389715.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/009/389/715/GCF_009389715.1/GCF_009389715.1.chrom.sizes.txt" \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/000/413/155/GCF_000413155.1/GCF_000413155.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/000/413/155/GCF_000413155.1/GCF_000413155.1.chrom.sizes.txt" \
+   GCF_000413155.1 GCF_009389715.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	33m7.581s
+
+    sed -e 's/^/    # /;' fb.GCF_000413155.1.chainRBest.GCF_009389715.1.txt
+    # 430390896 bases of 556480649 (77.342%) in intersection
+
+##############################################################################
