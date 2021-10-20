@@ -21,7 +21,7 @@
 #define MAX_SUBTREE_CTS 10
 
 // For usher's -K option (single subtree):
-#define SINGLE_SUBTREE_SIZE "1000"
+#define SINGLE_SUBTREE_SIZE "2000"
 
 #define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
 #define OUTBREAK_INFO_URLBASE "https://outbreak.info/situation-reports?pango="
