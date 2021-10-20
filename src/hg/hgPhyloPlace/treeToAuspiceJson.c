@@ -272,7 +272,7 @@ if (snc->chromStart < gi->psl->tEnd && snc->chromStart >= gi->psl->tStart)
     char gAlt[2];
     safef(gAlt, sizeof(gAlt), "%c", snc->newBase);
     if (!sameString(gi->psl->strand, "+"))
-        errAbort("changesProtein: only worlds for psl->strand='+', but gene '%s' has strand '%s'",
+        errAbort("changesProtein: only works for psl->strand='+', but gene '%s' has strand '%s'",
                  gi->psl->qName, gi->psl->strand);
     struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &gBed3, gAlt, gi->psl, gi->txSeq);
     if (vpTx->start.region == vpExon)
@@ -295,6 +295,11 @@ if (snc->chromStart < gi->psl->tEnd && snc->chromStart >= gi->psl->tStart)
             oldCodon[codonOffset] = snc->parBase;
             oldAa = lookupCodon(oldCodon);
             }
+        // Watch out for lookupCodon's null-character return value for stop codon; we want '*'.
+        if (newAa == '\0')
+            newAa = '*';
+        if (oldAa == '\0')
+            oldAa = '*';
         if (newAa != oldAa)
             {
             isCodingChange = TRUE;
