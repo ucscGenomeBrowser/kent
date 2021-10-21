@@ -659,8 +659,7 @@ include pbm.ra
 include pbmShanghai.ra
 include abEscape.ra
 include bloom.ra
-include variantMuts.ra public 
-include variantMutsV2.ra alpha,beta
+include variantMutsV2.ra
 
 include vaccines.ra
 include mutCons.ra
