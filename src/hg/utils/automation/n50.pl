@@ -70,8 +70,12 @@ while (my $sizeFile = shift) {
 	    my $origName = $key;
 	    $origName =~ s/_X_[0-9]+//;
 	    printf "# cumulative\tN50 count\tcontig\tcontig size\n";
-	    printf "%d\t%d\t%s\t%d\n",
-		$totalSize-$sizes{$key},$contigCount-1,$prevName, $prevSize;
+	    if (1 == $contigCount) {
+	      printf "%d\t%d\t%s\t%d\n", $totalSize, $contigCount, $origName, $sizes{$key};
+            } else {
+	      printf "%d\t%d\t%s\t%d\n",
+		  $totalSize-$sizes{$key},$contigCount-1,$prevName, $prevSize;
+            }
 	    printf "%d one half size\n", $n50Size;
 	    printf "%d\t%d\t%s\t%d\n", $totalSize, $contigCount, $origName, $sizes{$key};
 	    last;

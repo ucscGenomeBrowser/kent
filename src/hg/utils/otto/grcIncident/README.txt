@@ -1,4 +1,10 @@
 
+Thu Oct 21 11:17:52 PDT 2021
+
+The cron job is daily at 09:33
+
+33 09 * * * /hive/data/outside/grc/incidentDb/runUpdate.sh makeItSo
+
 Tue Sep  3 10:48:30 PDT 2019
 
 Create the directory:
