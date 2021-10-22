@@ -1,0 +1,31 @@
+track t2tChain
+shortLabel T2T Alignments
+longLabel T2T (Telomere-To-Telomere) chained alignments: all vs. liftOver alignments
+group map
+visibility hide
+type chain
+compositeTrack on
+
+        track t2tAllChain
+        shortLabel T2T All Chains
+        longLabel T2T All possible chains
+        priority 1
+        type chain hg38
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        #otherDb hg19
+        chainMinScore 3000
+        chainLinearGap medium
+        parent t2tChain
+
+        track t2tOverChain
+        shortLabel T2T liftOver Chains
+        longLabel T2T chained alignments used by liftOver
+        priority 2
+        type chain hg38
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        #otherDb hg19
+        chainMinScore 3000
+        chainLinearGap medium
+        parent t2tChain
