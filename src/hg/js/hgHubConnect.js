@@ -46,7 +46,6 @@ function closeIframe() {
 function reloadIframe() {
     document.getElementById("content").innerHTML = "Re-loading hub...";
     window.parent.document.getElementById('checkerFrame').src += '';
-
 }
 
 // hover effect to highlight table rows
@@ -71,13 +70,6 @@ $(function() {
       }
   });
 });
-
-// make sure that a click onto "Public Hubs" doesn't jump to the tabs.
-//$(document).ready(function() {
-    //$('a[href^="tabs-"]').on('click', function(e) {
-          //e.preventDefault();
-    //});
-//});
 
 // creates keyup event; listening for return key press
 $(document).ready(function() {
