@@ -23,6 +23,14 @@ ul {
         font-size: 80%;
 }
 
+/* not used, but suggested by QA, waiting for feedback */
+/*
+button.pressed {
+    background: #ebf0ff;
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+} */
+
 h4 {
         margin: 0px;
         padding-top: 4px;

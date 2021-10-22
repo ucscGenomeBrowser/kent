@@ -26,7 +26,7 @@ include colonWang.ra
 include rectumWang.ra
 include placentaVentoTormo.ra alpha,beta
 include singleCellMerged.ra
-#include lungMadissoon.ra
+include t2t.ra alpha
 
 include gtexEqtl.ra
 
