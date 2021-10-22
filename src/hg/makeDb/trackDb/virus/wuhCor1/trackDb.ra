@@ -80,7 +80,7 @@ bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
 
 track cd8escape
 shortLabel CD8 Escape Muts
-longLabel T-Cell MHCI CD8+ Escape Mutations from Angerer et al. Sci Immun 2020
+longLabel T-Cell MHCI CD8+ Escape Mutations from Agerer et al. Sci Immun 2020
 group immu
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/cd8escape/cd8escape.bb
