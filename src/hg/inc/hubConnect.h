@@ -52,6 +52,7 @@
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
 #define hgHubDoClear       hgHubDo "clear"
+#define hgHubDoRefresh     hgHubDo "refresh"
 #define hgHubDoSearch      hgHubDo "search"
 #define hgHubDoDeleteSearch      hgHubDo "deleteSearch"
 #define hgHubDoFilter      hgHubDo "filter"

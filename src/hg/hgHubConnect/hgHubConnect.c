@@ -1409,7 +1409,7 @@ printf("<pre>Completed\n");
 
 static void checkTrackDbs(struct hubConnectStatus *hubList)
 {
-//long beforeCheck = clock1000();
+long beforeCheck = clock1000();
 
 struct hubConnectStatus *hub = hubList;
 

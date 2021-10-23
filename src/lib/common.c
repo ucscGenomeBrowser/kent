@@ -64,6 +64,19 @@ newBuf[len] = 0;
 return newBuf;
 }
 
+char *catThreeStrings(char *a, char *b, char *c)
+/* Allocate new string that is a concatenation of three strings. */
+{
+int aLen = strlen(a), bLen = strlen(b), cLen = strlen(c);
+int len = aLen + bLen + cLen; 
+char *newBuf = needLargeMem(len+1);
+memcpy(newBuf, a, aLen);
+memcpy(newBuf+aLen, b, bLen);
+memcpy(newBuf+aLen+bLen, c, cLen);
+newBuf[len] = 0;
+return newBuf;
+}
+
 /* Reverse the order of the bytes. */
 void reverseBytes(char *bytes, long length)
 {
