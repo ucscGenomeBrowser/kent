@@ -503,14 +503,14 @@ if (searchEnabled)
     printf("The list below can be filtered on words in the description pages or assemblies.<BR>"
             "Search terms: "
             "<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\" "
-            "type=\"text\" size=\"50\" value=\"%s\"> \n",
+            "placeholder='e.g. methylation' type=\"text\" size=\"50\" value=\"%s\"> \n",
             hubSearchTerms!=NULL?hubSearchTerms:"");
     printf("\n");
     }
 
 printf("Assembly: "
         "<input name=\"%s\" id=\"hubDbFilter\" class=\"hubField\" "
-        "type=\"text\" size=\"10\" value=\"%s\"> \n"
+        "type=\"text\" size=\"15\" value=\"%s\" placeholder='empty or e.g. hg38'> \n"
         "<input name=\"hubSearchButton\" id='hubSearchButton' "
         "class=\"hubField\" type=\"submit\" value=\"Search Public Hubs\">\n",
         hgHubDbFilter, dbFilter!=NULL?dbFilter:"");
@@ -1217,7 +1217,8 @@ if (isNotEmpty(lcDbFilter))
 // make sure all the public hubs are in the hubStatus table.
 long lastTime= clock1000();
 addPublicHubsToHubStatus(cart, conn, publicTable, statusTable);
-printf("Time of addPublicHubsToHubStatus: %ld <br>", (clock1000()-lastTime));
+if (measureTiming)
+    printf("Time of addPublicHubsToHubStatus: %ld <br>", (clock1000()-lastTime));
 
 
 // build full public hub lookup hash, taking each URL to struct hubEntry * for that hub
@@ -1409,7 +1410,7 @@ printf("<pre>Completed\n");
 
 static void checkTrackDbs(struct hubConnectStatus *hubList)
 {
-//long beforeCheck = clock1000();
+long beforeCheck = clock1000();
 
 struct hubConnectStatus *hub = hubList;
 
