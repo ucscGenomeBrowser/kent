@@ -28,7 +28,7 @@ include placentaVentoTormo.ra alpha,beta
 include singleCellMerged.ra
 include t2t.ra alpha
 
-include gtexEqtl.ra
+include gtexEqtl.ra alpha,beta
 
 include liftOver.ra
 include exomeProbesets.ra
