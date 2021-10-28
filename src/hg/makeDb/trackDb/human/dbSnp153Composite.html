@@ -5,18 +5,18 @@ This track shows short genetic variants
 <A HREF="https://www.ncbi.nlm.nih.gov/SNP/" target=_blank>dbSNP</A>
 build 153:
 single-nucleotide variants (SNVs),
-small insertions, deletions, and complex deletion/insertions,
+small insertions, deletions, and complex deletion/insertions (indels),
 relative to the reference genome assembly.
 Most variants in dbSNP are rare, not true polymorphisms,
 and some variants are known to be pathogenic.
 </p><p>
 For hg38 (GRCh38), approximately 667 million distinct variants
 (RefSNP clusters with rs# ids)
-have been mapped to over 702 million genomic locations
+have been mapped to more than 702 million genomic locations
 including alternate haplotype and fix patch sequences.
 dbSNP remapped variants from hg38 to hg19 (GRCh37);
 approximately 658 million distinct variants were mapped to
-over 683 million genomic locations
+more than 683 million genomic locations
 including alternate haplotype and fix patch sequences (not
 all of which are included in UCSC's hg19).
 </p>
@@ -77,13 +77,13 @@ A relative to the reference genome.
 However, which A was deleted?  There is no way to tell whether the first, second or third A
 was removed.
 Different variant mapping tools may place the deletion at different bases in the reference genome.
-In order to reduce errors in merging variant calls made with different left vs. right biases,
+To reduce errors in merging variant calls made with different left vs. right biases,
 dbSNP made a major change in its representation of deletion/insertion variants in build 152.
 Now, instead of assigning a single-base genomic location at one of the A's,
 dbSNP expands the coordinates to encompass the whole repetitive region,
 so the variant is represented as a deletion of 3 A's combined with an insertion of 2 A's.
 In the track display, there will be a half-height box covering the first two A's,
-followed by a full-height box covering the third A, in order to show a net loss of one base
+followed by a full-height box covering the third A, to show a net loss of one base
 but an uncertain placement within the three A's.
 </p>
 <p>
@@ -118,7 +118,7 @@ Allele frequencies are reported independently by twelve projects
       in 14 populations.
     </li>
     <li><a href="https://www.nhlbiwgs.org/" target=_blank>TOPMED</a>:
-      The TOPMED dataset contains phase 3 data from freeze 5 panel that include over 60,000
+      The TOPMED dataset contains phase 3 data from freeze 5 panel that include more than 60,000
       individuals. The approximate ethnic breakdown is European(52%), African (31%),
       Hispanic or Latino (10%), and East Asian (7%) ancestry.
     </li>
@@ -406,7 +406,7 @@ and others may indicate an anomaly or problem with the variant data:
 <p>
 dbSNP has collected genetic variant reports from researchers worldwide for 
 <a href="https://ncbiinsights.ncbi.nlm.nih.gov/2019/10/07/dbsnp-celebrates-20-years/"
-   target=_blank>over 20 years</a>.
+   target=_blank>more than 20 years</a>.
 Since the advent of next-generation sequencing methods and the population sequencing efforts
 that they enable, dbSNP has grown exponentially, requiring a new data schema, computational pipeline,
 web infrastructure, and download files.
@@ -414,11 +414,11 @@ web infrastructure, and download files.
 The same challenges of exponential growth affected UCSC's presentation of dbSNP variants,
 so we have taken the opportunity to change our internal representation and import pipeline.
 Most notably, flanking sequences are no longer provided by dbSNP,
-since most submissions have been genomic variant calls in VCF format as opposed to
+because most submissions have been genomic variant calls in VCF format as opposed to
 independent sequences.
 </p>
 <p>
-We downloaded dbSNP's JSON files available from
+We downloaded JSON files available from dbSNP at
 <a href="ftp://ftp.ncbi.nlm.nih.gov/snp/archive/b153/JSON/"
 target=_blank>ftp://ftp.ncbi.nlm.nih.gov/snp/archive/b153/JSON/</a>,
 extracted a subset of the information about each variant, and collated
@@ -510,7 +510,7 @@ For automated analysis, the track data files can be downloaded from the download
 Several utilities for working with bigBed-formatted binary files can be downloaded
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
    target=_blank>here</a>.
-Run a utility with no arguments in order to see a brief description of the utility and its options.
+Run a utility with no arguments to see a brief description of the utility and its options.
 <ul>
   <li><b>bigBedInfo</b> provides summary statistics about a bigBed file including the number of
     items in the file.  With the <b>-as</b> option, the output includes an
@@ -565,7 +565,7 @@ that can be used to retrieve values from a particular chromosome range.
 </p><p>
 A list of rs# IDs can be pasted/uploaded in the
 <a href="hgVai" target=_blank>Variant Annotation Integrator</a>
-tool in order to find out which genes (if any) the variants are located in,
+tool to find out which genes (if any) the variants are located in,
 as well as functional effect such as intron, coding-synonymous, missense, frameshift, etc.
 </p><p>
 Please refer to our searchable
