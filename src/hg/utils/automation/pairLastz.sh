@@ -2,6 +2,8 @@
 
 set -beEu -o pipefail
 
+export userName="`whoami`"
+
 if [ $# != 4 ]; then
   printf "usage: pairLastz.sh <target> <query> <tClade> <qClade>
 
@@ -21,6 +23,8 @@ Will set up a DEF file there, and a run.sh script to run all steps
 
 AND MORE, it will run the swap operation into the corresponding
   blastz.target.swap directory in the query genome work space.
+
+Email will be sent to: '$userName' upon completion.
 
 e.g.: pairLastz.sh rn7 papAnu4 mammal primate\n" 1>&2
   exit 255
@@ -423,10 +427,10 @@ fi      ###     if [ $primaryDone -eq 0 ]; then
 
 #### print out the makeDoc.txt to this point into buildDir/makeDoc.txt
 
-export userName="`whoami`"
-
 printf "##############################################################################
-# LASTZ ${tOrgName} ${Target} vs. $qOrgName ${Query} (DONE - $DS - $userName)
+# LASTZ ${tOrgName} ${Target} vs. $qOrgName ${Query}
+#    (DONE - $DS - $userName)
+
     mkdir $buildDir
     cd $buildDir
 
@@ -539,3 +543,20 @@ printf "\n######################################################################
 
 ### show completed makeDoc.txt ####
 cat ${buildDir}/makeDoc.txt
+
+export toAddress="$userName"
+export fromAddress="$userName"
+export subject="pair lastz DONE $target $query"
+printf "To: $toAddress
+From: $fromAddress
+Subject: $subject
+
+##################################################################
+" > /tmp/send.txt.$$
+date >> /tmp/send.txt.$$
+printf "##################################################################\n" >> /tmp/send.txt.$$
+cat ${buildDir}/makeDoc.txt >> /tmp/send.txt.$$
+
+cat /tmp/send.txt.$$ | /usr/sbin/sendmail -t -oi
+
+rm -f /tmp/send.txt.$$

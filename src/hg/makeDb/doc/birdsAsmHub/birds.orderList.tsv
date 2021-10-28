@@ -4,7 +4,6 @@ GCF_000691975.1_ASM69197v1	American crow
 GCF_003957555.1_bCalAnn1_v1.p	Anna's hummingbird
 GCF_000737465.1_Haliaeetus_leucocephalus-4.0	bald eagle
 GCF_000703405.1_ASM70340v1	bar-tailed trogon
-GCF_902150015.1_genome_assembly_l500	barn owl (2020)
 GCF_018691265.1_T.alba_DEE_v4.0	barn owl (U. Lausanne 2021)
 GCF_015227805.1_bHirRus1.pri.v2	barn swallow
 GCF_005870125.1_lonStrDom2	Bengalese finch
@@ -23,20 +22,26 @@ GCF_000747805.1_ChaPel_1.0	chimney swift
 GCF_000700745.1_ASM70074v1	chuck-will's-widow
 GCF_000247815.1_FicAlb1.5	collared flycatcher
 GCF_007115625.1_cibio_Scana_2019	common canary
-GCF_000709325.1_ASM70932v1	common cuckoo
+GCA_017976375.1_bCucCan1.pri	common cuckoo (VGP 2021)
 GCF_001447265.1_Sturnus_vulgaris-1.0	common starling
 GCF_000708225.1_ASM70822v1	crested ibis
 GCF_000691785.1_ASM69178v1	cuckoo roller
 GCF_000687375.1_ASM68737v1	Dalmatian pelican
-GCF_000699005.1_ASM69900v1	downy woodpecker
+GCA_014839835.1_bDryPub1.pri	downy woodpecker (VGP 2020)
 GCF_000709895.1_ASM70989v1	East African grey crowned-crane
 GCF_000699145.1_ASM69914v1	emperor penguin
-GCF_003342905.1_droNov1	emu
+GCA_016128335.1_ZJU1.0	emu (2020)
+GCF_003342905.1_droNov1	emu (2018)
+GCA_907165065.1_bCapEur3.1	Eurasian nightjar
 GCF_014805655.1_ASM1480565v1	Eurasian tree sparrow
+GCA_017639485.1_bPluApr1.pri	European golden plover
+GCA_903797595.2_bEriRub2.2	European robin
+GCA_014839755.1_bSylBor1.pri	garden warbler
 GCF_001715985.3_ASM171598v3	golden-collared manakin
 GCF_900496995.4_bAquChr1.4	golden eagle
 GCF_000708925.1_ASM70892v1	great cormorant
-GCF_001522545.3_Parus_major1.1	Great Tit
+GCA_013368605.1_bNycGra1.pri	great potoo
+GCF_001522545.3_Parus_major1.1	great tit
 GCF_019232065.1_USGS_Curo_1.0	greater sage-grouse
 GCF_002078875.1_NumMel1.0	helmeted guineafowl
 GCF_000692075.1_ASM69207v1	hoatzin
@@ -48,6 +53,7 @@ GCF_000708025.1_ASM70802v2	killdeer
 GCF_017639655.2_bFalNau1.pat	lesser kestrel
 GCF_000687185.1_ASM68718v1	little egret
 GCF_000695195.1_ASM69519v1	Macqueen's bustard
+GCA_017639555.1_bCicMag1.pri	maguari stor
 GCF_003850225.1_IASCAAS_PekingDuck_PBH1.5	mallard PBH1.5
 GCF_015476345.1_ZJU1.0	mallard ZJU1.0
 GCF_017639235.1_C.kubaryi_AGA036_p1.0	Mariana crow
@@ -57,10 +63,11 @@ GCF_000690835.1_ASM69083v1	Northern fulmar
 GCF_003343035.1_aptRow1	Okarito brown kiwi
 GCF_000337955.1_F_peregrinus_v1.0	peregrine falcon
 GCF_000709365.1_ASM70936v1	red-crested turaco
+GCA_015220805.1_bPogPus1.pri	red-fronted tinkerbird
 GCF_000690535.1_ASM69053v1	red-legged seriema
 GCF_000690875.1_ASM69087v1	red-throated loon
 GCF_000710305.1_ASM71030v1	rhinoceros hornbill
-GCF_000695815.1_ASM69581v1	rifleman
+GCA_016904835.1_bAcaChl1.pri	rifleman (VGP 2021)
 GCF_004143745.1_ASM414374v1	ring-necked pheasant
 GCF_000337935.1_Cliv_1.0	rock pigeon
 GCF_011077185.1_BPBGC_Ojam_1.0	ruddy duck

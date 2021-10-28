@@ -19,27 +19,34 @@ GCA_009819595.1_bMerNub1.pri	carmine bee-eater
 GCF_900634415.1_fCotGob3.1	channel bull blenny
 GCF_900324465.2_fAnaTes1.2	climbing perch
 GCF_011100635.1_mTriVul1.pri	common brushtail
+GCA_017976375.1_bCucCan1.pri	common cuckoo (VGP 2021)
 GCA_009819605.1_bSteHir1.pri	common tern
 GCA_009764595.1_bGeoTri1.pri	common yellowthroat
 GCF_905171765.1_aBufBuf1.1	common toad
 GCF_017976325.1_fCheRos1.pri	copperband butterflyfish
 GCF_900700375.1_fDenClu1.1	denticle herring
+GCA_014839835.1_bDryPub1.pri	downy woodpecker (VGP 2020)
 GCA_011004875.1_bBalReg1.pri	East African grey crowned-crane
 GCF_900246225.1_fAstCal1.2	eastern happy
 GCF_014176215.1_mRouAeg1.p	Egyptian rousette
 GCF_013358815.1_fEleEle1.pri	electric eel
 GCF_009829155.1_mMusErm1.Pri	ermine
+GCA_907165065.1_bCapEur3.1	Eurasian nightjar
 GCA_902686455.1_mSciVul1.1	Eurasian red squirrel
 GCF_903992535.2_mArvAmp1.2	Eurasian water vole (2021)
 GCF_905171775.1_aRanTem1.1	European common frog
 GCF_013347855.1_fAngAng1.pri	European eel
+GCA_017639485.1_bPluApr1.pri	European golden plover
+GCA_903797595.2_bEriRub2.2	European robin
 GCF_902459465.1_eAstRub1.3	European starfish
 GCA_901699155.1_bStrTur1.1	European turtle dove
 GCF_007364275.1_fArcCen1	flier cichlid
 GCF_902459505.1_aGeoSer1.1	Gabon caecilian
+GCA_014839755.1_bSylBor1.pri	garden warbler
 GCF_900880675.1_fSpaAur1.1	gilthead seabream
 GCF_900496995.4_bAquChr1.4	golden eagle (2021)
 GCF_007399415.2_rGopEvg1_v1.p	Goodes thornscrub tortoise
+GCA_013368605.1_bNycGra1.pri	great potoo
 GCF_902652985.1_xPecMax1.1	great scallop
 GCF_017639515.1_sCarCar2.pri	great white shark
 GCA_004115265.2_mRhiFer1_v1.p	greater horseshoe bat
@@ -61,7 +68,7 @@ GCF_009764565.2_rDerCor1.pri.v3	leatherback sea turtle (v3 2020)
 GCF_017639655.2_bFalNau1.pat	lesser kestrel
 GCF_900963305.1_fEcheNa1.1	live sharksucker
 GCF_009769545.1_fCycLum1.pri	lumpfish (refseq)
-GCF_015476345.1_ZJU1.0	mallard
+GCA_017639555.1_bCicMag1.pri	maguari stor
 GCF_902362185.1_fChaCha1.1	milkfish
 GCF_009769625.2_bCygOlo1.pri.v2	mute swan (v2 2021)
 GCF_009650955.1_bCorMon1.pri	New Caledonian crow
@@ -77,8 +84,10 @@ GCF_902500255.1_fThaAma1.1	prehistoric monster fish
 GCA_008658365.1_bAlcTor1_primary	razorbill
 GCF_015220715.1_fPygNat1.pri	red-bellied piranha
 GCA_009769465.1_bTauEry1.pri	red-crested turaco
+GCA_015220805.1_bPogPus1.pri	red-fronted tinkerbird
 GCA_009819825.1_bCarCri1.pri	red-legged seriema
 GCF_900747795.1_fErpCal1.1	reedfish
+GCA_016904835.1_bAcaChl1.pri	rifleman (VGP 2021)
 GCF_901001165.1_fSalTru1.1	river trout
 GCF_009819535.1_rLacAgi1.pri	sand lizard
 GCF_010993605.1_kPetMar1.pri	sea lamprey

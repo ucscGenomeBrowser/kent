@@ -105,6 +105,15 @@
 ./runBuild GCA_012275265.1 GCA_012275265.1_bMelUnd1.mat birds Melopsittacus_undulatus
 ./runBuild GCA_012275275.1 GCA_012275275.1_bMelUnd1.pat birds Melopsittacus_undulatus
 ./runBuild GCA_012275295.1 GCA_012275295.1_bMelUnd1.mat.Z birds Melopsittacus_undulatus
+./runBuild GCA_013368605.1 GCA_013368605.1_bNycGra1.pri birds Nyctibius_grandis
+./runBuild GCA_014839755.1 GCA_014839755.1_bSylBor1.pri birds Sylvia_borin
+./runBuild GCA_014839835.1 GCA_014839835.1_bDryPub1.pri birds Dryobates_pubescens
+./runBuild GCA_015220805.1 GCA_015220805.1_bPogPus1.pri birds Pogoniulus_pusillus
+./runBuild GCA_016128335.1 GCA_016128335.1_ZJU1.0 birds Dromaius_novaehollandiae
+./runBuild GCA_016904835.1 GCA_016904835.1_bAcaChl1.pri birds Acanthisitta_chloris
+./runBuild GCA_017639485.1 GCA_017639485.1_bPluApr1.pri birds Pluvialis_apricaria
+./runBuild GCA_017639555.1 GCA_017639555.1_bCicMag1.pri birds Ciconia_maguari
+./runBuild GCA_017976375.1 GCA_017976375.1_bCucCan1.pri birds Cuculus_canorus
 ./runBuild GCA_018400075.1 GCA_018400075.1_ASM1840007v1 fish Danio_rerio
 ./runBuild GCA_900324465.2 GCA_900324465.2_fAnaTes1.2 fish Anabas_testudineus
 ./runBuild GCA_900634415.1 GCA_900634415.1_fCotGob3.1 vertebrate Cottoperca_gobio
@@ -143,6 +152,8 @@
 ./runBuild GCA_902686455.1 GCA_902686455.1_mSciVul1.1 mammals Sciurus_vulgaris
 ./runBuild GCA_902713425.1 GCA_902713425.1_fAciRut3.1_maternal_haplotype vertebrate Acipenser_ruthenus
 ./runBuild GCA_902713435.1 GCA_902713435.1_fAciRut3.1_paternal_haplotype vertebrate Acipenser_ruthenus
+./runBuild GCA_903797595.2 GCA_903797595.2_bEriRub2.2 birds Erithacus_rubecula
+./runBuild GCA_907165065.1 GCA_907165065.1_bCapEur3.1 birds Caprimulgus_europaeus
 ./runBuild GCF_000001215.4 GCF_000001215.4_Release_6_plus_ISO1_MT invertebrate Drosophila_melanogaster
 ./runBuild GCF_000001405.39 GCF_000001405.39_GRCh38.p13 vertebrate_mammalian Homo_sapiens
 ./runBuild GCF_000001635.26 GCF_000001635.26_GRCm38.p6 vertebrate_mammalian Mus_musculus
