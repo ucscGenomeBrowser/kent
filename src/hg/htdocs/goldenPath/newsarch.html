@@ -51,6 +51,73 @@
 
 <!-- ============= 2021 archived news ============= -->
 <a name="2021"></a>
+<a name="102821"></a>
+<h2>
+Oct. 28, 2021 &nbsp;&nbsp; New GTEx cis-eQTL and RNA-seq read coverage tracks for human (hg38)</h2>
+<p>
+We are happy to announce the release of two new tracks for the human assembly (GRCh38/hg38): the
+<a href="../../cgi-bin/hgTrackUi?db=hg38&c=chrX&g=gtexEqtlHighConf">GTEx High-Confidence cis-eQTLs
+from CAVIAR</a> and <a href="../../cgi-bin/hgTrackUi?db=hg38&c=chrX&g=gtexCov">GTEx RNA-seq read
+coverage</a> tracks.
+</p>
+<dl>
+  <dt>GTEx High-Confidence cis-eQTLs from CAVIAR</dt>
+    <dd>
+      <ul>
+        <li>
+        Shows genetic variants likely affecting proximal gene expression in 49 human tissues from
+        the <a href="https://gtexportal.org/home/" target="_blank">Genotype-Tissue Expression
+        (GTEx)</a> V8 data release.
+        </li>
+        <li>
+        Items in the track are colored according to their tissue, with the color matching those in
+        the <a href="../../cgi-bin/hgGtexTrackSettings?g=gtexGeneV8">GTEx Gene V8 Track</a>.
+        </li>
+        <li>
+        The data items displayed are gene expression quantitative trait loci within 1MB of gene
+        transcription start sites (cis-eQTLs), significantly associated with gene expression and in
+        the credible set of variants for the gene at a high confidence level, with a causal
+        posterior probability of &gt;0.1.
+        </li>
+        <li>
+        Raw data for these analyses are available from the
+        <a href="https://gtexportal.org/home/protectedDataAccess" target="_blank">GTEx Portal</a>.
+        </li>
+    </dd>
+  <dt>GTEx V8 RNA-Seq Read Coverage by Tissue</dt>
+    <dd>
+      <ul>
+        <li>
+        The <a href="https://commonfund.nih.gov/GTEx/index" target="_blank">NIH Genotype-Tissue
+        Expression</a> (GTEx) project determined genetic variation and gene expression in 52 tissues
+        and 2 cell lines using RNA-seq data (V8, August 2019), on 17,382 samples from 948 adults.
+        </li>
+        <li>
+        This track focuses on gene expression and shows read coverage, from one single sample
+        per tissue, selected for high-quality and high read depth. The data is summarized to one
+        number per base pair, the number of sequencing reads that cover this position.
+        </li>
+        <li>
+        The plot shows if a given exon is transcribed primarily in certain tissues and whether
+        transcription is uniform over the length of a single exon.
+        </li>
+        <li>
+        Data can also be obtained directly from the
+        <a href="https://gtexportal.org/home/datasets" target="_blank">GTEx Portal</a>.
+        </li>
+    </dd>
+</dl>
+<p class ="text-center">
+  <a href="http://genome.ucsc.edu/s/Lou/GTEx">
+    <img class="text-center" src="../images/newsArchImages/GTExV8_eQTL_RNA-seq.jpg" width="800px">
+  </a>
+</p>
+<p>
+We would like to thank the GTEx investigators, analysts, and portal team for providing this data. We
+would also like to thank Max Haeussler, Matt Speir, and Jairo Navarro for the creation and release
+of these tracks.
+</p>
+
 <a name="102121"></a>
 <h2>Oct. 21, 2021 &nbsp;&nbsp; GENCODE Genes V38 for human (hg38)</h2>
 <p>
