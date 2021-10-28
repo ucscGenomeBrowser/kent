@@ -36,16 +36,11 @@ struct plProc
 };
 
 struct pipeline
-/* Object for a process pipeline and associated open file.  Pipeline process
- * consist of a process group leader and then all of the child process.  The
- * group leader does no work, just wait on processes to complete and report
- * errors to the top level process.  This object is create in the calling
- * process, and then passed down, but not shared, via forks.
+/* Object for a process pipeline and associated open files.
  */
 {
     struct plProc *procs;      /* list of processes */
     int numRunning;            /* number of processes running */
-    pid_t groupLeader;         /* process group id, or -1 if not set. This is pid of group leader */
     char *procName;            /* name to use in error messages. */
     int pipeFd;                /* fd of pipe to/from process, -1 if none */
     unsigned options;          /* options */
@@ -175,9 +170,6 @@ static void plProcSetup(struct plProc* proc, int stdinFd, int stdoutFd, int stde
 if (signal(SIGPIPE, ((proc->pl->options & pipelineSigpipe) ? SIG_DFL : SIG_IGN)) == SIG_ERR)
     errnoAbort("error ignoring SIGPIPE");
 
-if (setpgid(getpid(), proc->pl->groupLeader) != 0)
-    errnoAbort("error from setpgid(%d, %d)", getpid(), proc->pl->groupLeader);
-
 /* child, first setup stdio files */
 if (stdinFd != STDIN_FILENO)
     {
@@ -225,42 +217,43 @@ else
     }
 }
 
-static void plProcHandleSignaled(struct plProc* proc, int status)
-/* handle one of the processes terminating on a signal */
+static boolean isIgnoredSigPipe(struct plProc* proc)
+/* did this process exit with SIGPIPE and we are ignoring it */
+{
+return (WTERMSIG(proc->status) == SIGPIPE) && (proc->pl->options & pipelineSigpipe);
+}
+
+static void plProcHandleSignaled(struct plProc* proc)
+/* handle one of the processes terminating on a signal,
+ * return status*/
 {
 assert(WIFSIGNALED(proc->status));
-if (!((WTERMSIG(proc->status) == SIGPIPE) && (proc->pl->options & pipelineSigpipe)))
+if (!isIgnoredSigPipe(proc))
     {
     errAbort("process terminated on signal %d: \"%s\" in pipeline \"%s\"",
              WTERMSIG(proc->status), joinCmd(proc->cmd), proc->pl->procName);
     }
 }
 
-static void plProcHandleExited(struct plProc* proc, int status)
+static void plProcHandleExited(struct plProc* proc)
 /* handle one of the processes terminating on an exit */
 {
 assert(WIFEXITED(proc->status));
-if (WEXITSTATUS(proc->status) != 0)
+// only print an error message if aborting
+if ((WEXITSTATUS(proc->status) != 0) && !(proc->pl->options & pipelineNoAbort))
     {
-    // only print an error message if aborting
-    if (!(proc->pl->options & pipelineNoAbort))
-        fprintf(stderr, "process exited with %d: \"%s\" in pipeline \"%s\"\n",
-                WEXITSTATUS(proc->status), joinCmd(proc->cmd), proc->pl->procName);
-    exit(WEXITSTATUS(proc->status));  // pass back exit code
+    fprintf(stderr, "process exited with %d: \"%s\" in pipeline \"%s\"\n",
+            WEXITSTATUS(proc->status), joinCmd(proc->cmd), proc->pl->procName);
     }
 }
 
-static void plProcHandleTerminate(struct plProc* proc, int status)
+static void plProcHandleTerminate(struct plProc* proc)
 /* handle one of the processes terminating, save exit status */
 {
-proc->pid = -1;
-proc->status = status;
-plProcStateTrans(proc, procStateDone);
-
 if (WIFSIGNALED(proc->status))
-    plProcHandleSignaled(proc, status);
+    plProcHandleSignaled(proc);
 else
-    plProcHandleExited(proc, status);
+    plProcHandleExited(proc);
 }
 
 static struct pipeline* pipelineNew(char ***cmds, unsigned options)
@@ -271,7 +264,6 @@ struct pipeline *pl;
 int iCmd;
 
 AllocVar(pl);
-pl->groupLeader = -1;
 pl->pipeFd = -1;
 pl->options = options;
 pl->procName = joinCmds(cmds);
@@ -308,17 +300,6 @@ if (pl != NULL)
     freez(&pl->stdioBuf);
     freez(plPtr);
     }
-}
-
-static struct plProc *pipelineFindProc(struct pipeline *pl, pid_t pid)
-/* find a plProc by pid */
-{
-struct plProc *proc;
-for (proc = pl->procs; proc != NULL; proc = proc->next)
-    if (proc->pid == pid)
-        return proc;
-errAbort("pid not found in pipeline: %d", (int)pid);
-return 0; // never reached
 }
 
 static void execProcChild(struct pipeline* pl, struct plProc *proc,
@@ -367,8 +348,8 @@ if (proc->next != NULL)
 return prevStdoutFd;
 }
 
-static void pipelineGroupExec(struct pipeline* pl, int stdinFd, int stdoutFd, int stderrFd,
-                              void *otherEndBuf, size_t otherEndBufSize)
+static void pipelineExec(struct pipeline* pl, int stdinFd, int stdoutFd, int stderrFd,
+                         void *otherEndBuf, size_t otherEndBufSize)
 /* Start all processes in a pipeline, stdinFd and stdoutFd are the ends of
  * the pipeline, stderrFd is applied to all processed */
 {
@@ -384,82 +365,38 @@ for (proc = pl->procs; proc != NULL; proc = proc->next)
     }
 }
 
-static void waitOnOne(struct pipeline *pl)
+static void waitOnOne(struct pipeline *pl, struct plProc* proc)
 /* wait on one process to finish */
 {
 int status;
-pid_t pid = waitpid(-pl->groupLeader, &status, 0);
+pid_t pid = waitpid(proc->pid, &status, 0);
 if (pid < 0)
     errnoAbort("waitpid failed");
-plProcHandleTerminate(pipelineFindProc(pl, pid), status);
+proc->pid = -1;
+proc->status = status;
+plProcStateTrans(proc, procStateDone);
+plProcHandleTerminate(proc);
 pl->numRunning--;
 assert(pl->numRunning >= 0);
 }
 
-static void groupWait(struct pipeline *pl)
+static void waitForProcs(struct pipeline *pl)
 /* Wait for pipeline to complete */
 {
-/* wait on all processes to complete */
-while (pl->numRunning > 0)
-    waitOnOne(pl);
+for (struct plProc *proc = pl->procs; proc != NULL; proc = proc->next)
+    waitOnOne(pl, proc);
 }
 
-static void groupLeaderRun(struct pipeline* pl, int stdinFd, int stdoutFd, int stderrFd,
-                           void *otherEndBuf, size_t otherEndBufSize)
-/* group leader process */
+static int waitStatus(struct pipeline *pl)
+/* return exit status of pipeline */
 {
-pl->groupLeader = getpid();
-if (setpgid(pl->groupLeader, pl->groupLeader) != 0)
-    errnoAbort("error from child setpgid(%d, %d)", pl->groupLeader, pl->groupLeader);
-pipelineGroupExec(pl, stdinFd, stdoutFd, stderrFd, otherEndBuf, otherEndBufSize);
-
-// only keep stderr open
-close(STDIN_FILENO);
-close(STDOUT_FILENO);
-closeNonStdDescriptors();
-groupWait(pl);
-_exit(0);
-}
-
-static int groupLeaderWait(struct pipeline *pl)
-/* Wait for group leader to complete. If pipelineNoAbort was specified, return
- * the exit code of the first group process exit non-zero, or zero if none
- * failed. */
-{
-int status;
-pid_t pid = waitpid(-pl->groupLeader, &status, 0);
-if (pid < 0)
-    errnoAbort("waitpid failed");
-if (WIFSIGNALED(status))
-    errAbort("process pipeline terminated on signal %d", WTERMSIG(status));
-assert(WIFEXITED(status));
-
-if ((WEXITSTATUS(status) != 0) && !(pl->options & pipelineNoAbort))
-    errAbort("pipeline exited with %d", WEXITSTATUS(status));
-return WEXITSTATUS(status);
-}
-
-static void pipelineExec(struct pipeline* pl, int stdinFd, int stdoutFd, int stderrFd,
-                         void *otherEndBuf, size_t otherEndBufSize)
-/* Fork the group leader, which then launches all processes in a pipeline,
- * stdinFd and stdoutFd are the ends of the pipeline, stderrFd is applied to
- * all processes, including group leader */
-{
-assert(pl->groupLeader < 0);  // should not be set
-if ((pl->groupLeader = fork()) < 0)
-    errnoAbort("can't fork");
-if (pl->groupLeader == 0)
+for (struct plProc *proc = pl->procs; proc != NULL; proc = proc->next)
     {
-    groupLeaderRun(pl, stdinFd, stdoutFd, stderrFd, otherEndBuf, otherEndBufSize);
-    exit(1); // doesn't return to here
+    if (WIFEXITED(proc->status) && (WEXITSTATUS(proc->status) != 0))
+        return WEXITSTATUS(proc->status);
     }
-else
-    {
-    // parent also must also setpgid to prevent race condition
-    if (setpgid(pl->groupLeader, pl->groupLeader) != 0)
-        errnoAbort("error from parent setpgid(%d, %d)", pl->groupLeader, pl->groupLeader);
-    }
-} 
+return 0;
+}
 
 static int openRead(char *fname)
 /* open a file for reading */
@@ -681,12 +618,14 @@ pl->pipeFd = -1;
 
 int pipelineWait(struct pipeline *pl)
 /* Wait for processes in a pipeline to complete; normally aborts if any
- * process exists non-zero.  If pipelineNoAbort was specified, return the exit
- * code of the first process exit non-zero, or zero if none failed. */
+ * process exits non-zero or signals.  If pipelineNoAbort was specified,
+ * return the exit code of the first process exit non-zero.
+ */
 {
 /* must close before waiting to so processes get pipe EOF */
 closePipeline(pl);
-return groupLeaderWait(pl);
+waitForProcs(pl);
+return waitStatus(pl);
 }
 
 int pipelineClose(struct pipeline **pPl)
