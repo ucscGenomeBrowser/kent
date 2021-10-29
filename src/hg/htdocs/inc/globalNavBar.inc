@@ -49,7 +49,7 @@
 </li>
 <li class="menuparent" id="mirrors"><span>Mirrors</span>
 	<ul style="display: none; visibility: hidden;">
-	<li class="first"><a href="../mirror.html">Third Party Mirrors</a></li>
+	<li class="first"><a href="../mirror.html">Euro/Asia Mirrors</a></li>
 	<li><a href="../goldenPath/help/mirror.html">Mirroring Instructions</a></li>
 	<!-- OPTIONAL_MIRROR_MENU -->
 	</ul>
