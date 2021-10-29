@@ -139,9 +139,8 @@ struct lineFile *pipelineLineFile(struct pipeline *pl);
 
 int pipelineWait(struct pipeline *pl);
 /* Wait for processes in a pipeline to complete; normally aborts if any
- * process exits non-zero or signals.  If pipelineNoAbort was specified,
- * return the exit code of the first process exit non-zero.
- */
+ * process exists non-zero.  If pipelineNoAbort was specified, return the exit
+ * code of the first process exit non-zero, or zero if none failed. */
 
 void pipelineFree(struct pipeline **plPtr);
 /* free a pipeline object */
