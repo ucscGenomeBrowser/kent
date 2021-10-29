@@ -205,9 +205,26 @@ html chainNet
         shortLabel Rambouillet sheep Chain
         longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Chained Alignments
         type bigChain GCF_002742125.1
-        bigDataUrl /gbdb/$D/bbi/chainNet/chainGCF_002742125.1.bb
-        linkDataUrl /gbdb/$D/bbi/chainNet/chainGCF_002742125.1Link.bb
-        html chainNet
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_002742125.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_002742125.1Link.bb
+
+        track chainSynGCF_002742125.1
+        parent chainNetGCF_002742125.1Viewchain
+        subGroups view=chain
+        shortLabel Rambouillet sheep Chain
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Syntenic Chained Alignments
+        type bigChain GCF_002742125.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_002742125.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_002742125.1Link.bb
+
+        track chainRBestGCF_002742125.1
+        parent chainNetGCF_002742125.1Viewchain
+        subGroups view=chain
+        shortLabel Rambouillet sheep Chain
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Reciprocal Best Chained Alignments
+        type bigChain GCF_002742125.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_002742125.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_002742125.1Link.bb
 
     track mafNetGCF_002742125.1Viewnet
     shortLabel Net
@@ -225,6 +242,26 @@ html chainNet
         summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.net.summary.bb
         speciesOrder GCF_002742125.1
         html chainNet
+
+        track synNetGCF_002742125.1
+        parent mafNetGCF_002742125.1Viewnet
+        subGroups view=net
+        shortLabel Rambouillet sheep mafNet
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.synNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.synNet.summary.bb
+        speciesOrder GCF_002742125.1
+
+        track rbestNetGCF_002742125.1
+        parent mafNetGCF_002742125.1Viewnet
+        subGroups view=net
+        shortLabel Rambouillet sheep mafNet
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.rbestNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.rbestNet.summary.bb
+        speciesOrder GCF_002742125.1
 
 ##############################################################################
 # GCA_018400075.1 - Zebrafish T5D - Danio rerio - taxId: 7955 - fish
@@ -416,7 +453,7 @@ html chainNet
         longLabel Golden hamster (Mar. 2013 (MesAur1.0/GCF_000349665.1) Chained Alignments
         type bigChain GCF_000349665.1
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_000349665.1.bb
-        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_000349665.1.Link.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_000349665.1Link.bb
 
         track chainSynGCF_000349665.1
         parent chainNetGCF_000349665.1iewchain
@@ -425,7 +462,7 @@ html chainNet
         longLabel Golden hamster (Mar. 2013 (MesAur1.0/GCF_000349665.1) Syntenic Chained Alignments
         type bigChain GCF_000349665.1
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_000349665.1.bb
-        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_000349665.1.Link.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_000349665.1Link.bb
 
         track chainRBestGCF_000349665.1
         parent chainNetGCF_000349665.1iewchain
@@ -434,7 +471,7 @@ html chainNet
         longLabel Golden hamster (Mar. 2013 (MesAur1.0/GCF_000349665.1) Reciprocal Best Chained Alignments
         type bigChain GCF_000349665.1
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_000349665.1.bb
-        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_000349665.1.Link.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_000349665.1Link.bb
 
     track mafNetGCF_000349665.1iewnet
     shortLabel Net
