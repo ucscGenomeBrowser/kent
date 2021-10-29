@@ -385,7 +385,7 @@ void doValidateNewHub(char *hubUrl)
 udcSetCacheTimeout(1);
 printf("<div id=\"validateHubResult\" class=\"hubTdbTree\" style=\"overflow: auto\"></div>");
 char *cmd[] = {"loader/hubCheck", "-htmlOut", "-noTracks", hubUrl, NULL};
-struct pipeline *pl = pipelineOpen1(cmd, pipelineRead | pipelineNoAbort, NULL, NULL);
+struct pipeline *pl = pipelineOpen1(cmd, pipelineRead | pipelineNoAbort, NULL, NULL, 0);
 struct lineFile *lf = pipelineLineFile(pl);
 char *line;
 while (lineFileNext(lf, &line, NULL))

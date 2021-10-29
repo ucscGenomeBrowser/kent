@@ -369,7 +369,7 @@ if (keyCount > 0)
 	extraOptions = "";
     makeCmds(cmds, keyWords, keyCount, extraOptions);
 
-    pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile, NULL);
+    pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile, NULL, 0);
     lf = pipelineLineFile(pl);
     verbose(3, "\n***Running this fgrep command with pipeline from %s:\n*** %s\n\n",
 	    indexFile, pipelineDesc(pl));

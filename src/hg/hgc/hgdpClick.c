@@ -195,7 +195,7 @@ cmds[0] = cmd;
 cmds[1] = NULL;
 cmd[0] = program;
 cmd[1] = inFile;
-struct pipeline *pl = pipelineOpen(cmds, pipelineWrite|pipelineAppend, outFile, NULL);
+struct pipeline *pl = pipelineOpen(cmds, pipelineWrite|pipelineAppend, outFile, NULL, 0);
 pipelineClose(&pl);
 }
 
@@ -291,7 +291,7 @@ safef(pdfFile, sizeof(pdfFile), "%s.pdf", rootName);
 safef(pngFile, sizeof(pngFile), "%s.png", rootName);
 char *ps2pdfCmd[] = {"ps2pdf", epsFile, pdfFile, NULL};
 char **cmdsPdf[] = {ps2pdfCmd, NULL};
-pl = pipelineOpen(cmdsPdf, pipelineWrite, "/dev/null", NULL);
+pl = pipelineOpen(cmdsPdf, pipelineWrite, "/dev/null", NULL, 0);
 pipelineClose(&pl);
 
 char *ps2raster = cfgOption("hgc.ps2rasterPath");
@@ -300,7 +300,7 @@ char gsOpt[PATH_LEN];
 safef(gsOpt, sizeof(gsOpt), "-G%s", ghostscript);
 char *ps2RasterPngCmd[] = {ps2raster, gsOpt, "-P", "-A", "-Tg", "-E150", epsFile, NULL};
 char **cmdsPng[] = {ps2RasterPngCmd, NULL};
-pl = pipelineOpen(cmdsPng, pipelineRead, "/dev/null", NULL);
+pl = pipelineOpen(cmdsPng, pipelineRead, "/dev/null", NULL, 0);
 pipelineClose(&pl);
 
 // Back to our usual working directory and $HOME:

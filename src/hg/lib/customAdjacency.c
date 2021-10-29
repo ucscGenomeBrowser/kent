@@ -160,7 +160,7 @@ assert(index <= ArraySize(cmd1));
  *	our private error log so we can send it back to the user
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-	"/dev/null", track->dbStderrFile);
+	"/dev/null", track->dbStderrFile, 0);
 }
 
 

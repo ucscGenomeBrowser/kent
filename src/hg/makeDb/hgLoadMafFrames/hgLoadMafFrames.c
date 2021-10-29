@@ -38,7 +38,7 @@ void processFrameFiles(char *tabFile, int numFramesFiles, char **framesFiles)
 /* sort by chrom location, accounting for bin column */
 static char *cmd[] = {"sort", "-k", "2,2", "-k", "3,3n", NULL};
 int i;
-struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite, tabFile, NULL);
+struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite, tabFile, NULL, 0);
 FILE *sortFh = pipelineFile(pl);
 
 for (i = 0; i < numFramesFiles; i++)
