@@ -267,19 +267,18 @@ for(hub = hubList; hub; hub = nextHub)
 
 hubList = NULL;  // hubList no longer valid
 
-puts("<p>If have a new hub URL, you can add it here, then connect/disconnect "
-        " as needed. Other users will not see your hub.</p>"
-    "<p>To share your hub with others, connect it below, then save a session "
-        "from the Genome Browser (\"My Data > My Sessions\"). "
-        " You can put the session link "
-        "into a manuscript or send it to others. This means that you can always update the session later. "
-        "Users who click the session link will lose their own Genome Browser "
-        "configuration, connected hubs and custom tracks.</p>"
-        "<p>If you want to avoid overriding their sessions, construct a link for others with "
-        "the hubUrl argument, like this: "
-        "https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hubUrl=URL_TO_HUB"
+puts("<p>Enter hub URLs below to connect hubs. Hubs connected this way are not accessible to "
+        "other users by default.</p><p>If you wish to share your hub you can create a "
+        "<a href=\"/goldenPath/help/hgSessionHelp.html\" style='color:#121E9A' target=_blank>session link</a>. "
+        "First, connect the hub and configure the tracks image as desired, then navigate to "
+        "<a href=\"/cgi-bin/hgSession\" style='color:#121E9A' target=_blank>My Sessions</a> (<b>My Data</b> > <b>My Sessions</b>). "
+        "The resulting stable link can be added to publications and shared freely. You, as the author, "
+        "also have the power to update the session contents freely.</p>"
+        "<p>Alternatively, you may <a href=\"http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html#Sharing\" "
+        "style='color:#121E9A' target=_blank>build a link with the hub URL</a> to allow users to retain their browser "
+        "configuration, connected hubs, and custom tracks.</p>"
         "</p>"
-        "<p><a href=\"../contacts.html\">Contact us</A> if you want to add a hub to the list of public hubs.</p>\n"
+        "<p><a href=\"../contacts.html\" style='color:#121E9A'>Contact us</A> if you wish to submit a hub to the list of public hubs.</p>\n"
         );
 
 if (unlistedHubCount == 0)
@@ -413,27 +412,29 @@ if (hubUrl != NULL)
 
 puts("<div class='tabSection'>");
 puts("<h4>Create your own hub</h4>");
-puts("For information on making track hubs, please see the following pages: \n "
+puts("For information on making track hubs, see the following pages: \n "
     "<ul>\n"
-    "<li><a href=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank>Track Hub Users Guide</a></li>\n"
-    "<li><a href='../goldenPath/help/hubQuickStart.html' target=_blank>Quick Start</a></li>\n"
-    "<li><a href=\"../goldenPath/help/trackDb/trackDbHub.html\" target=_blank>Track Hub Settings Reference</a></li>\n"
-    "<li><a href=\"../goldenPath/help/hgTrackHubHelp#Hosting\" target=_blank>Where to host your track hub</a></li>\n"
-    "<li><a href='../contacts.html'>Contact us</a> if you have trouble</li>\n"
+    "<li><a href='../goldenPath/help/hubQuickStart.html' style='color:#121E9A' target=_blank>Quick Start Guide</a></li>\n"
+    "<li><a href=\"../goldenPath/help/hgTrackHubHelp.html\" style='color:#121E9A' TARGET=_blank>Track Hub User's Guide</a></li>\n"
+    "<li><a href=\"../goldenPath/help/hgTrackHubHelp#Hosting\" style='color:#121E9A' target=_blank>Where to host your track hub</a></li>\n"
+    "<li><a href=\"../goldenPath/help/trackDb/trackDbHub.html\" style='color:#121E9A' target=_blank>Track Hub Settings Reference</a></li>\n"
     "</ul>\n"
-    "Example hub URL: http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt");
+    "<BR>You may also <a href='../contacts.html' style='color:#121E9A'>contact us</a> if you have any "
+    "issues or questions on hub development.");
 puts("</div>"); // .tabSection
 
 puts("<div class='tabSection'>");
 puts("<h4>Check a hub for errors</h4>");
 printf("<label for=\"validateHubUrl\"><b>Hub URL:</b></label>");
-printf("<input id='validateHubUrl' name='validateHubUrl' class='hubField' type='text' size='65'%s>\n", hubUrlVal);
+printf("<input id='validateHubUrl' name='validateHubUrl' class='hubField' "
+       "placeholder='e.g. https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt' "
+       "type='text' size='65'%s>\n", hubUrlVal);
 printf("<button type='button' id='hubValidateButton'>Check</button>\n");
 
-puts("<div class='help'>When debugging a hub, it is sometimes helpful to check it for errors. "
-        "With the button above, you can validate the hub's configuration files, including hub.txt, "
+puts("<div class='help'>Use the URL bar above to check a hub for errors. This will "
+        "validate the hub's configuration files, including hub.txt, "
         "genomes.txt and trackDb.txt. "
-    "A hierarchical tree of tracks is presented with any errors in red. A hub "
+    "It will also present a  hierarchical tree of tracks with any errors in red. A hub "
     "with no errors still shows the tree which can be used to explore the track hierarchy. "
     "Hub error checking will always refresh the files and never use our remote file cache (see below)."
     "</div>\n "
@@ -500,7 +501,7 @@ if (searchEnabled)
     cgiMakeHiddenVar(hgHubDbFilter, "");
     cartSaveSession(cart);
 
-    printf("The list below can be filtered on words in the description pages or assemblies.<BR>"
+    printf("The list below can be filtered on words in the hub description pages or by assemblies.<BR>"
             "Search terms: "
             "<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\" "
             "placeholder='e.g. methylation' type=\"text\" size=\"50\" value=\"%s\"> \n",
@@ -510,7 +511,7 @@ if (searchEnabled)
 
 printf("Assembly: "
         "<input name=\"%s\" id=\"hubDbFilter\" class=\"hubField\" "
-        "type=\"text\" size=\"15\" value=\"%s\" placeholder='empty or e.g. hg38'> \n"
+        "type=\"text\" size=\"15\" value=\"%s\" placeholder='e.g. hg38'> \n"
         "<input name=\"hubSearchButton\" id='hubSearchButton' "
         "class=\"hubField\" type=\"submit\" value=\"Search Public Hubs\">\n",
         hgHubDbFilter, dbFilter!=NULL?dbFilter:"");
@@ -1231,15 +1232,14 @@ puts("<div class='tabSection' style='border-bottom:none'>");
 printf(
     "<P>"
     "Track data hubs are collections of external tracks that can be added to the UCSC Genome Browser. "
-    "Click \"Connect\" below to show the \"Genomes\" page with all assemblies covered by a hub. "
-    "Hub tracks then show up under the hub's own blue bar track group under the browser graphic, "
-    "as well as under \"Genome Browser > Configure\". See the "
+    "Click <B>Connect</B> to attach a hub and redirect to the assembly gateway page. "
+    "Hub tracks will then show up in the hub's own blue bar track group under the browser graphic. "
+    "See the "
     "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank style='color:#121E9A'>"
-    "User's Guide</A>. "
+    "User's Guide</A> for more. "
     "</P>"
     "<P>Track Hubs are created and maintained by external sources."
-    " The public hubs below were submitted to us, we have performed "
-    " basic quality checks. UCSC is not responsible for their content.</P>"
+    " UCSC is not responsible for their content.<BR></P>"
 );
 
 char *hubSearchTableName = hubSearchTextTableName();
@@ -1527,7 +1527,7 @@ if (cartVarExists(cart, hgHubDoHubCheck))
 
         printf("<div>Finished checking %s</div>", hubUrl);
         doValidateNewHub(hubUrl);
-        puts("<p>Our command line tool <a href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>hubCheck</a> "
+        puts("<p>Our command line tool <a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>hubCheck</a> "
                 "can be used to obtain the same output from a Unix command line.</p>");
         }
     puts("</div>"); // margin 10px
