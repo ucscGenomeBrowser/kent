@@ -372,7 +372,7 @@ assert(index <= ArraySize(cmd1));
  *	our private error log so we can send it back to the user
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-	"/dev/null", track->dbStderrFile);
+	"/dev/null", track->dbStderrFile, 0);
 }
 
 void pipelineFailExit(struct customTrack *track)
@@ -787,7 +787,7 @@ assert(index <= ArraySize(cmd1));
  *	our private error log so we can send it back to the user
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-	"/dev/null", track->dbStderrFile);
+	"/dev/null", track->dbStderrFile, 0);
 }
 
 /* Need customTrackEncodePeak */
@@ -950,7 +950,7 @@ assert(index <= ArraySize(cmd1));
  *	our private error log so we can send it back to the user
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-	"/dev/null", track->dbStderrFile);
+	"/dev/null", track->dbStderrFile, 0);
 }
 
 /* customTrackBedDetail load item */
@@ -1155,7 +1155,7 @@ assert(index <= ArraySize(cmd1));
  *	our private error log so we can send it back to the user
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-	"/dev/null", track->dbStderrFile);
+	"/dev/null", track->dbStderrFile, 0);
 }
 
 /* customTrackPgSnp load item */
@@ -1386,7 +1386,7 @@ assert(index <= ArraySize(cmd1));
  *	The dbStderrFile will get stderr messages from hgLoadBed into the
  *	our private error log so we can send it back to the user
  */
-return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile);
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile, 0);
 }
 
 static struct customTrack *barChartFinish(struct customTrack *track, struct barChartBed *itemList)
@@ -1575,7 +1575,7 @@ assert(index <= ArraySize(cmd1));
  *	The dbStderrFile will get stderr messages from hgLoadBed into the
  *	our private error log so we can send it back to the user
  */
-return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile);
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile, 0);
 }
 
 static struct customTrack *interactFinish(struct customTrack *track, struct interact *itemList)
@@ -2224,7 +2224,7 @@ cmd1[8] = CUSTOM_TRASH;
 cmd1[9] = track->dbTableName;
 
 struct pipeline *dataPipe =  pipelineOpen(cmds,
-    pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile);
+    pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile, 0);
 if(pipelineWait(dataPipe))
     pipelineFailExit(track);	/* prints error and exits */
 
@@ -2392,7 +2392,7 @@ cmd2[8] = track->dbTableName;
  *	our private error file so we can return the errors to the user.
  */
 return pipelineOpen(cmds, pipelineWrite | pipelineNoAbort,
-	"/dev/null", track->dbStderrFile);
+	"/dev/null", track->dbStderrFile, 0);
 }
 
 static void wigDbGetLimits(struct sqlConnection *conn, char *tableName,

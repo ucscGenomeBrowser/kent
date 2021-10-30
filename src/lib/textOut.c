@@ -161,7 +161,7 @@ else
 
     /* Redirect stdout to compressor pipeline object. */
     compressPipeline = pipelineOpen1(getCompressor(compressType),
-				     pipelineWrite, NULL, NULL);
+				     pipelineWrite, NULL, NULL, 0);
     if (-1 == dup2(pipelineFd(compressPipeline), STDOUT_FILENO))
 	errnoAbort("dup2(pipelineFd %d, stdout %d) failed in textOpen()",
 		   pipelineFd(compressPipeline), STDOUT_FILENO);

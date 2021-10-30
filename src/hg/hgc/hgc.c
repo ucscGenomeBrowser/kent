@@ -25855,7 +25855,7 @@ safef(faNameBuffer, sizeof faNameBuffer, "-fa=%s", faName);
 char *cmd11[] = {"loader/pslToBigPsl", pslName,  faNameBuffer, "stdout", NULL};
 char *cmd12[] = {"sort","-k1,1","-k2,2n", NULL};
 char **cmds1[] = { cmd11, cmd12, NULL};
-struct pipeline *pl = pipelineOpen(cmds1, pipelineWrite, bigPslFile, NULL);
+struct pipeline *pl = pipelineOpen(cmds1, pipelineWrite, bigPslFile, NULL, 0);
 pipelineWait(pl);
 
 char buf[4096];
@@ -25876,7 +25876,7 @@ else
 char udcDir[strlen(udcDefaultDir()) + strlen("-udcDir=") + 1];
 safef(udcDir, sizeof udcDir, "-udcDir=%s", udcDefaultDir());
 char *cmd2[] = {"loader/bedToBigBed","-verbose=0",udcDir,"-extraIndex=name","-sizesIs2Bit", "-tab", "-as=loader/bigPsl.as","-type=bed12+13", bigPslFile, twoBitDir, outputBigBed, NULL};
-pl = pipelineOpen1(cmd2, pipelineRead, NULL, NULL);
+pl = pipelineOpen1(cmd2, pipelineRead, NULL, NULL, 0);
 pipelineWait(pl);
 
 unlink(bigPslFile);
