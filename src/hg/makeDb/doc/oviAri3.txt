@@ -829,3 +829,104 @@ mysql>  LOAD DATA LOCAL INFILE "oviAri3.cytoBand" INTO TABLE cytoBandIdeo;
     # verify this file exists:
     #	/gbdb/oviAri3/liftOver/oviAri3ToOviAri4.over.chain.gz
     # and try out the conversion on genome-test from oviAri1 to oviAri3
+
+##############################################################################
+# LASTZ Sheep OviAri3 vs. sheep GCF_002742125.1 (DONE - 2021-10-27 - Gerardo)
+
+# should be able to run this from anywhere, this time it was run from:
+    cd kent/src/hg/utils/automation
+
+  time (~/kent/src/hg/utils/automation/pairLastz.sh \
+	oviAri3 GCF_002742125.1_Oar_rambouillet_v1.0 mammal mammal) \
+	   > sheepLiftOver_20211027.log 2>&1 &
+  # check the total time
+grep -w real sheepLiftOver_20211027.log  | tail -1 | sed -e 's/^/    # /;'
+    # real      1128m46.020s
+
+  # this sheepLiftOver_20211027 log file happens to have a copy of the make doc, as well
+  # as the copy of the make doc left in the target assembly directory:
+# /hive/data/genomes/oviAri3/bed/lastzGCF_002742125.1.2021-10-27/makeDoc.txt
+
+    # this command outputs this makeDoc text:
+
+    cat kent/src/hg/utils/automation/sheepLiftOver_20211027.log
+
+##############################################################################
+# LASTZ Sheep OviAri3 vs. sheep GCF_002742125.1 
+#       (DONE - 2021-10-06 - Gerardo)
+
+    mkdir /hive/data/genomes/oviAri3/bed/lastzGCF_002742125.1.2021-10-27
+    cd /hive/data/genomes/oviAri3/bed/lastzGCF_002742125.1.2021-10-27
+
+    printf '# sheep GCF_002742125.1 vs. Sheep OviAri3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Sheep OviAri3
+SEQ1_DIR=/hive/data/genomes/oviAri3/oviAri3.2bit
+SEQ1_LEN=/hive/data/genomes/oviAri3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: sheep GCF_002742125.1
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/002/742/125/GCF_002742125.1/GCF_002742125.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/002/742/125/GCF_002742125.1/GCF_002742125.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/oviAri3/bed/lastzGCF_002742125.1.2021-10-27
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_002742125.1_Oar_rambouillet_v1.0 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	1128m46.020s
+
+    sed -e 's/^/    # /;' fb.oviAri3.chainGCF_002742125.1Link.txt
+    # 2501829064 bases of 2619054388 (95.524%) in intersection
+    sed -e 's/^/    # /;' fb.oviAri3.chainSynGCF_002742125.1Link.txt
+    # 2475978010 bases of 2619054388 (94.537%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/002/742/125/GCF_002742125.1/GCF_002742125.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/002/742/125/GCF_002742125.1/GCF_002742125.1.chrom.sizes.txt" \
+        oviAri3 GCF_002742125.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	116m28.947s
+
+    sed -e 's/^/    # /;' fb.oviAri3.chainRBest.GCF_002742125.1.txt
+    # 2474220941 bases of 2619054388 (94.470%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/002/742/125/GCF_002742125.1_Oar_rambouillet_v1.0/trackData/blastz.oviAri3.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCF_002742125.1_Oar_rambouillet_v1.0 /hive/data/genomes/oviAri3/bed/lastzGCF_002742125.1.2021-10-27/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	778m32.085s
+
+    sed -e 's/^/    # /;' fb.GCF_002742125.1.chainOviAri3Link.txt
+    # 2707531625 bases of 2869914396 (94.342%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_002742125.1.chainSynOviAri3Link.txt
+    # 2631159342 bases of 2869914396 (91.681%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/002/742/125/GCF_002742125.1/GCF_002742125.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/002/742/125/GCF_002742125.1/GCF_002742125.1.chrom.sizes.txt" \
+   GCF_002742125.1 oviAri3) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	140m7.548s
+
+    sed -e 's/^/    # /;' fb.GCF_002742125.1.chainRBest.OviAri3.txt
+    # 2470704166 bases of 2869914396 (86.090%) in intersection
