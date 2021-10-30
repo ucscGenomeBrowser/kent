@@ -93,7 +93,7 @@ for (side = 0; side < ArraySize(names); ++side)
             else
                 {
                 char *plotCmd[] = {rnaPlotPath, NULL};
-                struct pipeline *plStruct = pipelineOpen1(plotCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+                struct pipeline *plStruct = pipelineOpen1(plotCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
                 f = pipelineFile(plStruct);
                 if (f != NULL)
                     {
@@ -228,7 +228,7 @@ else if (sameString(how, "picture"))
     if (!fileExists(pdfName))
         {
         char *command[] = { "ps2pdf", psFile, pdfName, NULL};
-        struct pipeline *pl = pipelineOpen1(command, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+        struct pipeline *pl = pipelineOpen1(command, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
         int sysRet = pipelineWait(pl);
         if (sysRet != 0)
             errAbort("System call returned %d for:\n  %s", sysRet, pipelineDesc(pl));
@@ -239,7 +239,7 @@ else if (sameString(how, "picture"))
         char outputBuf[1024];
         safef(outputBuf, sizeof outputBuf, "-sOutputFile=%s", pngName);
         char *command[] = { "gs","-sDEVICE=png16m", outputBuf,"-dBATCH","-dNOPAUSE","-q", psFile, NULL};
-        struct pipeline *pl = pipelineOpen1(command, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+        struct pipeline *pl = pipelineOpen1(command, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
         int sysRet = pipelineWait(pl);
         if (sysRet != 0)
             errAbort("System call returned %d for:\n  %s", sysRet, pipelineDesc(pl));

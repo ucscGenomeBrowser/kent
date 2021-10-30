@@ -2,7 +2,7 @@
 
 # Allele-specific expression
 
-include gtexCov.ra alpha
+include gtexCov.ra
 include trackDb.gtexAwgAse.ra
 
 # Gene expression

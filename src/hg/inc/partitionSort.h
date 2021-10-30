@@ -40,7 +40,7 @@ else if (endsWith(inFile, ".bz2"))
 cmds[iCmd++] = sortCmd;
 cmds[iCmd++] = NULL;
 
-return pipelineOpen(cmds, pipelineRead, inFile, NULL);
+return pipelineOpen(cmds, pipelineRead, inFile, NULL, 0);
 }
 
 #endif

@@ -922,7 +922,7 @@ char *convertPath = cfgOption("sessionThumbnail.convertPath");
 if (convertPath == NULL)
     convertPath = cloneString("convert");
 char *whichCmd[] = {"which", convertPath, NULL};
-struct pipeline *pl = pipelineOpen1(whichCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+struct pipeline *pl = pipelineOpen1(whichCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
 int convertTestResult = pipelineWait(pl);
 
 if (convertTestResult != 0)
@@ -955,7 +955,7 @@ if (destFile != NULL)
     char *renderCmd[] = {"wget", "-q", "-O", "-", renderUrl->string, NULL};
     char *convertCmd[] = {convertPath, "-", "-resize", "320", "-crop", "320x240+0+0", destFile, NULL};
     char **cmdsImg[] = {renderCmd, convertCmd, NULL};
-    pipelineOpen(cmdsImg, pipelineWrite, "/dev/null", NULL);
+    pipelineOpen(cmdsImg, pipelineWrite, "/dev/null", NULL, 0);
     }
 return 1;
 }
