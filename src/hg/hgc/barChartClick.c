@@ -370,7 +370,7 @@ bool useOldFonts = cgiBoolean("oldFonts");
 char *pipeCmd[] = {"Rscript","--vanilla","--slave","hgcData/barChartBoxplot.R", 
     item, units, colorFile, df, pngTn.forHtml, 
     isEmpty(name2) ? "n/a" : name2, useOldFonts ? "1" : "0", NULL};
-struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
 int ret = pipelineWait(pl);
 
 if (ret == 0)

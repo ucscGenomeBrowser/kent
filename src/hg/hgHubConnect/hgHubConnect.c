@@ -385,7 +385,7 @@ void doValidateNewHub(char *hubUrl)
 udcSetCacheTimeout(1);
 printf("<div id=\"validateHubResult\" class=\"hubTdbTree\" style=\"overflow: auto\"></div>");
 char *cmd[] = {"loader/hubCheck", "-htmlOut", "-noTracks", hubUrl, NULL};
-struct pipeline *pl = pipelineOpen1(cmd, pipelineRead | pipelineNoAbort, NULL, NULL);
+struct pipeline *pl = pipelineOpen1(cmd, pipelineRead | pipelineNoAbort, NULL, NULL, 0);
 struct lineFile *lf = pipelineLineFile(pl);
 char *line;
 while (lineFileNext(lf, &line, NULL))
@@ -1234,9 +1234,10 @@ printf(
     "Track data hubs are collections of external tracks that can be added to the UCSC Genome Browser. "
     "Click <B>Connect</B> to attach a hub and redirect to the assembly gateway page. "
     "Hub tracks will then show up in the hub's own blue bar track group under the browser graphic. "
-    "See the "
+    "For more information, including <A HREF=\"../goldenPath/help/hgTrackHubHelp#Hosting\" "
+    "style='color:#121E9A' target=_blank>where to host your track hub</a>, see our "
     "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank style='color:#121E9A'>"
-    "User's Guide</A> for more. "
+    "User's Guide</A>. "
     "</P>"
     "<P>Track Hubs are created and maintained by external sources."
     " UCSC is not responsible for their content.<BR></P>"

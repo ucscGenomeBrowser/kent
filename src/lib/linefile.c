@@ -146,7 +146,7 @@ testName=getFileNameFromHdrSig(testbytes);
 freez(&testbytes);
 if (!testName)
     return NULL;  /* avoid error from pipeline */
-pl = pipelineOpen1(getDecompressor(fileName), pipelineRead|pipelineSigpipe, fileName, NULL);
+pl = pipelineOpen1(getDecompressor(fileName), pipelineRead|pipelineSigpipe, fileName, NULL, 0);
 lf = lineFileAttach(fileName, zTerm, pipelineFd(pl));
 lf->pl = pl;
 return lf;
@@ -157,7 +157,7 @@ struct lineFile *lineFileDecompressFd(char *name, bool zTerm, int fd)
 {
 struct pipeline *pl;
 struct lineFile *lf;
-pl = pipelineOpenFd1(getDecompressor(name), pipelineRead|pipelineSigpipe, fd, STDERR_FILENO);
+pl = pipelineOpenFd1(getDecompressor(name), pipelineRead|pipelineSigpipe, fd, STDERR_FILENO, 0);
 lf = lineFileAttach(name, zTerm, pipelineFd(pl));
 lf->pl = pl;
 return lf;
@@ -173,7 +173,7 @@ struct lineFile *lf;
 char *fileName = getFileNameFromHdrSig(mem);
 if (fileName==NULL)
   return NULL;
-pl = pipelineOpenMem1(getDecompressor(fileName), pipelineRead|pipelineSigpipe, mem, size, STDERR_FILENO);
+pl = pipelineOpenMem1(getDecompressor(fileName), pipelineRead|pipelineSigpipe, mem, size, STDERR_FILENO, 0);
 lf = lineFileAttach(fileName, zTerm, pipelineFd(pl));
 lf->pl = pl;
 return lf;

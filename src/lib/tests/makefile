@@ -46,7 +46,8 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 
 pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
 		pipelineRead pipelineReadMult pipelineReadFd pipelineReadMem \
-		pipelineExitCode pipelineWriteErr pipelineExecError pipelineSigpipe
+		pipelineExitCode pipelineWriteErr pipelineExecError pipelineSigpipe \
+		pipelineTimeout
 
 pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
@@ -108,7 +109,11 @@ pipelineExecError: ${BIN_DIR}/pipelineTester mkdirs
 pipelineSigpipe: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -sigpipe -maxNumLines=3 -pipeData=/dev/null "awk 'BEGIN {while (1) {print "foo"}}'"
 
-${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
+pipelineTimeout: ${BIN_DIR}/pipelineTester mkdirs
+	if ${BIN_DIR}/pipelineTester -timeout=2 "bash -c 'sleep 20'" 2> output/$@.parent.err ; then false else true ; fi
+	diff -b expected/$@.parent.err output/$@.parent.err
+
+${BIN_DIR}/pipelineTester: pipelineTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} ${L}
 
 

@@ -152,7 +152,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
 
                 // use pipelineNoAbort so the loop continues if a url is typo'd or something,
                 // but still warn the user
-                struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+                struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
                 int ret = pipelineWait(pl);
                 if (ret != 0)
                     {

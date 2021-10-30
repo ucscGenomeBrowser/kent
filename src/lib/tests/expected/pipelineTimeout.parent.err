@@ -1,0 +1,2 @@
+pipeline timeout kill after 2 seconds: bash -c sleep 20
+process pipeline terminated on signal 9

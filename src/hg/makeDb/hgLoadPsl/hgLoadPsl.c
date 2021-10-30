@@ -136,9 +136,9 @@ if (noSort)
 else
     {
     if (pslCreateOpts & PSL_WITH_BIN)
-	pl = pipelineOpen(outPipeBin, pipelineWrite, tabFile, NULL);
+	pl = pipelineOpen(outPipeBin, pipelineWrite, tabFile, NULL, 0);
     else
-	pl = pipelineOpen(outPipeNoBin, pipelineWrite, tabFile, NULL);
+	pl = pipelineOpen(outPipeNoBin, pipelineWrite, tabFile, NULL, 0);
     tabFh = pipelineFile(pl);
     }
 while ((psl = pslNext(lf)) != NULL)
@@ -168,9 +168,9 @@ if (noSort)
 else
     {
     if (pslCreateOpts & PSL_WITH_BIN)
-	pl = pipelineOpen(outPipeBin, pipelineWrite, tabFile, NULL);
+	pl = pipelineOpen(outPipeBin, pipelineWrite, tabFile, NULL, 0);
     else
-	pl = pipelineOpen(outPipeNoBin, pipelineWrite, tabFile, NULL);
+	pl = pipelineOpen(outPipeNoBin, pipelineWrite, tabFile, NULL, 0);
     tabFh = pipelineFile(pl);
     }
 while (lineFileRow(lf, row))
