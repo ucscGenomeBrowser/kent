@@ -2281,7 +2281,7 @@ for (ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, sIx++)
     cmd[cIx++] = ti->subtreeTn->forCgi;
     }
 cmd[cIx++] = NULL;
-struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, NULL);
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, NULL, 0);
 pipelineClose(&pl);
 reportTiming(pStartTime, "make subtree zipfile");
 return zipTn;
