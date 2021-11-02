@@ -1784,6 +1784,7 @@ function updateBrowser {
 
 function addTools {
    rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /usr/local/bin/
+   mv /usr/local/bin/blat/* /usr/local/bin/ # tools under the BLAT license are separated into their own directory
    echo2 The UCSC User Tools were copied to /usr/local/bin
    echo2 Please note that most of the tools require an .hg.conf file in the users
    echo2 home directory. A very minimal .hg.conf file can be found here:
