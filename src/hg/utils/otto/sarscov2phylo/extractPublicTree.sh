@@ -45,6 +45,7 @@ if [ -s cladeToName ]; then
     time $matUtils annotate -T 50 \
         -l \
         -i public-$today.all.masked.pb \
+        -M $scriptDir/nextstrain.clade-mutations.tsv \
         -c cladeToPublicName \
         -f 0.95 \
         -D details.nextclade.public \
@@ -63,6 +64,7 @@ if [ -s lineageToName ]; then
     grep -v EPI_ISL lineageToName > lineageToPublicName
     time $matUtils annotate -T 50 \
         -i public-$today.all.masked.nextclade.pb \
+        -M $scriptDir/pango.clade-mutations.tsv \
         -c lineageToPublicName \
         -f 0.95 \
         -D details.pango.public \
