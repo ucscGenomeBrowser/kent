@@ -324,8 +324,8 @@
 
 
 #########################################################################
-# PROBLEMATIC SITES (DONE - 2021-08-16 - Angie)
-# Previously updated 2020-08-26, 2020-12-30
+# PROBLEMATIC SITES (DONE - 2021-11-01 - Angie)
+# Previously updated 2020-08-26, 2020-12-30, 2021-08-16
 
     today=$(date +%y-%m-%d)
     mkdir -p /hive/data/genomes/wuhCor1/bed/problematicSites/$today
