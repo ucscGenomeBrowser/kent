@@ -32,9 +32,17 @@ $matUtils extract -i gisaidAndPublic.$buildDate.masked.pb \
     --reroot "$wh4SampleName" \
     -o gisaidAndPublic.$buildDate.masked.reroot.pb
 
+# Reroot pango.clade-mutations.tsv:
+grep -w ^A $scriptDir/pango.clade-mutations.tsv \
+| sed -re 's/T28144C( > )?//;  s/C8782T( > )?//;' \
+    > pango.clade-mutations.reroot.tsv
+grep -vw ^A $scriptDir/pango.clade-mutations.tsv \
+| sed -re 's/\t/\tT8782C > C28144T > /;' \
+    >> pango.clade-mutations.reroot.tsv
 # Assign updated lineages on the rerooted tree, pango-only for pangolin:
 time $matUtils annotate -T 50 \
     -i gisaidAndPublic.$buildDate.masked.reroot.pb \
+    -M pango.clade-mutations.reroot.tsv \
     -l \
     -c lineageToName \
     -f 0.95 \
@@ -48,7 +56,7 @@ grep 'Could not' annotate.pangoOnly.out | cat
 set -o pipefail
 
 # Make a bunch of smaller trees and see how they do.
-mkdir /hive/users/angie/lineageTreeUpdate.$today
+mkdir -p /hive/users/angie/lineageTreeUpdate.$today
 cd /hive/users/angie/lineageTreeUpdate.$today
 for i in 0 1 2 3 4 5 6 7 8 9; do
     echo test.50.$i
@@ -61,10 +69,6 @@ done
 # 7.5-14.5m each job, ~3.5hrs total:
 conda activate pangolin
 for i in 0 1 2 3 4 5 6 7 8 9; do
-    echo test.50.$i
-    time pangolin -t 50 --usher-tree test.50.$i.pb \
-        --skip-designation-hash --no-temp --outdir subset_10000_0.pusher.test.50.$i.out \
-        ../pangolin_eval/subset_10000_0.fa
     echo test.50.$i.simp
     time pangolin -t 50 --usher-tree test.50.$i.simp.pb \
         --skip-designation-hash --no-temp --outdir subset_10000_0.pusher.test.50.$i.simp.out \
@@ -73,16 +77,7 @@ done
 
 # Summarize results
 for i in 0 1 2 3 4 5 6 7 8 9; do
-    echo test.50.$i
-    tail -n+2 subset_10000_0.pusher.test.50.$i.out/lineage_report.csv \
-    | awk -F, '{print $1 "\t" $2;}' \
-    | sort \
-        > subset_10000_0.pusher.test.50.$i
-    join -t$'\t' ../pangolin_eval/subset_10000_0.cogNameToLin subset_10000_0.pusher.test.50.$i \
-    | tawk '$2 != $3' \
-        > subset_10000_0.pusher.test.50.$i.diff
-    cut -f 2,3 subset_10000_0.pusher.test.50.$i.diff \
-    | sort | uniq -c | sort -nr > subset_10000_0.pusher.test.50.$i.diffrank
+    echo test.50.$i.simp
     tail -n+2 subset_10000_0.pusher.test.50.$i.simp.out/lineage_report.csv \
     | awk -F, '{print $1 "\t" $2;}' \
     | sort \
