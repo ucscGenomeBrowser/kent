@@ -75,6 +75,7 @@ if [ -s $ottoDir/$prevDate/cladeToName ]; then
     time $matUtils annotate -T 50 \
         -l \
         -i gisaidAndPublic.$today.masked.pb \
+        -M $scriptDir/nextstrain.clade-mutations.tsv \
         -c $ottoDir/$prevDate/cladeToName \
         -f 0.95 \
         -D details.nextclade \
@@ -92,6 +93,7 @@ fi
 if [ -s $ottoDir/$prevDate/lineageToName ]; then
     time $matUtils annotate -T 50 \
         -i gisaidAndPublic.$today.masked.nextclade.pb \
+        -M $scriptDir/pango.clade-mutations.tsv \
         -c $ottoDir/$prevDate/lineageToName \
         -f 0.95 \
         -D details.pango \
@@ -120,10 +122,11 @@ tail -n+2 sample-clades \
 # Add clade & lineage from tree to metadata.
 zcat gisaidAndPublic.$today.metadata.tsv.gz \
 | tail -n+2 \
+| cut -f 1-9 \
 | sort > tmp1
 tail -n+2 sample-clades \
 | sort > tmp2
-paste <(zcat gisaidAndPublic.$today.metadata.tsv.gz | head -1) \
+paste <(zcat gisaidAndPublic.$today.metadata.tsv.gz | cut -f 1-9 | head -1) \
       <(echo -e "Nextstrain_clade_usher\tpango_lineage_usher") \
     > gisaidAndPublic.$today.metadata.tsv
 join -t$'\t' tmp1 tmp2 \
