@@ -1,4 +1,3 @@
-
 <h2>Description</h2>
 <p>
 This track represents genome-wide predicted binding sites for TF 
@@ -91,6 +90,19 @@ Zoom to a smaller region and click into an item to see more detail.</p>
 </table>
 
 <h2>Methods</h2>
+<p>
+JASPAR 2022 contains updates transcription factor binding sites
+with additional transcription factor profiles. More information on
+the methods can be found in the upcoming publication.</p>
+
+<p>
+JASPAR 2020 scanned DNA sequences with JASPAR CORE TF-binding profiles 
+for each taxa independently using PWMScan. TFBS predictions were selected with 
+a PWM relative score &ge; 0.8 and a p-value &lt; 0.05. P-values were scaled 
+between 0 (corresponding to a p-value of 1) and 1000 (p-value &le; 10<sup>-10</sup>) for 
+colouring of the genome tracks and to allow for comparison of prediction 
+confidence between different profiles.</p>
+
 <p> 
 JASPAR 2018 used the TFBS Perl module (Lenhard and Wasserman 2002) 
 and FIMO (Grant, Bailey, and Noble 2011), as distributed within the MEME suite 
@@ -102,16 +114,10 @@ consistent between the two methods (TFBS Perl module and FIMO) were removed. The
 remaining TFBS predictions were colored according 
 to their FIMO p-value to allow for comparison of prediction confidence between 
 different profiles.</p>
-<p>
-For JASPAR 2020, DNA sequences were scanned with JASPAR CORE TF-binding profiles 
-for each taxa independently using PWMScan. TFBS predictions were selected with 
-a PWM relative score &ge; 0.8 and a p-value &lt; 0.05. P-values were scaled 
-between 0 (corresponding to a p-value of 1) and 1000 (p-value &le; 10<sup>-10</sup>) for 
-colouring of the genome tracks and to allow for comparison of prediction 
-confidence between different profiles.</p>
 
 <p>
-Please refer to the JASPAR 2020 and 2018 publication for more details (citation below).</p>
+Please refer to the JASPAR 2022, 2020, and 2018 publications for more 
+details (citation below).</p>
 
 <h2>Data Access</h2>
 <p>
@@ -153,7 +159,8 @@ Public Hub</a> or by clicking the assembly links below:</p>
     </tr>
     <tr>
       <td width="300">Human - <em>Homo sapiens</em></td>
-      <td width="200"><a target="_blank" href="../cgi-bin/hgTrackUi?db=hg19&g=jaspar">hg19</a>, <a target="_blank" href="../cgi-bin/hgTrackUi?db=hg38&g=jaspar">hg38</a></td>
+      <td width="200"><a target="_blank" href="../cgi-bin/hgTrackUi?db=hg19&g=jaspar">hg19</a>, 
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=hg38&g=jaspar">hg38</a></td>
     </tr>
     <tr>
       <td>Mouse - <em>Mus musculus</em></td>
@@ -212,6 +219,15 @@ u&#98;&#99;.c&#97;</A>
 </blockquote>
 
 <h2>References</h2>
+<p>
+Castro-Mondragon JA, Riudavets-Puig R, Rauluseviciute I, Berhanu Lemma R, Turchi L, 
+Blanc-Mathieu R, Lucas J, Boddie P, Khan A, Manosalva Pérez N, Fornes O, Leung TY,
+Aguirre A, Hammal F, Schmelter D, Baranasic D, Ballester B, Sandelin A, Lenhard B,
+Vandepoele K, Wasserman WW, Parcy F, and Mathelier A. <b>JASPAR 2022: the 9th 
+release of the open-access database of transcription factor binding profiles</b> 
+<em>Nucleic Acids Res</em>. Pending Publication.
+</p>
+
 <p>
 Fornes O, Castro-Mondragon JA, Khan A, van der Lee R, Zhang X, Richmond PA, 
 Modi BP, Correard S, Gheorghe M, Barana&#353;i&#263; D <em>et al</em>.
