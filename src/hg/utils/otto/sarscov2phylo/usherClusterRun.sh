@@ -22,7 +22,6 @@ source $scriptDir/util.sh
 usherDir=~angie/github/usher
 usher=$usherDir/build/usher
 matUtils=$usherDir/build/matUtils
-matOptimize=$usherDir/build/matOptimize
 
 cd $ottoDir/$today
 
@@ -93,6 +92,38 @@ wait
 
 time $matUtils merge -T 64 --input-mat-1 merged.0.7.pb --input-mat-2 merged.8.15.pb -o merged.pb
 
-# Optimize
-$matOptimize -T 40 -r 8 -S move_log -i merged.pb -M 6 -o gisaidAndPublic.$today.masked.preTrim.pb \
-    >& matOptimize.merged.log
+# Optimize on the cluster too, with Cheng's MPI-parallelized matOptimize
+# Reserve parasol nodes with a "cluster run" of sleep commands
+mkdir -p reserveKuNodes
+cd reserveKuNodes
+reserveHours=8
+reserveSeconds=$((3600 * $reserveHours))
+cp /dev/null jobList
+for ((i=0;  $i < $jobCount;  i++)); do
+    echo "sleep $reserveSeconds" >> jobList
+done
+ssh ku "cd $ottoDir/$today/reserveKuNodes && para create -cpu=$threadCount jobList && para push"
+
+# Wait for all jobs to start (i.e. all nodes to be reserved):
+echo "Waiting for parasol to assign ku nodes"
+while (( $(ssh ku "parasol list jobs | grep $USER" | awk '$2 != "none"' | wc -l) < $jobCount )); do
+    sleep 10
+done
+
+# Make hostfile for mpirun
+cd $ottoDir/$today
+cp /dev/null hostfile
+for h in $(ssh ku "parasol list jobs | grep $USER | grep sleep" | awk '{print $2;}'); do
+    echo "$h slots=$threadCount" >> hostfile
+done
+
+# mpirun matOptimize on first host in hostfile
+headNode=$(head -1 hostfile | awk '{print $1;}')
+radius=8
+ssh $headNode "cd $ottoDir/$today && \
+               $scriptDir/kuRunMatOptimize.sh -T $threadCount -r $radius \
+                   -S move_log.cluster -i merged.pb -o gisaidAndPublic.$today.masked.preTrim.pb \
+                   >& matOptimize.cluster.log"
+
+# Release the ku nodes by stopping the parasol batch
+ssh ku "cd $ottoDir/$today/reserveKuNodes && para stop"
