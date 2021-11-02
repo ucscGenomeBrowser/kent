@@ -1,6 +1,6 @@
 track liftHg19
-shortLabel Hg19 Mapping
-longLabel Hg19 Mappings: UCSC LiftOver and NCBI ReMap
+shortLabel LiftOver & ReMap
+longLabel UCSC LiftOver and NCBI ReMap: Genome alignments to convert annotations to hg19
 group map
 visibility hide
 type chain

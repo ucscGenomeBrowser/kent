@@ -1,3 +1,4 @@
 #!/bin/sh
 mkdir ~/bin -p
 rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/
+mv ~/bin/blat/* ~/bin/ # BLAT related tools are under a different license and separated
