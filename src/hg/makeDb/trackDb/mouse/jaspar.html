@@ -91,34 +91,14 @@ Zoom to a smaller region and click into an item to see more detail.</p>
 
 <h2>Methods</h2>
 <p>
-JASPAR 2022 contains updated transcription factor binding sites
-with additional transcription factor profiles. More information on
-the methods can be found in their upcoming publication or on the
+JASPAR contains transcription factor binding sites
+with additional transcription factor profiles. TFBS predictions were selected with
+a PWM relative score &ge; 0.8 and a p-value &lt; 0.05. P-values were scaled
+between 0 (corresponding to a p-value of 1) and 1000 (p-value &le; 10<sup>-10</sup>) for
+colouring of the genome tracks and to allow for comparison of prediction
+confidence between different profiles. More information on
+the methods can be found in their publications or on the
 <a href="https://jaspar.genereg.net/" target="_blank">JASPAR website</a>.</p>
-
-<p>
-JASPAR 2020 scanned DNA sequences with JASPAR CORE TF-binding profiles 
-for each taxa independently using PWMScan. TFBS predictions were selected with 
-a PWM relative score &ge; 0.8 and a p-value &lt; 0.05. P-values were scaled 
-between 0 (corresponding to a p-value of 1) and 1000 (p-value &le; 10<sup>-10</sup>) for 
-colouring of the genome tracks and to allow for comparison of prediction 
-confidence between different profiles.</p>
-
-<p> 
-JASPAR 2018 used the TFBS Perl module (Lenhard and Wasserman 2002) 
-and FIMO (Grant, Bailey, and Noble 2011), as distributed within the MEME suite 
-(version 4.11.2) (Bailey <em>et al.</em> 2009). For scanning genomes with the 
-BioPerl TFBS module, profiles were converted to PWMs and matches were kept with a 
-relative score &ge; 0.8. For the FIMO scan, profiles were reformatted to MEME motifs 
-and matches with a p-value &lt; 0.05 were kept. TFBS predictions that were not 
-consistent between the two methods (TFBS Perl module and FIMO) were removed. The 
-remaining TFBS predictions were colored according 
-to their FIMO p-value to allow for comparison of prediction confidence between 
-different profiles.</p>
-
-<p>
-Please refer to the JASPAR 2022, 2020, and 2018 publications for more 
-details (citation below).</p>
 
 <h2>Data Access</h2>
 <p>
@@ -165,8 +145,10 @@ Public Hub</a> or by clicking the assembly links below:</p>
     </tr>
     <tr>
       <td>Mouse - <em>Mus musculus</em></td>
-      <td><a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=jaspar">mm10</a>, 
-<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm39&g=jaspar">mm39</a></td>
+      <td>
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=jaspar">
+mm10</a>, <a target="_blank" href="../cgi-bin/hgTrackUi?db=mm39&g=jaspar">
+mm39</a></td>
     </tr>
     <tr>
       <td>Zebrafish - <em>Danio rerio</em></td>
@@ -239,17 +221,4 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31701148"
 target="_blank">31701148</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7145627/" 
 target="_blank">PMC7145627</a>
-</p>
-
-<p>
-Khan A, Fornes O, Stigliani A, Gheorghe M, Castro-Mondragon JA, van der Lee R, 
-Bessy A, Ch&#232;neby J, Kulkarni SR, Tan G <em>et al</em>.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/29140473" target="_blank">
-JASPAR 2018: update of the open-access database of transcription factor 
-binding profiles and its web framework</a>.
-<em>Nucleic Acids Res</em>. 2018 Jan 4;46(D1):D260-D266.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29140473" 
-target="_blank">29140473</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5753243/" 
-target="_blank">PMC5753243</a>
 </p>
