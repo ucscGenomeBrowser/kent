@@ -1276,10 +1276,13 @@ struct hash *settings = track->tdb->settingsHash;
 char *barChartBars = hashFindVal(settings, BAR_CHART_CATEGORY_LABELS);
 if (isNotEmpty(barChartBars))
     return;
-errAbort("Missing '%s' setting from track of type=%s (%s).  "
+barChartBars = hashFindVal(settings, BAR_CHART_CATEGORY_URL);
+if (isNotEmpty(barChartBars))
+    return;
+errAbort("Missing either '%s' or '%s' setting from track of type=%s (%s).  "
          "Please check for case and spelling and that there is no new-line "
-         "between the 'track' and the '%s'.",
-         BAR_CHART_CATEGORY_LABELS, track->tdb->type, track->tdb->shortLabel, BAR_CHART_CATEGORY_LABELS);
+         "between the 'track' and the '%s' or '%s'.",
+         BAR_CHART_CATEGORY_LABELS, BAR_CHART_CATEGORY_URL, track->tdb->type, track->tdb->shortLabel, BAR_CHART_CATEGORY_LABELS, BAR_CHART_CATEGORY_URL);
 }
 
 static boolean barChartRecognizer(struct customFactory *fac, struct customPp *cpp, char *type,
