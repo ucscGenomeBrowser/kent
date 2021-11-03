@@ -443,24 +443,24 @@ puts("</div>"); // .tabSection
 
 puts("<div class='tabSection'>");
 puts("<h4>Enable Genome Browser debugging modes</h4>");
-puts("<div class='help'>These apply to all connected hubs. By default, caching is activated and track load times are not shown, but you can change these settings when debugging your hub.</div>");
+puts("<div class='help'>These apply to all connected hubs. By default, caching is activated and track load times are not shown, but you can change these settings while developing your hub:</div>");
 puts("<div style='margin-left: 15px'>");
 puts("<FORM ACTION='hgHubConnect#hubDeveloper' METHOD='POST' NAME='debugForm'>");
 
 // output the udcTimeout button
-char *noCacheLabel = "Deactivate (Always refresh)";
+char *noCacheLabel = "Inactive, never cache";
 char *timeout = "5";
 char *cacheStatus = "ON";
-char *description = "Always refresh files, do not cache contents at UCSC. This means that data access is slower, but you can see the effect of changes to your files immediately on the Genome Browser.";
+char *description = "Do not cache contents at UCSC and always load them from the source server. This means that data access is slower, but you can see the effect of changes to your files immediately on the Genome Browser.";
 if (cartNonemptyString(cart, "udcTimeout")) 
     {
-    noCacheLabel = "Activate (Always cache)";
+    noCacheLabel = "Active, always cache";
     timeout = "";
     cacheStatus = "OFF";
     description = "Always cache contents at UCSC. This means that data access is faster, but you cannot see the effect of changes to your files on the Genome Browser for at least 5 minutes.";
     }
 printf("<b style='font-size:90%%'>File caching: %s</b> &nbsp;", cacheStatus);
-printf("<button type='submit' name='udcTimeout' value='%s'>%s</button>", timeout, noCacheLabel);
+printf("<button type='submit' name='udcTimeout' value='%s'>Change to: %s</button>", timeout, noCacheLabel);
 
 printf("<div class='help'>%s<br>", description);
 puts("For custom tracks, this affects only the remote formats (bigBed, bigWig, tabix, BAM, CRAM, etc), not text files (BED, PSL, etc), which are stored at UCSC.</div>");
@@ -469,7 +469,7 @@ puts("For custom tracks, this affects only the remote formats (bigBed, bigWig, t
 char *timeLabel = "Show timings";
 char *timeVal = "on";
 char *timeDesc = "Shows loading time in milliseconds for each track, to help debug performance problems.";
-char *timeStatus = "OFF";
+char *timeStatus = "ON";
 if (cartNonemptyString(cart, "measureTiming")) 
     {
         timeLabel = "Hide timings";
@@ -479,7 +479,7 @@ if (cartNonemptyString(cart, "measureTiming"))
     }
 
 printf("<b style='font-size:90%%'>Load times: %s</b> &nbsp;", timeStatus);
-printf("<button type='submit' name='measureTiming' value='%s'>%s</button>", timeVal, timeLabel);
+printf("<button type='submit' name='measureTiming' value='%s'>Change to: %s</button>", timeVal, timeLabel);
 
 printf("<div class='help'>%s</div>", timeDesc);
 
