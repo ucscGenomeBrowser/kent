@@ -4,7 +4,7 @@ include ../../inc/common.mk
 XINC = -I$(MYSQLINC)
 
 O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o autoUpgrade.o axtInfo.o \
-  barChartBed.o barChartUi.o bed.o bedDetail.o bigBedFind.o bigBedLabel.o bigDbSnp.o bigGenePred.o \
+  barChartBed.o barChartCategory.o barChartUi.o bed.o bedDetail.o bigBedFind.o bigBedLabel.o bigDbSnp.o bigGenePred.o \
   bigPsl.o blastTab.o borf.o botDelay.o cart.o cartDb.o cdsEvidence.o cdsOrtho.o cdsPick.o \
   cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgiApoptosis.o chainCart.o chainDb.o chainLink.o chainNet.o \
   chainNetDbLoad.o chromAlias.o chromBins.o chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o \
