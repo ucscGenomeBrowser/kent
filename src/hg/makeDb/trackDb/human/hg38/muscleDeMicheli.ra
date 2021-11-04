@@ -44,9 +44,10 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/muscleDeMicheli/sample.bb
     barChartStatsUrl /gbdb/hg38/bbi/muscleDeMicheli/sample.stats
+    barChartCategoryUrl /gbdb/hg38/bbi/muscleDeMicheli/sample.colors
     #barChartColors #ff0000 #ff9c00 #ebff4c #4cff00 #00ffad #00d2ff #004cff #6600ff #e300ff #ff009c
     #barChartColors #ba3652 #da5d34 #cf878e #a35636 #ed5c2a #f56725 #ca3b6c #23a90e #698b18 #9f7726
-    barChartColors #e13b4c #b84b3a #d2838b #aa5739 #be4931 #b54e29 #b93467 #39a015 #6e8220 #a0692f
-    barChartBars hu01_061419 hu02_062419 hu03_062719 hu04_080619 hu05_111418 hu06_120518 hu07_021219 hu08_092618 hu09_092718 hu10_101018
+    #barChartColors #e13b4c #b84b3a #d2838b #aa5739 #be4931 #b54e29 #b93467 #39a015 #6e8220 #a0692f
+    #barChartBars hu01_061419 hu02_062419 hu03_062719 hu04_080619 hu05_111418 hu06_120518 hu07_021219 hu08_092618 hu09_092718 hu10_101018
     transformFunc NONE
     barChartLimit 2
