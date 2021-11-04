@@ -993,7 +993,7 @@ if (errCatchStart(errCatch))
     hub = trackHubOpen(hubUrl, "");
     char *descUrl = hub->descriptionUrl;
     if (descUrl == NULL)
-        warn("warning: missing hub overview descripton page (descriptionUrl setting)");
+        warn("warning: missing hub overview description page (descriptionUrl setting)");
     else if (!extFileExists(descUrl))
         warn("warning: %s descriptionUrl setting does not exist", hub->descriptionUrl);
     }
