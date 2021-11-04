@@ -12,13 +12,14 @@
 <h6><a href="#Introduction">Introduction</a></h6> 
 <h6><a href="#Tables">About the Table Browser databases and tables</a></h6> 
 <ul> 
-  <li><a href="#NonPositional"><strong>Non-positional tables</strong></a></li> 
   <li><a href="#Positional"><strong>Position-oriented tables</strong></a></li> 
+  <li><a href="#NonPositional"><strong>Non-positional tables</strong></a></li> 
 </ul> 
 <h6><a href="#GettingStarted">Getting started - simple queries</a></h6> 
 <ul> 
   <li><a href="#PositionQuery"><strong>Simple position-based query</strong></a></li> 
   <li><a href="#BatchQuery"><strong>Batch query using identifiers</strong></a></li>
+  <li><a href="#GetInfoFromPositions"><strong>Batch query using positions</strong></a></li>
   <li><a href="#GetGeneSymbols"><strong>Query to get gene symbols</strong></a></li> 
 </ul> 
 <h6><a href="#Filter">Filtering output by constraining field values</a></h6> 
@@ -129,7 +130,24 @@ several separate databases, one for each genome assembly.</p>
 Tables within the databases may be differentiated by whether the data are based on genome start-stop
 coordinates (positional tables) or are independent of position (non-positional tables).Some output 
 formats and query options are applicable only to positional tables, hence the distinction.</p> 
-
+<!-- ====Positional========================== -->
+<a name="Positional"></a>
+<h3>Positional tables</h3>
+<p>
+Positional tables contain data associated with specific locations in the genome, such as mRNA
+alignments, gene predictions, cross-species alignments, and other annotations. Each of the
+annotation tracks displayed in the Genome Browser is based on a positional table. In some instances,
+data from other positional and non-positional tables may also be incorporated into the track. Data
+associated with custom annotation tracks active within the user's Table Browser session are also
+available as positional tables.</p>
+<p>
+Positional tables can be further subdivided into several categories based on the type of data they
+describe. Alignment data can be best described by using a block structure to represent each element.
+Other tables require only start and end coordinate data for each element. Some tables specify a
+translation start and end in addition to the transcription start and end. Some tables contain strand
+information, others don't. Most tables, but not all, specify a name for each element. Based on the
+format of the data described by a table, different query and output formatting options may be
+offered.</p>
 <!-- ====Non-positional======================= -->
 <a name="NonPositional"></a> 
 
@@ -141,24 +159,6 @@ IDs to extended information such as author, tissue, or keyword.  Some &quot;meta
 this category contain information about the structure of the database itself or describe external 
 files containing sequence data.</p>  
 
-<!-- ====Positional========================== -->
-<a name="Positional"></a> 
-<h3>Positional tables</h3> 
-<p> 
-Positional tables contain data associated with specific locations in the genome, such as mRNA 
-alignments, gene predictions, cross-species alignments, and other annotations. Each of the 
-annotation tracks displayed in the Genome Browser is based on a positional table. In some instances,
-data from other positional and non-positional tables may also be incorporated into the track. Data 
-associated with custom annotation tracks active within the user's Table Browser session are also 
-available as positional tables.</p> 
-<p> 
-Positional tables can be further subdivided into several categories based on the type of data they 
-describe. Alignment data can be best described by using a block structure to represent each element.
-Other tables require only start and end coordinate data for each element. Some tables specify a 
-translation start and end in addition to the transcription start and end. Some tables contain strand
-information, others don't. Most tables, but not all, specify a name for each element. Based on the 
-format of the data described by a table, different query and output formatting options may be 
-offered.</p>  
 <!-- REPLACE OR REMOVE
 <p> 
 For descriptions of the Genome Browser database tables, see the 
@@ -285,12 +285,12 @@ NM_006735, NM_153632, NM_030661, and NM_153631.</p>
 <a name="BatchQuery"></a> 
 <h3>Batch query using identifiers</h3> 
 <p> 
-In many cases, you may want to retrieve data based on a list of one or more accessions or names, 
+In many cases, you may want to retrieve data based on a list of one or more accessions, IDs, or names, 
 rather than querying by genomic position. Many tracks in the Table Browser, such as those in the 
-<em>Genes and Gene Prediction</em> track group, support identifier queries. The identifier type used
+<em>Genes and Gene Prediction</em> or <em>Variation</em>track groups, support identifier queries. The identifier type used
 in the query must match the kind of identifiers present in the track data, e.g., mRNA accession IDs 
-must be used to query the mRNA table.</p>  
-<p> 
+must be used to query the mRNA table and rsIDs must match those in the dbSNP table.</p>  
+<p>
 Follow these steps to display a list of records that correspond to a set of accessions or names 
 entered as query input.</p> 
 <p> 
@@ -322,6 +322,29 @@ query output.
 -->
 <!-- ====Query to get gene symbols========================== -->
 
+<!-- ====Batch Query with positions========================== -->
+<a name="GetInfoFromPositions"></a>
+<h3>Batch query from positions</h3>
+<p>
+If you have a list of genomic positions and want to retrieve information
+about their properties, you can use the <code>Define Regions</code> button to input
+multiple positions to query a chosen table. In this example, you want to determine
+the dbSNP rsID names for your list of positions.
+
+<p><strong>Step 1. Select genome assembly and track</strong></br>
+To determine dbSNP rsIDs we will be using Human genome hg38 and dbSNP153.</p>
+
+<p><strong>Step 2. Select the <code>define regions</code> button, enter regions</strong></br>
+You can find the <code>define regions</code> button under the <code>Define region of
+interest</code> section. Upload, type, or paste in your regions of interest, making sure they are
+in the desired 0/1 base notation. They will only be accepted in BED or positional format.</p>
+
+<p><strong>Step 3. Select output format and <code>get output</code></strong></br>
+If you want all data from a table, you need not change the output format from the default.
+If you want only particular columns from the table, you can change it to <code>selected fields
+from primary and related tables</code>. Once you hit the <code>get output</code> button,
+you will be redirected to a column selection page or if you did not change the output format,
+your output data itself.</p>
 <a name="GetGeneSymbols"></a>
 <h3>Get gene symbols in a query</h3>
 
@@ -342,8 +365,6 @@ results.</li>
 <li>6. Click <code> get output</code> again to get the final query output.</li>
 </ul>
 </p>
- 
-
 
 <!-- ====Filtering Output================== -->
 <a name="Filter"></a>
@@ -432,6 +453,11 @@ Tables</code> button to include them in the output.</p>
 <p>
 <strong>Strings</strong><br> 
 Text fields are compared to words or patterns containing wildcard characters. Valid wildcards are 
+i
+
+
+
+
 &quot;*&quot; (matches 0 or more characters) and &quot;?&quot; (matches a single character). Each 
 space-separated word or pattern in a text field box is matched against the value of that field in 
 each record. If any word or pattern matches the value, then the record meets the constraint on that 

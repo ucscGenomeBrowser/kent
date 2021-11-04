@@ -5448,7 +5448,6 @@ filterValues.assnType Biomarker tested in,Candidate gene tested in,Disease-causi
 filterValues.inheritance Autosomal dominant,Autosomal recessive,Mitochondrial inheritance,Multigenic/multifactorial,No data available,Not applicable,Oligogenic,Semi-dominant,Unknown,X-linked dominant,X-linked recessive,Y-linked
 filterValues.onsetList Adolescent,Adult,All ages,Antenatal,Childhood,Elderly,Infancy,Neonatal,No data available
 itemRgb on
-release alpha
 
 
 

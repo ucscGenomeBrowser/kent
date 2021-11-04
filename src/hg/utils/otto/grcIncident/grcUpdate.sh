@@ -7,7 +7,7 @@ TOP="/hive/data/outside/grc/incidentDb"
 
 export ECHO="/bin/echo -e"
 export bbiInfo="/cluster/bin/x86_64/bigBedInfo"
-export failMail="hiram@soe.ucsc.edu"
+export failMail="hiram@soe.ucsc.edu,lrnassar@ucsc.edu"
 
 if [ $# -ne 4 ]; then
   echo "usage: grcUpdate.sh <workDir> <db> <issueName> <ftpPath>" 1>&2

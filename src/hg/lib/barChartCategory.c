@@ -172,6 +172,18 @@ fputc(lastSep,f);
 
 #include "hdb.h"
 
+struct hash *barChartCategoriesToHash(struct barChartCategory *categories)
+/* Convert a barChartCategory to hash of barChartCategory->name */
+{
+struct hash *ret = hashNew(0);
+struct barChartCategory *cat;
+for (cat = categories; cat != NULL; cat = cat->next)
+    {
+    hashStore(ret, cat->label);
+    }
+return ret;
+}
+
 struct barChartCategory *barChartGetCategories(char *database, char *track)
 /* Get id, labels, colors, etc. */
 {
