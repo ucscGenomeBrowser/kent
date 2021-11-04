@@ -78,5 +78,21 @@ struct hubSearchText *hubSearchTextLoadWithNullGiveContext(char **row, char *sea
  * only load the pieces that provide context for the supplied searchTerms.
  * Dispose of this with hubSearchTextFree(). */
 
+char *modifyTermsForHubSearch(char *hubSearchTerms, bool isStrictSearch);
+/* This won't exactly be pretty.  MySQL treats any sequence of alphanumerics and underscores
+ * as a word, and single apostrophes are allowed as long as they don't come back-to-back.
+ * Cut down to those characters, then add initial + (for requiring word) and * (for word
+ * expansion) as appropriate. */
+
+void getHubSearchResults(struct sqlConnection *conn, char *hubSearchTableName,
+        char *hubSearchTerms, bool checkLongText, char *dbFilter, struct hash *hubLookup,
+        struct hash **searchResultHashRet, struct slName **hubsToPrintRet, char *extra);
+/* Find hubs, genomes, and tracks that match the provided search terms.
+ * Return all hits that satisfy the (optional) supplied assembly filter.
+ * if checkLongText is FALSE, skip searching within the long description text entries
+ * extra contains optional caller specific mysql filtering*/
+
+char *hubSearchTextTableName();
+
 #endif /* HUBSEARCHTEXT_H */
 

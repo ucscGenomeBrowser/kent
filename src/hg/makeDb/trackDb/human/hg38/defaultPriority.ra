@@ -47,6 +47,7 @@ track rmsk override
 group rep
 visibility dense
 priority 1
+html rmsk
 
 track joinedRmsk override
 priority 4

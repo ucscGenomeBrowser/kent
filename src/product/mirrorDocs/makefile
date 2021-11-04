@@ -9,11 +9,9 @@ user:
 	@echo ""
 	@echo "You can now 'cd ~/kent/src/hg/htdocs' and run 'make' there"
 	@echo ""
-	@echo "To commit the change, cd to kent/src/hg/htdocs, commit goldenPath/help/mirror.html"
-	@echo "and goldenPath/help/mirrorManual.html, and run your makes from there!"
-	@echo ""
-	@echo "Or run this:"
-	@echo "git add ../mirrorManual.txt ../../hg/htdocs/mirror.html ../../hg/htdocs/goldenPath/help/mirrorManual.html"
+	@echo "To commit the change, run this to commit both the "
+	@echo "Markdown and the HTML files:"
+	@echo "git add ../mirrorManual.txt ../README.txt ../../hg/htdocs/mirror.html ../../hg/htdocs/goldenPath/help/mirrorManual.html"
 	@echo "git commit"
 
 

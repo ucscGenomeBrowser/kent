@@ -955,8 +955,8 @@ return ret;
 static void requireBarChartBars(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
 /* Fetch setting(s) or give an error message */
 {
-/* LATER: allow URL for file containing labels and colors */
-requiredSetting(hub, genome, tdb, BAR_CHART_CATEGORY_LABELS);
+if (!trackDbSetting(tdb, BAR_CHART_CATEGORY_URL) && !trackDbSetting(tdb, BAR_CHART_CATEGORY_LABELS))
+    errAbort("BarChart track '%s' is missing either %s or %s setting. Please add one of those settings to the appropriate stanza", tdb->track, BAR_CHART_CATEGORY_LABELS, BAR_CHART_CATEGORY_URL);
 }
 
 static void validateOneTrack( struct trackHub *hub, 

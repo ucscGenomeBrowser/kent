@@ -7,7 +7,6 @@ group genes
 dragAndDrop subTracks
 priority 34.167
 visibility pack
-pennantIcon New red ../goldenPath/newsarch.html#072021 "Released at UCSC Jul. 20, 2021"
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
 allButtonPair on

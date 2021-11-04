@@ -17,7 +17,7 @@ int mailViaPipe(char *toAddress, char *theSubject, char *theBody, char *fromAddr
 {
 char *cmd1[] = {"/usr/sbin/sendmail", "-t", "-oi", NULL};
 struct pipeline *dataPipe = pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-"/dev/null", NULL);
+                                          "/dev/null", NULL, 0);
 FILE *out = pipelineFile(dataPipe);
 fprintf(out, "To: %s\n", toAddress);
 fprintf(out, "From: %s\n", fromAddress);

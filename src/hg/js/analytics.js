@@ -25,6 +25,8 @@ function addGtag() {
     analyticsKey = "UA-4289047-7";
   } else if (hostName.search("hgwalpha") > -1) {
     analyticsKey = "UA-4289047-7";
+  } else if (hostName.search("hgdownload") > -1) {
+    analyticsKey = "G-PWFD1NPDNM";
   } else if (hostName.search("hgwdev-hiram") > -1) {
     analyticsKey = "UA-4289047-10";
   }

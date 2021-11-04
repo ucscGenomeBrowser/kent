@@ -38,23 +38,6 @@ struct barChartItemData
     double value;	/* Measured value (e.g. expression level) */
     };
 
-static struct hash *getTrackCategories(struct trackDb *tdb)
-/* Get list of categories from trackDb.  This may be a subset of those in matrix. 
- * (though maybe better to prune matrix for performance) */
-{
-char *categs = trackDbSetting(tdb, BAR_CHART_CATEGORY_LABELS);
-char *words[BAR_CHART_MAX_CATEGORIES];
-int wordCt;
-wordCt = chopLine(cloneString(categs), words);
-int i;
-struct hash *categoryHash = hashNew(0);
-for (i=0; i<wordCt; i++)
-    {
-    hashStore(categoryHash, words[i]);
-    }
-return categoryHash;
-}
-
 static struct barChartBed *getBarChartFromFile(struct trackDb *tdb, char *file, 
                                                 char *item, char *chrom, int start, int end, 
                                                 struct asObject **retAs, char **extraFieldsRet,
@@ -215,6 +198,20 @@ for (i=1; i<wordCt && samples[i] != NULL; i++)
         data->value = sqlDouble(vals[i]);
         slAddHead(&sampleVals, data);
         }
+    else
+        {
+        // we may have subbed out '_' for ' ' in barChartUiGetCategories earlier so try
+        // searching for them in the hash here instead of straight from the data file
+        subChar(categ, '_', ' ');
+        if (hashLookup(categoryHash, categ))
+            {
+            AllocVar(data);
+            data->sample = cloneString(sample);
+            data->category = cloneString(categ);
+            data->value = sqlDouble(vals[i]);
+            slAddHead(&sampleVals, data);
+            }
+        }
     }
 return sampleVals;
 }
@@ -297,7 +294,8 @@ char *dataFile = trackDbSetting(tdb, "barChartMatrixUrl");
 if (dataFile == NULL)
     dataFile = trackDbSetting(tdb, "barChartDataUrl");
 // for backwards compatibility during qa review
-struct hash *categoryHash = getTrackCategories(tdb);
+struct barChartCategory *categories = barChartUiGetCategories(database, tdb);
+struct hash *categoryHash = barChartCategoriesToHash(categories);
 if (dataFile != NULL)
     {
     char *sampleFile = trackDbSetting(tdb, "barChartSampleUrl");
@@ -370,7 +368,7 @@ bool useOldFonts = cgiBoolean("oldFonts");
 char *pipeCmd[] = {"Rscript","--vanilla","--slave","hgcData/barChartBoxplot.R", 
     item, units, colorFile, df, pngTn.forHtml, 
     isEmpty(name2) ? "n/a" : name2, useOldFonts ? "1" : "0", NULL};
-struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
 int ret = pipelineWait(pl);
 
 if (ret == 0)

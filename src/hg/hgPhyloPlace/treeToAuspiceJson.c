@@ -102,8 +102,9 @@ fputs("  ] , "
       "{\"E\":{\"end\":26472,\"start\":26245,\"strand\":\"+\",\"type\":\"CDS\"},"
       " \"M\":{\"end\":27191,\"start\":26523,\"strand\":\"+\",\"type\":\"CDS\"},"
       " \"N\":{\"end\":29533,\"start\":28274,\"strand\":\"+\",\"type\":\"CDS\"},"
-      " \"ORF1a\":{\"end\":13468,\"start\":266,\"strand\":\"+\",\"type\":\"CDS\"},"
-      " \"ORF1b\":{\"end\":21555,\"start\":13468,\"strand\":\"+\",\"type\":\"CDS\"},"
+      " \"ORF1ab\":{\"end\":21555,\"start\":266,\"strand\":\"+\",\"type\":\"CDS\"},"
+//      " \"ORF1a\":{\"end\":13468,\"start\":266,\"strand\":\"+\",\"type\":\"CDS\"},"
+//      " \"ORF1b\":{\"end\":21555,\"start\":13468,\"strand\":\"+\",\"type\":\"CDS\"},"
       " \"ORF3a\":{\"end\":26220,\"start\":25393,\"strand\":\"+\",\"type\":\"CDS\"},"
       " \"ORF6\":{\"end\":27387,\"start\":27202,\"strand\":\"+\",\"type\":\"CDS\"},"
       " \"ORF7a\":{\"end\":27759,\"start\":27394,\"strand\":\"+\",\"type\":\"CDS\"},"
@@ -271,7 +272,7 @@ if (snc->chromStart < gi->psl->tEnd && snc->chromStart >= gi->psl->tStart)
     char gAlt[2];
     safef(gAlt, sizeof(gAlt), "%c", snc->newBase);
     if (!sameString(gi->psl->strand, "+"))
-        errAbort("changesProtein: only worlds for psl->strand='+', but gene '%s' has strand '%s'",
+        errAbort("changesProtein: only works for psl->strand='+', but gene '%s' has strand '%s'",
                  gi->psl->qName, gi->psl->strand);
     struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &gBed3, gAlt, gi->psl, gi->txSeq);
     if (vpTx->start.region == vpExon)
@@ -294,6 +295,11 @@ if (snc->chromStart < gi->psl->tEnd && snc->chromStart >= gi->psl->tStart)
             oldCodon[codonOffset] = snc->parBase;
             oldAa = lookupCodon(oldCodon);
             }
+        // Watch out for lookupCodon's null-character return value for stop codon; we want '*'.
+        if (newAa == '\0')
+            newAa = '*';
+        if (oldAa == '\0')
+            oldAa = '*';
         if (newAa != oldAa)
             {
             isCodingChange = TRUE;

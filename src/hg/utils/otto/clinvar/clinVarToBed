@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import logging, sys, optparse, re, os, datetime, gzip, urllib.request, urllib.error, urllib.parse, subprocess
-import tempfile
+import tempfile, json
 from collections import defaultdict
-from os.path import join, basename, dirname, isfile, abspath
+from os.path import join, basename, dirname, isfile, abspath, isdir
 from datetime import date, datetime, timedelta
 
 dbToUrl = {
@@ -20,11 +20,11 @@ dbToUrl = {
 possMolConseqs = set(["genic downstream transcript variant","no sequence alteration","inframe indel","stop lost","genic upstream transcript variant","initiatior codon variant","inframe insertion","inframe deletion","","splice acceptor variant","splice donor variant","5 prime UTR variant","nonsense","non-coding transcript variant","3 prime UTR variant","frameshift variant","intron variant","synonymous variant","missense variant", ""])
 
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
-parser = optparse.OptionParser("""usage: %prog [options] summaryFname varAllFname hgvsFname - check and convert the three main clinVar tab-sep files to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed
+parser = optparse.OptionParser("""usage: %prog [options] summaryFname varAllFname hgvsFname - check and convert the three main clinVar tab-sep files to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed.
 
 Output goes into the current dir
 
-input file is ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz
+Typical input files are at ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/
 """) 
 
 parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
@@ -420,10 +420,11 @@ def compareWithLastMonth(fname, maxDiff):
 #    return allToVar
 
 def parseHgvsFile(hgvsFname):
-    " return dict: allele Id -> (hgvs coding, hgvs protein) "
+    " return dict: allele Id -> list of (hgvs coding, hgvs protein) "
     logging.info("Parsing %s" % hgvsFname)
     expHead	= "#Symbol	GeneID	VariationID	AlleleID	Type	Assembly	NucleotideExpression	NucleotideChange	ProteinExpression	ProteinChange	UsedForNaming	Submitted	OnRefSeqGene"
-    allToHgvs = {}
+    hg19Hgvs = defaultdict(list)
+    hg38Hgvs = defaultdict(list)
     foundHead = False
     for line in gzip.open(hgvsFname, "rt"):
         line = line.rstrip("\n")
@@ -431,7 +432,7 @@ def parseHgvsFile(hgvsFname):
             foundHead = True
         if line.startswith("#Symbol") and "GeneID" in line:
             if not line == expHead:
-                print ("Header of hgvs file has changed again. Code needs fixing")
+                print ("Header of hgvs file has changed again. Code needs fixing. Look at the new fields and decide if we should show them.")
                 print(("found:",line))
                 print(("expected:",expHead))
             else:
@@ -443,10 +444,34 @@ def parseHgvsFile(hgvsFname):
             raise Exception("Invalid Header. Code needs fixing, again.")
 
         fields = line.split("\t")
-        varType = fields[4]
-        if "coding" in varType and not "LRG" in fields[6]:
-            allToHgvs[fields[3]]=(fields[6], fields[8])
-    return allToHgvs
+        sym, geneId, varId, alleleId, varType, assembly, nuclExpr, nuclChange, protExpr, protChange, usedForNaming, submitted, onLrg = fields
+        #varType = fields[4]
+        #if "coding" in varType and not "LRG" in fields[6]:
+        #assert("|" not in nuclChange and "|" not in protChange)
+        #hgvsRow = "|".join((nuclChange, protChange))
+        #if ";" in hgvsRow:
+            #print(sym, geneId, varId, hgvsRow)
+        # this creates invalid HGVS, but it's the only way for now, until we have real JSON tables
+        #hgvsRow = hgvsRow.replace(";", ",")
+        #assert(";" not in hgvsRow)
+        hgvsRow = (nuclChange, protChange)
+
+        if assembly=="GRCh37":
+            addTo = [hg19Hgvs]
+        elif assembly=="GRCh38":
+            addTo = [hg38Hgvs]
+        elif assembly=="na": # protein changes have no assembly and must be shown on all assemblies
+            addTo = [hg19Hgvs, hg38Hgvs]
+        elif assembly=="NCBI36":
+            continue
+        else:
+            print("invalid assembly in HGVS: %s, in %s" % (assembly, line))
+            assert(False)
+
+        for data in addTo:
+            data[alleleId].append( hgvsRow )
+
+    return hg19Hgvs, hg38Hgvs
 
 def accListToHtml(inStr):
     """
@@ -609,7 +634,7 @@ def parseVcf(vcfFname):
             elif key=="MC":
                 mc = val.split("|")[1].split(",")[0].replace("_", " ")
                 if not mc in possMolConseqs:
-                    print("molecular consequence '%s' in VCF file is not known and so not in trackDb file. ",
+                    print("molecular consequence '%s' in VCF file is not known and so not in trackDb file. "
                             "Please update otto script %s" % (mc, __file__))
                     sys.exit(1)
 
@@ -635,7 +660,7 @@ else:
 
 #allToVar = parseVariationAlleleFile(varFname) # the alleles are now in the hgvs file after a Clinvar change
 allToVcf = parseVcf(vcfFname)
-allToHgvs = parseHgvsFile(hgvsFname)
+hg19Hgvs, hg38Hgvs = parseHgvsFile(hgvsFname)
 
 # e.g. GRCh38/hg38 1p36.33-36.31(chr1:1181847-5507243)x1
 # GRCh38/hg38 9p24.3-q34.3(chr9:204193-138179445)
@@ -691,7 +716,20 @@ for line in ifh:
     if varId=="":
         logging.warn("empty variantID for alleleId %s, %s" % (alleleId, irvcAcc))
 
-    hgvsCod, hgvsProt =  allToHgvs.get(alleleId, ("", ""))
+    if chrom=="" or assembly=="" or assembly=="NCBI36" or assembly=="na":
+        noAssCount += 1
+        continue
+
+    if assembly=="GRCh37":
+        hgvs = hg19Hgvs
+    elif assembly=="GRCh38":
+        hgvs = hg38Hgvs
+    else:
+        print("Invalid assembly: %s, row %s" % (repr(assembly), repr(row)))
+        assert(False)
+
+    #hgvsTable =  ";".join(hgvs[alleleId])
+    hgvsTable =  json.dumps(hgvs[alleleId])
 
     molConseq = allToVcf.get(int(alleleId))
     if molConseq is None:
@@ -699,14 +737,14 @@ for line in ifh:
         noMcCount += 1
         molConseq = ""
 
-    if chrom=="" or assembly=="" or assembly=="NCBI36":
-        noAssCount += 1
-        continue
+    if chromAcc=="NT_187513.1":
+        chrom = "chrUn_KI270742v1"
+    else:
+        chrom = "chr"+chrom
 
-    if chrom=="Un" and assembly=="GRCh38":
+    if chrom=="chrUn" and assembly=="GRCh38":
         print(("wrong chrUn chrom on assembly hg38. Skipping %s" % irvcAcc))
         continue
-    chrom = "chr"+chrom
 
     if chrom=="chrMT": # why does NCBI use chrMT but we use chrM ?
         if assembly=="GRCh37":
@@ -817,10 +855,10 @@ for line in ifh:
     if len(mouseOverName)>80:
         mouseOverName = mouseOverName[:80]+"..."
 
-    if len(hgvsProt) > 90:
-        hgvsProt = hgvsProt[:90]+"..."
-    if len(hgvsCod) > 90:
-        hgvsCod = hgvsCod[:90]+"..."
+    #if len(hgvsProt) > 90:
+        #hgvsProt = hgvsProt[:90]+"..."
+    #if len(hgvsCod) > 90:
+        #hgvsCod = hgvsCod[:90]+"..."
 
     phenotypeIds, _ = accListToHtml(phenotypeIds)
 
@@ -835,7 +873,7 @@ for line in ifh:
         blockCount, blockSizes, blockStarts,
         name, clinSign, starRatingHtml, allType, geneStr, molConseq,
         snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeList, phenotypeIds, origin, assembly, cytogenetic,
-        hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, mouseOver,
+        hgvsTable, "", numberSubmitters, lastEval, guidelines, otherIds, mouseOver,
         # these fields are the for the filters, not for the display
         pathoCode, originCode, allTypeCode, str(varLen), str(starCount),
         # the variant ID got forgotten in the original bigBed schema, it was only part of the origName field
@@ -861,8 +899,6 @@ for line in ifh:
     else:
         noAssCount +=1
         
-    #for o in row:
-        #print(o, type(o))
     ofh.write("\t".join(row))
     ofh.write("\n")
 
@@ -913,8 +949,19 @@ for db, tableName, tmpFname, finalFname in tmpFnames:
     os.rename(tmpFname, finalFname)
 
 # make sure that the "Data last updated" in the table browser is correct
+monYear = date.today().strftime("%Y-%m")
 for db, tableName, tmpFname, finalFname in tmpFnames:
-    cmd = "hgBbiDbLink %s %s /gbdb/%s/bbi/clinvar/%s.bb" % (db, tableName, db, tableName)
+    gbdbFname = "/gbdb/%s/bbi/clinvar/%s.bb" % (db, tableName)
+    cmd = "hgBbiDbLink %s %s %s" % (db, tableName, gbdbFname)
+    mustRun(cmd)
+
+    # put a copy into the archive
+    outDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/clinvar/%s" % (db, monYear)
+    if not isdir(outDir):
+        os.mkdir(outDir)
+    archiveFname = join(outDir, basename(gbdbFname))
+    logging.info("Creating %s" % archiveFname)
+    cmd = "cp %s %s" % (finalFname, archiveFname)
     mustRun(cmd)
 
 loadSubmissions(summFname)

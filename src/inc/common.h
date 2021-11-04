@@ -766,6 +766,9 @@ char *cloneLongString(char *s);
 char *catTwoStrings(char *a, char *b);
 /* Allocate new string that is a concatenation of two strings. */
 
+char *catThreeStrings(char *a, char *b, char *c);
+/* Allocate new string that is a concatenation of three strings. */
+
 int differentWord(char *s1, char *s2);
 /* strcmp ignoring case - returns zero if strings are
  * the same (ignoring case) otherwise returns difference

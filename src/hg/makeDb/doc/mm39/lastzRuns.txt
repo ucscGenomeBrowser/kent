@@ -2238,3 +2238,84 @@ TMPDIR=/dev/shm
     # 730973192 bases of 2312743346 (31.606%) in intersection
 
 ##############################################################################
+# LASTZ human hg19 (DONE - 2021-09-30 - Hiram)
+
+# should be able to run this from anywhere, this time it was run from:
+    cd /hive/data/genomes/mm39/bed
+
+  time (~/kent/src/hg/utils/automation/pairLastz.sh mm39 hg19 mammal primate) \
+      > mm39.hg19.log 2>&1
+
+    grep -w real mm39.hg19.log | tail -1 | sed -e 's/^/    # /;'
+    # real    1200m57.924s
+
+    # this command outputs this makeDoc text:
+
+    cat lastz.hg19/makeDoc.txt
+
+##############################################################################
+# LASTZ Mouse Mm39 vs. Human Hg19 (DONE - 2021-09-30 - Hiram)
+    mkdir /hive/data/genomes/mm39/bed/lastzHg19.2021-09-30
+    cd /hive/data/genomes/mm39/bed/lastzHg19.2021-09-30
+
+    printf '# Human Hg19 vs. Mouse Mm39
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Mouse Mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Human Hg19
+SEQ2_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ2_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/mm39/bed/lastzHg19.2021-09-30
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real      474m8.118s
+    #     # real        474m8.118s
+    #     # real        370m29.622s
+    # real      844m37.788s
+
+    sed -e 's/^/    # /;' fb.mm39.chainHg19Link.txt
+    # 938444606 bases of 2654624157 (35.351%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/hg19/bed/blastz.mm39.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl   -swap -verbose=2 \
+      /hive/data/genomes/mm39/bed/lastzHg19.2021-09-30/DEF -swapDir=`pwd` \
+      -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+         -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real      57m17.328s
+
+    sed -e 's/^/    # /;' fb.hg19.chainMm39Link.txt
+    # 969322683 bases of 2991710746 (32.400%) in intersection
+    sed -e 's/^/    # /;' fb.hg19.chainSynMm39Link.txt
+    # 921405754 bases of 2991710746 (30.799%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       hg19 mm39) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real      299m2.449s
+
+    sed -e 's/^/    # /;' fb.hg19.chainRBest.Mm39.txt
+    # 892863094 bases of 2991710746 (29.845%) in intersection
+
+##############################################################################

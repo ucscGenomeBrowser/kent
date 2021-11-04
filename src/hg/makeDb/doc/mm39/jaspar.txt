@@ -1,0 +1,11 @@
+# JASPAR 2022 track addition by Daniel 10/11/21
+   cd /hive/data/genomes/mm39/bed
+   mkdir jaspar
+   cd jaspar
+   wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2022/JASPAR2022_mm39.bb
+   mv JASPAR2022_mm39.bb JASPAR2022.bb
+   cd /gbdb/mm39
+   mkdir jaspar
+   cd jaspar
+   ln -s /hive/data/genomes/mm39/bed/jaspar/JASPAR2022.bb .
+

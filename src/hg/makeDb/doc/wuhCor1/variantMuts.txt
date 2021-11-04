@@ -47,4 +47,200 @@ end
 
 csh load.csh >&! load.out
 
+########################
+# Update to include newly designated VOC, VOI, etc.  RM #27926.
+#    September 2021, kate (as volunteer) & angie
+
+# This required running Nick Keener's alignment and mutation calling pipeline, 
+# 'lineageVariants', with minor mods (Angie added minAF cutoff, I added command-line
+# options for cutoffs).
+# Angie  downloaded sequences from GISAID and provided technical/scientific guidance
+# for this track,
+#
+# 1 VOC Delta
+# 2 VOI Mu, Lambda
+# 3 VUM Eta, Iota, Kappa
+
+# VOC
+# Alpha   B.1.1.7
+# Beta    B.1.351
+# Gamma   P.1
+# Delta   B.1617.2
+# 
+# VOI
+# Lambda  C.37
+# Mu      B.1.621
+# 
+# VUM (formerly VOI)
+# Epsilon B.1.429
+# Eta     B.1.525
+# Iota    B.1.526
+# Kappa   B.1.617.1
+
+# Noting there are 2 additional WHO-named variants. These are former VOI's,
+# but no longer under monitoring:  Zeta (P.2) and Theta (P.3).  
+# These are not included in this track.
+
+cd /hive/data/genomes/wuhCor1/bed/strains/2021-09-10
+
+# Install pipeline
+
+# Use this once Angie & Nick have updated pipeline at github
+#git clone https://github.com/nickeener/sarscov2lineages.git
+#cd sarscov2lineages/
+#bash
+#conda env create -f environment.yml
+
+# For now, using modified environment: sarscov2lineagesAngie github dir, 
+#                                       slAngie conda env
+# This is a bit messy!
+
+bash
+pushd sarscov2lineagesAngie/  # caution: this is symlink into Angie's home dir
+conda env create -f environment.yml -n slAngie
+conda activate slAngie
+
+# move old faToVcf out of the way so we pick up Angie's newer version (adds -minAF option)
+# (noting newer faToVcf missing from Angie's slAngie conda bin)
+pushd ~/miniconda3/envs/slAngie/bin/
+mkdir old
+mv faToVcf/old
+popd
+
+mkdir results
+for i in B.1.525 B.1.526 B.1.617.1 B.1.617.2 B.1.621 C.37; do echo $i; cp $i.early3000.fa results/$i.fa; ./sarscov2lineagesAngie/lineageVariants.sh results/$i.fa sarscov2lineagesAngie/NC_045512.fa; done > results/log.txt 2>&1
+
+# re-run to confirm, use new scripts and capture intermediate files and log file.  not used for track
+#mkdir results2
+#for i in B.1.525 B.1.526 B.1.617.1 B.1.617.2 B.1.621 C.37; do echo $i; cp $i.early3000.fa results2/$i.fa; ./sarscov2lineagesAngie/lineageVariants.params.sh -v results2/$i.fa sarscov2lineagesAngie/NC_045512.fa; done > results2/log.txt 2>&1
+
+cd results
+cat > load.csh << 'EOF'
+foreach v (B.1.617.2 B.1.621 C.37 B.1.617.1 B.1.525 B.1.526 )
+    echo $v
+    set d = 2021_09_10
+    foreach t (aa nuc)
+        set if = ${v}_${t}.bed
+        set T = `perl -e "print ucfirst($t)"`
+        set of = variant${T}Muts_${v}_${d}
+        # fix chrom name and strip protein prefix from variant identifiers
+        sed -e 's/NC_045512.2/NC_045512v2/' -e 's/\t[^\t]*:/\t/' < $if > $of.bed
+        bedToBigBed -type=bed4 $of.bed /hive/data/genomes/wuhCor1/chrom.sizes $of.bb
+        ln -s `pwd`/$of /gbdb/wuhCor1/strainMuts
+    end
+end
+'EOF'
+
+wc -l *_aa.bed
+  18 B.1.525_aa.bed
+  12 B.1.526_aa.bed
+  13 B.1.617.1_aa.bed
+  12 B.1.617.2_aa.bed
+  17 B.1.621_aa.bed
+  18 C.37_aa.bed
+wc -l *_nuc.bed
+  30 B.1.525_nuc.bed
+  16 B.1.526_nuc.bed
+  18 B.1.617.1_nuc.bed
+  16 B.1.617.2_nuc.bed
+  25 B.1.621_nuc.bed
+  27 C.37_nuc.bed
     
+csh load.csh >&! load.log &
+cd ../
+
+# Run Delta with lower cutoffs, as per Angie's rec -- the early delta seqs
+# included many gaps and the default params missed spike muts.
+# Aiming here to get close to outbreak.info spike mut identifications.
+
+mkdir delta
+i=B.1.617.2
+cp $i.early3000.fa delta/$i.fa
+./sarscov2lineagesAngie/lineageVariants.params.sh -s 0.70 -i .50 -v \
+        delta/B.1.617.2.fa sarscov2lineagesAngie/NC_045512.fa > delta/log.txt 2>&1
+
+# Worked -- picked up both final SNV and the del
+grep 'S:' *aa.bed
+NC_045512.2     21616   21619   S:T19R
+NC_045512.2     22028   22034   S:del_22029
+NC_045512.2     22915   22918   S:L452R
+NC_045512.2     22993   22996   S:T478K
+NC_045512.2     23401   23404   S:D614G
+NC_045512.2     23602   23605   S:P681R
+NC_045512.2     24409   24412   S:D950N
+
+# Load up
+
+cd delta
+set v = B.1.617.2
+set d = 2021_09_10
+    foreach t (aa nuc)
+        set if = ${v}_${t}.bed
+        set T = `perl -e "print ucfirst($t)"`
+        set of = variant${T}Muts_${v}_${d}
+        # fix chrom name and strip protein prefix from variant identifiers
+        sed -e 's/NC_045512.2/NC_045512v2/' -e 's/\t[^\t]*:/\t/' < $if > $of.bed
+        bedToBigBed -type=bed4 $of.bed /hive/data/genomes/wuhCor1/chrom.sizes $of.bb
+        ln -s `pwd`/$of.bb /gbdb/wuhCor1/strainMuts
+    end
+
+
+################
+# Sanity check from earlier runs.  Just here for historical reasons, as RM wasn't updated during
+# track dev.
+
+# Noting that Angie wants to keep non-delta SNV cutoff at .95, so we will miss some 
+# outbreak listed variants as they use .75 cutoff.
+
+# outbreak.info/situation-reports#voc  9/14/21
+# WHO https://www.who.int/en/activities/tracking-SARS-CoV-2-variants/  Sept 2 2021
+
+########
+# Variants of Concern
+
+B.1.617.2 (Delta)  India, Dec 2020  Nextstrain 21A/S, 1,039,720 seqs !!!
+
+    spike muts from outbreak: T19R, E156G, del157/158, L452R, T478K, D614G, P681R, D950N
+
+    UCSC pipeline: D514G, P681R (6 fewer)
+
+#########
+# Variants of interest:
+
+B.1.525 (Eta)  UK and Nigeria Dec 2020  Nextrain 20A, 8057 seqs
+
+    Spike muts from Outbreak: Q52R, A67V, 69del, 70del, 144del, E484K, D614G, Q677H, F888L
+
+    UCSC pipeline: lacks 3 (Q52R, Q677H, F88L)
+
+B.1.526 (Iota)  New York, Nov 2020  Nextstrain 20C, 39,674 seqs
+
+    Spike muts from Outbreak: L5F, T95I, D253G, D614G
+
+    UCSC pipeline: same
+
+B.1.617.1 (Kappa)  India, Dec 2020   Nextstrain 20A/S, 6286 seqs
+
+    Spike muts from Outbreak: L452R, E484Q, D614G, P681R, Q1071H
+
+    UCSC pipeline: lacks 1 (Q1071H)
+
+C.37 (Lambda) Peru Dec 2020, 6635 seqs
+
+    Spike muts from Outbreak: G75V, T76I, R246N, Del247/253, L452Q, F490S, D614G, T859N
+
+    UCSC pipeline: lacks 3 (G75V, R246N, Del247/253)
+
+B.1.621 (Mu) Colombia, Jan 2021, 5731 seqs
+
+     Spike muts from Outbreak: R346K, E484K, N501Y, D614G, P681H
+
+
+NOTE: Outbreak includes Theta (P.3) first identified in Philipines in Mar 2021, with just 305 seqs,
+        as a VOI
+
+###################
+# Exploratory runs of delta to identify more variants.  First run was stymied by prevalence of N's i# in seqs.  To address, Angie added -minAf option to vcfToFa.  We will also try lower cutoff,
+# based observing that outbreak.info includes variants at 93% cutoff.  Also, more seqs -- 10K
+# that Angie downloaded from GISAID.
+

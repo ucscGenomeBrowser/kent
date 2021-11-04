@@ -28,11 +28,29 @@ if ($gpFile =~ m/.gz$/) {
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp ($line);
-  my ($name, $chrom, $strand, $txStart, $txEnd, $cdsStart, $cdsEnd, $exonCount, $exonStarts, $exonEnds, $score, $name2, $cdsStartStat, $cdsEndStat, $exonFrames) = split('\s+', $line);
+  my ($itemName, $chrom, $strand, $txStart, $txEnd, $cdsStart, $cdsEnd, $exonCount, $exonStarts, $exonEnds, $score, $name2, $cdsStartStat, $cdsEndStat, $exonFrames) = split('\s+', $line);
+  my $name = $itemName;
   my $extraNames = "";
+  my $ncbiName = "";
+  my $isNcbiName = 0;
+  $isNcbiName = 1 if ($name =~ m/\|/);
+  if ($isNcbiName) {
+    my @ncbiParts = split('\|', $name);
+    if (defined($ncbiParts[2])) {
+      $name = $ncbiParts[2];
+      $name =~ s/^mrna.//;
+      $extraNames = $name;
+    }
+  }
   my $noSuffix=$name;
   $noSuffix =~ s/\.[0-9][0-9]*$//;
-  $extraNames = $noSuffix if (($noSuffix ne $name) && (length($noSuffix) > 0));
+  if (($noSuffix ne $name) && (length($noSuffix) > 0)) {
+      if (length($extraNames) > 0) {
+         $extraNames .= "\t" . $noSuffix;
+      } else {
+         $extraNames = $noSuffix;
+      }
+  }
   if (defined($name2)) {
     if ($name !~ m/\Q$name2\E/i) {
       if (length($extraNames) > 0) {
@@ -45,6 +63,6 @@ while (my $line = <FH>) {
       $extraNames .= "\t" . $noSuffix if (($noSuffix ne $name2) && (length($noSuffix) > 0));
     }
   }
-  printf "%s\t%s\n", $name, $extraNames if (length($extraNames) > 0);
+  printf "%s\t%s\n", $itemName, $extraNames if (length($extraNames) > 0);
 }
 close (FH);

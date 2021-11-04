@@ -29,6 +29,9 @@
 #include "net.h"
 #include "hubSearchText.h"
 #include "pipeline.h"
+#include "hubPublic.h"
+
+static boolean measureTiming;
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -72,37 +75,6 @@ struct tdbOutputStructure
     struct tdbOutputStructure *children;
     int childCount;
     };
-
-struct hubEntry
-// for entries pulled from hubPublic
-    {
-    struct hubEntry *next;
-    char *hubUrl;
-    char *shortLabel;
-    char *longLabel;
-    char *dbList;
-    char *errorMessage;
-    int id;
-    char *descriptionUrl;
-    bool tableHasDescriptionField;
-    };
-
-struct hubEntry *hubEntryTextLoad(char **row, bool hasDescription)
-{
-struct hubEntry *ret;
-AllocVar(ret);
-ret->hubUrl = cloneString(row[0]);
-ret->shortLabel = cloneString(row[1]);
-ret->longLabel = cloneString(row[2]);
-ret->dbList = cloneString(row[3]);
-ret->errorMessage = cloneString(row[4]);
-ret->id = sqlUnsigned(row[5]);
-if (hasDescription)
-    ret->descriptionUrl = cloneString(row[6]);
-else
-    ret->descriptionUrl = NULL;
-return ret;
-}
 
 
 static void ourCellStart()
@@ -252,8 +224,14 @@ static void hgHubConnectUnlisted(struct hubConnectStatus *hubList,
 /* NOTE: Destroys hubList */
 {
 // put out the top of our page
-printf("<div id=\"unlistedHubs\" class=\"hubList\"> \n"
-    "<table id=\"unlistedHubsTable\"> \n"
+puts("<div id=\"unlistedHubs\" class=\"hubList\"> \n"
+    "<div class='tabSection' style='border-bottom:none'>");
+
+printf("<FORM ACTION=\"%s\" id='unlistedHubForm' NAME=\"unlistedHubForm\">\n",  "../cgi-bin/hgGateway");
+cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+cartSaveSession(cart);
+
+puts("<table id=\"unlistedHubsTable\"> \n"
     "<thead><tr> \n"
 	"<th colspan=\"6\" id=\"addHubBar\"><label for=\"hubUrl\">URL:</label> \n"
 	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\" "
@@ -289,21 +267,37 @@ for(hub = hubList; hub; hub = nextHub)
 
 hubList = NULL;  // hubList no longer valid
 
+puts("<p>Enter hub URLs below to connect hubs. Hubs connected this way are not accessible to "
+        "other users by default.</p><p>If you wish to share your hub you can create a "
+        "<a href=\"/goldenPath/help/hgSessionHelp.html\" style='color:#121E9A' target=_blank>session link</a>. "
+        "First, connect the hub and configure the tracks image as desired, then navigate to "
+        "<a href=\"/cgi-bin/hgSession\" style='color:#121E9A' target=_blank>My Sessions</a> (<b>My Data</b> > <b>My Sessions</b>). "
+        "The resulting stable link can be added to publications and shared freely. You, as the author, "
+        "also have the power to update the session contents freely. "
+        "Alternatively, you may <a href=\"http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html#Sharing\" "
+        "style='color:#121E9A' target=_blank>build a link with the hub URL</a> to allow users to retain their browser "
+        "configuration, connected hubs, and custom tracks.</p>"
+        "</p>"
+        "<p><a href=\"../contacts.html\" style='color:#121E9A'>Contact us</A> if you wish to submit a hub to the list of public hubs.</p>\n"
+        );
+
 if (unlistedHubCount == 0)
     {
     // nothing to see here
     printf("<tr><td>No Unlisted Track Hubs</td></tr>");
-    printf("</thead></table></div>");
+    printf("</thead></table>");
+    puts("</FORM>");      // return from within DIV and FROM is probably not a good idea
+    puts("</div></div>"); // tabSection and .unlistedHubs
     return;
     }
 
 // time to output the big table.  First the header
-printf(
+puts(
     "<tr> "
 	"<th>Display</th> "
 	"<th>Hub Name</th> "
 	"<th>Description</th> "
-	"<th>Assemblies</th> "
+	"<th>Assemblies<span class='assemblyClickNote'>Click to connect and browse directly</span></th> "
     "</tr>\n"
     "</thead>\n");
 
@@ -379,7 +373,10 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     }
 
 printf("</tbody></TABLE>\n");
-printf("</div>");
+puts("</FORM>");
+printf("</div>"); // .tabSection
+printf("</div>"); // #unlistedHubs
+
 }
 
 void doValidateNewHub(char *hubUrl)
@@ -388,7 +385,7 @@ void doValidateNewHub(char *hubUrl)
 udcSetCacheTimeout(1);
 printf("<div id=\"validateHubResult\" class=\"hubTdbTree\" style=\"overflow: auto\"></div>");
 char *cmd[] = {"loader/hubCheck", "-htmlOut", "-noTracks", hubUrl, NULL};
-struct pipeline *pl = pipelineOpen1(cmd, pipelineRead | pipelineNoAbort, NULL, NULL);
+struct pipeline *pl = pipelineOpen1(cmd, pipelineRead | pipelineNoAbort, NULL, NULL, 0);
 struct lineFile *lf = pipelineLineFile(pl);
 char *line;
 while (lineFileNext(lf, &line, NULL))
@@ -405,265 +402,120 @@ void hgHubConnectDeveloperMode()
 {
 // put out the top of our page
 char *hubUrl = cartOptionalString(cart, "validateHubUrl");
-boolean doHubValidate = cartVarExists(cart, hgHubDoHubCheck);
 
 // the outer div for all the elements in the tab
-printf("\n<div id=\"hubDeveloper\" class=\"hubList\">\n");
+puts("<div id=\"hubDeveloper\" class=\"hubList\">");
 
-// the row to enter in the url and the button and settings to validate/load
-printf("<div class=\"addHubBar roundCorners\" id=\"validateHubUrlRow\">\n");
-printf("<label for=\"validateHubUrl\"><b>URL:</b></label>\n");
+char *hubUrlVal = "";
 if (hubUrl != NULL)
+    hubUrlVal = catThreeStrings(" value='", hubUrl, "'");
+
+puts("<div class='tabSection'>");
+puts("<h4>Create your own hub</h4>");
+puts("For information on making track hubs, see the following pages: \n "
+    "<ul>\n"
+    "<li><a href='../goldenPath/help/hubQuickStart.html' style='color:#121E9A' target=_blank>Quick Start Guide</a></li>\n"
+    "<li><a href=\"../goldenPath/help/hgTrackHubHelp.html\" style='color:#121E9A' TARGET=_blank>Track Hub User's Guide</a></li>\n"
+    "<li><a href=\"../goldenPath/help/hgTrackHubHelp#Hosting\" style='color:#121E9A' target=_blank>Where to host your track hub</a></li>\n"
+    "<li><a href=\"../goldenPath/help/trackDb/trackDbHub.html\" style='color:#121E9A' target=_blank>Track Hub Settings Reference</a></li>\n"
+    "</ul>\n"
+    "<BR>You may also <a href='../contacts.html' style='color:#121E9A'>contact us</a> if you have any "
+    "issues or questions on hub development.");
+puts("</div>"); // .tabSection
+
+puts("<div class='tabSection'>");
+puts("<h4>Check a hub for errors</h4>");
+printf("<label for=\"validateHubUrl\"><b>Hub URL:</b></label>");
+printf("<input id='validateHubUrl' name='validateHubUrl' class='hubField' "
+       "placeholder='e.g. https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt' "
+       "type='text' size='65'%s>\n", hubUrlVal);
+printf("<button type='button' id='hubValidateButton'>Check</button>\n");
+
+puts("<div class='help'>Use the URL bar above to check a hub for errors. This will "
+        "validate the hub's configuration files, including hub.txt, "
+        "genomes.txt and trackDb.txt. "
+    "It will also present a  hierarchical tree of tracks with any errors in red. A hub "
+    "with no errors still shows the tree which can be used to explore the track hierarchy. "
+    "Hub error checking will always refresh the files and never use our remote file cache (see below)."
+    "</div>\n "
+);
+puts("</div>"); // .tabSection
+
+puts("<div class='tabSection'>");
+puts("<h4>Enable Genome Browser debugging modes</h4>");
+puts("<div class='help'>These apply to all connected hubs. By default, caching is activated and track load times are not shown, but you can change these settings while developing your hub:</div>");
+puts("<div style='margin-left: 15px'>");
+puts("<FORM ACTION='hgHubConnect#hubDeveloper' METHOD='POST' NAME='debugForm'>");
+
+// output the udcTimeout button
+char *noCacheLabel = "Inactive, never cache";
+char *timeout = "5";
+char *cacheStatus = "ON";
+char *description = "Do not cache contents at UCSC and always load them from the source server. This means that data access is slower, but you can see the effect of changes to your files immediately on the Genome Browser.";
+if (cartNonemptyString(cart, "udcTimeout")) 
     {
-    printf("<input name=\"validateText\" id=\"validateHubUrl\" class=\"hubField\" "
-        "type=\"text\" size=\"65\" value=\"%s\"> \n", hubUrl);
+    noCacheLabel = "Active, always cache";
+    timeout = "";
+    cacheStatus = "OFF";
+    description = "Always cache contents at UCSC. This means that data access is faster, but you cannot see the effect of changes to your files on the Genome Browser for at least 5 minutes.";
     }
-else
+printf("<b style='font-size:90%%'>File caching: %s</b> &nbsp;", cacheStatus);
+printf("<button type='submit' name='udcTimeout' value='%s'>Change to: %s</button>", timeout, noCacheLabel);
+
+printf("<div class='help'>%s<br>", description);
+puts("For custom tracks, this affects only the remote formats (bigBed, bigWig, tabix, BAM, CRAM, etc), not text files (BED, PSL, etc), which are stored at UCSC.</div>");
+
+// output the measureTiming button
+char *timeLabel = "Show timings";
+char *timeVal = "on";
+char *timeDesc = "Shows loading time in milliseconds for each track, to help debug performance problems.";
+char *timeStatus = "ON";
+if (cartNonemptyString(cart, "measureTiming")) 
     {
-    printf("<input name=\"validateText\" id=\"validateHubUrl\" class=\"hubField\" "
-        "type=\"text\" size=\"65\"> \n");
+        timeLabel = "Hide timings";
+        timeVal = "";
+        timeDesc = "Hide timing measurements.";
+        timeStatus = "OFF";
     }
-printf("<input name=\"hubValidateButton\" id='hubValidateButton' "
-    "class=\"hubField\" type=\"button\" value=\"Check Hub settings\">\n");
-printf(" or \n");
-printf("<input name=\"hubLoadMaybeTiming\" id='hubLoadMaybeTiming' "
-    "class=\"hubField\" type=\"button\" value=\"View Hub on Genome Browser\">\n");
-printf("</div>\n"); // validateHubUrlRow div
 
-printf("<div id=\"extraSettingsContainer\" class=\"addHubBar\">\n");
-printf("<img id=\"advancedSettingsButton\" src=\"../images/add_sm.gif\">\n");
-printf("Optional View Hub Settings");
+printf("<b style='font-size:90%%'>Load times: %s</b> &nbsp;", timeStatus);
+printf("<button type='submit' name='measureTiming' value='%s'>Change to: %s</button>", timeVal, timeLabel);
 
-char *measureTiming = cartCgiUsualString(cart, "measureTiming", NULL);
-char *udcTimeout = cartCgiUsualString(cart, "udcTimeout", NULL);
-boolean doMeasureTiming = isNotEmpty(measureTiming);
-boolean doUdcTimeout = isNotEmpty(udcTimeout);
+printf("<div class='help'>%s</div>", timeDesc);
 
-printf("<div id=\"extraSettingsList\" style=\"display: none\">\n");
-printf("<ul style=\"list-style-type:none\">\n<li>\n");
-// measureTiming first
-printf("<input name=\"addMeasureTiming\" id=\"addMeasureTiming\" "
-    "class=\"hubField\" type=\"checkbox\" %s>", doMeasureTiming ? "checked": "");
-printf("<label for=\"addMeasureTiming\">Display load times</label>\n");
+puts("</div>"); // margin-left
+puts("</div>"); // tabSection
+puts("</div>"); // #hubDeveloper
 
-// and a tooltip explaining this checkbox
-printf("<div class=\"tooltip\"> (?)\n");
-printf("<span class=\"tooltiptext\">"
-    "Checking this box shows the timing measurements at the bottom of the Genome Browser page. "
-    "Useful for determining slowdowns to loading or drawing tracks."
-    "</span>\n");
-printf("</div></li>\n"); // tooltip div
-
-printf("<li>\n");
-// udcTimeout enable/disable
-printf("<input name=\"disableUdcTimeout\" id=\"disableUdcTimeout\" "
-    "class=\"hubField\" type=\"checkbox\" %s >", doUdcTimeout ? "checked" : "");
-printf("<label for=\"disableUdcTimeout\">Enable hub refresh</label>\n");
-// add a tooltip explaining these checkboxes
-printf("<div class=\"tooltip\"> (?)\n");
-printf("<span class=\"tooltiptext\">"
-    "Checking this box changes the cache expiration time (default of 5 minutes) "
-    "and allows the Genome Browser to reload Hub configuration and data files with each refresh."
-    "</span>\n");
-printf("</div></li>\n"); // tooltip div
-printf("</ul>\n");
-printf("</div>\n"); // extraSettingsList div
-printf("</div>\n"); // extraSettingsContainer div
-
-if (hubUrl != NULL && doHubValidate)
-    doValidateNewHub(hubUrl);
-else
-    printf("<div id=\"hubDeveloperInstructions\">Enter URL to hub to check configuration settings "
-        "or load hub </div> \n");
-printf("</div>"); // hubDeveloper div
-
-jsOnEventById("click", "hubValidateButton",
-    "var validateText = document.getElementById('validateHubUrl');"
-    "var udcTimeout = document.getElementById('disableUdcTimeout').checked === true;"
-    "var doMeasureTiming = document.getElementById('addMeasureTiming').checked === true;"
-    "validateText.value=$.trim(validateText.value);"
-    "if(validateUrl($('#validateHubUrl').val())) { "
-    " document.validateHubForm.elements['validateHubUrl'].value=validateText.value;"
-    " document.validateHubForm.elements['" hgHubDoHubCheck "'].value='on';"
-    " if (doMeasureTiming) { document.validateHubForm.elements['measureTiming'].value='1'; }"
-    " else { document.validateHubForm.elements['measureTiming'].value=''}"
-    " if (udcTimeout) { document.validateHubForm.elements['udcTimeout'].value='1'; }"
-    " else { document.validateHubForm.elements['udcTimeout'].value=''}"
-    " document.validateHubForm.submit(); return true; }"
-    "else { return false; }"
-    );
-jsOnEventById("click", "hubLoadMaybeTiming",
-    "var validateText = document.getElementById('validateHubUrl');"
-    "var udcTimeout = document.getElementById('disableUdcTimeout').checked === true;"
-    "var doMeasureTiming = document.getElementById('addMeasureTiming').checked === true;"
-    "validateText.value=$.trim(validateText.value);"
-    "if(validateUrl($('#validateHubUrl').val())) {"
-    "   loc = \"../cgi-bin/hgTracks?hgHub_do_firstDb=on&hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on\" + \"&hubUrl=\" + validateText.value;"
-    "   if (doMeasureTiming) { loc += \"&measureTiming=1\";} else { loc += \"&measureTiming=[]\"; }"
-    "   if (udcTimeout) { loc += \"&udcTimeout=5\"; } else { loc += \"&udcTimeout=[]\"; }"
-    "   window.location.href=loc; "
-    "} else { return false; }"
-    );
+jsOnEventById("click", "hubValidateButton", "makeIframe(event)");
 }
-
-static void addPublicHubsToHubStatus(struct sqlConnection *conn, char *publicTable, char  *statusTable)
-/* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
-{
-char query[1024];
-sqlSafef(query, sizeof(query),
-        "select %s.hubUrl from %s left join %s on %s.hubUrl = %s.hubUrl where %s.hubUrl is NULL",
-        publicTable, publicTable, statusTable, publicTable, statusTable, statusTable); 
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *errorMessage = NULL;
-    char *url = row[0];
-
-    // add this url to the hubStatus table
-    hubFindOrAddUrlInStatusTable(database, cart, url, &errorMessage);
-    }
-}
-
-
-char *modifyTermsForHubSearch(char *hubSearchTerms, bool isStrictSearch)
-/* This won't exactly be pretty.  MySQL treats any sequence of alphanumerics and underscores
- * as a word, and single apostrophes are allowed as long as they don't come back-to-back.
- * Cut down to those characters, then add initial + (for requiring word) and * (for word
- * expansion) as appropriate. */
-{
-char *cloneTerms = cloneString(hubSearchTerms);
-struct dyString *modifiedTerms = dyStringNew(0);
-if (isNotEmpty(cloneTerms))
-    {
-    int i;
-    for (i=0; i<strlen(cloneTerms); i++)
-        {
-        // allowed punctuation is underscore and apostrophe, and we'll do special handling for hyphen
-        if (!isalnum(cloneTerms[i]) && cloneTerms[i] != '_' && cloneTerms[i] != '\'' &&
-                cloneTerms[i] != '-')
-            cloneTerms[i] = ' ';
-        }
-    char *splitTerms[1024];
-    int termCount = chopByWhite(cloneTerms, splitTerms, sizeof(splitTerms));
-    for (i=0; i<termCount; i++)
-        {
-        char *hyphenatedTerms[1024];
-        int hyphenTerms = chopString(splitTerms[i], "-", hyphenatedTerms, sizeof(hyphenatedTerms));
-        int j;
-        for (j=0; j<hyphenTerms-1; j++)
-            {
-            dyStringPrintf(modifiedTerms, "+%s ", hyphenatedTerms[j]);
-            }
-        if (isStrictSearch)
-            dyStringPrintf(modifiedTerms, "+%s ", hyphenatedTerms[j]);
-        else
-            {
-            dyStringPrintf(modifiedTerms, "+%s* ", hyphenatedTerms[j]);
-            }
-        }
-    }
-return dyStringCannibalize(&modifiedTerms);
-}
-
-
-struct hubSearchText *getHubSearchResults(struct sqlConnection *conn, char *hubSearchTableName,
-        char *hubSearchTerms, bool checkLongText, char *dbFilter, struct hash *hubLookup)
-/* Find hubs, genomes, and tracks that match the provided search terms.
- * Return all hits that satisfy the (optional) supplied assembly filter.
- * if checkLongText is FALSE, skip searching within the long description text entries */
-{
-char *cleanSearchTerms = cloneString(hubSearchTerms);
-if (isNotEmpty(cleanSearchTerms))
-    tolowers(cleanSearchTerms);
-bool isStrictSearch = FALSE;
-char *modifiedSearchTerms = modifyTermsForHubSearch(cleanSearchTerms, isStrictSearch);
-struct hubSearchText *hubSearchResultsList = NULL;
-struct dyString *query = dyStringNew(100);
-char *noLongText = NULL;
-
-if (!checkLongText)
-    noLongText = cloneString("textLength = 'Short' and");
-else
-    noLongText = cloneString("");
-
-sqlDyStringPrintf(query, "select * from %s where %s match(text) against ('%s' in boolean mode)"
-        " order by match(text) against ('%s' in boolean mode)",
-        hubSearchTableName, noLongText, modifiedSearchTerms, modifiedSearchTerms);
-
-struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hubSearchText *hst = hubSearchTextLoadWithNullGiveContext(row, cleanSearchTerms);
-    // Skip rows where the long text matched the more lax MySQL search (punctuation just
-    // splits terms into two words, so "rna-seq" finds "rna" and "seq" separately, but
-    // not the more strict rules used to find context for the search terms.
-    if ((hst->textLength == hubSearchTextLong) && isEmpty(hst->text))
-        continue;
-    char *hubUrl = hst->hubUrl;
-    struct hubEntry *hubInfo = hashFindVal(hubLookup, hubUrl);
-    if (hubInfo == NULL)
-        continue; // Search table evidently includes a hub that's not on this server.  Skip it.
-    char *db = cloneString(hst->db);
-    tolowers(db);
-    if (isNotEmpty(dbFilter))
-        {
-        if (isNotEmpty(db))
-            {
-            if (stringIn(dbFilter, db) == NULL)
-                continue;
-            }
-        else
-            {
-            // no db in the hubSearchText means this is a top-level hub hit.
-            // filter by the db list associated with the hub instead
-            char *dbList = cloneString(hubInfo->dbList);
-            tolowers(dbList);
-            if (stringIn(dbFilter, dbList) == NULL)
-                continue;
-            }
-        }
-    // Add hst to the list to be returned
-    slAddHead(&hubSearchResultsList, hst);
-    }
-slReverse(&hubSearchResultsList);
-return hubSearchResultsList;
-}
-
 
 void printSearchAndFilterBoxes(int searchEnabled, char *hubSearchTerms, char *dbFilter)
 /* Create the text boxes for search and database filtering along with the required
  * javscript */
 {
-char event[4096];
+printf("<FORM ACTION=\"%s\" NAME=\"searchHubForm\">\n",  "../cgi-bin/hgHubConnect");
 if (searchEnabled)
     {
-    safef(event, sizeof(event), 
-            "document.searchHubForm.elements['hubSearchTerms'].value=$('#hubSearchTerms').val();"
-            "document.searchHubForm.elements['hubDbFilter'].value=$('#hubDbFilter').val();"
-            "document.searchHubForm.submit();return true;");
-    printf("Enter search terms to find in public track hub description pages:<BR>"
+    cgiMakeHiddenVar(hgHubDoSearch, "on");
+    cgiMakeHiddenVar(hgHubDbFilter, "");
+    cartSaveSession(cart);
+
+    printf("The list below can be filtered on words in the hub description pages or by assemblies.<BR>"
+            "Search terms: "
             "<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\" "
-            "type=\"text\" size=\"65\" value=\"%s\"> \n",
+            "placeholder='e.g. methylation' type=\"text\" size=\"50\" value=\"%s\"> \n",
             hubSearchTerms!=NULL?hubSearchTerms:"");
-    printf("<br>\n");
-    }
-else
-    {
-    safef(event, sizeof(event), 
-            "document.searchHubForm.elements['hubDbFilter'].value=$('#hubDbFilter').val();"
-            "document.searchHubForm.submit();return true;");
+    printf("\n");
     }
 
-printf("Filter hubs by assembly: "
+printf("Assembly: "
         "<input name=\"%s\" id=\"hubDbFilter\" class=\"hubField\" "
-        "type=\"text\" size=\"10\" value=\"%s\"> \n"
+        "type=\"text\" size=\"15\" value=\"%s\" placeholder='e.g. hg38'> \n"
         "<input name=\"hubSearchButton\" id='hubSearchButton' "
-        "class=\"hubField\" type=\"button\" value=\"Search Public Hubs\">\n",
+        "class=\"hubField\" type=\"submit\" value=\"Search Public Hubs\">\n",
         hgHubDbFilter, dbFilter!=NULL?dbFilter:"");
-jsOnEventById("click", "hubSearchButton", event);
-puts("<br><br>\n");
+puts("</FORM>");
 }
 
 
@@ -689,49 +541,15 @@ puts("<BR><BR>\n");
 void printHubListHeader()
 /* Write out the header for a list of hubs in its own table */
 {
-puts("<I>Clicking Connect redirects to the gateway page of the selected hub's default assembly.</I><BR>");
-printf("<table id=\"publicHubsTable\" class=\"hubList\"> "
+puts("<table id=\"publicHubsTable\" class=\"hubList\"> "
         "<thead><tr> "
             "<th>Display</th> "
             "<th>Hub Name</th> "
             "<th>Description</th> "
-            "<th>Assemblies</th> "
-        "</tr></thead></table>\n");
+            //"<th>Assemblies</th> "
+            "<th>Assemblies<span class='assemblyClickNote'>Click to connect and browse directly</span></th> "
+        "</tr></thead>");
 }
-
-
-struct hash *buildPublicLookupHash(struct sqlConnection *conn, char *publicTable, char *statusTable,
-        struct hash **pHash)
-/* Return a hash linking hub URLs to struct hubEntries.  Also make pHash point to a hash that just stores
- * the names of the public hubs (for use later when determining if hubs were added by the user) */
-{
-struct hash *hubLookup = newHash(5);
-struct hash *publicLookup = newHash(5);
-char query[512];
-bool hasDescription = sqlColumnExists(conn, publicTable, "descriptionUrl");
-if (hasDescription)
-    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,"
-            "s.errorMessage,s.id,p.descriptionUrl from %s p,%s s where p.hubUrl = s.hubUrl", 
-	    publicTable, statusTable); 
-else
-    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,"
-            "s.errorMessage,s.id from %s p,%s s where p.hubUrl = s.hubUrl", 
-	    publicTable, statusTable); 
-
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hubEntry *hubInfo = hubEntryTextLoad(row, hasDescription);
-    hubInfo->tableHasDescriptionField = hasDescription;
-    hashAddUnique(hubLookup, hubInfo->hubUrl, hubInfo);
-    hashStore(publicLookup, hubInfo->hubUrl);
-    }
-sqlFreeResult(&sr);
-*pHash = publicLookup;
-return hubLookup;
-}
-
 
 void outputPublicTableRow(struct hubEntry *hubInfo, int count)
 /* Prints out a table row with basic information about a hub and a button
@@ -1300,12 +1118,15 @@ void printHubList(struct slName *hubsToPrint, struct hash *hubLookup, struct has
  * searchResultHash takes hub URLs to struct hubSearchText * (list of hits on that hub)
  */
 {
+printf("<FORM ACTION=\"%s\" id='publicHubForm' NAME=\"publicHubForm\">\n",  "../cgi-bin/hgGateway");
+cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+cartSaveSession(cart);
+
 int count = 0;
 struct hubEntry *hubList = NULL;
 struct hubEntry *hubInfo;
 long slTime;
 long printOutputForHubTime;
-boolean measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
 if (hubsToPrint != NULL)
     {
     printHubListHeader();
@@ -1373,15 +1194,16 @@ jsInline(
         "    for(i=0; i<tableList.length; i++)\n"
         "        {\n"
         "        for(j=0; j<tableList[i].rows[0].cells.length; j++)\n"
-        "            tableList[i].rows[0].cells[j].style.width = colWidths[j]+'px';\n"
+        "            tableList[i].rows[0].cells[j].style.width = (colWidths[j])+'px';\n"
         "        }\n"
         "    }\n"
         "window.onload = lineUpCols();\n"
         );
 if (searchResultHash != NULL)
     jsInline("hubSearchTree.init(true);\n");
-}
 
+puts("</FORM>");
+}
 
 static bool outputPublicTable(struct sqlConnection *conn, char *publicTable, char *statusTable,
         struct hash **pHash)
@@ -1394,14 +1216,34 @@ if (isNotEmpty(lcDbFilter))
     tolowers(lcDbFilter);
 
 // make sure all the public hubs are in the hubStatus table.
-addPublicHubsToHubStatus(conn, publicTable, statusTable);
+long lastTime= clock1000();
+addPublicHubsToHubStatus(cart, conn, publicTable, statusTable);
+if (measureTiming)
+    printf("Time of addPublicHubsToHubStatus: %ld <br>", (clock1000()-lastTime));
+
 
 // build full public hub lookup hash, taking each URL to struct hubEntry * for that hub
 struct hash *hubLookup = buildPublicLookupHash(conn, publicTable, statusTable, pHash);
 
-printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
+puts("<div id=\"publicHubs\" class=\"hubList\">");
 
-char *hubSearchTableName = cfgOptionDefault("hubSearchTextTable", "hubSearchText");
+puts("<div class='tabSection' style='border-bottom:none'>");
+
+printf(
+    "<P>"
+    "Track data hubs are collections of external tracks that can be added to the UCSC Genome Browser. "
+    "Click <B>Connect</B> to attach a hub and redirect to the assembly gateway page. "
+    "Hub tracks will then show up in the hub's own blue bar track group under the browser graphic. "
+    "For more information, including <A HREF=\"../goldenPath/help/hgTrackHubHelp#Hosting\" "
+    "style='color:#121E9A' target=_blank>where to host your track hub</a>, see our "
+    "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank style='color:#121E9A'>"
+    "User's Guide</A>. "
+    "</P>"
+    "<P>Track Hubs are created and maintained by external sources."
+    " UCSC is not responsible for their content.<BR></P>"
+);
+
+char *hubSearchTableName = hubSearchTextTableName();
 int searchEnabled = sqlTableExists(conn, hubSearchTableName);
 
 printSearchAndFilterBoxes(searchEnabled, hubSearchTerms, dbFilter);
@@ -1414,29 +1256,9 @@ if (searchEnabled && !isEmpty(hubSearchTerms))
     // Forcing checkDescriptions to TRUE right now, but we might want to add this as a
     // checkbox option for users in the near future.
     bool checkDescriptions = TRUE;
-    struct hubSearchText *hubSearchResults = getHubSearchResults(conn, hubSearchTableName,
-            hubSearchTerms, checkDescriptions, lcDbFilter, hubLookup);
     searchResultHash = newHash(5);
-    struct hubSearchText *hst = hubSearchResults;
-    while (hst != NULL)
-        {
-        struct hubSearchText *nextHst = hst->next;
-        hst->next = NULL;
-        struct hashEl *hubHashEnt = hashLookup(searchResultHash, hst->hubUrl);
-        if (hubHashEnt == NULL)
-            {
-            slNameAddHead(&hubsToPrint, hst->hubUrl);
-            hashAdd(searchResultHash, hst->hubUrl, hst);
-            }
-        else
-            slAddHead(&(hubHashEnt->val), hst);
-        hst = nextHst;
-        }
-    struct hashEl *hel;
-    struct hashCookie cookie = hashFirst(searchResultHash);
-    while ((hel = hashNext(&cookie)) != NULL)
-        slReverse(&(hel->val));
-    }
+    getHubSearchResults(conn, hubSearchTableName,
+            hubSearchTerms, checkDescriptions, lcDbFilter, hubLookup, &searchResultHash, &hubsToPrint, NULL); }
 else
     {
     // There is no active search, so just add all hubs to the list
@@ -1459,11 +1281,12 @@ else
     }
 slReverse(&hubsToPrint);
 
+printf("</div>\n"); // .tabSection
+
 printHubList(hubsToPrint, hubLookup, searchResultHash);
-printf("</div>");
+printf("</div>"); // #publicHubs
 return (hubsToPrint != NULL);
 }
-
 
 struct hash *hgHubConnectPublic()
 /* Put up the list of public hubs and other controls for the page. */
@@ -1474,6 +1297,7 @@ char *publicTable = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE",
 	hubPublicTableConfVariable, defaultHubPublicTableName);
 char *statusTable = cfgOptionEnvDefault("HGDB_HUB_STATUS_TABLE", 
 	hubStatusTableConfVariable, defaultHubStatusTableName);
+
 if (!(sqlTableExists(conn, publicTable) && 
 	outputPublicTable(conn, publicTable,statusTable, &retHash)) )
     {
@@ -1516,7 +1340,7 @@ if (hub == NULL)
 char headerText[1024];
 
 char *errorMessage;
-hubFindOrAddUrlInStatusTable(database, cart, hub->hubUrl, &errorMessage);
+hubFindOrAddUrlInStatusTable(cart, hub->hubUrl, &errorMessage);
 
 // if there is an error message, we stay in hgHubConnect
 if (errorMessage != NULL)
@@ -1587,6 +1411,8 @@ printf("<pre>Completed\n");
 
 static void checkTrackDbs(struct hubConnectStatus *hubList)
 {
+long beforeCheck = clock1000();
+
 struct hubConnectStatus *hub = hubList;
 
 for(; hub; hub = hub->next)
@@ -1605,6 +1431,9 @@ for(; hub; hub = hub->next)
     else
 	hubUpdateStatus(NULL, hub);
     }
+
+if (measureTiming)
+    printf("hgHubConnect: checkTrackDbs time: %lu millis<BR>\n", clock1000() - beforeCheck);
 }
 
 int hubConnectStatusCmp(const void *va, const void *vb)
@@ -1621,10 +1450,30 @@ if ((ta == NULL) || (tb == NULL))
 return strcasecmp(tb->shortLabel, ta->shortLabel);
 }
 
+void printIncludes() 
+/* print the CSS and javascript include lines */
+{
+printf(
+"<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css\" />\n"
+"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
+"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n"
+"<style>.jstree-default .jstree-anchor { height: initial; } </style>\n"
+);
+jsIncludeFile("utils.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("ajax.js", NULL);
+jsIncludeFile("hgHubConnect.js", NULL);
+webIncludeResourceFile("hgHubConnect.css");
+jsIncludeFile("jquery.cookie.js", NULL);
+jsIncludeFile("spectrum.min.js", NULL); // there is no color picker used anywhere on this page. why include this?
+}
+
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
 cart = theCart;
+measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
 
 if(cgiIsOnWeb())
     checkForGeoMirrorRedirect(cart);
@@ -1650,55 +1499,56 @@ if (cartVarExists(cart, hgHubDoRedirect))
 	}
     }
 
+if (cartVarExists(cart, hgHubDoHubCheck))
+    {
+    puts("<html>");
+    puts("<body>");
+    puts("<link rel='stylesheet' href='../style/HGStyle.css' type='text/css'>");
+    printIncludes();
+
+    jsInline("trackData = [];\n");
+    char *hubUrl = cartOptionalString(cart, "validateHubUrl");
+    jsInline("document.body.style.margin = 0;\n");
+    // simulate the look and feel of a dialog window with a blue bar at the top
+    puts("<div id='titlebar' style='background: #D9E4F8; border: 1px outset #000088; padding: 10px'>"
+        "<span id='title' style='font-weight: bold; margin: .2em 0 .1em; color: #000088'>Hub Check</span>"
+        "<a href='#' id='windowX' style='float: right' class='ui-dialog-titlebar-close ui-corner-all ui-state-hover' role='button'>"
+        "<span class='ui-icon ui-icon-closethick'>close</span></a></div>");
+
+    puts("<div id='content' style='margin:10px; padding: 2px'>");
+    if (isEmpty(hubUrl))
+        printf("Please wait, loading and checking hub, this can take 15 seconds to several minutes.");
+    else
+        {
+        puts("<p><button id='reloadButton'>Check again</button>");
+        puts("&nbsp;&nbsp;<button id='closeButton'>Close this window</button></p>");
+        jsOnEventByIdF("click", "reloadButton", "reloadIframe()");
+        jsOnEventByIdF("click", "closeButton", "closeIframe()");
+        jsOnEventByIdF("click", "windowX", "closeIframe()");
+
+        printf("<div>Finished checking %s</div>", hubUrl);
+        doValidateNewHub(hubUrl);
+        puts("<p>Our command line tool <a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>hubCheck</a> "
+                "can be used to obtain the same output from a Unix command line.</p>");
+        }
+    puts("</div>"); // margin 10px
+    puts("</div>"); // ui-dialog-titlebar
+    puts("</div>"); // ui-dialog
+    cartWebEnd();
+    return;
+    }
+
 cartWebStart(cart, NULL, "%s", pageTitle);
 
-printf(
-"<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css\" />\n"
-"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
-"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n"
-"<style>.jstree-default .jstree-anchor { height: initial; } </style>\n"
-);
-jsIncludeFile("utils.js", NULL);
-jsIncludeFile("jquery-ui.js", NULL);
-webIncludeResourceFile("jquery-ui.css");
-jsIncludeFile("ajax.js", NULL);
-jsIncludeFile("hgHubConnect.js", NULL);
-webIncludeResourceFile("hgHubConnect.css");
-jsIncludeFile("jquery.cookie.js", NULL);
-jsIncludeFile("spectrum.min.js", NULL);
+printIncludes();
 
-boolean doHubDevMode = cfgOptionBooleanDefault("hgHubConnect.validateHub", FALSE);
-printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
-printf(
-    "<P>Track data hubs are collections of external tracks that can be imported into the UCSC Genome Browser. "
-    "Hub tracks show up under the hub's own blue label bar on the main browser page, "
-    "as well as on the configure page. For more information, including where to "
-    "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html#Hosting\">host</A> your track hub, see the "
-    "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank>"
-    "User's Guide</A>."
-    "To import a public hub click its \"Connect\" button below.</P>"
-    "<P><B>NOTE: Because Track Hubs are created and maintained by external sources,"
-    " UCSC is not responsible for their content.</B></P>"
-   );
-printf("</div>\n");
-if (doHubDevMode)
+if (cartVarExists(cart, hgHubDoHubCheck))
     {
-    printf("<div id=\"developerModeDescription\" style=\"display:none\"> \n");
-    printf("<p>Check the configuration settings for a hub, including the settings "
-        "in the hub.txt, genomes.txt, and trackDb.txt files. If there are errors in the hub "
-        "setup, a heirarchal tree of tracks is presented with the errors in red text. A hub "
-        "with no errors still has the tree present but needs to be clicked to be expanded to "
-        " explore the track heirarchy.</p>\n"
-        "<p>Also present are buttons to load the hub with track timing measuring turned on "
-        "in order to profile slow loading tracks, and an option to disable the track caching "
-        "mechanism so the Genome Browser picks up changes to the configuration files or "
-        "track data files. For more information on making track hubs, please see the following links: \n "
-        "<ul>\n"
-        "<li><a href=\"../goldenPath/help/trackDb/trackDbHub.html\">Track Hub Settings</a></li> \n"
-        "<li><a href=\"../goldenPath/help/hgTrackHubHelp#Hosting\">Where to host your track hub</a></li> \n"
-        "</ul> \n"
-        "</div>\n "
-        );
+    jsInline("trackData = [];\n");
+    char *hubUrl = cartOptionalString(cart, "validateHubUrl");
+    doValidateNewHub(hubUrl);
+    cartWebEnd();
+    return;
     }
 
 // this variable is used by hub search and hub validate, initialize here so we don't
@@ -1721,7 +1571,7 @@ checkTrackDbs(hubList);
 
 slSort(&hubList, hubConnectStatusCmp);
 
-// here's a little form for the add new hub button
+// here's a little invisible form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar("hubUrl", "");
 cgiMakeHiddenVar( hgHubDoFirstDb, "on");
@@ -1730,7 +1580,7 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 cartSaveSession(cart);
 puts("</FORM>");
 
-// this is the form for the connect hub button
+// this is the invisible form for the connect hub button
 printf("<FORM ACTION=\"%s\" NAME=\"connectHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar("hubUrl", "");
 cgiMakeHiddenVar("db", "");
@@ -1739,7 +1589,7 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 cartSaveSession(cart);
 puts("</FORM>");
 
-// this is the form for the disconnect hub button
+// this is the invisible form for the disconnect hub button - it's submitted via javascript
 printf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar("hubId", "");
 cgiMakeHiddenVar(hgHubDoDisconnect, "on");
@@ -1747,104 +1597,51 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 cartSaveSession(cart);
 puts("</FORM>");
 
-// this is the form for the reset hub button
+// this is the invisible form for the reset hub button - it's submitted via javascript
 printf("<FORM ACTION=\"%s\" NAME=\"resetHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar(hgHubCheckUrl, "");
 cartSaveSession(cart);
 puts("</FORM>");
 
-// this is the form for the search hub button
-printf("<FORM ACTION=\"%s\" NAME=\"searchHubForm\">\n",  "../cgi-bin/hgHubConnect");
-cgiMakeHiddenVar(hgHubSearchTerms, "");
-cgiMakeHiddenVar(hgHubDoSearch, "on");
-cgiMakeHiddenVar(hgHubDbFilter, "");
-cartSaveSession(cart);
-puts("</FORM>");
-
-// this is the form for the validate button
-if (doHubDevMode)
-    {
-    printf("<FORM ACTION=\"%s\" NAME=\"validateHubForm\">\n",  "../cgi-bin/hgHubConnect");
-    cgiMakeHiddenVar("validateHubUrl", "");
-    cgiMakeHiddenVar("measureTiming", "");
-    cgiMakeHiddenVar("udcTimeout", "");
-    // allows saving the old url in the search bar but not run hubCheck on it right away
-    // mostly for when you come back to hgHubConnect after just looking at hgTracks
-    cgiMakeHiddenVar(hgHubDoHubCheck, "off");
-    cartSaveSession(cart);
-    puts("</FORM>");
-    }
 
 // ... and now the main form
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", "../cgi-bin/hgGateway");
-cartSaveSession(cart);
 
-// we have two tabs for the public and unlisted hubs
+// we have three tabs for the public and unlisted hubs and hub development
 printf("<div id=\"tabs\">"
        "<ul> <li><a class=\"defaultDesc\" href=\"#publicHubs\">Public Hubs</a></li>"
        "<li><a class=\"defaultDesc\" href=\"#unlistedHubs\">My Hubs</a></li> ");
-if (doHubDevMode) // put up the validate tab if hg.conf statement present
-    printf("<li><a class=\"hubDeveloperDesc\" href=\"#hubDeveloper\">Hub Development</a></li>");
+printf("<li><a class=\"hubDeveloperDesc\" href=\"#hubDeveloper\">Hub Development</a></li>");
 printf("</ul> ");
 
+// The public hubs table is getting big and takes a while to download.
+// Jquery UI's tabs() command will layout the page, but because of
+// jsInlining, it will only be called at the end of the page. This can lead to the page "jumping".
+// To make the inline code run now, let's flush JS inlines.
+// I'm not sure that this makes a visible difference, but it doesn't do any harm either
+jsInlineFinish();
+jsInlineReset();
+
 struct hash *publicHash = hgHubConnectPublic();
+
 hgHubConnectUnlisted(hubList, publicHash);
-if (doHubDevMode)
-    hgHubConnectDeveloperMode();
-// add the event listener for toggling the right description text
-jsInline(
-    "var oldDesc = document.getElementById('description');\n"
-    "var newDesc = document.getElementById('developerModeDescription');\n"
-    "if (location.hash === \"#hubDeveloper\") {\n"
-    "   toggleTwoDivs(newDesc, oldDesc);\n"
-    "}\n"
-    "window.addEventListener('hashchange', function() {\n"
-    "   if (location.hash === \"#hubDeveloper\") {"
-    "       toggleTwoDivs(newDesc, oldDesc);\n"
-    "   } else {\n"
-    "       toggleTwoDivs(oldDesc, newDesc);\n"
-    "   }\n"
-    "});\n"
-    "var plusButton = document.getElementById('advancedSettingsButton');\n"
-    "plusButton.addEventListener('click', function() {\n"
-    "   var advancedSettingsDiv = document.getElementById('extraSettingsContainer');\n"
-    "   var extraSettingsList = document.getElementById('extraSettingsList');\n"
-    "   if (extraSettingsList.style.display != 'none') {\n"
-    "       extraSettingsList.style.display = 'none';\n"
-    "       imgTag = advancedSettingsDiv.getElementsByTagName('img')[0];\n"
-    "       imgTag.src = \"../images/add_sm.gif\";\n"
-    "   } else {\n"
-    "       extraSettingsList.style.display = 'block';\n"
-    "       imgTag = advancedSettingsDiv.getElementsByTagName('img')[0];\n"
-    "       imgTag.src = \"../images/remove_sm.gif\";\n"
-    "   }\n"
-    "});"
-    );
-printf("</div>");
 
-printf("<div class=\"tabFooter\">");
+hgHubConnectDeveloperMode();
 
-printf("<span class=\"small\">"
-    "Contact <a href=\"../contacts.html\">us</A> to add a public hub."
-    "</span>\n");
-printf("</div>");
+printf("</div>"); // #tabs
 
-cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
-
-puts("</FORM>");
-printf("</div>\n");
 
 cartWebEnd();
 }
 
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubDoHubCheck,
-    hgHubCheckUrl, hgHubDoClear, hgHubDoDisconnect,hgHubDoRedirect, hgHubDataText, 
+    hgHubCheckUrl, hgHubDoClear, hgHubDoRefresh, hgHubDoDisconnect,hgHubDoRedirect, hgHubDataText, 
     hgHubConnectRemakeTrackHub, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);

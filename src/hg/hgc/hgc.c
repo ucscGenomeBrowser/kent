@@ -1697,12 +1697,15 @@ if (table)
 return foundFields;
 }
 
+#define TDB_DYNAMICTABLE_SETTING "detailsDynamicTable"
+#define TDB_DYNAMICTABLE_SETTING_2 "extraTableFields"
 void getExtraTableFields(struct trackDb *tdb, struct slName **retFieldNames, struct embeddedTbl **retList, struct hash *embeddedTblHash)
-/* Parse the trackDb field "extraTableFields" into the field names and titles specified,
+/* Parse the trackDb field TDB_DYNAMICTABLE_FIELD into the field names and titles specified,
  * and fill out a hash keyed on the bigBed field name (which may be in an external file
  * and not in the bigBed itself) to a helper struct for storing user defined tables. */
 {
-struct slName *tmp, *embeddedTblSetting = slNameListFromComma(trackDbSetting(tdb, "extraTableFields"));
+struct slName *tmp, *embeddedTblSetting = slNameListFromComma(trackDbSetting(tdb, TDB_DYNAMICTABLE_SETTING));
+struct slName *embeddedTblSetting2 = slNameListFromComma(trackDbSetting(tdb, TDB_DYNAMICTABLE_SETTING_2));
 char *title = NULL, *fieldName = NULL;
 for (tmp = embeddedTblSetting; tmp != NULL; tmp = tmp->next)
     {
@@ -1720,8 +1723,26 @@ for (tmp = embeddedTblSetting; tmp != NULL; tmp = tmp->next)
     slNameAddHead(retFieldNames, fieldName);
     hashAdd(embeddedTblHash, fieldName, new);
     }
+for (tmp = embeddedTblSetting2; tmp != NULL; tmp = tmp->next)
+    {
+    fieldName = cloneString(tmp->name);
+    if (strchr(tmp->name, '|'))
+        {
+        title = strchr(fieldName, '|');
+        *title++ = 0;
+        }
+    struct embeddedTbl *new;
+    AllocVar(new);
+    new->field = fieldName;
+    new->title = title != NULL ? cloneString(title) : fieldName;
+    slAddHead(retList, new);
+    slNameAddHead(retFieldNames, fieldName);
+    hashAdd(embeddedTblHash, fieldName, new);
+    }
 }
 
+#define TDB_STATICTABLE_SETTING "extraDetailsTable"
+#define TDB_STATICTABLE_SETTING_2 "detailsStaticTable"
 int extraFieldsPrintAs(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount, struct asObject *as)
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
@@ -1749,7 +1770,7 @@ if (sepFieldsStr)
 
 // make list of fields that we want to substitute
 // this setting has format description|URLorFilePath, with the stuff before the pipe optional
-char *extraDetailsTableName = NULL, *extraDetails = cloneString(trackDbSetting(tdb, "extraDetailsTable"));
+char *extraDetailsTableName = NULL, *extraDetails = cloneString(trackDbSetting(tdb, TDB_STATICTABLE_SETTING));
 if (extraDetails && strchr(extraDetails,'|'))
     {
     extraDetailsTableName = extraDetails;
@@ -1760,6 +1781,17 @@ struct dyString *extraTblStr = dyStringNew(0);
 struct slName *detailsTableFields = NULL;
 if (extraDetails)
     detailsTableFields = findFieldsInExtraFile(extraDetails, col, extraTblStr);
+char *extraDetails2TableName = NULL, *extraDetails2 = cloneString(trackDbSetting(tdb, TDB_STATICTABLE_SETTING_2));
+if (extraDetails2 && strchr(extraDetails2,'|'))
+    {
+    extraDetails2TableName = extraDetails2;
+    extraDetails2 = strchr(extraDetails2,'|');
+    *extraDetails2++ = 0;
+    }
+struct dyString *extraTbl2Str = dyStringNew(0);
+struct slName *detailsTable2Fields = NULL;
+if (extraDetails2)
+    detailsTable2Fields = findFieldsInExtraFile(extraDetails2, col, extraTbl2Str);
 
 struct hash *embeddedTblHash = hashNew(0);
 struct slName *embeddedTblFields = NULL;
@@ -1798,6 +1830,20 @@ for (;col != NULL && count < fieldCount;col=col->next)
         replaceField[fieldLen+2] = '}';
         replaceField[fieldLen+3] = 0;
         extraTblStr = dyStringSub(extraTblStr->string, replaceField, fields[ix]);
+        continue;
+        }
+
+    // don't print this field if we are gonna print it later in a custom table
+    if (detailsTable2Fields && slNameInList(detailsTable2Fields, fieldName))
+        {
+        int fieldLen = strlen(fieldName);
+        char *replaceField = needMem(fieldLen+4);
+        replaceField[0] = '$';
+        replaceField[1] = '{';
+        strcpy(replaceField+2, fieldName);
+        replaceField[fieldLen+2] = '}';
+        replaceField[fieldLen+3] = 0;
+        extraTbl2Str = dyStringSub(extraTbl2Str->string, replaceField, fields[ix]);
         continue;
         }
 
@@ -1880,6 +1926,10 @@ if (printCount > 0)
 if (detailsTableFields)
     {
     printExtraDetailsTable(tdb->track, extraDetailsTableName, extraDetails, extraTblStr);
+    }
+if (detailsTable2Fields)
+    {
+    printExtraDetailsTable(tdb->track, extraDetails2TableName, extraDetails2, extraTbl2Str);
     }
 
 return printCount;
@@ -25805,7 +25855,7 @@ safef(faNameBuffer, sizeof faNameBuffer, "-fa=%s", faName);
 char *cmd11[] = {"loader/pslToBigPsl", pslName,  faNameBuffer, "stdout", NULL};
 char *cmd12[] = {"sort","-k1,1","-k2,2n", NULL};
 char **cmds1[] = { cmd11, cmd12, NULL};
-struct pipeline *pl = pipelineOpen(cmds1, pipelineWrite, bigPslFile, NULL);
+struct pipeline *pl = pipelineOpen(cmds1, pipelineWrite, bigPslFile, NULL, 0);
 pipelineWait(pl);
 
 char buf[4096];
@@ -25826,7 +25876,7 @@ else
 char udcDir[strlen(udcDefaultDir()) + strlen("-udcDir=") + 1];
 safef(udcDir, sizeof udcDir, "-udcDir=%s", udcDefaultDir());
 char *cmd2[] = {"loader/bedToBigBed","-verbose=0",udcDir,"-extraIndex=name","-sizesIs2Bit", "-tab", "-as=loader/bigPsl.as","-type=bed12+13", bigPslFile, twoBitDir, outputBigBed, NULL};
-pl = pipelineOpen1(cmd2, pipelineRead, NULL, NULL);
+pl = pipelineOpen1(cmd2, pipelineRead, NULL, NULL, 0);
 pipelineWait(pl);
 
 unlink(bigPslFile);

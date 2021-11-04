@@ -546,7 +546,7 @@ safef(geoBuf, sizeof geoBuf, "-g%dx%d", w, h);
 char outputBuf[1024];
 safef(outputBuf, sizeof outputBuf, "-sOutputFile=%s", fileName);
 char *pipeCmd[] = {gsExe, "-sDEVICE=png16m", outputBuf, "-dBATCH","-dNOPAUSE","-q", geoBuf, psName, NULL};
-struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
 sysRet = pipelineWait(pl);
 if (sysRet != 0)
     errAbort("System call returned %d for:\n  %s", sysRet, pipelineDesc(pl));
@@ -605,7 +605,7 @@ safef(geoBuf, sizeof geoBuf, "-g%dx%d ", (int) ceil(width), h);
 char outputBuf[1024];
 safef(outputBuf, sizeof outputBuf, "-sOutputFile=%s", fileName);
 char *pipeCmd[] = {gsExe, "-sDEVICE=pgmraw", outputBuf, "-dBATCH","-dNOPAUSE","-q", geoBuf, psName, NULL};
-struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
 sysRet = pipelineWait(pl);
 
 if (sysRet != 0)

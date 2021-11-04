@@ -14,5 +14,56 @@ tags
 src/htslib/version.h
 *.gcno
 
+.emacs.bak/
+src/hg/pslCDnaFilter/algo.msg
+src/hg/pslCDnaFilter/usage.msg
 
 compiled/
+
+# for those that build kent/bin/
+/bin
+
+# build droppings
+src/hg/hgGateway/hgGateway.html.h
+src/hg/hgPhyloPlace/phyloPlace
+src/isPcr/webPcr/webPcr
+src/utils/pslMap/usage.msg
+src/webBlat/webBlat
+
+# test results
+**/tests/output/
+src/lib/tests/bin/
+
+# other tests output follow conventions
+src/hg/autoDtd/test/chado/out.atree
+src/hg/autoDtd/test/chado/out.dtd
+src/hg/autoDtd/test/chado/out.stats
+src/hg/autoDtd/test/chado/out.tree
+src/hg/autoDtd/test/hotnews/out.atree
+src/hg/autoDtd/test/hotnews/out.dtd
+src/hg/autoDtd/test/hotnews/out.stats
+src/hg/autoDtd/test/hotnews/out.tree
+src/hg/autoDtd/test/shapes/out.atree
+src/hg/autoDtd/test/shapes/out.dtd
+src/hg/autoDtd/test/shapes/out.stats
+src/hg/autoDtd/test/shapes/out.tree
+src/hg/cgilib/tests/bin/
+src/hg/cgilib/tests/udcCache/
+src/hg/liftAcross/tests/testErr.out
+src/hg/liftAcross/tests/testOut.bed
+src/hg/liftAcross/tests/testOutput.gp
+src/hg/sqlToXml/test/visiGeneXml/out.xml
+src/hg/utils/bedMergeAdjacent/tests/output.bed
+src/hg/utils/overlapSelect/usage.msg
+src/utils/bedGeneParts/firstCodingSplice.out
+src/utils/bedGeneParts/firstExon.out
+src/utils/bedGeneParts/introns.out
+src/utils/bedGeneParts/promoter.out
+src/utils/clusterMatrixToBarChartBed/tests/test.output
+src/utils/cpgIslandExt/tests/testOutput.bed.gz
+src/utils/matrixMarketToTsv/tests/out.tsv
+src/utils/pslRemoveFrameShifts/tests/out/
+src/utils/pslScore/tests/NP_149062.tab
+src/utils/pslScore/tests/NP_149062Pl.tab
+src/utils/trackDbIndexBb/tests/out/
+

@@ -22,9 +22,9 @@ GCF_007399415.2_rGopEvg1_v1.p	Goodes thornscrub tortoise
 GCF_016835505.1_ASM1683550v1	gray bichir
 GCF_017639515.1_sCarCar2.pri	great white shark
 GCF_000090745.1_AnoCar2.0	green anole
-GCF_000344595.1_CheMyd_1.0	green sea turtle
+GCF_015237465.2_rCheMyd1.pri.v2	green sea turtle (v2 2021)
 GCF_000935625.1_ASM93562v1	High Himalaya frog
-GCF_009764565.2_rDerCor1.pri.v3	leatherback sea turtle
+GCF_009764565.3_rDerCor1.pri.v4	leatherback sea turtle (v4 2021)
 GCF_900518725.1_TS10Xv2-PRI	mainland tiger snake
 GCF_017654505.1_ASM1765450v1	Mississippi paddlefish
 GCF_013100865.1_CAS_Tse_1.0	red-eared slider turtle
@@ -41,5 +41,6 @@ GCF_901765095.1_aMicUni1.1	tiny Cayenne caecilian
 GCF_000004195.4_UCB_Xtro_10.0	tropical clawed frog
 GCF_901001135.1_aRhiBiv1.1	two-lined caecilian
 GCF_011800845.1_UG_Zviv_1	viviparous/common lizard
-GCF_000241765.3_Chrysemys_picta_bellii-3.0.3	western painted turtle
+GCF_000241765.4_Chrysemys_picta_BioNano-3.0.4	western painted turtle (v304 2020)
 GCF_001642345.1_ASM164234v2	whale shark
+GCF_004010195.1_ASM401019v2	whitespotted bambooshark

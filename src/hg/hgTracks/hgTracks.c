@@ -8059,9 +8059,9 @@ hPrintf("<BR>");
 void printSearchHelpLink()
 /* print the little search help link next to the go button */
 {
-char *url = cfgOption("searchHelpUrl");
-char *label = cfgOptionDefault("searchHelpLabel", "Search Help");
-if (!url)
+char *url = cfgOptionDefault("searchHelpUrl","../goldenPath/help/query.html");
+char *label = cfgOptionDefault("searchHelpLabel", "examples");
+if (!url || isEmpty(url))
     return;
 
 printf("<div id='searchHelp'><a target=_blank title='Documentation on what you can enter into the Genome Browser search box' href='%s'>%s</a></div>", url, label);
@@ -8752,7 +8752,7 @@ if (!hideControls)
 	sprintLongWithCommas(buf, virtWinEnd - virtWinStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
 	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput'"
-                        " size='%d'>\n", multiRegionButtonTop ? 50 : 60);
+                        " size='%d'>\n", multiRegionButtonTop ? 51 : 61);
 	hWrites(" ");
 	hButton("goButton", "go");
 

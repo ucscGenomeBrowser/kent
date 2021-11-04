@@ -1,10 +1,10 @@
 track knownGene
-shortLabel GENCODE V36
-longLabel GENCODE V36
+shortLabel GENCODE V38
+longLabel GENCODE V38
 priority 1
 visibility pack
 type bigGenePred
-bigDataUrl /gbdb/hg38/gencode/gencodeV36.bb
+bigDataUrl /gbdb/hg38/gencode/gencodeV38.bb
 baseColorDefault genomicCodons
 group genes
 isGencode3 on
@@ -12,9 +12,9 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 labelFields geneName,name,geneName2,name2
 defaultLabelFields geneName
 itemRgb on
-#externalDb knownGeneV36
+#externalDb knownGeneV38
 maxItems 50000
-html knownGene
+html knownGeneV38
 searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
@@ -46,6 +46,6 @@ searchTable knownGene
 searchType knownGeneFast
 shortCircuit 1
 searchPriority 1001
-searchTrix /gbdb/hg38/knownGeneFastV36.ix
+searchTrix /gbdb/hg38/knownGeneFastV38.ix
 doPage 1
 

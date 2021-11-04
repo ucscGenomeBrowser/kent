@@ -104,6 +104,7 @@ dbPrefixUrls bigBed bed bigPsl genePred psl
 dbPrefixLabels bigBed bed bigPsl genePred psl
 dbProfile *
 dbTrackType customTracks
+detailsUrls big*
 detailsTabUrls big*
 defaultGeneTracks bed
 defaultLabelFields big*
@@ -139,7 +140,9 @@ expTable bed expRatio
 extTable *
 externalDb bigGenePred
 extraDetailsTable bigBed
+detailsStaticTable bigBed
 extraTableFields bigBed
+detailsDynamicTable bigBed
 fieldCount customTracks
 filePos *
 fileSortOrder *

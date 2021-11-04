@@ -13,3 +13,13 @@
     ln -s /hive/data/genomes/hg38/bed/jaspar/JASPAR2018.bb .
     ln -s /hive/data/genomes/hg38/bed/jaspar/JASPAR2020.bb .
 ###############################################################################
+
+
+# JASPAR 2022 track addition by Daniel 10/11/21
+cd ~/kent/src/hg/makeDb/trackDb
+# trackDb copied in the hg19.txt makeDoc
+cd /hive/data/genomes/hg38/bed/jaspar
+wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2022/JASPAR2022_hg38.bb
+mv JASPAR2022_hg38.bb JASPAR2022.bb
+cd /gbdb/hg38/jaspar
+ln -s /hive/data/genomes/hg38/bed/jaspar/JASPAR2022.bb .

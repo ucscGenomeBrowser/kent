@@ -22,7 +22,7 @@ my $buildDir = shift;
 my $gc5Bw = "$buildDir/bbi/$asmId.gc5Base.bw";
 
 if ( ! -s $gc5Bw ) {
-  printf STDERR "ERROR: can not find CpG masked file:\n\t'%s'\n", $gc5Bw;
+  printf STDERR "ERROR: can not find gc5Base.bw file:\n\t'%s'\n", $gc5Bw;
   exit 255;
 }
 

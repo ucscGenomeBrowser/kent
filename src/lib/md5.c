@@ -36,7 +36,7 @@ char *md5HexForFile(char *fileName)
 {
 /* Calculate md5 using pipeline to unix utility. */
 char *cmd[] = {"md5sum", NULL};
-struct pipeline *pl = pipelineOpen1(cmd, pipelineRead, fileName, NULL);
+struct pipeline *pl = pipelineOpen1(cmd, pipelineRead, fileName, NULL, 0);
 FILE *f = pipelineFile(pl);
 char hex[33];
 mustRead(f, hex, 32);
@@ -50,7 +50,7 @@ char *md5HexForBuf(char *buf, size_t bufSize)
 {
 /* Calculate md5 using pipeline to unix utility. */
 char *cmd[] = {"md5sum", NULL};
-struct pipeline *pl = pipelineOpenMem1(cmd, pipelineRead, buf, bufSize, fileno(stderr));
+struct pipeline *pl = pipelineOpenMem1(cmd, pipelineRead, buf, bufSize, fileno(stderr), 0);
 FILE *f = pipelineFile(pl);
 char hex[33];
 mustRead(f, hex, 32);

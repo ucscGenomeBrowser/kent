@@ -5,7 +5,7 @@ HG_WARN=-Wall
 
 L += -lm ${MYSQLLIBS}
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkhgapcgi.a ${MYLIBDIR}/jkweb.a
 
 A = das
 

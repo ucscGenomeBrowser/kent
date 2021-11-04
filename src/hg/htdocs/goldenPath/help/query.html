@@ -45,7 +45,9 @@ To specify a genome position:</p>
 <p> 
 Note: A query may have multiple results. If this is the case, a results page will appear listing 
 each result along with the track it is associated with. Once selected, the result will be displayed 
-in the Browser with a highlighted tag, making it easier to identify.</p> 
+in the Browser with a highlighted tag, making it easier to identify. Also, if you have further
+questions, you can search the <a href="/FAQ/index.html" target="_blank">Genome Browser FAQ</a>
+page and find links to further resources.</p>
 
 <h2>Sample queries</h2> 
 <p> 
@@ -60,6 +62,18 @@ different types of queries that can be performed.
   <tr>
     <td>chr3:1-1000000</td>
     <td>Displays the first million bases of chromosome 3, counting from the p-arm telomere</td></tr>
+  <tr>
+    <td>3:1-1000000</td>
+    <td>Displays the first million bases of chromosome 3, Ensembl format chromosome names</td></tr>
+  <tr>
+    <td>chr3 0 1000000</td>
+    <td>Displays the first million bases of chromosome 3; BED format</td></tr>
+  <tr>
+    <td>NC_000007.14:1-1000000</td>
+    <td>Displays the first million bases of chromosome 3, RefSeq format</td></tr>
+  <tr>
+    <td>CM000665.2:1-1000000</td>
+    <td>Displays the first million bases of chromosome 3, GenBank/INSDC format</td></tr>
   <tr>
     <td>chr3:1000000+2000</td>
     <td>Displays a region of chromosome 3 that spans 2000 bases, starting with position 1000000</td>
@@ -79,11 +93,7 @@ different types of queries that can be performed.
   <tr>
   <tr>
     <td>GTATGTAGCCACGGAGCACCATTACCTGTCACCATTACCTGAATGGCTA</td>
-    <td>Displays the first best match to this DNA sequence, e.g. chr21:33034835-33034883 for hg19</td>
-  </tr> 
-  <tr>
-    <td>374180</td>
-    <td>Displays the region containing Entrez Gene identifier 374180</td></tr> 
+    <td>Displays the first best match to this DNA sequence, e.g. chr21:33034835-33034883 for hg19</td></tr> 
   <tr>
     <td>AA205474</td>
     <td>Displays the region containing the EST with GenBank accession AA205474 in the BRCA1 cancer 

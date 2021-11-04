@@ -551,7 +551,7 @@ int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int 
 // Returns number of extra fields actually printed.
 
 struct slPair *parseDetailsTablUrls(struct trackDb *tdb);
-/* Parse detailsTabUrls setting string into an slPair list of {offset column name, fileOrUrl} */
+/* Parse detailsUrls setting string into an slPair list of {offset column name, fileOrUrl} */
 
 char *readOneLineMaybeBgzip(char *fileOrUrl, bits64 offset, bits64 len);
 /* If fileOrUrl is bgzip-compressed and indexed, then use htslib's bgzf functions to
