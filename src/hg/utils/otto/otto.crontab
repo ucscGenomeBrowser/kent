@@ -9,9 +9,6 @@ SHELL=/bin/sh
 PATH=/cluster/bin/scripts:/cluster/bin/x86_64:/usr/local/bin:/bin:/usr/bin
 MAILTO=lrnassar@ucsc.edu
 
-#ISCA - Deprecated
-31 4 * * *  /hive/data/outside/otto/isca/iscaWrapper.sh 2>&1
-
 #OMIM
 MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
 17 4 * * *  /hive/data/outside/otto/omim/omimWrapper.sh 2>&1
