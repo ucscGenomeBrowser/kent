@@ -113,16 +113,24 @@ fd_set writefds;
 int err;
 struct timeval tv;
 
-// Set TRUSTED_FIRST for openssl 1.0
-// Fixes common issue openssl 1.0 had with with LetsEncrypt certs in the Fall of 2021.
-X509_STORE_set_flags(SSL_CTX_get_cert_store(ctx), X509_V_FLAG_TRUSTED_FIRST);
 
-// verify peer cert of the server.
-SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
-if (!SSL_CTX_set_default_verify_paths(ctx)) 
+/* TODO checking certificates 
+
+char *certFile = NULL;
+char *certPath = NULL;
+if (certFile || certPath)
     {
-    xerr("SSL set default verify paths failed");
+    SSL_CTX_load_verify_locations(ctx,certFile,certPath);
+#if (OPENSSL_VERSION_NUMBER < 0x0090600fL)
+    SSL_CTX_set_verify_depth(ctx,1);
+#endif
     }
+
+// verify paths and mode.
+
+*/
+
+
 
 // Don't want any retries since we are non-blocking bio now
 // This is available on newer versions of openssl
@@ -272,6 +280,14 @@ while (1)
 	}
     }
 
+
+/* TODO checking certificates 
+
+if (certFile || certPath)
+    if (!check_cert(ssl, host))
+	return -1;
+
+*/
 
 /* we need to wait on both the user's socket and the BIO SSL socket 
  * to see if we need to ferry data from one to the other */
