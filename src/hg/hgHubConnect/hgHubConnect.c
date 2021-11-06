@@ -451,13 +451,13 @@ puts("<FORM ACTION='hgHubConnect#hubDeveloper' METHOD='POST' NAME='debugForm'>")
 char *noCacheLabel = "Inactive, never cache";
 char *timeout = "5";
 char *cacheStatus = "ON";
-char *description = "Do not cache contents at UCSC and always load them from the source server. This means that data access is slower, but you can see the effect of changes to your files immediately on the Genome Browser.";
+char *description = "The current status always caches contents at UCSC. This means that data access is faster, but you cannot see the effect of changes to your files on the Genome Browser for at least 5 minutes.";
 if (cartNonemptyString(cart, "udcTimeout")) 
     {
     noCacheLabel = "Active, always cache";
     timeout = "";
     cacheStatus = "OFF";
-    description = "Always cache contents at UCSC. This means that data access is faster, but you cannot see the effect of changes to your files on the Genome Browser for at least 5 minutes.";
+    description = "The current status does not cache contents at UCSC and always load them from the source server. This means that data access is slower, but you can see the effect of changes to your files immediately on the Genome Browser.";
     }
 printf("<b style='font-size:90%%'>File caching: %s</b> &nbsp;", cacheStatus);
 printf("<button type='submit' name='udcTimeout' value='%s'>Change to: %s</button>", timeout, noCacheLabel);
@@ -468,14 +468,14 @@ puts("For custom tracks, this affects only the remote formats (bigBed, bigWig, t
 // output the measureTiming button
 char *timeLabel = "Show timings";
 char *timeVal = "on";
-char *timeDesc = "Shows loading time in milliseconds for each track, to help debug performance problems.";
-char *timeStatus = "ON";
+char *timeDesc = "Show no timing measurements.";
+char *timeStatus = "OFF";
 if (cartNonemptyString(cart, "measureTiming")) 
     {
         timeLabel = "Hide timings";
         timeVal = "";
-        timeDesc = "Hide timing measurements.";
-        timeStatus = "OFF";
+        timeDesc = "Shows loading time in milliseconds for each track, to help debug performance problems.";
+        timeStatus = "ON";
     }
 
 printf("<b style='font-size:90%%'>Load times: %s</b> &nbsp;", timeStatus);
@@ -1473,7 +1473,9 @@ void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
 cart = theCart;
-measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
+// hgHubConnect's own timing is tied to a special value of measureTiming, since now
+// our users use measureTiming a lot more, we need to keep a special mode for us
+measureTiming = sameString(cartUsualString(cart, "measureTiming", "full"), "full");
 
 if(cgiIsOnWeb())
     checkForGeoMirrorRedirect(cart);
@@ -1516,6 +1518,7 @@ if (cartVarExists(cart, hgHubDoHubCheck))
         "<span class='ui-icon ui-icon-closethick'>close</span></a></div>");
 
     puts("<div id='content' style='margin:10px; padding: 2px'>");
+    jsOnEventByIdF("click", "windowX", "closeIframe()");
     if (isEmpty(hubUrl))
         printf("Please wait, loading and checking hub, this can take 15 seconds to several minutes.");
     else
@@ -1524,7 +1527,6 @@ if (cartVarExists(cart, hgHubDoHubCheck))
         puts("&nbsp;&nbsp;<button id='closeButton'>Close this window</button></p>");
         jsOnEventByIdF("click", "reloadButton", "reloadIframe()");
         jsOnEventByIdF("click", "closeButton", "closeIframe()");
-        jsOnEventByIdF("click", "windowX", "closeIframe()");
 
         printf("<div>Finished checking %s</div>", hubUrl);
         doValidateNewHub(hubUrl);
