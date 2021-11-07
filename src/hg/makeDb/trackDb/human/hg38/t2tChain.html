@@ -13,7 +13,7 @@ predicted to be protein coding."
 </P>
 
 <P>
-This track includes subtracks that show alignments of the human hg38 assembly to the
+This track includes subtracks that show alignments of the human hg38 primary assembly to the
 T2T CHM13 V1.1 assembly. There is one subtrack with all possible "chain" alignments and one
 subtrack with the best alignment per range which can be used for coordinate conversions, 
 using the UCSC "liftOver" tool.</P>
@@ -94,18 +94,10 @@ level above.
 
 <H2>Methods</H2>
 <H3>Chain track</H3>
-<P>
-<B>MarkD - THIS IS NOT TRUE, IS IT?</B> -- 
-Transposons that have been inserted since the human/other
-split were removed from the assemblies. The abbreviated genomes were
-aligned with lastz, and the transposons were added back in.
-The resulting alignments were converted into axt format using the lavToAxt
-program. The axt alignments were fed into axtChain, which organizes all
-alignments between a single human chromosome and a single
-chromosome from the other genome into a group and creates a kd-tree out
-of the gapless subsections (blocks) of the alignments. A dynamic program
-was then run over the kd-trees to find the maximally scoring chains of these
-blocks.
+
+GRCh38 (hg38) primary assembly sequences were aligned with the
+T2T V1.1 assembly using LASTZ.  The primary assembly is
+chromosomes 1-22, X, Y, and the mitochondria.
 
 <P>
 The following lastz matrix was used<BR>for the alignments
@@ -121,9 +113,9 @@ The following lastz matrix was used<BR>for the alignments
 </TABLE>
 
 Chains scoring below a minimum
-score of ??? 'chainMinScore' ?? were discarded; the remaining chains
+score of 5000 were discarded; the remaining chains
 are displayed in this track.  The linear gap matrix used with axtChain:<BR>
-?? chainLinearGap ??
+&quot;loose&quot;.
 
 <H3>Net track</H3>
 <P>
