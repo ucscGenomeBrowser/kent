@@ -14,9 +14,11 @@ predicted to be protein coding."
 
 <P>
 This track includes subtracks that show alignments of the human hg38 primary assembly to the
-T2T CHM13 V1.1 assembly. There is one subtrack with all possible "chain" alignments and one
-subtrack with the best alignment per range which can be used for coordinate conversions, 
-using the UCSC "liftOver" tool.</P>
+T2T CHM13 V1.1 assembly. There is one subtrack with all possible "chain" alignments and two
+filtered, single-coverage subtracks with the best alignment per range, in two slightly different
+display formats (chain and net).  The filtered alignments are typically used
+for annotation coordinate conversions from hg38 to T2T, using the UCSC
+"liftOver" tool.</P>
 
 <P>
 In the context of the UCSC alignment tracks, "chains" are longer alignments
@@ -39,6 +41,8 @@ species.  In cases where multiple chains align over a particular region of
 the other genome, the chains with single-lined gaps are often 
 due to processed pseudogenes, while chains with double-lined gaps are more 
 often due to paralogs and unprocessed pseudogenes.</P> 
+<P>
+
 <P>
 In the "pack" and "full" display
 modes, the individual feature names indicate the chromosome, strand, and
