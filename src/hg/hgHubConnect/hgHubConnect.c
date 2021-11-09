@@ -1475,7 +1475,7 @@ void doMiddle(struct cart *theCart)
 cart = theCart;
 // hgHubConnect's own timing is tied to a special value of measureTiming, since now
 // our users use measureTiming a lot more, we need to keep a special mode for us
-measureTiming = sameString(cartUsualString(cart, "measureTiming", "full"), "full");
+measureTiming = sameString(cartUsualString(cart, "measureTiming", ""), "full");
 
 if(cgiIsOnWeb())
     checkForGeoMirrorRedirect(cart);
