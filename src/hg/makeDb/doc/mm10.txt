@@ -18446,8 +18446,8 @@ TMPDIR=/dev/shm
 ##############################################################################
 
 # JASPAR mouse track addition by Daniel 10/11/21
-tdb
-v mouse/jaspar.ra
+cd ~/kent/src/hg/makeDb/trackDb
+vi mouse/jaspar.ra
 curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/mm10/trackDb.txt >> mouse/jaspar.ra
 cd /hive/data/genomes/mm10/bed
 mkdir jaspar

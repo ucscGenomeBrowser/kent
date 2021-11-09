@@ -34655,7 +34655,7 @@ TMPDIR=/dev/shm
 
 # JASPAR Track integration by Daniel 8/20/21
     cd ~/kent/src/hg/makeDb/trackDb 
-    v human/jaspar.ra 
+    vi human/jaspar.ra 
     curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/hg19/trackDb.txt >> human/jaspar.ra 
     cd /hive/data/genomes/hg19/bed
     mkdir jaspar
@@ -34669,8 +34669,8 @@ TMPDIR=/dev/shm
     cd jaspar
     ln -s /hive/data/genomes/hg19/bed/jaspar/JASPAR2018.bb .
     ln -s /hive/data/genomes/hg19/bed/jaspar/JASPAR2020.bb .
-    tdb
-    v human/jaspar.html  
+    cd ~/kent/src/hg/makeDb/trackDb
+    vi human/jaspar.html  
     curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/JASPAR2018_TFBS_help.html >> human/jaspar.html 
 
 ###############################################################################
@@ -34679,14 +34679,14 @@ TMPDIR=/dev/shm
 
 cd ~/kent/src/hg/makeDb/trackDb
 curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/hg19/trackDb.txt | head -n16 >> human/jaspar.ra
-v human/jaspar.ra
+vi human/jaspar.ra
 cd /hive/data/genomes/hg19/bed/jaspar
 wget http://expdatdbta.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2022/JASPAR2022_hg19.bb
 mv JASPAR2022_hg19.bb JASPAR2022.bb
 cd /gbdb/hg19/jaspar
 ln -s /hive/data/genomes/hg19/bed/jaspar/JASPAR2022.bb .
-tdb
-v human/jaspar.html
+cd ~/kent/src/hg/makeDb/trackDb
+vi human/jaspar.html
 
 
 
