@@ -50,6 +50,214 @@
 </div>
 
 <!-- ============= 2021 archived news ============= -->
+<a name="11XX21"></a>
+<h2>Nov. XX, 2021 &nbsp;&nbsp; Releasing A New Genome Browser Track Group: Single-Cell RNA-seq</h2>
+<p>
+We are excited to release a new Genome Browser track group with single-cell
+RNA-seq (scRNA-seq) datasets for the hg38 assembly. We are starting with 14
+scRNA-seq tracks covering different major organs of the body.</p>
+<p class ="text-center">
+    <img class="text-center" src="../images/newsArchImages/scRNAseq_trackgroup.jpg" width="800px">
+</p>
+<p>
+Each new single-cell track contains anywhere from 2-19 individual mRNA
+expression tracks in <a target="_blank"
+href="https://genome.ucsc.edu/goldenPath/help/barChart.html">barChart</a>
+format. By default, tracks display gene expression per individual cell type
+annotation and are colored according to cell class:</p>
+<table cellpadding="2">
+  <thead>
+  <tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;">Cell Classification</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="background-color: #f0c000; padding-left: 20px"></td>
+      <td>neural</td>
+    </tr>
+    <tr>
+      <td style="background-color: #707070; padding-left: 20px"></td>
+      <td>stem cell</td>
+    </tr>
+    <tr>
+      <td style="background-color: #ff8838; padding-left: 20px"></td>
+      <td>adipose</td>
+    </tr>
+    <tr>
+      <td style="background-color: #b05020; padding-left: 20px"></td>
+      <td>fibroblast</td>
+    </tr>
+        <tr>
+      <td style="background-color: #e02900; padding-left: 20px"></td>
+      <td>myeloid</td>
+    </tr>
+    </tr>
+        <tr>
+      <td style="background-color: #f01111; padding-left: 20px"></td>
+      <td>immune</td>
+    </tr>
+    </tr>
+        <tr>
+      <td style="background-color: #ff334a; padding-left: 20px"></td>
+      <td>lymphoid</td>
+    </tr>
+    </tr>
+        <tr>
+      <td style="background-color: #c000c0; padding-left: 20px"></td>
+      <td>muscle</td>
+    </tr>
+    </tr>
+        <tr>
+      <td style="background-color: #6000b0; padding-left: 20px"></td>
+      <td>hepatocyte</td>
+    </tr>
+    </tr>
+        <tr>
+      <td style="background-color: #0000ff; padding-left: 20px"></td>
+      <td>kidney tubule</td>
+    </tr>
+    </tr>
+        <tr>
+      <td style="background-color: #0050ff; padding-left: 20px"></td>
+      <td>secretory</td>
+    </tr>
+    </tr>
+        <tr>
+      <td style="background-color: #0072d6; padding-left: 20px"></td>
+      <td>ciliated</td>
+    </tr>
+    </tr>
+        <tr>
+      <td style="background-color: #0099c0; padding-left: 20px"></td>
+      <td>epithelial</td>
+    </tr>
+    </tr>
+        <tr>
+      <td style="background-color: #00c000; padding-left: 20px"></td>
+      <td>endothelial</td>
+    </tr>
+    </tr>
+        <tr>
+      <td style="background-color: #80d000; padding-left: 20px"></td>
+      <td>glia</td>
+    </tr>
+  </tbody>
+</table>
+<p>
+When available, expression tracks organized by other categories such as sex,
+donor, sample, detailed cell type, etc. are also included in these container
+tracks.</p>
+<p>
+Clicking on any of the track titles below will lead to the track description
+page, which includes additional information and allows for configuration of
+various display options. <br><br>This release includes the following
+tracks:<br></p>
+<ul>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?&g=bloodHao&position=default">Blood (PBMC) Hao</a>
+- This track displays peripheral blood mononuclear cell expression data from 
+<a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/34062119/">Hao <em>et al.</em>, 2020</a> 
+for 3 levels of cell type annotations, donor, phase, and time.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=colonWang&position=default">Colon Wang</a> 
+- This track shows colon expression data from 
+<a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/31753849/">Wang <em>et al.</em>, 2020</a> 
+grouped by cell type and donor.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=cortexVelmeshev&position=default">Cortex Velmeshev </a> 
+- This track shows cortex expression data from 
+<a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/31097668/">Velmeshev <em>et al.</em>, 2019</a> 
+grouped by cell type, sex, sample, donor, and diagnosis.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=fetalGeneAtlas&position=default">Fetal Gene Atlas</a> 
+- This track shows expression data from 
+<a target="_blank" href="">Cao <em>et al.</em>, 2020</a> 
+binned by cell type and other categories including sex, organ, experiment, donor, etc.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=heartCellAtlas&position=default">Heart Cell Atlas</a> 
+href="/cgi-bin/hgTrackUi?db=hg38&g=heartCellAtlas&position=default">Heart Cell
+Atlas</a> - This track shows heart expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/32971526/">Litvi&#328;ukov&#225 <em>et
+al.</em>, 2020</a> binned by cell type and various categories including cell
+state, sample, region, donor, age, etc.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=ileumWang&position=default">Ileum Wang</a> -
+This track shows ileum expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/31753849/">Wang <em>et al.</em>, 2020</a>
+grouped by cell type and donor.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=kidneyStewart&position=default">Kidney
+Stewart</a> - This track shows kidney expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/31604275/">Stewart <em>et al.</em>,
+2019</a> grouped by cell type, detailed cell type, project, experiment, etc.
+</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=liverMacParland&position=default">Liver
+MacParland</a> - This track shows liver expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/30348985/">MacParland<em>et al.</em>,
+2018</a> grouped by cell type, broad cell type, and donor.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=lungTravaglini2020&position=default">Lung
+Travaglini</a> - This track shows lung expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/33208946/"> Travaglini <em>et al.</em>,
+2020</a> binned by categories such as cell type, sample, donor, compartment,
+etc. using both 10x and Smart-seq2 library preparation methods.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=muscleDeMicheli&position=default">Muscle De
+Micheli</a> - This track shows muscle expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/32624006/">De Micheli <em>et al.</em>,
+2020</a> grouped by cell type and sample.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=pancreasBaron&position=default">Pancreas
+Baron</a> - This track shows pancreas expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/27667365/">Baron <em>et al.</em>, 2016
+</a> grouped by cell type, detailed cell type, donor, and batch.
+</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=placentaVentoTormo&position=default">Placenta
+Vento-Tormo</a> - This track shows placenta and matched decidua and maternal
+PBMCs expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/30429548/"> Vento-Tormo <em>et al.</em>,
+2018</a> grouped by cell type, detailed cell type, stage, etc. using both 10x
+and Smart-seq2 library preparation methods.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=rectumWang&position=default">Rectum Wang</a>
+- This track shows rectum expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/31753849/"> Wang <em>et al.</em>,
+2020</a> grouped by cell type and donor.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=skinSoleBoldo&position=default">Skin
+Sole-Boldo</a> - This track shows skin expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/32327715/"> Sol&#233-Boldo <em>et
+al.</em>, 2020</a> grouped by cell type, cell type with donor’s age, donor, and
+age.</li>
+</ul>
+<p>
+Many of these datasets can also be explored interactively using the 
+<a target="_blank" href="http://cells.ucsc.edu/">UCSC Cell Browser</a>. We are
+interested in bringing more single-cell datasets into the Genome Browser and
+the UCSC Cell Browser as well as the 
+<a target="_blank" href="http://cells.ucsc.edu/">Human Cell Atlas</a> project. 
+If you have data you would like to contribute, check out our 
+<a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSdbr65jBIHwWn3GecJll2RrvxIvzxLikOTIdG17Qzsvs2seig/viewform">
+questionnaire</a>.</p>
+<p>
+We would like to thank the publication authors for making these data available.
+We would also like to thank Jim Kent, Brittney Wick, Luis Nassar, Daniel
+Schmelter, Jairo Navarro, and Gerardo Perez for building and testing these
+tracks.</p>
+
 <a name="2021"></a>
 <a name="102821"></a>
 <h2>
