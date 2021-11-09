@@ -451,6 +451,7 @@ typedef enum _eCfgType
     cfgLollipop =16,
     cfgHic      =17,
     cfgBigDbSnp =19,
+    cfgBigRmsk  =20,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 

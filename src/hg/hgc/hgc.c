@@ -26207,6 +26207,10 @@ else if (startsWith("rmskJoined", table))
     {
     doJRepeat(tdb, item);
     }
+else if (tdb != NULL && startsWith("bigRmsk", tdb->type))
+    {
+    doBigRmskRepeat(tdb, item);
+    }
 else if (startsWith("rmsk", table))
     {
     doHgRepeat(tdb, item);

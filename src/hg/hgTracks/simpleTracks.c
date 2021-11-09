@@ -14123,6 +14123,13 @@ else if (sameWord(type, "bigBarChart"))
     track->isBigBed = TRUE;
     barChartMethods(track);
     }
+else if (sameWord(type, "bigRmsk"))
+    {
+    tdb->canPack = TRUE;
+    track->isBigBed = TRUE;
+    track->mapsSelf = TRUE;
+    bigRmskMethods(track, tdb, wordCount, words);
+    }
 else if (sameWord(type, "bigLolly"))
     {
     tdb->canPack = TRUE;

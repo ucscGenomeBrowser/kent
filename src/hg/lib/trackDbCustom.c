@@ -242,6 +242,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("vcfTabix", s) || sameString("vcf", s) || sameString("pgSnp", s) ||
 		   sameString("narrowPeak", s) || sameString("broadPeak", s) || 
                    sameString("bigLolly", s) || 
+                   sameString("bigRmsk", s) || 
                    sameString("peptideMapping", s) || sameString("barChart", s) ||
                    sameString("interact", s) ||
                    (!startsWithWord("bigWig", s) && startsWith("big", s))
@@ -711,6 +712,8 @@ else if (sameWord("interact", type) || sameWord("bigInteract", type))
     cType = cfgInteract;
 else if (startsWith("bigLolly", type))
     cType = cfgLollipop;
+else if (startsWith("bigRmsk", type))
+    cType = cfgBigRmsk;
 else if (sameWord("bigDbSnp", type))
     cType = cfgBigDbSnp;
 else if(startsWith("longTabix", type))

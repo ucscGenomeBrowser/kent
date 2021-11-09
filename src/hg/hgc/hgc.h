@@ -561,6 +561,7 @@ char *readOneLineMaybeBgzip(char *fileOrUrl, bits64 offset, bits64 len);
 #define NUCCORE_SEARCH "https://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 void doJRepeat (struct trackDb *tdb, char *repeat);
+void doBigRmskRepeat (struct trackDb *tdb, char *repeat);
 /* New RepeatMasker Visualization defined in joinedRmskClick.c */
 
 INLINE char* strOrNbsp(char* val)

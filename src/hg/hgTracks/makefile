@@ -11,7 +11,7 @@ A = hgTracks
 RENDERA = hgRenderTracks
 
 COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrack.o bedGraph.o \
-	bedTrack.o  bigBedTrack.o bigWarn.o bigWigTrack.o \
+	bedTrack.o  bigBedTrack.o bigRmskTrack.o bigWarn.o bigWigTrack.o \
 	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o container.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
 	expRatioTracks.o factorSource.o hgTracks.o interactTrack.o \

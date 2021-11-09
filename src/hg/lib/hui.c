@@ -30,6 +30,7 @@
 #include "hPrint.h"
 #include "fileUi.h"
 #include "bigBed.h"
+#include "bigRmskUi.h"
 #include "bigWig.h"
 #include "regexHelper.h"
 #include "snakeUi.h"
@@ -4517,6 +4518,29 @@ slSort(tdbRefList, trackDbRefCmp);
 return cartPriorities;
 }
 
+void bigRmskCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
+/* UI for the bigRmsk track */
+{
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+boolean showUnalignedExtents = cartUsualBoolean(cart, BIGRMSK_SHOW_UNALIGNED_EXTENTS, BIGRMSK_SHOW_UNALIGNED_EXTENTS_DEFAULT);
+boolean showLabels = cartUsualBoolean(cart, BIGRMSK_SHOW_LABELS, BIGRMSK_SHOW_LABELS_DEFAULT);
+boolean origPackViz = cartUsualBoolean(cart, BIGRMSK_ORIG_PACKVIZ, BIGRMSK_ORIG_PACKVIZ_DEFAULT);
+boolean regexpFilter = cartUsualBoolean(cart, BIGRMSK_REGEXP_FILTER, BIGRMSK_REGEXP_FILTER_DEFAULT);
+char * nameFilter = cartUsualString(cart, BIGRMSK_NAME_FILTER, BIGRMSK_NAME_FILTER_DEFAULT);
+puts("<br>");
+printf("<b>Filter by 'name#class/subclass' field (e.g. '*Alu*' would match 'FRAM#SINE/Alu'):</b> ");
+cgiMakeTextVar(BIGRMSK_NAME_FILTER, cartUsualString(cart, BIGRMSK_NAME_FILTER, nameFilter), 20);
+cgiMakeCheckBox(BIGRMSK_REGEXP_FILTER, regexpFilter);
+puts("&nbsp;<B>regular expression</B></P>");
+cgiMakeCheckBox(BIGRMSK_SHOW_UNALIGNED_EXTENTS, showUnalignedExtents);
+puts("&nbsp;<B>Show unaligned repeat regions</B></P>");
+cgiMakeCheckBox(BIGRMSK_SHOW_LABELS, showLabels);
+puts("&nbsp;<B>Show annotation labels</B></P>");
+cgiMakeCheckBox(BIGRMSK_ORIG_PACKVIZ, origPackViz);
+puts("&nbsp;<B>Display original pack visualization</B></P>");
+cfgEndBox(boxed);
+}
+
 void lollyCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* UI for the wiggle track */
 {
@@ -4754,6 +4778,8 @@ switch(cType)
     case cfgBarChart:   barChartCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgInteract:   interactCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
+    case cfgBigRmsk:    bigRmskCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgLollipop:   lollyCfgUi(db,cart,tdb,prefix,title,boxed);
 			scoreCfgUi(db, cart,tdb,prefix,title,1000,boxed);
