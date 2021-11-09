@@ -1123,6 +1123,10 @@ void mathWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 /* mathWig load and draw methods. */
 
+void bigRmskMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* Set up bigRmsk methods. */
+
 void bigBedMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Set up bigBed methods. */

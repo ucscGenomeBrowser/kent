@@ -2737,6 +2737,15 @@ static struct customFactory bigWigFactory =
 
 /*** Big Bed Factory - for big client-side BED tracks ***/
 
+/* RMH: Added to support track hubs for RepeatMaskerViz track */
+static boolean bigRmskRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigRmsk track */
+{
+return (sameType(type, "bigRmsk"));
+}
+
 static boolean bigLollyRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2959,6 +2968,15 @@ static struct customFactory bigMafFactory =
     NULL,
     "bigMaf",
     bigMafRecognizer,
+    bigBedLoader,
+    };
+
+static struct customFactory bigRmskFactory =
+/* Factory for bigRmsk tracks */
+    {
+    NULL,
+    "bigRmsk",
+    bigRmskRecognizer,
     bigBedLoader,
     };
 
@@ -3556,6 +3574,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &interactFactory);
     slAddTail(&factoryList, &bigInteractFactory);
     slAddTail(&factoryList, &hicFactory);
+    slAddTail(&factoryList, &bigRmskFactory);
     slAddTail(&factoryList, &bigLollyFactory);
     }
 }

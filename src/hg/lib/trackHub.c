@@ -1002,6 +1002,7 @@ else
             }
         else 
             {
+            /* RMH: Added bigRmsk to support RepeatMasker data in bigBed track hub format */
             if (!(startsWithWord("wig", type)||  startsWithWord("bedGraph", type)))
                 {
                 if (!(startsWithWord("bigWig", type) ||
@@ -1019,6 +1020,7 @@ else
                   startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
                   startsWithWord("bigLolly", type) ||
+                  startsWithWord("bigRmsk", type) ||
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bigInteract", type) ||
                   startsWithWord("hic", type) ||
@@ -1401,11 +1403,12 @@ if (relativeUrl != NULL)
         struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
         bbiFileClose(&bbi);
         }
+    /* RMH: Added support for bigRmsk track hub data type */
     else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) ||
                 startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)||
                 startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
                 startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type) ||
-                startsWithWord("bigLolly", type))
+                startsWithWord("bigLolly", type) || startsWithWord("bigRmsk",type))
         {
         /* Just open and close to verify file exists and is correct type. */
         struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);

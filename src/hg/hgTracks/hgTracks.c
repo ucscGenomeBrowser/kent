@@ -4572,6 +4572,7 @@ if (
 || sameWord(type, "bigBarChart")
 || sameWord(type, "interact")
 || sameWord(type, "bigInteract")
+|| sameWord(type, "bigRmsk")
 || sameWord(type, "bigLolly")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
@@ -7377,6 +7378,7 @@ return (startsWith("big", track->tdb->type)
      || startsWithWord("mathWig"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
+     || startsWithWord("bigRmsk", track->tdb->type)
      || startsWithWord("bigLolly", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
      // XX code-review: shouldn't we error abort if the URL is not valid?

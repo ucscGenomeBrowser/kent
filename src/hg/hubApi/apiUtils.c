@@ -349,6 +349,7 @@ if (startsWithWord("bigBarChart", type) ||
     startsWithWord("bigGenePred", type) ||
     startsWithWord("bigInteract", type) ||
     startsWithWord("bigLolly", type) ||
+    startsWithWord("bigRmsk", type) ||
     startsWithWord("bigPsl", type)
    )
     return TRUE;
