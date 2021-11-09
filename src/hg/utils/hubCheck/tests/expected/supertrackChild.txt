@@ -7,4 +7,4 @@ warning: missing description page for track: 'myFirstTrackC'
 warning: missing description page for track: 'mySecondTrackA'
 warning: missing description page for track: 'mySecondTrackB'
 warning: missing description page for track: 'mySecondTrackC'
-warning: missing hub overview descripton page (descriptionUrl setting)
+warning: missing hub overview description page (descriptionUrl setting)

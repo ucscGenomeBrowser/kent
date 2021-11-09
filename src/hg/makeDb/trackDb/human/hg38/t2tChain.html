@@ -13,10 +13,12 @@ predicted to be protein coding."
 </P>
 
 <P>
-This track includes subtracks that show alignments of the human hg38 assembly to the
-T2T CHM13 V1.1 assembly. There is one subtrack with all possible "chain" alignments and one
-subtrack with the best alignment per range which can be used for coordinate conversions, 
-using the UCSC "liftOver" tool.</P>
+This track includes subtracks that show alignments of the human hg38 primary assembly to the
+T2T CHM13 V1.1 assembly. There is one subtrack with all possible "chain" alignments and two
+filtered, single-coverage subtracks with the best alignment per range, in two slightly different
+display formats (chain and net).  The filtered alignments are typically used
+for annotation coordinate conversions from hg38 to T2T, using the UCSC
+"liftOver" tool.</P>
 
 <P>
 In the context of the UCSC alignment tracks, "chains" are longer alignments
@@ -39,6 +41,8 @@ species.  In cases where multiple chains align over a particular region of
 the other genome, the chains with single-lined gaps are often 
 due to processed pseudogenes, while chains with double-lined gaps are more 
 often due to paralogs and unprocessed pseudogenes.</P> 
+<P>
+
 <P>
 In the "pack" and "full" display
 modes, the individual feature names indicate the chromosome, strand, and
@@ -94,18 +98,10 @@ level above.
 
 <H2>Methods</H2>
 <H3>Chain track</H3>
-<P>
-<B>MarkD - THIS IS NOT TRUE, IS IT?</B> -- 
-Transposons that have been inserted since the human/other
-split were removed from the assemblies. The abbreviated genomes were
-aligned with lastz, and the transposons were added back in.
-The resulting alignments were converted into axt format using the lavToAxt
-program. The axt alignments were fed into axtChain, which organizes all
-alignments between a single human chromosome and a single
-chromosome from the other genome into a group and creates a kd-tree out
-of the gapless subsections (blocks) of the alignments. A dynamic program
-was then run over the kd-trees to find the maximally scoring chains of these
-blocks.
+
+GRCh38 (hg38) primary assembly sequences were aligned with the
+T2T V1.1 assembly using LASTZ.  The primary assembly is
+chromosomes 1-22, X, Y, and the mitochondria.
 
 <P>
 The following lastz matrix was used<BR>for the alignments
@@ -121,9 +117,9 @@ The following lastz matrix was used<BR>for the alignments
 </TABLE>
 
 Chains scoring below a minimum
-score of ??? 'chainMinScore' ?? were discarded; the remaining chains
+score of 5000 were discarded; the remaining chains
 are displayed in this track.  The linear gap matrix used with axtChain:<BR>
-?? chainLinearGap ??
+&quot;loose&quot;.
 
 <H3>Net track</H3>
 <P>
@@ -137,10 +133,7 @@ a gap in a higher-scoring chain was placed underneath that chain. The program
 netSyntenic was used to fill in information about the relationship between 
 higher- and lower-level chains, such as whether a lower-level
 chain was syntenic or inverted relative to the higher-level chain. 
-The program netClass was then used to fill in how much of the gaps and chains 
-contained <em>N</em>s (sequencing gaps) in one or both species and how much
-was filled with transposons inserted before and after the two organisms 
-diverged.</P>
+</P>
 
 <H2>Credits</H2>
 This track was created by Mark Diekhans from the T2T 1.1 assembly using software 
@@ -162,7 +155,7 @@ Santa Cruz by Jim Kent with advice from Webb Miller and David Haussler.</P>
 The browser display and database storage of the chains and nets were created
 by Robert Baertsch and Jim Kent.</P>
 <P>
-The chainNet, netSyntenic, and netClass programs were
+The chainNet and netSyntenic programs were
 developed at the University of California
 Santa Cruz by Jim Kent.</P>
 <P>
@@ -182,7 +175,7 @@ Nurk S.
 
 <p>
 <a href="https://github.com/marbl/CHM13" target="_blank">
-T2T CHM13 Github page
+  T2T CHM13 Github page</a>
 </p>
 
 <p>

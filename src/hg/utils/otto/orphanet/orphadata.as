@@ -1,5 +1,5 @@
 table orphadata
-"orphadata (change)"
+"Aggregated Phenotype, Epidemiological, and Rare Disease Gene Relationships from Orphanet"
 (
 string	chrom;		"Reference sequence chromosome or scaffold"
 uint	chromStart;	"Start position of feature on chromosome"
