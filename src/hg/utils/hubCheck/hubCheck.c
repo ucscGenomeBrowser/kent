@@ -44,6 +44,7 @@ errAbort(
   "   -genome=genome        - only check this genome\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                                     Will create this directory if not existing\n"
+  "   -httpsCertCheck=[abort,warn,none] - set the ssl certificate verification mode.\n"
   "   -printMeta            - print the metadata for each track\n"
   "   -cacheTime=N          - set cache refresh time in seconds, default %d\n"
   "   -verbose=2            - output verbosely\n"
@@ -62,6 +63,7 @@ static struct optionSpec options[] = {
    {"test", OPTION_BOOLEAN},
    {"printMeta", OPTION_BOOLEAN},
    {"udcDir", OPTION_STRING},
+   {"httpsCertCheck", OPTION_STRING},
    {"specHost", OPTION_STRING},
    {"cacheTime", OPTION_INT},
    // intentionally undocumented option for hgHubConnect
@@ -1160,6 +1162,20 @@ udcSetCacheTimeout(cacheTime);
 // UDC cache dir: first check for hg.conf setting, then override with command line option if given.
 setUdcCacheDir();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
+
+char *httpsCertCheck = optionVal("httpsCertCheck", NULL);
+if (httpsCertCheck)
+    {
+    if (sameString(httpsCertCheck, "abort") || sameString(httpsCertCheck, "warn") || sameString(httpsCertCheck, "none"))
+	{
+	setenv("https_cert_check", httpsCertCheck, 1);
+	}
+    else
+	{
+	verbose(1, "The value of -httpsCertCheck should be either abort to avoid Man-in-middle attack, warn to warn about failed certs, or none indicating the verify is skipped.");
+	usage();
+	}
+    }
 
 knetUdcInstall();  // make the htslib library use udc
 

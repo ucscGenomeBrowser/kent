@@ -24,6 +24,7 @@
 <h6><a href='#modifying-the-source-code'>Modifying the source code</a></h6>
 <h6><a href='#custom-track-database'>Custom Track Database</a></h6>
 <h6><a href='#debugging-the-cgi-binaries'>Debugging the CGI binaries</a></h6>
+<h6><a href='#https-cert-check'>HTTPS Certificate Verification support</a></h6>
 <h6><a href='#proxy-support'>Proxy support</a></h6>
 <h6><a href='#the-udc-local-cache-directory'>The UDC local cache directory</a></h6>
 <h6><a href='#activating-cram-support-for-the-genome-browser'>Activating CRAM support for the Genome Browser.</a></h6>
@@ -1854,6 +1855,57 @@ FireFox, so after debugging hgTables, you will probably want to add
 <p>
 One thing that does not work with GET is &quot;upload file&quot; inputs.
 </p>
+
+<a name='https-cert-check'></a>
+<h2>HTTPS Certificate Verification support</h2>
+
+<p>
+https.c now has support for verifying website domain certificates.
+Verifying a certificate for a site involves checking that the cert is not expired,
+that the host domain name in the URL matches one of those listed in the certificate,
+that the certificate issuer is known. We use openssl which is a very popular library.
+Self-certified certificates are not allowed, but LETSENCRYPT offers free certs via certbot.
+certbot only works with real domains, IP addresses do not work.
+However, there is a small subset of domains that fail with openssl, even though they work in the browser.
+Use curl as a quick way to confirm that your custom track or hub URL will work with openssl.
+
+hg.conf setting:<br>
+<code>httpsCertCheck=warn</code><br>
+<b>warn</b> is currently the default setting, and other values are <b>abort</b> for security against Man-in-the-middle attacks,
+and <b>none</b> which skips verification entirely.
+
+<pre><code>curl -I https://some-website/somepath</code></pre>
+If you do not see errors with curl, then it will work in the UCSC Genome Browser.
+If your site fails verification with curl or the browser, you can confirm with this.
+<br><br>
+Use online tools such as this one to verify your site's ssl certificate works.
+<pre>
+https://www.ssllabs.com/ssltest/analyze.html?d=somedomain.com&latest
+</pre>
+If it says 
+<pre>
+This server's certificate chain is incomplete.
+</pre>
+then that error can be fixed by changing the website http server configuration so that it does not return a single cert,
+but instead make it return the entire full chain of certificates. Typically this will be 2 or 3 certs, but it could be more.
+You can immediately confirm success if you use curl to read the URL as shown above.
+<br>
+<br>
+Another handy command for checking https certs:
+<pre>
+openssl s_client -trusted_first -connect yourdomain.edu:443 -servername yourdomain.edu -showcerts
+</pre>
+
+
+<p>
+One must add the setting &quot;httpProxy&quot;, &quot;httpsProxy&quot;, &quot;ftpProxy&quot; to hg.conf
+</p>
+
+<pre><code>httpProxy=http://someProxyServer:3128
+httpsProxy=http://someProxyServer:3128
+ftpProxy=ftp://127.0.0.1:2121</code></pre>
+
+
 
 <a name='proxy-support'></a>
 <h2>Proxy support</h2>

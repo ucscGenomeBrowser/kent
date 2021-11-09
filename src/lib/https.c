@@ -48,10 +48,8 @@ struct netConnectHttpsParams
 /* params to pass to thread */
 {
 pthread_t thread;
-char *hostName;
-int port;
-boolean noProxy;
 int sv[2]; /* the pair of socket descriptors */
+BIO *sbio;  // ssl bio
 };
 
 static void xerrno(char *msg)
@@ -92,206 +90,15 @@ struct netConnectHttpsParams *params = threadParam;
 
 pthread_detach(params->thread);  // this thread will never join back with it's progenitor
 
-int fd=0;
-char *proxyUrl = getenv("https_proxy");
-if (params->noProxy)
-    proxyUrl = NULL;
-char *connectHost;
-int connectPort;
-
-BIO *fbio=NULL;  // file descriptor bio
-BIO *sbio=NULL;  // ssl bio
-SSL_CTX *ctx;
-SSL *ssl;
-
-openSslInit();
-
-ctx = SSL_CTX_new(SSLv23_client_method());
-
-fd_set readfds;
-fd_set writefds;
-int err;
-struct timeval tv;
-
-
-/* TODO checking certificates 
-
-char *certFile = NULL;
-char *certPath = NULL;
-if (certFile || certPath)
-    {
-    SSL_CTX_load_verify_locations(ctx,certFile,certPath);
-#if (OPENSSL_VERSION_NUMBER < 0x0090600fL)
-    SSL_CTX_set_verify_depth(ctx,1);
-#endif
-    }
-
-// verify paths and mode.
-
-*/
-
-
-
-// Don't want any retries since we are non-blocking bio now
-// This is available on newer versions of openssl
-//SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
-
-// Support for Http Proxy
-struct netParsedUrl pxy;
-if (proxyUrl)
-    {
-    netParseUrl(proxyUrl, &pxy);
-    if (!sameString(pxy.protocol, "http"))
-	{
-	char s[256];	
-	safef(s, sizeof s, "Unknown proxy protocol %s in %s. Should be http.", pxy.protocol, proxyUrl);
-	xerr(s);
-	goto cleanup;
-	}
-    connectHost = pxy.host;
-    connectPort = atoi(pxy.port);
-    }
-else
-    {
-    connectHost = params->hostName;
-    connectPort = params->port;
-    }
-fd = netConnect(connectHost,connectPort);
-if (fd == -1)
-    {
-    xerr("netConnect() failed");
-    goto cleanup;
-    }
-
-if (proxyUrl)
-    {
-    char *logProxy = getenv("log_proxy");
-    if (sameOk(logProxy,"on"))
-	verbose(1, "CONNECT %s:%d HTTP/1.0 via %s:%d\n", params->hostName, params->port, connectHost,connectPort);
-    struct dyString *dy = newDyString(512);
-    dyStringPrintf(dy, "CONNECT %s:%d HTTP/1.0\r\n", params->hostName, params->port);
-    setAuthorization(pxy, "Proxy-Authorization", dy);
-    dyStringAppend(dy, "\r\n");
-    mustWriteFd(fd, dy->string, dy->stringSize);
-    dyStringFree(&dy);
-    // verify response
-    char *newUrl = NULL;
-    boolean success = netSkipHttpHeaderLinesWithRedirect(fd, proxyUrl, &newUrl);
-    if (!success) 
-	{
-	xerr("proxy server response failed");
-	goto cleanup;
-	}
-    if (newUrl) /* no redirects */
-	{
-	xerr("proxy server response should not be a redirect");
-	goto cleanup;
-	}
-    }
-
-
-fbio=BIO_new_socket(fd,BIO_NOCLOSE);  
-// BIO_NOCLOSE because we handle closing fd ourselves.
-if (fbio == NULL)
-    {
-    xerr("BIO_new_socket() failed");
-    goto cleanup;
-    }
-sbio = BIO_new_ssl(ctx, 1);
-if (sbio == NULL) 
-    {
-    xerr("BIO_new_ssl() failed");
-    goto cleanup;
-    }
-sbio = BIO_push(sbio, fbio);
-BIO_get_ssl(sbio, &ssl);
-if(!ssl) 
-    {
-    xerr("Can't locate SSL pointer");
-    goto cleanup;
-    }
-
-
-/* 
-Server Name Indication (SNI)
-Required to complete tls ssl negotiation for systems which house multiple domains. (SNI)
-This is common when serving HTTPS requests with a wildcard certificate (*.domain.tld).
-This line will allow the ssl connection to send the hostname at tls negotiation time.
-It tells the remote server which hostname the client is connecting to.
-The hostname must not be an IP address.
-*/ 
-if (!isIpv4Address(params->hostName) && !isIpv6Address(params->hostName))
-    SSL_set_tlsext_host_name(ssl,params->hostName);
-
-BIO_set_nbio(sbio, 1);     /* non-blocking mode */
-
-while (1) 
-    {
-    if (BIO_do_handshake(sbio) == 1) 
-	{
-	break;  /* Connected */
-	}
-    if (! BIO_should_retry(sbio)) 
-	{
-	xerr("BIO_do_handshake() failed");
-	char s[256];	
-	safef(s, sizeof s, "SSL error: %s", ERR_reason_error_string(ERR_get_error()));
-	xerr(s);
-	goto cleanup;
-	}
-
-    fd = BIO_get_fd(sbio, NULL);
-    if (fd == -1) 
-	{
-	xerr("unable to get BIO descriptor");
-	goto cleanup;
-	}
-    FD_ZERO(&readfds);
-    FD_ZERO(&writefds);
-    if (BIO_should_read(sbio)) 
-	{
-	FD_SET(fd, &readfds);
-	}
-    else if (BIO_should_write(sbio)) 
-	{
-	FD_SET(fd, &writefds);
-	}
-    else 
-	{  /* BIO_should_io_special() */
-	FD_SET(fd, &readfds);
-	FD_SET(fd, &writefds);
-	}
-    tv.tv_sec = (long) (DEFAULTCONNECTTIMEOUTMSEC/1000);  // timeout default 10 seconds
-    tv.tv_usec = (long) (((DEFAULTCONNECTTIMEOUTMSEC/1000)-tv.tv_sec)*1000000);
-
-    err = select(fd + 1, &readfds, &writefds, NULL, &tv);
-    if (err < 0) 
-	{
-	xerr("select() error");
-	goto cleanup;
-	}
-
-    if (err == 0) 
-	{
-	char s[256];	
-	safef(s, sizeof s, "connection timeout to %s", params->hostName);
-	xerr(s);
-	goto cleanup;
-	}
-    }
-
-
-/* TODO checking certificates 
-
-if (certFile || certPath)
-    if (!check_cert(ssl, host))
-	return -1;
-
-*/
 
 /* we need to wait on both the user's socket and the BIO SSL socket 
  * to see if we need to ferry data from one to the other */
 
+fd_set readfds;
+fd_set writefds;
+
+struct timeval tv;
+int err;
 
 char sbuf[32768];  // socket buffer sv[1] to user
 char bbuf[32768];  // bio buffer
@@ -299,12 +106,13 @@ int srd = 0;
 int swt = 0;
 int brd = 0;
 int bwt = 0;
+int fd = 0;
 while (1) 
     {
 
     // Do NOT move this outside the while loop. 
     /* Get underlying file descriptor, needed for select call */
-    fd = BIO_get_fd(sbio, NULL);
+    fd = BIO_get_fd(params->sbio, NULL);
     if (fd == -1) 
 	{
 	xerr("BIO doesn't seem to be initialized in https, unable to get descriptor.");
@@ -358,10 +166,10 @@ while (1)
 
 	if (FD_ISSET(fd, &writefds))
 	    {
-	    int swtx = BIO_write(sbio, sbuf+swt, srd-swt);
+	    int swtx = BIO_write(params->sbio, sbuf+swt, srd-swt);
 	    if (swtx <= 0)
 		{
-		if (!BIO_should_write(sbio))
+		if (!BIO_should_write(params->sbio))
 		    {
 		    ERR_print_errors_fp(stderr);
 		    xerr("Error writing SSL connection");
@@ -382,11 +190,11 @@ while (1)
 	if (FD_ISSET(fd, &readfds))
 	    {
 	    bwt = 0;
-	    brd = BIO_read(sbio, bbuf, 32768);
+	    brd = BIO_read(params->sbio, bbuf, 32768);
 
 	    if (brd <= 0)
 		{
-		if (BIO_should_read(sbio))
+		if (BIO_should_read(params->sbio))
 		    {
 		    brd = 0;
 		    continue;
@@ -448,26 +256,283 @@ while (1)
 
 cleanup:
 
-BIO_free_all(sbio);  // will free entire chain of bios
+
+BIO_free_all(params->sbio);  // will free entire chain of bios
 close(fd);     // Needed because we use BIO_NOCLOSE above. Someday might want to re-use a connection.
 close(params->sv[1]);  /* we are done with it */
 
 return NULL;
 }
 
+
+static int verify_callback(int preverify_ok, X509_STORE_CTX *ctx)
+{
+char    buf[256];
+X509   *cert;
+int     err, depth;
+
+cert = X509_STORE_CTX_get_current_cert(ctx);
+err = X509_STORE_CTX_get_error(ctx);
+depth = X509_STORE_CTX_get_error_depth(ctx);
+
+/*
+* Retrieve the pointer to the SSL of the connection currently treated
+* and the application specific data stored into the SSL object.
+*/
+
+X509_NAME_oneline(X509_get_subject_name(cert), buf, 256);
+
+/*
+* Catch a too long certificate chain. The depth limit set using
+* SSL_CTX_set_verify_depth() is by purpose set to "limit+1" so
+* that whenever the "depth>verify_depth" condition is met, we
+* have violated the limit and want to log this error condition.
+* We must do it here, because the CHAIN_TOO_LONG error would not
+* be found explicitly; only errors introduced by cutting off the
+* additional certificates would be logged.
+*/
+if (depth > atoi(getenv("https_cert_check_depth")))
+    {
+    preverify_ok = 0;
+    err = X509_V_ERR_CERT_CHAIN_TOO_LONG;
+    X509_STORE_CTX_set_error(ctx, err);
+    }
+if (sameString(getenv("https_cert_check_verbose"), "on"))
+    {
+    fprintf(stderr,"depth=%d:%s\n", depth, buf);
+    }
+if (!preverify_ok) 
+    {
+    if (getenv("SCRIPT_NAME"))  // CGI mode
+	{
+	fprintf(stderr, "verify error:num=%d:%s:depth=%d:%s\n", err,
+	    X509_verify_cert_error_string(err), depth, buf);
+	}
+    char *cn = strstr(buf, "/CN=");
+    if (cn) cn+=4;  // strlen /CN=
+    warn("%s on %s", X509_verify_cert_error_string(err), cn);
+    }
+/*
+* At this point, err contains the last verification error. We can use
+* it for something special
+*/
+if (!preverify_ok && (err == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT))
+    {
+    X509_NAME_oneline(X509_get_issuer_name(ctx->current_cert), buf, 256);
+    fprintf(stderr, "issuer= %s\n", buf);
+    }
+if (sameString(getenv("https_cert_check"), "warn"))
+    return 1;
+else
+    return preverify_ok;
+}
+
+
 int netConnectHttps(char *hostName, int port, boolean noProxy)
 /* Return socket for https connection with server or -1 if error. */
 {
 
-fflush(stdin);
-fflush(stdout);
-fflush(stderr);
+int fd=0;
+
+// https_cert_check env var can be abort warn or none.
+
+setenv("https_cert_check", "warn", 0);      // DEFAULT certificate check is warn.
+
+setenv("https_cert_check_depth", "9", 0);   // DEFAULT level is warn.
+
+setenv("https_cert_check_verbose", "off", 0);   // DEFAULT level is warn.
+
+char *proxyUrl = getenv("https_proxy");
+
+if (noProxy)
+    proxyUrl = NULL;
+char *connectHost;
+int connectPort;
+
+BIO *fbio=NULL;  // file descriptor bio
+BIO *sbio=NULL;  // ssl bio
+SSL_CTX *ctx;
+SSL *ssl;
+
+openSslInit();
+
+ctx = SSL_CTX_new(SSLv23_client_method());
+
+fd_set readfds;
+fd_set writefds;
+int err;
+struct timeval tv;
+
+if (!sameString(getenv("https_cert_check"), "none"))
+    {
+
+    // Set TRUSTED_FIRST for openssl 1.0
+    // Fixes common issue openssl 1.0 had with with LetsEncrypt certs in the Fall of 2021.
+    X509_STORE_set_flags(SSL_CTX_get_cert_store(ctx), X509_V_FLAG_TRUSTED_FIRST);
+
+    // verify peer cert of the server.
+
+    // verify_callback gets called once per certificate returned by the server.
+    SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, verify_callback);  // DEBUG REMOVE
+
+    /*
+     * Let the verify_callback catch the verify_depth error so that we get
+     * an appropriate error in the logfile.
+     */
+    SSL_CTX_set_verify_depth(ctx, atoi(getenv("https_cert_check_depth")) + 1);
+
+    // VITAL FOR PROPER VERIFICATION OF CERTS
+    if (!SSL_CTX_set_default_verify_paths(ctx)) 
+	{
+	warn("SSL set default verify paths failed");
+	}
+    }
+
+// Don't want any retries since we are non-blocking bio now
+// This is available on newer versions of openssl
+//SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
+
+
+// Support for Http Proxy
+struct netParsedUrl pxy;
+if (proxyUrl)
+    {
+    netParseUrl(proxyUrl, &pxy);
+    if (!sameString(pxy.protocol, "http"))
+	{
+	warn("Unknown proxy protocol %s in %s. Should be http.", pxy.protocol, proxyUrl);
+	goto cleanup2;
+	}
+    connectHost = pxy.host;
+    connectPort = atoi(pxy.port);
+    }
+else
+    {
+    connectHost = hostName;
+    connectPort = port;
+    }
+fd = netConnect(connectHost,connectPort);
+if (fd == -1)
+    {
+    warn("netConnect() failed");
+    goto cleanup2;
+    }
+
+if (proxyUrl)
+    {
+    char *logProxy = getenv("log_proxy");
+    if (sameOk(logProxy,"on"))
+	verbose(1, "CONNECT %s:%d HTTP/1.0 via %s:%d\n", hostName, port, connectHost,connectPort);
+    struct dyString *dy = newDyString(512);
+    dyStringPrintf(dy, "CONNECT %s:%d HTTP/1.0\r\n", hostName, port);
+    setAuthorization(pxy, "Proxy-Authorization", dy);
+    dyStringAppend(dy, "\r\n");
+    mustWriteFd(fd, dy->string, dy->stringSize);
+    dyStringFree(&dy);
+    // verify response
+    char *newUrl = NULL;
+    boolean success = netSkipHttpHeaderLinesWithRedirect(fd, proxyUrl, &newUrl);
+    if (!success) 
+	{
+	warn("proxy server response failed");
+	goto cleanup2;
+	}
+    if (newUrl) /* no redirects */
+	{
+	warn("proxy server response should not be a redirect");
+	goto cleanup2;
+	}
+    }
+
+fbio=BIO_new_socket(fd,BIO_NOCLOSE);  
+// BIO_NOCLOSE because we handle closing fd ourselves.
+if (fbio == NULL)
+    {
+    warn("BIO_new_socket() failed");
+    goto cleanup2;
+    }
+sbio = BIO_new_ssl(ctx, 1);
+if (sbio == NULL) 
+    {
+    warn("BIO_new_ssl() failed");
+    goto cleanup2;
+    }
+sbio = BIO_push(sbio, fbio);
+BIO_get_ssl(sbio, &ssl);
+if(!ssl) 
+    {
+    warn("Can't locate SSL pointer");
+    goto cleanup2;
+    }
+
+
+/* 
+Server Name Indication (SNI)
+Required to complete tls ssl negotiation for systems which house multiple domains. (SNI)
+This is common when serving HTTPS requests with a wildcard certificate (*.domain.tld).
+This line will allow the ssl connection to send the hostname at tls negotiation time.
+It tells the remote server which hostname the client is connecting to.
+The hostname must not be an IP address.
+*/ 
+if (!isIpv4Address(hostName) && !isIpv6Address(hostName))
+    SSL_set_tlsext_host_name(ssl,hostName);
+
+BIO_set_nbio(sbio, 1);     /* non-blocking mode */
+
+while (1) 
+    {
+    if (BIO_do_handshake(sbio) == 1) 
+	{
+	break;  /* Connected */
+	}
+    if (! BIO_should_retry(sbio)) 
+	{
+	//BIO_do_handshake() failed
+	warn("SSL error: %s", ERR_reason_error_string(ERR_get_error()));
+	goto cleanup2;
+	}
+
+    fd = BIO_get_fd(sbio, NULL);
+    if (fd == -1) 
+	{
+	warn("unable to get BIO descriptor");
+	goto cleanup2;
+	}
+    FD_ZERO(&readfds);
+    FD_ZERO(&writefds);
+    if (BIO_should_read(sbio)) 
+	{
+	FD_SET(fd, &readfds);
+	}
+    else if (BIO_should_write(sbio)) 
+	{
+	FD_SET(fd, &writefds);
+	}
+    else 
+	{  /* BIO_should_io_special() */
+	FD_SET(fd, &readfds);
+	FD_SET(fd, &writefds);
+	}
+    tv.tv_sec = (long) (DEFAULTCONNECTTIMEOUTMSEC/1000);  // timeout default 10 seconds
+    tv.tv_usec = (long) (((DEFAULTCONNECTTIMEOUTMSEC/1000)-tv.tv_sec)*1000000);
+
+    err = select(fd + 1, &readfds, &writefds, NULL, &tv);
+    if (err < 0) 
+	{
+	warn("select() error");
+	goto cleanup2;
+	}
+
+    if (err == 0) 
+	{
+	warn("connection timeout to %s", hostName);
+	goto cleanup2;
+	}
+    }
 
 struct netConnectHttpsParams *params;
 AllocVar(params);
-params->hostName = cloneString(hostName);
-params->port = port;
-params->noProxy = noProxy;
+params->sbio = sbio;
 
 socketpair(AF_UNIX, SOCK_STREAM, 0, params->sv);
 
@@ -482,9 +547,18 @@ if (rc)
     errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
     }
 
+return params->sv[0];
+
 /* parent */
 
-return params->sv[0];
+cleanup2:
+
+if (sbio)
+    BIO_free_all(sbio);  // will free entire chain of bios
+if (fd != -1)
+    close(fd);  // Needed because we use BIO_NOCLOSE above. Someday might want to re-use a connection.
+
+return -1;
 
 }
 

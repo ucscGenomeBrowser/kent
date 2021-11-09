@@ -1326,6 +1326,7 @@ int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *o
  * library. optionalHeader may be NULL or contain additional header
  * lines such as cookie info. 
  * Proxy support via hg.conf httpProxy or env var http_proxy
+ * Cert verification control via hg.conf httpsCertCheck or env var https_cert_check
  * Return data socket, or -1 if error.*/
 {
 struct netParsedUrl npu;

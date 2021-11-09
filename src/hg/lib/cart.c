@@ -2264,6 +2264,19 @@ struct cart *cartForSession(char *cookieName, char **exclude,
 /* Most cgis call this routine */
 if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
     initSigHandlers(hDumpStackEnabled());
+
+/* HTTPS SSL Cert Checking Settings */
+char *httpsCertCheck = cfgOption("httpsCertCheck");  
+if (httpsCertCheck)
+    setenv("https_cert_check", httpsCertCheck, TRUE);
+char *httpsCertCheckVerbose = cfgOption("httpsCertCheckVerbose");  
+if (httpsCertCheckVerbose)
+    setenv("https_cert_check_verbose", httpsCertCheckVerbose, TRUE);
+char *httpsCertCheckDepth = cfgOption("httpsCertCheckDepth");  
+if (httpsCertCheckDepth)
+    setenv("https_cert_check_depth", httpsCertCheckDepth, TRUE);
+
+
 /* Proxy Settings 
  * net.c cannot see the cart, pass the value through env var */
 char *httpProxy = cfgOption("httpProxy");  
