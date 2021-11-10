@@ -36,7 +36,7 @@ buildDbTrix() {
     local tmpFile3=`mktemp`;
     makeTrackIndex $db $metaDbName $cvRaPath > $tmpFile;
     if test -s $tmpFile; then
-        ixIxx $tmpFile $tmpFile2 $tmpFile3
+        ixIxx -maxWordLength=64 $tmpFile $tmpFile2 $tmpFile3
 	chmod 664  $tmpFile2 $tmpFile3
 	rsync -a $tmpFile2 $outMachine:$outPath/${db}_${trixName}.ix
 	rsync -a $tmpFile3 $outMachine:$outPath/${db}_${trixName}.ixx
