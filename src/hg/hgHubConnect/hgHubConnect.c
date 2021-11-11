@@ -274,7 +274,7 @@ puts("<p>Enter hub URLs below to connect hubs. Hubs connected this way are not a
         "<a href=\"/cgi-bin/hgSession\" style='color:#121E9A' target=_blank>My Sessions</a> (<b>My Data</b> > <b>My Sessions</b>). "
         "The resulting stable link can be added to publications and shared freely. You, as the author, "
         "also have the power to update the session contents freely. "
-        "Alternatively, you may <a href=\"http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html#Sharing\" "
+        "Alternatively, you may <a href=\"/goldenPath/help/hgTrackHubHelp.html#Sharing\" "
         "style='color:#121E9A' target=_blank>build a link with the hub URL</a> to allow users to retain their browser "
         "configuration, connected hubs, and custom tracks.</p>"
         "</p>"
