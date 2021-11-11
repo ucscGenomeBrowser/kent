@@ -76,8 +76,6 @@ if [ -s $ottoDir/$prevDate/cladeToName ]; then
         -l \
         -i gisaidAndPublic.$today.masked.pb \
         -M $scriptDir/nextstrain.clade-mutations.tsv \
-        -c $ottoDir/$prevDate/cladeToName \
-        -f 0.95 \
         -D details.nextclade \
         -o gisaidAndPublic.$today.masked.nextclade.pb \
         >& annotate.nextclade
