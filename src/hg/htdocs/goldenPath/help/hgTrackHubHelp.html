@@ -658,14 +658,22 @@ utility periodically checks the time stamps on the hub files, and downloads them
 have a time stamp newer than the UCSC one. For performance reasons, UCSC checks the time stamps
 every 300 seconds, which can result in a 5-minute delay between the time a hub file is updated and
 the change appears on the Genome Browser. Hub providers can work around this delay by inserting the
-CGI variable <em><strong>udcTimeout=1</strong></em> into the Genome Browser URL, which will reduce
-the delay to one second. To add this variable, open the Genome Browser tracks page and zoom or
+CGI variable <em><strong>udcTimeout=5</strong></em> into the Genome Browser URL, which will reduce
+the delay to five seconds. To add this variable, open the Genome Browser tracks page and zoom or
 scroll the image to display a full browser URL in which the CGI variables visible. Insert the CGI
 variable just after the &quot;hgTracks&quot; portion of the URL so that it reads
-<em>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>udcTimeout=1&</b></em> (with the remainder of the URL
+<em>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>udcTimeout=5&</b></em> (with the remainder of the URL
 following the ampersand). To restore the default timeout, a warning message will appear on hgTracks
 with a link to clear the udcTimeout variable.</p>
-
+<h4>I used udcTimeout, why is it still not updating?</h4>
+<p>
+Browser software attempts to speed performance by reading the trackDb architecture into
+a separate cache. This software assumes that the timestamp on a file like a hub's trackDb.txt should
+always be increasing in time and never decreasing (i.e., a new update to the file should not have
+an earlier timestamp). We did discover that if someone were to copy an older file (say with
+<code>cp -p</code> to preserve file timestamp), for example to restore a trackDb.txt to an earlier
+version, they might get stuck with a hub that is not updating. To resolve this specific problem the
+person would only need to edit or touch the file and give it a new timestamp.</p>
 <a name="validate"></a>
 <h3>Check hub settings using Hub Development tool</h3>
 <p>
