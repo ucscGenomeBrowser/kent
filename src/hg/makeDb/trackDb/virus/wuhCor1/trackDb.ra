@@ -525,7 +525,7 @@ compositeTrack on
 type bigBed
 skipEmptyFields on
 group map
-dataVersion v4 (2020-12-22)
+dataVersion v8 (2021-10-27)
 release alpha
 
     track problematicSitesMask
