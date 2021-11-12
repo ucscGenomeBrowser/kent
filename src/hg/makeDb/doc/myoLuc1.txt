@@ -1,6 +1,9 @@
 # for emacs: -*- mode: sh; -*-
 
 # microbat (  Myotis lucifugus )
+
+# NOTE: "microbat" is not the ncorrect common name, it is "Little brown bat"
+
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-07-11)
     ssh kkstore05
@@ -200,3 +203,19 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/myoLuc1/bed/ensGene.51
 
 ############################################################################
+# 2021-11-11 Fix common name (2021-11-11 markd)
+
+# It was discovered that "microbat" is not is a common name, but a suborder
+# of Microchiroptera consisting of ~1000 bat species.  The correct 
+# common name for Myotis lucifugus is "Little brown bat"
+
+hgsql -e 'update dbDb set organism="Little brown bat" where name="myoLuc1";' hgcentraltest
+
+hgsql -e 'update dbDb set genome="Little brown bat" where name="myoLuc1";' hgcentraltest
+
+hgsql -e 'update genomeClade set genome="Little brown bat" where genome="Microbat";' hgcentraltest
+
+hgsql -e 'update defaultDb set genome="Little brown bat" where name="myoLuc1";' hgcentraltest
+
+
+#########################################################################

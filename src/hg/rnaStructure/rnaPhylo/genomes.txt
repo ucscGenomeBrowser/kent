@@ -111,7 +111,7 @@ speTri1	Squirrel
 ochPri2	Pika
 vicPac1	Alpaca
 turTru1	Dolphin
-myoLuc1	Microbat
+myoLuc1	Little brown bat
 pteVam1	Megabat
 loxAfr2	Elephant
 proCap1	Rock hyrax
