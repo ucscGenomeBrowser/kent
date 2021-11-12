@@ -21,6 +21,7 @@
 #define SPECIES_HTML_TARGET	"sT"
 #define SPECIES_CODON_DEFAULT	"speciesCodonDefault"
 #define SPECIES_USE_FILE        "speciesUseFile"
+#define SPECIES_LABELS          "speciesLabels"
 #define PAIRWISE_VAR            "pairwise"
 #define PAIRWISE_HEIGHT         "pairwiseHeight"
 #define SUMMARY_VAR             "summary"
@@ -102,5 +103,8 @@ struct consWiggle *consWiggleFind(char *db,struct trackDb *parent,char *table);
 
 struct mafAli *bigMafLoadInRegion( struct bbiFile *bbi, char *chrom, int start, int end);
 /* Read in MAF blocks from bigBed. */
+
+struct hash *mafGetLabelHash(struct trackDb *tdb);
+/* Get mapping of sequence name to label. */
 
 #endif//ndef HGMAF_H

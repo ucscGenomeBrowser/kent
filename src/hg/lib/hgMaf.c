@@ -486,3 +486,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 slReverse(&mafList);
 return mafList;
 }
+
+struct hash *mafGetLabelHash(struct trackDb *tdb)
+/* Get mapping of sequence name to label. */
+{
+char *labels = trackDbSetting(tdb, SPECIES_LABELS);
+struct hash *labelHash = NULL;
+
+if (labels)
+    labelHash = hashFromString(labels);
+
+return labelHash;
+}
+
