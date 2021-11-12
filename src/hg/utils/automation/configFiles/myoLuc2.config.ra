@@ -3,7 +3,7 @@ db myoLuc2
 clade mammal
 genomeCladePriority 35
 scientificName Myotis lucifugus
-commonName Microbat
+commonName Little brown bat
 assemblyDate Jul. 2010
 assemblyLabel  Broad Institute (NCBI Project ID: 16951, Accession: GCA_000147115.1)
 assemblyShortLabel  Broad Institute Myoluc2.0
