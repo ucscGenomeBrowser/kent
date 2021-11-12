@@ -4196,7 +4196,11 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * Also make sure settingsHash is set up. */
     lf = cpp->fileStack;
     char *dataUrl = NULL;
-    if (lf->fileName && (
+    if (lf->fileName && (startsWith("s3://" , lf->fileName)))
+        errAbort("The browser does not support Amazon s3 URIs.  Please use http/https/ftp.");
+    else if (lf->fileName && (startsWith("gs://" , lf->fileName)))
+        errAbort("The browser does not support Google URIs.  Please use http/https/ftp.");
+    else if (lf->fileName && (
             startsWith("http://" , lf->fileName) ||
             startsWith("https://", lf->fileName) ||
             startsWith("ftp://"  , lf->fileName)
