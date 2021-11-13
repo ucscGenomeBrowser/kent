@@ -37,6 +37,7 @@
 ./runBuild GCA_008658365.1 GCA_008658365.1_bAlcTor1_primary birds Alca_torda
 ./runBuild GCA_008658375.1 GCA_008658375.1_mBalMus1_alternate mammals Balaenoptera_musculus
 ./runBuild GCA_008692045.1 GCA_008692045.1_mPhoSin1.alt mammals Phocoena_sinus
+./runBuild GCA_008746955.1 GCA_008746955.1_CAU_Wild1.0 birds Anas_platyrhynchos
 ./runBuild GCA_008822115.3 GCA_008822115.3_bTaeGut2.mat.v3 birds Taeniopygia_guttata
 ./runBuild GCA_008822125.1 GCA_008822125.1_bTaeGut2pat birds Taeniopygia_guttata
 ./runBuild GCA_009651025.1 GCA_009651025.1_bCorMon1.alt birds Corvus_moneduloides
@@ -152,6 +153,7 @@
 ./runBuild GCA_901001175.1 GCA_901001175.1_aRhiBiv1.1_alternate_haplotype vertebrate Rhinatrema_bivittatum
 ./runBuild GCA_901343595.1 GCA_901343595.1_MONAX5 mammals Marmota_monax
 ./runBuild GCA_901699155.1 GCA_901699155.1_bStrTur1.1 birds Streptopelia_turtur
+./runBuild GCA_901699155.2 GCA_901699155.2_bStrTur1.2 birds Streptopelia_turtur
 ./runBuild GCA_901699165.1 GCA_901699165.1_bStrTur1.1_alternate_haplotype birds Streptopelia_turtur
 ./runBuild GCA_901709675.1 GCA_901709675.1_fSynAcu1.1 fish Syngnathus_acus
 ./runBuild GCA_901709685.1 GCA_901709685.1_fSynAcu1.1_alternate_haplotype fish Syngnathus_acus
