@@ -15,6 +15,7 @@
 /* size for query name hashs */
 static int queryHashPowTwo = 22;
 static boolean warnOnConflicts = FALSE;
+static boolean tsvHeader = FALSE;
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -22,6 +23,7 @@ static struct optionSpec optionSpecs[] = {
     {"overallStats", OPTION_BOOLEAN},
     {"queries", OPTION_STRING},
     {"warnOnConflicts", OPTION_BOOLEAN},
+    {"tsv", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -40,7 +42,8 @@ errAbort(
   "  -queries=querySizeFile - tab separated file with of expected qNames and sizes.\n"
   "   If specified, statistic will include queries that didn't align.\n"
   "  -warnOnConflicts - warn and ignore when a two PSLs with the same qName conflict.\n"
-  "   This can happen with bogus generated names.\n");
+  "   This can happen with bogus generated names.\n"
+  "  -tsv - write a TSV header instead of an autoSql header\n");
 }
 
 struct querySizeCnt
@@ -309,7 +312,7 @@ ss->alnCnt += ss2->alnCnt;
 }
 
 /* header for alignment statistics */
-static char *alnStatsHdr = "#qName\t" "qSize\t" "tName\t" "tStart\t" "tEnd\t"
+static char *alnStatsHdr = "qName\t" "qSize\t" "tName\t" "tStart\t" "tEnd\t"
 "ident\t" "qCover\t" "repMatch\t" "tCover\n";
 
 /* format for alignStats output */
@@ -337,6 +340,8 @@ struct lineFile *pslLf = pslFileOpen(pslFile);
 FILE *fh = mustOpen(statsFile, "w");
 struct psl* psl;
 
+if (!tsvHeader)
+    fputc('#', fh);
 fputs(alnStatsHdr, fh);
 while ((psl = pslNext(pslLf)) != NULL)
     {
@@ -472,6 +477,7 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
     usage();
 warnOnConflicts = optionExists("warnOnConflicts");
+tsvHeader = optionExists("tsv");
 char *querySizeFile = optionVal("queries", NULL);
 if (optionExists("queryStats") && optionExists("overallStats"))
     errAbort("can't specify both -queryStats and -overallStats");
