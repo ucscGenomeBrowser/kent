@@ -360,7 +360,7 @@ carefulClose(&fh);
 }
 
 /* header for query statistics */
-static char *queryStatsHdr = "#qName\t" "qSize\t" "alnCnt\t" "minIdent\t" "maxIdent\t" "meanIdent\t"
+static char *queryStatsHdr = "qName\t" "qSize\t" "alnCnt\t" "minIdent\t" "maxIdent\t" "meanIdent\t"
 "minQCover\t" "maxQCover\t" "meanQCover\t" "minRepMatch\t" "maxRepMatch\t" "meanRepMatch\t"
 "minTCover\t" "maxTCover\n";
 
@@ -383,6 +383,8 @@ struct hashCookie cookie = hashFirst(queryStatsTbl);
 FILE *fh = mustOpen(statsFile, "w");
 struct hashEl *hel;
 
+if (!tsvHeader)
+    fputc('#', fh);
 fputs(queryStatsHdr, fh);
 while ((hel = hashNext(&cookie)) != NULL)
     queryStatsOutput(fh, hel->val);
@@ -418,7 +420,7 @@ outputQueryStats(queryStatsTbl, statsFile);
 }
 
 /* header for overall statistics */
-static char *overallStatsHdr = "#queryCnt\t" "minQSize\t" "maxQSize\t" "meanQSize\t"
+static char *overallStatsHdr = "queryCnt\t" "minQSize\t" "maxQSize\t" "meanQSize\t"
 "alnCnt\t" "minIdent\t" "maxIdent\t" "meanIdent\t"
 "minQCover\t" "maxQCover\t" "meanQCover\t" "minRepMatch\t" "maxRepMatch\t" "meanRepMatch\t"
 "minTCover\t" "maxTCover\t" "aligned\t" "aligned1\t" "alignedN\t" "totalAlignedSize\n";
@@ -427,6 +429,8 @@ static void outputOverallStats(char *statsFile, struct sumStats *os, int aligned
 /* output overall statistic */
 {
 FILE *fh = mustOpen(statsFile, "w");
+if (!tsvHeader)
+    fputc('#', fh);
 fputs(overallStatsHdr, fh);
 fprintf(fh, "%d\t%d\t%d\t%d\t%d\t" "%0.4f\t%0.4f\t%0.4f\t"
         "%0.4f\t%0.4f\t%0.4f\t"  "%0.4f\t%0.4f\t%0.4f\t" "%0.4f\t%0.4f\t"
