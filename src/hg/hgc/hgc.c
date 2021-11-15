@@ -1258,7 +1258,7 @@ else
 }
 
 void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize,
-	boolean onlyDiff, int blockNo);
+	boolean onlyDiff, int blockNo, struct hash *hash);
 
 void doAtom( struct trackDb *tdb, char *item)
 {
@@ -1379,7 +1379,7 @@ if (mf != NULL)
 	{
 	printf("<BR><B>Multiple Alignment Block %d of %d</B><BR>",
 	    count, numBlocks);
-	mafPrettyOut(stdout, mafAli, 70, FALSE, count++);
+	mafPrettyOut(stdout, mafAli, 70, FALSE, count++, NULL);
 	if (mafAli->next != NULL)
 	    {
 	    struct mafAli *next = mafAli->next;

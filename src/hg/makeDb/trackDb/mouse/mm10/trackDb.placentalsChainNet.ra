@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Placental Chain/Net
 longLabel Placental Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aMegabat=Megabat bMicrobat=Microbat cMonkSeal=Monk_seal cPanda=Panda daDog=Dog dbDog=Dog dcDog=Dog ddDog=Dog eCat=Cat ezSSOtter=Southern_Sea_Otter fHedgehog=Hedgehog gShrew=Shrew hPangolin=Pangolin hWhite_Rhinoceros=White_Rhinoceros iaHorse=Horse ibHorse=Horse jBison=Bison jaCow=Cow jbCow=Cow kaSheep=Sheep kbSheep=Sheep lDolphin=Dolphin mAlpaca=Alpaca nPig=Pig oSloth=Sloth pArmadillo=Armadillo qTenrec=Tenrec rManatee=Manatee sRHyrax=Rock_hyrax tElephant=Elephant
+subGroup2 species Species aMegabat=Megabat bMicrobat=Little_brown_bat cMonkSeal=Monk_seal cPanda=Panda daDog=Dog dbDog=Dog dcDog=Dog ddDog=Dog eCat=Cat ezSSOtter=Southern_Sea_Otter fHedgehog=Hedgehog gShrew=Shrew hPangolin=Pangolin hWhite_Rhinoceros=White_Rhinoceros iaHorse=Horse ibHorse=Horse jBison=Bison jaCow=Cow jbCow=Cow kaSheep=Sheep kbSheep=Sheep lDolphin=Dolphin mAlpaca=Alpaca nPig=Pig oSloth=Sloth pArmadillo=Armadillo qTenrec=Tenrec rManatee=Manatee sRHyrax=Rock_hyrax tElephant=Elephant
 subGroup3 clade Clade aAfro=Afrotheria bXena=Xenarthra cLaura=Laurasiatheria dInsect=Insectivora eCarn=Carnivora fChir=Chiroptera
 dragAndDrop subTracks
 visibility hide
