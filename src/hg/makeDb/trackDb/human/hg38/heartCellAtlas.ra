@@ -1,10 +1,10 @@
-
 track heartCellAtlas
 superTrack on
 shortLabel Heart Cell Atlas
 longLabel Heart single cell RNA data from https://heartcellatlas.com
 visibility hide
 group singleCell
+pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track heartAtlasCellTypes
     parent heartCellAtlas
