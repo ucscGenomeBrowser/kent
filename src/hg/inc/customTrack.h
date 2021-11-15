@@ -90,7 +90,8 @@ struct customTrack *customTracksParseCartDetailed(char *genomeDb, struct cart *c
 					  char **retCtFileName,
                                           struct customTrack **retReplacedCts,
                                           int *retNumAdded,
-                                          char **retErr);
+                                          char **retErr,
+                                          boolean *retWarnOnly);
 /* Figure out from cart variables where to get custom track text/file.
  * Parse text/file into a custom set of tracks.  Lift if necessary.
  * If retBrowserLines is non-null then it will return a list of lines
