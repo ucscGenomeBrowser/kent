@@ -84,7 +84,7 @@ static boolean measureTiming = FALSE;
 /* Global variables */
 struct cart *cart;
 struct hash *oldVars = NULL;
-char *excludeVars[] = {"Submit", "submit", "SubmitFile", NULL};
+char *excludeVars[] = {"Submit", "submit", "SubmitFile", "ContinueWithWarn", NULL};
 char *database = NULL;
 char *organism = NULL;
 struct customTrack *ctList = NULL;
@@ -148,7 +148,7 @@ puts(" Data must be formatted in\n"
 );
 }
 
-void addCustomForm(struct customTrack *ct, char *err)
+void addCustomForm(struct customTrack *ct, char *err, boolean warnOnly)
 /* display UI for adding custom tracks by URL or pasting data */
 {
 char *dataUrl = NULL;
@@ -223,17 +223,14 @@ puts("<P>");
 /* row for error message */
 if (isNotEmpty(err))
     {
-    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:RED; font-style:italic;'>"
-           "Error</span>&nbsp;%s</B><P>", err);
+    char *fullErrString = replaceChars(err, "\n", "<br>\n");
+    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:%s; font-style:italic;'>"
+           "%s</span><P>%s</B><P>", warnOnly ? "ORANGE" : "RED", warnOnly ? "Warning" : "Error", fullErrString);
+    freeMem(fullErrString);
     /* send two lines of the message to the apache error log also: */
-    char *tmpString = cloneString(err);
-    char *lineBreak = strchr(tmpString, '\n');
-    if (lineBreak)  /* first line break becomes a blank */
-        *lineBreak = ' ';
-    lineBreak = strchr(tmpString, '\n');
-    if (lineBreak)  /* second one becomes end of string */
-        *lineBreak = (char) 0;
+    char *tmpString = replaceChars(err, "\n", " ");
     fprintf(stderr, "hgCustom load error: %s\n", tmpString);
+    freeMem(tmpString);
     }
 
 cgiSimpleTableStart();
@@ -253,6 +250,15 @@ if (isUpdateForm)
     cgiTableFieldEnd();
     cgiTableField("&nbsp;");
     puts("<TD ALIGN='RIGHT'>");
+    if (warnOnly)
+	{
+	cgiMakeButtonWithOnClick("ContinueWithWarn", "Continue with Warning", NULL, "return submitClick(this);");
+	printf("&nbsp;");
+	jsInline(
+	    "$('textarea').change(function() {\n"
+	    "    $('#ContinueWithWarn').hide();\n"
+	    "});\n");
+	}
     cgiMakeButtonWithOnClick("Submit", "Submit", NULL, "return submitClick(this);");
     printf("<img id='loadingImg' src='../images/loading.gif' />\n");
     cgiTableFieldEnd();
@@ -319,6 +325,15 @@ else
 if (!isUpdateForm)
     {
     cgiSimpleTableFieldStart();
+    if (warnOnly)
+	{
+	cgiMakeButtonWithOnClick("ContinueWithWarn", "Continue with Warning", NULL, "return submitClick(this);");
+	printf("&nbsp;");
+	jsInline(
+	    "$('textarea').change(function() {\n"
+	    "    $('#ContinueWithWarn').hide();\n"
+	    "});\n");
+	}
     cgiMakeButtonWithOnClick("Submit", "Submit", NULL, "return submitClick(this);");
     printf("<img id='loadingImg' src='../images/loading.gif' />\n");
     cgiTableFieldEnd();
@@ -950,19 +965,19 @@ char *ip = getenv("REMOTE_ADDR");
 botDelayMessage(ip, botDelayMillis);
 }
 
-void doAddCustom(char *err)
+void doAddCustom(char *err, boolean warnOnly)
 /* display form for adding custom tracks.
  * Include error message, if any */
 {
 cartWebStart(cart, database, "Add Custom Tracks");
-addCustomForm(NULL, err);
+addCustomForm(NULL, err, warnOnly);
 helpCustom();
 if (issueBotWarning)
     webBotWarning();
 cartWebEnd(cart);
 }
 
-void doUpdateCustom(struct customTrack *ct, char *err)
+void doUpdateCustom(struct customTrack *ct, char *err, boolean warnOnly)
 /* display form for adding custom tracks.
  * Include error message, if any */
 {
@@ -971,7 +986,7 @@ cartWebStart(cart, database, "Update Custom Track: %s [%s]",
         longLabel, database);
 freeMem(longLabel);
 cartSetString(cart, hgCtDocText, ct->tdb->html);
-addCustomForm(ct, err);
+addCustomForm(ct, err, warnOnly);
 helpCustom();
 cartWebEnd(cart);
 }
@@ -1195,7 +1210,7 @@ if (sameString(initialDb, "0"))
     }
 
 if (cartVarExists(cart, hgCtDoAdd))
-    doAddCustom(NULL);
+    doAddCustom(NULL, FALSE);
 #ifdef PROGRESS_METER
 else if (cartVarExists(cart, hgCtDoProgress))
     {
@@ -1214,9 +1229,9 @@ else if (cartVarExists(cart, hgCtTable))
         ct = ctFromList(ctList, selectedTable);
         }
     if (ct)
-        doUpdateCustom(ct, NULL);
+        doUpdateCustom(ct, NULL, FALSE);
     else
-        doAddCustom(NULL);
+        doAddCustom(NULL, FALSE);
     }
 else
     {
@@ -1230,6 +1245,8 @@ else
     act->sa_flags = SA_RESTART;
     sigaction(SIGALRM, act, NULL);
     alarm(TIMER_INTERVAL);
+
+    boolean warnOnly = FALSE;
 
     char *customText = fixNewData(cart);
     /* save input so we can display if there's an error */
@@ -1276,17 +1293,20 @@ else
             cartRemove(cart, hgCtDataFileName);
             }
         }
+    warnOnly = FALSE;
     struct errCatch *catch = errCatchNew();
     if (errCatchStart(catch))
 	ctList = customTracksParseCartDetailed(database, cart, &browserLines, &ctFileName,
-					       &replacedCts, NULL, &err);
+					       &replacedCts, NULL, &err, &warnOnly);
     errCatchEnd(catch);
     if (catch->gotError)
 	{
 	addWarning(dsWarn, err);
 	}
     if (isNotEmpty(catch->message->string))
+	{
         addWarning(dsWarn, catch->message->string);
+	}
     errCatchFree(&catch);
 
     /* exclude special setting used by table browser to indicate
@@ -1329,7 +1349,7 @@ else
     addWarning(dsWarn, replacedTracksMsg(replacedCts));
     doBrowserLines(browserLines, &warnMsg);
     addWarning(dsWarn, warnMsg);
-    if (err)
+    if (err && !(warnOnly && cartVarExists(cart, "ContinueWithWarn")))
 	{
         char *selectedTable = NULL;
         cartSetString(cart, hgCtDataText, savedCustomText);
@@ -1337,10 +1357,10 @@ else
         if ((selectedTable= cartOptionalString(cart, hgCtUpdatedTable)) != NULL)
             {
             ct = ctFromList(ctList, selectedTable);
-            doUpdateCustom(ct, err);
+            doUpdateCustom(ct, err, warnOnly);
             }
         else
-            doAddCustom(err);
+            doAddCustom(err, warnOnly);
        	cartRemovePrefix(cart, hgCt);
 	return;
 	}
@@ -1360,10 +1380,11 @@ else
 	customTracksSaveCart(database, cart, ctList);
 
 	/* refresh ctList again to pickup remote resource error state */
+	warnOnly=FALSE;
 	struct errCatch *catch = errCatchNew();
 	if (errCatchStart(catch))
 	    ctList = customTracksParseCartDetailed(database, cart, &browserLines, &ctFileName,
-					       &replacedCts, NULL, &err);
+					       &replacedCts, NULL, &err, &warnOnly);
 	errCatchEnd(catch);
 	if (catch->gotError)
 	    {
@@ -1371,7 +1392,6 @@ else
 	    addWarning(dsWarn, catch->message->string);
 	    }
 	errCatchFree(&catch);
-
 	}
     warnMsg = dyStringCannibalize(&dsWarn);
     if (measureTiming)
@@ -1379,10 +1399,12 @@ else
 	long lastTime = clock1000();
 	loadTime = lastTime - thisTime;
 	}
+
+
     if (ctList || cartVarExists(cart, hgCtDoDelete))
         doManageCustom(warnMsg);
     else
-	doAddCustom(warnMsg);
+	doAddCustom(warnMsg, warnOnly);
     }
 cartRemovePrefix(cart, hgCt);
 cartRemove(cart, CT_CUSTOM_TEXT_VAR);

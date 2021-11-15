@@ -146,7 +146,7 @@ myoBri	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; 
 # David's Myotis (bat) - Myotis davidii
 myoDav	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; Myotis
 
-# Microbat - Myotis lucifugus
+# Little brown bat - Myotis lucifugus
 myoLuc	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; Myotis
 
 # big brown bat - Eptesicus fuscus

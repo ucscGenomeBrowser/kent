@@ -85,7 +85,7 @@ for (i=0; i<size; i++)
 }
 
 void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize,
-                  boolean onlyDiff, int blockNo)
+                  boolean onlyDiff, int blockNo, struct hash *labelHash)
 {
 int ii, ch;
 int srcChars = 0;
@@ -169,8 +169,11 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 
 	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
 	chrom = chopPrefix(dbOnly);
-	if ((org = hOrganism(dbOnly)) == NULL)
-	    org = dbOnly;
+        if ((labelHash == NULL) || ((org = hashFindVal(labelHash, dbOnly)) == NULL))
+            {
+            if ((org = hOrganism(dbOnly)) == NULL)
+                org = dbOnly;
+            }
 
 	if (mc->strand == '-')
 	    reverseIntRange(&s, &e, mc->srcSize);
@@ -514,6 +517,7 @@ else
     char buffer[1024];
     int useTarg = FALSE;
     int useIrowChains = FALSE;
+    struct hash *labelHash = mafGetLabelHash(tdb);
 
     safef(option, sizeof(option), "%s.%s", tdb->track, MAF_CHAIN_VAR);
     if (cartCgiUsualBoolean(cart, option, FALSE) &&
@@ -789,7 +793,7 @@ else
             printf("<B>Alignment block %d of %d in window, %d - %d, %d bps </B>\n",
                    ++aliIx,realCount,maf->components->start + 1,
                    maf->components->start + maf->components->size, maf->components->size);
-            mafPrettyOut(stdout, maf, 70,onlyDiff, aliIx);
+            mafPrettyOut(stdout, maf, 70,onlyDiff, aliIx, labelHash);
             }
 	mafAliFreeList(&subList);
 	}
