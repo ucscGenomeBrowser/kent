@@ -4,6 +4,7 @@ shortLabel Pancreas Baron
 longLabel Pancreas single cell sequencing from Baron et al 2016
 visibility hide
 group singleCell
+pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track pancreasBaronCellType
     parent pancreasBaron
