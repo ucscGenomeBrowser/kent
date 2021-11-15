@@ -5,7 +5,7 @@ XINC = -I$(MYSQLINC)
 
 O=HInv.o affy10KDetails.o affy120KDetails.o ancientRref.o annoFormatVep.o annoGrateWigDb.o annoGratorGpVar.o \
   annoStreamDb.o annoStreamDbFactorSource.o annoStreamDbPslPlus.o annoStreamWig.o api.o atomDb.o axtLib.o \
-  bactigPos.o barChartData.o barChartSample.o bdgpExprLink.o bdgpGeneInfo.o bed12Source.o bed5FloatScore.o \
+  bactigPos.o barChartData.o barChartSample.o bdgpExprLink.o bdgpGeneInfo.o bed5FloatScore.o \
   bed6FloatScore.o bed8Attrs.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bigTransMap.o borkPseudoHom.o \
   cartEdit0.o cartEdit1.o cartJson.o cartRewrite.o cartTrackDb.o ccdsGeneMap.o ccdsInfo.o ccdsNotes.o \
   cdsSpec.o celeraCoverage.o celeraDupPositive.o cgh.o chicken13kInfo.o chr18deletions.o cnpIafrate.o \
