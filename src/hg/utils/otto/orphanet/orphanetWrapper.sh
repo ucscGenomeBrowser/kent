@@ -1,8 +1,7 @@
 #!/bin/sh -e
 
 PATH=/cluster/bin/x86_64:/cluster/bin/scripts:$PATH
-#EMAIL="lrnassar@ucsc.edu"
-EMAIL="chmalee@ucsc.edu"
+EMAIL="lrnassar@ucsc.edu"
 WORKDIR="/hive/data/outside/otto/orphanet"
 
 cd $WORKDIR
