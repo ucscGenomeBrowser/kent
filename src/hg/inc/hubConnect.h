@@ -22,12 +22,6 @@
 #define hubStatusTableConfVariable    "hub.statusTableName"
 /* the name of the hg.conf variable to use something other than the default */
 
-#define defaultGenArkTableName "genark"
-/* Name of table that maintains the names of hubs we'll automatically attach if referenced. */
-
-#define genArkTableConfVariable    "hub.genArkTableName"
-/* the name of the hg.conf variable to use something other than the default */
-
 #define hgHubCheckUrl      "hubCheckUrl"
 /* name of cgi variable containing hub name to check */
 

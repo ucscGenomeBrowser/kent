@@ -7,6 +7,8 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "genark.h"
+#include "hgConfig.h"
+#include "hdb.h"
 
 
 
@@ -240,4 +242,49 @@ fputc('}',f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+char *genarkUrl(char *accession)
+/* Return the URL to the genark assembly with this accession if present,
+ * otherwise return NULL
+ * */
+{
+char *genarkPrefix = cfgOption("genarkHubPrefix");
+
+if (genarkPrefix == NULL)
+    return NULL;
+
+struct sqlConnection *conn = hConnectCentral();
+if (!sqlTableExists(conn, genarkTableName()))
+    return NULL;
+
+char *url = NULL;
+char query[4096];
+char buffer[4096];
+sqlSafef(query, sizeof query, "select hubUrl from %s where gcAccession='%s'", genarkTableName(), accession);
+if (sqlQuickQuery(conn, query, buffer, sizeof buffer))
+    {
+    char buffer2[4096];
+    safef(buffer2, sizeof buffer2, "%s/%s", genarkPrefix, buffer);
+
+    url = cloneString(buffer2);
+    }
+
+hDisconnectCentral(&conn);
+
+return url;
+}
+
+static char *_genarkTableName = NULL;
+
+char *genarkTableName()
+/* return the genark table name from the environment, 
+ * or hg.conf, or use the default.  Cache the result */
+{
+if (_genarkTableName == NULL)
+    _genarkTableName = cfgOptionEnvDefault("HGDB_GENARK_STATUS_TABLE",
+	    genarkTableConfVariable, defaultGenarkTableName);
+
+return _genarkTableName;
+}
+
 
