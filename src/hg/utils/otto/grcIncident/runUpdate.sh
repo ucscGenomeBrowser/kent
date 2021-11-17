@@ -4,7 +4,7 @@
 
 export TOP="/hive/data/outside/grc/incidentDb"
 export ECHO="/bin/echo -e"
-export failMail="hiram@soe.ucsc.edu"
+export failMail="hiram@soe.ucsc.edu,lrnassar@ucsc.edu"
 
 
 if [[ $# == 0 || "$1" != "makeItSo" ]]; then
