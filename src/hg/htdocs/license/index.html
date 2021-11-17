@@ -93,26 +93,14 @@ See the LICENSE file in the top level of our source code for a listing of licens
 <br>
 <h1 id="free">Software: Tools and directories freely available for all uses</h1>
 <p>
-The following directories are available without a license for all uses, academic, 
-non-profit, and commercial: </p>
-<ul>
-  <li>
-  kent/src/utils (includes big* tools and C libraries, for reading and writing bigBed, bigWig and similar files)</li>
-  <li>
-  kent/src/lib</li>
-  <li>
-  kent/src/inc</li>
-  <li>
-  kent/src/tagStorm - tools and libraries for reading and writing hierarchical meta data files</li>
-  <li>
-  kent/src/parasol - a very fast cluster job scheduler</li>
-  <li>
-  kent/src/htslib - a third party library that we only distribute for convenience</li>
-  <li>
-  kent/src/hg/autoSql</li>
-  <li>
-  kent/src/hg/autoXml</li>
-</ul>
+The Genome Browser source code is available for free under the MIT license 
+(see <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/LICENSE" target=_blank>LICENSE on Github</a>),
+except for the following subdirectories under kent/src/hg:
+<br>
+
+<p>
+<tt>cgilib das encode hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene</tt>
+</p>
 
 <p>
 See the LICENSE file in the top level of our source code for a listing of licenses and directories that they apply to: 
@@ -129,5 +117,7 @@ This software includes software made by open-source projects:
 <ul>
     <li> htslib, see <a href="https://doi.org/10.1093/gigascience/giab007" target=_blank>Bonfield et al, 2021</a>: Copyright (C) 2012-2020 Genome Research Ltd., see kent/src/htslib
     <li> optimalLeaf, see <a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target=_blank>Bar-Joseph et al. 2003</a>: released into the public domain by Ziv Bar-Joseph, see kent/src/optimalLeaf.
+    <li> Portions of this software are copyright 2020 The FreeType Project (www.freetype.org).  All rights reserved.
+    <li> This software uses the (URW)++ fonts, Copyright 1999 by (URW)++ Design & Development. The files are not in git but can be obtained via rsync or ftp from hgdownload.soe.ucsc.edu/htdocs.
 </ul>
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
