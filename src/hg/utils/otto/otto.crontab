@@ -68,4 +68,8 @@ MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
 MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
 23 8 * * 3 /hive/data/outside/ncbi/genomes/ncbiRefSeq/ottoNcbiRefSeq.sh
 
+#Orphanet
+MAILTO=lrnassar@ucsc.edu
+10 7 10 * * /hive/data/outside/otto/orphanet/orphanetWrapper.sh
+
 #Format: Minute - Hour - DayofMonth month Day-of-week

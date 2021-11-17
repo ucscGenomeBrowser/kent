@@ -1579,6 +1579,8 @@ There are no extra options that can appear on the type hic line.
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
     <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a 
     &quot;.&quot; (for non-extended bigBed tracks) is required
+    <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
+    at least a bed5</li>
     <li>By default, all bed tracks that are at least bed5 will have a score filter. 
     Enabling any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
     that default filter</li></ul></P>
@@ -1660,6 +1662,8 @@ There are no extra options that can appear on the type hic line.
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
     type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
     &quot;.&quot; (for non-extended bigBed tracks) is required
+    <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
+    at least a bed5</li>
     <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling 
     any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
     that default filter</li></ul></P>
@@ -1758,6 +1762,8 @@ There are no extra options that can appear on the type hic line.
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
     type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
     &quot;.&quot; (for non-extended bigBed tracks) is required
+    <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
+    at least a bed5</li>
     <li>There should not be any white spaces between declared items after commas, e.x.
     "itemOne,itemTwo,itemThree"</li>
     <li>The default label can be customized with the <a 

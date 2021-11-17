@@ -8,6 +8,13 @@
 #include "jksql.h"
 #define GENARK_NUM_COLS 6
 
+#define defaultGenarkTableName "genark"
+/* Name of table that maintains the names of hubs we'll automatically attach if referenced. */
+
+#define genarkTableConfVariable    "hub.genArkTableName"
+/* the name of the hg.conf variable to use something other than the default */
+
+
 extern char *genarkCommaSepFieldNames;
 
 struct genark
@@ -82,5 +89,13 @@ void genarkJsonOutput(struct genark *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+char *genarkUrl(char *accession);
+/* Return the URL to the genark assembly with this accession if present,
+ * otherwise return NULL
+ * */
+
+char *genarkTableName();
+/* return the genark table name from the environment, 
+ * or hg.conf, or use the default.  Cache the result */
 #endif /* GENARK_H */
 

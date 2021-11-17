@@ -698,7 +698,8 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
         {
         parseClades(path, results->samplePlacements);
         }
-    else if (sameString(file->name, "final-tree.nh"))
+    else if (sameString(file->name, "final-tree.nh") ||
+             sameString(file->name, "placement_stats.tsv"))
         {
         // Don't need this, just remove it.
         }

@@ -264,6 +264,7 @@
 #include "htslib/bgzf.h"
 #include "htslib/kstring.h"
 #include "pipeline.h"
+#include "genark.h"
 
 static char *rootDir = "hgcData";
 
@@ -3542,6 +3543,13 @@ chainDbAddBlocks(chain, track, conn);
 return chain;
 }
 
+void linkToOtherBrowserHub(char *otherDb, char *chrom, int start, int end,  char *hubUrl)
+/* Make anchor tag to open another browser window. */
+{
+printf("<A TARGET=\"_blank\" HREF=\"%s?genome=%s&position=%s%%3A%d-%d&hubUrl=%s\">",
+       hgTracksName(), otherDb, chrom, start+1, end, hubUrl);
+}
+
 void linkToOtherBrowserExtra(char *otherDb, char *chrom, int start, int end, char *extra)
 /* Make anchor tag to open another browser window. */
 {
@@ -3570,7 +3578,7 @@ printf("<A TARGET=\"_blank\" TITLE=\"%s\" HREF=\"%s?db=%s&ct=&position=%s%%3A%d-
        title, hgTracksName(), otherDb, chrom, start+1, end);
 }
 
-void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)
+void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg, char *hubUrl)
 /* Put up link that lets us use chain to browser on
  * corresponding window of other species. */
 {
@@ -3580,7 +3588,10 @@ chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 if (subChain != NULL && otherOrg != NULL)
     {
     qChainRangePlusStrand(subChain, &qs, &qe);
-    linkToOtherBrowserExtra(otherDb, subChain->qName, qs-1, qe, cartSidUrlString(cart));
+    if (hubUrl)
+        linkToOtherBrowserHub(otherDb, subChain->qName, qs-1, qe, hubUrl);
+    else
+        linkToOtherBrowser(otherDb, subChain->qName, qs-1, qe);
     printf("Open %s browser</A> at position corresponding to the part of chain that is in this window.<BR>\n", trackHubSkipHubName(otherOrg));
     }
 chainFree(&toFree);
@@ -3597,6 +3608,13 @@ int chainWinSize;
 double subSetScore = 0.0;
 int qs, qe;
 boolean nullSubset = FALSE;
+boolean otherIsActive = FALSE;
+char *hubUrl = NULL;   // if otherDb is a genark browser
+
+if (hDbIsActive(otherDb))
+    otherIsActive = TRUE;
+else 
+    hubUrl = genarkUrl(otherDb); // may be NULL
 
 if (! sameWord(otherDb, "seq"))
     {
@@ -3614,11 +3632,14 @@ if (startsWith("big", tdb->type))
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
     chain = chainLoadIdRangeHub(fileName, linkFileName, seqName, winStart, winEnd, atoi(item));
 
-    if (!hDbIsActive(otherDb)) // if this isn't a native database, check to see if it's a hub
+    if (!otherIsActive) // if this isn't a native database, check to see if it's a hub
         {
         struct trackHubGenome *genome = trackHubGetGenomeUndecorated(otherDb);
         if (genome)
+            {
+            otherIsActive = TRUE;
             otherDb = genome->name;
+            }
         }
     }
 else
@@ -3630,7 +3651,7 @@ chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 
 if (subChain == NULL)
     nullSubset = TRUE;
-else if (hDbIsActive(otherDb) && subChain != chain)
+else if (otherIsActive && subChain != chain)
     {
     char *linearGap = trackDbSettingOrDefault(tdb, "chainLinearGap", "loose");
     struct gapCalc *gapCalc = gapCalcFromFile(linearGap);
@@ -3687,11 +3708,14 @@ else
     /* prints link to other db browser only if db exists and is active */
     /* else just print position with no link for the other db */
     printf("<B>%s position: </B>", otherOrg);
-    if (hDbIsActive(otherDb))
+    if (otherIsActive)
         printf(" <A target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">",
                hgTracksName(), otherDb, chain->qName, qs, qe);
+    else if (hubUrl != NULL)
+        printf(" <A target=\"_blank\" href=\"%s?genome=%s&hubUrl=%s&position=%s%%3A%d-%d\">",
+               hgTracksName(), otherDb, hubUrl, chain->qName, qs, qe);
     printf("%s:%d-%d", chain->qName, qs, qe);
-    if (hDbIsActive(otherDb))
+    if (otherIsActive || hubUrl)
         printf("</A>");
     printf(" size: %d<BR>\n", chain->qEnd - chain->qStart);
     }
@@ -3700,7 +3724,7 @@ printf("<B>Score:</B> %1.0f\n", chain->score);
 
 if (nullSubset)
     printf("<B>Score within browser window:</B> N/A (no aligned bases)<BR>\n");
-else if (hDbIsActive(otherDb) && subChain != chain)
+else if (otherIsActive && subChain != chain)
     printf("<B>&nbsp;&nbsp;Approximate Score within browser window:</B> %1.0f<BR>\n",
 	   subSetScore);
 else
@@ -3754,9 +3778,10 @@ if (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) && chromSeqFileE
            "and return here to see alignment details.<BR>\n");
         }
     }
-if (!sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
+
+if (!sameWord(otherDb, "seq") && (otherIsActive || hubUrl))
     {
-    chainToOtherBrowser(chain, otherDb, otherOrg);
+    chainToOtherBrowser(chain, otherDb, otherOrg, hubUrl);
     }
 /*
 if (!sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
@@ -3912,7 +3937,7 @@ if (net->chainId != 0)
         {
          /* print link to browser for otherDb only if otherDb is active */
         if (hDbIsActive(otherDb))
-	    chainToOtherBrowser(chain, otherDb, otherOrgBrowser);
+	    chainToOtherBrowser(chain, otherDb, otherOrgBrowser, NULL);
 	chainFree(&chain);
 	}
     htmlHorizontalLine();
