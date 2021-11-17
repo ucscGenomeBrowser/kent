@@ -173,7 +173,7 @@ sub doMakeBed {
   }
 
   my $whatItDoes = "Makes bed from cpglh output.";
-  my $bossScript = newBash HgRemoteScript("$runDir/doMakeBed.bcsh", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/doMakeBed.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
