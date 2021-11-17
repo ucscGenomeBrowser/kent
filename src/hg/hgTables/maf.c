@@ -42,7 +42,7 @@ else
 	struct trackDb *childTdb = tdbRef->val;
         if(sameString(childTdb->table, table))
             {
-            if (startsWithWord("maf",childTdb->type) || startsWithWord("wigMaf",childTdb->type))
+            if (startsWithWord("maf",childTdb->type) || startsWithWord("wigMaf",childTdb->type) || startsWithWord("bigMaf",childTdb->type))
                 return TRUE;
             break;
             }
@@ -102,7 +102,8 @@ for (region = regionList; region != NULL; region = region->next)
 	    {
             if (isBigBed(database, table, curTrack, ctLookupName))
                 {
-                char *fileName = trackDbSetting(track, "bigDataUrl");
+                struct trackDb *subTdb = hashFindVal(fullTableToTdbHash, table);
+                char *fileName = trackDbSetting(subTdb, "bigDataUrl");
                 struct bbiFile *bbi = bigBedFileOpen(fileName);
                 mafList = bigMafLoadInRegion(bbi, bed->chrom, bed->chromStart, bed->chromEnd);
                 }

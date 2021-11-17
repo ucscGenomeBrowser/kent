@@ -2275,6 +2275,9 @@ if (httpsCertCheckVerbose)
 char *httpsCertCheckDepth = cfgOption("httpsCertCheckDepth");  
 if (httpsCertCheckDepth)
     setenv("https_cert_check_depth", httpsCertCheckDepth, TRUE);
+char *httpsCertCheckDomainExceptions = cfgOption("httpsCertCheckDomainExceptions");  
+if (httpsCertCheckDomainExceptions)
+    setenv("https_cert_check_domain_exceptions", httpsCertCheckDomainExceptions, TRUE);
 
 
 /* Proxy Settings 

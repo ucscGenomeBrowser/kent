@@ -14,6 +14,7 @@
 #include "common.h"
 #include "internet.h"
 #include "errAbort.h"
+#include "hash.h"
 #include "net.h"
 
 
@@ -328,6 +329,63 @@ else
 }
 
 
+static struct hash *initDomainWhiteListHash()
+/* Initialize once, has all the old existing domains 
+ * for which cert checking is skipped since they are not compatible (yet) with openssl.*/
+{
+static struct hash *domainWhiteList = NULL;
+static pthread_mutex_t initInUseMutex = PTHREAD_MUTEX_INITIALIZER;
+
+if (!domainWhiteList)
+    {
+    pthread_mutex_lock( &initInUseMutex );
+    if (!domainWhiteList)
+	{
+	struct hash *domainHash = hashNew(8);
+
+	// Hardwired exceptions
+	// TODO RESTORE, whitelist removed for testing
+	// added 2021-11-15
+	//hashStoreName(domainHash, "oculargenomics.meei.harvard.edu");
+	//hashStoreName(domainHash, "annotation.dbi.udel.edu");
+	//hashStoreName(domainHash, "garfield.igh.cnrs.fr");
+	//hashStoreName(domainHash, "bioinfo2.ugr.es");
+	//hashStoreName(domainHash, "snpinfo.niehs.nih.gov");
+	//hashStoreName(domainHash, "edn.som.umaryland.edu");
+	//hashStoreName(domainHash, "arn.ugr.es");
+	//hashStoreName(domainHash, "hkgateway.med.umich.edu");
+	//hashStoreName(domainHash, "hsb.upf.edu");
+	//hashStoreName(domainHash, "bioinfo2.ugr.es");
+	//hashStoreName(domainHash, "datahub-7ak6xof0.udes.genap.ca");
+	//hashStoreName(domainHash, "datahub-nyt53rix.udes.genap.ca");
+	//hashStoreName(domainHash, "xinglabtrackhub.research.chop.edu");
+	//hashStoreName(domainHash, "ftp.science.ru.nl");
+
+	// whitelisted domain exceptions set in hg.conf
+	// space separated list.
+	char *dmwl = cloneString(getenv("https_cert_check_domain_exceptions"));
+	int wordCount = chopByWhite(dmwl, NULL, 0);
+	if (wordCount > 0)
+	    {
+	    char **words;
+	    AllocArray(words, wordCount);
+	    chopByWhite(dmwl, words, wordCount);
+	    int w;
+	    for(w=0; w < wordCount; w++)
+		{
+		hashStoreName(domainHash, words[w]);
+		}
+	    freeMem(words);
+	    }
+	freez(&dmwl);
+	domainWhiteList = domainHash;
+	}
+    pthread_mutex_unlock( &initInUseMutex );
+    }
+return domainWhiteList;
+}
+
+
 int netConnectHttps(char *hostName, int port, boolean noProxy)
 /* Return socket for https connection with server or -1 if error. */
 {
@@ -338,9 +396,11 @@ int fd=0;
 
 setenv("https_cert_check", "warn", 0);      // DEFAULT certificate check is warn.
 
-setenv("https_cert_check_depth", "9", 0);   // DEFAULT level is warn.
+setenv("https_cert_check_depth", "9", 0);   // DEFAULT depth check level is 9.
 
-setenv("https_cert_check_verbose", "off", 0);   // DEFAULT level is warn.
+setenv("https_cert_check_verbose", "off", 0);   // DEFAULT verbose is off.
+
+setenv("https_cert_check_domain_exceptions", "", 0);   // DEFAULT space separated list is empty string.
 
 char *proxyUrl = getenv("https_proxy");
 
@@ -363,28 +423,45 @@ fd_set writefds;
 int err;
 struct timeval tv;
 
+
 if (!sameString(getenv("https_cert_check"), "none"))
     {
-
-    // Set TRUSTED_FIRST for openssl 1.0
-    // Fixes common issue openssl 1.0 had with with LetsEncrypt certs in the Fall of 2021.
-    X509_STORE_set_flags(SSL_CTX_get_cert_store(ctx), X509_V_FLAG_TRUSTED_FIRST);
-
-    // verify peer cert of the server.
-
-    // verify_callback gets called once per certificate returned by the server.
-    SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, verify_callback);  // DEBUG REMOVE
-
-    /*
-     * Let the verify_callback catch the verify_depth error so that we get
-     * an appropriate error in the logfile.
-     */
-    SSL_CTX_set_verify_depth(ctx, atoi(getenv("https_cert_check_depth")) + 1);
-
-    // VITAL FOR PROPER VERIFICATION OF CERTS
-    if (!SSL_CTX_set_default_verify_paths(ctx)) 
+    if (hashLookup(initDomainWhiteListHash(), hostName))
 	{
-	warn("SSL set default verify paths failed");
+	// old existing domains which are not (yet) compatible with openssl.
+	if (getenv("SCRIPT_NAME"))  // CGI mode
+	    {
+	    fprintf(stderr, "domain %s cert check skipped because it is white listed.\n", hostName);
+	    }
+	}
+    else
+	{
+
+	// verify peer cert of the server.
+	// Set TRUSTED_FIRST for openssl 1.0
+	// Fixes common issue openssl 1.0 had with with LetsEncrypt certs in the Fall of 2021.
+	X509_STORE_set_flags(SSL_CTX_get_cert_store(ctx), X509_V_FLAG_TRUSTED_FIRST);
+
+        // This flag causes intermediate certificates in the trust store to be treated as trust-anchors, in the same way as the self-signed root CA certificates. 
+        // This makes it possible to trust certificates issued by an intermediate CA without having to trust its ancestor root CA.
+        // GNU-TLS uses it, and openssl probably will do it in the future. 
+        // Currently this does not fix any of our known issues with users servers certs.
+	// X509_STORE_set_flags(SSL_CTX_get_cert_store(ctx), X509_V_FLAG_PARTIAL_CHAIN);
+
+	// verify_callback gets called once per certificate returned by the server.
+	SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, verify_callback);
+
+	/*
+	 * Let the verify_callback catch the verify_depth error so that we get
+	 * an appropriate error in the logfile.
+	 */
+	SSL_CTX_set_verify_depth(ctx, atoi(getenv("https_cert_check_depth")) + 1);
+
+	// VITAL FOR PROPER VERIFICATION OF CERTS
+	if (!SSL_CTX_set_default_verify_paths(ctx)) 
+	    {
+	    warn("SSL set default verify paths failed");
+	    }
 	}
     }
 

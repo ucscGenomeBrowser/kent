@@ -1,23 +1,34 @@
 The default license of this repository is the MIT License, but LICENSE files in
-subdirectories override the text of this LICENSE file.
+subdirectories override the text of this LICENSE file for files in these subdirectories.
 
 Therefore the code in this repository falls into three different license types:
 
-1 the default MIT license (attached below) for code in src/ and most subdirectories
-  - this directory includes all code to build and use tools and libraries to
+1 OPEN: the default MIT license (attached below) for code in src/ and most
+  subdirectories of src/hg
+  - this includes all code to build and use tools and libraries to
     read and write the Genome Browser file formats, like bigBed and bigWig, and
     the command line tools for these, bedToBigBed, wigToBigWig and the tagStorm
     tools and the parasol job scheduler.
+  - code to build all other UCSC command line tools, like pslCDnaFilter,
+    overlapSelect or featureBits and hundreds of others.
   - also, third-party code from open-source projects bundled for convenience,
     in src/htslib (MIT), and ./src/optimalLeaf (public domain, with attribution).
-  - the directories src/hg/autoSql and src/hg/autoXml have MIT LICENSE files, so they are also 
-    under the MIT License
-2 A non-commercial license from UC for the genome browser website code in
-  src/hg/ and subdirectories (see src/hg/LICENSE), see https://genome-store.ucsc.edu/
-3 A non-commercial license from Kent Informatics for the BLAT code in src/blat/ and
+
+2 NON-COMMERCIAL: A non-commercial license from UC for the genome browser website code in
+  selected subdirectories of src/hg, see src/hg/LICENSE and https://genome-store.ucsc.edu/
+
+  - for source code under directories in src/hg:
+   cgilib das encode hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene
+   hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession
+   hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene
+
+
+3 NON-COMMERCIAL: A non-commercial license from Kent Informatics for the BLAT code in src/blat/ and
   src/jkOwnLib/, see http://www.kentinformatics.com/
 
-See https://genome.ucsc.edu/license/ for more details and on how to obtain a license.
+  - for source code under directories: src/blat/ and src/jkOwnLib
+
+See https://genome.ucsc.edu/license/ for more details and on how to obtain a license for (2) and (3)
 
 ---- 
 

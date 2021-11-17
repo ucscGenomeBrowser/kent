@@ -19,7 +19,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o autoUpg
   encode/wgEncodeGencodeTranscriptSource.o encode/wgEncodeGencodeTranscriptSupport.o \
   encode/wgEncodeGencodeTranscriptionSupportLevel.o encode/wgEncodeGencodeUniProt.o encode3/encode3Valid.o \
   estOrientInfo.o expData.o expRecord.o facetField.o facetedTable.o featureBits.o findKGAlias.o \
-  findKGProtAlias.o gcPercent.o genbank.o genbankBlackList.o gencodeAttrs.o gencodeToRefSeq.o geneGraph.o \
+  findKGProtAlias.o gcPercent.o genark.o genbank.o genbankBlackList.o gencodeAttrs.o gencodeToRefSeq.o geneGraph.o \
   genePred.o genePredReader.o geoMirror.o ggCluster.o ggDump.o ggGraph.o ggMrnaAli.o ggTypes.o glDbRep.o \
   googleAnalytics.o gpFx.o grp.o gtexAse.o gtexDonor.o gtexGeneBed.o gtexInfo.o gtexSample.o \
   gtexSampleData.o gtexTissue.o gtexTissueMedian.o gtexUi.o hCommon.o hPrint.o hVarSubst.o \

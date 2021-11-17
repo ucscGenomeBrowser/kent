@@ -5,6 +5,7 @@ longLabel Colon single cell sequencing from Wang et al 2020
 visibility hide
 group singleCell
 priority 2.5
+pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track colonWangCellType
     parent colonWang

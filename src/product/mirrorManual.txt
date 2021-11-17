@@ -1347,6 +1347,9 @@ One thing that does not work with GET is "upload file" inputs.
 # HTTPS Certificate Check for Verification Settings are: abort warn none
 # currently the default is warn
 httpsCertCheck=warn
+# domains to whitelist, skip cert checking, space-separated list
+httpsCertCheckDomainExceptions=somedomain1.com somedomain2.edu
+
 
 # Proxy support
 
