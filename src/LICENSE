@@ -20,8 +20,7 @@ Therefore the code in this repository falls into three different license types:
   - for source code under directories in src/hg:
    cgilib das encode hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene
    hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession
-   hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene
-
+   hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene liftOver
 
 3 NON-COMMERCIAL: A non-commercial license from Kent Informatics for the BLAT code in src/blat/ and
   src/jkOwnLib/, see http://www.kentinformatics.com/

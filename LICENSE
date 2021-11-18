@@ -38,7 +38,7 @@ NON-COMMERCIAL licenses:
      cgilib das encode hgApi hgCollection hgFileSearch hgFileUi hgGateway
      hgGene hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions
      hgSession hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near
-     visiGene
+     visiGene liftOver
 5. A non-commercial license from Kent Informatics for the BLAT and isPCR code
    in src/blat/ and src/jkOwnLib/, for more information see
    https://genome.ucsc.edu/license/ and http://www.kentinformatics.com/
