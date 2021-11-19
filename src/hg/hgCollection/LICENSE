@@ -5,7 +5,7 @@ WITH THE EXCEPTION of the following subdirectories:
 
    cgilib das encode hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene
    hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession
-   hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene liftOver
+   hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene
 
 The Genome Browser binaries and source code in these directories and subdirectories
 are freely available for academic, nonprofit, and personal use. A license is

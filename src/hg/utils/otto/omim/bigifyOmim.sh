@@ -12,11 +12,11 @@
 
 set -e
 for db in hg19 hg38; do
-hgsql $db -e 'select chrom, chromStart, chromEnd, name, "0", ".", chromStart, chromEnd, "color", geneSymbol, disorders1, GROUP_CONCAT(omimPhenotype.description, "|", omimPhenoMapKey, "|", inhMode SEPARATOR "$") from omimGene2, omimGeneMap, omimPhenotype where omimGene2.name=omimGeneMap.omimId and omimGene2.name=omimPhenotype.omimId GROUP BY chrom, chromStart, chromEnd, omimGeneMap.omimId ' -NB  > omimGene2.tmp
-hgsql $db -NB -e 'select chrom, chromStart, chromEnd, name, "0", ".", chromStart, chromEnd, "color", geneSymbol, "", "" from omimGene2 JOIN omimGeneMap ON omimGene2.name=omimGeneMap.omimId LEFT OUTER JOIN omimPhenotype on omimGene2.name=omimPhenotype.omimId where phenotypeId is NULL' >> omimGene2.tmp
+hgsql $db -e 'select chrom, chromStart, chromEnd, name, "0", ".", chromStart, chromEnd, "color", geneSymbol, disorders1, GROUP_CONCAT(omimPhenotype.description, "|", omimPhenoMapKey, "|", inhMode SEPARATOR "$"), omimPhenoMapKey from omimGene2, omimGeneMap, omimPhenotype where omimGene2.name=omimGeneMap.omimId and omimGene2.name=omimPhenotype.omimId GROUP BY chrom, chromStart, chromEnd, omimGeneMap.omimId ' -NB  > omimGene2.tmp
+hgsql $db -NB -e 'select chrom, chromStart, chromEnd, name, "0", ".", chromStart, chromEnd, "color", geneSymbol, "", "", "0" from omimGene2 JOIN omimGeneMap ON omimGene2.name=omimGeneMap.omimId LEFT OUTER JOIN omimPhenotype on omimGene2.name=omimPhenotype.omimId where phenotypeId is NULL' >> omimGene2.tmp
 bedSort omimGene2.tmp omimGene2.tmp
-python omimGene2ToBigBed.py omimGene2.tmp /hive/data/genomes/$db/chrom.sizes 2020-06-22/omimGene2.$db.bb 
+python omimGene2ToBigBed.py omimGene2.tmp /hive/data/genomes/$db/chrom.sizes 2020-10-22/omimGene2.$db.bb 
 #rm omimGene2.tmp 
 rm -f /gbdb/$db/bbi/omimGene2.bb
-ln -s `pwd`/2020-06-22/omimGene2.$db.bb /gbdb/$db/bbi/omimGene2.bb 
+ln -s `pwd`/2020-10-22/omimGene2.$db.bb /gbdb/$db/bbi/omimGene2.bb 
 done

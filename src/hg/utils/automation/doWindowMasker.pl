@@ -140,34 +140,6 @@ _EOF_
 sub doMask {
   printf STDERR "# doMask: obsolete step, no longer needed\n";
   return 0;
-#  my $runDir = "$buildDir";
-#  &HgAutomate::checkExistsUnlessDebug('count', 'mask', "$runDir/windowmasker.counts");
-#  my $whatItDoes = "It does WindowMasker masking step.";
-#  my $workhorse = &HgAutomate::chooseWorkhorse();
-#  my $bossScript = new HgRemoteScript("$runDir/doMask.csh", $workhorse,
-#				      $runDir, $whatItDoes);
-#  $bossScript->add(<<_EOF_
-# set windowMaskerDir = /cluster/bin/\$MACHTYPE
-# set windowMasker = \$windowMaskerDir/windowmasker
-# set fa = $db.fa
-# set tmpDir = `mktemp -d -p /scratch/tmp doWindowMasker.XXXXXX`
-# chmod 775 \$tmpDir
-# set inputTwoBit = $unmaskedSeq
-# cp windowmasker.counts \$tmpDir
-# pushd \$tmpDir
-# twoBitToFa \$inputTwoBit \$fa
-# \$windowMasker -ustat windowmasker.counts -input \$fa -output windowmasker.intervals
-# perl -wpe \'if \(s\/^\>lcl\\\|\(\.\*\)\\n\$\/\/\) { \$chr = \$1\; } \\
-#    if \(\/^\(\\d+\) \- \(\\d+\)\/\) { \\
-#    \$s=\$1\; \$e=\$2+1\; s\/\(\\d+\) \- \(\\d+\)\/\$chr\\t\$s\\t\$e\/\; \\
-#    }\' windowmasker.intervals > windowmasker.bed
-# popd
-# cp \$tmpDir/windowmasker.bed .
-# rm -rf \$tmpDir
-# _EOF_
-#   );
-#
-#  $bossScript->execute();
 } # doMask
 
 #########################################################################
