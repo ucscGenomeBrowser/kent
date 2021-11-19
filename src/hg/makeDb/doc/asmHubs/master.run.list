@@ -16,6 +16,7 @@
 ./runBuild GCA_001632615.1 GCA_001632615.1_LP_J_v1 mammals Mus_musculus
 ./runBuild GCA_001949185.1 GCA_001949185.1_Rvar_4.0 invertebrate Ramazzottius_varieornatus
 ./runBuild GCA_002082055.1 GCA_002082055.1_nHd_3.1 invertebrate Hypsibius_dujardini
+./runBuild GCA_002250225.1 GCA_002250225.1_ASM225022v1 fungi Saccharomyces_cerevisiae
 ./runBuild GCA_002844635.1 GCA_002844635.1_USMARCv1.0 mammals Sus_scrofa
 ./runBuild GCA_003369685.2 GCA_003369685.2_UOA_Angus_1 mammals Bos_indicus_x_Bos_taurus
 ./runBuild GCA_003957525.1 GCA_003957525.1_bTaeGut1_v1.h birds Taeniopygia_guttata
