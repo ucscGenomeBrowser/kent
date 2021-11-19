@@ -1491,7 +1491,8 @@ struct dyString *encoded = newDyString(4096);
 cartEncodeState(cart, encoded);
 
 /* update sessionDb and userDb tables (removed check for cart stuffing bots) */
-updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
+if (!cartCgiUsualString(cart, "incognito", NULL))
+    updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
 updateOne(conn, sessionDbTable(), cart->sessionInfo, encoded->string, encoded->stringSize);
 
 /* Cleanup */
@@ -2298,9 +2299,9 @@ char *logProxy = cfgOption("logProxy");
 if (logProxy)
     setenv("log_proxy", logProxy, TRUE);
 
-// if ignoreCookie is on the URL, don't check for cookies
+// if ignoreCookie or incognito is on the URL, don't check for cookies
 char *hguid = NULL;
-if (cgiOptionalString("ignoreCookie") == NULL)
+if (cgiOptionalString("ignoreCookie") == NULL || cgiOptionalString("incognito"))
     hguid = getCookieId(cookieName);
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
@@ -2333,6 +2334,7 @@ popWarnHandler();
 popAbortHandler();
 
 cartWriteCookie(cart, cookieName);
+
 if (doContentType && !cartDidContentType)
     {
     addHttpHeaders();
