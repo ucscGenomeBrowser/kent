@@ -1,20 +1,24 @@
+MIT 
+
 The default license of this repository is the MIT License, but LICENSE files in
-subdirectories override the text of this LICENSE file for files in these subdirectories.
+subdirectories override the text of this LICENSE file for files in certain
+subdirectories. This allows us to keep all functionally related code together
+in the same repository.
 
-Therefore the code in this repository falls into three different license types:
+As a result, the code in this repository falls into three different license types:
 
-1 OPEN: the default MIT license (attached below) for code in src/ and most
-  subdirectories of src/hg
+1 OSI OPEN SOURCE: the default MIT license (below) applies to the large majority of the code.
   - this includes all code to build and use tools and libraries to
     read and write the Genome Browser file formats, like bigBed and bigWig, and
     the command line tools for these, bedToBigBed, wigToBigWig and the tagStorm
     tools and the parasol job scheduler.
   - code to build all other UCSC command line tools, like pslCDnaFilter,
     overlapSelect or featureBits and hundreds of others.
-  - also, third-party code from open-source projects bundled for convenience,
-    in src/htslib (MIT), and ./src/optimalLeaf (public domain, with attribution).
+  - also, patched third-party code from open-source projects bundled for
+    convenience, in src/htslib (MIT), and ./src/optimalLeaf (public domain,
+    with attribution).
 
-2 NON-COMMERCIAL: A non-commercial license from UC for the genome browser website code in
+2 NON-COMMERCIAL UCSC: A non-commercial license from UC for the genome browser website code in
   selected subdirectories of src/hg, see src/hg/LICENSE and https://genome-store.ucsc.edu/
 
   - for source code under directories in src/hg:
@@ -22,12 +26,15 @@ Therefore the code in this repository falls into three different license types:
    hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession
    hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene liftOver
 
-3 NON-COMMERCIAL: A non-commercial license from Kent Informatics for the BLAT code in src/blat/ and
-  src/jkOwnLib/, see http://www.kentinformatics.com/
+3 NON-COMMERCIAL Kent: A non-commercial license from Kent Informatics for the
+  BLAT code in src/blat/ and src/jkOwnLib/, see http://www.kentinformatics.com/
 
   - for source code under directories: src/blat/ and src/jkOwnLib
 
 See https://genome.ucsc.edu/license/ for more details and on how to obtain a license for (2) and (3)
+
+The first line of all LICENSE files specifies the license for all files in subdirectories under it
+in SPDX format.
 
 ---- 
 
@@ -51,12 +58,3 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-Commercial users should contact kent@soe.ucsc.edu for access to other modules
-including jkOwnLib and blat.
-
-Commercial users interested in the UCSC Genome Browser in particular please see
-    http://genome.ucsc.edu/license/.
-
-The code in /src/htslib is distributed with two licenses as noted in the LICENSE
-file in that directory.
