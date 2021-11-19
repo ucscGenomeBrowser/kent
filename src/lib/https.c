@@ -306,23 +306,23 @@ if (!preverify_ok)
     {
     if (getenv("SCRIPT_NAME"))  // CGI mode
 	{
-	fprintf(stderr, "verify error:num=%d:%s:depth=%d:%s\n", err,
-	    X509_verify_cert_error_string(err), depth, buf);
+	fprintf(stderr, "verify error:num=%d:%s:depth=%d:%s CGI=%s\n", err,
+	    X509_verify_cert_error_string(err), depth, buf, getenv("SCRIPT_NAME"));
 	}
-    char *cn = strstr(buf, "/CN=");
-    if (cn) cn+=4;  // strlen /CN=
-    warn("%s on %s", X509_verify_cert_error_string(err), cn);
+    if (!sameString(getenv("https_cert_check"), "log"))
+	{
+	char *cn = strstr(buf, "/CN=");
+	if (cn) cn+=4;  // strlen /CN=
+	warn("%s on %s", X509_verify_cert_error_string(err), cn);
+	}
     }
-/*
-* At this point, err contains the last verification error. We can use
-* it for something special
-*/
+/* err contains the last verification error.  */
 if (!preverify_ok && (err == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT))
     {
     X509_NAME_oneline(X509_get_issuer_name(ctx->current_cert), buf, 256);
     fprintf(stderr, "issuer= %s\n", buf);
     }
-if (sameString(getenv("https_cert_check"), "warn"))
+if (sameString(getenv("https_cert_check"), "warn") || sameString(getenv("https_cert_check"), "log"))
     return 1;
 else
     return preverify_ok;
@@ -394,7 +394,7 @@ int fd=0;
 
 // https_cert_check env var can be abort warn or none.
 
-setenv("https_cert_check", "warn", 0);      // DEFAULT certificate check is warn.
+setenv("https_cert_check", "log", 0);      // DEFAULT certificate check is log.
 
 setenv("https_cert_check_depth", "9", 0);   // DEFAULT depth check level is 9.
 
@@ -431,7 +431,7 @@ if (!sameString(getenv("https_cert_check"), "none"))
 	// old existing domains which are not (yet) compatible with openssl.
 	if (getenv("SCRIPT_NAME"))  // CGI mode
 	    {
-	    fprintf(stderr, "domain %s cert check skipped because it is white listed.\n", hostName);
+	    fprintf(stderr, "domain %s cert check skipped because it is white-listed as an exception.\n", hostName);
 	    }
 	}
     else
