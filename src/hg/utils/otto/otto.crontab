@@ -1,5 +1,24 @@
-#Below is the otto crontab active in the otto-meister's own cron
-#Changes here must be copied over by the current otto-meister
+# DO NOT EDIT THE OTTO CRONTAB FILE DIRECTLY!
+# This file is in the kent git repository: ~/kent/src/hg/utils/otto/otto.crontab
+# Please edit and commit changes to the git repository,
+# and then ssh otto@hgwdev and run crontab on the edited and checked in file,
+# for example crontab ~lrnassar/kent/src/hg/utils/otto/otto.crontab
+
+TMPDIR=/data/tmp
+ottomeister=lrnassar@ucsc.edu
+
+#Format: Minute - Hour - DayofMonth month Day-of-week
+
+MAILTO=lrnassar@ucsc.edu
+#Daily sandbox update
+41 07 * * 1-5 /cluster/home/otto/bin/sandboxupdate
+
+# save shell history and last log into log files in ~/lastLog/
+# last day of the month to catch them just before log rotation
+38 23 30 4,6,9,11 * ~/lastLog/lastLog.sh
+38 23 31 1,3,5,7,8,10,12 * ~/lastLog/lastLog.sh
+38 23 28 2 * ~/lastLog/lastLog.sh
+38 23 29 2 * ~/lastLog/lastLog.sh
 
 #######################################################
 ###################### OTTO ###########################
@@ -9,16 +28,11 @@ SHELL=/bin/sh
 PATH=/cluster/bin/scripts:/cluster/bin/x86_64:/usr/local/bin:/bin:/usr/bin
 MAILTO=lrnassar@ucsc.edu
 
-#OMIM
-MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
-17 4 * * *  /hive/data/outside/otto/omim/omimWrapper.sh 2>&1
-
 #Update check
-MAILTO=lrnassar@ucsc.edu
 0 5 1 */3 * mail -s "OMIM/GWAS CHECK - DID DBSNP UPDATE?" lrnassar@ucsc.edu < /cluster/home/chmalee/crontabs/dbSnpCheck.txt
 
 #DECIPHER
-#11 4 * * *  /hive/data/outside/otto/decipher/decipherWrapper.sh
+#11 4 * * * /hive/data/outside/otto/decipher/decipherWrapper.sh
 
 #GWAS Catalog
 41 4 * * 3  /hive/data/outside/otto/gwas/gwasWrapper.sh
@@ -29,47 +43,46 @@ MAILTO=lrnassar@ucsc.edu
 #LRG
 57 9 1 * * /hive/data/outside/otto/lrg/lrgWrapper.sh
 
+#dbVar
+13 8 2 * * /hive/data/outside/otto/dbVar/dbVarWrapper.sh
+
+#Orphanet
+10 7 10 * * /hive/data/outside/otto/orphanet/orphanetWrapper.sh
+
+#OMIM Upload
+HGDB_CONF=/cluster/home/otto/.hg.conf.beta
+15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh
+
 #ClinVar
 MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
 08 00 8 * * umask 002; /hive/data/outside/otto/clinvar/doUpdate.sh
 
+#OMIM
+17 4 * * *  /hive/data/outside/otto/omim/omimWrapper.sh 2>&1
+
 #LOVD
 14 13 * * mon /hive/data/outside/otto/lovd/doUpdate.sh
 
+#Mastermind
+05 8 8  */3 * /hive/data/outside/otto/mastermind/buildMastermind.sh
+
+#wuhCor1 uniprot otto cron by Max, May 2021
+00 4 * * * /hive/data/outside/otto/uniprot/covidCheck.sh
+
 #User annotations
 #* * * * * ~max/miniconda3/envs/py3/bin/python ~max/usr/scripts/tsvSafeToBigBed /cluster/home/max/.user-annots-browser-track-c513a43ffff8.json https://docs.google.com/spreadsheets/d/1l38ypTcQH2AP2hlBmQ7kIXz1G4e33RPX-iFH1vu-utU/edit#gid=0 ~max/public_html/userAnnots/public.bb
-
-#Mastermind
-MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
-05 8 8  */3 * /hive/data/outside/otto/mastermind/buildMastermind.sh
-#
-#dbVar
-MAILTO=lrnassar@ucsc.edu
-13 8 2 * * /hive/data/outside/otto/dbVar/dbVarWrapper.sh
-
-#OMIM Upload
-HGDB_CONF=/cluster/home/lrnassar/.hg.conf.beta
-MAILTO=lrnassar@ucsc.edu
-15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh
 
 #ClinGen
 MAILTO=abenet@ucsc.edu,lrnassar@ucsc.edu
 00 9 * * * /hive/data/outside/otto/clinGen/clinGenWrapper.sh
 
-#wuhCor1 uniprot otto cron by Max, May 2021
-MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
-00 4 * * * /hive/data/outside/otto/uniprot/covidCheck.sh
-
 #GRC Incident
-MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
-33 09 * * * /hive/data/outside/grc/incidentDb/runUpdate.sh makeItSo
+#MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
+#33 09 * * * /hive/data/outside/grc/incidentDb/runUpdate.sh makeItSo
 
 #NCBI RefSeq
-MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
-23 8 * * 3 /hive/data/outside/ncbi/genomes/ncbiRefSeq/ottoNcbiRefSeq.sh
+#MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
+#23 8 * * 3 /hive/data/outside/ncbi/genomes/ncbiRefSeq/ottoNcbiRefSeq.sh
 
-#Orphanet
-MAILTO=lrnassar@ucsc.edu
-10 7 10 * * /hive/data/outside/otto/orphanet/orphanetWrapper.sh
 
 #Format: Minute - Hour - DayofMonth month Day-of-week
