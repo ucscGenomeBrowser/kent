@@ -343,24 +343,6 @@ if (!domainWhiteList)
 	{
 	struct hash *domainHash = hashNew(8);
 
-	// Hardwired exceptions
-	// TODO RESTORE, whitelist removed for testing
-	// added 2021-11-15
-	//hashStoreName(domainHash, "oculargenomics.meei.harvard.edu");
-	//hashStoreName(domainHash, "annotation.dbi.udel.edu");
-	//hashStoreName(domainHash, "garfield.igh.cnrs.fr");
-	//hashStoreName(domainHash, "bioinfo2.ugr.es");
-	//hashStoreName(domainHash, "snpinfo.niehs.nih.gov");
-	//hashStoreName(domainHash, "edn.som.umaryland.edu");
-	//hashStoreName(domainHash, "arn.ugr.es");
-	//hashStoreName(domainHash, "hkgateway.med.umich.edu");
-	//hashStoreName(domainHash, "hsb.upf.edu");
-	//hashStoreName(domainHash, "bioinfo2.ugr.es");
-	//hashStoreName(domainHash, "datahub-7ak6xof0.udes.genap.ca");
-	//hashStoreName(domainHash, "datahub-nyt53rix.udes.genap.ca");
-	//hashStoreName(domainHash, "xinglabtrackhub.research.chop.edu");
-	//hashStoreName(domainHash, "ftp.science.ru.nl");
-
 	// whitelisted domain exceptions set in hg.conf
 	// space separated list.
 	char *dmwl = cloneString(getenv("https_cert_check_domain_exceptions"));
@@ -378,6 +360,75 @@ if (!domainWhiteList)
 	    freeMem(words);
 	    }
 	freez(&dmwl);
+
+	// useful for testing, turns off hardwired whitelist exceptions
+	if (!hashLookup(domainHash, "noHardwiredExceptions"))  
+	    {
+	    // Hardwired exceptions whitelist
+	    hashStoreName(domainHash, "141.80.181.46");
+	    hashStoreName(domainHash, "54.175.59.127");
+	    hashStoreName(domainHash, "annotation.dbi.udel.edu");
+	    hashStoreName(domainHash, "apprisws.bioinfo.cnio.es");
+	    hashStoreName(domainHash, "arn.ugr.es");
+	    hashStoreName(domainHash, "bic2.ibi.upenn.edu");
+	    hashStoreName(domainHash, "bioinfo2.ugr.es");
+	    hashStoreName(domainHash, "bioshare.genomecenter.ucdavis.edu");
+	    hashStoreName(domainHash, "biowebport.com");
+	    hashStoreName(domainHash, "bx.bio.jhu.edu");
+	    hashStoreName(domainHash, "cluster.hpcc.ucr.edu");
+	    hashStoreName(domainHash, "costalab.ukaachen.de");
+	    hashStoreName(domainHash, "data.rc.fas.harvard.edu");
+	    hashStoreName(domainHash, "datahub-7ak6xof0.udes.genap.ca");
+	    hashStoreName(domainHash, "datahub-7mu6z13t.udes.genap.ca");
+	    hashStoreName(domainHash, "datahub-bx3mvzla.udes.genap.ca");
+	    hashStoreName(domainHash, "datahub-gvhsc2p7.udes.genap.ca");
+	    hashStoreName(domainHash, "datahub-i8kms5wt.udes.genap.ca");
+	    hashStoreName(domainHash, "datahub-kazb7g4u.udes.genap.ca");
+	    hashStoreName(domainHash, "datahub-nyt53rix.udes.genap.ca");
+	    hashStoreName(domainHash, "datahub-ruigbdoq.udes.genap.ca");
+	    hashStoreName(domainHash, "dev.herv.img.cas.cz");
+	    hashStoreName(domainHash, "dev.stanford.edu");
+	    hashStoreName(domainHash, "dice-green.liai.org");
+	    hashStoreName(domainHash, "dropbox.ogic.ca");
+	    hashStoreName(domainHash, "edn.som.umaryland.edu");
+	    hashStoreName(domainHash, "ftp--ncbi--nlm--nih--gov.ibrowse.co");
+	    hashStoreName(domainHash, "ftp.science.ru.nl");
+	    hashStoreName(domainHash, "garfield.igh.cnrs.fr");
+	    hashStoreName(domainHash, "gcp.wenglab.org");
+	    hashStoreName(domainHash, "genome-tracks.ngs.omrf.in");
+	    hashStoreName(domainHash, "genomicsdata.cs.ucl.ac.uk");
+	    hashStoreName(domainHash, "gsmplot.deqiangsun.org");
+	    hashStoreName(domainHash, "hgdownload--soe--ucsc--edu.ibrowse.co");
+	    hashStoreName(domainHash, "hkgateway.med.umich.edu");
+	    hashStoreName(domainHash, "hsb.upf.edu");
+	    hashStoreName(domainHash, "icbi.at");
+	    hashStoreName(domainHash, "lichtlab.cancer.ufl.edu");
+	    hashStoreName(domainHash, "manticore.niehs.nih.gov");
+	    hashStoreName(domainHash, "microb215.med.upenn.edu");
+	    hashStoreName(domainHash, "nextgen.izkf.rwth-aachen.de");
+	    hashStoreName(domainHash, "oculargenomics.meei.harvard.edu");
+	    hashStoreName(domainHash, "onesgateway.med.umich.edu");
+	    hashStoreName(domainHash, "openslice.fenyolab.org");
+	    hashStoreName(domainHash, "peromyscus.rc.fas.harvard.edu");
+	    hashStoreName(domainHash, "pricenas.biochem.uiowa.edu");
+	    hashStoreName(domainHash, "rnaseqhub.brain.mpg.de");
+	    hashStoreName(domainHash, "schatzlabucscdata.yalespace.org.s3.amazonaws.com");
+	    hashStoreName(domainHash, "silo.bioinf.uni-leipzig.de");
+	    hashStoreName(domainHash, "snpinfo.niehs.nih.gov");
+	    hashStoreName(domainHash, "v91rc2.master.demo.encodedcc.org");
+	    hashStoreName(domainHash, "v91rc3.master.demo.encodedcc.org");
+	    hashStoreName(domainHash, "v94.rc2.demo.encodedcc.org");
+	    hashStoreName(domainHash, "virtlehre.informatik.uni-leipzig.de");
+	    hashStoreName(domainHash, "web1.bx.bio.jhu.edu");
+	    hashStoreName(domainHash, "www.datadepot.rcac.purdue.edu");
+	    hashStoreName(domainHash, "www.isical.ac.in");
+	    hashStoreName(domainHash, "www.ogic.ca");
+	    hashStoreName(domainHash, "www.v93rc2.demo.encodedcc.org");
+	    hashStoreName(domainHash, "xinglabtrackhub.research.chop.edu");
+	    hashStoreName(domainHash, "zlab-trackhub.umassmed.edu");
+	    hashStoreName(domainHash, "zlab.umassmed.edu");
+	    }
+
 	domainWhiteList = domainHash;
 	}
     pthread_mutex_unlock( &initInUseMutex );
