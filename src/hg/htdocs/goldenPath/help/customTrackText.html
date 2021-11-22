@@ -746,7 +746,8 @@ cart variables, for example having both hide all and highlight features.)
   target="_blank">example link</a> to highlight two parts of the ABO locus in red and blue.</li>
   <li>
   <code>ignoreCookie=1</code> - do not load the user's existing settings saved
-  in the internet browser's UCSC Genome Browser cookie.  This means that the link will show the Genome Browser default 
+  in the internet browser's UCSC Genome Browser cookie.  This means that the link will show the 
+  Genome Browser default 
   settings such as track selections, custom tracks, and track hubs. Any changes
   you make in this new session will however affect the user's settings.  E.g.
   if you add a track in this new window, and come back to the genome browser
@@ -755,24 +756,31 @@ cart variables, for example having both hide all and highlight features.)
   the user will most likely come back to the Genome Browser and expect the
   changes that they made still to be there.
   - <a href="../../cgi-bin/hgTracks?db=hg19&ignoreCookie=1" 
-  target="_blank">example link</a> to show the default tracks and positions for hg19, in a new, clean session</li>
+  target="_blank">example link</a> to show the default tracks and positions for hg19, 
+  in a new, clean session</li>
   <li>
   <code>incognito=1</code> - do not load the user's existing settings saved
   in the internet browser's UCSC Genome Browser cookie and also never save them to the cookie. 
   This means that that link will show the Genome Browser default 
   settings like track selections, custom
-  tracks, and track hubs. Also: Any changes made by the user or other URL arguments will not affect the user's 
+  tracks, and track hubs. Also: Any changes made by the user or other URL arguments 
+  will not affect the user's 
   Genome Browser settings. E.g. if you add a track in this new window, and come
   back to the genome browser later, this track will appear NOT in the new window. This setting
   is useful if a website wants to link to the Genome Browser, wants to start 
   with a "clean slate" but does not want any changes to affect other Genome
   Browser windows that are open or that the user may open later.
   - <a href="../../cgi-bin/hgTracks?db=hg19&incognito=1" 
-  target="_blank">example link</a> to show the default tracks and positions for hg19, in a new, clean session,
-  that is completely independent from all other Genome Browser windows that the user has open or will open later.
-  Any changes made to this window won't be saved and are lost as soon as the window is closed. (At the moment,
-  there is no visual indicator in such a Genome Browser window that changes are not saved, but we could add one 
-  in the future, please contact us if you think this could be useful for you.) This variable is probably 
+  target="_blank">example link</a> to show the default tracks and positions for hg19, 
+  in a new, clean session,
+  that is completely independent from all other Genome Browser windows that the user 
+  has open or will open later.
+  Any changes made to this window won't be saved and are lost as soon as the window is closed. 
+  (At the moment,
+  there is no visual indicator in such a Genome Browser window that changes are not saved, 
+  but we could add one 
+  in the future, please contact us if you think this could be useful for you.) 
+  This variable is probably 
   useful for most websites who use our tool hgRenderTracks to show only the
   Browser's main image from a Javascript-driven website.
   </li>
