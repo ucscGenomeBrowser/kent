@@ -316,11 +316,11 @@ extern char *curAlignId;		/* Current Align Id. */
 extern char *curProtId;		/* Current protein Id. */
 extern char *curGeneName;		/* Biological name of gene. */
 extern char *curGeneChrom;	/* Chromosome current gene is on. */
-struct genePred *curGenePred;	/* Current gene prediction structure. */
+extern struct genePred *curGenePred;	/* Current gene prediction structure. */
 extern boolean isGencode;              /* is this based on the Gencode models */
 extern boolean isGencode2;             /* is this based on the Gencode models and use ensembl id as primary id */
 extern int curGeneStart,curGeneEnd;	/* Position in chromosome. */
-struct sqlConnection *spConn;	/* Connection to SwissProt database. */
+extern struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 extern char *swissProtAcc;	/* SwissProt accession (may be NULL). */
 extern struct trackDb *globalTdb;  /* The trackDb structure for the table containing the current item. */
 

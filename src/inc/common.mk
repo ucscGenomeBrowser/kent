@@ -393,7 +393,7 @@ ifeq (${HG_WARN},)
       HG_WARN_UNINIT=-Wuninitialized
     else
       ifeq (${FULLWARN},yes)
-        HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type -Wempty-body -Wunused-but-set-variable
+        HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type -Wempty-body -Wunused-but-set-variable -fno-common
         HG_WARN_UNINIT=-Wuninitialized
       else
         HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
