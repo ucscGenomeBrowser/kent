@@ -44,7 +44,7 @@ errAbort(
   "   -genome=genome        - only check this genome\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                                     Will create this directory if not existing\n"
-  "   -httpsCertCheck=[abort,warn,none] - set the ssl certificate verification mode.\n"
+  "   -httpsCertCheck=[abort,warn,none] - set the ssl certificate verification mode.\n"  
   "   -printMeta            - print the metadata for each track\n"
   "   -cacheTime=N          - set cache refresh time in seconds, default %d\n"
   "   -verbose=2            - output verbosely\n"
@@ -1166,13 +1166,17 @@ udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 char *httpsCertCheck = optionVal("httpsCertCheck", NULL);
 if (httpsCertCheck)
     {
-    if (sameString(httpsCertCheck, "abort") || sameString(httpsCertCheck, "warn") || sameString(httpsCertCheck, "none"))
+    // secretly accept level log for testing, but you only see something if SCRIPT_NAME env variable is set like CGIs have.
+    if (sameString(httpsCertCheck, "abort") || sameString(httpsCertCheck, "warn") || sameString(httpsCertCheck, "log") || sameString(httpsCertCheck, "none"))
 	{
 	setenv("https_cert_check", httpsCertCheck, 1);
 	}
     else
 	{
-	verbose(1, "The value of -httpsCertCheck should be either abort to avoid Man-in-middle attack, warn to warn about failed certs, or none indicating the verify is skipped.");
+	// log level is not very useful, but included it for completeness.
+	verbose(1, "The value of -httpsCertCheck should be either abort to avoid Man-in-middle attack,\n"
+		"warn to warn about failed certs,\n"
+		"none indicating the verify is skipped entirely.");
 	usage();
 	}
     }

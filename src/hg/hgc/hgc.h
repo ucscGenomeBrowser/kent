@@ -430,7 +430,7 @@ void hgdpGeoFreqTable(struct hgdpGeo *geo);
 /* Print an HTML table of populations and allele frequencies. */
 
 void printOtherSnpMappings(char *table, char *name, int start,
-			   struct sqlConnection *conn, int rowOffset);
+			   struct sqlConnection *conn, int rowOffset, struct trackDb *tdb);
 /* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
 
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
@@ -572,5 +572,8 @@ return isEmpty(val) ? "&nbsp;" : val;
 
 void doInteractDetails(struct trackDb *tdb, char *item);
 /* Details of interaction item */
+
+void doParDetails(struct trackDb *tdb, char *name);
+/* show details of a PAR item. */
 
 #endif

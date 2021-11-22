@@ -1870,8 +1870,10 @@ However, there is a small subset of domains that fail with openssl, even though 
 Use curl as a quick way to confirm that your custom track or hub URL will work with openssl.
 
 hg.conf setting:<br>
-<code>httpsCertCheck=warn</code><br>
-<b>warn</b> is currently the default setting, and other values are <b>abort</b> for security against Man-in-the-middle attacks,
+<code>httpsCertCheck=log</code><br>
+<b>log</b> is currently the default setting, and only logs to stderr. 
+Other values are <b>abort</b> for security against Man-in-the-middle attacks, 
+and <b>warn</b> for showing errors to users but letting them proceed, 
 and <b>none</b> which skips verification entirely.
 
 <pre><code>curl -I https://some-website/somepath</code></pre>
