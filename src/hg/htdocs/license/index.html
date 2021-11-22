@@ -32,7 +32,7 @@ Certain genome annotation data, mostly on the human
 genome and in the domain of clinical genetics, have specific restrictions.
 Usually the data must be obtained from the source database directly in the
 original format or licensed, rather from UCSC. Examples are HGMD, LOVD, OMIM, Decipher,
-Genomenom, Genehancer and COSMIC, as well as any GISAID-derived data on viral
+Genomenon, Genehancer and COSMIC, as well as any GISAID-derived data on viral
 genomes. Please see the respective track documentation pages on these
 assemblies for more details, by selecting the assembly and clicking the track
 title in the genome browser.</p> <br>
@@ -54,14 +54,13 @@ pslMap, pslFilter and pslCDnaFilter.  </p>
 
 <p>
 The exceptions are source code directories with special LICENSE files in them. 
-These are <code>kent/src/blat</code>, <code>kent/src/jkOwnLib</code>, and 
+These are <code>kent/src/blat</code>, <code>kent/src/isPcr</code>, <code>kent/src/jkOwnLib</code>, and 
 the programs that produce the graphical images or user interface
 for the UCSC Genome Browser. This includes the following subdirectories under 
 <code>kent/src/hg</code>:
 </p>
 
-<p>
-<code>cgilib das encode hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene 
+<p><code>cgilib hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene 
 hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession hgSuggest 
 hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene liftOver</code>
 </p>
@@ -92,21 +91,22 @@ For commercial use, a license is required for download and local installation of
 certain Genome Browser webserver CGI binaries and source code. In the source
 code repository, the respective directories are marked by special LICENSE
 files in them. As specified above, this applies to <code>kent/src/blat</code>, 
+<code>kent/src/isPcr</code>, 
 <code>kent/src/jkOwnLib</code>, and the following subdirectories and 
 programs under <code>kent/src/hg</code>. The majority of license protected files 
 are the programs that produce the graphical images and the graphical user interface 
 for the UCSC Genome Browser:</p>
 <br>
 
-<p>
-<code>cgilib das encode hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene hgGenome 
+<p><code>cgilib hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene hgGenome 
 hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession hgSuggest hgTables hgTrackUi 
 hgTracks hgVai hgc hubApi near visiGene liftOver</code>
 </p>
 
 <p>
 Also, BLAT and isPCR, if needed, are covered by a separate license (see below). This concerns 
-the source code directories <code>kent/src/blat</code> and <code>kent/src/jkOwnLib</code>.
+the source code directories <code>kent/src/blat</code>, <code>kent/src/isPcr</code> 
+and <code>kent/src/jkOwnLib</code>.
 </p>
 
 <p>
@@ -117,9 +117,10 @@ We also have an <a href="../FAQ/FAQlicense.html">FAQ on licensing questions</a>
 which may help to clarify questions on how to license the code. We also have documentation 
 on how to choose the best option for a local installation of a 
 <a target=_blank href="../goldenPath/help/mirror.html">Genome Browser "mirror"</a>.
+</p>
 
 <p>
-If you would like to purchase more than 20 copies of the Genome Browser source code, please follow 
+If you would like to purchase the Genome Browser source code without going through our store, please follow 
 these instructions: 
 <ol>
   <li> 
@@ -164,6 +165,11 @@ This software includes software made by open-source projects:
     <li> This software uses the (URW)++ fonts, Copyright 1999 by (URW)++ Design &amp; Development. 
       The files are not in git but can be obtained via rsync or ftp from 
       hgdownload.soe.ucsc.edu/htdocs.</li>
+      <li>MySQL connectivity is provided via the MariaDB C client library provided under LGPL. <a href="https://mariadb.com/kb/en/the-mariadb-library/mariadb-connector-c/">https://mariadb.com/kb/en/the-mariadb-library/mariadb-connector-c/</a></li>
+      <li>This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit
+      (http://www.openssl.org/).
+      This product includes cryptographic software written by Eric Young (eay@cryptsoft.com).
+      This product includes software written by Tim Hudson (tjh@cryptsoft.com).</li>
 </ul>
 </p>
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
