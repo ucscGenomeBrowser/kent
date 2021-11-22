@@ -17,7 +17,6 @@
 Color plShadesPos[RNAPLFOLD_DATA_SHADES * 3];
 Color plOutlineColor;
 Color plHighDprimeLowLod; /* blue */
-int colorLookup[256];
 double basePairSpan=0;
 int maxBasePairSpan=5000;
 boolean rnaPLFoldInv=FALSE; // default is inverted = sequence on buttom

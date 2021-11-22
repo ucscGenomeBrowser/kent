@@ -47,6 +47,10 @@ else
   GBROWSE_D=
 endif
 
+ifeq (${FULLWARN},yes)
+  HG_WARN += -fno-common
+endif
+
 %.o: %.c
 	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
 
