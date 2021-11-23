@@ -11,9 +11,9 @@ As a result, the code in this repository falls into three different license type
   - this includes all code to build and use tools and libraries to
     read and write the Genome Browser file formats, like bigBed and bigWig, and
     the command line tools for these, bedToBigBed, wigToBigWig and the tagStorm
-    tools and the parasol job scheduler.
-  - code to build all other UCSC command line tools, like pslCDnaFilter,
-    overlapSelect or featureBits and hundreds of others.
+    tools, the parasol job scheduler, tools to process out file formats, like
+    pslCDnaFilter, pslFilter, pslToChain, overlapSelect and featureBits and 
+    hundreds of others.
   - also, patched third-party code from open-source projects bundled for
     convenience, in src/htslib (MIT), and ./src/optimalLeaf (public domain,
     with attribution).
@@ -22,7 +22,7 @@ As a result, the code in this repository falls into three different license type
   selected subdirectories of src/hg, see src/hg/LICENSE and https://genome-store.ucsc.edu/
 
   - for source code under directories in src/hg:
-   cgilib das encode hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene
+   cgilib hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene
    hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession
    hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene liftOver
 

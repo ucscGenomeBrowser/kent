@@ -2301,7 +2301,7 @@ if (logProxy)
 
 // if ignoreCookie or incognito is on the URL, don't check for cookies
 char *hguid = NULL;
-if (cgiOptionalString("ignoreCookie") == NULL || cgiOptionalString("incognito"))
+if ( cgiOptionalString("ignoreCookie") == NULL || cgiOptionalString("incognito") == NULL )
     hguid = getCookieId(cookieName);
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);

@@ -3,7 +3,7 @@ LicenceRef-proprietary=https://genome.ucsc.edu/license
 Source code under this directory is under the MIT license (see kent/LICENSE), 
 WITH THE EXCEPTION of the following subdirectories:
 
-   cgilib das encode hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene
+   cgilib hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene
    hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession
    hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene liftOver
 
