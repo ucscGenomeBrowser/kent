@@ -8,8 +8,8 @@ can be redistributed under their original open source licenses.
 
 As a result, if you are a non-commercial entity, you can use all the source
 code for free.  However, if you are commercial, you may need to pay if you want
-to install a web-based Genome Browser locally or use BLAT locally (command line
-or web GUI). 
+to install a web-based Genome Browser locally or use BLAT locally, either 
+as the blat/gfServer/gfClient command line programs or the or the webBlat GUI). 
 
 This means that all UCSC Genome Browser command-line tools and their required
 libraries are released under the MIT License. This includes our various file
