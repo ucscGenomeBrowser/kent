@@ -13,7 +13,7 @@ or web GUI).
 
 This means that all UCSC Genome Browser command-line tools and their required
 libraries are released under the MIT License. This includes our various file
-format converters, like bedToBigBed and wigToBigWig and any tools to create
+format converters, such as bedToBigBed and wigToBigWig, and any tools to create
 files needed for track hubs. They can be redistributed in any way necessary.
 
 In total, the code in this repository is covered by five different licenses:
