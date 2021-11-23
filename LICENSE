@@ -7,10 +7,11 @@ licensed by Kent Informatics.  Two libraries are bundled for convenience, they
 can be redistributed under their original open source licenses.
 
 As a result, if you are a non-commercial entity, you can use all the source
-code for free.  However, if you are commercial, you may need to pay if you want
+code for free. However, if you are commercial, you may need to pay if you want
 to install a web-based Genome Browser locally or use BLAT locally, either 
-as the blat/gfServer/gfClient command line programs or the or the webBlat GUI). 
-
+as the blat/gfServer/gfClient command line programs or the webBlat GUI 
+running locally on your servers.
+ 
 This means that all UCSC Genome Browser command-line tools and their required
 libraries are released under the MIT License. This includes our various file
 format converters, such as bedToBigBed and wigToBigWig, and any tools to create
