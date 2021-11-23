@@ -788,6 +788,7 @@ cart variables, for example having both hide all and highlight features.)
   useful for most websites using our tool hgRenderTracks to show only the
   Browser's main image from a Javascript-driven website.
   </li>
+
   <li>
   <code>oligoMatch=pack&amp;hgt.oligoMatch=&lt;dnaSeq&gt;</code> - switch on the Short Match track and 
   highlight a matching sequence - 
@@ -801,15 +802,20 @@ cart variables, for example having both hide all and highlight features.)
   <code>textSize=&lt;number&gt;</code> - set the size of text font - 
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&textSize=12" 
   target="_blank">example link</a> to increase the text font size to 12 pixels</li>
+
   <li>
-  <code>&lt;trackName&gt;=full|dense|pack|hide</code> - show the default tracks adding a track and
-  set it to full, dense, pack or hide visibility - 
+  <code>&lt;trackName&gt;=full|pack|dense|hide</code> - show your current tracks, adding a track 
+  and set it to full, pack or dense visibility or hide it, respectively - 
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&cytoBand=pack" 
-  target="_blank">example link</a> to show the default or user-selected tracks and set the 
-  Chromosome Bands track to &quot;pack&quot; view. Please note that for this feature to work with 
-  custom tracks you must use their unique assigned name and identifier number 
-  <code>ct_name_####</code>, only with the full custom track name will this feature work: 
-  <code>ct_name_####=full</code></li>
+  target="_blank">example link</a> to show the 
+  Chromosome Bands track set to &quot;pack&quot; and added to your view as saved in your cart. 
+  Please note that for this feature to work with 
+  custom tracks you must use the unique name and identifier number 
+  <code>ct_name_####</code> assigned by our system.   You can determine the name for a custom track 
+  using the url, <a href = "https://genome.ucsc.edu/cgi-bin/cartDump">
+  https://genome.ucsc.edu/cgi-bin/cartDump</a>.
+
+
   <li>
   <code>&lt;trackName&gt;.heightPer=&lt;number&gt;</code> - sets the height of the a bigWig track
   in pixels - <a 

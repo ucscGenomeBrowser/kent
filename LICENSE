@@ -3,7 +3,7 @@ LICENSE files in subdirectories override this default. As a result, the
 majority of the source code falls under the MIT license, however, some parts
 are under two non-commercial licenses (see below). The Genome Browser Web CGI
 programs are under a non-commercial license by UC, the BLAT program suite is
-licensed by Kent Informatics.  Two librarires are bundled for convenience and
+licensed by Kent Informatics.  Two libraries are bundled for convenience and
 are under their original open source licenses.
 
 As a result, if you are a non-commercial entity, you can use all the source
@@ -13,7 +13,7 @@ or web GUI).
 
 This means that all UCSC Genome Browser command-line tools and their required
 libraries are released under the MIT License. This includes our various file
-format converters, like bedToBigBed and wigToBigWig and any tools to create
+format converters, such as bedToBigBed and wigToBigWig, and any tools to create
 files needed for track hubs. They can be redistributed in any way necessary.
 
 In total, the code in this repository is covered by five different licenses:

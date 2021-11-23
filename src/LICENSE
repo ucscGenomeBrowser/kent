@@ -9,10 +9,10 @@ As a result, the code in this repository falls into three different license type
 
 1 OSI OPEN SOURCE: the default MIT license (below) applies to the large majority of the code.
   - this includes all code to build and use tools and libraries to
-    read and write the Genome Browser file formats, like bigBed and bigWig, and
+    read and write the Genome Browser file formats, such as bigBed and bigWig, and
     the command line tools for these, bedToBigBed, wigToBigWig and the tagStorm
     tools and the parasol job scheduler.
-  - code to build all other UCSC command line tools, like pslCDnaFilter,
+  - code to build all other UCSC command line tools, such as pslCDnaFilter,
     overlapSelect or featureBits and hundreds of others.
   - also, patched third-party code from open-source projects bundled for
     convenience, in src/htslib (MIT), and ./src/optimalLeaf (public domain,
