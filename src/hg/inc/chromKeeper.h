@@ -1,7 +1,7 @@
 /* chromKeeper - Wrapper for binKeepers around the whole genome. */
 
 /* Copyright (C) 2004 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef CHROMKEEPER_H
 #define CHROMKEEPER_H
 

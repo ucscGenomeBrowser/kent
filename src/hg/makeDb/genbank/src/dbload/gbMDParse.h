@@ -1,7 +1,7 @@
 /* Parse genbank metadata from RA files. */
 
 /* Copyright (C) 2008 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef GBMDPARSE_H
 #define GBMDPARSE_H
 

@@ -2,7 +2,7 @@
 /* Also use in loaders like hgRatioMicroarray and hgMedianMicroarray. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef MICROARRAY_H
 #define MICROARRAY_H

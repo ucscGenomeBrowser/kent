@@ -2,7 +2,7 @@
  * tracks in the browser CGIs */
 
 /* Copyright (C) 2008 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef transMapStuff_h
 #define transMapStuff_h
 struct trackDb;

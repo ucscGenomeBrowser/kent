@@ -1,5 +1,5 @@
 /* Copyright (C) 2007 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* agpAddCtgNamesAndGaps - Add component names to AGP where there are multiple 
 * components contributing to one accession with gaps getween them. e.g.

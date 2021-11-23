@@ -1,7 +1,7 @@
 /* regexHelper: easy wrappers on POSIX Extended Regular Expressions (man 7 regex, man 3 regex) */
 
 /* Copyright (C) 2012 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "regexHelper.h"
 #include "hash.h"

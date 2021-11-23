@@ -1,7 +1,7 @@
 /* Parse a statistics file from autoDtd. */
 
 /* Copyright (C) 2005 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef ELSTAT_H
 #define ELSTAT_H

@@ -1,7 +1,7 @@
 /* jingTestFoo - This is a program just to test newProg, and to do little non-repeating tests for Jing.. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
