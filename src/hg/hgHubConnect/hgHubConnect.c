@@ -31,6 +31,7 @@
 #include "pipeline.h"
 #include "hubPublic.h"
 
+
 static boolean measureTiming;
 
 struct cart *cart;	/* The user's ui state. */
@@ -383,16 +384,29 @@ void doValidateNewHub(char *hubUrl)
 /* Run hubCheck on a hub. */
 {
 udcSetCacheTimeout(1);
+char *expireTime = cfgOptionDefault("browser.cgiExpireMinutes", "20");
+unsigned expireMinutes = sqlUnsigned(expireTime);
+int hubCheckTimeout = (expireMinutes - 1) * 60 > 0 ? (expireMinutes - 1) * 60 : 60;
 printf("<div id=\"validateHubResult\" class=\"hubTdbTree\" style=\"overflow: auto\"></div>");
 char *cmd[] = {"loader/hubCheck", "-htmlOut", "-noTracks", hubUrl, NULL};
-struct pipeline *pl = pipelineOpen1(cmd, pipelineRead | pipelineNoAbort, NULL, NULL, 0);
-struct lineFile *lf = pipelineLineFile(pl);
-char *line;
-while (lineFileNext(lf, &line, NULL))
-    jsInlineF("%s", line);
-pipelineClose(&pl);
-// the 'false' below prevents a few hub-search specific jstree configuration options
-jsInline("hubSearchTree.init(false);");
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    struct pipeline *pl = pipelineOpen1(cmd, pipelineRead | pipelineNoAbort, NULL, NULL, hubCheckTimeout);
+    struct lineFile *lf = pipelineLineFile(pl);
+    char *line;
+    while (lineFileNext(lf, &line, NULL))
+        jsInlineF("%s", line);
+    pipelineClose(&pl);
+    // the 'false' below prevents a few hub-search specific jstree configuration options
+    jsInline("hubSearchTree.init(false);");
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError || errCatch->gotWarning)
+    {
+    printf("hubCheck timed out after running for %d seconds. Please try on a Unix command line", hubCheckTimeout);
+    }
+errCatchFree(&errCatch);
 }
 
 void hgHubConnectDeveloperMode()
@@ -1469,6 +1483,11 @@ jsIncludeFile("jquery.cookie.js", NULL);
 jsIncludeFile("spectrum.min.js", NULL); // there is no color picker used anywhere on this page. why include this?
 }
 
+void blankWarn()
+/* Dummy warn handler used in the iframe for returning hubCheck output */
+{
+}
+
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
@@ -1503,6 +1522,9 @@ if (cartVarExists(cart, hgHubDoRedirect))
 
 if (cartVarExists(cart, hgHubDoHubCheck))
     {
+    // we aren't calling cartWebStart so we need to push 3 error handlers:
+    webPushErrHandlers();
+    pushWarnHandler(blankWarn);
     puts("<html>");
     puts("<body>");
     puts("<link rel='stylesheet' href='../style/HGStyle.css' type='text/css'>");
@@ -1520,7 +1542,7 @@ if (cartVarExists(cart, hgHubDoHubCheck))
     puts("<div id='content' style='margin:10px; padding: 2px'>");
     jsOnEventByIdF("click", "windowX", "closeIframe()");
     if (isEmpty(hubUrl))
-        printf("Please wait, loading and checking hub, this can take 15 seconds to several minutes.");
+        printf("Please wait, loading and checking hub, this can take 15 seconds to 5 minutes.");
     else
         {
         puts("<p><button id='reloadButton'>Check again</button>");

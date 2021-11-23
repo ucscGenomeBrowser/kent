@@ -424,7 +424,7 @@ static void setupTimeout(struct pipeline* pl)
 /* setup timeout handling */
 {
 groupApoptosisPipeline = pl;
-if (signal(SIGALRM, groupApoptosis) != 0)
+if (signal(SIGALRM, groupApoptosis) == SIG_ERR)
     errnoAbort("signal failed");
 (void)alarm(pl->timeout);
 }
