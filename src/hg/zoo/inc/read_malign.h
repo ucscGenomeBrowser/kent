@@ -2,7 +2,7 @@
 *  alignments */
 
 /* Copyright (C) 2003 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* Return a multiple alignment contained in a file.  The first line contains
 *  two integers, namely the number of rows (nrow) followed by the number of

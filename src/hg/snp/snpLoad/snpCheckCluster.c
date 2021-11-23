@@ -5,7 +5,7 @@
 /* assert end == start */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* SKIPPING chrY because of those damned PAR SNPs */
 

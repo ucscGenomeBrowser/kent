@@ -2,7 +2,7 @@
  * if they share same frame as well as a genomic region. */
 
 /* Copyright (C) 2007 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "memalloc.h"
 #include "linefile.h"

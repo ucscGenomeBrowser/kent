@@ -1,7 +1,7 @@
 /* bigBedFind.h - Find things in big beds . */
 
 /* Copyright (C) 2010 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef BIGBEDFIND_H
 #define BIGBEDFIND_H

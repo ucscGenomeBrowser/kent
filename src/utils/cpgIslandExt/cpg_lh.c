@@ -1,5 +1,5 @@
 /* Copyright (C) 2012 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 
 /*  Last edited: Jun 23 19:33 1995 (gos) */

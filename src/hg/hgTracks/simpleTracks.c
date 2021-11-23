@@ -2,7 +2,7 @@
  * hgTracks.c allows a standalone main to make track images. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* NOTE: This code was imported from hgTracks.c 1.1469, May 19 2008,
  * so a lot of revision history has been obscured.  To see code history

@@ -3,8 +3,8 @@ LICENSE files in subdirectories override this default. As a result, the
 majority of the source code falls under the MIT license, however, some parts
 are under two non-commercial licenses (see below). The Genome Browser Web CGI
 programs are under a non-commercial license by UC, the BLAT program suite is
-licensed by Kent Informatics.  Two libraries are bundled for convenience and
-are under their original open source licenses.
+licensed by Kent Informatics.  Two libraries are bundled for convenience, they 
+can be redistributed under their original open source licenses.
 
 As a result, if you are a non-commercial entity, you can use all the source
 code for free.  However, if you are commercial, you may need to pay if you want
@@ -20,10 +20,10 @@ In total, the code in this repository is covered by five different licenses:
 
 FREE Licenses:
 
-1. the default MIT license (attached below) 
-  - for example, all code to read and write the Genome Browser file formats,
-    such as bigBed and bigWig, and the command line tools for these,
-    bedToBigBed, wigToBigWig and the tagStorm tools and the parasol job
+1. the default is the MIT license (attached below) 
+  - this includes, for example, all code to read and write the Genome Browser
+    file formats, such as bigBed and bigWig, and the command line tools for
+    these, bedToBigBed, wigToBigWig and the tagStorm tools and the parasol job
     scheduler.
   - also, third-party code from open-source projects bundled for convenience,
     in src/htslib (MIT)
@@ -35,12 +35,12 @@ NON-COMMERCIAL licenses:
 
 4. A non-commercial license from UC for the genome browser website code in 
    the following subdirectories of src/hg/ (see the LICENSE files in these directories):
-     cgilib das encode hgApi hgCollection hgFileSearch hgFileUi hgGateway
+     cgilib hgApi hgCollection hgFileSearch hgFileUi hgGateway
      hgGene hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions
      hgSession hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near
      visiGene liftOver
 5. A non-commercial license from Kent Informatics for the BLAT and isPCR code
-   in src/blat/ and src/jkOwnLib/, for more information see
+   in src/blat/, src/isPcr and src/jkOwnLib/, for more information see
    https://genome.ucsc.edu/license/ and http://www.kentinformatics.com/
 
 See https://genome.ucsc.edu/license/ for more details and on how to obtain a license

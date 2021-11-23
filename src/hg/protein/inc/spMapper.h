@@ -3,7 +3,7 @@
  * to collect results so that duplication of entries can be avoided.  */
 
 /* Copyright (C) 2005 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef SPMAPPER_H
 #define SPMAPPER_H
 

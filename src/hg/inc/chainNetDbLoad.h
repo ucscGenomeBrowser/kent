@@ -3,7 +3,7 @@
  * representation of chain into chain. */
 
 /* Copyright (C) 2002 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef CHAINNETDBLOAD_H
 #define CHAINNETDBLOAD_H

@@ -4,7 +4,7 @@
  * for random access to annotations. */
 
 /* Copyright (C) 2007 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef MINCHROMSIZE_H
 #define MINCHROMSIZE_H

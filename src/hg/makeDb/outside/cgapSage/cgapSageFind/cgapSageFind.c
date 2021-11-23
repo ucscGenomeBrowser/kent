@@ -1,7 +1,7 @@
 /* cgapSageFind - Find all the locations in the genome with SAGE data including SNP variants. */
 
 /* Copyright (C) 2007 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "obscure.h"
 #include "dystring.h"

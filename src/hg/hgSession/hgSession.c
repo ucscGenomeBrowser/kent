@@ -1,7 +1,7 @@
 /* hgSession - Interface with wiki login and do session saving/loading. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* WARNING: testing this CGI on hgwbeta can lead to missed bugs. This is
  * because on hgwbeta, the login links go just to hgwbeta. But on genome-euro

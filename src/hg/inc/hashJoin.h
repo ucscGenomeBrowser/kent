@@ -2,7 +2,7 @@
  * char **row that contains the key and empty slot(s) for the column value(s) */
 
 /* Copyright (C) 2015 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef HASHJOIN_H
 #define HASHJOIN_H

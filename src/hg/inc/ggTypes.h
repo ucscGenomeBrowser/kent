@@ -1,7 +1,7 @@
 /* ggTypes - Type enumerations used by geneGraph and other modules. */
 
 /* Copyright (C) 2007 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef GGTYPES_H
 #define GGTYPES_H
