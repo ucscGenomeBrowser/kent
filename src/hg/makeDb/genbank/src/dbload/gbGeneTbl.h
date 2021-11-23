@@ -2,7 +2,7 @@
  * This defines per-table objects that handling loading and updating. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef gbGeneTbl_h
 #define gbGeneTbl_h
 struct sqlConnection;

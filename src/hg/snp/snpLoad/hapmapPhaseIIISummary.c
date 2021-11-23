@@ -4,7 +4,7 @@
  * filtering items in all of those subtracks. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* This is inflexible about filenames (very rel27-specific).  If we
  * ever need flexibility, add args and options... */

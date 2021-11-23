@@ -1,5 +1,5 @@
 /* Copyright (C) 2007 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* hprdP2p - Create hprd.p2p tab file by reading HPRD FLAT_FILES.
  *   It is assumed that the HPRD flat files have been decompressed in

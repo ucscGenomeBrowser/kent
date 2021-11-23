@@ -1,7 +1,7 @@
 /* bamFile -- interface to binary alignment format files using Heng Li's samtools lib. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hdb.h"

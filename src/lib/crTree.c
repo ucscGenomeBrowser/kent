@@ -1,5 +1,5 @@
 /* Copyright (C) 2009 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* crTree chromosome r tree. This module creates and uses a disk-based index that can find items
  * that overlap with a chromosome range - something of the form chrN:start-end - with a

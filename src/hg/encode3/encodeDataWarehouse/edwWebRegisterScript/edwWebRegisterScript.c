@@ -1,7 +1,7 @@
 /* edwWebRegisterScript - Create a user ID for a script, since scripts have a hard time with Persona.. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include <uuid/uuid.h>
 #include "common.h"
 #include "linefile.h"

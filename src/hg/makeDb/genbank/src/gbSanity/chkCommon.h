@@ -1,7 +1,7 @@
 /* chkCommon - common function used by various modules */
 
 /* Copyright (C) 2006 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef CHKCOMMON_H
 #define CHKCOMMON_H
 extern int errorCnt;  /* count of errors */

@@ -4,7 +4,7 @@
  * at database now. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* Version history -
  *  v2 - making it so daemon only keeps current job in memory consulting db table always

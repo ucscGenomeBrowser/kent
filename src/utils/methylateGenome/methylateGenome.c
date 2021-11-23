@@ -1,7 +1,7 @@
 /* methylateGenome - Creates a methylated version of an input genome, in which any occurance of CG becomes TG. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

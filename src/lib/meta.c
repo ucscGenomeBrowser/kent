@@ -1,5 +1,5 @@
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* metaRa - stuff to parse and interpret a genome-hub meta.txt file, which is in 
  * a hierarchical ra format.  That is something like:

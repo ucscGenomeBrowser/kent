@@ -19,9 +19,12 @@ As far as the UCSC Genome Browser group is concerned, the raw table data and bin
 files used to create the graphics by the browser is freely available for both
 public and commercial use. This applies to data that is downloaded as files via 
 http, https, ftp or rsync, and equally when data is accessed through 
-the public MySQL server or via the web API.
+the public MySQL server or via the web API. The only exception are the liftOver chain files,
+they can be linked, downloaded, used and redistributed, but only for non-commercial use
+see the <a href="http://hgdownload.cse.ucsc.edu/goldenpath/hg38/liftOver/">liftOver README</a>.
+
 </p>
-<p>Sometimes, the source databases or authors place restrictions on the data. In very rare
+<p>Sometimes, the source databases or authors place restrictions on data. In very rare
 cases, the genomes come with citation requirements. The README.txt file in the
 download directory of each assembly shows the
 original restrictions pertaining to the genome
@@ -30,12 +33,17 @@ sequence itself by the original authors; most assemblies do not have any restric
 <p>
 Certain genome annotation data, mostly on the human
 genome and in the domain of clinical genetics, have specific restrictions.
+For some of these, we are not allowed to make the data available. 
 Usually the data must be obtained from the source database directly in the
 original format or licensed, rather from UCSC. Examples are HGMD, LOVD, OMIM, Decipher,
-Genomenon, Genehancer and COSMIC, as well as any GISAID-derived data on viral
-genomes. Please see the respective track documentation pages on these
-assemblies for more details, by selecting the assembly and clicking the track
-title in the genome browser.</p> <br>
+Genomenon, Genehancer and COSMIC. For viral genomes, any GISAID-sequences or any data
+derived from GISAID sequences cannot be shared by us. Please see the respective
+track documentation pages on these assemblies for more details, by selecting
+the assembly and clicking the track title in the genome browser. They usually
+list or link to the exact license conditions. Files for these tracks are not
+available from our download servers, please contact us for questions or if you
+need a pointer to the respective conversion scripts in our Github code
+repository.</p><br>
 
 <h1 id="free">Software: Most command-line tools and directories are freely available for all uses</h1>
 <p>

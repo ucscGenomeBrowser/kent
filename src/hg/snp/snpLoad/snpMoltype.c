@@ -5,7 +5,7 @@
  * Use UCSC chromInfo. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* Look in chrMulti_snpFasta if no match found in chrN_snpFasta. */
 /* Write to error file if no match found in chrN_snpFasta or chrMulti_snpFasta. */

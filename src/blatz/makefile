@@ -5,6 +5,8 @@ L += -lm $(SOCKETLIB)
 MYLIBDIR = ../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkOwnLib.a ${MYLIBDIR}/jkweb.a
 
+HG_WARN += -fcommon
+
 O = align.o bzp.o gapless.o index.o output.o
 
 all: blatz blatzClient blatzServer 

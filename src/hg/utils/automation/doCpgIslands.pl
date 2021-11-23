@@ -143,7 +143,7 @@ sub doCpg {
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "Run /hive/data/staging/data/cpgIslandExt/cpglh on masked sequence.";
-  my $bossScript = newBash HgRemoteScript("$runDir/doCpg.bcsh", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/doCpg.bash", $workhorse,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 export twoBit=\"$maskedSeq\"
