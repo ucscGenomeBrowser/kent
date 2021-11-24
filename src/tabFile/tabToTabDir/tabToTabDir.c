@@ -15,6 +15,7 @@
 
 char *clId = NULL;  // Flag set from command line to add an id column
 int clStartId = 1;  // What number id column should start with
+boolean clSort = FALSE;  // Sort output?
 
 void usage()
 /* Explain usage and exit. */
@@ -29,6 +30,7 @@ errAbort(
 "   -id=fieldName - Add a numeric id field of given name that starts at 1 and autoincrements \n"
 "                   for each table\n"
 "   -startId=fieldName - sets starting ID to be something other than 1\n"
+"   -sort - if set then sort tables before output\n"
 "usage:\n"
 "   in.tsv is a tab-separated input file.  The first line is the label names and may start with #\n"
 "   spec.x is a file that says what columns to put into the output, described in more detail below.\n"
@@ -50,6 +52,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"id", OPTION_STRING},
    {"startId", OPTION_INT},
+   {"sort", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -778,6 +781,10 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
 	outTable = unrollTable(outTable);
 	}
 
+    /* Optionally sort output */
+    if (clSort)
+        fieldedTableSortOnField(outTable, newTable->keyField->name, FALSE);
+
     /* Create output file name and save file. */
     char outTabName[FILENAME_LEN];
     safef(outTabName, sizeof(outTabName), "%s/%s.tsv", outDir, newTable->name);
@@ -796,6 +803,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 clId = optionVal("id", clId);
 clStartId = optionInt("startId", clStartId);
+clSort = optionExists("sort");
 if (argc != 4)
     usage();
 tabToTabDir(argv[1], argv[2], argv[3]);
