@@ -885,6 +885,12 @@ if (--dot <= 0)
     }
 }
 
+void dotForUserEnd()
+/* Write out new line at end of dots for user */
+{
+putc('\n', stderr);
+}
+
 void spaceToUnderbar(char *s)
 /* Convert white space to underbar. */
 {
