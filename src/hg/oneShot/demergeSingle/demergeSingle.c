@@ -2,6 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "obscure.h"
 #include "options.h"
 #include "fieldedTable.h"
 
@@ -11,7 +12,7 @@ void usage()
 errAbort(
   "demergeSingle - Help propagate terminology changes used in merged tracks to what makes them up.\n"
   "usage:\n"
-  "   demergeSingle merged oldSingle newSingle\n"
+  "   demergeSingle merged fileList backupSuffix\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -56,7 +57,7 @@ carefulClose(&f);
 }
 
 
-void demergeSingle(char *merged, char *oldSingle, char *newSingle)
+void demergeSingle(char *merged, char *oldFiles, char *backupSuffix)
 /* demergeSingle - Help propagate terminology changes used in merged tracks to what makes them up.. */
 {
 char *required[] = {"count", "total", "cell_class",};
@@ -65,7 +66,15 @@ struct fieldedTable *mergedTable = fieldedTableFromTabFile(merged, merged,
 uglyf("%s has %d rows and %d fields\n", merged, mergedTable->rowCount, mergedTable->fieldCount);
 struct hash *mergedHash = fieldedTableUniqueIndex(mergedTable, "total");
 
-demergeOne(mergedTable, mergedHash, oldSingle, newSingle);
+struct slName *fileList = readAllLines(oldFiles);
+uglyf("Processing %d files\n", slCount(fileList));
+struct slName *file;
+for (file = fileList; file != NULL; file = file->next)
+    {
+    char newPath[PATH_LEN];
+    safef(newPath, sizeof(newPath), "%s%s", file->name, backupSuffix);
+    demergeOne(mergedTable, mergedHash, file->name, newPath);
+    }
 }
 
 int main(int argc, char *argv[])
