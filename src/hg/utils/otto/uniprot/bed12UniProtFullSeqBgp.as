@@ -43,6 +43,6 @@ table bed12BgpUniProtAnnot
     lstring refSeqProt; "RefSeq Protein IDs"
     lstring entrezGene; "NCBI Entrez Gene"
     lstring ensGene; "Ensembl Gene IDs"
-    lstring ensTrans; "Ensembl Transcript IDs"
     lstring ensProt; "Ensembl Protein IDs"
+    lstring ensTrans; "Ensembl Transcript IDs"
     )

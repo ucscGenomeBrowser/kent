@@ -1,7 +1,7 @@
 /* pbStampPic.h define geometri parameter for drawing a Proteom Browser stamp */
 
 /* Copyright (C) 2004 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef PBSTAMPPICT_H
 #define PBSTAMPPICT_H

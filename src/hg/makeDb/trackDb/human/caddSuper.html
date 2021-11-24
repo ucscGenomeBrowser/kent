@@ -7,8 +7,8 @@ well as insertion/deletion variants in the human genome.</p>
 
 <p>
 Some mutation annotations
-tend to exploit a single information type (e.g. phastCons or phyloP for
-conservation) and/or are restricted in scope (e.g. to missense changes). Thus,
+tend to exploit a single information type (e.g., phastCons or phyloP for
+conservation) and/or are restricted in scope (e.g., to missense changes). Thus,
 a broadly applicable metric that objectively weights and integrates diverse
 information is needed.  Combined Annotation Dependent Depletion (CADD) is a
 framework that integrates multiple annotations into one metric by contrasting
@@ -24,6 +24,19 @@ Finally, CADD scores of complex trait-associated variants from genome-wide
 association studies (GWAS) are significantly higher than matched controls and
 correlate with study sample size, likely reflecting the increased accuracy of
 larger GWAS.
+</p>
+
+<p>
+A CADD score represents a ranking not a prediction, and no threshold is defined
+for a specific purpose.  Higher scores are more likely to be deleterious: 
+Scores are 
+
+<pre>  10 * -log of the rank</pre>
+
+so that variants with scores above 20 are 
+predicted to be among the 1.0% most deleterious possible substitutions in 
+the human genome. We recommend thinking carefully about what threshold is 
+appropriate for your application.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -45,7 +58,7 @@ parameters, etc.
 The four single-nucleotide mutation tracks have a default viewing range of
 score 10 to 50. As explained in the paragraph above, that results in
 slightly less than 10% of the data displayed. The 
-deletion and insertion tracks have a default filter of 10-100, since they
+deletion and insertion tracks have a default filter of 10-100, because they
 display discrete items and not graphical data.
 </p>
 
@@ -53,7 +66,7 @@ display discrete items and not graphical data.
 <b>Single nucleotide variants (SNV):</b> For SNVs, at every
 genome position, there are three values per position, one for every possible
 nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing 
-the reference allele, e.g. A to A, is always set to zero.
+the reference allele, e.g., A to A, is always set to zero.
 </p>
 <p>
 When using this track, zoom in until you can see every basepair at the
@@ -66,7 +79,7 @@ application of CADD.
 
 <p><b>Insertions and deletions:</b> Scores are also shown on mouseover for a
 set of insertions and deletions. On hg38, the set has been obtained from
-Gnomad3. On hg19, the set of indels has been obtained from various sources
+gnomAD3. On hg19, the set of indels has been obtained from various sources
 (gnomAD2, ExAC, 1000 Genomes, ESP). If your insertion or deleletion of interest
 is not in the track, you will need to use CADD's
 <a target="_blank" href="https://cadd.gs.washington.edu/score">online scoring tool</a>
@@ -92,7 +105,7 @@ regions or the whole genome annotation can be obtained using our tools <tt>bigWi
 or <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
-The tools can also be used to obtain features confined to a given range, e.g.
+The tools can also be used to obtain features confined to a given range, e.g.,
 <br>
 <tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/a.bw stdout</tt>
 <br>
@@ -121,7 +134,7 @@ Thanks to the CADD development team for providing precomputed data as simple tab
 <h2>References</h2>
 <p>
 Kircher M, Witten DM, Jain P, O'Roak BJ, Cooper GM, Shendure J.
-<a href="http://dx.doi.org/10.1038/ng.2892" target="_blank">
+<a href="https://www.nature.com/articles/ng.2892" target="_blank">
 A general framework for estimating the relative pathogenicity of human genetic variants</a>.
 <em>Nat Genet</em>. 2014 Mar;46(3):310-5.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24487276" target="_blank">24487276</a>;

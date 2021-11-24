@@ -2,7 +2,7 @@
  * See also customFactory, which is where the parsing is done. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hash.h"
@@ -731,7 +731,8 @@ struct customTrack *customTracksParseCartDetailed(char *genomeDb, struct cart *c
 					  char **retCtFileName,
                                           struct customTrack **retReplacedCts,
                                           int *retNumAdded,
-                                          char **retErr)
+                                          char **retErr,
+                                          boolean *retWarnOnly)
 /* Figure out from cart variables where to get custom track text/file.
  * Parse text/file into a custom set of tracks.  Lift if necessary.
  * If retBrowserLines is non-null then it will return a list of lines
@@ -746,6 +747,7 @@ struct customTrack *customTracksParseCartDetailed(char *genomeDb, struct cart *c
 #define CT_CUSTOM_DOC_FILE_BIN_VAR  CT_CUSTOM_DOC_FILE_VAR "__binary"
 int numAdded = 0;
 char *err = NULL;
+boolean warnOnly = FALSE;
 
 /* the hgt.customText and hgt.customFile variables contain new custom
  * tracks that have not yet been parsed */
@@ -866,10 +868,12 @@ if (isNotEmpty(customText))
     else
 	{
 	err = customTrackUnavailableErrsFromList(newCts);
-	if (err)
-	    newCts = NULL;  /* do not save the unhappy remote cts*/
         if (isNotEmpty(errCatch->message->string))
             err = catTwoStrings(emptyForNull(err), errCatch->message->string);
+        if (err)
+	    {
+	    warnOnly = TRUE;
+	    }
 	}
     errCatchFree(&errCatch);
     }
@@ -1013,6 +1017,8 @@ if (retNumAdded)
     *retNumAdded = numAdded;
 if (retErr)
     *retErr = err;
+if (retWarnOnly)
+    *retWarnOnly = warnOnly;
 return ctList;
 }
 
@@ -1024,7 +1030,7 @@ struct customTrack *customTracksParseCart(char *genomeDb, struct cart *cart,
 char *err = NULL;
 struct customTrack *ctList =
     customTracksParseCartDetailed(genomeDb, cart, retBrowserLines, retCtFileName,
-                                        NULL, NULL, &err);
+                                        NULL, NULL, &err, NULL);
 if (err)
     warn("%s", err);
 return ctList;

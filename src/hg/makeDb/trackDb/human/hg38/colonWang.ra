@@ -4,6 +4,8 @@ shortLabel Colon Wang
 longLabel Colon single cell sequencing from Wang et al 2020
 visibility hide
 group singleCell
+priority 2.5
+pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track colonWangCellType
     parent colonWang
@@ -44,8 +46,9 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/colonWang/donor.bb
     barChartStatsUrl /gbdb/hg38/bbi/colonWang/donor.stats
-    barChartBars Colon-1 Colon-2
-    barChartColors #205cd4 #215bd3
+    barChartCategoryUrl /gbdb/hg38/bbi/colonWang/donor.colors
+    #barChartBars Colon-1 Colon-2
+    #barChartColors #205cd4 #215bd3
     #barChartColors #078fc2 #0296c0
     #barChartColors #145cdf #0b5de9
     #barChartColors #52719f #3a81a5

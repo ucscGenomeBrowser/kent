@@ -5,7 +5,7 @@
  * hgRenderTracks web service.  See mainMain.c for the main used by the hgTracks CGI. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include <pthread.h>
 #include <limits.h>
@@ -4572,6 +4572,7 @@ if (
 || sameWord(type, "bigBarChart")
 || sameWord(type, "interact")
 || sameWord(type, "bigInteract")
+|| sameWord(type, "bigRmsk")
 || sameWord(type, "bigLolly")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
@@ -7377,6 +7378,7 @@ return (startsWith("big", track->tdb->type)
      || startsWithWord("mathWig"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
+     || startsWithWord("bigRmsk", track->tdb->type)
      || startsWithWord("bigLolly", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
      // XX code-review: shouldn't we error abort if the URL is not valid?
@@ -8059,9 +8061,9 @@ hPrintf("<BR>");
 void printSearchHelpLink()
 /* print the little search help link next to the go button */
 {
-char *url = cfgOption("searchHelpUrl");
-char *label = cfgOptionDefault("searchHelpLabel", "Search Help");
-if (!url)
+char *url = cfgOptionDefault("searchHelpUrl","../goldenPath/help/query.html");
+char *label = cfgOptionDefault("searchHelpLabel", "examples");
+if (!url || isEmpty(url))
     return;
 
 printf("<div id='searchHelp'><a target=_blank title='Documentation on what you can enter into the Genome Browser search box' href='%s'>%s</a></div>", url, label);
@@ -8752,7 +8754,7 @@ if (!hideControls)
 	sprintLongWithCommas(buf, virtWinEnd - virtWinStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
 	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput'"
-                        " size='%d'>\n", multiRegionButtonTop ? 50 : 60);
+                        " size='%d'>\n", multiRegionButtonTop ? 51 : 61);
 	hWrites(" ");
 	hButton("goButton", "go");
 

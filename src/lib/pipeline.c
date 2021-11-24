@@ -2,7 +2,7 @@
  * writing  */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "pipeline.h"
 #include "common.h"
@@ -46,6 +46,7 @@ struct pipeline
     struct plProc *procs;      /* list of processes */
     int numRunning;            /* number of processes running */
     pid_t groupLeader;         /* process group id, or -1 if not set. This is pid of group leader */
+    unsigned int timeout;      /* timeout, in seconds, or zero */
     char *procName;            /* name to use in error messages. */
     int pipeFd;                /* fd of pipe to/from process, -1 if none */
     unsigned options;          /* options */
@@ -263,7 +264,7 @@ else
     plProcHandleExited(proc, status);
 }
 
-static struct pipeline* pipelineNew(char ***cmds, unsigned options)
+static struct pipeline* pipelineNew(char ***cmds, unsigned options, unsigned int timeout)
 /* create a new pipeline object. Doesn't start processes */
 {
 static char *memPseudoCmd[] = {"[mem]", NULL};
@@ -274,6 +275,7 @@ AllocVar(pl);
 pl->groupLeader = -1;
 pl->pipeFd = -1;
 pl->options = options;
+pl->timeout = timeout;
 pl->procName = joinCmds(cmds);
 
 if (cmds[0] == NULL)
@@ -404,6 +406,29 @@ while (pl->numRunning > 0)
     waitOnOne(pl);
 }
 
+/* uses to stash pipeline object for group leader process only, which is
+ * single-threaded */
+static struct pipeline* groupApoptosisPipeline = NULL;
+
+static void groupApoptosis(int signum)
+/* signal handler for SIGALRM expiration */
+{
+// hopefully this gets logged or seen by user
+fprintf(stderr, "pipeline timeout kill after %d seconds: %s\n", groupApoptosisPipeline->timeout,
+        pipelineDesc(groupApoptosisPipeline));
+fflush(stderr);
+(int)kill(0, SIGKILL); // kill off process group
+}
+
+static void setupTimeout(struct pipeline* pl)
+/* setup timeout handling */
+{
+groupApoptosisPipeline = pl;
+if (signal(SIGALRM, groupApoptosis) == SIG_ERR)
+    errnoAbort("signal failed");
+(void)alarm(pl->timeout);
+}
+
 static void groupLeaderRun(struct pipeline* pl, int stdinFd, int stdoutFd, int stderrFd,
                            void *otherEndBuf, size_t otherEndBufSize)
 /* group leader process */
@@ -411,6 +436,9 @@ static void groupLeaderRun(struct pipeline* pl, int stdinFd, int stdoutFd, int s
 pl->groupLeader = getpid();
 if (setpgid(pl->groupLeader, pl->groupLeader) != 0)
     errnoAbort("error from child setpgid(%d, %d)", pl->groupLeader, pl->groupLeader);
+if (pl->timeout > 0)
+    setupTimeout(pl);
+    
 pipelineGroupExec(pl, stdinFd, stdoutFd, stderrFd, otherEndBuf, otherEndBufSize);
 
 // only keep stderr open
@@ -513,14 +541,15 @@ if ((opts & pipelineAppend) && ((opts & pipelineWrite) == 0))
 }
 
 struct pipeline *pipelineOpenFd(char ***cmds, unsigned opts,
-                                int otherEndFd, int stderrFd)
+                                int otherEndFd, int stderrFd,
+                                unsigned int timeout)
 /* Create a pipeline from an array of commands.  See pipeline.h for
  * full documentation. */
 {
 struct pipeline *pl;
 
 checkOpts(opts);
-pl = pipelineNew(cmds, opts);
+pl = pipelineNew(cmds, opts, timeout);
 if (opts & pipelineRead)
     pipelineStartRead(pl, otherEndFd, stderrFd, NULL, 0);
 else
@@ -529,7 +558,8 @@ return pl;
 }
 
 struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
-                              char *otherEndFile, char *stderrFile)
+                              char *otherEndFile, char *stderrFile,
+                              unsigned int timeout)
 /* Create a pipeline from an array of commands.  See pipeline.h for
  * full documentation */
 {
@@ -542,7 +572,7 @@ if (opts & pipelineRead)
     otherEndFd = (otherEndFile == NULL) ? STDIN_FILENO : openRead(otherEndFile);
 else
     otherEndFd = (otherEndFile == NULL) ? STDOUT_FILENO : openWrite(otherEndFile, append);
-struct pipeline *pl = pipelineOpenFd(cmds, opts, otherEndFd, stderrFd);
+struct pipeline *pl = pipelineOpenFd(cmds, opts, otherEndFd, stderrFd, timeout);
 safeClose(&otherEndFd);
 if (stderrFile != NULL)
     safeClose(&stderrFd);
@@ -551,7 +581,7 @@ return pl;
 
 struct pipeline *pipelineOpenMem(char ***cmds, unsigned opts,
                                  void *otherEndBuf, size_t otherEndBufSize,
-                                 int stderrFd)
+                                 int stderrFd, unsigned int timeout)
 /* Create a pipeline from an array of commands, with the pipeline input/output
  * in a memory buffer.  See pipeline.h for full documentation.  Currently only
  * input to a read pipeline is supported  */
@@ -562,40 +592,42 @@ if (opts & pipelineWrite)
     errAbort("pipelineOpenMem only supports read pipelines at this time");
 opts |= pipelineMemInput;
 
-pl = pipelineNew(cmds, opts);
+pl = pipelineNew(cmds, opts, timeout);
 pipelineStartRead(pl, STDIN_FILENO, stderrFd, otherEndBuf, otherEndBufSize);
 return pl;
 }
 
 struct pipeline *pipelineOpenFd1(char **cmd, unsigned opts,
-                                 int otherEndFd, int stderrFd)
+                                 int otherEndFd, int stderrFd,
+                                 unsigned int timeout)
 /* like pipelineOpenFd(), only takes a single command */
 {
 char **cmds[2];
 cmds[0] = cmd;
 cmds[1] = NULL;
-return pipelineOpenFd(cmds, opts, otherEndFd, stderrFd);
+return pipelineOpenFd(cmds, opts, otherEndFd, stderrFd, timeout);
 }
 
 struct pipeline *pipelineOpen1(char **cmd, unsigned opts,
-                               char *otherEndFile, char *stderrFile)
+                               char *otherEndFile, char *stderrFile,
+                               unsigned int timeout)
 /* like pipelineOpen(), only takes a single command */
 {
 char **cmds[2];
 cmds[0] = cmd;
 cmds[1] = NULL;
-return pipelineOpen(cmds, opts, otherEndFile, stderrFile);
+return pipelineOpen(cmds, opts, otherEndFile, stderrFile, timeout);
 }
 
 struct pipeline *pipelineOpenMem1(char **cmd, unsigned opts,
                                   void *otherEndBuf, size_t otherEndBufSize,
-                                  int stderrFd)
+                                  int stderrFd, unsigned int timeout)
 /* like pipelineOpenMem(), only takes a single command */
 {
 char **cmds[2];
 cmds[0] = cmd;
 cmds[1] = NULL;
-return pipelineOpenMem(cmds, opts, otherEndBuf, otherEndBufSize, stderrFd);
+return pipelineOpenMem(cmds, opts, otherEndBuf, otherEndBufSize, stderrFd, timeout);
 }
 
 char *pipelineDesc(struct pipeline *pl)

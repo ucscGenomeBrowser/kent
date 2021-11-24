@@ -2,7 +2,7 @@
  * variant with ambiguous placement, e.g. 'AAA' -> 'AAAA' -- where is the extra A inserted? */
 
 /* Copyright (C) 2017 The Regents of the University of California
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef INDELSHIFT_H
 #define INDELSHIFT_H

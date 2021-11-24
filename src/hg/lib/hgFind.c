@@ -1,7 +1,7 @@
 /* hgFind.c - Find things in human genome annotations. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "regexHelper.h"
 #include "obscure.h"
@@ -369,7 +369,7 @@ if (keyCount > 0)
 	extraOptions = "";
     makeCmds(cmds, keyWords, keyCount, extraOptions);
 
-    pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile, NULL);
+    pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile, NULL, 0);
     lf = pipelineLineFile(pl);
     verbose(3, "\n***Running this fgrep command with pipeline from %s:\n*** %s\n\n",
 	    indexFile, pipelineDesc(pl));

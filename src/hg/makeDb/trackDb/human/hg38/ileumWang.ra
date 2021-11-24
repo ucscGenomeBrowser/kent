@@ -4,6 +4,8 @@ shortLabel Ileum Wang
 longLabel Ileum single cell sequencing from Wang et al 2020
 visibility hide
 group singleCell
+priority 6
+pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track ileumWangCellType
     parent ileumWang
@@ -42,8 +44,9 @@ group singleCell
     labelFields name,name2
     bigDataUrl /gbdb/hg38/bbi/ileumWang/donor.bb
     barChartStatsUrl /gbdb/hg38/bbi/ileumWang/donor.stats
-    barChartBars Ileum-1 Ileum-2
-    barChartColors #078fc2 #0296c0
+    barChartCategoryUrl /gbdb/hg38/bbi/ileumWang/donor.colors
+    #barChartBars Ileum-1 Ileum-2
+    #barChartColors #078fc2 #0296c0
     #barChartColors #0d91bc #0397bf
     transformFunc NONE
     barChartLimit 2

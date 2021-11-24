@@ -43,7 +43,6 @@ with those classes. The colors will be purest in the
 the bars represent relatively pure cell types. They can give an overview of the
 cell composition within other categories in other subtracks as well.</p>
 
-
 <h2>Method</h2>
 <p>
 Healthy cortical samples were taken from 16 controls (ages 4-22) without 
@@ -62,20 +61,13 @@ generated 104,559 single-nuclei gene expression profiles in total. </p>
 <p>
 The cell/gene matrix and cell-level metadata was downloaded from the <a
 href="http://cells.ucsc.edu/?ds=autism" target="_blank">UCSC Cell Browser</a>. The
-UCSC command line tool matrixClusterColumns, matrixToBarChart, and bedToBigBed
+UCSC command line utility matrixClusterColumns, matrixToBarChart, and bedToBigBed
 were used to transform these into a bar chart format bigBed file that can be
 visualized. The coloring was done by defining colors for the broad level cell
-classes and then using another UCSC tool, hcaColorCells, to interpolate the
-colors across all cell types. The UCSC tools can be found on our download server: 
+classes and then using another UCSC utility, hcaColorCells, to interpolate the
+colors across all cell types. The UCSC utilities can be found on 
 <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
-target="_blank">hgdownload</a></p>
-
-<h2>Credit</h2>
-<p>
-Thanks to Dmitry Velmeshev and to the many authors who worked on
-producing and publishing this data set. The data were integrated into the UCSC
-Genome Browser by Jim Kent and Brittney Wick. The UCSC work was paid for by the
-Chan Zuckerberg Initiative.</p>
+target="_blank">our download server</a>.</p>
 
 <h2>Data Access</h2>
 <p>
@@ -88,6 +80,14 @@ href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing
 list archives</a> for questions, or our <a
 href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
 information.</p>
+
+
+<h2>Credit</h2>
+<p>
+Thanks to Dmitry Velmeshev and to the many authors who worked on
+producing and publishing this data set. The data were integrated into the UCSC
+Genome Browser by Jim Kent and Brittney Wick then reviewed by by Daniel Schmelter. 
+The UCSC work was paid for by the Chan Zuckerberg Initiative.</p>
 
 <h2>References</h2>
 <p>

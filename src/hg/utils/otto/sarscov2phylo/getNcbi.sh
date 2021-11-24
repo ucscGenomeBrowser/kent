@@ -3,7 +3,6 @@ source ~/.bashrc
 set -beEu -x -o pipefail
 
 # Download SARS-CoV-2 GenBank FASTA and metadata using NCBI Datasets API.
-# Use E-Utils to get SARS-CoV-2 metadata from BioSample.
 # Use BioSample metadata to fill in gaps in GenBank metadata and report conflicting dates.
 # Use enhanced metadata to rewrite FASTA headers for matching up with sequences in other databases.
 
@@ -54,58 +53,7 @@ jq -c -r '[.accession, .biosample, .isolate.collectionDate, .location.geographic
 | sort \
     > ncbi_dataset.tsv
 
-# TODO: get rid of all this eutils cruft when biosample.jsonl is stable:
-
-# Use EUtils (esearch) to get all SARS-CoV-2 BioSample GI# IDs:
-$scriptDir/searchAllSarsCov2BioSample.sh
-sort all.biosample.gids.txt > all.biosample.gids.sorted.txt
-
-# Copy yesterday's all.bioSample.txt so we don't have to refetch all the old stuff.
-if [ -e ../ncbi.latest/all.bioSample.txt.xz ]; then
-    xzcat ../ncbi.latest/all.bioSample.txt.xz > all.bioSample.txt
-    grep ^Accession all.bioSample.txt | sed -re 's/^.*ID: //' | sort -u > ids.loaded
-    comm -23 all.biosample.gids.sorted.txt ids.loaded > ids.notLoaded
-elif [ -e ../ncbi.latest/all.bioSample.txt ]; then
-    cp ../ncbi.latest/all.bioSample.txt all.bioSample.txt
-    grep ^Accession all.bioSample.txt | sed -re 's/^.*ID: //' | sort -u > ids.loaded
-    comm -23 all.biosample.gids.sorted.txt ids.loaded > ids.notLoaded
-else
-    cp -p all.biosample.gids.txt ids.notLoaded
-fi
-wc -l ids.notLoaded
-
-# Use EUtils (efetch) to get BioSample records for the GI# IDs that we don't have yet:
-time $scriptDir/bioSampleIdToText.sh < ids.notLoaded >> all.bioSample.txt
-
-grep ^Accession all.bioSample.txt | sed -re 's/^.*ID: //' | sort > ids.loaded
-comm -23 all.biosample.gids.sorted.txt ids.loaded > ids.notLoaded
-if [ -s ids.notLoaded ]; then
-    echo Retrying queries for `wc -l < ids.notLoaded` IDs
-    $scriptDir/bioSampleIdToText.sh < ids.notLoaded >> all.bioSample.txt
-    grep ^Accession all.bioSample.txt | sed -re 's/^.*ID: //' | sort > ids.loaded
-    comm -23 all.biosample.gids.sorted.txt ids.loaded > ids.notLoaded
-    if [ -s ids.notLoaded ]; then
-        echo "Still have only $accCount accession lines after retrying; quitting."
-        exit 1
-    fi
-fi
-
-# Extract properties of interest into tab-sep text:
-$scriptDir/bioSampleTextToTab.pl < all.bioSample.txt  > all.bioSample.tab
-
-# Extract BioSample tab-sep lines just for BioSample accessions included in the ncbi_dataset data:
-tawk '$2 != "" {print $2;}' ncbi_dataset.tsv \
-| grep -Fwf - all.bioSample.tab \
-    > gb.bioSample.eutils.tab
-
 time $scriptDir/bioSampleJsonToTab.py ncbi_dataset/data/biosample.jsonl > gb.bioSample.tab
-
-# TODO: get rid of this when bioSample json is stable
-comm -23 <(cut -f 2 gb.bioSample.eutils.tab | sort) <(cut -f 2 gb.bioSample.tab | sort) \
-    > bioSample.missingFromJson.txt
-wc -l bioSample.missingFromJson.txt
-grep -Fwf bioSample.missingFromJson.txt gb.bioSample.eutils.tab \
-    >> gb.bioSample.tab
 
 # Use BioSample metadata to fill in missing pieces of GenBank metadata and report conflicting
 # sample collection dates:
@@ -119,7 +67,7 @@ tawk '$3 != "" {print $1, $3;}' ncbi_dataset.plusBioSample.tsv \
 # Replace FASTA headers with reconstructed names from enhanced metadata.
 time cleanGenbank < ncbi_dataset/data/genomic.fna \
 | $scriptDir/fixNcbiFastaNames.pl ncbi_dataset.plusBioSample.tsv \
-| xz -T 50 \
+| xz -T 8 \
     > genbank.fa.xz
 
 # Run pangolin and nextclade on sequences that are new since yesterday
@@ -203,4 +151,3 @@ ln -s ncbi.$today $ottoDir/ncbi.latest
 
 # Clean up
 rm -r ncbi_dataset
-nice xz all.bioSample.* &

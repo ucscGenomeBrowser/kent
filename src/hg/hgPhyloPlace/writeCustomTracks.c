@@ -251,32 +251,20 @@ reportTiming(pStartTime, "parse userVcf genotypes");
 return userVcf;
 }
 
-static char *trackNameFromSampleIds(struct slName *sampleIds)
-/* Make a name for our subtree custom track by concatenating sample names. */
-{
-struct dyString *dy = dyStringCreate("subtree_%s", sampleIds->name);
-struct slName *id;
-for (id = sampleIds->next;  id != NULL;  id = id->next)
-    {
-    dyStringPrintf(dy, "_%s", id->name);
-    if (dy->stringSize > 200)
-        break;
-    }
-return dyStringCannibalize(&dy);
-}
-
-static void writeSubtreeTrackLine(FILE *ctF, struct subtreeInfo *ti, char *source, int fontHeight)
+static void writeSubtreeTrackLine(FILE *ctF, struct subtreeInfo *ti, int subtreeNum, char *source,
+                                  int fontHeight)
 /* Write a custom track line to ctF for one subtree. */
 {
-fprintf(ctF, "track name=%s", trackNameFromSampleIds(ti->subtreeUserSampleIds));
+fprintf(ctF, "track name=subtree%d", subtreeNum);
 // Keep the description from being too long in order to avoid buffer overflow in hgTrackUi
-int descLen = fprintf(ctF, " description='Uploaded sample%s %s",
-                      (slCount(ti->subtreeUserSampleIds) > 1 ? "s" : ""),
+// (and limited space for track title in hgTracks)
+int descLen = fprintf(ctF, " description='Subtree %d: uploaded sample%s %s",
+                      subtreeNum, (slCount(ti->subtreeUserSampleIds) > 1 ? "s" : ""),
                       ti->subtreeUserSampleIds->name);
 struct slName *id;
 for (id = ti->subtreeUserSampleIds->next;  id != NULL;  id = id->next)
     {
-    if (descLen > 200)
+    if (descLen > 100)
         {
         fprintf(ctF, " and %d other samples", slCount(id));
         break;
@@ -558,9 +546,10 @@ if (! userVcf)
 if (!bigTree)
     return;
 struct subtreeInfo *ti;
-for (ti = subtreeInfoList;  ti != NULL;  ti = ti->next)
+int subtreeNum;
+for (subtreeNum = 1, ti = subtreeInfoList;  ti != NULL;  ti = ti->next, subtreeNum++)
     {
-    writeSubtreeTrackLine(ctF, ti, source, fontHeight);
+    writeSubtreeTrackLine(ctF, ti, subtreeNum, source, fontHeight);
     writeVcfHeader(ctF, ti->subtreeNameList);
     writeSubtreeVcf(ctF, ti->subtreeIdToIx, userVcf, bigTree);
     fputc('\n', ctF);

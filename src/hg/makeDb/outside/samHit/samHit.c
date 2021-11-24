@@ -1,7 +1,7 @@
 /* samHit reads the SAM output file, XXXX.t2k.best-scores.rdb and produce .tab data for the protHomolog table */
 
 /* Copyright (C) 2009 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 
 void usage()

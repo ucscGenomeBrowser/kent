@@ -698,7 +698,8 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
         {
         parseClades(path, results->samplePlacements);
         }
-    else if (sameString(file->name, "final-tree.nh"))
+    else if (sameString(file->name, "final-tree.nh") ||
+             sameString(file->name, "placement_stats.tsv"))
         {
         // Don't need this, just remove it.
         }
@@ -740,7 +741,7 @@ char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOu
 char **cmds[] = { cmd, NULL };
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "usher_stderr", ".txt");
-struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi);
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
 pipelineClose(&pl);
 reportTiming(pStartTime, "run usher");
 parseStderr(tnStderr.forCgi, results->samplePlacements);
@@ -804,7 +805,7 @@ char *cmd[] = { matUtilsPath, "extract", "-i", protobufPath, "-d", tnOutDir.forC
 char **cmds[] = { cmd, NULL };
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "matUtils_stderr", ".txt");
-struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi);
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
 pipelineClose(&pl);
 reportTiming(pStartTime, "run matUtils");
 addEmptyPlacements(sampleIds, results->samplePlacements);

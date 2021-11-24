@@ -1,7 +1,7 @@
 /* hgMaf.c - Stuff to load up mafs from the browser database. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -486,3 +486,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 slReverse(&mafList);
 return mafList;
 }
+
+struct hash *mafGetLabelHash(struct trackDb *tdb)
+/* Get mapping of sequence name to label. */
+{
+char *labels = trackDbSetting(tdb, SPECIES_LABELS);
+struct hash *labelHash = NULL;
+
+if (labels)
+    labelHash = hashFromString(labels);
+
+return labelHash;
+}
+

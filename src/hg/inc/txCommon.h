@@ -2,7 +2,7 @@
  * the txXxx family (which is used to make the UCSC gene set */
 
 /* Copyright (C) 2008 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef TXCOMMON_H
 #define TXCOMMON_H

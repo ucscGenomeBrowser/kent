@@ -1,39 +1,44 @@
+[comment]: <> (QA: When you are done editing this file, cd into mirrorDocs, run 'make' there and follow the instructions)
+
 % Manual installation of the UCSC Genome Browser on a Unix server
 
 # Overview of the Genome Browser directories and databases
 
-The genome browser requires only Apache and MySQL and uses these directories:
+The genome browser requires only Apache and MariaDB and uses these directories:
 
 - static html files: we typically keep them under /usr/local/apache/htdocs and
   configure Apache to load them from there, to avoid conflicts with the 
   distribution of the Linux default location /var/www/html
-- MySQL databases: most of them are read-only, except the `hgcentral` database
-  which is read-write. Most linux distributions keep these under /var/lib/mysql
+- MariaDB databases: most of them are read-only, except the `hgcentral` database
+  which is read-write. Most linux distributions keep these under /var/lib/mysql.
+  (It is possible to get the genome browser to work with MySQL after version 8,
+  but we do highly discourage it, as our download procedures use MyISAM .frm
+  files which MySQL 8 dropped.)
 - static genome data files in /gbdb/
-- binary CGI programs that generate images from the MySQL and /gbdb files and
+- binary CGI programs that generate images from the MariaDB and /gbdb files and
   write them into the `trash` directory (see below). We modify our Apache
   config to load CGIs from /usr/local/apache/cgi-bin, so as to not conflict
   with the default directory of the Linux distribution
 - a directory for temp files called `trash`, located in the parent directory of the
   CGI programs, usually /usr/local/apache/trash
 - a small text file hg.conf in the same directory as the CGI programs, with
-  information on how to connect to MySQL, the location of the other directories
+  information on how to connect to MariaDB, the location of the other directories
   and various other settings, on our machines the location of this file is
   /usr/local/apache/cgi-bin/hg.conf
-- uploaded custom data gets written by the CGI programs into MySQL databases in
+- uploaded custom data gets written by the CGI programs into MariaDB databases in
   the database `customtrash` and also into files under /usr/local/apache/trash
   which is symlinked from /usr/local/apache/htdocs/trash so these files are
   accessible to Apache.
 
 When a web browser requests a Genome Browser page, typically /cgi-bin/hgTracks,
 Apache executes this CGI program. The programs then read information about how to 
-connect to MySQL using the file hg.conf, connects to MySQL, reads the
-installed genome assemblies and the current user session from the MySQL database
-hgcentral. For each genome assembly, there is a separate MySQL database (e.g. 
+connect to MariaDB using the file hg.conf, connects to MariaDB, reads the
+installed genome assemblies and the current user session from the MariaDB database
+hgcentral. For each genome assembly, there is a separate MariaDB database (e.g. 
 hg38). Some types of data (e.g. raw genome sequences) are kept as indexed
-binary files outside of MySQL, they are located in /gbdb, e.g. /gbdb/hg38. The
+binary files outside of MariaDB, they are located in /gbdb, e.g. /gbdb/hg38. The
 location of the /gbdb directory can be changed with a setting in hg.conf. Some
-types of data are not specific for a genome, these are kept in the MySQL
+types of data are not specific for a genome, these are kept in the MariaDB
 databases hgFixed, proteome and visiGene.
 
 We strongly recommend to follow the default locations, and to place our CGI
@@ -41,13 +46,13 @@ programs in `/usr/local/apache/cgi-bin`.  The htdocs root directory for html
 files should then be in /usr/local/apache/htdocs.  All Genome Browser
 components called from Apache get their settings from the central configuration
 file `/usr/local/apache/cgi-bin/hg.conf`.  Among others, the location and the
-username/password for the MySQL server is specified there.
+username/password for the MariaDB server is specified there.
 
 To load data into the genome browser databases, you need a command line tool
 like hgLoadBed.  These tools are distributed separately from the CGI programs.
-Some tools create only MySQL tables, others write into a /gbdb subdirectory.
+Some tools create only MariaDB tables, others write into a /gbdb subdirectory.
 Most of them require a configuration file ~/.hg.conf in your home directory
-with the MySQL connection information, like server name, username and password.
+with the MariaDB connection information, like server name, username and password.
 The data loading is done from the Unix command line and not dependent on the
 CGI programs that create the Genome Browser graphics.
 
@@ -57,7 +62,9 @@ To run our provided binaries:
 
 * Linux/Ubuntu/CentOS/Unix/MacOSX operating system
 * Apache2.x - http web server - <http://httpd.apache.org/>
-* MySQL development system and libraries - <http://dev.mysql.com/>
+* MariaDB development system and libraries - <http://mariadb.com/>
+  (MySQL 8 removed support for MyISAM schema files, which makes downloading
+   our data file very cumbersome and slow)
 * libpng runtime and development packages - <http://www.libpng.org/>
 * libssl runtime and development packages - <http://www.openssl.org/>
 * Universally Unique Identifier library - <http://e2fsprogs.sourceforge.net/>
@@ -79,15 +86,20 @@ Optional:
 It is best to install these packages with your standard operating
 system package management tools:
 
-* Debian/Ubuntu: `apt-get install ghostscript apache2 mysql-server gmt r-base uuid-dev python-mysqldb`
+* Debian/Ubuntu: `apt-get install ghostscript apache2 mariadb-server gmt r-base uuid-dev python-mysqldb`
 * Redhat/Fedora/CentOS: `yum install libpng12 httpd ghostscript GMT hdf5 R libuuid-devel MySQL-python`
+
+On newer distributions, python-mysqldb / MySQL-python is not available anymore.
+In this case, install python2, pip for it and then use pip to install the mysql
+library ("pip2 install MySQL-python").  See the file
+installer/browserSetup.sh for the commands.
 
 # Hardware and disk space requirements
 
 We currently use the following hardware to support our website:
 
 * 24 CPUs and 128Gb of memory for each of the six machines
-* 16 CPUs, 64 Gb of memory for the mySQL server
+* 16 CPUs, 64 Gb of memory for the MariaDB server
 
 The UCSC Genome Browser website experiences over one million hits per
 day. Your hardware requirements may be much less demanding and will
@@ -115,7 +127,7 @@ After running that command, you should see output like this:
     Number of files: 54886
     total size is 6515.70G  speedup is 5181080.38 (DRY RUN)
 
-The next command will give you the size of the entire mySQL database,
+The next command will give you the size of the entire mySQL/MariaDB database,
 but can be changed to get the size for a particular assembly:
   
     rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/mysql/ | egrep "Number of files:|total size is"
@@ -150,19 +162,19 @@ Confirm the following:
  
     You can test your Apache cgi-bin/ directory by copying the script src/product/scripts/printEnv.pl into it.
 
-2. MySQL database is installed and working
+2. MariaDB database is installed and working
 
        mysql -u browser -pgenome -e 'show tables;' mysql
 
-    MySQL can be run from the command line, and
-    the tables from the database mysql can be displayed.
+    MariaDB can be run from the command line, and
+    the tables from the database MariaDB can be displayed.
 
-    MySQL development package is installed (mysql-devel on RedHat)
+    MariaDB development package is installed (mariadb-devel on RedHat)
     The directory: /usr/include/mysql/ has the mysql .h files
     And the library: /usr/lib/mysql/libmysqlclient.a exists
     (your exact pathnames may vary depending upon your installation)
 
-    Set MySQL database access permissions.  The examples mentioned
+    Set MySQL/MariaDB database access permissions.  The examples mentioned
     in the "Mysql setup" section will allow this
     setup to function as described here.
 
@@ -279,12 +291,14 @@ Confirm the following:
          src/product/scripts/loadDb.sh
 
      And discussion in scripts/README about whether you can use directly
-     the MySQL binary database files, or if you need to download goldenPath
-     database text dumps and load them into the database.
+     the MariaDB binary database files, or if you need to download goldenPath
+     database text dumps and load them into the database. If you use MariaDB,
+     you can use the binary files, with MySQL >= 8 you need to use dumps,
+     which is why we discourage the use of MySQL >= 8 with the Genome Browser.
      
      An alternative to loading the database tables from text files,
-     is to directly rsync the MySQL tables themselves and place them
-     in your MySQL /var/ directory.  These tables are much larger
+     is to directly rsync the MariaDB tables themselves and place them
+     in your MariaDB /var/ directory.  These tables are much larger
      than the text files due to the sizes of indexes created during a
      table load, but it can save a lot of time since the data loading
      step is quite compute intensive.  A typical rsync command for an
@@ -294,7 +308,7 @@ Confirm the following:
 
 11.  Download extra databases to work with a full genome assembly
     such as human/hg38: hgFixed go140213 proteins140122 sp140122
-    Construct symlinks in your MySQL data directory to use database
+    Construct symlinks in your MariaDB data directory to use database
     names: go proteome uniProt for these database directories:
 
          $ ls -og proteome go uniProt
@@ -357,7 +371,7 @@ Confirm the following:
     The specified directory name is your apache: DocumentRoot/trash
     e.g. /usr/local/apache/htdocs/trash
 
-# MySQL Setup
+# MariaDB Setup
 
 1. Enable "LOAD DATA LOCAL INFILE":
 
@@ -369,9 +383,9 @@ Confirm the following:
         [client]
         local-infile=1
 
-2. MySQL Storage Engine:
+2. MariaDB Storage Engine:
 
-    In recent versions of MySQL, the default storage engine has changed from
+    In recent versions of MySQL/MariaDB, the default storage engine has changed from
     myisam to innodb.
     However the myisam engine should be used with the UCSC Genome Browser.
     
@@ -380,43 +394,43 @@ Confirm the following:
         [mysqld]
         default-storage-engine=MYISAM
 
-    Always restart your mysql server after making changes to these
+    Always restart your MariaDB server after making changes to these
     configuration files.
 
 3. Users: There are three cases of identity to consider when providing
-    access to the MySQL system for the browser CGI binaries
+    access to the MariaDB system for the browser CGI binaries
     and browser developers:
 
-    1.  A MySQL user that needs read-only access to the
+    1.  A MariaDB user that needs read-only access to the
             genome databases.  The browser CGI binaries
             require read-only access to the genome databases.
-    2.  A MySQL user that has write permissions to one database.
+    2.  A MariaDB user that has write permissions to one database.
             The CGI binaries require write permissions to one particular
             database (hgcentral) for maintaining user's cart information to
             store the user's browser cookie settings.
-    3.  A MySQL user that has general write permissions to all
+    3.  A MariaDB user that has general write permissions to all
             browser and genome databases to be used by developers
 
-    The cgi-bin binaries obtain the first two of these MySQL identities from
+    The cgi-bin binaries obtain the first two of these MariaDB identities from
     the text file: $WEBROOT/cgi-bin/hg.conf
 
-    Developers of the browser databases obtain their MySQL identities
+    Developers of the browser databases obtain their MariaDB identities
     from a text file in their home directory: ~/.hg.conf
     Note the initial dot in the name: .hg.conf
     This file in a user's directory will specify a higher-privileged user
-    to allow read/write access to the MySQL databases.
+    to allow read/write access to the MariaDB databases.
     This file must be set to mode 600 to provide security of the user
     and password to the database:
 
         $ chmod 600 ~/.hg.conf
 
-    All kent source code commands use this file to access the MySQL
+    All kent source code commands use this file to access the MariaDB
     databases.  Since this file contains password information it
     requires the permissions to be set at 600 to keep it secret.
     The kent source code commands will enforce this access and not
     function unless it is set at 600 permissions.
 
-    Therefore you will want to create three different MySQL users
+    Therefore you will want to create three different MariaDB users
     for these purposes.
 
     The examples listed below are implemented in the shell script: src/product/scripts/ex.MySQLUserPerms.sh
@@ -426,19 +440,19 @@ Confirm the following:
     the following procedure.
 
     For the following it is assumed that your root account
-    has access to the mysql database.  You should be able
+    has access to the MariaDB database.  You should be able
     to perform the following:
 
         $ export SQL_PASSWORD=mysql_root_password
         $ mysql -u root -p${SQL_PASSWORD} -e "show tables;" mysql
 
-    Create a MySQL user called "browser" with password
-    "genome" and give access to selected MySQL commands
+    Create a MariaDB user called "browser" with password
+    "genome" and give access to selected MariaDB commands
     for the following list of databases.  When you add other
     databases, you will need to add these permissions to your
     databases.  This procedure of adding permissions specifically
     for a set list of databases is a more secure method than allowing
-    the MySQL "browser" user to have access to any database.
+    the MariaDB "browser" user to have access to any database.
 
     ( MySQL version 5.5 requires the LOCK TABLES permission here )
     ( FILE, CREATE, DROP, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES on ${DB}.* )
@@ -474,7 +488,7 @@ Confirm the following:
             on hgTemp.* TO \
             readonly@localhost IDENTIFIED BY 'access';" mysql
 
-    A third MySQL user should be created with read-write access to only
+    A third MariaDB user should be created with read-write access to only
     the hgcentral database.  For example, a user: "readwrite"
     with password: "update"
 
@@ -485,7 +499,7 @@ Confirm the following:
                 IDENTIFIED BY 'update';" mysql
         done
 
-    The cgi-bin binaries obtain their MySQL identities from
+    The cgi-bin binaries obtain their MariaDB identities from
     the hg.conf file in the cgi-bin directory.  The file in this
     directory: src/product/ex.hg.conf
     demonstrates the use of the "readonly" user for genome database
@@ -524,10 +538,10 @@ command which can be built in the source-tree at:
         hgsql -e "show grants;" hgcentral
 
 
-5. Configuring MySQL SSL connections (entirely optional, only needed if your IT department requires it):
+5. Configuring MariaDB SSL connections (entirely optional, only needed if your IT department requires it):
 
-    MySQL is typically compiled with SSL capability from OpenSSL or yaSSL.
-    To see if your server supports ssl, login to mysql and run this command:
+    MariaDB is typically compiled with SSL capability from OpenSSL or yaSSL.
+    To see if your server supports ssl, login to MariaDB and run this command:
 
         mysql> show variables like '%ssl%';
         +---------------+----------+
@@ -544,7 +558,7 @@ command which can be built in the source-tree at:
         | ssl_key       |          |
         +---------------+----------+
 
-    If your mysql was compiled with SSL support, which is true of virtually all mysql packages
+    If your MariaDB was compiled with SSL support, which is true of virtually all MariaDB packages
     being provided today, you can easily enable SSL by adding settings to /etc/my.cnf:
 
         -------
@@ -564,7 +578,7 @@ command which can be built in the source-tree at:
         # mysql5.7 or later require all connections to be encrypted
         require_secure_transport server 
 
-    After making changes to my.cnf, be sure to restart your mysqld service.
+    After making changes to my.cnf, be sure to restart your mariadb service.
 
     The key means private key here, and should be kept secured.
     The cert is a certificate acting like a public key, signed by a trusted authority (CA).
@@ -573,12 +587,12 @@ command which can be built in the source-tree at:
     And it proves the key exists. The key is not sent to the other party. The cert is.
     If a ca is available it can show what certs to trust.
 
-    You do not need all the settings, but some versions of mysql
+    You do not need all the settings, but some versions of MariaDB
     do not activate SSL unless at least one of these is found: key, cert, ca, capath, cipher 
     If you configure a key for the server or client, you will also provide its cert.
 
     We cannot teach you how to create SSL certificates here.
-    There are many websites including mysql that have information about
+    There are many websites including MariaDB that have information about
     making keys and certs and ca.
 
     If you just add the ssl option to the top,
@@ -650,14 +664,14 @@ command which can be built in the source-tree at:
     but the CGIs and utils would not see them.  Only mysql and hgsql would see them.
 
 
-    Configuring SSL requirements for mysql user accounts:
+    Configuring SSL requirements for MariaDB user accounts:
 
-    You can tell mysql to require SSL for a user's account like this:
+    You can tell MariaDB to require SSL for a user's account like this:
 
         GRANT ALL PRIVILEGES ON *.* TO 'someuser'@'%'
           REQUIRE SSL;
 
-    You can tell mysql to use SSL for a user's account and to
+    You can tell MariaDB to use SSL for a user's account and to
     further require the client to use their key and x509 certificate to connect by saying:
 
         GRANT ALL PRIVILEGES ON *.* TO 'someuser'@'%'
@@ -673,7 +687,7 @@ command which can be built in the source-tree at:
     You can see the cert details like this:
          openssl x509 -in /somepath/someuser-cert.pem -text
 
-    In later versions of MySQL, it is a requirement that the CN of the CA cert must DIFFER 
+    In later versions of MariaDB, it is a requirement that the CN of the CA cert must DIFFER 
     from the CN of the user and server certs.
 
     Further MySQL SSL documentation is available from 
@@ -732,15 +746,17 @@ to the browser" below.
 If you want to add your own tracks (see next section), you probably want to put them into 
 a separate track group, so they are visually separated from the tracks provided by UCSC.
 
-The MySQL table `grp` contains the list of all track groups. If you rsync the data
+The MariaDB table `grp` contains the list of all track groups. If you rsync the data
 from UCSC on a regular schedule, the table would be overwritten each time. To avoid this,
 you can create an empty table with the same schema, e.g. in the database hg38:
 
     CREATE TABLE grp_local LIKE grp;
     
-You can then use the MySQL INSERT statement to add a new track group to this
+You can then use the MariaDB INSERT statement to add a new track group to this
 table, specify the name, label, priority and whether the group should be closed
 by default (most are open by default).
+
+    INSERT INTO grp_local VALUES ('test', 'This is my group', 1, 0);
 
 Then, edit cgi-bin/hg.conf and add a line like this:
 
@@ -947,12 +963,12 @@ Start with an empty database, for example hg18:
 
     hgsql -e "create database hg18;" mysql
 
-Again, copy the MySQL files directly from the download
+Again, copy the MariaDB files directly from the download
 server, for example hg18:
 
     rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hg18/ .
 
-(beware, this is several TB of data) into your MySQL data area.  Or load these tables from the text SQL
+(beware, this is several TB of data) into your MariaDB data area.  Or load these tables from the text SQL
 dumps from:
 
     rsync -avP rsync://hgdownload.soe.ucsc.edu/goldenPath/hg18/database/ .
@@ -1007,7 +1023,7 @@ release should be as easy as this:
 
 Without any specific hg.conf configuration, custom track data
 is kept in flat files in the /trash/ct/ directory. 
-It is much more efficient to load them into a MySQL database.
+It is much more efficient to load them into a MariaDB database.
 This article discusses the steps required to enable this function.
 
 1. Summary configuration
@@ -1016,8 +1032,8 @@ This article discusses the steps required to enable this function.
 	installed in /cgi-bin/loader/ - these are installed via the normal
 	'make cgi' in the source tree kent/src/hg/ directory or via rsync.
         They are probably aleady in your cgi-bin directory.
-    * an empty customTrash database has been created on the MySQL host -
-	create this manually once, the MySQL host name is a configuration
+    * an empty customTrash database has been created on the MariaDB host -
+	create this manually once, the MariaDB host name is a configuration
 	item, the database name customTrash is not a configuration item
     * temporary read-write data directory /data/tmp has been created
 	with read/write/delete enabled for the Apache server effective
@@ -1032,11 +1048,11 @@ This article discusses the steps required to enable this function.
 
 2. Host and database name
 
-    For performance and security considerations, the MySQL host for the
-    custom track database can be a separate machine from the ordinary MySQL
+    For performance and security considerations, the MariaDB host for the
+    custom track database can be a separate machine from the ordinary MariaDB
     host that usually serves up the assembly databases or the hgcentral
     database. It is not required that the custom track database be on a
-    separate MySQL server. The specification of the host machine is placed
+    separate MariaDB server. The specification of the host machine is placed
     in the /cgi-bin/hg.conf file, for example a host machine called
     "ctdbhost":
 
@@ -1055,11 +1071,11 @@ This article discusses the steps required to enable this function.
         customTracks.password=ctdbpasswd
         customTracks.useAll=yes
 
-    Establish this user account and password in MySQL with db and user
+    Establish this user account and password in MariaDB with db and user
     privileges:
 
     Select, Insert, Update, Delete, Create, Drop, Alter, Index
-    for example with your MySQL root user account:
+    for example with your MariaDB root user account:
 
         hgsql -hctdbhost -uroot -p -e \
             "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX" \
@@ -1086,7 +1102,7 @@ This article discusses the steps required to enable this function.
 
 4. Command line access:
 
-    Since the MySQL host may be different than your ordinary MySQL host, you
+    Since the MariaDB host may be different than your ordinary MariaDB host, you
     will need to create a unique $HOME/.ct.hg.conf file to be used in the
     case where you want to manipulate this separate database with the kent
     source tree command line tools. This unique .ct.hg.conf is merely a copy
@@ -1216,8 +1232,8 @@ message in your Apache error log:
 This is usually a simple configuration problem.  Items to verify:
 
 1.  the hg.conf file in the cgi-bin directory specifies the correct
-	user names and passwords for MySQL database access.
-	See also the section "Mysql Setup" below.
+	user names and passwords for MariaDB database access.
+	See also the section "MariaDB Setup" below.
 2.  The cgi-bin directory is set to permissions 755 and not 775 or 777
 	When permissions are too permissive for this directory, Apache
 	errors out with suexec permission violations.
@@ -1242,8 +1258,8 @@ line:
 
 By itself with no arguments, it should produce the default tracks
 display HTML page for the Human genome.  This assumes you have set
-up your $HOME/.hg.conf file to allow access to the MySQL databases.
-(See also: section "Mysql Setup").  A binary execution failure should
+up your $HOME/.hg.conf file to allow access to the MariaDB databases.
+(See also: section "MariaDB Setup").  A binary execution failure should
 be obvious at this stage of the game.  If it exits because of SIGSEGV
 we can run it under a debugger for specifics.  More on this below.
 
@@ -1327,6 +1343,13 @@ FireFox, so after debugging hgTables, you will probably want to add
 &formMethod=POST to an URL (or clear cart, load session etc).
 
 One thing that does not work with GET is "upload file" inputs.
+
+# HTTPS Certificate Check for Verification Settings are: abort warn log none
+# currently the default is log
+httpsCertCheck=log
+# domains to whitelist, skip cert checking, space-separated list
+httpsCertCheckDomainExceptions=somedomain1.com somedomain2.edu
+
 
 # Proxy support
 
@@ -1553,10 +1576,10 @@ If you have the kent git repository cloned:
 
 3a. ALTERNATE PATH: 
         If you are going to do a full build anyway, skip this and proceed straight to step 3 below.
-        Otherwise, to make a minimal utility build without mysql:
+        Otherwise, to make a minimal utility build without MariaDB:
 	There are some utilities that depend only on jkweb.a and not jkhgap.a
-	which means they can be compiled without needing mysql client installed.
-	To make a utility like pslCDnaFilter without installing mysql client:
+	which means they can be compiled without needing MariaDB client installed.
+	To make a utility like pslCDnaFilter without installing MariaDB client:
         # create jkweb.a
           cd kent/src/lib
           make
@@ -1588,11 +1611,11 @@ If you have the kent git repository cloned:
 	MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -lz"
 	export MYSQLINC MYSQLLIBS
 	Your setting may vary depending upon where your
-	mysql is installed.  The above example is typical.
+	MariaDB is installed.  The above example is typical.
 	If your system does not have this set of include files
 	or this static client.a file, you may need to install
-	the mysql-devel package to obtain the mysql development
-	environment.  (http://dev.mysql.com/downloads/)
+	the mariadb-devel package to obtain the MariaDB development
+	environment.
 	With that package installed, this command:
 		mysql_config --libs
 	will display the appropriate libraries to link with
@@ -1648,7 +1671,7 @@ If you have the kent git repository cloned:
         If your apache DocumentRoot is something different than
         /usr/local/apache/htdocs then use the DOCUMENTROOT variable.
         This value should be a full path and should agree with the 
-        browser.documentRoot setting in hg.conf; see the section "Mysql Setup"
+        browser.documentRoot setting in hg.conf; see the section "MariaDB Setup"
         for more details.
 
 	$ make install DESTDIR=/destination/prefix CGI_BIN=/cgi-bin/path DOCUMENTROOT=/usr/local/apache/htdocs
@@ -1690,7 +1713,7 @@ Known problems:
 	undefined reference to `SSL_read'
 	undefined reference to `SSL_get_error'
 	undefined reference to `SSL_write'
-    This error is due to your mysql libraries have been compiled with SSL
+    This error is due to your MariaDB libraries have been compiled with SSL
 	functionality enabled.  To fix this build problem, add '-lssl'
 	to your MYSQLLIBS environment variable to satisify these SSL
 	library functions.
@@ -1760,7 +1783,7 @@ make: *** [aliType.o] Error 1
   To add the library that includes these functions, add '-ldl' to the
   MYSQLLIBS string: MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -ldl -lz"
 
-10. Mac OSX dynamic link with the MySQL libraries results in the following
+10. Mac OSX dynamic link with the MySQL/MariaDB libraries results in the following
     run-time error for CGI binaries or command line programs:
 
     dyld: Library not loaded: libmysqlclient.18.dylib

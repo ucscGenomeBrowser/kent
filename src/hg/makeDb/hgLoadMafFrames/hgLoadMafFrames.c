@@ -1,7 +1,7 @@
 /* hgLoadMafFrames - load an mafFrames table  */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "options.h"
 #include "mafFrames.h"
@@ -38,7 +38,7 @@ void processFrameFiles(char *tabFile, int numFramesFiles, char **framesFiles)
 /* sort by chrom location, accounting for bin column */
 static char *cmd[] = {"sort", "-k", "2,2", "-k", "3,3n", NULL};
 int i;
-struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite, tabFile, NULL);
+struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite, tabFile, NULL, 0);
 FILE *sortFh = pipelineFile(pl);
 
 for (i = 0; i < numFramesFiles; i++)

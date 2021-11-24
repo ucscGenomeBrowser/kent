@@ -1,7 +1,7 @@
 /* validation of all alignment-based tables */
 
 /* Copyright (C) 2008 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef CHKALIGNTBLS_H
 #define CHKALIGNTBLS_H
 

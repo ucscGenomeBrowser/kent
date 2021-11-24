@@ -5,11 +5,11 @@ set -beEu -x -o pipefail
 #	kent/src/hg/utils/otto/sarscov2phylo/updateCombinedTree.sh
 
 usage() {
-    echo "usage: $0 prevDate today problematicSitesVcf"
+    echo "usage: $0 prevDate today problematicSitesVcf [baseProtobuf]"
     echo "This assumes that ncbi.latest and cogUk.latest links/directories have been updated."
 }
 
-if [ $# != 3 ]; then
+if [ $# != 3 && $# != 4]; then
   usage
   exit 1
 fi
@@ -17,6 +17,11 @@ fi
 prevDate=$1
 today=$2
 problematicSitesVcf=$3
+if [ $# == 4 ]; then
+    baseProtobuf=$4
+else
+    baseProtobuf=
+fi
 
 ottoDir=/hive/data/outside/otto/sarscov2phylo
 cncbDir=$ottoDir/cncb.latest
@@ -33,7 +38,7 @@ usher=$usherDir/build/usher
 matUtils=$usherDir/build/matUtils
 
 if [ ! -s new.masked.vcf.gz ]; then
-    $scriptDir/makeNewMaskedVcf.sh $prevDate $today $problematicSitesVcf
+    $scriptDir/makeNewMaskedVcf.sh $prevDate $today $problematicSitesVcf $baseProtobuf
 fi
 
 if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
@@ -70,8 +75,7 @@ if [ -s $ottoDir/$prevDate/cladeToName ]; then
     time $matUtils annotate -T 50 \
         -l \
         -i gisaidAndPublic.$today.masked.pb \
-        -c $ottoDir/$prevDate/cladeToName \
-        -f 0.95 \
+        -M $scriptDir/nextstrain.clade-mutations.tsv \
         -D details.nextclade \
         -o gisaidAndPublic.$today.masked.nextclade.pb \
         >& annotate.nextclade
@@ -87,6 +91,7 @@ fi
 if [ -s $ottoDir/$prevDate/lineageToName ]; then
     time $matUtils annotate -T 50 \
         -i gisaidAndPublic.$today.masked.nextclade.pb \
+        -M $scriptDir/pango.clade-mutations.tsv \
         -c $ottoDir/$prevDate/lineageToName \
         -f 0.95 \
         -D details.pango \
@@ -115,10 +120,11 @@ tail -n+2 sample-clades \
 # Add clade & lineage from tree to metadata.
 zcat gisaidAndPublic.$today.metadata.tsv.gz \
 | tail -n+2 \
+| cut -f 1-9 \
 | sort > tmp1
 tail -n+2 sample-clades \
 | sort > tmp2
-paste <(zcat gisaidAndPublic.$today.metadata.tsv.gz | head -1) \
+paste <(zcat gisaidAndPublic.$today.metadata.tsv.gz | cut -f 1-9 | head -1) \
       <(echo -e "Nextstrain_clade_usher\tpango_lineage_usher") \
     > gisaidAndPublic.$today.metadata.tsv
 join -t$'\t' tmp1 tmp2 \
@@ -140,7 +146,8 @@ for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
 done
 
 # Make Taxodium-formatted protobuf for display
-zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz > ncbiGenes.gtf
+zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz \
+| grep -v '"ORF1a"' > ncbiGenes.gtf
 zcat /hive/data/genomes/wuhCor1/wuhCor1.fa.gz > wuhCor1.fa
 zcat gisaidAndPublic.$today.metadata.tsv.gz > metadata.tmp.tsv
 time $matUtils extract -i gisaidAndPublic.$today.masked.pb \

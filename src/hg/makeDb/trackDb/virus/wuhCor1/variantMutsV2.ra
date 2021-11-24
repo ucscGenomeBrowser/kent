@@ -1,8 +1,8 @@
 # Mutations in variants of concern or interest - September 2021 update
 
-track variantMutsV2
+track variantMuts
 shortLabel Variants of Concern
-longLabel  Mutations in Variants of Concern (VOC) or Interest (VOI) identified from GISAID sequences (Feb and Sep 2021)
+longLabel  Mutations in Variants of Concern (VOC), Interest (VOI), or Under Monitoring (VUM) from GISAID sequences
 compositeTrack on
 subGroup1 mutation Mutations AA=Amino_Acid NUC=Nucleotide
 subGroup2 variant Variants A_B117=Alpha B_B1351=Beta C_P1=Gamma D_B16172=Delta L_C37=Lambda M_B1621=Mu E_B1429=Epsilon E_B1525=Eta I_B1526=Iota K_B16171=Kappa
@@ -14,13 +14,15 @@ darkerLabels on
 noScoreFilter on
 group varRep
 allButtonPair on
-#dataVersion September 10, 2021
+dataVersion Sequences downloaded September 10, 2021
 visibility dense
+pennantIcon Updated red ../goldenPath/newsarch.html#102021 "Track updated Oct. 20, 2021"
+html variantMutsV2
 
 # Amino acid tracks
 
         track variantAaMutsV2_B_1_1_7
-        parent variantMutsV2 on
+        parent variantMuts on
         subGroups variant=A_B117 mutation=AA designation=VOC
         shortLabel Alpha AA Muts 
         longLabel Alpha VOC (B.1.1.7 UK Sep-2020) amino acid mutations in 9838 GISAID sequences (Feb 5, 2021)
@@ -31,7 +33,7 @@ visibility dense
         priority 1
 
         track variantAaMutsV2_B_1_351
-        parent variantMutsV2 on
+        parent variantMuts on
         subGroups variant=B_B1351 mutation=AA designation=VOC
         shortLabel Beta AA Muts
         longLabel Beta VOC (B.1.351 SA Dec-2020) amino acid mutations in 793 GISAID sequences (Feb 5, 2021)
@@ -42,7 +44,7 @@ visibility dense
         priority 2
 
         track variantAaMutsV2_P_1
-        parent variantMutsV2 on
+        parent variantMuts on
         subGroups variant=C_P1 mutation=AA designation=VOC
         shortLabel Gamma AA Muts 
         longLabel Gamma VOC (P.1 Brazil Nov-2020) amino acid mutations in 78 GISAID sequences (Feb 5, 2021)
@@ -53,10 +55,10 @@ visibility dense
         priority 3
 
         track variantAaMutsV2_B_1_617_2
-        parent variantMutsV2 on
+        parent variantMuts on
         subGroups variant=D_B16172 mutation=AA designation=VOC
         shortLabel Delta AA Muts 
-        longLabel Delta V0C (B.1.617.2 India Oct-2020) amino acid mutations in 3000 GISAID sequences (Sep 10, 2021)
+        longLabel Delta VOC (B.1.617.2 India Oct-2020) amino acid mutations in 3000 GISAID sequences (Sep 10, 2021)
         bigDataUrl /gbdb/wuhCor1/strainMuts/variantAaMuts_B.1.617.2_2021_09_10.bb
         url https://outbreak.info/situation-reports?pango=B.1.617.2
         urlLabel B.1.617.2 Situation Report at outbreak.info
@@ -64,7 +66,7 @@ visibility dense
         priority 4
 
         track variantAaMutsV2_C_37
-        parent variantMutsV2 on
+        parent variantMuts on
         subGroups variant=L_C37 mutation=AA designation=VOI
         shortLabel Lambda AA Muts 
         longLabel Lambda VOI (C.37 Peru Mar-2020) amino acid mutations in 3000 GISAID sequences (Sep 10, 2021)
@@ -75,10 +77,10 @@ visibility dense
         priority 5
 
         track variantAaMutsV2_B_1_621
-        parent variantMutsV2 on
+        parent variantMuts on
         subGroups variant=M_B1621 mutation=AA designation=VOI
         shortLabel Mu AA Muts 
-        longLabel Mu V0I (B.1.621 Columbia Jan-2021) amino acid mutations in 3000 GISAID sequences (Sep 10, 2021)
+        longLabel Mu VOI (B.1.621 Columbia Jan-2021) amino acid mutations in 3000 GISAID sequences (Sep 10, 2021)
         bigDataUrl /gbdb/wuhCor1/strainMuts/variantAaMuts_B.1.621_2021_09_10.bb
         url https://outbreak.info/situation-reports?pango=B.1.621
         urlLabel B.1.621 Situation Report at outbreak.info
@@ -86,7 +88,7 @@ visibility dense
         priority 6
 
         track variantAaMutsV2_B_1_429
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=E_B1429 mutation=AA designation=VUM
         shortLabel Epsilon AA Muts 
         longLabel Epsilon VUM (B.1.429 USA Mar-2020) amino acid mutations in 1360 GISAID sequences (Feb 5, 2021)
@@ -97,7 +99,7 @@ visibility dense
         priority 7
 
         track variantAaMutsV2_B_1_525
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=E_B1525 mutation=AA designation=VUM
         shortLabel Eta AA Muts 
         longLabel Eta VUM (B.1.525 Dec-2020) amino acid mutations in 3000 GISAID sequences (Sep 10, 2021)
@@ -108,7 +110,7 @@ visibility dense
         priority 8
 
         track variantAaMutsV2_B_1_526
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=I_B1526 mutation=AA designation=VUM
         shortLabel Iota AA Muts 
         longLabel Iota VUM (B.1.526 USA Nov-2020) amino acid mutations in 3000 GISAID sequences (Sep 10, 2021)
@@ -119,7 +121,7 @@ visibility dense
         priority 9
 
         track variantAaMutsV2_B_1_617_1
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=K_B16171 mutation=AA designation=VUM
         shortLabel Kappa AA Muts 
         longLabel Kappa VUM (B.1.617.1 India Oct-2020) amino acid mutations in 3000 GISAID sequences (Sep 10, 2021)
@@ -132,7 +134,7 @@ visibility dense
 # Nucleotide tracks
 
         track variantNucMutsV2_B_1_1_7
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=A_B117 mutation=NUC designation=VOC
         shortLabel Alpha Nuc Muts
         longLabel Alpha VOC (B.1.1.7 UK Sep-2020) nucleotide mutations in 9838 GISAID sequences (Feb 5, 2021)
@@ -143,7 +145,7 @@ visibility dense
         priority 11
 
         track variantNucMutsV2_B_1_351
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=B_B1351 mutation=NUC designation=VOC
         shortLabel Beta Nuc Muts
         longLabel Beta VOC (B.1.351 SA Dec-2020) nucleotide mutations in 793 GISAID sequences (Feb 5, 2021)
@@ -154,7 +156,7 @@ visibility dense
         priority 12
 
         track variantNucMutsV2_P_1
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=C_P1 mutation=NUC designation=VOC
         shortLabel Gamma Nuc Muts 
         longLabel Gamma VOC (P.1 Brazil Nov-2020) nucleotide mutations in 78 GISAID sequences (Feb 5, 2021)
@@ -165,10 +167,10 @@ visibility dense
         priority 13
 
         track variantNucMutsV2_B_1_617_2
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=D_B16172 mutation=NUC designation=VOC
         shortLabel Delta Nuc Muts 
-        longLabel Delta V0C (B.1.617.2 India Oct-2020) nucleotide mutations in 3000 GISAID sequences (Sep 10, 2021)
+        longLabel Delta VOC (B.1.617.2 India Oct-2020) nucleotide mutations in 3000 GISAID sequences (Sep 10, 2021)
         bigDataUrl /gbdb/wuhCor1/strainMuts/variantNucMuts_B.1.617.2_2021_09_10.bb
         url https://outbreak.info/situation-reports?pango=B.1.617.2
         urlLabel B.1.617.2 Situation Report at outbreak.info
@@ -176,7 +178,7 @@ visibility dense
         priority 14
 
         track variantNucMutsV2_C_37
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=L_C37 mutation=NUC designation=VOI
         shortLabel Lambda Nuc Muts 
         longLabel Lambda VOI (C.37 Peru Mar-2020) nucleotide mutations in 3000 GISAID sequences (Sep 10, 2021)
@@ -187,10 +189,10 @@ visibility dense
         priority 15
 
         track variantNucMutsV2_B_1_621
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=M_B1621 mutation=NUC designation=VOI
         shortLabel Mu Nuc Muts 
-        longLabel Mu V0I (B.1.621 Columbia Jan-2021) nucleotide mutations in 3000 GISAID sequences (Sep 10, 2021)
+        longLabel Mu VOI (B.1.621 Columbia Jan-2021) nucleotide mutations in 3000 GISAID sequences (Sep 10, 2021)
         bigDataUrl /gbdb/wuhCor1/strainMuts/variantNucMuts_B.1.621_2021_09_10.bb
         url https://outbreak.info/situation-reports?pango=B.1.621
         urlLabel B.1.621 Situation Report at outbreak.info
@@ -198,7 +200,7 @@ visibility dense
         priority 16
 
         track variantNucMutsV2_B_1_429
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=E_B1429 mutation=NUC designation=VUM
         shortLabel Epsilon Nuc Muts 
         longLabel Epsilon VUM (B.1.429 USA Mar-2020) nucleotide mutations in 1360 GISAID sequences (Feb 5, 2021)
@@ -209,7 +211,7 @@ visibility dense
         priority 17
 
         track variantNucMutsV2_B_1_525
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=E_B1525 mutation=NUC designation=VUM
         shortLabel Eta Nuc Muts 
         longLabel Eta VUM (B.1.525 Dec-2020) nucleotide mutations in 3000 GISAID sequences (Sep 10, 2021)
@@ -220,7 +222,7 @@ visibility dense
         priority 18
 
         track variantNucMutsV2_B_1_526
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=I_B1526 mutation=NUC designation=VUM
         shortLabel Iota Nuc Muts 
         longLabel Iota VUM (B.1.526 USA Nov-2020) nucleotide mutations in 3000 GISAID sequences (Sep 10, 2021)
@@ -231,7 +233,7 @@ visibility dense
         priority 19
 
         track variantNucMutsV2_B_1_617_1
-        parent variantMutsV2 off
+        parent variantMuts off
         subGroups variant=K_B16171 mutation=NUC designation=VUM
         shortLabel Kappa Nuc Muts 
         longLabel Kappa VUM (B.1.617.1 India Oct-2020) nucleotide  mutations in 3000 GISAID sequences (Sep 10, 2021)

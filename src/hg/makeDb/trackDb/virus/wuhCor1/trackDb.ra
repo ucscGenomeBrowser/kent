@@ -80,7 +80,7 @@ bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
 
 track cd8escape
 shortLabel CD8 Escape Muts
-longLabel T-Cell MHCI CD8+ Escape Mutations from Angerer et al. Sci Immun 2020
+longLabel T-Cell MHCI CD8+ Escape Mutations from Agerer et al. Sci Immun 2020
 group immu
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/cd8escape/cd8escape.bb
@@ -495,8 +495,8 @@ compositeTrack on
 type bigBed
 skipEmptyFields on
 group map
-dataVersion 2020-07-29
-release beta,public
+dataVersion v8 (2021-10-27)
+pennantIcon Updated red ../goldenPath/newsarch.html "Updated Nov. 11, 2021"
 
     track problematicSitesMask
     shortLabel Mask
@@ -506,7 +506,6 @@ release beta,public
     color 255,0,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesMask.bb
     priority 10
-    release beta,public
 
     track problematicSitesCaution
     shortLabel Caution
@@ -516,37 +515,6 @@ release beta,public
     color 240,160,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesCaution.bb
     priority 20
-    release beta,public
-
-track problematicSites
-shortLabel Problematic Sites
-longLabel Problematic sites where masking or caution are recommended for analysis
-compositeTrack on
-type bigBed
-skipEmptyFields on
-group map
-dataVersion v4 (2020-12-22)
-release alpha
-
-    track problematicSitesMask
-    shortLabel Mask
-    longLabel Problematic sites where masking is recommended for analysis
-    parent problematicSites
-    type bigBed
-    color 255,0,0
-    bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesMask.bb
-    priority 10
-    release alpha
-
-    track problematicSitesCaution
-    shortLabel Caution
-    longLabel Problematic sites where caution is recommended for analysis
-    parent problematicSites
-    type bigBed
-    color 240,160,0
-    bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesCaution.bb
-    priority 20
-    release alpha
 
 track icshape
 shortLabel icSHAPE RNA Struct
@@ -659,8 +627,7 @@ include pbm.ra
 include pbmShanghai.ra
 include abEscape.ra
 include bloom.ra
-include variantMuts.ra
-include variantMutsV2.ra alpha
+include variantMutsV2.ra
 
 include vaccines.ra
 include mutCons.ra

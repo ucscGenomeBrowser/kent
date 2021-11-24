@@ -18444,3 +18444,23 @@ TMPDIR=/dev/shm
     # 730713145 bases of 2312743346 (31.595%) in intersection
 
 ##############################################################################
+
+# JASPAR mouse track addition by Daniel 10/11/21
+cd ~/kent/src/hg/makeDb/trackDb
+vi mouse/jaspar.ra
+curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/mm10/trackDb.txt >> mouse/jaspar.ra
+cd /hive/data/genomes/mm10/bed
+mkdir jaspar
+cd jaspar
+wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2022/JASPAR2022_mm10.bb
+wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2020/JASPAR2020_mm10.bb
+mv JASPAR2022_mm10.bb JASPAR2022.bb
+mv JASPAR2020_mm10.bb JASPAR2020.bb
+cd /gbdb/mm10
+mkdir jaspar
+cd jaspar
+ln -s /hive/data/genomes/mm10/bed/jaspar/JASPAR2022.bb .
+ln -s /hive/data/genomes/mm10/bed/jaspar/JASPAR2020.bb .
+
+
+

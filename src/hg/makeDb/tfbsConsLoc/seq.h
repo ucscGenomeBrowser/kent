@@ -1,7 +1,7 @@
 /* $Id: seq.h,v 1.1 2004/03/18 22:35:45 braney Exp $ */
 
 /* Copyright (C) 2004 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef PIPLIB_SEQ
 #define PIPLIB_SEQ

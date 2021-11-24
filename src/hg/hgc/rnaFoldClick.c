@@ -1,7 +1,7 @@
 /* Handle details pages for rna fold (evofold) tracks. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "jksql.h"
@@ -389,7 +389,7 @@ mkdirTrashDirectory(table);
 char psName[512];
 safef(psName, sizeof(psName), "../trash/%s/%s_%s.ps", table, table, item->name);
 char *plotCmd[] = {rnaPlotPath, NULL};
-struct pipeline *plStruct = pipelineOpen1(plotCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+struct pipeline *plStruct = pipelineOpen1(plotCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
 FILE *of = pipelineFile(plStruct);
 if (of != NULL)
     {
@@ -407,7 +407,7 @@ safef(pngName, sizeof(pngName), "%s.png", rootName);
 char outputBuf[1024];
 safef(outputBuf, sizeof outputBuf, "-sOutputFile=%s", pngName);
 char *pipeCmd[] = {"gs", "-sDEVICE=png16m", outputBuf, "-dBATCH","-dNOPAUSE","-q", psName, NULL};
-struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
 int sysRet = pipelineWait(pl);
 if (sysRet != 0)
     errAbort("System call returned %d for:\n  %s", sysRet, pipelineDesc(pl));

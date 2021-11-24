@@ -4,7 +4,8 @@ include ../../inc/common.mk
 XINC = -I$(MYSQLINC)
 
 O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o autoUpgrade.o axtInfo.o \
-  barChartBed.o barChartUi.o bed.o bed12Source.o bedDetail.o bigBedFind.o bigBedLabel.o bigDbSnp.o bigGenePred.o \
+  barChartBed.o barChartCategory.o barChartUi.o bed.o bed12Source.o \
+  bedDetail.o bigBedFind.o bigBedLabel.o bigDbSnp.o bigGenePred.o \
   bigPsl.o blastTab.o borf.o botDelay.o cart.o cartDb.o cdsEvidence.o cdsOrtho.o cdsPick.o \
   cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgiApoptosis.o chainCart.o chainDb.o chainLink.o chainNet.o \
   chainNetDbLoad.o chromAlias.o chromBins.o chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o \
@@ -19,7 +20,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o autoUpg
   encode/wgEncodeGencodeTranscriptSource.o encode/wgEncodeGencodeTranscriptSupport.o \
   encode/wgEncodeGencodeTranscriptionSupportLevel.o encode/wgEncodeGencodeUniProt.o encode3/encode3Valid.o \
   estOrientInfo.o expData.o expRecord.o facetField.o facetedTable.o featureBits.o findKGAlias.o \
-  findKGProtAlias.o gcPercent.o genbank.o genbankBlackList.o gencodeAttrs.o gencodeToRefSeq.o geneGraph.o \
+  findKGProtAlias.o gcPercent.o genark.o genbank.o genbankBlackList.o gencodeAttrs.o gencodeToRefSeq.o geneGraph.o \
   genePred.o genePredReader.o geoMirror.o ggCluster.o ggDump.o ggGraph.o ggMrnaAli.o ggTypes.o glDbRep.o \
   googleAnalytics.o gpFx.o grp.o gtexAse.o gtexDonor.o gtexGeneBed.o gtexInfo.o gtexSample.o \
   gtexSampleData.o gtexTissue.o gtexTissueMedian.o gtexUi.o hCommon.o hPrint.o hVarSubst.o \
@@ -47,11 +48,18 @@ else
   GBROWSE_D=
 endif
 
+ifeq (${FULLWARN},yes)
+  HG_WARN += -fno-common
+endif
+
 %.o: %.c
 	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
 
-../../lib/$(MACHTYPE)/jkhgap.a: $(O)
+../../lib/$(MACHTYPE)/jkhgap.a: $(O) libDir
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
+
+libDir:
+	mkdir -p ../../lib/$(MACHTYPE)
 
 jWestHeader.h: jWestHeader.html
 	sed -e 's/\\/\\\\/g; s/"/\\"/g; s/^/"/; s/$$/\\n"/;' jWestHeader.html > jWestHeader.h

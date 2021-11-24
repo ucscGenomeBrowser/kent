@@ -1,7 +1,7 @@
 /* Handle details pages for wiggle tracks. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "wiggle.h"
@@ -216,7 +216,7 @@ int printCount = 0;
 char *headerLine = readOneLineMaybeBgzip(detailsUrl, 0, 0);
 if (headerLine == NULL)
     {
-    printf("Error: Could not open the URL referenced in detailsTabUrls, %s", detailsUrl);
+    printf("Error: Could not open the URL referenced in detailsUrls, %s", detailsUrl);
     return printCount;
     }
 
@@ -293,16 +293,18 @@ return printCount;
 }
 
 struct slPair *parseDetailsTablUrls(struct trackDb *tdb)
-/* Parse detailsTabUrls setting string into an slPair list of {offset column name, fileOrUrl} */
+/* Parse detailsUrls setting string into an slPair list of {offset column name, fileOrUrl} */
 {
-char *detailsUrlsStr = trackDbSetting(tdb, "detailsTabUrls");
+char *detailsUrlsStr = trackDbSetting(tdb, "detailsUrls");
+if (!detailsUrlsStr)
+    detailsUrlsStr = trackDbSetting(tdb, "detailsTabUrls");
 if (!detailsUrlsStr)
     return NULL;
 
 struct slPair *detailsUrls = slPairListFromString(detailsUrlsStr, TRUE);
 if (!detailsUrls)
     {
-    printf("Problem when parsing trackDb setting detailsTabUrls<br>\n");
+    printf("Problem when parsing trackDb setting detailsUrls<br>\n");
     printf("Expected: a space-separated key=val list, like 'fieldName1=URL1 fieldName2=URL2'<br>\n");
     printf("But got: '%s'<br>", detailsUrlsStr);
     return NULL;
@@ -315,7 +317,7 @@ return detailsUrls;
 }
 
 static int printAllExternalExtraFields(struct trackDb *tdb, struct slPair *extraFields)
-/* handle the "detailsTabUrls" trackDb setting: 
+/* handle the "detailsUrls" trackDb setting:
  * For each field, print a separate html table with all field names and values
  * from the external tab-sep file. Return the number of fields we successfully printed  */
 {
@@ -330,7 +332,7 @@ for (pair = detailsUrls; pair != NULL; pair = pair->next)
     void *p = slPairFindVal(extraFields, fieldName);
     if (p==NULL)
         {
-        printf("Error when parsing trackDb detailsTabUrls statement:<br>\n");
+        printf("Error when parsing trackDb detailsUrls statement:<br>\n");
         printf("Cannot find extra bigBed field with name %s\n", fieldName);
         return 0;
         }

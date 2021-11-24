@@ -5,7 +5,7 @@
  * table by design.  We just want field-by-field access to this. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef HUBCONNECT_H
 #define HUBCONNECT_H
@@ -20,12 +20,6 @@
 /* Name of table that maintains status of hubs  read/write. */
 
 #define hubStatusTableConfVariable    "hub.statusTableName"
-/* the name of the hg.conf variable to use something other than the default */
-
-#define defaultGenArkTableName "genark"
-/* Name of table that maintains the names of hubs we'll automatically attach if referenced. */
-
-#define genArkTableConfVariable    "hub.genArkTableName"
 /* the name of the hg.conf variable to use something other than the default */
 
 #define hgHubCheckUrl      "hubCheckUrl"
@@ -52,6 +46,7 @@
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
 #define hgHubDoClear       hgHubDo "clear"
+#define hgHubDoRefresh     hgHubDo "refresh"
 #define hgHubDoSearch      hgHubDo "search"
 #define hgHubDoDeleteSearch      hgHubDo "deleteSearch"
 #define hgHubDoFilter      hgHubDo "filter"

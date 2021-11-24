@@ -2,6 +2,8 @@
 
 set -beEu -o pipefail
 
+export userName="`whoami`"
+
 if [ $# != 4 ]; then
   printf "usage: pairLastz.sh <target> <query> <tClade> <qClade>
 
@@ -21,6 +23,8 @@ Will set up a DEF file there, and a run.sh script to run all steps
 
 AND MORE, it will run the swap operation into the corresponding
   blastz.target.swap directory in the query genome work space.
+
+Email will be sent to: '$userName' upon completion.
 
 e.g.: pairLastz.sh rn7 papAnu4 mammal primate\n" 1>&2
   exit 255
@@ -60,6 +64,23 @@ function gcPath() {
   printf "%s" "${GCxPath}"
 }
 
+# asmSize - determine size of genome
+function asmSize() {
+  export asmName=$1
+  export sizes="/hive/data/genomes/${asmName}/chrom.sizes"
+  case $asmName in
+     GC[AF]_*)
+       gcxPath=$(gcPath $asmName)
+       id=$(asmId $asmName)
+       size=`awk '{sum+=$2}END{print sum}' /hive/data/genomes/asmHubs/${gcxPath}/${id}/${id}.chrom.sizes.txt`
+       ;;
+     *)
+       size=`awk '{sum+=$2}END{print sum}' ${sizes}`
+       ;;
+  esac
+  printf "%s" "${size}"
+}
+
 # seqCount - determine the sequence count in given genome target
 function seqCount() {
   export asmName=$1
@@ -68,10 +89,10 @@ function seqCount() {
      GC[AF]_*)
        gcxPath=$(gcPath $asmName)
        id=$(asmId $asmName)
-       count=`cat /hive/data/genomes/asmHubs/${gcxPath}/${id}/${id}.chrom.sizes.txt | wc -l`
+       count=`wc -l /hive/data/genomes/asmHubs/${gcxPath}/${id}/${id}.chrom.sizes.txt | cut -d' ' -f1`
        ;;
      *)
-       count=`cat ${sizes} | wc -l`
+       count=`wc -l ${sizes} | cut -d' ' -f1`
        ;;
   esac
   printf "%s" "${count}"
@@ -246,11 +267,14 @@ fi
 
 export tOrgName="$(orgName $target)"
 export qOrgName="$(orgName $query)"
+export tAsmSize="$(asmSize $target)"
+export qAsmSize="$(asmSize $query)"
 export tSequenceCount="$(seqCount $target)"
 export qSequenceCount="$(seqCount $query)"
 printf "# working: %s\n" "${buildDir}" 1>&2
 printf "# target: $target - $tOrgName - $tClade - $tSequenceCount sequences\n" 1>&2
 printf "#  query: $query - $qOrgName - $qClade - $qSequenceCount sequences\n" 1>&2
+LC_NUMERIC=en_US printf "#  sizes: target: %'d - query: %'d\n" "${tAsmSize}" "${qAsmSize}" 1>&2
 
 export seq1Limit="40"
 if [ "${tSequenceCount}" -gt 50000 ]; then
@@ -296,6 +320,42 @@ case $tClade in
       linearGap="loose"
 esac
 
+if [ "$tClade" == "primate" -a "$qClade" == "primate" ]; then
+
+export defString="# ${qOrgName} ${Query} vs. ${tOrgName} ${Target}
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: ${tOrgName} ${Target}
+SEQ1_DIR=${target2bit}
+SEQ1_LEN=${targetSizes}
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=${seq1Limit}
+
+# QUERY: ${qOrgName} ${Query}
+SEQ2_DIR=${query2bit}
+SEQ2_LEN=${querySizes}
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=${seq2Limit}
+
+BASE=${buildDir}
+TMPDIR=/dev/shm
+"
+else
+
 export defString="# ${qOrgName} ${Query} vs. ${tOrgName} ${Target}
 BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
 
@@ -316,6 +376,8 @@ SEQ2_LIMIT=${seq2Limit}
 BASE=${buildDir}
 TMPDIR=/dev/shm
 "
+
+fi
 
 ### skip primary alignment if it is already done
 ###  primaryDone == 0 means NOT done yet
@@ -366,7 +428,9 @@ fi      ###     if [ $primaryDone -eq 0 ]; then
 #### print out the makeDoc.txt to this point into buildDir/makeDoc.txt
 
 printf "##############################################################################
-# LASTZ ${tOrgName} ${Target} vs. $qOrgName ${Query} (DONE - $DS - Hiram)
+# LASTZ ${tOrgName} ${Target} vs. $qOrgName ${Query}
+#    (DONE - $DS - $userName)
+
     mkdir $buildDir
     cd $buildDir
 
@@ -479,3 +543,20 @@ printf "\n######################################################################
 
 ### show completed makeDoc.txt ####
 cat ${buildDir}/makeDoc.txt
+
+export toAddress="$userName"
+export fromAddress="$userName"
+export subject="pair lastz DONE $target $query"
+printf "To: $toAddress
+From: $fromAddress
+Subject: $subject
+
+##################################################################
+" > /tmp/send.txt.$$
+date >> /tmp/send.txt.$$
+printf "##################################################################\n" >> /tmp/send.txt.$$
+cat ${buildDir}/makeDoc.txt >> /tmp/send.txt.$$
+
+cat /tmp/send.txt.$$ | /usr/sbin/sendmail -t -oi
+
+rm -f /tmp/send.txt.$$

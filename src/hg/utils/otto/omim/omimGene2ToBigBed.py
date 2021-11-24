@@ -76,7 +76,8 @@ def main():
         #10  FGF23, ADHR, HPDR2, PHPTC, HFTC2
         #11  <old disorder string from old OMIM pipeline>
         #12  Tumoral calcinosis, hyperphosphatemic, familial, 2|3|$Hypophosphatemic rickets, autosomal dominant|3|Autosomal dominant
-        chrom, start, end, mimId, score, strand, thickStart, thickEnd, dummyColor, syms, oldDisorderStr, phenoStr = row
+        #13  PhenoMapKey
+        chrom, start, end, mimId, score, strand, thickStart, thickEnd, dummyColor, syms, oldDisorderStr, phenoStr,phenoMapKey = row
         
         mapKeys = []
         if phenoStr=="":
@@ -135,7 +136,7 @@ def main():
             else:
                 assert(False)
             
-        newRow = (chrom, start, end, mimId, score, strand, thickStart, thickEnd, color, mainSym, mouseOver)
+        newRow = (chrom, start, end, mimId, score, strand, thickStart, thickEnd, color, mainSym, phenoMapKey, mouseOver)
         ofh.write("\t".join(newRow))
         ofh.write("\n")
 

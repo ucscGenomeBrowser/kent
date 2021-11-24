@@ -1,7 +1,7 @@
 /* liftOver - Move annotations from one assembly to another. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -166,6 +166,12 @@ struct bed *bed = NULL;
 char strand = qStrand;
 /* initialize for single region case */
 int start = s, end = e;
+
+// for chain intersection we need a non-zero range because we need to 
+// distinquish a zero width query from a gap in the chain (i.e. minMatchSize needs to be 
+// non-zero).
+if (start == end) end++;
+
 double minMatchSize = minMatch * (end - start);
 int intersectSize;
 int tStart;
@@ -185,6 +191,10 @@ for (el = list; el != NULL; el = el->next)
         /* limit required match to chain range on target */
         end = min(e, chain->tEnd);
         start = max(s, chain->tStart);
+        
+        // see above
+        if (start == end) end++;
+
         minMatchSize = minMatch *  (end - start);
         }
     intersectSize = aliIntersectSize(chain, start, end);
@@ -225,6 +235,15 @@ for (chain = chainsHit; chain != NULL; chain = next)
     struct chain *subChain = NULL;
     struct chain *toFree = NULL;
     int start=s, end=e;
+    boolean expanded = FALSE;
+    
+    // see above.  Add fudge factor and remember that we did so.
+    if (start == end)
+        {
+        expanded = TRUE;
+        end++;
+        }
+
     next = chain->next;
     verbose(3,"hit chain %s:%d %s:%d-%d %c (%d)\n",
         chain->tName, chain->tStart,  chain->qName, chain->qStart, chain->qEnd,
@@ -249,6 +268,8 @@ for (chain = chainsHit; chain != NULL; chain = next)
         }
     if (!mapThroughChain(chain, minRatio, &start, &end, &subChain, &toFree))
         errAbort("Chain mapping error: %s:%d-%d\n", chain->qName, start, end);
+    if (expanded) // correct if we made a zero width item into a 1bp item
+        end = start;
     if (chain->qStrand == '-')
 	strand = otherStrand(qStrand);
     else

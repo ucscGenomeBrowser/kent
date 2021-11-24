@@ -10,7 +10,6 @@ color 150,80,200
 maxWindowToDraw 10000000
 mouseOverFunction noAverage
 dataVersion /gbdb/$D/revel/version.txt
-pennantIcon New red ../goldenPath/newsarch.html#062421 "Released by UCSC June 24, 2021"
 
         track revelA
         shortLabel Mutation: A

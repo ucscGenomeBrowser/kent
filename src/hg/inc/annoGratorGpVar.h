@@ -1,7 +1,7 @@
 /* annoGratorGpVar -- integrate pgSNP or VCF with gene pred and make gpFx predictions */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef ANNOGRATORGPVAR_H
 #define ANNOGRATORGPVAR_H

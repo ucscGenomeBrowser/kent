@@ -167,11 +167,8 @@ html html/%s.tanDups\n\n" "${asmId}"
 
 fi
 
-export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb | wc -l) || true`
-
-
 # see if there are repeatMasker bb files
-export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb | wc -l) || true`
+export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb 2> /dev/null | wc -l) || true`
 
 if [ "${rmskCount}" -gt 0 ]; then
 
@@ -195,7 +192,7 @@ maxWindowToDraw 10000000
 spectrum on
 html html/%s.repeatMasker\n\n" "${asmId}"
 $scriptDir/asmHubRmsk.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt > $buildDir/html/$asmId.repeatMasker.html
-fi
+fi      #       if [ "${rmskCount}" -gt 0 ]; then
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.SINE.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.SINE.bb

@@ -1,7 +1,7 @@
 /* GTEx (Genotype Tissue Expression) tracks  */
 
 /* Copyright (C) 2015 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hgTracks.h"
@@ -1128,33 +1128,36 @@ if ((vis == tvPack) || (vis == tvFull))
     {
     // set variable height rows
 
-    struct spaceSaver *ss = findSpaceSaver(tg, vis); // ss is a list now
-    assert(ss); // viz matches, we have the right one
+    if (tg->ss)  // got past trackLoadingInProgress
+	{
+	struct spaceSaver *ss = findSpaceSaver(tg, vis); // ss is a list now
+	assert(ss); // viz matches, we have the right one
 
-    if (ss && ss->rowCount != 0)
-        {
-        if (!ss->rowSizes)
+	if (ss && ss->rowCount != 0)
 	    {
-	    // collect the rowSizes data across all windows
-	    assert(currentWindow==windows); // first window
-	    assert(tg->ss->vis == vis); // viz matches, we have the right one
-	    struct spaceSaver *ssHold; 
-	    AllocVar(ssHold);
-	    struct track *tgSave = tg;
-	    for(tg=tgSave; tg; tg=tg->nextWindow)
+	    if (!ss->rowSizes)
 		{
-		assert(tgSave->ss->vis == tg->ss->vis); // viz matches, we have the right one
-		spaceSaverSetRowHeights(tg->ss, ssHold, gtexGeneHeight);
+		// collect the rowSizes data across all windows
+		assert(currentWindow==windows); // first window
+		assert(tg->ss->vis == vis); // viz matches, we have the right one
+		struct spaceSaver *ssHold; 
+		AllocVar(ssHold);
+		struct track *tgSave = tg;
+		for(tg=tgSave; tg; tg=tg->nextWindow)
+		    {
+		    assert(tgSave->ss->vis == tg->ss->vis); // viz matches, we have the right one
+		    spaceSaverSetRowHeights(tg->ss, ssHold, gtexGeneHeight);
+		    }
+		// share the rowSizes data across all windows
+		for(tg=tgSave; tg; tg=tg->nextWindow)
+		    {
+		    tg->ss->rowSizes = ssHold->rowSizes;
+		    }
+		tg = tgSave;
 		}
-	    // share the rowSizes data across all windows
-	    for(tg=tgSave; tg; tg=tg->nextWindow)
-		{
-		tg->ss->rowSizes = ssHold->rowSizes;
-		}
-	    tg = tgSave;
+	    height = spaceSaverGetRowHeightsTotal(ss);
 	    }
-	height = spaceSaverGetRowHeightsTotal(ss);
-        }
+	}
     }
 tg->height = height;
 

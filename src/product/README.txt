@@ -53,7 +53,7 @@ alternatives before embarking on a full UCSC Genome Browser installation directl
 
     [Genome Browser in a Box](https://genome.ucsc.edu/goldenPath/help/gbib.html) (GBiB): 
     is a fully configured virtual machine that includes
-    Apache and MySQL, and has behavior identical to the UCSC website.
+    Apache and MariaDB, and has behavior identical to the UCSC website.
     GBiB loads genome data from the UCSC download servers on the fly.
     Website and data updates are applied automatically every two weeks. By default, GBiB
     uses the VirtualBox virtualization software, so it can be run on any
@@ -70,7 +70,7 @@ alternatives before embarking on a full UCSC Genome Browser installation directl
         * For commercial users: easier click-through licensing compared to a full multi-seat, manual license.
     * Cons:
         * Requires the free VirtualBox software or a commercial Virtualization system.
-        * By default requires opening at least three outgoing ports to UCSC for MySQL, Rsync downloads 
+        * By default requires opening at least three outgoing ports to UCSC for MariaDB, Rsync downloads 
           and BLAT in your firewall. Once all data is downloaded, no open ports are needed.
         * For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks, like a manual local installation.
 
@@ -94,7 +94,7 @@ alternatives before embarking on a full UCSC Genome Browser installation directl
           take advantage of new features in the Genome Browser.
         * Preferably run on a linux server that is not used otherwise.
         * By default requires opening at least three outgoing ports to UCSC for 
-          MySQL and BLAT in your firewall. Once all data is downloaded and BLAT 
+          MariaDB and BLAT in your firewall. Once all data is downloaded and BLAT 
           setup locally, no open ports are needed anymore.
         * For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks.
 
@@ -115,7 +115,7 @@ alternatives before embarking on a full UCSC Genome Browser installation directl
         * Will probably require some support via the [genome-mirror](mailto:genome-mirror@soe.ucsc.edu) mailing list.
         * To keep up with changes in the Genome Browser, you will have to 
           install linux packages and update the linux distribution yourself in 
-          the future and apply UCSC data updates yourself using rsync or MySQL table loads
+          the future and apply UCSC data updates yourself using rsync or MariaDB table loads
         * Configuration changes on our side may break your setup.
         * For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks.
         * For commercial users: license agreements take longer to negotiate, no click-through license.
@@ -137,7 +137,7 @@ distributions.
 It has been tested on Ubuntu 14/16,  RedHat/CentOS 6 and 7,
 and Fedora 20. Preferably, the installation should be performed on a fresh Linux
 installation, as it deactivates the default site config file in Apache
-and fills the MySQL directory with numerous databases.  The easiest way to accomplish this is to
+and fills the MariaDB directory with numerous databases.  The easiest way to accomplish this is to
 run the Genome Browser in the Cloud program in a new virtual machine. The program also works on
 Docker and cloud computing virtual machines, and has been tested on those sold by
 Amazon, Microsoft and Google.
@@ -152,10 +152,11 @@ To run the installation program, please see the [GBiC user guide](https://genome
 
 # Manual installation instructions
 
-If the installation program does not work on your linux distribution or you prefer to
-make adaptations to your mirror, we also provide [step-by-step installation
+See [mirrorManual.html](mirrorManual.html): If the installation program does
+not work on your linux distribution or you prefer to make adaptations to your
+mirror, we provide these [step-by-step installation
 instructions](mirrorManual.html) that cover the configuration of Apache,
-MySQL, the Genome Browser CGIs, temporary file removal and other topics, like
+MariaDB, the Genome Browser CGIs, temporary file removal and other topics, like
 data loading through proxies.
 
 The following external websites were not created by UCSC
@@ -209,7 +210,7 @@ Linux 6). You'll find both a 64-bit and 32-bit rpm [here].
 Once you have a working UDR binary, either by building from source or by
 installing the rpm, you can download files from either of our our
 download servers in a fashion similar to rsync. For example, using
-rsync,  all of the MySQL tables for the hg19
+rsync,  all of the MariaDB tables for the hg19
 database can be downloaded using either one of the following two commands:
 
     rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hg19/ /my/local/hg19/

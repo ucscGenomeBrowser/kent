@@ -77,6 +77,10 @@ void barChartCategoryOutput(struct barChartCategory *el, FILE *f, char sep, char
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+
+struct hash *barChartCategoriesToHash(struct barChartCategory *categories);
+/* Hash the labels of a list of barChartCategories */
+
 struct barChartCategory *barChartGetCategories(char *database, char *track);
 /* Get id, labels, colors, etc. */
 

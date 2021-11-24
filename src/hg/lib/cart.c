@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hCommon.h"
@@ -1491,7 +1491,8 @@ struct dyString *encoded = newDyString(4096);
 cartEncodeState(cart, encoded);
 
 /* update sessionDb and userDb tables (removed check for cart stuffing bots) */
-updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
+if (!cartCgiUsualString(cart, "incognito", NULL))
+    updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
 updateOne(conn, sessionDbTable(), cart->sessionInfo, encoded->string, encoded->stringSize);
 
 /* Cleanup */
@@ -2264,6 +2265,22 @@ struct cart *cartForSession(char *cookieName, char **exclude,
 /* Most cgis call this routine */
 if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
     initSigHandlers(hDumpStackEnabled());
+
+/* HTTPS SSL Cert Checking Settings */
+char *httpsCertCheck = cfgOption("httpsCertCheck");  
+if (httpsCertCheck)
+    setenv("https_cert_check", httpsCertCheck, TRUE);
+char *httpsCertCheckVerbose = cfgOption("httpsCertCheckVerbose");  
+if (httpsCertCheckVerbose)
+    setenv("https_cert_check_verbose", httpsCertCheckVerbose, TRUE);
+char *httpsCertCheckDepth = cfgOption("httpsCertCheckDepth");  
+if (httpsCertCheckDepth)
+    setenv("https_cert_check_depth", httpsCertCheckDepth, TRUE);
+char *httpsCertCheckDomainExceptions = cfgOption("httpsCertCheckDomainExceptions");  
+if (httpsCertCheckDomainExceptions)
+    setenv("https_cert_check_domain_exceptions", httpsCertCheckDomainExceptions, TRUE);
+
+
 /* Proxy Settings 
  * net.c cannot see the cart, pass the value through env var */
 char *httpProxy = cfgOption("httpProxy");  
@@ -2282,9 +2299,9 @@ char *logProxy = cfgOption("logProxy");
 if (logProxy)
     setenv("log_proxy", logProxy, TRUE);
 
-// if ignoreCookie is on the URL, don't check for cookies
+// if ignoreCookie or incognito is on the URL, don't check for cookies
 char *hguid = NULL;
-if (cgiOptionalString("ignoreCookie") == NULL)
+if ( cgiOptionalString("ignoreCookie") == NULL && cgiOptionalString("incognito") == NULL )
     hguid = getCookieId(cookieName);
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
@@ -2317,6 +2334,7 @@ popWarnHandler();
 popAbortHandler();
 
 cartWriteCookie(cart, cookieName);
+
 if (doContentType && !cartDidContentType)
     {
     addHttpHeaders();

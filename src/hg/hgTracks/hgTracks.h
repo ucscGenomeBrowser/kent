@@ -2,7 +2,7 @@
  * individual tracks. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef HGTRACKS_H
 #define HGTRACKS_H
@@ -611,6 +611,7 @@ extern boolean chromosomeColorsMade; /* Have the 3 shades of 8 chromosome colors
 extern boolean doPliColors; /* Put up the color legend for the gnomAD pLI track */
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;
+extern int colorLookup[256]; /* Common to variation.c and rnaPLFoldtrack.c */
 
 extern boolean trackImgOnly;           /* caller wants just the track image and track table html */
 
@@ -1122,6 +1123,10 @@ void bigWigMethods(struct track *track, struct trackDb *tdb,
 void mathWigMethods(struct track *track, struct trackDb *tdb, 
 	int wordCount, char *words[]);
 /* mathWig load and draw methods. */
+
+void bigRmskMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* Set up bigRmsk methods. */
 
 void bigBedMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);

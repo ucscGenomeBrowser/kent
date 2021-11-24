@@ -5,7 +5,8 @@ pslStats = ${DESTBINDIR}/pslStats
 
 test:	untransAlignTest untransQueryTest untransOverallTest \
 	untransAlignUnalnTest untransQueryUnalnTest untransOverallUnalnTest \
-	cdna2cdnaAlignTest cdna2cdnaQueryTest cdna2cdnaOverallTest
+	cdna2cdnaAlignTest cdna2cdnaQueryTest cdna2cdnaOverallTest \
+	tsvHeaderTest
 
 # basic set of tests with an untranslated psl
 untransAlignTest: mkdirs
@@ -45,6 +46,11 @@ cdna2cdnaQueryTest: mkdirs
 cdna2cdnaOverallTest: mkdirs
 	${pslStats} -overallStats -queries=input/cdna2cdna.queries input/cdna2cdna.psl output/$@.stats
 	diff -u expected/$@.stats output/$@.stats
+
+tsvHeaderTest: mkdirs
+	${pslStats} -tsv input/basic.psl output/$@.stats
+	diff -u expected/$@.stats output/$@.stats
+
 
 clean::
 	rm -rf output

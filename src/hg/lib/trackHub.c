@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* trackHub - supports collections of tracks hosted on a remote site.
  * The basic layout of a data hub is:
@@ -955,8 +955,8 @@ return ret;
 static void requireBarChartBars(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
 /* Fetch setting(s) or give an error message */
 {
-/* LATER: allow URL for file containing labels and colors */
-requiredSetting(hub, genome, tdb, BAR_CHART_CATEGORY_LABELS);
+if (!trackDbSetting(tdb, BAR_CHART_CATEGORY_URL) && !trackDbSetting(tdb, BAR_CHART_CATEGORY_LABELS))
+    errAbort("BarChart track '%s' is missing either %s or %s setting. Please add one of those settings to the appropriate stanza", tdb->track, BAR_CHART_CATEGORY_LABELS, BAR_CHART_CATEGORY_URL);
 }
 
 static void validateOneTrack( struct trackHub *hub, 
@@ -1002,6 +1002,7 @@ else
             }
         else 
             {
+            /* RMH: Added bigRmsk to support RepeatMasker data in bigBed track hub format */
             if (!(startsWithWord("wig", type)||  startsWithWord("bedGraph", type)))
                 {
                 if (!(startsWithWord("bigWig", type) ||
@@ -1019,6 +1020,7 @@ else
                   startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
                   startsWithWord("bigLolly", type) ||
+                  startsWithWord("bigRmsk", type) ||
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bigInteract", type) ||
                   startsWithWord("hic", type) ||
@@ -1401,11 +1403,12 @@ if (relativeUrl != NULL)
         struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
         bbiFileClose(&bbi);
         }
+    /* RMH: Added support for bigRmsk track hub data type */
     else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) ||
                 startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)||
                 startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
                 startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type) ||
-                startsWithWord("bigLolly", type))
+                startsWithWord("bigLolly", type) || startsWithWord("bigRmsk",type))
         {
         /* Just open and close to verify file exists and is correct type. */
         struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);

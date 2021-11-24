@@ -205,9 +205,26 @@ html chainNet
         shortLabel Rambouillet sheep Chain
         longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Chained Alignments
         type bigChain GCF_002742125.1
-        bigDataUrl /gbdb/$D/bbi/chainNet/chainGCF_002742125.1.bb
-        linkDataUrl /gbdb/$D/bbi/chainNet/chainGCF_002742125.1Link.bb
-        html chainNet
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_002742125.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_002742125.1Link.bb
+
+        track chainSynGCF_002742125.1
+        parent chainNetGCF_002742125.1Viewchain
+        subGroups view=chain
+        shortLabel Rambouillet sheep Chain
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Syntenic Chained Alignments
+        type bigChain GCF_002742125.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_002742125.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_002742125.1Link.bb
+
+        track chainRBestGCF_002742125.1
+        parent chainNetGCF_002742125.1Viewchain
+        subGroups view=chain
+        shortLabel Rambouillet sheep Chain
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Reciprocal Best Chained Alignments
+        type bigChain GCF_002742125.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_002742125.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_002742125.1Link.bb
 
     track mafNetGCF_002742125.1Viewnet
     shortLabel Net
@@ -225,6 +242,26 @@ html chainNet
         summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.net.summary.bb
         speciesOrder GCF_002742125.1
         html chainNet
+
+        track synNetGCF_002742125.1
+        parent mafNetGCF_002742125.1Viewnet
+        subGroups view=net
+        shortLabel Rambouillet sheep mafNet
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.synNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.synNet.summary.bb
+        speciesOrder GCF_002742125.1
+
+        track rbestNetGCF_002742125.1
+        parent mafNetGCF_002742125.1Viewnet
+        subGroups view=net
+        shortLabel Rambouillet sheep mafNet
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.rbestNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.rbestNet.summary.bb
+        speciesOrder GCF_002742125.1
 
 ##############################################################################
 # GCA_018400075.1 - Zebrafish T5D - Danio rerio - taxId: 7955 - fish
@@ -283,3 +320,191 @@ html chainNet
         summary /gbdb/$D/bbi/chainNet/$D.GCA_018400075.1.net.summary.bb
         speciesOrder GCA_018400075.1
         html chainNet
+
+##############################################################################
+# GCF_016699485.2 - chicken (matMap) - Gallus gallus - taxId: 9031 - birds
+##############################################################################
+track chainNetGCF_016699485.2
+compositeTrack on
+shortLabel Chicken Chain/Net
+longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 5000
+chainLinearGap loose
+matrixHeader A, C, G, T
+otherDb GCF_016699485.2
+html chainNet
+
+    track chainNetGCF_016699485.2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_016699485.2
+    spectrum on
+
+        track chainGCF_016699485.2
+        parent chainNetGCF_016699485.2Viewchain
+        subGroups view=chain
+        shortLabel Chicken Chain
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Chained Alignments
+        type bigChain GCF_016699485.2
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_016699485.2.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_016699485.2Link.bb
+
+        track chainSynGCF_016699485.2
+        parent chainNetGCF_016699485.2Viewchain
+        subGroups view=chain
+        shortLabel Chicken synChain
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Syntenic Chained Alignments
+        type bigChain GCF_016699485.2
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_016699485.2.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_016699485.2Link.bb
+
+        track chainRBestGCF_016699485.2
+        parent chainNetGCF_016699485.2Viewchain
+        subGroups view=chain
+        shortLabel Chicken rbChain
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Reciprocal Best Chained Alignments
+        type bigChain GCF_016699485.2
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_016699485.2.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_016699485.2Link.bb
+
+    track mafNetGCF_016699485.2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCF_016699485.2
+
+        track netGCF_016699485.2
+        parent mafNetGCF_016699485.2Viewnet
+        subGroups view=net
+        shortLabel Chicken net
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.net.summary.bb
+        speciesOrder GCF_016699485.2
+
+        track synNetGCF_016699485.2
+        parent mafNetGCF_016699485.2Viewnet
+        subGroups view=net
+        shortLabel Chicken synNet
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.synNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.synNet.summary.bb
+        speciesOrder GCF_016699485.2
+
+        track rbestNetGCF_016699485.2
+        parent mafNetGCF_016699485.2Viewnet
+        subGroups view=net
+        shortLabel Chicken rbestNet
+        longLabel Chicken (Jan. 2021 (GRCg7b/GCF_016699485.2)) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.rbestNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.rbestNet.summary.bb
+        speciesOrder GCF_016699485.2
+
+##############################################################################
+# GCF_000349665.1 - golden hamster - Gallus gallus - taxId: 9031 - birds
+##############################################################################
+track chainNetGCF_000349665.1
+compositeTrack on
+shortLabel Golden hamster Chain/Net
+longLabel Golden hamster (Mar. 2013 (MesAur1.0/GCF_000349665.1), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 5000
+chainLinearGap loose
+matrixHeader A, C, G, T
+otherDb GCF_000349665.1
+html chainNet
+
+    track chainNetGCF_000349665.1iewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_000349665.1
+    spectrum on
+
+        track chainGCF_000349665.1
+        parent chainNetGCF_000349665.1iewchain
+        subGroups view=chain
+        shortLabel Golden hamster Chain
+        longLabel Golden hamster (Mar. 2013 (MesAur1.0/GCF_000349665.1) Chained Alignments
+        type bigChain GCF_000349665.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_000349665.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_000349665.1Link.bb
+
+        track chainSynGCF_000349665.1
+        parent chainNetGCF_000349665.1iewchain
+        subGroups view=chain
+        shortLabel Golden hamster synChain
+        longLabel Golden hamster (Mar. 2013 (MesAur1.0/GCF_000349665.1) Syntenic Chained Alignments
+        type bigChain GCF_000349665.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_000349665.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_000349665.1Link.bb
+
+        track chainRBestGCF_000349665.1
+        parent chainNetGCF_000349665.1iewchain
+        subGroups view=chain
+        shortLabel Golden hamster rbChain
+        longLabel Golden hamster (Mar. 2013 (MesAur1.0/GCF_000349665.1) Reciprocal Best Chained Alignments
+        type bigChain GCF_000349665.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_000349665.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_000349665.1Link.bb
+
+    track mafNetGCF_000349665.1iewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCF_000349665.1
+
+        track netGCF_000349665.1
+        parent mafNetGCF_000349665.1iewnet
+        subGroups view=net
+        shortLabel Golden hamster net
+        longLabel Golden hamster (Mar. 2013 (MesAur1.0/GCF_000349665.1) Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.net.summary.bb
+        speciesOrder GCF_000349665.1
+
+        track synNetGCF_000349665.1
+        parent mafNetGCF_000349665.1iewnet
+        subGroups view=net
+        shortLabel Golden hamster synNet
+        longLabel Golden hamster (Mar. 2013 (MesAur1.0/GCF_000349665.1) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.synNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.synNet.summary.bb
+        speciesOrder GCF_000349665.1
+
+        track rbestNetGCF_000349665.1
+        parent mafNetGCF_000349665.1iewnet
+        subGroups view=net
+        shortLabel Golden hamster rbestNet
+        longLabel Golden hamster (Mar. 2013 (MesAur1.0/GCF_000349665.1) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.rbestNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.rbestNet.summary.bb
+        speciesOrder GCF_000349665.1

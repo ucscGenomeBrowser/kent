@@ -3155,30 +3155,6 @@ urlLabel Link to LRG transcript
 url http://ftp.ebi.ac.uk/pub/databases/lrgex/$<_lrgParent>.xml#transcripts_anchor
 bigDataUrl /gbdb/$D/bbi/lrgBigPsl.bb
 searchIndex name
-release alpha
-
-track lrgTranscriptAli
-shortLabel LRG Transcripts
-longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
-group genes
-visibility hide
-type psl .
-cdsTable lrgCds
-cdnaTable lrgCdna
-pepTable lrgPep
-baseColorDefault diffCodons
-baseColorUseCds table lrgCds
-baseColorUseSequence table lrgCdna
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-color 54,125,29
-urlLabel Link to LRG transcript:
-url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
-release beta,public
 
 track affyHuEx1
 shortLabel Affy HuEx 1.0
@@ -5458,6 +5434,22 @@ visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
 multiRegionsBedUrl /gbdb/hg19/covidMuts/covidMuts.regions.bed
  
-
-
+track orphadata
+bigDataUrl /gbdb/$D/bbi/orphanet/orphadata.bb
+shortLabel Orphanet
+longLabel Orphadata: Aggregated Data From Orphanet
+group phenDis
+type bigBed 9 +
+bedNameLabel OrphaCode
+url http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=en&Expert=$$
+urlLabel OrphaNet Phenotype Link:
+urls ensemblID="https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" pmid="https://pubmed.ncbi.nlm.nih.gov/$$" orphaCode="http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=en&Expert=$$" omim="https://www.omim.org/entry/$$?search=$$&highlight=$$" hgnc="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$"
+skipEmptyFields on
+skipFields name,score,itemRgb
+mouseOver Gene: $geneSymbol, Disorder: $disorder, Inheritance(s): $inheritance, Onset: $onsetList
+filterValues.assnType Biomarker tested in,Candidate gene tested in,Disease-causing germline mutation(s) (gain of function) in,Disease-causing germline mutation(s) (loss of function) in,Disease-causing germline mutation(s) in,Disease-causing somatic mutation(s) in,Major susceptibility factor in,Modifying germline mutation in,Part of a fusion gene in,Role in the phenotype of
+filterValues.inheritance Autosomal dominant,Autosomal recessive,Mitochondrial inheritance,Multigenic/multifactorial,No data available,Not applicable,Oligogenic,Semi-dominant,Unknown,X-linked dominant,X-linked recessive,Y-linked
+filterValues.onsetList Adolescent,Adult,All ages,Antenatal,Childhood,Elderly,Infancy,Neonatal,No data available
+itemRgb on
+pennantIcon New red ../goldenPath/newsarch.html#111821 "Released Nov. 18, 2021"
 

@@ -239,7 +239,7 @@ alpha_all: ${DBS:%=%_alpha}
 %_alpha:
 	./loadTracks -addVersion ${EXTRA} -release=alpha trackDb hgFindSpec $*
 	./checkMetaDb alpha metaDb $*
-	rm -f ${HIVE_TRIX}/$*_trackDb.{ixx,ix}}
+	rm -f ${HIVE_TRIX}/$*_trackDb.{ixx,ix}
 	HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/alpha/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
 	./makeTrixLinks trackDb ${HIVE_TRIX} $*
 	# now build the relatedTracks table for each db

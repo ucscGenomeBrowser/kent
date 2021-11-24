@@ -13,7 +13,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V36
     longLabel GENCODE V36
     parent knownGeneArchive
-    priority 1
+    priority 5
     visibility pack
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV36.bb

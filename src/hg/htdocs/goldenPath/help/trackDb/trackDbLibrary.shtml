@@ -1579,6 +1579,8 @@ There are no extra options that can appear on the type hic line.
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
     <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a 
     &quot;.&quot; (for non-extended bigBed tracks) is required
+    <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
+    at least a bed5</li>
     <li>By default, all bed tracks that are at least bed5 will have a score filter. 
     Enabling any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
     that default filter</li></ul></P>
@@ -1643,8 +1645,10 @@ There are no extra options that can appear on the type hic line.
     a wildcard (*) item on either end will match any number of additional characters before
     and/or after the search term. The regexp option allows for searching with <a target="_blank"
     href="https://en.wikipedia.org/wiki/Regular_expression#POSIX_basic_and_extended">regular 
-    expression rules</a>. The optional settings <code>filterType.&lt;fieldName&gt;</code> may
-    be added to switch the default from wildcard to regexp.</P>
+    expression rules</a>. For instance, with wildcard changed to a regexp type of search, putting in
+    <code>.*A\|B.*</code> will match any items with an A or B in it, while <code>.*[0-9]</code> will
+    match any item ending in a number. The optional settings <code>filterType.&lt;fieldName&gt;</code>
+    may be added to switch the default from wildcard to regexp.</P>
     <P>The filter label will be the description of the field as specified by the autoSql (.as) file.
     This label can be customized with the <a 
     href="#filterLabel"><code>filterLabel.&lt;fieldName&gt;</code></a> parameter.
@@ -1658,6 +1662,8 @@ There are no extra options that can appear on the type hic line.
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
     type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
     &quot;.&quot; (for non-extended bigBed tracks) is required
+    <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
+    at least a bed5</li>
     <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling 
     any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
     that default filter</li></ul></P>
@@ -1756,6 +1762,8 @@ There are no extra options that can appear on the type hic line.
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
     type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
     &quot;.&quot; (for non-extended bigBed tracks) is required
+    <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
+    at least a bed5</li>
     <li>There should not be any white spaces between declared items after commas, e.x.
     "itemOne,itemTwo,itemThree"</li>
     <li>The default label can be customized with the <a 

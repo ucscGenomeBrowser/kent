@@ -67,8 +67,8 @@ do
   if [ "${otherPrefix}" = "GC" ]; then
     sciName=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *//i; s/ *(.*//;'`
     organism=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *.*(//i; s/).*//;'`
-    taxId=`grep -i 'taxid' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*taxid: *//i;'`
-    o_date=`grep -i 'date' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
+    taxId=`grep -i 'taxid:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*taxid: *//i;'`
+    o_date=`grep -i 'date:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
     matrix=""
     linGap=""
     minScore=""
@@ -84,8 +84,8 @@ do
   if [ "${otherPrefix}" = "GC" ]; then
     sciName=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *//i; s/ *(.*//;'`
     organism=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *.*(//i; s/).*//;'`
-    taxId=`grep -i 'taxid' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*taxid: *//i;'`
-    o_date=`grep -i 'date' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
+    taxId=`grep -i 'taxid:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*taxid: *//i;'`
+    o_date=`grep -i 'date:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
     matrix=""
     linGap=""
     minScore=""
@@ -171,7 +171,7 @@ if [ -s "$buildDir/bbi/${asmId}.chainRBest$OtherDb.bb" ]; then
 printf "        track chainRBest$OtherDb
         parent chainNet${OtherDb}Viewchain
         subGroups view=chain
-        shortLabel $organism syChain
+        shortLabel $organism rbChain
         longLabel $organism ($o_date) Reciprocal Best Chained Alignments
         type bigChain $otherDb
         bigDataUrl bbi/$asmId.chainRBest$OtherDb.bb

@@ -3,7 +3,7 @@
  * (zoomed out) */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hash.h"
@@ -90,26 +90,35 @@ static struct mafAli *wigMafLoadInRegion(struct sqlConnection *conn,
     return mafLoadInRegion2(conn, conn2, table, chrom, start, end, file);
 }
 
-static struct wigMafItem *newMafItem(char *s, int g, boolean lowerFirstChar)
+static struct wigMafItem *newMafItem(char *s, int g, boolean lowerFirstChar, struct hash *labelHash)
 /* Allocate and initialize a maf item. Species param can be a db or name */
 {
 struct wigMafItem *mi;
 char *val;
 
 AllocVar(mi);
-if ((val = hGenome(s)) != NULL)
+if (labelHash)
     {
-    /* it's a database name */
     mi->db = cloneString(hubConnectSkipHubPrefix(s));
-    mi->name = val;
+    mi->name = hashFindVal(labelHash, mi->db);
     }
-else
+
+if (mi->name == NULL)
     {
-    mi->db = cloneString(s);
-    mi->name = cloneString(s);
+    if ((val = hGenome(s)) != NULL)
+        {
+        /* it's a database name */
+        mi->db = cloneString(hubConnectSkipHubPrefix(s));
+        mi->name = val;
+        }
+    else
+        {
+        mi->db = cloneString(s);
+        mi->name = cloneString(s);
+        }
     }
 mi->name = hgDirForOrg(mi->name);
-if (lowerFirstChar)
+if (lowerFirstChar && labelHash == NULL )
     *mi->name = tolower(*mi->name);
 mi->height = tl.fontHeight;
 mi->group = g;
@@ -172,6 +181,7 @@ char *speciesUseFile = trackDbSetting(track->tdb, SPECIES_USE_FILE);
 char *speciesOrder = trackDbSetting(track->tdb, SPECIES_ORDER_VAR);
 char *speciesGroup = trackDbSetting(track->tdb, SPECIES_GROUP_VAR);
 char *speciesOff = trackDbSetting(track->tdb, SPECIES_DEFAULT_OFF_VAR);
+struct hash *labelHash = mafGetLabelHash(track->tdb);
 
 bool lowerFirstChar = TRUE;
 char *firstCase;
@@ -182,7 +192,7 @@ if (firstCase != NULL)
     if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
     }
 
-if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
+if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL && labelHash == NULL)
     return getSpeciesFromMaf(track, height);
 
 if (speciesGroup)
@@ -222,7 +232,7 @@ for (group = 0; group < groupCt; group++)
 
 	if (cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, species[i],defaultOn))
 	    {
-	    mi = newMafItem(species[i], group, lowerFirstChar);
+	    mi = newMafItem(species[i], group, lowerFirstChar, labelHash);
 	    mi->height = height;
 	    slAddHead(&miList, mi);
 	    }
@@ -340,6 +350,8 @@ if (firstCase != NULL)
     if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
     }
 
+struct hash *labelHash = mafGetLabelHash(track->tdb);
+
 loadMafsToTrack(track);
 
 /* NOTE: we are building up the item list backwards */
@@ -366,7 +378,7 @@ mi->height = tl.fontHeight;
 slAddHead(&miList, mi);
 
 /* Make up item for this organism. */
-mi = newMafItem(database, 0, lowerFirstChar);
+mi = newMafItem(database, 0, lowerFirstChar, labelHash);
 slAddHead(&miList, mi);
 speciesList = newSpeciesItems(track, tl.fontHeight);
 /* Make items for other species */

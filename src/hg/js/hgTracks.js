@@ -1062,7 +1062,7 @@ var dragSelect = {
     // hlColor is a 6-character hex string prefixed by #
     {
             dragSelect.hlColor = hlColor;
-            cart.setVars(["prevHlColor"], [dragSelect.hlColor]);
+            cart.setVars(["prevHlColor"], [dragSelect.hlColor], null, false);
             hgTracks.prevHlColor = hlColor; // cart.setVars does not update the hgTracks-variables. The cart-variable system is a problem.
             return hlColor;
     },
@@ -1164,7 +1164,6 @@ var dragSelect = {
                              "<li>To merely save the color for the next keyboard or right-click &gt; Highlight operations, click 'Save Color' below" +
                              "</ul></p>" +
                              "<p>Highlight color: <input type='text' style='width:70px' id='hlColorInput' value='"+dragSelect.loadHlColor()+"'>" +
-                             //"<span id='hlColorBox' style='width:20px'></span>" + 
                              "&nbsp;&nbsp;<input id='hlColorPicker'>" + 
                              "&nbsp;&nbsp;<a href='#' id='hlReset'>Reset</a></p>" + 
                              "<input style='float:left' type='checkbox' id='disableDragHighlight'>" + 

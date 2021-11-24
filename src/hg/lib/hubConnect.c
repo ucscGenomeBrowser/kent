@@ -5,7 +5,7 @@
  * table by design.  We just want field-by-field access to this. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -24,6 +24,7 @@
 #include "grp.h"
 #include "udc.h"
 #include "hubPublic.h"
+#include "genark.h"
 
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
@@ -53,20 +54,6 @@ if (_hubPublicTableName == NULL)
                                              defaultHubPublicTableName);
 return _hubPublicTableName;
 }
-
-static char *_genArkTableName = NULL;
-
-static char *genArkTableName()
-/* return the genark table name from the environment, 
- * or hg.conf, or use the default.  Cache the result */
-{
-if (_genArkTableName == NULL)
-    _genArkTableName = cfgOptionEnvDefault("HGDB_GENARK_STATUS_TABLE",
-	    genArkTableConfVariable, defaultGenArkTableName);
-
-return _genArkTableName;
-}
-
 
 boolean hubConnectTableExists()
 /* Return TRUE if the hubStatus table exists. */
@@ -917,7 +904,7 @@ static boolean lookForLonelyHubs(struct cart *cart, struct hubConnectStatus  *hu
 // that is NOT currently loaded, but we know a URL to load it.
 {
 struct sqlConnection *conn = hConnectCentral();
-if (!sqlTableExists(conn, genArkTableName()))
+if (!sqlTableExists(conn, genarkTableName()))
     return FALSE;
 
 boolean added = FALSE;
@@ -945,7 +932,7 @@ for(hub = hubList; hub; hub = hub->next)
                 {
                 // see if genark has this assembly
                 char query[4096];
-                sqlSafef(query, sizeof query, "select hubUrl from %s where gcAccession='%s'", genArkTableName(), name);
+                sqlSafef(query, sizeof query, "select hubUrl from %s where gcAccession='%s'", genarkTableName(), name);
                 if (sqlQuickQuery(conn, query, buffer, sizeof buffer))
                     {
                     char url[4096];

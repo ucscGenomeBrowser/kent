@@ -3,7 +3,7 @@
  * that are carted around).  */
 
 /* Copyright (C) 2001 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef CART_H
 #define CART_H

@@ -1,7 +1,7 @@
 /* Data structure for dealing with custom tracks in the browser. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef CUSTOMTRACK_H
 #define CUSTOMTRACK_H
 
@@ -90,7 +90,8 @@ struct customTrack *customTracksParseCartDetailed(char *genomeDb, struct cart *c
 					  char **retCtFileName,
                                           struct customTrack **retReplacedCts,
                                           int *retNumAdded,
-                                          char **retErr);
+                                          char **retErr,
+                                          boolean *retWarnOnly);
 /* Figure out from cart variables where to get custom track text/file.
  * Parse text/file into a custom set of tracks.  Lift if necessary.
  * If retBrowserLines is non-null then it will return a list of lines

@@ -3,7 +3,7 @@
  * the RAM representation of objects. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef TRACKDB_H
 #define TRACKDB_H
@@ -451,6 +451,7 @@ typedef enum _eCfgType
     cfgLollipop =16,
     cfgHic      =17,
     cfgBigDbSnp =19,
+    cfgBigRmsk  =20,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 

@@ -1,7 +1,7 @@
 /* bio.h - routines to fetch https url using openssl */
 
 /* Copyright (C) 2009 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef BIO_H
 #define BIO_H

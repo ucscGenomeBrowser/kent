@@ -5,7 +5,7 @@
  * being at the top left. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "psPoly.h"
@@ -474,7 +474,7 @@ char widthBuff[1024], heightBuff[1024];
 safef(widthBuff, sizeof widthBuff, "-dDEVICEWIDTHPOINTS=%d", round(width));
 safef(heightBuff, sizeof heightBuff, "-dDEVICEHEIGHTPOINTS=%d", round(height));
 char *pipeCmd[] = { "ps2pdf", widthBuff, heightBuff, epsFile, pdfName, NULL } ;
-struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite, "/dev/null", NULL);
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite, "/dev/null", NULL, 0);
 sysVal = pipelineWait(pl);
 if(sysVal != 0)
     freez(&pdfName);

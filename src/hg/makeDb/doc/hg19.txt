@@ -31905,23 +31905,24 @@ cut -f 1 foo | cut -f 1 -d "." > foo2
 cut -f 2,3,4 foo > foo3
 paste foo2 foo3 > foo4
 
-cp ../sortedGtexTransExp.bed .
-cut -f 1,2,3 sortedGtexTransExp.bed > foo5
-cut -f 4 sortedGtexTransExp.bed > foo6
-cut -f 5- sortedGtexTransExp.bed > foo7
-paste foo6 foo5 > foo8
-paste foo8 foo7 > foo9
+# NOTE: CHRISL10-05-2021 - Re-run to fix float parse bug:
+cp ../sortedGtexTransExp.bed sortedGtexTransExpFixed.bed
+cut -f 1,2,3 sortedGtexTransExpFixed.bed > foo5Fixed
+cut -f 4 sortedGtexTransExpFixed.bed > foo6Fixed
+cut -f 5- sortedGtexTransExpFixed.bed > foo7Fixed
+paste foo6Fixed foo5Fixed > foo8Fixed
+paste foo8Fixed foo7Fixed > foo9Fixed
 
+join <(sort foo4) <(sort foo9Fixed) > foo10Fixed
 
-join <(sort foo4) <(sort foo9) > foo10
-
-cat foo10 | awk '{print $4"\t"$2"\t"$3"\t"$1"\t"$8"\t"$9"\t"$10"\t"$11"\t"$12"\t"$13"\t"$14}' > foo11
-
-# Copy over the header line from sortedGtexTransExp.bed
+cat foo10Fixed | awk '{print $4"\t"$2"\t"$3"\t"$1"\t"$8"\t"$9"\t"$10"\t"$11"\t"$12"\t"$13"\t"$14}' > foo11Fixed
 
 # Sort and convert into a bigBed file.
-sort -k1,1 -k2,2n foo11 > sortedGtexTransExpHg19.bed
-bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGtexTransExpHg19.bed /hive/data/genomes/hg19/chrom.sizes gtexTranscExprHg19.bb
+sort -k1,1 -k2,2n foo11Fixed > sortedGtexTransExpHg19Fixed.bed
+# remove final line with header info:
+vim sortedGtexTransExpHg19Fixed.bed
+bedToBigBed -as=$HOME/kent/src/hg/lib/barChartBed.as -type=bed6+5 sortedGtexTransExpHg19Fixed.bed /hive/data/genomes/hg19/chrom.sizes gtexTranscExprHg19.bb
+# END NOTE: CHRISL10-05-2021
 
 # Link the files into gbdb
 # <2007-0-30 kate)
@@ -34654,7 +34655,7 @@ TMPDIR=/dev/shm
 
 # JASPAR Track integration by Daniel 8/20/21
     cd ~/kent/src/hg/makeDb/trackDb 
-    v human/jaspar.ra 
+    vi human/jaspar.ra 
     curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/hg19/trackDb.txt >> human/jaspar.ra 
     cd /hive/data/genomes/hg19/bed
     mkdir jaspar
@@ -34668,7 +34669,24 @@ TMPDIR=/dev/shm
     cd jaspar
     ln -s /hive/data/genomes/hg19/bed/jaspar/JASPAR2018.bb .
     ln -s /hive/data/genomes/hg19/bed/jaspar/JASPAR2020.bb .
-    v human/jaspar.html  
+    cd ~/kent/src/hg/makeDb/trackDb
+    vi human/jaspar.html  
     curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/JASPAR2018_TFBS_help.html >> human/jaspar.html 
 
 ###############################################################################
+
+# JASPAR 2022 track addition by Daniel 10/11/21
+
+cd ~/kent/src/hg/makeDb/trackDb
+curl http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/hg19/trackDb.txt | head -n16 >> human/jaspar.ra
+vi human/jaspar.ra
+cd /hive/data/genomes/hg19/bed/jaspar
+wget http://expdatdbta.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2022/JASPAR2022_hg19.bb
+mv JASPAR2022_hg19.bb JASPAR2022.bb
+cd /gbdb/hg19/jaspar
+ln -s /hive/data/genomes/hg19/bed/jaspar/JASPAR2022.bb .
+cd ~/kent/src/hg/makeDb/trackDb
+vi human/jaspar.html
+
+
+

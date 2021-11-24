@@ -2,7 +2,7 @@
  * new versions. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* The input for this program was generated with:
  * mdbQuery "select fileName,objStatus from hg19 where objStatus like 'rename%'" -out=tab -table=metaDb_cricket > ~/renamedHg19.tab

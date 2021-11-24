@@ -1,7 +1,7 @@
 /* repeatSelect - Grab x % more repeats in addition to what we already got. */
 
 /* Copyright (C) 2006 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "bits.h"

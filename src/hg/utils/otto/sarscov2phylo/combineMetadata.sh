@@ -57,19 +57,19 @@ if [ -e $ncbiDir/lineage_report.csv ]; then
     tail -n+2  $ncbiDir/lineage_report.csv \
     | sed -re 's/^([A-Z][A-Z][0-9]{6}\.[0-9]+)[^,]*/\1/;' \
     | awk -F, '$2 != "" && $2 != "None" {print $1 "\t" $2;}' \
-    | sort \
+    | sort -u \
         > gbToLineage
 else
     echo Getting GenBank Pangolin lineages from $prevMeta
     zcat $prevMeta \
     | tail -n+2 \
     | tawk '$2 != "" && $8 != "" { print $2, $8; }' \
-    | sort \
+    | sort -u \
         > gbToLineage
 fi
 wc -l gbToLineage
 if [ -e $ncbiDir/nextclade.tsv ]; then
-    sort $ncbiDir/nextclade.tsv > gbToNextclade
+    sort -u $ncbiDir/nextclade.tsv > gbToNextclade
 else
     touch gbToNextclade
 fi
@@ -79,6 +79,7 @@ join -t$'\t' -a 1 gb.metadata gbToNextclade \
 | tawk '{ if ($2 == "") { $2 = "?"; }
           print $1, $1, $2, $3, $4, "", $6, $7, $8; }' \
 | join -t$'\t' -o 1.2,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9 idToName - \
+| uniq \
     >> gisaidAndPublic.$today.metadata.tsv
 # COG-UK metadata:
 if [ -e $cogUkDir/nextclade.tsv ]; then

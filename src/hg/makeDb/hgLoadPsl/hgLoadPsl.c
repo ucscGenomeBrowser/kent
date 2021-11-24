@@ -1,7 +1,7 @@
 /* hgLoadPsl - Load up a mySQL database with psl alignment tables. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "options.h"
 #include "jksql.h"
@@ -136,9 +136,9 @@ if (noSort)
 else
     {
     if (pslCreateOpts & PSL_WITH_BIN)
-	pl = pipelineOpen(outPipeBin, pipelineWrite, tabFile, NULL);
+	pl = pipelineOpen(outPipeBin, pipelineWrite, tabFile, NULL, 0);
     else
-	pl = pipelineOpen(outPipeNoBin, pipelineWrite, tabFile, NULL);
+	pl = pipelineOpen(outPipeNoBin, pipelineWrite, tabFile, NULL, 0);
     tabFh = pipelineFile(pl);
     }
 while ((psl = pslNext(lf)) != NULL)
@@ -168,9 +168,9 @@ if (noSort)
 else
     {
     if (pslCreateOpts & PSL_WITH_BIN)
-	pl = pipelineOpen(outPipeBin, pipelineWrite, tabFile, NULL);
+	pl = pipelineOpen(outPipeBin, pipelineWrite, tabFile, NULL, 0);
     else
-	pl = pipelineOpen(outPipeNoBin, pipelineWrite, tabFile, NULL);
+	pl = pipelineOpen(outPipeNoBin, pipelineWrite, tabFile, NULL, 0);
     tabFh = pipelineFile(pl);
     }
 while (lineFileRow(lf, row))

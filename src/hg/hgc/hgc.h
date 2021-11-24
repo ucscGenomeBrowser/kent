@@ -3,7 +3,7 @@
  * shared with other modules in hgc,  but not in other programs. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef HGC_H
 #define HGC_H
 
@@ -430,7 +430,7 @@ void hgdpGeoFreqTable(struct hgdpGeo *geo);
 /* Print an HTML table of populations and allele frequencies. */
 
 void printOtherSnpMappings(char *table, char *name, int start,
-			   struct sqlConnection *conn, int rowOffset);
+			   struct sqlConnection *conn, int rowOffset, struct trackDb *tdb);
 /* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
 
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
@@ -551,7 +551,7 @@ int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int 
 // Returns number of extra fields actually printed.
 
 struct slPair *parseDetailsTablUrls(struct trackDb *tdb);
-/* Parse detailsTabUrls setting string into an slPair list of {offset column name, fileOrUrl} */
+/* Parse detailsUrls setting string into an slPair list of {offset column name, fileOrUrl} */
 
 char *readOneLineMaybeBgzip(char *fileOrUrl, bits64 offset, bits64 len);
 /* If fileOrUrl is bgzip-compressed and indexed, then use htslib's bgzf functions to
@@ -561,6 +561,7 @@ char *readOneLineMaybeBgzip(char *fileOrUrl, bits64 offset, bits64 len);
 #define NUCCORE_SEARCH "https://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 void doJRepeat (struct trackDb *tdb, char *repeat);
+void doBigRmskRepeat (struct trackDb *tdb, char *repeat);
 /* New RepeatMasker Visualization defined in joinedRmskClick.c */
 
 INLINE char* strOrNbsp(char* val)
@@ -571,5 +572,8 @@ return isEmpty(val) ? "&nbsp;" : val;
 
 void doInteractDetails(struct trackDb *tdb, char *item);
 /* Details of interaction item */
+
+void doParDetails(struct trackDb *tdb, char *name);
+/* show details of a PAR item. */
 
 #endif

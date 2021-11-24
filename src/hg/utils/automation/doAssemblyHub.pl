@@ -265,6 +265,7 @@ sub readChr2Acc($$) {
     my ($chrN, $acc) = split('\t', $line);
     $chrN =~ s/ /_/g;   # some assemblies have spaces in chr names ...
     $chrN =~ s/:/_/g;   # one assembly GCF_002910315.2 had : in a chr name
+    $chrN = "chr" if ($chrN eq "na");	# seen in bacteria with only one chr
     $accToChr->{$acc} = $chrN;
   }
   close (FH);
@@ -283,6 +284,7 @@ sub compositeAgp($$$$) {
   foreach my $acc (keys %accToChr) {
     my $chrN =  $accToChr{$acc};
     my $ncbiChr = "chr${chrN}";
+    $ncbiChr = "chr" if ($chrN eq "chr");    # seen in bacteria with only 1 chr
     open (FH, "zcat $agpSource/${ncbiChr}.comp.agp.gz|") or die "can not read $ncbiChr.comp.agp.gz";
     while (my $line = <FH>) {
         if ($line =~ m/^#/) {

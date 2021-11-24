@@ -1,11 +1,18 @@
-The Genome Browser binaries and source code in this directory and subdirectories
+LicenceRef-proprietary=https://genome.ucsc.edu/license
+
+Source code under this directory is under the MIT license (see kent/LICENSE), 
+WITH THE EXCEPTION of the following subdirectories:
+
+   cgilib hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene
+   hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession
+   hgSuggest hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene liftOver
+
+The Genome Browser binaries and source code in these directories and subdirectories
 are freely available for academic, nonprofit, and personal use. A license is
-required for commercial download and installation of most Genome Browser
-binaries and source code, with the exception of the items in the section below.
+required for commercial download and installation of all software in this directory.
+Redistribution or modification of files in these subdirectories is not allowed.
+See https://genome.ucsc.edu/license/
+
 To purchase a commercial license for Genome Browser source code, LiftOver,
 GBiB, or GBiC, please visit the Genome Browser store: https://genome-store.ucsc.edu/
-
-For licenses with > 20 seats and more details please see https://genome.ucsc.edu/license/
-
-There are two tools in this directory that are available under an MIT license:
-src/hg/autoSql and sc/hg/autoXml. Please see the respective LICENSE files in these directories.
+If you have any questions, please contact our licensing department via https://genome.ucsc.edu/license/

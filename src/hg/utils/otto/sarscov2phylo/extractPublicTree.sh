@@ -45,6 +45,7 @@ if [ -s cladeToName ]; then
     time $matUtils annotate -T 50 \
         -l \
         -i public-$today.all.masked.pb \
+        -M $scriptDir/nextstrain.clade-mutations.tsv \
         -c cladeToPublicName \
         -f 0.95 \
         -D details.nextclade.public \
@@ -63,6 +64,7 @@ if [ -s lineageToName ]; then
     grep -v EPI_ISL lineageToName > lineageToPublicName
     time $matUtils annotate -T 50 \
         -i public-$today.all.masked.nextclade.pb \
+        -M $scriptDir/pango.clade-mutations.tsv \
         -c lineageToPublicName \
         -f 0.95 \
         -D details.pango.public \
@@ -99,7 +101,8 @@ echo "$sampleCountComma genomes from GenBank, COG-UK and CNCB ($today); sarscov2
     > hgPhyloPlace.description.txt
 
 # Make Taxodium-formatted protobuf for display
-zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz > ncbiGenes.gtf
+zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz \
+| grep -v '"ORF1a"' > ncbiGenes.gtf
 zcat /hive/data/genomes/wuhCor1/wuhCor1.fa.gz > wuhCor1.fa
 zcat public-$today.metadata.tsv.gz > metadata.tmp.tsv
 time $matUtils extract -i public-$today.all.masked.pb \

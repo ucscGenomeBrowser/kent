@@ -1,7 +1,7 @@
 /* gbGetTestSubset - generate a test subset of the genbank and refseq data */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "gbIndex.h"
 #include "gbGenome.h"

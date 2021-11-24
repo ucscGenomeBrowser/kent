@@ -6440,11 +6440,16 @@ rowsToCols cleanTspsdMatrix.tsv cleanGtexMatrix.tsv
 hgsql hg38 -e "select * from ensGene" | cut -f 2- | sort > ensGene
 hgsql hg38 -e "select * from ensemblToGeneName" | sort >  ensemblToGeneName
 join ensGene ensemblToGeneName | awk '{print $2"\t"$4"\t"$5"\t"$1"\t0\t"$3"\t"$16}' > coord.bed
+# NOTE: CHRISL10-05-2021 - the above ensGene steps weren't actually done or the files were removed,
+# there was a coord.tsv which I used instead so the below re-run could work
+tawk '{print $1,$2,$3,$4,0,$5,$6}' coord.tsv > coord.bed
+# END CHRISL10-05-2021 NOTE)
 
 # Get the gtex ordering
 hgsql hgFixed -e "select * from gtexTissue" | cut -f 3 | sed 's/ - /-/g' | sed 's/ /_/g' | sed '1D' > gtexGroupOrder.txt
 
 # Use the meta data, matrix, and coordinate map to generate a barchart bed
+# NOTE: CHRISL10-05-2021 - re-ran this step to fix float parsing bug:
 time expMatrixToBarchartBed cleanGtexSamples.tsv cleanGtexMatrix.tsv coord.bed gtexTransExp.bed --groupOrderFile gtexGroupOrder.txt
 
 # NOTE: Use the header line of the bed file to populate the barChartBars field in the trackDb.
@@ -6453,7 +6458,8 @@ time expMatrixToBarchartBed cleanGtexSamples.tsv cleanGtexMatrix.tsv coord.bed g
 
 # Sort and convert into a bigBed file.
 sort -k1,1 -k2,2n gtexTransExp.bed > sortedGtexTransExp.bed
-bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGtexTransMed.bed /hive/data/genomes/hg38/chrom.sizes gtexTranscExpr.bb
+# NOTE: CHRISL10-05-2021 - re-ran bedToBigBed step with correct file names
+bedToBigBed -as=$HOME/kent/src/hg/lib/barChartBed.as -type=bed6+5 sortedGtexTransExp.bed /hive/data/genomes/hg38/chrom.sizes gtexTranscExpr.bb
 
 # Link the files into gbdb
 cd /gbdb/hgFixed/human/expMatrix

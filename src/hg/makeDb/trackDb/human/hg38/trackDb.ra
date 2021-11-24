@@ -15,19 +15,21 @@ include heartCellAtlas.ra
 include kidneyStewart.ra
 include muscleDeMicheli.ra
 #include lungVieiraBraga.ra
-include fetalGeneAtlas.ra alpha,beta
-include bloodHao.ra alpha,beta
+include fetalGeneAtlas.ra 
+include bloodHao.ra 
 include lungTravaglini2020.ra
 include skinSoleBoldo.ra
 include liverMacParland.ra
-include pancreasBaron.ra alpha,beta
+include pancreasBaron.ra 
 include ileumWang.ra
 include colonWang.ra
 include rectumWang.ra
-include placentaVentoTormo.ra alpha,beta
+include placentaVentoTormo.ra 
 include singleCellMerged.ra
 #include lungMadissoon.ra
+#include spleenMadissoon.ra
 include tabulaSapiens.ra
+include t2t.ra alpha
 
 include gtexEqtl.ra
 
@@ -708,6 +710,10 @@ mouseOver $_mouseOver : $name - CQV: $cqv - Rank: $rank
 group covid
 bigDataUrl /gbdb/hg38/covidHct/covidHct.bb
 release alpha
+
+track orphadata override
+urls ensemblID="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" pmid="https://pubmed.ncbi.nlm.nih.gov/$$" orphaCode="http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=en&Expert=$$" omim="https://www.omim.org/entry/$$?search=$$&highlight=$$" hgnc="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$"
+
 
 include dbSnpArchiveHg38.ra
 include affyArchive.ra

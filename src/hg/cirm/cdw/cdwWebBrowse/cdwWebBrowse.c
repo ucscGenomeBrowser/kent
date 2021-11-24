@@ -1,7 +1,7 @@
 /* cdwWebBrowse - Browse CIRM data warehouse.. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -1241,7 +1241,7 @@ if (clearRestriction && sameString(clearRestriction,"1"))
     }
 
 // DEBUG REMOVE
-//char *varName = "cdwSelectedFieldValues";
+//char *varName = "cdwBrowseFiles_facet_selList";
 //char *varVal = cartUsualString(cart, varName, "");
 //warn("varName=[%s] varVal=[%s]", varName, varVal); // DEBUG REMOVE
 
@@ -1254,14 +1254,14 @@ if (selOp)
     char *selFieldVal = cartOptionalString(cart, "cdwBrowseFiles_facet_fieldVal");
     if (selFieldName && selFieldVal)
 	{
-	char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
+	char *selectedFacetValues=cartUsualString(cart, "cdwBrowseFiles_facet_selList", "");
 	//warn("selectedFacetValues=[%s] selFieldName=%s selFieldVal=%s selOp=%s", 
 	    //selectedFacetValues, selFieldName, selFieldVal, selOp); // DEBUG REMOVE
 	struct facetField *selList = deLinearizeFacetValString(selectedFacetValues);
 	selectedListFacetValUpdate(&selList, selFieldName, selFieldVal, selOp);
 	char *newSelectedFacetValues = linearizeFacetVals(selList);
 	//warn("newSelectedFacetValues=[%s]", newSelectedFacetValues); // DEBUG REMOVE
-	cartSetString(cart, "cdwSelectedFieldValues", newSelectedFacetValues);
+	cartSetString(cart, "cdwBrowseFiles_facet_selList", newSelectedFacetValues);
 	cartRemove(cart, "cdwBrowseFiles_facet_op");
 	cartRemove(cart, "cdwBrowseFiles_facet_fieldName");
 	cartRemove(cart, "cdwBrowseFiles_facet_fieldVal");
