@@ -27,6 +27,7 @@ include rectumWang.ra
 include placentaVentoTormo.ra alpha,beta
 include singleCellMerged.ra
 #include lungMadissoon.ra
+include tabulaSapiens.ra
 
 include gtexEqtl.ra
 
