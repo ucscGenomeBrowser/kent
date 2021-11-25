@@ -31,6 +31,8 @@ struct barChartTrack
     char **categLabels;         /* Category labels  - derived from above */
     struct rgbColor *colors;    /* Colors  for all categories */
     struct hash *categoryFilter; /* NULL out excluded factors */
+    struct fieldedTable *statsTable;  /* Filled in if barChartStats setting is there */
+    struct facetedTable *facetsTable;  /* Filled in if barChartFacets setting is there */
     int maxViewLimit;
 
     // dimensions for drawing
@@ -69,11 +71,6 @@ struct barChartCategory *getCategories(struct track *tg)
 /* Get and cache category extras */
 {
 struct barChartTrack *extras;
-if (!tg->extraUiData)
-    {
-    AllocVar(extras);
-    tg->extraUiData = extras;
-    }
 extras = (struct barChartTrack *)tg->extraUiData;
 if (extras->categories == NULL)
     extras->categories = barChartUiGetCategories(database, tg->tdb);
@@ -148,6 +145,20 @@ if (!extras->colors)
 return extras->colors;
 }
 
+static void fillInTables(struct track *tg, struct barChartTrack *extras)
+/* Fill in statTable and facetsTable on extras */
+{
+char *barChartStatsUrl = trackDbSetting(tg->tdb, "barChartStatsUrl");
+if (barChartStatsUrl != NULL)
+    {
+    extras->statsTable = fieldedTableFromTabFile(barChartStatsUrl,
+	    barChartStatsUrl, NULL, 0);
+    char *barChartFacets = trackDbSetting(tg->tdb, "barChartFacets");
+    if (barChartFacets != NULL)
+	extras->facetsTable = facetedTableFromTable(extras->statsTable, tg->track, barChartFacets);
+    }
+}
+
 static void filterCategories(struct track *tg)
 /* Check cart for category selection.  NULL out unselected categorys in category list */
 {
@@ -155,13 +166,9 @@ struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 struct barChartCategory *categ = NULL;
 extras->categories = getCategories(tg);
 extras->categoryFilter = hashNew(0);
-char *barChartFacets = trackDbSetting(tg->tdb, "barChartFacets");
-char *barChartStatsUrl = trackDbSetting(tg->tdb, "barChartStatsUrl");
-if (barChartFacets != NULL && barChartStatsUrl != NULL)
+if (extras->facetsTable != NULL && extras->statsTable != NULL)
     {
-    struct fieldedTable *table = fieldedTableFromTabFile(barChartStatsUrl,
-	barChartStatsUrl, NULL, 0);
-    struct facetedTable *facTab = facetedTableFromTable(table, tg->track, barChartFacets);
+    struct facetedTable *facTab = extras->facetsTable;
     struct slInt *sel, *selList = facetedTableSelectOffsets(facTab, cart);
     for (sel = selList; sel != NULL; sel = sel->next)
         {
@@ -483,6 +490,7 @@ if (bed != NULL)
                             categCount, expCount);
     }
 
+fillInTables(tg, extras);
 filterCategories(tg);
 
 int barCount = filteredCategoryCount(extras);

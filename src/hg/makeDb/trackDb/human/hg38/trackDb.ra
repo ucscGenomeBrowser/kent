@@ -28,6 +28,7 @@ include placentaVentoTormo.ra
 include singleCellMerged.ra
 #include lungMadissoon.ra
 #include spleenMadissoon.ra
+include tabulaSapiens.ra
 include t2t.ra alpha
 
 include gtexEqtl.ra
