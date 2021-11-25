@@ -16,15 +16,15 @@ set program=""
 set location=""
 set size=""
 
-# set up equivalence to remove split contributions under two names
+# set up equivalence to combine split contributions under two logins
 set names=( 'Ann Zweig' 'Brian Raney' 'Brooke Rhead' 'Jim Kent' 'Andy Pohl'\
   'Larry Meyer' 'Mark Diekhans' 'Kate Rosenbloom' 'Hiram Clawson' 'Tim Dreszer' \
   'Galt Barber' 'Belinda Giardine' 'Angie Hinrichs' 'Robert Baertsch' \
-  'Donna Karolchik' 'Fan Hsu')
+  'Donna Karolchik' 'Fan Hsu' 'Robert Kuhn' 'Maximilian Haeussler')
 set alias=( ann braney rhead kent aamp \
   larrym markd kate hiram tdreszer  \
   galt giardine angie baertsch \
-  donnak fanhsu)
+  donnak fanhsu kuhn Max)
 # set names=( 'Jim Kent' )
 # set alias=( kent )
 set aliases=`echo $alias | wc -w`
@@ -51,7 +51,6 @@ endif
 cd ~/kent
 set location=`find . -name $program`
 echo
-
 # find out if input location is a directory
 # and prepend the path to each filename
 # omitting dot oh files
@@ -79,8 +78,8 @@ foreach file ( $location )
 
   while ( $i > 0 )
     # sum and substitute to get one name per person
-    set first=`cat tmp001$i | egrep "$alias[$i]" | awk '{print $1}'`
-    set secon=`cat tmp001$i | egrep "$names[$i]" | awk '{print $1}'`
+    set first=`cat tmp001$i | egrep -w "$alias[$i]" | awk '{print $1}'`
+    set secon=`cat tmp001$i | egrep -w "$names[$i]" | awk '{print $1}'`
     set sum=`echo $first $secon | awk '{print $1+$2}'`
 
     if ( $sum > $first ) then
