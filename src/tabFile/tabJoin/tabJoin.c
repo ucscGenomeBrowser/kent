@@ -16,6 +16,8 @@ errAbort(
   "same number of lines and the same items in the columns specified by field1\n"
   "and field2. The output is file in the same order as file1.tsv with the matching line from\n"
   "file2 appended to the line from file1.\n"
+  "The field1 and field2 parameters can be numerical indexes (1-based) rather than\n"
+  "field names\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -26,17 +28,45 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+void tableWithField(char *fileName, char *field, struct fieldedTable **retTable, int *retFieldIx)
+/* Open up table and find index of field, which may be either a named field or a 1-based
+ * field index into table */
+{
+struct fieldedTable *table = fieldedTableFromTabFile(fileName, fileName, NULL, 0);
+int fieldIx = -1;
+if (isAllDigits(field))
+    {
+    fieldIx = atoi(field) - 1;
+    if (fieldIx < 0 || fieldIx >= table->fieldCount)
+        errAbort("Numerical field %s for %s needs to be between 1 and %d"
+	    , field, fileName, table->fieldCount);
+    }
+else
+    {
+    fieldIx = fieldedTableMustFindFieldIx(table, field);
+    }
+*retTable = table;
+*retFieldIx = fieldIx;
+}
+
 void tabJoin(char *fileName1, char *fieldName1, char *fileName2, char *fieldName2, char *outFile)
 /* tabJoin - Join together two tab-separated files based on a common field. */
 {
-struct fieldedTable *table1 = fieldedTableFromTabFile(fileName1, fileName1, &fieldName1, 1);
-struct fieldedTable *table2 = fieldedTableFromTabFile(fileName2, fileName2, &fieldName2, 1);
+/* Open up input and figure out where column is for joining */
+int fieldIx1, fieldIx2;
+struct fieldedTable *table1, *table2;
+tableWithField(fileName1, fieldName1, &table1, &fieldIx1);
+tableWithField(fileName2, fieldName2, &table2, &fieldIx2);
+
+char *field1 = table1->fields[fieldIx1];
+char *field2 = table2->fields[fieldIx2];
+
+/* Do a little error checking, making sure the fields are unique and map 1-1 */
 if (table1->rowCount != table2->rowCount)
     errAbort("%s has %d rows but %s has %d.  They must have same number of rows.", 
 	fileName1, table1->rowCount, fileName2, table2->rowCount);
-struct hash *hash1 = fieldedTableUniqueIndex(table1, fieldName1);
-struct hash *hash2 = fieldedTableUniqueIndex(table2, fieldName2);
-int fieldIx1 = fieldedTableMustFindFieldIx(table1, fieldName1);
+struct hash *hash1 = fieldedTableUniqueIndex(table1, field1);
+struct hash *hash2 = fieldedTableUniqueIndex(table2, field2);
 
 /* Open output and write out header */
 FILE *f = mustOpen(outFile, "w");
