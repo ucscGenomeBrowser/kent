@@ -42,11 +42,15 @@ mkdir -p $buildDir
 cd $buildDir
 
 prevDate=$(date -d yesterday +%F)
-time $scriptDir/updateCombinedTree.sh $prevDate $today $problematicSitesVcf >& updateCombinedTree.log
+time $scriptDir/updateCombinedTree.sh $prevDate $today $problematicSitesVcf \
+    >& updateCombinedTree.log
 
 echo ""
 cat hgPhyloPlace.description.txt
 cat hgPhyloPlace.plusGisaid.description.txt
+
+grep skip annotate.pango annotate.nextclade
+grep 'Could not' annotate.pango annotate.nextclade
 
 # Clean up
 nice xz -f new*fa &
