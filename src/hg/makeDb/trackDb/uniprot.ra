@@ -30,7 +30,7 @@ hideEmptySubtracks on
         urls acc="https://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$" refSeqProt="https://www.ncbi.nlm.nih.gov/protein/$$" ncbiGene="https://www.ncbi.nlm.nih.gov/gene/$$" entrezGene="https://www.ncbi.nlm.nih.gov/gene/$$" ensGene="https://www.ensembl.org/Gene/Summary?g=$$"
         labelFields name,acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt
         mouseOverField protFullNames
-        itemRgb off
+        itemRgb on
         color 2,12,120
         indelDoubleInsert on
         indelQueryInsert on
@@ -51,7 +51,7 @@ hideEmptySubtracks on
         urls acc="https://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" refseq="https://www.ncbi.nlm.nih.gov/nuccore/$$" refSeqProt="https://www.ncbi.nlm.nih.gov/protein/$$" ncbiGene="https://www.ncbi.nlm.nih.gov/gene/$$" entrezGene="https://www.ncbi.nlm.nih.gov/gene/$$" ensGene="https://www.ensembl.org/Gene/Summary?g=$$"
         labelFields name,acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt
         mouseOverField protFullNames
-        itemRgb off
+        itemRgb on
         color 0,150,250
         indelDoubleInsert on
         indelQueryInsert on
