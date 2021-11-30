@@ -441,9 +441,9 @@ puts("<div class='tabSection'>");
 puts("<h4>Check a hub for errors</h4>");
 printf("<label for=\"validateHubUrl\"><b>Hub URL:</b></label>");
 printf("<input id='validateHubUrl' name='validateHubUrl' class='hubField' "
-       "placeholder='e.g. https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt' "
        "type='text' size='65'%s>\n", hubUrlVal);
 printf("<button type='button' id='hubValidateButton'>Check</button>\n");
+printf("&nbsp;&nbsp<span style='font-size:90%%' class='link' id='loadSampleHub'>Load Example URL</span>\n");
 
 puts("<div class='help'>Use the URL bar above to check a hub for errors. This will "
         "validate the hub's configuration files, including hub.txt, "
@@ -465,19 +465,19 @@ puts("<FORM ACTION='hgHubConnect#hubDeveloper' METHOD='POST' NAME='debugForm'>")
 char *noCacheLabel = "Inactive, never cache";
 char *timeout = "5";
 char *cacheStatus = "ON";
-char *description = "The current status always caches contents at UCSC. This means that data access is faster, but you cannot see the effect of changes to your files on the Genome Browser for at least 5 minutes.";
+char *description = "Always cache contents at UCSC. This means that data access is faster, but you cannot see the effect of changes to your files on the Genome Browser for at least 5 minutes.";
 if (cartNonemptyString(cart, "udcTimeout")) 
     {
     noCacheLabel = "Active, always cache";
     timeout = "";
     cacheStatus = "OFF";
-    description = "The current status does not cache contents at UCSC and always load them from the source server. This means that data access is slower, but you can see the effect of changes to your files immediately on the Genome Browser.";
+    description = "Do not cache contents at UCSC and always load them from the source server. This means that data access is slower, but you can see the effect of changes to your files immediately on the Genome Browser.";
     }
 printf("<b style='font-size:90%%'>File caching: %s</b> &nbsp;", cacheStatus);
 printf("<button type='submit' name='udcTimeout' value='%s'>Change to: %s</button>", timeout, noCacheLabel);
 
-printf("<div class='help'>%s<br>", description);
-puts("For custom tracks, this affects only the remote formats (bigBed, bigWig, tabix, BAM, CRAM, etc), not text files (BED, PSL, etc), which are stored at UCSC.</div>");
+printf("<div class='help'>Current setting: %s<br>", description);
+puts("For custom tracks, this affects only the remote formats (bigBed, bigWig, VCF+tabix, BAM, CRAM, bigPsl, HiC, etc), not text files (BED, VCF, PSL, etc), which are stored at UCSC.</div>");
 
 // output the measureTiming button
 char *timeLabel = "Show timings";
@@ -492,10 +492,10 @@ if (cartNonemptyString(cart, "measureTiming"))
         timeStatus = "ON";
     }
 
-printf("<b style='font-size:90%%'>Load times: %s</b> &nbsp;", timeStatus);
+printf("<b style='font-size:90%%'>Show load times: %s</b> &nbsp;", timeStatus);
 printf("<button type='submit' name='measureTiming' value='%s'>Change to: %s</button>", timeVal, timeLabel);
 
-printf("<div class='help'>%s</div>", timeDesc);
+printf("<div class='help'>Current setting: %s</div>", timeDesc);
 
 puts("</div>"); // margin-left
 puts("</div>"); // tabSection
@@ -1531,7 +1531,7 @@ if (cartVarExists(cart, hgHubDoHubCheck))
     printIncludes();
 
     jsInline("trackData = [];\n");
-    char *hubUrl = cartOptionalString(cart, "validateHubUrl");
+    char *hubUrl = cgiOptionalString("validateHubUrl");
     jsInline("document.body.style.margin = 0;\n");
     // simulate the look and feel of a dialog window with a blue bar at the top
     puts("<div id='titlebar' style='background: #D9E4F8; border: 1px outset #000088; padding: 10px'>"
@@ -1549,11 +1549,19 @@ if (cartVarExists(cart, hgHubDoHubCheck))
         puts("&nbsp;&nbsp;<button id='closeButton'>Close this window</button></p>");
         jsOnEventByIdF("click", "reloadButton", "reloadIframe()");
         jsOnEventByIdF("click", "closeButton", "closeIframe()");
+        jsInline("document.onkeydown = function(evt) { if (evt.keyCode===27) { closeIframe() } };");
 
         printf("<div>Finished checking %s</div>", hubUrl);
         doValidateNewHub(hubUrl);
+        puts("<hr>");
         puts("<p>Our command line tool <a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>hubCheck</a> "
                 "can be used to obtain the same output from a Unix command line.</p>");
+        puts("<p>To download the hubCheck tool for Linux, run these commands"
+             " (replace 'linux' with 'macOSX' on a x86 Mac):<br>"
+                "<pre>wget http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/hubCheck\n"
+                "chmod a+x hubCheck\n"
+                "hubCheck https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt</pre></p>");
+        puts("<p>You can use the 'Esc' key to close this window.</p>");
         }
     puts("</div>"); // margin 10px
     puts("</div>"); // ui-dialog-titlebar
@@ -1565,15 +1573,6 @@ if (cartVarExists(cart, hgHubDoHubCheck))
 cartWebStart(cart, NULL, "%s", pageTitle);
 
 printIncludes();
-
-if (cartVarExists(cart, hgHubDoHubCheck))
-    {
-    jsInline("trackData = [];\n");
-    char *hubUrl = cartOptionalString(cart, "validateHubUrl");
-    doValidateNewHub(hubUrl);
-    cartWebEnd();
-    return;
-    }
 
 // this variable is used by hub search and hub validate, initialize here so we don't
 // overwrite it unintentionally depending on which path the CGI takes
