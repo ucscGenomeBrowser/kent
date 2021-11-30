@@ -88,7 +88,8 @@ return posList;
 static struct hgPos *doTrixSearch(struct cart *cart, struct trackDb *tdb, char *trixFile,
                         struct slName *indices, struct bbiFile *bbi, char *term, char *description,
                         struct hgFindSpec *hfs)
-/* search a trix file in the "searchTrix" field of a bigBed trackDb */
+/* search a trix file in the "searchTrix" field of a bigBed trackDb 
+ * TODO: Get trixSearchResult snippets in here*/
 {
 struct trix *trix = trixOpen(trixFile);
 int trixWordCount = 0;
@@ -145,7 +146,7 @@ if (diff == 0)
 return diff;
 }
 
-boolean findBigBedPosInTdbList(struct cart *cart, char *db, struct trackDb *tdbList, char *term, struct hgPositions *hgp, struct hgFindSpec *hfs)
+boolean findBigBedPosInTdbList(struct cart *cart, char *db, struct trackDb *tdbList, char *term, struct hgPositions *hgp, struct hgFindSpec *hfs, boolean measureTiming)
 /* Given a list of trackDb entries, check each of them for a searchIndex */
 {
 char *description = NULL;
@@ -162,9 +163,10 @@ struct trackDb *tdb;
 boolean found = FALSE;
 for(tdb=tdbList; tdb; tdb = tdb->next)
     {
+    long startTime = clock1000();
     if (tdb->subtracks)
         {
-        found = findBigBedPosInTdbList(cart, db, tdb->subtracks, term, hgp, hfs) || found;
+        found = findBigBedPosInTdbList(cart, db, tdb->subtracks, term, hgp, hfs, measureTiming) || found;
         continue;
         }
     if (startsWith("bigWig", tdb->type) || !startsWith("big", tdb->type))
@@ -253,6 +255,8 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
 	slAddHead(&hgp->tableList, table);
 	table->description = cloneString(description ? description : tdb->longLabel);
 	table->name = cloneString(tdb->table);
+        if (measureTiming)
+            table->searchTime = clock1000() - startTime;
 
 	table->posList = posList1;
 	}
@@ -260,4 +264,111 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
     }
 freeMem(description);
 return found;
+}
+
+boolean isTdbSearchable(struct trackDb *tdb)
+/* Check if a single tdb is searchable */
+{
+if (tdb->subtracks)
+    {
+    boolean searchable = FALSE;
+    struct trackDb *sub;
+    for (sub = tdb->subtracks; sub != NULL; sub = sub->next)
+        searchable |= isTdbSearchable(sub);
+    return searchable;
+    }
+if (startsWith("bigWig", tdb->type) || !startsWith("big", tdb->type))
+    return FALSE;
+
+char *indexField = NULL;
+indexField = trackDbSetting(tdb, "searchIndex");
+if (!indexField)
+    return FALSE;
+
+// If !indexField but we do have an index on the bigBed use that
+char *fileName = trackDbSetting(tdb, "bigDataUrl");
+if (!fileName)
+    return FALSE;
+
+// we fail silently if bigBed can't be opened.
+struct bbiFile *bbi = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    bbi = bigBedFileOpen(fileName);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    return FALSE;
+
+if (!indexField)
+    {
+    struct slName *indexFields = bigBedListExtraIndexes(bbi);
+    if (slNameInList(indexFields, "name"))
+        indexField = "name";
+    slNameFreeList(&indexFields);
+    }
+if (!indexField)
+    {
+    bigBedFileClose(&bbi);
+    return FALSE;
+    }
+return TRUE;
+}
+
+struct trackDb *getSearchableBigBeds(struct trackDb *tdbList)
+/* Given a list of tracks from a hub, return those that are searchable */
+{
+struct trackDb *tdb, *next, *ret = NULL;
+for (tdb = tdbList ; tdb; tdb = next)
+    {
+    next = tdb->next;
+    if (tdb->subtracks)
+        {
+        struct trackDb *subtrackList = getSearchableBigBeds(tdb->subtracks);
+        if (subtrackList)
+            ret = slCat(subtrackList, ret);
+        continue;
+        }
+    if (startsWith("bigWig", tdb->type) || !startsWith("big", tdb->type))
+        continue;
+
+    char *indexField = NULL;
+    indexField = trackDbSetting(tdb, "searchIndex");
+    if (!indexField)
+        continue;
+
+    // If !indexField but we do have an index on the bigBed use that
+    char *fileName = trackDbSetting(tdb, "bigDataUrl");
+    if (!fileName)
+        continue;
+
+    // we fail silently if bigBed can't be opened.
+    struct bbiFile *bbi = NULL;
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        bbi = bigBedFileOpen(fileName);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        continue;
+
+    if (!indexField)
+        {
+        struct slName *indexFields = bigBedListExtraIndexes(bbi);
+        if (slNameInList(indexFields, "name"))
+            indexField = "name";
+        slNameFreeList(&indexFields);
+        }
+    if (!indexField)
+        {
+        bigBedFileClose(&bbi);
+        continue;
+        }
+
+    // finally we have verified the track is searchable, add it to our list we're returning
+    slAddHead(&ret, tdb);
+    }
+return ret;
 }

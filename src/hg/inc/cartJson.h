@@ -6,6 +6,7 @@
 #include "cart.h"
 #include "hash.h"
 #include "jsonWrite.h"
+#include "hgFind.h"
 
 #define CARTJSON_COMMAND "cjCmd"
 
@@ -47,5 +48,8 @@ void cartJsonExecute(struct cartJson *cj);
 
 void cartJsonFree(struct cartJson **pCj);
 /* Close **pCj's contents and nullify *pCj. */
+
+void hgPositionsJson(struct jsonWrite *jw, char *db, struct hgPositions *hgp, struct cart *cart);
+/* Write out JSON description of multiple position matches. */
 
 #endif /* CARTJSON_H */

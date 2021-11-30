@@ -1496,6 +1496,7 @@ var hgGateway = (function() {
     function goToHgTracks() {
         // Create and submit a form for hgTracks with hidden inputs for org, db and position.
         var position = $('#positionInput').val();
+        var searchTerm = position;
         var posDisplay = $('#positionDisplay').text();
         var pix = uiState.pix || calculateHgTracksWidth();
         var $form;
@@ -1505,20 +1506,35 @@ var hgGateway = (function() {
         } else {
             position = position.replace(/\u2013|\u2014/g, "-");  // replace en-dash and em-dash with hyphen
         }
-
-        // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
-        $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
-        // Make a form and submit it.  In order for this to work in IE, the form
-        // must be appended to the body.
-        $form = $('<form action="hgTracks" method=GET id="mainForm">' +
-                  '<input type=hidden name="hgsid" value="' + window.hgsid + '">' +
-                  '<input type=hidden name="org" value="' + uiState.genome + '">' +
-                  '<input type=hidden name="db" value="' + uiState.db + '">' +
-                  '<input type=hidden name="position" value="' + position + '">' +
-                  '<input type=hidden name="pix" value="' + pix + '">' +
-                  '</form>');
-        $('body').append($form);
-        $form.submit();
+        var canonMatch = position.match(canonicalRangeExp);
+        var gbrowserMatch = position.match(gbrowserRangeExp);
+        var lengthMatch = position.match(lengthRangeExp);
+        var bedMatch = position.match(bedRangeExp);
+        var sqlMatch = position.match(sqlRangeExp);
+        var singleMatch = position.match(singleBaseExp);
+        var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
+        if (positionMatch !== null) {
+            // We already have a position from either selecting a suggestion or the user just typed a regular
+            // old position, so go to hgTracks at that location
+            // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
+            $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
+            // Make a form and submit it.  In order for this to work in IE, the form
+            // must be appended to the body.
+            $form = $('<form action="hgTracks" method=GET id="mainForm">' +
+                      '<input type=hidden name="hgsid" value="' + window.hgsid + '">' +
+                      '<input type=hidden name="org" value="' + uiState.genome + '">' +
+                      '<input type=hidden name="db" value="' + uiState.db + '">' +
+                      '<input type=hidden name="position" value="' + position + '">' +
+                      '<input type=hidden name="pix" value="' + pix + '">' +
+                      '</form>');
+            $('body').append($form);
+            $form.submit();
+        } else {
+            // User has entered a search term with no suggestion, go to the disambiguation
+            // page so the user can choose a position
+            $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
+            window.location.assign("../cgi-bin/searchExample?hgsid="+ window.hgsid + "&search=" + searchTerm);
+        }
     }
 
     function replaceHgsidInLinks() {

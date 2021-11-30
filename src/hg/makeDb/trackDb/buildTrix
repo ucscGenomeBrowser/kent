@@ -26,6 +26,7 @@ dbExists() {
 }
 
 buildDbTrix() {
+    set -x
     local db="$1"
     local trixName="$2"
     local metaDbName="$3"
@@ -36,12 +37,17 @@ buildDbTrix() {
     local tmpFile3=`mktemp`;
     makeTrackIndex $db $metaDbName $cvRaPath > $tmpFile;
     if test -s $tmpFile; then
-        ixIxx -maxWordLength=64 $tmpFile $tmpFile2 $tmpFile3
+        ~/bin/x86_64/ixIxx -maxWordLength=64 $tmpFile $tmpFile2 $tmpFile3
 	chmod 664  $tmpFile2 $tmpFile3
+    ~/bin/x86_64/trixContextIndex $tmpFile ${db}_${trixName}
 	rsync -a $tmpFile2 $outMachine:$outPath/${db}_${trixName}.ix
 	rsync -a $tmpFile3 $outMachine:$outPath/${db}_${trixName}.ixx
+    rsync -a $tmpFile $outMachine:$outPath/${db}_${trixName}.txt
+    rsync -a ${db}_${trixName}.offsets $outMachine:$outPath/${db}_${trixName}.offsets
+    rsync -a ${db}_${trixName}.offsets.ixx $outMachine:$outPath/${db}_${trixName}.offsets.ixx
     fi
     rm -f $tmpFile $tmpFile2 $tmpFile3
+    set +x
 }
 
 for db in $dbs ; do

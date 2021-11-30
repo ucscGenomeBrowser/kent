@@ -1,0 +1,92 @@
+#!/cluster/software/bin/python3
+
+"""
+This program crawls through a list of HTML files
+and adds them to the html data source table for
+sphinx.
+
+Usage:
+./addHtml listOfFileNames outTabFile
+
+inFileName is newline separated path strings like:
+/path/to/file
+
+outTabFile has the format:
+id<tab>title<tab>destinationUrl<tab>content
+
+inFileName can be 'stdin' in which case lines will be read from standard input.
+"""
+
+import sys,argparse,gzip,os,re
+# for reading whole files as strings easier
+from pathlib import Path
+
+def parseCommandLine():
+    parser = argparse.ArgumentParser(description="Crawl a list of HTML files and generate " +
+            "the appropriate tab file that can be loaded into the sphinx indexed search table.",
+        epilog="inFileName can be stdin to read from stdin. Only outTabFile can be stdout")
+    parser.add_argument("inFileName", help="file with a list of files to index.")
+    parser.add_argument("outTabFile", help="Tab separated output for loading into sphinx table.")
+    args = parser.parse_args()
+    return args
+
+headers = ["id", "title", "destination", "content"]
+
+titleRegex = re.compile("<!--#set var=\"TITLE\" value=\"(.*)\"")
+
+def addHtml(infh, outfh, binaryMode=False):
+    if binaryMode:
+        t = "\t".join(headers) + "\n"
+        outfh.write(t.encode())
+    else:
+        outfh.write("\t".join(headers) + "\n")
+    idx = 0
+    for line in infh:
+        path = line.strip()
+        title = os.path.basename(path)
+        # slurp the file content into memory, probably a
+        # better way to go about this:
+        content = Path(path).read_text(encoding="utf-8")
+        try:
+            match = re.search(titleRegex, content)
+            if match:
+                title = match.group(1)
+                if binaryMode:
+                    t = "%d\t%s\t" % (idx,title)
+                    outfh.write(t.encode())
+                    outfh.write(content.encode("unicode_escape"))
+                    t = "\t" + path
+                    outfh.write(t.encode())
+                    outfh.write("\n".encode())
+                else:
+                    outfh.write("%d\t%s\t%s\t" % (idx, title, path))
+                    outfh.write(content.encode("unicode_escape").decode("utf-8"))
+                    outfh.write("\n")
+                idx += 1
+        except UnicodeDecodeError:
+            continue
+    infh.close()
+    outfh.close()
+
+def main():
+    args = parseCommandLine()
+    inFname = args.inFileName
+    outFname = args.outTabFile
+    infh = None
+    outfh = None
+    if inFname == "stdin" or inFname == "/dev/stdin":
+        infh = sys.stdin
+    else:
+        infh = open(inFname, "r")
+
+    if outFname == "stdout" or outFname == "/dev/stdout":
+        outfh = sys.stdout
+    elif outFname[-3:] == ".gz":
+        outfh = gzip.open(outFname, "wb")
+    else:
+        outfh = open(outFname, "w")
+
+    addHtml(infh, outfh, outFname[-3:] == ".gz")
+
+if __name__ == "__main__":
+    main()

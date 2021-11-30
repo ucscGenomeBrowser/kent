@@ -76,6 +76,7 @@
 #include "jsonWrite.h"
 #include "cds.h"
 #include "cacheTwoBit.h"
+#include "cartJson.h"
 
 //#include "bed3Sources.h"
 
@@ -9487,9 +9488,7 @@ hgp = hgFindSearch(cart, pPosition, &chromName, &winStart, &winEnd, hgTracksName
 displayChromName = chromAliasGetDisplayChrom(database, cart, chromName);
 if (isNotEmpty(dyWarn->string))
     {
-    if (noShort) // we're on the second pass of the search
-        hgp->posCount = 0; // hgFindSearch gives us a bogus hgp if the warn string is set
-    else
+    if (!noShort) // we're not on the second pass of the search
         warn("%s", dyWarn->string);
     }
 

@@ -67,7 +67,7 @@ if (regexMatchSubstrNoCase(textIn, "<a href[^>]+>", matches, ArraySize(matches))
 return textIn;
 }
 
-static void hgPositionsJson(struct jsonWrite *jw, char *db, struct hgPositions *hgp, struct cart *cart)
+void hgPositionsJson(struct jsonWrite *jw, char *db, struct hgPositions *hgp, struct cart *cart)
 /* Write out JSON description of multiple position matches. */
 {
 struct hgPosTable *table;
@@ -76,58 +76,66 @@ struct trackDb *tdbList = NULL;
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
     if (table->posList != NULL)
-	{
-	char *tableName = table->name;
-	// clear the tdb cache if this track is a hub track
-	if (isHubTrack(tableName))
-	    tdbList = NULL;
-	struct trackDb *tdb = tdbForTrack(db, tableName, &tdbList);
-	if (!tdb && startsWith("all_", tableName))
-            tdb = tdbForTrack(db, tableName+strlen("all_"), &tdbList);
-        if (!tdb)
-            errAbort("no track for table \"%s\" found via a findSpec", tableName);
-	char *trackName = tdb->track;
-	jsonWriteObjectStart(jw, NULL);
-	jsonWriteString(jw, "name", table->name);
-	jsonWriteString(jw, "trackName", trackName);
-	jsonWriteString(jw, "description", table->description);
-	jsonWriteString(jw, "vis", hCarefulTrackOpenVis(db, trackName));
-	jsonWriteListStart(jw, "matches");
-	struct hgPos *pos;
-	for (pos = table->posList; pos != NULL; pos = pos->next)
-	    {
-	    char *encMatches = cgiEncode(pos->browserName);
-	    jsonWriteObjectStart(jw, NULL); // begin one match
-	    if (pos->chrom != NULL)
-		jsonWriteStringf(jw, "position", "%s:%d-%d",
-				 pos->chrom, pos->chromStart+1, pos->chromEnd);
-	    else
-		// GenBank results set position to GB accession instead of chr:s-e position.
-		jsonWriteString(jw, "position", pos->name);
-	    // this is magic to tell the browser to make the
-	    // composite and this subTrack visible
-	    if (tdb->parent)
-		{
-		if (tdbIsSuperTrackChild(tdb))
-		    jsonWriteStringf(jw, "extraSel", "%s=show&", tdb->parent->track);
-		else
-		    {
-		    // tdb is a subtrack of a composite or a view
-		    jsonWriteStringf(jw, "extraSel", "%s_sel=1&%s_sel=1&",
-				     trackName, tdb->parent->track);
-		    }
-		}
-	    jsonWriteString(jw, "hgFindMatches", encMatches);
-	    jsonWriteString(jw, "posName", htmlEncode(pos->name));
-	    if (pos->description)
-		{
-		stripString(pos->description, "\n");
-		jsonWriteString(jw, "description", stripAnchor(pos->description));
-		}
-	    jsonWriteObjectEnd(jw); // end one match
-	    }
-	jsonWriteListEnd(jw); // end matches
-	jsonWriteObjectEnd(jw); // end one table
+        {
+        char *trackName = table->name, *tableName = table->name;
+        struct trackDb *tdb = NULL;
+        // clear the tdb cache if this track is a hub track
+        if (! (sameString("trackDb", tableName) || sameString("helpDocs", tableName) || sameString("publicHubs", tableName)))
+            {
+            if (isHubTrack(tableName))
+                tdbList = NULL;
+            tdb = tdbForTrack(db, tableName, &tdbList);
+            if (!tdb && startsWith("all_", tableName))
+                tdb = tdbForTrack(db, tableName+strlen("all_"), &tdbList);
+            if (!tdb)
+                errAbort("no track for table \"%s\" found via a findSpec", tableName);
+            trackName = tdb->track;
+            }
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "name", table->name);
+        jsonWriteString(jw, "trackName", trackName);
+        jsonWriteString(jw, "description", table->description);
+        if (tdb != NULL)
+            jsonWriteString(jw, "vis", hCarefulTrackOpenVis(db, trackName));
+        jsonWriteListStart(jw, "matches");
+        struct hgPos *pos;
+        for (pos = table->posList; pos != NULL; pos = pos->next)
+            {
+            char *encMatches = cgiEncode(pos->browserName);
+            jsonWriteObjectStart(jw, NULL); // begin one match
+            if (pos->chrom != NULL)
+                jsonWriteStringf(jw, "position", "%s:%d-%d",
+                                 pos->chrom, pos->chromStart+1, pos->chromEnd);
+            else
+                // GenBank results set position to GB accession instead of chr:s-e position.
+                jsonWriteString(jw, "position", pos->name);
+            // this is magic to tell the browser to make the
+            // composite and this subTrack visible
+            if (tdb && tdb->parent)
+                {
+                if (tdbIsSuperTrackChild(tdb))
+                    jsonWriteStringf(jw, "extraSel", "%s=show&", tdb->parent->track);
+                else
+                    {
+                    // tdb is a subtrack of a composite or a view
+                    jsonWriteStringf(jw, "extraSel", "%s_sel=1&%s_sel=1&",
+                                     trackName, tdb->parent->track);
+                    }
+                }
+            jsonWriteString(jw, "hgFindMatches", encMatches);
+            jsonWriteString(jw, "posName", htmlEncode(pos->name));
+            jsonWriteBoolean(jw, "canonical", pos->canonical);
+            if (pos->description)
+                {
+                stripString(pos->description, "\n");
+                jsonWriteString(jw, "description", stripAnchor(pos->description));
+                }
+            jsonWriteObjectEnd(jw); // end one match
+            }
+        jsonWriteListEnd(jw); // end matches
+        if (table->searchTime != 0)
+            jsonWriteNumber(jw, "searchTime", table->searchTime);
+        jsonWriteObjectEnd(jw); // end one table
 	}
     }
     jsonWriteListEnd(jw); // end positionMatches
@@ -147,6 +155,7 @@ struct hgPositions *hgp = NULL;
 char *chrom = NULL;
 int start = BIGNUM;
 int end = 0;
+boolean measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
 
 char *terms[16];
 int termCount = chopByChar(cloneString(spec), ';', terms, ArraySize(terms));
@@ -158,7 +167,7 @@ for (i = 0;  i < termCount;  i++)
     trimSpaces(terms[i]);
     if (isEmpty(terms[i]))
 	continue;
-    hgp = hgPositionsFind(db, terms[i], "", hgAppName, cart, multiTerm);
+    hgp = hgPositionsFind(db, terms[i], "", hgAppName, cart, multiTerm, measureTiming, NULL);
     if (hgp == NULL || hgp->posCount == 0)
 	{
 	jsonWriteStringf(jw, "error",
