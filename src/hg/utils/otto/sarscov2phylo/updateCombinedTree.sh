@@ -45,7 +45,9 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
     $scriptDir/usherClusterRun.sh $today
     # Prune samples with too many private mutations and internal branches that are too long.
     $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.pb \
-        -b 30 \
+        --max-parsimony 20 \
+        --max-branch-length 45 \
+        --max-path-length 100 \
         -O -o gisaidAndPublic.$today.masked.pb
 fi
 
@@ -69,23 +71,14 @@ sampleCountComma=$(echo $(wc -l < samples.$today) \
 echo "$sampleCountComma genomes from GISAID, GenBank, COG-UK and CNCB ($today); sarscov2phylo 13-11-20 tree with newer sequences added by UShER" \
     > hgPhyloPlace.plusGisaid.description.txt
 
-# Add nextclade annotations to protobuf
-if [ -s $ottoDir/$prevDate/cladeToName ]; then
-    # Use yesterday's clade assignments to annotate clades on today's tree
-    time $matUtils annotate -T 50 \
-        -l \
-        -i gisaidAndPublic.$today.masked.pb \
-        -M $scriptDir/nextstrain.clade-mutations.tsv \
-        -D details.nextclade \
-        -o gisaidAndPublic.$today.masked.nextclade.pb \
-        >& annotate.nextclade
-else
-    time $matUtils annotate -T 50 \
-        -l \
-        -i gisaidAndPublic.$today.masked.pb \
-        -P ../nextstrain.clade-paths.tsv \
-        -o gisaidAndPublic.$today.masked.nextclade.pb
-fi
+# Add nextclade annotations to protobuf (completely specified by nextstrain.clade-mutations.tsv)
+time $matUtils annotate -T 50 \
+    -l \
+    -i gisaidAndPublic.$today.masked.pb \
+    -M $scriptDir/nextstrain.clade-mutations.tsv \
+    -D details.nextclade \
+    -o gisaidAndPublic.$today.masked.nextclade.pb \
+    >& annotate.nextclade
 
 # Add pangolin lineage annotations to protobuf.
 if [ -s $ottoDir/$prevDate/lineageToName ]; then
@@ -98,10 +91,8 @@ if [ -s $ottoDir/$prevDate/lineageToName ]; then
         -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb \
         >& annotate.pango
 else
-    time $matUtils annotate -T 50 \
-        -i gisaidAndPublic.$today.masked.nextclade.pb \
-        -P ../pango.clade-paths.tsv \
-        -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb
+    echo "Can't find $ottoDir/$prevDate/lineageToName for assigning lineages!"
+    exit 1
 fi
 
 # Replace protobuf with annotated protobuf.
@@ -154,8 +145,11 @@ time $matUtils extract -i gisaidAndPublic.$today.masked.pb \
     -f wuhCor1.fa \
     -g ncbiGenes.gtf \
     -M metadata.tmp.tsv \
+    --extra-fields pango_lineage_usher \
     --write-taxodium gisaidAndPublic.$today.masked.taxodium.pb
 rm metadata.tmp.tsv wuhCor1.fa
 gzip -f gisaidAndPublic.$today.masked.taxodium.pb
 
 $scriptDir/extractPublicTree.sh $today
+
+grep skipping annotate*
