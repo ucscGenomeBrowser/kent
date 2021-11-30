@@ -4,7 +4,7 @@ table bigPsl
     string chrom;       "Reference sequence chromosome or scaffold"
     uint   chromStart;  "Start position in chromosome"
     uint   chromEnd;    "End position in chromosome"
-    string name;        "Name or ID of item, ideally both human readable and unique"
+    string name;        "UniProt isoform seq. ID"
     uint score;         "Score (0-1000)"
     char[1] strand;     "+ or - indicates whether the query aligns to the + or - strand on the reference"
     uint thickStart;    "Start of where display should be thick (start codon)"
@@ -31,11 +31,12 @@ table bigPsl
     uint nCount;   " Number of 'N' bases "
     uint seqType;    "0=empty, 1=nucleotide, 2=amino_acid"
 
-    string acc; "UniProt main accession"
-    lstring uniprotName; "UniProt main record name"
+    lstring transList; "Mapped to genome through these transcripts"
+    string acc; "UniProt record accession"
+    lstring uniprotName; "UniProt record name"
     string status; "UniProt status"
-    lstring accList; "UniProt all accessions"
-    lstring isoIds; "UniProt isoform accessions"
+    lstring accList; "UniProt previous and alternative accessions"
+    lstring isoIds; "All UniProt sequence isoform accessions"
 
     lstring protFullNames; "UniProt protein name"
     lstring protShortNames; "UniProt protein short name"
@@ -46,12 +47,12 @@ table bigPsl
     lstring functionText; "UniProt function"
 
     lstring hgncSym; "HGNC Gene Symbol"
-    lstring hgncId; "HGNC ID"
-    lstring refSeq; "RefSeq IDs"
+    lstring hgncId; "HGNC IDs"
+    lstring refSeq; "RefSeq Transcript IDs"
     lstring refSeqProt; "RefSeq Protein IDs"
-    lstring entrezGene; "NCBI Entrez Gene"
+    lstring entrezGene; "NCBI Gene IDs"
     lstring ensGene; "Ensembl Gene IDs"
-    lstring ensTrans; "Ensembl Transcript IDs"
     lstring ensProt; "Ensembl Protein IDs"
+    lstring ensTrans; "Ensembl Transcript IDs"
     )
 

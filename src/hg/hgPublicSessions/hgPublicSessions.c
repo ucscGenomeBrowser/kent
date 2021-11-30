@@ -225,14 +225,14 @@ while (thisSession != NULL)
     printf ("\t<tr>\n");
     if (isNotEmpty(thisSession->imgUri))
         {
-        printf ("\t\t<td><a href=\"../cgi-bin/hgTracks?%s\">",
+        printf ("\t\t<td><a target=_blank href=\"../cgi-bin/hgTracks?%s\">",
             dyStringContents(thisSession->sessionUrl));
         printf ("<img src=\"%s\" class=\"sessionThumbnail\"></a></td>\n", thisSession->imgUri);
         }
     else
         {
         printf ("\t\t<td><center><nobr>Screenshot not available</nobr><br>\n");
-        printf ("\t\t<a href=\"../cgi-bin/hgTracks?%s\">Click Here</a> to view</center></td>\n",
+        printf ("\t\t<a target=_blank href=\"../cgi-bin/hgTracks?%s\">Click Here</a> to view</center></td>\n",
             dyStringContents(thisSession->sessionUrl));
         }
 
