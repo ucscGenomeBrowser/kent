@@ -77,8 +77,8 @@ MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
 33 09 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
 
 #NCBI RefSeq
-#MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
-#23 8 * * 3 /hive/data/outside/ncbi/genomes/ncbiRefSeq/ottoNcbiRefSeq.sh
+MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
+23 8 * * 3 /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh
 
 #OMIM Upload
 MAILTO=lrnassar@ucsc.edu
