@@ -73,8 +73,8 @@ MAILTO=abenet@ucsc.edu,lrnassar@ucsc.edu
 00 9 * * * /hive/data/outside/otto/clinGen/clinGenWrapper.sh
 
 #GRC Incident
-#MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
-#33 09 * * * /hive/data/outside/grc/incidentDb/runUpdate.sh makeItSo
+MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
+33 09 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
 
 #NCBI RefSeq
 #MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
