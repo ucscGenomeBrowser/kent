@@ -1626,7 +1626,7 @@ sub doNcbiGene {
 
   my $dupList = "";
   if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
-    $dupList = " | grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\" ";
+    $dupList = " | grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\"  || true";
   }
 
   $bossScript->add(<<_EOF_
