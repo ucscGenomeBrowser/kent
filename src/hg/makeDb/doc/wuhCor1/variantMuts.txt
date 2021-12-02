@@ -1,3 +1,6 @@
+# for emacs: -*- mode: sh; -*-
+
+#########################################################################
 # Mutations in in COVID variants of interest, from Nick Keener and Angie Hinrichs
 # 2/8/21 Kate
 
@@ -44,6 +47,7 @@ foreach v (B.1.1.7 B.1.351 B.1.429 P.1)
     end
 end
 'EOF'
+EOF
 
 csh load.csh >&! load.out
 
@@ -130,6 +134,7 @@ foreach v (B.1.617.2 B.1.621 C.37 B.1.617.1 B.1.525 B.1.526 )
     end
 end
 'EOF'
+EOF
 
 wc -l *_aa.bed
   18 B.1.525_aa.bed
@@ -244,8 +249,97 @@ NOTE: Outbreak includes Theta (P.3) first identified in Philipines in Mar 2021, 
 # based observing that outbreak.info includes variants at 93% cutoff.  Also, more seqs -- 10K
 # that Angie downloaded from GISAID.
 
+
+#########################################################################
+# UPDATE - Files prepared for Kate's runs of Nick's scripts - 2021-09-10 - Angie
+
+mkdir /hive/data/genomes/wuhCor1/bed/strains/2021-09-10
+cd /hive/data/genomes/wuhCor1/bed/strains/2021-09-10
+
+gisaidDir=/hive/users/angie/gisaid
+
+N=10000
+
+# Pick the $N earliest B.1.1.7 sequences (that don't claim to be from before October 2020):
+zcat $gisaidDir/metadata_batch_2021-09-10.tsv.gz \
+| cut -f 1,5,19 \
+| tawk '$3 == "B.1.1.7" && $2 ~ /202[01]-[0-9]{2}-[0-9]{2}/ && $2 > "2020-09-30"' \
+| sort -k2,2 \
+| head -$N \
+    > B.1.1.7.early$N
+
+time faSomeRecords <(xzcat $gisaidDir/sequences_batch_2021-09-10.fa.xz) \
+    <(cut -f 1 B.1.1.7.early$N) B.1.1.7.early$N.fa
+#real    3m38.874s
+faSize B.1.1.7.early$N.fa
+#89363373 bases (460913 N's 88902460 real 88902460 upper 0 lower) in 3002 sequences in 1 files
+
+# Now for the rest, rejecting any before 2021:
+# Delta (B.1.617.2)
+# Eta (B.1.525)
+# Iota (B.1.526)
+# Kappa (B.1.617.1)
+# Lambda (C.37)
+# Mu (B.1.621)
+for lineage in B.1.617.2 B.1.525 B.1.526 B.1.617.1 C.37 B.1.621; do
+    zcat $gisaidDir/metadata_batch_2021-09-10.tsv.gz \
+    | cut -f 1,5,19 \
+    | tawk '$3 == "'$lineage'" && $2 ~ /2021-[0-9]{2}-[0-9]{2}/' \
+    | sort -k2,2 \
+    | head -$N \
+        > $lineage.early$N
+    time faSomeRecords <(xzcat $gisaidDir/sequences_batch_2021-09-10.fa.xz) \
+        <(cut -f 1 $lineage.early$N) $lineage.early$N.fa
+done
+
+
+#########################################################################
 # Update for Omicron Thu Dec  2 07:41:53 PST 2021
 cd /hive/data/genomes/wuhCor1/bed/strains/2021-09-10/results/
 wget https://raw.githubusercontent.com/cov-lineages/constellations/main/constellations/definitions/cB.1.1.529.json
 echo 'C14408T > C241T > C3037T > A23403G > G28881A > G28883C > G28882A > C21846T > C23604A > A23063T > T22882G,C22995A,A23013C,C23525T,C24130A > A2832G,T5386G,G8393A,C10029T,C10449A,A11537G,T13195C,C15240T,A18163G,C21762T,G22578A,T22673C,C22674T,T22679C,G22813T,G22898A,G22992A,A23040G,G23048A,A23055G,C23202A,T23599G,C23854A,G23948T,A24424T,T24469A,C24503T,C25000T,C25584T,C26270T,A26530G,C26577G,G26709A,A27259C,C27807T,A28271T,C28311T' > B.1.1.529_nuc.txt
 ~/kent/src/hg/makeDb/scripts/variantsMuts/usherDescToBed B.1.1.529_nuc.txt cB.1.1.529.json B.1.1.529
+
+
+#########################################################################
+# Omicron additions - 2021-12-02 - Angie
+
+# The cov-lineages/constellations/.../cB.1.1.529.json file actually had an incomplete list
+# of deletions in Omicron, and omitted the insertion.
+
+# Log in on gisaid.org, go to Search tab, select "VOC Omicron ..." from Variants menu
+# 339 sequences match; click checkbox to select all, click Download, leave the checkbox
+# "Replace spaces with underscores in FASTA header" checked, click Download,
+# xz the downloaded file, upload file to hgwdev.
+
+mkdir /hive/data/genomes/wuhCor1/bed/strains/2021-12-02
+cd /hive/data/genomes/wuhCor1/bed/strains/2021-12-02
+unxz gisaid_hcov-19_2021_12_02_22.fasta.xz
+mv gisaid_hcov-19_2021_12_02_22.fasta B.1.1.529.2021-12-02.fa
+
+ln -s ~angie/github/sarscov2lineages .
+# I had previously created this conda environment
+# (same conda env create shown in Kate's section above)
+conda activate slAngie
+
+./sarscov2lineages/lineageVariants.params.sh -c 50 -s 0.8 -i 0.7 -v \
+    B.1.1.529.2021-12-02.fa sarscov2lineages/NC_045512.fa
+
+# Omicron/B.1.1.529 has two mutations in Spike codon 371 that need to be translated together.
+# The _aa.bed output has two separate translations (S371P and S371F) but really it should be
+# S371L -- hand-edit to fix.
+vi B.1.1.529.2021-12-02_aa.bed
+
+# Fix reference name, make bigBed, install in /gbdb.  Use Max's names for bigBed files.
+sed -re 's/NC_045512\.2/NC_045512v2/' B.1.1.529.2021-12-02_nuc.bed \
+    > B.1.1.529_nuc.bed
+sed -re 's/NC_045512\.2/NC_045512v2/' B.1.1.529.2021-12-02_aa.bed \
+    > B.1.1.529_prot.bed
+for suffix in nuc prot; do
+    bedToBigBed -type=bed4 B.1.1.529_$suffix.bed /hive/data/genomes/wuhCor1/chrom.sizes \
+       B.1.1.529_$suffix.bb
+    ln -sf `pwd`/B.1.1.529_$suffix.bb /gbdb/wuhCor1/strainMuts/
+done
+
+
+#########################################################################
