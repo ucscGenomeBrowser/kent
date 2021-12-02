@@ -5,7 +5,7 @@ shortLabel Variants of Concern
 longLabel  Mutations in Variants of Concern (VOC), Interest (VOI), or Under Monitoring (VUM) from GISAID sequences
 compositeTrack on
 subGroup1 mutation Mutations AA=Amino_Acid NUC=Nucleotide
-subGroup2 variant Variants A_B117=Alpha B_B1351=Beta C_P1=Gamma D_B16172=Delta L_C37=Lambda M_B1621=Mu E_B1429=Epsilon E_B1525=Eta I_B1526=Iota K_B16171=Kappa
+subGroup2 variant Variants A_B117=Alpha B_B1351=Beta C_P1=Gamma D_B16172=Delta L_C37=Lambda M_B1621=Mu E_B1429=Epsilon E_B1525=Eta I_B1526=Iota K_B16171=Kappa B11529=Omicron
 subGroup3 designation Designation VOC=VOC VOI=VOI VUM=VUM
 sortOrder designation=+ variant=+ mutation=+
 bedNameLabel Mutation
@@ -14,9 +14,9 @@ darkerLabels on
 noScoreFilter on
 group varRep
 allButtonPair on
-dataVersion Sequences downloaded September 10, 2021
+dataVersion Sequences downloaded September 10, 2021, update on Dec 2, 2021
 visibility dense
-pennantIcon Updated red ../goldenPath/newsarch.html#102021 "Track updated Oct. 20, 2021"
+pennantIcon Updated red ../goldenPath/newsarch.html#120321 "Track updated Dec 3, 2021"
 html variantMutsV2
 
 # Amino acid tracks
@@ -131,6 +131,17 @@ html variantMutsV2
         color 143,210,134
         priority 10
 
+        track variantAaMuts_B_1_1_529
+        parent variantMuts on
+        subGroups variant=B11529 mutation=AA designation=VOC
+        shortLabel Omicron AA Muts 
+        longLabel Omicron (B.1.1.529) amino acid mutations from cov-lineages.org
+        url https://outbreak.info/situation-reports?pango=B.1.1.529
+        urlLabel B.1.1.529 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_prot.bb
+        color 80,160,200
+        priority 11
+
 # Nucleotide tracks
 
         track variantNucMutsV2_B_1_1_7
@@ -242,4 +253,15 @@ html variantMutsV2
         urlLabel B.1.617.1 Situation Report at outbreak.info
         color 143,210,134
         priority 20
+
+        track variantNucMuts_B_1_1_529
+        parent variantMuts off
+        subGroups variant=B11529 mutation=NUC designation=VOC
+        shortLabel Omicron Nuc Muts 
+        longLabel Omicron VOC (B.1.1.529) nucleotide mutations identifed from GISAID sequences (Nov 2021)
+        url https://outbreak.info/situation-reports?pango=B.1.1.529
+        urlLabel B.1.1.529 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_nuc.bb
+        color 80,160,200
+        priority 21
 
