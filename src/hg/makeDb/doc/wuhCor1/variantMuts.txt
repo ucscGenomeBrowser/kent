@@ -244,3 +244,8 @@ NOTE: Outbreak includes Theta (P.3) first identified in Philipines in Mar 2021, 
 # based observing that outbreak.info includes variants at 93% cutoff.  Also, more seqs -- 10K
 # that Angie downloaded from GISAID.
 
+# Update for Omicron Thu Dec  2 07:41:53 PST 2021
+cd /hive/data/genomes/wuhCor1/bed/strains/2021-09-10/results/
+wget https://raw.githubusercontent.com/cov-lineages/constellations/main/constellations/definitions/cB.1.1.529.json
+echo 'C14408T > C241T > C3037T > A23403G > G28881A > G28883C > G28882A > C21846T > C23604A > A23063T > T22882G,C22995A,A23013C,C23525T,C24130A > A2832G,T5386G,G8393A,C10029T,C10449A,A11537G,T13195C,C15240T,A18163G,C21762T,G22578A,T22673C,C22674T,T22679C,G22813T,G22898A,G22992A,A23040G,G23048A,A23055G,C23202A,T23599G,C23854A,G23948T,A24424T,T24469A,C24503T,C25000T,C25584T,C26270T,A26530G,C26577G,G26709A,A27259C,C27807T,A28271T,C28311T' > B.1.1.529_nuc.txt
+~/kent/src/hg/makeDb/scripts/variantsMuts/usherDescToBed B.1.1.529_nuc.txt cB.1.1.529.json B.1.1.529
