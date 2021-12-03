@@ -1,0 +1,115 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse, re
+from collections import defaultdict
+import json
+from os import system
+from os.path import join, basename, dirname, isfile
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("usage: %prog [options] usherFname jsonFname outputBase - outputs a wuhCor1 BED file given an usher description of nucleotide variants and json file from cov-lineages. creates two files: outBase_nuc.bb and outBase_prot.bb ")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    usherFname, jsonFname, outBase = args
+    nucBed = outBase+"_nuc.bed"
+    protBed = outBase+"_prot.bed"
+
+    usherText = open(usherFname).read().strip()
+    ofh = open(nucBed, "w")
+    # C14408T > C241T > C3037T > A23403G > G28881A > G28883C > G28882A > C21846T > C23604A > A23063T > T22882G,C22995A,A23013C,C23525T,C24130A > A2832G,T5386G,G8393A,C10029T,C10449A,A11537G,T13195C,C15240T,A18163G,C21762T,G22578A,T22673C,C22674T,T22679C,G22813T,G22898A,G22992A,A23040G,G23048A,A23055G,C23202A,T23599G,C23854A,G23948T,A24424T,T24469A,C24503T,C25000T,C25584T,C26270T,A26530G,C26577G,G26709A,A27259C,C27807T,A28271T,C28311T
+    usherText = usherText.replace(" > ", ",")
+    muts = usherText.split(",")
+    for mut in muts:
+        fromNuc = mut[:1]
+        toNuc = mut[-1:]
+        pos = mut[1:-1]
+        row = ["NC_045512v2", str(int(pos)-1), pos, mut]
+        ofh.write("\t".join(row))
+        ofh.write("\n")
+    ofh.close()
+
+    covData = json.load(open(jsonFname))
+
+    protToStart = {
+            # see https://github.com/nextstrain/ncov/blob/master/defaults/reference_seq.gb
+            "spike" : 21562,
+            "orf1" : 265,
+            "orf1a" : 265,
+            "orf1b" : 13467,
+            "e" : 26244,
+            "m" : 26522,
+            "n" : 28273,
+            }
+
+    ofh = open(protBed, "w")
+    for site in covData["sites"]:
+        #print(site)
+        # nuc:C25000T
+        siteParts = site.split(":")
+        loc = siteParts[0]
+        mut = siteParts[1]
+
+        #print(mut)
+        mo = re.match(r'([A-Z]*)([0-9]+)([A-Z]*)', mut)
+        fromSeq, pos, toSeq = mo.groups()
+
+        if loc=="nuc":
+            # nuc:C25000T
+            row = ("NC_045512v2", str(int(pos)-1), pos, mut)
+        elif loc=="del":
+            # del:11283:9
+            delLen = int(siteParts[2])
+            delStart = int(mut)-1
+            delEnd = delStart+delLen
+            row = ("NC_045512v2", str(delStart), str(delEnd), "del_"+str(delLen))
+        else:
+            # spike:N969K
+            protName = loc
+            protStart = protToStart[protName]
+            nucStart = protStart+ 3*(int(pos)-1)
+            row = ("NC_045512v2", str(nucStart), str(nucStart+3*len(fromSeq)), mut)
+
+        ofh.write("\t".join(row))
+        ofh.write("\n")
+
+    ofh.close()
+
+    # convert to bigBed
+    cmd = "bedSort %s %s" % (nucBed, nucBed)
+    system(cmd)
+    cmd = "bedSort %s %s" % (protBed, protBed)
+    system(cmd)
+
+    nucBb = outBase+"_nuc.bb"
+    protBb = outBase+"_prot.bb"
+    cmd = "bedToBigBed %s /hive/data/genomes/wuhCor1/chrom.sizes %s" % (nucBed, nucBb)
+    system(cmd)
+    cmd = "bedToBigBed %s /hive/data/genomes/wuhCor1/chrom.sizes %s" % (protBed, protBb)
+    system(cmd)
+
+    print("Wrote %s and %s" % (nucBb, protBb))
+
+
+
+main()

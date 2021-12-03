@@ -172,21 +172,20 @@ transcripts for one protein, as their coding sequences can be identical.
 
 <p>
 Proteins were aligned to transcripts with TBLASTN, converted to PSL, filtered
-with pslReps (93% query coverage, within top 1% score), lifted to genome
-positions with pslMap and filtered again.  UniProt annotations were
+with pslReps (93% query coverage, keep alignments within top-1% score), lifted to genome
+positions with pslMap and filtered again with pslReps.  UniProt annotations were
 obtained from the UniProt XML file.  The UniProt annotations were then mapped to the
-genome through the alignment using the pslMap program.  This mapping approach
+genome through the alignment described above using the pslMap program.  This approach
 draws heavily on the <A HREF="https://modbase.compbio.ucsf.edu/LS-SNP/"
-TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans. For human and mouse, the
-alignments were filtered by retaining only proteins annotated with
-a given transcript in the Genome Browser table kgXref. Like all Genome Browser
-source code, the main script used to build this track can be found on 
-<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/uniprot/doUniprot">github</a>.
+TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans.
+Like all Genome Browser source code, the main script used to build this track
+can be found on <a
+href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/uniprot/doUniprot">Github</a>.
 </p>
 
 <h2>Automated data updates and release history</h2>
 <p>
-This track is automatically updated on an ongoing basis, every 3-6 months.
+This track is automatically updated on an ongoing basis, every 1-2 months.
 The current version is always shown on the track details page, it includes the
 release of UniProt, the version of the transcript set and a unique MD5 that is
 based on the protein sequences, the transcript sequences, the mapping file
