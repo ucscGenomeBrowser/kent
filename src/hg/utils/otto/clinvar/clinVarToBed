@@ -41,89 +41,92 @@ else:
 clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories	VariationID	PositionVCF	ReferenceAlleleVCF	AlternateAlleleVCF\n"
 # ==== FUNCTIONs =====
 
-# benign = B, likely benign = LB, conflicting = CF, likely pathogenic= LP, 
-# pathogenic = P, other = OT, uncertain = VUS, RF=risk factor
+# benign = BN, likely benign = LB, conflicting = CF, likely pathogenic= LP, 
+# pathogenic = PG, other = OT, uncertain = VUS, RF=risk factor
 # colors were defined by Ana Benet Pages
+# - WARNING ON FILTER CHANGES:  -  see #28562
+# Never change these codes. They are in old sessions. If you change them, change the across the whole script
+# and also change the name of the .as field, so the cart variables will be different. You can add new values through:
 cnvColors = {
         "INS" : {
             "OT" : "225,165,0",
-            "B" : "250,214,69",
+            "BN" : "250,214,69",
             "LB" : "250,214,69",
             "CF" : "225,165,0",
             "RF" : "225,165,0",
             "VUS" : "225,165,0",
             "LP" : "199,114,3",
-            "P" : "199,114,3"
+            "PG" : "199,114,3"
             },
         "LOSS" : {
             "OT" : "255,0,0",
-            "B" : "255,98,119",
+            "BN" : "255,98,119",
             "LB" : "255,98,119",
             "CF" : "255,0,0",
             "VUS" : "255,0,0",
             "RF" : "255,0,0",
             "LP" : "153,0,0",
-            "P" : "153,0,0"
+            "PG" : "153,0,0"
             },
         "GAIN" : {
             "OT" : "0,0,225",
-            "B" : "77,184,255",
+            "BN" : "77,184,255",
             "LB" : "77,184,255",
             "CF" : "0,0,225",
             "VUS" : "0,0,225",
             "RF" : "0,0,225",
             "LP" : "0,0,179",
-            "P" : "0,0,179"
+            "PG" : "0,0,179"
             },
         "STRUCT" : {
             "OT" : "0,210,0",
-            "B" : "0,255,0",
+            "BN" : "0,255,0",
             "LB" : "0,255,0",
             "CF" : "0,210,0",
             "VUS" : "0,210,0",
             "RF" : "0,210,0",
             "LP" : "0,128,0",
-            "P" : "0,128,0"
+            "PG" : "0,128,0"
             },
         "INV" : {
             "OT" : "192,0,192",
-            "B" : "255,128,255",
+            "BN" : "255,128,255",
             "LB" : "255,128,255",
             "CF" : "192,0,192",
             "VUS" : "192,0,192",
             "RF" : "192,0,192",
             "LP" : "128,0,128",
-            "P" : "128,0,128"
+            "PG" : "128,0,128"
             },
         "SEQALT" : {
             "OT" : "128,128,128",
-            "B" : "191,191,191",
+            "BN" : "191,191,191",
             "LB" : "191,191,191",
             "CF" : "128,128,128",
             "VUS" : "128,128,128",
             "RF" : "128,128,128",
             "LP" : "64,64,64",
-            "P" : "64,64,64"
+            "PG" : "64,64,64"
             },
         "SEQLEN" : {
             "OT" : "0,179,179",
-            "B" : "0,255,255",
+            "BN" : "0,255,255",
             "LB" : "0,255,255",
             "CF" : "0,179,179",
             "VUS" : "0,179,179",
             "RF" : "0,179,179",
             "LP" : "0,102,102",
-            "P" : "0,102,102"
+            "PG" : "0,102,102"
             },
         "SUBST" : {
             "OT" : "128,128,128",
-            "B" : "191,191,191",
+            "BN" : "191,191,191",
             "LB" : "191,191,191",
             "CF" : "128,128,128",
             "VUS" : "128,128,128",
             "RF" : "128,128,128",
             "LP" : "64,64,64",
-            "P" : "64,64,64"
+            "PG" : "64,64,64"
             },
 }
 
@@ -329,6 +332,8 @@ def clinSignToCode(pathoStr):
     # the aim of this order is to err on the side of caution: if a variant is VUS and pathogenic,
     # we rather classify it as VUS (=triggering manual review). If it's pathogenic and benign at the same 
     # time, we rather classify it as pathogenic
+    #
+    # Do not changes these codes. See WARNING ON FILTER CHANGES in this script.
     if "conflicting" in pathoStr:
         return "CF"
     if "uncertain" in pathoStr:
@@ -338,11 +343,11 @@ def clinSignToCode(pathoStr):
     if "likely pathogenic" in pathoStr:
         return "LP"
     if "pathogenic" in pathoStr:
-        return "P"
+        return "PG"
     if "likely benign" in pathoStr:
         return "LB"
     if "benign" in pathoStr:
-        return "B"
+        return "BN"
     return "OT"
 
 def lastMonth(d,x=1):
@@ -816,9 +821,9 @@ for line in ifh:
             assert(False)
 
     else:
-        if pathoCode in ["P", "LP"]: # pathogenic or likely pathogenic
+        if pathoCode in ["PG", "LP"]: # pathogenic or likely pathogenic
             itemRgb = "210,0,0" # red
-        elif pathoCode in ["B", "LB"]: # benign or likely benign
+        elif pathoCode in ["BN", "LB"]: # benign or likely benign
             itemRgb = "0,210,0" # green
         elif pathoCode in ["VUS", "RF"]: # uncertain
             itemRgb = "0,0,128" # dark-blue
