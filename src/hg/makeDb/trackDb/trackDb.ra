@@ -260,7 +260,7 @@ showCdsAllScales .
 baseColorDefault diffBases
 baseColorUseSequence db
 color 0,0,100
-visibility dense
+visibility pack
 pennantIcon p13 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p13 patch sequences"; Updated red ../goldenPath/newsarch.html#101221 "Updated Oct. 12, 2021"
 
 track fixSeqLiftOverPsl
