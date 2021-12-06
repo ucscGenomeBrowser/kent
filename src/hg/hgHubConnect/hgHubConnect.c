@@ -380,9 +380,10 @@ printf("</div>"); // #unlistedHubs
 
 }
 
-void doValidateNewHub(char *hubUrl)
+int doValidateNewHub(char *hubUrl)
 /* Run hubCheck on a hub. */
 {
+int ret = 0;
 udcSetCacheTimeout(1);
 char *expireTime = cfgOptionDefault("browser.cgiExpireMinutes", "20");
 unsigned expireMinutes = sqlUnsigned(expireTime);
@@ -404,9 +405,11 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError || errCatch->gotWarning)
     {
-    printf("hubCheck timed out after running for %d seconds. Please try on a Unix command line", hubCheckTimeout);
+    printf("hubCheck timed out after running for %d minute%s. Please try on a Unix command line", hubCheckTimeout / 60, hubCheckTimeout/60 > 1 ? "s" : "");
+    ret = 1;
     }
 errCatchFree(&errCatch);
+return ret;
 }
 
 void hgHubConnectDeveloperMode()
@@ -1551,8 +1554,9 @@ if (cartVarExists(cart, hgHubDoHubCheck))
         jsOnEventByIdF("click", "closeButton", "closeIframe()");
         jsInline("document.onkeydown = function(evt) { if (evt.keyCode===27) { closeIframe() } };");
 
-        printf("<div>Finished checking %s</div>", hubUrl);
-        doValidateNewHub(hubUrl);
+        int retVal = doValidateNewHub(hubUrl);
+        if (retVal == 0)
+            printf("<div>Finished checking %s</div>", hubUrl);
         puts("<hr>");
         puts("<p>Our command line tool <a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>hubCheck</a> "
                 "can be used to obtain the same output from a Unix command line.</p>");

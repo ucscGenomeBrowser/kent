@@ -16,7 +16,7 @@ group varRep
 allButtonPair on
 dataVersion Sequences downloaded September 10, 2021, update on Dec 2, 2021
 visibility dense
-pennantIcon Updated red ../goldenPath/newsarch.html18,3,33 "Track updated Dec 3, 2021"
+pennantIcon Updated red ../goldenPath/newsarch.html#120321 "Track updated Dec 3, 2021"
 html variantMutsV2
 
 # Amino acid tracks
@@ -66,7 +66,7 @@ html variantMutsV2
         priority 4
 
         track variantAaMutsV2_C_37
-        parent variantMuts on
+        parent variantMuts off
         subGroups variant=L_C37 mutation=AA designation=VOI
         shortLabel Lambda AA Muts 
         longLabel Lambda VOI (C.37 Peru Mar-2020) amino acid mutations in 3000 GISAID sequences (Sep 10, 2021)
@@ -77,7 +77,7 @@ html variantMutsV2
         priority 5
 
         track variantAaMutsV2_B_1_621
-        parent variantMuts on
+        parent variantMuts off
         subGroups variant=M_B1621 mutation=AA designation=VOI
         shortLabel Mu AA Muts 
         longLabel Mu VOI (B.1.621 Columbia Jan-2021) amino acid mutations in 3000 GISAID sequences (Sep 10, 2021)
@@ -135,7 +135,7 @@ html variantMutsV2
         parent variantMuts on
         subGroups variant=J_B11529 mutation=AA designation=VOC
         shortLabel Omicron AA Muts 
-        longLabel Omicron (B.1.1.529) amino acid mutations from cov-lineages.org
+        longLabel Omicron (B.1.1.529 SA Nov-2021) amino acid mutations from cov-lineages.org (Nov 2021)
         url https://outbreak.info/situation-reports?pango=B.1.1.529
         urlLabel B.1.1.529 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_prot.bb
@@ -258,7 +258,7 @@ html variantMutsV2
         parent variantMuts off
         subGroups variant=J_B11529 mutation=NUC designation=VOC
         shortLabel Omicron Nuc Muts 
-        longLabel Omicron VOC (B.1.1.529) nucleotide mutations identifed from GISAID sequences (Nov 2021)
+        longLabel Omicron VOC (B.1.1.529 SA Nov-2021) nucleotide mutations identifed from GISAID sequences (Nov 2021)
         url https://outbreak.info/situation-reports?pango=B.1.1.529
         urlLabel B.1.1.529 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_nuc.bb
