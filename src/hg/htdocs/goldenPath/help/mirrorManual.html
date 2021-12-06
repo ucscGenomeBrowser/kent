@@ -2,7 +2,9 @@
 <!-- DO NOT EDIT THE HTDOCS VERSION OF THIS FILE. THIS FILE IS AUTOMATICALLY
      GENERATED FROM A MARKDOWN FILE IN kent/src/product. MAKE ANY EDITS TO
      THIS PAGE THERE, THEN RUN MAKE in kent/src/product/mirrorDocs, AND FOLLOW THE 
-     INSTRUCTIONS TO COMMIT THIS PAGE INTO git. -->
+     INSTRUCTIONS TO COMMIT THIS PAGE INTO git. 
+     Please read the file kent/src/product/Note-To-QA.txt for details.
+     -->
 <!--#set var="TITLE" value="Genome Browser Manual Installation" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -10,7 +12,7 @@
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 
-<h1>No title defined in document, first line must be % mytitle </h1>
+<h1>Manual installation of the UCSC Genome Browser on a Unix server</h1>
 <h2>Contents</h2>
 <h6><a href='#overview-of-the-genome-browser-directories-and-databases'>Overview of the Genome Browser directories and databases</a></h6>
 <h6><a href='#software-requirements'>Software Requirements</a></h6>
@@ -24,16 +26,11 @@
 <h6><a href='#modifying-the-source-code'>Modifying the source code</a></h6>
 <h6><a href='#custom-track-database'>Custom Track Database</a></h6>
 <h6><a href='#debugging-the-cgi-binaries'>Debugging the CGI binaries</a></h6>
-<h6><a href='#https-cert-check'>HTTPS Certificate Verification support</a></h6>
 <h6><a href='#proxy-support'>Proxy support</a></h6>
 <h6><a href='#the-udc-local-cache-directory'>The UDC local cache directory</a></h6>
 <h6><a href='#activating-cram-support-for-the-genome-browser'>Activating CRAM support for the Genome Browser.</a></h6>
 <h6><a href='#using-freetype-font-support-for-anti-aliased-text'>Using FreeType font support for anti-aliased text</a></h6>
 <h6><a href='#building-the-kent-source-tree'>Building the kent source tree.</a></h6>
-<p>
-% Manual installation of the UCSC Genome Browser on a Unix server
-</p>
-
 <a name='overview-of-the-genome-browser-directories-and-databases'></a>
 <h2>Overview of the Genome Browser directories and databases</h2>
 
@@ -220,12 +217,12 @@ machine image that can be converted for VirtualBox, VMWare, Hyper-V and other
 popular environments. We also offer Genome-Browser-in-the-Cloud (GBIC) an
 shell script that installs a genome browser in most main Linux distributions
 (Most Debian and Redhat-based ones, like Ubuntu and CentOS).
-See https://genome.ucsc.edu/goldenPath/help/mirror.html
+See <a href='https://genome.ucsc.edu/goldenPath/help/mirror.html' title=''>https://genome.ucsc.edu/goldenPath/help/mirror.html</a>
 </p>
 
 <p>
 Scripts to perform all of the functions below can be found in
-the directory https://github.com/ucscGenomeBrowser/kent/tree/master/src/product/scripts.
+the directory <a href='https://github.com/ucscGenomeBrowser/kent/tree/master/src/product/scripts' title=''>https://github.com/ucscGenomeBrowser/kent/tree/master/src/product/scripts</a>.
 In a git clone of the kent repository, the scripts
 are located in src/product/scripts.
 </p>
@@ -281,9 +278,7 @@ To setup the example user accounts as mentioned in these
 instructions, run the script:
 </p>
 
-<p>
-ex.MySQLUserPerms.sh
-</p></li>
+<pre><code> ex.MySQLUserPerms.sh</code></pre></li>
 <li><p>
 Find the location of your Apache WEB server DocumentRoot and cgi-bin directory.
 Typical locations are: /var/www and /usr/local/apache, /var/www/html, /var/www/cgi-bin
@@ -306,24 +301,25 @@ the three directories: html cgi-bin and trash should be
 at the same level in this other WEBROOT. For example:
 </p>
 
-<pre><code>    /some/other/directory/path/html/
-    /some/other/directory/path/cgi-bin/
-    /some/other/directory/path/trash/</code></pre>
+<pre><code>/some/other/directory/path/html/
+/some/other/directory/path/cgi-bin/
+/some/other/directory/path/trash/</code></pre>
 
 <p>
 Symlinks to the trash directory should exist from the html
 directory. As so:
 </p>
 
-<pre><code>    /some/other/directory/path/html/trash -&gt; ../trash</code></pre>
+<pre><code>/some/other/directory/path/html/trash -&gt; ../trash</code></pre>
 
 <p>
 The actual trash directory can be somewhere else. If it is
 not in your Apache /var/www/trash/ directory, then create
-that symlink as well as the html/trash symlink. For example
-/var/www/trash -&gt; /some/other/directory/trash
-/var/www/html/trash -&gt; /some/other/directory/trash
-</p></li>
+that symlink as well as the html/trash symlink. For example:
+</p>
+
+<pre><code>/var/www/trash -&gt; /some/other/directory/trash
+/var/www/html/trash -&gt; /some/other/directory/trash</code></pre></li>
 <li><p>
 Create html, cgi-bin and trash directories:
 </p>
@@ -350,9 +346,11 @@ that directory.
 
 <p>
 A cron job should be set to periodically clean the files in trash.
-See also, the two scripts here: src/product/scripts/trashCleanMonitor.csh
-src/product/scripts/trashCleaner.csh
-</p></li>
+See also, the two scripts here:
+</p>
+
+<pre><code>    src/product/scripts/trashCleanMonitor.csh
+    src/product/scripts/trashCleaner.csh</code></pre></li>
 <li><p>
 Download static WEB page content:
 See also: src/product/scripts/updateHtml.sh
@@ -423,9 +421,9 @@ to allow developers write access to the database.
 Load databases of interest. See also:
 </p>
 
-<pre><code>src/product/scripts/activeDbList.sh
-src/product/scripts/minimal.db.list.txt
-src/product/scripts/loadDb.sh</code></pre>
+<pre><code> src/product/scripts/activeDbList.sh
+ src/product/scripts/minimal.db.list.txt
+ src/product/scripts/loadDb.sh</code></pre>
 
 <p>
 And discussion in scripts/README about whether you can use directly
@@ -445,9 +443,7 @@ step is quite compute intensive. A typical rsync command for an
 entire database (e.g. ce4) would be something like:
 </p>
 
-<p>
-rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/
-</p></li>
+<pre><code> rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/</code></pre></li>
 <li><p>
 Download extra databases to work with a full genome assembly
 such as human/hg38: hgFixed go140213 proteins140122 sp140122
@@ -473,13 +469,15 @@ change the symlink.
 </p></li>
 <li><p>
 Copy the gbdb data to /gbdb - See also:
-scripts/fetchFullGbdb.sh
-scripts/fetchMinimalGbdb.sh
-</p></li>
+</p>
+
+<pre><code>scripts/fetchFullGbdb.sh
+scripts/fetchMinimalGbdb.sh</code></pre></li>
 <li><p>
 The browser should now appear at the URL:
-http://localhost/
 </p>
+
+<pre><code>http://localhost/</code></pre>
 
 <p>
 Check your Apache error_log file for hints to solving problems.
@@ -978,7 +976,7 @@ Further MySQL SSL documentation is available from
 <p>
 Use the following procedures to create your own personal copy of the kent source
 tree where you can have your own edits that are not part of the development at
-UCSC. This is useful for mirror sites that have their own customizations in
+UCSC This is useful for mirror sites that have their own customizations in
 the source tree for local circumstances. It will also be necessary if you want to
 add your own tracks to your mirror (see next section).
 </p>
@@ -986,7 +984,7 @@ add your own tracks to your mirror (see next section).
 <p>
 Install Git software version 1.6.2.2 or later. See the Git Community Handbook
 installation (<a href='https://git-scm.com/book/en/v2/Getting-Started-Installing-Git' title=''>https://git-scm.com/book/en/v2/Getting-Started-Installing-Git</a>) and setup
-(&lt;href=&#39;https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup&gt;) instructions, as well
+(<a href='https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup' title=''>https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup</a>) instructions, as well
 as our Installing Git (<a href='http://genomewiki.ucsc.edu/index.php/Installing_git' title=''>http://genomewiki.ucsc.edu/index.php/Installing_git</a>)
 Genomewiki page.
 </p>
@@ -1786,8 +1784,9 @@ For the case of specific options or tracks causing problems,
 to find the full set of options in effect for the failure case,
 when your WEB browser is at the Error 500 display page, edit
 the displayed URL in your WEB browser to call the cgi binary cartDump:
-http://<code>html</code>/cgi-bin/cartDump
 </p>
+
+<pre><code>http://&lt;your server&gt;/cgi-bin/cartDump </code></pre>
 
 <p>
 This will display all environment variables in effect at the time
@@ -1856,63 +1855,12 @@ FireFox, so after debugging hgTables, you will probably want to add
 One thing that does not work with GET is &quot;upload file&quot; inputs.
 </p>
 
-<a name='https-cert-check'></a>
-<h2>HTTPS Certificate Verification support</h2>
+<pre><code># HTTPS Certificate Check for Verification Settings are: abort warn log none
+# currently the default is log
+    httpsCertCheck=log
 
-<p>
-https.c now has support for verifying website domain certificates.
-Verifying a certificate for a site involves checking that the cert is not expired,
-that the host domain name in the URL matches one of those listed in the certificate,
-that the certificate issuer is known. We use openssl which is a very popular library.
-Self-certified certificates are not allowed, but LETSENCRYPT offers free certs via certbot.
-certbot only works with real domains, IP addresses do not work.
-However, there is a small subset of domains that fail with openssl, even though they work in the browser.
-Use curl as a quick way to confirm that your custom track or hub URL will work with openssl.
-
-hg.conf setting:<br>
-<code>httpsCertCheck=log</code><br>
-<b>log</b> is currently the default setting, and only logs to stderr. 
-Other values are <b>abort</b> for security against Man-in-the-middle attacks, 
-and <b>warn</b> for showing errors to users but letting them proceed, 
-and <b>none</b> which skips verification entirely.
-
-<pre><code>curl -I https://some-website/somepath</code></pre>
-If you do not see errors with curl, then it will work in the UCSC Genome Browser.
-If your site fails verification with curl or the browser, you can confirm with this.
-<br><br>
-Use online tools such as this one to verify your site's ssl certificate works.
-<pre>
-https://www.ssllabs.com/ssltest/analyze.html?d=somedomain.com&latest
-</pre>
-If it says 
-<pre>
-This server's certificate chain is incomplete.
-</pre>
-then that error can be fixed by changing the website http server configuration so that it does not return a single cert,
-but instead make it return the entire full chain of certificates. Typically this will be 2 or 3 certs, but it could be more.
-You can immediately confirm success if you use curl to read the URL as shown above.
-<br>
-<br>
-Another handy command for checking https certs:
-<pre>
-openssl s_client -trusted_first -connect yourdomain.edu:443 -servername yourdomain.edu -showcerts
-</pre>
-
-<code>httpsCertCheckDomainExceptions=somedomain1.com somedomain2.edu</code><br>
-Cert verification for these domains will not happen. This is intended to be a short list of old servers that could not be upgraded to a proper cert,
-or are currently still incompatible because openssl ca-certificates does not list their intermediate certs.
-Just configuring the webserver to return intermediate certs, or full chain will make it compatible with openssl.<br>
-
-
-<p>
-One must add the setting &quot;httpProxy&quot;, &quot;httpsProxy&quot;, &quot;ftpProxy&quot; to hg.conf
-</p>
-
-<pre><code>httpProxy=http://someProxyServer:3128
-httpsProxy=http://someProxyServer:3128
-ftpProxy=ftp://127.0.0.1:2121</code></pre>
-
-
+# domains to whitelist, skip cert checking, space-separated list
+    httpsCertCheckDomainExceptions=somedomain1.com somedomain2.edu</code></pre>
 
 <a name='proxy-support'></a>
 <h2>Proxy support</h2>
@@ -1963,9 +1911,7 @@ If you are debugging your proxy configuration, you can use this hg.conf setting
 to turn on logging to stderr.
 </p>
 
-<p>
-logProxy=on
-</p>
+<pre><code>logProxy=on</code></pre>
 
 <p>
 It is not meant to be left on in production.
@@ -2024,7 +1970,7 @@ On some systems this directory is called cgi-bin/.
 The UCSC Genome Browser is capable of displaying tracks from both the BAM and
 CRAM file formats. While BAM tracks provide all of the required data within
 the file, however, CRAM tracks depend on external &quot;reference sequence&quot; files
-(see http://www.ebi.ac.uk/ena/software/cram-toolkit for more information about
+(see <a href='http://www.ebi.ac.uk/ena/software/cram-toolkit' title=''>http://www.ebi.ac.uk/ena/software/cram-toolkit</a> for more information about
 the CRAM format). A bit of information on how the Browser works with these
 files is included below. For installation instructions, skip to the numbered
 steps at the end of this file.
@@ -2042,7 +1988,7 @@ used on our production servers:
 When loading tracks from the CRAM file format, CGIs will look for reference
 sequences in that directory. The filename of each reference sequence should be
 the MD5 or SHA1 checksum of the reference sequence as described at
-http://www.ebi.ac.uk/ena/software/cram-reference-registry. If a CGI is unable
+<a href='http://www.ebi.ac.uk/ena/software/cram-reference-registry' title=''>http://www.ebi.ac.uk/ena/software/cram-reference-registry</a>. If a CGI is unable
 to find the reference sequence file for a CRAM track, it will next check the
 cramRef/pending/ directory to see if a request for that reference sequence has
 already been made, and the cramRef/error/ directory to see if a previous
@@ -2166,25 +2112,41 @@ If you have the kent git repository cloned:
 <li><p>
 Check your shell environment. It should
 contain a MACHTYPE variable. Typical values, for example:
-i386 i686 sparc alpha x86_64 ppc
+</p>
+
+<pre><code>i386 i686 sparc alpha x86_64 ppc</code></pre>
+
+<p>
 If there is none, set it to indicate your
 CPU architecture, for example,
-MACHTYPE=i686
-export MACHTYPE
+</p>
+
+<pre><code>MACHTYPE=i686
+export MACHTYPE</code></pre>
+
+<p>
 You need to do this if your existing MACHTYPE is a long string
-such as: i686-pc-linux-gnu
+such as:
+</p>
+
+<pre><code>i686-pc-linux-gnu</code></pre>
+
+<p>
 since this is used as an argument on the command line to gcc
 which will not work with the - signs in the strings.
-Typical values: i386 i686 x86_64 sparc ppc
+Typical values:
 </p>
+
+<pre><code>i386 i686 x86_64 sparc ppc</code></pre>
 
 <p>
 To determine the machine cpu type of your computer, try
 one of these uname command options:
-$ uname -m
-$ uname -p
-$ uname -a
 </p>
+
+<pre><code>$ uname -m
+$ uname -p
+$ uname -a</code></pre>
 
 <p>
 Remember to set this MACHTYPE in your .bashrc or .tcshrc home directory
@@ -2197,41 +2159,48 @@ CentOS Linux on Intel or AMD Opteron environment.
 Other users do report successful operation on other systems.
 </p>
 
-<pre><code> Depending upon what libraries you have installed locally, you may want
- to set environment variable USE_SAMTABIX.</code></pre>
+<p>
+Depending upon what libraries you have installed locally, you may want
+to set environment variable USE_SAMTABIX.
+</p>
 
 <p>
 See also:
-http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
+<a href='http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables' title=''>http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables</a>
 </p></li>
 <li><p>
 Create a directory where binaries will be moved to during
 the build of the source tree:
-$ mkdir -p ~/bin/${MACHTYPE}
-</p></li>
-</ol>
+</p>
+
+<pre><code>$ mkdir -p ~/bin/${MACHTYPE}</code></pre>
 
 <p>
-3a. ALTERNATE PATH:
+2a. ALTERNATE PATH:
+</p>
+
+<p>
 If you are going to do a full build anyway, skip this and proceed straight to step 3 below.
 Otherwise, to make a minimal utility build without MariaDB:
 There are some utilities that depend only on jkweb.a and not jkhgap.a
 which means they can be compiled without needing MariaDB client installed.
 To make a utility like pslCDnaFilter without installing MariaDB client:
-# create jkweb.a
-cd kent/src/lib
-make
-# create stringify utility required by some makefiles
-cd kent/src/utils/stringify
-make
-# create pslCDnaFilter utility program
-cd kent/src/hg/pslCDnaFilter
-make
-Proceed similarly for any other such utilities.
-You are done and can stop here.
 </p>
 
-<ol>
+<pre><code># create jkweb.a
+  cd kent/src/lib
+  make
+# create stringify utility required by some makefiles
+  cd kent/src/utils/stringify
+  make
+# create pslCDnaFilter utility program
+  cd kent/src/hg/pslCDnaFilter
+  make</code></pre>
+
+<p>
+Proceed similarly for any other such utilities.
+You are done and can stop here.
+</p></li>
 <li><p>
 Create the following shell environment variables:
 </p>
@@ -2244,17 +2213,20 @@ eliminate any MYSQLINC and MYSQLLIBS definitions from your shell
 environment and make sure mysql_config can be found in your PATH.
 This option is not perfect and may not function correctly.
 It usually will not use a static linked library which can lead
-to a known issue on the Mac OSX. See &#39;Known Problems&#39; item 10 below.
+to a known issue on the Mac OSX. See &#39;<a href='#known-issues' title=''>Known Problems</a>&#39; item 10 below.
 </p>
 
-<pre><code>In the case the automatic configuration does not function, you
+<p>
+In the case the automatic configuration does not function, you
 can set these variables in your shell environment to override
-the automatic configuration:</code></pre>
+the automatic configuration:
+</p>
+
+<pre><code>MYSQLINC=/usr/include/mysql
+MYSQLLIBS=&quot;/usr/lib/mysql/libmysqlclient.a -lz&quot;
+export MYSQLINC MYSQLLIBS</code></pre>
 
 <p>
-MYSQLINC=/usr/include/mysql
-MYSQLLIBS=&quot;/usr/lib/mysql/libmysqlclient.a -lz&quot;
-export MYSQLINC MYSQLLIBS
 Your setting may vary depending upon where your
 MariaDB is installed. The above example is typical.
 If your system does not have this set of include files
@@ -2262,83 +2234,103 @@ or this static client.a file, you may need to install
 the mariadb-devel package to obtain the MariaDB development
 environment.
 With that package installed, this command:
-mysql_config --libs
+</p>
+
+<pre><code>mysql_config --libs</code></pre>
+
+<p>
 will display the appropriate libraries to link with
 for your system configuration. And:
-mysql_config --include
+</p>
+
+<pre><code>mysql_config --include</code></pre>
+
+<p>
 will display the appropriate MYSQLINC directory.
 The -lz requires a link to the libraries installed in the
 zlib-devel rpm.
-</p></li>
-</ol>
+</p>
 
 <p>
-4a. Required SSL support:
+3a. Required SSL support:
+</p>
+
+<p>
 In order for the libraries to be able to use SSL,
 for instance to support fetching HTTPS URLs,
 install openssl. We are currently using these packages:
-openssl-1.0.1e
-openssl-devel-1.0.1e
+</p>
+
+<pre><code>openssl-1.0.1e
+openssl-devel-1.0.1e</code></pre>
+
+<p>
 SSL is also useful for accessing bigWig and bigBed over HTTPS.
 The directory on your server should be found automatically.
 </p>
 
 <p>
-4b. In the source tree, perform the following:
-$ cd kent/src
-$ make libs
+3b. In the source tree, perform the following:
+</p>
+
+<pre><code>$ cd kent/src
+$ make libs</code></pre>
+
+<p>
 At this point, you can build utilities in other parts of
 the source tree if that is your goal. Go to the directory
 of the utility command you want to build and run a &#39;make&#39;
 in that directory. The resulting binary will be placed
 in \(HOME/bin/\)MACHTYPE
-</p>
-
-<ol>
+</p></li>
 <li><p>
 To continue building the CGI binaries
-$ cd kent/src/hg
-$ make compile
-$ make install DESTDIR=/destination/prefix
 </p>
+
+<pre><code>$ cd kent/src/hg
+$ make compile
+$ make install DESTDIR=/destination/prefix</code></pre>
 
 <p>
 Where &quot;/destination/prefix&quot; is your choice, and
 this will install the cgi binaries in:
-/destination/prefix/usr/local/apache/cgi-bin
 </p>
 
-<pre><code>If your cgi-bin directory is something different than</code></pre>
+<pre><code>/destination/prefix/usr/local/apache/cgi-bin</code></pre>
 
 <p>
+If your cgi-bin directory is something different than
 /usr/local/apache/cgi-bin then use the CGI_BIN variable, e.g.:
-make install DESTDIR=/var/www CGI_BIN=/cgi-bin<br/>DOCUMENTROOT=/var/www/html
 </p>
+
+<pre><code>make install DESTDIR=/var/www CGI_BIN=/cgi-bin \
+DOCUMENTROOT=/var/www/html</code></pre>
 
 <p>
 You can save yourself time and trouble if your Apache is somewhere
 other than at /usr/local/apache by creating that directory and making
 symlinks to your actual apache directories. For example:
-mkdir /usr/local/apache
+</p>
+
+<pre><code>mkdir /usr/local/apache
 ln -s /var/www/cgi-bin /usr/local/apache/cgi-bin
 ln -s /var/www/html /usr/local/apache/htdocs
-ln -s /var/www/cgi-bin-${LOGNAME} /usr/local/apache/cgi-bin
-</p>
+ln -s /var/www/cgi-bin-${LOGNAME} /usr/local/apache/cgi-bin</code></pre>
 
 <p>
 With those symlinks in place, a simple &#39;make cgi&#39; can be used
 instead of the &#39;make compile; make install DESTDIR=...&#39; business.
 </p>
 
-<pre><code>If your apache DocumentRoot is something different than
-/usr/local/apache/htdocs then use the DOCUMENTROOT variable.
-This value should be a full path and should agree with the 
-browser.documentRoot setting in hg.conf; see the section &quot;MariaDB Setup&quot;
-for more details.</code></pre>
-
 <p>
-$ make install DESTDIR=/destination/prefix CGI_BIN=/cgi-bin/path DOCUMENTROOT=/usr/local/apache/htdocs
+If your apache DocumentRoot is something different than
+/usr/local/apache/htdocs then use the DOCUMENTROOT variable.
+This value should be a full path and should agree with the
+browser.documentRoot setting in hg.conf; see the section &quot;MariaDB Setup&quot;
+for more details.
 </p>
+
+<pre><code>$ make install DESTDIR=/destination/prefix CGI_BIN=/cgi-bin/path DOCUMENTROOT=/usr/local/apache/htdocs</code></pre>
 
 <p>
 to install binaries in &quot;/destination/prefix/cgi-bin/path&quot;
@@ -2349,19 +2341,19 @@ to install binaries in &quot;/destination/prefix/cgi-bin/path&quot;
 </p></li>
 <li><p>
 After source tree updates, the make sequence is:
-$ cd kent/src
+</p>
+
+<pre><code>$ cd kent/src
 $ make clean
 $ make libs
 $ cd hg
 $ make compile
-$ make install DESTDIR=/destination/prefix
-</p></li>
+$ make install DESTDIR=/destination/prefix</code></pre></li>
 </ol>
 
-<p>
-====================================================================
-Known problems:
-</p>
+<hr/>
+
+<h3 id="known-issues">Known problems:</h3>
 
 <ol>
 <li><p>
@@ -2370,8 +2362,9 @@ such as: bind, accept, listen, gethostbyname, socket, setsockopt,
 connect, inet_pton, inet_ntop or h_errno
 To fix this, you need to add &#39;-lsocket -lnsl&#39; to your MYSQLLIBS
 environment variable. This is typically the case on Solaris systems:
-MYSQLLIBS=&quot;/usr/lib/mysql/libmysqlclient.a -lsocket -lnsl -lz&quot;
-</p></li>
+</p>
+
+<pre><code>MYSQLLIBS=&quot;/usr/lib/mysql/libmysqlclient.a -lsocket -lnsl -lz&quot;</code></pre></li>
 <li><p>
 The build fails immediately in the first src/lib/ directory with
 the compiler issuing a warning about unused variables.
@@ -2384,9 +2377,15 @@ the compiler to allow these warnings without an exit.
 <li><p>
 The build fails during a link of any program under the src/hg/
 hierarchy with an error something like:
-undefined reference to <code>SSL_CTX_free&#39; undefined reference to</code>ERR_get_error_line_data&#39;
-undefined reference to <code>SSL_read&#39; undefined reference to</code>SSL_get_error&#39;
-undefined reference to `SSL_write&#39;
+</p>
+
+<pre><code>undefined reference to &#39;SSL_CTX_free&#39;
+undefined reference to &#39;ERR_get_error_line_data&#39;
+undefined reference to &#39;SSL_read&#39;
+undefined reference to &#39;SSL_get_error&#39;
+undefined reference to &#39;SSL_write&#39;</code></pre>
+
+<p>
 This error is due to your MariaDB libraries have been compiled with SSL
 functionality enabled. To fix this build problem, add &#39;-lssl&#39;
 to your MYSQLLIBS environment variable to satisify these SSL
@@ -2394,9 +2393,10 @@ library functions.
 </p></li>
 <li><p>
 Build fails on Macintosh with an error:
-aliType.c:5: warning: `rcsid&#39; defined but not used
-make: *** [aliType.o] Error 1
 </p>
+
+<pre><code>aliType.c:5: warning: &#39;rcsid&#39; defined but not used
+make: *** [aliType.o] Error 1</code></pre>
 
 <p>
 The OSTYPE environment variable needs to be set to &quot;darwin&quot;. If your
@@ -2407,16 +2407,21 @@ variable as with tcsh.
 <p>
 To avoid this error, place an export statement in your $HOME/.bashrc
 environment:
-export OSTYPE
+</p>
+
+<pre><code>export OSTYPE</code></pre>
+
+<p>
 This causes the OSTYPE variable to be recognized during the
 make and the conditional statements in src/inc/common.mk will
 include the -Wno-unused-variable option in the build.
 </p></li>
 <li><p>
 The build fails with an error:
-gifdecomp.c:274: error: call to function &#39;gif_out_line&#39; without
-a real prototype
 </p>
+
+<pre><code>gifdecomp.c:274: error: call to function &#39;gif_out_line&#39; without
+a real prototype</code></pre>
 
 <p>
 This happens with newer versions of the gcc compiler. To avoid the
@@ -2426,10 +2431,11 @@ get our hands on a newer version of the gcc compiler.
 </p></li>
 <li><p>
 The build fails with an error of this type:
-pipeline.c: In function waitOnExec:
-pipeline.c:351: error: ignoring return value of read, declared with
-attribute warn_unused_result
 </p>
+
+<pre><code>pipeline.c: In function waitOnExec:
+pipeline.c:351: error: ignoring return value of read, declared with
+attribute warn_unused_result </code></pre>
 
 <p>
 This happens with newer versions of the gcc compiler. To avoid the
@@ -2439,57 +2445,69 @@ get our hands on a newer version of the gcc compiler.
 </p></li>
 <li><p>
 Build fails complaining about missing png.h file:
-pngwrite.c:7:87: error: png.h: No such file or directory
 </p>
+
+<pre><code>pngwrite.c:7:87: error: png.h: No such file or directory</code></pre>
 
 <p>
 Find out where your png.h file is and set PNGINCL to something like:
-export PNGINCL=&quot;-I/opt/local/include/libpng14&quot;
+</p>
+
+<pre><code>export PNGINCL=&quot;-I/opt/local/include/libpng14&quot;</code></pre>
+
+<p>
 pointing to the directory where png.h exists.
 </p></li>
 <li><p>
 Build fails at the point of building a CGI binary with the error:
-Undefined symbols:
+</p>
+
+<pre><code>Undefined symbols:
 &quot;_png_write_png&quot;, referenced from:
 _mgSaveToPng in jkweb.a(pngwrite.o)
-... other png symbols ...
-</p>
+... other png symbols ...</code></pre>
 
 <p>
 You need to find out where your libpng.a is located. For example
 it may be in /opt/local/lib/libpng.a When found, use the PNGLIB
 variable to specify it, for example:
-export PNGLIB=/opt/local/lib/libpng.a
+</p>
+
+<pre><code>export PNGLIB=/opt/local/lib/libpng.a</code></pre>
+
+<p>
 or equivalent:
-export PNGLIB=&#39;-L/opt/local/lib -lpng&#39;
-</p></li>
+</p>
+
+<pre><code>export PNGLIB=&#39;-L/opt/local/lib -lpng&#39;</code></pre></li>
 <li><p>
 Build fails with complains about missing functions dlclose, dlopen:
-/usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function <code>add_plugin&#39;:   (.text+0x1ed): undefined reference to</code>dlclose&#39;
-/usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function <code>mysql_client_plugin_deinit&#39;:   (.text+0x28b): undefined reference to</code>dlclose&#39;
-/usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function <code>mysql_load_plugin_v&#39;:   (.text+0x51e): undefined reference to</code>dlopen&#39;
-</p></li>
-</ol>
+</p>
+
+<pre><code> /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function &#39;add_plugin&#39;:
+ (.text+0x1ed): undefined reference to &#39;dlclose&#39;
+ /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function &#39;mysql_client_plugin_deinit&#39;:
+ (.text+0x28b): undefined reference to &#39;dlclose&#39;
+ /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function &#39;mysql_load_plugin_v&#39;:
+ (.text+0x51e): undefined reference to &#39;dlopen&#39;</code></pre>
 
 <p>
 To add the library that includes these functions, add &#39;-ldl&#39; to the
-MYSQLLIBS string: MYSQLLIBS=&quot;/usr/lib/mysql/libmysqlclient.a -ldl -lz&quot;
+MYSQLLIBS string:
 </p>
 
-<ol>
+<pre><code> MYSQLLIBS=&quot;/usr/lib/mysql/libmysqlclient.a -ldl -lz&quot;</code></pre></li>
 <li><p>
 Mac OSX dynamic link with the MySQL/MariaDB libraries results in the following
 run-time error for CGI binaries or command line programs:
 </p>
 
-<p>
-dyld: Library not loaded: libmysqlclient.18.dylib
-</p>
+<pre><code>dyld: Library not loaded: libmysqlclient.18.dylib</code></pre>
 
 <p>
 This is a known problem with the dynamic library for MySQL,
 with potential work-arounds offered:
-http://bugs.mysql.com/bug.php?id=61243
+<a href='http://bugs.mysql.com/bug.php?id=61243' title=''>http://bugs.mysql.com/bug.php?id=61243</a>
 </p>
 
 <p>
@@ -2500,9 +2518,7 @@ to the static MySQL library as mentioned in Step 3 above.
 Genome browser issues error:
 </p>
 
-<p>
-&quot;PDF format not available&quot; when trying to export to pdf.
-</p>
+<pre><code>&quot;PDF format not available&quot; when trying to export to pdf.</code></pre>
 
 <p>
 The browser can&#39;t find the command &#39;ps2pdf&#39; which is usually

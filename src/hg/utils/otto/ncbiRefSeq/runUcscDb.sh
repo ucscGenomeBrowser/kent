@@ -2,7 +2,7 @@
 
 set -beEu -o pipefail
 
-export TOP="/hive/data/outside/ncbi/genomes/ncbiRefSeq"
+export TOP="/hive/data/outside/otto/ncbiRefSeq"
 cd "${TOP}"
 
 export db="$1"
@@ -14,7 +14,7 @@ export gffFile="$6"
 export msgFile="/tmp/refSeqUpdateNotice.msg.txt"
 
 function prevCompleted() {
-  printf "To: hclawson@ucsc.edu\n" > ${msgFile}
+  printf "To: hclawson@ucsc.edu,lrnassar@ucsc.edu\n" > ${msgFile}
   printf "From: hiram@soe.ucsc.edu\n" >> ${msgFile}
   printf "Subject: $db ncbiRefSeq is not needed\n" >> ${msgFile}
   printf "\n" >> ${msgFile}
@@ -23,7 +23,7 @@ function prevCompleted() {
 }
 
 function inProgress() {
-  printf "To: hclawson@ucsc.edu\n" > ${msgFile}
+  printf "To: hclawson@ucsc.edu,lrnassar@ucsc.edu\n" > ${msgFile}
   printf "From: hiram@soe.ucsc.edu\n" >> ${msgFile}
   printf "Subject: ALERT: $db ncbiRefSeq update in progress\n" >> ${msgFile}
   printf "\n" >> ${msgFile}

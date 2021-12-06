@@ -1,7 +1,7 @@
 track vaccines
 group immu
 shortLabel Vaccines
-longLabel COVID Vaccines BioNTech/Pfizer BNT-162b2 and mRNA-1273
+longLabel COVID Vaccines BioNTech/Pfizer BNT-162b2 and Moderna mRNA-1273
 type bigPsl
 bigDataUrl /gbdb/wuhCor1/bbi/wuhCor1.vaccines.bb
 indelDoubleInsert on

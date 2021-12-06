@@ -27,6 +27,7 @@ function makeIframe(ev) {
     // first show the loading page
     document.body.appendChild(node);
 
+
     // when the waiting page has finished loading, load the hub checker page
     var finalUrl = waitUrl + '&validateHubUrl='+hubUrl;
     var alreadyRun = false;
@@ -34,6 +35,7 @@ function makeIframe(ev) {
         if (! alreadyRun)
             node.setAttribute('src', finalUrl);
         alreadyRun = true; // because 'load' fires again when finalUrl is loaded
+        this.contentWindow.focus(); // activate keyboard event handlers of the iframe
     });
     return false;
 }
@@ -73,6 +75,10 @@ $(function() {
 
 // creates keyup event; listening for return key press
 $(document).ready(function() {
+    $('#loadSampleHub').bind('click', function(e) {
+        $('#validateHubUrl').val("https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt");
+
+    });
     $('#hubUrl').bind('keypress', function(e) {  // binds listener to url field
         if (e.which === 13) {  // listens for return key
              e.preventDefault();   // prevents return from also submitting whole form

@@ -2,10 +2,9 @@
 
 # set -beEu -o pipefail
 
-export TOP="/hive/data/outside/grc/incidentDb"
+export TOP="/hive/data/outside/otto/grcIncidentDb"
 export ECHO="/bin/echo -e"
 export failMail="hiram@soe.ucsc.edu,lrnassar@ucsc.edu"
-
 
 if [[ $# == 0 || "$1" != "makeItSo" ]]; then
   printf "To: $failMail\nFrom: $failMail\nSubject: ALERT: GRC Incident update\n\nERROR: ${TOP}/runUpdate.sh is being run without the argument: makeItSo\n" | /usr/sbin/sendmail -t -oi
@@ -37,7 +36,7 @@ do
   mkdir -p ${D}/log/${YM}
 done
 
-./grcUpdate.sh GRCh38 hg38 GRCh38.p12_issues human/GRC/Issue_Mapping \
+./grcUpdate.sh GRCh38 hg38 GRCh38.p13_issues human/GRC/Issue_Mapping \
   > GRCh38/log/${YM}/${DS}.txt 2>&1
 
 ./grcUpdate.sh GRCh37 hg19 GRCh37.p13_issues human/GRC/Issue_Mapping \
@@ -70,43 +69,3 @@ if [ "${WC}" -ne 9 ]; then
     ${ECHO} "WC: ${WC} <- should be nine" 1>&2
     exit 255
 fi
-
-if [ 0 = 1 ]; then
-# GRCg6a/log/2019/09/2019-09-03.txt  GRCz11/log/2019/09/2019-09-03.txt
-# GRCh37/log/2019/09/2019-09-03.txt  Gallus_gallus-5.0/log/2019/09/2019-09-03.txt
-# GRCh38/log/2019/09/2019-09-03.txt  MGSCv37/log/2019/09/2019-09-03.txt
-# GRCm38/log/2019/09/2019-09-03.txt  Zv9/log/2019/09/2019-09-03.txt
-# GRCz10/log/2019/09/2019-09-03.txt
-
-### disabled ###
-export update="/hive/data/outside/grc/incidentDb/update.sh"
-mkdir -p ${TOP}/human
-cd ${TOP}/human
-# ${update} human hg19 Hg19 GRCh37 > human.hg19.log.${DS} 2>&1
-# ${update} human hg38 Hg38 GRCh38 > human.hg38.log.${DS} 2>&1
-mkdir -p ${TOP}/mouse
-cd ${TOP}/mouse
-${update} mouse mm9 Mm9 MGSCv37 > mouse.mm9.log.${DS} 2>&1
-${update} mouse mm10 Mm10 GRCm38 > mouse.mm10.log.${DS} 2>&1
-mkdir -p ${TOP}/zebrafish
-cd ${TOP}/zebrafish
-${update} zebrafish danRer7 DanRer7 Zv9 > zebrafish.log.${DS} 2>&1
-cd "${TOP}"
-# ./verifyTransfer.sh Hg19 Mm9 DanRer7
-./verifyTransfer.sh Mm9 DanRer7
-if [ $? -ne 0 ]; then
-    ${ECHO} "incidentDb/runUpdate.sh failing verifyTransfer.sh" 1>&2
-    exit 255
-fi
-
-WC=`tail --quiet --lines=1 ${TOP}/mouse/mouse.mm9.log.${DS} ${TOP}/mouse/mouse.mm10.log.${DS} ${TOP}/zebrafish/zebrafish.log.${DS} | grep SUCCESS | wc -l`
-if [ "${WC}" -ne 3 ]; then
-    ${ECHO} "incidentDb/runUpdate.sh failing" 1>&2
-    ${ECHO} "WC: ${WC}" 1>&2
-    exit 255
-fi
-
-### disabled ###
-fi
-
-

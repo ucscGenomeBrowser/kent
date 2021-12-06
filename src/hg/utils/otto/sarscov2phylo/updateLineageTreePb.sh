@@ -24,12 +24,15 @@ matUtils=$usherDir/build/matUtils
 today=$(date +%F)
 cd $ottoDir/$buildDate
 
-# Get full sample name for lineage A sequence used as reference/root by Pangolin:
-wh4SampleName=$(grep LR757995 samples.$buildDate)
+# Get node ID for root of lineage A, used as reference/root by Pangolin:
+if [ ! -s clade-paths ]; then
+    $matUtils extract -i gisaidAndPublic.$buildDate.masked.pb -C clade-paths
+fi
+lineageARoot=$(grep ^A$'\t' clade-paths | cut -f 2)
 
-# Reroot protobuf:
+# Reroot protobuf to lineage A:
 $matUtils extract -i gisaidAndPublic.$buildDate.masked.pb \
-    --reroot "$wh4SampleName" \
+    --reroot $lineageARoot \
     -o gisaidAndPublic.$buildDate.masked.reroot.pb
 
 # Reroot pango.clade-mutations.tsv:
@@ -39,9 +42,21 @@ grep -w ^A $scriptDir/pango.clade-mutations.tsv \
 grep -vw ^A $scriptDir/pango.clade-mutations.tsv \
 | sed -re 's/\t/\tT8782C > C28144T > /;' \
     >> pango.clade-mutations.reroot.tsv
-# Assign updated lineages on the rerooted tree, pango-only for pangolin:
+
+# Mask additional bases at the beginning and end of the genome that pangolin masks after
+# aligning input sequences.
+for ((i=56;  $i <= 265;  i++)); do
+    echo -e "N${i}N"
+done > maskPangoEnds
+for ((i=29674;  $i < 29804;  i++)); do
+    echo -e "N${i}N"
+done >> maskPangoEnds
+$matUtils mask -i gisaidAndPublic.$buildDate.masked.reroot.pb \
+    -m maskPangoEnds -o gisaidAndPublic.$buildDate.masked.reroot.pangoMasked.pb
+
+# Assign updated lineages on the rerooted & pango-masked tree, pango-only for pangolin:
 time $matUtils annotate -T 50 \
-    -i gisaidAndPublic.$buildDate.masked.reroot.pb \
+    -i gisaidAndPublic.$buildDate.masked.reroot.pangoMasked.pb \
     -M pango.clade-mutations.reroot.tsv \
     -l \
     -c lineageToName \
@@ -53,6 +68,7 @@ time $matUtils annotate -T 50 \
 
 set +o pipefail
 grep 'Could not' annotate.pangoOnly.out | cat
+grep skip annotate.pangoOnly.out | cat
 set -o pipefail
 
 # Make a bunch of smaller trees and see how they do.

@@ -20,18 +20,18 @@ hideEmptySubtracks on
 
         track unipAliSwissprot
         shortLabel SwissProt Aln.
-        longLabel UCSC alignment of SwissProt proteins to genome
+        longLabel UCSC alignment of SwissProt proteins to genome (dark blue: main, annotated protein sequence)
         priority 1
         parent uniprot
-        visibility hide
+        visibility pack
         type bigPsl
         bigDataUrl /gbdb/$D/uniprot/unipAliSwissprot.bb
         searchIndex name,acc
         urls acc="https://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$" refSeqProt="https://www.ncbi.nlm.nih.gov/protein/$$" ncbiGene="https://www.ncbi.nlm.nih.gov/gene/$$" entrezGene="https://www.ncbi.nlm.nih.gov/gene/$$" ensGene="https://www.ensembl.org/Gene/Summary?g=$$"
         labelFields name,acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt
         mouseOverField protFullNames
-        itemRgb off
-        color 2,12,120
+        itemRgb on
+        #color 2,12,120
         indelDoubleInsert on
         indelQueryInsert on
         baseColorTickColor contrastingColor
@@ -51,8 +51,8 @@ hideEmptySubtracks on
         urls acc="https://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" refseq="https://www.ncbi.nlm.nih.gov/nuccore/$$" refSeqProt="https://www.ncbi.nlm.nih.gov/protein/$$" ncbiGene="https://www.ncbi.nlm.nih.gov/gene/$$" entrezGene="https://www.ncbi.nlm.nih.gov/gene/$$" ensGene="https://www.ensembl.org/Gene/Summary?g=$$"
         labelFields name,acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt
         mouseOverField protFullNames
-        itemRgb off
-        color 0,150,250
+        itemRgb on
+        #color 0,150,250
         indelDoubleInsert on
         indelQueryInsert on
         baseColorTickColor contrastingColor

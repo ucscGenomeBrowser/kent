@@ -487,6 +487,7 @@ speciesCodonDefault wigMafProt wigMaf bigMaf
 speciesDefaultOff wigMaf bigMaf
 speciesDefaultOn wigMaf bigMaf
 speciesGroups wigMafProt wigMaf bigMaf
+speciesLabels wigMafProt wigMaf bigMaf
 speciesOrder bed maf wigMaf bigMaf
 speciesTarget wigMaf
 speciesTree wigMaf
