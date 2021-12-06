@@ -714,7 +714,7 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
 static char *chartMapText(struct track *tg, struct barChartCategory *categ, double expScore)
 /* Construct mouseover text for a chart bar */
 {
-static char buf[128];
+static char buf[256];
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 safef(buf, sizeof(buf), "%s (%.1f %s)", categ->label, expScore, extras->unit);
 subChar(buf, '_', ' ');
