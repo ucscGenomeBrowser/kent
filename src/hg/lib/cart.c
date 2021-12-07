@@ -1339,7 +1339,9 @@ cart->hash = newHash(12);
 cart->exclude = newHash(7);
 cart->userId = userId;
 cart->sessionId = sessionId;
-cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
+//if ( cgiOptionalString(cart, "incognito", NULL) != NULL )
+    cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
+
 cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
@@ -2301,7 +2303,8 @@ if (logProxy)
 
 // if ignoreCookie or incognito is on the URL, don't check for cookies
 char *hguid = NULL;
-if ( cgiOptionalString("ignoreCookie") == NULL && cgiOptionalString("incognito") == NULL )
+//if ( cgiOptionalString("ignoreCookie") == NULL && cgiOptionalString("incognito") == NULL )
+if ( cgiOptionalString("ignoreCookie") == NULL )
     hguid = getCookieId(cookieName);
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
