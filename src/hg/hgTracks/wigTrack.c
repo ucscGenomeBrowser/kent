@@ -1170,6 +1170,7 @@ if (dropMouseOverData)
 return(mouseOverData);
 }	/*	graphPreDraw()	*/
 
+#ifdef NOTNOW
 static void drawLogoChar( struct hvGfx *hvg, int xOff, int yOff, struct dnaMotif *motif, int width, int height, int count, boolean flip)
 {
 int orangeColor = hvGfxFindColorIx(hvg, 230, 130, 0);
@@ -1222,6 +1223,7 @@ hvGfxUnclip(hvg);
 fclose(f);
 remove(pngTn.forCgi);
 }
+#endif
 
 struct dnaMotif *getMotif(int numBases)
 {
@@ -1415,6 +1417,36 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                 // make sure it draws something
                 double prob = (double)(dataValue) / (graphUpperLimit - graphLowerLimit);
                     
+                char string[2];
+                string[0] = toupper(base);
+                string[1] = 0;
+                MgFont *font = tl.font;
+                int height = dataValue * scaleFactor;
+                unsigned color = MG_BLACK;
+                if (base == 'a')
+                    color = MG_RED;
+                else if (base == 't')
+                    color = MG_GREEN;
+                else if (base == 'c')
+                    color = MG_BROWN;
+                else if (base == 'g')
+                    color = MG_BLUE;
+                if (abs(dataValue) > 0.1)
+                    {
+                    if (dataValue < 0)
+                        {
+                        //hvGfxBox(image, x, yOff+graphUpperLimit * scaleFactor, width, -height, MG_RED);
+                        hvGfxTextInBox(hvg, x, yOff+graphUpperLimit * scaleFactor, width - 1, dataValue * scaleFactor,
+                            color, font, string);
+                        }
+                    else
+                        {
+                       // hvGfxBox(image, x, yOff-height+graphUpperLimit * scaleFactor, width, height, MG_RED);
+
+                        hvGfxTextInBox(hvg, x, yOff-height+graphUpperLimit * scaleFactor, width - 1, dataValue * scaleFactor,
+                            color, font, string);
+                        }
+                    }
                 if (((boxTop+boxHeight) == 0) && !isnan(dataValue))
                     boxHeight += 1;
                 struct dnaMotif *motif;
@@ -1450,9 +1482,6 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
             }   /*	vis == tvFull || vis == tvPack */
         }
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
-
-drawLogoChar( hvg, xOff, yOff + graphLowerLimit * scaleFactor, motifPos, width, tg->lineHeight, numBases, FALSE);
-drawLogoChar( hvg, xOff, yOff + graphUpperLimit * scaleFactor, motifNeg, width, tg->lineHeight, numBases, TRUE);
 
 if (dropMouseOverData)
     slFreeList(&mouseOverData);

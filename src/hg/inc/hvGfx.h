@@ -153,6 +153,13 @@ else
     vgTextRight(hvg->vg, x, y, width, height, colorIx, font, text);
 }
 
+INLINE void hvGfxTextInBox(struct hvGfx *hvg, int x, int y, int width, int height,
+                           int colorIx, void *font, char *text)
+/* Draw a line of text to fill box. */
+{
+vgTextInBox(hvg->vg, hvGfxAdjXW(hvg, x, width), y, width, height, colorIx, font, text);
+}
+
 INLINE void hvGfxTextCentered(struct hvGfx *hvg, int x, int y, int width, int height,
                            int colorIx, void *font, char *text)
 /* Draw a line of text in middle of box. */
