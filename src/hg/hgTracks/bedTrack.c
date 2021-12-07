@@ -223,7 +223,7 @@ adjustBedScoreGrayLevel(tdb, bed, scoreMin, scoreMax);
 struct linkedFeatures *lf = lfFromBedExtra(bed, scoreMin, scoreMax);
 if (useItemRgb)
     {
-    lf->extra = (void *)USE_ITEM_RGB;       /* signal for coloring */
+    lf->useItemRgb = TRUE;
     lf->filterColor=bed->itemRgb;
     }
 bedFree(pBed);
@@ -525,7 +525,7 @@ else
 	lf = lfFromBedExtra(bed, scoreMin, scoreMax);
 	if (useItemRgb)
 	    {
-	    lf->extra = (void *)USE_ITEM_RGB;       /* signal for coloring */
+            lf->useItemRgb = TRUE;
 	    lf->filterColor=bed->itemRgb;
 	    }
 	slAddHead(&lfList, lf);

@@ -281,6 +281,38 @@ psTextOutEscaped(ps, text);
 fprintf(ps->f, ") showBefore\n");
 }
 
+void psTextInBox(struct psGfx *ps, double x, double y, 
+	double width, double height, 
+	char *text)
+/* Draw a line of text that fills a box. */
+{
+if (height == 0)
+    return;
+if (height > 0)
+    {
+    psMoveTo(ps, x, y + height);
+    fprintf(ps->f, "gsave\n");
+    psSetFont(ps, "Courier", 1.0);
+    fprintf(ps->f, "%g %g scale\n", width,height);
+    fprintf(ps->f, "(");
+    psTextOutEscaped(ps, text);
+    fprintf(ps->f, ") show\n");
+    fprintf(ps->f, "grestore\n");
+    }
+else
+    {
+    //height = -height;
+    psMoveTo(ps, x, y);
+    fprintf(ps->f, "gsave\n");
+    psSetFont(ps, "Courier", 1.0);
+    fprintf(ps->f, "%g %g scale\n", width,height);
+    fprintf(ps->f, "(");
+    psTextOutEscaped(ps, text);
+    fprintf(ps->f, ") show\n");
+    fprintf(ps->f, "grestore\n");
+    }
+}
+
 void psTextCentered(struct psGfx *ps, double x, double y, 
 	double width, double height, 
 	char *text)

@@ -27,6 +27,8 @@ typedef void (*vg_text)(void *v, int x, int y, int colorIx, void *font,
 	char *text);
 typedef void (*vg_textRight)(void *v, int x, int y, int width, int height,
 	int colorIx, void *font, char *text);
+typedef void (*vg_textInBox)(void *v, int x, int y, int width, int height,
+	int colorIx, void *font, char *text);
 typedef void (*vg_textCentered)(void *v, int x, int y, int width, int height,
 	int colorIx, void *font, char *text);
 typedef int (*vg_findColorIx)(void *v, int r, int g, int b);

@@ -79,6 +79,10 @@ void psTextRight(struct psGfx *mg, double x, double y,
 	double width, double height, char *text);
 /* Draw a line of text right justified in box defined by x/y/width/height */
 
+void psTextInBox(struct psGfx *mg, double x, double y, 
+	double width, double height, char *text);
+/* Draw a line of text filling in box defined by x/y/width/height */
+
 void psTextCentered(struct psGfx *mg, double x, double y, 
 	double width, double height, char *text);
 /* Draw a line of text centered in box defined by x/y/width/height */

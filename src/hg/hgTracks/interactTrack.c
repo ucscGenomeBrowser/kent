@@ -194,7 +194,7 @@ setInteractLfEndNames(lf, cloneString(inter->sourceName), cloneString(inter->tar
 interactLfSortAndBound(lf);
 if (doColor)
     {
-    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+    lf->useItemRgb = TRUE;
     lf->filterColor = bed->itemRgb;
     }
 bedFree(&bed);
