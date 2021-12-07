@@ -692,6 +692,10 @@ int slPairCmpCase(const void *va, const void *vb);
 void slPairSortCase(struct slPair **pList);
 /* Sort slPair list, ignore case. */
 
+int slPairCmpWordsWithEmbeddedNumbers(const void *va, const void *vb);
+/* Sort slPairList ignoring case and dealing with embedded numbers so 2 comes
+ * before 10, not after. */
+
 int slPairCmp(const void *va, const void *vb);
 /* Compare two slPairs. */
 

@@ -475,7 +475,8 @@ if (visibleFacetList)
 			returnUrl, varPrefix,
 			op, varPrefix, field->fieldName, varPrefix, val->val, varPrefix
 			);
-		    htmlDyStringPrintf(facetBar, "%s (%d)</a>", val->val, val->selectCount);
+		    htmlDyStringPrintf(facetBar, "%s (%d)</a>", 
+			naForEmpty(val->val), val->selectCount);
 		    htmlDyStringPrintf(facetBar, "</dd>\n");
 		    }
 		}
@@ -612,7 +613,7 @@ if (visibleFacetList)
 		    returnUrl, varPrefix,
 		    op, varPrefix, field->fieldName, varPrefix, val->val, varPrefix, selfId
 		    );
-		htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
+		htmlPrintf("%s (%d)</a>", naForEmpty(val->val), val->selectCount);
 		printf("</dd>\n");
 		}
 	    else if (val->selectCount > 0)
