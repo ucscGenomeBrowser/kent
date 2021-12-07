@@ -1,7 +1,7 @@
 /* Connect via https. */
 
 /* Copyright (C) 2012 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "openssl/ssl.h"
 #include "openssl/err.h"
@@ -365,8 +365,7 @@ if (!domainWhiteList)
 	if (!hashLookup(domainHash, "noHardwiredExceptions"))  
 	    {
 	    // Hardwired exceptions whitelist
-	    hashStoreName(domainHash, "141.80.181.46");
-	    hashStoreName(domainHash, "54.175.59.127");
+	    // openssl automatically whitelists domains which are given as IPv4 or IPv6 addresses
 	    hashStoreName(domainHash, "annotation.dbi.udel.edu");
 	    hashStoreName(domainHash, "apprisws.bioinfo.cnio.es");
 	    hashStoreName(domainHash, "arn.ugr.es");

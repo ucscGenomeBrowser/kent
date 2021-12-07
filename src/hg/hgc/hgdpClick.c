@@ -1,7 +1,7 @@
 /* hgdpClick -- handlers for Human Genome Variation Project tracks */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hgc.h"
@@ -419,7 +419,7 @@ printCustomUrl(tdb, item, TRUE);
 bedPrintPos((struct bed *)geo, 4, tdb);
 printf("<B>Ancestral Allele:</B> %c<BR>\n", geo->ancestralAllele);
 printf("<B>Derived Allele:</B> %c<BR>\n", geo->derivedAllele);
-printOtherSnpMappings(tdb->table, item, start, conn, hasBin);
+printOtherSnpMappings(tdb->table, item, start, conn, hasBin, tdb);
 printf("<BR>\n");
 printf("<TABLE><TR><TD>\n");
 hgdpGeoFreqTable(geo);

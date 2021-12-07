@@ -20,7 +20,7 @@ scoreLabel ClinVar Star-Rating (0-4)
         priority 1
         type bigBed 12 +
         showCfg on
-        filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other,VUS|vus
+        filterValues._clinSignCode B|benign,LB|likely benign,CF|conflicting,P|pathogenic,LP|likely pathogenic,RF|risk factor,OT|other,VUS|vus
         filterType._clinSignCode multiple
         filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,UNK|unknown
         filterType._originCode multiple

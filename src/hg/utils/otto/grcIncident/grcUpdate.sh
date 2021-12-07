@@ -3,9 +3,8 @@
 # exit on any failure
 set -beEu -o pipefail
 
-TOP="/hive/data/outside/grc/incidentDb"
+export TOP="/hive/data/outside/otto/grcIncidentDb"
 
-export ECHO="/bin/echo -e"
 export bbiInfo="/cluster/bin/x86_64/bigBedInfo"
 export failMail="hiram@soe.ucsc.edu,lrnassar@ucsc.edu"
 
@@ -44,7 +43,7 @@ mkdir -p ${YM}
 export DS=`date "+%F"`
 
 wget --timestamping \
- ftp://ftp.ncbi.nlm.nih.gov/pub/grc/${ftpPath} \
+ https://ftp.ncbi.nlm.nih.gov/pub/grc/${ftpPath} \
    -O ${YM}/${GRC_issue}.${DS}.gff > /dev/null 2>&1
 gzip -f ${YM}/${GRC_issue}.${DS}.gff
 
@@ -53,15 +52,15 @@ if [ $debug -ne 0 ]; then
 fi
 
 if [ "${db}" = "mm9" ]; then
-/hive/data/outside/grc/incidentDb/parseGff.pl ${YM}/${GRC_issue}.${DS}.gff.gz \
-  | sort \
-     |  join -t"	" validContigs - > ${YM}/${db}.${DS}.contigs.bed5
+/hive/data/outside/otto/grcIncidentDb/parseGff.pl \
+  ${YM}/${GRC_issue}.${DS}.gff.gz | sort \
+     |  join -t$'\t' validContigs - > ${YM}/${db}.${DS}.contigs.bed5
   /cluster/bin/x86_64/liftUp -type=.bed ${YM}/${db}.${DS}.bed5 refSeq.lift error ${YM}/${db}.${DS}.contigs.bed5
   gzip -f ${YM}/${db}.${DS}.contigs.bed5
 else
   /hive/data/outside/grc/incidentDb/parseGff.pl \
     ${YM}/${GRC_issue}.${DS}.gff.gz | sort \
-     | join -t"	" refSeq.chromNames.tab - \
+     | join -t$'\t' refSeq.chromNames.tab - \
       | cut -f2- | sort -k1,1 -k2,2n > ${YM}/${db}.${DS}.bed5
 fi
 
@@ -116,5 +115,5 @@ else
    /cluster/bin/x86_64/ixIxx ${Db}.nameIndex.txt ${Db}.grcIncidentDb.ix ${Db}.grcIncidentDb.ixx
 fi
 rm -f updateRunning.pid
-${ECHO} SUCCESS
+printf "SUCCESS\n"
 exit 0

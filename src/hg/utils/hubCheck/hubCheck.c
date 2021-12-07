@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "axt.h"
 #include "common.h"
@@ -44,7 +44,8 @@ errAbort(
   "   -genome=genome        - only check this genome\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                                     Will create this directory if not existing\n"
-  "   -httpsCertCheck=[abort,warn,none] - set the ssl certificate verification mode.\n"  
+  "   -httpsCertCheck=[abort,warn,log,none] - set the ssl certificate verification mode.\n"  
+  "   -httpsCertCheckDomainExceptions= - space separated list of domains to whitelist.\n"  
   "   -printMeta            - print the metadata for each track\n"
   "   -cacheTime=N          - set cache refresh time in seconds, default %d\n"
   "   -verbose=2            - output verbosely\n"
@@ -64,6 +65,7 @@ static struct optionSpec options[] = {
    {"printMeta", OPTION_BOOLEAN},
    {"udcDir", OPTION_STRING},
    {"httpsCertCheck", OPTION_STRING},
+   {"httpsCertCheckDomainExceptions", OPTION_STRING},
    {"specHost", OPTION_STRING},
    {"cacheTime", OPTION_INT},
    // intentionally undocumented option for hgHubConnect
@@ -1166,7 +1168,7 @@ udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 char *httpsCertCheck = optionVal("httpsCertCheck", NULL);
 if (httpsCertCheck)
     {
-    // secretly accept level log for testing, but you only see something if SCRIPT_NAME env variable is set like CGIs have.
+    //  level log for testing, but you only see something if SCRIPT_NAME env variable is set like CGIs have.
     if (sameString(httpsCertCheck, "abort") || sameString(httpsCertCheck, "warn") || sameString(httpsCertCheck, "log") || sameString(httpsCertCheck, "none"))
 	{
 	setenv("https_cert_check", httpsCertCheck, 1);
@@ -1179,6 +1181,13 @@ if (httpsCertCheck)
 		"none indicating the verify is skipped entirely.");
 	usage();
 	}
+    }
+
+// should be space separated list, if that lists contains "noHardwiredExceptions" then the built-in hardwired whitelist in https.c is skipped.
+char *httpsCertCheckDomainExceptions = optionVal("httpsCertCheckDomainExceptions", NULL);
+if (httpsCertCheckDomainExceptions)
+    {
+    setenv("https_cert_check_domain_exceptions", httpsCertCheckDomainExceptions, 1);
     }
 
 knetUdcInstall();  // make the htslib library use udc

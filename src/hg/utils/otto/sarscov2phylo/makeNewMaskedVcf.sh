@@ -279,17 +279,12 @@ wc -l $renaming
 # Make masked VCF
 tawk '{ if ($1 ~ /^#/) { print; } else if ($7 == "mask") { $1 = "NC_045512v2"; print; } }' \
     $problematicSitesVcf > mask.vcf
-# Add masked VCF to previous protobuf
-#*** With horrible hack for time being, to mask 21987 (because it messes up the Delta branch)...
-#*** TODO: make hgPhyloPlace handle protobufs that don't have all of the latest problematic sites
-#*** masked more gracefully, and update the Problematic Sites track.
 time cat <(twoBitToFa $ref2bit stdout) $alignedFa \
 | faToVcf -maxDiff=1000 \
     -excludeFile=<(cat ../tooManyEpps.ids ../badBranchSeed.ids) \
     -verbose=2 stdin stdout \
 | vcfRenameAndPrune stdin $renaming stdout \
 | vcfFilter -excludeVcf=mask.vcf stdin \
-| tawk '$2 != 21987' \
 | gzip -c \
     > new.masked.vcf.gz
 

@@ -3,7 +3,7 @@
  * drawing code. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hash.h"
@@ -550,6 +550,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             reverseComplement(seq, strlen(seq));
         lf->extra = seq;
         lf->cds = cds;
+        lf->useItemRgb = useItemRgb;
+        if ( lf->useItemRgb )
+            lf->filterColor = itemRgbColumn(bedRow[8]);
         }
     else if (sameString(tdb->type, "bigDbSnp"))
         {

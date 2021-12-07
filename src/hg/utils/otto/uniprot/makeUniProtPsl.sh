@@ -1,25 +1,23 @@
 #!/bin/bash
-# create mapping from uniProt protein positions to genome positions
+# create mapping from UniProt protein sequences to genome
+# input is protein sequence file and transcript table, and optional a mapping proteinId <-> transcriptId
 
 # originally inspired/copied from Markd's script LS-SNP pipeline
 # original: snpProtein/build/Makefile
 
-# for hg38, this should probably use RefSeq, not Ensembl (=Gencode=knownGene)
+# for human, this is now using RefSeq, see #27836
 # The reason is that for all proteins that are broken in the reference, the positions will be wrong 
-# for Gencode, but not with RefSeq (for which we have a proper alignment file).
-# This also means that for RefSeq, I need to find the real Refseq sequences file, not the our
-# reconstructed one with getRnaPred
-# pslSelect then probably has some table that it can use... or maybe use refSeq's refSeqId -> uniProt ID mapping?
-# or could use UniProt's refseq mapping...
+# for Gencode, but not with RefSeq (for which we have a proper PSL alignment).
 
 # parameters:
 # $1 = the fasta file with uniprot sequences
-# $2 = the UCSC database name, e.g. hg19 or hg38 or else
-# $3 = the gene table
-# $4 = the cluster
-# $5 = the nucleotide output file
-
-# Currently: does not work with refGene, finds different query lengths at the pslMap step, when refseq differ from faked Psls
+# $2 = the transcript fasta file
+# $3 = the transcript->genome PSL file
+# $4 = MINALI, the minimum percent ID, e.g. 0.93
+# $5 = the parasol cluster
+# $6 = temporary workdir
+# $7 = OUTPUT: the nucleotide PSL output file to create
+# $8 = optional: tsv table with mapping from uniprot to transcript
 
 # Will always rm -rf the work directory, before and after a run
 
@@ -28,7 +26,6 @@ if [ "$1" == "" ]; then
         exit 0
 fi
 
-MINALI=0.93
 # ideally, we have a table of uniprotID <-> gene model ID, so can decide where to map protein sequences that match identically twice.
 # but often we don't have known genes tables.
 # to get an idea of the impact, I compared hg38 with and without known gene tables
@@ -71,14 +68,17 @@ MINALI=0.93
 
 # the input fasta file has to be created by the uniprotToTab parser (originally from the publications track code)
 UNIPROTFAGZ=$1
-DB=$2
-GENETRACK=$3
-CLUSTER=$4
-OUTFNAME=$5
+TRANSCRIPTFA=$2
+TRANSCRIPTPSL=$3
+MINALI=$4
+CLUSTER=$5
+WORKDIR=$6
+OUTFNAME=$7
+PAIRNAME=$8
 
-if [[ "$DB" == "ci3" ]]; then
-   MINALI=0.85
-fi
+#if [[ "$DB" == "ci3" ]]; then
+   #MINALI=0.85
+#fi
 
 # if you change BLASTDIR, also must change the cluster script mapUniprot_doBlast
 BLASTDIR=/cluster/bin/blast/x86_64/blast-2.2.16/bin
@@ -89,28 +89,23 @@ set -e
 set -x 
 
 
-WORKDIR=makeUniProtPsl-$2-$3-$4.tmp
+#WORKDIR=makeUniProtPsl-$2-$3-$4.tmp
 
 #rm -rf $WORKDIR
 
 mkdir -p $WORKDIR
 
-# get transcript sequences and a (pseudo) alignment from transcript to genome using the exon information
 cp ${UNIPROTFAGZ} $WORKDIR/uniProt.fa
-if [ ! -f $WORKDIR/transcripts.fa ] ; then
-        hgsql -Ne 'select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from '$GENETRACK' where cdsStart < cdsEnd' $DB  > $WORKDIR/transcripts.gp
-        genePredToFakePsl $DB $WORKDIR/transcripts.gp $WORKDIR/transcripts.psl $WORKDIR/transcripts.cds
-        getRnaPred $DB $WORKDIR/transcripts.gp all $WORKDIR/transcripts.fa
-fi
-
-if [ "$GENETRACK" == "knownGene" ]; then
-    # our kg system sometimes keeps the variant number, sometimes it doesn't (e.g. mm10 vs hg19)
-    #hgsql -Ne 'select spID, kgID from kgXref where spID!=""' $DB | awk '{OFS="\t"; print;} /-/ {split($1,a,"-"); print a[1], $2}' > $WORKDIR/ucscUniProt.pairs
-    hgsql -Ne 'select spID, kgID from kgXref where spID!=""' $DB > $WORKDIR/ucscUniProt.pairs
+cp $TRANSCRIPTFA $WORKDIR/transcripts.fa
+cp $TRANSCRIPTPSL $WORKDIR/transcripts.psl
+if [ "$PAIRNAME" != "" ] ; then
+   cp $PAIRNAME $WORKDIR/upToTrans.pairs
 fi
 
 # setup blast uniprot -> transcript cDNAs
-if [ ! -d $WORKDIR/aligns ] ; then
+if [ -f $WORKDIR/bestAln.psl ] ; then
+        echo WARNING: re-using existing protein-transcript alignments to save time! see $WORKDIR/bestAln.psl
+else
         mkdir $WORKDIR/queries 
         mkdir $WORKDIR/aligns 
         faSplit about $WORKDIR/uniProt.fa 2500 $WORKDIR/queries/
@@ -125,25 +120,33 @@ if [ ! -d $WORKDIR/aligns ] ; then
         set -x
         cp mapUniprot_doBlast $WORKDIR/
         ssh $CLUSTER "cd `pwd`/$WORKDIR && para make jobList"
+        echo Concatenating and filtering protein/transcript alignments
+        # sort and pick the best alignments for each protein
+        find $WORKDIR/aligns -name '*.psl' | xargs cat | pslReps -noIntrons -nohead -nearTop=0.01 -minAli=$MINALI stdin stdout /dev/null > $WORKDIR/bestAln.psl
 fi
 
-# sort and pick the best alignments for each protein
-# when we have a knownGene table, just use our existing uniProt mapping from there
-if [ -f $WORKDIR/ucscUniProt.pairs ]; then
-    # this are very special pslSelect options:
+# when we have a list of pairs to filter on, then use it
+if [ -f $WORKDIR/upToTrans.pairs ]; then
+    # these are very special pslSelect options:
     # - pass through all PSLs for queries that do not appear in our tables (=all Trembl and a few swissprot sequences missed by our tables)
     # - only compare the part before the dot
-    find $WORKDIR/aligns -name '*.psl' | xargs cat | pslSelect -qPass -qDelim=. -qtPairs=$WORKDIR/ucscUniProt.pairs stdin stdout | pslReps -noIntrons -nohead -nearTop=0.01 -minAli=$MINALI stdin stdout /dev/null > $WORKDIR/uniProtVsTranscripts.psl
-#when we have no known gene table, take the top 1% alignments with 93% query coverage. Hopefully that gives similar results.
-else
+    # - use pslSwap as a workaround, as pslSelect doesn't have -tDelim yet and the query IDs don't have dots in them anyways
+    #   too lazy to patch pslSelect now
+    cat $WORKDIR/upToTrans.pairs | gawk '{OFS="\t"; print $2, $1; }' > $WORKDIR/transToUp.pairs
+    pslSwap $WORKDIR/bestAln.psl stdout | pslSelect -qPass -qDelim=. -qtPairs=$WORKDIR/transToUp.pairs stdin stdout | pslSwap stdin $WORKDIR/uniProtVsTranscripts.psl
+    # when we have no known gene table, blat the proteins directly and
+    # take the top 1% alignments with 93% query coverage. Hopefully that gives similar results...
     # inspired by kent/src/hg/makeDb/doc/ucscGenes/hg19.ucscGenes13.csh
     # as requested by Alejo: lower to 93%, which are the pslReps defaults
-    find $WORKDIR/aligns -name '*.psl' | xargs cat | pslReps -noIntrons -nohead -nearTop=0.01 -minAli=$MINALI stdin stdout /dev/null > $WORKDIR/uniProtVsTranscripts.psl
+else
+    cp $WORKDIR/bestAln.psl $WORKDIR/uniProtVsTranscripts.psl
 fi
 
 # now combine the two alignments with pslMap
-pslMap $WORKDIR/uniProtVsTranscripts.psl $WORKDIR/transcripts.psl $WORKDIR/uniProtVsGenome.psl
-# 2016: lowering to 99% identity due to hg38 alt loci sucking up our main (and more important) alignments from the
+pslMap $WORKDIR/uniProtVsTranscripts.psl $WORKDIR/transcripts.psl $WORKDIR/uniProtVsGenome.psl -mapInfo=$WORKDIR/mapInfo.tab
+# 2016: lowering to 95% identity due to hg38 alt loci sucking up our main (and more important) alignments from the
+# 2021: using MINALI is more consistent
 # normal chromosomes
-sort -k10,10 $WORKDIR/uniProtVsGenome.psl | pslCDnaFilter stdin -globalNearBest=0.99  -bestOverlap -filterWeirdOverlapped stdout | sort | uniq > $OUTFNAME
-rm -rf $WORKDIR
+sort -k10,10 $WORKDIR/uniProtVsGenome.psl | pslCDnaFilter stdin -globalNearBest=$MINALI  -bestOverlap -filterWeirdOverlapped stdout | sort | uniq > $OUTFNAME
+cp $WORKDIR/mapInfo.tab ${OUTFNAME}.mapInfo
+#rm -rf $WORKDIR

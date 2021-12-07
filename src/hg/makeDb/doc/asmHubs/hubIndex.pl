@@ -31,7 +31,9 @@ printf '
 </div><!-- closing gbsPage from gbPageStartHardcoded.html -->
 </div><!-- closing container-fluid from gbPageStartHardcoded.html -->
 <!--#include virtual="$ROOT/inc/gbFooterHardcoded.html"-->
-<script type="text/javascript" src="/js/sorttable.js"></script>
+<script type="text/javascript" src="<!--#echo var="ROOT" -->/js/sorttable.js"></script>
+<script type="text/javascript" src="<!--#echo var="ROOT" -->/js/analytics.js"></script>
+
 </body></html>
 '
 }

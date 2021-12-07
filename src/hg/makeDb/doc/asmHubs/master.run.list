@@ -1317,6 +1317,7 @@
 ./runBuild GCF_011750605.1 GCF_011750605.1_ASM1175060v1 invertebrate Drosophila_busckii
 ./runBuild GCF_011762505.1 GCF_011762505.1_mArvNil1.pat.X mammals Arvicanthis_niloticus
 ./runBuild GCF_011762595.1 GCF_011762595.1_mTurTru1.mat.Y mammals Tursiops_truncatus
+./runBuild GCF_011764305.1 GCF_011764305.1_ASM1176430v1.1 mammals Mustela_putorius_furo
 ./runBuild GCF_011800145.1 GCF_011800145.1_KU_Mleo_1.0 mammals Mirounga_leonina
 ./runBuild GCF_011800845.1 GCF_011800845.1_UG_Zviv_1 vertebrate Zootoca_vivipara
 ./runBuild GCF_011865705.1 GCF_011865705.1_USU_MGEN_1.2 invertebrate Megalopta_genalis

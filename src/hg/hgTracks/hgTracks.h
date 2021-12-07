@@ -2,7 +2,7 @@
  * individual tracks. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef HGTRACKS_H
 #define HGTRACKS_H
@@ -390,6 +390,7 @@ struct linkedFeatures
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
     struct simpleFeature *codons;       /* If zoomed to CDS or codon level.*/
+    boolean useItemRgb;                 /* If true, use rgb from item. */
     void *extra;			/* Extra info that varies with type. */
     void *original;			/* The structure that was converted
 					   into this (when needed later).  */
@@ -611,6 +612,7 @@ extern boolean chromosomeColorsMade; /* Have the 3 shades of 8 chromosome colors
 extern boolean doPliColors; /* Put up the color legend for the gnomAD pLI track */
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;
+extern int colorLookup[256]; /* Common to variation.c and rnaPLFoldtrack.c */
 
 extern boolean trackImgOnly;           /* caller wants just the track image and track table html */
 

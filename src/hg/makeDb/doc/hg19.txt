@@ -34378,7 +34378,7 @@ end
 
 
 #############################################################################
-# fetalGeneAtlas JimK 01-19-2020
+# fetalGeneAtlas JimK 01-19-2021
 ############################################################################
 # This is the RNA-seq part of the data set described in
 # "A human cell atlas of fetal gene expression" by Cao, Day et al
@@ -34393,8 +34393,8 @@ cd /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas
 mkdir bbi
 
 # link in in files from cell browser
-ln -s /hive/data/inside/cells/datasets/fetal-gene-atlas/genes/all/meta.tsv .
-ln -s /hive/data/inside/cells/datasets/fetal-gene-atlas/genes/all/exprMatrix.tsv.gz .
+ln -s /hive/data/inside/cells/datasets/fetal-gene-atlas/all/meta.tsv .
+ln -s /hive/data/inside/cells/datasets/fetal-gene-atlas/all/exprMatrix.tsv.gz .
 
 # Get the first line (fields) out of meta.tsv and also make stats on it
 head -1 meta.tsv > meta.fields

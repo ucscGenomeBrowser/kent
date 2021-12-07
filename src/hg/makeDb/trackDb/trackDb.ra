@@ -20,7 +20,8 @@ include trackDb.transMap.ra
 
 include trackDb.nt.ra
 include trackDb.genbank.ra 
-include trackDb.uniprot.ra
+include trackDb.uniprot.ra public,beta
+include uniprot.ra alpha
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
@@ -259,7 +260,7 @@ showCdsAllScales .
 baseColorDefault diffBases
 baseColorUseSequence db
 color 0,0,100
-visibility dense
+visibility pack
 pennantIcon p13 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p13 patch sequences"; Updated red ../goldenPath/newsarch.html#101221 "Updated Oct. 12, 2021"
 
 track fixSeqLiftOverPsl

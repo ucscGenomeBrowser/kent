@@ -11,7 +11,7 @@ void usage()
 errAbort(
   "adiposeRelabelImmune - Merge together two files from the adipose tissue data set in GSE129363 to add immune subclusterings.\n"
   "usage:\n"
-  "   adiposeRelabelImmune meta.tsv\n"
+  "   adiposeRelabelImmune oldMeta.tsv immuneAnnotation.tsv newMeta.tsv\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -22,17 +22,13 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void adiposeRelabelImmune(char *metaOut)
+void adiposeRelabelImmune(char *metaIn, char *immuneIn, char *metaOut)
 /* adiposeRelabelImmune - Merge together two files from the adipose tissue data set in GSE129363 to add immune subclusterings.. */
 {
-char *allIn = "CellClusterAnnotation.txt";
-char *immuneIn = "ImmuneCell_ClusterAnnotation.txt";
-char *metaIn = "GSE129363_Discovery_Cohort_CellAnnotation.txt";
 struct hash *immuneHash = hashTwoColumnFile(immuneIn);
-struct hash *allHash = hashTwoColumnFile(allIn);
 struct lineFile *lf = lineFileOpen(metaIn, TRUE);
 FILE *f = mustOpen(metaOut, "w");
-char *row[4];
+char *row[5];
 
 char *cluster;
 while (lineFileNextRow(lf, row, ArraySize(row)))
@@ -42,12 +38,10 @@ while (lineFileNextRow(lf, row, ArraySize(row)))
     else
 	{
 	char *cell = row[0];
-	char *oldCluster = hashFindVal(allHash, cell);
+	char *oldCluster = row[4];
 	cluster = hashFindVal(immuneHash, cell);
 	if (cluster == NULL)
 	     cluster = oldCluster;
-	if (cluster == NULL)
-	     errAbort("Can't find cluster for cell %s", cell);
 	}
     fprintf(f, "%s\t%s\t%s\t%s\t%s\n", row[0], row[1], row[2], row[3], cluster);
     }
@@ -58,8 +52,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc != 4)
     usage();
-adiposeRelabelImmune(argv[1]);
+adiposeRelabelImmune(argv[1], argv[2], argv[3]);
 return 0;
 }

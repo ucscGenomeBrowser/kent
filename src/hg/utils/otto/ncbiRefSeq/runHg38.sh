@@ -2,7 +2,7 @@
 
 set -beEu -o pipefail
 
-export TOP="/hive/data/outside/ncbi/genomes/ncbiRefSeq"
+export TOP="/hive/data/outside/otto/ncbiRefSeq"
 cd "${TOP}"
 
 export db="hg38"

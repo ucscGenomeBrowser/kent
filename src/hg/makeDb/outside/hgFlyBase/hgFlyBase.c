@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* hgFlyBase - Parse FlyBase genes.txt file and turn it into a couple of 
  * tables.  See http://flybase.org/.data/docs/refman/refman-B.html for a 

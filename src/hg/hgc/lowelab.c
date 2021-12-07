@@ -1,7 +1,7 @@
 /* Lowe Lab additions for Archaea and Bacterial details pages*/
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifdef LOWELAB
 #include "common.h"
 #include "obscure.h"
@@ -394,7 +394,7 @@ void printSelfHomologs(struct sqlConnection *conn, struct blastTab *blastpHitsLi
 		}
 		else
 		{
-			ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
+			ginfo = getGbProtCodeInfo(conn, database, blastpTarget[0], blastpTarget[1]);
 			if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
 				strcpy(product, ginfo->product);
 			else
@@ -2326,7 +2326,7 @@ void printQueryGeneInfo(struct sqlConnection *conn, struct bed *blastpTrack, cha
                 /* Print query gene info */
                 printf("<B>Gene: </B>%s<BR>\n", queryName);
 
-                ginfo = getGbProtCodeInfo(conn, database, queryName);
+                ginfo = getGbProtCodeInfo(conn, database, database, queryName);
                 if (ginfo != NULL)
                 {
                     if (ginfo->product != NULL && differentString(ginfo->product,"none"))
@@ -2539,7 +2539,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
                 }
                 else
                 {
-                    ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
+                    ginfo = getGbProtCodeInfo(conn, database, blastpTarget[0], blastpTarget[1]);
                     if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
                         strcpy(product, ginfo->product);
                     else
@@ -2903,7 +2903,7 @@ void printBlastxResult(struct sqlConnection *conn, struct blastTab *blastxHitsLi
             /* Get target gene product annotation */
             if (hDbExists(blastxTarget[0]))
             {
-                ginfo = getGbProtCodeInfo(conn, blastxTarget[0], blastxTarget[1]);
+                ginfo = getGbProtCodeInfo(conn, database, blastxTarget[0], blastxTarget[1]);
                 if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
                     printf("<td>%s</td>\n", ginfo->product);
                 else

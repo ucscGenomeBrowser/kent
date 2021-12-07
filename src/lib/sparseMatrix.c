@@ -71,6 +71,7 @@ for (y=0; y<ySize; ++y)
 	    fprintf(f, "\t%g", row[x]);
 	}
     fprintf(f, "\n");
+    dotForUser();
     }
 }
 

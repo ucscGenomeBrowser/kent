@@ -1,7 +1,7 @@
 /* wikiTrack - wikiTrack functions */
 
 /* Copyright (C) 2012 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "jksql.h"
 #include "hgTracks.h"
@@ -136,7 +136,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     bed->itemRgb = hexToDecimal(item->color);
     bed8To12(bed);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
-    lf->extra = (void *)USE_ITEM_RGB;	/* signal for coloring */
+    lf->useItemRgb = TRUE;
     lf->filterColor=bed->itemRgb;
 
     /* overload itemAttr fields to be able to pass id to hgc click box */
@@ -168,7 +168,7 @@ if ((! wikiTrackReadOnly()) && wikiTrackEnabled(database, NULL))
     bed->itemRgb = 0xcc0000;
     bed8To12(bed);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
-    lf->extra = (void *)USE_ITEM_RGB;	/* signal for coloring */
+    lf->useItemRgb = TRUE;
     lf->filterColor=bed->itemRgb;
     slAddHead(&lfList, lf);
     }

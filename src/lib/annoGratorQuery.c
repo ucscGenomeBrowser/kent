@@ -1,7 +1,7 @@
 /* annoGratorQuery -- framework for integrating genomic annotations from many sources */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "annoGratorQuery.h"
 #include "dystring.h"

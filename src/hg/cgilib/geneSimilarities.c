@@ -2,7 +2,7 @@
  * is used to relate genes between two gene sets. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "geneSimilarities.h"
 #include "genePred.h"

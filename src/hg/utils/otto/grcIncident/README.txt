@@ -3,7 +3,7 @@ Thu Oct 21 11:17:52 PDT 2021
 
 The cron job is daily at 09:33
 
-33 09 * * * /hive/data/outside/grc/incidentDb/runUpdate.sh makeItSo
+33 09 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
 
 Tue Sep  3 10:48:30 PDT 2019
 
@@ -28,13 +28,13 @@ And add the command in the set of commands there: e.g.:
 
 You can verify the issues.gff3 file name at the NCBI FTP directory:
 
-   ftp://ftp.ncbi.nlm.nih.gov/pub/grc/chicken/GRC/Issue_Mapping/
+   https://ftp.ncbi.nlm.nih.gov/pub/grc/chicken/GRC/Issue_Mapping/
 
 run the runUpdate.sh (optionally just the new one to avoid other issues)
 
 Will need to add the symlink, e.g.:
 
-/gbdb/galGal6/bbi/grcIncidentDb/galGal6.grcIncidentDb.bb -> /hive/data/outside/grc/incidentDb/GRCg6a/GalGal6.grcIncidentDb.bb
+/gbdb/galGal6/bbi/grcIncidentDb/galGal6.grcIncidentDb.bb -> /hive/data/outside/otto/grcIncidentDb/GRCg6a/GalGal6.grcIncidentDb.bb
 
 And run the hgBbiDbLink command:
 

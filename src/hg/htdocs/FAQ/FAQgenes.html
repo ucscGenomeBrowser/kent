@@ -329,9 +329,8 @@ they are updated constantly even for older assemblies, such as GRCh37/hg19.
 The advantage of NCBI alignments are that they are placed manually 
 to a chromosome location and are the official alignments, e.g. for databases and manuscripts.
 Therefore, we recommend working with the NCBI annotations and when an assembly has an &quot;NCBI RefSeq&quot; track, we show it by default and hide the
-&quot;UCSC RefSeq&quot; track.
+&quot;UCSC RefSeq&quot; track. The only exception may be hg19 (see the note at the end of this section).
 </p>
-
 <p>The UCSC alignments can differ from the NCBI alignments for two reasons:</p>
 
 <p><b>Very similar transcripts:</b> 
@@ -379,7 +378,15 @@ The <a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">RefSe
 subtrack makes the problematic region very clear with double lines
 indicating unalignable transcript sequence.
 </p>
+<b>Data format:</b> <p>A small difference is the data format, which matters if you integrate our files into pipelines:
+The refGene table qName field stores the RefSeq accession but without the version number. The
+ncbiRefSeq tables show the full accession, with the version number. To add the version number 
+to the refGene table, use a MySQL command like this: <pre>
+SELECT matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,concat(qName, '.', gbSeq.version),qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts from refSeqAli, hgFixed.gbSeq WHERE refSeqAli.qname=gbSeq.acc</pre>. To remove the transcripts on haplotypes, add this condition at the end: <pre>and tName NOT LIKE '%_hap%' AND tName not like '%_alt%' AND tNAME NOT LIKE '%_fix%'</pre>.
 
+<p>A word of caution on the NCBI RefSeq track on hg19: NCBI is not fully supporting hg19 anymore. As a result, 
+some genes are not located on the main chromosomes in anymore. An example is NM_001129826/CSAG3.
+For hg19, you may prefer UCSC RefSeq for now.</p>
 <a name="mito"></a>
 <h2>What is the best gene track for mitochondrial gene annotations</h2>
 <p>

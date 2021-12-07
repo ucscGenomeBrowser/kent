@@ -1199,6 +1199,20 @@ sub doSimpleRepeat {
   my $bossScript = newBash HgRemoteScript("$runDir/doSimpleRepeat.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  my $trfClusterHub = $smallClusterHub;
+
+  my $seqCount = `cat $buildDir/$asmId.chrom.sizes | wc -l`;
+  chomp $seqCount;
+  # check for large seqCount and large genome, then use bigCluster
+  # the 100000 and 20000000 are from doSimpleRepeat.pl
+  if ( $seqCount > 100000 ) {
+     my $genomeSize = `ave -col=2 $buildDir/$asmId.chrom.sizes | grep -w total | awk '{printf "%d", \$NF}'`;
+     chomp $genomeSize;
+     if ($genomeSize > 200000000) {
+	$trfClusterHub = $bigClusterHub;
+     }
+  }
+
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 export buildDir=$buildDir
@@ -1206,11 +1220,11 @@ export buildDir=$buildDir
 if [ \$buildDir/\$asmId.2bit -nt trfMask.bed.gz ]; then
   doSimpleRepeat.pl -stop=filter -buildDir=`pwd` \\
     -unmaskedSeq=\$buildDir/\$asmId.2bit \\
-      -trf409=6 -dbHost=$dbHost -smallClusterHub=$smallClusterHub \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$trfClusterHub \\
         -workhorse=$workhorse \$asmId
   doSimpleRepeat.pl -buildDir=`pwd` \\
     -continue=cleanup -stop=cleanup -unmaskedSeq=\$buildDir/\$asmId.2bit \\
-      -trf409=6 -dbHost=$dbHost -smallClusterHub=$smallClusterHub \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$trfClusterHub \\
         -workhorse=$workhorse \$asmId
   gzip simpleRepeat.bed trfMask.bed
 fi
@@ -1626,7 +1640,7 @@ sub doNcbiGene {
 
   my $dupList = "";
   if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
-    $dupList = " | grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\" ";
+    $dupList = " | grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\"  || true";
   }
 
   $bossScript->add(<<_EOF_

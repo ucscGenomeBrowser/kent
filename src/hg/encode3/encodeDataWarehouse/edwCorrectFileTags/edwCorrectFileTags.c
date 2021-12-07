@@ -1,7 +1,7 @@
 /* edwCorrectFileTags - Use this to correct tags in the edwFile table and corresponding fields in the edwValidFile table without forcing a validateManifest rerun or a reupload.. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"

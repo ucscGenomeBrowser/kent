@@ -2,7 +2,7 @@
  * writing  */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "pipeline.h"
 #include "common.h"
@@ -424,7 +424,7 @@ static void setupTimeout(struct pipeline* pl)
 /* setup timeout handling */
 {
 groupApoptosisPipeline = pl;
-if (signal(SIGALRM, groupApoptosis) != 0)
+if (signal(SIGALRM, groupApoptosis) == SIG_ERR)
     errnoAbort("signal failed");
 (void)alarm(pl->timeout);
 }
