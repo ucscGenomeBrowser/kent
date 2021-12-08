@@ -34,7 +34,7 @@ int facetValCmp(const void *va, const void *vb)
 {
 struct facetVal *a = *((struct facetVal **)va);
 struct facetVal *b = *((struct facetVal **)vb);
-return strcasecmp(a->val, b->val);
+return cmpWordsWithEmbeddedNumbers(a->val, b->val);
 }
 
 struct facetVal *facetsClone(struct facetVal *origList)
