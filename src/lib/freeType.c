@@ -139,10 +139,11 @@ void ftTextInBox(struct memGfx *mg, int x, int y, int width, int height, Color c
 	MgFont *font, char *text)
 /* Draw a line of text with upper left corner x,y. */
 {
+FT_Matrix     matrix;
+FT_Vector     pen;  
+
 if (height > 0)
     {
-    FT_Matrix     matrix;
-    FT_Vector     pen;  
     matrix.xx = (FT_Fixed)(1 * 0x10000L);
     matrix.xy = (FT_Fixed)0;
     matrix.yx = (FT_Fixed)0;
@@ -151,11 +152,10 @@ if (height > 0)
     pen.y = 0;
     FT_Set_Transform( face, &matrix, &pen );
     FT_Set_Pixel_Sizes( face, 1.3*width, 1.3 * height);
+    ftTextHelper(mg, x, y, height, color, font, text);
     }
 else
     {
-    FT_Matrix     matrix;
-    FT_Vector     pen;  
     matrix.xx = (FT_Fixed)(1 * 0x10000L);
     matrix.xy = (FT_Fixed)0;
     matrix.yx = (FT_Fixed)0;
@@ -166,9 +166,13 @@ else
 
     height = -height;
     FT_Set_Pixel_Sizes( face, 1.3*width, 1.3 * height);
-    }
+    ftTextHelper(mg, x, y, height, color, font, text);
 
-ftTextHelper(mg, x, y, height, color, font, text);
+    matrix.yy = (FT_Fixed)(1 * 0x10000L) ;
+    pen.x = 0;
+    pen.y = 0;
+    FT_Set_Transform( face, &matrix, &pen );
+    }
 }
 
 void ftText(struct memGfx *mg, int x, int y, Color color, 
