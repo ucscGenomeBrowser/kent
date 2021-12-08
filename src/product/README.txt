@@ -134,10 +134,10 @@ Genome Browser in the Cloud (GBiC)
 that sets up a fully functional mirror on all major Linux
 distributions.  
 
-It has been tested on Ubuntu 14/16,  RedHat/CentOS 6 and 7,
+It has been tested on Ubuntu 16, RedHat/CentOS 7 and 8,
 and Fedora 20. Preferably, the installation should be performed on a fresh Linux
 installation, as it deactivates the default site config file in Apache
-and fills the MariaDB directory with numerous databases.  The easiest way to accomplish this is to
+and fills the MariaDB directory with numerous databases. The easiest way to accomplish this is to
 run the Genome Browser in the Cloud program in a new virtual machine. The program also works on
 Docker and cloud computing virtual machines, and has been tested on those sold by
 Amazon, Microsoft and Google.
@@ -181,7 +181,7 @@ work under other UNIX variants. The source code can be obtained through
 [GitHub][UDR]. When using the GBIC installation
 program, the `-u` option will use UDR for all downloads.
 
-If you  manually download data only occasionally, there is no
+If you manually download data only occasionally, there is no
 need to change your method; continue to visit our download server to
 download the files you need. This new protocol has been put in place 
 primarily to facilitate quick downloads of huge amounts of data over long distances.
@@ -210,7 +210,7 @@ Linux 6). You'll find both a 64-bit and 32-bit rpm [here].
 Once you have a working UDR binary, either by building from source or by
 installing the rpm, you can download files from either of our our
 download servers in a fashion similar to rsync. For example, using
-rsync,  all of the MariaDB tables for the hg19
+rsync, all of the MariaDB tables for the hg19
 database can be downloaded using either one of the following two commands:
 
     rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hg19/ /my/local/hg19/

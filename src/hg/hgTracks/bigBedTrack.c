@@ -550,6 +550,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             reverseComplement(seq, strlen(seq));
         lf->extra = seq;
         lf->cds = cds;
+        lf->useItemRgb = useItemRgb;
+        if ( lf->useItemRgb )
+            lf->filterColor = itemRgbColumn(bedRow[8]);
         }
     else if (sameString(tdb->type, "bigDbSnp"))
         {

@@ -9,6 +9,8 @@
 #include "sqlNum.h"
 #include "sqlList.h"
 
+boolean clUpperCase = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -22,6 +24,7 @@ errAbort(
   "   geneSymVer.tsv is output of gencodeGeneSymVer, usually /hive/data/inside/geneSymVerTx.tsv\n"
   "options:\n"
   "   -bed=output.bed - Create bed file for mapping genes to genome via best gencode fit\n"
+  "   -upperCase - Force genes to be upper case\n"
   "   -allBed=outputDir - Output beds for all versions in geneSymVer.tsv\n"
   "   -geneToId=geneToId.tsv - Output two column file with symbol from gene.txt and gencode\n"
   "                  gene names as second. Symbols with no gene found are omitted\n"
@@ -38,6 +41,7 @@ static struct optionSpec options[] = {
    {"geneToId", OPTION_STRING},
    {"miss", OPTION_STRING},
    {"target", OPTION_STRING},
+   {"upperCase", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -73,6 +77,8 @@ AllocVar(ret);
 ret->blockCount = sqlUnsigned(row[13]);
 ret->gene = cloneString(row[0]);
 ret->symbol = cloneString(row[1]);
+if (clUpperCase)
+   touppers(ret->symbol);
 ret->gencodeVersion = cloneString(row[2]);
 ret->ucscDb = cloneString(row[3]);
 ret->chrom = cloneString(row[4]);
@@ -275,6 +281,14 @@ verbose(2, "Read %d from %s\n", geneCount, geneListFile);
 if (geneCount <= 0)
     errAbort("%s is empty", geneListFile);
 
+/* Optionally uppercase genes. */
+if (clUpperCase)
+   {
+   struct slName *el;
+   for (el = geneList; el != NULL; el = el->next)
+      touppers(el->name);
+   }
+
 /* Read geneSymVerTx file and create versions from it */
 struct version *versionList = NULL;
 struct gsvt *gsvt, *gsvtList = gsvtLoadAll(geneSymVerTxFile);
@@ -431,6 +445,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+clUpperCase = optionExists("upperCase");
 gencodeVersionForGenes(argv[1],argv[2], optionVal("target", NULL),
     optionVal("geneToId", NULL), optionVal("bed", NULL), 
     optionVal("allBed", NULL), optionVal("miss", NULL));

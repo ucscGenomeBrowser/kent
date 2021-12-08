@@ -1336,6 +1336,15 @@ void slPairSortCase(struct slPair **pList)
 slSort(pList, slPairCmpCase);
 }
 
+int slPairCmpWordsWithEmbeddedNumbers(const void *va, const void *vb)
+/* Sort slPairList ignoring case and dealing with embedded numbers so 2 comes
+ * before 10, not after. */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return cmpWordsWithEmbeddedNumbers(a->name, b->name);
+}
+
 int slPairCmp(const void *va, const void *vb)
 /* Compare two slPairs. */
 {

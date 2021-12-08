@@ -65,20 +65,17 @@ MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
 #wuhCor1 uniprot otto cron by Max, May 2021
 00 4 * * * /hive/data/outside/otto/uniprot/covidCheck.sh
 
-#User annotations
-#* * * * * ~max/miniconda3/envs/py3/bin/python ~max/usr/scripts/tsvSafeToBigBed /cluster/home/max/.user-annots-browser-track-c513a43ffff8.json https://docs.google.com/spreadsheets/d/1l38ypTcQH2AP2hlBmQ7kIXz1G4e33RPX-iFH1vu-utU/edit#gid=0 ~max/public_html/userAnnots/public.bb
-
 #ClinGen
 MAILTO=abenet@ucsc.edu,lrnassar@ucsc.edu
 00 9 * * * /hive/data/outside/otto/clinGen/clinGenWrapper.sh
 
 #GRC Incident
-#MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
-#33 09 * * * /hive/data/outside/grc/incidentDb/runUpdate.sh makeItSo
+MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
+33 09 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
 
 #NCBI RefSeq
-#MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
-#23 8 * * 3 /hive/data/outside/ncbi/genomes/ncbiRefSeq/ottoNcbiRefSeq.sh
+MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
+23 8 * * 3 /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh
 
 #OMIM Upload
 MAILTO=lrnassar@ucsc.edu

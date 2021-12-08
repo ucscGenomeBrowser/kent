@@ -29,6 +29,7 @@ typedef unsigned int Color;
 #define MG_MAGENTA 0xff00ffff
 #define MG_YELLOW  0xffff00ff
 #define MG_GRAY    0x808080ff
+#define MG_BROWN   0xa000a0ff
 
 #define MAKECOLOR_32_A(r,g,b,a) (((unsigned int)a) | ((unsigned int)b<<8) | ((unsigned int)g << 16) | ((unsigned int)r << 24))
 #define MAKECOLOR_32(r,g,b) (((unsigned int)0xff) | ((unsigned int)b<<8) | ((unsigned int)g << 16) | ((unsigned int)r << 24))
@@ -50,6 +51,7 @@ typedef unsigned int Color;
 #define MG_MAGENTA 0xffff00ff
 #define MG_YELLOW  0xff00ffff
 #define MG_GRAY    0xff808080
+#define MG_BROWN   0xff00a0a0
 
 #define MAKECOLOR_32_A(r,g,b,a) (((unsigned int)a<<24) | ((unsigned int)b<<16) | ((unsigned int)g << 8) | (unsigned int)r)
 #define MAKECOLOR_32(r,g,b) (((unsigned int)0xff<<24) | ((unsigned int)b<<16) | ((unsigned int)g << 8) | (unsigned int)r)
@@ -284,6 +286,10 @@ MgFont *mgMenloMediumFont();
 void mgText(struct memGfx *mg, int x, int y, Color color, 
 	MgFont *font, char *text);
 /* Draw a line of text with upper left corner x,y. */
+
+void mgTextInBox(struct memGfx *mg, int x, int y, int width, int height, 
+	Color color, MgFont *font, char *text);
+/* Draw a line of text filling in box defined by x/y/width/height */
 
 void mgTextCentered(struct memGfx *mg, int x, int y, int width, int height, 
 	Color color, MgFont *font, char *text);

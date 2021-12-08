@@ -125,7 +125,7 @@ foreach my $queryDb (@queryList) {
         track chainRBest%s
         subTrack %sChainNetViewchain off
         subGroups view=chain species=s%03d clade=c00
-        shortLabel %s synChain
+        shortLabel %s rbChain
         longLabel %s (%s) Reciprocal Best Chained Alignments
         type bigChain %s
         bigDataUrl bbi/%s.chainRBest%s.bb

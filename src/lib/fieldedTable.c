@@ -196,7 +196,7 @@ slReverse(&pairList);
 if (fieldIsNumeric)
     slSort(&pairList, slPairCmpNumbers);
 else
-    slSort(&pairList, slPairCmpCase);
+    slSort(&pairList, slPairCmpWordsWithEmbeddedNumbers);
 if (doReverse)
     slReverse(&pairList);
 

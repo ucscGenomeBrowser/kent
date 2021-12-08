@@ -390,6 +390,7 @@ struct linkedFeatures
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
     struct simpleFeature *codons;       /* If zoomed to CDS or codon level.*/
+    boolean useItemRgb;                 /* If true, use rgb from item. */
     void *extra;			/* Extra info that varies with type. */
     void *original;			/* The structure that was converted
 					   into this (when needed later).  */
