@@ -124,6 +124,12 @@ enum strexOp
     /* Binary operations. */
     strexOpAdd,
     strexOpSubtract,
+    strexOpGt,
+    strexOpLt,
+    strexOpGe,
+    strexOpLe,
+    strexOpEq,
+    strexOpNe,
     strexOpOr,
     strexOpAnd,
 
@@ -218,6 +224,7 @@ static struct strexIn *strexInNew(struct lineFile *lf,
 {
 struct tokenizer *tkz = tokenizerOnLineFile(lf);
 tkz->leaveQuotes = TRUE;
+tkz->twoCharOps = TRUE;
 struct strexIn *si;
 AllocVar(si);
 si->tkz = tkz;
@@ -344,9 +351,23 @@ switch (op)
     case strexOpUnaryMinusDouble:
         return "strexOpUnaryMinusDouble";
 
-
     case strexOpAdd:
 	return "strexOpAdd";
+    case strexOpSubtract:
+        return "strexOpSubtract";
+    case strexOpEq:
+        return "strexOpEq";
+    case strexOpNe:
+        return "strexOpNe";
+    case strexOpGt:
+        return "strexOpGt";
+    case strexOpLt:
+        return "strexOpLt";
+    case strexOpGe:
+        return "strexOpGe";
+    case strexOpLe:
+        return "strexOpLe";
+
     case strexOpOr:
 	return "strexOpOr";
     case strexOpAnd:
@@ -1019,11 +1040,90 @@ for (;;)
     }
 }
 
+boolean isCmpOp(char *tok)
+/* Return TRUE if tok is one of t > < >= <= = and !=. */
+{
+char t0 = tok[0];
+char t1 = tok[1];
+switch (t0)
+   {
+   case '>':
+   case '<':
+        return t1 == 0 || t1 == '=';
+   case '=':
+        return t1 == 0;
+   case '!':
+        return t1 == '=';
+   default:
+       return FALSE;
+   }
+}
+
+enum strexOp strexOpForCmpTok(char *tok)
+/* Return TRUE if tok is one of t > < >= <= = and !=. */
+{
+if (sameString(tok, "="))
+    return strexOpEq;
+else if (sameString(tok, "!="))
+    return strexOpNe;
+else if (sameString(tok, ">"))
+    return strexOpGt;
+else if (sameString(tok, ">="))
+    return strexOpGe;
+else if (sameString(tok, "<"))
+    return strexOpLt;
+else if (sameString(tok, "<="))
+    return strexOpLe;
+else
+    {
+    warn("unrecognized cmp op token %s", tok);
+    internalErr();
+    return strexOpUnknown;
+    }
+}
+
+
+static struct strexParse *strexParseCompareOp(struct strexIn *in)
+/* Parse out > < >= <= = and !=. */
+{
+struct tokenizer *tkz = in->tkz;
+struct strexParse *p = strexParseSum(in);
+char *tok = tokenizerNext(tkz);
+if (tok == NULL || !isCmpOp(tok))
+    {
+    tokenizerReuse(tkz);
+    return p;
+    }
+enum strexOp cmpOp = strexOpForCmpTok(tok);
+
+/* What we've parsed so far becomes left side of binary op, next term ends up on right. */
+struct strexParse *l = p;
+struct strexParse *r = strexParseSum(in);
+
+/* Make left and right side into a common type */
+enum strexType commonType = commonTypeForMathBop(l->type, r->type);
+if (commonType == strexTypeBoolean)
+    commonType = strexTypeInt;
+
+l = strexParseCoerce(l, commonType);
+r = strexParseCoerce(r, commonType);
+
+/* Create the binary operation */
+AllocVar(p);
+p->op = cmpOp;
+p->type = strexTypeBoolean;
+
+/* Now hang children onto node and return it. */
+p->children = l;
+l->next = r;
+return p;
+}
+
 static struct strexParse *strexParseAnd(struct strexIn *in)
 /* Parse out plus or minus. */
 {
 struct tokenizer *tkz = in->tkz;
-struct strexParse *p = strexParseSum(in);
+struct strexParse *p = strexParseCompareOp(in);
 for (;;)
     {
     char *tok = tokenizerNext(tkz);
@@ -1035,7 +1135,7 @@ for (;;)
 
     /* What we've parsed so far becomes left side of binary op, next term ends up on right. */
     struct strexParse *l = p;
-    struct strexParse *r = strexParseSum(in);
+    struct strexParse *r = strexParseCompareOp(in);
 
     /* Make left and right side into a common type */
     enum strexType childType = commonTypeForLogicBop(l->type, r->type);
@@ -1308,6 +1408,193 @@ switch (lv.type)
 	break;
     }
 res.type = lv.type;
+return res;
+}
+
+static struct strexEval strexEvalEq(struct strexParse *p, struct strexRun *run)
+/* Return a == b. */
+{
+struct strexParse *lp = p->children;
+struct strexParse *rp = lp->next;
+struct strexEval lv = strexLocalEval(lp, run);
+struct strexEval rv = strexLocalEval(rp, run);
+struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
+switch (lv.type)
+    {
+    case strexTypeInt:
+	res.val.b = (lv.val.i == rv.val.i);
+	break;
+    case strexTypeDouble:
+	res.val.b = (lv.val.x == rv.val.x);
+	break;
+    case strexTypeString:
+	{
+	res.val.b = (strcasecmp(lv.val.s, rv.val.s) == 0);
+	break;
+	}
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = strexTypeBoolean;
+return res;
+}
+
+static struct strexEval strexEvalNe(struct strexParse *p, struct strexRun *run)
+/* Return a != b. */
+{
+struct strexParse *lp = p->children;
+struct strexParse *rp = lp->next;
+struct strexEval lv = strexLocalEval(lp, run);
+struct strexEval rv = strexLocalEval(rp, run);
+struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
+switch (lv.type)
+    {
+    case strexTypeInt:
+	res.val.b = (lv.val.i != rv.val.i);
+	break;
+    case strexTypeDouble:
+	res.val.b = (lv.val.x != rv.val.x);
+	break;
+    case strexTypeString:
+	{
+	res.val.b = (strcasecmp(lv.val.s, rv.val.s) != 0);
+	break;
+	}
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = strexTypeBoolean;
+return res;
+}
+
+
+static struct strexEval strexEvalGt(struct strexParse *p, struct strexRun *run)
+/* Return a > b. */
+{
+struct strexParse *lp = p->children;
+struct strexParse *rp = lp->next;
+struct strexEval lv = strexLocalEval(lp, run);
+struct strexEval rv = strexLocalEval(rp, run);
+struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
+switch (lv.type)
+    {
+    case strexTypeInt:
+	res.val.b = (lv.val.i > rv.val.i);
+	break;
+    case strexTypeDouble:
+	res.val.b = (lv.val.x > rv.val.x);
+	break;
+    case strexTypeString:
+	{
+	res.val.b = (cmpWordsWithEmbeddedNumbers(lv.val.s, rv.val.s) > 0);
+	break;
+	}
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = strexTypeBoolean;
+return res;
+}
+
+static struct strexEval strexEvalLt(struct strexParse *p, struct strexRun *run)
+/* Return a < b. */
+{
+struct strexParse *lp = p->children;
+struct strexParse *rp = lp->next;
+struct strexEval lv = strexLocalEval(lp, run);
+struct strexEval rv = strexLocalEval(rp, run);
+struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
+switch (lv.type)
+    {
+    case strexTypeInt:
+	res.val.b = (lv.val.i < rv.val.i);
+	break;
+    case strexTypeDouble:
+	res.val.b = (lv.val.x < rv.val.x);
+	break;
+    case strexTypeString:
+	{
+	res.val.b = (cmpWordsWithEmbeddedNumbers(lv.val.s, rv.val.s) < 0);
+	break;
+	}
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = strexTypeBoolean;
+return res;
+}
+
+static struct strexEval strexEvalGe(struct strexParse *p, struct strexRun *run)
+/* Return a > b. */
+{
+struct strexParse *lp = p->children;
+struct strexParse *rp = lp->next;
+struct strexEval lv = strexLocalEval(lp, run);
+struct strexEval rv = strexLocalEval(rp, run);
+struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
+switch (lv.type)
+    {
+    case strexTypeInt:
+	res.val.b = (lv.val.i >= rv.val.i);
+	break;
+    case strexTypeDouble:
+	res.val.b = (lv.val.x >= rv.val.x);
+	break;
+    case strexTypeString:
+	{
+	res.val.b = (cmpWordsWithEmbeddedNumbers(lv.val.s, rv.val.s) >= 0);
+	break;
+	}
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = strexTypeBoolean;
+return res;
+}
+
+static struct strexEval strexEvalLe(struct strexParse *p, struct strexRun *run)
+/* Return a < b. */
+{
+struct strexParse *lp = p->children;
+struct strexParse *rp = lp->next;
+struct strexEval lv = strexLocalEval(lp, run);
+struct strexEval rv = strexLocalEval(rp, run);
+struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
+switch (lv.type)
+    {
+    case strexTypeInt:
+	res.val.b = (lv.val.i <= rv.val.i);
+	break;
+    case strexTypeDouble:
+	res.val.b = (lv.val.x <= rv.val.x);
+	break;
+    case strexTypeString:
+	{
+	res.val.b = (cmpWordsWithEmbeddedNumbers(lv.val.s, rv.val.s) <= 0);
+	break;
+	}
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = strexTypeBoolean;
 return res;
 }
 
@@ -2098,6 +2385,26 @@ switch (p->op)
        break;
     case strexOpSubtract:
        res = strexEvalSubtract(p, run);
+       break;
+
+    /* Comparison ops, simple binary type */
+    case strexOpEq:
+       res = strexEvalEq(p, run);
+       break;
+    case strexOpNe:
+       res = strexEvalNe(p, run);
+       break;
+    case strexOpGt:
+       res = strexEvalGt(p, run);
+       break;
+    case strexOpLt:
+       res = strexEvalLt(p, run);
+       break;
+    case strexOpGe:
+       res = strexEvalGe(p, run);
+       break;
+    case strexOpLe:
+       res = strexEvalLe(p, run);
        break;
 
     /* Logical ops, simple binary type and not*/
