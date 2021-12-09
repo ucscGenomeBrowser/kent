@@ -1,8 +1,15 @@
 The strex language is a small string expression evaluation language.  
 This document describes its built in functions and operators:
 
-+  - returns the concatenation of the surrounding strings or the addition of surrounding
++    returns the concatenation of the surrounding strings or the addition of surrounding
      numbers.  Will convert a number to a string in mixed expressions
+=    returns true if two items are the same.  For strings ignores case
+!=   returns true if two items are not the same.  For strings ignores case
+>    Greater than. Converts mixed expressions to strings. Ignores case in strings
+>=   Greater or equal. Converts mixed expressions to strings. Ignores case in strings
+>    Less than. Converts mixed expressions to strings. Ignores case in strings
+>=   Less or equal. Converts mixed expressions to strings. Ignores case in strings
+
 
 [index] - selects a character from string given an integer zero based index. As in Python
        if index is negative it selects characters from the end of the string.  -1
