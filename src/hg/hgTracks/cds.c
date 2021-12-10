@@ -1955,6 +1955,8 @@ if (drawOpt == baseColorDrawItemBases ||
     drawOpt == baseColorDrawDiffCodons ||
     indelShowPolyA)
     {
+    if (lf->extra == NULL)
+        errAbort("baseColorDrawSetup: sequence for track '%s' not loaded when sequence option is set in trackDb\n", tg->track);
     *retMrnaSeq = maybeGetSeqUpper(lf, tg->table, tg);
     if (*retMrnaSeq != NULL && *retPsl != NULL) // we have both sequence and PSL
 	{
