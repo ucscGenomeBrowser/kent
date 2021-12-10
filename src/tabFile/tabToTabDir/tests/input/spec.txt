@@ -94,6 +94,7 @@ submitter
 
 table donor biosample_source_id
 biosample_source_id
+id symbol_id("d", biosample_source_id)
 species
 biosample_source_gender 
 biosample_source_age biosample_source_age_value

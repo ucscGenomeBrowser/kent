@@ -109,6 +109,8 @@ symbol(prefix, string) - turn string into a computer usable symbol that starts w
 	    is 32 characters or less it's used, but if it's longer it's converted into an MD5
 	    sum.
 
+symbol_id(prefix, string) - turns a string into prefix followed by a small numerical ID that will be
+            unique and return consistently if same prefix,string is input.
 replace(string, oldPart, newPart) - returns string with all instances of old replaced by new.
 	    The cases where either old or new are empty string are useful special cases.
 	    If new is "", then all instances of the old string will be deleted.
