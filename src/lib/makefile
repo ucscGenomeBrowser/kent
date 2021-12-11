@@ -49,10 +49,6 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     wildcmp.o windowsToAscii.o wormdna.o \
     xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o zlibFace.o
 
-ifeq (${FULLWARN},yes)
-  HG_WARN += -fno-common
-endif
-
 $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
 	ar rcus $(MACHTYPE)/jkweb.a $(O)
 

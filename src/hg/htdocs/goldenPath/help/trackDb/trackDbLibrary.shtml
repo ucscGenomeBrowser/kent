@@ -3730,6 +3730,13 @@ There are no extra options that can appear on the type hic line.
     it may make sense to use the <code>speciesGroups</code> setting instead.</P>
 </DIV>
 
+<DIV class="speciesLabels"><span class="types wigMaf bed"></span>
+<div class="format"><code>speciesLabels &lt;species1=newLabel1&gt; [species2=newLabel2 &hellip;]</code></div>
+    <P>Use <code>speciesLabels</code> to specify new labels that map to sequence names.</P>
+    <P><B>Example:</B></P>
+    <pre>   speciesLabels mm10=mouse_mm10 mm39=mouse_mm39</pre>
+</DIV>
+
 <DIV class="speciesGroups"><span class="types wigMaf"></span>
 <div class="format">
     <code>speciesGroups &lt;sgroup1&gt; [sgroup2  &hellip;]</code><BR>
