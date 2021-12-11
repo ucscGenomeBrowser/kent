@@ -25,7 +25,7 @@ set names=( 'Ann Zweig' 'Brian Raney' 'Brooke Rhead' 'Jim Kent' 'Andy Pohl'\
 set alias=( ann braney rhead kent aamp \
   larrym markd kate hiram tdreszer  \
   galt giardine angie baertsch \
-  donnak fanhsu kuhn Max 
+  donnak fanhsu kuhn Max \
   hartera brianlee)
 # set names=( 'Jim Kent' )
 # set alias=( kent )
