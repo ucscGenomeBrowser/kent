@@ -10503,6 +10503,8 @@ cgiTableRowEnd();
 
 if (sameString(database,"hg38"))
     chromInfoRowsChromExt("withAltRandom");
+else if (trackHubDatabase(database))
+    chromInfoRowsNonChrom(1000);
 else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) &&
     hChromCount(database) < 100)
     chromInfoRowsChrom();
