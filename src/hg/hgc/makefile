@@ -14,7 +14,7 @@ O = $A.o bamClick.o barChartClick.o bigBedClick.o bigDbSnpClick.o \
 	interactClick.o lowelab.o lrgClick.o \
 	mafClick.o makeItemsClick.o mgcClick.o \
 	parClick.o peakClusters.o regMotif.o retroClick.o rmskJoinedClick.o \
-	bigRmskClick.o rnaFoldClick.o \
+	bigRmskClick.o rnaFoldClick.o togaClick.o \
 	transMapClick.o txCdsInfo.o pubs.o vcfClick.o wiggleClick.o \
 	wikiTrack.o variomeClick.o numtsClick.o geneReviewsClick.o
 

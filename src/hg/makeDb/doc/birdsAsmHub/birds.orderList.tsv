@@ -66,6 +66,7 @@ GCF_003850225.1_IASCAAS_PekingDuck_PBH1.5	mallard PBH1.5
 GCF_015476345.1_ZJU1.0	mallard ZJU1.0
 GCF_017639235.1_C.kubaryi_AGA036_p1.0	Mariana crow
 GCF_000277835.1_GeoFor_1.0	medium ground-finch
+GCA_017639245.1_MMon_1.0	monk parakeet
 GCF_009769625.2_bCygOlo1.pri.v2	mute swan
 GCF_000690835.1_ASM69083v1	Northern fulmar
 GCF_003343035.1_aptRow1	Okarito brown kiwi
@@ -86,6 +87,8 @@ GCF_003984885.1_ASM398488v2	saffron-crested tyrant-manakin
 GCF_000337975.1_F_cherrug_v1.0	Saker falcon
 GCF_901933205.1_STF_HiC	small tree finch (2019)
 GCA_902806625.1_Camarhynchus_parvulus_V1.1	small tree finch (2020)
+GCA_020800305.1_bPorHoc1.mat.Z.cur	South Island takahe (VGP primary 2021)
+GCA_020801775.1_bPorHoc1.pat.decon	South Island takahe (VGP alternate 2021)
 GCF_000690715.1_ASM69071v1	speckled mousebird
 GCF_000690775.1_ASM69077v1	sunbittern
 GCA_020746105.1_bTroSur1.pri.cur	Suruca trogon
