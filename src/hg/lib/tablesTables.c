@@ -167,39 +167,42 @@ struct slName *el;
 for (el = visibleFields; el != NULL; el = el->next)
     {
     char *field = el->name;
-    int fieldIx = fieldedTableMustFindFieldIx(table, field);
-    char varName[256];
-    safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
-    printf("<td>");
+    int fieldIx = fieldedTableFindFieldIx(table, field);
+    if (fieldIx >= 0)
+	{
+	char varName[256];
+	safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
+	printf("<td>");
 
-    /* Approximate size of input control in characters */
-    int size = fieldedTableMaxColChars(table, fieldIx);
-    if (size > maxLenField)
-	size = maxLenField;
+	/* Approximate size of input control in characters */
+	int size = fieldedTableMaxColChars(table, fieldIx);
+	if (size > maxLenField)
+	    size = maxLenField;
 
-    /* Print input control getting previous value from cart.  Set an id=
-     * so auto-suggest can find this control. */
-    char *oldVal = cartUsualString(cart, varName, "");
-    printf("<INPUT TYPE=TEXT NAME=\"%s\" id=\"%s\" SIZE=%d",
-	varName, varName, size+1);
-    if (isEmpty(oldVal))
-        printf(" placeholder=\" filter \">\n");
-    else
-        printf(" value=\"%s\">\n", oldVal);
+	/* Print input control getting previous value from cart.  Set an id=
+	 * so auto-suggest can find this control. */
+	char *oldVal = cartUsualString(cart, varName, "");
+	printf("<INPUT TYPE=TEXT NAME=\"%s\" id=\"%s\" SIZE=%d",
+	    varName, varName, size+1);
+	if (isEmpty(oldVal))
+	    printf(" placeholder=\" filter \">\n");
+	else
+	    printf(" value=\"%s\">\n", oldVal);
 
-    /* Write out javascript to reset page number to 1 if filter changes */
-    resetPageNumberOnChange(varName, varPrefix);
+	/* Write out javascript to reset page number to 1 if filter changes */
+	resetPageNumberOnChange(varName, varPrefix);
 
-    /* Set up the auto-suggest list for this filter */
-    if (suggestHash != NULL)
-        {
-	struct slName *suggestList = hashFindVal(suggestHash, field);
-	if (suggestList != NULL)
+	/* Set up the auto-suggest list for this filter */
+	if (suggestHash != NULL)
 	    {
-	    printSuggestScript(varName, suggestList);
+	    struct slName *suggestList = hashFindVal(suggestHash, field);
+	    if (suggestList != NULL)
+		{
+		printSuggestScript(varName, suggestList);
+		}
 	    }
+	printf("</td>\n");
 	}
-    printf("</td>\n");
     }
 
 
@@ -222,33 +225,36 @@ safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
 struct slName *vis;
 for (vis = visibleFields; vis != NULL; vis = vis->next)
     {
-    printf("<td>");
-    printf("<A class=\"topbar\" HREF=\"");
-    printf("%s", returnUrl);
-    printf("&%s=1", pageVar);
-    printf("&%s=", orderVar);
-    char *field = vis->name;
-    if (!isEmpty(orderFields) && sameString(orderFields, field))
-        printf("-");
-    printf("%s", field);
-    printf("\">");
-    printf("%s", field);
-    if (!isEmpty(orderFields))
-        {
-	char *s = orderFields;
-	boolean isRev = (s[0] == '-');
-	if (isRev)
-	    ++s;
-	if (sameString(field, s))
+    if (fieldedTableFindFieldIx(table, vis->name) != -1)
+	{
+	printf("<td>");
+	printf("<A class=\"topbar\" HREF=\"");
+	printf("%s", returnUrl);
+	printf("&%s=1", pageVar);
+	printf("&%s=", orderVar);
+	char *field = vis->name;
+	if (!isEmpty(orderFields) && sameString(orderFields, field))
+	    printf("-");
+	printf("%s", field);
+	printf("\">");
+	printf("%s", field);
+	if (!isEmpty(orderFields))
 	    {
+	    char *s = orderFields;
+	    boolean isRev = (s[0] == '-');
 	    if (isRev)
-	        printf("&uarr;");
-	    else
-	        printf("&darr;");
+		++s;
+	    if (sameString(field, s))
+		{
+		if (isRev)
+		    printf("&uarr;");
+		else
+		    printf("&darr;");
+		}
 	    }
+	printf("</A>");
+	printf("</td>\n");
 	}
-    printf("</A>");
-    printf("</td>\n");
     }
 
 /* Sort on field */
@@ -276,14 +282,20 @@ int visIx[visFieldCount];
 int i;
 struct slName *el = visibleFields;;
 for (i=0; i<visFieldCount; ++i, el = el->next)
-    visIx[i] = fieldedTableMustFindFieldIx(table, el->name);
+    visIx[i] = fieldedTableFindFieldIx(table, el->name);
 
 /* Figure out numerical ones */
 int count = 0;
 struct fieldedRow *row;
 boolean isNum[visFieldCount];
 for (i=0; i<visFieldCount; ++i)
-    isNum[i] = fieldedTableColumnIsNumeric(table, visIx[i]);
+    {
+    int vix = visIx[i];
+    if (vix >= 0)
+	isNum[i] = fieldedTableColumnIsNumeric(table, visIx[i]);
+    else
+        isNum[i] = FALSE;
+    }
 
 for (row = table->rowList; row != NULL; row = row->next)
     {
@@ -295,39 +307,43 @@ for (row = table->rowList; row != NULL; row = row->next)
     for (i=0; i<visFieldCount; ++i)
 	{
 	fieldIx = visIx[i];
-	char shortVal[maxLenField+1];
-	char *longVal = emptyForNull(row->row[fieldIx]);
-	char *val = longVal;
-	int valLen = strlen(val);
-	if (maxLenField > 0 && maxLenField < valLen)
+	if (fieldIx >= 0)
 	    {
-	    if (valLen > maxLenField)
+	    char shortVal[maxLenField+1];
+	    char *longVal = emptyForNull(row->row[fieldIx]);
+	    char *val = longVal;
+	    int valLen = strlen(val);
+	    if (maxLenField > 0 && maxLenField < valLen)
 		{
-		memcpy(shortVal, val, maxLenField-3);
-		shortVal[maxLenField-3] = 0;
-		strcat(shortVal, "...");
-		val = shortVal;
+		if (valLen > maxLenField)
+		    {
+		    memcpy(shortVal, val, maxLenField-3);
+		    shortVal[maxLenField-3] = 0;
+		    strcat(shortVal, "...");
+		    val = shortVal;
+		    }
 		}
-	    }
-	if (isNum[fieldIx]) // vacuous, but left it just in case we want to do different stuff to numbers later
-            printf("<td>");
-        else
-            printf("<td>");
-	boolean printed = FALSE;
-	if (tagOutputWrappers != NULL && !isEmpty(val))
-	    {
-	    char *field = table->fields[fieldIx];
-	    webTableOutputWrapperType *printer = hashFindVal(tagOutputWrappers, field);
-	    if (printer != NULL)
+	    if (isNum[fieldIx]) // vacuous, but left it just in case we want 
+				// to do different stuff to numbers later
+		printf("<td>");
+	    else
+		printf("<td>");
+	    boolean printed = FALSE;
+	    if (tagOutputWrappers != NULL && !isEmpty(val))
 		{
-		printer(table, row, field, longVal, val, wrapperContext);
-		printed = TRUE;
+		char *field = table->fields[fieldIx];
+		webTableOutputWrapperType *printer = hashFindVal(tagOutputWrappers, field);
+		if (printer != NULL)
+		    {
+		    printer(table, row, field, longVal, val, wrapperContext);
+		    printed = TRUE;
+		    }
+		
 		}
-	    
+	    if (!printed)
+		printf("%s", val);
+	    printf("</td>\n");
 	    }
-	if (!printed)
-	    printf("%s", val);
-	printf("</td>\n");
 	}
     printf("</TR>\n");
     }
@@ -409,7 +425,7 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     int pageSize, int facetUsualSize,
     struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
     struct facetField **ffArray, char *visibleFacetList,
-    void (*addFunc)(int) )
+    void (*addFunc)(int), boolean facetMergeOk )
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -440,52 +456,56 @@ if (visibleFacetList)
     struct slName *vis;
     for (vis = visList; vis != NULL; vis = vis->next)
 	{
-	int f = fieldedTableMustFindFieldIx(table, vis->name);
-	struct facetField *field = ffArray[f];
-	if (!field->allSelected)
+	int fIx = fieldedTableFindFieldIx(table, vis->name);
+	if (fIx >= 0)
 	    {
-	    gotSelected = TRUE;
-	    htmlDyStringPrintf(facetBar, "<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
-	    htmlDyStringPrintf(facetBar, "<dt style='display: inline-block;'>\n");
-	    htmlDyStringPrintf(facetBar, "<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
-
-	    struct facetVal *val;
-
-	    // Sort values alphabetically
-	    // Make a copy to not disturb the original order 
-	    struct facetVal *valListCopy = facetsClone(field->valList);
-	    slSort(&valListCopy, facetValCmp);
-	    
-	    for (val = valListCopy; val; val=val->next)
+	    struct facetField *field = ffArray[fIx];
+	    if (!field->allSelected)
 		{
-		boolean specificallySelected = (val->selected && !field->allSelected);
-		if (specificallySelected)
+		gotSelected = TRUE;
+		htmlDyStringPrintf(facetBar, "<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
+		htmlDyStringPrintf(facetBar, "<dt style='display: inline-block;'>\n");
+		htmlDyStringPrintf(facetBar, "<h6 class='card-title'>%s</h6></dt>\n", 
+		    field->fieldName);
+
+		struct facetVal *val;
+
+		// Sort values alphabetically
+		// Make a copy to not disturb the original order 
+		struct facetVal *valListCopy = facetsClone(field->valList);
+		slSort(&valListCopy, facetValCmp);
+		
+		for (val = valListCopy; val; val=val->next)
 		    {
-		    char *op = "remove";
-		    htmlDyStringPrintf(facetBar, "<dd class=\"facet\" style='display: inline-block;'>\n");
-		    htmlDyStringPrintf(facetBar, "<input type=checkbox value=%s class=ttFsCheckBox %s>&nbsp;",
-			specificallySelected ? "true" : "false", 
-			specificallySelected ? "checked" : "");
-		    htmlDyStringPrintf(facetBar, "<a href='%s"
-			    "&%s_facet_op=%s|url|"
-			    "&%s_facet_fieldName=%s|url|"
-			    "&%s_facet_fieldVal=%s|url|"
-			    "&%s_page=1'"
-			    ">",
-			returnUrl, varPrefix,
-			op, varPrefix, field->fieldName, varPrefix, val->val, varPrefix
-			);
-		    htmlDyStringPrintf(facetBar, "%s (%d)</a>", 
-			naForEmpty(val->val), val->selectCount);
-		    htmlDyStringPrintf(facetBar, "</dd>\n");
+		    boolean specificallySelected = (val->selected && !field->allSelected);
+		    if (specificallySelected)
+			{
+			char *op = "remove";
+			htmlDyStringPrintf(facetBar, 
+			    "<dd class=\"facet\" style='display: inline-block;'>\n");
+			htmlDyStringPrintf(facetBar, 
+			    "<input type=checkbox value=%s class=ttFsCheckBox %s>&nbsp;",
+			    specificallySelected ? "true" : "false", 
+			    specificallySelected ? "checked" : "");
+			htmlDyStringPrintf(facetBar, "<a href='%s"
+				"&%s_facet_op=%s|url|"
+				"&%s_facet_fieldName=%s|url|"
+				"&%s_facet_fieldVal=%s|url|"
+				"&%s_page=1'"
+				">",
+			    returnUrl, varPrefix,
+			    op, varPrefix, field->fieldName, varPrefix, val->val, varPrefix
+			    );
+			htmlDyStringPrintf(facetBar, "%s (%d)</a>", 
+			    naForEmpty(val->val), val->selectCount);
+			htmlDyStringPrintf(facetBar, "</dd>\n");
+			}
 		    }
+		slFreeList(&valListCopy);
+		
+		htmlDyStringPrintf(facetBar, "</span></span>\n");
 		}
-	    slFreeList(&valListCopy);
-	    
-	    htmlDyStringPrintf(facetBar, "</span></span>\n");
-
 	    }
-
 	}
 
     if (!isEmpty(where) || gotSelected)
@@ -547,112 +567,152 @@ if (visibleFacetList)
     struct slName *vis;
     for (vis = visList; vis != NULL; vis = vis->next)
 	{
+	char *fieldName = vis->name;
 	char selfId[256];
-	safef(selfId, sizeof(selfId), "%s_self_a_%s", varPrefix, vis->name);
+	safef(selfId, sizeof(selfId), "%s_self_a_%s", varPrefix, fieldName);
 	subChar(selfId, ' ', '_');
 
-	int f = fieldedTableMustFindFieldIx(table, vis->name);
-	struct facetField *field = ffArray[f];
+	/* Work on facet field label line */
 	htmlPrintf("<div id=\"%s\" class='card facet-card'><div class='card-body'>\n", selfId);
-	htmlPrintf("<h6 class='card-title'>%s</h6><dl>\n", field->fieldName);
-	struct facetVal *val;
+	htmlPrintf("<h6 class='card-title'>%s",vis->name);
 
-	if (!field->allSelected)  // add reset facet link
+	int f = fieldedTableFindFieldIx(table, fieldName);
+	char *op = "unmerge";
+	struct facetField *field = NULL;
+	if (f >= 0)
 	    {
-	    char *op = "reset";
-	    htmlPrintf("<dd><a class='btn btn-secondary' href='%s"
-		    "&%s_facet_op=%s|url|"
+	    field = ffArray[f];
+	    if (!field->isMerged)
+	        op = "merge";
+	    }
+
+	/* Write merge/unmerge link and number of categories */
+	if (facetMergeOk)
+	    {
+	    htmlPrintf("<span style='float:right'>");
+	    htmlPrintf("<a class='btn btn-secondary' href='%s"
+		    "&%s_facet_op=%s|none|"
 		    "&%s_facet_fieldName=%s|url|"
 		    "&%s_facet_fieldVal=%s|url|"
 		    "&%s_page=1' "
-		    ">%s</a></dd>\n",
-		returnUrl, varPrefix, op, 
-		varPrefix, field->fieldName, varPrefix, "", varPrefix,
-		"Clear"
-		);
+		    ">", 
+		    returnUrl, varPrefix, op, varPrefix, fieldName, 
+		    varPrefix, "", varPrefix);
+	    htmlPrintf("%s", op);
+
+	    if (field != NULL && sameString(op, "merge"))
+		{
+		int selectedFieldCount = facetFieldCountSelected(field);
+		htmlPrintf(" %d", selectedFieldCount);
+		}
+	    htmlPrintf("</a></span>");
 	    }
 
-	int valuesShown = 0;
-	int valuesNotShown = 0;
-	if (field->showAllValues)  // Sort alphabetically if they want all values 
+	/* CLose up facet field label line */
+	htmlPrintf("</h6><dl>\n");
+
+	if (field != NULL)
 	    {
-	    slSort(&field->valList, facetValCmp);
-	    }
-	int extraAnchorPeriod = 15;
-	int extraAnchorPos = 0;
-	for (val = field->valList; val; val=val->next)
-	    {
-	    boolean specificallySelected = (val->selected && !field->allSelected);
-	    if ((val->selectCount > 0 && (field->showAllValues || valuesShown < facetUsualSize))
-		|| specificallySelected)
+	    struct facetVal *val;
+	    if (!field->allSelected)  // add reset facet link
 		{
-		++valuesShown;
-		++extraAnchorPos;
-		char *op = "add";
-		if (specificallySelected)
-		    op = "remove";
-		printf("<dd class=\"facet\"");
-		if (extraAnchorPos >= extraAnchorPeriod)
+		char *op = "reset";
+		htmlPrintf("<dd><a class='btn btn-secondary' href='%s"
+			"&%s_facet_op=%s|url|"
+			"&%s_facet_fieldName=%s|url|"
+			"&%s_facet_fieldVal=%s|url|"
+			"&%s_page=1' "
+			">%s</a></dd>\n",
+		    returnUrl, varPrefix, op, 
+		    varPrefix, field->fieldName, varPrefix, "", varPrefix,
+		    "Clear"
+		    );
+		}
+
+	    int valuesShown = 0;
+	    int valuesNotShown = 0;
+	    if (field->showAllValues)  // Sort alphabetically if they want all values 
+		{
+		slSort(&field->valList, facetValCmp);
+		}
+	    int extraAnchorPeriod = 15;
+	    int extraAnchorPos = 0;
+	    for (val = field->valList; val; val=val->next)
+		{
+		boolean specificallySelected = (val->selected && !field->allSelected);
+		if ((val->selectCount > 0 && 
+		    (field->showAllValues || valuesShown < facetUsualSize) && 
+		    !field->isMerged)
+		    || specificallySelected)
 		    {
-		    safef(selfId, sizeof(selfId), "%s_self_a_%s_%s", varPrefix, vis->name, 
-			val->val);
-		    subChar(selfId, ' ', '_');
-		    printf(" id=\"%s\"", selfId);
-		    extraAnchorPos= 0;
+		    ++valuesShown;
+		    ++extraAnchorPos;
+		    char *op = "add";
+		    if (specificallySelected)
+			op = "remove";
+		    printf("<dd class=\"facet\"");
+		    if (extraAnchorPos >= extraAnchorPeriod)
+			{
+			safef(selfId, sizeof(selfId), "%s_self_a_%s_%s", varPrefix, vis->name, 
+			    val->val);
+			subChar(selfId, ' ', '_');
+			printf(" id=\"%s\"", selfId);
+			extraAnchorPos= 0;
+			}
+		    printf(">\n");
+		    htmlPrintf("<input type=checkbox value=%s class=ttFsCheckBox %s>&nbsp;",
+			specificallySelected ? "true" : "false", 
+			specificallySelected ? "checked" : "");
+		    htmlPrintf("<a href='%s"
+			    "&%s_facet_op=%s|none|"
+			    "&%s_facet_fieldName=%s|url|"
+			    "&%s_facet_fieldVal=%s|url|"
+			    "&%s_page=1#%s' "
+			    ">",
+			returnUrl, varPrefix,
+			op, varPrefix, field->fieldName, varPrefix, val->val, varPrefix, selfId
+			);
+		    htmlPrintf("%s (%d)</a>", naForEmpty(val->val), val->selectCount);
+		    printf("</dd>\n");
 		    }
-		printf(">\n");
-		htmlPrintf("<input type=checkbox value=%s class=ttFsCheckBox %s>&nbsp;",
-		    specificallySelected ? "true" : "false", 
-		    specificallySelected ? "checked" : "");
-		htmlPrintf("<a href='%s"
-			"&%s_facet_op=%s|none|"
+		else if (val->selectCount > 0)
+		    {
+		    ++valuesNotShown;
+		    }
+		}
+
+	    // show "See More" link when facet has lots of values
+	    if (valuesNotShown > 0 && !field->isMerged)
+		{
+		char *op = "showAllValues";
+		htmlPrintf("<dd><a href='%s"
+			"&%s_facet_op=%s|url|"
 			"&%s_facet_fieldName=%s|url|"
 			"&%s_facet_fieldVal=%s|url|"
 			"&%s_page=1#%s' "
-			">",
-		    returnUrl, varPrefix,
-		    op, varPrefix, field->fieldName, varPrefix, val->val, varPrefix, selfId
+			">See %d More</a></dd>\n",
+		    returnUrl, varPrefix, op, 
+		    varPrefix, field->fieldName, varPrefix, "", 
+		    varPrefix, selfId, valuesNotShown
 		    );
-		htmlPrintf("%s (%d)</a>", naForEmpty(val->val), val->selectCount);
-		printf("</dd>\n");
 		}
-	    else if (val->selectCount > 0)
+
+	    // show "See Fewer" link when facet has lots of values
+	    if (field->showAllValues && valuesShown >= facetUsualSize)
 		{
-		++valuesNotShown;
+		safef(selfId, sizeof(selfId), "%s_self_a_%s", varPrefix, vis->name);
+		subChar(selfId, ' ', '_');
+		char *op = "showSomeValues";
+		htmlPrintf("<dd><a href='%s"
+			"&%s_facet_op=%s|url|"
+			"&%s_facet_fieldName=%s|url|"
+			"&%s_facet_fieldVal=%s|url|"
+			"&%s_page=1#%s' "
+			">%s</a></dd>\n",
+		    returnUrl, varPrefix, op, varPrefix, field->fieldName, varPrefix, "", varPrefix,
+		    selfId, "See Fewer"
+		    );
 		}
-	    }
-
-	// show "See More" link when facet has lots of values
-	if (valuesNotShown > 0)
-	    {
-	    char *op = "showAllValues";
-	    htmlPrintf("<dd><a href='%s"
-		    "&%s_facet_op=%s|url|"
-		    "&%s_facet_fieldName=%s|url|"
-		    "&%s_facet_fieldVal=%s|url|"
-		    "&%s_page=1#%s' "
-		    ">See %d More</a></dd>\n",
-		returnUrl, varPrefix, op, 
-		varPrefix, field->fieldName, varPrefix, "", 
-		varPrefix, selfId, valuesNotShown
-		);
-	    }
-
-	// show "See Fewer" link when facet has lots of values
-	if (field->showAllValues && valuesShown >= facetUsualSize)
-	    {
-	    safef(selfId, sizeof(selfId), "%s_self_a_%s", varPrefix, vis->name);
-	    subChar(selfId, ' ', '_');
-	    char *op = "showSomeValues";
-	    htmlPrintf("<dd><a href='%s"
-		    "&%s_facet_op=%s|url|"
-		    "&%s_facet_fieldName=%s|url|"
-		    "&%s_facet_fieldVal=%s|url|"
-		    "&%s_page=1#%s' "
-		    ">%s</a></dd>\n",
-		returnUrl, varPrefix, op, varPrefix, field->fieldName, varPrefix, "", varPrefix,
-		selfId, "See Fewer"
-		);
 	    }
 	htmlPrintf("</div></div>\n");
 	}
@@ -712,7 +772,7 @@ webFilteredFieldedTable(cart, table, NULL, returnUrl, varPrefix,
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
     slCount(table->rowList), 
-    0, NULL, NULL, NULL, NULL, NULL);
+    0, NULL, NULL, NULL, NULL, NULL, FALSE);
 }
 
 
@@ -923,7 +983,7 @@ if (!visibleFacetList)
 
 webFilteredFieldedTable(cart, table, fields, returnUrl, varPrefix, maxFieldWidth, 
     tagOutWrappers, wrapperContext, withFilters, pluralInstructions, 
-    pageSize, facetUsualSize, &context, suggestHash, ffArray, visibleFacetList, addFunc);
+    pageSize, facetUsualSize, &context, suggestHash, ffArray, visibleFacetList, addFunc, FALSE);
 fieldedTableFree(&table);
 
 dyStringFree(&fusedFields);

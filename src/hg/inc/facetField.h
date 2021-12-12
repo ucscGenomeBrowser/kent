@@ -16,6 +16,9 @@ struct facetVal
     int selectCount;	    /* Number of times this value used if selected. */
     };
 
+int facetValCountSelected(struct facetVal *list);
+/* Return number of facets in list that are selected */
+
 struct facetField
 /* Keeps track of number of uses and unique values of a field */
     {
@@ -27,6 +30,7 @@ struct facetField
     struct facetVal *currentVal; /* Temporary value saves having to repeat hash lookup. */
     boolean allSelected;    /* When on no specific values selected, so all values are selected. default TRUE. */
     boolean showAllValues;  /* When true, show all values, otherwise only show first 100 values plus See More link, defaults to false */
+    boolean isMerged;	    /* When true user has merged out this field */
     };
 
 int facetValCmpSelectCountDesc(const void *va, const void *vb);
@@ -38,6 +42,12 @@ int facetValCmp(const void *va, const void *vb);
 
 struct facetVal *facetsClone(struct facetVal *origList);
 /* Copy the facet vals list */
+
+int facetFieldCountSelected(struct facetField *facetField);
+/* Return number of facets in list that are selected */
+
+boolean facetFieldAnyMerged(struct facetField *list);
+/* Return TRUE if any facetField on list isMerged */
 
 void selectedListFacetValUpdate(struct facetField **pSelectedList, char *facetName, char *facetValue, char *op);
 /* Add or remove by changing selected boolean */
@@ -62,10 +72,11 @@ struct facetField *facetFieldsFromSqlTable(struct sqlConnection *conn, char *tab
     char *nullVal, char *where, char *selectedFields, int *pSelectedRowCount);
 /* Return a list of facetField, one for each field of given table */
 
-struct fieldedTable *facetFieldsFromFieldedTable(struct fieldedTable *ft, char *selectedFields,
+struct fieldedTable *facetFieldSelectRows(struct fieldedTable *ft, char *selectionKey,
     struct facetField *ffArray[]);
-/* Return a list of facetField, one for each selected field of given table.  It'll
- * scan through table to do this and optionally you can get the count of selected rows. */
+/* Return a tables that is just rows of table ft that pass selection key.  ffArray should
+ * have same number of elements as ft->fieldCount */
+
 
 struct facetVal *facetValMajorPlusOther(struct facetVal *list, double minRatio);
 /* Return a list of only the tags that are over minRatio of total tags.

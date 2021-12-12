@@ -171,4 +171,5 @@ group regulation
     barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_detailed.facets
     barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_detailed.categories
     barChartFacets tissue,subtissue,cell_class,cell_type,age,sex,mouse_id
+    barChartMerge on
     barChartStretchToItem on

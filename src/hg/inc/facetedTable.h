@@ -8,8 +8,9 @@
  *
  * struct facetedTable *facTab = facetedTableFromTable(myTable, varPrefix, "organ,cell,stage");
  * facetedTableUpdateOnClick(facTab, cart); 
- * struct fieldedTable *selected = facetedTableSelect(facTab, cart);
- * facetedTableWriteHtml(facTab, cart, selected, "shortLabel,expressionValue",
+ * struct facetField *selectedFf;
+ * struct fieldedTable *selected = facetedTableSelect(facTab, cart, &selectedFf);
+ * facetedTableWriteHtml(facTab, cart, selected, selectedFf, "shortLabel,expressionValue",
  *                       "../cgi-bin/hgSomething?hgsid=123_ABC",  32,
  *                       NULL, NULL, 7);
  *
@@ -29,6 +30,7 @@ struct facetedTable
     char *facets;   /* Comma separated list of facets */
     struct fieldedTable *table;	/* Associated table-in-memory */
     struct facetField **ffArray; /* Additional info on each field of table for faceter */
+    boolean mergeFacetsOk;	/* If set can merge facets */
     };
 
 void facetedTableFree(struct facetedTable **pFt);
@@ -42,12 +44,14 @@ boolean facetedTableUpdateOnClick(struct facetedTable *facTab, struct cart *cart
 /* If we got called by a click on a facet deal with that and return TRUE, else do
  * nothing and return false */
 
-struct fieldedTable *facetedTableSelect(struct facetedTable *facTab, struct cart *cart);
-/* Return table containing rows of table that have passed facet selection */
+struct fieldedTable *facetedTableSelect(struct facetedTable *facTab, struct cart *cart,
+    struct facetField ***retFfArray);
+/* Return table containing rows of facTab->table that have passed facet selection */
 
 void facetedTableWriteHtml(struct facetedTable *facTab, 
     struct cart *cart,		    /* User settingss and stuff */
     struct fieldedTable *selected,  /* Table that just contains rows that survive selection */
+    struct facetField **selectedFf, /* Fields that survive selection */
     char *displayList,		    /* Comma separated list of fields to display in table */
     char *returnUrl,		    /* Url that takes us back to page we are writing next click */
     int maxFieldWidth,		    /* How big do we let fields get in characters */
