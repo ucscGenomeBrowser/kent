@@ -45,6 +45,7 @@
 
 #include "hgdpGeo.h"
 #include "dnaMotif.h"
+#include "togaClick.h"
 
 extern struct cart *cart;	/* User's settings. */
 extern char *seqName;		/* Name of sequence we're working on. */
