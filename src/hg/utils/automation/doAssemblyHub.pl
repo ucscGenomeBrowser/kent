@@ -1415,13 +1415,18 @@ if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   twoBitToFa \$asmId.masked.2bit stdout | faSize stdin > \$asmId.masked.faSize.txt
   touch -r \$asmId.masked.2bit \$asmId.masked.faSize.txt
   cp -p \$asmId.masked.faSize.txt ../../\$asmId.faSize.txt
-  ln \$asmId.masked.2bit \$accessionId.2bit
-  gfServer -trans index ../../\$accessionId.trans.gfidx \$accessionId.2bit &
-  gfServer -stepSize=5 index ../../\$accessionId.untrans.gfidx \$accessionId.2bit
-  wait
-  rm \$accessionId.2bit
-  touch -r \$asmId.masked.2bit ../../\$accessionId.trans.gfidx
-  touch -r \$asmId.masked.2bit ../../\$accessionId.untrans.gfidx
+  size=`grep -w bases \$asmId.masked.faSize.txt | cut -d' ' -f1`
+  if [ \$size -lt 4294967297 ]; then
+    ln \$asmId.masked.2bit \$accessionId.2bit
+    gfServer -trans index ../../\$accessionId.trans.gfidx \$accessionId.2bit &
+    gfServer -stepSize=5 index ../../\$accessionId.untrans.gfidx \$accessionId.2bit
+    wait
+    rm \$accessionId.2bit
+    touch -r \$asmId.masked.2bit ../../\$accessionId.trans.gfidx
+    touch -r \$asmId.masked.2bit ../../\$accessionId.untrans.gfidx
+  else
+    printf "# genome \$asmId too large at \$size to make blat indexes\\n" 1>&2
+  fi
 else
   printf "# addMask step previously completed\\n" 1>&2
   exit 0
@@ -1519,6 +1524,12 @@ sub doTandemDups {
     &HgAutomate::verbose(1,
 	"ERROR: tandemDups: can not find $buildDir/$asmId.unmasked.2bit\n");
     exit 255;
+  }
+  my $ctgCount = `grep -c '^' $buildDir/$asmId.chrom.sizes`;
+  chomp $ctgCount;
+  if ( $ctgCount > 100000) {
+   &HgAutomate::verbose(1, "# tandemDups step too many contigs at $ctgCount\n");
+       return;
   }
   if (-d "${runDir}" ) {
      if (! -s "$runDir/$asmId.tandemDups.bb") {

@@ -390,3 +390,17 @@ exonArrows on
     priority 2
 
 include dbSnpArchiveMm10.ra 
+
+# TOGA default annotation for hg38
+track HLTOGAannotvsHg38v1
+shortLabel TOGA hg38 annotations
+longLabel TOGA annotations using human hg38 as reference
+group genes
+priority 2
+visibility pack
+itemRgb on
+type bed 12
+
+searchTable HLTOGAannotvsHg38v1
+searchType bed
+searchMethod fuzzy
