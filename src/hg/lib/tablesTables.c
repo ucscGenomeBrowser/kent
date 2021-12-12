@@ -451,6 +451,7 @@ if (visibleFacetList)
 
 
     boolean gotSelected = FALSE;
+    boolean anyMerged = FALSE;
 
     struct slName *visList = slNameListFromComma(visibleFacetList);
     struct slName *vis;
@@ -463,7 +464,9 @@ if (visibleFacetList)
 	    if (!field->allSelected)
 		{
 		gotSelected = TRUE;
-		htmlDyStringPrintf(facetBar, "<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
+		htmlDyStringPrintf(facetBar, 
+		    "<span class='card facet-card' style='display: inline-block;'>"
+		    "<span class='card-body'>\n");
 		htmlDyStringPrintf(facetBar, "<dt style='display: inline-block;'>\n");
 		htmlDyStringPrintf(facetBar, "<h6 class='card-title'>%s</h6></dt>\n", 
 		    field->fieldName);
@@ -506,9 +509,30 @@ if (visibleFacetList)
 		htmlDyStringPrintf(facetBar, "</span></span>\n");
 		}
 	    }
+	else
+	    {
+	    anyMerged = TRUE;
+	    htmlDyStringPrintf(facetBar, 
+		"<span class='card facet-card' style='display: inline-block;'>"
+		"<span class='card-body'>\n");
+	    htmlDyStringPrintf(facetBar, "<dt style='display: inline-block;'>\n");
+	    htmlDyStringPrintf(facetBar, "<h6 class='card-title'>%s</h6></dt>\n", 
+		vis->name);
+	    htmlDyStringPrintf(facetBar, " <a class='btn btn-secondary' href='%s"
+		    "&%s_facet_op=%s|none|"
+		    "&%s_facet_fieldName=%s|url|"
+		    "&%s_facet_fieldVal=%s|url|"
+		    "&%s_page=1' "
+		    ">", 
+		    returnUrl, varPrefix, "unmerge", varPrefix, vis->name, 
+		    varPrefix, "", varPrefix);
+	    htmlDyStringPrintf(facetBar, " %s", "unmerge");
+	    htmlDyStringPrintf(facetBar, "</a>");
+	    htmlDyStringPrintf(facetBar, "</span></span>\n");
+	    }
 	}
 
-    if (!isEmpty(where) || gotSelected)
+    if (!isEmpty(where) || gotSelected || anyMerged)
         {
 	printf("<div>\n");
         }
@@ -531,8 +555,7 @@ if (visibleFacetList)
 	printf("<br>");
         }
 
-
-    if (gotSelected)
+    if (gotSelected || anyMerged)
 	{
 	// reset all facet value selections button
 	char *op = "resetAll";
@@ -550,7 +573,7 @@ if (visibleFacetList)
 	printf("</dl>\n");
 	}
 
-    if (!isEmpty(where) || gotSelected)
+    if (!isEmpty(where) || gotSelected || anyMerged)
 	printf("</div><br>\n");
 
     dyStringFree(&facetBar);
