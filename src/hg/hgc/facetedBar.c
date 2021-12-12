@@ -32,7 +32,7 @@ void wrapVal(struct fieldedTable *table, struct fieldedRow *row,
 /* Write out wrapper draws a SVG bar*/
 {
 struct wrapContext *wc = context;
-char *color = "#000000";
+char *color = "#000000";    // Black is default color if no color column
 int colorIx = wc->colorIx;
 if (colorIx >= 0)
     color = row->row[colorIx];
@@ -81,8 +81,29 @@ char *trackName = tdb->track;
 struct sqlConnection *conn = sqlConnect(database);
 struct hash *wrapperHash = hashNew(0);
 
+/* Load up table from tsv file */
+char *requiredStatsFields[] = {"count",};
+struct fieldedTable *statsTable = fieldedTableFromTabFile(statsFile, statsFile, 
+    requiredStatsFields, ArraySize(requiredStatsFields));
+struct fieldedTable *table = addChartVals(statsTable, chart);
+
+/* Update facet selections from users input if any and get selected part of table */
+struct facetedTable *facTab = facetedTableFromTable(table, trackName, facets);
+facTab->mergeFacetsOk = trackDbSettingOn(tdb, "barChartMerge");
+boolean trackDbSettingOn(struct trackDb *tdb, char *name);
+/* Return true if a tdb setting is "on" "true" or "enabled". */
+
+facetedTableUpdateOnClick(facTab, cart);
+struct facetField **selectedFf = NULL;
+struct fieldedTable *selected = facetedTableSelect(facTab, cart, &selectedFf);
+
 /* Write html to make white background */
 hInsideStyleToWhite();
+
+/* Add a few extra status bits  and a way back home before facets and table display */
+printf("&nbsp;&nbsp;<B>Bars selected:</B> %d of %d", selected->rowCount, table->rowCount);
+printf("&nbsp;&nbsp;&nbsp;&nbsp;<b><a href=%s>Return to Genome Browser</href></a></b><p>\n", 
+                     hgTracksPathAndSettings());
 
 /* Set up url that has enough context to get back to us.  */
 struct dyString *returnUrl = dyStringNew(0);
@@ -99,23 +120,13 @@ cartSaveSession(cart);
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("i");
 
-/* Load up table from tsv file */
-char *requiredStatsFields[] = {"count",};
-struct fieldedTable *statsTable = fieldedTableFromTabFile(statsFile, statsFile, 
-    requiredStatsFields, ArraySize(requiredStatsFields));
-struct fieldedTable *table = addChartVals(statsTable, chart);
-
-/* Update facet selections from users input if any and get selected part of table */
-struct facetedTable *facTab = facetedTableFromTable(table, trackName, facets);
-facetedTableUpdateOnClick(facTab, cart);
-struct fieldedTable *selected = facetedTableSelect(facTab, cart);
 
 /* Set up context for functions that wrap output fields */
 struct wrapContext context = {
-		              .valIx = fieldedTableFindFieldIx(table, "val"),
-			      .colorIx = fieldedTableFindFieldIx(table, "color"), 
+		              .valIx = fieldedTableFindFieldIx(selected, "val"),
+			      .colorIx = fieldedTableFindFieldIx(selected, "color"), 
 			     };
-context.maxVal = fieldedTableMaxInCol(table, context.valIx);
+context.maxVal = fieldedTableMaxInCol(selected, context.valIx);
 
 /* Add wrapper function(s) */
 hashAdd(wrapperHash, "val", wrapVal);
@@ -123,10 +134,10 @@ hashAdd(wrapperHash, "val", wrapVal);
 /* Pick which fields to display.  We'll take the first field whatever it is
  * named, and also count, and the "val" field we added and wrapped. */
 char displayList[256];
-safef(displayList, sizeof(displayList), "%s,count,val", table->fields[0]);
+safef(displayList, sizeof(displayList), "%s,count,val", selected->fields[0]);
 
-facetedTableWriteHtml(facTab, cart, selected, displayList,
-    returnUrl->string, 45, wrapperHash, &context, 5);
+facetedTableWriteHtml(facTab, cart, selected, selectedFf, displayList,
+    returnUrl->string, 45, wrapperHash, &context, 6);
 
 
 /* Clean up and go home. */
