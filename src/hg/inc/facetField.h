@@ -46,9 +46,6 @@ struct facetVal *facetsClone(struct facetVal *origList);
 int facetFieldCountSelected(struct facetField *facetField);
 /* Return number of facets in list that are selected */
 
-boolean facetFieldAnyMerged(struct facetField *list);
-/* Return TRUE if any facetField on list isMerged */
-
 void selectedListFacetValUpdate(struct facetField **pSelectedList, char *facetName, char *facetValue, char *op);
 /* Add or remove by changing selected boolean */
 

@@ -89,16 +89,6 @@ else
     }
 }
 
-boolean facetFieldAnyMerged(struct facetField *list)
-/* Return TRUE if any facetField on list isMerged */
-{
-struct facetField *facetField;
-for (facetField = list; facetField != NULL; facetField = facetField->next)
-    if (facetField->isMerged)
-        return TRUE;
-return FALSE;
-}
-
 static void facetFieldAdd(struct facetField *facetField, char *tagVal, boolean selecting)
 /* Add information about tag to facetField */
 {
