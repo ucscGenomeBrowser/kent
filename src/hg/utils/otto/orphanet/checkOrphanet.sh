@@ -46,12 +46,12 @@ sort -k1,1 -k2,2n orphadata.hg19.bed > sortedOrphadata.hg19.bed
 sort -k1,1 -k2,2n orphadata.hg38.bed > sortedOrphadata.hg38.bed
 
 # Check not too much has changed
-oldHg19Count=$(bigBedInfo /gbdb/hg19/bbi/orphanet/orphadata.bb | grep itemCount | cut -d' ' -f2)
-newHg19Count=$(wc -l sortedOrphadata.hg19.bed)
-oldHg38Count=$(bigBedInfo /gbdb/hg38/bbi/orphanet/orphadata.bb | grep itemCount | cut -d' ' -f2)
-newHg38Count=$(wc -l sortedOrphadata.hg38.bed)
-echo $oldHg19Count $newHg19Count | awk '{diff=(($2-$1)/$1); if (diff > 0.1 || diff < 0.1) {printf "validate on hg19 Orphanet failed: old count: %d, new count: %d, difference: %0.2f\n", $1,$2,diff; exit 1;}}'
-echo $oldHg38Count $newHg38Count | awk '{diff=(($2-$1)/$1); if (diff > 0.1 || diff < 0.1) {printf "validate on hg38 Orphanet failed: old count: %d, new count: %d, difference: %0.2f\n", $1,$2,diff; exit 1;}}'
+oldHg19Count=$(bigBedInfo /gbdb/hg19/bbi/orphanet/orphadata.bb | grep itemCount | cut -d' ' -f2 | sed 's/,//')
+newHg19Count=$(wc -l sortedOrphadata.hg19.bed | cut -d' ' -f1)
+oldHg38Count=$(bigBedInfo /gbdb/hg38/bbi/orphanet/orphadata.bb | grep itemCount | cut -d' ' -f2 | sed 's/,//')
+newHg38Count=$(wc -l sortedOrphadata.hg38.bed | cut -d' ' -f1)
+echo $oldHg19Count $newHg19Count | awk '{diff=(($2-$1)/$1); if (diff > 0.1 || diff < -0.1) {printf "validate on hg19 Orphanet failed: old count: %d, new count: %d, difference: %0.2f\n", $1,$2,diff; exit 1;}}'
+echo $oldHg38Count $newHg38Count | awk '{diff=(($2-$1)/$1); if (diff > 0.1 || diff < -0.1) {printf "validate on hg38 Orphanet failed: old count: %d, new count: %d, difference: %0.2f\n", $1,$2,diff; exit 1;}}'
 
 # Make bigBed files
 bedToBigBed -tab -as=$WORKDIR/orphadata.as -type=bed9+20 sortedOrphadata.hg19.bed /hive/data/genomes/hg19/chrom.sizes orphadata.hg19.bb
