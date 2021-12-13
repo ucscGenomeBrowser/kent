@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 {
-. ./buildEnv.sh
+source ./buildEnv.sh
 cd $dir
 
 buildCore.sh
@@ -13,5 +13,9 @@ buildPfamScop.sh &
 buildTo.sh &
 # buildMafGene.sh &
 wait
+
+hgsql $tempDb -Ne "drop view trackDb"
+hgsql $tempDb -Ne "drop view chromInfo"
+
 echo "BuildKnown successfully finished"
 } > doKnown.log < /dev/null 2>&1

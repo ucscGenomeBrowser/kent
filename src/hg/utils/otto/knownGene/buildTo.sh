@@ -21,13 +21,13 @@ hgLoadSqlTab -notOnServer $tempDb  knownToEnsembl  $kent/src/hg/lib/knownTo.sql 
 hgLoadSqlTab -notOnServer $tempDb  knownToGencode${GENCODE_VERSION}  $kent/src/hg/lib/knownTo.sql  knownToGencode${GENCODE_VERSION}.tab
 
 # make knownToLynx
-# wget "http://lynx.ci.uchicago.edu/downloads/LYNX_GENES.tab"
-# awk '{print $2}' LYNX_GENES.tab | sort > lynxExists.txt
-# hgsql -e "select geneSymbol,kgId from kgXref" --skip-column-names $tempDb | awk '{if (NF == 2) print}' | sort > geneSymbolToKgId.txt
-# join lynxExists.txt geneSymbolToKgId.txt | awk 'BEGIN {OFS="\t"} {print $2,$1}' | sort > knownToLynx.tab
-# hgLoadSqlTab -notOnServer $tempDb  knownToLynx $kent/src/hg/lib/knownTo.sql  knownToLynx.tab
-# 
-# rm lynxExists.txt geneSymbolToKgId.txt
+wget "http://lynx.ci.uchicago.edu/downloads/LYNX_GENES.tab"
+awk '{print $2}' LYNX_GENES.tab | sort > lynxExists.txt
+hgsql -e "select geneSymbol,kgId from kgXref" --skip-column-names $tempDb | awk '{if (NF == 2) print}' | sort > geneSymbolToKgId.txt
+join lynxExists.txt geneSymbolToKgId.txt | awk 'BEGIN {OFS="\t"} {print $2,$1}' | sort > knownToLynx.tab
+hgLoadSqlTab -notOnServer $tempDb  knownToLynx $kent/src/hg/lib/knownTo.sql  knownToLynx.tab
+
+rm lynxExists.txt geneSymbolToKgId.txt
 
 # load malacards table
 if test "$malacardTable" != ""
@@ -111,7 +111,7 @@ hgsql -e "select spID,kgId from kgXref" --skip-column-names $tempDb | awk '{if (
 join displayIdToKgId.txt displayIdToNextProt.txt | awk 'BEGIN {OFS="\t"} {print $2,$3}' > knownToNextProt.tab
 hgLoadSqlTab -notOnServer $tempDb  knownToNextProt $kent/src/hg/lib/knownTo.sql  knownToNextProt.tab
 
-
+hgMapToGene -geneTableType=genePred -tempDb=$tempDb $db HInvGeneMrna knownGene knownToHInv
 
 
 echo "BuildKnownTo successfully finished"
