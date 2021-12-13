@@ -268,6 +268,20 @@ slReverse(&labels);
 slReverse(&colors);
 }
 
+static void getCategsFromMergeList(struct facetedTableMergedOffset *mergeList,
+                                        struct slName **labels, struct slName **colors)
+/* Given merged list, return separate list of labels and colors */
+{
+struct facetedTableMergedOffset *tmo;
+for (tmo = mergeList; tmo != NULL; tmo = tmo->next)
+    {
+    slNameAddHead(labels, tmo->name);
+    slNameAddHead(colors, tmo->color);
+    }
+slReverse(labels);
+slReverse(colors);
+}
+
 static struct barChartCategory *createCategs(char *track, 
                                                 struct slName *labels, struct slName *colors)
 /* Populate category structs from label and color lists.  Assign rainbow if no color list */
@@ -329,15 +343,20 @@ slReverse(&categs);
 return categs;
 }
 
-struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)
-/* Get category colors and descriptive labels.
-   Use labels in tab-sep file specified by barChartCategoryUrl setting, o/w in barChartBars setting.
+struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb,
+    struct facetedTableMergedOffset *mergeList)
+/* Get category colors and descriptive labels.  If mergeList is non-NULL gets it from there,else
+   use labels in tab-sep file specified by barChartCategoryUrl setting, o/w in barChartBars setting.
    If colors are not specified via barChartColors setting or second column in category file,
    assign rainbow colors.  Colors are specified as #fffff or r,g,b  or html color name) */
 {
 struct slName *labels = NULL, *colors = NULL;
 char *categUrl = trackDbSetting(tdb, BAR_CHART_CATEGORY_URL);
-if (isNotEmpty(categUrl))
+if (mergeList != NULL)
+    {
+    getCategsFromMergeList(mergeList, &labels, &colors);
+    }
+else if (isNotEmpty(categUrl))
     getCategsFromFile(tdb->track, categUrl, &labels, &colors);
 else
     {
@@ -349,28 +368,29 @@ return createCategs(tdb->track, labels, colors);
 }
 
 struct barChartCategory *barChartUiGetCategoryById(int id, char *database, 
-                                                        struct trackDb *tdb)
+			       struct trackDb *tdb, struct facetedTableMergedOffset *mergeList)
 /* Get category info by id */
 {
 struct barChartCategory *categ;
-struct barChartCategory *categs = barChartUiGetCategories(database, tdb);
+struct barChartCategory *categs = barChartUiGetCategories(database, tdb, mergeList);
 for (categ = categs; categ != NULL; categ = categ->next)
     if (categ->id == id)
         return categ;
 return NULL;
 }
 
-char *barChartUiGetCategoryLabelById(int id, char *database, struct trackDb *tdb)
+char *barChartUiGetCategoryLabelById(int id, char *database, 
+			       struct trackDb *tdb, struct facetedTableMergedOffset *mergeList)
 /* Get label for a category id */
 {
-struct barChartCategory *categ = barChartUiGetCategoryById(id, database, tdb);
+struct barChartCategory *categ = barChartUiGetCategoryById(id, database, tdb, mergeList);
 if (categ == NULL)
     return "Unknown";
 return categ->label;
 }
 
-void barChartCfgUiSelectEachBar(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
-                        char *title, boolean boxed)
+void barChartCfgUiSelectEachBar(char *database, struct cart *cart, struct trackDb *tdb, 
+	char *track, char *title, boolean boxed)
 /* Bar chart track type */
 {
 printf("\n<table id=barChartControls style='font-size:%d%%' %s>\n<tr><td>", 
@@ -391,7 +411,7 @@ printf("<br>");
 char *categoryLabel =  trackDbSettingClosestToHomeOrDefault(tdb, 
                     BAR_CHART_CATEGORY_LABEL, BAR_CHART_CATEGORY_LABEL_DEFAULT);
 char *db = cartString(cart, "db");
-struct barChartCategory *categs = barChartUiGetCategories(db, tdb);
+struct barChartCategory *categs = barChartUiGetCategories(db, tdb, NULL);
 printf("<div><b>%s:</b>\n", categoryLabel);
 char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_CATEGORY_SELECT);

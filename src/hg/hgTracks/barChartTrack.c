@@ -33,6 +33,7 @@ struct barChartTrack
     struct hash *categoryFilter; /* NULL out excluded factors */
     struct fieldedTable *statsTable;  /* Filled in if barChartStats setting is there */
     struct facetedTable *facetsTable;  /* Filled in if barChartFacets setting is there */
+    struct facetedTableMergedOffset *facetsMergeList; /* Filled in if barChartMerge setting is on */
     int maxViewLimit;
 
     // dimensions for drawing
@@ -73,7 +74,9 @@ struct barChartCategory *getCategories(struct track *tg)
 struct barChartTrack *extras;
 extras = (struct barChartTrack *)tg->extraUiData;
 if (extras->categories == NULL)
-    extras->categories = barChartUiGetCategories(database, tg->tdb);
+    {
+    extras->categories = barChartUiGetCategories(database, tg->tdb, extras->facetsMergeList);
+    }
 return extras->categories;
 }
 
@@ -86,7 +89,7 @@ if (extras->categCount == 0)
 return extras->categCount;
 }
 
-char *getCategoryName(struct track *tg, int id)
+static char *getCategoryName(struct track *tg, int id)
 /* Get category name from id, cacheing */
 {
 struct barChartCategory *categ;
@@ -155,7 +158,16 @@ if (barChartStatsUrl != NULL)
 	    barChartStatsUrl, NULL, 0);
     char *barChartFacets = trackDbSetting(tg->tdb, "barChartFacets");
     if (barChartFacets != NULL)
+	{
 	extras->facetsTable = facetedTableFromTable(extras->statsTable, tg->track, barChartFacets);
+	if (trackDbSettingOn(tg->tdb, "barChartMerge"))
+	    {
+	    struct facetedTableMergedOffset *facetsMergeList = facetedTableMakeMergedOffsets(
+									extras->facetsTable, cart);
+	    assert(facetsMergeList != NULL);
+	    extras->facetsMergeList = facetsMergeList;
+	    }
+	}
     }
 }
 
@@ -163,45 +175,54 @@ static void filterCategories(struct track *tg)
 /* Check cart for category selection.  NULL out unselected categorys in category list */
 {
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
-struct barChartCategory *categ = NULL;
-extras->categories = getCategories(tg);
-extras->categoryFilter = hashNew(0);
-if (extras->facetsTable != NULL && extras->statsTable != NULL)
+if (extras->facetsMergeList == NULL)
     {
-    struct facetedTable *facTab = extras->facetsTable;
-    struct slInt *sel, *selList = facetedTableSelectOffsets(facTab, cart);
-    for (sel = selList; sel != NULL; sel = sel->next)
-        {
-	char numBuf[16];
-	safef(numBuf, sizeof(numBuf), "%d", sel->val);
-	char *numCopy = lmCloneString(extras->categoryFilter->lm, numBuf);
-	hashAdd(extras->categoryFilter, numCopy, numCopy);
-	}
-    return;
-    }
-else if (cartListVarExistsAnyLevel(cart, tg->tdb, FALSE, BAR_CHART_CATEGORY_SELECT))
-    {
-    struct slName *selectedValues = cartOptionalSlNameListClosestToHome(cart, tg->tdb, 
-                                                        FALSE, BAR_CHART_CATEGORY_SELECT);
-    if (selectedValues != NULL)
-        {
-        struct slName *name;
-        for (name = selectedValues; name != NULL; name = name->next)
+    struct barChartCategory *categ = NULL;
+    extras->categories = getCategories(tg);
+    extras->categoryFilter = hashNew(0);
+    if (extras->facetsTable != NULL && extras->statsTable != NULL)
+	{
+	struct facetedTable *facTab = extras->facetsTable;
+	if (extras->facetsMergeList == NULL)
 	    {
-            hashAdd(extras->categoryFilter, name->name, name->name);
+	    struct slInt *sel, *selList = facetedTableSelectOffsets(facTab, cart);
+	    for (sel = selList; sel != NULL; sel = sel->next)
+		{
+		char numBuf[16];
+		safef(numBuf, sizeof(numBuf), "%d", sel->val);
+		char *numCopy = lmCloneString(extras->categoryFilter->lm, numBuf);
+		hashAdd(extras->categoryFilter, numCopy, numCopy);
+		}
 	    }
-        return;
-        }
+	return;
+	}
+    else if (cartListVarExistsAnyLevel(cart, tg->tdb, FALSE, BAR_CHART_CATEGORY_SELECT))
+	{
+	struct slName *selectedValues = cartOptionalSlNameListClosestToHome(cart, tg->tdb, 
+							    FALSE, BAR_CHART_CATEGORY_SELECT);
+	if (selectedValues != NULL)
+	    {
+	    struct slName *name;
+	    for (name = selectedValues; name != NULL; name = name->next)
+		{
+		hashAdd(extras->categoryFilter, name->name, name->name);
+		}
+	    return;
+	    }
+	}
+    /* no filter */
+    for (categ = extras->categories; categ != NULL; categ = categ->next)
+	hashAdd(extras->categoryFilter, categ->name, categ->name);
     }
-/* no filter */
-for (categ = extras->categories; categ != NULL; categ = categ->next)
-    hashAdd(extras->categoryFilter, categ->name, categ->name);
 }
 
 static int filteredCategoryCount(struct barChartTrack *extras)
 /* Count of categories to display */
 {
-return hashNumEntries(extras->categoryFilter);
+if (extras->facetsMergeList != NULL)
+    return slCount(extras->facetsMergeList);
+else
+    return hashNumEntries(extras->categoryFilter);
 }
 
 static boolean filterCategory(struct barChartTrack *extras, char *name)
@@ -209,6 +230,8 @@ static boolean filterCategory(struct barChartTrack *extras, char *name)
 {
 if (name == NULL)
     return FALSE;
+else if (extras->facetsMergeList)
+    return TRUE;
 return (hashLookup(extras->categoryFilter, name) != NULL);
 }
 
@@ -404,6 +427,29 @@ else
     return standardSize;
 }
 
+
+static void  mergeBedScores( struct facetedTableMergedOffset *facetsMergeList, 
+    struct bed *bedList)
+/* Return a merged down version of bed.  Bed serves as both input and output.  */
+/* Maybe a use for a nondestructive-to-inputs version will come up soon. This one is faster
+ * for the first use case though. */
+{
+int outSize = slCount(facetsMergeList);
+if (outSize > bedList->expCount)
+     {
+     errAbort("problem in mergeBedScores(): bed->expCount = %d, outSize = %d", 
+	bedList->expCount, outSize);
+     }
+float outBuf[outSize];
+struct bed *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    facetedTableMergeVals(facetsMergeList, bed->expScores, outBuf);
+    bed->expCount = outSize;
+    memcpy(bed->expScores, outBuf, sizeof(outBuf));
+    }
+}
+
 static void barChartLoadItems(struct track *tg)
 /* Load method for track items */
 {
@@ -420,6 +466,14 @@ if (!tg->extraUiData)
     tg->extraUiData = extras;
     }
 extras = (struct barChartTrack *)tg->extraUiData;
+
+loadSimpleBedWithLoader(tg, (bedItemLoader)barChartSimpleBedLoad);
+fillInTables(tg, extras);
+struct bed *bedList = tg->items;
+if (extras->facetsMergeList)
+    {
+    mergeBedScores(extras->facetsMergeList, bedList);
+    }
 
 extras->colors = getCategoryColors(tg);
 
@@ -473,25 +527,22 @@ if (isNotEmpty(setting))
         }
     }
 
-/* Get bed (names and all-sample category median scores) in range */
-loadSimpleBedWithLoader(tg, (bedItemLoader)barChartSimpleBedLoad);
 
 /* Create itemInfo items with BED and geneModels */
 struct barChartItem *itemInfo = NULL, *list = NULL;
-struct bed *bed = (struct bed *)tg->items;
+
+
+filterCategories(tg);
 
 /* Test that configuration matches data file */
-if (bed != NULL)
+if (bedList != NULL)
     {
     int categCount = getCategoryCount(tg);
-    int expCount = bed->expCount;
+    int expCount = bedList->expCount;
     if (categCount != expCount)
         warn("Bar chart track: category count mismatch between trackDb (%d) and data file (%d)",
                             categCount, expCount);
     }
-
-fillInTables(tg, extras);
-filterCategories(tg);
 
 int barCount = filteredCategoryCount(extras);
 double scale = 1.0;
@@ -550,20 +601,20 @@ if (extras->barWidth < 1)
     extras->padding = 0;
 else
     extras->barWidth = round(extras->barWidth);
-// uglyAbort("barCount %d, graphSize %s, extras->barWidth = %g, extras->padding = %d, scale = %g", barCount, extras->maxGraphSize, extras->barWidth, extras->padding, scale);
 
 extras->modelHeight =  extras->boxModelHeight + 3;
 extras->margin = 1;
 extras->squishHeight = tl.fontHeight - tl.fontHeight/2;
 extras->stretchToItem = trackDbSettingOn(tg->tdb, "barChartStretchToItem");
 
-while (bed != NULL)
+struct bed *bed, *next;
+for (bed = bedList; bed != NULL; bed = next)
     {
+    next = bed->next;
+    bed->next = NULL;	/* Pop it off list */
     AllocVar(itemInfo);
-    itemInfo->bed = bed;
+    itemInfo->bed = (struct bed *)bed;
     slAddHead(&list, itemInfo);
-    bed = bed->next;
-    itemInfo->bed->next = NULL;
     itemInfo->height = barChartItemHeight(tg, itemInfo);
     }
 slReverse(&list);

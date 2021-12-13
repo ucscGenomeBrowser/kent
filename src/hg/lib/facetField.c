@@ -268,6 +268,7 @@ else if (sameString(op, "unmerge"))
 struct facetField *deLinearizeFacetValString(char *selectedFields)
 /* Turn linearized selected fields string back into facet structures */
 {
+if (selectedFields == NULL) return NULL;  // Empty input means empty output
 struct facetField *ffList = NULL, *ff;
 boolean done = FALSE;
 while (!done)
