@@ -845,6 +845,98 @@ wgo->yOff = yOff;
 return wgo;
 }
 
+struct wigMouseOver *getMouseOverData(struct track *tg, struct preDrawElement *preDraw, int width, int xOff, int preDrawZero)
+/* Calculate the mouseOver data. */
+{
+int x1;
+boolean skipMouseOvers = TRUE;	/* assuming not using */
+boolean dropMouseOverData = FALSE;	// will become TRUE if noAverage
+int mouseOverX2 = -1;
+struct wigMouseOver *mouseOverData = NULL;
+double previousValue = 0;
+char *mouseOverFunction = trackDbSetting(tg->tdb, "mouseOverFunction");
+boolean noAverage = FALSE;
+if (sameOk(mouseOverFunction, "noAverage"))
+    noAverage = TRUE;
+
+if (enableMouseOver)
+    skipMouseOvers = FALSE;
+					// condition is encountered
+/* ===== mouseOver calculations===== */
+for (x1 = 0; x1 < width; ++x1)
+    {
+    //int x = x1 + xOff;
+    int preDrawIndex = x1 + preDrawZero;
+    struct preDrawElement *p = &preDraw[preDrawIndex];
+    if (enableMouseOver && !dropMouseOverData)
+        {
+        /* checking if mouseOver construction is allowed */
+        if (!skipMouseOvers && (p->count > 0) && !(noAverage && p->count>1))
+            {
+            if (p->count > 0)	/* allow any number of values to display */
+                {
+                double thisValue = p->sumData/p->count;	/*average if count > 1*/
+                if (mouseOverX2 < 0)    /* first valid data found */
+                    {
+                    struct wigMouseOver *dataItem;
+                    AllocVar(dataItem);
+                    mouseOverX2 = x1+1;
+                    dataItem->x1 = x1;
+                    dataItem->x2 = mouseOverX2;
+                    dataItem->value = thisValue;
+                    dataItem->valueCount = p->count;
+                    slAddHead(&mouseOverData, dataItem);
+                    previousValue = thisValue;
+                    }
+                else	/* see if we need a new item */
+                    {
+#define epsilonLimit 1.0e-6
+                    if (fabs(thisValue - previousValue) > epsilonLimit)
+                        {
+                        /* finish off the existing run of data (list head)*/
+                        mouseOverData->x2 = mouseOverX2;
+                        mouseOverX2 = x1+1;
+                        struct wigMouseOver *dataItem;
+                        AllocVar(dataItem);
+                        dataItem->x1 = x1;
+                        dataItem->x2 = mouseOverX2;
+                        dataItem->value = thisValue;
+                        dataItem->valueCount = p->count;
+                        slAddHead(&mouseOverData, dataItem);
+                        previousValue = thisValue;
+                        }
+                    else	/* continue run of same data value */
+                        mouseOverX2 = x1+1;
+                    }
+                }
+            else
+                skipMouseOvers = TRUE;	/* has become too dense to make sense */
+            }
+        else /* perhaps entered region without values after some data already */
+            {
+
+            if (noAverage && p->count>1)
+              dropMouseOverData = TRUE;
+            else if (mouseOverX2 > 0)	/* yes, been in data, end it here */
+                {
+                mouseOverData->x2 = mouseOverX2;
+                mouseOverX2 = -1;	/* start over with new data when found*/
+                }
+            }
+        /* potentially end the last mouseOver box */
+        if (mouseOverX2 > 0 && mouseOverX2 > mouseOverData->x2)
+                mouseOverData->x2 = mouseOverX2;
+
+        }       //      if (enableMouseOver)
+else
+    skipMouseOvers = TRUE;
+    }
+if (dropMouseOverData)
+    slFreeList(&mouseOverData);
+
+return mouseOverData;
+}
+
 struct wigMouseOver *graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
     struct track *tg, void *image, WigVerticalLineVirtual vLine, int xOff, int yOff, double *yOffsets, int numTrack,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
@@ -863,21 +955,9 @@ enum wiggleTransformFuncEnum transformFunc = wigCart->transformFunc;
 enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
 boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers
 			&& width < winEnd-winStart);
-struct wigMouseOver *mouseOverData = NULL;
 	/* list of mouse over data, if created here */
 
-boolean skipMouseOvers = TRUE;	/* assuming not using */
-int mouseOverX2 = -1;
-double previousValue = 0;
-if (enableMouseOver)
-    skipMouseOvers = FALSE;
-
-boolean noAverage = FALSE;
-boolean dropMouseOverData = FALSE;	// will become TRUE if noAverage
-					// condition is encountered
-char *mouseOverFunction = trackDbSetting(tg->tdb, "mouseOverFunction");
-if (sameOk(mouseOverFunction, "noAverage"))
-    noAverage = TRUE;
+struct wigMouseOver *mouseOverData = getMouseOverData(tg, preDraw, width, xOff, preDrawZero);
 
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements could draw boxes where pixels
@@ -888,71 +968,6 @@ for (x1 = 0; x1 < width; ++x1)
     int x = x1 + xOff;
     int preDrawIndex = x1 + preDrawZero;
     struct preDrawElement *p = &preDraw[preDrawIndex];
-    /* ===== mouseOver calculations===== */
-    if (enableMouseOver && !dropMouseOverData)
-        {
-        /* checking if mouseOver construction is allowed */
-        if (!skipMouseOvers && (p->count > 0) && !(noAverage && p->count>1))
-            {
-            if (p->count > 0)	/* allow any number of values to display */
-                {
-                double thisValue = p->sumData/p->count;	/*average if count > 1*/
-                if (mouseOverX2 < 0)    /* first valid data found */
-                    {
-		    struct wigMouseOver *dataItem;
-		    AllocVar(dataItem);
-                    mouseOverX2 = x1+1;
-                    dataItem->x1 = x1;
-                    dataItem->x2 = mouseOverX2;
-                    dataItem->value = thisValue;
-		    dataItem->valueCount = p->count;
-		    slAddHead(&mouseOverData, dataItem);
-                    previousValue = thisValue;
-                    }
-                else	/* see if we need a new item */
-                    {
-#define epsilonLimit 1.0e-6
-                    if (fabs(thisValue - previousValue) > epsilonLimit)
-                        {
-                        /* finish off the existing run of data (list head)*/
-                        mouseOverData->x2 = mouseOverX2;
-                        mouseOverX2 = x1+1;
-			struct wigMouseOver *dataItem;
-			AllocVar(dataItem);
-                        dataItem->x1 = x1;
-                        dataItem->x2 = mouseOverX2;
-                        dataItem->value = thisValue;
-			dataItem->valueCount = p->count;
-			slAddHead(&mouseOverData, dataItem);
-                        previousValue = thisValue;
-                        }
-                    else	/* continue run of same data value */
-                        mouseOverX2 = x1+1;
-                    }
-                }
-            else
-                skipMouseOvers = TRUE;	/* has become too dense to make sense */
-            }
-        else /* perhaps entered region without values after some data already */
-            {
-
-            if (noAverage && p->count>1)
-              dropMouseOverData = TRUE;
-            else if (mouseOverX2 > 0)	/* yes, been in data, end it here */
-                {
-		mouseOverData->x2 = mouseOverX2;
-                mouseOverX2 = -1;	/* start over with new data when found*/
-                }
-            }
-        /* potentially end the last mouseOver box */
-        if (mouseOverX2 > 0 && mouseOverX2 > mouseOverData->x2)
-                mouseOverData->x2 = mouseOverX2;
-
-        }       //      if (enableMouseOver)
-    else
-	skipMouseOvers = TRUE;
-
-    /* ===== done with mouseOver calculations===== */
 
     assert(x1/pixelBins->binSize < pixelBins->binCount);
     unsigned long *bitCount = &pixelBins->bins[x1/pixelBins->binSize];
@@ -1165,79 +1180,8 @@ for (x1 = 0; x1 < width; ++x1)
 	}	/*	if (preDraw[].count)	*/
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
 
-if (dropMouseOverData)
-    slFreeList(&mouseOverData);
 return(mouseOverData);
 }	/*	graphPreDraw()	*/
-
-#ifdef NOTNOW
-static void drawLogoChar( struct hvGfx *hvg, int xOff, int yOff, struct dnaMotif *motif, int width, int height, int count, boolean flip)
-{
-int orangeColor = hvGfxFindColorIx(hvg, 230, 130, 0);
-int blueColor = hvGfxFindColorIx(hvg, 0,114,198);
-int greenColor = hvGfxFindColorIx(hvg, 28,206,40);
-
-int ii;
-FILE *f;
-struct tempName pngTn;
-unsigned char *buf;
-
-buf = needMem(width + 1);
-makeTempName(&pngTn, "logo", ".pgm");
-dnaMotifToLogoPGM(motif, width / count, width  , (double)height - 2, NULL, "../trash", pngTn.forCgi);
-
-f = mustOpen(pngTn.forCgi, "r");
-
-/* get rid of header */
-for(ii=0; ii < 4; ii++)
-    while(fgetc(f) != '\n')
-	;
-
-/* map colors from PGM to browser colors */
-Color *colors = needMem(sizeof(Color) * (1+width));
-for(ii=0; ii < height; ii++)
-    {
-    int jj;
-    mustRead(f, buf, width);
-
-    for(jj=0; jj < width + 2; jj++)
-	{
-	if (buf[jj] == 255) colors[jj] = MG_WHITE;
-	else if (buf[jj] == 0x87) colors[jj] = MG_RED;
-	else if (buf[jj] == 0x60) colors[jj] = greenColor;
-	else if (buf[jj] == 0x7f) colors[jj] = blueColor;
-	else if (buf[jj] == 0x62) colors[jj] = orangeColor;
-	}
-
-    if (flip)
-        {
-        int pos = yOff + height - ii;
-        hvGfxVerticalSmear(hvg,xOff,pos,width ,1, colors,TRUE);
-            //        hvGfxBox(hvg, xOff, pos, width, 1, MG_BLACK);
-        }
-    else
-        hvGfxVerticalSmear(hvg,xOff,yOff+ii,width ,1, colors,TRUE);
-    }
-hvGfxUnclip(hvg);
-
-fclose(f);
-remove(pngTn.forCgi);
-}
-#endif
-
-struct dnaMotif *getMotif(int numBases)
-{
-struct dnaMotif *motif;
-AllocVar(motif);
-motif->name = NULL;
-motif->columnCount = numBases;
-motif->aProb = needMem(sizeof(float) * motif->columnCount);
-motif->cProb = needMem(sizeof(float) * motif->columnCount);
-motif->gProb = needMem(sizeof(float) * motif->columnCount);
-motif->tProb = needMem(sizeof(float) * motif->columnCount);
-
-return motif;
-}
 
 static struct wigMouseOver *logoPreDrawContainer(struct preDrawContainer *preDrawContainer,
     int preDrawZero, int width, struct track *tg, struct hvGfx *hvg,
@@ -1246,7 +1190,7 @@ static struct wigMouseOver *logoPreDrawContainer(struct preDrawContainer *preDra
 {
 struct preDrawElement *preDraw = preDrawContainer->preDraw;
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
-struct wigMouseOver *mouseOverData = NULL;
+//struct wigMouseOver *mouseOverData = NULL;
 unsigned numBases = seqEnd - seqStart;
 struct dnaSeq *seq = hChromSeq(database, chromName, seqStart, seqEnd);
 struct pixelCountBin *pixelBins = wgo->pixelBins;
@@ -1259,22 +1203,7 @@ void *image = wgo->image;
 
 int h = tg->lineHeight;	/*	the height of our drawing window */
 double scaleFactor = h/graphRange;
-
-boolean skipMouseOvers = TRUE;	/* assuming not using */
-int mouseOverX2 = -1;
-double previousValue = 0;
-if (enableMouseOver)
-    skipMouseOvers = FALSE;
-
-boolean noAverage = FALSE;
-boolean dropMouseOverData = FALSE;	// will become TRUE if noAverage
-					// condition is encountered
-char *mouseOverFunction = trackDbSetting(tg->tdb, "mouseOverFunction");
-if (sameOk(mouseOverFunction, "noAverage"))
-    noAverage = TRUE;
-
-struct dnaMotif *motifPos = getMotif(numBases);
-struct dnaMotif *motifNeg = getMotif(numBases);
+struct wigMouseOver *mouseOverData = getMouseOverData(tg, preDraw, width, xOff, preDrawZero);
 
 double xIncr = (double)width / numBases;
 unsigned baseNum;
@@ -1288,71 +1217,6 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
     lastX = x;
     int preDrawIndex = x1 + preDrawZero;
     struct preDrawElement *p = &preDraw[preDrawIndex];
-    /* ===== mouseOver calculations===== */
-    if (enableMouseOver && !dropMouseOverData)
-        {
-        /* checking if mouseOver construction is allowed */
-        if (!skipMouseOvers && (p->count > 0) && !(noAverage && p->count>1))
-            {
-            if (p->count > 0)	/* allow any number of values to display */
-                {
-                double thisValue = p->sumData/p->count;	/*average if count > 1*/
-                if (mouseOverX2 < 0)    /* first valid data found */
-                    {
-		    struct wigMouseOver *dataItem;
-		    AllocVar(dataItem);
-                    mouseOverX2 = x1+1;
-                    dataItem->x1 = x1;
-                    dataItem->x2 = mouseOverX2;
-                    dataItem->value = thisValue;
-		    dataItem->valueCount = p->count;
-		    slAddHead(&mouseOverData, dataItem);
-                    previousValue = thisValue;
-                    }
-                else	/* see if we need a new item */
-                    {
-#define epsilonLimit 1.0e-6
-                    if (fabs(thisValue - previousValue) > epsilonLimit)
-                        {
-                        /* finish off the existing run of data (list head)*/
-                        mouseOverData->x2 = mouseOverX2;
-                        mouseOverX2 = x1+1;
-			struct wigMouseOver *dataItem;
-			AllocVar(dataItem);
-                        dataItem->x1 = x1;
-                        dataItem->x2 = mouseOverX2;
-                        dataItem->value = thisValue;
-			dataItem->valueCount = p->count;
-			slAddHead(&mouseOverData, dataItem);
-                        previousValue = thisValue;
-                        }
-                    else	/* continue run of same data value */
-                        mouseOverX2 = x1+1;
-                    }
-                }
-            else
-                skipMouseOvers = TRUE;	/* has become too dense to make sense */
-            }
-        else /* perhaps entered region without values after some data already */
-            {
-
-            if (noAverage && p->count>1)
-              dropMouseOverData = TRUE;
-            else if (mouseOverX2 > 0)	/* yes, been in data, end it here */
-                {
-		mouseOverData->x2 = mouseOverX2;
-                mouseOverX2 = -1;	/* start over with new data when found*/
-                }
-            }
-        /* potentially end the last mouseOver box */
-        if (mouseOverX2 > 0 && mouseOverX2 > mouseOverData->x2)
-                mouseOverData->x2 = mouseOverX2;
-
-        }       //      if (enableMouseOver)
-    else
-	skipMouseOvers = TRUE;
-
-    /* ===== done with mouseOver calculations===== */
 
     assert(x1/pixelBins->binSize < pixelBins->binCount);
     unsigned long *bitCount = &pixelBins->bins[x1/pixelBins->binSize];
@@ -1413,10 +1277,6 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                 if (boxTop == h)
                     boxTop = h - 1;
 
-                // negative data value exactly equal to top pixel
-                // make sure it draws something
-                double prob = (double)(dataValue) / (graphUpperLimit - graphLowerLimit);
-                    
                 char string[2];
                 string[0] = toupper(base);
                 string[1] = 0;
@@ -1435,36 +1295,17 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                     {
                     if (dataValue < 0)
                         {
-                        //hvGfxBox(image, x, yOff+graphUpperLimit * scaleFactor, width, -height, MG_RED);
                         hvGfxTextInBox(hvg, x, yOff+graphUpperLimit * scaleFactor, width - 1, dataValue * scaleFactor,
                             color, font, string);
                         }
                     else
                         {
-                       // hvGfxBox(image, x, yOff-height+graphUpperLimit * scaleFactor, width, height, MG_RED);
-
                         hvGfxTextInBox(hvg, x, yOff-height+graphUpperLimit * scaleFactor, width - 1, dataValue * scaleFactor,
                             color, font, string);
                         }
                     }
                 if (((boxTop+boxHeight) == 0) && !isnan(dataValue))
                     boxHeight += 1;
-                struct dnaMotif *motif;
-                if (dataValue < 0)
-                    {
-                    motif = motifNeg;
-                    prob = -prob;
-                    }
-                else
-                    motif = motifPos;
-                if (base == 'a')
-                    motif->aProb[baseNum] = prob;
-                if (base == 't')
-                    motif->tProb[baseNum] = prob;
-                if (base == 'c')
-                    motif->cProb[baseNum] = prob;
-                if (base == 'g')
-                    motif->gProb[baseNum] = prob;
                 }
 	    double stackValue = dataValue;
 
@@ -1483,11 +1324,8 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
         }
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
 
-if (dropMouseOverData)
-    slFreeList(&mouseOverData);
 return(mouseOverData);
 }
-
 
 struct wigMouseOver *graphPreDrawContainer(struct preDrawContainer *preDrawContainer,
     int preDrawZero, int width, struct track *tg, struct hvGfx *hvg,
@@ -1757,7 +1595,8 @@ graphRange = graphUpperLimit - graphLowerLimit;
 wigTrackSetGraphOutputDefault(tg, xOff, yOff, width, hvg);
 
 struct wigMouseOver *mouseOverData = NULL;
-if (zoomedToCodonLevel && trackDbSettingOn(tg->tdb, "logo"))
+//if (zoomedToCodonLevel && trackDbSettingOn(tg->tdb, "logo"))
+if (zoomedToBaseLevel && trackDbSettingOn(tg->tdb, "logo"))
     mouseOverData = logoPreDrawContainer(preContainer,
         preDrawZero, width, tg, hvg, xOff, yOff,
         graphUpperLimit, graphLowerLimit, graphRange, vis, wigCart, seqStart, seqEnd);
