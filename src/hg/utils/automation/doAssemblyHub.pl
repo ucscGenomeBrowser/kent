@@ -1525,6 +1525,12 @@ sub doTandemDups {
 	"ERROR: tandemDups: can not find $buildDir/$asmId.unmasked.2bit\n");
     exit 255;
   }
+  my $ctgCount = `grep -c '^' $buildDir/$asmId.chrom.sizes`;
+  chomp $ctgCount;
+  if ( $ctgCount > 100000) {
+   &HgAutomate::verbose(1, "# tandemDups step too many contigs at $ctgCount\n");
+       return;
+  }
   if (-d "${runDir}" ) {
      if (! -s "$runDir/$asmId.tandemDups.bb") {
        &HgAutomate::verbose(1,

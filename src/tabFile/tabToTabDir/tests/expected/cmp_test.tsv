@@ -1,0 +1,13 @@
+#biosample_source_id	biosample_source_age_value	over50	under50	overeq50	undereq50	middle	senior	is50	not50	isOne
+AB_S8	54	true	false	true	false	true	senior	false	true	false
+AB_S11	37	false	true	false	true	true	junior	false	true	true
+AB_S1	47	false	true	false	true	true	junior	false	true	false
+AB_S2	63	true	false	true	false	false	senior	false	true	false
+AB_S3	22	false	true	false	true	false	junior	false	true	false
+AB_S4	50	false	false	true	true	true	junior	true	false	false
+AB_S5	63	true	false	true	false	false	senior	false	true	false
+AB_S7	21	false	true	false	true	false	junior	false	true	false
+FB_S1	17	false	true	false	true	false	junior	false	true	false
+FB_S2	17	false	true	false	true	false	junior	false	true	false
+FB_S3	17	false	true	false	true	false	junior	false	true	false
+FB_S6	17	false	true	false	true	false	junior	false	true	false

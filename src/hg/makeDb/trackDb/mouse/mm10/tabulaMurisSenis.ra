@@ -12,8 +12,8 @@ group regulation
     visibility pack
     shortLabel tissue cell 
     longLabel Tabula muris senis 10x grouped by tissue and cell type
-    barChartMetric mean
-    barChartUnit UMI/cell
+    barChartMetric gene/genome
+    barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell.bb
@@ -28,8 +28,8 @@ group regulation
     visibility hide
     shortLabel tissue cell age
     longLabel Tabula muris senis 10x grouped by tissue, cell type, and age
-    barChartMetric mean
-    barChartUnit UMI/cell
+    barChartMetric gene/genome
+    barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell_age.bb
@@ -44,8 +44,8 @@ group regulation
     visibility hide
     shortLabel tissue cell sex
     longLabel Tabula muris senis 10x grouped by tissue, cell type, and sex
-    barChartMetric mean
-    barChartUnit UMI/cell
+    barChartMetric gene/genome
+    barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell_sex.bb
@@ -60,8 +60,8 @@ group regulation
     visibility hide
     shortLabel tissue subtissue
     longLabel Tabula muris senis 10x grouped by tissue, subtissue, and cell type
-    barChartMetric mean
-    barChartUnit UMI/cell
+    barChartMetric gene/genome
+    barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_subtissue_cell.bb
@@ -76,8 +76,8 @@ group regulation
     visibility hide
     shortLabel view detailed
     longLabel Tabula muris senis 10x view with full subtissue and mouse by mouse details
-    barChartMetric mean
-    barChartUnit UMI/cell
+    barChartMetric gene/genome
+    barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_detailed.bb
@@ -99,8 +99,8 @@ group regulation
     visibility pack
     shortLabel tissue cell 
     longLabel Tabula muris senis FACS grouped by tissue and cell type
-    barChartMetric mean
-    barChartUnit UMI/cell
+    barChartMetric gene/genome
+    barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell.bb
@@ -115,8 +115,8 @@ group regulation
     visibility hide
     shortLabel tissue cell age
     longLabel Tabula muris senis FACS grouped by tissue, cell type, and age
-    barChartMetric mean
-    barChartUnit UMI/cell
+    barChartMetric gene/genome
+    barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell_age.bb
@@ -131,8 +131,8 @@ group regulation
     visibility hide
     shortLabel tissue cell sex
     longLabel Tabula muris senis FACS grouped by tissue, cell type, and sex
-    barChartMetric mean
-    barChartUnit UMI/cell
+    barChartMetric gene/genome
+    barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell_sex.bb
@@ -147,8 +147,8 @@ group regulation
     visibility hide
     shortLabel tissue subtissue
     longLabel Tabula muris senis FACS grouped by tissue, subtissue, and cell type
-    barChartMetric mean
-    barChartUnit UMI/cell
+    barChartMetric gene/genome
+    barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_subtissue_cell.bb
@@ -163,12 +163,13 @@ group regulation
     visibility hide
     shortLabel view detailed
     longLabel Tabula muris senis FACS view with full subtissue and mouse by mouse details
-    barChartMetric mean
-    barChartUnit UMI/cell
+    barChartMetric gene/genome
+    barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_detailed.bb
     barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_detailed.facets
     barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_detailed.categories
     barChartFacets tissue,subtissue,cell_class,cell_type,age,sex,mouse_id
+    barChartMerge on
     barChartStretchToItem on

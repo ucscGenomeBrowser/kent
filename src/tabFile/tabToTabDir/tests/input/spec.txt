@@ -19,6 +19,19 @@ less_messy tidy("messy ", messy, " very")
 mangled_date	symbol("DATE_", submission_date)
 messy	messy
 
+table cmp_test biosample_source_id
+biosample_source_id
+biosample_source_age_value
+over50 biosample_source_age_value > 50
+under50 biosample_source_age_value < 50
+overeq50 biosample_source_age_value >= 50
+undereq50 biosample_source_age_value <= 50
+middle biosample_source_age_value >= 30 and biosample_source_age_value < 60 
+senior biosample_source_age_value <= 50 ? "junior" : "senior"
+is50 biosample_source_age_value = 50
+not50 biosample_source_age_value != 50
+isOne biosample_source_id = "AB_S11"
+
 unroll unroll_test id
 id "1,2,3"
 summary GEO_Series_summary	
@@ -81,6 +94,7 @@ submitter
 
 table donor biosample_source_id
 biosample_source_id
+id symbol_id("d", biosample_source_id)
 species
 biosample_source_gender 
 biosample_source_age biosample_source_age_value
