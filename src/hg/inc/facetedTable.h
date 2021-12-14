@@ -63,5 +63,32 @@ void facetedTableWriteHtml(struct facetedTable *facTab,
 struct slInt *facetedTableSelectOffsets(struct facetedTable *facTab, struct cart *cart);
 /* Return a list of row positions that pass faceting */
 
+struct facetedTableCountOffset
+/* An offset to a value field, and a count to help us merge values */
+    {
+    struct facetedTableCountOffset *next;
+    int valIx;		/* Index of value field */
+    int count;		/* How many samples are behind this value */
+    };
+
+struct facetedTableMergedOffset
+/* What we need to know to merge */
+    {
+    struct facetedTableMergedOffset *next;
+    char *name;	/* Name of merged bar */
+    char color[8];  /* Color for merged bar */
+    int totalCount;  /* Total count of all merged elements  */
+    struct facetedTableCountOffset *colList; /* List of indexes int parent table to sum together */
+    int outIx;	/* Position in output file */
+    };
+
+struct facetedTableMergedOffset *facetedTableMakeMergedOffsets(struct facetedTable *facTab,
+     struct cart *cart);
+/* Return a structure that will let us relatively rapidly merge together one row */
+
+void facetedTableMergeVals(struct facetedTableMergedOffset *tmoList, float *inVals, float *outVals);
+/* Populate outVals array with columns of weighted averages derived from applying
+ * tmoList to inVals array. */
+
 #endif /* FACETEDTABLE_H */
 
