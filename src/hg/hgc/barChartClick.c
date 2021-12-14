@@ -294,7 +294,7 @@ char *dataFile = trackDbSetting(tdb, "barChartMatrixUrl");
 if (dataFile == NULL)
     dataFile = trackDbSetting(tdb, "barChartDataUrl");
 // for backwards compatibility during qa review
-struct barChartCategory *categories = barChartUiGetCategories(database, tdb);
+struct barChartCategory *categories = barChartUiGetCategories(database, tdb, NULL);
 struct hash *categoryHash = barChartCategoriesToHash(categories);
 if (dataFile != NULL)
     {
@@ -341,7 +341,7 @@ trashDirFile(&colorTn, "hgc", "barChartColors", ".txt");
 FILE *f = fopen(colorTn.forCgi, "w");
 if (f == NULL)
     errAbort("can't create temp file %s", colorTn.forCgi);
-struct barChartCategory *categs = barChartUiGetCategories(database, tdb);
+struct barChartCategory *categs = barChartUiGetCategories(database, tdb, NULL);
 struct barChartCategory *categ;
 fprintf(f, "%s\t%s\n", "category", "color");
 for (categ = categs; categ != NULL; categ = categ->next)
@@ -415,7 +415,7 @@ static void svgBarChart(struct barChartBed *chart, struct trackDb *tdb, double m
 {
 puts("<p>");
 /* Load up input labels, color, and data */
-struct barChartCategory *categs = barChartUiGetCategories(database, tdb);
+struct barChartCategory *categs = barChartUiGetCategories(database, tdb, NULL);
 int categCount = slCount(categs);
 if (categCount != chart->expCount)
     {
@@ -577,7 +577,7 @@ float highLevel = barChartMaxValue(chartItem, &categId);
 char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
 char *metric = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_METRIC, "");
 printf("<b>Maximum %s value: </b> %0.2f %s in %s<br>\n", 
-                metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
+	    metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb, NULL));
 printf("<b>Gene position: "
                 "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a>\n", 
                     database, hgTracksPathAndSettings(), database, 

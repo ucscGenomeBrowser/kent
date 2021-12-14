@@ -1612,3 +1612,38 @@ cd $dir
 makeBigKnown hg19
 rm -f /gbdb/hg19/knownGene.bb
 ln -s `pwd`/hg19.knownGene.bb /gbdb/hg19/knownGene.bb
+
+# upgrade old gene symbols
+mkdir $dir/newSyms
+cd $dir/newSyms
+hgMapToGene hg19 wgEncodeGencodeCompV38lift37 knownGene map -noLoad
+hgsql hg19 -Ne "select name,geneSymbol from knownGene, kgXref where knownGene.name=kgXref.kgId" | sort > ucToSym.txt
+hgsql hg19 -Ne "select name,geneName from wgEncodeGencodeCompV38lift37, wgEncodeGencodeAttrsV38lift37 where name=transcriptId" | sort > ensToSym.txt
+join -t$'\t' ucToEns.txt ucToSym.txt | sort -k 2 > ucEnsSymbol.txt
+join -t$'\t' -1 2 -2 1 ucEnsSymbol.txt ens* | tawk '{print $2,$1, $3, $4}' | sort > mapping.txt
+tawk '$3 != $4 {print $1, $4}' mapping.txt | sort -u > newMaps.txt
+tawk '$3 != $4 {print $1}' mapping.txt | sort -u > changedIds.txt
+cat ../ucscGenes.alias newMaps.txt | sort > newKgAlias.txt
+hgLoadSqlTab hg19 kgAlias $HOME/kent/src/hg/lib/kgAlias.sql newKgAlias.txt
+
+# now do kgXref
+tawk '$3 != $4 {print $1, $3, $4}' mapping.txt | sort -u | tr '/' '.' > idOldNew.txt
+sort ../ucscGenes.xref | join -t$'\t' changedIds.txt /dev/stdin -v 2 > unchangedXref.tab 
+sort ../ucscGenes.xref | join -t$'\t' changedIds.txt /dev/stdin  > toChangeXref.tab 
+
+# only change gene symbols in field 5, and 8 on lines where the id has been identified above
+IFS=$'\t'; while read id old new; do grep "^$id" toChangeXref.tab | tawk "{gsub(\"$old\", \"$new\", \$5);gsub(\"$old\", \"$new\", \$8); print}" ; done < idOldNew.txt > beenChangedXref.txt
+
+cat unchangedXref.tab   beenChangedXref.txt | sort > newKgXref.tab
+hgLoadSqlTab hg19 kgXref $HOME/kent/src/hg/lib/kgXref.sql newKgXref.tab
+
+sort ../knownGene.text > oldKnownGene.text
+join -t$'\t' -a 1 oldKnownGene.text newMaps.txt > newKnownGene.txt
+ixIxx newKnownGene.txt knownGene.ix knownGene.ixx -maxWordLength=63
+rm -f /gbdb/hg19/knownGene.ix /gbdb/hg19/knownGene.ixx
+ln -s `pwd`/knownGene.ix  /gbdb/hg19/knownGene.ix
+ln -s `pwd`/knownGene.ixx /gbdb/hg19/knownGene.ixx
+
+./makeBigKnown hg19
+rm -f /gbdb/hg19/knownGene.bb
+ln -s `pwd`/hg19.knownGene.bb /gbdb/hg19/knownGene.bb
