@@ -418,6 +418,16 @@ if (largerContext != NULL)  // Need to page?
      }
 }
 
+static void createSelfId(char *varPrefix, char *fieldName, 
+	char *val, char *selfId, int selfIdSize)
+{
+if (val == NULL)
+    safef(selfId, selfIdSize, "%s_self_a_%s", varPrefix, fieldName);
+else
+    safef(selfId, selfIdSize, "%s_self_a_%s_%s", varPrefix, fieldName, val);
+subChar(selfId, ' ', '_');
+}
+
 void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table, 
     char *visibleFieldList, char *returnUrl, char *varPrefix,
     int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
@@ -507,8 +517,7 @@ if (visibleFacetList)
 		slFreeList(&valListCopy);
 		
 		htmlDyStringPrintf(facetBar, "</span></span>\n");
-		}
-	    }
+		} }
 	else
 	    {
 	    anyMerged = TRUE;
@@ -592,8 +601,7 @@ if (visibleFacetList)
 	{
 	char *fieldName = vis->name;
 	char selfId[256];
-	safef(selfId, sizeof(selfId), "%s_self_a_%s", varPrefix, fieldName);
-	subChar(selfId, ' ', '_');
+	createSelfId(varPrefix, fieldName, NULL, selfId, sizeof(selfId));
 
 	/* Work on facet field label line */
 	htmlPrintf("<div id=\"%s\" class='card facet-card'><div class='card-body'>\n", selfId);
@@ -612,15 +620,17 @@ if (visibleFacetList)
 	/* Write merge/unmerge link and number of categories */
 	if (facetMergeOk)
 	    {
+	    char selfId[256];
+	    createSelfId(varPrefix, fieldName, NULL, selfId, sizeof(selfId));
 	    htmlPrintf("<span style='float:right'>");
 	    htmlPrintf("<a class='btn btn-secondary' href='%s"
 		    "&%s_facet_op=%s|none|"
 		    "&%s_facet_fieldName=%s|url|"
 		    "&%s_facet_fieldVal=%s|url|"
-		    "&%s_page=1' "
+		    "&%s_page=1#%s' "
 		    ">", 
 		    returnUrl, varPrefix, op, varPrefix, fieldName, 
-		    varPrefix, "", varPrefix);
+		    varPrefix, "", varPrefix, selfId);
 	    htmlPrintf("%s", op);
 
 	    if (field != NULL && sameString(op, "merge"))
@@ -676,9 +686,8 @@ if (visibleFacetList)
 		    printf("<dd class=\"facet\"");
 		    if (extraAnchorPos >= extraAnchorPeriod)
 			{
-			safef(selfId, sizeof(selfId), "%s_self_a_%s_%s", varPrefix, vis->name, 
-			    val->val);
-			subChar(selfId, ' ', '_');
+			char selfId[256];
+			createSelfId(varPrefix, vis->name, val->val, selfId, sizeof(selfId));
 			printf(" id=\"%s\"", selfId);
 			extraAnchorPos= 0;
 			}
@@ -723,8 +732,8 @@ if (visibleFacetList)
 	    // show "See Fewer" link when facet has lots of values
 	    if (field->showAllValues && valuesShown >= facetUsualSize)
 		{
-		safef(selfId, sizeof(selfId), "%s_self_a_%s", varPrefix, vis->name);
-		subChar(selfId, ' ', '_');
+		char selfId[256];
+		createSelfId(varPrefix, vis->name, NULL, selfId, sizeof(selfId));
 		char *op = "showSomeValues";
 		htmlPrintf("<dd><a href='%s"
 			"&%s_facet_op=%s|url|"
