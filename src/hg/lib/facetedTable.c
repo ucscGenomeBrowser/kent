@@ -234,7 +234,7 @@ for (col = colList; col != NULL; col = col->next)
     if (col->isFacet && !col->isMerged)
 	{
 	if (key->stringSize != 0)
-	    dyStringAppendC(key, ' ');
+	    dyStringAppendC(key, '/');
 	dyStringAppend(key, row[col->ix]);
 	}
     }
