@@ -86,7 +86,8 @@ struct facetedTableMergedOffset *facetedTableMakeMergedOffsets(struct facetedTab
      struct cart *cart);
 /* Return a structure that will let us relatively rapidly merge together one row */
 
-void facetedTableMergeVals(struct facetedTableMergedOffset *tmoList, float *inVals, float *outVals);
+void facetedTableMergeVals(struct facetedTableMergedOffset *tmoList, float *inVals, int inValCount,
+    float *outVals, int outValCount);
 /* Populate outVals array with columns of weighted averages derived from applying
  * tmoList to inVals array. */
 

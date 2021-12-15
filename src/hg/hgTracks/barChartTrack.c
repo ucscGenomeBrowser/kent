@@ -434,6 +434,8 @@ static void  mergeBedScores( struct facetedTableMergedOffset *facetsMergeList,
 /* Maybe a use for a nondestructive-to-inputs version will come up soon. This one is faster
  * for the first use case though. */
 {
+if (bedList == NULL)
+    return;
 int outSize = slCount(facetsMergeList);
 if (outSize > bedList->expCount)
      {
@@ -444,7 +446,7 @@ float outBuf[outSize];
 struct bed *bed;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
-    facetedTableMergeVals(facetsMergeList, bed->expScores, outBuf);
+    facetedTableMergeVals(facetsMergeList, bed->expScores, bed->expCount, outBuf, outSize);
     bed->expCount = outSize;
     memcpy(bed->expScores, outBuf, sizeof(outBuf));
     }
