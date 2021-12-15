@@ -547,6 +547,8 @@ if (bedList != NULL)
     }
 
 int barCount = filteredCategoryCount(extras);
+
+/* Scaling here is pretty ad-hoc! */
 double scale = 1.0;
 if (barCount <= 20)
     scale = 2.5;
@@ -558,13 +560,19 @@ else if (barCount <= 120)
     scale = 0.8;
 else if (barCount <= 200)
     scale = 0.6;
-else 
+else  if (barCount <= 300)
     scale = 0.5;
+else  if (barCount <= 500)
+    scale = 0.4;
+else  if (barCount <= 1000)
+    scale = 0.3;
+else
+    scale = 0.2;
 
 long winSize = virtWinBaseCount;
 if (winSize < extras->winMaxGraph && 
         sameString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_LARGE))
-{
+    {
     extras->boxModelHeight = MAX_BAR_CHART_MODEL_HEIGHT;
     extras->barWidth = MAX_BAR_WIDTH * scale;
     extras->padding = MAX_GRAPH_PADDING * scale;
@@ -850,32 +858,35 @@ int itemHeight = itemInfo->height;
 mapBoxHc(hvg, itemStart, itemEnd, x1-labelWidth, y, labelWidth, itemHeight-3, 
                     tg->track, mapItemName, itemName);
 
-// add maps to category bars
-struct barChartCategory *categs = getCategories(tg);
-struct barChartCategory *categ = NULL;
 
 int graphX = barChartX(bed);
-
 int graphWidth = chartWidth(tg, itemInfo);
-int x0 = insideX + graphX;
 int barCount = filteredCategoryCount(extras);
-double invCount = 1.0/barCount;
-int i = 0, barsDrawn = 0;
-int extraAtTop = 4;
-for (categ = categs; categ != NULL; categ = categ->next, i++)
+
+if (barCount <= graphWidth) // Don't create map boxes if less than one pixel per bar
     {
-    if (!filterCategory(extras, categ->name))
-	continue;
-    x1 = barsDrawn * graphWidth * invCount;
-    barsDrawn += 1;
-    x2 = barsDrawn * graphWidth * invCount;
-    int width = max(1, x2-x1);
-    double expScore = bed->expScores[i];
-    int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
-                                        extras->maxHeight, extras->doLogTransform);
-    height = min(height+extraAtTop, extras->maxHeight);
-    mapBoxHc(hvg, itemStart, itemEnd, x0 + x1, yZero-height, width, height, 
-                        tg->track, mapItemName, chartMapText(tg, categ, expScore));
+    // add maps to category bars
+    struct barChartCategory *categs = getCategories(tg);
+    struct barChartCategory *categ = NULL;
+    int x0 = insideX + graphX;
+    double invCount = 1.0/barCount;
+    int i = 0, barsDrawn = 0;
+    int extraAtTop = 4;
+    for (categ = categs; categ != NULL; categ = categ->next, i++)
+	{
+	if (!filterCategory(extras, categ->name))
+	    continue;
+	x1 = barsDrawn * graphWidth * invCount;
+	barsDrawn += 1;
+	x2 = barsDrawn * graphWidth * invCount;
+	int width = max(1, x2-x1);
+	double expScore = bed->expScores[i];
+	int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
+					    extras->maxHeight, extras->doLogTransform);
+	height = min(height+extraAtTop, extras->maxHeight);
+	mapBoxHc(hvg, itemStart, itemEnd, x0 + x1, yZero-height, width, height, 
+			    tg->track, mapItemName, chartMapText(tg, categ, expScore));
+	}
     }
 
 // map over background of chart
