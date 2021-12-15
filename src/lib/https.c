@@ -319,7 +319,7 @@ if (!preverify_ok)
 /* err contains the last verification error.  */
 if (!preverify_ok && (err == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT))
     {
-    X509_NAME_oneline(X509_get_issuer_name(ctx->current_cert), buf, 256);
+    X509_NAME_oneline(X509_get_issuer_name(cert), buf, 256);
     fprintf(stderr, "issuer= %s\n", buf);
     }
 if (sameString(getenv("https_cert_check"), "warn") || sameString(getenv("https_cert_check"), "log"))
