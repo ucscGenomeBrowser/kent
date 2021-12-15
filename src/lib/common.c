@@ -709,6 +709,15 @@ const struct slName *b = *((struct slName **)vb);
 return cmpStringsWithEmbeddedNumbers(a->name, b->name);
 }
 
+int slNameCmpWordsWithEmbeddedNumbers(const void *va, const void *vb)
+/* Compare strings such as gene names that may have embedded numbers,
+ * in a string sensitive way so that bmp4a comes before bmp14a 
+ * and ABc and abC are treated as the same.  A little slow. */
+{
+const struct slName *a = *((struct slName **)va);
+const struct slName *b = *((struct slName **)vb);
+return cmpWordsWithEmbeddedNumbers(a->name, b->name);
+}
 
 
 void slNameSort(struct slName **pList)
