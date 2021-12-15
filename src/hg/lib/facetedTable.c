@@ -596,21 +596,26 @@ struct facetedTableMergedOffset *facetedTableMakeMergedOffsets(struct facetedTab
      struct cart *cart)
 /* Return a structure that will let us relatively rapidly merge together one row */
 {
+struct fieldedTable *tableIn = facTab->table;
+fieldedTableResetRowIds(tableIn, 0);	// Use the seldom-used ID column as indexes
+
 /* Figure out user selection of fields to select on and merge as ffSelList */
 char *selList = facetedTableSelList(facTab, cart);
 struct facetField *ffSelList  = deLinearizeFacetValString(selList);
 
+/* Remove columns that have not been selected */
+struct fieldedTable *subtable = facetFieldSelectRows(facTab->table, selList, facTab->ffArray);
+// struct fieldedTable *subtable = facTab->table; // ugly
+
 /* Get output column list and pointers to key columns */
-struct fieldedTable *tableIn = facTab->table;
 struct mergeColHelper *countCol = NULL, *valCol = NULL, *colorCol = NULL;
-struct mergeColHelper *colList = makeColList(facTab, tableIn, ffSelList, 
+struct mergeColHelper *colList = makeColList(facTab, subtable, ffSelList, 
     &countCol, &valCol, &colorCol);
-struct mergeGroup *mergeList = findMergeGroups(tableIn, colList);
+struct mergeGroup *mergeList = findMergeGroups(subtable, colList);
 int newFieldCount;
 struct mergeColHelper **outCol;
 annotateColListAndMakeNewFields(colList, mergeList, &newFieldCount, &outCol);
 
-fieldedTableResetRowIds(tableIn, 0);	// Use the seldom-used ID column as indexes
 struct facetedTableMergedOffset *tmoList = NULL;
 struct mergeGroup *merge;
 
