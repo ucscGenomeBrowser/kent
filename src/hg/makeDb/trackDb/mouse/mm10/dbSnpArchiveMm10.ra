@@ -19,17 +19,20 @@ html ../../dbSnpArchive
 	parent dbSnpArchive
         visibility dense
 	priority 1
+        html ../snp142
 
 	track snp142Mult override
 	group varRep
 	parent dbSnpArchive 
 	priority 1
+        html ../snp142Mult
 
 	track snp138 override
 	group varRep
 	parent dbSnpArchive 
 	priority 2
 	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
+        html ../../snp138
 
 	track snp138Common override
 	group varRep
@@ -37,6 +40,7 @@ html ../../dbSnpArchive
 	snpSeqFile /gbdb/mm10/snp/snp138.fa
 	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 	parent dbSnpArchive 
+        html ../../snp138Common
 
 	track snp138Mult override
 	group varRep
@@ -44,6 +48,7 @@ html ../../dbSnpArchive
 	snpSeqFile /gbdb/mm10/snp/snp138.fa
 	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 	parent dbSnpArchive 
+        html ../../snp138Mult
 
 	track snp137Common override
 	group varRep
@@ -51,6 +56,7 @@ html ../../dbSnpArchive
 	snpSeqFile /gbdb/mm10/snp/snp137.fa
 	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 	parent dbSnpArchive 
+        html ../../snp137Common
 
 	track snp137Mult override
 	group varRep
@@ -58,6 +64,7 @@ html ../../dbSnpArchive
 	snpSeqFile /gbdb/mm10/snp/snp137.fa
 	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 	parent dbSnpArchive 
+        html ../../snp137Mult
 
 	track snp137 override
 	group varRep
@@ -65,3 +72,4 @@ html ../../dbSnpArchive
 	snpSeqFile /gbdb/mm10/snp/snp137.fa
 	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 	parent dbSnpArchive 
+        html ../../snp137
