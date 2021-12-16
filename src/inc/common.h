@@ -541,6 +541,11 @@ int slNameCmpStringsWithEmbeddedNumbers(const void *va, const void *vb);
 /* Compare strings such as gene names that may have embedded numbers,
  * so that bmp4a comes before bmp14a */
 
+int slNameCmpWordsWithEmbeddedNumbers(const void *va, const void *vb);
+/* Compare strings such as gene names that may have embedded numbers,
+ * in a string sensitive way so that bmp4a comes before bmp14a 
+ * and ABc and abC are treated as the same.  A little slow. */
+
 void slNameSortCase(struct slName **pList);
 /* Sort slName list, ignore case. */
 

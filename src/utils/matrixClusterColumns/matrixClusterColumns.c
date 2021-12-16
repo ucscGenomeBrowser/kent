@@ -245,6 +245,7 @@ hashFree(&uniqHash);
 
 /* Just alphabetize names for now */
 slNameSort(&nameList);
+slSort(&nameList, slNameCmpWordsWithEmbeddedNumbers);
 
 /* Make up hash that maps cluster names to cluster ids */
 struct hash *clusterIxHash = hashNew(0);	/* Keyed by cluster, no value */
