@@ -61,7 +61,7 @@ if [ -s seqsForNextclade ]; then
             --input-qc-config $nDataDir/qc.json \
             --output-dir $outDir \
             --output-tsv $outTsv >& nextclade.log
-        cut -f 1,2 $outTsv | tail -n+2 >> nextclade.tsv
+        cut -f 1,2 $outTsv | tail -n+2 | sed -re 's/"//g;' >> nextclade.tsv
         rm $outTsv
     done
     rm -rf $outDir
