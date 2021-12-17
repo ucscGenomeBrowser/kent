@@ -53,6 +53,7 @@ html ../../dbSnpArchive
         track snp150Flagged override
         parent dbSnpArchive 
         priority 0.916
+        html ../snp150Flagged
 
         track snp149Mult override
         parent dbSnpArchive 
