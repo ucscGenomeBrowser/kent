@@ -44,7 +44,7 @@ compositeTrack on
 	color 254,97,0
 
 	track Twist_Comp_Exome_Target
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/Twist_ComprehensiveExome_targets_hg38.bb
 	shortLabel Twist Compr. T
 	longLabel Twist - Comprehensive Exome Panel Target Regions
@@ -53,7 +53,7 @@ compositeTrack on
 	color 254,97,0
 
 	track Twist_Exome_Target2
-	parent exomeProbesets off
+	parent exomeProbesets on
 	bigDataUrl /gbdb/hg38/exomeProbesets/TwistExome21.bb
 	shortLabel Twist Exome 2.0
 	longLabel Twist - Exome 2.0 Panel Target Regions
