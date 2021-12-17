@@ -1,0 +1,42 @@
+
+track brainDevRegions
+superTrack on
+shortLabel Brain Dev Bhaduri
+longLabel  Brain developing regions from Bhaduri et al 2021
+visibility hide
+group singleCell
+
+    track brainDevRegionsTissueCellType
+    parent brainDevRegions
+    type bigBarChart
+    visibility pack
+    shortLabel Brain dev regions
+    longLabel  Brain developing regions from Bhaduri et al 2021 overview
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/brainDevRegions/facet_usual.bb
+    barChartStatsUrl /gbdb/$D/bbi/brainDevRegions/facet_usual.facets
+    barChartCategoryUrl /gbdb/$D/bbi/brainDevRegions/facet_usual.categories
+    barChartFacets structure,area,cell_type
+    barChartMerge on
+    barChartStretchToItem on
+
+    track brainDevRegionsFullDetails
+    parent brainDevRegions
+    type bigBarChart
+    visibility hide
+    shortLabel Brain dev rgn full
+    longLabel  Brain developing regions from Bhaduri et al 2021 full
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/brainDevRegions/facet_detailed.bb
+    barChartStatsUrl /gbdb/$D/bbi/brainDevRegions/facet_detailed.facets
+    barChartCategoryUrl /gbdb/$D/bbi/brainDevRegions/facet_detailed.categories
+    barChartFacets structure,area,subarea,lamina,cell_class,cell_type,detailed_cell_type,age,individual
+    barChartMerge on
+    maxWindowToDraw 10000000
+    barChartStretchToItem on
