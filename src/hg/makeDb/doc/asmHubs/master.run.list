@@ -15,6 +15,7 @@
 ./runBuild GCA_001632575.1 GCA_001632575.1_C3H_HeJ_v1 mammals Mus_musculus
 ./runBuild GCA_001632615.1 GCA_001632615.1_LP_J_v1 mammals Mus_musculus
 ./runBuild GCA_001949185.1 GCA_001949185.1_Rvar_4.0 invertebrate Ramazzottius_varieornatus
+./runBuild GCA_002057885.1 GCA_002057885.1_ASM205788v1 fungi Saccharomyces_cerevisiae
 ./runBuild GCA_002082055.1 GCA_002082055.1_nHd_3.1 invertebrate Hypsibius_dujardini
 ./runBuild GCA_002250225.1 GCA_002250225.1_ASM225022v1 fungi Saccharomyces_cerevisiae
 ./runBuild GCA_002844635.1 GCA_002844635.1_USMARCv1.0 mammals Sus_scrofa
@@ -121,6 +122,7 @@
 ./runBuild GCA_016128335.1 GCA_016128335.1_ZJU1.0 birds Dromaius_novaehollandiae
 ./runBuild GCA_016904835.1 GCA_016904835.1_bAcaChl1.pri birds Acanthisitta_chloris
 ./runBuild GCA_017562165.1 GCA_017562165.1_ASM1756216v1 invertebrates Ectropis_grisescens
+./runBuild GCA_017639245.1 GCA_017639245.1_MMon_1.0 birds Myiopsitta_monachus
 ./runBuild GCA_017639485.1 GCA_017639485.1_bPluApr1.pri birds Pluvialis_apricaria
 ./runBuild GCA_017639555.1 GCA_017639555.1_bCicMag1.pri birds Ciconia_maguari
 ./runBuild GCA_017976375.1 GCA_017976375.1_bCucCan1.pri birds Cuculus_canorus
@@ -136,6 +138,8 @@
 ./runBuild GCA_020745705.1 GCA_020745705.1_bHemCom1.pri.cur birds Hemiprocne_comata
 ./runBuild GCA_020745775.1 GCA_020745775.1_bTheCae1.pri.cur birds Theristicus_caerulescens
 ./runBuild GCA_020746105.1 GCA_020746105.1_bTroSur1.pri.cur birds Trogon_surrucura
+./runBuild GCA_020800305.1 GCA_020800305.1_bPorHoc1.mat.Z.cur birds Porphyrio_hochstetteri
+./runBuild GCA_020801775.1 GCA_020801775.1_bPorHoc1.pat.decon birds Porphyrio_hochstetteri
 ./runBuild GCA_900324465.2 GCA_900324465.2_fAnaTes1.2 fish Anabas_testudineus
 ./runBuild GCA_900634415.1 GCA_900634415.1_fCotGob3.1 vertebrate Cottoperca_gobio
 ./runBuild GCA_900634435.1 GCA_900634435.1_fCotGob3.1_alternate_haplotype fish Cottoperca_gobio
@@ -1317,6 +1321,7 @@
 ./runBuild GCF_011750605.1 GCF_011750605.1_ASM1175060v1 invertebrate Drosophila_busckii
 ./runBuild GCF_011762505.1 GCF_011762505.1_mArvNil1.pat.X mammals Arvicanthis_niloticus
 ./runBuild GCF_011762595.1 GCF_011762595.1_mTurTru1.mat.Y mammals Tursiops_truncatus
+./runBuild GCF_011764305.1 GCF_011764305.1_ASM1176430v1.1 mammals Mustela_putorius_furo
 ./runBuild GCF_011800145.1 GCF_011800145.1_KU_Mleo_1.0 mammals Mirounga_leonina
 ./runBuild GCF_011800845.1 GCF_011800845.1_UG_Zviv_1 vertebrate Zootoca_vivipara
 ./runBuild GCF_011865705.1 GCF_011865705.1_USU_MGEN_1.2 invertebrate Megalopta_genalis

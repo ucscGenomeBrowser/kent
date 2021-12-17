@@ -294,7 +294,7 @@ char *dataFile = trackDbSetting(tdb, "barChartMatrixUrl");
 if (dataFile == NULL)
     dataFile = trackDbSetting(tdb, "barChartDataUrl");
 // for backwards compatibility during qa review
-struct barChartCategory *categories = barChartUiGetCategories(database, tdb);
+struct barChartCategory *categories = barChartUiGetCategories(database, tdb, NULL);
 struct hash *categoryHash = barChartCategoriesToHash(categories);
 if (dataFile != NULL)
     {
@@ -341,7 +341,7 @@ trashDirFile(&colorTn, "hgc", "barChartColors", ".txt");
 FILE *f = fopen(colorTn.forCgi, "w");
 if (f == NULL)
     errAbort("can't create temp file %s", colorTn.forCgi);
-struct barChartCategory *categs = barChartUiGetCategories(database, tdb);
+struct barChartCategory *categs = barChartUiGetCategories(database, tdb, NULL);
 struct barChartCategory *categ;
 fprintf(f, "%s\t%s\n", "category", "color");
 for (categ = categs; categ != NULL; categ = categ->next)
@@ -413,8 +413,9 @@ for (row = ft->rowList; row != NULL; row = row->next)
 static void svgBarChart(struct barChartBed *chart, struct trackDb *tdb, double maxVal, char *metric)
 /* Plot bar chart without quartiles or anything fancy just using SVG */
 {
+puts("<p>");
 /* Load up input labels, color, and data */
-struct barChartCategory *categs = barChartUiGetCategories(database, tdb);
+struct barChartCategory *categs = barChartUiGetCategories(database, tdb, NULL);
 int categCount = slCount(categs);
 if (categCount != chart->expCount)
     {
@@ -576,14 +577,13 @@ float highLevel = barChartMaxValue(chartItem, &categId);
 char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
 char *metric = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_METRIC, "");
 printf("<b>Maximum %s value: </b> %0.2f %s in %s<br>\n", 
-                metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
-printf("<b>Score: </b> %d<br>\n", chartItem->score); 
-printf("<b>Genomic position: "
-                "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
+	    metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb, NULL));
+printf("<b>Gene position: "
+                "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a>\n", 
                     database, hgTracksPathAndSettings(), database, 
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd,
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd);
-printf("<b>Strand: </b> %s\n", chartItem->strand); 
+printf("&nbsp;&nbsp;<b>Strand: </b> %s\n", chartItem->strand); 
 
 // print any remaining extra fields
 if (numColumns > 0)
@@ -593,9 +593,9 @@ if (numColumns > 0)
 
 char *matrixUrl = NULL, *sampleUrl = NULL;
 struct barChartItemData *vals = getSampleVals(tdb, chartItem, &matrixUrl, &sampleUrl);
-puts("<p>");
 if (vals != NULL)
     {
+    puts("<p>");
     // Print boxplot
     char *df = makeDataFrame(tdb->table, vals);
     char *colorFile = makeColorFile(tdb);

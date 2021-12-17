@@ -3558,7 +3558,7 @@ static void lfColors(struct track *tg, struct linkedFeatures *lf,
 {
 if (!((lf->isBigGenePred) ||(lf->filterColor == 0)|| (lf->filterColor == -1)))
     {
-    if (lf->extra == (void *)USE_ITEM_RGB)
+    if (lf->useItemRgb)
 	{
 	struct rgbColor itemRgb;
 	itemRgb.r = (lf->filterColor & 0xff0000) >> 16;
@@ -5186,7 +5186,7 @@ for (i = 0; i < blockCount; i++)
 	((bed->thickStart > lf->end) && (bed->thickEnd > lf->end)))
 	lf->tallStart = lf->end;
     /* Finally the business about the color. */
-    lf->extra = (void *)USE_ITEM_RGB;
+    lf->useItemRgb = TRUE;
     lf->filterColor = (unsigned)bed->expIds[i];
     slAddHead(&lfList, lf);
     }
@@ -12464,7 +12464,7 @@ if (fieldCount < 12)
 lf = lfFromBed(bedPart);
 if (useItemRgb)
     {
-    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+    lf->useItemRgb = TRUE;
     lf->filterColor=bedPart->itemRgb;
     }
 return lf;
@@ -13735,7 +13735,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     bed->itemRgb = bedParseRgb(item->color);
     bed8To12(bed);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
-    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+    lf->useItemRgb = TRUE;
     lf->filterColor=bed->itemRgb;
 
     /* overload itemAttr fields to be able to pass id to hgc click box */
@@ -13763,7 +13763,7 @@ bed->thickEnd = winEnd;
 bed->itemRgb = 0xcc0000;
 bed8To12(bed);
 lf = lfFromBedExtra(bed, scoreMin, scoreMax);
-lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+lf->useItemRgb = TRUE;
 lf->filterColor=bed->itemRgb;
 slAddHead(&lfList, lf);
 

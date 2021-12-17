@@ -20,6 +20,7 @@ noInherit on
 priority 3
 type bed 3
 origAssembly hg18
+html wgEncodeAffyRnaChip
 
     track wgEncodeAffyRnaChipViewFiltTransfrags
     shortLabel Transfrags

@@ -1245,7 +1245,7 @@ def pslToBigPsl(mapFname, protSeqs, accToDb, accToMeta, accToMapSource, chromSiz
             elif mapSource == "entrez":
                 mapInfo = "best match(es) when aligning protein against RefSeq transcripts of NCBI gene annotated by UniProt"
             else:
-                assert(False)
+                assert(False) # invalid mapSource ?
             mapInfoStr = transListStr+" (%s)" % mapInfo
         else:
             mapInfoStr = "(mapped with direct BLAT)"
@@ -1866,7 +1866,6 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
 
 def makeSymlink(target, linkName):
     if isfile(linkName):
-        #logging.debug("%s already exists" % linkName)
         os.remove(linkName)
     if target is None or not isfile(target):
         logging.error("Cannot symlink: %s does not exist" % str(target))
@@ -1907,8 +1906,9 @@ def makeLinks(bigBedDir, faDir, onlyDbs, taxIdDbs):
 
             # and create links to them
             for bbFname in bbFnames:
-                bbLink = join(bbTargetDir, basename(bbFname))
-                makeSymlink(bbFname, bbLink)
+                if "_" not in bbFname: # skip the bigPsl files with the md5 in them
+                    bbLink = join(bbTargetDir, basename(bbFname))
+                    makeSymlink(bbFname, bbLink)
 
 def checkPsl(pslName, faFname):
     " checking the qNames in a psl input (!) file "

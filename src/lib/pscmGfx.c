@@ -288,6 +288,16 @@ psTextCentered(pscm->ps, x, y, width, height, text);
 boxPscm = NULL;
 }
 
+void pscmTextInBox(struct pscmGfx *pscm, int x, int y, 
+	int width, int height, int color, MgFont *font, char *text)
+/* Draw a line of text that fills in box defined by x/y/width/height */
+{
+pscmSetColor(pscm, color);
+pscmSetFont(pscm, font);
+psTextInBox(pscm->ps, x, y, width, height, text);
+boxPscm = NULL;
+}
+
 void pscmFillUnder(struct pscmGfx *pscm, int x1, int y1, int x2, int y2, 
 	int bottom, Color color)
 /* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
@@ -775,6 +785,7 @@ vg->line = (vg_line)pscmLine;
 vg->text = (vg_text)pscmText;
 vg->textRight = (vg_textRight)pscmTextRight;
 vg->textCentered = (vg_textCentered)pscmTextCentered;
+vg->textInBox = (vg_textInBox)pscmTextInBox;
 vg->findColorIx = (vg_findColorIx)pscmFindColorIx;
 vg->colorIxToRgb = (vg_colorIxToRgb)pscmColorIxToRgb;
 vg->setClip = (vg_setClip)pscmSetClip;

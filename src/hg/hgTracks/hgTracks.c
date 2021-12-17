@@ -6007,7 +6007,7 @@ if (ct->dbTrack)
 	lf = lfFromBed(bed);
 	if (useItemRgb)
 	    {
-	    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+            lf->useItemRgb = TRUE;
 	    lf->filterColor=bed->itemRgb;
 	    }
 	slAddHead(&lfList, lf);
@@ -6027,7 +6027,7 @@ else
 	    lf = lfFromBed(bed);
 	    if (useItemRgb)
 		{
-		lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+                lf->useItemRgb = TRUE;
 		lf->filterColor=bed->itemRgb;
 		}
 	    slAddHead(&lfList, lf);
@@ -6118,7 +6118,7 @@ if (ct->dbTrack)
 		continue;
 	if (useItemRgb)
 	    {
-	    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+            lf->useItemRgb = TRUE;
 	    lf->filterColor=bed->itemRgb;
 	    }
 	slAddHead(&lfList, lf);
@@ -6137,7 +6137,7 @@ else
 	    lf = lfFromBed(bed);
 	    if (useItemRgb)
 		{
-		lf->extra = (void *)USE_ITEM_RGB; /* signal for coloring */
+                lf->useItemRgb = TRUE;
 		lf->filterColor=bed->itemRgb;
 		}
 	    slAddHead(&lfList, lf);
@@ -10503,6 +10503,8 @@ cgiTableRowEnd();
 
 if (sameString(database,"hg38"))
     chromInfoRowsChromExt("withAltRandom");
+else if (trackHubDatabase(database))
+    chromInfoRowsNonChrom(1000);
 else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) &&
     hChromCount(database) < 100)
     chromInfoRowsChrom();

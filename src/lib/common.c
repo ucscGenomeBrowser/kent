@@ -709,6 +709,15 @@ const struct slName *b = *((struct slName **)vb);
 return cmpStringsWithEmbeddedNumbers(a->name, b->name);
 }
 
+int slNameCmpWordsWithEmbeddedNumbers(const void *va, const void *vb)
+/* Compare strings such as gene names that may have embedded numbers,
+ * in a string sensitive way so that bmp4a comes before bmp14a 
+ * and ABc and abC are treated as the same.  A little slow. */
+{
+const struct slName *a = *((struct slName **)va);
+const struct slName *b = *((struct slName **)vb);
+return cmpWordsWithEmbeddedNumbers(a->name, b->name);
+}
 
 
 void slNameSort(struct slName **pList)
@@ -1334,6 +1343,15 @@ void slPairSortCase(struct slPair **pList)
 /* Sort slPair list, ignore case. */
 {
 slSort(pList, slPairCmpCase);
+}
+
+int slPairCmpWordsWithEmbeddedNumbers(const void *va, const void *vb)
+/* Sort slPairList ignoring case and dealing with embedded numbers so 2 comes
+ * before 10, not after. */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return cmpWordsWithEmbeddedNumbers(a->name, b->name);
 }
 
 int slPairCmp(const void *va, const void *vb)

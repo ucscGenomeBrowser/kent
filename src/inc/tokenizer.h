@@ -23,6 +23,7 @@ struct tokenizer
     bool leaveQuotes;	 /* Leave quotes in string. */
     bool uncommentC;	 /* Take out C (and C++) style comments. */
     bool uncommentShell; /* Take out # style comments. */
+    bool twoCharOps;     /* Return single token for != == && || >= <= ++ -- */
     };
 
 struct tokenizer *tokenizerNew(char *fileName);

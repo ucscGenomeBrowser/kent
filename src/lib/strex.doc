@@ -1,8 +1,15 @@
 The strex language is a small string expression evaluation language.  
 This document describes its built in functions and operators:
 
-+  - returns the concatenation of the surrounding strings or the addition of surrounding
++    returns the concatenation of the surrounding strings or the addition of surrounding
      numbers.  Will convert a number to a string in mixed expressions
+=    returns true if two items are the same.  For strings ignores case
+!=   returns true if two items are not the same.  For strings ignores case
+>    Greater than. Converts mixed expressions to strings. Ignores case in strings
+>=   Greater or equal. Converts mixed expressions to strings. Ignores case in strings
+>    Less than. Converts mixed expressions to strings. Ignores case in strings
+>=   Less or equal. Converts mixed expressions to strings. Ignores case in strings
+
 
 [index] - selects a character from string given an integer zero based index. As in Python
        if index is negative it selects characters from the end of the string.  -1
@@ -102,6 +109,8 @@ symbol(prefix, string) - turn string into a computer usable symbol that starts w
 	    is 32 characters or less it's used, but if it's longer it's converted into an MD5
 	    sum.
 
+symbol_id(prefix, string) - turns a string into prefix followed by a small numerical ID that will be
+            unique and return consistently if same prefix,string is input.
 replace(string, oldPart, newPart) - returns string with all instances of old replaced by new.
 	    The cases where either old or new are empty string are useful special cases.
 	    If new is "", then all instances of the old string will be deleted.

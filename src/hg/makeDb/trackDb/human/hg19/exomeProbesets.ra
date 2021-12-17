@@ -70,6 +70,15 @@ compositeTrack on
 	visibility dense
 	color 254,97,0
 	
+	track Twist_Exome_Target2
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg19/exomeProbesets/TwistExome21.bb
+	shortLabel Twist Exome 2.0
+	longLabel Twist - Exome 2.0 Panel Target Regions
+	type bigBed
+	visibility dense
+	color 254,97,0
+	
 	track MGI_Exome_Capture_V4
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/MGI_Exome_Capture_V4.bb

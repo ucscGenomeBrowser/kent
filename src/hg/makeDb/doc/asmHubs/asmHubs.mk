@@ -54,6 +54,9 @@ trackData::
 	chmod +x ${destDir}/${dataName}.html
 	chmod +x ${destDir}/download.${dataName}.html
 
+indexPages: hubIndex asmStats trackData
+	echo indexPages done
+
 hubTxt:
 	rm -f ${destDir}/${testHubFile}.txt ${destDir}/${hubFile}.txt
 	sed -e "s#index.html#${indexName}.html#; s#genomes.txt#${genomesTxt}.txt#;" ${srcDir}/${hubTxtFile} > ${destDir}/${hubFile}.txt
@@ -104,3 +107,14 @@ verifyDownload:
 verifyDynamicBlat:
 	cut -d'_' -f1-2 ${orderList} | while read asmId; do \
 	  ${toolsDir}/testDynBlat.sh $$asmId < /dev/null; done
+
+sendIndexes::
+	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
+		qateam@hgdownload:/mirrordata/hubs/${name}/${indexName}.html
+	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
+		qateam@hgdownload:/mirrordata/hubs/${name}/${statsName}.html
+	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
+		qateam@hgdownload:/mirrordata/hubs/${name}/${dataName}.html

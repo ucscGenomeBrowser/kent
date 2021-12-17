@@ -196,7 +196,7 @@ slReverse(&pairList);
 if (fieldIsNumeric)
     slSort(&pairList, slPairCmpNumbers);
 else
-    slSort(&pairList, slPairCmpCase);
+    slSort(&pairList, slPairCmpWordsWithEmbeddedNumbers);
 if (doReverse)
     slReverse(&pairList);
 
@@ -329,6 +329,16 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 
 carefulClose(&f);
 }
+
+void fieldedTableResetRowIds(struct fieldedTable *table, int startId)
+/* Redo ID's in table to be incrementing numbers starting with startId */
+{
+struct fieldedRow *fr;
+int id = startId;
+for (fr  = table->rowList; fr != NULL; fr = fr->next)
+    fr->id = id++;
+}
+
 
 void fieldedTableToTabFile(struct fieldedTable *table, char *fileName)
 /* Write out a fielded table back to file */

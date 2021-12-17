@@ -51,6 +51,10 @@ struct vGfx
     	int colorIx, void *font, char *text);
     /* Draw a line of text in middle of box. */
 
+    void (*textInBox)(void *v, int x, int y, int width, int height,
+    	int colorIx, void *font, char *text);
+    /* Draw text that fills a box. */
+
     int (*findColorIx)(void *v, int r, int g, int b);
     /* Find color in map if possible, otherwise create new color or
      * in a pinch a close color. */
@@ -152,6 +156,10 @@ void vgClose(struct vGfx **pVg);
 #define vgTextCentered(v,x,y,width,height,color,font,string) \
 	v->textCentered(v->data,x,y,width,height,color,font,string)
 /* Draw a line of text in middle of box. */
+
+#define vgTextInBox(v,x,y,width,height,color,font,string) \
+	v->textInBox(v->data,x,y,width,height,color,font,string)
+/* Draw text that fills a box. */
 
 #define vgFindColorIx(v,r,g,b) v->findColorIx(v->data, r, g, b)
 /* Find index of RGB color.  */

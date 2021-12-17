@@ -1081,3 +1081,13 @@ textHistogram -real -binSize=0.2 -maxBinCount=1100 -minVal=-200 \
     hgsql hgFixed < ~/kent/src/hg/lib/ctdSorted.sql
     hgsql hgFixed -e 'load data local infile "ctdSorted.tab" into table ctdSorted'
 
+#####
+# Jaspar 2022 PFM  (DONE 2021/12/08 braney)
+#####
+mkdir -p /hive/data/outside/jaspar/2022/all
+cd  /hive/data/outside/jaspar/2022/all
+wget "https://jaspar.genereg.net/download/data/2022/CORE/JASPAR2022_CORE_non-redundant_pfms_jaspar.zip"
+unzip JASPAR2022_CORE_non-redundant_pfms_jaspar.zip
+for i in *.jaspar; do f=`awk '{print $1; exit}' $i | tr -d '>'`;  tail -n +1  $i | awk '{count=NF - 3;  for (ii=3; ii <= NF - 1; ii++) counts[ii - 3] += $ii;} END {for(ii=0; ii < count; ii++) printf "%d\t", counts[ii]; printf "\n"}'  > /tmp/1;  tail -n +2   $i | awk '{count=NF - 3;  for (ii=3; ii <= NF - 1; ii++) printf "%d\t", $ii; printf "\n"}' >> /tmp/1; tail -n +1 $i | awk '{count=NF - 3;  for (ii=3; ii <= NF - 1; ii++) counts[ii - 3] += $ii;} END {for(ii=0; ii < count; ii++) printf "%d\t", counts[ii]; printf "\n"}' | awk '{numCols=NF; for(ii=1;ii <= numCols; ii++) mat[NR-1][ii] = $ii;} END {for(jj=1; jj <= numCols; jj++) {for(ii=0; ii < NR; ii++) printf "%d\t",mat[ii][jj]; printf "\n";}}'  /tmp/1 | awk '{for (ii=2; ii <= NF; ii++) printf "%f\t",$ii/$1; printf "\n";}' | awk -v name=$f '{numCols=NF; for(ii=1;ii <= numCols; ii++) mat[NR-1][ii] = $ii;} END {printf "%s\t%d\t",name,NR;for(jj=1; jj <= numCols; jj++) {for(ii=0; ii < NR; ii++) printf "%g,",mat[ii][jj]; printf "\t";}} END {printf "\n"}'  ; done > jasparMotif.tab
+
+hgLoadSqlTab hgFixed jasparCore2022 ~/kent/src/hg/lib/dnaMotif.sql jasparMotif.tab

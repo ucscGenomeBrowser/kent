@@ -44,6 +44,14 @@ geneTrack ncbiGeneBGP
         color 105,190,185
         priority 4
 
+        track ucscStrainNucMutsOmicron
+        parent ucscStrainNucMuts
+        shortLabel B.1.1.529 Nuc Muts 
+        longLabel B.1.1.529 (Omicron) nucleotide mutations identifed from GISAID sequences
+        bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_nuc.bb
+        color 80,160,200
+        priority 5
+
 track ucscStrainMuts
 shortLabel UCSC Strain Muts
 longLabel  Strains of interest amino acid mutations identified from GISAID sequences by UCSC Genomics Inst
@@ -135,5 +143,13 @@ noScoreFilter on
         bigDataUrl /gbdb/wuhCor1/strainMuts/strainMutsCA.bb
         color 105,190,185
         priority 4
+
+        track strainMutsOmicron
+        parent strainMuts
+        shortLabel Omicron Strain Muts 
+        longLabel Omicron (B.1.1.529) amino acid mutations from cov-lineages.org
+        bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_prot.bb
+        color 80,160,200
+        priority 5
 
 -

@@ -30,6 +30,7 @@ barChartCategoryUrl barChart bigBarChart
 multiRegionsBedUrl *
 barChartFacets barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
+barChartMerge barChart bigBarChart
 barChartStatsUrl barChart bigBarChart
 barChartStretchToItem barChart bigBarChart
 # below for backwards compatibility during QA. 

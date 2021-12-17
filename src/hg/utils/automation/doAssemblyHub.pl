@@ -1199,6 +1199,20 @@ sub doSimpleRepeat {
   my $bossScript = newBash HgRemoteScript("$runDir/doSimpleRepeat.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  my $trfClusterHub = $smallClusterHub;
+
+  my $seqCount = `cat $buildDir/$asmId.chrom.sizes | wc -l`;
+  chomp $seqCount;
+  # check for large seqCount and large genome, then use bigCluster
+  # the 100000 and 20000000 are from doSimpleRepeat.pl
+  if ( $seqCount > 100000 ) {
+     my $genomeSize = `ave -col=2 $buildDir/$asmId.chrom.sizes | grep -w total | awk '{printf "%d", \$NF}'`;
+     chomp $genomeSize;
+     if ($genomeSize > 200000000) {
+	$trfClusterHub = $bigClusterHub;
+     }
+  }
+
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 export buildDir=$buildDir
@@ -1206,11 +1220,11 @@ export buildDir=$buildDir
 if [ \$buildDir/\$asmId.2bit -nt trfMask.bed.gz ]; then
   doSimpleRepeat.pl -stop=filter -buildDir=`pwd` \\
     -unmaskedSeq=\$buildDir/\$asmId.2bit \\
-      -trf409=6 -dbHost=$dbHost -smallClusterHub=$smallClusterHub \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$trfClusterHub \\
         -workhorse=$workhorse \$asmId
   doSimpleRepeat.pl -buildDir=`pwd` \\
     -continue=cleanup -stop=cleanup -unmaskedSeq=\$buildDir/\$asmId.2bit \\
-      -trf409=6 -dbHost=$dbHost -smallClusterHub=$smallClusterHub \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$trfClusterHub \\
         -workhorse=$workhorse \$asmId
   gzip simpleRepeat.bed trfMask.bed
 fi
@@ -1401,13 +1415,18 @@ if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   twoBitToFa \$asmId.masked.2bit stdout | faSize stdin > \$asmId.masked.faSize.txt
   touch -r \$asmId.masked.2bit \$asmId.masked.faSize.txt
   cp -p \$asmId.masked.faSize.txt ../../\$asmId.faSize.txt
-  ln \$asmId.masked.2bit \$accessionId.2bit
-  gfServer -trans index ../../\$accessionId.trans.gfidx \$accessionId.2bit &
-  gfServer -stepSize=5 index ../../\$accessionId.untrans.gfidx \$accessionId.2bit
-  wait
-  rm \$accessionId.2bit
-  touch -r \$asmId.masked.2bit ../../\$accessionId.trans.gfidx
-  touch -r \$asmId.masked.2bit ../../\$accessionId.untrans.gfidx
+  size=`grep -w bases \$asmId.masked.faSize.txt | cut -d' ' -f1`
+  if [ \$size -lt 4294967297 ]; then
+    ln \$asmId.masked.2bit \$accessionId.2bit
+    gfServer -trans index ../../\$accessionId.trans.gfidx \$accessionId.2bit &
+    gfServer -stepSize=5 index ../../\$accessionId.untrans.gfidx \$accessionId.2bit
+    wait
+    rm \$accessionId.2bit
+    touch -r \$asmId.masked.2bit ../../\$accessionId.trans.gfidx
+    touch -r \$asmId.masked.2bit ../../\$accessionId.untrans.gfidx
+  else
+    printf "# genome \$asmId too large at \$size to make blat indexes\\n" 1>&2
+  fi
 else
   printf "# addMask step previously completed\\n" 1>&2
   exit 0
@@ -1505,6 +1524,12 @@ sub doTandemDups {
     &HgAutomate::verbose(1,
 	"ERROR: tandemDups: can not find $buildDir/$asmId.unmasked.2bit\n");
     exit 255;
+  }
+  my $ctgCount = `grep -c '^' $buildDir/$asmId.chrom.sizes`;
+  chomp $ctgCount;
+  if ( $ctgCount > 100000) {
+   &HgAutomate::verbose(1, "# tandemDups step too many contigs at $ctgCount\n");
+       return;
   }
   if (-d "${runDir}" ) {
      if (! -s "$runDir/$asmId.tandemDups.bb") {
@@ -1626,7 +1651,7 @@ sub doNcbiGene {
 
   my $dupList = "";
   if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
-    $dupList = " | grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\" ";
+    $dupList = " | grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\"  || true";
   }
 
   $bossScript->add(<<_EOF_

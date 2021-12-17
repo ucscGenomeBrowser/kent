@@ -319,7 +319,7 @@ if (!preverify_ok)
 /* err contains the last verification error.  */
 if (!preverify_ok && (err == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT))
     {
-    X509_NAME_oneline(X509_get_issuer_name(ctx->current_cert), buf, 256);
+    X509_NAME_oneline(X509_get_issuer_name(cert), buf, 256);
     fprintf(stderr, "issuer= %s\n", buf);
     }
 if (sameString(getenv("https_cert_check"), "warn") || sameString(getenv("https_cert_check"), "log"))
@@ -366,6 +366,8 @@ if (!domainWhiteList)
 	    {
 	    // Hardwired exceptions whitelist
 	    // openssl automatically whitelists domains which are given as IPv4 or IPv6 addresses
+	    hashStoreName(domainHash, "*.cbu.uib.no");
+	    hashStoreName(domainHash, "*.genebook.com.cn");
 	    hashStoreName(domainHash, "annotation.dbi.udel.edu");
 	    hashStoreName(domainHash, "apprisws.bioinfo.cnio.es");
 	    hashStoreName(domainHash, "arn.ugr.es");
@@ -389,27 +391,34 @@ if (!domainWhiteList)
 	    hashStoreName(domainHash, "dev.stanford.edu");
 	    hashStoreName(domainHash, "dice-green.liai.org");
 	    hashStoreName(domainHash, "dropbox.ogic.ca");
+	    hashStoreName(domainHash, "dropfile.hpc.qmul.ac.uk");
 	    hashStoreName(domainHash, "edn.som.umaryland.edu");
+	    hashStoreName(domainHash, "frigg.uio.no");
 	    hashStoreName(domainHash, "ftp--ncbi--nlm--nih--gov.ibrowse.co");
 	    hashStoreName(domainHash, "ftp.science.ru.nl");
+	    hashStoreName(domainHash, "galaxy.med.uvm.edu");
 	    hashStoreName(domainHash, "garfield.igh.cnrs.fr");
 	    hashStoreName(domainHash, "gcp.wenglab.org");
 	    hashStoreName(domainHash, "genome-tracks.ngs.omrf.in");
 	    hashStoreName(domainHash, "genomicsdata.cs.ucl.ac.uk");
 	    hashStoreName(domainHash, "gsmplot.deqiangsun.org");
 	    hashStoreName(domainHash, "hgdownload--soe--ucsc--edu.ibrowse.co");
+	    hashStoreName(domainHash, "hci-bio-app.hci.utah.edu");
 	    hashStoreName(domainHash, "hkgateway.med.umich.edu");
 	    hashStoreName(domainHash, "hsb.upf.edu");
 	    hashStoreName(domainHash, "icbi.at");
 	    hashStoreName(domainHash, "lichtlab.cancer.ufl.edu");
 	    hashStoreName(domainHash, "manticore.niehs.nih.gov");
 	    hashStoreName(domainHash, "microb215.med.upenn.edu");
+	    hashStoreName(domainHash, "mitranscriptome.path.med.umich.edu");
 	    hashStoreName(domainHash, "nextgen.izkf.rwth-aachen.de");
 	    hashStoreName(domainHash, "oculargenomics.meei.harvard.edu");
 	    hashStoreName(domainHash, "onesgateway.med.umich.edu");
 	    hashStoreName(domainHash, "openslice.fenyolab.org");
 	    hashStoreName(domainHash, "peromyscus.rc.fas.harvard.edu");
+	    hashStoreName(domainHash, "pgv19.virol.ucl.ac.uk");
 	    hashStoreName(domainHash, "pricenas.biochem.uiowa.edu");
+	    hashStoreName(domainHash, "redirect.medsch.ucla.edu");
 	    hashStoreName(domainHash, "rnaseqhub.brain.mpg.de");
 	    hashStoreName(domainHash, "schatzlabucscdata.yalespace.org.s3.amazonaws.com");
 	    hashStoreName(domainHash, "silo.bioinf.uni-leipzig.de");
@@ -421,6 +430,7 @@ if (!domainWhiteList)
 	    hashStoreName(domainHash, "web1.bx.bio.jhu.edu");
 	    hashStoreName(domainHash, "www.datadepot.rcac.purdue.edu");
 	    hashStoreName(domainHash, "www.isical.ac.in");
+	    hashStoreName(domainHash, "www.morgridge.us");
 	    hashStoreName(domainHash, "www.ogic.ca");
 	    hashStoreName(domainHash, "www.v93rc2.demo.encodedcc.org");
 	    hashStoreName(domainHash, "xinglabtrackhub.research.chop.edu");
@@ -435,6 +445,23 @@ if (!domainWhiteList)
 return domainWhiteList;
 }
 
+struct hashEl *checkIfInHashWithWildCard(char *hostName)
+/* check if in hash, and if in hash with lowest-level domain set to "*" wildcard */
+{
+struct hashEl *result = hashLookup(initDomainWhiteListHash(), hostName);
+if (!result)
+    {
+    char *dot = strchr(hostName, '.');
+    if (dot && (dot - hostName) >= 1)
+	{
+        int length=strlen(hostName)+1;
+	char wildHost[length];
+	safef(wildHost, sizeof wildHost, "*%s", dot);
+	result = hashLookup(initDomainWhiteListHash(), wildHost);
+	}
+    }
+return result;
+}
 
 int netConnectHttps(char *hostName, int port, boolean noProxy)
 /* Return socket for https connection with server or -1 if error. */
@@ -476,7 +503,7 @@ struct timeval tv;
 
 if (!sameString(getenv("https_cert_check"), "none"))
     {
-    if (hashLookup(initDomainWhiteListHash(), hostName))
+    if (checkIfInHashWithWildCard(hostName))
 	{
 	// old existing domains which are not (yet) compatible with openssl.
 	if (getenv("SCRIPT_NAME"))  // CGI mode

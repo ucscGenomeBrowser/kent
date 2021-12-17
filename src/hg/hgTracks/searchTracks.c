@@ -268,47 +268,53 @@ struct paraFetchData *pfdDone = NULL;
 void *addUnconnectedHubSearchResults(void *threadParam)
 /* Add a not yet connected hub to the search results */
 {
+pthread_t *thread = threadParam;
 struct paraFetchData *pfd = NULL;
-pthread_mutex_lock(&pfdMutex);
-// the wait function will set pfdList = NULL, so don't start up any more
-// stuff if that happens:
+// this thread will just happily keep working until waitForSearchResults() finishes,
+// moving it's completed work onto pfdDone, so we can safely detach
+pthread_detach(*thread);
 boolean allDone = FALSE;
-if (!pfdList)
-    allDone = TRUE;
-else
+while(1)
     {
-    pfd = slPopHead(&pfdList);
-    pfd->threadId = threadParam;
-    slAddHead(&pfdRunning, pfd);
-    }
-pthread_mutex_unlock(&pfdMutex);
-if (allDone)
-    return NULL;
-struct hubSearchTracks *hst = pfd->hst;
-struct track *tracksToAdd = NULL;
-long startTime = clock1000();
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    struct trackDb *tdbList = hubAddTracks(hst->hub, database);
-    if (measureTiming)
-        measureTime("After connecting to hub %s: '%d': ", hst->hubUrl, hst->hubId);
-    // get composite and subtracks into trackList
-    hubTdbListToTrackList(tdbList, &tracksToAdd, hst->searchedTracks);
-    hubTdbListAddSupers(tdbList, &tracksToAdd, hst->searchedTracks);
     pthread_mutex_lock(&pfdMutex);
-    pfd->tlist = tracksToAdd;
-    pfd->done = TRUE;
-    if (measureTiming)
+    // the wait function will set pfdList = NULL, so don't start up any more
+    // stuff if that happens:
+    if (!pfdList)
+        allDone = TRUE;
+    else
         {
-        pfd->searchTime = clock1000() - startTime;;
-        measureTime("Finished finding tracks for hub '%s': ", pfd->hubName);
+        pfd = slPopHead(&pfdList);
+        pfd->threadId = threadParam;
+        slAddHead(&pfdRunning, pfd);
         }
+    pthread_mutex_unlock(&pfdMutex);
+    if (allDone)
+        return NULL;
+    struct hubSearchTracks *hst = pfd->hst;
+    struct track *tracksToAdd = NULL;
+    long startTime = clock1000();
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        pfd->done = FALSE;
+        struct trackDb *tdbList = hubAddTracks(hst->hub, database);
+        if (measureTiming)
+            measureTime("After connecting to hub %s: '%d': ", hst->hubUrl, hst->hubId);
+        // get composite and subtracks into trackList
+        hubTdbListToTrackList(tdbList, &tracksToAdd, hst->searchedTracks);
+        hubTdbListAddSupers(tdbList, &tracksToAdd, hst->searchedTracks);
+        pfd->done = TRUE;
+        pfd->tlist = tracksToAdd;
+        pfd->searchTime = clock1000() - startTime;;
+        }
+    errCatchEnd(errCatch);
+    pthread_mutex_lock(&pfdMutex);
     slRemoveEl(&pfdRunning, pfd);
     slAddHead(&pfdDone, pfd);
+    if (measureTiming)
+        measureTime("Finished finding tracks for hub '%s': ", pfd->hubName);
     pthread_mutex_unlock(&pfdMutex);
     }
-errCatchEnd(errCatch);
 //always return NULL for pthread_create()
 return NULL;
 }
@@ -425,6 +431,8 @@ lockStatus = pthread_mutex_trylock(&pfdMutex);
 struct paraFetchData *neverRan = pfdList;
 if (lockStatus == 0)
     {
+    // prevent still running threads from continuing
+    pfdList = NULL;
     if (measureTiming)
         fprintf(stdout, "<span class='timing'>Successfully aquired lock, adding any succesful thread data\n<br></span>");
     for (pfd = pfdDone; pfd != NULL; pfd = pfd->next)
@@ -432,7 +440,6 @@ if (lockStatus == 0)
         struct track *t;
         for (t = pfd->tlist; t != NULL; t = t->next)
             refAdd(&tracks, t);
-        pthread_join(*pfd->threadId, NULL);
         if (measureTiming)
             measureTime("'%s' search times", pfd->hubName);
         }

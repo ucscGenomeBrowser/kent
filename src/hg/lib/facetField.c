@@ -34,7 +34,7 @@ int facetValCmp(const void *va, const void *vb)
 {
 struct facetVal *a = *((struct facetVal **)va);
 struct facetVal *b = *((struct facetVal **)vb);
-return strcasecmp(a->val, b->val);
+return cmpWordsWithEmbeddedNumbers(a->val, b->val);
 }
 
 struct facetVal *facetsClone(struct facetVal *origList)
@@ -71,6 +71,22 @@ AllocVar(facetVal);
 facetVal->val = val;
 facetVal->useCount = useCount;
 return facetVal;
+}
+
+int facetFieldCountSelected(struct facetField *facetField)
+/* Return number of facets in list that are selected */
+{
+if (facetField->allSelected)
+    return slCount(facetField->valList);
+else
+    {
+    int count = 0;
+    struct facetVal *facetVal;
+    for (facetVal = facetField->valList; facetVal != NULL; facetVal = facetVal->next)
+	if (facetVal->selected)
+	    ++count;
+    return count;
+    }
 }
 
 static void facetFieldAdd(struct facetField *facetField, char *tagVal, boolean selecting)
@@ -163,7 +179,7 @@ struct dyString *dy = newDyString(1024);
 struct facetField *sff = NULL;
 for (sff = selectedList; sff; sff=sff->next)
     {
-    dyStringPrintf(dy, "%s %d ", sff->fieldName, sff->showAllValues);
+    dyStringPrintf(dy, "%s %d%d ", sff->fieldName, sff->showAllValues, sff->isMerged);
     boolean first = TRUE;
     struct facetVal *el;
     for (el=sff->valList; el; el=el->next)
@@ -231,11 +247,20 @@ else if (sameString(op, "showSomeValues"))  // show all facet values
 else if (sameString(op, "reset"))
     {
     sff->showAllValues = FALSE;
+    sff->isMerged = FALSE;
     struct facetVal *el;
     for (el=sff->valList; el; el=el->next)
 	{
 	el->selected = FALSE;
 	}
+    }
+else if (sameString(op, "merge"))
+    {
+    sff->isMerged = TRUE;
+    }
+else if (sameString(op, "unmerge"))
+    {
+    sff->isMerged = FALSE;
     }
 *pSelectedList = selectedList;
 }
@@ -243,6 +268,7 @@ else if (sameString(op, "reset"))
 struct facetField *deLinearizeFacetValString(char *selectedFields)
 /* Turn linearized selected fields string back into facet structures */
 {
+if (selectedFields == NULL) return NULL;  // Empty input means empty output
 struct facetField *ffList = NULL, *ff;
 boolean done = FALSE;
 while (!done)
@@ -262,8 +288,8 @@ while (!done)
 	errAbort("expected space separating fieldname from showAllValues boolean");
     *spc = 0;
 
-    char *showAllValuesBoolean = spc+1;
-    char *spc2 = strchr(showAllValuesBoolean, ' ');
+    char *flagsBoolean = spc+1;
+    char *spc2 = strchr(flagsBoolean, ' ');
     if (!spc2)
 	errAbort("expected space separating showAllValues boolean from facet values list");
     *spc2 = 0;
@@ -274,13 +300,13 @@ while (!done)
 	valList = csvParse(vals);
 
     ff = facetFieldNew(selectedFields);
-    ff->showAllValues = (*showAllValuesBoolean == '1');
+    ff->showAllValues = (flagsBoolean[0] == '1');
+    ff->isMerged = (flagsBoolean[1] == '1');
 
     slAddHead(&ffList, ff);
     struct slName *el;
     for (el=valList; el; el=el->next)
 	{
-	//uglyf("adding selected field %s val %s\n", selectedFields, el->name);
 	facetFieldAdd(ff, el->name, TRUE);
 	}
     
@@ -310,22 +336,19 @@ slReverse(&ffList);
 /* Initialize selected facet values */
 if (selectedFields)
     {
-    //warn("facetFieldsFromSqlTableInit: selectedFields is NOT NULL [%s]\n", selectedFields);  // TODO REMOVE DEBUG
     struct facetField *selectedList = deLinearizeFacetValString(selectedFields);
     struct facetField *sff = NULL;
     for (sff = selectedList; sff; sff=sff->next)
 	{
-	//warn("facetFieldsFromSqlTableInit: looking for ff->fieldName [%s]\n", sff->fieldName);  // TODO REMOVE DEBUG
 	for (i=0; i<fieldCount; ++i)
 	    {
 	    if (sameString(ffArray[i]->fieldName, sff->fieldName))
 		{
-	        //warn("facetFieldsFromSqlTableInit: found ffArray[%d]->fieldName [%s]\n", i, ffArray[i]->fieldName);  // TODO REMOVE DEBUG
 		ffArray[i]->showAllValues = sff->showAllValues;
+		ffArray[i]->isMerged = sff->isMerged;
 		struct facetVal *el;
 		for (el=sff->valList; el; el=el->next)
 		    {
-		    //warn("adding selected field %s val %s\n", sff->fieldName, el->val);  // TODO REMOVE DEBUG
 		    facetFieldAdd(ffArray[i], el->val, TRUE);
 		    }
 		}
@@ -390,15 +413,16 @@ if (pSelectedRowCount)
 return ffList;
 }
 
-struct fieldedTable *facetFieldsFromFieldedTable(struct fieldedTable *ft, char *selectedFields,
+// struct fieldedTable *facetFieldsFromFieldedTable(struct fieldedTable *ft, char *selectionKey,
+struct fieldedTable *facetFieldSelectRows(struct fieldedTable *ft, char *selectionKey,
     struct facetField *ffArray[])
-/* Get a facetField list and initialize arrays based on selected fields from table 
- * ffArray must be big enough to hold all fields in table */
+/* Return a tables that is just rows of table ft that pass selection key.  ffArray should
+ * have same number of elements as ft->fieldCount */
 {
 int fieldCount = ft->fieldCount;
 struct fieldedTable *subTable = fieldedTableNew(ft->name, ft->fields, fieldCount);
 struct facetField *ffList = facetFieldsFromSqlTableInit(ft->fields, fieldCount, 
-    selectedFields, ffArray);
+    selectionKey, ffArray);
 struct fieldedRow *fr;
 for (fr = ft->rowList; fr != NULL; fr = fr->next)
     {

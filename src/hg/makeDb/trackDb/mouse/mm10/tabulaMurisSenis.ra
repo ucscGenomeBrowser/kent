@@ -1,0 +1,177 @@
+
+track tabulaMurisSenis10x
+superTrack on
+shortLabel Tabula Muris 2 10x 
+longLabel Tabula Muris Senis 10x single cell RNA data from mice of different ages and sexes
+visibility hide
+group regulation
+
+    track tabulaMurisSenis10xTissueCellType
+    type bigBarChart
+    parent tabulaMurisSenis10x
+    visibility pack
+    shortLabel tissue cell 
+    longLabel Tabula muris senis 10x grouped by tissue and cell type
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell.categories
+    barChartFacets tissue,cell_class,cell_type
+    barChartStretchToItem on
+
+    track tabulaMurisSenis10xFacetsTissueCellAge
+    type bigBarChart
+    parent tabulaMurisSenis10x
+    visibility hide
+    shortLabel tissue cell age
+    longLabel Tabula muris senis 10x grouped by tissue, cell type, and age
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell_age.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell_age.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell_age.categories
+    barChartFacets tissue,cell_class,cell_type,age
+    barChartStretchToItem on
+
+    track tabulaMurisSenis10xFacetsTissueCellSex
+    type bigBarChart
+    parent tabulaMurisSenis10x
+    visibility hide
+    shortLabel tissue cell sex
+    longLabel Tabula muris senis 10x grouped by tissue, cell type, and sex
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell_sex.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell_sex.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell_sex.categories
+    barChartFacets tissue,cell_class,cell_type,sex
+    barChartStretchToItem on
+
+    track tabulaMurisSenis10xFacetsTissueSubtissueCell
+    type bigBarChart
+    parent tabulaMurisSenis10x
+    visibility hide
+    shortLabel tissue subtissue
+    longLabel Tabula muris senis 10x grouped by tissue, subtissue, and cell type
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_subtissue_cell.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_subtissue_cell.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_subtissue_cell.categories
+    barChartFacets tissue,subtissue,cell_class,cell_type
+    barChartStretchToItem on
+
+    track tabulaMurisSenis10xFacetsDetailed
+    type bigBarChart
+    parent tabulaMurisSenis10x
+    visibility hide
+    shortLabel view detailed
+    longLabel Tabula muris senis 10x view with full subtissue and mouse by mouse details
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_detailed.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_detailed.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_detailed.categories
+    barChartFacets tissue,subtissue,cell_class,cell_type,age,sex,mouse_id
+    maxWindowToDraw 10000000
+    barChartStretchToItem on
+
+track tabulaMurisSenisFacs
+superTrack on
+shortLabel Tabula Muris 2 FACS 
+longLabel Tabula Muris Senis FACS single cell RNA data from mice of different ages and sexes
+visibility hide
+group regulation
+
+    track tabulaMurisSenisFacsTissueCellType
+    type bigBarChart
+    parent tabulaMurisSenisFacs
+    visibility pack
+    shortLabel tissue cell 
+    longLabel Tabula muris senis FACS grouped by tissue and cell type
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell.categories
+    barChartFacets tissue,cell_class,cell_type
+    barChartStretchToItem on
+
+    track tabulaMurisSenisFacsFacetsTissueCellAge
+    type bigBarChart
+    parent tabulaMurisSenisFacs
+    visibility hide
+    shortLabel tissue cell age
+    longLabel Tabula muris senis FACS grouped by tissue, cell type, and age
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell_age.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell_age.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell_age.categories
+    barChartFacets tissue,cell_class,cell_type,age
+    barChartStretchToItem on
+
+    track tabulaMurisSenisFacsFacetsTissueCellSex
+    type bigBarChart
+    parent tabulaMurisSenisFacs
+    visibility hide
+    shortLabel tissue cell sex
+    longLabel Tabula muris senis FACS grouped by tissue, cell type, and sex
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell_sex.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell_sex.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell_sex.categories
+    barChartFacets tissue,cell_class,cell_type,sex
+    barChartStretchToItem on
+
+    track tabulaMurisSenisFacsFacetsTissueSubtissueCell
+    type bigBarChart
+    parent tabulaMurisSenisFacs
+    visibility hide
+    shortLabel tissue subtissue
+    longLabel Tabula muris senis FACS grouped by tissue, subtissue, and cell type
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_subtissue_cell.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_subtissue_cell.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_subtissue_cell.categories
+    barChartFacets tissue,subtissue,cell_class,cell_type
+    barChartStretchToItem on
+
+    track tabulaMurisSenisFacsFacetsDetailed
+    type bigBarChart
+    parent tabulaMurisSenisFacs
+    visibility hide
+    shortLabel view detailed
+    longLabel Tabula muris senis FACS view with full subtissue and mouse by mouse details
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_detailed.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_detailed.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_detailed.categories
+    barChartFacets tissue,subtissue,cell_class,cell_type,age,sex,mouse_id
+    barChartMerge on
+    maxWindowToDraw 10000000
+    barChartStretchToItem on

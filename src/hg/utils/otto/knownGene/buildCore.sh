@@ -16,16 +16,27 @@ rm tmp tmp2
 
 # generate UC id's for the models along with mapping from ENST to uc (txToAcc.tab)
 # update hgFixed.knownId with id range
-# get current list of ids
-zcat gencode${GENCODE_VERSION}.bed.gz |  awk '{print $4}' | sort > newGencodeName.txt
-# grab ENST to UC map from the previous set
-hgsql $oldDb -Ne "select name,alignId from knownGene" | sort > EnstToUC.txt
 # get the last id from last build of the geneset   (human V36)
 lastEndId=`hgsql hgFixed -Ne "select end+1 from knownId where end = (select maX(end) from knownId)"`
-kgAllocId EnstToUC.txt newGencodeName.txt $lastEndId stdout 2> out.txt | sort -u >  txToAcc.tab
-newEndId=`awk '{print $2}' out.txt`
+
+if test "$firstGencode" == ""
+then
+    # get current list of ids
+    zcat gencode${GENCODE_VERSION}.bed.gz |  awk '{print $4}' | sort > newGencodeName.txt
+    # grab ENST to UC map from the previous set
+    hgsql $oldDb -Ne "select name,alignId from knownGene" | sort > EnstToUC.txt
+    kgAllocId EnstToUC.txt newGencodeName.txt $lastEndId stdout 2> out.txt | sort -u >  txToAcc.tab
+    newEndId=`awk '{print $2}' out.txt`
+    touch oldToNew.tab
+    rm EnstToUC.txt newGencodeName.txt out.txt
+else
+    echo $lastEndId > startId
+    txGeneAccession $oldGeneBed startId gencode${GENCODE_VERSION}.bed.gz txToAcc.tab oldToNew.tab
+    newEndId=`cat startId`
+    rm startId
+fi
+
 hgsql hgFixed -Ne "insert into knownId values ($lastEndId, $newEndId, \"$db ${GENCODE_VERSION}\")"
-rm EnstToUC.txt newGencodeName.txt out.txt
 
 # ucscGenes.bed
 zcat gencode${GENCODE_VERSION}.bed.gz > ucscGenes.bed
@@ -85,7 +96,6 @@ hgLoadSqlTab -notOnServer $tempDb knownAttrs $kent/src/hg/lib/knownAttrs.sql kno
 hgsql $tempDb -e "select * from knownToMrna" | tail -n +2 | tawk '{if ($1 != last) {print last, count, buffer; count=1; buffer=$2} else {count++;buffer=$2","buffer} last=$1}' | tail -n +2 | sort > tmp1
 hgsql $tempDb  -e "select * from knownToMrnaSingle" | tail -n +2 | sort > tmp2
 join  tmp2 tmp1 > knownGene.ev
-touch oldToNew.tab
 txGeneAlias $db $spDb kgXref.tab knownGene.ev oldToNew.tab foo.alias foo.protAlias
 tawk '{split($2,a,"."); for(ii = 1; ii <= a[2]; ii++) print $1,a[1] "." ii }' txToAcc.tab >> foo.alias
 tawk '{split($1,a,"."); for(ii = 1; ii <= a[2] - 1; ii++) print $1,a[1] "." ii }' txToAcc.tab >> foo.alias
@@ -107,8 +117,8 @@ txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq | bedClip stdin /cluster/data/$db/chrom.sizes  ucscSplice.bed
 hgLoadBed $tempDb knownAlt ucscSplice.bed
 
-#txGeneExplainUpdate2 $oldGeneBed ucscGenes.bed kgOldToNew.tab
-#hgLoadSqlTab -notOnServer $tempDb kg${lastVer}ToKg${GENCODE_VERSION} $kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
+txGeneExplainUpdate2 $oldGeneBed ucscGenes.bed kgOldToNew.tab
+hgLoadSqlTab -notOnServer $tempDb kg${PREV_GENCODE_VERSION}ToKg${GENCODE_VERSION} $kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
 
 
 hgsql $tempDb -Ne "select kgId, geneSymbol, spID from kgXref" > geneNames.txt
