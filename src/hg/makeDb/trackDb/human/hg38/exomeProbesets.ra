@@ -55,8 +55,8 @@ compositeTrack on
 	track Twist_Exome_Target2
 	parent exomeProbesets off
 	bigDataUrl /gbdb/hg38/exomeProbesets/TwistExome21.bb
-	shortLabel Twist Exome 2.1
-	longLabel Twist - Exome 2.1 Panel Target Regions
+	shortLabel Twist Exome 2.0
+	longLabel Twist - Exome 2.0 Panel Target Regions
 	type bigBed
 	visibility dense
 	color 254,97,0
