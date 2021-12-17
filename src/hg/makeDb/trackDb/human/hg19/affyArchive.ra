@@ -25,6 +25,7 @@ pennantIcon New red . "Supertrack created Aug. 27th 2021"
     visibility pack
     noInherit on
     type bed 12
+    html affyExonArray
 
         track affyExonProbeset
         parent affyExonArray
@@ -126,21 +127,25 @@ pennantIcon New red . "Supertrack created Aug. 27th 2021"
     parent affyArchive
     group expression
     priority 2
+    html ../affyGnf1h
 
 
     track affyU95 override
     parent affyArchive
     group expression
     priority 4
+    html ../affyU95
 
     track affyU133 override
     parent affyArchive
     group expression
     priority 5
+    html ../affyU133
 
     track affyU133Plus2 override
     parent affyArchive
     group expression
     priority 6
+    html ../affyU133Plus2
 
     include wgEncodeAffyRnaChip.ra

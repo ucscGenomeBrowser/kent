@@ -10,7 +10,7 @@ mkdir -p ${WORKDIR}/clinGenDosage
 cd ${WORKDIR}/clinGenDosage
 
 echo "user anonymous
-ls ClinGen*
+ls ClinGen*curation_list*
 bye" > ftp.dosage.cmds
 
 if [ -e release.list ]

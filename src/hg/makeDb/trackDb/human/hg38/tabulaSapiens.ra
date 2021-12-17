@@ -69,4 +69,5 @@ group singleCell
     barChartCategoryUrl /gbdb/$D/bbi/tabulaSapiens/facet_detailed.categories
     barChartFacets tissue,subtissue,cell_class,cell_type,sex,donor,assay
     barChartMerge on
+    maxWindowToDraw 10000000
     barChartStretchToItem on

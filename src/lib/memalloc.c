@@ -196,6 +196,10 @@ void *needMem(size_t size)
  * is initialized to zero. */
 {
 void *pt;
+
+if (size >= 0x8000000000000000)  // caused by overflowed signed int getting sign-extended
+    size += 4294967296;
+
 if (size == 0 || size > NEEDMEM_LIMIT)
     errAbort("needMem: trying to allocate %llu bytes (limit: %llu)",
          (unsigned long long)size, (unsigned long long)NEEDMEM_LIMIT);

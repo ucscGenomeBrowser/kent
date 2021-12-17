@@ -144,7 +144,7 @@ puts(" Data must be formatted in\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html#Hosting'>Hosting</A> section of the Track Hub Help documentation.\n<br><br>"
 " Please note a much more efficient way to load data is to use\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html'>Track Hubs</A>, which are loaded\n" 
-" from the <A HREF='hgHubConnect'>Track Hubs Portal</A> found in the menu under My Data.\n"
+" from the <A TARGET=_BLANK HREF='hgHubConnect'>Track Hubs Portal</A> found in the menu under My Data.\n"
 );
 }
 

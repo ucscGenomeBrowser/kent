@@ -1545,7 +1545,7 @@ if (cartVarExists(cart, hgHubDoHubCheck))
     puts("<div id='content' style='margin:10px; padding: 2px'>");
     jsOnEventByIdF("click", "windowX", "closeIframe()");
     if (isEmpty(hubUrl))
-        printf("Please wait, loading and checking hub, this can take 15 seconds to 5 minutes.");
+        printf("Please wait, loading and checking hub. This usually takes a minute or two but can take up to 20 minutes for big hubs.");
     else
         {
         puts("<p><button id='reloadButton'>Check again</button>");

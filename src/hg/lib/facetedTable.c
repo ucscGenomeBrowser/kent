@@ -15,6 +15,10 @@
 #include "hgConfig.h"
 #include "facetedTable.h"
 
+/* These two may someday need to be non-constant */
+#define ftClusterOutIx 0    /* Output for synthesized cluster name is always in zero column */
+#define ftKeySep '/'	    /* Componenets of composite keys are separated with they */
+
 static struct facetedTable *facetedTableNew(char *name, char *varPrefix, char *facets)
 /* Return new, mostly empty faceted table */
 {
@@ -146,13 +150,15 @@ else
     return FALSE;
 }
 
+
 struct mergeGroup
 /* Adds up series of counts and values with values weighted by count*/
     {
     struct mergeGroup *next;
-    char *key;	        /* Key - just / separated list of component keys */
-    char **aRow;	/* First row we encounter in input table*/
+    char *key;		     /* Unique key for this group */
+    struct fieldedRow *aRow; /* First row we encounter in input table */
     struct slRef *rowRefList;  /* List of refs to all rows (struct fieldedRow *) in merge */
+    // struct mergeColHelper *col;  /* Associated column if any */
     };
 
 struct mergeColHelper
@@ -211,7 +217,7 @@ for (i=0; i<table->fieldCount; ++i)
     helper->isColor = sameString(field, "color");
     if (helper->isColor)
         *retColorCol = helper;
-    helper->isKey = (i == 0);
+    helper->isKey = (i == ftClusterOutIx);
     slAddHead(&list, helper);
     }
 slReverse(&list);
@@ -234,7 +240,7 @@ for (col = colList; col != NULL; col = col->next)
     if (col->isFacet && !col->isMerged)
 	{
 	if (key->stringSize != 0)
-	    dyStringAppendC(key, ' ');
+	    dyStringAppendC(key, ftKeySep);
 	dyStringAppend(key, row[col->ix]);
 	}
     }
@@ -274,7 +280,7 @@ double ratioUnderThreshold = (double)underThreshold/(double)threshold;
 return (1 - ratioUnderThreshold)*fullColor + ratioUnderThreshold*maxVal;
 }
 
-long long weightedAveValAt(int countIx, int valIx, struct mergeGroup *merge)
+double weightedAveValAt(int countIx, int valIx, struct mergeGroup *merge)
 /* Return wieghted average value */
 {
 long totalCount = 0;
@@ -292,7 +298,7 @@ for (ref = merge->rowRefList; ref != NULL; ref = ref->next)
 return weightedSum/totalCount;
 }
 
-long long aveValAt(int valIx, struct mergeGroup *merge)
+double aveValAt(int valIx, struct mergeGroup *merge)
 /* Return average value */
 {
 int count = 0;
@@ -354,12 +360,17 @@ for (fr = tableIn->rowList; fr != NULL; fr = fr->next)
         {
 	AllocVar(merge);
 	merge->key = cloneString(key);
-	merge->aRow = fr->row;
-	slAddHead(&mergeList, merge);
+	merge->aRow = fr;
 	hashAdd(mergeHash, key, merge);
+	slAddHead(&mergeList, merge);
 	}
     refAdd(&merge->rowRefList, fr);
     }
+
+/* Do list reversals, damn cheap singly-linked lists always needing this! */
+struct mergeGroup *merge;
+for (merge = mergeList; merge != NULL; merge = merge->next)
+    slReverse(&merge->rowRefList);
 slReverse(&mergeList);
 
 /* Clean up and go home. */
@@ -368,15 +379,35 @@ hashFree(&mergeHash);
 return mergeList;
 }
 
-
-static char **annotateColListAndMakeNewFields(struct mergeColHelper *colList, 
-    struct mergeGroup *mergeList, int *retCount)
+#ifdef DEBUG
+static struct hash *hashColList(struct mergeColHelper *colList)
+/* Make hash of colList keyed by name */
 {
-/* Make a trip through merged table noting whether a each column merges cleanly */
+   { // ugly debug
+   struct dyString *dy = dyStringNew(0);
+    struct mergeColHelper *col;
+    for (col = colList; col != NULL; col = col->next)
+	dyStringPrintf(dy, "%s,", col->name);
+    uglyAbort("hashColList on %s", dy->string);
+   }
+struct hash *hash = hashNew(0);
 struct mergeColHelper *col;
+for (col = colList; col != NULL; col = col->next)    hashAdd(hash, col->name, col);
+    hashAdd(hash, col->name, col);
+return hash;
+}
+#endif /* DEBUG */
+
+void annotateColListAndMakeNewFields(struct mergeColHelper *colList, 
+    struct mergeGroup *mergeList, int *retCount, struct mergeColHelper ***retNewFields)
+/* Update fields in colList. */
+{
+struct mergeGroup *merge;
+struct mergeColHelper *col;
+
+/* Make a trip through merged table noting whether a each column merges cleanly */
 for (col = colList; col != NULL; col = col->next)
     {
-    struct mergeGroup *merge;
     int colIx = col->ix;
     boolean mergeOk = TRUE;
     for (merge = mergeList; merge != NULL && mergeOk; merge = merge->next)
@@ -406,15 +437,14 @@ for (col = colList; col != NULL; col = col->next)
  *     We'll compute new count and val fields where count is sum and val is weighted average 
  *     If there's a color field we'll merge it by weighted average as well */
 
-char **newFields;
+struct mergeColHelper **newFields;
 AllocArray(newFields, slCount(colList)); // Big enough
 int newFieldCount = 0;
 for (col = colList; col != NULL; col = col->next)
     {
-    char *name = col->name;
     if (col->sameAfterMerger || col->isKey || col->isCount || col->isVal || col->isColor)
         {
-	newFields[newFieldCount] = name;
+	newFields[newFieldCount] = col;
 	col->mergedIx = newFieldCount;
 	newFieldCount += 1;
 	}
@@ -422,7 +452,7 @@ for (col = colList; col != NULL; col = col->next)
         col->mergedIx = -1;
     }
 *retCount = newFieldCount;
-return newFields;
+*retNewFields = newFields;
 }
 
 static struct facetField **recomputeFfArray(struct facetField **oldFfArray, 
@@ -452,7 +482,14 @@ struct mergeColHelper *colList = makeColList(facTab, tableIn, selList,
     &countCol, &valCol, &colorCol);
 struct mergeGroup *mergeList = findMergeGroups(tableIn, colList);
 int newFieldCount;
-char **newFields = annotateColListAndMakeNewFields(colList, mergeList, &newFieldCount);
+struct mergeColHelper **outCols;
+annotateColListAndMakeNewFields(colList, mergeList, &newFieldCount, &outCols);
+
+/* Convert array of columns to array of names */
+char *newFields[newFieldCount];
+int i;
+for (i=0; i<newFieldCount; ++i)
+    newFields[i] = outCols[i]->name;
 
 struct fieldedTable *tableOut = fieldedTableNew("merged", newFields, newFieldCount);
 char *newRow[newFieldCount];
@@ -494,7 +531,7 @@ for (merge = mergeList; merge != NULL; merge = merge->next)
 		}
 	    else if (col->sameAfterMerger)
 	        {
-		newRow[col->mergedIx] = merge->aRow[col->ix];
+		newRow[col->mergedIx] = merge->aRow->row[col->ix];
 		}
 	    }
 	}
@@ -555,36 +592,38 @@ const struct facetedTableMergedOffset *b = *((struct facetedTableMergedOffset **
 return cmpWordsWithEmbeddedNumbers(a->name, b->name);
 }
 
-
 struct facetedTableMergedOffset *facetedTableMakeMergedOffsets(struct facetedTable *facTab,
      struct cart *cart)
 /* Return a structure that will let us relatively rapidly merge together one row */
 {
+struct fieldedTable *tableIn = facTab->table;
+fieldedTableResetRowIds(tableIn, 0);	// Use the seldom-used ID column as indexes
+
 /* Figure out user selection of fields to select on and merge as ffSelList */
 char *selList = facetedTableSelList(facTab, cart);
 struct facetField *ffSelList  = deLinearizeFacetValString(selList);
 
-/* Get output column list and pointers to key columns */
-struct fieldedTable *tableIn = facTab->table;
-struct mergeColHelper *countCol = NULL, *valCol = NULL, *colorCol = NULL;
-struct mergeColHelper *colList = makeColList(facTab, tableIn, ffSelList, 
-    &countCol, &valCol, &colorCol);
-struct mergeGroup *mergeList = findMergeGroups(tableIn, colList);
-int newFieldCount;
-annotateColListAndMakeNewFields(colList, mergeList, &newFieldCount);
+/* Remove columns that have not been selected */
+struct fieldedTable *subtable = facetFieldSelectRows(facTab->table, selList, facTab->ffArray);
+// struct fieldedTable *subtable = facTab->table; // ugly
 
-fieldedTableResetRowIds(tableIn, 0);	// Use the seldom-used ID column as indexes
+/* Get output column list and pointers to key columns */
+struct mergeColHelper *countCol = NULL, *valCol = NULL, *colorCol = NULL;
+struct mergeColHelper *colList = makeColList(facTab, subtable, ffSelList, 
+    &countCol, &valCol, &colorCol);
+struct mergeGroup *mergeList = findMergeGroups(subtable, colList);
+int newFieldCount;
+struct mergeColHelper **outCol;
+annotateColListAndMakeNewFields(colList, mergeList, &newFieldCount, &outCol);
+
 struct facetedTableMergedOffset *tmoList = NULL;
 struct mergeGroup *merge;
-struct dyString *keyBuf = dyStringNew(0);
-int outIx = 0;
+
 for (merge = mergeList; merge != NULL; merge = merge->next)
     {
     struct facetedTableMergedOffset *tmo;
     AllocVar(tmo);
     slAddHead(&tmoList, tmo);
-    tmo->outIx = outIx++;
-    dyStringClear(keyBuf);
     tmo->name = merge->key;
     int r,g,b;
     weightedAveColorAt(countCol, colorCol->ix, merge, &r, &g, &b);
@@ -601,18 +640,29 @@ for (merge = mergeList; merge != NULL; merge = merge->next)
 	tmo->totalCount += count;
 	slAddHead(&tmo->colList, tco);
 	}
+    slReverse(&tmo->colList);
     }
+
+/* Sort and attach ascending output indexes. */
 slSort(&tmoList, facetedTableMergedOffsetCmp);
+int outIx = 0;
+struct facetedTableMergedOffset *tmo;
+for (tmo = tmoList; tmo != NULL; tmo = tmo->next)
+    {
+    tmo->outIx = outIx++;
+    }
 return tmoList;
 }
 
-void facetedTableMergeVals(struct facetedTableMergedOffset *tmoList, float *inVals, float *outVals)
+void facetedTableMergeVals(struct facetedTableMergedOffset *tmoList, float *inVals, int inValCount,
+    float *outVals, int outValCount)
 /* Populate outVals array with columns of weighted averages derived from applying
  * tmoList to inVals array. */
 {
 struct facetedTableMergedOffset *tmo;
 for (tmo = tmoList; tmo != NULL; tmo = tmo->next)
     {
+    if (tmo->outIx < 0 || tmo->outIx >= outValCount) errAbort("facetTableMergeVals finds outIx out of range %d not in [0-%d)\n", tmo->outIx, outValCount);
     struct facetedTableCountOffset *colList = tmo->colList;
     if (colList->next == NULL)  // specail case of one
         {

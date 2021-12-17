@@ -130,7 +130,7 @@ if ( -e grandTotFile$$ ) then
     cat grandTotFile$$ | grep "$name" \
       | awk '{total+=$1} END {print total, $2, $3}' >> finFile$$
   end
-  set totsize=`cat finFile | grep -v "Not Committed" \
+  set totsize=`cat finFile$$ | grep -v "Not Committed" \
     | awk '{total+=$1} END {print total, $2, $3}'`
   cat finFile$$ | grep -v "Not Committed" | sort -nr \
     | awk '{print $1, $2, $3}' | sed "s/ /_/" \

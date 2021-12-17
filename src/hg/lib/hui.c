@@ -9466,7 +9466,7 @@ if (tdbIsSuper(tdb) || tdbIsComposite(tdb))
     // and composite tracks. Adding the SVG removes a dependency and makes the icons show up instantly,
     // instead of the short delay when using fonts. Github uses icons like this.
     hPrintf("<span title='The folder icon indicates a container track. "
-            "Click the track name to see all possible subtracks.'>"
+            "Click the track name to see all subtracks.'>"
             "<svg class='folderIcon' viewBox='0 0 512 512'><path fill='#00457c' "
             "d='M464 128H272l-64-64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 "
             "0 48-21.49 48-48V176c0-26.51-21.49-48-48-48z'/></svg></span>");
