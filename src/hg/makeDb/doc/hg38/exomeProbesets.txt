@@ -34,6 +34,9 @@ Track: Twist - Comprehensive Exome Panel Target Regions
 Download: https://www.twistbioscience.com/sites/default/files/resources/2020-09/Twist_ComprehensiveExome_targets_hg38.bed
 File name: Twist_ComprehensiveExome_targets_hg38.bed
 
+Track: Twist - Exome 2.1
+Download: curl https://www.twistbioscience.com/sites/default/files/resources/2021-10/hg19_Twist_exome_2_1_annotated_targets.bed | cut -f1-3 > TwistExome21.bed
+bedToBigBed TwistExome21.bed ../../chrom.sizes TwistExome21.bb -type=bed3
 
 # Agilent Datasets:
 Download for all Agilent files: https://earray.chem.agilent.com/suredesign/ - Password needed (from Ana)
