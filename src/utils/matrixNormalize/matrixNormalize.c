@@ -4,6 +4,9 @@
 #include "hash.h"
 #include "options.h"
 #include "vMatrix.h"
+#include "pthreadDoList.h"
+
+int clThreads = 10;
 
 void usage()
 /* Explain usage and exit. */
@@ -20,12 +23,17 @@ errAbort(
   "   length - Euclidian length as a vector adds to one\n"
   "options:\n"
   "   -target=val - use target val instead of one for normalizing\n"
+  "   -threads=N - number of threads to use, Expect limited help if you increase this\n"
+  "                Default is %d.  Only goes multitheaded in column mode and even then\n"
+  "                about 60%% of program is in the non-parallel bit.  Still, it helps\n"
+  , clThreads
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"target", OPTION_DOUBLE},
+   {"threads", OPTION_INT},
    {NULL, 0},
 };
 
@@ -112,6 +120,55 @@ for (y=0; y<ySize; ++y)
 carefulClose(&f);
 }
 
+static void normCol(struct memMatrix *m, int x, double target, boolean isLength)
+/* Normalize column x of matrix to sum to target according to measure in isLength */
+{
+/* Calculate how big we are currently */
+double scaleVal = target;
+double sum = 0.0;
+int ySize = m->ySize;
+int y;
+if (isLength)
+    {
+    for (y=0; y<ySize; ++y)
+	{
+	double val = m->rows[y][x];
+	sum += val*val;
+	}
+    sum = sqrt(sum);
+    }
+else
+    {
+    for (y=0; y<ySize; ++y)
+	sum += m->rows[y][x];
+    }
+
+/* Multiply ourselves by normalizing scale factor */
+if (sum != 0.0)
+    {
+    scaleVal /= sum;
+    for (y=0; y<ySize; ++y)
+	m->rows[y][x] *= scaleVal;
+    }
+}
+
+struct columnJob
+/* Multithreaded job that handles a column */
+    {
+    struct columnJob *next;
+    int x;	/* Index of column withing matrix */
+    boolean isLength;	/* Do sqrt(sum(squares)) type normalization */
+    double target;	/* Want column to end up summing to this */
+    };
+
+void columnWorker(void *item, void *context)
+/* A worker to execute a single column job */
+{
+struct columnJob *job = item;
+struct memMatrix *m = context;
+normCol(m, job->x, job->target, job->isLength);
+}
+
 void matrixNormalizeColumns(char *inFile, boolean isLength, double target, char *outFile)
 /* Normalize matrix one row at a time. */
 {
@@ -119,37 +176,32 @@ void matrixNormalizeColumns(char *inFile, boolean isLength, double target, char 
 struct memMatrix *m = memMatrixFromTsv(inFile);
 
 /* Go through matrix by column (y-dimension) */
-int xSize = m->xSize, ySize = m->ySize;
-int x,y;
-for (x=0; x<xSize; ++x)
-    {
-    /* Calculate how big we are currently */
-    double scaleVal = target;
-    double sum = 0.0;
-    if (isLength)
-        {
-	for (y=0; y<ySize; ++y)
-	    {
-	    double val = m->rows[y][x];
-            sum += val*val;
-	    }
-        sum = sqrt(sum);
-	}
-    else
-        {
-	for (y=0; y<ySize; ++y)
-	    sum += m->rows[y][x];
-	}
+int xSize = m->xSize;
+int x;
 
-    /* Multiply ourselves by normalizing scale factor */
-    if (sum != 0.0)
+if (clThreads > 1)
+    {
+    int threadCount = min(clThreads, 100);
+    struct columnJob *jobList = NULL;
+    for (x=0; x<xSize; ++x)
 	{
-	scaleVal /= sum;
-	for (y=0; y<ySize; ++y)
-	    m->rows[y][x] *= scaleVal;
+	struct columnJob *job;
+	AllocVar(job);
+	job->x = x;
+	job->isLength = isLength;
+	job->target = target;
+	slAddHead(&jobList, job);
+	}
+    slReverse(&jobList);
+    pthreadDoList(threadCount, jobList, columnWorker, m);
+    }
+else
+    {
+    for (x=0; x<xSize; ++x)
+	{
+	normCol(m, x, target, isLength);
 	}
     }
-
 /* Output and go home */
 memMatrixToTsv(m, outFile);
 }
@@ -175,6 +227,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
+clThreads = optionInt("threads", clThreads);
 matrixNormalize(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
