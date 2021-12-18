@@ -44,7 +44,7 @@ compositeTrack on
 	color 255,176,0
 	
 	track Twist_Comp_Exome_Target
-	parent exomeProbesets on
+	parent exomeProbesets off
 	bigDataUrl /gbdb/hg19/exomeProbesets/TwistCompExomeTarget_hg19.bb
 	shortLabel Twist Compr. T
 	longLabel Twist - Comprehensive Exome Panel Target Regions
@@ -66,6 +66,15 @@ compositeTrack on
 	bigDataUrl /gbdb/hg19/exomeProbesets/TwistExomeTarget_hg19.bb
 	shortLabel Twist Core T
 	longLabel Twist - Core Exome Panel Target Regions
+	type bigBed
+	visibility dense
+	color 254,97,0
+	
+	track Twist_Exome_Target2
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg19/exomeProbesets/TwistExome21.bb
+	shortLabel Twist Exome 2.0
+	longLabel Twist - Exome 2.0 Panel Target Regions
 	type bigBed
 	visibility dense
 	color 254,97,0

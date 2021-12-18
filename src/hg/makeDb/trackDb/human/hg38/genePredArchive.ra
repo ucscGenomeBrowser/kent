@@ -13,24 +13,29 @@ pennantIcon New red . "Supertrack created Aug. 27th 2021"
     parent genePredArchive
     color 180,0,0
     visibility pack
+    html ../../augustusGene
 
     track sibGene override
     parent genePredArchive
     color 195,90,0
     url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg38&query_str=$$
     urlLabel SIB link:
+    html ../../sibGene
 
     track sgpGene override
     parent genePredArchive
     color 0,90,100
     type genePred sgpPep
+    html ../../sgpGene
 
     track geneid override
     parent genePredArchive
     color 0,90,100
     type genePred geneidPep
+    html ../../geneid
 
     track genscan override
     parent genePredArchive
     color 170,100,0
     type genePred genscanPep
+    html ../../genscan
