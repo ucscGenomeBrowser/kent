@@ -81,7 +81,13 @@ while ((row = vRowMatrixNextRow(m, &label)) != NULL)
         row[i] *= scaleVal;
     fprintf(f, "%s", label);
     for (i=0; i<size; ++i)
-	fprintf(f, "\t%g", row[i]);
+	{
+	double val = row[i];
+	if (val == 0.0)
+	   fputs("\t0", f);
+	else
+	    fprintf(f, "\t%g", row[i]);
+	}
     fprintf(f, "\n");
     }
 carefulClose(&f);
