@@ -100,7 +100,13 @@ for (y=0; y<ySize; ++y)
    fprintf(f, "%s", m->yLabels[y]);
    double *row = m->rows[y];
    for (x=0; x<xSize; ++x)
-       fprintf(f, "\t%g", row[x]);
+       {
+       double val = row[x];
+       if (val == 0.0)
+	   fputs("\t0", f);  // Common special case in these sparse matrices
+       else
+	   fprintf(f, "\t%g", row[x]);
+       }
    fprintf(f, "\n");
    }
 carefulClose(&f);
