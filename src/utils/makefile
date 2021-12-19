@@ -69,7 +69,9 @@ UTILS_APPLIST = \
 	faTrans \
 	headRest \
 	htmlCheck \
+	matrixClusterColumns \
 	matrixMarketToTsv \
+	matrixNormalize \
 	newProg \
 	newPythonProg \
 	nibFrag \
