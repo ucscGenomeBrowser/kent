@@ -20,7 +20,7 @@ hideEmptySubtracks on
 
         track unipAliSwissprot
         shortLabel SwissProt Aln.
-        longLabel UCSC alignment of SwissProt proteins to genome (dark blue: main, annotated protein sequence)
+        longLabel UCSC alignment of SwissProt proteins to genome (dark blue: main isoform, light blue: alternative isoforms)
         priority 1
         parent uniprot
         visibility pack
@@ -38,6 +38,8 @@ hideEmptySubtracks on
         baseColorUseCds given
         baseColorDefault genomicCodons
         showDiffBasesAllScales on
+        # this is only for filtering, no need to show it
+        skipFields isMain
 
         track unipAliTrembl
         shortLabel TrEMBL Aln.
@@ -59,6 +61,8 @@ hideEmptySubtracks on
         baseColorUseCds given
         baseColorDefault genomicCodons
         showDiffBasesAllScales on
+        # this is only for filtering, no need to show it
+        skipFields isMain
 
         track unipLocSignal
         shortLabel Signal Peptide
