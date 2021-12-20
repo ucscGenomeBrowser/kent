@@ -66,7 +66,7 @@ def processFile(fileName, outputDir):
         ifh = open(fileName, "r")
     for line in ifh:
         if "str" not in str(type(line)):
-            line = line.decode("ASCII")
+            line = line.decode("utf-8")
         if "positionInput" in line:
             findSearchTerms(line)
     # Output results to file
@@ -83,8 +83,8 @@ def processDir(dirName, outputDir):
 
 def outputToFile(usersDict, usersOutName, countsOutName):
     """Output supplied dictionary to a tab-separated file"""
-    usersOut = open(usersOutName, "w")
-    countsOut = open(countsOutName, "w")
+    usersOut = open(usersOutName, "w", encoding="utf-8")
+    countsOut = open(countsOutName, "w", encoding="utf-8")
 
     usersOut.write("# User/IP\tSearch term\tUse count\n")
     countsOut.write("# Search term\t# of users\t# of times searched\n")
