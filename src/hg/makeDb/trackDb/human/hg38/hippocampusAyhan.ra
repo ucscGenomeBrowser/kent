@@ -1,0 +1,42 @@
+
+track hippocampusAyhan
+superTrack on
+shortLabel Hippocampus Ayhan
+longLabel  Hippocampus cells from Ayhan et al 2021 
+visibility hide
+group singleCell
+
+    track hippocampusAyhanTissueCellType
+    parent hippocampusAyhan
+    type bigBarChart
+    visibility pack
+    shortLabel Hippocampus Ayhan 
+    longLabel  Hippocampus cells from Ayhan et al 2021 
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/hippocampusAyhan/facet_usual.bb
+    barChartStatsUrl /gbdb/$D/bbi/hippocampusAyhan/facet_usual.facets
+    barChartCategoryUrl /gbdb/$D/bbi/hippocampusAyhan/facet_usual.categories
+    barChartFacets group,cell_class,cell_type
+    barChartMerge on
+    barChartStretchToItem on
+
+    track hippocampusAyhanFullDetails
+    parent hippocampusAyhan
+    type bigBarChart
+    visibility hide
+    shortLabel Hippo. Ayhan full
+    longLabel  Hippocampus cells from Ayhan et al 2021 full
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/hippocampusAyhan/facet_detailed.bb
+    barChartStatsUrl /gbdb/$D/bbi/hippocampusAyhan/facet_detailed.facets
+    barChartCategoryUrl /gbdb/$D/bbi/hippocampusAyhan/facet_detailed.categories
+    barChartFacets group,cell_class,cell_type,cell_subtype,seurat_clusters,epilepsy_duration,epilepsy_frequency,age,sex,donor
+    barChartMerge on
+    maxWindowToDraw 20000000
+    barChartStretchToItem on
