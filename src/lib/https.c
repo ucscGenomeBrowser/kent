@@ -368,6 +368,7 @@ if (!domainWhiteList)
 	    // openssl automatically whitelists domains which are given as IPv4 or IPv6 addresses
 	    hashStoreName(domainHash, "*.cbu.uib.no");
 	    hashStoreName(domainHash, "*.clinic.cat");
+	    hashStoreName(domainHash, "*.ezproxy.u-pec.fr");
 	    hashStoreName(domainHash, "*.genebook.com.cn");
 	    hashStoreName(domainHash, "annotation.dbi.udel.edu");
 	    hashStoreName(domainHash, "apprisws.bioinfo.cnio.es");
@@ -402,6 +403,7 @@ if (!domainWhiteList)
 	    hashStoreName(domainHash, "garfield.igh.cnrs.fr");
 	    hashStoreName(domainHash, "gcp.wenglab.org");
 	    hashStoreName(domainHash, "genap.ca");
+	    hashStoreName(domainHash, "genemo.ucsd.edu");
 	    hashStoreName(domainHash, "genome-tracks.ngs.omrf.in");
 	    hashStoreName(domainHash, "genomicsdata.cs.ucl.ac.uk");
 	    hashStoreName(domainHash, "gsmplot.deqiangsun.org");
