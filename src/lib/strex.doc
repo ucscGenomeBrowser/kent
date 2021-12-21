@@ -7,8 +7,8 @@ This document describes its built in functions and operators:
 !=   returns true if two items are not the same.  For strings ignores case
 >    Greater than. Converts mixed expressions to strings. Ignores case in strings
 >=   Greater or equal. Converts mixed expressions to strings. Ignores case in strings
->    Less than. Converts mixed expressions to strings. Ignores case in strings
->=   Less or equal. Converts mixed expressions to strings. Ignores case in strings
+<    Less than. Converts mixed expressions to strings. Ignores case in strings
+<=   Less or equal. Converts mixed expressions to strings. Ignores case in strings
 
 
 [index] - selects a character from string given an integer zero based index. As in Python
@@ -135,6 +135,11 @@ pick(query ? key1:val1, key2:val2, ... keyN:valN, default:defaultVal)
     The default key can appear in any position, but traditionally is last or first.
     Can be used to apply different expressions to parsing in different conditions:
          pick(species, "human" : ethnicity,  "mouse"  : strain,  default:"unknown")
+
+lookup(string, twoColFileName, defaultVal)
+    Looks up a string in a table defined by twoColFileName, a tab separated file.
+    If string is in the first column, return the corresponding string from the second
+    column.  Returns defaultVal if string not in lookup table.
         
 (boolean ?  trueVal : falseVal)
     This is the trinary conditional expression found in C, Python and many other languages.
@@ -144,7 +149,7 @@ pick(query ? key1:val1, key2:val2, ... keyN:valN, default:defaultVal)
 
 in(string, query) - returns true if query is a substring of string, false otherwise
 
-same(a, b) - returns true if the two arguments are the same, false otherwise
+same(a, b) - returns true if the two arguments are the same, false otherwise. Same as a=b
 
 starts_with(prefix, string) - returns true if string starts with prefix
 
