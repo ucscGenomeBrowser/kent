@@ -395,28 +395,36 @@ if (fIndex)
   }
 }
 
-struct lineIoInfo
-/* Enough rows to do things in parallel we hope? */
+struct lineIoItem
+/* This is an item fed to a parallel worker.  It corresponds to a single line of
+ * input matrix */
     {
-    struct lineIoInfo *next;
+    struct lineIoItem *next;	/* Pointer to next in list */
+
+    /* Information about input file and where we are in it. */
     char *fileName;
-    struct clustering *clusteringList;
-    int lineIx;	    /* Index of line in file */
-    int chunkIx;  /* Index of line in chunk */
+    int lineIx;	    /* Index of line in input file */
     long long lineStartOffset;	/* Start offset within file */
     long long lineSize;	/* Size of line */
     long long lineEndOffset;	
+    int chunkIx;  /* Index of line in chunk */
+
+    /* Slightly parsed input. */
     struct dyString *rowLabel;	/* Just the row label of input */
     struct dyString *lineIn;     /* Unparsed rest of input line */
-    double *vals;		 /* Array of values parsed from string  */
-    double *totalingTemp;        /* Buffer for parllel computation */
+
+    struct clustering *clusteringList;  /* Instructions on how to cluster and output */
+    
+    /* Temporary values used for calculating output */
+    double *vals;		 /* Parse out input matrix values for this line */
+    double *totalingTemp;        /* Buffer for parallel computation of totals */
     int *elementsTemp;           /* buffers for parallel computation */
     };
 
 void lineWorker(void *item, void *context)
 /* A worker to execute a single column clustering  */
 {
-struct lineIoInfo *lii = item;
+struct lineIoItem *lii = item;
 struct ccMatrix *v = context;
 int xSize = v->colCount;
 char *s = lii->lineIn->string;
@@ -476,10 +484,10 @@ for (i=0; i<outputCount; ++i)
     }
 
 /* Set up buffers for pthread workers */
-struct lineIoInfo chunks[chunkMaxSize];
+struct lineIoItem chunks[chunkMaxSize];
 for (i=0; i<chunkMaxSize; ++i)
     {
-    struct lineIoInfo *chunk = &chunks[i];
+    struct lineIoItem *chunk = &chunks[i];
     chunk->fileName = matrixFile;
     chunk->clusteringList = clusteringList;
     chunk->chunkIx = i;
@@ -495,11 +503,10 @@ dotForUserInit(1);
 
 boolean atEof = FALSE;
 struct lineFile *lf = v->lf;
-uglyf("Starting main loop on %d columns\n", v->colCount);
 while (!atEof)
     {
     /* Read a chunk of lines of the file */
-    struct lineIoInfo *chunkList = NULL, *chunk;
+    struct lineIoItem *chunkList = NULL, *chunk;
     int chunkSize;
     for (chunkSize = 0; chunkSize < chunkMaxSize; chunkSize += 1)
 	{
