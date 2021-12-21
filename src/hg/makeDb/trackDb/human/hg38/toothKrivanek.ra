@@ -19,8 +19,7 @@ group singleCell
     bigDataUrl /gbdb/$D/bbi/toothKrivanek/facet_usual.bb
     barChartStatsUrl /gbdb/$D/bbi/toothKrivanek/facet_usual.facets
     barChartCategoryUrl /gbdb/$D/bbi/toothKrivanek/facet_usual.categories
-    barChartFacets group,cell_class,cell_type
-    barChartMerge on
+    barChartFacets cell_type
     barChartStretchToItem on
 
     track toothKrivanekFullDetails
@@ -36,7 +35,7 @@ group singleCell
     bigDataUrl /gbdb/$D/bbi/toothKrivanek/facet_detailed.bb
     barChartStatsUrl /gbdb/$D/bbi/toothKrivanek/facet_detailed.facets
     barChartCategoryUrl /gbdb/$D/bbi/toothKrivanek/facet_detailed.categories
-    barChartFacets group,cell_class,cell_type,cell_subtype,seurat_clusters,epilepsy_duration,epilepsy_frequency,age,sex,donor
+    barChartFacets cell_type,cell_cluster,donor
     barChartMerge on
     maxWindowToDraw 20000000
     barChartStretchToItem on

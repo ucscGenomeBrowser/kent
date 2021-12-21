@@ -6,7 +6,7 @@ longLabel  Hippocampus cells from Ayhan et al 2021
 visibility hide
 group singleCell
 
-    track hippocampusAyhanTissueCellType
+    track hippocampusAyhanCellType
     parent hippocampusAyhan
     type bigBarChart
     visibility pack
