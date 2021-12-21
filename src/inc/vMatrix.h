@@ -63,4 +63,7 @@ void memMatrixFree(struct memMatrix **pMatrix);
 struct memMatrix *memMatrixFromTsv(char *fileName);
 /* Return a memMatrix based on file */
 
+void memMatrixToTsv(struct memMatrix *m, char *fileName);
+/* Write out memMatrix to file. */
+
 #endif /* VMATRIX_H */

@@ -398,17 +398,35 @@ for (i=0; i<clusterCount; ++i)
     grandTotal[i] += total;
     double val;
     if (doMedian)
+	{
 	val = doubleMedian(clusterElements[i], job->clusterSamples[i]);
+	fprintf(f, "%g", val);
+	}
     else
-	val = total/clusterElements[i];
-    fprintf(f, "%g", val);
+	{
+	if (total > 0)
+	    {
+	    val = total/clusterElements[i];
+	    fprintf(f, "%g", val);
+	    }
+	else
+	    fputc('0', f);
+	}
     }
 	
 fprintf(f, "\n");
 }
 
-
-
+static void addRowToIndex(FILE *fIndex, struct vMatrix *v)
+/* Write out info to index file about where this row begins */
+{
+if (fIndex)
+  {
+  fprintf(fIndex, "%s", v->rowLabel->string);
+  struct lineFile *lf = v->lf;
+  fprintf(fIndex, "\t%lld\t%lld\n",  (long long)lineFileTell(lf), (long long)lineFileTellSize(lf));
+  }
+}
 
 void matrixClusterColumns(char *matrixFile, char *metaFile, char *sampleField,
     int outputCount, char **clusterFields, char **outMatrixFiles, char **outStatsFiles,
@@ -450,17 +468,12 @@ for (;;)
   double *a = vMatrixNextRow(v);
   if (a == NULL)
        break;
-  if (fIndex)
-      {
-      fprintf(fIndex, "%s", v->rowLabel->string);
-      struct lineFile *lf = v->lf;
-      fprintf(fIndex, "\t%lld\t%lld\n",  (long long)lineFileTell(lf), (long long)lineFileTellSize(lf));
-      }
+  addRowToIndex(fIndex, v);
   for (job = jobList; job != NULL; job = job->next)
       clusterRow(job, v, a);
   dotForUser();
   }
-fputc('\n', stderr);  // Cover last dotForUser
+dotForUserEnd();
 
 /* Do stats and close files */
 for (job = jobList; job != NULL; job = job->next)

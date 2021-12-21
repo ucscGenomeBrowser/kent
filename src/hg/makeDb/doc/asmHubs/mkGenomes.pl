@@ -23,6 +23,7 @@ if ($argc != 3) {
 my $downloadHost = "hgwdev";
 my @blatHosts = qw( dynablat-01 dynablat-01 );
 my @blatPorts = qw( 4040 4040 );
+my $blatHostDomain = ".soe.ucsc.edu";
 
 ################### writing out hub.txt file, twice ##########################
 sub singleFileHub($$$$$$$$$$) {
@@ -60,9 +61,9 @@ sub singleFileHub($$$$$$$$$$) {
     printf $fh "htmlPath html/%s.description.html\n", $asmId;
     # until blat server host is ready for hgdownload, avoid these lines
     if ($blatHosts[$fileCount] ne $downloadHost) {
-      printf $fh "blat %s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatPorts[$fileCount];
-      printf $fh "transBlat %s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatPorts[$fileCount];
-      printf $fh "isPcr %s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatPorts[$fileCount];
+      printf $fh "blat %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
+      printf $fh "transBlat %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
+      printf $fh "isPcr %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
     }
     printf $fh "\n";
     foreach my $tdbLine (@tdbLines) {
@@ -185,9 +186,9 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   # until blat server host is ready for hgdownload, avoid these lines
   if ($blatHost ne $downloadHost) {
     if ( -s "${destDir}/$accessionId.trans.gfidx" ) {
-      printf "blat $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
-    printf "transBlat $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
-      printf "isPcr $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
+      printf "blat $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
+    printf "transBlat $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
+      printf "isPcr $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
     }
   }
   printf "\n";
@@ -229,9 +230,9 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   # until blat server host is ready for hgdownload, avoid these lines
   if ($blatHost ne $downloadHost) {
     if ( -s "${destDir}/$accessionId.trans.gfidx" ) {
-      printf GF "blat $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
-      printf GF "transBlat $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
-     printf GF "isPcr $blatHost $blatPort dynamic $accessionDir/$accessionId\n";
+      printf GF "blat $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
+      printf GF "transBlat $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
+     printf GF "isPcr $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
     }
   }
   close (GF);

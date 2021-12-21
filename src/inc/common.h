@@ -1489,7 +1489,18 @@ char *trueFalseString(boolean b);
 
 void uglyTime(char *label, ...)
 /* Print label and how long it's been since last call.  Call with
- * a NULL label to initialize. */
+ * a NULL label to initialize. Works better in html pages cause of formatting */
+
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
+
+
+void uglyt(char *label, ...)
+/* Print label and how long it's been since last call.  Call with
+ * a NULL label to initialize. Like uglyTime without the html formatting */
+
 #if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
 #endif

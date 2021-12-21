@@ -38,12 +38,6 @@ else
                      PSL_NUM_COLS, PSLX_NUM_COLS, nCols);
         }
     }
-
-if ((psl != NULL) && (reader->opts & cDnaRepsAsMatch))
-    {
-    psl->match += psl->repMatch;
-    psl->repMatch = 0;
-    }
 return psl;
 }
 
@@ -67,11 +61,11 @@ if (psl == NULL)
 if (reader->polyASizes != NULL)
     polyASize = hashFindVal(reader->polyASizes, psl->qName);
 cdna = reader->cdna = cDnaQueryNew(reader->opts, &reader->stats, psl, polyASize);
-cDnaAlignNew(cdna, psl);
+cDnaAlignNew(cdna, reader->opts, psl);
 
 /* remaining alignments for same sequence */
 while (((psl = readNextPsl(reader)) != NULL) && sameString(psl->qName, cdna->id))
-    cDnaAlignNew(cdna, psl);
+    cDnaAlignNew(cdna, reader->opts, psl);
 
 reader->nextCDnaPsl = psl;  /* save for next time (or NULL) */
 return TRUE;

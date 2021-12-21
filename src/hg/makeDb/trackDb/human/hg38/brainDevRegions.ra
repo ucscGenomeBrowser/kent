@@ -36,7 +36,7 @@ group singleCell
     bigDataUrl /gbdb/$D/bbi/brainDevRegions/facet_detailed.bb
     barChartStatsUrl /gbdb/$D/bbi/brainDevRegions/facet_detailed.facets
     barChartCategoryUrl /gbdb/$D/bbi/brainDevRegions/facet_detailed.categories
-    barChartFacets structure,area,subarea,lamina,cell_class,cell_type,detailed_cell_type,age,individual
+    barChartFacets structure,area,subarea,lamina,cell_class,cell_type,cell_cluster,age,individual
     barChartMerge on
     maxWindowToDraw 10000000
     barChartStretchToItem on
