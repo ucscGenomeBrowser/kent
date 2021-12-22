@@ -6,6 +6,7 @@ longLabel Tabula Sapiens single cell RNA data from many tissues
 visibility hide
 group singleCell
 
+<<<<<<< HEAD
     track tabulaSapiensCellType
     parent tabulaSapiens
     html tabulaSapiens
@@ -24,12 +25,14 @@ group singleCell
     barChartStretchToItem on
 
     
+=======
+>>>>>>> cc4e71ba07ac0df9f1f108834ae80ab8f2fceb73
     track tabulaSapiensTissueCellType
     parent tabulaSapiens
     html tabulaSapiens
     type bigBarChart
     visibility pack
-    shortLabel tissue cell type
+    shortLabel Tabula Tissue Cell
     longLabel Tabula sapiens RNA by tissue and cell type
     barChartMetric gene/genome
     barChartUnit parts per million
@@ -41,6 +44,7 @@ group singleCell
     barChartFacets tissue,cell_class,cell_type
     barChartStretchToItem on
 
+<<<<<<< HEAD
     track tabulaSapiensTissueSubtissueCellType
     parent tabulaSapiens
     html tabulaSapiens
@@ -58,13 +62,15 @@ group singleCell
     barChartFacets tissue,subtissue,cell_class,cell_type
     barChartStretchToItem on
 
+=======
+>>>>>>> cc4e71ba07ac0df9f1f108834ae80ab8f2fceb73
     track tabulaSapiensFullDetails
     parent tabulaSapiens
     html tabulaSapiens
     type bigBarChart
     visibility hide
-    shortLabel view details
-    longLabel Tabula sapiens full details view (browsing when zoomed out is awkward)
+    shortLabel Tabula Details
+    longLabel Tabula sapiens full details view
     barChartMetric gene/genome
     barChartUnit parts per million
     defaultLabelFields name

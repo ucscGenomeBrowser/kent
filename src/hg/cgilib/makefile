@@ -24,7 +24,7 @@ O=HInv.o affy10KDetails.o affy120KDetails.o ancientRref.o annoFormatVep.o annoGr
   ncbiRefSeqLink.o nonCodingUi.o omicia.o omimTitle.o oreganno.o oregannoUi.o pal.o pcrResult.o \
   peptideAtlasPeptide.o pgPolyphenPred.o pgSiftPred.o polyGenotype.o protVar.o protobuf.o pscreen.o \
   pseudoGeneLink.o pslWScore.o putaInfo.o recombRate.o recombRateMouse.o recombRateRat.o rhMapZfishInfo.o \
-  rmskAlign.o rmskJoined.o rnaFold.o rnaHybridization.o rnaPLFold.o rnaSecStr.o roughAli.o sageExp.o \
+  rnaFold.o rnaHybridization.o rnaPLFold.o rnaSecStr.o roughAli.o sageExp.o \
   search.o sessionThumbnail.o sgdClone.o sgdDescription.o simpleNucDiff.o simpleRepeat.o snp125.o \
   snp125CodingCoordless.o snp125Ui.o snp132Ext.o snpMap.o snpUi.o softPromoter.o softberryHom.o stsInfo.o \
   stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o suggest.o \

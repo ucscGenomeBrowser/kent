@@ -29,6 +29,9 @@ include singleCellMerged.ra
 #include lungMadissoon.ra
 #include spleenMadissoon.ra
 include tabulaSapiens.ra
+include toothKrivanek.ra
+include hippocampusAyhan.ra
+include brainDevRegions.ra
 include t2t.ra alpha
 
 include gtexEqtl.ra

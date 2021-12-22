@@ -556,18 +556,30 @@ else if (barCount <= 40)
     scale = 1.6;
 else if (barCount <= 60)
     scale = 1.0;
+else
+    scale = 60.0/barCount;
+#ifdef OLD
 else if (barCount <= 120)
     scale = 0.8;
 else if (barCount <= 200)
     scale = 0.6;
 else  if (barCount <= 300)
     scale = 0.5;
+else
+    scale = 0.5 * 300/barCount;
 else  if (barCount <= 500)
     scale = 0.4;
+else 
+    scale = 0.4 * 500/barCount;
 else  if (barCount <= 1000)
     scale = 0.3;
-else
+else if (barCount <= 2000)
     scale = 0.2;
+else if (barCount <= 5000)
+    scale = 0.1;
+else
+    scale = 500/barCount;
+#endif /* OLD */
 
 long winSize = virtWinBaseCount;
 if (winSize < extras->winMaxGraph && 
@@ -863,6 +875,7 @@ int graphX = barChartX(bed);
 int graphWidth = chartWidth(tg, itemInfo);
 int barCount = filteredCategoryCount(extras);
 
+char label[256];
 if (barCount <= graphWidth) // Don't create map boxes if less than one pixel per bar
     {
     // add maps to category bars
@@ -887,12 +900,18 @@ if (barCount <= graphWidth) // Don't create map boxes if less than one pixel per
 	mapBoxHc(hvg, itemStart, itemEnd, x0 + x1, yZero-height, width, height, 
 			    tg->track, mapItemName, chartMapText(tg, categ, expScore));
 	}
+    safef(label, sizeof(label), 
+	"%s - click for faceted view or hover over a bar for sample values", 
+	itemName);
     }
-
+else
+    safef(label, sizeof(label), 
+	    "%s - zoom in to resolve individual bars or click for details", 
+	    itemName);
 // map over background of chart
 getItemX(start, end, &x1, &x2);
 mapBoxHc(hvg, itemStart, itemEnd, x1, y, graphWidth, itemHeight-3,
-                    tg->track, mapItemName, itemName);
+                    tg->track, mapItemName, label);
 }
 
 /* This is lifted nearly wholesale from gtexGene track.  Could be shared */
