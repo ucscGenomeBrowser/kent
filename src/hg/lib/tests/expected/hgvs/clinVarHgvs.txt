@@ -79,4 +79,4 @@ chr1	35570363	35656664	NC_000001.11:g.35570364_35656664dup86301	0	+
 # Sometimes they only use a gene symbol -- Mutalyzer requires that to be converted to versioned NM_:
 chr13	113731320	113731321	GRK1:c.1172C>A	0	+
 chr16	15798698	15798701	MYH11:c.503-14_503-12del	0	-
-chr17	49404262	49404263	PHB:c.*729C>T	0	-
+chr17	49404262	49404263	PHB1:c.*729C>T	0	-
