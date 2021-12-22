@@ -18,6 +18,15 @@
 #include "net.h"
 
 
+// For use with callback. Set a variable into the connection itself,
+// and then use that during the callback.
+struct myData
+    {
+    char *hostName;
+    };
+
+int myDataIndex = -1;
+
 static pthread_mutex_t *mutexes = NULL;
  
 static unsigned long openssl_id_callback(void)
@@ -76,6 +85,7 @@ if (!done)
     ERR_load_SSL_strings();
     OpenSSL_add_all_algorithms();
     openssl_pthread_setup();
+    myDataIndex = SSL_get_ex_new_index(0, "myDataIndex", NULL, NULL, NULL);
     done = TRUE;
     }
 pthread_mutex_unlock( &osiMutex );
@@ -272,6 +282,9 @@ char    buf[256];
 X509   *cert;
 int     err, depth;
 
+struct myData *myData;
+SSL    *ssl;
+
 cert = X509_STORE_CTX_get_current_cert(ctx);
 err = X509_STORE_CTX_get_error(ctx);
 depth = X509_STORE_CTX_get_error_depth(ctx);
@@ -292,6 +305,11 @@ X509_NAME_oneline(X509_get_subject_name(cert), buf, 256);
 * be found explicitly; only errors introduced by cutting off the
 * additional certificates would be logged.
 */
+
+ssl = X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
+myData = SSL_get_ex_data(ssl, myDataIndex);
+
+
 if (depth > atoi(getenv("https_cert_check_depth")))
     {
     preverify_ok = 0;
@@ -306,14 +324,17 @@ if (!preverify_ok)
     {
     if (getenv("SCRIPT_NAME"))  // CGI mode
 	{
-	fprintf(stderr, "verify error:num=%d:%s:depth=%d:%s CGI=%s\n", err,
-	    X509_verify_cert_error_string(err), depth, buf, getenv("SCRIPT_NAME"));
+	fprintf(stderr, "verify error:num=%d:%s:depth=%d:%s hostName=%s CGI=%s\n", err,
+	    X509_verify_cert_error_string(err), depth, buf, myData->hostName, getenv("SCRIPT_NAME"));
 	}
     if (!sameString(getenv("https_cert_check"), "log"))
 	{
 	char *cn = strstr(buf, "/CN=");
 	if (cn) cn+=4;  // strlen /CN=
-	warn("%s on %s", X509_verify_cert_error_string(err), cn);
+	if (sameString(cn, myData->hostName))
+	    warn("%s on %s", X509_verify_cert_error_string(err), cn);
+	else
+	    warn("%s on %s (%s)", X509_verify_cert_error_string(err), cn, myData->hostName);
 	}
     }
 /* err contains the last verification error.  */
@@ -505,6 +526,8 @@ fd_set writefds;
 int err;
 struct timeval tv;
 
+struct myData myData;
+boolean doSetMyData = FALSE;
 
 if (!sameString(getenv("https_cert_check"), "none"))
     {
@@ -544,7 +567,12 @@ if (!sameString(getenv("https_cert_check"), "none"))
 	    {
 	    warn("SSL set default verify paths failed");
 	    }
-	}
+
+	// add the hostName to the structure and set it here, making it available during callback.
+	myData.hostName = hostName;
+	doSetMyData = TRUE;
+
+	} 
     }
 
 // Don't want any retries since we are non-blocking bio now
@@ -624,6 +652,8 @@ if(!ssl)
     goto cleanup2;
     }
 
+if (doSetMyData)
+    SSL_set_ex_data(ssl, myDataIndex, &myData);
 
 /* 
 Server Name Indication (SNI)
