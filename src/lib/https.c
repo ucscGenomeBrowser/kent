@@ -388,6 +388,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "*.clinic.cat");
     hashStoreName(domainWhiteList, "*.ezproxy.u-pec.fr");
     hashStoreName(domainWhiteList, "*.genebook.com.cn");
+    hashStoreName(domainWhiteList, "*.jncasr.ac.in");
     hashStoreName(domainWhiteList, "annotation.dbi.udel.edu");
     hashStoreName(domainWhiteList, "apprisws.bioinfo.cnio.es");
     hashStoreName(domainWhiteList, "arn.ugr.es");
@@ -396,6 +397,8 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "bioshare.genomecenter.ucdavis.edu");
     hashStoreName(domainWhiteList, "biowebport.com");
     hashStoreName(domainWhiteList, "bx.bio.jhu.edu");
+    hashStoreName(domainWhiteList, "ccg.epfl.ch");
+    hashStoreName(domainWhiteList, "cctop.cos.uni-heidelberg.de");
     hashStoreName(domainWhiteList, "cluster.hpcc.ucr.edu");
     hashStoreName(domainWhiteList, "costalab.ukaachen.de");
     hashStoreName(domainWhiteList, "data.rc.fas.harvard.edu");
@@ -413,6 +416,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "dropbox.ogic.ca");
     hashStoreName(domainWhiteList, "dropfile.hpc.qmul.ac.uk");
     hashStoreName(domainWhiteList, "edn.som.umaryland.edu");
+    hashStoreName(domainWhiteList, "epd.epfl.ch");
     hashStoreName(domainWhiteList, "expiereddnsmanager.com");
     hashStoreName(domainWhiteList, "frigg.uio.no");
     hashStoreName(domainWhiteList, "ftp--ncbi--nlm--nih--gov.ibrowse.co");
@@ -446,6 +450,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "schatzlabucscdata.yalespace.org.s3.amazonaws.com");
     hashStoreName(domainWhiteList, "silo.bioinf.uni-leipzig.de");
     hashStoreName(domainWhiteList, "snpinfo.niehs.nih.gov");
+    hashStoreName(domainWhiteList, "spades.cgi.bch.uconn.edu");
     hashStoreName(domainWhiteList, "v91rc2.master.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "v91rc3.master.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "v94.rc2.demo.encodedcc.org");
