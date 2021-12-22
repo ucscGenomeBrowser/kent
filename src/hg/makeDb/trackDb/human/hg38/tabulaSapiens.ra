@@ -8,6 +8,7 @@ group singleCell
 
     track tabulaSapiensCellType
     parent tabulaSapiens
+    html tabulaSapiens
     type bigBarChart
     visibility hide
     shortLabel cell type
@@ -22,8 +23,10 @@ group singleCell
     barChartFacets cell_class,cell_type
     barChartStretchToItem on
 
+    
     track tabulaSapiensTissueCellType
     parent tabulaSapiens
+    html tabulaSapiens
     type bigBarChart
     visibility pack
     shortLabel tissue cell type
@@ -40,6 +43,7 @@ group singleCell
 
     track tabulaSapiensTissueSubtissueCellType
     parent tabulaSapiens
+    html tabulaSapiens
     type bigBarChart
     visibility hide
     shortLabel subtissue cell type
@@ -56,6 +60,7 @@ group singleCell
 
     track tabulaSapiensFullDetails
     parent tabulaSapiens
+    html tabulaSapiens
     type bigBarChart
     visibility hide
     shortLabel view details
