@@ -6,20 +6,22 @@ longLabel Tabula Muris Senis single cell RNA data from mice of different ages an
 visibility hide
 group regulation
 
-    track tabulaMurisSenis10xTissueCellType
+    track tabulaMurisSenis10xFacetsUsual
     type bigBarChart
     parent tabulaMurisSenis
     visibility pack
     shortLabel Tabula 10x
-    longLabel Tabula muris senis 10x by tissue and cell type
+    longLabel Tabula muris senis 10x by tissue, cell type and age
     barChartMetric gene/genome
     barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
-    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell.bb
-    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell.facets
-    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_tissue_cell.categories
-    barChartFacets tissue,cell_class,cell_type
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_usual.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_usual.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/droplet/facets_usual.categories
+    barChartFacets tissue,cell_class,cell_type,age
+    barChartMerge on
+    maxWindowToDraw 20000000
     barChartStretchToItem on
 
     track tabulaMurisSenis10xFacetsDetailed
@@ -40,20 +42,22 @@ group regulation
     maxWindowToDraw 10000000
     barChartStretchToItem on
 
-    track tabulaMurisSenisFacsTissueCellType
+    track tabulaMurisSenisFacsFacetsUsual
     type bigBarChart
     parent tabulaMurisSenis
     visibility pack
     shortLabel Tabula FACS 
-    longLabel Tabula muris senis FACS grouped by tissue and cell type
+    longLabel Tabula muris senis FACS grouped by tissue, cell type and age
     barChartMetric gene/genome
     barChartUnit parts per million
     defaultLabelFields name
     labelFields name,name2
-    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell.bb
-    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell.facets
-    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_tissue_cell.categories
-    barChartFacets tissue,cell_class,cell_type
+    bigDataUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_usual.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_usual.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaMurisSenis/facs/facets_usual.categories
+    barChartFacets tissue,cell_class,cell_type,age
+    barChartMerge on
+    maxWindowToDraw 20000000
     barChartStretchToItem on
 
     track tabulaMurisSenisFacsFacetsDetailed
