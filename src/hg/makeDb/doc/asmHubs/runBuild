@@ -12,6 +12,11 @@ export sciName=$4
 
 export asmHubName=$clade
 
+export rmskSpecies="${sciName}"
+
+### This ucscNames decision needs to be an automatic process since
+### some browsers have been built with ucscNames and other have not.
+### This is important for track updates, such as ncbiRefSeq
 ### export ucscNames="-ucscNames"
 export ucscNames=""
 export augustusSpecies="-augustusSpecies=human"
@@ -37,8 +42,14 @@ elif [ "${clade}" = "vertebrate" ]; then
   subGroup="vertebrate_other"
 elif [ "${clade}" = "invertebrate" ]; then
   subGroup="invertebrate"
+elif [ "${clade}" = "invertebrates" ]; then
+  subGroup="invertebrate"
+elif [ "${clade}" = "fungi" ]; then
+  subGroup="fungi"
+  augustusSpecies="-augustusSpecies=saccharomyces"
 elif [ "${clade}" = "plants" ]; then
   subGroup="plants"
+  augustusSpecies="-augustusSpecies=arabidopsis"
 elif [ "${clade}" = "vertebrate_mammalian" ]; then
   subGroup="vertebrate_mammalian"
 elif [ "${clade}" = "vertebrate_other" ]; then
@@ -65,6 +76,8 @@ elif [ "${clade}" = "Scerevisiae" ]; then
   augustusSpecies="-augustusSpecies=saccharomyces"
 elif [ "${clade}" = "viral" ]; then
   subGroup="viral"
+  rmskSpecies="viruses"
+  augustusSpecies="-noAugustus -noXenoRefSeq"
 elif [ "${clade}" = "bacteria" ]; then
   subGroup="bacteria"
   noRmsk="-noRmsk"
@@ -76,10 +89,6 @@ fi
 
 export stepStart="download"
 export stepEnd="trackDb"
-### export stepStart="ncbiRefSeq"
-### export stepEnd="ncbiRefSeq"
-### export stepStart="trackDb"
-### export stepEnd="trackDb"
 
 # download, sequence, assemblyGap, gatewayPage, cytoBand, gc5Base,
 # repeatMasker, simpleRepeat, allGaps, idKeys, windowMasker, addMask,
@@ -108,12 +117,16 @@ export buildDir=`printf "%s/%s/%s/%s/%s/%s" "${TOP0}/${topBuild}" "${gcPrefix}" 
 export linkDir=`printf "%s/%s/%s/%s" "${linkTop}" "${genbankRefseq}" "${subGroup}" "${sciName}"`
 
 if [ -d "${buildDir}" ]; then
-  printf "# Already done ? $gcxName\n" 1>&2
-  exit 255
 #  printf "# removing: %s\n" "${buildDir}" 1>&2
 #  rm -fr "${buildDir}"
+  if [ -s "${buildDir}/${asmId}.trackDb.txt" ]; then
+     printf "# Already done $gcxName\n"
+     printf "# Already done $gcxName\n" 1>&2
+     exit 0
+  fi
+  printf "# partially done $gcxName\n"
+  printf "# partially done $gcxName\n" 1>&2
 fi
-
 
 mkdir -p ${TOP0}/${topBuild}/buildLogs/${subGroup}
 export logFile="${TOP0}/${topBuild}/buildLogs/${subGroup}/${asmId}.log"
@@ -137,7 +150,7 @@ echo "/hive/data/genomes/asmHubs/${genbankRefseq}Build/doIdKeys \"${asmId}\" &" 
 
 echo "### \$HOME/kent/src/hg/utils/automation/doAssemblyHub.pl \
   -continue=\"${stepStart}\" -stop=\"${stepEnd}\" \
-    -rmskSpecies=\"$sciName\" -bigClusterHub=ku -buildDir=\`pwd\` \
+    -rmskSpecies=\"${rmskSpecies}\" -bigClusterHub=ku -buildDir=\`pwd\` \
       -asmHubName=$asmHubName -fileServer=hgwdev -smallClusterHub=hgwdev \
         ${noRmsk} ${ncbiRmsk} ${ucscNames} ${augustusSpecies} -workhorse=hgwdev \"${asmId}\"" >> "${logFile}"
 
@@ -148,6 +161,6 @@ fi
 
 time ($HOME/kent/src/hg/utils/automation/doAssemblyHub.pl \
   -continue="${stepStart}" -stop="${stepEnd}" \
-    -rmskSpecies="$sciName" -bigClusterHub=ku -buildDir=`pwd` \
+    -rmskSpecies="${rmskSpecies}" -bigClusterHub=ku -buildDir=`pwd` \
       -asmHubName=$asmHubName -fileServer=hgwdev -smallClusterHub=hgwdev \
         ${noRmsk} ${ncbiRmsk} ${ucscNames} ${augustusSpecies} -workhorse=hgwdev "${asmId}") >> "${logFile}" 2>&1

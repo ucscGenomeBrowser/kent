@@ -77,4 +77,4 @@ NC_000001.11:g.35570364_35656664dup86301
 # Sometimes they only use a gene symbol -- Mutalyzer requires that to be converted to versioned NM_:
 GRK1:c.1172C>A
 MYH11:c.503-14_503-12del
-PHB:c.*729C>T
+PHB1:c.*729C>T
