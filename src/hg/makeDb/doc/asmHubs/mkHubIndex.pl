@@ -237,78 +237,134 @@ sub endHtml() {
 sub tableContents() {
   my $rowCount = 0;
   foreach my $asmId (@orderList) {
-    my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
-    my $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
+    my $gcPrefix = "GCx";
+    my $asmAcc = "asmAcc";
+    my $asmName = "asmName";
+    my $accessionId = "GCx_098765432.1";
     my $accessionDir = substr($asmId, 0 ,3);
-    $accessionDir .= "/" . substr($asmId, 4 ,3);
-    $accessionDir .= "/" . substr($asmId, 7 ,3);
-    $accessionDir .= "/" . substr($asmId, 10 ,3);
-    my $ncbiFtpLink = "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$accessionDir/$asmId";
-    my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
-    if ($gcPrefix eq "GCA") {
-     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
+    my $configRa = "n/a";
+    if ($asmId !~ m/^GC/) {	# looking at a UCSC database, not a hub
+       $configRa = "/hive/data/genomes/$asmId/$asmId.config.ra";
+      $accessionId = `grep ^genBankAccessionID "${configRa}" | cut -d' ' -f2`;
+       chomp $accessionId;
+       $asmName = `grep ^ncbiAssemblyName "${configRa}" | cut -d' ' -f2`;
+       chomp $asmName;
+       $accessionDir = substr($accessionId, 0 ,3);
+       $accessionDir .= "/" . substr($accessionId, 4 ,3);
+       $accessionDir .= "/" . substr($accessionId, 7 ,3);
+       $accessionDir .= "/" . substr($accessionId, 10 ,3);
+       ($gcPrefix, $asmAcc) = split('_', $accessionId, 2);
+       printf STDERR "# not an assembly hub: '%s' - '%s' '%s' '%s'\n", $asmId, $accessionId, $gcPrefix, $asmAcc;
+    } else {
+       ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
+       $accessionDir .= "/" . substr($asmId, 4 ,3);
+       $accessionDir .= "/" . substr($asmId, 7 ,3);
+       $accessionDir .= "/" . substr($asmId, 10 ,3);
     }
+    $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
+    my $ncbiFtpLink = "https://ftp.ncbi.nlm.nih.gov/genomes/all/$accessionDir/$asmId";
+   my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
+    if ($asmId =~ m/^GCA/) {
+     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
+     $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
+    } elsif ($asmId !~ m/^GC/) {
+       $buildDir="/hive/data/outside/ncbi/genomes/$accessionDir/${accessionId}_${asmName}";
+       $asmReport="$buildDir/${accessionId}_${asmName}_assembly_report.txt";
+    }
     my $trackDb="$buildDir/${asmId}.trackDb.txt";
-    next if (! -s "$trackDb");	# assembly build not complete
-    my $chromSizes="${buildDir}/${asmId}.chrom.sizes";
+#    next if (! -s "$trackDb");	# assembly build not complete
+    my $commonName = "notFound(${asmId})";
     my $sciName = "notFound";
-    my $commonName = "notFound";
     my $bioSample = "notFound";
     my $bioProject = "notFound";
     my $taxId = "notFound";
     my $asmDate = "notFound";
     my $itemsFound = 0;
-    open (FH, "<$asmReport") or die "can not read $asmReport";
-    while (my $line = <FH>) {
-      last if ($itemsFound > 5);
-      chomp $line;
-      $line =~ s///g;;
-      $line =~ s/\s+$//g;;
-      if ($line =~ m/Date:/) {
-        if ($asmDate =~ m/notFound/) {
-           ++$itemsFound;
-           $line =~ s/.*:\s+//;
-           my @a = split('-', $line);
-           $asmDate = sprintf("%04d-%02d-%02d", $a[0], $a[1], $a[2]);
+    if ( -s "${asmReport}" ) {
+        open (FH, "<$asmReport") or die "can not read $asmReport";
+        while (my $line = <FH>) {
+          last if ($itemsFound > 5);
+          chomp $line;
+          $line =~ s///g;;
+          $line =~ s/\s+$//g;;
+          if ($line =~ m/Date:/) {
+            if ($asmDate =~ m/notFound/) {
+               ++$itemsFound;
+               $line =~ s/.*:\s+//;
+               my @a = split('-', $line);
+               $asmDate = sprintf("%04d-%02d-%02d", $a[0], $a[1], $a[2]);
+            }
+          } elsif ($line =~ m/BioSample:/) {
+            if ($bioSample =~ m/notFound/) {
+               ++$itemsFound;
+               $bioSample = $line;
+               $bioSample =~ s/.*:\s+//;
+            }
+          } elsif ($line =~ m/BioProject:/) {
+            if ($bioProject =~ m/notFound/) {
+               ++$itemsFound;
+               $bioProject = $line;
+               $bioProject =~ s/.*:\s+//;
+            }
+          } elsif ($line =~ m/Organism name:/) {
+            if ($sciName =~ m/notFound/) {
+               ++$itemsFound;
+               $commonName = $line;
+               $sciName = $line;
+               $commonName =~ s/.*\(//;
+               $commonName =~ s/\)//;
+               $commonName = $commonName{$asmId} if (exists($commonName{$asmId}));
+               $sciName =~ s/.*:\s+//;
+               $sciName =~ s/\s+\(.*//;
+            }
+          } elsif ($line =~ m/Taxid:/) {
+            if ($taxId =~ m/notFound/) {
+               ++$itemsFound;
+               $taxId = $line;
+               $taxId =~ s/.*:\s+//;
+            }
+          }
         }
-      } elsif ($line =~ m/BioSample:/) {
-        if ($bioSample =~ m/notFound/) {
-           ++$itemsFound;
-           $bioSample = $line;
-           $bioSample =~ s/.*:\s+//;
-        }
-      } elsif ($line =~ m/BioProject:/) {
-        if ($bioProject =~ m/notFound/) {
-           ++$itemsFound;
-           $bioProject = $line;
-           $bioProject =~ s/.*:\s+//;
-        }
-      } elsif ($line =~ m/Organism name:/) {
-        if ($sciName =~ m/notFound/) {
-           ++$itemsFound;
-           $commonName = $line;
-           $sciName = $line;
-           $commonName =~ s/.*\(//;
-           $commonName =~ s/\)//;
-           $commonName = $commonName{$asmId} if (exists($commonName{$asmId}));
-           $sciName =~ s/.*:\s+//;
-           $sciName =~ s/\s+\(.*//;
-        }
-      } elsif ($line =~ m/Taxid:/) {
-        if ($taxId =~ m/notFound/) {
-           ++$itemsFound;
-           $taxId = $line;
-           $taxId =~ s/.*:\s+//;
-        }
-      }
+        close (FH);
+    } elsif ( -s "${configRa}" ) {	#	if ( -s "${asmReport}" )
+# ncbiAssemblyName Sscrofa10.2
+# genBankAccessionID GCA_000003025.4
+# ncbiBioProject 13421
+# assemblyDate Aug. 2011
+
+       $asmName = `grep ^ncbiAssemblyName "${configRa}" | cut -d' ' -f2`;
+       chomp $asmName;
+       $taxId = `grep ^taxId "${configRa}" | cut -d' ' -f2`;
+       chomp $taxId;
+       $commonName = `grep ^commonName "${configRa}" | cut -d' ' -f2-`;
+       chomp $commonName;
+       $sciName = `grep ^scientificName "${configRa}" | cut -d' ' -f2-`;
+       chomp $sciName;
+       $asmDate = `grep ^assemblyDate "${configRa}" | cut -d' ' -f2-`;
+       chomp $asmDate;
+       $bioProject = `grep ^ncbiBioProject "${configRa}" | cut -d' ' -f2-`;
+       chomp $bioProject;
+       $bioSample = `grep ^ncbiBioSample "${configRa}" | cut -d' ' -f2-`;
+       chomp $bioSample;
+       $ncbiFtpLink = "https://ftp.ncbi.nlm.nih.gov/genomes/all/$accessionDir/${accessionId}_${asmName}";
     }
-    close (FH);
     my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
+    my $browserName = $commonName;
+    my $browserUrl = "https://genome.ucsc.edu/h/$accessionId";
+    if ($asmId !~ m/^GC/) {
+       $hubUrl = "https://hgdownload.soe.ucsc.edu/goldenPath/$asmId/bigZips";
+       $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
+       $browserName = "$commonName ($asmId)";
+    }
     printf "<tr><td align=right>%d</td>\n", ++$rowCount;
-    printf "<td align=center><a href='https://genome.ucsc.edu/h/%s' target=_blank>%s</a></td>\n", $accessionId, $commonName;
+    printf "<td align=center><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
     printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
-    printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
+    if ($asmId !~ m/^GC/) {
+      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s_%s</a></td>\n", $gcPrefix, $asmAcc, $accessionId, $asmName;
+    } else {
+      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
+    }
     if ( $bioSample ne "notFound" ) {
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/biosample/?term=%s' target=_blank>%s</a></td>\n", $bioSample, $bioSample;
     } else {
