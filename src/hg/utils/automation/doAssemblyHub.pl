@@ -597,20 +597,31 @@ sub unplacedAgp($$$$) {
 #########################################################################
 # process NCBI unplaced FASTA file, perhaps translate into UCSC naming scheme
 #   optional chrPrefix can be "chrUn_" for assemblies that have other chr names
-sub unplacedFasta($$$$) {
-  my ($agpFile, $twoBitFile, $chrPrefix, $fastaOut) = @_;
+sub unplacedFasta($$$$$$$) {
+  my ($agpFile, $faFile, $twoBitFile, $chrPrefix, $fastaOut, $agpOutput, $agpNames) = @_;
 
   my %contigName;  # key is NCBI contig name, value is UCSC contig name
-  open (FH, "zcat $agpFile|") or die "can not read $agpFile";
-  while (my $line = <FH>) {
-    if ($line !~ m/^#/) {
-        my ($ncbiAcc, undef) = split('\s+', $line, 2);
-        my $ucscAcc = $ncbiAcc;
-        $ucscAcc =~ s/\./v/ if ($ucscNames);
-        $contigName{$ncbiAcc} = $ucscAcc;
+  if ( -s $agpFile ) {
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    while (my $line = <FH>) {
+      if ($line !~ m/^#/) {
+          my ($ncbiAcc, undef) = split('\s+', $line, 2);
+          my $ucscAcc = $ncbiAcc;
+          $ucscAcc =~ s/\./v/ if ($ucscNames);
+          $contigName{$ncbiAcc} = $ucscAcc;
+      }
     }
+    close (FH);
+  } else {	# no AGP file, get the contig names from the fasta file
+    open (FH, "zgrep '^>' $faFile | cut -d' ' -f1 | tr -d '>'|") or die "can not read $faFile";
+    while (my $ncbiAcc = <FH>) {
+      chomp $ncbiAcc;
+      my $ucscAcc = $ncbiAcc;
+      $ucscAcc =~ s/\./v/ if ($ucscNames);
+      $contigName{$ncbiAcc} = $ucscAcc;
+    }
+    close (FH);
   }
-  close (FH);
 
   my ($fh, $tmpFile) = tempfile("seqList_XXXX", DIR=>'/dev/shm', SUFFIX=>'.txt', UNLINK=>1);
   foreach my $ctg (sort keys %contigName) {
@@ -639,6 +650,23 @@ sub unplacedFasta($$$$) {
   }
   close(FH);
   close(FA);
+  if ( ! -s $agpFile ) {	# there was no AGP file, make a fake one
+     printf STDERR "# no AGP for unplaced sequence, making up a fake AGP\n";
+     print `hgFakeAgp -singleContigs -minContigGap=1 -minScaffoldGap=50000 $fastaOut stdout | gzip -c > $agpOutput`;
+     open (NAMES, "|sort -u >$agpNames") or die "can not write to $agpNames";
+     open (FH, "zcat $agpOutput|") or die "can not read $agpOutput";
+     while (my $line = <FH>) {
+       if ($line !~ m/^#/) {
+          my ($ncbiAcc, undef) = split('\s+', $line, 2);
+          next if (exists($dupAccessionList{$ncbiAcc}));
+          my $ucscAcc = $ncbiAcc;
+          $ucscAcc =~ s/\./v/;
+          printf NAMES "%s%s\t%s\n", $chrPrefix, $ucscAcc, $ncbiAcc;
+       }
+     }
+    close (FH);
+    close (NAMES);
+  }
 }	# sub unplacedFasta($$$$)
 
 #########################################################################
@@ -770,21 +798,26 @@ sub doSequence {
 
   ###########  unplaced sequence  ################
   my $unplacedScafAgp = "$primaryAssembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
-  if ( -s $unplacedScafAgp ) {
+  my $unplacedScafFa = "$primaryAssembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz";
+  if ( -s $unplacedScafAgp || -s $unplacedScafFa) {
     my $chrPrefix = "";   # no prefix if no other chrom parts
     $chrPrefix = "chrUn_" if ($otherChrParts && ! $ucscNames);
     my $agpOutput = "$runDir/$asmId.unplaced.agp.gz";
     my $agpNames = "$runDir/$asmId.unplaced.names";
     $partsDone += 1;
 
-    if (needsUpdate($unplacedScafAgp, $agpOutput)) {
-      unplacedAgp($unplacedScafAgp, $agpOutput, $agpNames, $chrPrefix);
-      `touch -r $unplacedScafAgp $agpOutput`;
+    if ( -s $unplacedScafAgp ) {
+      if (needsUpdate($unplacedScafAgp, $agpOutput)) {
+        unplacedAgp($unplacedScafAgp, $agpOutput, $agpNames, $chrPrefix);
+        `touch -r $unplacedScafAgp $agpOutput`;
+      }
     }
-    my $fastaOut = "$runDir/$asmId.unplaced.fa.gz";
-    if (needsUpdate($twoBitFile, $fastaOut)) {
-      unplacedFasta($unplacedScafAgp, $twoBitFile, $chrPrefix, $fastaOut);
-      `touch -r $twoBitFile $fastaOut`;
+    if ( -s $unplacedScafFa ) {	# will make an AGP file if there was none
+      my $fastaOut = "$runDir/$asmId.unplaced.fa.gz";
+      if (needsUpdate($twoBitFile, $fastaOut)) {
+        unplacedFasta($unplacedScafAgp, $unplacedScafFa, $twoBitFile, $chrPrefix, $fastaOut, $agpOutput, $agpNames);
+        `touch -r $twoBitFile $fastaOut`;
+      }
     }
   }
 
@@ -839,18 +872,18 @@ _EOF_
 
 ### construct sequence when no AGP files exist
   if (0 == $partsDone) {
-printf STDERR "creating fake AGP\n";
+    printf STDERR "# partsDone is zero, creating fake AGP\n";
     if ($ucscNames) {
       $bossScript->add(<<_EOF_
 twoBitToFa ../download/\$asmId.2bit stdout | sed -e "s/\\.\\([0-9]\\+\\)/v\\1/;" | gzip -c > \$asmId.fa.gz
-hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
+hgFakeAgp -singleContigs -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
 zgrep "^>" \$asmId.fa.gz | sed -e 's/>//;' | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\\)/.\\1/;' | awk '{printf "%s\\t%s\\n", \$2, \$1}' > \$asmId.fake.names
 _EOF_
       );
     } else {
       $bossScript->add(<<_EOF_
 twoBitToFa ../download/\$asmId.2bit stdout | gzip -c > \$asmId.fa.gz
-hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
+hgFakeAgp -singleContigs -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
 twoBitInfo ../download/\$asmId.2bit stdout | cut -f1 \\
   | sed -e "s/\\.\\([0-9]\\+\\)/v\\1/;" \\
     | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\$\\)/.\\1/;' \\
@@ -1651,7 +1684,7 @@ sub doNcbiGene {
 
   my $dupList = "";
   if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
-    $dupList = " | grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\"  || true";
+    $dupList = " | (grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\"  || true)";
   }
 
   $bossScript->add(<<_EOF_

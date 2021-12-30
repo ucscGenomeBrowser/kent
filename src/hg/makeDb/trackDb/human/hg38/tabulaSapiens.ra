@@ -6,8 +6,27 @@ longLabel Tabula Sapiens single cell RNA data from many tissues
 visibility hide
 group singleCell
 
+    track tabulaSapiensCellType
+    parent tabulaSapiens
+    html tabulaSapiens
+    type bigBarChart
+    visibility hide
+    shortLabel cell type
+    longLabel Tabula sapiens RNA by cell type
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaSapiens/cell_type.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaSapiens/cell_type.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaSapiens/cell_type.categories
+    barChartFacets cell_class,cell_type
+    barChartStretchToItem on
+
+    
     track tabulaSapiensTissueCellType
     parent tabulaSapiens
+    html tabulaSapiens
     type bigBarChart
     visibility pack
     shortLabel Tabula Tissue Cell
@@ -22,8 +41,26 @@ group singleCell
     barChartFacets tissue,cell_class,cell_type
     barChartStretchToItem on
 
+    track tabulaSapiensTissueSubtissueCellType
+    parent tabulaSapiens
+    html tabulaSapiens
+    type bigBarChart
+    visibility hide
+    shortLabel subtissue cell type
+    longLabel Tabula sapiens RNA by tissue, subtissue and cell type
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/tabulaSapiens/tissue_subtissue_cell_type.bb
+    barChartStatsUrl /gbdb/$D/bbi/tabulaSapiens/tissue_subtissue_cell_type.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaSapiens/tissue_subtissue_cell_type.categories
+    barChartFacets tissue,subtissue,cell_class,cell_type
+    barChartStretchToItem on
+
     track tabulaSapiensFullDetails
     parent tabulaSapiens
+    html tabulaSapiens
     type bigBarChart
     visibility hide
     shortLabel Tabula Details

@@ -19,6 +19,7 @@ export orderList=$2
 export successCount=0
 export doneCount=0
 
+export dbHost="localhost"
 export hubSource="hgdownload-test.gi.ucsc.edu"
 if [ "${host}" = "apibeta.soe.ucsc.edu" ]; then
   hubSource="hgdownload.soe.ucsc.edu"
@@ -30,13 +31,8 @@ do
 
   export genome=`basename $dirPath`
 
-#   hubCount=`wget -O- https://hgdownload.soe.ucsc.edu/hubs/${dirPath}/hub.txt 2> /dev/null | wc -l`
-# if [ "${hubCount}" -lt 200 ]; then
-#   printf "%d\t%s\tWARNING\n" "${hubCount}" "${dirPath}"
-# fi
-# else
-#  printf "%d\t%s/hub.txt line count\n" "${hubCount}" "${dirPath}"
-
+  case $genome in
+     GC*)
   trackCount=`curl -L "https://$host/list/tracks?genome=$genome;trackLeavesOnly=1;hubUrl=https://$hubSource/hubs/${dirPath}/hub.txt" \
       2> /dev/null | python -mjson.tool | egrep ": {$" \
        | tr -d '"' | sed -e 's/^ \+//; s/ {//;' | xargs echo | wc -w`
@@ -48,7 +44,20 @@ do
      | python -mjson.tool | egrep "organism\":|description\":" | sed -e "s/'/_/g;" \
        | tr -d '"'  | xargs echo \
           | sed -e 's/genomes: //; s/description: //; s/organism: //; s/{ //g;'
-# fi
+       ;;
+     *)
+       db=`echo $genome | tr -d '_'`
+ trackCount=`curl -L "https://$host/list/tracks?genome=$db;trackLeavesOnly=1" \
+           2> /dev/null | python -mjson.tool | egrep ": {$" \
+               | egrep -v '"'$db'":' | tr -d '"' \
+                 | sed -e 's/^ \+//; s/ {//;' | xargs echo | wc -w`
+  if [ "${trackCount}" -gt 14 ]; then
+    ((successCount=successCount+1))
+  fi
+  printf "%03d\t%s\t%d tracks:\t" "${doneCount}" "${db}" "${trackCount}"
+hgsql -N -e "select organism,description,\",\",scientificName from dbDb where name=\"$db\";" hgcentraltest | tr "'" '_' | xargs echo | sed -e 's/ ,/,/;'
+       ;;
+  esac
 
 done
 export failCount=`echo $doneCount $successCount | awk '{printf "%d", $1-$2}'`

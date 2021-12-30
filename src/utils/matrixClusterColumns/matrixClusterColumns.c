@@ -7,6 +7,11 @@
 #include "obscure.h"
 #include "fieldedTable.h"
 #include "sqlNum.h"
+#include "pthreadDoList.h"
+
+#define clThreadCount 50
+#define chunkItemsPerThread 5
+#define chunkMaxSize (clThreadCount * chunkItemsPerThread)
 
 void usage()
 /* Explain usage and exit. */
@@ -74,91 +79,43 @@ while (--size >= 0)
 return sum;
 }
 
-struct vMatrix
-/* Virtual matrix - little wrapper around a fielded table/lineFile combination
- * to help manage row-at-a-time access. */
+struct ccMatrix
+/* Local matrix structure - little wrapper around a fielded table/lineFile combination */
     {
-    struct vMatrix *next;
+    struct ccMatrix *next;
 
         /* kind of private fields */
     struct lineFile *lf;	    // Line file for tab-sep case
     struct fieldedTable *ft;	    // fielded table if a tab-sep file
-    char **rowAsStrings;		    // Our row as an array of strings
 
 	/* From below are fields that yu can read but not change */
-    double *rowAsNum;		    // Our fielded table result array of numbers
-    char **rowLabels;		    // If non-NULL array of labels for each row
-    char **colLabels;		    // Array of labels for each column
     int colCount;		    // Number of columns in a row
+    char **colLabels;		    // A label for each column 
     int curRow;			    // Current row we are processing
-    struct dyString *rowLabel;	    // Label associated with this line
     };
 
-struct vMatrix *vMatrixOpen(char *matrixFile, char *columnFile, char *rowFile)
+struct ccMatrix *ccMatrixOpen(char *matrixFile)
+/* Local helper matrix structure.  Could be simplified */
 /* Figure out if it's a mtx or tgz file and open it */
 {
 /* Read in labels if there are any */
-char **columnLabels = NULL, **rowLabels = NULL;
-int columnCount = 0, rowCount = 0;
-if (columnFile != NULL)
-    readLineArray(columnFile, &columnCount, &columnLabels);
-if (rowFile != NULL)
-    readLineArray(rowFile, &rowCount, &rowLabels);
-
-struct vMatrix *v = needMem(sizeof(*v));
+struct ccMatrix *v = needMem(sizeof(*v));
 struct lineFile *lf = v->lf = lineFileOpen(matrixFile, TRUE);
 struct fieldedTable *ft = v->ft = fieldedTableReadTabHeader(lf, NULL, 0);
 v->colCount = ft->fieldCount-1;	    // Don't include row label field 
-v->rowAsNum = needHugeMem(v->colCount * sizeof(v->rowAsNum[0]));
-v->rowAsStrings = needHugeMem(ft->fieldCount * sizeof(v->rowAsStrings[0]));
-if (columnLabels == NULL)
-    columnLabels = ft->fields+1;	// +1 to skip over row label field
-v->rowLabels = rowLabels;
-v->colLabels = columnLabels;
-v->rowLabel = dyStringNew(32);
+v->colLabels = ft->fields+1;	// +1 to skip over row label field
 return v;
 }
 
-void vMatrixClose(struct vMatrix **pV)
-/* Close up vMatrix */
+void ccMatrixClose(struct ccMatrix **pV)
+/* Close up ccMatrix */
 {
-struct vMatrix *v = *pV;
+struct ccMatrix *v = *pV;
 if (v != NULL)
     {
     fieldedTableFree(&v->ft);
-    freeMem(v->rowAsNum);
-    freeMem(v->rowAsStrings);
-    dyStringFree(&v->rowLabel);
     freez(pV);
     }
-}
-
-double *vMatrixNextRow(struct vMatrix *v)
-/* Return next row of matrix or NULL if at end of file */
-{
-int colCount = v->colCount;
-if (!lineFileNextRow(v->lf, v->rowAsStrings, colCount+1))
-    return NULL;
-
-/* Save away the row label for later. */
-char *rowLabel;
-if (v->rowLabels)
-    rowLabel = v->rowLabels[v->curRow];
-else
-    rowLabel = v->rowAsStrings[0];
-dyStringClear(v->rowLabel);
-dyStringAppend(v->rowLabel, rowLabel);
-
-/* Convert ascii to floating point, with little optimization for the many zeroes we usually see */
-int i;
-for (i=1; i<=colCount; ++i)
-    {
-    char *str = v->rowAsStrings[i];
-    double val = ((str[0] == '0' && str[1] == 0) ? 0.0 : sqlDouble(str));
-    v->rowAsNum[i-1] = val;
-    }
-v->curRow += 1;
-return v->rowAsNum;
 }
 
 struct clustering
@@ -184,13 +141,15 @@ struct clustering
     boolean doMedian;	/* If true we calculate median */
     double **clusterSamples; /* An array that holds an array big enough for all vals in cluster. */
 
-    FILE *matrixFile;		    /* output */
+    struct dyString **chunkLinesOut; /* parallel output */
+    double **chunkSubtotals;	     /* Totals */
+    FILE *matrixFile;		     /* serial output */
     };
 
 
 struct clustering *clusteringNew(char *clusterField, char *outMatrixFile, char *outStatsFile,
-    struct fieldedTable *metaTable, struct vMatrix *v, boolean doMedian)
-/* Make up a new clustering job structure */
+    struct fieldedTable *metaTable, struct ccMatrix *v, boolean doMedian)
+/* Make up a new clustering structure */
 {
 /* Check that all column names in matrix are unique */
 int colCount = v->colCount;
@@ -206,17 +165,17 @@ for (colIx=0; colIx < colCount; colIx = colIx+1)
         errAbort("Duplicated column label %s in input matrix", label);
     }
 
-struct clustering *job;
-AllocVar(job);
-job->clusterField = clusterField;
-job->outMatrixFile = outMatrixFile;
-job->outStatsFile = outStatsFile;
-int clusterFieldIx = job->clusterMetaIx = fieldedTableMustFindFieldIx(metaTable, clusterField);
+struct clustering *clustering;
+AllocVar(clustering);
+clustering->clusterField = clusterField;
+clustering->outMatrixFile = outMatrixFile;
+clustering->outStatsFile = outStatsFile;
+int clusterFieldIx = clustering->clusterMetaIx = fieldedTableMustFindFieldIx(metaTable, clusterField);
 
 /* Make up hash of sample names with cluster name values 
  * and also hash of cluster names with size values */
 struct hash *sampleHash = hashNew(0);	/* Keyed by sample value is cluster */
-struct hash *clusterSizeHash = job->clusterSizeHash = hashNew(0);
+struct hash *clusterSizeHash = clustering->clusterSizeHash = hashNew(0);
 struct fieldedRow *fr;
 for (fr = metaTable->rowList; fr != NULL; fr = fr->next)
     {
@@ -253,36 +212,36 @@ int i;
 struct slName *name;
 for (name = nameList, i=0; name != NULL; name = name->next, ++i)
     hashAddInt(clusterIxHash, name->name, i);
-int clusterCount = job->clusterCount = clusterIxHash->elCount;
+int clusterCount = clustering->clusterCount = clusterIxHash->elCount;
 
 /* Make up array that holds size of each cluster */
-AllocArray(job->clusterSizes, clusterCount);
-AllocArray(job->clusterNames, clusterCount);
+AllocArray(clustering->clusterSizes, clusterCount);
+AllocArray(clustering->clusterNames, clusterCount);
 for (i = 0, name = nameList; i < clusterCount; ++i, name = name->next)
     {
-    job->clusterSizes[i] = hashIntVal(job->clusterSizeHash, name->name);
-    job->clusterNames[i] = name->name;
-    verbose(2, "clusterSizes[%d] = %d\n", i, job->clusterSizes[i]);
+    clustering->clusterSizes[i] = hashIntVal(clustering->clusterSizeHash, name->name);
+    clustering->clusterNames[i] = name->name;
+    verbose(2, "clusterSizes[%d] = %d\n", i, clustering->clusterSizes[i]);
     }
 
 if (doMedian)
     {	
     /* Allocate arrays to hold number of samples and all sample vals for each cluster */
-    job->doMedian = doMedian;
-    AllocArray(job->clusterSamples, clusterCount);
+    clustering->doMedian = doMedian;
+    AllocArray(clustering->clusterSamples, clusterCount);
     int clusterIx;
     for (clusterIx = 0; clusterIx < clusterCount; ++clusterIx)
 	{
 	double *samples;
-	AllocArray(samples, job->clusterSizes[clusterIx]);
-	job->clusterSamples[clusterIx] = samples;
+	AllocArray(samples, clustering->clusterSizes[clusterIx]);
+	clustering->clusterSamples[clusterIx] = samples;
 	}
     }
 
 
 /* Make up array that has -1 where no cluster available, otherwise output index, also
  * hash up all column labels. */
-int *colToCluster = job->colToCluster = needHugeMem(colCount * sizeof(colToCluster[0]));
+int *colToCluster = clustering->colToCluster = needHugeMem(colCount * sizeof(colToCluster[0]));
 int unclusteredColumns = 0, missCount = 0;
 for (colIx=0; colIx < colCount; colIx = colIx+1)
     {
@@ -306,15 +265,15 @@ verbose(1, "%d total columns, %d unclustered, %d misses\n",
     colCount, unclusteredColumns, missCount);
 
 /* Allocate space for results for clustering one line */
-job->clusterResults = needHugeMem(clusterCount * sizeof(job->clusterResults[0]));
+clustering->clusterResults = needHugeMem(clusterCount * sizeof(clustering->clusterResults[0]));
 
 /* Allocate a few more things */
-job->clusterTotal = needMem(clusterCount*sizeof(job->clusterTotal[0]));
-job->clusterGrandTotal = needMem(clusterCount*sizeof(job->clusterGrandTotal[0]));
-job->clusterElements = needMem(clusterCount*sizeof(job->clusterElements[0]));
+clustering->clusterTotal = needMem(clusterCount*sizeof(clustering->clusterTotal[0]));
+clustering->clusterGrandTotal = needMem(clusterCount*sizeof(clustering->clusterGrandTotal[0]));
+clustering->clusterElements = needMem(clusterCount*sizeof(clustering->clusterElements[0]));
 
 /* Open file - and write out header */
-FILE *f = job->matrixFile = mustOpen(job->outMatrixFile, "w");
+FILE *f = clustering->matrixFile = mustOpen(clustering->outMatrixFile, "w");
 if (v->ft->startsSharp)
     fputc('#', f);
 
@@ -329,35 +288,45 @@ for (name = nameList; name != NULL; name = name->next)
     }
 fputc('\n', f);
 
-
+/* Allocate parallel output buffers */
+AllocArray(clustering->chunkSubtotals, chunkMaxSize);
+for (i=0; i<chunkMaxSize; ++i)
+    {
+    AllocArray(clustering->chunkSubtotals[i], clusterCount);
+    }
+AllocArray(clustering->chunkLinesOut, chunkMaxSize);
+for (i=0; i<chunkMaxSize; ++i)
+    clustering->chunkLinesOut[i] = dyStringNew(colCount * 3);  
 
 /* Clean up and return result */
 hashFree(&sampleHash);
 hashFree(&clusterIxHash);
-return job;
+return clustering;
 }
 
-void outputClusterStats(struct clustering *job)
-/* Output statistics on each cluster in this job. */
+void outputClusterStats(struct clustering *clustering)
+/* Output statistics on each cluster in this clustering. */
 {
-FILE *f = mustOpen(job->outStatsFile, "w");
+FILE *f = mustOpen(clustering->outStatsFile, "w");
 fprintf(f, "#cluster\tcount\ttotal\n");
 int i;
-for (i=0; i<job->clusterCount; ++i)
+for (i=0; i<clustering->clusterCount; ++i)
     {
-    fprintf(f, "%s\t%d\t%g\n", job->clusterNames[i], 
-	job->clusterElements[i], job->clusterGrandTotal[i]);
+    fprintf(f, "%s\t%d\t%g\n", clustering->clusterNames[i], 
+	clustering->clusterSizes[i], clustering->clusterGrandTotal[i]);
     }
 carefulClose(&f);
 }
 
-void clusterRow(struct clustering *job, struct vMatrix *v, double *a)
-/* Process a row in a, outputting in job->file */
+void clusterRow(struct clustering *clustering, int colCount, char *rowLabel, 
+    double *a, double *totalingTemp, int *elementsTemp, struct dyString *out,
+    double *subtotals)
+/* Process a row in a, outputting in clustering->file */
 {
 /* Zero out cluster histogram */
-double *clusterTotal = job->clusterTotal;
-int *clusterElements = job->clusterElements;
-int clusterCount = job->clusterCount;
+double *clusterTotal = totalingTemp;
+int *clusterElements = elementsTemp;
+int clusterCount = clustering->clusterCount;
 int i;
 for (i=0; i<clusterCount; ++i)
     {
@@ -366,9 +335,8 @@ for (i=0; i<clusterCount; ++i)
     }
 
 /* Loop through rest of row filling in histogram */
-int colCount = v->colCount;
-int *colToCluster = job->colToCluster;
-boolean doMedian = job->doMedian;
+int *colToCluster = clustering->colToCluster;
+boolean doMedian = clustering->doMedian;
 for (i=0; i<colCount; ++i)
     {
     int clusterIx = colToCluster[i];
@@ -380,52 +348,109 @@ for (i=0; i<colCount; ++i)
 	clusterTotal[clusterIx] += val;
 	if (doMedian)
 	    {
-	    if (valCount >= job->clusterSizes[clusterIx])
+	    if (valCount >= clustering->clusterSizes[clusterIx])
 		internalErr();
-	    job->clusterSamples[clusterIx][valCount] = val;
+	    clustering->clusterSamples[clusterIx][valCount] = val;
 	    }
 	}
     }
 
-/* Do output to file and grand totalling */
-FILE *f = job->matrixFile;
-fprintf(f, "%s", v->rowLabel->string);
-double *grandTotal = job->clusterGrandTotal;
+/* Do output to outstrng and do grand totalling */
+dyStringClear(out);
+dyStringPrintf(out, "%s", rowLabel);
 for (i=0; i<clusterCount; ++i)
     {
-    fprintf(f, "\t");
+    dyStringAppendC(out, '\t');
     double total = clusterTotal[i];
-    grandTotal[i] += total;
+    subtotals[i] += total;
+    int elements = clusterElements[i];
     double val;
     if (doMedian)
 	{
-	val = doubleMedian(clusterElements[i], job->clusterSamples[i]);
-	fprintf(f, "%g", val);
+	val = doubleMedian(elements, clustering->clusterSamples[i]);
+	dyStringPrintf(out, "%g", val);
 	}
     else
 	{
 	if (total > 0)
 	    {
-	    val = total/clusterElements[i];
-	    fprintf(f, "%g", val);
+	    val = total/elements;
+	    dyStringPrintf(out, "%g", val);
 	    }
 	else
-	    fputc('0', f);
+	    dyStringAppendC(out, '0');
 	}
     }
-	
-fprintf(f, "\n");
+dyStringAppendC(out, '\n');
 }
 
-static void addRowToIndex(FILE *fIndex, struct vMatrix *v)
+
+static void addRowToIndex(FILE *fIndex, char *rowLabel, struct lineFile *lf)
 /* Write out info to index file about where this row begins */
 {
 if (fIndex)
   {
-  fprintf(fIndex, "%s", v->rowLabel->string);
-  struct lineFile *lf = v->lf;
+  fprintf(fIndex, "%s", rowLabel);
   fprintf(fIndex, "\t%lld\t%lld\n",  (long long)lineFileTell(lf), (long long)lineFileTellSize(lf));
   }
+}
+
+struct lineIoItem
+/* This is an item fed to a parallel worker.  It corresponds to a single line of
+ * input matrix */
+    {
+    struct lineIoItem *next;	/* Pointer to next in list */
+
+    /* Information about input file and where we are in it. */
+    char *fileName;
+    int lineIx;	    /* Index of line in input file */
+    long long lineStartOffset;	/* Start offset within file */
+    long long lineSize;	/* Size of line */
+    long long lineEndOffset;	
+    int chunkIx;  /* Index of line in chunk */
+
+    /* Slightly parsed input. */
+    struct dyString *rowLabel;	/* Just the row label of input */
+    struct dyString *lineIn;     /* Unparsed rest of input line */
+
+    struct clustering *clusteringList;  /* Instructions on how to cluster and output */
+    
+    /* Temporary values used for calculating output */
+    double *vals;		 /* Parse out input matrix values for this line */
+    double *totalingTemp;        /* Buffer for parallel computation of totals */
+    int *elementsTemp;           /* buffers for parallel computation */
+    };
+
+void lineWorker(void *item, void *context)
+/* A worker to execute a single column clustering  */
+{
+struct lineIoItem *lii = item;
+struct ccMatrix *v = context;
+int xSize = v->colCount;
+char *s = lii->lineIn->string;
+char *rowLabel = lii->rowLabel->string;;
+
+/* Convert ascii to floating point, with little optimization for the many zeroes we usually see */
+int i;
+double *vals = lii->vals;
+for (i=0; i<xSize; ++i)
+    {
+    char *str = nextTabWord(&s);
+    if (str == NULL)
+        errAbort("not enough fields in input matrix line %d", lii->lineIx);
+    double val = ((str[0] == '0' && str[1] == 0) ? 0.0 : sqlDouble(str));
+    vals[i] = val;
+    }
+
+/* Then do the clustering */
+struct clustering *clustering;
+for (clustering = lii->clusteringList; clustering != NULL; clustering = clustering->next)
+      {
+      int chunkIx = lii->chunkIx;
+      clusterRow(clustering, xSize, rowLabel, 
+	    lii->vals, lii->totalingTemp, lii->elementsTemp,
+	    clustering->chunkLinesOut[chunkIx], clustering->chunkSubtotals[chunkIx]);
+      }
 }
 
 void matrixClusterColumns(char *matrixFile, char *metaFile, char *sampleField,
@@ -444,45 +469,101 @@ struct fieldedTable *metaTable = fieldedTableFromTabFile(metaFile, metaFile, NUL
 struct hash *metaHash = fieldedTableIndex(metaTable, sampleField);
 verbose(1, "Read %d rows from %s\n", metaHash->elCount, metaFile);
 
-/* Load up input matrix and labels */
-char *columnFile = optionVal("columnLabels", NULL);
-char *rowFile = optionVal("rowLabels", NULL);
-struct vMatrix *v = vMatrixOpen(matrixFile, columnFile, rowFile);
+/* Load up input matrix first line at least */
+struct ccMatrix *v = ccMatrixOpen(matrixFile);
 verbose(1, "matrix %s has %d fields\n", matrixFile, v->colCount);
 
 /* Create a clustering for each output and find index in metaTable for each. */
-struct clustering *jobList = NULL, *job;
+struct clustering *clusteringList = NULL, *clustering;
 int i;
 for (i=0; i<outputCount; ++i)
     {
-    job = clusteringNew(clusterFields[i], outMatrixFiles[i], outStatsFiles[i], 
+    clustering = clusteringNew(clusterFields[i], outMatrixFiles[i], outStatsFiles[i], 
 			metaTable, v, doMedian);
-    slAddTail(&jobList, job);
+    slAddTail(&clusteringList, clustering);
+    }
+
+/* Set up buffers for pthread workers */
+struct lineIoItem chunks[chunkMaxSize];
+for (i=0; i<chunkMaxSize; ++i)
+    {
+    struct lineIoItem *chunk = &chunks[i];
+    chunk->fileName = matrixFile;
+    chunk->clusteringList = clusteringList;
+    chunk->chunkIx = i;
+    chunk->lineIn = dyStringNew(0);
+    chunk->rowLabel = dyStringNew(0);
+    AllocArray(chunk->vals, v->colCount);
+    AllocArray(chunk->totalingTemp, v->colCount);
+    AllocArray(chunk->elementsTemp, v->colCount);
+    }
+
+/* Chug through big matrix a row at a time clustering */
+dotForUserInit(1);
+
+boolean atEof = FALSE;
+struct lineFile *lf = v->lf;
+while (!atEof)
+    {
+    /* Read a chunk of lines of the file */
+    struct lineIoItem *chunkList = NULL, *chunk;
+    int chunkSize;
+    for (chunkSize = 0; chunkSize < chunkMaxSize; chunkSize += 1)
+	{
+	char *line;
+	if (!lineFileNextReal(lf, &line))
+	   {
+	   atEof = TRUE;
+	   break;
+	   }
+	chunk = &chunks[chunkSize];
+	chunk->lineIx = lf->lineIx;
+	char *rowLabel = nextTabWord(&line);
+	addRowToIndex(fIndex, rowLabel, lf);
+	dyStringClear(chunk->rowLabel);
+	dyStringAppend(chunk->rowLabel, rowLabel);
+	dyStringClear(chunk->lineIn);
+	dyStringAppend(chunk->lineIn, line);
+	slAddHead(&chunkList, chunk);
+	}
+    slReverse(&chunkList);
+
+    /* Calculate strings to print in parallel */
+    pthreadDoList(clThreadCount, chunkList, lineWorker, v);
+
+    /* Do the actual file writes in serial and add subtotals to grand total */
+    for (chunk = chunkList; chunk != NULL; chunk = chunk->next)
+	{
+	struct clustering *clustering;
+	for (clustering = clusteringList; clustering != NULL; clustering = clustering->next)
+	    {
+	    fputs(clustering->chunkLinesOut[chunk->chunkIx]->string, clustering->matrixFile);
+
+	    /* Add subtotals calculated in parallel to grandTotal. */
+	    int i;
+	    double *grandTotal = clustering->clusterGrandTotal;
+	    double *subtotal = clustering->chunkSubtotals[chunk->chunkIx];
+	    for (i=0; i<clustering->clusterCount; ++i)
+		{
+	        grandTotal[i] += subtotal[i];
+		subtotal[i] = 0;
+		}
+	    }
+	}
+    dotForUser();
     }
 
 
-/* Chug through big matrix a row at a time clustering */
-dotForUserInit(100);
-for (;;)
-  {
-  double *a = vMatrixNextRow(v);
-  if (a == NULL)
-       break;
-  addRowToIndex(fIndex, v);
-  for (job = jobList; job != NULL; job = job->next)
-      clusterRow(job, v, a);
-  dotForUser();
-  }
 dotForUserEnd();
 
 /* Do stats and close files */
-for (job = jobList; job != NULL; job = job->next)
+for (clustering = clusteringList; clustering != NULL; clustering = clustering->next)
     {
-    outputClusterStats(job);
-    carefulClose(&job->matrixFile);
+    outputClusterStats(clustering);
+    carefulClose(&clustering->matrixFile);
     }
 
-vMatrixClose(&v);
+ccMatrixClose(&v);
 carefulClose(&fIndex);
 }
 

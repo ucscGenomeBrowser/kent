@@ -158,7 +158,7 @@ struct psl *psl = pslLoadAll(pslFile);
 struct hash *fastHash = NULL;
 struct hash *cdsHash = NULL;
 
-if (fastaFile != NULL)
+if ((fastaFile != NULL) && (psl != NULL))
     {
     struct dnaSeq  *seqs = pslIsProtein(psl) ?faReadAllPep(fastaFile) : faReadAllDna(fastaFile); 
     fastHash = newHash(10);

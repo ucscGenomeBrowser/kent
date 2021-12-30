@@ -201,7 +201,6 @@ sub asmCounts($) {
   return ($sequenceCount, $totalSize);
 }
 
-#    my ($gapSize) = maskStats($faSizeTxt);
 sub maskStats($) {
   my ($faSizeFile) = @_;
   my $gapSize = `grep 'sequences in 1 file' $faSizeFile | awk '{print \$3}'`;
@@ -222,7 +221,12 @@ sub gapStats($$) {
   my ($buildDir, $asmId) = @_;
   my $gapBed = "$buildDir/trackData/allGaps/$asmId.allGaps.bed.gz";
   my $gapCount = 0;
-  if ( -s "$gapBed" ) {
+  if ($asmId !~ m/^GC/) {
+     $gapBed = "/hive/data/genomes/$asmId/$asmId.N.bed";
+     if ( -s "$gapBed" ) {
+       $gapCount = `awk '{print \$3-\$2}' $gapBed | ave stdin | grep '^count' | awk '{print \$2}'`;
+     }
+  } elsif ( -s "$gapBed" ) {
     $gapCount = `zcat $gapBed | awk '{print \$3-\$2}' | ave stdin | grep '^count' | awk '{print \$2}'`;
   }
   chomp $gapCount;
@@ -235,31 +239,57 @@ sub gapStats($$) {
 sub tableContents() {
 
   foreach my $asmId (@orderList) {
-printf STDERR "# asmId: '%s'\n", $asmId;
-    my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
-    my $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
-    my $accessionDir = substr($asmId, 0 ,3);
-    $accessionDir .= "/" . substr($asmId, 4 ,3);
-    $accessionDir .= "/" . substr($asmId, 7 ,3);
-    $accessionDir .= "/" . substr($asmId, 10 ,3);
-    my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
-    if ($gcPrefix eq "GCA") {
+    my $gcPrefix = "GCx";
+    my $asmAcc = "asmAcc";
+    my $asmName = "asmName";
+    my $accessionId = "GCx_098765432.1";
+    my $accessionDir = "";
+    my $configRa = "n/a";
+    if ($asmId !~ m/^GC/) {
+       $configRa = "/hive/data/genomes/$asmId/$asmId.config.ra";
+      $accessionId = `grep ^genBankAccessionID "${configRa}" | cut -d' ' -f2`;
+       chomp $accessionId;
+       $asmName = `grep ^ncbiAssemblyName "${configRa}" | cut -d' ' -f2`;
+       chomp $asmName;
+       $accessionDir = substr($accessionId, 0 ,3);
+       $accessionDir .= "/" . substr($accessionId, 4 ,3);
+       $accessionDir .= "/" . substr($accessionId, 7 ,3);
+       $accessionDir .= "/" . substr($accessionId, 10 ,3);
+       ($gcPrefix, $asmAcc) = split('_', $accessionId, 2);
+       printf STDERR "# %03d\t%s_%s (%s)\n", 1 + $asmCount, $accessionId, $asmName, $asmId;
+    } else {
+       ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
+       $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
+       $accessionDir = substr($asmId, 0 ,3);
+       $accessionDir .= "/" . substr($asmId, 4 ,3);
+       $accessionDir .= "/" . substr($asmId, 7 ,3);
+       $accessionDir .= "/" . substr($asmId, 10 ,3);
+       printf STDERR "# %03d\t%s\n", 1 + $asmCount, $asmId;
+    }
+    # assume GCF/refseq build
+   my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
+    if ($gcPrefix eq "GCA") {   # this is a GCA/genbank build
      $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
     }
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
+    my $chromSizes = "${buildDir}/${asmId}.chrom.sizes";
+    my $twoBit = "${buildDir}/trackData/addMask/${asmId}.masked.2bit";
+    my $faSizeTxt = "${buildDir}/${asmId}.faSize.txt";
+    if ($asmId !~ m/^GC/) {        # this is a UCSC genome database browser
+       $buildDir="/hive/data/outside/ncbi/genomes/$accessionDir/${accessionId}_${asmName}";
+       $asmReport="$buildDir/${accessionId}_${asmName}_assembly_report.txt";
+       $chromSizes = "/hive/data/genomes/$asmId/chrom.sizes";
+       $twoBit = "/hive/data/genomes/$asmId/$asmId.2bit";
+       $faSizeTxt = "/hive/data/genomes/$asmId/faSize.${asmId}.2bit.txt";
+    }
     if (! -s "$asmReport") {
       printf STDERR "# no assembly report:\n# %s\n", $asmReport;
       next;
     }
-    my $chromSizes = "${buildDir}/${asmId}.chrom.sizes";
-    my $twoBit = "${buildDir}/trackData/addMask/${asmId}.masked.2bit";
     if (! -s "$twoBit") {
       printf STDERR "# no 2bit file:\n# %s\n", $twoBit;
       next;
     }
-    my $trackDb="$buildDir/${asmId}.trackDb.txt";
-    next if (! -s "$trackDb");	# assembly build not complete
-    my $faSizeTxt = "${buildDir}/${asmId}.faSize.txt";
     if ( ! -s "$faSizeTxt" ) {
        printf STDERR "twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt\n";
        print `twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt`;
@@ -268,7 +298,6 @@ printf STDERR "# asmId: '%s'\n", $asmId;
     $overallGapSize += $gapSize;
     my ($seqCount, $totalSize) = asmCounts($chromSizes);
     $overallSeqCount += $seqCount;
-#    my $totalSize=`ave -col=2 $chromSizes | grep "^total" | awk '{printf "%d", \$NF}'`;
     $overallNucleotides += $totalSize;
     my $gapCount = gapStats($buildDir, $asmId);
     $overallGapCount += $gapCount;
@@ -324,11 +353,22 @@ printf STDERR "# asmId: '%s'\n", $asmId;
     }
     close (FH);
     my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
+    my $browserName = $commonName;
+    my $browserUrl = "https://genome.ucsc.edu/h/$accessionId";
+    if ($asmId !~ m/^GC/) {
+       $hubUrl = "https://hgdownload.soe.ucsc.edu/goldenPath/$asmId/bigZips";
+       $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
+       $browserName = "$commonName ($asmId)";
+    }
     printf "<tr><td align=right>%d</td>\n", ++$asmCount;
 #    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $accessionId, $commonName;
-    printf "<td align=center><a href='https://genome.ucsc.edu/h/%s' target=_blank>%s</a></td>\n", $accessionId, $commonName;
+    printf "<td align=center><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
     printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
-    printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
+    if ($asmId !~ m/^GC/) {
+      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s_%s</a></td>\n", $gcPrefix, $asmAcc, $accessionId, $asmName;
+    } else {
+      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
+    }
     printf "    <td align=right>%s</td>\n", commify($seqCount);
     printf "    <td align=right>%s</td>\n", commify($totalSize);
     printf "    <td align=right>%s</td>\n", commify($gapCount);

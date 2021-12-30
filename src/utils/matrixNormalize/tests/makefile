@@ -9,3 +9,6 @@ test:
 	diff expected/colSum.out out/colSum.out
 	matrixNormalize column length test.in out/colLength.out
 	diff expected/colLength.out out/colLength.out
+
+clean:
+	rm -rf out/

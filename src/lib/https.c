@@ -18,6 +18,15 @@
 #include "net.h"
 
 
+// For use with callback. Set a variable into the connection itself,
+// and then use that during the callback.
+struct myData
+    {
+    char *hostName;
+    };
+
+int myDataIndex = -1;
+
 static pthread_mutex_t *mutexes = NULL;
  
 static unsigned long openssl_id_callback(void)
@@ -63,6 +72,8 @@ static void xerr(char *msg)
 fprintf(stderr, "%s\n", msg); fflush(stderr);
 }
 
+void initDomainWhiteListHash();   // forward declaration
+
 void openSslInit()
 /* do only once */
 {
@@ -76,6 +87,8 @@ if (!done)
     ERR_load_SSL_strings();
     OpenSSL_add_all_algorithms();
     openssl_pthread_setup();
+    myDataIndex = SSL_get_ex_new_index(0, "myDataIndex", NULL, NULL, NULL);
+    initDomainWhiteListHash();
     done = TRUE;
     }
 pthread_mutex_unlock( &osiMutex );
@@ -272,6 +285,9 @@ char    buf[256];
 X509   *cert;
 int     err, depth;
 
+struct myData *myData;
+SSL    *ssl;
+
 cert = X509_STORE_CTX_get_current_cert(ctx);
 err = X509_STORE_CTX_get_error(ctx);
 depth = X509_STORE_CTX_get_error_depth(ctx);
@@ -292,6 +308,11 @@ X509_NAME_oneline(X509_get_subject_name(cert), buf, 256);
 * be found explicitly; only errors introduced by cutting off the
 * additional certificates would be logged.
 */
+
+ssl = X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
+myData = SSL_get_ex_data(ssl, myDataIndex);
+
+
 if (depth > atoi(getenv("https_cert_check_depth")))
     {
     preverify_ok = 0;
@@ -306,14 +327,17 @@ if (!preverify_ok)
     {
     if (getenv("SCRIPT_NAME"))  // CGI mode
 	{
-	fprintf(stderr, "verify error:num=%d:%s:depth=%d:%s CGI=%s\n", err,
-	    X509_verify_cert_error_string(err), depth, buf, getenv("SCRIPT_NAME"));
+	fprintf(stderr, "verify error:num=%d:%s:depth=%d:%s hostName=%s CGI=%s\n", err,
+	    X509_verify_cert_error_string(err), depth, buf, myData->hostName, getenv("SCRIPT_NAME"));
 	}
     if (!sameString(getenv("https_cert_check"), "log"))
 	{
 	char *cn = strstr(buf, "/CN=");
 	if (cn) cn+=4;  // strlen /CN=
-	warn("%s on %s", X509_verify_cert_error_string(err), cn);
+	if (sameString(cn, myData->hostName))
+	    warn("%s on %s", X509_verify_cert_error_string(err), cn);
+	else
+	    warn("%s on %s (%s)", X509_verify_cert_error_string(err), cn, myData->hostName);
 	}
     }
 /* err contains the last verification error.  */
@@ -328,130 +352,126 @@ else
     return preverify_ok;
 }
 
+struct hash *domainWhiteList = NULL;
 
-static struct hash *initDomainWhiteListHash()
+void initDomainWhiteListHash()
 /* Initialize once, has all the old existing domains 
  * for which cert checking is skipped since they are not compatible (yet) with openssl.*/
 {
-static struct hash *domainWhiteList = NULL;
-static pthread_mutex_t initInUseMutex = PTHREAD_MUTEX_INITIALIZER;
 
-if (!domainWhiteList)
+domainWhiteList = hashNew(8);
+
+// whitelisted domain exceptions set in hg.conf
+// space separated list.
+char *dmwl = cloneString(getenv("https_cert_check_domain_exceptions"));
+int wordCount = chopByWhite(dmwl, NULL, 0);
+if (wordCount > 0)
     {
-    pthread_mutex_lock( &initInUseMutex );
-    if (!domainWhiteList)
+    char **words;
+    AllocArray(words, wordCount);
+    chopByWhite(dmwl, words, wordCount);
+    int w;
+    for(w=0; w < wordCount; w++)
 	{
-	struct hash *domainHash = hashNew(8);
-
-	// whitelisted domain exceptions set in hg.conf
-	// space separated list.
-	char *dmwl = cloneString(getenv("https_cert_check_domain_exceptions"));
-	int wordCount = chopByWhite(dmwl, NULL, 0);
-	if (wordCount > 0)
-	    {
-	    char **words;
-	    AllocArray(words, wordCount);
-	    chopByWhite(dmwl, words, wordCount);
-	    int w;
-	    for(w=0; w < wordCount; w++)
-		{
-		hashStoreName(domainHash, words[w]);
-		}
-	    freeMem(words);
-	    }
-	freez(&dmwl);
-
-	// useful for testing, turns off hardwired whitelist exceptions
-	if (!hashLookup(domainHash, "noHardwiredExceptions"))  
-	    {
-	    // Hardwired exceptions whitelist
-	    // openssl automatically whitelists domains which are given as IPv4 or IPv6 addresses
-	    hashStoreName(domainHash, "*.cbu.uib.no");
-	    hashStoreName(domainHash, "*.clinic.cat");
-	    hashStoreName(domainHash, "*.genebook.com.cn");
-	    hashStoreName(domainHash, "annotation.dbi.udel.edu");
-	    hashStoreName(domainHash, "apprisws.bioinfo.cnio.es");
-	    hashStoreName(domainHash, "arn.ugr.es");
-	    hashStoreName(domainHash, "bic2.ibi.upenn.edu");
-	    hashStoreName(domainHash, "bioinfo2.ugr.es");
-	    hashStoreName(domainHash, "bioshare.genomecenter.ucdavis.edu");
-	    hashStoreName(domainHash, "biowebport.com");
-	    hashStoreName(domainHash, "bx.bio.jhu.edu");
-	    hashStoreName(domainHash, "cluster.hpcc.ucr.edu");
-	    hashStoreName(domainHash, "costalab.ukaachen.de");
-	    hashStoreName(domainHash, "data.rc.fas.harvard.edu");
-	    hashStoreName(domainHash, "datahub-7ak6xof0.udes.genap.ca");
-	    hashStoreName(domainHash, "datahub-7mu6z13t.udes.genap.ca");
-	    hashStoreName(domainHash, "datahub-bx3mvzla.udes.genap.ca");
-	    hashStoreName(domainHash, "datahub-gvhsc2p7.udes.genap.ca");
-	    hashStoreName(domainHash, "datahub-i8kms5wt.udes.genap.ca");
-	    hashStoreName(domainHash, "datahub-kazb7g4u.udes.genap.ca");
-	    hashStoreName(domainHash, "datahub-nyt53rix.udes.genap.ca");
-	    hashStoreName(domainHash, "datahub-ruigbdoq.udes.genap.ca");
-	    hashStoreName(domainHash, "dev.herv.img.cas.cz");
-	    hashStoreName(domainHash, "dev.stanford.edu");
-	    hashStoreName(domainHash, "dice-green.liai.org");
-	    hashStoreName(domainHash, "dropbox.ogic.ca");
-	    hashStoreName(domainHash, "dropfile.hpc.qmul.ac.uk");
-	    hashStoreName(domainHash, "edn.som.umaryland.edu");
-	    hashStoreName(domainHash, "expiereddnsmanager.com");
-	    hashStoreName(domainHash, "frigg.uio.no");
-	    hashStoreName(domainHash, "ftp--ncbi--nlm--nih--gov.ibrowse.co");
-	    hashStoreName(domainHash, "ftp.science.ru.nl");
-	    hashStoreName(domainHash, "galaxy.med.uvm.edu");
-	    hashStoreName(domainHash, "garfield.igh.cnrs.fr");
-	    hashStoreName(domainHash, "gcp.wenglab.org");
-	    hashStoreName(domainHash, "genap.ca");
-	    hashStoreName(domainHash, "genome-tracks.ngs.omrf.in");
-	    hashStoreName(domainHash, "genomicsdata.cs.ucl.ac.uk");
-	    hashStoreName(domainHash, "gsmplot.deqiangsun.org");
-	    hashStoreName(domainHash, "hgdownload--soe--ucsc--edu.ibrowse.co");
-	    hashStoreName(domainHash, "hci-bio-app.hci.utah.edu");
-	    hashStoreName(domainHash, "hkgateway.med.umich.edu");
-	    hashStoreName(domainHash, "hsb.upf.edu");
-	    hashStoreName(domainHash, "icbi.at");
-	    hashStoreName(domainHash, "lichtlab.cancer.ufl.edu");
-	    hashStoreName(domainHash, "manticore.niehs.nih.gov");
-	    hashStoreName(domainHash, "microb215.med.upenn.edu");
-	    hashStoreName(domainHash, "mitranscriptome.path.med.umich.edu");
-	    hashStoreName(domainHash, "nextgen.izkf.rwth-aachen.de");
-	    hashStoreName(domainHash, "oculargenomics.meei.harvard.edu");
-	    hashStoreName(domainHash, "onesgateway.med.umich.edu");
-	    hashStoreName(domainHash, "openslice.fenyolab.org");
-	    hashStoreName(domainHash, "peromyscus.rc.fas.harvard.edu");
-	    hashStoreName(domainHash, "pgv19.virol.ucl.ac.uk");
-	    hashStoreName(domainHash, "pricenas.biochem.uiowa.edu");
-	    hashStoreName(domainHash, "redirect.medsch.ucla.edu");
-	    hashStoreName(domainHash, "rnaseqhub.brain.mpg.de");
-	    hashStoreName(domainHash, "schatzlabucscdata.yalespace.org.s3.amazonaws.com");
-	    hashStoreName(domainHash, "silo.bioinf.uni-leipzig.de");
-	    hashStoreName(domainHash, "snpinfo.niehs.nih.gov");
-	    hashStoreName(domainHash, "v91rc2.master.demo.encodedcc.org");
-	    hashStoreName(domainHash, "v91rc3.master.demo.encodedcc.org");
-	    hashStoreName(domainHash, "v94.rc2.demo.encodedcc.org");
-	    hashStoreName(domainHash, "virtlehre.informatik.uni-leipzig.de");
-	    hashStoreName(domainHash, "web1.bx.bio.jhu.edu");
-	    hashStoreName(domainHash, "www.datadepot.rcac.purdue.edu");
-	    hashStoreName(domainHash, "www.isical.ac.in");
-	    hashStoreName(domainHash, "www.morgridge.us");
-	    hashStoreName(domainHash, "www.ogic.ca");
-	    hashStoreName(domainHash, "www.v93rc2.demo.encodedcc.org");
-	    hashStoreName(domainHash, "xinglabtrackhub.research.chop.edu");
-	    hashStoreName(domainHash, "zlab-trackhub.umassmed.edu");
-	    hashStoreName(domainHash, "zlab.umassmed.edu");
-	    }
-
-	domainWhiteList = domainHash;
+	hashStoreName(domainWhiteList, words[w]);
 	}
-    pthread_mutex_unlock( &initInUseMutex );
+    freeMem(words);
     }
-return domainWhiteList;
+freez(&dmwl);
+
+// useful for testing, turns off hardwired whitelist exceptions
+if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))  
+    {
+    // Hardwired exceptions whitelist
+    // openssl automatically whitelists domains which are given as IPv4 or IPv6 addresses
+    hashStoreName(domainWhiteList, "*.cbu.uib.no");
+    hashStoreName(domainWhiteList, "*.clinic.cat");
+    hashStoreName(domainWhiteList, "*.ezproxy.u-pec.fr");
+    hashStoreName(domainWhiteList, "*.genebook.com.cn");
+    hashStoreName(domainWhiteList, "*.jncasr.ac.in");
+    hashStoreName(domainWhiteList, "annotation.dbi.udel.edu");
+    hashStoreName(domainWhiteList, "apprisws.bioinfo.cnio.es");
+    hashStoreName(domainWhiteList, "arn.ugr.es");
+    hashStoreName(domainWhiteList, "bic2.ibi.upenn.edu");
+    hashStoreName(domainWhiteList, "bioinfo2.ugr.es");
+    hashStoreName(domainWhiteList, "bioshare.genomecenter.ucdavis.edu");
+    hashStoreName(domainWhiteList, "biowebport.com");
+    hashStoreName(domainWhiteList, "bx.bio.jhu.edu");
+    hashStoreName(domainWhiteList, "ccg.epfl.ch");
+    hashStoreName(domainWhiteList, "cctop.cos.uni-heidelberg.de");
+    hashStoreName(domainWhiteList, "cluster.hpcc.ucr.edu");
+    hashStoreName(domainWhiteList, "costalab.ukaachen.de");
+    hashStoreName(domainWhiteList, "data.rc.fas.harvard.edu");
+    hashStoreName(domainWhiteList, "datahub-7ak6xof0.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-7mu6z13t.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-bx3mvzla.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-gvhsc2p7.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-i8kms5wt.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-kazb7g4u.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-nyt53rix.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-ruigbdoq.udes.genap.ca");
+    hashStoreName(domainWhiteList, "dev.herv.img.cas.cz");
+    hashStoreName(domainWhiteList, "dev.stanford.edu");
+    hashStoreName(domainWhiteList, "dice-green.liai.org");
+    hashStoreName(domainWhiteList, "dropbox.ogic.ca");
+    hashStoreName(domainWhiteList, "dropfile.hpc.qmul.ac.uk");
+    hashStoreName(domainWhiteList, "edn.som.umaryland.edu");
+    hashStoreName(domainWhiteList, "epd.epfl.ch");
+    hashStoreName(domainWhiteList, "expiereddnsmanager.com");
+    hashStoreName(domainWhiteList, "frigg.uio.no");
+    hashStoreName(domainWhiteList, "ftp--ncbi--nlm--nih--gov.ibrowse.co");
+    hashStoreName(domainWhiteList, "ftp.science.ru.nl");
+    hashStoreName(domainWhiteList, "galaxy.med.uvm.edu");
+    hashStoreName(domainWhiteList, "garfield.igh.cnrs.fr");
+    hashStoreName(domainWhiteList, "gcp.wenglab.org");
+    hashStoreName(domainWhiteList, "genap.ca");
+    hashStoreName(domainWhiteList, "genemo.ucsd.edu");
+    hashStoreName(domainWhiteList, "genome-tracks.ngs.omrf.in");
+    hashStoreName(domainWhiteList, "genomicsdata.cs.ucl.ac.uk");
+    hashStoreName(domainWhiteList, "gsmplot.deqiangsun.org");
+    hashStoreName(domainWhiteList, "hgdownload--soe--ucsc--edu.ibrowse.co");
+    hashStoreName(domainWhiteList, "hci-bio-app.hci.utah.edu");
+    hashStoreName(domainWhiteList, "hkgateway.med.umich.edu");
+    hashStoreName(domainWhiteList, "hsb.upf.edu");
+    hashStoreName(domainWhiteList, "icbi.at");
+    hashStoreName(domainWhiteList, "lichtlab.cancer.ufl.edu");
+    hashStoreName(domainWhiteList, "manticore.niehs.nih.gov");
+    hashStoreName(domainWhiteList, "microb215.med.upenn.edu");
+    hashStoreName(domainWhiteList, "mitranscriptome.path.med.umich.edu");
+    hashStoreName(domainWhiteList, "nextgen.izkf.rwth-aachen.de");
+    hashStoreName(domainWhiteList, "oculargenomics.meei.harvard.edu");
+    hashStoreName(domainWhiteList, "onesgateway.med.umich.edu");
+    hashStoreName(domainWhiteList, "openslice.fenyolab.org");
+    hashStoreName(domainWhiteList, "peromyscus.rc.fas.harvard.edu");
+    hashStoreName(domainWhiteList, "pgv19.virol.ucl.ac.uk");
+    hashStoreName(domainWhiteList, "pricenas.biochem.uiowa.edu");
+    hashStoreName(domainWhiteList, "redirect.medsch.ucla.edu");
+    hashStoreName(domainWhiteList, "rnaseqhub.brain.mpg.de");
+    hashStoreName(domainWhiteList, "schatzlabucscdata.yalespace.org.s3.amazonaws.com");
+    hashStoreName(domainWhiteList, "silo.bioinf.uni-leipzig.de");
+    hashStoreName(domainWhiteList, "snpinfo.niehs.nih.gov");
+    hashStoreName(domainWhiteList, "spades.cgi.bch.uconn.edu");
+    hashStoreName(domainWhiteList, "v91rc2.master.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "v91rc3.master.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "v94.rc2.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "virtlehre.informatik.uni-leipzig.de");
+    hashStoreName(domainWhiteList, "web1.bx.bio.jhu.edu");
+    hashStoreName(domainWhiteList, "www.datadepot.rcac.purdue.edu");
+    hashStoreName(domainWhiteList, "www.isical.ac.in");
+    hashStoreName(domainWhiteList, "www.morgridge.us");
+    hashStoreName(domainWhiteList, "www.ogic.ca");
+    hashStoreName(domainWhiteList, "www.v93rc2.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "xinglabtrackhub.research.chop.edu");
+    hashStoreName(domainWhiteList, "zlab-trackhub.umassmed.edu");
+    hashStoreName(domainWhiteList, "zlab.umassmed.edu");
+    }
+
 }
 
 struct hashEl *checkIfInHashWithWildCard(char *hostName)
 /* check if in hash, and if in hash with lowest-level domain set to "*" wildcard */
 {
-struct hashEl *result = hashLookup(initDomainWhiteListHash(), hostName);
+struct hashEl *result = hashLookup(domainWhiteList, hostName);
 if (!result)
     {
     char *dot = strchr(hostName, '.');
@@ -460,7 +480,7 @@ if (!result)
         int length=strlen(hostName)+1;
 	char wildHost[length];
 	safef(wildHost, sizeof wildHost, "*%s", dot);
-	result = hashLookup(initDomainWhiteListHash(), wildHost);
+	result = hashLookup(domainWhiteList, wildHost);
 	}
     }
 return result;
@@ -503,6 +523,8 @@ fd_set writefds;
 int err;
 struct timeval tv;
 
+struct myData myData;
+boolean doSetMyData = FALSE;
 
 if (!sameString(getenv("https_cert_check"), "none"))
     {
@@ -542,7 +564,12 @@ if (!sameString(getenv("https_cert_check"), "none"))
 	    {
 	    warn("SSL set default verify paths failed");
 	    }
-	}
+
+	// add the hostName to the structure and set it here, making it available during callback.
+	myData.hostName = hostName;
+	doSetMyData = TRUE;
+
+	} 
     }
 
 // Don't want any retries since we are non-blocking bio now
@@ -622,6 +649,8 @@ if(!ssl)
     goto cleanup2;
     }
 
+if (doSetMyData)
+    SSL_set_ex_data(ssl, myDataIndex, &myData);
 
 /* 
 Server Name Indication (SNI)

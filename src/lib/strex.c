@@ -56,6 +56,7 @@ enum strexBuiltInFunc
     strexBuiltInUntsv,
     strexBuiltInReplace,
     strexBuiltInFix,
+    strexBuiltInLookup,
     strexBuiltInStrip,
     strexBuiltInLen,
     strexBuiltInSymbol,
@@ -192,6 +193,7 @@ static struct strexBuiltIn builtins[] = {
     { "untsv", strexBuiltInUntsv, strexTypeString, 2, stringInt },
     { "replace", strexBuiltInReplace, strexTypeString, 3, threeStrings },
     { "fix", strexBuiltInFix, strexTypeString, 3, threeStrings },
+    { "lookup", strexBuiltInLookup, strexTypeString, 2, twoStrings},
     { "strip", strexBuiltInStrip, strexTypeString, 2, twoStrings },
     { "len", strexBuiltInLen, strexTypeInt, 1, oneString},
     { "symbol", strexBuiltInSymbol, strexTypeString, 2, twoStrings },
@@ -1976,6 +1978,39 @@ if (id == NULL)
 return id;
 }
 
+static struct hash *hashTwoColTsv(char *fileName)
+/* Given a two column file (key, value) return a hash. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *hash = hashNew(16);
+char *row[3];
+int fields = 0;
+while ((fields = lineFileChopTab(lf, row)) != 0)
+    {
+    lineFileExpectWords(lf, 2, fields);
+    char *name = row[0];
+    char *value = lmCloneString(hash->lm, row[1]);
+    hashAdd(hash, name, value);
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+static char *lookupInTwoColFile(char *original, char *tsvName)
+/* Lookup value in a two column file which we cache */
+{
+static struct hash *fileHash = NULL;
+if (fileHash == NULL)
+    fileHash = hashNew(0);
+struct hash *idHash = hashFindVal(fileHash, tsvName);
+if (idHash == NULL)
+    {
+    idHash = hashTwoColTsv(tsvName);
+    hashAdd(fileHash, tsvName, idHash);
+    }
+return emptyForNull(hashFindVal(idHash, original));
+}
+
 char *finalMatchToSubstring(char *haystack,char *needle)
 /* Return the final position of needle in haystack */
 {
@@ -2084,6 +2119,13 @@ switch (builtIn->func)
 	    }
 	else
 	    res.val.s = string.val.s;
+	break;
+	}
+    case strexBuiltInLookup:
+        {
+        struct strexEval string = strexLocalEval(p->children, run);
+        struct strexEval fileName = strexLocalEval(p->children->next, run);
+	res.val.s = lookupInTwoColFile(string.val.s, fileName.val.s);
 	break;
 	}
     case strexBuiltInStrip:
