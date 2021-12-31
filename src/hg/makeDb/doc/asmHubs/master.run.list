@@ -84,6 +84,7 @@
 ./runBuild GCA_002201775.1 GCA_002201775.1_ALER1.0 mammals Ammotragus_lervia
 ./runBuild GCA_002250225.1 GCA_002250225.1_ASM225022v1 fungi Saccharomyces_cerevisiae
 ./runBuild GCA_002288905.2 GCA_002288905.2_ASM228890v2 mammals Enhydra_lutris_kenyoni
+./runBuild GCA_002288925.2 GCA_002288925.2_ASM228892v2 mammals Delphinapterus_leucas
 ./runBuild GCA_002406435.1 GCA_002406435.1_ASM240643v1 mammals Spermophilus_dauricus
 ./runBuild GCA_002443075.1 GCA_002443075.1_Milu1.0 mammals Elaphurus_davidianus
 ./runBuild GCA_002754865.1 GCA_002754865.1_ASM275486v1 primates Callithrix_jacchus
@@ -1526,6 +1527,7 @@
 ./runBuild GCF_012393455.1 GCF_012393455.1_Tufts_HGry_1.1 mammals Halichoerus_grypus
 ./runBuild GCF_012460135.1 GCF_012460135.1_BPBGC_Mater_1.0 birds Molothrus_ater
 ./runBuild GCF_012550715.1 GCF_012550715.1_ASM1255071v1 fungi Geosmithia_morbida
+./runBuild GCF_012559485.2 GCF_012559485.2_MFA1912RKSv2 primates Macaca_fascicularis
 ./runBuild GCF_012931545.1 GCF_012931545.1_Oket_V1 fish Oncorhynchus_keta
 ./runBuild GCF_012932325.1 GCF_012932325.1_TpBJ-2018v1 invertebrate Thrips_palmi
 ./runBuild GCF_012971845.1 GCF_012971845.1_ASM1297184v1 fungi Lasiodiplodia_theobromae
@@ -1717,6 +1719,7 @@
 ./runBuild GCF_019238085.1 GCF_019238085.1_USGS_WTPT01 birds Lagopus_leucura
 ./runBuild GCF_019320065.1 GCF_019320065.1_ASM1932006v1 mammals Cervus_canadensis
 ./runBuild GCF_019457755.1 GCF_019457755.1_ASM1945775v1 invertebrate Venturia_canescens
+./runBuild GCF_020740605.2 GCF_020740605.2_mLemCat1.pri primates Lemur_catta
 ./runBuild GCF_900007375.1 GCF_900007375.1_ASM90000737v1 fungi Fusarium_venenatum
 ./runBuild GCF_900044065.1 GCF_900044065.1_Genome_assembly_version_1 fungi Fusarium_mangiferae
 ./runBuild GCF_900067095.1 GCF_900067095.1_F._proliferatum_ET1_version_1 fungi Fusarium_proliferatum_ET1

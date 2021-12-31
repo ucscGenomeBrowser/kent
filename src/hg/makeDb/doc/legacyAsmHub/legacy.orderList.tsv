@@ -31,7 +31,8 @@ GCF_000709325.1_ASM70932v1	common cuckoo (BGI 2014)
 GCF_000365465.2_Ptep_2.0	common house spider (v2 2017)
 GCA_002940915.2_ASM294091v2	common vampire bat (DRU21DN04 2018 genbank)
 GCA_000956105.1_Pcoq_1.0	Coquerel's sifaka 6110/Marcella (2015 genbank)
-GCA_000364345.1_Macaca_fascicularis_5.0	crab-eating macaque genbank
+GCA_000364345.1_Macaca_fascicularis_5.0	crab-eating macaque WashU 2013 genbank
+GCF_000364345.1_Macaca_fascicularis_5.0	crab-eating macaque WashU 2013 refseq
 GCA_000260255.1_OctDeg1.0	degu (3935 2012 genbank)
 GCA_004027395.1_CanFam_VD_v1_BIUU	dog (BS72 2019 Broad)
 GCF_000215625.1_MusPutFur1.0	domestic ferret (Sable ID 1420 FGSC 2011)
@@ -87,6 +88,7 @@ GCA_000258655.2_panpan1.1	pygmy chimpanzee (Ulindi genbank 2015)
 GCA_000003625.1_OryCun2.0	rabbit (Thorbecke 2009 Broad genbank)
 GCA_000772875.3_Mmul_8.0.1	Rhesus monkey (2015 Baylor)
 GCF_000695815.1_ASM69581v1	rifleman (BGI 2014)
+GCA_004024665.1_LemCat_v1_BIUU	ring-tailed lemur BS26 Broad 2019
 GCF_014905685.1_NemWhi1	Rio pearlfish (Nwh7 v1 2020)
 GCA_900094665.2_CAROLI_EIJ_v1.1	Ryukyu mouse (2017 EBI genbank)
 GCA_002288905.2_ASM228890v2	sea otter (GAN:26980312 2017 genbank)

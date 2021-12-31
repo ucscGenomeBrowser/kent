@@ -9,7 +9,7 @@ GCA_004027275.1_EulFul_v1_BIUU	brown lemur
 GCF_002880755.1_Clint_PTRv2	chimpanzee
 GCA_004024645.1_MizCoq_v1_BIUU	Coquerel's mouse lemur
 GCF_000956105.1_Pcoq_1.0	Coquerel's sifaka 6110/Marcella (2015 refseq)
-GCF_000364345.1_Macaca_fascicularis_5.0	crab-eating macaque
+GCF_012559485.2_MFA1912RKSv2	crab-eating macaque CE1976F Keio U/RIKEN 2021
 GCA_004027615.1_CertNeg_v1_BIUU	De Brazza's monkey
 GCF_000951045.1_Mleu.le_1.0	drill
 GCF_009764315.1_Tfra_2.0	Francois's langur
@@ -34,7 +34,7 @@ GCF_013052645.1_Mhudiblu_PPA_v0	pygmy chimpanzee (Mhudiblu)
 GCA_004027335.1_EryPat_v1_BIUU	red guenon
 GCA_004024825.1_PygNem_v1_BIUU	red shanked douc langur
 GCF_003339765.1_Mmul_10	Rhesus monkey (2019 U. Washington)
-GCA_004024665.1_LemCat_v1_BIUU	ring-tailed lemur
+GCF_020740605.2_mLemCat1.pri	ring-tailed lemur (2021 VGP)
 GCF_009828535.2_HMol_V2	silvery gibbon
 GCA_004027815.1_NycCou_v1_BIUU	slow loris
 GCF_000181295.1_OtoGar3	small-eared galago
