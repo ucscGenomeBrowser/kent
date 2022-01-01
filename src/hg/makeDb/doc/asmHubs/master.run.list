@@ -1166,6 +1166,7 @@
 ./runBuild GCF_002163495.1 GCF_002163495.1_Omyk_1.0 vertebrate_other Oncorhynchus_mykiss
 ./runBuild GCF_002168275.1 GCF_002168275.1_ASM216827v2 plants Herrania_umbratica
 ./runBuild GCF_002201575.1 GCF_002201575.1_ASM220157v1 vertebrate_mammalian Neomonachus_schauinslandi
+./runBuild GCF_002201575.2 GCF_002201575.2_ASM220157v2 mammals Neomonachus_schauinslandi
 ./runBuild GCF_002204375.1 GCF_002204375.1_MunDraft-v1.0 vertebrate_mammalian Meriones_unguiculatus
 ./runBuild GCF_002204515.2 GCF_002204515.2_AaegL5.0 invertebrate Aedes_aegypti
 ./runBuild GCF_002207925.1 GCF_002207925.1_PAV_r1.0 plants Prunus_avium
@@ -1303,6 +1304,7 @@
 ./runBuild GCF_003573695.1 GCF_003573695.1_ASM357369v1 plants Papaver_somniferum
 ./runBuild GCF_003576645.1 GCF_003576645.1_ASM357664v1 plants Ipomoea_triloba
 ./runBuild GCF_003584765.1 GCF_003584765.1_ASM358476v1 vertebrate_mammalian Ursus_arctos
+./runBuild GCF_003584765.2 GCF_003584765.2_ASM358476v2 mammals Ursus_arctos_horribilis
 ./runBuild GCF_003589595.1 GCF_003589595.1_ASM358959v1 invertebrate Hyposmocoma_kahamanoa
 ./runBuild GCF_003590095.1 GCF_003590095.1_tn1 invertebrate Trichoplusia_ni
 ./runBuild GCF_003597395.1 GCF_003597395.1_ASM359739v1 vertebrate Chelonoidis_abingdonii
@@ -1624,10 +1626,12 @@
 ./runBuild GCF_015832195.1 GCF_015832195.1_Motacilla_alba_V1.0_pri birds Motacilla_alba_alba
 ./runBuild GCF_015852505.1 GCF_015852505.1_mTacAcu1.pri mammals Tachyglossus_aculeatus
 ./runBuild GCF_016077235.1 GCF_016077235.1_ASM1607723v1 fish Cyprinodon_tularosa
+./runBuild GCF_016077325.2 GCF_016077325.2_ASM1607732v2 mammals Equus_asinus
 ./runBuild GCF_016086655.2 GCF_016086655.2_UVic_Lsal_1.1 invertebrate Lepeophtheirus_salmonis
 ./runBuild GCF_016097555.1 GCF_016097555.1_Gae_host_genome invertebrate Gigantopelta_aegis
 ./runBuild GCF_016161935.1 GCF_016161935.1_ASM1616193v1 vertebrate Mauremys_reevesii
 ./runBuild GCF_016432855.1 GCF_016432855.1_SaNama_1.0 fish Salvelinus_namaycush
+./runBuild GCF_016433145.1 GCF_016433145.1_AgileGrace mammals Gracilinanus_agilis
 ./runBuild GCF_016509475.1 GCF_016509475.1_Fcat_Pben_1.1_paternal_pri mammals Prionailurus_bengalensis
 ./runBuild GCF_016545825.1 GCF_016545825.1_ASM1654582v1 plants Eucalyptus_grandis
 ./runBuild GCF_016545835.1 GCF_016545835.1_ASM1654583v1 vertebrate Crotalus_tigris
@@ -1695,6 +1699,8 @@
 ./runBuild GCF_018340385.1 GCF_018340385.1_ASM1834038v1 fish Cyprinus_carpio
 ./runBuild GCF_018340605.1 GCF_018340605.1_Asppvi_assembly01 fungi Aspergillus_pseudoviridinutans
 ./runBuild GCF_018345385.1 GCF_018345385.1_ASM1834538v1 mammals Vulpes_lagopus
+./runBuild GCF_018350155.1 GCF_018350155.1_O.geoffroyi_Oge1_pat1.0 mammals Leopardus_geoffroyi
+./runBuild GCF_018350175.1 GCF_018350175.1_F.catus_Fca126_mat1.0 mammals Felis_catus
 ./runBuild GCF_018350195.1 GCF_018350195.1_P.tigris_Pti1_mat1.1 mammals Panthera_tigris
 ./runBuild GCF_018350215.1 GCF_018350215.1_P.leo_Ple1_pat1.1 mammals Panthera_leo
 ./runBuild GCF_018398535.1 GCF_018398535.1_NCSU_Asbu1 fish Haplochromis_burtoni
@@ -1713,13 +1719,21 @@
 ./runBuild GCF_019059575.1 GCF_019059575.1_NRLGWU_Aamphi_draft invertebrate Amphibalanus_amphitrite
 ./runBuild GCF_019112545.1 GCF_019112545.1_Guyne1 fungi Guyanagaster_necrorhizus_MCA_3950
 ./runBuild GCF_019175285.1 GCF_019175285.1_SceUnd_v1.1 vertebrate Sceloporus_undulatus
+./runBuild GCF_019176455.1 GCF_019176455.1_IFAPA_SoseM_1 fish Solea_senegalensis	2021/07/09
 ./runBuild GCF_019207285.1 GCF_019207285.1_ASM1920728v1 fungi Ogataea_haglerorum
 ./runBuild GCF_019207475.1 GCF_019207475.1_ASM1920747v1 fungi Ogataea_angusta
 ./runBuild GCF_019232065.1 GCF_019232065.1_USGS_Curo_1.0 birds Centrocercus_urophasianus
 ./runBuild GCF_019238085.1 GCF_019238085.1_USGS_WTPT01 birds Lagopus_leucura
 ./runBuild GCF_019320065.1 GCF_019320065.1_ASM1932006v1 mammals Cervus_canadensis
+./runBuild GCF_019393635.1 GCF_019393635.1_mDroGli1.pri mammals Dromiciops_gliroides
 ./runBuild GCF_019457755.1 GCF_019457755.1_ASM1945775v1 invertebrate Venturia_canescens
+./runBuild GCF_019740435.1 GCF_019740435.1_SWU_Gaff_1.0 fish Gambusia_affinis	2021/08/25
+./runBuild GCF_019923935.1 GCF_019923935.1_NDDB_SH_1 mammals Bubalus_bubalis
+./runBuild GCF_020085105.1 GCF_020085105.1_ASM2008510v1 fish Siniperca_chuatsi	2021/09/24
+./runBuild GCF_020171115.1 GCF_020171115.1_ASM_NN_V1 mammals Neogale_vison
+./runBuild GCF_020615455.1 GCF_020615455.1_ASM2061545v1 fish Coregonus_clupeaformis	2021/11/04
 ./runBuild GCF_020740605.2 GCF_020740605.2_mLemCat1.pri primates Lemur_catta
+./runBuild GCF_020740685.1 GCF_020740685.1_mJacJac1.mat.Y.cur mammals Jaculus_jaculus
 ./runBuild GCF_900007375.1 GCF_900007375.1_ASM90000737v1 fungi Fusarium_venenatum
 ./runBuild GCF_900044065.1 GCF_900044065.1_Genome_assembly_version_1 fungi Fusarium_mangiferae
 ./runBuild GCF_900067095.1 GCF_900067095.1_F._proliferatum_ET1_version_1 fungi Fusarium_proliferatum_ET1
@@ -1800,4 +1814,6 @@
 ./runBuild GCF_905171765.1 GCF_905171765.1_aBufBuf1.1 vertebrate Bufo_bufo
 ./runBuild GCF_905171775.1 GCF_905171775.1_aRanTem1.1 vertebrate Rana_temporaria
 ./runBuild GCF_907166805.1 GCF_907166805.1_ALTATR162 fungi Alternaria_atra
+./runBuild GCF_910594005.1 GCF_910594005.1_mCerEla1.1 mammals Cervus_elaphus
 ./runBuild GCF_910596095.1 GCF_910596095.1_fThuMac1.1 fish Thunnus_maccoyii
+./runBuild GCF_914725855.1 GCF_914725855.1_fThuAlb1.1 fish Thunnus_albacares	2021/09/16
