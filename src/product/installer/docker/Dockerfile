@@ -2,8 +2,12 @@
 FROM phusion/baseimage:0.10.1
 MAINTAINER Maximilian Haeussler <max@soe.ucsc.edu>
 ADD http://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh /root/browserSetup.sh
-ADD mysql.service /etc/service/mysqld/run
-ADD apache.service /etc/service/apache/run
+
+# for debugging, it's usually best to uncomment these lines and comment out the next two lines
+#ADD mysql.service /etc/service/mysqld/run
+#ADD apache.service /etc/service/apache/run
+ADD https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/docker/apache.service /etc/service/apache/run
+ADD https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/docker/mysql.service /etc/service/mysqld/run
 
 # Upgrade the base image using the Ubuntu repos
 RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"

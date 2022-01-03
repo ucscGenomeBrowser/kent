@@ -1,5 +1,9 @@
 These are the docker files for the "docker build" comment.
 
-You need to download all three files to a directory, then run "docker build ." to build the container from them.
+You only need to download the Dockerfile to a new directory and build the docker image:
+
+    mkdir browserDocker && cd browserDocker
+    wget https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/docker/Dockerfile
+    docker build .
 
 The Apache server is running on port 80 then.
