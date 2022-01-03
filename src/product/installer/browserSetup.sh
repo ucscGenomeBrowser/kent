@@ -1484,6 +1484,7 @@ function installBrowser ()
     echo2 the parameters 'download "<assemblyName1> <assemblyName2> ..."', e.g. '"'bash $0 mirror mm10 hg19'"'
     echo2 
     showMyAddress
+    exit 0
 }
 
 # GENOME DOWNLOAD: mysql and /gbdb
