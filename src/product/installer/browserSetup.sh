@@ -6,11 +6,13 @@
 # you can easily debug this script with 'bash -x browserInstall.sh', it 
 # will show all commands then
 
+exec > >(tee -a "${HOME}/browserInstall.log") 2>&1
+
 set -u -e -o pipefail # fail on unset vars and all errors, also in pipes
 
 exitHandler() {
     if [ "$1" == "100" -o "$1" == "0" ] ; then
-       exit 1 # all fine, a specific error message has already been output
+       exit $1 # all fine, a specific error message has already been output
     fi
 
     # somehow this script exited with an unknown type of error code
@@ -1200,6 +1202,8 @@ else
     fi
        
     echo2 "Then run this script again."
+    echo2 'If this is a fresh docker image or blank VM, you can also remove Mariadb entirely, run "rm -rf /var/lib/mysql/*"'
+    echo2 "and rm -f ${HOME}/.my.cnf and then rerun this script. It will then reinstall Mariadb and define new passwords."
     exit 100
 fi
 }
@@ -1268,11 +1272,18 @@ function mysqlDbSetup ()
     #  Full access to all databases for the user 'browser'
     #       This would be for browser developers that need read/write access
     #       to all database tables.  
-    # $MYSQL -e "DROP USER IF EXISTS browser@localhost" # centos7 uses mysql 5.6 which doesn't have IF EXISTS so work around that here
-    # $MYSQL -e "DROP USER IF EXISTS readonly@localhost"
-    # $MYSQL -e "DROP USER IF EXISTS ctdbuser@localhost"
-    # $MYSQL -e "DROP USER IF EXISTS readwrite@localhost"
-    $MYSQL -e 'DELETE from mysql.user where User="browser" or User="readonly" or User="readwrite" or User="ctdbuser"'
+
+    mysqlVer=`mysql -e 'SHOW VARIABLES LIKE "version";' -NB | cut -f2 | cut -d- -f1 | cut -d. -f-2`
+    if [[ $mysqlVer == "5.6" ]] ; then
+       # centos7 uses mysql 5.6 which doesn't have IF EXISTS so work around that here
+       $MYSQL -e 'DELETE from mysql.user where user="browser" or user="readonly" or user="readwrite" or user="ctdbuser"'
+    else
+       $MYSQL -e "DROP USER IF EXISTS browser@localhost"
+       $MYSQL -e "DROP USER IF EXISTS readonly@localhost"
+       $MYSQL -e "DROP USER IF EXISTS ctdbuser@localhost"
+       $MYSQL -e "DROP USER IF EXISTS readwrite@localhost"
+    fi
+
     $MYSQL -e "FLUSH PRIVILEGES;"
 
     $MYSQL -e "CREATE USER browser@localhost IDENTIFIED BY 'genome'"
