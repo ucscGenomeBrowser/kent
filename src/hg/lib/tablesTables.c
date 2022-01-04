@@ -635,8 +635,11 @@ if (visibleFacetList)
 
 	    if (field != NULL && sameString(op, "merge"))
 		{
-		int selectedFieldCount = facetFieldCountSelected(field);
-		htmlPrintf(" %d", selectedFieldCount);
+		if (!field->allSelected)
+		    {
+		    int selectedFieldCount = facetFieldCountSelected(field);
+		    htmlPrintf(" %d", selectedFieldCount);
+		    }
 		}
 	    htmlPrintf("</a></span>");
 	    }
