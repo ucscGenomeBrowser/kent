@@ -366,7 +366,7 @@ html gnomad
         itemRgb on
         searchIndex name,geneName
         bigDataUrl /gbdb/hg19/gnomAD/missense/missenseByGene.bb
-        url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
+        url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
         urlLabel View this Gene on the gnomAD browser
         labelFields name,geneName
         filter._zscore 0
@@ -878,8 +878,8 @@ html gnomad
     parent gnomadSuper
     visibility squish
     dataVersion Release 2.1.1
-    labelFields name,rsId
-    defaultLabelFields name
+    labelFields _displayName,rsId
+    defaultLabelFields _displayName
     sepFields AC_afr
     filterValues.annot pLoF,missense,synonymous,other
     filterType.annot multiple
