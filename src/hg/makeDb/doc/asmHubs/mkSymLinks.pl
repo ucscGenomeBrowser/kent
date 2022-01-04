@@ -54,6 +54,10 @@ my $buildDone = 0;
 my $orderIndex = 0;
 foreach my $asmId (@orderList) {
   ++$orderIndex;
+  if ($asmId !~ m/^GC/) {
+    printf STDERR "# not an assembly hub: %s\n", $asmId;
+    next;
+  }
   my ($gcPrefix, $accession, undef) = split('_', $asmId);
   my $accessionId = sprintf("%s_%s", $gcPrefix, $accession);
   my $accessionDir = substr($asmId, 0 ,3);

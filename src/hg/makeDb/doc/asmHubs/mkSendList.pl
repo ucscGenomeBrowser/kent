@@ -16,10 +16,18 @@ while (my $line = <FH>) {
   my @a = split('\s+', $line);
   my @b = split('_', $a[0]);
   my $GCx = $b[0];
-  my $id0 = substr($b[1],0,3);
-  my $id1 = substr($b[1],3,3);
-  my $id2 = substr($b[1],6,3);
-  my $srcPath = sprintf("%s/%s/%s/%s/%s_%s", $GCx, $id0, $id1, $id2, $b[0], $b[1]);
+  my $d0 = "x";
+  my $d1 = "x";
+  my $d2 = "x";
+  my $srcPath = "x";
+  if (defined($b[1])) {
+    $d0 = substr($b[1],0,3);
+    $d1 = substr($b[1],3,3);
+    $d2 = substr($b[1],6,3);
+    $srcPath = sprintf("%s/%s/%s/%s/%s_%s", $GCx, $d0, $d1, $d2, $b[0], $b[1]);
+  } else {
+    $srcPath = sprintf("%s/%s/%s/%s/%s", $GCx, $d0, $d1, $d2, $b[0]);
+  }
   printf "%s\n", $srcPath;
 }
 close (FH);

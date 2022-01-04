@@ -57,13 +57,15 @@ GCF_001970005.1_Flounder_ref_guided_V1.0	Japanese flounder
 GCF_002234675.1_ASM223467v1	Japanese medaka
 GCF_902148845.1_fSalaFa1.1	jewelled blenny
 GCF_016432855.1_SaNama_1.0	lake trout
-GCF_018398675.1_ASM1839867v1	lake whitefish
+GCF_018398675.1_ASM1839867v1	lake whitefish (EN20210322 male 2021 Laval U)
+GCF_020615455.1_ASM2061545v1	lake whitefish (EN_2021a female 2021 Laval U)
 GCF_000972845.2_L_crocea_2.0	large yellow croaker
 GCF_014851395.1_ASM1485139v1	largemouth bass
 GCF_008729295.1_YSFRI_Pleo_2.0	leopard coralgrouper
 GCF_900963305.1_fEcheNa1.1	live sharksucker
 GCF_009769545.1_fCycLum1.pri	lumpfish
 GCF_000239395.1_NeoBri1.0	lyretail cichlid
+GCF_020085105.1_ASM2008510v1	mandarin fish
 GCF_001649575.2_ASM164957v2	mangrove rivulus
 GCF_000372685.2_Astyanax_mexicanus-2.0	Mexican tetra
 GCF_902362185.1_fChaCha1.1	milkfish
@@ -88,6 +90,7 @@ GCF_001682695.1_Pygocentrus_nattereri-1.0.2	red-bellied piranha
 GCF_014905685.2_NemWhi1	Rio pearlfish (Nwh7 v2 2021)
 GCF_901001165.1_fSalTru1.1	river trout
 GCF_001443285.1_P_latipinna-1.0	sailfin molly
+GCF_019176455.1_IFAPA_SoseM_1	Senegalese sole
 GCF_000732505.1_C_variegatus-1.0	sheepshead minnow
 GCF_001443325.1_P_mexicana-1.0	shortfin molly
 GCF_900634795.3_fBetSpl5.3	Siamese fighting fish (v3 2020)
@@ -110,11 +113,13 @@ GCF_000523025.1_Cse_v1.0	tongue sole
 GCF_901000725.2_fTakRub1.2	torafugu
 GCF_013347765.1_ASM1334776v1	turbot
 GCF_001465895.1_Nfu_20140520	turquoise killifish
+GCF_019740435.1_SWU_Gaff_1.0	western mosquitofish
 GCF_016077235.1_ASM1607723v1	White Sands pupfish
 GCF_004355925.1_GSC_Weel_1.0	wolf-eel
 GCF_003724035.1_ASM372403v1	yellow catfish
 GCF_004354835.1_PFLA_1.0	yellow perch
 GCF_904848185.1_fAcaLat1.1	yellowfin seabream
+GCF_914725855.1_fThuAlb1.1	yellowfin tuna
 GCF_002814215.1_Sedor1	yellowtail amberjack
 GCF_009762535.1_fNotCel1.pri	Zealand spotty
 GCF_000238955.4_M_zebra_UMD2a	zebra mbuna

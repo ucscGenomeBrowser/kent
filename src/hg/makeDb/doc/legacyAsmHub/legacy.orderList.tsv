@@ -17,6 +17,7 @@ GCF_902150015.1_genome_assembly_l500	barn owl (2020)
 GCF_016920785.1_Ixodes_scapularus_ComboLowHiFi	black-legged tick (U.Maryland v1 2021)
 GCA_001698545.1_ASM169854v1	black snub-nosed monkey genbank
 GCF_000235385.1_SaiBol1.0	Bolivian squirrel monkey (2011)
+GCF_003584765.1_ASM358476v1	brown bear (v1 2018)
 GCA_004024565.1_ZalCal_v1_BIUU	California sea lion (BS06 2019 Broad)
 GCA_004027935.1_ChrAsi_v1_BIUU	Cape golden mole (BS56 2019 Broad)
 GCA_000003205.6_Btau_5.0.1	cattle (Hereford 2015)
@@ -31,7 +32,8 @@ GCF_000709325.1_ASM70932v1	common cuckoo (BGI 2014)
 GCF_000365465.2_Ptep_2.0	common house spider (v2 2017)
 GCA_002940915.2_ASM294091v2	common vampire bat (DRU21DN04 2018 genbank)
 GCA_000956105.1_Pcoq_1.0	Coquerel's sifaka 6110/Marcella (2015 genbank)
-GCA_000364345.1_Macaca_fascicularis_5.0	crab-eating macaque genbank
+GCA_000364345.1_Macaca_fascicularis_5.0	crab-eating macaque WashU 2013 genbank
+GCF_000364345.1_Macaca_fascicularis_5.0	crab-eating macaque WashU 2013 refseq
 GCA_000260255.1_OctDeg1.0	degu (3935 2012 genbank)
 GCA_004027395.1_CanFam_VD_v1_BIUU	dog (BS72 2019 Broad)
 GCF_000215625.1_MusPutFur1.0	domestic ferret (Sable ID 1420 FGSC 2011)
@@ -54,6 +56,7 @@ GCF_000002595.1_v3.0	green algae C.reinhardtii CC-503 cw92 (v1 2007)
 GCA_000409795.2_Chlorocebus_sabeus_1.1	green monkey 1994-021 (2014 genbank)
 GCF_000344595.1_CheMyd_1.0	green sea turtle (BGI 2013)
 GCF_015237465.1_rCheMyd1.pri	green sea turtle (v1 2020)
+GCF_002201575.1_ASM220157v1	Hawaiian monk seal (2017 Johns Hopkins U)
 GCF_000738735.2_ASM73873v2	hooded crow (2017)
 GCA_000002305.1_EquCab2.0	horse (Twilight 2007 genbank)
 GCF_000001635.26_GRCm38.p6	house mouse
@@ -87,6 +90,7 @@ GCA_000258655.2_panpan1.1	pygmy chimpanzee (Ulindi genbank 2015)
 GCA_000003625.1_OryCun2.0	rabbit (Thorbecke 2009 Broad genbank)
 GCA_000772875.3_Mmul_8.0.1	Rhesus monkey (2015 Baylor)
 GCF_000695815.1_ASM69581v1	rifleman (BGI 2014)
+GCA_004024665.1_LemCat_v1_BIUU	ring-tailed lemur BS26 Broad 2019
 GCF_014905685.1_NemWhi1	Rio pearlfish (Nwh7 v1 2020)
 GCA_900094665.2_CAROLI_EIJ_v1.1	Ryukyu mouse (2017 EBI genbank)
 GCA_002288905.2_ASM228890v2	sea otter (GAN:26980312 2017 genbank)

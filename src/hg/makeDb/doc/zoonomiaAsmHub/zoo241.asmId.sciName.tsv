@@ -16,7 +16,7 @@ GCA_000978805.1_ASM97880v1	Balaenoptera_bonaerensis
 GCA_004027495.1_BeaHun_v1_BIUU	Beatragus_hunteri
 GCA_000754665.1_Bison_UMD1.0	Bison_bison
 GCA_000247795.2_Bos_indicus_1.0	Bos_indicus
-bosMut1	Bos_mutus
+GCF_000298355.1_BosGru_v2.0	Bos_mutus
 GCA_000003205.6_Btau_5.0.1	Bos_taurus
 GCA_000471725.1_UMD_CASPUR_WB_2.0	Bubalus_bubalis
 GCA_004027715.1_CalDon_v1_BIUU	Callicebus_donacophilus
@@ -25,14 +25,14 @@ GCA_000767855.1_Ca_bactrianus_MBC_1.0	Camelus_bactrianus
 GCA_000767585.1_PRJNA234474_Ca_dromedarius_V1.0	Camelus_dromedarius
 GCA_000311805.2_CB1	Camelus_ferus
 GCA_004027395.1_CanFam_VD_v1_BIUU	Canis_lupus
-GCA_000002285.2_CanFam3.1	Canis_lupus_familiaris
+GCF_000002285.3_CanFam3.1	Canis_lupus_familiaris
 GCA_000978405.1_CapAeg_1.0	Capra_aegagrus
 GCA_001704415.1_ARS1	Capra_hircus
 GCA_004027915.1_CapPil_v1_BIUU	Capromys_pilorides
 GCA_004027735.1_CarPer_v1_BIUU	Carollia_perspicillata
 GCA_004027675.1_CasCan_v1_BIUU	Castor_canadensis
 GCA_004024745.1_CatWag_v1_BIUU	Catagonus_wagneri
-cavApe1	Cavia_aperea
+GCA_000688575.1_CavAp1.0	Cavia_aperea
 GCA_000151735.1_Cavpor3.0	Cavia_porcellus
 GCA_004027695.1_CavTsc_v1_BIUU	Cavia_tschudii
 GCA_004027755.1_CebAlb_v1_BIUU	Cebus_albifrons
@@ -43,7 +43,7 @@ GCF_000955945.1_Caty_1.0	Cercocebus_atys
 GCA_004027615.1_CertNeg_v1_BIUU	Cercopithecus_neglectus
 GCA_004027955.1_ChaVel_v1_BIUU	Chaetophractus_vellerosus
 GCA_004024725.1_CheMed_v1_BIUU	Cheirogaleus_medius
-chiLan1	Chinchilla_lanigera
+GCF_000276665.1_ChiLan1.0	Chinchilla_lanigera
 GCA_000409795.2_Chlorocebus_sabeus_1.1	Chlorocebus_sabaeus
 GCA_004027855.1_ChoDid_v1_BIUU	Choloepus_didactylus
 GCA_000164785.2_C_hoffmanni-2.0.1	Choloepus_hoffmanni
@@ -70,7 +70,7 @@ GCF_000151885.1_Dord_2.0	Dipodomys_ordii
 GCA_004024685.1_DipSte_v1_BIUU	Dipodomys_stephensi
 GCA_004027295.1_DolPat_v1_BIUU	Dolichotis_patagonum
 GCA_000313985.1_EchTel2.0	Echinops_telfairi
-eidHel1	Eidolon_helvum
+GCA_000465285.1_ASM46528v1	Eidolon_helvum
 GCA_002443075.1_Milu1.0	Elaphurus_davidianus
 GCF_000299155.1_EleEdw1.0	Elephantulus_edwardii
 GCA_001685075.1_ASM168507v1	Ellobius_lutescens
@@ -101,7 +101,7 @@ GCA_004026845.1_HetBruBak_v1_BIUU	Heterohyrax_brucei
 GCA_004027065.1_HipAmp_v1_BIUU	Hippopotamus_amphibius
 GCA_001890085.1_ASM189008v1	Hipposideros_armiger
 GCA_004027415.1_HipGal_v1_BIUU	Hipposideros_galeritus
-GCA_000001405.27_GRCh38.p12	Homo_sapiens
+hg38	Homo_sapiens
 GCA_004023945.1_HyaHya_v1_BIUU	Hyaena_hyaena
 GCA_004027455.1_HydHyd_v1_BIUU	Hydrochoerus_hydrochaeris
 GCA_004026905.1_HysCri_v1_BIUU	Hystrix_cristata
@@ -164,7 +164,7 @@ nomLeu3	Nomascus_leucogenys
 GCA_004027815.1_NycCou_v1_BIUU	Nycticebus_coucang
 GCA_000292845.1_OchPri3.0	Ochotona_princeps
 GCA_000260255.1_OctDeg1.0	Octodon_degus
-odoRosDiv1	Odobenus_rosmarus
+GCF_000321225.1_Oros_1.0	Odobenus_rosmarus
 GCA_002102435.1_Ovir.te_1.0	Odocoileus_virginianus
 GCA_001660835.1_ASM166083v1	Okapia_johnstoni
 GCA_004026605.1_OndZib_v1_BIUU	Ondatra_zibethicus
@@ -195,9 +195,9 @@ GCA_002880775.3_Susie_PABv2	Pongo_abelii
 GCA_004026925.1_ProCapCap_v1_BIUU	Procavia_capensis
 GCA_000956105.1_Pcoq_1.0	Propithecus_coquereli
 GCA_002215935.1_ASM221593v1	Psammomys_obesus
-ptePar1	Pteronotus_parnellii
+GCA_000465405.1_ASM46540v1	Pteronotus_parnellii
 GCA_004024605.1_PteBra_v1_BIUU	Pteronura_brasiliensis
-pteAle1	Pteropus_alecto
+GCF_000325575.1_ASM32557v1	Pteropus_alecto
 GCF_000151845.1_Pvam_2.0	Pteropus_vampyrus
 GCA_003327715.1_PumCon1.0	Puma_concolor
 GCA_004024825.1_PygNem_v1_BIUU	Pygathrix_nemaeus
