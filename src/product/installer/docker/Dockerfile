@@ -1,5 +1,5 @@
 # UCSC Genome Browser Website Dockerfile
-FROM phusion/baseimage:0.10.1
+FROM phusion/baseimage:focal-1.0.0
 MAINTAINER Maximilian Haeussler <max@soe.ucsc.edu>
 ADD http://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh /root/browserSetup.sh
 

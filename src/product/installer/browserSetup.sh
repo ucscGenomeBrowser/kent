@@ -522,6 +522,7 @@ function setMYCNF ()
     	echo Could not find my.cnf. Adapt 'setMYCNF()' in browserSetup.sh and/or contact us.
     	exit 1
     fi
+    echo Found Mariadb config file: $MYCNF
 }
 
 function mysqlAllowOldPasswords
@@ -1250,7 +1251,6 @@ function mysqlDbSetup ()
     # -------------------
     # Mysql db setup
     # -------------------
-    mysqlAllowOldPasswords
 
     echo2
     echo2 Creating Mysql databases customTrash, hgTemp and hgcentral
@@ -1368,6 +1368,8 @@ function installBrowser ()
     # mysql user password be changed
 
     # ---- END OS-SPECIFIC part -----
+
+    mysqlAllowOldPasswords
 
     if [[ "${SET_MYSQL_ROOT}" == "1" ]]; then
        mysqlChangeRootPwd
