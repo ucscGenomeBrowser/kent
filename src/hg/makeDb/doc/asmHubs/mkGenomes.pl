@@ -116,6 +116,7 @@ my $buildDone = 0;
 my $orderKey = 0;
 foreach my $asmId (@orderList) {
   ++$orderKey;
+  next if ($asmId !~ m/^GC/);
   my ($gcPrefix, $accession, undef) = split('_', $asmId);
   my $accessionId = sprintf("%s_%s", $gcPrefix, $accession);
   my $accessionDir = substr($asmId, 0 ,3);

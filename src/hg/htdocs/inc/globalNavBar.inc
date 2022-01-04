@@ -110,6 +110,7 @@
 	<li class="even"><a href="../conditions.html">Conditions of Use</a></li>
 	<li class="odd"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
 	<li class="even last"><a href="../license/">Licenses</a></li>
+        <li><a href="../contacts.html">Contact Us</a></li>
 </ul>
 </li>
 

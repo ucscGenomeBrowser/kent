@@ -55,7 +55,7 @@ Below is a list of examples that might be used to query the Genome Browser. Note
 query listed here will produce a result in every assembly. The list serves only to illustrate the 
 different types of queries that can be performed.  
 <table border="1"> 
-  <tr><th width="200">Query</th><th>Genome Browser Response</th></tr> 
+  <tr><th width="200">Query</th><th width="250">Genome Browser Response</th></tr> 
   <tr>
     <td>chr7</td>
     <td>Displays all of chromosome 7</td></tr> 
@@ -132,8 +132,8 @@ different types of queries that can be performed.
     ENSP00000005178.5:p.Val20Gly<br>
     chrX:g.31500000_31600000del<br> NR_111987:n.-1 <br> NM_015102.5:n.3038-2<br>
     NM_001372044:c.1528_1530del</td>
-    <td>Displays the region containing <a href="http://varnomen.hgvs.org/" target="_blank">HGVS</a> 
-    term</td></tr> 
+    <td>Displays the region that matches the <a href="http://varnomen.hgvs.org/" target="_blank">HGVS</a> 
+        expression, usually in the format <tt>&lt;transcript or protein&gt;:&lt;position&gt; &lt;amino acid or nucleotide change&gt;</tt><br>If a gene symbol is used, HGVS search will try all RefSeq transcripts to find the nucleotide or amino acid at the position indicated in the expression. If there are multiple matches, a disambiguation page will be shown. If the RefSeq sequence differs from the genome sequence, then currently the search will use the genome, not the transcript, for codon counting and amino acid / nucleotide  comparison. Please contact us if this is inconvenient.</td></tr> 
 <!-- commented out -- not working 
   <tr> 
     <td>15q11;15q13</td>
@@ -143,6 +143,32 @@ different types of queries that can be performed.
     <td>rs1042522;rs1800370</td> 
     <td>such as between uniquely determined ESTs, mRNAs, refSeqs, etc.</td></tr> 
 --> 
+  <tr>
+    <td>essv8694097</td>
+    <td>Displays the region covering the copy number variant with the accession essv8694097 in the
+        Database of Genomic Variants (DGV)</td></tr>
+  <tr>
+    <td>nssv3446126</td>
+    <td>Displays the region covering the copy number variant with the accession nssv3446126 in the cases of developmental delay</td></tr>
+  <tr>
+    <td>CTD-3071L10</td>
+    <td>Displays the region covering the CTD-3071L10 NCBI clone end mapping in the NCBI Clone DB database</td></tr>
+  <tr>
+    <td>nssv16167444</td>
+    <td>Displays the region covering the common copy number genomic variant with the accession nssv16167444 in the 
+        nstd186 (NCBI Curated Common Structural Variants) dataset</td></tr>
+  <tr>
+    <td>COSM6161404</td>
+    <td>Displays the region covering COSM6161404 in the Catalogue Of Somatic Mutations In Cancer (COSMIC) database</td></tr>
+  <tr>
+    <td>nssv3395351</td>
+    <td>Displays the region covering ClinVar Copy Number Variant with the accession nssv3395351 in the ClinVar database</td></tr>
+  <tr>
+    <td>BRCT_assoc</td>
+    <td>Displays the region covering the manually-curated Pfam-A domain BRCT_assoc found in GENCODE Genes</td></tr>
+  <tr>
+    <td>U133A:219211_at</td>
+    <td>Displays the region containing the consensus and exemplar sequences used for the selection of probes on the Affymetrix HG-U133A chips</td></tr>
   <tr>
     <td>chr1 0 1000</td>
     <td>When entered without ":" and "-", uses 0-based, half-open coordinates (like custom tracks and internal table coordinates), so displays chr1:1-1000</td>
