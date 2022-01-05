@@ -394,6 +394,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "arn.ugr.es");
     hashStoreName(domainWhiteList, "bic2.ibi.upenn.edu");
     hashStoreName(domainWhiteList, "bioinfo2.ugr.es");
+    hashStoreName(domainWhiteList, "bioinfo5.ugr.es");
     hashStoreName(domainWhiteList, "bioshare.genomecenter.ucdavis.edu");
     hashStoreName(domainWhiteList, "biowebport.com");
     hashStoreName(domainWhiteList, "bx.bio.jhu.edu");
@@ -427,15 +428,18 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "genap.ca");
     hashStoreName(domainWhiteList, "genemo.ucsd.edu");
     hashStoreName(domainWhiteList, "genome-tracks.ngs.omrf.in");
+    hashStoreName(domainWhiteList, "genomics.virus.kyoto-u.ac.jp");
     hashStoreName(domainWhiteList, "genomicsdata.cs.ucl.ac.uk");
     hashStoreName(domainWhiteList, "gsmplot.deqiangsun.org");
     hashStoreName(domainWhiteList, "hgdownload--soe--ucsc--edu.ibrowse.co");
+    hashStoreName(domainWhiteList, "herv.img.cas.cz");
     hashStoreName(domainWhiteList, "hci-bio-app.hci.utah.edu");
     hashStoreName(domainWhiteList, "hkgateway.med.umich.edu");
     hashStoreName(domainWhiteList, "hsb.upf.edu");
     hashStoreName(domainWhiteList, "icbi.at");
     hashStoreName(domainWhiteList, "lichtlab.cancer.ufl.edu");
     hashStoreName(domainWhiteList, "manticore.niehs.nih.gov");
+    hashStoreName(domainWhiteList, "metamorf.hb.univ-amu.fr");
     hashStoreName(domainWhiteList, "microb215.med.upenn.edu");
     hashStoreName(domainWhiteList, "mitranscriptome.path.med.umich.edu");
     hashStoreName(domainWhiteList, "nextgen.izkf.rwth-aachen.de");
@@ -448,6 +452,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "redirect.medsch.ucla.edu");
     hashStoreName(domainWhiteList, "rnaseqhub.brain.mpg.de");
     hashStoreName(domainWhiteList, "schatzlabucscdata.yalespace.org.s3.amazonaws.com");
+    hashStoreName(domainWhiteList, "sharing.biotec.tu-dresden.de");
     hashStoreName(domainWhiteList, "silo.bioinf.uni-leipzig.de");
     hashStoreName(domainWhiteList, "snpinfo.niehs.nih.gov");
     hashStoreName(domainWhiteList, "spades.cgi.bch.uconn.edu");
@@ -462,6 +467,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "www.ogic.ca");
     hashStoreName(domainWhiteList, "www.v93rc2.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "xinglabtrackhub.research.chop.edu");
+    hashStoreName(domainWhiteList, "ydna-warehouse.org");
     hashStoreName(domainWhiteList, "zlab-trackhub.umassmed.edu");
     hashStoreName(domainWhiteList, "zlab.umassmed.edu");
     }
