@@ -1083,6 +1083,7 @@
 ./runBuild GCF_001654025.1 GCF_001654025.1_ASM165402v1 invertebrate Drosophila_arizonae
 ./runBuild GCF_001654055.1 GCF_001654055.1_ASM165405v1 plants Hevea_brasiliensis
 ./runBuild GCF_001659605.1 GCF_001659605.1_Manihot_esculenta_v6 plants Manihot_esculenta
+./runBuild GCF_001659605.2 GCF_001659605.2_M.esculenta_v8 plants Manihot_esculenta
 ./runBuild GCF_001660625.1 GCF_001660625.1_IpCoco_1.2 vertebrate_other Ictalurus_punctatus
 ./runBuild GCF_001661235.1 GCF_001661235.1_Picme2 fungi Pichia_membranifaciens_NRRL_Y-2026
 ./runBuild GCF_001661255.1 GCF_001661255.1_Wican1 fungi Wickerhamomyces_anomalus_NRRL_Y-366-8
@@ -1190,6 +1191,7 @@
 ./runBuild GCF_002532875.1 GCF_002532875.1_vjacob_1.0 invertebrate Varroa_jacobsoni
 ./runBuild GCF_002571385.1 GCF_002571385.1_Stylophora_pistillata_v1 invertebrate Stylophora_pistillata
 ./runBuild GCF_002575655.1 GCF_002575655.1_Aet_v4.0 plants Aegilops_tauschii_subsp._strangulata
+./runBuild GCF_002575655.2 GCF_002575655.2_Aet_v5.0 plants Aegilops_tauschii_subsp._strangulata
 ./runBuild GCF_002706865.1 GCF_002706865.1_ASM270686v1 invertebrate Spodoptera_litura
 ./runBuild GCF_002708625.1 GCF_002708625.1_Rhimi1_1 fungi Rhizopus_microsporus_ATCC_52813
 ./runBuild GCF_002738345.1 GCF_002738345.1_Cmax_1.0 plants Cucurbita_maxima
@@ -1504,6 +1506,7 @@
 ./runBuild GCF_011064685.1 GCF_011064685.1_ZJU_Sfru_1.0 invertebrate Spodoptera_frugiperda
 ./runBuild GCF_011074865.1 GCF_011074865.1_ASM1107486v2 fungi Brettanomyces_nanus
 ./runBuild GCF_011074885.1 GCF_011074885.1_ASM1107488v2 fungi Brettanomyces_bruxellensis
+./runBuild GCF_011075055.1 GCF_011075055.1_CATAS_Mindica_2.1 plants Mangifera_indica
 ./runBuild GCF_011075155.1 GCF_011075155.1_ASM1107515v1 fungi Colletotrichum_scovillei
 ./runBuild GCF_011077185.1 GCF_011077185.1_BPBGC_Ojam_1.0 birds Oxyura_jamaicensis
 ./runBuild GCF_011100635.1 GCF_011100635.1_mTriVul1.pri mammals Trichosurus_vulpecula
@@ -1712,6 +1715,7 @@
 ./runBuild GCF_018153835.1 GCF_018153835.1_ASM1815383v1 invertebrate Drosophila_eugracilis
 ./runBuild GCF_018153845.1 GCF_018153845.1_ASM1815384v1 invertebrate Drosophila_bipectinata
 ./runBuild GCF_018167655.1 GCF_018167655.1_Mior012 mammals Microtus_oregoni
+./runBuild GCF_018294505.1 GCF_018294505.1_IWGSC_CS_RefSeq_v2.1 plants Triticum_aestivum
 ./runBuild GCF_018296145.1 GCF_018296145.1_Otsh_v2.0 fish Oncorhynchus_tshawytscha
 ./runBuild GCF_018320785.1 GCF_018320785.1_ASM1832078v1 fish Cheilinus_undulatus
 ./runBuild GCF_018340385.1 GCF_018340385.1_ASM1834038v1 fish Cyprinus_carpio
@@ -1729,6 +1733,7 @@
 ./runBuild GCF_018687715.1 GCF_018687715.1_C.illinoinensisPawnee_v1 plants Carya_illinoinensis
 ./runBuild GCF_018691265.1 GCF_018691265.1_T.alba_DEE_v4.0 birds Tyto_alba
 ./runBuild GCF_018831695.1 GCF_018831695.1_ASM1883169v1 fish Puntigrus_tetrazona
+./runBuild GCF_018873765.1 GCF_018873765.1_Tspe_v1 plants Telopea_speciosissima
 ./runBuild GCF_018924745.1 GCF_018924745.1_UU_Maror_2 fungi Marasmius_oreades
 ./runBuild GCF_018977255.1 GCF_018977255.1_IMCB_Cmil_1.0 vertebrate Callorhinchus_milii
 ./runBuild GCF_018991925.1 GCF_018991925.1_GMGI_Hamer_2.0 invertebrate Homarus_americanus
@@ -1834,6 +1839,7 @@
 ./runBuild GCF_903995425.1 GCF_903995425.1_mOncTor1.1 mammals Onychomys_torridus
 ./runBuild GCF_904425465.1 GCF_904425465.1_Colossoma_macropomum fish Colossoma_macropomum
 ./runBuild GCF_904848185.1 GCF_904848185.1_fAcaLat1.1 fish Acanthopagrus_latus
+./runBuild GCF_904849725.1 GCF_904849725.1_MorexV3_pseudomolecules_assembly plants Hordeum_vulgare_subsp._vulgare
 ./runBuild GCF_905115235.1 GCF_905115235.1_iHerIll2.2.curated.20191125 invertebrate Hermetia_illucens
 ./runBuild GCF_905116875.1 GCF_905116875.1_Haplomerged_assembly invertebrate Plutella_xylostella
 ./runBuild GCF_905147365.1 GCF_905147365.1_ilAriAges1.1 invertebrate Aricia_agestis
