@@ -442,6 +442,7 @@
 ./runBuild GCA_907165235.1 GCA_907165235.1_ilZeuPyri1.1 invertebrates Zeuzera_pyrina
 ./runBuild GCA_907165245.1 GCA_907165245.1_ilHabPyri1.1 invertebrates Habrosyne_pyritoides
 ./runBuild GCA_907165275.1 GCA_907165275.1_ilZygFili1.1 invertebrates Zygaena_filipendulae
+./runBuild GCA_907166925.1 GCA_907166925.1_wheat_cv_fielder_v1_assembly plants Triticum_aestivum
 ./runBuild GCA_907269065.1 GCA_907269065.1_ilCroElin1.1 invertebrates Crocallis_elinguaria
 ./runBuild GCA_907269075.1 GCA_907269075.1_ilIdaAver1.1 invertebrates Idaea_aversata
 ./runBuild GCA_907269095.1 GCA_907269095.1_ilBlaAdus2.1 invertebrates Blastobasis_adustella
