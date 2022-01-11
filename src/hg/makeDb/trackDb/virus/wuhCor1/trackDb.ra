@@ -187,6 +187,16 @@ type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/bbi/articV4.bb
 noScoreFilter on
 
+track articV4_1
+shortLabel ARTIC Primers V4.1
+longLabel ARTIC V4.1 Oxford Nanopore sequencing primers
+visibility hide
+group map
+priority 5
+type bigBed 6 +
+bigDataUrl /gbdb/wuhCor1/bbi/articV4.1.bb
+noScoreFilter on
+
 track rapid
 shortLabel RAPID/Midnight Primers
 longLabel RAPID/Midnight 1200bp amplicon Oxford Nanopore sequencing primers

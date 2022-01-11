@@ -43,6 +43,10 @@ done >> $maskFile
 echo -e "N28271N\t$deltaNode" >> $maskFile
 set -x
 
+# S:95 (21846) is also very unreliably detected in Delta.  Mask it off to avoid tree trouble,
+# like split AY.100.
+echo -e "N21846N\t$deltaNode" >> $maskFile
+
 time $matUtils mask -i $treeInPb \
     -m $maskFile \
     -o $treeOutPb
