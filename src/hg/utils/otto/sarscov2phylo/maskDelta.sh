@@ -32,7 +32,7 @@ deltaNode=$(grep IND/GBRC714b/2021 $samplePaths | awk '{print $NF;}' | sed -re '
 
 # Delta has deletions at S:157-158 (22029-22034), ORF8:119-120 (28248-28253) and 28271.
 # Mask those locations and some adjacent bases where we get a ton of spurious "mutations".
-maskFile=$(basename $treeInPb .pb).maskForDelta.tsv
+maskFile=$(basename $treeInPb .pb).branchSpecificMask.tsv
 set +x
 for ((i=22027;  $i <= 22034;  i++)); do
     echo -e "N${i}N\t$deltaNode"
@@ -47,6 +47,32 @@ set -x
 # like split AY.100.
 echo -e "N21846N\t$deltaNode" >> $maskFile
 
+# These three sites are recommended for caution in the Problematic Sites set, and seem to have
+# create a false lineage (AY.89) from samples that probably should be AY.4.  AY.89 is being
+# withdrawn (https://github.com/cov-lineages/pango-designation/issues/398); mask sites in Delta.
+echo -e "N21302N\t$deltaNode" >> $maskFile
+echo -e "N21304N\t$deltaNode" >> $maskFile
+echo -e "N21305N\t$deltaNode" >> $maskFile
+
+# OK, not just Delta -- Alpha, Beta, and Gamma have a deletion that causes spurious "mutations",
+# especially at 11296 and 11291, somewhat also at 11288.
+# Omicron has ~ the same deletion but it aligns 5 bases to the left, probably because it was
+# combined with an SNV (https://github.com/cov-lineages/pango-designation/issues/361).
+alphaNode=$(grep Italy/TAA-1900553896/2021 $samplePaths \
+            | awk '{print $(NF-1);}' | sed -re 's/:.*//;')
+betaNode=$(grep SouthAfrica/CERI-KRISP-K012031/2021 $samplePaths \
+           | awk '{print $NF;}' | sed -re 's/:.*//;')
+gammaNode=$(grep France/PAC-IHU-5193-N1/2021 $samplePaths | awk '{print $NF;}' | sed -re 's/:.*//;')
+set +x
+for node in $alphaNode $betaNode $gammaNode; do
+    for ((i=11288;  $i <= 11296;  i++)); do
+        echo -e "N${i}N\t$node"
+    done
+done >> $maskFile
+set -x
+
 time $matUtils mask -i $treeInPb \
     -m $maskFile \
     -o $treeOutPb
+
+rm $samplePaths
