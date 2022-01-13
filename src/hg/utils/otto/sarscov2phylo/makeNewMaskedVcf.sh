@@ -173,7 +173,7 @@ egrep $'\t''[A-Z][A-Z][0-9]{6}\.[0-9]+' $epiToPublic \
     >> prevGbAcc
 set -o pipefail
 xzcat $ncbiDir/genbank.fa.xz \
-| faSomeRecords -exclude stdin prevGbAcc newGenBank.fa
+| faSomeRecords -exclude stdin <(cat prevGbAcc ../tooManyEpps.ids ../badBranchSeed.ids) newGenBank.fa
 faSize -veryDetailed newGenBank.fa \
 | tawk '$4 < '$minReal' {print $1;}' \
     > gbTooSmall
@@ -191,7 +191,8 @@ comm -23 <(fastaNames $cogUkDir/cog_all.fasta.xz | sort) \
     > cogFaNotMeta
 # Also exclude COG-UK sequences that have been added to GenBank (cogUkInGenBank, see above).
 xzcat $cogUkDir/cog_all.fasta.xz \
-| faSomeRecords -exclude stdin <(cat prevCogUk cogFaNotMeta cogUkInGenBank) newCogUk.fa
+| faSomeRecords -exclude stdin \
+    <(cat prevCogUk cogFaNotMeta cogUkInGenBank ../tooManyEpps.ids ../badBranchSeed.ids) newCogUk.fa
 faSize -veryDetailed newCogUk.fa \
 | tawk '$4 < '$minReal' {print $1;}' \
     > cogUkTooSmall
@@ -201,7 +202,7 @@ faSize newCogUk.filtered.fa
 # Get new GISAID sequences with at least $minReal non-N bases.
 xzcat $gisaidDir/gisaid_fullNames_$today.fa.xz \
 | sed -re 's/^>.*\|(EPI_ISL_[0-9]+)\|.*/>\1/' \
-| faSomeRecords -exclude stdin prevGisaid newGisaid.fa
+| faSomeRecords -exclude stdin <(cat prevGisaid ../tooManyEpps.ids ../badBranchSeed.ids) newGisaid.fa
 faSize -veryDetailed newGisaid.fa \
 | tawk '$4 < '$minReal' {print $1;}' \
     > gisaidTooSmall
