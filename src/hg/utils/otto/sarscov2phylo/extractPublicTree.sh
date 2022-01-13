@@ -36,7 +36,7 @@ $matUtils extract -i gisaidAndPublic.$today.masked.pb \
 $matUtils extract -i public-$today.all.masked.preTrim.pb \
     --max-parsimony 20 \
     --max-branch-length 45 \
-    --max-path-length 100 \
+    --max-path-length 150 \
     -O -o public-$today.all.masked.pb
 
 # Add nextclade annotations to protobuf (completely specified by nextstrain.clade-mutations.tsv)
