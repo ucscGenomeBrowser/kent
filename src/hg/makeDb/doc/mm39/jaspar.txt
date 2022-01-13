@@ -20,3 +20,12 @@ mv JASPAR2022_mm39.bb JASPAR2022.bb
 ls -lh
 ls -lh /gbdb/mm39/jaspar
 
+########################################
+
+# JASPER 2022 file update 1/3/21
+cd /hive/data/genomes/mm39/bed/jaspar
+wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2022/JASPAR2022_mm39.bb
+rm JASPAR2022.bb
+mv JASPAR2022_mm39.bb JASPAR2022.bb
+ls -lh
+ls -lh /gbdb/mm39/jaspar
