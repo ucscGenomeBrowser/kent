@@ -18466,9 +18466,18 @@ ln -s /hive/data/genomes/mm10/bed/jaspar/JASPAR2020.bb .
 
 # JASPAR$ 2022 bigBed update 12/7/21
 cd /hive/data/genomes/mm10/bed/jaspar
-wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2020/JASPAR2020_mm10.bb
+wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2022/JASPAR2022_mm10.bb
 rm JASPAR2022.bb
 mv JASPAR2022_mm10.bb JASPAR2022.bb
 ls -lh
 ls -lh /gbdb/mm10/jaspar
 
+###############################################################################
+
+# JASPAR$ 2022 bigBed update 1/3/22
+cd /hive/data/genomes/mm10/bed/jaspar
+wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2022/JASPAR2022_mm10.bb
+rm JASPAR2022.bb
+mv JASPAR2022_mm10.bb JASPAR2022.bb
+ls -lh
+ls -lh /gbdb/mm10/jaspar
