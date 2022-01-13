@@ -49,12 +49,50 @@ then
         fi
         echo $grc
         # the process script creates a haplo.bed and triplo.bed file:
-        hgsql -Ne "select phenotypeId, description from omimPhenotype" ${db} > ${db}.omimPhenotypes
-        ../../../processClinGenDosage.py ClinGen_region_curation_list_${grc}.tsv ClinGen_gene_curation_list_${grc}.tsv ${db}.omimPhenotypes ../output/${db}
+        ../../../processClinGenDosage.py ClinGen_region_curation_list_${grc}.tsv ClinGen_gene_curation_list_${grc}.tsv ../output/${db}
         sort -k1,1 -k2,2n ../output/${db}.haplo.bed > ../output/${db}.clinGenHaplo.bed
         sort -k1,1 -k2,2n ../output/${db}.triplo.bed > ../output/${db}.clinGenTriplo.bed
-        bedToBigBed -type=bed9+16 -as=../../clinGenDosageHaplo.as -tab ../output/${db}.clinGenHaplo.bed /hive/data/genomes/${db}/chrom.sizes ../output/${db}.clinGenHaplo.bb
-        bedToBigBed -type=bed9+16 -as=../../clinGenDosageTriplo.as -tab ../output/${db}.clinGenTriplo.bed /hive/data/genomes/${db}/chrom.sizes ../output/${db}.clinGenTriplo.bb
+
+        # validate new release by diffing against old release:
+        bigBedToBed ${WORKDIR}/release/${db}/clinGenHaplo.bb ${db}.old.haplo.bed
+        bigBedToBed ${WORKDIR}/release/${db}/clinGenTriplo.bb ${db}.old.triplo.bed
+        oldHaploLc=$(wc -l ${db}.old.haplo.bed | cut -d' ' -f1)
+        newHaploLc=$(wc -l ../output/${db}.clinGenHaplo.bed | cut -d' ' -f1)
+        # diff returns 1 when it finds a difference, which causes the script to silently exit. Add the
+        # '|| true' to prevent that behavior since we want the number of diffs
+        diffCountHaplo=$( (diff ${db}.old.haplo.bed ../output/${db}.clinGenHaplo.bed --speed-large-files || true) | grep -c '^[\>\<]')
+        diffPerc=$(echo $oldHaploLc $newHaploLc | awk '{diff=(($2-$1)/$1); printf "%0.2f", diff}')
+        shouldError=$(echo $diffPerc | awk '{if ($1 > 0.1 || $1 < -0.1) {print 0} else {print 1}}')
+        if [[ $shouldError -eq 0 ]]; then
+            printf "validate on %s ClinGen Haplo failed: old count: %d, new count: %d, difference: %0.2f\n" $db $oldHaploLc $newHaploLc $diffPerc
+            exit 1
+        fi
+        diffPerc=$(echo $newHaploLc $diffCountHaplo | awk '{diff=$2/$1; printf "%0.2f", diff}')
+        shouldError=$(echo $diffPerc | awk '{if ($1 > 0.1 || $1 < -0.1) {print 0} else {print 1}}')
+        if [[ $shouldError -eq 0 ]]; then
+            printf "validate on %s ClinGen Haplo failed with too many differences to old version: %d lines changed, new count: %d, difference: %0.2f\n" $db $diffCountHaplo $newHaploLc $diffPerc
+            exit 1
+        fi
+        oldTriploLc=$(wc -l ${db}.old.triplo.bed | cut -d' ' -f1)
+        newTriploLc=$(wc -l ../output/${db}.clinGenTriplo.bed | cut -d' ' -f1)
+        # diff returns 1 when it finds a difference, which causes the script to silently exit. Add the
+        # '|| true' to prevent that behavior since we want the number of diffs
+        diffCountTriplo=$( (diff ${db}.old.triplo.bed ../output/${db}.clinGenTriplo.bed --speed-large-files || true) | grep -c '^[\>\<]')
+        diffPerc=$(echo $oldTriploLc $newTriploLc | awk '{diff=(($2-$1)/$1); printf "%0.2f", diff}')
+        shouldError=$(echo $diffPerc | awk '{if ($1 > 0.1 || $1 < -0.1) {print 0} else {print 1}}')
+        if [[ $shouldError -eq 0 ]]; then
+            printf "validate on %s ClinGen Triplo failed: old count: %d, new count: %d, difference: %0.2f\n" $db $oldTriploLc $newTriploLc $diffPerc
+            exit 1
+        fi
+        diffPerc=$(echo $newTriploLc $diffCountTriplo | awk '{diff=$2/$1; printf "%0.2f", diff}')
+        shouldError=$(echo $diffPerc | awk '{if ($1 > 0.1 || $1 < -0.1) {print 0} else {print 1}}')
+        if [[ $shouldError -eq 0 ]]; then
+            printf "validate on %s ClinGen Triplo failed with too many differences to old version: %d lines changed, new count: %d, difference: %0.2f\n" $db $diffCountTriplo $newTriploLc $diffPerc
+            exit 1
+        fi
+
+        bedToBigBed -type=bed9+17 -as=../../clinGenDosageHaplo.as -tab ../output/${db}.clinGenHaplo.bed /hive/data/genomes/${db}/chrom.sizes ../output/${db}.clinGenHaplo.bb
+        bedToBigBed -type=bed9+17 -as=../../clinGenDosageTriplo.as -tab ../output/${db}.clinGenTriplo.bed /hive/data/genomes/${db}/chrom.sizes ../output/${db}.clinGenTriplo.bb
         cp ../output/${db}.clinGenHaplo.bb ${WORKDIR}/release/${db}/clinGenHaplo.bb
         cp ../output/${db}.clinGenTriplo.bb ${WORKDIR}/release/${db}/clinGenTriplo.bb
     done

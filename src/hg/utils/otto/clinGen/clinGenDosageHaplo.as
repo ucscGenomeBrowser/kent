@@ -1,5 +1,5 @@
 table clinGenCnv
-"Dosage Sensitivity scores from Clinical Genome Resource bed9+16"
+"Dosage Sensitivity scores from Clinical Genome Resource"
     (
     string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"
@@ -15,8 +15,8 @@ table clinGenCnv
     string geneId;     "Gene ID or ISCA ID"
     string cytoBand;   "Cytoband"
     string dateLastEvaluated; "Last evaluation date"
-    string omimID; "OMIM Phenotype ID"
-    string omimDesc; "OMIM Phenotype Description"
+    string _omimID; "OMIM Phenotype ID - Deprecated"
+    string _omimDesc; "OMIM Phenotype Description - Deprecated"
     string haploScore; "Haploinsufficiency score"
     string haploDescription; "Haploinsufficiency phenotype description"
     string PMID1; "Associated PubMed ID 1"
@@ -26,4 +26,5 @@ table clinGenCnv
     string PMID5; "Associated PubMed ID 5"
     string PMID6; "Associated PubMed ID 6"
     lstring _mouseOver; "Mouseover string for the genome browser display"
+    string mondoID; "Mondo disease ontology ID"
     )
