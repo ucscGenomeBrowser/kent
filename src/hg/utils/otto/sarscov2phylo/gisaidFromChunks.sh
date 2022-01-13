@@ -33,21 +33,21 @@ time xzcat chunks/gisaid_epi_isl_*.fa.xz \
 # Make tmp files with a fullName key and various columns that we'll join together.
 fastaNames gisaid_fullNames_$today.fa.xz \
 | awk -F\| -vOFS="\t" '{print $0, $1, $2, $3;}' \
-| sort \
+| sort -u \
     > tmp.first3
 # Sequence length
-faSize -detailed  <(xzcat gisaid_fullNames_$today.fa.xz) | sort > tmp.lengths
+faSize -detailed  <(xzcat gisaid_fullNames_$today.fa.xz) | sort -u > tmp.lengths
 # Lineage & clade assignments
-sort chunks/pangolin.tsv \
+sort -u chunks/pangolin.tsv \
     > tmp.lineage
-sort chunks/nextclade.tsv \
+sort -u chunks/nextclade.tsv \
     > tmp.clade
 # Countries -- go back to unstripped sequence names:
 xzcat chunks/gisaid_epi_isl_*.fa.xz \
 | grep ^\> \
 | sed -re 's@^>hCo[Vv]-19/+@@;' \
 | $scriptDir/gisaidNameToCountry.pl \
-| sort \
+| sort -u \
     > tmp.country
 
 # Join locally computed fields and sort by EPI ID for joining with latest real nextmeta
@@ -56,7 +56,7 @@ join -t$'\t' -a 1 tmp.first3 tmp.lengths \
 | join -t$'\t' -a 1 -o 1.1,1.2,1.3,1.4,1.5,1.6,2.2 - tmp.lineage \
 | join -t$'\t' -a 1 -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,2.2 - tmp.country \
 | tawk '{print $3, $2, $4, $5, $6, $7, $8;}' \
-| sort \
+| sort -u \
     > tmp.epiToLocalMeta
 # Join with latest real nextmeta and put locally computed fields in nextmeta column positions.
 # Last real nextmeta has 27 columns.  These are the columns we can fill in:
