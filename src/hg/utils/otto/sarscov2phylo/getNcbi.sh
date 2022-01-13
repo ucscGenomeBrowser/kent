@@ -84,7 +84,7 @@ if [ -e ../ncbi.latest/nextclade.tsv ]; then
     faSplit about nextclade.fa 30000000 $splitDir/chunk
 else
     cp /dev/null nextclade.tsv
-    faSplit about <(xzcat genbank.fa.xz) 30000000 $splitDir/chunk
+    faSplit about <(xzcat genbank.fa.xz) 300000000 $splitDir/chunk
 fi
 if (( $(ls -1 splitForNextclade | wc -l) > 0 )); then
     nDataDir=~angie/github/nextclade/data/sars-cov-2
