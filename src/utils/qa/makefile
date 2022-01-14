@@ -11,7 +11,6 @@ install:
 	cp -p --remove-destination alertBqueue.csh         ${SCRIPTS}
 	cp -p --remove-destination allowTraffic.csh        ${SCRIPTS}
 	cp -p --remove-destination assemblyStatsCron.py    ${SCRIPTS}
-	cp -p --remove-destination assemblyStatsCronSaveStats.py ${SCRIPTS}
 	cp -p --remove-destination backupCentral.csh       ${SCRIPTS}
 	cp -p --remove-destination bamToBedGraph.csh       ${SCRIPTS}
 	cp -p --remove-destination bamToBigWig.csh         ${SCRIPTS}
