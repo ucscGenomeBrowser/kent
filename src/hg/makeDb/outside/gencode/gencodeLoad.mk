@@ -35,8 +35,8 @@ mach = $(shell uname -m)
 preRelease = no
 #preRelease = yes
 #db = hg38
-#db = hg19
-db = mm39
+db = hg19
+#db = mm39
 #db = mm10
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
