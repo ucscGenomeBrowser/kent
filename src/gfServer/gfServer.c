@@ -237,7 +237,7 @@ logDebug("gf->isPep: %d", gf->isPep);
 logDebug("gf->allowOneMismatch: %d", gf->allowOneMismatch);
 logDebug("gf->noSimpRepMask: %d", gf->noSimpRepMask);
 logDebug("gf->segSize: %d", gf->segSize);
-logDebug("gf->totalSeqSize: %d", gf->totalSeqSize);
+logDebug("gf->totalSeqSize: " GFOFFSET_FMT, gf->totalSeqSize);
 }
 
 void logGenoFindIndex(struct genoFindIndex *gfIdx)
