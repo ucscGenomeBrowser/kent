@@ -1,7 +1,7 @@
 /* hic track controls */
 
 /* Copyright (C) 2019 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "cheapcgi.h"
 #include "cart.h"
@@ -9,7 +9,7 @@
 #include "web.h"
 #include "trackDb.h"
 #include "hicUi.h"
-#include "Cstraw.h"
+#include "cStraw.h"
 #include "regexHelper.h"
 #include "obscure.h"
 #include "htmshell.h"

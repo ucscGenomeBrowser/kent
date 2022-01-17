@@ -255,6 +255,15 @@ if apt-cache policy curl | grep "Installed: .none." > /dev/null; then
 fi
 
 echo
+
+# Feb 2021: cgi-bin and htdocs are now too big for the root partition. Moving both to the data partition:
+if [ ! -L /usr/local/apache/htdocs ] ; then
+ rsync -avp /usr/local/apache/htdocs/ /data/htdocs/ && rm -rf /usr/local/apache/htdocs && ln -s /data/htdocs /usr/local/apache/htdocs 
+fi
+if [ ! -L /usr/local/apache/cgi-bin ] ; then
+ rsync -avp /usr/local/apache/cgi-bin/ /data/cgi-bin/ && rm -rf /usr/local/apache/cgi-bin && ln -s  /data/cgi-bin /usr/local/apache/cgi-bin
+fi
+
 echo - Updating the genome browser software via rsync:
 
 # CGI-BIN and HTDOCS:
@@ -305,14 +314,15 @@ if [ "$1" == "hgwdev" ] ; then
 
 # normal public updates from hgdownload are easier, not many excludes necessary
 else
+
     # update CGIs
     echo - Updating CGIs...
-    rsync --delete -u $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/apache/cgi-bin/ --exclude=hg.conf --exclude=hg.conf.local --exclude edw* --exclude *private --exclude hgNearData --exclude visiGeneData --exclude Neandertal 
+    rsync --delete -u $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /data/cgi-bin/ --exclude=hg.conf --exclude=hg.conf.local --exclude edw* --exclude *private --exclude hgNearData --exclude visiGeneData --exclude Neandertal 
 
     echo - Updating HTML files...
     # not using -u because we had a case with a 0-byte html page that was 
     # not updated anymore in #18337
-    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bam --exclude *.bb --exclude */*.bw --exclude */*.gz --exclude favicon.ico --exclude folders --exclude ancestors --exclude admin --exclude goldenPath/customTracks --exclude images/mammalPsg --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png --exclude goldenPath/**.pdf --exclude training
+    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /data/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bam --exclude *.bb --exclude */*.bw --exclude */*.gz --exclude favicon.ico --exclude folders --exclude ancestors --exclude admin --exclude goldenPath/customTracks --exclude images/mammalPsg --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png --exclude goldenPath/**.pdf --exclude training
 
     PUSHLOC=hgdownload.soe.ucsc.edu::gbib/push/
 fi
@@ -348,6 +358,18 @@ touch /data/mysql/hgFixed/gtexTissue.{MYI,MYD,frm}
 
 # -- END JUNE 2017
 
+# add gtex v8 data, which is now a default track, #27854:
+touch /data/mysql/hg38/gtexGeneModelV8.{MYI,MYD,frm}
+touch /data/mysql/hg38/gtexGeneV8.{MYI,MYD,frm}
+touch /data/mysql/hgFixed/gtexTissueV8.{MYI,MYD,frm}
+
+# Feb 2021, knownCds is required for knownGene display
+for db in hg38 mm10; do
+    if [ -e "/data/mysql/$db" ] ; then
+       touch /data/mysql/$db/knownCds.{MYI,MYD,frm}
+    fi
+done
+
 if [ "$1" != "hgwdev" ] ; then
   echo - Updating GBDB files...
   rsync $RSYNCOPTS --existing rsync://hgdownload.soe.ucsc.edu/gbdb/ /data/gbdb/
@@ -356,7 +378,8 @@ fi
 
 echo - Pulling other files
 # make sure we never overwrite the hg.conf.local file
-rsync $RSYNCOPTS $PUSHLOC / --exclude=hg.conf.local
+# Feb 2021: requires -K now since /usr/local/apache/{cgi-bin,htdocs} are symlinks
+rsync -ltrvhK --exclude=hg.conf.local $PUSHLOC / 
 
 # July 2016: add the cram fetcher to root's crontab 
 # this has to be done after the PUSHLOC directory has been copied over
@@ -408,7 +431,7 @@ if [ "$1" != "hgwdev" ] ; then
   echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.soe.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
   
   echo updating hgcentral database, make sure to always overwrite
-  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz --existing rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
+  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/ --exclude hubSearch* --exclude tableDescriptions* --exclude hubSearchText* --exclude gbNode* --exclude geoIp* ; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
   # update blat servers
   mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu") WHERE host not like "%ucsc.edu"'
   # the box does not officially support the HAL right now, remove the ecoli hubs

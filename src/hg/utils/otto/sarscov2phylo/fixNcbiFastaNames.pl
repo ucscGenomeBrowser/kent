@@ -18,14 +18,18 @@ sub makeName($$$$) {
   if ($host) {
     push @components, $host;
   }
-  if ($country) {
-    push @components, $country;
-  }
-  if ($isolate) {
+  if ($isolate =~ m@^[A-Za-z]+/.*/\d+$@) {
     push @components, $isolate;
-  }
-  if ($year) {
-    push @components, $year;
+  } else {
+    if ($country) {
+      push @components, $country;
+    }
+    if ($isolate) {
+      push @components, $isolate;
+    }
+    if ($year) {
+      push @components, $year;
+    }
   }
   return join('/', @components);
 }
@@ -103,14 +107,14 @@ while (<>) {
       print ">$acc |$name\n";
     } else {
       print STDERR "No metadata for $acc\n";
-      s/ /\|/;
+      s/ / \|/;
       print;
     }
   } elsif (/^[A-Z]+$/) {
     print;
   } else {
     if (/^>/) {
-      s/ /\|/;
+      s/ / \|/;
     } else {
       warn "Passing through weird line:\n$_";
     }

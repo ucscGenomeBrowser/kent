@@ -1,0 +1,32 @@
+<!--#if expr='"$SERVER_NAME" == /.*.ucsc.edu/ || "$SERVER_NAME" == /.*.sdsc.edu/ || "$SERVER_NAME" == /browser/'-->
+<div id="helpdesk_widget"></div>
+<script type="text/javascript" src="https://redmine.soe.ucsc.edu/helpdesk_widget/widget.js"></script>
+<script>
+  RedmineHelpdeskWidget.config({
+    color: '#426f9e',
+    translation: {
+      subjectLabel: 'Subject',
+      descriptionLabel: 'Questions or comments?',
+      nameLabel: 'Please enter your name here',
+      emailLabel: 'Please put your email here',
+      createButtonLabel: 'Send',
+      createSuccessDescription: 'Thank you for your feedback.',
+      createErrorLabel: 'We have encountered an error, please try again or email us directly at genome-www@soe.ucsc.edu',
+      createSuccessLabel: 'We have received your input, and will get back to you soon.'
+    },
+    identify: {
+      nameValue: 'GenomeBrowser',
+      emailValue: 'genome-www@soe.ucsc.edu',
+      trackerValue: 'MLQ',
+      projectValue: 'Mail Lists',
+      customFieldValues: {
+        'MLQ Category - primary': 'Widget',
+        'MLQ Category - secondary': 'Widget',
+        'MLM': 'QA Team'
+      }
+    },
+    attachment: true,
+    title: '<br>We welcome questions and feedback from our users. For general questions you may also find our <a href="/FAQ/" target="_blank">FAQs</a> helpful.'
+  });
+</script>
+<!--#endif -->

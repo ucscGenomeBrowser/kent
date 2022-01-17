@@ -3,7 +3,7 @@
  * the RAM representation of objects. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -420,11 +420,7 @@ if (wordCount > 11)
     i = item->blockCount-1;
     if ((item->chromStart + item->chromStarts[i] + item->blockSizes[i]) !=
         item->chromEnd)
-        {
-        lineFileAbort(lf,
-            "BED blocks must span chromStart to chromEnd.  (chromStart + "
-            "chromStarts[last] + blockSizes[last]) must equal chromEnd.");
-        }
+	lineFileAbort(lf, BAD_BLOCKS);
     }
     /* these 2 should not be null (maybe empty string), but always last 2 */
     item->id = cloneString(row[size-2]);

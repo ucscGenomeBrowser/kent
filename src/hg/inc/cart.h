@@ -3,7 +3,7 @@
  * that are carted around).  */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef CART_H
 #define CART_H
@@ -20,6 +20,9 @@ struct cart;         // forward definition for use in trackDb.h
 // If If cgi created new and oldVars are stored, then will be CART_VAR_EMPTY in old vars
 #define CART_VAR_EMPTY "[]"
 #define IS_CART_VAR_EMPTY(var) ((var) == NULL || sameString(var,CART_VAR_EMPTY))
+
+// A list of headers each CGI can use to control their own HTTP headers
+extern struct slPair *httpHeaders;
 
 typedef struct sqlConnection *(*DbConnector)();
 /* funtion type used to get a connection to database */
@@ -657,5 +660,18 @@ void cartTdbFetchMinMaxPixels(struct cart *theCart, struct trackDb *tdb,
  *      Initial height and limits may be defined in trackDb with the maxHeightPixels string,
  *      Or user requested limits are defined in the cart. */
 
+unsigned cartGetVersion(struct cart *cart);
+/* Get the current version of the cart, which is stored in the variable "cartVersion" */
+
+void cartSetVersion(struct cart *cart, unsigned version);
+/* Set the current version of the cart, which is stored in the variable "cartVersion" */
+
+void cartRewrite(struct cart *cart, unsigned trackDbCartVersion, unsigned cartVersion);
+/* Rewrite the cart to update it to expectations of trackDb. */
+
+void cartTurnOnSuper(struct cart *cart, char **trackNames, unsigned numTracks, char *superTrackName);
+/* Turn on a supertrack if any of the subtracks are not hidden.  ASSUMES ALL TRACKS ARE HIDDEN
+ * by default.
+ */
 #endif /* CART_H */
 

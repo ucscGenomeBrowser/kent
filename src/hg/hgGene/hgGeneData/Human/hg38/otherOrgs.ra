@@ -1,5 +1,5 @@
 name mouse
-db mm10
+db mm39
 geneUrl ../cgi-bin/hgGene?org=Mouse&hgg_gene=%s&hgg_chrom=none
 sorterUrl ../cgi-bin/hgNear?org=Mouse&near_search=%s
 

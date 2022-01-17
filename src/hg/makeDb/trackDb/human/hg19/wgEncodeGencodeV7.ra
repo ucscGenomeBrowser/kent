@@ -25,7 +25,6 @@ sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred 
 configurable off
-wgEncode 1
 wgEncodeGencodeVersion 7
 wgEncodeGencodeAttrs wgEncodeGencodeAttrsV7
 wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV7
@@ -142,13 +141,6 @@ searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.29801
 
-searchName wgEncodeGencodeBasicGeneSymV7
-searchTable wgEncodeGencodeBasicV7
-searchMethod exact
-searchType genePred
-searchPriority 2.29802
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
-
 searchName wgEncodeGencodeBasicGeneV7
 searchTable wgEncodeGencodeBasicV7
 searchMethod prefix
@@ -184,13 +176,6 @@ searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.29806
 
-searchName wgEncodeGencodeCompGeneSymV7
-searchTable wgEncodeGencodeCompV7
-searchMethod exact
-searchType genePred
-searchPriority 2.29807
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
-
 searchName wgEncodeGencodeCompGeneV7
 searchTable wgEncodeGencodeCompV7
 searchMethod prefix
@@ -225,5 +210,4 @@ searchMethod exact
 searchType genePred
 termRegex PGOHUM[0-9.]+
 searchPriority 2.29811
-
 

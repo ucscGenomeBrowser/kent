@@ -30,7 +30,7 @@ do
     onlyOld=`join -t '\001' -v 1 $i.out $f.out | wc -l`
     onlyNew=`join -t '\001' -v 2 $i.out $f.out | wc -l`
     echo $i $newCount "-" $onlyNew "=" $common "=" $oldCount "-" $onlyOld  
-#    rm $i.out $f.out
+    rm $i.out $f.out
 done > newISCA.stats
 
 cat newISCA.stats | awk -v db=$db -v tooMuch=$tooMuch ' 

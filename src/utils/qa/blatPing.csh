@@ -10,36 +10,30 @@ if ( "$HOST" != "hgwdev" ) then
     exit 1
 endif
 
-hgsql -h $sqlrr hgcentral -B -N -e "SELECT db, host, port FROM blatServers \
+hgsql -h $sqlrr hgcentral -B -N -e "SELECT db, host, port FROM blatServers WHERE dynamic = 0 \
   ORDER BY db, host, port" > blatList$$
 
-#Need to do it in two steps so list is not too long giving word too long error.
-set list = (`head -100 blatList$$`)
-set list2 = (`tail --lines=+101 blatList$$`)
+set list = (`cat blatList$$`)
 
 # next line just for testing:
 #set list = (xx1 blat13 17779 xx2 blat14 17779 xx3 blat12 17779)
 set problems = ()
 while ( "$list" != "" )
-    while ( "$list" != "" )
-	set db = $list[1]
-	shift list
-	set host = $list[1]
-	shift list
-	set port = $list[1]
-	shift list
-	#-- use to remove monotonous long running blat failures:
-	#if ("$db" != "rn2") then
-	 gfServer status $host $port > /dev/null
-	 set err = $status
-	 if ( $err ) then
-	    echo "error $err on ${db} ${host}:${port}"
-	    set problems = ($problems "${db} ${host}:${port}\n")
-	 endif
-	#endif
-    end
-    set list = ( $list2 )
-    set list2 = ()
+    set db = $list[1]
+    shift list
+    set host = $list[1]
+    shift list
+    set port = $list[1]
+    shift list
+    #-- use to remove monotonous long running blat failures:
+    #if ("$db" != "rn2") then
+    gfServer status $host $port > /dev/null
+    set err = $status
+    if ( $err ) then
+	echo "error $err on ${db} ${host}:${port}"
+	set problems = ($problems "${db} ${host}:${port}\n")
+    endif
+    #endif
 end
 if ( "$problems" != "") then
     echo "Summary:"

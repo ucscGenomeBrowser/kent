@@ -1,53 +1,58 @@
 % Manual installation of the UCSC Genome Browser on a Unix server
 
+[comment]: <> (QA: When you are done editing this file, cd into mirrorDocs, run 'make' there and follow the instructions)
+
 # Overview of the Genome Browser directories and databases
 
-The genome browser requires only Apache and MySQL and uses these directories:
+The genome browser requires only Apache and MariaDB and uses these directories:
 
 - static html files: we typically keep them under /usr/local/apache/htdocs and
   configure Apache to load them from there, to avoid conflicts with the 
-  Linux distribution's default location /var/www/html
-- MySQL databases: most of them are read-only, except the `hgcentral` database
-  which is read-write. Most linux distributions keep these under /var/lib/mysql
+  distribution of the Linux default location /var/www/html
+- MariaDB databases: most of them are read-only, except the `hgcentral` database
+  which is read-write. Most linux distributions keep these under /var/lib/mysql.
+  (It is possible to get the genome browser to work with MySQL after version 8,
+  but we do highly discourage it, as our download procedures use MyISAM .frm
+  files which MySQL 8 dropped.)
 - static genome data files in /gbdb/
-- binary CGI programs that generate images from the MySQL and /gbdb files and
+- binary CGI programs that generate images from the MariaDB and /gbdb files and
   write them into the `trash` directory (see below). We modify our Apache
   config to load CGIs from /usr/local/apache/cgi-bin, so as to not conflict
   with the default directory of the Linux distribution
 - a directory for temp files called `trash`, located in the parent directory of the
   CGI programs, usually /usr/local/apache/trash
 - a small text file hg.conf in the same directory as the CGI programs, with
-  information on how to connect to MySQL, the location of the other directories
+  information on how to connect to MariaDB, the location of the other directories
   and various other settings, on our machines the location of this file is
   /usr/local/apache/cgi-bin/hg.conf
-- uploaded custom data gets written by the CGI programs into MySQL databases in
+- uploaded custom data gets written by the CGI programs into MariaDB databases in
   the database `customtrash` and also into files under /usr/local/apache/trash
   which is symlinked from /usr/local/apache/htdocs/trash so these files are
   accessible to Apache.
 
 When a web browser requests a Genome Browser page, typically /cgi-bin/hgTracks,
 Apache executes this CGI program. The programs then read information about how to 
-connect to MySQL using the file hg.conf, connects to MySQL, reads the
-installed genome assemblies and the current user session from the MySQL database
-hgcentral. For each genome assembly, there is a separate MySQL database (e.g. 
+connect to MariaDB using the file hg.conf, connects to MariaDB, reads the
+installed genome assemblies and the current user session from the MariaDB database
+hgcentral. For each genome assembly, there is a separate MariaDB database (e.g. 
 hg38). Some types of data (e.g. raw genome sequences) are kept as indexed
-binary files outside of MySQL, they are located in /gbdb, e.g. /gbdb/hg38. The
+binary files outside of MariaDB, they are located in /gbdb, e.g. /gbdb/hg38. The
 location of the /gbdb directory can be changed with a setting in hg.conf. Some
-types of data are not specific for a genome, these are kept in the MySQL
+types of data are not specific for a genome, these are kept in the MariaDB
 databases hgFixed, proteome and visiGene.
 
 We strongly recommend to follow the default locations, and to place our CGI
-programs in `/usr/local/apache/cgi-bin`.  The htdocs root directory for html
-files should then be in /usr/local/apache/htdocs.  All Genome Browser
+programs in `/usr/local/apache/cgi-bin`. The htdocs root directory for html
+files should then be in /usr/local/apache/htdocs. All Genome Browser
 components called from Apache get their settings from the central configuration
-file `/usr/local/apache/cgi-bin/hg.conf`.  Among others, the location and the
-username/password for the MySQL server is specified there.
+file `/usr/local/apache/cgi-bin/hg.conf`. Among others, the location and the
+username/password for the MariaDB server is specified there.
 
 To load data into the genome browser databases, you need a command line tool
-like hgLoadBed.  These tools are distributed separately from the CGI programs.
-Some tools create only MySQL tables, others write into a /gbdb subdirectory.
+like hgLoadBed. These tools are distributed separately from the CGI programs.
+Some tools create only MariaDB tables, others write into a /gbdb subdirectory.
 Most of them require a configuration file ~/.hg.conf in your home directory
-with the MySQL connection information, like server name, username and password.
+with the MariaDB connection information, like server name, username and password.
 The data loading is done from the Unix command line and not dependent on the
 CGI programs that create the Genome Browser graphics.
 
@@ -57,7 +62,9 @@ To run our provided binaries:
 
 * Linux/Ubuntu/CentOS/Unix/MacOSX operating system
 * Apache2.x - http web server - <http://httpd.apache.org/>
-* MySQL development system and libraries - <http://dev.mysql.com/>
+* MariaDB development system and libraries - <http://mariadb.com/>
+  (MySQL 8 removed support for MyISAM schema files, which makes downloading
+   our data file very cumbersome and slow)
 * libpng runtime and development packages - <http://www.libpng.org/>
 * libssl runtime and development packages - <http://www.openssl.org/>
 * Universally Unique Identifier library - <http://e2fsprogs.sourceforge.net/>
@@ -79,15 +86,20 @@ Optional:
 It is best to install these packages with your standard operating
 system package management tools:
 
-* Debian/Ubuntu: `apt-get install ghostscript apache2 mysql-server gmt r-base uuid-dev python-mysqldb`
+* Debian/Ubuntu: `apt-get install ghostscript apache2 mariadb-server gmt r-base uuid-dev python-mysqldb`
 * Redhat/Fedora/CentOS: `yum install libpng12 httpd ghostscript GMT hdf5 R libuuid-devel MySQL-python`
+
+On newer distributions, python-mysqldb / MySQL-python is not available anymore.
+In this case, install python2, pip for it and then use pip to install the mysql
+library ("pip2 install MySQL-python"). See the file
+installer/browserSetup.sh for the commands.
 
 # Hardware and disk space requirements
 
 We currently use the following hardware to support our website:
 
 * 24 CPUs and 128Gb of memory for each of the six machines
-* 16 CPUs, 64 Gb of memory for the mySQL server
+* 16 CPUs, 64 Gb of memory for the MariaDB server
 
 The UCSC Genome Browser website experiences over one million hits per
 day. Your hardware requirements may be much less demanding and will
@@ -115,7 +127,7 @@ After running that command, you should see output like this:
     Number of files: 54886
     total size is 6515.70G  speedup is 5181080.38 (DRY RUN)
 
-The next command will give you the size of the entire mySQL database,
+The next command will give you the size of the entire mySQL/MariaDB database,
 but can be changed to get the size for a particular assembly:
   
     rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/mysql/ | egrep "Number of files:|total size is"
@@ -124,13 +136,15 @@ but can be changed to get the size for a particular assembly:
 
 Note: we offer Genome-Browser-in-a-Box (GBIB), a fully configured virtual
 machine image that can be converted for VirtualBox, VMWare, Hyper-V and other
-popular environments.  We also offer Genome-Browser-in-the-Cloud (GBIC) an
+popular environments. We also offer Genome-Browser-in-the-Cloud (GBIC) an
 shell script that installs a genome browser in most main Linux distributions
 (Most Debian and Redhat-based ones, like Ubuntu and CentOS). 
-See https://hgwdev-max.gi.ucsc.edu/goldenPath/help/mirror.html
+See <https://genome.ucsc.edu/goldenPath/help/mirror.html>
 
 Scripts to perform all of the functions below can be found in
-the directory here: src/products/scripts/
+the directory <https://github.com/ucscGenomeBrowser/kent/tree/master/src/product/scripts>.
+In a git clone of the kent repository, the scripts
+are located in src/product/scripts.
 
 Confirm the following:
 
@@ -148,26 +162,26 @@ Confirm the following:
  
     You can test your Apache cgi-bin/ directory by copying the script src/product/scripts/printEnv.pl into it.
 
-2. MySQL database is installed and working
+2. MariaDB database is installed and working
 
        mysql -u browser -pgenome -e 'show tables;' mysql
 
-    MySQL can be run from the command line, and
-    the tables from the database mysql can be displayed.
+    MariaDB can be run from the command line, and
+    the tables from the database MariaDB can be displayed.
 
-    MySQL development package is installed (mysql-devel on RedHat)
+    MariaDB development package is installed (mariadb-devel on RedHat)
     The directory: /usr/include/mysql/ has the mysql .h files
     And the library: /usr/lib/mysql/libmysqlclient.a exists
     (your exact pathnames may vary depending upon your installation)
 
-    Set MySQL database access permissions.  The examples mentioned
-    in the README.mysql.setup instructions will allow this
+    Set MySQL/MariaDB database access permissions. The examples mentioned
+    in the "Mysql setup" section will allow this
     setup to function as described here.
 
     To setup the example user accounts as mentioned in these
     instructions, run the script:
 
-	ex.MySQLUserPerms.sh
+        ex.MySQLUserPerms.sh
 
 3.  Find the location of your Apache WEB server DocumentRoot and cgi-bin directory.
     Typical locations are:  /var/www and /usr/local/apache, /var/www/html, /var/www/cgi-bin
@@ -181,24 +195,25 @@ Confirm the following:
     since referrals in html are often: "../cgi-bin"
     
     The browser should function even if WEBROOT is in a different
-    directory from the primary Apache web root.  In this case,
+    directory from the primary Apache web root. In this case,
     the three directories: html cgi-bin and trash should be
-    at the same level in this other WEBROOT.  For example:
+    at the same level in this other WEBROOT. For example:
 
-            /some/other/directory/path/html/
-            /some/other/directory/path/cgi-bin/
-            /some/other/directory/path/trash/
+        /some/other/directory/path/html/
+        /some/other/directory/path/cgi-bin/
+        /some/other/directory/path/trash/
 
     Symlinks to the trash directory should exist from the html
-    directory.  As so:
+    directory. As so:
 
-            /some/other/directory/path/html/trash -> ../trash
+        /some/other/directory/path/html/trash -> ../trash
 
-    The actual trash directory can be somewhere else.  If it is
+    The actual trash directory can be somewhere else. If it is
     not in your Apache /var/www/trash/ directory, then create
-    that symlink as well as the html/trash symlink.  For example
-    /var/www/trash -> /some/other/directory/trash
-    /var/www/html/trash -> /some/other/directory/trash
+    that symlink as well as the html/trash symlink. For example:
+
+        /var/www/trash -> /some/other/directory/trash
+        /var/www/html/trash -> /some/other/directory/trash
 
 4.  Create html, cgi-bin and trash directories:
 
@@ -208,7 +223,7 @@ Confirm the following:
 
     (this chmod 755 will prevent suexec failures that are indicated
         by "Premature end of script headers" errors in the Apache
-        error_log.  Your cgi binaries should also be 755 permissions.)
+        error_log. Your cgi binaries should also be 755 permissions.)
     
         mkdir ${WEBROOT}/trash
         chmod 777 ${WEBROOT}/trash
@@ -219,7 +234,9 @@ Confirm the following:
     that directory.
     
     A cron job should be set to periodically clean the files in trash.
-    See also, the two scripts here: src/product/scripts/trashCleanMonitor.csh
+    See also, the two scripts here:
+
+            src/product/scripts/trashCleanMonitor.csh
             src/product/scripts/trashCleaner.csh
 
 5.  Download static WEB page content:
@@ -227,24 +244,25 @@ Confirm the following:
 
 6.  Copy CGI binaries: This set of binaries are for x86_64 types of Linux machines.
     If you need to instead build binaries for your platform,
-    follow the instructions in: README.building.source
+    follow the instructions in the section "Building the kent source tree", below.
+
     See also: src/product/scripts/kentSrcUpdate.sh
 
         rsync -avP rsync://hgdownload.soe.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/
 
-7.  Create hgcentral database and tables.  This is the primary gateway
+7.  Create hgcentral database and tables. This is the primary gateway
     database that allows the browser to find specific organism
-    databases.  See also: scripts/fetchHgCentral.sh to fetch
+    databases. See also: scripts/fetchHgCentral.sh to fetch
     a current copy of hgcentral.sql
     
         mysql -u browser -pgenome -e "create database hgcentral;"
         mysql -u browser -pgenome hgcentral < hgcentral.sql
     
     Please note, it is possible to create alternative hgcentral
-    databases.  For example, for test purposes.  In this
+    databases. For example, for test purposes. In this
     case use a unique name for the hgcentral database, such
     as "hgcentraltest", and it can be specified in the hg.conf
-    file as mentioned in the next step.  To create a second copy
+    file as mentioned in the next step. To create a second copy
     of the hgcentral database:
     
         mysql -u browser -pgenome -e "create database hgcentraltest;"
@@ -261,86 +279,89 @@ Confirm the following:
         cp ex.hg.conf ${WEBROOT}/cgi-bin/hg.conf
 
     Please edit this hg.conf file and set any parameters required
-    for your installation.  Use the comments in that file as your guide.
+    for your installation. Use the comments in that file as your guide.
 
     Browser developers will want a copy of this file in
     their home directory with mode 600 and named: ~/.hg.conf
 
     These copies may have different db.user specification
     to allow developers write access to the database.
-    See also: README.mysql.setup
 
-10.  Load databases of interest.  See also: README.QuickStart
+9.  Load databases of interest. See also: 
 
-    src/product/scripts/activeDbList.sh
-    src/product/scripts/minimal.db.list.txt
-    src/product/scripts/loadDb.sh
+         src/product/scripts/activeDbList.sh
+         src/product/scripts/minimal.db.list.txt
+         src/product/scripts/loadDb.sh
 
-    And discussion in scripts/README about whether you can use directly
-    the MySQL binary database files, or if you need to download goldenPath
-    database text dumps and load them into the database.
-    
-    An alternative to loading the database tables from text files,
-    is to directly rsync the MySQL tables themselves and place them
-    in your MySQL /var/ directory.  These tables are much larger
-    than the text files due to the sizes of indexes created during a
-    table load, but it can save a lot of time since the data loading
-    step is quite compute intensive.  A typical rsync command for an
-    entire database (e.g. ce4) would be something like:
+     And discussion in scripts/README about whether you can use directly
+     the MariaDB binary database files, or if you need to download goldenPath
+     database text dumps and load them into the database. If you use MariaDB,
+     you can use the binary files, with MySQL >= 8 you need to use dumps,
+     which is why we discourage the use of MySQL >= 8 with the Genome Browser.
+     
+     An alternative to loading the database tables from text files,
+     is to directly rsync the MariaDB tables themselves and place them
+     in your MariaDB /var/ directory. These tables are much larger
+     than the text files due to the sizes of indexes created during a
+     table load, but it can save a lot of time since the data loading
+     step is quite compute intensive. A typical rsync command for an
+     entire database (e.g. ce4) would be something like:
 
-        rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/
+         rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/
 
-11.  Download extra databases to work with a full genome assembly
+10.  Download extra databases to work with a full genome assembly
     such as human/hg38: hgFixed go140213 proteins140122 sp140122
-    Construct symlinks in your MySQL data directory to use database
+    Construct symlinks in your MariaDB data directory to use database
     names: go proteome uniProt for these database directories:
 
-        $ ls -og proteome go uniProt
-        lrwxrwxrwx 1  8 Feb 26 11:39 go -> go140213
-        lrwxrwxrwx 1 14 Mar 27 12:01 proteome -> proteins140122
-        lrwxrwxrwx 1  8 Mar 27 12:01 uniProt -> sp140122
-
-        $ ls -ld go140213 proteins140122 sp140122
-        drwx------ 2 mysql mysql 4096 Feb 26 10:57 go140213
-        drwx------ 2 mysql mysql 4096 Aug 19 08:08 proteins140122
-        drwx------ 2 mysql mysql 4096 Mar 26 13:01 sp140122
+         $ ls -og proteome go uniProt
+         lrwxrwxrwx 1  8 Feb 26 11:39 go -> go140213
+         lrwxrwxrwx 1 14 Mar 27 12:01 proteome -> proteins140122
+         lrwxrwxrwx 1  8 Mar 27 12:01 uniProt -> sp140122
+ 
+         $ ls -ld go140213 proteins140122 sp140122
+         drwx------ 2 mysql mysql 4096 Feb 26 10:57 go140213
+         drwx------ 2 mysql mysql 4096 Aug 19 08:08 proteins140122
+         drwx------ 2 mysql mysql 4096 Mar 26 13:01 sp140122
 
      These file names are data stamped YYMMDD to indicate changes
      over time as they are updated with new builds of the UCSC gene track.
      When a new UCSC gene track is released, fetch new databases and
      change the symlink.
 
-12.  Copy the gbdb data to /gbdb - See also:
-		scripts/fetchFullGbdb.sh
-		scripts/fetchMinimalGbdb.sh
+11.  Copy the gbdb data to /gbdb - See also:
 
-13.  The browser should now appear at the URL:
-	http://localhost/
+         scripts/fetchFullGbdb.sh
+         scripts/fetchMinimalGbdb.sh
 
-	Check your Apache error_log file for hints to solving problems.
+12.  The browser should now appear at the URL:
 
-14.  BLAT server setup: The blatServers table in the database hgcentral needs to
-	have a fully qualified host name specified in the 'host' column.
+         http://localhost/
 
-    Educational and non-profit institutions are allowed to use
-    blat free of charge.  Commercial installations of the browser
-    require a license for blat.  See also: <http://kentinformatics.com/index.html>
-    and: <http://genome.ucsc.edu/license/>
-    In the source tree: src/gfServer/README.blat
+     Check your Apache error_log file for hints to solving problems.
 
-15.  Useful links:
+13.  BLAT server setup: The blatServers table in the database hgcentral needs to
+     have a fully qualified host name specified in the 'host' column.
 
-    <http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ>
+     Educational and non-profit institutions are allowed to use
+     blat free of charge. Commercial installations of the browser
+     require a license for blat. See also: <http://kentinformatics.com/index.html>
+     and: <http://genome.ucsc.edu/license/>
+     In the source tree: src/gfServer/README.blat
 
-    There are numerous README files in the source tree on
-    a variety of specific subjects, e.g.:
+14.  Useful links:
 
-        ./src/README
-        ./src/product/README.*
-        ./src/hg/makeDb/trackDB/README
-        ./src/hg/makeDb/doc/make*.txt
+     <http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ>
+ 
+     There are numerous README files in the source tree on
+     a variety of specific subjects, e.g.:
+ 
+         ./src/README
+         ./src/product/README.*
+         ./src/hg/makeDb/trackDB/README
+         ./src/hg/makeDb/doc/make*.txt
 
-16. Apache configuration:
+15. Apache configuration:
 
     To lock down your trash directory from scanning via "indexes"
     enter the following in your httpd.conf:
@@ -355,7 +376,7 @@ Confirm the following:
     The specified directory name is your apache: DocumentRoot/trash
     e.g. /usr/local/apache/htdocs/trash
 
-# MySQL Setup
+# MariaDB Setup
 
 1. Enable "LOAD DATA LOCAL INFILE":
 
@@ -367,9 +388,9 @@ Confirm the following:
         [client]
         local-infile=1
 
-2. MySQL Storage Engine:
+2. MariaDB Storage Engine:
 
-    In recent versions of MySQL, the default storage engine has changed from
+    In recent versions of MySQL/MariaDB, the default storage engine has changed from
     myisam to innodb.
     However the myisam engine should be used with the UCSC Genome Browser.
     
@@ -378,65 +399,65 @@ Confirm the following:
         [mysqld]
         default-storage-engine=MYISAM
 
-    Always restart your mysql server after making changes to these
+    Always restart your MariaDB server after making changes to these
     configuration files.
 
 3. Users: There are three cases of identity to consider when providing
-    access to the MySQL system for the browser CGI binaries
+    access to the MariaDB system for the browser CGI binaries
     and browser developers:
 
-    1.  A MySQL user that needs read-only access to the
-            genome databases.  The browser CGI binaries
+    1.  A MariaDB user that needs read-only access to the
+            genome databases. The browser CGI binaries
             require read-only access to the genome databases.
-    2.  A MySQL user that has write permissions to one database.
+    2.  A MariaDB user that has write permissions to one database.
             The CGI binaries require write permissions to one particular
             database (hgcentral) for maintaining user's cart information to
             store the user's browser cookie settings.
-    3.  A MySQL user that has general write permissions to all
+    3.  A MariaDB user that has general write permissions to all
             browser and genome databases to be used by developers
 
-    The cgi-bin binaries obtain the first two of these MySQL identities from
+    The cgi-bin binaries obtain the first two of these MariaDB identities from
     the text file: $WEBROOT/cgi-bin/hg.conf
 
-    Developers of the browser databases obtain their MySQL identities
+    Developers of the browser databases obtain their MariaDB identities
     from a text file in their home directory: ~/.hg.conf
     Note the initial dot in the name: .hg.conf
     This file in a user's directory will specify a higher-privileged user
-    to allow read/write access to the MySQL databases.
+    to allow read/write access to the MariaDB databases.
     This file must be set to mode 600 to provide security of the user
     and password to the database:
 
         $ chmod 600 ~/.hg.conf
 
-    All kent source code commands use this file to access the MySQL
+    All kent source code commands use this file to access the MariaDB
     databases.  Since this file contains password information it
     requires the permissions to be set at 600 to keep it secret.
     The kent source code commands will enforce this access and not
     function unless it is set at 600 permissions.
 
-    Therefore you will want to create three different MySQL users
+    Therefore you will want to create three different MariaDB users
     for these purposes.
 
     The examples listed below are implemented in the shell script: src/product/scripts/ex.MySQLUserPerms.sh
     You can execute that script to set up these example users.
 
-    An example full read/write access user: "browser",  is created with
+    An example full read/write access user: "browser", is created with
     the following procedure.
 
     For the following it is assumed that your root account
-    has access to the mysql database.  You should be able
+    has access to the MariaDB database. You should be able
     to perform the following:
 
         $ export SQL_PASSWORD=mysql_root_password
         $ mysql -u root -p${SQL_PASSWORD} -e "show tables;" mysql
 
-    Create a MySQL user called "browser" with password
-    "genome" and give access to selected MySQL commands
-    for the following list of databases.  When you add other
+    Create a MariaDB user called "browser" with password
+    "genome" and give access to selected MariaDB commands
+    for the following list of databases. When you add other
     databases, you will need to add these permissions to your
-    databases.  This procedure of adding permissions specifically
+    databases. This procedure of adding permissions specifically
     for a set list of databases is a more secure method than allowing
-    the MySQL "browser" user to have access to any database.
+    the MariaDB "browser" user to have access to any database.
 
     ( MySQL version 5.5 requires the LOCK TABLES permission here )
     ( FILE, CREATE, DROP, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES on ${DB}.* )
@@ -451,8 +472,8 @@ Confirm the following:
 
     The above granted permissions are recommended for browser developers.
     The WEB browser CGI binaries need SELECT, INSERT and CREATE TEMPORARY
-    TABLES permissions.  For example, you should create a special user for
-    the browser genome databases only.  In this example, user: "readonly"
+    TABLES permissions. For example, you should create a special user for
+    the browser genome databases only. In this example, user: "readonly"
     with password: "access"
 
         for DB in cb1 hgcentral hgFixed hg38 proteins140122 sp140122 go140213 uniProt go
@@ -472,8 +493,8 @@ Confirm the following:
             on hgTemp.* TO \
             readonly@localhost IDENTIFIED BY 'access';" mysql
 
-    A third MySQL user should be created with read-write access to only
-    the hgcentral database.  For example, a user: "readwrite"
+    A third MariaDB user should be created with read-write access to only
+    the hgcentral database. For example, a user: "readwrite"
     with password: "update"
 
         for DB in hgcentral
@@ -483,14 +504,14 @@ Confirm the following:
                 IDENTIFIED BY 'update';" mysql
         done
 
-    The cgi-bin binaries obtain their MySQL identities from
-    the hg.conf file in the cgi-bin directory.  The file in this
+    The cgi-bin binaries obtain their MariaDB identities from
+    the hg.conf file in the cgi-bin directory. The file in this
     directory: src/product/ex.hg.conf
     demonstrates the use of the "readonly" user for genome database
     access and the "readwrite" user for hgcentral database access.
 
 4. The hgsql command: Developers can access the browser databases via the 'hgsql'
-command which can be built in the source-tree at:
+   command which can be built in the source-tree at:
 
 	kent/src/hg/hgsql/
 
@@ -522,10 +543,10 @@ command which can be built in the source-tree at:
         hgsql -e "show grants;" hgcentral
 
 
-5. Configuring MySQL SSL connections:
+5. Configuring MariaDB SSL connections (entirely optional, only needed if your IT department requires it):
 
-    MySQL is typically compiled with SSL capability from OpenSSL or yaSSL.
-    To see if your server supports ssl, login to mysql and run this command:
+    MariaDB is typically compiled with SSL capability from OpenSSL or yaSSL.
+    To see if your server supports ssl, login to MariaDB and run this command:
 
         mysql> show variables like '%ssl%';
         +---------------+----------+
@@ -542,7 +563,7 @@ command which can be built in the source-tree at:
         | ssl_key       |          |
         +---------------+----------+
 
-    If your mysql was compiled with SSL support, which is true of virtually all mysql packages
+    If your MariaDB was compiled with SSL support, which is true of virtually all MariaDB packages
     being provided today, you can easily enable SSL by adding settings to /etc/my.cnf:
 
         -------
@@ -562,7 +583,7 @@ command which can be built in the source-tree at:
         # mysql5.7 or later require all connections to be encrypted
         require_secure_transport server 
 
-    After making changes to my.cnf, be sure to restart your mysqld service.
+    After making changes to my.cnf, be sure to restart your mariadb service.
 
     The key means private key here, and should be kept secured.
     The cert is a certificate acting like a public key, signed by a trusted authority (CA).
@@ -571,12 +592,12 @@ command which can be built in the source-tree at:
     And it proves the key exists. The key is not sent to the other party. The cert is.
     If a ca is available it can show what certs to trust.
 
-    You do not need all the settings, but some versions of mysql
+    You do not need all the settings, but some versions of MariaDB
     do not activate SSL unless at least one of these is found: key, cert, ca, capath, cipher 
     If you configure a key for the server or client, you will also provide its cert.
 
     We cannot teach you how to create SSL certificates here.
-    There are many websites including mysql that have information about
+    There are many websites including MariaDB that have information about
     making keys and certs and ca.
 
     If you just add the ssl option to the top,
@@ -648,14 +669,14 @@ command which can be built in the source-tree at:
     but the CGIs and utils would not see them.  Only mysql and hgsql would see them.
 
 
-    Configuring SSL requirements for mysql user accounts:
+    Configuring SSL requirements for MariaDB user accounts:
 
-    You can tell mysql to require SSL for a user's account like this:
+    You can tell MariaDB to require SSL for a user's account like this:
 
         GRANT ALL PRIVILEGES ON *.* TO 'someuser'@'%'
           REQUIRE SSL;
 
-    You can tell mysql to use SSL for a user's account and to
+    You can tell MariaDB to use SSL for a user's account and to
     further require the client to use their key and x509 certificate to connect by saying:
 
         GRANT ALL PRIVILEGES ON *.* TO 'someuser'@'%'
@@ -671,12 +692,241 @@ command which can be built in the source-tree at:
     You can see the cert details like this:
          openssl x509 -in /somepath/someuser-cert.pem -text
 
-    In later versions of MySQL, it is a requirement that the CN of the CA cert must DIFFER 
+    In later versions of MariaDB, it is a requirement that the CN of the CA cert must DIFFER 
     from the CN of the user and server certs.
 
-    Further MySQL SSL documentation is available from <https://dev.mysql.com/doc/refman/5.6/en/ssl-connections.html>
+    Further MySQL SSL documentation is available from 
+<https://dev.mysql.com/doc/refman/5.6/en/creating-ssl-files-using-openssl.html> 
 
-# Adding a custom genome to the browser
+# Local Git repository (aka: "the source tree")
+
+Use the following procedures to create your own personal copy of the kent source
+tree where you can have your own edits that are not part of the development at
+UCSC  This is useful for mirror sites that have their own customizations in
+the source tree for local circumstances. It will also be necessary if you want to 
+add your own tracks to your mirror (see next section).
+ 
+Install Git software version 1.6.2.2 or later. See the Git Community Handbook
+ installation (<https://git-scm.com/book/en/v2/Getting-Started-Installing-Git>) and setup
+ (<https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup>) instructions, as well
+ as our Installing Git (<http://genomewiki.ucsc.edu/index.php/Installing_git>)
+ Genomewiki page.
+
+Start an initial Git local repository:
+
+    git clone git://genome-source.soe.ucsc.edu/kent.git
+ 
+or, if a firewall prevents git daemon port 9418, use:
+ 
+    git clone http://genome-source.soe.ucsc.edu/kent.git
+ 
+The kent source tree will be imported to the current working directory in a
+directory named ./kent/.
+
+Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
+ the browser. To create a beta tracking branch:
+ 
+    cd kent
+    git checkout -t -b beta origin/beta
+ 
+The -b creates a local branch with name "beta", and checks it out.
+The -t makes it a tracking branch, so that 'git pull' brings in updates from
+origin/beta, the "real" beta branch in our public central read-only repository.
+
+To get the latest UCSC release, from anywhere within the kent source tree:
+ 
+    git pull
+
+Updates: UCSC generally updates the origin/beta branch every three weeks. If you are 
+ updating database tables for a mirror site, we recommend that you update the
+ source at the same time, as source code is sometimes modified to include
+ operations on new columns that have been added to database tables.
+ 
+For instructions on keeping local tracks separate from UCSC Genome Browser
+tracks created at UCSC and mirrored from there, see the section "Adding tracks
+to the browser" below.
+
+# Adding your own track groups to the browser
+
+If you want to add your own tracks (see next section), you probably want to put them into 
+a separate track group, so they are visually separated from the tracks provided by UCSC.
+
+The MariaDB table `grp` contains the list of all track groups. If you rsync the data
+from UCSC on a regular schedule, the table would be overwritten each time. To avoid this,
+you can create an empty table with the same schema, e.g. in the database hg38:
+
+    CREATE TABLE grp_local LIKE grp;
+    
+You can then use the MariaDB INSERT statement to add a new track group to this
+table, specify the name, label, priority and whether the group should be closed
+by default (most are open by default).
+
+    INSERT INTO grp_local VALUES ('test', 'This is my group', 1, 0);
+
+Then, edit cgi-bin/hg.conf and add a line like this:
+
+    db.grp=grp_local,grp
+
+This means that grp_local is added to the contents of grp and grp_local has higher priority, so you can override
+the UCSC-provided default groups, if needed.
+
+This will not have any effect yet. First you need to add a new track that uses your new group.
+You can use your new group's `name` using the "group" statement in trackDb (see the next section).
+
+All tracks with a group not in the grp table will end up in the group "Experimental" at the bottom of the page.
+
+# Adding your own tracks to the browser
+
+A track needs two items to make it exist in the browser:
+
+1.  A database table with the track data
+2.  An entry in a database table: trackDb_localTracks
+    Built from track specifications in your trackDb.ra file.
+    The format of the trackDb.ra file is explained at
+    <http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbDoc.html>
+    The correspondence between the database table and the trackDb.ra
+    definition is in the name used on the 'track' line in the
+    trackDb.ra file. Your database table name is defined by the 'track'
+    definition line.
+
+To direct the genome browser to this trackDb_localTracks table to use as extra trackDb
+definitions, add this line to your cgi-bin/hg.conf file:
+
+    db.trackDb=trackDb_localTracks,trackDb
+
+The order matters. Any definitions for tracks
+in trackDb_localTracks will override any definitions for the
+same named tracks in trackDb. You can then override the
+standard definitions for UCSC-defined tracks.
+The usual case will be that your tracks are unique to your
+local installation.
+
+Almost all of the database tables have specific loader
+programs to load the track data. The loader programs
+also verify the data before it is added to the table,
+and they create the proper indexes on the table to allow
+efficient display by the genome browser.
+
+By far the most common format of track data is the BED format.
+See also: <http://genome.ucsc.edu/FAQ/FAQformat.html#format1>
+for a description of BED file formats.
+
+A typical BED file format is loaded into a database table with
+the loader: hgLoadBed
+For example, to load the data from the file: data.bed into
+the table named: bedExample
+
+    hgLoadBed hg17 bedExample data.bed
+
+You then add a section that starts with the line "track bedExample" to your trackDb.ra file,
+run hgTrackDb to create the trackDb_localTracks database table and the table should appear, 
+as long as trackDb_localTracks has been added to hg.conf as explained before.
+
+There are a variety of file formats: GFF, GTF, PSL, WIG, MAF as well as
+a variety of specialized data types. All the loader programs can be seen
+in the source tree as subdirectories in: src/hg/makeDb/
+
+    cd src/hg/makeDb
+    ls -d hg*
+
+The build instructions for the browser code do not include
+instructions for building all of the loaders, or other utilities
+in the kent source tree. This is because there are literally
+hundreds of utilities, 345 at last count, that are not needed
+for ordinary browser development. In most cases a developer will
+need only a couple of the loaders and utilities. Since the libraries
+were built for the CGI binaries, to build any utility or
+loader, simply go into its directory and run a 'make'. If you do not have 
+the kent tree source repository cloned with git yet onto your own disk,
+please go back to the previous section and do that now.
+
+For our purposes here, we need for example, for BED format tracks:
+
+1. hgLoadBed
+2. hgTrackDb
+3. hgFindSpec
+
+To build the three loaders mentioned, go to the three directories in the kent git source repository:
+
+    src/hg/makeDb/hgTrackDb/
+    src/hg/makeDb/hgFindSpec/
+    src/hg/makeDb/hgLoadBed/
+
+And run a 'make' in each one. The resulting binary is placed
+in: $HOME/bin/$MACHTYPE
+This binary directory should be in your PATH, or make this directory
+be a symlink to some binary directory that is in your PATH
+and you have write permission to.
+
+See also: new assistant scripts as of March 2010 in the src/product/scripts/
+	directory here to fetch and build the source tree.
+
+If you want to build all the utilities and all database
+loaders now, perform the following 'make' commands in your source tree:
+
+    cd src
+    make clean
+    make libs
+    cd hg
+    make
+    cd ../utils
+    make
+
+This builds everything cleanly, all CGI binaries, all database
+loaders, all utilities. Perform this sequence each time you
+do a 'git pull' on your source tree. The 'make clean' step
+is especially important since the makefile hierarchy does not
+have built in dependencies and will not rebuild items that
+depend upon each other. The traditional dependency on the
+source tree libraries is taken care of because a make in any
+directory that produces a binary will always re-link the
+binary every time, thus always picking up any potentially new
+library.
+
+With those three loader programs built, you can now load BED
+format tracks, and build the trackDb_localTracks table as
+mentioned next.
+
+The hgTrackDb and hgFindSpec loaders are used to build the trackDb and
+hgFindSpec tables in the database. You can obtain example
+trackDb entries from the source tree hierarchy: src/hg/makeDb/trackDb/
+in any of the *.ra files. And you will need to refer to the README
+file in that directory for information about options you can use with
+each track type or use our full trackDb.ra documentation at 
+<http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbDoc.html>.
+
+To work independently of the UCSC source tree,
+establish your own trackDb.ra files outside the UCSC source tree in
+a directory of your choice under your control. Then, to load them
+into the database, run the hgTrackDb command with this
+simple makefile in the directory where your .ra file exists:
+	
+    trackDbSql=/path/to/kent/source/tree/src/hg/lib/trackDb.sql
+    DB=hg19
+
+    all::
+            hgTrackDb . ${DB} trackDb_localTracks ${trackDbSql} .
+
+This hgTrackDb command reads your trackDb.ra file and converts it
+into row entries for each track specified in it into row contents
+in this new table trackDb_localTracks.
+
+The DB= specification is your database of interest, this example: hg19
+This loads your local specific table trackDb_localTracks in the database.
+This name trackDb_localTracks is not special, just different than
+the ordinary trackDb table. It should have some meaning to anyone
+in your environment and not be the same name as any UCSC database
+table. The two '.' arguments in the command above refer
+to directory names. Since you have no hierarchy of levels in this
+single directory, unlike in the source tree trackDb hierarchy, the
+'.' arguments refer to the current directory.
+
+See also:
+
+* A similar overview: <http://genomewiki.ucsc.edu/index.php/Local_tracks_at_mirror_sites>
+* TrackDb.ra track configuration format: <http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbDoc.html>
+
+# Adding a new, custom (non-UCSC) genome to the browser
     
 Please note that setting up an [assembly hub](http://genomewiki.ucsc.edu/index.php/Assembly_Hubs) 
 is a lot easier than adding a genome to a local mirror.
@@ -710,7 +960,7 @@ And then six tables for the latest human database.
 
 The gateway page always needs a minimum human database in order
 to function even if the browser is being built for the primary
-purpose of displaying other genomes.  This default can currently
+purpose of displaying other genomes. This default can currently
 be changed in the source tree in src/hg/lib/hdb.c
 (to be done: specify this default in hg.conf file)
 
@@ -718,12 +968,12 @@ Start with an empty database, for example hg18:
 
     hgsql -e "create database hg18;" mysql
 
-Again, copy the MySQL files directly from the download
+Again, copy the MariaDB files directly from the download
 server, for example hg18:
 
     rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hg18/ .
 
-(beware, this is several TB of data) into your MySQL data area.  Or load these tables from the text SQL
+(beware, this is several TB of data) into your MariaDB data area. Or load these tables from the text SQL
 dumps from:
 
     rsync -avP rsync://hgdownload.soe.ucsc.edu/goldenPath/hg18/database/ .
@@ -741,13 +991,13 @@ The minimal set of tables required are:
 
 With this set of six tables the gateway page will
 begin to function and the browser page and table browser
-will function.  Other browser functions are not ready yet without
-additional tables and databases.  This is a bare minimum just to
+will function. Other browser functions are not ready yet without
+additional tables and databases. This is a bare minimum just to
 demonstrate the CGI binaries are working.
 
 This will all work even without copying any files for the /gbdb/
 data area, although most functions will not work, such as fetching
-the DNA sequence from a browser view.  The DNA sequence for
+the DNA sequence from a browser view. The DNA sequence for
 an assembly is found in, for example hg18: /gbdb/hg18/nib/chr*.nib
 Some assemblies have all the DNA sequence in a single .2bit file,
 for example: /gbdb/mm8/mm8.2bit
@@ -760,7 +1010,7 @@ undocumented way to solve your problem.
 
 If you need to change the code, make sure to isolate your changes into a
 single function, if possible. Using git, merge your branch into our "beta"
-branch, ideally for every release, then recompile.  If your changes could be
+branch, ideally for every release, then recompile. If your changes could be
 useful for someone else, and you are getting tired of updating them to keep up
 with our changing code base, consider submitting them as a pull request, so we
 can integrate it into the main code base and you do not have to worry about
@@ -776,41 +1026,42 @@ release should be as easy as this:
 
 # Custom Track Database
 
-A new feature of the genome browser as of March 2007 is the ability to
-use a data base for custom tracks. Up to this date, custom track data
-has been kept in files in the /trash/ct/ directory. This article
-discusses the steps required to enable this function.
+Without any specific hg.conf configuration, custom track data
+is kept in flat files in the /trash/ct/ directory. 
+It is much more efficient to load them into a MariaDB database.
+This article discusses the steps required to enable this function.
 
 1. Summary configuration
 
     * database loader binaries hgLoadBed, hgLoadWiggle and wigEncode are
-	installed in /cgi-bin/loader/ - these are installed via the normal
-	'make cgi' in the source tree kent/src/hg/ directory.
-    * an empty customTrash database has been created on the MySQL host -
-	create this manually once, the MySQL host name is a configuration
-	item, the database name customTrash is not a configuration item
+      installed in /cgi-bin/loader/ - these are installed via the normal
+      'make cgi' in the source tree kent/src/hg/ directory or via rsync.
+      They are probably aleady in your cgi-bin directory.
+    * an empty customTrash database has been created on the MariaDB host -
+      create this manually once, the MariaDB host name is a configuration
+      item, the database name customTrash is not a configuration item
     * temporary read-write data directory /data/tmp has been created
-	with read/write/delete enabled for the Apache server effective
-	user, this directory name is a configuration item
+      with read/write/delete enabled for the Apache server effective
+      user, this directory name is a configuration item
     * configuration items are specified in /cgi-bin/hg.conf/ - this will
-	turn on the function
+      turn on the function
     * for command line access to the database, create a special
-	~/.hg.ct.conf to be used with the environment variable HGDB_CONF
+      ~/.hg.ct.conf to be used with the environment variable HGDB_CONF
     * create a cron job to run a cleaner script to expire and remove
-	older tables from the database - dbTrash command is used for this
-	purpose
+      older tables from the database - dbTrash command is used for this
+      purpose
 
 2. Host and database name
 
-    For performance and security considerations, the MySQL host for the
-    custom track database can be a separate machine from the ordinary MySQL
+    For performance and security considerations, the MariaDB host for the
+    custom track database can be a separate machine from the ordinary MariaDB
     host that usually serves up the assembly databases or the hgcentral
     database. It is not required that the custom track database be on a
-    separate MySQL server. The specification of the host machine is placed
+    separate MariaDB server. The specification of the host machine is placed
     in the /cgi-bin/hg.conf file, for example a host machine called
     "ctdbhost":
 
-    customTracks.host=ctdbHost
+        customTracks.host=ctdbHost
 
     The database name used on this host is fixed at customTrash which is a
     define in the source tree file hg/inc/customTrack.h
@@ -825,11 +1076,11 @@ discusses the steps required to enable this function.
         customTracks.password=ctdbpasswd
         customTracks.useAll=yes
 
-    Establish this user account and password in MySQL with db and user
+    Establish this user account and password in MariaDB with db and user
     privileges:
 
     Select, Insert, Update, Delete, Create, Drop, Alter, Index
-    for example with your MySQL root user account:
+    for example with your MariaDB root user account:
 
         hgsql -hctdbhost -uroot -p -e \
             "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX" \
@@ -856,7 +1107,7 @@ discusses the steps required to enable this function.
 
 4. Command line access:
 
-    Since the MySQL host may be different than your ordinary MySQL host, you
+    Since the MariaDB host may be different than your ordinary MariaDB host, you
     will need to create a unique $HOME/.ct.hg.conf file to be used in the
     case where you want to manipulate this separate database with the kent
     source tree command line tools. This unique .ct.hg.conf is merely a copy
@@ -983,39 +1234,39 @@ message in your Apache error log:
 
     [Fri Mar 25 11:02:40 2005] [error] Premature end of script headers: hgTracks
 
-This is usually a simple configuration problem.  Items to verify:
+This is usually a simple configuration problem. Items to verify:
 
 1.  the hg.conf file in the cgi-bin directory specifies the correct
-	user names and passwords for MySQL database access.
-	See also: README.mysql.setup
+    user names and passwords for MariaDB database access.
+    See also the section "MariaDB Setup" below.
 2.  The cgi-bin directory is set to permissions 755 and not 775 or 777
-	When permissions are too permissive for this directory, Apache
-	errors out with suexec permission violations.
+    When permissions are too permissive for this directory, Apache
+    errors out with suexec permission violations.
 3.  Verify change history of the database hgcentral.
     Rarely, changes in this database require corresponding changes
-    in the source code.  Make sure your code and version of
-    hgcentral are synchronized.  Newer versions of hgcentral
-    database with old source code are OK.  The problem is when
+    in the source code. Make sure your code and version of
+    hgcentral are synchronized. Newer versions of hgcentral
+    database with old source code are OK. The problem is when
     you have new source code that expects new features in hgcentral.
 
 If these items are OK, then you can check the actual operation of
-a cgi binary.  Go to the source tree directory of the cgi binary,
+a cgi binary. Go to the source tree directory of the cgi binary,
 for example hgTracks:
 
-	kent/src/hg/hgTracks
+    kent/src/hg/hgTracks
 
 In this directory, run a 'make compile' to produce a binary that
-is left in this directory.  This binary can be run from the command
+is left in this directory. This binary can be run from the command
 line:
 
     ./hgTracks
 
 By itself with no arguments, it should produce the default tracks
-display HTML page for the Human genome.  This assumes you have set
-up your $HOME/.hg.conf file to allow access to the MySQL databases.
-(See also: README.mysql.setup).  A binary execution failure should
-be obvious at this stage of the game.  If it exits because of SIGSEGV
-we can run it under a debugger for specifics.  More on this below.
+display HTML page for the Human genome. This assumes you have set
+up your $HOME/.hg.conf file to allow access to the MariaDB databases.
+(See also: section "MariaDB Setup"). A binary execution failure should
+be obvious at this stage of the game. If it exits because of SIGSEGV
+we can run it under a debugger for specifics. More on this below.
 
 If the problem is specific to a particular set of tracks being
 displayed, or particular genomes or options, command line arguments
@@ -1026,7 +1277,7 @@ To prepare the binaries for operation under a debugger, go to
 the src/inc directory and edit the common.mk configuration file.
 Change "COPT=-O" to read: "COPT=-g"
 GNU gcc will allow "-O" with "-g", and some bugs will only exhibit
-themselves with -O on.  However the optimizations with -O can
+themselves with -O on. However the optimizations with -O can
 sometimes confuse the debugger's sense of location due to
 optimization rearrangement of code.
 Also eliminate the -Wuninitialized option from the HG_WARN definition
@@ -1047,14 +1298,15 @@ For the case of specific options or tracks causing problems,
 to find the full set of options in effect for the failure case,
 when your WEB browser is at the Error 500 display page, edit
 the displayed URL in your WEB browser to call the cgi binary cartDump:
-http://<your server>/cgi-bin/cartDump 
+
+    http://<your server>/cgi-bin/cartDump 
 
 This will display all environment variables in effect at the time
-of the crash.  Most of the track display options that are marked
-as "hide" can be ignored.  That is their default setting already.
+of the crash. Most of the track display options that are marked
+as "hide" can be ignored. That is their default setting already.
 The important ones are the db, position, and specific options for
-the track under consideration.  The command line can be formatted
-just as if it was a URL string.  For example:
+the track under consideration. The command line can be formatted
+just as if it was a URL string. For example:
 
     ./hgTracks "db=hg17&trackControlsOnMain=0&position=chr4:56214201-56291736"
 
@@ -1068,24 +1320,24 @@ shell interpretation by appropriate quoting.
 At this point, running under a debugger, with a command line for
 specific options, a crash of the binary should give you some clue
 about the problem by checking the stack backtrace to see what function
-is failing.  It is highly doubtful you will be finding problems
-in the source code for the crashes.  The almost universal cause
-for failure are the data inputs to the binaries.  For example,
+is failing. It is highly doubtful you will be finding problems
+in the source code for the crashes. The almost universal cause
+for failure are the data inputs to the binaries. For example,
 violations of the SQL structures expected from the database tables.
 Missing data files in the /gbdb/ hierarchy, and so forth.
 
 If you are developing code for special track displays, the most
 common form of problem is a memory violation while using some
-of the specialized structures, hash lists, etc.  Your stack backtrace
+of the specialized structures, hash lists, etc. Your stack backtrace
 will usually highlight these situations.
 
 In order to determine the URL being used by the browser CGIs to pass
 to in the debugger, you need to force the browser to use GET http
-requests rather than POST.  Try adding &formMethod=GET to an URL.
+requests rather than POST. Try adding &formMethod=GET to an URL.
 Not all forms pay attention to that input, but when they do it
 generally looks like this:
 
-hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",
+    hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",
     getScriptName(), cartUsualString(cart, "formMethod", "POST"));
 
 If you add &formMethod=GET and a subsequently fetched form is still
@@ -1098,51 +1350,13 @@ FireFox, so after debugging hgTables, you will probably want to add
 
 One thing that does not work with GET is "upload file" inputs.
 
-# Local Git repository
-Use the following procedures to create your own personal copy of the kent source
-tree where you can have your own edits that are not part of the development at
-UCSC.  This is useful for mirror sites that have their own customizations in
-the source tree for local circumstances.
- 
-Install Git software version 1.6.2.2 or later. See the Git Community Handbook
- installation (<http://book.git-scm.com/2_installing_git.html>) and setup
- (<http://book.git-scm.com/2_setup_and_initialization.html>) instructions, as well
- as our Installing git (<http://genomewiki.ucsc.edu/index.php/Installing_git>)
- Genomewiki page.
+    # HTTPS Certificate Check for Verification Settings are: abort warn log none
+    # currently the default is log
+        httpsCertCheck=log
 
-Start an initial Git local repository:
+    # domains to whitelist, skip cert checking, space-separated list
+        httpsCertCheckDomainExceptions=somedomain1.com somedomain2.edu
 
-    git clone git://genome-source.soe.ucsc.edu/kent.git
- 
-or, if a firewall prevents git daemon port 9418, use:
- 
-    git clone http://genome-source.soe.ucsc.edu/kent.git
- 
-The kent source tree will be imported to the current working directory in a
-directory named ./kent/.
-
-Track the beta branch at UCSC repository: Most users want to use the beta branch, which has tested, released versions of
- the browser. To create a beta tracking branch:
- 
-    cd kent
-    git checkout -t -b beta origin/beta
- 
-The -b creates a local branch with name "beta", and checks it out.
-The -t makes it a tracking branch, so that 'git pull' brings in updates from
-origin/beta, the "real" beta branch in our public central read-only repository.
-
-To get the latest UCSC release, from anywhere within the kent source tree:
- 
-    git pull
-
-Updates: UCSC generally updates the origin/beta branch every three weeks. If you are 
- updating database tables for a mirror site, we recommend that you update the
- source at the same time, as source code is sometimes modified to include
- operations on new columns that have been added to database tables.
- 
-See also: the README files in the source tree directory src/product/README.*.
-For instructions on keeping local tracks separate from UCSC Genome Browser
-tracks, see src/product/README.trackDb.
 
 # Proxy support
 
@@ -1154,14 +1368,14 @@ bigWig or bigBed data via custom track bigDataUrl.
 
 One must add the setting "httpProxy", "httpsProxy", "ftpProxy" to hg.conf
 
-httpProxy=http://someProxyServer:3128
-httpsProxy=http://someProxyServer:3128
-ftpProxy=ftp://127.0.0.1:2121
+    httpProxy=http://someProxyServer:3128
+    httpsProxy=http://someProxyServer:3128
+    ftpProxy=ftp://127.0.0.1:2121
 
 If the proxy server requires BASIC authentication
 
-httpProxy=http://user:password@someProxyServer:3128
-httpsProxy=http://user:password@someProxyServer:3128
+    httpProxy=http://user:password@someProxyServer:3128
+    httpsProxy=http://user:password@someProxyServer:3128
 
 where user and password may need URL-encoding
 if they contain special characters such as
@@ -1171,16 +1385,16 @@ If you wish to exclude domains from proxying,
 create a comma-separated list of domain-suffixes.  
 If a domain ends with an entry from this list, the proxy will be skipped.
 
-noProxy=ucsc.edu,mit.edu
+    noProxy=ucsc.edu,mit.edu
 
 
-(The httpProxy and httpsProxy URLs should use http protocol, not https.
-One reason for this is that https sessions would end up doubly-encoded.)
+The httpProxy and httpsProxy URLs should use http protocol, not https.
+One reason for this is that https sessions would end up doubly-encoded.
 
 If you are debugging your proxy configuration, you can use this hg.conf setting
 to turn on logging to stderr.
 
-logProxy=on
+    logProxy=on
 
 It is not meant to be left on in production.
 Your proxy server should have its own logging features.
@@ -1188,160 +1402,13 @@ Your proxy server should have its own logging features.
 net.c also responds to environment variables http_proxy, https_proxy, ftp_proxy, no_proxy and log_proxy.
 
 
-# Adding tracks to the browser
-
-See also:
-
-* <http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbDoc.html>
-* <http://genomewiki.ucsc.edu/index.php/Local_tracks_at_mirror_sites>
-
-A track needs two items to make it exist in the browser:
-
-1.  A database table with the track data
-2.  An entry in a database table: trackDb_localTracks
-    Built from track specifications in your trackDb.ra file.
-    Please note the description of trackDb.ra entries in the
-    source tree: src/hg/makeDb/trackDb/README
-    The correspondence between the database table and the trackDb.ra
-    definition is in the name used on the 'track' line in the
-    trackDb.ra file.  Your database table name is used on the 'track'
-    definition line.
-
-Almost all of the database tables have specific loader
-programs to load the track data.  The loader programs
-also verify the data before it is added to the table,
-and they create the proper indexes on the table to allow
-efficient display by the genome browser.
-
-By far the most common format of track data is the BED format.
-See also: <http://genome.ucsc.edu/FAQ/FAQformat.html#format1>
-for a description of BED file formats.
-
-A typical BED file format is loaded into a database table with
-the loader: hgLoadBed
-For example, to load the data from the file: data.bed into
-the table named: bedExample
-
-    hgLoadBed hg17 bedExample data.bed
-
-There are a variety of file formats: GFF, GTF, PSL, WIG, MAF as well as
-a variety of specialized data types.  All the loader programs can be seen
-in the source tree as subdirectories in: src/hg/makeDb/
-
-    cd src/hg/makeDb
-    ls -d hg*
-
-The build instructions for the browser code do not include
-instructions for building all of the loaders, or other utilities
-in the kent source tree.  This is because there are literally
-hundreds of utilities,  345 at last count, that are not needed
-for ordinary browser development.  In most cases a developer will
-need only a couple of the loaders and utilities.  Since the libraries
-were built for the CGI binaries, to build any utility or
-loader, simply go into its directory and run a 'make'
-
-For our purposes here, we need for example, for BED format tracks:
-
-1. hgLoadBed
-2. hgTrackDb
-3. hgFindSpec
-
-To build the three loaders mentioned, go to the three directories:
-
-    src/hg/makeDb/hgTrackDb/
-    src/hg/makeDb/hgFindSpec/
-    src/hg/makeDb/hgLoadBed/
-
-And run a 'make' in each one.  The resulting binary is placed
-in: $HOME/bin/$MACHTYPE
-This binary directory should be in your PATH, or make this directory
-be a symlink to some binary directory that is in your PATH
-and you have write permission to.
-
-With those three loader programs built, you can now load BED
-format tracks, and build the trackDb_localTracks table as
-mentioned next.
-
-The hgTrackDb and hgFindSpec loaders are used to build the trackDb and
-hgFindSpec tables in the database.  Older instructions used to mention
-using the trackDb file hierarchy in the source tree.  This is no longer
-necessary and is not recommended.  You can certainly obtain example
-trackDb entries from the source tree hierarchy: src/hg/makeDb/trackDb/
-in any of the *.ra files.  And you will need to refer to the README
-file in that directory for information about options you can use with
-each track type.  To work independently of the UCSC source tree,
-establish your own trackDb.ra files outside the UCSC source tree in
-a directory of your choice under your control.  Then, to load them
-into the database, run the hgTrackDb command with this
-simple makefile in the directory where your .ra file exists:
-	
-    trackDbSql=/path/to/kent/source/tree/src/hg/lib/trackDb.sql
-    DB=hg19
-
-    all::
-            hgTrackDb . ${DB} trackDb_localTracks ${trackDbSql} .
-
-This hgTrackDb command reads your trackDb.ra file and converts it
-into row entries for each track specified in it into row contents
-in this new table trackDb_localTracks.
-
-The DB= specification is your database of interest, this example: hg19
-This loads your local specific table trackDb_localTracks in the database.
-This name trackDb_localTracks is not special, just different than
-the ordinary trackDb table.  It should have some meaning to anyone
-in your environment and not be the same name as any UCSC database
-table.  The two '.' arguments in the command above refer
-to directory names.  Since you have no hierarchy of levels in this
-single directory, unlike in the source tree trackDb hierarchy, the
-'.' arguments refer to the current directory.
-
-To direct the genome browser to this table to use as extra trackDb
-definitions, add to the specification in your cgi-bin/hg.conf file:
-
-    db.trackDb=trackDb_localTracks,trackDb
-
-Beware of the specified order of the tables if there are tracks
-by the same name in each table.  Any definitions for tracks
-in trackDb_localTracks will override any definitions for the
-same named tracks in trackDb.  You could thus override the
-standard definitions for tracks from the trackDb table.
-Your usual case will be that your tracks are unique to your
-local installation.
-
-See also: new assistant scripts as of March 2010 in the src/product/scripts/
-	directory here to fetch and build the source tree.
-
-Older instructions about building the source tree remain valid:
-
-If you really do want to build all the utilities and all database
-loaders, perform the following 'make' commands in your source tree:
-
-    cd src
-    make clean
-    make libs
-    cd hg
-    make
-    cd ../utils
-    make
-
-This builds everything cleanly, all CGI binaries, all database
-loaders, all utilities.  Perform this sequence each time you
-do a 'git pull' on your source tree.  The 'make clean' step
-is especially important since the makefile hierarchy does not
-have built in dependencies and will not rebuild items that
-depend upon each other.  The traditional dependency on the
-source tree libraries is taken care of because a make in any
-directory that produces a binary will always re-link the
-binary every time, thus always picking up any potentially new
-library.
-
 # The UDC local cache directory
 
 The udcCache allows tracks that are either installed tracks
 or custom tracks of the above mentioned types to cache data 
-that they have already fetched via URL.  This allows data to 
+that they have already fetched via URL. This allows data to 
 reside elsewhere and only download the parts
-needed on demand.  The datablocks are usually
+needed on demand. The datablocks are usually
 compressed and have an efficient random access
 index. They are accessed from a remote location
 via URLs such as HTTP, HTTPS, FTP.
@@ -1368,52 +1435,426 @@ On some systems this directory is called cgi-bin/.
 # Activating CRAM support for the Genome Browser.
 
 The UCSC Genome Browser is capable of displaying tracks from both the BAM and
-CRAM file formats.  While BAM tracks provide all of the required data within
+CRAM file formats. While BAM tracks provide all of the required data within
 the file, however, CRAM tracks depend on external "reference sequence" files
-(see http://www.ebi.ac.uk/ena/software/cram-toolkit for more information about
-the CRAM format).  A bit of information on how the Browser works with these
-files is included below.  For installation instructions, skip to the numbered
+(see <http://www.ebi.ac.uk/ena/software/cram-toolkit> for more information about
+the CRAM format). A bit of information on how the Browser works with these
+files is included below. For installation instructions, skip to the numbered
 steps at the end of this file.
 
 The directory that Genome Browser CGIs check for CRAM reference files is set
-with the cramRef setting in hg.conf.  For example, the following setting is
+with the cramRef setting in hg.conf. For example, the following setting is
 used on our production servers:
 
     cramRef=/userdata/cramCache
 
 When loading tracks from the CRAM file format, CGIs will look for reference
-sequences in that directory.  The filename of each reference sequence should be
+sequences in that directory. The filename of each reference sequence should be
 the MD5 or SHA1 checksum of the reference sequence as described at
-http://www.ebi.ac.uk/ena/software/cram-reference-registry.  If a CGI is unable
+<http://www.ebi.ac.uk/ena/software/cram-reference-registry>. If a CGI is unable
 to find the reference sequence file for a CRAM track, it will next check the
 cramRef/pending/ directory to see if a request for that reference sequence has
 already been made, and the cramRef/error/ directory to see if a previous
-attempt at downloading that reference sequence resulted in an error.  If none
+attempt at downloading that reference sequence resulted in an error. If none
 of those files are found, the CGI will then create a request file in the
-cramRef/pending/ directory.  The name of the request file will be the MD5 or
-SHA1 sequence checksum, as specified in the CRAM data file.  The contents of
-the request file will be the URL to download that reference sequence.  A
+cramRef/pending/ directory. The name of the request file will be the MD5 or
+SHA1 sequence checksum, as specified in the CRAM data file. The contents of
+the request file will be the URL to download that reference sequence. A
 separate tool can then be used to download reference sequences listed in the
 pending/ directory and place them into cramRef/.
 
 Steps to set up CRAM track support:
 
-1.  Add the hg.conf setting cramRef.  The value should be the path (relative
+1.  Add the hg.conf setting cramRef. The value should be the path (relative
     or absolute) to a directory where CRAM reference sequences are stored.
 
 2.  Inside the cramRef directory create subdirectories called "pending" and
-    "error".  The apache user must have read/write permissions for the pending/
+    "error". The apache user must have read/write permissions for the pending/
     directory, and at least read permissions for the cramRef/ and error/
     directories.  
     If you plan to manually load all CRAM reference sequences for your tracks into
-    the cramRef directory, track support is now complete.  If you prefer to
+    the cramRef directory, track support is now complete. If you prefer to
     have reference sequences automatically downloaded and placed in that directory
     (e.g., for user-submitted custom tracks), continue to step 3.
 
 3.  Add a cron job to run a script that parses files in the cramRef/pending/
     directory, downloads the corresponding reference sequence files, and places
-    those sequence files in cramRef/.  Error messages during file retrieval
-    should be placed in cramRef/error/.  An example script is provided in this
-    repository at kent/src/product/scripts/fetchCramReference.sh.  The account
+    those sequence files in cramRef/. Error messages during file retrieval
+    should be placed in cramRef/error/. An example script is provided in this
+    repository at kent/src/product/scripts/fetchCramReference.sh. The account
     that runs this script must have read/write permissions for the cramRef/,
     cramRef/pending/, and cramRef/error/ directories.
+
+# Using FreeType font support for anti-aliased text
+
+The Genome Browser can use a set of hard-coded Type1 fonts for text display
+in hgTracks. The fonts are NOT distributed as part of the Genome Browser files
+but they exist natively on the UNIX systems we use in our production environment.
+To support FreeType font drawing on your system you may need to install these files if they
+are not already present. On most systems, they exist in one of three directories:
+
+    /usr/share/X11/fonts/urw-fonts
+    /usr/share/fonts/default/Type1
+    /usr/share/fonts/type1/gsfonts
+
+To turn on the FreeType font rendering you need to add this line to your hg.conf file:
+
+    freeType=on
+
+By default, the Genome Browser looks in the directory 
+
+    /usr/share/fonts/default/Type1 
+
+for the font files it expects to find. If you have these fonts in a different directory, you need
+to add this line to your hg.conf file:
+
+    freeTypeDir='<apache accessible directory path with fonts in it>'
+
+The names of the font files that the Genome Browser expects and their md5sums are in the following table:
+
+    5624bc04bbd862287bda3c44b15e90d6  a010013l.pfb
+    6883f53d0d140f972480f179bb5e4e3b  a010015l.pfb
+    db21f79bac990fa7e3de6d4cc6f54020  a010033l.pfb
+    c3d0c3af6bc183010204ca923fb98e83  a010035l.pfb
+    33265074c9c45c356f90de9cc47259b3  n019003l.pfb
+    9d07b8658622c2e0127628c87fdb9661  n019004l.pfb
+    df59ecc7bd232d2355786fd644f13baa  n019023l.pfb
+    9f2d4377d9eea95dfdfa705c83a39464  n019024l.pfb
+    8f75382bd2620a20aaeb06ab8c591e8f  n019043l.pfb
+    28bb40d1700909b2509e2125a1963e2c  n019044l.pfb
+    adf4d5565bec1170f0a5810c6984ff55  n019063l.pfb
+    57e1a49c39a546c2883375df12111816  n019064l.pfb
+    84e347c88eff2e77ed40b020b457bafe  n021003l.pfb
+    8721c1175d907d7d484bdaa91d4533ad  n021004l.pfb
+    eef0367afaa10b929e528c40c980b941  n021023l.pfb
+    7af41ff3536fadcdc27eb9e5cc1c32d3  n021024l.pfb
+    db95b702b81c12df1f91d15c8a6c3191  n022003l.pfb
+    e97c9af68414fabe157af711b7691df7  n022004l.pfb
+    f13fb8e581426a1ffa5fc12b10ad0f34  n022023l.pfb
+    f3cd9244150f086434b62d5c5bb559b0  n022024l.pfb
+    30aef717b7c68a6b6b7760b764fbd01c  z003034l.pfb
+
+# Building the kent source tree.
+
+In some cases, you may have to modify the source code itself. In these cases, you would need
+to build all the tools and CGI programs from the source code on your machine.
+
+There are scripts available in the git repo src/product/scripts/ directory 
+that can run all of these steps for you with the script: scripts/kentSrcUpdate.sh
+See the instructions in scripts/README
+
+If you have the kent git repository cloned:
+
+1.  Check your shell environment. It should
+    contain a MACHTYPE variable. Typical values, for example:
+
+        i386 i686 sparc alpha x86_64 ppc
+
+    If there is none, set it to indicate your
+    CPU architecture, for example,
+
+        MACHTYPE=i686
+        export MACHTYPE
+
+    You need to do this if your existing MACHTYPE is a long string
+    such as:
+
+        i686-pc-linux-gnu
+
+    since this is used as an argument on the command line to gcc
+    which will not work with the - signs in the strings.
+    Typical values:
+
+        i386 i686 x86_64 sparc ppc
+
+    To determine the machine cpu type of your computer, try
+    one of these uname command options:
+
+        $ uname -m
+        $ uname -p
+        $ uname -a
+
+    Remember to set this MACHTYPE in your .bashrc or .tcshrc home directory
+    environment files so it will be set properly at your next login.
+
+    The browser code has not been tested by UCSC outside a
+    CentOS Linux on Intel or AMD Opteron environment.
+    Other users do report successful operation on other systems.
+
+    Depending upon what libraries you have installed locally, you may want
+    to set environment variable USE_SAMTABIX.
+
+    See also:
+    <http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables>
+
+2.  Create a directory where binaries will be moved to during
+    the build of the source tree:
+
+        $ mkdir -p ~/bin/${MACHTYPE}
+
+    2a. ALTERNATE PATH:
+
+    If you are going to do a full build anyway, skip this and proceed straight to step 3 below.
+    Otherwise, to make a minimal utility build without MariaDB:
+    There are some utilities that depend only on jkweb.a and not jkhgap.a
+    which means they can be compiled without needing MariaDB client installed.
+    To make a utility like pslCDnaFilter without installing MariaDB client:
+
+        # create jkweb.a
+          cd kent/src/lib
+          make
+        # create stringify utility required by some makefiles
+          cd kent/src/utils/stringify
+          make
+        # create pslCDnaFilter utility program
+          cd kent/src/hg/pslCDnaFilter
+          make
+
+    Proceed similarly for any other such utilities.
+    You are done and can stop here.
+
+3.  Create the following shell environment variables:
+
+    NOTE: As of mid-October 2013 the makefile build system in the source
+    tree will attempt to configure MYSQLINC and MYSQLLIBS with
+    the mysql_config command. To use that automatic configuration,
+    eliminate any MYSQLINC and MYSQLLIBS definitions from your shell
+    environment and make sure mysql_config can be found in your PATH.
+    This option is not perfect and may not function correctly.
+    It usually will not use a static linked library which can lead
+    to a known issue on the Mac OSX. See '[Known Problems](#known-issues)' item 10 below.
+
+    In the case the automatic configuration does not function, you
+    can set these variables in your shell environment to override
+    the automatic configuration:
+
+        MYSQLINC=/usr/include/mysql
+        MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -lz"
+        export MYSQLINC MYSQLLIBS
+
+    Your setting may vary depending upon where your
+    MariaDB is installed. The above example is typical.
+    If your system does not have this set of include files
+    or this static client.a file, you may need to install
+    the mariadb-devel package to obtain the MariaDB development
+    environment.
+    With that package installed, this command:
+
+        mysql_config --libs
+
+    will display the appropriate libraries to link with
+    for your system configuration. And:
+
+        mysql_config --include
+
+    will display the appropriate MYSQLINC directory.
+    The -lz requires a link to the libraries installed in the
+    zlib-devel rpm.
+
+    3a. Required SSL support:
+
+    In order for the libraries to be able to use SSL,
+    for instance to support fetching HTTPS URLs,
+    install openssl. We are currently using these packages: 
+
+        openssl-1.0.1e
+        openssl-devel-1.0.1e
+
+    SSL is also useful for accessing bigWig and bigBed over HTTPS.
+    The directory on your server should be found automatically.
+
+    3b. In the source tree, perform the following:
+
+        $ cd kent/src
+        $ make libs
+
+    At this point, you can build utilities in other parts of
+    the source tree if that is your goal. Go to the directory
+    of the utility command you want to build and run a 'make'
+    in that directory. The resulting binary will be placed
+    in $HOME/bin/$MACHTYPE
+
+4.  To continue building the CGI binaries
+
+        $ cd kent/src/hg
+        $ make compile
+        $ make install DESTDIR=/destination/prefix
+
+    Where "/destination/prefix" is your choice, and
+    this will install the cgi binaries in:
+
+        /destination/prefix/usr/local/apache/cgi-bin
+
+    If your cgi-bin directory is something different than
+    /usr/local/apache/cgi-bin then use the CGI_BIN variable, e.g.:
+
+        make install DESTDIR=/var/www CGI_BIN=/cgi-bin \
+        DOCUMENTROOT=/var/www/html
+
+    You can save yourself time and trouble if your Apache is somewhere
+    other than at /usr/local/apache by creating that directory and making
+    symlinks to your actual apache directories. For example:
+
+        mkdir /usr/local/apache
+        ln -s /var/www/cgi-bin /usr/local/apache/cgi-bin
+        ln -s /var/www/html /usr/local/apache/htdocs
+        ln -s /var/www/cgi-bin-${LOGNAME} /usr/local/apache/cgi-bin
+
+    With those symlinks in place, a simple 'make cgi' can be used
+    instead of the 'make compile; make install DESTDIR=...' business.
+
+    If your apache DocumentRoot is something different than
+    /usr/local/apache/htdocs then use the DOCUMENTROOT variable.
+    This value should be a full path and should agree with the 
+    browser.documentRoot setting in hg.conf; see the section "MariaDB Setup"
+    for more details.
+
+        $ make install DESTDIR=/destination/prefix CGI_BIN=/cgi-bin/path DOCUMENTROOT=/usr/local/apache/htdocs
+
+    to install binaries in "/destination/prefix/cgi-bin/path"
+
+    [NOTE:  These 'make' commands assume gnu make is being used]
+
+5.  After source tree updates, the make sequence is:
+
+        $ cd kent/src
+        $ make clean
+        $ make libs
+        $ cd hg
+        $ make compile
+        $ make install DESTDIR=/destination/prefix
+
+****
+### Known problems: {#known-issues}
+
+1.  A compile/link of a utility has complaints about undefined symbols
+    such as: bind, accept, listen, gethostbyname, socket, setsockopt,
+    connect, inet_pton, inet_ntop or h_errno
+    To fix this, you need to add '-lsocket -lnsl' to your MYSQLLIBS
+    environment variable. This is typically the case on Solaris systems:
+
+        MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -lsocket -lnsl -lz"
+
+2.  The build fails immediately in the first src/lib/ directory with
+    the compiler issuing a warning about unused variables.
+    Some newer versions of gcc issue these warnings and the
+    src/inc/common.mk file specifies -Werror which causes it to
+    exit on these warnings. Either remove the -Werror specifications
+    in src/inc/common.mk or add the -Wno-unused-variable to instruct
+    the compiler to allow these warnings without an exit.
+
+3.  The build fails during a link of any program under the src/hg/
+    hierarchy with an error something like:
+
+        undefined reference to 'SSL_CTX_free'
+        undefined reference to 'ERR_get_error_line_data'
+        undefined reference to 'SSL_read'
+        undefined reference to 'SSL_get_error'
+        undefined reference to 'SSL_write'
+
+    This error is due to your MariaDB libraries have been compiled with SSL
+    functionality enabled. To fix this build problem, add '-lssl'
+    to your MYSQLLIBS environment variable to satisify these SSL
+    library functions.
+
+4.  Build fails on Macintosh with an error:
+
+        aliType.c:5: warning: 'rcsid' defined but not used
+        make: *** [aliType.o] Error 1
+
+    The OSTYPE environment variable needs to be set to "darwin". If your
+    shell is bash, it is a shell local variable instead of an environment
+    variable as with tcsh.
+
+    To avoid this error, place an export statement in your $HOME/.bashrc
+    environment:
+
+        export OSTYPE
+
+    This causes the OSTYPE variable to be recognized during the
+    make and the conditional statements in src/inc/common.mk will
+    include the -Wno-unused-variable option in the build.
+
+5.  The build fails with an error:
+
+        gifdecomp.c:274: error: call to function 'gif_out_line' without
+        a real prototype
+
+    This happens with newer versions of the gcc compiler. To avoid the
+    build stopping at this point, eliminate the -Werror argument from the
+    src/inc/common.mk file. We will fix this error as soon as we
+    get our hands on a newer version of the gcc compiler.
+
+6.  The build fails with an error of this type:
+
+        pipeline.c: In function waitOnExec:
+        pipeline.c:351: error: ignoring return value of read, declared with
+        attribute warn_unused_result 
+
+    This happens with newer versions of the gcc compiler. To avoid the
+    build stopping at this point, eliminate the -Werror argument from the
+    src/inc/common.mk file. We will fix this error as soon as we
+    get our hands on a newer version of the gcc compiler.
+
+7.  Build fails complaining about missing png.h file:
+
+        pngwrite.c:7:87: error: png.h: No such file or directory
+
+    Find out where your png.h file is and set PNGINCL to something like:
+
+        export PNGINCL="-I/opt/local/include/libpng14"
+
+    pointing to the directory where png.h exists.
+
+8.  Build fails at the point of building a CGI binary with the error:
+
+        Undefined symbols:
+        "_png_write_png", referenced from:
+        _mgSaveToPng in jkweb.a(pngwrite.o)
+        ... other png symbols ...
+
+    You need to find out where your libpng.a is located. For example
+    it may be in /opt/local/lib/libpng.a  When found, use the PNGLIB
+    variable to specify it, for example:
+
+        export PNGLIB=/opt/local/lib/libpng.a
+
+    or equivalent:
+
+        export PNGLIB='-L/opt/local/lib -lpng'
+
+9. Build fails with complains about missing functions dlclose, dlopen:
+
+        /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function 'add_plugin':
+        (.text+0x1ed): undefined reference to 'dlclose'
+        /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function 'mysql_client_plugin_deinit':
+        (.text+0x28b): undefined reference to 'dlclose'
+        /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function 'mysql_load_plugin_v':
+        (.text+0x51e): undefined reference to 'dlopen'
+
+    To add the library that includes these functions, add '-ldl' to the
+    MYSQLLIBS string:
+
+        MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -ldl -lz"
+
+10. Mac OSX dynamic link with the MySQL/MariaDB libraries results in the following
+    run-time error for CGI binaries or command line programs:
+
+        dyld: Library not loaded: libmysqlclient.18.dylib
+
+    This is a known problem with the dynamic library for MySQL,
+    with potential work-arounds offered:
+        <http://bugs.mysql.com/bug.php?id=61243>
+
+    Or, you can set the MYSQLINC and MYSQLLIBS shell environment variables
+    to the static MySQL library as mentioned in Step 3 above.
+
+11. Genome browser issues error:
+
+        "PDF format not available" when trying to export to pdf.
+
+    The browser can't find the command 'ps2pdf' which is usually
+    found in /usr/bin/ps2pdf and is installed with the 'ghostscript'
+    package. Install the 'ghostscript' package and verify ps2pdf is
+    in: /usr/bin/ps2pdf
+

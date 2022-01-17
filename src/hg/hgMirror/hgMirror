@@ -102,11 +102,13 @@ FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
     'gbExtFile', 'flyBase2004Xref',
     # for gencode/knownGene tracks and hg38 in particular
     "knownToTag", "ncbiRefSeqLink", "ncbiRefSeqCurated", "gtexGeneModel", "gtexGene", "knownAttrs",
-    "seqNcbiRefSeq",
+    "seqNcbiRefSeq", "gtexGeneModelV8", "gtexGeneV8",
     # for faster searches
     'hgFindSpec', 'ensemblToGeneName', "ucscToINSDC",
     # these are almost required for searches, common tracks and not too big
-    "ensGene", "xenoRefGene"
+    "ensGene", "xenoRefGene",
+    # added in Feb 2021, necessary now for knownGenes display
+    "knownCds"
     ]
 
 # always copy these hgFixed tables
@@ -258,6 +260,8 @@ def parseRa(text):
     data = dict()
     for l in lines:
         if len(l)==0:
+            continue
+        if " " not in l:
             continue
         key, val = string.split(l, " ", maxsplit=1)
         data[key] = val

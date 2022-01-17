@@ -316,7 +316,7 @@ protectedData = protectedTrack(tdb, tdb->track);
 jsonWriteString(jw, "shortLabel", tdb->shortLabel);
 jsonWriteString(jw, "type", tdb->type);
 jsonWriteString(jw, "longLabel", tdb->longLabel);
-if (! isContainer)	/* containers do not have items to count */
+if (! isContainer && (itemCount > 0))	/* containers do not have items to count and if itemCount == -1 we didn't count */
     jsonWriteNumber(jw, "itemCount", itemCount);
 if (tdb->parent)
     {
@@ -681,6 +681,7 @@ else
 hFreeConn(&conn);
 }
 
+#ifdef NOTUSED
 static long long bbiTableItemCount(struct sqlConnection *conn, char *type, char *tableName)
 /* Given a tableName that has a fileName column pointing to big*, bam or vcfTabix files, return the
  * total itemCount from all rows (BAM and VCF tables may have one row per chrom). */
@@ -755,6 +756,7 @@ else
     }
 return itemCount;
 }	/*	static long long dataItemCount(char *db, struct trackDb *tdb) */
+#endif
 
 static void recursiveTrackList(struct jsonWrite *jw, struct trackDb *tdb,
     char *db)
@@ -767,16 +769,18 @@ boolean isContainer = trackHasNoData(tdb);
 /* do *NOT* print containers when 'trackLeavesOnly' requested */
 if (! (trackLeavesOnly && isContainer) )
     {
+#ifdef NOTNOW
     long long itemCount = 0;
     /* do not show counts for protected data or continers (== no items)*/
     if (! (isContainer || protectedTrack(tdb, tdb->track)))
 	itemCount = dataItemCount(db, tdb);
+#endif
     jsonWriteObjectStart(jw, tdb->track);
     if (tdbIsComposite(tdb))
         jsonWriteString(jw, "compositeContainer", "TRUE");
     if (tdbIsCompositeView(tdb))
         jsonWriteString(jw, "compositeViewContainer", "TRUE");
-    outputTrackDbVars(jw, tdb, itemCount);
+    outputTrackDbVars(jw, tdb, -1);
 
     if (tdb->subtracks)
 	{

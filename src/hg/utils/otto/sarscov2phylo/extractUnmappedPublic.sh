@@ -47,7 +47,7 @@ fastaNames $cncbFa | cleanCncb \
 | tawk '{print $2, $1;}' | sort > cncbAccName
 
 # Filter minSize and exclude sequences that were mapped to GISAID IDs
-join -t$'\t' tree.renaming $epiToPublic | cut -f 3 > mappedIds
+join -t$'\t' epi.renaming $epiToPublic | cut -f 3 > mappedIds
 xcat $genbankFa \
 | faFilter -minSize=$minSize stdin stdout \
 | faSomeRecords -exclude stdin mappedIds genbank.unmapped.fa

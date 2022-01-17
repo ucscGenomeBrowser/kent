@@ -112,4 +112,5 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     // we found what we wanted
     break;
     }
+printTrackHtml(tdb);
 }

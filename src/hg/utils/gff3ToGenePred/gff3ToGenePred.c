@@ -1,7 +1,7 @@
 /* gff3ToGenePred - convert a GFF3 file to a genePred file. */
 
 /* Copyright (C) 2012 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include <limits.h>
 #include "linefile.h"
@@ -277,7 +277,7 @@ if (isGeneWithCdsChildCase(mrna))
     {
     // is name something like YP_203370.1 (don't try too hard)
     struct gff3Ann *cds = mrna->children->ann;
-    if ((strlen(cds->name) > 4) && isupper(cds->name[0]) && isupper(cds->name[1])
+    if ((cds->name != NULL) && (strlen(cds->name) > 4) && isupper(cds->name[0]) && isupper(cds->name[1])
         && (cds->name[2] == '_') && isdigit(cds->name[3]))
         return cds->name;
     }

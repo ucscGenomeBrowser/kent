@@ -183,7 +183,8 @@ my $avgTime = $totalRunTime / $jobsDone;
 my $overallTimeDone = `date "+%s"`;
 chomp $overallTimeDone;
 my $wallClockTime = $overallTimeDone - $overallTimeStart;
-my $speedUpMultiple = $totalRunTime / $wallClockTime;
+my $speedUpMultiple = 1;
+$speedUpMultiple = $totalRunTime / $wallClockTime if ($wallClockTime > 0);
 
 printf STDERR "# %d jobs %d totalSec %d sec/job %d wallClock %.2f X speedup multiple\n", $jobsDone, $totalRunTime, $avgTime, $wallClockTime, $speedUpMultiple;
 

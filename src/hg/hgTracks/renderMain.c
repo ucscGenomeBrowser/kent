@@ -2,7 +2,7 @@
  * writing form. . */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -114,6 +114,7 @@ boolean issueBotWarning;
 
 int main(int argc, char *argv[])
 {
+cgiSpoof(&argc, argv);
 if(argc == 1)
     {
     enteredMainTime = clock1000();
@@ -141,7 +142,13 @@ if(argc == 1)
         // remote rendering of hgTracks PNG image based on contents of a session; caller may pass in a subset of
         // hgTracks parameters: e.g. db, hgsid, pix, position and tracks with explicit visibilities (e.g. knownGene=pack).
 
+#define PDF_OUTPUT 0
+#if PDF_OUTPUT
+        cartSetString(cart, "hgt.contentType", "pdf");
+        cartSetString(cart, "hgt.psOutput", "on");
+#else
         cartSetString(cart, "hgt.contentType", "png");
+#endif
         cartSetBoolean(cart, "hgt.imageV1", TRUE);
         if(!cartVarExists(cart, "hgt.internal"))
             {

@@ -2,6 +2,8 @@
 
 use warnings;
 use strict;
+use Date::Parse;
+
 
 sub usage() {
   print STDERR "usage: $0 biosample.tab [gbMetadata.tab]\n";
@@ -17,27 +19,23 @@ my @months = qw(jan feb mar apr may jun jul aug sep oct nov dec);
 sub normalizeDate($) {
   # Convert "25-Jan-2020" to 2020-01-25, "19-MAR-2020" to 2020-03-19...
   my ($dateIn) = @_;
-  my $dateOut = "";
-  if ($dateIn) {
-    if ($dateIn =~ /^\d\d\d\d(-\d\d)?(-\d\d)?$/) {
-      $dateOut = $dateIn;
-    } elsif ($dateIn =~ /^((\d\d?)-)?(\w\w\w)-(\d\d\d\d)$/) {
-      my ($day, $month, $year) = ($2, lc($3), $4);
-      my ($mIx) = grep { $months[$_] eq $month } (0 .. @months-1);
-      if (! defined $mIx) {
-        die "Unrecognized month '$month' in '$dateIn'";
-      }
-      $month = $mIx + 1;
-      if ($day) {
-        $dateOut = sprintf("%04d-%02d-%02d", $year, $month, $day);
-      } else {
-        $dateOut = sprintf("%04d-%02d", $year, $month);
-      }
-    } else {
-      die "Unrecognized date format '$dateIn'";
+  $dateIn =~ s/-00//g;
+  if (! $dateIn) {
+    return "";
+  } elsif ($dateIn =~ /^\d\d\d\d(-\d\d)*$/) {
+    return $dateIn;
+  } else {
+    my ($ss,$mm,$hh,$day,$month,$year,$zone) = strptime($dateIn);
+    my $dateOut = "";
+    if ($day) {
+      $dateOut = sprintf("%04d-%02d-%02d", $year+1900, $month+1, $day);
+    } elsif ($month) {
+      $dateOut = sprintf("%04d-%02d", $year+1900, $month+1);
+    } elsif ($year) {
+      $dateOut = printf("%04d", $year+1900);
     }
+    return $dateOut;
   }
-  return $dateOut;
 }
 
 my $biosampleFile = shift @ARGV;
@@ -62,11 +60,11 @@ while (<>) {
     if (exists $b2Name{$bAcc}) {
       my ($bName, $bDate, $bCountry) = ($b2Name{$bAcc}, normalizeDate($b2Date{$bAcc}),
                                         $b2Country{$bAcc});
-      if (! $gbDate) {
+      if (! $gbDate || length($bDate) > length($gbDate)) {
         $gbDate = $bDate;
       } elsif ($bDate && $gbDate ne $bDate) {
-        print STDERR "CONFLICT: Genbank date ($gbAcc $gbName) = $gbDate, " .
-          "BioSample date ($bAcc $bName) = $bDate\n";
+        print STDERR join("\t", "dateMismatch", $gbAcc, $gbName, $gbDate, $bAcc, $bName, $bDate) .
+          "\n";
       }
       if (! $gbName) {
         $gbName = $bName;
@@ -83,7 +81,7 @@ while (<>) {
       # BioSample file doesn't have info for this BioSample accession
       print STDERR "Missing BioSample info for $bAcc\n";
       $missingCount++;
-      if ($missingCount >= 1000) {
+      if ($missingCount >= 100000) {
         die "Too many missing BioSamples, quitting.\n";
       }
       # Pass through as-is

@@ -1,0 +1,13 @@
+The two HTML files mirror.html and mirrorManual.html in ../htdocs/goldenPath/help
+are generated from the two text files in this directory:
+
+ README.txt -> ../hg/htdocs/goldenPath/help/mirror.html
+ mirrorManual.txt -> ../hg/htdocs/goldenPath/help/mirrorManual.html
+
+This makes it possible that installation instructions are normal text files because 
+many sys-admin users expect them to be raw ASCII and this is the way we used
+to provide them. At the same time, we have nice HTML files for interactive users
+and search engines.
+
+Therefore, to modify these files, edit only README.txt and mirrorManual.txt, never
+edit the HTML files. Then, run "make" in mirrorDocs/ and follow the instructions.

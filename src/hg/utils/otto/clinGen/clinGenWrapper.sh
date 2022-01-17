@@ -1,6 +1,6 @@
 #!/bin/sh -e
 PATH=/cluster/bin/x86_64:$PATH
-EMAIL="chmalee@ucsc.edu,abenet@ucsc.edu"
+EMAIL="lrnassar@ucsc.edu"
 WORKDIR="/hive/data/outside/otto/clinGen"
 
 cd $WORKDIR

@@ -29,7 +29,33 @@ printf "# srcDir: %s\n" "${srcDir}"
 printf "# destDir: %s\n" "${destDir}"
 
 ssh qateam@hgdownload.soe.ucsc.edu "mkdir -p ${destDir}" 2>&1 | grep -v "X11 forwarding request" || true
-printf "# successful mkdir\n"
-rsync --delete --stats -a -L -P "${srcDir}/" "qateam@hgdownload.soe.ucsc.edu:${destDir}/" \
+printf "# successful mkdir on hgdownload\n"
+
+### 2021-12-20 - out of disk space on dynablat
+
+if [ 1 -eq 0 ]; then
+
+export dynaServerDir="/scratch/hubs/${dirPath}"
+
+ssh qateam@dynablat-01.soe.ucsc.edu "mkdir -p ${dynaServerDir}" 2>&1 | grep -v "X11 forwarding request" || true
+printf "# successful mkdir on dynablat-01\n"
+
+rsync --stats -a -L -P ${srcDir}/*.2bit "qateam@dynablat-01.soe.ucsc.edu:${dynaServerDir}/" \
+  2>&1 | grep -v "X11 forwarding request" || true
+rsync --stats -a -L -P ${srcDir}/*.gfidx "qateam@dynablat-01.soe.ucsc.edu:${dynaServerDir}/" \
+  2>&1 | grep -v "X11 forwarding request" || true
+
+fi
+### 2021-12-20 - out of disk space on dynablat
+##################################################################
+
+# the new single file hub genome trackDb file:
+# genomes.txt obsolete now with the single file
+# ssh qateam@hgdownload.soe.ucsc.edu "rm ${destDir}/genomes.txt" 2>&1 | egrep -v "cannot remove|X11 forwarding request" || true
+# ssh qateam@hgdownload.soe.ucsc.edu "rm ${destDir}/html/*.description.html" 2>&1 | grep -v "X11 forwarding request" || true
+rsync --delete --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@hgdownload.soe.ucsc.edu:${destDir}/" \
+  2>&1 | grep -v "X11 forwarding request" || true
+# the new single file hub genome trackDb file:
+rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@hgdownload.soe.ucsc.edu:${destDir}/hub.txt" \
   2>&1 | grep -v "X11 forwarding request" || true
 printf "# successful rsync\n"

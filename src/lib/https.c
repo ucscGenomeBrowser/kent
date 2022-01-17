@@ -1,7 +1,7 @@
 /* Connect via https. */
 
 /* Copyright (C) 2012 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "openssl/ssl.h"
 #include "openssl/err.h"
@@ -14,8 +14,18 @@
 #include "common.h"
 #include "internet.h"
 #include "errAbort.h"
+#include "hash.h"
 #include "net.h"
 
+
+// For use with callback. Set a variable into the connection itself,
+// and then use that during the callback.
+struct myData
+    {
+    char *hostName;
+    };
+
+int myDataIndex = -1;
 
 static pthread_mutex_t *mutexes = NULL;
  
@@ -48,10 +58,8 @@ struct netConnectHttpsParams
 /* params to pass to thread */
 {
 pthread_t thread;
-char *hostName;
-int port;
-boolean noProxy;
 int sv[2]; /* the pair of socket descriptors */
+BIO *sbio;  // ssl bio
 };
 
 static void xerrno(char *msg)
@@ -63,6 +71,8 @@ static void xerr(char *msg)
 {
 fprintf(stderr, "%s\n", msg); fflush(stderr);
 }
+
+void initDomainWhiteListHash();   // forward declaration
 
 void openSslInit()
 /* do only once */
@@ -77,6 +87,8 @@ if (!done)
     ERR_load_SSL_strings();
     OpenSSL_add_all_algorithms();
     openssl_pthread_setup();
+    myDataIndex = SSL_get_ex_new_index(0, "myDataIndex", NULL, NULL, NULL);
+    initDomainWhiteListHash();
     done = TRUE;
     }
 pthread_mutex_unlock( &osiMutex );
@@ -92,206 +104,15 @@ struct netConnectHttpsParams *params = threadParam;
 
 pthread_detach(params->thread);  // this thread will never join back with it's progenitor
 
-int fd=0;
-char *proxyUrl = getenv("https_proxy");
-if (params->noProxy)
-    proxyUrl = NULL;
-char *connectHost;
-int connectPort;
-
-BIO *fbio=NULL;  // file descriptor bio
-BIO *sbio=NULL;  // ssl bio
-SSL_CTX *ctx;
-SSL *ssl;
-
-openSslInit();
-
-ctx = SSL_CTX_new(SSLv23_client_method());
-
-fd_set readfds;
-fd_set writefds;
-int err;
-struct timeval tv;
-
-
-/* TODO checking certificates 
-
-char *certFile = NULL;
-char *certPath = NULL;
-if (certFile || certPath)
-    {
-    SSL_CTX_load_verify_locations(ctx,certFile,certPath);
-#if (OPENSSL_VERSION_NUMBER < 0x0090600fL)
-    SSL_CTX_set_verify_depth(ctx,1);
-#endif
-    }
-
-// verify paths and mode.
-
-*/
-
-
-
-// Don't want any retries since we are non-blocking bio now
-// This is available on newer versions of openssl
-//SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
-
-// Support for Http Proxy
-struct netParsedUrl pxy;
-if (proxyUrl)
-    {
-    netParseUrl(proxyUrl, &pxy);
-    if (!sameString(pxy.protocol, "http"))
-	{
-	char s[256];	
-	safef(s, sizeof s, "Unknown proxy protocol %s in %s. Should be http.", pxy.protocol, proxyUrl);
-	xerr(s);
-	goto cleanup;
-	}
-    connectHost = pxy.host;
-    connectPort = atoi(pxy.port);
-    }
-else
-    {
-    connectHost = params->hostName;
-    connectPort = params->port;
-    }
-fd = netConnect(connectHost,connectPort);
-if (fd == -1)
-    {
-    xerr("netConnect() failed");
-    goto cleanup;
-    }
-
-if (proxyUrl)
-    {
-    char *logProxy = getenv("log_proxy");
-    if (sameOk(logProxy,"on"))
-	verbose(1, "CONNECT %s:%d HTTP/1.0 via %s:%d\n", params->hostName, params->port, connectHost,connectPort);
-    struct dyString *dy = newDyString(512);
-    dyStringPrintf(dy, "CONNECT %s:%d HTTP/1.0\r\n", params->hostName, params->port);
-    setAuthorization(pxy, "Proxy-Authorization", dy);
-    dyStringAppend(dy, "\r\n");
-    mustWriteFd(fd, dy->string, dy->stringSize);
-    dyStringFree(&dy);
-    // verify response
-    char *newUrl = NULL;
-    boolean success = netSkipHttpHeaderLinesWithRedirect(fd, proxyUrl, &newUrl);
-    if (!success) 
-	{
-	xerr("proxy server response failed");
-	goto cleanup;
-	}
-    if (newUrl) /* no redirects */
-	{
-	xerr("proxy server response should not be a redirect");
-	goto cleanup;
-	}
-    }
-
-
-fbio=BIO_new_socket(fd,BIO_NOCLOSE);  
-// BIO_NOCLOSE because we handle closing fd ourselves.
-if (fbio == NULL)
-    {
-    xerr("BIO_new_socket() failed");
-    goto cleanup;
-    }
-sbio = BIO_new_ssl(ctx, 1);
-if (sbio == NULL) 
-    {
-    xerr("BIO_new_ssl() failed");
-    goto cleanup;
-    }
-sbio = BIO_push(sbio, fbio);
-BIO_get_ssl(sbio, &ssl);
-if(!ssl) 
-    {
-    xerr("Can't locate SSL pointer");
-    goto cleanup;
-    }
-
-
-/* 
-Server Name Indication (SNI)
-Required to complete tls ssl negotiation for systems which house multiple domains. (SNI)
-This is common when serving HTTPS requests with a wildcard certificate (*.domain.tld).
-This line will allow the ssl connection to send the hostname at tls negotiation time.
-It tells the remote server which hostname the client is connecting to.
-The hostname must not be an IP address.
-*/ 
-if (!isIpv4Address(params->hostName) && !isIpv6Address(params->hostName))
-    SSL_set_tlsext_host_name(ssl,params->hostName);
-
-BIO_set_nbio(sbio, 1);     /* non-blocking mode */
-
-while (1) 
-    {
-    if (BIO_do_handshake(sbio) == 1) 
-	{
-	break;  /* Connected */
-	}
-    if (! BIO_should_retry(sbio)) 
-	{
-	xerr("BIO_do_handshake() failed");
-	char s[256];	
-	safef(s, sizeof s, "SSL error: %s", ERR_reason_error_string(ERR_get_error()));
-	xerr(s);
-	goto cleanup;
-	}
-
-    fd = BIO_get_fd(sbio, NULL);
-    if (fd == -1) 
-	{
-	xerr("unable to get BIO descriptor");
-	goto cleanup;
-	}
-    FD_ZERO(&readfds);
-    FD_ZERO(&writefds);
-    if (BIO_should_read(sbio)) 
-	{
-	FD_SET(fd, &readfds);
-	}
-    else if (BIO_should_write(sbio)) 
-	{
-	FD_SET(fd, &writefds);
-	}
-    else 
-	{  /* BIO_should_io_special() */
-	FD_SET(fd, &readfds);
-	FD_SET(fd, &writefds);
-	}
-    tv.tv_sec = (long) (DEFAULTCONNECTTIMEOUTMSEC/1000);  // timeout default 10 seconds
-    tv.tv_usec = (long) (((DEFAULTCONNECTTIMEOUTMSEC/1000)-tv.tv_sec)*1000000);
-
-    err = select(fd + 1, &readfds, &writefds, NULL, &tv);
-    if (err < 0) 
-	{
-	xerr("select() error");
-	goto cleanup;
-	}
-
-    if (err == 0) 
-	{
-	char s[256];	
-	safef(s, sizeof s, "connection timeout to %s", params->hostName);
-	xerr(s);
-	goto cleanup;
-	}
-    }
-
-
-/* TODO checking certificates 
-
-if (certFile || certPath)
-    if (!check_cert(ssl, host))
-	return -1;
-
-*/
 
 /* we need to wait on both the user's socket and the BIO SSL socket 
  * to see if we need to ferry data from one to the other */
 
+fd_set readfds;
+fd_set writefds;
+
+struct timeval tv;
+int err;
 
 char sbuf[32768];  // socket buffer sv[1] to user
 char bbuf[32768];  // bio buffer
@@ -299,12 +120,13 @@ int srd = 0;
 int swt = 0;
 int brd = 0;
 int bwt = 0;
+int fd = 0;
 while (1) 
     {
 
     // Do NOT move this outside the while loop. 
     /* Get underlying file descriptor, needed for select call */
-    fd = BIO_get_fd(sbio, NULL);
+    fd = BIO_get_fd(params->sbio, NULL);
     if (fd == -1) 
 	{
 	xerr("BIO doesn't seem to be initialized in https, unable to get descriptor.");
@@ -358,10 +180,10 @@ while (1)
 
 	if (FD_ISSET(fd, &writefds))
 	    {
-	    int swtx = BIO_write(sbio, sbuf+swt, srd-swt);
+	    int swtx = BIO_write(params->sbio, sbuf+swt, srd-swt);
 	    if (swtx <= 0)
 		{
-		if (!BIO_should_write(sbio))
+		if (!BIO_should_write(params->sbio))
 		    {
 		    ERR_print_errors_fp(stderr);
 		    xerr("Error writing SSL connection");
@@ -382,11 +204,11 @@ while (1)
 	if (FD_ISSET(fd, &readfds))
 	    {
 	    bwt = 0;
-	    brd = BIO_read(sbio, bbuf, 32768);
+	    brd = BIO_read(params->sbio, bbuf, 32768);
 
 	    if (brd <= 0)
 		{
-		if (BIO_should_read(sbio))
+		if (BIO_should_read(params->sbio))
 		    {
 		    brd = 0;
 		    continue;
@@ -448,26 +270,461 @@ while (1)
 
 cleanup:
 
-BIO_free_all(sbio);  // will free entire chain of bios
+
+BIO_free_all(params->sbio);  // will free entire chain of bios
 close(fd);     // Needed because we use BIO_NOCLOSE above. Someday might want to re-use a connection.
 close(params->sv[1]);  /* we are done with it */
 
 return NULL;
 }
 
+
+static int verify_callback(int preverify_ok, X509_STORE_CTX *ctx)
+{
+char    buf[256];
+X509   *cert;
+int     err, depth;
+
+struct myData *myData;
+SSL    *ssl;
+
+cert = X509_STORE_CTX_get_current_cert(ctx);
+err = X509_STORE_CTX_get_error(ctx);
+depth = X509_STORE_CTX_get_error_depth(ctx);
+
+/*
+* Retrieve the pointer to the SSL of the connection currently treated
+* and the application specific data stored into the SSL object.
+*/
+
+X509_NAME_oneline(X509_get_subject_name(cert), buf, 256);
+
+/*
+* Catch a too long certificate chain. The depth limit set using
+* SSL_CTX_set_verify_depth() is by purpose set to "limit+1" so
+* that whenever the "depth>verify_depth" condition is met, we
+* have violated the limit and want to log this error condition.
+* We must do it here, because the CHAIN_TOO_LONG error would not
+* be found explicitly; only errors introduced by cutting off the
+* additional certificates would be logged.
+*/
+
+ssl = X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
+myData = SSL_get_ex_data(ssl, myDataIndex);
+
+
+if (depth > atoi(getenv("https_cert_check_depth")))
+    {
+    preverify_ok = 0;
+    err = X509_V_ERR_CERT_CHAIN_TOO_LONG;
+    X509_STORE_CTX_set_error(ctx, err);
+    }
+if (sameString(getenv("https_cert_check_verbose"), "on"))
+    {
+    fprintf(stderr,"depth=%d:%s\n", depth, buf);
+    }
+if (!preverify_ok) 
+    {
+    if (getenv("SCRIPT_NAME"))  // CGI mode
+	{
+	fprintf(stderr, "verify error:num=%d:%s:depth=%d:%s hostName=%s CGI=%s\n", err,
+	    X509_verify_cert_error_string(err), depth, buf, myData->hostName, getenv("SCRIPT_NAME"));
+	}
+    if (!sameString(getenv("https_cert_check"), "log"))
+	{
+	char *cn = strstr(buf, "/CN=");
+	if (cn) cn+=4;  // strlen /CN=
+	if (sameString(cn, myData->hostName))
+	    warn("%s on %s", X509_verify_cert_error_string(err), cn);
+	else
+	    warn("%s on %s (%s)", X509_verify_cert_error_string(err), cn, myData->hostName);
+	}
+    }
+/* err contains the last verification error.  */
+if (!preverify_ok && (err == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT))
+    {
+    X509_NAME_oneline(X509_get_issuer_name(cert), buf, 256);
+    fprintf(stderr, "issuer= %s\n", buf);
+    }
+if (sameString(getenv("https_cert_check"), "warn") || sameString(getenv("https_cert_check"), "log"))
+    return 1;
+else
+    return preverify_ok;
+}
+
+struct hash *domainWhiteList = NULL;
+
+void initDomainWhiteListHash()
+/* Initialize once, has all the old existing domains 
+ * for which cert checking is skipped since they are not compatible (yet) with openssl.*/
+{
+
+domainWhiteList = hashNew(8);
+
+// whitelisted domain exceptions set in hg.conf
+// space separated list.
+char *dmwl = cloneString(getenv("https_cert_check_domain_exceptions"));
+int wordCount = chopByWhite(dmwl, NULL, 0);
+if (wordCount > 0)
+    {
+    char **words;
+    AllocArray(words, wordCount);
+    chopByWhite(dmwl, words, wordCount);
+    int w;
+    for(w=0; w < wordCount; w++)
+	{
+	hashStoreName(domainWhiteList, words[w]);
+	}
+    freeMem(words);
+    }
+freez(&dmwl);
+
+// useful for testing, turns off hardwired whitelist exceptions
+if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))  
+    {
+    // Hardwired exceptions whitelist
+    // openssl automatically whitelists domains which are given as IPv4 or IPv6 addresses
+    hashStoreName(domainWhiteList, "*.cbu.uib.no");
+    hashStoreName(domainWhiteList, "*.clinic.cat");
+    hashStoreName(domainWhiteList, "*.ezproxy.u-pec.fr");
+    hashStoreName(domainWhiteList, "*.genebook.com.cn");
+    hashStoreName(domainWhiteList, "*.jncasr.ac.in");
+    hashStoreName(domainWhiteList, "annotation.dbi.udel.edu");
+    hashStoreName(domainWhiteList, "apprisws.bioinfo.cnio.es");
+    hashStoreName(domainWhiteList, "arn.ugr.es");
+    hashStoreName(domainWhiteList, "bic2.ibi.upenn.edu");
+    hashStoreName(domainWhiteList, "bioinfo2.ugr.es");
+    hashStoreName(domainWhiteList, "bioinfo5.ugr.es");
+    hashStoreName(domainWhiteList, "bioshare.genomecenter.ucdavis.edu");
+    hashStoreName(domainWhiteList, "biowebport.com");
+    hashStoreName(domainWhiteList, "bx.bio.jhu.edu");
+    hashStoreName(domainWhiteList, "ccg.epfl.ch");
+    hashStoreName(domainWhiteList, "cctop.cos.uni-heidelberg.de");
+    hashStoreName(domainWhiteList, "cluster.hpcc.ucr.edu");
+    hashStoreName(domainWhiteList, "costalab.ukaachen.de");
+    hashStoreName(domainWhiteList, "data.rc.fas.harvard.edu");
+    hashStoreName(domainWhiteList, "datahub-7ak6xof0.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-7mu6z13t.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-bx3mvzla.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-gvhsc2p7.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-i8kms5wt.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-kazb7g4u.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-nyt53rix.udes.genap.ca");
+    hashStoreName(domainWhiteList, "datahub-ruigbdoq.udes.genap.ca");
+    hashStoreName(domainWhiteList, "dev.herv.img.cas.cz");
+    hashStoreName(domainWhiteList, "dev.stanford.edu");
+    hashStoreName(domainWhiteList, "dice-green.liai.org");
+    hashStoreName(domainWhiteList, "dropbox.ogic.ca");
+    hashStoreName(domainWhiteList, "dropfile.hpc.qmul.ac.uk");
+    hashStoreName(domainWhiteList, "edn.som.umaryland.edu");
+    hashStoreName(domainWhiteList, "epd.epfl.ch");
+    hashStoreName(domainWhiteList, "expiereddnsmanager.com");
+    hashStoreName(domainWhiteList, "frigg.uio.no");
+    hashStoreName(domainWhiteList, "ftp--ncbi--nlm--nih--gov.ibrowse.co");
+    hashStoreName(domainWhiteList, "ftp.science.ru.nl");
+    hashStoreName(domainWhiteList, "galaxy.med.uvm.edu");
+    hashStoreName(domainWhiteList, "garfield.igh.cnrs.fr");
+    hashStoreName(domainWhiteList, "gcp.wenglab.org");
+    hashStoreName(domainWhiteList, "genap.ca");
+    hashStoreName(domainWhiteList, "genemo.ucsd.edu");
+    hashStoreName(domainWhiteList, "genome-tracks.ngs.omrf.in");
+    hashStoreName(domainWhiteList, "genomics.virus.kyoto-u.ac.jp");
+    hashStoreName(domainWhiteList, "genomicsdata.cs.ucl.ac.uk");
+    hashStoreName(domainWhiteList, "gsmplot.deqiangsun.org");
+    hashStoreName(domainWhiteList, "hgdownload--soe--ucsc--edu.ibrowse.co");
+    hashStoreName(domainWhiteList, "herv.img.cas.cz");
+    hashStoreName(domainWhiteList, "hci-bio-app.hci.utah.edu");
+    hashStoreName(domainWhiteList, "hkgateway.med.umich.edu");
+    hashStoreName(domainWhiteList, "hsb.upf.edu");
+    hashStoreName(domainWhiteList, "icbi.at");
+    hashStoreName(domainWhiteList, "lichtlab.cancer.ufl.edu");
+    hashStoreName(domainWhiteList, "manticore.niehs.nih.gov");
+    hashStoreName(domainWhiteList, "metamorf.hb.univ-amu.fr");
+    hashStoreName(domainWhiteList, "microb215.med.upenn.edu");
+    hashStoreName(domainWhiteList, "mitranscriptome.path.med.umich.edu");
+    hashStoreName(domainWhiteList, "nextgen.izkf.rwth-aachen.de");
+    hashStoreName(domainWhiteList, "oculargenomics.meei.harvard.edu");
+    hashStoreName(domainWhiteList, "onesgateway.med.umich.edu");
+    hashStoreName(domainWhiteList, "openslice.fenyolab.org");
+    hashStoreName(domainWhiteList, "peromyscus.rc.fas.harvard.edu");
+    hashStoreName(domainWhiteList, "pgv19.virol.ucl.ac.uk");
+    hashStoreName(domainWhiteList, "pricenas.biochem.uiowa.edu");
+    hashStoreName(domainWhiteList, "redirect.medsch.ucla.edu");
+    hashStoreName(domainWhiteList, "rnaseqhub.brain.mpg.de");
+    hashStoreName(domainWhiteList, "schatzlabucscdata.yalespace.org.s3.amazonaws.com");
+    hashStoreName(domainWhiteList, "sharing.biotec.tu-dresden.de");
+    hashStoreName(domainWhiteList, "silo.bioinf.uni-leipzig.de");
+    hashStoreName(domainWhiteList, "snpinfo.niehs.nih.gov");
+    hashStoreName(domainWhiteList, "spades.cgi.bch.uconn.edu");
+    hashStoreName(domainWhiteList, "v91rc2.master.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "v91rc3.master.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "v94.rc2.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "virtlehre.informatik.uni-leipzig.de");
+    hashStoreName(domainWhiteList, "web1.bx.bio.jhu.edu");
+    hashStoreName(domainWhiteList, "www.datadepot.rcac.purdue.edu");
+    hashStoreName(domainWhiteList, "www.isical.ac.in");
+    hashStoreName(domainWhiteList, "www.morgridge.us");
+    hashStoreName(domainWhiteList, "www.ogic.ca");
+    hashStoreName(domainWhiteList, "www.v93rc2.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "xinglabtrackhub.research.chop.edu");
+    hashStoreName(domainWhiteList, "ydna-warehouse.org");
+    hashStoreName(domainWhiteList, "zlab-trackhub.umassmed.edu");
+    hashStoreName(domainWhiteList, "zlab.umassmed.edu");
+    }
+
+}
+
+struct hashEl *checkIfInHashWithWildCard(char *hostName)
+/* check if in hash, and if in hash with lowest-level domain set to "*" wildcard */
+{
+struct hashEl *result = hashLookup(domainWhiteList, hostName);
+if (!result)
+    {
+    char *dot = strchr(hostName, '.');
+    if (dot && (dot - hostName) >= 1)
+	{
+        int length=strlen(hostName)+1;
+	char wildHost[length];
+	safef(wildHost, sizeof wildHost, "*%s", dot);
+	result = hashLookup(domainWhiteList, wildHost);
+	}
+    }
+return result;
+}
+
 int netConnectHttps(char *hostName, int port, boolean noProxy)
 /* Return socket for https connection with server or -1 if error. */
 {
 
-fflush(stdin);
-fflush(stdout);
-fflush(stderr);
+int fd=0;
+
+// https_cert_check env var can be abort warn or none.
+
+setenv("https_cert_check", "log", 0);      // DEFAULT certificate check is log.
+
+setenv("https_cert_check_depth", "9", 0);   // DEFAULT depth check level is 9.
+
+setenv("https_cert_check_verbose", "off", 0);   // DEFAULT verbose is off.
+
+setenv("https_cert_check_domain_exceptions", "", 0);   // DEFAULT space separated list is empty string.
+
+char *proxyUrl = getenv("https_proxy");
+
+if (noProxy)
+    proxyUrl = NULL;
+char *connectHost;
+int connectPort;
+
+BIO *fbio=NULL;  // file descriptor bio
+BIO *sbio=NULL;  // ssl bio
+SSL_CTX *ctx;
+SSL *ssl;
+
+openSslInit();
+
+ctx = SSL_CTX_new(SSLv23_client_method());
+
+fd_set readfds;
+fd_set writefds;
+int err;
+struct timeval tv;
+
+struct myData myData;
+boolean doSetMyData = FALSE;
+
+if (!sameString(getenv("https_cert_check"), "none"))
+    {
+    if (checkIfInHashWithWildCard(hostName))
+	{
+	// old existing domains which are not (yet) compatible with openssl.
+	if (getenv("SCRIPT_NAME"))  // CGI mode
+	    {
+	    fprintf(stderr, "domain %s cert check skipped because it is white-listed as an exception.\n", hostName);
+	    }
+	}
+    else
+	{
+
+	// verify peer cert of the server.
+	// Set TRUSTED_FIRST for openssl 1.0
+	// Fixes common issue openssl 1.0 had with with LetsEncrypt certs in the Fall of 2021.
+	X509_STORE_set_flags(SSL_CTX_get_cert_store(ctx), X509_V_FLAG_TRUSTED_FIRST);
+
+        // This flag causes intermediate certificates in the trust store to be treated as trust-anchors, in the same way as the self-signed root CA certificates. 
+        // This makes it possible to trust certificates issued by an intermediate CA without having to trust its ancestor root CA.
+        // GNU-TLS uses it, and openssl probably will do it in the future. 
+        // Currently this does not fix any of our known issues with users servers certs.
+	// X509_STORE_set_flags(SSL_CTX_get_cert_store(ctx), X509_V_FLAG_PARTIAL_CHAIN);
+
+	// verify_callback gets called once per certificate returned by the server.
+	SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, verify_callback);
+
+	/*
+	 * Let the verify_callback catch the verify_depth error so that we get
+	 * an appropriate error in the logfile.
+	 */
+	SSL_CTX_set_verify_depth(ctx, atoi(getenv("https_cert_check_depth")) + 1);
+
+	// VITAL FOR PROPER VERIFICATION OF CERTS
+	if (!SSL_CTX_set_default_verify_paths(ctx)) 
+	    {
+	    warn("SSL set default verify paths failed");
+	    }
+
+	// add the hostName to the structure and set it here, making it available during callback.
+	myData.hostName = hostName;
+	doSetMyData = TRUE;
+
+	} 
+    }
+
+// Don't want any retries since we are non-blocking bio now
+// This is available on newer versions of openssl
+//SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
+
+
+// Support for Http Proxy
+struct netParsedUrl pxy;
+if (proxyUrl)
+    {
+    netParseUrl(proxyUrl, &pxy);
+    if (!sameString(pxy.protocol, "http"))
+	{
+	warn("Unknown proxy protocol %s in %s. Should be http.", pxy.protocol, proxyUrl);
+	goto cleanup2;
+	}
+    connectHost = pxy.host;
+    connectPort = atoi(pxy.port);
+    }
+else
+    {
+    connectHost = hostName;
+    connectPort = port;
+    }
+fd = netConnect(connectHost,connectPort);
+if (fd == -1)
+    {
+    warn("netConnect() failed");
+    goto cleanup2;
+    }
+
+if (proxyUrl)
+    {
+    char *logProxy = getenv("log_proxy");
+    if (sameOk(logProxy,"on"))
+	verbose(1, "CONNECT %s:%d HTTP/1.0 via %s:%d\n", hostName, port, connectHost,connectPort);
+    struct dyString *dy = newDyString(512);
+    dyStringPrintf(dy, "CONNECT %s:%d HTTP/1.0\r\n", hostName, port);
+    setAuthorization(pxy, "Proxy-Authorization", dy);
+    dyStringAppend(dy, "\r\n");
+    mustWriteFd(fd, dy->string, dy->stringSize);
+    dyStringFree(&dy);
+    // verify response
+    char *newUrl = NULL;
+    boolean success = netSkipHttpHeaderLinesWithRedirect(fd, proxyUrl, &newUrl);
+    if (!success) 
+	{
+	warn("proxy server response failed");
+	goto cleanup2;
+	}
+    if (newUrl) /* no redirects */
+	{
+	warn("proxy server response should not be a redirect");
+	goto cleanup2;
+	}
+    }
+
+fbio=BIO_new_socket(fd,BIO_NOCLOSE);  
+// BIO_NOCLOSE because we handle closing fd ourselves.
+if (fbio == NULL)
+    {
+    warn("BIO_new_socket() failed");
+    goto cleanup2;
+    }
+sbio = BIO_new_ssl(ctx, 1);
+if (sbio == NULL) 
+    {
+    warn("BIO_new_ssl() failed");
+    goto cleanup2;
+    }
+sbio = BIO_push(sbio, fbio);
+BIO_get_ssl(sbio, &ssl);
+if(!ssl) 
+    {
+    warn("Can't locate SSL pointer");
+    goto cleanup2;
+    }
+
+if (doSetMyData)
+    SSL_set_ex_data(ssl, myDataIndex, &myData);
+
+/* 
+Server Name Indication (SNI)
+Required to complete tls ssl negotiation for systems which house multiple domains. (SNI)
+This is common when serving HTTPS requests with a wildcard certificate (*.domain.tld).
+This line will allow the ssl connection to send the hostname at tls negotiation time.
+It tells the remote server which hostname the client is connecting to.
+The hostname must not be an IP address.
+*/ 
+if (!isIpv4Address(hostName) && !isIpv6Address(hostName))
+    SSL_set_tlsext_host_name(ssl,hostName);
+
+BIO_set_nbio(sbio, 1);     /* non-blocking mode */
+
+while (1) 
+    {
+    if (BIO_do_handshake(sbio) == 1) 
+	{
+	break;  /* Connected */
+	}
+    if (! BIO_should_retry(sbio)) 
+	{
+	//BIO_do_handshake() failed
+	warn("SSL error: %s", ERR_reason_error_string(ERR_get_error()));
+	goto cleanup2;
+	}
+
+    fd = BIO_get_fd(sbio, NULL);
+    if (fd == -1) 
+	{
+	warn("unable to get BIO descriptor");
+	goto cleanup2;
+	}
+    FD_ZERO(&readfds);
+    FD_ZERO(&writefds);
+    if (BIO_should_read(sbio)) 
+	{
+	FD_SET(fd, &readfds);
+	}
+    else if (BIO_should_write(sbio)) 
+	{
+	FD_SET(fd, &writefds);
+	}
+    else 
+	{  /* BIO_should_io_special() */
+	FD_SET(fd, &readfds);
+	FD_SET(fd, &writefds);
+	}
+    tv.tv_sec = (long) (DEFAULTCONNECTTIMEOUTMSEC/1000);  // timeout default 10 seconds
+    tv.tv_usec = (long) (((DEFAULTCONNECTTIMEOUTMSEC/1000)-tv.tv_sec)*1000000);
+
+    err = select(fd + 1, &readfds, &writefds, NULL, &tv);
+    if (err < 0) 
+	{
+	warn("select() error");
+	goto cleanup2;
+	}
+
+    if (err == 0) 
+	{
+	warn("connection timeout to %s", hostName);
+	goto cleanup2;
+	}
+    }
 
 struct netConnectHttpsParams *params;
 AllocVar(params);
-params->hostName = cloneString(hostName);
-params->port = port;
-params->noProxy = noProxy;
+params->sbio = sbio;
 
 socketpair(AF_UNIX, SOCK_STREAM, 0, params->sv);
 
@@ -482,9 +739,18 @@ if (rc)
     errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
     }
 
+return params->sv[0];
+
 /* parent */
 
-return params->sv[0];
+cleanup2:
+
+if (sbio)
+    BIO_free_all(sbio);  // will free entire chain of bios
+if (fd != -1)
+    close(fd);  // Needed because we use BIO_NOCLOSE above. Someday might want to re-use a connection.
+
+return -1;
 
 }
 

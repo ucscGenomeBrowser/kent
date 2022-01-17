@@ -30,11 +30,17 @@ var ddcl = {
 
     textOfObjWrappedInStyle: function (obj)
     { // returns the obj text and if there is obj style, the text gets span wrapped with it
+
         var text = '';
         var style = $(obj).attr('style');
         if (style && style.length > 0)
             text = "<span style='"+style+"'>";
         text += $(obj).text();
+
+        if (obj.facetCount > 0) {
+	    text += ' ('+obj.facetCount+')';
+	}
+
         if (style && style.length > 0)
             text += "</span>";
 
@@ -92,6 +98,7 @@ var ddcl = {
         var allCheckboxes = $(dropWrapper).find("input.active");
         var selectOptions = multiSelect[0].options;
 
+
         // Special juice to handle "exclude" options based upon competing filterBoxes
         try {
             if ((  $(multiSelect).hasClass('filterComp')  
@@ -102,10 +109,12 @@ var ddcl = {
                 // "exclude" items based upon the exclude tag of the true options
                 allCheckboxes.each(function(index) {
                     var item = $(this).parent();
+                    // GREY OUT
                     if ($(selectOptions[index]).hasClass('excluded')) {
                         $(item).addClass("ui-state-excluded");
-                    } else //if ($(item).hasClass("ui-state-excluded"))
+                    } else { 
                         $(item).removeClass("ui-state-excluded");
+                    }
                 });
             }
         }
@@ -114,13 +123,65 @@ var ddcl = {
         // Show only first as selected if it is selected
         if (allCheckboxes[0].checked === true) {
             allCheckboxes.each(function(index) {
-                if (index > 0)
+                if (index > 0) {
                     $(this).attr('checked',false);
+                }
             });
         }
+
+
+        var hideCount = 0;
+        var itemHeight = 0;
+
+        // update the facetCounts
+        allCheckboxes.each(function(index) {
+            var item = $(this).parent();
+
+            if (index === 0) {
+                itemHeight = item[0].clientHeight;
+            }
+
+            var facetSpan=$(item).find('span');
+            var facetCount = selectOptions[index].facetCount;
+            if (index === 0 || facetCount === 0 || facetCount === undefined) {  // Al
+                $(facetSpan).html('');
+            } else {
+                $(facetSpan).html(' ('+facetCount+')');
+            }
+            // facetSpan and item and this did not work to get it to hide:
+            if (index === 0 || (facetCount !== 0) || $(this).attr('checked')) {
+                    $(item).show();
+            } else {
+                $(item).hide();
+                ++hideCount;
+            }
+        });
+
+
+        // make dynamic height based on current window size, but make sure we
+        // don't take into account we may already be far down the page if there
+        // are many config options on hgTrackUi or we are in a popup
+        var maxDropHeight = $(window).height() - this.getBoundingClientRect().top - 80;
+        if (maxDropHeight < 49)
+            maxDropHeight = 49;
+
+        // each element 22 high plus one Close panel at bottom
+        var dropHeight = ($(multiSelect).children().length - hideCount + 1) * itemHeight;  
+
+        if (dropHeight > maxDropHeight)
+            dropHeight = maxDropHeight;
+        $(dropWrapper).css({
+            height: dropHeight + "px",
+        });
+        dropWrapper.find(".ui-dropdownchecklist-dropcontainer").css({
+            height: dropHeight + "px"
+        });
+
+
+
     },
 
-    onComplete: function (multiSelect) {
+    onCompleteDraw: function (multiSelect) {
         // Called by ui.dropdownchecklist.js when selections have been made
         // Also called at init to fill the selector with current choices
 
@@ -156,8 +217,35 @@ var ddcl = {
         //    newColor = 'black';
         ddcl.labelSet(control,msg,newColor,'Click to select...');
 
+    },
+
+    onComplete: function (multiSelect) {
+
+
+        // Called by ui.dropdownchecklist.js when selections have been made
+        // Also called at init to fill the selector with current choices
+	ddcl.onCompleteDraw(multiSelect);
+
         // Notice special handling for a custom event
         $(multiSelect).trigger('done',multiSelect);
+
+    },
+
+
+   reinitFacetCounts: function () {
+        // ReInitialize the DDCLs (drop-down checkbox-list)
+
+	var possibleSelections = {};    // use as hash
+
+        $('select.filterComp').each( function(i) { 
+            var multiSelect = this;
+	    // skip if setup not run yet.
+            var id = $(multiSelect).attr('id');
+	    if (id && (id.length > 0) && normed($('#ddcl-' + id))) {
+		filterCompositeExcludeOptionsQuick(multiSelect, possibleSelections);
+		ddcl.onCompleteDraw(multiSelect);
+	    }
+        });
     },
 
     reinit: function (filterBys,force) {
@@ -204,6 +292,7 @@ var ddcl = {
         var myEmptyText  = 'Select...';
         var myClose      = 'close&nbsp;&nbsp;';
         var myDropHeight = filterByMaxHeight(obj);
+
         // parse optional args
         for (var vIx=1;vIx<arguments.length;vIx++) {
             switch(arguments[vIx]) {
@@ -245,6 +334,7 @@ var ddcl = {
         var maxWidth = $(obj).width();
         if (maxWidth === 0) // currently hidden so wait for a reinit();
             return;
+
         var minWidth = $(obj).css('min-width');
         if (minWidth && minWidth.length > 0) { // Is a string, so convert and compare
             minWidth = parseInt(minWidth);
@@ -267,7 +357,22 @@ var ddcl = {
         });
         if (myNoneIsAll)
             $(obj).addClass('noneIsAll'); // Declare this as none selected same as all selected
-        ddcl.onComplete(obj); // shows selected items in multiple lines
+
+        // shows selected items in multiple lines
+        try {
+	    if (!obj.options[0].selected) {  // All selected
+		if ((  $(obj).hasClass('filterComp')  
+		    && filterCompositeExcludeOptions(obj))
+		||  (  $(obj).hasClass('filterTable') 
+		    && filterTable.excludeOptions(obj))) {
+		   // do nothing
+		}
+	    }
+	}
+        catch (err) {} // OK if filterCompositeExcludeOptions is not defined.
+        ddcl.onCompleteDraw(obj);
+        $(obj).trigger('done',obj);
+
 
         // Set up the selector (control seen always and replacing select)
         var control = $('#ddcl-' + id);
@@ -276,7 +381,11 @@ var ddcl = {
             return;
         }
         var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
+
         $(controlSelector).click(ddcl.onOpen);
+
+	maxWidth += 60; // extra space for the facet count " (9999)"
+
         $(controlSelector).css({width:maxWidth+'px'});
         var controlText = $(control).find(".ui-dropdownchecklist-text");
         $(controlText).css({width:maxWidth+'px'});
@@ -310,7 +419,9 @@ var ddcl = {
             $(dropContainerDiv).css({height:maxHeight+'px'});
             $(dropWrapper).css({height:maxHeight+'px'});
         }
-        maxWidth += 30; // extra avoids horizontal scrollBar when vertical one is included
+
+
+        maxWidth -= 10; // tweak width for dropdown
         $(dropContainerDiv).css({width:(maxWidth)+'px'});
         $(dropWrapper).css({width:maxWidth+'px'});
 

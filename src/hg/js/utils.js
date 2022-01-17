@@ -7,6 +7,61 @@
 
 var debug = false;
 
+function cfgPageOnVisChange(ev) {
+    /* configuration page event listener when user changes visibility in dropdown */
+    if (ev.target.value === 'hide')
+        ev.target.classList.replace("normalText", "hiddenText");
+    else
+        ev.target.classList.replace("hiddenText", "normalText");
+}
+
+function cfgPageAddListeners() {
+    /* add event listener to dropdowns */
+    var els = document.querySelectorAll(".trackVis");
+    for (var i=0; i < els.length; i++) {
+        var el = els[i];
+        el.addEventListener("change", cfgPageOnVisChange );
+    }
+}
+
+// Google Analytics helper functions to send events, see src/hg/lib/googleAnalytics.c
+
+function gaOnButtonClick(ev) {
+/* user clicked a button: send event to GA, then execute the old handler */
+    var button = ev.currentTarget;
+    var buttonName = button.name;
+    if (buttonName==="")
+        buttonName = button.id;
+    if (buttonName==="")
+        buttonName = button.value;
+    // add the original label, makes logs a lot easier to read
+    buttonName = button.value + " / "+buttonName;
+
+    ga('send', 'event', 'buttonClick', buttonName);
+    if (button.oldOnClick) // most buttons did not have an onclick function at all (the default click is a listener)
+    {
+        button.oldOnClick(ev);
+    }
+}
+
+function gaTrackButtons() {
+  /* replace the click handler on all buttons with one the sends a GA event first, then handles the click */
+  if (!window.ga || ga.loaded) // When using an Adblocker, the ga object does not exist
+      return;
+  var buttons = document.querySelectorAll('input[type=submit],input[type=button]');
+  var isFF = theClient.isFirefox();
+  for (var i = 0; i < buttons.length; i++) {
+       var b = buttons[i];
+       // some old Firefox versions <= 78 do not allow submit buttons to also send AJAX requests
+       // so Zoom/Move buttons are skipped in FF (even though newer versions allow it again, certainly FF >= 90)
+       if (isFF && b.name.match(/\.out|\.in|\.left|\.right/))
+           continue;
+       b.oldOnClick = b.onclick;
+       b.onclick = gaOnButtonClick; // addEventHandler would not work here, the default click stops propagation.
+  }
+}
+// end Google Analytics helper functions
+
 function clickIt(obj,state,force)
 {
 // calls click() for an object, and click();click() if force
@@ -706,6 +761,15 @@ if (debug)
 return content;
 }
 
+function notifBoxShow() {
+    /* move the notification bar div under '#TrackHeaderForm' */
+    var notifEl = document.getElementById("notifBox");
+    var parentEl = document.getElementById('TrackHeaderForm');
+    parentEl.appendChild(notifEl);
+    notifEl.style.display = 'block';
+    //document.getElementById('notifOK').onclick = notifBoxHide;
+}
+
 function warnBoxJsSetup()
 {   // Sets up warnBox if not already established.  This is duplicated from htmshell.c
     var html = "";
@@ -753,7 +817,18 @@ function warn(msg)
     if (!warnList)
         alert(msg);
     else {
-        $( warnList ).append('<li>'+msg+'</li>');
+        // don't add warnings that already exist:
+        var oldMsgs = [];
+        $('#warnList li').each(function(i, elem) {
+            oldMsgs.push(elem.innerHTML);
+        });
+        // make the would-be new message into an <li> element so the case and quotes
+        // match any pre-existing ones
+        var newNode = document.createElement('li');
+        newNode.innerHTML = msg;
+        if (oldMsgs.indexOf(newNode.innerHTML) === -1) {
+            $( warnList ).append(newNode);
+        }
         if ($.isFunction(showWarnBox))
             showWarnBox();
         else
@@ -1252,7 +1327,7 @@ function waitMaskSetup(timeOutInMs)
     var  waitMask = normed($('#waitMask'));
     if (!waitMask) {
         // create the waitMask
-        $("body").append("<div id='waitMask' class='waitMask');'></div>");
+        $("body").append("<div id='waitMask' class='waitMask'></div>");
         waitMask = normed($('#waitMask'));
     }
     $(waitMask).css({opacity:0.0,display:'block',top: '0px', 
@@ -1852,7 +1927,7 @@ function filterByMaxHeight(multiSel)
         }
     }
     var maxHeight = $(window).height() - pos;
-    var selHeight = $(multiSel).children().length * 21;
+    var selHeight = ($(multiSel).children().length + 1) * 22;
     if (maxHeight > selHeight)
         maxHeight = null;
 
@@ -2782,6 +2857,8 @@ var findTracks = {
         var hiddenVis = $("input[name='"+trackName+"']");
         var tr = $(selCb).parents('tr.found');
         var tdb = tdbGetJsonRecord(trackName);
+        var isHub = trackName.slice(0,4) === "hub_";
+        var hubUrl = isHub ? tdb.hubUrl : "";
         var needSel = (typeof(tdb.parentTrack) === 'string' && tdb.parentTrack !== '');
         var shouldPack = tdb.canPack && tdb.kindOfParent === 0; // If parent then not pack but full
         if (shouldPack
@@ -2830,6 +2907,30 @@ var findTracks = {
                     $(hiddenSel).val('0');  // Can't set it to [] because it means default is used.
                 $(hiddenSel).attr('disabled',false);
             }
+        }
+
+        // if we selected a track in a public hub that is unconnected, we need to get the
+        // hubUrl into the form so the genome browser knows to load that hub. If the hub
+        // was already a connected hub, then we don't need to specify anything because it
+        // will already be in the cart and we handle the visibility settings like normal.
+        // The hubUrl field present in the json indicates this is an unconnected hub
+        if (justClicked && hubUrl !== undefined) {
+            var form = $("form[id='searchResults'");
+            var newHubInput = document.createElement("input");
+            // if we are a subtrack we need to explicitly hide the parent
+            // track so ALL subtracks of the parent don't show up unexpectedly
+            if (needSel) {
+                var parentTrack = tdb.parentTrack;
+                var parentTrackInput = document.createElement("input");
+                parentTrackInput.setAttribute("type", "hidden");
+                parentTrackInput.setAttribute("name", parentTrack);
+                parentTrackInput.setAttribute("value", "hide");
+                form.append(parentTrackInput);
+            }
+            newHubInput.setAttribute("type", "hidden");
+            newHubInput.setAttribute("name", "hubUrl");
+            newHubInput.setAttribute("value", hubUrl);
+            form.append(newHubInput);
         }
 
         // The "view in browser" button should be enabled/disabled

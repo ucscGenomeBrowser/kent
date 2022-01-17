@@ -307,7 +307,7 @@ if (db)
     tdb = hTrackDb(db);
 else
     {
-    tdb = trackHubTracksForGenome(genome->trackHub, genome);
+    tdb = trackHubTracksForGenome(genome->trackHub, genome, NULL);
     tdb = trackDbLinkUpGenerations(tdb);
     tdb = trackDbPolishAfterLinkup(tdb, genome->name);
     }
@@ -349,6 +349,7 @@ if (startsWithWord("bigBarChart", type) ||
     startsWithWord("bigGenePred", type) ||
     startsWithWord("bigInteract", type) ||
     startsWithWord("bigLolly", type) ||
+    startsWithWord("bigRmsk", type) ||
     startsWithWord("bigPsl", type)
    )
     return TRUE;
@@ -652,6 +653,8 @@ else
 	{
 	char *tbOff = trackDbSetting(tdb, "tableBrowser");
 	if (tbOff && startsWithWord("off", tbOff))
+	    ret = TRUE;
+	if (tbOff && startsWithWord("noGenome", tbOff))
 	    ret = TRUE;
 	}
     }

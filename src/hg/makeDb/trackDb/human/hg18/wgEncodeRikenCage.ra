@@ -16,7 +16,6 @@ controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExt
 noInherit on
 priority 0
 type bed 3
-wgEncode 1
 
     track wgEncodeRikenCageView1PlusClusters
     shortLabel Plus Clusters

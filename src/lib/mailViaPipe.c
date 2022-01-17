@@ -6,7 +6,7 @@
  * error condition at all, and will return 0 regardless. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
  
 #include "pipeline.h"
 #include "common.h"
@@ -17,7 +17,7 @@ int mailViaPipe(char *toAddress, char *theSubject, char *theBody, char *fromAddr
 {
 char *cmd1[] = {"/usr/sbin/sendmail", "-t", "-oi", NULL};
 struct pipeline *dataPipe = pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-"/dev/null", NULL);
+                                          "/dev/null", NULL, 0);
 FILE *out = pipelineFile(dataPipe);
 fprintf(out, "To: %s\n", toAddress);
 fprintf(out, "From: %s\n", fromAddress);

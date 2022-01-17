@@ -2,7 +2,7 @@
  * and restricting to just things on the list. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -203,7 +203,7 @@ hPrintf("Please paste in the identifiers you want to include.\n");
 if (sqlDatabaseExists("hgTemp"))
     explainIdentifiers(actualDb, alternateConn, idField);
 else
-    warn("No hgTemp database found for temporary tables.<br>Please src/product/README.mysql.setup for more information.");
+    warn("No hgTemp database found for temporary tables.<br>Please see https://genome.ucsc.edu/goldenPath/help/mirrorManual.html#mysql-setup for more information.");
 hPrintf("<BR>\n");
 cgiMakeTextArea(hgtaPastedIdentifiers, oldPasted, 10, 70);
 hPrintf("<BR>\n");
@@ -319,8 +319,9 @@ static struct hash *getAllPossibleIds(struct sqlConnection *conn,
  * make a hash of all identifiers in curTable (and alias tables if specified)
  * so that we can check the validity of pasted/uploaded identifiers. */
 {
+// this assumes that there is a knownGene table even if the track is a bigGenePred
 if (isCustomTrack(curTable) || isLongTabixTable(curTable) || isBamTable(curTable) || isVcfTable(curTable, NULL) ||
-    isBigBed(database, curTable, curTrack, ctLookupName))
+    (differentString("knownGene", curTable) && isBigBed(database, curTable, curTrack, ctLookupName)))
     return NULL;
 
 struct hash *matchHash = hashNew(20);

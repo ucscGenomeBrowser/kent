@@ -1,28 +1,28 @@
 <h2>Description</h2>
 <p>
 <a href="https://nextstrain.org/ncov" target=_blank>Nextstrain.org</a> displays
-data about variants that occur in the current 2019/2020 outbreak.
+data about mutations that occur in the current 2019/2020 outbreak.
 Nextstrain has a powerful user interface for viewing the timestamped molecular phylogeny tree
-that it infers from the patterns of variants in sequences worldwide using the
+that it infers from the patterns of mutations in sequences worldwide using the
 <a href="https://github.com/neherlab/treetime" target=_blank>TreeTime</a> algorithm.
 </p>
 <p>
 Nextstrain defines clades named by year and letter, anticipating that SARS-CoV-2 will
 become a seasonal virus in the coming years.  For more information about the rationale
 and properties of current clades, see
-<a href="https://github.com/nextstrain/ncov/blob/master/docs/naming_clades.md"
-   target=_blank>https://github.com/nextstrain/ncov/blob/master/docs/naming_clades.md</a>.
+<a href="https://github.com/nextstrain/ncov/blob/master/docs/src/reference/naming_clades.md"
+   target=_blank>https://github.com/nextstrain/ncov/blob/master/docs/src/reference/naming_clades.md</a>.
 </p>
 <p>
-The <em>Nextstrain Variants</em> track contains all variants shown on Nextstrain,
-of which this track's variants are a very small subset.
+The <em>Nextstrain Mutations</em> track contains all mutations shown on Nextstrain,
+of which this track's mutations are a very small subset.
 </p>
 
 <h2>Methods</h2>
 <p>Nextstrain downloads SARS-CoV-2 genomes from
   <a href="https://gisaid.org/" target=_blank>GISAID</a>
   as they are submitted by labs worldwide.
-  Nextstrain identifies variants that define clades of interest and puts them in the file
+  Nextstrain identifies mutations that define clades of interest and puts them in the file
   <a href="https://github.com/nextstrain/ncov/blob/master/config/clades.tsv"
      target=_blank>clades.tsv</a>.
   The genome sequences and metadata including clades.tsv are processed by an

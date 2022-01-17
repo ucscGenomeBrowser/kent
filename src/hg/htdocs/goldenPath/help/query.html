@@ -45,7 +45,9 @@ To specify a genome position:</p>
 <p> 
 Note: A query may have multiple results. If this is the case, a results page will appear listing 
 each result along with the track it is associated with. Once selected, the result will be displayed 
-in the Browser with a highlighted tag, making it easier to identify.</p> 
+in the Browser with a highlighted tag, making it easier to identify. Also, if you have further
+questions, you can search the <a href="/FAQ/index.html" target="_blank">Genome Browser FAQ</a>
+page and find links to further resources.</p>
 
 <h2>Sample queries</h2> 
 <p> 
@@ -53,13 +55,25 @@ Below is a list of examples that might be used to query the Genome Browser. Note
 query listed here will produce a result in every assembly. The list serves only to illustrate the 
 different types of queries that can be performed.  
 <table border="1"> 
-  <tr><th width="200">Query</th><th>Genome Browser Response</th></tr> 
+  <tr><th width="200">Query</th><th width="250">Genome Browser Response</th></tr> 
   <tr>
     <td>chr7</td>
     <td>Displays all of chromosome 7</td></tr> 
   <tr>
     <td>chr3:1-1000000</td>
     <td>Displays the first million bases of chromosome 3, counting from the p-arm telomere</td></tr>
+  <tr>
+    <td>3:1-1000000</td>
+    <td>Displays the first million bases of chromosome 3, Ensembl format chromosome names</td></tr>
+  <tr>
+    <td>chr3 0 1000000</td>
+    <td>Displays the first million bases of chromosome 3; BED format</td></tr>
+  <tr>
+    <td>NC_000007.14:1-1000000</td>
+    <td>Displays the first million bases of chromosome 3, RefSeq format</td></tr>
+  <tr>
+    <td>CM000665.2:1-1000000</td>
+    <td>Displays the first million bases of chromosome 3, GenBank/INSDC format</td></tr>
   <tr>
     <td>chr3:1000000+2000</td>
     <td>Displays a region of chromosome 3 that spans 2000 bases, starting with position 1000000</td>
@@ -79,11 +93,7 @@ different types of queries that can be performed.
   <tr>
   <tr>
     <td>GTATGTAGCCACGGAGCACCATTACCTGTCACCATTACCTGAATGGCTA</td>
-    <td>Displays the first best match to this DNA sequence, e.g. chr21:33034835-33034883 for hg19</td>
-  </tr> 
-  <tr>
-    <td>374180</td>
-    <td>Displays the region containing Entrez Gene identifier 374180</td></tr> 
+    <td>Displays the first best match to this DNA sequence, e.g. chr21:33034835-33034883 for hg19</td></tr> 
   <tr>
     <td>AA205474</td>
     <td>Displays the region containing the EST with GenBank accession AA205474 in the BRCA1 cancer 
@@ -104,22 +114,26 @@ different types of queries that can be performed.
     <td>PRNP</td>
     <td>Displays the region containing HUGO Gene Nomenclature Committee identifier PRNP</td></tr> 
   <tr>
+  <tr>
+    <td>Q99697</td>
+    <td>Displays the region containing the alignment of the UniProt/SwissProt protein sequence with accession Q99697 (PITX2)</td></tr> 
+  <tr>
     <td nowrap>RH18061;RH80175<br>15q11;15q13<br>NM_012090.5;NM_012421.4</td>
     <td nowrap>Displays the region between genome landmarks, such as the STS markers RH18061 and 
     RH80175, or chromosome<br> bands 15q11 to 15q13, or SNPs NM_000310.4 and NM_012090.5. This syntax
     may also be used for other range queries,<br>such as between uniquely determined ESTs, mRNAs, 
     refSeqs, SNPS, etc.</td></tr>
   <tr id="HGVS">
-    <td nowrap>NM_000310.3(PPT1):c.271_287del17insTT<br> NM_007262.5(PARK7):c.-24+75_-24+92dup<br>
+    <td nowrap>NM_000310.4(PPT1):c.271_287del17insTT<br> NM_007262.5(PARK7):c.-24+75_-24+92dup<br>
     NM_006172.4(NPPA):c.456_*1delAA<br> MYH11:c.503-14_503-12del<br> 
-    NM_198576.4(AGRN):c.1057C&gt;T<br> NM_198056.2:c.1654G&gt;T<br> NP_002993.1:p.Asp92Glu<br>
+    NM_198576.4(AGRN):c.1057C&gt;T<br> NM_198056.3:c.1654G&gt;T<br> NP_002993.1:p.Asp92Glu<br>
     NP_002993.1:p.D92E<br> BRCA1 Ala744Cys<br> BRCA1 A744C<br> LRG_100t1:c.4G>A<br> LRG_100t1:n.1<br>
-    LRG_456p1:p.Ser190Leu<br>LRG_321:g.16409_16461del<br>ENST00000002596.5:c.-108-6848A&gt;G<br>
+    LRG_456p1:p.Ser190Leu<br>LRG_321:g.16409_16461del<br>ENST00000002596.6:c.-108-6848A&gt;G<br>
     ENSP00000005178.5:p.Val20Gly<br>
     chrX:g.31500000_31600000del<br> NR_111987:n.-1 <br> NM_015102.5:n.3038-2<br>
     NM_001372044:c.1528_1530del</td>
-    <td>Displays the region containing <a href="http://varnomen.hgvs.org/" target="_blank">HGVS</a> 
-    term</td></tr> 
+    <td>Displays the region that matches the <a href="http://varnomen.hgvs.org/" target="_blank">HGVS</a> 
+        expression, usually in the format <tt>&lt;transcript or protein&gt;:&lt;position&gt; &lt;amino acid or nucleotide change&gt;</tt><br>If a gene symbol is used, HGVS search will try all RefSeq transcripts to find the nucleotide or amino acid at the position indicated in the expression. If there are multiple matches, a disambiguation page will be shown. If the RefSeq sequence differs from the genome sequence, then currently the search will use the genome, not the transcript, for codon counting and amino acid / nucleotide  comparison. Please contact us if this is inconvenient.</td></tr> 
 <!-- commented out -- not working 
   <tr> 
     <td>15q11;15q13</td>
@@ -129,6 +143,32 @@ different types of queries that can be performed.
     <td>rs1042522;rs1800370</td> 
     <td>such as between uniquely determined ESTs, mRNAs, refSeqs, etc.</td></tr> 
 --> 
+  <tr>
+    <td>essv8694097</td>
+    <td>Displays the region covering the copy number variant with the accession essv8694097 in the
+        Database of Genomic Variants (DGV)</td></tr>
+  <tr>
+    <td>nssv3446126</td>
+    <td>Displays the region covering the copy number variant with the accession nssv3446126 in the cases of developmental delay</td></tr>
+  <tr>
+    <td>CTD-3071L10</td>
+    <td>Displays the region covering the CTD-3071L10 NCBI clone end mapping in the NCBI Clone DB database</td></tr>
+  <tr>
+    <td>nssv16167444</td>
+    <td>Displays the region covering the common copy number genomic variant with the accession nssv16167444 in the 
+        nstd186 (NCBI Curated Common Structural Variants) dataset</td></tr>
+  <tr>
+    <td>COSM6161404</td>
+    <td>Displays the region covering COSM6161404 in the Catalogue Of Somatic Mutations In Cancer (COSMIC) database</td></tr>
+  <tr>
+    <td>nssv3395351</td>
+    <td>Displays the region covering ClinVar Copy Number Variant with the accession nssv3395351 in the ClinVar database</td></tr>
+  <tr>
+    <td>BRCT_assoc</td>
+    <td>Displays the region covering the manually-curated Pfam-A domain BRCT_assoc found in GENCODE Genes</td></tr>
+  <tr>
+    <td>U133A:219211_at</td>
+    <td>Displays the region containing the consensus and exemplar sequences used for the selection of probes on the Affymetrix HG-U133A chips</td></tr>
   <tr>
     <td>chr1 0 1000</td>
     <td>When entered without ":" and "-", uses 0-based, half-open coordinates (like custom tracks and internal table coordinates), so displays chr1:1-1000</td>

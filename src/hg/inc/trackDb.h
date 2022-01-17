@@ -3,7 +3,7 @@
  * the RAM representation of objects. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef TRACKDB_H
 #define TRACKDB_H
@@ -38,7 +38,7 @@ struct minMax
 /* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
 /* This number is tacked onto the end of cached trackDb entries to make sure we
  * don't use a cached structure that has different contents. */
-#define TRACKDB_VERSION 3 
+#define TRACKDB_VERSION 4
 
 struct trackDb
 /* This describes an annotation track.  */
@@ -93,7 +93,7 @@ struct trackDb
     struct tdbExtras *tdbExtras;// This struct allows storing extra values which may be used
                                 // multiple times within a single cgi. An example is the metadata
                                 // looked up once in the metaDb and used again and again.
-    boolean isNewFilterType;    // are we using the new filter variables on this track
+    struct hash *isNewFilterHash;    // if a field is specified in the "new" way, the trackDb variable will be in this hash
 /* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
     };
 
@@ -360,13 +360,15 @@ int trackDbCmpShortLabel(const void *va, const void *vb);
 void trackDbOverridePriority(struct hash *tdHash, char *priorityRa);
 /* Override priority settings using a ra file. */
 
-struct trackDb *trackDbFromRa(char *raFile, char *releaseTag);
+struct trackDb *trackDbFromRa(char *raFile, char *releaseTag, struct dyString *incFiles);
 /* Load track info from ra file into list.  If releaseTag is non-NULL
- * then only load tracks that mesh with release. */
+ * then only load tracks that mesh with release. if incFiles is non-null, 
+ * add included file names to it.*/
 
-struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag);
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag, struct dyString *incFiles);
 /* Load track info from ra file already opened as lineFile into list.  If releaseTag is
- * non-NULL then only load tracks that mesh with release. */
+ * non-NULL then only load tracks that mesh with release. If incFiles is not-NULL, put
+ * list of included files in there. */
 
 void trackDbPolish(struct trackDb *bt);
 /* Fill in missing values with defaults. */
@@ -449,6 +451,7 @@ typedef enum _eCfgType
     cfgLollipop =16,
     cfgHic      =17,
     cfgBigDbSnp =19,
+    cfgBigRmsk  =20,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 
@@ -727,8 +730,8 @@ struct trackDb *lmCloneTdbList(struct lm *lm, struct trackDb *list, struct track
 struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *superHash);
 /* clone a super track tdb structure. */
 
-void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size);
-/* For this hub, Allocate shared memory and clone trackDb list into it. */
+void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size, char *incFiles);
+/* For this hub, Allocate shared memory and clone trackDb list into it. incFiles has a list of include files that may be null. */
 
 void trackDbCloneTdbListToSharedMem(char *db, char *tdbPathString, struct trackDb *list, unsigned long size);
 /* For this native db, allocate shared memory and clone trackDb list into it. */
@@ -742,10 +745,18 @@ struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time);
 boolean trackDbCacheOn();
 /* Check to see if we're caching trackDb contents. */
 
+boolean trackSettingIsFile(char *setting);
+/* Returns TRUE if setting found in trackDb stanza is a file setting that
+ * would benefit from directory $D substitution among other things - looks for
+ * settings that ends in "Url" and a few others. */
+
 char *labelAsFiltered(char *label);
 /* add text to label to indicate filter is active */
 
 char *labelAsFilteredNumber(char *label, unsigned number);
 /* add text to label to indicate filter is active */
+
+int trackDbGetCartVersion();
+/* Get the highest cart version that a set of trackDb entries has specified. */
 #endif /* TRACKDB_H */
 

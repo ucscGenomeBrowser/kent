@@ -135,10 +135,10 @@ sub parseOneLrg {
     # Find BED 12+ fields.
     my $mapType = $refMapping->findvalue('@type');
     my $seq = $refMapping->findvalue('@other_name');
-    if ($seq eq 'unlocalized') {
+    if ($seq eq 'unlocalized' || $seq eq 'Unknown') {
       $seq = "Un";
     }
-    if ($mapType eq 'haplotype' || $mapType eq 'fix_patch' || $mapType eq 'novel_patch') {
+    if ($mapType eq 'haplotype' || $mapType eq 'fix_patch' || $mapType eq 'novel_patch' || $mapType eq 'patch' || $seq eq "Un") {
       my $gbAcc = $refMapping->findvalue('@other_id_syn');
       $gbAcc =~ m/^[A-Z]+\d+\.\d+$/ || die "$xmlIn: $assemblyPrefix has $mapType mapping with " .
         "other_id_syn='$gbAcc', expecting versioned GenBank acc (e.g. 'KI270850.1').";
@@ -166,10 +166,12 @@ sub parseOneLrg {
     my $start = $refMapping->findvalue('@other_start') - 1;
     my $end = $refMapping->findvalue('@other_end');
     my @mappingSpans = $refMapping->findnodes('mapping_span');
-    die 'Unusual number of mapping_spans' if (@mappingSpans != 1);
-    my $span = $mappingSpans[0];
-    my $lrgStart = $span->findvalue('@lrg_start') - 1;
-    my $lrgEnd = $span->findvalue('@lrg_end');
+    #We can certainly have multiple mapping_span elements, see LRG_1321 on GRCh37.p13
+    #This happens when there is a large gap in the alignment
+    my $firstSpan = $mappingSpans[0];
+    my $finalSpan = $mappingSpans[$#mappingSpans];
+    my $lrgStart = $firstSpan->findvalue('@lrg_start') - 1;
+    my $lrgEnd = $finalSpan->findvalue('@lrg_end');
     if ($lrgSize < $lrgEnd) {
       die "$xmlIn: length of sequence is $lrgSize but $assemblyPrefix lrg_end is $lrgEnd";
     }
@@ -177,47 +179,95 @@ sub parseOneLrg {
     if ($lrgStart != 0 || $lrgEnd != $lrgSize) {
       $name .= ":". ($lrgStart+1) . "-$lrgEnd";
     }
-    my $strand = $span->findvalue('@strand');
+    # ensure strandedness is the same:
+    my $strand = $firstSpan->findvalue('@strand');
+    foreach my $span (@mappingSpans) {
+        my $st = $span->findvalue('@strand');
+        die "$xmlIn: Mismatched strands across mapping_span elements" if ($st != $strand);
+    }
     $strand = ($strand == 1 ? '+' : '-');
 
-    # Sort out indels and mismatches when building block coords:
+    # Sort out indels, mismatches, and large gaps  when building block coords:
     my @blockSizes = ();
     my @blockStarts = (0);
     my @mismatches = ();
     my @indels = ();
-    my @diffs = $refMapping->findnodes('mapping_span/diff');
-    # Sort @diffs by ascending assembly start coords, so the loop below has sorted inputs:
-    @diffs = sort { $a->findvalue('@other_start') <=> $b->findvalue('@other_start') } @diffs;
-    foreach my $d (@diffs) {
-      my $lrgStart = $d->findvalue('@lrg_start') - 1;
-      my $lrgEnd = $d->findvalue('@lrg_end');
-      my $blkStart = $d->findvalue('@other_start') - 1 - $start;
-      my $blkEnd = $d->findvalue('@other_end') - $start;
-      my $lrgSeq = $d->findvalue('@lrg_sequence');
-      my $refSeq = $d->findvalue('@other_sequence');
-      my $type = $d->findvalue('@type');
-      my $lastBlkStart = $blockStarts[$#blockStarts];
-      if ($type eq 'mismatch') {
-        push @mismatches, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
-      } elsif ($type eq 'lrg_ins') {
-        # LRG has sequence where assembly has none; adjust assembly coords to start=end
-        $blkStart++;  $blkEnd--;  die "weird lrg_ins other_ coords" if ($blkStart != $blkEnd);
-        push @blockSizes, ($blkStart - $lastBlkStart);
-        push @blockStarts, $blkStart;
-        push @indels, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
-      } elsif ($type eq 'other_ins') {
-        # assembly has sequence where LRG has none; adjust LRG coords to be start=end
-        $lrgStart++;  $lrgEnd--;  die "weird other_ins lrg_ coords" if ($lrgStart != $lrgEnd);
-        push @blockSizes, ($blkStart - $lastBlkStart);
-        push @blockStarts, $blkEnd;
-        push @indels, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
-      } else {
-        die "Unrecognized diff type '$type' in $xmlIn";
+    @mappingSpans = sort { $a->findvalue('@other_start') <=> $b->findvalue('@other_start') } @mappingSpans;
+    foreach my $ix (0 .. $#mappingSpans) {
+      my $span = $mappingSpans[$ix];
+      my @diffs = $span->findnodes('diff');
+      if (scalar(@diffs) > 0) {
+        # Sort @diffs by ascending assembly start coords, so the loop below has sorted inputs:
+        @diffs = sort { $a->findvalue('@other_start') <=> $b->findvalue('@other_start') } @diffs;
+        foreach my $d (@diffs) {
+          my $lrgStart = $d->findvalue('@lrg_start') - 1;
+          my $lrgEnd = $d->findvalue('@lrg_end');
+          my $blkStart = $d->findvalue('@other_start') - 1 - $start;
+          my $blkEnd = $d->findvalue('@other_end') - $start;
+          my $lrgSeq = $d->findvalue('@lrg_sequence');
+          my $refSeq = $d->findvalue('@other_sequence');
+          my $type = $d->findvalue('@type');
+          my $lastBlkStart = $blockStarts[$#blockStarts];
+          if ($type eq 'mismatch') {
+            push @mismatches, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
+          } elsif ($type eq 'lrg_ins') {
+            # LRG has sequence where assembly has none; adjust assembly coords to start=end
+            $blkStart++;  $blkEnd--;  die "weird lrg_ins other_ coords" if ($blkStart != $blkEnd);
+            push @blockSizes, ($blkStart - $lastBlkStart);
+            push @blockStarts, $blkStart;
+            push @indels, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
+          } elsif ($type eq 'other_ins') {
+            # assembly has sequence where LRG has none; adjust LRG coords to be start=end
+            $lrgStart++;  $lrgEnd--;  die "weird other_ins lrg_ coords" if ($lrgStart != $lrgEnd);
+            push @blockSizes, ($blkStart - $lastBlkStart);
+            push @blockStarts, $blkEnd;
+            push @indels, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
+          } else {
+            die "Unrecognized diff type '$type' in $xmlIn";
+          }
+        }
+      } elsif (scalar(@mappingSpans) > 1) {
+        # at this point we have multiple mapping spans with no <diff>, which is
+        # supposed to represent large gaps. Downstream we need this represented
+        # as an indel so fake it here. As per the above code, this kind of
+        # element can be thought of as both the LRG and assembly having sequence
+        # where the other doesn't
+        my $lrgStart = $span->findvalue('@lrg_start') - 1;
+        my $lrgEnd = $span->findvalue('@lrg_end');
+        my $blkStart = $span->findvalue('@other_start') - 1 - $start;
+        my $otherStart = $span->findvalue('@other_start');
+        my $blkEnd = $span->findvalue('@other_end') - $start;
+        my $lastBlkStart = $blockStarts[$#blockStarts];
+        push @blockSizes, ($blkEnd - $blkStart);
+        push @blockStarts, $blkStart if $blkStart != $lastBlkStart;
+        if ($ix > 0) {
+          # add a fake indel element representing the double sided gap, but we want one less
+          # than the number of total blocks in the bed
+          my $prevSpan = $mappingSpans[$ix-1];
+          my $prevLrgStart = $prevSpan->findvalue('@lrg_start')-1;
+          my $prevLrgEnd = $prevSpan->findvalue('@lrg_end');
+          my $prevBlkStart = $blockStarts[$ix-1];
+          my $prevBlkSize = $blockSizes[$ix - 1];
+          my $assemblyGapStart = $prevBlkSize;
+          my $assemblyGapSize = ($start + $blkStart) - ($start + $assemblyGapStart);
+          my $lrgGapSize;
+          my $lrgGapStart;
+          if ($strand eq '-') {
+            $lrgGapSize = $prevLrgStart - $lrgEnd;
+            $lrgGapStart = $lrgEnd;
+          } else {
+            $lrgGapSize = $lrgStart - $prevLrgEnd;
+            $lrgGapStart = $prevLrgEnd;
+          }
+          push @indels, join(':', $prevBlkSize, $prevBlkSize, "?" x $assemblyGapSize, substr $lrgSeq, $lrgGapStart, $lrgGapSize);
+        }
       }
     }
-    push @blockSizes, ($end - $start - $blockStarts[$#blockStarts]);
+    if (scalar(@mappingSpans) == 1) {
+      push @blockSizes, ($end - $start - $blockStarts[$#blockStarts]);
+    }
     my $blockCount = @blockStarts;
-    die unless ($blockCount == @blockSizes);
+    die "$xmlIn blockCount $blockCount != blockSizes @blockSizes" unless ($blockCount == @blockSizes);
     my $blockSizesStr = join(',', @blockSizes) . ',';
     my $blockStartsStr = join(',', @blockStarts) . ',';
     my $mismatchesStr = join(',', @mismatches);

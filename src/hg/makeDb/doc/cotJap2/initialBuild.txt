@@ -959,10 +959,11 @@ cotJap2.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaF
     # add to cotJap2/trackDb.ra:
     # include ../../crispr10K.ra
 
-    # after is appears to be correct, cleanup:
-    time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=cleanup \
-   -buildDir=`pwd` -smallClusterHub=hgwdev-101 cotJap2 ncbiRefSeq) \
-	> do.log 2>&1
+    # after is appears to be correct, cleanup: 2021-04-26
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=cleanup cotJap2 -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > cleanup.log 2>&1
 
 ##############################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2018-11-26 - Hiram)

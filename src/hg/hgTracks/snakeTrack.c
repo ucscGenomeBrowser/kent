@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifdef USE_HAL
 /* snakeTrack - stuff to load and display snake type tracks in browser.  */
@@ -1123,7 +1123,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
         }
         double queryGapNFrac = 0.0;
         double queryGapMaskedFrac = 0.0;
-        if (qs - lastQEnd != 0 && qs - lastQEnd < 1000000) {
+        if ((qs > lastQEnd) && qs - lastQEnd < 1000000) {
             // sketchy
             char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
             char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
@@ -1354,7 +1354,7 @@ if (errCatchStart(errCatch))
     {
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
-    char *errString = "empty";
+    char *errString = "<HAL error message not set>";
     int handle = -1;
     if (!isPsl)
         {
@@ -1544,6 +1544,7 @@ tg->drawLeftLabels = halSnakeDrawLeftLabels;
 
 tg->drawItemAt = snakeDrawAt;
 tg->itemHeight = snakeItemHeight;
+tg->nextItemButtonable = FALSE;
 }
 #endif  // USE_HAL
 

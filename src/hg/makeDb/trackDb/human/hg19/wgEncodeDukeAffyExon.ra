@@ -20,7 +20,6 @@ canPack On
 priority 0
 type bed 3    
 noInherit on
-wgEncode 1
 superTrack wgEncodeExonArraySuper dense
 
     track wgEncodeDukeAffyExonViewSimpleSignal

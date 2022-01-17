@@ -12,7 +12,6 @@ fileSortOrder cell=Cell_Line antibody=Target labVersion=Antibody view=View dccAc
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
-wgEncode 1
 origAssembly hg18
 type broadPeak
 boxedCfg on

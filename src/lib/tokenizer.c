@@ -4,7 +4,7 @@
  * a separate token.  This is used by autoSql. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "errAbort.h"
@@ -160,9 +160,36 @@ else if (c == '"' || c == '\'')
     if (tkz->leaveQuotes)
 	end += 1;
     }
-else
+else /* case for punctuation etc. */
     {
-    end = ++s;
+    if (tkz->twoCharOps)
+        {
+	int opSize = 1;
+	switch (c)
+	   {
+	   case '>':
+	   case '<':
+	   case '=':
+	   case '!':
+	       if (start[1] == '=')
+		   opSize = 2;
+	       break;
+	   case '+':
+	   case '-':
+	   case '|':
+	   case '&':
+	       if (start[1] == c)
+		   opSize = 2;
+	       break;
+	   default:
+	       opSize = 1;
+	       break;
+	   }
+	s += opSize;
+	end = s;
+	}
+    else
+	end = ++s;
     }
 tkz->linePt = s;
 size = end - start;

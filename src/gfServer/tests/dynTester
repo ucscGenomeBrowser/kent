@@ -6,6 +6,8 @@
 import sys
 import argparse
 import subprocess
+import re
+from collections import namedtuple
 
 debug = False
 valGrind = False
@@ -21,14 +23,14 @@ def parseArgs():
                         help="gfServer command to use")
     parser.add_argument('rootDir',
                         help="data root directory")
-    parser.add_argument('queryType', choices=("query", "protQuery", "transQuery"),
-                        help="query request: query, protQuery, or transQuery")
+    parser.add_argument('queryType', choices=("query", "protQuery", "transQuery", "pcr"),
+                        help="query type to run")
     parser.add_argument('genome',
                         help="genome name")
     parser.add_argument('genomeDataDir',
                         help="directory for genome files")
     parser.add_argument('queryFa',
-                        help="query fasta")
+                        help="query fasta, for PCR, each data line should contain the two primers, separated by a '/'")
     parser.add_argument('resultsOut',
                         help="out is saved here for checking ")
     args = parser.parse_args()
@@ -39,20 +41,34 @@ def parseArgs():
 
 gfSignature = "0ddf270562684f29"
 
+class Seq(namedtuple("Seq", ("seqid", "data", "revPrimer"))):
+    "data bag for a sequence from the fasta"
+    pass
+
+def makeSeq(idline, data):
+    "store a parsed FASTA record in a Seq object"
+    seqid = re.match("^>(\\S+)", idline).group(1)
+    parts = data.split('/')  # for PCR
+    data = parts[0]
+    revPrimer = parts[1] if len(parts) > 1 else None
+    return Seq(seqid, data, revPrimer)
+
 def readFastaSeqsFh(faFh):
-    """read from one sequence from fasta"""
+    """read from sequences from fasta"""
     seqs = []
-    seq = ""
+    idline = ""
+    data = ""
     for line in faFh:
         line = line.strip()
         if line.startswith('>'):
-            if len(seq) > 0:
-                seqs.append(seq)
-                seq = ""
+            if len(data) > 0:
+                seqs.append(makeSeq(idline, data))
+            data = ""
+            idline = line
         elif len(line) > 0:
-            seq = seq + line
-    if len(seq) > 0:
-        seqs.append(bytes(seq, encoding="latin-1"))
+            data += line.strip()
+    if len(data) > 0:
+        seqs.append(makeSeq(idline, data))
     return seqs
 
 def readFastaSeqs(queryFa):
@@ -124,7 +140,7 @@ def readResults(gfServer, resultsFh):
 
 def queryRequest(gfServer, queryType, genome, genomeDataDir, seq, resultsFh):
     "make a query to the server"
-    query = "{}{} {} {} {}\n".format(gfSignature, queryType, genome, genomeDataDir, len(seq))
+    query = "{}{} {} {} {}\n".format(gfSignature, queryType, genome, genomeDataDir, len(seq.data))
     print(query, file=resultsFh)
     writeBytes(gfServer.stdin, query)
 
@@ -132,12 +148,21 @@ def queryRequest(gfServer, queryType, genome, genomeDataDir, seq, resultsFh):
     if resp != b"Y":
         resp += gfServer.stdout.read()
         raise Exception("expected 'Y' from gfServer, got '{}'".format(resp))
-    writeBytes(gfServer.stdin, seq)
+    writeBytes(gfServer.stdin, seq.data)
+    readResults(gfServer, resultsFh)
+
+def pcrRequest(gfServer, genome, genomeDataDir, seq, resultsFh):
+    "make a query to the server"
+    maxDistance = 4 * 1024
+    query = "{}{} {} {} {} {} {}\n".format(gfSignature, "pcr", genome, genomeDataDir, seq.data, seq.revPrimer, maxDistance)
+    print(query, file=resultsFh)
+    writeBytes(gfServer.stdin, query)
+
     readResults(gfServer, resultsFh)
 
 def infoRequest(gfServer, queryType, genome, genomeDataDir, resultsFh):
     "info request to the server"
-    infoType = "untransInfo" if queryType == "query" else "transInfo"
+    infoType = "untransInfo" if queryType in  ("query", "pcr") else "transInfo"
     query = "{}{} {} {}\n".format(gfSignature, infoType, genome, genomeDataDir)
     print(query, file=resultsFh)
     writeBytes(gfServer.stdin, query)
@@ -150,7 +175,10 @@ def dynTester(gfServerCmd, rootDir, queryType, genome, genomeDataDir, queryFa, r
         raise Exception("no sequences found in {}".format(queryFa))
     gfServer = serverStart(gfServerCmd, rootDir)
     for seq in seqs:
-        queryRequest(gfServer, queryType, genome, genomeDataDir, seq, resultsFh)
+        if queryType == "pcr":
+            pcrRequest(gfServer, genome, genomeDataDir, seq, resultsFh)
+        else:
+            queryRequest(gfServer, queryType, genome, genomeDataDir, seq, resultsFh)
     infoRequest(gfServer, queryType, genome, genomeDataDir, resultsFh)
     serverWait(gfServer)
 

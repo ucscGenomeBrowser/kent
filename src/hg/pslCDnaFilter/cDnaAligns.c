@@ -2,7 +2,7 @@
  * not made here*/
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "cDnaAligns.h"
 #include "cDnaStats.h"
@@ -20,8 +20,8 @@ static void alignInfoVerb(int level, struct cDnaAlign *aln, char *desc)
 /* print info about and alignment */
 {
 cDnaAlignVerb(5, aln, "%s: id=%0.3f cov=%0.3f rep=%0.3f alnPolyAT=%d score=%0.3f mat=%d mis=%d repMat=%d nCnt=%d adjAlnSize=%d",
-              desc, aln->ident, aln->cover, aln->repMatch, aln->alnPolyAT, aln->score,
-              aln->psl->match, aln->psl->misMatch, aln->psl->repMatch, aln->psl->nCount, aln->adjAlnSize);
+              desc, aln->ident, aln->cover, aln->repMatchFrac, aln->alnPolyAT, aln->score,
+              aln->adjMatch, aln->psl->misMatch, aln->adjRepMatch, aln->psl->nCount, aln->adjAlnSize);
 }
 
 static float calcCover(struct cDnaAlign *aln)
@@ -42,14 +42,14 @@ for (iBlk = 0; iBlk < aln->psl->blockCount; iBlk++)
     }
 if (aln->cdna->opts & cDnaIgnoreNs)
     alnSize -= aln->psl->nCount;
-unsigned matchCnts = (aln->psl->match + aln->psl->misMatch + aln->psl->repMatch + aln->psl->nCount);
+unsigned matchCnts = (aln->adjMatch + aln->psl->misMatch + aln->adjRepMatch + aln->psl->nCount);
 if (totAlnSize != matchCnts)
     cDnaAlignVerb(1, aln, "Warning: total alignment size (%d) doesn't match counts (%d)",
                   totAlnSize, matchCnts);
 return ((float)alnSize)/((float)(aln->cdna->adjQEnd - aln->cdna->adjQStart));
 }
 
-static int alignMilliBadness(struct psl *psl, int adjMisMatch)
+static int alignMilliBadness(struct psl *psl, int adjMatch, int adjRepMatch, int adjMisMatch)
 /* Determine a badness score.  This is the pslCalcMilliBad()
  * algorithm, with an option of not counting Ns. */
 {
@@ -64,7 +64,7 @@ int sizeDif = qAliSize - tAliSize;
 if (sizeDif < 0)
     sizeDif = 0;
 
-int total = (sizeMul * (psl->match + psl->repMatch + adjMisMatch));
+int total = (sizeMul * (adjMatch + adjRepMatch + adjMisMatch));
 if (total != 0)
     milliBad = (1000 * (adjMisMatch*sizeMul + psl->qNumInsert + round(3*log(1+sizeDif)))) / total;
 return milliBad;
@@ -99,17 +99,17 @@ return ((float)bonus)/1000.0;
 }
 
 
-static float sizeFactor(struct psl *psl)
+static float sizeFactor(struct psl *psl, int adjMatch, int adjRepMatch)
 /* Return a score factor that will favor longer alignments. */
 {
-return (4.0*sqrt(psl->match + psl->repMatch/4))/1000.0;
+return (4.0*sqrt(adjMatch + adjRepMatch/4))/1000.0;
 }
 
-static float calcScore(struct psl *psl, int adjMisMatch, boolean ignoreIntrons)
+static float calcScore(struct psl *psl, int adjMatch, int adjRepMatch, int adjMisMatch, boolean ignoreIntrons)
 /* calculate an alignment score, with weighting towards alignments with
  * introns and longer alignments.  The algorithm is based pslReps. */
 {
-return (1000.0-alignMilliBadness(psl, adjMisMatch))/1000.0 + sizeFactor(psl)
+return (1000.0-alignMilliBadness(psl, adjMatch, adjRepMatch, adjMisMatch))/1000.0 + sizeFactor(psl, adjMatch, adjRepMatch)
     + (ignoreIntrons ? 0 : intronFactor(psl));
 }
 
@@ -133,7 +133,7 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
 return alnSize;
 }
 
-struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna, struct psl *psl)
+struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna, unsigned opts, struct psl *psl)
 /* construct a new object and add to the cdna list, updating the stats */
 {
 if ((cdna->alns != NULL) && (cdna->alns->psl->qSize != psl->qSize))
@@ -147,9 +147,20 @@ aln->alnId = cdna->numAln;
 aln->alnPolyAT = getAlnPolyATLen(cdna, psl);
 aln->adjAlnSize = ((psl->match + psl->repMatch + adjMisMatch) - aln->alnPolyAT);
 aln->ident = pslIdent(psl);
-aln->repMatch = ((float)psl->repMatch)/((float)(psl->match+psl->repMatch));
-aln->score = calcScore(psl, adjMisMatch, (cdna->opts & cDnaIgnoreIntrons));
+if (opts & cDnaRepsAsMatch)
+    {
+    aln->adjMatch = psl->match + psl->repMatch;
+    aln->adjRepMatch = 0;
+    }
+else
+    {
+    aln->adjMatch = psl->match;
+    aln->adjRepMatch = psl->repMatch;
+    }
+aln->repMatchFrac = ((float)aln->adjRepMatch)/((float)(aln->adjMatch+aln->adjRepMatch));
+aln->score = calcScore(psl, aln->adjMatch, aln->adjRepMatch, adjMisMatch, (cdna->opts & cDnaIgnoreIntrons));
 aln->cover = calcCover(aln);
+
 assert(aln->alnPolyAT <= (psl->match+psl->misMatch+psl->repMatch+psl->nCount));
 
 slAddHead(&cdna->alns, aln);

@@ -5,7 +5,7 @@
  * table by design.  We just want field-by-field access to this. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -23,6 +23,8 @@
 #include "hgConfig.h"
 #include "grp.h"
 #include "udc.h"
+#include "hubPublic.h"
+#include "genark.h"
 
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
@@ -197,6 +199,8 @@ if (row != NULL)
 	{
 	char *errorMessage = NULL;
 	hub->trackHub = fetchHub( hub, &errorMessage);
+        if (hub->trackHub)
+            hub->trackHub->hubStatus = hub;
 	hub->errorMessage = cloneString(errorMessage);
 	hubUpdateStatus( hub->errorMessage, hub);
 	if (!isEmpty(hub->errorMessage))
@@ -371,7 +375,7 @@ struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database,
 unsigned hubId = hubIdFromTrackName(trackName);
 struct hubConnectStatus *hub = hubFromId(hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
-struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome);
+struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome, NULL);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
 //this next line causes warns to print outside of warn box on hgTrackUi
@@ -423,12 +427,23 @@ struct sqlConnection *conn = hConnectCentral();
 char query[4096];
 char *statusTable = getHubStatusTableName();
 
-if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
-    sqlSafef(query, sizeof(query), "insert into %s (hubUrl,shortLabel,longLabel,dbCount,dbList,status,lastOkTime,lastNotOkTime,errorMessage,firstAdded) values (\"%s\",\"\",\"\",0,NULL,0,\"\",\"\",\"\",now())", statusTable, url);
-else
-    sqlSafef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
+sqlGetLockWithTimeout(conn, "central_hubStatus", 15);
+
+// Try to grab a row right before we insert but after the lock.
+sqlSafef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", statusTable, url);
+struct sqlResult *sr = sqlGetResult(conn, query);
+
+if (sqlNextRow(sr) == NULL)  // if we got something from this query, someone added it right before we locked it
+    {
+    if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
+        sqlSafef(query, sizeof(query), "insert into %s (hubUrl,shortLabel,longLabel,dbCount,dbList,status,lastOkTime,lastNotOkTime,errorMessage,firstAdded) values (\"%s\",\"\",\"\",0,NULL,0,\"\",\"\",\"\",now())", statusTable, url);
+    else
+        sqlSafef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
 	statusTable, url);
-sqlUpdate(conn, query);
+    sqlUpdate(conn, query);
+    }
+sqlFreeResult(&sr);
+sqlReleaseLock(conn, "central_hubStatus");
 hDisconnectCentral(&conn);
 }
 
@@ -515,8 +530,7 @@ if (set)
 return hub;
 }
 
-unsigned hubFindOrAddUrlInStatusTable(char *database, struct cart *cart,
-    char *url, char **errorMessage)
+unsigned hubFindOrAddUrlInStatusTable(struct cart *cart, char *url, char **errorMessage)
 /* find this url in the status table, and return its id and errorMessage (if an errorMessage exists) */
 {
 int id = 0;
@@ -760,14 +774,15 @@ if (trackHub != NULL)
             memCheckPoint(); // we want to know how much memory is used to build the tdbList
             }
 
-        tdbList = trackHubTracksForGenome(trackHub, hubGenome);
+        struct dyString *incFiles = newDyString(4096);
+        tdbList = trackHubTracksForGenome(trackHub, hubGenome, incFiles);
         tdbList = trackDbLinkUpGenerations(tdbList);
         tdbList = trackDbPolishAfterLinkup(tdbList, database);
         trackDbPrioritizeContainerItems(tdbList);
         trackHubPolishTrackNames(trackHub, tdbList);
 
         if (doCache)
-            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint());
+            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint(), incFiles->string);
 	}
     }
 return tdbList;
@@ -869,12 +884,101 @@ for (status = globalHubList;  status != NULL;  status = status->next)
 return NULL;
 }
 
+static unsigned lookForUndecoratedDb(char *name)
+// Look for this undecorated in the attached assembly hubs
+{
+struct trackHubGenome *genome = trackHubGetGenomeUndecorated(name);
+
+if (genome == NULL)
+    return FALSE;
+
+struct trackHub *trackHub = genome->trackHub;
+
+if ((trackHub != NULL) && (trackHub->hubStatus != NULL))
+    return trackHub->hubStatus->id;
+return 0;
+}
+
+static boolean lookForLonelyHubs(struct cart *cart, struct hubConnectStatus  *hubList, char **newDatabase, char *genarkPrefix)
+// We go through the hubs and see if any of them reference an assembly
+// that is NOT currently loaded, but we know a URL to load it.
+{
+struct sqlConnection *conn = hConnectCentral();
+if (!sqlTableExists(conn, genarkTableName()))
+    return FALSE;
+
+boolean added = FALSE;
+
+struct hubConnectStatus  *hub;
+for(hub = hubList; hub; hub = hub->next)
+    {
+    struct trackHub *tHub = hub->trackHub;
+    if (tHub == NULL)
+        continue;
+
+    struct trackHubGenome *genomeList = tHub->genomeList, *genome;
+
+    for(genome = genomeList; genome; genome = genome->next)
+        {
+        char *name = genome->name;
+
+        if (!hDbIsActive(name) )
+            {
+            char buffer[4096];
+            unsigned newId = 0;
+
+            // look with undecorated name for an attached assembly hub
+            if (!(newId = lookForUndecoratedDb(name)))
+                {
+                // see if genark has this assembly
+                char query[4096];
+                sqlSafef(query, sizeof query, "select hubUrl from %s where gcAccession='%s'", genarkTableName(), name);
+                if (sqlQuickQuery(conn, query, buffer, sizeof buffer))
+                    {
+                    char url[4096];
+                    safef(url, sizeof url, "%s/%s", genarkPrefix, buffer);
+
+                    struct hubConnectStatus *status = getAndSetHubStatus( cart, url, TRUE);
+
+                    if (status)
+                        {
+                        newId = status->id;
+                        added = TRUE;
+                        }
+                    }
+                }
+
+            // if we found an id, change some names to use it as a decoration
+            if (newId)
+                {
+                safef(buffer, sizeof buffer, "hub_%d_%s", newId, name);
+
+                genome->name = cloneString(buffer);
+    
+                // if our new database is an undecorated db, decorate it
+                if (*newDatabase && sameString(*newDatabase, name))
+                    *newDatabase = cloneString(buffer);
+                }
+
+            }
+        }
+    }
+
+hDisconnectCentral(&conn);
+return added;
+}
+
 char *hubConnectLoadHubs(struct cart *cart)
 /* load the track data hubs.  Set a static global to remember them */
 {
 char *newDatabase = checkForNew( cart);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart);
+
+char *genarkPrefix = cfgOption("genarkHubPrefix");
+if (genarkPrefix && lookForLonelyHubs(cart, hubList, &newDatabase, genarkPrefix))
+    hubList = hubConnectStatusListFromCart(cart);
+
 globalHubList = hubList;
 
 return newDatabase;
@@ -890,4 +994,55 @@ struct sqlConnection *conn = hConnectCentral();
 char *name = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
 return name;
+}
+
+void addPublicHubsToHubStatus(struct cart *cart, struct sqlConnection *conn, char *publicTable, char  *statusTable)
+/* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
+{
+char query[1024];
+sqlSafef(query, sizeof(query),
+        "select %s.hubUrl from %s left join %s on %s.hubUrl = %s.hubUrl where %s.hubUrl is NULL",
+        publicTable, publicTable, statusTable, publicTable, statusTable, statusTable);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *errorMessage = NULL;
+    char *url = row[0];
+
+    // add this url to the hubStatus table
+    hubFindOrAddUrlInStatusTable(cart, url, &errorMessage);
+    }
+}
+
+struct hash *buildPublicLookupHash(struct sqlConnection *conn, char *publicTable, char *statusTable,
+        struct hash **pHash)
+/* Return a hash linking hub URLs to struct hubEntries.  Also make pHash point to a hash that just stores
+ * the names of the public hubs (for use later when determining if hubs were added by the user) */
+{
+struct hash *hubLookup = newHash(5);
+struct hash *publicLookup = newHash(5);
+char query[512];
+bool hasDescription = sqlColumnExists(conn, publicTable, "descriptionUrl");
+if (hasDescription)
+    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,"
+            "s.errorMessage,s.id,p.descriptionUrl from %s p,%s s where p.hubUrl = s.hubUrl",
+	    publicTable, statusTable);
+else
+    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,"
+            "s.errorMessage,s.id from %s p,%s s where p.hubUrl = s.hubUrl",
+	    publicTable, statusTable);
+
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hubEntry *hubInfo = hubEntryTextLoad(row, hasDescription);
+    hubInfo->tableHasDescriptionField = hasDescription;
+    hashAddUnique(hubLookup, hubInfo->hubUrl, hubInfo);
+    hashStore(publicLookup, hubInfo->hubUrl);
+    }
+sqlFreeResult(&sr);
+*pHash = publicLookup;
+return hubLookup;
 }

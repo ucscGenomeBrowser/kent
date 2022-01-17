@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Placental Chain/Net
 longLabel Non-primate Placental Mammal Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species s000=Guinea_pig s001=Guinea_pig s002=Chinchilla s003=Chinese_hamster s004a=Chinese_hamster_CHOv1 s004b=Chinese_hamster_CHOv2 s004c=RegenCHO1 s005a=Kangaroo_rat s005b=Beaver s006=Malayan_flying_lemur s007=Naked_mole-rat s008=Naked_mole-rat s0081=Damara_mole-rat s009=Lesser_Egyptian_jerboa s010=Golden_hamster s011=Prairie_vole s012a=Mouse s012b=Mouse38B s012c=Mouse s013=Mouse s014=Mouse s015=Mouse s016=Mouse s017=Upper_Galilee_mountains_blind_mole_rat s018=Pika s019=Pika s020=Brush-tailed_rat s021=Rabbit s022=Rabbit s023=Prairie_deer_mouse s024a=RegenRn1 s024b=RegenRn0 s024c=Rat s025=Rat s026=Rat s027=Rat s028=Rat s029=Squirrel s030=Squirrel s031=Tree_shrew s032=Chinese_tree_shrew s033=Panda s034a=Dog s034b=Dog s034c=Dog s035=Dog s036=Dog s037=Dog s037b=Cat s038=Cat s039=Cat s040=Cat s041=Cat s042=Weddell_seal s043=Ferret s043a=Southern_sea_otter s044=Hawaiian_monk_seal s045=Pacific_walrus s046=Amur_tiger s047=Polar_bear s048=Minke_whale s049=Bison s050=Wild_yak s051a=Cow s051b=Cow s052=Cow s053=Cow s054=Cow s055=Cow s056=Cow s057=Cow s058=Cow s059=Cow s060=Water_buffalo s061=Bactrian_camel s062=Domestic_goat s063=Yangtze_river_dolphin s064=Killer_whale s065a=Sheep s065b=Sheep s065c=Sheep s067=Tibetan_antelope s068=Sperm_whale s069=Pig s070=Pig s071=Pig s072=Pig s073=Dolphin s074=Dolphin s075=Alpaca s076=Alpaca s077=Straw_colored_fruit_bat s078=Big_brown_bat s079=Indian_false_vampire s080=Brandt's_myotis_(bat) s081=David's_myotis_(bat) s082=Microbat s083=Microbat s084=Black_flying-fox s085=Parnell's_mustached_bat s086=Megabat s087=Greater_horseshoe_bat s088=Egyptian_rousette s089=Star-nosed_mole s090=Hedgehog s091=Hedgehog s092=Chinese_pangolin s093=Shrew s094=Shrew s095=White_rhinoceros s096a=Horse s096b=Horse s096c=Horse s098=Przewalski_horse s099=Sloth s100=Armadillo s101=Armadillo s102=Armadillo s103=Cape_golden_mole s104=Tenrec s105=Tenrec s106=Cape_elephant_shrew s107=Elephant s108=Elephant s109=Elephant s110=Aardvark s111=Rock_hyrax s112=Manatee
+subGroup2 species Species s000=Guinea_pig s001=Guinea_pig s002=Chinchilla s003=Chinese_hamster s004a=Chinese_hamster_CHOv1 s004b=Chinese_hamster_CHOv2 s004c=RegenCHO1 s005a=Kangaroo_rat s005b=Beaver s006=Malayan_flying_lemur s007=Naked_mole-rat s008=Naked_mole-rat s0081=Damara_mole-rat s009=Lesser_Egyptian_jerboa s010=Golden_hamster s011=Prairie_vole s012a=Mouse s012b=Mouse38B s012c=Mouse s013=Mouse s014=Mouse s015=Mouse s016=Mouse s017=Upper_Galilee_mountains_blind_mole_rat s018=Pika s019=Pika s020=Brush-tailed_rat s021=Rabbit s022=Rabbit s023=Prairie_deer_mouse s024a=Rat s024b=RegenRn1 s024c=RegenRn0 s024d=Rat s025=Rat s026=Rat s027=Rat s028=Rat s029=Squirrel s030=Squirrel s031=Tree_shrew s032=Chinese_tree_shrew s033=Panda s034a=Dog s034b=Dog s034c=Dog s034d=Dog s035=Dog s036=Dog s037=Dog s037b=Cat s038=Cat s039=Cat s040=Cat s041=Cat s042=Weddell_seal s043=Ferret s043a=Southern_sea_otter s044=Hawaiian_monk_seal s045=Pacific_walrus s046=Amur_tiger s047=Polar_bear s048=Minke_whale s049=Bison s050=Wild_yak s051a=Cow s051b=Cow s052=Cow s053=Cow s054=Cow s055=Cow s056=Cow s057=Cow s058=Cow s059=Cow s060=Water_buffalo s061=Bactrian_camel s062=Domestic_goat s063=Yangtze_river_dolphin s064=Killer_whale s065a=Sheep s065b=Sheep s065c=Sheep s065d=Sheep s067=Tibetan_antelope s068=Sperm_whale s069=Pig s070=Pig s071=Pig s072=Pig s073=Dolphin s074=Dolphin s075=Alpaca s076=Alpaca s077=Straw_colored_fruit_bat s078=Big_brown_bat s079=Indian_false_vampire s080=Brandt's_myotis_(bat) s081=David's_myotis_(bat) s082=Microbat s083=Microbat s084=Black_flying-fox s085=Parnell's_mustached_bat s086=Megabat s087=Greater_horseshoe_bat s088=Egyptian_rousette s089=Star-nosed_mole s090=Hedgehog s091=Hedgehog s092=Chinese_pangolin s093=Shrew s094=Shrew s095=White_rhinoceros s096a=Horse s096b=Horse s096c=Horse s098=Przewalski_horse s099=Sloth s100=Armadillo s101=Armadillo s102=Armadillo s103=Cape_golden_mole s104=Tenrec s105=Tenrec s106=Cape_elephant_shrew s107=Elephant s108=Elephant s109=Elephant s110=Aardvark s111=Rock_hyrax s112=Manatee
 subGroup3 clade Clade c00=Euarchontoglires c01=Carnivora c02=Cetartiodactyla c03=Chiroptera c04=Laurasiatheria c05=Perissodactyla c06=Xenarthra c07=Afrotheria
 dragAndDrop subTracks
 visibility hide
@@ -181,7 +181,7 @@ priority 8
 
         track chainMm10
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=s012c clade=c00
+        subGroups view=chain species=s012a clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain mm10
@@ -275,9 +275,17 @@ priority 8
         type chain perManBai1
         otherDb perManBai1
 
-        track chainRegenRn1
+        track chainRn7
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s024a clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rn7
+        otherDb rn7
+
+        track chainRegenRn1
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=s024b clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain RegenRn1
@@ -285,7 +293,7 @@ priority 8
 
         track chainRegenRn0
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=s024b clade=c00
+        subGroups view=chain species=s024c clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain RegenRn0
@@ -293,7 +301,7 @@ priority 8
 
         track chainRn6
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=s024c clade=c00
+        subGroups view=chain species=s024d clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain rn6
@@ -371,9 +379,17 @@ priority 8
         type chain ailMel1
         otherDb ailMel1
 
-        track chainCanFam5
+        track chainCanFam6
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s034a clade=c01
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain canFam6
+        otherDb canFam6
+
+        track chainCanFam5
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=s034b clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain canFam5
@@ -381,7 +397,7 @@ priority 8
 
         track chainCanFam4
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=s034b clade=c01
+        subGroups view=chain species=s034c clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain canFam4
@@ -389,7 +405,7 @@ priority 8
 
         track chainCanFam3
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=s034c clade=c01
+        subGroups view=chain species=s034d clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain canFam3
@@ -659,9 +675,19 @@ priority 8
         type chain orcOrc1
         otherDb orcOrc1
 
-        track chainOviAri4
+        track chainGCF_002742125.1
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s065a clade=c02
+        shortLabel Rambouillet sheep Chain
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Chained Alignments
+        type bigChain GCF_002742125.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/chainGCF_002742125.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/chainGCF_002742125.1Link.bb
+        otherDb GCF_002742125.1
+
+        track chainOviAri4
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=s065b clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain oviAri4
@@ -669,7 +695,7 @@ priority 8
 
         track chainOviAri3
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=s065b clade=c02
+        subGroups view=chain species=s065c clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain oviAri3
@@ -677,7 +703,7 @@ priority 8
 
         track chainOviAri1
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=s065c clade=c02
+        subGroups view=chain species=s065d clade=c02
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain oviAri1
@@ -1219,7 +1245,7 @@ priority 8
 
         track netMm10
         subTrack placentalChainNetViewnet on
-        subGroups view=net species=s012c clade=c00
+        subGroups view=net species=s012a clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign mm10 chainMm10
@@ -1313,9 +1339,17 @@ priority 8
         type netAlign perManBai1 chainPerManBai1
         otherDb perManBai1
 
-        track netRegenRn1
+        track netRn7
         subTrack placentalChainNetViewnet on
         subGroups view=net species=s024a clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign rn7 chainRn7
+        otherDb rn7
+
+        track netRegenRn1
+        subTrack placentalChainNetViewnet on
+        subGroups view=net species=s024b clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign regenRn1 chainRegenRn1
@@ -1323,15 +1357,15 @@ priority 8
 
         track netRegenRn0
         subTrack placentalChainNetViewnet on
-        subGroups view=net species=s024b clade=c00
+        subGroups view=net species=s024c clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign regenRn0 chainRegenRn0
         otherDb regenRn0
 
         track netRn6
-        subTrack placentalChainNetViewnet on
-        subGroups view=net species=s024c clade=c00
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=s024d clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rn6 chainRn6
@@ -1409,9 +1443,17 @@ priority 8
         type netAlign ailMel1 chainAilMel1
         otherDb ailMel1
 
-        track netCanFam5
+        track netCanFam6
         subTrack placentalChainNetViewnet on
         subGroups view=net species=s034a clade=c01
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign canFam6 chainCanFam6
+        otherDb canFam6
+
+        track netCanFam5
+        subTrack placentalChainNetViewnet on
+        subGroups view=net species=s034b clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign canFam5 chainCanFam5
@@ -1419,7 +1461,7 @@ priority 8
 
         track netCanFam4
         subTrack placentalChainNetViewnet on
-        subGroups view=net species=s034b clade=c01
+        subGroups view=net species=s034c clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign canFam4 chainCanFam4
@@ -1427,7 +1469,7 @@ priority 8
 
         track netCanFam3
         subTrack placentalChainNetViewnet on
-        subGroups view=net species=s034c clade=c01
+        subGroups view=net species=s034d clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign canFam3 chainCanFam3
@@ -1697,9 +1739,20 @@ priority 8
         type netAlign orcOrc1 chainOrcOrc1
         otherDb orcOrc1
 
-        track netOviAri4
+        track netGCF_002742125.1
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s065a clade=c02
+        shortLabel Rambouillet sheep Net
+        longLabel Rambouillet sheep (Nov. 2017 GCF_002742125.1_Oar_rambouillet_v1.0) Alignment Net
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.net.summary.bb
+        speciesOrder GCF_002742125.1
+        itemFirstCharCase noChange
+
+        track netOviAri4
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=s065b clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oviAri4 chainOviAri4
@@ -1707,7 +1760,7 @@ priority 8
 
         track netOviAri3
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=s065b clade=c02
+        subGroups view=net species=s065c clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oviAri3 chainOviAri3
@@ -1715,7 +1768,7 @@ priority 8
 
         track netOviAri1
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=s065c clade=c02
+        subGroups view=net species=s065d clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oviAri1 chainOviAri1

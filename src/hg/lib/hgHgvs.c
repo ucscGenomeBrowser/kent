@@ -2,7 +2,7 @@
 /* See http://varnomen.hgvs.org/ and https://github.com/mutalyzer/mutalyzer/ */
 
 /* Copyright (C) 2016 The Regents of the University of California
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "hgHgvs.h"
 #include "bPlusTree.h"
@@ -95,7 +95,8 @@ if (pHgvs && *pHgvs)
 
 // Protein substitution regex
 #define aa3Exp "Ala|Arg|Asn|Asp|Cys|Gln|Glu|Gly|His|Ile|Leu|Lys|Met|Phe|Pro|Ser|Thr|Trp|Tyr|Val|Ter"
-#define hgvsAminoAcidExp "[ARNDCQEGHILKMFPSTWYVX*]|" aa3Exp
+#define aa3ExpLower "ala|arg|asn|asp|cys|gln|glu|gly|his|ile|leu|lys|met|phe|pro|ser|thr|trp|tyr|val|ter"
+#define hgvsAminoAcidExp "[ARNDCQEGHILKMFPSTWYVX*]|" aa3Exp "|" aa3ExpLower
 #define hgvsAminoAcidSubstExp "(" hgvsAminoAcidExp ")" posIntExp "(" hgvsAminoAcidExp "|=)"
 #define hgvsPDotSubstExp "p\\.\\(?" hgvsAminoAcidSubstExp "\\)?"
 //                                 ...                                  // original sequence
@@ -661,8 +662,8 @@ if (hgvs == NULL)
 return hgvs;
 }
 
-static char *npForGeneSymbol(char *db, char *geneSymbol)
-/* Given a gene symbol, look up and return its NP_ accession; if not found return NULL. */
+static struct slName *npForGeneSymbol(char *db, char *geneSymbol)
+/* Given a gene symbol, look up and return a list of NP_ accessions; if not found return NULL. */
 {
 char query[2048];
 if (hDbHasNcbiRefSeq(db))
@@ -683,7 +684,7 @@ else if (hTableExists(db, "refGene"))
 else
     return NULL;
 struct sqlConnection *conn = hAllocConn(db);
-char *npAcc = sqlQuickString(conn, query);
+struct slName *npAcc = sqlQuickList(conn, query);
 hFreeConn(&conn);
 return npAcc;
 }
@@ -883,7 +884,8 @@ return base;
 }
 
 struct hgvsVariant *hgvsParsePseudoHgvs(char *db, char *term)
-/* Attempt to parse things that are not strict HGVS, but that people might intend as HGVS: */
+/* Attempt to parse things that are not strict HGVS, but that people might intend as HGVS:
+ * Return a list of struct hgvsVariant that may be what was intended  */
 // Note: this doesn't support non-coding gene symbol terms (which should have nt alleles)
 {
 struct hgvsVariant *hgvs = NULL;
@@ -928,17 +930,23 @@ else if ((isSubst = regexMatchSubstr(term, pseudoHgvsGeneSymbolProtSubstExp,
     int len = substrs[geneSymbolIx].rm_eo - substrs[geneSymbolIx].rm_so;
     char geneSymbol[len+1];
     safencpy(geneSymbol, sizeof(geneSymbol), term, len);
-    char *npAcc = npForGeneSymbol(db, geneSymbol);
-    if (isNotEmpty(npAcc))
+    struct slName *npAccList = npForGeneSymbol(db, geneSymbol);
+    if (npAccList != NULL)
         {
-        // Make it a real HGVS term with the NP and pass that on to the usual parser.
-        int descStartIx = 2;
-        char *description = term + substrs[descStartIx].rm_so;
-        struct dyString *npTerm = dyStringCreate("%s(%s):p.%s",
-                                                 npAcc, geneSymbol, description);
-        hgvs = hgvsParseTerm(npTerm->string);
-        dyStringFree(&npTerm);
-        freeMem(npAcc);
+        struct slName *npItem = NULL;
+        for (npItem = npAccList; npItem != NULL; npItem = npItem->next)
+            {
+            char *npAcc = npItem->name;
+            // Make it a real HGVS term with the NP and pass that on to the usual parser.
+            int descStartIx = 2;
+            char *description = term + substrs[descStartIx].rm_so;
+            struct dyString *npTerm = dyStringCreate("%s(%s):p.%s",
+                                                     npAcc, geneSymbol, description);
+            struct hgvsVariant *newTerm = hgvsParseTerm(npTerm->string);
+            if (newTerm)
+                slAddHead(&hgvs, newTerm);
+            dyStringFree(&npTerm);
+            }
         }
     }
 else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolProtPosExp, substrs, ArraySize(substrs)))
@@ -946,19 +954,25 @@ else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolProtPosExp, substrs, ArraySi
     int len = substrs[geneSymbolIx].rm_eo - substrs[geneSymbolIx].rm_so;
     char geneSymbol[len+1];
     safencpy(geneSymbol, sizeof(geneSymbol), term, len);
-    char *npAcc = npForGeneSymbol(db, geneSymbol);
-    if (isNotEmpty(npAcc))
+    struct slName *npAccList = npForGeneSymbol(db, geneSymbol);
+    if (npAccList != NULL)
         {
-        // Only position was provided, no change.  Look up ref base and make a synonymous subst
-        // so it's parseable HGVS.
-        int posIx = 2;
-        int pos = regexSubstringInt(term, substrs[posIx]);
-        char refBase = refBaseForNp(db, npAcc, pos);
-        struct dyString *npTerm = dyStringCreate("%s(%s):p.%c%d=",
-                                                 npAcc, geneSymbol, refBase, pos);
-        hgvs = hgvsParseTerm(npTerm->string);
-        dyStringFree(&npTerm);
-        freeMem(npAcc);
+        struct slName *npItem = NULL;
+        for (npItem = npAccList; npItem != NULL; npItem = npItem->next)
+            {
+            char *npAcc = npItem->name;
+            // Only position was provided, no change.  Look up ref base and make a synonymous subst
+            // so it's parseable HGVS.
+            int posIx = 2;
+            int pos = regexSubstringInt(term, substrs[posIx]);
+            char refBase = refBaseForNp(db, npAcc, pos);
+            struct dyString *npTerm = dyStringCreate("%s(%s):p.%c%d=",
+                                                     npAcc, geneSymbol, refBase, pos);
+            struct hgvsVariant *newTerm = hgvsParseTerm(npTerm->string);
+            if (newTerm)
+                slAddHead(&hgvs, newTerm);
+            dyStringFree(&npTerm);
+            }
         }
     }
 else if (regexMatchSubstr(term, pseudoHgvsGeneSympolCDotPosExp, substrs, ArraySize(substrs)))
@@ -1008,8 +1022,7 @@ struct bbiFile *bbi = NULL;
 char fileName[1024];
 safef(fileName, sizeof(fileName), "/gbdb/%s/bbi/lrg.bb", db);
 char *fileNameRep = hReplaceGbdb(fileName);
-if (fileExists(fileNameRep))
-    bbi = bigBedFileOpen(fileNameRep);
+bbi = bigBedFileOpen(fileNameRep);
 freeMem(fileNameRep);
 return bbi;
 }
@@ -1898,8 +1911,10 @@ else
 return txAli;
 }
 
-static struct bed *hgvsMapNucToGenome(char *db, struct hgvsVariant *hgvs, char **retPslTable)
+static struct bed *hgvsMapNucToGenome(char *db, struct hgvsVariant *hgvs, char **retPslTable,
+                                      boolean mustBeCds)
 /* Return a bed6 with the variant's span on the genome and strand, or NULL if unable to map.
+ * If mustBeCds, but we can't find cds or the variant coords are outside of it, return NULL.
  * If successful and retPslTable is not NULL, set it to the name of the PSL table used. */
 {
 if (hgvs->type == hgvstGenomic)
@@ -1912,6 +1927,9 @@ char *pslTable = NULL;
 struct genbankCds cds;
 struct psl *txAli = getPslAndCds(db, hgvs, &acc, &cds, &pslTable);
 boolean gotCds = (cds.end > cds.start);
+if (mustBeCds &&
+    (!gotCds || hgvs->type != hgvstCoding || hgvs->start1-1 >= (cds.end - cds.start)))
+    return NULL;
 if (txAli && (hgvs->type != hgvstCoding || gotCds))
     {
     int upstream = 0, downstream = 0;
@@ -1970,7 +1988,7 @@ if (txAcc)
     cDot.start1 = ((hgvs->start1 - 1) * 3) + 1;
     cDot.end = ((hgvs->end - 1) * 3) + 3;
     cDot.changes = hgvs->changes;
-    region = hgvsMapNucToGenome(db, &cDot, retPslTable);
+    region = hgvsMapNucToGenome(db, &cDot, retPslTable, TRUE);
     freeMem(txAcc);
     }
 return region;
@@ -1986,7 +2004,7 @@ struct bed *region = NULL;
 if (hgvs->type == hgvstProtein)
     region = hgvsMapPDotToGenome(db, hgvs, retPslTable);
 else
-    region = hgvsMapNucToGenome(db, hgvs, retPslTable);
+    region = hgvsMapNucToGenome(db, hgvs, retPslTable, FALSE);
 return region;
 }
 

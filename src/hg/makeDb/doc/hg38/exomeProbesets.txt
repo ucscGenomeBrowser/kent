@@ -1,0 +1,580 @@
+================================================================
+# track made by Pranav, Tiana, Began, Ana, just small edits by Max
+# Download data for hg38:
+
+We make tracks for the main Exome Kit Vendors: IDT, Twist Biosciences, Agilent, and Roche.
+
+Note: IDT, Agilent and Roche have bed files for the Probes and for the Target Regions. Twist, MGI, and Illumina have bed files for the Target Regions (but not for Probes).
+
+Data downloaded in my windows desktop and copied to hgwdev: 
+scp <file.bed> ana@hgwdev.gi.ucsc.edu://hive/data/genomes/hg19/bed/exonArrays/raw/idt 
+
+# IDT Datasets:
+
+Track: IDT - xGen Exome Research Panel V2 Probes
+Download: https://sfvideo.blob.core.windows.net/sitefinity/docs/default-source/supplementary-product-info/xgen-exome-research-panel-v2-probes-hg3862a5791532796e2eaa53ff00001c1b3c.bed?sfvrsn=bdd1707_6&download=true
+File name: xgen-exome-research-panel-v2-probes-hg38.bed
+ 
+Track: IDT - xGen Exome Research Panel V2 Target Regions
+Download: 
+https://sfvideo.blob.core.windows.net/sitefinity/docs/default-source/supplementary-product-info/xgen-exome-research-panel-v2-targets-hg38.bed?sfvrsn=5dd1707_6&download=true
+File name: xgen-exome-research-panel-v2-targets-hg38.bed
+
+# Twist Biosciences Datasets:
+
+Track: Twist - RefSeq Exome Panel Target Regions
+Download: https://www.twistbioscience.com/sites/default/files/resources/2019-09/Twist_Exome_RefSeq_targets_hg38.bed
+File name: Twist_Exome_RefSeq_targets_hg38.bed
+
+Track: Twist - Core Exome Panel Target Regions
+Download: https://www.twistbioscience.com/sites/default/files/resources/2019-06/Twist_Exome_Target_hg38.bed
+File name: Twist_Exome_Target_hg38.bed
+
+Track: Twist - Comprehensive Exome Panel Target Regions
+Download: https://www.twistbioscience.com/sites/default/files/resources/2020-09/Twist_ComprehensiveExome_targets_hg38.bed
+File name: Twist_ComprehensiveExome_targets_hg38.bed
+
+Track: Twist - Exome 2.1
+Download: curl https://www.twistbioscience.com/sites/default/files/resources/2021-10/hg19_Twist_exome_2_1_annotated_targets.bed | cut -f1-3 > TwistExome21.bed
+bedToBigBed TwistExome21.bed ../../chrom.sizes TwistExome21.bb -type=bed3
+
+# Agilent Datasets:
+Download for all Agilent files: https://earray.chem.agilent.com/suredesign/ - Password needed (from Ana)
+
+Track: Agilent - SureSelect Clinical Research Exome V2 Covered by Probes
+File name: S30409818_Covered.bed
+
+Track: Agilent - SureSelect Clinical Research Exome V2 Target Regions 
+File name: S30409818_Regions.bed
+
+Track: Agilent - SureSelect Focused Exome Covered by Probes
+File name: S07084713_Covered.bed
+
+Track: Agilent - SureSelect Focused Exome Target Regions
+File name: S07084713_Regions.bed
+
+Track: Agilent - SureSelect All Exon V4 Covered by Probes
+File name: S03723314_Covered.bed
+
+Track: Agilent - SureSelect All Exon V4 Target Regions
+File name: S03723314_Regions.bed
+
+Track: Agilent - SureSelect All Exon V4 + UTRs Covered by Probes
+File name: S03723424_Covered.bed
+
+Track: Agilent - SureSelect All Exon V4 + UTRs Target Regions
+File name: S03723424_Regions.bed
+
+Track: Agilent - SureSelect All Exon V5 Covered by Probes
+File name: S04380110_Covered.bed
+
+Track: Agilent - SureSelect All Exon V5 Target Regions
+File name: S04380110_Regions.bed
+
+Track: Agilent - SureSelect All Exon V5 + UTRs Covered by Probes
+File name: S04380219_Covered.bed
+
+Track: Agilent - SureSelect All Exon V5 + UTRs Target Regions
+File name: S04380219_Regions.bed
+
+Track: Agilent - SureSelect All Exon V6 r2 Covered by Probes
+File name: S07604514_Covered.bed
+
+Track: Agilent - SureSelect All Exon V6 r2 Target Regions
+File name: S07604514_Regions.bed
+
+Track: Agilent - SureSelect All Exon V6 + COSMIC r2 Covered by Probes
+File name: S07604715_Covered.bed
+
+Track: Agilent - SureSelect All Exon V6 + COSMIC r2 Target Regions
+File name: S07604715_Regions.bed
+
+Track: Agilent - SureSelect All Exon V6 + UTR r2 Covered by Probes
+File name: S07604624_Covered.bed
+
+Track: Agilent - SureSelect All Exon V6 + UTR r2 Target Regions
+File name: S07604624_Regions.bed
+
+Track: Agilent - SureSelect All Exon V7 Covered by Probes
+File name: S31285117_Covered.bed
+
+Track: Agilent - SureSelect All Exon V7 Target Regions
+File name: S31285117_Regions.bed
+
+# Roche Datasets:
+
+Track: Roche - KAPA HyperExome Capture Probe Footprint
+Download: https://sequencing.roche.com/content/dam/rochesequence/worldwide/design-files/KAPA%20HyperExome%20Design%20files%20HG38.zip
+File name: KAPA_HyperExome_hg38_capture_targets.bed
+
+Track: Roche - KAPA HyperExome Primary Target Regions
+Download:
+https://sequencing.roche.com/content/dam/rochesequence/worldwide/design-files/KAPA%20HyperExome%20Design%20files%20HG38.zip
+File name: KAPA_HyperExome_hg38_primary_targets.bed
+
+Track: Roche - SeqCap EZ MedExome Capture Probe Footprint
+Download: https://sequencing.roche.com/en/support-resources/discontinued-products/seqcap-ez-exome-v3-kit.html
+File name: KAPA_HyperExome_hg38_primary_targets.bed
+
+Track: Roche - SeqCap EZ MedExome Empirical Target Regions
+Download: https://sequencing.roche.com/en/support-resources/discontinued-products/seqcap-ez-exome-v3-kit.html
+File name: SeqCap_EZ_MedExome_hg38_empirical_targets.bed
+
+Track: Roche - SeqCap EZ MedExome + Mito Capture Probe Footprint
+Download: https://sequencing.roche.com/en/support-resources/discontinued-products/seqcap-ez-exome-v3-kit.html
+File name: SeqCap_EZ_MedExomePlusMito_hg38_capture_targets.bed
+
+Track: Roche - SeqCap EZ MedExome + Mito Empirical Target Regions
+Download: https://sequencing.roche.com/en/support-resources/discontinued-products/seqcap-ez-exome-v3-kit.html
+File name: SeqCap_EZ_MedExomePlusMito_hg38_empirical_targets.bed
+
+===============================================================
+
+================================================================
+# Converting data for hg38:
+
+All files were converted from bed to bigBed using the Genome Browser documentation. All of the files underwent the following steps, with the exception of a few files that are described below. (NOTE: the documentation includes a step to remove any header lines -- only a couple files had headers, and those were simply removed within vim.)
+
+Sort all bed files
+sort -k1,1 -k2,2n unsorted.bed > input.bed
+fetchChromSizes (run once)
+fetchChromSizes hg38 > hg38.chrom.sizes
+NOTE: this only needs to be run once, since one hg38.chrom.sizes files can be used for all bedToBigBed runs.
+bedToBigBed for all files
+bedToBigBed input.bed hg38.chrom.sizes myBigBed.bb
+
+Here’s an example using the MGI Exome Capture V4 file:
+
+sort -k1,1 -k2,2n MGI_Exome_Capture_V4.bed > sorted_MGI_Exome_Capture_V4.bed
+fetchChromSizes hg38 > hg38.chrom.sizes
+bedToBigBed sorted_MGI_Exome_Capture_V4.bed hg38.chrom.sizes MGI_Exome_Capture_V4.bb
+
+The following files from Roche had long entries in col4, causing these files to have rows that were too long for bedToBigBed. Therefore, all the input bed files had col4 cut. (Note: these were just the ensembl and ccds ids, which did not provide any other substantial information.)
+
+We ran the command
+
+> cat [file]| awk '{print $1 "\t" $2 "\t" $3}'
+
+for all such files. Here’s an example for the Roche - KAPA HyperExome Capture Probe:
+
+Footprint file:
+cat sorted_KAPA_HyperExome_hg38_capture_targets.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_KAPA_HyperExome_hg38_capture_targets.bed
+
+================================================================
+Moving .bb files:
+
+Once all bigBed files are completed, they can be moved to the directory where trackDb.txt is located. This is placed in the hg38/ directory (refer to Genome Browser documentation for the directory tree)
+================================================================
+Agilent File Manipulations:
+
+#-----------------------------
+# Files:
+#S04380110_Covered.bed
+#S04380110_Regions.bed
+#S04380219_Covered.bed
+#S04380219_Regions.bed
+#S07084713_Covered.bed
+#S07084713_Regions.bed
+#S07604514_Covered.bed
+#S07604514_Regions.bed
+#S07604624_Covered.bed
+#S07604624_Regions.bed
+#S07604715_Covered.bed
+#S07604715_Regions.bed
+#S30409818_Covered.bed
+#S30409818_Regions.bed
+#S31285117_Covered.bed
+#S31285117_Regions.bed
+#--------------------------------------------------
+ 
+#--------------------------------------------------
+# Converting bed to bigBed files
+# -------------------------------------------------
+ 
+# 1. Sort all the original files
+ 
+# S04380110_Covered (hg38):
+sort -k1,1 -k2,2n S04380110_Covered.bed > sorted_S04380110_Covered.bed
+ 
+# S04380110_Regions.bed (hg38):
+sort -k1,1 -k2,2n S04380110_Regions.bed > sorted_S04380110_Regions.bed
+ 
+# S04380219_Covered (hg38):
+sort -k1,1 -k2,2n S04380219_Covered.bed > sorted_S04380219_Covered.bed
+ 
+# S04380219_Regions.bed (hg38):
+sort -k1,1 -k2,2n S04380219_Regions.bed > sorted_S04380219_Regions.bed
+ 
+# S07084713_Covered (hg38):
+sort -k1,1 -k2,2n S07084713_Covered.bed > sorted_S07084713_Covered.bed
+ 
+# S07084713_Regions.bed (hg38):
+sort -k1,1 -k2,2n S07084713_Regions.bed > sorted_S07084713_Regions.bed
+ 
+# S07604514_Covered (hg38):
+sort -k1,1 -k2,2n S07604514_Covered.bed > sorted_S07604514_Covered.bed
+ 
+# S07604514_Regions.bed (hg38):
+sort -k1,1 -k2,2n S07604514_Regions.bed > sorted_S07604514_Regions.bed
+ 
+# S07604624_Covered (hg38):
+sort -k1,1 -k2,2n S07604624_Covered.bed > sorted_S07604624_Covered.bed
+ 
+# S07604624_Regions.bed (hg38):
+sort -k1,1 -k2,2n S07604624_Regions.bed > sorted_S07604624_Regions.bed
+ 
+# S07604715_Covered (hg38):
+sort -k1,1 -k2,2n S07604715_Covered.bed > sorted_S07604715_Covered.bed
+ 
+# S07604715_Regions.bed (hg38):
+sort -k1,1 -k2,2n S07604715_Regions.bed > sorted_S07604715_Regions.bed
+ 
+# S30409818_Covered (hg38):
+sort -k1,1 -k2,2n S30409818_Covered.bed > sorted_S30409818_Covered.bed
+ 
+# S30409818_Regions.bed (hg38):
+sort -k1,1 -k2,2n S30409818_Regions.bed > sorted_S30409818_Regions.bed
+ 
+# S31285117_Covered (hg38):
+sort -k1,1 -k2,2n S31285117_Covered.bed > sorted_S31285117_Covered.bed
+ 
+# S31285117_Regions.bed (hg38):
+sort -k1,1 -k2,2n S31285117_Regions.bed > sorted_S31285117_Regions.bed
+ 
+ 
+# NOTE: no need to remove any "track" or "browser" lines in sorted bed files
+#---------------------------------------------------
+ 
+# 2. fetchChromSizes 
+ 
+ 
+# Run fetchChromSizes for the files (NOTE: only need to run fetchChromSizes
+# hg38 file:
+fetchChromSizes hg38 > hg38.chrom.sizes
+ 
+#------------------------------------------------------
+ 
+ 
+ 
+# 3. Take only first 3 columns of each sorted bed file
+ 
+# S04380110_Covered (hg38):
+cat sorted_S04380110_Covered.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S04380110_Covered.bed
+ 
+# S04380110_Regions.bed (hg38):
+cat sorted_S04380110_Regions.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S04380110_Regions.bed
+ 
+# S04380219_Covered (hg38):
+cat sorted_S04380219_Covered.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S04380219_Covered.bed
+ 
+# S04380219_Regions.bed (hg38):
+cat sorted_S04380219_Regions.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S04380219_Regions.bed
+ 
+# S07084713_Covered (hg38):
+cat sorted_S07084713_Covered.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S07084713_Covered.bed
+ 
+# S07084713_Regions.bed (hg38):
+cat sorted_S07084713_Regions.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S07084713_Regions.bed
+ 
+# S07604514_Covered (hg38):
+cat sorted_S07604514_Covered.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S07604514_Covered.bed
+ 
+# S07604514_Regions.bed (hg38):
+cat sorted_S07604514_Regions.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S07604514_Regions.bed
+ 
+# S07604624_Covered (hg38):
+cat sorted_S07604624_Covered.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S07604624_Covered.bed
+ 
+# S07604624_Regions.bed (hg38):
+cat sorted_S07604624_Regions.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S07604624_Regions.bed
+ 
+# S07604715_Covered (hg38):
+cat sorted_S07604715_Covered.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S07604715_Covered.bed
+ 
+# S07604715_Regions.bed (hg38):
+cat sorted_S07604715_Regions.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S07604715_Regions.bed
+ 
+# S30409818_Covered (hg38):
+cat sorted_S30409818_Covered.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S30409818_Covered.bed
+ 
+# S30409818_Regions.bed (hg38):
+cat sorted_S30409818_Regions.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S30409818_Regions.bed
+ 
+# S31285117_Covered (hg38):
+cat sorted_S31285117_Covered.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S31285117_Covered.bed
+ 
+# S31285117_Regions.bed (hg38):
+cat sorted_S31285117_Regions.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_S31285117_Regions.bed
+ 
+#------------------------------------------------------
+ 
+ 
+# 4. Run bedToBigBed for each file, using the .chrom.sizes files
+ 
+DONE# S04380110_Covered (hg38):
+bedToBigBed short_sorted_S04380110_Covered.bed hg38.chrom.sizes S04380110_Covered.bb
+ 
+DONE# S04380110_Regions.bed (hg38):
+bedToBigBed short_sorted_S04380110_Regions.bed hg38.chrom.sizes S04380110_Regions.bb
+ 
+DONE# S04380219_Covered (hg38):
+bedToBigBed short_sorted_S04380219_Covered.bed hg38.chrom.sizes S04380219_Covered.bb
+ 
+DONE# S04380219_Regions.bed (hg38):
+bedToBigBed short_sorted_S04380219_Regions.bed hg38.chrom.sizes S04380219_Regions.bb
+ 
+DONE# S07084713_Covered (hg38):
+bedToBigBed short_sorted_S07084713_Covered.bed hg38.chrom.sizes S07084713_Covered.bb
+ 
+DONE# S07084713_Regions.bed (hg38):
+bedToBigBed short_sorted_S07084713_Regions.bed hg38.chrom.sizes S07084713_Regions.bb
+ 
+DONE# S07604514_Covered (hg38):
+bedToBigBed short_sorted_S07604514_Covered.bed hg38.chrom.sizes S07604514_Covered.bb
+ 
+DONE# S07604514_Regions.bed (hg38):
+bedToBigBed short_sorted_S07604514_Regions.bed hg38.chrom.sizes S07604514_Regions.bb
+ 
+DONE# S07604624_Covered (hg38):
+bedToBigBed short_sorted_S07604624_Covered.bed hg38.chrom.sizes S07604624_Covered.bb
+ 
+DONE# S07604624_Regions.bed (hg38):
+bedToBigBed short_sorted_S07604624_Regions.bed hg38.chrom.sizes S07604624_Regions.bb
+ 
+# S07604715_Covered (hg38):
+bedToBigBed short_sorted_S07604715_Covered.bed hg38.chrom.sizes S07604715_Covered.bb
+ 
+# S07604715_Regions.bed (hg38):
+bedToBigBed short_sorted_S07604715_Regions.bed hg38.chrom.sizes S07604715_Regions.bb
+ 
+# S30409818_Covered (hg38):
+bedToBigBed short_sorted_S30409818_Covered.bed hg38.chrom.sizes S30409818_Covered.bb
+ 
+# S30409818_Regions.bed (hg38):
+bedToBigBed short_sorted_S30409818_Regions.bed hg38.chrom.sizes S30409818_Regions.bb
+ 
+# S31285117_Covered (hg38):
+bedToBigBed short_sorted_S31285117_Covered.bed hg38.chrom.sizes S31285117_Covered.bb
+ 
+# S31285117_Regions.bed (hg38):
+bedToBigBed short_sorted_S31285117_Regions.bed hg38.chrom.sizes S31285117_Regions.bb
+ 
+#------------------------------------------------------
+ 
+
+
+
+========================================================
+IDT File Manipulation:
+
+#-----------------------------
+# Files:
+xgen-exome-research-panel-v2-probes-hg38.bed
+xgen-exome-research-panel-v2-targets-hg38.bed
+#--------------------------------------------------
+ 
+#--------------------------------------------------
+# Converting bed to bigBed files
+# -------------------------------------------------
+ 
+# 1. Sort all the original files
+ 
+#xgen Exome Probes (hg38)
+sort -k1,1 -k2,2n xgen-exome-research-panel-v2-probes-hg38.bed > sorted_xgen-exome-research-panel-v2-probes-hg38.bed
+ 
+ 
+#xgen Exome Targets (hg38)
+sort -k1,1 -k2,2n xgen-exome-research-panel-v2-targets-hg38.bed > sorted_xgen-exome-research-panel-v2-targets-hg38.bed
+ 
+ 
+# NOTE: no need to remove any "track" or "browser" lines in sorted bed files
+#---------------------------------------------------
+ 
+# 2. fetchChromSizes 
+ 
+ 
+# Run fetchChromSizes for the files (NOTE: only need to run fetchChromSizes
+# hg38 file:
+fetchChromSizes hg38 > hg38.chrom.sizes
+ 
+#------------------------------------------------------
+ 
+ 
+# 3. Run bedToBigBed for each file, using the .chrom.sizes files
+ 
+#xgen Exome Probes (hg38)
+bedToBigBed sorted_xgen-exome-research-panel-v2-probes-hg38.bed hg38.chrom.sizes xgen-exome-research-panel-v2-probes-hg38.bb
+ 
+#xgen Exome Targets (hg38)
+bedToBigBed sorted_xgen-exome-research-panel-v2-targets-hg38.bed hg38.chrom.sizes xgen-exome-research-panel-v2-targets-hg38.bb
+ 
+#------------------------------------------------------
+ 
+
+
+
+===========================================================
+Twist
+
+#-----------------------------
+# Files:
+Twist_ComprehensiveExome_targets_hg38.bed
+Twist_Exome_RefSeq_targets_hg38.bed
+Twist_Exome_Target_hg38.bed
+#--------------------------------------------------
+ 
+#--------------------------------------------------
+# Converting bed to bigBed files
+# -------------------------------------------------
+ 
+# 1. Sort all the original files
+ 
+#Comprehensive Exome Targets(hg38)
+sort -k1,1 -k2,2n Twist_ComprehensiveExome_targets_hg38.bed > sorted_Twist_ComprehensiveExome_targets_hg38.bed
+ 
+#ExomeRefseq Targets(hg38)
+sort -k1,1 -k2,2n Twist_Exome_RefSeq_targets_hg38.bed > sorted_Twist_Exome_RefSeq_targets_hg38.bed
+ 
+#Exome Target(hg38)
+sort -k1,1 -k2,2n Twist_Exome_Target_hg38.bed > sorted_Twist_Exome_Target_hg38.bed
+ 
+# NOTE: no need to remove any "track" or "browser" lines in sorted bed files
+#---------------------------------------------------
+ 
+# 2. fetchChromSizes 
+ 
+ 
+# Run fetchChromSizes for the files (NOTE: only need to run fetchChromSizes
+# hg38 file:
+fetchChromSizes hg38 > hg38.chrom.sizes
+ 
+#------------------------------------------------------
+ 
+# 3. Run bedToBigBed for each file, using the .chrom.sizes files
+ 
+#Comprehensive Exome Targets(hg38)
+bedToBigBed sorted_Twist_ComprehensiveExome_targets_hg38.bed hg38.chrom.sizes Twist_ComprehensiveExome_targets_hg38.bb
+ 
+#ExomeRefseq Targets(hg38)
+bedToBigBed sorted_Twist_Exome_RefSeq_targets_hg38.bed hg38.chrom.sizes Twist_Exome_RefSeq_targets_hg38.bb
+ 
+#Exome Target(hg38)
+bedToBigBed sorted_Twist_Exome_Target_hg38.bed hg38.chrom.sizes Twist_Exome_Target_hg38.bb
+ 
+#------------------------------------------------------
+ 
+
+================================================================
+Roche File Manipulations:
+
+#-----------------------------
+# Files:
+KAPA_HyperExome_hg38_capture_targets.bed
+KAPA_HyperExome_hg38_primary_targets.bed
+SeqCap_EZ_MedExomePlusMito_hg38_capture_targets.bed
+SeqCap_EZ_MedExomePlusMito_hg38_empirical_targets.bed
+SeqCap_EZ_MedExome_hg38_capture_targets.bed
+SeqCap_EZ_MedExome_hg38_empirical_targets.bed
+#--------------------------------------------------
+ 
+#--------------------------------------------------
+# Converting bed to bigBed files
+# -------------------------------------------------
+ 
+# 1. Sort all the original files
+ 
+#KAPA Capture targets(hg38)
+sort -k1,1 -k2,2n KAPA_HyperExome_hg38_capture_targets.bed > sorted_KAPA_HyperExome_hg38_capture_targets.bed
+ 
+#KAPA Primary targets(hg38)
+sort -k1,1 -k2,2n KAPA_HyperExome_hg38_primary_targets.bed > sorted_KAPA_HyperExome_hg38_primary_targets.bed
+ 
+#SeqCap MedExome + Mito Capture targets(hg38)
+sort -k1,1 -k2,2n SeqCap_EZ_MedExomePlusMito_hg38_capture_targets.bed > sorted_SeqCap_EZ_MedExomePlusMito_hg38_capture_targets.bed
+ 
+#SeqCap MedExome + Mito Empirical targets(hg38)
+sort -k1,1 -k2,2n SeqCap_EZ_MedExomePlusMito_hg38_empirical_targets.bed > sorted_SeqCap_EZ_MedExomePlusMito_hg38_empirical_targets.bed
+ 
+#SeqCap MedExome Capture targets(hg38)
+sort -k1,1 -k2,2n SeqCap_EZ_MedExome_hg38_capture_targets.bed > sorted_SeqCap_EZ_MedExome_hg38_capture_targets.bed
+ 
+#SeqCap MedExome Empirical targets(hg38)
+sort -k1,1 -k2,2n SeqCap_EZ_MedExome_hg38_empirical_targets.bed > sorted_SeqCap_EZ_MedExome_hg38_empirical_targets.bed
+ 
+# NOTE: no need to remove any "track" or "browser" lines in sorted bed files
+#---------------------------------------------------
+ 
+# 2. fetchChromSizes 
+ 
+ 
+# Run fetchChromSizes for the files (NOTE: only need to run fetchChromSizes
+# hg38 file:
+fetchChromSizes hg38 > hg38.chrom.sizes
+ 
+#------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+# 3. Take only first 3 columns of each sorted bed file
+ 
+#KAPA Capture targets(hg38)
+cat sorted_KAPA_HyperExome_hg38_capture_targets.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_KAPA_HyperExome_hg38_capture_targets.bed
+ 
+#KAPA Primary targets(hg38)
+cat sorted_KAPA_HyperExome_hg38_primary_targets.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_KAPA_HyperExome_hg38_primary_targets.bed
+ 
+#SeqCap MedExome + Mito Capture targets(hg38)
+cat sorted_SeqCap_EZ_MedExomePlusMito_hg38_capture_targets.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_SeqCap_EZ_MedExomePlusMito_hg38_capture_targets.bed
+ 
+#SeqCap MedExome + Mito Empirical targets(hg38)
+cat sorted_SeqCap_EZ_MedExomePlusMito_hg38_empirical_targets.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_SeqCap_EZ_MedExomePlusMito_hg38_empirical_targets.bed
+ 
+ 
+#SeqCap MedExome Capture targets(hg38)
+cat sorted_SeqCap_EZ_MedExome_hg38_capture_targets.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_SeqCap_EZ_MedExome_hg38_capture_targets.bed
+ 
+#SeqCap MedExome Empirical targets(hg38)
+cat sorted_SeqCap_EZ_MedExome_hg38_empirical_targets.bed | awk '{print $1 "\t" $2 "\t" $3}' > short_sorted_SeqCap_EZ_MedExome_hg38_empirical_targets.bed
+ 
+ 
+ 
+ 
+#------------------------------------------------------
+ 
+ 
+# 4. Run bedToBigBed for each file, using the .chrom.sizes files
+ 
+DONE #KAPA Capture targets(hg38)
+bedToBigBed short_sorted_KAPA_HyperExome_hg38_capture_targets.bed hg38.chrom.sizes KAPA_HyperExome_hg38_capture_targets.bb
+ 
+DONE#KAPA Primary targets(hg38)
+bedToBigBed short_sorted_KAPA_HyperExome_hg38_primary_targets.bed hg38.chrom.sizes KAPA_HyperExome_hg38_primary_targets.bb
+ 
+DONE#SeqCap MedExome + Mito Capture targets(hg38)
+bedToBigBed short_sorted_SeqCap_EZ_MedExomePlusMito_hg38_capture_targets.bed hg38.chrom.sizes SeqCap_EZ_MedExomePlusMito_hg38_capture_targets.bb
+ 
+DONE#SeqCap MedExome + Mito Empirical targets(hg38)
+bedToBigBed short_sorted_SeqCap_EZ_MedExomePlusMito_hg38_empirical_targets.bed hg38.chrom.sizes SeqCap_EZ_MedExomePlusMito_hg38_empirical_targets.bb
+ 
+#SeqCap MedExome Capture targets(hg38)
+bedToBigBed short_sorted_SeqCap_EZ_MedExome_hg38_capture_targets.bed hg38.chrom.sizes SeqCap_EZ_MedExome_hg38_capture_targets.bb
+ 
+#SeqCap MedExome Empirical targets(hg38)
+bedToBigBed short_sorted_SeqCap_EZ_MedExome_hg38_empirical_targets.bed hg38.chrom.sizes SeqCap_EZ_MedExome_hg38_empirical_targets.bb
+ 
+ 
+#------------------------------------------------------
+ 
+
+
+ 
+
+
+

@@ -1,0 +1,6 @@
+hub Invertebrate genome assemblies
+shortLabel Invertebrate assemblies
+longLabel Invertebrate genome assemblies
+genomesFile genomes.txt
+email hclawson@ucsc.edu
+descriptionUrl index.html

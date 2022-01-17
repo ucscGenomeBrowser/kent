@@ -19,6 +19,12 @@ searchPriority 8
 track chainNetHg38 override
 visibility pack
 
+track chainNetMm10 override
+shortLabel $o_db ChainNet
+
+track chainNetHg19 override
+shortLabel $o_db ChainNet
+
 track rhesusSNVs
 shortLabel Rhesus SNVs
 longLabel Annotated SNVs from the Rhesus Macaque Sequencing Consortium
@@ -30,4 +36,3 @@ hapClusterHeight 360
 hapClusterEnabled on
 hapClusterMethod fileOrder
 maxWindowToDraw 1000000
-pennantIcon New red ../goldenPath/newsarch.html#080320 "Released Aug. 3, 2020"

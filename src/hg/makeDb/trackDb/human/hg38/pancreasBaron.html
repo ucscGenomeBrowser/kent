@@ -1,0 +1,94 @@
+<h2>Description</h2>
+<p>
+This track shows data from <a href="https://pubmed.ncbi.nlm.nih.gov/27667365/"
+target="_blank"><em>A Single-Cell Transcriptomic Map of the Human and Mouse
+Pancreas Reveals Inter- and Intra-cell Population Structure</em></a>. Pancreas
+tissue was analyzed using droplet-based single-cell RNA-sequencing (scRNA-seq)
+and subsequent clustering distinguished 14 pancreas-resident cell types based
+on their identified marker genes found in Baron <em>et al</em>., 2016.</p>
+
+<p>
+There are four bar chart tracks in this track collection with pancreas cells
+grouped by either batch (<a href="hgTrackUi?g=pancreasBaronBatch">Pancreas Batch</a>),
+cell type (<a href="hgTrackUi?g=pancreasBaronCellType">Pancreas Cells</a>), detailed
+cell type (<a href="hgTrackUi?g=pancreasBaronDetailedCellType">Pancreas Details</a>) and
+donor (<a href="hgTrackUi?g=pancreasBaronDonor">Pancreas Donor</a>). The default track
+displayed is pancreas cells grouped by cell type.</p>
+
+<h2>Display Conventions</h2>
+<p>
+The cell types are colored by which class they belong to according to the following table.</p>
+
+<p>
+<table cellpadding='2'>
+  <thead><tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;">Cell classification</th>
+  </tr></thead>
+  <tr><td style="background-color: #0050FF;"></td><td>secretory</td></tr>
+  <tr><td style="background-color: #00C000;"></td><td>endothelial</td></tr>
+  <tr><td style="background-color: #0099C0;"></td><td>epithelial</td></tr>
+  <tr><td style="background-color: #B05020;"></td><td>fibroblast</td></tr>
+</table>
+</p>
+
+<p>
+Cells that fall into multiple classes will be colored by blending the colors
+associated with those classes. The colors will be purest in the
+<a href="hgTrackUi?g=pancreasBaronCellType">Pancreas Cells</a>
+subtrack, where the bars represent relatively pure cell types. They can give an
+overview of the cell composition within other categories in other subtracks as
+well.</p>
+
+<h2>Method</h2>
+<p>
+Human islets were obtained from two female cadaveric donors ages 51 (human2)
+and 59 (human4) and two male cadaveric donors ages 17 (human1) and 38 (human3).
+The samples collected from human 1-3 were non-diabetic and human 4 had type 2
+diabetes mellitus. Using single-cell RNA-sequencing ~10,000 human pancreatic
+cells were isolated and sequenced. For each donor, several separate batches of
+~800 cells were prepared and sequenced to obtain an average of about 100,000
+reads per cell. Cells were barcoded using the inDrop platform which follows the
+CEL-Seq protocol for library construction. Paired end sequencing was done on
+the Illumina Hiseq 2500. After filtering out cells with limited numbers of
+detected genes, the dataset contained 8,629 cells from the four donors.</p>
+
+<p>
+The cell/gene matrix and cell-level metadata was downloaded from the 
+<a href="http://cells.ucsc.edu/?ds=human-pancreas" target="_blank">UCSC Cell Browser</a>.
+The UCSC command line utility matrixClusterColumns, matrixToBarChart, and bedToBigBed were used
+to transform these into a bar chart format bigBed file that can be visualized. The coloring 
+was done by defining colors for the broad level cell classes and then using another UCSC utility,
+hcaColorCells, to interpolate the colors across all cell types. The UCSC utilities can be found on
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">our download server</a>.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw <a href="/goldenPath/help/barChart.html">bar chart</a> data can be
+explored interactively with the <a href="../cgi-bin/hgTables">Table
+Browser</a> or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a
+href="/goldenPath/help/api.html">REST API</a>. Please refer to our <a
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing
+list archives</a> for questions, or our <a
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.</p>
+  
+<h2>Credit</h2>
+<p>
+Thanks to Mayaan Baron, Adrian Veres, Samuel L. Wolock, Aubrey L. Faust, and to
+the many authors who worked on producing and publishing this data set. The data
+were integrated into the UCSC Genome Browser by Jim Kent and Brittney Wick then
+reviewed by Jairo Navarro. The UCSC work was paid for by the Chan Zuckerberg Initiative.</p>
+
+<h2>References</h2>
+<p>
+Baron M, Veres A, Wolock SL, Faust AL, Gaujoux R, Vetere A, Ryu JH, Wagner BK, Shen-Orr SS, Klein AM
+<em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27667365" target="_blank">
+A Single-Cell Transcriptomic Map of the Human and Mouse Pancreas Reveals Inter- and Intra-cell
+Population Structure</a>.
+<em>Cell Syst</em>. 2016 Oct 26;3(4):346-360.e4.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27667365" target="_blank">27667365</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5228327/" target="_blank">PMC5228327</a></p>

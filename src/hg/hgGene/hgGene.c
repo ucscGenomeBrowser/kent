@@ -1,7 +1,7 @@
 /* hgGene - A CGI script to display the gene details page.. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "hCommon.h"
 #include "linefile.h"
@@ -38,6 +38,7 @@ struct trackDb *globalTdb;
 struct genePred *curGenePred;	/* Current gene prediction structure. */
 boolean isGencode;              /* is this based on the Gencode models */
 boolean isGencode2;             /* is this based on the Gencode models and use ensembl id as primary id */
+boolean isGencode3;             /* is this based on the Gencode models and use ensembl id as primary id */
 int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
@@ -45,6 +46,10 @@ int  kgVersion = KG_UNKNOWN;	/* KG version */
 int measureTiming = FALSE;
 
 //#include "rgdInfo.c"
+
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   1.0     /* standard penalty for most CGIs */
+static boolean issueBotWarning = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -260,9 +265,9 @@ freez(&description);
 char buffer[1024];
 char *commaPos;
    
-if (isGencode || isGencode2)
+if (isGencode || isGencode2 || isGencode3)
     {
-    hPrintf("<B>Gencode Transcript:</B> %s<br>\n", isGencode2 ? curGeneId : curAlignId);;
+    hPrintf("<B>Gencode Transcript:</B> %s<br>\n", isGencode2 || isGencode3 ? curGeneId : curAlignId);;
     char buffer[1024];
     hPrintf("<B>Gencode Gene:</B> %s<br>\n", getGencodeGeneId(conn, curGeneId, buffer, sizeof buffer));
     }
@@ -691,7 +696,11 @@ void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now
  * set up the globals and make a web page. */
 {
-hgBotDelay();
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 cart = theCart;
 getDbAndGenome(cart, &database, &genome, oldVars);
 initGenbankTableNames(database);
@@ -766,8 +775,14 @@ else
 	measureTiming =  isNotEmpty(cartOptionalString(cart, "measureTiming"));
         isGencode = trackDbSettingOn(tdb, "isGencode");
         isGencode2 = trackDbSettingOn(tdb, "isGencode2");
-	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index",
-	    genome, curGeneName, isGencode2 ? curGeneId : curAlignId);
+        isGencode3 = trackDbSettingOn(tdb, "isGencode3");
+
+        if (isGencode2 || isGencode3)
+            cartWebStart(cart, database, "%s Gene %s (%s) from %s",
+                genome, curGeneName, curGeneId, tdb->longLabel);
+        else
+            cartWebStart(cart, database, "%s Gene %s (%s)",
+                genome, curGeneName, curAlignId);
 	webMain(conn, tdb);
 	cartWebEnd();
 	}
@@ -783,6 +798,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgGene", delayFraction, 0, 0, "html");
+
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)

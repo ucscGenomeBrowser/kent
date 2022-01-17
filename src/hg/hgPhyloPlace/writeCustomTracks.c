@@ -186,7 +186,8 @@ if (anyImputedBases(samplePlacements, sampleIds))
 return ctVcfTn;
 }
 
-static void uploadedSamplesTree(char *sampleTreeFile, char *bigTreeFile, struct slName *sampleIds)
+static struct phyloTree *uploadedSamplesTree(char *sampleTreeFile, char *bigTreeFile,
+                                             struct slName *sampleIds)
 /* Read in tree from bigTreeFile, prune all nodes that have no leaf descendants in sampleIds,
  * save pruned tree to sampleTreeFile. */
 {
@@ -195,6 +196,7 @@ tree = phyloPruneToIds(tree, sampleIds);
 FILE *f = mustOpen(sampleTreeFile, "w");
 phyloPrintTree(tree, f);
 carefulClose(&f);
+return tree;
 }
 
 static int heightForSampleCount(int fontHeight, int count)
@@ -203,12 +205,13 @@ static int heightForSampleCount(int fontHeight, int count)
 return (fontHeight + 1) * count;
 }
 
-static void addSampleOnlyCustomTrack(FILE *ctF, struct tempName *vcfTn, char *bigTreePlusFile,
-                                     struct slName *sampleIds,
-                                     int fontHeight, int *pStartTime)
+static struct phyloTree *addSampleOnlyCustomTrack(FILE *ctF, struct tempName *vcfTn,
+                                                  char *bigTreePlusFile, struct slName *sampleIds,
+                                                  int fontHeight, int *pStartTime)
 /* Make custom track with uploaded VCF.  If there are enough samples to make a non-trivial tree,
  * then make the tree by pruning down the big tree plus samples to only the uploaded samples. */
 {
+struct phyloTree *sampleTree = NULL;
 fprintf(ctF, "track name=uploadedSamples description='Uploaded sample genotypes' "
         "type=vcf visibility=pack "
         "hapClusterEnabled=on hapClusterHeight=%d ",
@@ -217,7 +220,7 @@ if (slCount(sampleIds) >= minSamplesForOwnTree)
     {
     struct tempName sampleTreeTn;
     trashDirFile(&sampleTreeTn, "ct", "uploadedSamples", ".nwk");
-    uploadedSamplesTree(sampleTreeTn.forCgi, bigTreePlusFile, sampleIds);
+    sampleTree = uploadedSamplesTree(sampleTreeTn.forCgi, bigTreePlusFile, sampleIds);
     fprintf(ctF, "hapClusterMethod='treeFile %s' ", sampleTreeTn.forCgi);
     }
 else
@@ -231,6 +234,7 @@ while (lineFileNext(vcfLf, &line, NULL))
     fprintf(ctF, "%s\n",line);
 lineFileClose(&vcfLf);
 reportTiming(pStartTime, "add custom track for uploaded samples");
+return sampleTree;
 }
 
 static struct vcfFile *parseUserVcf(char *userVcfFile, int *pStartTime)
@@ -247,42 +251,31 @@ reportTiming(pStartTime, "parse userVcf genotypes");
 return userVcf;
 }
 
-static char *trackNameFromSampleIds(struct slName *sampleIds)
-/* Make a name for our subtree custom track by concatenating sample names. */
-{
-struct dyString *dy = dyStringCreate("subtree_%s", sampleIds->name);
-struct slName *id;
-for (id = sampleIds->next;  id != NULL;  id = id->next)
-    {
-    dyStringPrintf(dy, "_%s", id->name);
-    if (dy->stringSize > 200)
-        break;
-    }
-return dyStringCannibalize(&dy);
-}
-
-static void writeSubtreeTrackLine(FILE *ctF, struct subtreeInfo *ti, int fontHeight)
+static void writeSubtreeTrackLine(FILE *ctF, struct subtreeInfo *ti, int subtreeNum, char *source,
+                                  int fontHeight)
 /* Write a custom track line to ctF for one subtree. */
 {
-fprintf(ctF, "track name=%s", trackNameFromSampleIds(ti->subtreeUserSampleIds));
+fprintf(ctF, "track name=subtree%d", subtreeNum);
 // Keep the description from being too long in order to avoid buffer overflow in hgTrackUi
-int descLen = fprintf(ctF, " description='Uploaded sample%s %s",
-                      (slCount(ti->subtreeUserSampleIds) > 1 ? "s" : ""),
+// (and limited space for track title in hgTracks)
+int descLen = fprintf(ctF, " description='Subtree %d: uploaded sample%s %s",
+                      subtreeNum, (slCount(ti->subtreeUserSampleIds) > 1 ? "s" : ""),
                       ti->subtreeUserSampleIds->name);
 struct slName *id;
 for (id = ti->subtreeUserSampleIds->next;  id != NULL;  id = id->next)
     {
-    if (descLen > 200)
+    if (descLen > 100)
         {
         fprintf(ctF, " and %d other samples", slCount(id));
         break;
         }
     descLen += fprintf(ctF, ", %s", id->name);
     }
-fprintf(ctF, " and nearest neighboring sequences from GISAID' type=vcf visibility=pack "
+int height = heightForSampleCount(fontHeight, slCount(ti->subtreeNameList));
+fprintf(ctF, " and nearest neighboring %s sequences' type=vcf visibility=dense "
         "hapClusterEnabled=on hapClusterHeight=%d hapClusterMethod='treeFile %s' "
         "highlightIds=%s",
-        heightForSampleCount(fontHeight, slCount(ti->subtreeNameList)), ti->subtreeTn->forHtml,
+        source, height, ti->subtreeTn->forHtml,
         slNameListToString(ti->subtreeUserSampleIds, ','));
 if (isNotEmpty(geneTrack))
     fprintf(ctF, " hapClusterColorBy=function geneTrack=%s", geneTrack);
@@ -310,8 +303,8 @@ for (ref = inList;  ref != NULL;  ref = ref->next)
 return outList;
 }
 
-static void treeToBaseAlleles(struct phyloTree *node, char *refBases, char **sampleBases,
-                              struct hash *sampleToIx, struct slRef *parentMuts)
+static void treeToBaseAlleles(struct phyloTree *node, struct hash *condensedNodes, char *refBases,
+                              char **sampleBases, struct hash *sampleToIx, struct slRef *parentMuts)
 /* Traverse tree, building up an array of reference bases indexed by position, and an array
  * (indexed by pos) of sample allele arrays indexed by sampleToIx. */
 {
@@ -329,30 +322,44 @@ if (node->numEdges > 0)
     {
     int i;
     for (i = 0;  i < node->numEdges;  i++)
-        treeToBaseAlleles(node->edges[i], refBases, sampleBases, sampleToIx, nodeMuts);
+        treeToBaseAlleles(node->edges[i], condensedNodes, refBases, sampleBases, sampleToIx,
+                          nodeMuts);
     }
 else
     {
     // Leaf node: if in sampleToIx, then for each mutation (beware back-mutations),
     // set refBase if it has not already been set and set sample allele.
-    int ix = hashIntValDefault(sampleToIx, node->ident->name, -1);
-    if (ix >= 0)
+    boolean allocdHere = FALSE;
+    struct slName *nameList = hashFindVal(condensedNodes, node->ident->name);
+    if (nameList == NULL)
         {
-        struct slRef *mlRef;
-        for (mlRef = nodeMuts;  mlRef != NULL;  mlRef = mlRef->next)
+        nameList = slNameNew(node->ident->name);
+        allocdHere = TRUE;
+        }
+    struct slName *name;
+    for (name = nameList;  name != NULL;  name = name->next)
+        {
+        int ix = hashIntValDefault(sampleToIx, name->name, -1);
+        if (ix >= 0)
             {
-            struct singleNucChange *snc, *sncs = mlRef->val;
-            for (snc = sncs;  snc != NULL;  snc = snc->next)
+            struct slRef *mlRef;
+            for (mlRef = nodeMuts;  mlRef != NULL;  mlRef = mlRef->next)
                 {
-                // Don't let a back-mutation overwrite the true ref value:
-                if (!refBases[snc->chromStart])
-                    refBases[snc->chromStart] = snc->refBase;
-                if (sampleBases[snc->chromStart] == NULL)
-                    AllocArray(sampleBases[snc->chromStart], sampleToIx->elCount);
-                sampleBases[snc->chromStart][ix] = snc->newBase;
+                struct singleNucChange *snc, *sncs = mlRef->val;
+                for (snc = sncs;  snc != NULL;  snc = snc->next)
+                    {
+                    // Don't let a back-mutation overwrite the true ref value:
+                    if (!refBases[snc->chromStart])
+                        refBases[snc->chromStart] = snc->refBase;
+                    if (sampleBases[snc->chromStart] == NULL)
+                        AllocArray(sampleBases[snc->chromStart], sampleToIx->elCount);
+                    sampleBases[snc->chromStart][ix] = snc->newBase;
+                    }
                 }
             }
         }
+    if (allocdHere)
+        slFreeList(&nameList);
     }
 if (node->priv != NULL)
     slFreeList(&nodeMuts);
@@ -505,7 +512,7 @@ for (chromStart = 0;  chromStart < baseCount;  chromStart++)
 }
 
 static void writeSubtreeVcf(FILE *f, struct hash *sampleToIx,
-                            struct vcfFile *userVcf, struct phyloTree *bigTree)
+                            struct vcfFile *userVcf, struct mutationAnnotatedTree *bigTree)
 /* Write rows of VCF with genotypes for samples in sampleToIx (with order determined by sampleToIx)
  * with some samples found in userVcf and the rest found in bigTree which has been annotated
  * with single-nucleotide variants. */
@@ -514,7 +521,7 @@ char refBases[chromSize];
 memset(refBases, 0, sizeof refBases);
 char *sampleBases[chromSize];
 memset(sampleBases, 0, sizeof sampleBases);
-treeToBaseAlleles(bigTree, refBases, sampleBases, sampleToIx, NULL);
+treeToBaseAlleles(bigTree->tree, bigTree->condensedNodes, refBases, sampleBases, sampleToIx, NULL);
 vcfToBaseAlleles(userVcf, refBases, sampleBases, sampleToIx);
 int sampleCount = sampleToIx->elCount;
 baseAllelesToVcf(refBases, sampleBases, chromSize, sampleCount, f);
@@ -524,8 +531,9 @@ for (i = 0;  i < chromSize;  i++)
 }
 
 static void addSubtreeCustomTracks(FILE *ctF, char *userVcfFile, struct subtreeInfo *subtreeInfoList,
-                                   struct hash *samplePlacements, struct phyloTree *bigTree,
-                                   int fontHeight, int *pStartTime)
+                                   struct hash *samplePlacements,
+                                   struct mutationAnnotatedTree *bigTree,
+                                   char *source, int fontHeight, int *pStartTime)
 /* For each subtree trashfile, write VCF+treeFile custom track text to ctF. */
 {
 struct vcfFile *userVcf = parseUserVcf(userVcfFile, pStartTime);
@@ -538,9 +546,10 @@ if (! userVcf)
 if (!bigTree)
     return;
 struct subtreeInfo *ti;
-for (ti = subtreeInfoList;  ti != NULL;  ti = ti->next)
+int subtreeNum;
+for (subtreeNum = 1, ti = subtreeInfoList;  ti != NULL;  ti = ti->next, subtreeNum++)
     {
-    writeSubtreeTrackLine(ctF, ti, fontHeight);
+    writeSubtreeTrackLine(ctF, ti, subtreeNum, source, fontHeight);
     writeVcfHeader(ctF, ti->subtreeNameList);
     writeSubtreeVcf(ctF, ti->subtreeIdToIx, userVcf, bigTree);
     fputc('\n', ctF);
@@ -550,8 +559,9 @@ reportTiming(pStartTime, "write subtree custom tracks");
 }
 
 struct tempName *writeCustomTracks(struct tempName *vcfTn, struct usherResults *ur,
-                                   struct slName *sampleIds, struct phyloTree *bigTree,
-                                   int fontHeight, int *pStartTime)
+                                   struct slName *sampleIds, struct mutationAnnotatedTree *bigTree,
+                                   char *source, int fontHeight, struct phyloTree **retSampleTree,
+                                   int *pStartTime)
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 {
 struct tempName *ctVcfTn = userVcfWithImputedBases(vcfTn, ur->samplePlacements, sampleIds);
@@ -559,10 +569,18 @@ struct tempName *ctTn;
 AllocVar(ctTn);
 trashDirFile(ctTn, "ct", "ct_pp", ".ct");
 FILE *ctF = mustOpen(ctTn->forCgi, "w");
-addSubtreeCustomTracks(ctF, ctVcfTn->forCgi, ur->subtreeInfoList, ur->samplePlacements, bigTree,
-                       fontHeight, pStartTime);
-addSampleOnlyCustomTrack(ctF, ctVcfTn, ur->bigTreePlusTn->forCgi, sampleIds, fontHeight,
-                         pStartTime);
+int subtreeCount = slCount(ur->subtreeInfoList);
+if (subtreeCount <= MAX_SUBTREE_CTS)
+    addSubtreeCustomTracks(ctF, ctVcfTn->forCgi, ur->subtreeInfoList, ur->samplePlacements, bigTree,
+                           source, fontHeight, pStartTime);
+else
+    printf("<p>Subtree custom tracks are added when there are at most %d subtrees, "
+           "but %d subtrees were found.</p>\n",
+           MAX_SUBTREE_CTS, subtreeCount);
+struct phyloTree *sampleTree = addSampleOnlyCustomTrack(ctF, ctVcfTn, ur->bigTreePlusTn->forCgi,
+                                                        sampleIds, fontHeight, pStartTime);
+if (retSampleTree)
+    *retSampleTree = sampleTree;
 carefulClose(&ctF);
 return ctTn;
 }

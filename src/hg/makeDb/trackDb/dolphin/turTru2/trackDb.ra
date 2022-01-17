@@ -11,6 +11,11 @@ track chainNetBosTau7 override
 visibility pack
 
 track chainNetMm10 override
+shortLabel $o_db ChainNet
+
+track chainNetHg19 override
+shortLabel $o_db ChainNet
+
 visibility pack
 
 track gc5BaseBw override

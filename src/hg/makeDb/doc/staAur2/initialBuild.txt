@@ -670,9 +670,9 @@ XXX - need to get gene descriptions out of the genbank record
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("staAur2", "blat1a", "17876", "1", "0"); \
+	VALUES ("staAur2", "blat1a", "17896", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("staAur2", "blat1a", "17877", "0", "1");' \
+	VALUES ("staAur2", "blat1a", "17897", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 

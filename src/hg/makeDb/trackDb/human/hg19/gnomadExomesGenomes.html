@@ -1,19 +1,24 @@
 <h2>Description</h2>
 <p>
-The <strong>Genome Aggregation Database (gnomAD) - Genome and Exome Variants</strong> tracks show single nucleotide variants (SNVs) and small insertion/deletion variants of &lt;50 nucleotides (indels) from 125,748 exomes and 15,708 whole genomes of unrelated individuals, short variant release 2.1.1. For more information on the processing pipeline and population annotations, see the following
- <a target="_blank" href="https://macarthurlab.org/2018/10/17/gnomad-v2-1/">blog post</a> and the 2.1.1 <a href="https://storage.googleapis.com/gnomad-public/release/2.1.1/README.txt" target="_blank">README</a>.
+The <strong>Genome Aggregation Database (gnomAD) - Genome and Exome Variants</strong> tracks 
+show single nucleotide variants (SNVs) and small insertion/deletion variants of &lt;50 nucleotides
+(indels) from 125,748 exomes and 15,708 whole genomes of unrelated individuals, short variant 
+release 2.1.1. For more information on the processing pipeline and population annotations, see the following
+<a target="_blank" href="https://macarthurlab.org/2018/10/17/gnomad-v2-1/">blog post</a> and the 
+2.1.1 <a href="https://storage.googleapis.com/gnomad-public/release/2.1.1/README.txt" target="_blank">README</a>.
 </p>
 
 <p>
 There are two tracks making up this data set:
 <ol>
-  <li><b>gnomAD Exome Variants:</b> short variants of 125,748 exomes, release 2.1.1.
-  <li><b>gnomAD Genome Variants:</b> short variants of 15,708 genomes, release 2.1.1.
+  <li><b>gnomAD Exome Variants:</b> short variants of 125,748 exomes, release 2.1.1.</li>
+  <li><b>gnomAD Genome Variants:</b> short variants of 15,708 genomes, release 2.1.1.</li>
 </ol>
 </p>
 
 <p>
-VCF's were downloaded according to the <a href="https://gnomad.broadinstitute.org/downloads" target="_blank">gnomAD instructions</a> and
+VCF files were downloaded according to the 
+<a href="https://gnomad.broadinstitute.org/downloads" target="_blank">gnomAD instructions</a> and
 transformed into one bigBed file per data set, as described in <a href="#UCSCMethods">UCSC Methods</a>.
 </p>
 
@@ -27,6 +32,11 @@ described below), before the track switches to dense display mode.
 <p>
 Mouse hover on an item will display many details about each variant, including the affected gene(s),
 the variant type, and annotation (missense, synonymous, etc).
+</p>
+
+<p>
+Clicking on an item will display additional details on the variant, including a population frequency
+table showing allele count in each sub-population.
 </p>
 
 <p>
@@ -58,7 +68,7 @@ Three filters are available for these tracks:
 <ol>
     <li>FILTER: Used to exclude/include variants that failed Random Forest
     (RF), Inbreeding Coefficient (Inbreeding Coeff), or Allele Count (AC0) filters. The
-    PASS option is used to include/exlcude variants that pass all of the RF,
+    PASS option is used to include/exclude variants that pass all of the RF,
     InbreedingCoeff, and AC0 filters, as denoted in the original VCF.
     <li>Annotation type: Used to exclude/include variants that are annotated as
     Probability Loss of Function (pLoF), Missense, Synonymous, or Other, as
@@ -108,10 +118,11 @@ data may be queried from our <a target="_blank"
 href="/goldenPath/help/api.html">REST API</a> or downloaded as files from our
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/variants/"
 target="_blank">download server</a>, subject to the conditions set forth by the
-gnomAD consortium (see below).
-
-<p>
-Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome" target="_blank">mailing list archives</a> for questions or our <a target="_blank" href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
+gnomAD consortium (see below). Please refer to our 
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome" target="_blank">
+mailing list archives</a> for questions or our 
+<a target="_blank" href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> 
+for more information.</p>
 
 <p>
 More information about using and understanding the gnomAD data can be found in the

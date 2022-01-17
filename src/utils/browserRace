@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+
+import logging, sys, optparse, time, os, random
+#from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+import requests
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("""usage: %prog [options] hgcentralname server1 server2 outFname - measure timing of a browser
+
+    Gets all public sessions, loads all of them on two servers, shows total time spent for each server.
+
+    Example:
+       browserRace hgcentraltest hgwdev hgwdev-demo7 laps.tsv
+            """)
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+
+def readSessions(centralName):
+    " return list of username, sessionname "
+    logging.info("Getting hubUrls from db %s" % centralName)
+    cmd = 'hgsql %s -se "select userName,sessionName from namedSessionDb where shared=1"' % centralName
+    lines = os.popen(cmd).read().splitlines() # please do not suggest using subprocess in code review. Thx.
+    rows = [l.split("\t") for l in lines]
+    logging.info("Got %d public sessions" % len(rows))
+    return rows
+
+def timeWeb(url):
+    t = time.process_time()
+    requests.get(url)
+    elapsed_time = time.process_time() - t
+    return elapsed_time
+        
+def timeSessions(sessions, server1, server2, outFname):
+    sum1 = 0
+    sum2 = 0
+    ofh = open(outFname, "w")
+    ofh.write("#user\tsession\ttime1\ttime2\n")
+    for user, session in sessions:
+        logging.info("Session: %s %s" % (user, session))
+        path = "cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=%s&hgS_otherUserSessionName=%s"% (user, session)
+        url1 = "http://%s.gi.ucsc.edu/%s" % (server1, path)
+        url2 = "http://%s.gi.ucsc.edu/%s" % (server2, path)
+        # the second call always has an advantage due to warm caches so flip the order
+        if random.random() < 0.5:
+            time1 = timeWeb(url1)
+            time2 = timeWeb(url2)
+        else:
+            time2 = timeWeb(url2)
+            time1 = timeWeb(url1)
+
+        sum1 += time1
+        sum2 += time2
+        diff = 100*((sum2/sum1)-1.0)
+        logging.info("%f versus %f. Sum: %f versus %f, difference: %.1f%%" % (time1, time2, sum1, sum2, diff))
+        row = [user, session, str(time1), str(time2)]
+        ofh.write("%s\n" % ("\t".join(row)))
+    logging.info("Total time %s: %f" % (server1, sum1))
+    logging.info("Total time %s: %f" % (server2, sum2))
+    ofh.close()
+
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    centralName, server1, server2, outFname = args
+    sessions = readSessions(centralName)
+    timeSessions(sessions, server1, server2, outFname)
+
+main()

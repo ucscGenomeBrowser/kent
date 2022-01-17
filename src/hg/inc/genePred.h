@@ -3,7 +3,7 @@
  * representation of objects. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef GENEPRED_H
 #define GENEPRED_H
@@ -327,7 +327,12 @@ boolean genePredNmdTarget(struct genePred *gp);
 
 void genePredAddExonFrames(struct genePred *gp);
 /* Add exonFrames array to a genePred that doesn't have it. Frame is assumed
- * to be contiguous. */
+ * to be contiguous.  NOTE: suggest using genePredFixExonFrames for new code. */
+
+void genePredFixExonFrames(struct genePred *gp);
+/* Add exonFrames array to a genePred that has frame on only some or no
+ * features. Frame is assumed to be contiguous when an existing frame is not
+ * present. */
 
 void genePredRc(struct genePred *gp, int chromSize);
 /* Reverse complement a genePred (project it to the opposite strand).  Useful

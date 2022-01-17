@@ -140,6 +140,9 @@ searchPriority 2.07207
 searchType bigBed
 searchDescription COSMIC Regions
 
+# knownGene archive
+#include knownGeneArchive.ra
+
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.denisova.ra
@@ -163,7 +166,6 @@ track encodeRegions override
 shortLabel ENCODE Pilot
 longLabel Regions Used for ENCODE Pilot Project (1%)
 group map
-pennantIcon encodeThumbnail.jpg ../ENCODE "encode project"
 
 track switchDbTss override
 origAssembly hg17
@@ -208,8 +210,8 @@ snpTable snp144
 snpVersion 144
 
 track liftHg38
-shortLabel Hg38 Mapping
-longLabel Hg38 Mappings: UCSC LiftOver and NCBI ReMap
+shortLabel liftOver & ReMap
+longLabel UCSC LiftOver and NCBI ReMap: Genome alignments to convert annotations to hg38
 group map
 visibility hide
 type chain
@@ -416,7 +418,6 @@ xrefQuery select ucscRetroInfo7.name, geneSymbol from %s where geneSymbol like '
 searchPriority 3.53
 
 track illuminaProbes override
-priority 17
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -435,7 +436,6 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 #not all have been lifted, do at subtrack level after adding new
 
 track sestanBrainAtlas override
-priority 21
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -1012,241 +1012,6 @@ priority 2
 track genomicSuperDups override
 group rep
 
-track snp141Flagged override
-snpSeqFile /gbdb/hg19/snp/snp141.fa
-
-track snp141Common override
-snpSeqFile /gbdb/hg19/snp/snp141.fa
-
-track snp141 override
-snpSeqFile /gbdb/hg19/snp/snp141.fa
-
-track snp142Mult override
-snpSeqFile /gbdb/hg19/snp/snp142.fa
-
-track snp142Flagged override
-snpSeqFile /gbdb/hg19/snp/snp142.fa
-
-track snp142Common override
-snpSeqFile /gbdb/hg19/snp/snp142.fa
-
-track snp142 override
-snpSeqFile /gbdb/hg19/snp/snp142.fa
-
-track snp144Mult override
-snpSeqFile /gbdb/hg19/snp/snp144.fa
-
-track snp144Flagged override
-snpSeqFile /gbdb/hg19/snp/snp144.fa
-
-track snp144Common override
-snpSeqFile /gbdb/hg19/snp/snp144.fa
-
-track snp144 override
-snpSeqFile /gbdb/hg19/snp/snp144.fa
-
-track snp137Common override
-snpSeqFile /gbdb/hg19/snp/snp137.fa
-chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-
-track snp138Flagged
-shortLabel Flagged SNPs(138)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Flagged by dbSNP as Clinically Assoc
-group varRep
-visibility hide
-url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-snpSeq snp138Seq
-snpExceptionDesc snp138ExceptionDesc
-defaultGeneTracks knownGene
-type bed 6 +
-snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro4
-orangDb ponAbe2
-macaqueDb rheMac3
-hapmapPhase III
-codingAnnotations snp138CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp138CodingDbSnp dbSNP
-priority 18.1
-
-track snp138Mult override
-snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro4
-orangDb ponAbe2
-macaqueDb rheMac3
-hapmapPhase III
-priority 23.1
-
-track snp138 override
-snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro4
-orangDb ponAbe2
-macaqueDb rheMac3
-hapmapPhase III
-priority 12.1
-
-track snp138Common override
-snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro4
-orangDb ponAbe2
-macaqueDb rheMac3
-hapmapPhase III
-visibility hide
-priority 6.1
-
-track snp137Flagged
-shortLabel Flagged SNPs(137)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Flagged by dbSNP as Clinically Assoc
-group varRep
-visibility hide
-url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-snpSeq snp137Seq
-snpExceptionDesc snp137ExceptionDesc
-defaultGeneTracks knownGene
-type bed 6 +
-snpSeqFile /gbdb/hg19/snp/snp137.fa
-chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp137CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp137CodingDbSnp dbSNP
-
-
-track snp137Mult override
-snpSeqFile /gbdb/hg19/snp/snp137.fa
-chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-
-track snp137 override
-snpSeqFile /gbdb/hg19/snp/snp137.fa
-chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-
-track snp135Common override
-snpSeqFile /gbdb/hg19/snp/snp135.fa
-chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp135CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp135CodingDbSnp dbSNP
-
-track snp135Flagged override
-snpSeqFile /gbdb/hg19/snp/snp135.fa
-chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp135CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp135CodingDbSnp dbSNP
-
-track snp135Mult override
-snpSeqFile /gbdb/hg19/snp/snp135.fa
-chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp135CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp135CodingDbSnp dbSNP
-
-track snp135 override
-chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp135CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp135CodingDbSnp dbSNP
-
-track snp132Common override
-snpSeqFile /gbdb/hg19/snp/snp132.fa
-chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp132CodingDbSnp,
-codingAnnoLabel_snp132CodingDbSnp dbSNP
-
-track snp132Flagged override
-snpSeqFile /gbdb/hg19/snp/snp132.fa
-chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp132CodingDbSnp,
-codingAnnoLabel_snp132CodingDbSnp dbSNP
-
-track snp132Mult override
-snpSeqFile /gbdb/hg19/snp/snp132.fa
-chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp132CodingDbSnp,
-codingAnnoLabel_snp132CodingDbSnp dbSNP
-
-track snp132 override
-chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp132CodingDbSnp,
-codingAnnoLabel_snp132CodingDbSnp dbSNP
-
-track snp131 override
-chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp131CodingDbSnp,
-codingAnnoLabel_snp131CodingDbSnp dbSNP
-
-track snp130 override
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 130 - Provisional Mapping to GRCh37)
-visibility hide
-chimpOrangMacOrthoTable snp130OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp130CodingDbSnp,
-codingAnnoLabel_snp130CodingDbSnp dbSNP
-pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
-# Use hg18 file so we don't have to duplicate the 18G:
-snpSeqFile /gbdb/hg18/snp/snp130.fa
-origAssembly hg18
-
 track hapmapSnps override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
@@ -1257,9 +1022,6 @@ hapmapPhase III
 track hapmapLdPh override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
-
-track nscanGene override
-informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterative pseudogene masking.
 
 track chainNetVenter override
 priority 450
@@ -1421,74 +1183,9 @@ track pgLucier override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
-track tgpPhase1
-shortLabel 1000G Ph1 Vars
-longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, Indels, SVs
-type vcfTabix
-group varRep
-visibility hide
-maxWindowToDraw 5000000
-showHardyWeinberg on
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-
-track tgpPhase1Accessibility
-compositeTrack on
-shortLabel 1000G Ph1 Accsbl
-longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions
-type bigBed 3
-visibility hide
-group varRep
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
-
-    track tgpPhase1AccessibilityPilotCriteria
-    subTrack tgpPhase1Accessibility
-    shortLabel 1000G Accs Pilot
-    longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions - Pilot Criteria
-    color 100,100,100
-
-    track tgpPhase1AccessibilityStrictCriteria
-    subTrack tgpPhase1Accessibility
-    shortLabel 1000G Accs Strict
-    longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions - Strict Criteria
-    color 0,0,0
-
 track tgpRecombRate override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
-
-track tgpPhase3
-shortLabel 1000G Ph3 Vars
-longLabel 1000 Genomes Phase 3 Integrated Variant Calls: SNVs, Indels, SVs
-type vcfTabix
-group varRep
-visibility hide
-maxWindowToDraw 5000000
-showHardyWeinberg on
-geneTrack ncbiRefSeqCurated
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-
-track tgpPhase3Accessibility
-compositeTrack on
-shortLabel 1000G Ph3 Accsbl
-longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions
-type bigBed 3
-visibility hide
-group varRep
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
-
-    track tgpPhase3AccessibilityPilotCriteria
-    subTrack tgpPhase3Accessibility
-    shortLabel 1000G Accs Pilot
-    longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions - Pilot Criteria
-    bigDataUrl /gbdb/hg19/1000Genomes/phase3/20141020.pilot_mask.whole_genome.bb
-    color 100,100,100
-
-    track tgpPhase3AccessibilityStrictCriteria
-    subTrack tgpPhase3Accessibility
-    shortLabel 1000G Accs Strict
-    longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions - Strict Criteria
-    bigDataUrl /gbdb/hg19/1000Genomes/phase3/20141020.strict_mask.whole_genome.bb
-    color 0,0,0
 
 track evsEsp6500
 shortLabel EVS Variants
@@ -1500,8 +1197,11 @@ maxWindowToDraw 5000000
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 url http://evs.gs.washington.edu/EVS/PopStatsServlet?searchBy=rsOrChrom&target=$$&chromosome=$s&chromoStart=${&chromoEnd=$}&x=0&y=0
 urlLabel Exome Variant Server:
+vcfDoQual off
+vcfDoFilter off
 
-include trackDb.gnomad.ra
+include trackDb.gnomad.ra beta,public
+include trackDb.gnomad.alpha.ra alpha
 
 track exac
 compositeTrack on
@@ -1632,118 +1332,6 @@ minLimit 0
 maxLimit 100
 html gc5Base
 
-track affyExonArray
-compositeTrack on
-group expression
-priority 1.5
-shortLabel Affy Exon Array
-longLabel Affymetrix $Organism Exon Array Probes and Probesets
-subGroup1 view Views v1Probeset=Probeset v2Probe=Probe
-subGroup2 level Level L1Core=Core L2Extended=Extended L3Full=Full L4Free=Free L5Ambiguous=Ambiguous 
-sortOrder level=+ view=+ 
-dimensions dimensionX=level dimensionY=view
-dragAndDrop subTracks
-color 0,0,0
-visibility hide
-noInherit on
-type bed 12
-
-    track affyExonProbeset
-    parent affyExonArray
-    view v1Probeset
-    visibility dense
-
-        track affyExonProbesetCore
-        parent affyExonProbeset
-        subGroups view=v1Probeset level=L1Core
-        shortLabel Core PS
-        longLabel Affymetrix $Organism Exon Array Core Probesets 
-        # royalblue
-        color 65,105,225
-
-        track affyExonProbesetExtended
-        parent affyExonProbeset
-        subGroups view=v1Probeset level=L2Extended
-        shortLabel Extended PS
-        longLabel Affymetrix $Organism Exon Array Extended Probesets
-        # chocolate 4
-        color 139,69,19
-
-        track affyExonProbesetFull
-        parent affyExonProbeset off
-        subGroups view=v1Probeset level=L3Full
-        shortLabel Full PS
-        longLabel Affymetrix $Organism Exon Array Full Probesets
-        # deeppink
-        color 205,96,144
-
-        track affyExonProbesetFree 
-        parent affyExonProbeset off
-        subGroups view=v1Probeset level=L4Free
-        shortLabel Free PS
-        longLabel Affymetrix $Organism Exon Array Free Probesets
-        # darkgreen
-        color 0,100,0
-
-        track affyExonProbesetAmbiguous 
-        parent affyExonProbeset off
-        subGroups view=v1Probeset level=L5Ambiguous
-        shortLabel Ambiguous PS
-        longLabel Affymetrix $Organism Exon Array Ambiguous Probesets
-        # orchid 
-        color 218,112,214	
-
-    track affyExonProbe
-    parent affyExonArray
-    view v2Probe
-    visibility dense
-
-        track affyExonProbeCore 
-        parent affyExonProbe off
-        subGroups view=v2Probe level=L1Core
-        shortLabel Core Probes
-        longLabel Affymetrix $Organism Exon Array Core Probes
-        # royalblue
-        color 65,105,225
-        type bed 10
-
-        track affyExonProbeExtended 
-        parent affyExonProbe off
-        subGroups view=v2Probe level=L2Extended
-        shortLabel Extended Probes
-        longLabel Affymetrix $Organism Exon Array Extended Probes
-        # chocolate 4
-        color 139,69,19
-        type bed 10
-
-        track affyExonProbeFull 
-        parent affyExonProbe off
-        subGroups view=v2Probe level=L3Full
-        shortLabel Full Probes
-        longLabel Affymetrix $Organism Exon Array Full Probes
-        # deep pink
-        color 205,96,144
-        type bed 10
-
-        track affyExonProbeFree 
-        parent affyExonProbe off
-        subGroups view=v2Probe level=L4Free
-        shortLabel Free Probes
-        longLabel Affymetrix $Organism Exon Array Free Probes
-        # darkgreen
-        color 0,100,0
-        type bed 10
-
-        track affyExonProbeAmbiguous 
-        parent affyExonProbe off
-        subGroups view=v2Probe level=L5Ambiguous
-        shortLabel Ambiguous Probes
-        longLabel Affymetrix $Organism Exon Array Ambiguous Probes
-        # orchid
-        color 218,112,214	
-        type bed 10
-
-
 searchTable haplotypeLocations
 searchMethod exact
 searchType bed
@@ -1788,7 +1376,7 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track wgRna override 
-dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
+dataVersion miRBase Version 20 (Oct. 2013) and snoRNABase Version 3
 
 include altSeqComposite5.ra alpha
 
@@ -1806,16 +1394,35 @@ mafTrack multiz46way
 origAssembly hg17
 pennantIcon 17.jpg ../goldenPath/help/liftOver.html "lifted from hg17"
 
-track targetScanS
-shortLabel TS miRNA sites
-longLabel TargetScan miRNA Regulatory Sites
+track targetScanMiRnaSites
+superTrack on
+shortLabel TS miRNA Targets
+longLabel TargetScan predicted microRNA target sites
 group regulation
 visibility hide
-color 0,96,0
-scoreFilterMax 100
-type bed 6 .
-urlLabel TargetScan link:
-url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+
+    track targetScanS
+    parent targetScanMiRnaSites
+    shortLabel TS miRNA sites
+    longLabel TargetScan miRNA Regulatory Sites (Release 5.1, April 2009)
+    color 0,96,0
+    scoreFilterMax 100
+    type bed 6 .
+    urlLabel TargetScan link:
+    url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+
+    track targetScanMiRnaSitesV72
+    parent targetScanMiRnaSites
+    shortLabel TS miRNA v7.2
+    longLabel Predicted microRNA Target Sites from TargetScanHuman 7.2 (March 2018)
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    filter.targetScanScore -1
+    filterLimits.targetScanScore -1:99
+    urlLabel View miRNA target at TargetScan
+    url http://www.targetscan.org/cgi-bin/targetscan/vert_72/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+    bigDataUrl /gbdb/hg19/targetScan/targetScanSitesV72.bb
 
 track ntHumChimpCodingDiff override
 origAssembly hg18
@@ -2426,6 +2033,7 @@ baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
 bigGeneDataUrl /gbdb/hg19/knownGene.bb
+#release beta,public
 
 #
 # This is a temporary track constructed for the purpose of helping Brooke QA
@@ -2471,11 +2079,8 @@ searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
 searchPriority 3.53
 
+#include knownGene.alpha.ra alpha
 include lincRNAs.ra
-
-track sibGene override
-url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg19&query_str=$$
-urlLabel SIB link:
 
 track sibTxGraph override
 priority 11
@@ -2490,7 +2095,6 @@ searchPriority 50
 padding 250
 
 track qPcrPrimers override
-priority 19
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
@@ -2557,7 +2161,6 @@ release alpha,beta,public
 type bigWig 1 141
 
 track peptideAtlas2014
-release beta,public
 shortLabel PeptideAtlas
 html peptideAtlas
 longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas
@@ -2566,72 +2169,71 @@ type bed 12
 url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
 urlLabel Link to PeptideAtlas:
 group expression
-priority 18
 spectrum on
 minGrayLevel 4
 scoreMax 51
 scoreMin 1
 color 100, 82, 160
 
-track peptideAtlasSuper
-release alpha
-html peptideAtlas
-superTrack on
-group expression
-priority 18
-shortLabel PeptideAtlas
-longLabel Peptide sequences identified by tandem MS from PeptideAtlas
-
-    track peptideAtlas2014
-    release alpha
-    parent peptideAtlasSuper
-    shortLabel PeptideAtlas
-    html peptideAtlas
-    longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas
-    visibility squish
-    type bed 12
-    url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
-    urlLabel Link to PeptideAtlas:
-    group expression
-    spectrum on
-    minGrayLevel 4
-    scoreMax 51
-    scoreMin 1
-    color 100, 82, 160
-
-    track pgxPeptideAtlas2014
-    parent peptideAtlasSuper
-    release alpha
-    shortLabel PeptideAtlas PGx
-    longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas (PGx mapped)
-    type bed 12
-    group expression
-    color 160, 100, 50
-
-    track peptideAtlasRegions2014
-    release alpha
-    parent peptideAtlasSuper
-    shortLabel PeptideAtlas Mappings 2014
-    html peptideAtlas
-    longLabel Peptide sequence mappings identified by tandem MS from PeptideAtlas (2014)
-    type bedDetail 6
-    url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
-    urlLabel Link to PeptideAtlas:
-    group expression
-    color 82, 82, 160
-
-    track peptideAtlasRegions2013
-    table peptideAtlas
-    release alpha
-    parent peptideAtlasSuper
-    html peptideAtlas
-    shortLabel PeptideAtlas Mappings 2013
-    longLabel Peptide sequence mappings identified by tandem MS from PeptideAtlas (2013)
-    type bedDetail 6
-    url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=393&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
-    urlLabel Link to PeptideAtlas:
-    group expression
-    color 82, 82, 160
+#track peptideAtlasSuper
+#release alpha
+#html peptideAtlas
+#superTrack on
+#group expression
+#priority 18
+#shortLabel PeptideAtlas
+#longLabel Peptide sequences identified by tandem MS from PeptideAtlas
+#
+#    track peptideAtlas2014
+#    release alpha
+#    parent peptideAtlasSuper
+#    shortLabel PeptideAtlas
+#    html peptideAtlas
+#    longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas
+#    visibility squish
+#    type bed 12
+#    url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
+#    urlLabel Link to PeptideAtlas:
+#    group expression
+#    spectrum on
+#    minGrayLevel 4
+#    scoreMax 51
+#    scoreMin 1
+#    color 100, 82, 160
+#
+#    track pgxPeptideAtlas2014
+#    parent peptideAtlasSuper
+#    release alpha
+#    shortLabel PeptideAtlas PGx
+#    longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas (PGx mapped)
+#    type bed 12
+#    group expression
+#    color 160, 100, 50
+#
+#    track peptideAtlasRegions2014
+#    release alpha
+#    parent peptideAtlasSuper
+#    shortLabel PeptideAtlas Mappings 2014
+#    html peptideAtlas
+#    longLabel Peptide sequence mappings identified by tandem MS from PeptideAtlas (2014)
+#    type bedDetail 6
+#    url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
+#    urlLabel Link to PeptideAtlas:
+#    group expression
+#    color 82, 82, 160
+#
+#    track peptideAtlasRegions2013
+#    table peptideAtlas
+#    release alpha
+#    parent peptideAtlasSuper
+#    html peptideAtlas
+#    shortLabel PeptideAtlas Mappings 2013
+#    longLabel Peptide sequence mappings identified by tandem MS from PeptideAtlas (2013)
+#    type bedDetail 6
+#    url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=393&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
+#    urlLabel Link to PeptideAtlas:
+#    group expression
+#    color 82, 82, 160
 
 searchTable peptideAtlas2014
 searchType bed
@@ -2678,22 +2280,6 @@ track uniGene_3 override
 group rna
 priority 13
 
-track affyGnf1h override
-group expression
-priority 2
-
-track affyU95 override
-group expression
-priority 4
-
-track affyU133 override
-group expression
-priority 5
-
-track affyU133Plus2 override
-group expression
-priority 6
-
 track allenBrainAli override
 group expression
 priority 7
@@ -2704,39 +2290,13 @@ priority 8
 
 track gnfAtlas2 override
 group expression
-priority 14
 
 track gwipsvizRiboseq override
 group expression
-priority 16
 
 track phastBias override
 group compGeno
 priority 6
-
-track snp147Flagged override
-group varRep
-
-track snp147Mult override
-group varRep
-
-track snp147Common override
-group varRep
-
-track snp147 override
-group varRep
-
-track snp146Mult override
-group varRep
-
-track snp146Flagged override
-group varRep
-
-track snp146 override
-group varRep
-
-track snp146Common override
-group varRep
 
 track hgdpGeo override
 group varRep
@@ -2772,9 +2332,11 @@ include encode3.ra
 
 include wgEncodeReg.dev.ra alpha
 
+# other tracks
+#
 include platinumGenomes.ra
-
 include hic.ra
+include exomeProbesets.ra
 
 track epdNew
 shortLabel EPDnew Promoters
@@ -2790,6 +2352,10 @@ color 50,50,200
 exonArrows on
 dataVersion EPDNew Version 006 (May 2018)
 visibility hide
+priority 14.3
+
+include fetalGeneAtlas.ra
+include skinSoleBoldo.ra
 
 #  include doseSensitivity.ra
 
@@ -2829,3 +2395,18 @@ track clinGenCnv override
 filter.size 773:11309570
 filterLimits.size 773:11309570
 
+track decipherHaploIns
+type bigBed 9 +
+group phenDis
+shortLabel Haploinsufficiency
+longLabel Haploinsufficiency predictions for genes from DECIPHER
+bigDataUrl /gbdb/hg19/bbi/haploins/haploinsufficiency.bb
+itemRgb on
+skipFields mouseOver
+noScoreFilter on
+mouseOver $name, HI: $quantile
+
+include dbSnpArchiveHg19.ra 
+include affyArchive.ra
+include genePredArchive.ra
+include tgpArchive.ra

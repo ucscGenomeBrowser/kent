@@ -147,7 +147,7 @@ while (lineFileNext(lf, &line, &size))
 	if (!containsCopyright(fileName, 10))
 	    {
 	    addCopyright(fileName, sqlUnsigned(date), "The Regents of the University of California",
-		"See README in this or parent directory for licensing information.");
+		"See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information.");
 	    }
 	}
     }

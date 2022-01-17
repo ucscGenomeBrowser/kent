@@ -1,0 +1,49 @@
+# This doc assumes that the gencode* tables have been built on $db
+export db=mm39
+export GENCODE_VERSION=VM27
+export PREV_GENCODE_VERSION=NOT_VALID
+export dir=/hive/data/genomes/$db/bed/gencode$GENCODE_VERSION/build
+export genomes=/hive/data/genomes
+export tempDb=knownGeneVM27
+export oldDb=mm10
+export kent=$HOME/kent
+export spDb=sp180404
+export cpuFarm=ku
+export oldGeneDir=/cluster/data/mm10/bed/ucsc.19.1
+export oldGeneBed=/cluster/data/mm10/bed/ucsc.19.1/ucscGenes.bed
+export lastVer=12
+export curVer=13
+export Db=Mm39
+export xdb=hg38
+export Xdb=Hg38
+export ydb=canFam4
+export zdb=rheMac8
+export ratDb=rn6
+export RatDb=Rn6
+export fishDb=danRer11
+export flyDb=dm6
+export wormDb=ce11
+export yeastDb=sacCer3
+export tempFa=$dir/ucscGenes.faa
+export genomes=/hive/data/genomes
+
+export xdbFa=$genomes/$xdb/bed/gencodeV36/build/ucscGenes.faa
+export ratFa=$genomes/$ratDb/bed/ensGene.95/ensembl.faa
+#export ratFa=$genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
+export fishFa=$genomes/$fishDb/bed/ensGene.95/ensembl.faa
+#export fishFa=$genomes/$fishDb/bed/blastp/ensembl.faa
+export flyFa=$genomes/$flyDb/bed/ensGene.95/ensembl.faa
+#export flyFa=$genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
+export wormFa=$genomes/$wormDb/bed/ws245Genes/ws245Pep.faa
+#export wormFa=$genomes/$wormDb/bed/blastp/wormPep190.faa
+export yeastFa=$genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
+export scratchDir=/hive/users/braney/scratch
+
+export blastTab=mmBlastTab
+export xBlastTab=hgBlastTab
+export rnBlastTab=rnBlastTab
+export dbHost=hgwdev
+export ramFarm=ku
+export cpuFarm=ku
+
+export bioCycDir=/hive/data/outside/bioCyc/210803/mousecyc/23.0/data

@@ -1,7 +1,7 @@
 /* cdwWebBrowse - Browse CIRM data warehouse.. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -45,7 +45,6 @@ boolean isPublicSite = FALSE;
 
 
 char *excludeVars[] = {"cdwCommand", "submit", "DownloadFormat", NULL};
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -150,7 +149,7 @@ printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s&",
 char query[2*PATH_LEN];
 safef(query, sizeof(query), "%s = '%s'", field, val);
 char *escapedQuery = cgiEncode(query);
-printf("%s=%s&cdwBrowseFiles_page=1", "cdwFile_filter", escapedQuery);
+printf("%s=%s&cdwBrowseFiles_page=1", "cdwBrowseFiles_filter", escapedQuery);
 freez(&escapedQuery);
 printf("\">%s</A>", shortVal);
 }
@@ -908,7 +907,7 @@ char *table = isEmpty(initialWhere) ? getCdwTableSetting("cdwFileFacets") : getC
 webTableBuildQuery(cart, table, accWhere->string, "cdwBrowseFiles", fileTableFields, FALSE, &dummy, &filteredWhere);
 
 // Selected Facet Values Filtering
-char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
+char *selectedFacetValues=cartUsualString(cart, "cdwBrowseFiles_facet_selList", "");
 struct facetField *selectedList = deLinearizeFacetValString(selectedFacetValues);
 struct facetField *sff = NULL;
 struct dyString *facetedWhere = dyStringNew(1024);
@@ -966,7 +965,7 @@ if (count<0)
 printf("<A class='btn btn-secondary' HREF=\"cdwWebBrowse?hgsid=%s&cdwCommand=downloadFiles", cartSessionId(cart));
 
 printf("&cdwFileSearch=%s", unquotedCartString(cart, "cdwFileSearch"));
-printf("&cdwFile_filter=%s", cartUsualString(cart, "cdwFile_filter", ""));
+printf("&cdwBrowseFiles_filter=%s", cartUsualString(cart, "cdwBrowseFiles_filter", ""));
 printf("\">Download %d File%s</A>", count, count>1?"s":"");
 printf("<br><br>\n");
 }
@@ -1022,7 +1021,7 @@ if (!securityColumnsInTable)
     suggestHash = accessibleSuggestHash(conn, fields, efList);
 
 webFilteredSqlTable(cart, conn, fields, fromTable, where->string, returnUrl, varPrefix, maxFieldWidth,
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash, visibleFacetList, makeDownloadAllButtonForm);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, 15, suggestHash, visibleFacetList, makeDownloadAllButtonForm);
 
 /* Clean up and go home. */
 cdwFileFreeList(&efList);
@@ -1086,7 +1085,7 @@ else
     puts("Content-disposition: attachment; filename=fileUrls.txt\n");
 
 char *searchString = unquotedCartString(cart, "cdwFileSearch");
-char *initialWhere = cartUsualString(cart, "cdwFile_filter", "");
+char *initialWhere = cartUsualString(cart, "cdwBrowseFiles_filter", "");
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
 
@@ -1148,7 +1147,7 @@ cgiMakeHiddenVar("cdwCommand", "downloadUrls");
 continueSearchVars();
 
 char *searchString = unquotedCartString(cart, "cdwFileSearch");
-char *initialWhere = cartUsualString(cart, "cdwFile_filter", "");
+char *initialWhere = cartUsualString(cart, "cdwBrowseFiles_filter", "");
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
 
@@ -1237,35 +1236,35 @@ cgiMakeHiddenVar("clearRestriction", "0");
 char *clearRestriction = cartOptionalString(cart, "clearRestriction");
 if (clearRestriction && sameString(clearRestriction,"1"))
     {
-    cartSetString(cart, "cdwFile_filter", "");  // reset file filter to empty string
+    cartSetString(cart, "cdwBrowseFiles_filter", "");  // reset file filter to empty string
     cartRemove(cart, "clearRestriction");
     }
 
 // DEBUG REMOVE
-//char *varName = "cdwSelectedFieldValues";
+//char *varName = "cdwBrowseFiles_facet_selList";
 //char *varVal = cartUsualString(cart, varName, "");
 //warn("varName=[%s] varVal=[%s]", varName, varVal); // DEBUG REMOVE
 
 //warn("getCdwTableSetting(cdwFileFacets)=%s", getCdwTableSetting("cdwFileFacets")); // DEBUG REMOVE
 
-char *selOp = cartOptionalString(cart, "browseFiles_facet_op");
+char *selOp = cartOptionalString(cart, "cdwBrowseFiles_facet_op");
 if (selOp)
     {
-    char *selFieldName = cartOptionalString(cart, "browseFiles_facet_fieldName");
-    char *selFieldVal = cartOptionalString(cart, "browseFiles_facet_fieldVal");
+    char *selFieldName = cartOptionalString(cart, "cdwBrowseFiles_facet_fieldName");
+    char *selFieldVal = cartOptionalString(cart, "cdwBrowseFiles_facet_fieldVal");
     if (selFieldName && selFieldVal)
 	{
-	char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
+	char *selectedFacetValues=cartUsualString(cart, "cdwBrowseFiles_facet_selList", "");
 	//warn("selectedFacetValues=[%s] selFieldName=%s selFieldVal=%s selOp=%s", 
 	    //selectedFacetValues, selFieldName, selFieldVal, selOp); // DEBUG REMOVE
 	struct facetField *selList = deLinearizeFacetValString(selectedFacetValues);
 	selectedListFacetValUpdate(&selList, selFieldName, selFieldVal, selOp);
 	char *newSelectedFacetValues = linearizeFacetVals(selList);
 	//warn("newSelectedFacetValues=[%s]", newSelectedFacetValues); // DEBUG REMOVE
-	cartSetString(cart, "cdwSelectedFieldValues", newSelectedFacetValues);
-	cartRemove(cart, "browseFiles_facet_op");
-	cartRemove(cart, "browseFiles_facet_fieldName");
-	cartRemove(cart, "browseFiles_facet_fieldVal");
+	cartSetString(cart, "cdwBrowseFiles_facet_selList", newSelectedFacetValues);
+	cartRemove(cart, "cdwBrowseFiles_facet_op");
+	cartRemove(cart, "cdwBrowseFiles_facet_fieldName");
+	cartRemove(cart, "cdwBrowseFiles_facet_fieldVal");
 	}
     }
 
@@ -1277,7 +1276,7 @@ char *searchString = showSearchControl("cdwFileSearch", "files");
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
-char *where = cartUsualString(cart, "cdwFile_filter", "");
+char *where = cartUsualString(cart, "cdwBrowseFiles_filter", "");
 
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
@@ -1411,11 +1410,11 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	sqlSafef(query, sizeof(query), 
 	    "select count(*) from %s where data_set_id='%s'", getCdwTableSetting("cdwFileTags"), datasetId);  
 	long long fileCount = sqlQuickLongLong(conn, query);
-//	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwFile_filter=data_set_id%%3D+%%27%s%%27&%s\"",
+//	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_filter=data_set_id%%3D+%%27%s%%27&%s\"",
 //		desc, datasetId, cartSidUrlString(cart)); 
 	char varEqVal[256];
 	safef(varEqVal, sizeof(varEqVal), "data_set_id='%s'", datasetId);
-	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwFile_filter=%s&%s\"",
+	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_filter=%s&%s\"",
 		desc, cgiEncode(varEqVal), cartSidUrlString(cart)); 
 	printf(">%lld files</A>)",fileCount);
 

@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* trackHub - supports collections of tracks hosted on a remote site.
  * The basic layout of a data hub is:
@@ -61,6 +61,7 @@
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
+static struct hash *hubAssemblyUndecoratedHash; // mapping of undecorated assembly name to genome struct
 static struct hash *hubOrgHash;   // mapping from organism name to hub pointer
 static struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
 static struct hash *trackHubHash;
@@ -106,7 +107,22 @@ for(; hubGenome; hubGenome=hubGenome->next)
 return NULL;
 }
 
+struct trackHubGenome *trackHubGetGenomeUndecorated(char *database)
+/* Get the genome structure for an undecorated genome name. */
+{
+if (hubAssemblyUndecoratedHash == NULL)
+    return NULL;
+
+struct hashEl *hel = hashLookup(hubAssemblyUndecoratedHash, database);
+
+if (hel == NULL)
+    return NULL;
+
+return (struct trackHubGenome *)hel->val;
+}
+
 struct trackHubGenome *trackHubGetGenome(char *database)
+/* get genome structure for an assembly in a trackHub */
 {
 if (hubAssemblyHash == NULL)
     errAbort("requesting hub genome with no hubs loaded");
@@ -619,6 +635,11 @@ if (hubAssemblyHash == NULL)
     hubAssemblyHash = newHash(5);
 if ((hel = hashLookup(hubAssemblyHash, genome->name)) == NULL)
     hashAdd(hubAssemblyHash, genome->name, genome);
+
+if (hubAssemblyUndecoratedHash == NULL)
+    hubAssemblyUndecoratedHash = newHash(5);
+if ((hel = hashLookup(hubAssemblyUndecoratedHash, trackHubSkipHubName(genome->name))) == NULL)
+    hashAdd(hubAssemblyUndecoratedHash, trackHubSkipHubName(genome->name), genome);
 }
 
 static char *addHubName(char *base, char *hubName)
@@ -909,16 +930,14 @@ static void expandBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome
 	struct trackDb *tdb)
 /* Expand bigDataUrls so that no longer relative to genome->trackDbFile */
 {
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataIndex");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "frames");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "summary");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "linkDataUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "searchTrix");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartSampleUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartMatrixUrl");
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, SUBTRACK_HIDE_EMPTY_MULTIBED_URL);
-expandOneUrl(tdb->settingsHash, genome->trackDbFile, SUBTRACK_HIDE_EMPTY_SOURCES_URL);
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(tdb->settingsHash);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    char *name = hel->name;
+    if (trackSettingIsFile(name))
+	expandOneUrl(tdb->settingsHash, genome->trackDbFile, name);
+    }
 }
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)
@@ -936,8 +955,8 @@ return ret;
 static void requireBarChartBars(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
 /* Fetch setting(s) or give an error message */
 {
-/* LATER: allow URL for file containing labels and colors */
-requiredSetting(hub, genome, tdb, BAR_CHART_CATEGORY_LABELS);
+if (!trackDbSetting(tdb, BAR_CHART_CATEGORY_URL) && !trackDbSetting(tdb, BAR_CHART_CATEGORY_LABELS))
+    errAbort("BarChart track '%s' is missing either %s or %s setting. Please add one of those settings to the appropriate stanza", tdb->track, BAR_CHART_CATEGORY_LABELS, BAR_CHART_CATEGORY_URL);
 }
 
 static void validateOneTrack( struct trackHub *hub, 
@@ -983,6 +1002,7 @@ else
             }
         else 
             {
+            /* RMH: Added bigRmsk to support RepeatMasker data in bigBed track hub format */
             if (!(startsWithWord("wig", type)||  startsWithWord("bedGraph", type)))
                 {
                 if (!(startsWithWord("bigWig", type) ||
@@ -1000,6 +1020,7 @@ else
                   startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
                   startsWithWord("bigLolly", type) ||
+                  startsWithWord("bigRmsk", type) ||
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bigInteract", type) ||
                   startsWithWord("hic", type) ||
@@ -1093,12 +1114,13 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome)
+struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles)
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
- * types.  Do a few other quick checks to catch errors early. */
+ * types.  Do a few other quick checks to catch errors early. If incFiles is not NULL,
+ * put the list of included files in there. */
 {
 struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
-struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL, incFiles);
 lineFileClose(&lf);
 
 char *tabMetaName = hashFindVal(genome->settingsHash, "metaTab");
@@ -1310,7 +1332,7 @@ struct trackDb *tdbList = NULL;
 if (trackHubDatabase(db))
     {
     struct trackHubGenome *genome = trackHubGetGenome(db);
-    tdbList = trackHubTracksForGenome(genome->trackHub, genome);
+    tdbList = trackHubTracksForGenome(genome->trackHub, genome, NULL);
     }
 else
     tdbList = hubCollectTracks(db, NULL);
@@ -1381,11 +1403,12 @@ if (relativeUrl != NULL)
         struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
         bbiFileClose(&bbi);
         }
+    /* RMH: Added support for bigRmsk track hub data type */
     else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) ||
                 startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)||
                 startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
                 startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type) ||
-                startsWithWord("bigLolly", type))
+                startsWithWord("bigLolly", type) || startsWithWord("bigRmsk",type))
         {
         /* Just open and close to verify file exists and is correct type. */
         struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);

@@ -1,7 +1,7 @@
 /* cds.c - code for coloring of bases, codons, or alignment differences. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "hCommon.h"
 #include "hash.h"
@@ -657,7 +657,8 @@ if (cds != NULL)
 cdsSpecFreeList(&cdsSpec);
 }
 
-static void getPslCds(struct psl *psl, struct track *tg, struct genbankCds *cds)
+static void getPslCds(struct psl *psl, struct track *tg, struct linkedFeatures *lf,
+                      struct genbankCds *cds)
 /* get CDS defintion for a PSL */
 {
 ZeroVar(cds);
@@ -668,6 +669,11 @@ if (pslIsProtein(psl))
     cds->end=psl->qSize*3;
     cds->startComplete = TRUE;
     cds->endComplete = TRUE; 
+    }
+else if (startsWith("bigPsl", tg->tdb->type))
+    {
+    if (lf->cds)
+        genbankCdsParse(lf->cds, cds);
     }
 else 
     {
@@ -726,13 +732,7 @@ else
      * genomic codons, this is letting the query sequence define the frame.
      */
     struct genbankCds cds;
-    if (startsWith("bigPsl", tg->tdb->type))
-        {
-        if (lf->cds)
-            genbankCdsParse(lf->cds, &cds);
-        }
-    else
-	getPslCds(psl, tg, &cds);
+    getPslCds(psl, tg, lf, &cds);
 
     int insertMergeSize = -1;
     unsigned opts = genePredCdsStatFld|genePredExonFramesFld;
@@ -980,6 +980,8 @@ else if (sameString("seq1Seq2", seqSource))
     }
 else if (sameString("lfExtra", seqSource))
     {
+    if (lf->extra == NULL)
+        errAbort("baseColorDrawSetup: sequence for track '%s' not loaded when sequence option is set in trackDb\n", tg->track);
     mrnaSeq = newDnaSeq(cloneString(lf->extra), strlen(lf->extra), lf->extra);
     if (lf->orientation == -1)
 	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
@@ -2019,7 +2021,7 @@ void baseColorSetCdsBounds(struct linkedFeatures *lf, struct psl *psl,
  * for codon or base coloring, but still want to render CDS bounds */
 {
 struct genbankCds cds;
-getPslCds(psl, tg, &cds);
+getPslCds(psl, tg, lf, &cds);
 if (cds.start < cds.end)
     {
     struct genbankCds genomeCds = genbankCdsToGenome(&cds, psl);

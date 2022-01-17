@@ -288,7 +288,7 @@ my %dbToClade = ( hg => $mammal, mm => $mammal, rn => $mammal, tmpFoo => $mammal
 		  danRer => $fish,
 		  dm => $fly,
 		  ce => $worm,
-		  sacCer => $yeast, );
+		  sacCer => $yeast, knownGeneV => $mammal, knownGeneVM => $mammal, );
 my @cladeEs;
 # Different species within clade (not self alignments -- see $selfE):
 $cladeEs[$mammal][$mammal] = $cladeEs[$fish][$fish] = $cladeEs[$fly][$fly] =
@@ -373,7 +373,8 @@ sub dbToPrefix {
   } elsif ($db =~ /^(\w)\w\w(\w)\w\w\d+$/) {
     $prefix = $1 . lc($2);
   } else {
-    die "Error: dbToPrefix: expecting database name, got $db";
+    # just use the whole db name
+    $prefix = $db;
   }
   return $prefix;
 }

@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* udc - url data cache - a caching system that keeps blocks of data fetched from URLs in
  * sparse local files for quick use the next time the data is needed. 
@@ -432,10 +432,28 @@ return TRUE;
 /********* Section for http protocol **********/
 
 static char *defaultDir = "/tmp/udcCache";
+static bool udcInitialized = FALSE;
+
+static void initializeUdc()
+/* Use the $TMPDIR environment variable, if set, to amend the default location
+ * of the cache */
+{
+if (udcInitialized)
+    return;
+char *tmpDir = getenv("TMPDIR");
+if (isNotEmpty(tmpDir))
+    {
+    char buffer[2048];
+    safef(buffer, sizeof(buffer), "%s/udcCache", tmpDir);
+    udcSetDefaultDir(buffer);
+    }
+}
 
 char *udcDefaultDir()
 /* Get default directory for cache */
 {
+if (!udcInitialized)
+    initializeUdc();
 return defaultDir;
 }
 
@@ -443,12 +461,14 @@ void udcSetDefaultDir(char *path)
 /* Set default directory for cache.  */
 {
 defaultDir = cloneString(path);
+udcInitialized = TRUE;
 }
 
 void udcDisableCache()
 /* Switch off caching. Re-enable with udcSetDefaultDir */
 {
 defaultDir = NULL;
+udcInitialized = TRUE;
 }
 
 static bool udcCacheEnabled()
@@ -1809,7 +1829,12 @@ for (i=0; ; ++i)
     char c;
     bits64 sizeRead = udcRead(file, &c, 1);
     if (sizeRead == 0)
-	return NULL;
+        {
+        // EOF before newline: return NULL for empty string
+        if (i == 0)
+            return NULL;
+        break;
+        }
     buf[i] = c;
     if (c == '\n')
 	{

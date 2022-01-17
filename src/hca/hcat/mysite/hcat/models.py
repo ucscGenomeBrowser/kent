@@ -109,6 +109,18 @@ class ProjectStatus(models.Model):
        verbose_name = 'x project status'
        verbose_name_plural = 'x project status'
 
+class Tag(models.Model):
+    """ Some label you can tag a project with so as to group together related project
+    or projects that are used for a particular analysis freeze etc
+    """
+    tag = models.CharField(max_length=40, unique=True)
+    description = models.CharField(max_length=150)
+    projects = models.ManyToManyField("Project", blank=True, through="project_tags")
+    def __str__(self):
+        return self.tag
+    class Meta:
+        verbose_name = 'x project tag'
+
 class WranglingStatus(models.Model):
     """ State within wrangling.  Covers from primary wrangler's first sight to successful 
     submission and perhaps through multiple updates
@@ -181,9 +193,7 @@ class Consent(models.Model):
        verbose_name = 'x consent'
 
 class SampleType(models.Model):
-    """ The SampleType is a broad classification of how fresh the sample was when delivered to
-    the sequencing or imaging assay process.  This also distinguishes between cultured and
-    in vivo samples.
+    """ The SampleType is a broad classification of how close to in-vivo the tissue sample is.
     """
     short_name = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=255)
@@ -193,20 +203,31 @@ class SampleType(models.Model):
     class Meta:
        verbose_name = 'x sample type'
 
-class AssayTech(models.Model):
-    """ AssayTech describes the technology used to make the cell-by-cell (or bulk) measurements.
-    This typically includes a combination of device, chemistry, and software.  At the
-    biochemical level when doing RNA sequencing it corresponds to the cDNA library preparation.
+class PreservationMethod(models.Model):
+    """ The PreservationType describes how a sample was preserved before measurement """
+    short_name = models.CharField(max_length=50, unique=True)
+    description = models.CharField(max_length=255)
+    comments = models.CharField(max_length=255, blank=True)
+    def __str__(self):
+        return self.short_name
+    class Meta:
+       verbose_name = 'x preservation method'
+
+class CdnaLibraryPrep(models.Model):
+    """ CdnaLibraryPrep describes the technology used to make the cDNA library. In the single cell
+    world this term has come to encompass to an extent both the device and chemistry used to
+    separate single cells and turn the RNA inside of those into DNA for sequencing.  Bar codes
+    to specify individual cells or individual (pre-PCR) RNA molecules may be added here.
     """
     short_name = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=255)
     comments = models.CharField(max_length=255, blank=True)
     projects = models.ManyToManyField("Project", blank=True, 
-        through="project_assay_tech", related_name='projects_assay_tech_relationship')
+        through="project_cdna_library_prep")
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'x assay tech'
+       verbose_name = 'x cDNA library prep'
 
 class Publication(models.Model):
     """ Most often a publication is an article in a scientific journal. """
@@ -220,7 +241,7 @@ class Publication(models.Model):
     class Meta:
        verbose_name = 'x publication'
 
-class EffortType(models.Model):
+class ProjectSourceType(models.Model):
     """ Distinguishes high level classes of effort such as importing data from the
     scientific literature vs. helping labs organize, understand, and share
     prepublication effort.
@@ -231,7 +252,7 @@ class EffortType(models.Model):
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'x effort type'
+       verbose_name = 'x project source type'
 
 class SoftwareDeveloper(models.Model):
     """ Software developers contributing to the project. """
@@ -278,6 +299,7 @@ class Project(models.Model):
     comments = models.CharField(max_length=255, blank=True)
     status = models.ForeignKey(ProjectStatus, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="state_reached")
     stars = models.IntegerField(blank=True,validators=[MinValueValidator(1),MaxValueValidator(5)], default=3)
+    tags = models.ManyToManyField(Tag, blank=True)
     git_ticket_url = models.URLField(blank=True, null=True)
     primary_wrangler = models.ForeignKey(Wrangler, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="wrangler1");
     secondary_wrangler = models.ForeignKey(Wrangler, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="secondary_wrangler");
@@ -286,8 +308,8 @@ class Project(models.Model):
     last_contact_date = models.DateField(blank=True, null=True, default=None)
     questionnaire_comments = models.CharField(max_length=255, blank=True)
     questionnaire_date = models.DateField(blank=True, null=True, default=None)
-    tAndC_comments = models.CharField(max_length=255, blank=True)
-    tAndC_date = models.DateField(blank=True, null=True, default=None)
+    tAndC_comments = models.CharField("T&C", max_length=255, blank=True)
+    tAndC_date = models.DateField("T&C date", blank=True, null=True, default=None)
     sheet_template = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
     sheet_template_date = models.DateField(blank=True, null=True, default=None)
     sheet_from_lab = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
@@ -297,9 +319,9 @@ class Project(models.Model):
     back_to_lab_date = models.DateField(blank=True, null=True, default=None)
     lab_review_comments = models.CharField(max_length=255, blank=True)
     lab_review_date = models.DateField(blank=True, null=True, default=None)
-    sheet_that_validated = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+    sheet_submitted = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
     sheet_validated_date = models.DateField(blank=True, null=True, default=None)
-    staging_area = models.CharField(max_length=255,blank=True, default="")
+    staging_area = models.CharField('Staging S3 bucket', max_length=255,blank=True, default="")
     staging_area_date = models.DateField(blank=True, null=True, default=None)
     submit_date = models.DateField(blank=True, null=True, default=None)
     submit_comments = models.CharField(max_length=255, blank=True)
@@ -310,16 +332,17 @@ class Project(models.Model):
     organ_part = models.ManyToManyField(OrganPart, blank=True)
     disease = models.ManyToManyField(Disease, blank=True)
     sample_type = models.ManyToManyField(SampleType, blank=True)
+    preservation_method = models.ManyToManyField(PreservationMethod, blank=True)
     consent = models.ForeignKey(Consent, blank=True, null=True, default=None, on_delete=models.SET_NULL)
-    effort = models.ForeignKey(EffortType, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    project_source = models.ForeignKey(ProjectSourceType, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     origin_name = models.CharField(max_length=200, blank=True)
-    assay_tech = models.ManyToManyField(AssayTech, blank=True)
+    cdna_library_prep = models.ManyToManyField(CdnaLibraryPrep, blank=True, verbose_name=' cDNA library prep')
     cells_expected = models.IntegerField(blank=True, default=0)
     publications = models.ManyToManyField(Publication, blank=True)
     contributors = models.ManyToManyField(Contributor)
     species = models.ManyToManyField(Species, blank=True)
     grants = models.ManyToManyField("Grant", blank=True, through="grant_funded_projects")
-    files = models.ManyToManyField(File, blank=True)
+    wrangler_drive = models.URLField(blank=True)
     urls = models.ManyToManyField(Url, blank=True)
     def __str__(self):
        return self.short_name

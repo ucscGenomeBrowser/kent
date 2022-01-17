@@ -5,7 +5,7 @@
  */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "gff3.h"
 #include <limits.h>
@@ -897,7 +897,10 @@ if ((ver != NULL) && (*ver != '\0'))
     ver = trimSpaces(ver);
     }
 if (!(sameString(line, "##gff-version") && sameString(ver, "3")))
-    gff3FileErr(g3f, TRUE, "invalid GFF3 header");
+    {
+    gff3FileErr(g3f, FALSE, "invalid GFF3 header");
+    errAbort("may not be a GFF3 file");
+    }
 }
 
 static void parseFile(struct gff3File *g3f)

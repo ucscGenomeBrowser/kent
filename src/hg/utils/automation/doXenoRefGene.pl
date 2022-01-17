@@ -40,8 +40,6 @@ my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 my $mrnas = "/hive/data/genomes/asmHubs/xenoRefSeq";
 my $noDbGenePredCheck = 1;    # default yes, use -db for genePredCheck
-my $augustusDir = "/hive/data/outside/augustus/augustus-3.3.1";
-my $augustusConfig="$augustusDir/config";
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -80,7 +78,7 @@ Automates construction of a xeno RefSeq gene track from RefSeq mRNAs.  Steps:
                 bigGenePred from the genePred file
     cleanup:    Removes hard-masked fastas and output from gsBig.
 All operations are performed in the build directory which is
-$HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/augustus unless -buildDir is given.
+$HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/xenoRefGene unless -buildDir is given.
 ";
   # Detailed help (-help):
   print STDERR "
@@ -137,14 +135,20 @@ sub doSplitTarget {
 export asmId="$db"
 export maskedSeq="$maskedSeq"
 export queryCount=`cat "$mrnas/query.list" | wc -l`
-# aim for 100,000 cluster job batch size
+# aim for about 100,000 cluster job batch size, could end up less than this
 export targetPartCount=`echo \$queryCount | awk '{printf "%d", 1 + (100000 / \$1)}'`
 twoBitInfo \$maskedSeq stdout | sort -k2,2nr > \$asmId.chrom.sizes
 export targetParts=`cat \$asmId.chrom.sizes | wc -l`
 export maxChunk=`head -1 \$asmId.chrom.sizes | awk '{printf "%d", 1.1*\$(NF)}'`
+if [ \$maxChunk -lt 10000000 ]; then
+  maxChunk=10000000
+fi
 export seqLimit=`echo \$targetParts \$targetPartCount | awk '{printf "%d", 1 + (\$1 / \$2)}'`
+if [ \$seqLimit -lt 1000 ]; then
+  seqLimit=1000
+fi
 export totalJobs=`echo \$queryCount \$targetPartCount | awk '{printf "%d", \$1 * \$2}'`
-printf "# batch job count will be: \%d\\n", \$totalJobs
+printf "# batch job count will be approximately: \%d or even less than that.\\n", \$totalJobs
 rm -fr targetList
 ~/kent/src/hg/utils/automation/partitionSequence.pl -concise \\
    -lstDir=targetList \$maxChunk 0 \$maskedSeq \$asmId.chrom.sizes \$seqLimit
@@ -152,14 +156,13 @@ rm -fr target
 mkdir target
 ls targetList/*.lst | while read partSpec
 do
-  export part=`basename \$partSpec | sed -e 's/.lst/.fa/;'`
-  export faFile="target/\$part"
+  export part=`basename \$partSpec | sed -e 's/.lst//;'`
+  export faFile="target/\$part.fa"
+  export seqList="target/\$part.lst"
   rm -f \$faFile
-  touch \$faFile
-  cat \$partSpec | while read seq
-  do
-    twoBitToFa \$seq stdout
-  done > \$faFile
+  cat \$partSpec | sed -e 's#.*2bit:##;' > \$seqList
+  twoBitToFa -seqList=\$seqList \$maskedSeq \$faFile
+  rm -f \$seqList
 done
 gzip target/*.fa
 ls target | sed -e 's/.fa.gz//;' > target.list
@@ -289,7 +292,9 @@ sub doMakeGp {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export db=$db
+export db="$db"
+export buildDir="$buildDir"
+
 if [ -s "\$db.xenoRefGene.psl" ]; then
   grep NR_ \$db.xenoRefGene.psl > NR.psl
   grep NM_ \$db.xenoRefGene.psl > NM.psl
@@ -312,6 +317,14 @@ if [ -s "\$db.xenoRefGene.psl" ]; then
      \$db.bgpInput \$db.chrom.sizes \$db.xenoRefGene.bb
   \$HOME/kent/src/hg/utils/automation/xenoRefGeneIx.pl \$db.bgpInput | sort -u > \$db.ix.txt
   ixIxx \$db.ix.txt \$db.xenoRefGene.ix \$db.xenoRefGene.ixx
+  mkdir -p /dev/shm/\$db
+  cp -p \$db.xenoRefGene.gp /dev/shm/\$db/xenoRefGene.\$db
+  cd /dev/shm/\$db
+  genePredToGtf -utr file xenoRefGene.\$db stdout | gzip -c \\
+    > \$buildDir/\$db.xenoRefGene.gtf.gz
+  cd \$buildDir
+  rm -f /dev/shm/\$db/xenoRefGene.\$db
+  rmdir /dev/shm/\$db
 fi
 _EOF_
   );
@@ -333,32 +346,33 @@ sub doCleanup {
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 export db="$db"
-rm -fr $buildDir/target/
-rm -fr $buildDir/blatRun/err/
-rm -fr $buildDir/blatRun/result/
-rm -f $buildDir/blatRun/batch.bak
-rm -f $buildDir/NM.gp
-rm -f $buildDir/NR.gp
-rm -f $buildDir/NM.psl
-rm -f $buildDir/NR.psl
-if [ -s "$buildDir/\$db.bgpInput" ]; then
-  gzip $buildDir/\$db.bgpInput &
+export buildDir="$buildDir"
+rm -fr \$buildDir/target/
+rm -fr \$buildDir/blatRun/err/
+rm -fr \$buildDir/blatRun/result/
+rm -f \$buildDir/blatRun/batch.bak
+rm -f \$buildDir/NM.gp
+rm -f \$buildDir/NR.gp
+rm -f \$buildDir/NM.psl
+rm -f \$buildDir/NR.psl
+if [ -s "\$buildDir/\$db.bgpInput" ]; then
+  gzip \$buildDir/\$db.bgpInput &
 fi
-if [ -s "$buildDir/\$db.ix.txt" ]; then
-  gzip $buildDir/\$db.ix.txt &
+if [ -s "\$buildDir/\$db.ix.txt" ]; then
+  gzip \$buildDir/\$db.ix.txt &
 fi
-if [ -s "$buildDir/\$db.all.psl" ]; then
-  gzip $buildDir/\$db.all.psl &
+if [ -s "\$buildDir/\$db.all.psl" ]; then
+  gzip \$buildDir/\$db.all.psl &
 else
-  rm -f $buildDir/\$db.all.psl
+  rm -f \$buildDir/\$db.all.psl
 fi
-if [ -s "$buildDir/\$db.xenoRefGene.psl" ]; then
-  gzip $buildDir/\$db.xenoRefGene.psl &
+if [ -s "\$buildDir/\$db.xenoRefGene.psl" ]; then
+  gzip \$buildDir/\$db.xenoRefGene.psl &
 else
-  rm -f $buildDir/\$db.xenoRefGene.psl
+  rm -f \$buildDir/\$db.xenoRefGene.psl
 fi
-if [ -s "$buildDir/\$db.xenoRefGene.gp" ]; then
-gzip $buildDir/\$db.xenoRefGene.gp
+if [ -s "\$buildDir/\$db.xenoRefGene.gp" ]; then
+gzip \$buildDir/\$db.xenoRefGene.gp
 fi
 wait
 _EOF_
@@ -387,7 +401,7 @@ $noDbGenePredCheck = $opt_noDbGenePredCheck ? 0 : $noDbGenePredCheck;
 
 # Establish what directory we will work in.
 $buildDir = $opt_buildDir ? $opt_buildDir :
-  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/augustus";
+  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/xenoRefGene";
 $maskedSeq = $opt_maskedSeq ? $opt_maskedSeq :
   "$HgAutomate::clusterData/$db/$db.2bit";
 $mrnas = $opt_mrnas ? $opt_mrnas : $mrnas;

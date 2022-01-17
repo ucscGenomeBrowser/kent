@@ -1,7 +1,7 @@
 /* hgTables - Main and utility functions for table browser. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -1675,7 +1675,8 @@ oldVars = hashNew(10);
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
 // Try to deal with virt chrom position used by hgTracks.
-if (startsWith("virt:", cartUsualString(cart, "position", "")))
+if (startsWith(    MULTI_REGION_CHROM, cartUsualString(cart, "position", ""))
+ || startsWith(OLD_MULTI_REGION_CHROM, cartUsualString(cart, "position", "")))
     cartSetString(cart, "position", cartUsualString(cart, "nonVirtPosition", ""));
 
 /* Set up global variables. */
@@ -1707,8 +1708,10 @@ if (sameOk(backgroundExec,"gsSendToDM"))
 /* Init track and group lists and figure out what page to put up. */
 initGroupsTracksTables();
 struct dyString *dyWarn = dyStringNew(0);
+boolean noShort = (cartOptionalString(cart, "noShort") != NULL); // is this the second page of results
+char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
 struct hgPositions *hgp = lookupPosition(dyWarn);
-if (hgp->singlePos && isEmpty(dyWarn->string))
+if (hgp->singlePos && isEmpty(dyWarn->string) && !noShort)
     {
     if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
 	doGetGreatOutput(dispatch);
@@ -1719,9 +1722,17 @@ else
     {
     cartWebStartHeader(cart, database, "Table Browser");
     if (isNotEmpty(dyWarn->string))
-        warn("%s", dyWarn->string);
-    if (hgp->posCount > 1)
+        {
+        if (noShort) // we're on the second page of results
+            hgp->posCount = 0;  // hgFindSearch gives us a bogus hgp if the warn string is set
+        else
+            warn("%s", dyWarn->string);
+        }
+    if ((hgp->posCount > 1) || noShort) // if we're on the second page we want to put out HTML even if there are no results.
+        {
         hgPositionsHtml(database, hgp, hgTablesName(), cart);
+        cartSetString(cart, hgtaRange, range); // we need to reset the position because lookupPosition above trashes it
+        }
     else
         {
         struct sqlConnection *conn = NULL;

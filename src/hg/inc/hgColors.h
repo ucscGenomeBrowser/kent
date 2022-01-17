@@ -1,7 +1,7 @@
 /* hgColors - colors used in UCSC Genome Browser pages. */
 
 /* Copyright (C) 2012 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef HGCOLORS_H
 #define HGCOLORS_H
@@ -30,5 +30,8 @@ int hGrayInRange(int oldVal, int oldMin, int oldMax, int newMax);
  * equivalent number between 1 and newMax. The way this does it
  * is perhaps a little odd, forcing 0 go to 1, but visually it works
  * out nicely when 0 is white. */
+
+void hInsideStyleToWhite();
+/* Override a few old styling things to get a white instead of cream background */
 
 #endif /* HGCOLORS_H */

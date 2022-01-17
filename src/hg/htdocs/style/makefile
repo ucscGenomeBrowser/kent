@@ -12,7 +12,8 @@ ifeq (${FIND},)
     endif
 endif
 
-CSS_FILES=HGStyle.css autocomplete.css blueStyle.css encodeProject.css floretStyle.css \
+CSS_FILES=HGStyle.css autocomplete.css blueStyle.css \
+    encodeProject.css facets.css floretStyle.css \
     hgHubConnect.css jquery-ui.css jquery.contextmenu.css \
     jquery.ui.autocomplete.css jquery.ui.colorPicker.css \
     jquery.treetable.css jquery.treetable.theme.default.css  \
@@ -20,7 +21,8 @@ CSS_FILES=HGStyle.css autocomplete.css blueStyle.css encodeProject.css floretSty
     theme-modern.css ui.dropdownchecklist.css nice_menu.css \
     encodeDataMatrix.css encodeDataSummary.css userAccounts.css \
     encode3.css encode3Ucsc.css bootstrap.min.css \
-    gbStatic.css gb.css gbAfterMenu.css hgGtexTrackSettings.css spectrum.min.css
+    gbStatic.css gb.css gbAfterMenu.css hgGtexTrackSettings.css spectrum.min.css \
+    font-awesome.min.css
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \

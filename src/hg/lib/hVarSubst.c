@@ -4,7 +4,7 @@
  * with behavior of the old substitution mechanism. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "trackDb.h"
 #include "hdb.h"
@@ -237,6 +237,8 @@ else if (sameString(varName, "chainLinearGap"))
     substLinearGap(tdb, dest);
 else if (sameString(varName, "downloadsServer"))
     dyStringAppend(dest, hDownloadsServer());
+else if (sameString(varName, "track"))
+    dyStringAppend(dest, tdb->track);
 else
     dyStringAppend(dest, lookupTrackDbSubVar(desc, tdb, varName, varName));
 }

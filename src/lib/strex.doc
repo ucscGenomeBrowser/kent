@@ -1,8 +1,15 @@
 The strex language is a small string expression evaluation language.  
 This document describes its built in functions and operators:
 
-+  - returns the concatenation of the surrounding strings or the addition of surrounding
++    returns the concatenation of the surrounding strings or the addition of surrounding
      numbers.  Will convert a number to a string in mixed expressions
+=    returns true if two items are the same.  For strings ignores case
+!=   returns true if two items are not the same.  For strings ignores case
+>    Greater than. Converts mixed expressions to strings. Ignores case in strings
+>=   Greater or equal. Converts mixed expressions to strings. Ignores case in strings
+<    Less than. Converts mixed expressions to strings. Ignores case in strings
+<=   Less or equal. Converts mixed expressions to strings. Ignores case in strings
+
 
 [index] - selects a character from string given an integer zero based index. As in Python
        if index is negative it selects characters from the end of the string.  -1
@@ -102,6 +109,8 @@ symbol(prefix, string) - turn string into a computer usable symbol that starts w
 	    is 32 characters or less it's used, but if it's longer it's converted into an MD5
 	    sum.
 
+symbol_id(prefix, string) - turns a string into prefix followed by a small numerical ID that will be
+            unique and return consistently if same prefix,string is input.
 replace(string, oldPart, newPart) - returns string with all instances of old replaced by new.
 	    The cases where either old or new are empty string are useful special cases.
 	    If new is "", then all instances of the old string will be deleted.
@@ -126,6 +135,11 @@ pick(query ? key1:val1, key2:val2, ... keyN:valN, default:defaultVal)
     The default key can appear in any position, but traditionally is last or first.
     Can be used to apply different expressions to parsing in different conditions:
          pick(species, "human" : ethnicity,  "mouse"  : strain,  default:"unknown")
+
+lookup(string, twoColFileName, defaultVal)
+    Looks up a string in a table defined by twoColFileName, a tab separated file.
+    If string is in the first column, return the corresponding string from the second
+    column.  Returns defaultVal if string not in lookup table.
         
 (boolean ?  trueVal : falseVal)
     This is the trinary conditional expression found in C, Python and many other languages.
@@ -135,7 +149,7 @@ pick(query ? key1:val1, key2:val2, ... keyN:valN, default:defaultVal)
 
 in(string, query) - returns true if query is a substring of string, false otherwise
 
-same(a, b) - returns true if the two arguments are the same, false otherwise
+same(a, b) - returns true if the two arguments are the same, false otherwise. Same as a=b
 
 starts_with(prefix, string) - returns true if string starts with prefix
 

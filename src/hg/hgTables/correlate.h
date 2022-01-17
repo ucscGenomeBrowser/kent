@@ -2,7 +2,7 @@
 /*	and communication between correlate.c and correlatePlot.c	*/
 
 /* Copyright (C) 2009 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef CORRELATE_H
 #define CORRELATE_H

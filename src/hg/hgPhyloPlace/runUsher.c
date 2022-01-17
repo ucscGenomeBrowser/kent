@@ -17,9 +17,6 @@
 #define sampleIdPrefix "Sample name:"
 #define pScorePrefix "Parsimony score:"
 #define numPlacementsPrefix "Number of parsimony-optimal placements:"
-#define bestNodePrefix "Best node ("
-#define mutationsPrefix "Mutations: "
-#define sampleMutsPrefix "Sample mutations:"
 #define imputedMutsPrefix "Imputed mutations:"
 
 static void parseSampleIdAndParsimonyScore(char **words, char **retSampleId,
@@ -72,105 +69,6 @@ if (regexMatchSubstr(sncStr, "^([ACGT])([0-9]+)([ACGT])$", substrs, ArraySize(su
     snc = sncNew(chromStart, '\0', sncStr[0], sncStr[substrs[3].rm_so]);
     }
 return snc;
-}
-
-static struct variantPathNode *parsePipeyPath(char *pipeyPath)
-/* Parse something like "|C8782T|T28144C| > |C29095T|  > |G2494A|T11083G|C18501T|"
- * into a variant path with unknown node names. */
-{
-if (isEmpty(pipeyPath))
-    return NULL;
-struct variantPathNode *variantPath = NULL;
-char *words[strlen(pipeyPath) / 5];
-int wordCount = chopString(pipeyPath, " > ", words, ArraySize(words));
-int i;
-for (i = 0;  i < wordCount;  i++)
-    {
-    struct variantPathNode *vpn;
-    AllocVar(vpn);
-    vpn->nodeName = cloneString("?");
-    char *mutStr = words[i];
-    // Trim first and last pipes
-    if (mutStr[0] == '|')
-        mutStr++;
-    if (mutStr[strlen(mutStr)-1] == '|')
-        mutStr[strlen(mutStr)-1] = '\0';
-    // Split by pipe
-    char *muts[strlen(mutStr) / 4];
-    int sncCount = chopString(mutStr, "|", muts, ArraySize(muts));
-    int j;
-    for (j = 0;  j < sncCount;  j++)
-        {
-        struct singleNucChange *snc = parseSnc(muts[j]);
-        if (!snc)
-            errAbort("Expected single-nucleotide change but got '%s' when parsing pipe-separated "
-                     "best node path", muts[j]);
-        slAddHead(&vpn->sncList, snc);
-        }
-    slReverse(&vpn->sncList);
-    slAddHead(&variantPath, vpn);
-    }
-slReverse(&variantPath);
-return variantPath;
-}
-
-static boolean parseBestNode(char **words, struct placementInfo *info)
-/* If the line starts with "Best node", parse out the name and path of the node
- * (or one of the nodes) with the lowest parsimony distance from the sample being placed;
- * add to info->bestNodes and return TRUE. */
-{
-// Example line (* means this node was chosen for placement):
-// words[0] = Best node (child)*: 1239
-// words[1] = Mutations: |C8782T|T28144C| > |C29095T| > |T8782C| > |T29095C| > |C28144T|
-// or
-// words[0] = Best node (sibling): SomeLeafName
-// words[1] = Mutations: |C8782T|T28144C| > |C29095T| > |T8782C| > |T29095C| > |C28144T| > |G11083T| > |G2494A|T11083G|C18501T|
-boolean matches = FALSE;
-if (stringIn(bestNodePrefix, words[0]))
-    {
-    matches = TRUE;
-    struct bestNodeInfo *bn;
-    AllocVar(bn);
-    char *p = words[0] + strlen(bestNodePrefix);
-    if (startsWith("sibling", p))
-        bn->isSibling = TRUE;
-    boolean isChosen = (stringIn(")*:", words[0]) != NULL);
-    p = stringIn(": ", words[0]);
-    if (p)
-        bn->name = cloneString(p + strlen(": "));
-    else
-        errAbort("parseBestNode: expected first column to have ': ' followed by name, but got '%s'",
-                 words[0]);
-    if (startsWith(mutationsPrefix, words[1]))
-        bn->variantPath = parsePipeyPath(words[1] + strlen(mutationsPrefix));
-    else
-        errAbort("parseBestNode: expected second column to have '" mutationsPrefix"' followed by "
-                 "path, but got '%s'", words[1]);
-    if (isChosen)
-        slAddHead(&info->bestNodes, bn);
-    else
-        slAddTail(&info->bestNodes, bn);
-    }
-return matches;
-}
-
-
-static boolean parseSampleMutations(char **words, struct placementInfo *info)
-/* If words[] looks like it defines the sample mutations relative to the reference genome,
- * then parse out the list and add to info->sampleMuts and return TRUE. */
-{
-// Example line:
-// words[0] = Sample mutations:
-// words[1] = |C241T| |C3037T| |C14408T| |A23403G|
-boolean matches = FALSE;
-if (stringIn(sampleMutsPrefix, words[0]))
-    {
-    matches = TRUE;
-    char *mutStr = words[1];
-    stripChar(mutStr, '|');
-    info->sampleMuts = slNameListFromString(mutStr, ' ');
-    }
-return matches;
 }
 
 static boolean parseImputedMutations(char **words, struct placementInfo *info)
@@ -246,9 +144,7 @@ while (lineFileNext(lf, &line, &size))
         if (!info)
             errAbort("Problem parsing stderr output of usher: "
                      "Can't find placement info for sample '%s'", sampleId);
-        if (! parseBestNode(words, info) &&
-            ! parseSampleMutations(words, info))
-            parseImputedMutations(words, info);
+        parseImputedMutations(words, info);
         }
     }
 }
@@ -547,14 +443,15 @@ for (i = 0;  i < node->numEdges;  i++)
     rSubstTreeNames(node->edges[i], nameSubstitutions);
 }
 
-static struct tempName *substituteTreeNames(struct phyloTree *tree, struct hash *nameSubstitutions)
+static struct tempName *substituteTreeNames(struct phyloTree *tree, char *treeName,
+                                            struct hash *nameSubstitutions)
 /* If tree has any nodes whose names are in nameSubstitutions, then substitute those names.
  * Write tree out to a trash file and return its location. */
 {
 rSubstTreeNames(tree, nameSubstitutions);
 struct tempName *newTn;
 AllocVar(newTn);
-trashDirFile(newTn, "ct", "treeNameSubst", ".nwk");
+trashDirFile(newTn, "ct", treeName, ".nwk");
 FILE *f = mustOpen(newTn->forCgi, "w");
 phyloPrintTree(tree, f);
 carefulClose(&f);
@@ -582,7 +479,7 @@ static void addMutationsToTree(struct phyloTree *node, struct variantPathNode **
 struct variantPathNode *nodeMuts = slPopHead(pNodeMutList);
 if (! nodeMuts)
     errAbort("addMutationsToTree: subtree mutation list has fewer nodes than subtree");
-if (! sameString(nodeMuts->nodeName, node->ident->name))
+if (node->ident->name && ! sameString(nodeMuts->nodeName, node->ident->name))
     errAbort("addMutationsToTree: subtree node name is '%s' but subtree mutation list item is '%s'",
              node->ident->name, nodeMuts->nodeName);
 if (node->priv != NULL)
@@ -593,42 +490,88 @@ for (i = 0;  i < node->numEdges;  i++)
     addMutationsToTree(node->edges[i], pNodeMutList);
 }
 
-static struct subtreeInfo *parseSubtrees(int subtreeCount, struct tempName *subtreeTns[],
+static struct subtreeInfo *parseOneSubtree(struct tempName *subtreeTn, char *subtreeName,
+                                           struct variantPathNode *subtreeMuts,
+                                           struct slName *userSampleIds, struct hash *condensedNodes)
+/* Parse usher's subtree output, figure out which user samples are in subtree and expand names
+ * of condensed nodes. */
+{
+struct subtreeInfo *ti;
+AllocVar(ti);
+ti->subtreeTn = subtreeTn;
+ti->subtree = phyloOpenTree(ti->subtreeTn->forCgi);
+addMutationsToTree(ti->subtree, &subtreeMuts);
+if (subtreeMuts != NULL)
+    errAbort("addMutationsToTree: subtreeMutationList has more nodes than subtree");
+struct slName *subtreeIdList = phyloLeafNames(ti->subtree);
+// Don't do name substitutions on condensed node names in subtreeIdToIx since the IDs have to
+// match those in the original tree from protobuf.
+ti->subtreeIdToIx = slNameListToIxHash(subtreeIdList);
+ti->subtreeUserSampleIds = getSubtreeSampleIds(userSampleIds, ti->subtreeIdToIx);
+if (slCount(ti->subtreeUserSampleIds) == 0)
+    errAbort("No user sample IDs found in subtree file %s", ti->subtreeTn->forCgi);
+// Substitute in nicer node names for condensed nodes for displaying to the user in
+// custom tracks and Nextstrain/auspice JSON.
+struct hash *nameSubstitutions = expandCondensedNodeNames(condensedNodes, subtreeIdList);
+if (nameSubstitutions->elCount > 0)
+    ti->subtreeTn = substituteTreeNames(ti->subtree, subtreeName, nameSubstitutions);
+ti->subtreeNameList = substituteNameList(subtreeIdList, nameSubstitutions);
+hashFree(&nameSubstitutions);
+slFreeList(&subtreeIdList);
+return ti;
+}
+
+static struct subtreeInfo *parseSubtrees(int subtreeCount, struct tempName *singleSubtreeTn,
+                                         struct variantPathNode *singleSubtreeMuts,
+                                         struct tempName *subtreeTns[],
                                          struct variantPathNode *subtreeMuts[],
                                          struct slName *userSampleIds, struct hash *condensedNodes)
 /* Parse usher's subtree output, figure out which user samples are in each subtree, expand names
- * of condensed nodes, and write auspice json. */
+ * of condensed nodes.  Add parsed singleSubtree at head of list, followed by numbered subtrees. */
 {
 struct subtreeInfo *subtreeInfoList = NULL;
 int sIx;
 for (sIx = 0;  sIx < subtreeCount;  sIx++)
     {
-    struct subtreeInfo *ti;
-    AllocVar(ti);
-    ti->subtreeTn = subtreeTns[sIx];
-    ti->subtree = phyloOpenTree(ti->subtreeTn->forCgi);
-    addMutationsToTree(ti->subtree, &subtreeMuts[sIx]);
-    if (subtreeMuts[sIx] != NULL)
-        errAbort("addMutationsToTree: subtreeMutationList has more nodes than subtree");
-    struct slName *subtreeIdList = phyloLeafNames(ti->subtree);
-    // Don't do name substitutions on condensed node names in subtreeIdToIx since the IDs have to
-    // match those in the original tree from protobuf.
-    ti->subtreeIdToIx = slNameListToIxHash(subtreeIdList);
-    ti->subtreeUserSampleIds = getSubtreeSampleIds(userSampleIds, ti->subtreeIdToIx);
-    if (slCount(ti->subtreeUserSampleIds) == 0)
-        errAbort("No user sample IDs found in subtree file %s", ti->subtreeTn->forCgi);
-    // Substitute in nicer node names for condensed nodes for displaying to the user in
-    // custom tracks and Nextstrain/auspice JSON.
-    struct hash *nameSubstitutions = expandCondensedNodeNames(condensedNodes, subtreeIdList);
-    if (nameSubstitutions->elCount > 0)
-        ti->subtreeTn = substituteTreeNames(ti->subtree, nameSubstitutions);
-    ti->subtreeNameList = substituteNameList(subtreeIdList, nameSubstitutions);
+    char subtreeName[512];
+    safef(subtreeName, sizeof(subtreeName), "subtree%d", sIx+1);
+    struct subtreeInfo *ti = parseOneSubtree(subtreeTns[sIx], subtreeName, subtreeMuts[sIx],
+                                             userSampleIds, condensedNodes);
     slAddHead(&subtreeInfoList, ti);
-    hashFree(&nameSubstitutions);
-    slFreeList(&subtreeIdList);
     }
 slReverse(&subtreeInfoList);
+struct subtreeInfo *ti = parseOneSubtree(singleSubtreeTn, "singleSubtree", singleSubtreeMuts,
+                                         userSampleIds, condensedNodes);
+slAddHead(&subtreeInfoList, ti);
 return subtreeInfoList;
+}
+
+static void parseClades(char *filename, struct hash *samplePlacements)
+/* Parse usher's clades.txt, which might have {sample, clade} or {sample, clade, lineage}. */
+{
+struct hash *wordStore = hashNew(0);
+struct lineFile *lf = lineFileOpen(filename, TRUE);
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    char *words[3];
+    int wordCount = chopTabs(line, words);
+    char *sampleId = words[0];
+    struct placementInfo *info = hashFindVal(samplePlacements, sampleId);
+    if (!info)
+        errAbort("parseClades: can't find placementInfo for sample '%s'", sampleId);
+    if (wordCount > 1)
+        {
+        // Nextstrain's clade "20E (EU1)" has to be tweaked to "20E.EU1" for matUtils to avoid
+        // whitespace trouble; tweak it back.
+        if (sameString(words[1], "20E.EU1"))
+            words[1] = "20E (EU1)";
+        info->nextClade = hashStoreName(wordStore, words[1]);
+        }
+    if (wordCount > 2)
+        info->pangoLineage = hashStoreName(wordStore, words[2]);
+    }
+lineFileClose(&lf);
 }
 
 static char *dirPlusFile(struct dyString *dy, char *dir, char *file)
@@ -640,6 +583,8 @@ return dy->string;
 }
 
 static int processOutDirFiles(struct usherResults *results, char *outDir,
+                              struct tempName **retSingleSubtreeTn,
+                              struct variantPathNode **retSingleSubtreeMuts,
                               struct tempName *subtreeTns[], struct variantPathNode *subtreeMuts[],
                               int maxSubtrees)
 /* Get paths to files in outDir; parse them, move files that we'll keep up to trash/ct/,
@@ -710,7 +655,51 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
         else
             warn("Unexpected filename '%s' from usher, ignoring", file->name);
         }
-    else if (sameString(file->name, "final-tree.nh"))
+    else if (startsWith("single-subtree", file->name))
+        {
+        // One subtree to bind them all
+        char fnameCpy[strlen(file->name)+1];
+        safecpy(fnameCpy, sizeof fnameCpy, file->name);
+        char *parts[4];
+        int partCount = chopString(fnameCpy, "-", parts, ArraySize(parts));
+        if (partCount == 2)
+            {
+            // Expect single-subtree.nh
+            if (!endsWith(parts[1], ".nh"))
+                warn("Unexpected filename '%s' from usher, ignoring", file->name);
+            else if (retSingleSubtreeTn)
+                {
+                struct tempName *tn;
+                AllocVar(tn);
+                trashDirFile(tn, "ct", "subtree", ".nwk");
+                mustRename(path, tn->forCgi);
+                *retSingleSubtreeTn = tn;
+                }
+            }
+        else if (partCount == 3)
+            {
+            // Expect single-subtree-mutations.txt or single-subtree-expanded.txt
+            if (sameString(parts[2], "mutations.txt"))
+                {
+                if (retSingleSubtreeMuts)
+                    *retSingleSubtreeMuts = parseSubtreeMutations(path);
+                }
+            else if (sameString(parts[2], "expanded.txt"))
+                {
+                // Don't need this, just remove it
+                }
+            else
+                warn("Unexpected filename '%s' from usher, ignoring", file->name);
+            }
+        else
+            warn("Unexpected filename '%s' from usher, ignoring", file->name);
+        }
+    else if (sameString(file->name, "clades.txt"))
+        {
+        parseClades(path, results->samplePlacements);
+        }
+    else if (sameString(file->name, "final-tree.nh") ||
+             sameString(file->name, "placement_stats.tsv"))
         {
         // Don't need this, just remove it.
         }
@@ -747,21 +736,86 @@ char *numThreadsStr = "16";
 struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "usher_outdir", ".dir");
 char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOutDir.forCgi,
-                "-k", subtreeSizeStr, "-T", numThreadsStr, "-u", "-l", NULL };
+                "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE, "-T", numThreadsStr, "-u",
+                NULL };
 char **cmds[] = { cmd, NULL };
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "usher_stderr", ".txt");
-struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi);
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
 pipelineClose(&pl);
 reportTiming(pStartTime, "run usher");
 parseStderr(tnStderr.forCgi, results->samplePlacements);
 
-struct tempName *subtreeTns[MAX_SUBTREES];
-struct variantPathNode *subtreeMuts[MAX_SUBTREES];
-int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, subtreeTns, subtreeMuts,
-                                      MAX_SUBTREES);
-results->subtreeInfoList = parseSubtrees(subtreeCount, subtreeTns, subtreeMuts, userSampleIds,
-                                         condensedNodes);
+struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
+struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
+int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn, &singleSubtreeMuts,
+                                      subtreeTns, subtreeMuts, MAX_SUBTREES);
+if (singleSubtreeTn == NULL)
+    {
+    warn("Sorry, there was a problem running usher.  "
+         "Please ask genome-www@soe.ucsc.edu to take a look at %s.", tnStderr.forCgi);
+    return NULL;
+    }
+results->subtreeInfoList = parseSubtrees(subtreeCount, singleSubtreeTn, singleSubtreeMuts,
+                                         subtreeTns, subtreeMuts, userSampleIds, condensedNodes);
+results->singleSubtreeInfo = results->subtreeInfoList;
+results->subtreeInfoList = results->subtreeInfoList->next;
 return results;
 }
 
+static void addEmptyPlacements(struct slName *sampleIds, struct hash *samplePlacements)
+/* Parsing an usher-style clades.txt file from matUtils extract requires samplePlacements to
+ * have placementInfo for each sample.  When running usher, those are added when we parse
+ * usher stderr; when running matUtils, just allocate one for each sample. */
+{
+struct slName *sample;
+for (sample = sampleIds;  sample != NULL;  sample = sample->next)
+    {
+    struct placementInfo *info;
+    AllocVar(info);
+    hashAdd(samplePlacements, sample->name, info);
+    info->sampleId = cloneString(sample->name);
+    }
+}
+
+struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protobufPath,
+                                                int subtreeSize, struct slName *sampleIds,
+                                                struct hash *condensedNodes, int *pStartTime)
+/* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
+ * containing sampleIds, save resulting subtrees to trash files, return subtree results.
+ * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
+{
+struct usherResults *results = usherResultsNew();
+char subtreeSizeStr[16];
+safef(subtreeSizeStr, sizeof subtreeSizeStr, "%d", subtreeSize);
+char *numThreadsStr = "16";
+struct tempName tnSamples;
+trashDirFile(&tnSamples, "ct", "matUtilsExtractSamples", ".txt");
+FILE *f = mustOpen(tnSamples.forCgi, "w");
+struct slName *sample;
+for (sample = sampleIds;  sample != NULL;  sample = sample->next)
+    fprintf(f, "%s\n", sample->name);
+carefulClose(&f);
+struct tempName tnOutDir;
+trashDirFile(&tnOutDir, "ct", "matUtils_outdir", ".dir");
+char *cmd[] = { matUtilsPath, "extract", "-i", protobufPath, "-d", tnOutDir.forCgi,
+                "-s", tnSamples.forCgi,
+                "-x", subtreeSizeStr, "-X", SINGLE_SUBTREE_SIZE, "-T", numThreadsStr,
+                "--usher-clades-txt", NULL };
+char **cmds[] = { cmd, NULL };
+struct tempName tnStderr;
+trashDirFile(&tnStderr, "ct", "matUtils_stderr", ".txt");
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
+pipelineClose(&pl);
+reportTiming(pStartTime, "run matUtils");
+addEmptyPlacements(sampleIds, results->samplePlacements);
+struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
+struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
+int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn, &singleSubtreeMuts,
+                                      subtreeTns, subtreeMuts, MAX_SUBTREES);
+results->subtreeInfoList = parseSubtrees(subtreeCount, singleSubtreeTn, singleSubtreeMuts,
+                                         subtreeTns, subtreeMuts, sampleIds, condensedNodes);
+results->singleSubtreeInfo = results->subtreeInfoList;
+results->subtreeInfoList = results->subtreeInfoList->next;
+return results;
+}

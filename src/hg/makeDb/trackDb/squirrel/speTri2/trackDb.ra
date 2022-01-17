@@ -17,7 +17,11 @@ track gc5BaseBw override
 visibility full
 
 track chainNetMm10 override
+shortLabel $o_db ChainNet
 visibility pack
+
+track chainNetHg19 override
+shortLabel $o_db ChainNet
 
 track intronEst override
 visibility hide

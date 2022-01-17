@@ -2,7 +2,7 @@
  * hgTracks.c allows a standalone main to make track images. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* NOTE: This code was imported from hgTracks.c 1.1469, May 19 2008,
  * so a lot of revision history has been obscured.  To see code history
@@ -269,7 +269,8 @@ Color shadesOfGray[10+1];	/* 10 shades of gray from white to black
 Color shadesOfBrown[10+1];	/* 10 shades of brown from tan to tar. */
 struct rgbColor brownColor = {100, 50, 0};
 struct rgbColor tanColor = {255, 240, 200};
-struct rgbColor guidelineColor = { 220, 220, 255};
+struct rgbColor guidelineColor = {220, 220, 255};
+struct rgbColor multiRegionAltColor = {235, 235, 255};
 struct rgbColor undefinedYellowColor = {240,240,180};
 
 Color shadesOfSea[10+1];       /* Ten sea shades. */
@@ -362,16 +363,30 @@ rgbColor.b = (rgbColor.b+128)/2;
 return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
-void checkIfWiggling(struct cart *cart, struct track *tg)
-/* Check to see if a linkedFeatures track should be drawing as a wiggle. */
+boolean checkIfWiggling(struct cart *cart, struct track *tg)
+/* Check to see if a track should be drawing as a wiggle. */
 {
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
-if (doWiggle)
+
+if (!doWiggle)
+    {
+    char *setting = trackDbSetting(tg->tdb, "maxWindowCoverage" );
+    if (setting)
+        {
+        unsigned size = sqlUnsigned(setting);
+        if ((size > 0) && ((winEnd - winStart) > size))
+            doWiggle = TRUE;
+        }
+    }
+
+if (doWiggle && isEmpty(tg->networkErrMsg))
     {
     tg->drawLeftLabels = wigLeftLabels;
     tg->colorShades = shadesOfGray;
     tg->mapsSelf = TRUE;
     }
+
+return doWiggle;
 }
 
 struct sameItemNode
@@ -736,7 +751,7 @@ int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vi
  * they use. */
 {
 
-boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
+boolean doWiggle = checkIfWiggling(cart, tg);
 if (doWiggle)
     {
     struct wigCartOptions *wigCart = tg->wigCartData;
@@ -1137,7 +1152,7 @@ if (x < xEnd)
     char *encodedTrack = cgiEncode(track);
     if (theImgBox && curImgTrack)
         {
-        char link[512];
+        char link[2000];
         if (directUrl)
             {
             safef(link,sizeof(link),directUrl, item, chromName, start, end, encodedTrack, database);
@@ -1148,8 +1163,8 @@ if (x < xEnd)
             {
 	    // NOTE: chopped out winStart/winEnd
 	    // NOTE: Galt added winStart/winEnd back in for multi-region
-            safef(link,sizeof(link),"%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s",
-                hgcNameAndSettings(), chromName, winStart, winEnd, start, end, encodedTrack, encodedItem);
+            safef(link,sizeof(link),"%s&db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s",
+                hgcNameAndSettings(), database, chromName, winStart, winEnd, start, end, encodedTrack, encodedItem);
             }
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
@@ -1175,8 +1190,8 @@ if (x < xEnd)
             }
         else
             {
-            hPrintf("HREF=\"%s&c=%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
-                hgcNameAndSettings(), chromName, start, end, encodedTrack, encodedItem,
+            hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
+                hgcNameAndSettings(), start, end, encodedTrack, encodedItem,
                     chromName, winStart, winEnd,
                     database, tl.picWidth);
             }
@@ -3543,7 +3558,7 @@ static void lfColors(struct track *tg, struct linkedFeatures *lf,
 {
 if (!((lf->isBigGenePred) ||(lf->filterColor == 0)|| (lf->filterColor == -1)))
     {
-    if (lf->extra == (void *)USE_ITEM_RGB)
+    if (lf->useItemRgb)
 	{
 	struct rgbColor itemRgb;
 	itemRgb.r = (lf->filterColor & 0xff0000) >> 16;
@@ -4069,10 +4084,14 @@ if (tg->tdb)
     char *type = tg->tdb->type;
     if (sameString(type, "interact") || sameString(type, "bigInteract"))
         return FALSE;
-    if (startsWith("bigGenePred", type) || startsWith("genePred", type))
-        return TRUE;
     }
-boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "off"), "on");
+
+char *defVal = "off";
+char *type = tg->tdb->type;
+if (startsWith("bigGenePred", type) || startsWith("genePred", type))
+    defVal = "on";
+
+boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", defVal), "on");
 return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
  && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
 }
@@ -4168,7 +4187,12 @@ if (vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
 		s, e, textX, y, w, heightPer);
 	}
     }
-
+else if (vis == tvSquish)
+    {
+    int w = x2-textX;
+    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+            s, e, textX, y, w, heightPer);
+    }
 else if (vis == tvFull)
     {
     int geneMapBoxX = insideX;
@@ -4455,6 +4479,8 @@ for (item = items; item; item = item->next)
             {
             unsigned start = sf->start;
             unsigned end = sf->end;
+            if (start == end)
+                end++;
             if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
                 continue;
 
@@ -4748,7 +4774,7 @@ if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
 if (vis != tvDense && baseColorCanDraw(tg))
     baseColorInitTrack(hvg, tg);
-boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
+boolean doWiggle = checkIfWiggling(cart, tg);
 if (doWiggle)
     {
     genericDrawItemsWiggle(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
@@ -5160,7 +5186,7 @@ for (i = 0; i < blockCount; i++)
 	((bed->thickStart > lf->end) && (bed->thickEnd > lf->end)))
 	lf->tallStart = lf->end;
     /* Finally the business about the color. */
-    lf->extra = (void *)USE_ITEM_RGB;
+    lf->useItemRgb = TRUE;
     lf->filterColor = (unsigned)bed->expIds[i];
     slAddHead(&lfList, lf);
     }
@@ -6560,6 +6586,19 @@ tg->itemColor   = knownGeneColor;
 void knownGeneMethods(struct track *tg)
 /* Make track of known genes. */
 {
+boolean isGencode3 = trackDbSettingOn(tg->tdb, "isGencode3");
+
+// knownGene is now a bigBed track
+if (isGencode3)
+    {
+    char *words[3];
+    words[0] = "bigGenePred";
+    words[1] = "12";
+    words[2] = 0;
+    complexBedMethods(tg, tg->tdb, TRUE, 2, words);
+    return;
+    }
+
 /* use loadGenePredWithName2 instead of loadKnownGene to pick up proteinID */
 tg->loadItems   = loadKnownGene;
 tg->itemName    = knownGeneName;
@@ -8190,9 +8229,10 @@ for(ii=0; ii < 52; ii++)
     for(jj=0; jj < width + 2; jj++)
 	{
 	if (buf[jj] == 255) colors[jj] = MG_WHITE;
-	else if (buf[jj] == 0x44) colors[jj] = MG_RED;
-	else if (buf[jj] == 0x69) colors[jj] = greenColor;
-	else if (buf[jj] == 0x5e) colors[jj] = blueColor;
+	else if (buf[jj] == 0x87) colors[jj] = MG_RED;
+	else if (buf[jj] == 0x60) colors[jj] = greenColor;
+	else if (buf[jj] == 0x7f) colors[jj] = blueColor;
+	else if (buf[jj] == 0x62) colors[jj] = orangeColor;
 	}
 
     hvGfxVerticalSmear(hvg,xOff,yOff+ii,width ,1, colors,TRUE);
@@ -12424,7 +12464,7 @@ if (fieldCount < 12)
 lf = lfFromBed(bedPart);
 if (useItemRgb)
     {
-    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+    lf->useItemRgb = TRUE;
     lf->filterColor=bedPart->itemRgb;
     }
 return lf;
@@ -13695,7 +13735,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     bed->itemRgb = bedParseRgb(item->color);
     bed8To12(bed);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
-    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+    lf->useItemRgb = TRUE;
     lf->filterColor=bed->itemRgb;
 
     /* overload itemAttr fields to be able to pass id to hgc click box */
@@ -13723,7 +13763,7 @@ bed->thickEnd = winEnd;
 bed->itemRgb = 0xcc0000;
 bed8To12(bed);
 lf = lfFromBedExtra(bed, scoreMin, scoreMax);
-lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+lf->useItemRgb = TRUE;
 lf->filterColor=bed->itemRgb;
 slAddHead(&lfList, lf);
 
@@ -14082,6 +14122,13 @@ else if (sameWord(type, "bigBarChart"))
     tdb->canPack = TRUE;
     track->isBigBed = TRUE;
     barChartMethods(track);
+    }
+else if (sameWord(type, "bigRmsk"))
+    {
+    tdb->canPack = TRUE;
+    track->isBigBed = TRUE;
+    track->mapsSelf = TRUE;
+    bigRmskMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "bigLolly"))
     {

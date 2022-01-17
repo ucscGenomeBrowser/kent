@@ -1,5 +1,5 @@
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 // elmTree.c/.h - Extensible local memory tree grown from an slList of objects, via
 // NEIGHBOR JOINING and a supplied compare routine.  Unlike hacTree, this is not a binary tree

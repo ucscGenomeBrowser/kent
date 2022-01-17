@@ -45,21 +45,30 @@ while (<>) {
   }
   my $chr = "chr$c";
   my $chrBase = $chr;
-  if ($c =~ m/^HSCHR/) {
+  if ($c =~ m/^HSCHR/ || $c =~ m/^MMCHR/) {
     # Mapping is not alt/fix to chrom, but fix to alt; convert alt accession to UCSC format:
     $chr = $cAcc;
-    if ($opt_db && $opt_db eq 'hg19') {
+    if ($opt_db && ($opt_db eq 'hg19' || $opt_db eq 'mm10')) {
       $chr =~ s/^(\w+)\.\d+/$1/ || die "Unexpected cAcc ($cAcc)";
-      $chr = lc($chr);
+      if ($opt_db && ($opt_db eq 'hg19')) {
+	$chr = lc($chr);
+      }
     } else {
       $chr =~ s/^(\w+)\.(\d+)/$1v$2/ || die "Unexpected cAcc ($cAcc)";
     }
-    $chrBase =~ s/HSCHR([A-Z0-9]+)_.*/$1/;
+    if ($c =~ m/^HSCHR/) {
+      $chrBase =~ s/HSCHR([A-Z0-9]+)_.*/$1/;
+    }
+    if ($c =~ m/^MMCHR/) {
+      $chrBase =~ s/MMCHR([A-Z0-9]+)_.*/$1/;
+    }
     $chr = "${chrBase}_${chr}_alt";
   }
-  if ($opt_db && $opt_db eq 'hg19') {
+  if ($opt_db && ($opt_db eq 'hg19' || $opt_db eq 'mm10')) {
     $altAcc =~ s/^(\w+)\.\d+/$1/ || die "Unexpected altAcc ($altAcc)";
-    $altAcc = lc($altAcc);
+    if ($opt_db && ($opt_db eq 'hg19')) {
+      $altAcc = lc($altAcc);
+    }
   } else {
     $altAcc =~ s/^(\w+)\.(\d+)/$1v$2/ || die "Unexpected altAcc ($altAcc)";
   }

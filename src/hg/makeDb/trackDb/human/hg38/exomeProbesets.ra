@@ -1,0 +1,239 @@
+track exomeProbesets
+shortLabel Exome Probesets
+longLabel Exome Capture Probesets and Targeted Region
+group map
+type bigBed
+visibility hide
+allButtonPair on
+compositeTrack on
+
+	track xGen_Research_Probes_V2
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg38/exomeProbesets/xgen-exome-research-panel-v2-probes-hg38.bb
+	shortLabel IDT xGen V2 P
+	longLabel IDT - xGen Exome Research Panel V2 Probes
+	type bigBed
+	visibility dense
+	color 100,143,255
+
+	track xGen_Research_Targets_V2
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg38/exomeProbesets/xgen-exome-research-panel-v2-targets-hg38.bb
+	shortLabel IDT xGen V2 T
+	longLabel IDT - xGen Exome Research Panel V2 Target Regions
+	type bigBed
+	visibility dense
+	color 100,143,255
+
+	track Twist_Exome_RefSeq_Targets
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/Twist_Exome_RefSeq_targets_hg38.bb
+	shortLabel Twist RefSeq T
+	longLabel Twist - RefSeq Exome Panel Target Regions
+	type bigBed
+	visibility dense
+	color 254,97,0
+
+	track Twist_Exome_Target
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/Twist_Exome_Target_hg38.bb
+	shortLabel Twist Core T
+	longLabel Twist - Bioscience - Core Exome Panel Target Regions
+	type bigBed
+	visibility dense
+	color 254,97,0
+
+	track Twist_Comp_Exome_Target
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg38/exomeProbesets/Twist_ComprehensiveExome_targets_hg38.bb
+	shortLabel Twist Compr. T
+	longLabel Twist - Comprehensive Exome Panel Target Regions
+	type bigBed
+	visibility dense
+	color 254,97,0
+
+	track Twist_Exome_Target2
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg38/exomeProbesets/TwistExome21.bb
+	shortLabel Twist Exome 2.0
+	longLabel Twist - Exome 2.0 Panel Target Regions
+	type bigBed
+	visibility dense
+	color 254,97,0
+	
+	track Agilent_Human_Exon_Focused_Covered
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S07084713_Covered.bb
+	shortLabel SureSel. Focused P
+	longLabel Agilent - SureSelect Focused Exome Covered by Probes
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_Focused_Regions
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S07084713_Regions.bb
+	shortLabel SureSel. Focused T
+	longLabel Agilent - SureSelect Focused Exome Target Regions
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_Clinical_Research_V2_Covered
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg38/exomeProbesets/S30409818_Covered.bb
+	shortLabel SureSel. Clinical V2 P
+	longLabel Agilent - SureSelect Clinical Research Exome V2 Covered by Probes
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_Clinical_Research_V2_Regions
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg38/exomeProbesets/S30409818_Regions.bb
+	shortLabel SureSel. Clinical V2 T
+	longLabel Agilent - SureSelect Clinical Research Exome V2 Target Regions
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V4_Covered
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S04380110_Covered.bb
+	shortLabel SureSel. V4+UTR P
+	longLabel Agilent - SureSelect All Exon V4 + UTRs Covered by Probes
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V4_Regions
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S04380110_Regions.bb
+	shortLabel SureSel. V4+UTR T
+	longLabel Agilent - SureSelect All Exon V4 + UTRs Target Regions
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V5_UTRs_Covered
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S04380219_Covered.bb
+	shortLabel SureSel. V5+UTR P
+	longLabel Agilent - SureSelect All Exon V5 + UTRs Covered by Probes
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V5_UTRs_Regions
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S04380219_Regions.bb
+	shortLabel SureSel. V5+UTR T
+	longLabel Agilent - SureSelect All Exon V5 + UTRs Target Regions
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V6_Covered
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S07604514_Covered.bb
+	shortLabel SureSel. V6 P
+	longLabel Agilent - SureSelect All Exon V6 r2 Covered by Probes
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V6_Regions
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S07604514_Regions.bb
+	shortLabel SureSel. V6 T
+	longLabel Agilent - SureSelect All Exon V6 r2 Target Regions
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V6_COSMIC_Covered
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S07604715_Covered.bb
+	shortLabel SureSel. V6+COSMIC P
+	longLabel Agilent - SureSelect All Exon V6 + COSMIC r2 Covered by Probes
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V6_COSMIC_Regions
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S07604715_Regions.bb
+	shortLabel SureSel. V6+COSMIC T
+	longLabel Agilent - SureSelect All Exon V6 + COSMIC r2 Target Regions
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V6_UTRs_Covered
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S07604624_Covered.bb
+	shortLabel SureSel. V6+UTR P
+	longLabel Agilent - SureSelect All Exon V6 + UTR r2 Covered by Probes
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V6_UTRs_Regions
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/S07604624_Regions.bb
+	shortLabel SureSel. V6 +UTR T
+	longLabel Agilent - SureSelect All Exon V6 + UTR r2 Target Regions
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V7_Covered
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg38/exomeProbesets/S31285117_Covered.bb
+	shortLabel SureSel. V7 P
+	longLabel Agilent - SureSelect All Exon V7 Covered by Probes
+	type bigBed
+	color 255,36,36
+
+	track Agilent_Human_Exon_V7_Regions
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg38/exomeProbesets/S31285117_Regions.bb
+	shortLabel SureSel. V7 T
+	longLabel Agilent - SureSelect All Exon V7 Target Regions
+	type bigBed
+	color 255,36,36
+
+	track KAPA_HyperExome_hg38_capture_targets
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/KAPA_HyperExome_hg38_capture_targets.bb
+	shortLabel KAPA Hyper P
+	longLabel Roche - KAPA HyperExome Capture Probe Footprint
+	type bigBed
+	color 100,143,255
+
+	track KAPA_HyperExome_hg38_primary_targets
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/KAPA_HyperExome_hg38_primary_targets.bb
+	shortLabel KAPA Hyper T
+	longLabel Roche - KAPA HyperExome Primary Target Regions
+	type bigBed
+	color 100,143,255
+
+	track SeqCap-EZ_MedExome_hg38_capture_targets
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/SeqCap_EZ_MedExome_hg38_capture_targets.bb
+	shortLabel SeqCap EZ Med P
+	longLabel Roche - SeqCap EZ MedExome Capture Probe Footprint
+	type bigBed
+	color 100,143,255
+
+	track SeqCap-EZ_MedExome_hg19_empirical_targets
+	parent exomeProbesets off
+	bigDataUrl /gbdb/hg38/exomeProbesets/SeqCap_EZ_MedExome_hg38_empirical_targets.bb
+	shortLabel SeqCap EZ Med T
+	longLabel Roche - SeqCap EZ MedExome Empirical Target Regions
+	type bigBed
+	color 100,143,255
+
+	track SeqCap-EZ_MedExomePlusMito_hg19_capture_targets
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg38/exomeProbesets/SeqCap_EZ_MedExomePlusMito_hg38_capture_targets.bb
+	shortLabel SeqCap EZ Med+Mito P
+	longLabel Roche - SeqCap EZ MedExome + Mito Capture Probe Footprint
+	type bigBed
+	color 100,143,255
+
+	track SeqCap-EZ_MedExomePlusMito_hg19_empirical_targets
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg38/exomeProbesets/SeqCap_EZ_MedExomePlusMito_hg38_empirical_targets.bb
+	shortLabel SeqCap EZ Med+Mito T
+	longLabel Roche - SeqCap EZ MedExome + Mito Empirical Target Regions
+	type bigBed
+	color 100,143,255
+

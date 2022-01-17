@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "axt.h"
 #include "common.h"
@@ -41,8 +41,11 @@ errAbort(
   "   -extra=[file|url]     - accept settings in this file (or url)\n"
   "   -level=base|required  - reject settings below this support level\n"
   "   -settings             - just list settings with support level\n"
+  "   -genome=genome        - only check this genome\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                                     Will create this directory if not existing\n"
+  "   -httpsCertCheck=[abort,warn,log,none] - set the ssl certificate verification mode.\n"  
+  "   -httpsCertCheckDomainExceptions= - space separated list of domains to whitelist.\n"  
   "   -printMeta            - print the metadata for each track\n"
   "   -cacheTime=N          - set cache refresh time in seconds, default %d\n"
   "   -verbose=2            - output verbosely\n"
@@ -57,9 +60,12 @@ static struct optionSpec options[] = {
    {"noTracks", OPTION_BOOLEAN},
    {"settings", OPTION_BOOLEAN},
    {"checkSettings", OPTION_BOOLEAN},
+   {"genome", OPTION_STRING},
    {"test", OPTION_BOOLEAN},
    {"printMeta", OPTION_BOOLEAN},
    {"udcDir", OPTION_STRING},
+   {"httpsCertCheck", OPTION_STRING},
+   {"httpsCertCheckDomainExceptions", OPTION_STRING},
    {"specHost", OPTION_STRING},
    {"cacheTime", OPTION_INT},
    // intentionally undocumented option for hgHubConnect
@@ -77,6 +83,7 @@ struct trackHubCheckOptions
     char *specHost;             /* server hosting hub spec */
     char *level;                /* check hub is valid to this support level */
     char *extraFile;            /* name of extra file/url with additional settings to accept */
+    char *genome;               /* only check this genome */
     /* intermediate data */
     struct hash *settings;      /* supported settings for this version */
     struct hash *extra;         /* additional trackDb settings to accept */
@@ -479,9 +486,9 @@ char *makeFolderObjectString(char *id, char *text, char *parent, char *title, bo
 {
 struct dyString *folderString = dyStringNew(0);
 dyStringPrintf(folderString, "{icon: '../../images/folderC.png', id: '%s', "
-    "text:\"%s\", parent:'%s',"
+    "text:'%s', parent:'%s',"
     "li_attr:{title:'%s'}, children:%s, state: {opened: %s}}",
-    htmlEncode(id), text, htmlEncode(parent), title, children ? "true" : "false", openFolder ? "true" : "false");
+    htmlEncode(id), htmlEncode(text), htmlEncode(parent), title, children ? "true" : "false", openFolder ? "true" : "false");
 return dyStringCannibalize(&folderString);
 }
 
@@ -493,7 +500,7 @@ struct dyString *item = dyStringNew(0);
 dyStringPrintf(item, "{icon: 'fa fa-plus', id:'%s', li_attr:{class: 'hubError', title: '%s', "
         "shortLabel: '%s', longLabel: '%s', color: '%s', name:'%s'}, "
         "text:'%s', parent: '%s', state: {opened: true}}",
-        htmlEncode(id), title, shortLabel, longLabel, color, name, replaceChars(text, "'", "\\'"), htmlEncode(parent));
+        htmlEncode(id), title, htmlEncode(shortLabel), htmlEncode(longLabel), color, name, htmlEncode(text), htmlEncode(parent));
 return dyStringCannibalize(&item);
 }
 
@@ -736,6 +743,16 @@ if (tdbIsSuper(tdb) || tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsCo
         errAbort("Track \"%s\" is declared superTrack, compositeTrack, view or "
             "container, and also has a bigDataUrl", tdb->track);
         }
+
+    // multiWigs cannot be the child of a composite
+    if (tdbIsContainer(tdb) &&
+            (tdb->parent != NULL &&
+            (tdbIsComposite(tdb->parent) || tdbIsCompositeView(tdb->parent))))
+        {
+        errAbort("Track \"%s\" is declared container multiWig and has parent \"%s\"."
+            " Container multiWig tracks cannot be children of composites or views",
+            tdb->track, tdb->parent->track);
+        }
     }
 else if (tdb->subtracks != NULL)
     {
@@ -812,9 +829,12 @@ if (errCatchStart(errCatch))
 
     if (options->checkFiles)
         hubCheckBigDataUrl(hub, genome, tdb);
-    trackHubAddDescription(genome->trackDbFile, tdb);
-    if (!tdb->html)
-        warn("warning: missing description page for track: '%s'", tdb->track);
+    if (!sameString(tdb->track, "cytoBandIdeo"))
+        {
+        trackHubAddDescription(genome->trackDbFile, tdb);
+        if (!tdb->html)
+            warn("warning: missing description page for track: '%s'", tdb->track);
+        }
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError || errCatch->gotWarning)
@@ -859,6 +879,7 @@ struct errCatch *errCatch = errCatchNew();
 struct trackDb *tdbList = NULL;
 int genomeErrorCount = 0;
 boolean openedGenome = FALSE;
+verbose(3, "checking genome %s\n", trackHubSkipHubName(genome->name));
 
 if (errCatchStart(errCatch))
     {
@@ -881,7 +902,7 @@ if (errCatchStart(errCatch))
         else if (!extFileExists(htmlPath))
             warn("warning: '%s' htmlPath file does not exist or is not accessible: '%s'", genome->name, htmlPath);
         }
-    tdbList = trackHubTracksForGenome(hub, genome);
+    tdbList = trackHubTracksForGenome(hub, genome, NULL);
     tdbList = trackDbLinkUpGenerations(tdbList);
     tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
     trackHubPolishTrackNames(hub, tdbList);
@@ -939,6 +960,26 @@ dyStringClear(tdbDyString);
 return genomeErrorCount;
 }
 
+void checkGenomeRestriction(struct trackHubCheckOptions *options, struct trackHub *hub)
+/* check the a genome restriction from the command line is a valid genome */
+{
+if (options->genome == NULL)
+    return;  // OK
+for (struct trackHubGenome *genome = hub->genomeList; genome != NULL; genome = genome->next)
+    {
+    if (sameString(trackHubSkipHubName(genome->name), options->genome))
+        return;  // OK
+    }
+errAbort("Genome %s not found in hub", options->genome);
+}
+
+boolean shouldCheckGenomes(struct trackHubCheckOptions *options, struct trackHubGenome *genome)
+/* should this genome be check based on command line restrictions */
+{
+return (options->genome == NULL) ||
+    sameString(trackHubSkipHubName(genome->name), options->genome);
+}
+
 
 int trackHubCheck(char *hubUrl, struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check a track data hub for integrity. Put errors in dyString.
@@ -956,7 +997,7 @@ if (errCatchStart(errCatch))
     hub = trackHubOpen(hubUrl, "");
     char *descUrl = hub->descriptionUrl;
     if (descUrl == NULL)
-        warn("warning: missing hub overview descripton page (descriptionUrl setting)");
+        warn("warning: missing hub overview description page (descriptionUrl setting)");
     else if (!extFileExists(descUrl))
         warn("warning: %s descriptionUrl setting does not exist", hub->descriptionUrl);
     }
@@ -1003,22 +1044,25 @@ if (options->checkSettings)
     retVal |= hubSettingsCheckInit(hub, options, errors);
 
 struct trackHubGenome *genome;
-int numGenomeErrors = 0;
+checkGenomeRestriction(options, hub);
 char genomeTitleString[128];
 struct dyString *genomeErrors = dyStringNew(0);
 for (genome = hub->genomeList; genome != NULL; genome = genome->next)
     {
-    numGenomeErrors = hubCheckGenome(hub, genome, options, genomeErrors);
-    if (options->htmlOut)
+    if (shouldCheckGenomes(options, genome))
         {
-        char *genomeName = trackHubSkipHubName(genome->name);
-        safef(genomeTitleString, sizeof(genomeTitleString),
-            "%s (%d configuration error%s)", genomeName, numGenomeErrors,
-            numGenomeErrors == 1 ? "" : "s");
-        dyStringPrintf(errors, "%s,", makeFolderObjectString(genomeName, genomeTitleString, "#",
-            "Click to open node", TRUE, numGenomeErrors > 0 ? TRUE : FALSE));
+        int numGenomeErrors = hubCheckGenome(hub, genome, options, genomeErrors);
+        if (options->htmlOut)
+            {
+            char *genomeName = trackHubSkipHubName(genome->name);
+            safef(genomeTitleString, sizeof(genomeTitleString),
+                  "%s (%d configuration error%s)", genomeName, numGenomeErrors,
+                  numGenomeErrors == 1 ? "" : "s");
+            dyStringPrintf(errors, "%s,", makeFolderObjectString(genomeName, genomeTitleString, "#",
+                           "Click to open node", TRUE, numGenomeErrors > 0 ? TRUE : FALSE));
+            }
+        retVal |= numGenomeErrors;
         }
-    retVal |= numGenomeErrors;
     }
 if (options->htmlOut)
     {
@@ -1094,6 +1138,7 @@ checkOptions->specHost = optionVal("specHost", checkOptions->specHost);
 checkOptions->printMeta = optionExists("printMeta");
 checkOptions->checkFiles = !optionExists("noTracks");
 checkOptions->checkSettings = optionExists("checkSettings");
+checkOptions->genome = optionVal("genome", NULL);
 
 struct trackHubSettingSpec *setting = NULL;
 AllocVar(setting);
@@ -1119,6 +1164,31 @@ udcSetCacheTimeout(cacheTime);
 // UDC cache dir: first check for hg.conf setting, then override with command line option if given.
 setUdcCacheDir();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
+
+char *httpsCertCheck = optionVal("httpsCertCheck", NULL);
+if (httpsCertCheck)
+    {
+    //  level log for testing, but you only see something if SCRIPT_NAME env variable is set like CGIs have.
+    if (sameString(httpsCertCheck, "abort") || sameString(httpsCertCheck, "warn") || sameString(httpsCertCheck, "log") || sameString(httpsCertCheck, "none"))
+	{
+	setenv("https_cert_check", httpsCertCheck, 1);
+	}
+    else
+	{
+	// log level is not very useful, but included it for completeness.
+	verbose(1, "The value of -httpsCertCheck should be either abort to avoid Man-in-middle attack,\n"
+		"warn to warn about failed certs,\n"
+		"none indicating the verify is skipped entirely.");
+	usage();
+	}
+    }
+
+// should be space separated list, if that lists contains "noHardwiredExceptions" then the built-in hardwired whitelist in https.c is skipped.
+char *httpsCertCheckDomainExceptions = optionVal("httpsCertCheckDomainExceptions", NULL);
+if (httpsCertCheckDomainExceptions)
+    {
+    setenv("https_cert_check_domain_exceptions", httpsCertCheckDomainExceptions, 1);
+    }
 
 knetUdcInstall();  // make the htslib library use udc
 

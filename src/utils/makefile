@@ -45,6 +45,7 @@ UTILS_APPLIST = \
 	colTransform \
 	countChars \
 	endsInLf \
+	clusterMatrixToBarChartBed \
 	cpgIslandExt \
 	faAlign \
 	fastqToFa \
@@ -66,22 +67,26 @@ UTILS_APPLIST = \
 	faToTab \
 	faToTwoBit \
 	faTrans \
-	findMotif \
 	headRest \
 	htmlCheck \
+	matrixClusterColumns \
+	matrixMarketToTsv \
+	matrixNormalize \
 	newProg \
 	newPythonProg \
 	nibFrag \
 	nibSize \
 	paraFetch \
 	paraSync \
-	pslLiftSubrangeBlat \
+	pslMap \
+	pslMapPostChain \
 	pslPosTarget \
+	pslRc \
 	pslRemoveFrameShifts \
 	pslScore \
+	pslSwap \
 	pslToPslx \
 	randomLines \
-	raSqlQuery \
 	raToTab \
 	raToLines \
 	rmFaDups \
@@ -108,6 +113,11 @@ UTILS_APPLIST = \
 	wigToBigWig \
 	wordLine \
 
+# doesn't work on arm64 due to use of SSE
+ifneq (${MACHTYPE},arm64)
+UTILS_APPLIST += findMotif
+endif
+
 # list of utilities to build of interest only at UCSC
 
 UCSC_APPS = \
@@ -122,6 +132,7 @@ UCSC_APPS = \
 	faGapLocs \
 	faGapSizes \
 	faNcbiToUcsc \
+	faRenameRecords \
 	faSimplify \
 	faToNib \
 	faTrimPolyA \
@@ -136,7 +147,6 @@ UCSC_APPS = \
 	lineCount \
 	nt4Frag \
 	pslToXa \
-	scaffoldFaToAgp \
 	scrambleFa \
 	subs \
 	tableSum \
@@ -148,7 +158,6 @@ UCSC_APPS = \
 	venn \
 	verticalSplitSqlTable \
 	weedLines
-
 
 # list of scripts to install
 
@@ -202,6 +211,8 @@ SCRIPT_FILES = \
 	bedAppendPaperInfo \
 	googleSheetToBigBed \
 	doClinvarLift \
+	hubPublicMail \
+	browserRace \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build
@@ -210,7 +221,7 @@ ALL_APPS = $(UTILS_APPLIST) $(UCSC_APPS)
 
 # all: builds all utilities here
 
-all: $(ALL_APPS:%=%.all)
+all: $(ALL_APPS:%=%.all) $(USER_APP_SCRIPTS:%=%.userAppScript)
 
 %.all:
 	cd $* && echo $* && $(MAKE)

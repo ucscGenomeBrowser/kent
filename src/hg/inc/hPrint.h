@@ -2,7 +2,7 @@
  * when postscript and PDF images are being drawn  */
 
 /* Copyright (C) 2010 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef HPRINT_H
 #define HPRINT_H
@@ -60,8 +60,14 @@ void hOnClickButton(char *id, char *command, char *label);
 /* Write out push button if not suppressed. */
 
 void hButtonMaybePressed(char *name, char *label, char *msg, char *onClick, boolean pressed);
-/* If not suppresed, write out button optionally with onclick javascript, message and 
+/* If not suppresed, write out submit button optionally with onclick javascript, message and 
    styled to indicate modal state (button pressed)
+ */
+
+void hButtonNoSubmitMaybePressed(char *name, char *label, char *msg, 
+                                        char *onClick, boolean pressed);
+/* If not suppresed, write out button optionally with onclick javascript, message and 
+   styled to indicate modal state (button pressed).  
  */
 
 void hTextVar(char *varName, char *initialVal, int charSize);

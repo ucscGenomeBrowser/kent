@@ -1,5 +1,5 @@
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* errCatch - help catch errors so that errAborts aren't
  * fatal, and warn's don't necessarily get printed immediately. 

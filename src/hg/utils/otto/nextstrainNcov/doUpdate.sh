@@ -1,4 +1,5 @@
 #!/bin/bash
+source ~/.bashrc
 set -beEu -o pipefail
 
 #	Do not modify this script, modify the source tree copy:
@@ -8,7 +9,7 @@ ottoDir=/hive/data/outside/otto/nextstrainNcov
 chromSizes=/hive/data/genomes/wuhCor1/chrom.sizes
 gbdbDir=/gbdb/wuhCor1/nextstrain
 
-ncovJsonUrl='https://nextstrain.org/charon/getDataset?prefix=/ncov/global'
+ncovJsonUrl='https://nextstrain.org/charon/getDataset?prefix=/ncov/open/global'
 
 cd $ottoDir
 

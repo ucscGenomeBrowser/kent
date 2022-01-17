@@ -1,7 +1,7 @@
 /* hubPublicCheck - checks that the labels in hubPublic match what is in the hub labels. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -89,13 +89,18 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct dyString *dy = newDyString(1024);
     struct trackHubGenome *genome = tHub->genomeList;
 
+    unsigned dbCount = 0;
     for(; genome; genome = genome->next)
+        {
+        dbCount++;
 	dyStringPrintf(dy, "%s,", trackHubSkipHubName(genome->name));
+        }
 
     if (!sameString(dy->string, dbList))
 	{
 	differences++;
 
+	printf("update %s set dbCount=\"%d\" where hubUrl=\"%s\";\n",table, dbCount, url);
 	printf("update %s set dbList=\"%s\" where hubUrl=\"%s\";\n",table, dy->string, url);
 	}
 
@@ -132,14 +137,13 @@ errCatchFree(&errCatch);
 if (gotWarning)
     return 1;
 
-struct hashEl *hel;
-struct hashCookie cookie = hashFirst(tHub->genomeHash);
 struct dyString *dy = newDyString(1024);
 
-while ((hel = hashNext(&cookie)) != NULL)
+struct trackHubGenome *list;
+for(list = tHub->genomeList; list;  list = list->next)
     {
     dbCount++;
-    dyStringPrintf(dy, "%s,", trackHubSkipHubName(hel->name));
+    dyStringPrintf(dy, "%s,", trackHubSkipHubName(list->name));
     }
 
 char *descriptionUrl = tHub->descriptionUrl;

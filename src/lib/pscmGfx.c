@@ -247,9 +247,13 @@ static void pscmSetFont(struct pscmGfx *pscm, MgFont *font)
  * PostScript.  We'll try and arrange it so that the PostScript
  * fonts match the gem fonts more or less. */
 void *v = font;
-if ((pscm->fontMethod == 0) && (v != pscm->curFont))
+if (v != pscm->curFont)
     {
-    psTimesFont(pscm->ps, font->psHeight);
+    if (pscm->fontMethod == 0) 
+        psTimesFont(pscm->ps, font->psHeight);
+    else
+        psSetFont(pscm->ps, pscm->fontName, font->psHeight);
+
     pscm->curFont = v;
     }
 }
@@ -281,6 +285,16 @@ void pscmTextCentered(struct pscmGfx *pscm, int x, int y,
 pscmSetColor(pscm, color);
 pscmSetFont(pscm, font);
 psTextCentered(pscm->ps, x, y, width, height, text);
+boxPscm = NULL;
+}
+
+void pscmTextInBox(struct pscmGfx *pscm, int x, int y, 
+	int width, int height, int color, MgFont *font, char *text)
+/* Draw a line of text that fills in box defined by x/y/width/height */
+{
+pscmSetColor(pscm, color);
+pscmSetFont(pscm, font);
+psTextInBox(pscm->ps, x, y, width, height, text);
 boxPscm = NULL;
 }
 
@@ -757,7 +771,6 @@ void pscmSetFontMethod(struct pscmGfx *pscm, unsigned int method, char *fontName
 {
 pscm->fontMethod = method;
 pscm->fontName = cloneString(fontName);
-psSetFont(pscm->ps, fontName);
 }
 
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName)
@@ -772,6 +785,7 @@ vg->line = (vg_line)pscmLine;
 vg->text = (vg_text)pscmText;
 vg->textRight = (vg_textRight)pscmTextRight;
 vg->textCentered = (vg_textCentered)pscmTextCentered;
+vg->textInBox = (vg_textInBox)pscmTextInBox;
 vg->findColorIx = (vg_findColorIx)pscmFindColorIx;
 vg->colorIxToRgb = (vg_colorIxToRgb)pscmColorIxToRgb;
 vg->setClip = (vg_setClip)pscmSetClip;

@@ -32,6 +32,8 @@ my $stepper = new HgStepManager(
     ]
 				);
 
+my $cpgLh = "/hive/data/staging/data/cpgIslandExt/cpglh";
+
 # Option defaults:
 # my $bigClusterHub = 'swarm';
 my $bigClusterHub = 'ku';
@@ -121,98 +123,36 @@ sub checkOptions {
 #########################################################################
 # * step: hard mask [workhorse]
 sub doHardMask {
-  # Set up and perform the cluster run to run the hardMask sequence.
-  my $runDir = "$buildDir";
-  my $outRoot = 'hardMaskedFa';
-
-  # First, make sure we're starting clean.
-  if ( ! $opt_debug && ( -d "$runDir/$outRoot" || -s "$runDir/hardMask.done" ) ) {
-    die "doHardMask: looks like this was run successfully already " .
-      "(directory hardMaskedFa exists).  Either run with -continue cpg or some later " .
-	"stage, or move aside/remove $runDir/$outRoot and run again.\n";
-  }
-
-  my $whatItDoes = "Constructs $outRoot/*.2bit files for processing with cphlh.";
-  my $bossScript = newBash HgRemoteScript("$runDir/doHardMask.bash", $workhorse,
-				      $runDir, $whatItDoes);
-
-  $bossScript->add(<<_EOF_
-rm -fr parts $outRoot
-mkdir $outRoot
-export twoBit=\"$maskedSeq\"
-export maxSize=`sort -k2nr $chromSizes | head -1 | awk '{print \$2}'`
-/cluster/bin/scripts/partitionSequence.pl -lstDir parts \$maxSize 0 \$twoBit $chromSizes 30 > /dev/null
-for L in parts/part*.lst
-do
-  B=`basename \$L | sed -e 's/.lst//;'`
-  sed -e 's/.*.2bit://; s/:0-.*//;' \${L} > \${B}.list
-  twoBitToFa -seqList=\$B.list \${twoBit} stdout | maskOutFa stdin hard stdout \\
-     | faToTwoBit stdin $outRoot/\$B.t.2bit
-  rm -f \${B}.list
-  twoBitToFa $outRoot/\$B.t.2bit stdout | faCount stdin | egrep -v \"^total|^#seq\" | awk '\$2-\$7 > 200 { printf \"%s\\n\", \$1}' > \$B.list
-  if [ -s \$B.list ]; then
-    twoBitToFa -seqList=\$B.list $outRoot/\$B.t.2bit stdout | faToTwoBit stdin $outRoot/\$B.2bit
-  fi
-  rm -f $outRoot/\$B.t.2bit \$B.list
-done
-date > hardMask.done
-_EOF_
-  );
-  $bossScript->execute();
+  printf STDERR "# doHardMask: obsolete step, no longer needed\n";
+  return 0;
 } # doHardMask
 
 #########################################################################
-# * step: cpg [bigClusterHub]
+# * step: cpg [workhorse]
 sub doCpg {
   # Set up and perform the cluster run to run the CpG function on the
   #     hard masked sequence.
   my $paraHub = $bigClusterHub;
   my $runDir = $buildDir;
-  # First, make sure previous step is completed
-  if (! $opt_debug && ! -s "$runDir/hardMask.done") {
-    die "doCpg: previous step hardMask has not completed\n";
-  }
   # Second, make sure we're starting clean.
-  if (-e "$runDir/run.time") {
+  if (-e "$runDir/cpglh.result") {
     die "doCpg: looks like this was run successfully already " .
-      "(run.time exists).  Either run with -continue makeBed or some later " .
+      "(cpglh.result exists).  Either run with -continue makeBed or some later " .
 	"stage, or move aside/remove $runDir/ and run again.\n";
-  } elsif ((-e "$runDir/gsub" || -e "$runDir/jobList") && ! $opt_debug) {
-    die "doCpg: looks like we are not starting with a clean " .
-      "slate.\n\tclean\n  $runDir/\n\tand run again.\n";
   }
   &HgAutomate::mustMkdir($runDir);
 
-  my $templateCmd = ("./runCpg.csh " . '$(root1) '
-                . '{check out exists results/$(root1).cpg}');
-  &HgAutomate::makeGsub($runDir, $templateCmd);
- `touch "$runDir/para_hub_$paraHub"`;
-
-  my $fh = &HgAutomate::mustOpen(">$runDir/runCpg.csh");
-  print $fh <<_EOF_
-#!/bin/csh -ef
-set partName = \$1
-set part2bit = hardMaskedFa/\$partName.2bit
-set result = \$2
-twoBitToFa \$part2bit stdout | /hive/data/staging/data/cpgIslandExt/cpglh /dev/stdin > \$result
-_EOF_
-  ;
-  close($fh);
-
   my $whatItDoes = "Run /hive/data/staging/data/cpgIslandExt/cpglh on masked sequence.";
-  my $bossScript = new HgRemoteScript("$runDir/doCpg.csh", $paraHub,
+  my $bossScript = newBash HgRemoteScript("$runDir/doCpg.bash", $workhorse,
 				      $runDir, $whatItDoes);
-  my $paraRun = &HgAutomate::paraRun();
-  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
-mkdir -p results
-chmod a+x runCpg.csh
-rm -f file.list
-find ./hardMaskedFa -type f > file.list
-$gensub2 file.list single gsub jobList
-$paraRun
+export twoBit=\"$maskedSeq\"
+twoBitToFa \$twoBit stdout | maskOutFa stdin hard stdout \\
+   | /hive/data/staging/data/cpgIslandExt/cpglh /dev/stdin 2> cpglh.stderr \\
+     > cpglh.result
 _EOF_
   );
+
   $bossScript->execute();
 } # doCpg
 
@@ -228,14 +168,16 @@ sub doMakeBed {
       "(cpgIsland.bed exists).  Either run with -continue load or cleanup " .
 	"or move aside/remove $runDir/cpgIsland.bed and run again.\n";
   }
+  if (! -e "$runDir/cpglh.result") {
+    die "doMakeBed: previous step doCpg has not completed, cpglh.result not found\n";
+  }
 
   my $whatItDoes = "Makes bed from cpglh output.";
-  my $bossScript = new HgRemoteScript("$runDir/doMakeBed.csh", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/doMakeBed.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-catDir -r results \\
-     | awk \'\{\$2 = \$2 - 1; width = \$3 - \$2;  printf\(\"\%s\\t\%d\\t\%s\\t\%s \%s\\t\%s\\t\%s\\t\%0.0f\\t\%0.1f\\t\%s\\t\%s\\n\", \$1, \$2, \$3, \$5, \$6, width, \$6, width\*\$7\*0.01, 100.0\*2\*\$6\/width, \$7, \$9\);}\' \\
+awk \'\{\$2 = \$2 - 1; width = \$3 - \$2;  printf\(\"\%s\\t\%d\\t\%s\\t\%s \%s\\t\%s\\t\%s\\t\%0.0f\\t\%0.1f\\t\%s\\t\%s\\n\", \$1, \$2, \$3, \$5, \$6, width, \$6, width\*\$7\*0.01, 100.0\*2\*\$6\/width, \$7, \$9\);}\' cpglh.result \\
      | sort -k1,1 -k2,2n > cpgIsland.bed
 bedToBigBed -tab -type=bed4+6 -as=\$HOME/kent/src/hg/lib/cpgIslandExt.as \\
   cpgIsland.bed $chromSizes $db.$tableName.bb
@@ -253,6 +195,10 @@ sub doLoadCpg {
   my $whatItDoes = "Loads cpgIsland.bed.";
   my $bossScript = new HgRemoteScript("$runDir/doLoadCpg.csh", $dbHost,
 				      $runDir, $whatItDoes);
+
+  if (! -e "$runDir/cpgIsland.bed") {
+    die "doLoadCpg previous step doMakeBed has not completed, cpgIsland.bed not found\n";
+  }
 
   $bossScript->add(<<_EOF_
 set C=`cut -f1 cpgIsland.bed | sort -u | awk '{print length(\$0)}' | sort -rn | sed -n -e '1,1 p'`
@@ -275,14 +221,12 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -rf hardMaskedFa/ results/ err/ run.hardMask/err/
-rm -f batch.bak bed.tab cpgIslandExt.sql run.hardMask/batch.bak
+rm -f bed.tab cpgIslandExt.sql
 gzip cpgIsland.bed
 _EOF_
   );
   $bossScript->execute();
 } # doCleanup
-
 
 #########################################################################
 # main

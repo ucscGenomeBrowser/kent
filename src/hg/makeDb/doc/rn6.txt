@@ -4515,4 +4515,25 @@ TMPDIR=/dev/shm
     cat fb.regenCho1.chainRBest.Rn6.txt
     # 1435220608 bases of 2266312740 (63.328%) in intersection
 
-#########################################################################
+##############################################################################
+# LIFTOVER TO rn7 (DONE - 2021-02-04 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rn6/bed/blat.rn7.2021-02-04
+    cd /hive/data/genomes/rn6/bed/blat.rn7.2021-02-04
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -query2Bit=/hive/data/genomes/rn7/rn7.2bit \
+        -querySizes=/hive/data/genomes/rn7/chrom.sizes \
+        -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc \
+         rn6 rn7
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -query2Bit=/hive/data/genomes/rn7/rn7.2bit \
+        -querySizes=/hive/data/genomes/rn7/chrom.sizes \
+        -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc \
+         rn6 rn7) > doLiftOverToRn7.log 2>&1
+    # real    317m44.103s
+
+    # see if the liftOver menus function in the browser from rn6 to rn7
+
+##############################################################################

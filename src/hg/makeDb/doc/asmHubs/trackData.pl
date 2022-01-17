@@ -65,6 +65,25 @@ sub commify($) {
     return scalar reverse $text
 }
 
+# ($itemCount, $percentCover) = bigWigMeasure($trackFile, $genomeSize);
+sub bigWigMeasure($$) {
+  my ($file, $genomeSize) = @_;
+  my $bigWigInfo = `bigWigInfo "$file" | egrep "basesCovered:|mean:" | awk '{print \$NF}' | xargs echo | sed -e 's/,//g;'`;
+  chomp $bigWigInfo;
+  my ($bases, $mean) = split('\s+', $bigWigInfo);
+  my $itemCount = sprintf ("%.2f", $mean);
+  my $percentCover = sprintf("%.2f %%", 100.0 * $bases / $genomeSize);
+  return ($itemCount, $percentCover);
+}
+
+# $percentCover = pcFbFile($trackFb);
+sub pcFbFile($) {
+  my ($trackFb) = @_;
+  my ($itemBases, undef, undef, $noGapSize, undef) = split('\s+', `cat $trackFb`, 5);
+  my $percentCover = sprintf("%.2f %%", 100.0 * $itemBases / $noGapSize);
+  return $percentCover;
+}
+
 # ($itemCount, $percentCover) = oneTrackData($asmId, $track, $trackFile, $totalSize, $trackFb, $runDir);
 # might have a track feature bits file (trackFb), maybe not
 sub oneTrackData($$$$$$) {
@@ -90,28 +109,21 @@ sub oneTrackData($$$$$$) {
     }
   } else {
     if ($file =~ m/.bw$/) {
-      my $bigWigInfo = `bigWigInfo "$file" | egrep "basesCovered:|mean:" | awk '{print \$NF}' | xargs echo | sed -e 's/,//g;'`;
-      chomp $bigWigInfo;
-      my ($bases, $mean) = split('\s+', $bigWigInfo);
-      $percentCover = sprintf("%.2f %%", 100.0 * $bases / $genomeSize);
-      $itemCount = sprintf ("%.2f", $mean);
-# printf STDERR "# bigWigInfo %s %s %s\n", $itemCount, $percentCover, $file;
+      ($itemCount, $percentCover) = bigWigMeasure($file, $genomeSize);
     } else {
       my $bigBedInfo = `bigBedInfo "$file" | egrep "itemCount:|basesCovered:" | awk '{print \$NF}' | xargs echo | sed -e 's/,//g;'`;
       chomp $bigBedInfo;
       my ($items, $bases) = split('\s', $bigBedInfo);
       $itemCount = commify($items);
       $percentCover = sprintf("%.2f %%", 100.0 * $bases / $genomeSize);
-#             56992654 bases of 2616369673 (2.178%) in intersection
       if ( -s "${trackFb}" ) {
-          my ($itemBases, undef, undef, $noGapSize, undef) = split('\s+', `cat $trackFb`, 5);
-          $percentCover = sprintf("%.2f %%", 100.0 * $itemBases / $noGapSize);
+	$percentCover = pcFbFile($trackFb);
       }
 # printf STDERR "# bigBedInfo %s %s %s\n", $itemCount, $percentCover, $file;
     }
   }
   return ($itemCount, $percentCover);
-}
+}	#	sub oneTrackData($$$$$$)
 
 ##############################################################################
 ### start the HTML output
@@ -169,9 +181,7 @@ Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 END
 }
   my $indexUrl = "index";
-  $indexUrl = "testIndex" if ($testOutput);
   my $asmStats = "asmStats";
-  $asmStats = "testAsmStats" if ($testOutput);
   print <<"END"
 <h3>See also: <a href='$indexUrl.html'>hub access</a>,&nbsp;<a href='$asmStats.html'>assembly statistics</a></h3><br>
 
@@ -287,7 +297,6 @@ sub asmCounts($) {
   return ($sequenceCount, $totalSize);
 }
 
-#    my ($gapSize, $maskPerCent, $sizeNoGaps) = maskStats($faSizeTxt);
 sub maskStats($) {
   my ($faSizeFile) = @_;
   my $sizeNoGaps = `grep 'sequences in 1 file' $faSizeFile | awk '{print \$4}'`;
@@ -309,7 +318,12 @@ sub gapStats($$) {
   my ($buildDir, $asmId) = @_;
   my $gapBed = "$buildDir/trackData/allGaps/$asmId.allGaps.bed.gz";
   my $gapCount = 0;
-  if ( -s "$gapBed" ) {
+  if ($asmId !~ m/^GC/) {
+     $gapBed = "/hive/data/genomes/$asmId/$asmId.N.bed";
+     if ( -s "$gapBed" ) {
+       $gapCount = `awk '{print \$3-\$2}' $gapBed | ave stdin | grep '^count' | awk '{print \$2}'`;
+     }
+  } elsif ( -s "$gapBed" ) {
     $gapCount = `zcat $gapBed | awk '{print \$3-\$2}' | ave stdin | grep '^count' | awk '{print \$2}'`;
   }
   chomp $gapCount;
@@ -336,26 +350,56 @@ sub tableContents() {
     splice @trackList, 1, 0, "ncbiGene";
   }
   foreach my $asmId (@orderList) {
+    my $gcPrefix = "GCx";
+    my $asmAcc = "asmAcc";
+    my $asmName = "asmName";
+    my $accessionId = "GCx_098765432.1";
+    my $accessionDir = "";
+    my $configRa = "n/a";
     my $tracksCounted = 0;
-    my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
-    my $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
-    my $accessionDir = substr($asmId, 0 ,3);
-    $accessionDir .= "/" . substr($asmId, 4 ,3);
-    $accessionDir .= "/" . substr($asmId, 7 ,3);
-    $accessionDir .= "/" . substr($asmId, 10 ,3);
     my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
-    if ($gcPrefix eq "GCA") {
-     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
-    }
-    my $trackDb="$buildDir/${asmId}.trackDb.txt";
-    next if (! -s "$trackDb");	# assembly build not complete
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
+    my $chromSizes = "${buildDir}/${asmId}.chrom.sizes";
+    my $twoBit = "${buildDir}/trackData/addMask/${asmId}.masked.2bit";
+    my $faSizeTxt = "${buildDir}/${asmId}.faSize.txt";
+    if ($asmId !~ m/^GC/) {
+       $configRa = "/hive/data/genomes/$asmId/$asmId.config.ra";
+      $accessionId = `grep ^genBankAccessionID "${configRa}" | cut -d' ' -f2`;
+       chomp $accessionId;
+       $asmName = `grep ^ncbiAssemblyName "${configRa}" | cut -d' ' -f2`;
+       chomp $asmName;
+       $accessionDir = substr($accessionId, 0 ,3);
+       $accessionDir .= "/" . substr($accessionId, 4 ,3);
+       $accessionDir .= "/" . substr($accessionId, 7 ,3);
+       $accessionDir .= "/" . substr($accessionId, 10 ,3);
+       ($gcPrefix, $asmAcc) = split('_', $accessionId, 2);
+       $buildDir="/hive/data/outside/ncbi/genomes/$accessionDir/${accessionId}_${asmName}";
+       $asmReport="$buildDir/${accessionId}_${asmName}_assembly_report.txt";
+       $chromSizes = "/hive/data/genomes/$asmId/chrom.sizes";
+       $twoBit = "/hive/data/genomes/$asmId/$asmId.2bit";
+       $faSizeTxt = "/hive/data/genomes/$asmId/faSize.${asmId}.2bit.txt";
+    } else {
+       ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
+       $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
+       $accessionDir = substr($asmId, 0 ,3);
+       $accessionDir .= "/" . substr($asmId, 4 ,3);
+       $accessionDir .= "/" . substr($asmId, 7 ,3);
+       $accessionDir .= "/" . substr($asmId, 10 ,3);
+      $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
+       if ($gcPrefix eq "GCA") {
+     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
+       }
+       $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
+       $chromSizes = "${buildDir}/${asmId}.chrom.sizes";
+       $twoBit = "${buildDir}/trackData/addMask/${asmId}.masked.2bit";
+       $faSizeTxt = "${buildDir}/${asmId}.faSize.txt";
+    }
+#    my $trackDb="$buildDir/${asmId}.trackDb.txt";
+#    next if (! -s "$trackDb");	# assembly build not complete
     if (! -s "$asmReport") {
       printf STDERR "# no assembly report:\n# %s\n", $asmReport;
       next;
     }
-    my $chromSizes = "${buildDir}/${asmId}.chrom.sizes";
-    my $twoBit = "${buildDir}/trackData/addMask/${asmId}.masked.2bit";
     if (! -s "$twoBit") {
       printf STDERR "# no 2bit file:\n# %s\n", $twoBit;
       printf "<tr><td align=right>%d</td>\n", ++$asmCount;
@@ -364,7 +408,6 @@ sub tableContents() {
       printf "</tr>\n";
       next;
     }
-    my $faSizeTxt = "${buildDir}/${asmId}.faSize.txt";
     if ( ! -s "$faSizeTxt" ) {
        printf STDERR "twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt\n";
        print `twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt`;
@@ -373,7 +416,6 @@ sub tableContents() {
     $overallGapSize += $gapSize;
     my ($seqCount, $totalSize) = asmCounts($chromSizes);
     $overallSeqCount += $seqCount;
-#    my $totalSize=`ave -col=2 $chromSizes | grep "^total" | awk '{printf "%d", \$NF}'`;
     $overallNucleotides += $totalSize;
     my $gapCount = gapStats($buildDir, $asmId);
     $overallGapCount += $gapCount;
@@ -407,64 +449,132 @@ sub tableContents() {
       }
     }
     close (FH);
-    my $hubUrl = "https://genome.ucsc.edu/h/$accessionId";
-    if ($testOutput) {
-      $hubUrl = "https://genome-test.gi.ucsc.edu/h/$accessionId";
+    my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
+    my $browserName = $commonName;
+    my $browserUrl = "https://genome.ucsc.edu/h/$accessionId";
+    if ($asmId !~ m/^GC/) {
+       $hubUrl = "https://hgdownload.soe.ucsc.edu/goldenPath/$asmId/bigZips";
+       $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
+       $browserName = "$commonName ($asmId)";
+       if ($testOutput) {
+         $browserUrl = "https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
+         $hubUrl = "https://hgdownload-test.gi.ucsc.edu/goldenPath/$asmId/bigZips";
+       }
+    } elsif ($testOutput) {
+      $browserUrl = "https://genome-test.gi.ucsc.edu/h/$accessionId";
     }
     printf "<tr><td align=right>%d</td>\n", ++$asmCount;
-    printf "<td align=center><a href='%s' target=_blank>%s<br>%s</a></td>\n", $hubUrl, $commonName, $accessionId;
+    printf "<td align=center><a href='%s' target=_blank>%s<br>%s</a></td>\n", $browserUrl, $browserName, $accessionId;
     foreach my $track (@trackList) {
       my $trackFile = "$buildDir/bbi/$asmId.$track";
       my $trackFb = "$buildDir/trackData/$track/fb.$asmId.$track.txt";
       my $runDir = "$buildDir/trackData/$track";
       my ($itemCount, $percentCover);
-      if ( "$track" eq "gc5Base" ) {
-         $trackFile .= ".bw";
-      } else {
-         $trackFile .= ".bb";
-      }
       my $customKey = "";
-      if ( "$track" eq "rmsk") {
-        my $rmskStats = "$buildDir/trackData/repeatMasker/$asmId.rmsk.stats";
-        if (! -s "${rmskStats}") {
-         my $faOut = "$buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.gz";
-          if ( -s "$faOut") {
-            my $items = `zcat "$faOut" | wc -l`;
-            chomp $items;
-            $itemCount = commify($items);
-            my $masked = `grep masked "$buildDir/trackData/repeatMasker/faSize.rmsk.txt" | awk '{print \$4}' | sed -e 's/%//;'`;
-            chomp $masked;
-            $percentCover = sprintf("%.2f %%", $masked);
-            open (RS, ">$rmskStats") or die "can now write to $rmskStats";
-            printf RS "%s\t%s\n", $itemCount, $percentCover;
-            close (RS);
+      if ($asmId !~ m/^GC/) {
+        $itemCount = "n/a";
+        $percentCover = "n/a";
+        if ($track eq "ncbiRefSeq") {
+          my $refSeqDir=`ls -d /hive/data/genomes/$asmId/bed/ncbiRefSeq.20* | tail -1`;
+          chomp $refSeqDir;
+          if ( -d "${refSeqDir}" ) {
+            my $trackFb = "${refSeqDir}/fb.ncbiRefSeq.$asmId.txt";
+            if ( -s "${trackFb}" ) {
+              $itemCount = `hgsql -N -e 'select count(*) from $track;' $asmId 2> /dev/null`;
+              chomp $itemCount;
+              $percentCover = pcFbFile($trackFb);
+            }
+          }
+        } elsif ($track eq "gc5Base") {
+          my $bwFile = "/gbdb/$asmId/bbi/gc5Base.bw";
+        $bwFile = "/gbdb/$asmId/bbi/gc5BaseBw/gc5Base.bw" if (! -s "${bwFile}");
+          ($itemCount, $percentCover) = bigWigMeasure($bwFile, $totalSize);
+        } elsif ($track eq "rmsk") {
+          my $rmskStats = "/hive/data/genomes/$asmId/bed/repeatMasker/$asmId.rmsk.stats";
+          if (! -s "${rmskStats}") {
+            my $faOut = "/hive/data/genomes/$asmId/bed/repeatMasker/$asmId.sorted.fa.out.gz";
+            if ( -s "$faOut") {
+		my $items = `zgrep -c ^ "$faOut"`;
+		chomp $items;
+		$itemCount = commify($items);
+		my $masked = `grep masked "/hive/data/genomes/$asmId/bed/repeatMasker/faSize.rmsk.txt" | awk '{print \$4}' | sed -e 's/%//;'`;
+		chomp $masked;
+		$percentCover = sprintf("%.2f %%", $masked);
+		open (RS, ">$rmskStats") or die "can now write to $rmskStats";
+		printf RS "%s\t%s\n", $itemCount, $percentCover;
+		close (RS);
+	    } else {
+		$itemCount = "n/a";
+		$percentCover = "n/a";
+            }
           } else {
-            $itemCount = "n/a";
-            $percentCover = "n/a";
+            ($itemCount, $percentCover) = split('\s+', `cat $rmskStats`);
+            chomp $percentCover;
+            $customKey = sprintf("%.2f", $percentCover);
+            $percentCover = sprintf("%.2f %%", $percentCover);
           }
-        } else {
-          ($itemCount, $percentCover) = split('\s+', `cat $rmskStats`);
-          chomp $percentCover;
-          $customKey = sprintf("%.2f", $percentCover);
-          $percentCover = sprintf("%.2f %%", $percentCover);
-        }
-      } else {	# not the rmsk track
-        ($itemCount, $percentCover) = oneTrackData($asmId, $track, $trackFile, $totalSize, $trackFb, $runDir);
-        if (0 == $testOutput) {
-          # if track ncbiRefSeq does not exist, try the ncbiGene track
-          if ($trackDb eq "ncbiRefSeq" && $itemCount eq "n/a") {
-           $runDir = "$buildDir/trackData/ncbiGene";
-           $trackFile = "$buildDir/bbi/$asmId.$track.bb";
-          ($itemCount, $percentCover) = oneTrackData($asmId, "ncbiGene", $trackFile, $totalSize, $trackFb, $runDir);
+        }	# elsif ($track eq "rmsk")
+########### need to figure which tables can be measured here
+#        x else x
+#          $itemCount = `hgsql -N -e 'select count(*) from $track;' $asmId 2> /dev/null`;
+#          chomp $itemCount;
+#          if (length($itemCount) < 1) {
+#	    $itemCount = "n/a";
+#	    $percentCover = "n/a";
+#          } else {
+#            $percentCover = `featureBits $asmId $track 2>&1 | cut -d' ' -f5 | tr -d ')('`;
+#            chomp $percentCover;
+#            $customKey = $percentCover;
+#            $customKey =~ s/[ %]+//;
+#          }
+      } else {	# working on an assembly hub
+	if ( "$track" eq "gc5Base" ) {
+          $trackFile .= ".bw";
+	} else {
+          $trackFile .= ".bb";
+	}
+	if ( "$track" eq "rmsk") {
+          my $rmskStats = "$buildDir/trackData/repeatMasker/$asmId.rmsk.stats";
+          if (! -s "${rmskStats}") {
+            my $faOut = "$buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.gz";
+            if ( -s "$faOut") {
+                my $items = `zgrep -c ^ "$faOut"`;
+                chomp $items;
+                $itemCount = commify($items);
+                my $masked = `grep masked "$buildDir/trackData/repeatMasker/faSize.rmsk.txt" | awk '{print \$4}' | sed -e 's/%//;'`;
+                chomp $masked;
+                $percentCover = sprintf("%.2f %%", $masked);
+                open (RS, ">$rmskStats") or die "can now write to $rmskStats";
+                printf RS "%s\t%s\n", $itemCount, $percentCover;
+                close (RS);
+            } else {
+                $itemCount = "n/a";
+                $percentCover = "n/a";
+            }
+          } else {
+            ($itemCount, $percentCover) = split('\s+', `cat $rmskStats`);
+            chomp $percentCover;
+            $customKey = sprintf("%.2f", $percentCover);
+            $percentCover = sprintf("%.2f %%", $percentCover);
           }
-        }
-        if (($percentCover =~ m/%/) || ($percentCover !~ m#n/a#)) {
-          $customKey = $percentCover;
-          $customKey =~ s/[ %]+//;
-        }
+	} else {	# not the rmsk track
+          ($itemCount, $percentCover) = oneTrackData($asmId, $track, $trackFile, $totalSize, $trackFb, $runDir);
+          if (0 == $testOutput) {
+              # if track ncbiRefSeq does not exist, try the ncbiGene track
+            if ($track eq "ncbiRefSeq" && $itemCount eq "n/a") {
+              $runDir = "$buildDir/trackData/ncbiGene";
+              $trackFile = "$buildDir/bbi/$asmId.$track.bb";
+              ($itemCount, $percentCover) = oneTrackData($asmId, "ncbiGene", $trackFile, $totalSize, $trackFb, $runDir);
+            }
+          }
+	}	#       else not the rmsk track
+      }		#       else if ($asmId !~ m/^GC/)
+      if (($percentCover =~ m/%/) || ($percentCover !~ m#n/a#)) {
+        $customKey = $percentCover;
+        $customKey =~ s/[ %]+//;
       }
       if (length($customKey)) {
-      printf "    <td align=right sorttable_customkey='%s'>%s<br>(%s)</td>\n", $customKey, $itemCount, $percentCover;
+        printf "    <td align=right sorttable_customkey='%s'>%s<br>(%s)</td>\n", $customKey, $itemCount, $percentCover;
       } else {
         if ($itemCount eq "n/a") {
       printf "    <td align=right>n/a</td>\n";
@@ -476,7 +586,11 @@ sub tableContents() {
     }	#	foreach my $track (@trackList)
     printf "</tr>\n";
     $asmCounted += 1;
-    printf STDERR "# %03d\t%02d tracks\t%s\n", $asmCounted, $tracksCounted, $asmId;
+    if ($asmId =~ m/^GC/) {
+       printf STDERR "# %03d\t%02d tracks\t%s\n", $asmCounted, $tracksCounted, $asmId;
+    } else {
+       printf STDERR "# %03d\t%02d tracks\t%s_%s (%s)\n", $asmCounted, $tracksCounted, $accessionId, $asmName, $asmId;
+    }
   }
 }
 

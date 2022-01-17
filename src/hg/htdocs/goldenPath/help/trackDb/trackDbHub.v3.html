@@ -1,0 +1,1373 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+    <META name="description" content="UCSC Track Database Definition">
+    <META name="keywords" content="tracDb, tracks, UCSC, bioinformatics">
+    <TITLE>UCSC Track Database Definition</TITLE>
+    <LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+    <LINK REL="STYLESHEET" HREF="trackDbDoc.css">
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/staticDoc.js"></script>
+    <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="trackDbDoc.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            //tdbDoc.library.checkup(); // Run this test during development only
+            // TOC Self assembly EXPERIMENTAL
+            tdbDoc.tocAssemble( 0, ["bed_flavors","parent_supertrack",
+                                    "parent_view","parent_container"] );
+            tdbDoc.documentLoad();
+        });
+    </script>
+</HEAD>
+<BODY>
+<A NAME="TOP"></A>
+
+<!-- Format everthing inside this narrower "pageWidth" window -->
+<div class="pageWidth">
+
+<!--#include virtual="../../../cgi-bin/hgMenubar"-->
+
+<!--Content Tables-->
+    <!--outer table is for border purposes-->
+
+<div class="contentBorder">
+<div class="lightBlueBar">
+    <div class="lightBlueBarTitle">&nbsp;&nbsp;Track Database Definition</div>
+</div>
+
+<!-- Finally to the content -->
+<div class="borderGuard">
+
+<DIV class="trackDbHub_intro">
+<H1>Hub Track Database Definition (<SPAN id="trackDbHub_version">v3</SPAN>)</H1>
+<H2>How to declare Dataset Display Settings in Genome Browser Hubs</H2>
+    <P>This document describes how to set dataset display characteristics
+    using "track database" or "trackDb" settings through key-value pair
+    associations used in a Track Hub's trackDb.txt file.
+
+    <P>The text file format for trackDb settings starts by creating a
+    text block, or "stanza", for each track dataset following
+    "ra" rules to establish a "record" of related settings. The first
+    line establishes the <code>track</code> "key", with additional lines
+    containing further "setting" keys, and one or more words or numbers
+    that follow, which are the "values" for each setting.  All trackDb
+    stanzas are keyed by <code>track</code> and delimited by blank lines.
+    Here is an example:</P>
+
+    <pre>
+        track myFirstTrack
+        type bigBed 3
+        bigDataUrl myFirstTrack.bb
+        shortLabel Example Data
+        longLabel The data in this track is format "bigBed 3".    </pre>
+
+    <P>A basic track stanza should have these five above settings
+    (<code>track type bigDataUrl shortLabel longLabel</code>).
+    The first line's <code>track</code> key value (<code>myFirstTrack</code>) is the
+    identifier for the dataset given to the Browser and it must be
+    unique for each track within your data hub.  After the <code>track</code> key,
+    the most important setting is the <code>type</code> key. This value
+    (<code>bigBed 3</code>) tells the Browser the type of format the
+    data is in, defines how to display it, and determines
+    which options are available for fine control of that display.
+    For some configurable features, like <a href="#filter">filters</a>, an additional
+    period or plus may be needed (<code>bigBed 5 .</code>) or (<code>bigBed 9 +</code>).
+</P>
+
+    <P>While there are over 100 settings (providing a high level of flexibility for track
+    display) defined in this document and supported at UCSC, only the above five
+    are <font class="level-required">required</font>
+    to define a track and other sites that display hubs have more limited settings support.
+    To ease the task of hub developers and sites that
+    display hubs, each setting has been assigned a support level. The most
+    commonly used and broadly supported settings have
+    been designated as <font class="level-base">base</font> settings, to foster
+    hub portability.  The level for each setting is indicated in this document by
+    color, shown below and in each description
+    section as well as in the <A HREF="#toc">Table of Contents</A>.
+    The support levels are:
+    <table style="margin-left: 50px;">
+        <tr><td class="level-required">required</td><td>required settings</td></tr>
+        <tr><td class="level-base">base</td><td>common settings supported
+            at other sites</td></tr>
+        <tr><td class="level-deprecated">deprecated</td><td>settings that
+            are being retired (replacement is listed in details section)</td></tr>
+        <tr><td class="level-new">new</td><td>new settings not yet assigned
+            a level (may be replaced)</td></tr>
+        <tr><td class="level-full">full</td><td>other settings</td></tr>
+    </table>
+    </P>
+    <P>This documentation page has also been assigned a version number
+    so that when  <font class="level-new">new</font> settings are added, or
+    older settings are <font class="level-deprecated">deprecated</font>
+    other browser sites and track hub builders can verify the hub to
+    the relevant version. To learn about new settings you can view our
+    <a href="http://genomewiki.ucsc.edu/index.php/Genome_Browser_Software_Features"
+    target="_blank">software release log</a> or view news at a collaborative
+    <a href="http://groups.google.com/a/soe.ucsc.edu/group/track-hubs"
+    target="_blank"> track hub mailing list</a>.
+    </P>
+    <p>
+    You can use the <code>hubCheck</code> utility to check the compatibility of your hub and its
+    trackDb settings with the UCSC Genome Browser or other genome browsers, such as Ensembl.
+    Our <a href="../hgTrackHubHelp.html#Compatibility">track hub help page</a>
+    provides some examples of how you might use <code>hubCheck</code> to do this and
+    you can read more in this related
+    <a href="http://genome.ucsc.edu/blog/how-portable-is-your-track-hub-use-hubcheck-to-find-out/"
+    target="_blank">blog post.</a></p>
+</DIV>
+
+<P>The remainder of this document is divided into the following sections and should be
+used as a ready reference.</P>
+<IMG class='toggle all' />&nbsp;<I>Expand/close descriptions of settings
+in the sections below.</I>
+
+<OL>
+
+    <LI><A HREF="#commonSettings">Common trackDb settings</A></LI>
+    <LI><A HREF="#settingsByType">Settings by track type</A> &ndash; with examples
+    <UL>
+        <LI><A HREF="#bam">bam/cram</A>: Compressed Sequence Alignment/Map tracks</LI>
+        <LI><A HREF="#bigBed_-_Item_or_Region_Track_Settings">bigBed</A>: Item or region tracks</LI>
+        <LI><A HREF="#bigBarChart">bigBarChart</A>: Bar charts of categorical variables displayed over genomic regions</LI>
+        <LI><A HREF="#bigChain_-_Pairwise_Alignments">bigChain</A>: Genome-wide Pairwise Alignments</LI>
+        <LI><A HREF="#bigGenePred_-_Gene_Annotations">bigGenePred</A>: Gene Annotations</LI>
+        <LI><A HREF="#bigInteract">bigInteract</A>: Pairwise interactions</LI>
+        <LI><A HREF="#bigLolly">bigLolly</A>: Lollipops</LI>
+        <LI><A HREF="#bigNarrowPeak_-_Peaks">bigNarrowPeak</A>: Peaks</LI>
+        <LI><A HREF="#bigMaf_-_Multiple_Alignments">bigMaf</A>: Mulitple Alignments</LI>
+        <LI><A HREF="#bigPsl_-_Pairwise_Alignments">bigPsl</A>: Pairwise Alignments</LI>
+        <LI><A HREF="#bigWig_-_Signal_Graphing_Track_Settings">bigWig</A>: Signal graphing tracks</LI>
+        <LI><A HREF="#hic">hic</A>: Hi-C contact matrices</LI>
+        <LI><A HREF="#halSnake">halSnake</A>: HAL Snake Format</LI>
+        <LI><A HREF="#vcfTabix">vcfTabix</A>: Variant Call Format</LI>
+        <LI><A HREF="#vcfPhasedTrio">vcfPhasedTrio</A>: Variant Call Format Trios</LI>
+    </UL></LI>
+    <LI><A HREF="#groupingTracks">Grouping tracks into sets and hierarchies</A>
+        &ndash; with examples
+    <UL>
+        <LI><A HREF="#superTrack">Supertracks (Folders)</A></LI>
+        <LI><A HREF="#compositeTrack">Composite Tracks</A>
+        <UL>
+            <LI><A HREF="#subGroups">Subgroups</A></LI>
+            <LI><A HREF="#view">Views</A></LI>
+        </UL></LI>
+        <LI><A HREF="#aggregate">Aggregate or Overlay Tracks: multiWig</A></LI>
+    </UL></LI>
+    <LI><A HREF="#toc">Table of Contents</A></LI>
+</OL>
+</div></div>
+<!-- Settings specification -->
+<div id="specification">
+
+<!-- Next section -->
+<div class="contentBorder">
+
+<A name="commonSettings"></A>
+<div class="lightBlueBar">
+    <div class="lightBlueBarTitle">&nbsp;&nbsp;Common trackDb settings</div>
+</div>
+<div class="borderGuard">
+
+<TABLE class="settingsTable" id="Common_Settings">
+<THEAD><TR><TD><DIV ID="commonSettings_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection' />&nbsp;Common Settings</TH></TR>
+    <TR VALIGN=TOP><TD class="track"><A name="track"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">track</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="type"><A name="type"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">type</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="shortLabel"><A name="shortLabel"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">shortLabel</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="longLabel"><A name="longLabel"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">longLabel</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><A name="bigDataUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="html"><A name="html"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">html</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="visibility"><A name="visibility"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">visibility</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="meta"><A name="meta"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">meta</code></div>
+    </TD></TR>
+</TABLE>
+<BR>
+
+<A name="commonLessFrequent"></A>
+<TABLE class="settingsTable" id="Common_Settings_-_less_frequent">
+    <THEAD><TR><TD><DIV ID="lessCommon_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH>
+            <IMG class='toggle oneSection' />&nbsp;Common Optional Settings
+    </TH> </TR>
+    <TR VALIGN=TOP><TD class="color"><A name="color"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">color &lt;red,green,blue&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="priority"><A name="priority"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">priority &lt;float&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="altColor"><A name="altColor"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">altColor &lt;red,green,blue&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="boxedCfg"><A name="boxedCfg"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">boxedCfg &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chromosomes"><A name="chromosomes"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">chromosomes &lt;chr1,chr2,...&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="darkerLabels"><A name="darkerLabels"></A><IMG class='toggle detail'>
+        <div class="format">
+                <code class="level-full">darkerLabels on</code><BR>
+        </div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dataVersion"><A name="dataVersion"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">dataVersion &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="directUrl_for_hubs"><A name="directUrl_for_hubs"></A>
+        <A name="directUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">directUrl &lt;url&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="iframeUrl"><A name="iframeUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">iframeUrl &lt;url&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="iframeOptions"><A name="iframeOptions"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">iframeOptions &lt;string&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="mouseOver"><A name="mouseOver"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">mouseOver &lt;pattern&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="mouseOverField"><A name="mouseOverField"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">mouseOverField &lt;fieldName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="multiRegionsBedUrl"><A name="multiRegionsBedUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code>multiRegionsBedUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="otherDb"><A name="otherDb"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">otherDb &lt;otherDb&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="pennantIcon"><A name="pennantIcon"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">pennantIcon &lt;iconFile&gt;/&lt;text color&gt; [html [tip]]
+        [; &lt;iconFile&gt;/&lt;text color&gt; [html [tip]]]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="tableBrowser"><A name="tableBrowser"></A><IMG class='toggle detail'>
+        <div class="format"><code>tableBrowser &lt;off/on/noGenome&gt; [table1 ...]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="url_for_hubs">
+            <A name="url"></A>
+            <A name="urlLabel"></A><IMG class='toggle detail'>
+        <div class="format">
+            <span class="url"><code class="level-full">url &lt;url&gt;</code></span><BR>
+            <span class="urlLabel"><code class="level-full">urlLabel &lt;label&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="urls"><A name="urls"></A><IMG class='toggle detail'>
+        <div class="format">
+                <code class="level-full">urls &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
+        </div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="skipEmptyFields"><A name="skipEmptyFields"></A><IMG class='toggle detail'>
+        <div class="format">
+                <code class="level-full">skipEmptyFields on</code><BR>
+        </div>
+    </TD></TR>
+
+    <TR VALIGN=TOP><TD class="skipFields"><A name="skipFields"></A><IMG class='toggle detail'>
+        <div class="format">
+                <code class="level-full">skipFields fieldName1,fieldName2 ...</code><BR>
+        </div>
+    </TD></TR>
+
+    <TR VALIGN=TOP><TD class="sepFields"><A name="sepFields"></A><IMG class='toggle detail'>
+        <div class="format">
+                <code class="level-full">sepFields fieldName1,fieldName2 ...</code><BR>
+        </div>
+    </TD></TR>
+
+</TABLE>
+</div></div>
+
+<!-- Next section -->
+<div class="contentBorder">
+
+<A name="settingsByType"></A>
+<div class="lightBlueBar">
+    <div class="lightBlueBarTitle">&nbsp;&nbsp;Settings by track type</div>
+</div>
+<div class="borderGuard">
+
+<P>Many settings are 
+valid only for certain types of tracks.  Many of these tracks 
+are described below along with settings specific to their types.</P>
+
+<A name="bam"></A>
+<TABLE class="settingsTable" id="bam_-_Compressed_Alignment_Track_Settings">
+<THEAD><TR><TD><DIV ID="bam_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bam/cram - Compressed Sequence Alignment track settings</TH></TR>
+    <TR VALIGN=TOP><TD class="bam"><IMG class='toggle detail'>
+        <div class="format"><code>type bam</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="refUrl"><A name="refUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">refUrl &lt;url&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataIndex"><A name="bigDataIndex"></A> <IMG class='toggle detail'>
+        <div class="format"><code class="level-full">bigDataIndex &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR class="related1st" VALIGN=TOP><TD class="bamColorMode">
+        <A name="bamColorMode"></A><IMG class='toggle detail setD'>
+        <div class="format"><I>Related settings:</I><BR>
+            <code class="level-full">bamColorMode &lt;strand/gray/tag/off&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="bamGrayMode">
+            <A name="bamGrayMode"></A>
+            <A name="aliQualRange"></A>
+            <A name="baseQualRange"></A><IMG class='toggle detail setD'>
+        <div class="format">
+            <code class="level-full">bamGrayMode &lt;aliQual/baseQual/unpaired&gt;</code><BR>
+          <span class="aliQualRange"><code class="level-full">aliQualRange &lt;min:max&gt;</code></span><BR>
+          <span class="baseQualRange"><code class="level-full">baseQualRange &lt;min:max&gt;</code><</span></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="bamColorTag">
+        <A name="bamColorTag"></A><IMG class='toggle detail setD'>
+        <div class="format"><code class="level-full">bamColorTag &lt;XX&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="noColorTag">
+        <A name="noColorTag"></A><IMG class='toggle detail setD'>
+        <div class="format"><code class="level-full">noColorTag .</code></div>
+    </TD></TR>
+
+    <TR VALIGN=TOP><TD class="bamSkipPrintQualScore"><A name="bamSkipPrintQualScore"></A>
+        <IMG class='toggle detail'>
+        <div class="format"><code class="level-full">bamSkipPrintQualScore .</code></div>
+    </TD></TR>
+
+    <TR VALIGN=TOP><TD class="indelDoubleInsert">
+            <A name="indelDoubleInsert"></A>
+            <A name="indelQueryInsert"></A>
+            <A name="indelPolyA"></A><IMG class='toggle detail'>
+        <div class="format">
+            <span class="indelDoubleInsert"><code class="level-full">indelDoubleInsert &lt;off/on&gt;</code></span><BR>
+            <span class="indelQueryInsert"><code class="level-full">indelQueryInsert &lt;off/on&gt;</code></span><BR>
+            <span class="indelPolyA"><code class="level-full">indelPolyA &lt;off/on&gt;</code></span></div>
+    </TD></TR>
+
+    <TR VALIGN=TOP><TD class="minAliQual"><A name="minAliQual"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">minAliQual &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR class="related1st" VALIGN=TOP><TD class="pairEndsByName">
+        <A name="pairEndsByName"></A><IMG class='toggle detail setE'>
+        <div class="format"><I>Related settings:</I><BR>
+            <code class="level-full">pairEndsByName .</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="pairSearchRange">
+        <A name="pairSearchRange"></A><IMG class='toggle detail setE'>
+        <div class="format"><code class="level-full">pairSearchRange &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showNames"><A name="showNames"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">showNames &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="doWiggle"><A name="doWiggle"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">doWiggle on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings
+            found in the "Item or region tracks" section are also
+            available for displaying bam tags.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowCoverage</A>,
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="bam_example"><IMG class='toggle detail'>
+        <div class="format"><B>Example of a bam track</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<a name="bigBarChart"></a>
+<style>
+.dot {
+    display: inline-block; 
+    height: 10px; 
+    width: 10px; 
+    margin-right: 2px;
+    border-radius: 50%;
+}
+</style>
+<table class="settingsTable" id="bigBarChart">
+<thead><tr><td><div ID="bigBarChart_intro" class="intro"></div></td></tr></thead>
+<tr valign=top><th><img class='toggle oneSection'>
+    &nbsp;bigBarChart - Bar chart display of categorical variables over genomic regions
+</th></tr>
+<tr valign=top><td class="bigBarChart"><img class='toggle detail'>
+    <div class="format"> <code>type bigBarChart</code></div>
+</td></tr>
+<tr valign=top><td class="barChartBars"><a name="barChartBars"></a><img class='toggle detail'>
+    <div class="format"> <code class="level-full">barChartBars &lt;label1 label2...&gt;</code></div>
+</td></tr>
+<tr valign=top><td class="bigDataUrl"><img class='toggle detail'>
+    <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartColors"><a name="barChartColors"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">barChartColors &lt;color1 color2...&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartLabel"><a name="barChartLabel"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">barChartLabel &lt;label&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartMaxSize"><a name="barChartMaxSize"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-full">barChartMaxSize &lt;small/medium/large&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartSizeWindows"><a name="barChartSizeWindows"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-full">
+        barChartSizeWindows &lt;largeMax&gt; &lt;smallMin&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartMetric"><a name="barChartMetric"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">barChartMetric &lt;metric&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartUnit"><a name="barChartUnit"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">barChartUnit &lt;unit&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartCategoryUrl"><a name="barChartCategoryUrl"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-full">barChartCategoryUrl &lt;url/relativePath&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartSampleUrl"><a name="barChartSampleUrl"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-full">barChartSampleUrl &lt;url/relativePath&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="maxLimit"><A name="maxLimit"></A><img class='toggle detail'>
+    <div class="format"><code class="level-full">maxLimit &lt;maximum-bar-value&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td>
+        <p>Additional settings defined in other sections are also
+        available for displaying bigBarChart tracks.</p>
+        <a onclick="return jumpTo(this);" HREF="#">labelFields</a>,
+        <a onclick="return jumpTo(this);" HREF="#">defaultLabelFields</a>
+        <a onclick="return jumpTo(this);" HREF="#">url</a>
+        <a onclick="return jumpTo(this);" HREF="#">urlLabel</a>
+        <a onclick="return jumpTo(this);" HREF="#">urls</a>
+</td></tr>
+<tr class="examples" valign=top><td class="bigBarChart_example"><img class='toggle detail'>
+    <div class="format"><b>Example of a bigBarChart track</b></div>
+</td></tr>
+</table>
+<br><br>
+
+<A name="bigBed"></A>
+<TABLE class="settingsTable" id="bigBed_-_Item_or_Region_Track_Settings">
+<THEAD><TR><TD><DIV ID="bigBed_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigBed - Item or region track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigBed"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigBed &lt;3-12&gt; [+/.]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="itemRgb"><A name="itemRgb"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">itemRgb on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="colorByStrand"><A name="colorByStrand"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">colorByStrand &lt;red,green,blue&gt;
+                                            &lt;red,green,blue&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="denseCoverage"><A name="denseCoverage"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">denseCoverage &lt;maxVal&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="labelOnFeature"><A name="labelOnFeature"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">labelOnFeature &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <tr valign=top><td class="extraDetailsTable"><a name="extraDetailsTable"></a><img class='toggle detail'>
+        <div class="format"><code class="level-new">extraDetailsTable &lt;url/relativePath&gt;</code>
+        </div>
+    </td></tr>
+    <tr valign=top><td class="extraTableFields"><a name="extraTableFields"></a><img class='toggle detail'>
+        <div class="format"><code class="level-new">extraTableFields &lt;fieldName1|table title,fieldName2|table title,...&gt;</code>
+        </div>
+    </td></tr>
+    <TR VALIGN=TOP><TD class="exonArrows"><A name="exonArrows"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">exonArrows &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="exonNumbers"><A name="exonNumbers"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">exonNumbers &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="scoreFilter">
+            <A name="scoreFilter"></A>
+            <A name="scoreFilterLimits"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-full">scoreFilter &lt;low&gt;[:&lt;high&gt;]</code><BR>
+            <span class="scoreFilterLimits"><code class="level-full">scoreFilterLimits &lt;low&gt;[:&lt;high&gt;]</code></span><BR>
+            </div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxItems"><A name="maxItems"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">maxItems &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxWindowCoverage">
+        <A name="maxWindowCoverage"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">maxWindowCoverage &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxWindowToDraw">
+        <A name="maxWindowToDraw"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">maxWindowToDraw &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="minGrayLevel"><A name="minGrayLevel"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">minGrayLevel  &lt;1-9&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="noScoreFilter"><A name="noScoreFilter"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">noScoreFilter  on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="spectrum">
+            <A name="spectrum"></A>
+            <A name="scoreMax"></A>
+            <A name="scoreMin"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-base">spectrum on</code><BR>
+            <span class="scoreMax"><code class="level-full">scoreMax &lt;integer&gt;</code></span><BR>
+            <span class="scoreMin"><code class="level-full">scoreMin &lt;integer&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="thickDrawItem"><A name="thickDrawItem"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">thickDrawItem &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="searchIndex"><A name="searchIndex"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">searchIndex &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="searchTrix"><A name="searchTrix"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">searchTrix &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="labelFields"><A name="labelFields"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">labelFields &lt;fieldName[,fieldName]&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="defaultLabelFields"><A name="defaultLabelFields"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">defaultLabelFields &lt;fieldName[,fieldName]&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="labelSeparator"><A name="labelSeparator"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">labelSeparator &lt;text&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filter"><A name="filter"></A>
+            <A name="filter.fieldName"></A>
+            <A name="filterLimits.fieldName"></A>
+            <A name="filterByRange.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-full">filter.&lt;fieldName&gt; &lt;default integer&gt;</code><BR>
+            <span class="filterByRange"><code class="level-full">filterByRange.&lt;fieldName&gt; &lt;off/on&gt;</code></span><BR>
+            <span class="filterLimits"><code class="level-full">filterLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filterText"><A name="filterText"></A>
+            <A name="filterText.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-full">filterText.&lt;fieldName&gt; &lt;default search string&gt;</code><BR>
+            <span class="filterType"><code class="level-full">filterType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filterValues"><A name="filterValues"></A>
+            <A name="filterValues.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-full">filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+            <span class="filterValuesDefault"><code class="level-full">filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code></span><BR>
+            <span class="filterType"><code class="level-full">filterType.&lt;fieldName&gt; &lt;single/singleList/multiple/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filterLabel"><A name="filterLabel"></A>
+            <A name="filterLabel.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-full">filterLabel.&lt;fieldName&gt; &lt;label&gt;</code></div>
+    </TD></TR>
+</TABLE>
+
+<TABLE class="settingsTable" id="Item_or_Region_Track_Settings_-_less_frequent">
+    <TR VALIGN=TOP><TH><A name="item_lessFrequent"></A>
+            <IMG class='toggle oneSection' />&nbsp;Less frequently used item track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bedNameLabel"><A name="bedNameLabel"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">bedNameLabel &lt;label&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="exonArrowsDense">
+        <A name="exonArrowsDense"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">exonArrowsDense &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="itemImagePath">
+            <A name="itemImagePath"></A>
+            <A name="itemBigImagePath"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">itemImagePath &lt;path&gt; &lt;suffix&gt;</code><BR>
+            <span class="itemBigImagePath"><code class="level-full">itemBigImagePath &lt;path&gt; &lt;suffix&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="mergeSpannedItems"><A name="mergeSpannedItems"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">mergeSpannedItems &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="linkIdInName"><A name="linkIdInName"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">linkIdInName on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="nextExonText">
+            <A name="nextExonText"></A>
+            <A name="prevExonText"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-full">nextExonText &lt;str&gt;</code><BR>
+            <span class="prevExonText"><code class="level-full">prevExonText &lt;str&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="scoreLabel"><A name="scoreLabel"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">scoreLabel &lt;label&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showTopScorers">
+        <A name="showTopScorers"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">showTopScorers #</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="bigBed_example">
+        <A name="bigBed_Examples"></A><IMG class='toggle detail'>
+        <div class="format"><B>Examples of item base types</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="bigChain"></A>
+<TABLE class="settingsTable" id="bigChain_-_Pairwise_Alignments">
+<THEAD><TR><TD><DIV ID="bigChain_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigChain - Genome-wide Pairwise Alignments
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigChain"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigChain</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="linkDataUrl"><A name="linkDataUrl"</A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">linkDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+
+<A name="bigGenePred"></A>
+<TABLE class="settingsTable" id="bigGenePred_-_Gene_Annotations">
+<THEAD><TR><TD><DIV ID="bigGenePred_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigGenePred  - Gene Annotations
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigGenePred"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigGenePred</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="baseColorDefault"><A name="baseColorDefault"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">
+        baseColorDefault &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="labelFields"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">labelFields &lt;fieldName[,fieldName]&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="defaultLabelFields"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">defaultLabelFields &lt;fieldName[,fieldName]&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="labelSeparator"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">labelSeparator &lt;text&gt;</code></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<a name="bigInteract"></a>
+<table class="settingsTable" id="bigInteract">
+<thead><tr><td><div ID="bigInteract_intro" class="intro"></div></td></tr></thead>
+<tr valign=top><th><img class='toggle oneSection'>
+    &nbsp;bigInteract - Pairwise interaction display
+</th></tr>
+<tr valign=top><td class="bigInteract"><img class='toggle detail'>
+    <div class="format"> <code>type bigInteract</code></div>
+</td></tr>
+<tr valign=top><td class="bigDataUrl"><img class='toggle detail'>
+    <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="interactDirectional"><a name="interactDirectional"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">interactDirectional &lt;true/offsetSource/offsetTarget/clusterSource/clusterTarget&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="interactUp"><a name="interactUp"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">interactUp &lt;true/false&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="interactMultiRegion"><a name="interactMultiRegion"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">interactMultiRegion &lt;true/padding&gt;</code>
+    </div>
+</td></tr>
+
+<tr valign=top><td>
+        <p>Additional settings defined in other sections are also
+        available for displaying bigInteract tracks.</p>
+        <a onclick="return jumpTo(this);" HREF="#">maxHeightPixels</a>
+        <a onclick="return jumpTo(this);" HREF="#">scoreMin</a>
+        <a onclick="return jumpTo(this);" HREF="#">spectrum</a>,
+</td></tr>
+<tr class="examples" valign=top><td class="interact_example"><img class='toggle detail'>
+    <div class="format"><b>Example of a bigInteract track</b></div>
+</td></tr>
+</table>
+<br><br>
+
+<A name="bigMaf"></A>
+<TABLE class="settingsTable" id="bigMaf_-_Multiple_Alignments">
+<THEAD><TR><TD><DIV ID="bigMaf_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigMaf - Multiple alignments
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigMaf"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigMaf</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="speciesOrder"><A name="speciesOrder"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">speciesOrder &lt;species1&gt; [species2 &hellip;]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="speciesLabels"><A name="speciesLabels"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">speciesLabels &lt;species1=newLabel1&gt; [species2=newLabel2 &hellip;]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="frames"><A name="frames"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">frames &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="summary"><A name="summary"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">summary &lt;tableName/url&gt;</code></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="bigNarrowPeak"></A>
+<TABLE class="settingsTable" id="bigNarrowPeak_-_Peaks">
+<THEAD><TR><TD><DIV ID="bigNarrowPeak_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigNarrowPeak  - Peaks
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigNarrowPeak"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigNarrowPeak</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="Filter">
+            <A name="Filter"></A>
+            <A name="pValueFilter"></A>
+            <A name="qValueFilter"></A>
+            <A name="signalFilter"></A><IMG class='toggle detail'>
+        <div class="format">
+            <span class="pValueFilter"><code class="level-full">pValueFilter</code></span><BR>
+            <span class="qValueFilter"><code class="level-full">qValueFilter</code></span><BR>
+            <span class="signalFilter"><code class="level-full">signalFilter</code></span></div>
+            </div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="bigPsl"></A>
+<TABLE class="settingsTable" id="bigPsl_-_Pairwise_Alignments">
+<THEAD><TR><TD><DIV ID="bigPsl_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigPsl - Pairwise Alignments
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigPsl"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigPsl</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="baseColorUseCds"><A name="baseColorUseCds"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="baseColorUseSequence"><A name="baseColorUseSequence"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; / 
+                                hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss &gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="baseColorDefault"><A name="baseColorDefault"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">baseColorDefault &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showDiffBasesAllScales"><A name="showDiffBasesAllScales"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">showDiffBasesAllScales on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="labelFields"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">labelFields &lt;fieldName[,fieldName]&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="defaultLabelFields"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">defaultLabelFields &lt;fieldName[,fieldName]&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="labelSeparator"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">labelSeparator &lt;text&gt;</code></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="bigWig">
+<TABLE class="settingsTable" id="bigWig_-_Signal_Graphing_Track_Settings">
+<THEAD><TR><TD><DIV ID="bigWig_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigWig - Signal graphing track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigWig"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigWig &lt;#&gt; &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="autoScale"><A name="autoScale"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">autoScale &lt;off/on/group&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxHeightPixels">
+        <A name="maxHeightPixels"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">maxHeightPixels &lt;max:default:min&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="viewLimits">
+            <A name="viewLimits"></A>
+            <A name="viewLimitsMax"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-base">viewLimits &lt;lower:upper&gt;</code><BR>
+            <span class="viewLimitsMax"><code class="level-full">viewLimitsMax &lt;lower:upper&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="alwaysZero"><A name="alwaysZero"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">alwaysZero  &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="graphTypeDefault">
+        <A name="graphTypeDefault"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">graphTypeDefault points</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxWindowToQuery">
+        <A name="maxWindowToQuery"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">maxWindowToQuery &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="negateValues">
+        <A name="negateValues"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">negateValues &lt;on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="smoothingWindow">
+        <A name="smoothingWindow"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">smoothingWindow &lt;off/1-16&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="transformFunc">
+        <A name="transformFunc"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">transformFunc &lt;NONE/LOG&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="windowingFunction">
+        <A name="windowingFunction"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">windowingFunction
+                                    &lt;mean/mean+whiskers/maximum/minimum&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="yLineMark">
+            <A name="yLineMark"></A>
+            <A name="yLineOnOff"></A>
+            <A name="gridDefault"></A><IMG class='toggle detail'>
+        <div class="format">
+            <span class="yLineMark"><code class="level-full">yLineMark &lt;#&gt;</code></span><BR>
+            <span class="yLineOnOff"><code class="level-full">yLineOnOff &lt;off/on&gt;</code></span><BR>
+            <span class="gridDefault"><code class="level-full">gridDefault   on</code></span></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="bigWig_example"><IMG class='toggle detail'>
+        <div class="format"><B>Examples of signal graphing tracks</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="bigLolly"></A>
+<TABLE class="settingsTable" id="bigLolly - Lollipop charts">
+<THEAD><TR><TD><DIV ID="bigLolly_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigLolly - lollipop graphs
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigLolly"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigLolly</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <tr valign=top><td class="noStems"><a name="noStems"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-full">noStems &lt;on/off&gt;</code>
+        </div>
+    </td></tr>
+    <tr valign=top><td class="lollySizeField"><a name="lollySizeField"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-full">lollySizeField &lt;integer&gt;</code>
+        </div>
+    </td></tr>
+    <tr valign=top><td class="lollyMaxSize"><a name="lollyMaxSize"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-full">lollyMaxSize &lt;integer&gt;</code>
+        </div>
+    </td></tr>
+    <tr valign=top><td class="lollyField"><a name="lollyField"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-full">lollyField &lt;integer&gt;</code>
+        </div>
+    </td></tr>
+    <tr valign=top><td class="yAxisLabel"><a name="yAxisLabel"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-full">yAxisLabel.&lt;integer&gt; &lt;integer&gt; &lt;on/off&gt; &lt;R,G,B&gt; &lt;string&gt; </code></div>
+    </td></tr>
+    <tr valign=top><td class="yAxisNumLabels"><a name="yAxisNumLabels"<a/><img class='toggle detail'>
+        <div class="format"><code class="level-full">yAxisNumLabels &lt;on/off&gt;</code>
+        </div>
+    </td></tr>
+</TABLE>
+<BR><BR>
+
+<A name="hic"></A>
+<TABLE class="settingsTable" id="hic_-_Hi-C contact matrices">
+<THEAD><TR><TD><DIV ID="hic_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;hic - Hi-C contact matrices
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="hic"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type hic</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <tr valign=top><td class="color"><img class='toggle detail'>
+        <div class="format"><code class="level-base">color &lt;red,green,blue&gt;</code></div>
+    </td></tr>
+    <tr valign=top><td class="drawMode"><a name="drawMode"></a><img class='toggle detail'>
+        <div class="format"><code class="level-full">drawMode &lt;triangle|square|arc&gt;</code></div>
+    </td></tr>
+    <tr valign=top><td class="normalization"><a name="normalization"></a><img class='toggle detail'>
+        <div class="format"><code class="level-full">normalization &lt;NONE|VC|VC_SQRT|KR&gt;</code></div>
+    </td></tr>
+    <tr valign=top><td class="resolution"><a name="resolution"></a><img class='toggle detail'>
+        <div class="format"><code class="level-full">resolution &lt;Auto|integer&gt;</code></div>
+    </td></tr>
+    <tr valign=top><td class="saturationScore"><a name="saturationScore"></a><img class='toggle detail'>
+        <div class="format"><code class="level-full">saturationScore &lt;float&gt;</code></div>
+    </td></tr>
+    <tr valign=top><td class="autoScale"><a name="autoScale"></a><img class='toggle detail'>
+        <div class="format"><code class="level-base">autoScale &lt;off/on/group&gt;</code></div>
+    </td></tr>
+    <tr class="examples" valign=top><td class="hic_example"><img class='toggle detail'>
+        <div class="format"><b>Example of a hic track</b></div>
+    </td></tr>
+</TABLE>
+<BR><BR>
+
+<A name="halSnake"></A>
+<TABLE class="settingsTable" id="halSnake_-_Multiple_Alignments">
+<THEAD><TR><TD><DIV ID="halSnake_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;halSnake - Genome-wide Multiple Alignments
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="halSnake"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type halSnake</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showSnpWidth"><A name="showSnpWidth"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">showSnpWidth &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="otherSpecies"><A name="otherSpecies"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">otherSpecies &lt;otherSpecies&gt;</code></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<a name="vcf"></a>
+<A name="vcfTabix"></A>
+<TABLE class="settingsTable" id="vcfTabix_-_Variant_Call_Format_Track_Settings">
+<THEAD><TR><TD><DIV ID="vcfTabix_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'/>
+        &nbsp;vcfTabix - Variant Call Format (indexed by tabix) track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="vcfTabix"><IMG class='toggle detail'>
+        <div class="format"><code>type vcfTabix</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataIndex"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">bigDataIndex &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+
+    <TR class="related1st" VALIGN=TOP><TD class="hapClusterEnabled"><A NAME="hapClusterEnabled"><IMG class='toggle detail setF'>
+        <div class="format"><I>Related settings:</I><BR>
+	  <code class="level-full">hapClusterEnabled &lt;true|false&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="hapClusterMethod"><A NAME="hapClusterMethod"><IMG class='toggle detail setF'>
+        <div class="format"><code class="level-full">hapClusterMethod &lt;centerWeighted|fileOrder|treeFile <em>url</em>&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="hapClusterColorBy"><A NAME="hapClusterColorBy"><IMG class='toggle detail setF'>
+        <div class="format"><code class="level-full">hapClusterColorBy &lt;altOnly|function|refAlt|base&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="geneTrack"><A NAME="geneTrack"><IMG class='toggle detail setF'>
+        <div class="format"><code class="level-full">geneTrack &lt;<em>track</em>&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="hapClusterTreeAngle"><A NAME="hapClusterTreeAngle"><IMG class='toggle detail setF'>
+        <div class="format"><code class="level-full">hapClusterTreeAngle &lt;triangle|rectangle&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="hapClusterHeight"><A NAME="hapClusterHeight"><IMG class='toggle detail setF'>
+        <div class="format"><code class="level-full">hapClusterHeight &lt;N&gt;</code></div>
+    </TD></TR>
+
+    <TR class="related1st" VALIGN=TOP><TD class="applyMinQual"><A NAME="applyMinQual"><IMG class='toggle detail setG'>
+        <div class="format"><I>Related settings:</I><BR>
+	  <code class="level-full">applyMinQual &lt;true|false&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="minQual"><A NAME="minQual"><IMG class='toggle detail setG'>
+        <div class="format"><code class="level-full">minQual &lt;<EM>Q</EM>&gt;</code></div>
+    </TD></TR>
+
+    <TR VALIGN=TOP><TD class="minFreq"><A NAME="minFreq"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">minFreq &lt;<EM>F</EM>&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfDoFilter"><A NAME="vcfDoFilter"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">vcfDoFilter &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfDoQual"><A NAME="vcfDoQual"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">vcfDoQual &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfDoMaf"><A NAME="vcfDoMaf"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">vcfDoMaf &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings found in the "Item or
+            region tracks" section are also available for displaying
+            Variant Call Format tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowCoverage</A>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>
+        </DIV>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="vcfTabix_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a VCF track</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="vcfPhasedTrio"></A>
+<TABLE class="settingsTable" id="vcfPhasedTrio_-_Variant_Call_Format_Track_Settings">
+<THEAD><TR><TD><DIV ID="vcfPhasedTrio_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'/>
+        &nbsp;vcfPhasedTrio - Variant Call Format Trio track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="vcfPhasedTrio"><IMG class='toggle detail'>
+        <div class="format"><code>type vcfPhasedTrio</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfChildSample"><a name="vcfChildSample"</a><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">vcfChildSample &lt;sampleName|altName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataIndex"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">bigDataIndex &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+
+    <TR VALIGN=TOP><TD class="vcfParentSamples"><A NAME="vcfParentSamples"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">vcfParentSamples &lt;sampleName|altName,sampleName|altName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfUseAltSampleNames"><A NAME="vcfUseAltSampleNames"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">vcfUseAltSampleNames &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="geneTrack"><A NAME="geneTrack"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">geneTrack &lt;track&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfDoFilter"><A NAME="vcfDoFilter"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">vcfDoFilter &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfDoQual"><A NAME="vcfDoQual"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">vcfDoQual &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfDoMaf"><A NAME="vcfDoMaf"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">vcfDoMaf &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings found in the "Item or
+            region tracks" section are also available for displaying
+            Variant Call Format tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowCoverage</A>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>
+        </DIV>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="vcfPhasedTrio_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a VCF Phased Trio track</B></div>
+    </TD></TR>
+</TABLE>
+
+</div></div>
+
+<!-- Next section -->
+<div class="contentBorder">
+
+<A name="groupingTracks"></A>
+<div class="lightBlueBar">
+    <div class="lightBlueBarTitle">&nbsp;&nbsp;Grouping tracks
+into sets and hierarchies</div>
+</div>
+<div class="borderGuard">
+
+Depending on how closely related they are, tracks can be organized into one of three 
+hierarchical containers:
+<ul>
+        <li>"<A href="#multiWig">multiWig</A>" container: when the tracks are
+        all in signal (wiggle or bigWig) format and it makes sense to overlay
+        them.<br>
+
+        Example: a set of bigWig tracks with H3K27ac signal, all on the same
+        scale</li>
+
+        <li>"<A href="#compositeTrack">composite</A>" container: when the
+        tracks are expected to be configured together or have an internal
+        subgrouping, like cell type or cell treatment.<br>
+
+        Example: a set of ChIP-bigBeds in three different cell types</li>
+
+        <li>"<A href="#superTrack">superTrack</A>" container: when the tracks
+        share no specific configuration and you mostly want to show them
+        together.<br>
+        Example: a set of composite tracks or a mix of bigBed,
+        bigWig and bam</li>
+</ul>
+
+<A name="group"></A>
+<A name="superTrack"></A>
+<TABLE class="settingsTable" id="superTrack_-_Folder_Track_Settings">
+<THEAD><TR><TD><DIV ID="superTrack_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Supertrack (Folders) settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="superTrack"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">superTrack on show</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="parent_supertrack">
+            <A name="parent_supertrack"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">parent &lt;superTrack&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="superTrack_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a Supertrack</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="compositeTrack"></A>
+<TABLE class="settingsTable" id="Composite_Track_Settings">
+<THEAD><TR><TD><DIV ID="compositeTrack_hub_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>&nbsp;Composite track settings</TH></TR>
+    <TR VALIGN=TOP><TD class="parent"><A name="parent"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">parent &lt;composite&gt; [off/on]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="compositeTrack"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">compositeTrack on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="allButtonPair"><A name="allButtonPair"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">allButtonPair on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="centerLabelsDense">
+        <A name="centerLabelsDense"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">centerLabelsDense &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dragAndDrop"><A name="dragAndDrop"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">dragAndDrop subTracks</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracks"><A name="hideEmptySubtracks"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code class="level-full">hideEmptySubtracks &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracksMultiBedUrl"><A name="hideEmptySubtracksMultiBedUrl"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code class="level-full">hideEmptySubtracksMultiBedUrl file.bb</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracksSourcesUrl"><A name="hideEmptySubtracksSourcesUrl"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code class="level-full">hideEmptySubtracksSourcesUrl file.tab</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracksLabel"><A name="hideEmptySubtracksLabel"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code class="level-full">hideEmptySubtracksLabel &lt;label&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="compositeTrack_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a Composite track</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="subGroups"></A>
+<TABLE class="settingsTable" id="Composite_-_Subgroups_Settings">
+<THEAD><TR><TD><DIV ID="subGroups_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Composite track subgroup settings</TH></TR>
+    <TR VALIGN=TOP><TD class="subGroupN">
+            <A name="subGroupN"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-base">subGroup1 &lt;gTag1&gt; &lt;gTitle1&gt; &lt;mTag1a=mTitle1a&gt;
+                                                        [mTag1b=mTitle1b&hellip;]</code><BR>
+            <code class="level-base">subGroup2 &lt;gTag2&gt; &lt;gTitle2&gt; &lt;mTag2a=mTitle2a&gt;
+                                                        [mTag2b=mTitle2b&hellip;]</code><BR>
+            <code class="level-base">subGroup3</code>
+            <code class="level-base">subGroup4</code>
+            <code class="level-base">subGroup5</code>
+            <code class="level-base">subGroup6</code>
+            <code class="level-base">subGroup7</code>
+            <code class="level-base">subGroup8</code>
+            <code class="level-base">subGroup9</code>
+            </div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="subGroups"><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-base">subGroups &lt;gTag1=mTag1?&gt; [gTag2= mTag2?]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dimensions"><A name="dimensions"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">dimensions &lt;dimX=gTag#&gt;
+                                                    [dimY=gTag#] [dimA=gTag# ...]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filterComposite">
+        <A name="filterComposite"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">filterComposite &lt;dim[A/B/C][=one]&gt [dimB dimC ...]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dimensionAchecked">
+         <A name="dimensionAchecked"></A><IMG class='toggle detail'>
+         <div class="format">
+                <code class="level-full">dimensionAchecked &lt;mTag1a&gt; [mTag1b &hellip;]</code><BR>
+                <code class="level-full">dimensionBchecked</code>
+                <code class="level-full">dimensionCchecked</code>
+                </div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="sortOrder"><A name="sortOrder"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">sortOrder &lt;gTag#=+/-&gt; [gTag#=- &hellip;]</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="subGroups_hub_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Examples of Composite tracks with Subgroups</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="view"></A>
+<TABLE class="settingsTable" id="Composite_-_Views_Settings">
+<THEAD><TR><TD><DIV ID="view_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Composite track View settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="view"><IMG class='toggle detail'>
+        <div class="format">
+            <code class='level-base'>subGroup1 view &lt;Views&gt; &lt;vTag1a=vTitle1a&gt;
+                                                [vTag1b=vTitle1b&hellip;]</code><BR>
+            <code class='level-required'>track &lt;viewName&gt;</code><BR>
+            <span class="view"><code class="level-full">view &lt;viewTag&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="parent_view"><A name="parent_view"></A><IMG class='toggle detail'>
+        <div class="format"> <code class="level-base">subGroups view=&lt;vTag1&gt;&hellip;</code><BR>
+            <code>parent &lt;viewName&gt; [off/on]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="viewUi"><A name="viewUi"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">viewUi on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="configurable"><A name="configurable"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">configurable &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="view_example"><IMG class='toggle detail'>
+        <div class="format"><B>Example of a Composite track with Views</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="container"><A name="aggregate"><A name="multiWig"></A>
+<TABLE class="settingsTable" id="Aggregate_or_Overlay_Track_Settings">
+<THEAD><TR><TD><DIV ID="container_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Aggregate or Overlay track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="container"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">container multiWig</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="parent_container">
+        <A name="parent_container"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">parent &lt;containerTrack&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="aggregate"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">aggregate &lt;transparentOverlay/stacked/solidOverlay/none&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showSubtrackColorOnUi">
+        <A name="showSubtrackColorOnUi"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">showSubtrackColorOnUi on</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="container_hub_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of an Aggregate track</B></div>
+    </TD></TR>
+</TABLE>
+</div></div>
+
+<!-- Deprecated settings -->
+
+<div class="contentBorder">
+<div class="borderGuard">
+<A name="Deprecated"></A>
+<H3>Miscellaneous Deprecated Settings</H3>
+<TABLE class="settingsTable" id="Miscellaneous_Deprecated_Settings">
+    <TR VALIGN=TOP><TH WIDTH=100>Setting</TH><TH WIDTH=100>For Types</TH><TH>Notes</TH></TR>
+    <TR VALIGN=TOP>
+        <TD class="metadata"><A name="metadata"></A><code class="level-deprecated">metadata</code>
+        </TD>
+        <TD>all</TD><TD></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="noInherit"><A name="noInherit"></A><code class="level-deprecated">noInherit</code></TD><TD>all</TD><TD></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="useScore"><A name="useScore"></A>
+            <code class="level-deprecated">useScore</code></TD>
+        <TD>bed, factorSource, bed5FloatScore, broadPeak</TD>
+        <TD>Replaced with <A onclick="return jumpTo(this);" HREF="#">spectrum</A>.</TD>
+    </TR>
+</TABLE>
+</div>
+</div>
+
+<!-- End of specs -->
+
+</div>
+
+<!-- Next section -->
+<div class="contentBorder">
+<div class="borderGuard">
+<TABLE class="settingsTable" id="toc"></TABLE>
+</div></div>
+
+<!-- Plain text -->
+<!-- QA (BL) suggested removing this (leaving code in for now)
+<pre id="plainToc">
+</pre>
+</div>
+-->
+
+
+<!-- - - - - - - - Documentation Library gets filled here with setting DIVs - - - - - - - -->
+<div id="library">
+<!--#include virtual="trackDbLibrary.shtml" -->
+</div>
+
+</BODY></HTML>

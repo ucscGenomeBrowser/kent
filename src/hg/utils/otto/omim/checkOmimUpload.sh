@@ -32,7 +32,7 @@ rm -f omimGene2.date omimAvSnp.date
 touch omimGene2.date omimAvSnp.date
 hgsqlTableDate hg19 omimGene2 omimGene2.date
 hgsqlTableDate hg19 omimAvSnp omimAvSnp.date
-if [ ! omimGene2.date -nt upload.omim2.date -a ! omimAvSnp.date -nt omimAvSnp.date ]
+if [ ! omimGene2.date -nt upload.omim2.date -a ! omimAvSnp.date -nt upload.omimAvSnp.date ]
 then
     echo "No new table."
     exit 0;

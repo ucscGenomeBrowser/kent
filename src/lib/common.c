@@ -64,6 +64,19 @@ newBuf[len] = 0;
 return newBuf;
 }
 
+char *catThreeStrings(char *a, char *b, char *c)
+/* Allocate new string that is a concatenation of three strings. */
+{
+int aLen = strlen(a), bLen = strlen(b), cLen = strlen(c);
+int len = aLen + bLen + cLen; 
+char *newBuf = needLargeMem(len+1);
+memcpy(newBuf, a, aLen);
+memcpy(newBuf+aLen, b, bLen);
+memcpy(newBuf+aLen+bLen, c, cLen);
+newBuf[len] = 0;
+return newBuf;
+}
+
 /* Reverse the order of the bytes. */
 void reverseBytes(char *bytes, long length)
 {
@@ -132,6 +145,21 @@ while (--halfLen >= 0)
     *a++ = *--end;
     *end = c;
     }
+}
+
+static int stringCmp(const void *va, const void *vb)
+/* Compare function to sort array of strings. */
+{
+char **a = (char **)va;
+char **b = (char **)vb;
+return strcmp(*a, *b);
+}
+
+void sortStrings(char **array, int count)
+/* Sort array using strcmp */
+{
+if (count > 1)
+    qsort(array, count, sizeof(array[0]), stringCmp); 
 }
 
 /* Swap buffers a and b. */
@@ -450,6 +478,7 @@ a->val = x;
 return a;
 }
 
+
 static int doubleCmp(const void *va, const void *vb)
 /* Compare function to sort array of doubles. */
 {
@@ -468,7 +497,7 @@ void doubleSort(int count, double *array)
 /* Sort an array of doubles. */
 {
 if (count > 1)
-qsort(array, count, sizeof(array[0]), doubleCmp);
+    qsort(array, count, sizeof(array[0]), doubleCmp);
 }
 
 double doubleMedian(int count, double *array)
@@ -680,6 +709,15 @@ const struct slName *b = *((struct slName **)vb);
 return cmpStringsWithEmbeddedNumbers(a->name, b->name);
 }
 
+int slNameCmpWordsWithEmbeddedNumbers(const void *va, const void *vb)
+/* Compare strings such as gene names that may have embedded numbers,
+ * in a string sensitive way so that bmp4a comes before bmp14a 
+ * and ABc and abC are treated as the same.  A little slow. */
+{
+const struct slName *a = *((struct slName **)va);
+const struct slName *b = *((struct slName **)vb);
+return cmpWordsWithEmbeddedNumbers(a->name, b->name);
+}
 
 
 void slNameSort(struct slName **pList)
@@ -1305,6 +1343,15 @@ void slPairSortCase(struct slPair **pList)
 /* Sort slPair list, ignore case. */
 {
 slSort(pList, slPairCmpCase);
+}
+
+int slPairCmpWordsWithEmbeddedNumbers(const void *va, const void *vb)
+/* Sort slPairList ignoring case and dealing with embedded numbers so 2 comes
+ * before 10, not after. */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return cmpWordsWithEmbeddedNumbers(a->name, b->name);
 }
 
 int slPairCmp(const void *va, const void *vb)
@@ -3591,6 +3638,24 @@ if (label != NULL)
 lastTime = time;
 va_end(args);
 }
+
+void uglyt(char *label, ...)
+/* Print label and how long it's been since last call.  Call with
+ * a NULL label to initialize. */
+{
+static long lastTime = 0;
+long time = clock1000();
+if (label != NULL)
+    {
+    va_list args;
+    va_start(args, label);
+    vfprintf(stdout, label, args);
+    fprintf(stdout, ": %ld ms\n", time - lastTime);
+    lastTime = time;
+    va_end(args);
+    }
+}
+
 
 void makeDirs(char* path)
 /* make a directory, including parent directories */

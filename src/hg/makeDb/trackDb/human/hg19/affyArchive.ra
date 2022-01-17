@@ -1,0 +1,151 @@
+track affyArchive
+superTrack on
+shortLabel Affy Archive
+longLabel Affymetrix Archive
+group expression
+cartVersion 2
+visibility hide
+type psl .
+html ../affyArchive
+pennantIcon New red . "Supertrack created Aug. 27th 2021"
+
+    track affyExonArray
+    parent affyArchive
+    compositeTrack on
+    group expression
+    priority 1.5
+    shortLabel Affy Exon Array
+    longLabel Affymetrix $Organism Exon Array Probes and Probesets
+    subGroup1 view Views v1Probeset=Probeset v2Probe=Probe
+    subGroup2 level Level L1Core=Core L2Extended=Extended L3Full=Full L4Free=Free L5Ambiguous=Ambiguous 
+    sortOrder level=+ view=+ 
+    dimensions dimensionX=level dimensionY=view
+    dragAndDrop subTracks
+    color 0,0,0
+    visibility pack
+    noInherit on
+    type bed 12
+    html affyExonArray
+
+        track affyExonProbeset
+        parent affyExonArray
+        view v1Probeset
+        visibility dense
+
+            track affyExonProbesetCore
+            parent affyExonProbeset
+            subGroups view=v1Probeset level=L1Core
+            shortLabel Core PS
+            longLabel Affymetrix $Organism Exon Array Core Probesets 
+            # royalblue
+            color 65,105,225
+
+            track affyExonProbesetExtended
+            parent affyExonProbeset
+            subGroups view=v1Probeset level=L2Extended
+            shortLabel Extended PS
+            longLabel Affymetrix $Organism Exon Array Extended Probesets
+            # chocolate 4
+            color 139,69,19
+
+            track affyExonProbesetFull
+            parent affyExonProbeset off
+            subGroups view=v1Probeset level=L3Full
+            shortLabel Full PS
+            longLabel Affymetrix $Organism Exon Array Full Probesets
+            # deeppink
+            color 205,96,144
+
+            track affyExonProbesetFree 
+            parent affyExonProbeset off
+            subGroups view=v1Probeset level=L4Free
+            shortLabel Free PS
+            longLabel Affymetrix $Organism Exon Array Free Probesets
+            # darkgreen
+            color 0,100,0
+
+            track affyExonProbesetAmbiguous 
+            parent affyExonProbeset off
+            subGroups view=v1Probeset level=L5Ambiguous
+            shortLabel Ambiguous PS
+            longLabel Affymetrix $Organism Exon Array Ambiguous Probesets
+            # orchid 
+            color 218,112,214   
+
+        track affyExonProbe
+        parent affyExonArray
+        view v2Probe
+        visibility dense
+ 
+            track affyExonProbeCore 
+            parent affyExonProbe off
+            subGroups view=v2Probe level=L1Core
+            shortLabel Core Probes
+            longLabel Affymetrix $Organism Exon Array Core Probes
+            # royalblue
+            color 65,105,225
+            type bed 10
+ 
+            track affyExonProbeExtended 
+            parent affyExonProbe off
+            subGroups view=v2Probe level=L2Extended
+            shortLabel Extended Probes
+            longLabel Affymetrix $Organism Exon Array Extended Probes
+            # chocolate 4
+            color 139,69,19
+            type bed 10
+ 
+            track affyExonProbeFull 
+            parent affyExonProbe off
+            subGroups view=v2Probe level=L3Full
+            shortLabel Full Probes
+            longLabel Affymetrix $Organism Exon Array Full Probes
+            # deep pink
+            color 205,96,144
+            type bed 10
+ 
+            track affyExonProbeFree 
+            parent affyExonProbe off
+            subGroups view=v2Probe level=L4Free
+            shortLabel Free Probes
+            longLabel Affymetrix $Organism Exon Array Free Probes
+            # darkgreen
+            color 0,100,0
+            type bed 10
+ 
+            track affyExonProbeAmbiguous 
+            parent affyExonProbe off
+            subGroups view=v2Probe level=L5Ambiguous
+            shortLabel Ambiguous Probes
+            longLabel Affymetrix $Organism Exon Array Ambiguous Probes
+            # orchid
+            color 218,112,214      
+            type bed 10
+
+
+    track affyGnf1h override
+    parent affyArchive
+    group expression
+    priority 2
+    html ../affyGnf1h
+
+
+    track affyU95 override
+    parent affyArchive
+    group expression
+    priority 4
+    html ../affyU95
+
+    track affyU133 override
+    parent affyArchive
+    group expression
+    priority 5
+    html ../affyU133
+
+    track affyU133Plus2 override
+    parent affyArchive
+    group expression
+    priority 6
+    html ../affyU133Plus2
+
+    include wgEncodeAffyRnaChip.ra

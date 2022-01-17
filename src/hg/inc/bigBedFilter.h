@@ -1,21 +1,22 @@
 /* bigBedFilter.h - Filter things from bigBeds */
 
 /* Copyright (C) 2018 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef BIGBEDFILTER_H
 #define BIGBEDFILTER_H
 
 /* the values legal for *FilterType */
-#define FILTERBY_SINGLE            "single"
-#define FILTERBY_MULTIPLE          "multiple"
-#define FILTERBY_SINGLE_LIST       "singleList"
-#define FILTERBY_MULTIPLE_LIST_OR  "multipleListOr"
+#define FILTERBY_SINGLE                 "single"
+#define FILTERBY_MULTIPLE               "multiple"
+#define FILTERBY_SINGLE_LIST            "singleList"
+#define FILTERBY_MULTIPLE_LIST_OR       "multipleListOr"
 #define FILTERBY_MULTIPLE_LIST_ONLY_OR  "multipleListOnlyOr"
-#define FILTERBY_MULTIPLE_LIST_ONLY_AND  "multipleListOnlyAnd"
-#define FILTERBY_MULTIPLE_LIST_AND "multipleListAnd"
-#define FILTERTEXT_WILDCARD        "wildcard"
-#define FILTERTEXT_REGEXP          "regexp"
+#define FILTERBY_MULTIPLE_LIST_ONLY_AND "multipleListOnlyAnd"
+#define FILTERBY_MULTIPLE_LIST_AND      "multipleListAnd"
+#define FILTERBY_DEFAULT                FILTERBY_MULTIPLE
+#define FILTERTEXT_WILDCARD             "wildcard"
+#define FILTERTEXT_REGEXP               "regexp"
 
 /* cart and tdb variables */
 #define FILTER_NUMBER_NAME_LOW    "filter"

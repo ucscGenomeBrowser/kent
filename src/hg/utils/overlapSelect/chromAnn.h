@@ -2,7 +2,7 @@
  * other formats */
 
 /* Copyright (C) 2010 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef CHROMANN_H
 #define CHROMANN_H
 struct rowReader;
@@ -62,6 +62,7 @@ struct chromAnnReader
     /* function to free this object */
 
     unsigned opts;  /* options for reader */
+    unsigned maxParsedColumns;  /* just drag along columns after this. */
     void *data;     /* data associated with this reader */
 };
 
@@ -71,7 +72,8 @@ void chromAnnFree(struct chromAnn **caPtr);
 int chromAnnTotalBlockSize(struct chromAnn* ca);
 /* count the total bases in the blocks of a chromAnn */
 
-struct chromAnnReader *chromAnnBedReaderNew(char *fileName, unsigned opts);
+struct chromAnnReader *chromAnnBedReaderNew(char *fileName, unsigned opts,
+                                            unsigned maxParsedCols);
 /* construct a reader for a BED file */
 
 struct chromAnnReader *chromAnnGenePredReaderNew(char *fileName, unsigned opts);

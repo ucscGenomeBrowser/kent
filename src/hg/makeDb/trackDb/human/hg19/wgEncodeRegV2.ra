@@ -4,7 +4,6 @@ track wgEncodeRegV2
 superTrack on show
 shortLabel ENCODE Reg V2
 longLabel Integrated Regulation from ENCODE V2 (Jan 2011 Freeze, Integrated Analysis)
-wgEncode 1
 group regulation
 priority 1
 canPack On

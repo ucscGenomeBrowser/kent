@@ -1,20 +1,22 @@
 /* rowReader - read rows from tab files or databases without length restrictions */
 
 /* Copyright (C) 2010 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef ROWREADER_H
 #define ROWREADER_H
 
 struct rowReader
-/* object to read rows */
+/* object to read records as rows */
 {
     int numCols;          /* number of columns in current row */
-    char **row;           /* parsed row */
+    char **row;           /* split row */
+    int maxParsedCols;    /* number of columns that are to be parsed, others
+                           * should be just passed through. */
     int colSpace;         /* number of columns allocated in row */
     struct lineFile *lf;  /* if reading from a file */
 };
 
-struct rowReader *rowReaderOpen(char *fileName, boolean isPslFile);
+struct rowReader *rowReaderOpen(char *fileName, int maxParsedCols, boolean isPslFile);
 /* create a row reader for a file */
 
 void rowReaderFree(struct rowReader **rrPtr);

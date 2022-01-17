@@ -3,7 +3,7 @@
  * representation of objects. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "gff.h"
@@ -570,81 +570,6 @@ errAbort("bug: position %d not found in exon of %s genePred", pos, gp->name);
 return 0;
 }
 
-static int findLastFramedExon(struct genePred *gp)
-/* locate the last exon with frame */
-{
-int iStart = (gp->strand[0] == '+') ? 0 : gp->exonCount-1;
-int iStop = (gp->strand[0] == '+') ? gp->exonCount : -1;
-int dir =  (gp->strand[0] == '+') ? +1 : -1;
-int iPrevExon = -1, iExon;
-
-// find beginning of frames
-for (iExon = iStart; (iExon != iStop) && (gp->exonFrames[iExon] == -1); iExon += dir)
-    continue;
-// find last with frame
-for (; (iExon != iStop) && (gp->exonFrames[iExon] != -1); iExon += dir)
-    iPrevExon = iExon;
-if (iPrevExon < 0)
-    errAbort("bug: findLastFramedExon should have found an exon with frame");
-return iPrevExon;
-}
-
-static int exonCdsStart(struct genePred *gp, int iExon)
-/* get the CDS starting position in specified exon */
-{
-return (gp->cdsStart < gp->exonStarts[iExon]) ? gp->exonStarts[iExon] : gp->cdsStart;
-}
-
-static int exonCdsEnd(struct genePred *gp, int iExon)
-/* get the CDS ending position in specified exon */
-{
-return (gp->cdsEnd > gp->exonEnds[iExon]) ? gp->exonEnds[iExon] : gp->cdsEnd;
-}
-
-static void extendFramePos(struct genePred *gp)
-/* extend frame missing from last exon(s) for positive strand genes, normally
- * caused by GTF stop_codon */
-{
-int iExon = findLastFramedExon(gp);
-int frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
-for (iExon++; (iExon < gp->exonCount) && (gp->exonStarts[iExon] < gp->cdsEnd); iExon++)
-    {
-    if (!((gp->exonFrames[iExon] < 0) || (gp->exonFrames[iExon] == frame)))
-        errAbort("conflicting frame for %s exon index %d, was %d, trying to assign %d", gp->name, iExon, gp->exonFrames[iExon], frame);
-    gp->exonFrames[iExon] = frame;
-    frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
-    }
-}
-
-static void extendFrameNeg(struct genePred *gp)
-/* extend frame missing from last exon(s) for negative strand genes, normally
- * caused by GTF stop_codon */
-{
-int iExon = findLastFramedExon(gp);
-int frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
-for (iExon--; (iExon >= 0) && (gp->exonEnds[iExon] > gp->cdsStart); iExon--)
-    {
-    if (!((gp->exonFrames[iExon] < 0) || (gp->exonFrames[iExon] == frame)))
-        errAbort("conflicting frame for %s exon index %d, was %d, trying to assign %d", gp->name, iExon, gp->exonFrames[iExon], frame);
-    gp->exonFrames[iExon] = frame;
-    frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
-    }
-}
-
-static void fixStopFrame(struct genePred *gp)
-/* Handle nasty corner case: GTF with the all or part of the stop codon as the
- * only codon in an exon, we must set the frame on these exons.  Some ENSEMBL
- * GTFs have single base `exons' with just a base of the stop codon, so must
- * check every base.  While less than ideal, we just extend the frame past the
- * last exon with frame, so a conflicting frame on the stop codon will be
- * missed.  Just switching to GFF3 fixes this mess. */
-{
-if (gp->strand[0] == '+')
-    extendFramePos(gp);
-else
-    extendFrameNeg(gp);
-}
-
 static boolean adjImpliedStopPos(struct genePred *gp)
 /* implied stop codon adjustment for positive strand gene */
 {
@@ -704,35 +629,6 @@ else
         {
         if (gp->optFields & genePredCdsStatFld)
             gp->cdsStartStat = cdsComplete;
-        }
-    }
-}
-
-static void checkForNoFrames(struct genePred *gp)
-/* check for requesting frame from a file without frames. */
-{
-int i;
-/* Complain if we have a CDS but exonFrames are all -1: */
-if (gp->cdsStart < gp->cdsEnd)
-    {
-    boolean foundReal = FALSE;
-    for (i = 0;  i < gp->exonCount;  i++)
-        {
-        if (gp->exonFrames[i] >= 0 && gp->exonFrames[i] <= 2)
-            {
-            foundReal = TRUE;
-            break;
-            }
-        }
-    if (! foundReal)
-        {
-        errAbort("Error: exonFrames field is being added, but I found a "
-                 "gene (%s) with CDS but no valid frames.  "
-                 "This can happen if program is invoked with -genePredExt "
-                 "but no valid frames are given in the file.  If the 8th "
-                 "field of GFF/GTF file is always a placeholder, then don't use "
-                 "-genePredExt.",
-                 gp->name);
         }
     }
 }
@@ -802,26 +698,35 @@ while ((gl != NULL) && (rangeIntersection(gl->start, gl->end, start, end) > 0))
 return gl;
 }
 
-static void assignFrame(boolean isGtf, struct gffGroup *group, struct genePred *gp)
-/* Assign frame from GFF after genePred has been built.*/
+static void assignFrame(boolean isGtf, struct gffGroup *group, struct genePred *gp, unsigned options)
+/* Assign frame from GFF/GTF after genePred has been built.*/
 {
+
 struct gffLine *gl = group->lineList;
 int start, end, i;
-boolean haveFrame = FALSE;
+int numCdsExons = 0;
+int numFrameExons = 0;
 for (i = 0; i < gp->exonCount; i++)
     {
     if (genePredCdsExon(gp, i, &start, &end))
         {
+        numCdsExons += 1;
         gl = assignFrameForCdsExon(start, end, &(gp->exonFrames[i]), gl, isGtf);
         if (gp->exonFrames[i] >= 0)
-            haveFrame = TRUE;
+            numFrameExons += 1;
         }
     }
 
-/* make sure stop has frame if some exons in the gene had frame */
-if (haveFrame)
-    fixStopFrame(gp);
-checkForNoFrames(gp);
+/* Assign frames for exons without frames, either due to it incorrectly not
+ * being on cases.  This also Handle the nasty corner caseof GTF with the all
+ * or part of the stop codon as the only codon in an exon, we must set the
+ * frame on these exons.  Some ENSEMBL GTFs have single base `exons' (due to
+ * low quality assemblies) with just a base of the stop codon, so must check
+ * every base.  While less than ideal, we just extend the frame past the last
+ * exon with frame, so a conflicting frame on the stop codon will be missed.
+ * Just switching to GFF3 fixes this mess.  Return the count of exons that
+ * actually had frame set. */
+genePredFixExonFrames(gp);
 }
 
 static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *group, char *name,
@@ -1033,7 +938,7 @@ if ((options & genePredGxfImpliedStopAfterCds) && !haveStopCodon)
     adjImpliedStopAfterCds(gp);
 
 if (optFields & genePredExonFramesFld)
-    assignFrame(isGtf, group, gp);
+    assignFrame(isGtf, group, gp, options);
 
 return gp;
 }
@@ -1772,7 +1677,7 @@ return FALSE;
 
 void genePredAddExonFrames(struct genePred *gp)
 /* Add exonFrames array to a genePred that doesn't have it. Frame is assumed
- * to be contiguous. */
+ * to be contiguous.  NOTE: suggest using genePredFixExonFrames for new code. */
 {
 int iExon, start, end, iBase = 0;
 int iStart, iEnd, iDir;
@@ -1801,6 +1706,56 @@ for (iExon = iStart; iExon != iEnd; iExon += iDir)
         {
         gp->exonFrames[iExon] = iBase % 3;
         iBase += (end - start);
+        }
+    }
+}
+
+void genePredFixExonFrames(struct genePred *gp)
+/* Add exonFrames array to a genePred that has frame on only some or no
+ * features. Frame is assumed to be contiguous when an existing frame is not
+ * present. */
+{
+int iStart, iEnd, iDir;
+
+if (gp->exonFrames == NULL)
+    {
+    /* doesn't currently have frames */
+    AllocArray(gp->exonFrames, gp->exonCount);
+    gp->optFields |= genePredExonFramesFld;
+    for (int iExon = 0; iExon < gp->exonCount; iExon++)
+        gp->exonFrames[iExon] = -1;
+    }
+
+if (sameString(gp->strand, "+"))
+    {
+    iStart = 0;
+    iEnd = gp->exonCount;
+    iDir = 1;
+    }
+else
+    {
+    iStart = gp->exonCount - 1;
+    iEnd = -1;
+    iDir = -1;
+    }
+int nextFrame = -1;
+for (int iExon = iStart; iExon != iEnd; iExon += iDir)
+    {
+    int start, end;
+    if (genePredCdsExon(gp, iExon, &start, &end))
+        {
+        if (gp->exonFrames[iExon] < 0)
+            {
+            // no existing frame
+            if (nextFrame < 0)
+                nextFrame = 0;  // first frame
+            gp->exonFrames[iExon] = nextFrame;
+            }
+        nextFrame = incrFrame(gp->exonFrames[iExon], end - start);
+        }
+    else
+        {
+        gp->exonFrames[iExon] = -1;
         }
     }
 }

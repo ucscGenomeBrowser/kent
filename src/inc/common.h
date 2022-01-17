@@ -344,6 +344,10 @@ void reverseDoubles(double *a, int length);
 void reverseStrings(char **a, int length);
 /* Reverse the order of the char* array. */
 
+void sortStrings(char **array, int count);
+/* Sort array using strcmp */
+
+
 void swapBytes(char *a, char *b, int length);
 /* Swap buffers a and b. */
 
@@ -537,6 +541,11 @@ int slNameCmpStringsWithEmbeddedNumbers(const void *va, const void *vb);
 /* Compare strings such as gene names that may have embedded numbers,
  * so that bmp4a comes before bmp14a */
 
+int slNameCmpWordsWithEmbeddedNumbers(const void *va, const void *vb);
+/* Compare strings such as gene names that may have embedded numbers,
+ * in a string sensitive way so that bmp4a comes before bmp14a 
+ * and ABc and abC are treated as the same.  A little slow. */
+
 void slNameSortCase(struct slName **pList);
 /* Sort slName list, ignore case. */
 
@@ -688,6 +697,10 @@ int slPairCmpCase(const void *va, const void *vb);
 void slPairSortCase(struct slPair **pList);
 /* Sort slPair list, ignore case. */
 
+int slPairCmpWordsWithEmbeddedNumbers(const void *va, const void *vb);
+/* Sort slPairList ignoring case and dealing with embedded numbers so 2 comes
+ * before 10, not after. */
+
 int slPairCmp(const void *va, const void *vb);
 /* Compare two slPairs. */
 
@@ -761,6 +774,9 @@ char *cloneLongString(char *s);
 
 char *catTwoStrings(char *a, char *b);
 /* Allocate new string that is a concatenation of two strings. */
+
+char *catThreeStrings(char *a, char *b, char *c);
+/* Allocate new string that is a concatenation of three strings. */
 
 int differentWord(char *s1, char *s2);
 /* strcmp ignoring case - returns zero if strings are
@@ -1473,7 +1489,18 @@ char *trueFalseString(boolean b);
 
 void uglyTime(char *label, ...)
 /* Print label and how long it's been since last call.  Call with
- * a NULL label to initialize. */
+ * a NULL label to initialize. Works better in html pages cause of formatting */
+
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
+
+
+void uglyt(char *label, ...)
+/* Print label and how long it's been since last call.  Call with
+ * a NULL label to initialize. Like uglyTime without the html formatting */
+
 #if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
 #endif
@@ -1588,5 +1615,17 @@ boolean haplotype(const char *name);
 
 char *shorterDouble(double value);
 /* Work around a "bug" in %g output that goes into scientific notation too early. */
+
+struct runTimes
+/* clock time since epoch, user CPU, and system CPU, in seconds */
+{
+    double clockSecs;
+    double userSecs;
+    double sysSecs;
+};
+
+struct runTimes getTimesInSeconds(void);
+/* get the current clock time since epoch, process user CPU, and system CPU times, all in
+ * seconds. */
 
 #endif /* COMMON_H */

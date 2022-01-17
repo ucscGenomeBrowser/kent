@@ -4,23 +4,25 @@
 #ifndef USE_FREETYPE
 int ftInitialize()
 {
-errAbort("FreeType not enabled");
+errAbort("FreeType not enabled. Install FreeType and recompile, or add freeType=off to hg.conf");
 return 0;
 }
 
 int ftWidth(MgFont *font, unsigned char *chars, int charCount)
 {
-errAbort("FreeType not enabled");
+errAbort("FreeType not enabled. Install FreeType and recompile, or add freeType=off to hg.conf");
 return 0;
 }
 
 void ftText(struct memGfx *mg, int x, int y, Color color, 
 	MgFont *font, char *text)
 {
-errAbort("FreeType not enabled");
+errAbort("FreeType not enabled. Install FreeType and recompile, or add freeType=off to hg.conf");
 }
 
 #else 
+FT_Library    library;
+FT_Face       face;
 
 int ftInitialize(char *fontFile)
 {
@@ -107,14 +109,11 @@ switch(requestSize)
     }
 }
 
-void ftText(struct memGfx *mg, int x, int y, Color color, 
-	MgFont *font, char *text)
-/* Draw a line of text with upper left corner x,y. */
+
+
+void ftTextHelper(struct memGfx *mg, int x, int y, int baseline, Color color,
+        MgFont *font, char *text)
 {
-unsigned int fontHeight;
-unsigned int baseline;
-getFontCorrection(mgFontPixelHeight(font), &fontHeight, &baseline);
-FT_Set_Pixel_Sizes( face, fontHeight, fontHeight);
 int length = strlen(text);
 int n;
 FT_Error error;
@@ -134,6 +133,57 @@ for(n = 0; n < length; n++)
          //offset + slot->bitmap_left, y - slot->bitmap_top, mg->pixels, mg->width ); 
     offset += slot->advance.x;
     }
+}
+
+void ftTextInBox(struct memGfx *mg, int x, int y, int width, int height, Color color, 
+	MgFont *font, char *text)
+/* Draw a line of text with upper left corner x,y. */
+{
+FT_Matrix     matrix;
+FT_Vector     pen;  
+
+if (height > 0)
+    {
+    matrix.xx = (FT_Fixed)(1 * 0x10000L);
+    matrix.xy = (FT_Fixed)0;
+    matrix.yx = (FT_Fixed)0;
+    matrix.yy = (FT_Fixed)(1 * 0x10000L) ;
+    pen.x = 0;
+    pen.y = 0;
+    FT_Set_Transform( face, &matrix, &pen );
+    FT_Set_Pixel_Sizes( face, 1.3*width, 1.3 * height);
+    ftTextHelper(mg, x, y, height, color, font, text);
+    }
+else
+    {
+    matrix.xx = (FT_Fixed)(1 * 0x10000L);
+    matrix.xy = (FT_Fixed)0;
+    matrix.yx = (FT_Fixed)0;
+    matrix.yy = (FT_Fixed)(-1 * 0x10000L) ;
+    pen.x = 0;
+    pen.y = -height * 64;
+    FT_Set_Transform( face, &matrix, &pen );
+
+    height = -height;
+    FT_Set_Pixel_Sizes( face, 1.3*width, 1.3 * height);
+    ftTextHelper(mg, x, y, height, color, font, text);
+
+    matrix.yy = (FT_Fixed)(1 * 0x10000L) ;
+    pen.x = 0;
+    pen.y = 0;
+    FT_Set_Transform( face, &matrix, &pen );
+    }
+}
+
+void ftText(struct memGfx *mg, int x, int y, Color color, 
+	MgFont *font, char *text)
+/* Draw a line of text with upper left corner x,y. */
+{
+unsigned int fontHeight;
+unsigned int baseline;
+getFontCorrection(mgFontPixelHeight(font), &fontHeight, &baseline);
+FT_Set_Pixel_Sizes( face, fontHeight, fontHeight);
+ftTextHelper(mg, x, y, baseline,color, font, text);
 }
 
 int ftWidth(MgFont *font, unsigned char *chars, int charCount)

@@ -1,7 +1,7 @@
 /* localtime - command line implementation of localtime() C library function */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include	<stdio.h>
 #include	<time.h>
 #include	<unistd.h>

@@ -23,6 +23,13 @@ for db in $*; do
     if [ $? -eq 0 ]
     then
         set -e
+        # enfore two lines per relationship:
+        uniqTables=$(comm -3 <(grep -w "^$db" relatedTracks.ra | cut -d' ' -f2 | sort) <(grep -w "^$db" relatedTracks.ra | cut -d' ' -f3 | sort) | wc -l)
+        if [ $uniqTables -gt 0 ]; then
+            printf "ERROR: mismatched primary and secondary related tracks for '%s'\n" "$db"
+            echo "Tracks:" $(comm -3 <(grep -w "^$db" relatedTracks.ra | cut -d' ' -f2 | sort) <(grep -w "^$db" relatedTracks.ra | cut -d' ' -f3 | sort))
+            exit 255
+        fi
         grep -w "^$db" relatedTracks.ra | cut -d' ' -f2- \
             | sed -e 's/ /\t/' -e 's/ /\t/' | sort -k1 -k2 \
             | hgLoadSqlTab "$db" "$tbl" ~/kent/src/hg/lib/relatedTrack.sql stdin

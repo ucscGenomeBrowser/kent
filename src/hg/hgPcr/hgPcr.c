@@ -1,7 +1,7 @@
 /* hgPcr - In-silico PCR CGI for UCSC. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "hash.h"
 #include "errAbort.h"
@@ -35,6 +35,10 @@
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
+
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   1.0     /* standard penalty for most CGIs */
+static boolean issueBotWarning = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -520,6 +524,43 @@ else
 cartSetString(cart, cartVar, buf);
 }
 
+static void printHelpLinks(struct gfPcrOutput *gpoList) {
+    /* print links to our docs for special chromosome names */
+    // if you modify this, also modify hgBlat.c:showAliPlaces, which implements a similar feature, for hgBlat
+    boolean isAlt = FALSE;
+    boolean isFix = FALSE;
+    boolean isRandom = FALSE;
+    boolean isChrUn = FALSE;
+
+    if (gpoList != NULL)
+        {
+        struct gfPcrOutput *gpo;
+        for (gpo = gpoList;  gpo != NULL;  gpo = gpo->next)
+            {
+            char *seq = gpo->seqName;
+            if (endsWith(seq, "_fix"))
+                isFix = TRUE;
+            else if (endsWith(seq, "_alt"))
+                isAlt = TRUE;
+            else if (endsWith(seq, "_random"))
+                isRandom = TRUE;
+            else if (startsWith(seq, "chrUn"))
+                isChrUn = TRUE;
+            }
+        }
+
+    if (isFix || isRandom || isAlt || isChrUn)
+        webNewSection("Notes on the results above");
+
+    if (isFix)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#downloadFix\">What is chrom_fix?</A><BR>");
+    if (isAlt)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#downloadAlt\">What is chrom_alt?</A><BR>");
+    if (isRandom)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#download10\">What is chrom_random?</A><BR>");
+    if (isChrUn)
+        printf("<A target=_blank HREF=\"../FAQ/FAQdownloads#download11\">What is a chrUn sequence?</A><BR>");
+}
 
 void doQuery(struct pcrServer *server, struct gfPcrInput *gpi,
 	     int maxSize, int minPerfect, int minGood)
@@ -530,6 +571,8 @@ struct gfConnection *conn = gfConnect(server->host, server->port,
 struct gfPcrOutput *gpoList =
     gfPcrViaNet(conn, server->seqDir, gpi,
 		maxSize, minPerfect, minGood);
+
+
 if (gpoList != NULL)
     {
     char urlFormat[2048];
@@ -539,6 +582,8 @@ if (gpoList != NULL)
     printf("<TT><PRE>");
     gfPcrOutputWriteAll(gpoList, "fa", urlFormat, "stdout");
     printf("</PRE></TT>");
+    
+    printHelpLinks(gpoList);
     writePcrResultTrack(gpoList, server->db, NULL);
     }
 else
@@ -560,6 +605,7 @@ splitPath(server->targetDb->seqFile, seqDir, NULL, NULL);
 if (endsWith("/", seqDir))
     seqDir[strlen(seqDir) - 1] = '\0';
 gpoList = gfPcrViaNet(conn, seqDir, gpi, maxSize, minPerfect, minGood);
+
 if (gpoList != NULL)
     {
     struct gfPcrOutput *gpo;
@@ -583,6 +629,7 @@ if (gpoList != NULL)
 	gfPcrOutputWriteOne(gpo, "fa", urlFormat, stdout);
 	printf("\n");
 	}
+
     printf("</PRE></TT>");
     writePcrResultTrack(gpoList, server->targetDb->db, server->targetDb->name);
     }
@@ -602,7 +649,12 @@ boolean doPcr(struct pcrServer *server, struct targetPcrServer *targetServer,
 struct errCatch *errCatch = errCatchNew();
 boolean ok = FALSE;
 
-hgBotDelay();
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
+
 if (flipReverse)
     reverseComplement(rPrimer, strlen(rPrimer));
 if (errCatchStart(errCatch))
@@ -707,6 +759,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgPcr", delayFraction, 0, 0, "html");
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);

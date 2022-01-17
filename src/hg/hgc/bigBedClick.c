@@ -1,7 +1,7 @@
 /* Handle details pages for wiggle tracks. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "wiggle.h"
@@ -12,6 +12,7 @@
 #include "bigBed.h"
 #include "hui.h"
 #include "subText.h"
+#include "web.h"
 
 static void bigGenePredLinks(char *track, char *item)
 /* output links to genePred driven sequence dumps */
@@ -205,37 +206,35 @@ else if (sameWord(name, "_crisprOfftargets"))
     extFieldCrisprOfftargets(val, extraFields);
 }
 
-static void seekAndPrintTable(char *detailsUrl, off_t offset, struct slPair *extraFields)
+static int seekAndPrintTable(struct trackDb *tdb, char *detailsUrl, off_t offset, struct slPair *extraFields)
 /* seek to 0 at url, get headers, then seek to offset, read tab-sep fields and output 
- * (extraFields are needed for some special field handlers) */
+ * (extraFields are needed for some special field handlers). Return the number of fields
+ * successfully printed.  */
 {
-// open the URL
-struct lineFile *lf = lineFileUdcMayOpen(detailsUrl, TRUE);
-if (lf==NULL)
+int printCount = 0;
+// open the URL and get the first line
+char *headerLine = readOneLineMaybeBgzip(detailsUrl, 0, 0);
+if (headerLine == NULL)
     {
-    printf("Error: Could not open the URL referenced in detailsTabUrls, %s", detailsUrl);
-    return;
+    printf("Error: Could not open the URL referenced in detailsUrls, %s", detailsUrl);
+    return printCount;
     }
 
+boolean skipEmptyFields = trackDbSettingOn(tdb, "skipEmptyFields");
+
 // get the headers
-char *headLine = NULL;
-int lineSize = 0;
-lineFileNext(lf, &headLine, &lineSize);
 char *headers[1024];
-int headerCount = chopTabs(headLine, headers);
+int headerCount = chopTabs(headerLine, headers);
 
 // clone the headers
 int i;
 for (i=0; i<headerCount; i++)
     headers[i] = cloneString(headers[i]);
 
-lineFileSeek(lf, offset, SEEK_SET);
-
 // read a line
-char *detailsLine;
-lineFileNext(lf, &detailsLine, &lineSize);
+char *detailsLine = readOneLineMaybeBgzip(detailsUrl, offset, 0);;
 if (!detailsLine || isEmpty(detailsLine))
-    return;
+    return printCount;
 char *fields[1024];
 int fieldCount = chopTabs(detailsLine, fields);
 
@@ -246,41 +245,66 @@ if (fieldCount!=headerCount)
     printf("with the line pointed to by offset %lld in the bigBed file.<br>", (long long int)offset);
     printf("Number of headers: %d", headerCount);
     printf("Number of fields at offset: %d", fieldCount);
-    return;
+    return printCount;
     }
+struct slName *tblFieldNames = NULL;
+struct hash *fieldsToEmbeddedTbl = hashNew(0);
+struct embeddedTbl *tblList = NULL;
+getExtraTableFields(tdb, &tblFieldNames, &tblList, fieldsToEmbeddedTbl);
 
 // print the table for all external extra fields 
 printf("<br><table class='bedExtraTbl'>\n");
 fieldCount = min(fieldCount, headerCount);
+struct embeddedTbl *userTbl = NULL;
+struct dyString *tableLabelsDy = dyStringNew(0);
+dyStringPrintf(tableLabelsDy, "var _jsonHgcLabels = [");
 for (i=0; i<fieldCount; i++)
-{
+    {
     char *name = headers[i];
     char *val  = fields[i];
-    
-    if (startsWith("_", name))
+
+    // skip this field if it's empty and "skipEmptyFields" option is set
+    if (skipEmptyFields && isEmpty(val))
+        continue;
+
+    // skip an optional '#' on the first field name
+    if (i == 0 && startsWith("#", name))
+        name = skipBeyondDelimit(name, '#');
+
+    if (startsWith("_", name) && !(startsWith("_json", name)) && !(startsWith("json", name)))
         detailsTabPrintSpecial(name, val, extraFields);
+    else if (slNameInList(tblFieldNames, name))
+        {
+        userTbl = (struct embeddedTbl *)hashFindVal(fieldsToEmbeddedTbl, name);
+        userTbl->encodedTbl = val;
+        printEmbeddedTable(tdb, userTbl, tableLabelsDy);
+        }
     else
         {
         printf("<tr><td>%s</td>\n", name);
         printf("<td>%s</td></tr>\n", val);
         }
-}
+    printCount++;
+    }
 printf("</table>\n");
-
-lineFileClose(&lf);
+dyStringPrintf(tableLabelsDy, "];\n");
+jsInline(dyStringCannibalize(&tableLabelsDy));
+return printCount;
 }
 
 struct slPair *parseDetailsTablUrls(struct trackDb *tdb)
-/* Parse detailsTabUrls setting string into an slPair list of {offset column name, fileOrUrl} */
+/* Parse detailsUrls setting string into an slPair list of {offset column name, fileOrUrl} */
 {
-char *detailsUrlsStr = trackDbSetting(tdb, "detailsTabUrls");
+char *detailsUrlsStr = trackDbSetting(tdb, "detailsUrls");
+if (!detailsUrlsStr)
+    detailsUrlsStr = trackDbSetting(tdb, "detailsTabUrls");
 if (!detailsUrlsStr)
     return NULL;
 
 struct slPair *detailsUrls = slPairListFromString(detailsUrlsStr, TRUE);
 if (!detailsUrls)
     {
-    printf("Problem when parsing trackDb setting detailsTabUrls<br>\n");
+    printf("Problem when parsing trackDb setting detailsUrls<br>\n");
     printf("Expected: a space-separated key=val list, like 'fieldName1=URL1 fieldName2=URL2'<br>\n");
     printf("But got: '%s'<br>", detailsUrlsStr);
     return NULL;
@@ -292,12 +316,12 @@ for (pair = detailsUrls;  pair != NULL;  pair = pair->next)
 return detailsUrls;
 }
 
-static void printAllExternalExtraFields(struct trackDb *tdb, struct slPair *extraFields)
-/* handle the "detailsTabUrls" trackDb setting: 
+static int printAllExternalExtraFields(struct trackDb *tdb, struct slPair *extraFields)
+/* handle the "detailsUrls" trackDb setting:
  * For each field, print a separate html table with all field names and values
- * from the external tab-sep file */
-
+ * from the external tab-sep file. Return the number of fields we successfully printed  */
 {
+int printCount = 0;
 struct slPair *detailsUrls = parseDetailsTablUrls(tdb), *pair;
 for (pair = detailsUrls; pair != NULL; pair = pair->next)
     {
@@ -308,9 +332,9 @@ for (pair = detailsUrls; pair != NULL; pair = pair->next)
     void *p = slPairFindVal(extraFields, fieldName);
     if (p==NULL)
         {
-        printf("Error when parsing trackDb detailsTabUrls statement:<br>\n");
+        printf("Error when parsing trackDb detailsUrls statement:<br>\n");
         printf("Cannot find extra bigBed field with name %s\n", fieldName);
-        return;
+        return 0;
         }
     char *offsetStr = (char*)p;
 
@@ -324,9 +348,10 @@ for (pair = detailsUrls; pair != NULL; pair = pair->next)
 	}
     off_t offset = atoll(offsetStr);
 
-    seekAndPrintTable(detailsUrl, offset, extraFields);
+    printCount += seekAndPrintTable(tdb, detailsUrl, offset, extraFields);
     }
 slPairFreeValsAndList(&detailsUrls);
+return printCount;
 }
 
 static void bigBedClick(char *fileName, struct trackDb *tdb,
@@ -426,13 +451,13 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     // display seq1 and seq2
     if (seq1Seq2 && bedSize+seq1Seq2Fields == 8)
         printf("<table><tr><th>Sequence 1</th><th>Sequence 2</th></tr>"
-	       "<tr><td> %s </td><td> %s </td></tr></table>", fields[6], fields[7]);
-    else if (isNotEmpty(rest))
-	{
-	if (restCount > restBedFields)
-	    {
-            int printCount = extraFieldsPrint(tdb,NULL,extraFields, extraFieldCount);
-            printAllExternalExtraFields(tdb, extraFieldPairs);
+            "<tr><td> %s </td><td> %s </td></tr></table>", fields[6], fields[7]);
+    else if (restCount > 0)
+        {
+        if (restCount > restBedFields)
+            {
+            int printCount = extraFieldsPrint(tdb, NULL, extraFields, extraFieldCount);
+            printCount += printAllExternalExtraFields(tdb, extraFieldPairs);
 
             if (printCount == 0)
                 {
@@ -445,15 +470,24 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                     printf("%s%s", (i > 0 ? "\t" : ""), restFields[i]);
                 printf("<BR>\n");
                 }
-	    }
-	if (sameString(tdb->type, "bigGenePred"))
-	    bigGenePredLinks(tdb->track, item);
-	}
+            }
+        if (sameString(tdb->type, "bigGenePred"))
+            bigGenePredLinks(tdb->track, item);
+        }
     if (isCustomTrack(tdb->track))
 	{
 	time_t timep = bbiUpdateTime(bbi);
 	printBbiUpdateTime(&timep);
 	}
+    char *motifPwmTable = trackDbSetting(tdb, "motifPwmTable");
+    if (motifPwmTable)
+        {
+        struct dnaSeq *seq = hDnaFromSeq(database, bed->chrom, bed->chromStart, bed->chromEnd, dnaLower);
+        if (bed->strand[0] == '-')
+            reverseComplement(seq->dna, seq->size);
+        struct dnaMotif *motif = loadDnaMotif(bed->name, motifPwmTable);
+        motifHitSection(seq, motif);
+        }
     }
 if (!found)
     {

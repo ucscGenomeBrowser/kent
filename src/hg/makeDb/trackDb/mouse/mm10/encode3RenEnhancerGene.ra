@@ -12,7 +12,6 @@ dimensions dimX=set dimY=view
 type bed 3
 visibility hide
 group regulation
-wgEncode 1
 
     track egPromoterView
     type bigBed 9

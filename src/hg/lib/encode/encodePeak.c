@@ -3,7 +3,7 @@
  * the RAM representation of objects. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -407,11 +407,7 @@ if ((pt == gappedPeak) || (pt == encodePeak))
     i = peak->blockCount-1;
     if ((peak->chromStart + peak->blockStarts[i] + peak->blockSizes[i]) !=
 	peak->chromEnd)
-	{
-	lineFileAbort(lf, 
-	    "BED blocks must span chromStart to chromEnd.  (chromStart + "
-	    "blockStarts[last] + blockSizes[last]) must equal chromEnd.");
-	}
+	lineFileAbort(lf, BAD_BLOCKS);
     }
 if (pt == gappedPeak)
     /* deal with final three columns of a gappedPeak */

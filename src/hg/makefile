@@ -24,11 +24,11 @@ ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
 endif
 
 
-TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
+TEST_DIRS = lib cgilib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToBed genePredToGtf \
 	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross liftOver \
             mouseStuff mrnaToGene pslCDnaFilter pslDiff pslHisto \
-            pslPartition pslSelect pslStats pslSwap pslToBed spideyToPsl \
+            pslPartition pslSelect pslStats pslToBed spideyToPsl \
 	    sqlToXml xmlToSql utils
 
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
@@ -106,7 +106,6 @@ UTILS_APPLIST = \
 	pslSomeRecords \
 	pslSort \
 	pslStats \
-	pslSwap \
 	pslToBed \
 	pslToChain \
 	pslxToFa \
@@ -228,6 +227,7 @@ all::    cgi utils
 
 hgLib:
 	cd lib && ${MAKE}
+	cd cgilib && ${MAKE}
 
 userApps: $(UTILS_APPLIST:%=%.userApp)
 	cd altSplice/lib && $(MAKE)

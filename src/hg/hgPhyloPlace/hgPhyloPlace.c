@@ -5,6 +5,7 @@
 #include "common.h"
 #include "botDelay.h"
 #include "cart.h"
+#include "cgiApoptosis.h"
 #include "cheapcgi.h"
 #include "hCommon.h"
 #include "hash.h"
@@ -26,7 +27,13 @@ struct hash *oldVars = NULL;   // Old contents of cart before it was updated by 
 boolean measureTiming = FALSE; // Print out how long things take
 char *leftLabelWidthForLongNames = "55";// Leave plenty of room for tree and long virus strain names
 
+/* for botDelay call, 10 second for warning, 20 second for immediate exit */
+#define delayFraction   0.25
+static boolean issueBotWarning = FALSE;
+static long enteredMainTime = 0;
+
 #define seqFileVar "sarsCoV2File"
+#define pastedIdVar "namesOrIds"
 #define remoteFileVar "remoteFile"
 
 static struct lineFile *lineFileFromFileInput(struct cart *cart, char *fileVar)
@@ -130,6 +137,17 @@ puts("<style>\n"
 "td.qcFail {\n"
 "    background-color: #ff6666;\n"
 "}\n"
+".gbSectionBannerLarge {\n"
+"    padding: 10px;\n"
+"    margin-top: 6px;\n"
+"    margin-right: 0;\n"
+"    background-color: #4c759c;  /* light blue */\n"
+"    color: white;\n"
+"    font-weight: bold;\n"
+"    font-size: 22px;\n"
+"}\n"
+"h2 { font-size: 18px; }\n"
+"h3 { font-size: 16px; }\n"
 "</style>\n"
      );
 
@@ -149,11 +167,21 @@ webIncludeFile("inc/gbFooter.html");
 webEndJWest();
 }
 
-#define CHECK_FILE_INPUT_JS "{ var $fileInput = $('input[name="seqFileVar"]');  " \
-    "if ($fileInput && $fileInput[0] && $fileInput[0].files && !$fileInput[0].files.length) {" \
-      " alert('Please choose a file first, then click the upload button.');" \
-      " return false; " \
-    "} else { return true; } }"
+#define CHECK_FILE_OR_PASTE_INPUT_JS(fileVarName, pasteVarName) \
+    "{ var $fileInput = $('input[name="fileVarName"]');" \
+    "  var $pasteInput = $('textarea[name="pasteVarName"]');" \
+    "  if ($fileInput && $fileInput[0] && $fileInput[0].files && !$fileInput[0].files.length &&" \
+    "      $pasteInput && !$pasteInput.val()) {" \
+    "     alert('Please either choose a file or paste in sequence names/IDs first, ' +" \
+    "           'and then click the upload button.');" \
+    "     return false; " \
+    "   } else if ($fileInput && $fileInput[0] && $fileInput[0].files && " \
+    "              !!$fileInput[0].files.length &&" \
+    "              $pasteInput && !!$pasteInput.val()) {" \
+    "     alert('Sorry, unable to process both a file and pasted-in sequence names/IDs at the ' +" \
+    "            'same time.  Please clear one or the other and then click the upload button.');" \
+    "     return false; " \
+    "   } else { loadingImage.run(); return true; } }"
 
 static void inputForm()
 /* Ask the user for FASTA or VCF. */
@@ -161,19 +189,71 @@ static void inputForm()
 printf("<form action='%s' name='mainForm' method=POST enctype='multipart/form-data'>\n\n",
        "hgPhyloPlace");
 cartSaveSession(cart);
-cgiMakeHiddenVar("db", "wuhCor1");
-puts("  <div class='gbControl col-md-12'>");
+char *db = "wuhCor1";
+cgiMakeHiddenVar("db", db);
 puts("<div class='readableWidth'>");
+puts("  <div class='gbControl col-md-12'>");
+puts("<div style='font-size: 20px; font-weight: 500; margin-top: 15px; margin-bottom: 10px;'>"
+     "Place your SARS-CoV-2 sequences in a global phylogenetic tree</div>");
+printf("<p>Select your FASTA, VCF or list of sequence names/IDs: ");
+printf("<input type='file' id='%s' name='%s'>",
+       seqFileVar, seqFileVar);
+printf("</p><p>or paste in sequence names/IDs:<br>\n");
+cgiMakeTextArea(pastedIdVar, "", 10, 70);
+struct treeChoices *treeChoices = loadTreeChoices(db);
+if (treeChoices)
+    {
+    puts("</p><p>");
+    printf("Phylogenetic tree version: ");
+    char *phyloPlaceTree = cartOptionalString(cart, "phyloPlaceTree");
+    cgiMakeDropListWithVals("phyloPlaceTree", treeChoices->descriptions, treeChoices->protobufFiles,
+                            treeChoices->count, phyloPlaceTree);
+    }
+puts("</p><p>");
+printf("Number of samples per subtree showing sample placement: ");
+int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
+cgiMakeIntVarWithLimits("subtreeSize", subtreeSize,
+                        "Number of samples in subtree showing neighborhood of placement",
+                        5, 10, 5000);
+puts("</p><p>");
+cgiMakeOnClickSubmitButton(CHECK_FILE_OR_PASTE_INPUT_JS(seqFileVar, pastedIdVar),
+                           "submit", "Upload");
+puts("&nbsp;&nbsp;");
+cgiMakeOnClickSubmitButton("{ loadingImage.run(); return true; }",
+                           "exampleButton", "Upload Example File");
+puts("&nbsp;&nbsp;");
+puts("<a href='https://github.com/russcd/USHER_DEMO/' target=_blank>More example files</a>");
+puts("</p>");
+// Add a loading image to reassure people that we're working on it when they upload a big file
+printf("<div><img id='loadingImg' src='../images/loading.gif' />\n");
+printf("<span id='loadingMsg'></span></div>\n");
+jsInline("$(document).ready(function() {\n"
+         "    loadingImage.init($('#loadingImg'), $('#loadingMsg'), "
+         "'<p style=\"color: red; font-style: italic;\">Uploading and processing your sequences "
+         "may take some time. Please leave this window open while we work on your sequences.</p>');"
+         "});\n");
+
+puts("  </div>");
+puts("</div>");
+puts("<div class='readableWidth'>");
+puts("  <div class='gbControl col-md-12'>");
+puts("<h2>More information</h2>");
 puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most similar\n"
      "complete, high-coverage samples from \n"
      "<a href='https://www.gisaid.org/' target='_blank'>GISAID</a>\n"
+     "or from public sequence databases ("
+     "<a href='https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=SARS-CoV-2,%20taxid:2697049' "
+     "target=_blank>NCBI Virus / GenBank</a>,\n"
+     "<a href='https://www.cogconsortium.uk/data/' target=_blank>COG-UK</a> and the\n"
+     "<a href='https://bigd.big.ac.cn/ncov/release_genome' "
+     "target=_blank>China National Center for Bioinformation</a>), "
      "and your sequence's placement in the phylogenetic tree generated by the\n"
      "<a href='https://github.com/roblanf/sarscov2phylo' target='_blank'>sarscov2phylo</a>\n"
      "pipeline.\n"
      "Placement is performed by\n"
      "<a href='https://github.com/yatisht/usher' target=_blank>"
      "Ultrafast Sample placement on Existing tRee (UShER)</a> "
-     "(<a href='https://www.biorxiv.org/content/10.1101/2020.09.26.314971v1' target=_blank>"
+     "(<a href='https://www.nature.com/articles/s41588-021-00862-7' target=_blank>"
      "Turakhia <em>et al.</em></a>).  UShER also generates local subtrees to show samples "
      "in the context of the most closely related sequences.  The subtrees can be visualized "
      "as Genome Browser custom tracks and/or using "
@@ -181,11 +261,27 @@ puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most si
      "which supports "
      "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' "
      "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.</p>\n");
-puts("<p><b>Note:</b> "
-     "Please do not upload any files that contain "
+puts("<p>\n"
+     "GISAID data displayed in the Genome Browser are subject to GISAID's\n"
+     "<a href='https://www.gisaid.org/registration/terms-of-use/' target=_blank>"
+     "Terms and Conditions</a>.\n"
+     "SARS-CoV-2 genome sequences and metadata are available for download from\n"
+     "<a href='https://gisaid.org' target=_blank>GISAID</a> EpiCoV&trade;.\n"
+     "</p>");
+puts("<p>\n"
+     "<a href='/covid19.html'>COVID-19 Pandemic Resources at UCSC</a></p>\n");
+puts("</div>");
+puts("</div>");
+puts("<div class='readableWidth'>");
+puts("  <div class='gbControl col-md-12'>");
+puts("<h2>Privacy and sharing</h2>");
+puts("<h3>Please do not upload "
      "<a href='https://en.wikipedia.org/wiki/Protected_health_information#United_States' "
-     "target=_blank>Protected Health Information (PHI)</a> "
-     "to UCSC.</p>\n"
+     "target=_blank>Protected Health Information (PHI)</a>.</h3>\n"
+     "If even virus sequence files must remain local on your computer, then you can try "
+     "<a href='https://shusher.gi.ucsc.edu/' target=_blank>ShUShER</a> "
+     "which runs entirely in your web browser so that no files leave your computer."
+     "</p>\n"
      "<p>We do not store your information "
      "(aside from the information necessary to display results)\n"
      "and will not share it with others unless you choose to share your Genome Browser view.</p>\n"
@@ -200,72 +296,33 @@ puts("<p><b>Note:</b> "
      "</p>\n");
 puts("</div>");
 puts("  </div>");
-puts("  <div class='gbControl col-md-12'>");
-printf("<input type='file' id='%s' name='%s' "
-       "accept='.fa, .fasta, .vcf, .vcf.gz, .fa.gz, .fasta.gz'>",
-       seqFileVar, seqFileVar);
-printf("Number of samples per subtree showing sample placement: ");
-int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
-cgiMakeIntVarWithLimits("subtreeSize", subtreeSize,
- "Number of samples in subtree showing neighborhood of placement",
- 5, 10, 1000);
-cgiMakeOnClickSubmitButton(CHECK_FILE_INPUT_JS, "submit", "upload");
-puts("  </div>");
-puts("</form>");
-}
-
-static void exampleForm()
-/* Let the user try Russ's example. */
-{
-printf("<form action='%s' name='exampleForm' method=POST>\n\n",
-       "hgPhyloPlace");
-cartSaveSession(cart);
-cgiMakeHiddenVar("db", "wuhCor1");
-puts("  <div class='gbControl col-md-12'>");
-puts("If you don't have a local file, you can try an "
-     "<a href='https://github.com/russcd/USHER_DEMO/' target=_blank>example</a>: ");
-cgiMakeButton("submit", "try example");
-puts("  </div>");
-puts("</form>");
-}
-
-static void linkToLandingPage()
-/* David asked for a link back to our covid19 landing page. */
-{
-puts("<div class='gbControl col-md-12'>");
 puts("<div class='readableWidth'>");
-puts("<p></p>");
-puts("<p>\n"
-     "<a href='/covid19.html'>COVID-19 Pandemic Resources at UCSC</a></p>\n");
-puts("</div>");
-puts("</div>");
-}
-
-static void gisaidFooter()
-/* GISAID wants this on all pages that have anything to do with GISAID samples. */
-{
 puts("<div class='gbControl col-md-12'>");
-puts("<div class='readableWidth'>");
-puts("<p></p>");
-puts("<p>\n"
-     "GISAID data displayed in the Genome Browser are subject to GISAID's\n"
-     "<a href='https://www.gisaid.org/registration/terms-of-use/' target=_blank>"
-     "Terms and Conditions</a>.\n"
-     "SARS-CoV-2 genome sequences and metadata are available for download from\n"
-     "<a href='https://gisaid.org' target=_blank>GISAID</a> EpiCoV&trade;.\n"
-     "</p>");
+puts("<h2>Tutorial</h2>");
+puts("<iframe width='267' height='150' src='https://www.youtube.com/embed/humQ1NyZOUM' "
+     "frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; "
+     "gyroscope; picture-in-picture' allowfullscreen></iframe>\n"
+     "<h3><a href='https://www.cdc.gov/amd/pdf/slidesets/ToolkitModule_3.3-508C.pdf' "
+     "target=_blank>Slides for tutorial</a></h3>\n"
+     "<h3><a href='https://www.cdc.gov/amd/training/covid-19-gen-epi-toolkit.html' target=_blank>"
+     "More tutorials from CDC COVID-19 Genomic Epidemiology Toolkit</a></h3>\n"
+     "</p>"
+     );
 puts("</div>");
 puts("</div>");
+puts("</form>");
 }
 
 static void mainPage(char *db)
 {
 // Start web page with new-style header
 webStartGbNoBanner(cart, db, "UShER: Upload");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("ajax.js", NULL);
 newPageStartStuff();
 
 puts("<div class='row'>"
-     "  <div class='row gbSectionBanner'>\n"
+     "  <div class='row gbSectionBannerLarge'>\n"
      "    <div class='col-md-11'>UShER: Ultrafast Sample placement on Existing tRee</div>\n"
      "    <div class='col-md-1'></div>\n"
      "  </div>\n"
@@ -274,9 +331,6 @@ puts("<div class='row'>"
 if (hgPhyloPlaceEnabled())
     {
     inputForm();
-    exampleForm();
-    linkToLandingPage();
-    gisaidFooter();
     }
 else
     {
@@ -294,12 +348,21 @@ static void resultsPage(char *db, struct lineFile *lf)
  * and display results. */
 {
 webStartGbNoBanner(cart, db, "UShER: Results");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("ajax.js", NULL);
 newPageStartStuff();
 
-hgBotDelay();
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
+
+// Allow 10 minutes for big sets of sequences
+lazarusLives(15 * 60);
 
 puts("<div class='row'>"
-     "  <div class='row gbSectionBanner'>\n"
+     "  <div class='row gbSectionBannerLarge'>\n"
      "    <div class='col-md-11'>UShER: Ultrafast Sample placement on Existing tRee</div>\n"
      "    <div class='col-md-1'></div>\n"
      "  </div>\n"
@@ -310,6 +373,7 @@ printf("<form action='%s' name='resultsForm' method=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 puts("  <div class='gbControl col-md-12'>");
+fflush(stdout);
 
 if (lf != NULL)
     {
@@ -317,8 +381,11 @@ if (lf != NULL)
     struct trackLayout tl;
     trackLayoutInit(&tl, cart);
     // Do our best to place the user's samples, make custom tracks if successful:
+    char *phyloPlaceTree = cartOptionalString(cart, "phyloPlaceTree");
     int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
-    char *ctFile = phyloPlaceSamples(lf, db, measureTiming, subtreeSize, tl.fontHeight);
+    boolean success = FALSE;
+    char *ctFile = phyloPlaceSamples(lf, db, phyloPlaceTree, measureTiming, subtreeSize,
+                                     tl.fontHeight, &success);
     if (ctFile)
         {
         cgiMakeHiddenVar(CT_CUSTOM_TEXT_VAR, ctFile);
@@ -328,8 +395,9 @@ if (lf != NULL)
         puts("  </div>");
         puts("</form>");
         }
-    else
+    else if (! success)
         {
+        puts("<p></p>");
         puts("  </div>");
         puts("</form>");
         // Let the user upload something else and try again:
@@ -344,12 +412,9 @@ else
     puts("  </div>");
     puts("</form>");
     inputForm();
-    exampleForm();
     }
 puts("</div>\n");
 
-linkToLandingPage();
-gisaidFooter();
 newPageEndStuff();
 }
 
@@ -368,7 +433,9 @@ knetUdcInstall();
 measureTiming = cartUsualBoolean(cart, "measureTiming", measureTiming);
 
 char *submitLabel = cgiOptionalString("submit");
-if (submitLabel && sameString(submitLabel, "try example"))
+char *newExampleButton = cgiOptionalString("exampleButton");
+if ((submitLabel && sameString(submitLabel, "try example")) ||
+    (newExampleButton && sameString(newExampleButton, "Upload Example File")))
     {
     char *exampleFile = phyloPlaceDbSettingPath(db, "exampleFile");
     struct lineFile *lf = lineFileOpen(exampleFile, TRUE);
@@ -378,6 +445,12 @@ else if (cgiOptionalString(remoteFileVar))
     {
     char *url = cgiString(remoteFileVar);
     struct lineFile *lf = netLineFileOpen(url);
+    resultsPage(db, lf);
+    }
+else if (isNotEmpty(trimSpaces(cgiOptionalString(pastedIdVar))))
+    {
+    char *pastedIds = cgiString(pastedIdVar);
+    struct lineFile *lf = lineFileOnString("pasted names/IDs", TRUE, pastedIds);
     resultsPage(db, lf);
     }
 else if (cgiOptionalString(seqFileVar) || cgiOptionalString(seqFileVar "__filename"))
@@ -417,8 +490,11 @@ int main(int argc, char *argv[])
 /* Null terminated list of CGI Variables we don't want to save to cart */
 char *excludeVars[] = {"submit", "Submit",
                        seqFileVar, seqFileVar "__binary", seqFileVar "__filename",
+                       pastedIdVar,
                        NULL};
-long enteredMainTime = clock1000();
+enteredMainTime = clock1000();
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgPhyloPlace", delayFraction, 0, 0, "html");
+
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
 addLdLibraryPath();

@@ -81,21 +81,25 @@ enum pipelineOpts
     };
 
 struct pipeline *pipelineOpenFd(char ***cmds, unsigned opts,
-                                int otherEndFd, int stderrFd);
+                                int otherEndFd, int stderrFd,
+                                unsigned int timeout);
 /* Create a pipeline from an array of commands.  Each command is an array of
  * arguments.  Shell expansion is not done on the arguments.  If pipelineRead
  * is specified, the output of the pipeline is readable from the pipeline
  * object.  If pipelineWrite is specified, the input of the pipeline is
- * writable from the pipeline object. */
+ * writable from the pipeline object.  If timeout is > 0, pipeline is killed
+ * after timeout seconds. */
 
 struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
-                              char *otherEndFile, char *stderrFile);
+                              char *otherEndFile, char *stderrFile,
+                              unsigned int timeout);
 /* Create a pipeline from an array of commands.  Each command is an array of
  * arguments.  Shell expansion is not done on the arguments.  If pipelineRead
  * is specified, the output of the pipeline is readable from the pipeline
  * object.  If pipelineWrite is specified, the input of the pipeline is
  * writable from the pipeline object.  If stderrFile is NULL, stderr is inherited,
- * otherwise it is redirected to this file.
+ * otherwise it is redirected to this file.   If timeout is > 0, pipeline is killed
+ * after timeout seconds.
  */
 
 void pipelineDumpCmds(char ***cmds);
@@ -103,22 +107,26 @@ void pipelineDumpCmds(char ***cmds);
 
 struct pipeline *pipelineOpenMem(char ***cmds, unsigned opts,
                                  void *otherEndBuf, size_t otherEndBufSize,
-                                 int stderrFd);
+                                 int stderrFd, unsigned int timeout);
 /* Create a pipeline from an array of commands, with the pipeline input/output
  * in a memory buffer.  See pipeline.h for full documentation.  Currently only
- * input to a read pipeline is supported  */
+ * input to a read pipeline is supported   If timeout is > 0, pipeline is killed
+ * after timeout seconds. */
 
 struct pipeline *pipelineOpenFd1(char **cmd, unsigned opts,
-                                 int otherEndFd, int stderrFd);
+                                 int otherEndFd, int stderrFd,
+                                 unsigned int timeout);
 /* like pipelineOpenFd(), only takes a single command */
 
 struct pipeline *pipelineOpen1(char **cmd, unsigned opts,
-                               char *otherEndFile, char *stderrFile);
+                               char *otherEndFile, char *stderrFile,
+                               unsigned int timeout);
 /* like pipelineOpen(), only takes a single command */
 
 struct pipeline *pipelineOpenMem1(char **cmd, unsigned opts,
                                   void *otherEndBuf, size_t otherEndBufSize,
-                                  int stderrFd);
+                                  int stderrFd,
+                                  unsigned int timeout);
 /* like pipelineOpenMem(), only takes a single command */
 
 char *pipelineDesc(struct pipeline *pl);

@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* trackHub - supports collections of tracks hosted on a remote site.
  * The basic layout of a data hub is:
@@ -31,6 +31,8 @@ struct trackHub
 /* A track hub. */
     {
     struct trackHub *next;
+
+    struct hubConnectStatus *hubStatus;  /* Pointer to our hubConnectStatus structure, if any. */
 
     char *url;		/* URL of hub.ra file. */
     struct trackHubGenome *genomeList;	/* List of associated genomes. */
@@ -79,9 +81,10 @@ struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName
 /* Return trackHubGenome of given name associated with hub.  Return NULL if no
  * such genome. */
 
-struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome);
+struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles);
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
- * types.  Do a few other quick checks to catch errors early. */
+ * types.  Do a few other quick checks to catch errors early. If incFiles is not NULL,
+ * put the list of included files in there. */
 
 void trackHubAddNamePrefix(char *hubName, struct trackDb *tdbList);
 /* For a hub named "xyz" add the prefix "hub_xyz_" to each track and parent field. 
@@ -216,5 +219,8 @@ struct dbDb *trackHubGetPcrServers();
 
 boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort, char **pGenomeDataDir);
 /* Get the isPcr params from a trackHub genome. */
+
+struct trackHubGenome *trackHubGetGenomeUndecorated(char *database);
+/* Get the genome structure for an undecorated genome name. */
 #endif /* TRACKHUB_H */
 

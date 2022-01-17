@@ -35,6 +35,11 @@ if (argc != 2)
 char *userSeqOrVcf = argv[1];
 struct lineFile *lf = lineFileOpen(userSeqOrVcf, TRUE);
 int subtreeSize = optionInt("subtreeSize", 50);
-char *ctFile = phyloPlaceSamples(lf, "wuhCor1", TRUE, subtreeSize, 9);
-return (ctFile == NULL);
+boolean success = FALSE;
+char *ctFile = phyloPlaceSamples(lf, "wuhCor1", NULL, TRUE, subtreeSize, 9, &success);
+if (ctFile)
+    printf("ctFile = %s\n", ctFile);
+else
+    printf("no ctFile.\n");
+return (success == TRUE);
 }

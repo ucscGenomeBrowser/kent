@@ -8,7 +8,7 @@
  * handles the graph building. */
 
 /* Copyright (C) 2008 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -304,7 +304,8 @@ for (cluster = clusterList; cluster != NULL; cluster = nextCluster)
     verbose(2, "Got cluster of %d called %s.\n", slCount(cluster->lbList), name);
     struct txGraph *graph = makeGraph(cluster->lbList, maxBleedOver, maxUncheckedBleed, 
     	seqCache, singleExonMaxOverlap, name);
-    slAddHead(&graphList, graph);
+    if (graph != NULL)
+	slAddHead(&graphList, graph);
     lbClusterFree(&cluster);
     }
 slReverse(&graphList);

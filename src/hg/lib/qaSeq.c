@@ -1,7 +1,7 @@
 /* qaSeq.c - read and write quality scores. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 
 #include "common.h"
@@ -273,7 +273,7 @@ static void fillInQac(char *qacName, struct hash *hash, struct qaSeq *qaList)
 /* Hash contains qaSeq's with DNA sequence but no
  * quality info.  Fill in quality info from .qac file. */
 { 
-boolean isSwapped;   
+boolean isSwapped = FALSE;
 FILE *f = qacOpenVerify(qacName, &isSwapped);
 struct qaSeq *qa;
 
@@ -373,7 +373,7 @@ struct qaSeq *qaRead(char *qaName)
 struct qaSeq *qa, *qaList = NULL;
 if (isQacFile(qaName))
     {
-    boolean isSwapped;
+    boolean isSwapped = FALSE;
     FILE *f = qacOpenVerify(qaName, &isSwapped);
     while ((qa = qacReadNext(f, isSwapped)) != NULL)
 	{

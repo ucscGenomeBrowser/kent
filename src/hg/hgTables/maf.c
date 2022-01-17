@@ -1,7 +1,7 @@
 /* maf - stuff to process maf tracks.  */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hash.h"
@@ -42,7 +42,7 @@ else
 	struct trackDb *childTdb = tdbRef->val;
         if(sameString(childTdb->table, table))
             {
-            if (startsWithWord("maf",childTdb->type) || startsWithWord("wigMaf",childTdb->type))
+            if (startsWithWord("maf",childTdb->type) || startsWithWord("wigMaf",childTdb->type) || startsWithWord("bigMaf",childTdb->type))
                 return TRUE;
             break;
             }
@@ -80,6 +80,16 @@ if (isCustomTrack(table))
     }
 
 mafWriteStart(stdout, NULL);
+
+// if this is a bigMaf file, open the source.
+struct bbiFile *bigMafBbi = NULL;
+if (isBigBed(database, table, curTrack, ctLookupName))
+    {
+    struct trackDb *subTdb = hashFindVal(fullTableToTdbHash, table);
+    char *fileName = trackDbSetting(subTdb, "bigDataUrl");
+    bigMafBbi = bigBedFileOpen(fileName);
+    }
+
 for (region = regionList; region != NULL; region = region->next)
     {
     struct bed *bedList = cookedBedList(conn, table, region, lm, NULL);
@@ -100,12 +110,8 @@ for (region = regionList; region != NULL; region = region->next)
 	    continue;
 	if (ct == NULL)
 	    {
-            if (isBigBed(database, table, curTrack, ctLookupName))
-                {
-                char *fileName = trackDbSetting(track, "bigDataUrl");
-                struct bbiFile *bbi = bigBedFileOpen(fileName);
-                mafList = bigMafLoadInRegion(bbi, bed->chrom, bed->chromStart, bed->chromEnd);
-                }
+            if (bigMafBbi)
+                mafList = bigMafLoadInRegion(bigMafBbi, bed->chrom, bed->chromStart, bed->chromEnd);
 	    else if (mafFile != NULL)
 		mafList = mafLoadInRegion2(conn, conn, table,
 			bed->chrom, bed->chromStart, bed->chromEnd, mafFile);
@@ -132,6 +138,9 @@ for (region = regionList; region != NULL; region = region->next)
     }
 mafWriteEnd(stdout);
 lmCleanup(&lm);
+
+if (bigMafBbi)
+    bigBedFileClose(&bigMafBbi);
 
 if (isCustomTrack(table))
     {

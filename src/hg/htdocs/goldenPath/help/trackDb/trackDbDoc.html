@@ -232,6 +232,9 @@ used as a ready reference.</P>
     <TR VALIGN=TOP><TD class="mouseOverField"><A name="mouseOverField"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">mouseOverField &lt;fieldName&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="multiRegionsBedUrl"><A name="multiRegionsBedUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">multiRegionsBedUrl</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="otherDb"><A name="otherDb"></A><IMG class='toggle detail'>
         <div class="format"><code>otherDb &lt;otherDb&gt;</code></div>
     </TD></TR>
@@ -355,6 +358,14 @@ are described below along with the settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="labelOnFeature"><A name="labelOnFeature"></A><IMG class='toggle detail'>
         <div class="format"><code>labelOnFeature &lt;on/off&gt;</code></div>
     </TD></TR>
+    <tr valign=top><td class="extraDetailsTable"><a name="extraDetailsTable"></a><img class='toggle detail'>
+        <div class="format"><code class="level-new">extraDetailsTable &lt;url/relativePath&gt;</code>
+        </div>
+    </td></tr>
+    <tr valign=top><td class="extraTableFields"><a name="extraTableFields"></a><img class='toggle detail'>
+        <div class="format"><code class="level-new">extraTableFields &lt;url/relativePath&gt;</code>
+        </div>
+    </td></tr>
     <TR VALIGN=TOP><TD class="exonArrows"><A name="exonArrows"></A><IMG class='toggle detail'>
         <div class="format"><code>exonArrows &lt;on/off&gt;</code></div>
     </TD></TR>
@@ -400,7 +411,7 @@ are described below along with the settings specific to their types.</P>
         <div class="format">
             <code>filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
             <code>filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
-            <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd&gt;</code><BR>
+            <code>filterType.&lt;fieldName&gt; &lt;single/singleList/multiple/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
             </div>
     <TR VALIGN=TOP><TD class="filterLabel"><A name="filterLabel">
             <A name="filterLabel.fieldName"></A><IMG class='toggle detail'>
@@ -417,6 +428,10 @@ are described below along with the settings specific to their types.</P>
     </TD></TR>
     <TR VALIGN=TOP><TD class="maxItems"><A name="maxItems"></A><IMG class='toggle detail'>
         <div class="format"><code>maxItems &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxWindowCoverage">
+        <A name="maxWindowCoverage"></A><IMG class='toggle detail'>
+        <div class="format"><code>maxWindowCoverage &lt;integer&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="maxWindowToDraw">
         <A name="maxWindowToDraw"></A><IMG class='toggle detail'>
@@ -588,6 +603,10 @@ are described below along with the settings specific to their types.</P>
         <A name="transformFunc"></A><IMG class='toggle detail'>
         <div class="format"><code>transformFunc &lt;NONE/LOG&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="mouseOverFunction">
+        <A name="mouseOverFunction"></A><IMG class='toggle detail'>
+        <div class="format"><code>mouseOverFunction &lt;noAverage&gt;</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="viewLimits">
             <A name="viewLimits"></A>
             <A name="viewLimitsMax"></A><IMG class='toggle detail'>
@@ -676,6 +695,7 @@ are described below along with the settings specific to their types.</P>
             <A onclick="return jumpTo(this);" HREF="#">baseColorUseSequence</A>,
             <A onclick="return jumpTo(this);" HREF="#">baseColorDefault</A>,
             <A onclick="return jumpTo(this);" HREF="#">itemDetailsHtmlTable</A>,
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowCoverage</A>,
             <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
             <A onclick="return jumpTo(this);" HREF="#">showDiffBasesAllScales</A>,
             <A onclick="return jumpTo(this);" HREF="#">showDiffBasesMaxZoom</A>
@@ -760,6 +780,7 @@ are described below along with the settings specific to their types.</P>
             available for displaying bam tags.</P>
             <A onclick="return jumpTo(this);" HREF="#">baseColorUseSequence</A>,
             <A onclick="return jumpTo(this);" HREF="#">baseColorDefault</A>,
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowCoverage</A>,
             <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
             <A onclick="return jumpTo(this);" HREF="#">showDiffBasesAllScales</A>,
             <A onclick="return jumpTo(this);" HREF="#">showDiffBasesMaxZoom</A>
@@ -1054,6 +1075,7 @@ are described below along with the settings specific to their types.</P>
             <P>Additional settings found in the "Item or
             region tracks" section are also available for displaying
             Variant Call Format tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowCoverage</A>,
             <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>
         </DIV>
     </TD></TR>
@@ -1165,6 +1187,7 @@ are described below along with the settings specific to their types.</P>
             <A onclick="return jumpTo(this);" HREF="#">matrix</A>,
             <A onclick="return jumpTo(this);" HREF="#">matrixHeader</A>,
             <A onclick="return jumpTo(this);" HREF="#">maxItems</A>,
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowCoverage</A>,
             <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
             <A onclick="return jumpTo(this);" HREF="#">showCdsAllScales</A>,
             <A onclick="return jumpTo(this);" HREF="#">showCdsMaxZoom</A>,
@@ -1276,6 +1299,9 @@ are described below along with the settings specific to their types.</P>
             <code>speciesGroups &lt;sgroup1&gt; [sgroup2  &hellip;]</code><BR>
             <code>sGroup_&lt;sgroupN&gt; &lt;species1&gt; [species2 &hellip;]</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="speciesLabels"><A name="speciesLabels"></A><IMG class='toggle detail'>
+        <div class="format"><code>speciesLabels &lt;species1=newLabel1&gt; [species2=newLabel2 &hellip;]</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="summary"><A name="summary"></A><IMG class='toggle detail'>
         <div class="format"><code>summary &lt;tableName&gt;</code></div>
     </TD></TR>
@@ -1379,6 +1405,7 @@ are described below along with the settings specific to their types.</P>
             <P>Additional settings found in the "Item or
             region tracks" section are also available for displaying
             snp tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowCoverage</A>
             <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>
         </DIV>
     </TD></TR>

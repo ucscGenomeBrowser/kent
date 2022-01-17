@@ -1,7 +1,7 @@
 /* fetchUrlTest - test some stuff in net module. */
 
 /* Copyright (C) 2010 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "options.h"
 #include "dystring.h"
@@ -78,8 +78,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-//fetchUrlTest(argv[1]);
-fetchUrlBody(argv[1]);
+fetchUrlTest(argv[1]);
+//fetchUrlBody(argv[1]);
 return 0;
 }
 

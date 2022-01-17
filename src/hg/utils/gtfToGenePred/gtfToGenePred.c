@@ -1,7 +1,7 @@
 /* gtfToGenePred - convert a GTF file to a genePred. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "gff.h"
@@ -54,7 +54,6 @@ struct slName *clSourcePrefixes; /* list of source prefixes to match */
 boolean clIncludeVersion = FALSE; /* add version numbers to identifiers if available */
 unsigned clGxfOptions = 0;       /* options for converting GTF/GFF */
 boolean doSimple = FALSE;      /* only check column validity */
-
 int badGroupCount = 0;  /* count of inconsistent groups found */
 
 
@@ -229,8 +228,6 @@ if (optionExists("geneNameAsName2"))
     clGxfOptions |= genePredGxfGeneNameAsName2;
 if (optionExists("includeVersion"))
     clGxfOptions |= genePredGxfIncludeVersion;
-
-
 gtfToGenePred(argv[1], argv[2], optionVal("infoOut", NULL));
 if (badGroupCount > 0)
     errAbort("%d errors", badGroupCount);

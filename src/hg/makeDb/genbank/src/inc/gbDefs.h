@@ -2,7 +2,7 @@
  * these are uses by many modules and don't really make sense anywhere. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef GBDEFS_H
 #define GBDEFS_H
 

@@ -3,7 +3,7 @@
  * representation of chain into chain. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hash.h"
@@ -228,7 +228,7 @@ struct chain *chainLoadIdRangeHub(char *fileName, char *linkFileName,   char *ch
 struct lm *lm = lmInit(0);
 struct bbiFile *bbi =  bigBedFileOpen(fileName);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
-char *bedRow[11];
+char *bedRow[12];
 char startBuf[16], endBuf[16];
 bbiFileClose(&bbi);
 boolean loadAll = FALSE;
@@ -257,6 +257,7 @@ chain->qSize = sqlUnsigned(bedRow[8]);
 chain->qStrand = *bedRow[5];
 chain->qStart = sqlUnsigned(bedRow[9]);
 chain->qEnd = sqlUnsigned(bedRow[10]);
+chain->score = sqlUnsigned(bedRow[11]);
 chain->id = id;
 
 // Now load the links.
@@ -283,7 +284,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         cBlock->tEnd = sqlUnsigned(bedRow[2]);
         unsigned size = cBlock->tEnd - cBlock->tStart;
         cBlock->qStart = sqlUnsigned(bedRow[4]);
-        cBlock->qStart = cBlock->qStart + size;
+        cBlock->qEnd = cBlock->qStart + size;
         }
     }
 slReverse(&chain->blockList);

@@ -1,7 +1,7 @@
 /* bedToBigBed - Convert bed to bigBed.. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -404,6 +404,10 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	int start = range->start;
 	int end = range->end;
 	bits32 size = end - start;
+
+        // we want to make sure we count zero size elements
+        if (size == 0)
+            size = 1;
 
 	/* Add to total summary. */
 	if (firstTime)

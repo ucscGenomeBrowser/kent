@@ -1,5 +1,5 @@
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 
 /* blatServersCheck - Check that the blatServers table value match the 
@@ -73,7 +73,7 @@ setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, (const char*)&tv, sizeof tv);
 }
 
-int statusServer(char *hostName, char *portName, boolean isTrans, struct hash *versionHash)
+int statusServer(char *hostName, char *portName, boolean isTrans, boolean isDynamic, char *db, struct hash *versionHash)
 /* Send status message to server arnd report result.
  * Returns -1 for connection error.
  * Returns -2 for error reading string.
@@ -96,7 +96,10 @@ if (sd == -1)
 
 setSocketTimeout(sd, timeout);
 
-sprintf(buf, "%sstatus", gfSignature());
+if (isDynamic)
+    sprintf(buf, "%s%s %s %s", gfSignature(), isTrans ? "transInfo" : "untransInfo", db, db);
+else
+    sprintf(buf, "%sstatus", gfSignature());
 mustWriteFd(sd, buf, strlen(buf));
 
 for (;;)
@@ -300,7 +303,7 @@ if (totalRows==0)
 
 int errCount = 0;
 
-sqlSafef(query,sizeof(query), "select db, host, port, isTrans from %s order by db,port", blatServersTableName);
+sqlSafef(query,sizeof(query), "select db, host, port, isTrans, dynamic from %s order by db,port", blatServersTableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -309,12 +312,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *portStr = row[2];
     unsigned int port  = sqlUnsigned(portStr);
     unsigned int trans = sqlUnsigned(row[3]);
+    unsigned int dynamic = sqlUnsigned(row[4]);
     boolean isTrans = (trans == 1);
+    boolean isDynamic = (dynamic == 1);
 
     if (hostFilter && !sameString(hostFilter, host))
 	continue;   // skip
 
-    int res = statusServer(host, portStr, isTrans, versionHash);
+    int res = statusServer(host, portStr, isTrans, isDynamic, db, versionHash);
     int res2 = 0;
     if (res != -1)  // if not a connection error, proceed.
 	{
@@ -328,10 +333,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     else
 	{
-	warn("duplicate host:port %s found", hashKey);
+	if (!isDynamic)
+	    warn("duplicate host:port %s found", hashKey);
 	}
 
-    if ((res != 0) || (res2 != 0) || (hel != NULL))
+    if ((res != 0) || (res2 != 0) || ((hel != NULL) && !isDynamic))
 	{
 	++errCount;
     	verbose(1, "db=%s host=%s port=%d isTrans=%d res=%d res2=%d\n\n", db, host, port, trans, res, res2);

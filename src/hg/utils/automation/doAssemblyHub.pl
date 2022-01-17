@@ -265,6 +265,7 @@ sub readChr2Acc($$) {
     my ($chrN, $acc) = split('\t', $line);
     $chrN =~ s/ /_/g;   # some assemblies have spaces in chr names ...
     $chrN =~ s/:/_/g;   # one assembly GCF_002910315.2 had : in a chr name
+    $chrN = "chr" if ($chrN eq "na");	# seen in bacteria with only one chr
     $accToChr->{$acc} = $chrN;
   }
   close (FH);
@@ -283,6 +284,7 @@ sub compositeAgp($$$$) {
   foreach my $acc (keys %accToChr) {
     my $chrN =  $accToChr{$acc};
     my $ncbiChr = "chr${chrN}";
+    $ncbiChr = "chr" if ($chrN eq "chr");    # seen in bacteria with only 1 chr
     open (FH, "zcat $agpSource/${ncbiChr}.comp.agp.gz|") or die "can not read $ncbiChr.comp.agp.gz";
     while (my $line = <FH>) {
         if ($line =~ m/^#/) {
@@ -595,20 +597,31 @@ sub unplacedAgp($$$$) {
 #########################################################################
 # process NCBI unplaced FASTA file, perhaps translate into UCSC naming scheme
 #   optional chrPrefix can be "chrUn_" for assemblies that have other chr names
-sub unplacedFasta($$$$) {
-  my ($agpFile, $twoBitFile, $chrPrefix, $fastaOut) = @_;
+sub unplacedFasta($$$$$$$) {
+  my ($agpFile, $faFile, $twoBitFile, $chrPrefix, $fastaOut, $agpOutput, $agpNames) = @_;
 
   my %contigName;  # key is NCBI contig name, value is UCSC contig name
-  open (FH, "zcat $agpFile|") or die "can not read $agpFile";
-  while (my $line = <FH>) {
-    if ($line !~ m/^#/) {
-        my ($ncbiAcc, undef) = split('\s+', $line, 2);
-        my $ucscAcc = $ncbiAcc;
-        $ucscAcc =~ s/\./v/ if ($ucscNames);
-        $contigName{$ncbiAcc} = $ucscAcc;
+  if ( -s $agpFile ) {
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    while (my $line = <FH>) {
+      if ($line !~ m/^#/) {
+          my ($ncbiAcc, undef) = split('\s+', $line, 2);
+          my $ucscAcc = $ncbiAcc;
+          $ucscAcc =~ s/\./v/ if ($ucscNames);
+          $contigName{$ncbiAcc} = $ucscAcc;
+      }
     }
+    close (FH);
+  } else {	# no AGP file, get the contig names from the fasta file
+    open (FH, "zgrep '^>' $faFile | cut -d' ' -f1 | tr -d '>'|") or die "can not read $faFile";
+    while (my $ncbiAcc = <FH>) {
+      chomp $ncbiAcc;
+      my $ucscAcc = $ncbiAcc;
+      $ucscAcc =~ s/\./v/ if ($ucscNames);
+      $contigName{$ncbiAcc} = $ucscAcc;
+    }
+    close (FH);
   }
-  close (FH);
 
   my ($fh, $tmpFile) = tempfile("seqList_XXXX", DIR=>'/dev/shm', SUFFIX=>'.txt', UNLINK=>1);
   foreach my $ctg (sort keys %contigName) {
@@ -637,6 +650,23 @@ sub unplacedFasta($$$$) {
   }
   close(FH);
   close(FA);
+  if ( ! -s $agpFile ) {	# there was no AGP file, make a fake one
+     printf STDERR "# no AGP for unplaced sequence, making up a fake AGP\n";
+     print `hgFakeAgp -singleContigs -minContigGap=1 -minScaffoldGap=50000 $fastaOut stdout | gzip -c > $agpOutput`;
+     open (NAMES, "|sort -u >$agpNames") or die "can not write to $agpNames";
+     open (FH, "zcat $agpOutput|") or die "can not read $agpOutput";
+     while (my $line = <FH>) {
+       if ($line !~ m/^#/) {
+          my ($ncbiAcc, undef) = split('\s+', $line, 2);
+          next if (exists($dupAccessionList{$ncbiAcc}));
+          my $ucscAcc = $ncbiAcc;
+          $ucscAcc =~ s/\./v/;
+          printf NAMES "%s%s\t%s\n", $chrPrefix, $ucscAcc, $ncbiAcc;
+       }
+     }
+    close (FH);
+    close (NAMES);
+  }
 }	# sub unplacedFasta($$$$)
 
 #########################################################################
@@ -768,29 +798,34 @@ sub doSequence {
 
   ###########  unplaced sequence  ################
   my $unplacedScafAgp = "$primaryAssembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
-  if ( -s $unplacedScafAgp ) {
+  my $unplacedScafFa = "$primaryAssembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz";
+  if ( -s $unplacedScafAgp || -s $unplacedScafFa) {
     my $chrPrefix = "";   # no prefix if no other chrom parts
     $chrPrefix = "chrUn_" if ($otherChrParts && ! $ucscNames);
     my $agpOutput = "$runDir/$asmId.unplaced.agp.gz";
     my $agpNames = "$runDir/$asmId.unplaced.names";
     $partsDone += 1;
 
-    if (needsUpdate($unplacedScafAgp, $agpOutput)) {
-      unplacedAgp($unplacedScafAgp, $agpOutput, $agpNames, $chrPrefix);
-      `touch -r $unplacedScafAgp $agpOutput`;
+    if ( -s $unplacedScafAgp ) {
+      if (needsUpdate($unplacedScafAgp, $agpOutput)) {
+        unplacedAgp($unplacedScafAgp, $agpOutput, $agpNames, $chrPrefix);
+        `touch -r $unplacedScafAgp $agpOutput`;
+      }
     }
-    my $fastaOut = "$runDir/$asmId.unplaced.fa.gz";
-    if (needsUpdate($twoBitFile, $fastaOut)) {
-      unplacedFasta($unplacedScafAgp, $twoBitFile, $chrPrefix, $fastaOut);
-      `touch -r $twoBitFile $fastaOut`;
+    if ( -s $unplacedScafFa ) {	# will make an AGP file if there was none
+      my $fastaOut = "$runDir/$asmId.unplaced.fa.gz";
+      if (needsUpdate($twoBitFile, $fastaOut)) {
+        unplacedFasta($unplacedScafAgp, $unplacedScafFa, $twoBitFile, $chrPrefix, $fastaOut, $agpOutput, $agpNames);
+        `touch -r $twoBitFile $fastaOut`;
+      }
     }
   }
 
   ###########  non-nuclear chromosome sequence  ################
   my $nonNucAsm = "$buildDir/download/${asmId}_assembly_structure/non-nuclear";
   my $nonNucChr2acc = "$nonNucAsm/assembled_chromosomes/chr2acc";
-  my $agpSource = "$nonNucAsm/assembled_chromosomes/AGP";
   if ( -s $nonNucChr2acc ) {
+    my $agpSource = "$nonNucAsm/assembled_chromosomes/AGP";
     my $agpOutput = "$runDir/$asmId.nonNucChr.agp.gz";
     my $agpNames = "$runDir/$asmId.nonNucChr.names";
     my $fastaOut = "$runDir/$asmId.nonNucChr.fa.gz";
@@ -808,16 +843,17 @@ sub doSequence {
   ###########  non-nuclear scaffold unlocalized sequence  ################
   my $nonNucChr2scaf = "$nonNucAsm/unlocalized_scaffolds/unlocalized.chr2scaf";
   if ( -s $nonNucChr2scaf ) {
+    my $agpSource = "$nonNucAsm/unlocalized_scaffolds/AGP";
     my $agpOutput = "$runDir/$asmId.nonNucUnlocalized.agp.gz";
     my $agpNames = "$runDir/$asmId.nonNucUnlocalized.names";
     my $fastaOut = "$runDir/$asmId.nonNucUnlocalized.fa.gz";
     $partsDone += 1;
     if (needsUpdate($nonNucChr2scaf, $agpOutput)) {
-      compositeAgp($nonNucChr2scaf, $agpSource, $agpOutput, $agpNames);
+      unlocalizedAgp($nonNucChr2scaf, $agpSource, $agpOutput, $agpNames);
       `touch -r $nonNucChr2scaf $agpOutput`;
     }
     if (needsUpdate($twoBitFile, $fastaOut)) {
-      compositeFasta($nonNucChr2scaf, $twoBitFile, $fastaOut);
+      unlocalizedFasta($nonNucChr2scaf, $twoBitFile, $fastaOut);
       `touch -r $twoBitFile $fastaOut`;
     }
   }
@@ -836,18 +872,18 @@ _EOF_
 
 ### construct sequence when no AGP files exist
   if (0 == $partsDone) {
-printf STDERR "creating fake AGP\n";
+    printf STDERR "# partsDone is zero, creating fake AGP\n";
     if ($ucscNames) {
       $bossScript->add(<<_EOF_
 twoBitToFa ../download/\$asmId.2bit stdout | sed -e "s/\\.\\([0-9]\\+\\)/v\\1/;" | gzip -c > \$asmId.fa.gz
-hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
+hgFakeAgp -singleContigs -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
 zgrep "^>" \$asmId.fa.gz | sed -e 's/>//;' | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\\)/.\\1/;' | awk '{printf "%s\\t%s\\n", \$2, \$1}' > \$asmId.fake.names
 _EOF_
       );
     } else {
       $bossScript->add(<<_EOF_
 twoBitToFa ../download/\$asmId.2bit stdout | gzip -c > \$asmId.fa.gz
-hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
+hgFakeAgp -singleContigs -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
 twoBitInfo ../download/\$asmId.2bit stdout | cut -f1 \\
   | sed -e "s/\\.\\([0-9]\\+\\)/v\\1/;" \\
     | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\$\\)/.\\1/;' \\
@@ -1196,6 +1232,20 @@ sub doSimpleRepeat {
   my $bossScript = newBash HgRemoteScript("$runDir/doSimpleRepeat.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  my $trfClusterHub = $smallClusterHub;
+
+  my $seqCount = `cat $buildDir/$asmId.chrom.sizes | wc -l`;
+  chomp $seqCount;
+  # check for large seqCount and large genome, then use bigCluster
+  # the 100000 and 20000000 are from doSimpleRepeat.pl
+  if ( $seqCount > 100000 ) {
+     my $genomeSize = `ave -col=2 $buildDir/$asmId.chrom.sizes | grep -w total | awk '{printf "%d", \$NF}'`;
+     chomp $genomeSize;
+     if ($genomeSize > 200000000) {
+	$trfClusterHub = $bigClusterHub;
+     }
+  }
+
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 export buildDir=$buildDir
@@ -1203,11 +1253,11 @@ export buildDir=$buildDir
 if [ \$buildDir/\$asmId.2bit -nt trfMask.bed.gz ]; then
   doSimpleRepeat.pl -stop=filter -buildDir=`pwd` \\
     -unmaskedSeq=\$buildDir/\$asmId.2bit \\
-      -trf409=6 -dbHost=$dbHost -smallClusterHub=$smallClusterHub \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$trfClusterHub \\
         -workhorse=$workhorse \$asmId
   doSimpleRepeat.pl -buildDir=`pwd` \\
     -continue=cleanup -stop=cleanup -unmaskedSeq=\$buildDir/\$asmId.2bit \\
-      -trf409=6 -dbHost=$dbHost -smallClusterHub=$smallClusterHub \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$trfClusterHub \\
         -workhorse=$workhorse \$asmId
   gzip simpleRepeat.bed trfMask.bed
 fi
@@ -1390,6 +1440,7 @@ sub doAddMask {
 
   $bossScript->add(<<_EOF_
 export asmId=$asmId
+export accessionId=`echo \$asmId | cut -d'_' -f1-2`
 
 if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   twoBitMask $src2BitToMask -type=.bed \\
@@ -1397,6 +1448,18 @@ if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   twoBitToFa \$asmId.masked.2bit stdout | faSize stdin > \$asmId.masked.faSize.txt
   touch -r \$asmId.masked.2bit \$asmId.masked.faSize.txt
   cp -p \$asmId.masked.faSize.txt ../../\$asmId.faSize.txt
+  size=`grep -w bases \$asmId.masked.faSize.txt | cut -d' ' -f1`
+  if [ \$size -lt 4294967297 ]; then
+    ln \$asmId.masked.2bit \$accessionId.2bit
+    gfServer -trans index ../../\$accessionId.trans.gfidx \$accessionId.2bit &
+    gfServer -stepSize=5 index ../../\$accessionId.untrans.gfidx \$accessionId.2bit
+    wait
+    rm \$accessionId.2bit
+    touch -r \$asmId.masked.2bit ../../\$accessionId.trans.gfidx
+    touch -r \$asmId.masked.2bit ../../\$accessionId.untrans.gfidx
+  else
+    printf "# genome \$asmId too large at \$size to make blat indexes\\n" 1>&2
+  fi
 else
   printf "# addMask step previously completed\\n" 1>&2
   exit 0
@@ -1494,6 +1557,12 @@ sub doTandemDups {
     &HgAutomate::verbose(1,
 	"ERROR: tandemDups: can not find $buildDir/$asmId.unmasked.2bit\n");
     exit 255;
+  }
+  my $ctgCount = `grep -c '^' $buildDir/$asmId.chrom.sizes`;
+  chomp $ctgCount;
+  if ( $ctgCount > 100000) {
+   &HgAutomate::verbose(1, "# tandemDups step too many contigs at $ctgCount\n");
+       return;
   }
   if (-d "${runDir}" ) {
      if (! -s "$runDir/$asmId.tandemDups.bb") {
@@ -1615,7 +1684,7 @@ sub doNcbiGene {
 
   my $dupList = "";
   if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
-    $dupList = " | grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\" ";
+    $dupList = " | (grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\"  || true)";
   }
 
   $bossScript->add(<<_EOF_
@@ -1630,7 +1699,8 @@ function cleanUp() {
 if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
   (gff3ToGenePred -warnAndContinue -useName \\
     -attrsOut=\$asmId.geneAttrs.ncbi.txt \$gffFile stdout \\
-      2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter stdin stdout \\
+      2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter \\
+         -chromSizes=../../\$asmId.chrom.sizes stdin stdout \\
         $dupList | gzip -c > \$asmId.ncbiGene.genePred.gz
   genePredCheck \$asmId.ncbiGene.genePred.gz
   export howMany=`genePredCheck \$asmId.ncbiGene.genePred.gz 2>&1 | grep "^checked" | awk '{print \$2}'`
@@ -1916,10 +1986,10 @@ if (length($species) < 1) {
      $species =~ s/.*organism\s+name:\s+//i;
      $species =~ s/\s+\(.*//;
   } else {
-     die "no -species specified and can not find $asmReport";
+     die "ERROR: no -species specified and can not find $asmReport";
   }
   if (length($species) < 1) {
-     die "no -species specified and can not find Organism name: in $asmReport";
+     die "ERROR: no -species specified and can not find Organism name: in $asmReport";
   }
 }
 

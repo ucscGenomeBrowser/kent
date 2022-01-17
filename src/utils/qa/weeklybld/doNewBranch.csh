@@ -133,7 +133,7 @@ if ( $status ) then
 endif
 
 ## copy binaries to beta machine:
-rsync -a -P --exclude=hg.conf --exclude=hg.conf.private \
+rsync -rLptgoD -P --exclude=hg.conf --exclude=hg.conf.private \
   /usr/local/apache/cgi-bin-beta/ qateam@hgwbeta:/data/apache/cgi-bin/
 ## this htdocs rsync seems redundant. buildBeta.csh does not update htdocs-beta, 
 ##  but make beta in htdocs/ does, however they should be identical already.
@@ -154,7 +154,7 @@ echo "Wait complete, checking results. [${0}: `date`]"
 if ( -e GitReports.ok ) then
     echo "Git Reports finished ok. [${0}: `date`]"
     echo "buildGitReports.csh done on hgwdev, sending email... [${0}: `date`]"
-    echo "Ready for pairings, day 16, Git reports completed for v${BRANCHNN} branch http://genecats.gi.ucsc.edu/git-reports/ (history at http://genecats.gi.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 16, v${BRANCHNN} review)." ${BUILDMEISTEREMAIL} kuhn@soe.ucsc.edu brianlee@soe.ucsc.edu azweig@ucsc.edu kate@soe.ucsc.edu chmalee@ucsc.edu jnavarr5@ucsc.edu
+    echo "Ready for pairings, day 16, Git reports completed for v${BRANCHNN} branch http://genecats.gi.ucsc.edu/git-reports/ (history at http://genecats.gi.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 16, v${BRANCHNN} review)." ${BUILDMEISTEREMAIL} kuhn@soe.ucsc.edu brianlee@soe.ucsc.edu azweig@ucsc.edu clayfischer@ucsc.edu chmalee@ucsc.edu jnavarr5@ucsc.edu
 
     # email all who have checked in that code summaries are due
     @ LASTNN=$BRANCHNN - 1

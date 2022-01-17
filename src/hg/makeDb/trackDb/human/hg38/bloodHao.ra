@@ -1,0 +1,136 @@
+track bloodHao
+superTrack on
+shortLabel Blood (PBMC) Hao
+longLabel Peripheral blood mononuclear cells (PBMC) from Hao et al 2020
+visibility hide
+group singleCell
+pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
+
+    track bloodHaoCellType
+    parent bloodHao
+    html bloodHao    
+    type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
+    visibility pack
+    shortLabel Blood PBMC Cells
+    longLabel Blood (PBMCs) binned by cell type (level 1) from Hao et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    bigDataUrl /gbdb/$D/bbi/bloodHao/cell_type.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/cell_type.stats
+    #barChartBars B CD4_T CD8_T DC Mono NK other other_T
+    barChartBars B_cell T_cell_CD4+ T_cell_CD8+ dendritic_cell_(DC) monocyte natural_killer_cell_(NK) other T_cell_other
+    barChartColors #fe3247 #fe3248 #fe3248 #e92812 #e02900 #fb2e3e #f01111 #fe3247
+    transformFunc NONE
+    barChartLimit 2
+
+    track bloodHaoL2
+    parent bloodHao
+    html bloodHao
+    type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
+    visibility hide
+    shortLabel Blood PBMC Cells 2
+    longLabel Blood PBMCs binned by cell type (level 2) from Hao et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/bloodHao/celltype.l2.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/celltype.l2.stats
+    barChartBars ASDC B_intermediate B_memory B_naive CD14_Mono CD16_Mono CD4_CTL CD4_Naive CD4_Proliferating CD4_TCM CD4_TEM CD8_Naive CD8_Proliferating CD8_TCM CD8_TEM Doublet Eryth HSPC ILC MAIT NK NK_Proliferating NK_CD56bright Plasmablast Platelet Treg cDC1 cDC2 dnT gdT pDC
+    barChartColors #f77170 #fe3246 #fe3246 #fe3246 #e02901 #e22803 #fd3145 #fe3248 #fb737b #fe3248 #fe3248 #fe3248 #fc737c #fe3248 #fd3145 #e22803 #fa9fa1 #fd7580 #fe7683 #fe3246 #fb2e3e #f82b36 #fd3043 #fc747d #f01212 #fe3248 #f77071 #e5270a #fe7685 #fe3145 #f72c34
+    transformFunc NONE
+    barChartLimit 3
+
+    track bloodHaoL3
+    parent bloodHao
+    html bloodHao
+    type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
+    visibility hide
+    shortLabel Blood PBMC Cells 3
+    longLabel Blood PBMCs binned by cell type (level 3) from Hao et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/bloodHao/celltype.l3.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/celltype.l3.stats
+    #barChartCategoryUrl /gbdb/$D/bbi/bloodHao/celltype.l3.categories
+    #barChartColors #ff8282 #feb1a7 #ff3d00 #ff5c00 #ff7b00 #ff8e00 #ffa000 #ffb500 #ffcb00 #ffe100 #fff700 #f1ff00 #e5ff4c #c5ff00 #afff00 #9bff00 #89ff00 #93ff4c #27ff00 #4cff5b #00ff53 #4cffa8 #4cffb5 #00ffa8 #00ffbe #00ffd5 #00ffea #00fdff #4ceeff #00d2ff #00bbff #00a5ff #0093ff #82c1ff #4c93ff #4c7dff #0027ff #0008ff #1600ff #3400ff #5300ff #7200ff #8900ff #b94cff #d782ff #c500ff #db00ff #f100ff #ff4cf9 #ff00e1 #ff00cb #ff4ccb #ff4cbc #ff008e #ff007b #ff005c #ff003d #ff001e
+    #barChartColors #e8c1be #e9c0be #c01622 #c01622 #c01623 #bf1623 #c01622 #c01622 #a35a04 #a35a04 #b91449 #b30b64 #d25f8a #b3096a #b40c63 #b3096a #b30b64 #cc5d98 #b30968 #dd93ba #b30d5f #cd638a #e05f73 #b20e5f #b20b66 #b2105c #b41451 #bf163d #cf6485 #cd112f #da0c23 #b6144c #a25b03 #e19aa6 #d06382 #d05f8e #b51058 #f0060d #f0050e #f4040a #f2050c #f3040b #e70817 #d2647b #ebbac6 #bd1f30 #b30a67 #b40b62 #cb746c #ad3e17 #b12f21 #cd5d96 #d06189 #bd1443 #e60917 #b30e5e #dc0b21 #b92428
+    barChartColors #fabfbc #fcc0c1 #fe3246 #fe3146 #fe3246 #fe3246 #fe3246 #fe3246 #e02901 #e22803 #fd3145 #fe3248 #fb737b #fe3248 #fd3145 #fe3248 #fe3247 #fe7785 #fe3248 #ffa4ad #fe3248 #fe7684 #fc737c #fe3248 #fe3248 #fe3248 #fe3247 #fd3144 #fe7684 #fc3042 #fc2f41 #fe3246 #e22803 #fa9fa1 #fd7580 #fe7683 #fe3246 #f82b36 #fb2e3e #fa2d3c #fc2f40 #fc2f41 #fd3043 #fc747d #fdc1c4 #f01212 #fe3248 #fe3248 #f77071 #e22804 #e8270f #ff7785 #fd7581 #fd3145 #fb2e3f #fe3248 #fc3042 #f72c34
+    barChartBars ASDC_mDC ASDC_pDC B_intermediate_kappa B_intermediate_lambda B_memory_kappa B_memory_lambda B_naive_kappa B_naive_lambda CD14_Mono CD16_Mono CD4_CTL CD4_Naive CD4_Proliferating CD4_TCM_1 CD4_TCM_2 CD4_TCM_3 CD4_TEM_1 CD4_TEM_2 CD4_TEM_3 CD4_TEM_4 CD8_Naive CD8_Naive_2 CD8_Proliferating CD8_TCM_1 CD8_TCM_2 CD8_TCM_3 CD8_TEM_1 CD8_TEM_2 CD8_TEM_3 CD8_TEM_4 CD8_TEM_5 CD8_TEM_6 Doublet Eryth HSPC ILC MAIT NK_Proliferating NK_1 NK_2 NK_3 NK_4 NK_CD56bright Plasma Plasmablast Platelet Treg_Memory Treg_Naive cDC1 cDC2_1 cDC2_2 dnT_1 dnT_2 gdT_1 gdT_2 gdT_3 gdT_4 pDC
+    transformFunc NONE
+    barChartLimit 3
+
+    track bloodHaoDonor
+    parent bloodHao
+    html bloodHao
+    type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
+    visibility hide
+    shortLabel Blood PBMC Donor
+    longLabel Blood PBMCs binned by blood donor from Hao et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/bloodHao/donor.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/donor.stats
+    #barChartColors #ff0000 #ffbb00 #a4ff00 #00ff92 #00d2ff #0020ff #a400ff #ff00bb
+    #barChartColors #b51057 #b40f5a #b61153 #b51156 #bd1f31 #bd183c #b82037 #bf163d
+    barChartColors #fd3144 #fe3247 #fd3144 #fd3144 #f32b2b #f92e3a #f52c30 #fa2f3c
+    barChartBars P1 P2 P3 P4 P5 P6 P7 P8
+    transformFunc NONE
+    barChartLimit 2
+
+    track bloodHaoTime
+    parent bloodHao
+    html bloodHao
+    type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
+    visibility hide
+    shortLabel Blood PBMC Time
+    longLabel Blood PBMCs binned by time into experiment from Hao et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/bloodHao/time.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/time.stats
+    #barChartColors #b81843 #b7144c #b81549
+    barChartColors #f92e3b #fc3043 #fc3041
+    barChartBars 0 3 7
+    transformFunc NONE
+    barChartLimit 2
+
+    track bloodHaoPhase
+    parent bloodHao
+    html bloodHao
+    type bigBarChart
+    url https://cells.ucsc.edu/?ds=multimodal-pbmc+sct&gene=$$
+    urlLabel View on the UCSC Cell Browser:
+    visibility hide
+    shortLabel Blood PBMC Phase
+    longLabel Blood PBMCs binned by phase of cell cycle from Hao et al 2020
+    barChartMetric mean
+    barChartUnit UMI/cell
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/$D/bbi/bloodHao/Phase.bb
+    barChartStatsUrl /gbdb/$D/bbi/bloodHao/Phase.stats
+    #barChartColors #ff0000 #00ff2a #2a00ff
+    #barChartColors #b03a1e #b7134d #b51353
+    barChartColors #e92913 #fd3144 #fe3247
+    barChartBars G1 G2M S
+    transformFunc NONE
+    barChartLimit 2
+

@@ -4,9 +4,11 @@ usage='loadTracks [options] trackDb hgFindSpec db0 ...
 options:
    -release=release
    -strict
+   -addVersion -- add cartVersion pseudo-table 
    -raName=trackDb.ra  - base name of ra file
    -grpSql=grp.sql - create a grp table using this sql file
-   -sqlDir=../../lib - directory containg trackDb.sql and hgFindSpec.sql'
+   -sqlDir=../../lib - directory containg trackDb.sql and hgFindSpec.sql
+   -gbdbList=user@machine - machine with /gbdb on it'
 
 UNAME_N=`uname -n`
 UNAME_N=${UNAME_N/.soe.ucsc.edu/}
@@ -16,6 +18,7 @@ local=''
 strict=''
 raName=''
 grpSql=''
+gbdbList=''
 sqlDir='../../lib'
 while [[ $1 == -* ]] ; do
     case $1 in
@@ -23,6 +26,8 @@ while [[ $1 == -* ]] ; do
             release=$(echo $1 | sed 's/-release=//') ;;
         -strict)
             strict=yes;;
+        -addVersion)
+            addVersion=yes;;
         -settings)
             settings="yes";;
         -raName=*)
@@ -31,6 +36,8 @@ while [[ $1 == -* ]] ; do
             grpSql=$(echo $1 | sed 's/-grpSql=//') ;;
         -sqlDir=*)
             sqlDir=$(echo $1 | sed 's/-sqlDir=//') ;;
+        -gbdbList=*)
+            gbdbList=$(echo $1 | sed 's/-gbdbList=//') ;;
         *)
             echo "invalid option: $1" >&2
             exit 1 ;;
@@ -80,6 +87,9 @@ loadDbTracks() {
         fopts="$fopts -release=$release"
         qopts="$qopts -release=$release"
     fi
+    if [ -n "$addVersion" ] ; then
+        topts="$topts -addVersion"
+    fi
     if [ -n "$strict" ] ; then
         topts="$topts -strict"
         fopts="$fopts -strict"
@@ -91,6 +101,9 @@ loadDbTracks() {
     if [ -n "$raName" ] ; then
         topts="$topts -raName=$raName"
         fopts="$fopts -raName=$raName"
+    fi
+    if [ -n "$gbdbList" ] ; then
+        topts="$topts -gbdbList=$gbdbList"
     fi
     # don't use set -x, since the autoload scripts e-mail stderr.
     local cmd="hgTrackDb $topts $org $db $trackDb ${sqlDir}/trackDb.sql ."

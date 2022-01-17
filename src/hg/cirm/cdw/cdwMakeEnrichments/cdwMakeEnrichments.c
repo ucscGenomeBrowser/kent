@@ -3,7 +3,7 @@
  * in featureBits */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -444,6 +444,8 @@ char *ignoredFormats[] = {
 	"html",
 	"csv",
 	"tsv",
+	"pdf",
+	"png",
 	"unknown",
 	};
 
@@ -508,7 +510,7 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown") && !isEmpty(vf-
 	else if (sameString(format, "vcf"))
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 	else if (stringIx(format, ignoredFormats) >= 0)
-	    verbose(2, "Ignoring %s %s in doEnrichments, that's ok", format, ef->cdwFileName);
+	    verbose(2, "Ignoring %s %s in doEnrichments, that's ok\n", format, ef->cdwFileName);
 	else
 	    errAbort("Unrecognized format %s in doEnrichments(%s)", format, path);
 	}

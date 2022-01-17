@@ -262,7 +262,8 @@
     table specified in either metaDb or metaTab in the genomes.txt file. The meta tag can be 
     any alphanumeric string. Each meta tag should appear in a trackDb stanza AND in either the 
     tab-separated file specified by metaTab, or tagStorm file specified by metaDb in the 
-    hub's genomes.txt file.
+    hub's genomes.txt file. Examples on how to include metadata in your hubs can be found
+    on the following <a href="/goldenPath/help/metadata.html">metadata guide</a>.
 </DIV>
 
 <DIV class="visibility"><span class="types all"></span>
@@ -473,7 +474,11 @@
     setting to display the weaker islands, while the stronger ones are rendered in
     <code>color</code>.  If <code>altColor</code> is not specified, the system will
     use a color halfway between that specified in the <code>color</code> tag
-    and white instead.</P>
+    and white instead. Tracks using <code>altColor</code> with the windowing function
+    &quot;mean+whiskers&quot; will see the shading of colors impacted, with lighter
+    shades for values within a standard deviation around the mean, most noticeable when zoomed out
+    and average calculations are taking place.</p>
+</P>
     <P><B>Example:</B></P>
     <pre>   altColor 0,0,255</pre>
     <P>This example sets the alternate color to blue.</P>
@@ -888,7 +893,7 @@
     <P>
     If the field contains a "|" symbol, the part before the symbol is used to
     replace the $$ wildcard and the part after it as the label. This is similar
-    to how Wikpedia markup encodes links. In the example below, a value for the
+    to how Wikipedia markup encodes links. In the example below, a value for the
     field pmid of "115330|Doe, J. et al" would create a link with the URL
     https://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J. et al" .
     </P>
@@ -925,7 +930,7 @@
 
 <DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
-        <code>sepFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
+        <code>sepFields fieldName1,fieldName2 ...</code><BR>
     </div>
         
     <P>This setting changes the item details page and splits the table used for showing extra fields
@@ -971,6 +976,29 @@
     <pre>
     mouseOver variant $name/$chrom:$chromStart value $score
     </pre>
+</DIV>
+
+<DIV class="multiRegionsBedUrl"><span class="types all"></span>
+<div class="format"><code>multiRegionsBedUrl &lt;url/relativePath&gt;</code></div>
+    <P>This setting causes a link to appear on the track configuration and items details pages to
+launch a 
+<a target="_blank" href="https://genome.ucsc.edu/goldenPath/help/multiRegionHelp.html">
+multi-region custom regions view</a>, 
+where the regions are defined by the file supplied 
+as an argument to the setting.  
+It is useful for tracks with sparse annotations in the genome.
+The file must be 
+<a target="_blank" href="https://genome.ucsc.edu/FAQ/FAQformat.html#format1">BED format</a>,
+and should contain a limited number (e.g. 2 to 10) regions of 
+interest for the track. 
+It can be BED 3 format (chrom, start, end), but may have any number of 
+additional fields.  
+When the link is clicked, a companion custom track is also created in order to
+highlight and title the displayed regions.   
+If the name field (field 4) is present in the BED file, the name for each region 
+will be displayed in the custom track.
+    <P><B>Example</B></P>
+    <pre>    multiRegionsBedUrl covidMuts.regions.bed</pre>
 </DIV>
 
 <DIV class="wgEncode"><span class="types all"></span>
@@ -1292,8 +1320,7 @@ There are no extra options that can appear on the type hic line.
 <div class="format"><code>exonNumbers &lt;on/off&gt;</code></div>
     <P>A mouseover that shows the exon and intron numbers 
     can be explicitly shown or hidden using this setting.
-    The default is "on" for the track types genePred and bigGenePred and "off"
-    for the track types genePred and bigGenePred.</P>
+    The default is "on" for the track types genePred and bigGenePred.</P>
     <P><B>Example:</B></P>
     <pre>   exonNumbers off</pre>
     <P>The text can be set with the options "exonText" and "intronText". It defaults to "exon" and "intron", respectively.</P>
@@ -1369,6 +1396,14 @@ There are no extra options that can appear on the type hic line.
     </P>
     <P>The score filter will exclude items that fall below the setting. That is, a
     scoreFilter of 800 will exclude all items with a score below 800.</P>
+    <p>Since the introduction of scoreFilter more powerful filter.&lt;fieldName&gt;
+    options exist where the score column can be filtered with different syntax.
+    In such a way <code>scoreFilter 400</code> and <code>scoreFilterLimits 0:1000</code>
+    can be replaced with <code>filter.score 400</code> and <code>filterByRange.score 0:1000</code>.
+    The advantage of switching to the filter.&lt;fieldName&gt; approach is that filters
+    can also be added on additional bigBed &lt;fieldNames&gt; such as filterText.disease
+    or filterValues.cellType where bigBeds defined with a disease or cellType column can
+    be filtered. See filter.&lt;fieldName&gt; for more information and examples. </p>
     <P><B>Example:</B></P>
     <pre>
     scoreFilter 300
@@ -1506,9 +1541,9 @@ There are no extra options that can appear on the type hic line.
     <code>filterByRange.&lt;fieldName&gt; &lt;off/on&gt;</code><BR>
     <code>filterLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code><BR>
     </div>
-<!-- 
-    <P>There are a number of different filters available for bed data, see also the 
-    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
+    <P>There are a number of different filters available for bigBed data. See the 
+    <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
+    more info.</P>
     <P><code> filter.&lt;fieldName&gt; </code> is used for numerical data. It requires
     a default value to be passed. A value of 0 (or the lowest value present in the dataset) 
     can be used to enable numerical filtering, but filter nothing by default.</P>
@@ -1544,6 +1579,8 @@ There are no extra options that can appear on the type hic line.
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
     <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a 
     &quot;.&quot; (for non-extended bigBed tracks) is required
+    <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
+    at least a bed5</li>
     <li>By default, all bed tracks that are at least bed5 will have a score filter. 
     Enabling any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
     that default filter</li></ul></P>
@@ -1595,9 +1632,9 @@ There are no extra options that can appear on the type hic line.
     <code>filterText.&lt;fieldName&gt; &lt;default search string&gt;</code><BR>
     <code>filterType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code><BR>
     </div>
-<!-- 
-    <P>There are a number of different filters available for bed data, see also the 
-    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
+    <P>There are a number of different filters available for bigBed data. See the     
+    <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
+    more info.</P>
     <P><code>filterText.&lt;fieldName&gt;</code> is used to enable text searching in the 
     specified fieldName. It requires a default search string to be passed. An asterisk/wildcard (*)
     can be used to enable text searching, but pass no default value. If a word or string is
@@ -1608,8 +1645,10 @@ There are no extra options that can appear on the type hic line.
     a wildcard (*) item on either end will match any number of additional characters before
     and/or after the search term. The regexp option allows for searching with <a target="_blank"
     href="https://en.wikipedia.org/wiki/Regular_expression#POSIX_basic_and_extended">regular 
-    expression rules</a>. The optional settings <code>filterType.&lt;fieldName&gt;</code> may
-    be added to switch the default from wildcard to regexp.</P>
+    expression rules</a>. For instance, with wildcard changed to a regexp type of search, putting in
+    <code>.*A\|B.*</code> will match any items with an A or B in it, while <code>.*[0-9]</code> will
+    match any item ending in a number. The optional settings <code>filterType.&lt;fieldName&gt;</code>
+    may be added to switch the default from wildcard to regexp.</P>
     <P>The filter label will be the description of the field as specified by the autoSql (.as) file.
     This label can be customized with the <a 
     href="#filterLabel"><code>filterLabel.&lt;fieldName&gt;</code></a> parameter.
@@ -1623,6 +1662,8 @@ There are no extra options that can appear on the type hic line.
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
     type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
     &quot;.&quot; (for non-extended bigBed tracks) is required
+    <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
+    at least a bed5</li>
     <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling 
     any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
     that default filter</li></ul></P>
@@ -1654,11 +1695,11 @@ There are no extra options that can appear on the type hic line.
 <div class="format">
     <code>filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
     <code>filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
-    <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
+    <code>filterType.&lt;fieldName&gt; &lt;single/singleList/multiple/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
     </div>
-<!-- 
-    <P>There are a number of different filters available for bed data, see also the 
-    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
+    <P>There are a number of different filters available for bigBed data. See the     
+    <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
+    more info.</P>
     <P><code>filterValues.&lt;fieldName&gt;</code> is used to enable filtering by 
     specified values within a field. It can be used on fields that can contain
     one text value or a list of comma-separated values of text, like "classA,classB".
@@ -1669,15 +1710,27 @@ There are no extra options that can appear on the type hic line.
     values as categories, choosing to display only items that
     belong to one, any, or at least one of the selected values. By default, the user
     can select multiple values from this list and the filter lets pass any features
-    with at least one of these values (<code>multipleListOr</code>).</P>
+    with at least one of these values (<code>multiple</code>).</P>
     <P>In order to choose the default selection behavior, the optional parameter
     <code>filterType.&lt;fieldName&gt;</code> may be used. If this parameter is not passed,
     by default the selection will be set to &quot;one or more match&quot; which is the same
-    as having <code>filterType.fieldName multipleListOr</code>. If the user should
+    as having <code>filterType.fieldName multiple</code>. If the user should
     only be able to select a single value, 
-    <code>singleList</code> can be passed instead. Another option,
+    <code>single</code> can be passed instead. Another option,
     <code>multipleListAnd</code>, means that the user can select multiple categories,
     but the filter will let pass only features where all of these categories are present.
+    </p>
+    <p>
+    Both <code>single</code> and <code>multiple</code> have &quot;list&quot; options. These options
+    split the bigBed field values by commas, meaning that they should only be used when items can
+    contain multiple values at once in the desired filter field. For example, if my data is 
+    classifying variants, and they can only be a SNV, insertion, or deletion, I will want to
+    use <code>single</code> and <code>multiple</code>. However, if instead the filter will be
+    on a field classifying functional impact, there can be many values for each item. For 
+    example, variant rs11541299, which is both a synonymous variant and a 
+    coding sequence variant. In this case, I would want to use one of the &quot;list&quot;
+    options. Most simply <code>singleList</code> or <code>multipleList</code>, or one of
+    the additional varieties of <code>multipleList</code> depending on the desired options.
     </p>
     <p>
     <code>multipleListOr</code> and <code>multipleListAnd</code> both still let the user
@@ -1709,6 +1762,8 @@ There are no extra options that can appear on the type hic line.
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
     type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
     &quot;.&quot; (for non-extended bigBed tracks) is required
+    <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
+    at least a bed5</li>
     <li>There should not be any white spaces between declared items after commas, e.x.
     "itemOne,itemTwo,itemThree"</li>
     <li>The default label can be customized with the <a 
@@ -1806,24 +1861,41 @@ There are no extra options that can appear on the type hic line.
     <pre>   maxItems 25</pre>
 </DIV>
 
+<DIV class="maxWindowCoverage"><span class="types bed genepred bam rmsk narrowPeak broadPeak bigWig bedlogR"></span>
+<div class="format"><code>maxWindowCoverage &lt;integer&gt;</code></div>
+    <p>When too many individual bed items might be shown in the Browser image
+    (such as might occur when a large region of a chromosome is viewed),
+    <code>maxWindowCoverage</code> will switch the track into density covergage plot when
+    the window contains more than the specified number of bases.</p>
+    <P><B>Example:</B></P>
+    <pre>   maxWindowCoverage 10000000</pre>
+    <p>Browser images that show more than 10,000,000 bases will result in the track data
+    being displayed as a density coverage graph</code>.</p>
+</DIV>
+
 <DIV class="maxWindowToDraw"><span class="types bed genepred bam rmsk narrowPeak broadPeak bigWig bedlogR"></span>
 <div class="format"><code>maxWindowToDraw &lt;integer&gt;</code></div>
-    <P>When too many individual bed items are shown in the Browser image (such as 
-    might occur when a large region of a chromosome is viewed), the
-    information is often better visualized as a summary in dense mode.  
-    Depending on the current visibility of the
-    bed track and which other tracks are being shown concurrently, the
-    Browser may automatically reduce the display to pack or dense mode.  This setting
-    allows you to force the data summarization at whatever display limit you consider
-    reasonable. Unlike the <code>maxItems</code> setting, which controls the display of
-    vertical space, this setting dictates the number of bases to be displayed horizontally 
-    in a window before the track is forced into dense mode.  There is no default for this 
-    setting, but the <code>maxItems</code> setting will ultimately prevent too many items from
-    being displayed.</P>
+    <p>When too many individual bed items might be shown in the Browser image
+    (such as might occur when a large region of a chromosome is viewed),
+    <code>maxWindowToDraw</code> will trigger a choice to display a message
+    asking users to zoom in to a smaller region.</p>
+    <p>Depending on the current visibility
+    of the bed track and which other tracks are being shown concurrently, the
+    Browser may automatically reduce the display to pack or dense mode in some cases.
+    The <code>maxWindowToDraw</code> setting allows you to force users to zoom in
+    as an overriding message will block out the data display. Unlike the <code>maxItems</code>
+    setting, which controls the display of vertical space and forces a display to dense
+    when the maximum number of items is exceeded, the <code>maxWindowToDraw</code>
+    setting dictates the number of bases to be displayed in a window
+    before the track is obscured with a message explaining the
+    requirement for zooming-in. Even without this setting,
+    there are browser operations that will ultimately prevent too many items from
+    being displayed by forcing a visualized summary in dense mode as noted.</p>
     <P><B>Example:</B></P>
-    <pre>   maxWindowToDraw 200000</pre>
-    <P>Browser images that show more then 200,000 bases will result in the track being 
-    displayed in dense mode.
+    <pre>   maxWindowToDraw 10000000</pre>
+    <p>Browser images that show more than 10,000,000 bases will result in the track data
+    being obscured with a note across the genomic range stating the message
+    <code>zoom in to <= 10,000,000 bases to view items</code>.</p>
 </DIV>
 
 <DIV class="minGrayLevel"><span class="types bed broadPeak narrowPeak bedLogR bigBed"></span>
@@ -2338,7 +2410,8 @@ There are no extra options that can appear on the type hic line.
 <!-- - - - - - - - WIG/BIGWIG settings - - - - - - - -->
 <DIV class="wig_intro">
 <H3>wig, bigWig, and bedGraph: Signal graphing tracks </H3>
-    <P>Another set of common track types is one that graphs a density signal along
+    <P>
+    Another set of common track types is one that graphs a density signal along
     the genome. The graph can be a continuously varying density plot or
     one that displays a density signal in only certain regions.  The
     oldest and simplest of these is of <code>wig</code> format. This type has been
@@ -2497,7 +2570,11 @@ There are no extra options that can appear on the type hic line.
 <DIV class="negateValues"><span class="types wig bigWig bedGraph"></span>
 <div class="format"><code>negateValues &lt;on&gt;</code></div>
     <P>Negate the values in the wiggle, meaning that positive values become negative and vice-versa.
-    This is useful for wiggles representing transcription or other activities on the Crick strand.  Be aware that wiggles with negative values are drawn in <B>altColor</B>  not <B>color</B> as positive values are.
+    This is useful for wiggles representing transcription or other activities on the Crick strand.
+    Be aware that wiggles with negative values are drawn in <B>altColor</B> not <B>color</B> as
+    positive values are. Also, tracks using the windowing function "mean+whiskers" will see the
+    shading of colors impacted, with lighter shades for values a standard deviation around the mean,
+    most noticeable when zoomed out and average calculations are taking place.</p>
 </DIV>
 
 <DIV class="spanList"><span class="types wig"></span>
@@ -2534,6 +2611,17 @@ There are no extra options that can appear on the type hic line.
     can be presented in log scale with this user-configurable setting. Default: NONE.</P>
     <P><B>Example:</B></P>
     <pre>   transformFunc LOG</pre>
+</DIV>
+
+<DIV class="mouseOverFunction"><span class="types wig bigWig bedGraph"></span>
+<div class="format"><code>mouseOverFunction &lt;noAverage&gt;</code></div>
+    <P>Limit mouse over value display to only display the fundamental values
+    without any averaging of multiple data points.  Display will show
+    "zoom in to see values" when fundamental individual values can not
+    be shown.  Useful for tracks where averaging values together is not a
+    valid operation.</P>
+    <P><B>Example:</B></P>
+    <pre>   mouseOverFunction noAverage</pre>
 </DIV>
 
 <DIV class="viewLimits"><span class="types wig bigWig bedGraph"></span>
@@ -3642,6 +3730,13 @@ There are no extra options that can appear on the type hic line.
     it may make sense to use the <code>speciesGroups</code> setting instead.</P>
 </DIV>
 
+<DIV class="speciesLabels"><span class="types wigMaf bed"></span>
+<div class="format"><code>speciesLabels &lt;species1=newLabel1&gt; [species2=newLabel2 &hellip;]</code></div>
+    <P>Use <code>speciesLabels</code> to specify new labels that map to sequence names.</P>
+    <P><B>Example:</B></P>
+    <pre>   speciesLabels mm10=mouse_mm10 mm39=mouse_mm39</pre>
+</DIV>
+
 <DIV class="speciesGroups"><span class="types wigMaf"></span>
 <div class="format">
     <code>speciesGroups &lt;sgroup1&gt; [sgroup2  &hellip;]</code><BR>
@@ -3878,6 +3973,90 @@ There are no extra options that can appear on the type hic line.
     defined in the "<code>gnfHumanAtlas2Groups</code>" stanza of the
     makeDb/hgCgiData/Human/microarrayGroups.ra  file.
     </P>
+</DIV>
+
+<DIV class="extraDetailsTable"><span class="types bigBed"></span>
+<div class="format"><code>extraDetailsTable &lt;url/relativePath&gt;</code></div>
+    <p>
+    Provides a template to a tab separated text file where $&lt;fieldName&gt;
+    strings will be substituted for data in the bigBed and displayed as an HTML
+    table. For an example of this, please see the following text file:
+    <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt">http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt</a>, where
+    the strings such as &quot;${AC_afr}&quot; will be substituted for the data in that
+    field for the particular item from the bigBed.
+    </p>
+    <p>
+    Note that the same size table is displayed for every item of the bigBed, even
+    if there is missing data in that field for a particular item. For variable
+    size tables, please see <a href="#extraTableFields">extraTableFields</a>.
+    </p>
+</DIV>
+
+<DIV class="extraTableFields"><span class="types bigBed"></span>
+<div class="format"><code>extraTableFields &lt;fieldName1|table title,fieldName2|table title,...&gt;</code></div>
+    <p>
+    Tells the system that the data in &lt;fieldName1,...&gt; contains an <em>encoded</em> table
+    that should be turned into a standard HTML table on the details page for that item. If
+    the &lt;fieldName&gt; starts with &quot;_json&quot; or &quot;json&quot;, then the system
+    expects the data in &lt;fieldName&gt; to be valid JSON. If the field name starts with
+    anything else, then the table is formatted using &quot;|&quot; and &quot;;&quot; as field
+    and new row separators. The &quot;table title&quot; part of the statment is optional, if
+    present it will be used as the title for the table, if not, then the title will be taken
+    from the autoSql description of the field name, or if there is no autoSql because the data
+    is from an external file, then the field name will be used.
+
+    <p>An example of both formats is shown below, along with the
+    corresponding trackDb statements:<br>
+    <br>
+    trackDb line:
+    <pre>extraDetailsTable _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example</pre>
+    the two columns from the bigBed (or external file):<br>
+    <pre>_jsonField1	tableField2
+{key:val, key1: val1, key2: val2}	key|val;key1|val1;key2:val2
+    </pre>
+    And when clicking on an item in the browser, the following would be displayed:<br>
+    <table class='bedExtraTbl'>
+        <tr><td>JSON Title Example</td><td>
+            <table class='bedExtraTbl'>
+                <tr><td>key</td><td>val</td>
+                <tr><td>key1</td><td>val1</td>
+                <tr><td>key2</td><td>val2</td>
+            </table></td></tr>
+        <tr><td>NON-JSON Title Example</td><td>
+            <table class='bedExtraTbl'>
+                <tr><td>key</td><td>val</td>
+                <tr><td>key1</td><td>val1</td>
+                <tr><td>key2</td><td>val2</td>
+            </table></td></tr>
+    </table>
+    Note that the number of columns and rows is variable per item, meaning some items
+    can have different sized tables than other items, contrasting with the extraDetailsTable
+    statement, which enforces the same table size per item. For instance, in the above
+    example, a 3 rows by 2 columns table is created for each field, but if our JSON was
+    instead:
+<pre>{"transcript1": {annot1: val1, annot2: val2}, "transcript2": {annot3: val3}}</pre>
+    then the following nested table would be shown on the details page:
+    <table class='bedExtraTbl'>
+        <tr><td>JSON Title Example</td><td>
+            <table class='jsonTable'>
+                <tr>
+                  <td>transcript1</td><td>
+                    <table class='jsonTable'>
+                        <tr><td>annot1</td><td>val1</td></tr>
+                        <tr><td>annot2</td><td>val2</td></tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td>transcript2</td><td>
+                    <table class='jsonTable'>
+                        <tr><td>annot3</td><td>val3</td></tr>
+                    </table>
+                  </td>
+                </tr>
+            </table></td></tr>
+    </table>
+    </p>
 </DIV>
 
 
@@ -4189,21 +4368,21 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
-<DIV class="vcfDoFilter"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
+<DIV class="vcfDoFilter"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoFilter &lt;on/off&gt;</code></div>
     <p>
     Turn on/off the FILTER options available by default for VCF tracks
     </p>
 </DIV>
 
-<DIV class="vcfDoQual"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
+<DIV class="vcfDoQual"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoQual &lt;on/off&gt;</code></div>
     <p>
     Turns on/off the QUAL filter options available by default for VCF tracks
     </p>
 </DIV>
 
-<DIV class="vcfDoMaf"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
+<DIV class="vcfDoMaf"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoMaf &lt;on/off&gt;</code></div>
     <p>
     Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks
@@ -4848,7 +5027,10 @@ For the complete bigInteract format definitions please see the
 <DIV class="bigLolly_intro">
 <H3>bigLolly: Lollipop Charts</H3>
     <P>
-    Lollipop graphs are usually used to display data that is local to a single base that has one to three data values assigned to it which can be displayed using the lollipop height, the color, and the size of the circle at the top of the lollipop.
+    Lollipop graphs are usually used to display data that is local to a single base that
+    has one to three data values assigned to it which can be displayed using the lollipop
+    height, the color, and the size of the circle at the top of the lollipop. For examples
+    visit the <a href="../bigLolly.html">bigLolly help page</a>.
 </DIV>
 
 <DIV class="bigLolly_example"><span class="types bigLolly"></span>
@@ -5007,21 +5189,21 @@ For the complete bigBarChart format definitions please see the
         Colors are specified as RGB values (255,255,255 or #FFFFFF) or by name 
         (the 16 HTML color names defined in HTML 4.01).  
         The named HTML colors are: <div class='dot' style='background: #000000'></div>black,
-            <div class='dot'style='background: silver'></div>silver,
-            <div class='dot'style='background: gray'></div>gray,
-            <div class='dot'style='height: 8px; width: 8px; background: white; border: 1px solid black'></div>white,
-            <div class='dot'style='background: maroon'></div>maroon,
-            <div class='dot'style='background: red'></div>red,
-            <div class='dot'style='background: purple'></div>purple,
-            <div class='dot'style='background: fuchsia'></div>fuchsia,
-            <div class='dot'style='background: green'></div>green,
-            <div class='dot'style='background: lime'></div>lime,
-            <div class='dot'style='background: olive'></div>olive,
-            <div class='dot'style='background: yellow'></div>yellow,
-            <div class='dot'style='background: navy'></div>navy,
-            <div class='dot'style='background: blue'></div>blue,
-            <div class='dot'style='background: teal'></div>teal,
-            <div class='dot'style='background: aqua'></div>aqua.
+            <div class='dot' style='background: silver'></div>silver,
+            <div class='dot' style='background: gray'></div>gray,
+            <div class='dot' style='height: 8px; width: 8px; background: white; border: 1px solid black'></div>white,
+            <div class='dot' style='background: maroon'></div>maroon,
+            <div class='dot' style='background: red'></div>red,
+            <div class='dot' style='background: purple'></div>purple,
+            <div class='dot' style='background: fuchsia'></div>fuchsia,
+            <div class='dot' style='background: green'></div>green,
+            <div class='dot' style='background: lime'></div>lime,
+            <div class='dot' style='background: olive'></div>olive,
+            <div class='dot' style='background: yellow'></div>yellow,
+            <div class='dot' style='background: navy'></div>navy,
+            <div class='dot' style='background: blue'></div>blue,
+            <div class='dot' style='background: teal'></div>teal,
+            <div class='dot' style='background: aqua'></div>aqua.
     </P>
 </DIV>
 
@@ -5454,7 +5636,8 @@ and is particularly useful for tracks with large numbers of categories.
     <P>Note that the order of the subgroups in a dimension is exactly the same as 
     the order they appear in the <code>subGroup#</code> setting, regardless of whether
     the subtrack list is sorted by tags. Please also note that if a hub is not going to use
-    the X,Y matrix, dimX should be the first dimension defined rather than dimA.</P>
+    the X,Y matrix, dimX should be the first dimension defined rather than dimA.
+    Also, the setting <code>allButtonPair on</code> will prevent the matrix from displaying.</p>
 </DIV>
 
 <DIV class="filterComposite"><span class="types subGroups"></span>
@@ -6120,6 +6303,7 @@ and is particularly useful for tracks with large numbers of categories.
 <div class="format"><code>htmlUrl</code></div>
     <P>Internal only &ndash; user does not set.
     Filled with user entered URL for track
+</DIV>
 <DIV class="initialPos"><span class="types customTracks"></span>
 <div class="format"><code>initialPos</code></div>
     <P>Internal only &ndash; user does not set.

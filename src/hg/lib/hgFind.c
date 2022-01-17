@@ -1,7 +1,7 @@
 /* hgFind.c - Find things in human genome annotations. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "regexHelper.h"
 #include "obscure.h"
@@ -369,7 +369,7 @@ if (keyCount > 0)
 	extraOptions = "";
     makeCmds(cmds, keyWords, keyCount, extraOptions);
 
-    pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile, NULL);
+    pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile, NULL, 0);
     lf = pipelineLineFile(pl);
     verbose(3, "\n***Running this fgrep command with pipeline from %s:\n*** %s\n\n",
 	    indexFile, pipelineDesc(pl));
@@ -432,10 +432,9 @@ freez(&path);
 return newPath;
 }
 
-static boolean gotFullText(char *db, char *name)
+static boolean gotFullText(char *db, char *indexPath)
 /* Return TRUE if we have full text index. */
 {
-char *indexPath = makeIndexPath(db, name);
 boolean result = FALSE;
 
 if (udcExists(indexPath))
@@ -446,7 +445,6 @@ else
     result = FALSE;
     }
 
-freez(&indexPath);
 return result;
 }
 
@@ -626,7 +624,7 @@ table->posList = posList;
 hashFree(&hash);
 dyStringFree(&dy); }
 
-boolean findKnownGeneFullText(char *db, char *term,struct hgPositions *hgp, char *name)
+static boolean findKnownGeneFullText(char *db, char *term,struct hgPositions *hgp, char *name, char *path)
 /* Look for position in full text. */
 {
 boolean gotIt = FALSE;
@@ -636,7 +634,6 @@ char *lowered = cloneString(term);
 char *keyWords[HGFIND_MAX_KEYWORDS];
 int keyCount;
 
-char *path = makeIndexPath(db, name);
 trix = trixOpen(path);
 tolowers(lowered);
 keyCount = chopLine(lowered, keyWords);
@@ -1414,7 +1411,7 @@ for (el = *pAccList; el != NULL; el = el->next)
     dyStringPrintf(dy, "%s</A>", acc);
 
     /* print description for item, or lacking that, the product name */
-    char description[512];
+    char description[1028];
     safef(description, sizeof(description), "%s", "n/a"); 
     char query[512];
     sqlSafef(query, sizeof(query), 
@@ -2000,6 +1997,13 @@ struct trackDb *tdbList = NULL;
 // This used to be an argument, but only stdout was used:
 FILE *f = stdout;
 
+if (hgp->posCount == 0)
+    {
+    fprintf(f, "<div id='hgFindResults'>\n");
+    fprintf(f, "<p>No additional items found</p>");
+    fprintf(f, "</div>\n");
+    return;
+    }
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
     if (table->posList != NULL)
@@ -2020,8 +2024,9 @@ for (table = hgp->tableList; table != NULL; table = table->next)
         if(!containerDivPrinted)
             {
             fprintf(f, "<div id='hgFindResults'>\n");
-            fprintf(f, "<p>Your search resulted in multiple matches.  "
-                    "Please select a position:</p>\n");
+            if (hgp->singlePos == NULL) // we might be called with only one result
+                fprintf(f, "<p>Your search resulted in multiple matches.  "
+                        "Please select a position:</p>\n");
             containerDivPrinted = TRUE;
             }
 	if (table->htmlStart) 
@@ -2090,7 +2095,17 @@ for (table = hgp->tableList; table != NULL; table = table->next)
     }
 
 if(containerDivPrinted)
+    {
+    if (hgp->shortCircuited)
+        {
+        char *queryString = getenv("QUERY_STRING");
+        char *addString = "&noShort=1";
+        if (isEmpty(queryString))
+            addString = "noShort=1";
+        fprintf(f, "<A HREF=\"%s?%s%s\"> More results...</A>", hgAppName, queryString, addString);
+        }
     fprintf(f, "</div>\n");
+    }
 }
 
 static struct hgPositions *hgPositionsSearch(char *db, char *spec,
@@ -2164,7 +2179,8 @@ char *db = cartString(cart, "db");
 char *lastPosition = cartOptionalString(cart, "lastPosition");
 if (isNotEmpty(lastPosition) && !IS_CART_VAR_EMPTY(lastPosition))
     {
-    if (startsWith("virt:", lastPosition))
+    if (startsWith(MULTI_REGION_CHROM, lastPosition) || 
+        startsWith(OLD_MULTI_REGION_CHROM, lastPosition))
         {
         lastPosition = cartUsualString(cart, "nonVirtPosition", hDefaultPos(db));
         }
@@ -2297,12 +2313,15 @@ boolean isSpecial = TRUE;
 boolean found = FALSE;
 char *upcTerm = cloneString(term);
 touppers(upcTerm);
-if (sameString(hfs->searchType, "knownGene"))
+if (startsWith("knownGene", hfs->searchType))
     {
     char *knownDatabase = hdbDefaultKnownDb(db);
     char *name = (sameString(knownDatabase, db)) ? "knownGene" : knownDatabase;
-    if (gotFullText(db, name))
-	found = findKnownGeneFullText(db, term, hgp, name);
+    char *indexPath = hReplaceGbdb(hgFindSpecSetting(hfs, "searchTrix"));
+    if (indexPath == NULL)
+        indexPath = makeIndexPath(db, name);
+    if (gotFullText(db, indexPath))
+	found = findKnownGeneFullText(db, term, hgp, name, indexPath);
     }
 else if (sameString(hfs->searchType, "refGene"))
     {
@@ -2722,52 +2741,172 @@ if (foundIt)
 return foundIt;
 }
 
+// a little data structure for combining multiple transcripts that resolve
+// to the same hgvs change. This struct can be used to fill out a struct hgPos
+struct hgvsHelper
+    {
+    struct hgvsHelper *next;
+    char *chrom; // chromosome name of position
+    int chromStart; // start of position
+    int chromEnd; // end of position
+    struct slName *validTranscripts; // valid transcripts/protein accessions for this position
+    char *label; // corresponding hgvs term
+    char *table; // type of match, LRG, NCBI, etc
+    boolean mapError; // does this hgvs mapping result in a map error?
+    };
+
 static boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPositions *hgp)
-/* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature */
-/* See http://varnomen.hgvs.org/ */
+/* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature
+ * See http://varnomen.hgvs.org/
+ * If search term is a pseudo hgvs term like GeneName AminoAcidPosition (RUNX2 Arg155) and
+ * matches more than one transcript, fill out the hgp with the potential matches so the user
+ * can choose where to go, otherwise return a singlePos */
 {
 boolean foundIt = FALSE;
-struct hgvsVariant *hgvs = hgvsParseTerm(term);
-if (hgvs == NULL)
-    hgvs = hgvsParsePseudoHgvs(db, term);
-if (hgvs)
+struct hgvsVariant *hgvsList = hgvsParseTerm(term);
+if (hgvsList == NULL)
+    hgvsList = hgvsParsePseudoHgvs(db, term);
+if (hgvsList)
     {
+    struct hgvsVariant *hgvs = NULL;
+    int hgvsListLen = slCount(hgvsList);
+    struct hgPosTable *table;
+    AllocVar(table);
+    table->description = "HGVS";
+    int padding = 5;
+    int mapErrCnt = 0;
     struct dyString *dyWarn = dyStringNew(0);
-    char *pslTable = NULL;
-    struct bed *mapping = hgvsValidateAndMap(hgvs, db, term, dyWarn, &pslTable);
-    if (dyStringLen(dyWarn) > 0)
-        warn("%s", dyStringContents(dyWarn));
-    if (mapping)
+    struct hgvsHelper *helper = NULL;
+    struct hash *uniqHgvsPos = hashNew(0);
+    struct dyString *chromPosIndex = dyStringNew(0);
+    struct dyString *allWarnings = dyStringNew(0);
+    for (hgvs = hgvsList; hgvs != NULL; hgvs = hgvs->next)
         {
-        int padding = 5;
-        char *trackTable;
-        if (isEmpty(pslTable))
-            trackTable = "chromInfo";
-        else if (startsWith("lrg", pslTable))
-            trackTable = "lrgTranscriptAli";
-        else if (startsWith("wgEncodeGencode", pslTable))
-            trackTable = pslTable;
-        else if (startsWith("ncbiRefSeqPsl", pslTable))
+        dyStringClear(dyWarn);
+        dyStringClear(chromPosIndex);
+        char *pslTable = NULL;
+        struct bed *mapping = hgvsValidateAndMap(hgvs, db, term, dyWarn, &pslTable);
+        if (dyStringLen(dyWarn) > 0)
+            mapErrCnt++;
+        if (mapping)
             {
-            if (startsWith("NM_", hgvs->seqAcc) || startsWith("NR_", hgvs->seqAcc) ||
-                startsWith("NP_", hgvs->seqAcc) || startsWith("YP_", hgvs->seqAcc))
-                trackTable = "ncbiRefSeqCurated";
-            else if (startsWith("XM_", hgvs->seqAcc) || startsWith("XR_", hgvs->seqAcc) ||
-                     startsWith("XP_", hgvs->seqAcc))
-                trackTable = "ncbiRefSeqPredicted";
+            char *trackTable;
+            if (isEmpty(pslTable))
+                trackTable = "chromInfo";
+            else if (startsWith("lrg", pslTable))
+                trackTable = "lrgTranscriptAli";
+            else if (startsWith("wgEncodeGencode", pslTable))
+                trackTable = pslTable;
+            else if (startsWith("ncbiRefSeqPsl", pslTable))
+                {
+                if (startsWith("NM_", hgvs->seqAcc) || startsWith("NR_", hgvs->seqAcc) ||
+                    startsWith("NP_", hgvs->seqAcc) || startsWith("YP_", hgvs->seqAcc))
+                    trackTable = "ncbiRefSeqCurated";
+                else if (startsWith("XM_", hgvs->seqAcc) || startsWith("XR_", hgvs->seqAcc) ||
+                         startsWith("XP_", hgvs->seqAcc))
+                    trackTable = "ncbiRefSeqPredicted";
+                else
+                    trackTable = "ncbiRefSeq";
+                }
             else
-                trackTable = "ncbiRefSeq";
+                trackTable = "refGene";
+            dyStringPrintf(chromPosIndex, "%s%s%d%d", trackTable, mapping->chrom,
+                    mapping->chromStart-padding, mapping->chromEnd+padding);
+            if ((helper = hashFindVal(uniqHgvsPos, chromPosIndex->string)) != NULL)
+                {
+                slNameAddHead(&helper->validTranscripts, hgvs->seqAcc);
+                }
+            else
+                {
+                AllocVar(helper);
+                helper->chrom = mapping->chrom;
+                helper->chromStart = mapping->chromStart;
+                helper->chromEnd = mapping->chromEnd;
+                helper->validTranscripts = slNameNew(hgvs->seqAcc);
+                helper->label = cloneString(term);
+                helper->table = trackTable;
+                hashAdd(uniqHgvsPos, chromPosIndex->string, helper);
+                }
+            if (dyStringLen(dyWarn) > 0)
+                {
+                helper->mapError = TRUE;
+                dyStringPrintf(allWarnings, "%s%s", dyStringLen(allWarnings) > 0 ? "\n" : "", dyStringContents(dyWarn));
+                }
+            }
+        }
+    if (mapErrCnt < hgvsListLen)
+        // at least one of the hgvs terms mapped sucessfully, so we can go to that spot
+        // or let the user pick a location
+        {
+        struct hashEl *hel, *helList= hashElListHash(uniqHgvsPos);
+        for (hel = helList; hel != NULL; hel = hel->next)
+            {
+            helper = (struct hgvsHelper *)hel->val;
+            if (!helper->mapError)
+                {
+                if (hgp->tableList == NULL)
+                    hgp->tableList = table;
+                foundIt = TRUE;
+                table->name = helper->table;
+                struct hgPos *pos;
+                AllocVar(pos);
+                pos->chrom = helper->chrom;
+                pos->chromStart = helper->chromStart - padding;
+                pos->chromEnd = helper->chromEnd + padding;
+                pos->name = slNameListToString(helper->validTranscripts, '/');
+                pos->description = cloneString(helper->label);
+                pos->browserName = "";
+                slAddHead(&table->posList, pos);
+                // highlight the mapped bases to distinguish from padding
+                hgp->tableList->posList->highlight = addHighlight(db, helper->chrom,
+                                                        helper->chromStart, helper->chromEnd);
+                }
+            }
+        }
+    else
+        // all of the positions mapped incorrectly, so the term was bad. However, we may
+        // be able to still go to a general area around the term, so build that, warn the
+        // user about their bad search term, and warn that this is not an exactly correct position
+        // NOTE: There is a bug here in general, in that when mapping an hgvs term we don't
+        // consider alternate haplotypes, and thus below we will always get at least some range
+        // on the same chromosome within a gene, but if the mapping code were to change in the
+        // future, we might end up with some weird coordinates
+        {
+        struct hashEl *hel, *helList= hashElListHash(uniqHgvsPos);
+        if (helList)
+            {
+            if (hgp->tableList == NULL)
+                hgp->tableList = table;
+            foundIt = TRUE;
+            struct hgPos *pos;
+            AllocVar(pos);
+            char *chrom = NULL;
+            int spanStart = INT_MAX, spanEnd = 0;
+            for (hel = helList; hel != NULL; hel = hel->next)
+                {
+                helper = (struct hgvsHelper *)hel->val;
+                chrom = helper->chrom;
+                spanStart = helper->chromStart < spanStart ? helper->chromStart : spanStart;
+                spanEnd = helper->chromEnd > spanEnd ? helper->chromEnd : spanEnd;
+                table->name = helper->table;
+                }
+            pos->chrom = cloneString(chrom);
+            pos->chromStart = spanStart-padding;
+            pos->chromEnd = spanEnd + padding;
+            pos->name = "Approximate area";
+            pos->description = term;
+            pos->browserName = term;
+            slAddHead(&table->posList, pos);
+            // highlight the 'mapped' bases to distinguish from padding
+            hgp->tableList->posList->highlight = addHighlight(db, helper->chrom, spanStart, spanEnd);
+            warn("%s", dyStringContents(allWarnings));
+            warn("Sorry, couldn't locate %s, moving to general location", term);
             }
         else
-            trackTable = "refGene";
-        singlePos(hgp, "HGVS", NULL, trackTable, term, "",
-                  mapping->chrom, mapping->chromStart-padding, mapping->chromEnd+padding);
-        // highlight the mapped bases to distinguish from padding
-        hgp->tableList->posList->highlight = addHighlight(db, mapping->chrom,
-                                                          mapping->chromStart, mapping->chromEnd);
-        foundIt = TRUE;
+            warn("%s", dyStringContents(dyWarn));
         }
     dyStringFree(&dyWarn);
+    dyStringFree(&allWarnings);
     }
 return foundIt;
 }
@@ -2890,18 +3029,25 @@ else if (!matchesHgvs(cart, db, term, hgp))
 
     if (!trackHubDatabase(db))
 	hgFindSpecGetAllSpecs(db, &shortList, &longList);
-    for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
-	{
-	if (hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
-			    multiTerm))
-	    {
-	    done = TRUE;
-	    if (! hgFindSpecSetting(hfs, "semiShortCircuit"))
-		break;
-	    }
-	}
+    if ((cart == NULL) || (cartOptionalString(cart, "noShort") == NULL))
+        {
+        hgp->shortCircuited = TRUE;
+        for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
+            {
+            if (hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
+                                multiTerm))
+                {
+                done = TRUE;
+                if (! hgFindSpecSetting(hfs, "semiShortCircuit"))
+                    break;
+                }
+            }
+        }
+    else
+        cartRemove(cart, "noShort");
     if (! done)
 	{
+        hgp->shortCircuited = FALSE;
 	for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
 	    {
 	    hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,

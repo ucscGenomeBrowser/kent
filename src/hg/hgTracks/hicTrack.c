@@ -1,7 +1,7 @@
 /* hic -- draw Hi-C maps */
 
 /* Copyright (C) 2018 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "obscure.h"
@@ -10,7 +10,7 @@
 #include "bigWarn.h"
 #include "interact.h" // for interact structures
 #include "hicUi.h"
-#include "Cstraw.h"
+#include "cStraw.h"
 #include "hic.h"
 #include "htmlColor.h"
 
@@ -154,7 +154,17 @@ void hicLoadItems(struct track *tg)
 char *filename = trackDbSettingOrDefault(tg->tdb, "bigDataUrl", NULL);
 if (filename == NULL)
     return;
-tg->customPt = grabHeader(tg);
+if (tg->customPt == NULL)
+    {
+    tg->customPt = grabHeader(tg);
+    struct track *hicInNextWindow = tg->nextWindow;
+    while (hicInNextWindow != NULL)
+        {
+        // pre-cache the hic header info; no reason to re-fetch
+        hicInNextWindow->customPt = tg->customPt;
+        hicInNextWindow = hicInNextWindow->nextWindow;
+        }
+    }
 if (tg->customPt == NULL)
     return;
 loadAndFilterItems(tg);

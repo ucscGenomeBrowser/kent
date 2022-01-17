@@ -1,3 +1,5 @@
+#JASPAR tracks
+include jaspar.ra
 
 # ENCODE tracks
 include trackDb.encode.ra
@@ -21,7 +23,7 @@ include trackDb.gtex.ra
 include trackDb.geneHancer.ra
 
 # NCBI ClinVar
-include trackDb.clinvar.ra
+include trackDb.clinvar.ra 
 
 # NCBI dbVar
 include trackDb.dbVar.ra
@@ -31,6 +33,12 @@ include trackDb.clinGen.ra
 
 # Genome In a Bottle
 include trackDb.giab.ra
+
+# CADD scores
+include cadd.ra
+
+# Revel scores
+include revel.ra
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -102,6 +110,7 @@ indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .
 color 72,167,38
+searchIndex name
 
 track gad
 shortLabel GAD View
@@ -131,7 +140,6 @@ filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Unc
 mergeSpannedItems on
 searchIndex name
 mouseOverField _mouseOver
-pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 searchTable decipher
 searchMethod exact
@@ -199,26 +207,6 @@ type bed 3
         parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOverField _mouseOver
-
-track pathoPred
-type bigWig
-longLabel Pathogenicity predictions
-shortLabel Pathogenicity
-color 112,172,192
-visibility hide
-superTrack on
-group phenDis
-
-        track cadd
-        type bigWig
-        longLabel CADD scores version 1.4
-        viewLimits 0:30
-        color 100,130,160
-        bigDataUrl /gbdb/$D/bbi/CADD-v1.4.bw
-        viewLimitsMax 0:100
-        shortLabel CADD
-        visibility full
-        parent pathoPred on
 
 track caseControl
 compositeTrack on
@@ -995,7 +983,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
-priority 6
 
 
 track snp141Flagged
@@ -1015,7 +1002,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
-priority 18
 
 
 track snp141Mult
@@ -1037,7 +1023,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
-priority 24
 
 track snp141
 shortLabel All SNPs(141)
@@ -1055,7 +1040,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
-priority 12
 
 
 track snp142Common
@@ -1077,7 +1061,6 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Common_bugFix
-priority 5
 
 
 track snp142Flagged
@@ -1098,7 +1081,6 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Flagged_bugFix
-priority 17
 
 track snp142Mult
 shortLabel Mult. SNPs(142)
@@ -1120,7 +1102,6 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Mult_bugFix
-priority 23
 
 
 track snp142
@@ -1140,7 +1121,6 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142_bugFix
-priority 11
 
 
 track snp144Common
@@ -1162,7 +1142,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
-priority 4
 
 
 track snp144Flagged
@@ -1183,7 +1162,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
-priority 16
 
 track snp144Mult
 shortLabel Mult. SNPs(144)
@@ -1205,7 +1183,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
-priority 22
 
 
 track snp144
@@ -1225,7 +1202,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
-priority 10
 
 
 track snp146Common
@@ -1247,7 +1223,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
-priority 3
 
 
 track snp146Flagged
@@ -1268,7 +1243,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
-priority 15
 
 
 track snp146Mult
@@ -1291,7 +1265,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
-priority 21
 
 
 track snp146
@@ -1311,7 +1284,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
-priority 9
 
 
 track snp147Common
@@ -1333,7 +1305,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
-priority 2
 
 
 track snp147Flagged
@@ -1354,7 +1325,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
-priority 14
 
 
 track snp147Mult
@@ -1377,7 +1347,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
-priority 20
 
 
 track snp147
@@ -1397,7 +1366,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
-priority 8
 
 
 track snp149Common
@@ -1497,7 +1465,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
-priority 1
 
 track snp150Flagged
 shortLabel Flagged SNPs(150)
@@ -1517,7 +1484,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
-priority 13
 
 track snp150Mult
 shortLabel Mult. SNPs(150)
@@ -1539,7 +1505,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
-priority 19
 
 track snp150
 shortLabel All SNPs(150)
@@ -1558,7 +1523,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
-priority 7
 
 
 track snp151Common
@@ -1580,7 +1544,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
-priority 0.9
 
 track snp151Flagged
 shortLabel Flagged SNPs(151)
@@ -1600,7 +1563,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
-priority 12.9
 
 track snp151Mult
 shortLabel Mult. SNPs(151)
@@ -1621,7 +1583,6 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
-priority 18.9
 
 track snp151
 shortLabel All SNPs(151)
@@ -1640,28 +1601,27 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
-priority 6.9
 
-track dbSnp152
-shortLabel All dbSNP (152)
-longLabel Short Genetic Variants from dbSNP release 152
-bigDataUrl /gbdb/$D/snp/dbSnp152.bb
-detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp152Details.tab.gz
-group varRep
-visibility hide
-url https://www.ncbi.nlm.nih.gov/snp/$$
-urlLabel dbSNP: 
-type bigDbSnp
-freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,GnomAD,ExAC,GoESP,ALSPAC,TWINSUK,Estonian
-maxWindowToDraw 1000000
-classFilterValues snv,mnv,ins,del,delins,identity
-classFilterType multipleListOr
-ucscNotesFilterValues |(nothing noted),classMismatch|Variant class/type is inconsistent with allele sizes,clinvar|Present in ClinVar,clusterError|Overlaps a variant with the same type/class and position,commonAll|MAF >= 1% in all projects that report frequencies,commonSome|MAF >= 1% in at least one project that reports frequencies,delMismatch|Deleted sequence mismatches genomic reference sequence,diffMajor|Different projects report different major alleles,multiMap|Variant is placed in more than one genomic position,overlapDiffClass|Variant overlaps other variant(s) of different type/class,overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,refIsMinor|Genomic reference allele is minor allele in at least one project that reports frequencies,refIsRare|Genomic reference allele frequency is <1% in at least one project,refIsSingleton|Genomic reference frequency is 0 in all projects reporting frequencies,revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
-ucscNotesFilterType multipleListOr
-maxFuncImpactFilterValues 0|(not annotated),0865|frameshift,1587|stop_gained,1574|splice_acceptor_variant,1575|splice_donor_variant,1821|inframe_insertion,1583|missense_variant,1590|terminator_codon_variant,1819|synonymous_variant,1580|coding_sequence_variant,1623|5_prime_UTR_variant,1624|3_prime_UTR_variant,1619|nc_transcript_variant,2153|genic_upstream_transcript_variant,1986|upstream_transcript_variant,2152|genic_downstream_transcript_variant,1987|downstream_transcript_variant,1627|intron_variant
-maxFuncImpactFilterType multipleListOr
-priority 6.8
-release alpha
+#track dbSnp152
+#shortLabel All dbSNP (152)
+#longLabel Short Genetic Variants from dbSNP release 152
+#bigDataUrl /gbdb/$D/snp/dbSnp152.bb
+#detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp152Details.tab.gz
+#group varRep
+#visibility hide
+#url https://www.ncbi.nlm.nih.gov/snp/$$
+#urlLabel dbSNP: 
+#type bigDbSnp
+#freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,GnomAD,ExAC,GoESP,ALSPAC,TWINSUK,Estonian
+#maxWindowToDraw 1000000
+#classFilterValues snv,mnv,ins,del,delins,identity
+#classFilterType multipleListOr
+#ucscNotesFilterValues |(nothing noted),classMismatch|Variant class/type is inconsistent with allele sizes,clinvar|Present in ClinVar,clusterError|Overlaps a variant with the same type/class and position,commonAll|MAF >= 1% in all projects that report frequencies,commonSome|MAF >= 1% in at least one project that reports frequencies,delMismatch|Deleted sequence mismatches genomic reference sequence,diffMajor|Different projects report different major alleles,multiMap|Variant is placed in more than one genomic position,overlapDiffClass|Variant overlaps other variant(s) of different type/class,overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,refIsMinor|Genomic reference allele is minor allele in at least one project that reports frequencies,refIsRare|Genomic reference allele frequency is <1% in at least one project,refIsSingleton|Genomic reference frequency is 0 in all projects reporting frequencies,revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
+#ucscNotesFilterType multipleListOr
+#maxFuncImpactFilterValues 0|(not annotated),0865|frameshift,1587|stop_gained,1574|splice_acceptor_variant,1575|splice_donor_variant,1821|inframe_insertion,1583|missense_variant,1590|terminator_codon_variant,1819|synonymous_variant,1580|coding_sequence_variant,1623|5_prime_UTR_variant,1624|3_prime_UTR_variant,1619|nc_transcript_variant,2153|genic_upstream_transcript_variant,1986|upstream_transcript_variant,2152|genic_downstream_transcript_variant,1987|downstream_transcript_variant,1627|intron_variant
+#maxFuncImpactFilterType multipleListOr
+#priority 6.8
+#release alpha
 
 track dbSnp153Composite
 compositeTrack on
@@ -3169,23 +3129,20 @@ url2Label miRBase:
 url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
-track lrgBigPsl
-shortLabel LRG Transcripts (RM 24672)
-longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations (RedMine 24672)
+track lrgTranscriptAli
+shortLabel LRG Transcripts
+longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
 group genes
 visibility hide
 type bigPsl
-mouseOverField mouseOver
+html lrgTranscriptAli
+mouseOver ${name}: ${ncbiTranscript} ${ensemblTranscript} ${ncbiProtein} ${ensemblProtein} ${geneName}
 skipFields mouseOver
 skipEmptyFields on
 urls ncbiTranscript=https://www.ncbi.nlm.nih.gov/nuccore/$$ ensemblTranscript=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$ ncbiProtein=https://www.ncbi.nlm.nih.gov/protein/$$ ensemblProtein=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$
-cdsTable lrgCds
-cdnaTable lrgCdna
-pepTable lrgPep
 altColor 127,127,127
 baseColorDefault genomicCodons
 baseColorUseSequence lfExtra
-baseColorUseCds table lrgCds
 indelDoubleInsert on
 indelPolyA on
 indelQueryInsert on
@@ -3194,30 +3151,10 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 color 54,125,29
-urlLabel Link to LRG transcript:
-url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
-
-track lrgTranscriptAli
-shortLabel LRG Transcripts
-longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
-group genes
-visibility hide
-type psl .
-cdsTable lrgCds
-cdnaTable lrgCdna
-pepTable lrgPep
-baseColorDefault diffCodons
-baseColorUseCds table lrgCds
-baseColorUseSequence table lrgCdna
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-color 54,125,29
-urlLabel Link to LRG transcript:
-url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+urlLabel Link to LRG transcript
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$<_lrgParent>.xml#transcripts_anchor
+bigDataUrl /gbdb/$D/bbi/lrgBigPsl.bb
+searchIndex name
 
 track affyHuEx1
 shortLabel Affy HuEx 1.0
@@ -3701,11 +3638,10 @@ compositeTrack on
 type bigBed 4 +
 tableBrowser off lovdComp
 html lovdComp
-pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
         track lovdShort
-        shortLabel LOVD Variants < 50 bp
-        longLabel Leiden Open Variation Database, short < 50 bp variants
+        shortLabel LOVD Variants < 50 bp + ins
+        longLabel Leiden Open Variation Database, short < 50 bp variants and insertions of any length
         group phenDis
         visibility hide
         urls id="http://varcache.lovd.nl/redirect/$$"
@@ -3779,7 +3715,7 @@ searchType bigBed
 termRegex rs[0-9]+
 searchPriority 1
 padding 50
-semiShortCircuit 1
+#semiShortCircuit 1
 
 searchTable snpediaText
 searchMethod exact
@@ -4076,12 +4012,29 @@ searchType psl
 termRegex HIT[0-9]{9,9}
 searchPriority 50
 
+searchTable lrg
+searchMethod exact
+searchType bigBed
+termRegex LRG_[0-9]+
+semiShortCircuit 1
+searchPriority 49
+release alpha
+
+searchTable lrgBigPsl
+searchMethod exact
+searchType bigBed
+termRegex LRG_[0-9]+t[0-9]+
+semiShortCircuit 1
+searchPriority 50
+release alpha
+
 searchTable lrgTranscriptAli
 searchMethod exact
 searchType psl
 termRegex LRG_[0-9]+t[0-9]+
 semiShortCircuit 1
 searchPriority 50
+release beta,public
 
 searchName lrgTranscriptAliNoTNum
 searchTable lrgTranscriptAli
@@ -5094,7 +5047,6 @@ mouseOver $name disease(s): $diseases
 html geneReviews
 url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
 noScoreFilter on
-pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 searchName geneReviews
 searchTable geneReviews
@@ -5142,7 +5094,7 @@ termRegex ux\.[0-9]+
 searchTable snp141Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9865
 padding 250
@@ -5150,7 +5102,7 @@ padding 250
 searchTable snp141Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9866
 padding 250
@@ -5158,7 +5110,7 @@ padding 250
 searchTable snp141Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9867
 padding 250
@@ -5166,7 +5118,7 @@ padding 250
 searchTable snp141
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9868
 padding 250
@@ -5174,7 +5126,7 @@ padding 250
 searchTable snp142Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9861
 padding 250
@@ -5182,7 +5134,7 @@ padding 250
 searchTable snp142Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9862
 padding 250
@@ -5190,7 +5142,7 @@ padding 250
 searchTable snp142Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9863
 padding 250
@@ -5198,7 +5150,7 @@ padding 250
 searchTable snp142
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9864
 padding 250
@@ -5206,7 +5158,7 @@ padding 250
 searchTable snp144Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9855
 padding 250
@@ -5214,7 +5166,7 @@ padding 250
 searchTable snp144Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9856
 padding 250
@@ -5222,7 +5174,7 @@ padding 250
 searchTable snp144Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9857
 padding 250
@@ -5230,7 +5182,7 @@ padding 250
 searchTable snp144
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9858
 padding 250
@@ -5238,7 +5190,7 @@ padding 250
 searchTable snp146Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9851
 padding 250
@@ -5246,7 +5198,7 @@ padding 250
 searchTable snp146Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9852
 padding 250
@@ -5254,7 +5206,7 @@ padding 250
 searchTable snp146Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9853
 padding 250
@@ -5262,7 +5214,7 @@ padding 250
 searchTable snp146
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.954
 padding 250
@@ -5270,7 +5222,7 @@ padding 250
 searchTable snp147Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9847
 padding 250
@@ -5278,7 +5230,7 @@ padding 250
 searchTable snp147Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9848
 padding 250
@@ -5286,7 +5238,7 @@ padding 250
 searchTable snp147Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9849
 padding 250
@@ -5294,7 +5246,7 @@ padding 250
 searchTable snp147
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.953
 padding 250
@@ -5302,7 +5254,7 @@ padding 250
 searchTable snp149Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9844
 padding 250
@@ -5310,7 +5262,7 @@ padding 250
 searchTable snp149Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9845
 padding 250
@@ -5318,7 +5270,7 @@ padding 250
 searchTable snp149Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9846
 padding 250
@@ -5326,7 +5278,7 @@ padding 250
 searchTable snp149
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.952
 padding 250
@@ -5334,7 +5286,7 @@ padding 250
 searchTable snp150Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9841
 padding 250
@@ -5342,7 +5294,7 @@ padding 250
 searchTable snp150
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.951
 padding 250
@@ -5350,7 +5302,7 @@ padding 250
 searchTable snp150Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9842
 padding 250
@@ -5358,7 +5310,7 @@ padding 250
 searchTable snp150Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9843
 padding 250
@@ -5366,7 +5318,7 @@ padding 250
 searchTable snp151Common
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9837
 padding 250
@@ -5374,7 +5326,7 @@ padding 250
 searchTable snp151Flagged
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9838
 padding 250
@@ -5382,7 +5334,7 @@ padding 250
 searchTable snp151Mult
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9839
 padding 250
@@ -5390,7 +5342,7 @@ padding 250
 searchTable snp151
 searchMethod exact
 searchType bed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.950
 padding 250
@@ -5398,7 +5350,7 @@ padding 250
 searchTable dbSnp152
 searchMethod exact
 searchType bigBed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.949
 padding 100
@@ -5406,7 +5358,7 @@ padding 100
 searchTable dbSnp153Common
 searchMethod exact
 searchType bigBed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9450
 padding 100
@@ -5414,7 +5366,7 @@ padding 100
 searchTable dbSnp153ClinVar
 searchMethod exact
 searchType bigBed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9451
 padding 100
@@ -5430,7 +5382,7 @@ padding 100
 searchTable dbSnp153Mult
 searchMethod exact
 searchType bigBed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9453
 padding 100
@@ -5438,7 +5390,7 @@ padding 100
 searchTable dbSnp153BadCoords
 searchMethod exact
 searchType bigBed
-semiShortCircuit 1
+#semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9454
 padding 100
@@ -5480,8 +5432,24 @@ group covid
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
-pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 12, 2020"
+multiRegionsBedUrl /gbdb/hg19/covidMuts/covidMuts.regions.bed
  
-
-
+track orphadata
+bigDataUrl /gbdb/$D/bbi/orphanet/orphadata.bb
+shortLabel Orphanet
+longLabel Orphadata: Aggregated Data From Orphanet
+group phenDis
+type bigBed 9 +
+bedNameLabel OrphaCode
+url http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=en&Expert=$$
+urlLabel OrphaNet Phenotype Link:
+urls ensemblID="https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" pmid="https://pubmed.ncbi.nlm.nih.gov/$$" orphaCode="http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=en&Expert=$$" omim="https://www.omim.org/entry/$$?search=$$&highlight=$$" hgnc="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$"
+skipEmptyFields on
+skipFields name,score,itemRgb
+mouseOver Gene: $geneSymbol, Disorder: $disorder, Inheritance(s): $inheritance, Onset: $onsetList
+filterValues.assnType Biomarker tested in,Candidate gene tested in,Disease-causing germline mutation(s) (gain of function) in,Disease-causing germline mutation(s) (loss of function) in,Disease-causing germline mutation(s) in,Disease-causing somatic mutation(s) in,Major susceptibility factor in,Modifying germline mutation in,Part of a fusion gene in,Role in the phenotype of
+filterValues.inheritance Autosomal dominant,Autosomal recessive,Mitochondrial inheritance,Multigenic/multifactorial,No data available,Not applicable,Oligogenic,Semi-dominant,Unknown,X-linked dominant,X-linked recessive,Y-linked
+filterValues.onsetList Adolescent,Adult,All ages,Antenatal,Childhood,Elderly,Infancy,Neonatal,No data available
+itemRgb on
+pennantIcon New red ../goldenPath/newsarch.html#111821 "Released Nov. 18, 2021"
 

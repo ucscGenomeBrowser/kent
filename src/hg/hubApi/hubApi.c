@@ -58,7 +58,7 @@ static long totalTracks = 0;
 static boolean allTrackSettings = FALSE;	/* checkbox setting */
 static char **shortLabels = NULL;	/* public hub short labels in array */
 static int publicHubCount = 0;
-static char *defaultHub = "Plants";
+static char *defaultHub = "Synonymous Constraint";
 static char *defaultDb = "ce11";
 long enteredMainTime = 0;	/* will become = clock1000() on entry */
 		/* to allow calculation of when to bail out, taking too long */
@@ -97,6 +97,8 @@ slAddHead(&supportedTypes, el);
 el = newSlName("psl");
 slAddHead(&supportedTypes, el);
 el = newSlName("rmsk");
+slAddHead(&supportedTypes, el);
+el = newSlName("bigRmsk");
 slAddHead(&supportedTypes, el);
 el = newSlName("bigPsl");
 slAddHead(&supportedTypes, el);
@@ -880,7 +882,7 @@ hPrintf("<h4>genome sequences (and tracks) present in this track hub (<a href='%
 
 if (NULL == genome)
     {
-    hPrintf("<h4>odd error, can not find a gnomeList ? at url: '%s'</h4>\n", hubTop->url);
+    hPrintf("<h4>odd error, can not find a genomeList ? at url: '%s'</h4>\n", hubTop->url);
     return;
     }
 
@@ -1569,10 +1571,12 @@ if (botDelay > 0)
 
 setGlobalCgiVars();
 
+#ifdef NOTUSED // the argument processing doesn't allow udcTimeout
 int timeout = cgiOptionalInt("udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
-knetUdcInstall();
+#endif
+setUdcCacheDir();
 
 initSupportedTypes();
 

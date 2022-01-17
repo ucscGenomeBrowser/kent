@@ -1,0 +1,7 @@
+On brainDevRegions, with 33k genes and 600k cells or so:
+
+ungzipped matrix new:  1306.232u 21.958s 2:23.48 925.6%
+gzipped matrix new  :   995.367u 35.087s 7:35.60 226.1%
+gunzipping itself   :   238.886u 29.877s 4:35.33  97.6%
+ungzipped matrix old:   468.348u 22.804s 8:12.25 99.7% 
+gzipped matrix old  :   527.427u 26.885s 14:45.97 62.5%

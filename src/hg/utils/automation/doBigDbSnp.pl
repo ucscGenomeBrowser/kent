@@ -41,7 +41,7 @@ my $refSeqToUcsc = 'refSeqToUcsc.tab';
 my $equivRegions = 'equivRegions.tab';
 
 # Option defaults:
-my $assemblyList = 'GRCh37.p13,GRCh38.p12';
+my $assemblyList = 'GRCh37.p13,GRCh38.p13';
 my $dbHost = 'hgwdev';
 my $bigClusterHub = 'ku';
 my $smallClusterHub = 'hgwdev';

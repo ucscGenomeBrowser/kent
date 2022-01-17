@@ -1,7 +1,7 @@
 /* hgMaf.c - Stuff to load up mafs from the browser database. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -283,8 +283,12 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	    mc->leftStatus = mc->rightStatus = 0; /* squash annotation */
 
 	    e = strchr(mc->src, '.');
+	    /* Look up dyString corresponding to  org */
 	    if (e == NULL)
+                {
 		orgName = mc->src;
+                org = hashFindVal(orgHash, orgName);
+                }
 	    else
 		{
 		int len = e - mc->src;
@@ -293,11 +297,28 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		memcpy(buf, mc->src, len);
 		buf[len] = 0;
 		orgName = buf;
+                // if the orderList is present, it may have organism names with dots in them,
+                // If we can't find the sequence after one dot, we look again after two
+                if (orderList != NULL)  
+                    {
+                    if ((org = hashFindVal(orgHash, orgName)) == NULL)  // couldn't find this org
+                        {
+                        e = strchr(e + 1, '.');  // look for another dot following the first dot
+                        if (e != NULL)
+                            {
+                            // if we found a dot, try the longer name 
+                            len = e - mc->src;
+                            if (len >= sizeof(buf))
+                                errAbort("organism/database name %s too long", mc->src);
+                            memcpy(buf, mc->src, len);
+                            buf[len] = 0;
+                            org = hashFindVal(orgHash, orgName);
+                            }
+                        }
+                    }
 		}
 
-	    /* Look up dyString corresponding to  org, and create a
-	     * new one if necessary. */
-	    org = hashFindVal(orgHash, orgName);
+	    /* create a  new org if necessary. */
 	    if (org == NULL)
 		{
 		if (orderList != NULL)
@@ -453,14 +474,28 @@ struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end
 struct mafAli *mafList = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    // the MAF block in the record as \001 instead of newlines 
-    char *mafText = replaceChars(bb->rest, ";","\n");
+    // the MAF block in the bigBed record has a semi-colon instead of newlines 
+    replaceChar(bb->rest, ';','\n');
 
     struct mafFile mf;
-    mf.lf = lineFileOnString(NULL, TRUE, mafText);
+    mf.lf = lineFileOnString(NULL, TRUE, bb->rest);
 
     struct mafAli *maf = mafNext(&mf);
     slAddHead(&mafList, maf);
     }
+slReverse(&mafList);
 return mafList;
 }
+
+struct hash *mafGetLabelHash(struct trackDb *tdb)
+/* Get mapping of sequence name to label. */
+{
+char *labels = trackDbSetting(tdb, SPECIES_LABELS);
+struct hash *labelHash = NULL;
+
+if (labels)
+    labelHash = hashFromString(labels);
+
+return labelHash;
+}
+

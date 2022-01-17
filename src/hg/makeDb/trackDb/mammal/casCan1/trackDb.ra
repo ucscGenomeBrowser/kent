@@ -6,7 +6,7 @@ html gold
 track gap override
 html gap
 
-include ../../refSeqComposite.ra
+include ../../refSeqComposite.ra alpha
 
 searchTable gold
 shortCircuit 1

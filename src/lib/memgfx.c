@@ -751,6 +751,20 @@ switch (mg->fontMethod)
     }
 }
 
+void mgTextInBox(struct memGfx *mg, int x, int y, int width, int height, 
+	Color color, MgFont *font, char *text)
+/* Draw a line of text centered in box defined by x/y/width/height */
+{
+#ifndef USE_FREETYPE
+// should draw an X
+#else
+if (face == NULL)  // have we turned on freetype
+    ;// should draw an X
+else
+    ftTextInBox(mg, x, y, width, height, color, font, text);
+#endif
+}
+
 void mgTextCentered(struct memGfx *mg, int x, int y, int width, int height, 
 	Color color, MgFont *font, char *text)
 /* Draw a line of text centered in box defined by x/y/width/height */
@@ -1011,6 +1025,7 @@ vg->line = (vg_line)mgDrawLine;
 vg->text = (vg_text)mgText;
 vg->textRight = (vg_textRight)mgTextRight;
 vg->textCentered = (vg_textCentered)mgTextCentered;
+vg->textInBox = (vg_textInBox)mgTextInBox;
 vg->findColorIx = (vg_findColorIx)mgFindColor;
 vg->colorIxToRgb = (vg_colorIxToRgb)mgColorIxToRgb;
 vg->setWriteMode = (vg_setWriteMode)mgSetWriteMode;

@@ -53,7 +53,7 @@ byte-ranges. You can check using the following command to verify &quot;Accept-Ra
 displays: <pre><code>curl -I http://yourURL/hub.txt</code></pre></p>
 <p>
 Now that you have the assembly hub copied from above, you can copy the directory and start to edit 
-some of the documents like genomes.txt, groups.txt, and trackDb.txt to understand how they work. 
+some of the documents such as genomes.txt, groups.txt, and trackDb.txt to understand how they work. 
 Refer to the <a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs" target="_blank">Assembly 
 Hub Wiki</a> to understand how to build a <a href="twoBit.html" target="_blank">twoBit</a> file for 
 your own original fasta files. Read more about <a href="trackDb/trackDbHub.html"
@@ -127,55 +127,12 @@ referring to yourAssembly, that would have matching port numbers:</p>
 The assembly hub can be configured to talk to a dynamic BLAT server that loads
 a pre-built index when started by an <code>xinetd</code> super-server.  This
 allows genomes to have a blat server without needing it to be resident in
-memory at all times.
+memory at all times.  See
+<a href="http://genomewiki.ucsc.edu/index.php/Running_your_own_gfServer">Running your own gfServer</a>
+and
+<a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs#Adding_BLAT_servers">Adding BLAT servers</a>
+for details on how to setup dynamic BLAT servers
 <p>
-</p>
-A dynamic BLAT server is specified with the <code>dynamic</code> argument to
-the <code>blat</code> or <code>transBlat</code> specification, followed by
-the <code>gfServer</code> dynamic root-relative path of the directory
-containing the <code>2bit</code> and <code>gfidx</code> files, named in the form
-<ul>
-  <li><code><em>myGenome</em>.2bit</code> - two-bit format genomic sequence
-  <li><code><em>myGenome</em>.untrans.gfidx</code> - untranslated index, built by <code>gfServer index</code>
-  <li><code><em>myGenome</em>.trans.gfidx</code> - translated index, built by <code>gfServer -trans index</code>
-</ul>
-<p>
-For example:
-<pre>
-   transBlat yourLab.yourInstitution.edu 4096 dynamic jillLab
-   blat yourLab.yourInstitution.edu 4096 dynamic jillLab
-   isPcr yourLab.yourInstitution.edu 4096 dynamic jillLab
-</pre>
-</p>
-<p>
-for files names in the form:
-<pre>
-    $rootdir/jillLab/myGenome.2bit
-    $rootdir/jillLab/myGenome.untrans.gfidx
-    $rootdir/jillLab/myGenome.trans.gfidx
-</pre>
-</p>
-
-<p>
-For for more deeply nest directory, for instance, for instance following the NCBI
-convention:
-<pre>
-   transBlat yourLab.yourInstitution.edu 4096 dynamic GCF/000/181/335/GCF_000181335.3
-   blat yourLab.yourInstitution.edu 4096 dynamic GCF/000/181/335/GCF_000181335.3
-</pre>
-</p>
-<p>
-will reference these genome files:
-<pre>
-    $rootdir/GCF/000/181/335/GCF_000181335.3/GCF_000181335.3.2bit
-    $rootdir/GCF/000/181/335/GCF_000181335.3/GCF_000181335.3.untrans.gfidx
-    $rootdir/GCF/000/181/335/GCF_000181335.3/GCF_000181335.3.trans.gfidx
-</pre>
-</p>
-
-See <code>gfServer</code> documentation for the details
-of configuring a dynamic BLAT server and generating indexes.
-  
 See an example genomes.txt with commented out lines 
 <a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/genomes.txt"
 target="_blank">here</a>, and please note the uppercase &quot;B&quot; in transBlat. For more 
@@ -271,8 +228,14 @@ target="_blank">http://127.0.0.1:1234/cgi-bin/hgGateway?genome=araTha1&amp;hubUr
 <p>
 On the blat page, <code><a href="http://127.0.0.1:1234/cgi-bin/hgBlat" 
 target="_blank">http://127.0.0.1:1234/cgi-bin/hgBlat</a></code>, you can now select the 
-<em>Arabidopsis thaliana</em> assembly and blat plant amino acid sequences, like
+<em>Arabidopsis thaliana</em> assembly and blat plant amino acid sequences, such as
 <code>IYQTRENKYIIGEIQITESERDRRRSSLPGNH</code>
-or DNA sequences, like <code>TAAGTAAAAAATAATATGATTAAGACTAATAAATCTTAATAGTTAATACT</code>.
-
+or DNA sequences, such as <code>TAAGTAAAAAATAATATGATTAAGACTAATAAATCTTAATAGTTAATACT</code>.
+</p>
+<p>On the PCR page, <code><a href="http://127.0.0.1:1234/cgi-bin/hgPcr"
+target="_blank">http://127.0.0.1:1234/cgi-bin/hgPcr</a></code>, you can now select the
+<em>Arabidopsis thaliana</em> genome and enter a forward primer such as
+<code>TAGGTCTGCACCTGTGGTTCAAAATTTT</code> and a reverse primer such as
+<code>CAATACAAGTCAACATTTTAGCGCCGAGA</code> and click the &quot;Flip Reverse Primer&quot;
+box and then click submit to find matches on the assembly.</p>
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

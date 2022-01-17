@@ -2,7 +2,7 @@
 set -beEu -x -o pipefail
 
 #	Do not modify this script, modify the source tree copy:
-#	kent/src/hg/utils/otto/sarscov2phylo/mapPublic.sh
+#	kent/src/hg/utils/otto/sarscov2phylo/publicCredits.sh
 
 usage() {
     echo "usage: $0"
@@ -28,7 +28,24 @@ ncbiMetadata=ncbi.authors.20-11-13.csv
 #   * select columns center_name, sample_accession, sample_alias
 #   * Download report: TSV
 #   * file saved to filereport_read_run_PRJEB37886_tsv.2020-11-3.txt (extra first column, run_accession)
+# 2021-01-08: the project seems to have 133312 sequences, but the download file is cut off
+# after 100,000.  It would probably be more efficient to just identify all of the country/center
+# strings in strain names, and ask COG-UK how to attribute sequences from each one.
 cogUkMetadata=filereport_read_run_PRJEB37886_tsv.2020-11-13.txt
+
+
+# Actually BioSample has this for COG-UK:
+# xzcat $ncbiDir/all.bioSample.tab.xz \
+# | grep COG-UK \
+# | sed -re 's@COG-UK/@@; s/(\t202[01])[0-9-]+/\1/;' \
+# | tawk '{print $8 "/" $3 "/" $4, $5;}' \
+# | sort > cogToLab
+# -- although some entries break it down like this:
+# Wales/QEUH-B2C4CB/2020  Originating lab: Wales Specialist Virology Centre Sequencing lab: Pathogen Genomics Unit
+# -- well, I guess just that one:
+# g : cogToLab | cut -f 2 | sort | uniq -c | sort -nr | less
+#  38415 Originating lab: Wales Specialist Virology Centre Sequencing lab: Pathogen Genomics Unit
+
 
 
 # Author credits file... strip GenBank version numbers because NCBI metadata doesn't have those

@@ -92,9 +92,9 @@ while (my $line = <GL>) {
    my ($count, $type) = split('\s+', $line);
    my $singleMessage = "";
    if ((1 == $count) && (("F" eq $type) || ("O" eq $type))) {
-       my $chr = `zcat $agpFile | grep -v '^#' | awk -F'\t' '\$5 == \"$type\" | cut -f1'`;
+       my $chr = `zcat $agpFile | grep -v '^#' | awk -F'\t' '\$5 == \"$type\"' | cut -f1`;
        chomp $chr;
-       my $frag = `zcat $agpFile | grep -v '^#' | awk -F'\t' '\$5 == \"$type\" | cut -f6'`;
+       my $frag = `zcat $agpFile | grep -v '^#' | awk -F'\t' '\$5 == \"$type\"' | cut -f6`;
        chomp $frag;
        $singleMessage = sprintf("(%s/%s)", $chr, $frag);
    }

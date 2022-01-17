@@ -98,7 +98,13 @@ classification of each submission:
  <li><b>OTH:</b> Others</li>
 </ul>
 The size of the bead represents 
-the number of submissions at that genomic position. 
+the number of submissions at that genomic position. For track display clarity, these submission
+numbers are binned into three categories:
+<ul>
+ <li><b>Small-sized beads:</b> 1-2 submissions</li>
+ <li><b>Medium-sized beads:</b> 3-7 submissions</li>
+ <li><b>Large-sized beads:</b> 8 or more submissions</li>
+</ul>
 Hovering on the track items shows the genomic variations which start at that position 
 and the number of individual submissions with that classification. The details page lists all
 rated submissions from ClinVar, with specific details to the interpretation of the clinical or 
@@ -131,9 +137,9 @@ This track is then updated automatically at most six days
 later. The exact date of our last update is shown when you click onto any variant. 
 You can find the previous versions of the track organized by month on our
 downloads server in the 
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/archive/clinvar/" target="_blank">archive</a>
-directory. To access one of these previous versions, paste the URL to one of
-the older files into our "Custom tracks" box.</p>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/clinvar/" target="_blank">archive</a>
+directory. To display one of these previous versions, paste the URL to one of
+the older files into the custom track text input field under "My Data &gt; Custom Tracks".</p>
 
 <H2>Data access</H2>
 <p>

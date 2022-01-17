@@ -2,7 +2,7 @@
  * other formats */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "chromAnn.h"
 #include "binRange.h"
@@ -160,7 +160,7 @@ if (!rowReaderNext(rr))
 rowReaderExpectAtLeast(rr, 3);
 
 char **rawCols = (car->opts & chromAnnSaveLines) ? rowReaderCloneColumns(rr) : NULL;
-struct bed *bed = bedLoadN(rr->row, rr->numCols);
+struct bed *bed = bedLoadN(rr->row, min(rr->numCols, rr->maxParsedCols));
 struct chromAnn *ca = chromAnnNew(bed->chrom, bed->strand[0], bed->name, rawCols,
                                   strVectorWrite, strVectorFree);
 
@@ -194,7 +194,8 @@ if (car != NULL)
     }
 }
 
-struct chromAnnReader *chromAnnBedReaderNew(char *fileName, unsigned opts)
+struct chromAnnReader *chromAnnBedReaderNew(char *fileName, unsigned opts,
+                                            unsigned maxParsedCols)
 /* construct a reader for a BED file */
 {
 struct chromAnnReader *car;
@@ -202,7 +203,7 @@ AllocVar(car);
 car->caRead = chromAnnBedReaderRead;
 car->carFree = chromAnnBedReaderFree;
 car->opts = opts;
-car->data = rowReaderOpen(fileName, FALSE);
+car->data = rowReaderOpen(fileName, maxParsedCols, FALSE);
 return car;
 }
 
@@ -276,7 +277,7 @@ AllocVar(car);
 car->caRead = chromAnnGenePredReaderRead;
 car->carFree = chromAnnGenePredReaderFree;
 car->opts = opts;
-car->data = rowReaderOpen(fileName, FALSE);
+car->data = rowReaderOpen(fileName, GENEPREDX_NUM_COLS, FALSE);
 return car;
 }
 
@@ -381,7 +382,7 @@ AllocVar(car);
 car->caRead = chromAnnPslReaderRead;
 car->carFree = chromAnnPslReaderFree;
 car->opts = opts;
-car->data = rowReaderOpen(fileName, FALSE);
+car->data = rowReaderOpen(fileName, PSL_NUM_COLS, FALSE);
 return car;
 }
 
@@ -408,7 +409,7 @@ for (blk = chain->blockList; blk != NULL; blk = blk->next)
 }
 
 struct chromAnnChainReader
-/* reader data for tab files */
+/* reader data for chain files */
 {
     struct lineFile *lf;
 };
@@ -538,7 +539,7 @@ struct chromAnnReader *chromAnnTabReaderNew(char *fileName, struct coordCols* co
 struct chromAnnTabReader *catr;
 AllocVar(catr);
 catr->cols = *cols;
-catr->rr = rowReaderOpen(fileName, FALSE);
+catr->rr = rowReaderOpen(fileName, 0, FALSE);
 
 struct chromAnnReader *car;
 AllocVar(car);

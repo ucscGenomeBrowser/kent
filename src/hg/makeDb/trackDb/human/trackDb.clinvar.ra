@@ -9,7 +9,6 @@ noParentConfig on
 itemRgb on
 urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 scoreLabel ClinVar Star-Rating (0-4)
-pennantIcon Updated red /goldenPath/newsarch.html#093020a "Updated Sep. 30, 2020"
 
         track clinvarMain
         parent clinvar
@@ -21,13 +20,15 @@ pennantIcon Updated red /goldenPath/newsarch.html#093020a "Updated Sep. 30, 2020
         priority 1
         type bigBed 12 +
         showCfg on
-        filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
-        filterType._clinSignCode singleList
-        filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
-        filterType._originCode singleList
+        # note that you cannot change these values. Old carts will contain them. If you must change these, you'll have to rename
+        # the field, which will reset the cart variables. Or use the cart rewrite mechanism. You can add more values, though
+        filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,RF|risk factor,OT|other,VUS|vus
+        filterType._clinSignCode multiple
+        filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,UNK|unknown
+        filterType._originCode multiple
         filterLabel._originCode Alelle Origin
         filterValues._allTypeCode SNV|single nucleotide variant - SNV,INS|insertion - INS,DEL|deletion - DEL,INDEL|insertion-deletion - INDEL,dupl|duplication - DUPL,OTH|other - OTH
-        filterType._allTypeCode singleList
+        filterType._allTypeCode multiple
         filter._varLen 0
         filterByRange._varLen on
         filterLimits._varLen 0:49
@@ -47,13 +48,15 @@ pennantIcon Updated red /goldenPath/newsarch.html#093020a "Updated Sep. 30, 2020
         itemRgb on
         group phenDis
         priority 2
+        # note that you cannot change these values. Old carts will contain them. If you must change these, you'll have to rename
+        # the field, which will reset the cart variables. Or use the cart rewrite mechanism. You can add more values, though
         filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
-        filterType._originCode singleList
+        filterType._originCode multiple
         filterLabel._originCode Alelle Origin
         filterValues._allTypeCode INS|insertion - INS,DEL|deletion - DEL,INDEL|insertion-deletion - INDEL,dupl|duplication - DUPL,OTH|other - OTH
-        filterType._allTypeCode singleList
+        filterType._allTypeCode multiple
         filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
-        filterType._clinSign singleList
+        filterType._clinSignCode multiple
         filter._varLen 50:999999999
         filterByRange._varLen on
         filterLimits._varLen 50:999999999

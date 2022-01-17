@@ -1,12 +1,17 @@
 <h2>Description</h2>
 
 <p>
-This track shows protein sequence annotations from the <a
+This track shows protein sequences and annotations on them from the <a
 href="https://www.uniprot.org/" target="_blank">UniProt/SwissProt</A> database,
-mapped to genomic coordinates. It also shows how the protein sequences in this database 
-map to the genome.
-The data has been curated from scientific publications by the UniProt/SwissProt staff.
-The annotations are divided into multiple subtracks, based on their &quot;feature type&quot; in UniProt:
+mapped to genomic coordinates. 
+</p>
+<p>
+UniProt/SwissProt data has been curated from scientific publications by the UniProt staff,
+UniProt/TrEMBL data has been predicted by various computational algorithms.
+The annotations are divided into multiple subtracks, based on their &quot;feature type&quot; in UniProt.
+The first two subtracks below - one for SwissProt, one for TrEMBL - show the
+alignments of protein sequences to the genome, all other tracks below are the protein annotations
+mapped through these alignments to the genome.
 </p> 
 
 <table class="stdTbl">
@@ -15,15 +20,18 @@ The annotations are divided into multiple subtracks, based on their &quot;featur
     <th>Description</th>
   </tr>
   <tr>
-    <td>UCSC Alignment, SwissProt</td>
+    <td>UCSC Alignment, SwissProt = curated protein sequences</td>
     <td>Protein sequences from SwissProt mapped onto the genome. All other
-        tracks are (start,end) annotations mapped using this track.</td> </tr>
-  <tr>
-    <td>UCSC Alignment, TrEMBL</td>
+        tracks are (start,end) SwissProt annotations on these sequences mapped
+        using this track. Protein sequences without a single curated 
+    annotation were not added to this track.</td> </tr>
+<tr>
+    <td>UCSC Alignment, TrEMBL = predicted protein sequences</td>
     <td>Protein sequences from TrEMBL mapped onto the genome. All other tracks
-        are (start,end) annotations mapped using this track. This track is
-hidden by default. To show it, click its checkbox on the track description
-page.</td> </tr>
+        below are (start,end) TrEMBL annotations mapped to the genome using
+        this track. This track is hidden by default. To show it, click its
+        checkbox on the track configuration page. Protein sequences without a single 
+        predicted annotation on them were not added to this track.</td></tr>
   <tr>
     <td>UniProt Signal Peptides</td>
     <td>Regions found in proteins destined to be secreted, generally cleaved from mature protein.</td>
@@ -43,6 +51,10 @@ page.</td> </tr>
   <tr>
     <td>UniProt Polypeptide Chains</td>
     <td>Polypeptide chain in mature protein after post-processing.</td>
+  </tr>
+  <tr>
+    <td>UniProt Regions of Interest</td>
+    <td>Regions that have been experimentally defined, such as the role of a region in mediating protein-protein interactions or some other biological process.</td>
   </tr>
   <tr>
     <td>UniProt Domains</td>
@@ -74,7 +86,7 @@ page.</td> </tr>
   </tr>
   <tr>
     <td>UniProt Other Annotations</td>
-    <td>All other annotations</td>
+    <td>All other annotations, e.g. compositional bias</td>
   </tr>
 </table>
 <p>
@@ -129,12 +141,12 @@ for a given protein.</p>
 <h2>Methods</h2>
 
 <p>
-UniProt sequences were aligned to UCSC/Gencode transcript sequences first with
+UniProt sequences were aligned to one of UCSC, Gencode, Ensembl or Augustus transcript sequences, first with
 BLAT, filtered with pslReps (93% query coverage, within top 1% score), lifted
 to genome positions with pslMap and filtered again.  UniProt annotations were
-obtained from the UniProt XML file.  The annotations were then mapped to the
+obtained from the UniProt XML file.  The UniProt annotations were then mapped to the
 genome through the alignment using the pslMap program.  This mapping approach
-draws heavily on the <A HREF="http://modbase.compbio.ucsf.edu/LS-SNP/"
+draws heavily on the <A HREF="https://modbase.compbio.ucsf.edu/LS-SNP/"
 TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans. For human and mouse, the
 alignments were filtered by retaining only proteins annotated with
 a given transcript in the Genome Browser table kgXref. Like all Genome Browser

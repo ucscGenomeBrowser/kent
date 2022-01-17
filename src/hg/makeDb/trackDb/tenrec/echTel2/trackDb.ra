@@ -20,9 +20,11 @@ track cpgIslandExt override
 visibility pack
 
 track chainNetMm10 override
+shortLabel $o_db ChainNet
 visibility dense
 
 track chainNetHg19 override
+shortLabel $o_db ChainNet
 visibility dense
 
 searchTable gold

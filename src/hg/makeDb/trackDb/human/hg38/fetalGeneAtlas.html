@@ -1,0 +1,127 @@
+<h2>Description</h2>
+<p>
+This group of tracks shows data from <a
+href="https://science.sciencemag.org/content/370/6518/eaba7721" target="_blank">
+<i>A human cell atlas of fetal gene expression</i></a>. This is a collection of
+single cell and single nucleus combinatorial indexing-based RNA-seq data covering 4 million
+cells from 15 organs obtained during mid-gestation. The cells were sequenced in
+a highly multiplexed fashion and then clustered with annotations as described
+in Cao <em>et al</em>., 2020.</p>
+
+<p>
+The <a href="hgTrackUi?g=fetalGeneAtlasCellType">Fetal Cells</a> subtrack contains the 
+data organized by cell type, with RNA signals from all cells of a given type pooled 
+and averaged into one bar for each cell type. The 
+<a href="hgTrackUi?g=fetalGeneAtlasOrganCellLineage">Fetal Lineage</a> subtrack shows 
+similar data, but with the cell types subdivided more finely and by organ. Additional 
+bar chart subtracks pool the cell by other characteristics such as by sex 
+(<a href="hgTrackUi?g=fetalGeneAtlasSex">Fetal Sex</a>), assay 
+(<a href="hgTrackUi?g=fetalGeneAtlasAssay">FetalAssay</a>), donor 
+(<a href="hgTrackUi?g=fetalGeneAtlasDonor">Fetal Donor ID</a>), experiment 
+(<a href="hgTrackUi?g=fetalGeneAtlasExperiment">Fetal Exp</a>), organ 
+(<a href="hgTrackUi?g=fetalGeneAtlasOrgan">Fetal Organ</a>), and reverse transcription group 
+(<a href="hgTrackUi?g=fetalGeneAtlasRtGroup">Fetal RT Group</a>).</p>
+
+<p>
+Please see <a
+href='https://descartes.brotmanbaty.org/'>descartes.brotmanbaty.org</a> for
+further interactive displays and additional data.</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+The cell types are colored by which class they belong to according to the following table.
+The coloring algorithm allows cells that show some blended characteristics to show blended
+colors so there will be some color variation within a class. The colors will be purest in
+the <a href="hgTrackUi?g=fetalGeneAtlasCellType">Fetal Cells</a> subtrack, where the bars 
+represent relatively pure cell types. They can give an overview of the cell composition 
+within other categories in other subtracks as well.
+
+<p>
+<table cellpadding='2'>
+  <thead><tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;">Cell classification</th>
+  </tr></thead>
+  <tr><td style='background-color: #F0C000;'></td><td>neural</td></tr>
+  <tr><td style="background-color: #FF8838;"></td><td>adipose</td></tr>
+  <tr><td style="background-color: #B05020;"></td><td>fibroblast</td></tr>
+  <tr><td style="background-color: #F01111;"></td><td>immune</td></tr>
+  <tr><td style="background-color: #C000C0;"></td><td>muscle</td></tr>
+  <tr><td style="background-color: #6000B0;"></td><td>hepatocyte</td></tr>
+  <tr><td style="background-color: #5020E0;"></td><td>trophoblast</td></tr>
+  <tr><td style="background-color: #0050FF;"></td><td>secretory</td></tr>
+  <tr><td style="background-color: #0072D6;"></td><td>ciliated</td></tr>
+  <tr><td style="background-color: #0099C0;"></td><td>epithelial</td></tr>
+  <tr><td style="background-color: #00C000;"></td><td>endothelial</td></tr>
+  <tr><td style="background-color: #80D000;"></td><td>glia</td></tr>
+</table>
+
+<h2>Methods</h2>
+<p>
+Three-level single-cell combinatorial indexing (sci-RNAseq3) as described in
+Cao <em>et al</em>., 2020  was used on 121 samples from 28 fetuses estimated 72
+to 129 days post-conception. This included samples from 15 organs. and
+resulted in RNA profiles for 4 million cells. The samples were flash-frozen for
+majority of the experiments and then nuclei extracted for sequencing. Samples
+from tissues from the kidney and digestive system were fixed after
+disassociation to deactivate endogenous RNases and proteases.</p>
+
+<p>The cell/gene matrix and cell-level metadata was downloaded from the <a
+href="http://cells.ucsc.edu/?ds=fetal-gene-atlas+all" target="_blank">
+UCSC Cell Browser</a>. The UCSC command line utility matrixClusterColumns,
+matrixToBarChart, and bedToBigBed were used to transform these into a bar chart
+format bigBed file that can be visualized. The coloring was done by defining
+colors for the broad level cell classes and then using another UCSC utility,
+hcaColorCells, to interpolate the colors across all cell types.
+The UCSC utilities can be found on 
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">our download server</a>.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw <a href="/goldenPath/help/barChart.html">bar chart</a> data can be
+explored interactively with the <a href="../cgi-bin/hgTables">Table
+Browser</a>, or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a
+href="/goldenPath/help/api.html">REST API</a>. Please refer to our <a
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing
+list archives</a> for questions, or our <a
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.</p>
+
+
+<h2>Credits</h2>
+<p>Thanks to the many authors who worked on producing and publishing this data set.  
+The data were integrated into the UCSC Genome Browser by Jim Kent and Brittney Wick 
+then reviewed by Jairo Navarro. The UCSC work was paid for by the Chan Zuckerberg Initiative.</p>
+
+<h2>References</h2>
+<p>
+Cao J, O'Day DR, Pliner HA, Kingsley PD, Deng M, Daza RM, Zager MA, Aldinger KA, Blecher-Gonen R,
+Zhang F <em>et al</em>.
+<a href="https://www.science.org/doi/10.1126/science.aba7721" target="_blank">
+A human cell atlas of fetal gene expression</a>.
+<em>Science</em>. 2020 Nov 13;370(6518).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33184181" target="_blank">33184181</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7780123/" target="_blank">PMC7780123</a>
+</p>
+<p>
+Cao J, Spielmann M, Qiu X, Huang X, Ibrahim DM, Hill AJ, Zhang F, Mundlos S, Christiansen L,
+Steemers FJ <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30787437" target="_blank">
+The single-cell transcriptional landscape of mammalian organogenesis</a>.
+<em>Nature</em>. 2019 Feb;566(7745):496-502.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30787437" target="_blank">30787437</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6434952/" target="_blank">PMC6434952</a>
+</p>
+
+<!-- seize control of background color -->
+<style>
+body.cgi {
+   background: #F0F0F0;
+}
+table.hgInside {
+   background: #FFFFFF;
+}
+</style>
+

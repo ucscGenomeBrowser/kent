@@ -3,13 +3,14 @@
  * with a "#list of fields" line among other things. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "localmem.h"
 #include "linefile.h"
 #include "hash.h"
 #include "fieldedTable.h"
+#include "sqlNum.h"
 #include "net.h"
 
 struct fieldedTable *fieldedTableNew(char *name, char **fields, int fieldCount)
@@ -130,6 +131,27 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 return anyVals;
 }
 
+double fieldedTableMaxInCol(struct fieldedTable *table, int colIx)
+/* Figure out total and count columns from context and use them to figure
+ * out maximum mean value */
+{
+boolean firstTime = TRUE;
+double max = 0.0;
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    double val = sqlDouble(fr->row[colIx]);
+    if (firstTime)
+	{
+        max = val;
+	firstTime = FALSE;
+	}
+    else if (max < val)
+        max = val;
+    }
+return max;
+}
+
 static int slPairCmpNumbers(const void *va, const void *vb)
 /* Compare slPairs where name is interpreted as floating point number */
 {
@@ -174,7 +196,7 @@ slReverse(&pairList);
 if (fieldIsNumeric)
     slSort(&pairList, slPairCmpNumbers);
 else
-    slSort(&pairList, slPairCmpCase);
+    slSort(&pairList, slPairCmpWordsWithEmbeddedNumbers);
 if (doReverse)
     slReverse(&pairList);
 
@@ -188,6 +210,42 @@ for (pair = pairList; pair != NULL; pair = pair->next)
 slReverse(&newList);
 table->rowList = newList;
 lmCleanup(&lm);
+}
+
+struct fieldedTable *fieldedTableReadTabHeader(struct lineFile *lf, 
+    char *requiredFields[], int requiredCount)
+/* Read in first line of file treating it as a fieldedTable header line. 
+ * Used in combination with fieldedTableReadNextRow() */
+{
+/* Get first line and turn it into field list. */
+char *line;
+if (!lineFileNext(lf, &line, NULL))
+   errAbort("%s is empty", lf->fileName);
+boolean startsSharp = FALSE;
+if (line[0] == '#')
+   {
+   line = skipLeadingSpaces(line+1);
+   startsSharp = TRUE;
+   }
+   
+int fieldCount = chopByChar(line, '\t', NULL, 0);
+char *fields[fieldCount];
+chopTabs(line, fields);
+
+/* Make sure that all required fields are present. */
+int i;
+for (i = 0; i < requiredCount; ++i)
+    {
+    char *required = requiredFields[i];
+    int ix = stringArrayIx(required, fields, fieldCount);
+    if (ix < 0)
+        errAbort("%s is missing required field '%s'", lf->fileName, required);
+    }
+
+/* Create fieldedTable . */
+struct fieldedTable *table = fieldedTableNew(lf->fileName, fields, fieldCount);
+table->startsSharp = startsSharp;
+return table;
 }
 
 struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *reportFileName, 
@@ -215,37 +273,11 @@ else
     reportFileName = fileName;
     }
 
-/* Get first line and turn it into field list. */
-char *line;
-if (!lineFileNext(lf, &line, NULL))
-   errAbort("%s is empty", reportFileName);
-boolean startsSharp = FALSE;
-if (line[0] == '#')
-   {
-   line = skipLeadingSpaces(line+1);
-   startsSharp = TRUE;
-   }
-   
-int fieldCount = chopByChar(line, '\t', NULL, 0);
-char *fields[fieldCount];
-chopTabs(line, fields);
-
-/* Make sure that all required fields are present. */
-int i;
-for (i = 0; i < requiredCount; ++i)
+struct fieldedTable *table = fieldedTableReadTabHeader(lf, requiredFields, requiredCount);
+char *row[table->fieldCount];
+while (lineFileNextRowTab(lf, row, table->fieldCount))
     {
-    char *required = requiredFields[i];
-    int ix = stringArrayIx(required, fields, fieldCount);
-    if (ix < 0)
-        errAbort("%s is missing required field '%s'", reportFileName, required);
-    }
-
-/* Create fieldedTable . */
-struct fieldedTable *table = fieldedTableNew(reportFileName, fields, fieldCount);
-table->startsSharp = startsSharp;
-while (lineFileRowTab(lf, fields))
-    {
-    fieldedTableAdd(table, fields, fieldCount, lf->lineIx);
+    fieldedTableAdd(table, row, table->fieldCount, lf->lineIx);
     }
 
 /* Clean up and go home. */
@@ -297,6 +329,16 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 
 carefulClose(&f);
 }
+
+void fieldedTableResetRowIds(struct fieldedTable *table, int startId)
+/* Redo ID's in table to be incrementing numbers starting with startId */
+{
+struct fieldedRow *fr;
+int id = startId;
+for (fr  = table->rowList; fr != NULL; fr = fr->next)
+    fr->id = id++;
+}
+
 
 void fieldedTableToTabFile(struct fieldedTable *table, char *fileName)
 /* Write out a fielded table back to file */

@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import re
+from collections import defaultdict
+myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
+sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
+import argparse
+from pycbio.db import mysqlOps
+from pycbio.hgdata import hgDb
+from pycbio.hgdata.chromInfo import ChromInfoTbl
+
+mysqlOps.mySqlSetErrorOnWarn()
+
+DEBUG = False
+
+ucscDbToRefAsm = {
+    "hg19": "GRCh37",
+    "hg38": "GRCh38",
+    "mm10": "GRCm38",
+    "mm39": "GRCm39",
+}
+
+badChroms = frozenset([
+    "chrUn_KI270752v1"   # contamination in GRCh38
+])
+
+def parseArgs():
+    desc = """Generate liftOver chains of GENCODE chromosome names to UCSC chromosomes.
+
+    For GRCh37, this does special handling of chrM to handle mapping
+    NC_012920 to UCSC chrM.
+
+    It also create mappings for the chr* names used by GENCODE and ENCODE,
+    with the exclusion of chrM on GRCh37.
+"""
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument("ucscDbName", choices=ucscDbToRefAsm.keys(),
+                        help="UCSC daatbase name for reference assembly name")
+    parser.add_argument("gencodeToUcscLift",
+                        help="GENCODE to UCSC to liftOver chains")
+    return parser.parse_args()
+
+
+# template for 1-to-1 chain
+chainTmpl = """chain {size} {qName} {size} + 0 {size} {tName} {size} + 0 {size} {chainId}
+{size}
+"""
+
+# alignment of chrMs on hg19. GRCh37 did not which initially have chrM,
+# so UCSC chose a different one.
+hg19ChrMQNames = ("NC_012920", "MT", "chrM")
+
+hg19ChrMChain = """chain 16493 {qName} 16569 + 0 16569 chrM 16571 + 0 16571 {chainId}
+309	0	1
+6	0	1
+2791	1	0
+13081	1	2
+380
+"""
+
+def isPrimaryChrom(chrom):
+    return re.match("^chr(([1-9][0-9]?)|[XYM]|MT)$", chrom)
+
+def loadChromAlias(conn):
+    # other ucsc sources
+    chromAliases = defaultdict(set)
+    for row in mysqlOps.query(conn, 'SELECT alias, chrom FROM chromAlias'):
+        chromAliases[row[1]].add(row[0])
+    chromAliases.default_factory = None
+    return chromAliases
+
+def writeHg19ChrM(nextChainId, fh):
+    for chrMName in hg19ChrMQNames:
+        fh.write(hg19ChrMChain.format(qName=chrMName, chainId=nextChainId))
+        nextChainId += 1
+    return nextChainId
+
+def writeStdChain(chromName, ucscChrom, nextChainId, fh):
+    fh.write(chainTmpl.format(size=ucscChrom.size, qName=chromName, tName=ucscChrom.chrom, chainId=nextChainId))
+    return nextChainId + 1
+
+def writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh):
+    if ucscChrom.chrom not in chromAliases:
+        raise Exception(f"UCSC chrom {ucscChrom.chrom} not in chromAlias table")
+    if (ucscDbName == "hg19") and (ucscChrom.chrom == "chrM"):
+        nextChainId = writeHg19ChrM(nextChainId, fh)
+    elif (ucscDbName == "hg19") and (ucscChrom.chrom == "chrMT"):
+        # don't create a constant lift for chrM -> chrMT, this is handled by gencodeGxfToGenePred
+        # since liftOver can't handle multiple lifts
+        pass
+    elif isPrimaryChrom(ucscChrom.chrom):
+        nextChainId = writeStdChain(ucscChrom.chrom, ucscChrom, nextChainId, fh)
+    else:
+        for chromName in chromAliases[ucscChrom.chrom]:
+            nextChainId = writeStdChain(chromName, ucscChrom, nextChainId, fh)
+    return nextChainId
+
+def writeChains(ucscDbName, chromInfos, chromAliases, fh):
+    nextChainId = 1
+    for ucscChrom in chromInfos.values():
+        if ucscChrom.chrom not in badChroms:
+            nextChainId = writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh)
+
+def buildGencodeToUcscLift(opts):
+    with hgDb.connect(opts.ucscDbName) as conn:
+        chromInfos = ChromInfoTbl.loadDb(conn)
+        chromAliases = loadChromAlias(conn)
+
+    with open(opts.gencodeToUcscLift, "w") as fh:
+        writeChains(opts.ucscDbName, chromInfos, chromAliases, fh)
+
+
+buildGencodeToUcscLift(parseArgs())

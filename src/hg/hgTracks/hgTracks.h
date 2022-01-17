@@ -2,7 +2,7 @@
  * individual tracks. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef HGTRACKS_H
 #define HGTRACKS_H
@@ -60,6 +60,11 @@
 #endif
 
 #define BIGBEDMAXIMUMITEMS 100000
+
+#define MULTI_REGION_VIRTUAL_CHROM_NAME "multi"
+// original name was 'virt'
+
+#define MULTI_REGION_CFG_BUTTON_TOP     "multiRegionButtonTop"
 
 /* for botDelay call, 10 second for warning, 20 second for immediate exit */
 #define delayFraction   0.25
@@ -385,6 +390,7 @@ struct linkedFeatures
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
     struct simpleFeature *codons;       /* If zoomed to CDS or codon level.*/
+    boolean useItemRgb;                 /* If true, use rgb from item. */
     void *extra;			/* Extra info that varies with type. */
     void *original;			/* The structure that was converted
 					   into this (when needed later).  */
@@ -580,6 +586,7 @@ extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black
                                    * Red is put at end to alert overflow. */
 extern Color shadesOfBrown[10+1]; /* 10 shades of brown from tan to tar. */
 extern struct rgbColor guidelineColor;
+extern struct rgbColor multiRegionAltColor;
 extern struct rgbColor undefinedYellowColor;
 extern Color darkGreenColor;
 
@@ -605,6 +612,7 @@ extern boolean chromosomeColorsMade; /* Have the 3 shades of 8 chromosome colors
 extern boolean doPliColors; /* Put up the color legend for the gnomAD pLI track */
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;
+extern int colorLookup[256]; /* Common to variation.c and rnaPLFoldtrack.c */
 
 extern boolean trackImgOnly;           /* caller wants just the track image and track table html */
 
@@ -1117,6 +1125,10 @@ void mathWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 /* mathWig load and draw methods. */
 
+void bigRmskMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* Set up bigRmsk methods. */
+
 void bigBedMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Set up bigBed methods. */
@@ -1621,8 +1633,8 @@ int tgCmpPriority(const void *va, const void *vb);
 void printMenuBar();
 /* Put up the menu bar. */
 
-void checkIfWiggling(struct cart *cart, struct track *tg);
-/* Check to see if a linkedFeatures track should be drawing as a wiggle. */
+boolean checkIfWiggling(struct cart *cart, struct track *tg);
+/* Check to see if a track should be drawing as a wiggle. */
 
 boolean isTypeBedLike(struct track *track);
 /* Check if track type is BED-like packable thing (but not rmsk or joinedRmsk) */

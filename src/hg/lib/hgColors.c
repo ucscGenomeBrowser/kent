@@ -1,7 +1,7 @@
 /* hgColors - colors used in UCSC Genome Browser pages. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hgColors.h"
@@ -35,3 +35,17 @@ if (newVal <= 0) newVal = 1;
 if (newVal > newMax) newVal = newMax;
 return newVal;
 }
+
+void hInsideStyleToWhite()
+/* Override a few old styling things to get a white instead of cream background */
+{
+printf("<style>");
+printf("body.cgi {\n");
+printf("   background: #F0F0F0;\n");
+printf("}\n");
+printf("table.hgInside {\n");
+printf("   background: #FFFFFF;\n");
+printf("}\n");
+printf("</style>");
+}
+

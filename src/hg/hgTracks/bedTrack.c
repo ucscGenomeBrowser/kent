@@ -1,7 +1,7 @@
 /* bedTrack - handle most aspects of a bed-format track (or bigBed). */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "jksql.h"
@@ -223,7 +223,7 @@ adjustBedScoreGrayLevel(tdb, bed, scoreMin, scoreMax);
 struct linkedFeatures *lf = lfFromBedExtra(bed, scoreMin, scoreMax);
 if (useItemRgb)
     {
-    lf->extra = (void *)USE_ITEM_RGB;       /* signal for coloring */
+    lf->useItemRgb = TRUE;
     lf->filterColor=bed->itemRgb;
     }
 bedFree(pBed);
@@ -525,7 +525,7 @@ else
 	lf = lfFromBedExtra(bed, scoreMin, scoreMax);
 	if (useItemRgb)
 	    {
-	    lf->extra = (void *)USE_ITEM_RGB;       /* signal for coloring */
+            lf->useItemRgb = TRUE;
 	    lf->filterColor=bed->itemRgb;
 	    }
 	slAddHead(&lfList, lf);

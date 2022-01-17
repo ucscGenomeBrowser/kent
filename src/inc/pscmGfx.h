@@ -66,6 +66,10 @@ void pscmTextRight(struct pscmGfx *pscm, int x, int y, int width, int height,
 	int color, MgFont *font, char *text);
 /* Draw a line of text right justified in box defined by x/y/width/height */
 
+void pscmTextInBox(struct pscmGfx *pscm, int x, int y, 
+	int width, int height, int color, MgFont *font, char *text);
+/* Draw a line of text filling in box defined by x/y/width/height */
+
 void pscmTextCentered(struct pscmGfx *pscm, int x, int y, 
 	int width, int height, int color, MgFont *font, char *text);
 /* Draw a line of text centered in box defined by x/y/width/height */

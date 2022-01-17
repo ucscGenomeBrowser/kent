@@ -1,7 +1,7 @@
 /* pipelineTester - test program for pipeline object */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "limits.h"
 #include "common.h"
 #include "pipeline.h"
@@ -35,7 +35,8 @@ errAbort(
     "  -stderr=file - file for stderr of pipeline\n"
     "  -fdApi - use the file descriptor API\n"
     "  -sigpipe - enable SIGPIPE.\n"
-    "  -maxNumLines - read or write this many lines and close (for testing -sigpipe)\n",
+    "  -maxNumLines=n - read or write this many lines and close (for testing -sigpipe)\n"
+    "  -timeout=n - timeout, in seconds\n",
     msg);
 }
 
@@ -50,6 +51,7 @@ static struct optionSpec options[] =
     {"fdApi", OPTION_BOOLEAN},
     {"sigpipe", OPTION_BOOLEAN},
     {"maxNumLines", OPTION_INT},
+    {"timeout", OPTION_INT},
     {NULL, 0},
 };
 
@@ -64,6 +66,7 @@ int maxNumLines = INT_MAX;  /* number of lines to read or write */
 char *pipeDataFile = NULL;   /* use for input or output to the pipeline */
 char *otherEndFile = NULL;   /* file for other end of pipeline */
 char *stderrFile = NULL;   /* file for other stderr of pipeline */
+unsigned int timeout = 0;  /* timeout to apply */
 
 int countOpenFiles()
 /* count the number of opens.  This is used to make sure no stray
@@ -206,7 +209,7 @@ int mode = (isWrite ? O_WRONLY|O_CREAT|O_TRUNC : O_RDONLY);
 int otherEndFd = mustOpenFd(otherEndFile, mode);
 int stderrFd = (stderrFile == NULL) ? STDERR_FILENO
     : mustOpenFd(stderrFile, O_WRONLY|O_CREAT|O_TRUNC);
-struct pipeline *pl = pipelineOpenFd(cmds, options, otherEndFd, stderrFd);
+struct pipeline *pl = pipelineOpenFd(cmds, options, otherEndFd, stderrFd, timeout);
 runPipelineTest(pl);
 pipelineFree(&pl);
 mustCloseFd(&otherEndFd);
@@ -221,7 +224,7 @@ int stderrFd = (stderrFile == NULL) ? STDERR_FILENO
     : mustOpenFd(stderrFile, O_WRONLY|O_CREAT|O_TRUNC);
 size_t otherEndBufSize = 0;
 void *otherEndBuf = loadMemData(otherEndFile, &otherEndBufSize);
-struct pipeline *pl = pipelineOpenMem(cmds, options, otherEndBuf, otherEndBufSize, stderrFd);
+struct pipeline *pl = pipelineOpenMem(cmds, options, otherEndBuf, otherEndBufSize, stderrFd, timeout);
 runPipelineTest(pl);
 pipelineFree(&pl);
 freeMem(otherEndBuf);
@@ -232,7 +235,7 @@ if (stderrFile != NULL)
 void pipelineTestFName(char ***cmds, unsigned options)
 /* test for file name API */
 {
-struct pipeline *pl = pipelineOpen(cmds, options, otherEndFile, stderrFile);
+struct pipeline *pl = pipelineOpen(cmds, options, otherEndFile, stderrFile, timeout);
 runPipelineTest(pl);
 pipelineFree(&pl);
 }
@@ -278,6 +281,7 @@ memApi = optionExists("memApi");
 fdApi = optionExists("fdApi");
 sigpipe = optionExists("sigpipe");
 maxNumLines = optionInt("maxNumLines", INT_MAX);
+timeout = optionInt("timeout", 0);
 if (fdApi && memApi)
     errAbort("can't specify both -fdApi and -memApi");
 pipeDataFile = optionVal("pipeData", NULL);

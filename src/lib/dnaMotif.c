@@ -3,7 +3,7 @@
  * the RAM representation of objects. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "linefile.h"
@@ -11,6 +11,7 @@
 #include "dystring.h"
 #include "dnaMotif.h"
 #include "portable.h"
+#include "pipeline.h"
 
 
 struct dnaMotif *dnaMotifCommaIn(char **pS, struct dnaMotif *ret)
@@ -533,7 +534,6 @@ void dnaMotifToLogoPng(
 /* Write logo corresponding to motif to png file. */
 {
 char *psName = rTempName(tempDir, "dnaMotif", ".ps");
-struct dyString *dy = dyStringNew(0);
 int w, h;
 int sysRet;
 
@@ -541,23 +541,15 @@ if (gsExe == NULL) gsExe = "gs";
 if (tempDir == NULL) tempDir = "/tmp";
 dnaMotifToLogoPs(motif, widthPerBase, height, psName);
 dnaMotifDims(motif, widthPerBase, height, &w, &h);
-dyStringAppend(dy, gsExe);
-dyStringAppend(dy, " -sDEVICE=png16m -sOutputFile=");
-dyStringAppend(dy, fileName);
-dyStringAppend(dy, " -dBATCH -dNOPAUSE -q ");
-dyStringPrintf(dy, "-g%dx%d ", w, h);
-dyStringAppend(dy, psName);
-sysRet = system(dy->string);
+char geoBuf[1024];
+safef(geoBuf, sizeof geoBuf, "-g%dx%d", w, h);
+char outputBuf[1024];
+safef(outputBuf, sizeof outputBuf, "-sOutputFile=%s", fileName);
+char *pipeCmd[] = {gsExe, "-sDEVICE=png16m", outputBuf, "-dBATCH","-dNOPAUSE","-q", geoBuf, psName, NULL};
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
+sysRet = pipelineWait(pl);
 if (sysRet != 0)
-    errAbort("System call returned %d for:\n  %s", sysRet, dy->string);
-
-/* Clean up. */
-dyStringFree(&dy);
-
-/* change permisssions so the webserver can access the file */
-dy = newDyString(0);
-dyStringPrintf(dy, "chmod 666 %s ", fileName);
-sysRet = system(dy->string);
+    errAbort("System call returned %d for:\n  %s", sysRet, pipelineDesc(pl));
 
 remove(psName);
 }
@@ -601,7 +593,6 @@ void dnaMotifToLogoPGM(
 /* Write logo corresponding to motif to pgm file. */
 {
 char *psName = rTempName(tempDir, "dnaMotif", ".ps");
-struct dyString *dy = dyStringNew(0);
 int w, h;
 int sysRet;
 
@@ -609,23 +600,16 @@ if (gsExe == NULL) gsExe = "gs";
 if (tempDir == NULL) tempDir = "/tmp";
 dnaMotifToLogoPsW(motif, widthPerBase, width, height, psName);
 dnaMotifDims(motif, widthPerBase, height, &w, &h);
-dyStringAppend(dy, gsExe);
-dyStringAppend(dy, " -sDEVICE=pgmraw -sOutputFile=");
-dyStringAppend(dy, fileName);
-dyStringAppend(dy, " -dBATCH -dNOPAUSE -q ");
-dyStringPrintf(dy, "-g%dx%d ", (int) ceil(width), h);
-dyStringAppend(dy, psName);
-sysRet = system(dy->string);
+char geoBuf[1024];
+safef(geoBuf, sizeof geoBuf, "-g%dx%d ", (int) ceil(width), h);
+char outputBuf[1024];
+safef(outputBuf, sizeof outputBuf, "-sOutputFile=%s", fileName);
+char *pipeCmd[] = {gsExe, "-sDEVICE=pgmraw", outputBuf, "-dBATCH","-dNOPAUSE","-q", geoBuf, psName, NULL};
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
+sysRet = pipelineWait(pl);
+
 if (sysRet != 0)
-    errAbort("System call returned %d for:\n  %s", sysRet, dy->string);
-
-/* Clean up. */
-dyStringFree(&dy);
-
-/* change permisssions so the webserver can access the file */
-dy = newDyString(0);
-dyStringPrintf(dy, "chmod 666 %s ", fileName);
-sysRet = system(dy->string);
+    errAbort("System call returned %d for:\n  %s", sysRet, pipelineDesc(pl));
 
 remove(psName);
 }

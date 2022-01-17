@@ -1,7 +1,7 @@
 /* liftOver - Move annotations from one assembly to another. */
 
 /* Copyright (C) 2012 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -188,8 +188,8 @@ double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
 
 optionInit(&argc, argv, optionSpecs);
-minMatch = optionFloat("minMatch", minMatch);
-minBlocks = optionFloat("minBlocks", minBlocks);
+minMatch = optionDouble("minMatch", minMatch);
+minBlocks = optionDouble("minBlocks", minBlocks);
 fudgeThick = optionExists("fudgeThick");
 multiple = optionExists("multiple");
 noSerial = optionExists("noSerial");

@@ -2,14 +2,12 @@ track encode3Reg
 superTrack on
 shortLabel ENCODE Regulation
 longLabel Integrated Regulation from ENCODE
-wgEncode 1
 group regulation
-priority 2
 
 include encode3.chromHmm.ra
 include encode3.histone.ra
 include encode3.atac.ra
 
 track encodeCcreCombined override
-url https://screen.encodeproject.org/search/?q=$$&assembly=mm10
+url https://screen-v2.wenglab.org/search/?q=$$&assembly=mm10
 

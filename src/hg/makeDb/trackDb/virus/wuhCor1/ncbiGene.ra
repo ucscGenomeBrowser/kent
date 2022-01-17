@@ -2,7 +2,7 @@ track ncbiGeneBGP
 shortLabel NCBI Genes
 longLabel NCBI Genes from NC_045512.2
 group genes
-visibility hide
+visibility pack
 priority 1
 color 12,12,120
 type bigGenePred 

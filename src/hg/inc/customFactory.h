@@ -2,7 +2,7 @@
  * creating various types of custom tracks. */
 
 /* Copyright (C) 2009 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef CUSTOMFACTORY_H
 #define CUSTOMFACTORY_H

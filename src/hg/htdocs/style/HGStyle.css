@@ -17,9 +17,20 @@ body.training {
         background: url("../../images/internal_bg1.jpg") repeat-x fixed left bottom #F9F9F7;
 }
 
+#searchHelp {
+        display: inline;
+        margin-left: 0.5em;
+        font-size: 80%;
+}
+
 a:link {
         color: #121E9A; 
         text-decoration: underline
+}
+
+.blueLink {
+        color: #121E9A !important; 
+        cursor: pointer;
 }
 
 span.link {
@@ -297,6 +308,18 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
     padding-right: 5px;
 }
 
+/* Used by hgc json tables */
+TABLE.jsonTable, TABLE.jsonTable td, TABLE.jsonTable td {
+    border: 1px solid #909090;
+    border-collapse: collapse;
+    text-align: left;
+    vertical-align: top;
+    padding: 5px;
+}
+
+TABLE.jsonTable thead tr td {
+    font-weight: bold;
+}
 
 /* hgTrackUi page formatting */
 label.trackUiHicLabel
@@ -532,6 +555,7 @@ input[type=color] { padding: 0px; }
 div.disabled  { border-color: gray; color: gray;  }
 input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
 span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
+td.disabled   { color: gray; }
 
 .positionDisplay {
     display: inline-block;
@@ -542,17 +566,6 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 .positionDisplay:hover {
     cursor: default;
 }
-
-.positionDisplay.pressed {
-    background: #ebf0ff;
-    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
-    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
-    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
-    border-radius: 4px;
-}
-
-
 
 .positionInput {
         padding: 7px; -moz-border-radius: 3px; border-radius: 3px;
@@ -567,6 +580,13 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
     font-weight: bold;
     vertical-align: text-top;
 }
+
+.folderIcon {
+        /* color: #00457c;  color of SVG must be set via fill attribute, see hui.c:printIcons() */
+        height: 13px;
+        vertical-align: top;
+}
+
 
 /*
    Styles for hgHubConnect (formerly in separate .css)
@@ -713,14 +733,28 @@ body.oldStaticPage .sectionContent {
 #warnBox {
     background-color: Beige;
     border: 3px ridge DarkRed;
-    width:640px;
     padding:10px; 
     margin:10px;
     text-align:left;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    width: 800px;
 }
 
 #warnHead {
     color: DarkRed;
+}
+
+/* like warnBox, but under the menu, not in the middle of the screen */
+#notifBox {
+    background-color: beige;
+    border: 1px solid grey;
+    padding: 5px; 
+    margin: 5px;
+    text-align: left;
 }
 
 /* For jquery-ui dialog box */
@@ -949,6 +983,24 @@ input[type="submit"].pressed {
     border-radius: 4px;
 }
 
+input[type="button"].pressed {
+    background: #ebf0ff;
+    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+
+.positionDisplay.pressed {
+    background: #ebf0ff;
+    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+
 /* Session label in a box */
 
 span.gbSessionLabelPanel {
@@ -973,3 +1025,29 @@ span.gbSessionLabelText {
 span.gbSessionChanged {
     color: darkslategray !important;
 }
+
+/* Table browser styles */
+
+.tbTooltip {
+    display: inline-block;
+}
+
+.tbTooltipLabel {
+    background: #EFEFEF;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.tbTooltiptext {
+    visibility: hidden;
+    font-style: italic;
+    font-size: smaller;
+    padding: 5px;
+}
+
+.tbTooltip:hover .tbTooltiptext {
+    visibility: visible;
+}
+
+
+

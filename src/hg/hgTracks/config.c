@@ -1,7 +1,7 @@
 /* config - put up track and display configuration page. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "dystring.h"
@@ -107,26 +107,37 @@ char *emptyStyles[] = {
 "Normal"
 };
 
+static boolean freeTypeOn()
+{
+#ifdef USE_FREETYPE
+char *defaultState = "on";
+#else // USE_FREETYPE
+char *defaultState = "off";
+#endif // USE_FREETYPE
+
+return sameString(cfgOptionDefault("freeType", defaultState), "on");
+}
+
 void maybeNewFonts(struct hvGfx *hvg)
 /* Check to see if we want to use the alternate font engine (FreeType2). */
 {
-if (sameString(cfgOptionDefault("freeType", "off"), "on"))
-    {
-    if (sameString(tl.textFont, "Bitmap"))
-        return;
+if (!freeTypeOn())
+    return;
 
-    char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
-    char buffer[4096];
+if (sameString(tl.textFont, "Bitmap"))
+    return;
 
-    int ii;
-    for(ii=0; ii < ArraySize(freeTypeFontNames); ii++)
-        if (sameString(freeTypeFontNames[ii], tl.textFont))
-            break;
-    char *fontFile = freeTypeFontFiles[ii];
-    char *fontName = freeTypeFontNames[ii];
-    safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
-    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
-    }
+char *fontDir = cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts");
+char buffer[4096];
+
+int ii;
+for(ii=0; ii < ArraySize(freeTypeFontNames); ii++)
+    if (sameString(freeTypeFontNames[ii], tl.textFont))
+        break;
+char *fontFile = freeTypeFontFiles[ii];
+char *fontName = freeTypeFontNames[ii];
+safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
+hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
 }
 
 static void textFontDropDown()
@@ -199,6 +210,7 @@ dyStringPrintf(dy, "$(\"[name='textStyle']\").val('%s');\n", currentStyle);
 jsInline(dy->string);
 
 hDropList(textFontVar, faceNames, numFonts, currentFontName);
+jsInline("$('[name=\"textFont\"]')[0].style.width='15em';\n"); // hDropList has no 'style' nor 'id' argument <-> no opt args in C
 }
 
 static void textStyleDropDown()
@@ -323,7 +335,7 @@ for (group = groupList; group != NULL; group = group->next)
                 chromName, RULER_TRACK_NAME);
         hPrintf("%s</A>", RULER_TRACK_LABEL);
 	hPrintf("</TD><TD>");
-	hTvDropDownClass("ruler", rulerMode, FALSE, rulerMode ? "normalText" : "hiddenText");
+	hTvDropDownClass("ruler", rulerMode, FALSE, rulerMode ? "normalText trackVis" : "hiddenText trackVis");
 	hPrintf("</TD><TD>");
 	hPrintf("Chromosome position in bases.  (Clicks here zoom in 3x)");
 	hPrintf("</TD></TR>\n");
@@ -387,8 +399,7 @@ for (group = groupList; group != NULL; group = group->next)
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 
-        // Print an icon before the title when one is defined
-        hPrintPennantIcon(tdb);
+        hPrintIcons(tdb);
 
         if (track->hasUi)
             hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%s&g=%s&hgTracksConfigPage=configure'>",
@@ -397,8 +408,6 @@ for (group = groupList; group != NULL; group = group->next)
                     hTrackUiForTrack(tdb->track),
                     cartSessionVarName(), cartSessionId(cart), track->track);
         hPrintf(" %s", tdb->shortLabel);
-        if (tdbIsSuper(tdb))
-            hPrintf("...");
         if (track->hasUi)
 	    hPrintf("</A>");
 	hPrintf("</TD><TD NOWRAP>");
@@ -423,7 +432,7 @@ for (group = groupList; group != NULL; group = group->next)
                 /* check for option of limiting visibility to one mode */
                 hTvDropDownClassVisOnly(track->track, track->visibility,
                                         rTdbTreeCanPack(track->tdb),
-                                        (track->visibility == tvHide) ? "hiddenText" : "normalText",
+                                        (track->visibility == tvHide) ? "hiddenText trackVis" : "normalText trackVis",
                                         trackDbSetting(track->tdb, "onlyVisibility"));
                 }
 	    }
@@ -438,6 +447,8 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("</td></tr>\n");
     }
 hPrintf("</TABLE>\n");
+
+jsInline("$(document).ready( cfgPageAddListeners )");
 }
 
 static int addDownloadOnlyTracks(char *db,struct group **pGroupList,struct track **pTrackList)
@@ -603,7 +614,7 @@ if (trackLayoutInclFontExtras())
     }
 hPrintf("</TR>");
 
-if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+if (freeTypeOn())
     {
     hPrintf("<TR><TD>font:");
     hPrintf("<TD style=\"text-align: right\">");
@@ -749,8 +760,13 @@ webStartWrapperDetailedNoArgs(cart, database, "", "", FALSE, FALSE, FALSE, FALSE
 
 cartSaveSession(cart);
 
-
-hPrintf("<BR>\n");
+hPrintf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target='_blank' class='blueLink'>"
+                "<b>Multi-region display</b></a>"
+            " 'slices' the genome to allow viewing discontinuous regions"
+            " together in the browser window. &nbsp;&nbsp;");
+// mode-specific message filled in by JS when dialog opened
+hPrintf("<span id='multiRegionConfigStatusMsg'></span>");
+hPrintf("<p></p>");
 
 hTableStart();
 
@@ -758,7 +774,8 @@ virtModeType = cartUsualString(cart, "virtModeType", virtModeType);
 
 hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "default", sameWord("default", virtModeType));
-hPrintf("</TD><TD>");
+hPrintf("</TD>");
+hPrintf("<TD id='virtModeTypeDefaultLabel'>");
 hPrintf("Exit multi-region mode");
 hPrintf("</TD></TR>\n");
 
@@ -804,7 +821,7 @@ if (conn && sqlTableExists(conn,"knownCanonical"))
 hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "customUrl", sameWord("customUrl", virtModeType));
 hPrintf("</TD><TD>");
-hPrintf("Enter Custom regions as BED, or a URL to them:<br>");
+hPrintf("Enter custom regions as BED, or a URL to them:<br>");
 multiRegionsBedUrl = cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
 struct dyString *dyMultiRegionsBedInput = dyStringNew(256);
 if (strstr(multiRegionsBedUrl,"://"))
@@ -827,8 +844,18 @@ else
     }
 hPrintf("<TEXTAREA NAME='multiRegionsBedInput' ID='multiRegionsBedInput' rows='4' cols='58' style='white-space: pre;'>%s</TEXTAREA>",
     dyMultiRegionsBedInput->string);
-hPrintf("</TD></TR>\n");
 
+// option to set viewing window to show all regions.  This id also known to JS.
+if (cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, FALSE))
+    {
+    boolean isChecked = cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE);
+    hPrintf("&nbsp;&nbsp");
+    cgiMakeCheckBoxUtil(MULTI_REGION_BED_WIN_FULL, isChecked, 
+                            "If unchecked, when regions are changed here the view is zoomed in and does not display all regions", 
+                            MULTI_REGION_BED_WIN_FULL);
+    hPrintf("Show all");
+    hPrintf("</TD></TR>\n");
+}
 
 /* The AllChroms option will be released in future
 if (emGeneTable && sqlTableExists(conn, emGeneTable))
@@ -971,9 +998,9 @@ hPrintf("</TABLE>\n");
 hPrintf("<BR>\n");
 hPrintf("<TABLE style=\"border:0px;width:650px \">\n");
 hPrintf("<TR><TD>");
-cgiMakeButton("topSubmit", "submit");
-hPrintf("</TD><TD align=right>");
-hPrintf("<A HREF=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>Help</A>\n");
+cgiMakeButton("topSubmit", "Submit");
+hPrintf("&nbsp;&nbsp");
+cgiMakeCancelButton("Cancel");
 hPrintf("</TD></TR>\n");
 hPrintf("</TABLE>\n");
 

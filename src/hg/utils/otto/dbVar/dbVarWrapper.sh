@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 PATH=/cluster/bin/x86_64:$PATH
-EMAIL="chmalee@ucsc.edu"
+EMAIL="lrnassar@ucsc.edu"
 WORKDIR="/hive/data/outside/otto/dbVar"
 
 cd $WORKDIR

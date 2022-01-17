@@ -265,9 +265,22 @@ void cgiEncodeHash(struct hash *hash, struct dyString *dy);
 /* Put a cgi-encoding of a string valued hash into dy.  Tags are always
  * alphabetical to make it easier to compare if two hashes are same. */
 
+void cgiMakeButtonMaybePressedMaybeSubmit(char *name, char *label, char *msg, 
+                                char *onClick, boolean pressed, boolean isSubmit);
+/* Make button type input, with optional messsage and onclick javascript. Optionally this
+   is a submit button.  Set styling to indicate whether button has been pressed (for buttons 
+   that change browser mode).
+ */
+
 void cgiMakeSubmitButtonMaybePressed(char *name, char *value, char *msg, 
-                char *onClick, boolean pressed);
-/* Make 'submit' type button, with optional messsage and onclick javascript, boolean pressed.
+                                        char *onClick, boolean pressed);
+/* Make 'submit' type button, with optional messsage and onclick javascript.
+   Set styling to indicate whether button has been pressed (for buttons that change browser mode).
+ */
+
+void cgiMakeNonSubmitButtonMaybePressed(char *name, char *value, char *msg, 
+                                        char *onClick, boolean pressed);
+/* Make button, with optional messsage and onclick javascript.
    Set styling to indicate whether button has been pressed (for buttons that change browser mode).
  */
 
@@ -280,8 +293,11 @@ void cgiMakeButtonWithOnClick(char *name, char *value, char *msg, char *onClick)
 void cgiMakeButton(char *name, char *value);
 /* Make 'submit' type button. */
 
+void cgiMakeOnClickButtonWithMsg(char *id, char *command, char *value, char *msg);
+/* Make button (not submit) with client side onClick javascript. Display msg on mouseover. */
+
 void cgiMakeOnClickButton(char *id, char *command, char *value);
-/* Make 'push' type button with client side onClick (java)script. */
+/* Make button (not submit) with client side onClick javascript. */
 
 void cgiMakeOnClickSubmitButton(char *command, char *name, char *value);
 /* Make submit button with both variable name and value with client side
@@ -373,6 +389,8 @@ void cgiMakeIntVarWithMax(char *varName, int initialVal, char *title, int width,
 
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits);
 /* Make a text control filled with initial floating-point value.  */
+void cgiMakeDoubleVarWithExtra(char *varName, double initialVal, int maxDigits, char *extra);
+/* Make a text control filled with initial floating-point value and optional extra HTML.  */
 
 void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width, 
                              char *min, char *max);
@@ -551,6 +569,9 @@ void cgiMakeSubmitButton();
 
 void cgiMakeResetButton();
 /* Make 'reset' type button. */
+
+void cgiMakeCancelButton(char *label);
+/* Make button named 'Cancel' (for modal dialogs), with optional label (e.g. OK) */
 
 void cgiMakeClearButton(char *form, char *field);
 /* Make button to clear a text field. */

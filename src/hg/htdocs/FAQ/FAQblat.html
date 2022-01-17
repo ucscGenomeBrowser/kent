@@ -26,6 +26,7 @@ results</a></li>
 <li><a href="#blat10">BLAT ALL genomes: No matches found</a></li>
 <li><a href="#blat11">Approximating web-based BLAT results using gfServer/gfClient</a></li>
 <li><a href="#blat12">Standalone or gfServer/gfClient result start positions off by one</a></li>
+<li><a href="#blat13">Protein-translated BLAT having different results</a></li>
 
 </ul>
 <hr>
@@ -102,7 +103,7 @@ find the other matches, but only if the other matches are long and specific enou
 check whether any sequence is present at a particular location 
 by using the <a href="../cgi-bin/hgTrackUi?db=hg38&g=oligoMatch">"Short match" track</a> 
 if your sequence is less than 30 bp.
-You can work around this minimum length limitation but adding more flanking sequence to your query
+You can work around this minimum length limitation by adding more flanking sequence to your query
 to make the query unique enough. If this is not possible, the only alternative is to download 
 the executables of BLAT and the .2bit file of a genome to your own machine and use BLAT on 
 the command line. See <a href="#blat3">Downloading BLAT source and documentation</a> for 
@@ -360,8 +361,15 @@ belong to.
 Selecting the "Search ALL" 
 checkbox above the Genome drop-down list allows you to search the genomes
 of the default assemblies for all of our organisms. It also searches any attached hubs' 
-Blat servers, meaning you can search your user-generated assembly hubs. The results page 
-displays an ordered list 
+Blat servers, meaning you can search your user-generated assembly hubs. 
+<br>
+<br>
+The new dynamic BLAT servers allow one to perform BLAT searches on an unlimited number of genomes with a fixed amount of memory,
+however it takes time to swap virtual pages from the storage device.
+Currently dynamic BLAT servers are not supported for "Search ALL", and they are noted as skipped in the output.
+<br>
+<br>
+The results page displays an ordered list 
 of all our organisms and their homology with your query sequence. The results are ordered 
 so that the organism with the best alignment score is at the top, indicating which region(s) 
 of that organism has the greatest homology with your query sequence.
@@ -456,6 +464,19 @@ and a one-based end. See the following <a target="_blank" href="/FAQ/FAQtracks#t
 If the <strong>Output type</strong> is changed to <strong>psl</strong> on web Blat, the same
 zero-based half open coordinate results will be seen as the standalone Blat and gfServer/gfClient 
 procedures.</p>
+
+<a name="blat13"></a>
+<h2>Protein-translated BLAT having different results</h2>
+<p>
+Protein-translated BLAT (protein or translated RNA queries) uses the standard vertebrate
+genetic code. It will be slightly less sensitive on mitochondria and species using other
+genetic codes. More information on standard genetic codes can be found on the
+<a target="_blank"
+href="https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes">
+NCBI website</a>. Additional details on mitochondria codon tables can be found on
+the <a target="_blank"
+href="https://www.wikiwand.com/en/DNA_and_RNA_codon_tables">Wikiwand website</a>.
+</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 </body>

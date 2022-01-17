@@ -93,3 +93,15 @@
       - It's not visible in code but in database I adjusted some tables to view only for wranglers
         at their request including species.
       - Buried Grant and Wrangler behind an x in the admin list since these are also seldom used.
+      - Renaming AssayTech to CdnaLibraryPrep
+      - Making title field have more space
+      - Rearranging top part of Project details page in admin.
+      - See issues 1-5 for even more detail.
+0.9 - Added a landing page that explains Tuatara and includes links to the admin interface
+      and a decent description of the API.  Also:
+      - Fixed a bug that made the project search box crash
+      - Minor configuration adjustments to make it fit into https://tuatara.data.humancellatlas.org
+        ES-2 unit.
+      - Removed lab affiliation from api/contributors since not really needed
+
+

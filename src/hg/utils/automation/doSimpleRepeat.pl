@@ -16,7 +16,7 @@ use HgRemoteScript;
 use HgStepManager;
 
 # Hardcoded (for now):
-my $chunkSize = 50000000;
+my $chunkSize = 50000000;	# will be readjusted if seqCount > 100000
 my $singleRunSize = 200000000;
 my $clusterBin = qw(/cluster/bin/$MACHTYPE);
 
@@ -337,7 +337,7 @@ sub doFilter {
   my $partDir = "$buildDir/TrfPart";
   if ($useCluster) {
     $bossScript->add(<<_EOF_
-cat $partDir/???/*.bed > simpleRepeat.bed
+find $partDir/??? -type f | grep lst.bed | xargs cat > simpleRepeat.bed
 endsInLf simpleRepeat.bed
 if (\$status) then
   echo Uh-oh -- simpleRepeat.bed fails endsInLf.  Look at $partDir/ bed files.
@@ -354,7 +354,7 @@ if ( -s simpleRepeat.bed ) then
   twoBitInfo $unmaskedSeq stdout | sort -k2nr > tmp.chrom.sizes
   bedToBigBed -tab -type=bed4+12 -as=\$HOME/kent/src/hg/lib/simpleRepeat.as \\
     simpleRepeat.bed16.bed tmp.chrom.sizes simpleRepeat.bb
-  rm -f tmp.chrom.sizes simpleRepeat.bed16.bed tmp.chrom.sizes
+  rm -f tmp.chrom.sizes simpleRepeat.bed16.bed
 else
   echo empty simpleRepeat.bed - no repeats found
 endif
@@ -461,6 +461,7 @@ if ($unmaskedSeq !~ /^\//) {
   $unmaskedSeq = "$pwd/$unmaskedSeq";
 }
 
+# try to adjust chunkSize to achive a reasonable (1K) single job sequence count
 my $pipe = &HgAutomate::mustOpen("twoBitInfo $unmaskedSeq stdout |");
 my $seqCount = 0;
 my $genomeSize = 0;
@@ -469,15 +470,20 @@ while (<$pipe>) {
   my (undef, $size) = split;
   $genomeSize += $size;
   $seqCount++;
-  if ($seqCount > $HgAutomate::splitThreshold &&
-      $genomeSize > $singleRunSize) {
-    # No need to keep counting -- we know our boolean answers.
-    last;
-  }
 }
 close($pipe);
 die "Could not open pipe from twoBitInfo $unmaskedSeq"
   unless ($genomeSize > 0 && $seqCount > 0);
+
+# lots of contigs, and big genome, adjust chunkSize
+if ( ($seqCount > 100000) && ($genomeSize > $singleRunSize) ) {
+  # if they were uniform size, 1K jobs would be sized:
+  my $uniform1K = int( 1 + $genomeSize / 1000 );
+  # but if they were all small, 1K jobs would be sized
+  my $allSmall1K = int (1 + (($seqCount / 1000) * 5000));
+  # use the smaller size of those two measures
+  $chunkSize = $uniform1K > $allSmall1K ? $allSmall1K : $uniform1K;
+}
 
 $chromBased = ($seqCount <= $HgAutomate::splitThreshold);
 $useCluster = ($genomeSize > $singleRunSize);

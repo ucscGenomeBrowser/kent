@@ -4,11 +4,10 @@ track wgEncodeReg
 superTrack on show
 shortLabel ENCODE Regulation
 longLabel Integrated Regulation from ENCODE
-wgEncode 1
 group regulation
 priority 1
 canPack On
-pennantIcon Updated red ../goldenPath/newsarch.html added Trancscription Factor ChIP-seq Clusters and Peaks from ENCODE 3 tracks; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+pennantIcon Updated red ../goldenPath/newsarch.html added Trancscription Factor ChIP-seq Clusters and Peaks from ENCODE 3 tracks
 
 include wgEncodeRegDnase.ra
 
@@ -28,7 +27,7 @@ include wgEncodeRegDnase.ra
     priority 1.1
     dragAndDrop subTracks
     allButtonPair on
-    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     origAssembly hg19
 	
 	track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
@@ -38,7 +37,7 @@ include wgEncodeRegDnase.ra
         type bigWig 0 65535
 	priority 1
 	color 255,128,128
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled
@@ -48,7 +47,7 @@ include wgEncodeRegDnase.ra
         type bigWig 0 65535
 	priority 2
 	color 255,212,128
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled
@@ -58,7 +57,7 @@ include wgEncodeRegDnase.ra
         type bigWig 0 65535
 	priority 3
 	color 227,255,128
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled
@@ -68,7 +67,7 @@ include wgEncodeRegDnase.ra
         type bigWig 0 65535
 	priority 4
 	color 128,255,149
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled
@@ -78,7 +77,7 @@ include wgEncodeRegDnase.ra
         type bigWig 0 65535
 	priority 5
 	color 128,255,242
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled
@@ -88,7 +87,7 @@ include wgEncodeRegDnase.ra
         type bigWig 0 65535
 	priority 6
 	color 128,199,255
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled
@@ -98,7 +97,7 @@ include wgEncodeRegDnase.ra
         type bigWig 0 65535
 	priority 7
 	color 149,128,255
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled
@@ -108,7 +107,7 @@ include wgEncodeRegDnase.ra
 	type bigWig 0 65535
 	priority 8
 	color 227,128,255
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigPooled
@@ -118,7 +117,7 @@ include wgEncodeRegDnase.ra
 	type bigWig 0 65535
 	priority 9
 	color 255,128,212
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
     track wgEncodeRegMarkH3k4me1
@@ -136,7 +135,7 @@ include wgEncodeRegDnase.ra
     priority 1.2
     dragAndDrop subtracks
     allButtonPair on
-    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     origAssembly hg19
 
 	#track wgEncodeRegMarkH3k4me1Gm12878
@@ -146,7 +145,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me1
 	color 255,128,128
 	type bigWig 0 5199
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k4me1H1hesc
@@ -156,7 +155,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me1
 	color 255,212,128
 	type bigWig 0 8355
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k4me1Hsmm
@@ -166,7 +165,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me1
 	color 120,235,204
 	type bigWig 0 6265
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k4me1Huvec
@@ -176,7 +175,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me1
 	color 128,212,255
 	type bigWig 0 4666
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k4me1K562
@@ -186,7 +185,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me1
 	color 128,128,255
 	type bigWig 0 5716
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k4me1Nhek
@@ -196,7 +195,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me1
 	color 212,128,255
 	type bigWig 0 2669
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k4me1Nhlf
@@ -206,7 +205,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me1
 	color 255,128,212
 	type bigWig 0 6866
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
     track wgEncodeRegMarkH3k4me3
@@ -224,7 +223,7 @@ include wgEncodeRegDnase.ra
     priority 1.3
     dragAndDrop subtracks
     allButtonPair on
-    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     origAssembly hg19
 
 	#track wgEncodeRegMarkH3k4me3Gm12878
@@ -234,7 +233,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me3
 	color 255,128,128
 	type bigWig 0 5199
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 	
 	track wgEncodeRegMarkH3k4me3H1hesc
@@ -244,7 +243,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me3
 	color 255,212,128
 	type bigWig 0 6957
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k4me3Hsmm
@@ -254,7 +253,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me3
 	color 120,235,204
 	type bigWig 0 25995
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k4me3Huvec
@@ -264,7 +263,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me3
 	color 128,212,255
 	type bigWig 0 7852
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k4me3K562
@@ -274,7 +273,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me3
 	color 128,128,255
 	type bigWig 0 9918
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k4me3Nhek
@@ -284,7 +283,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me3
 	color 212,128,255
 	type bigWig 0 8230
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k4me3Nhlf
@@ -294,7 +293,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k4me3
 	color 255,128,212
 	type bigWig 0 19229
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
     track wgEncodeRegMarkH3k27ac
@@ -312,7 +311,7 @@ include wgEncodeRegDnase.ra
     priority 1.4
     dragAndDrop subtracks
     allButtonPair on
-    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     origAssembly hg19
 
 	track wgEncodeRegMarkH3k27acGm12878
@@ -322,7 +321,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k27ac
 	color 255,128,128
 	type bigWig 0 223899
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k27acH1hesc
@@ -332,7 +331,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k27ac
 	color 255,212,128
 	type bigWig 0 14898
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k27acHsmm
@@ -342,7 +341,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k27ac
 	color 120,235,204
 	type bigWig 0 5448
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k27acHuvec
@@ -352,7 +351,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k27ac
 	color 128,212,255
 	type bigWig 0 3721
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k27acK562
@@ -362,7 +361,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k27ac
 	color 128,128,255
 	type bigWig 0 6249
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k27acNhek
@@ -372,7 +371,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k27ac
 	color 212,128,255
 	type bigWig 0 23439
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 	track wgEncodeRegMarkH3k27acNhlf
@@ -382,7 +381,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegMarkH3k27ac
 	color 255,128,212
 	type bigWig 0 3851
-	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "includes annotations on GRCh38.p12 patch sequences"
+	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
 

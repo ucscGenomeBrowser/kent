@@ -1,5 +1,5 @@
 /* Copyright (C) 2012 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 
 /*  Last edited: Jun 23 19:33 1995 (gos) */
@@ -169,7 +169,7 @@ void findspans ( int start, int end, char *seq, char *seqname )
 	/* old gos estimate	  printf("%s\t %d\t %d\t %d\t CpG: %d\t %.1f\t %.1f\n", seqname, imn+2, imx+2, mx, ncpg, ngc*100.0/(imx+1-imn), 1.0*ncpg/ngpc) ; */
 	winlen=imx+1-imn;
 	/* ASH 3/23/04: expected val from Gardiner-Garden & Frommer '87: */
-	expect = (float)(nc * ng) / (float)winlen;
+	expect = ((float)nc * (float)ng) / (float)winlen;
 	obsToExp = (float)ncpg / expect;
 	if ( obsToExp > 0.60 )
            printf("%s\t %d\t %d\t %d\t CpG: %d\t %.1f\t %.2f\t %.2f\n",
@@ -197,7 +197,7 @@ void findspans ( int start, int end, char *seq, char *seqname )
       ngc = nc + ng;
       if (((imx+2)-(imn+2))>199 && (ngc*100.0/(imx+1-imn))>50.0 ) {
 	winlen=imx+1-imn;
-	expect = (float)(nc * ng) / (float)winlen;
+	expect = ((float)nc * (float)ng) / (float)winlen;
 	obsToExp = (float)ncpg / expect;
 	if ( obsToExp > 0.60 )
            printf("%s\t %d\t %d\t %d\t CpG: %d\t %.1f\t %.2f\t %.2f\n",

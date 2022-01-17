@@ -2,7 +2,7 @@
  * See also customFactory, which is where the parsing is done. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hash.h"
@@ -667,6 +667,8 @@ if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed") || endsWith(fileN
 if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig") ||  
             endsWith(fileName, ".bigwig") || endsWith(fileName, ".bwig"))
     return cloneString("bigWig");
+if (endsWith(fileName, ".inter.bb") || endsWith(fileName, ".inter.bigBed"))
+   return cloneString("bigInteract");
 if (endsWith(fileName, ".bam") || endsWith(fileName, ".cram"))
     return cloneString("bam");
 if (endsWith(fileName, ".vcf.gz"))
@@ -729,7 +731,8 @@ struct customTrack *customTracksParseCartDetailed(char *genomeDb, struct cart *c
 					  char **retCtFileName,
                                           struct customTrack **retReplacedCts,
                                           int *retNumAdded,
-                                          char **retErr)
+                                          char **retErr,
+                                          boolean *retWarnOnly)
 /* Figure out from cart variables where to get custom track text/file.
  * Parse text/file into a custom set of tracks.  Lift if necessary.
  * If retBrowserLines is non-null then it will return a list of lines
@@ -744,6 +747,7 @@ struct customTrack *customTracksParseCartDetailed(char *genomeDb, struct cart *c
 #define CT_CUSTOM_DOC_FILE_BIN_VAR  CT_CUSTOM_DOC_FILE_VAR "__binary"
 int numAdded = 0;
 char *err = NULL;
+boolean warnOnly = FALSE;
 
 /* the hgt.customText and hgt.customFile variables contain new custom
  * tracks that have not yet been parsed */
@@ -864,10 +868,12 @@ if (isNotEmpty(customText))
     else
 	{
 	err = customTrackUnavailableErrsFromList(newCts);
-	if (err)
-	    newCts = NULL;  /* do not save the unhappy remote cts*/
         if (isNotEmpty(errCatch->message->string))
             err = catTwoStrings(emptyForNull(err), errCatch->message->string);
+        if (err)
+	    {
+	    warnOnly = TRUE;
+	    }
 	}
     errCatchFree(&errCatch);
     }
@@ -946,20 +952,32 @@ if (customTracksExist(cart, &ctFileName))
 
 /* merge new and old tracks */
 numAdded = slCount(newCts);
-if (numAdded)
+/* add delay even if numAdded==0 because that can be when the loading
+ * of the custom tracks failed.  The try is worth the penalty.
+ */
+if (numAdded > 0)
     {
-    fprintf(stderr, "customTrack: new %d from %s\n", numAdded, customText);
+    static int botCheckMult = 0;
+    if (0 == botCheckMult)      // only on first time through here
+	{                       // default is 1 when not specified
+	char *val = cfgOptionDefault("customTracks.botCheckMult", "1");
+        botCheckMult = sqlSigned(val);
+        if (botCheckMult < 1)   // protect against negative value
+	    botCheckMult = 1;   // default is 1, no maximum check here
+	}
     printSaveList = TRUE;
     /* add penalty in relation to number of tracks created
-     * the delayFraction here is 0.25 as it is in hgTracks
-     * the enteredMainTime is 0 since this is not important here
-     * the warnMs and exitMs are set at 1,000,000 since we do *not* want
-     * any exit or warning here, and the return code issueBotWarning is ignored
-     * this is merely to accumulate penalty time.  The name "hgTracks" here
-     * is unimportant, it is not going to be used.  Other CGIs besides hgTracks
-     * will be calling here.
+     * the default delayFraction here is 1, can be hg.conf specified
+     * this call to hgBotDelayTimeFrac will merely add this penalty
+     * to the existing delay time, there will be no sleeping here, that will
+     * happen upon the next execution for the next CGI from that IP address.
+     * Other CGIs besides hgTracks can be calling here.
      */
-    (void) earlyBotCheck(0, "hgTracks", (double)(numAdded + 1) * 0.25, 1000000, 1000000, "html");
+//  multiply by numAdded might be too much for ordinary users who are loading
+//  lots of tracks.  For now, only use the number in from botCheckMult.
+//  botDelayMillis = hgBotDelayTimeFrac((double)((numAdded + 1)*botCheckMult));
+    botDelayMillis = hgBotDelayTimeFrac((double)botCheckMult);
+    fprintf(stderr, "customTrack: new %d from %s botDelay %d millis\n", numAdded, customText, botDelayMillis);
     }
 
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
@@ -999,6 +1017,8 @@ if (retNumAdded)
     *retNumAdded = numAdded;
 if (retErr)
     *retErr = err;
+if (retWarnOnly)
+    *retWarnOnly = warnOnly;
 return ctList;
 }
 
@@ -1010,7 +1030,7 @@ struct customTrack *customTracksParseCart(char *genomeDb, struct cart *cart,
 char *err = NULL;
 struct customTrack *ctList =
     customTracksParseCartDetailed(genomeDb, cart, retBrowserLines, retCtFileName,
-                                        NULL, NULL, &err);
+                                        NULL, NULL, &err, NULL);
 if (err)
     warn("%s", err);
 return ctList;

@@ -411,10 +411,11 @@ recommend that you use the documentation edit box only for changes made to text 
 pasted in.</p> 
 
 <a name="lines"></a>
-<h2>Browser lines</h2>
+<h3>Browser lines</h3>
 <p>
-Browser lines configure the overall display of the Genome Browser window when your annotation file 
-is uploaded. Each line defines one display attribute. Browser lines consist of the format:</p>
+Browser lines are optional, but they give you control of many aspects of the overall display of the
+Genome Browser window when your annotation file
+is uploaded. Each line defines one display attribute. Browser lines are in the format:</p>
 <p>
 <pre><code>browser attribute_name attribute_value(s)</code></pre>
 
@@ -497,7 +498,7 @@ in your annotation file to ensure that the track will appear in the display rang
 uploaded into the Genome Browser.</p>
 
 <a name="TRACK"></a>
-<h2>Track lines</h2>
+<h3>Track lines</h3>
 <p>
 Track lines define the display attributes for all lines in an annotation data set. If more than one 
 data set is included in the annotation file, each group of data must be preceded by a track line 
@@ -744,9 +745,18 @@ cart variables, for example having both hide all and highlight features.)
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136136597-136139844&highlight=hg19.chr9%3A136138630-136139650%23AA0000%7Chg19.chr9%3A136136630-136137650%230000FF" 
   target="_blank">example link</a> to highlight two parts of the ABO locus in red and blue.</li>
   <li>
-  <code>ignoreCookie=1</code> - uses default user settings like track selections, custom
-  tracks, and track hubs - <a href="../../cgi-bin/hgTracks?db=hg19&ignoreCookie=1" 
-  target="_blank">example link</a> to show the default tracks and positions for hg19</li>
+
+  <code>ignoreCookie=1</code> - do not load the user's existing settings saved
+  in the internet browser's UCSC Genome Browser cookie.  This means that the link will show the 
+  Genome Browser default 
+  settings such as track selections, custom tracks, and track hubs. Any changes
+  you make in this new session will, however, affect the user's settings.  E.g.,
+  if you add a track in this new window, and come back to the genome browser
+  later, the track will still be there. This setting is useful if a website
+  wants to link to the Genome Browser, starting with a "clean slate" but
+  believes the user will come back to the Genome Browser expecting the
+  changes to still be there. </li>
+
   <li>
   <code>oligoMatch=pack&amp;hgt.oligoMatch=&lt;dnaSeq&gt;</code> - switch on the Short Match track and 
   highlight a matching sequence - 
@@ -760,15 +770,20 @@ cart variables, for example having both hide all and highlight features.)
   <code>textSize=&lt;number&gt;</code> - set the size of text font - 
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&textSize=12" 
   target="_blank">example link</a> to increase the text font size to 12 pixels</li>
+
   <li>
-  <code>&lt;trackName&gt;=full|dense|pack|hide</code> - show the default tracks adding a track and
-  set it to full, dense, pack or hide visibility - 
+  <code>&lt;trackName&gt;=full|pack|dense|hide</code> - show your current tracks, adding a track 
+  and set it to full, pack or dense visibility or hide it, respectively - 
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&cytoBand=pack" 
-  target="_blank">example link</a> to show the default or user-selected tracks and set the 
-  Chromosome Bands track to &quot;pack&quot; view. Please note that for this feature to work with 
-  custom tracks you must use their unique assigned name and identifier number 
-  <code>ct_name_####</code>, only with the full custom track name will this feature work: 
-  <code>ct_name_####=full</code></li>
+  target="_blank">example link</a> to show the 
+  Chromosome Bands track set to &quot;pack&quot; and added to your view as saved in your cart. 
+  Please note that for this feature to work with 
+  custom tracks you must use the unique name and identifier number 
+  <code>ct_name_####</code> assigned by our system.   You can determine the name for a custom track 
+  using the url, <a href = "https://genome.ucsc.edu/cgi-bin/cartDump">
+  https://genome.ucsc.edu/cgi-bin/cartDump</a>.
+
+
   <li>
   <code>&lt;trackName&gt;.heightPer=&lt;number&gt;</code> - sets the height of the a bigWig track
   in pixels - <a 
@@ -797,7 +812,7 @@ by %24, resulting in the modified password mypwd%24wk.</p>
 <p>
 For integration into your own website e.g. in an html IFRAME, you can obtain the track image only,
 without the rest of the genome browser user interface, by replacing hgTracks in the URL with
-hgRenderTracks, like in this example:</p>
+hgRenderTracks, such as in this example:</p>
 <pre><code><a href="http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=chr9%3A136130563-136150630"
 target="_blank">http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=chr9%3A136130563-136150630</a></code></pre>
 <p>
@@ -942,7 +957,7 @@ other customizations you have made to your Genome Browser display.</p>
 <p>
 <strong><em>Problem:</em></strong> I put my custom track files on Dropbox,
 Apple iCloud, Google Drive, Amazon Drive, Box.com, Microsoft OneDrive, or
-another "online cloud backup" provider and they won't display in the browser.
+another "online cloud backup" provider and they will not display in the browser.
 Why? <br>
 <em>OR</em><br>
 <strong><em>Problem:</em></strong> When I try to visualize my custom tracks in the Browser, I 

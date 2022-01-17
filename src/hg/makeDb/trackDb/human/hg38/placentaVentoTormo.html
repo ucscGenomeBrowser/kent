@@ -1,0 +1,107 @@
+<h2>Description</h2>
+<p>
+This track displays data from <a
+href="https://pubmed.ncbi.nlm.nih.gov/30429548/"
+target="_blank"><em>Single-cell reconstruction of the early maternal-fetal
+interface in humans</em></a>. Using droplet-based 10x and plate-based
+Smart-seq2 single cell RNA-sequencing (scRNA-seq) ~70,000 cells were profiled
+from first-trimester placentas with matched decidual cells and maternal
+peripheral blood mononuclear cells (PBMC).</p>
+
+<p>
+This track collection contains nine bar chart tracks of RNA expression in the
+human placenta, decidua, and maternal PBMCs
+where cells are grouped by cell type (<a href="hgTrackUi?g=placentaVentoTormoCellType10x">Placenta
+Cells</a>, <a href="hgTrackUi?g=placentaVentoTormoCellTypeSs2">Placenta Cells Ss2</a>), detailed
+cell type (<a href="hgTrackUi?g=placentaVentoTormoCellDetailed10x">Placenta Detail</a>,
+<a href="hgTrackUi?g=placentaVentoTormoCellDetailedSs2">Placenta Detail Ss2</a>), cell location
+(<a href="hgTrackUi?g=placentaVentoTormoLocation10x">Placenta Loc</a>,
+<a href="hgTrackUi?g=placentaVentoTormoLocationSs2">Placenta Loc Ss2</a>), stage
+(<a href="g=placentaVentoTormoStage10x">Placenta Stage</a>), and placenta and
+decidua cells (<a href="hgTrackUi?g=placentaVentoTormoMatFet10x">Placenta Mat/Fet</a>,
+<a href="hgTrackUi?g=placentaVentoTormoMatFetSs2">Placenta Mat/Fet Ss2</a>). The default tracks
+displayed are <a href="hgTrackUi?g=placentaVentoTormoCellType10x">Placenta Cells</a>,
+<a href="hgTrackUi?g=placentaVentoTormoLocation10x">Placenta Loc</a>,
+<a href="hgTrackUi?g=placentaVentoTormoLocationSs2">Placenta Loc Ss2</a>, and
+<a href="hgTrackUi?g=placentaVentoTormoMatFetSs2">Placenta Mat/Fet Ss2</a>.</p>
+
+<h2>Display Conventions</h2>
+<p>
+The cell types are colored by which class they belong to according to the following table.</p>
+
+<p>
+<table cellpadding='2'>
+  <thead><tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;">Cell classification</th>
+  </tr></thead>
+  <tr><td style="background-color: #B05020;"></td><td>fibroblast</td></tr>
+  <tr><td style="background-color: #F01111;"></td><td>immune</td></tr>
+  <tr><td style="background-color: #C000C0;"></td><td>muscle</td></tr>
+  <tr><td style="background-color: #5020E0;"></td><td>trophoblast</td></tr>
+  <tr><td style="background-color: #0099C0;"></td><td>epithelial</td></tr>
+  <tr><td style="background-color: #00C000;"></td><td>endothelial</td></tr>
+</table>
+</p>
+
+<p>
+Cells that fall into multiple classes will be colored by blending the colors associated
+with those classes. The colors will be purest in the
+<a href="hgTrackUi?g=placentaVentoTormoCellType10x">Placenta Cells</a> and
+<a href="hgTrackUi?g=placentaVentoTormoCellTypeSs2">Placenta Cells Ss2</a>
+subtracks, where the bars represent relatively pure cell types. They can give an overview of 
+the cell composition within other categories in other subtracks as well.</p>
+
+<h2>Method</h2>
+<p>
+Tissue was collected from 5 placentas (6-14 gestational weeks) and 11 deciduas.
+Additionally, blood was drawn from 6 of the donors (D4-D9) and enriched for
+PBMCs using a Ficoll-Paque gradient. Decidual and placental tissue were both
+first macroscopically separated. Decidual tissue was then chopped before
+enzymatic dissociation. Placental villi was scraped from the chorionic membrane
+before enzymatic dissociation. Decidual and blood cells were enriched for
+certain populations using an antibody panel prior to Smart-seq2 library
+preparation. Cells from blood decidua and placenta were enriched using FACS
+prior to 10x Genomics v2 library preparation. Smart-seq2 libraries were
+sequenced on an Illumina HiSeq2000. 10x libraries were sequenced on an Illumina
+HiSeq4000.</p>
+
+<p>The cell/gene matrix and cell-level metadata was downloaded from the 
+<a href="http://cells.ucsc.edu/?ds=placenta-decidua&bp=placenta%2Fdecidua" target="_blank">UCSC Cell Browser</a>.
+The UCSC command line utility matrixClusterColumns, matrixToBarChart, and bedToBigBed were used
+to transform these into a bar chart format bigBed file that can be visualized. The coloring 
+was done by defining colors for the broad level cell classes and then using another UCSC utility,
+hcaColorCells, to interpolate the colors across all cell types. The UCSC utilities can be found on
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">our download server</a>.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw <a href="/goldenPath/help/barChart.html">bar chart</a> data can be
+explored interactively with the <a href="../cgi-bin/hgTables">Table
+Browser</a> or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a
+href="/goldenPath/help/api.html">REST API</a>. Please refer to our <a
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing
+list archives</a> for questions, or our <a
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.</p>
+ 
+<h2>Credit</h2>
+<p>
+Thanks to Roser Vento-Tormo, Mirjana Efremova, and to the many authors who worked on
+producing and publishing this data set. The data were integrated into the UCSC
+Genome Browser by Jim Kent and Brittney Wick then reviewed by Jairo Navarro. The UCSC 
+work was paid for by the Chan Zuckerberg Initiative.</p>
+
+<h2>References</h2>
+<p>
+Vento-Tormo R, Efremova M, Botting RA, Turco MY, Vento-Tormo M, Meyer KB, Park JE, Stephenson E,
+Pola&#324;ski K, Goncalves A <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30429548" target="_blank">
+Single-cell reconstruction of the early maternal-fetal interface in humans</a>.
+<em>Nature</em>. 2018 Nov;563(7731):347-353.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30429548" target="_blank">30429548</a>
+</p>
+
+

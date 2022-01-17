@@ -1,0 +1,6 @@
+hub Fungi genome assemblies
+shortLabel Fungi assemblies
+longLabel Fungi genome assemblies
+genomesFile genomes.txt
+email hclawson@ucsc.edu
+descriptionUrl index.html

@@ -1,9 +1,13 @@
 /* barChart track UI */
 
 /* Copyright (C) 2015 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef BAR_CHARTUI_H
 #define BAR_CHARTUI_H
+
+#ifndef FACETEDTABLE_H
+#include "facetedTable.h"
+#endif /* FACETEDTABLE_H */
 
 /* Color scheme */
 #define BAR_CHART_COLORS                     "colorScheme"
@@ -25,8 +29,10 @@
 #define BAR_CHART_MAX_VIEW_LIMIT             "maxViewLimit"
 #define BAR_CHART_MAX_VIEW_LIMIT_DEFAULT     50
 
+#define BAR_CHART_LIMIT	"barChartLimit"
+
 /* Category (bar) info */
-#define BAR_CHART_MAX_CATEGORIES        1000
+#define BAR_CHART_MAX_CATEGORIES        2000
 
 /* Category filter */
 #define BAR_CHART_CATEGORY_SELECT      "categories"
@@ -78,19 +84,28 @@ void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char 
     "float[expCount] expScores; \"Comma separated list of category values\"\n" \
     ")\n"
 
+double barChartCurViewMax(struct cart *cart, char *trackName, struct trackDb *tdb);
+/* Look up max value to scale for this bar chart - consults both cart and trackDb defaults. */
+
+boolean barChartIsLogTransformed(struct cart *cart, char *trackName, struct trackDb *tdb);
+/* Return TRUE if bar chart needs to be log transformed */
+
 double barChartUiMaxMedianScore();
 /* Max median score, for scaling */
 
-struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb);
-/* Get category colors and descriptions.  
- * If barChartLabel setting contains label list, assign rainbow colors.
- * O/w look for a table naed track+Category, and use labels and colors there */
+struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb,
+    struct facetedTableMergedOffset *mergeList);
+/* Get category colors and descriptive labels.  If mergeList is non-NULL gets it from there,else
+   use labels in tab-sep file specified by barChartCategoryUrl setting, o/w in barChartBars setting.
+   If colors are not specified via barChartColors setting or second column in category file,
+   assign rainbow colors.  Colors are specified as #fffff or r,g,b  or html color name) */
 
 struct barChartCategory *barChartUiGetCategoryById(int id, char *database, 
-                                                        struct trackDb *tdb);
+			       struct trackDb *tdb, struct facetedTableMergedOffset *mergeList);
 /* Get category info by id */
 
-char *barChartUiGetCategoryLabelById(int id, char *database, struct trackDb *tdb);
+char *barChartUiGetCategoryLabelById(int id, char *database, 
+			       struct trackDb *tdb, struct facetedTableMergedOffset *mergeList);
 /* Get label for a category id */
 
 char *barChartUiGetLabel(char *database, struct trackDb *tdb);

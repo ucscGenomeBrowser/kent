@@ -1,7 +1,7 @@
 /* filter cDNA alignments in psl format */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "cDnaAligns.h"
 #include "cDnaReader.h"
@@ -253,7 +253,7 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     /* don't included poly-A length, although we are not sure if it's aligned
      * to a repeat. Also, don't include mismatches, as these are not reported
      * by blat */
-    int nonRepSize = (aln->psl->match - aln->alnPolyAT);
+    int nonRepSize = (aln->adjMatch - aln->alnPolyAT);
     if (nonRepSize < 0)
         nonRepSize = 0;
     if (!aln->drop && (nonRepSize < gMinNonRepSize))
@@ -269,8 +269,8 @@ struct cDnaAlign *aln;
 /* drop those that are over max */
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
-    if (!aln->drop && (aln->repMatch > gMaxRepMatch))
-        cDnaAlignDrop(aln, FALSE, &cdna->stats->maxRepMatchDropCnts, "max repMatch %0.4g", aln->repMatch);
+    if (!aln->drop && (aln->repMatchFrac > gMaxRepMatch))
+        cDnaAlignDrop(aln, FALSE, &cdna->stats->maxRepMatchDropCnts, "max repMatch %0.4g", aln->repMatchFrac);
     }
 }
 

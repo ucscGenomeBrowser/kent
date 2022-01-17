@@ -25,11 +25,14 @@ while (<>) {
     $attribs{__sra} = $sra if ($sra);
   } elsif (/^Identifiers: /) {
     die "Can't parse Identifiers line $.:\n$_\t";
-  } elsif (/^    \/([^=]+)="([^"]+)"$/) {
+  } elsif (/^    \/([^=]+)="(.+)"$/) {
     my ($attr, $val) = ($1, $2);
     if (isReal($val)) {
       $attribs{$attr} = $val;
     }
+  } elsif (/^    \/([^=]+)=""$/) {
+    # empty value; ignore.
+    next;
   } elsif (/^    \//) {
     die "Can't parse attribute line $.:\n$_\t";
   } elsif (/^(EPI_ISL_\d+)/) {

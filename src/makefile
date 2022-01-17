@@ -17,7 +17,9 @@ topLibs:
 	@./checkUmask.sh
 	@MACHTYPE=${MACHTYPE} ./machTest.sh
 	cd lib && ${MAKE}
+ifneq ($(wildcard jkOwnLib/*),)
 	cd jkOwnLib && ${MAKE}
+endif
 	cd parasol/lib && ${MAKE}
 	cd htslib && ${MAKE}
 
@@ -25,8 +27,11 @@ optLib:
 	cd optimalLeaf && ${MAKE}
 
 hgLib:
+ifneq ($(wildcard hg/makefile),)
 	@./hg/sqlEnvTest.sh
 	cd hg/lib && ${MAKE}
+	cd hg/cgilib && ${MAKE}
+endif
 
 libs: topLibs hgLib optLib
 
@@ -75,7 +80,7 @@ blatSuite: topLibs hgLib
 # all of these application makefiles have been updated to include use
 #	of DESTDIR and BINDIR
 
-BLAT_APPLIST = blat gfClient gfServer
+BLAT_APPLIST = blat gfClient gfServer isPcr
 
 userApps: topLibs hgLib destBin
 	cd utils/stringify && echo utils/stringify && ${MAKE}
@@ -105,7 +110,9 @@ clean:
 	cd lib && ${MAKE} clean 
 	cd hg && ${MAKE} clean
 	cd hg && ${MAKE} clean_utils
+ifneq ($(wildcard jkOwnLib/*),)
 	cd jkOwnLib && ${MAKE} clean
+endif
 	cd htslib && ${MAKE} clean
 	cd utils && ${MAKE} clean
 	if test -d webBlat ; then cd webBlat && ${MAKE} clean ; fi
@@ -159,7 +166,9 @@ utils: libs destBin
             fi ;\
 	done
 	cd utils && ${MAKE}
+ifneq ($(wildcard jkOwnLib/*),)
 	cd hg && ${MAKE} utils
+endif
 
 utils-alpha: check-alpha libs destBin
 	${MKDIR} ${SCRIPTS}
@@ -173,7 +182,13 @@ utils-alpha: check-alpha libs destBin
 	cd utils && ${MAKE}
 	cd hg && ${MAKE} utils
 
+
+ifneq ($(wildcard jkOwnLib/*),)
 DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm tabFile
+else
+DIRS = ameme index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm tabFile
+endif
+
 
 ##  cellar archive for obsolete programs
 

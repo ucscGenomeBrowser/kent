@@ -1,7 +1,7 @@
 /* textOut - set up stdout to be HTTP text, file or compressed file. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "errAbort.h"
@@ -161,7 +161,7 @@ else
 
     /* Redirect stdout to compressor pipeline object. */
     compressPipeline = pipelineOpen1(getCompressor(compressType),
-				     pipelineWrite, NULL, NULL);
+				     pipelineWrite, NULL, NULL, 0);
     if (-1 == dup2(pipelineFd(compressPipeline), STDOUT_FILENO))
 	errnoAbort("dup2(pipelineFd %d, stdout %d) failed in textOpen()",
 		   pipelineFd(compressPipeline), STDOUT_FILENO);

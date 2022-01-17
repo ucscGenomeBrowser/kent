@@ -1,7 +1,7 @@
 /* Details pages for barChart tracks */
 
 /* Copyright (C) 2015 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hash.h"
@@ -13,12 +13,18 @@
 #include "asParse.h"
 #include "hgc.h"
 #include "trackHub.h"
+#include "memgfx.h"
+#include "hgColors.h"
+#include "fieldedTable.h"
 
 #include "barChartBed.h"
 #include "barChartCategory.h"
 #include "barChartData.h"
 #include "barChartSample.h"
 #include "barChartUi.h"
+#include "hgConfig.h"
+#include "facetedBar.h"
+#include "pipeline.h"
 
 #define EXTRA_FIELDS_SIZE 256
 
@@ -31,23 +37,6 @@ struct barChartItemData
     char *category;     /* Sample category (from barChartSample table  or barChartSampleUrl file) */
     double value;	/* Measured value (e.g. expression level) */
     };
-
-static struct hash *getTrackCategories(struct trackDb *tdb)
-/* Get list of categories from trackDb.  This may be a subset of those in matrix. 
- * (though maybe better to prune matrix for performance) */
-{
-char *categs = trackDbSetting(tdb, BAR_CHART_CATEGORY_LABELS);
-char *words[BAR_CHART_MAX_CATEGORIES];
-int wordCt;
-wordCt = chopLine(cloneString(categs), words);
-int i;
-struct hash *categoryHash = hashNew(0);
-for (i=0; i<wordCt; i++)
-    {
-    hashStore(categoryHash, words[i]);
-    }
-return categoryHash;
-}
 
 static struct barChartBed *getBarChartFromFile(struct trackDb *tdb, char *file, 
                                                 char *item, char *chrom, int start, int end, 
@@ -209,6 +198,20 @@ for (i=1; i<wordCt && samples[i] != NULL; i++)
         data->value = sqlDouble(vals[i]);
         slAddHead(&sampleVals, data);
         }
+    else
+        {
+        // we may have subbed out '_' for ' ' in barChartUiGetCategories earlier so try
+        // searching for them in the hash here instead of straight from the data file
+        subChar(categ, '_', ' ');
+        if (hashLookup(categoryHash, categ))
+            {
+            AllocVar(data);
+            data->sample = cloneString(sample);
+            data->category = cloneString(categ);
+            data->value = sqlDouble(vals[i]);
+            slAddHead(&sampleVals, data);
+            }
+        }
     }
 return sampleVals;
 }
@@ -291,7 +294,8 @@ char *dataFile = trackDbSetting(tdb, "barChartMatrixUrl");
 if (dataFile == NULL)
     dataFile = trackDbSetting(tdb, "barChartDataUrl");
 // for backwards compatibility during qa review
-struct hash *categoryHash = getTrackCategories(tdb);
+struct barChartCategory *categories = barChartUiGetCategories(database, tdb, NULL);
+struct hash *categoryHash = barChartCategoriesToHash(categories);
 if (dataFile != NULL)
     {
     char *sampleFile = trackDbSetting(tdb, "barChartSampleUrl");
@@ -337,7 +341,7 @@ trashDirFile(&colorTn, "hgc", "barChartColors", ".txt");
 FILE *f = fopen(colorTn.forCgi, "w");
 if (f == NULL)
     errAbort("can't create temp file %s", colorTn.forCgi);
-struct barChartCategory *categs = barChartUiGetCategories(database, tdb);
+struct barChartCategory *categs = barChartUiGetCategories(database, tdb, NULL);
 struct barChartCategory *categ;
 fprintf(f, "%s\t%s\n", "category", "color");
 for (categ = categs; categ != NULL; categ = categ->next)
@@ -353,7 +357,6 @@ static void printBoxplot(char *df, char *item, char *name2, char *units, char *c
 /* Plot data frame to image file and include in HTML */
 {
 struct tempName pngTn;
-struct dyString *cmd = dyStringNew(0);
 trashDirFile(&pngTn, "hgc", "barChart", ".png");
 
 // to help with QAing the change, we add the "oldFonts" CGI parameter so QA can compare
@@ -362,13 +365,161 @@ trashDirFile(&pngTn, "hgc", "barChart", ".png");
 bool useOldFonts = cgiBoolean("oldFonts");
 
 /* Exec R in quiet mode, without reading/saving environment or workspace */
-dyStringPrintf(cmd, "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s '%s' %s %s %s %s %d",
-                                item, units, colorFile, df, pngTn.forHtml, isEmpty(name2) ? "n/a" : name2, useOldFonts);
-int ret = system(cmd->string);
+char *pipeCmd[] = {"Rscript","--vanilla","--slave","hgcData/barChartBoxplot.R", 
+    item, units, colorFile, df, pngTn.forHtml, 
+    isEmpty(name2) ? "n/a" : name2, useOldFonts ? "1" : "0", NULL};
+struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
+int ret = pipelineWait(pl);
+
 if (ret == 0)
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
 else
-    warn("Error creating boxplot from sample data with command: %s", cmd->string);
+    warn("Error creating boxplot from sample data with command: %s", pipelineDesc(pl));
+}
+
+static double estimateStringWidth(char *s)
+/* Get estimate of string width based on a memory font that is about the
+ * same size as svg will be using.  After much research I don't think we
+ * can get the size from the server, would have to be in Javascript to get
+ * more precise */
+{
+MgFont *font = mgHelvetica14Font();
+return mgFontStringWidth(font, s);
+}
+
+static double longestLabelSize(struct barChartCategory *categList)
+/* Get estimate of longest label in pixels */
+{
+int longest = 0;
+struct barChartCategory *categ;
+for (categ = categList; categ != NULL; categ = categ->next)
+    {
+    int size = estimateStringWidth(categ->label);
+    if (size > longest)
+        longest = size;
+    }
+return longest * 1.02;
+}
+
+void deunderbarColumn(struct fieldedTable *ft, int fieldIx)
+/* Ununderbar all of a column inside table because space/underbar gets
+ * so confusing */
+{
+struct fieldedRow *row;
+for (row = ft->rowList; row != NULL; row = row->next)
+    replaceChar(row->row[fieldIx], '_', ' ');
+}
+
+static void svgBarChart(struct barChartBed *chart, struct trackDb *tdb, double maxVal, char *metric)
+/* Plot bar chart without quartiles or anything fancy just using SVG */
+{
+puts("<p>");
+/* Load up input labels, color, and data */
+struct barChartCategory *categs = barChartUiGetCategories(database, tdb, NULL);
+int categCount = slCount(categs);
+if (categCount != chart->expCount)
+    {
+    warn("Problem in %s barchart track. There are %d categories in trackDb and %d in data",
+	tdb->track, categCount, chart->expCount);
+    return;
+    }
+
+char *statsFile = trackDbSetting(tdb, "barChartStatsUrl");
+struct hash *statsHash = NULL;
+int countStatIx = 0;
+double statsSize = 0.0;
+if (statsFile != NULL)
+    {
+    char *required[] = { "count", "total"};
+    struct fieldedTable *ft = fieldedTableFromTabFile(
+	statsFile, statsFile, required, ArraySize(required));
+    deunderbarColumn(ft, 0);
+    statsHash = fieldedTableIndex(ft, ft->fields[0]);
+    countStatIx = fieldedTableFindFieldIx(ft, "count");
+    statsSize = 8*(fieldedTableMaxColChars(ft, countStatIx)+1);
+    }
+
+/* Some constants that control layout */
+double heightPer=18.0;
+double totalWidth=1250.0;
+double borderSize = 1.0;
+
+double headerHeight = heightPer + 2*borderSize;
+double innerHeight=heightPer-borderSize;
+double labelWidth = longestLabelSize(categs) + 9;  // Add some because size is just estimate
+if (labelWidth > totalWidth/2) labelWidth = totalWidth/2;  // Don't let labels take up more than half
+double patchWidth = heightPer;
+double labelOffset = patchWidth + 2*borderSize;
+double statsOffset = labelOffset + labelWidth;
+double barOffset = statsOffset + statsSize;
+double statsRightOffset = barOffset - 9;
+double barNumLabelWidth = estimateStringWidth(" 1234.000"); 
+double barMaxWidth = totalWidth-barOffset -barNumLabelWidth ;
+double totalHeight = headerHeight + heightPer * categCount + borderSize;
+
+printf("<svg width=\"%g\" height=\"%g\">\n", totalWidth, totalHeight);
+
+/* Draw header */
+printf("<rect width=\"%g\" height=\"%g\" style=\"fill:#%s\"/>\n", totalWidth, headerHeight, HG_COL_HEADER);
+char *sampleLabel = trackDbSettingOrDefault(tdb, "barChartLabel", "Sample");
+printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n", 
+    labelOffset, innerHeight-1, innerHeight-1, sampleLabel);
+if (statsSize > 0.0)
+    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n", 
+	statsRightOffset, innerHeight-1, innerHeight-1, "N");
+printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s %s</text>\n", 
+    barOffset, innerHeight-1, innerHeight-1, metric, "Value");
+
+/* Set up clipping path for the pesky labels, which may be too long */
+printf("<clipPath id=\"labelClip\"><rect x=\"%g\" y=\"0\" width=\"%g\" height=\"%g\"/></clipPath>\n",
+    labelOffset, barOffset-labelOffset, totalHeight);
+
+double yPos = headerHeight;
+struct barChartCategory *categ;
+int i;
+for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer)
+    {
+    double score = chart->expScores[i];
+    double barWidth = 0;
+    if (maxVal > 0.0)
+	barWidth = barMaxWidth * score/maxVal;
+    char *deunder = cloneString(categ->label);
+    replaceChar(deunder, '_', ' ');
+    printf("<rect x=\"0\" y=\"%g\" width=\"15\" height=\"%g\" style=\"fill:#%06X\"/>\n",
+	yPos, innerHeight, categ->color);
+    printf("<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
+	barOffset, yPos, barWidth, innerHeight, categ->color);
+    if (i&1)  // every other time
+	printf("<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
+	    labelOffset, yPos, labelWidth+statsSize, innerHeight, 0xFFFFFF);
+    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" clip-path=\"url(#labelClip)\"\">%s</text>\n", 
+ 	labelOffset, yPos+innerHeight-1, innerHeight-1, deunder);
+    if (statsSize > 0.0)
+	{
+	struct fieldedRow *fr = hashFindVal(statsHash, deunder);
+	if (fr != NULL)
+	    {
+	    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n", 
+		statsRightOffset, yPos+innerHeight-1, innerHeight-1, fr->row[countStatIx]);
+	    }
+	}
+    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n", 
+	barOffset+barWidth+2, yPos+innerHeight-1, innerHeight-1, score);
+    }
+printf("</svg>");
+}
+
+
+static void printBarChart(char *item, struct barChartBed *chart, struct trackDb *tdb, 
+    double maxVal, char *metric)
+/* Plot bar chart without expressionMatrix or R plots*/
+{
+char *statsFile = trackDbSetting(tdb, "barChartStatsUrl");
+char *facets = trackDbSetting(tdb, "barChartFacets");
+if (facets != NULL && statsFile != NULL)
+    facetedBarChart(item, chart, tdb, maxVal, statsFile, facets, metric);
+else
+    svgBarChart(chart, tdb, maxVal, metric);
 }
 
 struct asColumn *asFindColByIx(struct asObject *as, int ix)
@@ -377,7 +528,7 @@ struct asColumn *asFindColByIx(struct asObject *as, int ix)
 struct asColumn *asCol;
 int i;
 for (i=0, asCol = as->columnList; asCol != NULL && i<ix; asCol = asCol->next, i++);
-return asCol;
+    return asCol;
 }
 
 void doBarChartDetails(struct trackDb *tdb, char *item)
@@ -409,29 +560,30 @@ nameLabel = trackDbSettingClosestToHomeOrDefault(tdb, "bedNameLabel", nameCol ? 
 if (trackDbSettingClosestToHomeOrDefault(tdb, "url", NULL) != NULL)
     printCustomUrl(tdb, item, TRUE);
 else
-    printf("<b>%s: </b>%s<br>\n", nameLabel, chartItem->name);
+    printf("<b>%s: </b>%s ", nameLabel, chartItem->name);
 name2Label = name2Col ? name2Col->comment : "Alternative name";
-if (differentString(chartItem->name2, "")) {
+if (differentString(chartItem->name2, "")) 
+    {
     if (trackDbSettingClosestToHomeOrDefault(tdb, "url2", NULL) != NULL)
         printOtherCustomUrl(tdb, chartItem->name2, "url2", TRUE);
     else
-        printf("<b>%s: </b> %s<br>\n", name2Label, chartItem->name2);
-}
+        printf("(%s: %s)<br>\n", name2Label, chartItem->name2);
+    }
+else
+    printf("<br>\n");
 
 int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
 char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
 char *metric = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_METRIC, "");
-printf("<b>Total all %s values: </b> %0.2f %s<br>\n", metric, barChartTotalValue(chartItem), units);
 printf("<b>Maximum %s value: </b> %0.2f %s in %s<br>\n", 
-                metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
-printf("<b>Score: </b> %d<br>\n", chartItem->score); 
-printf("<b>Genomic position: "
-                "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
+	    metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb, NULL));
+printf("<b>Gene position: "
+                "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a>\n", 
                     database, hgTracksPathAndSettings(), database, 
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd,
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd);
-printf("<b>Strand: </b> %s\n", chartItem->strand); 
+printf("&nbsp;&nbsp;<b>Strand: </b> %s\n", chartItem->strand); 
 
 // print any remaining extra fields
 if (numColumns > 0)
@@ -443,8 +595,8 @@ char *matrixUrl = NULL, *sampleUrl = NULL;
 struct barChartItemData *vals = getSampleVals(tdb, chartItem, &matrixUrl, &sampleUrl);
 if (vals != NULL)
     {
-    // Print boxplot
     puts("<p>");
+    // Print boxplot
     char *df = makeDataFrame(tdb->table, vals);
     char *colorFile = makeColorFile(tdb);
     printBoxplot(df, item, chartItem->name2, units, colorFile);
@@ -453,6 +605,13 @@ if (vals != NULL)
                         chartItem->name2 ? " (" : "",
                         chartItem->name2 ? chartItem->name2 : "",
                         chartItem->name2 ? ")" : "");
+    }
+else
+    {
+    if (cfgOptionBooleanDefault("svgBarChart", FALSE))
+	{
+	printBarChart(item, chartItem, tdb, highLevel, metric);
+	}
     }
 puts("<br>");
 }

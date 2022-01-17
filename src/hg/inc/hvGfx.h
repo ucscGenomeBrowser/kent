@@ -2,7 +2,7 @@
  * providing genome browser-specific features.*/
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef BRGFX_H
 #define BRGFX_H
 #include "vGfx.h"
@@ -151,6 +151,13 @@ if (hvg->rc)
     }
 else
     vgTextRight(hvg->vg, x, y, width, height, colorIx, font, text);
+}
+
+INLINE void hvGfxTextInBox(struct hvGfx *hvg, int x, int y, int width, int height,
+                           int colorIx, void *font, char *text)
+/* Draw a line of text to fill box. */
+{
+vgTextInBox(hvg->vg, hvGfxAdjXW(hvg, x, width), y, width, height, colorIx, font, text);
 }
 
 INLINE void hvGfxTextCentered(struct hvGfx *hvg, int x, int y, int width, int height,

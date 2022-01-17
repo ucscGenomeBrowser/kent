@@ -5,7 +5,7 @@
 // cgi-bin/extTools.ra defines the parameters and labels of the tools
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "dystring.h"
@@ -199,7 +199,8 @@ char *db = cartString(cart, "db");
 char *pos = cartString(cart, "position");
 
 // Try to deal with virt chrom position used by hgTracks.
-if (startsWith("virt:", cartUsualString(cart, "position", "")))
+if (isNotEmpty(pos) && 
+        (startsWith(MULTI_REGION_CHROM, pos) || startsWith(OLD_MULTI_REGION_CHROM, pos)))
     pos = cartString(cart, "nonVirtPosition");
 
 if (!parsePosition(pos, &chromName, (uint *)&winStart, (uint *)&winEnd))

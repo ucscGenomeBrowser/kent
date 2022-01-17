@@ -2,7 +2,7 @@
  * not made here*/
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef CDNAALIGNS_H
 #define CDNAALIGNS_H
 
@@ -35,12 +35,14 @@ struct cDnaAlign
     int alnId;               /* number id to identify this alignment */
     int adjAlnSize;          /* number of bases considered aligned after polyAT and ingore N
                               * adjustments */
+    unsigned adjMatch;       /* match, adjusted by cDnaRepsAsMatch */
+    unsigned adjRepMatch;    /* repMatch, adjusted by cDnaRepsAsMatch */
     float ident;             /* fraction ident */
     float cover;             /* fraction of cDNA aligned, excluding polyA if
                               * it is available */
     int alnPolyAT;           /* bases of poly-A head or poly-T tail that are aligned */
     float score;             /* score weight by having introns and length */
-    float repMatch;          /* fraction repeat match */
+    float repMatchFrac;      /* fraction repeat match */
     boolean drop;            /* drop this psl if set */
     boolean weirdOverlap;    /* weird overlap was detected */
     struct cDnaAlignRef *hapAlns; /* best scoring haplotype alignments for each chrom */
@@ -117,7 +119,7 @@ INLINE int cDnaQuerySize(struct cDnaQuery *cdna)
 return cdna->alns->psl->qSize;
 }
 
-struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna, struct psl *psl);
+struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna, unsigned opts, struct psl *psl);
 /* construct a new object and add to the cdna list, updating the stats */
 
 void cDnaAlignDrop(struct cDnaAlign *aln, boolean dropHapSetLinked, struct cDnaCnts *cnts, char *reasonFmt, ...);

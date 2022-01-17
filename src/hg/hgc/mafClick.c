@@ -1,7 +1,7 @@
 /* Handle details pages for maf tracks and axt tracks. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hash.h"
@@ -18,6 +18,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 
+extern boolean issueBotWarning;
 
 #define ADDEXONCAPITAL
 
@@ -84,7 +85,7 @@ for (i=0; i<size; i++)
 }
 
 void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize,
-                  boolean onlyDiff, int blockNo)
+                  boolean onlyDiff, int blockNo, struct hash *labelHash)
 {
 int ii, ch;
 int srcChars = 0;
@@ -168,8 +169,11 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 
 	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
 	chrom = chopPrefix(dbOnly);
-	if ((org = hOrganism(dbOnly)) == NULL)
-	    org = dbOnly;
+        if ((labelHash == NULL) || ((org = hashFindVal(labelHash, dbOnly)) == NULL))
+            {
+            if ((org = hOrganism(dbOnly)) == NULL)
+                org = dbOnly;
+            }
 
 	if (mc->strand == '-')
 	    reverseIntRange(&s, &e, mc->srcSize);
@@ -490,7 +494,11 @@ winStart, winEnd, winStart, database, tdb->track, label);
 static void mafOrAxtClick2(struct sqlConnection *conn, struct sqlConnection *conn2, struct trackDb *tdb, char *axtOtherDb, char *fileName)
 /* Display details for MAF or AXT tracks. */
 {
-hgBotDelay();
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 if (winEnd - winStart > 30000)
     {
     printf("Zoom so that window is 30,000 bases or less to see alignments and conservation statistics\n");
@@ -509,6 +517,7 @@ else
     char buffer[1024];
     int useTarg = FALSE;
     int useIrowChains = FALSE;
+    struct hash *labelHash = mafGetLabelHash(tdb);
 
     safef(option, sizeof(option), "%s.%s", tdb->track, MAF_CHAIN_VAR);
     if (cartCgiUsualBoolean(cart, option, FALSE) &&
@@ -784,7 +793,7 @@ else
             printf("<B>Alignment block %d of %d in window, %d - %d, %d bps </B>\n",
                    ++aliIx,realCount,maf->components->start + 1,
                    maf->components->start + maf->components->size, maf->components->size);
-            mafPrettyOut(stdout, maf, 70,onlyDiff, aliIx);
+            mafPrettyOut(stdout, maf, 70,onlyDiff, aliIx, labelHash);
             }
 	mafAliFreeList(&subList);
 	}

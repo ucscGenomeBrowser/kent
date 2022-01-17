@@ -3,7 +3,7 @@
  * MySQL table out of the trackDb.ra files. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include <sys/mman.h>
 #include "common.h"
@@ -118,6 +118,7 @@ static void trackDbAddInfo(struct trackDb *bt,
 {
 if (sameString(var, "track"))
     parseTrackLine(bt, value, lf);
+
 if (bt->settingsHash == NULL)
     bt->settingsHash = hashNew(7);
 if (bt->viewHash == NULL)
@@ -241,6 +242,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("vcfTabix", s) || sameString("vcf", s) || sameString("pgSnp", s) ||
 		   sameString("narrowPeak", s) || sameString("broadPeak", s) || 
                    sameString("bigLolly", s) || 
+                   sameString("bigRmsk", s) || 
                    sameString("peptideMapping", s) || sameString("barChart", s) ||
                    sameString("interact", s) ||
                    (!startsWithWord("bigWig", s) && startsWith("big", s))
@@ -300,9 +302,10 @@ else
     return NULL;
 }
 
-struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag)
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag, struct dyString *incFiles)
 /* Load track info from ra file already opened as lineFile into list.  If releaseTag is
- * non-NULL then only load tracks that mesh with release. */
+ * non-NULL then only load tracks that mesh with release. If incFiles is not-NULL, put
+ * list of included files in there. */
 {
 char *raFile = lf->fileName;
 char *line, *word;
@@ -334,8 +337,10 @@ for (;;)
                 trackDbCheckValidRelease(subRelease);
             if (releaseTag && subRelease && !sameString(subRelease, releaseTag))
                 errAbort("Include with release %s inside include with release %s line %d of %s", subRelease, releaseTag, lf->lineIx, lf->fileName);
-            struct trackDb *incTdb = trackDbFromRa(incFile, subRelease);
+            struct trackDb *incTdb = trackDbFromRa(incFile, subRelease, incFiles);
             btList = slCat(btList, incTdb);
+            if (incFiles)
+                dyStringPrintf(incFiles, "%s\n", incFile);
             }
 	}
     if (done)
@@ -397,12 +402,13 @@ for(ii=0; ii < count; ii++)
 return TRUE;
 }
 
-struct trackDb *trackDbFromRa(char *raFile, char *releaseTag)
+struct trackDb *trackDbFromRa(char *raFile, char *releaseTag, struct dyString *incFiles)
 /* Load track info from ra file into list.  If releaseTag is non-NULL
- * then only load tracks that mesh with release. */
+ * then only load tracks that mesh with release. if incFiles is non-null, 
+ * add included file names to it.*/
 {
 struct lineFile *lf = udcWrapShortLineFile(raFile, NULL, 16*1024*1024);
-struct trackDb *tdbList = trackDbFromOpenRa(lf, releaseTag);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, releaseTag, incFiles);
 lineFileClose(&lf);
 return tdbList;
 }
@@ -706,6 +712,8 @@ else if (sameWord("interact", type) || sameWord("bigInteract", type))
     cType = cfgInteract;
 else if (startsWith("bigLolly", type))
     cType = cfgLollipop;
+else if (startsWith("bigRmsk", type))
+    cType = cfgBigRmsk;
 else if (sameWord("bigDbSnp", type))
     cType = cfgBigDbSnp;
 else if(startsWith("longTabix", type))
@@ -1013,10 +1021,15 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 	char *parentName = cloneFirstWord(subtrackSetting);
 	struct trackDb *parent = hashFindVal(trackHash, parentName);
 	if (parent != NULL)
-	    {
-	    slAddHead(&parent->subtracks, tdb); // composite/multiWig children are ONLY subtracks
-	    tdb->parent = parent;
-	    }
+        {
+        if (trackDbLocalSetting(tdb, "container"))
+            {
+            errAbort("Composite track '%s' cannot have child track '%s',"
+                " which is a container  multiWig.", parentName, tdb->track);
+            }
+        slAddHead(&parent->subtracks, tdb); // composite/multiWig children are ONLY subtracks
+        tdb->parent = parent;
+        }
 	else
 	    {
 	    errAbort("Parent track %s of child %s doesn't exist", parentName, tdb->track);
@@ -1567,11 +1580,23 @@ if (metadataInTdb)
 return NULL;
 }
 
+boolean trackSettingIsFile(char *setting)
+/* Returns TRUE if setting found in trackDb stanza is a file setting that
+ * would benefit from directory $D substitution among other things - looks for
+ * settings that ends in "Url" and a few others. */
+{
+return endsWith(setting, "Url") ||
+    sameString(setting, "bigDataIndex") ||
+    sameString(setting, "frames") ||
+    sameString(setting, "summary") ||
+    sameString(setting, "searchTrix");
+}
+
 char *labelAsFilteredNumber(char *label, unsigned numOut)
 /* add text to label to indicate filter is active */
 {
 char buffer[2048];
-safef(buffer, sizeof buffer, " (%d items filtered)", numOut);
+safef(buffer, sizeof buffer, " (%d items filtered out)", numOut);
 return catTwoStrings(label, buffer);
 }
 

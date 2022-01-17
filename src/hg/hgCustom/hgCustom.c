@@ -1,7 +1,7 @@
 /* hgCustom - Custom track management CGI. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "obscure.h"
 #include "linefile.h"
@@ -84,7 +84,7 @@ static boolean measureTiming = FALSE;
 /* Global variables */
 struct cart *cart;
 struct hash *oldVars = NULL;
-char *excludeVars[] = {"Submit", "submit", "SubmitFile", NULL};
+char *excludeVars[] = {"Submit", "submit", "SubmitFile", "ContinueWithWarn", NULL};
 char *database = NULL;
 char *organism = NULL;
 struct customTrack *ctList = NULL;
@@ -109,6 +109,7 @@ puts(" Data must be formatted in\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigChain.html'>bigChain</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigGenePred.html'>bigGenePred</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/interact.html'>bigInteract</A>,\n"
+" <A TARGET=_BLANK HREF='../goldenPath/help/bigLolly.html'>bigLolly</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigMaf.html'>bigMaf</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigPsl.html'>bigPsl</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigWig.html'>bigWig</A>,\n"
@@ -129,25 +130,25 @@ puts(" Data must be formatted in\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format10'>Personal Genome SNP,</A>\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format2'>PSL</A>,\n"
 " or <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>\n"
-" formats. To configure the display, set\n"
+" formats.<br>"
+" <li>You can paste just the URL to the file, without a \"track\" line, for bigBed, bigWig, bigGenePred, BAM and VCF.<br>"
+" <li>To configure the display, set\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#TRACK'>track</A>\n"
 " and"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
 " line attributes as described in the \n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.<br>\n"
-" Data in the bigBed, bigWig, bigGenePred, BAM and VCF formats can be provided via only a URL or embedded in a track\n"
-" line in the box below.\n"
 " Examples are\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#EXAMPLE1'>here</A>.\n"
 " If you do not have web-accessible data storage available, please see the\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html#Hosting'>Hosting</A> section of the Track Hub Help documentation.\n<br><br>"
 " Please note a much more efficient way to load data is to use\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html'>Track Hubs</A>, which are loaded\n" 
-" from the <A HREF='hgHubConnect'>Track Hubs Portal</A> found in the menu under My Data.\n"
+" from the <A TARGET=_BLANK HREF='hgHubConnect'>Track Hubs Portal</A> found in the menu under My Data.\n"
 );
 }
 
-void addCustomForm(struct customTrack *ct, char *err)
+void addCustomForm(struct customTrack *ct, char *err, boolean warnOnly)
 /* display UI for adding custom tracks by URL or pasting data */
 {
 char *dataUrl = NULL;
@@ -222,17 +223,14 @@ puts("<P>");
 /* row for error message */
 if (isNotEmpty(err))
     {
-    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:RED; font-style:italic;'>"
-           "Error</span>&nbsp;%s</B><P>", err);
+    char *fullErrString = replaceChars(err, "\n", "<br>\n");
+    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:%s; font-style:italic;'>"
+           "%s</span><P>%s</B><P>", warnOnly ? "ORANGE" : "RED", warnOnly ? "Warning" : "Error", fullErrString);
+    freeMem(fullErrString);
     /* send two lines of the message to the apache error log also: */
-    char *tmpString = cloneString(err);
-    char *lineBreak = strchr(tmpString, '\n');
-    if (lineBreak)  /* first line break becomes a blank */
-        *lineBreak = ' ';
-    lineBreak = strchr(tmpString, '\n');
-    if (lineBreak)  /* second one becomes end of string */
-        *lineBreak = (char) 0;
+    char *tmpString = replaceChars(err, "\n", " ");
     fprintf(stderr, "hgCustom load error: %s\n", tmpString);
+    freeMem(tmpString);
     }
 
 cgiSimpleTableStart();
@@ -252,6 +250,15 @@ if (isUpdateForm)
     cgiTableFieldEnd();
     cgiTableField("&nbsp;");
     puts("<TD ALIGN='RIGHT'>");
+    if (warnOnly)
+	{
+	cgiMakeButtonWithOnClick("ContinueWithWarn", "Continue with Warning", NULL, "return submitClick(this);");
+	printf("&nbsp;");
+	jsInline(
+	    "$('textarea').change(function() {\n"
+	    "    $('#ContinueWithWarn').hide();\n"
+	    "});\n");
+	}
     cgiMakeButtonWithOnClick("Submit", "Submit", NULL, "return submitClick(this);");
     printf("<img id='loadingImg' src='../images/loading.gif' />\n");
     cgiTableFieldEnd();
@@ -318,6 +325,15 @@ else
 if (!isUpdateForm)
     {
     cgiSimpleTableFieldStart();
+    if (warnOnly)
+	{
+	cgiMakeButtonWithOnClick("ContinueWithWarn", "Continue with Warning", NULL, "return submitClick(this);");
+	printf("&nbsp;");
+	jsInline(
+	    "$('textarea').change(function() {\n"
+	    "    $('#ContinueWithWarn').hide();\n"
+	    "});\n");
+	}
     cgiMakeButtonWithOnClick("Submit", "Submit", NULL, "return submitClick(this);");
     printf("<img id='loadingImg' src='../images/loading.gif' />\n");
     cgiTableFieldEnd();
@@ -949,19 +965,19 @@ char *ip = getenv("REMOTE_ADDR");
 botDelayMessage(ip, botDelayMillis);
 }
 
-void doAddCustom(char *err)
+void doAddCustom(char *err, boolean warnOnly)
 /* display form for adding custom tracks.
  * Include error message, if any */
 {
 cartWebStart(cart, database, "Add Custom Tracks");
-addCustomForm(NULL, err);
+addCustomForm(NULL, err, warnOnly);
 helpCustom();
 if (issueBotWarning)
     webBotWarning();
 cartWebEnd(cart);
 }
 
-void doUpdateCustom(struct customTrack *ct, char *err)
+void doUpdateCustom(struct customTrack *ct, char *err, boolean warnOnly)
 /* display form for adding custom tracks.
  * Include error message, if any */
 {
@@ -970,7 +986,7 @@ cartWebStart(cart, database, "Update Custom Track: %s [%s]",
         longLabel, database);
 freeMem(longLabel);
 cartSetString(cart, hgCtDocText, ct->tdb->html);
-addCustomForm(ct, err);
+addCustomForm(ct, err, warnOnly);
 helpCustom();
 cartWebEnd(cart);
 }
@@ -1194,7 +1210,7 @@ if (sameString(initialDb, "0"))
     }
 
 if (cartVarExists(cart, hgCtDoAdd))
-    doAddCustom(NULL);
+    doAddCustom(NULL, FALSE);
 #ifdef PROGRESS_METER
 else if (cartVarExists(cart, hgCtDoProgress))
     {
@@ -1213,9 +1229,9 @@ else if (cartVarExists(cart, hgCtTable))
         ct = ctFromList(ctList, selectedTable);
         }
     if (ct)
-        doUpdateCustom(ct, NULL);
+        doUpdateCustom(ct, NULL, FALSE);
     else
-        doAddCustom(NULL);
+        doAddCustom(NULL, FALSE);
     }
 else
     {
@@ -1229,6 +1245,8 @@ else
     act->sa_flags = SA_RESTART;
     sigaction(SIGALRM, act, NULL);
     alarm(TIMER_INTERVAL);
+
+    boolean warnOnly = FALSE;
 
     char *customText = fixNewData(cart);
     /* save input so we can display if there's an error */
@@ -1275,17 +1293,20 @@ else
             cartRemove(cart, hgCtDataFileName);
             }
         }
+    warnOnly = FALSE;
     struct errCatch *catch = errCatchNew();
     if (errCatchStart(catch))
 	ctList = customTracksParseCartDetailed(database, cart, &browserLines, &ctFileName,
-					       &replacedCts, NULL, &err);
+					       &replacedCts, NULL, &err, &warnOnly);
     errCatchEnd(catch);
     if (catch->gotError)
 	{
 	addWarning(dsWarn, err);
 	}
     if (isNotEmpty(catch->message->string))
+	{
         addWarning(dsWarn, catch->message->string);
+	}
     errCatchFree(&catch);
 
     /* exclude special setting used by table browser to indicate
@@ -1328,7 +1349,7 @@ else
     addWarning(dsWarn, replacedTracksMsg(replacedCts));
     doBrowserLines(browserLines, &warnMsg);
     addWarning(dsWarn, warnMsg);
-    if (err)
+    if (err && !(warnOnly && cartVarExists(cart, "ContinueWithWarn")))
 	{
         char *selectedTable = NULL;
         cartSetString(cart, hgCtDataText, savedCustomText);
@@ -1336,10 +1357,10 @@ else
         if ((selectedTable= cartOptionalString(cart, hgCtUpdatedTable)) != NULL)
             {
             ct = ctFromList(ctList, selectedTable);
-            doUpdateCustom(ct, err);
+            doUpdateCustom(ct, err, warnOnly);
             }
         else
-            doAddCustom(err);
+            doAddCustom(err, warnOnly);
        	cartRemovePrefix(cart, hgCt);
 	return;
 	}
@@ -1359,10 +1380,11 @@ else
 	customTracksSaveCart(database, cart, ctList);
 
 	/* refresh ctList again to pickup remote resource error state */
+	warnOnly=FALSE;
 	struct errCatch *catch = errCatchNew();
 	if (errCatchStart(catch))
 	    ctList = customTracksParseCartDetailed(database, cart, &browserLines, &ctFileName,
-					       &replacedCts, NULL, &err);
+					       &replacedCts, NULL, &err, &warnOnly);
 	errCatchEnd(catch);
 	if (catch->gotError)
 	    {
@@ -1370,7 +1392,6 @@ else
 	    addWarning(dsWarn, catch->message->string);
 	    }
 	errCatchFree(&catch);
-
 	}
     warnMsg = dyStringCannibalize(&dsWarn);
     if (measureTiming)
@@ -1378,10 +1399,12 @@ else
 	long lastTime = clock1000();
 	loadTime = lastTime - thisTime;
 	}
+
+
     if (ctList || cartVarExists(cart, hgCtDoDelete))
         doManageCustom(warnMsg);
     else
-	doAddCustom(warnMsg);
+	doAddCustom(warnMsg, warnOnly);
     }
 cartRemovePrefix(cart, hgCt);
 cartRemove(cart, CT_CUSTOM_TEXT_VAR);

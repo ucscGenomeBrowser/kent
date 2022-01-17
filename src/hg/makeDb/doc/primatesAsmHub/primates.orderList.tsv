@@ -1,26 +1,49 @@
 GCF_000951035.1_Cang.pa_1.0	Angolan colobus
+GCA_004027145.1_DauMad_v1_BIUU	aye-aye
+GCA_004363605.1_IndInd_v1_BIUU	babakoto
 GCF_001698545.1_ASM169854v1	black snub-nosed monkey
-GCF_000235385.1_SaiBol1.0	Bolivian squirrel monkey
+GCA_004024785.1_AteGeo_v1_BIUU	black-handed spider monkey
+GCA_004027715.1_CalDon_v1_BIUU	Bolivian titi
+GCF_016699345.1_BCM_Sbol_2.0	Bolivian squirrel monkey (2021)
+GCA_004027275.1_EulFul_v1_BIUU	brown lemur
 GCF_002880755.1_Clint_PTRv2	chimpanzee
-GCF_000956105.1_Pcoq_1.0	Coquerel's sifaka
-GCF_000364345.1_Macaca_fascicularis_5.0	crab-eating macaque
+GCA_004024645.1_MizCoq_v1_BIUU	Coquerel's mouse lemur
+GCF_000956105.1_Pcoq_1.0	Coquerel's sifaka 6110/Marcella (2015 refseq)
+GCF_012559485.2_MFA1912RKSv2	crab-eating macaque CE1976F Keio U/RIKEN 2021
+GCA_004027615.1_CertNeg_v1_BIUU	De Brazza's monkey
 GCF_000951045.1_Mleu.le_1.0	drill
+GCF_009764315.1_Tfra_2.0	Francois's langur
 GCF_003255815.1_Tgel_1.0	gelada
-GCF_007565055.1_ASM756505v1	golden snub-nosed monkey
+GCF_007565055.1_ASM756505v1	golden snub-nosed monkey (2019 Northwest U)
 GCF_000165445.2_Mmur_3.0	gray mouse lemur
-GCF_000409795.2_Chlorocebus_sabeus_1.1	green monkey
+GCF_000409795.2_Chlorocebus_sabeus_1.1	green monkey 1994-021 (2014 refseq)
+GCF_015252025.1_Vero_WHO_p1.0	green monkey WHO RCB 10-87
+GCA_004025065.1_SemEnt_v1_BIUU	Hanuman langur
 GCF_000001405.39_GRCh38.p13	human
+GCA_004024725.1_CheMed_v1_BIUU	lesser dwarf lemur
 GCF_000952055.2_Anan_2.0	Ma's night monkey
-GCF_006542625.1_Asia_NLE_v1	northern white-cheeked gibbon
-GCF_008728515.1_Panubis1.0	olive baboon
+GCA_004027835.1_AloPal_v1_BIUU	mantled howler monkey
+GCF_006542625.1_Asia_NLE_v1	northern white-cheeked gibbon (2019 U. Washington)
+GCF_008728515.1_Panubis1.0	olive baboon (2019 UCSF)
+GCF_001604975.1_Cebus_imitator-1.0	Panamanian white-faced capuchin
 GCF_000164805.1_Tarsius_syrichta-2.0.1	Philippine tarsier
 GCF_000956065.1_Mnem_1.0	pig-tailed macaque
-GCF_000258655.2_panpan1.1	pygmy chimpanzee
-GCF_003339765.1_Mmul_10	Rhesus monkey
+GCA_004027105.1_NasLar_v1_BIUU	proboscis monkey
+GCF_000258655.2_panpan1.1	pygmy chimpanzee (Ulindi refseq 2015)
+GCF_013052645.1_Mhudiblu_PPA_v0	pygmy chimpanzee (Mhudiblu)
+GCA_004027335.1_EryPat_v1_BIUU	red guenon
+GCA_004024825.1_PygNem_v1_BIUU	red shanked douc langur
+GCF_003339765.1_Mmul_10	Rhesus monkey (2019 U. Washington)
+GCF_020740605.2_mLemCat1.pri	ring-tailed lemur (2021 VGP)
 GCF_009828535.2_HMol_V2	silvery gibbon
+GCA_004027815.1_NycCou_v1_BIUU	slow loris
 GCF_000181295.1_OtoGar3	small-eared galago
 GCF_000955945.1_Caty_1.0	sooty mangabey
-GCF_002880775.1_Susie_PABv2	Sumatran orangutan
+GCF_002880775.1_Susie_PABv2	Sumatran orangutan (2018 refseq)
+GCA_004024885.1_SagImp_v1_BIUU	tamarin
+GCF_009761245.1_GSC_monkey_1.0	tufted capuchin
 GCF_002776525.3_ASM277652v3	Ugandan red Colobus
-GCF_008122165.1_Kamilah_GGO_v0	western lowland gorilla
-GCF_000004665.1_Callithrix_jacchus-3.2	white-tufted-ear marmoset
+GCF_008122165.1_Kamilah_GGO_v0	western lowland gorilla (Kamilah 2019)
+GCA_004026645.1_PitPit_v1_BIUU	white-faced saki
+GCA_004027755.1_CebAlb_v1_BIUU	white-fronted capuchin
+GCF_009663435.1_Callithrix_jacchus_cj1700_1.1	white-tufted-ear marmoset (cj1700 2020)

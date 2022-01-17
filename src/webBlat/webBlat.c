@@ -385,11 +385,9 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	}
     else
         {
-	gfAlignStrand(conn, server->seqDir, seq, FALSE, 16,
-                      tFileCache, gvo);
+	gfAlignStrand(conn, server->seqDir, seq, FALSE, 16, tFileCache, gvo);
 	reverseComplement(seq->dna, seq->size);
-	gfAlignStrand(conn, server->seqDir, seq, TRUE, 16,
-                      tFileCache, gvo);
+	gfAlignStrand(conn, server->seqDir, seq, TRUE, 16, tFileCache, gvo);
 	}
     gfOutputQuery(gvo, f);
     }

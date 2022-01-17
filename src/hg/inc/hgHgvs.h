@@ -3,7 +3,7 @@
  * See http://www.hgvs.org/mutnomen/ */
 
 /* Copyright (C) 2016 The Regents of the University of California
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef HGHGVS_H
 #define HGHGVS_H
@@ -179,7 +179,9 @@ struct hgvsVariant *hgvsParseTerm(char *term);
  * This does not check validity of accessions or alleles. */
 
 struct hgvsVariant *hgvsParsePseudoHgvs(char *db, char *term);
-/* Attempt to parse things that are not strict HGVS, but that people might intend as HGVS. */
+/* Attempt to parse things that are not strict HGVS, but that people might intend as HGVS:
+ * Return a list of struct hgvsVariant that may be what was intended  */
+// Note: this doesn't support non-coding gene symbol terms (which should have nt alleles)
 
 boolean hgvsValidate(char *db, struct hgvsVariant *hgvs, char **retFoundAcc, int *retFoundVersion,
                      char **retDiffRefAllele);

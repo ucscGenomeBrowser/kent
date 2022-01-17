@@ -1,6 +1,7 @@
 # Affymetrix RNA-chip (wrangler: braney/cricket)
 
 track wgEncodeAffyRnaChip
+parent affyArchive
 compositeTrack on
 shortLabel Affy RNA Loc
 longLabel RNA Subcellular Localization by Tiling Microarray from ENCODE Affymetrix/CSHL
@@ -18,8 +19,8 @@ dragAndDrop subTracks
 noInherit on
 priority 3
 type bed 3
-wgEncode 1
 origAssembly hg18
+html wgEncodeAffyRnaChip
 
     track wgEncodeAffyRnaChipViewFiltTransfrags
     shortLabel Transfrags

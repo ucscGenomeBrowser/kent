@@ -12,18 +12,19 @@ bed8Fields = ["chrom", "chromStart", "chromEnd", "name", "score", "strand", "thi
     "thickEnd"]
 
 # we only use some of these fields depending on whether we are working with haplo or triplo scores
-commonFields = ["cytoBand", "Genomic Location", "Haploinsufficiency Score", "Haploinsufficiency Description", "Haploinsufficiency PMID1", "Haploinsufficiency PMID2", "Haploinsufficiency PMID3", "Triplosensitivity Score", "Triplosensitivity Description", "Triplosensitivity PMID1", "Triplosensitivity PMID2", "Triplosensitivity PMID3", "Date Last Evaluated", "Loss phenotype OMIM ID", "Triplosensitive phenotype OMIM ID"] #, 
-haploFields = ["Haploinsufficiency Score", "Haploinsufficiency Description", "Haploinsufficiency PMID1", "Haploinsufficiency PMID2", "Haploinsufficiency PMID3"]
-triploFields = ["Triplosensitivity Score", "Triplosensitivity Description", "Triplosensitivity PMID1", "Triplosensitivity PMID2", "Triplosensitivity PMID3"]
+commonFields = ["cytoBand", "Genomic Location", "Haploinsufficiency Score", "Haploinsufficiency Description", "Haploinsufficiency PMID1", "Haploinsufficiency PMID2", "Haploinsufficiency PMID3", "Haploinsufficiency PMID4", "Haploinsufficiency PMID5", "Haploinsufficiency PMID6", "Triplosensitivity Score", "Triplosensitivity Description", "Triplosensitivity PMID1", "Triplosensitivity PMID2", "Triplosensitivity PMID3", "Triplosensitivity PMID4", "Triplosensitivity PMID5", "Triplosensitivity PMID6", "Date Last Evaluated", "Haploinsufficiency Disease ID", "Triplosensitivity Disease ID"] #, 
+haploFields = ["Haploinsufficiency Score", "Haploinsufficiency Description", "Haploinsufficiency PMID1", "Haploinsufficiency PMID2", "Haploinsufficiency PMID3", "Haploinsufficiency PMID4", "Haploinsufficiency PMID5", "Haploinsufficiency PMID6"]
+triploFields = ["Triplosensitivity Score", "Triplosensitivity Description", "Triplosensitivity PMID1", "Triplosensitivity PMID2", "Triplosensitivity PMID3", "Triplosensitivity PMID4", "Triplosensitivity PMID5", "Triplosensitivity PMID6"]
 geneListFields = ["Gene Symbol", "Gene ID"]
 regionListFields = ["ISCA ID", "ISCA Region Name"]
 omimOutFields = ["OMIM ID", "OMIM Description"]
+mondoOutFields = ["MONDO ID"]
 
 # the gene and region files get merged:
 combinedFields = ["Gene Symbol/ISCA ID", "Gene ID/ISCA Region Name"]
 
-clinGenGeneUrl = "https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/clingen_gene.cgi?sym="
-clinGenIscaUrl = "https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/clingen_region.cgi?id="
+clinGenGeneUrl = "https://search.clinicalgenome.org/kb/gene-dosage/"
+clinGenIscaUrl = "https://search.clinicalgenome.org/kb/gene-dosage/region/"
 
 scoreExplanation = {
     -1: "not yet evaluated",
@@ -38,15 +39,11 @@ scoreExplanation = {
 # the input data keyed by "Gene Symbol" or "ISCA ID", and further keyed by each field name
 inData = {}
 
-# omim phenotype info
-omimData = {}
-
 def setupCommandLine():
     parser = argparse.ArgumentParser(description="Transform ClinGen region and gene lists into a bed file",
         add_help=True, usage = "%(prog)s [options]")
     parser.add_argument("regionFile", action="store", default=None, help="a ClinGen_region_curation_list file")
     parser.add_argument("geneFile", action="store", default=None, help="a ClinGen_gene_curation_list file")
-    parser.add_argument("omimPhenotypesFile", action="store", default=None, help="two column tab-sep file with omim ids and phenotypes")
     parser.add_argument("outFileBase", action="store", default=None, help="the base file name for the two output files: outFileBase.haplo.bed and outFileBase.triplo.bed will be created.")
     args = parser.parse_args()
     if args.regionFile == "stdin" and args.geneFile == "stdin":
@@ -91,19 +88,20 @@ def makeBedLines():
     """Turn inData into bed 9+"""
     bedList = []
     for key in inData:
+        name = key.split('\t')[0]
         data = inData[key]
         bed = {}
         chrom, start, end = parsePosition(data["Genomic Location"])
         bed["chrom"] = chrom
         bed["chromStart"] = start
         bed["chromEnd"] = end
-        bed["name"] = key
+        bed["name"] = name
         bed["score"] = 0
         bed["strand"] = "."
         bed["thickStart"] = bed["chromStart"]
         bed["thickEnd"] = bed["chromEnd"]
         bed["Size"] = bed["chromEnd"] - bed["chromStart"]
-        bed["Gene Symbol/ISCA ID"] = key
+        bed["Gene Symbol/ISCA ID"] = name
         extra = inData[key]
         bed.update(extra)
         bed["itemRgb"] = getColor(bed) # dict of colors
@@ -118,7 +116,7 @@ def dumpBedLines(ofBase):
     extraFields = ["clinGen URL"] + [x for x in combined if x != "Genomic Location"]
 
     # some fields differ depending on which file we are writing to, so remove them:
-    for field in haploFields + triploFields + ["Loss phenotype OMIM ID", "Triplosensitive phenotype OMIM ID"]:
+    for field in haploFields + triploFields + ["Haploinsufficiency Disease ID", "Triplosensitivity Disease ID"]:
         extraFields.remove(field)
 
     if not ofBase.endswith("."):
@@ -127,8 +125,8 @@ def dumpBedLines(ofBase):
     triploOfh = ofBase + "triplo.bed"
     haploFile = open(haploOfh, "w")
     triploFile = open(triploOfh, "w")
-    print("#%s" % ("\t".join(bed8Fields + ["itemRgb"] + extraFields + omimOutFields + haploFields + ["_mouseOver"])), file=haploFile)
-    print("#%s" % ("\t".join(bed8Fields + ["itemRgb"] + extraFields + omimOutFields + triploFields + ["_mouseOver"])), file=triploFile)
+    print("#%s" % ("\t".join(bed8Fields + ["itemRgb"] + extraFields + omimOutFields + haploFields + ["_mouseOver"] + mondoOutFields )), file=haploFile)
+    print("#%s" % ("\t".join(bed8Fields + ["itemRgb"] + extraFields + omimOutFields + triploFields + ["_mouseOver"] + mondoOutFields )), file=triploFile)
     for bed in bedLines:
         finalBed = []
         haploBed = []
@@ -166,33 +164,23 @@ def dumpBedLines(ofBase):
                 sys.stderr.write("ill formed bed:\n%s\n" % (bed))
                 sys.exit(1)
 
-        # the OMIM fields
-        haploId = bed["Loss phenotype OMIM ID"]
-        haploBed.append(str(haploId))
-        if haploId and haploId in omimData:
-                haploBed.append(str(omimData[haploId]))
-        else:
-            haploBed.append("")
-        triploId = bed["Triplosensitive phenotype OMIM ID"]
-        triploBed.append(str(triploId))
-        if triploId and triploId in omimData:
-            triploBed.append(str(omimData[triploId]))
-        else:
-            triploBed.append("")
+        # The empty OMIM fields for preserving the old schema
+        haploBed += ["",""]
+        triploBed += ["",""]
 
         # then the differing extra fields:
         haploBed += [bed[field] for field in haploFields] + [bed["_mouseOver"]["haplo"]]
         triploBed += [bed[field] for field in triploFields] + [bed ["_mouseOver"]["triplo"]]
+
+        # the MONDO field
+        haploMondoId = bed["Haploinsufficiency Disease ID"]
+        haploBed.append(str(haploMondoId))
+        triploId = bed["Triplosensitivity Disease ID"]
+        triploBed.append(str(triploId))
         print("\t".join(haploBed), file=haploFile)
         print("\t".join(triploBed), file=triploFile)
     haploFile.close()
     triploFile.close()
-
-def parseOmim(infh):
-    with open(infh) as f:
-        for line in f:
-            omimId,phenotype = line.strip().split('\t')
-            omimData[omimId] = phenotype
 
 def parseInFile(fname, fileType="gene"):
     if fname != "stdin":
@@ -204,10 +192,12 @@ def parseInFile(fname, fileType="gene"):
         if line.startswith("#"):
             continue
         l = line.strip("\n").split("\t")
-        key = l[0] # geneSymbol or ISCA id
+        sym = l[0] # geneSymbol or ISCA id
         extra = l[1:]
+        pos = l[3] # Genomic location for uniqifying keys
+        key = sym+ "\t" + pos
         if key in inData:   
-            print("duplicate info for gene symbol: '%s'" % (geneSymbol))
+            print("duplicate info for gene symbol: '%s'" % (sym))
             sys.exit(1)
         else:
             temp = {}
@@ -226,9 +216,9 @@ def parseInFile(fname, fileType="gene"):
                     sys.exit(1)
             if not bizarreRecord:
                 if fileType == "gene":
-                    temp["clinGen URL"] = clinGenGeneUrl + key
+                    temp["clinGen URL"] = clinGenGeneUrl + sym
                 else:
-                    temp["clinGen URL"] = clinGenIscaUrl + key
+                    temp["clinGen URL"] = clinGenIscaUrl + sym
                 inData[key] = temp
     f.close()
 
@@ -236,7 +226,6 @@ def main():
     args = setupCommandLine()
     parseInFile(args.geneFile, "gene")
     parseInFile(args.regionFile, "region")
-    parseOmim(args.omimPhenotypesFile)
     dumpBedLines(args.outFileBase)
 
 if __name__=="__main__":

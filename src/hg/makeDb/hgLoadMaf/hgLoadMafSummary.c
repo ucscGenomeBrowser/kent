@@ -1,7 +1,7 @@
 /* hgLoadMafSummary - Load a summary table of pairs in a maf into a database. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "cheapcgi.h"
 #include "linefile.h"
@@ -131,7 +131,35 @@ char *e, *chrom;
 char src[256];
 
 strcpy(src, mcMaster->src);
-chrom = chopPrefix(src);
+
+char *dot = strchr(src, '.');
+
+if (dot == NULL)
+    // this should never happen since mafMaster above requires the assembly name be in the name
+    chrom = src;  // if there are no dots, assume the name is the chrom and don't worry about matching the assembly name
+else
+    {
+    // now we're thinking maybe there's an assembly name as a prefix to the chrom name
+    *dot = 0;
+    chrom = dot + 1;
+
+    if (differentString(src, database))  
+        {
+        // the database name isn't matching the first part of the component source,
+        // look to see if maybe the database has a dot in it
+        *dot = '.';   // replace the dot
+        dot = strchr(dot + 1, '.'); // look for the next dot
+        if (dot != NULL)
+            {
+            *dot = 0;
+            chrom = dot + 1;
+            }
+
+        if ((dot == NULL) || differentString(src, database))
+            errAbort("expecting first component to have assembly name with no more than one dot");
+        }
+    }
+
 for (mc = maf->components; mc != NULL; mc = nextMc)
     {
     nextMc = mc->next;

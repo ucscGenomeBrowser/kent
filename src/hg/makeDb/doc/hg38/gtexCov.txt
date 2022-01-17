@@ -1,0 +1,9 @@
+Max, Thu Oct 28 01:45:34 PDT 2021
+# I did not make the data, just download the bigwig files from the gtex portal.
+#- grabbed the IGV.js config (similar to our trackDb.ra) from https://gtexportal.org/js/app.3ccc3c31.js
+#- manually searched there for the string RNASeqCoverage, and extracted the part manually, then used tr and cut to convert to the tsv names.tsv
+#- Example URL is https://storage.googleapis.com/gtex-igv-files/GTEX-T5JC-0011-R4A-SM-32PLT.Brain_Amygdala.RNAseq.bw
+cd /hive/data/genomes/hg38/bed/gtex/cov
+cat names.tsv  | awk -v 'FS=\t'  '{tissSep=$1; tissNoSep=$1; Sep=gsub(/_/, "", tissNoSep); gsub(/_/, " ", tissSep); print "  track gtexCov"tissNoSep; print "  parent gtexCov"; print "  shortLabel "$3; print "  longLabel "tissSep; print "  bigDataUrl /gbdb/hg38/gtex/cov/"$2"."$1".RNAseq.bw"; print "";}' > trackDb.ra
+wget -i urls.txt 
+mv *.bw bigWigs/

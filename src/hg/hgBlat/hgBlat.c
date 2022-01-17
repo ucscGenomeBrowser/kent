@@ -1,7 +1,7 @@
 /* hgBlat - CGI-script to manage fast human genome sequence searching. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include <pthread.h>
 #include "common.h"
 #include "errAbort.h"
@@ -40,7 +40,12 @@ boolean orgChange = FALSE;
 boolean dbChange = FALSE;
 boolean allGenomes = FALSE;
 boolean allResults = FALSE;
+static long enteredMainTime = 0;
 
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   0.5    /* standard penalty is 1.0 for most CGIs */
+                                /* this one is 0.5 */
+static boolean issueBotWarning = FALSE;
 
 struct gfResult
 /* Detailed gfServer results, this is a span of several nearby tiles, minimum 2 for dna. */
@@ -280,11 +285,18 @@ for (pfd = pfdDone; pfd; pfd = pfd->next)
     if (pfd->error)
         ++errCount;
     }
+slCat(pfdDone, pfdRunning);
+pfdRunning = NULL;
+slCat(pfdDone, pfdNeverStarted);
+pfdNeverStarted = NULL;
 pthread_mutex_unlock( &pfdMutex );
 return errCount;
 }
 
 // ==================
+
+int nonHubDynamicBlatServerCount = 0;
+int hubDynamicBlatServerCount   = 0;
 
 struct serverTable
 /* Information on a server. */
@@ -303,7 +315,7 @@ struct serverTable
     };
 
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
-char *outputList[] = {"hyperlink", "psl", "psl no header"};
+char *outputList[] = {"hyperlink", "psl", "psl no header", "JSON"};
 
 int minMatchShown = 0;
 
@@ -360,6 +372,7 @@ if (atoi(row[6]))
     {
     st->isDynamic = TRUE;
     st->genomeDataDir = cloneString(st->db);  // directories by database name for database genomes
+    ++nonHubDynamicBlatServerCount;
     }
 
 sqlFreeResult(&sr);
@@ -374,7 +387,7 @@ char *host, *port;
 char *genomeDataDir;
 
 if (!trackHubGetBlatParams(db, isTrans, &host, &port, &genomeDataDir))
-    errAbort("Cannot get blat server parameters for track hub with database %s", db);
+    return NULL;
 
 struct serverTable *st;
 AllocVar(st);
@@ -394,6 +407,7 @@ if (genomeDataDir != NULL)
     {
     st->isDynamic = TRUE;
     st->genomeDataDir = cloneString(genomeDataDir);
+    ++hubDynamicBlatServerCount;
     }
 return st;
 }
@@ -529,6 +543,8 @@ char unhideTrack[64];
 char *sort = cartUsualString(cart, "sort", pslSortList[0]);
 char *output = cartUsualString(cart, "output", outputList[0]);
 boolean pslOut = startsWith("psl", output);
+boolean pslRawOut = sameWord("pslRaw", output);
+boolean jsonOut = sameWord(output, "json");
 
 sprintf(uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 
@@ -546,11 +562,11 @@ while ((psl = pslNext(lf)) != NULL)
 	slAddHead(&pslList, psl);
     }
 lineFileClose(&lf);
-if (pslList == NULL)
+if (pslList == NULL && !jsonOut)
     {
     printf("<table><tr><td><hr>Sorry, no matches found");
     if (!allResults)
-	printf(" (with score at least %d)", minMatchShown);
+	printf(" (with a score of at least %d)", minMatchShown);
     printf("<hr><td></tr></table>\n");
     return;
     }
@@ -573,12 +589,24 @@ if(feelingLucky)
     }
 else if (pslOut)
     {
-    printf("<TT><PRE>");
+    if (!pslRawOut)
+        printf("<TT><PRE>");
     if (!sameString(output, "psl no header"))
 	pslxWriteHead(stdout, qType, tType);
+
     for (psl = pslList; psl != NULL; psl = psl->next)
 	pslTabOut(psl, stdout);
+
+    if (pslRawOut)
+        exit(0);
+    printf("<TT><PRE>");
     printf("</PRE></TT>");
+    }
+else if (jsonOut)  
+    {
+    webStartText();
+    pslWriteAllJson(pslList, stdout, database, TRUE);
+    exit(0);
     }
 else  // hyperlink
     {
@@ -593,7 +621,7 @@ else  // hyperlink
         char *trackDescription = NULL;
         getCustomName(database, cart, pslList, &trackName, &trackDescription);
         psl = pslList;
-        printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"POST\" NAME=\"customTrackForm\">\n", hgcUrl);
+        printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl,cartUsualString(cart, "formMethod", "POST"));
         printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
         printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",psl->tEnd);
         printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
@@ -670,13 +698,26 @@ else  // hyperlink
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
 	printf("%s",psl->tName);
 	spaceOut(stdout, maxTChromNameSize - strlen(psl->tName));
-	printf("  %-2s  %9d %9d %6d\n",
+	printf("  %-2s  %9d %9d %6d",
 	    psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
+
+        // if you modify this, also modify hgPcr.c:doQuery, which implements a similar feature
+        char *seq = psl->tName;
+        if (endsWith(seq, "_fix"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#downloadFix\">What is chrom_fix?</A>");
+        else if (endsWith(seq, "_alt"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#downloadAlt\">What is chrom_alt?</A>");
+        else if (endsWith(seq, "_random"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download10\">What is chrom_random?</A>");
+        else if (startsWith(seq, "chrUn"))
+            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download11\">What is a chrUn sequence?</A>");
+        printf("\n");
 	}
     printf("</PRE>\n");
     webNewSection("Help");
-    puts("<P style=\"text-align:left\"><SMALL><A HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A><br><A HREF=\"../FAQ/FAQblat.html#blat1c\">What is chr_alt & chr_fix?</A></SMALL></P>\n");
+    puts("<P style=\"text-align:left\"><A target=_blank HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A><br>");
+    puts("<A target=_blank HREF=\"../FAQ/FAQblat.html#blat1c\">What is chr_alt & chr_fix?</A></P>\n");
     puts("</DIV>\n");
     }
 pslFreeList(&pslList);
@@ -874,6 +915,7 @@ void queryServer(char *host, char *port, char *db, struct dnaSeq *seq, char *typ
 /* Send simple query to server and report results. (no, it doesn't do this)
  * queryRC is true when the query has been reverse-complemented */
 {
+
 struct genomeHits *gH;
 AllocVar(gH);
 
@@ -893,7 +935,22 @@ gH->isProt = isProt;
 gH->isDynamic = (genomeDataDir != NULL);
 gH->genomeDataDir = genomeDataDir;
 gH->dbg = dyStringNew(256);
-slAddHead(&pfdList, gH);
+
+/* SKIP DYNAMIC SERVERS
+ * xinetd throttles by refusing more connections, which causes queries to fail
+ * when the configured limit is reached.  Rather than trying to throttle in the
+ * client, dynamic servers are excluded. See issue #26658.
+ */
+if (gH->isDynamic)
+    {
+    gH->error = TRUE;
+    gH->networkErrMsg = cloneString("Skipped Dynamic Server");
+    slAddHead(&pfdDone, gH);
+    }
+else
+    {
+    slAddHead(&pfdList, gH);
+    }
 }
 
 void findBestGene(struct genomeHits *gH, int queryFrame)
@@ -1340,7 +1397,24 @@ for (;;)
     {
     if (netGetString(conn->fd, buf) == NULL)
 	{
-	warn("Error reading status information from %s:%s",serve->host, serve->port);
+	long et = clock1000() - enteredMainTime;
+	if (serve->isDynamic)
+	    {
+	    if (et > NET_TIMEOUT_MS)
+		warn("the dynamic blat service is taking too long to respond, probably overloaded at this time, try again later.  Error reading status information from %s:%s",
+		serve->host, serve->port);
+	    else if (et < NET_QUICKEXIT_MS)
+		warn("the dynamic blat service is returning an error immediately. it is probably overloaded at this time, try again later.  Error reading status information from %s:%s",
+		serve->host, serve->port);
+	    else
+		warn("the dynamic blat service is returning an error at this time, try again later.  Error reading status information from %s:%s",
+		serve->host, serve->port);
+	    }
+	else
+	    {
+	    warn("Error reading status information from %s:%s; gfServer maybe down or misconfigured, see system logs for details)",
+             serve->host, serve->port);
+	    }
 	ret = -1;
         break;
 	}
@@ -1398,8 +1472,11 @@ if (allGenomes)
 else
     getDbAndGenome(cart, &db, &genome, oldVars);
 
+char *output = cgiOptionalString("output");
+boolean isJson= sameWordOk(output, "json");
+boolean isPslRaw= sameWordOk(output, "pslRaw");
 
-if(!feelingLucky && !allGenomes)
+if (!feelingLucky && !allGenomes && !isJson && !isPslRaw)
     cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), db);
 
 /* Load user sequence and figure out if it is DNA or protein. */
@@ -1584,8 +1661,12 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     oneSize = realSeqSize(seq, !isTx);
     // Impose half the usual bot delay per sequence
     
-    if (dbCount == 0)
-	hgBotDelayFrac(0.5);
+    if (dbCount == 0 && issueBotWarning)
+        {
+        char *ip = getenv("REMOTE_ADDR");
+        botDelayMessage(ip, botDelayMillis);
+        }
+
     if (++seqCount > maxSeqCount)
         {
 	warn("More than %d input sequences, stopping at %s<br>(see also: cgi-bin/hg.conf hgBlat.maxSequenceCount setting).",
@@ -1763,9 +1844,9 @@ jsOnEventById("click", "allResultsText",
 printf("</TD>\n");
 
 printf("<TD COLSPAN=4 style='text-align:right'>\n");
-printf("<INPUT style='height:1.5em; width:100px; font-size:1.2em' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
-printf("<INPUT style='font-size:1.2em' TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
-printf("<INPUT style='font-size:1.2em' TYPE=SUBMIT NAME=Clear VALUE=Clear>\n");
+printf("<INPUT style='height:1.5em; width:100px; font-size:1.0em' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
+printf("<INPUT style='font-size:1.0em' TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
+printf("<INPUT style='font-size:1.0em' TYPE=SUBMIT NAME=Clear VALUE=Clear>\n");
 printf("</TD>\n");
 printf("</TR>\n");
 
@@ -1792,8 +1873,11 @@ printf("%s",
 "is <tt>GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG</tt> (human SOD1).\n</P>\n");
 
 printf("%s", 
-"<P>The <b>Search all</b> checkbox allows you to search all\n"
-"genomes at the same time. It will query the default assembly of every organism and BLAT servers of attached hubs.\n");
+"<P>The <b>Search all</b> checkbox allows you to search all genomes at the same time. "
+"Search all is only available for default assemblies and attached hubs with dedicated BLAT servers."
+"The new dynamic BLAT servers are not supported, and they are noted as skipped in the output. "
+"<b>See our <a href='/FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> for more information.</b>\n"
+);
 
 printf("<P>The <b>All Results</b> checkbox disables minimum matches filtering so all results are seen." 
 " For example, with a human dna search, 20 is minimum matches required, based on the genome size, to filter out lower-quality results.\n"
@@ -1842,7 +1926,10 @@ printf("%s",
 "\n"
 "<P>For more information on the graphical version of BLAT, click the Help \n"
 "button on the top menu bar");
-printf(" or see the Genome Browser <A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
+printf(" or see the Genome Browser <A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n"
+"<P>Kent WJ. <a href=\"https://genome.cshlp.org/content/12/4/656.abstract\" \n"
+"target=_blank>BLAT - the BLAST-like alignment tool</a>. \n" 
+"Genome Res. 2002 Apr;12(4):656-64. PMID: 11932250</p>");
 
 }
 
@@ -1891,7 +1978,7 @@ for (;gH1; gH1 = gH2->next)
 	gH1->hide = TRUE;
     else if (!gH1->error && gH2->error)
 	gH2->hide = TRUE;
-    else  // keep the best scoring or the pair, hide the other
+    else  // keep the best scoring of the pair, hide the other
 	{
 	if (gH2->maxGeneHits > gH1->maxGeneHits)
 	    gH1->hide = TRUE;
@@ -2031,6 +2118,8 @@ if (orgChange)
     }
 getDbAndGenome(cart, &db, &organism, oldVars);
 char *oldDb = cloneString(db);
+
+// n.b. this changes to default db if db doesn't have BLAT
 findClosestServer(&db, &organism);
 
 allResults = cartUsualBoolean(cart, "allResults", allResults);
@@ -2070,6 +2159,9 @@ else
 	char *saveOrg = organism;
 	struct sqlConnection *conn = hConnectCentral();
 	int dbCount = 0;
+	nonHubDynamicBlatServerCount = 0;
+	hubDynamicBlatServerCount   = 0;
+
 	for(this = dbList; this; this = this->next)
 	    {
 	    db = this->name;
@@ -2239,10 +2331,17 @@ else
 	    
 		printf("</TR>\n");
 		}
-	    printf("</TABLE><br><br>\n");
+	    printf("</TABLE><br>\n");
 
 	    if (debuggingGfResults)
 		printDebugging();
+
+	    if (hubDynamicBlatServerCount > 0 || nonHubDynamicBlatServerCount > 0) 
+		{
+		printf("The BLAT All Genomes feature does not currently support dynamic BLAT servers. "
+		"<b>See our <a href='/FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> for more information.</b><br>\n");
+		}
+	    printf( "<br>\n");
 
 	    fakeAskForSeqForm(organism, db);
 	    }
@@ -2265,7 +2364,9 @@ char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-long enteredMainTime = clock1000();
+enteredMainTime = clock1000();
+/* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgBlat", delayFraction, 0, 0, "html");
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 

@@ -2,7 +2,7 @@
  * when postscript and PDF images are being drawn  */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "hPrint.h"
 #include "htmshell.h"
@@ -94,12 +94,22 @@ if (!suppressHtml)
 }
 
 void hButtonMaybePressed(char *name, char *label, char *msg, char *onClick, boolean pressed)
-/* If not suppresed, write out button optionally with onclick javascript, message and 
+/* If not suppresed, write out submit button optionally with onclick javascript, message and 
    styled to indicate modal state (button pressed)
  */
 {
 if (!suppressHtml)
     cgiMakeSubmitButtonMaybePressed(name, label, msg, onClick, pressed);
+}
+
+void hButtonNoSubmitMaybePressed(char *name, char *label, char *msg, 
+                                        char *onClick, boolean pressed)
+/* If not suppresed, write out button optionally with onclick javascript, message and 
+   styled to indicate modal state (button pressed).  
+ */
+{
+if (!suppressHtml)
+    cgiMakeNonSubmitButtonMaybePressed(name, label, msg, onClick, pressed);
 }
 
 void hButton(char *name, char *label)
@@ -121,7 +131,7 @@ hButtonMaybePressed(name, label, msg, onClick, FALSE);
 }
 
 void hOnClickButton(char *id, char *command, char *label)
-/* Write out button with onclick command */
+    /* Write out button with onclick command */
 {
 hButtonMaybePressed(id, label, NULL, command, FALSE);
 }

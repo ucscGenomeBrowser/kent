@@ -188,7 +188,8 @@ tileSize 4
 end
 0ddf270562684f29transInfo crea crea
 
-version 37x0
+version XXX
+serverType dynamic
 type translated
 tileSize 4
 stepSize 4

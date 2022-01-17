@@ -58,6 +58,33 @@ Gardiner-Garden <em>et al</em>. (1987)):
 <pre>    Obs/Exp CpG = Number of CpG * N / (Number of C * Number of G)</pre>
 
 where N = length of sequence.</p>
+<p>
+The calculation of the track data is performed by the following command sequence:
+<pre>
+twoBitToFa <em>assembly.2bit</em> stdout | maskOutFa stdin hard stdout \
+  | cpg_lh /dev/stdin 2&gt; cpg_lh.err \
+    |  awk '{&dollar;2 = &dollar;2 - 1; width = &dollar;3 - &dollar;2;  printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n", &dollar;1, &dollar;2, &dollar;3, &dollar;5, &dollar;6, width, &dollar;6, width*&dollar;7*0.01, 100.0*2*&dollar;6/width, &dollar;7, &dollar;9);}' \
+     | sort -k1,1 -k2,2n &gt; cpgIsland.bed
+</pre>
+The <em>unmasked</em> track data is constructed from
+<em>twoBitToFa -noMask</em> output for the <em>twoBitToFa</em> command.
+</p>
+
+<h2>Data access</h2>
+<p>
+CpG islands and its associated tables can be explored interactively using the
+<a href="../goldenPath/help/api.html" target="_blank">REST API</a>, the
+<a href="/cgi-bin/hgTables" target="_blank">Table Browser</a> or the
+<a href="/cgi-bin/hgIntegrator" target="_blank">Data Integrator</a>.
+All the tables can also be queried directly from our public MySQL
+servers, with more information available on our
+<a target="_blank" href="/goldenPath/help/mysql.html">help page</a> as well as on
+<a target="_blank" href="http://genome.ucsc.edu/blog/tag/mysql/">our blog</a>.</p>
+<p>
+The source for the <em>cpg_lh</em> program can be obtained from
+<a href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/tree/master/src/utils/cpgIslandExt/" target=_blank>src/utils/cpgIslandExt/</a>.
+The <em>cpg_lh</em> program binary can be obtained from: <a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/cpg_lh" download="cpg_lh">http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/cpg_lh</a> (choose "save file")
+</p>
 
 <h2>Credits</h2>
 

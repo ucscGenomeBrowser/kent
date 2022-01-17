@@ -13,17 +13,20 @@ void usage()
 errAbort("bedJoinTabOffset - Add file offset and length of line in a text file with the same name as the BED name to each row of BED.\n"
   "usage:\n"
   "   bedJoinTabOffset inTabFile inBedFile outBedFile\n"
-  "Given a bed file and tab file where each have a column with matching values:\n"
-  "first get the value of column0, the offset and line length from inTabFile.\n"
-  "Then go over the bed file, use the name field and append its offset and length\n"
-  "to the bed file as two separate fields.  Write the new bed file to outBed.\n"
-//  "options:\n"
-//  "   -xxx=XXX\n"
+  "\nGiven a bed file and tab file where each have a column with matching values:\n"
+  "1. first get the value of column0, the offset and line length from inTabFile.\n"
+  "2. Then go over the bed file, use the -bedKey (defaults to the name field)\n"
+  "   field and append its offset and length to the bed file as two separate\n"
+  "   fields. Write the new bed file to outBed.\n"
+  "options:\n"
+  "   -bedKey=integer   0-based index key of the bed file to use to match up with\n"
+  "                     the tab file. Default is 3 for the name field.\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"bedKey", OPTION_INT},
    {NULL, 0},
 };
 
@@ -80,7 +83,7 @@ lmCleanup(&lm);
 return nameToOffsetLen;
 }
 
-void bedJoinTabOffset(char *inTabFile, char *inBedFile, char *outBedFile)
+void bedJoinTabOffset(char *inTabFile, char *inBedFile, char *outBedFile, int bedKey)
 /* bedJoinTabOffset - Add file offset and length of line in a text file with the same name
  * as the BED name to each row of BED. */
 {
@@ -103,15 +106,15 @@ while (lineFileNext(bLf, &line, &size))
         {
         dyStringClear(dy);
         dyStringAppend(dy, line);
-        char *words[5];
+        char *words[bedKey + 2];
         int wordCount = chopTabs(dy->string, words);
-        if (wordCount < 4)
-            lineFileAbort(bLf, "Expected at least 4 words but got %d (%s).", wordCount, line);
-        char *name = words[3];
-        struct offsetLen *ol = hashFindVal(nameToOffsetLen, name);
+        if (wordCount < bedKey + 1)
+            lineFileAbort(bLf, "Expected at least %d words but got %d (%s).", bedKey + 1, wordCount, line);
+        char *indexField = words[bedKey];
+        struct offsetLen *ol = hashFindVal(nameToOffsetLen, indexField);
         if (ol == NULL)
-            lineFileAbort(bLf, "Unable to find corresponding line in %s for name '%s'",
-                          inTabFile, name);
+            lineFileAbort(bLf, "Unable to find corresponding line in %s for field '%s'",
+                          inTabFile, indexField);
         fprintf(outF, "%s\t%lld\t%lld\n",
                 line, (long long)ol->offset, (long long)ol->len);
         }
@@ -127,8 +130,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+int bedKey = optionInt("bedKey", 3);
 if (argc != 4)
     usage();
-bedJoinTabOffset(argv[1], argv[2], argv[3]);
+bedJoinTabOffset(argv[1], argv[2], argv[3], bedKey);
 return 0;
 }

@@ -1,0 +1,61 @@
+track mutCons
+type bigBed 12 +
+itemRgb on
+shortLabel Mutation Conservation
+longLabel Mutation Conservation in Sarbecoviruses
+visibility hide
+priority 1
+compositeTrack on
+group varRep
+
+        track ConservedAAs
+        parent mutCons
+        type bigBed 12 +
+        itemRgb on
+        bigDataUrl /gbdb/wuhCor1/mutCons/ConservedAAs.bb
+        shortLabel ConservedAAs
+        longLabel Conserved amino acid positions in Sarbecoviruses
+        exonNumbers off
+        noScoreFilter on
+        visibility dense
+        priority 10
+
+        track SynConsCodons
+        parent mutCons
+        type bigBed 12 +
+        itemRgb on
+        bigDataUrl /gbdb/wuhCor1/mutCons/SynConstraintCodons.bb
+        shortLabel SynConsCodons
+        longLabel Synonymously constrained codons in Sarbecoviruses
+        exonNumbers off
+        noScoreFilter on
+        visibility dense
+        priority 10
+
+        track SNVcons2020-04
+        parent mutCons
+        type bigBed 12 +
+        itemRgb on
+        bigDataUrl /gbdb/wuhCor1/mutCons/SNVconservation-2020-04-18.bb
+        shortLabel SNVcons2020-04
+        longLabel SNVs from 2020-04 classified as missense/synonymous (using NCBI gene annotations) and in a conserved position or not
+        exonNumbers off
+        noScoreFilter on
+        visibility hide
+        priority 11
+        html SNVconservation.html
+
+        track SNVcons2020-05
+        parent mutCons
+        group mutCons
+        type bigBed 12 +
+        itemRgb on
+        bigDataUrl /gbdb/wuhCor1/mutCons/SNVconservation-2020-05-09.bb
+        shortLabel SNVcons2020-05
+        longLabel SNVs from 2020-05 classified as missense/synonymous (using PhyloCSF Genes) and in a conserved position or not
+        exonNumbers off
+        noScoreFilter on
+        visibility dense
+        priority 12
+        html SNVconservation.html
+

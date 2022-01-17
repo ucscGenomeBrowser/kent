@@ -1,7 +1,7 @@
 /* hgFind.h - Find things in human genome annotations. */
 
 /* Copyright (C) 2010 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef HGFIND_H
 #define HGFIND_H
@@ -40,6 +40,7 @@ struct hgPositions
     struct hgPos *singlePos;      /* If resolves to a single position, reference to that here. */
     char *extraCgi;		  /* Extra info to embed in CGI requests to browser. */
     boolean useAlias;             /* Set if an alias is used */
+    boolean shortCircuited;       /* Is this a result of a short circuit?  */
     };
 
 struct hgPosTable

@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 
 #include "common.h"
@@ -627,11 +627,24 @@ for(; comp; comp = comp->next)
     if (chrom == NULL)
 	errAbort("all components must have a '.'");
 
-    *chrom++ = 0;
+    // nowadays we may have a '.' in the assembly name, so if we don't find the chrom
+    // let's try to see if that extra dot is in there
+    char saveChar = *chrom;
+    *chrom = 0;
 
     struct speciesInfo *si = hashFindVal(siHash, comp->src);
-    if (si == NULL)
-	continue;
+    if (si == NULL)   // didn't find the chrom name... maybe because the assembly name has a dot
+        {
+        *chrom = saveChar;   // restore the dot in the assembly name
+        chrom = strchr(chrom + 1, '.');  // look for the second dot
+        if (chrom == NULL)
+            continue;
+        *chrom = 0;
+        si = hashFindVal(siHash, comp->src);  // did we find it?
+        if (si == NULL)
+            continue;
+        }
+    chrom++;
 
     if (comp->strand == '+')
 	updatePosString(si, chrom, comp->strand, 

@@ -37,7 +37,6 @@ fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Source replicate=Rep
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment obtainedBy=lab
 dragAndDrop subTracks
 priority 0
-wgEncode 1
 type bed 9 +
 itemRgb on
 visibility dense

@@ -3,7 +3,7 @@
  * drawing code. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hash.h"
@@ -148,7 +148,7 @@ struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, 
 /* Add a bigBed filter using a trackDb filterBy statement. */
 {
 struct bigBedFilter *filter;
-char *setting = getFilterType(cart, tdb, field,  FILTERBY_SINGLE);
+char *setting = getFilterType(cart, tdb, field,  FILTERBY_DEFAULT);
 
 AllocVar(filter);
 filter->fieldNum =  getFieldNum(bbi, field);
@@ -278,7 +278,9 @@ for (;filterBy != NULL; filterBy = filterBy->next)
     }
 
 /* custom gencode filters */
-if (startsWith("gencodeV", tdb->track))
+boolean isGencode3 = trackDbSettingOn(tdb, "isGencode3");
+
+if (isGencode3)
     addGencodeFilters(cart, tdb, &filters);
 
 return filters;
@@ -532,20 +534,26 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct linkedFeatures *lf = NULL;
     char *bedRow[bbi->fieldCount];
     if (sameString(track->tdb->type, "bigPsl"))
-	{
-	char *seq, *cds;
-	struct psl *psl = pslFromBigPsl(chromName, bb, seqTypeField,  &seq, &cds); 
-	int sizeMul =  pslIsProtein(psl) ? 3 : 1;
-	boolean isXeno = 0;  // just affects grayIx
-	boolean nameGetsPos = FALSE; // we want the name to stay the name
+        {
+        // fill out bedRow to support mouseOver pattern replacements
+        char startBuf[16], endBuf[16];
+        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        char *seq, *cds;
+        struct psl *psl = pslFromBigPsl(chromName, bb, seqTypeField,  &seq, &cds);
+        int sizeMul =  pslIsProtein(psl) ? 3 : 1;
+        boolean isXeno = 0;  // just affects grayIx
+        boolean nameGetsPos = FALSE; // we want the name to stay the name
 
-	lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, track);
-	lf->original = psl;
-	if ((seq != NULL) && (lf->orientation == -1))
-	    reverseComplement(seq, strlen(seq));
-	lf->extra = seq;
-	lf->cds = cds;
-	}
+        lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, track);
+        lf->original = psl;
+        if ((seq != NULL) && (lf->orientation == -1))
+            reverseComplement(seq, strlen(seq));
+        lf->extra = seq;
+        lf->cds = cds;
+        lf->useItemRgb = useItemRgb;
+        if ( lf->useItemRgb )
+            lf->filterColor = itemRgbColumn(bedRow[8]);
+        }
     else if (sameString(tdb->type, "bigDbSnp"))
         {
         // bigDbSnp does not have a score field, but I want to compute the freqSourceIx from

@@ -3,7 +3,6 @@ Declarations and operations on biotypes.  Used in ensuring that
 all biotypes are can be mapped to a reduced set for coloring and
 selection in the browser.
 """
-from pycbio.sys import pycbioRaiseFrom
 from pycbio.sys.symEnum import SymEnum, SymEnumValue, auto
 
 
@@ -150,7 +149,10 @@ bioTypesSmallNonCoding = frozenset([BioType.miRNA,
                                     BioType.snoRNA,
                                     BioType.scRNA,
                                     BioType.snRNA,
-                                    BioType.sRNA])
+                                    BioType.sRNA,
+                                    BioType.scaRNA,
+                                    BioType.vaultRNA,
+                                    BioType.vault_RNA])
 
 # imported from external databases
 bioTypesNonCodingExternalDb = frozenset([BioType.miRNA,
@@ -176,7 +178,7 @@ def getFunctionForBioType(bt):
     elif bt in bioTypesOther:
         return GencodeFunction.other
     else:
-        pycbioRaiseFrom(GencodeGenesException("unknown biotype: " + str(bt)))
+        raise GencodeGenesException("unknown biotype: " + str(bt))
 
 def getTranscriptFunction(geneBioType, transcriptBioType):
     # all transcripts in pseudogenes are psuedogene transcripts

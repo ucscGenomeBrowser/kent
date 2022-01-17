@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
 #include "hCommon.h"
@@ -39,6 +39,8 @@ static char *positionCgiName = "position";
 DbConnector cartDefaultConnector = hConnectCart;
 DbDisconnect cartDefaultDisconnector = hDisconnectCart;
 static boolean cartDidContentType = FALSE;
+
+struct slPair *httpHeaders = NULL; // A list of headers to output before the content-type
 
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
@@ -365,10 +367,9 @@ void cartReplaceHubVars(struct cart *cart, char *hubFileVar, char *oldHubUrl, ch
 if (! startsWith(customCompositeCartName, hubFileVar))
     errAbort("cartReplaceHubVars: expected hubFileVar to begin with '"customCompositeCartName"' "
              "but got '%s'", hubFileVar);
-char *db = hubFileVar + strlen(customCompositeCartName "-");
 char *errorMessage;
-unsigned oldHubId =  hubFindOrAddUrlInStatusTable(db, cart, oldHubUrl, &errorMessage);
-unsigned newHubId =  hubFindOrAddUrlInStatusTable(db, cart, newHubUrl, &errorMessage);
+unsigned oldHubId =  hubFindOrAddUrlInStatusTable(cart, oldHubUrl, &errorMessage);
+unsigned newHubId =  hubFindOrAddUrlInStatusTable(cart, newHubUrl, &errorMessage);
 
 // need to change hgHubConnect.hub.#hubNumber# (connected hubs)
 struct slPair *hv, *hubVarList = cartVarsWithPrefix(cart, hgHubConnectHubVarPrefix);
@@ -2263,6 +2264,22 @@ struct cart *cartForSession(char *cookieName, char **exclude,
 /* Most cgis call this routine */
 if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
     initSigHandlers(hDumpStackEnabled());
+
+/* HTTPS SSL Cert Checking Settings */
+char *httpsCertCheck = cfgOption("httpsCertCheck");  
+if (httpsCertCheck)
+    setenv("https_cert_check", httpsCertCheck, TRUE);
+char *httpsCertCheckVerbose = cfgOption("httpsCertCheckVerbose");  
+if (httpsCertCheckVerbose)
+    setenv("https_cert_check_verbose", httpsCertCheckVerbose, TRUE);
+char *httpsCertCheckDepth = cfgOption("httpsCertCheckDepth");  
+if (httpsCertCheckDepth)
+    setenv("https_cert_check_depth", httpsCertCheckDepth, TRUE);
+char *httpsCertCheckDomainExceptions = cfgOption("httpsCertCheckDomainExceptions");  
+if (httpsCertCheckDomainExceptions)
+    setenv("https_cert_check_domain_exceptions", httpsCertCheckDomainExceptions, TRUE);
+
+
 /* Proxy Settings 
  * net.c cannot see the cart, pass the value through env var */
 char *httpProxy = cfgOption("httpProxy");  
@@ -2283,12 +2300,24 @@ if (logProxy)
 
 // if ignoreCookie is on the URL, don't check for cookies
 char *hguid = NULL;
-if (cgiOptionalString("ignoreCookie") == NULL)
+if ( cgiOptionalString("ignoreCookie") == NULL )
     hguid = getCookieId(cookieName);
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
 return cart;
+}
+
+static void addHttpHeaders()
+/* CGIs can initialize the global variable httpHeaders to control their own HTTP
+ * headers. This allows, for example, to prevent web browser caching of hgTracks
+ * responses, but implicitly allow web browser caching everywhere else */
+{
+struct slPair *h;
+for (h = httpHeaders; h != NULL; h = h->next)
+    {
+    printf("%s: %s\n", h->name, (char *)h->val);
+    }
 }
 
 struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
@@ -2304,8 +2333,10 @@ popWarnHandler();
 popAbortHandler();
 
 cartWriteCookie(cart, cookieName);
+
 if (doContentType && !cartDidContentType)
     {
+    addHttpHeaders();
     puts("Content-Type:text/html");
     puts("\n");
     cartDidContentType = TRUE;
@@ -3475,7 +3506,9 @@ struct cart *lastDbPosCart = cartOfNothing();
 boolean gotCart = FALSE;
 char dbPosKey[256];
 safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
-if (sameOk(cgiOptionalString("position"), "lastDbPos"))
+
+// use cartCgiUsualString in case request is coming via ajax call from hgGateway
+if (sameOk(cartCgiUsualString(cart, "position", NULL), "lastDbPos"))
     {
     char *dbLocalPosContent = cartUsualString(cart, dbPosKey, NULL);
     if (dbLocalPosContent)
@@ -3640,3 +3673,15 @@ defaultHeight = max(minHeightPixels, defaultHeight);
 freeMem(tdbDefault);
 } 
 
+unsigned cartGetVersion(struct cart *cart)
+/* Get the current version of the cart, which is stored in the variable "cartVersion" */
+{
+unsigned ret = cartUsualInt(cart, "cartVersion", 0);
+return ret;
+}
+
+void cartSetVersion(struct cart *cart, unsigned version)
+/* Set the current version of the cart, which is stored in the variable "cartVersion" */
+{
+cartSetInt(cart, "cartVersion", version);
+}

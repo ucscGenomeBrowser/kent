@@ -3006,3 +3006,106 @@ done
 # Crispr track. See ../crisprTrack/README.txt (2016-09-15 max)
 # Command: doCrispr.sh <db> ensGene
 ##############################################################################
+# LASTZ Rat Rn5 vs. Rat Rn7 (DONE - 2022-01-07 - Gerardo)
+
+# should be able to run this from anywhere, this time it was run from:
+    cd kent/src/hg/utils/automation
+
+  time (~/kent/src/hg/utils/automation/pairLastz.sh \
+	rn5 rn7 mammal mammal) \
+	   > rn5_rn7_20220107.log 2>&1 &
+  # check the total time
+grep -w real  rn5_rn7_20220107.log  | tail -1 | sed -e 's/^/    # /;'
+    # real      532m37.936s
+
+  # this  rn5_rn7_20220107.log log file happens to have a copy of the make doc, as well
+  # as the copy of the make doc left in the target assembly directory:
+# /hive/data/genomes/rn5/bed/lastzRn7.2022-01-07/makeDoc.txt
+
+    # this command outputs this makeDoc text:
+
+    cat kent/src/hg/utils/automation/rn5_rn7_20220107.log
+
+##############################################################################
+# LASTZ Rat Rn5 vs. Rat Rn7
+#    (DONE - 2022-01-07 - Gerardo)
+
+    mkdir /hive/data/genomes/rn5/bed/lastzRn7.2022-01-07
+    cd /hive/data/genomes/rn5/bed/lastzRn7.2022-01-07
+
+    printf '# Rat Rn7 vs. Rat Rn5
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Rat Rn5
+SEQ1_DIR=/hive/data/genomes/rn5/rn5.2bit
+SEQ1_LEN=/hive/data/genomes/rn5/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Rat Rn7
+SEQ2_DIR=/hive/data/genomes/rn7/rn7.2bit
+SEQ2_LEN=/hive/data/genomes/rn7/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/rn5/bed/lastzRn7.2022-01-07
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	243m55.340s
+
+    sed -e 's/^/    # /;' fb.rn5.chainRn7Link.txt
+    # 2536856185 bases of 2572853723 (98.601%) in intersection
+    sed -e 's/^/    # /;' fb.rn5.chainSynRn7Link.txt
+    # 2490005622 bases of 2572853723 (96.780%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        rn5 rn7) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	89m48.335s
+
+    sed -e 's/^/    # /;' fb.rn5.chainRBest.Rn7.txt
+    # 2402478429 bases of 2572853723 (93.378%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/rn7/bed/blastz.rn5.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/rn5/bed/lastzRn7.2022-01-07/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	117m28.787s
+
+    sed -e 's/^/    # /;' fb.rn7.chainRn5Link.txt
+    # 2455376156 bases of 2626580772 (93.482%) in intersection
+    sed -e 's/^/    # /;' fb.rn7.chainSynRn5Link.txt
+    # 2410196801 bases of 2626580772 (91.762%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+    \
+   rn7 rn5) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	81m24.947s
+
+    sed -e 's/^/    # /;' fb.rn7.chainRBest.Rn5.txt
+    # 2400855216 bases of 2626580772 (91.406%) in intersection
+
+##############################################################################
+
+real	532m37.936s
+user	0m1.288s
+sys	0m0.938s

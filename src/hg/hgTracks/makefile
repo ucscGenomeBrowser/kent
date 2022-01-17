@@ -2,16 +2,16 @@ kentSrc = ../..
 include ../../inc/common.mk
 
 HG_INC += -I../../optimalLeaf
-L += ${HALLIBS} ${MYSQLLIBS}
+L += ${MYSQLLIBS}
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/optimalLeaf.a
+MYLIBS =  ${MYLIBDIR}/jkhgapcgi.a ${MYLIBDIR}/jkhgap.a  ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/optimalLeaf.a
 COPT = -ggdb
 
 A = hgTracks
 RENDERA = hgRenderTracks
 
 COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrack.o bedGraph.o \
-	bedTrack.o  bigBedTrack.o bigWarn.o bigWigTrack.o \
+	bedTrack.o  bigBedTrack.o bigRmskTrack.o bigWarn.o bigWigTrack.o \
 	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o container.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
 	expRatioTracks.o factorSource.o hgTracks.o interactTrack.o \
@@ -51,7 +51,7 @@ compile: compileMain ${RENDERA}
 
 compileMain: $O
 	${CC} ${CFLAGS} -o $A $O ${MYLIBS} ${L}
-	cp extTools.ra ${CGI-BIN_DEST}
+	cp extTools.ra ${CGI_BIN_DEST}
 
 ${RENDERA}: ${RENDERO}
 	${MAKE} -f makefile.hgRenderTracks ${MAKECMDGOALS}

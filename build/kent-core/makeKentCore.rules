@@ -1,0 +1,31 @@
++ /src/
++ /src/hg/
++ /src/hg/autoSql/
++ /src/hg/autoXml/
+# modifier is H so the directories are deleted if you add something
+# We cannot use --delete-excluded because we need to completely ignore the .git directories
+H /src/hg/*/
+
+# not useful
+H /python/
+H /java/
+H /build/
+H /install-hooks.sh
+H /src/ai/
+H /src/kehayden/
+H /pre-commit-prevent-large-files.sh
+H /confs/
+
+# blat suite
+H /src/jkOwnLib/
+H /src/blat/*
+H /src/blatz/
+H /src/isPcr/
+H /src/gfClient/
+H /src/gfServer/
+
+# these sometimes appear
+H .nfs*
+
+# This is essential
+- .git/

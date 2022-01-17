@@ -3,6 +3,8 @@
 
 # Myotis lucifugus (microbat) --  Broad Institute of MIT and Harvard
 
+# NOTE: "microbat" is not the ncorrect common name, it is "Little brown bat"
+
 #	http://www.ncbi.nlm.nih.gov/genome/614
 #	http://www.ncbi.nlm.nih.gov/bioproject/16951
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABVD00
@@ -677,4 +679,20 @@ db myoLuc2
 #########################################################################
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
+
 ##############################################################################
+Changing name of organism: (DONE - Hiram - 2021-11-11)
+# It was discovered that "microbat" is not is a common name, but a suborder
+# of Microchiroptera consisting of ~1000 bat species.  The correct 
+# common name for Myotis lucifugus is "Little brown bat"
+
+
+hgsql -e 'update dbDb set organism="Little brown bat" where name="myoLuc2";' hgcentraltest
+
+hgsql -e 'update dbDb set genome="Little brown bat" where name="myoLuc2";' hgcentraltest
+
+hgsql -e 'update genomeClade set genome="Little brown bat" where genome="Microbat";' hgcentraltest
+
+hgsql -e 'update defaultDb set genome="Little brown bat" where name="myoLuc2";' hgcentraltest
+
+#########################################################################

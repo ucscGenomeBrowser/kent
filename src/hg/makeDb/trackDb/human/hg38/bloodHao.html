@@ -1,0 +1,97 @@
+<h2>Description</h2>
+<p>
+This track displays data from <a
+href="https://pubmed.ncbi.nlm.nih.gov/34062119/" target="_blank"><em>Integrated analysis of
+multimodal single-cell data</em></a>. Human peripheral blood mononuclear cells
+(PBMCs) taken from pre-vaccinated and post-vaccinated individuals were profiled
+using both CITE-seq and ECCITE-seq. A total of 57 cell type clusters were
+identified and each cluster included cells from all 24 samples with rare
+exceptions. This dataset contains three annotations for cell clustering: Level
+1 (8 cell types), Level 2 (30 cell types), Level 3 (57 cell types).</p>
+
+<p>
+This track collection contains six bar chart tracks of RNA expression in PBMCs
+where cells are grouped by cell type level 1 
+(<a href="hgTrackUi?g=bloodHaoCellType">Blood PBMC Cells</a>), cell type level 2 
+(<a href="hgTrackUi?g=bloodHaoL2">Blood PBMC Cells 2</a>), 
+cell type level 3 (<a href="hgTrackUi?g=bloodHaoL3">Blood PBMC Cells 3</a>), donor 
+(<a href="hgTrackUi?g=bloodHaoDonor">Blood PBMC Donor</a>), phase of cell cycle 
+(<a href="hgTrackUi?g=bloodHaoPhase">Blood PBMC Phase</a>), or time into experiment 
+(<a href="hgTrackUi?g=bloodHaoTime">Blood PBMC Time</a>). The default track displayed 
+is <a href="hgTrackUi?g=bloodHaoCellType">Blood PBMC Cells</a>.</p>
+
+<h2>Display Conventions</h2>
+<p>
+The cell types are colored by which class they belong to according to the following table.</p>
+
+<p>
+<table cellpadding='2'>
+  <thead><tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;">Cell classification</th>
+  </tr></thead>
+  <tr><td style="background-color: #F01111;"></td><td>immune</td></tr>
+</table>
+</p>
+
+<p>
+Cells that fall into multiple classes will be colored by blending the colors associated
+with those classes.</p>
+
+<h2>Method</h2>
+<p>
+PBMC samples were taken from 8 volunteers ages 20-49 enrolled in an HIV
+vaccine trial (NCT01578889). A total of 24 blood samples were collected at 3
+time points: day 0 (the day before), day 3, and day 7 after the administration
+of a VSV-vectored HIV vaccine. Samples were collected at these different time
+points to minimize batch effects. Cells were then divided into separate
+aliquots for modified versions of the 3' CITE-seq and 5' ECCITE-seq staining
+protocols. In the 3' CITE-seq staining protocol, the samples are simultaneously
+stained with the antibody and unique hashtag. Whereas, 5' ECCITE-seq samples
+are stained first with a unique hashtag. 3' libraries were loaded into 8 lanes
+of a 10x Genomics Chip B using the 10x Genomics 3' v3 kit. 5' libraries
+were loaded into 2 lanes of a 10x Genomics Chip A using the 10x Genomics V(D)J
+kit (v1). Both 3' and 5' libraries were pooled together and sequenced on an
+Illumina Novaseq S4 flowcell. In total, 210,911 cells were profiled after 
+quality control and doublet filtration.</p>
+
+<p>
+The cell/gene matrix and cell-level metadata was downloaded from the <a
+href="http://cells.ucsc.edu/?ds=multimodal-pbmc+sct" target="_blank">UCSC Cell 
+Browser</a>. The UCSC command line utility matrixClusterColumns, matrixToBarChart, 
+and bedToBigBed were used to transform these into a bar chart format bigBed file 
+that can be visualized. The coloring was done by defining colors for the broad 
+level cell classes and then using another UCSC utility, hcaColorCells, to interpolate 
+the colors across all cell types. The UCSC utilities can be found on
+ <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">our download server</a>.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw <a href="/goldenPath/help/barChart.html">bar chart</a> data can be
+explored interactively with the <a href="../cgi-bin/hgTables">Table
+Browser</a> or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a
+href="/goldenPath/help/api.html">REST API</a>. Please refer to our <a
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing
+list archives</a> for questions, or our <a
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.</p>
+
+<h2>Credit</h2>
+<p>
+Thanks to Yuhan Hao, Stephanie Hao, and to the many authors who worked on
+producing and publishing this data set. The data were integrated into the UCSC
+Genome Browser by Jim Kent and Brittney Wick then reviewed by Jairo Navarro. The UCSC 
+work was paid for by the Chan Zuckerberg Initiative.</p>
+
+<h2>References</h2>
+<p>
+Hao Y, Hao S, Andersen-Nissen E, Mauck WM 3rd, Zheng S, Butler A, Lee MJ, Wilk AJ, Darby C, Zager M
+<em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/34062119" target="_blank">
+Integrated analysis of multimodal single-cell data</a>.
+<em>Cell</em>. 2021 Jun 24;184(13):3573-3587.e29.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34062119" target="_blank">34062119</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8238499/" target="_blank">PMC8238499</a>
+</p>

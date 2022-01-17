@@ -71,6 +71,7 @@ if (errCatchStart(errCatch))
     gpi->rPrimer = rPrimer;
     struct gfConnection *conn = gfConnect(server->host, server->port, NULL, NULL);
     gpoList = gfPcrViaNet(conn, server->seqDir, gpi, maxSize, minPerfect, minGood);
+    gfDisconnect(&conn);
     if (gpoList != NULL)
 	{
 	printf("<TT><PRE>");

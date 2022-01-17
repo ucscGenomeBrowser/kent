@@ -2,7 +2,7 @@
  * creating various types of custom tracks. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include <pthread.h>
 #include "common.h"
@@ -372,7 +372,7 @@ assert(index <= ArraySize(cmd1));
  *	our private error log so we can send it back to the user
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-	"/dev/null", track->dbStderrFile);
+	"/dev/null", track->dbStderrFile, 0);
 }
 
 void pipelineFailExit(struct customTrack *track)
@@ -581,11 +581,7 @@ if (wordCount > 11)
     i = bed->blockCount-1;
     if ((bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i]) !=
 	bed->chromEnd)
-	{
-	lineFileAbort(lf,
-	    "BED blocks must span chromStart to chromEnd.  (chromStart + "
-	    "chromStarts[last] + blockSizes[last]) must equal chromEnd.");
-	}
+	lineFileAbort(lf, BAD_BLOCKS);
     }
 if (wordCount > 12)
     // get the microarray/colored-exon fields
@@ -791,7 +787,7 @@ assert(index <= ArraySize(cmd1));
  *	our private error log so we can send it back to the user
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-	"/dev/null", track->dbStderrFile);
+	"/dev/null", track->dbStderrFile, 0);
 }
 
 /* Need customTrackEncodePeak */
@@ -954,7 +950,7 @@ assert(index <= ArraySize(cmd1));
  *	our private error log so we can send it back to the user
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-	"/dev/null", track->dbStderrFile);
+	"/dev/null", track->dbStderrFile, 0);
 }
 
 /* customTrackBedDetail load item */
@@ -1159,7 +1155,7 @@ assert(index <= ArraySize(cmd1));
  *	our private error log so we can send it back to the user
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-	"/dev/null", track->dbStderrFile);
+	"/dev/null", track->dbStderrFile, 0);
 }
 
 /* customTrackPgSnp load item */
@@ -1280,10 +1276,13 @@ struct hash *settings = track->tdb->settingsHash;
 char *barChartBars = hashFindVal(settings, BAR_CHART_CATEGORY_LABELS);
 if (isNotEmpty(barChartBars))
     return;
-errAbort("Missing '%s' setting from track of type=%s (%s).  "
+barChartBars = hashFindVal(settings, BAR_CHART_CATEGORY_URL);
+if (isNotEmpty(barChartBars))
+    return;
+errAbort("Missing either '%s' or '%s' setting from track of type=%s (%s).  "
          "Please check for case and spelling and that there is no new-line "
-         "between the 'track' and the '%s'.",
-         BAR_CHART_CATEGORY_LABELS, track->tdb->type, track->tdb->shortLabel, BAR_CHART_CATEGORY_LABELS);
+         "between the 'track' and the '%s' or '%s'.",
+         BAR_CHART_CATEGORY_LABELS, BAR_CHART_CATEGORY_URL, track->tdb->type, track->tdb->shortLabel, BAR_CHART_CATEGORY_LABELS, BAR_CHART_CATEGORY_URL);
 }
 
 static boolean barChartRecognizer(struct customFactory *fac, struct customPp *cpp, char *type,
@@ -1390,7 +1389,7 @@ assert(index <= ArraySize(cmd1));
  *	The dbStderrFile will get stderr messages from hgLoadBed into the
  *	our private error log so we can send it back to the user
  */
-return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile);
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile, 0);
 }
 
 static struct customTrack *barChartFinish(struct customTrack *track, struct barChartBed *itemList)
@@ -1579,7 +1578,7 @@ assert(index <= ArraySize(cmd1));
  *	The dbStderrFile will get stderr messages from hgLoadBed into the
  *	our private error log so we can send it back to the user
  */
-return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile);
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile, 0);
 }
 
 static struct customTrack *interactFinish(struct customTrack *track, struct interact *itemList)
@@ -2228,7 +2227,7 @@ cmd1[8] = CUSTOM_TRASH;
 cmd1[9] = track->dbTableName;
 
 struct pipeline *dataPipe =  pipelineOpen(cmds,
-    pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile);
+    pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile, 0);
 if(pipelineWait(dataPipe))
     pipelineFailExit(track);	/* prints error and exits */
 
@@ -2396,7 +2395,7 @@ cmd2[8] = track->dbTableName;
  *	our private error file so we can return the errors to the user.
  */
 return pipelineOpen(cmds, pipelineWrite | pipelineNoAbort,
-	"/dev/null", track->dbStderrFile);
+	"/dev/null", track->dbStderrFile, 0);
 }
 
 static void wigDbGetLimits(struct sqlConnection *conn, char *tableName,
@@ -2738,6 +2737,15 @@ static struct customFactory bigWigFactory =
 
 /*** Big Bed Factory - for big client-side BED tracks ***/
 
+/* RMH: Added to support track hubs for RepeatMaskerViz track */
+static boolean bigRmskRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigRmsk track */
+{
+return (sameType(type, "bigRmsk"));
+}
+
 static boolean bigLollyRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2859,6 +2867,8 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 
 setBbiViewLimits(track);
+track->dbTrackType = cloneString("bigBed");
+track->fieldCount = track->bbiFile->definedFieldCount;
 return track;
 }
 
@@ -2958,6 +2968,15 @@ static struct customFactory bigMafFactory =
     NULL,
     "bigMaf",
     bigMafRecognizer,
+    bigBedLoader,
+    };
+
+static struct customFactory bigRmskFactory =
+/* Factory for bigRmsk tracks */
+    {
+    NULL,
+    "bigRmsk",
+    bigRmskRecognizer,
     bigBedLoader,
     };
 
@@ -3454,6 +3473,8 @@ if (hasUnprintable(line, 6))
 	    type = "bam";
 	else if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed"))
 	    type = "bigBed";
+	else if (endsWith(fileName, ".inter.bb") || endsWith(fileName, ".inter.bigBed"))
+	    type = "bigInteract";
 	else if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig"))
 	    type = "bigWig";
 	}
@@ -3553,6 +3574,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &interactFactory);
     slAddTail(&factoryList, &bigInteractFactory);
     slAddTail(&factoryList, &hicFactory);
+    slAddTail(&factoryList, &bigRmskFactory);
     slAddTail(&factoryList, &bigLollyFactory);
     }
 }

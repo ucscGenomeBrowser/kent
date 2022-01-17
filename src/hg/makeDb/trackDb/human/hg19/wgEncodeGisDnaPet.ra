@@ -24,7 +24,6 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 100
 maxWindowToDraw 1000000
 noInherit on
-wgEncode 1
 
     track wgEncodeGisDnaPetViewAlignments
     shortLabel Alignments

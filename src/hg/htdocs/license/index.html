@@ -5,60 +5,181 @@
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<h1>Obtaining a Commercial License for the Genome Browser</h1>
-<p> 
-The Genome Browser binaries and source code are freely available for academic, nonprofit, and 
-personal use. A license is required for commercial download and installation of most Genome Browser 
-binaries and source code, with the exception of the items in the following directories that are 
-freely available for all uses: </p>
-<ul>
-  <li>
-  kent/src/utils (includes big* tools)</li>
-  <li>
-  kent/src/lib</li>
-  <li>
-  kent/src/inc</li>
-  <li>
-  kent/src/tagStorm</li>
-  <li>
-  kent/src/parasol</li>
-  <li>
-  kent/src/htslib</li>
-  <li>
-  kent/src/hg/autoSql</li>
-  <li>
-  kent/src/hg/autoXml</li>
-</ul> 
-<p> 
-The data displayed by the browser is freely available for both public and commercial use with a few 
-exceptions. The README.txt file in the download directory of each assembly shows the use 
-restrictions pertaining to that data set.</p> 
-<p> 
-To purchase a license visit the <a href="https://genome-store.ucsc.edu">Genome Browser store</a>. 
-If you would like to purchase more than 20 copies of the Genome Browser source code, please follow 
+<h1>Graphics: No permission is needed to reproduce a graphic produced by the Genome Browser</h1>
+<p>Permission is granted for reuse of all graphics produced
+by the UCSC Genome Browser website. There is no need to contact us to get permission. If your 
+publisher, notably Elsevier, insists on getting approval, please direct them to this webpage. 
+However, when you use the UCSC Genome Browser in your work, please cite one of our 
+<a href="../goldenPath/pubs.html">publications</a>.</p>
+<br>
+
+<h1>Data: No license is needed for the data files and database tables used by the Genome Browser</h1>
+<p>
+As far as the UCSC Genome Browser group is concerned, the raw table data and binary
+files used to create the graphics by the browser is freely available for both
+public and commercial use. This applies to data that is downloaded as files via 
+http, https, ftp or rsync, and equally when data is accessed through 
+the public MySQL server or via the web API. The only exception are the liftOver chain files,
+they can be linked, downloaded, used and redistributed, but only for non-commercial use
+see the <a href="http://hgdownload.cse.ucsc.edu/goldenpath/hg38/liftOver/">liftOver README</a>.
+
+</p>
+<p>Sometimes, the source databases or authors place restrictions on data. In very rare
+cases, the genomes come with citation requirements. The README.txt file in the
+download directory of each assembly shows the
+original restrictions pertaining to the genome
+sequence itself by the original authors; most assemblies do not have any restrictions.
+</p>
+<p>
+Certain genome annotation data, mostly on the human
+genome and in the domain of clinical genetics, have specific restrictions.
+For some of these, we are not allowed to make the data available. 
+Usually the data must be obtained from the source database directly in the
+original format or licensed, rather from UCSC. Examples are HGMD, LOVD, OMIM, Decipher,
+Genomenon, Genehancer and COSMIC. For viral genomes, any GISAID-sequences or any data
+derived from GISAID sequences cannot be shared by us. Please see the respective
+track documentation pages on these assemblies for more details, by selecting
+the assembly and clicking the track title in the genome browser. They usually
+list or link to the exact license conditions. Files for these tracks are not
+available from our download servers, please contact us for questions or if you
+need a pointer to the respective conversion scripts in our Github code
+repository.</p><br>
+
+<h1 id="free">Software: Most command-line tools and directories are freely available for all uses</h1>
+<p>
+The majority of the Genome Browser source code is available under the
+MIT license, see 
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/LICENSE" 
+target=_blank>the LICENSE file in our source code repository</a>. As such, the 
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">
+Unix command line utilities</a> needed to build 
+tracks, track hub files, computational pipelines, and our
+hundreds of tools to filter, sort, rearrange, join, and process genome
+annotation files can be used and redistributed freely 
+via package managers and installation tools, even for commercial use (except BLAT/LiftOver).  
+Notable examples are bedToBigBed, wigToBigWig, overlapSelect, featureBits,
+pslMap, pslFilter and pslCDnaFilter.  </p>
+
+<p>
+The exceptions are source code directories with special LICENSE files in them. 
+These are <code>kent/src/blat</code>, <code>kent/src/isPcr</code>, <code>kent/src/jkOwnLib</code>, and 
+the programs that produce the graphical images or user interface
+for the UCSC Genome Browser. This includes the following subdirectories under 
+<code>kent/src/hg</code>:
+</p>
+
+<p><code>cgilib hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene 
+hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession hgSuggest 
+hgTables hgTrackUi hgTracks hgVai hgc hubApi near visiGene liftOver</code>
+</p>
+
+<p>
+See the LICENSE file in the top level of our source code for a listing of
+licenses and directories that they apply to: 
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/LICENSE">
+https://github.com/ucscGenomeBrowser/kent/blob/master/LICENSE</a>.
+Directories under non-commercial licenses have LICENSE files in them that start
+with the "LicenseRef-proprietary" SPDX tag.  </p>
+
+<p>When you use the UCSC Genome Browser in your work, please cite one of 
+our <a href="../goldenPath/pubs.html">publications</a>.</p>
+<br>
+
+<h1>Software: Download and installation of the graphical Genome Browser software 
+and access to the source code is free for non-commercial uses but not commercial usage</h1>
+<p>Non-commercial usage for the Genome Browser graphical interface (primarily the "hgTracks" program),
+including download and local installation, aka setting up a 
+<a href="../goldenPath/help/mirror.html">"mirror"</a>, is free. When you use the UCSC
+Genome Browser in your work, please cite one of our <a
+    href="../goldenPath/pubs.html">publications</a>.
+</p>
+
+<p>
+For commercial use, a license is required for download and local installation of
+certain Genome Browser webserver CGI binaries and source code. In the source
+code repository, the respective directories are marked by special LICENSE
+files in them. As specified above, this applies to <code>kent/src/blat</code>, 
+<code>kent/src/isPcr</code>, 
+<code>kent/src/jkOwnLib</code>, and the following subdirectories and 
+programs under <code>kent/src/hg</code>. The majority of license protected files 
+are the programs that produce the graphical images and the graphical user interface 
+for the UCSC Genome Browser:</p>
+<br>
+
+<p><code>cgilib hgApi hgCollection hgFileSearch hgFileUi hgGateway hgGene hgGenome 
+hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions hgSession hgSuggest hgTables hgTrackUi 
+hgTracks hgVai hgc hubApi near visiGene liftOver</code>
+</p>
+
+<p>
+Also, BLAT and isPCR, if needed, are covered by a separate license (see below). This concerns 
+the source code directories <code>kent/src/blat</code>, <code>kent/src/isPcr</code> 
+and <code>kent/src/jkOwnLib</code>.
+</p>
+
+<p>
+To purchase a commercial license for Genome Browser source code, LiftOver, GBiB, or GBiC, please 
+visit the <a href="https://genome-store.ucsc.edu">Genome Browser store</a>. </p>
+
+<p>
+We also have an <a href="../FAQ/FAQlicense.html">FAQ on licensing questions</a>
+which may help to clarify questions on how to license the code. We also have documentation 
+on how to choose the best option for a local installation of a 
+<a target=_blank href="../goldenPath/help/mirror.html">Genome Browser "mirror"</a>.
+</p>
+
+<p>
+If you would like to purchase the Genome Browser source code without going through our store, please follow 
 these instructions: 
-<ul>
+<ol>
   <li> 
   Read and sign the <A HREF="gbLicense2020.pdf" target=_blank>licensing agreement</a>.</li>
   <li> 
   Email a signed copy of the license agreement to the UCSC Office for IP Management 
-  (<A HREF="mailto:&#103;&#101;&#110;&#111;&#109;&#101;&#98;&#114;&#111;w&#115;&#101;r&#64;&#117;&#99;sc.
-&#101;&#100;&#117;">&#103;&#101;&#110;&#111;&#109;&#101;&#98;&#114;&#111;w&#115;&#101;r&#64;&#117;&#99;sc.
-&#101;&#100;&#117;</A>).
-<!-- above address is genomebrowser at ucsc.edu -->
+  (<A HREF="mailto:&#103;&#101;&#110;&#111;&#109;&#101;&#98;&#114;&#111;w&#115;&#101;r&#64;&#117;&#99;sc.&#101;&#100;&#117;"
+>&#103;&#101;&#110;&#111;&#109;&#101;&#98;&#114;&#111;w&#115;&#101;r&#64;&#117;&#99;sc.&#101;&#100;&#117;</A>).
+<!-- above address is genomebrowser at ucsc.edu --></li>
   <li> Follow the instructions in the license agreement for submitting the signed original copy and 
   payment.</li>
-</ul> 
+  <li> After your license application has been processed, 
+  you will receive instructions for downloading the
+  browser software and data.</li>
+</ol></p> 
 <p> 
-After your license application has been processed, you will receive instructions for downloading the
-browser software and data. CDs are also available upon request.</p> 
-<p> 
-Genome Browser licensing inquiries should be made to 
+Genome Browser licensing questions should be directed to 
 <a href="mailto:&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;">&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;</a>.  
 <!-- above address is genome-www at soe.ucsc.edu --> 
 For information about commercial licensing of the Blat and In-Silico PCR tools, see the 
 <a href="http://www.kentinformatics.com" target=_blank>Kent Informatics</a> website or contact 
 <a href="mailto:&#107;&#101;&#110;t&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;&#100;u">&#107;&#101;&#110;t&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;&#100;u</a>.</p>
 <!-- above address is kent at soe.ucsc.edu --> 
-
+<p>
+See the LICENSE file in the top level of our source code for a listing of licenses and 
+directories that they apply to: 
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/LICENSE">
+https://github.com/ucscGenomeBrowser/kent/blob/master/LICENSE</a>.</p>
+<br>
+<h1>Acknowledgements</h1>
+<p>
+This software includes software made by open-source projects:
+<ul>
+    <li> htslib, see <a href="https://doi.org/10.1093/gigascience/giab007" target=_blank>
+      Bonfield et al, 2021</a>: Copyright (C) 2012-2020 Genome Research Ltd., see 
+      <code>kent/src/htslib</code></li>
+    <li> optimalLeaf, see <a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target=_blank>
+     Bar-Joseph et al. 2003</a>: released into the public domain by Ziv Bar-Joseph, 
+     see <code>kent/src/optimalLeaf</code>.</li>
+    <li> Portions of this software are copyright 2020 The FreeType Project (www.freetype.org). 
+     All rights reserved.</li>
+    <li> This software uses the (URW)++ fonts, Copyright 1999 by (URW)++ Design &amp; Development. 
+      The files are not in git but can be obtained via rsync or ftp from 
+      hgdownload.soe.ucsc.edu/htdocs.</li>
+      <li>MySQL connectivity is provided via the MariaDB C client library provided under LGPL. <a href="https://mariadb.com/kb/en/the-mariadb-library/mariadb-connector-c/">https://mariadb.com/kb/en/the-mariadb-library/mariadb-connector-c/</a></li>
+      <li>It includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit
+      (http://www.openssl.org/).
+      This product includes cryptographic software written by Eric Young (eay@cryptsoft.com).
+      This product includes software written by Tim Hudson (tjh@cryptsoft.com).</li>
+      <li>We use Font Awesome by Dave Gandy - http://fontawesome.io</li>
+</ul>
+</p>
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

@@ -1,7 +1,7 @@
 /* encodeCvToDb - Make a relational database version of cv.ra. */
 
 /* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* Currently this is implemented in three main steps:
  *    1) Read in cv.ra into a list of stanzaTypes.

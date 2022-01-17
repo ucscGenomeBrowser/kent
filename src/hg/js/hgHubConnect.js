@@ -1,8 +1,53 @@
-// make div1 visible and hide div2, used to show two different intro texts
-// in the public/my hubs tab and the hub develop tab
-function toggleTwoDivs(div1, div2) {
-    div1.style.display = "block";
-    div2.style.display = "none";
+function makeIframe(ev) {
+    /* It's unusual to show script output in an iframe. But this solution has a few advantages:
+     * - We can show a "waiting" message while the data loads
+     * - The user knows where the results will appear, it looks like a dialog box and covers the page
+     */
+    ev.stopPropagation();
+    var validateText = document.getElementById('validateHubUrl');
+    validateText.value=$.trim(validateText.value);
+    var hubUrl = $('#validateHubUrl').val();
+    if(!validateUrl(hubUrl)) { 
+        alert('Invalid hub URL');
+        return;
+    }
+
+    hgsid = document.querySelector("input[name='hgsid']").value;
+    var myUrl = window.location.href.split("#")[0].split("?")[0]; // strip off hgsid and tab-name
+    var waitUrl =  myUrl + '?hgsid=' + hgsid + '&hgHub_do_hubCheck=1';
+    var node = document.createElement('iframe'); 
+    node.setAttribute('src', waitUrl);
+    node.setAttribute('width', document.documentElement.clientWidth-100+'px');
+    node.setAttribute('height', document.documentElement.clientHeight-100+'px');
+    node.style.position = 'absolute'; 
+    node.style.top = '50px'; 
+    node.style.left = '50px'; 
+    node.style.border = '3px solid darkgrey'; 
+    node.id = 'checkerFrame';
+    // first show the loading page
+    document.body.appendChild(node);
+
+
+    // when the waiting page has finished loading, load the hub checker page
+    var finalUrl = waitUrl + '&validateHubUrl='+hubUrl;
+    var alreadyRun = false;
+    node.addEventListener("load", function() {
+        if (! alreadyRun)
+            node.setAttribute('src', finalUrl);
+        alreadyRun = true; // because 'load' fires again when finalUrl is loaded
+        this.contentWindow.focus(); // activate keyboard event handlers of the iframe
+    });
+    return false;
+}
+
+function closeIframe() {
+    var theFrame = window.parent.document.getElementById('checkerFrame');
+    theFrame.parentNode.removeChild(theFrame);
+}
+
+function reloadIframe() {
+    document.getElementById("content").innerHTML = "Re-loading hub...";
+    window.parent.document.getElementById('checkerFrame').src += '';
 }
 
 // hover effect to highlight table rows
@@ -20,17 +65,20 @@ $(function() {
 // initializes the tabs - with cookie option
 // cookie option requires jquery.cookie.js
 $(function() {
-    $("#tabs").tabs({
-        cookie: {
-            name: 'hubTab_cookie',
-            expires: 30
-        }
-    });
+  $("#tabs").tabs({
+      cookie: {
+          name: 'hubTab_cookie',
+          expires: 30
+      }
+  });
 });
-
 
 // creates keyup event; listening for return key press
 $(document).ready(function() {
+    $('#loadSampleHub').bind('click', function(e) {
+        $('#validateHubUrl').val("https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt");
+
+    });
     $('#hubUrl').bind('keypress', function(e) {  // binds listener to url field
         if (e.which === 13) {  // listens for return key
              e.preventDefault();   // prevents return from also submitting whole form

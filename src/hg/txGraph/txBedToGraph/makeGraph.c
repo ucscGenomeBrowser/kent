@@ -1,5 +1,5 @@
 /* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 /* makeGraph - this module creates a txGraph from a list of 
  * linkedBeds.  The main steps to this process are:
@@ -243,7 +243,7 @@ for (lb = lbList; lb != NULL; lb = lb->next)
 return edgeTree;
 }
 
-static void incVertexUses(void *item)
+void incVertexUses(void *item)
 /* Callback to clear edge->start->useCount and edge->end->useCount. */
 {
 struct edge *edge = item;
@@ -251,7 +251,7 @@ edge->start->count += 1;
 edge->end->count += 1;
 }
 
-static void removeUnusedVertices(struct rbTree *vertexTree, struct rbTree *edgeTree)
+void removeUnusedVertices(struct rbTree *vertexTree, struct rbTree *edgeTree)
 /* Remove vertices not connected to any edges. */
 {
 /* Get vertex list and clear counts. */
@@ -276,7 +276,7 @@ for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
 slFreeList(&vRefList);
 }
 
-static void removeEmptyEdges(struct rbTree *vertexTree, struct rbTree *edgeTree)
+void removeEmptyEdges(struct rbTree *vertexTree, struct rbTree *edgeTree)
 /* Remove edges that are zero or negative in length. */
 {
 int removeCount = 0;
@@ -307,7 +307,7 @@ slFreeList(&refList);
 return list;
 }
 
-static void addWaysInAndOut(struct rbTree *vertexTree, struct rbTree *edgeTree,
+void addWaysInAndOut(struct rbTree *vertexTree, struct rbTree *edgeTree,
 	struct lm *lm)
 /* Put a bunch of ways in and out of the graph onto the edges. */
 {
@@ -466,7 +466,7 @@ else if (currentType == ggSoftStart)
 return FALSE;
 }
 
-static void mergeOrAddEdge(struct rbTree *edgeTree, struct edge *edge)
+void mergeOrAddEdge(struct rbTree *edgeTree, struct edge *edge)
 /* Add edge back if it is still unique, otherwise move evidence from
  * edge into existing edge. */
 {
@@ -480,7 +480,7 @@ else
     rbTreeAdd(edgeTree, edge);
 }
 
-static void updateForwardedEdges(struct rbTree *edgeTree)
+void updateForwardedEdges(struct rbTree *edgeTree)
 /* Go through edges, following the movedTo's in the
  * vertices if need be. */
 {
@@ -506,7 +506,7 @@ if (forwardCount > 0)
 slFreeList(&refList);
 }
 
-static void snapSoftToCloseHard(struct rbTree *vertexTree, struct rbTree *edgeTree, int maxSnapSize,
+void snapSoftToCloseHard(struct rbTree *vertexTree, struct rbTree *edgeTree, int maxSnapSize,
 	int maxUncheckedSnapSize, struct nibTwoCache *seqCache, char *chromName)
 /* Snap hard vertices to nearby soft vertices of same type. */
 {
@@ -681,7 +681,7 @@ snapCount += snapHalfHardBackward(v, edgeTree, softType, hardType);
 return snapCount;
 }
 
-static void snapHalfHards(struct rbTree *vertexTree, struct rbTree *edgeTree)
+void snapHalfHards(struct rbTree *vertexTree, struct rbTree *edgeTree)
 /* Snap edges that are half hard to edges that are fully hard and that
  * share the original hard end */
 {
@@ -739,7 +739,7 @@ if (el == NULL)
 return matchingVertex(vertexTree, el->position, softType);
 }
 
-static void halfConsensusForward(struct vertex *v, 
+void halfConsensusForward(struct vertex *v, 
 	struct rbTree *vertexTree, struct rbTree *edgeTree,
 	enum ggVertexType softType, struct lm *lm)
 /* Figure out consensus end of all edges beginning at v that have soft end. */
@@ -789,7 +789,7 @@ if (softCount > 1)
 }
 
 
-static void halfConsensusBackward(struct vertex *v, 
+void halfConsensusBackward(struct vertex *v, 
 	struct rbTree *vertexTree, struct rbTree *edgeTree,
 	enum ggVertexType softType, struct lm *lm)
 /* Figure out consensus start of all edges end at v that have soft start. */
@@ -838,7 +838,7 @@ if (softCount > 1)
     }
 }
 
-static void halfHardConsensus(struct vertex *v, 
+void halfHardConsensus(struct vertex *v, 
 	struct rbTree *vertexTree, struct rbTree *edgeTree,
 	struct lm *lm)
 /* Form consensus of soft vertices connected to hard vertex v. 
@@ -862,7 +862,7 @@ halfConsensusForward(v, vertexTree, edgeTree, softType, lm);
 halfConsensusBackward(v, vertexTree, edgeTree, softType, lm);
 }
 
-static void halfHardConsensuses(struct rbTree *vertexTree, struct rbTree *edgeTree)
+void halfHardConsensuses(struct rbTree *vertexTree, struct rbTree *edgeTree)
 /* Collect soft edges that share a hard edge. Move all of them to a consensus
  * vertex, which is either:
  *    1) The largest refSeq.
@@ -932,7 +932,7 @@ for (ev = evList; ev != NULL; ev = nextEv)
 return edge;
 }
 
-static void removeEnclosedDoubleSofts(struct rbTree *vertexTree, struct rbTree *edgeTree, 
+void removeEnclosedDoubleSofts(struct rbTree *vertexTree, struct rbTree *edgeTree, 
 	int maxBleedOver, double singleExonMaxOverlap)
 /* Move double-softs that overlap spliced things to a very great extent into
  * the spliced things. Also remove tiny double-softs (no more than 2*maxBleedOver). */
@@ -1028,7 +1028,7 @@ slFreeList(&edgeRefList);
 rbTreeFree(&rangeTree);
 }
 
-static void mergeDoubleSofts(struct rbTree *vertexTree, struct rbTree *edgeTree)
+void mergeDoubleSofts(struct rbTree *vertexTree, struct rbTree *edgeTree)
 /* Merge together overlapping edges with soft ends. */
 {
 struct mergedEdge
@@ -1102,7 +1102,7 @@ rbTreeFree(&rangeTree);
 }
 
 #ifdef DEBUG
-static void dumpVertices(struct rbTree *vertexTree)
+oid dumpVertices(struct rbTree *vertexTree)
 {
 struct slRef *vRef, *vRefList = rbTreeItems(vertexTree);
 for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
@@ -1119,6 +1119,9 @@ struct txGraph *treeTreeToTxg(struct rbTree *vertexTree, struct rbTree *edgeTree
 	struct linkedBeds *lbList)
 /* Convert from vertexTree/edgeTree representation to txGraph */
 {
+if (vertexTree->root == NULL || edgeTree->root == NULL)  // Nothing to do really
+    return NULL;
+
 /* Allocate txGraph, and fill in some of the relatively easy fields. */
 struct txGraph *txg;
 AllocVar(txg);

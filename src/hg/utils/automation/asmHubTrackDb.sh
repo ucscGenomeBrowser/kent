@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -beEux -o pipefail
+set -beEu -o pipefail
 
 if [ $# -ne 2 ]; then
   printf "usage: trackDb.sh <asmId> <pathTo/assembly hub build directory> > trackDb.txt\n" 1>&2
@@ -11,8 +11,14 @@ fi
 
 export asmId=$1
 export buildDir=$2
+# hubLinks is for mouseStrains specific hub only
 export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
 export accessionId=`echo "$asmId" | awk -F"_" '{printf "%s_%s", $1, $2}'`
+export gcX=`echo $asmId | cut -c1-3`
+export d0=`echo $asmId | cut -c5-7`
+export d1=`echo $asmId | cut -c8-10`
+export d2=`echo $asmId | cut -c11-13`
+export hubPath="$gcX/$d0/$d1/$d2/$asmId"
 
 export scriptDir="$HOME/kent/src/hg/utils/automation"
 
@@ -161,13 +167,19 @@ html html/%s.tanDups\n\n" "${asmId}"
 
 fi
 
-export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb | wc -l) || true`
-
-
 # see if there are repeatMasker bb files
-export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb | wc -l) || true`
+export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb 2> /dev/null | wc -l) || true`
 
 if [ "${rmskCount}" -gt 0 ]; then
+
+if [ ! -s "$buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.gz" ]; then
+  printf "ERROR: can not find trackData/repeatMasker/$asmId.sorted.fa.out.gz\n" 1>&2
+  exit 255
+fi
+
+rm -f $buildDir/$asmId.repeatMasker.out.gz
+ln -s trackData/repeatMasker/$asmId.sorted.fa.out.gz $buildDir/$asmId.repeatMasker.out.gz
+
 printf "track repeatMasker
 compositeTrack on
 shortLabel RepeatMasker
@@ -180,7 +192,7 @@ maxWindowToDraw 10000000
 spectrum on
 html html/%s.repeatMasker\n\n" "${asmId}"
 $scriptDir/asmHubRmsk.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt > $buildDir/html/$asmId.repeatMasker.html
-fi
+fi      #       if [ "${rmskCount}" -gt 0 ]; then
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.SINE.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.SINE.bb
@@ -641,7 +653,12 @@ fi
 if [ -s ${buildDir}/trackData/xenoRefGene/${asmId}.xenoRefGene.bb ]; then
 rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
 rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ixx
-rm -f ${buildDir}/bbi/${asmId}.xenoRefGene.bb
+rm -f $buildDir/bbi/${asmId}.xenoRefGene.bb
+rm -f $buildDir/genes/${asmId}.xenoRefGene.gtf.gz
+  if [ -s ${buildDir}/trackData/xenoRefGene/${asmId}.xenoRefGene.gtf.gz ]; then
+    mkdir -p $buildDir/genes
+    ln -s ../trackData/xenoRefGene/${asmId}.xenoRefGene.gtf.gz ${buildDir}/genes/${asmId}.xenoRefGene.gtf.gz
+  fi
 ln -s ../trackData/xenoRefGene/${asmId}.xenoRefGene.bb ${buildDir}/bbi/${asmId}.xenoRefGene.bb
 ln -s ../trackData/xenoRefGene/$asmId.xenoRefGene.ix $buildDir/ixIxx/${asmId}.xenoRefGene.ix
 ln -s ../trackData/xenoRefGene/$asmId.xenoRefGene.ixx $buildDir/ixIxx/${asmId}.xenoRefGene.ixx
@@ -661,24 +678,6 @@ html html/%s.xenoRefGene\n\n" "${asmId}" "${asmId}" "${asmId}"
 $scriptDir/asmHubXenoRefGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.xenoRefGene.html
 fi
 
-###################################################################
-# gapOverlap
-# if [ -s ${buildDir}/trackData/gapOverlap/${asmId}.gapOverlap.bb ]; then
-# rm -f ${buildDir}/bbi/${asmId}.gapOverlap.bb
-# ln -s ../trackData/gapOverlap/${asmId}.gapOverlap.bb ${buildDir}/bbi/${asmId}.gapOverlap.bb
-
-# printf "track gapOverlap
-# shortLabel Gap Overlaps
-# longLabel Exactly identical sequence on each side of a gap
-# group map
-# visibility hide
-# type bigBed 12 .
-# bigDataUrl bbi/%s.gapOverlap.bb
-# html html/%s.gapOverlap\n\n" "${asmId}" "${asmId}"
-
-# $scriptDir/asmHubGapOverlap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.gapOverlap.html
-
-# fi
 ###################################################################
 # Ensembl genes
 if [ -s ${buildDir}/trackData/ensGene/bbi/${asmId}.ensGene.bb ]; then
@@ -720,7 +719,30 @@ fi
 if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
   printf "include rnaSeqData/%s.trackDb.txt\n\n" "${asmId}"
 fi
+##  for mouse strain hubs only
+if [ -s "${buildDir}/$asmId.bigMaf.trackDb.txt" ]; then
+  printf "include %s.bigMaf.trackDb.txt\n\n" "${asmId}"
+fi
 
 if [ -s "${buildDir}/$asmId.userTrackDb.txt" ]; then
   printf "include %s.userTrackDb.txt\n\n" "${accessionId}"
 fi
+
+###################################################################
+# check for lastz/chain/net available
+
+export lz=`ls -d ${buildDir}/trackData/lastz.* 2> /dev/null | wc -l`
+
+if [ "${lz}" -gt 0 ]; then
+  if [ "${lz}" -eq 1 ]; then
+    export lastzDir=`ls -d ${buildDir}/trackData/lastz.*`
+    export oOrganism=`basename "${lastzDir}" | sed -e 's/lastz.//;'`
+    # single chainNet here, no need for a composite track, does the symLinks too
+    ~/kent/src/hg/utils/automation/asmHubChainNetTrackDb.sh $asmId $buildDir
+    $scriptDir/asmHubChainNet.pl $asmId $buildDir/html/$asmId.names.tab $oOrganism $hubPath > $buildDir/html/$asmId.chainNet.html
+  else
+    # multiple chainNets here, create composite track, does the symLinks too
+    ~/kent/src/hg/utils/automation/asmHubChainNetTrackDb.pl $buildDir
+  fi
+fi
+

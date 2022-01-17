@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 PATH=/cluster/bin/x86_64:/cluster/bin/scripts:$PATH
-EMAIL="jcasper@soe.ucsc.edu,chmalee@ucsc.edu"
+EMAIL="lrnassar@ucsc.edu"
 WORKDIR="/hive/data/outside/otto/omim"
 
 cd $WORKDIR

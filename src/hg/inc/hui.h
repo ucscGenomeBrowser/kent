@@ -2,7 +2,7 @@
  * between more than one CGI. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+ * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #ifndef HUI_H
 #define HUI_H
 
@@ -158,6 +158,13 @@ char *hTrackUiForTrack(char *trackName);
 #define SUBTRACK_HIDE_EMPTY_MULTIBED_URL       "hideEmptySubtracksMultiBedUrl"
 #define SUBTRACK_HIDE_EMPTY_SOURCES_URL        "hideEmptySubtracksSourcesUrl"
 
+// multi-region 
+#define MULTI_REGION_CHROM      "multi"
+#define OLD_MULTI_REGION_CHROM  "virt"
+
+#define MULTI_REGION_BED_PADDING    "multiRegionBedPadding"
+#define MULTI_REGION_BED_WIN_FULL   "virtWinFull"
+ 
 void netUi(struct trackDb *tdb);
 
 struct controlGrid
@@ -1408,7 +1415,7 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
 void makeTopLink(struct trackDb *tdb);
 // Link to top of UI page
 
-void extraUiLinks(char *db,struct trackDb *tdb);
+void extraUiLinks(char *db, struct trackDb *tdb, struct cart *cart);
 // Show downloads, schema and metadata links where appropriate
 
 boolean chainDbNormScoreAvailable(struct trackDb *tdb);
@@ -1451,6 +1458,9 @@ boolean hPrintPennantIcon(struct trackDb *tdb);
 boolean printPennantIconNote(struct trackDb *tdb);
 // Returns TRUE and prints out the "pennantIcon" and note when found.
 //This is used by hgTrackUi and hgc before printing out trackDb "html"
+
+void hPrintIcons(struct trackDb *tdb);
+/* prints optional folder and pennants icons and a space, if any icons were printed */
 
 void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,
                   char *prefix, char *title, boolean boxed);

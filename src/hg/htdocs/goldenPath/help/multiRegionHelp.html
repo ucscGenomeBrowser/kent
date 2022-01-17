@@ -9,6 +9,9 @@
 
 <h2>Contents</h2>
 
+<div class="row">
+<div class="col-md-4">
+
 <h6><a href="#Intro">Introduction</strong></a></h6>
 <h6><a href="#GetStarted">Getting started with Multi-Region View</a></h6>
 <h6><a href="#About">About the Multi-Region modes</a></h6>
@@ -25,8 +28,11 @@
   <li><a href="#HaplotypeVid"><strong>Haplotype view</strong></a></li>
 </ul>
 <h6><a href="#Examples">Examples</a></h6>
-<hr>
-<form name="googleForm1" method="GET" action="http://www.google.com/search" 
+
+ </div>
+<div class="col-md-8">
+
+<form name="googleForm1" method="GET" action="https://www.google.com/search"
 onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+
 '   site:genome.ucsc.edu/goldenPath/help';">
 <p> 
@@ -39,6 +45,9 @@ onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+
 </form> 
 </p>
 <p><a href="../../contacts.html">Questions and feedback are welcome</a>.
+
+ </div>
+</div>
 
 <a name="Intro"></a>	
 <h2>Introduction</h2> 
@@ -80,14 +89,14 @@ open a custom region within an assembly hub.</p>
 Click <button type="button">multi-region</button> under the tracks display to open the multi-region 
 configuration window.</p> 
 <p> 
-<img src="../../images/MultiRegionButton.png" alt="Multi-Region button" width="799"
+<img src="../../images/multiRegionButton.png" alt="Multi-Region button" width="799"
 height="201"></p> 
 <p> 
 <strong>Step 3. Configure the multi-region view</strong><br> 
 By default, the <strong>Exit multi-region mode</strong> button is selected. This button returns the 
 display to the traditional view.</p>  
 <p>
-<img src="../../images/MultiRegionConfigurationWindow2.png" alt="Configure Multi-Region view" 
+<img src="../../images/multiRegionConfig.png" alt="Configure Multi-Region view" 
 width="701" height="387"> </p>
 <p>
 To activate a multi-region view, click one of these options:</p> 
@@ -114,7 +123,7 @@ Click  <button type="button">submit</button> to save your changes and return to 
 Here is a view of the Genome Browser with the &quot;Show exons&quot; and &quot;Highlight alternating
 regions&quot; options selected:</p> 
 <p>
-<img src="../../images/MultiRegionMouseHighlighted.png" alt="Exon-only screenshot" width="950"
+<img src="../../images/multiRegionExample.png" alt="Exon-only screenshot" width="950"
 height="380"></p>
 <p> 
 <strong>Navigation and display</strong><br> 
@@ -147,6 +156,10 @@ If the gene track used to compute the slicing is a
 <a href="./trackDb/trackDbDoc.html#superTrack">super track</a> or contains other transcripts, only 
 the longest exon will be used to determine slicing, regardless of whether or not they are in the 
 same transcript. See <a href="#Example1">Example 1</a> for more information.  
+
+<p>
+<a href ="#ExonOnlyVid">Video</a>
+</p>
 
 <a name="GeneOnly"></a> 
 <h3>Gene-only mode</h3> 
@@ -220,6 +233,10 @@ the BED-defined regions. Although you can still zoom in to single base resolutio
 is limited to the extent of the defined regions.  Scrolling upstream and downstream is also limited 
 to the BED-defined range.</p> 
 
+<p>
+<a href ="#CustomRegionsVid">Video</a>
+</p>
+
 <a name="Haplotype"></a> 
 <h3>Haplotype mode</h3> 
 <p> 
@@ -236,6 +253,9 @@ Alternatively, haplotypes can be viewed using the <strong>Alt Map...</strong> tr
 and Sequencing group. Open the track and navigate to the haplotype of interest in the track window. 
 Click on the haplotype to display its details page, then click the link <strong>Show this alternate 
 haplotype placed on its chromosome</strong>.</p>
+<p>
+<a href ="#HaplotypeVid">Video</a>
+</p>
         
 <a name="Videos"></a>
 <p>
@@ -391,7 +411,7 @@ that annotations from the standard browser display do not extend into or out of 
 region, since haplotypes are annotated separately from regular chromosomes.</p>  
 <p>
 <img src="../../images/MultiRegionHaplotypeView.png" alt="Multi-Region haplotype view"
-width="881" height="344"></p> 
+width="881" height="359"></p> 
 <p> 
 Click 
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/

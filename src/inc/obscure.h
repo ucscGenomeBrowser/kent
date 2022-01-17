@@ -156,6 +156,12 @@ struct hash *hashNameIntFile(char *fileName);
 struct hash *hashTwoColumnFile(char *fileName);
 /* Given a two column file (key, value) return a hash. */
 
+struct hash *hashTsvBy(char *in, int keyColIx, int *retColCount);
+/* Return a hash of rows keyed by the given column */
+
+void writeTsvRow(FILE *f, int rowSize, char **row);
+/* Write out row of strings to a line in tab-sep file */
+
 struct slPair *slPairTwoColumnFile(char *fileName);
 /* Read in a two column file into an slPair list */
 
@@ -188,6 +194,9 @@ void dotForUserInit(int dotMod);
 
 void dotForUser();
 /* Write out a dot every _dotForUserMod times this is called. */
+
+void dotForUserEnd();
+/* Write out new line at end of dots for user */
 
 void spaceToUnderbar(char *s);
 /* Convert white space to underbar. */

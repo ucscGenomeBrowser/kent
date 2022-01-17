@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="COVID-19 Resources at UCSC" -->
+<!--#set var="TITLE" value="COVID-19 Research at UCSC" -->
 <!--#set var="ROOT" value="." -->
 
 <!--#include virtual="$ROOT/inc/gbPageStart.html"-->
 
-<h1>COVID-19 Pandemic Resources at UCSC 
+<h1>COVID-19 Research at UCSC 
 <span> <font size=-1 style="padding-left: 10px; padding-right: 10px; margin-left: 15px;">
-<a href="#news">Updated: November 13, 2020</a></font></span></h1>
+<a href="#news">Updated: Jan. 12, 2022</a></font></span></h1>
 
 <div class="row">
     <div class="col-md-6">
@@ -22,29 +22,40 @@ on March 11, 2020.
 <p>
 Genome sequencing of thousands of viral samples has helped researchers study mechanisms of 
 infection, transmission and response of the human immune system. 
-Since the beginning of SARS-CoV-2 circulation in humans, the viral genome has been accummulating
-mutations.  Compared to other RNA viruses its mutation rate is low, but enough variants are known 
-to determine how samples cluster into groups and how they are related (see COVID-19 transmission map).
-</p>
-<p>
 We at the
 <a target="_blank" href="https://ucscgenomics.soe.ucsc.edu/">UC Santa Cruz Genomics Institute</a>
-are responding to the urgency of supporting biomedical research aimed at 
-developing treatments and a vaccine for this devastating illness by fast-tracking 
-visualization of genome sequences and analyses in the
-<a target="_blank" href="/cgi-bin/hgGateway?db=wuhCor1">UCSC Genome Browser for SARS-Cov-2</a>.
-Moreover, we are incorporating relevant biomedical datasets such as single-cell lung gene 
+are responding to the urgency of biomedical research to develop treaments and vaccines for this
+devastating illness by fast-tracking visualization of genome sequences and analyses in the
+<a target="_blank" href="/cgi-bin/hgGateway?db=wuhCor1">UCSC Genome Browser for SARS-CoV-2</a>.
+We are also incorporating relevant biomedical datasets such as single-cell lung gene 
 expression into the 
-<a target="_blank" href="/singlecell.html">UCSC Cell Browser</a>, and are creating data tracks
+<a target="_blank" href="/singlecell.html">UCSC Cell Browser</a>, and creating data tracks
 of
-<a target="_blank" href="#covidHgiGwas">COVID-19 annotations in our Human Genome Browsers</a>
-as datasets become publicly available.  These annotations can further understanding of the
+<a target="_blank" href="#covidHgiGwas">COVID-19 annotations in our Human Genome Browsers</a>.
+These annotations can further understanding of the
 human genetic determinants of infection susceptibility, disease severity, and outcomes. 
 </p>
 <p>
-A manuscript describing 
+Since the beginning of SARS-CoV-2 circulation in humans, the viral genome has been accummulating
+mutations.  
+Mutations identified as important medically and epidemiologically are displayed in SARS-CoV-2 
+browser 
+tracks 
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&g=variantMuts">Variants of Concern</a> and
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&g=spikeMuts">Spike Mutations</a>.
+Investigations of antibody resistance of viral mutations are available in the 
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&g=abEscape">Antibody Escape</a> track 
+collection. The alignment of the Pfizer and Moderna mRNA vaccine sequences to the SARS-CoV-2 genome
+can be viewed using the
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=vaccines">Vaccines</a> track.
+</p>
+<p>
+See our <a href="/goldenPath/help/covidBrowserIntro.html" target="_blank">
+SARS-CoV-2 introduction page</a> for an overview of the 
+resources offered. A manuscript describing 
 <a href="https://www.nature.com/articles/s41588-020-0700-8" target="_blank">
-The UCSC SARS-CoV-2 Genome Browser</a>, was published in the September 9 issue of <em>Nature Genetics</em>.
+The UCSC SARS-CoV-2 Genome Browser</a> was also published in the September 9, 2020 issue of 
+<em>Nature Genetics</em>.
 </p>
     </div>
 
@@ -56,8 +67,8 @@ The UCSC SARS-CoV-2 Genome Browser</a>, was published in the September 9 issue o
                         <font SIZE=-1><em>COVID-19 transmission as of May 30, 2020</em><BR>
                         </font>
                         <font SIZE=-2>
-                          <A HREF="https://nextstrain.org"
-                          TARGET=_blank>Latest situation report from Nextstrain.org</a>
+                          <A HREF="https://nextstrain.org/ncov/global"
+                          TARGET=_blank>Latest global analysis from Nextstrain.org</a>
                         </font>
                     </div>
     </div>
@@ -135,6 +146,23 @@ img {
         UShER is the only available method that can do this in &quot;real time&quot;.
         Our tool places genomes onto a comprehensive global phylogeny of more than 80,000
         virus genomes in less than one second.
+        More information about UShER can be found on the UCSC news article,
+        <a href="https://news.ucsc.edu/2021/05/coronavirus-variants.html">New tools enable rapid
+        analysis of coronavirus sequences and tracking of variants</a>. The number of genome
+        sequences available has increased to 5.6 million since the article was initially published
+        with 1.2 million sequences on May 2021. 
+      </p>
+      <p>
+        <div style='float:left; margin-right: 10px;'>
+          <iframe width="267" height="150" src="https://www.youtube.com/embed/humQ1NyZOUM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        The <a href='https://www.cdc.gov/amd/training/covid-19-gen-epi-toolkit.html'
+               target=_blank>CDC COVID-19 Genomic Epidemiology Toolkit</a>
+        now includes a training module for UShER!
+        Module 3.3 includes a <a href='https://youtu.be/humQ1NyZOUM' target=_blank>video</a>,
+        slides (<a href='https://www.cdc.gov/amd/pdf/slidesets/ToolkitModule_3.3-508C.pdf'
+                   target=_blank>PDF</a>),
+        and links to more resources.
       </p>
     </div>
     <div class="col-md-6">
@@ -156,6 +184,42 @@ img {
 
 <h2 id="news">News</h2>
 <ul>
+<li>
+<b>January 12, 2022</b>:
+Addition of the <a href="cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=articV4_1">ARTIC V4.1</a>
+Oxford Nanopore sequencing primers. This track shows the primers for the
+<a href="https://artic.network/" target="_blank">ARTIC network</a> SARS-CoV-2 sequencing protocol,
+Version 4.1 (January 7, 2022), which restores the funtionality of some primers against the Omicron
+variant.</li>
+<li><b>December 7, 2021</b>:
+Updates to the SARS-CoV-2 <a href="cgi-bin/hgTrackUi?db=wuhCor1&g=variantMuts&c=NC_045512v2">
+Variants of Concern (VOC)</a> track with amino acid and nucleotide annotations for 11
+different COVID variants, including the Delta (B.1.617.2), Mu (B.1.621), and Omicron (B.1.1.529)
+variants.
+<li><b>May 11, 2021</b>:
+Release of SARS-CoV-2
+<a href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=vaccines" target="_blank">
+Vaccines</a> track, displaying the alignment of three different mRNA vaccine sequences to the
+coronavirus genome: the BioNTech/Pfizer BNT-162b2 sequence, the reconstructed BioNTech/Pfizer
+BNT-162b2 RNA sequence, and the Moderna mRNA-1273 sequence.
+<li><b>February 17, 2021</b>:
+Release of SARS-CoV-2
+ <a href="/cgi-bin/hgTrackUi?db=wuhCor1&g=variantMuts" target="_blank"> Variants of Concern</a> 
+track, displaying amino acid and nucelotide mutations in three "Variants of Concern" (B.1.1.7, B.1.351, and P.1) and one "Variant of Interest" (B.1.429, first identified in California), as defined in late January 2021.
+<li><b>January 29, 2021</b>:
+<a target="_blank" href="goldenPath/newsarch.html#012921">
+January 29th SARS-CoV-2 update</a> -
+This update includes new data on sequence variants and phylogeny, 
+spike protein amino-acid mutations, and antibody escape.</li>
+<li><b>January 8, 2021</b>:
+<a target="_blank" href="goldenPath/newsarch.html#010821">
+January 8th SARS-CoV-2 update</a> - 
+This update includes an updated track as well as three new tracks for
+the <a href="/cgi-bin/hgTracks?db=wuhCor1" 
+target="_blank">coronavirus genome browser</a>, and a track for the <a 
+href="/cgi-bin/hgTracks?db=hg19" target="_blank">hg19/GRCh37</a> and <a
+href="/cgi-bin/hgTracks?db=hg38" target="_blank">hg38/GRCh38</a> human assemblies.
+</li>
 <li>
 <b>October 21, 2020</b>:
 <a target="_blank" href="goldenPath/newsarch.html#102120">
@@ -249,19 +313,15 @@ SARS-CoV-2 Sequencing Resources</a> on GitHub
 </li>
 
 <li> Nextstrain open-source tracking of pathogen evolution:
-    <a target="_blank" href="https://nextstrain.org/ncov">SARS-Cov2 browser</a> (strain tree, geographical mapping)</li>
+    <a target="_blank" href="https://nextstrain.org/ncov">SARS-CoV-2 browser</a> (strain tree, geographical mapping)</li>
 
 <li> NCBI sequence database search, publication list, and genome display:
     <a href="https://www.ncbi.nlm.nih.gov/genbank/sars-cov-2-seqs/" target="_blank"</a>NCBI SARS-CoV-2 Sequences</a></li>
 <li>Virus Pathogen Resource:
     <a target="_blank" href="https://www.viprbrc.org/brc/home.spg?decorator=corona_ncov">VIPR SARS-CoV-2 resource</a> (tools for sequence and structure analysis, comparative genomics and phenotype studies)</li>
 
-<li>CDC: <a target="_blank" href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/cases-in-us.html">Cases
+<li>CDC: <a target="_blank" href="https://covid.cdc.gov/covid-data-tracker/#cases">Cases
 in U.S.</a>, updated daily.  </li>
-<li>CDC data as <a href =
-"https://bit.ly/coronaPerCapita" target = _blank><em>per capita</em>
-map</a> of the states.
-</li>
 
 <li>Johns Hopkins University: <a target="_blank" href="https://coronavirus.jhu.edu/map.html">
 Coronavirus Resource Center</a></li>
@@ -274,6 +334,9 @@ COVID-19 citizen science and crowdsourcing projects</a>
 
 <li>Wikipedia: <a target="_blank" href="https://en.wikipedia.org/wiki/Severe_acute_respiratory_syndrome_coronavirus_2">Severe acute respiratory syndrome coronavirus 2</a></li>
 
+<li>COVID Textbook:
+<a target="_blank" href="https://covidreference.com/">COVID Reference</a></li>
+
 <li>
 Nature News graphical guide to vaccine designs:
 <a target="_blank" href="https://www.nature.com/articles/d41586-020-01221-y">
@@ -285,6 +348,16 @@ The Race for Coronavirus Vaccines</a>
 Inside the Coronavirus Genome</a>, and
 <a target="_blank" href="https://www.nytimes.com/interactive/2020/04/30/science/coronavirus-mutations.html">
 How Coronavirus Mutates and Spreads</a>, The New York Times
+
+<li>
+<a target="_blank" href="https://ucscgenomics.soe.ucsc.edu/ucscs-million-covid-genome-tree-could-be-a-first/">
+UCSC's Million-COVID-Genome Tree Could be a First</a>, UCSC Genomics Institute
+</li>
+
+<li>
+<a target="_blank" href="https://www.nature.com/articles/s41467-021-22905-7">
+SARS-CoV-2 gene content and COVID-19 mutation impact by comparing 44 <em>Sarbecovirus</em> genomes</a>,
+<em>Nature Genetics</em>.
 </li>
 
 </ul>
