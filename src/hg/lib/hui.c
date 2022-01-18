@@ -7461,6 +7461,7 @@ int groupCt;
 char option[MAX_SP_SIZE];
 int group, prevGroup;
 int i,j;
+struct hash *labelHash = mafGetLabelHash(tdb);
 
 bool lowerFirstChar = TRUE;
 
@@ -7564,11 +7565,18 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     safecpy(option, sizeof(option), name);
     wmSpecies->on = isSpeciesOn(cart, tdb, wmSpecies->name, option, sizeof option, defaultState );
     cgiMakeCheckBoxWithId(option, wmSpecies->on,id);
-    label = hOrganism(wmSpecies->name);
-    if (label == NULL)
-            label = wmSpecies->name;
-    if (lowerFirstChar)
-        *label = tolower(*label);
+
+    char *remapName = NULL;
+    if ((labelHash != NULL) && (remapName = hashFindVal(labelHash,wmSpecies->name)))
+        label = remapName;
+    else
+        {
+        label = hOrganism(wmSpecies->name);
+        if (label == NULL)
+                label = wmSpecies->name;
+        if (lowerFirstChar)
+            *label = tolower(*label);
+        }
     printf("%s<BR>", label);
     puts("</TD>");
     lineBreakJustPrinted = FALSE;
