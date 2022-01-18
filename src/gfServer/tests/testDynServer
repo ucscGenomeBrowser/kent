@@ -13,6 +13,6 @@ $gfServer index $gfDir/crea.untrans.gfidx $gfDir/crea.2bit >/dev/null
 
 # test query
 
-./dynTester $gfRootDir query crea crea input/crea.mrna output/${testName}.ver.out
+./dynTester --gfServer=${gfServer} $gfRootDir query crea crea input/crea.mrna output/${testName}.ver.out
 sed -e 's/^version .*$/version XXX/' output/${testName}.ver.out > output/${testName}.out
 diff -u expected/${testName}.out output/${testName}.out

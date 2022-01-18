@@ -67,9 +67,11 @@ enum gfConstants {
 
 #ifdef GFSERVER64
 typedef bits64 gfOffset;  /* offset/size of genome sequences */
+#define GFINDEX_BITS 64
 #define GFOFFSET_FMT "%lld"
 #else
 typedef bits32 gfOffset;  /* offset/size of genome sequences */
+#define GFINDEX_BITS 32
 #define GFOFFSET_FMT "%d"
 #endif
 

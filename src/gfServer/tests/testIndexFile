@@ -3,7 +3,7 @@ gfServer=${1:-gfServer}   # first arg is optional name of gfServer program
 testName=$(basename $0)
 
 # build index
-gfIdx=output/$testName.gfidx
+gfIdx=output/creaGeno.untrans.gfidx
 rm -f $gfIdx
 mkdir -p output
 $gfServer index $gfIdx input/creaGeno.2bit >/dev/null

@@ -82,7 +82,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gfServer v %s - Make a server to quickly find where DNA occurs in genome\n"
+  "gfServer v %s - Make a server to quickly find where DNA occurs in genome (%d-bit index)\n"
   "   To set up a server:\n"
   "      gfServer start host port file(s)\n"
   "      where the files are .2bit or .nib format files specified relative to the current directory\n"
@@ -172,7 +172,7 @@ errAbort(
   "                   will happen.\n"
   "   -timeout=N      Timeout in seconds.\n"
   "                   Default is %d.\n"
-  ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize, timeout
+  ,	gfVersion, GFINDEX_BITS, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize, timeout
   );
 
 }
