@@ -18,6 +18,7 @@ UTILS_APPLIST = \
 	bedCoverage \
 	chainAntiRepeat \
 	chainBridge \
+	chainCleaner \
 	chainFilter \
 	chainMergeSort \
 	chainNet \
