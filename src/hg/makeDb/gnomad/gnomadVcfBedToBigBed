@@ -111,7 +111,7 @@ versionAutoSql = {
     "v2.1.1": ["chrom", "chromStart", "chromEnd", "name", "score", "strand",
         "thickStart", "thickEnd", "itemRgb", "ref", "alt", "FILTER", "AC",
         "AN", "AF", "faf95", "nhomalt", "rsId", "genes", "annot", "variation_type",
-        "pLoF", "lofFlags", "lofCuration", "pLoFCurationFlags", "_startPos", "displayName"]
+        "_startPos", "displayName", "pLoF", "lofFlags", "lofCuration", "pLoFCurationFlags"]
 }
 
 # the fields in the extra tab file, specify order here so we have the same order
@@ -124,9 +124,9 @@ versionExtraFields = {
         "asj", "eas", "fin", "mid", "nfe", "sas", "oth", "XX", "XY"] for x in ["AC", "AN",
         "AF", "nhomalt"]], "cadd_phred", "revel_score", "splice_ai_max_ds",
         "splice_ai_consequence", "primate_ai_score"],
-    "v2.1.1": ["hgvsc", "hgvsp", "popmax", *[x + "_" + y for y in ["popmax", "afr", "amr",
-        "asj", "eas", "fin", "nfe", "oth", "female", "male"] for x in ["AC", "AN", "AF",
-        "nhomalt"]]]
+    "v2.1.1": ["hgvsc", "hgvsp", "popmax", "AC_popmax", "AN_popmax", "AF_popmax",
+        *[x + "_" + y for y in ["afr", "amr", "asj", "eas", "fin", "nfe", "oth",
+        "female", "male"] for x in ["AC", "AN", "AF", "nhomalt"]]]
 }
 
 # determines the color of the variant in the browser
@@ -179,7 +179,7 @@ def writeHeaders(version, outfh, extrafh):
             extrafh.write("#" + "\t".join(versionExtraFields[version]))
         extrafh.write("\n")
     else:
-        outfh.write("\t" + "#" + "\t".join(versionExtraFields[version]))
+        outfh.write("\t" + "\t".join(versionExtraFields[version]))
     outfh.write("\n")
 
 def parseHeader(headerStr, infh, outfh, extraFh):
@@ -359,14 +359,14 @@ def parseVep(vep, version):
             consList = group[1].split('&')
         else:
             consList = [group[1]]
-        if "regulatory_region_variant" in consList \
-                or "downstream_gene_variant" in consList \
-                or "upstream_gene_variant" in consList \
-                or "TF_binding_site_variant" in consList \
-                or "intergenic_variant" in consList:
-            continue
+        #if "regulatory_region_variant" in consList \
+        #        or "downstream_gene_variant" in consList \
+        #        or "upstream_gene_variant" in consList \
+        #        or "TF_binding_site_variant" in consList \
+        #        or "intergenic_variant" in consList:
+        #    continue
         vepFields = dict(zip(versionVepFields[version],group)) 
-        gene = vepFields["SYMBOL"]
+        gene = vepFields["SYMBOL"] if vepFields["SYMBOL"] != "" else "N/A"
         hgvsc = [vepFields["HGVSc"]] if vepFields["HGVSc"] != "" else None
         hgvsp = [vepFields["HGVSp"]] if vepFields["HGVSp"] != "" else None
         lof = [vepFields["LoF"]] if vepFields["LoF"] != "" else None
@@ -443,60 +443,70 @@ def gnomadVcfBedToBigBed(infh, outfh, extraFh, version, lofDict):
 
         # Now that we've parsed all the incoming fields from vcfToBed, write
         # output to final bed, and maybe to extra tab file:
-        if genes:
-            consList = []
-            for gene in genes:
-                consList += list(genes[gene]["cons"])
-            annot,color = pickColor(consList)
-            rsId = ""
-            if bedName.startswith("rs"):
-                rsId = bedName
-            unshiftedStart = unshiftLeftPad(int(chromStart), ref, alt)
-            displayName = chrom + "-" + str(unshiftedStart) + "-"
-            displayName += ref[:10]+"..." if len(ref) > 13 else ref
-            displayName += "-"
-            displayName += alt[:10]+"..." if len(alt) > 13 else alt
-            name = hashlib.md5(str.encode(chrom+chromStart+chromEnd+ref+alt)).hexdigest()
-            if version == "v3.1.1" or version == "v3.1_chrM":
-                outfh.write("\t".join([chrom, chromStart, chromEnd, name, score, strand,
-                    thickStart, thickEnd, color, ref, alt, filterTag, ac, an, af, faf95, nhomalt,
-                    rsId, ", ".join(genes.keys()), annot, ",".join(consList), str(unshiftedStart), displayName]))
-                popTable, otherFields = convertExtraFields(maybeExtraFields + [ac, an, af, nhomalt], version)
-                if version == "v3.1_chrM":
-                    # otherFields is the haplotype table plus empties for the v3.1.1 fields:
-                    otherFields = ["" for i in range(5)] + [json.dumps(otherFields)]
-                if extraFh:
-                    extraFh.write("\t".join([name, json.dumps(genes), json.dumps(popTable)] + otherFields))
-                    extraFh.write("\n")
-                else:
-                    outfh.write("\t" + "\t".join([name] + [json.dumps(genes), json.dumps(popTable)] + otherFields))
-                outfh.write("\n")
-            elif version == "v3.1":
-                hgvscList = [", ".join(list(genes[gene]["hgvsc"]))]
-                hgvspList = [", ".join(list(genes[gene]["hgvsp"]))]
-                pLoFList = [", ".join(list(genes[gene]["pLoF"]))]
-                pLoFFlags = [", ".join(list(genes[gene]["Flag"]))]
-                outfh.write("\t".join([chrom, chromStart, chromEnd, name, score, strand,
-                    thickStart, thickEnd, color, ref, alt, filterTag, ac, an, af, faf95, nhomalt,
-                    rsId, gene, annot, *consList, str(unshiftedStart), displayName]))
-                if extraFh:
-                    extraFh.write("\t".join([name] + hgvscList + hgvspList + maybeExtraFields))
-                    extraFh.write("\n")
-                else:
-                    outfh.write("\t" + "\t".join([name] + hgvscList + hgvspList + maybeExtraFields))
-                outfh.write("\n")
+        #if genes:
+        consList = []
+        for gene in genes:
+            consList += list(genes[gene]["cons"])
+        annot,color = pickColor(consList)
+        rsId = ""
+        if bedName.startswith("rs"):
+            rsId = bedName
+        unshiftedStart = unshiftLeftPad(int(chromStart), ref, alt)
+        displayName = chrom + "-" + str(unshiftedStart) + "-"
+        displayName += ref[:10]+"..." if len(ref) > 13 else ref
+        displayName += "-"
+        displayName += alt[:10]+"..." if len(alt) > 13 else alt
+        name = hashlib.md5(str.encode(chrom+chromStart+chromEnd+ref+alt)).hexdigest()
+        if version == "v3.1.1" or version == "v3.1_chrM":
+            outfh.write("\t".join([chrom, chromStart, chromEnd, name, score, strand,
+                thickStart, thickEnd, color, ref, alt, filterTag, ac, an, af, faf95, nhomalt,
+                rsId, ", ".join(genes.keys()), annot, ",".join(consList), str(unshiftedStart), displayName]))
+            popTable, otherFields = convertExtraFields(maybeExtraFields + [ac, an, af, nhomalt], version)
+            if version == "v3.1_chrM":
+                # otherFields is the haplotype table plus empties for the v3.1.1 fields:
+                otherFields = ["" for i in range(5)] + [json.dumps(otherFields)]
+            if extraFh:
+                extraFh.write("\t".join([name, json.dumps(genes), json.dumps(popTable)] + otherFields))
+                extraFh.write("\n")
             else:
-                pLoFCuration = getLofCuration(lofDict, version, bed8Fields[0],
-                    str(unshiftedStart), ref, alt)
-                outfh.write("\t".join([chrom, chromStart, chromEnd, name, score, strand,
-                    thickStart, thickEnd, color, ref, alt, filterTag, ac, an, af, faf95, nhomalt,
-                    rsId, gene, annot, *consList, displayName]))
-                outfh.write("\t" + "\t".join(pLoFCuration, [str(unshiftedStart)]))
-                if extraFh:
-                    extraFh.write("\t".join(name + hgvscList + hgvspList + maybeExtraFields))
-                    extraFh.write("\n")
-                else:
-                    outfh.write("\t" + "\t".join([name] + hgvscList + hgvspList + maybeExtraFields))
+                outfh.write("\t" + "\t".join([name] + [json.dumps(genes), json.dumps(popTable)] + otherFields))
+            outfh.write("\n")
+        elif version == "v3.1":
+            hgvscList = [", ".join(list(genes[gene]["hgvsc"]))]
+            hgvspList = [", ".join(list(genes[gene]["hgvsp"]))]
+            pLoFList = [", ".join(list(genes[gene]["pLoF"]))]
+            pLoFFlags = [", ".join(list(genes[gene]["Flag"]))]
+            outfh.write("\t".join([chrom, chromStart, chromEnd, name, score, strand,
+                thickStart, thickEnd, color, ref, alt, filterTag, ac, an, af, faf95, nhomalt,
+                rsId, gene, annot, *consList, str(unshiftedStart), displayName]))
+            if extraFh:
+                extraFh.write("\t".join([name] + hgvscList + hgvspList + maybeExtraFields))
+                extraFh.write("\n")
+            else:
+                outfh.write("\t" + "\t".join([name] + hgvscList + hgvspList + maybeExtraFields))
+            outfh.write("\n")
+        else:
+            pLoFCuration = getLofCuration(lofDict, version, chrom,
+                str(unshiftedStart), ref, alt)
+            hgvscList = [x for x in genes[gene]["hgvsc"] for gene in genes]
+            hgvspList = [x for x in genes[gene]["hgvsp"] for gene in genes]
+            pLoFList = [x for x in genes[gene]["pLoF"] for gene in genes]
+            pLoFFlags = [x for x in genes[gene]["Flag"] for gene in genes]
+            outfh.write("\t".join([chrom, chromStart, chromEnd, name, score, strand,
+                thickStart, thickEnd, color, ref, alt, filterTag, ac, an, af, faf95, nhomalt,
+                rsId, ", ".join(genes.keys()), annot, ", ".join(consList)]))
+            outfh.write("\t" + str(unshiftedStart))
+            outfh.write("\t" + displayName)
+            outfh.write("\t" + ", ".join(pLoFList))
+            outfh.write("\t" + ", ".join(pLoFFlags))
+            outfh.write("\t" + "\t".join(pLoFCuration))
+            if extraFh:
+                extraFh.write(", ".join(hgvscList) + "\t" +  ", ".join(hgvspList) + "\t" + "\t".join(maybeExtraFields))
+                extraFh.write("\n")
+            else:
+                outfh.write("\t" + ", ".join(hgvscList))
+                outfh.write("\t" + ", ".join(hgvspList))
+                outfh.write("\t" + "\t".join(maybeExtraFields))
                 outfh.write("\n")
 
 def parseLofFile(fpath):
