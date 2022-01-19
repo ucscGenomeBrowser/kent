@@ -321,7 +321,22 @@ else
     puts("Or upload: ");
     cgiMakeFileEntry(hgCtDataFile);
     cgiTableFieldEnd();
+    jsInline(
+            "$(\"[name='hgt.customFile']\").change(function(ev) { \n"
+            "   var fname = ev.target.files[0].name; \n"
+            "   var ext = fname.split('.').pop().toLowerCase(); \n"
+            "   var warnExts = ['bigbed', 'bb', 'bam', 'vcf.gz', 'bigwig', 'bw', 'jpeg', 'pdf', 'jpg', 'png'];\n"
+            "   if (warnExts.indexOf(ext) >= 0) {\n"
+            "       alert('You are trying to upload a binary file on this page. This usually does not work. The Genome Browser server needs access to binary files via the internet.'+"
+            "          ' Therefore, you will need to store the files on a web server, then paste the URLs to them on this page, or you can upload a text file with \"track\" lines '+"
+            "          ' and configuration settings to points to the file URLs. For more information, please read the documentation '+"
+            "          ' referenced at the top of this page or contact us.');\n"
+            "       $(\"[name='hgt.customFile']\")[0].value = '';"
+            "   }\n"
+            "});\n"
+            );
     }
+
 if (!isUpdateForm)
     {
     cgiSimpleTableFieldStart();
