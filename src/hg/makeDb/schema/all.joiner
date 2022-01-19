@@ -7303,81 +7303,11 @@ identifier knownGeneId dependency
     $hg.humanWankerP2P.query
     $hg.humanWankerP2P.target
     $kgDb.kgColor.kgID full
-    $kgDb.kg2ToKg3.newId minCheck=0.5 exclude=
-    $kgDb.kg3ToKg4.oldId minCheck=0.5 exclude=
-    $kgDb.kg3ToKg4.newId minCheck=0.5 exclude=
-    $kgDb,!hg19.kg4ToKg5.newId minCheck=0.5 exclude=
-    $kgDb,!mm10,!hg19.kg5ToKg6.newId exclude=
-    $kgDb,!mm10.kg6ToKg7.newId exclude=
-    $kgDb,!mm10.kg7ToKg8.newId exclude=
-    $kgDb,!mm10.kg8ToKg9.newId exclude=
-    $kgDb,!hg38,!mm10.kg9ToKg10.newId exclude=
-    $kgDb.kg10ToKg11.newId exclude=
     $kgDb,!hg16.kgTargetAli.qName full
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
-    $kgDb.kg11ToKg12.newId exclude=
     $kgDb.knownAttrs.kgID
     $kgDb.knownCds.name
-
-identifier knownGeneOld11Id dependency
-"Previous UCSC Gene build"
-    $kgDb.knownGeneOld11.name
-    $kgDb.kg10ToKg11.oldId full
-    $kgDb.kgXrefOld11.kgID full
-    
-identifier knownGeneOld10Id dependency
-"Previous UCSC Gene build"
-    $kgDb.knownGeneOld10.name
-    $kgDb.kg10ToKg11.oldId full
-    $kgDb.kgXrefOld10.kgID full
-    
-identifier knownGeneOld9Id dependency
-"Previous UCSC Gene build"
-    $kgDb.knownGeneOld9.name
-    $kgDb.kg9ToKg10.oldId full
-    $kgDb.kgXrefOld9.kgID full
-
-identifier knownGeneOld8Id dependency
-"Previous UCSC Gene build"
-    $kgDb.knownGeneOld8.name
-    $kgDb.kg8ToKg9.oldId full
-    $kgDb.kgXrefOld8.kgID full
-
-identifier knownGeneOld7Id dependency
-"Previous UCSC Gene build"
-    $kgDb.knownGeneOld7.name
-    $kgDb.kg7ToKg8.oldId full
-    $kgDb.kgXrefOld7.kgID full
-
-identifier knownGeneOld6Id dependency
-"Previous UCSC Gene build"
-    $kgDb.knownGeneOld6.name
-    $kgDb.kg6ToKg7.oldId full
-    $kgDb.kgXrefOld6.kgID full
-
-identifier knownGeneOld5Id dependency
-"Previous UCSC Gene build"
-    $kgDb,!mm10.knownGeneOld5.name
-    $kgDb.kg5ToKg6.oldId full
-    $kgDb.kgXrefOld5.kgID full
-
-identifier knownGeneOldId dependency
-"Still-previous UCSC Genes build"
-    $kgDb,!hg19.knownGeneOld4.name
-    $kgDb,!hg19.kg4ToKg5.oldId full
-
-identifier knownGeneOld3Id dependency
-"Still-still previous UCSC Genes build"
-    $kgDb.knownGeneOld3.name
-    $kgDb.kg3ToKg4.oldId full
-
-identifier knownGeneOld2Id dependency
-"Old knownGene (KGII) and kgXref tables kept after KGIII implementation - still needed?"
-    $kgDb.knownGeneOld2.name dupeOk
-    $kgDb.kgXrefOld2.kgID full
-    $kgDb.humanBlastTab.query
-    $kgDb.humanBlastTab.target
 
 identifier knownToHprdName
 "Dependencies on knownToHprd.name"
