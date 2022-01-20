@@ -8600,10 +8600,10 @@ if (!hideControls)
 	else
 	    {
 	    if (stringIn(database, freezeName))
-		hPrintf("%s %s on %s %s Assembly",
+		hPrintf("%s %s on %s %s",
 			organization, browserName, organism, freezeName);
 	    else
-		hPrintf("%s %s on %s %s Assembly (%s)",
+		hPrintf("%s %s on %s %s (%s)",
 			organization, browserName, trackHubSkipHubName(organism), freezeName, trackHubSkipHubName(database));
 	    }
 	}
