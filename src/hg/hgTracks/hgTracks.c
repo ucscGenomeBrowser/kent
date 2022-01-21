@@ -8584,8 +8584,20 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
         freezeName = "Unknown";
-    hPrintf("<span style='font-size:x-large;'><B>");
-    if (startsWith("zoo",database) )
+    hPrintf("<span style='font-size:large;'><B>");
+
+    // for these assemblies, we do not display the year, to save space and reduce clutter
+    // Their names must include a "(" character
+    char* noYearDbs[] = { "hg19", "hg38", "mm39", "mm10" };
+
+    if ( stringArrayIx(database, noYearDbs, ArraySize(noYearDbs)) != -1 )
+        {
+        // freezeName is e.g. "Feb. 2009 (GRCh37/hg19)"
+        char *afterParen = skipBeyondDelimit(freezeName, '(');
+        afterParen--; // move back one char
+        hPrintf("%s %s on %s %s", organization, browserName, organism, afterParen);
+        }
+    else if (startsWith("zoo",database) )
         {
 	hPrintf("%s %s on %s June 2002 Assembly %s target1",
 	    organization, browserName, organism, freezeName);
