@@ -107,6 +107,7 @@ struct bbiFile
     struct bbiFile *next;	/* Next in list. */
     char *fileName;		/* Name of file - for better error reporting. */
     struct udcFile *udc;	/* Open UDC file handle. */
+    struct hash *aliasHash;     /* If non-NULL, constains chrom alias hash. */
     bits32 typeSig;		/* bigBedSig or bigWigSig for now. */
     boolean isSwapped;		/* If TRUE need to byte swap everything. */
     struct bptFile *chromBpt;	/* Index of chromosomes. */
@@ -131,6 +132,9 @@ struct bbiFile
     bits64 extraIndexListOffset;    /* Offset to list of extra indexes */
     };
 
+
+struct bbiFile *bbiFileOpenAlias(char *fileName, bits32 sig, char *typeName, struct hash *aliasHash);
+/* Open up big wig or big bed file with chrom alias hash. */
 
 struct bbiFile *bbiFileOpen(char *fileName, bits32 sig, char *typeName);
 /* Open up big wig or big bed file. */

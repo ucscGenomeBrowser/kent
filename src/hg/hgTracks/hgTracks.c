@@ -4670,7 +4670,7 @@ if (!multiBedFile)
 // TODO: filters here ?
 // TODO:  protect against temporary network error ? */
 struct lm *lm = lmInit(0);
-struct bbiFile *bbi = bigBedFileOpen(multiBedFile);
+struct bbiFile *bbi =  bigBedFileOpenAlias(multiBedFile, chromAliasGetHash(database));
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
 char *row[bbi->fieldCount];
 char startBuf[16], endBuf[16];
@@ -10757,6 +10757,7 @@ printf("State: %s\n", cgiUrlString()->string);
 #endif
 
 getDbAndGenome(cart, &database, &organism, oldVars);
+chromAliasSetup(database);
 
 genomeIsRna = !isHubTrack(database) && hgPdbOk(database);
 

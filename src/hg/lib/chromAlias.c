@@ -162,17 +162,49 @@ fputc('}',f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct hash *chromAliasMakeLookupTable(char *database)
-/* Given a database name and a connection to that database, construct a lookup table
- * that takes chromosome alias names to a matching struct chromAlias.  Returns NULL
- * if the given database does not have a chromAlias table. */
+/* our "global" data */
+static struct
 {
-struct hash *hash = NULL;
+char *database;
+struct hash *nameHash;
+struct hash *forwardHash;
+struct hash *reverseHash;
+} chromHashes;
+
+static boolean checkDatabase(char *database)
+/* Make sure we don't see different databases. */
+{
+if (database == NULL) 
+    return TRUE;
+
+if (chromHashes.database != NULL)
+    {
+    if (!sameString(chromHashes.database, database))
+        {
+        errAbort("chromAliasSetup: only works for one db.  %s was passed in earlier, now %s.", chromHashes.database, database);
+        return FALSE;
+        }
+    return TRUE;
+    }
+
+chromHashes.database = cloneString(database);
+return TRUE;
+}
+
+void chromAliasSetup(char *database)
+/* Read in the chromAlias file/table for this database. */
+{
+if (!checkDatabase(database))
+    return;
+
 if (!hTableExists(database, "chromAlias"))
-    return NULL;
+    return;
 
 struct sqlConnection *conn = hAllocConn(database);
-hash = hashNew(0);
+chromHashes.forwardHash = hashNew(0);
+chromHashes.reverseHash = hashNew(0);
+chromHashes.nameHash = hashNew(0);
+
 char query[2048];
 sqlSafef(query, sizeof(query), "select * from chromAlias");
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -180,11 +212,22 @@ char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct chromAlias *new = chromAliasLoad(row);
-    hashAdd(hash, new->alias, new);
+    hashAdd(chromHashes.forwardHash, new->alias, new);
+    hashAdd(chromHashes.reverseHash, new->chrom, new);
+    hashAdd(chromHashes.nameHash, new->chrom, new->alias);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-return hash;
+}
+
+struct hash *chromAliasMakeLookupTable(char *database)
+/* Given a database name and a connection to that database, construct a lookup table
+ * that takes chromosome alias names to a matching struct chromAlias.  Returns NULL
+ * if the given database does not have a chromAlias table. */
+{
+if (!checkDatabase(database))
+    return NULL;
+return chromHashes.forwardHash;
 }
 
 struct hash *chromAliasMakeReverseLookupTable(char *database)
@@ -194,22 +237,16 @@ struct hash *chromAliasMakeReverseLookupTable(char *database)
  * may be required to see them all.  Returns NULL if the given database does not have
  * a chromAlias table. */
 {
-struct hash *hash = NULL;
-if (!hTableExists(database, "chromAlias"))
+if (!checkDatabase(database))
+    return NULL;
+return chromHashes.reverseHash;
+}
+
+struct hash *chromAliasGetHash(char *database)
+/* Get the hash that maps chrom names to their aliases. */
+{
+if (!checkDatabase(database))
     return NULL;
 
-struct sqlConnection *conn = hAllocConn(database);
-hash = hashNew(0);
-char query[2048];
-sqlSafef(query, sizeof(query), "select * from chromAlias");
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct chromAlias *new = chromAliasLoad(row);
-    hashAdd(hash, new->chrom, new);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return hash;
+return chromHashes.nameHash;
 }

@@ -12,6 +12,7 @@
 #include "hgc.h"
 #include "rmskAlign.h"
 #include "hCommon.h"
+#include "chromAlias.h"
 
 
 void printAlignmentBR (struct rmskAlign *ra)
@@ -207,7 +208,7 @@ int end = cartInt(cart, "t");
 char *fileName = trackDbSetting(tdb, "bigDataUrl");
 
 /* Open BigWig file and get interval list. */
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasGetHash(database));
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 
