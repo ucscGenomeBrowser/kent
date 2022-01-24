@@ -14,6 +14,7 @@
 #include "pslTransMap.h"
 #include "regexHelper.h"
 #include "trackHub.h"
+#include "chromAlias.h"
 
 void hgvsVariantFree(struct hgvsVariant **pHgvs)
 // Free *pHgvs and its contents, and set *pHgvs to NULL.
@@ -1022,7 +1023,7 @@ struct bbiFile *bbi = NULL;
 char fileName[1024];
 safef(fileName, sizeof(fileName), "/gbdb/%s/bbi/lrg.bb", db);
 char *fileNameRep = hReplaceGbdb(fileName);
-bbi = bigBedFileOpen(fileNameRep);
+bbi =  bigBedFileOpenAlias(fileNameRep, chromAliasGetHash(db));
 freeMem(fileNameRep);
 return bbi;
 }

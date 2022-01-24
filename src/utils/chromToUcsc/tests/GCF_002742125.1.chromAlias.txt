@@ -1,0 +1,2 @@
+# sequenceName	alias names	assembly: GCF_002742125.1_Oar_rambouillet_v1.0
+chr1	1	CM008472.1	NC_040252.1

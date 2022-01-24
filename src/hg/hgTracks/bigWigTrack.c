@@ -19,6 +19,7 @@
 #include "mathWig.h"
 #include "float.h"
 #include "hubConnect.h"
+#include "chromAlias.h"
 
 struct preDrawContainer *bigWigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
 /* Do bits that load the predraw buffer tg->preDrawContainer. */
@@ -114,7 +115,7 @@ static void bigWigOpenCatch(struct track *tg, char *fileName)
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    struct bbiFile *bbiFile = bigWigFileOpen(fileName);
+    struct bbiFile *bbiFile = bigWigFileOpenAlias(fileName, chromAliasGetHash(database));
     slAddHead(&tg->bbiFile, bbiFile);
     }
 errCatchEnd(errCatch);

@@ -40,6 +40,7 @@
 #include "trashDir.h"
 #include "genbank.h"
 #include "windowsToAscii.h"
+#include "chromAlias.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -1682,6 +1683,7 @@ if (startsWith(    MULTI_REGION_CHROM, cartUsualString(cart, "position", ""))
 /* Set up global variables. */
 allJoiner = joinerRead("all.joiner");
 getDbGenomeClade(cart, &database, &genome, &clade, oldVars);
+chromAliasSetup(database);
 freezeName = hFreezeFromDb(database);
 
 initGenbankTableNames(database);

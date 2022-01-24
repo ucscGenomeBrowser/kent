@@ -51,6 +51,7 @@
 #include "interactUi.h"
 #include "hic.h"
 #include "cgiApoptosis.h"
+#include "chromAlias.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -2712,7 +2713,7 @@ checkAllowedBigDataUrlProtocols(bigDataUrl);
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    track->bbiFile = bigWigFileOpen(bigDataUrl);
+    track->bbiFile = bigWigFileOpenAlias(bigDataUrl, chromAliasGetHash(NULL));
     setBbiViewLimits(track);
     }
 errCatchEnd(errCatch);
@@ -2856,7 +2857,7 @@ checkAllowedBigDataUrlProtocols(bigDataUrl);
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    track->bbiFile = bigBedFileOpen(bigDataUrl);
+    track->bbiFile = bigBedFileOpenAlias(bigDataUrl, chromAliasGetHash(NULL));
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)

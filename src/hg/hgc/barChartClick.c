@@ -25,6 +25,7 @@
 #include "hgConfig.h"
 #include "facetedBar.h"
 #include "pipeline.h"
+#include "chromAlias.h"
 
 #define EXTRA_FIELDS_SIZE 256
 
@@ -45,7 +46,7 @@ static struct barChartBed *getBarChartFromFile(struct trackDb *tdb, char *file,
 /* Retrieve barChart BED item from big file */
 {
 boolean hasOffsets = TRUE;
-struct bbiFile *bbi = bigBedFileOpen(file);
+struct bbiFile *bbi =  bigBedFileOpenAlias(file, chromAliasGetHash(database));
 struct asObject *as = bigBedAsOrDefault(bbi);
 if (retAs != NULL)
     *retAs = as;
