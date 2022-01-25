@@ -213,51 +213,12 @@ buf[HDB_MAX_CHROM_STRING-1] = 0;
 ci = hGetChromInfo(db, buf);
 if (ci != NULL)
     return cloneString(ci->chrom);
-else
+aliasHash = chromAliasAliasToChromHash(db);
+if (aliasHash)
     {
-    if (!aliasHash && trackHubDatabase(db))
-	{
-        aliasHash = newHash(4); /* could remain empty if no hubHash which
-	 * will prevent getting into this initalization again and all hash
-	 * lookups will return NULL.
-	 * hub hash is different than what we want here, its key is
-         * the chrom name with a hash value of: struct chromAlias *
-         */
-        struct hash *hubHash = trackHubAllChromAlias(db);
-        if (hubHash)
-	    {
-	    /* rearrange hubHash into the hash we need here */
-	    struct hashCookie cookie = hashFirst(hubHash);
-	    struct hashEl *hel;
-	    while ((hel = hashNext(&cookie)) != NULL)
-		{
-		struct chromAlias *ca = (struct chromAlias *)hel->val;
-		hashAdd(aliasHash, ca->alias, cloneString(ca->chrom));
-		}
-	    }
-	}
-    if (aliasHash || hTableExists(db, "chromAlias"))
-       {
-       if (! aliasHash)	/* first time, initialize aliasHash */
-	    {
-            aliasHash = newHash(4);
-	    struct sqlConnection *conn = hAllocConn(db);
-	    char query[512];
-	    sqlSafef(query, sizeof(query), "select * from chromAlias");
-	    struct sqlResult *sr = sqlGetResult(conn, query);
-	    char **row;
-	    while ((row = sqlNextRow(sr)) != NULL)
-		{
-		struct chromAlias *ca = chromAliasLoad(row);
-		hashAdd(aliasHash, ca->alias, cloneString(ca->chrom));
-		}
-	    sqlFreeResult(&sr);
-	    hFreeConn(&conn);
-	    }
-	char *chrom = (char *)hashFindVal(aliasHash, name);
-       if (isNotEmpty(chrom))
-         return cloneString(chrom);
-       }
+    char *chrom = (char *)hashFindVal(aliasHash, name);
+    if (isNotEmpty(chrom))
+        return cloneString(chrom);
     }
 return NULL;
 }	/*	char *hgOfficialChromName(char *db, char *name)	*/

@@ -275,7 +275,7 @@ if (isNotEmpty(maxWinToQuery))
 
 if ((maxWinToQuery == NULL) || (maxWTQ > winEnd-winStart))
     {
-    bbi = bigWigFileOpenAlias(fileName, chromAliasGetHash(database));
+    bbi = bigWigFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
     bbList = bigWigIntervalQuery(bbi, chrom, winStart, winEnd, lm);
     }
 

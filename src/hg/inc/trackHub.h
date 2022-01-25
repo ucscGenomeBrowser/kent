@@ -146,9 +146,6 @@ char *trackHubAliasFile(char *database);
  * returns NULL when not present
  */
 
-struct hash *trackHubAllChromAlias(char *database);
-/* Return a hash of chroms with alias names from alias file if present */
-
 struct chromInfo *trackHubAllChromInfo(char *database);
 /* Return a chromInfo structure for all the chroms in this database. */
 
