@@ -342,7 +342,7 @@ int end = cartInt(cart, "t");
 char *fileOrUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (isEmpty(fileOrUrl))
     errAbort("bigDbSnpClick: trackDb is missing bigDataUrl setting");
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileOrUrl, chromAliasGetHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileOrUrl, chromAliasChromToAliasHash(database));
 boolean found = FALSE;
 char *chrom = cartString(cart, "c");
 int ivStart = start, ivEnd = end;
