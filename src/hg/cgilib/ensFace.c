@@ -95,7 +95,7 @@ struct sqlConnection *conn = hAllocConn(database);
 if (sqlTableExists(conn, ENSEMBL_LIFT))
     {
     char query[256];
-    sqlSafef(query, ArraySize(query), "select offset from %s where chrom='%s'",
+    sqlSafef(query, ArraySize(query), "select `offset` from %s where chrom='%s'",
 	ENSEMBL_LIFT, chrom);
     offset = sqlQuickNum(conn,query); // returns 0 for failed query
     }

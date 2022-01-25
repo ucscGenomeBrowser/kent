@@ -4670,7 +4670,7 @@ if (!multiBedFile)
 // TODO: filters here ?
 // TODO:  protect against temporary network error ? */
 struct lm *lm = lmInit(0);
-struct bbiFile *bbi =  bigBedFileOpenAlias(multiBedFile, chromAliasGetHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(multiBedFile, chromAliasChromToAliasHash(database));
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
 char *row[bbi->fieldCount];
 char startBuf[16], endBuf[16];
@@ -10209,7 +10209,7 @@ void chromInfoRowsNonChromTrackHub(int limit)
 struct chromInfo *chromInfo = trackHubAllChromInfo(database);
 slSort(&chromInfo, chromInfoCmpSize);
 int seqCount = slCount(chromInfo);
-struct hash *aliasHash = trackHubAllChromAlias(database);
+struct hash *aliasHash =  chromAliasMakeReverseLookupTable(database);
 boolean hasAlias = FALSE;
 if (aliasHash)
     hasAlias = TRUE;

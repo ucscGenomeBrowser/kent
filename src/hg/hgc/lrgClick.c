@@ -75,7 +75,7 @@ char *urlsStr = trackDbSetting(tdb, "urls");
 struct hash *columnUrls = hashFromString(urlsStr);
 
 // Open BigWig file and get interval list.
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasGetHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 int bedSize = bbi->definedFieldCount;
 int fieldCount = bbi->fieldCount;
 struct lm *lm = lmInit(0);

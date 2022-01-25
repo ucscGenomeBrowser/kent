@@ -208,7 +208,7 @@ int end = cartInt(cart, "t");
 char *fileName = trackDbSetting(tdb, "bigDataUrl");
 
 /* Open BigWig file and get interval list. */
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasGetHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 
