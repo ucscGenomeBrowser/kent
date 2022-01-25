@@ -90,8 +90,20 @@ def splitLines(ifh):
                     sep = " "
                 yield lineNo, sep, row, line
 
+def parseNewAlias(ifh):
+    " IGV-compatible format: first is UCSC, all other columns are aliases "
+    toUcsc = {}
+    for line in ifh:
+        if line.startswith("#"):
+            continue
+        row = line.rstrip("\n").split("\t")
+        for i in range(1, len(row)):
+            toUcsc[row[i]] = row[0]
+    return toUcsc
+
 def parseAlias(fname):
     " parse tsv file with at least two columns, orig chrom name and new chrom name "
+    logging.debug("alias file is in IGV-format")
     toUcsc = {}
     if fname.startswith("http://") or fname.startswith("https://"):
         ifh = urlopen(fname)
@@ -103,11 +115,15 @@ def parseAlias(fname):
     else:
         ifh = open(fname)
 
+    firstLine = True
     for line in ifh:
+        if line.startswith("#") and firstLine:
+            return parseNewAlias(ifh)
         if line.startswith("alias"):
             continue
         row = line.rstrip("\n").split("\t")
         toUcsc[row[0]] = row[1]
+        firstLine = False
     return toUcsc
 
 

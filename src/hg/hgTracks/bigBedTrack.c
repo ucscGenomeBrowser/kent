@@ -27,6 +27,7 @@
 #include "bigBedFilter.h"
 #include "bigBedLabel.h"
 #include "variation.h"
+#include "chromAlias.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
@@ -381,7 +382,7 @@ if (bbi == NULL)
     #include "gbib.c"
     #endif
 
-    bbi = track->bbiFile = bigBedFileOpen(fileName);
+    bbi = track->bbiFile = bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
     }
 return bbi;
 }

@@ -72,15 +72,15 @@ struct dbDb *dbList;
 char *fromOrg = hOrganism(chain->fromDb), *toOrg = hOrganism(chain->toDb);
 char *chainString = chainStringVal(chain);
 cgiParagraph(
-    "This tool converts genome coordinates and genome annotation files "
+    "This tool converts genome coordinates and annotation files "
     "between assemblies.&nbsp;&nbsp;"
-    "The input data can be pasted into the text box or uploaded from a file.&nbsp;&nbsp;"
-    "For more information, please see our "
+    "The input data can be entered into the text box or uploaded as a file.&nbsp;&nbsp;"
+    "For files over 500Mb, use the command-line tool described in our "
     "<a href=\"../goldenPath/help/hgTracksHelp.html#Liftover\">LiftOver documentation</a>."
     "&nbsp;&nbsp;If a pair of assemblies cannot be selected from the pull-down menus,"
-    " a sequential lift may still be possible.&nbsp;&nbsp;"
-    "For example, to lift from mm9 to mm39, lift from Mouse mm9 to mm10 and then from"
-    " mm10 to mm39.&nbsp;&nbsp;"
+    " a sequential lift may still be possible (e.g., mm9 to mm10 to mm39).&nbsp;&nbsp;"
+    "If your desired conversion is still not available, please "
+    "<a href=\"../../contacts.html\">contact us</a>."
     "");
 
 /* create HMTL form */
@@ -316,10 +316,11 @@ webNewSection("Command Line Tool");
 cgiParagraph(
 "To lift genome annotations locally on Linux systems, download the "
 "<A HREF=\"https://genome-store.ucsc.edu\">" 
-"<I>liftOver</I></A> executable and the appropriate "
+"<I>LiftOver</I></A> executable and the appropriate "
 "<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html#liftover\">"
 "chain file</A>."
-" Run <I>liftOver</I> with no arguments to see the usage message.\n");
+" Run <I>liftOver</I> with no arguments to see the usage message.\n"
+"See the <a href=\"../goldenPath/help/hgTracksHelp.html#Liftover\">LiftOver documentation</a>.");
 }
 
 
