@@ -23,6 +23,7 @@
 #include "soTerm.h"
 #include "bigBed.h"
 #include "hubConnect.h"
+#include "chromAlias.h"
 
 
 #define GAP_ITEM_LABEL  "Gaps"
@@ -984,7 +985,7 @@ if (fileName == NULL)
     warn("cannot find summary information in trackDb for track '%s'", track->track);
     return;
     }
-struct bbiFile *bbi =  bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
 char *bedRow[7];
 char startBuf[16], endBuf[16];
@@ -1230,7 +1231,7 @@ if (track->isBigBed)
     {
     struct lm *lm = lmInit(0);
     char *fileName = trackDbSetting(track->tdb, "summary");
-    struct bbiFile *bbi =  bigBedFileOpen(fileName);
+    struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
     struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
     char *bedRow[7];
     char startBuf[16], endBuf[16];
@@ -1956,7 +1957,7 @@ return mfList;
 static struct mafFrames *getFramesFromBb(  char *framesTable, char *chromName, int seqStart, int seqEnd, char *component)
 {
 struct lm *lm = lmInit(0);
-struct bbiFile *bbi =  bigBedFileOpen(framesTable);
+struct bbiFile *bbi =  bigBedFileOpenAlias(framesTable, chromAliasChromToAliasHash(database));
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
 char *bedRow[11];
 char startBuf[16], endBuf[16];

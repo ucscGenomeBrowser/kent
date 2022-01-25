@@ -16,6 +16,7 @@
 #include "chainNet.h"
 #include "netAlign.h"
 #include "chainNetDbLoad.h"
+#include "chromAlias.h"
 
 
 struct cnFill *cnFillFromNetAlign(struct netAlign *na, struct hash *nameHash)
@@ -226,7 +227,7 @@ struct chain *chainLoadIdRangeHub(char *fileName, char *linkFileName,   char *ch
  * overlapping the range will be loaded. */
 {
 struct lm *lm = lmInit(0);
-struct bbiFile *bbi =  bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(NULL));
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 char *bedRow[12];
 char startBuf[16], endBuf[16];
@@ -261,7 +262,7 @@ chain->score = sqlUnsigned(bedRow[11]);
 chain->id = id;
 
 // Now load the links.
-bbi =  bigBedFileOpen(linkFileName);
+bbi =  bigBedFileOpenAlias(linkFileName, chromAliasChromToAliasHash(NULL));
 if (loadAll)
     {
     start = chain->tStart;

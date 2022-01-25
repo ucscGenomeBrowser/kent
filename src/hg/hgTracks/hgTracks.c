@@ -4670,7 +4670,7 @@ if (!multiBedFile)
 // TODO: filters here ?
 // TODO:  protect against temporary network error ? */
 struct lm *lm = lmInit(0);
-struct bbiFile *bbi = bigBedFileOpen(multiBedFile);
+struct bbiFile *bbi =  bigBedFileOpenAlias(multiBedFile, chromAliasChromToAliasHash(database));
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
 char *row[bbi->fieldCount];
 char startBuf[16], endBuf[16];
@@ -8584,8 +8584,20 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
         freezeName = "Unknown";
-    hPrintf("<span style='font-size:x-large;'><B>");
-    if (startsWith("zoo",database) )
+    hPrintf("<span style='font-size:large;'><B>");
+
+    // for these assemblies, we do not display the year, to save space and reduce clutter
+    // Their names must include a "(" character
+    char* noYearDbs[] = { "hg19", "hg38", "mm39", "mm10" };
+
+    if ( stringArrayIx(database, noYearDbs, ArraySize(noYearDbs)) != -1 )
+        {
+        // freezeName is e.g. "Feb. 2009 (GRCh37/hg19)"
+        char *afterParen = skipBeyondDelimit(freezeName, '(');
+        afterParen--; // move back one char
+        hPrintf("%s %s on %s %s", organization, browserName, organism, afterParen);
+        }
+    else if (startsWith("zoo",database) )
         {
 	hPrintf("%s %s on %s June 2002 Assembly %s target1",
 	    organization, browserName, organism, freezeName);
@@ -8600,10 +8612,10 @@ if (!hideControls)
 	else
 	    {
 	    if (stringIn(database, freezeName))
-		hPrintf("%s %s on %s %s Assembly",
+		hPrintf("%s %s on %s %s",
 			organization, browserName, organism, freezeName);
 	    else
-		hPrintf("%s %s on %s %s Assembly (%s)",
+		hPrintf("%s %s on %s %s (%s)",
 			organization, browserName, trackHubSkipHubName(organism), freezeName, trackHubSkipHubName(database));
 	    }
 	}
@@ -10197,7 +10209,7 @@ void chromInfoRowsNonChromTrackHub(int limit)
 struct chromInfo *chromInfo = trackHubAllChromInfo(database);
 slSort(&chromInfo, chromInfoCmpSize);
 int seqCount = slCount(chromInfo);
-struct hash *aliasHash = trackHubAllChromAlias(database);
+struct hash *aliasHash =  chromAliasMakeReverseLookupTable(database);
 boolean hasAlias = FALSE;
 if (aliasHash)
     hasAlias = TRUE;
@@ -10745,6 +10757,7 @@ printf("State: %s\n", cgiUrlString()->string);
 #endif
 
 getDbAndGenome(cart, &database, &organism, oldVars);
+chromAliasSetup(database);
 
 genomeIsRna = !isHubTrack(database) && hgPdbOk(database);
 

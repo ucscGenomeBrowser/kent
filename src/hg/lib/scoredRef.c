@@ -134,7 +134,7 @@ static char *createString =
 "    chromStart int unsigned not null,	# Start position in chromosome (forward strand)\n"
 "    chromEnd int unsigned not null,	# End position in chromosome\n"
 "    extFile int unsigned not null,	# Pointer to associated MAF file\n"
-"    offset bigint not null,	# Offset in MAF file\n"
+"    `offset` bigint not null,	# Offset in MAF file\n"
 "    score double not null,	# Score\n"
 "              #Indices\n"
 "    INDEX(chrom(%d),bin)\n"

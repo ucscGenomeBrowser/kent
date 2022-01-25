@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "chromAlias.h"
 #include "hdb.h"
+#include "trackHub.h"
+#include "fieldedTable.h"
 
 
 char *chromAliasCommaSepFieldNames = "alias,chrom,source";
@@ -162,17 +164,137 @@ fputc('}',f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct hash *chromAliasMakeLookupTable(char *database)
-/* Given a database name and a connection to that database, construct a lookup table
- * that takes chromosome alias names to a matching struct chromAlias.  Returns NULL
- * if the given database does not have a chromAlias table. */
+/* our "global" data */
+static struct
 {
-struct hash *hash = NULL;
+boolean inited;
+char *database;
+struct hash *chromToAliasHash;
+struct hash *aliasToChromHash;
+struct hash *forwardHash;
+struct hash *reverseHash;
+} chromHashes;
+
+static boolean checkDatabase(char *database)
+/* Make sure we don't see different databases. */
+{
+if (database == NULL) 
+    return TRUE;
+
+if (chromHashes.database != NULL)
+    {
+    if (!sameString(chromHashes.database, database))
+        {
+        errAbort("chromAliasSetup: only works for one db.  %s was passed in earlier, now %s.", chromHashes.database, database);
+        return FALSE;
+        }
+    return TRUE;
+    }
+
+chromHashes.database = cloneString(database);
+return TRUE;
+}
+
+static void readOldAlias(struct lineFile *lf)
+/* Don't assume the table is fully populated, and dummy up a value for source. */
+{
+char *words[1024];	/* process lines, no more than 1,024 words on a line */
+char *line;
+int size;
+printf("<BR>readOldAlias<BR>\n");
+while (lineFileNext(lf, &line, &size))
+    {
+    int wordCount = chopByWhite(line, words, ArraySize(words));
+    if (wordCount > 1)
+        {
+        int i = 1;
+        for ( ; i < wordCount; ++i )
+            {
+            if (isNotEmpty(words[i]))
+                {
+                struct chromAlias *ali;
+                AllocVar(ali);
+                ali->alias = cloneString(words[i]);
+                ali->chrom = cloneString(words[0]);
+                ali->source = cloneString("asmHub");
+                hashAdd(chromHashes.forwardHash, ali->alias, ali);
+                hashAdd(chromHashes.reverseHash, ali->chrom, ali);
+                hashAdd(chromHashes.chromToAliasHash, ali->chrom, ali->alias);
+                hashAdd(chromHashes.aliasToChromHash, ali->alias, ali->chrom);
+                //hashAdd(aliasHash, words[0], ali);
+                }
+            }
+        }
+    }
+
+lineFileClose(&lf);
+}
+
+static void readFieldedTable(struct lineFile *lf)
+/* Use the fieldedTable library to read in fully populated chromAlias.txt file. */
+{
+struct fieldedTable *aliasTable = fieldedTableAttach(lf, NULL, 0);
+
+struct fieldedRow *row;
+for(row = aliasTable->rowList; row; row = row->next)
+    {
+    char *chrom = row->row[0];
+
+    unsigned field;
+    for(field=1; field< aliasTable->fieldCount; field++)
+        {
+        struct chromAlias *new;
+        AllocVar(new);
+        new->chrom = chrom;
+        new->alias = row->row[field];
+        new->source = aliasTable->fields[field];
+
+        hashAdd(chromHashes.forwardHash, new->alias, new);
+        hashAdd(chromHashes.reverseHash, new->chrom, new);
+        hashAdd(chromHashes.chromToAliasHash, new->chrom, new->alias);
+        hashAdd(chromHashes.aliasToChromHash, new->alias, new->chrom);
+        }
+    }
+}
+
+static void chromAliasSetupHub(char *database)
+/* Look for a chromAlias text table and load the hashes with its contents. */
+{
+char *aliasFile = trackHubAliasFile(database);
+if (aliasFile == NULL)
+    return;
+
+struct lineFile *lf = udcWrapShortLineFile(aliasFile, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
+
+chromHashes.forwardHash = hashNew(0);
+chromHashes.reverseHash = hashNew(0);
+chromHashes.chromToAliasHash = hashNew(0);
+chromHashes.aliasToChromHash = hashNew(0);
+
+char *line;
+if (!lineFileNext(lf, &line, NULL))
+   errAbort("%s is empty", lf->fileName);
+lineFileReuse(lf);
+
+if (line[0] == '#')
+    readFieldedTable(lf);
+else
+    readOldAlias(lf);
+}
+
+
+static void chromAliasSetupSql(char *database)
+/* Look for a chromAlias SQL table and load the hashes with its contents. */
+{
 if (!hTableExists(database, "chromAlias"))
-    return NULL;
+    return;
 
 struct sqlConnection *conn = hAllocConn(database);
-hash = hashNew(0);
+chromHashes.forwardHash = hashNew(0);
+chromHashes.reverseHash = hashNew(0);
+chromHashes.chromToAliasHash = hashNew(0);
+chromHashes.aliasToChromHash = hashNew(0);
+
 char query[2048];
 sqlSafef(query, sizeof(query), "select * from chromAlias");
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -180,11 +302,38 @@ char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct chromAlias *new = chromAliasLoad(row);
-    hashAdd(hash, new->alias, new);
+    hashAdd(chromHashes.forwardHash, new->alias, new);
+    hashAdd(chromHashes.reverseHash, new->chrom, new);
+    hashAdd(chromHashes.chromToAliasHash, new->chrom, new->alias);
+    hashAdd(chromHashes.aliasToChromHash, new->alias, new->chrom);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-return hash;
+}
+
+void chromAliasSetup(char *database)
+/* Read in the chromAlias file/table for this database. */
+{
+if (!checkDatabase(database))
+    return;
+
+if (chromHashes.inited)
+    return;
+chromHashes.inited = TRUE;
+
+if (trackHubDatabase(database))
+    chromAliasSetupHub(database);
+else
+    chromAliasSetupSql(database);
+}
+
+struct hash *chromAliasMakeLookupTable(char *database)
+/* Given a database name and a connection to that database, construct a lookup table
+ * that takes chromosome alias names to a matching struct chromAlias.  Returns NULL
+ * if the given database does not have a chromAlias table. */
+{
+chromAliasSetup(database);
+return chromHashes.forwardHash;
 }
 
 struct hash *chromAliasMakeReverseLookupTable(char *database)
@@ -194,22 +343,20 @@ struct hash *chromAliasMakeReverseLookupTable(char *database)
  * may be required to see them all.  Returns NULL if the given database does not have
  * a chromAlias table. */
 {
-struct hash *hash = NULL;
-if (!hTableExists(database, "chromAlias"))
-    return NULL;
+chromAliasSetup(database);
+return chromHashes.reverseHash;
+}
 
-struct sqlConnection *conn = hAllocConn(database);
-hash = hashNew(0);
-char query[2048];
-sqlSafef(query, sizeof(query), "select * from chromAlias");
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct chromAlias *new = chromAliasLoad(row);
-    hashAdd(hash, new->chrom, new);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return hash;
+struct hash *chromAliasAliasToChromHash(char *database)
+/* Get the hash that maps chrom names to their aliases. */
+{
+chromAliasSetup(database);
+return chromHashes.aliasToChromHash;
+}
+
+struct hash *chromAliasChromToAliasHash(char *database)
+/* Get the hash that maps chrom names to their aliases. */
+{
+chromAliasSetup(database);
+return chromHashes.chromToAliasHash;
 }

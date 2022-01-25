@@ -24,6 +24,7 @@
 #include "hubConnect.h"
 #include "hgTables.h"
 #include "mathWig.h"
+#include "chromAlias.h"
 
 boolean isBigWig(char *database, char *table, struct trackDb *parent,
 	struct customTrack *(*ctLookupName)(char *table))
@@ -243,7 +244,7 @@ int resultCount = 0;
 char *wigFileName = bigWigFileName(table, conn);
 if (wigFileName)
     {
-    struct bbiFile *bwf = bigWigFileOpen(wigFileName);
+    struct bbiFile *bwf = bigWigFileOpenAlias(wigFileName, chromAliasChromToAliasHash(database));
     if (bwf)
 	{
 	/* Easy case, just dump out data. */
@@ -295,7 +296,7 @@ if (anySubtrackMerge(database, curTable))
 	    "page (not implemented yet).  Statistics shown here are only for "
 	    "the primary table %s (%s).</EM>", shortLabel, table);
 
-struct bbiFile *bwf = bigWigFileOpen(fileName);
+struct bbiFile *bwf = bigWigFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 struct region *region, *regionList = getRegions();
 double sumData = 0, sumSquares = 0, minVal = 0, maxVal = 0;
 bits64 validCount = 0;
@@ -384,7 +385,7 @@ struct bed *bigWigIntervalsToBed(struct sqlConnection *conn, char *table, struct
 {
 struct bed *bed, *bedList = NULL;
 char *fileName = bigWigFileName(table, conn);
-struct bbiFile *bwf = bigWigFileOpen(fileName);
+struct bbiFile *bwf = bigWigFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, region->chrom, region->start,
 						      region->end, lm);
 for (iv = ivList;  iv != NULL;  iv = iv->next)
@@ -411,7 +412,7 @@ getWigFilter(database, curTable, &cmp, &ll, &ul);
 /* Get intervals that pass filter and intersection. */
 struct lm *lm = lmInit(0);
 char *fileName = bigWigFileName(table, conn);
-struct bbiFile *bwf = bigWigFileOpen(fileName);
+struct bbiFile *bwf = bigWigFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 struct bbiInterval *iv, *ivList;
 ivList = intersectedFilteredBbiIntervalsOnRegion(conn, bwf, region, cmp, ll, ul, lm);
 int vIndex = 0;

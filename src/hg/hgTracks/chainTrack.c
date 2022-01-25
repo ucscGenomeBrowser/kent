@@ -18,6 +18,7 @@
 #include "chainCart.h"
 #include "hgColors.h"
 #include "hubConnect.h"
+#include "chromAlias.h"
 
 
 
@@ -165,7 +166,7 @@ if (tg->isBigBed)
         warn("Cannot find linkDataUrl in custom track \"%s\"\n", tg->shortLabel);
         return;
         }
-    struct bbiFile *bbi =  bigBedFileOpen(fileName);
+    struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
     if (bbi == NULL)
         return;
     bbClosure.bbi =  bbi;

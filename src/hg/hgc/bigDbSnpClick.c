@@ -10,6 +10,7 @@
 #include "bPlusTree.h"
 #include "htslib/bgzf.h"
 #include "soTerm.h"
+#include "chromAlias.h"
 
 static struct dbSnpDetails *getDetails(struct bigDbSnp *bds, char *detailsFileOrUrl)
 /* Seek to the offset for this variant in detailsFileOrUrl, read the line and load as
@@ -341,7 +342,7 @@ int end = cartInt(cart, "t");
 char *fileOrUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (isEmpty(fileOrUrl))
     errAbort("bigDbSnpClick: trackDb is missing bigDataUrl setting");
-struct bbiFile *bbi = bigBedFileOpen(fileOrUrl);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileOrUrl, chromAliasChromToAliasHash(database));
 boolean found = FALSE;
 char *chrom = cartString(cart, "c");
 int ivStart = start, ivEnd = end;

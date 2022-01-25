@@ -89,5 +89,10 @@ struct hash *fieldedTableIndex(struct fieldedTable *table, char *field);
 struct hash *fieldedTableUniqueIndex(struct fieldedTable *table, char *field);
 /* Return hash of fieldedRows keyed by values of given field, which must be unique. */
 
+struct fieldedTable *fieldedTableAttach(struct lineFile  *lf,  char *requiredFields[], int requiredCount);
+/* Read table from tab-separated file with a #header line that defines the fields
+ * from already open lineFile..  Ensures all requiredFields (if any) are present.  
+ * should be NULL for most purposes.  */
+
 #endif /* FIELDEDTABLE_H */
 
