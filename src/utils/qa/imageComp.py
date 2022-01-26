@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 import subprocess, os, sys
 from PIL import Image, ImageChops
