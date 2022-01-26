@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import subprocess, os, sys
 from PIL import Image, ImageChops
 from datetime import date
