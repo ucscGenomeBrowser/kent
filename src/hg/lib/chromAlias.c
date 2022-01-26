@@ -314,6 +314,9 @@ hFreeConn(&conn);
 void chromAliasSetup(char *database)
 /* Read in the chromAlias file/table for this database. */
 {
+if (database == NULL)
+    return;
+
 if (!checkDatabase(database))
     return;
 
