@@ -3630,7 +3630,7 @@ if (startsWith("big", tdb->type))
     {
     char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
-    chain = chainLoadIdRangeHub(fileName, linkFileName, seqName, winStart, winEnd, atoi(item));
+    chain = chainLoadIdRangeHub(database, fileName, linkFileName, seqName, winStart, winEnd, atoi(item));
 
     if (!otherIsActive) // if this isn't a native database, check to see if it's a hub
         {

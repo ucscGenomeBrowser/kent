@@ -2713,7 +2713,8 @@ checkAllowedBigDataUrlProtocols(bigDataUrl);
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    track->bbiFile = bigWigFileOpenAlias(bigDataUrl, chromAliasChromToAliasHash(NULL));
+    char *db = ctGenomeOrCurrent(track);
+    track->bbiFile = bigWigFileOpenAlias(bigDataUrl, chromAliasChromToAliasHash(db));
     setBbiViewLimits(track);
     }
 errCatchEnd(errCatch);
@@ -2857,7 +2858,8 @@ checkAllowedBigDataUrlProtocols(bigDataUrl);
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    track->bbiFile = bigBedFileOpenAlias(bigDataUrl, chromAliasChromToAliasHash(NULL));
+    char *db = ctGenomeOrCurrent(track);
+    track->bbiFile = bigBedFileOpenAlias(bigDataUrl, chromAliasChromToAliasHash(db));
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
