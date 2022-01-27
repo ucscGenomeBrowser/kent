@@ -351,7 +351,7 @@ struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb 
    assign rainbow colors.  Colors are specified as #fffff or r,g,b  or html color name) */
 {
 struct slName *labels = NULL, *colors = NULL;
-char *categUrl = trackDbSetting(tdb, BAR_CHART_CATEGORY_URL);
+char *categUrl = hReplaceGbdb(trackDbSetting(tdb, BAR_CHART_CATEGORY_URL));
 if (mergeList != NULL)
     {
     getCategsFromMergeList(mergeList, &labels, &colors);
