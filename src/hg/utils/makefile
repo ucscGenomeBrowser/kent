@@ -50,12 +50,13 @@ UTILS_APPLIST = \
 	oligoMatch \
 	overlapSelect \
 	positionalTblCheck \
+	pslLiftSubrangeBlat \
 	pslToBigPsl \
+	raSqlQuery \
 	tdbQuery \
 	transMapPslToGenePred \
-	raSqlQuery \
-	pslLiftSubrangeBlat \
-	twoBitMask
+	twoBitMask \
+	vcfToBed
 
 USER_APP_SCRIPTS = \
 	vai.pl
