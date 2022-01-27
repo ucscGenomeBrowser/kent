@@ -50,11 +50,11 @@ UTILS_APPLIST = \
 	oligoMatch \
 	overlapSelect \
 	positionalTblCheck \
+	pslLiftSubrangeBlat \
 	pslToBigPsl \
+	raSqlQuery \
 	tdbQuery \
 	transMapPslToGenePred \
-	raSqlQuery \
-	pslLiftSubrangeBlat \
 	twoBitMask
 
 USER_APP_SCRIPTS = \
