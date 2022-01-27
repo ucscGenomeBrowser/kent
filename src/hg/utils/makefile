@@ -55,7 +55,8 @@ UTILS_APPLIST = \
 	raSqlQuery \
 	tdbQuery \
 	transMapPslToGenePred \
-	twoBitMask
+	twoBitMask \
+	vcfToBed
 
 USER_APP_SCRIPTS = \
 	vai.pl
