@@ -24,6 +24,7 @@
 #include <signal.h>
 #include "trackHub.h"
 #include "botDelay.h"
+#include "chromAlias.h"
 
 static long loadTime = 0;
 static boolean issueBotWarning = FALSE;
@@ -1193,6 +1194,7 @@ cart = theCart;
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 initialDb = cloneString(cartUsualString(cart, "db", ""));
 getDbAndGenome(cart, &database, &organism, oldVars);
+chromAliasSetup(database);
 
 customFactoryEnableExtraChecking(TRUE);
 
