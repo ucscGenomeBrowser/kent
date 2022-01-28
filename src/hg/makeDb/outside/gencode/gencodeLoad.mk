@@ -34,8 +34,8 @@ mach = $(shell uname -m)
 ##
 #preRelease = no
 preRelease = yes
-db = hg38
-#db = hg19
+#db = hg38
+db = hg19
 #db = mm39
 #db = mm10
 ifeq (${db},mm10)
@@ -300,7 +300,7 @@ ${gencodeToUcscChain}:
 # other tab files, just copy to name following convention to make load rules
 # work
 ifeq (${isBackmap}, yes)
-   metaFilterCmd = ${gencodeBackMapMetadataIds} ${gencodeTsv} ${targetGencodeTsv}
+   metaFilterCmd = ${gencodeBackMapMetadataIds} ${db} ${gencodeTsv} ${targetGencodeTsv}
    metaFilterCmdGz = ${metaFilterCmd}
    metaFilterDepend = ${gencodeTsv} ${targetGencodeTsv}
 else
