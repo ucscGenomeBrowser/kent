@@ -1,0 +1,5 @@
+Error: # Boundary problem: need 2, got 1, diff 1, mapped 0.5
+       ENST00000619954.1	HSCHR12_4_CTG2_1	-	179636	184320	184320	184320	2	179636,184303,	180540,184320,	0	RP5-944M2.1	none	none	-1,-1,
+Error: # Boundary problem: need 4, got 3, diff 1, mapped 0.8
+       ENST00000576369.2	HSCHR3_1_CTG2_1	+	155088	180672	155208	165289	4	155088,165265,166681,178164,	155346,165335,166853,180672,	0	AADACL2	cmpl	cmpl	0,0,-1,-1,
+Errors occurred while lifting

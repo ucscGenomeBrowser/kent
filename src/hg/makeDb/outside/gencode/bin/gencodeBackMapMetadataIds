@@ -3,7 +3,7 @@
 import sys
 import os
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
-sys.path.extend((myBinDir + "/../../lib", myBinDir + "/../../../lib/py"))
+sys.path.append(os.path.join(myBinDir, "../lib"))
 sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
 from collections import defaultdict
 import argparse

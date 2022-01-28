@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 """
 Generate GENCODE trackDb .ra and .html files and git add them.
 Also generate blurb to section to edit into joinerCheck.
@@ -10,7 +10,6 @@ In order to easily track priority numbers in one place, this file is edited to a
 commenting out
 rather than
 """
-from __future__ import print_function
 import os
 import re
 import subprocess
@@ -23,6 +22,20 @@ import argparse
 #  - lift is only backmap GENCODE
 #  - both is normal and backmap.
 ##
+
+def parseArgs():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--noGit", action='store_true',
+                        help="don't add generate files to git (for teating)")
+    parser.add_argument("hgDb", help="UCSC database")
+    parser.add_argument("gencodeVer", help="GENCODE version number ")
+    parser.add_argument("ensemblVer", help="Ensembl version number ")
+    parser.add_argument("gencodeDate", help="Month and year of GENCODE release, in the form `August 2014'")
+    opts = parser.parse_args()
+    verRe = "M?([0-9]+)(lift37)?$"
+    if re.match(verRe, opts.gencodeVer) is None:
+        raise Exception("GENCODE version should match {}, got `{}'".format(verRe, opts.gencodeVer))
+    return opts
 
 def forStd(params, lines):
     """return lines merge into text if this is a standard release"""
@@ -515,10 +528,10 @@ def joinerCheckTemplateGen(params):
         ""))
 
 def hgSql(orgHgDb, sql):
-    return subprocess.check_output(["hgsql", orgHgDb, "-Ne", sql]).split('\n')[0:-1]
+    return subprocess.check_output(["hgsql", orgHgDb, "-Ne", sql], encoding="utf8").split('\n')[0:-1]
 
 def gitAdd(fname):
-    subprocess.check_call(["git", "add", fname])
+    subprocess.check_call(["git", "add", fname], encoding="utf8")
 
 def getTransBioTypes(orgHgDb, gencodeVer):
     "obtain sorted list of transcript biotypes"
@@ -662,21 +675,23 @@ def writePart(fh, templ, params):
     "output one section, formatting params"
     fh.write(templ.format(**vars(params)))
 
-def generateRaFile(params):
+def generateRaFile(params, noGit):
     raFile = params.getTrackDbFileName("ra")
     print("generating {}".format(raFile))
     with open(raFile, "w") as fh:
         for part in trackDbTemplateGen(params):
             writePart(fh, part, params)
-    gitAdd(raFile)
+    if not noGit:
+        gitAdd(raFile)
 
-def generateHtmlFile(params):
+def generateHtmlFile(params, noGit):
     htmlFile = params.getTrackDbFileName("html")
     print("generating {}".format(htmlFile))
     with open(htmlFile, "w") as fh:
         for part in trackHtmlTemplateGen(params):
             writePart(fh, part, params)
-    gitAdd(htmlFile)
+    if not noGit:
+        gitAdd(htmlFile)
 
 def generateJoinerFile(params):
     joinerFile = os.path.expanduser("~/tmp/gencodeV{}.joiner".format(params.gencodeVer))
@@ -687,21 +702,8 @@ def generateJoinerFile(params):
 
 def gencodeGenerateTrackDbs(opts):
     params = getGencodeParams(opts.hgDb, opts.gencodeVer, opts.ensemblVer, opts.gencodeDate)
-    generateRaFile(params)
-    generateHtmlFile(params)
+    generateRaFile(params, opts.noGit)
+    generateHtmlFile(params, opts.noGit)
     generateJoinerFile(params)
-
-def parseArgs():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("hgDb", help="UCSC database")
-    parser.add_argument("gencodeVer", help="GENCODE version number ")
-    parser.add_argument("ensemblVer", help="Ensembl version number ")
-    parser.add_argument("gencodeDate", help="Month and year of GENCODE release, in the form `August 2014'")
-    opts = parser.parse_args()
-    verRe = "M?([0-9]+)(lift37)?$"
-    if re.match(verRe, opts.gencodeVer) is None:
-        raise Exception("GENCODE version should match {}, got `{}'".format(verRe, opts.gencodeVer))
-    return opts
-
 
 gencodeGenerateTrackDbs(parseArgs())

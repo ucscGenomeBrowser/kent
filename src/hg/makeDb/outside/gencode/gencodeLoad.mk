@@ -34,9 +34,9 @@ mach = $(shell uname -m)
 ##
 #preRelease = no
 preRelease = yes
-#db = hg38
+db = hg38
 #db = hg19
-db = mm39
+#db = mm39
 #db = mm10
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
@@ -94,15 +94,15 @@ annotationGff = ${relDir}/gencode.v${ver}.${annGffTypeName}.gff3.gz
 pseudo2WayGff = ${relDir}/gencode.v${ver}.2wayconspseudos.gff3.gz
 polyAGff = ${relDir}/gencode.v${ver}.polyAs.gff3.gz
 
-ccdsBinDir = ~markd/compbio/ccds/ccds2/output/bin/$(mach)/opt
-gencodeMakeTracks = ${ccdsBinDir}/gencodeMakeTracks
-gencodeMakeAttrs = ${ccdsBinDir}/gencodeMakeAttrs
-gencodeExonSupportToTable = ${ccdsBinDir}/gencodeExonSupportToTable
-gencodeGxfToGenePred = ${ccdsBinDir}/gencodeGxfToGenePred
-gencodePolyaGxfToGenePred = ${ccdsBinDir}/gencodePolyaGxfToGenePred
-gencodeGxfToAttrs = ${ccdsBinDir}/gencodeGxfToAttrs
+gencodeBinDir = ${HOME}/kent/src/hg/makeDb/outside/gencode/bin
+gencodeMakeTracks = ${gencodeBinDir}/gencodeMakeTracks
+gencodeMakeAttrs = ${gencodeBinDir}/gencodeMakeAttrs
+gencodeExonSupportToTable = ${gencodeBinDir}/gencodeExonSupportToTable
+gencodeGxfToGenePred = ${gencodeBinDir}/gencodeGxfToGenePred
+gencodePolyaGxfToGenePred = ${gencodeBinDir}/gencodePolyaGxfToGenePred
+gencodeGxfToAttrs = ${gencodeBinDir}/gencodeGxfToAttrs
 buildGencodeToUcscLift = ${HOME}/kent/src/hg/makeDb/outside/gencode/bin/buildGencodeToUcscLift
-gencodeBackMapMetadataIds = ${ccdsBinDir}/gencodeBackMapMetadataIds
+gencodeBackMapMetadataIds = ${gencodeBinDir}/gencodeBackMapMetadataIds
 encodeAutoSqlDir = ${HOME}/kent/src/hg/lib/encode
 
 ##
@@ -200,7 +200,6 @@ tableEntrezGeneMeta = ${relDir}/gencode.v${ver}.metadata.EntrezGene.gz
 tableEntrezGene = ${tablePre}EntrezGene${rel}
 tableEntrezGeneTab = ${tableDir}/${tableEntrezGene}.tab
 
-tableTranscriptionSupportLevelData = ${dataDir}/gencode.v${ver}.transcriptionSupportLevel.tab
 tableTranscriptionSupportLevel  = ${tablePre}TranscriptionSupportLevel${rel}
 tableTranscriptionSupportLevelTab = ${tableDir}/${tableTranscriptionSupportLevel}.tab
 
@@ -270,9 +269,12 @@ ${tableDir}/${tablePre}%${rel}.gp: ${gencodeGp} ${gencodeTsv}
 	mv -f $@.${tmpExt} $@
 
 ${tableTagTab}: ${tableAttrsTab}
+${tableTranscriptionSupportLevelTab}: ${tableAttrsTab}
 ${tableAttrsTab}: ${gencodeGp} ${gencodeTsv}
 	@mkdir -p $(dir $@)
-	${gencodeMakeAttrs} ${gencodeGp} ${gencodeTsv} $@.${tmpExt} ${tableTagTab}
+	${gencodeMakeAttrs} ${gencodeGp} ${gencodeTsv} $@.${tmpExt} ${tableTagTab}.${tmpExt} ${tableTranscriptionSupportLevelTab}.${tmpExt}
+	mv -f ${tableTranscriptionSupportLevelTab}.${tmpExt} ${tableTranscriptionSupportLevelTab}
+	mv -f ${tableTagTab}.${tmpExt} ${tableTagTab}
 	mv -f $@.${tmpExt} $@
 
 ${table2WayConsPseudoGp}: ${pseudo2WayGff}
@@ -336,11 +338,6 @@ ${tablePubMedTab}: ${tablePubMedMeta} ${metaFilterDepend}
 ${tableRefSeqTab}: ${tableRefSeqMeta} ${metaFilterDepend}
 	${copyMetadataTabGz}
 
-${tableTranscriptionSupportLevelTab}: ${tableTranscriptionSupportLevelData}
-	mkdir -p $(dir $@)
-	cp $< $@.${tmpExt}
-	mv -f $@.${tmpExt} $@
-
 # convert to zero-based, 1/2 open
 ${tablePolyAFeatureTab}: ${tablePolyAFeatureMeta} ${metaFilterDepend}
 	@mkdir -p $(dir $@)
@@ -364,12 +361,10 @@ ${gencodeGp}: ${annotationGff} ${gencodeToUcscChain}
 	${gencodeGxfToGenePred} ${db} ${annotationGff} ${gencodeToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${tableTranscriptionSupportLevelData}: ${metaFilterDepend}
 	touch $@
 ${gencodeTsv}: ${annotationGff}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToAttrs} --keepGoing ${annotationGff} $@.${tmpExt} --tslTabOut=${tableTranscriptionSupportLevelData}.${tmpExt}
-	mv -f ${tableTranscriptionSupportLevelData}.${tmpExt} ${tableTranscriptionSupportLevelData}
+	${gencodeGxfToAttrs} ${annotationGff} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${targetGencodeTsv}:
