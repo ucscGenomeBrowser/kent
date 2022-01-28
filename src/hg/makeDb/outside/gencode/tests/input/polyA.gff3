@@ -1,0 +1,50 @@
+##gff-version 3
+#description: evidence-based annotation of the human genome (GRCh38), version 40 (Ensembl 106) - polyA features
+#provider: GENCODE
+#contact: gencode-help@ebi.ac.uk
+#format: gff3
+#date: 2022-01-20
+##sequence-region chr1 1 248956422
+chr1	HAVANA	pseudo_polyA	134957	134962	.	-	.	ID=383460;gene_id=383460;transcript_id=383460;gene_type=pseudo_polya;gene_name=383460;transcript_type=pseudo_polya;transcript_name=383460;level=2
+chr1	HAVANA	polyA_site	141474	141475	.	-	.	ID=383461;gene_id=383461;transcript_id=383461;gene_type=polya_site;gene_name=383461;transcript_type=polya_site;transcript_name=383461;level=2
+chr1	HAVANA	polyA_signal	141477	141482	.	-	.	ID=383462;gene_id=383462;transcript_id=383462;gene_type=polya_signal;gene_name=383462;transcript_type=polya_signal;transcript_name=383462;level=2
+chr1	HAVANA	pseudo_polyA	184934	184939	.	-	.	ID=383463;gene_id=383463;transcript_id=383463;gene_type=pseudo_polya;gene_name=383463;transcript_type=pseudo_polya;transcript_name=383463;level=2
+chr1	HAVANA	pseudo_polyA	258530	258535	.	-	.	ID=383464;gene_id=383464;transcript_id=383464;gene_type=pseudo_polya;gene_name=383464;transcript_type=pseudo_polya;transcript_name=383464;level=2
+chr1	HAVANA	polyA_site	266354	266355	.	-	.	ID=383465;gene_id=383465;transcript_id=383465;gene_type=polya_site;gene_name=383465;transcript_type=polya_site;transcript_name=383465;level=2
+chr1	HAVANA	polyA_signal	266362	266367	.	-	.	ID=383466;gene_id=383466;transcript_id=383466;gene_type=polya_signal;gene_name=383466;transcript_type=polya_signal;transcript_name=383466;level=2
+chr1	HAVANA	polyA_signal	365489	365494	.	+	.	ID=383467;gene_id=383467;transcript_id=383467;gene_type=polya_signal;gene_name=383467;transcript_type=polya_signal;transcript_name=383467;level=2
+chr1	HAVANA	polyA_site	365509	365510	.	+	.	ID=383468;gene_id=383468;transcript_id=383468;gene_type=polya_site;gene_name=383468;transcript_type=polya_site;transcript_name=383468;level=2
+chr1	HAVANA	polyA_signal	366033	366038	.	+	.	ID=383469;gene_id=383469;transcript_id=383469;gene_type=polya_signal;gene_name=383469;transcript_type=polya_signal;transcript_name=383469;level=2
+chr1	HAVANA	polyA_site	366049	366050	.	+	.	ID=383470;gene_id=383470;transcript_id=383470;gene_type=polya_site;gene_name=383470;transcript_type=polya_site;transcript_name=383470;level=2
+chr1	HAVANA	polyA_site	594453	594454	.	-	.	ID=383471;gene_id=383471;transcript_id=383471;gene_type=polya_site;gene_name=383471;transcript_type=polya_site;transcript_name=383471;level=2
+chr1	HAVANA	polyA_signal	594475	594480	.	-	.	ID=383472;gene_id=383472;transcript_id=383472;gene_type=polya_signal;gene_name=383472;transcript_type=polya_signal;transcript_name=383472;level=2
+chr1	HAVANA	polyA_signal	594553	594558	.	+	.	ID=383473;gene_id=383473;transcript_id=383473;gene_type=polya_signal;gene_name=383473;transcript_type=polya_signal;transcript_name=383473;level=2
+chr1	HAVANA	polyA_site	594573	594574	.	+	.	ID=383474;gene_id=383474;transcript_id=383474;gene_type=polya_site;gene_name=383474;transcript_type=polya_site;transcript_name=383474;level=2
+chr1	HAVANA	polyA_site	627377	627378	.	-	.	ID=383475;gene_id=383475;transcript_id=383475;gene_type=polya_site;gene_name=383475;transcript_type=polya_site;transcript_name=383475;level=2
+chr1	HAVANA	polyA_signal	627391	627396	.	-	.	ID=383476;gene_id=383476;transcript_id=383476;gene_type=polya_signal;gene_name=383476;transcript_type=polya_signal;transcript_name=383476;level=2
+chr1	HAVANA	pseudo_polyA	725805	725810	.	+	.	ID=383477;gene_id=383477;transcript_id=383477;gene_type=pseudo_polya;gene_name=383477;transcript_type=pseudo_polya;transcript_name=383477;level=2
+chr1	HAVANA	polyA_signal	784726	784731	.	+	.	ID=383478;gene_id=383478;transcript_id=383478;gene_type=polya_signal;gene_name=383478;transcript_type=polya_signal;transcript_name=383478;level=2
+chr1	HAVANA	polyA_site	784743	784744	.	+	.	ID=383479;gene_id=383479;transcript_id=383479;gene_type=polya_site;gene_name=383479;transcript_type=polya_site;transcript_name=383479;level=2
+chr1	HAVANA	polyA_site	784758	784759	.	+	.	ID=383480;gene_id=383480;transcript_id=383480;gene_type=polya_site;gene_name=383480;transcript_type=polya_site;transcript_name=383480;level=2
+chr1	HAVANA	polyA_signal	784943	784948	.	+	.	ID=383481;gene_id=383481;transcript_id=383481;gene_type=polya_signal;gene_name=383481;transcript_type=polya_signal;transcript_name=383481;level=2
+chr1	HAVANA	polyA_site	784976	784977	.	+	.	ID=383482;gene_id=383482;transcript_id=383482;gene_type=polya_site;gene_name=383482;transcript_type=polya_site;transcript_name=383482;level=2
+chr1	HAVANA	polyA_signal	787653	787658	.	+	.	ID=383483;gene_id=383483;transcript_id=383483;gene_type=polya_signal;gene_name=383483;transcript_type=polya_signal;transcript_name=383483;level=2
+chr1	HAVANA	polyA_site	787671	787672	.	+	.	ID=383484;gene_id=383484;transcript_id=383484;gene_type=polya_site;gene_name=383484;transcript_type=polya_site;transcript_name=383484;level=2
+chr1	HAVANA	polyA_signal	801856	801861	.	+	.	ID=383485;gene_id=383485;transcript_id=383485;gene_type=polya_signal;gene_name=383485;transcript_type=polya_signal;transcript_name=383485;level=2
+chr1	HAVANA	polyA_site	801875	801876	.	+	.	ID=383486;gene_id=383486;transcript_id=383486;gene_type=polya_site;gene_name=383486;transcript_type=polya_site;transcript_name=383486;level=2
+chr1	HAVANA	polyA_signal	805249	805254	.	+	.	ID=383487;gene_id=383487;transcript_id=383487;gene_type=polya_signal;gene_name=383487;transcript_type=polya_signal;transcript_name=383487;level=2
+chr1	HAVANA	polyA_site	805269	805270	.	+	.	ID=383488;gene_id=383488;transcript_id=383488;gene_type=polya_site;gene_name=383488;transcript_type=polya_site;transcript_name=383488;level=2
+chr1	HAVANA	polyA_signal	810041	810046	.	+	.	ID=383489;gene_id=383489;transcript_id=383489;gene_type=polya_signal;gene_name=383489;transcript_type=polya_signal;transcript_name=383489;level=2
+chr1	HAVANA	polyA_site	810059	810060	.	+	.	ID=383490;gene_id=383490;transcript_id=383490;gene_type=polya_site;gene_name=383490;transcript_type=polya_site;transcript_name=383490;level=2
+chr1	HAVANA	polyA_signal	819814	819819	.	+	.	ID=383491;gene_id=383491;transcript_id=383491;gene_type=polya_signal;gene_name=383491;transcript_type=polya_signal;transcript_name=383491;level=2
+chr1	HAVANA	polyA_site	819836	819837	.	+	.	ID=383492;gene_id=383492;transcript_id=383492;gene_type=polya_site;gene_name=383492;transcript_type=polya_site;transcript_name=383492;level=2
+chr1	HAVANA	polyA_site	826206	826207	.	-	.	ID=383493;gene_id=383493;transcript_id=383493;gene_type=polya_site;gene_name=383493;transcript_type=polya_site;transcript_name=383493;level=2
+chr1	HAVANA	polyA_signal	826219	826224	.	-	.	ID=383494;gene_id=383494;transcript_id=383494;gene_type=polya_signal;gene_name=383494;transcript_type=polya_signal;transcript_name=383494;level=2
+chr1	HAVANA	polyA_signal	854369	854374	.	+	.	ID=383495;gene_id=383495;transcript_id=383495;gene_type=polya_signal;gene_name=383495;transcript_type=polya_signal;transcript_name=383495;level=2
+chr1	HAVANA	polyA_site	854386	854387	.	+	.	ID=383496;gene_id=383496;transcript_id=383496;gene_type=polya_site;gene_name=383496;transcript_type=polya_site;transcript_name=383496;level=2
+chr1	HAVANA	polyA_site	854391	854392	.	+	.	ID=383497;gene_id=383497;transcript_id=383497;gene_type=polya_site;gene_name=383497;transcript_type=polya_site;transcript_name=383497;level=2
+chr1	HAVANA	polyA_site	854410	854411	.	+	.	ID=383498;gene_id=383498;transcript_id=383498;gene_type=polya_site;gene_name=383498;transcript_type=polya_site;transcript_name=383498;level=2
+chr1	HAVANA	polyA_signal	857226	857231	.	+	.	ID=383499;gene_id=383499;transcript_id=383499;gene_type=polya_signal;gene_name=383499;transcript_type=polya_signal;transcript_name=383499;level=2
+chr1	HAVANA	polyA_site	857245	857246	.	+	.	ID=383500;gene_id=383500;transcript_id=383500;gene_type=polya_site;gene_name=383500;transcript_type=polya_site;transcript_name=383500;level=2
+chr1	HAVANA	polyA_signal	859423	859428	.	+	.	ID=383501;gene_id=383501;transcript_id=383501;gene_type=polya_signal;gene_name=383501;transcript_type=polya_signal;transcript_name=383501;level=2
+chr1	HAVANA	polyA_site	859445	859446	.	+	.	ID=383502;gene_id=383502;transcript_id=383502;gene_type=polya_site;gene_name=383502;transcript_type=polya_site;transcript_name=383502;level=2

@@ -220,14 +220,14 @@ slSort(&list, cBlockCmpTarget);
 chain->blockList = list;
 }
 
-struct chain *chainLoadIdRangeHub(char *fileName, char *linkFileName,   char *chrom, int start, int end, int id)
+struct chain *chainLoadIdRangeHub(char *db, char *fileName, char *linkFileName,   char *chrom, int start, int end, int id)
 /* Load parts of chain of given ID from bigChain file.  Note the chain header
  * including score, tStart, tEnd, will still reflect the whole chain,
  * not just the part in range.  However only the blocks of the chain
  * overlapping the range will be loaded. */
 {
 struct lm *lm = lmInit(0);
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(NULL));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(db));
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 char *bedRow[12];
 char startBuf[16], endBuf[16];
@@ -262,7 +262,7 @@ chain->score = sqlUnsigned(bedRow[11]);
 chain->id = id;
 
 // Now load the links.
-bbi =  bigBedFileOpenAlias(linkFileName, chromAliasChromToAliasHash(NULL));
+bbi =  bigBedFileOpenAlias(linkFileName, chromAliasChromToAliasHash(db));
 if (loadAll)
     {
     start = chain->tStart;

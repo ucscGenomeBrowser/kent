@@ -6,6 +6,8 @@ import sys
 import re
 from pycbio.sys import fileOps
 
+class LiftError(Exception):
+    pass
 
 class LiftOverUnmapped(object):
     "parsed liftOver unmapped file"
@@ -32,16 +34,13 @@ class LiftOverUnmapped(object):
 
     def report(self):
         "warning on skip sequences, error on other problems"
-        gotErrs = False
         if len(self.droppedSeqs) > 0:
             sys.stderr.write("Warning: annotations not mapped for these chromosomes, the maybe new patches/alt sequence not in UCSC: " + " ".join(sorted(self.droppedSeqs)) + "\n")
         if len(self.otherProblems) > 0:
             for probInfo in self.otherProblems:
                 sys.stderr.write("Error: " + probInfo[0] + "\n")
                 sys.stderr.write("       " + "\t".join(probInfo[1]) + "\n")
-            gotErrs = True
-        if gotErrs:
-            sys.exit(1)
+            raise LiftError("Errors occurred while lifting")
 
 class GencodeLiftOver(object):
     def __init__(self, dataFormat, liftFile, unmappedOutFile=None):

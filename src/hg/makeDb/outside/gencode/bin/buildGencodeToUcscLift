@@ -93,13 +93,13 @@ def writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh):
     elif isPrimaryChrom(ucscChrom.chrom):
         nextChainId = writeStdChain(ucscChrom.chrom, ucscChrom, nextChainId, fh)
     else:
-        for chromName in chromAliases[ucscChrom.chrom]:
+        for chromName in sorted(chromAliases[ucscChrom.chrom]):
             nextChainId = writeStdChain(chromName, ucscChrom, nextChainId, fh)
     return nextChainId
 
 def writeChains(ucscDbName, chromInfos, chromAliases, fh):
     nextChainId = 1
-    for ucscChrom in chromInfos.values():
+    for ucscChrom in sorted(chromInfos.values()):
         if ucscChrom.chrom not in badChroms:
             nextChainId = writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh)
 

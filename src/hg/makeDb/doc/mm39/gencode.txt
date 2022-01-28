@@ -181,6 +181,4 @@
     # check tracks in browser sandbox
     # commit all
     make DBS=mm39 alpha
-    # if pushing public: add ticket and MARK QA READY
-
 ##############################################################################

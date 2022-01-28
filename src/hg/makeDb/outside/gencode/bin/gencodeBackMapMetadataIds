@@ -3,18 +3,33 @@
 import sys
 import os
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
-sys.path.extend((myBinDir + "/../../lib", myBinDir + "/../../../lib/py"))
+sys.path.append(os.path.join(myBinDir, "../lib"))
 sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
 from collections import defaultdict
 import argparse
 from pycbio.sys import fileOps
 from pycbio.tsv import TsvReader, TabFileReader
 
+# Note:
+#  hg19 backmap generates join errors because of this transcript
+#  missing
+#   ENSG00000168939.6 / ENST00000302805.2 / SPRY3
+#
+# These are missing from
+#   data/release_39lift37/gencode.v39lift37.metadata.Transcript_source.gz
+#   data/release_39lift37/gencode.v39lift37.metadata.Gene_source.gz
+#
+# This is the case of SPRV3 which has now has a transcript past the PAR.
+# While addressed in hg38, the state of GENCODE V19 causes issues,
+# so we added these to the metadata.
+#
+
 def parseArgs():
     desc = """Edit GENCODE metadata tab file use mapped ids.  When there are multiple mappings,lines are duplicated."""
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("--verbose", dest="verbose", action="store_true", default=False,
                         help="verbose output for debugging")
+    parser.add_argument("targetDb", help="""target UCSC database""")
     parser.add_argument("srcAttrsTsv", help="""attributes from src (newer) database""")
     parser.add_argument("targetAttrsTsv", help="""attributes from target (older) database""")
     parser.add_argument("inTab", help="""tab file to edit""")
@@ -57,14 +72,33 @@ def mapTabFileRow(srcIdMap, targetIdMap, row, dupCheck, outTabFh):
             fileOps.prRow(outTabFh, outRow)
             dupCheck.add(outRow)
 
+def isBackMapGeneSource(targetDb, inTab):
+    # gencode.v39lift37.metadata.Gene_source.gz
+    return ((targetDb == "hg19") and
+            (inTab.find(".metadata.Gene_source.") >= 0))
 
-def mapTabFileIds(srcIdMap, targetIdMap, inTab, outTabFh):
+def fixBackMapGeneSource(outTabFh):
+    print("ENSG00000168939.6", "ensembl_gene_transcript_homo_sapiens", sep='\t', file=outTabFh)
+
+def isBackMapTranscriptSource(targetDb, inTab):
+    # gencode.v39lift37.metadata.Transcript_source.gz
+    return ((targetDb == "hg19") and
+            (inTab.find(".metadata.Transcript_source.") >= 0))
+
+def fixBackMapTranscriptSource(outTabFh):
+    print("ENST00000302805.2", "ensembl_havana_transcript_homo_sapiens", sep='\t', file=outTabFh)
+
+def mapTabFileIds(targetDb, srcIdMap, targetIdMap, inTab, outTabFh):
     # at least one release had some metadata entries accidentally duplicated, so check
     # for entire row being the same
     dupCheck = set()
     for row in TabFileReader(inTab):
         mapTabFileRow(srcIdMap, targetIdMap, row, dupCheck, outTabFh)
 
+    if isBackMapGeneSource(targetDb, inTab):
+        fixBackMapGeneSource(outTabFh)
+    elif isBackMapTranscriptSource(targetDb, inTab):
+        fixBackMapTranscriptSource(outTabFh)
 
 def gencodeBackMapMetadataIds(opts):
     srcIdMap = GencodeBackMapIdMap(opts.srcAttrsTsv)
@@ -75,7 +109,7 @@ def gencodeBackMapMetadataIds(opts):
         sys.stderr.write(">>> targetAttrs\n")
         targetIdMap.dump(sys.stderr)
     with open(opts.outTab, "w") as outTabFh:
-        mapTabFileIds(srcIdMap, targetIdMap, opts.inTab, outTabFh)
+        mapTabFileIds(opts.targetDb, srcIdMap, targetIdMap, opts.inTab, outTabFh)
 
 
 gencodeBackMapMetadataIds(parseArgs())

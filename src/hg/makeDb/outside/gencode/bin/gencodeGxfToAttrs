@@ -14,26 +14,15 @@ from gencode.gencodeGxfParser import ParseException
 from gencode.biotypes import BioType, getTranscriptFunction
 
 def parseArgs():
-    desc = """Extract attributes from a GENCODE GTF or GFF3 into a tab-separate file for loading into
-the gencodeAttrs, gencodeTranscriptSupport (TSL), and gencodeTag tables.  It
-also output the attributes in TSV format for use by other programs before loading
-into the table.
-"""
+    desc = """Extract attributes from a GENCODE GTF or GFF3 into a tab-separate file for
+use by other programs."""
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("gencodeGxf",
                         help="""GENCODE GTF or GFF3 file""")
     parser.add_argument("attrsTsv",
                         help="""write attributes to this TSV file""")
-    parser.add_argument("attrsTab",
-                        help="""write attributes to this file""")
-    parser.add_argument("tslTab",
-                        help="""write TSLs to this file""")
-    parser.add_argument("tagTab",
-                        help="""write tags to this file""")
     return parser.parse_args()
 
-
-unused = ""
 
 def emptyIfNone(v):
     return v if v is not None else ""
@@ -47,26 +36,14 @@ class Transcript:
     geneId: str
     geneName: str
     geneType: str
+    source: str
+    havanaGeneId: str
+    havanaTranscriptId: str
     ccdsId: str
     level: int
     transcriptSupportLevel: str
     proteinId: str
     tags: set
-
-    def writeAttrs(self, fh):
-        """must match autoSql, which includes unused columns to match old table"""
-        fileOps.prRowv(fh, self.geneId, self.geneName, self.geneType, unused,
-                       self.transcriptId, self.transcriptName, self.transcriptType,
-                       unused, unused, unused, emptyIfNone(self.ccdsId), self.level,
-                       self.transcriptClass, emptyIfNone(self.proteinId))
-
-    def writeTsl(self, fh):
-        fileOps.prRowv(fh, self.transcriptId, self.transcriptSupportLevel)
-
-    def writeTags(self, fh):
-        for tag in sorted(self.tags):
-            fileOps.prRowv(fh, self.transcriptId, tag)
-
 
 class GencodeGxfToAttrs(object):
     def __init__(self, gxfParser):
@@ -92,6 +69,9 @@ class GencodeGxfToAttrs(object):
                                geneId=attrs.gene_id,
                                geneName=attrs.gene_name,
                                geneType=attrs.gene_type,
+                               source=rec.source,
+                               havanaGeneId=attrs.havana_gene,
+                               havanaTranscriptId=attrs.havana_transcript,
                                ccdsId=attrs.ccdsid,
                                level=attrs.level,
                                transcriptSupportLevel=attrs.transcript_support_level,
@@ -154,36 +134,31 @@ class GencodeGxfToAttrs(object):
         self._mergeGeneTags()
         self._assignFunctions()
 
-    def writeAttrs(self, fh):
-        for transId in sorted(self.transcripts.keys()):
-            self.transcripts[transId].writeAttrs(fh)
+    @staticmethod
+    def _writeAttrsTsvRow(tr, fh):
+        fileOps.prRowv(fh, tr.geneId, tr.geneName, tr.geneType,
+                       tr.transcriptId, tr.transcriptName, tr.transcriptType,
+                       tr.source, tr.havanaGeneId, tr.havanaTranscriptId,
+                       emptyIfNone(tr.ccdsId), tr.level,
+                       tr.transcriptClass, emptyIfNone(tr.proteinId),
+                       tr.transcriptSupportLevel,
+                       ",".join(map(str, sorted(tr.tags))))
 
     def writeAttrsTsv(self, fh):
-        fileOps.prRowv(fh, "geneId", "geneName", "geneType", "unused1",
-                       "transcriptId", "transcriptName", "unused2", "unused3", "unused4",
-                       "transcriptType", "ccdsId", "level", "transcriptClass", "proteinId")
-        self.writeAttrs(fh)
-
-    def writeTsls(self, fh):
-        for transId in sorted(self.transcripts.keys()):
-            self.transcripts[transId].writeTsl(fh)
-
-    def writeTags(self, fh):
-        for transId in sorted(self.transcripts.keys()):
-            self.transcripts[transId].writeTags(fh)
-
+        fileOps.prRowv(fh, "geneId", "geneName", "geneType",
+                       "transcriptId", "transcriptName", "transcriptType",
+                       "source", "havanaGeneId", "havanaTranscriptId",
+                       "ccdsId", "level", "transcriptClass", "proteinId",
+                       "tsl", "tags")
+        for transcript in sorted(self.transcripts.values(),
+                                 key=lambda t: (t.geneId, t.transcriptId)):
+            self._writeAttrsTsvRow(transcript, fh)
 
 def gencodeGxfToAttrs(opts):
     parser = GencodeGxfToAttrs(gencodeGxfParserFactory(opts.gencodeGxf, ignoreUnknownAttrs=True))
     parser.parse()
     with open(opts.attrsTsv, "w") as fh:
         parser.writeAttrsTsv(fh)
-    with open(opts.attrsTab, "w") as fh:
-        parser.writeAttrs(fh)
-    with open(opts.tslTab, "w") as fh:
-        parser.writeTsls(fh)
-    with open(opts.tagTab, "w") as fh:
-        parser.writeTags(fh)
 
 
 gencodeGxfToAttrs(parseArgs())
