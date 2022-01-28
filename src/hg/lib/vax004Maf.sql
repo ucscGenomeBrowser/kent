@@ -9,7 +9,7 @@ CREATE TABLE vax004Maf (
     chromStart int unsigned not null,	# Start position in chromosome (forward strand)
     chromEnd int unsigned not null,	# End position in chromosome
     extFile int unsigned not null,	# Pointer to associated external file
-    offset bigint not null,	# Offset in external file
+    `offset` bigint not null,	# Offset in external file
     score float not null,	# Overall score
               #Indices
     PRIMARY KEY(chrom)
