@@ -225,8 +225,6 @@ while (lineFileNext(lf, &line, &size))
             }
         }
     }
-
-lineFileClose(&lf);
 }
 
 static void readFieldedTable(struct lineFile *lf)
@@ -283,7 +281,6 @@ else
     readOldAlias(lf);
 lineFileClose(&lf);
 }
-
 
 static void chromAliasSetupSql(char *database)
 /* Look for a chromAlias SQL table and load the hashes with its contents. */
