@@ -82,6 +82,11 @@ static pthread_mutex_t osiMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_lock( &osiMutex );
 if (!done)
     {
+    // setenv here for thread-safety
+    setenv("https_cert_check", "log", 0);      // DEFAULT certificate check is log.
+    setenv("https_cert_check_depth", "9", 0);   // DEFAULT depth check level is 9.
+    setenv("https_cert_check_verbose", "off", 0);   // DEFAULT verbose is off.
+    setenv("https_cert_check_domain_exceptions", "", 0);   // DEFAULT space separated list is empty string.
     SSL_library_init();
     ERR_load_crypto_strings();
     ERR_load_SSL_strings();
@@ -509,14 +514,6 @@ int netConnectHttps(char *hostName, int port, boolean noProxy)
 int fd=0;
 
 // https_cert_check env var can be abort warn or none.
-
-setenv("https_cert_check", "log", 0);      // DEFAULT certificate check is log.
-
-setenv("https_cert_check_depth", "9", 0);   // DEFAULT depth check level is 9.
-
-setenv("https_cert_check_verbose", "off", 0);   // DEFAULT verbose is off.
-
-setenv("https_cert_check_domain_exceptions", "", 0);   // DEFAULT space separated list is empty string.
 
 char *proxyUrl = getenv("https_proxy");
 
