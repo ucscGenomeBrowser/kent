@@ -384,13 +384,14 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     {
     // Hardwired exceptions whitelist
     // openssl automatically whitelists domains which are given as IPv4 or IPv6 addresses
+    hashStoreName(domainWhiteList, "*.bio.ed.ac.uk");
     hashStoreName(domainWhiteList, "*.cbu.uib.no");
     hashStoreName(domainWhiteList, "*.clinic.cat");
+    hashStoreName(domainWhiteList, "*.crg.eu");
     hashStoreName(domainWhiteList, "*.ezproxy.u-pec.fr");
     hashStoreName(domainWhiteList, "*.genebook.com.cn");
     hashStoreName(domainWhiteList, "*.jncasr.ac.in");
     hashStoreName(domainWhiteList, "annotation.dbi.udel.edu");
-    hashStoreName(domainWhiteList, "apprisws.bioinfo.cnio.es");
     hashStoreName(domainWhiteList, "arn.ugr.es");
     hashStoreName(domainWhiteList, "bic2.ibi.upenn.edu");
     hashStoreName(domainWhiteList, "bioinfo2.ugr.es");
@@ -419,6 +420,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "edn.som.umaryland.edu");
     hashStoreName(domainWhiteList, "epd.epfl.ch");
     hashStoreName(domainWhiteList, "expiereddnsmanager.com");
+    hashStoreName(domainWhiteList, "export.uppmax.uu.se");
     hashStoreName(domainWhiteList, "frigg.uio.no");
     hashStoreName(domainWhiteList, "ftp--ncbi--nlm--nih--gov.ibrowse.co");
     hashStoreName(domainWhiteList, "ftp.science.ru.nl");
@@ -441,6 +443,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "manticore.niehs.nih.gov");
     hashStoreName(domainWhiteList, "metamorf.hb.univ-amu.fr");
     hashStoreName(domainWhiteList, "microb215.med.upenn.edu");
+    hashStoreName(domainWhiteList, "mitranscriptome.org");
     hashStoreName(domainWhiteList, "mitranscriptome.path.med.umich.edu");
     hashStoreName(domainWhiteList, "nextgen.izkf.rwth-aachen.de");
     hashStoreName(domainWhiteList, "oculargenomics.meei.harvard.edu");
@@ -450,21 +453,28 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "pgv19.virol.ucl.ac.uk");
     hashStoreName(domainWhiteList, "pricenas.biochem.uiowa.edu");
     hashStoreName(domainWhiteList, "redirect.medsch.ucla.edu");
+    hashStoreName(domainWhiteList, "rewrite.bcgsc.ca");
     hashStoreName(domainWhiteList, "rnaseqhub.brain.mpg.de");
     hashStoreName(domainWhiteList, "schatzlabucscdata.yalespace.org.s3.amazonaws.com");
     hashStoreName(domainWhiteList, "sharing.biotec.tu-dresden.de");
     hashStoreName(domainWhiteList, "silo.bioinf.uni-leipzig.de");
     hashStoreName(domainWhiteList, "snpinfo.niehs.nih.gov");
     hashStoreName(domainWhiteList, "spades.cgi.bch.uconn.edu");
+    hashStoreName(domainWhiteList, "stark.imp.ac.at");
+    hashStoreName(domainWhiteList, "starklab.org");
+    hashStoreName(domainWhiteList, "trackhub.pnri.org");
+    hashStoreName(domainWhiteList, "transcrispr.igcz.poznan.pl");
     hashStoreName(domainWhiteList, "v91rc2.master.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "v91rc3.master.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "v94.rc2.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "virtlehre.informatik.uni-leipzig.de");
+    hashStoreName(domainWhiteList, "vm-galaxy-prod.toulouse.inra.fr");
     hashStoreName(domainWhiteList, "web1.bx.bio.jhu.edu");
     hashStoreName(domainWhiteList, "www.datadepot.rcac.purdue.edu");
     hashStoreName(domainWhiteList, "www.isical.ac.in");
     hashStoreName(domainWhiteList, "www.morgridge.us");
     hashStoreName(domainWhiteList, "www.ogic.ca");
+    hashStoreName(domainWhiteList, "www.starklab.org");
     hashStoreName(domainWhiteList, "www.v93rc2.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "xinglabtrackhub.research.chop.edu");
     hashStoreName(domainWhiteList, "ydna-warehouse.org");
