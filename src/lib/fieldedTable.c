@@ -259,9 +259,6 @@ while (lineFileNextRowTab(lf, row, table->fieldCount))
     {
     fieldedTableAdd(table, row, table->fieldCount, lf->lineIx);
     }
-
-/* Clean up and go home. */
-lineFileClose(&lf);
 return table;
 }
 
@@ -290,7 +287,12 @@ else
     reportFileName = fileName;
     }
 
-return fieldedTableAttach(lf, requiredFields, requiredCount);
+struct fieldedTable *table = fieldedTableAttach(lf, requiredFields, requiredCount);
+
+/* Clean up and go home. */
+lineFileClose(&lf);
+
+return table;
 }
 
 void fieldedTableToTabFileWithId(struct fieldedTable *table, char *fileName, 
