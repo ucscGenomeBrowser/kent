@@ -2241,9 +2241,9 @@ char *line;
 int size;
 
 lineFileNeedNext(lf, &line, &size);
+ctAddToSettings(track, "firstItemPos", cloneString(line));
 lineFileClose(&lf);
 unlink(tn.forCgi);
-ctAddToSettings(track, "firstItemPos", cloneString(line));
 }
 
 static struct customTrack *mafLoader(struct customFactory *fac,

@@ -201,7 +201,6 @@ static void readOldAlias(struct lineFile *lf)
 char *words[1024];	/* process lines, no more than 1,024 words on a line */
 char *line;
 int size;
-printf("<BR>readOldAlias<BR>\n");
 while (lineFileNext(lf, &line, &size))
     {
     int wordCount = chopByWhite(line, words, ArraySize(words));
@@ -226,8 +225,6 @@ while (lineFileNext(lf, &line, &size))
             }
         }
     }
-
-lineFileClose(&lf);
 }
 
 static void readFieldedTable(struct lineFile *lf)
@@ -276,12 +273,14 @@ if (!lineFileNext(lf, &line, NULL))
    errAbort("%s is empty", lf->fileName);
 lineFileReuse(lf);
 
-if (line[0] == '#')
+// for the moment always read the alias file in the "old" way
+//if (line[0] == '#')
+if (0)
     readFieldedTable(lf);
 else
     readOldAlias(lf);
+lineFileClose(&lf);
 }
-
 
 static void chromAliasSetupSql(char *database)
 /* Look for a chromAlias SQL table and load the hashes with its contents. */
@@ -335,7 +334,6 @@ struct hash *chromAliasMakeLookupTable(char *database)
  * that takes chromosome alias names to a matching struct chromAlias.  Returns NULL
  * if the given database does not have a chromAlias table. */
 {
-chromAliasSetup(database);
 return chromHashes.forwardHash;
 }
 
@@ -346,20 +344,17 @@ struct hash *chromAliasMakeReverseLookupTable(char *database)
  * may be required to see them all.  Returns NULL if the given database does not have
  * a chromAlias table. */
 {
-chromAliasSetup(database);
 return chromHashes.reverseHash;
 }
 
 struct hash *chromAliasAliasToChromHash(char *database)
 /* Get the hash that maps chrom names to their aliases. */
 {
-chromAliasSetup(database);
 return chromHashes.aliasToChromHash;
 }
 
 struct hash *chromAliasChromToAliasHash(char *database)
 /* Get the hash that maps chrom names to their aliases. */
 {
-chromAliasSetup(database);
 return chromHashes.chromToAliasHash;
 }
