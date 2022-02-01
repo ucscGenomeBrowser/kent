@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
+sys.path.extend((os.path.join(myBinDir, "../lib"),
+                os.path.expanduser("~markd/compbio/code/pycbio/lib")))
+import argparse
+from pycbio.sys import fileOps
+from gencode import gencodeGxfParserFactory
+import pipettor
+from gencode.gencodeProcess import GencodeLiftOver, getEditIdCmd
+
+# This currently produces an extended genePred due to historic reasons, however
+# bed would be more appropriate.
+
+def parseArgs():
+    desc = """%prog [options] polyAGxf ensemblToUcscChain outGp
+
+Create a genePred for the GENCODE polyAGxf.
+"""
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument("--verbose", dest="verbose", action="store_true", default=False,
+                        help="verbose output for debugging")
+    parser.add_argument("inGxf",
+                        help="input GTF or GFF3")
+    parser.add_argument("gencodeToUcscLift",
+                        help="GENCODE to UCSC to liftOver chains")
+    parser.add_argument("outGenePred",
+                        help="output in genePred format")
+    return parser.parse_args()
+
+def convertRec(rec, outGpPipe):
+    transId = rec.attributes.transcript_id
+    # 440715	chr1	-	141473	141475	141475	141475	1	141473,	141475,	0	polyA_site	none	none	-1,
+    row = [transId, rec.seqname, rec.strand, rec.start - 1, rec.end, rec.end, rec.end,
+           1, "{},".format(rec.start - 1), "{},".format(rec.end), 0, rec.feature, "none", "none", "-1,"]
+    fileOps.prRow(outGpPipe, row)
+
+def gencodePolyaGxfToGenePred(opts):
+    gxfParser = gencodeGxfParserFactory(opts.inGxf)
+    liftOver = GencodeLiftOver("genePred", opts.gencodeToUcscLift)
+    outGpPipe = pipettor.Popen([getEditIdCmd(0), liftOver.getLiftoverCmd(stdout=opts.outGenePred)], "w")
+
+    for rec in gxfParser.reader():
+        convertRec(rec, outGpPipe)
+
+    outGpPipe.close()
+    unmappedInfo = liftOver.getLiftOverUnmappedInfo()
+    liftOver.removeTmp()
+    unmappedInfo.report()
+
+
+gencodePolyaGxfToGenePred(parseArgs())

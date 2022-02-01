@@ -264,6 +264,7 @@
 #include "htslib/kstring.h"
 #include "pipeline.h"
 #include "genark.h"
+#include "chromAlias.h"
 
 static char *rootDir = "hgcData";
 
@@ -3241,7 +3242,7 @@ void genericBigPslClick(struct sqlConnection *conn, struct trackDb *tdb,
 {
 struct psl* pslList = NULL;
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 struct lm *lm = lmInit(0);
 int ivStart = start, ivEnd = end;
 if (start == end)
@@ -3629,7 +3630,7 @@ if (startsWith("big", tdb->type))
     {
     char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
-    chain = chainLoadIdRangeHub(fileName, linkFileName, seqName, winStart, winEnd, atoi(item));
+    chain = chainLoadIdRangeHub(database, fileName, linkFileName, seqName, winStart, winEnd, atoi(item));
 
     if (!otherIsActive) // if this isn't a native database, check to see if it's a hub
         {
@@ -7651,7 +7652,7 @@ char *chrom = cartString(cart, "c");
 char *seq, *cdsString = NULL;
 struct lm *lm = lmInit(0);
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 char *bedRow[32];
 char startBuf[16], endBuf[16];
@@ -7715,7 +7716,7 @@ char *chrom = cartString(cart, "c");
 char *seq, *cdsString = NULL;
 struct lm *lm = lmInit(0);
 char *fileName = bbiNameFromSettingOrTable(tdb, NULL, tdb->table);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 char *bedRow[32];
 char startBuf[16], endBuf[16];
@@ -8804,7 +8805,7 @@ struct genePred *getGenePredForPositionBigGene(struct trackDb *tdb,  char *geneN
 /* Find the genePred to the current gene using a bigGenePred. */
 {
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
 struct genePred *gpList = NULL;
@@ -8905,7 +8906,7 @@ else if (isHubTrack(table))
 else
     tdb = hashFindVal(trackHash, table);
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 struct lm *lm = lmInit(0);
 int ivStart = start, ivEnd = end;
 if (start == end)
@@ -9279,7 +9280,7 @@ static struct bed *getBedsFromBigBedRange(struct trackDb *tdb, char *geneName)
 {
 struct bbiFile *bbi;
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
-bbi = bigBedFileOpen(fileName);
+bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
 struct bed *bedList = NULL;
@@ -25957,6 +25958,7 @@ if (issueBotWarning)
 
 /*	database and organism are global variables used in many places	*/
 getDbAndGenome(cart, &database, &genome, NULL);
+chromAliasSetup(database);
 organism = hOrganism(database);
 scientificName = hScientificName(database);
 

@@ -17,6 +17,7 @@
 #include "hCommon.h"
 #include "hubConnect.h"
 #include "trackHub.h"
+#include "chromAlias.h"
 
 extern boolean issueBotWarning;
 
@@ -541,7 +542,7 @@ else
     if (sameString(tdb->type, "bigMaf"))
         {
         char *fileName = trackDbSetting(tdb, "bigDataUrl");
-        struct bbiFile *bbi = bigBedFileOpen(fileName);
+        struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
         mafList = bigMafLoadInRegion(bbi, seqName, winStart, winEnd);
         }
     else

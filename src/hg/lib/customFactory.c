@@ -51,6 +51,7 @@
 #include "interactUi.h"
 #include "hic.h"
 #include "cgiApoptosis.h"
+#include "chromAlias.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -2240,9 +2241,9 @@ char *line;
 int size;
 
 lineFileNeedNext(lf, &line, &size);
+ctAddToSettings(track, "firstItemPos", cloneString(line));
 lineFileClose(&lf);
 unlink(tn.forCgi);
-ctAddToSettings(track, "firstItemPos", cloneString(line));
 }
 
 static struct customTrack *mafLoader(struct customFactory *fac,
@@ -2712,7 +2713,8 @@ checkAllowedBigDataUrlProtocols(bigDataUrl);
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    track->bbiFile = bigWigFileOpen(bigDataUrl);
+    char *db = ctGenomeOrCurrent(track);
+    track->bbiFile = bigWigFileOpenAlias(bigDataUrl, chromAliasChromToAliasHash(db));
     setBbiViewLimits(track);
     }
 errCatchEnd(errCatch);
@@ -2856,7 +2858,8 @@ checkAllowedBigDataUrlProtocols(bigDataUrl);
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    track->bbiFile = bigBedFileOpen(bigDataUrl);
+    char *db = ctGenomeOrCurrent(track);
+    track->bbiFile = bigBedFileOpenAlias(bigDataUrl, chromAliasChromToAliasHash(db));
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)

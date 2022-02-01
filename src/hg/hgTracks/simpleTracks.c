@@ -13882,7 +13882,7 @@ if (!zoomedToBaseLevel)
 
 conn = hAllocConn(database);
 sqlSafef(query, sizeof(query),
-	"select offset,fileName from %s where chrom = '%s'", tg->table,chromName);
+	"select `offset`,fileName from %s where chrom = '%s'", tg->table,chromName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {

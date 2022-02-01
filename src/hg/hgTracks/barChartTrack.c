@@ -151,7 +151,7 @@ return extras->colors;
 static void fillInTables(struct track *tg, struct barChartTrack *extras)
 /* Fill in statTable and facetsTable on extras */
 {
-char *barChartStatsUrl = trackDbSetting(tg->tdb, "barChartStatsUrl");
+char *barChartStatsUrl = hReplaceGbdb(trackDbSetting(tg->tdb, "barChartStatsUrl"));
 if (barChartStatsUrl != NULL)
     {
     extras->statsTable = fieldedTableFromTabFile(barChartStatsUrl,

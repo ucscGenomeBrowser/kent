@@ -24,6 +24,7 @@
 #include <signal.h>
 #include "trackHub.h"
 #include "botDelay.h"
+#include "chromAlias.h"
 
 static long loadTime = 0;
 static boolean issueBotWarning = FALSE;
@@ -321,7 +322,22 @@ else
     puts("Or upload: ");
     cgiMakeFileEntry(hgCtDataFile);
     cgiTableFieldEnd();
+    jsInline(
+            "$(\"[name='hgt.customFile']\").change(function(ev) { \n"
+            "   var fname = ev.target.files[0].name; \n"
+            "   var ext = fname.split('.').pop().toLowerCase(); \n"
+            "   var warnExts = ['bigbed', 'bb', 'bam', 'bigwig', 'bw', 'jpeg', 'pdf', 'jpg', 'png', 'hic', 'cram'];\n"
+            "   if (warnExts.indexOf(ext) >= 0  ||  fname.toLowerCase().endsWith('.vcf.gz')) {\n"
+            "       alert('You are trying to upload a binary file on this page, but the Genome Browser server needs access to binary files via the internet.'+"
+            "          ' Therefore, you will need to store the files on a web server, then paste the URLs to them on this page, or upload a text file with \"track\" lines '+"
+            "          ' and configuration settings that point to the file URLs. Please read the documentation'+"
+            "          ' referenced at the top of this page or contact us for more information.');\n"
+            "       $(\"[name='hgt.customFile']\")[0].value = '';"
+            "   }\n"
+            "});\n"
+            );
     }
+
 if (!isUpdateForm)
     {
     cgiSimpleTableFieldStart();
@@ -1178,6 +1194,7 @@ cart = theCart;
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 initialDb = cloneString(cartUsualString(cart, "db", ""));
 getDbAndGenome(cart, &database, &organism, oldVars);
+chromAliasSetup(database);
 
 customFactoryEnableExtraChecking(TRUE);
 

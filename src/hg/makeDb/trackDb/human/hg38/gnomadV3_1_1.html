@@ -52,6 +52,7 @@ number of items in the bigBed.
 display, and one with the information necessary for the details page. For more information on
 this data format, please see the <a href="#dataAccess">Data Access</a> section below.
 <li>The VEP annotation is shown as a table instead of spread across multiple fields.
+<li>Intergenic variants have not been pre-filtered.
 </ol>
 
 <h3>gnomAD v3.1</h3>
@@ -83,12 +84,10 @@ type:
 
 <h4>Label Options</h4>
 <p>
-By default, variants are labeled according to their chromosomal position followed by the reference
-and alternate alleles, for example &quot;chr1:1234-1235 T/CAG&quot;.
-</p>
-
-<p>
-dbSNP rsID's are also available as an additional label, if the variant is present in dbSnp.
+To maintain consistency with the gnomAD website, variants are by default labeled according
+to their chromosomal start position followed by the reference and alternate alleles,
+for example &quot;chr1-1234-T-CAG&quot;. dbSNP rsID's are also available as an additional
+label, if the variant is present in dbSnp.
 </p>
 
 <h4>Filtering Options</h4>
@@ -139,7 +138,10 @@ There are two additional filters available, one for the minimum minor allele fre
 <a name="UCSCMethods">
 <h2>UCSC Methods</h2>
 <p>
-For the v3.1 update, In order to cut down on the amount of displayed data, the following variant
+The gnomAD v3.1.1 data is unfiltered. </p>
+<p>
+For the v3.1 update only, in order to cut 
+down on the amount of displayed data, the following variant
 types have been filtered out, but are still viewable in the gnomAD browser:
 <ul>
     <li>Regulatory Region Variants

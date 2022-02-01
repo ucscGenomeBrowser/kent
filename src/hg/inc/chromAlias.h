@@ -76,4 +76,12 @@ struct hash *chromAliasMakeReverseLookupTable(char *database);
  * may be required to see them all.  Returns NULL if the given database does not have
  * a chromAlias table. */
 
+void chromAliasSetup(char *database);
+/* Read in the chromAlias file/table for this database. */
+
+struct hash *chromAliasChromToAliasHash(char *database);
+/* Get the hash that maps chrom names to their aliases. */
+
+struct hash *chromAliasAliasToChromHash(char *database);
+/* Get the hash that maps alias names to their chroms. */
 #endif /* CHROMALIAS_H */

@@ -26,6 +26,7 @@
 #include "knetUdc.h"
 #include "udc.h"
 #include "memgfx.h"
+#include "chromAlias.h"
 
 // Russ Corbett-Detig suggested darker shades for coloring non-synonymous variants green
 Color darkerShadesOfGreenOnWhite[EXPR_DATA_SHADES];
@@ -960,7 +961,7 @@ if (fileName == NULL)
     fileName = cloneString(trackDbSetting(gTdb, "bigGeneDataUrl"));
 if (isNotEmpty(fileName))
     {
-    struct bbiFile *bbi = bigBedFileOpen(hReplaceGbdb(fileName));
+    struct bbiFile *bbi =  bigBedFileOpenAlias(hReplaceGbdb(fileName), chromAliasChromToAliasHash(database));
     struct lm *lm = lmInit(0);
     struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chromName, winStart,
                                                         winEnd, 0, lm);

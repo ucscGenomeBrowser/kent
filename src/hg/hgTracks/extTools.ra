@@ -75,12 +75,12 @@ param end $]
 tool primer3Plus
 shortLabel Primer3Plus
 longLabel Updated interface of the popular primer designer. Primers flank the nucleotide in the center of the screen.
-url http://primer3plus.com/cgi-bin/dev/primer3plus.cgi
-email server@untergasser.de
+url https://dev.primer3plus.com/primer3plus/api/v1/upload
+email server@untergasser.de <mailto:server@untergasser.de>
 maxSize 10000
-param GENBRO_RETURN_PATH $returnUrl
-param GENBRO_DB $db
-param GENBRO_POSITION $position
+param P3P_GB_RETURN_PATH $returnUrl
+param P3P_GB_DB $db
+param P3P_GB_POSITION $position
 param SEQUENCE_TEMPLATE $seq
 
 tool primerBlast

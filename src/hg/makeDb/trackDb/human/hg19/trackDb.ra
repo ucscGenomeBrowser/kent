@@ -1200,8 +1200,7 @@ urlLabel Exome Variant Server:
 vcfDoQual off
 vcfDoFilter off
 
-include trackDb.gnomad.ra beta,public
-include trackDb.gnomad.alpha.ra alpha
+include trackDb.gnomad.ra 
 
 track exac
 compositeTrack on

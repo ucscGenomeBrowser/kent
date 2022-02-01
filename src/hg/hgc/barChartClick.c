@@ -25,6 +25,7 @@
 #include "hgConfig.h"
 #include "facetedBar.h"
 #include "pipeline.h"
+#include "chromAlias.h"
 
 #define EXTRA_FIELDS_SIZE 256
 
@@ -45,7 +46,7 @@ static struct barChartBed *getBarChartFromFile(struct trackDb *tdb, char *file,
 /* Retrieve barChart BED item from big file */
 {
 boolean hasOffsets = TRUE;
-struct bbiFile *bbi = bigBedFileOpen(file);
+struct bbiFile *bbi =  bigBedFileOpenAlias(file, chromAliasChromToAliasHash(database));
 struct asObject *as = bigBedAsOrDefault(bbi);
 if (retAs != NULL)
     *retAs = as;
@@ -125,7 +126,7 @@ static struct barChartBed *getBarChart(struct trackDb *tdb, char *item, char *ch
 /* Retrieve barChart BED item from track */
 {
 struct barChartBed *barChart = NULL;
-char *file = trackDbSetting(tdb, "bigDataUrl");
+char *file = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (file != NULL)
     barChart = getBarChartFromFile(tdb, file, item, chrom, start, end, retAs, extraFieldsReg, extraFieldsCountRet);
 else
@@ -289,16 +290,16 @@ static struct barChartItemData *getSampleVals(struct trackDb *tdb, struct barCha
 /* Get data values for this item (locus) from all samples */
 {
 struct barChartItemData *vals = NULL;
-char *dataFile = trackDbSetting(tdb, "barChartMatrixUrl");
+char *dataFile = hReplaceGbdb(trackDbSetting(tdb, "barChartMatrixUrl"));
 // for backwards compatibility during qa review
 if (dataFile == NULL)
-    dataFile = trackDbSetting(tdb, "barChartDataUrl");
+    dataFile = hReplaceGbdb(trackDbSetting(tdb, "barChartDataUrl"));
 // for backwards compatibility during qa review
 struct barChartCategory *categories = barChartUiGetCategories(database, tdb, NULL);
 struct hash *categoryHash = barChartCategoriesToHash(categories);
 if (dataFile != NULL)
     {
-    char *sampleFile = trackDbSetting(tdb, "barChartSampleUrl");
+    char *sampleFile = hReplaceGbdb(trackDbSetting(tdb, "barChartSampleUrl"));
     if (sampleFile == NULL)
         return NULL;
     if (retMatrixUrl != NULL)
@@ -424,7 +425,7 @@ if (categCount != chart->expCount)
     return;
     }
 
-char *statsFile = trackDbSetting(tdb, "barChartStatsUrl");
+char *statsFile = hReplaceGbdb(trackDbSetting(tdb, "barChartStatsUrl"));
 struct hash *statsHash = NULL;
 int countStatIx = 0;
 double statsSize = 0.0;
@@ -514,7 +515,7 @@ static void printBarChart(char *item, struct barChartBed *chart, struct trackDb 
     double maxVal, char *metric)
 /* Plot bar chart without expressionMatrix or R plots*/
 {
-char *statsFile = trackDbSetting(tdb, "barChartStatsUrl");
+char *statsFile = hReplaceGbdb(trackDbSetting(tdb, "barChartStatsUrl"));
 char *facets = trackDbSetting(tdb, "barChartFacets");
 if (facets != NULL && statsFile != NULL)
     facetedBarChart(item, chart, tdb, maxVal, statsFile, facets, metric);
