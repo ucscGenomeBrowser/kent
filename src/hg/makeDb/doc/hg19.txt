@@ -34068,6 +34068,17 @@ Track: Twist - Exome 2.1
 Download: curl https://www.twistbioscience.com/sites/default/files/resources/2021-10/hg38_Twist_exome_2_1_annotated_targets.bed | cut -f1-3 > TwistExome21.bed
 bedToBigBed TwistExome21.bed ../../chrom.sizes TwistExome21.bb -type=bed3
 
+# Updated on Feb 1, 2021 (max): got a corrected file from Tina Han <than@twistbioscience.com>
+To stay consistent, I kept the original filename TwistExome21.bb even though this 
+is not the 2.1 version anymore. Confusing, Twist went from 2.0 to 2.1 and then to 2.0.1 (!!)
+So 2.0.1 is more recent than 2.1.
+Original filename from Tina was: hg19_exome_v2.0.2_targets_sorted_validated.annotated.bed.gz
+
+mv TwistExome21.bb TwistExome21.old.bb
+cut TwistExome202.bed -f1-3 > TwistExome202.cut.bed
+bedToBigBed TwistExome202.cut.bed ../../chrom.sizes TwistExome21.bb -type=bed3
+
+
 # MGI Datasets:
 
 Track: MGI - Easy Exome Capture V4 Target Regions
