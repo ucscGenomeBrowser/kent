@@ -1105,52 +1105,55 @@ For more information on using Figshare, please see their
 <a href="https://support.figshare.com/support/home" target="_blank">Support Portal</a>.</p>
 
 
-<h3>Configuring your own HTTPS server</h3>
+<h3>Troubleshooting your own HTTPS server configuration</h3>
 <p>
-<p> The most popular web servers are Apache and NGINX. 
+When your own institution's system administrators are hosting your data they may benefit
+from this section about ensuring a secure HTTPS configuration. The most popular web servers
+that system admins use are Apache and NGINX. Instructions for setting up these popular web
+servers are found all over the web, so this section will not cover those here.<p>
 <p>
+<b>Certs and Security</b><br>
+As security on the Internet becomes increasingly important, SSL certificates are often
+required for proper server installation. Proper certificate validation helps stop
+&quot;Man-In-The-Middle&quot; attacks by ensuring that connections go to the correct
+server and not some fake imposter site. This process requires SSL certificates that
+have not expired, and whose domain name matches the domain name specified in the HTTPS URL.</p>
 <p>
-Instructions for setting up these popular web servers are found all over the web, so we will not cover that here.<p>
-
+The UCSC Genome Browser's networking software uses the very popular open source library
+openssl 1.0. System administrators hosting your data should ensure that TLS1.2 is allowed
+if you are going to provide data over HTTPS, since it is fast and secure and compatible
+with openssl 1.0.</p>
 <p>
-<B>Certs and Security</B><br>
-
-As security on the Internet is becoming increasingly important, SSL certificates are required for proper server installation.
-The certificate validation step helps stop Man-In-The-Middle attacks by ensuring that the connection goes to the correct server
-and not some fake site. The process requires SSL certificates that have not expired and whose domain name matches the domain name 
-specified in the HTTPS URL.<p> 
+<b>FREE CERT PROVIDER</b></p>
 <p>
-Our networking software uses the very popular open source library openssl 1.0.<br>
-Please ensure that TLS1.2 is allowed, since it is fast and secure and compatible with openssl 1.0.
+To help system administrators, here are groups that provide free web certs, including
+the popular <a href="https://letsencrypt.org/" target="_blank">LETSENCRYPT</a></p>
 <p>
-
-<B>FREE CERT PROVIDER</B><p>
-There are groups that provide free web certs, including the popular <a href="https://letsencrypt.org/">LETSENCRYPT</a><p>
-
-
-<B>Testing your site certs</B><p>
+<b>Testing your site certs</b></p>
 <p>
-<p>
-curl uses openssl
+Here are ways to check HTTPS certificates, such as with <code>curl</code>, which uses openssl.
 <pre>
 curl https://yourdomain.com/yourhub/hub.txt
 </pre>
 <p>
-If curl can fetch your hub.txt URL without errors, then the certs will work with the UCSC Genome Browser. <p>
+If curl can fetch the hub.txt HTTPS URL without errors, then the certs should work
+with the UCSC Genome Browser.</p>
 <p>
-<p>
-For a deeper level of debugging, use the open ssl client command<p>
+For a deeper level of debugging, system administrators can use the open ssl client command:
 <pre>
 openssl s_client -connect yourdomain.com:443 -servername yourdomain.com
-</pre>
+</pre></p>
 <p>
-Various online SSL Server Test sites have great detailed documentation about your web site certs and configuration<p>
+Various online SSL Server Test sites have great detailed documentation about how
+to check your website's certs and configuration, such as <a href="https://www.ssllabs.com/ssltest/"
+target="_blank">https://www.ssllabs.com/ssltest/</a>. Here is an example where you can
+supply yourdomain.com and discover results:
 <pre>
-https://www.ssllabs.com/ssltest/
 https://www.ssllabs.com/ssltest/analyze.html?d=yourdomain.com&latest
-</pre>
+</pre></p>
 <p>
-Feel free to contact UCSC Genome Browser for help if you are seeing certificate validation error messages you do not understand.<p>
+Feel free to contact UCSC Genome Browser for help if you are seeing certificate
+validation error messages you do not understand.</p>
 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
