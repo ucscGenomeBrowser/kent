@@ -1481,3 +1481,111 @@ TMPDIR=/dev/shm
 real	758m9.174s
 user	0m1.449s
 sys	0m1.346s
+##############################################################################
+# LASTZ  mummichog GCF_011125445.2 vs. mummichog GCF_000826765.1 (DONE - 2022-01-21 - Gerardo)
+
+# should be able to run this from anywhere, this time it was run from:
+    cd kent/src/hg/utils/automation
+
+  time (~/kent/src/hg/utils/automation/pairLastz.sh \
+        GCF_011125445.2_MU-UCD_Fhet_4.1 GCF_000826765.1_Fundulus_heteroclitus-3.0.2 other other) \
+           > GCF011125445_GCF000826765_20220121.log 2>&1 &
+  # check the total time
+grep -w real  GCF011125445_GCF000826765_20220121.log  | tail -1 | sed -e 's/^/    # /;'
+    # real      1621m36.194s
+
+  # this GCF011125445_GCF000826765_20220121.log log file happens to have a copy of the make doc, as well
+  # as the copy of the make doc left in the target assembly directory:
+# /hive/data/genomes/asmHubs/allBuild/GCF/011/125/445/GCF_011125445.2_MU-UCD_Fhet_4.1/trackData/lastzGCF_000826765.1.2022-01-21/makeDoc.txt
+
+    # this command outputs this makeDoc text:
+
+    cat kent/src/hg/utils/automation/GCF011125445_GCF000826765_20220121.log
+
+##############################################################################
+# LASTZ mummichog GCF_011125445.2 vs. mummichog GCF_000826765.1
+#    (DONE - 2022-01-21 - Gerardo)
+
+    mkdir /hive/data/genomes/asmHubs/allBuild/GCF/011/125/445/GCF_011125445.2_MU-UCD_Fhet_4.1/trackData/lastzGCF_000826765.1.2022-01-21
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/011/125/445/GCF_011125445.2_MU-UCD_Fhet_4.1/trackData/lastzGCF_000826765.1.2022-01-21
+
+    printf '# mummichog GCF_000826765.1 vs. mummichog GCF_011125445.2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: mummichog GCF_011125445.2
+SEQ1_DIR=/hive/data/genomes/asmHubs/GCF/011/125/445/GCF_011125445.2/GCF_011125445.2.2bit
+SEQ1_LEN=/hive/data/genomes/asmHubs/GCF/011/125/445/GCF_011125445.2/GCF_011125445.2.chrom.sizes.txt
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: mummichog GCF_000826765.1
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/000/826/765/GCF_000826765.1/GCF_000826765.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/000/826/765/GCF_000826765.1/GCF_000826765.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/asmHubs/allBuild/GCF/011/125/445/GCF_011125445.2_MU-UCD_Fhet_4.1/trackData/lastzGCF_000826765.1.2022-01-21
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+      -tAsmId GCF_011125445.2_MU-UCD_Fhet_4.1 -qAsmId GCF_000826765.1_Fundulus_heteroclitus-3.0.2 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	755m29.866s
+
+    sed -e 's/^/    # /;' fb.GCF_011125445.2.chainGCF_000826765.1Link.txt
+    # 1069310182 bases of 1203505739 (88.850%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_011125445.2.chainSynGCF_000826765.1Link.txt
+    # 885838715 bases of 1203505739 (73.605%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+      -target2Bit="/hive/data/genomes/asmHubs/GCF/011/125/445/GCF_011125445.2/GCF_011125445.2.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/011/125/445/GCF_011125445.2/GCF_011125445.2.chrom.sizes.txt" \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/000/826/765/GCF_000826765.1/GCF_000826765.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/000/826/765/GCF_000826765.1/GCF_000826765.1.chrom.sizes.txt" \
+        GCF_011125445.2 GCF_000826765.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	86m1.406s
+
+    sed -e 's/^/    # /;' fb.GCF_011125445.2.chainRBest.GCF_000826765.1.txt
+    # 858755159 bases of 1203505739 (71.354%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/000/826/765/GCF_000826765.1_Fundulus_heteroclitus-3.0.2/trackData/blastz.GCF_011125445.2.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+  -tAsmId GCF_011125445.2_MU-UCD_Fhet_4.1 -qAsmId GCF_000826765.1_Fundulus_heteroclitus-3.0.2 /hive/data/genomes/asmHubs/allBuild/GCF/011/125/445/GCF_011125445.2_MU-UCD_Fhet_4.1/trackData/lastzGCF_000826765.1.2022-01-21/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	706m8.827s
+
+    sed -e 's/^/    # /;' fb.GCF_000826765.1.chainGCF_011125445.2Link.txt
+    # 906492141 bases of 1021898560 (88.707%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_000826765.1.chainSynGCF_011125445.2Link.txt
+    # 852990578 bases of 1021898560 (83.471%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+   -query2bit="/hive/data/genomes/asmHubs/GCF/011/125/445/GCF_011125445.2/GCF_011125445.2.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/011/125/445/GCF_011125445.2/GCF_011125445.2.chrom.sizes.txt" \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/000/826/765/GCF_000826765.1/GCF_000826765.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/000/826/765/GCF_000826765.1/GCF_000826765.1.chrom.sizes.txt" \
+   GCF_000826765.1 GCF_011125445.2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	73m55.254s
+
+    sed -e 's/^/    # /;' fb.GCF_000826765.1.chainRBest.GCF_011125445.2.txt
+    # 865608764 bases of 1021898560 (84.706%) in intersection
+
+##############################################################################
+
+real	1621m36.194s
+user	0m2.046s
+sys	0m2.922s
