@@ -206,6 +206,7 @@ if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), idSize, sizeof(idSize)))
 
             hel = hashLookupNext(hel);
             }
+        return NULL;
         }
     else
         {
