@@ -198,14 +198,14 @@ if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), idSize, sizeof(idSize)))
         // didn't find chrom name, but have an alias hash.  Try the aliases
         struct hashEl *hel = hashLookup(bbi->aliasHash, chrom);
 
-        while(hel)
+        for(; hel;  hel = hashLookupNext(hel))
             {
             char *alias = hel->val;
             if (bptFileFind(bbi->chromBpt, alias, strlen(alias), idSize, sizeof(idSize)))
                 break;
-
-            hel = hashLookupNext(hel);
             }
+        if (hel == NULL)   // did we run out of aliases to try?
+            return NULL;
         }
     else
         {
