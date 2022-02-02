@@ -104,8 +104,6 @@ for (ucscName = ucscNameList; ucscName != NULL; ucscName = ucscName->next)
     }
 newMeta->ucscToAlias = ucscToHicName;
 
-if (ucscToChromAlias != NULL)
-    hashFreeWithVals(&ucscToChromAlias, chromAliasFree);
 hashFree(&hicChromHash);
 slNameFreeList(&hicChromNames);
 slNameFreeList(&ucscNameList);
