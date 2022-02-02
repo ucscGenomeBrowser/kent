@@ -35,6 +35,12 @@ printf "# successful mkdir on hgdownload\n"
 
 if [ 1 -eq 0 ]; then
 
+### check if there are actually index files to go:
+
+export idxCount=`ls ${srcDir}/*.gfidx 2> /dev/null | wc -l`
+
+if [ "${idxCount}" -gt 0 ]; then
+
 export dynaServerDir="/scratch/hubs/${dirPath}"
 
 ssh qateam@dynablat-01.soe.ucsc.edu "mkdir -p ${dynaServerDir}" 2>&1 | grep -v "X11 forwarding request" || true
@@ -46,6 +52,9 @@ rsync --stats -a -L -P ${srcDir}/*.gfidx "qateam@dynablat-01.soe.ucsc.edu:${dyna
   2>&1 | grep -v "X11 forwarding request" || true
 
 fi
+
+fi
+
 ### 2021-12-20 - out of disk space on dynablat
 ##################################################################
 

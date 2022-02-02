@@ -71,6 +71,7 @@
 ./runBuild GCA_001685135.1 GCA_001685135.1_ManJav1.0 mammals Manis_javanica
 ./runBuild GCA_001698545.1 GCA_001698545.1_ASM169854v1 primates Rhinopithecus_bieti
 ./runBuild GCA_001704415.1 GCA_001704415.1_ARS1 mammals Capra_hircus
+./runBuild GCA_001708105.1 GCA_001708105.1_ASM170810v1 fungi Komagataella_pastoris
 ./runBuild GCA_001857705.1 GCA_001857705.1_PanPar1.0 mammals Panthera_pardus
 ./runBuild GCA_001887905.1 GCA_001887905.1_LycPicSAfr1.0 mammals Lycaon_pictus
 ./runBuild GCA_001888835.1 GCA_001888835.1_ASM188883v1 mammals Rhinolophus_sinicus
