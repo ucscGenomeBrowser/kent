@@ -9,9 +9,9 @@ setenv LASTREVIEW2DAY  2021-12-20           # v425 preview2
 setenv preview2Subversion      # empty string unless mistake, otherwise .1 etc
 
 # set these three for final build:  increment NN and copy date from TODAY to LASTWEEK
-setenv BRANCHNN 425                    # increment for new build
-setenv TODAY 2022-01-10                 # v425 final
-setenv LASTWEEK 2021-12-06                 # v424 final
+setenv BRANCHNN 426                    # increment for new build
+setenv TODAY 2022-01-31                 # v426 final
+setenv LASTWEEK 2022-01-10                 # v425 final
 setenv baseSubversion                  # empty string unless mistake, otherwise .1 etc (warning: fixed for _base but not _branch)
 
 setenv BUILDHOME /hive/groups/browser/newBuild
