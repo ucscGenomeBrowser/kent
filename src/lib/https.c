@@ -17,6 +17,10 @@
 #include "hash.h"
 #include "net.h"
 
+char *https_cert_check = NULL;
+char *https_cert_check_depth = NULL;
+char *https_cert_check_verbose = NULL;
+char *https_cert_check_domain_exceptions = NULL;
 
 // For use with callback. Set a variable into the connection itself,
 // and then use that during the callback.
@@ -74,6 +78,16 @@ fprintf(stderr, "%s\n", msg); fflush(stderr);
 
 void initDomainWhiteListHash();   // forward declaration
 
+char *mySetenv(char *setting, char *defaultValue)
+/* avoid real setenv which causes problems in multi-threaded programs */
+{
+char *thisSetting = getenv(setting);
+if (thisSetting)
+    return cloneString(thisSetting);
+else
+    return cloneString(defaultValue);
+}
+
 void openSslInit()
 /* do only once */
 {
@@ -82,6 +96,12 @@ static pthread_mutex_t osiMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_lock( &osiMutex );
 if (!done)
     {
+    // setenv here for thread-safety
+    https_cert_check                   = mySetenv("https_cert_check", "log");                  // DEFAULT certificate check is log.
+    https_cert_check_depth             = mySetenv("https_cert_check_depth", "9");              // DEFAULT depth check level is 9.
+    https_cert_check_verbose           = mySetenv("https_cert_check_verbose", "off");          // DEFAULT verbose is off.
+    https_cert_check_domain_exceptions = mySetenv("https_cert_check_domain_exceptions", "");   // DEFAULT space separated list is empty string.
+
     SSL_library_init();
     ERR_load_crypto_strings();
     ERR_load_SSL_strings();
@@ -313,13 +333,13 @@ ssl = X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
 myData = SSL_get_ex_data(ssl, myDataIndex);
 
 
-if (depth > atoi(getenv("https_cert_check_depth")))
+if (depth > atoi(https_cert_check_depth))
     {
     preverify_ok = 0;
     err = X509_V_ERR_CERT_CHAIN_TOO_LONG;
     X509_STORE_CTX_set_error(ctx, err);
     }
-if (sameString(getenv("https_cert_check_verbose"), "on"))
+if (sameString(https_cert_check_verbose, "on"))
     {
     fprintf(stderr,"depth=%d:%s\n", depth, buf);
     }
@@ -330,7 +350,7 @@ if (!preverify_ok)
 	fprintf(stderr, "verify error:num=%d:%s:depth=%d:%s hostName=%s CGI=%s\n", err,
 	    X509_verify_cert_error_string(err), depth, buf, myData->hostName, getenv("SCRIPT_NAME"));
 	}
-    if (!sameString(getenv("https_cert_check"), "log"))
+    if (!sameString(https_cert_check, "log"))
 	{
 	char *cn = strstr(buf, "/CN=");
 	if (cn) cn+=4;  // strlen /CN=
@@ -346,7 +366,7 @@ if (!preverify_ok && (err == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT))
     X509_NAME_oneline(X509_get_issuer_name(cert), buf, 256);
     fprintf(stderr, "issuer= %s\n", buf);
     }
-if (sameString(getenv("https_cert_check"), "warn") || sameString(getenv("https_cert_check"), "log"))
+if (sameString(https_cert_check, "warn") || sameString(https_cert_check, "log"))
     return 1;
 else
     return preverify_ok;
@@ -363,7 +383,7 @@ domainWhiteList = hashNew(8);
 
 // whitelisted domain exceptions set in hg.conf
 // space separated list.
-char *dmwl = cloneString(getenv("https_cert_check_domain_exceptions"));
+char *dmwl = cloneString(https_cert_check_domain_exceptions);
 int wordCount = chopByWhite(dmwl, NULL, 0);
 if (wordCount > 0)
     {
@@ -510,14 +530,6 @@ int fd=0;
 
 // https_cert_check env var can be abort warn or none.
 
-setenv("https_cert_check", "log", 0);      // DEFAULT certificate check is log.
-
-setenv("https_cert_check_depth", "9", 0);   // DEFAULT depth check level is 9.
-
-setenv("https_cert_check_verbose", "off", 0);   // DEFAULT verbose is off.
-
-setenv("https_cert_check_domain_exceptions", "", 0);   // DEFAULT space separated list is empty string.
-
 char *proxyUrl = getenv("https_proxy");
 
 if (noProxy)
@@ -542,7 +554,7 @@ struct timeval tv;
 struct myData myData;
 boolean doSetMyData = FALSE;
 
-if (!sameString(getenv("https_cert_check"), "none"))
+if (!sameString(https_cert_check, "none"))
     {
     if (checkIfInHashWithWildCard(hostName))
 	{
@@ -573,7 +585,7 @@ if (!sameString(getenv("https_cert_check"), "none"))
 	 * Let the verify_callback catch the verify_depth error so that we get
 	 * an appropriate error in the logfile.
 	 */
-	SSL_CTX_set_verify_depth(ctx, atoi(getenv("https_cert_check_depth")) + 1);
+	SSL_CTX_set_verify_depth(ctx, atoi(https_cert_check_depth) + 1);
 
 	// VITAL FOR PROPER VERIFICATION OF CERTS
 	if (!SSL_CTX_set_default_verify_paths(ctx)) 

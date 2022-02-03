@@ -3740,28 +3740,13 @@ while ((c = *s++) != 0)
 return TRUE;
 }
 
-time_t mktimeFromUtc (struct tm *t)
-/* Return time_t for tm in UTC (GMT)
- * Useful for stuff like converting to time_t the
- * last-modified HTTP response header
- * which is always GMT. Returns -1 on failure of mktime */
+
+time_t mktimeFromUtc(struct tm *tm)
 {
-    time_t time;
-    char *tz;
-    char save_tz[100];
-    tz=getenv("TZ");
-    if (tz)
-        safecpy(save_tz, sizeof(save_tz), tz);
-    setenv("TZ", "GMT0", 1);
-    tzset();
-    t->tm_isdst = 0;
-    time=mktime(t);
-    if (tz)
-        setenv("TZ", save_tz, 1);
-    else
-        unsetenv("TZ");
-    tzset();
-    return (time);
+time_t ret = tm->tm_sec + tm->tm_min*60 + tm->tm_hour*3600 + tm->tm_yday*86400;
+ret += ((time_t)31536000) * (tm->tm_year-70);
+ret += ((tm->tm_year-69)/4)*86400 - ((tm->tm_year-1)/100)*86400 + ((tm->tm_year+299)/400)*86400;
+return ret;
 }
 
 
