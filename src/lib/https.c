@@ -22,6 +22,11 @@ char *https_cert_check_depth = NULL;
 char *https_cert_check_verbose = NULL;
 char *https_cert_check_domain_exceptions = NULL;
 
+char *https_proxy = NULL;
+char *log_proxy = NULL;
+
+char *SCRIPT_NAME = NULL;
+
 // For use with callback. Set a variable into the connection itself,
 // and then use that during the callback.
 struct myData
@@ -96,11 +101,15 @@ static pthread_mutex_t osiMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_lock( &osiMutex );
 if (!done)
     {
-    // setenv here for thread-safety
+    // setenv avoided since not thread-safe
     https_cert_check                   = mySetenv("https_cert_check", "log");                  // DEFAULT certificate check is log.
     https_cert_check_depth             = mySetenv("https_cert_check_depth", "9");              // DEFAULT depth check level is 9.
     https_cert_check_verbose           = mySetenv("https_cert_check_verbose", "off");          // DEFAULT verbose is off.
     https_cert_check_domain_exceptions = mySetenv("https_cert_check_domain_exceptions", "");   // DEFAULT space separated list is empty string.
+    // getenv here for thread-safety
+    https_proxy = cloneString(getenv("https_proxy"));
+    log_proxy   = cloneString(getenv("log_proxy"));
+    SCRIPT_NAME = cloneString(getenv("SCRIPT_NAME"));
 
     SSL_library_init();
     ERR_load_crypto_strings();
@@ -345,10 +354,10 @@ if (sameString(https_cert_check_verbose, "on"))
     }
 if (!preverify_ok) 
     {
-    if (getenv("SCRIPT_NAME"))  // CGI mode
+    if (SCRIPT_NAME)  // CGI mode
 	{
 	fprintf(stderr, "verify error:num=%d:%s:depth=%d:%s hostName=%s CGI=%s\n", err,
-	    X509_verify_cert_error_string(err), depth, buf, myData->hostName, getenv("SCRIPT_NAME"));
+	    X509_verify_cert_error_string(err), depth, buf, myData->hostName, SCRIPT_NAME);
 	}
     if (!sameString(https_cert_check, "log"))
 	{
@@ -530,7 +539,7 @@ int fd=0;
 
 // https_cert_check env var can be abort warn or none.
 
-char *proxyUrl = getenv("https_proxy");
+char *proxyUrl = https_proxy;
 
 if (noProxy)
     proxyUrl = NULL;
@@ -559,7 +568,7 @@ if (!sameString(https_cert_check, "none"))
     if (checkIfInHashWithWildCard(hostName))
 	{
 	// old existing domains which are not (yet) compatible with openssl.
-	if (getenv("SCRIPT_NAME"))  // CGI mode
+	if (SCRIPT_NAME)  // CGI mode
 	    {
 	    fprintf(stderr, "domain %s cert check skipped because it is white-listed as an exception.\n", hostName);
 	    }
@@ -632,8 +641,7 @@ if (fd == -1)
 
 if (proxyUrl)
     {
-    char *logProxy = getenv("log_proxy");
-    if (sameOk(logProxy,"on"))
+    if (sameOk(log_proxy,"on"))
 	verbose(1, "CONNECT %s:%d HTTP/1.0 via %s:%d\n", hostName, port, connectHost,connectPort);
     struct dyString *dy = newDyString(512);
     dyStringPrintf(dy, "CONNECT %s:%d HTTP/1.0\r\n", hostName, port);
