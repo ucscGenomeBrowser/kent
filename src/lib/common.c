@@ -3742,11 +3742,11 @@ return TRUE;
 
 
 time_t mktimeFromUtc(struct tm *tm)
+// convert UTC time to UTC time_t 
+// The timegm function is available on Linux and BSD and MacOS/Darwin
+// This is thread-safe and avoids setenv
 {
-time_t ret = tm->tm_sec + tm->tm_min*60 + tm->tm_hour*3600 + tm->tm_yday*86400;
-ret += ((time_t)31536000) * (tm->tm_year-70);
-ret += ((tm->tm_year-69)/4)*86400 - ((tm->tm_year-1)/100)*86400 + ((tm->tm_year+299)/400)*86400;
-return ret;
+return timegm(tm);
 }
 
 
