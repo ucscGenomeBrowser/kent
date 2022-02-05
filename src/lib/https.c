@@ -17,10 +17,10 @@
 #include "hash.h"
 #include "net.h"
 
-char *https_cert_check = NULL;
-char *https_cert_check_depth = NULL;
-char *https_cert_check_verbose = NULL;
-char *https_cert_check_domain_exceptions = NULL;
+char *https_cert_check = "log";                 // DEFAULT certificate check is log.
+char *https_cert_check_depth = "9";             // DEFAULT depth check level is 9.
+char *https_cert_check_verbose = "off";         // DEFAULT verbose is off.
+char *https_cert_check_domain_exceptions = "";  // DEFAULT space separated list is empty string.
 
 char *https_proxy = NULL;
 char *log_proxy = NULL;
@@ -83,14 +83,13 @@ fprintf(stderr, "%s\n", msg); fflush(stderr);
 
 void initDomainWhiteListHash();   // forward declaration
 
-char *mySetenv(char *setting, char *defaultValue)
-/* avoid real setenv which causes problems in multi-threaded programs */
+void myGetenv(char **pMySetting, char *envSetting)
+/* avoid setenv which causes problems in multi-threaded programs
+ * cloning the env var helps isolate it from other threads activity. */
 {
-char *thisSetting = getenv(setting);
-if (thisSetting)
-    return cloneString(thisSetting);
-else
-    return cloneString(defaultValue);
+char *value = getenv(envSetting);
+if (value)
+     *pMySetting = cloneString(value);
 }
 
 void openSslInit()
@@ -102,14 +101,13 @@ pthread_mutex_lock( &osiMutex );
 if (!done)
     {
     // setenv avoided since not thread-safe
-    https_cert_check                   = mySetenv("https_cert_check", "log");                  // DEFAULT certificate check is log.
-    https_cert_check_depth             = mySetenv("https_cert_check_depth", "9");              // DEFAULT depth check level is 9.
-    https_cert_check_verbose           = mySetenv("https_cert_check_verbose", "off");          // DEFAULT verbose is off.
-    https_cert_check_domain_exceptions = mySetenv("https_cert_check_domain_exceptions", "");   // DEFAULT space separated list is empty string.
-    // getenv here for thread-safety
-    https_proxy = cloneString(getenv("https_proxy"));
-    log_proxy   = cloneString(getenv("log_proxy"));
-    SCRIPT_NAME = cloneString(getenv("SCRIPT_NAME"));
+    myGetenv(&https_cert_check,                   "https_cert_check");
+    myGetenv(&https_cert_check_depth,             "https_cert_check_depth");
+    myGetenv(&https_cert_check_verbose,           "https_cert_check_verbose");
+    myGetenv(&https_cert_check_domain_exceptions, "https_cert_check_domain_exceptions");
+    myGetenv(&https_proxy, "https_proxy");
+    myGetenv(&log_proxy,   "log_proxy");
+    myGetenv(&SCRIPT_NAME, "SCRIPT_NAME");
 
     SSL_library_init();
     ERR_load_crypto_strings();
