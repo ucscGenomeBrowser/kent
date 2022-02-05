@@ -421,6 +421,8 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "annotation.dbi.udel.edu");
     hashStoreName(domainWhiteList, "arn.ugr.es");
     hashStoreName(domainWhiteList, "bic2.ibi.upenn.edu");
+    hashStoreName(domainWhiteList, "bifx-core3.bio.ed.ac.uk");
+    hashStoreName(domainWhiteList, "biodb.kaist.ac.kr");
     hashStoreName(domainWhiteList, "bioinfo2.ugr.es");
     hashStoreName(domainWhiteList, "bioinfo5.ugr.es");
     hashStoreName(domainWhiteList, "bioshare.genomecenter.ucdavis.edu");
@@ -430,6 +432,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "cctop.cos.uni-heidelberg.de");
     hashStoreName(domainWhiteList, "cluster.hpcc.ucr.edu");
     hashStoreName(domainWhiteList, "costalab.ukaachen.de");
+    hashStoreName(domainWhiteList, "cvmfs-hubs.vhost38.genap.ca");
     hashStoreName(domainWhiteList, "data.rc.fas.harvard.edu");
     hashStoreName(domainWhiteList, "datahub-7ak6xof0.udes.genap.ca");
     hashStoreName(domainWhiteList, "datahub-7mu6z13t.udes.genap.ca");
@@ -451,6 +454,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "frigg.uio.no");
     hashStoreName(domainWhiteList, "ftp--ncbi--nlm--nih--gov.ibrowse.co");
     hashStoreName(domainWhiteList, "ftp.science.ru.nl");
+    hashStoreName(domainWhiteList, "functionalgenomics.upf.edu");
     hashStoreName(domainWhiteList, "galaxy.med.uvm.edu");
     hashStoreName(domainWhiteList, "garfield.igh.cnrs.fr");
     hashStoreName(domainWhiteList, "gcp.wenglab.org");
@@ -464,9 +468,12 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "herv.img.cas.cz");
     hashStoreName(domainWhiteList, "hci-bio-app.hci.utah.edu");
     hashStoreName(domainWhiteList, "hkgateway.med.umich.edu");
+    hashStoreName(domainWhiteList, "hiview.case.edu");
+    hashStoreName(domainWhiteList, "hpc.bmrn.com");
     hashStoreName(domainWhiteList, "hsb.upf.edu");
     hashStoreName(domainWhiteList, "icbi.at");
     hashStoreName(domainWhiteList, "lichtlab.cancer.ufl.edu");
+    hashStoreName(domainWhiteList, "lvgsrv1.epfl.ch");
     hashStoreName(domainWhiteList, "manticore.niehs.nih.gov");
     hashStoreName(domainWhiteList, "metamorf.hb.univ-amu.fr");
     hashStoreName(domainWhiteList, "microb215.med.upenn.edu");
@@ -494,11 +501,14 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "v91rc2.master.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "v91rc3.master.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "v94.rc2.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "verjo103.butantan.gov.br");
     hashStoreName(domainWhiteList, "virtlehre.informatik.uni-leipzig.de");
     hashStoreName(domainWhiteList, "vm-galaxy-prod.toulouse.inra.fr");
     hashStoreName(domainWhiteList, "web1.bx.bio.jhu.edu");
     hashStoreName(domainWhiteList, "www.datadepot.rcac.purdue.edu");
+    hashStoreName(domainWhiteList, "www.epigenomes.ca");
     hashStoreName(domainWhiteList, "www.isical.ac.in");
+    hashStoreName(domainWhiteList, "www.morgridge.net");
     hashStoreName(domainWhiteList, "www.morgridge.us");
     hashStoreName(domainWhiteList, "www.ogic.ca");
     hashStoreName(domainWhiteList, "www.starklab.org");
