@@ -14,6 +14,7 @@ maxItems 100000
 maxWindowCoverage 50000
 exonArrows on
 spectrum on
+noParentConfig on
 
 	track jaspar2022
 	parent jaspar on
