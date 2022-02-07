@@ -20,6 +20,7 @@
 ./runBuild GCA_000296755.1 GCA_000296755.1_EriEur2.0 mammals Erinaceus_europaeus
 ./runBuild GCA_000298735.2 GCA_000298735.2_Oar_v4.0 mammals Ovis_aries
 ./runBuild GCA_000311805.2 GCA_000311805.2_CB1 mammals Camelus_ferus
+./runBuild GCA_000340355.2 GCA_000340355.2_Leishmania_braziliensis_M2903-1.0.6 invertebrate Leishmania_braziliensis
 ./runBuild GCA_000349665.1 GCA_000349665.1_MesAur1.0 mammals Mesocricetus_auratus
 ./runBuild GCA_000349705.1 GCA_000349705.1_LepWed1.0 mammals Leptonychotes_weddellii
 ./runBuild GCA_000364345.1 GCA_000364345.1_Macaca_fascicularis_5.0 primates Macaca_fascicularis

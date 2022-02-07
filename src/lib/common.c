@@ -3740,28 +3740,13 @@ while ((c = *s++) != 0)
 return TRUE;
 }
 
-time_t mktimeFromUtc (struct tm *t)
-/* Return time_t for tm in UTC (GMT)
- * Useful for stuff like converting to time_t the
- * last-modified HTTP response header
- * which is always GMT. Returns -1 on failure of mktime */
+
+time_t mktimeFromUtc(struct tm *tm)
+// convert UTC time to UTC time_t 
+// The timegm function is available on Linux and BSD and MacOS/Darwin
+// This is thread-safe and avoids setenv
 {
-    time_t time;
-    char *tz;
-    char save_tz[100];
-    tz=getenv("TZ");
-    if (tz)
-        safecpy(save_tz, sizeof(save_tz), tz);
-    setenv("TZ", "GMT0", 1);
-    tzset();
-    t->tm_isdst = 0;
-    time=mktime(t);
-    if (tz)
-        setenv("TZ", save_tz, 1);
-    else
-        unsetenv("TZ");
-    tzset();
-    return (time);
+return timegm(tm);
 }
 
 

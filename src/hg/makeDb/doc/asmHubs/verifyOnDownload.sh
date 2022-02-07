@@ -38,8 +38,10 @@ do
        | tr -d '"' | sed -e 's/^ \+//; s/ {//;' | xargs echo | wc -w`
   if [ "${trackCount}" -gt 14 ]; then
     ((successCount=successCount+1))
+    printf "%03d\t%s\t%d tracks:\t" "${doneCount}" "${genome}" "${trackCount}"
+  else
+    printf "%03d\t%s\t%d (error < 15) tracks:\t" "${doneCount}" "${genome}" "${trackCount}"
   fi
-  printf "%03d\t%s\t%d tracks:\t" "${doneCount}" "${genome}" "${trackCount}"
   curl -L "https://$host/list/hubGenomes?hubUrl=https://$hubSource/hubs/${dirPath}/hub.txt" 2> /dev/null \
      | python -mjson.tool | egrep "organism\":|description\":" | sed -e "s/'/_/g;" \
        | tr -d '"'  | xargs echo \
@@ -53,8 +55,10 @@ do
                  | sed -e 's/^ \+//; s/ {//;' | xargs echo | wc -w`
   if [ "${trackCount}" -gt 14 ]; then
     ((successCount=successCount+1))
+    printf "%03d\t%s\t%d tracks:\t" "${doneCount}" "${db}" "${trackCount}"
+  else
+    printf "%03d\t%s\t%d (error < 15) tracks:\t" "${doneCount}" "${db}" "${trackCount}"
   fi
-  printf "%03d\t%s\t%d tracks:\t" "${doneCount}" "${db}" "${trackCount}"
 hgsql -N -e "select organism,description,\",\",scientificName from dbDb where name=\"$db\";" hgcentraltest | tr "'" '_' | xargs echo | sed -e 's/ ,/,/;'
        ;;
   esac
