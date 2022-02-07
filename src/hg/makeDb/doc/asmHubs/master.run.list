@@ -275,6 +275,7 @@
 ./runBuild GCA_009859025.1 GCA_009859025.1_bTaeGut2.p.v1.alt birds Taeniopygia_guttata
 ./runBuild GCA_009859065.2 GCA_009859065.2_bTaeGut2.pri.v2 birds Taeniopygia_guttata
 ./runBuild GCA_009873245.2 GCA_009873245.2_mBalMus1.v2 mammals Balaenoptera_musculus
+./runBuild GCA_009914755.4 GCA_009914755.4_CHM13_T2T_v2.0 primates Homo_sapiens
 ./runBuild GCA_010909745.1 GCA_010909745.1_sAmbRad1.alt vertebrate Amblyraja_radiata
 ./runBuild GCA_010909765.1 GCA_010909765.1_sAmbRad1.pri vertebrate Amblyraja_radiata
 ./runBuild GCA_010993595.1 GCA_010993595.1_kPetMar1.alt vertebrate Petromyzon_marinus
