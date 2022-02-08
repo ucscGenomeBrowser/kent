@@ -17,10 +17,10 @@
 #include "hash.h"
 #include "net.h"
 
-char *https_cert_check = NULL;
-char *https_cert_check_depth = NULL;
-char *https_cert_check_verbose = NULL;
-char *https_cert_check_domain_exceptions = NULL;
+char *https_cert_check = "log";                 // DEFAULT certificate check is log.
+char *https_cert_check_depth = "9";             // DEFAULT depth check level is 9.
+char *https_cert_check_verbose = "off";         // DEFAULT verbose is off.
+char *https_cert_check_domain_exceptions = "";  // DEFAULT space separated list is empty string.
 
 char *https_proxy = NULL;
 char *log_proxy = NULL;
@@ -83,14 +83,13 @@ fprintf(stderr, "%s\n", msg); fflush(stderr);
 
 void initDomainWhiteListHash();   // forward declaration
 
-char *mySetenv(char *setting, char *defaultValue)
-/* avoid real setenv which causes problems in multi-threaded programs */
+void myGetenv(char **pMySetting, char *envSetting)
+/* avoid setenv which causes problems in multi-threaded programs
+ * cloning the env var helps isolate it from other threads activity. */
 {
-char *thisSetting = getenv(setting);
-if (thisSetting)
-    return cloneString(thisSetting);
-else
-    return cloneString(defaultValue);
+char *value = getenv(envSetting);
+if (value)
+     *pMySetting = cloneString(value);
 }
 
 void openSslInit()
@@ -102,14 +101,13 @@ pthread_mutex_lock( &osiMutex );
 if (!done)
     {
     // setenv avoided since not thread-safe
-    https_cert_check                   = mySetenv("https_cert_check", "log");                  // DEFAULT certificate check is log.
-    https_cert_check_depth             = mySetenv("https_cert_check_depth", "9");              // DEFAULT depth check level is 9.
-    https_cert_check_verbose           = mySetenv("https_cert_check_verbose", "off");          // DEFAULT verbose is off.
-    https_cert_check_domain_exceptions = mySetenv("https_cert_check_domain_exceptions", "");   // DEFAULT space separated list is empty string.
-    // getenv here for thread-safety
-    https_proxy = cloneString(getenv("https_proxy"));
-    log_proxy   = cloneString(getenv("log_proxy"));
-    SCRIPT_NAME = cloneString(getenv("SCRIPT_NAME"));
+    myGetenv(&https_cert_check,                   "https_cert_check");
+    myGetenv(&https_cert_check_depth,             "https_cert_check_depth");
+    myGetenv(&https_cert_check_verbose,           "https_cert_check_verbose");
+    myGetenv(&https_cert_check_domain_exceptions, "https_cert_check_domain_exceptions");
+    myGetenv(&https_proxy, "https_proxy");
+    myGetenv(&log_proxy,   "log_proxy");
+    myGetenv(&SCRIPT_NAME, "SCRIPT_NAME");
 
     SSL_library_init();
     ERR_load_crypto_strings();
@@ -423,6 +421,8 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "annotation.dbi.udel.edu");
     hashStoreName(domainWhiteList, "arn.ugr.es");
     hashStoreName(domainWhiteList, "bic2.ibi.upenn.edu");
+    hashStoreName(domainWhiteList, "bifx-core3.bio.ed.ac.uk");
+    hashStoreName(domainWhiteList, "biodb.kaist.ac.kr");
     hashStoreName(domainWhiteList, "bioinfo2.ugr.es");
     hashStoreName(domainWhiteList, "bioinfo5.ugr.es");
     hashStoreName(domainWhiteList, "bioshare.genomecenter.ucdavis.edu");
@@ -432,6 +432,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "cctop.cos.uni-heidelberg.de");
     hashStoreName(domainWhiteList, "cluster.hpcc.ucr.edu");
     hashStoreName(domainWhiteList, "costalab.ukaachen.de");
+    hashStoreName(domainWhiteList, "cvmfs-hubs.vhost38.genap.ca");
     hashStoreName(domainWhiteList, "data.rc.fas.harvard.edu");
     hashStoreName(domainWhiteList, "datahub-7ak6xof0.udes.genap.ca");
     hashStoreName(domainWhiteList, "datahub-7mu6z13t.udes.genap.ca");
@@ -453,6 +454,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "frigg.uio.no");
     hashStoreName(domainWhiteList, "ftp--ncbi--nlm--nih--gov.ibrowse.co");
     hashStoreName(domainWhiteList, "ftp.science.ru.nl");
+    hashStoreName(domainWhiteList, "functionalgenomics.upf.edu");
     hashStoreName(domainWhiteList, "galaxy.med.uvm.edu");
     hashStoreName(domainWhiteList, "garfield.igh.cnrs.fr");
     hashStoreName(domainWhiteList, "gcp.wenglab.org");
@@ -466,9 +468,12 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "herv.img.cas.cz");
     hashStoreName(domainWhiteList, "hci-bio-app.hci.utah.edu");
     hashStoreName(domainWhiteList, "hkgateway.med.umich.edu");
+    hashStoreName(domainWhiteList, "hiview.case.edu");
+    hashStoreName(domainWhiteList, "hpc.bmrn.com");
     hashStoreName(domainWhiteList, "hsb.upf.edu");
     hashStoreName(domainWhiteList, "icbi.at");
     hashStoreName(domainWhiteList, "lichtlab.cancer.ufl.edu");
+    hashStoreName(domainWhiteList, "lvgsrv1.epfl.ch");
     hashStoreName(domainWhiteList, "manticore.niehs.nih.gov");
     hashStoreName(domainWhiteList, "metamorf.hb.univ-amu.fr");
     hashStoreName(domainWhiteList, "microb215.med.upenn.edu");
@@ -496,11 +501,14 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "v91rc2.master.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "v91rc3.master.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "v94.rc2.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "verjo103.butantan.gov.br");
     hashStoreName(domainWhiteList, "virtlehre.informatik.uni-leipzig.de");
     hashStoreName(domainWhiteList, "vm-galaxy-prod.toulouse.inra.fr");
     hashStoreName(domainWhiteList, "web1.bx.bio.jhu.edu");
     hashStoreName(domainWhiteList, "www.datadepot.rcac.purdue.edu");
+    hashStoreName(domainWhiteList, "www.epigenomes.ca");
     hashStoreName(domainWhiteList, "www.isical.ac.in");
+    hashStoreName(domainWhiteList, "www.morgridge.net");
     hashStoreName(domainWhiteList, "www.morgridge.us");
     hashStoreName(domainWhiteList, "www.ogic.ca");
     hashStoreName(domainWhiteList, "www.starklab.org");

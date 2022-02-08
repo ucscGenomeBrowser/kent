@@ -30,6 +30,7 @@ wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureVM28
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkVM28
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelVM28
 wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM28
+pennantIcon New red ../goldenPath/newsarch.html#020922 "Released Feb. 9, 2022"
 
     track wgEncodeGencodeVM28ViewGenes
     shortLabel Genes
