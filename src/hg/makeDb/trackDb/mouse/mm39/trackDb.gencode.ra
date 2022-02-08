@@ -5,6 +5,7 @@ group genes
 shortLabel All GENCODE
 longLabel All GENCODE transcripts, including comprehensive set and previous version
 priority 2.1
+pennantIcon New red ../goldenPath/newsarch.html#020922 "Released Feb. 9, 2022"
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 include wgEncodeGencodeVM26.ra
