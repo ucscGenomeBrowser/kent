@@ -229,6 +229,9 @@ cd /hive/data/inside/assemblyEquivalence/2022-01-18
 
 ~/kent/src/hg/makeDb/doc/assemblyEquivalence/exactTableTsv.pl \
   | sort > table.2022-01-18.tsv
+wc -l table.*
+  317948 table.2022-01-18.tsv
+  363928 table.2022-02-07.tsv
 
 ###########  Near matches  ##################
 
@@ -243,11 +246,14 @@ chmod +x runOne
 ### genbank/refseq assemblies
 
 time (~/kent/src/hg/makeDb/doc/assemblyEquivalence/allByAll.sh) > all.log 2>&1
-# real    17m52.128s
+# real    107m11.347s
 
 sed -e 's/\tcount A .*//;' results/match.*.txt > notExact.table.2022-01-18.tsv
-wc -l notExact.table.2022-01-18.tsv
-# 1258 notExact.table.2022-01-18.tsv
+
+ wc -l notExact.tab*
+  1258 notExact.table.2022-01-18.tsv
+  1239 notExact.table.2022-01-26.tsv
+  1738 notExact.table.2022-02-07.tsv
 
 ###########  Table contents to load  ##################
 
@@ -258,6 +264,11 @@ sort -u notExact.table.2022-01-18.tsv ../table.2022-01-18.tsv \
 hgsql -N -e 'select * from asmEquivalent;' hgFixed | sort \
    > existing.2022-01-18.tsv
 
+wc -l hgFixed*
+  319206 hgFixed.asmEquivalent.tsv
+  365666 hgFixed.asmEquivalent.tsv.2022-02-07
+
+
 wc -l hgFixed.asmEquivalent.tsv existing.2022-01-18.tsv
   319206 hgFixed.asmEquivalent.tsv
     2594 existing.2022-01-18.tsv
@@ -265,14 +276,15 @@ wc -l hgFixed.asmEquivalent.tsv existing.2022-01-18.tsv
 # since we have so many new ones, will have to count identicals
 sort existing.2022-01-18.tsv hgFixed.asmEquivalent.tsv | uniq -c \
   | sort -rn | awk '$1 > 1' | wc -l
-# 2290
+# 2308
 
 sort existing.2022-01-18.tsv hgFixed.asmEquivalent.tsv | uniq -c \
   | sort -rn | awk '$1 > 1' | sed -e 's/^ \+//;' | cut -d' ' -f2- \
     | sort > same.as.before
 
-wc -l same.as.before
-# 2290
+wc -l same.as.b*
+  2290 same.as.before
+  2308 same.as.before.2022-02-07
 
 # so why are there so many missing that used to be counted ?
 
@@ -282,10 +294,9 @@ sort existing.2022-01-18.tsv same.as.before | uniq -c | awk '$1 > 1' | wc -l
 sort existing.2022-01-18.tsv same.as.before | uniq -c | awk '$1 < 2' \
    | sed -e 's/^ \+//;' | cut -d' ' -f2- | sort > why.gone.missing
 
-wc -l why.gone.missing
-# 304 why.gone.missing
-
-
+wc -l why*
+  304 why.gone.missing
+  286 why.gone.missing.2022-02-07
 
 ### How about the important ones:
 
@@ -308,27 +319,37 @@ mm39    Mus_musculus.GRCm39     ucsc    ensembl 61      61      61
 
 ### most should be identical to before
 join hgFixed.asmEquivalent.tsv existing.2022-01-18.tsv | wc -l
-         5057
+         5168
 
 ### probably should *not* be losing any from before:
 join -v 2 hgFixed.asmEquivalent.tsv existing.2022-01-18.tsv | wc -l
-      134
+      118
 
 join -v 2 hgFixed.asmEquivalent.tsv existing.2022-01-18.tsv \
    | cut -d' ' -f3 | sort | uniq -c
-      6 ensembl
-     76 genbank
-     41 refseq
-     11 ucsc
+      4 ensembl
+     74 genbank
+     35 refseq
+      5 ucsc
+
+join -v 2 hgFixed.asmEquivalent.tsv existing.2022-01-18.tsv | awk '$3 == "ucsc"'
+croPor0 GCA_000768395.1_Cpor_2.0 ucsc genbank 21892 23365 23365
+melGal1 GCA_000146605.2_Turkey_2.01 ucsc genbank 5890 5891 5891
+neoSch1 GCA_002201575.1_ASM220157v1 ucsc genbank 7871 7872 7872
+neoSch1 GCF_002201575.1_ASM220157v1 ucsc refseq 7872 7872 7873
+vicPac2 GCA_000164845.3_Vicugna_pacos-2.0.2 ucsc genbank 276609 276611 276724
 
 join -v 2 hgFixed.asmEquivalent.tsv existing.2022-01-18.tsv | cut -d' ' -f4 | sort | uniq -c
-     30 ensembl
-     35 genbank
-     49 refseq
-     20 ucsc
+     29 ensembl
+     32 genbank
+     41 refseq
+     16 ucsc
 
-Examined a couple (canFam3, xenTro9) appeared to have moved to a more exact
-match from genbank to refseq.
+The first time through this revealed that we need to include the 'historical'
+assemblies from NCBI to match the older UCSC assemblies.
+
+Not sure what all these new ones are this time.
+
 # if not 0, investigate.  Sometimes a new assembly is now an
 # exact match to something where it was a near match before to
 # a previous assembly of that organism.
@@ -380,8 +401,12 @@ hgsql -N -e 'select * from asmEquivalent;' hgFixed \
    | sort > updated.2022-01-18.tsv
 
 wc -l updated.2022-01-18.tsv existing.2022-01-18.tsv
+wc -l updated* existing*
   319206 updated.2022-01-18.tsv
+  365666 updated.2022-02-07.tsv
     2594 existing.2022-01-18.tsv
+     302 existing.ensembl.list
+     252 existing.ucsc.list
 
 # Previously:
   2594 updated.2022-01-18.tsv
