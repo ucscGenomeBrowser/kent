@@ -1,6 +1,6 @@
 track wgEncodeGencodeV38
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V38
 longLabel All GENCODE annotations from V38 (Ensembl 104)
 group genes
