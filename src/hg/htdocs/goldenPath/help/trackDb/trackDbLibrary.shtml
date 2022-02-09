@@ -5169,6 +5169,12 @@ For the complete bigBarChart format definitions please see the
     </P>
 </DIV>
 
+<DIV class="barChartStretchToItem"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartStretchToItem on</code></div>
+    <P>This setting extends the barCharts to cover the entire horizontal space available in the graph.
+    </P>
+</DIV>
+
 <DIV class="barChartMetric"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartMetric &lt;metric&gt;</code></div>
     <P>This setting provides a label for details page information about the barChart values presented.
