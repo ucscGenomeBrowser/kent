@@ -325,7 +325,7 @@ if ((!oldTable) && (!noLoad))
     dyStringAppend(dy, "  name varchar(255) not null,\n");
     dyStringAppend(dy, "  span int unsigned not null,\n");
     dyStringAppend(dy, "  count int unsigned not null,\n");
-    dyStringAppend(dy, "  offset int unsigned not null,\n");
+    dyStringAppend(dy, "  `offset` int unsigned not null,\n");
     dyStringAppend(dy, "  file varchar(255) not null,\n");
     dyStringAppend(dy, "  lowerLimit double not null,\n");
     dyStringAppend(dy, "  dataRange double not null,\n");
