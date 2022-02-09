@@ -184,7 +184,7 @@ char *getDbTable(char *db, char *table);
  * return a clone of table; otherwise alloc and return db.table . */
 
 void doTabOutTable(char *database, char *table, FILE *f,
-	struct sqlConnection *conn, char *fields);
+	struct sqlConnection *conn, char *fields, char outSep);
 /* Do tab-separated output on table. */
 
 struct slName *fullTableFields(char *db, char *table);
@@ -281,11 +281,12 @@ struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *tab
  * a MySQL type string. */
 
 /* ------------- Functions related to joining and filtering ------------*/
-void tabOutSelectedFields(
+void sepOutSelectedFields(
 	char *primaryDb,		/* The primary database. */
 	char *primaryTable, 		/* The primary table. */
 	FILE *f,                        /* file for output, null for stdout */
-	struct slName *fieldList);	/* List of db.table.field */
+	struct slName *fieldList,	/* List of db.table.field */
+    char outSep);               /* The separator for the output */
 /* Do tab-separated output on selected fields, which may
  * or may not include multiple tables. */
 
@@ -449,6 +450,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaSelDb "hgta_selDb"
 #define hgtaRegionType "hgta_regionType"
 #define hgtaCompressType "hgta_compressType"
+#define hgtaOutSep "hgta_outSep"
 #define hgtaRange "position"
 #define hgtaOffsetStart "hgta_offsetStart"
 #define hgtaOffsetEnd "hgta_offsetEnd"
@@ -557,6 +559,8 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outGalaxy "galaxyQuery"
 #define outMaf "maf"
 #define outPalOptions "fasta"
+#define outTab "tab"
+#define outCsv "csv"
 
 /* For disabling tables in 'tableBrowser noGenome' settings, when region is genome */
 #define NO_GENOME_CLASS " class=\"hgtaNoGenome\" title=\"Position range queries only\""
@@ -790,7 +794,7 @@ struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn,
 	int *retFieldCount);
 /* Get list of beds from bigBed, in all regions, that pass filtering. */
 
-void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
+void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f, char outSep);
 /* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */
 
 struct slName *randomBigBedIds(char *table, struct sqlConnection *conn, int count);
@@ -821,7 +825,7 @@ boolean isLongTabixTable(char *table);
 struct slName *getLongTabixFields();
 /* Get fields of bam as simple name list. */
 
-void longTabixTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
+void longTabixTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f, char outSep);
 /* Print out selected fields from long tabix.  If fields is NULL, then print out all fields. */
 
 struct hTableInfo *longTabixToHti(char *table);
@@ -853,7 +857,7 @@ struct hTableInfo *bamToHti(char *table);
 void showSchemaBam(char *table, struct trackDb *tdb);
 /* Show schema on bam. */
 
-void bamTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
+void bamTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f, char outSep);
 /* Print out selected fields from BAM.  If fields is NULL, then print out all fields. */
 
 struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn,
@@ -882,7 +886,7 @@ struct sqlFieldType *hicListFieldsAndTypes();
 void showSchemaHic(char *table, struct trackDb *tdb);
 /* Show schema on hic. */
 
-void hicTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
+void hicTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f, char outSep);
 /* Print out selected fields from hic.  If fields is NULL, then print out all fields. */
 
 struct bed *hicGetFilteredBedsOnRegions(struct sqlConnection *conn,
@@ -959,11 +963,11 @@ struct hTableInfo *ctToHti(struct customTrack *ct);
 /* Create an hTableInfo from a customTrack. */
 
 void doTabOutDb( char *db, char *dbVarName, char *table, char *tableVarName,
-	FILE *f, struct sqlConnection *conn, char *fields);
+	FILE *f, struct sqlConnection *conn, char *fields, char outSep);
 /* Do tab-separated output on fields of a single table. */
 
 void doTabOutCustomTracks(char *db, char *table, struct sqlConnection *conn,
-	char *fields, FILE *f);
+	char *fields, FILE *f, char outSep);
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 

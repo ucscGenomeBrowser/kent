@@ -102,7 +102,7 @@ row[11] = sam->tagTypeVals;
 assert(numPt < numBufEnd);
 }
 
-void bamTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f)
+void bamTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f, char outSep)
 /* Print out selected fields from BAM.  If fields is NULL, then print out all fields. */
 {
 struct hTableInfo *hti = NULL;
@@ -146,9 +146,17 @@ for (i=0; i<fieldCount; ++i)
     }
 
 /* Output row of labels */
-fprintf(f, "#%s", fieldArray[0]);
+fprintf(f, "#");
+if (outSep == ',') fputc('"', f);
+fprintf(f, "%s", fieldArray[0]);
+if (outSep == ',') fputc('"', f);
 for (i=1; i<fieldCount; ++i)
-    fprintf(f, "\t%s", fieldArray[i]);
+    {
+    fputc(outSep, f);
+    if (outSep == ',') fputc('"', f);
+    fprintf(f, "%s", fieldArray[i]);
+    if (outSep == ',') fputc('"', f);
+    }
 fprintf(f, "\n");
 
 struct asObject *as = bamAsObj();
@@ -190,9 +198,16 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
 		continue;
 
 	    int i;
+            if (outSep == ',') fputc('"', f);
 	    fprintf(f, "%s", row[columnArray[0]]);
+            if (outSep == ',') fputc('"', f);
 	    for (i=1; i<fieldCount; ++i)
-		fprintf(f, "\t%s", row[columnArray[i]]);
+                {
+                fputc(outSep, f);
+                if (outSep == ',') fputc('"', f);
+		fprintf(f, "%s", row[columnArray[i]]);
+                if (outSep == ',') fputc('"', f);
+                }
 	    fprintf(f, "\n");
 	    maxOut --;
 	    }

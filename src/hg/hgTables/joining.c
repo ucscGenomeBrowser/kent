@@ -46,8 +46,8 @@ struct joinedTables
     struct dyString *filter;  /* Filter if any applied. */
     };
 
-static void joinedTablesTabOutFile(struct joinedTables *joined, FILE *f)
-/* write out fields to file handle */
+static void joinedTablesSepOutFile(struct joinedTables *joined, FILE *f, char outSep)
+/* write outSep separated fields to file handle */
 {
 struct joinedRow *jr;
 struct joinerDtf *field;
@@ -64,42 +64,56 @@ if (joined->filter)
 fprintf(f, "#");
 for (field = joined->fieldList; field != NULL; field = field->next)
     {
+    if (outSep == ',') fputc('"', f);
     fprintf(f, "%s.%s.%s", field->database, field->table, field->field);
+    if (outSep == ',') fputc('"', f);
     if (field->next == NULL)
         fprintf(f, "\n");
     else
-        fprintf(f, "\t");
+        fprintf(f, "%c", outSep);
     }
 for (jr = joined->rowList; jr != NULL; jr = jr->next)
     {
     int i;
     if (jr->passedFilter)
-	{
-	for (i=0; i<joined->fieldCount; ++i)
-	    {
-	    struct slName *s;
-	    if (i != 0)
-                fprintf(f, "\t");
-	    s = jr->fields[i];
-	    if (s == NULL)
+        {
+        for (i=0; i<joined->fieldCount; ++i)
+            {
+            struct slName *s;
+            if (i != 0)
+                fprintf(f, "%c", outSep);
+            s = jr->fields[i];
+            if (s == NULL)
+                {
+                if (outSep == ',') fputc('"', f);
                 fprintf(f, "n/a");
-	    else if (s->next == NULL)
-	        fprintf(f, "%s", s->name);
-	    else
-	        {
-		char *lastS = NULL;
-		while (s != NULL)
-		    {
-		    if (lastS == NULL || !sameString(lastS, s->name))
-			fprintf(f, "%s,", s->name);
-		    lastS = s->name;
-		    s = s->next;
-		    }
-		}
-	    }
-	fprintf(f, "\n");
-	++outCount;
-	}
+                if (outSep == ',') fputc('"', f);
+                }
+            else if (s->next == NULL)
+                {
+                if (outSep == ',') fputc('"', f);
+                fprintf(f, "%s", s->name);
+                if (outSep == ',') fputc('"', f);
+                }
+            else
+                {
+                char *lastS = NULL;
+                if (outSep == ',') fputc('"', f);
+                while (s != NULL)
+                    {
+                    if (lastS == NULL || !sameString(lastS, s->name))
+                        {
+                        fprintf(f, "%s,", s->name);
+                        }
+                    lastS = s->name;
+                    s = s->next;
+                    }
+                if (outSep == ',') fputc('"', f);
+                }
+            }
+        fprintf(f, "\n");
+        ++outCount;
+        }
     }
 }
 
@@ -991,11 +1005,12 @@ return ret;
 }
 
 
-void tabOutSelectedFields(
+void sepOutSelectedFields(
 	char *primaryDb,		/* The primary database. */
 	char *primaryTable, 		/* The primary table. */
 	FILE *f,			/* file for output, null for stdout */
-	struct slName *fieldList)	/* List of db.table.field */
+	struct slName *fieldList,	/* List of db.table.field */
+    char outSep)               /* The separator for the output */
 /* Do tab-separated output on selected fields, which may
  * or may not include multiple tables. */
 {
@@ -1077,7 +1092,7 @@ if (! doJoin)
         makeCtOrderedCommaFieldList(dtfList, dy);
     else
 	makeDbOrderedCommaFieldList(conn, dtfList->table, dtfList, dy);
-    doTabOutTable(dtfList->database, dtfList->table, f, conn, dy->string);
+    doTabOutTable(dtfList->database, dtfList->table, f, conn, dy->string, outSep);
     hFreeConn(&conn);
     }
 else
@@ -1085,7 +1100,7 @@ else
     struct joiner *joiner = allJoiner;
     struct joinedTables *joined = joinedTablesCreate(joiner, 
     	primaryDb, primaryTable, dtfList, filterTables, 1000000, getRegions());
-    joinedTablesTabOutFile(joined, f);
+    joinedTablesSepOutFile(joined, f, outSep);
     joinedTablesFree(&joined);
     }
 joinerDtfFreeList(&dtfList);
