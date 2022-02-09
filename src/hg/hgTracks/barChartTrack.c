@@ -649,8 +649,9 @@ tg->items = list;
 static int barChartX(struct bed *bed)
 /* Locate chart on X, relative to viewport. */
 {
-// int start = max(bed->chromStart, winStart);	// Consider making this simply bed->chromStart -jk
-int start = bed->chromStart;
+// use the max() here because otherwise items that begin to the left
+// of the window may not be visible
+int start = max(bed->chromStart, winStart);
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
 int x1 = round((start - winStart) * scale);
 return x1;

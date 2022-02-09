@@ -1,6 +1,6 @@
 track wgEncodeGencodeVM27
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE VM27
 longLabel All GENCODE annotations from VM27 (Ensembl 104)
 group genes

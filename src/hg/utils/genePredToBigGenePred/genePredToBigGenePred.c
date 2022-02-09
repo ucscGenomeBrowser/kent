@@ -104,9 +104,14 @@ bgp.itemRgb = 0; // BLACK
 if (colorsHash)
     {
     struct rgbColor *color = hashFindVal(colorsHash, gp->name);
-    bgp.itemRgb = ( ((color->r) & 0xff) << 16) |
+    if (color == NULL)
+        warn("Warning: no color found for %s", gp->name);
+    else
+        {
+        bgp.itemRgb = ( ((color->r) & 0xff) << 16) |
             (((color->g) & 0xff) << 8) |
-                    ((color->b) & 0xff) ;
+            ((color->b) & 0xff);
+        }
     }
 bgp.blockCount = gp->exonCount;
 bgp.blockSizes = (unsigned *)blockSizes;
@@ -128,8 +133,13 @@ bgp.geneName2 = gp->name2;
 if (geneHash)
     {
     struct geneNames *gn = hashFindVal(geneHash, gp->name);
-    bgp.geneName = gn->name;
-    bgp.geneName2 = gn->name2;
+    if (gn == NULL)
+        warn("Warning: no gene name found for %s", gp->name);
+    else
+        {
+        bgp.geneName = gn->name;
+        bgp.geneName2 = gn->name2;
+        }
     }
 
 bgp.geneType = NULL;

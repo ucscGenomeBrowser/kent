@@ -618,6 +618,18 @@ searchDescription Spike protein mutations
 searchMethod fuzzy
 padding 5
 
+track resist
+shortLabel Drug Resistance
+longLabel Mutations that confer drug resistance collected by Paul Gordon, Calgary
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/resist/resist.bb
+itemRgb on
+bedNameLabel Mutation
+urls urls
+mouseOver $comment
+noScoreFilter on
+group varRep
+
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra

@@ -223,6 +223,7 @@
 ./runBuild GCA_007364275.2 GCA_007364275.2_fArcCen1 vertebrate Archocentrus_centrarchus
 ./runBuild GCA_007399395.1 GCA_007399395.1_rGopEvg1_v1.alt vertebrate Gopherus_evgoodei
 ./runBuild GCA_007474575.1 GCA_007474575.1_mLynCan4_v1.alt mammals Lynx_canadensis
+./runBuild GCA_007989325.2 GCA_007989325.2_ASM798932v2 invertebrate Drosophila_virilis
 ./runBuild GCA_008658355.1 GCA_008658355.1_bAlcTor1_alternate birds Alca_torda
 ./runBuild GCA_008658365.1 GCA_008658365.1_bAlcTor1_primary birds Alca_torda
 ./runBuild GCA_008658375.1 GCA_008658375.1_mBalMus1_alternate mammals Balaenoptera_musculus
@@ -275,6 +276,7 @@
 ./runBuild GCA_009859025.1 GCA_009859025.1_bTaeGut2.p.v1.alt birds Taeniopygia_guttata
 ./runBuild GCA_009859065.2 GCA_009859065.2_bTaeGut2.pri.v2 birds Taeniopygia_guttata
 ./runBuild GCA_009873245.2 GCA_009873245.2_mBalMus1.v2 mammals Balaenoptera_musculus
+./runBuild GCA_009914755.4 GCA_009914755.4_CHM13_T2T_v2.0 primates Homo_sapiens
 ./runBuild GCA_010909745.1 GCA_010909745.1_sAmbRad1.alt vertebrate Amblyraja_radiata
 ./runBuild GCA_010909765.1 GCA_010909765.1_sAmbRad1.pri vertebrate Amblyraja_radiata
 ./runBuild GCA_010993595.1 GCA_010993595.1_kPetMar1.alt vertebrate Petromyzon_marinus
