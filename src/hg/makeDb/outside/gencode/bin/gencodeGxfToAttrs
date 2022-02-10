@@ -2,21 +2,23 @@
 
 import sys
 import os
+import argparse
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
 sys.path.extend((os.path.join(myBinDir, "../lib"),
                 os.path.expanduser("~markd/compbio/code/pycbio/lib")))
 from collections import defaultdict
 from dataclasses import dataclass
-import argparse
 from pycbio.sys import fileOps
 from gencode import gencodeGxfParserFactory
-from gencode.gencodeGxfParser import ParseException
+from gencode.gencodeGxfParser import ParseException, GxfValidateException, GxfRecordValidator
 from gencode.biotypes import BioType, getTranscriptFunction
 
 def parseArgs():
     desc = """Extract attributes from a GENCODE GTF or GFF3 into a tab-separate file for
 use by other programs."""
     parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument("--debug", action="store_true",
+                        help="""print stack trace on all error""")
     parser.add_argument("gencodeGxf",
                         help="""GENCODE GTF or GFF3 file""")
     parser.add_argument("attrsTsv",
@@ -48,6 +50,7 @@ class Transcript:
 class GencodeGxfToAttrs(object):
     def __init__(self, gxfParser):
         self.gxfParser = gxfParser
+        self.recValidator = GxfRecordValidator(sys.stderr)
         self.errorCnt = 0
         self.unknownGeneTypes = set()
         self.unknownTranscriptTypes = set()
@@ -86,6 +89,7 @@ class GencodeGxfToAttrs(object):
 
     def _processRec(self, rec):
         try:
+            self.recValidator.validate(rec)
             if rec.feature == "gene":
                 self._processGeneRec(rec)
             elif rec.feature == "transcript":
@@ -99,30 +103,12 @@ class GencodeGxfToAttrs(object):
             trans.tags |= self.geneTags[trans.geneId]
 
     def _assignFunction(self, trans):
-        # convert and report unknown biotypes, only report once
-        try:
-            geneBioType = BioType(trans.geneType)
-        except ValueError:
-            if trans.geneType not in self.unknownGeneTypes:
-                sys.stderr.write("Error: unknown gene biotype, update gencode/biotypes.py: {}\n".format(trans.geneType))
-                self.unknownGeneTypes.add(trans.geneType)
-            self.errorCnt += 1
-            return
-        try:
-            transcriptBioType = BioType(trans.transcriptType)
-        except ValueError:
-            if trans.transcriptType not in self.unknownTranscriptTypes:
-                sys.stderr.write("Error: unknown transcript biotype, update gencode/biotypes.py: {}\n".format(trans.transcriptType))
-                self.unknownTranscriptType.add(trans.transcriptType)
-            self.errorCnt += 1
-            return
-        trans.transcriptClass = getTranscriptFunction(geneBioType, transcriptBioType)
+        trans.transcriptClass = getTranscriptFunction(BioType(trans.geneType),
+                                                      BioType(trans.transcriptType))
 
     def _assignFunctions(self):
         for trans in self.transcripts.values():
             self._assignFunction(trans)
-        if self.errorCnt > 0:
-            raise Exception("{} biotypes errors in {}".format(self.errorCnt, self.gxfParser.getFileName()))
 
     def parse(self):
         for rec in self.gxfParser.reader():
@@ -131,6 +117,7 @@ class GencodeGxfToAttrs(object):
                 break
         if self.errorCnt > 0:
             raise Exception("{} parse errors in {}".format(self.errorCnt, self.gxfParser.getFileName()))
+        self.recValidator.reportErrors()
         self._mergeGeneTags()
         self._assignFunctions()
 
@@ -155,10 +142,17 @@ class GencodeGxfToAttrs(object):
             self._writeAttrsTsvRow(transcript, fh)
 
 def gencodeGxfToAttrs(opts):
-    parser = GencodeGxfToAttrs(gencodeGxfParserFactory(opts.gencodeGxf, ignoreUnknownAttrs=True))
-    parser.parse()
-    with open(opts.attrsTsv, "w") as fh:
-        parser.writeAttrsTsv(fh)
+    try:
+        parser = GencodeGxfToAttrs(gencodeGxfParserFactory(opts.gencodeGxf, ignoreUnknownAttrs=True))
+        parser.parse()
+        with open(opts.attrsTsv, "w") as fh:
+            parser.writeAttrsTsv(fh)
+    except GxfValidateException as ex:
+        if opts.debug:
+            raise
+        print(str(ex), file=sys.stderr)
+        exit(1)
+
 
 
 gencodeGxfToAttrs(parseArgs())
