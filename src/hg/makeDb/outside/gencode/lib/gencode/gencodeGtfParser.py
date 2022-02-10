@@ -67,7 +67,7 @@ class GtfParser(object):
         row = line.split("\t")
         if len(row) != gtfNumCols:
             raise self.lineParser.parseException("Wrong number of columns, expected " + str(gtfNumCols) + ", got " + str(len(row)))
-        return Record(line, self.lineParser.lineFileOffset, self.lineParser.lineFileLength, row[0], row[1], row[2], int(row[3]), int(row[4]), row[5], row[6], row[7], self.__parseAttrs(row[8]))
+        return Record(line, self.lineParser.lineNumber, row[0], row[1], row[2], int(row[3]), int(row[4]), row[5], row[6], row[7], self.__parseAttrs(row[8]))
 
     def reader(self):
         "Generator over records"
