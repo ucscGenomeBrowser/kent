@@ -17,11 +17,7 @@ class GxfParser(object):
         self.openedFile = (gxfFh is None)
         self.fh = fileOps.opengz(gxfFile) if gxfFh is None else gxfFh
         self.line = None
-        self.lineNum = 0
-        # collect offsets if not compressed
-        self.randomAccess = (getattr(self.fh, "tell", None) is not None)
-        self.lineFileOffset = 0
-        self.lineFileLength = 0  # includes \n for reading
+        self.lineNumber = 0
         self.metas = []
 
     def parseException(self, msg):
@@ -30,16 +26,12 @@ class GxfParser(object):
 
     def __advanceLine(self):
         "sets object, return True or False"
-        if self.randomAccess:
-            self.lineFileOffset = self.fh.tell()
         self.line = self.fh.readline()
         if len(self.line) == 0:
             self.line = None
             return False
         else:
-            self.lineNum += 1
-            if self.randomAccess:
-                self.lineFileLength = self.fh.tell() - self.lineFileOffset
+            self.lineNumber += 1
             self.line = self.line[0:-1]
             return True
 
