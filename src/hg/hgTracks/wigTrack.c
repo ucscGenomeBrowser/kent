@@ -1295,11 +1295,15 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                     {
                     if (dataValue < 0)
                         {
+                        // useful for debug, fills a box where letter goes
+                        // hvGfxBox(hvg, x, yOff+graphUpperLimit * scaleFactor, width, -height, MG_BLACK);
                         hvGfxTextInBox(hvg, x, yOff+graphUpperLimit * scaleFactor, width - 1, dataValue * scaleFactor,
                             color, font, string);
                         }
                     else
                         {
+                        // useful for debug, fills a box where letter goes
+                        // hvGfxBox(hvg, x, yOff-height+graphUpperLimit * scaleFactor, width, height, MG_BLACK);
                         hvGfxTextInBox(hvg, x, yOff-height+graphUpperLimit * scaleFactor, width - 1, dataValue * scaleFactor,
                             color, font, string);
                         }
@@ -1595,8 +1599,8 @@ graphRange = graphUpperLimit - graphLowerLimit;
 wigTrackSetGraphOutputDefault(tg, xOff, yOff, width, hvg);
 
 struct wigMouseOver *mouseOverData = NULL;
-//if (zoomedToCodonLevel && trackDbSettingOn(tg->tdb, "logo"))
-if (zoomedToBaseLevel && trackDbSettingOn(tg->tdb, "logo"))
+if (zoomedToCodonLevel && trackDbSettingOn(tg->tdb, "logo"))
+//if (zoomedToBaseLevel && trackDbSettingOn(tg->tdb, "logo"))
     mouseOverData = logoPreDrawContainer(preContainer,
         preDrawZero, width, tg, hvg, xOff, yOff,
         graphUpperLimit, graphLowerLimit, graphRange, vis, wigCart, seqStart, seqEnd);
