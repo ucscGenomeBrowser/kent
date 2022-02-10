@@ -163,8 +163,7 @@ pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 
 track revel override
 origAssembly hg19 
-pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; New red ../goldenPath/newsarch.html#062421 "Released by UCSC June 24, 2021"
-
+pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 
 include nonCodingRNAs.ra
 

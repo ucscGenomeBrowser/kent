@@ -261,7 +261,7 @@ baseColorDefault diffBases
 baseColorUseSequence db
 color 0,0,100
 visibility pack
-pennantIcon p13 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p13 patch sequences"; Updated red ../goldenPath/newsarch.html#101221 "Updated Oct. 12, 2021"
+pennantIcon p13 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p13 patch sequences"
 
 track fixSeqLiftOverPsl
 shortLabel Fix Patches
@@ -280,7 +280,7 @@ color 231,203,21
 darkerLabels on
 priority 1
 visibility pack
-pennantIcon p13 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p13 patch sequences"; Updated red ../goldenPath/newsarch.html#101221 "Updated Oct. 12, 2021"
+pennantIcon p13 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p13 patch sequences"
 
 track knownAlt
 shortLabel UCSC Alt Events
