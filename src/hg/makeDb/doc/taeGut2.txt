@@ -900,3 +900,104 @@ TMPDIR=/dev/shm
     # real    354m40.975s
 
 ############################################################################
+# LASTZ Zebra finch TaeGut2 vs. Medium ground finch GeoFor1 (DONE - 2022-02-03 -Gerardo)
+
+# should be able to run this from anywhere, this time it was run from:
+    cd kent/src/hg/utils/automation
+
+  time (~/kent/src/hg/utils/automation/pairLastz.sh \
+        taeGut2 geoFor1 other other) \
+           > zebraFinch_medFinch_20220202_secondTime.log 2>&1 &
+  # check the total time
+grep -w real  zebraFinch_medFinch_20220202_secondTime.log  | tail -1 | sed -e 's/^/    # /;'
+    # real      107m34.019s
+
+  # this zebraFinch_medFinch_20220202_secondTime.log log file happens to have a copy of the make doc, as well
+  # as the copy of the make doc left in the target assembly directory:
+# /hive/data/genomes/taeGut2/bed/lastzGeoFor1.2022-02-02/makeDoc.txt
+
+    # this command outputs this makeDoc text:
+
+    cat kent/src/hg/utils/automation/zebraFinch_medFinch_20220202_secondTime.log
+
+##############################################################################
+# LASTZ Zebra finch TaeGut2 vs. Medium ground finch GeoFor1
+#    (DONE - 2022-02-03 - Gerardo)
+
+    mkdir /hive/data/genomes/taeGut2/bed/lastzGeoFor1.2022-02-02
+    cd /hive/data/genomes/taeGut2/bed/lastzGeoFor1.2022-02-02
+
+    printf '# Medium ground finch GeoFor1 vs. Zebra finch TaeGut2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Zebra finch TaeGut2
+SEQ1_DIR=/hive/data/genomes/taeGut2/taeGut2.2bit
+SEQ1_LEN=/hive/data/genomes/taeGut2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Medium ground finch GeoFor1
+SEQ2_DIR=/hive/data/genomes/geoFor1/geoFor1.2bit
+SEQ2_LEN=/hive/data/genomes/geoFor1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/taeGut2/bed/lastzGeoFor1.2022-02-02
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real      159m10.037s
+
+    sed -e 's/^/    # /;' fb.taeGut2.chainGeoFor1Link.txt
+    # 1125215195 bases of 1222864691 (92.015%) in intersection
+    sed -e 's/^/    # /;' fb.taeGut2.chainSynGeoFor1Link.txt
+    # 1024055100 bases of 1222864691 (83.742%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        taeGut2 geoFor1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+
+    sed -e 's/^/    # /;' fb.taeGut2.chainRBest.GeoFor1.txt
+
+    ### and for the swap
+
+    cd /hive/data/genomes/geoFor1/bed/blastz.taeGut2.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/taeGut2/bed/lastzGeoFor1.2022-02-02/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real      42m46.900s
+
+    sed -e 's/^/    # /;' fb.geoFor1.chainTaeGut2Link.txt
+    # 954457151 bases of 1041286029 (91.661%) in intersection
+    sed -e 's/^/    # /;' fb.geoFor1.chainSynTaeGut2Link.txt
+    # 912902982 bases of 1041286029 (87.671%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+    \
+   geoFor1 taeGut2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real      64m46.642s
+
+    sed -e 's/^/    # /;' fb.geoFor1.chainRBest.TaeGut2.txt
+    # 919870835 bases of 1041286029 (88.340%) in intersection
+
+##############################################################################
+
+real    107m34.019s
+user    0m1.109s
+sys     0m1.771s
