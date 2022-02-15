@@ -567,7 +567,8 @@ if (fieldList == NULL)
 slReverse(&fieldList);
 
 /* Do output. */
-tabOutSelectedFields(db, table, NULL, fieldList);
+char sep = sameString(cartUsualString(cart, hgtaOutSep, outTab), outTab) ? '\t' : ',';
+sepOutSelectedFields(db, table, NULL, fieldList, sep);
 
 /* Clean up. */
 slFreeList(&fieldList);

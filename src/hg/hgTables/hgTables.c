@@ -998,7 +998,7 @@ return(ret);
 }
 
 void doTabOutDb( char *db, char *dbVarName, char *table, char *tableVarName,
-	FILE *f, struct sqlConnection *conn, char *fields)
+        FILE *f, struct sqlConnection *conn, char *fields, char outSep)
 /* Do tab-separated output on fields of a single table. */
 {
 struct region *regionList = getRegions();
@@ -1011,14 +1011,14 @@ boolean isPositional;
 int fieldCount;
 char *idField;
 boolean showItemRgb = FALSE;
-int itemRgbCol = -1;	/*	-1 means not found	*/
+int itemRgbCol = -1;        /*        -1 means not found        */
 boolean printedColumns = FALSE;
 struct trackDb *tdb = findTdbForTable(db, curTrack, table, ctLookupName);
 
 hti = getHti(db, table, conn);
 idField = getIdField(db, curTrack, table, hti);
 
-showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
+showItemRgb=bedItemRgb(tdb);        /* should we expect itemRgb instead of "reserved" */
 
 /* If they didn't pass in a field list assume they want all fields. */
 if (fields != NULL)
@@ -1040,14 +1040,14 @@ if (idField != NULL)
     {
     idHash = identifierHash(db, table);
     if (idHash != NULL)
-	{
-	identifierFilter = identifierWhereClause(idField, idHash);
-	if (isEmpty(identifierFilter))
-	    {
-	    dyStringAppendC(fieldSpec, ',');
-	    dyStringAppend(fieldSpec, sqlCkId(idField));
-	    }
-	}
+        {
+        identifierFilter = identifierWhereClause(idField, idHash);
+        if (isEmpty(identifierFilter))
+            {
+            dyStringAppendC(fieldSpec, ',');
+            dyStringAppend(fieldSpec, sqlCkId(idField));
+            }
+        }
     }
 isPositional = htiIsPositional(hti);
 
@@ -1060,51 +1060,67 @@ for (region = regionList; region != NULL; region = region->next)
     char *filter = filterClause(dbVarName, tableVarName, region->chrom, identifierFilter);
 
     sr = regionQuery(conn, table, fieldSpec->string,
-    	region, isPositional, filter);
+            region, isPositional, filter);
     if (sr == NULL)
-	continue;
+        continue;
 
     /* First time through print column names. */
     if (! printedColumns)
         {
-	// Show only the SQL filter built from filter page options, not identifierFilter,
-	// because identifierFilter can get enormous (like 126kB for 12,500 rsIDs).
-	char *filterNoIds = filterClause(dbVarName, tableVarName, region->chrom, NULL);
-	if (filterNoIds != NULL)
-	    hOrFPrintf(f, "#filter: %s\n", filterNoIds);
-	hOrFPrintf(f, "#");
-	if (showItemRgb)
-	    {
-	    itemRgbCol = itemRgbHeader(f, sr, lastCol);
-	    if (itemRgbCol == -1)
-		showItemRgb = FALSE;	/*  did not find "reserved" */
-	    }
-	else
-	    {
-	    for (colIx = 0; colIx < lastCol; ++colIx)
-		hOrFPrintf(f, "%s\t", sqlFieldName(sr));
-	    hOrFPrintf(f, "%s\n", sqlFieldName(sr));
-	    }
-	printedColumns = TRUE;
-	}
+        // Show only the SQL filter built from filter page options, not identifierFilter,
+        // because identifierFilter can get enormous (like 126kB for 12,500 rsIDs).
+        char *filterNoIds = filterClause(dbVarName, tableVarName, region->chrom, NULL);
+        if (filterNoIds != NULL)
+            hOrFPrintf(f, "#filter: %s\n", filterNoIds);
+        hOrFPrintf(f, "#");
+        if (showItemRgb)
+            {
+            itemRgbCol = itemRgbHeader(f, sr, lastCol);
+            if (itemRgbCol == -1)
+                showItemRgb = FALSE;        /*  did not find "reserved" */
+            }
+        else
+            {
+            for (colIx = 0; colIx < lastCol; ++colIx)
+                {
+                if (outSep == ',') hOrFPrintf(f, "\"");
+                hOrFPrintf(f, "%s", sqlFieldName(sr));
+                if (outSep == ',') hOrFPrintf(f, "\"");
+                hOrFPrintf(f, "%c", outSep);
+                }
+            if (outSep == ',') hOrFPrintf(f, "\"");
+            hOrFPrintf(f, "%s", sqlFieldName(sr));
+            if (outSep == ',') hOrFPrintf(f, "\"");
+            hOrFPrintf(f, "\n");
+            }
+        printedColumns = TRUE;
+        }
     while ((row = sqlNextRow(sr)) != NULL)
-	{
-	if (idHash == NULL || isNotEmpty(identifierFilter) || hashLookup(idHash, row[fieldCount]))
-	    {
-	    if (showItemRgb)
-		itemRgbDataOut(f, row, lastCol, itemRgbCol);
-	    else
-		{
-		for (colIx = 0; colIx < lastCol; ++colIx)
-		    hOrFPrintf(f, "%s\t", row[colIx]);
-		hOrFPrintf(f, "%s\n", row[lastCol]);
-		}
-	    ++outCount;
-	    }
-	}
+        {
+        if (idHash == NULL || isNotEmpty(identifierFilter) || hashLookup(idHash, row[fieldCount]))
+            {
+            if (showItemRgb)
+                itemRgbDataOut(f, row, lastCol, itemRgbCol);
+            else
+                {
+                for (colIx = 0; colIx < lastCol; ++colIx)
+                    {
+                    if (outSep == ',') hOrFPrintf(f, "\"");
+                    hOrFPrintf(f, "%s", row[colIx]);
+                    if (outSep == ',') hOrFPrintf(f, "\"");
+                    hOrFPrintf(f, "%c", outSep);
+                    }
+                if (outSep == ',') hOrFPrintf(f, "\"");
+                hOrFPrintf(f, "%s", row[lastCol]);
+                if (outSep == ',') hOrFPrintf(f, "\"");
+                hOrFPrintf(f, "\n");
+                }
+            ++outCount;
+            }
+        }
     sqlFreeResult(&sr);
     if (!isPositional)
-        break;	/* No need to iterate across regions in this case. */
+        break;        /* No need to iterate across regions in this case. */
     freez(&filter);
     }
 
@@ -1115,26 +1131,26 @@ hashFree(&idHash);
 }
 
 
-void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
+void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields, char outSep)
 /* Do tab-separated output on fields of a single table. */
 {
 boolean isTabix = FALSE;
 if (isBigBed(database, table, curTrack, ctLookupName))
-    bigBedTabOut(db, table, conn, fields, f);
+    bigBedTabOut(db, table, conn, fields, f, outSep);
 else if (isLongTabixTable(table))
-    longTabixTabOut(db, table, conn, fields, f);
+    longTabixTabOut(db, table, conn, fields, f, outSep);
 else if (isBamTable(table))
-    bamTabOut(db, table, conn, fields, f);
+    bamTabOut(db, table, conn, fields, f, outSep);
 else if (isVcfTable(table, &isTabix))
     vcfTabOut(db, table, conn, fields, f, isTabix);
 else if (isHicTable(table))
-    hicTabOut(db, table, conn, fields, f);
+    hicTabOut(db, table, conn, fields, f, outSep);
 else if (isCustomTrack(table))
     {
-    doTabOutCustomTracks(db, table, conn, fields, f);
+    doTabOutCustomTracks(db, table, conn, fields, f, outSep);
     }
 else
-    doTabOutDb(db, db, table, table, f, conn, fields);
+    doTabOutDb(db, db, table, table, f, conn, fields, outSep);
 }
 
 struct slName *fullTableFields(char *db, char *table)
@@ -1211,10 +1227,11 @@ if (anyIntersection())
     errAbort("Can't do all fields output when intersection is on. "
     "Please go back and select another output type (BED or custom track is good), or clear the intersection.");
 textOpen();
+char sep = sameString(cartUsualString(cart, hgtaOutSep, outTab), outTab) ? '\t' : ',';
 if (sameWord(table, WIKI_TRACK_TABLE))
-    tabOutSelectedFields(wikiDbName(), table, NULL, fullTableFields(wikiDbName(), table));
+    sepOutSelectedFields(wikiDbName(), table, NULL, fullTableFields(wikiDbName(), table), sep);
 else
-    tabOutSelectedFields(database, table, NULL, fullTableFields(database, table));
+    sepOutSelectedFields(database, table, NULL, fullTableFields(database, table), sep);
 }
 
 void ensureVisibility(char *db, char *table, struct trackDb *tdb)
