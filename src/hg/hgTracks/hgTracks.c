@@ -8584,7 +8584,7 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
         freezeName = "Unknown";
-    hPrintf("<span style='font-size:x-large;'><B>");
+    hPrintf("<span style='font-size:large;'><B>");
 
     // for these assemblies, we do not display the year, to save space and reduce clutter
     // Their names must include a "(" character
