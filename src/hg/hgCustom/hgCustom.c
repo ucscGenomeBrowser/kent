@@ -327,7 +327,7 @@ else
             "   var fname = ev.target.files[0].name; \n"
             "   var ext = fname.split('.').pop().toLowerCase(); \n"
             "   var warnExts = ['bigbed', 'bb', 'bam', 'bigwig', 'bw', 'jpeg', 'pdf', 'jpg', 'png', 'hic', 'cram'];\n"
-            "   if (warnExts.indexOf(ext) >= 0  ||  fname.toLowerCase().endsWith('.vcf.gz')) {\n"
+            "   if (warnExts.indexOf(ext) >= 0 {\n"
             "       alert('You are trying to upload a binary file on this page, but the Genome Browser server needs access to binary files via the internet.'+"
             "          ' Therefore, you will need to store the files on a web server, then paste the URLs to them on this page, or upload a text file with \"track\" lines '+"
             "          ' and configuration settings that point to the file URLs. Please read the documentation'+"
