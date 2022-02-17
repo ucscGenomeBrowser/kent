@@ -15,11 +15,11 @@ var gar = {
     urlParams: null,
     submitButton: document.getElementById("submitButton"),
     garStatus: document.getElementById("garStatus"),
-    asmIdText: document.getElementById("asmId"),
+    asmIdText: document.getElementById("formAsmId"),
     commonName: document.getElementById("commonName"),
     betterCommonName: document.getElementById("betterCommonName"),
     comment: document.getElementById("comment"),
-    sciName: document.getElementById("sciName"),
+    sciName: document.getElementById("formSciName"),
     onLoadTime: new Date(),
     garEndTime: new Date(),
     // recent improvement has reduced this to a single table, no longer
