@@ -1,0 +1,499 @@
+html,
+body {
+    background-color:#ffffff;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+}
+
+#modalWrapper.overlay::before {
+    content: " ";
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    background: #000;
+    background: rgba(0,0,0,0.7);
+}
+
+#modalWindow {
+    display: none;
+    z-index: 200;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 460px;
+    height: 80%;
+    overflow: auto;
+    padding: 10px 20px;
+    background: #fff;
+    border: 5px solid #999;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#modalWrapper.overlay #modalWindow {
+    display: block;
+}
+
+/* padding: top right bottom left */
+
+.hideShowButton {
+  text-align: left;
+  background-color: #6688aa;
+  color: #ffff00;
+}
+
+/* CSS equivalent for border=1 in old style html
+ *  declare a table as: <table class='borderOne'>
+*/
+
+.borderOne {
+  border-collapse: collapse;
+  /* table-layout: fixed; */
+  width: 100%;
+}
+
+/* the large table begins life as display none,
+ *   onload will change it to 'table' -- saves time on Edge/Chrome */
+
+.cladeTable {
+  table-layout: fixed;
+  display: none;
+  width: auto;
+  margin: auto;
+}
+
+.borderOne th,
+.borderOne td {
+  border: 1px solid black;
+  word-wrap: anywhere;
+  /* overflow-wrap: anywhere; */
+  overflow: hidden;
+  height: 40px;
+  /* overflow: hidden; */
+}
+
+.gak {
+  display: table-row;
+}
+
+.gar {
+  display: table-row;
+}
+
+.colComName,
+.colGComName {
+  display: table-cell;
+  /* width: 90px; */
+  width: 10em;
+}
+
+.colSciName,
+.colGSciName {
+  display: table-cell;
+  /* width: 110px; */
+  width: 12em;
+}
+
+.colAsmId,
+.colGAsmId {
+  display: table-cell;
+  /* width: 240px; */
+  width: 240px;
+}
+
+.colAsmSize,
+.colGAsmSize {
+  display: none;
+  /* width: 90px; */
+  width: 10em;
+}
+
+.colAsmSeqCount,
+.colGAsmSeqCount {
+  display: none;
+  /* width: 60px; */
+  width: 8em;
+}
+
+.colScafN50,
+.colGScafN50 {
+  display: none;
+  /* width: 90px; */
+  width: 10em;
+}
+
+.colContigN50,
+.colGContigN50 {
+  display: none;
+  /* width: 90px; */
+  width: 10em;
+}
+
+.colIUCN,
+.colGIUCN {
+  display: none;
+  /* width: 28px; */
+  width: 4em;
+}
+
+.colTaxId,
+.colGTaxId {
+  display: none;
+  /* width: 56px; */
+  width: 7em;
+}
+
+.colAsmDate,
+.colGAsmDate {
+  display: none;
+  /* width: 66px; */
+  width: 8em;
+}
+
+.colSubmitter,
+.colGSubmitter {
+  display: none;
+  /* width: 90px; */
+  width: 11em;
+}
+
+.colClade,
+.colGClade {
+  display: none;
+  /* width: 60px; */
+  width: 8em;
+}
+
+/* a box for row count visible/hidden statistics */
+
+.rowCount {
+  position: relative;
+  display: inline-block;
+  float: right;
+  color: #ffff00;
+  background-color: #7799bb;
+  border: 1px solid #000000;
+  margin: 2px 20px 2px 2px;
+  padding: 5px 5px 5px 5px;
+}
+
+/* trying to get a legend box to pop up */
+
+/* the background color here is the background for this legend text box */
+
+.legendMenu {
+  position: relative;
+  display: inline-block;
+  float: right;
+  color: white;
+  background-color: #1d3a6e;
+  border: 1px solid black;
+  margin: 2px 20px 2px 2px;
+  padding: 5px 5px 5px 5px;
+}
+
+/* the color here is the text color in the legend text */
+.legendContent {
+  display: none;
+  /* border: 1px solid #000000; */
+  border: none;
+  position: absolute;
+  padding: 0;
+  z-index: 2;
+  float: left;
+  margin: 0;
+  height: 20%;
+  color: black;
+  /* background-color: black; */
+  /* margin-left: 0;*/
+  top: -250px;
+  /* left: -120%; */
+  right: 0;
+  /* right: 0;
+  bottom: -10px; */
+}
+
+.legendContent ul {
+  /* background-color: #4f6c9f; a lighter blue */
+  background-color: white;
+  /* list-style-type: none; */
+  list-style-position: outside;
+  background-image: none;
+  overflow: hidden;
+  margin-left: 0;
+  padding: 10px;
+  width: 600px;
+  border: 3px solid black;
+}
+
+.legendContent ul li {
+  list-style-position: outside;
+  overflow: hidden;
+  margin-top: 1px;
+  display: block;
+  text-align: left;
+}
+
+.legendMenu:hover .legendContent {
+  display: block;
+}
+
+/* the color of the text in the menu items when *not* highlighted #112295 */
+/* the color here is the color of the text when it is *not* highlighted */
+.legendContent ul:hover > li:not(:hover) {
+  color: #777777;
+  background-color: white;
+}
+
+.legendContent:hover .pullDownMenuContent {
+  display: block;
+}
+
+/* margin is: top right bottom left */
+/* padding is: top right bottom left */
+/* box-shadow: https://www.w3schools.com/cssref/css3_pr_box-shadow.asp */
+  /* min-width: 160px; */
+/*  box-shadow: 0px 2px 2px 2px rgba(0,0,0,0.2); */
+/*  padding: 5px 5px 5px 5px; */
+
+/* a drop down example from
+ * https://www.w3schools.com/css/tryit.asp?filename=trycss_dropdown_text
+ * the background-color here is the background of the ancher text box
+ *  but it doesn't come through as exactly what is specified here ?
+ */
+.pullDownMenu {
+  position: relative;
+  display: inline-block;
+  float: right;
+  color: white;
+  background-color: #1d3a6e;
+  border: 1px solid #000000;
+  margin: 2px 20px 2px 2px;
+  padding: 5px 5px 5px 5px;
+  text-align: left;
+}
+
+.pullDownMenuContent {
+  display: none;
+  position: absolute;
+  padding: 0;
+  z-index: 1;
+  margin: 0;
+  width: 100%;
+}
+/* the background-color here is what is in between the menu items */
+/* but why is there space between the menu items ? */
+/* the padding here affects the spacing to the left of the menu items */
+/* but these are offset to the right from the anchor text above ? */
+/* the margin-left moves them closer to the left edge of the anchor */
+/* a color here doesn't appear to color anything */
+
+.pullDownMenuContent ul {
+  /* color: #ff0000;*/
+  background-color: white;
+  list-style-type: none;
+  background-image: none;
+  margin-left: 0;
+  padding: 0;
+}
+
+/* from: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
+ * Example: div span will match all <span> elements that are inside
+ *  a <div> element.  This matches all 'li' inside the 'ul'
+ * color ad background-colore here does nothing
+ * the margin-top trick here sets the spacing between the li items
+ */
+.pullDownMenuContent ul li {
+  list-style-position: outside;
+  overflow: hidden;
+  margin-top: 1px;
+  display: block;
+/*
+  border:1px solit grey;
+*/
+}
+
+/*
+.pullDownMenuContent ul li:first-child {
+  margin-top: 8px;
+}
+*/
+
+/* these next two rules with the 'opacity' trick, allow the menu items
+ *   to show highlight on as item as the mouse hovers over that item
+ * the color here is the text color in the menu items when highlighted
+ * the background-color here is the background of the text items when they
+ * are highlighted
+ * from: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
+ul > li will match all <li> elements that are nested directly
+inside a <ul> element.
+
+ */
+.pullDownMenuContent ul > li {
+  /* opacity: 1.0; */
+  /* color: #1a2a98; */
+  color: white;
+  background-color: #457ddd;
+}
+
+/* this makes the entire item row clickable, including the trailing whitespace,
+ * not just the text part of the label
+ */
+.pullDownMenuContent label {
+  display: block;
+}
+
+/* the color of the text in the menu items when *not* highlighted #112295 */
+/* the color here is the color of the text when it is *not* highlighted */
+.pullDownMenuContent ul:hover > li:not(:hover) {
+  /* opacity: 0.7; */
+  /* color: #457ddd; */
+  color: #112295;
+  background-color: white;
+}
+
+.pullDownMenu:hover .pullDownMenuContent {
+  display: block;
+}
+
+/** previous version of pullDownColumn **/
+.pullDownColumn {
+  position: relative;
+  display: inline-block;
+  float: right;
+  color: #ffff00;
+  background-color: #7799bb;
+  border: 1px solid #000000;
+  margin: 2px 20px 2px 2px;
+  padding: 5px 5px 5px 5px;
+}
+
+.pullDownColumnContent {
+  display: none;
+  position: absolute;
+  background-color: #7799bb;
+  padding: 0;
+  z-index: 1;
+  margin: 0;
+  width: 100%;
+}
+
+.pullDownColumnContent ul {
+  color: #ffff00;
+  background-color: #7799bb;
+  list-style-type: none;
+  background-image: none;
+  margin: 0;
+  padding: 1px;
+}
+
+.pullDownColumnContent ul li {
+  list-style-position: outside;
+  overflow: hidden;
+}
+
+.pullDownColumnContent ul > li {
+  opacity: 1.0;
+  color: #ffff00;
+}
+
+.pullDownColumnContent ul:hover > li:not(:hover) {
+  opacity: 0.8;
+  color: #ff8800;
+}
+
+.pullDownColumn:hover .pullDownColumnContent {
+  display: block;
+}
+
+/* The pull-down check boxes for the columns hide/show
+ * example from:
+ *  https://stackoverflow.com/questions/19206919/how-to-create-checkbox-inside-dropdown
+ */
+
+.columnCheckList {
+  display: inline-block;
+  float: right;
+  padding: 5px 50px 5px 10px;
+  position: relative;
+}
+
+.columnCheckList .anchor {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 50px 5px 10px;
+  border: 1px solid #ccc;
+  color: #ffff00;
+  background-color: #7799bb;
+}
+
+#assemblyTypeAnchor {
+  text-align: right;
+}
+
+.columnCheckList .anchor:after {
+  position: absolute;
+  content: "";
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  padding: 5px;
+  right: 10px;
+  top: 20%;
+  -moz-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  -o-transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+
+.columnCheckList .anchor:active:after {
+  right: 8px;
+  top: 21%;
+}
+
+.columnCheckList ul.columnCheckBox {
+  padding: 2px;
+  display: none;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+  position: absolute;
+  left: 0; top: 100%;
+  width: 100%;
+}
+
+.columnCheckList ul.columnCheckBox li {
+  list-style: none;
+}
+
+.columnCheckList.visible .anchor {
+  color: #0094ff;
+  background-color: #7799bb;
+}
+
+.columnCheckList.visible .columnCheckBox {
+  display: block;
+}
+
+#canNotFindDiv {
+  color: white;
+  /* background-color: #00ff00; */
+  background-color: #4f6c9f;
+}
+
+#specificRequest {
+  color: #eeaa22;
+  /* background: #555555;*/
+  background: white;
+}
+
+#specificRequest:hover {
+  /* color: #555555;*/
+  color: white;
+  background: #eeaa22;
+}
