@@ -34,7 +34,7 @@ if (imgDir != NULL && webPath != NULL)
     safef(thumbnailPath->forCgi, sizeof(thumbnailPath->forCgi), "%s%s%s.png", imgDir,
         lastChar(thumbnailPath->forCgi) == '/' ? "" : "/",
         dyStringContents(base));
-    safef(thumbnailPath->forHtml, sizeof(thumbnailPath->forCgi), "%s%s%s.png", imgDir,
+    safef(thumbnailPath->forHtml, sizeof(thumbnailPath->forCgi), "%s%s%s.png", webPath,
         lastChar(thumbnailPath->forCgi) == '/' ? "" : "/",
         dyStringContents(base));
     }
