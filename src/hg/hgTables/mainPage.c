@@ -419,10 +419,13 @@ jsAddEventForId("change", "outputTypeDropdown", "checkSnpTablesNote");
 
 jsInlineF("function checkForCsv(event) {\n"
     "var outputType = document.getElementById('outputTypeDropdown').value;\n"
-    "if (outputType === 'primaryTable' || outputType === 'selectedFields')\n"
+    "if (outputType === 'primaryTable' || outputType === 'selectedFields') {\n"
     "   document.getElementById('%s').parentElement.style.display='';\n"
-    "else\n"
+    "   document.getElementById('excelOutNote').style.display='';\n"
+    "} else {\n"
     "   document.getElementById('%s').parentElement.style.display='none';\n"
+    "   document.getElementById('excelOutNote').style.display='none';\n"
+    "}\n"
     "}\n"
     "$(document).ready(checkForCsv);\n"
     , hgtaOutSep, hgtaOutSep);
@@ -933,7 +936,7 @@ showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, is
     hPrintf("<TR><TD>\n");
     hPrintf("<B>output filename:</B>&nbsp;");
     cgiMakeTextVar(hgtaOutFileName, fileName, 29);
-    hPrintf("&nbsp;(add .csv extension if opening in Excel, leave blank to keep output in browser)</TD></TR>\n");
+    hPrintf("&nbsp;(<span id='excelOutNote' style='display:none'>add .csv extension if opening in Excel, </span>leave blank to keep output in browser)</TD></TR>\n");
     hPrintf("<TR><TD>\n");
     hPrintf("<B>output field separator:&nbsp;</B>");
 
