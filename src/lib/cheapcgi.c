@@ -192,6 +192,12 @@ if (!findJsEvent(event))
 freeMem (event);
 }
 
+void jsAddEventForId(char *eventName, char *idText, char *jsText)
+{
+checkValidEvent(eventName);
+jsInlineF("document.getElementById('%s').addEventListener('%s', %s);\n", idText, eventName, jsText);
+}
+
 void jsOnEventById(char *eventName, char *idText, char *jsText)
 /* Add js mapping for inline event */
 {

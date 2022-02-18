@@ -706,4 +706,5 @@ def gencodeGenerateTrackDbs(opts):
     generateHtmlFile(params, opts.noGit)
     generateJoinerFile(params)
 
+
 gencodeGenerateTrackDbs(parseArgs())

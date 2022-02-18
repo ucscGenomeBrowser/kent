@@ -26158,9 +26158,9 @@ else if (sameWord(table, "mrna") || sameWord(table, "mrna2") ||
     {
     doHgRna(tdb, item);
     }
-else if (startsWith("HLTOGAannot", table))
+else if (startsWith("HLTOGAannot", trackHubSkipHubName(table)))
     {
-    doHillerLabTOGAGene(tdb, item, table);
+    doHillerLabTOGAGene(database, tdb, item, table);
     }
 else if (startsWith("pseudoMrna",table ) || startsWith("pseudoGeneLink",table )
         || sameWord("pseudoUcsc",table))

@@ -396,26 +396,40 @@ hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 
         "directory on our download server.</DIV>", database);
 hPrintf(" ");
 
-jsInline("function checkGtfNote() {"
-    "if (document.getElementById('outputTypeDropdown').value==='gff') "
-    "    document.getElementById('gffNote').style.display=''; "
-    "else "
-    "    document.getElementById('gffNote').style.display='none'; "
-    "}"
+jsInline("function checkGtfNote(event) {\n"
+    "if (document.getElementById('outputTypeDropdown').value==='gff')\n"
+    "    document.getElementById('gffNote').style.display='';\n"
+    "else\n"
+    "    document.getElementById('gffNote').style.display='none';\n"
+    "}\n"
     "$(document).ready(checkGtfNote);\n"
 );
-jsOnEventById("change", "outputTypeDropdown", "checkGtfNote()");
+jsAddEventForId("change", "outputTypeDropdown", "checkGtfNote");
 
-jsInline("function checkSnpTablesNote() {"  
-    "var trackName = document.getElementById('hgta_track').value;"
-    "if (trackName.startsWith('dbSnp') || trackName.startsWith('snp')) "
-    "    document.getElementById('snpTablesNote').style.display=''; "
-    "else "
-    "    document.getElementById('snpTablesNote').style.display='none'; "
-    "}"
+jsInline("function checkSnpTablesNote(event) {\n"  
+    "var trackName = document.getElementById('hgta_track').value;\n"
+    "if (trackName.startsWith('dbSnp') || trackName.startsWith('snp'))\n"
+    "    document.getElementById('snpTablesNote').style.display='';\n"
+    "else\n"
+    "    document.getElementById('snpTablesNote').style.display='none';\n"
+    "}\n"
     "$(document).ready(checkSnpTablesNote);\n"
 );
-jsOnEventById("change", "outputTypeDropdown", "checkSnpTablesNote()");
+jsAddEventForId("change", "outputTypeDropdown", "checkSnpTablesNote");
+
+jsInlineF("function checkForCsv(event) {\n"
+    "var outputType = document.getElementById('outputTypeDropdown').value;\n"
+    "if (outputType === 'primaryTable' || outputType === 'selectedFields') {\n"
+    "   document.getElementById('%s').parentElement.style.display='';\n"
+    "   document.getElementById('excelOutNote').style.display='';\n"
+    "} else {\n"
+    "   document.getElementById('%s').parentElement.style.display='none';\n"
+    "   document.getElementById('excelOutNote').style.display='none';\n"
+    "}\n"
+    "}\n"
+    "$(document).ready(checkForCsv);\n"
+    , hgtaOutSep, hgtaOutSep);
+jsAddEventForId("change", "outputTypeDropdown", "checkForCsv");
 
 if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
     {
@@ -916,20 +930,31 @@ showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, is
 
 /* Print output destination line. */
     {
-    char *compressType =
-	cartUsualString(cart, hgtaCompressType, textOutCompressNone);
+    char *compressType = cartUsualString(cart, hgtaCompressType, textOutCompressNone);
+    char *fieldSep = cartUsualString(cart, hgtaOutSep, outTab);
     char *fileName = cartUsualString(cart, hgtaOutFileName, "");
     hPrintf("<TR><TD>\n");
     hPrintf("<B>output filename:</B>&nbsp;");
     cgiMakeTextVar(hgtaOutFileName, fileName, 29);
-    hPrintf("&nbsp;(leave blank to keep output in browser)</TD></TR>\n");
+    hPrintf("&nbsp;(<span id='excelOutNote' style='display:none'>add .csv extension if opening in Excel, </span>leave blank to keep output in browser)</TD></TR>\n");
+    hPrintf("<TR><TD>\n");
+    hPrintf("<B>output field separator:&nbsp;</B>");
+
+    // tab or csv output
+    cgiMakeRadioButton(hgtaOutSep, outTab, sameWord(outTab, fieldSep));
+    hPrintf("&nbsp;tsv (tab-separated)&nbsp&nbsp;");
+
+    cgiMakeRadioButton(hgtaOutSep, outCsv, sameWord(outCsv, fieldSep));
+    hPrintf("&nbsp;csv (for excel)&nbsp;");
+
+    hPrintf("</TD></TR>\n");
     hPrintf("<TR><TD>\n");
     hPrintf("<B>file type returned:&nbsp;</B>");
     cgiMakeRadioButton(hgtaCompressType, textOutCompressNone,
-	sameWord(textOutCompressNone, compressType));
-    hPrintf("&nbsp;plain text&nbsp&nbsp");
+        sameWord(textOutCompressNone, compressType));
+    hPrintf("&nbsp;plain text&nbsp;");
     cgiMakeRadioButton(hgtaCompressType, textOutCompressGzip,
-	sameWord(textOutCompressGzip, compressType));
+        sameWord(textOutCompressGzip, compressType));
     hPrintf("&nbsp;gzip compressed");
     hPrintf("</TD></TR>\n");
     }

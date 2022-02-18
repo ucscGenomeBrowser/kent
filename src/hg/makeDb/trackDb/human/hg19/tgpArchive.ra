@@ -6,7 +6,6 @@ cartVersion 2
 visibility hide
 group varRep
 html ../tgpArchive
-pennantIcon New red . "Supertrack created Aug. 27th 2021"
 
     track tgpPhase1Accessibility
     parent tgpArchive

@@ -35,10 +35,11 @@ class Attributes(object):
 class Record(object):
     "one record of a GTF or GFF3"
 
-    def __init__(self, line, lineFileOffset, lineFileLength, seqname, source, feature, start, end, score, strand, frame, attrVals):
+    __slots__ = ("line", "lineNumber", "seqname", "source", "feature", "start", "end", "score", "strand", "frame", "attributes")
+
+    def __init__(self, line, lineNumber, seqname, source, feature, start, end, score, strand, frame, attrVals):
         self.line = line
-        self.lineFileOffset = lineFileOffset  # location in file
-        self.lineFileLength = lineFileLength  # length in file, including terminator
+        self.lineNumber = lineNumber
         self.seqname = seqname
         self.source = source
         self.feature = feature

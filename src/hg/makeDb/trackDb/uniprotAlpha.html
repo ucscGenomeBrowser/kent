@@ -92,7 +92,7 @@ mapped through these alignments to the genome.
   </tr>
 </table>
 <p>
-For consistency and make it easier for user of mutation-related tracks,
+For consistency and convenience for user of mutation-related tracks,
 the subtrack &quot;UniProt/SwissProt Variants&quot; is a copy of the track
 &quot;UniProt Variants&quot; in the track group &quot;Phenotype and Literature&quot;, or 
 &quot;Variation and Repeats&quot;, depending on the assembly.
@@ -134,18 +134,18 @@ annotations mapped through different protein sequence alignments but with the sa
 coordinates are only shown once.  </p>
 
 <p>On the configuration page of this track, you can choose to hide any TrEMBL annotations.
-This filter will also hide the UniProt alternative isoform protein sequences, because
+This filter will also hide the UniProt alternative isoform protein sequences because
 both types of information are less relevant to most users. Please contact us if you
 want more detailed filtering features.</p>
 
 <p>Note that for the human hg38 assembly and SwissProt annotations, there
 also is a <a
-href="hgTracks?db=hg38&hubUrl=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/genome_annotation_tracks/UP000005640_9606_hub/hub.txt" target=_blank>public
+href="hgTracks?db=hg38&hubUrl=https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/genome_annotation_tracks/UP000005640_9606_hub/hub.txt" target=_blank>public
 track hub</a> prepared by UniProt itself, with 
 genome annotations maintained by UniProt using their own mapping
 method based on those Gencode/Ensembl gene models that are annotated in UniProt
-for a given protein. For proteins that differ from the genome, UniProt's own mapping method
-will in most cases map a protein and its annotations to an unexpected location
+for a given protein. For proteins that differ from the genome, UniProt's mapping method
+will, in most cases, map a protein and its annotations to an unexpected location
 (see below for details on UCSC's mapping method).</p>
 
 <h2>Methods</h2>
@@ -172,13 +172,13 @@ proteins are only aligned to the RefSeq transcripts that are annotated
 by UniProt for this protein. If no transcripts are annotated on the protein, or
 the annotated ones do not exist anymore, but a NCBI Gene ID is annotated,
 the RefSeq transcripts for the gene are used.  If no NCBI Gene is annotated,
-then the best matching alignment is used. After this, on hg38, only a handful
-of edge cases (pseudogenes, very recently added proteins) remain where the
+then the best matching alignment is used. Only a handful of edge cases
+(pseudogenes, very recently added proteins) on hg38 remain where the
 global transcriptome-wide matches have to be used.  The details page of the
-protein alignments shows which transcript were used for the mapping and how
+protein alignments shows the transcripts used for the mapping and how
 these transcripts were found. There can be multiple transcripts for one
-protein, as their coding sequences can be identical or several of them were
-annotated and they do not differ by more than 1% in alignment score.
+protein, as their coding sequences can be identical or several of them do
+not differ by more than 1% in alignment score.
 </p>
 
 <p>In other words, when an NCBI or UCSC RefSeq track is used for the mapping and to align a
@@ -190,9 +190,10 @@ protein sequence to the correct transcript, we use a three stage process:
     <li>If no transcript is annotated or the transcript cannot be found in the
     NCBI/UCSC RefSeq track, the UniProt-annotated NCBI Gene ID is resolved to a
     set of NCBI RefSeq transcript IDs via the most current version of NCBI
-    genes tables. Of the resulting alignments, only the top match and all
+    genes tables. Only the top match of the resulting alignments and all
     others within 1% of its score are used for the mapping.
-    <li>If no transcript can be found after step (2), the protein is aligned to all transcripts and the top match and all others withint 1% of its score are used.
+    <li>If no transcript can be found after step (2), the protein is aligned to all transcripts,
+    the top match, and all others within 1% of its score are used.
 </ol>
 
 <p>This system was designed to resolve the problem of incorrect mappings of
@@ -203,11 +204,11 @@ composed of either very repetitive or very similar proteins. To make sure that
 the alignments always go to the best chromosome location, all _alt and _fix
 reference patch sequences are ignored for the alignment, so the patches are
 entirely free of UniProt annotations. Please contact us if you have feedback on
-this process, we are no aware of a way to evaluate the results completely and
-in an automated manner, and appreciate feedback or example edge cases.</p>
+this process or example edge cases. We are not aware of a way to evaluate the
+results completely and in an automated manner.</p>
 <p>
 Proteins were aligned to transcripts with TBLASTN, converted to PSL, filtered
-with pslReps (93% query coverage, keep alignments within top-1% score), lifted to genome
+with pslReps (93% query coverage, keep alignments within top 1% score), lifted to genome
 positions with pslMap and filtered again with pslReps.  UniProt annotations were
 obtained from the UniProt XML file.  The UniProt annotations were then mapped to the
 genome through the alignment described above using the pslMap program.  This approach
@@ -236,9 +237,9 @@ are available for browsing in the form of the <a
     target=_blank> UCSC UniProt Archive Track Hub</a>. The underlying data of
     all releases of this track (past and current) can be obtained from our <a
     href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/uniprot"
-target=_blank>Downloads Server, in the data archive directory</a>.  The UniProt
-protein-to-genome alignment is also available from there, in file formats for
-our command line programs liftOver or pslMap, which can be used to map
+target=_blank>downloads server</a>, including the UniProt
+protein-to-genome alignment. The file formats available are in the
+command line programs liftOver or pslMap, which can be used to map
 coordinates on protein sequences to genome coordinates. The filenames are
 unipToGenome.over.chain.gz and unipToGenomeLift.psl.gz.  </p>
 <!-- should I add pslMap/liftOver examples here? -->
@@ -259,9 +260,9 @@ which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, for example:
-<br> 
+<p>
 <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/uniprot/unipStruct.bb -chrom=chr6 -start=0 -end=1000000 stdout</tt> 
-<br>
+</p>
 Please refer to our
 <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
 for questions, or our

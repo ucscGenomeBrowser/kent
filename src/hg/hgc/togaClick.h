@@ -95,7 +95,7 @@ void extractHLTOGAsuffix(char *suffix);
 /* Extract suffix from TOGA table name.
 Prefix must be HLTOGAannot */
 
-void doHillerLabTOGAGene(struct trackDb *tdb, char *item, char *table_name);
+void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *table_name);
 /* Put up TOGA Gene track info. */
 
 #endif  // TOGACLICK_H

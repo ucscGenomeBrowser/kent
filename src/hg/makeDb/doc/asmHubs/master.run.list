@@ -310,6 +310,7 @@
 ./runBuild GCA_014905235.2 GCA_014905235.2_Bmori_2016v1.0 invertebrates Bombyx_mori
 ./runBuild GCA_015220805.1 GCA_015220805.1_bPogPus1.pri birds Pogoniulus_pusillus
 ./runBuild GCA_015227805.2 GCA_015227805.2_bHirRus1.pri.v2 birds Hirundo_rustica
+./runBuild GCA_015443085.1 GCA_015443085.1_Saanen_v1 mammals Capra_hircus
 ./runBuild GCA_016128335.1 GCA_016128335.1_ZJU1.0 birds Dromaius_novaehollandiae
 ./runBuild GCA_016904835.1 GCA_016904835.1_bAcaChl1.pri birds Acanthisitta_chloris
 ./runBuild GCA_017562165.1 GCA_017562165.1_ASM1756216v1 invertebrates Ectropis_grisescens

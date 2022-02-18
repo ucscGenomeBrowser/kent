@@ -6,7 +6,8 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
-include mane.ra 
+include mane.alpha.ra alpha
+include mane.ra beta,public
 
 include gdcCancer.ra
 
@@ -163,8 +164,7 @@ pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 
 track revel override
 origAssembly hg19 
-pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; New red ../goldenPath/newsarch.html#062421 "Released by UCSC June 24, 2021"
-
+pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 
 include nonCodingRNAs.ra
 
@@ -530,9 +530,8 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra public
-include knownGene.alpha.ra alpha,beta
-#include knownGene.ra
+include knownGene.ra
+#include knownGene.alpha.ra alpha
 include knownGeneArchive.ra alpha
 
 include trackDb.100way.ra

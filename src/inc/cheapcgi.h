@@ -29,6 +29,9 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
+void jsAddEventForId(char *eventName, char *idText, char *jsText);
+/* Add js mapping for inline event, adding multiple events as needed */
+
 void jsOnEventById(char *event, char *idText, char *jsText);
 /* Add js mapping for inline event */
 

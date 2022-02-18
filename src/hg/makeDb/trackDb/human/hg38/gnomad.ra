@@ -84,7 +84,7 @@ html gnomadV3_1_1
 
     track gnomadGenomesVariantsV3_1_1
     parent gnomadVariants
-    visibility pack
+    visibility squish
     shortLabel gnomAD v3.1.1
     longLabel Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
     dataVersion Release v3.1.1 (March 20, 2021) and v3.1 chrM Release (November 17, 2020)

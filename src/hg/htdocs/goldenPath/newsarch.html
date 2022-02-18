@@ -52,6 +52,104 @@
 <!-- ============= 2022 archived news ============= -->
 <a name="2022"></a>
 
+<a name="022222"></a>
+<h2>Feb. 22, 2022 &nbsp;&nbsp; Recommended Track Sets paper</h2>
+<p>
+We are pleased to announce a new paper about our Recommended Tracks Set feature, available
+on GRCh37/hg19, which collects related clinical tracks to help investigate variants.
+The <a href="https://doi.org/10.1002/humu.24335"
+target="_blank">Variant interpretation: UCSC Genome Browser Recommended Track Sets</a> paper
+covers how this new feature can facilitate the interpretation of variants for clinicians.</p>
+<p>
+Track Sets quickly swap out the on-screen annotations a user may be looking at in current genomic
+position for a different dataset relevant to specific medical scenarios: investigating single
+nucleotide variants in coding regions (Clinical SNVs), structural copy number variants
+(Clinical CNVs), and functional aspects of non-coding variants (Non-coding SNVs).</p>
+<p class ="text-center">
+  <a href="https://doi.org/10.1002/humu.24335">
+    <img class="text-center" src="../images/newsArchImages/track_sets1.png" width="900px">
+  </a>
+</p>
+<p>
+To access Recommended Track Sets, only available currently on the hg19 assembly, go to the top blue bar
+and under the  &quot;Genome Browser&quot; menu click the &quot;Recommended Track Sets&quot;
+option. This will launch a dialog box offering pre-configured track sets, enabling swapping from
+one view to another view without changing the current position.  The displayed tracks can then
+be customized, where one can configure tracks in the browser by clicking the grey bar on the
+left of a track. Or to see more information about displayed items, one can mouseover for an
+informative pop-up summary, or click on the item to access a details page.</p>
+<p>
+The new paper gives examples of using the experimental data in the Clinical SNV Track Set to examine a variant.</p>
+<p class ="text-center">
+  <a href="https://doi.org/10.1002/humu.24335">
+    <img class="text-center" src="../images/newsArchImages/track_sets2.png" width="900px">
+  </a>
+</p>
+<p>
+This image from the paper shows a vertical blue highlight for NM_172107.4(KCNQ2):c.635A>G (p.Asp212Gly).
+This variant is located in the KCNQ2 gene, in a codon for Aspartic acid (D212), and the mutation
+has been associated with early-onset epileptic encephalopathy, an autosomal dominant inherited
+disease. The ClinVar Short Variants and SNVs tracks show that all three possible single nucleotide
+substitutions have been described at this position with pathogenic or likely pathogenic
+classifications with red blocks (A>C, A>T, A>G). Each described variant leads to a missense
+change of the Asp residue. The SNV Track Set also includes computational and predictive components,
+such as the Rare Exome Variant Ensemble Learner (REVEL) and Combined Annotation Dependent Depletion
+(CADD) tracks, which calculate impacts of nucleotide changes, discussed in another figure in the paper.</p>
+<p>
+The paper also discusses many of the other features developed with the release of Track Sets,
+including the ability to merge items that span a region to declutter the view of CNVs and the
+addition of multiple configuration filters to allow users to dynamically generate a subset
+view of dense data on categories of interest.  Lastly, a far more informative mouseover
+was created when viewing clinical data that could combine multiple fields. For instance,
+in the ClinVar track, it is now possible to view a variant's HGVS annotation, molecular
+consequence, clinical significance, population frequency, and associated phenotypes without
+having to click into an item's details page.</p>
+<p>
+We would like to thank Ana Benet-Pag&#232;s and Robert Kuhn for their work publishing this new article.</p>
+
+<a name="021022"></a>
+<h2>Feb. 10, 2022 &nbsp;&nbsp; GENCODE Genes v39 for human (hg38)</h2>
+<p>
+We are happy to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=knownGene&c=chrX">GENCODE Genes v39</a> track for the human
+(<a href="/cgi-bin/hgGateway?db=hg38">GRCh38/hg38</a>) genome assembly. The track includes
+protein-coding genes, non-coding RNA genes, and pseudo-genes, though pseudo-genes are not displayed
+by default. It contains annotations on the reference chromosomes as well as assembly patches and
+alternative loci (haplotypes).
+</p>
+
+<p>
+<table class="stdTbl">
+    <tr><th COLSPAN=4 style="text-align:center">GENCODE v39 Release Stats</th></tr>
+    <tr align=left>
+        <th>Genes</th><th>Observed</th><th>Transcripts</th><th>Observed</th></tr>
+    <tr align=left>
+        <td>Protein-coding genes</td><td>19,982</td>
+        <td>Protein-coding transcripts</td><td>87,151</td></tr>
+    <tr align=left>
+        <td>Long non-coding RNA genes</td><td>18,811</td>
+        <td><font size="1">- full length protein-coding</font></td><td>61,516</td></tr>
+    <tr align=left>
+        <td>Small non-coding RNA genes</td><td>7,567</td>
+        <td><font size="1">- partial length protein-coding</font></td><td>25,635</td></tr>
+    <tr align=left>
+        <td>Pseudogenes</td><td>14,763</td>
+        <td>Nonsense mediated decay transcripts</td><td>19,762</td></tr>
+    <tr align=left>
+        <td>Immunoglobulin/T-cell receptor gene segments</td><td>409</td>
+        <td>Long non-coding RNA loci transcripts</td><td>53,009</td></tr>
+</table>
+</p>
+
+<p>
+More details about the GENCODE Genes v39 track can be found on the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=knownGene&c=chrX">track description</a> page.
+</p>
+<p>
+We would like to thank the <a href="https://www.gencodegenes.org/" target="_blank">GENCODE
+Project</a> for providing the data. The creation of this track was made possible thanks to Brian
+Raney, Mark Diekhans, and Jairo Navarro.</p>
+
 <a name="020922"></a>
 <h2>Feb. 9, 2022 &nbsp;&nbsp; New GENCODE gene tracks: Human V39 (hg19/hg38) - Mouse M28
 (mm39)</h2>

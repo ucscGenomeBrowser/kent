@@ -1589,3 +1589,111 @@ TMPDIR=/dev/shm
 real	1621m36.194s
 user	0m2.046s
 sys	0m2.922s
+##############################################################################
+# LASTZ kinetoplastids GCA_000340355.2 vs. kinetoplastids GCF_000002845.2 (DONE - 2022-02-06 - Gerardo)
+
+# should be able to run this from anywhere, this time it was run from:
+    cd kent/src/hg/utils/automation
+
+  time (~/kent/src/hg/utils/automation/pairLastz.sh \
+	GCA_000340355.2_Leishmania_braziliensis_M2903-1.0.6 GCF_000002845.2_ASM284v2   other other) \
+	   > GCA_000340355_GCF_000002845_20220204.log 2>&1 &
+  # check the total time
+grep -w real  GCA_000340355_GCF_000002845_20220204.log  | tail -1 | sed -e 's/^/    # /;'
+    # real      27m14.153s
+
+  # this  GCA_000340355_GCF_000002845_20220204.log log file happens to have a copy of the make doc, as well
+  # as the copy of the make doc left in the target assembly directory:
+# /hive/data/genomes/asmHubs/allBuild/GCA/000/340/355/GCA_000340355.2_Leishmania_braziliensis_M2903-1.0.6/trackData/lastzGCF_000002845.2.2022-02-06/makeDoc.txt
+
+    # this command outputs this makeDoc text:
+
+    cat kent/src/hg/utils/automation/GCA_000340355_GCF_000002845_20220204.log
+
+##############################################################################
+# LASTZ kinetoplastids GCA_000340355.2 vs. kinetoplastids GCF_000002845.2
+#    (DONE - 2022-02-06 - Gerardo)
+
+    mkdir /hive/data/genomes/asmHubs/allBuild/GCA/000/340/355/GCA_000340355.2_Leishmania_braziliensis_M2903-1.0.6/trackData/lastzGCF_000002845.2.2022-02-06
+    cd /hive/data/genomes/asmHubs/allBuild/GCA/000/340/355/GCA_000340355.2_Leishmania_braziliensis_M2903-1.0.6/trackData/lastzGCF_000002845.2.2022-02-06
+
+    printf '# kinetoplastids GCF_000002845.2 vs. kinetoplastids GCA_000340355.2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: kinetoplastids GCA_000340355.2
+SEQ1_DIR=/hive/data/genomes/asmHubs/GCA/000/340/355/GCA_000340355.2/GCA_000340355.2.2bit
+SEQ1_LEN=/hive/data/genomes/asmHubs/GCA/000/340/355/GCA_000340355.2/GCA_000340355.2.chrom.sizes.txt
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: kinetoplastids GCF_000002845.2
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/000/002/845/GCF_000002845.2/GCF_000002845.2.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/000/002/845/GCF_000002845.2/GCF_000002845.2.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/asmHubs/allBuild/GCA/000/340/355/GCA_000340355.2_Leishmania_braziliensis_M2903-1.0.6/trackData/lastzGCF_000002845.2.2022-02-06
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+      -tAsmId GCA_000340355.2_Leishmania_braziliensis_M2903-1.0.6 -qAsmId GCF_000002845.2_ASM284v2 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	21m44.561s
+
+    sed -e 's/^/    # /;' fb.GCA_000340355.2.chainGCF_000002845.2Link.txt
+    # 31699291 bases of 35210150 (90.029%) in intersection
+    sed -e 's/^/    # /;' fb.GCA_000340355.2.chainSynGCF_000002845.2Link.txt
+    # 30406396 bases of 35210150 (86.357%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+      -target2Bit="/hive/data/genomes/asmHubs/GCA/000/340/355/GCA_000340355.2/GCA_000340355.2.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCA/000/340/355/GCA_000340355.2/GCA_000340355.2.chrom.sizes.txt" \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/000/002/845/GCF_000002845.2/GCF_000002845.2.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/000/002/845/GCF_000002845.2/GCF_000002845.2.chrom.sizes.txt" \
+        GCA_000340355.2 GCF_000002845.2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	1m2.843s
+
+    sed -e 's/^/    # /;' fb.GCA_000340355.2.chainRBest.GCF_000002845.2.txt
+    # 30393628 bases of 35210150 (86.321%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/000/002/845/GCF_000002845.2_ASM284v2/trackData/blastz.GCA_000340355.2.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+  -tAsmId GCA_000340355.2_Leishmania_braziliensis_M2903-1.0.6 -qAsmId GCF_000002845.2_ASM284v2 /hive/data/genomes/asmHubs/allBuild/GCA/000/340/355/GCA_000340355.2_Leishmania_braziliensis_M2903-1.0.6/trackData/lastzGCF_000002845.2.2022-02-06/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	3m24.068s
+
+    sed -e 's/^/    # /;' fb.GCF_000002845.2.chainGCA_000340355.2Link.txt
+    # 31582268 bases of 32068771 (98.483%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_000002845.2.chainSynGCA_000340355.2Link.txt
+    # 30612946 bases of 32068771 (95.460%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+   -query2bit="/hive/data/genomes/asmHubs/GCA/000/340/355/GCA_000340355.2/GCA_000340355.2.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCA/000/340/355/GCA_000340355.2/GCA_000340355.2.chrom.sizes.txt" \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/000/002/845/GCF_000002845.2/GCF_000002845.2.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/000/002/845/GCF_000002845.2/GCF_000002845.2.chrom.sizes.txt" \
+   GCF_000002845.2 GCA_000340355.2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	1m2.112s
+
+    sed -e 's/^/    # /;' fb.GCF_000002845.2.chainRBest.GCA_000340355.2.txt
+    # 30310385 bases of 32068771 (94.517%) in intersection
+
+##############################################################################
+
+real	27m14.153s
+user	0m1.233s
+sys	0m1.147s

@@ -179,7 +179,7 @@ freeMem(fileName);
 return bedList;
 }
 
-void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f)
+void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f, char outSep)
 /* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */
 {
 if (f == NULL)
@@ -213,9 +213,17 @@ for (i=0; i<fieldCount; ++i)
     }
 
 /* Output row of labels */
-fprintf(f, "#%s", fieldArray[0]);
+fprintf(f, "#");
+if (outSep == ',') fputc('"', f);
+fprintf(f, "%s", fieldArray[0]);
+if (outSep == ',') fputc('"', f);
 for (i=1; i<fieldCount; ++i)
-    fprintf(f, "\t%s", fieldArray[i]);
+    {
+    fputc(outSep, f);
+    if (outSep == ',') fputc('"', f);
+    fprintf(f, "%s", fieldArray[i]);
+    if (outSep == ',') fputc('"', f);
+    }
 fprintf(f, "\n");
 
 /* Open up bigBed file. */
@@ -263,9 +271,16 @@ if (bpt) // if we have an index it means we're whole genome and don't need to fi
         if (asFilterOnRow(filter, row))
             {
             int i;
+            if (outSep == ',') fputc('"', f);
             fprintf(f, "%s", row[columnArray[0]]);
+            if (outSep == ',') fputc('"', f);
             for (i=1; i<fieldCount; ++i)
-                fprintf(f, "\t%s", row[columnArray[i]]);
+                {
+                fputc(outSep, f);
+                if (outSep == ',') fputc('"', f);
+                fprintf(f, "%s", row[columnArray[i]]);
+                if (outSep == ',') fputc('"', f);
+                }
             fprintf(f, "\n");
             }
         }
@@ -287,9 +302,16 @@ else
                 if ((idHash != NULL) && (hashLookup(idHash, row[3]) == NULL))
                     continue;
                 int i;
+                if (outSep == ',') fputc('"', f);
                 fprintf(f, "%s", row[columnArray[0]]);
+                if (outSep == ',') fputc('"', f);
                 for (i=1; i<fieldCount; ++i)
-                    fprintf(f, "\t%s", row[columnArray[i]]);
+                    {
+                    fputc(outSep, f);
+                    if (outSep == ',') fputc('"', f);
+                    fprintf(f, "%s", row[columnArray[i]]);
+                    if (outSep == ',') fputc('"', f);
+                    }
                 fprintf(f, "\n");
                 }
             }
