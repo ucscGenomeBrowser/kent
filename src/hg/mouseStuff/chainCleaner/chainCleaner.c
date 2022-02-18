@@ -1657,13 +1657,26 @@ void netInputChains (char *chainFile) {
    }
 
    dyStringClear(cmd);
-   dyStringPrintf(cmd, "set -o pipefail; chainNet -minScore=0 %s %s %s stdout /dev/null | NetFilterNonNested.perl /dev/stdin -minScore1 3000 > %s", chainFile, tSizes, qSizes, netFile);
+   dyStringPrintf(cmd, "chainNet -minScore=0 %s %s %s %s.raw /dev/null", chainFile, tSizes, qSizes, netFile);
    verbose(3, "\t\trunning netting command: %s\n", cmd->string);
    retVal = system(cmd->string);
    if (0 != retVal)
-      errAbort("ERROR: chainNet | NetFilterNonNested.perl failed. Cannot net the chains. Command: %s\n", cmd->string);
-   verbose(3, "\t\tnetting done\n");
+      errAbort("ERROR: chainNet failed. Cannot net the chains. Command: %s\n", cmd->string);
+   dyStringClear(cmd);
 
+   dyStringPrintf(cmd, "NetFilterNonNested.perl %s.raw -minScore1 3000 > %s", netFile, netFile);
+   verbose(3, "\t\trunning NetFilterNonNested.perl command: %s\n", cmd->string);
+   retVal = system(cmd->string);
+   if (0 != retVal)
+      errAbort("ERROR: NetFilterNonNested.perl failed. Cannot filter the nets. Command: %s\n", cmd->string);
+   verbose(3, "\t\tnetting done\n");
+   dyStringClear(cmd);
+   
+   dyStringPrintf(cmd, "rm -f %s.raw", netFile);
+   verbose(3, "\t\trunning %s\n", cmd->string);
+   retVal = system(cmd->string);
+   dyStringClear(cmd);
+   
    inNetFile = cloneString(netFile);
 }
 

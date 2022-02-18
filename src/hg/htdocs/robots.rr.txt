@@ -3,3 +3,4 @@ Crawl-delay: 2
 Disallow: /admin/stats/
 Disallow: /goldenPath/certificate.html
 Disallow: /goldenPath/certificates/
+Disallow: /cgi-bin/hgTracks*.customText*.
