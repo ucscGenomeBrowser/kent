@@ -387,7 +387,7 @@ jsOnEventById("click", "goBack", "history.go(-1)");
 void sendSuggestionBack(char *sName, char *sEmail, char *sCategory, char *sSummary, char *sDetails, char *suggestID)
 /* send back the suggestion */
 {
-/* parameters from hg.cong */
+/* parameters from hg.conf */
 char *mailTo = mailToAddr();
 char *mailFrom=mailFromAddr();
 char *filter=filterKeyword();
@@ -437,8 +437,7 @@ printSubmitFormScript();
 void  submitSuggestion()
 /* send the suggestion to ,.. */
 {
-/* parameters from hg.cong */
-char *filter=filterKeyword();
+/* parameters from hg.conf */
 
 /* values from cart */
 char *sName=cartUsualString(cart,"suggestName","");
@@ -449,37 +448,37 @@ char *sDetails=cartUsualString(cart,"suggestDetails","");
 char *sWebsite=cartUsualString(cart,"suggestWebsite","");
 char suggestID[512];
 safef(suggestID, sizeof(suggestID),"%s %s", sEmail, now());
-char subject[512];
-safef(subject, sizeof(subject),"%s %s", filter, suggestID);
 
 /* reject if the hidden field is not blank */
 if (isNotEmpty(sWebsite))
-{
+    {
     printInvalidForm();
     cartSetString(cart, "suggestWebsite", "");
     return;
-}
+    }
 
 /* reject suggestion if category is invalid */
 if (!validateCategory(sCategory))
-{
+    {
     printInvalidCategory(sCategory);
     return;  
-} 
+    } 
 
 /* Send back suggestion only with valid user email address */
 if (spc_email_isvalid(sEmail) != 0)
-{
+    {
     /* send back the suggestion */
     sendSuggestionBack(sName, sEmail, sCategory, sSummary, sDetails, suggestID);
     /* send confirmation mail to user */
     sendConfirmMail(sEmail,suggestID, sSummary, sDetails);
     /* display confirmation page */
     printSuggestionConfirmed(sSummary, suggestID, sEmail, mailReturnAddr(), sDetails);
-} else {
+    } 
+else 
+    {
     /* save all field value in cart */
      printInvalidEmailAddr(sEmail);
-}
+    }
 cartRemove(cart, "do.suggestSendMail");
 }
 
