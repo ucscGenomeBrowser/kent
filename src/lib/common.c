@@ -2855,9 +2855,10 @@ void mustReadFd(int fd, void *buf, size_t size)
 ssize_t actualSize;
 char *cbuf = buf;
 // using a loop because linux was not returning all data in a single request when request size exceeded 2GB.
+// MacOS complains invalid argument if it is over 2GB
 while (size > 0)
     {
-    actualSize = read(fd, cbuf, size);
+    actualSize = read(fd, cbuf, min(0x7FFF000,size));  // max 2GB 0x7FFF000 MAX_RW_COUNT = (INT_MAX & PAGE_MASK)
     if (actualSize < 0)
 	errnoAbort("Error reading %lld bytes", (long long)size);
     if (actualSize == 0)

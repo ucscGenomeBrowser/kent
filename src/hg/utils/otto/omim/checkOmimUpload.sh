@@ -34,7 +34,7 @@ hgsqlTableDate hg19 omimGene2 omimGene2.date
 hgsqlTableDate hg19 omimAvSnp omimAvSnp.date
 if [ ! omimGene2.date -nt upload.omim2.date -a ! omimAvSnp.date -nt omimAvSnp.date ]
 then
-    echo "No new table."
+#    echo "No new table."
     exit 0;
 fi
 echo doing upload
