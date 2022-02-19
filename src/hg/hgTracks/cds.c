@@ -954,7 +954,9 @@ static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf,
 struct dnaSeq *mrnaSeq = NULL;
 char *name = getItemDataName(tg, lf->name);
 char *seqSource = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE);
-if (sameString(tableName,"refGene") || sameString(tableName,"refSeqAli"))
+if (seqSource == NULL)
+    errAbort("setting '%s' missing for track '%s'", BASE_COLOR_USE_SEQUENCE, tg->track);
+else if (sameString(tableName,"refGene") || sameString(tableName,"refSeqAli"))
     mrnaSeq = hGenBankGetMrna(database, name, "refMrna");
 else if (sameString(seqSource, "ss"))
     mrnaSeq = maybeGetUserSeq(name);
