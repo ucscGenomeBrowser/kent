@@ -53,6 +53,7 @@ UTILS_APPLIST = \
 	pslLiftSubrangeBlat \
 	pslToBigPsl \
 	raSqlQuery \
+	rmskAlignToPsl \
 	tdbQuery \
 	transMapPslToGenePred \
 	twoBitMask \

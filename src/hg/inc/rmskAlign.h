@@ -25,7 +25,7 @@ struct rmskAlign
     char strand[2];	/* Relative orientation + or - */
     char *repName;	/* Name of repeat */
     char *repClass;	/* Class of repeat */
-    char *repFamily;	/* Family of repeat */
+    char *repFamily;	/* Family of repeat (1-based) */
     int repStart;	/* Start in repeat sequence */
     unsigned repEnd;	/* End in repeat sequence */
     int repLeft;	/* -#bases after match in repeat sequence */
