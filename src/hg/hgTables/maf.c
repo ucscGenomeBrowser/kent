@@ -74,7 +74,7 @@ if (isCustomTrack(table))
     if (mafFile == NULL)
 	{
 	/* this shouldn't happen */
-	printf("cannot find custom track file %s\n", mafFile);
+	printf("cannot find custom track file\n");
 	return;
 	}
     }
