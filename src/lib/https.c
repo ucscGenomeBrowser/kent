@@ -251,35 +251,7 @@ while (1)
 	    // write the https data received immediately back on socket to user, and it's ok if it blocks.
 	    while(bwt < brd)
 		{
-		// NOTE: Intended as a thread-specific library-safe way not to ignore SIG_PIPE for the entire application.
-		// temporarily block sigpipe on this thread
-		sigset_t sigpipe_mask;
-		sigemptyset(&sigpipe_mask);
-		sigaddset(&sigpipe_mask, SIGPIPE);
-		sigset_t saved_mask;
-		if (pthread_sigmask(SIG_BLOCK, &sigpipe_mask, &saved_mask) == -1) {
-		    perror("pthread_sigmask");
-		    exit(1);
-		}
 		int bwtx = write(params->sv[1], bbuf+bwt, brd-bwt);
-		int saveErrno = errno;
-		if ((bwtx == -1) && (saveErrno == EPIPE))
-		    { // if there was a EPIPE, accept and consume the SIGPIPE now.
-		    int sigErr, sig;
-		    if ((sigErr = sigwait(&sigpipe_mask, &sig)) != 0) 
-			{
-			errno = sigErr;
-			perror("sigwait");
-			exit(1);
-			}
-		    }
-		// restore signal mask on this thread
-		if (pthread_sigmask(SIG_SETMASK, &saved_mask, 0) == -1) 
-		    {
-		    perror("pthread_sigmask");
-		    exit(1);
-		    }
-		errno = saveErrno;
 		if (bwtx == -1)
 		    {
 		    if ((errno != 104)  // udcCache often closes causing "Connection reset by peer"
@@ -443,7 +415,6 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "datahub-nyt53rix.udes.genap.ca");
     hashStoreName(domainWhiteList, "datahub-ruigbdoq.udes.genap.ca");
     hashStoreName(domainWhiteList, "dev.herv.img.cas.cz");
-    hashStoreName(domainWhiteList, "dev.stanford.edu");
     hashStoreName(domainWhiteList, "dice-green.liai.org");
     hashStoreName(domainWhiteList, "dropbox.ogic.ca");
     hashStoreName(domainWhiteList, "dropfile.hpc.qmul.ac.uk");
@@ -504,7 +475,6 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "verjo103.butantan.gov.br");
     hashStoreName(domainWhiteList, "virtlehre.informatik.uni-leipzig.de");
     hashStoreName(domainWhiteList, "vm-galaxy-prod.toulouse.inra.fr");
-    hashStoreName(domainWhiteList, "web1.bx.bio.jhu.edu");
     hashStoreName(domainWhiteList, "www.datadepot.rcac.purdue.edu");
     hashStoreName(domainWhiteList, "www.epigenomes.ca");
     hashStoreName(domainWhiteList, "www.isical.ac.in");
@@ -766,9 +736,10 @@ params->sbio = sbio;
 
 socketpair(AF_UNIX, SOCK_STREAM, 0, params->sv);
 
-// netBlockBrokenPipes(); works, but is heavy handed 
-//  and ignores SIGPIPE on all connections for all threads in the entire application. 
-// We are trying something more subtle and library and thread-friendly instead.
+netBlockBrokenPipes();
+// we had a version that was more sophisticated about blocking only the current thread,
+// but it only worked for Linux, and fixing it for MacOS would futher increase complexity with little benefit.
+// SIGPIPE is often more of a hassle than a help in may cases, so we can just ignore it.
 
 int rc;
 rc = pthread_create(&params->thread, NULL, netConnectHttpsThread, (void *)params);

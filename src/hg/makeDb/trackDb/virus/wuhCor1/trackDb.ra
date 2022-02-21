@@ -649,7 +649,7 @@ include pbm.ra
 include pbmShanghai.ra
 include abEscape.ra
 include bloom.ra
-include variantMutsV2.ra
+include variantMuts.ra
 
 include vaccines.ra
 include mutCons.ra
