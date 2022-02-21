@@ -443,7 +443,6 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "datahub-nyt53rix.udes.genap.ca");
     hashStoreName(domainWhiteList, "datahub-ruigbdoq.udes.genap.ca");
     hashStoreName(domainWhiteList, "dev.herv.img.cas.cz");
-    hashStoreName(domainWhiteList, "dev.stanford.edu");
     hashStoreName(domainWhiteList, "dice-green.liai.org");
     hashStoreName(domainWhiteList, "dropbox.ogic.ca");
     hashStoreName(domainWhiteList, "dropfile.hpc.qmul.ac.uk");
@@ -504,7 +503,6 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "verjo103.butantan.gov.br");
     hashStoreName(domainWhiteList, "virtlehre.informatik.uni-leipzig.de");
     hashStoreName(domainWhiteList, "vm-galaxy-prod.toulouse.inra.fr");
-    hashStoreName(domainWhiteList, "web1.bx.bio.jhu.edu");
     hashStoreName(domainWhiteList, "www.datadepot.rcac.purdue.edu");
     hashStoreName(domainWhiteList, "www.epigenomes.ca");
     hashStoreName(domainWhiteList, "www.isical.ac.in");
