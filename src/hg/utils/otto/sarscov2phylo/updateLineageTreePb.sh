@@ -35,12 +35,13 @@ $matUtils extract -i gisaidAndPublic.$buildDate.masked.pb \
     --reroot $lineageARoot \
     -o gisaidAndPublic.$buildDate.masked.reroot.pb
 
-# Reroot pango.clade-mutations.tsv:
+# Reroot pango.clade-mutations.tsv; also remove B.1.1.529 (Rachel's request):
 grep -w ^A $scriptDir/pango.clade-mutations.tsv \
 | sed -re 's/T28144C( > )?//;  s/C8782T( > )?//;' \
     > pango.clade-mutations.reroot.tsv
 grep -vw ^A $scriptDir/pango.clade-mutations.tsv \
 | sed -re 's/\t/\tT8782C > C28144T > /;' \
+| grep -vF B.1.1.529 \
     >> pango.clade-mutations.reroot.tsv
 
 # Mask additional bases at the beginning and end of the genome that pangolin masks after
