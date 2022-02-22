@@ -27,7 +27,7 @@ cd /hive/users/angie/gisaid
 # Keep the strain|epiId|date "full names".
 time xzcat chunks/gisaid_epi_isl_*.fa.xz \
 | sed -re 's@^>hCo[Vv]-19/+@>@;  s/[ '"'"',()]//g;  s/\r$//;' \
-| xz -T 8 \
+| xz -T 20 \
     > gisaid_fullNames_$today.fa.xz
 
 # Make tmp files with a fullName key and various columns that we'll join together.
@@ -40,7 +40,8 @@ faSize -detailed  <(xzcat gisaid_fullNames_$today.fa.xz) | sort -u > tmp.lengths
 # Lineage & clade assignments
 sort -u chunks/pangolin.tsv \
     > tmp.lineage
-sort -u chunks/nextclade.tsv \
+sed -re 's/"//g;' chunks/nextclade.tsv \
+| sort -u \
     > tmp.clade
 # Countries -- go back to unstripped sequence names:
 xzcat chunks/gisaid_epi_isl_*.fa.xz \
@@ -82,12 +83,12 @@ zcat $lastRealNextmeta \
 | sort \
     >> metadata_batch_$today.tsv
 wc -l metadata_batch_$today.tsv
-gzip -f metadata_batch_$today.tsv
+pigz -p 8 -f metadata_batch_$today.tsv
 
 # Make fasta with strain-name headers a la nextfasta.
 xzcat gisaid_fullNames_$today.fa.xz \
-| sed -re 's/\|.*//' \
-| xz -T 8 \
+| sed -re '/^>/ s/\|.*//' \
+| xz -T 20 \
     > sequences_batch_$today.fa.xz
 
 # Clean up
