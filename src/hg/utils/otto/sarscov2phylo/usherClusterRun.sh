@@ -134,6 +134,8 @@ ssh ku "cd $ottoDir/$today/reserveKuNodes && para create -cpu=$threadCount jobLi
 echo "Waiting for parasol to assign ku nodes"
 while (( $(ssh ku "parasol list jobs | grep $USER | grep sleep" | awk '$2 != "none"' | wc -l) < $jobCount )); do
     sleep 10
+    # Just in case there was a crash (we seem to have some borderline nodes):
+    ssh ku "cd $ottoDir/$today/reserveKuNodes && para push"
 done
 
 # Make hostfile for mpirun
@@ -156,3 +158,7 @@ ssh $headNode "cd $ottoDir/$today && \
 
 # Release the ku nodes by stopping the parasol batch
 ssh ku "cd $ottoDir/$today/reserveKuNodes && para stop || true"
+
+# Clean up
+rm -f preTrim.*.pb merged.*.*.pb
+chmod 664 gis*.preTrim*.pb
