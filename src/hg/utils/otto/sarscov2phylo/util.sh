@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ $(hostname) == "hgwdev" ]; then
+    export TMPDIR=/data/tmp
+fi
+
 # Define some handy functions for other bash scripts in this directory
 
 xcat () {
@@ -31,6 +35,7 @@ cleanGenbank () {
     | sed -re 's@Severe acute respiratory syndrome coronavirus 2 isolate SARS[ -]Co[Vv]-2/(human|homo ?sapiens)/@@;' \
     | sed -re 's@Mutant Severe acute respiratory syndrome coronavirus 2 clone SARS-CoV-2[_-]@@;' \
     | sed -re 's@Severe acute respiratory syndrome coronavirus 2( isolate)?( 2019_nCoV)?@@;' \
+    | sed -re 's@Enter each isolate name here.*@@;' \
     | sed -re '/^[A-Z]+$/bx; s@[A-Za-z0-9]+ [a-z]*protein.*@@; :x;' \
     | sed -re 's@(( genomic)? RNA)?, ((nearly )?complete|partial) genome$@@;' \
     | sed -re 's@genome assembly(, complete genome)?: monopartite$@@;' \
@@ -48,7 +53,7 @@ cleanGenbank () {
     | sed -re 's@SARS-CoV-2/@@;' \
     | sed -re 's@BetaCoV/@@;' \
     | sed -re 's@Homo sapines/@@;' \
-    | sed -re 's@ \| @ \|@; s@ $@@; s@[:,]@ @g; s@  @ @g; s@[()]@@g;' \
+    | sed -re 's@ \| @ \|@; s@ $@@; s@[;:,]@ @g; s@  @ @g; s@[()]@@g;' \
     | sed -re 's@ \|@\t@;'
 # Got rid of this:   s/ ([^|])/_\1/g;
 }
