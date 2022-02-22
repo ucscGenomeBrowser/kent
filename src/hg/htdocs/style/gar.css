@@ -202,7 +202,7 @@
   border: 1px solid #000000;
   margin: 2px 20px 2px 2px;
   padding: 5px 5px 5px 5px;
-  text-align: left;
+  text-align: center;
   box-shadow: 0 0 4px 4px gold;
 }
 
@@ -232,6 +232,7 @@
   margin-bottom: 0;
   padding-left: 0;
   /* padding: 0; */
+  text-align: left;
 }
 
 /* from: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
