@@ -83,7 +83,7 @@ sub gmk($) {
 sub n50Cell($$$) {
   my ($size, $count, $fh) = @_;
   if ($size > 0) {
-    printf "<td style='display:none; text-align:right;' sorttable_customkey='%d'>%s&nbsp;(%s)</td>", $size, gmk($size), $count;
+    printf "<td style='display:none; text-align:right;' sorttable_customkey='%d'>%s&nbsp;(%s)</td>", $size, gmk($size), commify($count);
     printf $fh "\t%d (%d)", $size, $count;	# output to clade.tableData.txt
   } else {
     printf "<td style='display:none;'>&nbsp;</td>";
@@ -97,15 +97,19 @@ my @clades = qw( primates mammals birds fish vertebrate invertebrates plants fun
 
 # to help weed out some of the noise
 # key is clade, value is minimal size to count as a whole genome
+# these are actually pretty low to allow in some alternate haplotype
+# assemblies that don't seem to be the whole assembly.
+# The assemblies are also filtered by NCBI status 'full/partial' to only
+# allow in the 'full' genomes meaning representation of the whole genome
 my %minimalGenomeSize = (
   primates => 1000000000,
-  mammals => 200000000,
+  mammals => 20000000,
   birds => 200000000,
-  fish => 1000000,
-  vertebrate => 400000000,
-  invertebrates => 10000000,
-  plants => 10000000,
-  fungi => 1000000,
+  fish => 100000,
+  vertebrate => 4000000,
+  invertebrates => 10000,
+  plants => 100000,
+  fungi => 50000,
 );
 
 #########################################################################
@@ -560,10 +564,6 @@ foreach my $clade (@clades) {
 # GCA_900609265.1_Draft_mitochondrial_genome_of_wild_rice_W1679
      next if ($asmId =~ m/GCA_900609255.1|GCA_900609265.1/);
      # verify this asmId will pass the asmSize limit
-###     if (defined($metaInfo{$asmId})) {
-###       my ($asmSize, $asmContigCount, $n50Size, $n50Count, $n50ContigSize, $n50ContigCount, $n50ScaffoldSize, $n50ScaffoldCount) = split('\t', $metaInfo{$asmId});
-###       next if ($asmSize < $minimalGenomeSize{$clade});	# too small
-###     }
      if (defined($metaInfo{$asmId})) {
       my ($asmSize, $asmContigCount, $n50Size, $n50Count, $n50ContigSize, $n50ContigCount, $n50ScaffoldSize, $n50ScaffoldCount) = split('\t', $metaInfo{$asmId});
       # if asmSize is below the minimum, don't use it
@@ -572,7 +572,7 @@ foreach my $clade (@clades) {
      printf STDERR "# ACK would be genArk assembly %s\n", $asmId if (defined($genArkAsm{$asmId}));
      printf STDERR "# ACK would be UCSC RR %s\n", $asmId if (defined($rrGcaGcfList{$asmId}));
 printf STDERR "# ACK metaInfo: %s '%s'\n", $asmId, $metaInfo{$asmId};
-### XXX         next;
+         next;
        }
      }
      $alreadyDone{$asmId} = 1;
@@ -623,7 +623,7 @@ printf STDERR "# ACK metaInfo: %s '%s'\n", $asmId, $metaInfo{$asmId};
      printf STDERR "# ACK would be genArk assembly %s\n", $aId if (defined($genArkAsm{$aId}));
      printf STDERR "# ACK would be UCSC RR %s\n", $aId if (defined($rrGcaGcfList{$aId}));
 printf STDERR "# ACK metaInfo: %s '%s'\n", $aId, $metaInfo{$aId};
-### XXX                   next;
+                   next;
                  }
                }
                ++$ncbiSpeciesRecorded{$sciNames{$aId}};
@@ -710,25 +710,6 @@ foreach my $c (@clades) {
 printf "<!-- to get the pull-down menu items centered together -->\n";
 printf "<div style='text-align: center;'><!-- this will cause the next div to center -->\n";
 printf "  <div style='display: inline-block'>\n";
-
-
-printf "<div class='legendMenu'>\n";
-printf "  <span id='legendAnchor'>show legend for column definitions</span>\n";
-printf "  <div class='legendContent'>\n";
-printf "<ul>\n";
-printf "<li>Click on the column headers to sort the table by that column</li>\n";
-printf "<li>The <em>common name</em> column will either open a genome browser on that assembly when it exists, or it will submit a request to have this assembly added to the GenArk collection when it has not yet been built.</li>\n";
-# printf "<li>Use the <em>select columns of information to display</em> menu to show more or less information in the tables.</li>\n";
-# printf "<li>Use the <em>select assembly type display</em> menu to refine the types of assemblies to show in the tables.</li>\n";
-# printf "<li>Use the <em>show/hide species clade sets</em> menu to refine the species clades to display.</li>\n";
-printf "<li>Use the <em>hide all</em> selection to hide everything, or restore all items back when selections have been partially hidden.</li>\n";
-printf "<li>The <em>scientific name</em> link opens google image search for that species.  A name followed by a number in (parens) indicates number of assemblies available for this species when there are too many to include here.</li>\n";
-printf "<li>IUCN status column is the status from the <a href='https://www.iucnredlist.org/' target=_blank>IUCN (2021) Red List</a> of Threatened species, Version 2021-3, accessed on 17 Dec 2021 <span style='color:%s;'>CR - Critical</span> / <span style='color:%s;'>EN - Endangered</span> / <span style='color:%s;'>VU - Vulnerable</span> The link goes to the IUCN web site for more information for that species.</li>\n", $criticalColor, $endangeredColor, $vulnerableColor;
-printf "<li>The <em>NCBI taxID</em> links to the <a href='https://www.ncbi.nlm.nih.gov/taxonomy' target='_blank'>NCBI taxonomy</a> database.</li>\n";
-printf "</ul>\n";
-printf "  </div>\n";
-printf "</div>\n";
-
 
 printf "<div class='pullDownMenu'>\n";
 printf "  <span id='speciesSelectAnchor'>choose clades to view/hide</span>\n";
@@ -817,18 +798,18 @@ printf "</colgroup>\n";
 
 printf "<thead>\n";
 printf "<tr>\n";
-printf "  <th class='colComName'>common name<br>display in browser<br>or request assembly</th>\n";
-printf "  <th class='colSciName'>scientific name (count)<br>google image search</th>\n";
-printf "  <th class='colAsmId'>NCBI assembly</th>\n";
-printf "  <th class='colAsmSize'>assembly<br>size</th>\n";
-printf "  <th class='colAsmSeqCount'>sequence<br>count</th>\n";
-printf "  <th class='colScafN50'>scaffold N50<br>size (L50)</th>\n";
-printf "  <th class='colContigN50'>contig N50<br>size (L50)</th>\n";
-printf "  <th class='colIUCN'>I<br>U<br>C<br>N</th>\n";
-printf "  <th class='colTaxId'>NCBI taxID</th>\n";
-printf "  <th class='colAsmDate'>assembly<br>date</th>\n";
-printf "  <th class='colSubmitter'>submitter of assembly<br>link to NCBI assembly</th>\n";
-printf "  <th class='colClade'>clade</th>\n";
+printf "  <th class='colComName'><div class='tooltip'>common name<span class='tooltiptext'>The <em>common name</em> links to a genome browser when it exists, or provides a request form to ask for the assembly to be added to the system</span></div></th>\n";
+printf "  <th class='colSciName'><div class='tooltip'>scientific name (count)<span class='tooltiptext'>The numbers in parenthesis (1234) following the name indicates the number of assemblies available for this species.  The link does a google image search for that name.</span></div></th>\n";
+printf "  <th class='colAsmId'><div class='tooltip'>NCBI assembly<span class='tooltiptext'>The <em>NCBI assembly</em> provides a link to the NCBI resource record for this assembly</span></div></th>\n";
+printf "  <th class='colAsmSize'><div class='tooltip'>assembly<br>size<span class='tooltiptext'>The <em>assembly size</em> is the total number of nucleotides in the assembly.</span></div></th>\n";
+printf "  <th class='colAsmSeqCount'><div class='tooltip'>sequence<br>count<span class='tooltiptext'>The <em>sequence count</em> is the number of sequences in this assembly.</span></div></th>\n";
+printf "  <th class='colScafN50'><div class='tooltip'>scaffold N50<br>size (L50)<span class='tooltiptext'>The <em>scaffold N50</em> is the <a href='https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics' target=_blank>N50 measurement</a> for this assembly.</span></div> </th>\n";
+printf "  <th class='colContigN50'><div class='tooltip'>contig N50<br>size (L50)<span class='tooltiptext'>The <em>contig N50</em> is the <a href='https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics' target=_blank>N50 measurement</a> for this assembly when there are contigs to measure.</span></div></th>\n";
+printf "  <th class='colIUCN'><div class='tooltip'>I<br>U<br>C<br>N<span class='tooltiptext'>IUCN status column is the status from the <a href='https://www.iucnredlist.org/' target=_blank>IUCN (2021) Red List</a> of Threatened species, Version 2021-3, accessed on 17 Dec 2021 <span style='color:%s;'>CR - Critical</span> / <span style='color:%s;'>EN - Endangered</span> / <span style='color:%s;'>VU - Vulnerable</span> The link goes to the IUCN web site for more information for that species.</span></div></th>\n", $statusColors{"CR"}, $statusColors{"EN"}, $statusColors{"VU"};
+printf "  <th class='colTaxId'><div class='tooltip'>NCBI taxID<span class='tooltiptext'>The <em>taxID</em> links to the <a href='https://www.ncbi.nlm.nih.gov/taxonomy' target='_blank'>NCBI taxonomy</a> database.</span></div></th>\n";
+printf "  <th class='colAsmDate'><div class='tooltip'>assembly<br>date<span class='tooltiptext'>The submission date for this assembly to the <a href='https://www.ncbi.nlm.nih.gov/assembly' target=_blank>NCBI assembly</a> system.</span></div></th>\n";
+printf "  <th class='colSubmitter sorttable_alpha'><div class='tooltip'>submitter of assembly<span class='tooltiptextright'>The name of the organization that produced this assembly.</span></div></th>\n";
+printf "  <th class='colClade'><div class='tooltip'>clade<span class='tooltiptextright'>Indicating the <em>clade</em> of this organism.  Note: the <em>invertebrate</em> clade is a catch all category that includes organisims not typically classified as <em>invertebrate</em></span></div></th>\n";
 printf "</tr>\n";
 printf "</thead><tbody>\n";
 
@@ -973,7 +954,7 @@ foreach my $clade (@clades) {
     printf STDERR "# %s underSized 2 %d %s %s < %s\n", $clade, ++$underSized, $asmId, commify($asmSize), commify($minimalGenomeSize{$clade});
      printf STDERR "# ACK would be genArk assembly %s\n", $asmId if (defined($genArkAsm{$asmId}));
      printf STDERR "# ACK would be UCSC RR %s\n", $asmId if (defined($rrGcaGcfList{$asmId}));
-### XXX    next;
+     next;
   }
   my $iucnStatus = "&nbsp;";
   my $iucnLink = "";
@@ -1151,10 +1132,12 @@ foreach my $clade (@clades) {
   ############# eleventh column,  submitter ################
   $asmUrl = "https://www.ncbi.nlm.nih.gov/assembly/$accessionId";
   if (defined($asmSubmitter{$asmId})) {
-    printf "<td style='display:none;'><a href='%s' target=_blank>%s</a></td>", $asmUrl, $asmSubmitter{$asmId};
+    my $submitterSortKey = lc($asmSubmitter{$asmId});
+    $submitterSortKey =~ s/ //g;
+    printf "<td sorttable_customkey='%s' style='display:none;'>%s</td>", substr($submitterSortKey,0,20), $asmSubmitter{$asmId};
     printf PC "\t%s", $asmSubmitter{$asmId};	# output to clade.tableData.txt
   } else {
-    printf "<td style='display:none;'>n/a</td>";
+    printf "<td sorttable_customkey='n/a' style='display:none;'>n/a</td>";
     printf PC "\t%s", "n/a";	# output to clade.tableData.txt
   }
 
