@@ -1134,6 +1134,7 @@ foreach my $clade (@clades) {
   if (defined($asmSubmitter{$asmId})) {
     my $submitterSortKey = lc($asmSubmitter{$asmId});
     $submitterSortKey =~ s/ //g;
+    $submitterSortKey =~ s/[^a-z0-9]//ig;
     printf "<td sorttable_customkey='%s' style='display:none;'>%s</td>", substr($submitterSortKey,0,20), $asmSubmitter{$asmId};
     printf PC "\t%s", $asmSubmitter{$asmId};	# output to clade.tableData.txt
   } else {

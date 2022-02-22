@@ -28,7 +28,8 @@ export rightHandPointer="&#9758;"
 
 # printf "<a id='pageTop'></a>\n"
 
-printf "<h2>Genome assembly search and request</h2>\n"
+printf "<h1>Genome assembly search and request</h1>\n"
+printf "<h2>What is the Genome Browser ?</h2>\n"
 
 printf "<div id='canNotFindDiv' class='pullDownMenu'>\n"
 printf "  <span id='canNotFindAnchor'>Can't find your assembly ?</span'>\n"
@@ -53,6 +54,8 @@ more information on using the UCSC Genome Browser please see our
 <a href='https://genome.ucsc.edu/training/index.html' target=_blank>training</a>
 pages.
 </p>
+
+<h2>What is this page for ?</h2>
 <p>This page lists both whole genome assembly browsers that are available for
 immediate viewing, and assemblies that are not currently available but can
 be requested.
@@ -60,7 +63,7 @@ be requested.
 <p>We are working on adding a search function to this page. Until then, please use the &quot;find&quot; feature of your Browser (commonly CTRL+F).
 </p>
 <p>After searching the page, if you do not find the assembly you are
-interested in, you may request it using the &quot;Request new assembly&quot;
+interested in, you may request it using the <em>&quot;Can't find your assembly ?&quot;</em>
 button at the top of the page. Complete the request form (including the
 NCBI GenBank or RefSeq assembly accession identifier). You will be notified
 by email when your assembly is available for viewing in the UCSC Genome
