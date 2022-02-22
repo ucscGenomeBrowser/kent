@@ -163,6 +163,31 @@ grep -Fwf prevGbAcc $epiToPublic | cut -f 1 >> prevGisaid
 grep -Fwf prevCogUk $epiToPublic | cut -f 1 >> prevGisaid
 wc -l prev*
 
+# Exclude some sequences based on nextclade counts of reversions and other-clade mutations.
+zcat $gisaidDir/chunks/nextclade.full.tsv.gz \
+| $scriptDir/findDropoutContam.pl > gisaid.dropoutContam
+zcat $ncbiDir/nextclade.full.tsv.gz \
+| $scriptDir/findDropoutContam.pl > gb.dropoutContam
+zcat $cogUkDir/nextclade.full.tsv.gz \
+| $scriptDir/findDropoutContam.pl > cog.dropoutContam
+cut -f 1 *.dropoutContam \
+| awk -F\| '{ if ($3 == "") { print $1; } else { print $2; } }' \
+    > dropoutContam.ids
+# Also exclude sequences with unbelievably low numbers of mutations given sampling dates.
+zcat $gisaidDir/chunks/nextclade.full.tsv.gz | cut -f 1,5 \
+| awk -F\| '{ if ($3 == "") { print $1 "\t" $2; } else { print $2 "\t" $3; } }' \
+| $scriptDir/findRefBackfill.pl > gisaid.refBackfill
+zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 1,5 | sort \
+| join -t $'\t' <(cut -f 1,3 $ncbiDir/ncbi_dataset.plusBioSample.tsv | sort) - \
+| $scriptDir/findRefBackfill.pl > gb.refBackfill
+zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,5 | sort \
+| join -t $'\t' <(cut -d, -f 1,5 $cogUkDir/cog_metadata.csv | tr , $'\t' | sort) - \
+| $scriptDir/findRefBackfill.pl > cog.refBackfill
+cut -f 1 *.refBackfill > refBackfill.ids
+sort -u ../tooManyEpps.ids ../badBranchSeed.ids dropoutContam.ids refBackfill.ids \
+| grep -vFwf <(tail -n+4 $scriptDir/includeRecombinants.tsv | cut -f 1) \
+    > exclude.ids
+
 # Get new GenBank sequences with at least $minReal non-N bases.
 # Exclude seqs in the tree with EPI IDs that that have been mapped in the very latest $epiToPublic.
 set +o pipefail
@@ -173,7 +198,7 @@ egrep $'\t''[A-Z][A-Z][0-9]{6}\.[0-9]+' $epiToPublic \
     >> prevGbAcc
 set -o pipefail
 xzcat $ncbiDir/genbank.fa.xz \
-| faSomeRecords -exclude stdin <(cat prevGbAcc ../tooManyEpps.ids ../badBranchSeed.ids) newGenBank.fa
+| faSomeRecords -exclude stdin <(cat prevGbAcc exclude.ids) newGenBank.fa
 faSize -veryDetailed newGenBank.fa \
 | tawk '$4 < '$minReal' {print $1;}' \
     > gbTooSmall
@@ -192,7 +217,7 @@ comm -23 <(fastaNames $cogUkDir/cog_all.fasta.xz | sort) \
 # Also exclude COG-UK sequences that have been added to GenBank (cogUkInGenBank, see above).
 xzcat $cogUkDir/cog_all.fasta.xz \
 | faSomeRecords -exclude stdin \
-    <(cat prevCogUk cogFaNotMeta cogUkInGenBank ../tooManyEpps.ids ../badBranchSeed.ids) newCogUk.fa
+    <(cat prevCogUk cogFaNotMeta cogUkInGenBank exclude.ids) newCogUk.fa
 faSize -veryDetailed newCogUk.fa \
 | tawk '$4 < '$minReal' {print $1;}' \
     > cogUkTooSmall
@@ -202,7 +227,7 @@ faSize newCogUk.filtered.fa
 # Get new GISAID sequences with at least $minReal non-N bases.
 xzcat $gisaidDir/gisaid_fullNames_$today.fa.xz \
 | sed -re 's/^>.*\|(EPI_ISL_[0-9]+)\|.*/>\1/' \
-| faSomeRecords -exclude stdin <(cat prevGisaid ../tooManyEpps.ids ../badBranchSeed.ids) newGisaid.fa
+| faSomeRecords -exclude stdin <(cat prevGisaid exclude.ids) newGisaid.fa
 faSize -veryDetailed newGisaid.fa \
 | tawk '$4 < '$minReal' {print $1;}' \
     > gisaidTooSmall
@@ -282,7 +307,7 @@ tawk '{ if ($1 ~ /^#/) { print; } else if ($7 == "mask") { $1 = "NC_045512v2"; p
     $problematicSitesVcf > mask.vcf
 time cat <(twoBitToFa $ref2bit stdout) $alignedFa \
 | faToVcf -maxDiff=1000 \
-    -excludeFile=<(cat ../tooManyEpps.ids ../badBranchSeed.ids) \
+    -excludeFile=exclude.ids \
     -verbose=2 stdin stdout \
 | vcfRenameAndPrune stdin $renaming stdout \
 | vcfFilter -excludeVcf=mask.vcf stdin \
