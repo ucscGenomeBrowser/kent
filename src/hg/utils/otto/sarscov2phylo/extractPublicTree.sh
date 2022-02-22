@@ -64,10 +64,10 @@ time $matUtils annotate -T 50 \
 time $matUtils extract -i public-$today.all.masked.pb \
     -t public-$today.all.nwk \
     -v public-$today.all.masked.vcf
-time gzip -f public-$today.all.masked.vcf
+time pigz -p 8 -f public-$today.all.masked.vcf
 zcat gisaidAndPublic.$today.metadata.tsv.gz \
 | grep -v EPI_ISL_ \
-| gzip -c \
+| pigz -p 8 \
     > public-$today.metadata.tsv.gz
 
 rm public-$today.all.masked.pb
