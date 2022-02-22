@@ -94,6 +94,11 @@ var gar = {
              gar.setColumnNvis(n, true);
            }
         }
+        // and unhide all rows, class gca and gcf covers all rows
+        var thisList = document.getElementsByClassName('gca');
+        gar.resetListVis(thisList, true);
+        thisList = document.getElementsByClassName('gcf');
+        gar.resetListVis(thisList, true);
       } else {
         gar.urlParams.forEach(function(val, arg) {
           // beware, get('comName') returns zero, fails this if() statement
