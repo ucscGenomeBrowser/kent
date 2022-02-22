@@ -54,6 +54,11 @@ echo -e "N21302N\t$deltaNode" >> $maskFile
 echo -e "N21304N\t$deltaNode" >> $maskFile
 echo -e "N21305N\t$deltaNode" >> $maskFile
 
+# Mask flaky positions 28254 (ORF8:121) and 28461 (N:63) so that AY.96 is merged into AY.46
+# https://github.com/cov-lineages/pango-designation/issues/435
+echo -e "N28254N\t$deltaNode" >> $maskFile
+echo -e "N28461N\t$deltaNode" >> $maskFile
+
 # OK, not just Delta -- Alpha, Beta, and Gamma have a deletion that causes spurious "mutations",
 # especially at 11296 and 11291, somewhat also at 11288.
 # Omicron has ~ the same deletion but it aligns 5 bases to the left, probably because it was
