@@ -741,8 +741,8 @@ printf "   </ul>\n";
 printf "  </div>\n";
 printf "</div>\n";
 
-printf "<div class='pullDownMenu'>\n";
-printf "  <span id='columnSelectAnchor'>select columns of information to display</span>\n";
+printf "<div style='width: 240px;' class='pullDownMenu'>\n";
+printf "  <span id='columnSelectAnchor'>show/hide columns</span>\n";
 printf "  <div class='pullDownMenuContent'>\n";
 printf "  <ul id='checkBoxColumnSelect'>\n";
 printf "    <li><label><input class='columnCheckBox' type='checkbox' onchange='gar.resetColumnVis(this)' id='comNameCheckBox' value='comName' checked> common name</label></li>\n";
