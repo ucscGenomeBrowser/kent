@@ -474,9 +474,10 @@ alert("no element for label '" + labelId + "'");
        }
        gar.completedAsmId.set(e.name, true);
      } else {
-       gar.commonName.textContent = "enter information about desired assembly in the 'Other comments'";
-       gar.sciName.textContent = "including the scientific name";
-       gar.asmIdText.textContent = "and the GCx accession identifer";
+       gar.betterCommonName.value = "";
+       gar.commonName.textContent = "enter information about desired assembly in the 'Other comments' field";
+       gar.sciName.textContent = "include the scientific name";
+       gar.asmIdText.textContent = "include the GenBank or RefSeq accession identifier";
      }
      gar.submitButton.value = "Submit request";
      gar.submitButton.disabled = false;
