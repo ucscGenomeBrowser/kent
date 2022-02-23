@@ -75,7 +75,7 @@ MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
 
 #NCBI RefSeq
 MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
-23 8 * * 3 /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh
+23 8 * * * /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh
 
 #OMIM Upload
 MAILTO=lrnassar@ucsc.edu
