@@ -94,6 +94,11 @@ var gar = {
              gar.setColumnNvis(n, true);
            }
         }
+        // and unhide all rows, class gca and gcf covers all rows
+        var thisList = document.getElementsByClassName('gca');
+        gar.resetListVis(thisList, true);
+        thisList = document.getElementsByClassName('gcf');
+        gar.resetListVis(thisList, true);
       } else {
         gar.urlParams.forEach(function(val, arg) {
           // beware, get('comName') returns zero, fails this if() statement
@@ -474,9 +479,10 @@ alert("no element for label '" + labelId + "'");
        }
        gar.completedAsmId.set(e.name, true);
      } else {
-       gar.commonName.textContent = "enter information about desired assembly in the 'Other comments'";
-       gar.sciName.textContent = "including the scientific name";
-       gar.asmIdText.textContent = "and the GCx accession identifer";
+       gar.betterCommonName.value = "";
+       gar.commonName.textContent = "enter information about desired assembly in the 'Other comments' field";
+       gar.sciName.textContent = "include the scientific name";
+       gar.asmIdText.textContent = "include the GenBank or RefSeq accession identifier";
      }
      gar.submitButton.value = "Submit request";
      gar.submitButton.disabled = false;

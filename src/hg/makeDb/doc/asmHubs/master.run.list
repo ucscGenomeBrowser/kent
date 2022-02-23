@@ -301,6 +301,7 @@
 ./runBuild GCA_012275265.1 GCA_012275265.1_bMelUnd1.mat birds Melopsittacus_undulatus
 ./runBuild GCA_012275275.1 GCA_012275275.1_bMelUnd1.pat birds Melopsittacus_undulatus
 ./runBuild GCA_012275295.1 GCA_012275295.1_bMelUnd1.mat.Z birds Melopsittacus_undulatus
+./runBuild GCA_013030995.1 GCA_013030995.1_ASM1303099v1 birds Anser_cygnoides
 ./runBuild GCA_013368605.1 GCA_013368605.1_bNycGra1.pri birds Nyctibius_grandis
 ./runBuild GCA_013407035.1 GCA_013407035.1_ASM1340703v1 birds Coloeus_monedula
 ./runBuild GCA_014337955.1 GCA_014337955.1_AspMar1.0 vertebrate Aspidoscelis_marmoratus

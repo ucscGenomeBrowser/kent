@@ -28,55 +28,54 @@ export rightHandPointer="&#9758;"
 
 # printf "<a id='pageTop'></a>\n"
 
-printf "<h2>Genome assembly search and request</h2>\n"
+printf "<h1>Genome assembly search and request</h1>\n"
+printf "<h2>What is the Genome Browser ?</h2>\n"
 
 printf "<div id='canNotFindDiv' class='pullDownMenu'>\n"
-printf "  <span id='canNotFindAnchor'>after searching page,<br>cannot find desired assembly here</span'>\n"
+printf "  <span id='canNotFindAnchor'>Can't find your assembly ?</span'>\n"
 printf "  <div class='pullDownMenuContent'>\n"
-printf "   <button id='specificRequest' type='button' onclick='gar.openModal(this)' name='specific'><label>%s request specific assembly not found here %s</label></button>\n", "${rightHandPointer}" "${leftHandPointer}" 
+printf "   <button id='specificRequest' type='button' onclick='gar.openModal(this)' name='specific'><label>%s Press here to request an unlisted assembly %s</label></button>\n", "${rightHandPointer}" "${leftHandPointer}"
 printf "  </div>\n"
 printf "</div>\n"
 
-printf "<p>Please note discussion of <a href='http://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html#What' target=_blank>What does the Genome Browser do ?</a>\n"
-printf "</p>\n"
+printf "<p>The UCSC Genome Browser provides a rapid and reliable display of any
+requested portion of any genome assembly at any scale, together with dozens
+of aligned annotation tracks (genes, mRNAs, CpG islands, regulation,
+variation, repeats, and more). The Genome Browser stacks annotation tracks
+beneath genome coordinate positions, allowing rapid visual correlation of
+different types of information. The user can look at a whole chromosome to
+get a feel for gene density, open a specific cytogenetic band to see a
+positionally mapped disease gene candidate, or zoom in to a particular gene
+to view its spliced ESTs and possible alternative splicing. The Genome Browser
+itself does not draw conclusions; rather, it collates all relevant information
+in one location, leaving the exploration and interpretation to the user. For
+more information on using the UCSC Genome Browser please see our
+<a href='https://genome.ucsc.edu/FAQ/' target=_blank>help</a> and
+<a href='https://genome.ucsc.edu/training/index.html' target=_blank>training</a>
+pages.
+</p>
 
-printf "<p>The information in this page allows navigation to
-specific genome browsers when they are available.  In the case where a
-genome browser has not yet been constructed, the link for that species will
-open a request form which will notify the U.C. Genome Browser staff as a request
-to construct the genome browser for your species of interest.  This is a new
-and experimental service, we are interested to see if such requests are
-many or few.  Depending upon the level of activity, the expected processing
-time for an assembly to appear in the genome browser should be on the order of
-two weeks.
+<h2>What is this page for ?</h2>
+<p>This page lists both whole genome assembly browsers that are available for
+immediate viewing, and assemblies that are not currently available but can
+be requested.
+</p>
+<p>We are working on adding a search function to this page. Until then, please use the &quot;find&quot; feature of your Browser (commonly CTRL+F).
+</p>
+<p>After searching the page, if you do not find the assembly you are
+interested in, you may request it using the <em>&quot;Can't find your assembly ?&quot;</em>
+button at the top of the page. Complete the request form (including the
+NCBI GenBank or RefSeq assembly accession identifier). You will be notified
+by email when your assembly is available for viewing in the UCSC Genome
+Browser. This can take up to three weeks. The assembly browser will include
+the following annotation tracks: Assembly mapping, Base position,
+Gaps (when present), GC Percent, Restriction Enzymes, Tandem Duplications,
+CpG Islands, RefSeq mRNAs, Repeat Masking, and, if available:
+NCBI RefSeq Genes and Ensembl Genes.
+</p>
+<p>This page is optimized for use in Firefox and Safari
 </p>\n"
 
-printf "<p>Please note, not all possible assemblies are shown here.  There is
-nothing here from the clade categories: <em>archaea, viruses, bacteria</em>.
-This display attempts to show only whole genome assemblies.  Some assemblies
-have been eliminated when their total assembly size is much smaller than the
-typical genome size for such species.  For example, only the <em>exome</em>
-of the organism has been sequenced.  And in some cases there are too many
-assemblies for the same species, for example there are over 1,000 assemblies for <em>Homo sapiens</em>.
-</p>\n"
-
-printf "<p>This page works best in the <em>Firefox</em> and <em>Safari</em>
-web browsers.  The web browsers <em>Chrome</em> and <em>Edge</em> take
-almost a minute to prepare the page for use.
-</p>\n"
-
-printf "<p>Use your web browser <em>find in page</em> function to search
-for names of interest on this page.  Make the entire set visiible to allow
-the search to find everything.  Future enhancements to this page may include
-a better search system.
-</p>\n"
-
-# printf "<p>The numbers in parenthesis following the
-# <em>Scientific name (1,234)</em> indicate the number of assemblies available
-# for that species.
-# </p>\n"
-
-# my @clades = qw( primates mammals birds fish vertebrate invertebrates plants fungi );
 
 cut -d' ' -f3,5 \
   /cluster/home/hiram/kent/src/hg/makeDb/doc/asmHubs/master.run.list \
@@ -87,7 +86,7 @@ sort -k1,1 -u \
     > asmId.commonName;
 
 sort -u /hive/data/outside/ncbi/genomes/reports/newAsm/*.suppressed.asmId.list \
-  > asmId.suppressed.list 
+  > asmId.suppressed.list
 
 join -t$'\t' asmId.sciName asmId.commonName > asmId.sciName.commonName
 
