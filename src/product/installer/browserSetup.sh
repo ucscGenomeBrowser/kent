@@ -512,6 +512,9 @@ function setMYCNF ()
     if [ -f /etc/my.cnf ] ; then
 	# Centos 6-8
     	MYCNF=/etc/my.cnf
+    elif [ -f /etc/my.cnf.d/mariadb-server.cnf ] ; then
+	# Centos 8 stream
+    	MYCNF=/etc/mysql/mysql.conf.d/mariadb-server.cnf 
     elif [ -f /etc/mysql/my.cnf ] ; then
         # Ubuntu 14
     	MYCNF=/etc/mysql/my.cnf
@@ -767,6 +770,10 @@ function installRedhat () {
 
         secureMysql
         SET_MYSQL_ROOT=1
+
+        # make sure that missing values in Mysql insert statements do not trigger errors, #18368: deactivate strict mode
+	setMYCNF
+        sed -Ei '/^.(mysqld|server).$/a sql_mode=' $MYCNF
     else
         echo2 Mysql already installed
     fi
@@ -1020,9 +1027,9 @@ function installDebian ()
 	# -> we require mariaDb now
         # apt-get --assume-yes install mysql-server
         apt-get --assume-yes install mariadb-server
-        # make sure that missing values do not trigger errors, #18368
+        # make sure that missing values do not trigger errors, #18368: deactivate strict mode
 	setMYCNF
-        sed -i '/^.mysqld.$/a sql_mode=' $MYCNF
+        sed -Ei '/^.(mysqld|server).$/a'  $MYCNF
         # flag so script will set mysql root password later to a random value
         SET_MYSQL_ROOT=1
     fi
