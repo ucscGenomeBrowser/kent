@@ -514,7 +514,7 @@ function setMYCNF ()
     	MYCNF=/etc/my.cnf
     elif [ -f /etc/my.cnf.d/mariadb-server.cnf ] ; then
 	# Centos 8 stream
-    	MYCNF=/etc/mysql/mysql.conf.d/mariadb-server.cnf 
+    	MYCNF=/etc/my.cnf.d/mariadb-server.cnf 
     elif [ -f /etc/mysql/my.cnf ] ; then
         # Ubuntu 14
     	MYCNF=/etc/mysql/my.cnf
