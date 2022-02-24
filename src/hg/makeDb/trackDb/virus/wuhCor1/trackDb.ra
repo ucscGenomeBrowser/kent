@@ -625,8 +625,8 @@ type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/resist/resist.bb
 itemRgb on
 bedNameLabel Mutation
-urls urls
-mouseOver $comment
+urls urls=$$
+mouseOver $comments
 noScoreFilter on
 group varRep
 
