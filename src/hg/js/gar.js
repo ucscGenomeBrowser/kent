@@ -200,19 +200,22 @@ var gar = {
        */
       /* reset the checked status on all the other show/hide check boxes */
       gar.checkBoxNames.forEach(function(checkBox, name) {
+         // add the counts (visible/hidden) to the checkBox label text
+         var visibleCount = 0;
          if (categoryVisible.get(name)) {
            checkBox.checked = true;
+           visibleCount = categoryVisible.get(name);
          } else {
            checkBox.checked = false;
          }
-         // add the counts (visible/hidden) to the checkBox label text
-         var visibleCount = 0;
          var hiddenCount = 0;
-         if ( categoryVisible.get(name) ) {
-           visibleCount = categoryVisible.get(name);
-         }
          if ( categoryHidden.get(name) ) {
            hiddenCount = categoryHidden.get(name);
+         }
+         if (hiddenCount > 0 && visibleCount > 0) {
+           checkBox.indeterminate = true;
+         } else {
+           checkBox.indeterminate = false;
          }
          var labelId = name + "Label";
          var labelEl = document.getElementById(labelId);
@@ -278,7 +281,6 @@ alert("no element for label '" + labelId + "'");
       var t0 = gar.millis();
       var n = gar.columnNames.get(e.value);
       var tf = e.checked;       // true - turn column on, false - turn off
-// alert("column '" + e.value + "' n '" + n + " : checked: '" + tf + "'");
       gar.setColumnNvis(n, tf);
       var et = gar.millis() - t0;
       gar.countVisibleRows(et);
@@ -450,6 +452,37 @@ alert("no element for label '" + labelId + "'");
       }
     }
     return undefined;
+    },
+
+    // turn off the column 1 tool tip on mouse exit the table cell
+    col1TipOff: function(evt) {
+        $('#col1ToolTip').css('display','none');
+    },
+
+    // tooltip display for column one to indicate browser available or
+    //  request can be done
+    col1Tip: function(evt) {
+      if (evt.currentTarget) {
+        var cellRect = evt.currentTarget.getBoundingClientRect();
+        var cellLeft = Math.floor(cellRect.left);
+        var cellTop = Math.floor(cellRect.top);
+        var cellWidth = Math.floor(cellRect.width);
+        var cellHeight = Math.floor(cellRect.height);
+        var yOffset = Math.floor(window.pageYOffset);
+        var tipTop = Math.floor(yOffset + cellTop + (cellHeight/3));
+        var tipLeft = Math.floor(cellLeft+(cellWidth*0.8));
+        // class 'gar' means it can be requested
+        // NOT 'gar' means it exists (there are 'gak' and 'ucscDb' browsers)
+        var browserExists = ! evt.currentTarget.parentNode.classList.contains('gar');
+        if (browserExists) {
+          $('#col1ToolTip').html("browser");
+        } else {
+          $('#col1ToolTip').html("request");
+        }
+        $('#col1ToolTip').css('top',tipTop + "px");
+        $('#col1ToolTip').css('left',tipLeft + "px");
+        $('#col1ToolTip').css('display','block');
+      }
     },
 
   // Original JavaScript code by Chirp Internet: chirpinternet.eu

@@ -415,6 +415,7 @@ inside a <ul> element.
   top: 0;
   background: #ffffff;
   color: #000000;
+  pointer-events: none;
 }
 
 /* right most two columns have right margins instead of left so as
@@ -439,3 +440,23 @@ inside a <ul> element.
   background: #ffffff;
   color: #000000;
 }
+
+/* visible/hidden will be controlled by JS on mouseover */
+#col1ToolTip {
+  display: none;
+  position: absolute;
+  z-index: 5000;
+  overflow: visible;
+  visibility: visible;
+  color: #ff0;
+  background: #00f;
+  left: 0;
+  top: 0;
+}
+
+/* debug trick to mark all elements with a red border */
+/*
+* {
+  outline: 1px solid #f00 !important;
+}
+*/

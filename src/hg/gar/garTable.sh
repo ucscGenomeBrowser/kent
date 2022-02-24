@@ -29,10 +29,10 @@ export rightHandPointer="&#9758;"
 # printf "<a id='pageTop'></a>\n"
 
 printf "<h1>Genome assembly search and request</h1>\n"
-printf "<h2>What is the Genome Browser ?</h2>\n"
+printf "<h2>What is the Genome Browser?</h2>\n"
 
 printf "<div id='canNotFindDiv' class='pullDownMenu'>\n"
-printf "  <span id='canNotFindAnchor'>Can't find your assembly ?</span'>\n"
+printf "  <span id='canNotFindAnchor'>Can't find your assembly?</span'>\n"
 printf "  <div class='pullDownMenuContent'>\n"
 printf "   <button id='specificRequest' type='button' onclick='gar.openModal(this)' name='specific'><label>%s Press here to request an unlisted assembly %s</label></button>\n", "${rightHandPointer}" "${leftHandPointer}"
 printf "  </div>\n"
@@ -55,7 +55,7 @@ more information on using the UCSC Genome Browser please see our
 pages.
 </p>
 
-<h2>What is this page for ?</h2>
+<h2>What is this page for?</h2>
 <p>This page lists both whole genome assembly browsers that are available for
 immediate viewing, and assemblies that are not currently available but can
 be requested.
@@ -63,13 +63,13 @@ be requested.
 <p>We are working on adding a search function to this page. Until then, please use the &quot;find&quot; feature of your Browser (commonly CTRL+F).
 </p>
 <p>After searching the page, if you do not find the assembly you are
-interested in, you may request it using the <em>&quot;Can't find your assembly ?&quot;</em>
+interested in, you may request it using the <em>&quot;Can't find your assembly?&quot;</em>
 button at the top of the page. Complete the request form (including the
 NCBI GenBank or RefSeq assembly accession identifier). You will be notified
 by email when your assembly is available for viewing in the UCSC Genome
 Browser. This can take up to three weeks. The assembly browser will include
 the following annotation tracks: Assembly mapping, Base position,
-Gaps (when present), GC Percent, Restriction Enzymes, Tandem Duplications,
+Gaps, GC Percent, Restriction Enzymes, Tandem Duplications,
 CpG Islands, RefSeq mRNAs, Repeat Masking, and, if available:
 NCBI RefSeq Genes and Ensembl Genes.
 </p>
@@ -91,6 +91,9 @@ sort -u /hive/data/outside/ncbi/genomes/reports/newAsm/*.suppressed.asmId.list \
 join -t$'\t' asmId.sciName asmId.commonName > asmId.sciName.commonName
 
 $srcDir/garTable.pl
+
+# the column 1 tooltip display window, controlled in javaScript
+printf "<div id='col1ToolTip' class='col1ToolTip'>request</div>\n"
 
 # add in the modal popUp request hidden window
 printf "<!--#include virtual='\$ROOT/inc/garModal.html' -->
