@@ -509,12 +509,14 @@ function waitKey ()
 # set MYCNF to the path to my.cnf
 function setMYCNF ()
 {
-    if [ -f /etc/my.cnf ] ; then
+    if [ -f /etc/my.cnf.d/mariadb-server.cnf ] ; then
+	# Centos 8 stream: This has to be first, because /etc/my.cnf exists on Centos 8 Stream, but it contains a mysqld section
+        # by default and somehow the section doesn't seem to take effect since a specific [mariadb] section also exists in the mariadb-server.cnf.
+        # As a result, we only modify the mariadb-server config file
+    	MYCNF=/etc/my.cnf.d/mariadb-server.cnf 
+    elif [ -f /etc/my.cnf ] ; then
 	# Centos 6-8
     	MYCNF=/etc/my.cnf
-    elif [ -f /etc/my.cnf.d/mariadb-server.cnf ] ; then
-	# Centos 8 stream
-    	MYCNF=/etc/my.cnf.d/mariadb-server.cnf 
     elif [ -f /etc/mysql/my.cnf ] ; then
         # Ubuntu 14
     	MYCNF=/etc/mysql/my.cnf
