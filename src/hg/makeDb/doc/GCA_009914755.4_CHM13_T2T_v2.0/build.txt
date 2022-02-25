@@ -1,0 +1,64 @@
+================================================================
+Notes:
+  dataDir = /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_CHM13_T2T_v2.0
+  stagingDir = /hive/data/genomes/asmHubs/GCA/009/914/755/GCA_009914755.4
+
+T2T CHM13 track spreadsheet
+
+   https://docs.google.com/spreadsheets/d/13BXuEFB904aje6zWXyZ0znZnXvQiu1qxKADA2uV2JU4/edit#gid=1966247802
+
+staging URL
+   https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
+
+# tmp
+   kentDir=${HOME}/compbio/t2t/projs/chm13-v2.0/kent
+
+================================================================
+2022-02-22 ucscChromNamed   markd
+----------------------------------------------------------------
+chromosome sizes files with UCSC names
+    t2t-chm13-v2.0.2bit
+    t2t-chm13-v2.0.fa.gz
+    t2t-chm13-v2.0.sizes
+    t2t-chm13-v2.0.sizes3
+
+================================================================
+2022-02-21 proseq  markd
+----------------------------------------------------------------
+Supplied by Savannah Hoyt <savannah.klein@uconn.edu>
+from T2T Globus /team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/PROseq_Bowtie2/
+trackData/proseq
+
+renaming files for 
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-chm13v1.1_neg.bigwig                              -> PROseq_default_neg.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-chm13v1.1_pos.bigwig                              -> PROseq_default_pos.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_meryl-21mer-chm13v1.1_neg.bigwig   -> PROseq_k100_21mer_neg.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_meryl-21mer-chm13v1.1_pos.bigwig   -> PROseq_k100_21mer_pos.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_neg.bigwig                         -> PROseq_k100_neg.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_pos.bigwig                         -> PROseq_k100_pos.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_neg.bigwig                                 -> PROseq_k100_dual_21mer_neg.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_pos.bigwig                                 -> PROseq_k100_dual_21mer_pos.bw
+
+================================================================
+2022-02-22 cytoBandsMapped from T2T  markd
+----------------------------------------------------------------
+cytoBand tracks from T2T project mapped from GRCh38
+Supplied by Nick Altemose <nickaltemose@gmail.com>
+Delivered via Slack
+trackData/cytoBandMapped
+
+bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/cytoBand.as chm13v2.0_cytobands_allchrs.bed ../ucscChromNamed/t2t-chm13-v2.0.sizes cytoBandMapped.bb
+
+================================================================
+2022-02-24 sedefSegDups  markd
+----------------------------------------------------------------
+Supplied by Mitchell Robert Vollger <mvollger@uw.edu>
+team-segdups/Assembly_analysis/SEDEF/T2T-CHM13v2.SDs.bed
+
+    bedToBigBed -as=${kentDir}/src/hg/makeDb/doc/GCA_009914755.4_CHM13_T2T_v2.0/schema/sedefSegDups.as -type=bed9+ T2T-CHM13v2.SDs.bed ../ucscChromNamed/t2t-chm13-v2.0.sizes sedefSegDups.bb
+
+
+================================================================
+pending:
+
+================================================================

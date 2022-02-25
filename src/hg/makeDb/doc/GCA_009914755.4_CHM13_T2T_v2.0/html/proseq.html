@@ -1,0 +1,67 @@
+<h2>Description</h2>
+<p>CHM13 PRO-seq (Precision Run-On sequencing) Bowtie2 alignments to CHM13v2.0 (minus chrY) and unique genome-wide 21mer filtering (stranded)</p>
+<p>PRO-seq detects nascent transcription (including from non-coding) from RNA polymerases with nucleotide resolution at genome-scale.</p>
+
+<h2>Methods</h2>
+<p>The PRO-seq experiment was done on CHM13 cells (in duplicate, A and B) and sequenced from the 3' end for 75bp single-ended reads.</p>
+<p>Reads were adapter trimmed and quality filtered (-q 20) with Cutadapt (v2.7).</p>
+<p>Trimmed reads were then reverse complemented since they were sequenced in the 3'-->5' direction.</p>
+<p>D. melanogaster spike-ins were removed with Bowtie2 (v2.3.5.1) and samtools view -f 4 (v1.9).</p> 
+<p>Reads were then mapped to CHM13v2.0 (without chrY since CHM13 is female) with either Bowtie2 (v2.3.5.1) default or -k 100 (allowing up to 100 multi-mappers).</p>
+<p>Unique genome-wide 21mers were generated through Meryl (https://github.com/marbl/meryl).</p>
+<p>The reads mapped with -k 100 were filtered with these unique genome-wide 21mers through one of two methods:</p>
+<ol>
+  <li>1. locus-specific unique genome-wide 21mer filtering (overlapSelect -overlapBases=21; GenomeBrowser/20180626)
+  <li>2. read- and locus-specific unique genome-wide 21mer filtering (https://github.com/arangrhie/T2T-Polish/tree/master/marker_assisted, overlapSelect -overlapBases=21)
+<ol>
+
+<h2>Display Conventions and Configuration</h2>
+These tracks are not available for chrY because they were mapped to CHM13v2.0 without chrY since the CHM13 line is female.
+The tracks labeled as "neg" are negated for viewing. 
+<p></p>
+
+<h2>Data access</h2>
+<p>Raw PRO-seq data filled under BioProject PRJNA559484</p>
+
+<h2>Release history</h2>
+<ol>
+  <li>CHM13v2.0 assembly (minus chrY)
+</ol>
+
+<h2>Credits</h2>
+<p>Savannah J Hoyt (PROseq library prep & sequencing; mapping & locus-specific filtering)</p>
+<ul>
+  <li><a href="mailto:savannah.klein@uconn.edu">Savannah Hoyt &lt;savannah.klein@uconn.edu&gt;</a>
+</ul>
+<p>Rachel O'Neill</p>
+<p>Arang Rhie (Meryl software for generation of unique 21mers & read-specific filtering)</p>
+
+<h2>References</h2>
+ 
+<p>
+For generation of unique genome-wide 21mers:
+</p>
+
+<p>
+McCartney, A.M., et al.
+<a href="https://www.biorxiv.org/content/10.1101/2021.07.02.450803v1" target="_blank">.
+<em>bioRxiv</em> 2021 Jul.
+</p>
+
+<p>
+For the PRO-seq experimental, mapping, and filtering methods:
+</p>
+
+<p>
+Hoyt SJ, et al.
+<a href="https://www.biorxiv.org/content/10.1101/2021.07.12.451456v1" target="_blank">
+From telomere to telomere: the transcriptional and epigenetic state of human repeat elements</a>.
+<em>bioRxiv</em>. 2021 Jul.
+</p>
+ 
+<p>
+Hoyt SJ, et al.
+<a href="https://zenodo.org/record/5537106" target="_blank">
+From telomere to telomere: the transcriptional and epigenetic state of human repeat elements analysis code: T2T-CHM13</a>.
+<em>bioRxiv</em>. 2021   
+</p>
