@@ -619,6 +619,7 @@ searchMethod fuzzy
 padding 5
 
 track resist
+pennantIcon New red ../goldenPath/newsarch.html#022522 "Released Feb. 25, 2022"
 shortLabel Drug Resistance
 longLabel Mutations that confer drug resistance collected by Paul Gordon, Calgary
 type bigBed 9 +
