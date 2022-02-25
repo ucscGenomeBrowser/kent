@@ -239,6 +239,11 @@ alert("no element for label '" + labelId + "'");
         }
         for (i = 0; i < hideAllList.length; i++) {
           hideAllList[i].checked = false;
+          if (visRows > 0 && notVis > 0) {
+            hideAllList[i].indeterminate = true;
+          } else {
+            hideAllList[i].indeterminate = false;
+          }
         }
         hideAllLabelList = document.getElementsByClassName('hideAllLabel');
         for (i = 0; i < hideAllLabelList.length; i++) {
@@ -253,6 +258,7 @@ alert("no element for label '" + labelId + "'");
         }
         for (i = 0; i < hideAllList.length; i++) {
           hideAllList[i].checked = true;
+          hideAllList[i].indeterminate = false;
         }
         hideAllLabelList = document.getElementsByClassName('hideAllLabel');
         for (i = 0; i < hideAllLabelList.length; i++) {

@@ -171,6 +171,9 @@ close (FH);
 my $criticalColor = "#ff0000";
 my $endangeredColor = "#dd6600";
 my $vulnerableColor = "#663300";
+$criticalColor = "#ee3333";
+$endangeredColor = "#333388";
+$vulnerableColor = "#88aaaa";
 my %statusColors = (
   "CR" => $criticalColor,
   "EN" => $endangeredColor,
@@ -798,18 +801,18 @@ printf "</colgroup>\n";
 
 printf "<thead>\n";
 printf "<tr>\n";
-printf "  <th class='colComName'><div class='tooltip'>common name<span class='tooltiptext'>Links to an existing assembly browser, Button opens an assembly request form.</span></div></th>\n";
-printf "  <th class='colSciName'><div class='tooltip'>scientific name (count)<span class='tooltiptext'>Links to Google image search. Count shows the number of assemblies available for this orgnism.</span></div></th>\n";
-printf "  <th class='colAsmId'><div class='tooltip'>NCBI assembly<span class='tooltiptext'>Links to NCBI resource record.</span></div></th>\n";
-printf "  <th class='colAsmSize'><div class='tooltip'>assembly<br>size<span class='tooltiptext'>Number of nucleotides in the assembly.</span></div></th>\n";
-printf "  <th class='colAsmSeqCount'><div class='tooltip'>sequence<br>count<span class='tooltiptext'>The number of sequences in this assembly.</span></div></th>\n";
-printf "  <th class='colScafN50'><div class='tooltip'>scaffold N50<br>length (L50)<span class='tooltiptext'><a href='https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics' target=_blank>N50 (L50)</a> length.</span></div> </th>\n";
-printf "  <th class='colContigN50'><div class='tooltip'>contig N50<br>length (L50)<span class='tooltiptext'><a href='https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics' target=_blank>N50 (L50)</a> length.</span></div></th>\n";
-printf "  <th class='colIUCN'><div class='tooltip'>IUCN<span class='tooltiptext'>Links to <a href='https://www.iucnredlist.org/' target=_blank>IUCN Red List</a> of Threatened Species (version 2021-3) <span style='color:%s;'>CR - Critical</span> / <span style='color:%s;'>EN - Endangered</span> / <span style='color:%s;'>VU - Vulnerable</span></span></div></th>\n", $statusColors{"CR"}, $statusColors{"EN"}, $statusColors{"VU"};
-printf "  <th class='colTaxId'><div class='tooltip'>NCBI taxID<span class='tooltiptext'>Links to <a href='https://www.ncbi.nlm.nih.gov/taxonomy' target='_blank'>NCBI Taxonomy</a> database.</span></div></th>\n";
-printf "  <th class='colAsmDate'><div class='tooltip'>assembly<br>date<span class='tooltiptext'>Date submitted to <a href='https://www.ncbi.nlm.nih.gov/assembly' target=_blank>NCBI assembly</a> database.</span></div></th>\n";
-printf "  <th class='colSubmitter sorttable_alpha'><div class='tooltip'>Assembly submitter<span class='tooltiptextright'>Person or group who submitted to <<a href='https://www.ncbi.nlm.nih.gov/assembly' target=_blank>NCBI Assembly</a> database.</span></div></th>\n";
-printf "  <th class='colClade'><div class='tooltip'>clade<span class='tooltiptextright'>Clade of this organism.  Note: the <em>invertebrate</em> clade is a catch all category that includes organisims not typically classified as <em>invertebrate</em></span></div></th>\n";
+printf "  <th class='colComName'><div class='tooltip'>common name<span onclick='event.stopPropagation()' class='tooltiptext'>Links to an existing assembly browser, Button opens an assembly request form.</span></div></th>\n";
+printf "  <th class='colSciName'><div class='tooltip'>scientific name (count)<span onclick='event.stopPropagation()' class='tooltiptext'>Links to Google image search. Count shows the number of assemblies available for this orgnism.</span></div></th>\n";
+printf "  <th class='colAsmId'><div class='tooltip'>NCBI assembly<span onclick='event.stopPropagation()' class='tooltiptext'>Links to NCBI resource record.</span></div></th>\n";
+printf "  <th class='colAsmSize'><div class='tooltip'>assembly<br>size<span onclick='event.stopPropagation()' class='tooltiptext'>Number of nucleotides in the assembly.</span></div></th>\n";
+printf "  <th class='colAsmSeqCount'><div class='tooltip'>sequence<br>count<span onclick='event.stopPropagation()' class='tooltiptext'>The number of sequences in this assembly.</span></div></th>\n";
+printf "  <th class='colScafN50'><div class='tooltip'>scaffold N50<br>length (L50)<span onclick='event.stopPropagation()' class='tooltiptext'><a href='https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics' target=_blank>N50 (L50)</a> length.</span></div> </th>\n";
+printf "  <th class='colContigN50'><div class='tooltip'>contig N50<br>length (L50)<span onclick='event.stopPropagation()' class='tooltiptext'><a href='https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics' target=_blank>N50 (L50)</a> length.</span></div></th>\n";
+printf "  <th class='colIUCN'><div class='tooltip'>IUCN<span onclick='event.stopPropagation()' class='tooltiptext'>Links to <a href='https://www.iucnredlist.org/' target=_blank>IUCN Red List</a> of Threatened Species (version 2021-3) <span style='color:%s;'>CR - Critical</span> / <span style='color:%s;'>EN - Endangered</span> / <span style='color:%s;'>VU - Vulnerable</span></span></div></th>\n", $statusColors{"CR"}, $statusColors{"EN"}, $statusColors{"VU"};
+printf "  <th class='colTaxId'><div class='tooltip'>NCBI taxID<span onclick='event.stopPropagation()' class='tooltiptext'>Links to <a href='https://www.ncbi.nlm.nih.gov/taxonomy' target='_blank'>NCBI Taxonomy</a> database.</span></div></th>\n";
+printf "  <th class='colAsmDate'><div class='tooltip'>assembly<br>date<span onclick='event.stopPropagation()' class='tooltiptext'>Date submitted to <a href='https://www.ncbi.nlm.nih.gov/assembly' target=_blank>NCBI assembly</a> database.</span></div></th>\n";
+printf "  <th class='colSubmitter sorttable_alpha'><div class='tooltip'>Assembly submitter<span onclick='event.stopPropagation()' class='tooltiptextright'>Person or group who submitted to <a href='https://www.ncbi.nlm.nih.gov/assembly' target=_blank>NCBI Assembly</a> database.</span></div></th>\n";
+printf "  <th class='colClade'><div class='tooltip'>clade<span onclick='event.stopPropagation()' class='tooltiptextright'>Clade of this organism.  Note: the <em>invertebrate</em> clade is a catch all category that includes organisims not typically classified as <em>invertebrate</em></span></div></th>\n";
 printf "</tr>\n";
 printf "</thead><tbody>\n";
 
@@ -1029,10 +1032,13 @@ foreach my $clade (@clades) {
   # chrom browser initial loading performance
   # try out the table with out any count, just get the row started
   if (length($statusColor)) {
+     my $statusClass = sprintf(" style='color:%s;", $statusColor);
+     # let's see what nostatus looks like
+     $statusClass = "";
      if ($asmCountInTable > 500) {
-       printf "<tr%s style='color:%s; display:none;'>", $rowClass, $statusColor;
+       printf "<tr%s%s display:none;'>", $rowClass, $statusClass;
      } else {
-       printf "<tr%s style='color:%s;'>", $rowClass, $statusColor;
+       printf "<tr%s%s'>", $rowClass, $statusClass;
      }
   } else {
      if ($asmCountInTable > 500) {
@@ -1104,9 +1110,9 @@ foreach my $clade (@clades) {
 
   ############# eighth column,  IUCN status and link ################
   if (length($iucnLink) > 0) {
-    printf "<td style='display:none;'><a href='%s' target=_blank>%s</a></td>", $iucnLink, $iucnStatus;
+    printf "<td class='iucn%s' style='display:none;'><a href='%s' target=_blank>%s</a></td>", $iucnStatus, $iucnLink, $iucnStatus;
   } else {
-    printf "<td style='display:none;'>%s</td>", $iucnStatus;
+    printf "<td class='iucnNone' style='display:none;'>%s</td>", $iucnStatus;
   }
   printf PC "\t%s", $iucnStatus;	# output to clade.tableData.txt
 

@@ -415,7 +415,6 @@ inside a <ul> element.
   top: 0;
   background: #ffffff;
   color: #000000;
-  pointer-events: none;
 }
 
 /* right most two columns have right margins instead of left so as
@@ -452,6 +451,9 @@ inside a <ul> element.
   background: #00f;
   left: 0;
   top: 0;
+  border: 2px solid #000;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
+  border-radius: 4px;
 }
 
 /* debug trick to mark all elements with a red border */
@@ -460,3 +462,35 @@ inside a <ul> element.
   outline: 1px solid #f00 !important;
 }
 */
+
+.iucnCR {
+  background: #e33;
+}
+
+.iucnEN {
+  background: #338;
+}
+
+.iucnEN a:link {
+  color: #c66;
+}
+
+.iucnEN a:visited {
+  color: #6c6;
+}
+
+.iucnEN a:hover {
+  color: #cc6;
+}
+
+.iucnEN a:active {
+  color: #66c;
+}
+
+.iucnVU {
+  background: #8aa;
+}
+
+.iucnNone {
+  background: #ccc;
+}

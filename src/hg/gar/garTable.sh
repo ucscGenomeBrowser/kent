@@ -19,9 +19,12 @@ printf "<!DOCTYPE HTML 4.01 Transitional>
 "
 
 # coordinate these colors with the table.pl definitions
-export criticalColor="#ff0000"
-export endangeredColor="#dd6600"
-export vulnerableColor="#663300"
+# export criticalColor="#ff0000"
+# export endangeredColor="#dd6600"
+# export vulnerableColor="#663300"
+export criticalColor="#ee3333";
+export endangeredColor="#333388";
+export vulnerableColor="#88aaaa";
 
 export leftHandPointer="&#9756;"
 export rightHandPointer="&#9758;"
