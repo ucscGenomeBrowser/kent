@@ -91,11 +91,6 @@ else
   endif
 endif
 
-# autodetect if openssl is installed
-ifeq (${SSLDIR},)
-  SSLDIR = /usr/include/openssl
-endif
-
 # autodetect UCSC installation of hal:
 ifeq (${HALDIR},)
     HALDIR = /hive/groups/browser/hal/build/hal.2020-12-18
