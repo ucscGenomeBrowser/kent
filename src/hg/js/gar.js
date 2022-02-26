@@ -133,7 +133,10 @@ var gar = {
 <col id='IUCN' span='1' class=colGIUCN>
 <col id='taxId' span='1' class=colGTaxId>
 <col id='asmDate' span='1' class=colGAsmDate>
+<col id='bioSample' span='1' class=colGBioSample>
+<col id='bioProject' span='1' class=colGBioProject>
 <col id='submitter' span='1' class=colGSubmitter>
+<col id='clade' span='1' class=colGClade>
 */
 
     // given a category and a counts Map, increment the count for that category
@@ -146,10 +149,11 @@ var gar = {
     },
 
     // given a category and a counts Map, and some flags
-    countVisHidden: function(category, counts, gca, gcf, canBeReq, ucscDb) {
+    countVisHidden: function(category, counts, gca, gcf, canBeReq, ucscDb, hasIucn) {
        gar.incrementCount(category, counts);
        if (gca) { gar.incrementCount('gca', counts); }
        if (gcf) { gar.incrementCount('gcf', counts); }
+       if (hasIucn) { gar.incrementCount('iucn', counts); }
        if (canBeReq) {
           gar.incrementCount('gar', counts);
        } else {
@@ -162,6 +166,7 @@ var gar = {
 //      var t0 = gar.millis();
       var comNameRow = gar.columnNames.get('comName');
       var asmIdRow = gar.columnNames.get('asmId');
+      var iucnRow = gar.columnNames.get('IUCN');
       var cladeRow = gar.columnNames.get('clade');
       var visRows = 0;
       var totalRows = 0;
@@ -184,11 +189,16 @@ var gar = {
           var comName = rowId.cells[comNameRow].innerHTML;
           var canBeRequested = comName.includes("button");
           var ucscDb = comName.includes("cgi-bin/hgTracks");
+          var iucnStatus = rowId.cells[iucnRow].innerHTML;
+          var hasIucn = false;
+          if (iucnStatus) {
+             hasIucn = ! iucnStatus.includes("&nbsp;");
+          }
           if ( rowId.style.display !== "none") {
-            gar.countVisHidden(thisClade, categoryVisible, isGCA, isGCF, canBeRequested, ucscDb);
+            gar.countVisHidden(thisClade, categoryVisible, isGCA, isGCF, canBeRequested, ucscDb, hasIucn);
             ++visRows;
           } else {
-            gar.countVisHidden(thisClade, categoryHidden, isGCA, isGCF, canBeRequested, ucscDb);
+            gar.countVisHidden(thisClade, categoryHidden, isGCA, isGCF, canBeRequested, ucscDb, hasIucn);
           }
         }
       }
