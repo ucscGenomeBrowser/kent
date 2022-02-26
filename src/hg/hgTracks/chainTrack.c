@@ -166,7 +166,7 @@ if (tg->isBigBed)
         warn("Cannot find linkDataUrl in custom track \"%s\"\n", tg->shortLabel);
         return;
         }
-    struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
+    struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
     if (bbi == NULL)
         return;
     bbClosure.bbi =  bbi;

@@ -20,10 +20,10 @@
 #include "bbiFile.h"
 #include "bigBed.h"
 
-struct bbiFile *bigBedFileOpenAlias(char *fileName, struct hash *aliasHash)
+struct bbiFile *bigBedFileOpenAlias(char *fileName, aliasFunc aliasFunc)
 /* Open up big bed file with chrom alias hash. */
 {
-return bbiFileOpenAlias(fileName, bigBedSig, "big bed", aliasHash);
+return bbiFileOpenAlias(fileName, bigBedSig, "big bed", aliasFunc);
 }
 
 struct bbiFile *bigBedFileOpen(char *fileName)

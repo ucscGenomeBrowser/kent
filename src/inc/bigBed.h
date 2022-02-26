@@ -59,7 +59,7 @@ struct bigBedInterval
 struct bbiFile *bigBedFileOpen(char *fileName);
 /* Open up big bed file.   Free this up with bbiFileClose. */
 
-struct bbiFile *bigBedFileOpenAlias(char *fileName, struct hash *aliasHash);
+struct bbiFile *bigBedFileOpenAlias(char *fileName, aliasFunc aliasFunc);
 /* Open up big bed file with chrom alias hash. */
 
 #define bigBedFileClose(a) bbiFileClose(a)

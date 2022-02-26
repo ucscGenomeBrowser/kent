@@ -101,13 +101,15 @@ struct bbiZoomLevel *bbiBestZoom(struct bbiZoomLevel *levelList, int desiredRedu
 /* Return zoom level that is the closest one that is less than or equal to 
  * desiredReduction. */
 
+typedef struct slName *(*aliasFunc) (char *);   // A function that passed a native seqName returns a list of aliases
+
 struct bbiFile 
 /* An open bbiFile */
     {
     struct bbiFile *next;	/* Next in list. */
     char *fileName;		/* Name of file - for better error reporting. */
     struct udcFile *udc;	/* Open UDC file handle. */
-    struct hash *aliasHash;     /* If non-NULL, constains chrom alias hash. */
+    aliasFunc aliasFunc;        /* our aliasFunc or NULL. */
     bits32 typeSig;		/* bigBedSig or bigWigSig for now. */
     boolean isSwapped;		/* If TRUE need to byte swap everything. */
     struct bptFile *chromBpt;	/* Index of chromosomes. */
@@ -133,7 +135,7 @@ struct bbiFile
     };
 
 
-struct bbiFile *bbiFileOpenAlias(char *fileName, bits32 sig, char *typeName, struct hash *aliasHash);
+struct bbiFile *bbiFileOpenAlias(char *fileName, bits32 sig, char *typeName, aliasFunc aliasFunc);
 /* Open up big wig or big bed file with chrom alias hash. */
 
 struct bbiFile *bbiFileOpen(char *fileName, bits32 sig, char *typeName);

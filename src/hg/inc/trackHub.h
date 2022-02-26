@@ -141,6 +141,11 @@ char *trackHubChromSizes(char *database);
  * returns NULL when not present
  */
 
+char *trackHubAliasBbFile(char *database);
+/* see if this assembly hub has an alias bigBed file, return url if present
+ * returns NULL when not present
+ */
+
 char *trackHubAliasFile(char *database);
 /* see if this assembly hub has an alias file, return url if present
  * returns NULL when not present
