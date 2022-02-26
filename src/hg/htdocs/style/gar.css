@@ -154,6 +154,18 @@
   width: 8em;
 }
 
+.colBioSample,
+.colGBioSample {
+  display: none;
+  width: 11em;
+}
+
+.colBioProject,
+.colGBioProject {
+  display: none;
+  width: 11em;
+}
+
 .colSubmitter,
 .colGSubmitter {
   display: none;
