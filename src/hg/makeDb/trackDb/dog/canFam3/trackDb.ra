@@ -15,3 +15,17 @@ termRegex chr[0-9MUXn]+[AEJHX0-9_]+(\.[0-9]+)?
 searchPriority 50
 
 include ../../refSeqComposite.ra
+
+track evaSnp
+shortLabel EVA SNP Release 3
+longLabel Short Genetic Variants from European Variant Archive Release 3
+type bigBed 6 +
+group varRep
+visibility pack
+bigDataUrl /gbdb/canFam3/bbi/evaSnp.bb
+url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
+
+searchTable evaSnp
+searchType bigBed
+searchMethod exact
+padding 50

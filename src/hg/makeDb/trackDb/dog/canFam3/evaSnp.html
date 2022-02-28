@@ -1,0 +1,108 @@
+<h2>Description</h2>
+<p>
+This track contains information about single nucleotide variants 
+and small insertions and deletions (indels) &mdash; collectively Simple
+Nucleotide Variants (SNVs) &mdash; from the European Variation Archive
+(<a href="https://www.ebi.ac.uk/eva/" target=_blank>EVA</A>)
+Release 3 for the $organism $db genome. The dbSNP database at NCBI no longer
+hosts non-human variants.
+
+</p>
+
+<h2>Interpreting the Graphical Display</h2>
+<p>
+  Variants are shown as single tick marks at most zoom levels.
+  When viewing the track at or near base-level resolution, the displayed
+  width of the SNP variant corresponds to the width of the variant in the 
+  reference sequence. Insertions are indicated by a single tick mark displayed 
+  between two nucleotides, single nucleotide polymorphisms are displayed as the 
+  width of a single base, and multiple nucleotide variants are represented by a
+  block that spans two or more bases.
+</p>
+
+<p>
+  Navigation to an individual variant can be accomplished by typing or copying
+  the variant identifier (rsID) into the Position/Search box on the Browser.
+</p>
+
+<h2>Data </h2>
+
+<p>
+  A click on an item in the graphical display displays a page with data about
+  that variant.  Data fields include the Reference and Alternate Alleles, the
+  class of the variant, the source of the data and the validation status of the
+  variant which indicates that the RS was validated by any method as indicated 
+  by the dbSNP validation status 
+  (per <a href = "http://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/README_release_general_info.txt" 
+  target = _blank>EVA</a>).
+</p>
+
+</p>
+  Variants are classified into one of the following classes:
+</p>
+
+<ul>
+  <li> <b>substitution</b> &mdash; 
+       A single nucleotide in the reference is replaced by another, alternate allele 
+  <li> <b>deletion</b> &mdash; 
+       One or more nucleotides is deleted.  The representation in the database is to
+       display one additional nucleotide in both the Reference field (Ref) and the 
+       Alternate Allele field (Alt).  E.g. a variant that is a deletion of an A
+       maybe be represented as Ref = GA and Alt = G.
+  <li> <b>insertion</b> &mdash; 
+       One or more nucleotides is inserted.  The representation in the database is to
+       display one additional nucleotide in both the Reference field (Ref) and the 
+       Alternate Allele field (Alt).  E.g. a variant that is an insertion of a T maybe 
+       be represented as Ref = G and Alt = GT 
+  <li> <b>tandemRepeat</b> &mdash; 
+       The Reference and Alternate Alleles are runs of the same nucleotide,
+       but of different length, e.g., Ref = CCCC; Alt = CCCCCC 
+  <li> <b>delins</b> &mdash; 
+       Similar to tandemRepeat, except that there is more than one type of nucleotide,
+       e.g., Ref = CCAAAAACAAAAACA, Alt = ACAAAAAC.
+  <li> <b>multipleNucleotideSubstitution</b> &mdash; 
+       More than one nucleotide is substituted by an equal number of different 
+       nucleotides, e.g.,  Ref = AA, Alt = GC.
+</ul>
+
+<p>
+No functional annotations were provided by the EVA (e.g., missense, nonsense, etc).
+</p>
+
+<h2>Methods</h2>
+<p>
+Data were downloaded from the European Variation Archive:
+</p>
+  
+<pre>https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/GCA_000002285.2_current_ids.vcf.gz</pre>
+
+<p>
+and converted to BED format.  Data were released at EVA on 2002-02-24.
+Sequence Ontology (&quot;<a href = 
+"http://www.sequenceontology.org/browser/current_release" 
+target = _blank>SO</a>:&quot;) 
+terms were converted to the variant classes described above.
+</p>
+
+
+<h2>Credits</h2>
+
+<p>
+This track was produced at UCSC by Robert Kuhn from data generated worldwide.
+</p>
+
+<h2>References</h2>
+
+<p>
+Cezard T, Cunningham F, Hunt SE, Koylass B, Kumar N, Saunders G, Shen A, Silva AF, 
+Tsukanov K, Venkataraman S <em>et al.</em> <a href = 
+"https://doi.org/10.1093/nar/gkab960" target = _blank>The European Variation Archive: 
+a FAIR resource of genomic variation for all species</a>. 
+<em>Nucleic Acids Res.</em> 2021 Oct 28:gkab960. doi: 10.1093/nar/gkab960. 
+Epub ahead of print. 
+PMID: <a href = "https://pubmed.ncbi.nlm.nih.gov/34718739/" 
+target = _blank>34718739</a>. 
+PMID: <a href = "http://www.ncbi.nlm.nih.gov/pmc/articles/pmc8728205/" 
+target = _blank>PMC8728205</a>.
+</p>
+
