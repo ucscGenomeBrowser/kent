@@ -334,6 +334,7 @@
 ./runBuild GCA_020746105.1 GCA_020746105.1_bTroSur1.pri.cur birds Trogon_surrucura
 ./runBuild GCA_020800305.1 GCA_020800305.1_bPorHoc1.mat.Z.cur birds Porphyrio_hochstetteri
 ./runBuild GCA_020801775.1 GCA_020801775.1_bPorHoc1.pat.decon birds Porphyrio_hochstetteri
+./runBuild GCA_021556685.1 GCA_021556685.1_UTH_Rnor_SHRSP_BbbUtx_1.0 mammals Rattus_norvegicus
 ./runBuild GCA_900006655.3 GCA_900006655.3_Susie3 primates Gorilla_gorilla_gorilla
 ./runBuild GCA_900094665.2 GCA_900094665.2_CAROLI_EIJ_v1.1 mammals Mus_caroli
 ./runBuild GCA_900186095.1 GCA_900186095.1_CHOK1S_HZDv1 mammals Cricetulus_griseus
