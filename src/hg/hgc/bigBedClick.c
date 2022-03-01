@@ -362,7 +362,7 @@ static void bigBedClick(char *fileName, struct trackDb *tdb,
 char *chrom = cartString(cart, "c");
 
 /* Open BigWig file and get interval list. */
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
 int ivStart = start, ivEnd = end;
 char *itemForUrl = item;

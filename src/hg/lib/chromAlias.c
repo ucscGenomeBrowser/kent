@@ -2,6 +2,7 @@
  * generated chromAlias.h and chromAlias.sql.  This module links the database and
  * the RAM representation of objects. */
 
+#include <pthread.h>
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
@@ -10,6 +11,8 @@
 #include "hdb.h"
 #include "trackHub.h"
 #include "fieldedTable.h"
+#include "bigBed.h"
+#include "bPlusTree.h"
 
 
 char *chromAliasCommaSepFieldNames = "alias,chrom,source";
@@ -165,35 +168,22 @@ fputc('}',f);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 /* our "global" data */
+struct bptIndex
+{
+struct bptIndex *next;
+int fieldIx;
+struct bptFile *bpt;
+};
+
 static struct
 {
 boolean inited;
-char *database;
+boolean bptInited;
+struct bptIndex *bptList;
+struct bbiFile *bbi;
 struct hash *chromToAliasHash;
 struct hash *aliasToChromHash;
-struct hash *forwardHash;
-struct hash *reverseHash;
-} chromHashes;
-
-static boolean checkDatabase(char *database)
-/* Make sure we don't see different databases. */
-{
-if (database == NULL) 
-    return TRUE;
-
-if (chromHashes.database != NULL)
-    {
-    if (!sameString(chromHashes.database, database))
-        {
-        errAbort("chromAliasSetup: only works for one db.  %s was passed in earlier, now %s.", chromHashes.database, database);
-        return FALSE;
-        }
-    return TRUE;
-    }
-
-chromHashes.database = cloneString(database);
-return TRUE;
-}
+} chromAliasGlobals;
 
 static void readOldAlias(struct lineFile *lf)
 /* Don't assume the table is fully populated, and dummy up a value for source. */
@@ -211,16 +201,10 @@ while (lineFileNext(lf, &line, &size))
             {
             if (isNotEmpty(words[i]))
                 {
-                struct chromAlias *ali;
-                AllocVar(ali);
-                ali->alias = cloneString(words[i]);
-                ali->chrom = cloneString(words[0]);
-                ali->source = cloneString("asmHub");
-                hashAdd(chromHashes.forwardHash, ali->alias, ali);
-                hashAdd(chromHashes.reverseHash, ali->chrom, ali);
-                hashAdd(chromHashes.chromToAliasHash, ali->chrom, ali->alias);
-                hashAdd(chromHashes.aliasToChromHash, ali->alias, ali->chrom);
-                //hashAdd(aliasHash, words[0], ali);
+                char *alias = cloneString(words[i]);
+                char *chrom = cloneString(words[0]);
+                hashAdd(chromAliasGlobals.chromToAliasHash, chrom, alias);
+                hashAdd(chromAliasGlobals.aliasToChromHash, alias, chrom);
                 }
             }
         }
@@ -230,8 +214,7 @@ while (lineFileNext(lf, &line, &size))
 static void readFieldedTable(struct lineFile *lf)
 /* Use the fieldedTable library to read in fully populated chromAlias.txt file. */
 {
-struct fieldedTable *aliasTable = fieldedTableAttach(lf, NULL, 0);
-
+struct fieldedTable *aliasTable = fieldedTableAttach(lf, NULL, 0); 
 struct fieldedRow *row;
 for(row = aliasTable->rowList; row; row = row->next)
     {
@@ -240,33 +223,43 @@ for(row = aliasTable->rowList; row; row = row->next)
     unsigned field;
     for(field=1; field< aliasTable->fieldCount; field++)
         {
-        struct chromAlias *new;
-        AllocVar(new);
-        new->chrom = chrom;
-        new->alias = row->row[field];
-        new->source = aliasTable->fields[field];
-
-        hashAdd(chromHashes.forwardHash, new->alias, new);
-        hashAdd(chromHashes.reverseHash, new->chrom, new);
-        hashAdd(chromHashes.chromToAliasHash, new->chrom, new->alias);
-        hashAdd(chromHashes.aliasToChromHash, new->alias, new->chrom);
+        char *alias = row->row[field];
+        hashAdd(chromAliasGlobals.chromToAliasHash, chrom, alias);
+        hashAdd(chromAliasGlobals.aliasToChromHash, alias, chrom);
         }
     }
+}
+
+static char * gbdbBbExists(char *database)
+/* use a gbdb bigBed as our alias file. */
+{
+// not supported at the moment
+return NULL;
+}
+
+static void chromAliasSetupBb(char *database, char *bbFile)
+/* Look for a chromAlias bigBed file and open it. */
+{
+chromAliasGlobals.bbi = bigBedFileOpen(bbFile);
 }
 
 static void chromAliasSetupHub(char *database)
 /* Look for a chromAlias text table and load the hashes with its contents. */
 {
+char *aliasBbFile = trackHubAliasBbFile(database);
+if (aliasBbFile != NULL)
+    {
+    chromAliasSetupBb(database, aliasBbFile);
+    return;
+    }
 char *aliasFile = trackHubAliasFile(database);
 if (aliasFile == NULL)
     return;
 
 struct lineFile *lf = udcWrapShortLineFile(aliasFile, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
 
-chromHashes.forwardHash = hashNew(0);
-chromHashes.reverseHash = hashNew(0);
-chromHashes.chromToAliasHash = hashNew(0);
-chromHashes.aliasToChromHash = hashNew(0);
+chromAliasGlobals.chromToAliasHash = hashNew(0);
+chromAliasGlobals.aliasToChromHash = hashNew(0);
 
 char *line;
 if (!lineFileNext(lf, &line, NULL))
@@ -289,10 +282,8 @@ if (!hTableExists(database, "chromAlias"))
     return;
 
 struct sqlConnection *conn = hAllocConn(database);
-chromHashes.forwardHash = hashNew(0);
-chromHashes.reverseHash = hashNew(0);
-chromHashes.chromToAliasHash = hashNew(0);
-chromHashes.aliasToChromHash = hashNew(0);
+chromAliasGlobals.chromToAliasHash = hashNew(0);
+chromAliasGlobals.aliasToChromHash = hashNew(0);
 
 char query[2048];
 sqlSafef(query, sizeof(query), "select * from chromAlias");
@@ -301,13 +292,25 @@ char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct chromAlias *new = chromAliasLoad(row);
-    hashAdd(chromHashes.forwardHash, new->alias, new);
-    hashAdd(chromHashes.reverseHash, new->chrom, new);
-    hashAdd(chromHashes.chromToAliasHash, new->chrom, new->alias);
-    hashAdd(chromHashes.aliasToChromHash, new->alias, new->chrom);
+    hashAdd(chromAliasGlobals.chromToAliasHash, new->chrom, new->alias);
+    hashAdd(chromAliasGlobals.aliasToChromHash, new->alias, new->chrom);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+}
+
+static pthread_mutex_t ourMutex = PTHREAD_MUTEX_INITIALIZER;
+
+static void getLock()
+/* Create a mutex to make the code thread safe. */
+{
+pthread_mutex_lock( &ourMutex );
+}
+
+static void releaseLock()
+/* Release our mutex. */
+{
+pthread_mutex_unlock( &ourMutex );
 }
 
 void chromAliasSetup(char *database)
@@ -316,45 +319,163 @@ void chromAliasSetup(char *database)
 if (database == NULL)
     return;
 
-if (!checkDatabase(database))
+getLock();
+if (chromAliasGlobals.inited)
     return;
+chromAliasGlobals.inited = TRUE;
 
-if (chromHashes.inited)
-    return;
-chromHashes.inited = TRUE;
-
+char *gbdbFile;
 if (trackHubDatabase(database))
     chromAliasSetupHub(database);
+else if ((gbdbFile = gbdbBbExists(database)) != NULL)
+    chromAliasSetupBb(database, gbdbFile);
 else
     chromAliasSetupSql(database);
+releaseLock();
 }
 
-struct hash *chromAliasMakeLookupTable(char *database)
-/* Given a database name and a connection to that database, construct a lookup table
- * that takes chromosome alias names to a matching struct chromAlias.  Returns NULL
- * if the given database does not have a chromAlias table. */
+char *findNativeHashes(char *alias)
+/* Find a native sequence given an alias using the hash tables. */
 {
-return chromHashes.forwardHash;
+char *chrom = (char *)hashFindVal(chromAliasGlobals.aliasToChromHash, alias);
+if (isNotEmpty(chrom))
+    return cloneString(chrom);
+return NULL;
 }
 
-struct hash *chromAliasMakeReverseLookupTable(char *database)
-/* Given a database name and a connection to that database, construct a lookup table
- * that takes the actual assembly chromosome names to struct chromAliases.  Because a
- * chromosome name may well have multiple aliases, repeated calls to hashLookupNext
- * may be required to see them all.  Returns NULL if the given database does not have
- * a chromAlias table. */
+static struct bptIndex *getBpts(struct bbiFile *bbi)
+/* Open any extra indices that this bigBed has. */
 {
-return chromHashes.reverseHash;
+if (chromAliasGlobals.bptInited)
+    return chromAliasGlobals.bptList; 
+
+if (!chromAliasGlobals.bptInited)
+    {
+    struct bptIndex *bptList = NULL;
+    struct slName *indexList = bigBedListExtraIndexes(bbi);
+    for(; indexList; indexList = indexList->next)
+        {
+        struct bptIndex *bptIndex;
+        AllocVar(bptIndex);
+        bptIndex->bpt = bigBedOpenExtraIndex(bbi, indexList->name, &bptIndex->fieldIx);
+        slAddHead(&bptList, bptIndex);
+        }
+    chromAliasGlobals.bptList = bptList;
+    chromAliasGlobals.bptInited = TRUE;
+    }
+
+return chromAliasGlobals.bptList;
 }
 
-struct hash *chromAliasAliasToChromHash(char *database)
-/* Get the hash that maps chrom names to their aliases. */
+char *findNativeBb(struct bbiFile *bbi, char *alias)
+/* Find the native seqName for a given alias given a bigBed. */
 {
-return chromHashes.aliasToChromHash;
+struct bptIndex *bptIndex = getBpts(bbi);
+
+for(; bptIndex; bptIndex = bptIndex->next)
+    {
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *bb= bigBedNameQuery(bbi, bptIndex->bpt, bptIndex->fieldIx, alias, lm);
+
+    if (bb != NULL)
+        {
+        char chromName[1024];
+        bptStringKeyAtPos(bbi->chromBpt, bb->chromId,  chromName, sizeof(chromName));
+
+        return cloneString(chromName);
+        }
+    }
+
+return NULL;
 }
 
-struct hash *chromAliasChromToAliasHash(char *database)
-/* Get the hash that maps chrom names to their aliases. */
+char *chromAliasFindNative(char *alias)
+/* Find the native seqName for a given alias. */
 {
-return chromHashes.chromToAliasHash;
+static struct hash *cachedNative;
+char *chrom;
+
+if (cachedNative == NULL)
+    cachedNative = newHash(6);
+
+if ((chrom = hashFindVal(cachedNative, alias)) != NULL)
+    return chrom;
+
+getLock();
+if ((chrom = hashFindVal(cachedNative, alias)) == NULL)
+    {
+    if (chromAliasGlobals.bbi)
+        chrom = findNativeBb(chromAliasGlobals.bbi, alias);
+    else if (chromAliasGlobals.aliasToChromHash)
+        chrom = findNativeHashes(alias);
+
+    hashAdd(cachedNative, alias, chrom);
+    }
+releaseLock();
+
+return cloneString(chrom);
+}
+
+struct slName *findAliasesBb(struct bbiFile *bbi, char *seqName)
+/* Find the aliases for a given seqName using the alias bigBed. */
+{
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, seqName, 0, 1, 0, lm);
+char *bedRow[bbi->fieldCount];
+char startBuf[16], endBuf[16];
+struct slName *list = NULL;
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    int ii;
+    for(ii=3; ii < chromAliasGlobals.bbi->fieldCount; ii++)
+	{
+	struct slName *name = newSlName(bedRow[ii]);
+	slAddHead(&list, name);
+	}
+    }
+
+return list;
+}
+
+struct slName *findAliasesHashes(char *seqName)
+/* Find the aliases for a given seqName using the hashes. */
+{
+struct slName *slList = NULL;
+struct hashEl *thisEl = hashLookup(chromAliasGlobals.chromToAliasHash, seqName);
+
+for (;thisEl != NULL; thisEl = hashLookupNext(thisEl))
+    {
+    struct slName *name = newSlName((char *)thisEl->val);
+    slAddHead(&slList, name);
+    }
+
+return slList;
+}
+
+struct slName *chromAliasFindAliases(char *seqName)
+/* Find the aliases for a given seqName. */
+{
+static struct hash *cachedAliases;
+struct slName *aliases;
+
+if (cachedAliases == NULL)
+    cachedAliases = newHash(6);
+
+if ((aliases = hashFindVal(cachedAliases, seqName)) != NULL)
+    return aliases;
+
+getLock();
+if ((aliases = hashFindVal(cachedAliases, seqName)) == NULL)
+    {
+    if (chromAliasGlobals.bbi)
+        aliases = findAliasesBb(chromAliasGlobals.bbi, seqName);
+    else if (chromAliasGlobals.chromToAliasHash)
+        aliases = findAliasesHashes(seqName);
+
+    hashAdd(cachedAliases, seqName, aliases);
+    }
+releaseLock();
+
+return aliases;
 }

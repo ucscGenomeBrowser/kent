@@ -65,7 +65,7 @@ struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn)
 {
 /* Get columns in asObject format. */
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 
 /* Allocate hTableInfo structure and fill in info about bed fields. */
@@ -102,7 +102,7 @@ struct slName *bigBedGetFields(char *table, struct sqlConnection *conn)
 /* Get fields of bigBed as simple name list. */
 {
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct slName *names = asColNames(as);
 freeMem(fileName);
@@ -116,7 +116,7 @@ struct sqlFieldType *bigBedListFieldsAndTypes(struct trackDb *tdb, struct sqlCon
 char *fileOrUrl = bigFileNameFromCtOrHub(tdb->table, conn);
 if (fileOrUrl == NULL)
     fileOrUrl = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileOrUrl, chromAliasChromToAliasHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileOrUrl, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct sqlFieldType *list = sqlFieldTypesFromAs(as);
 bbiFileClose(&bbi);
@@ -160,7 +160,7 @@ struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn,
 {
 /* Connect to big bed and get metadata and filter. */
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct asFilter *filter = asFilterFromCart(cart, db, table, as);
 
@@ -228,7 +228,7 @@ fprintf(f, "\n");
 
 /* Open up bigBed file. */
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct asFilter *filter = NULL;
 
@@ -388,7 +388,7 @@ struct slName *randomBigBedIds(char *table, struct sqlConnection *conn, int coun
 /* Figure out bigBed file name and open it.  Get contents for first chromosome as an example. */
 struct slName *idList = NULL;
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct bbiChromInfo *chromList = bbiChromList(bbi);
 struct lm *lm = lmInit(0);
 int orderedCount = count * 4;
@@ -423,7 +423,7 @@ struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = hAllocConn(database);
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct bbiChromInfo *chromList = bbiChromList(bbi);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *ivList = getNElements(bbi, chromList, lm, 10);

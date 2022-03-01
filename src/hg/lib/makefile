@@ -36,7 +36,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o autoUpg
   tagRepo.o tfbsCons.o tigrCmrGene.o traceInfo.o trackDb.o trackDbCache.o trackDbCustom.o trackHub.o \
   trackVersion.o trashDir.o txAliDiff.o txCluster.o txCommon.o txEdgeBed.o txGraph.o txInfo.o txRnaAccs.o \
   variantProjector.o vcfUi.o vegaInfo.o web.o wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o \
-  wiggleUtils.o wikiLink.o
+  wiggleUtils.o wikiLink.o bigRmskAlignBed.o bigRmskBed.o
 
 ifeq (${USE_HIC}, 1)
   O += straw.o

@@ -36,7 +36,7 @@ $matUtils extract -i gisaidAndPublic.$today.masked.pb \
 $matUtils extract -i public-$today.all.masked.preTrim.pb \
     --max-parsimony 20 \
     --max-branch-length 45 \
-    --max-path-length 100 \
+    --max-path-length 150 \
     -O -o public-$today.all.masked.pb
 
 # Add nextclade annotations to protobuf (completely specified by nextstrain.clade-mutations.tsv)
@@ -64,10 +64,10 @@ time $matUtils annotate -T 50 \
 time $matUtils extract -i public-$today.all.masked.pb \
     -t public-$today.all.nwk \
     -v public-$today.all.masked.vcf
-time gzip -f public-$today.all.masked.vcf
+time pigz -p 8 -f public-$today.all.masked.vcf
 zcat gisaidAndPublic.$today.metadata.tsv.gz \
 | grep -v EPI_ISL_ \
-| gzip -c \
+| pigz -p 8 \
     > public-$today.metadata.tsv.gz
 
 rm public-$today.all.masked.pb

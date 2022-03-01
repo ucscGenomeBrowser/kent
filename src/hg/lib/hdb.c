@@ -198,12 +198,6 @@ char *hgOfficialChromName(char *db, char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
-/* aliasHash will be initialized if chromAlias table exists
- *   or track chromAlias file exists
- *  hash key is alias name, hash value is chromosome name
- */
-static struct hash *aliasHash = NULL;
-
 if (strlen(name) > HDB_MAX_CHROM_STRING)
     return NULL;
 struct chromInfo *ci = NULL;
@@ -213,14 +207,8 @@ buf[HDB_MAX_CHROM_STRING-1] = 0;
 ci = hGetChromInfo(db, buf);
 if (ci != NULL)
     return cloneString(ci->chrom);
-aliasHash = chromAliasAliasToChromHash(db);
-if (aliasHash)
-    {
-    char *chrom = (char *)hashFindVal(aliasHash, name);
-    if (isNotEmpty(chrom))
-        return cloneString(chrom);
-    }
-return NULL;
+
+return chromAliasFindNative(name);
 }	/*	char *hgOfficialChromName(char *db, char *name)	*/
 
 boolean hgIsOfficialChromName(char *db, char *name)

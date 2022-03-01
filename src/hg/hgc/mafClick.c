@@ -542,7 +542,7 @@ else
     if (sameString(tdb->type, "bigMaf"))
         {
         char *fileName = trackDbSetting(tdb, "bigDataUrl");
-        struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
+        struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
         mafList = bigMafLoadInRegion(bbi, seqName, winStart, winEnd);
         }
     else

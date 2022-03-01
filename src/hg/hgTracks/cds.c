@@ -953,63 +953,65 @@ static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf,
 {
 struct dnaSeq *mrnaSeq = NULL;
 char *name = getItemDataName(tg, lf->name);
-char *seqSource = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE);
-if (seqSource == NULL)
-    errAbort("setting '%s' missing for track '%s'", BASE_COLOR_USE_SEQUENCE, tg->track);
-else if (sameString(tableName,"refGene") || sameString(tableName,"refSeqAli"))
+if (sameString(tableName,"refGene") || sameString(tableName,"refSeqAli"))
     mrnaSeq = hGenBankGetMrna(database, name, "refMrna");
-else if (sameString(seqSource, "ss"))
-    mrnaSeq = maybeGetUserSeq(name);
-#ifndef GBROWSE
-else if (sameString(seqSource, PCR_RESULT_TRACK_NAME))
-    mrnaSeq = maybeGetPcrResultSeq(lf);
-#endif /* GBROWSE */
-else if (startsWith("extFile", seqSource))
-    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
-else if (endsWith("ExtFile", seqSource))
-    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
-else if (sameString("nameIsSequence", seqSource))
-    {
-    mrnaSeq = newDnaSeq(cloneString(name), strlen(name), name);
-    if (lf->orientation == -1)
-	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
-    }
-else if (sameString("seq1Seq2", seqSource))
-    {
-    mrnaSeq = lf->extra;
-    if (lf->orientation == -1)
-	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
-    }
-else if (sameString("lfExtra", seqSource))
-    {
-    if (lf->extra == NULL)
-        errAbort("baseColorDrawSetup: sequence for track '%s' not loaded when sequence option is set in trackDb\n", tg->track);
-    mrnaSeq = newDnaSeq(cloneString(lf->extra), strlen(lf->extra), lf->extra);
-    if (lf->orientation == -1)
-	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
-    }
-else if (sameString("lrg", seqSource))
-    {
-    struct lrg *lrg = lf->original;
-    mrnaSeq = lrgReconstructSequence(lrg, database);
-    }
-else if (startsWith("table ", seqSource))
-    {
-    char *table = seqSource;
-    nextWord(&table);
-    mrnaSeq = hGenBankGetMrna(database, name, table);
-    }
-else if (startsWithWord("db", seqSource))
-    {
-    char *sourceDb = seqSource;
-    nextWord(&sourceDb);
-    if (isEmpty(sourceDb))
-        sourceDb = database;
-    mrnaSeq = hChromSeq(sourceDb, name, 0, 0);
-    }
 else
-    mrnaSeq = hGenBankGetMrna(database, name, NULL);
-
+    {
+    char *seqSource = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE);
+    if (seqSource == NULL)
+    errAbort("setting '%s' missing for track '%s'", BASE_COLOR_USE_SEQUENCE, tg->track);
+    if (sameString(seqSource, "ss"))
+        mrnaSeq = maybeGetUserSeq(name);
+#ifndef GBROWSE
+    else if (sameString(seqSource, PCR_RESULT_TRACK_NAME))
+        mrnaSeq = maybeGetPcrResultSeq(lf);
+#endif /* GBROWSE */
+    else if (startsWith("extFile", seqSource))
+        mrnaSeq = maybeGetExtFileSeq(seqSource, name);
+    else if (endsWith("ExtFile", seqSource))
+        mrnaSeq = maybeGetExtFileSeq(seqSource, name);
+    else if (sameString("nameIsSequence", seqSource))
+        {
+        mrnaSeq = newDnaSeq(cloneString(name), strlen(name), name);
+        if (lf->orientation == -1)
+            reverseComplement(mrnaSeq->dna, mrnaSeq->size);
+        }
+    else if (sameString("seq1Seq2", seqSource))
+        {
+        mrnaSeq = lf->extra;
+        if (lf->orientation == -1)
+            reverseComplement(mrnaSeq->dna, mrnaSeq->size);
+        }
+    else if (sameString("lfExtra", seqSource))
+        {
+        if (lf->extra == NULL)
+            errAbort("baseColorDrawSetup: sequence for track '%s' not loaded when sequence option is set in trackDb\n", tg->track);
+        mrnaSeq = newDnaSeq(cloneString(lf->extra), strlen(lf->extra), lf->extra);
+        if (lf->orientation == -1)
+            reverseComplement(mrnaSeq->dna, mrnaSeq->size);
+        }
+    else if (sameString("lrg", seqSource))
+        {
+        struct lrg *lrg = lf->original;
+        mrnaSeq = lrgReconstructSequence(lrg, database);
+        }
+    else if (startsWith("table ", seqSource))
+        {
+        char *table = seqSource;
+        nextWord(&table);
+        mrnaSeq = hGenBankGetMrna(database, name, table);
+        }
+    else if (startsWithWord("db", seqSource))
+        {
+        char *sourceDb = seqSource;
+        nextWord(&sourceDb);
+        if (isEmpty(sourceDb))
+            sourceDb = database;
+        mrnaSeq = hChromSeq(sourceDb, name, 0, 0);
+        }
+    else
+        mrnaSeq = hGenBankGetMrna(database, name, NULL);
+}
 if (mrnaSeq != NULL)
     touppers(mrnaSeq->dna);
 return mrnaSeq;

@@ -63,9 +63,6 @@ newMeta->nAttributes = nAttributes;
 struct slName *ucscNameList = NULL, *ucscName = NULL;
 if (newMeta->ucscAssembly != NULL)
     ucscNameList = hAllChromNames(newMeta->ucscAssembly);
-struct hash *ucscToChromAlias = NULL;
-if ((newMeta->ucscAssembly != NULL) && !trackHubDatabase(ucscAssembly))
-    ucscToChromAlias = chromAliasMakeReverseLookupTable(newMeta->ucscAssembly);
 
 struct slName *hicChromNames = slNameListFromStringArray(chromosomes, nChroms);
 struct hash *hicChromHash = hashSetFromSlNameList(hicChromNames);
@@ -74,32 +71,31 @@ struct hash *ucscToHicName = newHash(0);
 // For each UCSC chrom name, try to find a .hic file chromosome to fetch annotation from.
 for (ucscName = ucscNameList; ucscName != NULL; ucscName = ucscName->next)
     {
+    struct slName *aliases;
     char mangledName[2048];
     mangleName(ucscName->name, mangledName, sizeof(mangledName));
     if (hashLookup(hicChromHash, ucscName->name))
         hashAdd(ucscToHicName, ucscName->name, cloneString(ucscName->name));
     else if (hashLookup(hicChromHash, mangledName))
         hashAdd(ucscToHicName, ucscName->name, cloneString(mangledName));
-    else if (ucscToChromAlias != NULL)
+    else if ((aliases = chromAliasFindAliases(ucscName->name)) != NULL)
         {
         // No hits on the primary chromosome name; time to start going through aliases.
-        struct hashEl *thisEl = hashLookup(ucscToChromAlias, ucscName->name);
-        while (thisEl != NULL)
+        for(; aliases; aliases = aliases->next)
             {
-            struct chromAlias *cA = (struct chromAlias*) thisEl->val;
-            if (hashLookup(hicChromHash, cA->alias))
+            if (hashLookup(hicChromHash, aliases->name))
                 {
-                hashAdd(ucscToHicName, ucscName->name, cloneString(cA->alias));
+                hashAdd(ucscToHicName, ucscName->name, cloneString(aliases->name));
                 break;
                 }
-            mangleName(cA->alias, mangledName, sizeof(mangledName));
+            mangleName(aliases->name, mangledName, sizeof(mangledName));
             if (hashLookup(hicChromHash, mangledName))
                 {
                 hashAdd(ucscToHicName, ucscName->name, cloneString(mangledName));
                 break;
                 }
-            thisEl = hashLookupNext(thisEl);
             }
+
         }
     }
 newMeta->ucscToAlias = ucscToHicName;

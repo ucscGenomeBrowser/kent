@@ -122,7 +122,7 @@ mkdir -p reserveKuNodes
 cd reserveKuNodes
 jobCount=16
 threadCount=16
-reserveHours=8
+reserveHours=2
 reserveSeconds=$((3600 * $reserveHours))
 cp /dev/null jobList
 for ((i=0;  $i < $jobCount;  i++)); do
@@ -132,8 +132,10 @@ ssh ku "cd $ottoDir/$today/reserveKuNodes && para create -cpu=$threadCount jobLi
 
 # Wait for all jobs to start (i.e. all nodes to be reserved):
 echo "Waiting for parasol to assign ku nodes"
-while (( $(ssh ku "parasol list jobs | grep $USER" | awk '$2 != "none"' | wc -l) < $jobCount )); do
+while (( $(ssh ku "parasol list jobs | grep $USER | grep sleep" | awk '$2 != "none"' | wc -l) < $jobCount )); do
     sleep 10
+    # Just in case there was a crash (we seem to have some borderline nodes):
+    ssh ku "cd $ottoDir/$today/reserveKuNodes && para push"
 done
 
 # Make hostfile for mpirun
@@ -149,10 +151,14 @@ ssh ku "parasol list jobs | grep $USER | grep sleep" \
 headNode=$(head -1 hostfile | awk '{print $1;}')
 radius=8
 ssh $headNode "cd $ottoDir/$today && \
-               $scriptDir/kuRunMatOptimize.sh -T $threadCount -r $radius \
+               $scriptDir/kuRunMatOptimize.sh -T $threadCount -r $radius -M $reserveHours \
                    -S move_log.cluster -i merged.deltaMasked.pb \
                    -o gisaidAndPublic.$today.masked.preTrim.pb \
                    >& matOptimize.cluster.log"
 
 # Release the ku nodes by stopping the parasol batch
-ssh ku "cd $ottoDir/$today/reserveKuNodes && para stop"
+ssh ku "cd $ottoDir/$today/reserveKuNodes && para stop || true"
+
+# Clean up
+rm -f preTrim.*.pb merged.*.*.pb
+chmod 664 gis*.preTrim*.pb

@@ -410,6 +410,14 @@ char *trackHubChromSizes(char *database)
 return assemblyHubGenomeSetting(database, "chromSizes");
 }
 
+char *trackHubAliasBbFile(char *database)
+/* see if this assembly hub has an alias bigBed file, return url if present
+ * returns NULL when not present
+ */
+{
+return assemblyHubGenomeSetting(database, "chromAliasBb");
+}
+
 char *trackHubAliasFile(char *database)
 /* see if this assembly hub has an alias file, return url if present
  * returns NULL when not present

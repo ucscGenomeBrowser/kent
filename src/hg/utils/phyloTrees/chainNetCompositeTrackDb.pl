@@ -6,11 +6,13 @@ use warnings;
 my $argc = scalar(@ARGV);
 
 if ($argc < 4) {
- printf STDERR "usage: compositeChainNet.pl [net|syn|rbest] <name> <db>  <clade1.list> \\\n\t[clade2.list ...etc...] > nameChainNet.ra
+ printf STDERR "usage: compositeChainNet.pl [net|syn|rbest] <name> <db> <nameList> <clade1.list> \\\n\t[clade2.list ...etc...] > nameChainNet.ra
 [net|syn|rbest] select one of these for lowest level chainNet\n\tor syntenic or reciprocal best chainNet
 name is the name of the composite track, examples:
 \tplacental, mammal, vertebrate
 db is the name of the database to construct the composite for
+nameList relates a genome name db/asmId to a common name to handle
+   assembly hubs
 The clade lists are lists of species dbs to put
 together into a view.  Additional clade lists for more views.
 The short and long lables will need attention in the result.
@@ -21,9 +23,20 @@ And the default on/off visibilities.\n";
 my $netType = shift;
 my $trackName = shift;
 my $thisDb = shift;
+my $nameList = shift;
 printf STDERR "# net type: '%s'\n", $netType;
 printf STDERR "# track name: '%s'\n", $trackName;
 printf STDERR "# thisDb '%s'\n", $thisDb;
+printf STDERR "# nameList '%s'\n", $nameList;
+my $trackType = "";
+$trackType = "Syn" if ($netType =~ m/syn/);
+$trackType = "RBest" if ($netType =~ m/rbest/);
+my $trackLabel = "";
+$trackLabel = "Syntenic" if ($netType =~ m/syn/);
+$trackLabel = "RecipBest" if ($netType =~ m/rbest/);
+my $shortLabel = "";
+$shortLabel = "sy" if ($netType =~ m/syn/);
+$shortLabel = "rb" if ($netType =~ m/rbest/);
 my $dbPrefix = $thisDb;
 $dbPrefix =~ s/[0-9]+$//;
 my @cladeLists;
@@ -34,11 +47,28 @@ my %speciesOrder;	# key is db, value is sNNN to get species order
 my %cladeOrder;		# key is clade name, value is cNNN to get clade order
 my %dbClade;		# key is db, value is clade
 my %rrActive;		# key is db, value is 1 for active on RR
-my %chainNetHg;		# chainNet tracks on hg38, hg19, key is db, value is 1
+my %chainNetHg;		# chainNet tracks on RR for given db
+my %nameList;	# key is genome db or asmId, value is common name
+my %existingTableList;	# key is table name, value is 1
+my $thisTableCount = 0;
 
+printf STDERR "# reading nameList: %s\n", $nameList;
+open (FH, "<$nameList") or die "can not read $nameList";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($key, $value) = split('\t', $line);
+  $value =~ s/ /_/g;
+  $nameList{$key} = $value;
+  my $tableName = sprintf("chain%s%s", $trackType, $key);
+  $existingTableList{$tableName} = 1;
+  ++$thisTableCount;
+}
+close (FH);
 my @rrDbList;
 
-open (FH, "HGDB_CONF=$ENV{'HOME'}/.hg.mysqlrr.conf hgsql -N -e 'show databases;' hg19|") or die "can not hgsql show databases hg19";
+printf STDERR "# show databases for RR\n";
+# open (FH, "HGDB_CONF=$ENV{'HOME'}/.hg.hgw1.conf hgsql -N -e 'show databases;' hg19|") or die "can not hgsql show databases hg19";
+open (FH, "ssh qateam\@hgw1 'HGDB_CONF=`pwd`/.hg.local.conf /home/qateam/bin/x86_64/hgsql -N -e \"show databases;\" hg19'|") or die "can not hgsql show databases hg19";
 while (my $db = <FH>) {
   chomp $db;
   if ($db =~ m/^$dbPrefix/) {
@@ -46,9 +76,6 @@ while (my $db = <FH>) {
   }
 }
 close (FH);
-
-my %existingTableList;	# key is table name, value is 1
-my $thisTableCount = 0;
 
 printf STDERR "# show tables on db '%s'\n", $thisDb;
 open (FH, "HGDB_CONF=$ENV{'HOME'}/.hg.conf hgsql -N -e 'show tables;' $thisDb|") or die "can not hgsql show tables $thisDb";
@@ -64,7 +91,7 @@ printf STDERR "# database %s table count: %s\n", $thisDb, $thisTableCount;
 
 foreach my $db (@rrDbList) {
   printf STDERR "# reading tables from %s\n", $db;
-  open (FH, "HGDB_CONF=$ENV{'HOME'}/.hg.mysqlrr.conf hgsql -e 'show tables;' $db | grep -i chain | grep Link | egrep -i -v 'self|patch' | sed -e 's/chain//; s/Link//;'|") or die "can not hgsql show tables $db";
+  open (FH, "ssh qateam\@hgw1 'HGDB_CONF=`pwd`/.hg.local.conf /home/qateam/bin/x86_64/hgsql -e \"show tables;\" $db | grep -i chain | grep Link | egrep -i -v \"self|patch\" | sed -e \"s/chain//; s/Link//;\"'|") or die "can not hgsql show tables $db";
   while (my $line = <FH>) {
     chomp $line;
   #  printf STDERR "# %s\n", lcfirst($line);
@@ -120,7 +147,14 @@ foreach my $clade (@cladeNames) {
      my $commonName = `hgsql -N -e 'select organism from dbDb where name=\"$db\";' hgcentraltest`;
      chomp $commonName;
      $commonName =~ s/ /_/g;
-     $commonName = $db if (length($commonName) < 1);
+#     $commonName = $db if (length($commonName) < 1);
+     if (length($commonName) < 1) {
+       if (defined($nameList{$db})) {
+         $commonName = $nameList{$db};
+       } else {
+         $commonName = $db;
+       }
+     }
      printf STDERR "# %s\t%s\ts%03d=%s\n", $clade, $db, $speciesCount, $commonName;
      $speciesOrder{$db} = sprintf("s%03d", $speciesCount);
      $subGroup2 .= sprintf(" s%03d=%s", $speciesCount, $commonName);
@@ -131,16 +165,6 @@ foreach my $clade (@cladeNames) {
 
 printf STDERR "# %s\n", $subGroup2;
 printf STDERR "# %s\n", $subGroup3;
-
-my $trackType = "";
-$trackType = "Syn" if ($netType =~ m/syn/);
-$trackType = "RBest" if ($netType =~ m/rbest/);
-my $trackLabel = "";
-$trackLabel = "Syntenic" if ($netType =~ m/syn/);
-$trackLabel = "RecipBest" if ($netType =~ m/rbest/);
-my $shortLabel = "";
-$shortLabel = "sy" if ($netType =~ m/syn/);
-$shortLabel = "rb" if ($netType =~ m/rbest/);
 
 printf 'track %s%sChainNet
 compositeTrack on

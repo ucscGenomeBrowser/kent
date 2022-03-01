@@ -64,24 +64,14 @@ void chromAliasJsonOutput(struct chromAlias *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct hash *chromAliasMakeLookupTable(char *database);
-/* Given a database name and a connection to that database, construct a lookup table
- * that takes chromosome alias names to a matching struct chromAlias.  Returns NULL
- * if the given database does not have a chromAlias table. */
-
-struct hash *chromAliasMakeReverseLookupTable(char *database);
-/* Given a database name and a connection to that database, construct a lookup table
- * that takes the actual assembly chromosome names to struct chromAliases.  Because a
- * chromosome name may well have multiple aliases, repeated calls to hashLookupNext
- * may be required to see them all.  Returns NULL if the given database does not have
- * a chromAlias table. */
 
 void chromAliasSetup(char *database);
 /* Read in the chromAlias file/table for this database. */
 
-struct hash *chromAliasChromToAliasHash(char *database);
-/* Get the hash that maps chrom names to their aliases. */
+char *chromAliasFindNative(char *name);
+/* Find the native seqName for a given alias. */
 
-struct hash *chromAliasAliasToChromHash(char *database);
-/* Get the hash that maps alias names to their chroms. */
+struct slName *chromAliasFindAliases(char *seqName);
+/* Get the list of aliases for this sequence name. */
+
 #endif /* CHROMALIAS_H */

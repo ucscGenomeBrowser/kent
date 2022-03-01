@@ -47,7 +47,7 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
     $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.pb \
         --max-parsimony 20 \
         --max-branch-length 45 \
-        --max-path-length 100 \
+        --max-path-length 150 \
         -O -o gisaidAndPublic.$today.masked.pb
 fi
 

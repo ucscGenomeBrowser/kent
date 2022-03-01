@@ -177,7 +177,7 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
 char *fileName = bbiNameFromSettingOrTable(tdb, NULL, tdb->table);
-struct bbiFile *bbi =  bigBedFileOpenAlias(hReplaceGbdb(fileName), chromAliasChromToAliasHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(hReplaceGbdb(fileName), chromAliasFindAliases);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 struct bigBedInterval *bb;
@@ -264,7 +264,7 @@ printf("<table border = \"1\" width = \"640\">\n");  // init table
 printf("<tr><th>exon</th><th>pos</th><th>m_class</th><th>mut</th><th>is_inact</th><th>mut_id</th>\n");
 printf("</tr>\n");
 fileName = trackDbSetting(tdb, "inactMutUrl");
-bbi =  bigBedFileOpenAlias(hReplaceGbdb(fileName), chromAliasChromToAliasHash(database));
+bbi =  bigBedFileOpenAlias(hReplaceGbdb(fileName), chromAliasFindAliases);
 //struct lm *lm = lmInit(0);
 bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 for (bb = bbList; bb != NULL; bb = bb->next)
@@ -307,7 +307,7 @@ printf("<h4>Exons data</h4><BR>\n");
 printf("<a data-toggle=\"collapse\" href=\"#collapseExons\">Show exon sequences and features</a>\n");
 printf("<div id=\"collapseExons\" class=\"panel-collapse collapse\">\n");
 fileName = trackDbSetting(tdb, "nuclUrl");
-bbi =  bigBedFileOpenAlias(hReplaceGbdb(fileName), chromAliasChromToAliasHash(database));
+bbi =  bigBedFileOpenAlias(hReplaceGbdb(fileName), chromAliasFindAliases);
 //struct lm *lm = lmInit(0);
 bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 for (bb = bbList; bb != NULL; bb = bb->next)
