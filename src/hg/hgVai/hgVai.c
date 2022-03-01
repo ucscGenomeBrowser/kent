@@ -41,6 +41,7 @@
 #include "annoStreamVcf.h"
 #include "windowsToAscii.h"
 #include "obscure.h"
+#include "chromAlias.h"
 
 #include "libifyMe.h"
 
@@ -3040,6 +3041,7 @@ if (startsWith(    MULTI_REGION_CHROM, cartUsualString(cart, "position", ""))
 
 /* Set up global variables. */
 getDbAndGenome(cart, &database, &genome, oldVars);
+chromAliasSetup(database);
 initGenbankTableNames(database);
 regionType = cartUsualString(cart, hgvaRegionType, hgvaRegionTypeGenome);
 if (isEmpty(cartOptionalString(cart, hgvaRange)))
