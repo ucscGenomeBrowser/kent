@@ -530,6 +530,13 @@ function setMYCNF ()
     echo Found Mariadb config file: $MYCNF
 }
 
+function mysqlStrictModeOff () 
+{
+# make sure that missing values in mysql insert statements do not trigger errors, #18368 = deactivate strict mode
+setMYCNF
+sed -Ei '/^.(mysqld|server).$/a sql_mode='  $MYCNF
+}
+
 function mysqlAllowOldPasswords
 # mysql >= 8 does not allow the old passwords anymore. But our client is still compiled
 # with the old, non-SHA256 encryption. So we must deactivate this new feature.
@@ -774,8 +781,7 @@ function installRedhat () {
         SET_MYSQL_ROOT=1
 
         # make sure that missing values in Mysql insert statements do not trigger errors, #18368: deactivate strict mode
-	setMYCNF
-        sed -Ei '/^.(mysqld|server).$/a sql_mode=' $MYCNF
+        mysqlStrictModeOff
     else
         echo2 Mysql already installed
     fi
@@ -1029,9 +1035,8 @@ function installDebian ()
 	# -> we require mariaDb now
         # apt-get --assume-yes install mysql-server
         apt-get --assume-yes install mariadb-server
-        # make sure that missing values do not trigger errors, #18368: deactivate strict mode
-	setMYCNF
-        sed -Ei '/^.(mysqld|server).$/a'  $MYCNF
+
+        mysqlStrictModeOff
         # flag so script will set mysql root password later to a random value
         SET_MYSQL_ROOT=1
     fi
