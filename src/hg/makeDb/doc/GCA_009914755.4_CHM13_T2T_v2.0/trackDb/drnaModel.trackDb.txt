@@ -1,0 +1,11 @@
+track drnaModel
+shortLabel rDNA models
+longLabel Consensus rDNA models
+priority 10
+group map
+type bigBed 9 35
+visibility hide
+itemRgb on
+maxItems 100000
+bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.drnaModel/drnaModel.bb
+html html/GCA_009914755.4_CHM13_T2T_v2.0.drnaModel.html

@@ -14,16 +14,17 @@ staging URL
    kentDir=${HOME}/compbio/t2t/projs/chm13-v2.0/kent
 
 ================================================================
-2022-02-22 ucscChromNamed   markd
+ucscChromNames (2022-02-22 markd)
 ----------------------------------------------------------------
-chromosome sizes files with UCSC names
+Chromosome sizes files with UCSC names for building other tracks,
+not a track in the browser
     t2t-chm13-v2.0.2bit
     t2t-chm13-v2.0.fa.gz
     t2t-chm13-v2.0.sizes
     t2t-chm13-v2.0.sizes3
 
 ================================================================
-2022-02-21 proseq  markd
+proseq  (2022-02-21 markd)
 ----------------------------------------------------------------
 Supplied by Savannah Hoyt <savannah.klein@uconn.edu>
 from T2T Globus /team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/PROseq_Bowtie2/
@@ -40,25 +41,51 @@ renaming files for
     PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_pos.bigwig                                 -> PROseq_k100_dual_21mer_pos.bw
 
 ================================================================
-2022-02-22 cytoBandsMapped from T2T  markd
+cytoBandsMapped (2022-02-22 markd)
 ----------------------------------------------------------------
 cytoBand tracks from T2T project mapped from GRCh38
 Supplied by Nick Altemose <nickaltemose@gmail.com>
 Delivered via Slack
 trackData/cytoBandMapped
 
-bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/cytoBand.as chm13v2.0_cytobands_allchrs.bed ../ucscChromNamed/t2t-chm13-v2.0.sizes cytoBandMapped.bb
+bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/cytoBand.as chm13v2.0_cytobands_allchrs.bed ../ucscChromNames/t2t-chm13-v2.0.sizes cytoBandMapped.bb
 
 ================================================================
-2022-02-24 sedefSegDups  markd
+sedefSegDups (2022-02-24 markd)
 ----------------------------------------------------------------
 Supplied by Mitchell Robert Vollger <mvollger@uw.edu>
 team-segdups/Assembly_analysis/SEDEF/T2T-CHM13v2.SDs.bed
 
-    bedToBigBed -as=${kentDir}/src/hg/makeDb/doc/GCA_009914755.4_CHM13_T2T_v2.0/schema/sedefSegDups.as -type=bed9+ T2T-CHM13v2.SDs.bed ../ucscChromNamed/t2t-chm13-v2.0.sizes sedefSegDups.bb
+    bedToBigBed -as=${kentDir}/src/hg/makeDb/doc/GCA_009914755.4_CHM13_T2T_v2.0/schema/sedefSegDups.as -type=bed9+ T2T-CHM13v2.SDs.bed ../ucscChromNames/t2t-chm13-v2.0.sizes sedefSegDups.bb
 
 
 ================================================================
+rdnaModel (2022-03-02 markd)
+----------------------------------------------------------------
+from Adam Phillippy
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/chm13v1.1.rdna_model.bed
+
+    bedToBigBed -type=bed4 chm13v1.1.rdna_model.bed ../ucscChromNames/t2t-chm13-v2.0.sizes rdnaModel.bb
+
+================================================================
 pending:
+
+- isoseq BAMs
+  http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/out-t2t-chrY-augPB/assemblyHub/CHM13/
+  @PG   ID:minimap2   PN:minimap2   VN:2.22-r1105-dirty   CL:minimap2 -ax splice -f 1000 --sam-hit-only --secondary=no --eqx -K 100M -t 8 --cap-sw-mem=3g chm13v2.0.chrY.fasta HG002-NA24385-LCL-polished_isoforms_hq.fasta
+  globus /HG002-IsoSeq
+
+- HAL http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/t2tChm13.v2.0.hal
+
+- Savannah Hoyt
+  I have included the updated PRO-seq and RNA-seq trackDescriptions and tracks
+  for chm13v2.0 and they are in these respective directories on Globus (and
+  listed in the google spreadsheet with their specific file
+  names)
+/team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/RNAseq_Bowtie2/
+/team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/PROseq_Bowtie2/
+
+
+If you mean the one we discussed on Feb 20th, then yes! I had just updated the trackDescription a bit after running it by @Arang Rhie first :slightly_smiling_face: And then followed the same formatting/set-up for the RNA-seq.
 
 ================================================================

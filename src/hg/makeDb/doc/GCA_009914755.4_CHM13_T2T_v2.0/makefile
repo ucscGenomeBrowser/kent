@@ -7,7 +7,7 @@ stageUrl = https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_00991475
 
 userTrackDbFile = ${asmBuildDir}/${asmid}.userTrackDb.txt
 
-tracks = proseq cytoBandMapped sedefSegDups
+tracks = proseq cytoBandMapped sedefSegDups rdnaModel
 
 tracksWithHtml = $(filter-out cytoBandMapped,${tracks})
 
