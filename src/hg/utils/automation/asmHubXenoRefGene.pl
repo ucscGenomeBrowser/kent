@@ -28,19 +28,12 @@ my $asmId = shift;
 my $namesFile = shift;
 my $trackDataDir = shift;
 my $xenoRefGeneBbi = "$trackDataDir/xenoRefGene/$asmId.xenoRefGene.bb";
-my $asmType = "refseq";
 
 if ( ! -s $xenoRefGeneBbi ) {
   printf STDERR "ERROR: can not find $asmId.xenoRefGene.bb file\n";
   exit 255;
 }
 
-my @partNames = split('_', $asmId);
-my $ftpDirPath = sprintf("%s/%s/%s/%s/%s", $partNames[0],
-   substr($partNames[1],0,3), substr($partNames[1],3,3),
-   substr($partNames[1],6,3), $asmId);
-
-$asmType = "genbank" if ($partNames[0] =~ m/GCA/);
 my $totalBases = `ave -col=2 $trackDataDir/../${asmId}.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`;
 chomp $totalBases;
 my $geneStats = `cat $trackDataDir/xenoRefGene/${asmId}.xenoRefGene.stats.txt | awk '{printf "%d\\n", \$2}' | xargs echo`;

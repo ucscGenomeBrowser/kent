@@ -746,3 +746,38 @@ if [ "${lz}" -gt 0 ]; then
   fi
 fi
 
+###################################################################
+# crisprAll track
+
+if [ -s ${buildDir}/trackData/crisprAll/crispr.bb ]; then
+
+rm -f $buildDir/bbi/${asmId}.crisprAll.bb
+rm -f $buildDir/bbi/${asmId}.crisprAllDetails.tab
+ln -s ../trackData/crisprAll/crispr.bb ${buildDir}/bbi/${asmId}.crisprAll.bb
+ln -s ../trackData/crisprAll/crisprDetails.tab $buildDir/bbi/${asmId}.crisprAllDetails.tab
+
+printf "track crisprAllTargets
+visibility hide
+shortLabel CRISPR Targets
+longLabel CRISPR/Cas9 -NGG Targets, whole genome
+group genes
+type bigBed 9 +
+html html/%s.crisprAll
+itemRgb on
+mouseOverField _mouseOver
+scoreLabel MIT Guide Specificity Score
+bigDataUrl bbi/%s.crisprAll.bb
+# details page is not using a mysql table but a tab-sep file
+detailsTabUrls _offset=bbi/%s.crisprAllDetails.tab
+url http://crispor.tefor.net/crispor.py?org=\$D&pos=\$S:\${&pam=NGG
+urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
+tableBrowser noGenome
+noGenomeReason This track is too big for whole-genome Table Browser access, it would lead to a timeout in your internet browser. Please see the CRISPR Track documentation, the section \"Data Access\", for bulk-download options. Contact us if you encounter difficulties with downloading the data.
+denseCoverage 0
+scoreFilterMax 100
+" "${asmId}" "${asmId}" "${asmId}"
+
+$scriptDir/asmHubCrisprAll.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.crisprAll.html
+
+fi
+

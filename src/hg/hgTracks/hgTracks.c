@@ -7384,7 +7384,8 @@ return (startsWith("big", track->tdb->type)
      // XX code-review: shouldn't we error abort if the URL is not valid?
      && (bdu && isValidBigDataUrl(bdu, FALSE))
      && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
-     && (track->subtracks == NULL);
+     && (track->subtracks == NULL)
+     && (!startsWith("bigMaf", track->tdb->type));
 }
 
 static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList)

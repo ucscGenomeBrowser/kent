@@ -1180,14 +1180,14 @@ vcfToBed dogSNPs.vcf.gz dogSNPs3Flags -fields=VC,SID,RS_VALIDATED
 # VC=Variant Class, SID=Submitter ID,  RS_VALIDATED=validated from dbSNP 
 
 wc -l *bed
- 5655126 dogSNPs3Flags.bed
-[kuhn@hgwdev release3]$ wc -l *vcf
-5655174 GCA_000002285.2_current_ids.vcf
+# 5655126 dogSNPs3Flags.bed
+wc -l *vcf
+# 5655174 GCA_000002285.2_current_ids.vcf
 
 # sort file
 bedSort dogSNPs3Flags.bed dogSNPs3Flags.bed
 
-[kuhn@hgwdev release3]$ head -2 dogSNPs3Flags.bed
+head -2 dogSNPs3Flags.bed
 #chrom  chromStart      chromEnd        name    score   strand  thickStart      thickEnd        itemRgb ref     alt     FILTER  VC      SID     RS_VALIDATED
 #chr1    111     112     rs850979046     0       .       111     112     0,0,0   A       G       .       SO:0001483      BROAD_VGB_CANINE_PON_SNP_DISCOVERY
 
@@ -1196,9 +1196,9 @@ cat dogSNPs3Flags.bed \
   | awk -F"\t" '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$10"\t"$11"\t"$13"\t"$14"\t"$15}' \
   > evaSnps1.bed
 
-[kuhn@hgwdev release3]$ head evaSnps1.bed
+head evaSnps1.bed
 #chrom  chromStart      chromEnd        name    score   strand  ref     alt     VC      SID     RS_VALIDATED
-chr1    111     112     rs850979046     0       .       A       G       SO:0001483      BROAD_VGB_CANINE_PON_SNP_DISCOVERY
+# chr1    111     112     rs850979046     0       .       A       G       SO:0001483      BROAD_VGB_CANINE_PON_SNP_DISCOVERY
 
 # add "No" to last column where needed (RS_VALIDATED)
 cat evaSnps1.bed \
@@ -1206,17 +1206,16 @@ cat evaSnps1.bed \
               else          { print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$7"\t"$8"\t"$9"\t"$10"\t"$11; }}' \
    > evaSnps2.bed 
    
-[kuhn@hgwdev release3]$ head evaSnps2.bed
+head evaSnps2.bed
 #chrom  chromStart      chromEnd        name    score   strand  ref     alt     VC      SID     No
-chr1    111     112     rs850979046     0       .       A       G       SO:0001483      BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
+# chr1    111     112     rs850979046     0       .       A       G       SO:0001483      BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
 
-[kuhn@hgwdev release3]$ cat evaSnps2.bed | awk -F"\t" '{print $11}' | sort | uniq -c
-4644128 No
-1010998 Yes
+cat evaSnps2.bed | awk -F"\t" '{print $11}' | sort | uniq -c
+# 4644128 No
+# 1010998 Yes
 
 # replace Sequence Ontology  "SO:" IDs with actual snp types
-
-[kuhn@hgwdev data]$ cat evaSnps2.bed \
+cat evaSnps2.bed \
   | sed "s/SO:0001483/substitution/" \
   | sed "s/SO:0000159/deletion/" \
   | sed "s/SO:0000667/insertion/" \
@@ -1224,83 +1223,80 @@ chr1    111     112     rs850979046     0       .       A       G       SO:00014
   | sed "s/SO:0002007/multipleNucleotideSubstitution/" \
   | sed "s/SO:1000032/delins/" > evaSnps3.bed
 
-[kuhn@hgwdev release3]$ cat evaSnps3.bed | awk '{print $9}' | sort | uniq -c | sort -nr
-4713243 substitution
- 474379 deletion
- 467490 insertion
-      7 tandemRepeat
-      5 delins
-      1 multipleNucleotideSubstitution
-      1 VC
+cat evaSnps3.bed | awk '{print $9}' | sort | uniq -c | sort -nr
+# 4713243 substitution
+#  474379 deletion
+#  467490 insertion
+#       7 tandemRepeat
+#       5 delins
+#       1 multipleNucleotideSubstitution
+#       1 VC
 
 # still has header row (VC)
 
-[kuhn@hgwdev release3]$ head evaSnps3.bed
+head evaSnps3.bed
 #chrom  chromStart      chromEnd        name    score   strand  ref     alt     VC      SID     No
-chr1    111     112     rs850979046     0       .       A       G       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
+# chr1    111     112     rs850979046     0       .       A       G       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
 
 # make bigBed
-[kuhn@hgwdev data]$ bedToBigBed -tab -as=../evaSnp.as -type=bed6+5 -extraIndex=name evaSnps3.bed ../chromInfo.txt evaSnp.bb
+bedToBigBed -tab -as=../evaSnp.as -type=bed6+5 -extraIndex=name evaSnps3.bed ../chromInfo.txt evaSnp.bb
 
 # error msg:
-evaSnpsr.bed is not sorted at line 115.  Please use "sort -k1,1 -k2,2n" or bedSort and try again.
+# evaSnpsr.bed is not sorted at line 115.  Please use "sort -k1,1 -k2,2n" or bedSort and try again.
 # ?? but it =looks= sorted there:
 
-114 chr1    6189    6189    rs851043138     0       .       T       TAG     insertion       BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
-115 chr1    6188    6189    rs852166058     0       .       T       G       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
-116 chr1    6193    6194    rs851187136     0       .       G       A       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
+# j114 chr1    6189    6189    rs851043138     0       .       T       TAG     insertion       BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
+# 115 chr1    6188    6189    rs852166058     0       .       T       G       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
+# 116 chr1    6193    6194    rs851187136     0       .       G       A       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
 
 bedSort evaSnps3.bed evaSnps4.bed
-
-# moved chromInfo.txt and evaSnp.as to local directory
-cp ../chromInfo.txt .
-cp ../evaSnp.as .
 
 # trackDb/ra entry:
 cd kent/src/hg/makeDb/trackDb/dog/canFam3/trackDb.ra
 
-track evaSnp
-shortLabel EVA SNP Release 3
-longLabel Short Genetic Variants from European Variant Archive Release 3
-type bigBed 6 +
-group varRep
-visibility pack
-bigDataUrl /gbdb/canFam3/bbi/evaSnp.bb
-url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
+# track evaSnp
+# shortLabel EVA SNP Release 3
+# longLabel Short Genetic Variants from European Variant Archive Release 3
+# type bigBed 6 +
+# group varRep
+# visibility pack
+# bigDataUrl /gbdb/canFam3/bbi/evaSnp.bb
+# url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
 
 # adding search in trackDb.ra (thanks jonathan):
 # added the following to dog/canFam3/trackDb.ra
 
-search works.
-searchTable evaSnp
-searchType bigBed
-searchMethod exact
-padding 50
+# searchTable evaSnp
+# searchType bigBed
+# searchMethod exact
+# padding 50
 
-[kuhn@hgwdev release3]$ bedToBigBed -tab -as=evaSnp.as -type=bed6+5 -extraIndex=name evaSnps4.bed chromInfo.txt evaSnp.bb
-pass1 - making usageList (39 chroms): 1815 millis
-pass2 - checking and writing primary data (5655125 records, 11 fields): 19207 millis
-Sorting and writing extra index 0: 4299 millis
-[kuhn@hgwdev release3]$ 
-[kuhn@hgwdev release3]$ bigBedInfo evaSnp.bb
-version: 4
-fieldCount: 11
-hasHeaderExtension: yes
-isCompressed: yes
-isSwapped: 0
-extraIndexCount: 1
-itemCount: 5,655,125
-primaryDataSize: 78,986,590
-primaryIndexSize: 365,236
-zoomLevels: 10
-chromCount: 39
-basesCovered: 6,322,774
-meanDepth (of bases covered): 1.025209
-minDepth: 1.000000
-maxDepth: 14.000000
-std of depth: 0.217172
+# search works:
 
-# copy to active directory for track
+bedToBigBed -tab -as=evaSnp.as -type=bed6+5 -extraIndex=name evaSnps4.bed chromInfo.txt evaSnp.bb
+# pass1 - making usageList (39 chroms): 1815 millis
+# pass2 - checking and writing primary data (5655125 records, 11 fields): 19207 millis
+# Sorting and writing extra index 0: 4299 millis
+
+bigBedInfo evaSnp.bb
+# version: 4
+# fieldCount: 11
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 1
+# itemCount: 5,655,125
+# primaryDataSize: 78,986,590
+# primaryIndexSize: 365,236
+# zoomLevels: 10
+# chromCount: 39
+# basesCovered: 6,322,774
+# meanDepth (of bases covered): 1.025209
+# minDepth: 1.000000
+# maxDepth: 14.000000
+# std of depth: 0.217172
+
+# copy to active /gbdb directory for track
 cp evaSnp.bb /cluster/data/canFam3/bed/evaSnp/evaSnp.bb
 
 # make gbdb symlink
@@ -1308,7 +1304,7 @@ cd /gbdb/canFam3/bbi
 ln -s /cluster/data/canFam3/bed/evaSnp/evaSnp.bb evaSnp.bb
 
 # submitters
-[kuhn@hgwdev release3]$ cat evaSnps4.bed | awk '{print $10}' | sed -e "s/,/\n/g" | sort | uniq -c | sort -r
+cat evaSnps4.bed | awk '{print $10}' | sed -e "s/,/\n/g" | sort | uniq -c | sort -r
 3492428 BROAD_VGB_CANINE_PON_SNP_DISCOVERY
 2458565 BROAD_DBSNP.2005.2.4.16.57
  697053 TIGR_1.0
@@ -1317,8 +1313,8 @@ ln -s /cluster/data/canFam3/bed/evaSnp/evaSnp.bb evaSnp.bb
      94 AMOUCD_MAL_20+TERV_1
 ...
 
-[kuhn@hgwdev release3]$ cat evaSnps4.bed | awk '{print $10}' | sed -e "s/,/\n/g" | sort | uniq -c | sort -r
-52
+cat evaSnps4.bed | awk '{print $10}' | sed -e "s/,/\n/g" | sort | uniq -c | sort -r
+# 52
 
 # 52 different submitters.  most from a few places, mostly the Broad
 

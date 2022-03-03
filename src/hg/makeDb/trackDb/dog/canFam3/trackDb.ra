@@ -24,8 +24,15 @@ group varRep
 visibility pack
 bigDataUrl /gbdb/canFam3/bbi/evaSnp.bb
 url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
+filterValues.valid No,Yes
+filterType.valid multiple
+filterValues.class deletion,delins,insertion,multipleNucleotideSubstitution,substitution,tandemRepeat
+filterType.class multiple
 
 searchTable evaSnp
 searchType bigBed
 searchMethod exact
 padding 50
+
+
+
