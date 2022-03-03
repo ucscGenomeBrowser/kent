@@ -1187,7 +1187,7 @@ wc -l *vcf
 # sort file
 bedSort dogSNPs3Flags.bed dogSNPs3Flags.bed
 
-[kuhn@hgwdev release3]$ head -2 dogSNPs3Flags.bed
+head -2 dogSNPs3Flags.bed
 #chrom  chromStart      chromEnd        name    score   strand  thickStart      thickEnd        itemRgb ref     alt     FILTER  VC      SID     RS_VALIDATED
 #chr1    111     112     rs850979046     0       .       111     112     0,0,0   A       G       .       SO:0001483      BROAD_VGB_CANINE_PON_SNP_DISCOVERY
 
