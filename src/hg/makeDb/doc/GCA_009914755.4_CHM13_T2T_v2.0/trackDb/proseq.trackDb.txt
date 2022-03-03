@@ -1,7 +1,7 @@
 track proseq
 compositeTrack off
 visibility hide
-shortLabel PROseq CHM13
+shortLabel CHM13 PROseq
 longLabel CHM13 PROseq stranded with unique genome-wide kmer filtering
 color 255,0,0
 altColor 0,0,255
@@ -10,70 +10,70 @@ group rna
 priority 30
 html html/GCA_009914755.4_CHM13_T2T_v2.0.proseq.html
     
-    track PROseq-AB_default_POS
+    track proseq_default_POS
     parent proseq
-    shortLabel PROseq-AB default POS
-    longLabel PROseq-AB default POS no kmer filtering
+    shortLabel PROseq default POS
+    longLabel PROseq default POS no kmer filtering
     type bigWig 
     visibility dense
     bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_default_pos.bw
 
-    track PROseq-AB_default_NEG
+    track proseq_default_NEG
     parent proseq
-    shortLabel PROseq-AB default NEG
-    longLabel PROseq-AB default NEG no kmer filtering
+    shortLabel PROseq default NEG
+    longLabel PROseq default NEG no kmer filtering
     type bigWig 
     visibility dense
     negateValues off
     bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_default_neg.bw
 
-    track PROseq-AB_k100_POS
+    track proseq_k100_POS
     parent proseq
-    shortLabel PROseq-AB k100 POS
-    longLabel PROseq-AB k100 POS no kmer filtering
+    shortLabel PROseq k100 POS
+    longLabel PROseq k100 POS no kmer filtering
     type bigWig 
     visibility dense
     negateValues on
     bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_k100_pos.bw
 
-    track PROseq-AB_k100_NEG
+    track proseq_k100_NEG
     parent proseq
-    shortLabel PROseq-AB k100 NEG
-    longLabel PROseq-AB k100 NEG no kmer filtering
+    shortLabel PROseq k100 NEG
+    longLabel PROseq k100 NEG no kmer filtering
     type bigWig 
     visibility dense
     bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_k100_neg.bw
     
-    track PROseq-AB_k100-21mer_POS
+    track proseq_k100-21mer_POS
     parent proseq
-    shortLabel PROseq-AB k100-21mer POS
-    longLabel PROseq-AB k100 POS 21mer filtering
+    shortLabel PROseq k100-21mer POS
+    longLabel PROseq k100 POS 21mer filtering
     type bigWig 
     visibility dense
     negateValues off
     bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_k100_21mer_pos.bw
 
-    track PROseq-AB_k100-21mer_NEG
+    track proseq_k100-21mer_NEG
     parent proseq
-    shortLabel PROseq-AB k100-21mer NEG
-    longLabel PROseq-AB k100 NEG 21mer filtering
+    shortLabel PROseq k100-21mer NEG
+    longLabel PROseq k100 NEG 21mer filtering
     type bigWig 
     visibility dense
     negateValues on
     bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_k100_21mer_neg.bw
 
-    track PROseq-AB_k100-dual-21mer_POS
+    track proseq_k100-dual-21mer_POS
     parent proseq
-    shortLabel PROseq-AB k100-dual-21mer POS
-    longLabel PROseq-AB k100 POS dual 21mer filtering
+    shortLabel PROseq k100-dual-21mer POS
+    longLabel PROseq k100 POS dual 21mer filtering
     type bigWig 
     visibility dense
     bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_k100_dual-21mer_pos.bw
     
-    track PROseq-AB_k100-dual-21mer_NEG
+    track proseq_k100-dual-21mer_NEG
     parent proseq
-    shortLabel PROseq-AB k100-dual-21mer NEG
-    longLabel PROseq-AB k100 NEG dual 21mer filtering
+    shortLabel PROseq k100-dual-21mer NEG
+    longLabel PROseq k100 NEG dual 21mer filtering
     type bigWig 
     visibility dense
     negateValues off

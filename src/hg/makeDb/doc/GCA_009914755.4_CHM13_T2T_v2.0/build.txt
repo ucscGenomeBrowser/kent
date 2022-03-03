@@ -24,13 +24,13 @@ not a track in the browser
     t2t-chm13-v2.0.sizes3
 
 ================================================================
-proseq  (2022-02-21 markd)
+proseq (2022-02-21 markd)
 ----------------------------------------------------------------
 Supplied by Savannah Hoyt <savannah.klein@uconn.edu>
 from T2T Globus /team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/PROseq_Bowtie2/
 trackData/proseq
 
-renaming files for 
+renaming files to something not as long
     CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-chm13v1.1_neg.bigwig                              -> PROseq_default_neg.bw
     CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-chm13v1.1_pos.bigwig                              -> PROseq_default_pos.bw
     CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_meryl-21mer-chm13v1.1_neg.bigwig   -> PROseq_k100_21mer_neg.bw
@@ -39,6 +39,18 @@ renaming files for
     CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_pos.bigwig                         -> PROseq_k100_pos.bw
     PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_neg.bigwig                                 -> PROseq_k100_dual_21mer_neg.bw
     PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_pos.bigwig                                 -> PROseq_k100_dual_21mer_pos.bw
+
+================================================================
+rnaseq (2022-03-02 markd)
+----------------------------------------------------------------
+Supplied by Savannah Hoyt <savannah.klein@uconn.edu>
+/team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/RNAseq_Bowtie2/
+
+renaming files to something not as long
+    CHM13_S182-183_rnaseq_cutadapt-q20-m100_bt2-chm13v1.1_F1548.bigwig                               -> RNAseq_default.bw
+    CHM13_S182-183_rnaseq_cutadapt-q20-m100_bt2-k100-chm13v1.1_F1548.bigwig                          -> RNAseq_k100.bw
+    CHM13_S182-S183_rnaseq_cutadapt-q20-m100_bt2-k100-chm13v1.1-F1548_meryl-21mer-chm13v1.1.bigwig   -> RNAseq_k100_21mer.bw
+    RNAseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1.bigwig                                     -> RNAseq_k100_dual_21mer.bw
 
 ================================================================
 cytoBandsMapped (2022-02-22 markd)
