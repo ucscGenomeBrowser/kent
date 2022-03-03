@@ -382,7 +382,7 @@ if (bbi == NULL)
     #include "gbib.c"
     #endif
 
-    bbi = track->bbiFile = bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
+    bbi = track->bbiFile = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
     }
 return bbi;
 }

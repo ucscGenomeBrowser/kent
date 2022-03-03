@@ -115,7 +115,7 @@ static void bigWigOpenCatch(struct track *tg, char *fileName)
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    struct bbiFile *bbiFile = bigWigFileOpenAlias(fileName, chromAliasChromToAliasHash(database));
+    struct bbiFile *bbiFile = bigWigFileOpenAlias(fileName, chromAliasFindAliases);
     slAddHead(&tg->bbiFile, bbiFile);
     }
 errCatchEnd(errCatch);

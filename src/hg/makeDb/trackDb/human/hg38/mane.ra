@@ -1,9 +1,9 @@
 track mane
-bigDataUrl /gbdb/hg38/mane/mane.0.95.bb
-shortLabel MANE select v0.95
-longLabel NCBI RefSeq and Ensembl transcripts from the MANE Project (v0.95)
+bigDataUrl /gbdb/hg38/mane/mane.1.0.bb
+shortLabel MANE select v1.0
+longLabel NCBI RefSeq and Ensembl transcripts from the MANE Project (v1.0)
 searchIndex name
-searchTrix /gbdb/hg38/mane/mane.0.95.ix
+searchTrix /gbdb/hg38/mane/mane.1.0.ix
 type bigGenePred
 visibility hide
 group genes
@@ -15,6 +15,6 @@ urls name2="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" geneNa
 
 searchTable mane
 searchType bigBed
-searchDescription NCBI RefSeq and Ensembl transcripts from the MANE Project (v0.95)
+searchDescription NCBI RefSeq and Ensembl transcripts from the MANE Project (v1.0)
 searchPriority 1.3
 

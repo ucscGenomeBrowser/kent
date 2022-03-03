@@ -60,7 +60,8 @@ join -t$'\t' -a 1 -1 2 -o 1.1,1.2,1.3,2.2 \
 cut -f 1,2 epiToPublicAndDate.$today \
 | egrep $'\t''[A-Z][A-Z][0-9]+\.[0-9]+' \
 | sort > latestEpiToGb
-tail -n+2 ~angie/github/ncov-ingest/source-data/accessions.tsv \
+zcat ~angie/github/ncov-ingest/source-data/accessions.tsv.gz \
+| tail -n+2 \
 | tawk '{print $2, $1;}' \
 | sort > ncovEpiToGb
 wc -l latestEpiToGb ncovEpiToGb

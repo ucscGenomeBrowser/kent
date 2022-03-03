@@ -57,6 +57,7 @@ mouseOverField comments
 group uniprot
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
+baseColorDefault genomicCodons
 itemRgb on
 html uniprotCov2
 

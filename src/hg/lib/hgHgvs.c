@@ -1023,7 +1023,7 @@ struct bbiFile *bbi = NULL;
 char fileName[1024];
 safef(fileName, sizeof(fileName), "/gbdb/%s/bbi/lrg.bb", db);
 char *fileNameRep = hReplaceGbdb(fileName);
-bbi =  bigBedFileOpenAlias(fileNameRep, chromAliasChromToAliasHash(db));
+bbi =  bigBedFileOpenAlias(fileNameRep, chromAliasFindAliases);
 freeMem(fileNameRep);
 return bbi;
 }

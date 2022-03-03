@@ -86,9 +86,11 @@ while (my $line = <FH>) {
     $submitter = $line;
     $submitter =~ s/.*Submitter:\s+//;
   } elsif ($line =~ m/^#\s+RefSeq assembly accession:/i) {
-    $genBankAccessionID = $line;
-    $genBankAccessionID =~ s/.*ccession:\s+//;
-    $genBankAccessionID =~ s/ .*//;
+    if ($genBankAccessionID =~ m/notFound/) {
+      $genBankAccessionID = $line;
+      $genBankAccessionID =~ s/.*ccession:\s+//;
+      $genBankAccessionID =~ s/ .*//;
+    }
   } elsif ($line =~ m/^#\s+GenBank assembly accession:/i) {
     if ($genBankAccessionID =~ m/notFound/) {
       $genBankAccessionID = $line;

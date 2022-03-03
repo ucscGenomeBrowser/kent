@@ -19,6 +19,8 @@ cd $ottoDir/ncbi.$today
 attempt=0
 maxAttempts=5
 retryDelay=300
+#*** From Eric Cox 1/25/22 when download failed and they were debugging firewall issues:
+#             --proxy https://www.st-va.ncbi.nlm.nih.gov/datasets/v1 \
 while [[ $((++attempt)) -le $maxAttempts ]]; do
     echo "datasets attempt $attempt"
     if datasets download virus genome taxon 2697049 \
@@ -67,7 +69,7 @@ tawk '$3 != "" {print $1, $3;}' ncbi_dataset.plusBioSample.tsv \
 # Replace FASTA headers with reconstructed names from enhanced metadata.
 time cleanGenbank < ncbi_dataset/data/genomic.fna \
 | $scriptDir/fixNcbiFastaNames.pl ncbi_dataset.plusBioSample.tsv \
-| xz -T 8 \
+| xz -T 20 \
     > genbank.fa.xz
 
 # Run pangolin and nextclade on sequences that are new since yesterday
@@ -76,34 +78,30 @@ fastaNames genbank.fa.xz | awk '{print $1;}' | sed -re 's/\|.*//' | grep -vx pdb
 splitDir=splitForNextclade
 rm -rf $splitDir
 mkdir $splitDir
-if [ -e ../ncbi.latest/nextclade.tsv ]; then
-    cp ../ncbi.latest/nextclade.tsv .
-    cut -f 1 nextclade.tsv | sort -u > nextclade.prev.names
-    comm -23 gb.names nextclade.prev.names > nextclade.names
-    faSomeRecords <(xzcat genbank.fa.xz) nextclade.names nextclade.fa
-    faSplit about nextclade.fa 30000000 $splitDir/chunk
-else
-    cp /dev/null nextclade.tsv
-    faSplit about <(xzcat genbank.fa.xz) 30000000 $splitDir/chunk
-fi
-if (( $(ls -1 splitForNextclade | wc -l) > 0 )); then
+zcat ../ncbi.latest/nextclade.full.tsv.gz > nextclade.full.tsv
+cp ../ncbi.latest/nextalign.fa.xz .
+comm -23 gb.names <(cut -f 1 nextclade.full.tsv | sort -u) > nextclade.names
+if [ -s nextclade.names ]; then
+    faSomeRecords <(xzcat genbank.fa.xz) nextclade.names stdout \
+    | faSplit about stdin 30000000 $splitDir/chunk
     nDataDir=~angie/github/nextclade/data/sars-cov-2
     outDir=$(mktemp -d)
     outTsv=$(mktemp)
     for chunkFa in $splitDir/chunk*.fa; do
         nextclade -j 50 -i $chunkFa \
-            --input-root-seq $nDataDir/reference.fasta \
-            --input-tree $nDataDir/tree.json \
-            --input-qc-config $nDataDir/qc.json \
+            --input-dataset $nDataDir \
             --output-dir $outDir \
+            --output-basename out \
             --output-tsv $outTsv >& nextclade.log
-        cut -f 1,2 $outTsv | tail -n+2 | sed -re 's/"//g;' >> nextclade.tsv
+        tail -n+2 $outTsv | sed -re 's/"//g;' >> nextclade.full.tsv
+        xz -T 20 < $outDir/out.aligned.fasta >> nextalign.fa.xz
         rm $outTsv
     done
     rm -rf $outDir
 fi
-wc -l nextclade.tsv
-rm -rf $splitDir nextclade.fa
+wc -l nextclade.full.tsv
+pigz -f -p 8 nextclade.full.tsv
+rm -rf $splitDir
 
 conda activate pangolin
 runPangolin() {

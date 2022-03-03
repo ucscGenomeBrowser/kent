@@ -46,7 +46,7 @@ static struct barChartBed *getBarChartFromFile(struct trackDb *tdb, char *file,
 /* Retrieve barChart BED item from big file */
 {
 boolean hasOffsets = TRUE;
-struct bbiFile *bbi =  bigBedFileOpenAlias(file, chromAliasChromToAliasHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(file, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 if (retAs != NULL)
     *retAs = as;

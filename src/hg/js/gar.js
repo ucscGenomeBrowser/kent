@@ -94,6 +94,11 @@ var gar = {
              gar.setColumnNvis(n, true);
            }
         }
+        // and unhide all rows, class gca and gcf covers all rows
+        var thisList = document.getElementsByClassName('gca');
+        gar.resetListVis(thisList, true);
+        thisList = document.getElementsByClassName('gcf');
+        gar.resetListVis(thisList, true);
       } else {
         gar.urlParams.forEach(function(val, arg) {
           // beware, get('comName') returns zero, fails this if() statement
@@ -128,7 +133,10 @@ var gar = {
 <col id='IUCN' span='1' class=colGIUCN>
 <col id='taxId' span='1' class=colGTaxId>
 <col id='asmDate' span='1' class=colGAsmDate>
+<col id='bioSample' span='1' class=colGBioSample>
+<col id='bioProject' span='1' class=colGBioProject>
 <col id='submitter' span='1' class=colGSubmitter>
+<col id='clade' span='1' class=colGClade>
 */
 
     // given a category and a counts Map, increment the count for that category
@@ -141,10 +149,11 @@ var gar = {
     },
 
     // given a category and a counts Map, and some flags
-    countVisHidden: function(category, counts, gca, gcf, canBeReq, ucscDb) {
+    countVisHidden: function(category, counts, gca, gcf, canBeReq, ucscDb, hasIucn) {
        gar.incrementCount(category, counts);
        if (gca) { gar.incrementCount('gca', counts); }
        if (gcf) { gar.incrementCount('gcf', counts); }
+       if (hasIucn) { gar.incrementCount('iucn', counts); }
        if (canBeReq) {
           gar.incrementCount('gar', counts);
        } else {
@@ -157,6 +166,7 @@ var gar = {
 //      var t0 = gar.millis();
       var comNameRow = gar.columnNames.get('comName');
       var asmIdRow = gar.columnNames.get('asmId');
+      var iucnRow = gar.columnNames.get('IUCN');
       var cladeRow = gar.columnNames.get('clade');
       var visRows = 0;
       var totalRows = 0;
@@ -179,11 +189,16 @@ var gar = {
           var comName = rowId.cells[comNameRow].innerHTML;
           var canBeRequested = comName.includes("button");
           var ucscDb = comName.includes("cgi-bin/hgTracks");
+          var iucnStatus = rowId.cells[iucnRow].innerHTML;
+          var hasIucn = false;
+          if (iucnStatus) {
+             hasIucn = ! iucnStatus.includes("&nbsp;");
+          }
           if ( rowId.style.display !== "none") {
-            gar.countVisHidden(thisClade, categoryVisible, isGCA, isGCF, canBeRequested, ucscDb);
+            gar.countVisHidden(thisClade, categoryVisible, isGCA, isGCF, canBeRequested, ucscDb, hasIucn);
             ++visRows;
           } else {
-            gar.countVisHidden(thisClade, categoryHidden, isGCA, isGCF, canBeRequested, ucscDb);
+            gar.countVisHidden(thisClade, categoryHidden, isGCA, isGCF, canBeRequested, ucscDb, hasIucn);
           }
         }
       }
@@ -195,19 +210,22 @@ var gar = {
        */
       /* reset the checked status on all the other show/hide check boxes */
       gar.checkBoxNames.forEach(function(checkBox, name) {
+         // add the counts (visible/hidden) to the checkBox label text
+         var visibleCount = 0;
          if (categoryVisible.get(name)) {
            checkBox.checked = true;
+           visibleCount = categoryVisible.get(name);
          } else {
            checkBox.checked = false;
          }
-         // add the counts (visible/hidden) to the checkBox label text
-         var visibleCount = 0;
          var hiddenCount = 0;
-         if ( categoryVisible.get(name) ) {
-           visibleCount = categoryVisible.get(name);
-         }
          if ( categoryHidden.get(name) ) {
            hiddenCount = categoryHidden.get(name);
+         }
+         if (hiddenCount > 0 && visibleCount > 0) {
+           checkBox.indeterminate = true;
+         } else {
+           checkBox.indeterminate = false;
          }
          var labelId = name + "Label";
          var labelEl = document.getElementById(labelId);
@@ -231,6 +249,11 @@ alert("no element for label '" + labelId + "'");
         }
         for (i = 0; i < hideAllList.length; i++) {
           hideAllList[i].checked = false;
+          if (visRows > 0 && notVis > 0) {
+            hideAllList[i].indeterminate = true;
+          } else {
+            hideAllList[i].indeterminate = false;
+          }
         }
         hideAllLabelList = document.getElementsByClassName('hideAllLabel');
         for (i = 0; i < hideAllLabelList.length; i++) {
@@ -245,6 +268,7 @@ alert("no element for label '" + labelId + "'");
         }
         for (i = 0; i < hideAllList.length; i++) {
           hideAllList[i].checked = true;
+          hideAllList[i].indeterminate = false;
         }
         hideAllLabelList = document.getElementsByClassName('hideAllLabel');
         for (i = 0; i < hideAllLabelList.length; i++) {
@@ -273,7 +297,6 @@ alert("no element for label '" + labelId + "'");
       var t0 = gar.millis();
       var n = gar.columnNames.get(e.value);
       var tf = e.checked;       // true - turn column on, false - turn off
-// alert("column '" + e.value + "' n '" + n + " : checked: '" + tf + "'");
       gar.setColumnNvis(n, tf);
       var et = gar.millis() - t0;
       gar.countVisibleRows(et);
@@ -447,6 +470,37 @@ alert("no element for label '" + labelId + "'");
     return undefined;
     },
 
+    // turn off the column 1 tool tip on mouse exit the table cell
+    col1TipOff: function(evt) {
+        $('#col1ToolTip').css('display','none');
+    },
+
+    // tooltip display for column one to indicate browser available or
+    //  request can be done
+    col1Tip: function(evt) {
+      if (evt.currentTarget) {
+        var cellRect = evt.currentTarget.getBoundingClientRect();
+        var cellLeft = Math.floor(cellRect.left);
+        var cellTop = Math.floor(cellRect.top);
+        var cellWidth = Math.floor(cellRect.width);
+        var cellHeight = Math.floor(cellRect.height);
+        var yOffset = Math.floor(window.pageYOffset);
+        var tipTop = Math.floor(yOffset + cellTop + (cellHeight/3));
+        var tipLeft = Math.floor(cellLeft+(cellWidth*0.8));
+        // class 'gar' means it can be requested
+        // NOT 'gar' means it exists (there are 'gak' and 'ucscDb' browsers)
+        var browserExists = ! evt.currentTarget.parentNode.classList.contains('gar');
+        if (browserExists) {
+          $('#col1ToolTip').html("browser");
+        } else {
+          $('#col1ToolTip').html("request");
+        }
+        $('#col1ToolTip').css('top',tipTop + "px");
+        $('#col1ToolTip').css('left',tipLeft + "px");
+        $('#col1ToolTip').css('display','block');
+      }
+    },
+
   // Original JavaScript code by Chirp Internet: chirpinternet.eu
   // Please acknowledge use of this code by including this header.
 //      const form = document.getElementById("modalFeedback");
@@ -474,9 +528,10 @@ alert("no element for label '" + labelId + "'");
        }
        gar.completedAsmId.set(e.name, true);
      } else {
-       gar.commonName.textContent = "enter information about desired assembly in the 'Other comments'";
-       gar.sciName.textContent = "including the scientific name";
-       gar.asmIdText.textContent = "and the GCx accession identifer";
+       gar.betterCommonName.value = "";
+       gar.commonName.textContent = "enter information about desired assembly in the 'Other comments' field";
+       gar.sciName.textContent = "include the scientific name";
+       gar.asmIdText.textContent = "include the GenBank or RefSeq accession identifier";
      }
      gar.submitButton.value = "Submit request";
      gar.submitButton.disabled = false;

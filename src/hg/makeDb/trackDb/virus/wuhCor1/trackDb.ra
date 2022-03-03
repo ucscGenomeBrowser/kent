@@ -619,15 +619,27 @@ searchMethod fuzzy
 padding 5
 
 track resist
+pennantIcon New red ../goldenPath/newsarch.html#022522 "Released Feb. 25, 2022"
 shortLabel Drug Resistance
 longLabel Mutations that confer drug resistance collected by Paul Gordon, Calgary
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/resist/resist.bb
 itemRgb on
 bedNameLabel Mutation
-urls urls
-mouseOver $comment
+urls urls=$$
+mouseOver $comments
 noScoreFilter on
+group varRep
+
+track resistPred
+#pennantIcon New red ../goldenPath/newsarch.html#022522 "Released Feb. 25, 2022"
+shortLabel Predicted Resistance
+longLabel Mutations that may confer drug resistance predicted by coronavirus3d.org (label is count of GISAID sequences with this mutation in Feb 2022)
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/resistPred/resistPred.bb
+itemRgb on
+bedNameLabel Mutation
+mouseOver $changeFreq
 group varRep
 
 include trackDb.119way.ra

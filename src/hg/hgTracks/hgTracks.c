@@ -4670,7 +4670,7 @@ if (!multiBedFile)
 // TODO: filters here ?
 // TODO:  protect against temporary network error ? */
 struct lm *lm = lmInit(0);
-struct bbiFile *bbi =  bigBedFileOpenAlias(multiBedFile, chromAliasChromToAliasHash(database));
+struct bbiFile *bbi =  bigBedFileOpenAlias(multiBedFile, chromAliasFindAliases);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
 char *row[bbi->fieldCount];
 char startBuf[16], endBuf[16];
@@ -7384,7 +7384,8 @@ return (startsWith("big", track->tdb->type)
      // XX code-review: shouldn't we error abort if the URL is not valid?
      && (bdu && isValidBigDataUrl(bdu, FALSE))
      && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
-     && (track->subtracks == NULL);
+     && (track->subtracks == NULL)
+     && (!startsWith("bigMaf", track->tdb->type));
 }
 
 static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList)
@@ -10116,25 +10117,17 @@ if (hasAlias)
 cgiTableRowEnd();
 }
 
-static char *chrAliases(struct hash *aliasHash, char *sequenceName)
+static char *chrAliases(struct slName *names, char *sequenceName)
 /* lookup the sequenceName in the aliasHash and return csv string
  * of alias names
  */
 {
-if (NULL == aliasHash)
+if (NULL == names)
     return NULL;
 struct dyString *returned = dyStringNew(512);
-struct hashEl *hel = hashLookup(aliasHash, sequenceName);
-if (hel)
-    {
-    dyStringPrintf(returned, "%s", ((struct chromAlias *)hel->val)->alias);
-    hel = hashLookupNext(hel);
-    while (hel != NULL)
-        {
-        dyStringPrintf(returned, ", %s",((struct chromAlias *)hel->val)->alias);
-        hel = hashLookupNext(hel);
-        }
-    }
+dyStringPrintf(returned, "%s", names->name);
+for(names = names->next; names; names = names->next)
+    dyStringPrintf(returned, ", %s",names->name);
 return dyStringCannibalize(&returned);
 }
 
@@ -10145,7 +10138,6 @@ struct slName *chromList = hAllChromNames(database);
 struct slName *chromPtr = NULL;
 long long total = 0;
 boolean hasAlias = hTableExists(database, "chromAlias");
-struct hash *aliasHash = chromAliasMakeReverseLookupTable(database);
 /* key is database sequence name, value is an alias name, can be multiple
  *   entries for the same sequence name.  NULL if no chromAlias available
  */
@@ -10160,7 +10152,7 @@ else
 for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     unsigned size = hChromSize(database, chromPtr->name);
-    char *aliasNames = chrAliases(aliasHash, chromPtr->name);
+    char *aliasNames = chrAliases(chromAliasFindAliases(chromPtr->name), chromPtr->name);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
     htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
@@ -10202,17 +10194,13 @@ const struct chromInfo *b = *((struct chromInfo **)vb);
 return b->size - a->size;
 }
 
-void chromInfoRowsNonChromTrackHub(int limit)
+void chromInfoRowsNonChromTrackHub(boolean hasAlias, int limit)
 /* Make table rows of non-chromosomal chromInfo name & size */
 /* leaks chromInfo list */
 {
 struct chromInfo *chromInfo = trackHubAllChromInfo(database);
 slSort(&chromInfo, chromInfoCmpSize);
 int seqCount = slCount(chromInfo);
-struct hash *aliasHash =  chromAliasMakeReverseLookupTable(database);
-boolean hasAlias = FALSE;
-if (aliasHash)
-    hasAlias = TRUE;
 long long total = 0;
 char msg1[512], msg2[512];
 boolean truncating;
@@ -10225,7 +10213,7 @@ for( ;lineCount < seqCount && (chromInfo != NULL); ++lineCount, chromInfo = chro
     unsigned size = chromInfo->size;
     if (lineCount < limit)
 	{
-	char *aliasNames = chrAliases(aliasHash, chromInfo->chrom);
+	char *aliasNames = chrAliases(chromAliasFindAliases(chromInfo->chrom), chromInfo->chrom);
 	cgiSimpleTableRowStart();
 	cgiSimpleTableFieldStart();
 	htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
@@ -10288,18 +10276,16 @@ else
     }
 }
 
-void chromInfoRowsNonChrom(int limit)
+void chromInfoRowsNonChrom(boolean hasAlias, int limit)
 /* Make table rows of non-chromosomal chromInfo name & size, sorted by size. */
 {
 if (trackHubDatabase(database))
     {
-    chromInfoRowsNonChromTrackHub(limit);
+    chromInfoRowsNonChromTrackHub(hasAlias, limit);
     return;
     }
 
 struct sqlConnection *conn = hAllocConn(database);
-boolean hasAlias = hTableExists(database, "chromAlias");
-struct hash *aliasHash = chromAliasMakeReverseLookupTable(database);
 /* key is database sequence name, value is an alias name, can be multiple
  *   entries for the same sequence name.  NULL if no chromAlias available
  */
@@ -10333,7 +10319,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            row[0], row[0]);
-    char *aliasNames = chrAliases(aliasHash, row[0]);
+    char *aliasNames = chrAliases(chromAliasFindAliases(row[0]), row[0]);
     cgiTableFieldEnd();
     cgiTableFieldStartAlignRight();
     printLongWithCommas(stdout, size);
@@ -10516,12 +10502,12 @@ cgiTableRowEnd();
 if (sameString(database,"hg38"))
     chromInfoRowsChromExt("withAltRandom");
 else if (trackHubDatabase(database))
-    chromInfoRowsNonChrom(1000);
+    chromInfoRowsNonChrom(hasAlias, 1000);
 else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) &&
     hChromCount(database) < 100)
     chromInfoRowsChrom();
 else
-    chromInfoRowsNonChrom(1000);
+    chromInfoRowsNonChrom(hasAlias, 1000);
 chromSizesDownloadRow(hasAlias, aliasFile, chromSizesFile);
 
 hTableEnd();
@@ -10757,7 +10743,11 @@ printf("State: %s\n", cgiUrlString()->string);
 #endif
 
 getDbAndGenome(cart, &database, &organism, oldVars);
+if (measureTiming)
+    measureTime("before chromAliasSetup");
 chromAliasSetup(database);
+if (measureTiming)
+    measureTime("after chromAliasSetup");
 
 genomeIsRna = !isHubTrack(database) && hgPdbOk(database);
 

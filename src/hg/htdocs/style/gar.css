@@ -1,10 +1,3 @@
-html,
-body {
-    background-color:#ffffff;
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
-}
 
 #modalWrapper.overlay::before {
     content: " ";
@@ -64,6 +57,13 @@ body {
   display: none;
   width: auto;
   margin: auto;
+}
+
+/* allow content in table header cells to overflow to allow tooltip
+ *  legend display outside the cell
+ */
+.cladeTable thead tr th {
+  overflow: visible;
 }
 
 .borderOne th,
@@ -154,6 +154,18 @@ body {
   width: 8em;
 }
 
+.colBioSample,
+.colGBioSample {
+  display: none;
+  width: 11em;
+}
+
+.colBioProject,
+.colGBioProject {
+  display: none;
+  width: 11em;
+}
+
 .colSubmitter,
 .colGSubmitter {
   display: none;
@@ -181,78 +193,6 @@ body {
   padding: 5px 5px 5px 5px;
 }
 
-/* trying to get a legend box to pop up */
-
-/* the background color here is the background for this legend text box */
-
-.legendMenu {
-  position: relative;
-  display: inline-block;
-  float: right;
-  color: white;
-  background-color: #1d3a6e;
-  border: 1px solid black;
-  margin: 2px 20px 2px 2px;
-  padding: 5px 5px 5px 5px;
-}
-
-/* the color here is the text color in the legend text */
-.legendContent {
-  display: none;
-  /* border: 1px solid #000000; */
-  border: none;
-  position: absolute;
-  padding: 0;
-  z-index: 2;
-  float: left;
-  margin: 0;
-  height: 20%;
-  color: black;
-  /* background-color: black; */
-  /* margin-left: 0;*/
-  top: -250px;
-  /* left: -120%; */
-  right: 0;
-  /* right: 0;
-  bottom: -10px; */
-}
-
-.legendContent ul {
-  /* background-color: #4f6c9f; a lighter blue */
-  background-color: white;
-  /* list-style-type: none; */
-  list-style-position: outside;
-  background-image: none;
-  overflow: hidden;
-  margin-left: 0;
-  padding: 10px;
-  width: 600px;
-  border: 3px solid black;
-}
-
-.legendContent ul li {
-  list-style-position: outside;
-  overflow: hidden;
-  margin-top: 1px;
-  display: block;
-  text-align: left;
-}
-
-.legendMenu:hover .legendContent {
-  display: block;
-}
-
-/* the color of the text in the menu items when *not* highlighted #112295 */
-/* the color here is the color of the text when it is *not* highlighted */
-.legendContent ul:hover > li:not(:hover) {
-  color: #777777;
-  background-color: white;
-}
-
-.legendContent:hover .pullDownMenuContent {
-  display: block;
-}
-
 /* margin is: top right bottom left */
 /* padding is: top right bottom left */
 /* box-shadow: https://www.w3schools.com/cssref/css3_pr_box-shadow.asp */
@@ -274,16 +214,19 @@ body {
   border: 1px solid #000000;
   margin: 2px 20px 2px 2px;
   padding: 5px 5px 5px 5px;
-  text-align: left;
+  text-align: center;
+  box-shadow: 0 0 4px 4px gold;
 }
 
 .pullDownMenuContent {
   display: none;
   position: absolute;
-  padding: 0;
   z-index: 1;
   margin: 0;
+  margin-bottom: 0;
   width: 100%;
+  /* border: 1px solid #00f; */
+  box-shadow: 0 0 4px 4px #1d3a6e;
 }
 /* the background-color here is what is in between the menu items */
 /* but why is there space between the menu items ? */
@@ -298,7 +241,10 @@ body {
   list-style-type: none;
   background-image: none;
   margin-left: 0;
-  padding: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  /* padding: 0; */
+  text-align: left;
 }
 
 /* from: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
@@ -317,9 +263,11 @@ body {
 */
 }
 
+/* eliminate stray blank area following last list item */
 /*
-.pullDownMenuContent ul li:first-child {
-  margin-top: 8px;
+.pullDownMenuContent ul li:last-child {
+  padding 0;
+  background-color: #f00;
 }
 */
 
@@ -359,61 +307,6 @@ inside a <ul> element.
 .pullDownMenu:hover .pullDownMenuContent {
   display: block;
 }
-
-/** previous version of pullDownColumn **/
-.pullDownColumn {
-  position: relative;
-  display: inline-block;
-  float: right;
-  color: #ffff00;
-  background-color: #7799bb;
-  border: 1px solid #000000;
-  margin: 2px 20px 2px 2px;
-  padding: 5px 5px 5px 5px;
-}
-
-.pullDownColumnContent {
-  display: none;
-  position: absolute;
-  background-color: #7799bb;
-  padding: 0;
-  z-index: 1;
-  margin: 0;
-  width: 100%;
-}
-
-.pullDownColumnContent ul {
-  color: #ffff00;
-  background-color: #7799bb;
-  list-style-type: none;
-  background-image: none;
-  margin: 0;
-  padding: 1px;
-}
-
-.pullDownColumnContent ul li {
-  list-style-position: outside;
-  overflow: hidden;
-}
-
-.pullDownColumnContent ul > li {
-  opacity: 1.0;
-  color: #ffff00;
-}
-
-.pullDownColumnContent ul:hover > li:not(:hover) {
-  opacity: 0.8;
-  color: #ff8800;
-}
-
-.pullDownColumn:hover .pullDownColumnContent {
-  display: block;
-}
-
-/* The pull-down check boxes for the columns hide/show
- * example from:
- *  https://stackoverflow.com/questions/19206919/how-to-create-checkbox-inside-dropdown
- */
 
 .columnCheckList {
   display: inline-block;
@@ -482,8 +375,13 @@ inside a <ul> element.
 
 #canNotFindDiv {
   color: white;
-  /* background-color: #00ff00; */
   background-color: #4f6c9f;
+  margin-bottom: 0;
+}
+
+/* no shadow around this button, override pullDownMenuContent */
+#canNotFindDiv .pullDownMenuContent {
+    box-shadow: 0 0 0 #fff;
 }
 
 #specificRequest {
@@ -496,4 +394,115 @@ inside a <ul> element.
   /* color: #555555;*/
   color: white;
   background: #eeaa22;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+}
+
+.cladeTable thead tr th:hover .tooltiptext {
+  visibility: visible;
+}
+
+.cladeTable thead tr th:hover .tooltiptextright {
+  visibility: visible;
+}
+
+.tooltip .tooltiptext {
+  border: 2px solid #000;
+  visibility: hidden;
+  overflow: visible;
+  position: absolute;
+  padding: 2px;
+  z-index: 5;
+  float: left;
+  margin: 0 auto;
+  height: auto;
+  width: 300px;
+  color: black;
+  left: -10px;
+  transform: translate(1px, -110%);
+  top: 0;
+  background: #ffffff;
+  color: #000000;
+}
+
+/* right most two columns have right margins instead of left so as
+ *  not to run off the page to the right
+ */
+
+.tooltip .tooltiptextright {
+  border: 2px solid #000;
+  visibility: hidden;
+  overflow: visible;
+  position: absolute;
+  padding: 2px;
+  z-index: 5;
+  float: right;
+  margin: 0 auto;
+  height: auto;
+  width: 300px;
+  color: black;
+  right: -10px;
+  transform: translate(1px, -110%);
+  top: 0;
+  background: #ffffff;
+  color: #000000;
+}
+
+/* visible/hidden will be controlled by JS on mouseover */
+#col1ToolTip {
+  display: none;
+  position: absolute;
+  z-index: 5000;
+  overflow: visible;
+  visibility: visible;
+  color: #ff0;
+  background: #00f;
+  left: 0;
+  top: 0;
+  border: 2px solid #000;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
+  border-radius: 4px;
+}
+
+/* debug trick to mark all elements with a red border */
+/*
+* {
+  outline: 1px solid #f00 !important;
+}
+*/
+
+.iucnCR {
+  background: #e33;
+}
+
+.iucnEN {
+  background: #338;
+}
+
+.iucnEN a:link {
+  color: #c66;
+}
+
+.iucnEN a:visited {
+  color: #6c6;
+}
+
+.iucnEN a:hover {
+  color: #cc6;
+}
+
+.iucnEN a:active {
+  color: #66c;
+}
+
+.iucnVU {
+  background: #8aa;
+}
+
+.iucnNone {
+  background: #ccc;
 }

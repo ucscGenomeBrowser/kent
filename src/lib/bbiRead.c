@@ -77,7 +77,7 @@ else
 return TRUE;
 }
 
-struct bbiFile *bbiFileOpenAlias(char *fileName, bits32 sig, char *typeName, struct hash *aliasHash)
+struct bbiFile *bbiFileOpenAlias(char *fileName, bits32 sig, char *typeName, aliasFunc aliasFunc)
 /* Open up big wig or big bed file using a chrom alias hash if non-NULL */
 {
 /* This code needs to agree with code in two other places currently - bigBedFileCreate,
@@ -88,7 +88,7 @@ struct bbiFile *bbiFileOpenAlias(char *fileName, bits32 sig, char *typeName, str
  * footprint by a factor of 2 or 4.  Still, for now it works. -JK */
 struct bbiFile *bbi;
 AllocVar(bbi);
-bbi->aliasHash = aliasHash;
+bbi->aliasFunc = aliasFunc;
 bbi->fileName = cloneString(fileName);
 struct udcFile *udc = bbi->udc = udcFileOpen(fileName, udcDefaultDir());
 
@@ -193,18 +193,18 @@ AllocVar(idSize);
 // first look for the given chrom name
 if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), idSize, sizeof(idSize)))
     {
-    if (bbi->aliasHash)
+    if (bbi->aliasFunc)
         {
-        // didn't find chrom name, but have an alias hash.  Try the aliases
-        struct hashEl *hel = hashLookup(bbi->aliasHash, chrom);
+        // didn't find chrom name, but have an alias function.  Try the aliases it returns.
+	struct slName *aliases = (*bbi->aliasFunc)(chrom);
 
-        for(; hel;  hel = hashLookupNext(hel))
+	for(; aliases; aliases = aliases->next)
             {
-            char *alias = hel->val;
+            char *alias = aliases->name;
             if (bptFileFind(bbi->chromBpt, alias, strlen(alias), idSize, sizeof(idSize)))
                 break;
             }
-        if (hel == NULL)   // did we run out of aliases to try?
+        if (aliases == NULL)   // did we run out of aliases to try?
             return NULL;
         }
     else

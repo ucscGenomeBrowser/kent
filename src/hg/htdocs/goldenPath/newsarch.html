@@ -51,18 +51,46 @@
 
 <!-- ============= 2022 archived news ============= -->
 <a name="2022"></a>
+<a name="022522a"></a>
+<h2>Feb, 25, 2022 &nbsp;&nbsp; MANE select v1.0 track available for hg38</h2>
+<p>
+We are happy to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=mane">MANE select v1.0</a> track for the human
+(<a href="/cgi-bin/hgGateway?db=hg38">GRCh38/hg38</a>) assembly. The
+<a href="https://www.ncbi.nlm.nih.gov/refseq/MANE/" target="_blank">Matched Annotation from NCBI and
+EMBL-EBI (MANE)</a> project aims to produce a matched set of high-confidence transcripts that are
+identically annotated between RefSeq (NCBI) and Ensembl/GENCODE (led by EMBL-EBI). Transcripts for
+MANE are chosen by a combination of automated and manual methods based on conservation, expression
+levels, clinical significance, and other factors.</p>
+<p>
+We would like to thank the NCBI and Ensembl-GENCODE collaboration for the MANE project. We would
+also like to thank Brian Raney and Jairo Navarro for the development and release of this track.</p>
+
+<a name="022522"></a>
+<h2>Feb, 25, 2022 &nbsp;&nbsp; New COVID track on Drug Resistance Mutations</h2>
+<p>
+We have just added the <a href="/cgi-bin/hgTrackUi?db=wuhCor1&g=resist">Drug Resistance</a>
+track to the SARS-CoV-2 (COVID-19) genome. This track shows 5 amino acid variants 
+documented to confer drug treatment resistance to Remdesivir. Try it yourself:</p>
+<p>
+<a href=" https://genome.ucsc.edu/s/view/DrugResistance">https://genome.ucsc.edu/s/view/DrugResistance</a>
+</p>
+<p>We would like to thank data contributor Paul Gordon for making the data
+accessible on his <a href="https://people.ucalgary.ca/~gordonp/remdesivir_failure-RdRp.html">
+University of Calgary website</a>.</p>
+
 
 <a name="022222"></a>
 <h2>Feb. 22, 2022 &nbsp;&nbsp; Recommended Track Sets paper</h2>
 <p>
 We are pleased to announce a new paper about our Recommended Tracks Set feature, available
 on GRCh37/hg19, which collects related clinical tracks to help investigate variants.
-The <a href="https://doi.org/10.1002/humu.24335"
-target="_blank">Variant interpretation: UCSC Genome Browser Recommended Track Sets</a> paper
+The paper, <a href="https://doi.org/10.1002/humu.24335"
+target="_blank">Variant interpretation: UCSC Genome Browser Recommended Track Sets</a>,
 covers how this new feature can facilitate the interpretation of variants for clinicians.</p>
 <p>
-Track Sets quickly swap out the on-screen annotations a user may be looking at in current genomic
-position for a different dataset relevant to specific medical scenarios: investigating single
+Track Sets allow a user to quickly swap out the on-screen annotations they may be looking at
+for a different set of tracks relevant to specific medical scenarios: investigating single
 nucleotide variants in coding regions (Clinical SNVs), structural copy number variants
 (Clinical CNVs), and functional aspects of non-coding variants (Non-coding SNVs).</p>
 <p class ="text-center">
@@ -71,41 +99,46 @@ nucleotide variants in coding regions (Clinical SNVs), structural copy number va
   </a>
 </p>
 <p>
-To access Recommended Track Sets, only available currently on the hg19 assembly, go to the top blue bar
+To access Recommended Track Sets, currently  available only on the hg19 assembly, go to the top blue bar
 and under the  &quot;Genome Browser&quot; menu click the &quot;Recommended Track Sets&quot;
 option. This will launch a dialog box offering pre-configured track sets, enabling swapping from
-one view to another view without changing the current position.  The displayed tracks can then
-be customized, where one can configure tracks in the browser by clicking the grey bar on the
+one view to another view without changing the current position. Please note this figure does not
+include a fourth Track Set, Problematic Regions, we added since the release of the paper. Problematic
+Regions help users evaluate if annotations in the Browser are located in areas of the genome of low
+confidence due to high homology or other reported concerns. Once displayed, Recommended Track Sets can
+then be customized, where one can configure tracks in the browser by clicking the grey bar on the
 left of a track. Or to see more information about displayed items, one can mouseover for an
 informative pop-up summary, or click on the item to access a details page.</p>
 <p>
-The new paper gives examples of using the experimental data in the Clinical SNV Track Set to examine a variant.</p>
+The paper gives an example of using the experimental data in the Clinical SNV Track Set to examine a variant.</p>
 <p class ="text-center">
   <a href="https://doi.org/10.1002/humu.24335">
     <img class="text-center" src="../images/newsArchImages/track_sets2.png" width="900px">
   </a>
 </p>
 <p>
-This image from the paper shows a vertical blue highlight for NM_172107.4(KCNQ2):c.635A>G (p.Asp212Gly).
-This variant is located in the KCNQ2 gene, in a codon for Aspartic acid (D212), and the mutation
+This figure from the paper shows a vertical blue highlight for NM_172107.4(KCNQ2):c.635A>G (p.Asp212Gly),
+the Human Genome Variation Society (HGVS) nomenclature to describe this variant.
+Located in the KCNQ2 gene, this variant is in a codon for Aspartic acid (D212), and the mutation
 has been associated with early-onset epileptic encephalopathy, an autosomal dominant inherited
 disease. The ClinVar Short Variants and SNVs tracks show that all three possible single nucleotide
 substitutions have been described at this position with pathogenic or likely pathogenic
 classifications with red blocks (A>C, A>T, A>G). Each described variant leads to a missense
-change of the Asp residue. The SNV Track Set also includes computational and predictive components,
-such as the Rare Exome Variant Ensemble Learner (REVEL) and Combined Annotation Dependent Depletion
-(CADD) tracks, which calculate impacts of nucleotide changes, discussed in another figure in the paper.</p>
+change of the Asp residue. The SNV Track Set also includes (discussed in another figure in the paper)
+computational and predictive components, such as the Rare Exome Variant Ensemble Learner (REVEL)
+and Combined Annotation Dependent Depletion (CADD) tracks, which calculate impacts of nucleotide changes.</p>
 <p>
 The paper also discusses many of the other features developed with the release of Track Sets,
 including the ability to merge items that span a region to declutter the view of CNVs and the
 addition of multiple configuration filters to allow users to dynamically generate a subset
-view of dense data on categories of interest.  Lastly, a far more informative mouseover
+view from dense data on specified categories of interest.  Lastly, a far more informative mouseover
 was created when viewing clinical data that could combine multiple fields. For instance,
 in the ClinVar track, it is now possible to view a variant's HGVS annotation, molecular
 consequence, clinical significance, population frequency, and associated phenotypes without
 having to click into an item's details page.</p>
 <p>
-We would like to thank Ana Benet-Pag&#232;s and Robert Kuhn for their work publishing this new article.</p>
+We would like to thank Ana Benet-Pag&#232;s and Robert Kuhn for their work publishing the paper,
+and Kate Rosenbloom, Ana Benet-Pag&#232;s and Lou Nassar for implementation of the feature.</p>
 
 <a name="021022"></a>
 <h2>Feb. 10, 2022 &nbsp;&nbsp; GENCODE Genes v39 for human (hg38)</h2>
@@ -211,6 +244,9 @@ Binding site predictions and UCSC tracks were computed by the <a href="http://ci
 target="_blank">Wasserman Lab</a>. We would like to thank Daniel Schmelter and Jairo Navarro at UCSC
 for building and testing these tracks.</p>
 
+<!-- ============= 2021 archived news ============= -->
+<a name="2021"></a>
+
 <a name="122021"></a>
 <h2>Dec. 20, 2021 &nbsp;&nbsp; Last of three blog posts about new GenArk hubs</h2>
 <p>
@@ -221,9 +257,6 @@ target="_blank">final installment</a> provides some explanation of the technical
 details behind the process. The <a href="https://bit.ly/UCSC_blog_GenArk1">first post</a>
 was about accessing the data, and the <a href="https://bit.ly/UCSC_blog_GenArk2">second post</a>
 shared examples of using the hub's data with BLAT, PCR, and External Tools.</p>
-
-<!-- ============= 2021 archived news ============= -->
-<a name="2021"></a>
 
 <a name="121621"></a>
 <h2>Dec. 16, 2021 &nbsp;&nbsp; Track Hub Filters Quick Start Guide</h2>

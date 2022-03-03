@@ -509,7 +509,12 @@ function waitKey ()
 # set MYCNF to the path to my.cnf
 function setMYCNF ()
 {
-    if [ -f /etc/my.cnf ] ; then
+    if [ -f /etc/my.cnf.d/mariadb-server.cnf ] ; then
+	# Centos 8 stream: This has to be first, because /etc/my.cnf exists on Centos 8 Stream, but it contains a mysqld section
+        # by default and somehow the section doesn't seem to take effect since a specific [mariadb] section also exists in the mariadb-server.cnf.
+        # As a result, we only modify the mariadb-server config file
+    	MYCNF=/etc/my.cnf.d/mariadb-server.cnf 
+    elif [ -f /etc/my.cnf ] ; then
 	# Centos 6-8
     	MYCNF=/etc/my.cnf
     elif [ -f /etc/mysql/my.cnf ] ; then
@@ -523,6 +528,14 @@ function setMYCNF ()
     	exit 1
     fi
     echo Found Mariadb config file: $MYCNF
+}
+
+function mysqlStrictModeOff () 
+{
+# make sure that missing values in mysql insert statements do not trigger errors, #18368 = deactivate strict mode
+# This must happen before Mariadb is started or alternative Mariadb must be restarted after this has been done
+setMYCNF
+sed -Ei '/^.(mysqld|server).$/a sql_mode='  $MYCNF
 }
 
 function mysqlAllowOldPasswords
@@ -729,7 +742,7 @@ function installRedhat () {
        service iptables restart
     fi
     
-    # MYSQL INSTALL ON REDHAT, quite involved, as MariaDB is increasingly the default
+    # MYSQL INSTALL ON REDHAT
 
     # centos7 provides only a package called mariadb-server
     # Mysql 8 does not allow copying MYISAM files anymore into the DB. 
@@ -743,7 +756,7 @@ function installRedhat () {
         exit 100
     fi
     
-    # even mariadb packages currently call their binary /usr/bin/mysqld_safe
+    # even mariadb packages currently call their main wrapper /usr/bin/mysqld_safe
     if [ ! -f /usr/bin/mysqld_safe ]; then
         echo2 
         echo2 Installing the Mysql or MariaDB server and make it start at boot.
@@ -762,11 +775,15 @@ function installRedhat () {
         # start mysql on boot
         chkconfig --level 2345 $MYSQLD on 
 
+        # make sure that missing values in Mysql insert statements do not trigger errors, #18368: deactivate strict mode
+        mysqlStrictModeOff
+
         # start mysql now
         /sbin/service $MYSQLD start
 
         secureMysql
         SET_MYSQL_ROOT=1
+
     else
         echo2 Mysql already installed
     fi
@@ -1020,9 +1037,9 @@ function installDebian ()
 	# -> we require mariaDb now
         # apt-get --assume-yes install mysql-server
         apt-get --assume-yes install mariadb-server
-        # make sure that missing values do not trigger errors, #18368
-	setMYCNF
-        sed -i '/^.mysqld.$/a sql_mode=' $MYCNF
+
+        mysqlStrictModeOff
+        service mariadb restart
         # flag so script will set mysql root password later to a random value
         SET_MYSQL_ROOT=1
     fi

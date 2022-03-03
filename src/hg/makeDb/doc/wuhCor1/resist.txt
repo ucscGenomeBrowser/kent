@@ -1,0 +1,4 @@
+cd /hive/data/genomes/wuhCor1/bed/resist
+# received from "Niewiadomska, Anna" <aniewiad@jcvi.org>, typed up manually
+bedToBigBed resist.bed ../../chrom.sizes resist.bb -type=bed9+4 -tab -as=resist.as
+bedSort resist.bed resist.bed

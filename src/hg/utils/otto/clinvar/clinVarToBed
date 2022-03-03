@@ -12,6 +12,8 @@ dbToUrl = {
     "OMIM Allelic Variant" : "http://www.omim.org/entry/%s",
     "MedGen": "https://www.ncbi.nlm.nih.gov/medgen/%s",
     "OMIM" : "http://www.omim.org/entry/%s",
+    "MONDO" : "https://monarchinitiative.org/disease/%s",
+    "ClinGen" : "https://reg.clinicalgenome.org/redmine/projects/registry/genboree_registry/by_caid?caid=%s",
     "Orphanet" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert=%s"
 }
 
@@ -482,11 +484,12 @@ def accListToHtml(inStr):
     """
     given a string of a list of db:acc tuples, like "dbVar:nssv578901, omim:12343", convert the accessions
     to HTML links to the databases. Also, pull out the dbVar SSV accession for its own field later.
+    A more recent example is  MONDO:MONDO:0019667, which meant that I had to add the "maxsplit" option.
     """
     dbVarAcc = ""
     newParts = []
     for part in inStr.split(","):
-        fields = part.split(":")
+        fields = part.split(":", maxsplit=1)
         if len(fields)!=2:
             newParts.append(part)
             continue

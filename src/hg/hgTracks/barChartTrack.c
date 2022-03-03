@@ -389,7 +389,12 @@ static int windowsTotalIntersection(struct window *list, char *chrom, int chromS
 /* Return total size all bits of region defined by chrom/start/end that intersects windows list */
 {
 if (list == NULL || list->next == NULL)
-    return (double)insideWidth * (chromEnd - chromStart) / (winEnd - winStart);
+    {
+    double scale = scaleForWindow(insideWidth, winStart, winEnd);
+    int leftBlank = round(scale * (max(winStart, chromStart) - winStart));
+    int rightBlank = round(scale * (winEnd - min(winEnd, chromEnd)));
+    return (double)insideWidth - leftBlank - rightBlank;
+    }
 long long totalGenoSize = 0;
 int totalPixelSize = 0;
 struct window *w;
@@ -548,6 +553,10 @@ if (bedList != NULL)
 
 int barCount = filteredCategoryCount(extras);
 
+// users can set minimum bar width and padding in trackDb
+char *userBarWidth = trackDbSetting(tdb, BAR_CHART_USER_BAR_WIDTH);
+char *userBarPadding = trackDbSetting(tdb, BAR_CHART_USER_BAR_PADDING);
+
 /* Scaling here is pretty ad-hoc! */
 double scale = 1.0;
 if (barCount <= 20)
@@ -620,9 +629,22 @@ if (extras->barWidth <= 1 && extras->padding == 1)
    extras->padding = 0;
    }
 if (extras->barWidth < 1)
+    {
+    extras->barWidth = 1;
     extras->padding = 0;
+    }
 else
     extras->barWidth = round(extras->barWidth);
+if (userBarWidth)
+    {
+    int barWidth = sqlUnsigned(userBarWidth);
+    extras->barWidth = barWidth > extras->barWidth ? barWidth : extras->barWidth;
+    }
+if (userBarPadding)
+    {
+    int barPadding = sqlUnsigned(userBarPadding);
+    extras->padding = barPadding > extras->padding ? barPadding : extras->padding;
+    }
 
 extras->modelHeight =  extras->boxModelHeight + 3;
 extras->margin = 1;
@@ -752,6 +774,13 @@ int expCount = bed->expCount;
 struct barChartCategory *categ;
 int barCount = filteredCategoryCount(extras), barsDrawn = 0;
 double invCount = 1.0/barCount;
+char *userBarWidth = trackDbSetting(tg->tdb, BAR_CHART_USER_BAR_WIDTH);
+if ((extras->padding == 0 || sameString(colorScheme, BAR_CHART_COLORS_USER))
+        && !userBarWidth)
+    {
+    // scale the barWidth on the graph size at this zoom level
+    barWidth = max(barWidth, graphWidth * invCount);
+    }
 for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=categ->next)
     {
     if (!filterCategory(extras, categ->name))
@@ -764,24 +793,21 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
     boolean isClipped = (!extras->doLogTransform && expScore > extras->maxViewLimit);
     int barTop = yZero - height + 1;
     if (extras->padding == 0 || sameString(colorScheme, BAR_CHART_COLORS_USER))
-	{
-	int cStart = barsDrawn * graphWidth * invCount;
-	int cEnd = (barsDrawn+1) * graphWidth * invCount;
-	x1 = cStart + x0;
-	barWidth = cEnd - cStart - extras->padding;
+        {
+        x1 = x0 + (barWidth * barsDrawn);
         hvGfxBox(hvg, x1, barTop, barWidth, height, fillColorIx);
-	if (isClipped)
-	    hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
-	barsDrawn += 1;
-	}
+        if (isClipped)
+            hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
+        barsDrawn += 1;
+        }
     else
-	{
+        {
         hvGfxOutlinedBox(hvg, x1, barTop, barWidth, height, fillColorIx, lineColorIx);
-	// mark clipped bar with magenta tip
-	if (isClipped)
-	    hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
-	x1 = x1 + barWidth + extras->padding;
-	}
+        // mark clipped bar with magenta tip
+        if (isClipped)
+            hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
+        x1 = x1 + barWidth + extras->padding;
+        }
     }
 }
 

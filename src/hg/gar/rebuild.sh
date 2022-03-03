@@ -27,6 +27,8 @@ cd "${workDir}"
 printf "### running time ucscEquiv.sh ###\n"
 time $srcDir/ucscEquiv.sh
 printf "### running time garTable.sh ###\n"
-time $srcDir/garTable.sh > index.html 2> ${dateStamp}.log
+time $srcDir/garTable.sh > next.html 2> ${dateStamp}.log
+rm -f index.html
+mv next.html index.html
 chmod +x index.html
 printf "### finished ###\n"

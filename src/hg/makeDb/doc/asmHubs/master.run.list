@@ -301,6 +301,7 @@
 ./runBuild GCA_012275265.1 GCA_012275265.1_bMelUnd1.mat birds Melopsittacus_undulatus
 ./runBuild GCA_012275275.1 GCA_012275275.1_bMelUnd1.pat birds Melopsittacus_undulatus
 ./runBuild GCA_012275295.1 GCA_012275295.1_bMelUnd1.mat.Z birds Melopsittacus_undulatus
+./runBuild GCA_013030995.1 GCA_013030995.1_ASM1303099v1 birds Anser_cygnoides
 ./runBuild GCA_013368605.1 GCA_013368605.1_bNycGra1.pri birds Nyctibius_grandis
 ./runBuild GCA_013407035.1 GCA_013407035.1_ASM1340703v1 birds Coloeus_monedula
 ./runBuild GCA_014337955.1 GCA_014337955.1_AspMar1.0 vertebrate Aspidoscelis_marmoratus
@@ -333,6 +334,7 @@
 ./runBuild GCA_020746105.1 GCA_020746105.1_bTroSur1.pri.cur birds Trogon_surrucura
 ./runBuild GCA_020800305.1 GCA_020800305.1_bPorHoc1.mat.Z.cur birds Porphyrio_hochstetteri
 ./runBuild GCA_020801775.1 GCA_020801775.1_bPorHoc1.pat.decon birds Porphyrio_hochstetteri
+./runBuild GCA_021556685.1 GCA_021556685.1_UTH_Rnor_SHRSP_BbbUtx_1.0 mammals Rattus_norvegicus
 ./runBuild GCA_900006655.3 GCA_900006655.3_Susie3 primates Gorilla_gorilla_gorilla
 ./runBuild GCA_900094665.2 GCA_900094665.2_CAROLI_EIJ_v1.1 mammals Mus_caroli
 ./runBuild GCA_900186095.1 GCA_900186095.1_CHOK1S_HZDv1 mammals Cricetulus_griseus

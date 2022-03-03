@@ -584,7 +584,8 @@ issues such as forward and reverse strand directions, multiple pieces to the ali
 forth.</p> 
 <p> 
 <strong>General Structure</strong><br> 
-The <em>.maf</em> format is line-oriented. Each multiple alignment ends with a blank line. Each 
+The <em>.maf</em> format is line-oriented. Each multiple alignment beigns with the reference genome
+line and ends with a blank line. Each 
 sequence in an alignment is on a single line, which can get quite long, but there is no length 
 limit. Words in a line are delimited by any white space. Lines starting with # are considered to be 
 comments. Lines starting with ## can be ignored by most programs, but contain meta-data of one form 
@@ -593,7 +594,8 @@ or another.</p>
 The file is divided into paragraphs that terminate in a blank line.  Within a paragraph, the first 
 word of a line indicates its type. Each multiple alignment is in a separate paragraph that begins 
 with an &quot;a&quot; line and contains an &quot;s&quot; line for each sequence in the multiple 
-alignment. Some MAF files may contain other optional line types: </p>
+alignment. The first sequence must be the reference genome on which the rest of the sequenes map. 
+Some MAF files may contain other optional line types: </p>
 <ul>
   <li>
   an &quot;i&quot; line containing information about what is in the aligned species DNA before and 
@@ -693,8 +695,8 @@ currently defined variables are: </p>
 </code></pre>
 <p> 
 The &quot;s&quot; lines together with the &quot;a&quot; lines define a multiple alignment. 
-The &quot;s&quot; lines have the following fields which are defined by position rather than 
-name=value pairs.</p> 
+The first &quot;s&quot; line must be the reference genome, hg16 in the above example.
+The &quot;s&quot; lines have the following fields which are defined by position.</p> 
 <ul> 
   <li> 
   <strong>src</strong> -- The name of one of the source sequences for the alignment. For sequences 

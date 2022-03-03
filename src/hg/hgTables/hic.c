@@ -369,12 +369,11 @@ if (errMsg != NULL)
 else
     {
     /* Print sample lines. */
-    struct hash *chromAliasHash = chromAliasMakeLookupTable(database);
     char *chrName = fileInfo->chromNames[1]; // Skip 0, which is "All"
-    struct chromAlias *a = hashFindVal(chromAliasHash, chrName);
+    char *nativeChrom = chromAliasFindNative(chrName);
     char *ucscChrName = NULL;
-    if (a != NULL)
-        ucscChrName = a->chrom;
+    if (nativeChrom != NULL)
+        ucscChrName = nativeChrom;
     else
         ucscChrName = chrName;
 

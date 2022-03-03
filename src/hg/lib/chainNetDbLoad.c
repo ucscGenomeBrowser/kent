@@ -227,7 +227,7 @@ struct chain *chainLoadIdRangeHub(char *db, char *fileName, char *linkFileName, 
  * overlapping the range will be loaded. */
 {
 struct lm *lm = lmInit(0);
-struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasChromToAliasHash(db));
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 char *bedRow[12];
 char startBuf[16], endBuf[16];
@@ -262,7 +262,7 @@ chain->score = sqlUnsigned(bedRow[11]);
 chain->id = id;
 
 // Now load the links.
-bbi =  bigBedFileOpenAlias(linkFileName, chromAliasChromToAliasHash(db));
+bbi =  bigBedFileOpenAlias(linkFileName, chromAliasFindAliases);
 if (loadAll)
     {
     start = chain->tStart;

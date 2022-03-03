@@ -23,10 +23,10 @@
 #include "bigBed.h"
 
 
-struct bbiFile *bigWigFileOpenAlias(char *fileName, struct hash *aliasHash)
+struct bbiFile *bigWigFileOpenAlias(char *fileName, aliasFunc aliasFunc)
 /* Open up big wig file. Using alias hash if not NULL */
 {
-return bbiFileOpenAlias(fileName, bigWigSig, "big wig", aliasHash);
+return bbiFileOpenAlias(fileName, bigWigSig, "big wig", aliasFunc);
 }
 
 struct bbiFile *bigWigFileOpen(char *fileName)
