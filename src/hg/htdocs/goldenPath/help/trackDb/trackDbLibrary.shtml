@@ -968,7 +968,8 @@
     <div class="format">
         <code>mouseOver &lt;pattern&gt;</code><BR>
     </div>
-    <P>For bigBed files this setting creates mouse over text from a pattern based on the values 
+    <P>For bigBed files with more than 8 fields this setting creates
+    mouse over text from a pattern based on the values
     of fields in the file.  The pattern is constructed with fieldnames from the .as file, preceded
     by the dollar sign ($), and can include arbitrary text between the fieldnames.</P>
 
