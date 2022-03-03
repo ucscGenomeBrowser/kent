@@ -169,6 +169,8 @@ if [ ! -s "$testDone" ]; then
     time ($crisporSrc/tools/crisprAddGenome \\
         fasta $db.fa --baseDir $crisporGenomesDir \\
         --desc='$db|$db|$db|$db') > createIndex.log 2>&1 &
+    rm -f $crisporSrc/genomes/$db
+    ln -s $crisporGenomesDir/$db $crisporSrc/genomes/$db
   else
     time ($crisporSrc/tools/crisprAddGenome \\
         ucscLocal $db --baseDir $crisporSrc/genomes) > createIndex.log 2>&1 &
