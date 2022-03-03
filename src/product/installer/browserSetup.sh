@@ -1291,8 +1291,8 @@ function mysqlDbSetup ()
     #       to all database tables.  
 
     mysqlVer=`mysql -e 'SHOW VARIABLES LIKE "version";' -NB | cut -f2 | cut -d- -f1 | cut -d. -f-2`
-    if [[ $mysqlVer == "5.6" ]] ; then
-       # centos7 uses mysql 5.6 which doesn't have IF EXISTS so work around that here
+    if [[ $mysqlVer == "5.6" || $mysqlVer == "5.5" ]] ; then
+       # centos7 uses mysql 5.5 or 5.6 which doesn't have IF EXISTS so work around that here
        $MYSQL -e 'DELETE from mysql.user where user="browser" or user="readonly" or user="readwrite" or user="ctdbuser"'
     else
        $MYSQL -e "DROP USER IF EXISTS browser@localhost"
