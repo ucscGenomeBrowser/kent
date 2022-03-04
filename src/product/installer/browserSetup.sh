@@ -514,15 +514,18 @@ function setMYCNF ()
         # by default and somehow the section doesn't seem to take effect since a specific [mariadb] section also exists in the mariadb-server.cnf.
         # As a result, we only modify the mariadb-server config file
     	MYCNF=/etc/my.cnf.d/mariadb-server.cnf 
+    elif [ -f /etc/mysql/mariadb.conf.d/*-server.cnf ] ; then
+	# Ubuntu with mariadb. Must come before etc/my.cnf
+	MYCNF=/etc/mysql/mariadb.conf.d/*-server.cnf
+    elif [ -f /etc/mysql/mysql.conf.d/mysqld.cnf ] ; then
+	# Ubuntu 16, 18, 20 with mysqld
+    	MYCNF=/etc/mysql/mysql.conf.d/mysqld.cnf
     elif [ -f /etc/my.cnf ] ; then
-	# Centos 6-8
+	# generic Centos 6-8
     	MYCNF=/etc/my.cnf
     elif [ -f /etc/mysql/my.cnf ] ; then
-        # Ubuntu 14
+        # generic Ubuntu 14
     	MYCNF=/etc/mysql/my.cnf
-    elif [ -f /etc/mysql/mysql.conf.d/mysqld.cnf ] ; then
-	# Ubuntu 16, 18, 20
-    	MYCNF=/etc/mysql/mysql.conf.d/mysqld.cnf
     else
     	echo Could not find my.cnf. Adapt 'setMYCNF()' in browserSetup.sh and/or contact us.
     	exit 1
@@ -535,6 +538,7 @@ function mysqlStrictModeOff ()
 # make sure that missing values in mysql insert statements do not trigger errors, #18368 = deactivate strict mode
 # This must happen before Mariadb is started or alternative Mariadb must be restarted after this has been done
 setMYCNF
+echo Deactivating MySQL strict mode
 sed -Ei '/^.(mysqld|server).$/a sql_mode='  $MYCNF
 }
 
