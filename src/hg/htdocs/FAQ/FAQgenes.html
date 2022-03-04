@@ -31,6 +31,8 @@
 <li><a href="#whatdo">This is rather complicated. Can you tell me which gene transcript track
                       I should use?</a></li>
 <li><a href="#gtfDownload">Does UCSC provide GTF/GFF files for gene models?</a></li>
+<li><a href="#coding">What is the best way to get only coding genes (or only non-coding genes)
+                      out of GENCODE (or other gene) tables?</a></li>
 </ul>
 <hr>
 <p>
@@ -609,6 +611,62 @@ downloads FAQ</a> using the <code>-utr</code> flag. They can be found on the dow
 address <i>http://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/genes/</i> where
 <i>$db</i> is the assembly of interest. For example, the <a target="_blank" 
 href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/">hg38 GTF files</a>.</p>
+
+<a name="coding"></a>
+<h2>What is the best way to get only coding genes (or only non-coding genes)
+out of GENCODE (or other gene) tables?</h2>
+<h3>Coding genes</h3>
+<p>
+One option for GENCODE is to use the Public MySQL server and the following query:
+<pre>
+ mysql --user=genome --host=genome-mysql.soe.ucsc.edu -Ne 'select * from wgEncodeGencodeBasicV39 where cdsStartStat = "cmpl" and cdsEndStat = "cmpl";' hg38 
+</pre></p>
+<p>
+What this query does is access the hg38 database, and then from the wgEncodeGencodeBasicV39 table,
+looks to the fields of cdsStartStat and cdsEndStat for only those entries with the value cmpl,
+showing &quot;CDS is complete&quot; at the start and end, so that these are genes that are
+protein-coding entries, thereby excluding non-coding RNA genes.</p>
+<p>
+For the manually curated RefSeq gene set transcript identifiers start with NM_ for coding
+or NR_ for non-coding, followed by a number and version number separated by a dot, e.g.
+&quot;NR_046018.2&quot; for a RNA pseudogene. For RefSeq one can select coding genes by
+filtering for NM identifiers.</p>
+<p>If using the UCSC knownGene table one can filter for where the coding start
+and coding end fields of the table are not equivalent, e.g.
+<code>knownGene.cdsStart != knownGene.cdsEnd</code>, which would ensure the selected
+entries are coding genes.</p>
+<p>
+You can also <a href="https://groups.google.com/u/1/a/soe.ucsc.edu/g/genome/search?q=only%20coding%20genes"
+target="_blank">search our mailing-list archives</a> to read further details about only
+obtaining coding genes from the UCSC Genome Browser.</p>
+<a name="nonCoding"></a>
+<h3>Non-coding genes</h3>
+<p>
+The steps for selecting non-coding genes are essentially the opposite of the steps to select
+only coding genes. One option for GENCODE is to use the Public MySQL server
+and the following query:</p>
+<p>
+<pre>
+ mysql --user=genome --host=genome-mysql.soe.ucsc.edu -Ne 'select * from wgEncodeGencodeBasicV39 where cdsStartStat != "cmpl" and cdsEndStat != "cmpl";' hg38
+</pre></p>
+<p>
+What this query does is access the hg38 database, and then from the wgEncodeGencodeBasicV39 table,
+looks to the fields of cdsStartStat and cdsEndStat for only those entries without the value cmpl,
+showing &quot;CDS is complete&quot; at the start and end, so that these are genes that are
+protein-coding entries, thereby including only non-coding RNA genes.</p>
+<p>
+For the manually curated RefSeq gene set transcript identifiers start with NM_ for coding
+or NR_ for non-coding, followed by a number and version number separated by a dot, e.g.
+&quot;NR_046018.2&quot; for an RNA pseudogene. For RefSeq, one can select coding genes by
+filtering for NR identifiers.</p>
+<p>If using the UCSC knownGene table one can filter for where the coding start
+and coding end fields of the table are equivalent, e.g.
+<code>knownGene.cdsStart = knownGene.cdsEnd</code>, which would ensure the selected
+entries are non-coding genes.</p>
+<p>
+You can also <a href="https://groups.google.com/u/1/a/soe.ucsc.edu/g/genome/search?q=only%20non-coding%20genes"
+target="_blank">search our mailing-list archives</a> to read further details about only
+obtaining non-coding genes from the UCSC Genome Browser.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 
