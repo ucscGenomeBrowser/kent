@@ -3,7 +3,7 @@
 This track contains information about single nucleotide variants 
 and small insertions and deletions (indels) &mdash; collectively Simple
 Nucleotide Variants (SNVs) &mdash; from the European Variation Archive
-(<a href="https://www.ebi.ac.uk/eva/" target=_blank>EVA</A>)
+(<a href="https://www.ebi.ac.uk/eva/" target="_blank">EVA</A>)
 Release 3 for the $organism $db genome. The dbSNP database at NCBI no longer
 hosts non-human variants.
 
@@ -33,8 +33,8 @@ hosts non-human variants.
   class of the variant, the source of the data and the validation status of the
   variant which indicates that the RS was validated by any method as indicated 
   by the dbSNP validation status 
-  (per <a href = "http://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/README_release_general_info.txt" 
-  target = _blank>EVA</a>).
+  (per <a href="http://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/README_release_general_info.txt" 
+  target="_blank">EVA</a>).
 </p>
 
 </p>
@@ -73,14 +73,26 @@ No functional annotations were provided by the EVA (e.g., missense, nonsense, et
 <h2>Methods</h2>
 <p>
 Data were downloaded from the European Variation Archive as a
-<a href =
-"https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/GCA_000002285.2_current_ids.vcf.gz"
-target = _blank>vcf.gz</a> file
+<a href="https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/GCA_000002285.2_current_ids.vcf.gz"
+target="_blank">vcf.gz</a> file
 (release date, 2022-02-24) and converted to BED and then bigBed format.
-Sequence Ontology (&quot;<a href =
-"http://www.sequenceontology.org/browser/current_release"
-target = _blank>SO</a>:&quot;)
+Sequence Ontology (&quot;<a href="http://www.sequenceontology.org/browser/current_release"
+target="_blank">SO</a>:&quot;)
 terms were converted to the variant classes described above.
+</p>
+
+<h2>Data Access</h2>
+<p>
+For automated download and analysis, this annotation is stored in a bigBed file that
+can be downloaded from <a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/"
+target="_blank">our download server</a>. The file for this track is called <tt>evaSnp.bb</tt>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, e.g.
+<br><br>
+<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/$db/encode3/evaSnp.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
 </p>
 
 
@@ -94,14 +106,11 @@ This track was produced at UCSC by Robert Kuhn from data generated worldwide.
 
 <p>
 Cezard T, Cunningham F, Hunt SE, Koylass B, Kumar N, Saunders G, Shen A, Silva AF, 
-Tsukanov K, Venkataraman S <em>et al.</em> <a href = 
-"https://doi.org/10.1093/nar/gkab960" target = _blank>The European Variation Archive: 
-a FAIR resource of genomic variation for all species</a>. 
-<em>Nucleic Acids Res.</em> 2021 Oct 28:gkab960. doi: 10.1093/nar/gkab960. 
-Epub ahead of print. 
-PMID: <a href = "https://pubmed.ncbi.nlm.nih.gov/34718739/" 
-target = _blank>34718739</a>. 
-PMID: <a href = "http://www.ncbi.nlm.nih.gov/pmc/articles/pmc8728205/" 
-target = _blank>PMC8728205</a>.
+Tsukanov K, Venkataraman S <em>et al.</em> <a href="https://doi.org/10.1093/nar/gkab960"
+target="_blank">The European Variation Archive: a FAIR resource of genomic variation for all
+species</a>.  <em>Nucleic Acids Res.</em> 2021 Oct 28:gkab960.
+<a href="https://doi.org/10.1093/nar/gkab960" target="_blank">doi:10.1093/nar/gkab960</a>. 
+Epub ahead of print. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/34718739/" 
+target="_blank">34718739</a>. PMID: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/pmc8728205/" 
+target="_blank">PMC8728205</a>.
 </p>
-
