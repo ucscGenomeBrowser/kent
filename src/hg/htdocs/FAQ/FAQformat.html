@@ -1122,7 +1122,8 @@ genePredExt format.</p>
     lstring exonFrames; 	"Exon frame offsets {0,1,2}"
     )
 </code></pre>
-<p>If you want only protein-coding transcripts, then filter for cdsStartStat='cmpl' and cdsEndStat='cmpl'. Non-coding transcripts have either one of these set to 'incmpl'.
+<p>The fields cdsStartStat and cdsEndStat can have the values ('none','unk','incmpl','cmpl'). However, the values are not used for our display and can not be 
+used to subset for coding or non-coding genes. For most purposes, to get more information about a transcript, other tables will need to be used e.g. in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, where xx is the Gencode Version number.
 </p>
 
 <a name=RefFlat></a>
