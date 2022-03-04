@@ -393,7 +393,7 @@ if (list == NULL || list->next == NULL)
     double scale = scaleForWindow(insideWidth, winStart, winEnd);
     int leftBlank = round(scale * (max(winStart, chromStart) - winStart));
     int rightBlank = round(scale * (winEnd - min(winEnd, chromEnd)));
-    return (double)insideWidth - leftBlank - rightBlank;
+    return insideWidth - leftBlank - rightBlank;
     }
 long long totalGenoSize = 0;
 int totalPixelSize = 0;
@@ -554,8 +554,8 @@ if (bedList != NULL)
 int barCount = filteredCategoryCount(extras);
 
 // users can set minimum bar width and padding in trackDb
-char *userBarWidth = trackDbSetting(tdb, BAR_CHART_USER_BAR_WIDTH);
-char *userBarPadding = trackDbSetting(tdb, BAR_CHART_USER_BAR_PADDING);
+char *userSettingMinBarWidth = trackDbSetting(tdb, BAR_CHART_USER_BAR_MIN_WIDTH);
+char *userSettingMinBarPadding = trackDbSetting(tdb, BAR_CHART_USER_BAR_MIN_PADDING);
 
 /* Scaling here is pretty ad-hoc! */
 double scale = 1.0;
@@ -620,6 +620,7 @@ else
     extras->padding = MIN_GRAPH_PADDING * scale;
     extras->maxHeight = tl.fontHeight * 4;
     }
+
 if (extras->barWidth > 1)
     extras->barWidth = floor(extras->barWidth);
     
@@ -635,15 +636,15 @@ if (extras->barWidth < 1)
     }
 else
     extras->barWidth = round(extras->barWidth);
-if (userBarWidth)
+if (userSettingMinBarWidth)
     {
-    int barWidth = sqlUnsigned(userBarWidth);
-    extras->barWidth = barWidth > extras->barWidth ? barWidth : extras->barWidth;
+    int userMinBarWidth = sqlUnsigned(userSettingMinBarWidth);
+    extras->barWidth = max(userMinBarWidth, extras->barWidth);
     }
-if (userBarPadding)
+if (userSettingMinBarPadding)
     {
-    int barPadding = sqlUnsigned(userBarPadding);
-    extras->padding = barPadding > extras->padding ? barPadding : extras->padding;
+    int userMinBarPadding = sqlUnsigned(userSettingMinBarPadding);
+    extras->padding = max(userMinBarPadding, extras->padding);
     }
 
 extras->modelHeight =  extras->boxModelHeight + 3;
@@ -774,13 +775,10 @@ int expCount = bed->expCount;
 struct barChartCategory *categ;
 int barCount = filteredCategoryCount(extras), barsDrawn = 0;
 double invCount = 1.0/barCount;
-char *userBarWidth = trackDbSetting(tg->tdb, BAR_CHART_USER_BAR_WIDTH);
-if ((extras->padding == 0 || sameString(colorScheme, BAR_CHART_COLORS_USER))
-        && !userBarWidth)
-    {
-    // scale the barWidth on the graph size at this zoom level
-    barWidth = max(barWidth, graphWidth * invCount);
-    }
+char *userSettingMinBarWidth = trackDbSetting(tg->tdb, BAR_CHART_USER_BAR_MIN_WIDTH);
+int userMinBarWidth = 0;
+if (userSettingMinBarWidth)
+    userMinBarWidth = sqlUnsigned(userSettingMinBarWidth);
 for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=categ->next)
     {
     if (!filterCategory(extras, categ->name))
@@ -794,7 +792,12 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
     int barTop = yZero - height + 1;
     if (extras->padding == 0 || sameString(colorScheme, BAR_CHART_COLORS_USER))
         {
-        x1 = x0 + (barWidth * barsDrawn);
+        int cStart = barsDrawn * graphWidth * invCount;
+        int cEnd = (barsDrawn+1) * graphWidth * invCount;
+        x1 = cStart + x0;
+        barWidth = max(userMinBarWidth, cEnd - cStart - extras->padding);
+        if (x1 + barWidth > x0 + graphWidth)
+            break;
         hvGfxBox(hvg, x1, barTop, barWidth, height, fillColorIx);
         if (isClipped)
             hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
@@ -903,6 +906,10 @@ int graphWidth = chartWidth(tg, itemInfo);
 int barCount = filteredCategoryCount(extras);
 
 char label[256];
+char *userSettingMinBarWidth= trackDbSetting(tg->tdb, BAR_CHART_USER_BAR_MIN_WIDTH);
+int userMinBarWidth = 0;
+if (userSettingMinBarWidth)
+    userMinBarWidth = sqlUnsigned(userSettingMinBarWidth);
 if (barCount <= graphWidth) // Don't create map boxes if less than one pixel per bar
     {
     // add maps to category bars
@@ -919,7 +926,7 @@ if (barCount <= graphWidth) // Don't create map boxes if less than one pixel per
 	x1 = barsDrawn * graphWidth * invCount;
 	barsDrawn += 1;
 	x2 = barsDrawn * graphWidth * invCount;
-	int width = max(1, x2-x1);
+	int width = max(userMinBarWidth, max(1, x2-x1));
 	double expScore = bed->expScores[i];
 	int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
 					    extras->maxHeight, extras->doLogTransform);

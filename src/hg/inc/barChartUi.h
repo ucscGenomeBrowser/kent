@@ -67,8 +67,8 @@
 #define BAR_CHART_SIZE_WINDOWS                   "barChartSizeWindows"
 
 /* Let users configure bar width and padding if semantic zoom doesn't work */
-#define BAR_CHART_USER_BAR_WIDTH "barChartBarWidth"
-#define BAR_CHART_USER_BAR_PADDING "barChartBarPadding"
+#define BAR_CHART_USER_BAR_MIN_WIDTH "barChartBarMinWidth"
+#define BAR_CHART_USER_BAR_MIN_PADDING "barChartBarMinPadding"
 
 void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
                         char *title, boolean boxed);
