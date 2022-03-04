@@ -629,7 +629,7 @@ protein-coding entries, thereby excluding non-coding RNA genes.</p>
 <p>
 For the manually curated RefSeq gene set transcript identifiers start with NM_ for coding
 or NR_ for non-coding, followed by a number and version number separated by a dot, e.g.
-&quot;NR_046018.2&quot; for a RNA pseudogene. For RefSeq one can select coding genes by
+&quot;NR_046018.2&quot; for an RNA pseudogene. For RefSeq one can select coding genes by
 filtering for NM identifiers.</p>
 <p>If using the UCSC knownGene table one can filter for where the coding start
 and coding end fields of the table are not equivalent, e.g.
@@ -652,12 +652,12 @@ and the following query:</p>
 <p>
 What this query does is access the hg38 database, and then from the wgEncodeGencodeBasicV39 table,
 looks to the fields of cdsStartStat and cdsEndStat for only those entries without the value cmpl,
-showing &quot;CDS is complete&quot; at the start and end, so that these are genes that are
-protein-coding entries, thereby including only non-coding RNA genes.</p>
+showing &quot;CDS is complete&quot; at the start and end, so that this removes genes that are
+protein-coding entries, thereby selecting only non-coding RNA genes.</p>
 <p>
 For the manually curated RefSeq gene set transcript identifiers start with NM_ for coding
 or NR_ for non-coding, followed by a number and version number separated by a dot, e.g.
-&quot;NR_046018.2&quot; for an RNA pseudogene. For RefSeq, one can select coding genes by
+&quot;NR_046018.2&quot; for an RNA pseudogene. For RefSeq, one can select non-coding genes by
 filtering for NR identifiers.</p>
 <p>If using the UCSC knownGene table one can filter for where the coding start
 and coding end fields of the table are equivalent, e.g.
