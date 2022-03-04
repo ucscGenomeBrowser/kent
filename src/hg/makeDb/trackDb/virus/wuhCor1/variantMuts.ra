@@ -22,7 +22,7 @@ html variantMuts
 # Amino acid tracks
 
         track variantAaMutsV2_B_1_1_7
-        parent variantMuts on
+        parent variantMuts off
         subGroups variant=A_B117 mutation=AA designation=VOC
         shortLabel Alpha AA Muts 
         longLabel Alpha VOC (B.1.1.7 UK Sep-2020) amino acid mutations in 9838 GISAID sequences (Feb 5, 2021)
@@ -33,7 +33,7 @@ html variantMuts
         priority 1
 
         track variantAaMutsV2_B_1_351
-        parent variantMuts on
+        parent variantMuts off
         subGroups variant=B_B1351 mutation=AA designation=VOC
         shortLabel Beta AA Muts
         longLabel Beta VOC (B.1.351 SA Dec-2020) amino acid mutations in 793 GISAID sequences (Feb 5, 2021)
@@ -44,7 +44,7 @@ html variantMuts
         priority 2
 
         track variantAaMutsV2_P_1
-        parent variantMuts on
+        parent variantMuts off
         subGroups variant=C_P1 mutation=AA designation=VOC
         shortLabel Gamma AA Muts 
         longLabel Gamma VOC (P.1 Brazil Nov-2020) amino acid mutations in 78 GISAID sequences (Feb 5, 2021)
