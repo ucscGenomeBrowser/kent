@@ -4464,7 +4464,7 @@ static unsigned *countOverlaps(struct track *track)
 struct slList *items = track->items;
 struct slList *item;
 unsigned size = winEnd - winStart;
-unsigned *counts = needHugeZeroedMem(size * sizeof(unsigned));
+unsigned *counts = needHugeZeroedMem((1+ size) * sizeof(unsigned));
 extern int linkedFeaturesItemStart(struct track *tg, void *item);
 boolean isLinkedFeature = ( track->itemStart == linkedFeaturesItemStart);
 
