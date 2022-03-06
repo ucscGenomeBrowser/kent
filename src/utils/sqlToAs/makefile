@@ -1,7 +1,7 @@
 kentSrc = ../..
 include ../../inc/common.mk
 
-wordsBySize:
+sqlToAs:
 	cp sqlToAs ${DESTDIR}${BINDIR}/sqlToAs
 
 clean::
