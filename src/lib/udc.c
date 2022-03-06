@@ -1902,7 +1902,7 @@ struct lineFile *udcWrapShortLineFile(char *url, char *cacheDir, size_t maxSize)
  * The cacheDir may be null in which case udcDefaultDir() will be used.  If maxSize
  * is zero then a default value (currently 64 meg) will be used. */
 {
-if (maxSize == 0) maxSize = 64 * 1024 * 1024;
+if (maxSize == 0) maxSize = 256 * 1024 * 1024;
 char *buf = udcFileReadAll(url, cacheDir, maxSize, NULL);
 return lineFileOnString(url, TRUE, buf);
 }
