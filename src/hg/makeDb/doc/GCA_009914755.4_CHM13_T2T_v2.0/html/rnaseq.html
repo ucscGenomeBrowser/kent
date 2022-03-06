@@ -5,9 +5,11 @@
 <p>Poly-A+ RNA-seq was performed on CHM13 in duplicate (A and B) and sequenced with 150-bp paired-ended reads. Reads were adapter trimmed, quality filtered (-q 20), and length filtered (-m 100) with Cutadapt (v2.7). Reads were then mapped with either Bowtie2 (v2.3.5.1) default or -k 100 (allowing up to 100 multi-mappers) and then filtered with samtools view F1548. Unique genome-wide 21mers were generated through <a href="https://github.com/marbl/meryl" target="_blank">Meryl (https://github.com/marbl/meryl)</a>.
 The reads mapped with -k 100 were filtered with these unique genome-wide 21mers through one of two methods:</p>
 <ol>
-  <li>Locus-specific unique genome-wide 21mer filtering (overlapSelect -overlapBases=21; <a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/" target="_blank">UCSC tools (GenomeBrowser/20180626)</a>)
-  <li>Read- and locus-specific unique genome-wide 21mer filtering (https://github.com/arangrhie/T2T-Polish/tree/master/marker_assisted, overlapSelect -overlapBases=21)
-<ol>
+  <li>Locus-specific unique genome-wide 21mer filtering (overlapSelect -overlapBases=21; <a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/" target="_blank">UCSC tools (GenomeBrowser/20180626)</a>)</li>
+  <li>Read- and locus-specific unique genome-wide 21mer filtering
+    (<a href="https://github.com/arangrhie/T2T-Polish/tree/master/marker_assisted">
+      https://github.com/arangrhie/T2T-Polish/tree/master/marker_assisted</a> overlapSelect -overlapBases=21)</li>
+</ol>
 
 <h2>Display Conventions and Configuration</h2>
 <p></p>

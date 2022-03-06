@@ -87,17 +87,23 @@ pending:
   @PG   ID:minimap2   PN:minimap2   VN:2.22-r1105-dirty   CL:minimap2 -ax splice -f 1000 --sam-hit-only --secondary=no --eqx -K 100M -t 8 --cap-sw-mem=3g chm13v2.0.chrY.fasta HG002-NA24385-LCL-polished_isoforms_hq.fasta
   globus /HG002-IsoSeq
 
+- isoseq
+    Fritz Sedlazeck  1 minute ago
+    STUDY: PRJNA754107
+     SAMPLE: GM27730 (SAMN20741798)
+      EXPERIMENT: PCD_NISTRM.NA27730-1_1sA-40 (SRX14226556)
+        RUN: m64139_220130_061226 (SRR18074967)
+    STUDY: PRJNA754107
+     SAMPLE: GM26105 (SAMN20741797)
+      EXPERIMENT: PCD_NISTRM.NA26105-1_1sA-40 (SRX14226558)
+        RUN: m64139_220131_122551 (SRR18074969)
+    STUDY: PRJNA200694
+     SAMPLE: NIST HG002 NA24385 (SAMN03283347)
+      EXPERIMENT: PCD_NISTRM.NA24385-1_1sA-40 (SRX14226557)
+        RUN: m64139_220127_180020 (SRR18074968)
+
 - HAL http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/t2tChm13.v2.0.hal
 
-- Savannah Hoyt
-  I have included the updated PRO-seq and RNA-seq trackDescriptions and tracks
-  for chm13v2.0 and they are in these respective directories on Globus (and
-  listed in the google spreadsheet with their specific file
-  names)
-/team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/RNAseq_Bowtie2/
-/team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/PROseq_Bowtie2/
 
-
-If you mean the one we discussed on Feb 20th, then yes! I had just updated the trackDescription a bit after running it by @Arang Rhie first :slightly_smiling_face: And then followed the same formatting/set-up for the RNA-seq.
 
 ================================================================
