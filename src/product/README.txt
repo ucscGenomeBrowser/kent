@@ -134,7 +134,7 @@ Genome Browser in the Cloud (GBiC)
 that sets up a fully functional mirror on all major Linux
 distributions.  
 
-It has been tested on Ubuntu 16, RedHat/CentOS 7 and 8,
+It has been tested on Ubuntu 18 and 20, RedHat/CentOS 7 and 8,
 and Fedora 20. Preferably, the installation should be performed on a fresh Linux
 installation, as it deactivates the default site config file in Apache
 and fills the MariaDB directory with numerous databases. The easiest way to accomplish this is to
