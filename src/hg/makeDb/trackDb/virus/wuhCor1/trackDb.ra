@@ -634,7 +634,7 @@ group varRep
 track resistPred
 #pennantIcon New red ../goldenPath/newsarch.html#022522 "Released Feb. 25, 2022"
 shortLabel Predicted Resistance
-longLabel Mutations that may confer drug resistance predicted by coronavirus3d.org (label is count of GISAID sequences with this mutation in Feb 2022)
+longLabel Mutations that may confer drug resistance - from coronavirus3d.org (label: count of GISAID sequences with mutation, Feb 2022)
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/resistPred/resistPred.bb
 itemRgb on
