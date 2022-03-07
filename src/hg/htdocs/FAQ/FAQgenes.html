@@ -617,20 +617,42 @@ href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/">hg38 GTF fi
 out of GENCODE (or other gene) tables?</h2>
 <h3>Coding genes</h3>
 <p>
-One option for GENCODE is to use the Public MySQL server and the following query:
+The best approach to get protein-coding genes out of GENCODE is to join data with a
+related attributes table, and specifically name the desired biotype(s).</p>
+<p>
+Here is an introductory example using the Public MySQL server to access the wgEncodeGencodeBasicV39
+table of all genes and the wgEncodeGencodeAttrsV39 related table to find the transcriptType for each
+entry and to select those that are annotated as protein-coding genes. There are a number of
+biotypes that can be accessed by looking at the table scheme and clicking the values link for the
+<a href="http://genome.ucsc.edu/cgi-bin/hgTables?hgta_database=hg38&hgta_histoTable=wgEncodeGencodeAttrsV39&hgta_doValueHistogram=transcriptType"
+target="_blank">transcriptType</a> field. These terms are also more fully described on the GENCODE
+<a href=" https://www.gencodegenes.org/pages/biotypes.html" target="_blank">biotypes page</a>.
+The below example will attempt to make a simple example to select
+all types that have &quot;protein_coding&quot; in this transcriptType field:</p>
+<p>
 <pre>
- mysql --user=genome --host=genome-mysql.soe.ucsc.edu -Ne 'select * from wgEncodeGencodeBasicV39 where cdsStartStat = "cmpl" and cdsEndStat = "cmpl";' hg38 
+hgsql hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g, wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "protein_coding");'
 </pre></p>
 <p>
 What this query does is access the hg38 database, and then from the wgEncodeGencodeBasicV39 table,
-looks to the fields of cdsStartStat and cdsEndStat for only those entries with the value cmpl,
-showing &quot;CDS is complete&quot; at the start and end, so that these are genes that are
-protein-coding entries, thereby excluding non-coding RNA genes.</p>
+it takes the name field (g.name) and looks in the related wgEncodeGencodeAttrsV39 table for a matching
+transcriptId field (g.name = a.transcriptId), and then screens for only entries in wgEncodeGencodeAttrsV39
+that are equal to protein-coding (a.transcriptType = &quot;protein_coding&quot;).
+In this way selecting all the entries which are annotated as protein-coding.
+Please note this selection will return some of the unusual protein-coding cases
+that one would not consider, for instance, it will return genes one may not want
+(or want), such as Immunoglobulin and T-cell receptor components.</p>
 <p>
 For the manually curated RefSeq gene set transcript identifiers start with NM_ for coding
 or NR_ for non-coding, followed by a number and version number separated by a dot, e.g.
 &quot;NR_046018.2&quot; for an RNA pseudogene. For RefSeq one can select coding genes by
-filtering for NM identifiers.</p>
+filtering for NM identifiers. On the concept of genes, it may be worth noting that the
+NR_046018.2 example is a transcribed pseudogene of an mRNA. So it is considered an RNA,
+and by many a lncRNA (long non-coding RNA), where the whole idea of transcribed pseudogenes
+is not an unambiguous concept to a lot of biologists. For some, another example, &quot;NR_106918.1&quot;
+represents a miRNA (microRNA), which are short (20-24 nt) non-coding RNAs, which may provide a
+more familiar idea of the kind of non-coding elements desired to be removed from a gene set.
+</p>
 <p>If using the UCSC knownGene table one can filter for where the coding start
 and coding end fields of the table are not equivalent, e.g.
 <code>knownGene.cdsStart != knownGene.cdsEnd</code>, which would ensure the selected
@@ -642,24 +664,40 @@ obtaining coding genes from the UCSC Genome Browser.</p>
 <a name="nonCoding"></a>
 <h3>Non-coding genes</h3>
 <p>
-The steps for selecting non-coding genes are essentially the opposite of the steps to select
-only coding genes. One option for GENCODE is to use the Public MySQL server
-and the following query:</p>
+The steps for selecting non-coding genes are not exactly the opposite of the steps to select
+only coding genes. The above discussion introduced the idea of lncRNA (long non-coding RNA)
+and miRNA (microRNA), hinting at the abundant types of RNA molecules.</p>
+<p>
+Since there are many different kinds of non-coding elements in GENCODE, a better step for non-coding
+selection is to join data with a related attributes table, and specifically name a specific
+desired biotype or biotypes, such as only lncRNAs. There are a number of biotypes that can be
+accessed by looking at the table scheme and clicking the values link for the
+<a href="http://genome.ucsc.edu/cgi-bin/hgTables?hgta_database=hg38&hgta_histoTable=wgEncodeGencodeAttrsV39&hgta_doValueHistogram=transcriptType"
+target="_blank">transcriptType</a> field. These terms are also more fully described on the GENCODE
+<a href=" https://www.gencodegenes.org/pages/biotypes.html" target="_blank">biotypes page</a>.</p>
+<p>
+Here is an introductory example using the Public MySQL server to access the wgEncodeGencodeBasicV39 table
+of all genes and the wgEncodeGencodeAttrsV39 related table to find the transcriptType for each entry and
+to select just lncRNA entries.</p>
 <p>
 <pre>
- mysql --user=genome --host=genome-mysql.soe.ucsc.edu -Ne 'select * from wgEncodeGencodeBasicV39 where cdsStartStat != "cmpl" and cdsEndStat != "cmpl";' hg38
+hgsql hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g, wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "lncRNA");' 
 </pre></p>
 <p>
 What this query does is access the hg38 database, and then from the wgEncodeGencodeBasicV39 table,
-looks to the fields of cdsStartStat and cdsEndStat for only those entries without the value cmpl,
-showing &quot;CDS is complete&quot; at the start and end, so that this removes genes that are
-protein-coding entries, thereby selecting only non-coding RNA genes.</p>
+it takes the name field (g.name) and looks in the related wgEncodeGencodeAttrsV39 table for a matching
+transcriptId field (g.name = a.transcriptId), and then screens for only entries in wgEncodeGencodeAttrsV39
+that are equal to lncRNA (a.transcriptType = &quot;lncRNA&quot;).  In this way selecting all of these types,
+which again, may not be the only subset desired. By modifying the above query it is possible to add
+further qualifiers and generate a subset of different non-coding elements meeting specific research needs.</p>
 <p>
 For the manually curated RefSeq gene set transcript identifiers start with NM_ for coding
 or NR_ for non-coding, followed by a number and version number separated by a dot, e.g.
 &quot;NR_046018.2&quot; for an RNA pseudogene. For RefSeq, one can select non-coding genes by
-filtering for NR identifiers.</p>
-<p>If using the UCSC knownGene table one can filter for where the coding start
+filtering for NR identifiers. Note that a pseudogene of mRNA is not an unambiguous concept,
+and there may be a desire to look further to select certain subset types as mentioned above.</p>
+<p>
+If using the UCSC knownGene table one can filter for where the coding start
 and coding end fields of the table are equivalent, e.g.
 <code>knownGene.cdsStart = knownGene.cdsEnd</code>, which would ensure the selected
 entries are non-coding genes.</p>

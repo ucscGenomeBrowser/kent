@@ -18481,3 +18481,40 @@ rm JASPAR2022.bb
 mv JASPAR2022_mm10.bb JASPAR2022.bb
 ls -lh
 ls -lh /gbdb/mm10/jaspar
+
+
+# TOGA annotations track 
+# got the following files from Michale
+# query_annotation.bed
+# togaData.tab
+
+mkdir /cluster/data/mm10/bed/togaBigBed
+cd /cluster/data/mm10/bed/togaBigBed
+
+sort -k 4 query_annotation.bed > sorted.query.bed
+sort togaData.tab > sorted.togaData.tab
+join -t $'\t' -1 4 sorted.query.bed sorted.togaData.tab  > joined.tab
+cut -f 2-4 joined.tab > part1.tab
+cut -f 1 joined.tab > part2.tab
+cut -f 5-31 joined.tab > part3.tab
+paste part1.tab part2.tab part3.tab | sort -k1,1 -k2,2n > merge.bed
+
+bedToBigBed -tab -type=bed12+19 merge.bed /cluster/data/mm10/chrom.sizes toga.bb -as=$HOME/kent/src/hg/lib/togaData.as
+
+sort togaNucl.tab > sorted.togaNucl.tab
+join -t $'\t' -1 4 sorted.query.bed sorted.togaNucl.tab  > joined.tab
+cut -f 2-4 joined.tab > part1.tab
+cut -f 1 joined.tab > part2.tab
+cut -f 13-21 joined.tab > part3.tab
+paste part1.tab part2.tab part3.tab | sort -k1,1 -k2,2n -k 5,5n > merge.bed
+
+bedToBigBed -tab -type=bed4+9 merge.bed /cluster/data/mm10/chrom.sizes togaNucl.bb -as=$HOME/kent/src/hg/lib/togaNucl.as
+
+sort togaInActMut.tab > sorted.togaInactMut.tab
+join -t $'\t' -1 4 sorted.query.bed sorted.togaInactMut.tab  > joined.tab
+cut -f 2-4 joined.tab > part1.tab
+cut -f 1 joined.tab > part2.tab
+cut -f 13-20 joined.tab > part3.tab
+paste part1.tab part2.tab part3.tab | sort -k1,1 -k2,2n > merge.bed
+
+bedToBigBed -tab -type=bed4+6 merge.bed /cluster/data/mm10/chrom.sizes togaInactMut.bb -as=$HOME/kent/src/hg/lib/togaInactMut.as
