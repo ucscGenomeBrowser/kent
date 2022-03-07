@@ -1637,7 +1637,8 @@ puts("</FORM>");
 printf("<div id=\"tabs\">"
        "<ul> <li><a class=\"defaultDesc\" href=\"#publicHubs\">Public Hubs</a></li>"
        "<li><a class=\"defaultDesc\" href=\"#unlistedHubs\">My Hubs</a></li> ");
-printf("<li><a class=\"hubDeveloperDesc\" href=\"#hubDeveloper\">Hub Development</a></li>");
+if (cfgOptionBooleanDefault("hgHubConnect.validateHub", TRUE))
+    printf("<li><a class=\"hubDeveloperDesc\" href=\"#hubDeveloper\">Hub Development</a></li>");
 printf("</ul> ");
 
 // The public hubs table is getting big and takes a while to download.
@@ -1652,7 +1653,8 @@ struct hash *publicHash = hgHubConnectPublic();
 
 hgHubConnectUnlisted(hubList, publicHash);
 
-hgHubConnectDeveloperMode();
+if (cfgOptionBooleanDefault("hgHubConnect.validateHub", TRUE))
+    hgHubConnectDeveloperMode();
 
 printf("</div>"); // #tabs
 
