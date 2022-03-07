@@ -1826,6 +1826,33 @@ type bed 3 .
     type bed 4 .
     priority 17
 
+    track agilentGeneticSureCghSnp4x180k
+    parent genotypeArrays
+    bigDataUrl /gbdb/hg19/genotypeArrays/hg19.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200518.bb
+    shortLabel Ag CGH/Snp 4x180k
+    longLabel Agilent GenetiSure Cyto CGH+SNP 4x180K AMADID 085591
+    color 0,128,0
+    type bigBed 4 .
+    priority 17
+
+    track agilentGeneticSureCgh4x180k
+    parent genotypeArrays
+    bigDataUrl /gbdb/hg19/genotypeArrays/hg19.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200518.bb
+    shortLabel Ag CGH 4x180k
+    longLabel Agilent GenetiSure Cyto CGH 4x180K AMADID 085589
+    color 255,128,0
+    type bigBed 4 .
+    priority 17.1
+
+    track agilentGeneticSureCgh8x60k
+    parent genotypeArrays
+    bigDataUrl /gbdb/hg19/genotypeArrays/hg19.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200518.bb
+    shortLabel Ag CGH 8x60k
+    longLabel Agilent GenetiSure Cyto CGH 8x60K AMADID 085590
+    color 0,128,0
+    type bigBed 4 .
+    priority 17.2
+
     track snpArrayIllumina650
     parent genotypeArrays off
     shortLabel Illumina 650

@@ -13807,6 +13807,13 @@ cd /hive/data/genomes/hg19/bed/agilentProbes
 ln -s 030587_D_BED_20101006_Colored.bed agilentCghSnpCancer4x180k.bed
 tail +3 agilentCghSnpCancer4x180k.bed | hgLoadBed hg19 agilentCghSnpCancer4x180k stdin
 
+### Update (2022-03-07 Max Haeussler and Daniel Schmelter)
+cd /hive/data/genomes/hg19/bed/agilentProbes/genetiSureCyto
+for i in hg19*.bed; do egrep -v 'browser|track' $i > /tmp/temp.bed; bedSort /tmp/temp.bed /tmp/temp.bed; bedToBigBed /tmp/temp.bed ../../../chrom.sizes `basename $i .bed`.bb; done
+mkdir /gbdb/hg19/genotypeArrays
+cd /gbdb/hg19/genotypeArrays
+for $i in /hive/data/genomes/hg19/bed/agilentProbes/genetiSureCyto/*.bb; do ln -s $i; done
+
 
 #################################################################################
 # Rfam (2011-11-30 Melissa Cline)
@@ -34091,6 +34098,10 @@ File name: MGI_Exome_Capture_V5.bed
 
 # Agilent Datasets:
 Download for all Agilent files: https://earray.chem.agilent.com/suredesign/ - Password needed (from Ana)
+
+to get them:
+go to https://earray.chem.agilent.com/suredesign/ then select Find Designs -> CGH -> Agilent Catalog
+(HT to Daniel)
 
 Track: Agilent - SureSelect Clinical Research Exome Covered by Probes
 File name: S06588914_Covered.bed
