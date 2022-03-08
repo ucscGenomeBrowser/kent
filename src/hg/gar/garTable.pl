@@ -729,7 +729,7 @@ printf "<div class='pullDownMenu'>\n";
 printf "  <span id='speciesSelectAnchor'>choose clades to view/hide</span>\n";
 printf "  <div class='pullDownMenuContent'>\n";
 printf "  <ul id='checkBoxSpeciesSelect'>\n";
-printf "    <li><label><input class='hideAll' type='checkbox' onchange='gar.visCheckBox(this)' id='allCheckBox' value='all' checked><span class='hideAllLabel'> hide all</span></label></li>\n";
+printf "    <li><label><input class='showAll' type='checkbox' onchange='gar.visCheckBox(this)' id='allCheckBox' value='all' checked><span class='showAllLabel'> show all</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='primatesCheckBox' value='primates' checked><span id='primatesLabel'> primates</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='mammalsCheckBox' value='mammals' checked><span id='mammalsLabel'> mammals</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='birdsCheckBox' value='birds' checked><span id='birdsLabel'> birds</span></label></li>\n";
@@ -746,7 +746,7 @@ printf "<div style='width: 260px;' class='pullDownMenu'>\n";
 printf "  <span style='text-align: center;' id='assemblyTypeAnchor'>select assembly type to display</span>\n";
 printf "  <div class='pullDownMenuContent'>\n";
 printf "  <ul id='checkBoxAssemblyType'>\n";
-printf "    <li><label><input class='hideAll' type='checkbox' onchange='gar.visCheckBox(this)' id='allCheckBox' value='all' checked><span class='hideAllLabel'> hide all</span></label></li>\n";
+printf "    <li><label><input class='showAll' type='checkbox' onchange='gar.visCheckBox(this)' id='allCheckBox' value='all' checked><span class='showAllLabel'> show all</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='gakCheckBox' value='gak' checked><span id='gakLabel'> Existing browser</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='garCheckBox' value='gar' checked><span id='garLabel'> Request browser</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='gcaCheckBox' value='gca' checked><span id='gcaLabel'> GCA/GenBank</span></label></li>\n";
@@ -799,6 +799,7 @@ printf "<h2 style='display: none;' id='counterDisplay'>%s total assemblies : use
 printf "<table style='display: hide;' class='sortable borderOne cladeTable' id='dataTable'>\n";
 
 printf "<colgroup id='colDefinitions'>\n";
+printf "<col id='viewReq' span='1' class=colGViewReq>\n";
 printf "<col id='comName' span='1' class=colGComName>\n";
 printf "<col id='sciName' span='1' class=colGSciName>\n";
 printf "<col id='asmId' span='1' class=colGAsmId>\n";
@@ -817,7 +818,8 @@ printf "</colgroup>\n";
 
 printf "<thead>\n";
 printf "<tr>\n";
-printf "  <th class='colComName'><div class='tooltip'>common name<span onclick='event.stopPropagation()' class='tooltiptext'>Links to an existing assembly browser, Button opens an assembly request form.</span></div></th>\n";
+printf "  <th class='colViewReq'><div class='tooltip'>view/request<span onclick='event.stopPropagation()' class='tooltiptext'><em>'view'</em> opens the genome browser on an existing assembly, or the <em>'request'</em> button opens an assembly build request form.</span></div></th>\n";
+printf "  <th class='colComName'><div class='tooltip'>common name<span onclick='event.stopPropagation()' class='tooltiptext'>common name</span></div></th>\n";
 printf "  <th class='colSciName'><div class='tooltip'>scientific name (count)<span onclick='event.stopPropagation()' class='tooltiptext'>Links to Google image search. Count shows the number of assemblies available for this orgnism.</span></div></th>\n";
 printf "  <th class='colAsmId'><div class='tooltip'>NCBI assembly<span onclick='event.stopPropagation()' class='tooltiptext'>Links to NCBI resource record.</span></div></th>\n";
 printf "  <th class='colAsmSize'><div class='tooltip'>assembly<br>size<span onclick='event.stopPropagation()' class='tooltiptext'>Number of nucleotides in the assembly.</span></div></th>\n";
@@ -1044,14 +1046,6 @@ foreach my $clade (@clades) {
 ### can override CSS settings here
 ###    $rowClass = " class='gar' style='display: none;'";
 
-  ############# obsolete first column, a running count, and establish row color ###
-  if ( 0 == 1 ) {
-    if (length($statusColor)) {
-       printf "<tr%s style='color:%s;'><th style='text-align:right;'>%d</th>", $rowClass, $statusColor, $asmCountInTable;
-    } else {
-       printf "<tr%s><th style='text-align:right;'>%d</th>", $rowClass, $asmCountInTable;
-    }
-  }
   # experiment with hiding all rows over 500 count to see if that helps
   # chrom browser initial loading performance
   # try out the table with out any count, just get the row started
@@ -1060,7 +1054,7 @@ foreach my $clade (@clades) {
      # let's see what nostatus looks like
      $statusClass = "";
      if ($asmCountInTable > 500) {
-       printf "<tr%s%s display:none;'>", $rowClass, $statusClass;
+       printf "<tr%s%s style='display:none;'>", $rowClass, $statusClass;
      } else {
        printf "<tr%s%s'>", $rowClass, $statusClass;
      }
@@ -1071,14 +1065,22 @@ foreach my $clade (@clades) {
        printf "<tr%s>", $rowClass;
      }
   }
+  ############# trying out a first column that is just the button or link
+
   ############# first column, common name link to browser or request button ##
   if (defined($comName{$asmId})) {
-     printf "<th onmouseout='gar.col1TipOff(event)' onmouseover='gar.col1Tip(event)' style='text-align:left;'><a href='%s' target=_blank>%s</a></th>", $browserUrl, $commonName;
+     printf "<th style='text-align:center;'><a href='%s' target=_blank>view</a></th>", $browserUrl;
+     printf PC "\tview";	# output to clade.tableData.tsv
+     printf "<th style='text-align:left;'>%s</th>", $commonName;
   } else {
      if (length($ucscDb)) {
-       printf "<th onmouseout='gar.col1TipOff(event)' onmouseover='gar.col1Tip(event)' style='text-align:left;'><a href='%s' target=_blank>%s</a></th>", $browserUrl, $commonName;
+       printf "<th style='text-align:center;'><a href='%s' target=_blank>view</a></th>", $browserUrl;
+       printf PC "\tview";	# output to clade.tableData.tsv
+       printf "<th style='text-align:left;'>%s</th>", $commonName;
      } else {
-       printf "<th onmouseout='gar.col1TipOff(event)' onmouseover='gar.col1Tip(event)' style='text-align:left;'><button type='button' onclick='gar.openModal(this)' name='%s'>%s</button></th>", $asmId, $commonName;
+       printf "<th style='text-align:center;'><button type='button' onclick='gar.openModal(this)' name='%s'>request</button></th>", $asmId;
+       printf PC "\trequest";	# output to clade.tableData.tsv
+       printf "<th style='text-align:left;'>%s</th>", $commonName;
      }
   }
   printf PC "\t%s", $commonName;	# output to clade.tableData.tsv

@@ -49,6 +49,16 @@
   width: 100%;
 }
 
+.borderOne th,
+.borderOne td {
+  border: 1px solid black;
+  word-wrap: anywhere;
+  /* overflow-wrap: anywhere; */
+  overflow: hidden;
+  height: 40px;
+  /* overflow: hidden; */
+}
+
 /* the large table begins life as display none,
  *   onload will change it to 'table' -- saves time on Edge/Chrome */
 
@@ -64,16 +74,6 @@
  */
 .cladeTable thead tr th {
   overflow: visible;
-}
-
-.borderOne th,
-.borderOne td {
-  border: 1px solid black;
-  word-wrap: anywhere;
-  /* overflow-wrap: anywhere; */
-  overflow: hidden;
-  height: 40px;
-  /* overflow: hidden; */
 }
 
 .gak {
@@ -215,8 +215,12 @@
   margin: 2px 20px 2px 2px;
   padding: 5px 5px 5px 5px;
   text-align: center;
-  box-shadow: 0 0 4px 4px gold;
+  box-shadow: 8px 8px 4px grey;
 }
+
+/* for box-shadow:
+ * offset-x | offset-y | blur-radius | spread-radius | color
+ */
 
 .pullDownMenuContent {
   display: none;
@@ -385,7 +389,7 @@ inside a <ul> element.
 }
 
 #specificRequest {
-  color: #eeaa22;
+  color: #000;
   /* background: #555555;*/
   background: white;
 }
@@ -393,7 +397,7 @@ inside a <ul> element.
 #specificRequest:hover {
   /* color: #555555;*/
   color: white;
-  background: #eeaa22;
+  background: #ea2;
 }
 
 .tooltip {

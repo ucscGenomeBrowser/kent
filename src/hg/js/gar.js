@@ -85,7 +85,7 @@ var gar = {
       var hasAll = gar.urlParams.has('all');
       if (hasAll) {
         var columnList = document.getElementsByClassName('columnCheckBox');
-        for ( i = 0; i < columnList.length; i++) { 
+        for ( i = 0; i < columnList.length; i++) {
            var id = columnList[i].value + "CheckBox";
            var checkBox = document.getElementById(id);
            if (checkBox) {
@@ -164,7 +164,7 @@ var gar = {
     // foreach table, for each row in the table, count visible rows
     countVisibleRows: function(et) {
 //      var t0 = gar.millis();
-      var comNameRow = gar.columnNames.get('comName');
+      var viewReqRow = gar.columnNames.get('viewReq');
       var asmIdRow = gar.columnNames.get('asmId');
       var iucnRow = gar.columnNames.get('IUCN');
       var cladeRow = gar.columnNames.get('clade');
@@ -186,9 +186,9 @@ var gar = {
           var asmId = rowId.cells[asmIdRow].innerHTML;
           var isGCA = asmId.includes("GCA");
           var isGCF = asmId.includes("GCF");
-          var comName = rowId.cells[comNameRow].innerHTML;
-          var canBeRequested = comName.includes("button");
-          var ucscDb = comName.includes("cgi-bin/hgTracks");
+          var viewReq = rowId.cells[viewReqRow].innerHTML;
+          var canBeRequested = viewReq.includes("button");
+          var ucscDb = viewReq.includes("cgi-bin/hgTracks");
           var iucnStatus = rowId.cells[iucnRow].innerHTML;
           var hasIucn = false;
           if (iucnStatus) {
@@ -203,10 +203,8 @@ var gar = {
         }
       }
       var notVis = totalRows - visRows;
-      /* fixup the hideAll checkbox status, if there are any rows visible,
-       * those hideAll checkboxes should indicate off so they are
-       * thereby ready to do the function of 'hideAll'.  Or if all rows
-       * are not visible, they should be on to indicate 'hideAll' is in effect
+      /* fixup the showAll checkbox status, fully on == checked box
+       * partially on == indeterminate/minus sign in box, fully off == empty box
        */
       /* reset the checked status on all the other show/hide check boxes */
       gar.checkBoxNames.forEach(function(checkBox, name) {
@@ -232,11 +230,11 @@ var gar = {
          var labelText = gar.checkBoxLabels.get(name);
          if (labelEl) {
             labelEl.innerText = labelText + " (" + visibleCount.toLocaleString() + "/" + hiddenCount.toLocaleString() + ")";
-         } else {
-alert("no element for label '" + labelId + "'");
+//         } else {
+// alert("no element for label '" + labelId + "'");
          }
       });
-      var hideAllList = document.getElementsByClassName('hideAll');
+      var showAllList = document.getElementsByClassName('showAll');
 //      var thisEt = gar.millis() - t0;
       var thisEt = et;
       if (visRows > 0) {
@@ -247,32 +245,33 @@ alert("no element for label '" + labelId + "'");
         } else {
           counterDisplay.innerHTML = "showing " + visRows.toLocaleString() + " assemblies, " + notVis.toLocaleString() + " hidden";
         }
-        for (i = 0; i < hideAllList.length; i++) {
-          hideAllList[i].checked = false;
-          if (visRows > 0 && notVis > 0) {
-            hideAllList[i].indeterminate = true;
+        for (i = 0; i < showAllList.length; i++) {
+          if (notVis > 0) {
+            showAllList[i].checked = false;	// they are not all on
+            showAllList[i].indeterminate = true;
           } else {
-            hideAllList[i].indeterminate = false;
+            showAllList[i].indeterminate = false;
+            showAllList[i].checked = true;	// all rows are on
           }
         }
-        hideAllLabelList = document.getElementsByClassName('hideAllLabel');
-        for (i = 0; i < hideAllLabelList.length; i++) {
-          hideAllLabelList[i].innerHTML = "hide all (" + visRows.toLocaleString() + "/" + notVis.toLocaleString() + ")"; 
+        showAllLabelList = document.getElementsByClassName('showAllLabel');
+        for (i = 0; i < showAllLabelList.length; i++) {
+          showAllLabelList[i].innerHTML = " show all (" + visRows.toLocaleString() + "/" + notVis.toLocaleString() + ")";
         }
 
-      } else {
+      } else {	// visRows == 0
         if (gar.measureTiming) {
           counterDisplay.innerHTML = totalRows.toLocaleString() + " total ssemblies : use the selection menus to select subsets : process time: " + thisEt + " millis";
         } else {
           counterDisplay.innerHTML = totalRows.toLocaleString() + " total ssemblies : use the selection menus to select subsets";
         }
-        for (i = 0; i < hideAllList.length; i++) {
-          hideAllList[i].checked = true;
-          hideAllList[i].indeterminate = false;
+        for (i = 0; i < showAllList.length; i++) {
+          showAllList[i].checked = false;
+          showAllList[i].indeterminate = false;
         }
-        hideAllLabelList = document.getElementsByClassName('hideAllLabel');
-        for (i = 0; i < hideAllLabelList.length; i++) {
-          hideAllLabelList[i].innerHTML = "hide all (" + visRows.toLocaleString() + "/" + notVis.toLocaleString() + ")"; 
+        showAllLabelList = document.getElementsByClassName('showAllLabel');
+        for (i = 0; i < showAllLabelList.length; i++) {
+          showAllLabelList[i].innerHTML = " show all (" + visRows.toLocaleString() + "/" + notVis.toLocaleString() + ")";
         }
       }
     },
@@ -315,8 +314,8 @@ alert("no element for label '" + labelId + "'");
       }
     },
 
-    // foreach table, for each row in the table, hide row
-    hideAll: function(offOn) {
+    // foreach table, for each row in the table, show row
+    showAll: function(offOn) {
       var t0 = gar.millis();
       for (var i = 0; i < gar.cladeTableList.length; i++) {
         for (var j = 0; j < gar.cladeTableList[i].rows.length; j++) {
@@ -325,19 +324,14 @@ alert("no element for label '" + labelId + "'");
           if (tagN === 'thead' || tagN === 'tfoot') {
             continue;
           }
-          if (offOn) {   // true, turn *off* the row == this is 'hideAll'
-            rowId.style.display = "none";
-          } else {	// false, turn *on* the row == this is ! 'hideAll'
+          if (offOn) {   // true, turn *on* the row == this is 'showAll'
             rowId.style.display = "table-row";
+          } else {	// false, turn *off* the row == this is ! 'showAll'
+            rowId.style.display = "none";
           }
         }
       }
-      /* reset the checked status on all the other show/hide check boxes */
-//      var checkBoxList = document.getElementsByClassName('hideShow');
-//      for (var i = 0; i < checkBoxList.length; i++) {
-//        checkBoxList[i].checked = ! offOn;
-//      }
-      /* the countVisibleRows will take care of the status on all 'hideAll'
+      /* the countVisibleRows will take care of the status on all 'showAll'
        * checkboxes - AND the checkBox 'hideShow' check boxes depending upon
        * the counts for that category.
        */
@@ -367,10 +361,10 @@ alert("no element for label '" + labelId + "'");
     // them to be available for a second click while in progress
     //  tf is 'true' or 'false' to disable (true), or reenable (false)
     disableCheckBoxes: function(tf) {
-      var hideAllList = document.getElementsByClassName('hideAll');
+      var showAllList = document.getElementsByClassName('showAll');
       var i = 0;
-      for (i = 0; i < hideAllList.length; i++) {
-        hideAllList[i].disabled = tf;
+      for (i = 0; i < showAllList.length; i++) {
+        showAllList[i].disabled = tf;
       }
       var hideShowList = document.getElementsByClassName('hideShow');
       for (i = 0; i < hideShowList.length; i++) {
@@ -384,7 +378,7 @@ alert("no element for label '" + labelId + "'");
       var offOn = e.checked;    // false to turn off, true to turn on
       gar.disableCheckBoxes(true);  // disable while processing
       if (e.value === "all") {
-        gar.hideAll(offOn);
+        gar.showAll(offOn);
       } else {
         var thisList = document.getElementsByClassName(e.value);
         gar.resetListVis(thisList, offOn);
@@ -634,7 +628,7 @@ alert("no element for label '" + labelId + "'");
 //	return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 //	var re = /^[^\s@]+@[^\s@]+$/;
 //  if (re.test(email)) { OK }
-        
+
 //    var validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       var validEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if(! validEmail.test(form.email.value)) {
