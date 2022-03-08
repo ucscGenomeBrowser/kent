@@ -215,8 +215,12 @@
   margin: 2px 20px 2px 2px;
   padding: 5px 5px 5px 5px;
   text-align: center;
-  box-shadow: 0 0 4px 4px gold;
+  box-shadow: 8px 8px 4px grey;
 }
+
+/* for box-shadow:
+ * offset-x | offset-y | blur-radius | spread-radius | color
+ */
 
 .pullDownMenuContent {
   display: none;
