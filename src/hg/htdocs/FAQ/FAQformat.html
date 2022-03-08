@@ -16,7 +16,7 @@
   <div class="col-md-6">
     <ul>
       <li><a href="../goldenPath/help/axt.html">Axt format</a></li>
-      <li><a href="#format5.1">BAM format</a></li>
+      <li><a href="/goldenPath/help/bam.html">BAM format</a></li>
       <li><a href="#format1">BED format</a></li>
       <li><a href="#format1.7">BED detail format</a></li>
       <li><a href="/goldenPath/help/bedgraph.html">bedGraph format</a></li>
@@ -848,23 +848,6 @@ s hg18.chr7    27707221 13 + 158545518 gcagctgaaaaca
 s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
 s baboon         249182 13 +   4622798 gcagctgaaaaca
 s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA </code></pre>
-
-<a name="format5.1"></a>
-<h2>BAM format</h2>
-<p>
-BAM is the compressed binary version of the <a href="http://samtools.sourceforge.net/" 
-target="_blank">Sequence Alignment/Map (SAM)</a> format, a compact and index-able representation of 
-nucleotide sequence alignments. Many <a href="http://samtools.sourceforge.net/swlist.shtml" 
-target="_blank">next-generation sequencing and analysis tools</a> work with SAM/BAM. For custom 
-track display, the main advantage of indexed BAM over PSL and other human-readable alignment formats
-is that only the portions of the files needed to display a particular region are transferred to
-UCSC. This makes it possible to display alignments from files that are so large that the connection 
-to UCSC would time out when attempting to upload the whole file to UCSC. Both the BAM file and its 
-associated index file remain on your web-accessible server (http or ftp), not on the UCSC server.
-UCSC temporarily caches the accessed portions of the files to speed up interactive display.</p>
-<p>
-Click <a href="../goldenPath/help/bam.html">here</a> for more information about BAM custom 
-tracks.</p>
 
 <a name="format6.1"></a>
 <h2>bigWig format</h2> 
