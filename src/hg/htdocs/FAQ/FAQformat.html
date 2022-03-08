@@ -21,7 +21,7 @@
       <li><a href="#format1.7">BED detail format</a></li>
       <li><a href="#format1.8">bedGraph format</a></li>
       <li><a href="#format21">barChart and bigBarChart format</a></li>
-      <li><a href="#format1.5">bigBed format</a></li>
+      <li><a href="/goldenPath/help/bigBed.html">bigBed format</a></li>
       <li><a href="#format9.1">bigGenePred table format</a></li>
       <li><a href="#format9.2">bigPsl table format</a></li>
       <li><a href="#format9.3">bigMaf table format</a></li>
@@ -244,20 +244,6 @@ chr7    127480532  127481699  Neg4  0  -
 <p>
 Click <a class="insideLink" href="../cgi-bin/hgTracks?org=human&amp;position=chr7&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/ColorByStrandDemo.txt"
 target="_blank">here</a> to display this track in the Genome Browser.</p>
-
-<a name="format1.5"></a>
-<h2>bigBed format</h2>
-<p>
-The bigBed format stores annotation items that can either be simple, or a linked collection of 
-exons, much as <a href="#format1">bed</a> files do. BigBed files are created initially from bed 
-type files, using the program <code>bedToBigBed</code>. The resulting bigBed files are in an indexed
-binary format. The main advantage of the bigBed files is that only the portions of the files needed 
-to display a particular region are transferred to UCSC, so for large data sets bigBed is 
-considerably faster than regular bed files. The bigBed file remains on your web accessible server 
-(http, https, or ftp), not on the UCSC server. </p>
-<p>
-Click <a href="../goldenPath/help/bigBed.html">here</a> for more information on the bigBed 
-format.</p> 
 
 <a name="format1.7"></a>
 <h2>BED detail format</h2>
