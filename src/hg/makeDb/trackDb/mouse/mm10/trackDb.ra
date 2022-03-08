@@ -63,6 +63,18 @@ visibility hide
 color 20,20,170
 type bed 12
 
+track ncbiRefSeqSelect
+parent refSeqComposite off
+priority 8
+type genePred
+shortLabel RefSeq Select
+longLabel NCBI RefSeq Select: One representative transcript per protein-coding gene
+trackHandler ncbiRefSeq
+idXref ncbiRefSeqLink mrnaAcc name
+color 20,20,160
+baseColorUseCds given
+baseColorDefault genomicCodons
+
 track xenoClinvar
 shortLabel Human Variants
 longLabel ClinVar Variants mapped to Mouse
