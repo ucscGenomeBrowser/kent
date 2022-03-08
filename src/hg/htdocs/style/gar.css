@@ -389,7 +389,7 @@ inside a <ul> element.
 }
 
 #specificRequest {
-  color: #eeaa22;
+  color: #000;
   /* background: #555555;*/
   background: white;
 }
@@ -397,7 +397,7 @@ inside a <ul> element.
 #specificRequest:hover {
   /* color: #555555;*/
   color: white;
-  background: #eeaa22;
+  background: #ea2;
 }
 
 .tooltip {

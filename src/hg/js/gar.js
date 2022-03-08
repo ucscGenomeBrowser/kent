@@ -164,7 +164,7 @@ var gar = {
     // foreach table, for each row in the table, count visible rows
     countVisibleRows: function(et) {
 //      var t0 = gar.millis();
-      var comNameRow = gar.columnNames.get('comName');
+      var viewReqRow = gar.columnNames.get('viewReq');
       var asmIdRow = gar.columnNames.get('asmId');
       var iucnRow = gar.columnNames.get('IUCN');
       var cladeRow = gar.columnNames.get('clade');
@@ -186,9 +186,9 @@ var gar = {
           var asmId = rowId.cells[asmIdRow].innerHTML;
           var isGCA = asmId.includes("GCA");
           var isGCF = asmId.includes("GCF");
-          var comName = rowId.cells[comNameRow].innerHTML;
-          var canBeRequested = comName.includes("button");
-          var ucscDb = comName.includes("cgi-bin/hgTracks");
+          var viewReq = rowId.cells[viewReqRow].innerHTML;
+          var canBeRequested = viewReq.includes("button");
+          var ucscDb = viewReq.includes("cgi-bin/hgTracks");
           var iucnStatus = rowId.cells[iucnRow].innerHTML;
           var hasIucn = false;
           if (iucnStatus) {
@@ -230,8 +230,8 @@ var gar = {
          var labelText = gar.checkBoxLabels.get(name);
          if (labelEl) {
             labelEl.innerText = labelText + " (" + visibleCount.toLocaleString() + "/" + hiddenCount.toLocaleString() + ")";
-         } else {
-alert("no element for label '" + labelId + "'");
+//         } else {
+// alert("no element for label '" + labelId + "'");
          }
       });
       var showAllList = document.getElementsByClassName('showAll');
