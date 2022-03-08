@@ -10,11 +10,16 @@
 <a href="https://github.com/aidenlab/juicer/wiki/Data/#hic-files" target="_blank">Hic format</a>
 is an indexed binary format designed to permit fast random access to contact matrix heatmaps.  The
 format was designed by the <a href="https://www.aidenlab.org/" target="_blank">Aiden Lab</a>
-at <a href="https://www.bcm.edu/" target="_blank">Baylor College of Medicine</a>.  
-</p><p>
-The format is used for displaying chromatin conformation data in the browser.  After running a
-chromatin conformation experiment such as <em>in situ</em> Hi-C, researchers can pass their results through
-the <a href="https://github.com/aidenlab/juicer/wiki" target="_blank">Juicer</a> pipeline to 
+at <a href="https://www.bcm.edu/" target="_blank">Baylor College of Medicine</a>. More information
+on the hic format itself can be found in the documentation on
+<a href="https://github.com/aidenlab/juicer/wiki/Data/#hic-files" target="_blank">Github</a>.
+</p>
+<p>
+The format is used for displaying chromatin conformation data in the browser. This format is useful
+for displaying interactions at a scale and depth that exceeds what can be easily visualized with the
+interact and bigInteract formats. After running a chromatin conformation experiment such as
+<em>in situ</em> Hi-C, researchers can pass their results through the
+<a href="https://github.com/aidenlab/juicer/wiki" target="_blank">Juicer</a> pipeline to
 produce a hic file. Due to the large size of many of these files, UCSC is not able to support
 direct upload via our Custom Track interface. Instead, users should place their Hic files in a 
 web-accessible space and enter the URL as a bigDataUrl. If you do not have access to a 
