@@ -1,0 +1,120 @@
+track galaxyEna
+superTrack on
+shortLabel Galaxy ENA mutations
+longLabel covid19.galaxyproject.org: surveillance of mutations in consistently processed sequencing results in the ENA 
+type bigBed
+group varRep
+visibility dense
+release alpha
+
+# the internal name, not visible in the UI, used for URL arguments. No special characters.
+track previous_quarter_tracks
+compositeTrack on
+type bigBed
+allButtonPair on
+visibility pack
+filterValues.countries EE|Estonia,GB|United Kingdom,GR|Greece,IE|Ireland,ZA|South Africa
+filterType.countries multipleListAnd
+filterValuesDefault.countries GB
+filter.withinLineageFrequency 0.1
+filterByRange.withinLineageFrequency on
+filterLimits.withinLineageFrequency 0:2
+# a short name for the track list, we try to stay < 20 characters, all characters are OK
+shortLabel Previous quarter top lineages
+# a long name, shown above the track, < 200 characters
+longLabel Most frequent lineages of previous quarter
+parent galaxyEna
+
+    track galaxyEnaAy4
+    parent previous_quarter_tracks on
+    shortLabel AY.4 mutations
+    longLabel Mutations (amino acid level) in AY.4 between 2021-09-01 and 2021-12-01
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/AY.4_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 5 + 13
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    # default visibility, one of full, pack, squish, dense, hide
+    # "pack" is usually a good starting visibility. Try to not show more than 12-15 tracks by default.
+
+    # the internal name, not visible in the UI, used for URL arguments. No special characters.
+    track galaxyEnaB117
+    parent previous_quarter_tracks on
+    # a short name for the track list, we try to stay < 20 characters, all characters are OK
+    shortLabel B.1.1.7 mutations
+    # a long name, shown above the track, < 200 characters
+    longLabel Mutations (amino acid level) in B.1.1.7 between 2021-09-01 and 2021-12-01
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/B.1.1.7_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 5 + 13
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    # default visibility, one of full, pack, squish, dense, hide
+    # "pack" is usually a good starting visibility. Try to not show more than 12-15 tracks by default.
+    visibility pack
+
+# the internal name, not visible in the UI, used for URL arguments. No special characters.
+track current_quarter_tracks
+compositeTrack on
+type bigBed
+allButtonPair on
+visibility pack
+filterValues.countries EE|Estonia,GB|United Kingdom,GR|Greece,IE|Ireland,ZA|South Africa
+filterType.countries multipleListAnd
+filterValuesDefault.countries GB
+filter.withinLineageFrequency 0.1
+filterByRange.withinLineageFrequency on
+filterLimits.withinLineageFrequency 0:2
+# a short name for the track list, we try to stay < 20 characters, all characters are OK
+shortLabel Current quarter top lineages
+# a long name, shown above the track, < 200 characters
+longLabel Most frequent lineages of current quarter
+parent galaxyEna
+
+    track 2
+    parent current_quarter_tracks on
+    shortLabel AY.4 mutations
+    longLabel Mutations (amino acid level) in AY.4 between 2021-12-01 and 2022-03-01
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_q1/AY.4_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 5 + 13
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    # default visibility, one of full, pack, squish, dense, hide
+    # "pack" is usually a good starting visibility. Try to not show more than 12-15 tracks by default.
+
+    # the internal name, not visible in the UI, used for URL arguments. No special characters.
+    track 3
+    parent current_quarter_tracks on
+    # a short name for the track list, we try to stay < 20 characters, all characters are OK
+    shortLabel B.1.1.7 mutations
+    # a long name, shown above the track, < 200 characters
+    longLabel Mutations (amino acid level) in B.1.1.7 between 2021-12-01 and 2022-03-01
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_q1/B.1.1.7_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 5 + 13
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    # default visibility, one of full, pack, squish, dense, hide
+    # "pack" is usually a good starting visibility. Try to not show more than 12-15 tracks by default.
+    visibility pack
