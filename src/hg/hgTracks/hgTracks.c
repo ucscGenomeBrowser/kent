@@ -10700,7 +10700,7 @@ measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTi
 if (measureTiming)
     measureTime("Startup (bottleneck %d ms) ", botDelayMillis);
 
-char *mouseOverEnabled = cfgOption("mouseOverEnabled");
+char *mouseOverEnabled = cfgOptionDefault("mouseOverEnabled", "on");
 if (sameWordOk(mouseOverEnabled, "on"))
     {
     /* can not use mouseOver in any virtual mode */

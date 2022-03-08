@@ -134,7 +134,7 @@ Genome Browser in the Cloud (GBiC)
 that sets up a fully functional mirror on all major Linux
 distributions.  
 
-It has been tested on Ubuntu 16, RedHat/CentOS 7 and 8,
+It has been tested on Ubuntu 18 and 20, RedHat/CentOS 7 and 8,
 and Fedora 20. Preferably, the installation should be performed on a fresh Linux
 installation, as it deactivates the default site config file in Apache
 and fills the MariaDB directory with numerous databases. The easiest way to accomplish this is to
@@ -149,6 +149,23 @@ Coast / San Francisco Bay Area or San Jose data centers; otherwise data-loading 
 very slow.
 
 To run the installation program, please see the [GBiC user guide](https://genome.ucsc.edu/goldenPath/help/gbic.html). 
+
+# Docker installation instructions
+
+Download the Dockerfile to a new directory and build the docker image. This works on Windows, OSX
+and Linux, as long as Docker is installed:
+
+    mkdir browserDocker && cd browserDocker
+    wget https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/docker/Dockerfile
+    docker build . -t gbImage
+
+You can then run the gbImage image that you just built as a new container in daemon mode (-d) and
+export its port to localhost:
+
+    docker run -d --name genomeBrowser -p 8080:80 gbImage
+
+The Apache server is running on port 8080 then and you should be able to access it via
+https://localhost:8080
 
 # Manual installation instructions
 
