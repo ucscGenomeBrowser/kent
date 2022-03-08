@@ -49,6 +49,16 @@
   width: 100%;
 }
 
+.borderOne th,
+.borderOne td {
+  border: 1px solid black;
+  word-wrap: anywhere;
+  /* overflow-wrap: anywhere; */
+  overflow: hidden;
+  height: 40px;
+  /* overflow: hidden; */
+}
+
 /* the large table begins life as display none,
  *   onload will change it to 'table' -- saves time on Edge/Chrome */
 
@@ -64,16 +74,6 @@
  */
 .cladeTable thead tr th {
   overflow: visible;
-}
-
-.borderOne th,
-.borderOne td {
-  border: 1px solid black;
-  word-wrap: anywhere;
-  /* overflow-wrap: anywhere; */
-  overflow: hidden;
-  height: 40px;
-  /* overflow: hidden; */
 }
 
 .gak {
