@@ -643,7 +643,7 @@ Please note this selection will return some of the unusual protein-coding cases
 that one would not consider, for instance, it will return genes one may not want
 (or want), such as Immunoglobulin and T-cell receptor components.</p>
 <p>
-For the manually curated RefSeq gene set transcript identifiers start with NM_ for coding
+For the manually curated RefSeq gene set, transcript identifiers start with NM_ for coding
 or NR_ for non-coding, followed by a number and version number separated by a dot, e.g.
 &quot;NR_046018.2&quot; for an RNA pseudogene. For RefSeq one can select coding genes by
 filtering for NM identifiers. On the concept of genes, it may be worth noting that the
@@ -653,7 +653,7 @@ is not an unambiguous concept to a lot of biologists. For some, another example,
 represents a miRNA (microRNA), which are short (20-24 nt) non-coding RNAs, which may provide a
 more familiar idea of the kind of non-coding elements desired to be removed from a gene set.
 </p>
-<p>If using the UCSC knownGene table one can filter for where the coding start
+<p>If using the UCSC knownGene table, one can filter for where the coding start
 and coding end fields of the table are not equivalent, e.g.
 <code>knownGene.cdsStart != knownGene.cdsEnd</code>, which would ensure the selected
 entries are coding genes.</p>
@@ -688,16 +688,16 @@ What this query does is access the hg38 database, and then from the wgEncodeGenc
 it takes the name field (g.name) and looks in the related wgEncodeGencodeAttrsV39 table for a matching
 transcriptId field (g.name = a.transcriptId), and then screens for only entries in wgEncodeGencodeAttrsV39
 that are equal to lncRNA (a.transcriptType = &quot;lncRNA&quot;).  In this way selecting all of these types,
-which again, may not be the only subset desired. By modifying the above query it is possible to add
+which again, may not be the only subset desired. By modifying the above query, it is possible to add
 further qualifiers and generate a subset of different non-coding elements meeting specific research needs.</p>
 <p>
-For the manually curated RefSeq gene set transcript identifiers start with NM_ for coding
+For the manually curated RefSeq gene set, transcript identifiers start with NM_ for coding
 or NR_ for non-coding, followed by a number and version number separated by a dot, e.g.
 &quot;NR_046018.2&quot; for an RNA pseudogene. For RefSeq, one can select non-coding genes by
 filtering for NR identifiers. Note that a pseudogene of mRNA is not an unambiguous concept,
 and there may be a desire to look further to select certain subset types as mentioned above.</p>
 <p>
-If using the UCSC knownGene table one can filter for where the coding start
+If using the UCSC knownGene table, one can filter for where the coding start
 and coding end fields of the table are equivalent, e.g.
 <code>knownGene.cdsStart = knownGene.cdsEnd</code>, which would ensure the selected
 entries are non-coding genes.</p>
