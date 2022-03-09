@@ -48,7 +48,7 @@
       <li><a href="../goldenPath/help/net.html">Net format</a></li>
       <li><a href="#format10">Personal Genome SNP format</a></li>
       <li><a href="#format2">PSL format</a></li>
-      <li><a href="#format10.1">VCF format</a></li>
+      <li><a href="/goldenPath/help/vcf.html">VCF format</a></li>
       <li><a href="/goldenPath/help/wiggle.html">WIG format</a></li>
     </ul>
   </div>
@@ -1103,25 +1103,6 @@ chr21	31812827	31812828	A/T	2	15,5	0,0
 chr21	31812879	31812880	C	1	0	0
 chr21   31812915	31812916	-	1	0	0
 </code></pre>
-
-<a name="format10.1"></a>
-<h2>VCF format</h2>
-<p>
-<a href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41"
-target="_blank">Variant Call Format (VCF)</a> is a flexible and extendable format (now maintained 
-by the <a href="http://ga4gh.org/#/fileformats-team" target="_blank">GA4GH</a>) for variation data 
-such as single nucleotide variants, insertions/deletions, copy number variants and structural 
-variants. When a VCF file is compressed and indexed using 
-<a href="http://samtools.sourceforge.net/tabix.shtml" target="_blank">tabix</a>, and made 
-web-accessible, the Genome Browser can fetch only the portions of the file necessary to display 
-items in the viewed region. This makes it possible to display alignments from files that are so 
-large that the connection to UCSC would time out when attempting to upload the whole file to UCSC. 
-Both the compressed VCF file and its tabix index file remain on your web-accessible server (http or 
-ftp), not on the UCSC server. UCSC temporarily caches the accessed portions of the files to speed up
-interactive display.</p>
-<p>
-Go to the <a href="../goldenPath/help/vcf.html">VCF Track Format</a> page for more information about
-VCF custom tracks.</p>
 
 <a name="format11"></a>
 <h2>ENCODE RNA elements: BED6 + 3 scores format</h2>
