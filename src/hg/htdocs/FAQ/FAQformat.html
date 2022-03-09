@@ -28,7 +28,7 @@
       <li><a href="#format9.4">bigChain table format</a></li>
       <li><a href="#format9.5">bigNarrowPeak table format</a></li>
       <li><a href="#format9.6">bigLolly table format</a></li>
-      <li><a href="#format6.1">bigWig format</a></li>
+      <li><a href="/goldenPath/help/bigWig.html">bigWig format</a></li>
       <li><a href="../goldenPath/help/chain.html">Chain format</a></li>
     </ul>
   </div>
@@ -848,23 +848,6 @@ s hg18.chr7    27707221 13 + 158545518 gcagctgaaaaca
 s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
 s baboon         249182 13 +   4622798 gcagctgaaaaca
 s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA </code></pre>
-
-<a name="format6.1"></a>
-<h2>bigWig format</h2> 
-<p>
-The bigWig format is for display of dense, continuous data that will be displayed in the Genome 
-Browser as a graph. BigWig files are created initially from <a href="#format6">wiggle</a> (wig) type
-files, using the program <code>wigToBigWig</code>. Alternatively, bigWig files can be created from 
-<a href="../goldenPath/help/bedgraph.html">bedGraph</a> files, using the program 
-<code>bedGraphToBigWig</code>. In either case, the resulting bigWig files are in an indexed binary 
-format. The main advantage of the bigWig files is that only the portions of the files needed to 
-display a particular region are transferred to UCSC, so for large data sets bigWig is considerably 
-faster than regular wiggle files. The bigWig file remains on your web accessible server (http, 
-https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position
-you are currently viewing is locally cached as a &quot;sparse file&quot;.</p>
-<p>
-Click <a href="../goldenPath/help/bigWig.html">here</a> for more information on the bigWig 
-format.</p>
 
 <a name="format6.5"></a>
 <h2>Microarray format</h2>
