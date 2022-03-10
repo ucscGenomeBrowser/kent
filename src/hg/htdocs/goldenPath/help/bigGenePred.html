@@ -9,7 +9,10 @@
 <p>
 The bigGenePred format stores positional annotations for collections of exons in a compressed
 format, similar to how <a href="../../FAQ/FAQformat.html#format1">BED</a> files are compressed
-into bigBeds. The bigGenePred format includes 8 additional fields that contain details about coding
+into bigBeds. The bigGenePred format is a superset of the
+<a href="/FAQ/FAQformat.html#format9">genePred</a> text-based format supported using the
+<a href="/goldenPath/help/bigBed.html">bigBed</a> format, so it can be efficiently accessed over a
+network. The bigGenePred format includes 8 additional fields that contain details about coding
 frames, annotation status, and other gene-specific information. This is commonly used in the Browser
 to display start codons, stop codons, and amino acid translations.</p>
 <p>

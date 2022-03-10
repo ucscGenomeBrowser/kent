@@ -1546,7 +1546,9 @@ There are no extra options that can appear on the type hic line.
     </div>
     <P>There are a number of different filters available for bigBed data. See the 
     <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
-    more info.</P>
+    more info. Note: for configurable features, like filters, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
     <P><code> filter.&lt;fieldName&gt; </code> is used for numerical data. It requires
     a default value to be passed. A value of 0 (or the lowest value present in the dataset) 
     can be used to enable numerical filtering, but filter nothing by default.</P>
@@ -1637,7 +1639,9 @@ There are no extra options that can appear on the type hic line.
     </div>
     <P>There are a number of different filters available for bigBed data. See the     
     <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
-    more info.</P>
+    more info. Note: for configurable features, like filters, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
     <P><code>filterText.&lt;fieldName&gt;</code> is used to enable text searching in the 
     specified fieldName. It requires a default search string to be passed. An asterisk/wildcard (*)
     can be used to enable text searching, but pass no default value. If a word or string is
@@ -1702,7 +1706,9 @@ There are no extra options that can appear on the type hic line.
     </div>
     <P>There are a number of different filters available for bigBed data. See the     
     <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
-    more info.</P>
+    more info. Note: for configurable features, like filters, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
     <P><code>filterValues.&lt;fieldName&gt;</code> is used to enable filtering by 
     specified values within a field. It can be used on fields that can contain
     one text value or a list of comma-separated values of text, like "classA,classB".
