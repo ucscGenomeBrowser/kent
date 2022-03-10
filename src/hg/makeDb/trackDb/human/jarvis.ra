@@ -1,0 +1,13 @@
+track jarvis
+shortLabel JARVIS
+bigDataUrl /gbdb/$D/jarvis/jarvis.bw
+longLabel JARVIS: score to prioritize non-coding regions for disease relevance
+group phenDis
+type bigWig
+viewLimits 0.0:1.0
+visibility hide
+#maxWindowToQuery 500000
+color 150,130,160
+maxWindowToDraw 10000000
+#mouseOverFunction noAverage
+release alpha

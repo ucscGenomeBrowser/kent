@@ -40,6 +40,9 @@ include cadd.ra
 # Revel scores
 include revel.ra
 
+# Jarvis scores
+include jarvis.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
