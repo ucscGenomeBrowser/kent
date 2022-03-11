@@ -807,9 +807,18 @@ char **row;
 char *firstUse = "now()";
 int useCount = INITIAL_USE_COUNT;
 char firstUseBuf[32];
+char *settings = NULL;
 
-/* If this session already existed, preserve its firstUse and useCount. */
-sqlDyStringPrintf(dy, "SELECT firstUse, useCount FROM %s "
+boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
+
+/* If this session already existed, preserve its firstUse, useCount,
+ * and settings (if available). */
+if (gotSettings)
+    sqlDyStringPrintf(dy, "SELECT firstUse, useCount, settings FROM %s "
+                  "WHERE userName = '%s' AND sessionName = '%s';",
+                  namedSessionTable, encUserName, encSessionName);
+else
+    sqlDyStringPrintf(dy, "SELECT firstUse, useCount FROM %s "
                   "WHERE userName = '%s' AND sessionName = '%s';",
                   namedSessionTable, encUserName, encSessionName);
 sr = sqlGetResult(conn, dy->string);
@@ -818,6 +827,12 @@ if ((row = sqlNextRow(sr)) != NULL)
     safef(firstUseBuf, sizeof(firstUseBuf), "'%s'", row[0]);
     firstUse = firstUseBuf;
     useCount = atoi(row[1]) + 1;
+    if (gotSettings)
+        {
+        settings = cloneString(row[2]);
+        if (settings == NULL)
+            settings = "";
+        }
     }
 sqlFreeResult(&sr);
 
@@ -834,7 +849,10 @@ sqlUpdate(conn, dy->string);
 dyStringClear(dy);
 sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
 dyStringAppend(dy, "(userName, sessionName, contents, shared, "
-               "firstUse, lastUse, useCount, settings) VALUES (");
+               "firstUse, lastUse, useCount");
+if (gotSettings)
+    dyStringAppend(dy, ", settings");
+dyStringAppend(dy, ") VALUES (");
 dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
 dyStringAppend(dy, "'");
 cleanHgSessionFromCart(cart);
@@ -848,7 +866,10 @@ sqlDyAppendEscaped(dy, encoded->string);
 dyStringFree(&encoded);
 dyStringAppend(dy, "', ");
 dyStringPrintf(dy, "%d, ", sharingLevel);
-dyStringPrintf(dy, "%s, now(), %d, '');", firstUse, useCount);
+dyStringPrintf(dy, "%s, now(), %d, '", firstUse, useCount);
+if (gotSettings)
+    dyStringPrintf(dy, ", '%s'", settings);
+dyStringPrintf(dy, ");");
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 
