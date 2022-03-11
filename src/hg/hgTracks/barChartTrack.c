@@ -794,7 +794,8 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
         {
         int cStart = barsDrawn * graphWidth * invCount;
         int cEnd = (barsDrawn+1) * graphWidth * invCount;
-        x1 = cStart + x0;
+        if (i >= 1)
+            x1 += barWidth + extras->padding;
         barWidth = max(userMinBarWidth, cEnd - cStart - extras->padding);
         if (x1 + barWidth > x0 + graphWidth)
             break;
