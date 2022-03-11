@@ -6992,3 +6992,20 @@ vi trackDb.ra
 cd ~/kent/src/hg/makeDb/trackDb
 make alpha DBS=hg38
 
+######
+#Agilent SNP/CNV arrays 3/11/21
+#Downloaded by web browser
+cd /hive/data/genomes/hg38/bed/agilentProbes/genetiSureCyto
+fetchChromSizes hg38 > hg38.chrom.sizes
+bedSort hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.bed hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.bed
+bedToBigBed hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.bed hg38.chrom.sizes hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.bb
+bedSort hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bed hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bed
+bedToBigBed hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bed hg38.chrom.sizes hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bb
+bedSort hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.bed hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.bed
+bedToBigBed hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.bed hg38.chrom.sizes hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.bb
+mkdir -p /gbdb/hg38/snpCnvArrays/agilent
+cd /gbdb/hg38/snpCnvArrays/agilent
+ln -s /hive/data/genomes/hg38/bed/agilentProbes/genetiSureCyto/hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.bb
+ln -s /hive/data/genomes/hg38/bed/agilentProbes/genetiSureCyto/hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bb
+ln -s /hive/data/genomes/hg38/bed/agilentProbes/genetiSureCyto/hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.bb
+vi ~/kent/src/hg/makeDb/trackDb/human/hg38/trackDb.ra
