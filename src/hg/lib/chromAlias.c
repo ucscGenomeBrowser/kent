@@ -12,6 +12,7 @@
 #include "trackHub.h"
 #include "fieldedTable.h"
 #include "bigBed.h"
+#include "bbiAlias.h"
 #include "bPlusTree.h"
 
 
@@ -168,19 +169,13 @@ fputc('}',f);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 /* our "global" data */
-struct bptIndex
-{
-struct bptIndex *next;
-int fieldIx;
-struct bptFile *bpt;
-};
-
 static struct
 {
 boolean inited;
 boolean bptInited;
 struct bptIndex *bptList;
 struct bbiFile *bbi;
+struct lm *lm;
 struct hash *chromToAliasHash;
 struct hash *aliasToChromHash;
 } chromAliasGlobals;
@@ -241,6 +236,8 @@ static void chromAliasSetupBb(char *database, char *bbFile)
 /* Look for a chromAlias bigBed file and open it. */
 {
 chromAliasGlobals.bbi = bigBedFileOpen(bbFile);
+chromAliasGlobals.bptList = bbiAliasOpenExtra(chromAliasGlobals.bbi);
+chromAliasGlobals.lm = lmInit(0);
 }
 
 static void chromAliasSetupHub(char *database)
@@ -343,52 +340,6 @@ if (isNotEmpty(chrom))
 return NULL;
 }
 
-static struct bptIndex *getBpts(struct bbiFile *bbi)
-/* Open any extra indices that this bigBed has. */
-{
-if (chromAliasGlobals.bptInited)
-    return chromAliasGlobals.bptList; 
-
-if (!chromAliasGlobals.bptInited)
-    {
-    struct bptIndex *bptList = NULL;
-    struct slName *indexList = bigBedListExtraIndexes(bbi);
-    for(; indexList; indexList = indexList->next)
-        {
-        struct bptIndex *bptIndex;
-        AllocVar(bptIndex);
-        bptIndex->bpt = bigBedOpenExtraIndex(bbi, indexList->name, &bptIndex->fieldIx);
-        slAddHead(&bptList, bptIndex);
-        }
-    chromAliasGlobals.bptList = bptList;
-    chromAliasGlobals.bptInited = TRUE;
-    }
-
-return chromAliasGlobals.bptList;
-}
-
-char *findNativeBb(struct bbiFile *bbi, char *alias)
-/* Find the native seqName for a given alias given a bigBed. */
-{
-struct bptIndex *bptIndex = getBpts(bbi);
-
-for(; bptIndex; bptIndex = bptIndex->next)
-    {
-    struct lm *lm = lmInit(0);
-    struct bigBedInterval *bb= bigBedNameQuery(bbi, bptIndex->bpt, bptIndex->fieldIx, alias, lm);
-
-    if (bb != NULL)
-        {
-        char chromName[1024];
-        bptStringKeyAtPos(bbi->chromBpt, bb->chromId,  chromName, sizeof(chromName));
-
-        return cloneString(chromName);
-        }
-    }
-
-return NULL;
-}
-
 char *chromAliasFindNative(char *alias)
 /* Find the native seqName for a given alias. */
 {
@@ -405,7 +356,7 @@ getLock();
 if ((chrom = hashFindVal(cachedNative, alias)) == NULL)
     {
     if (chromAliasGlobals.bbi)
-        chrom = findNativeBb(chromAliasGlobals.bbi, alias);
+        chrom = bbiAliasFindNative(chromAliasGlobals.bbi, chromAliasGlobals.bptList, chromAliasGlobals.lm,  alias);
     else if (chromAliasGlobals.aliasToChromHash)
         chrom = findNativeHashes(alias);
 
@@ -414,28 +365,6 @@ if ((chrom = hashFindVal(cachedNative, alias)) == NULL)
 releaseLock();
 
 return cloneString(chrom);
-}
-
-struct slName *findAliasesBb(struct bbiFile *bbi, char *seqName)
-/* Find the aliases for a given seqName using the alias bigBed. */
-{
-struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, seqName, 0, 1, 0, lm);
-char *bedRow[bbi->fieldCount];
-char startBuf[16], endBuf[16];
-struct slName *list = NULL;
-for (bb = bbList; bb != NULL; bb = bb->next)
-    {
-    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    int ii;
-    for(ii=3; ii < chromAliasGlobals.bbi->fieldCount; ii++)
-	{
-	struct slName *name = newSlName(bedRow[ii]);
-	slAddHead(&list, name);
-	}
-    }
-
-return list;
 }
 
 struct slName *findAliasesHashes(char *seqName)
@@ -469,7 +398,7 @@ getLock();
 if ((aliases = hashFindVal(cachedAliases, seqName)) == NULL)
     {
     if (chromAliasGlobals.bbi)
-        aliases = findAliasesBb(chromAliasGlobals.bbi, seqName);
+        aliases = bbiAliasFindAliases(chromAliasGlobals.bbi,chromAliasGlobals.lm, seqName);
     else if (chromAliasGlobals.chromToAliasHash)
         aliases = findAliasesHashes(seqName);
 

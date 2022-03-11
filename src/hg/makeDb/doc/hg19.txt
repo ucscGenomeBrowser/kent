@@ -34733,3 +34733,26 @@ rm JASPAR2022.bb
 mv JASPAR2022_hg19.bb JASPAR2022.bb
 ls -lh
 ls -lh /gbdb/hg19/jaspar
+
+###################################################
+
+# PanelApp refs #25568
+cd /hive/data/genomes/hg19/bed 
+mkdir panelApp
+cd panelApp
+wget https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg19/panel_hg19.bb
+wget https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg19/str_hg19.bb
+mv panel_hg19.bb genesPanel.bb
+mv str_hg19.bb STRsPanel.bb
+cd /gbdb/hg19
+mkdir panelApp
+cd panelApp
+ln -s /hive/data/genomes/hg19/bed/panelApp/genesPanel.bb
+ln -s /hive/data/genomes/hg19/bed/panelApp/STRsPanel.bb
+cd ~/kent/src/hg/makeDb/trackDb/human/hg19
+wget https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg19/panelapp.html
+cd ~/kent/src/hg/makeDb/trackDb
+mv human/hg19/panelapp.html human/hg19/panelApp.html
+curl https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg19/trackDb.txt >> trackDb.ra
+vi trackDb.ra
+make alpha DBS=hg19

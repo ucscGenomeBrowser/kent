@@ -102,6 +102,7 @@ struct bbiZoomLevel *bbiBestZoom(struct bbiZoomLevel *levelList, int desiredRedu
  * desiredReduction. */
 
 typedef struct slName *(*aliasFunc) (char *);   // A function that passed a native seqName returns a list of aliases
+typedef int (*bbiChromSizeFunc) (void *closure, char *);   // A function that passed its closure and an alias or a native seqName returns its size
 
 struct bbiFile 
 /* An open bbiFile */
@@ -385,7 +386,12 @@ struct bbExIndexMaker
 struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
 	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount, boolean tabSep);
 /* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
- * collect max field sizes there too. */
+ * collect max field sizes there too. Use chromSizesHash to find chrom sizes.  */
+
+struct bbiChromUsage *bbiChromUsageFromBedFileAlias(struct lineFile *lf, bbiChromSizeFunc chromSizeFunc, void *chromSizeClosure,
+	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount, boolean tabSep);
+/* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
+ * collect max field sizes there too.  Use chromSizeFunc to find chrom sizes.*/
 
 #define bbiMaxZoomLevels 10	/* Max number of zoom levels */
 #define bbiResIncrement 4	/* Amount to reduce at each zoom level */

@@ -17,6 +17,7 @@
 #include "sqlNum.h"
 #include "bPlusTree.h"
 #include "bigBed.h"
+#include "bbiAlias.h"
 #include "twoBit.h"
 
 char *version = "2.8";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
@@ -38,6 +39,7 @@ char *udcDir = NULL;
 static boolean doCompress = FALSE;
 static boolean tabSep = FALSE;
 static boolean sizesIs2Bit = FALSE;
+static boolean sizesIsBb = FALSE;
 static boolean allow1bpOverlap = FALSE;
 
 void usage()
@@ -80,6 +82,7 @@ errAbort(
   "   -extraIndex=fieldList - If set, make an index on each field in a comma separated list\n"
   "           extraIndex=name and extraIndex=name,id are commonly used.\n"
   "   -sizesIs2Bit  -- If set, the chrom.sizes file is assumed to be a 2bit file.\n"
+  "   -sizesIsBb  -- If set, the chrom.sizes file is assumed to be a bigBed file.\n"
   "   -udcDir=/path/to/udcCacheDir  -- sets the UDC cache dir for caching of remote files.\n"
   "   -allow1bpOverlap  -- allow exons to overlap by at most one base pair\n"
   "   -maxAlloc=N -- Set the maximum memory allocation size to N bytes\n"
@@ -95,6 +98,7 @@ static struct optionSpec options[] = {
    {"unc", OPTION_BOOLEAN},
    {"tab", OPTION_BOOLEAN},
    {"sizesIs2Bit", OPTION_BOOLEAN},
+   {"sizesIsBb", OPTION_BOOLEAN},
    {"extraIndex", OPTION_STRING},
    {"udcDir", OPTION_STRING},
    {"allow1bpOverlap", OPTION_BOOLEAN},
@@ -565,6 +569,20 @@ if (eim != NULL)
     }
 }
 
+struct chromSizeClosure  // a structure that contains the data we need to get a chromosome size from a bigBed
+{ 
+    struct bbiFile *bbi;
+    struct bptIndex *bptIndex;
+    struct lm *lm;
+};
+
+static int ourChromSizeFunc(void *closure, char *chrom)
+/* A function to return the size of a given sequence. */
+{
+struct chromSizeClosure *ourClosure = (struct chromSizeClosure *)closure;
+
+return bbiAliasChromSize(ourClosure->bbi, ourClosure->bptIndex, ourClosure->lm, chrom);
+}
 
 void bbFileCreate(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
@@ -589,22 +607,34 @@ struct bbExIndexMaker *eim = NULL;
 if (extraIndexList != NULL)
     eim = bbExIndexMakerNew(extraIndexList, as);
 
-/* Load in chromosome sizes. */
-struct hash *chromSizesHash = NULL;
-
-if (sizesIs2Bit)
-    chromSizesHash = twoBitChromHash(chromSizes);
-else
-    chromSizesHash = bbiChromSizesFromFile(chromSizes);
-verbose(2, "Read %d chromosomes and sizes from %s\n",  chromSizesHash->elCount, chromSizes);
-
 /* Do first pass, mostly just scanning file and counting hits per chromosome. */
 int minDiff = 0;
 double aveSize = 0;
 bits64 bedCount = 0;
 bits32 uncompressBufSize = 0;
-struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, eim, 
-    &minDiff, &aveSize, &bedCount, tabSep);
+struct bbiChromUsage *usageList = NULL;
+if (sizesIsBb)
+    {
+    struct chromSizeClosure *ourClosure = NULL;
+
+    AllocVar(ourClosure);
+    ourClosure->bbi = bigBedFileOpen(chromSizes);
+    ourClosure->bptIndex = bbiAliasOpenExtra(ourClosure->bbi);
+    ourClosure->lm = lmInit(0);
+    usageList = bbiChromUsageFromBedFileAlias(lf, ourChromSizeFunc, ourClosure, eim, &minDiff, &aveSize, &bedCount, tabSep);
+    // should close and free the closure contents
+    }
+else
+    {
+    struct hash *chromSizesHash = NULL;
+    if (sizesIs2Bit)
+        chromSizesHash = twoBitChromHash(chromSizes);
+    else
+        chromSizesHash = bbiChromSizesFromFile(chromSizes);
+    verbose(2, "Read %d chromosomes and sizes from %s\n",  chromSizesHash->elCount, chromSizes);
+    usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, eim, &minDiff, &aveSize, &bedCount, tabSep);
+    freeHash(&chromSizesHash);
+    }
 verboseTime(1, "pass1 - making usageList (%d chroms)", slCount(usageList));
 verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSize);
 
@@ -804,7 +834,6 @@ writeOne(f, sig);
 /* Clean up. */
 lineFileClose(&lf);
 carefulClose(&f);
-freeHash(&chromSizesHash);
 bbiChromUsageFreeList(&usageList);
 asObjectFreeList(&as);
 }
@@ -830,6 +859,7 @@ itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 asFile = optionVal("as", asFile);
 doCompress = !optionExists("unc");
 sizesIs2Bit = optionExists("sizesIs2Bit");
+sizesIsBb = optionExists("sizesIsBb");
 extraIndex = optionVal("extraIndex", NULL);
 tabSep = optionExists("tab");
 allow1bpOverlap = optionExists("allow1bpOverlap");
