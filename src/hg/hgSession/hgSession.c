@@ -1127,12 +1127,13 @@ if ((row = sqlNextRow(sr)) != NULL)
         description = replaceChars(description, "\\r", "\r");
         description = replaceChars(description, "\\n", "\n");
         description = replaceChars(description, "\\__ESC__", "\\");
+        char *encDescription = htmlEncode(description);
         dyStringPrintf(dyMessage,
             "Description:<BR>\n"
             "<TEXTAREA NAME=\"%s\" id='%s' ROWS=%d COLS=%d "
             ">%s</TEXTAREA><BR>\n",
             hgsNewSessionDescription, hgsNewSessionDescription, 5, 80,
-            description);
+            encDescription);
 	    jsOnEventById("change"   , hgsNewSessionDescription, highlightAccChanges);
 	    jsOnEventById("keypress" , hgsNewSessionDescription, highlightAccChanges);
         }
