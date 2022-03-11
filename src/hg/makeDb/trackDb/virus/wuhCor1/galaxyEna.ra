@@ -5,7 +5,6 @@ longLabel covid19.galaxyproject.org: surveillance of mutations in consistently p
 type bed
 group varRep
 visibility dense
-release alpha
 
 # the internal name, not visible in the UI, used for URL arguments. No special characters.
 track previous_quarter_tracks
@@ -24,7 +23,6 @@ filterLimits.withinLineageFrequency 0:2
 # a long name, shown above the track, < 200 characters
 longLabel Most frequent lineages of previous quarter
 parent galaxyEna
-release alpha
 
     track galaxyEnaAy4
     parent previous_quarter_tracks on
@@ -42,7 +40,6 @@ release alpha
     #maxWindowToDraw 200000
     # default visibility, one of full, pack, squish, dense, hide
     # "pack" is usually a good starting visibility. Try to not show more than 12-15 tracks by default.
-    release alpha
 
     # the internal name, not visible in the UI, used for URL arguments. No special characters.
     track galaxyEnaB117
@@ -64,5 +61,4 @@ release alpha
     # default visibility, one of full, pack, squish, dense, hide
     # "pack" is usually a good starting visibility. Try to not show more than 12-15 tracks by default.
     visibility pack
-    release alpha
 
