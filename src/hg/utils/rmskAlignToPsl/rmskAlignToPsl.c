@@ -2,6 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "rmskAlign.h"
+#include "bigRmskAlignBed.h"
 #include "psl.h"
 #include "options.h"
 
@@ -14,6 +15,7 @@ errAbort(
   "usage:\n"
   "   rmskAlignToPsl rmskAlignTab rmskPslFile\n"
   "\n"
+  "  -bigRmsk - input is the text version of bigRmskAlignBed files.\n"
   "  -dump - print alignments to stdout for debugging purposes\n"
   "\n"
   "This convert *.fa.align.tsv file, created by\n"
@@ -24,10 +26,12 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"bigRmsk", OPTION_BOOLEAN},
    {"dump", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
+static boolean bigRmsk = FALSE;
 static boolean dump = FALSE;
 
 /*
@@ -174,16 +178,16 @@ static boolean shouldConvert(struct rmskAlign *rmskAlign)
 return !sameString(rmskAlign->repClass, "Simple_repeat");
 }
 
-static struct rmskAlign **groupRmskAligns(struct rmskAlign **rmskAlignsPtr,
+static struct rmskAlign **groupRmskAligns(struct rmskAlign *rmskAligns,
                                           unsigned *maxAlignIdPtr)
 /* build array of alignment by ids */
 {
 unsigned maxAlignId = 0;
-for (struct rmskAlign *ra = *rmskAlignsPtr; ra != NULL; ra = ra->next)
+for (struct rmskAlign *ra = rmskAligns; ra != NULL; ra = ra->next)
     maxAlignId = max(maxAlignId, ra->id);
 
 struct rmskAlign **rmskAlignsById = AllocN(struct rmskAlign *, maxAlignId + 1);
-for (struct rmskAlign *ra = slPopHead(rmskAlignsPtr); ra != NULL; ra = slPopHead(rmskAlignsPtr))
+for (struct rmskAlign *ra = slPopHead(&rmskAligns); ra != NULL; ra = slPopHead(&rmskAligns))
     slAddTail((&rmskAlignsById[ra->id]), ra);  // keep in genomic order
 
 *maxAlignIdPtr = maxAlignId;
@@ -199,6 +203,61 @@ int diff = strcmp(a->genoName, b->genoName);
 if (diff != 0)
     return diff;
 return a->genoStart - b->genoStart;
+}
+
+static struct rmskAlign **loadRmskAlign(char *rmskAlignFile,
+                                        unsigned *maxAlignIdPtr)
+/* load rmskAlign file into an array of lists by indexed by alignment id */
+{
+struct rmskAlign *rmskAligns = rmskAlignLoadAllByTab(rmskAlignFile);
+slSort(&rmskAligns, rmskAlignGenomeCmp);
+
+return groupRmskAligns(rmskAligns, maxAlignIdPtr);
+}
+
+static struct rmskAlign *bigRmskAlignToRmskAlign(struct bigRmskAlignBed* bigRmskAlign)
+/* convert a bigRmskAlign record to an rmskAlign record */
+{
+struct rmskAlign *rmskAlign;
+AllocVar(rmskAlign);
+
+rmskAlign->swScore = bigRmskAlign->score;
+rmskAlign->milliDiv = 1000 * bigRmskAlign->percSubst;
+rmskAlign->milliDel = 1000 * bigRmskAlign->percDel;
+rmskAlign->milliIns = 1000 * bigRmskAlign->percIns;
+rmskAlign->genoName = cloneString(bigRmskAlign->chrom);
+rmskAlign->genoStart = bigRmskAlign->chromStart;
+rmskAlign->genoEnd = bigRmskAlign->chromEnd;
+rmskAlign->genoLeft = bigRmskAlign->chromRemain;
+rmskAlign->strand[0] = bigRmskAlign->strand[0];
+rmskAlign->repName = cloneString(bigRmskAlign->repName);
+rmskAlign->repClass = cloneString(bigRmskAlign->repType);
+rmskAlign->repFamily = cloneString(bigRmskAlign->repSubtype);
+rmskAlign->repStart = bigRmskAlign->repStart;
+rmskAlign->repEnd = bigRmskAlign->repEnd;
+rmskAlign->repLeft = bigRmskAlign->repRemain;
+rmskAlign->id = bigRmskAlign->id;
+rmskAlign->alignment = cloneString(bigRmskAlign->calignData);
+
+return rmskAlign;
+}
+
+static struct rmskAlign **loadBigRmskAlign(char *bigRmskAlignFile,
+                                           unsigned *maxAlignIdPtr)
+/* load bigRmskAlignBed file into an array of lists by indexed by alignment id */
+{
+struct bigRmskAlignBed *bigRmskAligns = bigRmskAlignBedLoadAllByTab(bigRmskAlignFile);
+struct rmskAlign *rmskAligns = NULL;
+struct bigRmskAlignBed *bigRmskAlign;
+
+for (bigRmskAlign = slPopHead(&bigRmskAligns); bigRmskAlign != NULL; bigRmskAlign = slPopHead(&bigRmskAligns))
+    {
+    slAddHead(&rmskAligns, bigRmskAlignToRmskAlign(bigRmskAlign));
+    bigRmskAlignBedFree(&bigRmskAlign);
+    }
+
+slSort(&rmskAligns, rmskAlignGenomeCmp);
+return groupRmskAligns(rmskAligns, maxAlignIdPtr);
 }
 
 static boolean rmskLinear(struct rmskAlign *prev,
@@ -561,12 +620,12 @@ static void rmskAlignToPsl(char *rmskAlignFile, char *rmskPslFile)
 {
 // load all, so we can join ones split by other insertions by id
 // don't bother freeing
-struct rmskAlign *rmskAligns = rmskAlignLoadAllByTab(rmskAlignFile);
-slSort(&rmskAligns, rmskAlignGenomeCmp);
-
-// get counts parts for each id
-unsigned maxAlignId;
-struct rmskAlign **rmskAlignGroups = groupRmskAligns(&rmskAligns, &maxAlignId);
+struct rmskAlign **rmskAlignGroups = NULL;
+unsigned maxAlignId = 0;
+if (bigRmsk)
+    rmskAlignGroups = loadBigRmskAlign(rmskAlignFile, &maxAlignId);
+else
+    rmskAlignGroups = loadRmskAlign(rmskAlignFile, &maxAlignId);
 
 FILE* outFh = mustOpen(rmskPslFile, "w");
 for (unsigned id = 0; id <= maxAlignId; id++)
@@ -580,6 +639,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+bigRmsk = optionExists("bigRmsk");
 dump = optionExists("dump");
 rmskAlignToPsl(argv[1], argv[2]);
 return 0;
