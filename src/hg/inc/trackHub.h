@@ -61,6 +61,7 @@ struct trackHubGenome
     char *trackDbFile;	/* The base trackDb.ra file. */
     struct hash *settingsHash;	/* Settings from hub.ra file. */
     char *twoBitPath;  /* URL to twoBit.  If not null, this is an assmebly hub*/
+    char *twoBitBptUrl;  /* URL to twoBit bpt.  May be NULL if no such index exists */
     struct twoBitFile *tbf;  /* open handle to two bit file */
     char *groups;	     /* URL to group.txt file */
     char *defaultPos;        /* default position */

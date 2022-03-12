@@ -348,6 +348,15 @@ slFreeList(&chromList);
 return defaultName;
 }
 
+static struct twoBitFile *openTwoBit(struct trackHubGenome *genome)
+/* Open a twoBit file that may or may not have a bpt index. */
+{
+if (genome->twoBitBptUrl)
+    return twoBitOpenExternalBptIndex(genome->twoBitPath, genome->twoBitBptUrl);
+else
+    return twoBitOpen(genome->twoBitPath);
+}
+
 struct chromInfo *trackHubMaybeChromInfo(char *database, char *chrom)
 /* Return a chromInfo structure for just this chrom in this database. 
  * Return NULL if chrom doesn't exist. */
@@ -357,7 +366,7 @@ if (genome == NULL)
     return NULL;
 
 if (genome->tbf == NULL)
-    genome->tbf = twoBitOpen(genome->twoBitPath);
+    genome->tbf = openTwoBit(genome);
 if (!twoBitIsSequence(genome->tbf, chrom))
     return NULL;
 
@@ -434,7 +443,7 @@ if (genome == NULL)
     return NULL;
 
 if (genome->tbf == NULL)
-    genome->tbf = twoBitOpen(genome->twoBitPath);
+    genome->tbf = openTwoBit(genome);
 struct chromInfo *ci, *ciList = NULL;
 struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
 
@@ -613,6 +622,7 @@ while ((ra = raNextRecord(lf)) != NULL)
         break;
 
     char *twoBitPath = hashFindVal(ra, "twoBitPath");
+    char *twoBitBptUrl = hashFindVal(ra, "twoBitBptUrl");
     char *genome, *trackDb;
     if (twoBitPath != NULL)
 	genome = addHubName(hashFindVal(ra, "genome"), hub->name);
@@ -658,6 +668,8 @@ while ((ra = raNextRecord(lf)) != NULL)
 	    errAbort("must have 'defaultPos' set in assembly hub in stanza ending line %d of %s",
 		     lf->lineIx, lf->fileName);
 	el->twoBitPath = trackHubRelativeUrl(url, twoBitPath);
+        if (twoBitBptUrl != NULL)
+            el->twoBitBptUrl = trackHubRelativeUrl(url, twoBitBptUrl);
 
 	char *htmlPath = hashFindVal(ra, "htmlPath");
 	if (htmlPath != NULL)
