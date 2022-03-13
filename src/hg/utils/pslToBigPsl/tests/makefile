@@ -28,7 +28,7 @@ doubleStrand: mkout
 	cmp input/$@.psl output/$@.psl
 
 badQSize: mkout
-	${pslToBigPsl} -fa=input/MamRep605b.fa input/MamRep605b.psl output/$@.tmp && ${cmdShouldFail}
+	if ! ${pslToBigPsl} -fa=input/MamRep605b.fa input/MamRep605b.psl output/$@.tmp >& output/$@.err ; then true ; else ${cmdShouldFail} ; fi
 
 mkout:
 	@mkdir -p output
