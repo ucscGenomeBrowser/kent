@@ -8,7 +8,7 @@ rmskAlignToPsl = ${DESTBINDIR}/rmskAlignToPsl
 
 all::
 
-test:: hg38Test mm39Test mm39ProbTest hg38BigRmskTest
+test:: hg38Test mm39Test mm39ProbTest hg38BigRmskTest wrongSizeTest
 
 hg38Test: mkout
 	${rmskAlignToPsl} input/hg38.align.tsv output/$@.psl
@@ -25,6 +25,10 @@ mm39ProbTest: mkout
 
 hg38BigRmskTest: mkout
 	${rmskAlignToPsl} -bigRmsk input/hg38.dfam_3.3.bigRmskIn output/$@.psl
+	diff expected/$@.psl output/$@.psl
+
+wrongSizeTest: mkout
+	${rmskAlignToPsl} -repSizes=input/wrongSize.sizes -bigRmsk input/wrongSize.bigRmskIn output/$@.psl
 	diff expected/$@.psl output/$@.psl
 
 mkout:

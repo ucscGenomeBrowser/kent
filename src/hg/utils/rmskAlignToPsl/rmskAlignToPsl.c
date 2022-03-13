@@ -4,6 +4,7 @@
 #include "rmskAlign.h"
 #include "bigRmskAlignBed.h"
 #include "psl.h"
+#include "hash.h"
 #include "options.h"
 
 void usage()
@@ -16,6 +17,9 @@ errAbort(
   "   rmskAlignToPsl rmskAlignTab rmskPslFile\n"
   "\n"
   "  -bigRmsk - input is the text version of bigRmskAlignBed files.\n"
+  "  -repSizes=tab - two column tab file with repeat name and size.\n"
+  "   Sometimes the repeat sizes are incorrect in the align file.\n"
+  "   Obtain the sizes from this file instead.\n"
   "  -dump - print alignments to stdout for debugging purposes\n"
   "\n"
   "This convert *.fa.align.tsv file, created by\n"
@@ -27,6 +31,7 @@ errAbort(
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"bigRmsk", OPTION_BOOLEAN},
+   {"repSizes", OPTION_STRING},
    {"dump", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -62,6 +67,19 @@ static boolean dump = FALSE;
  * have multiple repNames and are split into multiple PSL.
  */
 
+
+static struct hash* loadRepSizes(char *repSizesFile)
+/* load repeat sizes file into a hash */
+{
+struct hash* repSizes = hashNew(20);
+struct lineFile* lf = lineFileOpen(repSizesFile, TRUE);
+char *row[2];
+while (lineFileNextRowTab(lf, row, ArraySize(row)))
+    hashAddInt(repSizes, row[0], lineFileNeedNum(lf, row, 1));
+lineFileClose(&lf);
+return repSizes;
+}
+
 static unsigned getGenomeSize(struct rmskAlign *alignParts)
 /* get the length or the chromosome */
 {
@@ -78,12 +96,24 @@ static unsigned getRepeatSize(struct rmskAlign *alignParts)
  * Example .align problem:
  * 103 20.51 0.00 9.86 chr1 147061 147161 (248809261) C AluJr#SINE/Alu (146) 166 70 [m_b3s356i8] 1
  * 103 20.51 0.00 9.86 chr1 147481 147535 (248808887) C AluJr#SINE/Alu (146) 69 25 [m_b3s356i8] 1
+ *
+ * Still this doesn't always get the correct size.
  */
 {
 unsigned size = 0;
 for (struct rmskAlign *rmskAlign = alignParts; rmskAlign != NULL; rmskAlign = rmskAlign->next)
     size = max(rmskAlign->repEnd + rmskAlign->repLeft, size);
 return size;
+}
+
+static unsigned lookupRepeatSize(struct rmskAlign *alignParts,
+                                 struct hash* repSizes)
+/* get repeat size from supplied table in available, otherwise from
+ * alignments */
+{
+return (repSizes != NULL)
+    ? hashIntVal(repSizes, alignParts->repName)
+    : getRepeatSize(alignParts);
 }
 
 static void rmskAlignToPairwise(struct rmskAlign *rmskAlign,
@@ -478,10 +508,11 @@ while ((blkCoords != NULL) && ((blkCoords->qSize == 0) || (blkCoords->tSize == 0
 *blkCoordsPtr = blkCoords;
 }
 
-static struct blkCoord *parseCAligns(struct rmskAlign *alignParts)
+static struct blkCoord *parseCAligns(struct rmskAlign *alignParts,
+                                     struct hash* repSizes)
 /* parses alignment strings from all parts to go into a PSL  */
 {
-unsigned repSize = getRepeatSize(alignParts);
+unsigned repSize = lookupRepeatSize(alignParts, repSizes);
 
 // build list
 struct blkCoord *blkCoords = NULL;
@@ -538,13 +569,14 @@ for (struct blkCoord *blk = blkCoords; blk != NULL; blk = blk->next)
 }
 
 static struct psl *convertBlocksToPsl(struct rmskAlign *alignParts,
-                                      struct blkCoord *blkCoords)
+                                      struct blkCoord *blkCoords,
+                                      struct hash* repSizes)
 /* create a PSL from a repeat masker alignment */
 {
 /* must use coordinates from blocks, as end-indels have been trimmed */
 struct blkCoord *blkCountN = slLastEl(blkCoords);
 
-unsigned qSize = getRepeatSize(alignParts);
+unsigned qSize = lookupRepeatSize(alignParts, repSizes);
 unsigned qStart = blkCoords->qStart;
 unsigned qEnd = blkCountN->qStart + blkCountN->qSize;
 if (alignParts->strand[0] == '-')
@@ -565,23 +597,24 @@ slFreeList(&blkCoords);
 return psl;
 }
 
-static struct psl *convertToPsl(struct rmskAlign *alignParts)
+static struct psl *convertToPsl(struct rmskAlign *alignParts,
+                                struct hash* repSizes)
 /* create a PSL from a repeat masker alignment, return NULL if fails */
 {
-struct blkCoord *blkCoords = parseCAligns(alignParts);
+struct blkCoord *blkCoords = parseCAligns(alignParts, repSizes);
 if (blkCoords == NULL)
     return NULL;
 
 if (dump)
     blkCoordListPrint(blkCoords, stderr);
 
-return convertBlocksToPsl(alignParts, blkCoords);
+return convertBlocksToPsl(alignParts, blkCoords, repSizes);
 }
 
-static struct psl *alignToPsl(struct rmskAlign *alignParts)
+static struct psl *alignToPsl(struct rmskAlign *alignParts, struct hash* repSizes)
 /* convert and output one set of alignment parts */
 {
-struct psl* psl = convertToPsl(alignParts);
+struct psl* psl = convertToPsl(alignParts, repSizes);
 if ((psl != NULL) && (pslCheck("rmskAlign", stderr, psl) != 0))
     {
     fprintf(stderr, "Invalid PSL created\n");
@@ -593,6 +626,7 @@ return psl;
 }
 
 static void convertAlignGroup(struct rmskAlign **rmskAlignGroupPtr,
+                              struct hash* repSizes,
                               FILE* outFh)
 /* convert an alignment group */
 {
@@ -604,7 +638,7 @@ while ((alignParts = popAlignParts(rmskAlignGroupPtr)) != NULL)
 
     if (shouldConvert(alignParts))
         {
-        struct psl *psl = alignToPsl(alignParts);
+        struct psl *psl = alignToPsl(alignParts, repSizes);
         if (psl != NULL)
             {
             pslTabOut(psl, outFh);
@@ -615,7 +649,8 @@ while ((alignParts = popAlignParts(rmskAlignGroupPtr)) != NULL)
 }
 
 
-static void rmskAlignToPsl(char *rmskAlignFile, char *rmskPslFile)
+static void rmskAlignToPsl(char *rmskAlignFile, char *rmskPslFile,
+                           struct hash* repSizes)
 /* rmskAlignToPsl - convert repeatmasker alignment files to PSLs. */
 {
 // load all, so we can join ones split by other insertions by id
@@ -629,7 +664,7 @@ else
 
 FILE* outFh = mustOpen(rmskPslFile, "w");
 for (unsigned id = 0; id <= maxAlignId; id++)
-    convertAlignGroup(&(rmskAlignGroups[id]), outFh);
+    convertAlignGroup(&(rmskAlignGroups[id]), repSizes, outFh);
 carefulClose(&outFh);
 }
 
@@ -641,6 +676,9 @@ if (argc != 3)
     usage();
 bigRmsk = optionExists("bigRmsk");
 dump = optionExists("dump");
-rmskAlignToPsl(argv[1], argv[2]);
+struct hash* repSizes = NULL;
+if (optionExists("repSizes"))
+    repSizes = loadRepSizes(optionVal("repSizes", NULL));
+rmskAlignToPsl(argv[1], argv[2], repSizes);
 return 0;
 }
