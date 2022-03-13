@@ -121,6 +121,8 @@ if (fastaHash)
 
     if (seq != NULL)
         {
+        if (seq->size != psl->qSize)
+            errAbort("%s FASTA sequence length (%d) does not match PSL qSize (%d)", psl->qName, seq->size, psl->qSize);
 	bigPsl.oSequence = seq->dna;
         bigPsl.seqType = isProt ? PSL_SEQTYPE_PROTEIN : PSL_SEQTYPE_NUCLEOTIDE;
         }
