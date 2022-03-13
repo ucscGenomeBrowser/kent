@@ -19,7 +19,8 @@ errAbort(
   "  -bigRmsk - input is the text version of bigRmskAlignBed files.\n"
   "  -repSizes=tab - two column tab file with repeat name and size.\n"
   "   Sometimes the repeat sizes are incorrect in the align file.\n"
-  "   Obtain the sizes from this file instead.\n"
+  "   Obtain the sizes from this file instead.  Alignments not found\n"
+  "   in file are dropped.\n"
   "  -dump - print alignments to stdout for debugging purposes\n"
   "\n"
   "This convert *.fa.align.tsv file, created by\n"
@@ -596,10 +597,13 @@ slFreeList(&blkCoords);
 return psl;
 }
 
+
+
 static struct psl *convertToPsl(struct rmskAlign *alignParts,
                                 struct hash* repSizes)
 /* create a PSL from a repeat masker alignment, return NULL if fails */
 {
+
 struct blkCoord *blkCoords = parseCAligns(alignParts, repSizes);
 if (blkCoords == NULL)
     return NULL;
@@ -648,6 +652,27 @@ while ((alignParts = popAlignParts(rmskAlignGroupPtr)) != NULL)
 }
 
 
+static boolean checkMissingSize(struct rmskAlign* rmskAlignGroup,
+                                struct hash *repSizes,
+                                struct hash *repSizeWarned)
+/* If repSizes are supplied, check if we have it for this query.  If not, warn
+ * for first occurrence.  These are skipped */
+{
+if (repSizes != NULL)
+    {
+    if (hashLookup(repSizes, rmskAlignGroup->repName) == NULL)
+        {
+        if (hashLookup(repSizeWarned, rmskAlignGroup->repName) == NULL)
+            {
+            fprintf(stderr, "Warning: '%s' size not found for query, skipping\n", rmskAlignGroup->repName);
+            hashAddInt(repSizeWarned, rmskAlignGroup->repName, TRUE);
+            }
+        return FALSE;
+        }
+    }
+return TRUE;
+}
+
 static void rmskAlignToPsl(char *rmskAlignFile, char *rmskPslFile,
                            struct hash* repSizes)
 /* rmskAlignToPsl - convert repeatmasker alignment files to PSLs. */
@@ -661,9 +686,15 @@ if (bigRmsk)
 else
     rmskAlignGroups = loadRmskAlign(rmskAlignFile, &maxAlignId);
 
+struct hash* repSizeWarned = hashNew(12);  // don't warn multiple times on same sequence
+
 FILE* outFh = mustOpen(rmskPslFile, "w");
 for (unsigned id = 0; id <= maxAlignId; id++)
-    convertAlignGroup(&(rmskAlignGroups[id]), repSizes, outFh);
+    {
+    if ((rmskAlignGroups[id] != NULL)
+        && checkMissingSize(rmskAlignGroups[id], repSizes, repSizeWarned))
+        convertAlignGroup(&(rmskAlignGroups[id]), repSizes, outFh);
+    }
 carefulClose(&outFh);
 }
 

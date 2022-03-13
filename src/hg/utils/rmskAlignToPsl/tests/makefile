@@ -31,8 +31,9 @@ hg38BigRmskTest: mkout
 	${pslCheck} output/$@.psl
 
 wrongSizeTest: mkout
-	${rmskAlignToPsl} -repSizes=input/wrongSize.sizes -bigRmsk input/wrongSize.bigRmskIn output/$@.psl
+	${rmskAlignToPsl} -repSizes=input/wrongSize.sizes -bigRmsk input/wrongSize.bigRmskIn output/$@.psl 2> output/$@.out
 	diff expected/$@.psl output/$@.psl
+	diff expected/$@.out output/$@.out
 	${pslCheck} output/$@.psl
 
 mkout:
