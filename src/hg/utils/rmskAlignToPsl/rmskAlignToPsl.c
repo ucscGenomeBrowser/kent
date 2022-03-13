@@ -555,8 +555,7 @@ for (struct blkCoord *blk = blkCoords; blk != NULL; blk = blk->next)
     else
         {
         assert(blk->qSize == blk->tSize);
-        psl->match += blk->matches;
-        psl->repMatch += blk->matches;
+        psl->repMatch += blk->matches;  // all matches are repeat matches
         psl->misMatch += blk->mismatches;
         if (psl->blockCount >= *blockSpacePtr)
             pslGrow(psl, blockSpacePtr);
