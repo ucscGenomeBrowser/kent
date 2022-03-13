@@ -24,7 +24,7 @@ mm39ProbTest: mkout
 	diff expected/$@.err output/$@.err
 
 hg38BigRmskTest: mkout
-	${rmskAlignToPsl} -bigRmsk input/hg38.dfam_3.5.bigRmskIn output/$@.psl
+	${rmskAlignToPsl} -bigRmsk input/hg38.dfam_3.3.bigRmskIn output/$@.psl
 	diff expected/$@.psl output/$@.psl
 
 mkout:
