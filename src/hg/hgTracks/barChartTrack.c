@@ -794,7 +794,8 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
         {
         int cStart = barsDrawn * graphWidth * invCount;
         int cEnd = (barsDrawn+1) * graphWidth * invCount;
-        x1 = cStart + x0;
+        if (i >= 1)
+            x1 += barWidth + extras->padding;
         barWidth = max(userMinBarWidth, cEnd - cStart - extras->padding);
         if (x1 + barWidth > x0 + graphWidth)
             break;
@@ -916,24 +917,26 @@ if (barCount <= graphWidth) // Don't create map boxes if less than one pixel per
     struct barChartCategory *categs = getCategories(tg);
     struct barChartCategory *categ = NULL;
     int x0 = insideX + graphX;
+    int x1 = x0;
     double invCount = 1.0/barCount;
-    int i = 0, barsDrawn = 0;
+    int i = 0, barsDrawn = 0, width = 0;
     int extraAtTop = 4;
     for (categ = categs; categ != NULL; categ = categ->next, i++)
-	{
-	if (!filterCategory(extras, categ->name))
-	    continue;
-	x1 = barsDrawn * graphWidth * invCount;
-	barsDrawn += 1;
-	x2 = barsDrawn * graphWidth * invCount;
-	int width = max(userMinBarWidth, max(1, x2-x1));
-	double expScore = bed->expScores[i];
-	int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
-					    extras->maxHeight, extras->doLogTransform);
-	height = min(height+extraAtTop, extras->maxHeight);
-	mapBoxHc(hvg, itemStart, itemEnd, x0 + x1, yZero-height, width, height, 
-			    tg->track, mapItemName, chartMapText(tg, categ, expScore));
-	}
+        {
+        if (!filterCategory(extras, categ->name))
+            continue;
+        x1 += width;
+        int cStart = barsDrawn * graphWidth * invCount;
+        barsDrawn += 1;
+        int cEnd = barsDrawn * graphWidth * invCount;
+        width = max(userMinBarWidth, max(1, cEnd - cStart));
+        double expScore = bed->expScores[i];
+        int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
+                                            extras->maxHeight, extras->doLogTransform);
+        height = min(height+extraAtTop, extras->maxHeight);
+        mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, width, height,
+                            tg->track, mapItemName, chartMapText(tg, categ, expScore));
+        }
     safef(label, sizeof(label), 
 	"%s - click for faceted view or hover over a bar for sample values", 
 	itemName);

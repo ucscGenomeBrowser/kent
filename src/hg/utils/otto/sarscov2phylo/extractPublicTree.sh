@@ -27,7 +27,7 @@ matUtils=$usherDir/build/matUtils
 cd $ottoDir/$today
 
 # Extract public samples from tree
-grep -v EPI_ISL_ samples.$today > newPublicNames
+grep -v \|EPI_ISL_ samples.$today > newPublicNames
 # Dunno why, but when I tried using -s together with the filtering params, it ran for 3 hours
 # and I killed it -- stuck in a loop?  Run two commands:
 $matUtils extract -i gisaidAndPublic.$today.masked.pb \
@@ -93,6 +93,7 @@ time $matUtils extract -i public-$today.all.masked.pb \
     -g ncbiGenes.gtf \
     -M metadata.tmp.tsv \
     --extra-fields pango_lineage_usher \
+    --include-nt \
     --write-taxodium public-$today.all.masked.taxodium.pb
 rm metadata.tmp.tsv wuhCor1.fa
 gzip -f public-$today.all.masked.taxodium.pb
