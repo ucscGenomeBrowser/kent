@@ -146,6 +146,7 @@ time $matUtils extract -i gisaidAndPublic.$today.masked.pb \
     -g ncbiGenes.gtf \
     -M metadata.tmp.tsv \
     --extra-fields pango_lineage_usher \
+    --include-nt \
     --write-taxodium gisaidAndPublic.$today.masked.taxodium.pb
 rm metadata.tmp.tsv wuhCor1.fa
 gzip -f gisaidAndPublic.$today.masked.taxodium.pb
