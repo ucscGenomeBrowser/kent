@@ -1,0 +1,114 @@
+================================================================
+Notes:
+  dataDir = /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_CHM13_T2T_v2.0
+  stagingDir = /hive/data/genomes/asmHubs/GCA/009/914/755/GCA_009914755.4
+
+T2T CHM13 track spreadsheet
+
+   https://docs.google.com/spreadsheets/d/13BXuEFB904aje6zWXyZ0znZnXvQiu1qxKADA2uV2JU4/edit#gid=1966247802
+
+staging URL
+   https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
+
+# tmp
+   kentDir=${HOME}/compbio/t2t/projs/chm13-v2.0/kent
+
+================================================================
+ucscChromNames (2022-02-22 markd)
+----------------------------------------------------------------
+Chromosome sizes files with UCSC names for building other tracks,
+not a track in the browser
+    t2t-chm13-v2.0.2bit
+    t2t-chm13-v2.0.fa.gz
+    t2t-chm13-v2.0.sizes
+    t2t-chm13-v2.0.sizes3
+
+================================================================
+proseq (2022-02-21 markd)
+----------------------------------------------------------------
+Supplied by Savannah Hoyt <savannah.klein@uconn.edu>
+from T2T Globus /team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/PROseq_Bowtie2/
+trackData/proseq
+
+renaming files to something not as long
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-chm13v1.1_neg.bigwig                              -> PROseq_default_neg.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-chm13v1.1_pos.bigwig                              -> PROseq_default_pos.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_meryl-21mer-chm13v1.1_neg.bigwig   -> PROseq_k100_21mer_neg.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_meryl-21mer-chm13v1.1_pos.bigwig   -> PROseq_k100_21mer_pos.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_neg.bigwig                         -> PROseq_k100_neg.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_pos.bigwig                         -> PROseq_k100_pos.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_neg.bigwig                                 -> PROseq_k100_dual_21mer_neg.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_pos.bigwig                                 -> PROseq_k100_dual_21mer_pos.bw
+
+================================================================
+rnaseq (2022-03-02 markd)
+----------------------------------------------------------------
+Supplied by Savannah Hoyt <savannah.klein@uconn.edu>
+/team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/RNAseq_Bowtie2/
+
+renaming files to something not as long
+    CHM13_S182-183_rnaseq_cutadapt-q20-m100_bt2-chm13v1.1_F1548.bigwig                               -> RNAseq_default.bw
+    CHM13_S182-183_rnaseq_cutadapt-q20-m100_bt2-k100-chm13v1.1_F1548.bigwig                          -> RNAseq_k100.bw
+    CHM13_S182-S183_rnaseq_cutadapt-q20-m100_bt2-k100-chm13v1.1-F1548_meryl-21mer-chm13v1.1.bigwig   -> RNAseq_k100_21mer.bw
+    RNAseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1.bigwig                                     -> RNAseq_k100_dual_21mer.bw
+
+================================================================
+cytoBandsMapped (2022-02-22 markd)
+----------------------------------------------------------------
+cytoBand tracks from T2T project mapped from GRCh38
+Supplied by Nick Altemose <nickaltemose@gmail.com>
+Delivered via Slack
+trackData/cytoBandMapped
+
+bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/cytoBand.as chm13v2.0_cytobands_allchrs.bed ../ucscChromNames/t2t-chm13-v2.0.sizes cytoBandMapped.bb
+
+================================================================
+sedefSegDups (2022-02-24 markd)
+----------------------------------------------------------------
+Supplied by Mitchell Robert Vollger <mvollger@uw.edu>
+team-segdups/Assembly_analysis/SEDEF/T2T-CHM13v2.SDs.bed
+
+    bedToBigBed -as=${kentDir}/src/hg/makeDb/doc/GCA_009914755.4_CHM13_T2T_v2.0/schema/sedefSegDups.as -type=bed9+ T2T-CHM13v2.SDs.bed ../ucscChromNames/t2t-chm13-v2.0.sizes sedefSegDups.bb
+
+
+================================================================
+rdnaModel (2022-03-02 markd)
+----------------------------------------------------------------
+from Adam Phillippy
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/chm13v1.1.rdna_model.bed
+
+    bedToBigBed -type=bed4 chm13v1.1.rdna_model.bed ../ucscChromNames/t2t-chm13-v2.0.sizes rdnaModel.bb
+
+================================================================
+catLiftOffGenes 2022-03-10
+----------------------------------------------------------------
+from Marina Haukness <mhauknes@ucsc.edu>
+http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.chrY.combined.bb
+rename to catLiftOffGenes.bb
+
+================================================================
+pending:
+
+- isoseq BAMs
+  http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/out-t2t-chrY-augPB/assemblyHub/CHM13/
+  @PG   ID:minimap2   PN:minimap2   VN:2.22-r1105-dirty   CL:minimap2 -ax splice -f 1000 --sam-hit-only --secondary=no --eqx -K 100M -t 8 --cap-sw-mem=3g chm13v2.0.chrY.fasta HG002-NA24385-LCL-polished_isoforms_hq.fasta
+  globus /HG002-IsoSeq
+
+- isoseq
+    Fritz Sedlazeck  1 minute ago
+    STUDY: PRJNA754107
+     SAMPLE: GM27730 (SAMN20741798)
+      EXPERIMENT: PCD_NISTRM.NA27730-1_1sA-40 (SRX14226556)
+        RUN: m64139_220130_061226 (SRR18074967)
+    STUDY: PRJNA754107
+     SAMPLE: GM26105 (SAMN20741797)
+      EXPERIMENT: PCD_NISTRM.NA26105-1_1sA-40 (SRX14226558)
+        RUN: m64139_220131_122551 (SRR18074969)
+    STUDY: PRJNA200694
+     SAMPLE: NIST HG002 NA24385 (SAMN03283347)
+      EXPERIMENT: PCD_NISTRM.NA24385-1_1sA-40 (SRX14226557)
+        RUN: m64139_220127_180020 (SRR18074968)
+
+- HAL http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/t2tChm13.v2.0.hal
+
+================================================================
