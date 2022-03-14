@@ -12,6 +12,8 @@ userTrackDbFile = ${asmBuildDir}/${asmId}.userTrackDb.txt
 
 tracks = proseq rnaseq cytoBandMapped sedefSegDups rdnaModel
 
+#catLiftOffGenes
+
 tracksWithHtml = $(filter-out cytoBandMapped,${tracks})
 
 .SECONDARY:
@@ -20,8 +22,9 @@ all: ${userTrackDbFile} bbiInstall htmlInstall
 	cd ${asmBuildDir} && ./doTrackDb.bash
 	hubCheck ${stageUrl}
 
+# ensure spaces separate the stanzas
 ${userTrackDbFile}: ${tracks:%=trackDb/%.trackDb.txt}
-	cat $^ > $@
+	awk 'FNR==1{print ""} {print $$0}'  $^ > $@
 
 # make bbi links for directories
 .PHONY: bbiInstall bbiInstall_%

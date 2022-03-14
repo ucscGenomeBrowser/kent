@@ -80,6 +80,13 @@ https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annota
     bedToBigBed -type=bed4 chm13v1.1.rdna_model.bed ../ucscChromNames/t2t-chm13-v2.0.sizes rdnaModel.bb
 
 ================================================================
+catLiftOffGenes 2022-03-10
+----------------------------------------------------------------
+from Marina Haukness <mhauknes@ucsc.edu>
+http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.chrY.combined.bb
+rename to catLiftOffGenes.bb
+
+================================================================
 pending:
 
 - isoseq BAMs
@@ -103,7 +110,5 @@ pending:
         RUN: m64139_220127_180020 (SRR18074968)
 
 - HAL http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/t2tChm13.v2.0.hal
-
-
 
 ================================================================

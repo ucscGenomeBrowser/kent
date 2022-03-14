@@ -6,5 +6,3 @@ group map
 visibility dense
 type bigBed 4 +
 bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.cytoBandMapped/cytoBandMapped.bb
-
-

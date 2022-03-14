@@ -44,5 +44,3 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.rnaseq.html
     visibility dense
     negateValues off
     bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.rnaseq/RNAseq_k100_dual_21mer.bw
-
-
