@@ -2445,6 +2445,7 @@ visibility hide
 group phenDis
 pennantIcon New red ../goldenPath/newsarch.html "Released Mar. 2022"
 compositeTrack on
+html ../panelApp
 
     track panelAppGene
     parent panelApp on
@@ -2460,6 +2461,7 @@ compositeTrack on
     skipEmptyFields on
     skipFields chrom,chromStart,blockStarts,blockSizes,entityName,tags,status,mouseOverField
     filterValues.confidenceLevel 3,2,1,0
+    html ../panelApp
 
     track PanelAppSTRs
     parent panelApp on
@@ -2475,3 +2477,4 @@ compositeTrack on
     skipEmptyFields on
     skipFields chrom,chromStart,blockStarts,blockSizes,mouseOverField
     filterValues.confidenceLevel 3,2,1,0
+    html ../panelApp
