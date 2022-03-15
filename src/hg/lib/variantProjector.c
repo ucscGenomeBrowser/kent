@@ -1050,29 +1050,37 @@ if (txStart >= cds->start && txStart < cds->end && txEnd > cds->start &&
         freeMem(alt);
         safecpy(altCodons+altCodonsEnd, sizeof(altCodons)-altCodonsEnd, txSeq->dna + txEnd);
         alt = translateString(altCodons);
+        // But there might not be enough 3'UTR sequence to find a new stop codon...
+        if (endsWith(vpPep->ref, "X") && !endsWith(alt, "X"))
+            {
+            vpPep->cantPredict = TRUE;
+            }
         }
-    vpPep->alt = alt;
-    int refLen = strlen(vpPep->ref), altLen = strlen(vpPep->alt);
-    if (differentString(vpPep->ref, vpPep->alt))
+    if (! vpPep->cantPredict)
         {
-        // If alt has a stop codon, temporarily disguise it so it can't get trimmed
-        char *altStop = strchr(vpPep->alt, 'X');
-        if (altStop)
-            *altStop = 'Z';
-        trimRefAlt(vpPep->ref, vpPep->alt, &vpPep->start, &vpPep->end, &refLen, &altLen);
-        if (altStop)
-            *strchr(vpPep->alt, 'Z') = 'X';
+        vpPep->alt = alt;
+        int refLen = strlen(vpPep->ref), altLen = strlen(vpPep->alt);
+        if (differentString(vpPep->ref, vpPep->alt))
+            {
+            // If alt has a stop codon, temporarily disguise it so it can't get trimmed
+            char *altStop = strchr(vpPep->alt, 'X');
+            if (altStop)
+                *altStop = 'Z';
+            trimRefAlt(vpPep->ref, vpPep->alt, &vpPep->start, &vpPep->end, &refLen, &altLen);
+            if (altStop)
+                *strchr(vpPep->alt, 'Z') = 'X';
+            }
+        if (indelShiftIsApplicable(refLen, altLen))
+            {
+            struct seqWindow *pSeqWin = memSeqWindowNew(vpPep->name, pSeq);
+            vpPep->rightShiftedBases = indelShift(pSeqWin, &vpPep->start, &vpPep->end,
+                                                  vpPep->alt, INDEL_SHIFT_NO_MAX, isdRight);
+            freeMem(vpPep->ref);
+            vpPep->ref = cloneStringZ(pSeq+vpPep->start, vpPep->end - vpPep->start);
+            memSeqWindowFree(&pSeqWin);
+            }
+        dnaSeqFree((struct dnaSeq **)&txTrans);
         }
-    if (indelShiftIsApplicable(refLen, altLen))
-        {
-        struct seqWindow *pSeqWin = memSeqWindowNew(vpPep->name, pSeq);
-        vpPep->rightShiftedBases = indelShift(pSeqWin, &vpPep->start, &vpPep->end,
-                                              vpPep->alt, INDEL_SHIFT_NO_MAX, isdRight);
-        freeMem(vpPep->ref);
-        vpPep->ref = cloneStringZ(pSeq+vpPep->start, vpPep->end - vpPep->start);
-        memSeqWindowFree(&pSeqWin);
-        }
-    dnaSeqFree((struct dnaSeq **)&txTrans);
     }
 else
     {

@@ -19,7 +19,7 @@ priority 4
 defaultIsClosed 0
 
 name regulation
-label Regulation
+label Expression and Regulation
 priority 5
 defaultIsClosed 0
 
@@ -29,11 +29,11 @@ priority 6
 defaultIsClosed 0
 
 name varRep
-label Variation
+label Variation and Repeats
 priority 7
 defaultIsClosed 0
 
 name x
-label Experimental
+label Experimental Tracks
 priority 10
 defaultIsClosed 1

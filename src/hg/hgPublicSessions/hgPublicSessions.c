@@ -221,7 +221,7 @@ printf ("<tbody>\n");
 
 while (thisSession != NULL)
     {
-    char *settingString = NULL;
+    char *descriptionString = NULL;
     printf ("\t<tr>\n");
     if (isNotEmpty(thisSession->imgUri))
         {
@@ -237,17 +237,18 @@ while (thisSession != NULL)
         }
 
     struct hash *settingsHash = raFromString(thisSession->settings);
-    settingString = (char*) hashFindVal(settingsHash, "description");
-    if (settingString == NULL)
-        settingString = "";
+    descriptionString = (char*) hashFindVal(settingsHash, "description");
+    if (descriptionString == NULL)
+        descriptionString = "";
     else
         {
-        settingString = replaceChars(settingString, "\\\\", "\\__ESC__");
-        settingString = replaceChars(settingString, "\\r", "\r");
-        settingString = replaceChars(settingString, "\\n", "\n");
-        settingString = replaceChars(settingString, "\\__ESC__", "\\");
+        descriptionString = replaceChars(descriptionString, "\\\\", "\\__ESC__");
+        descriptionString = replaceChars(descriptionString, "\\r", "\r");
+        descriptionString = replaceChars(descriptionString, "\\n", "\n");
+        descriptionString = replaceChars(descriptionString, "\\__ESC__", "\\");
         }
-    printf ("\t\t<td><b>Description:</b> %s<br>\n", settingString);
+    char *safeDescription = htmlEncode(descriptionString);
+    printf ("\t\t<td><b>Description:</b> %s<br>\n", safeDescription);
     printf ("\t\t<b>Author:</b> %s<br>\n", thisSession->userName);
     printf ("\t\t<b>Session Name:</b> %s<br>\n", thisSession->sessionName);
     printf ("\t\t<b>Genome Assembly:</b> %s<br>\n", thisSession->db);

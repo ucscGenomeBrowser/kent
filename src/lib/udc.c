@@ -1900,7 +1900,7 @@ return buf;
 struct lineFile *udcWrapShortLineFile(char *url, char *cacheDir, size_t maxSize)
 /* Read in entire short (up to maxSize) url into memory and wrap a line file around it.
  * The cacheDir may be null in which case udcDefaultDir() will be used.  If maxSize
- * is zero then a default value (currently 64 meg) will be used. */
+ * is zero then a default value (currently 256 meg) will be used. */
 {
 if (maxSize == 0) maxSize = 256 * 1024 * 1024;
 char *buf = udcFileReadAll(url, cacheDir, maxSize, NULL);

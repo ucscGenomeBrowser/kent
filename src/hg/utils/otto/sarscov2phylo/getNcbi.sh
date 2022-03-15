@@ -52,10 +52,10 @@ unzip -o ncbi_dataset.zip
 jq -c -r '[.accession, .biosample, .isolate.collectionDate, .location.geographicLocation, .host.sciName, .isolate.name, .completeness, (.length|tostring)] | join("\t")' \
     ncbi_dataset/data/data_report.jsonl \
 | sed -e 's/COMPLETE/complete/; s/PARTIAL/partial/;' \
-| sort \
+| sort -u \
     > ncbi_dataset.tsv
 
-time $scriptDir/bioSampleJsonToTab.py ncbi_dataset/data/biosample.jsonl > gb.bioSample.tab
+time $scriptDir/bioSampleJsonToTab.py ncbi_dataset/data/biosample.jsonl | uniq > gb.bioSample.tab
 
 # Use BioSample metadata to fill in missing pieces of GenBank metadata and report conflicting
 # sample collection dates:
