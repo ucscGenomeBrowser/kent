@@ -157,8 +157,14 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct hash *hash = hashNew(16);
 char *row[3];
 int fields = 0;
-while ((fields = lineFileChop(lf, row)) != 0)
+// Try tab-separated first; if no tabs, then try whitespace-separated.
+while ((fields = lineFileChopTab(lf, row)) != 0)
     {
+    if (fields == 1)
+        {
+        char *line = row[0];
+        fields = chopLine(line, row);
+        }
     lineFileExpectWords(lf, 2, fields);
     char *name = row[0];
     char *value = lmCloneString(hash->lm, row[1]);
