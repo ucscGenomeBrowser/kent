@@ -342,6 +342,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *firstUse = row[2];
     char buf[512];
     boolean inGallery = FALSE;
+    boolean hasDescription = FALSE;
 
     if (shared >=2)
         inGallery = TRUE;
@@ -383,7 +384,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (gotSettings)
         {
         safef(buf, sizeof(buf), "%s%s", hgsEditPrefix, encSessionName);
-        cgiMakeButton(buf, "details");
+        cgiMakeButton(buf, "view/edit");
+        char *description = getSetting(row[4], "description");
+        if (!isEmpty(description))
+            hasDescription = TRUE;
         }
     else
         printf("unavailable");
@@ -397,12 +401,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
     cgiMakeCheckBoxWithId(buf, shared>0, buf);
-    jsOnEventById("change",buf,"console.log('new status' + this.checked); document.mainForm.submit();");
+    jsOnEventById("change",buf,"document.mainForm.submit();");
 
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsGalleryPrefix, encSessionName);
     cgiMakeCheckBoxFourWay(buf, inGallery, shared>0, buf, NULL, NULL);
-    jsOnEventById("change", buf, "document.mainForm.submit();");
+    if (hasDescription || inGallery)
+        jsOnEventById("change", buf, "document.mainForm.submit();");
+    else
+        jsOnEventById("change", buf, "warn('Please first use the view/edit option to "
+                "add a description for this session.'); this.checked = false;");
 
     link = getSessionEmailLink(encUserName, encSessionName);
     printf("</td><td align=center>%s</td></tr>", link);
@@ -866,7 +874,7 @@ sqlDyAppendEscaped(dy, encoded->string);
 dyStringFree(&encoded);
 dyStringAppend(dy, "', ");
 dyStringPrintf(dy, "%d, ", sharingLevel);
-dyStringPrintf(dy, "%s, now(), %d, '", firstUse, useCount);
+dyStringPrintf(dy, "%s, now(), %d", firstUse, useCount);
 if (gotSettings)
     dyStringPrintf(dy, ", '%s'", settings);
 dyStringPrintf(dy, ");");
