@@ -22,7 +22,7 @@ The first track,
 <a href="hgTrackUi?g=tabulaSapiensTissueCellType" target="_blank">Tabula Tissue Cell</a>
 allows cells to be grouped together and faceted on up to 3 categories: tissue, cell class, and cell type.
 The second track,
-<a href=hgTrackUi?g=tabulaSapiensFullDetails" target="_blank">Tabula Details</a>
+<a href="hgTrackUi?g=tabulaSapiensFullDetails" target="_blank">Tabula Details</a>
 allows cells to be grouped together and faceted on up to 7 categories: tissue,
 cell class, cell type, subtissue, sex, donor, and assay.
 </p>
@@ -35,14 +35,16 @@ for further interactive displays and additional data. </p>
 <h2>Display Conventions and Configuration</h2>
 <p>
 The cell types are colored by which compartment they belong to according to the following table.
-In addition, cells with less than 100 transcripts will be a lighter shade and less
+In addition, cells found in the 
+<a href="hgTrackUi?g=tabulaSapiensFullDetails" target="_blank">Tabula Details</a>
+track with less than 100 transcripts will be a lighter shade and less
 concentrated in color to represent a low number of transcripts.
 
 <p>
 <table cellpadding='2'>
   <thead><tr>
     <th style="border-bottom: 2px solid;">Color</th>
-    <th style="border-bottom: 2px solid;">Cell classification</th>
+    <th style="border-bottom: 2px solid;">Cell Compartment</th>
   </tr></thead>
   <tr><td style="background-color: #0000FF;"></td><td>epithelial</td></tr>
   <tr><td style="background-color: #00D000;"></td><td>endothelial</td></tr>
@@ -102,6 +104,11 @@ format bigBed file that can be visualized.
 The UCSC utilities can be found on 
 <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
 target="_blank">our download server</a>.</p>
+
+<h2>Errata</h2>
+Some cell types, particularly in the intestines, are duplicated due to
+the use of multiple ontologies for the same cell type.  In a future version,
+we plan to pool the data from these duplicates.
 
 <h2>Data Access</h2>
 <p>
