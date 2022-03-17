@@ -18,8 +18,8 @@ group singleCell
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaSapiens/tissue_cell_type.bb
-    barChartStatsUrl /gbdb/$D/bbi/tabulaSapiens/tissue_cell_type.facets
-    barChartCategoryUrl /gbdb/$D/bbi/tabulaSapiens/tissue_cell_type.categories
+    barChartStatsUrl /gbdb/$D/bbi/tabulaSapiens/bw_edit_tissue_cell_type.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaSapiens/bw_edit_tissue_cell_type.categories
     barChartFacets tissue,cell_class,cell_type
     barChartStretchToItem on
 
