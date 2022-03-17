@@ -24,6 +24,7 @@ my $downloadHost = "hgwdev";
 my @blatHosts = qw( dynablat-01 dynablat-01 );
 my @blatPorts = qw( 4040 4040 );
 my $blatHostDomain = ".soe.ucsc.edu";
+my $groupsTxt = `cat ~/kent/src/hg/makeDb/doc/asmHubs/groups.txt`;
 
 ################### writing out hub.txt file, twice ##########################
 sub singleFileHub($$$$$$$$$$) {
@@ -53,6 +54,7 @@ sub singleFileHub($$$$$$$$$$) {
     printf $fh "groups groups.txt\n";
     printf $fh "description %s\n", $orgName;
     printf $fh "twoBitPath %s.2bit\n", $accessionId;
+    printf $fh "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
     printf $fh "chromSizes %s.chrom.sizes.txt\n", $accessionId;
     printf $fh "chromAlias %s.chromAlias.txt\n", $accessionId;
     printf $fh "organism %s\n", $descr;
@@ -165,6 +167,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf "groups groups.txt\n";
   printf "description %s\n", $orgName;
   printf "twoBitPath ../%s/%s/%s.2bit\n", $accessionDir, $accessionId, $accessionId;
+  printf "twoBitBptUrl ../%s/%s/%s.2bit.bpt\n", $accessionDir, $accessionId, $accessionId;
   printf "chromSizes ../%s/%s/%s.chrom.sizes.txt\n", $accessionDir, $accessionId, $accessionId;
   printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
   printf "organism %s\n", $descr;
@@ -222,6 +225,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf GF "groups groups.txt\n";
   printf GF "description %s\n", $orgName;
   printf GF "twoBitPath %s.2bit\n", $accessionId;
+  printf GF "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
   printf GF "chromSizes %s.chrom.sizes.txt\n", $accessionId;
   printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
   printf GF "organism %s\n", $descr;
@@ -240,49 +244,8 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
 
   my $localGroups = "$buildDir/${asmId}.groups.txt";
   open (GR, ">$localGroups") or die "can not write to $localGroups";
-  print GR <<_EOF_
-name user
-label Custom Tracks
-priority 1
-defaultIsClosed 1
-
-name map
-label Mapping and Sequencing
-priority 2
-defaultIsClosed 0
-
-name genes
-label Genes and Gene Predictions
-priority 3
-defaultIsClosed 0
-
-name rna
-label mRNA and EST
-priority 4
-defaultIsClosed 0
-
-name regulation
-label Regulation
-priority 5
-defaultIsClosed 0
-
-name compGeno
-label Comparative Genomics
-priority 6
-defaultIsClosed 0
-
-name varRep
-label Variation
-priority 7
-defaultIsClosed 0
-
-name x
-label Experimental
-priority 10
-defaultIsClosed 1
-_EOF_
-   ;
-   close (GR);
+  print GR "%s", $groupsTxt;
+  close (GR);
 }
 
 __END__

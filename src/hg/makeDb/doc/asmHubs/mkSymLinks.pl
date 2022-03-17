@@ -90,6 +90,7 @@ foreach my $asmId (@orderList) {
   `rm -fr "${destDir}/html"`;
   `mkdir -p "${destDir}/html"`;
   `rm -f "${destDir}/${accessionId}.2bit"`;
+  `rm -f "${destDir}/${accessionId}.2bit.bpt"`;
   `rm -f "${destDir}/${accessionId}.untrans.gfidx"`;
   `rm -f "${destDir}/${accessionId}.trans.gfidx"`;
   `rm -f "${destDir}/${accessionId}.agp.gz"`;
@@ -118,13 +119,12 @@ foreach my $asmId (@orderList) {
     `ln -s ${buildDir}/html/*.jpg "${destDir}/html/"`;
    }
 #  `ln -s ${buildDir}/html/*.png "${destDir}/genomes/${asmId}/html/"`;
-  `ln -s "${buildDir}/${asmId}.2bit" "${destDir}/${accessionId}.2bit"` if (-s "${buildDir}/${asmId}.2bit");
-   if (-s "${buildDir}/${accessionId}.untrans.gfidx") {
-      if (-s "${buildDir}/${accessionId}.trans.gfidx") {
-        `rm -f "${buildDir}/${asmId}.untrans.gfidx"`;
-        `rm -f "${buildDir}/${asmId}.trans.gfidx"`;
-        `ln -s "${buildDir}/${accessionId}.untrans.gfidx" "${destDir}/${accessionId}.untrans.gfidx"`;
-        `ln -s "${buildDir}/${accessionId}.trans.gfidx" "${destDir}/${accessionId}.trans.gfidx"`;
+  `ln -s "${buildDir}/trackData/addMask/${asmId}.masked.2bit" "${destDir}/${accessionId}.2bit"` if (-s "${buildDir}/trackData/addMask/${asmId}.masked.2bit");
+  `ln -s "${buildDir}/trackData/addMask/${asmId}.masked.2bit.bpt" "${destDir}/${accessionId}.2bit.bpt"` if (-s "${buildDir}/trackData/addMask/${asmId}.masked.2bit.bpt");
+   if (-s "${buildDir}/trackData/addMask/${accessionId}.untrans.gfidx") {
+      if (-s "${buildDir}/trackData/addMask/${accessionId}.trans.gfidx") {
+        `ln -s "${buildDir}/trackData/addMask/${accessionId}.untrans.gfidx" "${destDir}/${accessionId}.untrans.gfidx"`;
+        `ln -s "${buildDir}/trackData/addMask/${accessionId}.trans.gfidx" "${destDir}/${accessionId}.trans.gfidx"`;
       }
    }
   `ln -s "${buildDir}/${asmId}.agp.gz" "${destDir}/${accessionId}.agp.gz"` if (-s "${buildDir}/${asmId}.agp.gz");
