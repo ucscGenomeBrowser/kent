@@ -740,7 +740,7 @@ html ../panelApp
     visibility pack
     bigDataUrl /gbdb/hg38/panelApp/genesPanel.bb
     itemRgb on
-    urls omimGene="https://www.omim.org/entry/$$" ensemblGenes="https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
+    urls omimGene="https://www.omim.org/entry/$$" ensemblGenes="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
     mouseOverField mouseOverField
     labelFields geneSymbol
     skipEmptyFields on
@@ -756,7 +756,7 @@ html ../panelApp
     visibility pack
     bigDataUrl /gbdb/hg38/panelApp/STRsPanel.bb  
     itemRgb on
-    urls omimGene="https://www.omim.org/entry/$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
+    urls omimGene="https://www.omim.org/entry/$$" ensemblID="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
     mouseOverField mouseOverField
     labelFields hgncSymbol
     skipEmptyFields on
