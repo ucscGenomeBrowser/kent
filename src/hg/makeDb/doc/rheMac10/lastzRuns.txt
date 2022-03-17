@@ -163,4 +163,105 @@ TMPDIR=/dev/shm
     # 2730109619 bases of 2803866698 (97.369%) in intersection
 
 ##############################################################################
+# LASTZ Rhesus RheMac10 vs. Baboon PapAnu2
+#    (DONE - 2022-03-17 - Jairo Navarro)
 
+    mkdir /hive/data/genomes/rheMac10/bed/lastzPapAnu2.2022-03-09
+    cd /hive/data/genomes/rheMac10/bed/lastzPapAnu2.2022-03-09
+
+    printf '# Baboon PapAnu2 vs. Rhesus RheMac10
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Rhesus RheMac10
+SEQ1_DIR=/hive/data/genomes/rheMac10/rheMac10.2bit
+SEQ1_LEN=/hive/data/genomes/rheMac10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Baboon PapAnu2
+SEQ2_DIR=/hive/data/genomes/papAnu2/papAnu2.2bit
+SEQ2_LEN=/hive/data/genomes/papAnu2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/rheMac10/bed/lastzPapAnu2.2022-03-09
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+
+    sed -e 's/^/    # /;' fb.rheMac10.chainPapAnu2Link.txt
+    # 2661233289 bases of 2936892733 (90.614%) in intersection
+    sed -e 's/^/    # /;' fb.rheMac10.chainSynPapAnu2Link.txt
+    # 2637780437 bases of 2936892733 (89.815%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        rheMac10 papAnu2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	92m15.570s
+
+    sed -e 's/^/    # /;' fb.rheMac10.chainRBest.PapAnu2.txt
+    # 2603944831 bases of 2936892733 (88.663%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/papAnu2/bed/blastz.rheMac10.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/rheMac10/bed/lastzPapAnu2.2022-03-09/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+
+    sed -e 's/^/    # /;' fb.papAnu2.chainRheMac10Link.txt
+    # 2643316405 bases of 2893250291 (91.361%) in intersection
+    sed -e 's/^/    # /;' fb.papAnu2.chainSynRheMac10Link.txt
+
+    cd /hive/data/genomes/papAnu2/bed/blastz.rheMac10.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/rheMac10/bed/lastzPapAnu2.2022-03-09/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	70m47.109s
+
+    sed -e 's/^/    # /;' fb.papAnu2.chainRheMac10Link.txt
+    # 2643316405 bases of 2893250291 (91.361%) in intersection
+    sed -e 's/^/    # /;' fb.papAnu2.chainSynRheMac10Link.txt
+    # 2615443297 bases of 2893250291 (90.398%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+    \
+   papAnu2 rheMac10) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	109m15.780s
+
+    sed -e 's/^/    # /;' fb.papAnu2.chainRBest.RheMac10.txt
+    # 2607952215 bases of 2893250291 (90.139%) in intersection
+
+##############################################################################
