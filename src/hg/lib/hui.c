@@ -6876,6 +6876,7 @@ if (wordCount == 3 && sameWord(words[1], "xeno"))
     crossSpeciesCfgUi(cart,tdb);
 baseColorDropLists(cart, tdb, name);
 indelShowOptionsWithName(cart, tdb, name);
+wigOption(cart, name, title, tdb);
 cfgEndBox(boxed);
 }
 

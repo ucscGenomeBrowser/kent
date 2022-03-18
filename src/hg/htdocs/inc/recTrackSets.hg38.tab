@@ -8,7 +8,7 @@
 # For details on how to update this file, see the wiki: http://genomewiki.ucsc.edu/genecats/index.php/Recommended_Track_Sets
 #       
 # Format: label, userName, sessionName, description
-Clinical SNVs	View	Clinical_SNVs_hg38 	Assess potential disease contributions of single nucleotide variants in coding regions
+Clinical SNVs	View	Clinical_SNVs_hg38	Assess potential disease contributions of single nucleotide variants in coding regions
 Clinical CNVs	View	Clinical_CNVs_hg38	Assess potential disease contributions of structural variants in coding regions
 Non-coding SNVs	View	Non_Coding_SNVs_hg38	Investigate functional aspects of non-coding variants
 Problematic Regions	View	Problematic_Regions_hg38	Evaluate if annotations are on potential low confidence regions due to high homology or other reported concerns
