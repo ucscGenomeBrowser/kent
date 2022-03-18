@@ -244,7 +244,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
 
   my $localGroups = "$buildDir/${asmId}.groups.txt";
   open (GR, ">$localGroups") or die "can not write to $localGroups";
-  print GR "%s", $groupsTxt;
+  printf GR "%s", $groupsTxt;
   close (GR);
 }
 
