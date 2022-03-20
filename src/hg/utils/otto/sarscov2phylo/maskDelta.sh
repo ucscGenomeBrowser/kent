@@ -102,6 +102,13 @@ for ((i=28362;  $i <= 28370;  i++)); do
     echo -e "N${i}N\t$BA1Node"
 done >> $maskFile
 
+# BA.1 has a lot of amplicon dropout / Delta contam noise at these sites, but so far they
+# don't affect the Delta/Omicron recombinants identified to date which all have Omicron spike,
+# so mask these out in BA.1:
+for i in 22813 22898 22882 22917 23854; do
+    echo -e "N${i}N\t$BA1Node"
+done >> $maskFile
+
 # BA.2 has some additional deletions.
 for ((i=21633;  $i <= 21641;  i++)); do
     echo -e "N${i}N\t$BA2Node"
