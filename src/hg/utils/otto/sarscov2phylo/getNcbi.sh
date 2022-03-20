@@ -69,6 +69,10 @@ tawk '$3 != "" {print $1, $3;}' ncbi_dataset.plusBioSample.tsv \
 # Replace FASTA headers with reconstructed names from enhanced metadata.
 time cleanGenbank < ncbi_dataset/data/genomic.fna \
 | $scriptDir/fixNcbiFastaNames.pl ncbi_dataset.plusBioSample.tsv \
+    > genbank.maybeDups.fa
+time fastaNames genbank.maybeDups.fa | awk '{print $1 "\t" $0;}' > gb.rename
+time faUniqify genbank.maybeDups.fa stdout \
+| faRenameRecords stdin gb.rename stdout \
 | xz -T 20 \
     > genbank.fa.xz
 
@@ -146,6 +150,9 @@ mv tmp ncbi_dataset.plusBioSample.tsv
 
 rm -f $ottoDir/ncbi.latest
 ln -s ncbi.$today $ottoDir/ncbi.latest
+
+rm -f ~angie/public_html/sarscov2phylo/ncbi.$today
+ln -s $ottoDir/ncbi.$today ~angie/public_html/sarscov2phylo/ncbi.$today
 
 # Clean up
 rm -r ncbi_dataset
