@@ -14,6 +14,6 @@ table evaSnp
     lstring  alt;        "The sequences of the alternate alleles"
     string   varClass;   "The variant class (VC) from EVA Sequence Ontology term"
     lstring  submitters; "Submitter ID (SID) reporting a variant"
-    string   aaChange;   "Change in amino acid"
     string   ucscClass;  "Class of variant per UCSC Variant Annotation Integrator"
+    string   aaChange;   "Change in amino acid"
     )
