@@ -297,7 +297,7 @@ fi
 if [ -s newGisaid.filtered.fa ]; then
     zcat $gisaidDir/metadata_batch_$today.tsv.gz \
     | grep -Fwf <(fastaNames newGisaid.filtered.fa) \
-    | tawk '{print $3 "\t" $1 "|" $3 "|" $5;}' \
+    | tawk '$3 != "" {print $3 "\t" $1 "|" $3 "|" $5;}' \
         >> $renaming
 fi
 wc -l $renaming

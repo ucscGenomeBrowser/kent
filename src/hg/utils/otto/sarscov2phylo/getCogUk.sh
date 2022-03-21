@@ -77,3 +77,6 @@ pigz -f -p 8 nextclade.full.tsv
 
 rm -f $ottoDir/cogUk.latest
 ln -s cogUk.$today $ottoDir/cogUk.latest
+
+rm -f ~angie/public_html/sarscov2phylo/cogUk.$today
+ln -s $ottoDir/cogUk.$today ~angie/public_html/sarscov2phylo/cogUk.$today
