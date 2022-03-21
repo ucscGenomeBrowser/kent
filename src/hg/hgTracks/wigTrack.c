@@ -1291,7 +1291,7 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                     color = MG_BROWN;
                 else if (base == 'g')
                     color = MG_BLUE;
-                if (abs(dataValue) > 0.1)
+                //if (abs(dataValue) > 0.1) // I have no idea why this check is here, so I'll leave it in just in case I'm just being forgetful
                     {
                     if (dataValue < 0)
                         {
