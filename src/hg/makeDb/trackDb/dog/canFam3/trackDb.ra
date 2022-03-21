@@ -19,18 +19,18 @@ include ../../refSeqComposite.ra
 track evaSnp
 shortLabel EVA SNP Release 3
 longLabel Short Genetic Variants from European Variant Archive Release 3
-type bigBed 6 +
+type bigBed 9 +
 group varRep
 visibility pack
+itemRgb on
+mouseOver $ucscClass $aaChange
 bigDataUrl /gbdb/canFam3/bbi/evaSnp.bb
 url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
-filterValues.valid No,Yes
-filterValues.class deletion,delins,insertion,multipleNucleotideSubstitution,substitution,tandemRepeat
+filterValues.varClass deletion,delins,insertion,multipleNucleotideSubstitution,substitution,tandemRepeat
+filterValues.ucscClass missense_variant,frameshift_variant,inframe_deletion,inframe_insertion,initiator_codon_variant,stop_gained,stop_lost,splice_acceptor_variant,splice_donor_variant,splice_region_variant,exon_loss_variant,coding_sequence_variant,5_prime_UTR_variant,3_prime_UTR_variant,NMD_transcript_variant,synonymous_variant,stop_retained_variant,complex_transcript_variant,non_coding_transcript_exon_variant,intron_variant,upstream_gene_variant,downstream_gene_variant,intergenic_variant,no_sequence_alteration, 
 
 searchTable evaSnp
 searchType bigBed
 searchMethod exact
-padding 50
-
-
+padding 20
 
