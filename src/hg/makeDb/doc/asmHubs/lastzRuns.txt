@@ -1697,3 +1697,93 @@ TMPDIR=/dev/shm
 real	27m14.153s
 user	0m1.233s
 sys	0m1.147s
+#############################################################################
+# LASTZ water buffalo GCF_003121395.1 vs. Cow BosTau9 (DONE - 2022-01-17)
+
+  ./pairLastz.sh  GCF_003121395.1_ASM312139v1 bosTau9 mammal mammal
+
+    # this command outputs this makeDoc text:
+
+    cat /hive/data/genomes/asmHubs/refseqBuild/GCF/003/121/395/GCF_003121395.1_ASM312139v1/trackData/lastzBosTau9.2022-03-15/makeDoc.txt
+
+##############################################################################
+# LASTZ water buffalo GCF_003121395.1 vs. Cow BosTau9
+#    (DONE - 2022-03-21 - hiram)
+
+    mkdir /hive/data/genomes/asmHubs/allBuild/GCF/003/121/395/GCF_003121395.1_ASM312139v1/trackData/lastzBosTau9.2022-03-15
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/003/121/395/GCF_003121395.1_ASM312139v1/trackData/lastzBosTau9.2022-03-15
+
+    printf '# Cow BosTau9 vs. water buffalo GCF_003121395.1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: water buffalo GCF_003121395.1
+SEQ1_DIR=/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.2bit
+SEQ1_LEN=/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.chrom.sizes.txt
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Cow BosTau9
+SEQ2_DIR=/hive/data/genomes/bosTau9/bosTau9.2bit
+SEQ2_LEN=/hive/data/genomes/bosTau9/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/asmHubs/allBuild/GCF/003/121/395/GCF_003121395.1_ASM312139v1/trackData/lastzBosTau9.2022-03-15
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+      -tAsmId GCF_003121395.1_ASM312139v1  -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	586m13.240s
+
+    sed -e 's/^/    # /;' fb.GCF_003121395.1.chainBosTau9Link.txt
+    # 2530022888 bases of 2655780776 (95.265%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_003121395.1.chainSynBosTau9Link.txt
+    # 2503488174 bases of 2655780776 (94.266%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+      -target2Bit="/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.chrom.sizes.txt" \
+       \
+        GCF_003121395.1 bosTau9) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	131m51.569s
+
+    sed -e 's/^/    # /;' fb.GCF_003121395.1.chainRBest.BosTau9.txt
+    # 2481923005 bases of 2655780776 (93.454%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/bosTau9/bed/blastz.GCF_003121395.1.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+  -tAsmId GCF_003121395.1_ASM312139v1  /hive/data/genomes/asmHubs/allBuild/GCF/003/121/395/GCF_003121395.1_ASM312139v1/trackData/lastzBosTau9.2022-03-15/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	217m58.432s
+
+    sed -e 's/^/    # /;' fb.bosTau9.chainGCF_003121395.1Link.txt
+    # 2545585532 bases of 2715853792 (93.731%) in intersection
+    sed -e 's/^/    # /;' fb.bosTau9.chainSynGCF_003121395.1Link.txt
+    # 2515328392 bases of 2715853792 (92.616%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+   -query2bit="/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.chrom.sizes.txt" \
+    \
+   bosTau9 GCF_003121395.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	142m40.163s
+
+    sed -e 's/^/    # /;' fb.bosTau9.chainRBest.GCF_003121395.1.txt
+    # 2481700410 bases of 2715853792 (91.378%) in intersection
+
+##############################################################################

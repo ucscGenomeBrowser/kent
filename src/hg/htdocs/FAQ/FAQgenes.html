@@ -631,7 +631,7 @@ The below example will attempt to make a simple example to select
 all types that have &quot;protein_coding&quot; in this transcriptType field:</p>
 <p>
 <pre>
-hgsql hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g, wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "protein_coding");'
+mysql -u genome -h genome-mysql.soe.ucsc.edu hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g, wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "protein_coding");'
 </pre></p>
 <p>
 What this query does is access the hg38 database, and then from the wgEncodeGencodeBasicV39 table,
@@ -681,7 +681,7 @@ of all genes and the wgEncodeGencodeAttrsV39 related table to find the transcrip
 to select just lncRNA entries.</p>
 <p>
 <pre>
-hgsql hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g, wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "lncRNA");' 
+mysql -u genome -h genome-mysql.soe.ucsc.edu hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g, wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "lncRNA");'
 </pre></p>
 <p>
 What this query does is access the hg38 database, and then from the wgEncodeGencodeBasicV39 table,

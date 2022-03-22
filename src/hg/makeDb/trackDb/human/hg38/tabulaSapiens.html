@@ -10,18 +10,17 @@ droplet-based and plate-based single-cell RNA-sequencing (scRNA-seq).
 Samples were taken from the human bladder, blood,
 bone marrow, eye, fat, heart, kidney, large intestine, liver, lung, lymph node,
 mammary, muscle, pancreas, prostate, salivary gland, skin, small intestine,
-spleen, thymus, tongue, trachea, uterus and vasculature. The dataset includes
-264,009 immune cells, 102,580 epithelial cells, 32,701 endothelial cells and
+spleen, thymus, tongue, trachea, uterus, and vasculature. The dataset includes
+264,009 immune cells, 102,580 epithelial cells, 32,701 endothelial cells, and
 81,529 stromal cells. A total of 475 distinct cell types were identified.
-
 </p>
 
 <p>
 This track collection contains two bar chart tracks of RNA expression.
 The first track,
 <a href="hgTrackUi?g=tabulaSapiensTissueCellType" target="_blank">Tabula Tissue Cell</a>
-allows cells to be grouped together and faceted on up to 3 categories: tissue, cell class, and cell type.
-The second track,
+allows cells to be grouped together and faceted on up to 3 categories: tissue, cell class, and cell
+type. The second track,
 <a href="hgTrackUi?g=tabulaSapiensFullDetails" target="_blank">Tabula Details</a>
 allows cells to be grouped together and faceted on up to 7 categories: tissue,
 cell class, cell type, subtissue, sex, donor, and assay.
@@ -39,6 +38,7 @@ In addition, cells found in the
 <a href="hgTrackUi?g=tabulaSapiensFullDetails" target="_blank">Tabula Details</a>
 track with less than 100 transcripts will be a lighter shade and less
 concentrated in color to represent a low number of transcripts.
+</p>
 
 <p>
 <table cellpadding='2'>
@@ -52,11 +52,11 @@ concentrated in color to represent a low number of transcripts.
   <tr><td style="background-color: #FF0000;"></td><td>immune</td></tr>
   <tr><td style="background-color: #CC00CC;"></td><td>stromal</td></tr>
 </table>
+</p>
 
 <h2>Methods</h2>
-</p>
-<b> All tissues </b>
-</p>
+
+<h3>All tissues</h3>
 
 <p>
 36 tissue specimens comprising 24 unique tissues and organs were collected from 
@@ -65,7 +65,8 @@ various hospital locations in the Northern California region and transported on
 ice in less than one hour to preserve cell viability. Single cell suspensions
 from each organ were prepared in tissue expert laboratories at Stanford and
 UCSF. For each tissue, the dissociated cells were sorted using MACS and FACS to
-balance immune, stromal, epithelial and endothelial cell types.
+balance immune, stromal, epithelial, and endothelial cell types.
+</p>
 
 <p>
 Sequencing libraries for all tissues were prepared using 10x 3' v3.1, 10x 5' v2, and
@@ -81,7 +82,8 @@ of 16 to 20 libraries of approximately 5,000 cells per library with the goal of 
 S4 flow cells to allow generating 1M reads per cell, depending on library quality. 152 10x
 reactions were performed, yielding 454,069 cells passing QC, and 161 smartseq2 plates
 were processed, yielding 27,051 cells passing QC.
-<p>
+</p>
+
 <p>
 Tissues collected from the same donor were used to study the
 clonal distribution of T cells between tissues, to understand the tissue
@@ -89,11 +91,13 @@ specific mutation rate in B cells, and to analyze the cell cycle state and
 proliferative potential of shared cell types across tissues. RNA splicing
 analysis was also used to characterize cell type specific splicing and its
 variation across individuals.
+</p>
 
 <p>
 For detailed methods and information on donors for each organ or tissue 
 please refer to Quake <em>et al</em>, 2021 or the 
 <a href="https://tabula-sapiens-portal.ds.czbiohub.org/">Tabula Sapiens</a> website.
+</p>
 
 <p>
 The cell/gene matrix and cell-level metadata was downloaded from the <a
@@ -106,9 +110,11 @@ The UCSC utilities can be found on
 target="_blank">our download server</a>.</p>
 
 <h2>Errata</h2>
+<p>
 Some cell types, particularly in the intestines, are duplicated due to
 the use of multiple ontologies for the same cell type.  In a future version,
 we plan to pool the data from these duplicates.
+</p>
 
 <h2>Data Access</h2>
 <p>
@@ -132,7 +138,7 @@ Wick, and Rachel Schwartz.</p>
 The Tabula Sapiens Consortium, Quake SR., <a
 href="https://www.biorxiv.org/content/10.1101/2021.07.19.452956v3"
 target="_blank">The Tabula Sapiens: A Multiple Organ Single Cell
-Transcriptomic Atlas of Humans.</a>. <em>bioRxiv</em>. 2021 March 4.; doi:
+Transcriptomic Atlas of Humans</a>. <em>bioRxiv</em>. 2021 March 4.; doi:
 <a href="https://doi.org/10.1101/2021.07.19.452956"
 target="_blank">https://doi.org/10.1101/2021.07.19.452956</a>.
 </p>
