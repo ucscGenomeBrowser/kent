@@ -84,6 +84,13 @@
   display: table-row;
 }
 
+.colViewReq,
+.colGViewReq {
+  display: table-cell;
+  /* width: 90px; */
+  width: 10em;
+}
+
 .colComName,
 .colGComName {
   display: table-cell;

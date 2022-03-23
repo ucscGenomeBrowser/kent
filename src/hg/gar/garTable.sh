@@ -59,7 +59,7 @@ pages.
 </p>
 
 <h2>What is this page for?</h2>
-<p>This page lists both whole genome assembly browsers that are available for
+<p>This page lists both whole-genome assembly browsers that are available for
 immediate viewing, and assemblies that are not currently available but can
 be requested.
 </p>
@@ -76,7 +76,7 @@ Gaps, GC Percent, Restriction Enzymes, Tandem Duplications,
 CpG Islands, RefSeq mRNAs, Repeat Masking, and, if available:
 NCBI RefSeq Genes and Ensembl Genes.
 </p>
-<p>This page is optimized for use in Firefox and Safari
+<p>This page is optimized for use in Firefox and Safari.
 </p>\n"
 
 
