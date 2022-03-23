@@ -173,9 +173,15 @@ asdUpdateBaselineQuery(self);
 }
 
 static char **nextRowFromSqlResult(struct annoStreamDb *self)
-/* Stream rows directly from self->sr. */
+/* Stream rows directly from self->sr, but copy into rowBuf in case we need extra columns for
+ * hashJoin. */
 {
-return sqlNextRow(self->sr);
+// Use only the first row in rowBuf.
+if (self->rowBuf.buf[0] == NULL)
+    lmAllocArray(self->rowBuf.lm, self->rowBuf.buf[0], self->bigRowSize);
+char **row = sqlNextRow(self->sr);
+CopyArray(row, self->rowBuf.buf[0], self->sqlRowSize);
+return self->rowBuf.buf[0];
 }
 
 INLINE boolean useSplitTable(struct annoStreamDb *self, struct joinerDtf *dtf)
@@ -1323,6 +1329,7 @@ if (slCount(self->chromList) > 1000)
     // Assembly has many sequences (e.g. scaffold-based assembly) --
     // don't break up into per-sequence queries.  Take our chances
     // with mysql being unhappy about the sqlResult being open too long.
+    rowBufInit(&self->rowBuf, 1);
     self->doQuery = asdDoQuerySimple;
     self->nextRowRaw = nextRowFromSqlResult;
     }
