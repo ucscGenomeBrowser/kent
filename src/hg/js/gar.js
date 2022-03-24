@@ -57,7 +57,7 @@ var gar = {
     },
 
     // given a 'false' or 'true' then 'hide' or 'show' all rows in the table
-    hideShowAllRows(hideShow) {
+    hideShowAllRows: function(hideShow) {
       var thisList = document.getElementsByClassName('gca');
       gar.resetListVis(thisList, hideShow);
       thisList = document.getElementsByClassName('gcf');
