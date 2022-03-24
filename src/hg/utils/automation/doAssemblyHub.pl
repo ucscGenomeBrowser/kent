@@ -1028,11 +1028,28 @@ export asmId=$asmId
 
 \$HOME/kent/src/hg/utils/automation/asmHubChromAlias.pl \\
     \${asmId} | sort > \${asmId}.chromAlias.txt
+
+\$HOME/kent/src/hg/utils/automation/aliasTextToBed.pl \\
+  -chromSizes=\$buildDir/\$asmId.chrom.sizes \\
+    -aliasText=\${asmId}.chromAlias.txt \\
+      -aliasBed=\${asmId}.chromAlias.bed \\
+        -aliasAs=\${asmId}.chromAlias.as \\
+        -aliasBigBed=\${asmId}.chromAlias.bb
+
+bigBedToBed -header \${asmId}.chromAlias.bb test.chromAlias.bed
+\$HOME/kent/src/hg/utils/automation/aliasBedToCt.pl \\
+  test.chromAlias.bed .
+
 # verify each sequence name has an alias
-export sizeCount=`cat ../../\${asmId}.chrom.sizes | wc -l`
-export aliasCount=`grep -v "^#" \${asmId}.chromAlias.txt | wc -l`
+export sizeCount=`grep -c . ../../\${asmId}.chrom.sizes`
+export aliasCount=`grep -c -v "^#" \${asmId}.chromAlias.txt`
+export testCount=`grep -c -v "^#" test.chromAlias.bed`
 if [ "\${sizeCount}" -ne "\${aliasCount}" ]; then
   printf "ERROR: chromAlias: incorrect number of aliases chromSizes %d > %d aliasCount\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
+  exit 255
+fi
+if [ "\${sizeCount}" -ne "\${testCount}" ]; then
+  printf "ERROR: chromAlias: incorrect number of aliases chromSizes %d > %d testCount in bigBed file\\n" "\${sizeCount}" "\${testCount}" 1>&2
   exit 255
 fi
 

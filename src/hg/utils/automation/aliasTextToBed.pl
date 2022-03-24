@@ -73,6 +73,8 @@ my %nameLabels = (
 
 open (AS, ">$opt_aliasAs") or die "can not write to $opt_aliasAs";
 
+my $indexNames;
+
 $titleLine =~ s/^#\s+//;
 my @legendNames = split('\s+', $titleLine);
 my $expectFieldCount = scalar(@legendNames);
@@ -85,10 +87,17 @@ printf AS "    string chrom;\t\"native sequence name\"\n";
 printf AS "    uint chromStart;\t\"always 0\"\n";
 printf AS "    uint chromEnd;\t\"chromosome size\"\n";
 foreach my $title (@legendNames) {
+  if (length($indexNames)) {
+    $indexNames .= "," . $title;
+  } else {
+    $indexNames = $title;
+  }
   printf AS "    string %s;\t\"%s name\"\n", $title, $nameLabels{$title};
 }
 printf AS "    )\n";
 close (AS);
+
+printf STDERR "# indexNames: '%s'\n", $indexNames;
 
 open (BD, ">$opt_aliasBed") or die "can not write to $opt_aliasBed";
 
@@ -109,7 +118,8 @@ while (my $line = <FH>) {
 close (FH);
 close (BD);
 
-print `bedToBigBed -tab -type=bed3+5 -as=$opt_aliasAs -extraIndex=ucsc,assembly,genbank,ncbi,refseq $opt_aliasBed $opt_chromSizes $opt_aliasBigBed`;
+printf STDERR "bedToBigBed -tab -type=bed3+5 -as=$opt_aliasAs -extraIndex=$indexNames $opt_aliasBed $opt_chromSizes $opt_aliasBigBed\n";
+print `bedToBigBed -tab -type=bed3+5 -as=$opt_aliasAs -extraIndex=$indexNames $opt_aliasBed $opt_chromSizes $opt_aliasBigBed`;
 
 __END__
 

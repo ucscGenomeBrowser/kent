@@ -119,6 +119,7 @@ install:
 	cp -p --remove-destination makeTouchCommands.csh   ${SCRIPTS}
 	cp -p --remove-destination makeUniProtFile.csh     ${SCRIPTS}
 	cp -p --remove-destination net.csh                 ${SCRIPTS}
+	cp -p --remove-destination pairLastzWrapper.py     ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}
 	cp -p --remove-destination printMan.csh            ${SCRIPTS}
 	cp -p --remove-destination qaAutoTrack.sh          ${SCRIPTS}

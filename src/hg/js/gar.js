@@ -14,7 +14,7 @@ var gar = {
     // and a query object with keys arg name and value the paired tag
     urlParams: null,
     submitButton: document.getElementById("submitButton"),
-    garStatus: document.getElementById("garStatus"),
+//    garStatus: document.getElementById("garStatus"),
     asmIdText: document.getElementById("formAsmId"),
     commonName: document.getElementById("commonName"),
     betterCommonName: document.getElementById("betterCommonName"),
@@ -56,6 +56,14 @@ var gar = {
       }
     },
 
+    // given a 'false' or 'true' then 'hide' or 'show' all rows in the table
+    hideShowAllRows: function(hideShow) {
+      var thisList = document.getElementsByClassName('gca');
+      gar.resetListVis(thisList, hideShow);
+      thisList = document.getElementsByClassName('gcf');
+      gar.resetListVis(thisList, hideShow);
+    },
+
     // find out the names of the columns, and get all the checkBox
     //  hideShow button names so they can be managed later
     discoverColumnsCheckboxes: function() {
@@ -95,11 +103,10 @@ var gar = {
            }
         }
         // and unhide all rows, class gca and gcf covers all rows
-        var thisList = document.getElementsByClassName('gca');
-        gar.resetListVis(thisList, true);
-        thisList = document.getElementsByClassName('gcf');
-        gar.resetListVis(thisList, true);
+        gar.hideShowAllRows(true);
       } else {
+        var colsOn = 0;
+        var iucnRequested = false;
         gar.urlParams.forEach(function(val, arg) {
           // beware, get('comName') returns zero, fails this if() statement
           if (gar.columnNames.has(arg)) {
@@ -109,6 +116,8 @@ var gar = {
               checkBox.checked = true;
               var n = gar.columnNames.get(arg);
               gar.setColumnNvis(n, true);
+              ++colsOn;
+              if ("IUCN" === arg) { iucnRequested = true; }
             }
 /*  could look at val here when present to turn on/off
             if (val) {
@@ -119,6 +128,11 @@ var gar = {
 */
           }
         });
+if ( (colsOn === 1) && iucnRequested ) {
+  gar.hideShowAllRows(false);
+  var thisList = document.getElementsByClassName("hasIucn");
+  gar.resetListVis(thisList, true);
+}
       }
     },	//	discoverColumnsCheckboxes: function()
 
@@ -164,10 +178,10 @@ var gar = {
     // foreach table, for each row in the table, count visible rows
     countVisibleRows: function(et) {
 //      var t0 = gar.millis();
-      var viewReqRow = gar.columnNames.get('viewReq');
-      var asmIdRow = gar.columnNames.get('asmId');
-      var iucnRow = gar.columnNames.get('IUCN');
-      var cladeRow = gar.columnNames.get('clade');
+      var viewReqCol = gar.columnNames.get('viewReq');
+      var asmIdCol = gar.columnNames.get('asmId');
+      var iucnCol = gar.columnNames.get('IUCN');
+      var cladeCol = gar.columnNames.get('clade');
       var visRows = 0;
       var totalRows = 0;
       // key is category name, value is count visible
@@ -182,14 +196,14 @@ var gar = {
           // ignore thead and tfoot rows
           if (tagN === "thead" || tagN === "tfoot") { continue; }
           ++totalRows;
-          var thisClade = rowId.cells[cladeRow].innerHTML;
-          var asmId = rowId.cells[asmIdRow].innerHTML;
+          var thisClade = rowId.cells[cladeCol].innerHTML;
+          var asmId = rowId.cells[asmIdCol].innerHTML;
           var isGCA = asmId.includes("GCA");
           var isGCF = asmId.includes("GCF");
-          var viewReq = rowId.cells[viewReqRow].innerHTML;
+          var viewReq = rowId.cells[viewReqCol].innerHTML;
           var canBeRequested = viewReq.includes("button");
           var ucscDb = viewReq.includes("cgi-bin/hgTracks");
-          var iucnStatus = rowId.cells[iucnRow].innerHTML;
+          var iucnStatus = rowId.cells[iucnCol].innerHTML;
           var hasIucn = false;
           if (iucnStatus) {
              hasIucn = ! iucnStatus.includes("&nbsp;");
@@ -407,7 +421,7 @@ var gar = {
     failedRequest: function(url) {
       gar.submitButton.value = "request failed";
       gar.submitButton.disabled = true;
-      garStatus.innerHTML = "FAILED: '" + url + "'";
+//      garStatus.innerHTML = "FAILED: '" + url + "'";
     },
 
     sendRequest: function(name, email, asmId, betterName, comment) {
@@ -427,7 +441,7 @@ var gar = {
          if (4 === this.readyState && 200 === this.status) {
             gar.submitButton.value = "request completed";
 //            gar.submitButton.disabled = true;
-            garStatus.innerHTML = "OK: <a href='" + url + "' target=_blank>" + url + "</a>";
+//            garStatus.innerHTML = "OK: <a href='" + url + "' target=_blank>" + url + "</a>";
 //            alert("SUCCESS: '" + url + "'");
          } else {
             if (4 === this.readyState && 404 === this.status) {
@@ -503,16 +517,19 @@ var gar = {
      if (e.name && e.name !== "specific") {
        var pTable = gar.parentTable(e);
        var thisRow = gar.whichRow(e);
+       var comNameCol = gar.columnNames.get('comName');
+       var sciNameCol = gar.columnNames.get('sciName');
 //       var thisCell = pTable.closest('td').cellIndex;
-       var comName = pTable.rows[thisRow].cells[0].innerText;
-       var sciName = pTable.rows[thisRow].cells[1].innerText;
+       var comName = pTable.rows[thisRow].cells[comNameCol].innerText;
+       var sciName = pTable.rows[thisRow].cells[sciNameCol].innerText;
        gar.commonName.textContent = comName;
        gar.betterCommonName.value = comName;
        gar.sciName.textContent = sciName;
        gar.asmIdText.textContent = e.name;
+       gar.comment.value = "";
 //       gar.modalForm.name.value = "some name";
 //       gar.modalForm.email.value = "some@email.com";
-       garStatus.innerHTML = "&nbsp;";
+//       garStatus.innerHTML = "&nbsp;";
        // check if this asmId already submitted
        if (gar.completedAsmId.get(e.name)) {
           gar.submitButton.value = "request completed";
@@ -523,9 +540,11 @@ var gar = {
        gar.completedAsmId.set(e.name, true);
      } else {
        gar.betterCommonName.value = "";
+       gar.betterCommonName.innerHtml = "";
        gar.commonName.textContent = "enter information about desired assembly in the 'Other comments' field";
        gar.sciName.textContent = "include the scientific name";
        gar.asmIdText.textContent = "include the GenBank or RefSeq accession identifier";
+       gar.comment.value = "";
      }
      gar.submitButton.value = "Submit request";
      gar.submitButton.disabled = false;

@@ -32,3 +32,4 @@ rm -f index.html
 mv next.html index.html
 chmod +x index.html
 printf "### finished ###\n"
+printf "# %s/index.html\n" "${workDir}"
