@@ -987,6 +987,8 @@ AllocVar(dtf);
 s = triple;
 e = strstr(s, ".hub_");
 if (e == NULL)
+    e = strstr(s, ".ct_");
+if (e == NULL)
     e = strchr(s, '.');
 if (e == NULL)
    notTriple(triple);

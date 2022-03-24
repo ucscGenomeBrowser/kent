@@ -515,6 +515,8 @@ char *ptr = NULL;
 safef(dbTable, sizeof(dbTable), "%s", dbTableField);
 ptr = strstr(dbTable, ".hub_");
 if (ptr == NULL)
+    ptr = strstr(dbTable, ".ct_");
+if (ptr == NULL)
     ptr = strchr(dbTable, '.');
 if (ptr == NULL)
     errAbort("Expected 3 .-separated words in %s but can't find first .",
