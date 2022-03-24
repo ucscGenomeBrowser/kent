@@ -22,53 +22,118 @@ my $ucscNames = 0;	# == 1 if sequence is UCSC names, == 0 if NCBI names
 my $dupCount = 0;
 my %dupToSequence;	# key is duplicate name, value is target sequence name
 			# to manage duplicates coming in from assembly report
+my $sequenceCount = 0;
+my %sequenceSizes;	# key is sequence name, value is sequence size
 
 my $asmId = shift;
 
-my %aliasOut;	# key is alias name, value is sequence name in this assembly
+my %aliasOut;	# key is source name, value is a hash pointer where
+		# key is alias name and value is chrom name
+	# typical source names: ucsc, refseq, genbank, ensembl, assembly, ncbi
 
-sub showAlias() {
-  printf "# sequenceName\talias names\tassembly: %s\n", $asmId;
-  my %chromIndex;	# key is sequence name in assembly, value
-                        # is a tab separated list of aliases
-  foreach my $alias (sort keys %aliasOut) {
-    my $name = $aliasOut{$alias};
-    next if ($alias eq "na");
-    if (defined($chromIndex{$name})) {
-      $chromIndex{$name} .= "\t" . $alias;
-    } else {
-      $chromIndex{$name} = $alias;
+# the argument is the name of the 'native' source name
+# where 'native' are the names in the assembly itself, thus the
+# assembly names.  The other sources are aliases to that.
+sub showAlias($) {
+  my ($native) = @_;
+  # second line is the column headers
+  printf "# %s", $native;
+  foreach my $source (sort keys %aliasOut) {
+    printf "\t%s", $source if ($source ne $native);
+  }
+  printf "\n";
+
+  # need to account for all sequence names for all sources
+  # create a list of sequence names for each source that does *not* have
+  # an alias
+  my %noAlias;	# key is source, value is a hash pointer with
+		# a key of seqName value 1 for those seqNames without alias
+  foreach my $source (sort keys %aliasOut) {
+    next if ($source eq $native);	# don't need to do this for native
+    my %seqDone;	# key is seqName found in alias, value is 1
+    my $hashPtr = $aliasOut{$source};
+    foreach my $alias (sort keys %$hashPtr) {
+      $seqDone{$hashPtr->{$alias}} = 1;
+    }
+    foreach my $sequence (sort keys %sequenceSizes) {
+      next if (defined($seqDone{$sequence}));
+      if (!defined($noAlias{$source})) {
+        my %h;
+        $noAlias{$source} = \%h;
+      }
+      $hashPtr = $noAlias{$source};
+      $hashPtr->{$sequence} = 1;
+    }
+  }	#	foreach my $source (sort keys %aliasOut)
+
+  my %chromIndex;	# key is sequence seqName in assembly, value
+                        # is a tab separated list of aliases, in order by source
+  foreach my $source (sort keys %aliasOut) {
+    next if ($source eq $native);
+    my $hashPtr = $aliasOut{$source};
+    foreach my $alias (sort keys %$hashPtr) {
+      my $seqName = $hashPtr->{$alias};
+      $alias = "" if ($alias eq "na");
+      if (defined($chromIndex{$seqName})) {
+        $chromIndex{$seqName} .= "\t" . $alias;
+      } else {
+        $chromIndex{$seqName} = $alias;
+      }
+    }
+    # catch up for those sequence names with no alias in this source
+    if (defined($noAlias{$source})) {
+      $hashPtr = $noAlias{$source};
+      foreach my $sequence (sort keys %sequenceSizes) {
+        next if (!defined($hashPtr->{$sequence}));
+        if (defined($chromIndex{$sequence})) {
+          $chromIndex{$sequence} .= "\t" . "";
+        } else {
+          $chromIndex{$sequence} = "";
+        }
+      }
     }
   }
-  foreach my $name (sort keys %chromIndex) {
-    printf "%s\t%s\n", $name, $chromIndex{$name};
+  foreach my $seqName (sort keys %chromIndex) {
+    printf "%s\t%s\n", $seqName, $chromIndex{$seqName};
   }
 }
 
 #  given an alias and a sequence name, add to result or verify identical
 #  to previous add
-sub addAlias($$) {
-  my ($alias, $sequence) = @_;
+sub addAlias($$$) {
+  my ($source, $alias, $sequence) = @_;
   # do not need to add the sequence name itself
   return if ($alias eq $sequence);
+  if (!defined($aliasOut{$source})) {
+     my %h;	# hash: key: alias name, value 'native' chrom name
+     $aliasOut{$source} = \%h;
+#     printf STDERR "# creating aliasOut{'%s'}\n", $source;
+  }
+  my $hashPtr = $aliasOut{$source};
   # already done, verify it is equivalent to previous request
-  if (defined($aliasOut{$alias})) {
-     if ($sequence ne $aliasOut{$alias}) {
-        printf STDERR "ERROR: additional alias '%s:%s' does not match previous '%s'\n", $alias, $sequence, $aliasOut{$alias};
+  if (defined($hashPtr->{$alias})) {
+     if ($sequence ne $hashPtr->{$alias}) {
+        printf STDERR "ERROR: additional alias '%s:%s' does not match previous '%s'\n", $alias, $sequence, $hashPtr->{$alias};
         exit 255;
      }
      return;
   }
-  $aliasOut{$alias} = $sequence;
+  $hashPtr->{$alias} = $sequence;
   return;
 }
 
+# asmSource - is this a genbank or refseq assembly
+my $asmSource = "genbank";
 my $refSeq = 0; #       == 0 for Genbank assembly, == 1 for RefSeq assembly
-$refSeq = 1 if ($asmId =~ m/^GCF/);
+if ($asmId =~ m/^GCF/) {
+#  printf STDERR "# processing a RefSeq assembly\n";
+  $refSeq = 1;
+  $asmSource = "refseq";
+} else {
+#  printf STDERR "# processing a GenBank assembly\n";
+}
 
 my $twoBit = "../../$asmId.2bit";
-my $sequenceCount = 0;
-my %sequenceSizes;	# key is sequence name, value is sequence size
 
 open (FH, "twoBitInfo $twoBit stdout|") or die "can not twoBitInfo $twoBit stdout";
 while (my $line = <FH>) {
@@ -79,6 +144,7 @@ while (my $line = <FH>) {
 }
 
 close (FH);
+# printf STDERR "# counted %d sequence names in the twoBit file\n", $sequenceCount;
 
 my $nameCount = 0;
 my %ncbiToUcsc;	# key is NCBI sequence name, value is 'chr' UCSC chromosome name
@@ -99,6 +165,19 @@ while (my $line = <FH>) {
 }
 close (FH);
 
+# when not a UCSC named assembly, add the UCSC names as aliases
+if (! $ucscNames) {
+  if ($refSeq) {
+    foreach my $ucscName (sort keys %ucscToRefSeq) {
+       addAlias("ucsc", $ucscName, $ucscToRefSeq{$ucscName});
+    }
+  } else {
+    foreach my $ucscName (sort keys %ucscToGenbank) {
+       addAlias("ucsc", $ucscName, $ucscToGenbank{$ucscName});
+    }
+  }
+}
+
 my $dupsNotFound = 0;
 my $dupsList = "../../download/$asmId.dups.txt.gz";
 if ( -s "$dupsList" ) {
@@ -112,11 +191,12 @@ if ( -s "$dupsList" ) {
        printf STDERR "# ERROR: can not find dupTarget: $dupTarget in ncbiToUcsc for dupAlias: $dupAlias\n";
          $dupsNotFound += 1;
       } else {
-        addAlias($dupAlias, $ncbiToUcsc{$dupTarget});
+        addAlias("ucsc", $dupAlias, $ncbiToUcsc{$dupTarget});
       }
     } else {
-        addAlias($dupAlias, $dupTarget);
+        addAlias($asmSource, $dupAlias, $dupTarget);
     }
+    printf STDERR "# adding duplicate alias %s\n", $dupAlias;
     ++$dupCount;
   }
   close (FH);
@@ -133,7 +213,7 @@ if ($sequenceCount != $nameCount) {
   exit 255;
 }
 
-printf STDERR "# initial set of %d UCSC names\n", $sequenceCount;
+# printf STDERR "# initial set of %d UCSC names\n", $sequenceCount;
 ### first set of names is the UCSC to NCBI sequence names
 foreach my $sequence (sort keys %sequenceSizes) {
   my $seqName = $sequence;
@@ -147,7 +227,7 @@ foreach my $sequence (sort keys %sequenceSizes) {
     printf STDERR "ERROR: can not find alias name for '%s' sequence\n", $seqName;
     exit 255;
   }
-  addAlias($alias, $seqName);
+  addAlias($ucscNames ? "ucsc" : $asmSource, $alias, $seqName);
 }
 
 # foreach my $sequence (sort keys %chrNames) {
@@ -160,7 +240,7 @@ my %chr2acc;	# key is sequence name, value is NCBI chromosome name
 my $asmStructCount = `ls  ../../download/${asmId}_assembly_structure/*/*/chr2acc 2> /dev/null | wc -l`;
 chomp $asmStructCount;
 if ( $asmStructCount > 0 ) {
-  printf STDERR "# second name set processing chr2acc files\n";
+#  printf STDERR "# second name set processing chr2acc files\n";
   open (FH, "grep -h -v '^#' ../../download/${asmId}_assembly_structure/*/*/chr2acc|") or die "can not grep chr2acc files";
   while (my $line = <FH>) {
     chomp $line;
@@ -171,7 +251,7 @@ if ( $asmStructCount > 0 ) {
     if ($ucscNames) {
        $seqName = $ncbiToUcsc{$seqName};
     }
-    addAlias($alias, $seqName);
+    addAlias("ncbi", $alias, $seqName);
   }
   close (FH);
 }
@@ -180,48 +260,70 @@ if ( $asmStructCount > 0 ) {
 #   printf "%s\t%s\n",  $chr2acc{$sequence}, $sequence;
 # }
 
-my %gbk2acc;	# key is refseq name, value is genbank accession
-printf STDERR "# third set processing assembly_report\n";
+my $dbgCount = 0;
+# printf STDERR "# third set processing assembly_report\n";
+# column 1 is the 'assembly' name
 # column 5 is the GenBank-Accn, column 7 is the RefSeq-Accn
-open (FH, "grep -v '^#' ../../download/${asmId}_assembly_report.txt | cut -d\$'\t' -f5,7|") or die "can not grep assembly_report";
+open (FH, "grep -v '^#' ../../download/${asmId}_assembly_report.txt | cut -d\$'\t' -f1,5,7|") or die "can not grep assembly_report";
 while (my $line = <FH>) {
   chomp $line;
-  my ($gbkName, $refSeqName) = split('\s+', $line);
-  next if ($refSeqName eq "na");	# may not be any RefSeq name
-  next if ($gbkName eq "na");	# may not be any GenBank name
-  $gbk2acc{$gbkName} = $refSeqName;
-  if ($refSeq) {
+  ++$dbgCount;
+  my ($asmName, $gbkName, $refSeqName) = split('\s+', $line);
+  printf STDERR "# '%s'\t'%s'\t'%s'\n", $asmName, $gbkName, $refSeqName if ($dbgCount < 5);
+#  next if ($refSeqName eq "na");	# may not be any RefSeq name
+#  next if ($gbkName eq "na");	# may not be any GenBank name
+  if ($refSeqName ne "na") {
     my $seqName = $refSeqName;
+    if (! $refSeq) {
+      $seqName = $gbkName;
+    }
     if ($ucscNames) {
        $seqName = $ncbiToUcsc{$seqName};
     }
     if (!defined($seqName)) {
-       if (defined($aliasOut{$refSeqName})) {
-          $seqName = $aliasOut{$refSeqName};
+       if (defined($aliasOut{"refseq"})) {
+         if (defined($aliasOut{"refseq"}->{$refSeqName})) {
+            $seqName = $aliasOut{"refseq"}->{$refSeqName};
+         }
        }
     }
-    if ($dupToSequence{$seqName}) {
-      addAlias($gbkName, $dupToSequence{$seqName});
-    } else {
-      addAlias($gbkName, $seqName);
+    if (defined($seqName)) {
+      if (defined($dupToSequence{$seqName})) {
+        addAlias("refseq", $refSeqName, $dupToSequence{$seqName});
+        addAlias("assembly", $asmName, $dupToSequence{$seqName});
+      } else {
+        addAlias("refseq", $refSeqName, $seqName);
+        addAlias("assembly", $asmName, $seqName);
+      }
     }
-  } else {
+  }	#	if ($refSeqName ne "na")
+
+  if ($gbkName ne "na") {
     my $seqName = $gbkName;
+    if ($refSeq) {
+      $seqName = $refSeqName;
+    }
     if ($ucscNames) {
        $seqName = $ncbiToUcsc{$seqName};
     }
     if (!defined($seqName)) {
-       if (defined($aliasOut{$gbkName})) {
-          $seqName = $aliasOut{$gbkName};
+       if (defined($aliasOut{"genbank"})) {
+         if (defined($aliasOut{"genbank"}->{$gbkName})) {
+            $seqName = $aliasOut{"genbank"}->{$gbkName};
+         }
        }
     }
-    if ($dupToSequence{$seqName}) {
-      addAlias($refSeqName, $dupToSequence{$seqName});
-    } else {
-      addAlias($refSeqName, $seqName);
+    if (defined($seqName)) {
+      if (defined($dupToSequence{$seqName})) {
+        addAlias("genbank", $gbkName, $dupToSequence{$seqName});
+        addAlias("assembly", $asmName, $dupToSequence{$seqName});
+      } else {
+        addAlias("genbank", $gbkName, $seqName);
+        addAlias("assembly", $asmName, $seqName);
+      }
     }
-  }
-}
+  }	#	if ($gbkName ne "na")
+}	#	done reading assembly_report.txt
 close (FH);
 
-showAlias();
+showAlias($ucscNames ? "ucsc" : $asmSource);
