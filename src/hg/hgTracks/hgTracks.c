@@ -10431,7 +10431,13 @@ else if (hubAliasFile)
         puts("&nbsp");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<a href='%s' target=_blank>%s.chromAlias.txt</A>", hubAliasFile, trackHubSkipHubName(database));
+    char *aliasUrl = cloneString(hubAliasFile);
+    /* this URL reference needs to be a text file to work as a click in the
+     *    html page.  Both files chromAlias.bb and chromAlias.txt exist.
+     */
+    if (endsWith(hubAliasFile, "chromAlias.bb"))
+       aliasUrl = replaceChars(hubAliasFile, "chromAlias.bb", "chromAlias.txt");
+    printf("<a href='%s' target=_blank>%s.chromAlias.txt</A>", aliasUrl, trackHubSkipHubName(database));
     cgiTableFieldEnd();
     cgiTableRowEnd();
     }
@@ -10440,7 +10446,6 @@ else if (hubAliasFile)
 void chromInfoPage()
 /* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
 {
-fprintf(stderr, "# DBG chromInfoPage entered\n");
 boolean hasAlias = FALSE;
 char *chromSizesFile = NULL;
 char *aliasFile = NULL;
