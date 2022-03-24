@@ -10440,14 +10440,21 @@ else if (hubAliasFile)
 void chromInfoPage()
 /* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
 {
+fprintf(stderr, "# DBG chromInfoPage entered\n");
 boolean hasAlias = FALSE;
 char *chromSizesFile = NULL;
 char *aliasFile = NULL;
 if (trackHubDatabase(database))
-    {
+    {	/* either one of these files present will work */
     aliasFile = trackHubAliasFile(database);
     if (aliasFile)
-        hasAlias = TRUE;
+        {
+            hasAlias = TRUE;
+        } else {
+            aliasFile = trackHubAliasBbFile(database);
+            if (aliasFile)
+               hasAlias = TRUE;
+        }
     chromSizesFile = trackHubChromSizes(database);
     }
 else
