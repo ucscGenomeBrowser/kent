@@ -27,8 +27,8 @@ my $blatHostDomain = ".soe.ucsc.edu";
 my $groupsTxt = `cat ~/kent/src/hg/makeDb/doc/asmHubs/groups.txt`;
 
 ################### writing out hub.txt file, twice ##########################
-sub singleFileHub($$$$$$$$$$) {
-  my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $defPos, $taxId, $trackDb, $accessionDir) = @_;
+sub singleFileHub($$$$$$$$$$$) {
+  my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $defPos, $taxId, $trackDb, $accessionDir, $buildDir) = @_;
   my @fhN;
   push @fhN, $fh1;
   push @fhN, $fh2;
@@ -56,7 +56,11 @@ sub singleFileHub($$$$$$$$$$) {
     printf $fh "twoBitPath %s.2bit\n", $accessionId;
     printf $fh "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
     printf $fh "chromSizes %s.chrom.sizes.txt\n", $accessionId;
-    printf $fh "chromAlias %s.chromAlias.txt\n", $accessionId;
+    if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+      printf $fh "chromAliasBb %s.chromAlias.bb\n", $accessionId;
+    } else {
+      printf $fh "chromAlias %s.chromAlias.txt\n", $accessionId;
+    }
     printf $fh "organism %s\n", $descr;
     printf $fh "defaultPos %s\n", $defPos;
     printf $fh "scientificName %s\n", $descr;
@@ -138,6 +142,10 @@ foreach my $asmId (@orderList) {
     printf STDERR "# ERROR: missing ${asmId}.chromAlias.txt in\n# ${buildDir}\n";
     next;
   }
+  if ( ! -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+    printf STDERR "# ERROR: missing ${asmId}.chromAlias.bb in\n# ${buildDir}\n";
+    next;
+  }
   my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
   my $trackDb = "$buildDir/$asmId.trackDb.txt";
   if ( ! -s "${trackDb}" ) {
@@ -169,7 +177,12 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf "twoBitPath ../%s/%s/%s.2bit\n", $accessionDir, $accessionId, $accessionId;
   printf "twoBitBptUrl ../%s/%s/%s.2bit.bpt\n", $accessionDir, $accessionId, $accessionId;
   printf "chromSizes ../%s/%s/%s.chrom.sizes.txt\n", $accessionDir, $accessionId, $accessionId;
-  printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
+
+  if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+    printf "chromAliasBb ../%s/%s/%s.chromAlias.bb\n", $accessionDir, $accessionId, $accessionId;
+  } else {
+    printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
+  }
   printf "organism %s\n", $descr;
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;
   chomp $chrName;
@@ -215,7 +228,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   open (HT, ">$localHubTxt") or die "can not write to $localHubTxt";
 
   singleFileHub(\*HT, \*DL, $accessionId, $orgName, $descr, $asmId,
-	$defPos, $taxId, $trackDb, $accessionDir);
+	$defPos, $taxId, $trackDb, $accessionDir, $buildDir);
 
   my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
   open (GF, ">$localGenomesFile") or die "can not write to $localGenomesFile";
@@ -227,7 +240,11 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf GF "twoBitPath %s.2bit\n", $accessionId;
   printf GF "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
   printf GF "chromSizes %s.chrom.sizes.txt\n", $accessionId;
-  printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
+  if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+    printf GF "chromAliasBb %s.chromAlias.bb\n", $accessionId;
+  } else {
+    printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
+  }
   printf GF "organism %s\n", $descr;
   printf GF "defaultPos %s\n", $defPos;
   printf GF "scientificName %s\n", $descr;
