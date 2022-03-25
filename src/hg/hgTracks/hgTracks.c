@@ -10431,7 +10431,13 @@ else if (hubAliasFile)
         puts("&nbsp");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<a href='%s' target=_blank>%s.chromAlias.txt</A>", hubAliasFile, trackHubSkipHubName(database));
+    char *aliasUrl = cloneString(hubAliasFile);
+    /* this URL reference needs to be a text file to work as a click in the
+     *    html page.  Both files chromAlias.bb and chromAlias.txt exist.
+     */
+    if (endsWith(hubAliasFile, "chromAlias.bb"))
+       aliasUrl = replaceChars(hubAliasFile, "chromAlias.bb", "chromAlias.txt");
+    printf("<a href='%s' target=_blank>%s.chromAlias.txt</A>", aliasUrl, trackHubSkipHubName(database));
     cgiTableFieldEnd();
     cgiTableRowEnd();
     }
@@ -10444,10 +10450,16 @@ boolean hasAlias = FALSE;
 char *chromSizesFile = NULL;
 char *aliasFile = NULL;
 if (trackHubDatabase(database))
-    {
+    {	/* either one of these files present will work */
     aliasFile = trackHubAliasFile(database);
     if (aliasFile)
-        hasAlias = TRUE;
+        {
+            hasAlias = TRUE;
+        } else {
+            aliasFile = trackHubAliasBbFile(database);
+            if (aliasFile)
+               hasAlias = TRUE;
+        }
     chromSizesFile = trackHubChromSizes(database);
     }
 else

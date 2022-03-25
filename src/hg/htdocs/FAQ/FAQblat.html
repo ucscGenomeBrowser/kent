@@ -27,6 +27,7 @@ results</a></li>
 <li><a href="#blat11">Approximating web-based BLAT results using gfServer/gfClient</a></li>
 <li><a href="#blat12">Standalone or gfServer/gfClient result start positions off by one</a></li>
 <li><a href="#blat13">Protein-translated BLAT having different results</a></li>
+<li><a href="#blat14">Querying BLAT programmatically using URLs</a></li>
 
 </ul>
 <hr>
@@ -476,6 +477,20 @@ href="https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=
 NCBI website</a>. Additional details on mitochondria codon tables can be found on
 the <a target="_blank"
 href="https://www.wikiwand.com/en/DNA_and_RNA_codon_tables">Wikiwand website</a>.
+</p>
+
+<a name="blat14"></a>
+<h2>Querying BLAT programmatically using URLs</h2>
+<p>
+For programmatic access, BLAT supports URL queries which are returned as psl format in a JSON structure. 
+This is only available for DNA queries. The URL requires 2 variables, the sequence to blat and 
+the database:</p>
+<pre>
+https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=[seq]&amp;type=DNA&amp;db=[database]&amp;output=json</pre>
+<p>
+For example:</p>
+<pre>
+<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=GACCTCGGCGTGGCCTAGCG&amp;type=DNA&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=GACCTCGGCGTGGCCTAGCG&amp;type=DNA&amp;db=hg38&amp;output=json</a></pre>
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

@@ -17,6 +17,11 @@ errAbort(
   "   rmskAlignToPsl rmskAlignTab rmskPslFile\n"
   "\n"
   "  -bigRmsk - input is the text version of bigRmskAlignBed files.\n"
+  "  -repSizes=tab - two column tab file with repeat name and size.\n"
+  "   Sometimes the repeat sizes are incorrect in the align file.\n"
+  "   If a repeat alignment doesn't match the size here or is not\n"
+  "   in the file it will be discarded.\n"
+  "   \n"
   "  -dump - print alignments to stdout for debugging purposes\n"
   "\n"
   "This convert *.fa.align.tsv file, created by\n"
@@ -28,6 +33,7 @@ errAbort(
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"bigRmsk", OPTION_BOOLEAN},
+   {"repSizes", OPTION_STRING},
    {"dump", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -63,6 +69,18 @@ static boolean dump = FALSE;
  * have multiple repNames and are split into multiple PSL.
  */
 
+
+static struct hash* loadRepSizes(char *repSizesFile)
+/* load repeat sizes file into a hash */
+{
+struct hash* repSizes = hashNew(20);
+struct lineFile* lf = lineFileOpen(repSizesFile, TRUE);
+char *row[2];
+while (lineFileNextRowTab(lf, row, ArraySize(row)))
+    hashAddInt(repSizes, row[0], lineFileNeedNum(lf, row, 1));
+lineFileClose(&lf);
+return repSizes;
+}
 
 static unsigned getGenomeSize(struct rmskAlign *alignParts)
 /* get the length or the chromosome */
@@ -621,7 +639,38 @@ while ((alignParts = popAlignParts(rmskAlignGroupPtr)) != NULL)
 }
 
 
-static void rmskAlignToPsl(char *rmskAlignFile, char *rmskPslFile)
+static boolean checkSizeWithExpected(struct rmskAlign* rmskAlignGroup,
+                                     struct hash *repSizes,
+                                     struct hash *repSizeWarned)
+/* Check if we have an expected repSize for this and they match query.  If not, warn
+ * for first occurrence.  These are skipped */
+{
+if (hashLookup(repSizes, rmskAlignGroup->repName) == NULL)
+    {
+    if (hashLookup(repSizeWarned, rmskAlignGroup->repName) == NULL)
+        {
+        fprintf(stderr, "Warning: '%s' expected not found, skipping\n", rmskAlignGroup->repName);
+        hashAddInt(repSizeWarned, rmskAlignGroup->repName, TRUE);
+        }
+    return FALSE;
+    }
+int gotRepSize = getRepeatSize(rmskAlignGroup);
+int expectRepSize = hashIntVal(repSizes, rmskAlignGroup->repName);
+if (gotRepSize != expectRepSize)
+    {
+    if (hashLookup(repSizeWarned, rmskAlignGroup->repName) == NULL)
+        {
+        fprintf(stderr, "Warning: '%s' size %d does not match expected size %d, skipping\n",
+                rmskAlignGroup->repName, gotRepSize, expectRepSize);
+        hashAddInt(repSizeWarned, rmskAlignGroup->repName, TRUE);
+        }
+    return FALSE;
+    }
+return TRUE;
+}
+
+static void rmskAlignToPsl(char *rmskAlignFile, char *rmskPslFile,
+                           struct hash* repSizes)
 /* rmskAlignToPsl - convert repeatmasker alignment files to PSLs. */
 {
 // load all, so we can join ones split by other insertions by id
@@ -633,11 +682,16 @@ if (bigRmsk)
 else
     rmskAlignGroups = loadRmskAlign(rmskAlignFile, &maxAlignId);
 
+struct hash* repSizeWarned = hashNew(12);  // don't warn multiple times on same sequence
+
 FILE* outFh = mustOpen(rmskPslFile, "w");
 for (unsigned id = 0; id <= maxAlignId; id++)
     {
     if (rmskAlignGroups[id] != NULL)
-        convertAlignGroup(&(rmskAlignGroups[id]), outFh);
+        {
+        if ((repSizes == NULL) || checkSizeWithExpected(rmskAlignGroups[id], repSizes, repSizeWarned))
+            convertAlignGroup(&(rmskAlignGroups[id]), outFh);
+        }
     }
 carefulClose(&outFh);
 }
@@ -650,6 +704,9 @@ if (argc != 3)
     usage();
 bigRmsk = optionExists("bigRmsk");
 dump = optionExists("dump");
-rmskAlignToPsl(argv[1], argv[2]);
+struct hash* repSizes = NULL;
+if (optionExists("repSizes"))
+    repSizes = loadRepSizes(optionVal("repSizes", NULL));
+rmskAlignToPsl(argv[1], argv[2], repSizes);
 return 0;
 }

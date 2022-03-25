@@ -1884,6 +1884,10 @@ printf("<P>The <b>All Results</b> checkbox disables minimum matches filtering so
 "This checkbox can be useful with short queries and with the tiny genomes of microorganisms. \n"
 );
 
+printf("<P>For programmatic access, BLAT supports URL queries which return in JSON format. "
+"See our <a href=\"/FAQ/FAQblat.html#blat14\">BLAT FAQ</a> for more.</P>\n"
+);
+
 if (hgPcrOk(db))
     printf("<P>For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
            " for best results instead of BLAT.</P>", db);
