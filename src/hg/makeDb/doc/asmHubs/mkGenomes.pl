@@ -178,7 +178,9 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf "twoBitBptUrl ../%s/%s/%s.2bit.bpt\n", $accessionDir, $accessionId, $accessionId;
   printf "chromSizes ../%s/%s/%s.chrom.sizes.txt\n", $accessionDir, $accessionId, $accessionId;
 
-  if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+  # wait until code gets out for v429 release before using chromAlias.bb
+  # for the chromInfoPage display of hgTracks
+  if ( (0 == 1) &&  -s "${buildDir}/${asmId}.chromAlias.bb" ) {
     printf "chromAliasBb ../%s/%s/%s.chromAlias.bb\n", $accessionDir, $accessionId, $accessionId;
   } else {
     printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
