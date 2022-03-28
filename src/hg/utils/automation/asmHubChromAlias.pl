@@ -124,10 +124,10 @@ sub addAlias($$$) {
 
 # asmSource - is this a genbank or refseq assembly
 my $asmSource = "genbank";
-my $refSeq = 0; #       == 0 for Genbank assembly, == 1 for RefSeq assembly
+my $isRefSeq = 0; #       == 0 for Genbank assembly, == 1 for RefSeq assembly
 if ($asmId =~ m/^GCF/) {
 #  printf STDERR "# processing a RefSeq assembly\n";
-  $refSeq = 1;
+  $isRefSeq = 1;
   $asmSource = "refseq";
 } else {
 #  printf STDERR "# processing a GenBank assembly\n";
@@ -157,7 +157,7 @@ while (my $line = <FH>) {
   $ucscToNcbi{$ucscName} = $seqName;
   ++$nameCount;
   $ucscNames = 1 if (defined($sequenceSizes{$ucscName}));
-  if ($refSeq) {
+  if ($isRefSeq) {
     $ucscToRefSeq{$ucscName} = $seqName;
   } else {
     $ucscToGenbank{$ucscName} = $seqName;
@@ -167,7 +167,7 @@ close (FH);
 
 # when not a UCSC named assembly, add the UCSC names as aliases
 if (! $ucscNames) {
-  if ($refSeq) {
+  if ($isRefSeq) {
     foreach my $ucscName (sort keys %ucscToRefSeq) {
        addAlias("ucsc", $ucscName, $ucscToRefSeq{$ucscName});
     }
@@ -274,7 +274,7 @@ while (my $line = <FH>) {
 #  next if ($gbkName eq "na");	# may not be any GenBank name
   if ($refSeqName ne "na") {
     my $seqName = $refSeqName;
-    if (! $refSeq) {
+    if (! $isRefSeq) {
       $seqName = $gbkName;
     }
     if ($ucscNames) {
@@ -300,7 +300,7 @@ while (my $line = <FH>) {
 
   if ($gbkName ne "na") {
     my $seqName = $gbkName;
-    if ($refSeq) {
+    if ($isRefSeq) {
       $seqName = $refSeqName;
     }
     if ($ucscNames) {

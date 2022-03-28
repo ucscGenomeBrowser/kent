@@ -1464,7 +1464,10 @@ if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
      -add ../simpleRepeat/trfMask.bed.gz \$asmId.masked.2bit
   twoBitToFa \$asmId.masked.2bit stdout | faSize stdin > \$asmId.masked.faSize.txt
   touch -r \$asmId.masked.2bit \$asmId.masked.faSize.txt
+  bptForTwoBit \$asmId.masked.2bit \$asmId.masked.2bit.bpt
+  touch -r \$asmId.masked.2bit \$asmId.masked.2bit.bpt
   cp -p \$asmId.masked.faSize.txt ../../\$asmId.faSize.txt
+  cp -p \$asmId.masked.2bit.bpt ../../\$asmId.2bit.bpt
   size=`grep -w bases \$asmId.masked.faSize.txt | cut -d' ' -f1`
   if [ \$size -lt 4294967297 ]; then
     ln \$asmId.masked.2bit \$accessionId.2bit
@@ -1928,10 +1931,15 @@ sub doTrackDb {
 
   $bossScript->add(<<_EOF_
 export asmId=$asmId
+export buildDir=$buildDir
 
 rm -f \$asmId.chromAlias.txt
 ln -s trackData/chromAlias/\${asmId}.chromAlias.txt .
-\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId $runDir \\
+if [ -s trackData/chromAlias/\${asmId}.chromAlias.bb ]; then
+  rm -f \${asmId}.chromAlias.bb
+  ln -s trackData/chromAlias/\${asmId}.chromAlias.bb .
+fi
+\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId \$buildDir \\
    > \$asmId.trackDb.txt
 
 _EOF_

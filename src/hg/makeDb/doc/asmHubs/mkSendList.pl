@@ -12,6 +12,7 @@ if ($argc != 1) {
 my $asmIdFile = shift;
 open (FH, "<$asmIdFile") or die "can not read $asmIdFile";
 while (my $line = <FH>) {
+  next if ($line =~ m/^#/);
   chomp $line;
   my @a = split('\s+', $line);
   my @b = split('_', $a[0]);

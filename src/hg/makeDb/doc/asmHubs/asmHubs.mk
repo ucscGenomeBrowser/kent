@@ -105,7 +105,7 @@ verifyDownload:
 	${toolsDir}/verifyOnDownload.sh apibeta.soe.ucsc.edu ${orderList}
 
 verifyDynamicBlat:
-	cut -d'_' -f1-2 ${orderList} | while read asmId; do \
+	grep -v "^#" ${orderList} | cut -d'_' -f1-2 | while read asmId; do \
 	  ${toolsDir}/testDynBlat.sh $$asmId < /dev/null; done
 
 sendIndexes::

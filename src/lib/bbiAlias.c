@@ -80,6 +80,7 @@ char startBuf[16], endBuf[16];
 if (bb != NULL)
     {
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    // sequence size is the end address of the bigBed item
     int ret = atoi(endBuf);
     return ret;
     }

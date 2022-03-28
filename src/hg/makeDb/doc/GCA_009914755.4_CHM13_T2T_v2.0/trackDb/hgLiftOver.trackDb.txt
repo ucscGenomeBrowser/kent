@@ -1,0 +1,33 @@
+track hgLiftOver
+compositeTrack on
+shortLabel Human reference liftOver
+longLabel GRCh38/hg38 and GRCh37/hg19 v1_nfLO liftOver alignments
+visibility hide
+type bigChain hg38
+group map
+html html/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver.html
+
+    track hg38LiftOver
+    parent hgLiftOver
+    shortLabel GRCh38/hg38 liftOver
+    longLabel GRCh38/hg38 v1_nfLO liftOver alignments
+    type bigChain hg38
+    color 120,20,0
+    visibility dense
+    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg38.liftover.chain.bb
+    linkDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg38.liftover.link.bb
+    priority 1
+    group map
+
+    track hg19LiftOver
+    parent hgLiftOver
+    shortLabel GRCh37/hg19 liftOver
+    longLabel GRCh37/hg19 v1_nfLO liftOver alignments
+    type bigChain hg19
+    color 120,20,0
+    visibility dense
+    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg19.liftover.chain.bb
+    linkDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg19.liftover.link.bb
+    priority 2
+    group map
+
