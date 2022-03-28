@@ -34761,3 +34761,13 @@ make alpha DBS=hg19
 
 #Probe and Microarray data sets addition 3/11/21
 
+###############################################
+# Jarvis, Max, 03/28/22
+cd /hive/data/genomes/hg19/bed/jarvis
+# downloaded from https://az.app.box.com/v/jarvis-gwrvis-scores/folder/146728772904 by Luis into orig/
+cd orig
+zcat `ls | sort | grep bed` > ../jarvis.bed
+bedGraphToBigWig jarvis.bed ../chrom.sizes jarvis.bw
+# Go to Brian's cube, push "that was easy" button
+
+
