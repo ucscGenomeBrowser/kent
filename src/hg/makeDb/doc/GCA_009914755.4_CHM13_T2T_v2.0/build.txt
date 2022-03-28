@@ -9,6 +9,14 @@ T2T CHM13 track spreadsheet
 
 staging URL
    https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
+   https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?hubUrl=https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=hub_24696_GCA_009914755.4&position=lastDbPos
+
+https://hgwdev.gi.ucsc.edu/h/GCA_009914755.4
+
+Public link:
+ https://genome.ucsc.edu/h/GCA_009914755.4
+
+
 
 # tmp
    kentDir=${HOME}/compbio/t2t/projs/chm13-v2.0/kent
@@ -92,6 +100,38 @@ rename to
   catLiftOffGenesV1.gff3.gz
 
 ================================================================
+& hgLiftOver (2022-03-26 markd)
+----------------------------------------------------------------
+GRCh38 & GRCh37 Nae-Chyun Chen <naechyun.chen@gmail.com>
+globus: team-liftover/v1_nflo/
+      chm13v2-grch38.chain
+      chm13v2-hg19.chain
+      grch38-chm13v2.chain
+      hg19-chm13v2.chain
+
+# make names consistent
+    mv chm13v2-grch38.chain chm13v2-hg38.chain
+    mv grch38-chm13v2.chain hg38-chm13v2.chain
+
+    pigz *.chain
+
+    hgLoadChain -noBin -test none bigChain chm13v2-hg38.chain.gz 
+    sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg38.liftover.chain.bb
+    tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg38.liftover.link.bb
+
+    hgLoadChain -noBin -test none bigChain chm13v2-hg19.chain.gz 
+    sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg19.liftover.chain.bb
+    tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg19.liftover.link.bb
+
+
+    rm *.tab
+
+v1_nflo_description.html
+================================================================
 pending:
 
 ensembl:
@@ -118,6 +158,33 @@ ensembl:
       EXPERIMENT: PCD_NISTRM.NA24385-1_1sA-40 (SRX14226557)
         RUN: m64139_220127_180020 (SRR18074968)
 
-- HAL http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/t2tChm13.v2.0.hal
+* HAL http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/t2tChm13.v2.0.hal
+
+* unique kmers
+  Min unique k-mer (+)	Present in v1.0 and v2.0	Michael Sauria	/team-epigenetics/032522_chm13v2.0_kmers/mu/chm13v2.0.mul.bw	H	min_unique_kmer.html
+  Min unique k-mer (-)	Present in v1.0 and v2.0	Michael Sauria	/team-epigenetics/032522_chm13v2.0_kmers/mu/chm13v2.0.mur.bw	H
+
+* RepeatMasker
+  Savannah Hoyt/Jessica Storer	https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/chm13v2.0_RepeatMasker_4.1.2p1.out	H
+
+* ENCODE
+  ENCODE pileups	Present in v1.0 and v2.0	Michael Sauria	/team-epigenetics/032522_chm13v2.0_encode/coverage/*.bw	H
+  ENCODE macs2 peaks	Present in v1.0 and v2.0	Michael Sauria	/team-epigenetics/032522_chm13v2.0_encode/peaks/*.bb	H
+  ENCDE macs2 LO peaks	Present in v1.0	Michael Sauria		H
+
+* GRCh38
+  Unresolved in GRCh	GRCh38	TBD	Sergey Koren	browser/tracks/chm13v2.0_unmapped_byHG38.bed	H	chm13_uncovered_byGRCh38.html
+  GRCh37		Sergey Koren	browser/tracks/chm13v2.0_unmapped_byHG19.bed	H
+
+
+
+* GRCh38 variants
+  TBD	Nancy Hansen	team-liftover/chain_variants/vcffiles/v1_nflo/chm13v2-grch38.sort.vcf.gz	L	grch_allele_differences.html
+  GRCh37 variants	TBD	Nancy Hansen	team-liftover/chain_variants/vcffiles/v1_nflo/chm13v2-hg19.sort.vcf.gz	L
+================================================================
+Problems:
++ ln -s -s trackData/chromAlias/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.bb .
+ln: failed to create symbolic link ‘./GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.bb’: File exists
 
 ================================================================
+

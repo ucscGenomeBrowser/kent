@@ -10,7 +10,7 @@ stageUrl = https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_00991475
 
 userTrackDbFile = ${asmBuildDir}/${asmId}.userTrackDb.txt
 
-tracks = proseq rnaseq cytoBandMapped sedefSegDups rdnaModel catLiftOffGenesV1
+tracks = proseq rnaseq cytoBandMapped sedefSegDups rdnaModel catLiftOffGenesV1 hgLiftOver
 
 tracksWithHtml = $(filter-out cytoBandMapped,${tracks})
 
