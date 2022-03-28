@@ -1095,9 +1095,19 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   hgsDoSessionChange, hgsDoSessionChange, 
 		   hgsCancel);
     struct slName *existingSessionNames = getUserSessionNames(encUserName);
-    struct dyString *js = dyPrintCheckExistingSessionJs( existingSessionNames, sessionName);
-    jsOnEventById("click", hgsDoSessionChange, js->string);
-    dyStringFree(&js);
+    struct dyString *checkExistingNameJs = dyPrintCheckExistingSessionJs( existingSessionNames, sessionName);
+    struct dyString *onClickJs = dyStringCreate(
+                    "var pattern = /^\\s*$/;"
+                    "if (document.getElementById(\"detailsGalleryCheckbox\").checked &&"
+                    "   pattern.test(document.getElementById(\"%s\").value)) {"
+                    "       warn('Please add a description to allow this session to be included in the Public Gallery');"
+                    "       event.preventDefault();"
+                    "} else {"
+                    "       %s"
+                    "}", hgsNewSessionDescription, checkExistingNameJs->string);
+    jsOnEventById("click", hgsDoSessionChange, onClickJs->string);
+    dyStringFree(&onClickJs);
+    dyStringFree(&checkExistingNameJs);
 
     dyStringPrintf(dyMessage,
 		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
