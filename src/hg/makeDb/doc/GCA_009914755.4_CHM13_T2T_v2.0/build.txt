@@ -100,7 +100,7 @@ rename to
   catLiftOffGenesV1.gff3.gz
 
 ================================================================
-& hgLiftOver (2022-03-26 markd)
+* hgLiftOver (2022-03-26 markd)
 ----------------------------------------------------------------
 GRCh38 & GRCh37 Nae-Chyun Chen <naechyun.chen@gmail.com>
 globus: team-liftover/v1_nflo/
@@ -109,19 +109,21 @@ globus: team-liftover/v1_nflo/
       grch38-chm13v2.chain
       hg19-chm13v2.chain
 
+download to trackData/liftOver
 # make names consistent
     mv chm13v2-grch38.chain chm13v2-hg38.chain
     mv grch38-chm13v2.chain hg38-chm13v2.chain
 
     pigz *.chain
 
-    hgLoadChain -noBin -test none bigChain chm13v2-hg38.chain.gz 
+    cd ../hgLiftOver
+    hgLoadChain -noBin -test none bigChain ../liftOver/chm13v2-hg38.chain.gz 
     sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
     bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg38.liftover.chain.bb
     tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
     bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg38.liftover.link.bb
 
-    hgLoadChain -noBin -test none bigChain chm13v2-hg19.chain.gz 
+    hgLoadChain -noBin -test none bigChain ../liftOver/chm13v2-hg19.chain.gz 
     sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
     bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg19.liftover.chain.bb
     tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
@@ -130,11 +132,14 @@ globus: team-liftover/v1_nflo/
 
     rm *.tab
 
-v1_nflo_description.html
+    v1_nflo_description.html
+================================================================
+* hgCactus (2022-03-28 markd)
+----------------------------------------------------------------
 ================================================================
 pending:
 
-ensembl:
+- ensembl:
   http://ftp.ebi.ac.uk/pub/databases/ensembl/hprc/y1_freeze/ contains all Y1 assemblies;
   http://ftp.ebi.ac.uk/pub/databases/ensembl/hprc/y1_freeze/GCA_009914755.4/ is CHM13v2
 
