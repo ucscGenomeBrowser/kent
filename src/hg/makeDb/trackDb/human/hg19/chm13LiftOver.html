@@ -1,7 +1,7 @@
 <h2>Description</h2>
 <p>
-  These tracks show the one-to-one v1_nfLO alignments of the T2T-CHM13 v2.0
-  assembly to the GRCh38/hg38 and GRCh37/hg19 human reference assemblies.
+  These tracks show the one-to-one v1_nfLO alignments of the GRCh37/hg19 to the
+  T2T-CHM13 v2.0 assembly.
 </p>
 
 <h2>Display Conventions</h2>
@@ -9,39 +9,12 @@
   The track displays boxes joined together by either single or double lines,
   with the boxes represent aligning regions, single lines indicating gaps that
   are largely due to a deletion in the CHM13 v2.0 assembly or an insertion in
-  the GRCh38 or GRCh37, and double lines representing more complex gaps that
-  involve substantial sequence in both assembly.
+  the GRCh37/hg19, and double lines representing more complex gaps that involve
+  substantial sequence in both assembly.
 </p>
 
-
-<h2>LiftOver chain file downloads</h2>
-One-to-one liftOver chain files to and from GRCh38/hg38 and GRCh37/hg19 are available here:
-<ul>
-  <li> T2T CHM13 v2.0 to GRCh38/hg38 <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/chm13v2-hg38.chain.gz">chm13v2-hg38.over.chain.gz</a>
-  <li> T2T CHM13 v2.0 to GRCh37/hg19 <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/chm13v2-hg19.chain.gz">chm13v2-hg19.over.chain.gz</a>
-  <li> GRCh38/hg38 to T2T CHM13 v2.0 <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/hg38-chm13v2.chain.gz">hg38-chm13v2.over.chain.gz</a>
-  <li> GRCh37/hg19 to T2T CHM13 v2.0 <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/hg19-chm13v2.chain.gz">hg19-chm13v2.over.chain.gz</a>
-</ul>
-
-The mask file for GRCh38/hg38
-is <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/hg38.liftover-mask.bed">hg38.over-mask.bed</a>.
 
 <h2>Methods</h2>
-<p>
-<ul>
-<h3>GRCh38/hg38 pre-processing</h3>
-<p>
-To prevent ambiguous alignments, all false duplications, as determined by the Genome in a Bottle Consortium
-(<a href="https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/references/GRCh38/GCA_000001405.15_GRCh38_GRC_exclusions_T2Tv2.bed">GCA_000001405.15_GRCh38_GRC_exclusions_T2Tv2.bed</a>), as well as the GRCh38 <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?hgsid=1285829831_crE6AIbRoN8GqiiHOPmjhYm2qTq2&db=hg38&c=chrX&g=centromeres">modeled centromeres</a>,
-were masked from the GRCh38/hg38 primary assembly. In addition, unlocalized and unplaced (random) contigs were removed.
-</p>
-
-<h3>GRCh37/hg19 pre-processing</h3>
-<p>
-Unlocalized and unplaced (random) contigs were removed from the GRCh37/hg19 assembly.
-</p>
-
-
 <h3>Alignment and Chain Creation</h3>
 <p>
 For the minimap2-based pipeline, the initial chain file was generated using
@@ -53,10 +26,10 @@ For the minimap2-based pipeline, the initial chain file was generated using
 Full commands with parameters used were:
 </p>
 <pre><code>
-    nextflow run main.nf --source GRCh38.fa --target chm13v2.0.fasta --outdir dir -profile local --aligner minimap2
+    nextflow run main.nf --source GRCh37.fa --target chm13v2.0.fasta --outdir dir -profile local --aligner minimap2
     python chaintools/src/split.py -c input.chain -o input-split.chain
     python chaintools/src/to_paf.py -c input-split.chain -t target.fa -q query.fa -o input-split.paf
-    awk '$1==$6' input-split.paf | rb break-paf --max-size 10000  | rb trim-paf -r | rb invert | rb trim-paf -r | rb invert > out.paf
+    awk '$$1==$$6' input-split.paf | rb break-paf --max-size 10000  | rb trim-paf -r | rb invert | rb trim-paf -r | rb invert > out.paf
     paf2chain -i out.paf > out.chain
     python chaintools/src/invert.py -c out.chain -o out_inverted.chain
 </code></pre>
@@ -71,9 +44,13 @@ smaller overlaps.
 
 <p>
 Results were validated by using chaintools to confirm that there were no
-overlapping sequences with respect to both CHM13v2.0 and GRCh38 in the
+overlapping sequences with respect to both CHM13v2.0 and GRCh37 in the
 released chain file. In addition, trimmed alignments were visually inspected
 with SafFire to confirm their quality.
+</p>
+
+<p>
+Chains were swapped to make GRCh37/hg19 the target.
 </p>
 </ul>
 </p>

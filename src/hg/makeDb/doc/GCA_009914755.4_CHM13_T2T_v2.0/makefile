@@ -18,7 +18,7 @@ userTrackDbFile = ${asmBuildDir}/${asmId}.userTrackDb.txt
 tracks = proseq rnaseq cytoBandMapped sedefSegDups rdnaModel catLiftOffGenesV1 hgLiftOver
 tracksWithHtml = $(filter-out cytoBandMapped,${tracks})
 
-hgLiftOverFiles = chm13v2-hg19.chain.gz chm13v2-hg38.chain.gz hg19-chm13v2.chain.gz hg38-chm13v2.chain.gz
+hgLiftOverFiles = chm13v2-hg19.over.chain.gz chm13v2-hg38.over.chain.gz hg19-chm13v2.over.chain.gz hg38-chm13v2.over.chain.gz
 
 .SECONDARY:
 MAKEFLAGS += --check-symlink-times

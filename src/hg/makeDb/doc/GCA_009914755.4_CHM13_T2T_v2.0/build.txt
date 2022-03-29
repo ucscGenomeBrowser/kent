@@ -9,12 +9,13 @@ T2T CHM13 track spreadsheet
 
 staging URL
    https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
-   https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?hubUrl=https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=hub_24696_GCA_009914755.4&position=lastDbPos
+   https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?hubUrl=https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=hub_24696_GCA_009914755.4
 
 https://hgwdev.gi.ucsc.edu/h/GCA_009914755.4
 
 Public link:
  https://genome.ucsc.edu/h/GCA_009914755.4
+ https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
 
 
 
@@ -111,31 +112,50 @@ globus: team-liftover/v1_nflo/
 
 download to trackData/liftOver
 # make names consistent
-    mv chm13v2-grch38.chain chm13v2-hg38.chain
-    mv grch38-chm13v2.chain hg38-chm13v2.chain
+    mv chm13v2-grch38.chain chm13v2-hg38.over.chain
+    mv grch38-chm13v2.chain hg38-chm13v2.over.chain
 
     pigz *.chain
 
     cd ../hgLiftOver
-    hgLoadChain -noBin -test none bigChain ../liftOver/chm13v2-hg38.chain.gz 
+    hgLoadChain -noBin -test none bigChain ../liftOver/chm13v2-hg38.over.chain.gz 
     sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
-    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg38.liftover.chain.bb
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg38.over.chain.bb
     tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
-    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg38.liftover.link.bb
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg38.over.link.bb
 
-    hgLoadChain -noBin -test none bigChain ../liftOver/chm13v2-hg19.chain.gz 
+    hgLoadChain -noBin -test none bigChain ../liftOver/chm13v2-hg19.over.chain.gz 
     sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
-    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg19.liftover.chain.bb
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg19.over.chain.bb
     tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
-    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg19.liftover.link.bb
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../ucscChromNames/t2t-chm13-v2.0.sizes chm13v2-hg19.over.link.bb
 
 
     rm *.tab
 
-    v1_nflo_description.html
+# GRCh38 mask used in liftover. This is based on:
+#  https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/references/GRCh38/GCA_000001405.15_GRCh38_GRC_exclusions_T2Tv2.bed
+#  plus UCSC hg38 centromeres track
+
+   GRCh38: /team-liftover/grch38_masked_fasta/grch38-centromere_and_falsedup.bed (edited)
+   rename to liftOver/hg38.over-mask.bed
+
+
 ================================================================
 * hgCactus (2022-03-28 markd)
 ----------------------------------------------------------------
+# HAL from Marina Haukness <mhauknes@ucsc.edu>
+
+   http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/t2tChm13.v2.0.hal
+
+# rename genomes to match browser, in renameFile.tab put
+GRCh38	hg38
+
+    halRenameGenomes t2tChm13.v2.0.hal renameFile.tab 
+
+    
+
+
 ================================================================
 pending:
 
@@ -163,8 +183,6 @@ pending:
       EXPERIMENT: PCD_NISTRM.NA24385-1_1sA-40 (SRX14226557)
         RUN: m64139_220127_180020 (SRR18074968)
 
-* HAL http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/t2tChm13.v2.0.hal
-
 * unique kmers
   Min unique k-mer (+)	Present in v1.0 and v2.0	Michael Sauria	/team-epigenetics/032522_chm13v2.0_kmers/mu/chm13v2.0.mul.bw	H	min_unique_kmer.html
   Min unique k-mer (-)	Present in v1.0 and v2.0	Michael Sauria	/team-epigenetics/032522_chm13v2.0_kmers/mu/chm13v2.0.mur.bw	H
@@ -186,10 +204,12 @@ pending:
 * GRCh38 variants
   TBD	Nancy Hansen	team-liftover/chain_variants/vcffiles/v1_nflo/chm13v2-grch38.sort.vcf.gz	L	grch_allele_differences.html
   GRCh37 variants	TBD	Nancy Hansen	team-liftover/chain_variants/vcffiles/v1_nflo/chm13v2-hg19.sort.vcf.gz	L
+
+* Dylan Taylor Today at 12:39 PM
+dbSNP, Clinvar, and GWAS Catalog liftover for CHM13v2.0 has been updated on the spreadsheet!
+
 ================================================================
 Problems:
-+ ln -s -s trackData/chromAlias/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.bb .
-ln: failed to create symbolic link ‘./GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.bb’: File exists
 
 ================================================================
 
