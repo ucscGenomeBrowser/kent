@@ -15,6 +15,7 @@ https://hgwdev.gi.ucsc.edu/h/GCA_009914755.4
 
 Public link:
  https://genome.ucsc.edu/h/GCA_009914755.4
+ https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
 
 
 
@@ -203,10 +204,12 @@ pending:
 * GRCh38 variants
   TBD	Nancy Hansen	team-liftover/chain_variants/vcffiles/v1_nflo/chm13v2-grch38.sort.vcf.gz	L	grch_allele_differences.html
   GRCh37 variants	TBD	Nancy Hansen	team-liftover/chain_variants/vcffiles/v1_nflo/chm13v2-hg19.sort.vcf.gz	L
+
+* Dylan Taylor Today at 12:39 PM
+dbSNP, Clinvar, and GWAS Catalog liftover for CHM13v2.0 has been updated on the spreadsheet!
+
 ================================================================
 Problems:
-+ ln -s -s trackData/chromAlias/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.bb .
-ln: failed to create symbolic link ‘./GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.bb’: File exists
 
 ================================================================
 
