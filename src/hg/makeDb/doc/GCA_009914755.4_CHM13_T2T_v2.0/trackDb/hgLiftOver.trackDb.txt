@@ -1,6 +1,6 @@
 track hgLiftOver
 compositeTrack on
-shortLabel Human reference liftOver
+shortLabel Human reference alignments
 longLabel GRCh38/hg38 and GRCh37/hg19 v1_nfLO liftOver alignments
 visibility hide
 type bigChain hg38
@@ -9,7 +9,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver.html
 
     track hg38LiftOver
     parent hgLiftOver
-    shortLabel GRCh38/hg38 liftOver
+    shortLabel GRCh38/hg38 alignments
     longLabel GRCh38/hg38 v1_nfLO liftOver alignments
     type bigChain hg38
     color 120,20,0
@@ -21,7 +21,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver.html
 
     track hg19LiftOver
     parent hgLiftOver
-    shortLabel GRCh37/hg19 liftOver
+    shortLabel GRCh37/hg19 alignments
     longLabel GRCh37/hg19 v1_nfLO liftOver alignments
     type bigChain hg19
     color 120,20,0
