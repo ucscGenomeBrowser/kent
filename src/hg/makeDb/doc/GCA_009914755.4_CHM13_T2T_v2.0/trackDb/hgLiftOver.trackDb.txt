@@ -14,8 +14,8 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver.html
     type bigChain hg38
     color 120,20,0
     visibility dense
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg38.liftover.chain.bb
-    linkDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg38.liftover.link.bb
+    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg38.over.chain.bb
+    linkDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg38.over.link.bb
     priority 1
     group map
 
@@ -26,8 +26,8 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver.html
     type bigChain hg19
     color 120,20,0
     visibility dense
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg19.liftover.chain.bb
-    linkDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg19.liftover.link.bb
+    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg19.over.chain.bb
+    linkDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg19.over.link.bb
     priority 2
     group map
 
