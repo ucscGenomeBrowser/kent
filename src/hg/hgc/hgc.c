@@ -5682,6 +5682,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 {
                 struct bed *bed;
                 int fieldCount = ct->fieldCount;
+                if ((ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "pgSnp"))
+                    fieldCount = 4;
                 char query[512];
                 int rowOffset;
                 char **row;
