@@ -132,10 +132,13 @@ return fetchQualifiers("utr5", qualifier, extra, retSize);
 
 
 
-boolean fbUnderstandTrack(char *db, char *track)
+boolean fbUnderstandTrack(char *db, struct trackDb *tdb)
 /* Return TRUE if can turn track into a set of ranges or bits. */
 {
-struct hTableInfo *hti = hFindTableInfo(db, NULL, track);
+if ((tdb != NULL) && startsWith("big", tdb->type))
+	return TRUE;
+
+struct hTableInfo *hti = hFindTableInfo(db, NULL, tdb->track);
 
 if (hti == NULL)
     return FALSE;
