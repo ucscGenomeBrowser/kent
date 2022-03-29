@@ -150,10 +150,11 @@ download to trackData/liftOver
 
 # rename genomes to match browser, in renameFile.tab put
 GRCh38	hg38
+CHM13	GCA_009914755.4
 
     halRenameGenomes t2tChm13.v2.0.hal renameFile.tab 
 
-    
+# NOTE: disabled due to Snakes not using chromAlias
 
 
 ================================================================
