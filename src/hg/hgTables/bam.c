@@ -28,6 +28,7 @@
 #include "xmlEscape.h"
 #include "hgBam.h"
 #include "hgConfig.h"
+#include "chromAlias.h"
 
 boolean isBamTable(char *table)
 /* Return TRUE if table corresponds to a BAM file. */
@@ -184,8 +185,20 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     char *fileName = bamFileName(table, conn, region->chrom);
     char *baiUrl = bigDataIndexFromCtOrHub(table, conn);
 
-    struct samAlignment *sam, *samList = bamAndIndexFetchSamAlignmentPlus(fileName, baiUrl, region->chrom,
-    	region->start, region->end, lm, refUrl, cacheDir);
+    struct samAlignment *sam, *samList = NULL;
+
+    struct slName *aliasList = chromAliasFindAliases(region->chrom);
+    struct slName *nativeName = newSlName(region->chrom);
+    slAddHead(&aliasList, nativeName);
+
+    for (; aliasList; aliasList = aliasList->next)
+        {
+        samList = bamAndIndexFetchSamAlignmentPlus(fileName, baiUrl, aliasList->name,
+            region->start, region->end, lm, refUrl, cacheDir);
+        if (samList)
+            break;
+        }
+
     char *row[SAMALIGNMENT_NUM_COLS];
     char numBuf[BAM_NUM_BUF_SIZE];
     for (sam = samList; sam != NULL && (maxOut > 0); sam = sam->next)

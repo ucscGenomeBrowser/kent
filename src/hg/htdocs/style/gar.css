@@ -216,13 +216,13 @@
   position: relative;
   display: inline-block;
   float: right;
-  color: white;
-  background-color: #1d3a6e;
+  color: black;
+  background-color: #ddd;
   border: 1px solid #000000;
+  border-radius: 10px;
   margin: 2px 20px 2px 2px;
   padding: 5px 5px 5px 5px;
   text-align: center;
-  box-shadow: 8px 8px 4px grey;
 }
 
 /* for box-shadow:
@@ -237,7 +237,6 @@
   margin-bottom: 0;
   width: 100%;
   /* border: 1px solid #00f; */
-  box-shadow: 0 0 4px 4px #1d3a6e;
 }
 /* the background-color here is what is in between the menu items */
 /* but why is there space between the menu items ? */
@@ -293,10 +292,8 @@ inside a <ul> element.
 
  */
 .pullDownMenuContent ul > li {
-  /* opacity: 1.0; */
-  /* color: #1a2a98; */
   color: white;
-  background-color: #457ddd;
+  background-color: #57d;
 }
 
 /* this makes the entire item row clickable, including the trailing whitespace,
@@ -309,10 +306,8 @@ inside a <ul> element.
 /* the color of the text in the menu items when *not* highlighted #112295 */
 /* the color here is the color of the text when it is *not* highlighted */
 .pullDownMenuContent ul:hover > li:not(:hover) {
-  /* opacity: 0.7; */
-  /* color: #457ddd; */
-  color: #112295;
-  background-color: white;
+  color: black;
+  background-color: #ddd;
 }
 
 .pullDownMenu:hover .pullDownMenuContent {

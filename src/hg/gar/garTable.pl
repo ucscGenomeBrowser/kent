@@ -726,7 +726,7 @@ printf "<div style='text-align: center;'><!-- this will cause the next div to ce
 printf "  <div style='display: inline-block'>\n";
 
 printf "<div class='pullDownMenu'>\n";
-printf "  <span id='speciesSelectAnchor'>choose clades to view/hide</span>\n";
+printf "  <span id='speciesSelectAnchor'>choose clades to view/hide &#9660;</span>\n";
 printf "  <div class='pullDownMenuContent'>\n";
 printf "  <ul id='checkBoxSpeciesSelect'>\n";
 printf "    <li><label><input class='showAll' type='checkbox' onchange='gar.visCheckBox(this)' id='allCheckBox' value='all' checked><span class='showAllLabel'> show all</span></label></li>\n";
@@ -743,7 +743,7 @@ printf "  </div>\n";
 printf "</div>\n";
 
 printf "<div style='width: 260px;' class='pullDownMenu'>\n";
-printf "  <span style='text-align: center;' id='assemblyTypeAnchor'>select assembly type to display</span>\n";
+printf "  <span style='text-align: center;' id='assemblyTypeAnchor'>select assembly type to display &#9660;</span>\n";
 printf "  <div class='pullDownMenuContent'>\n";
 printf "  <ul id='checkBoxAssemblyType'>\n";
 printf "    <li><label><input class='showAll' type='checkbox' onchange='gar.visCheckBox(this)' id='allCheckBox' value='all' checked><span class='showAllLabel'> show all</span></label></li>\n";
@@ -757,10 +757,10 @@ printf "  </div>\n";
 printf "</div>\n";
 
 printf "<div style='width: 240px;' class='pullDownMenu'>\n";
-printf "  <span id='columnSelectAnchor'>show/hide columns</span>\n";
+printf "  <span id='columnSelectAnchor'>show/hide columns &#9660;</span>\n";
 printf "  <div class='pullDownMenuContent'>\n";
 printf "  <ul id='checkBoxColumnSelect'>\n";
-printf "    <li><label><input class='columnCheckBox' type='checkbox' onchange='gar.resetColumnVis(this)' id='comNameCheckBox' value='comName' checked> common name</label></li>\n";
+printf "    <li><label><input class='columnCheckBox' type='checkbox' onchange='gar.resetColumnVis(this)' id='comNameCheckBox' value='comName' checked> English common name</label></li>\n";
 printf "    <li><label><input class='columnCheckBox' type='checkbox' onchange='gar.resetColumnVis(this)' id='sciNameCheckBox' value='sciName' checked> scientific name</label></li>\n";
 printf "    <li><label><input class='columnCheckBox' type='checkbox' onchange='gar.resetColumnVis(this)' id='asmIdCheckBox' value='asmId' checked> NCBI Assembly</label></li>\n";
 printf "    <li><label><input class='columnCheckBox' type='checkbox' onchange='gar.resetColumnVis(this)' id='asmSizeCheckBox' value='asmSize'> assembly size</label></li>\n";
@@ -818,21 +818,21 @@ printf "</colgroup>\n";
 
 printf "<thead>\n";
 printf "<tr>\n";
-printf "  <th class='colViewReq'><div class='tooltip'>view/request<span onclick='event.stopPropagation()' class='tooltiptext'><em>'view'</em> opens the genome browser for an existing assembly, <em>'request'</em> opens an assembly request form.</span></div></th>\n";
-printf "  <th class='colComName'><div class='tooltip'>common name<span onclick='event.stopPropagation()' class='tooltiptext'>common name</span></div></th>\n";
-printf "  <th class='colSciName'><div class='tooltip'>scientific name (count)<span onclick='event.stopPropagation()' class='tooltiptext'>Links to Google image search. Count shows the number of assemblies available for this orgnism.</span></div></th>\n";
-printf "  <th class='colAsmId'><div class='tooltip'>NCBI Assembly<span onclick='event.stopPropagation()' class='tooltiptext'>Links to NCBI resource record.</span></div></th>\n";
-printf "  <th class='colAsmSize'><div class='tooltip'>assembly<br>size<span onclick='event.stopPropagation()' class='tooltiptext'>Number of nucleotides in the assembly.</span></div></th>\n";
-printf "  <th class='colAsmSeqCount'><div class='tooltip'>sequence<br>count<span onclick='event.stopPropagation()' class='tooltiptext'>The number of sequences in this assembly.</span></div></th>\n";
-printf "  <th class='colScafN50'><div class='tooltip'>scaffold N50<br>length (L50)<span onclick='event.stopPropagation()' class='tooltiptext'><a href='https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics' target=_blank>N50 (L50)</a> length.</span></div> </th>\n";
-printf "  <th class='colContigN50'><div class='tooltip'>contig N50<br>length (L50)<span onclick='event.stopPropagation()' class='tooltiptext'><a href='https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics' target=_blank>N50 (L50)</a> length.</span></div></th>\n";
-printf "  <th class='colIUCN'><div class='tooltip'>IUCN<span onclick='event.stopPropagation()' class='tooltiptext'>Links to <a href='https://www.iucnredlist.org/' target=_blank>IUCN Red List</a> of Threatened Species (version 2021-3) <span style='color:%s;'>CR - Critical</span> / <span style='color:%s;'>EN - Endangered</span> / <span style='color:%s;'>VU - Vulnerable</span></span></div></th>\n", $statusColors{"CR"}, $statusColors{"EN"}, $statusColors{"VU"};
-printf "  <th class='colTaxId'><div class='tooltip'>NCBI taxID<span onclick='event.stopPropagation()' class='tooltiptext'>Links to <a href='https://www.ncbi.nlm.nih.gov/taxonomy' target='_blank'>NCBI Taxonomy</a> database.</span></div></th>\n";
-printf "  <th class='colAsmDate'><div class='tooltip'>assembly<br>date<span onclick='event.stopPropagation()' class='tooltiptext'>Date submitted to <a href='https://www.ncbi.nlm.nih.gov/assembly' target=_blank>NCBI Assembly</a> database.</span></div></th>\n";
-printf "  <th class='colBioSample sorttable_alpha'><div class='tooltip'>BioSample<span onclick='event.stopPropagation()' class='tooltiptext'>BioSample ID at <a href='https://www.ncbi.nlm.nih.gov/biosample' target=_blank>NCBI</a>.</span></div></th>\n";
-printf "  <th class='colBioProject sorttable_alpha'><div class='tooltip'>BioProject<span onclick='event.stopPropagation()' class='tooltiptext'>BioProject ID at <a href='https://www.ncbi.nlm.nih.gov/bioproject' target=_blank>NCBI</a>.</span></div></th>\n";
-printf "  <th class='colSubmitter sorttable_alpha'><div class='tooltip'>Assembly submitter<span onclick='event.stopPropagation()' class='tooltiptextright'>Person or group who submitted to <a href='https://www.ncbi.nlm.nih.gov/assembly' target=_blank>NCBI Assembly</a> database.</span></div></th>\n";
-printf "  <th class='colClade'><div class='tooltip'>clade<span onclick='event.stopPropagation()' class='tooltiptextright'>Clade of this organism.</span></div></th>\n";
+printf "  <th class='colViewReq'><div class='tooltip'>view/request &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'><em>'view'</em> opens the genome browser for an existing assembly, <em>'request'</em> opens an assembly request form.</span></div></th>\n";
+printf "  <th class='colComName'><div class='tooltip'>English common name &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>English common name</span></div></th>\n";
+printf "  <th class='colSciName'><div class='tooltip'>scientific name (count) &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>Links to Google image search. Count shows the number of assemblies available for this orgnism.</span></div></th>\n";
+printf "  <th class='colAsmId'><div class='tooltip'>NCBI Assembly &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>Links to NCBI resource record.</span></div></th>\n";
+printf "  <th class='colAsmSize'><div class='tooltip'>assembly<br>size &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>Number of nucleotides in the assembly.</span></div></th>\n";
+printf "  <th class='colAsmSeqCount'><div class='tooltip'>sequence<br>count &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>The number of sequences in this assembly.</span></div></th>\n";
+printf "  <th class='colScafN50'><div class='tooltip'>scaffold N50<br>length (L50) &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'><a href='https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics' target=_blank>N50 (L50)</a> length.</span></div> </th>\n";
+printf "  <th class='colContigN50'><div class='tooltip'>contig N50<br>length (L50) &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'><a href='https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics' target=_blank>N50 (L50)</a> length.</span></div></th>\n";
+printf "  <th class='colIUCN'><div class='tooltip'>IUCN &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>Links to <a href='https://www.iucnredlist.org/' target=_blank>IUCN Red List</a> of Threatened Species (version 2021-3) <span style='color:%s;'>CR - Critical</span> / <span style='color:%s;'>EN - Endangered</span> / <span style='color:%s;'>VU - Vulnerable</span></span></div></th>\n", $statusColors{"CR"}, $statusColors{"EN"}, $statusColors{"VU"};
+printf "  <th class='colTaxId'><div class='tooltip'>NCBI taxID &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>Links to <a href='https://www.ncbi.nlm.nih.gov/taxonomy' target='_blank'>NCBI Taxonomy</a> database.</span></div></th>\n";
+printf "  <th class='colAsmDate'><div class='tooltip'>assembly<br>date &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>Date submitted to <a href='https://www.ncbi.nlm.nih.gov/assembly' target=_blank>NCBI Assembly</a> database.</span></div></th>\n";
+printf "  <th class='colBioSample sorttable_alpha'><div class='tooltip'>BioSample &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>BioSample ID at <a href='https://www.ncbi.nlm.nih.gov/biosample' target=_blank>NCBI</a>.</span></div></th>\n";
+printf "  <th class='colBioProject sorttable_alpha'><div class='tooltip'>BioProject &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>BioProject ID at <a href='https://www.ncbi.nlm.nih.gov/bioproject' target=_blank>NCBI</a>.</span></div></th>\n";
+printf "  <th class='colSubmitter sorttable_alpha'><div class='tooltip'>Assembly submitter &#9432;<span onclick='event.stopPropagation()' class='tooltiptextright'>Person or group who submitted to <a href='https://www.ncbi.nlm.nih.gov/assembly' target=_blank>NCBI Assembly</a> database.</span></div></th>\n";
+printf "  <th class='colClade'><div class='tooltip'>clade &#9432;<span onclick='event.stopPropagation()' class='tooltiptextright'>Clade of this organism.</span></div></th>\n";
 printf "</tr>\n";
 printf "</thead><tbody>\n";
 
