@@ -31,6 +31,8 @@ def parseArgs():
     optional.add_argument ("-t", "--test", dest = "testMode", default = False, action = "store_true",
         help = "Optional: Run in test mode. Print out any discrepancies but do not run any " + \
             "commands.")
+    optional.add_argument ("-s", "--silent", dest = "silent", default = False, action = "store_true",
+        help = "Optional: Suppress output messages when hubs are not responding.")
     if (len(sys.argv) == 1):
         parser.print_usage()
         print("\nGiven a server (dev/hgwbeta/rr) will query hubPublic table URLs and verify that\n" + \
@@ -152,7 +154,7 @@ def compareResults(hubPublicDic,currentHub,hub,hgsqlInput,testMode):
     if set(hubPublicDic[hub]['dbList'][:-1].split(',')) != set(currentHub['dbList']):
         printHgsql(hub,'dbList',",".join(currentHub['dbList'])+",",hgsqlInput,testMode)
     
-def hubPublicCompare(hubPublicDic,hgsqlInput,testMode):
+def hubPublicCompare(hubPublicDic,hgsqlInput,testMode,silent):
     """Query hub.txt files and compare values to hubPublic values"""
     for hub in hubPublicDic.keys():
         try: #Try for timeout connections
@@ -160,15 +162,17 @@ def hubPublicCompare(hubPublicDic,hgsqlInput,testMode):
             currentHub = queryHubTxt(currentHub,hub)
             compareResults(hubPublicDic,currentHub,hub,hgsqlInput,testMode)
         except:
-            print("The following hub has an error or is not responsive: "+str(hub))            
+            if not silent:
+                print("The following hub has an error or is not responsive: "+str(hub))
             
 def main():
     """Initialize options and call other functions"""
     options = parseArgs()
     serverToQuery = options.server
     testMode = options.testMode
+    silent = options.silent
     hgsqlInput = evaluateServer(serverToQuery)
     hubPublicDic = buildPubHubDic(hgsqlInput)
-    hubPublicCompare(hubPublicDic,hgsqlInput,testMode)
+    hubPublicCompare(hubPublicDic,hgsqlInput,testMode,silent)
 
 main()
