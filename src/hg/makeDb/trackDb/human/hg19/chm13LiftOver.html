@@ -18,8 +18,17 @@
 <h3>Alignment and Chain Creation</h3>
 <p>
 For the minimap2-based pipeline, the initial chain file was generated using
-<a href="https://github.com/evotools/nf-LO">nf-LO</a> v1.5.1 with
-<a href="https://github.com/lh3/minimap2">minimap2</a> v2.24 alignments. These chains were then split at all locations that contained unaligned segments greater than 1kbp or gaps greater than 10kbp. Split chain files were then converted to PAF format with extended CIGAR strings using chaintools (https://doi.org/10.5281/zenodo.6342391, v0.1), and alignments between nonhomologous chromosomes were removed. The trim-paf operation of rustybam (https://zenodo.org/record/6342176, v0.1.29) was next used to remove overlapping alignments in the query sequence, and then the target sequence, to create 1:1 alignments. PAF alignments were converted back to the chain format with <a href="https://github.com/AndreaGuarracino/paf2chain">paf2chain</a> commit f68eeca, and finally, chaintools was used to generate the inverted chain file.
+<a target="_blank" href="https://github.com/evotools/nf-LO">nf-LO</a> v1.5.1 with
+<a  target="_blank" href="https://github.com/lh3/minimap2">minimap2</a> v2.24 alignments. 
+These chains were then split at all locations that contained unaligned segments greater 
+than 1kbp or gaps greater than 10kbp. Split chain files were then converted to PAF format 
+with extended CIGAR strings using chaintools (https://doi.org/10.5281/zenodo.6342391, v0.1), 
+and alignments between nonhomologous chromosomes were removed. The trim-paf operation of 
+rustybam (https://zenodo.org/record/6342176, v0.1.29) was next used to remove overlapping 
+alignments in the query sequence, and then the target sequence, to create 1:1 alignments. 
+PAF alignments were converted back to the chain format with <a  target="_blank" 
+href="https://github.com/AndreaGuarracino/paf2chain">paf2chain</a> commit f68eeca, and 
+finally, chaintools was used to generate the inverted chain file.
 </p>
 
 <p>
@@ -52,8 +61,6 @@ with SafFire to confirm their quality.
 <p>
 Chains were swapped to make GRCh37/hg19 the target.
 </p>
-</ul>
-</p>
 
 <h2>Credits</h2>
 <p>
@@ -65,5 +72,4 @@ and <a href="mvollger@uw.edu">Mitchell Vollger&lt;mvollger@uw.edu&gt;</a>
 <p>
 <p>Nurk S, Koren S, Rhie A, Rautiainen M, et al. The complete sequence of a human genome. bioRxiv, 2021.</p>
 </p>
-
 
