@@ -118,18 +118,17 @@ download to trackData/liftOver
     pigz *.chain
 
     cd ../hgLiftOver
-    hgLoadChain -noBin -test none bigChain ../liftOver/chm13v2-hg38.over.chain.gz 
+    hgLoadChain -noBin -test none bigChain ../../liftOver/chm13v2-hg38.over.chain.gz 
     sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
     bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab../chromAlias/ucsc.sizes.txt chm13v2-hg38.over.chain.bb
     tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
     bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab../chromAlias/ucsc.sizes.txt chm13v2-hg38.over.link.bb
 
-    hgLoadChain -noBin -test none bigChain ../liftOver/chm13v2-hg19.over.chain.gz 
+    hgLoadChain -noBin -test none bigChain ../../liftOver/chm13v2-hg19.over.chain.gz 
     sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
-    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab../chromAlias/ucsc.sizes.txt chm13v2-hg19.over.chain.bb
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../chromAlias/ucsc.sizes.txt chm13v2-hg19.over.chain.bb
     tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
-    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab../chromAlias/ucsc.sizes.txt chm13v2-hg19.over.link.bb
-
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../chromAlias/ucsc.sizes.txt chm13v2-hg19.over.link.bb
 
     rm *.tab
 
@@ -139,7 +138,6 @@ download to trackData/liftOver
 
    GRCh38: /team-liftover/grch38_masked_fasta/grch38-centromere_and_falsedup.bed (edited)
    rename to liftOver/hg38.over-mask.bed
-
 
 ================================================================
 * hgCactus (2022-03-28 markd)
@@ -155,6 +153,20 @@ CHM13	GCA_009914755.4
     halRenameGenomes t2tChm13.v2.0.hal renameFile.tab 
 
 # NOTE: disabled due to Snakes not using chromAlias
+
+================================================================
+* hgUnique (2022-03-30 markd)
+----------------------------------------------------------------
+regions not in hg38:
+globus: /team-liftover/v1_nflo/T2T-CHM13v2.0_new_and_non_syntenic_regions.bed
+         chm13v2-unique_to_hg19.bed
+         chm13v2-unique_to_hg38.bed
+
+csort -k1,1 -k2,2n chm13v2-unique_to_hg19.bed >tmp.bed
+bedToBigBed -type=bed3 -tab tmp.bed  ../chromAlias/ucsc.sizes.txt hgUnique.hg19.bb
+
+csort -k1,1 -k2,2n chm13v2-unique_to_hg38.bed >tmp.bed
+bedToBigBed -type=bed3 -tab tmp.bed ../chromAlias/ucsc.sizes.txt hgUnique.hg38.bb
 
 
 ================================================================
@@ -174,47 +186,43 @@ from Nick Altemose <nickaltemose@gmail.com> via Slack:
 * dbSNP155 (2022-03-29 markd)
 ----------------------------------------------------------------
 
-# dbSNP Variants	Lifted	TBD	Dylan Taylor
-   globus:/hg002/Liftover/CHM13v2_autosomes-sex/dbSNP155/dbSNP155.CHM13v2.autosome-sex.lifted.vcf.gz
-# Lifted after ref/alt swap	TBD	Dylan Taylor
-   globus:/hg002/Liftover/CHM13v2_autosomes-sex/dbSNP155/dbSNP155.CHM13v2.autosome-sex.recovered.vcf.gz
+# dbSNP Variants	Lifted+Recovered	TBD	Dylan Taylor
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/liftover/chm13v2.0_dbSNPv155.vcf.gz
+dbSNP_lifted-recovered.html
 
-
-dbSNP_liftover.html											
-
-dbSNP_refaltswap.html											
 
 # need to use NCBI names until supported by chromAlias
-   zcat dbSNP155.CHM13v2.autosome-sex.lifted.vcf.gz | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.txt /dev/stdin | bgzip -c >dbSNP155.CHM13v2.autosome-sex.lifted.ncbi.vcf.gz
-   zcat dbSNP155.CHM13v2.autosome-sex.recovered.vcf.gz  | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.txt /dev/stdin | bgzip -c >dbSNP155.CHM13v2.autosome-sex.recovered.ncbi.vcf.gz&
+   zcat chm13v2.0_dbSNPv155.vcf.gz  | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_dbSNPv155.ncbi-names.vcf.gz
 
-### waiting of decision if tracks should be joined
+tabix -p vcf chm13v2.0_dbSNPv155.vcf.gz &
+tabix -p vcf chm13v2.0_dbSNPv155.ncbi-names.vcf.gz &
 
-================================================================
-* clinVar (2022-03-29 markd)
-----------------------------------------------------------------
-ClinVar	Lifted	TBD	Dylan Taylor
-/hg002/Liftover/CHM13v2_autosomes-sex/Clinvar_202203013/clinvar_20220313.CHM13v2.autosome-sex.lifted.vcf.gz
-clinvar_liftover.html											
-
-Lifted after ref/alt swap	TBD	Dylan Taylor
-/hg002/Liftover/CHM13v2_autosomes-sex/Clinvar_202203013/clinvar_20220313.CHM13v2.autosome-sex.recovered.vcf.gz
-clinvar_refaltswap.html											
-
-### waiting of decision if tracks should be joined
 
 ================================================================
-* gwasSnps (2022-03-29 markd
+* clinVar20220313 (2022-03-29 markd)
 ----------------------------------------------------------------
-GWAS SNPs	Lifted	TBD	Dylan Taylor
-/hg002/Liftover/CHM13v2_autosomes-sex/gwas_catalog_v1.0-rsids_e100_r2022-03-08/gwas_catalog_v1.0-rsids_e100_r2022-03-08.CHM13v2.autosome-sex.lifted.vcf.gz
-gwas_catalog_liftover.html
+ClinVar	Lifted+Recovered	TBD	Dylan Taylor
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/liftover/chm13v2.0_ClinVar20220313.vcf.gz
 
-Lifted after ref/alt swap	TBD	Dylan Taylor
-/hg002/Liftover/CHM13v2_autosomes-sex/gwas_catalog_v1.0-rsids_e100_r2022-03-08/gwas_catalog_v1.0-rsids_e100_r2022-03-08.CHM13v2.autosome-sex.recovered.vcf.gz	H
-gwas_catalog_refaltswap.html											
+   zcat chm13v2.0_ClinVar20220313.vcf.gz | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_ClinVar20220313.ncbi-names.vcf.gz
 
-### waiting of decision if tracks should be joined
+tabix -p vcf chm13v2.0_ClinVar20220313.vcf.gz &
+tabix -p vcf chm13v2.0_ClinVar20220313.ncbi-names.vcf.gz &
+
+
+================================================================
+* gwasSNPs2022-03-08 (2022-03-29 markd
+----------------------------------------------------------------
+GWAS SNPs	Lifted+Recovered	TBD	Dylan Taylor
+
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/liftover/chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.vcf.gz
+gwas_catalog_lifted-recovered.html											
+
+# need to use NCBI names until supported by chromAlias
+   zcat chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.vcf.gz  | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.ncbi-names.vcf.gz
+
+tabix -p vcf  chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.ncbi-names.vcf.gz&
+tabix -p vcf  chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.vcf.gz&
 
 ================================================================
 pending:
@@ -265,11 +273,7 @@ pending:
   TBD	Nancy Hansen	team-liftover/chain_variants/vcffiles/v1_nflo/chm13v2-grch38.sort.vcf.gz	L	grch_allele_differences.html
   GRCh37 variants	TBD	Nancy Hansen	team-liftover/chain_variants/vcffiles/v1_nflo/chm13v2-hg19.sort.vcf.gz	L
 
-* Dylan Taylor Today at 12:39 PM
-dbSNP, Clinvar, and GWAS Catalog liftover for CHM13v2.0 has been updated on the spreadsheet!
-
 ================================================================
 Problems:
-
+- hub groups doesn't have phenDis, so put clinvar and GWAS in varRep
 ================================================================
-
