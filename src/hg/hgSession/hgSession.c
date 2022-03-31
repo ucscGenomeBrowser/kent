@@ -815,7 +815,7 @@ char **row;
 char *firstUse = "now()";
 int useCount = INITIAL_USE_COUNT;
 char firstUseBuf[32];
-char *settings = NULL;
+char *settings = "";
 
 boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
@@ -861,7 +861,7 @@ dyStringAppend(dy, "(userName, sessionName, contents, shared, "
 if (gotSettings)
     dyStringAppend(dy, ", settings");
 dyStringAppend(dy, ") VALUES (");
-dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
+sqlDyStringPrintfFrag(dy, "'%s', '%s', ", encUserName, encSessionName);
 dyStringAppend(dy, "'");
 cleanHgSessionFromCart(cart);
 struct dyString *encoded = newDyString(4096);
@@ -876,7 +876,7 @@ dyStringAppend(dy, "', ");
 dyStringPrintf(dy, "%d, ", sharingLevel);
 dyStringPrintf(dy, "%s, now(), %d", firstUse, useCount);
 if (gotSettings)
-    dyStringPrintf(dy, ", '%s'", settings);
+    sqlDyStringPrintfFrag(dy, ", '%s'", settings);
 dyStringPrintf(dy, ");");
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
