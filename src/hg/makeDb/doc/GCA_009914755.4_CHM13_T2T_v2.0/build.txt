@@ -118,18 +118,17 @@ download to trackData/liftOver
     pigz *.chain
 
     cd ../hgLiftOver
-    hgLoadChain -noBin -test none bigChain ../liftOver/chm13v2-hg38.over.chain.gz 
+    hgLoadChain -noBin -test none bigChain ../../liftOver/chm13v2-hg38.over.chain.gz 
     sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
     bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab../chromAlias/ucsc.sizes.txt chm13v2-hg38.over.chain.bb
     tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
     bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab../chromAlias/ucsc.sizes.txt chm13v2-hg38.over.link.bb
 
-    hgLoadChain -noBin -test none bigChain ../liftOver/chm13v2-hg19.over.chain.gz 
+    hgLoadChain -noBin -test none bigChain ../../liftOver/chm13v2-hg19.over.chain.gz 
     sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
-    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab../chromAlias/ucsc.sizes.txt chm13v2-hg19.over.chain.bb
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../chromAlias/ucsc.sizes.txt chm13v2-hg19.over.chain.bb
     tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
-    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab../chromAlias/ucsc.sizes.txt chm13v2-hg19.over.link.bb
-
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../chromAlias/ucsc.sizes.txt chm13v2-hg19.over.link.bb
 
     rm *.tab
 
@@ -160,13 +159,13 @@ CHM13	GCA_009914755.4
 ----------------------------------------------------------------
 regions not in hg38:
 globus: /team-liftover/v1_nflo/T2T-CHM13v2.0_new_and_non_syntenic_regions.bed
-         T2T-CHM13v2.0_new_and_non_syntenic_regions_hg19.bed
-         T2T-CHM13v2.0_new_and_non_syntenic_regions_hg38.bed
+         chm13v2-unique_to_hg19.bed
+         chm13v2-unique_to_hg38.bed
 
-csort -k1,1 -k2,2n T2T-CHM13v2.0_new_and_non_syntenic_regions_hg19.bed >tmp.bed
+csort -k1,1 -k2,2n chm13v2-unique_to_hg19.bed >tmp.bed
 bedToBigBed -type=bed3 -tab tmp.bed  ../chromAlias/ucsc.sizes.txt hgUnique.hg19.bb
 
-csort -k1,1 -k2,2n T2T-CHM13v2.0_new_and_non_syntenic_regions_hg38.bed >tmp.bed
+csort -k1,1 -k2,2n chm13v2-unique_to_hg38.bed >tmp.bed
 bedToBigBed -type=bed3 -tab tmp.bed ../chromAlias/ucsc.sizes.txt hgUnique.hg38.bb
 
 
