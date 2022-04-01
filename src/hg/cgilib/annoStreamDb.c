@@ -123,6 +123,15 @@ rowBuf->ix = 0;
 lmCleanup(&(rowBuf->lm));
 }
 
+static void rowBufInit(struct rowBuf *rowBuf, int size)
+/* Clean up rowBuf and give it a new lm and buffer[size]. */
+{
+resetRowBuf(rowBuf);
+rowBuf->lm = lmInit(0);
+rowBuf->size = size;
+lmAllocArray(rowBuf->lm, rowBuf->buf, size);
+}
+
 static void resetChunkState(struct annoStreamDb *self)
 /* Reset members that track chunked queries. */
 {
@@ -176,12 +185,20 @@ static char **nextRowFromSqlResult(struct annoStreamDb *self)
 /* Stream rows directly from self->sr, but copy into rowBuf in case we need extra columns for
  * hashJoin. */
 {
+// If we passed a position filter, we may have reset the rowBuf, so re-initialize
+if (self->rowBuf.buf == NULL)
+    rowBufInit(&self->rowBuf, 1);
 // Use only the first row in rowBuf.
 if (self->rowBuf.buf[0] == NULL)
     lmAllocArray(self->rowBuf.lm, self->rowBuf.buf[0], self->bigRowSize);
 char **row = sqlNextRow(self->sr);
-CopyArray(row, self->rowBuf.buf[0], self->sqlRowSize);
-return self->rowBuf.buf[0];
+if (row)
+    {
+    CopyArray(row, self->rowBuf.buf[0], self->sqlRowSize);
+    return self->rowBuf.buf[0];
+    }
+else
+    return NULL;
 }
 
 INLINE boolean useSplitTable(struct annoStreamDb *self, struct joinerDtf *dtf)
@@ -447,15 +464,6 @@ struct sqlResult *sr = sqlGetResult(self->conn, query->string);
 dyStringFree(&query);
 self->sr = sr;
 self->needQuery = FALSE;
-}
-
-static void rowBufInit(struct rowBuf *rowBuf, int size)
-/* Clean up rowBuf and give it a new lm and buffer[size]. */
-{
-resetRowBuf(rowBuf);
-rowBuf->lm = lmInit(0);
-rowBuf->size = size;
-lmAllocArray(rowBuf->lm, rowBuf->buf, size);
 }
 
 static void updateNextChunkState(struct annoStreamDb *self, int queryMaxItems)
