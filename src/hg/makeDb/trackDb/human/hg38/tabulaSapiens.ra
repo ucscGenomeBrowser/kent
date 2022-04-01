@@ -5,6 +5,7 @@ shortLabel Tabula Sapiens
 longLabel Tabula Sapiens single cell RNA data from many tissues
 visibility hide
 group singleCell
+pennantIcon New red ../goldenPath/newsarch.html#033122 "Released Mar. 31, 2022"
 
     track tabulaSapiensTissueCellType
     parent tabulaSapiens
@@ -38,6 +39,5 @@ group singleCell
     barChartStatsUrl /gbdb/$D/bbi/tabulaSapiens/facet_detailed.facets
     barChartCategoryUrl /gbdb/$D/bbi/tabulaSapiens/facet_detailed.categories
     barChartFacets tissue,subtissue,cell_class,cell_type,sex,donor,assay
-    barChartMerge on
     maxWindowToDraw 10000000
     barChartStretchToItem on

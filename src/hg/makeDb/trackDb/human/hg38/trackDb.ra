@@ -29,7 +29,7 @@ include placentaVentoTormo.ra
 include singleCellMerged.ra
 #include lungMadissoon.ra
 #include spleenMadissoon.ra
-include tabulaSapiens.ra alpha,beta
+include tabulaSapiens.ra
 include toothKrivanek.ra
 include hippocampusAyhan.ra
 include brainDevRegions.ra
