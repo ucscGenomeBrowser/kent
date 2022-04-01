@@ -820,7 +820,7 @@ printf "<thead>\n";
 printf "<tr>\n";
 printf "  <th class='colViewReq'><div class='tooltip'>view/request &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'><em>'view'</em> opens the genome browser for an existing assembly, <em>'request'</em> opens an assembly request form.</span></div></th>\n";
 printf "  <th class='colComName'><div class='tooltip'>English common name &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>English common name</span></div></th>\n";
-printf "  <th class='colSciName'><div class='tooltip'>scientific name (count) &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>Links to Google image search. Count shows the number of assemblies available for this orgnism.</span></div></th>\n";
+printf "  <th class='colSciName'><div class='tooltip'>scientific name (count) &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>Links to Google image search. Count shows the number of assemblies available for this organism.</span></div></th>\n";
 printf "  <th class='colAsmId'><div class='tooltip'>NCBI Assembly &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>Links to NCBI resource record.</span></div></th>\n";
 printf "  <th class='colAsmSize'><div class='tooltip'>assembly<br>size &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>Number of nucleotides in the assembly.</span></div></th>\n";
 printf "  <th class='colAsmSeqCount'><div class='tooltip'>sequence<br>count &#9432;<span onclick='event.stopPropagation()' class='tooltiptext'>The number of sequences in this assembly.</span></div></th>\n";
