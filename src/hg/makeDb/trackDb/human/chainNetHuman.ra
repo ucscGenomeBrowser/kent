@@ -17,7 +17,7 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on
-html humanChainNet
+html homoSapiensChainNet
 
     track humanChainNetViewchain
     shortLabel Chains
