@@ -6159,9 +6159,12 @@ char *getScoreNameAdd(struct trackDb *tdb, char *scoreName, char *add)
 {
 char scoreLimitName[1024];
 char *name = cloneString(scoreName);
-if (isNewFilterType(tdb, scoreName) != NULL)
+char *dot = strchr(name, '.');
+if (dot == NULL)
+    return name;
+
+if (isNewFilterType(tdb, dot+1) != NULL)
     {
-    char *dot = strchr(name, '.');
     *dot++ = 0;
     safef(scoreLimitName, sizeof(scoreLimitName), "%s%s.%s", name, add, dot);
     }

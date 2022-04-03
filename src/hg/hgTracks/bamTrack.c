@@ -22,6 +22,7 @@
 #include "bigWarn.h"
 #include "errCatch.h"
 #include "hgConfig.h"
+#include "chromAlias.h"
 
 
 struct bamTrackData
@@ -513,28 +514,38 @@ if (errCatchStart(errCatch))
     char *baiFileOrUrl = hReplaceGbdb(trackDbSetting(tg->tdb, "bigDataIndex"));
 
     char posForBam[512];
-    safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
     char *cacheDir =  cfgOption("cramRef");
     char *refUrl = trackDbSetting(tg->tdb, "refUrl");
-    if (!isPaired)
-	bamAndIndexFetchPlus(fileName2, baiFileOrUrl, posForBam, addBam, &btd, NULL, refUrl, cacheDir);
-    else
-	{
-	char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
-	int pairSearchRange = atoi(setting);
-	if (pairSearchRange > 0)
-	    safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
-		  max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamAndIndexFetchPlus(fileName2, baiFileOrUrl, posForBam, addBamPaired, &btd, NULL, refUrl, cacheDir);
-	struct hashEl *hel;
-	struct hashCookie cookie = hashFirst(btd.pairHash);
-	while ((hel = hashNext(&cookie)) != NULL)
-	    {
-	    struct linkedFeatures *lf = hel->val;
-	    if (lf->start < winEnd && lf->end > winStart)
-		slAddHead(&(tg->items), lfsFromLf(lf));
-	    }
-	}
+
+    struct slName *aliasList = chromAliasFindAliases(chromName);
+    struct slName *nativeName = newSlName(chromName);
+    slAddHead(&aliasList, nativeName);
+    for (; aliasList; aliasList = aliasList->next)
+        {
+        safef(posForBam, sizeof(posForBam), "%s:%d-%d", aliasList->name, winStart, winEnd);
+        if (!isPaired)
+            bamAndIndexFetchPlus(fileName2, baiFileOrUrl, posForBam, addBam, &btd, NULL, refUrl, cacheDir);
+        else
+            {
+            char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
+            int pairSearchRange = atoi(setting);
+            if (pairSearchRange > 0)
+                safef(posForBam, sizeof(posForBam), "%s:%d-%d", aliasList->name,
+                      max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
+            bamAndIndexFetchPlus(fileName2, baiFileOrUrl, posForBam, addBamPaired, &btd, NULL, refUrl, cacheDir);
+            struct hashEl *hel;
+            struct hashCookie cookie = hashFirst(btd.pairHash);
+            while ((hel = hashNext(&cookie)) != NULL)
+                {
+                struct linkedFeatures *lf = hel->val;
+                if (lf->start < winEnd && lf->end > winStart)
+                    slAddHead(&(tg->items), lfsFromLf(lf));
+                }
+            }
+
+        if (tg->items != NULL)
+            break;
+        }
     freez(&fileName2);
 
     if (tg->visibility != tvDense)

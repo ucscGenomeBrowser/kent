@@ -15,10 +15,15 @@ stageUrl = https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_00991475
 
 userTrackDbFile = ${asmBuildDir}/${asmId}.userTrackDb.txt
 
-tracks = proseq rnaseq cytoBandMapped sedefSegDups rdnaModel catLiftOffGenesV1 hgLiftOver
+tracks = proseq rnaseq cytoBandMapped sedefSegDups rdnaModel catLiftOffGenesV1 hgLiftOver \
+         censat hgUnique clinVar20220313 gwasSNPs2022-03-08 dbSNP155
+
+# snakes needs chromAlias fix:
+# hgCactus
+
 tracksWithHtml = $(filter-out cytoBandMapped,${tracks})
 
-hgLiftOverFiles = chm13v2-hg19.chain.gz chm13v2-hg38.chain.gz hg19-chm13v2.chain.gz hg38-chm13v2.chain.gz
+hgLiftOverFiles = chm13v2-hg19.over.chain.gz chm13v2-hg38.over.chain.gz hg19-chm13v2.over.chain.gz hg38-chm13v2.over.chain.gz
 
 .SECONDARY:
 MAKEFLAGS += --check-symlink-times
@@ -57,3 +62,6 @@ liftOverInstall: ${hgLiftOverFiles:%=${liftOverStageDir}/%}
 ${liftOverStageDir}/%: ${liftOverDataDir}/%
 	@mkdir -p $(dir $@)
 	ln -sf $< $@
+
+clean:
+	rm -f ${userTrackDbFile}

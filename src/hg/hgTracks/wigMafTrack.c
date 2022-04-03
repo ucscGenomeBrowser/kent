@@ -1308,6 +1308,17 @@ for (mi = miList; mi != NULL; mi = mi->next)
         continue;
     summaryList = (struct mafSummary *)hashFindVal(componentHash, mi->db);
     if (summaryList == NULL)
+        {
+        // sometimes the summary table has the other database without a dot even if it has one
+        char *tryNoDot = cloneString(mi->db);
+        char *dot = strchr(tryNoDot, '.');
+        if (dot != NULL)
+            {
+            *dot = 0;
+            summaryList = (struct mafSummary *)hashFindVal(componentHash, tryNoDot);
+            }
+        }
+    if (summaryList == NULL)
         summaryList = (struct mafSummary *)hashFindVal(componentHash, mi->name);
 
     if (summaryList != NULL)
