@@ -21,6 +21,7 @@
 #include "liftOverChain.h"
 #include "chromInfo.h"
 #include "net.h"
+#include "genark.h"
 
 
 /* CGI Variables */
@@ -304,11 +305,25 @@ else
            database exists.
            If these conditions are met then print position link to
            browser for toDb, otherwise just print position without link. */
+        boolean startedAnchor = FALSE;
         if (hDbIsActive(toDb->name) && chromSeqExists)
+            {
 	    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\">",
 		   hgTracksName(), toDb->name, chain->qName, qStart+1, qEnd);
+            startedAnchor = TRUE;
+            }
+        else if (sameString(toDb->nibPath, "genark"))
+            {
+            char *hubUrl = genarkUrl(toDb->name);
+            if (hubUrl)
+                {
+                startedAnchor = TRUE;
+                printf("<A HREF=\"%s?genome=%s&hubUrl=%s&position=%s:%d-%d\">",
+		   hgTracksName(), toDb->name, hubUrl, chain->qName, qStart+1, qEnd);
+                }
+            }
 	printf("%s:%d-%d",  chain->qName, qStart+1, qEnd);
-        if (hDbIsActive(toDb->name) && chromSeqExists)
+        if (startedAnchor)
 	    printf("</A>");
 	printf(" (%3.1f%% of bases, %3.1f%% of span)<BR>\n",
 	    100.0 * blockSize/origSize,
