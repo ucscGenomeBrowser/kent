@@ -213,3 +213,11 @@ time sort --merge joined/*.bed | grep -v "^#" > gnomad.v3.1.1.genomes.joined.bed
 
 # and lastly turn the merged bed into a bigBed:
 time (bedToBigBed -type=bed9+15 -tab -as=genomes.as -extraIndex=name,rsId,_displayName gnomad.v3.1.1.genomes.joined.bed /hive/data/genomes/hg38/chrom.sizes genomes.bb) &> bigBed.log &
+
+# Max Tue Apr  5 04:14:40 PDT 2022 - adding mutation constraint subtrack
+cd /hive/data/genomes/hg38/bed/gnomad/constraint
+# Downloaded BED file from https://www.biorxiv.org/content/10.1101/2022.03.20.485034v1.supplementary-material
+bedGraphToBigWig *.bed ../../../chrom.sizes mutConstraint.bw
+
+
+bedGraphToBigWig *.bed ../../../chrom.sizes mutConstraint.bw

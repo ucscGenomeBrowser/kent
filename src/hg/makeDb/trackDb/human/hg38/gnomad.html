@@ -1,6 +1,6 @@
 <h2>Description</h2>
 <p>
-The gnomAD v3 track shows variants from 71,702 whole genomes (and no exomes), all mapped to the 
+The gnomAD v3 track shows variants and derived information from 71,702 whole genomes (and no exomes), all mapped to the 
 GRCh38/hg38 reference sequence. Most of the genomes from v2 are included in v3. For more detailed 
 information on gnomAD v3, see the related <a target="_blank" 
 href="https://macarthurlab.org/2019/10/16/gnomad-v3-0/">blog post</a>.</p>
@@ -22,6 +22,16 @@ target="_blank">README</a>.</p>
 gnomAD v2 data are based on the GRCh37/hg19 assembly. These tracks display the 
 GRCh38/hg38 lift-over provided by gnomAD on their downloads site.
 </p>
+
+<p>On hg38 only, a subtrack "Gnomad mutational constraint" captures the
+depletion of disruptive variation caused by purifying natural selection.
+This is similar to negative selection on loss-of-function (LoF) for genes, but
+can be calculated for non-coding regions, too. Briefly, for any 1kbp window in
+the genome, a model based on trinucleotide sequence context, base-level
+methylation, and regional genomic features predicts expected number of mutations,
+and compares this number to the observed number of mutations using a Z-score (see preprint 
+in the Reference section for details).</p>
+
 <p>
 For questions on the gnomAD data, also see the <a target="_blank" 
 href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a>.</p>
@@ -46,7 +56,7 @@ href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are st
 can be downloaded from our <a
 href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/" target="_blank">download server</a>, subject
 to the conditions set forth by the gnomAD consortium (see below). Coverage values
-for the genome are in <a target="_blank" href="../goldenPath/help/bigWig.html">bigWig</a> files in
+and constraint scores for the genome are in <a target="_blank" href="../goldenPath/help/bigWig.html">bigWig</a> files in
 the coverage/ subdirectory. Variant VCFs can be found in the vcf/ subdirectory.</p>
 <p>
 The data can also be found directly from the gnomAD <a target="_blank" 
@@ -79,4 +89,9 @@ AJ, Cummings BB <em>et al</em>.
 genetic variation in 60,706 humans</a>. <em>Nature</em>. 2016 Aug 17;536(7616):285-91.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>;
 PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>
+<p>
+Chen S, Francioli L, Goodrich J, Collins R, Wang Q, Alfoldi J, Watts N, Vittal C, Gauthier L, Poterba T, Wilson M
+<a href="https://www.biorxiv.org/content/10.1101/2022.03.20.485034.abstract" target="_blank">
+A genome-wide mutational constraint map quantified from variation in 76,156 human genomes</a>. <em>Biorxiv 2022</em> 
 </p>

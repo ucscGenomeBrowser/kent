@@ -1,0 +1,8 @@
+Jarvis track, Max, 03-28-22
+cd /hive/data/genomes/hg38/bed/jarvis/
+chromToUcsc --get hg38
+zcat orig/*.bed.gz | chromToUcsc -a hg38.chromAlias.tsv -s > jarvis.hg38.bedgraph.ucsc.bed
+# I use a current version of "sort" installed via conda. If using older ones, remove --parallel and --buffer
+time sort -k1,1 -k2,2n  --parallel=10  --buffer=20G jarvis.hg38.bedgraph.ucsc.bed > jarvis.hg38.bedgraph.ucsc.sort.bed
+bedRemoveOverlap jarvis.hg38.bedgraph.ucsc.sort.bed jarvis.hg38.bedgraph.ucsc.nonOvlp.bed
+bedGraphToBigWig jarvis.hg38.bedgraph.ucsc.nonOvlp.bed  ../chrom.sizes jarvis.bw
