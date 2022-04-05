@@ -312,6 +312,7 @@
 ./runBuild GCA_014905235.2 GCA_014905235.2_Bmori_2016v1.0 invertebrates Bombyx_mori
 ./runBuild GCA_015220805.1 GCA_015220805.1_bPogPus1.pri birds Pogoniulus_pusillus
 ./runBuild GCA_015227805.2 GCA_015227805.2_bHirRus1.pri.v2 birds Hirundo_rustica
+./runBuild GCA_015244455.1 GCA_015244455.1_mRatBN7.1_alternate_haplotype mammals Rattus_norvegicus
 ./runBuild GCA_015443085.1 GCA_015443085.1_Saanen_v1 mammals Capra_hircus
 ./runBuild GCA_016128335.1 GCA_016128335.1_ZJU1.0 birds Dromaius_novaehollandiae
 ./runBuild GCA_016904835.1 GCA_016904835.1_bAcaChl1.pri birds Acanthisitta_chloris
@@ -340,6 +341,7 @@
 ./runBuild GCA_021951015.1 GCA_021951015.1_HG002.mat.cur.20211005 primates Homo_sapiens
 ./runBuild GCA_900006655.3 GCA_900006655.3_Susie3 primates Gorilla_gorilla_gorilla
 ./runBuild GCA_900094665.2 GCA_900094665.2_CAROLI_EIJ_v1.1 mammals Mus_caroli
+./runBuild GCA_900108605.1 GCA_900108605.1_NNQGG.v01 mammals Neovison_vison
 ./runBuild GCA_900186095.1 GCA_900186095.1_CHOK1S_HZDv1 mammals Cricetulus_griseus
 ./runBuild GCA_900324465.2 GCA_900324465.2_fAnaTes1.2 fish Anabas_testudineus
 ./runBuild GCA_900634415.1 GCA_900634415.1_fCotGob3.1 vertebrate Cottoperca_gobio
@@ -1523,6 +1525,7 @@
 ./runBuild GCF_011075155.1 GCF_011075155.1_ASM1107515v1 fungi Colletotrichum_scovillei
 ./runBuild GCF_011077185.1 GCF_011077185.1_BPBGC_Ojam_1.0 birds Oxyura_jamaicensis
 ./runBuild GCF_011100635.1 GCF_011100635.1_mTriVul1.pri mammals Trichosurus_vulpecula
+./runBuild GCF_011100685.1 GCF_011100685.1_UU_Cfam_GSD_1.0 mammals Canis_lupus_familiaris
 ./runBuild GCF_011125445.2 GCF_011125445.2_MU-UCD_Fhet_4.1 fishes Fundulus_heteroclitus
 ./runBuild GCF_011392965.1 GCF_011392965.1_Fvar_1.2 invertebrate Frieseomelitta_varia
 ./runBuild GCF_011630105.1 GCF_011630105.1_ASM1163010v1 invertebrate Anneissia_japonica
