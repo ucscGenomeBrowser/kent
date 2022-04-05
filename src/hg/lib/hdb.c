@@ -2841,7 +2841,7 @@ struct hash *hDbDbHash()
 /* The hashed-up version of the entire dbDb table, keyed on the db */
 {
 struct hash *dbDbHash = newHash(16);
-struct dbDb *list = hDbDbListDeadOrAlive();
+struct dbDb *list = hDbDbList();
 struct dbDb *dbdb;
 for (dbdb = list; dbdb != NULL; dbdb = dbdb->next)
     hashAdd(dbDbHash, dbdb->name, dbdb);
@@ -4862,7 +4862,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     }
 
 /* Get list of all databases */
-allDbList = hDbDbListDeadOrAlive();
+allDbList = hDbDbList();
 
 /* Create a new dbDb list of all entries in the liftOver hash */
 for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
