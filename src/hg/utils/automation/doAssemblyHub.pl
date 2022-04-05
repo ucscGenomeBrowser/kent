@@ -1936,7 +1936,8 @@ export buildDir=$buildDir
 rm -f \$asmId.chromAlias.txt
 ln -s trackData/chromAlias/\${asmId}.chromAlias.txt .
 if [ -s trackData/chromAlias/\${asmId}.chromAlias.bb ]; then
-  ln -s -s trackData/chromAlias/\${asmId}.chromAlias.bb .
+  rm -f \${asmId}.chromAlias.bb
+  ln -s trackData/chromAlias/\${asmId}.chromAlias.bb .
 fi
 \$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId \$buildDir \\
    > \$asmId.trackDb.txt

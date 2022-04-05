@@ -8083,7 +8083,7 @@ boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
 boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
-boolean multiRegionButtonTop = cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, FALSE);
+boolean multiRegionButtonTop = cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, TRUE);
 long thisTime = 0, lastTime = 0;
 
 basesPerPixel = ((float)virtWinBaseCount) / ((float)fullInsideWidth);

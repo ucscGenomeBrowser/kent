@@ -4975,7 +4975,7 @@ struct trackDb *rFindUnderstandableTrack(char *db, struct trackDb *tdb)
 if (tdb->subtracks != NULL)
     return rFindUnderstandableTrack(db,tdb->subtracks);
 
-if (fbUnderstandTrack(db, tdb->table) && !dnaIgnoreTrack(tdb->table))
+if (fbUnderstandTrack(db, tdb) && !dnaIgnoreTrack(tdb->table))
     return tdb;
 else
     return NULL;
@@ -5558,6 +5558,32 @@ if (cgiBoolean(buf))
     }
 }
 
+static struct featureBits *getBigBedFbList(struct trackDb *tdb, char *seqName, int winStart, int winEnd)
+/* Get a list of featureBits structures from a bigBed file. */
+{
+struct lm *lm = lmInit(0);
+char *fileName = bbiNameFromSettingOrTable(tdb, NULL, tdb->table);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
+char *bedRow[32];
+char startBuf[16], endBuf[16];
+struct featureBits *fbList = NULL, *fb;
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    struct bed *bed = bedLoadN(bedRow, bbi->definedFieldCount);
+    AllocVar(fb);
+    fb->name = bed->name;
+    fb->start = bed->chromStart;
+    fb->end = bed->chromEnd;
+    fb->strand = '+';
+    if (bed->strand[0])
+	fb->strand = bed->strand[0];
+    slAddHead(&fbList, fb);
+    }
+return fbList;
+}
+
 void doGetDna3()
 /* Fetch DNA in extended color format */
 {
@@ -5656,6 +5682,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 {
                 struct bed *bed;
                 int fieldCount = ct->fieldCount;
+                if ((ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "pgSnp"))
+                    fieldCount = 4;
                 char query[512];
                 int rowOffset;
                 char **row;
@@ -5712,11 +5740,14 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                     {
                     struct trackDb *tdbLeaf = refLeaf->val;
                     if (tdbVisLimitedByAncestors(cart,tdbLeaf,TRUE,TRUE) != tvHide
-                    &&  fbUnderstandTrack(database, tdbLeaf->table)
+                    &&  fbUnderstandTrack(database, tdbLeaf)
                     && !dnaIgnoreTrack(tdbLeaf->table))
                         {
-                        struct featureBits *fbLeafList =
-                                    fbGetRange(database, tdbLeaf->table, seqName, winStart, winEnd);
+                        struct featureBits *fbLeafList;
+                        if (startsWith("big", tdbLeaf->type))
+                            fbLeafList = getBigBedFbList(tdbLeaf, seqName, winStart, winEnd);
+                        else
+                            fbLeafList = fbGetRange(database, tdbLeaf->table, seqName, winStart, winEnd);
                         if (fbLeafList != NULL)
                             fbList = slCat(fbList,fbLeafList);
                         }

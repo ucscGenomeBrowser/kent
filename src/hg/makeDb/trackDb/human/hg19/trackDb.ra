@@ -2436,6 +2436,7 @@ include dbSnpArchiveHg19.ra
 include affyArchive.ra
 include genePredArchive.ra
 include tgpArchive.ra
+include chm13LiftOver.ra
 
 track panelApp
 shortLabel PanelApp 

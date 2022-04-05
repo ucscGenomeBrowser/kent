@@ -1,4 +1,5 @@
 track knownGene
+table knownGene
 shortLabel GENCODE V39
 longLabel GENCODE V39
 priority 1

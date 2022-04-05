@@ -39,6 +39,7 @@ include gtexEqtl.ra
 
 include liftOver.ra
 include exomeProbesets.ra
+include chm13LiftOver.ra
 
 track miRnaAtlas
 compositeTrack on
@@ -288,6 +289,7 @@ color 255,0,0
 url https://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel NCBI accession record:
 
+include ../chainNetHuman.ra
 include ../chainNetPrimate.ra
 include ../chainNetPlacental.ra
 include ../chainNetVertebrate.ra
@@ -811,4 +813,5 @@ compositeTrack on
     type bigBed 4
     visibility pack
     bigDataUrl /gbdb/hg38/snpCnvArrays/agilent/hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bb
+
 

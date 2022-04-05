@@ -483,15 +483,17 @@ href="https://www.wikiwand.com/en/DNA_and_RNA_codon_tables">Wikiwand website</a>
 <h2>Querying BLAT programmatically using URLs</h2>
 <p>
 For programmatic access, BLAT supports URL queries which are returned as psl format in a JSON structure. 
-This is only available for DNA queries. The URL requires 2 variables, the sequence to blat and 
-the database:</p>
+The URL requires 3 variables, the sequence to blat, the type of query and the database:</p>
 <pre>
-https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=[seq]&amp;type=DNA&amp;db=[database]&amp;output=json</pre>
+https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=[seq]&amp;type=[type]&amp;db=[database]&amp;output=json</pre>
 <p>
-For example:</p>
+Query types include DNA, protein, translated RNA and translated DNA:</p>
 <pre>
-<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=GACCTCGGCGTGGCCTAGCG&amp;type=DNA&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=GACCTCGGCGTGGCCTAGCG&amp;type=DNA&amp;db=hg38&amp;output=json</a></pre>
-</p>
+<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=GACCTCGGCGTGGCCTAGCG&amp;type=DNA&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=GACCTCGGCGTGGCCTAGCG&amp;type=DNA&amp;db=hg38&amp;output=json</a>
+<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=IGCLPAHLLGDMWGRFWTNLYSLTVPFGQKPNIDVTDAMVDQAWDAQRIFKEAEKFFVSVGLPNM&amp;type=protein&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=IGCLPAHLLGDMWGRFWTNLYSLTVPFGQKPNIDVTDAMVDQAWDAQRIFKEAEKFFVSVGLPNM&amp;type=protein&amp;db=hg38&amp;output=json</a>
+<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=TTTCCCTTCCCCACTGTAGTGGGAGAGAAGGGAGTGGCCATACCATATTTTTCTCGTGGGCCGTTGTAGTCATAAGGCCTTCCTTTGCGGAAAATTTTCAGGGTGGGATA&amp;type=translated%20RNA&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=TTTCCCTTCCCCACTGTAGTGGGAGAGAAGGGAGTGGCCATACCATATTTTTCTCGTGGGCCGTTGTAGTCATAAGGCCTTCCTTTGCGGAAAATTTTCAGGGTGGGATA&amp;type=translated%20RNA&amp;db=hg38&amp;output=json</a>
+<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=TTTCCCTTCCCCACTGTAGTGGGAGAGAAGGGAGTGGCCATACCATATTTTTCTCGTGGGCCGTTGTAGTCATAAGGCCTTCCTTTGCGGAAAATTTTCAGGGTGGGATA&amp;type=translated%20DNA&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=TTTCCCTTCCCCACTGTAGTGGGAGAGAAGGGAGTGGCCATACCATATTTTTCTCGTGGGCCGTTGTAGTCATAAGGCCTTCCTTTGCGGAAAATTTTCAGGGTGGGATA&amp;type=translated%20DNA&amp;db=hg38&amp;output=json</a>
+</pre>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 </body>

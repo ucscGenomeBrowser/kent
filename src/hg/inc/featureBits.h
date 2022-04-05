@@ -37,7 +37,7 @@ struct featureBits *fbGetRangeQuery(char *db, char *trackQualifier,
 	boolean clipToWindow, boolean filterOutNoUTR);
 /* Get features in range that match sqlConstraints. */
 
-boolean fbUnderstandTrack(char *db, char *track);
+boolean fbUnderstandTrack(char *db, struct trackDb *tdb);
 /* Return TRUE if can turn track into a set of ranges or bits. */
 
 void fbOrBits(Bits *bits, int bitSize, struct featureBits *fbList,

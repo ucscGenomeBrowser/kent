@@ -1,4 +1,5 @@
 track knownGene
+table knownGene
 shortLabel GENCODE VM27
 longLabel GENCODE VM27
 priority 1
