@@ -13,6 +13,16 @@ the UCSC version of the track was released). For more information about gnomAD v
 see the related
 <a target="_blank" href="https://gnomad.broadinstitute.org/news/2021-03-gnomad-v3-1-1/">changelog</a>.</p>
 
+<p>Based on v3.1.2 and available for hg38 only, a subtrack "Gnomad mutational
+constraint" shows the depletion of disruptive variation caused by purifying
+natural selection.  This is similar to negative selection on loss-of-function
+(LoF) for genes, but can be calculated for non-coding regions, too. Briefly,
+for any 1kbp window in the genome, a model based on trinucleotide sequence
+context, base-level methylation, and regional genomic features predicted the
+expected number of mutations, and compares this number to the observed number
+of mutations using a Z-score (see preprint in the reference section of this page for
+details).</p>
+
 <p>
 The gnomAD v2 tracks show variants from 125,748 exomes and 15,708 whole genomes, all mapped to
 the GRCh37/hg19 reference sequence and lifted to the GRCh38/hg38 assembly. The data originate
@@ -30,6 +40,7 @@ target="_blank">README</a>.</p>
 gnomAD v2 data are based on the GRCh37/hg19 assembly. These tracks display the
 GRCh38/hg38 lift-over provided by gnomAD on their downloads site.
 </p>
+
 <p>
 For questions on the gnomAD data, also see the <a target="_blank"
 href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a>.</p>
@@ -224,4 +235,9 @@ AJ, Cummings BB <em>et al</em>.
 genetic variation in 60,706 humans</a>. <em>Nature</em>. 2016 Aug 17;536(7616):285-91.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>;
 PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>
+<p>
+Chen S, Francioli L, Goodrich J, Collins R, Wang Q, Alfoldi J, Watts N, Vittal C, Gauthier L, Poterba T, Wilson M
+<a href="https://www.biorxiv.org/content/10.1101/2022.03.20.485034.abstract" target="_blank">
+A genome-wide mutational constraint map quantified from variation in 76,156 human genomes</a>. <em>Biorxiv 2022</em> 
 </p>
