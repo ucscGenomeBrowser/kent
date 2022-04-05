@@ -33,6 +33,29 @@ sub singleFileHub($$$$$$$$$$$) {
   push @fhN, $fh1;
   push @fhN, $fh2;
 
+  my %liftOverChain;	# key is 'otherDb' name, value is bbi path
+  my %liftOverGz;	# key is 'otherDb' name, value is lift.over.gz file path
+  my $hasChainNets = `ls -d $buildDir/trackData/lastz.* 2> /dev/null | wc -l`;
+  chomp $hasChainNets;
+  if ($hasChainNets) {
+    printf STDERR "# hasChainNets: %d\t%s\n", $hasChainNets, $asmId;
+    open (CH, "ls -d $buildDir/trackData/lastz.*|") or die "can not ls -d $buildDir/trackData/lastz.*";
+    while (my $line = <CH>) {
+      chomp $line;
+      my $otherDb = basename($line);
+      $otherDb =~ s/lastz.//;
+      my $OtherDb = ucfirst($otherDb);
+      my $bbiPath = "$buildDir/bbi/${asmId}.chainLiftOver${OtherDb}.bb";
+      if (-s "${bbiPath}") {
+        $liftOverChain{$otherDb} = "bbi/${asmId}.chainLiftOver${OtherDb}.bb";
+      }
+     my $loPath = "$buildDir/liftOver/${accessionId}To${OtherDb}.over.chain.gz";
+      if (-s "${loPath}") {
+    $liftOverGz{$otherDb} = "liftOver/${accessionId}To${OtherDb}.over.chain.gz";
+      }
+    }
+    close (CH);
+  }
   my $fileCount = 0;
   my @tdbLines;
   open (TD, "<$trackDb") or die "can not read trackDb: $trackDb";
@@ -56,12 +79,12 @@ sub singleFileHub($$$$$$$$$$$) {
     printf $fh "twoBitPath %s.2bit\n", $accessionId;
     printf $fh "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
     printf $fh "chromSizes %s.chrom.sizes.txt\n", $accessionId;
-    if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+    if ( (0 == 1) && -s "${buildDir}/${asmId}.chromAlias.bb" ) {
       printf $fh "chromAliasBb %s.chromAlias.bb\n", $accessionId;
     } else {
       printf $fh "chromAlias %s.chromAlias.txt\n", $accessionId;
     }
-    printf $fh "organism %s\n", $descr;
+    printf $fh "organism %s\n", $orgName;
     printf $fh "defaultPos %s\n", $defPos;
     printf $fh "scientificName %s\n", $descr;
     printf $fh "htmlPath html/%s.description.html\n", $asmId;
@@ -70,6 +93,9 @@ sub singleFileHub($$$$$$$$$$$) {
       printf $fh "blat %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
       printf $fh "transBlat %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
       printf $fh "isPcr %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
+    }
+    foreach my $otherDb (sort keys %liftOverGz) {
+       printf $fh "liftOver.%s %s\n", $otherDb, $liftOverGz{$otherDb};
     }
     printf $fh "\n";
     foreach my $tdbLine (@tdbLines) {
@@ -185,7 +211,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   } else {
     printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
   }
-  printf "organism %s\n", $descr;
+  printf "organism %s\n", $orgName;
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;
   chomp $chrName;
   my $bigChrom=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$NF}'`;
@@ -242,12 +268,12 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf GF "twoBitPath %s.2bit\n", $accessionId;
   printf GF "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
   printf GF "chromSizes %s.chrom.sizes.txt\n", $accessionId;
-  if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+  if ( (0 == 1) && -s "${buildDir}/${asmId}.chromAlias.bb" ) {
     printf GF "chromAliasBb %s.chromAlias.bb\n", $accessionId;
   } else {
     printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
   }
-  printf GF "organism %s\n", $descr;
+  printf GF "organism %s\n", $orgName;
   printf GF "defaultPos %s\n", $defPos;
   printf GF "scientificName %s\n", $descr;
   printf GF "htmlPath html/%s.description.html\n", $asmId;

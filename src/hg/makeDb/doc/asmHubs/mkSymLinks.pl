@@ -87,9 +87,11 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/ixIxx"`;
   `rm -f "${destDir}/genesGtf"`;
   `rm -f "${destDir}/liftOver"`;
+  `rm -f "${destDir}/otherAligners"`;
   `rm -fr "${destDir}/html"`;
   `mkdir -p "${destDir}/html"`;
   `rm -f "${destDir}/${accessionId}.2bit"`;
+  `rm -f "${destDir}/${accessionId}.fa.gz"`;
   `rm -f "${destDir}/${accessionId}.2bit.bpt"`;
   `rm -f "${destDir}/${accessionId}.untrans.gfidx"`;
   `rm -f "${destDir}/${accessionId}.trans.gfidx"`;
@@ -112,6 +114,7 @@ foreach my $asmId (@orderList) {
   `ln -s "${buildDir}/ixIxx" "${destDir}/ixIxx"` if (-d "${buildDir}/ixIxx");
   `ln -s "${buildDir}/genesGtf" "${destDir}/genesGtf"` if (-d "${buildDir}/genesGtf");
   `ln -s "${buildDir}/liftOver" "${destDir}/liftOver"` if (-d "${buildDir}/liftOver");
+  `ln -s "${buildDir}/otherAligners" "${destDir}/otherAligners"` if (-d "${buildDir}/otherAligners");
   `ln -s ${buildDir}/html/*.html "${destDir}/html/"` if (-d "${buildDir}/html");
    my $jpgFiles =`ls ${buildDir}/html/*.jpg 2> /dev/null | wc -l`;
    chomp $jpgFiles;
@@ -121,11 +124,12 @@ foreach my $asmId (@orderList) {
    }
 #  `ln -s ${buildDir}/html/*.png "${destDir}/genomes/${asmId}/html/"`;
   `ln -s "${buildDir}/trackData/addMask/${asmId}.masked.2bit" "${destDir}/${accessionId}.2bit"` if (-s "${buildDir}/trackData/addMask/${asmId}.masked.2bit");
+  `ln -s "${buildDir}/${asmId}.fa.gz" "${destDir}/${accessionId}.fa.gz"` if (-s "${buildDir}/${asmId}.fa.gz");
   `ln -s "${buildDir}/trackData/addMask/${asmId}.masked.2bit.bpt" "${destDir}/${accessionId}.2bit.bpt"` if (-s "${buildDir}/trackData/addMask/${asmId}.masked.2bit.bpt");
-   if (-s "${buildDir}/trackData/addMask/${accessionId}.untrans.gfidx") {
-      if (-s "${buildDir}/trackData/addMask/${accessionId}.trans.gfidx") {
-        `ln -s "${buildDir}/trackData/addMask/${accessionId}.untrans.gfidx" "${destDir}/${accessionId}.untrans.gfidx"`;
-        `ln -s "${buildDir}/trackData/addMask/${accessionId}.trans.gfidx" "${destDir}/${accessionId}.trans.gfidx"`;
+   if (-s "${buildDir}/${accessionId}.untrans.gfidx") {
+      if (-s "${buildDir}/${accessionId}.trans.gfidx") {
+        `ln -s "${buildDir}/${accessionId}.untrans.gfidx" "${destDir}/${accessionId}.untrans.gfidx"`;
+        `ln -s "${buildDir}/${accessionId}.trans.gfidx" "${destDir}/${accessionId}.trans.gfidx"`;
       }
    }
   `ln -s "${buildDir}/${asmId}.agp.gz" "${destDir}/${accessionId}.agp.gz"` if (-s "${buildDir}/${asmId}.agp.gz");
