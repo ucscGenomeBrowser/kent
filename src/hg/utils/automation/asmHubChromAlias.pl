@@ -102,6 +102,12 @@ sub showAlias($) {
 #  to previous add
 sub addAlias($$$) {
   my ($source, $alias, $sequence) = @_;
+  if ($alias eq "na") {
+    return;
+  }
+  if ($sequence eq "na") {
+    return;
+  }
   # do not need to add the sequence name itself
   return if ($alias eq $sequence);
   if (!defined($aliasOut{$source})) {
@@ -165,19 +171,6 @@ while (my $line = <FH>) {
 }
 close (FH);
 
-# when not a UCSC named assembly, add the UCSC names as aliases
-if (! $ucscNames) {
-  if ($isRefSeq) {
-    foreach my $ucscName (sort keys %ucscToRefSeq) {
-       addAlias("ucsc", $ucscName, $ucscToRefSeq{$ucscName});
-    }
-  } else {
-    foreach my $ucscName (sort keys %ucscToGenbank) {
-       addAlias("ucsc", $ucscName, $ucscToGenbank{$ucscName});
-    }
-  }
-}
-
 my $dupsNotFound = 0;
 my $dupsList = "../../download/$asmId.dups.txt.gz";
 if ( -s "$dupsList" ) {
@@ -191,10 +184,10 @@ if ( -s "$dupsList" ) {
        printf STDERR "# ERROR: can not find dupTarget: $dupTarget in ncbiToUcsc for dupAlias: $dupAlias\n";
          $dupsNotFound += 1;
       } else {
-        addAlias("ucsc", $dupAlias, $ncbiToUcsc{$dupTarget});
+        printf STDERR "# addAlias(\"ucsc\", $dupAlias, $ncbiToUcsc{$dupTarget});\n";
       }
     } else {
-        addAlias($asmSource, $dupAlias, $dupTarget);
+        printf STDERR "# addAlias($asmSource, $dupAlias, $dupTarget);\n";
     }
     printf STDERR "# adding duplicate alias %s\n", $dupAlias;
     ++$dupCount;
@@ -206,6 +199,31 @@ if ($dupsNotFound > 0) {
   printf STDERR "ERROR: can not find %d duplicate names\n", $dupsNotFound;
   exit 255;
 }
+if ($dupCount > 0) {
+  printf STDERR "# processed %d duplicates\n", $dupCount;
+}
+
+# when not a UCSC named assembly, add the UCSC names as aliases
+if (! $ucscNames) {
+  if ($isRefSeq) {
+    foreach my $ucscName (sort keys %ucscToRefSeq) {
+       if (defined($dupToSequence{$ucscToRefSeq{$ucscName}})) {   # avoid duplicates
+         printf STDERR "# skipping duplicate name $ucscToRefSeq{$ucscName}\n";
+       } else {
+         addAlias("ucsc", $ucscName, $ucscToRefSeq{$ucscName});
+       }
+    }
+  } else {
+    foreach my $ucscName (sort keys %ucscToGenbank) {
+       if (defined($dupToSequence{$ucscToGenbank{$ucscName}})) {   # avoid duplicates
+         printf STDERR "# skipping duplicate name $ucscToGenbank{$ucscName}\n";
+       } else {
+         addAlias("ucsc", $ucscName, $ucscToGenbank{$ucscName});
+       }
+    }
+  }
+}
+
 
 if ($sequenceCount != $nameCount) {
   printf STDERR "ERROR: do not find the same name count in sequence vs. names files\n";
@@ -217,6 +235,10 @@ if ($sequenceCount != $nameCount) {
 ### first set of names is the UCSC to NCBI sequence names
 foreach my $sequence (sort keys %sequenceSizes) {
   my $seqName = $sequence;
+  if (defined($dupToSequence{$seqName})) {   # avoid duplicates
+    printf STDERR "# skipping duplicate name $seqName\n";
+    next;
+  }
   my $alias = $sequence;
   if ($ucscNames) {
      $alias = $ucscToNcbi{$seqName};
@@ -251,7 +273,11 @@ if ( $asmStructCount > 0 ) {
     if ($ucscNames) {
        $seqName = $ncbiToUcsc{$seqName};
     }
-    addAlias("ncbi", $alias, $seqName);
+    if (defined($dupToSequence{$seqName})) {   # avoid duplicates
+      printf STDERR "# skipping duplicate name $seqName\n";
+    } else {
+      addAlias("ncbi", $alias, $seqName);
+    }
   }
   close (FH);
 }
@@ -269,6 +295,16 @@ while (my $line = <FH>) {
   chomp $line;
   ++$dbgCount;
   my ($asmName, $gbkName, $refSeqName) = split('\s+', $line);
+  if (defined($dupToSequence{$asmName})) {   # avoid duplicates
+     printf STDERR "# skipping duplicate name $asmName\n";
+     next;
+  } elsif (defined($dupToSequence{$gbkName})) {   # avoid duplicates
+     printf STDERR "# skipping duplicate name $gbkName\n";
+     next;
+  } elsif (defined($dupToSequence{$refSeqName})) {   # avoid duplicates
+     printf STDERR "# skipping duplicate name $refSeqName\n";
+     next;
+  }
   printf STDERR "# '%s'\t'%s'\t'%s'\n", $asmName, $gbkName, $refSeqName if ($dbgCount < 5);
 #  next if ($refSeqName eq "na");	# may not be any RefSeq name
 #  next if ($gbkName eq "na");	# may not be any GenBank name
@@ -289,11 +325,19 @@ while (my $line = <FH>) {
     }
     if (defined($seqName)) {
       if (defined($dupToSequence{$seqName})) {
-        addAlias("refseq", $refSeqName, $dupToSequence{$seqName});
-        addAlias("assembly", $asmName, $dupToSequence{$seqName});
+        if (defined($dupToSequence{$seqName})) {   # avoid duplicates
+          printf STDERR "# skipping duplicate name $dupToSequence{$seqName}\n";
+        } else {
+          addAlias("refseq", $refSeqName, $dupToSequence{$seqName});
+          addAlias("assembly", $asmName, $dupToSequence{$seqName});
+        }
       } else {
-        addAlias("refseq", $refSeqName, $seqName);
-        addAlias("assembly", $asmName, $seqName);
+        if (defined($dupToSequence{$seqName})) {   # avoid duplicates
+          printf STDERR "# skipping duplicate name $seqName\n";
+        } else {
+          addAlias("refseq", $refSeqName, $seqName);
+          addAlias("assembly", $asmName, $seqName);
+        }
       }
     }
   }	#	if ($refSeqName ne "na")
