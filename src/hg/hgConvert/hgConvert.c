@@ -22,6 +22,7 @@
 #include "chromInfo.h"
 #include "net.h"
 #include "genark.h"
+#include "trackHub.h"
 
 
 /* CGI Variables */
@@ -261,7 +262,7 @@ return chainList;
 static void doConvert(char *fromPos)
 /* Actually do the conversion */
 {
-struct dbDb *fromDb = hDbDb(database), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
+struct dbDb *fromDb = hDbDb(trackHubSkipHubName(database)), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
 char *fileName = liftOverChainFile(fromDb->name, toDb->name);
 fileName = hReplaceGbdbMustDownload(fileName);
 char *chrom;
@@ -369,7 +370,7 @@ if (cartVarExists(cart, HGLFT_DO_CONVERT))
     doConvert(fromPos);
 else
     {
-    struct liftOverChain *checkLiftOverList = liftOverChainListForDbFiltered(database);
+    struct liftOverChain *checkLiftOverList = liftOverChainListForDbFiltered(trackHubSkipHubName(database));
     struct liftOverChain *liftOverList = cleanLiftOverList(checkLiftOverList);
     struct liftOverChain *choice = defaultChoices(liftOverList, organism, database);
     if (choice == NULL)
