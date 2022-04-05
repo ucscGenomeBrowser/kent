@@ -288,6 +288,7 @@
 ./runBuild GCA_011078405.1 GCA_011078405.1_mCalJac1.mat primates Callithrix_jacchus
 ./runBuild GCA_011100535.1 GCA_011100535.1_mCalJac1.pat primates Callithrix_jacchus
 ./runBuild GCA_011100555.1 GCA_011100555.1_mCalJac1.pat.X primates Callithrix_jacchus
+./runBuild GCA_011100615.1 GCA_011100615.1_Macaca_fascicularis_6.0 mammals Macaca_fascicularis
 ./runBuild GCA_011100635.1 GCA_011100635.1_mTriVul1.pri mammals Trichosurus_vulpecula
 ./runBuild GCA_011100645.1 GCA_011100645.1_mTriVul1.alt mammals Trichosurus_vulpecula
 ./runBuild GCA_011316535.1 GCA_011316535.1_NJAU_Sexi_v1 invertebrates Spodoptera_exigua
@@ -335,6 +336,8 @@
 ./runBuild GCA_020800305.1 GCA_020800305.1_bPorHoc1.mat.Z.cur birds Porphyrio_hochstetteri
 ./runBuild GCA_020801775.1 GCA_020801775.1_bPorHoc1.pat.decon birds Porphyrio_hochstetteri
 ./runBuild GCA_021556685.1 GCA_021556685.1_UTH_Rnor_SHRSP_BbbUtx_1.0 mammals Rattus_norvegicus
+./runBuild GCA_021950905.1 GCA_021950905.1_HG002.pat.cur.20211005 primates Homo_sapiens
+./runBuild GCA_021951015.1 GCA_021951015.1_HG002.mat.cur.20211005 primates Homo_sapiens
 ./runBuild GCA_900006655.3 GCA_900006655.3_Susie3 primates Gorilla_gorilla_gorilla
 ./runBuild GCA_900094665.2 GCA_900094665.2_CAROLI_EIJ_v1.1 mammals Mus_caroli
 ./runBuild GCA_900186095.1 GCA_900186095.1_CHOK1S_HZDv1 mammals Cricetulus_griseus

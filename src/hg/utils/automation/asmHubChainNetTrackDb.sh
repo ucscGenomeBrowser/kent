@@ -19,6 +19,8 @@ export scriptDir="$HOME/kent/src/hg/utils/automation"
 mkdir -p $buildDir/bbi
 mkdir -p $buildDir/ixIxx
 
+export chainNetPriority=1
+
 for D in ${buildDir}/trackData/lastz.*
 do
   targetDb=$accessionId
@@ -40,12 +42,16 @@ do
   rm -f $buildDir/bbi/${asmId}.chainSyn${OtherDb}Link.bb
   rm -f $buildDir/bbi/${asmId}.chainRBest$OtherDb.bb
   rm -f $buildDir/bbi/${asmId}.chainRBest${OtherDb}Link.bb
+  rm -f $buildDir/bbi/${asmId}.chainLiftOver$OtherDb.bb
+  rm -f $buildDir/bbi/${asmId}.chainLiftOver${OtherDb}Link.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.net.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.net.summary.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.synNet.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.synNet.summary.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.rbestNet.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.rbestNet.summary.bb
+  rm -f $buildDir/bbi/${asmId}.$otherDb.liftOverNet.bb
+  rm -f $buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb
   ln -s ../trackData/$lastzDir/axtChain/chain${OtherDb}.bb $buildDir/bbi/${asmId}.chain$OtherDb.bb
   ln -s ../trackData/$lastzDir/axtChain/chain${OtherDb}Link.bb $buildDir/bbi/${asmId}.chain${OtherDb}Link.bb
   ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.net.bb $buildDir/bbi/${asmId}.$otherDb.net.bb
@@ -61,6 +67,15 @@ do
     ln -s ../trackData/$lastzDir/axtChain/chainRBest${OtherDb}Link.bb $buildDir/bbi/${asmId}.chainRBest${OtherDb}Link.bb
     ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.rbestNet.bb $buildDir/bbi/${asmId}.$otherDb.rbestNet.bb
     ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.rbestNet.summary.bb $buildDir/bbi/${asmId}.$otherDb.rbestNet.summary.bb
+  fi
+  if [ -s "$buildDir/trackData/$lastzDir/axtChain/chainLiftOver${OtherDb}.bb" ]; then
+printf "# making chainLiftOver${OtherDb}.bb\n" 1>&2
+    ln -s ../trackData/$lastzDir/axtChain/chainLiftOver${OtherDb}.bb $buildDir/bbi/${asmId}.chainLiftOver$OtherDb.bb
+    ln -s ../trackData/$lastzDir/axtChain/chainLiftOver${OtherDb}Link.bb $buildDir/bbi/${asmId}.chainLiftOver${OtherDb}Link.bb
+    ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.liftOverNet.bb $buildDir/bbi/${asmId}.$otherDb.liftOverNet.bb
+    ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.liftOverNet.summary.bb $buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb
+  else
+printf "# there is NO chainLiftOver${OtherDb}.bb\n" 1>&2
   fi
 
   otherPrefix=`echo $otherDb | cut -c1-2`
@@ -149,8 +164,9 @@ printf "    track chainNet${OtherDb}Viewchain
         type bigChain $otherDb
         bigDataUrl bbi/$asmId.chain$OtherDb.bb
         linkDataUrl bbi/$asmId.chain${OtherDb}Link.bb
+        priority %d
 
-"
+" $((chainNetPriority++))
 
 if [ -s "$buildDir/bbi/${asmId}.chainSyn$OtherDb.bb" ]; then
 
@@ -162,8 +178,10 @@ printf "        track chainSyn$OtherDb
         type bigChain $otherDb
         bigDataUrl bbi/$asmId.chainSyn$OtherDb.bb
         linkDataUrl bbi/$asmId.chainSyn${OtherDb}Link.bb
+        priority %d
 
-"
+" $((chainNetPriority++))
+
 fi
 
 if [ -s "$buildDir/bbi/${asmId}.chainRBest$OtherDb.bb" ]; then
@@ -176,8 +194,26 @@ printf "        track chainRBest$OtherDb
         type bigChain $otherDb
         bigDataUrl bbi/$asmId.chainRBest$OtherDb.bb
         linkDataUrl bbi/$asmId.chainRBest${OtherDb}Link.bb
+        priority %d
 
-"
+" $((chainNetPriority++))
+
+fi
+
+if [ -s "$buildDir/bbi/${asmId}.chainLiftOver$OtherDb.bb" ]; then
+
+printf "        track chainLiftOver$OtherDb
+        parent chainNet${OtherDb}Viewchain
+        subGroups view=chain
+        shortLabel $organism loChain
+        longLabel $organism ($o_date) Lift Over Chained Alignments
+        type bigChain $otherDb
+        bigDataUrl bbi/$asmId.chainLiftOver$OtherDb.bb
+        linkDataUrl bbi/$asmId.chainLiftOver${OtherDb}Link.bb
+        priority %d
+
+" $((chainNetPriority++))
+
 fi
 
 printf "    track mafNet${OtherDb}Viewnet
@@ -195,8 +231,9 @@ printf "    track mafNet${OtherDb}Viewnet
         bigDataUrl bbi/$asmId.$otherDb.net.bb
         summary bbi/$asmId.$otherDb.net.summary.bb
         speciesOrder $otherDb
+        priority %d
 
-"
+" $((chainNetPriority++))
 
 if [ -s "$buildDir/bbi/${asmId}.$otherDb.synNet.summary.bb" ]; then
 
@@ -209,8 +246,10 @@ printf "        track synNet$OtherDb
         bigDataUrl bbi/$asmId.$otherDb.synNet.bb
         summary bbi/$asmId.$otherDb.synNet.summary.bb
         speciesOrder $otherDb
+        priority %d
 
-"
+" $((chainNetPriority++))
+
 fi
 
 if [ -s "$buildDir/bbi/${asmId}.$otherDb.rbestNet.summary.bb" ]; then
@@ -224,8 +263,27 @@ printf "        track rbestNet$OtherDb
         bigDataUrl bbi/$asmId.$otherDb.rbestNet.bb
         summary bbi/$asmId.$otherDb.rbestNet.summary.bb
         speciesOrder $otherDb
+        priority %d
 
-"
+" $((chainNetPriority++))
+
+fi
+
+if [ -s "$buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb" ]; then
+
+printf "        track liftOverNet$OtherDb
+        parent mafNet${OtherDb}Viewnet
+        subGroups view=net
+        shortLabel $organism liftOverNet
+        longLabel $organism ($o_date) Lift Over Net Alignment
+        type bigMaf
+        bigDataUrl bbi/$asmId.$otherDb.liftOverNet.bb
+        summary bbi/$asmId.$otherDb.liftOverNet.summary.bb
+        speciesOrder $otherDb
+        priority %d
+
+" $((chainNetPriority++))
+
 fi
 
 done

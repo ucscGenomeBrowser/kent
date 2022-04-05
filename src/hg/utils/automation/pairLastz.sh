@@ -105,13 +105,29 @@ function orgName() {
        gcxPath=$(gcPath $asmName)
        asmDir="/hive/data/outside/ncbi/genomes/${gcxPath}/${asmName}"
        asmRpt="${asmDir}/${asmName}_assembly_report.txt"
-       oName=`egrep -i "^# organism name:" ${asmRpt} | tr -d '\r' | sed -e 's/.*(//; s/).*//'`
+       oName=`egrep -m 1 -i "^# organism name:" ${asmRpt} | tr -d '\r' | sed -e 's/.*(//; s/).*//'`
        ;;
      *)
        oName=`hgsql -N -e "select organism from dbDb where name=\"${asmName}\";" hgcentraltest`
        ;;
   esac
   printf "%s" "${oName}"
+}
+
+function orgDate() {
+  export asmName=$1
+  case $asmName in
+     GC[AF]_*)
+       gcxPath=$(gcPath $asmName)
+       asmDir="/hive/data/outside/ncbi/genomes/${gcxPath}/${asmName}"
+       asmRpt="${asmDir}/${asmName}_assembly_report.txt"
+       oDate=`egrep -m 1 -i "^#[[:space:]]*Date:" ${asmRpt} | tr -d '\r' | sed -e 's/.*ate: \+//;'`
+       ;;
+     *)
+       oDate=""
+       ;;
+  esac
+  printf "%s" "${oDate}"
 }
 
 export target="$1"
@@ -267,13 +283,15 @@ fi
 
 export tOrgName="$(orgName $target)"
 export qOrgName="$(orgName $query)"
+export tOrgDate="$(orgDate $target)"
+export qOrgDate="$(orgDate $query)"
 export tAsmSize="$(asmSize $target)"
 export qAsmSize="$(asmSize $query)"
 export tSequenceCount="$(seqCount $target)"
 export qSequenceCount="$(seqCount $query)"
 printf "# working: %s\n" "${buildDir}" 1>&2
-printf "# target: $target - $tOrgName - $tClade - $tSequenceCount sequences\n" 1>&2
-printf "#  query: $query - $qOrgName - $qClade - $qSequenceCount sequences\n" 1>&2
+printf "# target: $target - $tOrgName - $tOrgDate - $tClade - $tSequenceCount sequences\n" 1>&2
+printf "#  query: $query - $qOrgName - $qOrgDate - $qClade - $qSequenceCount sequences\n" 1>&2
 LC_NUMERIC=en_US printf "#  sizes: target: %'d - query: %'d\n" "${tAsmSize}" "${qAsmSize}" 1>&2
 
 export seq1Limit="40"
@@ -337,14 +355,14 @@ BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
 # G  -236  -318   100  -330
 # T  -356  -236  -330    90
 
-# TARGET: ${tOrgName} ${Target}
+# TARGET: ${tOrgName} ${tOrgDate} ${target}
 SEQ1_DIR=${target2bit}
 SEQ1_LEN=${targetSizes}
 SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
 SEQ1_LIMIT=${seq1Limit}
 
-# QUERY: ${qOrgName} ${Query}
+# QUERY: ${qOrgName} ${qOrgDate} ${query}
 SEQ2_DIR=${query2bit}
 SEQ2_LEN=${querySizes}
 SEQ2_CHUNK=20000000
@@ -359,14 +377,14 @@ else
 export defString="# ${qOrgName} ${Query} vs. ${tOrgName} ${Target}
 BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
 
-# TARGET: ${tOrgName} ${Target}
+# TARGET: ${tOrgName} ${tOrgDate} ${target}
 SEQ1_DIR=${target2bit}
 SEQ1_LEN=${targetSizes}
 SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
 SEQ1_LIMIT=${seq1Limit}
 
-# QUERY: ${qOrgName} ${Query}
+# QUERY: ${qOrgName} ${qOrgDate} ${query}
 SEQ2_DIR=${query2bit}
 SEQ2_LEN=${querySizes}
 SEQ2_CHUNK=20000000
@@ -471,6 +489,8 @@ printf "# swap into: ${swapDir}\n" 1>&2
 
 if [ "$swapDone" -eq 0 ]; then
 mkdir ${swapDir}
+
+ln -s ${buildDir}/DEF ${swapDir}/DEF
 
 printf "#!/bin/bash
 
