@@ -1,90 +1,16 @@
 #!/bin/bash
-# get raw data file from DECIPHER
 set -beEu -o pipefail
-TAWK=/cluster/bin/scripts/tawk
-CSVGREP=/cluster/software/bin/csvgrep
 
-# get canonical gene symbols:
-function getKnownCanonicalGeneSymbols() {
-    db=$1
-    hgsql -Ne "select chrom,chromStart,chromEnd,geneSymbol from knownCanonical kc join kgXref kg on kc.transcript=kg.kgID" $db | sort -k1,1 -k2,2n > $db.knownCanonical.genes
-}
+deciphervarfile=$1
 
-function makeCnvBed17() {
-    infile=$1
-    outfile=$2
-    sort $infile | grep -v '#' | $TAWK '$2 == "MT" {$2 = "M";}; {
-        $2 = "chr"$2;
-        $3 = $3 - 1;
-        printf "%s\t%s\t%s\t%s\t0\t.\t%s\t%s", $2,$3,$4,$1,$3,$4;
-        # placeholder itemRgb
-        printf "\t0,0,0";
-        # size field for filter
-        printf "\t%d", $4 - $3;
-        # force a float for mean_ratio:
-        printf "\t%0.2f", $5
-        # rest of the fields:
-        for (i = 6; i <= NF; i++) {
-            printf "\t%s", $i;
-        }
-        printf "\n";
-        }' | sort -k1,1 -k2,2n > $outfile
-}
+# Get canonical gene symbols
+hgsql -Ne "select chrom,chromStart,chromEnd,geneSymbol from knownCanonical kc join kgXref kg on kc.transcript=kg.kgID" hg38 | sort -k1,1 -k2,2n > hg38.knownCanonical.genes
 
-getKnownCanonicalGeneSymbols hg38
-makeCnvBed17 $1 decipherCnv.bed17
+../processDecipher.py $deciphervarfile hg38.knownCanonical.genes decipherCnv.bed decipherSnvsNew.bed decipherSnvsRawNew.txt
+bedSort decipherSnvsNew.bed decipherSnvsNew.bed
+bedSort decipherCnv.bed decipherCnv.bed
 
-# append a list of genes for each cnv:
-../processDecipher.py decipherCnv.bed17 hg38.knownCanonical.genes | sort -k1,1 -k2,2n > decipherCnv.bed
-oldLc=`bigBedToBed ../release/hg38/decipherCnv.bb stdout | wc -l`
-newLc=`grep -v "^#" decipherCnv.bed | wc -l | cut -d' ' -f1`
-echo hg38 decipherCnv rowcount: old $oldLc new: $newLc
-echo $oldLc $newLc | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on hg38 DECIPHER CNV failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
-bedToBigBed -extraIndex=name -tab -as=../decipherCnv.as -type=bed9+10 decipherCnv.bed /hive/data/genomes/hg38/chrom.sizes decipherCnv.bb
-cp decipherCnv.bb ../release/hg38/
-
-# SNVs pipeline
-
-sort $2| grep -v '#' | $TAWK '$2 == "MT" {$2 = "M";}; {print;}' | sort -u >  decipherSnvsRawNew.txt
-
-hgsql hg38 -e 'drop table if exists decipherSnvsRawNew'
+hgLoadBed hg38 decipherSnvsNew decipherSnvsNew.bed
 hgLoadSqlTab hg38 decipherSnvsRawNew ../decipherSnvsRaw.sql decipherSnvsRawNew.txt
 
-hgsql hg38 -N -e 'select "chr", chr, start-1, end, id from decipherSnvsRawNew ' |\
-    sed -e 's/chr\t/chr/' |sort > decipherSnvsNew.bed
-
-# Load decipher snvs table
-hgLoadBed hg38 decipherSnvsNew decipherSnvsNew.bed
-
-# Now drop the SNV and CNV track down to hg19:
-oldDataDir="/hive/data/outside/otto/decipher/archive/hg19/2020-12-10"
-# SNV:
-# Only load new items, don't mess with old IDs:
-cut -f4 $oldDataDir/decipherSnvsNew.bed | sort -u > oldSnvIds.txt
-cut -f4 decipherSnvsNew.bed | sort -u > newSnvIds.txt
-comm -13 oldSnvIds.txt newSnvIds.txt > onlyNewSnvIds.txt
-# lift the new ids down to hg19:
-grep -wf onlyNewSnvIds.txt decipherSnvsRawNew.txt | $TAWK '{print "chr"$2,$3,$4,$1,$5,$6,$7,$8,$9,$10,$11,$12,$13}' > snvsToLift.bed
-liftOver -tab -bedPlus=4 -minMatch=0.8 snvsToLift.bed /gbdb/hg38/liftOver/hg38ToHg19.over.chain.gz grch37.lifted.snvs.bed grch37.unmapped.snvs
-cat $oldDataDir/decipherSnvsNew.bed <($TAWK '{$2=$2-1; print $1,$2,$3,$4}' grch37.lifted.snvs.bed) | sort -k1,1 -k2,2n > hg19.decipherSnvsNew.bed
-cat $oldDataDir/decipherSnvsRawNew.txt grch37.lifted.snvs.bed > hg19.decipherSnvsRawNew.bed
-hgLoadBed hg19 decipherSnvsNew hg19.decipherSnvsNew.bed
-hgLoadSqlTab hg19 decipherSnvsRawNew ../decipherSnvsRaw.sql hg19.decipherSnvsRawNew.bed
-
-# CNV:
-cut -f4 $oldDataDir/decipherCnv.bed | sort > oldCnvIds.txt
-cut -f4 decipherCnv.bed | sort > newCnvIds.txt
-comm -13 oldCnvIds.txt newCnvIds.txt > onlyNewCnvIds.txt
-# lift down:
-grep -v "^#" $1 | $CSVGREP -t -H -c 1 -f onlyNewCnvIds.txt | tail -n +2 | csvToTab > hg38.cnvToLift.bed
-getKnownCanonicalGeneSymbols hg19
-makeCnvBed17 hg38.cnvToLift.bed hg19.decipherCnv.bed17
-../processDecipher.py hg19.decipherCnv.bed17 hg19.knownCanonical.genes | sort -k1,1 -k2,2n > cnvToLift.bed
-liftOver -tab -bedPlus=9 -minMatch=0.8 cnvToLift.bed /gbdb/hg38/liftOver/hg38ToHg19.over.chain.gz grch37.lifted.cnvs.bed grch37.unmapped.cnvs
-cat $oldDataDir/decipherCnv.bed grch37.lifted.cnvs.bed | sort -k1,1 -k2,2n > hg19.decipherCnv.bed
-oldLc=`bigBedToBed ../release/hg19/decipherCnv.bb stdout | wc -l`
-newLc=`grep -v "^#" hg19.decipherCnv.bed | wc -l | cut -d' ' -f1`
-echo hg19 decipherCnv rowcount: old $oldLc new: $newLc
-echo $oldLc $newLc | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on hg19 DECIPHER CNV failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
-bedToBigBed -extraIndex=name -tab -as=../decipherCnv.as -type=bed9+10 hg19.decipherCnv.bed /hive/data/genomes/hg19/chrom.sizes hg19.decipherCnv.bb
-cp hg19.decipherCnv.bb ../release/hg19/decipherCnv.bb
+bedToBigBed -extraIndex=name -tab -as=../decipherCnv.as -type=bed9+10 decipherCnv.bed /hive/data/genomes/hg38/chrom.sizes decipherCnv.bb
