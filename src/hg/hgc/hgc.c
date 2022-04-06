@@ -5755,7 +5755,12 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                     }
                 }
             else
-                fbList = fbGetRange(database, tdb->table, seqName, winStart, winEnd);
+                {
+                if (startsWith("big", tdb->type))
+                    fbList = getBigBedFbList(tdb, seqName, winStart, winEnd);
+                else
+                    fbList = fbGetRange(database, tdb->table, seqName, winStart, winEnd);
+                }
             }
 
         /* Flip underline/italic/bold bits. */

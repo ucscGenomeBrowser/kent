@@ -781,3 +781,7 @@ $scriptDir/asmHubCrisprAll.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/t
 
 fi
 
+if [ -s "${buildDir}/$asmId.trackDbOverrides.txt" ]; then
+  printf "\ninclude %s.trackDbOverrides.txt\n\n" "${accessionId}"
+fi
+

@@ -46,11 +46,10 @@ void readLiftOverMap(char *fileName, struct hash *chainHash)
 {
 
 struct lineFile *lf;
-struct netParsedUrl *npu;
 if (udcIsLocal(fileName))
     lf = lineFileOpen(fileName, TRUE);
 else
-    lf = netHttpLineFileMayOpen(fileName, &npu);
+    lf = netLineFileOpen(fileName);
 
 struct chain *chain;
 struct chromMap *map;
