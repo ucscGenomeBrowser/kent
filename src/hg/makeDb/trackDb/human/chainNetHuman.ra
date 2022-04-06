@@ -35,26 +35,29 @@ html homoSapiensChainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCA_009914755.4.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCA_009914755.4Link.bb
         otherDb GCA_009914755.4
+        priority 1
 
         track chainSynGCA_009914755.4
         parent humanChainNetViewchain
         subGroups view=chain species=s000 clade=c00
-        shortLabel CHM13 T2T Chain
+        shortLabel CHM13 T2T Syn Chain
         longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Syntenic Chained Alignments
         type bigChain GCA_009914755.4
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCA_009914755.4.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCA_009914755.4Link.bb
         otherDb GCA_009914755.4
+        priority 2
 
         track chainRBestGCA_009914755.4
         parent humanChainNetViewchain
         subGroups view=chain species=s000 clade=c00
-        shortLabel CHM13 T2T Chain
+        shortLabel CHM13 T2T RBest Chain
         longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Reciprocal Best Chained Alignments
         type bigChain GCA_009914755.4
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCA_009914755.4.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCA_009914755.4Link.bb
         otherDb GCA_009914755.4
+        priority 3
 
         track chainGCA_021951015.1
         parent humanChainNetViewchain
@@ -65,26 +68,29 @@ html homoSapiensChainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCA_021951015.1.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCA_021951015.1Link.bb
         otherDb GCA_021951015.1
+        priority 5
 
         track chainSynGCA_021951015.1
         parent humanChainNetViewchain
         subGroups view=chain species=s001 clade=c00
-        shortLabel HG002 mat Chain
+        shortLabel HG002 mat Syn Chain
         longLabel HG002 mat (Feb. 2022 GCA_021951015.1_HG002.mat.cur.20211005) Syntenic Chained Alignments
         type bigChain GCA_021951015.1
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCA_021951015.1.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCA_021951015.1Link.bb
         otherDb GCA_021951015.1
+        priority 6
 
         track chainRBestGCA_021951015.1
         parent humanChainNetViewchain
         subGroups view=chain species=s001 clade=c00
-        shortLabel HG002 mat Chain
+        shortLabel HG002 mat RBest Chain
         longLabel HG002 mat (Feb. 2022 GCA_021951015.1_HG002.mat.cur.20211005) Reciprocal Best Chained Alignments
         type bigChain GCA_021951015.1
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCA_021951015.1.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCA_021951015.1Link.bb
         otherDb GCA_021951015.1
+        priority 7
 
         track chainGCA_021950905.1
         parent humanChainNetViewchain
@@ -95,26 +101,29 @@ html homoSapiensChainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCA_021950905.1.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCA_021950905.1Link.bb
         otherDb GCA_021950905.1
+        priority 9
 
         track chainSynGCA_021950905.1
         parent humanChainNetViewchain
         subGroups view=chain species=s002 clade=c00
-        shortLabel HG002 pat Chain
+        shortLabel HG002 pat Syn Chain
         longLabel HG002 pat (Feb. 2022 GCA_021950905.1_HG002.pat.cur.20211005) Syntenic Chained Alignments
         type bigChain GCA_021950905.1
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCA_021950905.1.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCA_021950905.1Link.bb
         otherDb GCA_021950905.1
+        priority 10
 
         track chainRBestGCA_021950905.1
         parent humanChainNetViewchain
         subGroups view=chain species=s002 clade=c00
-        shortLabel HG002 pat Chain
+        shortLabel HG002 pat RBest Chain
         longLabel HG002 pat (Feb. 2022 GCA_021950905.1_HG002.pat.cur.20211005) Reciprocal Best Chained Alignments
         type bigChain GCA_021950905.1
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCA_021950905.1.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCA_021950905.1Link.bb
         otherDb GCA_021950905.1
+        priority 11
 
     track humanMafNetViewnet
     shortLabel Nets
@@ -125,101 +134,110 @@ html homoSapiensChainNet
         track netGCA_009914755.4
         parent humanMafNetViewnet
         subGroups view=net species=s000 clade=c00
-        shortLabel CHM13 T2T mafNet
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) mafNet Alignment
+        shortLabel CHM13 T2T Net
+        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.net.summary.bb
         speciesOrder GCA_009914755.4
         html chainNet
         otherDb GCA_009914755.4
+        priority 1
 
         track synNetGCA_009914755.4
         parent humanMafNetViewnet
         subGroups view=net species=s000 clade=c00
-        shortLabel CHM13 T2T mafNet
+        shortLabel CHM13 T2T Syn Net
         longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Syntenic Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.synNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.synNet.summary.bb
         speciesOrder GCA_009914755.4
         otherDb GCA_009914755.4
+        priority 2
 
         track rbestNetGCA_009914755.4
         parent humanMafNetViewnet
         subGroups view=net species=s000 clade=c00
-        shortLabel CHM13 T2T mafNet
+        shortLabel CHM13 T2T RBest Net
         longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Reciprocal Best Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.rbestNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.rbestNet.summary.bb
         speciesOrder GCA_009914755.4
         otherDb GCA_009914755.4
+        priority 3
 
         track netGCA_021951015.1
         parent humanMafNetViewnet
         subGroups view=net species=s001 clade=c00
-        shortLabel HG002 mat mafNet
-        longLabel HG002 mat (Feb. 2022 GCA_021951015.1_HG002.mat.cur.20211005) mafNet Alignment
+        shortLabel HG002 mat Net
+        longLabel HG002 mat (Feb. 2022 GCA_021951015.1_HG002.mat.cur.20211005) Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_021951015.1.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_021951015.1.net.summary.bb
         speciesOrder GCA_021951015.1
         html chainNet
         otherDb GCA_021951015.1
+        priority 5
 
         track synNetGCA_021951015.1
         parent humanMafNetViewnet
         subGroups view=net species=s001 clade=c00
-        shortLabel HG002 mat mafNet
+        shortLabel HG002 mat Syn Net
         longLabel HG002 mat (Feb. 2022 GCA_021951015.1_HG002.mat.cur.20211005) Syntenic Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_021951015.1.synNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_021951015.1.synNet.summary.bb
         speciesOrder GCA_021951015.1
         otherDb GCA_021951015.1
+        priority 6
 
         track rbestNetGCA_021951015.1
         parent humanMafNetViewnet
         subGroups view=net species=s001 clade=c00
-        shortLabel HG002 mat mafNet
+        shortLabel HG002 mat RBest Net
         longLabel HG002 mat (Feb. 2022 GCA_021951015.1_HG002.mat.cur.20211005) Reciprocal Best Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_021951015.1.rbestNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_021951015.1.rbestNet.summary.bb
         speciesOrder GCA_021951015.1
         otherDb GCA_021951015.1
+        priority 7
 
         track netGCA_021950905.1
         parent humanMafNetViewnet
         subGroups view=net species=s002 clade=c00
-        shortLabel HG002 pat mafNet
-        longLabel HG002 pat (Feb. 2022 GCA_021950905.1_HG002.pat.cur.20211005) mafNet Alignment
+        shortLabel HG002 pat Net
+        longLabel HG002 pat (Feb. 2022 GCA_021950905.1_HG002.pat.cur.20211005) Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_021950905.1.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_021950905.1.net.summary.bb
         speciesOrder GCA_021950905.1
         html chainNet
         otherDb GCA_021950905.1
+        priority 9
 
         track synNetGCA_021950905.1
         parent humanMafNetViewnet
         subGroups view=net species=s002 clade=c00
-        shortLabel HG002 pat mafNet
+        shortLabel HG002 pat Syn Net
         longLabel HG002 pat (Feb. 2022 GCA_021950905.1_HG002.pat.cur.20211005) Syntenic Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_021950905.1.synNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_021950905.1.synNet.summary.bb
         speciesOrder GCA_021950905.1
         otherDb GCA_021950905.1
+        priority 10
 
         track rbestNetGCA_021950905.1
         parent humanMafNetViewnet
         subGroups view=net species=s002 clade=c00
-        shortLabel HG002 pat mafNet
+        shortLabel HG002 pat RBest Net
         longLabel HG002 pat (Feb. 2022 GCA_021950905.1_HG002.pat.cur.20211005) Reciprocal Best Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_021950905.1.rbestNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_021950905.1.rbestNet.summary.bb
         speciesOrder GCA_021950905.1
         otherDb GCA_021950905.1
+        priority 11
