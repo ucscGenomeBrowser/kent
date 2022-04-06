@@ -147,6 +147,8 @@ searchDescription COSMIC Regions
 include trackDb.chainNet.ra
 include trackDb.denisova.ra
 
+include ../chainNetHuman.ra
+
 #large composites
 include uMassBrainHistone.ra
 
