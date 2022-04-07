@@ -100,6 +100,10 @@ rename to
   catLiftOffGenesV1.bb
   catLiftOffGenesV1.gff3.gz
 
+# create GTF
+  zcat catLiftOffGenesV1.gff3.gz | gffread /dev/stdin -T -o catLiftOffGenesV1.gtf
+  pigz catLiftOffGenesV1.gtf 
+
 ================================================================
 * hgLiftOver (2022-03-26 markd)
 ----------------------------------------------------------------
@@ -273,6 +277,9 @@ pending:
   TBD	Nancy Hansen	team-liftover/chain_variants/vcffiles/v1_nflo/chm13v2-grch38.sort.vcf.gz	L	grch_allele_differences.html
   GRCh37 variants	TBD	Nancy Hansen	team-liftover/chain_variants/vcffiles/v1_nflo/chm13v2-hg19.sort.vcf.gz	L
 
+* Gene GFF3/GTF downloads
+  http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.v2.0.gff3
+  
 ================================================================
 Problems:
 - hub groups doesn't have phenDis, so put clinvar and GWAS in varRep
