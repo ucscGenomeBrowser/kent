@@ -377,6 +377,7 @@ sub doCleanup {
 export db="$db"
 rm -fr $buildDir/fasta
 rm -fr $buildDir/run.augustus/err/
+rm -fr $buildDir/run.augustus/gtf/
 rm -f $buildDir/run.augustus/batch.bak
 rm -fr $buildDir/run.augustus/augErr
 rm -f $buildDir/\$db.augustus.bgp
