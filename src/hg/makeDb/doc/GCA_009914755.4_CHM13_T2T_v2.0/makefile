@@ -10,6 +10,8 @@ htmlBuildDir = ${asmBuildDir}/html
 htmlStageDir = ${asmStageDir}/html
 liftOverDataDir = ${asmBuildDir}/liftOver
 liftOverStageDir = ${asmStageDir}/liftOver
+geneDataDir = ${trackDataDir}/catLiftOffGenesV1
+geneStageDir = ${asmStageDir}/genes
 
 stageUrl = https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
 
@@ -25,10 +27,12 @@ tracksWithHtml = $(filter-out cytoBandMapped,${tracks})
 
 hgLiftOverFiles = chm13v2-hg19.over.chain.gz chm13v2-hg38.over.chain.gz hg19-chm13v2.over.chain.gz hg38-chm13v2.over.chain.gz
 
+catGxfFiles = catLiftOffGenesV1.gff3.gz catLiftOffGenesV1.gtf.gz
+
 .SECONDARY:
 MAKEFLAGS += --check-symlink-times
 
-all: ${userTrackDbFile} bbiInstall htmlInstall liftOverInstall
+all: ${userTrackDbFile} bbiInstall htmlInstall liftOverInstall geneInstall
 	cd ${asmBuildDir} && ./doTrackDb.bash
 	hubCheck ${stageUrl}
 
@@ -62,6 +66,14 @@ liftOverInstall: ${hgLiftOverFiles:%=${liftOverStageDir}/%}
 ${liftOverStageDir}/%: ${liftOverDataDir}/%
 	@mkdir -p $(dir $@)
 	ln -sf $< $@
+
+# install gene downloads
+geneInstall: ${catGxfFiles:%=${geneStageDir}/%}
+
+${geneStageDir}/%: ${geneDataDir}/%
+	@mkdir -p $(dir $@)
+	ln -sf $$(realpath --relative-to=${geneStageDir} $<) $@
+
 
 clean:
 	rm -f ${userTrackDbFile}
