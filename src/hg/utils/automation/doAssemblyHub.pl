@@ -1098,7 +1098,6 @@ export species=$speciesNoBlank
            > \$asmId.description.html 2> \$asmId.names.tab
 \$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
        ../\$asmId.chrom.sizes 2> \$asmId.build.stats.txt
-touch -r ../download/\${asmId}_assembly_report.txt \$asmId.description.html
 $photoLink
 _EOF_
   );
