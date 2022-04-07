@@ -2807,7 +2807,8 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
-    if (!doCheck || hashLookup(hash, db->name))
+    boolean isGenarkHub = sameOk(db->nibPath, "genark");
+    if (!doCheck || (isGenarkHub || hashLookup(hash, db->name)))
         {
 	slAddHead(&dbList, db);
 	}

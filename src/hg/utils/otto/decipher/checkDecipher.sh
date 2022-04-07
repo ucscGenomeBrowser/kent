@@ -52,6 +52,8 @@ then
     mkdir -p ${WORKDIR}/release/{hg38,hg19}
 
     # build the new DECIPHER track tables (builds bigBed for cnv's)
+    # THIS NEEDS TO CHANGE - NEW ARGUMENT IS JUST ONE VARIANT FILE FROM DECIPHER,
+    # BUT FIRST WE'LL NEED TO FIX THE FETCH SCRIPT
     ../buildDecipher `basename $CNV .gpg` `basename $SNV .gpg`
     ../validateDecipher.sh hg38
     #../validateDecipher.sh hg19
