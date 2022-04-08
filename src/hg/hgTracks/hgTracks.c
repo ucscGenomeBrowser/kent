@@ -8070,6 +8070,19 @@ if (!url || isEmpty(url))
 printf("<div id='searchHelp'><a target=_blank title='Documentation on what you can enter into the Genome Browser search box' href='%s'>%s</a></div>", url, label);
 }
 
+static void printDatabaseInfoHtml(char* database) 
+/* print database-specific piece of HTML defined in hg.conf, works also with Genark hubs */
+{
+char *cfgPrefix = database;
+if (trackHubDatabase(cfgPrefix))
+    // hub IDs look like hub_1234_GCA_1232.2, so skip the hub_1234 part
+    cfgPrefix = hubConnectSkipHubPrefix(cfgPrefix);
+char *cfgName = catTwoStrings(cfgPrefix,"_html");
+char *html = cfgOption(cfgName);
+if (html)
+    puts(html);
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -8622,6 +8635,8 @@ if (!hideControls)
 	}
     hPrintf("</B></SPAN>");
 
+    printDatabaseInfoHtml(database);
+
     // Disable recommended track set panel when changing tracks, session, database
     char *sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
     char *oldDb = hashFindVal(oldVars, "db");
@@ -8785,6 +8800,7 @@ if (!hideControls)
 
         // database-specific link: 2 hg.conf settings, format <db>_TopLink{Label}
         struct slName *dbLinks = cfgNamesWithPrefix(database);
+
         struct slName *link;
         char *dbTopLink = NULL, *dbTopLinkLabel = NULL;
         for (link = dbLinks; link != NULL; link = link->next)
@@ -8801,6 +8817,7 @@ if (!hideControls)
             hPrintf("&nbsp;&nbsp;<a href='%s' target='_blank'><em><b>%s</em></b></a>\n",
                 dbTopLink, dbTopLinkLabel);
             }
+        
         // generic link
 	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
 	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");

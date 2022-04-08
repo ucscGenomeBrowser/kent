@@ -120,8 +120,11 @@ shortLabel gnomAD Mut Constraint
 longLabel Genome Aggregation Database (gnomAD) Genome Mutational Constraint
 bigDataUrl /gbdb/hg38/gnomAD/mutConstraint/mutConstraint.bw
 type bigWig
-maxHeightPixels 128:20:8
+color 0,150,0
+altColor 150,0,0
+maxHeightPixels 128:40:8
 viewLimitsMax -3:3
+autoScale on
 priority 10
 html gnomadV3_1_1
 

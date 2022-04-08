@@ -11,6 +11,7 @@ use File::Basename;
 ### my $sourceServer = "hgdownload-test.gi.ucsc.edu";
 
 my $sourceServer = "hgdownload.soe.ucsc.edu";
+my $genomeSize = 0;	# will be set below
 
 my @months = qw( 0 Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 
@@ -61,7 +62,7 @@ sub chromSizes($) {
     }
     my $n50Size = $totalSize / 2;
 
-    my $genomeSize = $totalSize;
+    $genomeSize = $totalSize;
     printf "<b>Total assembly nucleotides:</b> %s<br>\n", &AsmHub::commify($totalSize);
     printf "<b>Assembly contig count:</b> %s<br>\n", &AsmHub::commify($contigCount);
 
@@ -120,6 +121,9 @@ if ($jpgImage ne "noPhoto") {
     usage;
   }
 }
+
+my $buildDir = dirname($chromSizes);
+my $genesDir = "$buildDir/genes";
 
 my $photoCreditURL = "";
 my $photoCreditName = "";
@@ -285,8 +289,6 @@ printf STDERR "%s\t", $asmLevel;
 printf STDERR "%s\t", $asmDate;
 printf STDERR "%s\n", $asmAccession;
 
-# printf "<script type='text/javascript'>var asmId='%s';</script>\n", $asmId;
-
 if (length($imageName)) {
 printf "<!-- Display image in righthand corner -->
 <table align=right border=0 width=%d height=%d>
@@ -318,75 +320,137 @@ printf "<p>
 <b>Assembly level:</b> %s<br>
 <b>Biosample:</b> <a href=\"https://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\">%s</a><br>
 <b>Assembly accession ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
-<b>Assembly FTP location:</b> <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/all/%s\" target=\"_blank\">%s</a><br>
+<b>Assembly FTP location:</b> <a href='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/%s' target='_blank'>%s</a><br>
 \n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
   $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $newStyleUrl, $newStyleUrl;
 
 chromSizes($chromSizes);
 
 printf "</p>\n<hr>
+<h4>Data file downloads</h4>
 <p>
-<b>Download files for this assembly hub:</b><br>
-To use the data from this assembly for a local hub instance at your
-institution, download these data as indicated by these instructions.<br>
-<br>
-To download this assembly data, use this <em>rsync</em> command:
+<ul>
+<li><a href='https://$sourceServer/hubs/$localDataUrl/$asmAccession.fa.gz' target=_blank>$asmAccession.fa.gz</a> fasta sequence with NCBI GenBank sequence names</li>
+<li><a href='https://$sourceServer/hubs/$localDataUrl/$asmAccession.2bit' target=_blank>$asmAccession.2bit</a> UCSC 2bit sequence file with NCBI GenBank sequence names</li>
+<li><a href='https://$sourceServer/hubs/$localDataUrl/$asmAccession.chromAlias.txt' target=_blank>$asmAccession.chromAlias.txt</a> chromAlias file to relate chromosome names</li>
+";
+
+if ( -s "$buildDir/$asmId.chrNames.fa.gz") {
+printf "<li><a href='https://$sourceServer/hubs/$localDataUrl/$asmAccession.chrNames.fa.gz' target=_blank>$asmAccession.chrNames.fa.gz</a> fasta sequence with <b>chrN</b> sequence names</li>\n";
+}
+
+if ( -s "$buildDir/$asmId.chrNames.2bit") {
+printf "<li><a href='https://$sourceServer/hubs/$localDataUrl/$asmAccession.chrNames.2bit' target=_blank>$asmAccession.chrNames.2bit</a> UCSC 2bit sequence file with <b>chrN</b> sequence names</li>\n";
+}
+
+if ( -d "$genesDir" ) {
+ open (GD, "ls $genesDir/*.gtf.gz $genesDir/*.gff3.gz 2> /dev/null|") or die "can not ls $genesDir/*.gtf.gz";
+ while (my $gtfFile = <GD>) {
+    chomp $gtfFile;
+    my $gtf = basename($gtfFile);
+    if ($gtf =~ m/gff3.gz/) {
+      printf "<li><a href='https://$sourceServer/hubs/$localDataUrl/genes/$gtf' target=_blank>$gtf</a> gene GFF3 file</li>\n";
+    } else {
+      printf "<li><a href='https://$sourceServer/hubs/$localDataUrl/genes/$gtf' target=_blank>$gtf</a> gene GTF file</li>\n";
+    }
+ }
+ close (GD);
+}
+
+if ( -d "${buildDir}/otherAligners" ) {
+  printf "<li><a href='https://$sourceServer/hubs/$localDataUrl/otherAligners/' target=_blank>pre-computed indices</a> for alignment programs: bowtie2, bwa-mem2, hisat2, minimap2</li>\n";
+}
+
+printf "<li>explore the hub directory at: <a href='https://$sourceServer/hubs/$localDataUrl/' target=_blank>$sourceServer/hubs/$localDataUrl/</a></li>
+</ul>
+";
+printf "</p>\n<hr>
+<h4>Copy this entire assembly hub for local use</h4>
+<p>
+This download is only for the purpose of using this assembly hub in
+your institution which may have firewall access restrictions to this
+data.<br>
+
+To download this assembly data, use this <b>rsync</b> command:
 <pre>
   rsync -a -P \\
     rsync://$sourceServer/hubs/$localDataUrl/ \\
       ./$accessionId/
-
-  which creates the local directory: ./$accessionId/
 </pre>
-or this <em>wget</em> command:
+
+  which creates the local directory: <b>./$accessionId/</b><br>
+or this <b>wget</b> command:
 <pre>
   wget --timestamping -m -nH -x --cut-dirs=6 -e robots=off -np -k \\
     --reject \"index.html*\" -P \"$accessionId\" \\
        https://$sourceServer/hubs/$localDataUrl/
-
-  which creates a local directory: ./$accessionId/
 </pre>
+
+  which creates a local directory: <b>./$accessionId/</b>
 <p>
-There is an included <em>hub.txt</em> file in that download
+There is an included <b>hub.txt</b> file in that download
 data directory to use for your local track hub instance.<br>
 Using the genome browser menus: <em><strong>My Data</strong> -&gt; <strong>Track Hubs</strong></em><br>
 select the <em><strong>My Hubs</strong></em> tab to enter a URL
-to this hub.txt file to attach this assembly hub to a genome browser.
+to this <b>hub.txt</b> file to attach this assembly hub to a genome browser.
 </p>
 <p>
-The <em>html/$asmId.description.html</em> page is information for your users to
-describe this assembly.  This WEB page with these instructions
-is an instance of html/$asmId.description.html file.
+The <b>html/$asmId.description.html</b> page is information for your users to
+describe this assembly.<br>This web page with these instructions
+is an instance of the <b>html/$asmId.description.html</b> file.
 </p>
 <p>
 See also: <a href='/goldenPath/help/hgTrackHubHelp.html' target=_blank>track hub help</a> documentation.<br>
 </p>\n";
 
-printf "<hr>
+if ($genomeSize < 4294967297) {
+  printf "<hr>
+<h4>blat service</h4>
 <p>
-To operate a blat server on this assembly, in the directory where you have
-the <em>$asmId.2bit</em> file:
-<pre>
-gfServer -log=$asmId.gfServer.trans.log -ipLog -canStop start \\
-    yourserver.domain.edu 76543 -trans -mask $asmId.2bit &
-gfServer -log=$asmId.gfServer.log -ipLog -canStop start \\
-    yourserver.domain.edu 76542 -stepSize=5 $asmId.2bit &
-</pre>
-Adjust the port numbers <em>76543</em> <em>76542</em> and the
-<em>yourserver.domain.edu</em> for your local circumstances.<br>
-Typically, port numbers in the range <em>49152</em> to <em>65535</em>
-are available for private use as in this case.
-See also: <a href='https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml' target=_blank>IANA.org</a> port registry.
+There is blat service available for this genome assembly.  When viewing this
+assembly in the genome browser, access the blat service via the
+<em><b>Tools -> Blat</b></em> blue navigation bar menu item.
 </p>
 <p>
-Enter the following specifications in your <em>genomes.txt</em> file:
+For local command line blat service, access
+the blat service via the <b>gfClient</b> command line operation.<br>
+See also: <a href='http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/' target=_blank>
+hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/</a> to download command line
+binaries.<br>
+<br>
+To operate this locally, you will need the <b>$accessionId.2bit</b> file from:
 <pre>
-transBlat yourserver.domain.edu 76543
-blat yourserver.domain.edu 76542
+  https://$sourceServer/hubs/$localDataUrl/
 </pre>
-See also: <a href=\"https://genome.ucsc.edu/goldenPath/help/hubQuickStartAssembly.html#blat\"
-target=_blank>Blat for an Assembly Hub</a>
+Which can be obtained with rsync via:
+<pre>
+  rsync -a -P \
+    rsync://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId.2bit ./
+</pre>
+With that <b>$accessionId.2bit</b> file in your working directory where you run
+this command, for example, a DNA query with your DNA sequence in
+the file: <b>someDna.fa</b>
+with result in the file: <b>$accessionId.someDna.psl</b>
+<pre>
+gfClient -t=dna -q=dna -genome=$accessionId -genomeDataDir=$accessionDir \
+    dynablat-01.soe.ucsc.edu 4040 ./ someDna.fa $accessionId.someDna.psl
+</pre>
+For a protein fasta query with your protein sequence in the file: <b>someProtein.faa</b>
+with result in the file: <b>$accessionId.someProtein.psl</b>
+<pre>
+gfClient -t=dnax -q=prot  -genome=$accessionId -genomeDataDir=$accessionDir \
+    dynablat-01.soe.ucsc.edu 4040 ./ someProtein.faa $accessionId.someProtein.psl
+</pre>
 </p>\n";
+
+} else {
+  printf "<hr>
+<p>
+At this time, this genome size: %s, is too large (greater than 4294967296),
+to function with the UCSC blat system.  We hope to have improvements to
+that system in the future to allow blat service for the larger genome sizes.
+</p>\n", commify($genomeSize);
+}
 
 printf "<hr>
 <p>
@@ -402,7 +466,7 @@ keywords from the GenBank description of an mRNA.
 <b>By gene name: </b> Type a gene name into the &quot;search term&quot; box,
 choose your gene from the drop-down list, then press &quot;submit&quot; to go
 directly to the assembly location associated with that gene.
-<a href=\"http://genome.ucsc.edu/goldenPath/help/geneSearchBox.html\">More information</a>.</li>
+<a href=\"http://genome.ucsc.edu/goldenPath/help/geneSearchBox.html\">More information</a>.  To avoid case sensitivity issues, always use fully lower case gene names.</li>
 <li>
 <b>By track type: </b> Click the &quot;track search&quot; button
 to find Genome Browser tracks that match specific selection criteria.
@@ -410,8 +474,6 @@ to find Genome Browser tracks that match specific selection criteria.
 </ul>
 </p>
 <hr>\n";
-
-# printf "<script type='text/javascript' src='../js/gatewayPage.js'></script>\n";
 
 __END__
 

@@ -3,6 +3,9 @@
 use strict;
 use warnings;
 use File::Basename;
+use FindBin qw($Bin);
+use lib "$Bin";
+use HgAutomate;
 
 sub usage() {
   printf STDERR "usage: asmHubChainNetTrackDb.pl <buildDir>\n";
@@ -10,41 +13,6 @@ sub usage() {
   printf STDERR "where each /lastz.*/ directory is one completed lastz/chainNet\n";
   printf STDERR "and basename(buildDir) is the 'target' sequence name\n";
   exit 255;
-}
-
-# try to find the date and assembly name for a hub
-sub hubDateName($) {
-  my ($accession) = @_;
-  my $returnDate = "some date";
-  my $returnAsmName = "";
-
-  my $gcX = substr($accession, 0, 3);
-  my $d0 = substr($accession, 4, 3);
-  my $d1 = substr($accession, 7, 3);
-  my $d2 = substr($accession, 10, 3);
-  my $dirCount = `ls -d /hive/data/outside/ncbi/genomes/$gcX/$d0/$d1/$d2/${accession}* | wc -l`;
-  chomp $dirCount;
-  if (1 == $dirCount) {
-     my $srcDir = `ls -d /hive/data/outside/ncbi/genomes/$gcX/$d0/$d1/$d2/${accession}*`;
-     chomp $srcDir;
-     if ( -d "${srcDir}" ) {
-        my $asmId = basename($srcDir);
-        my $asmRpt = "$srcDir/${asmId}_assembly_report.txt";
-        if ( -s "${asmRpt}" ) {
-           (undef, undef, $returnAsmName) = split('_', $asmId, 3);
-           if (defined($returnAsmName)) {
-             $returnAsmName =~ s/\r//;
-             $returnAsmName =~ s/^/_/;
-           } else {
-             $returnAsmName = "";
-           }
-           my $tDate = `egrep -m 1 -i "^#[[:space:]]*Date:" "${asmRpt}" | sed -e 's/.*ate: \\+//;' | tr -d '\r'`;
-           chomp $tDate;
-           $returnDate = $tDate if (length($tDate));
-        }
-     }
-  }
-  return ($returnDate, $returnAsmName);
 }
 
 my $argc = scalar(@ARGV);
@@ -84,7 +52,7 @@ foreach my $queryDb (@queryList) {
 printf "\n";
 printf "subGroup3 clade Clade c00=human\n";
 printf "dragAndDrop subTracks\n";
-printf "visibility pack
+printf "visibility hide
 group compGeno
 noInherit on
 color 0,0,0
@@ -95,7 +63,7 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on\n";
-printf "html %sChainNet\n", $targetDb;
+printf "html html/%s.chainNet\n", $targetDb;
 
 printf "
     track %sChainNetViewchain
@@ -120,7 +88,7 @@ foreach my $queryDb (@queryList) {
     $queryDate = `hgsql -N -e 'select description from dbDb where name="$queryDb"' hgcentraltest | sed -e 's/ (.*//;'`;
     chomp $queryDate;
   } else {
-    ($queryDate, $queryAsmName) = hubDateName($queryDb);
+    ($queryDate, $queryAsmName) = &HgAutomate::hubDateName($queryDb);
   }
   printf "
         track chain%s
@@ -132,9 +100,10 @@ foreach my $queryDb (@queryList) {
         bigDataUrl bbi/%s.chain%s.bb
         linkDataUrl bbi/%s.chain%sLink.bb
         otherDb %s
+        html html/%s.chainNet
         priority %d
 ", $QueryDb, $targetDb, $N, $queryDb, $queryDb, $queryAsmName, $queryDate, $queryDb, $targetDb,
-     $QueryDb, $targetDb, $QueryDb, $queryDb, $chainNetPriority++;
+     $QueryDb, $targetDb, $QueryDb, $queryDb, $targetDb, $chainNetPriority++;
 
   if ( -s "$buildDir/trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}.bb" ) {
     `rm -f $buildDir/bbi/$targetDb.chainSyn${QueryDb}.bb`;
@@ -151,9 +120,10 @@ foreach my $queryDb (@queryList) {
         bigDataUrl bbi/%s.chainSyn%s.bb
         linkDataUrl bbi/%s.chainSyn%sLink.bb
         otherDb %s
+        html html/%s.chainNet
         priority %d
 ", $QueryDb, $targetDb, $N, $queryDb, $queryDb, $queryAsmName, $queryDate, $queryDb, $targetDb,
-     $QueryDb, $targetDb, $QueryDb, $queryDb, $chainNetPriority++;
+     $QueryDb, $targetDb, $QueryDb, $queryDb, $targetDb, $chainNetPriority++;
 
   }
 
@@ -172,9 +142,10 @@ foreach my $queryDb (@queryList) {
         bigDataUrl bbi/%s.chainRBest%s.bb
         linkDataUrl bbi/%s.chainRBest%sLink.bb
         otherDb %s
+        html html/%s.chainNet
         priority %d
 ", $QueryDb, $targetDb, $N, $queryDb, $queryDb, $queryAsmName, $queryDate, $queryDb, $targetDb,
-     $QueryDb, $targetDb, $QueryDb, $queryDb, $chainNetPriority++;
+     $QueryDb, $targetDb, $QueryDb, $queryDb, $targetDb, $chainNetPriority++;
 
   }
 
@@ -199,9 +170,10 @@ foreach my $queryDb (@queryList) {
         bigDataUrl bbi/%s.chainLiftOver%s.bb
         linkDataUrl bbi/%s.chainLiftOver%sLink.bb
         otherDb %s
+        html html/%s.chainNet
         priority %d
 ", $QueryDb, $targetDb, $N, $queryDb, $queryDb, $queryAsmName, $queryDate, $queryDb, $targetDb,
-     $QueryDb, $targetDb, $QueryDb, $queryDb, $chainNetPriority++;
+     $QueryDb, $targetDb, $QueryDb, $queryDb, $targetDb, $chainNetPriority++;
 
   }
   $N++;
@@ -231,7 +203,7 @@ foreach my $queryDb (@queryList) {
     $queryDate = `hgsql -N -e 'select description from dbDb where name="$queryDb"' hgcentraltest | sed -e 's/ (.*//;'`;
     chomp $queryDate;
   } else {
-    ($queryDate, $queryAsmName) = hubDateName($queryDb);
+    ($queryDate, $queryAsmName) = &HgAutomate::hubDateName($queryDb);
   }
     printf "
         track net%s

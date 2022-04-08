@@ -629,7 +629,12 @@ fi
 # augustus genes
 if [ -s ${buildDir}/trackData/augustus/${asmId}.augustus.bb ]; then
 rm -f ${buildDir}/bbi/${asmId}.augustus.bb
+rm -f ${buildDir}/genes/${asmId}.augustus.gtf.gz
 ln -s ../trackData/augustus/${asmId}.augustus.bb ${buildDir}/bbi/${asmId}.augustus.bb
+if [ -s ${buildDir}/trackData/augustus/${asmId}.augustus.gtf.gz ]; then
+    mkdir -p $buildDir/genes
+    ln -s ../trackData/augustus/${asmId}.augustus.gtf.gz ${buildDir}/genes/${asmId}.augustus.gtf.gz
+fi
 
 export augustusVis="dense"
 
@@ -724,10 +729,6 @@ if [ -s "${buildDir}/$asmId.bigMaf.trackDb.txt" ]; then
   printf "include %s.bigMaf.trackDb.txt\n\n" "${asmId}"
 fi
 
-if [ -s "${buildDir}/$asmId.userTrackDb.txt" ]; then
-  printf "include %s.userTrackDb.txt\n\n" "${accessionId}"
-fi
-
 ###################################################################
 # check for lastz/chain/net available
 
@@ -743,6 +744,7 @@ if [ "${lz}" -gt 0 ]; then
   else
     # multiple chainNets here, create composite track, does the symLinks too
     ~/kent/src/hg/utils/automation/asmHubChainNetTrackDb.pl $buildDir
+    $scriptDir/asmHubChainNetComposite.pl $asmId $buildDir/html/$asmId.names.tab $hubPath > $buildDir/html/$asmId.chainNet.html
   fi
 fi
 
@@ -781,3 +783,10 @@ $scriptDir/asmHubCrisprAll.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/t
 
 fi
 
+if [ -s "${buildDir}/$asmId.userTrackDb.txt" ]; then
+  printf "\ninclude %s.userTrackDb.txt\n" "${accessionId}"
+fi
+
+if [ -s "${buildDir}/$asmId.trackDbOverrides.txt" ]; then
+  printf "\ninclude %s.trackDbOverrides.txt\n" "${accessionId}"
+fi
