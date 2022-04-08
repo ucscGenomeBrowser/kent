@@ -330,8 +330,8 @@ printf "</p>\n<hr>
 <h4>Data file downloads</h4>
 <p>
 <ul>
-<li><a href='https://$sourceServer/hubs/$localDataUrl/$asmAccession.fa.gz' target=_blank>$asmAccession.fa.gz</a> fasta sequence with original assembly sequence names</li>
-<li><a href='https://$sourceServer/hubs/$localDataUrl/$asmAccession.2bit' target=_blank>$asmAccession.2bit</a> UCSC 2bit sequence file with original assembly sequence names</li>
+<li><a href='https://$sourceServer/hubs/$localDataUrl/$asmAccession.fa.gz' target=_blank>$asmAccession.fa.gz</a> fasta sequence with NCBI GenBank sequence names</li>
+<li><a href='https://$sourceServer/hubs/$localDataUrl/$asmAccession.2bit' target=_blank>$asmAccession.2bit</a> UCSC 2bit sequence file with NCBI GenBank sequence names</li>
 <li><a href='https://$sourceServer/hubs/$localDataUrl/$asmAccession.chromAlias.txt' target=_blank>$asmAccession.chromAlias.txt</a> chromAlias file to relate chromosome names</li>
 ";
 
@@ -344,16 +344,24 @@ printf "<li><a href='https://$sourceServer/hubs/$localDataUrl/$asmAccession.chrN
 }
 
 if ( -d "$genesDir" ) {
- open (GD, "ls $genesDir/*.gtf.gz 2> /dev/null|") or die "can not ls $genesDir/*.gtf.gz";
+ open (GD, "ls $genesDir/*.gtf.gz $genesDir/*.gff3.gz 2> /dev/null|") or die "can not ls $genesDir/*.gtf.gz";
  while (my $gtfFile = <GD>) {
     chomp $gtfFile;
     my $gtf = basename($gtfFile);
-    printf "<li><a href='https://$sourceServer/hubs/$localDataUrl/genes/$gtf' target=_blank>$gtf</a> gene GTF file</li>\n";
+    if ($gtf =~ m/gff3.gz/) {
+      printf "<li><a href='https://$sourceServer/hubs/$localDataUrl/genes/$gtf' target=_blank>$gtf</a> gene GFF3 file</li>\n";
+    } else {
+      printf "<li><a href='https://$sourceServer/hubs/$localDataUrl/genes/$gtf' target=_blank>$gtf</a> gene GTF file</li>\n";
+    }
  }
+ close (GD);
 }
 
-printf "
-<li>explore the hub directory at: <a href='https://$sourceServer/hubs/$localDataUrl/' target=_blank>$sourceServer/hubs/$localDataUrl/</a></li>
+if ( -d "${buildDir}/otherAligners" ) {
+  printf "<li><a href='https://$sourceServer/hubs/$localDataUrl/otherAligners/' target=_blank>pre-computed indices</a> for alignment programs: bowtie2, bwa-mem2, hisat2, minimap2</li>\n";
+}
+
+printf "<li>explore the hub directory at: <a href='https://$sourceServer/hubs/$localDataUrl/' target=_blank>$sourceServer/hubs/$localDataUrl/</a></li>
 </ul>
 ";
 printf "</p>\n<hr>
@@ -410,7 +418,7 @@ See also: <a href='http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/' targe
 hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/</a> to download command line
 binaries.<br>
 <br>
-To operate this locally, you will need the <b>%s.2bit</b> file from:
+To operate this locally, you will need the <b>$accessionId.2bit</b> file from:
 <pre>
   https://$sourceServer/hubs/$localDataUrl/
 </pre>

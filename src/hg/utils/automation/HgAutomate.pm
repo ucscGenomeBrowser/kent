@@ -32,9 +32,9 @@ use File::Spec;
       ),
     # General-purpose utility routines:
     qw( checkCleanSlate checkExistsUnlessDebug closeStdin
-	getAssemblyInfo getSpecies gensub2 machineHasFile databaseExists
-	makeGsub mustMkdir asmHubBuildDir asmHubDownloadDir mustOpen
-	nfsNoodge paraRun run verbose
+	getAssemblyInfo getSpecies hubDateName gensub2 machineHasFile
+	databaseExists makeGsub mustMkdir asmHubBuildDir asmHubDownloadDir
+	mustOpen nfsNoodge paraRun run verbose
       ),
     # Hardcoded paths/commands/constants:
     qw( $centralDbSql $git
@@ -64,6 +64,9 @@ sub readMainCluster(); # forward declaration to keep code order
         { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
 	  'hostCount' => 32, },
       'hgwdev' =>
+        { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
+	  'hostCount' => 32, },
+      'newdev' =>
         { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
 	  'hostCount' => 32, },
     );
@@ -735,6 +738,54 @@ sub getOrganism {
   my ($organism) = split("\t", $line);
   return ($organism);
 } # getOrganism
+
+# try to find the date and assembly name for a hub given just the accession
+sub hubDateName($) {
+  my ($accession) = @_;
+  my $returnDate = "some date";
+  my $returnAsmName = "";
+
+  if ($accession !~ m/^GC/) {	# not a GenArk hub, database assembly
+    my ($comName, $asmDate, $submitter) = getAssemblyInfo("hgwdev", $accession);
+     $returnDate = $asmDate;
+     $returnAsmName = $accession;
+  } else {
+    my $gcX = substr($accession, 0, 3);
+    my $d0 = substr($accession, 4, 3);
+    my $d1 = substr($accession, 7, 3);
+    my $d2 = substr($accession, 10, 3);
+    # a couple assemblies unfortunately have two different assembly names
+    # can't work with those with just an accession
+    # special case the CHM13 assembly
+    my $betterId = $accession;
+    if ($accession =~ m/GCA_009914755.4/) {
+       $betterId = "GCA_009914755.4_CHM13_T2T_v2.0";
+    }
+    my $dirCount = `ls -d /hive/data/outside/ncbi/genomes/$gcX/$d0/$d1/$d2/${betterId}* | wc -l`;
+    chomp $dirCount;
+    if (1 == $dirCount) {
+       my $srcDir = `ls -d /hive/data/outside/ncbi/genomes/$gcX/$d0/$d1/$d2/${betterId}*`;
+       chomp $srcDir;
+       if ( -d "${srcDir}" ) {
+          my $asmId = basename($srcDir);
+          my $asmRpt = "$srcDir/${asmId}_assembly_report.txt";
+          if ( -s "${asmRpt}" ) {
+             (undef, undef, $returnAsmName) = split('_', $asmId, 3);
+             if (defined($returnAsmName)) {
+               $returnAsmName =~ s/\r//;
+               $returnAsmName =~ s/^/_/;
+             } else {
+               $returnAsmName = "";
+             }
+             my $tDate = `egrep -m 1 -i "^#[[:space:]]*Date:" "${asmRpt}" | sed -e 's/.*ate: \\+//;' | tr -d '\r'`;
+             chomp $tDate;
+             $returnDate = $tDate if (length($tDate));
+          }
+       }
+    }
+  }
+  return ($returnDate, $returnAsmName);
+}	#	sub hubDateName($)
 
 sub machineHasFile {
   # Return a positive integer if $mach appears to have $file or 0 if it
