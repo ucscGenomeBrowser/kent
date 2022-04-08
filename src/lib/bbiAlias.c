@@ -2,6 +2,8 @@
 #include "bigBed.h"
 #include "bbiAlias.h"
 #include "bPlusTree.h"
+#include "obscure.h"
+#include "hash.h"
 
 struct slName *bbiAliasFindAliases(struct bbiFile *bbi, struct lm *lm,  char *seqName)
 /* Find the aliases for a given seqName using the alias bigBed. */
@@ -59,11 +61,23 @@ for(; bptIndex; bptIndex = bptIndex->next)
 return NULL;
 }
 
-unsigned bbiAliasChromSize(struct bbiFile *bbi, struct bptIndex *bptIndex, struct lm *lm, char *chrom)
-/* Find the size of the given chrom in the given alias bbi file. */
+unsigned bbiAliasChromSizeExt(struct bbiFile *bbi, struct bptIndex *bptIndex, struct lm *lm, char *chrom, struct hash *usedHash, int lineIx)
+/* Find the size of the given chrom in the given chromAlias bbi file. If this alias has been used before, complain and exit. */
 {
-struct bigBedInterval *bb =  bigBedIntervalQuery(bbi, chrom, 0, 1, 0, lm);
+if (usedHash)
+    {
+    struct hashEl *hel;
 
+    if ((hel = hashLookup(usedHash, chrom)) != NULL)
+        {
+        int previousLineIx = ptToInt(hel->val);
+
+        errAbort("line %d: using a different alias for a previously seen name on line %d",
+            lineIx, previousLineIx);
+        }
+    }
+
+struct bigBedInterval *bb =  bigBedIntervalQuery(bbi, chrom, 0, 1, 0, lm);
 if (bb == NULL)
     {
     for(; bptIndex; bptIndex = bptIndex->next)
@@ -79,11 +93,27 @@ char *bedRow[bbi->fieldCount];
 char startBuf[16], endBuf[16];
 if (bb != NULL)
     {
-    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    int fieldCount = bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+
+    if (usedHash)
+        {
+        hashAddInt(usedHash, bedRow[0], lineIx);
+
+        int ii;
+        for (ii = 3; ii < fieldCount; ii++)
+            hashAddInt(usedHash, bedRow[ii], lineIx);
+        }
+
     // sequence size is the end address of the bigBed item
     int ret = atoi(endBuf);
     return ret;
     }
 
 return 0;
+}
+
+unsigned bbiAliasChromSize(struct bbiFile *bbi, struct bptIndex *bptIndex, struct lm *lm, char *chrom)
+/* Find the size of the given chrom in the given chromAlias bbi file.  */
+{
+return bbiAliasChromSizeExt(bbi, bptIndex, lm, chrom, NULL, 0);
 }

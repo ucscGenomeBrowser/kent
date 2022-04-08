@@ -20,4 +20,7 @@ struct bptIndex *bbiAliasOpenExtra(struct bbiFile *bbi);
 unsigned bbiAliasChromSize(struct bbiFile *bbi, struct bptIndex *bptIndex, struct lm *lm, char *chrom);
 /* Find the size of the given chrom in the given chromAlias bbi file.  */
 
+unsigned bbiAliasChromSizeExt(struct bbiFile *bbi, struct bptIndex *bptIndex, struct lm *lm, char *chrom, struct hash *usedHash, int lineIx);
+/* Find the size of the given chrom in the given chromAlias bbi file. If this alias has been used before, complain and exit. */
+
 #endif /* BBIALIAS_H */
