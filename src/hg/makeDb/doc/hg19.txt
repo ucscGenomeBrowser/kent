@@ -34821,3 +34821,12 @@ bedGraphToBigWig jarvis.bed ../chrom.sizes jarvis.bw
   /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/chm13LiftOver/hg19-chm13v2.ncbi-qnames.over.chain.gz
   /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/chm13LiftOver/hg19-chm13v2.over.chain.gz
 
+
+#############################################################################
+# HMC constraint scores, Max Fri Apr  8 08:30:49 PDT 2022
+# downloaded V2 from https://zenodo.org/record/6392153#.Yk8KeflBzIU)
+python ~/kent/src/hg/makeDb/scripts/hmc/hmcToWig.py hg19
+wigToBigWig a.bedGraph ../../chrom.sizes a.bw &
+wigToBigWig c.bedGraph ../../chrom.sizes c.bw &
+wigToBigWig g.bedGraph ../../chrom.sizes g.bw &
+wigToBigWig t.bedGraph ../../chrom.sizes t.bw &

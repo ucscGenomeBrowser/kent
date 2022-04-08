@@ -1,0 +1,14 @@
+track constraintSuper
+shortLabel Constraint scores
+longLabel Constraint scores (how should we call these?)
+superTrack on hide
+type bed
+visibility hide
+group phenDis
+color 100,0,160
+
+# Jarvis scores
+include jarvis.ra
+# HMC scores
+include hmc.ra
+
