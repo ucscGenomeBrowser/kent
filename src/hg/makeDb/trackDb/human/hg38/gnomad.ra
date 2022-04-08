@@ -123,6 +123,7 @@ type bigWig
 maxHeightPixels 128:20:8
 viewLimitsMax -3:3
 priority 10
+html gnomadV3_1_1
 
 searchTable gnomadGenomesVariantsV3_1_1
 searchType bigBed
