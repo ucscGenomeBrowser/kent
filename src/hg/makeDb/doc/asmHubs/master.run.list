@@ -427,6 +427,7 @@
 ./runBuild GCA_905220595.1 GCA_905220595.1_ilSpiLubr1.1 invertebrates Spilosoma_lubricipeda
 ./runBuild GCA_905220615.1 GCA_905220615.1_ilTinTrin1.1 invertebrates Tinea_trinotella
 ./runBuild GCA_905231865.2 GCA_905231865.2_ilBolSele5.2 invertebrates Boloria_selene
+./runBuild GCA_905237065.2 GCA_905237065.2_Ssal_v3.1 fish Salmo_salar
 ./runBuild GCA_905332915.1 GCA_905332915.1_ilHecDyso1.1 invertebrates Hecatera_dysodea
 ./runBuild GCA_905332985.1 GCA_905332985.1_ilMimTili1.1 invertebrates Mimas_tiliae
 ./runBuild GCA_905333005.1 GCA_905333005.1_ilLycPhla1.1 invertebrates Lycaena_phlaeas
