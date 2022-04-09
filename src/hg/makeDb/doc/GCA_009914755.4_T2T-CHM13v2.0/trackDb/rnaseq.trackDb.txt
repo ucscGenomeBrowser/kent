@@ -7,7 +7,7 @@ color 255,0,0
 type bigWig
 group rna
 priority 30
-html html/GCA_009914755.4_CHM13_T2T_v2.0.rnaseq.html
+html html/GCA_009914755.4_T2T-CHM13v2.0.rnaseq.html
     
     track rnaseq_default
     parent rnaseq
@@ -16,7 +16,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.rnaseq.html
     type bigWig 
     visibility dense
     negateValues off
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.rnaseq/RNAseq_default.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rnaseq/RNAseq_default.bw
 
     track rnaseq_k100
     parent rnaseq
@@ -25,7 +25,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.rnaseq.html
     type bigWig 
     visibility dense
     negateValues off
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.rnaseq/RNAseq_k100.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rnaseq/RNAseq_k100.bw
 
     track rnaseq_k100-21mer
     parent rnaseq
@@ -34,7 +34,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.rnaseq.html
     type bigWig 
     visibility dense
     negateValues off
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.rnaseq/RNAseq_k100_21mer.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rnaseq/RNAseq_k100_21mer.bw
     
     track rnaseq_k100-dual-21mer
     parent rnaseq
@@ -43,4 +43,4 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.rnaseq.html
     type bigWig 
     visibility dense
     negateValues off
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.rnaseq/RNAseq_k100_dual_21mer.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rnaseq/RNAseq_k100_dual_21mer.bw

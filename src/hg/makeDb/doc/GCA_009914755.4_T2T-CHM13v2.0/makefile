@@ -1,7 +1,8 @@
 SHELL = /bin/bash
 
 ncbiAcc = GCA_009914755.4
-asmId = ${ncbiAcc}_CHM13_T2T_v2.0
+asmName= T2T-CHM13v2.0
+asmId = ${ncbiAcc}_${asmName}
 asmBuildDir = /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/${asmId}
 asmStageDir = /hive/data/genomes/asmHubs/GCA/009/914/755/${ncbiAcc}
 trackDataDir = ${asmBuildDir}/trackData

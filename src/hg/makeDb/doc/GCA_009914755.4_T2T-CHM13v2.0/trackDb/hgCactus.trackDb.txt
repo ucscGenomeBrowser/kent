@@ -12,7 +12,7 @@ centerLabelsDense on
 visibility hide
 type bigBed 3
 priority 1
-html  html/GCA_009914755.4_CHM13_T2T_v2.0.hgCactus.html
+html  html/GCA_009914755.4_T2T-CHM13v2.0.hgCactus.html
 
     track cactusAlignments
     shortLabel Alignments
@@ -27,7 +27,7 @@ html  html/GCA_009914755.4_CHM13_T2T_v2.0.hgCactus.html
         visibility full
         parent cactusAlignments on
         priority 1
-        bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgCactus/t2tChm13.v2.0.hal
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hgCactus/t2tChm13.v2.0.hal
         type halSnake
         group compGeno
         subGroups view=Snake orgs=hg38
@@ -39,7 +39,7 @@ html  html/GCA_009914755.4_CHM13_T2T_v2.0.hgCactus.html
         visibility hide
         parent cactusAlignments off
         priority 2
-        bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgCactus/t2tChm13.v2.0.hal
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hgCactus/t2tChm13.v2.0.hal
         type halSnake
         group compGeno
         subGroups view=Snake orgs=GCA_009914755.4

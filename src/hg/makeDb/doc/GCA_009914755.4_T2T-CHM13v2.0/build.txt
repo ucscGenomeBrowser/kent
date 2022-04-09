@@ -1,6 +1,7 @@
 ================================================================
 Notes:
-  dataDir = /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_CHM13_T2T_v2.0
+
+  dataDir = /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0
   stagingDir = /hive/data/genomes/asmHubs/GCA/009/914/755/GCA_009914755.4
 
 T2T CHM13 track spreadsheet
@@ -77,7 +78,7 @@ sedefSegDups (2022-02-24 markd)
 Supplied by Mitchell Robert Vollger <mvollger@uw.edu>
 team-segdups/Assembly_analysis/SEDEF/T2T-CHM13v2.SDs.bed
 
-    bedToBigBed -as=${kentDir}/src/hg/makeDb/doc/GCA_009914755.4_CHM13_T2T_v2.0/schema/sedefSegDups.as -type=bed9+ T2T-CHM13v2.SDs.bed../chromAlias/ucsc.sizes.txt sedefSegDups.bb
+    bedToBigBed -as=${kentDir}/src/hg/makeDb/doc/GCA_009914755.4_T2T-CHM13v2.0/schema/sedefSegDups.as -type=bed9+ T2T-CHM13v2.SDs.bed../chromAlias/ucsc.sizes.txt sedefSegDups.bb
 
 
 ================================================================
@@ -108,27 +109,43 @@ rename to
 * hgLiftOver (2022-03-26 markd)
 ----------------------------------------------------------------
 GRCh38 & GRCh37 Nae-Chyun Chen <naechyun.chen@gmail.com>
-globus: team-liftover/v1_nflo/
-      chm13v2-grch38.chain
-      chm13v2-hg19.chain
-      grch38-chm13v2.chain
-      hg19-chm13v2.chain
 
-download to trackData/liftOver
-# make names consistent
-    mv chm13v2-grch38.chain chm13v2-hg38.over.chain
+# 2022-04-09 it was noted that chrM was left out of above alignments, so obtain them and repeat
+
+globus: /team-liftover/v1_nflo/with_chrM/
+    chm13v2-grch38.chain
+    grch38-chm13v2.chain
+    chm13v2-hg19_chrM.chain
+    chm13v2-hg19_chrMT.chain
+    hg19_chrM-chm13v2.chain
+    hg19_chrMT-chm13v2.chain
+
+   cd trackData/hgLiftOver
+
+# rename to match UCSC conventions
+    mv chm13v2-grch38.chain chm13v2-hg38.over.chain      
     mv grch38-chm13v2.chain hg38-chm13v2.over.chain
+    mv chm13v2-hg19_chrM.chain chm13v2-hg19_chrM.over.chain
+    mv chm13v2-hg19_chrMT.chain chm13v2-hg19_chrMT.over.chain
+    mv hg19_chrM-chm13v2.chain hg19_chrM-chm13v2.over.chain
+    mv hg19_chrMT-chm13v2.chain  hg19_chrMT-chm13v2.over.chain
 
-    pigz *.chain
+# create hg19 chains that combine chrM and chrMT for use in browser.
+   cp chm13v2-hg19_chrM.over.chain chm13v2-hg19.over.chain
+   chainFilter -q=chrMT chm13v2-hg19_chrMT.over.chain >>chm13v2-hg19.over.chain
+   cp hg19_chrM-chm13v2.over.chain hg19-chm13v2.over.chain
+   chainFilter -t=chrMT  hg19_chrMT-chm13v2.over.chain >>hg19-chm13v2.over.chain
 
-    cd ../hgLiftOver
-    hgLoadChain -noBin -test none bigChain ../../liftOver/chm13v2-hg38.over.chain.gz 
+   pigz *.chain
+
+# build tracks
+    hgLoadChain -noBin -test none bigChain chm13v2-hg38.over.chain.gz 
     sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
-    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab../chromAlias/ucsc.sizes.txt chm13v2-hg38.over.chain.bb
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../chromAlias/ucsc.sizes.txt chm13v2-hg38.over.chain.bb
     tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
-    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab../chromAlias/ucsc.sizes.txt chm13v2-hg38.over.link.bb
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../chromAlias/ucsc.sizes.txt chm13v2-hg38.over.link.bb
 
-    hgLoadChain -noBin -test none bigChain ../../liftOver/chm13v2-hg19.over.chain.gz 
+    hgLoadChain -noBin -test none bigChain chm13v2-hg19.over.chain.gz 
     sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
     bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../chromAlias/ucsc.sizes.txt chm13v2-hg19.over.chain.bb
     tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
@@ -136,12 +153,18 @@ download to trackData/liftOver
 
     rm *.tab
 
+   pigz *.chain
+   # make available is liftOver directory as we
+   ln -f *.chain.gz ../../liftOver/
+
 # GRCh38 mask used in liftover. This is based on:
 #  https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/references/GRCh38/GCA_000001405.15_GRCh38_GRC_exclusions_T2Tv2.bed
 #  plus UCSC hg38 centromeres track
 
    GRCh38: /team-liftover/grch38_masked_fasta/grch38-centromere_and_falsedup.bed (edited)
-   rename to liftOver/hg38.over-mask.bed
+   rename to hg38.liftover-mask.bed
+   ln -f hg38.liftover-mask.bed ../../liftOver/
+
 
 ================================================================
 * hgCactus (2022-03-28 markd)
@@ -166,11 +189,28 @@ globus: /team-liftover/v1_nflo/T2T-CHM13v2.0_new_and_non_syntenic_regions.bed
          chm13v2-unique_to_hg19.bed
          chm13v2-unique_to_hg38.bed
 
-csort -k1,1 -k2,2n chm13v2-unique_to_hg19.bed >tmp.bed
-bedToBigBed -type=bed3 -tab tmp.bed  ../chromAlias/ucsc.sizes.txt hgUnique.hg19.bb
+#
+chainToPslBasic ../hgLiftOver/chm13v2-hg38.over.chain.gz stdout \
+  | pslToBed stdin stdout \
+  | bedtools sort -i - -g ../ucscChromNames/t2t-chm13-v2.0.sizes \
+  | bedtools merge \
+  | bedtools complement -i - -g ../ucscChromNames/t2t-chm13-v2.0.sizes \
+  | bedtools merge \
+  | sort -k1,1 -k2,2n \
+  > chm13v2-unique_to_hg38.bed
 
-csort -k1,1 -k2,2n chm13v2-unique_to_hg38.bed >tmp.bed
-bedToBigBed -type=bed3 -tab tmp.bed ../chromAlias/ucsc.sizes.txt hgUnique.hg38.bb
+chainToPslBasic ../hgLiftOver/chm13v2-hg19.over.chain.gz stdout \
+  | pslToBed stdin stdout \
+  | bedtools sort -i - -g ../ucscChromNames/t2t-chm13-v2.0.sizes \
+  | bedtools merge \
+  | bedtools complement -i - -g ../ucscChromNames/t2t-chm13-v2.0.sizes \
+  | bedtools merge \
+  | sort -k1,1 -k2,2n \
+  > chm13v2-unique_to_hg19.bed
+
+
+bedToBigBed -type=bed3 -tab chm13v2-unique_to_hg38.bed ../chromAlias/ucsc.sizes.txt hgUnique.hg38.bb
+bedToBigBed -type=bed3 -tab chm13v2-unique_to_hg19.bed ../chromAlias/ucsc.sizes.txt hgUnique.hg19.bb
 
 
 ================================================================
@@ -196,7 +236,7 @@ dbSNP_lifted-recovered.html
 
 
 # need to use NCBI names until supported by chromAlias
-   zcat chm13v2.0_dbSNPv155.vcf.gz  | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_dbSNPv155.ncbi-names.vcf.gz
+   zcat chm13v2.0_dbSNPv155.vcf.gz  | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_dbSNPv155.ncbi-names.vcf.gz
 
 tabix -p vcf chm13v2.0_dbSNPv155.vcf.gz &
 tabix -p vcf chm13v2.0_dbSNPv155.ncbi-names.vcf.gz &
@@ -208,7 +248,7 @@ tabix -p vcf chm13v2.0_dbSNPv155.ncbi-names.vcf.gz &
 ClinVar	Lifted+Recovered	TBD	Dylan Taylor
 https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/liftover/chm13v2.0_ClinVar20220313.vcf.gz
 
-   zcat chm13v2.0_ClinVar20220313.vcf.gz | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_ClinVar20220313.ncbi-names.vcf.gz
+   zcat chm13v2.0_ClinVar20220313.vcf.gz | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_ClinVar20220313.ncbi-names.vcf.gz
 
 tabix -p vcf chm13v2.0_ClinVar20220313.vcf.gz &
 tabix -p vcf chm13v2.0_ClinVar20220313.ncbi-names.vcf.gz &
@@ -223,7 +263,7 @@ https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annota
 gwas_catalog_lifted-recovered.html											
 
 # need to use NCBI names until supported by chromAlias
-   zcat chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.vcf.gz  | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.ncbi-names.vcf.gz
+   zcat chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.vcf.gz  | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.ncbi-names.vcf.gz
 
 tabix -p vcf  chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.ncbi-names.vcf.gz&
 tabix -p vcf  chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.vcf.gz&

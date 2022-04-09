@@ -6,7 +6,7 @@ visibility hide
 type bigChain hg38
 group compGeno
 priority 0.1
-html html/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver.html
+html html/GCA_009914755.4_T2T-CHM13v2.0.hgLiftOver.html
 
     track hg38LiftOver
     parent hgLiftOver
@@ -15,8 +15,8 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver.html
     type bigChain hg38
     color 120,20,0
     visibility dense
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg38.over.chain.bb
-    linkDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg38.over.link.bb
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hgLiftOver/chm13v2-hg38.over.chain.bb
+    linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hgLiftOver/chm13v2-hg38.over.link.bb
     priority 1
 
     track hg19LiftOver
@@ -26,7 +26,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver.html
     type bigChain hg19
     color 120,20,0
     visibility dense
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg19.over.chain.bb
-    linkDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.hgLiftOver/chm13v2-hg19.over.link.bb
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hgLiftOver/chm13v2-hg19.over.chain.bb
+    linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hgLiftOver/chm13v2-hg19.over.link.bb
     priority 2
 

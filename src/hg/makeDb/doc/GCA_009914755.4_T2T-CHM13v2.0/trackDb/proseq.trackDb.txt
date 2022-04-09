@@ -8,7 +8,7 @@ altColor 0,0,255
 type bigWig
 group rna
 priority 30
-html html/GCA_009914755.4_CHM13_T2T_v2.0.proseq.html
+html html/GCA_009914755.4_T2T-CHM13v2.0.proseq.html
     
     track proseq_default_POS
     parent proseq
@@ -16,7 +16,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.proseq.html
     longLabel PROseq default POS no kmer filtering
     type bigWig 
     visibility dense
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_default_pos.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.proseq/PROseq_default_pos.bw
 
     track proseq_default_NEG
     parent proseq
@@ -25,7 +25,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.proseq.html
     type bigWig 
     visibility dense
     negateValues off
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_default_neg.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.proseq/PROseq_default_neg.bw
 
     track proseq_k100_POS
     parent proseq
@@ -34,7 +34,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.proseq.html
     type bigWig 
     visibility dense
     negateValues on
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_k100_pos.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.proseq/PROseq_k100_pos.bw
 
     track proseq_k100_NEG
     parent proseq
@@ -42,7 +42,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.proseq.html
     longLabel PROseq k100 NEG no kmer filtering
     type bigWig 
     visibility dense
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_k100_neg.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.proseq/PROseq_k100_neg.bw
     
     track proseq_k100-21mer_POS
     parent proseq
@@ -51,7 +51,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.proseq.html
     type bigWig 
     visibility dense
     negateValues off
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_k100_21mer_pos.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.proseq/PROseq_k100_21mer_pos.bw
 
     track proseq_k100-21mer_NEG
     parent proseq
@@ -60,7 +60,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.proseq.html
     type bigWig 
     visibility dense
     negateValues on
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_k100_21mer_neg.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.proseq/PROseq_k100_21mer_neg.bw
 
     track proseq_k100-dual-21mer_POS
     parent proseq
@@ -68,7 +68,7 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.proseq.html
     longLabel PROseq k100 POS dual 21mer filtering
     type bigWig 
     visibility dense
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_k100_dual-21mer_pos.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.proseq/PROseq_k100_dual-21mer_pos.bw
     
     track proseq_k100-dual-21mer_NEG
     parent proseq
@@ -77,4 +77,4 @@ html html/GCA_009914755.4_CHM13_T2T_v2.0.proseq.html
     type bigWig 
     visibility dense
     negateValues off
-    bigDataUrl bbi/GCA_009914755.4_CHM13_T2T_v2.0.proseq/PROseq_k100_dual-21mer_neg.bw
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.proseq/PROseq_k100_dual-21mer_neg.bw
