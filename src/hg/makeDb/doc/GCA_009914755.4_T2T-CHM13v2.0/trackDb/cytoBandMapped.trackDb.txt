@@ -1,8 +1,0 @@
-# this overrides the automated generated pseudo-cytoband track
-track cytoBandIdeo
-shortLabel Cytobands (Ideogram)
-longLabel Cytobands Mapped from hg38/GRCh38
-group map
-visibility dense
-type bigBed 4 +
-bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.cytoBandMapped/cytoBandMapped.bb
