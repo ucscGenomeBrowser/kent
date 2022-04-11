@@ -34,13 +34,6 @@ if [ -s "$buildDir/dropTracks.list" ]; then
   done
 fi
 
-if [ -z ${not_tanDups+x} ]; then
-  printf "# skipping the tanDups track\n" 1>&2
-fi
-if [ -z ${not_augustus+x} ]; then
-  printf "# skipping the augustus track\n" 1>&2
-fi
-
 mkdir -p $buildDir/bbi
 mkdir -p $buildDir/ixIxx
 
