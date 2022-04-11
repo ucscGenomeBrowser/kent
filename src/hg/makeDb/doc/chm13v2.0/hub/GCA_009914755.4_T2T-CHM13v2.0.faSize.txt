@@ -1,0 +1,6 @@
+3117292070 bases (0 N's 3117292070 real 1415692975 upper 1701599095 lower) in 25 sequences in 1 files
+Total size: mean 124691682.8 sd 62296927.8 min 16569 (CP068254.1) max 248387328 (CP068277.2) median 133324548
+N count: mean 0.0 sd 0.0
+U count: mean 56627719.0 sd 31286415.3
+L count: mean 68063963.8 sd 32034765.0
+%54.59 masked total, %54.59 masked real
