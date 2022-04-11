@@ -57,9 +57,9 @@
 <p>
 The Genome Browser has a <a href="/goldenPath/history.html">rich history</a> intricately connected
 to human genomic research. We have provided display to almost two dozen human genomes beginning 
-with the first drafts in the year 2000. Nearly 22 year later, the <a 
+with the first drafts in the year 2000. Nearly 22 years later, the <a 
 href="https://sites.google.com/ucsc.edu/t2tworkinggroup" target="_blank">T2T consortium</a> has 
-published the most complete human reference genome to date, having added just about all of the 200 
+published the most complete human haploid genome sequence to date, having added just about all of the 200 
 million bases (8%) missing from the current reference. We are proud of all the scientists 
 involved, including our colleagues in the <a href="https://genomics.ucsc.edu/" 
 target="_blank">UCSC Genomics Institute</a>, that played a role in this release. We strive 
@@ -71,37 +71,41 @@ target="_blank">T2T-CHM13 v2.0 browser</a>.</p>
 <a name="CHM13"></a><h3>What is T2T-CHM13 v2.0?</h3>
 <p>
 <a href="https://www.science.org/doi/10.1126/science.abj6987" target="_blank">T2T-CHM13 v2.0</a> 
-was produced by sequencing the CHM13hTERT human cell line from a hydatiform mole, which contains 
-nearly uniform homozygosity. It also employed recent technologies such as <a target="_blank"
+was produced by sequencing the CHM13hTERT human cell line from a hydatiform mole, which is
+haploid, meaning it contains nearly uniform homozygosity. 
+It also employed recent technologies such as <a target="_blank"
 href="https://www.pacb.com/technology/hifi-sequencing/">HiFi</a> and <a target="_blank" 
 href="https://nanoporetech.com/">nanopore</a> sequencing. The result is a 
 3.055 billion base pair genome that includes gapless assemblies for all main chromosomes 
 and introduces nearly 200Mbp of novel sequence containing 1956 gene predictions, 99 of 
 which are predicted to be protein coding. The completed regions include all centromeric satellite 
-arrays, recent segmental duplications, and the short arms of all five acrocentric chromosomes.</p>
+arrays, recent segmental duplications, and the short arms of all five acrocentric chromosomes. A Y
+chromosome was added from Genome in a Bottle's HG002 sample.</p>
 
 <figure class="text-center">
 <img class='text-center' src="../images/scienceFillingTheGaps.jpg" width='55%' alt="Representation
 of novel regions added to current reference.">
 <figcaption style="font-size:13px">Each bar is a linear visualization of a chromosome, with the chromosome number shown at 
-left. Red segments denote previously missing sequences that the T2T Consortium resolved.
+the left. Red segments denote previously missing sequences that the T2T Consortium resolved.
 Source: <a target="_blank" 
 href="https://www.science.org/doi/10.1126/science.abp8653">V. ALTOUNIAN/SCIENCE</a></figcaption>
 </figure>
 
 <p>
-CHM13 removes 1.2Mbp of falsely duplicated sequence in hg38, and 263 GENCODE genes from hg38 
+CHM13 removes 1.2Mbp of duplicated sequence in hg38, and 263 GENCODE genes from hg38 
 are absent in CHM13 as well as 3604 genes in CHM13 are absent in hg38, mostly in the 
 centromeres. Variant calling using CHM13 <a target="_blank" 
 href="https://www.science.org/doi/10.1126/science.abl3533">reduces the numbers of false 
 positives</a> in certain medically relevant genes, and CHM13 also resolves duplications 
-collapsed in hg38 that affect 48 protein coding genes (e.g. KCNJ18, KCNJ12, KMT2C, 
+collapsed in hg38 that affect 48 protein-coding genes (e.g. KCNJ18, KCNJ12, KMT2C, 
 MAP2K3), so it is more representative of human copy-number variation than hg38.</p>
 <p>
-It is also important to recognize, however, that while this assembly is an improvement 
-over the hg38 reference genome, it is not &quot;hg39&quot; as it is an alternate or 
+It is also important to recognize, however, that while this assembly's chromosome 
+sequences are more complete than the main chromosomes of the hg38 reference genome, 
+it is not &quot;hg39&quot; as it is an alternate or 
 companion assembly, not a primary reference assembly for the Genome Reference Consortium 
-and NCBI. Most genome annotation tracks now are based on the hg19 and hg38 coordinates. 
+and NCBI. It does not contain any alternative haplotypes, and most genome annotation tracks 
+now are based on the hg19 and hg38 coordinates. 
 Hundreds of human genomes at a similar accuracy as CHM13 are expected to be released over 
 the next 1-2 years, and therefore T2T CHM13 is the foundation of the future <a target="_blank"
 href="https://humanpangenome.org/">human pangenome reference genome</a>.</p>
@@ -109,7 +113,7 @@ href="https://humanpangenome.org/">human pangenome reference genome</a>.</p>
 <h3>How to access this assembly in the Genome Browser?</h3>
 <p>
 As with many of our assemblies, there are a few different ways to gain access. We have 
-added CHM13 to our Genomes drop-down menu, which provides direct access from most 
+added CHM13 to our Genomes drop-down menu, which provides direct access from almost 
 anywhere on our site. Also, like most of our other genomes, it can be found by searching 
 our <a target="_blank" href="/cgi-bin/hgGateway">Gateway page</a>.</p>
 
@@ -193,7 +197,7 @@ target="_blank">track hubs</a> can also be used to display annotations on CHM13.
 track hubs, using <code>genome GCA_009914755.4</code> is sufficient to declare the assembly. 
 We have also expanded our support of variable chromosome names, so data can be loaded using either 
 UCSC (&quot;chr1&quot;), NCBI (&quot;CP068277.2&quot;) or Ensembl (&quot;1&quot;) sequence 
-identifiers. There should no longer be a need to convert sequence names.</p>
+identifiers. <b>There should no longer be a need to convert sequence names</b>.</p>
 <p> 
 It is worth noting that GenArk assemblies are functionally hubs, which means all data is 
 stored in binary files, not MySQL databases. If your existing data pipelines do not work 
