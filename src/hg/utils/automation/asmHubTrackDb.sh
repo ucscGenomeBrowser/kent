@@ -361,7 +361,6 @@ group genes
 visibility pack
 type bigBed
 dragAndDrop subTracks
-noInherit on
 allButtonPair on
 dataVersion $dataVersion
 html html/%s.refSeqComposite
