@@ -52,6 +52,214 @@
 <!-- ============= 2022 archived news ============= -->
 <a name="2022"></a>
 
+<a name="041222"></a>
+<h2>Apr. 12, 2022 &nbsp;&nbsp; T2T CHM13 v2.0 now available in the Genome Browser</h2>
+<p>
+The Genome Browser has a <a href="/goldenPath/history.html">rich history</a> intricately connected
+to human genomic research. We have provided display to almost two dozen human genomes beginning 
+with the first drafts in the year 2000. Nearly 22 years later, the <a 
+href="https://sites.google.com/ucsc.edu/t2tworkinggroup" target="_blank">T2T consortium</a> has 
+published the most complete human haploid genome sequence to date, having added just about all of the 200 
+million bases (8%) missing from the current reference. We are proud of all the scientists 
+involved, including our colleagues in the <a href="https://genomics.ucsc.edu/" 
+target="_blank">UCSC Genomics Institute</a>, that played a role in this release. We strive 
+to facilitate omics research and thus would like to announce our expanded support for 
+the <a 
+href="/cgi-bin/hgTracks?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=GCA_009914755.4&position=lastDbPos" 
+target="_blank">T2T-CHM13 v2.0 browser</a>.</p>
+
+<a name="CHM13"></a><h3>What is T2T-CHM13 v2.0?</h3>
+<p>
+<a href="https://www.science.org/doi/10.1126/science.abj6987" target="_blank">T2T-CHM13 v2.0</a> 
+was produced by sequencing the CHM13hTERT human cell line from a hydatiform mole, which is
+haploid, meaning it contains nearly uniform homozygosity. 
+It also employed recent technologies such as <a target="_blank"
+href="https://www.pacb.com/technology/hifi-sequencing/">HiFi</a> and <a target="_blank" 
+href="https://nanoporetech.com/">nanopore</a> sequencing. The result is a 
+3.055 billion base pair genome that includes gapless assemblies for all main chromosomes 
+and introduces nearly 200Mbp of novel sequence containing 1956 gene predictions, 99 of 
+which are predicted to be protein coding. The completed regions include all centromeric satellite 
+arrays, recent segmental duplications, and the short arms of all five acrocentric chromosomes. A Y
+chromosome was added from Genome in a Bottle's HG002 sample.</p>
+
+<figure class="text-center">
+<img class='text-center' src="../images/scienceFillingTheGaps.jpg" width='55%' alt="Representation
+of novel regions added to current reference.">
+<figcaption style="font-size:13px">Each bar is a linear visualization of a chromosome, with the chromosome number shown at 
+the left. Red segments denote previously missing sequences that the T2T Consortium resolved.
+Source: <a target="_blank" 
+href="https://www.science.org/doi/10.1126/science.abp8653">V. ALTOUNIAN/SCIENCE</a></figcaption>
+</figure>
+
+<p>
+CHM13 removes 1.2Mbp of duplicated sequence in hg38, and 263 GENCODE genes from hg38 
+are absent in CHM13 as well as 3604 genes in CHM13 are absent in hg38, mostly in the 
+centromeres. Variant calling using CHM13 <a target="_blank" 
+href="https://www.science.org/doi/10.1126/science.abl3533">reduces the numbers of false 
+positives</a> in certain medically relevant genes, and CHM13 also resolves duplications 
+collapsed in hg38 that affect 48 protein-coding genes (e.g. KCNJ18, KCNJ12, KMT2C, 
+MAP2K3), so it is more representative of human copy-number variation than hg38.</p>
+<p>
+It is also important to recognize, however, that while this assembly's chromosome 
+sequences are more complete than the main chromosomes of the hg38 reference genome, 
+it is not &quot;hg39&quot; as it is an alternate or 
+companion assembly, not a primary reference assembly for the Genome Reference Consortium 
+and NCBI. It does not contain any alternative haplotypes, and most genome annotation tracks 
+now are based on the hg19 and hg38 coordinates. 
+Hundreds of human genomes at a similar accuracy as CHM13 are expected to be released over 
+the next 1-2 years, and therefore T2T CHM13 is the foundation of the future <a target="_blank"
+href="https://humanpangenome.org/">human pangenome reference genome</a>.</p>
+
+<h3>How to access this assembly in the Genome Browser?</h3>
+<p>
+As with many of our assemblies, there are a few different ways to gain access. We have 
+added CHM13 to our Genomes drop-down menu, which provides direct access from almost 
+anywhere on our site. Also, like most of our other genomes, it can be found by searching 
+our <a target="_blank" href="/cgi-bin/hgGateway">Gateway page</a>.</p>
+
+<figure class="text-center">
+<img class='text-center' src="../images/t2tGenomesMenu.png" width='20%' alt="Finding CHM13
+in the Genomes menu dropdown.">
+<img class='text-center' src="../images/chm13Gateway.png" width='25%' alt="Searching CHM13
+on the Gateway page.">
+</figure>
+
+<p>
+CHM13 is a part of our <a href="/goldenPath/newsarch.html#060121" target="_blank">Genome 
+Archive (GenArk)</a> system, and thus exists as an <a target="_blank"
+href="/goldenPath/help/hgTrackHubHelp.html#Assembly">assembly hub</a>. GenArk assemblies can 
+always be reached directly via their shortlink URL corresponding to their GCA accession, 
+e.g. CHM13: <a 
+href="https://genome.ucsc.edu/h/GCA_009914755.4">https://genome.ucsc.edu/h/GCA_009914755.4</a></p>
+
+<h3>What annotations are currently available on the CHM13 browser?</h3>
+
+<p>
+Some notable annotations currently available on the CHM13 are listed below. Additional 
+annotations will continue to be added as they become available.</p>
+<p>
+<b>Gene and mRNA annotations:</b>
+<ul>
+<li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hub_3267197_GCA_009914755.4&c=CP068277.2&g=hub_3267197_catLiftOffGenesV1"
+target="_blank">CAT/Liftoff Genes</a> - Gene models generated using the CAT software filling in 
+from the LiftOff mappings when needed. The reference annotations are from GENCODE V35.</li>
+<li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hub_3267197_GCA_009914755.4&c=CP068277.2&g=hub_3267197_proseq"
+target="_blank">CHM13 PROseq</a> - CHM13 cell line PRO-seq Bowtie2 alignments to CHM13v2.0 
+(minus chrY) and unique genome-wide 21mer filtering (stranded).</li>
+<li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hub_3267197_GCA_009914755.4&c=CP068277.2&g=hub_3267197_rnaseq"
+target="_blank">CHM13 RNA-Seq</a> - CHM13 cell line RNA-seq Bowtie2 alignments to CHM13v2.0 
+(minus chrY) and unique genome-wide 21mer filtering (unstranded).</li></ul></p>
+
+<p>
+<b>Clinical annotations:</b>
+<ul>
+<li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hub_3267197_GCA_009914755.4&c=CP068277.2&g=hub_3267197_clinVar20220313"
+target="_blank">ClinVar Variants</a> - Lifted ClinVar data from the hg38 March 13th, 2022 release.</li>
+<li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hub_3267197_GCA_009914755.4&c=CP068277.2&g=hub_3267197_dbSNP155"
+target="_blank">dbSNP 155</a> - Lifted dbSNP 155 variants from the hg38 release.</li>
+<li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hub_3267197_GCA_009914755.4&c=CP068277.2&g=hub_3267197_gwasSNPs2022-03-08"
+target="_blank">GWAS Variants</a> - GWAS catalog variants lifted from hg38.</li></ul></p>
+
+<p>
+<b>Comparative genomics:</b>
+<ul>
+<li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hub_3267197_GCA_009914755.4&c=CP068277.2&g=hub_3267197_hgUnique"
+target="_blank">CHM13 unique</a> - Regions unique to the T2T-CHM13 v2.0 assembly as compared 
+to the hg38 and hg19 reference assemblies.</li>
+<li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hub_3267197_GCA_009914755.4&c=CP068277.2&g=hub_3267197_hgLiftOver"
+target="_blank">Human liftOver</a> - Contains one to one Nextflow LiftOver pipeline 
+alignments between CHM13 and hg19/hg38.</li>
+<li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hub_3267197_GCA_009914755.4&c=CP068277.2&g=hub_3267197_GCA_009914755_4_T2T-CHM13v2_0ChainNet"
+target="_blank">Chain/Net Track</a> - Alignment track between CHM13 and four other human
+genomes that shows rearrangements in our usual chains (=alignable) and net (=synteny)
+display formats. Other genomes are hg19, hg38, HG002pat, and HG002mat.</li></ul></p>
+
+<h3>How to display my data in CHM13?</h3>
+<p>
+We have added support for CHM13 to our <a href="/cgi-bin/hgConvert?db=hg38&position=lastDbPos"
+target="_blank">hgConvert tool</a>. This allows region conversion of the current viewing 
+window between hg19/hg38 to CHM13 and vice versa. We will also be adding support for 
+conversion of data using our <a href="/cgi-bin/hgLiftOver" target="_blank">hgLiftOver tool</a> 
+at our next version release on May 3rd. In the meantime, the command line version of 
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">liftOver</a> in combination with the proper <a target="_blank"
+href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/">chain file</a>
+can be used to lift annotations.</p>
+
+<figure class="text-center">
+<img class='text-center' src="../images/hgConvert.png" width='80%' alt="Using hgConvert tool
+to see coordinates between hg38 and CHM13.">
+</figure>
+
+<p>
+<a href="/cgi-bin/hgCustom" target="_blank">Custom tracks</a> and <a href="/cgi-bin/hgHubConnect"
+target="_blank">track hubs</a> can also be used to display annotations on CHM13. In the case of 
+track hubs, using <code>genome GCA_009914755.4</code> is sufficient to declare the assembly. 
+We have also expanded our support of variable chromosome names, so data can be loaded using either 
+UCSC (&quot;chr1&quot;), NCBI (&quot;CP068277.2&quot;) or Ensembl (&quot;1&quot;) sequence 
+identifiers. <b>There should no longer be a need to convert sequence names</b>.</p>
+<p> 
+It is worth noting that GenArk assemblies are functionally hubs, which means all data is 
+stored in binary files, not MySQL databases. If your existing data pipelines do not work 
+because our data formats have changed compared to hg19/hg38, please do not hesitate to 
+contact us. Most formats are very similar to the MySQL tables and we have command 
+line tools that can perform the conversions.</p>
+
+<h3>Where to download CHM13 data?</h3>
+<p>
+All GenArk hubs are hosted on our download server. This means that all settings information 
+and data for displaying this browser can be found there: 
+<a href="https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/"
+target="_blank">https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/</a></p>
+<p>
+We also provide FASTA files there with two different sequence identifiers (the 
+&quot;chr1&quot; format and Genbank accessions), gene annotations in GFF and other 
+formats and assembly indexes with either Genbank or "chr1" sequence names for the 
+aligners bwa-mem2, bowtie2, hisat2 and minimap2. Detailed download instructions can 
+be found in the README and on our 
+<a href="https://genome.ucsc.edu/cgi-bin/hgGateway?db=hub_3267197_GCA_009914755.4"
+target="_blank">assembly description page</a></p>
+<p>
+All liftOver files, including files to/from hg19/hg38 and CHM13 can also be found 
+on our download server: 
+<a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/"
+target="_blank">https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/</a></p>
+
+<h3>Acknowledgements</h3>
+<p>
+We would like to thank the <a href="https://sites.google.com/ucsc.edu/t2tworkinggroup"
+target="_blank">T2T Consortium</a> for this landmark accomplishment. 
+We would like to extend an additional kudos to our fellow <a href="https://genomics.ucsc.edu/"
+target="_blank">UCSC Genomics Institute</a> members who are part of the consortium, 
+Karen Miga, Benedict Paten, Kishwar Shafin, Mark Diekhans, and Miten Jain. 
+Lastly, to the engineers and QA members of the Genome Browser for the rapid 
+development and release of CHM13 data and features.</p>
+
+
+<a name="041122"></a>
+<h2>Apr. 11, 2022 &nbsp;&nbsp; CRISPR Targets for Cow (bosTau9) now available</h2>
+<p>
+We are happy to announce the release of the the
+<a href="/cgi-bin/hgTrackUi?db=bosTau9&c=chr6&g=crisprAllTargets">CRISPR Targets</a> track for the
+cow assembly (<a href="/cgi-bin/hgGateway?db=bosTau9">ARS-UCD1.2/bosTau9</a>).
+</p>
+<p>
+The track &quot;CRISPR Targets&quot; shows all potential -NGG target sites across the genome. CRISPR
+target sites were annotated with predicted specificity (off-target effects) and predicted efficiency
+(on-target cleavage) by various algorithms through the tool
+<a href="http://crispor.tefor.net/" target="_blank">CRISPOR</a>.
+The target sequence of the guide is shown with a thick (exon) bar. The PAM motif match (NGG) is
+shown with a thinner bar. Guides are colored to reflect both predicted specificity and efficiency.
+Specificity reflects the &quot;uniqueness&quot; of a 20mer sequence in the genome; the less unique a
+sequence is, the more likely it is to cleave other locations of the genome (off-target effects).
+Efficiency is the frequency of cleavage at the target site (on-target efficiency).
+</p>
+<p>
+This track was created by Maximilian Haeussler, with helpful input from Jean-Paul Concordet (MNHN
+Paris) and Alberto Stolfi (NYU). We would also like to thank Hiram Clawson and Jairo Navarro for
+developing and releasing the track.
+</p>
+
 <a name="033122"></a>
 <h2>Mar. 31, 2022 &nbsp;&nbsp; Tabula Sapiens now available on hg38</h2>
 <p>

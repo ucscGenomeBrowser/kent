@@ -220,8 +220,8 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   my $tenK = $oneThird + 10000;
   $tenK = $bigChrom if ($tenK > $bigChrom);
   my $defPos="${chrName}:${oneThird}-${tenK}";
-  if ( -s "$asmId/defaultPos.txt" ) {
-    $defPos=`cat "$asmId/defaultPos.txt"`;
+  if ( -s "$buildDir/defaultPos.txt" ) {
+    $defPos=`cat "$buildDir/defaultPos.txt"`;
     chomp $defPos;
   }
   printf "defaultPos %s\n", $defPos;

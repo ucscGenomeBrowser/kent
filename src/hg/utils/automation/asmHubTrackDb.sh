@@ -22,6 +22,18 @@ export hubPath="$gcX/$d0/$d1/$d2/$asmId"
 
 export scriptDir="$HOME/kent/src/hg/utils/automation"
 
+# technique to set variables based on the name in another variable:
+
+if [ -s "$buildDir/dropTracks.list" ]; then
+  printf "# reading dropTracks.list\n" 1>&2
+  for dropTrack in `cat "$buildDir/dropTracks.list"`
+  do
+     notTrack="not_${dropTrack}"
+#      printf "# %s\n" "${notTrack}" 1>&2
+     eval $notTrack="1"
+  done
+fi
+
 mkdir -p $buildDir/bbi
 mkdir -p $buildDir/ixIxx
 
@@ -136,6 +148,8 @@ fi
 
 if [ "${gapOverlapCount}" -gt 0 -o "${tanDupCount}" -gt 0 ]; then
 
+  if [ -z ${not_tanDups+x} ]; then
+
   printf "track tanDups
 shortLabel Tandem Dups
 longLabel Paired identical sequences
@@ -165,7 +179,10 @@ html html/%s.tanDups\n\n" "${asmId}"
 
   $scriptDir/asmHubTanDups.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.tanDups.html
 
-fi
+  else
+    printf "# skipping the tanDups track\n" 1>&2
+  fi	#	the else clause of: if [ -z ${not_tanDups+x} ]
+fi	#	if [ "${gapOverlapCount}" -gt 0 -o "${tanDupCount}" -gt 0 ]
 
 # see if there are repeatMasker bb files
 export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb 2> /dev/null | wc -l) || true`
@@ -344,7 +361,6 @@ group genes
 visibility pack
 type bigBed
 dragAndDrop subTracks
-noInherit on
 allButtonPair on
 dataVersion $dataVersion
 html html/%s.refSeqComposite
@@ -627,6 +643,8 @@ fi
 
 ###################################################################
 # augustus genes
+if [ -z ${not_augustus+x} ]; then
+
 if [ -s ${buildDir}/trackData/augustus/${asmId}.augustus.bb ]; then
 rm -f ${buildDir}/bbi/${asmId}.augustus.bb
 rm -f ${buildDir}/genes/${asmId}.augustus.gtf.gz
@@ -652,6 +670,10 @@ bigDataUrl bbi/%s.augustus.bb
 html html/%s.augustus\n\n" "${augustusVis}" "${asmId}" "${asmId}"
 $scriptDir/asmHubAugustusGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.augustus.html
 fi
+
+else
+  printf "# skipping the augustus track\n" 1>&2
+fi	#	the else clause of: if [ -z ${not_augustus+x} ]
 
 ###################################################################
 # xenoRefGene genes

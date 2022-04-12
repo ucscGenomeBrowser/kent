@@ -54,7 +54,6 @@ printf "subGroup3 clade Clade c00=human\n";
 printf "dragAndDrop subTracks\n";
 printf "visibility hide
 group compGeno
-noInherit on
 color 0,0,0
 altColor 255,255,0
 type bed 3

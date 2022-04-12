@@ -125,7 +125,6 @@ subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
 group compGeno
-noInherit on
 "
 
   printf "priority 100.1

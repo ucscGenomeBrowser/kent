@@ -7,16 +7,17 @@
     mkdir -p /hive/data/genomes/hg38/bed/chm13LiftOver
     cd /hive/data/genomes/hg38/bed/chm13LiftOver
 
-# Obtain GRCh38 from T2T Globus: team-liftover/v1_nflo/grch38-chm13v2.chain
+# originally Obtain GRCh37 from T2T Globus: team-liftover/v1_nflo/grch38-chm13v2.chain
 
-# rename to better match UCSC convetions and compress
-    mv grch38-chm13v2.chain hg38-chm13v2.over.chain
-    pigz hg38-chm13v2.over.chain
+# 2022-04-09 updated due to discovery that chrM was missing
+# obtain updated chains from 
+
+  cp /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/trackData/hgLiftOver/hg38-chm13v2.over.chain.gz .
 
 # make NCBI query names as well, since chromAlias doesn't work yet for click-through
 # note doc is wrong in chromToPsl PSL query is 10
 
-    chainToPslBasic hg38-chm13v2.over.chain.gz stdout | chromToUcsc -k 10 -a /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_CHM13_T2T_v2.0/GCA_009914755.4_CHM13_T2T_v2.0.chromAlias.txt | pslToChain stdin stdout | pigz -c > hg38-chm13v2.ncbi-qnames.over.chain.gz
+    chainToPslBasic hg38-chm13v2.over.chain.gz stdout | chromToUcsc -k 10 -a /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt | pslToChain stdin stdout | pigz -c > hg38-chm13v2.ncbi-qnames.over.chain.gz
 
 # build bigChain files:
     hgLoadChain -noBin -test none bigChain hg38-chm13v2.over.chain.gz 

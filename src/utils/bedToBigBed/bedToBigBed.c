@@ -20,8 +20,9 @@
 #include "bbiAlias.h"
 #include "twoBit.h"
 
-char *version = "2.8";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
+char *version = "2.9";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
 /* Version history from 2.6 on at least -
+ *   2.9 - ability to specify chromAlias bigBed as chromSizes file
  *   2.8 - Various changes where developer didn't increment version id
  *   2.7 - Added check for duplicate field names in asParse.c
  *   2.6 - Made it not crash on empty input.  
@@ -569,21 +570,6 @@ if (eim != NULL)
     }
 }
 
-struct chromSizeClosure  // a structure that contains the data we need to get a chromosome size from a bigBed
-{ 
-    struct bbiFile *bbi;
-    struct bptIndex *bptIndex;
-    struct lm *lm;
-};
-
-static int ourChromSizeFunc(void *closure, char *chrom)
-/* A function to return the size of a given sequence. */
-{
-struct chromSizeClosure *ourClosure = (struct chromSizeClosure *)closure;
-
-return bbiAliasChromSize(ourClosure->bbi, ourClosure->bptIndex, ourClosure->lm, chrom);
-}
-
 void bbFileCreate(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
@@ -614,16 +600,7 @@ bits64 bedCount = 0;
 bits32 uncompressBufSize = 0;
 struct bbiChromUsage *usageList = NULL;
 if (sizesIsBb)
-    {
-    struct chromSizeClosure *ourClosure = NULL;
-
-    AllocVar(ourClosure);
-    ourClosure->bbi = bigBedFileOpen(chromSizes);
-    ourClosure->bptIndex = bbiAliasOpenExtra(ourClosure->bbi);
-    ourClosure->lm = lmInit(0);
-    usageList = bbiChromUsageFromBedFileAlias(lf, ourChromSizeFunc, ourClosure, eim, &minDiff, &aveSize, &bedCount, tabSep);
-    // should close and free the closure contents
-    }
+    usageList = bbiChromUsageFromBedFileAlias(lf, chromSizes, eim, &minDiff, &aveSize, &bedCount, tabSep);
 else
     {
     struct hash *chromSizesHash = NULL;

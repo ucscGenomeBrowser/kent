@@ -14,6 +14,7 @@
 #include "obscure.h"
 #include "vcf.h"
 #include "web.h"
+#include "trackHub.h"
 
 #define VCFDATALINE_NUM_COLS 10
 
@@ -468,7 +469,9 @@ return idList;
 void showSchemaVcf(char *table, struct trackDb *tdb, boolean isTabix)
 /* Show schema on vcf. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(database))
+    conn = hAllocConn(database);
 char *fileName = vcfMustFindFileName(conn, table, hDefaultChrom(database), isTabix);
 
 struct asObject *as = vcfAsObj();
