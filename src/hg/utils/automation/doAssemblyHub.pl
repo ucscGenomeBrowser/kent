@@ -1089,7 +1089,6 @@ sub doGatewayPage {
 
   $bossScript->add(<<_EOF_
 export asmId=$asmId
-export species=$speciesNoBlank
 
 \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
      $asmHubName ../download/\${asmId}_assembly_report.txt \\
