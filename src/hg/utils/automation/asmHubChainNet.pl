@@ -35,7 +35,7 @@ if ($queryId =~ m/^GC/) {
   my $d2 = substr($queryId,10,3);
   my $hubBuildDir = "refseqBuild";
   $hubBuildDir = "genbankBuild" if ($gcX eq "GCA");
-  $queryId = `ls -d /hive/data/genomes/asmHubs/$hubBuildDir/$gcX/$d0/$d1/$d2/${gcX}*`;
+  $queryId = `ls -d /hive/data/genomes/asmHubs/$hubBuildDir/$gcX/$d0/$d1/$d2/${queryId}*`;
   chomp $queryId;
   $queryId =~ s#.*/##;
 }
