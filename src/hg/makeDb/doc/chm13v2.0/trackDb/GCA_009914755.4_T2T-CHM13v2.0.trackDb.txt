@@ -1,7 +1,7 @@
 track assembly
-longLabel Assembly
+longLabel Assembly from NCBI Genbank Sequences
 shortLabel Assembly
-visibility pack
+visibility hide
 colorByStrand 150,100,30 230,170,40
 color 150,100,30
 altColor 230,170,40
@@ -18,7 +18,7 @@ track gc5Base
 shortLabel GC Percent
 longLabel GC Percent in 5-Base Windows
 group map
-visibility full
+visibility hide
 autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
@@ -173,7 +173,7 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene
 
 track GCA_009914755.4_T2T-CHM13v2.0ChainNet
 compositeTrack on
-shortLabel Chain/Net
+shortLabel Human Chain/Net
 longLabel Chain and Net alignments to target sequence: GCA_009914755.4_T2T-CHM13v2.0
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species s000=GCA_021950905.1 s001=GCA_021951015.1 s002=hg19 s003=hg38

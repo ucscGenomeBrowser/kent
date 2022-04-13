@@ -2,12 +2,12 @@ genome GCA_009914755.4
 taxId 9606
 trackDb trackDb.txt
 groups groups.txt
-description human T2T CHM13 v2.0
+description human T2T-CHM13 v2.0
 twoBitPath GCA_009914755.4.2bit
 twoBitBptUrl GCA_009914755.4.2bit.bpt
 chromSizes GCA_009914755.4.chrom.sizes.txt
 chromAlias GCA_009914755.4.chromAlias.txt
-organism human T2T CHM13 v2.0
+organism human T2T-CHM13 v2.0
 defaultPos CP068269.2:145462284-145491793
 scientificName Homo sapiens
 htmlPath html/GCA_009914755.4_T2T-CHM13v2.0.description.html
