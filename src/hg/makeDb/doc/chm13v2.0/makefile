@@ -74,10 +74,14 @@ verify:
 	@printf "track count: %d tracks via API list tracks\n" "`curl -L "https://apibeta.soe.ucsc.edu/list/tracks?genome=GCA_009914755.4;trackLeavesOnly=1;hubUrl=https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt"  2> /dev/null | python -mjson.tool | egrep ": {$$"  | tr -d '"' | sed -e 's/^ \+//; s/ {//;' | xargs echo | wc -w`"
 	@printf "should be more than 70 tracks\n"
 
+# user must have login permissions as qateam to hgdownload
+verifyLogin:
+	@ssh qateam@hgdownload.soe.ucsc.edu date
+
 # push the hub to hgdownload
-public:
+public: verifyLogin
 	@printf "pushing to hgdownload\n" 1>&2
-	rsync --delete --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${pushFromDir}/" "qateam@hgdownload.soe.ucsc.edu:${pushToDir}/" 2>&1 | grep -v "X11 forwarding request" || true
+	rsync --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${pushFromDir}/" "qateam@hgdownload.soe.ucsc.edu:${pushToDir}/" 2>&1 | grep -v "X11 forwarding request" || true
 	rsync --stats -a -L -P "${pushFromDir}/download.hub.txt" "qateam@hgdownload.soe.ucsc.edu:${pushToDir}/hub.txt" 2>&1 | grep -v "X11 forwarding request" || true
 	@printf "# successful rsync\n" 1>&2
 

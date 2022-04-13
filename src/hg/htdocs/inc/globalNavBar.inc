@@ -15,7 +15,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="../cgi-bin/hgTracks?db=hg38&amp;position=lastDbPos">Human GRCh38/hg38</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
-        <li><a href="../cgi-bin/hgTracks?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=GCA_009914755.4&position=lastDbPos">Human T2T/CHM13</a></li>
+        <li><a href="../cgi-bin/hgTracks?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=GCA_009914755.4&position=lastDbPos">Human T2T-CHM13</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm39&amp;position=lastDbPos">Mouse GRCm39/mm39</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
 	<li><a href="https://hgdownload.soe.ucsc.edu/hubs/">Genome Archive GenArk</a></li>

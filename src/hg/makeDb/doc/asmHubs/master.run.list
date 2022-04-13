@@ -541,6 +541,7 @@
 ./runBuild GCF_000006295.1 GCF_000006295.1_JCVI_LOUSE_1.0 invertebrate Pediculus_humanus_corporis
 ./runBuild GCF_000006335.3 GCF_000006335.3_ASM633v3 fungi Candida_tropicalis_MYA-3404
 ./runBuild GCF_000006445.2 GCF_000006445.2_ASM644v2 fungi Debaryomyces_hansenii_CBS767
+./runBuild GCF_000009045.1 GCF_000009045.1_ASM904v1 bacteria Bacillus_subtilis_subsp._subtilis_str._168
 ./runBuild GCF_000009225.2 GCF_000009225.2_ASM922v1 bacteria Pseudomonas_fluorescens_SBW25
 ./runBuild GCF_000026365.1 GCF_000026365.1_ASM2636v1 fungi Zygosaccharomyces_rouxii
 ./runBuild GCF_000026945.1 GCF_000026945.1_ASM2694v1 fungi Candida_dubliniensis_CD36
@@ -983,6 +984,7 @@
 ./runBuild GCF_000836275.1 GCF_000836275.1_Exop_meso_CBS40295_V1 fungi Exophiala_mesophila
 ./runBuild GCF_000836295.1 GCF_000836295.1_O_gall_CBS43764 fungi Verruconis_gallopava
 ./runBuild GCF_000836435.1 GCF_000836435.1_Fons_mult_CBS_102226_V1 fungi Fonsecaea_multimorphosa_CBS_102226
+./runBuild GCF_000850965.1 GCF_000850965.1_ViralMultiSegProj14847 viral La_Crosse_virus
 ./runBuild GCF_000935625.1 GCF_000935625.1_ASM93562v1 vertebrate_other Nanorana_parkeri
 ./runBuild GCF_000938715.1 GCF_000938715.1_LALA0 fungi Lachancea_lanzarotensis
 ./runBuild GCF_000949405.1 GCF_000949405.1_V.emery_V1.0 invertebrate Vollenhovia_emeryi

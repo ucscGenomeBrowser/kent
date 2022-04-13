@@ -24,6 +24,7 @@
 #include "snakeUi.h"
 #include "bits.h"
 #include "trix.h"
+#include "chromAlias.h"
 
 #include "halBlockViz.h"
 #include "bigPsl.h"
@@ -1382,7 +1383,15 @@ if (errCatchStart(errCatch))
         }
     else 
         {
-        head = halGetBlocksInTargetRange(handle, otherSpecies, otherDbName, aliasName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies, coalescent, &errString);
+        struct slName *aliasList = chromAliasFindAliases(chromName);
+        struct slName *nativeName = newSlName(aliasName);
+        slAddHead(&aliasList, nativeName);
+        for (; aliasList; aliasList = aliasList->next)
+            {
+            head = halGetBlocksInTargetRange(handle, otherSpecies, otherDbName, aliasList->name, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies, coalescent, &errString);
+            if (head != NULL) 
+                break;
+            }
         }
 
     // did we get any blocks from HAL
