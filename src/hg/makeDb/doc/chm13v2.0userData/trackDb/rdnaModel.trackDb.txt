@@ -4,7 +4,7 @@ longLabel Consensus rDNA models
 priority 10
 group map
 type bigBed 4
-visibility hide
+visibility pack
 itemRgb on
 maxItems 100000
 bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rdnaModel/rdnaModel.bb

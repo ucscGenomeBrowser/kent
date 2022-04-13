@@ -34,7 +34,6 @@ catGxfFiles = catLiftOffGenesV1.gff3.gz catLiftOffGenesV1.gtf.gz
 MAKEFLAGS += --check-symlink-times
 
 all: ${userTrackDbFile} bbiInstall htmlInstall liftOverInstall geneInstall
-	cd ${asmBuildDir} && ./doTrackDb.bash
 	hubCheck ${stageUrl}
 
 # ensure spaces separate the stanzas
