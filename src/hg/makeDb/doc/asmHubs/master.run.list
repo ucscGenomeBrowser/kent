@@ -1,4 +1,3 @@
-
 ./runBuild GCA_000001905.1 GCA_000001905.1_Loxafr3.0 mammals Loxodonta_africana
 ./runBuild GCA_000002305.1 GCA_000002305.1_EquCab2.0 mammals Equus_caballus
 ./runBuild GCA_000003205.6 GCA_000003205.6_Btau_5.0.1 mammals Bos_taurus
@@ -985,7 +984,7 @@
 ./runBuild GCF_000836275.1 GCF_000836275.1_Exop_meso_CBS40295_V1 fungi Exophiala_mesophila
 ./runBuild GCF_000836295.1 GCF_000836295.1_O_gall_CBS43764 fungi Verruconis_gallopava
 ./runBuild GCF_000836435.1 GCF_000836435.1_Fons_mult_CBS_102226_V1 fungi Fonsecaea_multimorphosa_CBS_102226
-./runBuild/GCF_000850965.1 GCF_000850965.1_ViralMultiSegProj14847 viral La_Crosse_virus
+./runBuild GCF_000850965.1 GCF_000850965.1_ViralMultiSegProj14847 viral La_Crosse_virus
 ./runBuild GCF_000935625.1 GCF_000935625.1_ASM93562v1 vertebrate_other Nanorana_parkeri
 ./runBuild GCF_000938715.1 GCF_000938715.1_LALA0 fungi Lachancea_lanzarotensis
 ./runBuild GCF_000949405.1 GCF_000949405.1_V.emery_V1.0 invertebrate Vollenhovia_emeryi
