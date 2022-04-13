@@ -8,7 +8,7 @@ twoBitBptUrl GCA_009914755.4.2bit.bpt
 chromSizes GCA_009914755.4.chrom.sizes.txt
 chromAlias GCA_009914755.4.chromAlias.txt
 organism human T2T-CHM13 v2.0
-defaultPos CP068269.2:145462284-145491793
+defaultPos CP068269.2:145458455-145495201
 scientificName Homo sapiens
 htmlPath html/GCA_009914755.4_T2T-CHM13v2.0.description.html
 blat dynablat-01.soe.ucsc.edu 4040 dynamic GCA/009/914/755/GCA_009914755.4
