@@ -81,7 +81,7 @@ verifyLogin:
 # push the hub to hgdownload
 public: verifyLogin
 	@printf "pushing to hgdownload\n" 1>&2
-	rsync --delete --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${pushFromDir}/" "qateam@hgdownload.soe.ucsc.edu:${pushToDir}/" 2>&1 | grep -v "X11 forwarding request" || true
+	rsync --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${pushFromDir}/" "qateam@hgdownload.soe.ucsc.edu:${pushToDir}/" 2>&1 | grep -v "X11 forwarding request" || true
 	rsync --stats -a -L -P "${pushFromDir}/download.hub.txt" "qateam@hgdownload.soe.ucsc.edu:${pushToDir}/hub.txt" 2>&1 | grep -v "X11 forwarding request" || true
 	@printf "# successful rsync\n" 1>&2
 
