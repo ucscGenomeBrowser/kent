@@ -401,7 +401,8 @@ exonArrows on
     color 180,0,134
     priority 2
 
-include dbSnpArchiveMm10.ra 
+include dbSnpArchiveMm10.ra
+include reMap.ra alpha
 
 # TOGA default annotation for hg38
 track HLTOGAannotvsHg38v1

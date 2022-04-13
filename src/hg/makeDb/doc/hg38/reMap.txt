@@ -1,0 +1,21 @@
+# ReMap refs #28960 (2022-04-13 Gerardo)
+cd /hive/data/genomes/hg38/bed
+mkdir reMap
+cd reMap
+wget https://remap.univ-amu.fr/storage/public/hubReMap2022/hg38/bigBed/remap2022_all_macs2_hg38_v1_0.bb
+mv remap2022_all_macs2_hg38_v1_0.bb reMap2022.bb
+wget https://remap.univ-amu.fr/storage/public/hubReMap2022/hg38/bigBed/hg38.bw
+mv hg38.bw reMapDensity2022.bw
+cd /gbdb/hg38
+mkdir reMap
+cd reMap
+ln -s /hive/data/genomes/hg38/bed/reMap/reMap2022.bb
+ln -s /hive/data/genomes/hg38/bed/reMap/reMapDensity2022.bw
+cd ~/kent/src/hg/makeDb/trackDb/human/
+wget https://remap.univ-amu.fr/storage/public/hubReMap2022/remapHub2022.html
+cp remapHub2022.html  reMap.html
+cd ~/kent/src/hg/makeDb/trackDb
+curl https://remap.univ-amu.fr/storage/public/hubReMap2022/hg38/trackDb.txt > human/hg38/reMap.ra
+vi human/hg38/reMap.ra
+vi human/hg38/trackDb.ra
+vi human/reMap.html

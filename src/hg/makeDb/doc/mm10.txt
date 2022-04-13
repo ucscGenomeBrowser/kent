@@ -18518,3 +18518,23 @@ cut -f 13-20 joined.tab > part3.tab
 paste part1.tab part2.tab part3.tab | sort -k1,1 -k2,2n > merge.bed
 
 bedToBigBed -tab -type=bed4+6 merge.bed /cluster/data/mm10/chrom.sizes togaInactMut.bb -as=$HOME/kent/src/hg/lib/togaInactMut.as
+
+###############################################################################
+# ReMap refs #28960 (2022-04-13 Gerardo)
+cd /hive/data/genomes/mm10/bed
+mkdir reMap
+cd reMap
+wget https://remap.univ-amu.fr/storage/public/hubReMap2022/mm10/bigBed/remap2022_all_macs2_mm10_v1_0.bb
+mv remap2022_all_macs2_mm10_v1_0.bb reMap2022.bb
+wget https://remap.univ-amu.fr/storage/public/hubReMap2022/mm10/bigBed/test.bw
+mv test.bw reMapDensity2022.bw
+cd /gbdb/mm10
+mkdir reMap
+cd reMap
+ln -s /hive/data/genomes/mm10/bed/reMap/reMap2022.bb
+ln -s /hive/data/genomes/mm10/bed/reMap/reMapDensity2022.bw
+cd ~/kent/src/hg/makeDb/trackDb/mouse/
+cd ~/kent/src/hg/makeDb/trackDb
+curl https://remap.univ-amu.fr/storage/public/hubReMap2022/mm10/trackDb.txt > mouse/mm10/reMap.ra
+vi mouse/mm10/reMap.ra
+vi human/mm10/trackDb.ra

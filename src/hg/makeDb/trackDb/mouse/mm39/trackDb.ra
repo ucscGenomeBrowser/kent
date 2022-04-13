@@ -49,3 +49,4 @@ include knownGene.ra
 #include knownGene.ra beta,public
 #include knownGene.alpha.ra alpha
 include knownGeneArchive.ra
+include reMap.ra alpha
