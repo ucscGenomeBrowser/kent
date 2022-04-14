@@ -28,7 +28,7 @@ tracksWithHtml = $(filter-out cytoBandMapped,${tracks})
 
 hgLiftOverFiles = chm13v2-hg19.over.chain.gz chm13v2-hg38.over.chain.gz hg19-chm13v2.over.chain.gz hg38-chm13v2.over.chain.gz
 
-catGxfFiles = catLiftOffGenesV1.gff3.gz catLiftOffGenesV1.gtf.gz
+catGxfFiles = catLiftOffGenesV1.gff3.gz catLiftOffGenesV1.gtf.gz catLiftOffGenesV1.rna.fa.gz catLiftOffGenesV1.protein.fa.gz
 
 .SECONDARY:
 MAKEFLAGS += --check-symlink-times

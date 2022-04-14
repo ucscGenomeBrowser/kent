@@ -105,6 +105,16 @@ rename to
   zcat catLiftOffGenesV1.gff3.gz | gffread /dev/stdin -T -o catLiftOffGenesV1.gtf
   pigz catLiftOffGenesV1.gtf 
 
+
+# obtain sequence fastas
+   http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.v2.0.fasta
+   http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.v2.0.protein.fasta
+
+   mv CHM13.v2.0.fasta catLiftOffGenesV1.rna.fa
+   mv CHM13.v2.0.protein.fasta  catLiftOffGenesV1.protein.fa
+   pigz *.fa
+   
+
 ================================================================
 * hgLiftOver (2022-03-26 markd)
 ----------------------------------------------------------------
@@ -185,9 +195,12 @@ CHM13	GCA_009914755.4
 * hgUnique (2022-03-30 markd)
 ----------------------------------------------------------------
 regions not in hg38:
+original version in:
 globus: /team-liftover/v1_nflo/T2T-CHM13v2.0_new_and_non_syntenic_regions.bed
          chm13v2-unique_to_hg19.bed
          chm13v2-unique_to_hg38.bed
+however, with the addition of 
+
 
 #
 chainToPslBasic ../hgLiftOver/chm13v2-hg38.over.chain.gz stdout \
