@@ -1,6 +1,6 @@
 hub GCA_009914755.4 genome assembly
-shortLabel human T2T CHM13 v2.0
-longLabel human T2T CHM13 v2.0/Homo sapiens/GCA_009914755.4_T2T-CHM13v2.0 genome assembly
+shortLabel human T2T-CHM13 v2.0
+longLabel human T2T-CHM13 v2.0/Homo sapiens/GCA_009914755.4_T2T-CHM13v2.0 genome assembly
 email hclawson@ucsc.edu
 descriptionUrl html/GCA_009914755.4_T2T-CHM13v2.0.description.html
 useOneFile on
@@ -8,13 +8,13 @@ useOneFile on
 genome GCA_009914755.4
 taxId 9606
 groups groups.txt
-description human T2T CHM13 v2.0
+description human T2T-CHM13 v2.0
 twoBitPath GCA_009914755.4.2bit
 twoBitBptUrl GCA_009914755.4.2bit.bpt
 chromSizes GCA_009914755.4.chrom.sizes.txt
 chromAlias GCA_009914755.4.chromAlias.txt
-organism human T2T CHM13 v2.0
-defaultPos CP068269.2:145462284-145491793
+organism human T2T-CHM13 v2.0
+defaultPos CP068269.2:145458455-145495201
 scientificName Homo sapiens
 htmlPath html/GCA_009914755.4_T2T-CHM13v2.0.description.html
 blat dynablat-01.soe.ucsc.edu 4040 dynamic GCA/009/914/755/GCA_009914755.4
@@ -26,9 +26,9 @@ liftOver.hg19 liftOver/GCA_009914755.4ToHg19.over.chain.gz
 liftOver.hg38 liftOver/GCA_009914755.4ToHg38.over.chain.gz
 
 track assembly
-longLabel Assembly
+longLabel Assembly from NCBI Genbank Sequences
 shortLabel Assembly
-visibility pack
+visibility hide
 colorByStrand 150,100,30 230,170,40
 color 150,100,30
 altColor 230,170,40
@@ -45,7 +45,7 @@ track gc5Base
 shortLabel GC Percent
 longLabel GC Percent in 5-Base Windows
 group map
-visibility full
+visibility hide
 autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
@@ -63,7 +63,7 @@ compositeTrack on
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
 group varRep
-visibility dense
+visibility hide
 type bigBed 6 +
 colorByStrand 50,50,150 150,50,50
 maxWindowToDraw 10000000
@@ -146,7 +146,7 @@ track simpleRepeat
 shortLabel Simple Repeats
 longLabel Simple Tandem Repeats by TRF
 group varRep
-visibility dense
+visibility hide
 type bigBed 4 +
 bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.simpleRepeat.bb
 html html/GCA_009914755.4_T2T-CHM13v2.0.simpleRepeat
@@ -156,7 +156,7 @@ compositeTrack on
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
-visibility pack
+visibility hide
 type bigBed 4 +
 html html/GCA_009914755.4_T2T-CHM13v2.0.cpgIslands
 
@@ -180,7 +180,7 @@ track windowMasker
 shortLabel WM + SDust
 longLabel Genomic Intervals Masked by WindowMasker + SDust
 group varRep
-visibility dense
+visibility hide
 type bigBed 3
 bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.windowMasker.bb
 html html/GCA_009914755.4_T2T-CHM13v2.0.windowMasker
@@ -189,7 +189,7 @@ track xenoRefGene
 shortLabel RefSeq mRNAs
 longLabel RefSeq mRNAs mapped to this assembly
 group rna
-visibility pack
+visibility hide
 color 180,0,0
 type bigGenePred
 bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene.bb
@@ -200,19 +200,17 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene
 
 track GCA_009914755.4_T2T-CHM13v2.0ChainNet
 compositeTrack on
-shortLabel Chain/Net
+shortLabel Human Chain/Net
 longLabel Chain and Net alignments to target sequence: GCA_009914755.4_T2T-CHM13v2.0
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species s000=GCA_021950905.1 s001=GCA_021951015.1 s002=hg19 s003=hg38
 subGroup3 clade Clade c00=human
 dragAndDrop subTracks
-visibility hide
+visibility full
 group compGeno
 color 0,0,0
 altColor 255,255,0
 type bed 3
-chainLinearGap loose
-chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on
@@ -228,8 +226,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track chainGCA_021950905.1
         subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
         subGroups view=chain species=s000 clade=c00
-        shortLabel GCA_021950905.1 Chain
-        longLabel GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Chained Alignments
+        shortLabel HG002 pat Chain
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Chained Alignments
         type bigChain GCA_021950905.1
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainGCA_021950905.1.bb
         linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainGCA_021950905.1Link.bb
@@ -240,8 +238,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track chainSynGCA_021950905.1
         subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
         subGroups view=chain species=s000 clade=c00
-        shortLabel GCA_021950905.1 synChain
-        longLabel GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Syntenic Chained Alignments
+        shortLabel HG002 pat synChain
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Syntenic Chained Alignments
         type bigChain GCA_021950905.1
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynGCA_021950905.1.bb
         linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynGCA_021950905.1Link.bb
@@ -252,8 +250,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track chainRBestGCA_021950905.1
         subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
         subGroups view=chain species=s000 clade=c00
-        shortLabel GCA_021950905.1 rbChain
-        longLabel GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Reciprocal Best Chained Alignments
+        shortLabel HG002 pat rbChain
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Reciprocal Best Chained Alignments
         type bigChain GCA_021950905.1
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestGCA_021950905.1.bb
         linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestGCA_021950905.1Link.bb
@@ -264,8 +262,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track chainLiftOverGCA_021950905.1
         subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
         subGroups view=chain species=s000 clade=c00
-        shortLabel GCA_021950905.1 loChain
-        longLabel GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
+        shortLabel HG002 pat loChain
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
         type bigChain GCA_021950905.1
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021950905.1.bb
         linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021950905.1Link.bb
@@ -276,8 +274,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track chainGCA_021951015.1
         subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
         subGroups view=chain species=s001 clade=c00
-        shortLabel GCA_021951015.1 Chain
-        longLabel GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Chained Alignments
+        shortLabel HG002 mat Chain
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Chained Alignments
         type bigChain GCA_021951015.1
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainGCA_021951015.1.bb
         linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainGCA_021951015.1Link.bb
@@ -288,8 +286,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track chainSynGCA_021951015.1
         subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
         subGroups view=chain species=s001 clade=c00
-        shortLabel GCA_021951015.1 synChain
-        longLabel GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Syntenic Chained Alignments
+        shortLabel HG002 mat synChain
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Syntenic Chained Alignments
         type bigChain GCA_021951015.1
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynGCA_021951015.1.bb
         linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynGCA_021951015.1Link.bb
@@ -300,8 +298,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track chainRBestGCA_021951015.1
         subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
         subGroups view=chain species=s001 clade=c00
-        shortLabel GCA_021951015.1 rbChain
-        longLabel GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Reciprocal Best Chained Alignments
+        shortLabel HG002 mat rbChain
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Reciprocal Best Chained Alignments
         type bigChain GCA_021951015.1
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestGCA_021951015.1.bb
         linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestGCA_021951015.1Link.bb
@@ -312,8 +310,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track chainLiftOverGCA_021951015.1
         subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
         subGroups view=chain species=s001 clade=c00
-        shortLabel GCA_021951015.1 loChain
-        longLabel GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
+        shortLabel HG002 mat loChain
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
         type bigChain GCA_021951015.1
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021951015.1.bb
         linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021951015.1Link.bb
@@ -406,7 +404,7 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         priority 15
 
         track chainLiftOverHg38
-        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain on
         subGroups view=chain species=s003 clade=c00
         shortLabel hg38 loChain
         longLabel hg38 (Dec. 2013) Lift Over Chained Alignments
@@ -420,14 +418,14 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
     track GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
     shortLabel Nets
     view net
-    visibility dense
+    visibility hide
     subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNet
 
         track netGCA_021950905.1
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
         subGroups view=net species=s000 clade=c00
-        shortLabel GCA_021950905.1 mafNet
-        longLabel GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) mafNet Alignment
+        shortLabel HG002 pat Net
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Net Alignment
         type bigMaf
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.net.bb
         summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.net.summary.bb
@@ -438,8 +436,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track synNetGCA_021950905.1
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
         subGroups view=net species=s000 clade=c00
-        shortLabel GCA_021950905.1 synNet
-        longLabel GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Syntenic Net Alignment
+        shortLabel HG002 pat synNet
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Syntenic Net Alignment
         type bigMaf
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.synNet.bb
         summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.synNet.summary.bb
@@ -450,8 +448,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track rbestNetGCA_021950905.1
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
         subGroups view=net species=s000 clade=c00
-        shortLabel GCA_021950905.1 rbestNet
-        longLabel GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Reciprocal Best Net Alignment
+        shortLabel HG002 pat rbestNet
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Reciprocal Best Net Alignment
         type bigMaf
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.rbestNet.bb
         summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.rbestNet.summary.bb
@@ -462,8 +460,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track liftOverNetGCA_021950905.1
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
         subGroups view=net species=s000 clade=c00
-        shortLabel GCA_021950905.1 liftOverNet
-        longLabel GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Net Alignment
+        shortLabel HG002 pat liftOverNet
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Net Alignment
         type bigMaf
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.liftOverNet.bb
         summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.liftOverNet.summary.bb
@@ -474,8 +472,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track netGCA_021951015.1
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
         subGroups view=net species=s001 clade=c00
-        shortLabel GCA_021951015.1 mafNet
-        longLabel GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) mafNet Alignment
+        shortLabel HG002 mat Net
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Net Alignment
         type bigMaf
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.net.bb
         summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.net.summary.bb
@@ -486,8 +484,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track synNetGCA_021951015.1
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
         subGroups view=net species=s001 clade=c00
-        shortLabel GCA_021951015.1 synNet
-        longLabel GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Syntenic Net Alignment
+        shortLabel HG002 mat synNet
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Syntenic Net Alignment
         type bigMaf
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.synNet.bb
         summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.synNet.summary.bb
@@ -498,8 +496,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track rbestNetGCA_021951015.1
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
         subGroups view=net species=s001 clade=c00
-        shortLabel GCA_021951015.1 rbestNet
-        longLabel GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Reciprocal Best Net Alignment
+        shortLabel HG002 mat rbestNet
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Reciprocal Best Net Alignment
         type bigMaf
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.rbestNet.bb
         summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.rbestNet.summary.bb
@@ -510,8 +508,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track liftOverNetGCA_021951015.1
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
         subGroups view=net species=s001 clade=c00
-        shortLabel GCA_021951015.1 liftOverNet
-        longLabel GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Net Alignment
+        shortLabel HG002 mat liftOverNet
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Net Alignment
         type bigMaf
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.liftOverNet.bb
         summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.liftOverNet.summary.bb
@@ -522,8 +520,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track netHg19
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
         subGroups view=net species=s002 clade=c00
-        shortLabel hg19 mafNet
-        longLabel hg19 (Feb. 2009) mafNet Alignment
+        shortLabel hg19 Net
+        longLabel hg19 (Feb. 2009) Net Alignment
         type bigMaf
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.net.bb
         summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.net.summary.bb
@@ -570,8 +568,8 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         track netHg38
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
         subGroups view=net species=s003 clade=c00
-        shortLabel hg38 mafNet
-        longLabel hg38 (Dec. 2013) mafNet Alignment
+        shortLabel hg38 Net
+        longLabel hg38 (Dec. 2013) Net Alignment
         type bigMaf
         bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.net.bb
         summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.net.summary.bb

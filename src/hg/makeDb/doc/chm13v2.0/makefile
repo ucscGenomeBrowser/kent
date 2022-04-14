@@ -60,7 +60,7 @@ stageFiles: $(htmlFiles:%=%stageFiles)
 # that cause this test to fail
 test:
 	@printf "# verify hub is functioning from hgdownload-test.gi.ucsc.edu\n"
-	hubCheck "https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt"
+	hubCheck -checkSettings "https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt"
 	@printf "hubCheck OK\n"
 	@printf "track count: %d tracks via API list tracks\n" "`curl -L "https://genome-test.gi.ucsc.edu/list/tracks?genome=GCA_009914755.4;trackLeavesOnly=1;hubUrl=https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt"  2> /dev/null | python -mjson.tool | egrep ": {$$"  | tr -d '"' | sed -e 's/^ \+//; s/ {//;' | xargs echo | wc -w`"
 	@printf "should be more than 70 tracks\n"
