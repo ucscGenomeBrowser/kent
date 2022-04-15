@@ -321,6 +321,42 @@ printf("</div>\n");
 printf("<p>For questions concerning the content of a file's metadata header, please contact the file creator.</p>\n");
 }
 
+double hicUiMaxInteractionRange(struct cart *cart, struct trackDb *tdb)
+/* Retrieve the maximum range for an interaction to be drawn.  Range is
+ * calculated from the left-most start to the right-most end of the interaction. */
+{
+double defaultValue = 0;
+char *tdbString = trackDbSetting(tdb, HIC_TDB_MAX_DISTANCE);
+if (!isEmpty(tdbString))
+    defaultValue = atof(tdbString);
+return cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MAX_DISTANCE, defaultValue);
+}
+
+double hicUiMinInteractionRange(struct cart *cart, struct trackDb *tdb)
+/* Retrieve the minimum range for an interaction to be drawn.  Range is
+ * calculated from the left-most start to the right-most end of the interaction. */
+{
+double defaultValue = 0;
+char *tdbString = trackDbSetting(tdb, HIC_TDB_MIN_DISTANCE);
+if (!isEmpty(tdbString))
+    defaultValue = atof(tdbString);
+return cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MIN_DISTANCE, defaultValue);
+}
+
+void hicUiMinMaxRangeMenu(struct cart *cart, struct trackDb *tdb)
+{
+char cartVar[2048];
+double minRange = hicUiMinInteractionRange(cart, tdb);
+double maxRange = hicUiMaxInteractionRange(cart, tdb);
+printf("<b>Filter by interaction distance in bp (0 for no limit):</b> ");
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_MIN_DISTANCE);
+printf("minimum ");
+cgiMakeDoubleVarWithMin(cartVar, minRange, NULL, 0, 0);
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_MAX_DISTANCE);
+printf(" maximum ");
+cgiMakeDoubleVarWithMin(cartVar, maxRange, NULL, 0, 0);
+}
+
 void hicCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
                         char *title, boolean boxed)
 /* Draw the list of track configuration options for Hi-C tracks */
@@ -349,6 +385,8 @@ hicUiResolutionMenu(cart, tdb, trackMeta);
 puts("&nbsp;&nbsp;");
 hicUiColorMenu(cart, tdb);
 puts("</p><p>\n");
+hicUiMinMaxRangeMenu(cart, tdb);
+puts("</p><p>\n");
 hicUiFileDetails(trackMeta);
 cfgEndBox(boxed);
 }
@@ -368,6 +406,10 @@ hicUiDrawMenu(cart, tdb);
 puts("&nbsp;&nbsp;");
 hicUiColorMenu(cart, tdb);
 puts("</p><p>\n");
+hicUiMinMaxRangeMenu(cart, tdb);
+puts("</p><p>\n");
 puts("Subtracks below have additional file-specific configuration options for resolution and normalization.\n</p>");
 cfgEndBox(boxed);
 }
+
+

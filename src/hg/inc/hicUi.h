@@ -22,6 +22,8 @@
 #define HIC_TDB_MAX_VALUE       "saturationScore"
 #define HIC_TDB_AUTOSCALE       "autoScale"
 #define HIC_TDB_COLOR           "color"
+#define HIC_TDB_MAX_DISTANCE    "hicDistanceMax"
+#define HIC_TDB_MIN_DISTANCE    "hicDistanceMin"
 
 
 /* Cart variables */
@@ -41,6 +43,8 @@
 /* Default to drawing red on a white background */
 #define HIC_DRAW_COLOR_DEFAULT      "#ff0000"
 #define HIC_DRAW_BG_COLOR_DEFAULT   "#ffffff"
+#define HIC_DRAW_MAX_DISTANCE       "maxDistance"
+#define HIC_DRAW_MIN_DISTANCE       "minDistance"
 
 
 void hicCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
@@ -93,5 +97,13 @@ double  hicUiFetchMaxValue(struct cart *cart, struct trackDb *tdb);
 /* Retrieve the score value at which the draw color reaches its
  * its maximum intensity.  Any scores above this value will
  * share that same draw color. */
+
+double hicUiMaxInteractionRange(struct cart *cart, struct trackDb *tdb);
+/* Retrieve the maximum range for an interaction to be drawn.  Range is
+ * calculated from the left-most start to the right-most end of the interaction. */
+
+double hicUiMinInteractionRange(struct cart *cart, struct trackDb *tdb);
+/* Retrieve the minimum range for an interaction to be drawn.  Range is
+ * calculated from the left-most start to the right-most end of the interaction. */
 
 #endif

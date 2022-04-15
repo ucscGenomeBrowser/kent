@@ -244,7 +244,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bigLolly", s) || 
                    sameString("bigRmsk", s) || 
                    sameString("peptideMapping", s) || sameString("barChart", s) ||
-                   sameString("interact", s) ||
+                   sameString("interact", s) || sameString("hic", s) ||
                    (!startsWithWord("bigWig", s) && startsWith("big", s))
                    );
 freeMem(t);

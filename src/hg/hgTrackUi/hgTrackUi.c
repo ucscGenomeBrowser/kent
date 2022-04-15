@@ -3337,6 +3337,8 @@ else if (!startsWith("bigWig", tdb->type) && startsWith("big", tdb->type))
     tdb->canPack = TRUE;
 else if (sameString(tdb->type, "bigNarrowPeak"))
     tdb->canPack = TRUE;
+else if (sameString(tdb->type, "hic"))
+    tdb->canPack = TRUE;
 
 // Don't bother with vis controls for downloadsOnly
 if (!tdbIsDownloadsOnly(tdb))

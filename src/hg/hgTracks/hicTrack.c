@@ -14,6 +14,22 @@
 #include "hic.h"
 #include "htmlColor.h"
 
+static double hicSqueezeFactor(enum trackVisibility vis)
+/* Controls the height multiplier for various draw modes. */
+{
+switch (vis)
+    {
+    case tvDense:
+        return 0.125;
+    case tvSquish:
+        return 0.25;
+    case tvPack:
+        return 0.5;
+    default:
+        return 1.0;
+    };
+    return 1.0;
+}
 
 static int hicTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Calculate height of the track across all windows.  For arc and triangle, this
@@ -38,10 +54,10 @@ while (trackScan != NULL) // ... and look at following windows ...
     trackScan = trackScan->nextWindow;
     }
 
-// Later, try making pack 0.5, squish 0.25, and dense 0.125.  The various
-// draw functions will also have to be modified accordingly.
-if ( tg->visibility == tvDense)
-    maxHeight *= 0.5;
+maxHeight *= hicSqueezeFactor(vis);
+
+if (maxHeight < tg->lineHeight)
+    maxHeight = tg->lineHeight;
 return maxHeight;
 }
 
@@ -111,8 +127,30 @@ if (numRecords > 0)
 
 struct interact *thisHic = hicItems;
 char *drawMode = hicUiFetchDrawMode(cart, tg->tdb);
+struct interact* filteredOut = NULL;
+struct interact** prevNextPtr = &hicItems; // for removing items from the linked list
+
+double maxRange = hicUiMaxInteractionRange(cart, tg->tdb);
+double minRange = hicUiMinInteractionRange(cart, tg->tdb);
+
 while (thisHic != NULL)
     {
+    // Add filtering based on max interaction distance
+    if (sameString(thisHic->sourceChrom, thisHic->targetChrom))
+        {
+        unsigned leftEdge = thisHic->sourceStart < thisHic->targetStart ? thisHic->sourceStart : thisHic->targetStart;
+        unsigned rightEdge = thisHic->sourceEnd > thisHic->targetEnd ? thisHic->sourceEnd : thisHic->targetEnd;
+        if ((maxRange && maxRange < (double)(rightEdge - leftEdge) ) ||
+            (minRange && minRange > (double)(rightEdge - leftEdge) ))
+            {
+            // a bit of pointer play to avoid repeated calls to slRemoveEl
+            *prevNextPtr = thisHic->next; // set prev element's next to the following element
+            slAddHead(&filteredOut, thisHic);
+            thisHic = *prevNextPtr; // restore thisHic to point to the next element
+            continue;
+            }
+        }
+
     if (sameString(drawMode, HIC_DRAW_MODE_ARC))
         {
         // we omit self-interactions in arc mode (they'd just be weird vertical lines)
@@ -134,8 +172,12 @@ while (thisHic != NULL)
 
     if (thisHeight > tg->maxRange)
         tg->maxRange = thisHeight;
+    prevNextPtr = &thisHic->next;
     thisHic = thisHic->next;
     }
+
+if (filteredOut != NULL)
+    interactFreeList(&filteredOut);
 
 // Heuristic for auto-scaling the color gradient based on the scores in view - draw the max color value
 // at or above 2*median score.
@@ -247,10 +289,7 @@ struct interact *hicItem = NULL;
 struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
 int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winStart);
 
-if (vis == tvDense)
-    {
-    yScale *= 0.5;
-    }
+yScale *= hicSqueezeFactor(vis);
 
 double maxScore = getHicMaxScore(tg);
 Color *colorIxs = colorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
@@ -261,7 +300,6 @@ for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
     {
     int leftStart, leftEnd, rightStart, rightEnd;
     calcItemLeftRightBoundaries(&leftStart, &leftEnd, &rightStart, &rightEnd, binSize, hicItem);
-
     int colorIx;
     if (hicItem->value > maxScore)
         colorIx = colorIxs[HIC_SCORE_BINS];
@@ -310,10 +348,7 @@ int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winSt
 if (binSize == 0)
     return;
 
-if (vis == tvDense)
-    {
-    yScale *= 0.5;
-    }
+yScale *= hicSqueezeFactor(vis);
 
 double maxScore = getHicMaxScore(tg);
 Color *colorIxs = colorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
@@ -372,10 +407,7 @@ int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winSt
 if (binSize == 0)
     return;
 
-if (vis == tvDense)
-    {
-    yScale *= 0.5;
-    }
+yScale *= hicSqueezeFactor(vis);
 
 double maxScore = getHicMaxScore(tg);
 Color *colorIxs = colorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
