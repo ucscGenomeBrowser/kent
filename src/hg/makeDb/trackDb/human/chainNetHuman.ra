@@ -59,6 +59,17 @@ html homoSapiensChainNet
         otherDb GCA_009914755.4
         priority 3
 
+        track chainLiftOverGCA_009914755.4
+        parent humanChainNetViewchain
+        subGroups view=chain species=s000 clade=c00
+        shortLabel CHM13 T2T LiftOver Chain
+        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Lift Over Chained Alignments
+        type bigChain GCA_009914755.4
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainLiftOverGCA_009914755.4.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainLiftOverGCA_009914755.4Link.bb
+        otherDb GCA_009914755.4
+        priority 4
+
         track chainGCA_021951015.1
         parent humanChainNetViewchain
         subGroups view=chain species=s001 clade=c00
@@ -92,6 +103,17 @@ html homoSapiensChainNet
         otherDb GCA_021951015.1
         priority 7
 
+        track chainLiftOverGCA_021951015.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s001 clade=c00
+        shortLabel HG002 mat Lift Over Chain
+        longLabel HG002 mat (Feb. 2022 GCA_021951015.1_HG002.mat.cur.20211005) Lift Over Chained Alignments
+        type bigChain GCA_021951015.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainLiftOverGCA_021951015.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainLiftOverGCA_021951015.1Link.bb
+        otherDb GCA_021951015.1
+        priority 8
+
         track chainGCA_021950905.1
         parent humanChainNetViewchain
         subGroups view=chain species=s002 clade=c00
@@ -124,6 +146,17 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCA_021950905.1Link.bb
         otherDb GCA_021950905.1
         priority 11
+
+        track chainLiftOverGCA_021950905.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s002 clade=c00
+        shortLabel HG002 pat Lift Over Chain
+        longLabel HG002 pat (Feb. 2022 GCA_021950905.1_HG002.pat.cur.20211005) Lift Over Chained Alignments
+        type bigChain GCA_021950905.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainLiftOverGCA_021950905.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainLiftOverGCA_021950905.1Link.bb
+        otherDb GCA_021950905.1
+        priority 12
 
     track humanMafNetViewnet
     shortLabel Nets
@@ -168,6 +201,18 @@ html homoSapiensChainNet
         otherDb GCA_009914755.4
         priority 3
 
+        track liftOverNetGCA_009914755.4
+        parent humanMafNetViewnet
+        subGroups view=net species=s000 clade=c00
+        shortLabel CHM13 T2T liftOverNet
+        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Lift Over Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.liftOverNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.liftOverNet.summary.bb
+        speciesOrder GCA_009914755.4
+        otherDb GCA_009914755.4
+        priority 4
+
         track netGCA_021951015.1
         parent humanMafNetViewnet
         subGroups view=net species=s001 clade=c00
@@ -205,6 +250,18 @@ html homoSapiensChainNet
         otherDb GCA_021951015.1
         priority 7
 
+        track liftOverNetGCA_021951015.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s001 clade=c00
+        shortLabel HG002 mat liftOverNet
+        longLabel HG002 mat (Feb. 2022 GCA_021951015.1_HG002.mat.cur.20211005) Lift Over Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_021951015.1.liftOverNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCA_021951015.1.liftOverNet.summary.bb
+        speciesOrder GCA_021951015.1
+        otherDb GCA_021951015.1
+        priority 8
+
         track netGCA_021950905.1
         parent humanMafNetViewnet
         subGroups view=net species=s002 clade=c00
@@ -241,3 +298,15 @@ html homoSapiensChainNet
         speciesOrder GCA_021950905.1
         otherDb GCA_021950905.1
         priority 11
+
+        track liftOverNetGCA_021950905.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s002 clade=c00
+        shortLabel HG002 pat liftOverNet
+        longLabel HG002 pat (Feb. 2022 GCA_021950905.1_HG002.pat.cur.20211005) Lift Over Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_021950905.1.liftOverNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCA_021950905.1.liftOverNet.summary.bb
+        speciesOrder GCA_021950905.1
+        otherDb GCA_021950905.1
+        priority 12
