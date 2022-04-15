@@ -102,3 +102,4 @@ singleFileHub: ${hubTxt}
 	@cp --remove-destination -p hub/${asmId}.genomes.txt ${stageDir}/
 	cp --remove-destination -p hub/${asmId}.hub.txt ${stageDir}/
 	cp --remove-destination -p trackDb/${asmId}.trackDb.txt ${stageDir}/
+	@rm -f hub.txt
