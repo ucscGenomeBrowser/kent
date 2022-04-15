@@ -22,9 +22,11 @@ For the minimap2-based pipeline, the initial chain file was generated using
 <a  target="_blank" href="https://github.com/lh3/minimap2">minimap2</a> v2.24 alignments. 
 These chains were then split at all locations that contained unaligned segments greater 
 than 1 kbp or gaps greater than 10 kbp. Split chain files were then converted to PAF format 
-with extended CIGAR strings using chaintools (https://doi.org/10.5281/zenodo.6342391, v0.1), 
+with extended CIGAR strings using <a target="_blank" 
+href="https://doi.org/10.5281/zenodo.6342391">chaintools (v0.1)</a>, 
 and alignments between nonhomologous chromosomes were removed. The trim-paf operation of 
-rustybam (https://zenodo.org/record/6342176, v0.1.29) was next used to remove overlapping 
+<a target="_blank" 
+href="https://zenodo.org/record/6342176">rustybam (v0.1.29)</a> was next used to remove overlapping 
 alignments in the query sequence, and then the target sequence, to create 1:1 alignments. 
 PAF alignments were converted back to the chain format with <a  target="_blank" 
 href="https://github.com/AndreaGuarracino/paf2chain">paf2chain</a> commit f68eeca, and 
@@ -44,7 +46,7 @@ Full commands with parameters used were:
 </code></pre>
 
 <p>
-<a href="https://mrvollger.github.io/rustybam/#align-once">Rustybam trim-paf</a>
+<a target="_blank" href="https://mrvollger.github.io/rustybam/#align-once">Rustybam trim-paf</a>
 uses dynamic programming and the CIGAR string to find an optimal
 splitting point between overlapping alignments in the query sequence. It
 starts its trimming with the largest overlap and then recursively trims
