@@ -325,22 +325,28 @@ double hicUiMaxInteractionRange(struct cart *cart, struct trackDb *tdb)
 /* Retrieve the maximum range for an interaction to be drawn.  Range is
  * calculated from the left-most start to the right-most end of the interaction. */
 {
-double defaultValue = 0;
+double defaultValue = 0, returnVal = 0;
 char *tdbString = trackDbSetting(tdb, HIC_TDB_MAX_DISTANCE);
 if (!isEmpty(tdbString))
     defaultValue = atof(tdbString);
-return cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MAX_DISTANCE, defaultValue);
+returnVal = cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MAX_DISTANCE, defaultValue);
+if (returnVal < 0)
+    return 0;
+return returnVal;
 }
 
 double hicUiMinInteractionRange(struct cart *cart, struct trackDb *tdb)
 /* Retrieve the minimum range for an interaction to be drawn.  Range is
  * calculated from the left-most start to the right-most end of the interaction. */
 {
-double defaultValue = 0;
+double defaultValue = 0, returnVal = 0;
 char *tdbString = trackDbSetting(tdb, HIC_TDB_MIN_DISTANCE);
 if (!isEmpty(tdbString))
     defaultValue = atof(tdbString);
-return cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MIN_DISTANCE, defaultValue);
+returnVal = cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MIN_DISTANCE, defaultValue);
+if (returnVal < 0)
+    return 0;
+return returnVal;
 }
 
 void hicUiMinMaxRangeMenu(struct cart *cart, struct trackDb *tdb)
