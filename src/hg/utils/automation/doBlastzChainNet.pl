@@ -1059,7 +1059,7 @@ wget --no-check-certificate -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitl
 wget --no-check-certificate -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
 mafToBigMaf $tDb $tDb.$qDb.net.maf.gz stdout \\
   | sort -k1,1 -k2,2n > $tDb.$qDb.net.txt
-bedToBigBed -type=bed3+1 -as=bigMaf.as -tab \\
+bedToBigBed -itemsPerSlot=4 -type=bed3+1 -as=bigMaf.as -tab \\
   $tDb.$qDb.net.txt  $defVars{SEQ1_LEN} $tDb.$qDb.net.bb
 hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.net.summary \\
   $tDb.$qDb.net.maf.gz
@@ -1841,7 +1841,7 @@ if (\$lineCount > 0) then
   wget --no-check-certificate -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
   mafToBigMaf $tDb ../axtChain/$tDb.$qDb.synNet.maf.gz stdout \\
     | sort -k1,1 -k2,2n > $tDb.$qDb.synNet.txt
-  bedToBigBed -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.synNet.txt \\
+  bedToBigBed -itemsPerSlot=4 -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.synNet.txt \\
     $defVars{SEQ1_LEN} $tDb.$qDb.synNet.bb
   hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.synNet.summary \\
         ../axtChain/$tDb.$qDb.synNet.maf.gz

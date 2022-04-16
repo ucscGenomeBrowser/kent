@@ -279,7 +279,7 @@ wget --no-check-certificate -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitl
 wget --no-check-certificate -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
 mafToBigMaf $tDb $tDb.$qDb.rbestNet.maf.gz stdout \\
   | sort -k1,1 -k2,2n > $tDb.$qDb.rbestNet.txt
-bedToBigBed -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.rbestNet.txt \\
+bedToBigBed -itemsPerSlot=4 -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.rbestNet.txt \\
   $targetSizes $tDb.$qDb.rbestNet.bb
 hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.rbestNet.summary \\
         $tDb.$qDb.rbestNet.maf.gz
