@@ -7,7 +7,6 @@ asmBuildDir = /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/${asmId}
 asmStageDir = /hive/data/genomes/asmHubs/GCA/009/914/755/${ncbiAcc}
 trackDataDir = ${asmBuildDir}/trackData
 bbiBuildDir = ${asmBuildDir}/bbi
-htmlBuildDir = ${asmBuildDir}/html
 htmlStageDir = ${asmStageDir}/html
 liftOverDataDir = ${asmBuildDir}/liftOver
 liftOverStageDir = ${asmStageDir}/liftOver
@@ -52,11 +51,7 @@ ${bbiBuildDir}/${asmId}.%:
 .PHONY: htmlInstall
 htmlInstall: ${tracksWithHtml:%=${htmlStageDir}/${asmId}.%.html}
 
-${htmlStageDir}/${asmId}.%.html: ${htmlBuildDir}/${asmId}.%.html
-	@mkdir -p $(dir $@)
-	ln -sf $< $@
-
-${htmlBuildDir}/${asmId}.%.html: html/%.html
+${htmlStageDir}/${asmId}.%.html: html/%.html
 	@mkdir -p $(dir $@)
 	cp -f $< $@
 
