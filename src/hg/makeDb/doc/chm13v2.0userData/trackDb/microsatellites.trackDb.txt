@@ -5,7 +5,6 @@ shortLabel Microsatellites
 longLabel Microsatellite repeats
 type bigWig
 group map
-color 0,0,128
 html html/GCA_009914755.4_T2T-CHM13v2.0.microsatellites.html
     
     track microsatellites_GA
@@ -14,6 +13,7 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.microsatellites.html
     longLabel GA Microsatellite repeats
     type bigWig 
     visibility dense
+    color 83,105,255
     priority 1
     bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.microsatellites/chm13v2.0.microsatellite.GA.128.bw
     
@@ -23,6 +23,7 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.microsatellites.html
     longLabel TC Microsatellite repeats
     type bigWig 
     visibility dense
+    color 102,0,102
     priority 2
     bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.microsatellites/chm13v2.0.microsatellite.TC.128.bw
     
@@ -32,6 +33,7 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.microsatellites.html
     longLabel GC Microsatellite repeats
     type bigWig 
     visibility dense
+    color 188,115,19
     priority 3
     bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.microsatellites/chm13v2.0.microsatellite.GC.128.bw
 
@@ -41,5 +43,6 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.microsatellites.html
     longLabel AT Microsatellite repeats
     type bigWig 
     visibility dense
+    color 51,102,0
     priority 4
     bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.microsatellites/chm13v2.0.microsatellite.AT.128.bw
