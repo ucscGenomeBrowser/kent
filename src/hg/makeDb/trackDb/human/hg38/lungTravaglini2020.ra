@@ -4,7 +4,6 @@ shortLabel Lung Travaglini
 longLabel Lung cells from from Travaglini et al 2020
 visibility hide
 group singleCell
-pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track lungTravaglini2020CellType10x
     parent lungTravaglini2020

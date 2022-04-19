@@ -1,7 +1,6 @@
 track catLiftOffGenesV1
 shortLabel CAT/Liftoff Genes
 longLabel CAT + Liftoff Gene Annotations
-description CAT + Liftoff Gene Annotations
 type bigGenePred
 group genes
 itemRgb on
@@ -12,6 +11,6 @@ visibility pack
 searchIndex name,name2,txId,geneName,sourceGene,sourceTranscript,alignmentId
 labelFields name,name2,txId,geneName,sourceGene,sourceTranscript,alignmentId
 defaultLabelFields name
-labelSeperator " "
+labelSeparator " "
 bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.catLiftOffGenesV1/catLiftOffGenesV1.bb
 html html/GCA_009914755.4_T2T-CHM13v2.0.catLiftOffGenesV1.html

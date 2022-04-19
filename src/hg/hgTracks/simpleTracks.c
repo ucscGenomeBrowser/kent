@@ -14252,6 +14252,7 @@ else if (sameWord(type, "bam"))
     }
 else if (sameWord(type, "hic"))
     {
+    tdb->canPack = TRUE;
     hicMethods(track);
     }
 #ifdef USE_HAL

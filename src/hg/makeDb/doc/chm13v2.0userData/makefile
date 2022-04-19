@@ -7,7 +7,6 @@ asmBuildDir = /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/${asmId}
 asmStageDir = /hive/data/genomes/asmHubs/GCA/009/914/755/${ncbiAcc}
 trackDataDir = ${asmBuildDir}/trackData
 bbiBuildDir = ${asmBuildDir}/bbi
-htmlBuildDir = ${asmBuildDir}/html
 htmlStageDir = ${asmStageDir}/html
 liftOverDataDir = ${asmBuildDir}/liftOver
 liftOverStageDir = ${asmStageDir}/liftOver
@@ -19,7 +18,7 @@ stageUrl = https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_00991475
 userTrackDbFile = ${asmBuildDir}/${asmId}.userTrackDb.txt
 
 tracks = proseq rnaseq cytoBandMapped sedefSegDups rdnaModel catLiftOffGenesV1 hgLiftOver \
-         censat hgUnique clinVar20220313 gwasSNPs2022-03-08 dbSNP155
+         censat hgUnique clinVar20220313 gwasSNPs2022-03-08 dbSNP155 microsatellites
 
 # snakes needs chromAlias fix:
 # hgCactus
@@ -28,14 +27,13 @@ tracksWithHtml = $(filter-out cytoBandMapped,${tracks})
 
 hgLiftOverFiles = chm13v2-hg19.over.chain.gz chm13v2-hg38.over.chain.gz hg19-chm13v2.over.chain.gz hg38-chm13v2.over.chain.gz
 
-catGxfFiles = catLiftOffGenesV1.gff3.gz catLiftOffGenesV1.gtf.gz
+catGxfFiles = catLiftOffGenesV1.gff3.gz catLiftOffGenesV1.gtf.gz catLiftOffGenesV1.rna.fa.gz catLiftOffGenesV1.protein.fa.gz
 
 .SECONDARY:
 MAKEFLAGS += --check-symlink-times
 
 all: ${userTrackDbFile} bbiInstall htmlInstall liftOverInstall geneInstall
-	cd ${asmBuildDir} && ./doTrackDb.bash
-	hubCheck ${stageUrl}
+	hubCheck -checkSettings ${stageUrl}
 
 # ensure spaces separate the stanzas
 ${userTrackDbFile}: ${tracks:%=trackDb/%.trackDb.txt}
@@ -53,11 +51,7 @@ ${bbiBuildDir}/${asmId}.%:
 .PHONY: htmlInstall
 htmlInstall: ${tracksWithHtml:%=${htmlStageDir}/${asmId}.%.html}
 
-${htmlStageDir}/${asmId}.%.html: ${htmlBuildDir}/${asmId}.%.html
-	@mkdir -p $(dir $@)
-	ln -sf $< $@
-
-${htmlBuildDir}/${asmId}.%.html: html/%.html
+${htmlStageDir}/${asmId}.%.html: html/%.html
 	@mkdir -p $(dir $@)
 	cp -f $< $@
 

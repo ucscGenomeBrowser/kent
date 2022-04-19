@@ -125,8 +125,8 @@ type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
 track decipher
-shortLabel Decipher CNVs
-longLabel Decipher CNVs
+shortLabel DECIPHER CNVs
+longLabel DECIPHER CNVs
 group phenDis
 visibility hide
 type bigBed 9 +
@@ -196,6 +196,7 @@ type bed 3
         mmcnt3Filter 0
         dataVersion /gbdb/$D/bbi/mastermindRelease.txt
         parent varsInPubs pack
+        maxWindowCoverage 80000
 
         track avada
         shortLabel Avada Variants

@@ -5,6 +5,7 @@
 
 use strict;
 use warnings;
+use File::Basename;
 use FindBin qw($Bin);
 use lib "$Bin";
 use commonHtml;
@@ -48,7 +49,7 @@ if ($vgpIndex) {
 
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
-my $assemblyCount = 0;
+my $assemblyTotal = 0;
 my %commonName;	# key is asmId, value is a common name, perhaps more appropriate
                 # than found in assembly_report file
 
@@ -397,16 +398,52 @@ sub tableContents() {
 ### main()
 ##############################################################################
 
+# if there is a 'promoted' list, it has been taken out of the 'orderList'
+# so will need to stuff it back in at the correct ordered location
+my %promotedList;	# key is asmId, value is common name
+my $promotedList = dirname(${orderList}) . "/promoted.list";
+my @promotedList;	# contents are asmIds, in order by lc(common name)
+my $promotedIndex = -1;	# to walk through @promotedList;
+
+if ( -s "${promotedList}" ) {
+  open (FH, "<${promotedList}" ) or die "can not read ${promotedList}";
+  while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($asmId, $commonName) = split('\t', $line);
+    $promotedList{$asmId} = $commonName;
+  }
+  close (FH);
+  foreach my $asmId ( sort { lc($promotedList{$a}) cmp lc($promotedList{$b}) } keys %promotedList) {
+     push @promotedList, $asmId;
+  }
+  $promotedIndex = 0;
+}
+
 open (FH, "<${orderList}") or die "can not read ${orderList}";
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
   my ($asmId, $commonName) = split('\t', $line);
+  if ( ($promotedIndex > -1) && ($promotedIndex < scalar(@promotedList))) {
+     my $checkInsertAsmId = $promotedList[$promotedIndex];
+     my $checkInsertName = $promotedList{$checkInsertAsmId};
+     # insert before this commonName when alphabetic before
+     if (lc($checkInsertName) lt lc($commonName)) {
+       push @orderList, $checkInsertAsmId;
+       $commonName{$checkInsertAsmId} = $checkInsertName;
+       ++$assemblyTotal;
+       printf STDERR "# inserting '%s' before '%s' at # %03d\n", $checkInsertName, $commonName, $assemblyTotal;
+       ++$promotedIndex;	# only doing one at this time
+                        # TBD: will need to improve this for more inserts
+     }
+  }
   push @orderList, $asmId;
   $commonName{$asmId} = $commonName;
-  ++$assemblyCount;
+  ++$assemblyTotal;
 }
 close (FH);
+# TBD: and would need to check if all promoted assemblies have been included
 
 startHtml();
 startTable();

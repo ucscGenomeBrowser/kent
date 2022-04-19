@@ -3833,3 +3833,25 @@ TMPDIR=/dev/shm
     # 110784245 bases of 124963774 (88.653%) in intersection
 
 ###########################################################################
+
+# ReMap refs #28960 (2022-04-13 Gerardo)
+cd /hive/data/genomes/dm6/bed
+mkdir reMap
+cd reMap
+wget https://remap.univ-amu.fr/storage/public/hubReMap2022/dm6/bigBed/remap2022_all_macs2_dm6_v1_0.bb
+mv remap2022_all_macs2_dm6_v1_0.bb reMap2022.bb
+wget https://remap.univ-amu.fr/storage/public/hubReMap2022/dm6/bigBed/dm6.bw
+mv dm6.bw reMapDensity2022.bw
+cd /gbdb/dm6
+mkdir reMap
+cd reMap
+ln -s /hive/data/genomes/dm6/bed/reMap/reMap2022.bb
+ln -s /hive/data/genomes/dm6/bed/reMap/reMapDensity2022.bw
+cd ~/kent/src/hg/makeDb/trackDb/drosophila/dm6/
+wget https://remap.univ-amu.fr/storage/public/hubReMap2022/remapHub2022.html
+cp remapHub2022.html  reMap.html
+cd ~/kent/src/hg/makeDb/trackDb
+curl https://remap.univ-amu.fr/storage/public/hubReMap2022/dm6/trackDb.txt > drosophila/dm6/reMap.ra
+vi drosophila/dm6/reMap.ra
+vi drosophila/dm6/trackDb.ra 
+vi drosophila/dm6/reMap.html

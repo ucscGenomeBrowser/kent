@@ -105,6 +105,16 @@ rename to
   zcat catLiftOffGenesV1.gff3.gz | gffread /dev/stdin -T -o catLiftOffGenesV1.gtf
   pigz catLiftOffGenesV1.gtf 
 
+
+# obtain sequence fastas
+   http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.v2.0.fasta
+   http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.v2.0.protein.fasta
+
+   mv CHM13.v2.0.fasta catLiftOffGenesV1.rna.fa
+   mv CHM13.v2.0.protein.fasta  catLiftOffGenesV1.protein.fa
+   pigz *.fa
+   
+
 ================================================================
 * hgLiftOver (2022-03-26 markd)
 ----------------------------------------------------------------
@@ -185,9 +195,12 @@ CHM13	GCA_009914755.4
 * hgUnique (2022-03-30 markd)
 ----------------------------------------------------------------
 regions not in hg38:
+original version in:
 globus: /team-liftover/v1_nflo/T2T-CHM13v2.0_new_and_non_syntenic_regions.bed
          chm13v2-unique_to_hg19.bed
          chm13v2-unique_to_hg38.bed
+however, with the addition of 
+
 
 #
 chainToPslBasic ../hgLiftOver/chm13v2-hg38.over.chain.gz stdout \
@@ -230,7 +243,7 @@ from Nick Altemose <nickaltemose@gmail.com> via Slack:
 * dbSNP155 (2022-03-29 markd)
 ----------------------------------------------------------------
 
-# dbSNP Variants	Lifted+Recovered	TBD	Dylan Taylor
+# dbSNP Variants	Lifted+Recovered	Dylan Taylor
 https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/liftover/chm13v2.0_dbSNPv155.vcf.gz
 dbSNP_lifted-recovered.html
 
@@ -245,7 +258,7 @@ tabix -p vcf chm13v2.0_dbSNPv155.ncbi-names.vcf.gz &
 ================================================================
 * clinVar20220313 (2022-03-29 markd)
 ----------------------------------------------------------------
-ClinVar	Lifted+Recovered	TBD	Dylan Taylor
+ClinVar	Lifted+Recovered	Dylan Taylor
 https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/liftover/chm13v2.0_ClinVar20220313.vcf.gz
 
    zcat chm13v2.0_ClinVar20220313.vcf.gz | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_ClinVar20220313.ncbi-names.vcf.gz
@@ -255,7 +268,7 @@ tabix -p vcf chm13v2.0_ClinVar20220313.ncbi-names.vcf.gz &
 
 
 ================================================================
-* gwasSNPs2022-03-08 (2022-03-29 markd
+* gwasSNPs2022-03-08 (2022-03-29 markd)
 ----------------------------------------------------------------
 GWAS SNPs	Lifted+Recovered	TBD	Dylan Taylor
 
@@ -267,6 +280,23 @@ gwas_catalog_lifted-recovered.html
 
 tabix -p vcf  chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.ncbi-names.vcf.gz&
 tabix -p vcf  chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.vcf.gz&
+
+
+================================================================
+* microsatellites (2022-04-17 markd)
+----------------------------------------------------------------
+Arang Rhie
+
+doc https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/pattern/microsatellite.html
+
+GA https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/pattern/chm13v2.0.microsatellite.GA.128.wig
+TC https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/pattern/chm13v2.0.microsatellite.TC.128.wig
+GC https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/pattern/chm13v2.0.microsatellite.GC.128.wig
+AT https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/pattern/chm13v2.0.microsatellite.AT.128.wig
+
+# convert to bigWi
+for f in *.wig ; do wigToBigWig -clip $f ../ucscChromNames/t2t-chm13-v2.0.sizes  $(basename $f .wig).bw ; done
+pigz *.wig
 
 ================================================================
 pending:

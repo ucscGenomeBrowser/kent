@@ -52,6 +52,122 @@
 <!-- ============= 2022 archived news ============= -->
 <a name="2022"></a>
 
+<!-- PREPPED FOR RELEASE
+<a name="041522"></a>
+<h2>Apr. 15, 2022 &nbsp;&nbsp; Merged Cell Expression on hg38</h2>
+<p>
+The Genome Browser already provided <a href="#111721">single-cell RNA-seq datasets</a> for the
+human GRCh38/hg38 assembly, but those data have so far been split among a collection of tracks
+depending on the organ and publication source.  We are happy to announce that data from 12 of
+those papers (and 14 organs) are now available in a combined
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=singleCellMerged">Merged Cells</a> track that provides
+normalized RNA-seq values for every cell type in those sets.  All components were normalized
+to show expression in parts per million.</p>
+<figure class="text-center">
+<img src="../images/singleCell/singleCellMerged.png" style="width: 80%; max-width: 1318px;"
+alt="Example of the Merged Cells track display for the ACE2 gene">
+</figure>
+<p>
+The following tracks were incorporated into this Merged Cells track:
+<ul>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=bloodHao&position=default">Blood (PBMC) Hao</a>
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=colonWang&position=default">Colon Wang</a> 
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=cortexVelmeshev&position=default">Cortex Velmeshev</a> 
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=fetalGeneAtlas&position=default">Fetal Gene Atlas</a> 
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=heartCellAtlas&position=default">Heart Cell Atlas</a> 
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=ileumWang&position=default">Ileum Wang</a>
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=kidneyStewart&position=default">Kidney Stewart</a>
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=liverMacParland&position=default">Liver MacParland</a>
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=lungTravaglini2020&position=default">Lung Travaglini</a>
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=muscleDeMicheli&position=default">Muscle De Micheli</a>
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=pancreasBaron&position=default">Pancreas Baron</a>
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=placentaVentoTormo&position=default">Placenta Vento-Tormo</a>
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=rectumWang&position=default">Rectum Wang</a>
+</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=skinSoleBoldo&position=default">Skin Sole-Boldo</a>
+</li>
+</ul>
+We hope that this combined format will facilitate research and comparison with the recently
+released <a href="#033122">Tabula Sapiens</a> expression tracks.
+</p>
+END PREPPED FOR RELEASE -->
+
+<a name="041522"></a>
+<h2>Apr. 15, 2022 &nbsp;&nbsp; DECIPHER variants track for human (hg38)</h2>
+<p>
+We are pleased to announce the release of two DECIPHER variant tracks,
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=decipher">DECIPHER CNVs</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=decipherSnvs">DECIPHER SNVs</a>, available for human
+(GRCh38/hg38)</a>. The genomic locations of DECIPHER variants are labeled with the DECIPHER variant
+descriptions. <b>Mouseover</b> on items shows variant details, clinical interpretation, and
+associated conditions. Further information on each variant is displayed on the details page by a
+click onto any variant.
+</p>
+
+<p>
+For the <b>CNVs track</b>, the entries are colored by the <b>type of variant</b>:
+<ul>
+ <li><b><font color="red">red</font></b> for loss</li>
+ <li><b><font color="blue">blue</font></b> for gain</li>
+ <li><b><font color="grey">grey</font></b> for amplification</li>
+</ul>
+</p>
+
+<p>
+A light-to-dark color gradient indicates the <b>clinical significance</b> of each variant, with 
+the lightest shade being benign, to the darkest shade being pathogenic. Detailed information on the 
+CNV color code is described on the following
+<a href="/goldenPath/help/hgCnvColoring.html">help page</a>. Items can be filtered according to the
+size of the variant, variant type, and clinical significance using the track <b>Configure</b>
+options.
+</p>
+
+<P>
+For the <b>SNVs track</b>, the entries are colored according to the estimated
+<b>clinical significance</b> of the variant:
+<ul>
+ <li><b><font color="black">black</font></b> for likely or definitely pathogenic</li>
+ <li><b><font color="#888">dark grey</font></b> for uncertain or unknown</li>
+ <li><b><font color="#c8c8c8">light grey</font></b> for likely or definitely benign</li>
+ </ul>
+</P>
+
+<p>
+For more information on DECIPHER, please contact
+<A HREF="mailto:&#99;&#111;n&#116;&#97;c&#116;&#64;&#100;&#101;&#99;&#105;p&#104;&#101;&#114;&#103;&#101;&#110;&#111;&#109;&#105;c&#115;.
+&#111;&#114;g">
+&#99;&#111;n&#116;&#97;c&#116;&#64;&#100;&#101;&#99;&#105;p&#104;&#101;&#114;&#103;&#101;&#110;&#111;&#109;&#105;c&#115;.
+&#111;&#114;g</A>.
+We would like to thank Jonathan Casper and Jairo Navarro of the UCSC Genome Browser group for their
+work in creating and releasing these tracks.
+</p>
+
 <a name="041222"></a>
 <h2>Apr. 12, 2022 &nbsp;&nbsp; T2T CHM13 v2.0 now available in the Genome Browser</h2>
 <p>
@@ -62,7 +178,7 @@ href="https://sites.google.com/ucsc.edu/t2tworkinggroup" target="_blank">T2T con
 published the most complete human haploid genome sequence to date, having added just about all of the 200 
 million bases (8%) missing from the current reference. We are proud of all the scientists 
 involved, including our colleagues in the <a href="https://genomics.ucsc.edu/" 
-target="_blank">UCSC Genomics Institute</a>, that played a role in this release. We strive 
+target="_blank">UCSC Genomics Institute</a>, who played a role in this release. We strive
 to facilitate omics research and thus would like to announce our expanded support for 
 the <a 
 href="/cgi-bin/hgTracks?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=GCA_009914755.4&position=lastDbPos" 
@@ -77,7 +193,7 @@ It also employed recent technologies such as <a target="_blank"
 href="https://www.pacb.com/technology/hifi-sequencing/">HiFi</a> and <a target="_blank" 
 href="https://nanoporetech.com/">nanopore</a> sequencing. The result is a 
 3.055 billion base pair genome that includes gapless assemblies for all main chromosomes 
-and introduces nearly 200Mbp of novel sequence containing 1956 gene predictions, 99 of 
+and introduces nearly 200 Mbp of novel sequence containing 1956 gene predictions, 99 of
 which are predicted to be protein coding. The completed regions include all centromeric satellite 
 arrays, recent segmental duplications, and the short arms of all five acrocentric chromosomes. A Y
 chromosome was added from Genome in a Bottle's HG002 sample.</p>
@@ -92,7 +208,7 @@ href="https://www.science.org/doi/10.1126/science.abp8653">V. ALTOUNIAN/SCIENCE<
 </figure>
 
 <p>
-CHM13 removes 1.2Mbp of duplicated sequence in hg38, and 263 GENCODE genes from hg38 
+CHM13 removes 1.2 Mbp of duplicated sequence in hg38, and 263 GENCODE genes from hg38
 are absent in CHM13 as well as 3604 genes in CHM13 are absent in hg38, mostly in the 
 centromeres. Variant calling using CHM13 <a target="_blank" 
 href="https://www.science.org/doi/10.1126/science.abl3533">reduces the numbers of false 
@@ -214,7 +330,7 @@ target="_blank">https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_0099147
 <p>
 We also provide FASTA files there with two different sequence identifiers (the 
 &quot;chr1&quot; format and Genbank accessions), gene annotations in GFF and other 
-formats and assembly indexes with either Genbank or "chr1" sequence names for the 
+formats and assembly indexes with either Genbank or &quot;chr1&quot; sequence names for the 
 aligners bwa-mem2, bowtie2, hisat2 and minimap2. Detailed download instructions can 
 be found in the README and on our 
 <a href="https://genome.ucsc.edu/cgi-bin/hgGateway?db=hub_3267197_GCA_009914755.4"
@@ -230,7 +346,7 @@ target="_blank">https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_00991475
 We would like to thank the <a href="https://sites.google.com/ucsc.edu/t2tworkinggroup"
 target="_blank">T2T Consortium</a> for this landmark accomplishment. 
 We would like to extend an additional kudos to our fellow <a href="https://genomics.ucsc.edu/"
-target="_blank">UCSC Genomics Institute</a> members who are part of the consortium, 
+target="_blank">UCSC Genomics Institute</a> members who are part of the consortium,
 Karen Miga, Benedict Paten, Kishwar Shafin, Mark Diekhans, and Miten Jain. 
 Lastly, to the engineers and QA members of the Genome Browser for the rapid 
 development and release of CHM13 data and features.</p>
@@ -8439,12 +8555,12 @@ key on your keyboard while on an assembly&apos;s browser display page (e.g.,
 The new shortcut set utilizes the keyboard keys 1 - 6 to provide six levels of zoom views 
 for tracks in the browser display, as listed below:</p>
 <ul>
-  <li>Press &quot;1&quot; to zoom to 50bp (1 zero)</li>
-  <li>Press &quot;2&quot; to zoom to 500bp (2 zeros)</li>
-  <li>Press &quot;3&quot; to zoom to 5000bp (3 zeros)</li>
-  <li>Press &quot;4&quot; to zoom to 50kbp (4 zeros)</li>
-  <li>Press &quot;5&quot; to zoom to 500kbp (5 zeros)</li>
-  <li>Press &quot;6&quot; to zoom to 5Mbp (6 zeros)</li>
+  <li>Press &quot;1&quot; to zoom to 50 bp (1 zero)</li>
+  <li>Press &quot;2&quot; to zoom to 500 bp (2 zeros)</li>
+  <li>Press &quot;3&quot; to zoom to 5000 bp (3 zeros)</li>
+  <li>Press &quot;4&quot; to zoom to 50 kbp (4 zeros)</li>
+  <li>Press &quot;5&quot; to zoom to 500 kbp (5 zeros)</li>
+  <li>Press &quot;6&quot; to zoom to 5 Mbp (6 zeros)</li>
 </ul>
 <p>
 Credit: Michael Hiller for initial development, Max Haeussler for browser implementation.</p>

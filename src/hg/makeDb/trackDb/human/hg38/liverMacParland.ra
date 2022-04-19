@@ -4,7 +4,6 @@ shortLabel Liver MacParland
 longLabel Liver single cell sequencing from MacParland et al 2018
 visibility hide
 group singleCell
-pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track liverMacParlandCellType
     parent liverMacParland

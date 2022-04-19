@@ -1,8 +1,10 @@
 track singleCellMerged
 type bigBarChart
 visibility hide
+configureByPopup off
 shortLabel Merged Cells
 longLabel Single cell RNA expression levels cell types from many organs
+pennantIcon New red ../goldenPath/newsarch.html#041522 "Released Apr. 15, 2022"
 barChartMetric mean
 barChartUnit ppm/cell
 defaultLabelFields name

@@ -78,8 +78,9 @@ CpG Islands, RefSeq mRNAs, Repeat Masking, and, if available:
 NCBI RefSeq Genes and Ensembl Genes.
 </p>
 <p>This page is optimized for use in Firefox and Safari.
+</p>
+<p>For more details on using this page, please see this <a href='https://genome-blog.soe.ucsc.edu/blog/2022/04/12/genark-hubs-part-4/' target=_blank>blog post</a>.
 </p>\n"
-
 
 cut -d' ' -f3,5 \
   /cluster/home/hiram/kent/src/hg/makeDb/doc/asmHubs/master.run.list \

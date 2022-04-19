@@ -2,7 +2,7 @@ track censat
 shortLabel CenSat Annotation
 longLabel Centromeric Satellite Annotation
 group map
-visibility hide
+visibility pack
 itemRgb on
 maxItems 100000
 type bigBed 9 +

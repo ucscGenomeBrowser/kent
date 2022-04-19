@@ -4,7 +4,6 @@ shortLabel Cortex Velmeshev
 longLabel Cerebral cortex single cell data from  Velmeshev et al 2019
 visibility hide
 group singleCell
-pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track cortexVelmeshevCellType
     parent cortexVelmeshev

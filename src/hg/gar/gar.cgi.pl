@@ -44,7 +44,7 @@ my $DS=`date "+%F %T"`;
 chomp $DS;
 
 open (FH, "|/usr/sbin/sendmail -t -oi");
-printf FH "To: hclawson\@ucsc.edu
+printf FH "To: hclawson\@ucsc.edu,clayfischer\@ucsc.edu
 From: %s
 Subject: gar request: %s
 
