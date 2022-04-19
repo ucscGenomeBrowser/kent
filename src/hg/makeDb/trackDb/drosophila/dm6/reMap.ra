@@ -1,5 +1,5 @@
 track ReMap
-shortLabel ReMap
+shortLabel ReMap ChIP-seq
 longLabel ReMap Atlas of Regulatory Regions
 type bigBed 9 +
 visibility hide

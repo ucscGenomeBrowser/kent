@@ -220,6 +220,8 @@ hapClusterHeight vcf vcfTabix
 hapmapPhase bed
 hgGene genePred
 hgsid bed genePred bigBed
+hicDistanceMin hic
+hicDistanceMax hic
 highlightBy genePred
 highlightColor genePred
 hoverMetadata wig bigWig

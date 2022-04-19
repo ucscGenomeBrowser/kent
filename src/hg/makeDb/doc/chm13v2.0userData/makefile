@@ -7,7 +7,6 @@ asmBuildDir = /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/${asmId}
 asmStageDir = /hive/data/genomes/asmHubs/GCA/009/914/755/${ncbiAcc}
 trackDataDir = ${asmBuildDir}/trackData
 bbiBuildDir = ${asmBuildDir}/bbi
-htmlBuildDir = ${asmBuildDir}/html
 htmlStageDir = ${asmStageDir}/html
 liftOverDataDir = ${asmBuildDir}/liftOver
 liftOverStageDir = ${asmStageDir}/liftOver
@@ -19,7 +18,7 @@ stageUrl = https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_00991475
 userTrackDbFile = ${asmBuildDir}/${asmId}.userTrackDb.txt
 
 tracks = proseq rnaseq cytoBandMapped sedefSegDups rdnaModel catLiftOffGenesV1 hgLiftOver \
-         censat hgUnique clinVar20220313 gwasSNPs2022-03-08 dbSNP155
+         censat hgUnique clinVar20220313 gwasSNPs2022-03-08 dbSNP155 microsatellites
 
 # snakes needs chromAlias fix:
 # hgCactus
@@ -52,11 +51,7 @@ ${bbiBuildDir}/${asmId}.%:
 .PHONY: htmlInstall
 htmlInstall: ${tracksWithHtml:%=${htmlStageDir}/${asmId}.%.html}
 
-${htmlStageDir}/${asmId}.%.html: ${htmlBuildDir}/${asmId}.%.html
-	@mkdir -p $(dir $@)
-	ln -sf $< $@
-
-${htmlBuildDir}/${asmId}.%.html: html/%.html
+${htmlStageDir}/${asmId}.%.html: html/%.html
 	@mkdir -p $(dir $@)
 	cp -f $< $@
 
