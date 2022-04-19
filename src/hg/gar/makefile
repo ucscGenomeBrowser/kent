@@ -12,6 +12,9 @@ endif
 my::
 	cp -p --remove-destination  gar.cgi.pl $(CGI_BIN_USER)/gar
 
+cgi::
+	cp -p --remove-destination  gar.cgi.pl $(CGI_BIN_USER)/gar
+
 alpha::
 	cp -p --remove-destination  gar.cgi.pl $(CGI_BIN)/gar
 
@@ -20,5 +23,8 @@ beta::
 
 install::
 	cp -p --remove-destination  gar.cgi.pl $(CGI_BIN)/gar
+
+compile::
+	@ls -og gar.cgi.pl
 
 clean::
