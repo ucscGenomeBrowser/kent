@@ -59,7 +59,7 @@
 #define MAXPIXELS 14000
 #endif
 
-#define BIGBEDMAXIMUMITEMS 100000
+#define BIGBEDMAXIMUMITEMS 1000000
 
 #define MULTI_REGION_VIRTUAL_CHROM_NAME "multi"
 // original name was 'virt'
