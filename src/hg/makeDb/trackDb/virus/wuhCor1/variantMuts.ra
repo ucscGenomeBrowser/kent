@@ -264,25 +264,3 @@ html variantMuts
         bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_nuc.bb
         color 219,40,35
         priority 21
-
-        track variantNucMuts_B_1_1_529
-        parent variantMuts off
-        subGroups variant=B11529 mutation=NUC
-        shortLabel Omicron Nuc Muts 
-        longLabel B.1.1.529 VOC (Omicron) nucleotide mutations identifed from GISAID sequences
-        url https://outbreak.info/situation-reports?pango=B.1.1.529
-        bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_nuc.bb
-        color 80,160,200
-        priority 9
-
-        track variantAaMuts_B_1_1_529
-        parent variantMuts on
-        subGroups variant=B11529 mutation=AA
-        shortLabel Omicron Aa Muts 
-        longLabel Omicron (B.1.1.529) amino acid mutations from cov-lineages.org
-        url https://outbreak.info/situation-reports?pango=B.1.1.529
-        bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_prot.bb
-        color 80,160,200
-        priority 9
-
-
