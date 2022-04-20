@@ -40,9 +40,9 @@ alpha:
 
 beta:
 	${GITUP}
+	cp -p --remove-destination ${DOCUMENTROOT}/assemblyRequest.html ${DOCUMENTROOT}-beta/assemblyRequest.html
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
-	cp -p --remove-destination ${DOCUMENTROOT}/assemblyRequest.html ${DOCUMENTROOT}-beta/assemblyRequest.html
 
 # Run rsync. Care is taken to preserve times and modes on files.  rsync is
 # smart about recreating files under the current users so that times and
