@@ -121,6 +121,8 @@ rename to
 GRCh38 & GRCh37 Nae-Chyun Chen <naechyun.chen@gmail.com>
 
 # 2022-04-09 it was noted that chrM was left out of above alignments, so obtain them and repeat
+# 2022-04-19 it was discover that chains render oddly due to the lack of chain ids.  Use chainMergeSort
+# to fix this
 
 globus: /team-liftover/v1_nflo/with_chrM/
     chm13v2-grch38.chain
@@ -133,18 +135,27 @@ globus: /team-liftover/v1_nflo/with_chrM/
    cd trackData/hgLiftOver
 
 # rename to match UCSC conventions
-    mv chm13v2-grch38.chain chm13v2-hg38.over.chain      
-    mv grch38-chm13v2.chain hg38-chm13v2.over.chain
-    mv chm13v2-hg19_chrM.chain chm13v2-hg19_chrM.over.chain
-    mv chm13v2-hg19_chrMT.chain chm13v2-hg19_chrMT.over.chain
-    mv hg19_chrM-chm13v2.chain hg19_chrM-chm13v2.over.chain
-    mv hg19_chrMT-chm13v2.chain  hg19_chrMT-chm13v2.over.chain
+    mv chm13v2-grch38.chain chm13v2-hg38.over.no-id.chain
+    mv grch38-chm13v2.chain hg38-chm13v2.over.no-id.chain
+    mv chm13v2-hg19_chrM.chain chm13v2-hg19_chrM.over.no-id.chain
+    mv chm13v2-hg19_chrMT.chain chm13v2-hg19_chrMT.over.no-id.chain
+    mv hg19_chrM-chm13v2.chain hg19_chrM-chm13v2.over.no-id.chain
+    mv hg19_chrMT-chm13v2.chain  hg19_chrMT-chm13v2.over.no-id.chain
+
+# add chain ids
+    chainMergeSort chm13v2-hg19_chrM.over.no-id.chain   > chm13v2-hg19_chrM.over.chain     
+    chainMergeSort chm13v2-hg19_chrMT.over.no-id.chain  > chm13v2-hg19_chrMT.over.chain    
+    chainMergeSort chm13v2-hg19.over.no-id.chain        > chm13v2-hg19.over.chain          
+    chainMergeSort chm13v2-hg38.over.no-id.chain        > chm13v2-hg38.over.chain          
+    chainMergeSort hg19-chm13v2.over.no-id.chain        > hg19-chm13v2.over.chain          
+    chainMergeSort hg19_chrM-chm13v2.over.no-id.chain   > hg19_chrM-chm13v2.over.chain     
+    chainMergeSort hg19_chrMT-chm13v2.over.no-id.chain  > hg19_chrMT-chm13v2.over.chain    
+    chainMergeSort hg38-chm13v2.over.no-id.chain        > hg38-chm13v2.over.chain          
+
 
 # create hg19 chains that combine chrM and chrMT for use in browser.
-   cp chm13v2-hg19_chrM.over.chain chm13v2-hg19.over.chain
-   chainFilter -q=chrMT chm13v2-hg19_chrMT.over.chain >>chm13v2-hg19.over.chain
-   cp hg19_chrM-chm13v2.over.chain hg19-chm13v2.over.chain
-   chainFilter -t=chrMT  hg19_chrMT-chm13v2.over.chain >>hg19-chm13v2.over.chain
+   chainFilter -q=chrMT chm13v2-hg19_chrMT.over.chain | chainMergeSort stdin chm13v2-hg19_chrM.over.chain > chm13v2-hg19.over.chain
+   chainFilter -t=chrMT hg19_chrMT-chm13v2.over.chain | chainMergeSort stdin  hg19_chrM-chm13v2.over.chain > hg19-chm13v2.over.chain
 
    pigz *.chain
 
@@ -163,7 +174,6 @@ globus: /team-liftover/v1_nflo/with_chrM/
 
     rm *.tab
 
-   pigz *.chain
    # make available is liftOver directory as we
    ln -f *.chain.gz ../../liftOver/
 
