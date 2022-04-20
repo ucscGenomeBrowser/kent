@@ -1375,7 +1375,7 @@ var hgGateway = (function() {
         // The user has selected a species (and possibly even a particular database) --
         // if we're not already using it, change to it.
         var cmd;
-        if (taxId !== uiState.taxId || (db && db !== uiState.db)) {
+        if (uiState.hubUrl !== null || taxId !== uiState.taxId || (db && db !== uiState.db)) {
             uiState.taxId = taxId;
             uiState.hubUrl = null;
             cmd = { setTaxId: { taxId: '' + taxId } };
