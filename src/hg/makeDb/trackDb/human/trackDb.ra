@@ -196,7 +196,8 @@ type bed 3
         mmcnt3Filter 0
         dataVersion /gbdb/$D/bbi/mastermindRelease.txt
         parent varsInPubs pack
-        maxWindowCoverage 80000
+        maxWindowCoverage 40000
+        maxItems 1000000
 
         track avada
         shortLabel Avada Variants

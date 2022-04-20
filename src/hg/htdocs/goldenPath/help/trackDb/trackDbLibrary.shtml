@@ -300,42 +300,39 @@
 <DIV class="html"><span class="types all"></span>
 <div class="format"><code>html</code></div>
     <P class="isRequired">Required: No</P>
-    <P>Specifies a file that contains the
-    complete description of a track in HTML format.  The path of this
-    file name is relative to the path of the trackDb file.  The
-    ".html" suffix is implied.</P>
-    <p>To be consistent with standard Genome Browser track descriptions, this description
+    <p>To help users understand your data we request you provide
+    a web page that explains what your Track Hub is presenting.</p>
+    <p>Use the <code>html path/to/explain.html</code> to specify the file
+    that contains the complete description of a track in HTML format.
+    The path of this file name is relative to the path of the trackDb file, or it
+    can be a full URL. It is also possible to have the &quot.html&quot; suffix implied,
+    for instance just have <code>html explainFile</code>. To further simplify trackDb,
+    if there is an html file with the same name as the <code>track nameOfTrack</code>
+    the html line does not even need to be declared if <code>nameOfTrack.html</code>
+    exists in the same location as the trackDb file.</p>
+    <p>To be consistent with standard Genome Browser track descriptions, html for tracks
     should contain several sections as seen below. Here is a link to an 
     <a href="../examples/hubExamples/templatePage.html" 
     target="_blank">example template</a> that you can use.</p>
-    <P><B>Description</B></P>
-    <P class="indent1">A few sentences describing the contents of the track and what
-    it attempts to show.  The description can include additional
-    paragraphs giving further details and can include links to outside
-    sources.</P>
-    <P><B>Display Conventions and Configuration</B></P>
-    <P class="indent1">A description of what the display represents. This
-    includes a description of conventions for coloring and any special glyphs used in the track.
-    It may describe how to interpret scores or full signal values.  This
-    section can also be used to describe how to customize the display
-    by using configuration controls.</P>
-    <P><B>Methods</B></P>
-    <P class="indent1">A
-    description of how the data was generated, which may include how
-    physical samples were treated as well as explanations of data-handling algorithms.</P>
-    <P><B>Credits</B></P>
-    <P class="indent1">Names
-    and institutions of those who performed the experiments and/or
-    prepared the data as well as any funding sources.  This section
-    should include a contact email address for questions concerning
-    the data.</P>
-    <P><B>References</B></P>
-    <P class="indent1">References
-    to any published work referring to or dependent upon this data as
-    well as any sources upon which the work is based or can be
-    understood.</P>
-    <P><B>Example:</B></P>
-    <pre>    html docs/myFirstTrack</pre>
+    <div class="indent1">
+    <p><b>Description</b></p>
+    <p class="indent1">A few sentences describing the track.</p>
+    <p><b>Display Conventions and Configuration</b></p>
+    <P class="indent1">If the track has colors, or unusual display properties,
+    explain them in this section, or how to configure special settings.</p>
+    <p><b>Methods</b></p>
+    <p class="indent1">This section can explain data-handling algorithms,
+    or the significance of scores if generated in a special fashion.</p>
+    <p><b>Credits</b></p>
+    <P class="indent1">This section helps people find the contacts
+    for questions about the data, please include an email or laboratory web page.</p>
+    <p><b>References</b></p>
+    <P class="indent1">Relevant publications regarding the data.</p>
+    </div>
+    <p><b>Example:</b></p>
+    <pre>    html docs/myFirstTrack.html</pre>
+    Or with full path:
+    <pre>    html https://path/to/location/docs/explainMyData.html</pre>
 </DIV>
 
 <DIV class="lessCommon_intro">

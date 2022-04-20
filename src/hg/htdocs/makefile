@@ -40,6 +40,7 @@ alpha:
 
 beta:
 	${GITUP}
+	cp -p --remove-destination ${DOCUMENTROOT}/assemblyRequest.html ${DOCUMENTROOT}-beta/assemblyRequest.html
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
 

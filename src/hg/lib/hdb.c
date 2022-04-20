@@ -208,7 +208,7 @@ ci = hGetChromInfo(db, buf);
 if (ci != NULL)
     return cloneString(ci->chrom);
 
-return chromAliasFindNative(name);
+return cloneString(chromAliasFindNative(name));
 }	/*	char *hgOfficialChromName(char *db, char *name)	*/
 
 boolean hgIsOfficialChromName(char *db, char *name)
