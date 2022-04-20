@@ -3044,7 +3044,7 @@ shortLabel EVA SNP Release 3
 longLabel Short Genetic Variants from European Variant Archive Release 3
 type bigBed 9 +
 group varRep
-visibility pack
+visibility dense
 itemRgb on
 mouseOver $ucscClass $aaChange
 bigDataUrl /gbdb/$D/bbi/evaSnp.bb
@@ -3056,6 +3056,7 @@ filterValues.ucscClass downstream_gene_variant|Downstream gene variant,upstream_
 filterType.ucscClass multipleListOnlyOr
 filterValues.itemRgb 255,,0,,0|Protein-altering and splice variants,0,,128,,0|Synonymous variants,0,,0,,255|Non-coding transcripts or UTR variants,0,,0,,0|Intergenic and intronic variants
 filterLabel.itemRgb General variant types by color grouping
+maxWindowCoverage 1000000
 pennantIcon New red ../goldenPath/newsarch.html#XX "Released Xxx. xx, 2022"
 
 searchTable evaSnp
