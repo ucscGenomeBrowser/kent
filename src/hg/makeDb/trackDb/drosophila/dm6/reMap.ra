@@ -28,7 +28,7 @@ compositeTrack on
     filterText.TF *
     filterText.Biotypes *
     filterText.FBgn *
-    filterLabel.TF Transcriptionnal regulators
+    filterLabel.TF Transcriptional regulators
     filterLabel.Biotypes Biotypes (cell lines, tissues...)
     filterLabel.FBgn FBgn ID
     labelFields name, TF, Biotypes, FBgn

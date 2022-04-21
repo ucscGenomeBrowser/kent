@@ -29,16 +29,16 @@ Each transcription factor follows a specific RGB color.
 ChIP-seq peak summits are represented by vertical bars.
 </li>
 <li>
-Hsap : A data set is defined as a ChIP/Exo-seq experiment in a given
-GEO/ArrayExpress/ENCODE series (e.g. GSE41561), for a given TF (e.g.: ESR1), in
+Hsap: A data set is defined as a ChIP/Exo-seq experiment in a given
+GEO/ArrayExpress/ENCODE series (e.g. GSE41561), for a given TF (e.g. ESR1), in
 a particular biological condition (e.g. MCF-7).
 <br>Data sets are labeled with the concatenation of these three pieces of
 information (e.g. GSE41561.ESR1.MCF-7).
 </li>
 <li>
-Atha :  The data set is defined as a ChIP-seq experiment in a given series
+Atha: The data set is defined as a ChIP-seq experiment in a given series
 (e.g. GSE94486), for a given target (e.g. ARR1), in a particular biological
-condition (i.e. ecotype, tissue type, experimental conditions ; e.g.
+condition (i.e. ecotype, tissue type, experimental conditions; e.g.
 Col-0_seedling_3d-6BA-4h).
 <br>Data sets are labeled with the concatenation of these three pieces of
 information (e.g. GSE94486.ARR1.Col-0_seedling_3d-6BA-4h).
@@ -89,13 +89,13 @@ were retrieved using the Python requests module.
 
 <h4>ChIP-seq processing</h4>
 Both Public and ENCODE data were processed similarly. Bowtie 2 (<a href=
-"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3322381/" TARGET = _BLANK>PMC3322381
-</a>) (version 2.2.9) with options -end-to-end -sensitive was used to align all
+"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3322381/" TARGET = _BLANK
+>PMC3322381</a>) (version 2.2.9) with options -end-to-end -sensitive was used to align all
 reads on the human genome (GRCh38/hg38 assembly). Biological and technical
 replicates for each unique combination of GSE/TF/Cell type or Biological condition
 were used for peak calling. TFBS were identified using MACS2 peak-calling tool
-(<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3120977/" TARGET = _BLANK>
-PMC3120977</a>) (version 2.1.1.2) in order to follow ENCODE ChIP-seq guidelines,
+(<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3120977/" TARGET = _BLANK
+>PMC3120977</a>) (version 2.1.1.2) in order to follow ENCODE ChIP-seq guidelines,
 with stringent thresholds (MACS2 default thresholds, p-value: 1e-5). An input data
 set was used when available.
 
@@ -140,13 +140,13 @@ as a bigBed file. This compressed binary format can be remotely queried through
 command line utilities. Please note that some of the download files can be quite large.</p>
 
 <p>
-Individual BED files for specific TFs, or Cells/Biotypes, or data sets can be
+Individual BED files for specific TFs, cells/biotypes, or data sets can be
 found and downloaded on the ReMap website <a href="http://remap.univ-amu.fr/"
 target="_blank">http://remap.univ-amu.fr/</a> or at <a href="http://remap2022.univ-amu.fr/"
 target="_blank">http://remap2022.univ-amu.fr/</a>.
 </p>
 
-The ReMap BED files for all versions [2022, 2020, 2018, 2015] are available for
+The ReMap BED files for all versions (2022, 2020, 2018, 2015) are available for
 download at the ReMap website <a href="http://remap.univ-amu.fr/"
 target="_blank">http://remap.univ-amu.fr/</a> in the download tab. 
 
