@@ -5558,6 +5558,19 @@ if (cgiBoolean(buf))
     }
 }
 
+static boolean clipFbToWindow( struct featureBits *fb, int winStart, int winEnd)
+{
+if ((fb->start > winEnd) || (fb->end < winStart))
+    return FALSE;
+
+if (fb->start < winStart)
+    fb->start = winStart;
+if (fb->end > winEnd)
+    fb->end = winEnd;
+
+return TRUE;
+}
+
 static struct featureBits *getBigBedFbList(struct trackDb *tdb, char *seqName, int winStart, int winEnd)
 /* Get a list of featureBits structures from a bigBed file. */
 {
@@ -5568,18 +5581,40 @@ struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart,
 char *bedRow[32];
 char startBuf[16], endBuf[16];
 struct featureBits *fbList = NULL, *fb;
+//struct bed *bedList = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
     struct bed *bed = bedLoadN(bedRow, bbi->definedFieldCount);
-    AllocVar(fb);
-    fb->name = bed->name;
-    fb->start = bed->chromStart;
-    fb->end = bed->chromEnd;
-    fb->strand = '+';
-    if (bed->strand[0])
-	fb->strand = bed->strand[0];
-    slAddHead(&fbList, fb);
+    if (bbi->definedFieldCount >= 12)
+        {
+        int ii;
+        for (ii = 0; ii < bed->blockCount; ii++)
+            {
+            AllocVar(fb);
+            fb->name = bed->name;
+            fb->start = bed->chromStart + bed->chromStarts[ii];
+            fb->end = bed->chromStart + bed->chromStarts[ii] + bed->blockSizes[ii];
+            fb->strand = '+';
+            if (bed->strand[0])
+                fb->strand = bed->strand[0];
+            if (!clipFbToWindow(fb, winStart,winEnd))
+                break;
+            slAddHead(&fbList, fb);
+            }
+        }
+    else
+        {
+        AllocVar(fb);
+        fb->name = bed->name;
+        fb->start = bed->chromStart;
+        fb->end = bed->chromEnd;
+        fb->strand = '+';
+        if (bed->strand[0])
+            fb->strand = bed->strand[0];
+        if (clipFbToWindow(fb, winStart,winEnd))
+            slAddHead(&fbList, fb);
+        }
     }
 return fbList;
 }
