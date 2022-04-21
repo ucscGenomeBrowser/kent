@@ -15,6 +15,7 @@ html/GCA_009914755.4_T2T-CHM13v2.0.gc5Base.html \
 html/GCA_009914755.4_T2T-CHM13v2.0.repeatMasker.html \
 html/GCA_009914755.4_T2T-CHM13v2.0.simpleRepeat.html \
 html/GCA_009914755.4_T2T-CHM13v2.0.windowMasker.html \
+html/GCA_009914755.4_T2T-CHM13v2.0.refSeqComposite.html \
 html/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene.html
 
 # tracks not used
