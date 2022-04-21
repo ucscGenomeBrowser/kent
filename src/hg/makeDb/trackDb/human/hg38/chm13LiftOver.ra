@@ -7,4 +7,3 @@ visibility hide
 bigDataUrl /gbdb/hg38/bbi/chm13LiftOver/hg38-chm13v2.ncbi-qnames.over.chain.bb
 linkDataUrl /gbdb/hg38/bbi/chm13LiftOver/hg38-chm13v2.ncbi-qnames.over.link.bb
 group compGeno
-
