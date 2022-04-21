@@ -191,9 +191,9 @@ type bed 3
         exonNumbers off
         mouseOverField _mouseOver
         itemRgb on
-        mmcnt1Filter 0
-        mmcnt2Filter 0
-        mmcnt3Filter 0
+        filter.mmcnt1 0
+        filter.mmcnt2 0
+        filter.mmcnt3 0
         dataVersion /gbdb/$D/bbi/mastermindRelease.txt
         parent varsInPubs pack
         maxWindowCoverage 40000
