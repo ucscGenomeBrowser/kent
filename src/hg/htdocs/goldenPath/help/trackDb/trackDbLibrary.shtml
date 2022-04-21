@@ -2195,7 +2195,6 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="showDiffBasesMaxZoom"><span class="types all"></span>
 <div class="format"><code>showDiffBasesMaxZoom &lt;basesPerPixel&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Show annotations highlighting base or codon differences
     only if current zoom level does not exceed 
     <code>basesPerPixel</code> (a float).  <code>showDiffBasesAllScales</code>
@@ -2204,13 +2203,11 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="showCdsAllScales"><span class="types psl"></span>
 <div class="format"><code>showCdsAllScales on</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Show CDS for PSL tracks at all zoom levels.</P>
 </DIV>
 
 <DIV class="showCdsMaxZoom"><span class="types psl"></span>
 <div class="format"><code>showCdsMaxZoom &lt;basesPerPixel&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Use this setting (a float) to specify the maximum zoom-out allowed for displaying the CDS 
     for psl tracks. 
     In conjunction with this setting, <code>showCdsAllScales</code> must be set on and 
