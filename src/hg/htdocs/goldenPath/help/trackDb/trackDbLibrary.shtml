@@ -806,7 +806,7 @@
     <LI>  $p - item name portion after first : in name, up to next colon</LI>
     <LI>  $taxId - NCBI Taxon ID of current organism (from hgCentral.dbDb)</LI>
     <LI>  $n - Scientific Name of current organism (from hgCentral.dbDb)</LI>
-    <LI>&lt;fieldName&gt; - For bigBed based tracks only (so excluding vcf, vcfPhasedTrio, bam/cram and hic), substitute the &lt;fieldName&gt; value from the bigBed.</LI>
+    <LI>$&lt;fieldName&gt; - For bigBed based tracks only (so excluding vcf, vcfPhasedTrio, bam/cram and hic), substitute the &lt;fieldName&gt; value from the bigBed.</LI>
     </UL>
     <P>The default prompt the user will see for this url is "outside link:".  Use
     <code>urlLabel</code> to provide a more informative prompt.
