@@ -5,6 +5,7 @@ longLabel GalaxyProject surveillance of SARS-CoV-2 mutations through consistent 
 type bed
 group varRep
 visibility dense
+pennantIcon New red ../goldenPath/newsarch.html "Released Apr. 2022"
 
 # the internal name, not visible in the UI, used for URL arguments. No special characters.
 track Q0_tracks
