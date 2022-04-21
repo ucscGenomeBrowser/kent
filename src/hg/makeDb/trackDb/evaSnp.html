@@ -6,7 +6,6 @@ Nucleotide Variants (SNVs) &mdash; from the European Variation Archive
 (<a href="https://www.ebi.ac.uk/eva/" target="_blank">EVA</A>)
 Release 3 for the $organism $db genome. The dbSNP database at NCBI no longer
 hosts non-human variants.
-
 </p>
 
 <h2>Interpreting and Configuring the Graphical Display</h2>
@@ -17,12 +16,16 @@ hosts non-human variants.
   reference sequence. Insertions are indicated by a single tick mark displayed
   between two nucleotides, single nucleotide polymorphisms are displayed as the
   width of a single base, and multiple nucleotide variants are represented by a
-  block that spans two or more bases.
+  block that spans two or more bases. The display is set to collapse to dense visability
+  when there are more than 100k variants in the window. When the window size is more than 1M bp, 
+  the display is switched to density graph mode.
 </p>
 
-<h3>Searching, details and filtering</h3>
-
-<p>                                                                                                                                                   Navigation to an individual variant can be accomplished by typing or copying                                                                          the variant identifier (rsID) or the genomic coordinates into the Position/Search box on the                                                          Browser.</p>
+<h3>Searching, details, and filtering</h3>
+<p>
+Navigation to an individual variant can be accomplished by typing or copying
+the variant identifier (rsID) or the genomic coordinates into the Position/Search box on the                                                       
+Browser.</p>
 
 <p>
   A click on an item in the graphical display displays a page with data about
@@ -32,16 +35,15 @@ hosts non-human variants.
   Integrator.
 </p>
 
-</p>                                                                                                                                                  Variants can be filtered using the track controls to show subsets of the                                                                              data by either EVA SO term, UCSC-generated functional annotation, or
-by color, which bins the UCSC functional annotations into general classes.
-</p>
+<p>Variants can be filtered using the track controls to show subsets of the 
+data by either EVA Sequence Ontology (SO) term, UCSC-generated functional effect, or
+by color, which bins the UCSC functional effects into general classes.</p>
 
 <h3>Mouse-over</h3>
-
 <p>
 Mousing over an item shows the ucscClass, which is the consequence according to the
 <a target="_blank" href="/cgi-bin/hgVai">Variant Annotation Integrator</a>, and
-the aaChange when one is available, which is the change in ammino acid in HGVS.p
+the aaChange when one is available, which is the change in amino acid in HGVS.p
 terms. Items may have multiple ucscClasses, which will all be shown in the mouse-over
 in a comma-separated list. Likewise, multiple HGVS.p terms may be shown for each rsID
 separated by spaces describing all possible AA changes.</p>
@@ -72,7 +74,7 @@ below.
 </table>
 </p>
 
-<h3>Sequence ontology</h3>
+<h3>Sequence ontology (SO)</h3>
 
 <p>
 Variants are classified by EVA into one of the following <a target="_blank"
@@ -111,7 +113,8 @@ Data were downloaded from the European Variation Archive EVA release 3 (2022-02-
 <a href="https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/"
 target="_blank">current_ids.vcf.gz</a> files corresponding to the proper assembly.</p>
 <p>
-Chromosome names were converted to UCSC-style, and the variants passed through the
+Chromosome names were converted to UCSC-style, a few problematic variants were removed,
+and the variants passed through the
 <a target="_blank" href="/cgi-bin/hgVai">Variant Annotation Integrator</a> in order to
 predict consequence. For every organism the ncbiRefSeqCurated gene models were used to
 predict the consequences, except for mm39 which used the ncbiRefSeqSelect models.</p>
@@ -135,13 +138,15 @@ intron_variant, intergenic_variant, NMD_transcript_variant, no_sequence_alterati
 <p>
 Sequence Ontology (&quot;<a href="http://www.sequenceontology.org/browser/current_release"
 target="_blank">SO</a>:&quot;)
-terms were converted to the variant classes, then the files were converted to BED 
+terms were converted to the variant classes, then the files were converted to BED, 
 and then bigBed format.
 </p>
 <p>
 No functional annotations were provided by the EVA (e.g., missense, nonsense, etc).
 These were computed using UCSC's Variant Annotation Integrator (Hinrichs, et al., 2016).
-</p>
+For complete documentation of the processing of these tracks, read the 
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/evaSnp3.txt">
+EVA Release 3 MakeDoc</a>.</p>
 
 <h2>Data Access</h2>
 <p>

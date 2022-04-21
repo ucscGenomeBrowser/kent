@@ -3056,9 +3056,9 @@ filterValues.ucscClass downstream_gene_variant|Downstream gene variant,upstream_
 filterType.ucscClass multipleListOnlyOr
 filterValues.itemRgb 255,,0,,0|Protein-altering and splice variants,0,,128,,0|Synonymous variants,0,,0,,255|Non-coding transcripts or UTR variants,0,,0,,0|Intergenic and intronic variants
 filterLabel.itemRgb General variant types by color grouping
-maxWindowCoverage 100000
+maxWindowCoverage 1000000
 maxItems 1000000
-pennantIcon New red ../goldenPath/newsarch.html#XX "Released Xxx. xx, 2022"
+pennantIcon New red ../goldenPath/newsarch.html#04222022 "Released at UCSC April 22, 2022"
 
 searchTable evaSnp
 searchType bigBed
