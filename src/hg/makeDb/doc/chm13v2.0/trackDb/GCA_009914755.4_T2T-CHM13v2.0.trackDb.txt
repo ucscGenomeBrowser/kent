@@ -232,17 +232,17 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         priority 3
 
-        track chainLiftOverGCA_021950905.1
-        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
-        subGroups view=chain species=s000 clade=c00
-        shortLabel HG002 pat loChain
-        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
-        type bigChain GCA_021950905.1
-        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021950905.1.bb
-        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021950905.1Link.bb
-        otherDb GCA_021950905.1
-        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
-        priority 4
+        #track chainLiftOverGCA_021950905.1
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        #subGroups view=chain species=s000 clade=c00
+        #shortLabel HG002 pat loChain
+        #longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
+        #type bigChain GCA_021950905.1
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021950905.1.bb
+        #linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021950905.1Link.bb
+        #otherDb GCA_021950905.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 4
 
         track chainGCA_021951015.1
         subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
@@ -280,17 +280,17 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         priority 7
 
-        track chainLiftOverGCA_021951015.1
-        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
-        subGroups view=chain species=s001 clade=c00
-        shortLabel HG002 mat loChain
-        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
-        type bigChain GCA_021951015.1
-        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021951015.1.bb
-        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021951015.1Link.bb
-        otherDb GCA_021951015.1
-        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
-        priority 8
+        #track chainLiftOverGCA_021951015.1
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        #subGroups view=chain species=s001 clade=c00
+        #shortLabel HG002 mat loChain
+        #longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
+        #type bigChain GCA_021951015.1
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021951015.1.bb
+        #linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021951015.1Link.bb
+        #otherDb GCA_021951015.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 8
 
         track chainHg19
         subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
@@ -328,17 +328,17 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         priority 11
 
-        track chainLiftOverHg19
-        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
-        subGroups view=chain species=s002 clade=c00
-        shortLabel hg19 loChain
-        longLabel hg19 (Feb. 2009) Lift Over Chained Alignments
-        type bigChain hg19
-        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg19.bb
-        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg19Link.bb
-        otherDb hg19
-        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
-        priority 12
+        #track chainLiftOverHg19
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        #subGroups view=chain species=s002 clade=c00
+        #shortLabel hg19 loChain
+        #longLabel hg19 (Feb. 2009) Lift Over Chained Alignments
+        #type bigChain hg19
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg19.bb
+        #linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg19Link.bb
+        #otherDb hg19
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 12
 
         track chainHg38
         subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
@@ -376,17 +376,17 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         priority 15
 
-        track chainLiftOverHg38
-        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain on
-        subGroups view=chain species=s003 clade=c00
-        shortLabel hg38 loChain
-        longLabel hg38 (Dec. 2013) Lift Over Chained Alignments
-        type bigChain hg38
-        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg38.bb
-        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg38Link.bb
-        otherDb hg38
-        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
-        priority 16
+        #track chainLiftOverHg38
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain on
+        #subGroups view=chain species=s003 clade=c00
+        #shortLabel hg38 loChain
+        #longLabel hg38 (Dec. 2013) Lift Over Chained Alignments
+        #type bigChain hg38
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg38.bb
+        #linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg38Link.bb
+        #otherDb hg38
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 16
 
     track GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
     shortLabel Nets
@@ -430,17 +430,17 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         priority 3
 
-        track liftOverNetGCA_021950905.1
-        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
-        subGroups view=net species=s000 clade=c00
-        shortLabel HG002 pat liftOverNet
-        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Net Alignment
-        type bigMaf
-        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.liftOverNet.bb
-        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.liftOverNet.summary.bb
-        speciesOrder GCA_021950905.1
-        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
-        priority 4
+        #track liftOverNetGCA_021950905.1
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s000 clade=c00
+        #shortLabel HG002 pat liftOverNet
+        #longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.liftOverNet.bb
+        #summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.liftOverNet.summary.bb
+        #speciesOrder GCA_021950905.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 4
 
         track netGCA_021951015.1
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
@@ -478,17 +478,17 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         priority 7
 
-        track liftOverNetGCA_021951015.1
-        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
-        subGroups view=net species=s001 clade=c00
-        shortLabel HG002 mat liftOverNet
-        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Net Alignment
-        type bigMaf
-        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.liftOverNet.bb
-        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.liftOverNet.summary.bb
-        speciesOrder GCA_021951015.1
-        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
-        priority 8
+        #track liftOverNetGCA_021951015.1
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s001 clade=c00
+        #shortLabel HG002 mat liftOverNet
+        #longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.liftOverNet.bb
+        #summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.liftOverNet.summary.bb
+        #speciesOrder GCA_021951015.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 8
 
         track netHg19
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
@@ -526,17 +526,17 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         priority 11
 
-        track liftOverNetHg19
-        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
-        subGroups view=net species=s002 clade=c00
-        shortLabel hg19 liftOverNet
-        longLabel hg19 (Feb. 2009) Lift Over Net Alignment
-        type bigMaf
-        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.liftOverNet.bb
-        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.liftOverNet.summary.bb
-        speciesOrder hg19
-        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
-        priority 12
+        #track liftOverNetHg19
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s002 clade=c00
+        #shortLabel hg19 liftOverNet
+        #longLabel hg19 (Feb. 2009) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.liftOverNet.bb
+        #summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.liftOverNet.summary.bb
+        #speciesOrder hg19
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 12
 
         track netHg38
         parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
@@ -574,16 +574,16 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
         priority 15
 
-        track liftOverNetHg38
-        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
-        subGroups view=net species=s003 clade=c00
-        shortLabel hg38 liftOverNet
-        longLabel hg38 (Dec. 2013) Lift Over Net Alignment
-        type bigMaf
-        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.liftOverNet.bb
-        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.liftOverNet.summary.bb
-        speciesOrder hg38
-        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
-        priority 16
+        #track liftOverNetHg38
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s003 clade=c00
+        #shortLabel hg38 liftOverNet
+        #longLabel hg38 (Dec. 2013) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.liftOverNet.bb
+        #summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.liftOverNet.summary.bb
+        #speciesOrder hg38
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 16
 
 include GCA_009914755.4.userTrackDb.txt
