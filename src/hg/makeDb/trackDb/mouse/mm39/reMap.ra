@@ -26,10 +26,10 @@ compositeTrack on
     filterType.Biotypes multipleListOnlyOr
     filterText.TF *
     filterText.Biotypes *
-    filterLabel.TF Transcriptionnal regulators
+    filterLabel.TF Transcriptional regulators
     filterLabel.Biotypes Biotypes (cell lines, tissues...)
     labelFields name, TF, Biotypes
-    urls TF="http://remap.univ-amu.fr/target_page/$$:9606" Biotypes="http://remap.univ-amu.fr/biotype_page/$$:9606"
+    urls TF="http://remap.univ-amu.fr/target_page/$$:10090" Biotypes="http://remap.univ-amu.fr/biotype_page/$$:10090"
     filterValues.Biotypes 16T,\
     3134,\
     32D,\

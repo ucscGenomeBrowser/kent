@@ -11,13 +11,13 @@ It restricts itself to data deposited by national genome surveillance projects t
 <ul>
 <li>Sample collection date</li>
 <li>Sequencing platform, library layout and strategy (currently reanalysis is done for ampliconic paired-end Illumina and ONT data)</li>
-<li>the primer scheme used for the generation of amplicons (this information is used to trim primer sequences from the data before variant calling; reanalysis can be done for any primer scheme with publically available primer binding site information)</li>
+<li>the primer scheme used for the generation of amplicons (this information is used to trim primer sequences from the data before variant calling; reanalysis can be done for any primer scheme with publicly available primer binding site information)</li>
 <li>some kind of discernible batch information (e.g. a library identifier) that can be used to form batches of samples for reanalysis and batch-level reporting</li>
 </ul>
 </p>
 <p>
 Analysis is performed on public <a href="https://galaxyproject.org" target="_blank">Galaxy</a> <a href="https://galaxyproject.org/use/" target="_blank">servers</a> with only open-source tools orchestrated through public, community-developed, reproducible workflows available from <a href="https://workflowhub.eu/collections/2" target="_blank">WorkflowHub</a> and <a href="https://dockstore.org/organizations/iwc/collections/Covid" target="_blank">Dockstore</a> and includes mutation calling for all samples, generation of per-sample and batch-level mutation reports and plots, generation of consensus sequences and pangolin lineage assignments.
-Key results and metadata are hosted on a <a href="ftp://xfer13.crg.eu">public FTP server</a> provided by the <a href="https://www.crg.eu/" target="_blank">Centre for Genomic Regulation</a> and the <a href="https://www.bsc.es/" target="_blank">Barcelona Supercomputing Centre</a> and form the basis of these UCSC genome browser tracks.
+Key results and metadata are hosted on a <a target="_blank" href="ftp://xfer13.crg.eu">public FTP server</a> provided by the <a href="https://www.crg.eu/" target="_blank">Centre for Genomic Regulation</a> and the <a href="https://www.bsc.es/" target="_blank">Barcelona Supercomputing Centre</a> and form the basis of these UCSC genome browser tracks.
 The project web site has <a href="https://galaxyproject.org/projects/covid19/data/" target="_blank">more information</a> about available results data.
 </p>
 
@@ -54,7 +54,7 @@ The quarters are redefined with each data update with the latest/current quarter
 
 <h2>Methods</h2>
 <p>
-For analyses, batches of raw sequencing data get downloaded from public databases (in particular, from the <a href="ftp://ftp.sra.ebi.ac.uk">FTP server</a> of the <a href="https://www.ebi.ac.uk/ena/browser/home" target="_blank">European Nucleotide Archive</a>) onto one of several public Galaxy instances.
+For analyses, batches of raw sequencing data get downloaded from public databases (in particular, from the <a target="_blank" href="ftp://ftp.sra.ebi.ac.uk">FTP server</a> of the <a href="https://www.ebi.ac.uk/ena/browser/home" target="_blank">European Nucleotide Archive</a>) onto one of several public Galaxy instances.
 The data gets processed with a sequencing platform-specific variation analysis workflow (one for <a href="https://workflowhub.eu/workflows/110" target="_blank">paired-end Illumina</a> data, another one for <a href="https://workflowhub.eu/workflows/111" target="_blank">ONT</a> data), which performs QC, read mapping, mapped reads postprocessing including primer trimming, variant calling and annotation and results in a collection of VCF files, one for each sample in the batch.
 This output gets picked up by a <a href="https://workflowhub.eu/workflows/109" target="_blank">reporting workflow</a>, which generates per-sample and per-batch mutation reports and a per-batch allele-frequency plot for a quick overview over variant patterns in the batch. In parallel, the outputs of the variation analysis workflow are also used by a <a href="https://workflowhub.eu/workflows/138" target="_blank">consensus workflow</a> to produce a FASTA consensus sequence for every sample in the batch.
 
@@ -62,7 +62,7 @@ Sequencing data downloads, execution of the three types of workflows, and export
 
 The bot accounts on participating Galaxy servers are checked on a roughly weekly basis for newly finished analysis histories, then
 <ol>
-<li>those histories are made publically accessible on their server</li>
+<li>those histories are made publicly accessible on their server</li>
 <li>batch information, i.e., samples analyzed and their metadata, links to the histories, etc. are added to <pre>ftp://xfer13.crg.eu/gx-surveillance.json</pre></li>
 <li>pangolin lineage assignment is (re)performed for the entire collection of samples ever analyzed</li>
 <li>the genome browser tracks get recalculated by
@@ -81,7 +81,7 @@ The bot accounts on participating Galaxy servers are checked on a roughly weekly
 The analysis behind these tracks is the result of joint efforts of the <a href="https://galaxyproject.org/community/" target="_blank">Galaxy community</a> at large, the <a href="https://usegalaxy.org" target="_blank">usegalaxy.org</a> and <a href="https://galaxyproject.eu/people" target="_blank">usegalaxy.eu</a> teams, the <a href="https://galaxyproject.org/iuc/" target="_blank">IUC</a>, and the <a href="https://github.com/galaxyproject/iwc/" target="_blank">IWC</a>.
 </p>
 <p>
-The infrastructure and devlopment work behind the project was made possible by <a href="https://galaxyproject.org/projects/covid19/#our-sponsors">generous support from funding agencies around the world</a>.
+The infrastructure and development work behind the project was made possible by <a href="https://galaxyproject.org/projects/covid19/#our-sponsors">generous support from funding agencies around the world</a>.
 </p>
 <p>
 For questions regarding SARS-CoV-2 data analysis and its automation with Galaxy, please join us in the <a href="https://matrix.to/#/#galaxyproject_Public-Health:gitter.im" target="_blank">GalaxyProject Public Health matrix channel</a>.
@@ -97,8 +97,8 @@ For questions regarding SARS-CoV-2 data analysis and its automation with Galaxy,
 
 <p>
 <ol>
-<li id="Ref1">Baker, D.; van den Beek, M.; Blankenberg, D.; Bouvier, D.; Chilton, J.; Coraor, N.; Coppens, F.; Eguinoa, I.; Gladman, S.; Grüning, B.; Keener, N.; Larivière, D.; Lonie, A.; Kosakovsky Pond, S.; Maier, W.; Nekrutenko, A.; Taylor, J. & Weaver, S. (2020): No more business as usual: Agile and effective responses to emerging pathogen threats require open data and open analytics. PLoS Pathogens 16(8):e1008643. DOI: <a href="https://doi.org/10.1371/journal.ppat.1008643">10.1371/journal.ppat.1008643</a></li>
-<li id="Ref2">Maier, W.; Bray, S.; van den Beek, M.; Bouvier, D.; Coraor, N.; Miladi, M.; Singh, B.; Argila, J. R. D.; Baker, D.; Roach, N.; Gladman, S.; Coppens, F.; Martin, D. P.; Lonie, A.; Grüning, B.; Pond, S. L. K. & Nekrutenko, A. (2021): Ready-to-use public infrastructure for global SARS-CoV-2 monitoring. Nature Biotechnology 39, 1178–1179. DOI: <a href="https://doi.org/10.1038/s41587-021-01069-1">10.1038/s41587-021-01069-1</a></li>
+<li id="Ref1">Baker, D.; van den Beek, M.; Blankenberg, D.; Bouvier, D.; Chilton, J.; Coraor, N.; Coppens, F.; Eguinoa, I.; Gladman, S.; Grüning, B.; Keener, N.; Lariviere, D.; Lonie, A.; Kosakovsky Pond, S.; Maier, W.; Nekrutenko, A.; Taylor, J. & Weaver, S. (2020): No more business as usual: Agile and effective responses to emerging pathogen threats require open data and open analytics. PLoS Pathogens 16(8):e1008643. DOI: <a href="https://doi.org/10.1371/journal.ppat.1008643">10.1371/journal.ppat.1008643</a></li>
+<li id="Ref2">Maier, W.; Bray, S.; van den Beek, M.; Bouvier, D.; Coraor, N.; Miladi, M.; Singh, B.; Argila, J. R. D.; Baker, D.; Roach, N.; Gladman, S.; Coppens, F.; Martin, D. P.; Lonie, A.; Grüning, B.; Pond, S. L. K. & Nekrutenko, A. (2021): Ready-to-use public infrastructure for global SARS-CoV-2 monitoring. Nature Biotechnology 39, 1178-1179. DOI: <a href="https://doi.org/10.1038/s41587-021-01069-1">10.1038/s41587-021-01069-1</a></li>
 </ol>
 </p>
 </body>

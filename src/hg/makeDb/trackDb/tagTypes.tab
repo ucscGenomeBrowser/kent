@@ -27,7 +27,6 @@ bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
 barChartColors barChart bigBarChart
 barChartCategoryUrl barChart bigBarChart
-multiRegionsBedUrl *
 barChartFacets barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 barChartMerge barChart bigBarChart
@@ -316,6 +315,7 @@ mouseOverField big*
 mouseOver bigLolly bigBed bigPsl
 mouseOverFunction bigWig
 msaTable wig wigMafProt wigMaf
+multiRegionsBedUrl *
 ncbiAccXref bed
 negateValues wigMaf bigWig bedGraph wig
 nextExonText *

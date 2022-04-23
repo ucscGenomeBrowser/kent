@@ -138,7 +138,7 @@ boolean fbUnderstandTrack(char *db, struct trackDb *tdb)
 if ((tdb != NULL) && startsWith("big", tdb->type) && !startsWith("bigWig", tdb->type)) 
 	return TRUE;
 
-struct hTableInfo *hti = hFindTableInfo(db, NULL, tdb->track);
+struct hTableInfo *hti = hFindTableInfo(db, NULL, tdb->table);
 
 if (hti == NULL)
     return FALSE;

@@ -402,7 +402,7 @@ exonArrows on
     priority 2
 
 include dbSnpArchiveMm10.ra
-include reMap.ra alpha
+include reMap.ra alpha,beta
 
 # TOGA default annotation for hg38
 track HLTOGAannotvsHg38v1

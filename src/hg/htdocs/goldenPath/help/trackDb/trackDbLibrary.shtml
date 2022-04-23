@@ -806,7 +806,7 @@
     <LI>  $p - item name portion after first : in name, up to next colon</LI>
     <LI>  $taxId - NCBI Taxon ID of current organism (from hgCentral.dbDb)</LI>
     <LI>  $n - Scientific Name of current organism (from hgCentral.dbDb)</LI>
-    <LI>&lt;fieldName&gt; - For bigBed based tracks only (so excluding vcf, vcfPhasedTrio, bam/cram and hic), substitute the &lt;fieldName&gt; value from the bigBed.</LI>
+    <LI>$&lt;fieldName&gt; - For bigBed based tracks only (so excluding vcf, vcfPhasedTrio, bam/cram and hic), substitute the &lt;fieldName&gt; value from the bigBed.</LI>
     </UL>
     <P>The default prompt the user will see for this url is "outside link:".  Use
     <code>urlLabel</code> to provide a more informative prompt.
@@ -2195,7 +2195,6 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="showDiffBasesMaxZoom"><span class="types all"></span>
 <div class="format"><code>showDiffBasesMaxZoom &lt;basesPerPixel&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Show annotations highlighting base or codon differences
     only if current zoom level does not exceed 
     <code>basesPerPixel</code> (a float).  <code>showDiffBasesAllScales</code>
@@ -2204,13 +2203,11 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="showCdsAllScales"><span class="types psl"></span>
 <div class="format"><code>showCdsAllScales on</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Show CDS for PSL tracks at all zoom levels.</P>
 </DIV>
 
 <DIV class="showCdsMaxZoom"><span class="types psl"></span>
 <div class="format"><code>showCdsMaxZoom &lt;basesPerPixel&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Use this setting (a float) to specify the maximum zoom-out allowed for displaying the CDS 
     for psl tracks. 
     In conjunction with this setting, <code>showCdsAllScales</code> must be set on and 
@@ -5135,6 +5132,13 @@ For the complete bigBarChart format definitions please see the
     <A HREF="../barChart.html">bigBarChart help page</A>.</P>
 </DIV>
 
+<DIV class="barChartBars"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartBars &lt;label1 label2...&gt;</code></div>
+    <P>This setting is a list of labels for the categorical variables (bars).
+    It is required for this track type.
+    </P>
+</DIV>
+
 <DIV class="barChartUnit"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartUnit &lt;unit&gt;</code></div>
     <P>The unit label is attached to values in the display, charts and plots of the track.
@@ -5180,6 +5184,8 @@ For the complete bigBarChart format definitions please see the
 <DIV class="barChartStretchToItem"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartStretchToItem on</code></div>
     <P>This setting extends the barCharts to cover the entire horizontal space available in the graph.
+    This setting is typically used with bar charts with large number of bars so that it is possible
+    to zoom in to see better the individual bars.
     </P>
 </DIV>
 
@@ -5190,12 +5196,6 @@ For the complete bigBarChart format definitions please see the
     </P>
 </DIV>
 
-<DIV class="barChartBars"><span class="types bigBarChart"></span>
-<div class="format"><code>barChartBars &lt;label1 label2...&gt;</code></div>
-    <P>This setting is a list of labels for the categorical variables (bars).
-    It is required for this track type.
-    </P>
-</DIV>
 
 <DIV class="barChartColors"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartColors &lt;color1 color2...&gt;</code></div>
@@ -5241,6 +5241,39 @@ This setting can replace the <code>barChartBars</code> and <code>barChartColors<
 and is particularly useful for tracks with large numbers of categories.
     </P>
 </DIV>
+
+<DIV class="barChartFacets"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartFacets &lt;column1,column2,...columnN&gt;</code></div>
+    <P>This setting turns on the faceted selection on the track details and configure page
+    which is useful for selecting which bars out of a large number to display.  It works
+    with the barChartStatsUrl.  The comma-separated list of columns refer to column names
+    in the tab-separated-value file specified by barChartStatsUrl.
+    </P>
+</DIV>
+
+<DIV class="barChartStatsUrl"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartStatsUrl &lt;url&gt;</code></div>
+    <P>This setting associates a table in tab-separated-values with the barchart, with one line
+    per bar.  The first line of the file contains the table column names. The first column
+    contains the name of the bar.  The other columns can be in any order.  
+    If a <i>color</i> column is present it will be used for the colors of the bars using the 
+    hexadecimal #RRGGBB format. 
+    (Currently the same names and colors should also be specified in a URL associated with barChartCategoriesUrl tag.) 
+    The <i>count</i> column is required, and contains the number of samples represented in the bar. 
+    Other columns can contain additional data associated with each bar. Typically these are used
+    in coordination with the barChartsFacets tag to specify metadata such as cell types or
+    tissue of origin.
+    </P>
+</DIV>
+
+<DIV class="barChartMerge"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartMerge on</code></div>
+    <P>This setting enables the <i>merge</i> button inside of the faceted selections.  It
+    is particularly useful when there are many bars and many facets. It allows bars that differ 
+    only in that one facet to be merged together.
+    </P>
+</DIV>
+
 
 <DIV class="bigBarChart_example"><span class="types bigBarChart"></span>
 <div class="format"><B>Example of a bigBarChart track</B></div>

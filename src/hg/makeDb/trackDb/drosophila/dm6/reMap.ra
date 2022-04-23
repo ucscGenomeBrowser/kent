@@ -28,11 +28,11 @@ compositeTrack on
     filterText.TF *
     filterText.Biotypes *
     filterText.FBgn *
-    filterLabel.TF Transcriptionnal regulators
+    filterLabel.TF Transcriptional regulators
     filterLabel.Biotypes Biotypes (cell lines, tissues...)
     filterLabel.FBgn FBgn ID
     labelFields name, TF, Biotypes, FBgn
-    urls TF="http://remap.univ-amu.fr/target_page/$$:9606" Biotypes="http://remap.univ-amu.fr/biotype_page/$$:9606"
+    urls TF="http://remap.univ-amu.fr/target_page/$$:7227" Biotypes="http://remap.univ-amu.fr/biotype_page/$$:7227"
     filterValues.Biotypes adult,\
     embryo,\
     Kc,\
