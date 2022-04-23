@@ -41,6 +41,12 @@
     the sequence is entirely new. The UCSC liftOver pipeline shows a lot of
     alignable pieces in them, because these repeats and rDNA sequences have
     similar copies in hg38. It depends on the particular analysis which approach is more appropriate.
+    <br>
+    A note on genes: As the link above shows, even though the sequence is new,
+    the T2T group mapped hg38 Gencode 35 gene models into these regions using
+    CAT/LiftOff. This is because CAT and liftOff are using approaches for their
+    lifting of genes / mapping that are not based on the liftOver alignments but sequence homology, 
+    like the UCSC liftOver pipeline.
 
     <li><a target=_blank href="https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?db=hub_24696_GCA_009914755.4&position=CP068269.2%3A145464863%2D145472134&t2tLiftOverHg38=pack&ucscLiftOverHg38=pack">Example 2:</a> The ABO gene in CHM13
     is a longer haplotype than in hg38. In the T2T liftOver alignments, it looks as if the sequence
