@@ -2592,39 +2592,39 @@ return(found);
 /* Support these formats for range specifiers.  Note the ()'s around chrom,
  * start and end portions for substring retrieval: */
 char *canonicalRangeExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
 		     "([-0-9,]+)"
 		     "[[:space:]]*[-_][[:space:]]*"
 		     "([0-9,]+)$";
 char *gbrowserRangeExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
 		     "([0-9,]+)"
 		     "[[:space:]]*\\.\\.[[:space:]]*"
 		     "([0-9,]+)$";
 char *lengthRangeExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
 		     "([0-9,]+)"
 		     //"[[:space:]]*\\^[[:space:]]*"
 		     "[[:space:]]*\\+[[:space:]]*"
 		     "([0-9,]+)$";
 char *bedRangeExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]+"
 		     "([0-9,]+)"
 		     "[[:space:]]+"
 		     "([0-9,]+)$";
 char *sqlRangeExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]*\\|[[:space:]]*"
 		     "([0-9,]+)"
 		     "[[:space:]]*\\|[[:space:]]*"
 		     "([0-9,]+)$";
 
 char *singleBaseExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
 		     "([0-9,]+)$";
 

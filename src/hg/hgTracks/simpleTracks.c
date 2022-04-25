@@ -1164,7 +1164,7 @@ if (x < xEnd)
 	    // NOTE: chopped out winStart/winEnd
 	    // NOTE: Galt added winStart/winEnd back in for multi-region
             safef(link,sizeof(link),"%s&db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s",
-                hgcNameAndSettings(), database, chromName, winStart, winEnd, start, end, encodedTrack, encodedItem);
+                hgcNameAndSettings(), database, cgiEncode(chromName), winStart, winEnd, start, end, encodedTrack, encodedItem);
             }
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
