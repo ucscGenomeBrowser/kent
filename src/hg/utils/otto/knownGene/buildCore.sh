@@ -59,7 +59,7 @@ hgMapToGene -geneTableType=genePred  -type=psl -tempDb=$tempDb $db all_mrna know
 # makes kgXref.tab  knownCanonical.tab knownIsoforms.tab kgColor.tab  
 makeGencodeKnownGene $db $tempDb $GENCODE_VERSION txToAcc.tab
 
-hgLoadSqlTab -notOnServer $tempDb kgXref $kent/src/hg/lib/kgXref.sql kgXref.tab
+sort kgXref.tab | uniq | hgLoadSqlTab -notOnServer $tempDb kgXref $kent/src/hg/lib/kgXref.sql stdin
 hgLoadSqlTab -notOnServer $tempDb knownCanonical $kent/src/hg/lib/knownCanonical.sql knownCanonical.tab
 sort knownIsoforms.tab | uniq | hgLoadSqlTab -notOnServer $tempDb knownIsoforms $kent/src/hg/lib/knownIsoforms.sql stdin
 
