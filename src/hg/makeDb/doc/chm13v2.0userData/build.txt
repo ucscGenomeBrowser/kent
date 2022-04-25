@@ -142,15 +142,15 @@ globus: /team-liftover/v1_nflo/with_chrM/
     mv hg19_chrM-chm13v2.chain hg19_chrM-chm13v2.over.no-id.chain
     mv hg19_chrMT-chm13v2.chain  hg19_chrMT-chm13v2.over.no-id.chain
 
-# add chain ids
-    chainMergeSort chm13v2-hg19_chrM.over.no-id.chain   > chm13v2-hg19_chrM.over.chain     
-    chainMergeSort chm13v2-hg19_chrMT.over.no-id.chain  > chm13v2-hg19_chrMT.over.chain    
-    chainMergeSort chm13v2-hg19.over.no-id.chain        > chm13v2-hg19.over.chain          
-    chainMergeSort chm13v2-hg38.over.no-id.chain        > chm13v2-hg38.over.chain          
-    chainMergeSort hg19-chm13v2.over.no-id.chain        > hg19-chm13v2.over.chain          
-    chainMergeSort hg19_chrM-chm13v2.over.no-id.chain   > hg19_chrM-chm13v2.over.chain     
-    chainMergeSort hg19_chrMT-chm13v2.over.no-id.chain  > hg19_chrMT-chm13v2.over.chain    
-    chainMergeSort hg38-chm13v2.over.no-id.chain        > hg38-chm13v2.over.chain          
+# add chain ids and score
+    chainMergeSort chm13v2-hg19_chrM.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg19/hg19.2bit chm13v2-hg19_chrM.over.chain     
+    chainMergeSort chm13v2-hg19_chrMT.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg19/hg19.2bit chm13v2-hg19_chrMT.over.chain    
+    chainMergeSort chm13v2-hg38.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg38/hg38.2bit chm13v2-hg38.over.chain
+
+    chainMergeSort hg19_chrM-chm13v2.over.no-id.chain | chainScore stdin /hive/data/genomes/hg19/hg19.2bit ../ucscChromNames/t2t-chm13-v2.0.2bit hg19_chrM-chm13v2.over.chain     
+    chainMergeSort hg19_chrMT-chm13v2.over.no-id.chain  | chainScore stdin /hive/data/genomes/hg19/hg19.2bit ../ucscChromNames/t2t-chm13-v2.0.2bit  hg19_chrMT-chm13v2.over.chain    
+
+    chainMergeSort hg38-chm13v2.over.no-id.chain         > hg38-chm13v2.over.chain          
 
 
 # create hg19 chains that combine chrM and chrMT for use in browser.
@@ -175,7 +175,7 @@ globus: /team-liftover/v1_nflo/with_chrM/
     rm *.tab
 
    # make available is liftOver directory as we
-   ln -f *.chain.gz ../../liftOver/
+   ln -f *.over.chain.gz ../../liftOver/
 
 # GRCh38 mask used in liftover. This is based on:
 #  https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/references/GRCh38/GCA_000001405.15_GRCh38_GRC_exclusions_T2Tv2.bed
