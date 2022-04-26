@@ -65,7 +65,7 @@ return tdb;
 static void createMetaInfo(struct sqlConnection *conn)
 /*	create the metaInfo table in customTrash db	*/
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 sqlDyStringPrintf(dy, "CREATE TABLE %s (\n"
     "name varchar(255) not null,\n"
     "useCount int not null,\n"
@@ -256,7 +256,9 @@ if (!customTrackNeedsLift(ctList))
 struct hash *ctgHash = newHash(0);
 struct ctgPos *ctg, *ctgList = NULL;
 struct sqlConnection *conn = hAllocConn(db);
-struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select * from ctgPos");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from ctgPos");
+struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
    {

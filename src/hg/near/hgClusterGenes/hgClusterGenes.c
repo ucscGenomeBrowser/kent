@@ -260,7 +260,7 @@ void createClusterTable(struct sqlConnection *conn,
 	char *tableName, int longestName)
 /* Create cluster table. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 sqlDyStringPrintf(dy,
     "CREATE TABLE %s (\n"
     " clusterId int unsigned not null,\n"
@@ -276,7 +276,7 @@ void createCannonicalTable(struct sqlConnection *conn,
 	char *tableName, int longestName)
 /* Create cannonical representative of cluster table. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 sqlDyStringPrintf(dy,
     "CREATE TABLE %s (\n"
     " chrom varchar(255) not null,\n"
@@ -332,7 +332,7 @@ if (!noProt)
 	sqlSafef(query, sizeof(query), "select orfName,protName from sangerLinks");
     else if (isNotEmpty(protAccQuery))
 	// accepting special user query without checking
-	sqlSafef(query, sizeof(query), "%-s", protAccQuery);  
+	sqlSafef(query, sizeof(query), protAccQuery, NULL);  
     else
 	sqlSafef(query, sizeof(query), "select name, proteinId from %s", geneTable);
     sr = sqlGetResult(conn, query);

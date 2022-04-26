@@ -47,9 +47,10 @@ void setupTable(struct sqlConnection *conn)
 {
 struct lineFile *lf = lineFileOpen("output/newTest.sql", TRUE);
 char *update = NULL;
+char query[4096];
 char *line = NULL;
-struct dyString *ds = newDyString(256);
-if(sqlTableExists(conn, testTableName))
+struct dyString *ds = dyStringNew(256);
+if (sqlTableExists(conn, testTableName))
     errAbort("dbLinkTest.c::setupTable() - Table %s.%s already exists. Can't create another.",
              sqlGetDatabase(conn), testTableName);
 while(lineFileNextReal(lf, &line)) 
@@ -62,10 +63,12 @@ while(lineFileNextReal(lf, &line))
 	*tmp = '\0';
 	}
     subChar(line, '\t', ' ');
-    sqlDyStringPrintf(ds, "%-s", line);
+    dyStringPrintf(ds, "%s", line);
     }
 update = replaceChars(ds->string, "PRIMARY KEY", "UNIQUE");
-sqlUpdate(conn, update);
+// TRUST sql data off disk
+sqlSafef(query, sizeof query, update, NULL);
+sqlUpdate(conn, query);
 freez(&update);
 dyStringFree(&ds);
 lineFileClose(&lf);
@@ -98,7 +101,7 @@ return numLineDiff;
 boolean testingFileIdentical(char *file1, char *file2)
 /** Check to see if two files are the same. */
 {
-struct dyString *command = newDyString(2048);
+struct dyString *command = dyStringNew(2048);
 char *resultsFile = "_testingFileIdentical.tmp";
 int result = 0;
 boolean identical = FALSE;
@@ -110,7 +113,7 @@ if(result != 0)
 numDiff = countWcDiff(resultsFile);
 if(numDiff ==0)
     identical = TRUE;
-freeDyString(&command);
+dyStringFree(&command);
 remove(resultsFile);
 return identical;
 }

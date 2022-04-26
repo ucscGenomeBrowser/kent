@@ -89,13 +89,13 @@ if (r != NULL)
     {
     if (hTableExists(database, "kgXref") )
         {
-        sqlSafefFrag(cond_str, sizeof(cond_str), "kgID='%s'", parentName);
+        sqlSafef(cond_str, sizeof(cond_str), "kgID='%s'", parentName);
         geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
         }
 
     if (sqlTableExists(conn, refLinkTable) )
         {
-        sqlSafefFrag(cond_str, sizeof(cond_str), "mrnaAcc = '%s'", r->refSeq);
+        sqlSafef(cond_str, sizeof(cond_str), "mrnaAcc = '%s'", r->refSeq);
         geneSymbol = sqlGetField(database, refLinkTable, "name", cond_str);
         }
     }

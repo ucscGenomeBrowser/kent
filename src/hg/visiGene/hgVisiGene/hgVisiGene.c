@@ -835,7 +835,6 @@ else
 	    {
 	    problemPage("Skip http header problem", url);
     	    }
-	freeMem(newUrl);
 	}
     }
 }

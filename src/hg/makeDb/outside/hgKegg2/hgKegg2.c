@@ -53,7 +53,7 @@ while (row != NULL)
     kgID  = row[0];
     refAC = row[1];
 	
-    sqlSafefFrag(cond_str, sizeof cond_str, "refseq='%s'", refAC);
+    sqlSafef(cond_str, sizeof cond_str, "refseq='%s'", refAC);
     locusID = sqlGetField("entrez", "entrezRefProt", "geneID", cond_str);
     if (locusID != NULL)
 	{

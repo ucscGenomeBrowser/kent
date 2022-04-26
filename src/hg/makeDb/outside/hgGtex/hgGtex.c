@@ -564,7 +564,7 @@ char *makeTissueName(char *description)
 {
 char *words[10];
 int count = chopByWhite(cloneString(description), words, sizeof(words));
-struct dyString *ds = newDyString(0);
+struct dyString *ds = dyStringNew(0);
 int i;
 for (i=0; i<count; i++)
     {

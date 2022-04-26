@@ -428,7 +428,7 @@ if (wordCount)
     }
 
 int extrasFound = 0;
-struct dyString *extras = newDyString(128);
+struct dyString *extras = dyStringNew(128);
 struct cgiVar *varList = cgiVarList();
 struct cgiVar *var = varList;
 for ( ; var; var = var->next)

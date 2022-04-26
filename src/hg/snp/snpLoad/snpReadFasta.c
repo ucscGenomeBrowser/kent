@@ -197,7 +197,7 @@ char *createString =
 "    weight int\n"
 ");\n";
 
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 sqlDyStringPrintf(dy, createString, tableName);

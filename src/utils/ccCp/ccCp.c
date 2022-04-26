@@ -262,7 +262,7 @@ struct dlList *sourceList = newDlList();        /* These are sources for copies.
 struct dlList *workingList = newDlList();       /* These are copying data to themselves. */
 struct dlList *errList = newDlList();           /* These are messed up 3x or more. */
 struct dlNode *finNode, *node, *sourceNode, *destNode;
-struct dyString *cmd = newDyString(256);
+struct dyString *cmd = dyStringNew(256);
 int machineCount;
 int machinesFinished = 0;
 char *thisHost = getenv("HOST");

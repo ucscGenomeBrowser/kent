@@ -47,11 +47,12 @@ static void buildLsSnpPdb(char *lsSnpProf, char *lsSnpDb, char *tabFile)
 {
 struct sqlConnection *conn = sqlConnectProfile(lsSnpProf, lsSnpDb);
 FILE *fh = mustOpen(tabFile, "w");
-char *query =
-    NOSQLINJ "SELECT distinct pr.accession,ps.pdb_id,pstr.struct_type,ps.chain,SNP.name,ps.snp_position "
+char query[1024];
+sqlSafef(query, sizeof query, 
+    "SELECT distinct pr.accession,ps.pdb_id,pstr.struct_type,ps.chain,SNP.name,ps.snp_position "
     "FROM Protein pr,PDB_SNP ps, SNP, PDB_Structure pstr "
     "WHERE (ps.snp_id = SNP.snp_id) AND (pr.prot_id = ps.prot_id) "
-    "AND (pstr.pdb_id = ps.pdb_id)";
+    "AND (pstr.pdb_id = ps.pdb_id)");
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 struct lsSnpPdb rec;

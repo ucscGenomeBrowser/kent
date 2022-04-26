@@ -39,7 +39,7 @@ int numWords;
 while (numWords = lineFileChop(vulg, words))
     {
     struct psl *aln;
-    struct dyString *cDNA = newDyString(2048);
+    struct dyString *cDNA = dyStringNew(2048);
     struct dnaSeq *dna;
     aaSeq *prot;
     char *translated = NULL;
@@ -185,7 +185,7 @@ while (numWords = lineFileChop(vulg, words))
 	    aln->misMatch++;
 	}
     freeMem(translated);
-    freeDyString(&cDNA);
+    dyStringFree(&cDNA);
     slAddHead(&list, aln);
     }
 slReverse(&list);

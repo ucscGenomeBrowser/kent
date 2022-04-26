@@ -54,11 +54,11 @@ void hubPublicSaveToDb(struct sqlConnection *conn, struct hubPublic *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s',%u,'%s','%s')", 
 	tableName,  el->hubUrl,  el->shortLabel,  el->longLabel,  el->registrationTime,  el->dbCount,  el->dbList,  el->descriptionUrl);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct hubPublic *hubPublicLoad(char **row)

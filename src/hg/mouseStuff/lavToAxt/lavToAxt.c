@@ -165,8 +165,8 @@ void outputBlocks(struct lineFile *lf,
 int qStart = BIGNUM, qEnd = 0, tStart = BIGNUM, tEnd = 0;
 struct block *lastBlock = NULL;
 struct block *block;
-struct dyString *qSym = newDyString(16*1024);
-struct dyString *tSym = newDyString(16*1024);
+struct dyString *qSym = dyStringNew(16*1024);
+struct dyString *tSym = dyStringNew(16*1024);
 struct dnaSeq *qSeq = NULL, *tSeq = NULL, *seq = NULL;
 struct axt axt;
 boolean qIsTwoBit = twoBitIsFile(qNibDir);

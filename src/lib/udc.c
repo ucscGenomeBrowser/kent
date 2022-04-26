@@ -1062,7 +1062,7 @@ static char *longDirHash(char *cacheDir, char *name)
 int maxLen = pathconf(cacheDir, _PC_NAME_MAX);
 if (maxLen < 0)   // if we can't get the real system max, assume it's 255
     maxLen = 255;
-struct dyString *dy = newDyString(strlen(name));
+struct dyString *dy = dyStringNew(strlen(name));
 char *ptr = strchr(name, '/');
 
 while(ptr)

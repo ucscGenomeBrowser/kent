@@ -114,7 +114,7 @@ for(; beds; beds = beds->next)
     {
     char where[10 * 1024];
 
-    sqlSafefFrag(where, sizeof where,
+    sqlSafef(where, sizeof where,
 	"name = '%s' and chrom='%s' and txEnd > %d and txStart <= %d",
 	beds->name, beds->chrom, beds->chromStart, beds->chromEnd);
 

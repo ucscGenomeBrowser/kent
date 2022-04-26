@@ -67,6 +67,7 @@ boolean mysqlCheckSecurityOfConfig(char *config)
 /* Can we connect? Can we access the mysql database? */
 {
 
+char query[1024];
 boolean problemFound = FALSE;
 
 if (
@@ -95,14 +96,17 @@ retry_it:
     if (conn)
 	{
     	printf("Connected to %s.\n", config);
-	printf("select database() = [%s]\n", sqlQuickString(conn, NOSQLINJ "select database()"));
-	char *result = sqlQuickString(conn, NOSQLINJ "show databases like 'mysql'");
+	sqlSafef(query, sizeof query, "select database()");
+	printf("select database() = [%s]\n", sqlQuickString(conn, query));
+        sqlSafef(query, sizeof query, "show databases like 'mysql'");
+	char *result = sqlQuickString(conn, query);
 	printf("show databases like 'mysql' = [%s]\n", result);
 	if (result)
 	    problemFound = TRUE;
 	if (!problemFound)
 	    {
-	    char *result = sqlQuickString(conn, NOSQLINJ "SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = 'mysql'");
+	    sqlSafef(query, sizeof query, "SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = 'mysql'");
+	    char *result = sqlQuickString(conn, query);
 	    if (result)
 		{
 		problemFound = TRUE;
@@ -116,7 +120,8 @@ retry_it:
 	/* Disabling this check. It actually shows information about mysql leaking out, but it does not give hackers access to passwords 
 	if (!problemFound)
 	    {
-	    char *result = sqlQuickString(conn, NOSQLINJ "SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_name = 'user'");
+	    sqlSafef(query, sizeof query, "SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_name = 'user'");
+	    char *result = sqlQuickString(conn, query);
 	    if (result)
 		{
 		problemFound = TRUE;
@@ -130,7 +135,7 @@ retry_it:
 	*/
 	if (!problemFound)
 	    {
-	    char *query = NOSQLINJ "desc mysql.user";
+	    sqlSafef(query, sizeof query, "desc mysql.user");
 	    unsigned int errNo = 0;
 	    char *errMsg = NULL;
 	    struct sqlResult *rs = sqlGetResultExt(conn, query, &errNo, &errMsg);
@@ -147,7 +152,7 @@ retry_it:
 	    }
 	if (!problemFound)
 	    {
-	    char *query = NOSQLINJ "select * from mysql.user";
+	    sqlSafef(query, sizeof query, "select * from mysql.user");
 	    unsigned int errNo = 0;
 	    char *errMsg = NULL;
 	    struct sqlResult *rs = sqlGetResultExt(conn, query, &errNo, &errMsg);
@@ -164,7 +169,7 @@ retry_it:
 	    }
 	if (!problemFound)
 	    {
-	    char *query = NOSQLINJ "use mysql";
+	    sqlSafef(query, sizeof query, "use mysql");
 	    unsigned int errNo = 0;
 	    char *errMsg = NULL;
 	    struct sqlResult *rs = sqlGetResultExt(conn, query, &errNo, &errMsg);

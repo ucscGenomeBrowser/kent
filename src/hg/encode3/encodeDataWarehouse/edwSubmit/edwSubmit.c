@@ -439,9 +439,8 @@ if (errCatchStart(errCatch))
     struct dyString *dy = dyStringNew(0);  /* Includes tag so query may be long */
     sqlDyStringPrintf(dy, "update edwFile set md5='%s',size=%lld,updateTime=%lld",
 	    md5, ef->size, ef->updateTime);
-    dyStringAppend(dy, ", tags='");
-    dyStringAppend(dy, ef->tags);
-    dyStringPrintf(dy, "' where id=%d", ef->id);
+    sqlDyStringPrintf(dy, ", tags='%s'", ef->tags);
+    sqlDyStringPrintf(dy, " where id=%d", ef->id);
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
 
@@ -515,7 +514,8 @@ if (!isEmpty(tagsString))
 
 
 char **row;
-struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select * from edwSubscriber order by runOrder,id");
+sqlSafef(query, sizeof query, "select * from edwSubscriber order by runOrder,id");
+struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct edwSubscriber *subscriber = edwSubscriberLoad(row);

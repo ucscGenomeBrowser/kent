@@ -536,7 +536,7 @@ int vertIx = 0;
 int *verts = path->vertices;
 int *vPos = ag->vPositions;
 int i = 0;
-struct dyString *buff = newDyString(256);
+struct dyString *buff = dyStringNew(256);
 
 AllocVar(bed);
 bed->chrom = cloneString(ag->tName);
@@ -1731,8 +1731,8 @@ fprintf(htmlOut, "<html><head><title>Alt-Splicing Paths</title></head>\n"
 void initHtmlFiles()
 /* Open and setup html files. */
 {
-struct dyString *tableFile = newDyString(256);
-struct dyString *frameFile = newDyString(256);
+struct dyString *tableFile = dyStringNew(256);
+struct dyString *frameFile = dyStringNew(256);
 char *htmlPrefix = optionVal("htmlPrefix", NULL);
 db = optionVal("db", NULL);
 browserName = optionVal("browser", "genome.ucsc.edu");

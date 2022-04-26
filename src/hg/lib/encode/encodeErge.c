@@ -104,14 +104,14 @@ void encodeErgeSaveToDb(struct sqlConnection *conn, struct encodeErge *el, char 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *blockSizesArray, *chromStartsArray;
 blockSizesArray = sqlUnsignedArrayToString(el->blockSizes, el->blockCount);
 chromStartsArray = sqlUnsignedArrayToString(el->chromStarts, el->blockCount);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->reserved,  el->blockCount,  blockSizesArray ,  chromStartsArray ,  el->Id,  el->color);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&blockSizesArray);
 freez(&chromStartsArray);
 }

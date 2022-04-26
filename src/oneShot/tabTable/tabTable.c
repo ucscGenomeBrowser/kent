@@ -18,7 +18,7 @@ int fieldCount;
 int lastField;
 int sep;
 int i;
-struct dyString *ds = newDyString(256);
+struct dyString *ds = dyStringNew(256);
 
 if (argc < 4)
     {
@@ -32,9 +32,9 @@ outName = argv[3];
 conn = sqlConnect(database);
 sqlDyStringPrintf(ds, "select * from %s", table);
 if (argc > 4)
-    dyStringPrintf(ds, " where id >= %s", argv[4]);
+    sqlDyStringPrintf(ds, " where id >= '%s'", argv[4]);
 if (argc > 5)
-    dyStringPrintf(ds, " and id < %s", argv[5]);
+    sqlDyStringPrintf(ds, " and id < '%s'", argv[5]);
 sr = sqlGetResult(conn, ds->string);
 out = mustOpen(outName, "w");
 fieldCount = sqlFieldCount(sr);

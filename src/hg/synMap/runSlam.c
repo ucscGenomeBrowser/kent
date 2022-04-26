@@ -285,7 +285,7 @@ freez(&faFile);
 void touchFile(char *root, char *suffix)
 /* same functionality as the "touch" unix command. */
 {
-struct dyString *file = newDyString(2048);
+struct dyString *file = dyStringNew(2048);
 FILE *touch = NULL;
 dyStringPrintf(file, "%s%s", root, suffix);
 touch = mustOpen(file->string, "w");
@@ -300,7 +300,7 @@ char *fa1 = NULL;
 char *fa2 = NULL;
 char *gff1 = NULL;
 char *gff2 = NULL;
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 char command[2048];
 int retVal = 0;

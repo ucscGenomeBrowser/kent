@@ -477,7 +477,7 @@ static struct dyString *addIndent(struct dyString **dy,int indent)
 {
 struct dyString *myDy = (dy ? *dy : NULL);
 if (dy == NULL || *dy == NULL)
-    myDy = newDyString(256);
+    myDy = dyStringNew(256);
 else
     dyStringAppend(myDy,"<br>");
 dyStringAppend(myDy,"<code>");

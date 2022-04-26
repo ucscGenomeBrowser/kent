@@ -184,7 +184,7 @@ sqlDyStringPrintf(dy,
       db);
 if (isNotEmpty(name))
     sqlDyStringPrintf(dy, "and t.name = '%s' ", name);
-dyStringAppend(dy, "order by t.priority");
+sqlDyStringPrintf(dy, "order by t.priority");
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {

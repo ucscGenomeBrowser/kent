@@ -1368,7 +1368,7 @@ if(err)
     errAbort("regcomp failed; err: %d", err);
 
 /* Search through oldString with regex, and build up new string in dy */
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 int offset;
 for(offset = 0; offset < len && !regexec(&re, oldString + offset, ArraySize(match), match, 0); 
     offset += match[0].rm_eo)

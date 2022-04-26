@@ -396,7 +396,8 @@ else  // figure out purge-ranges automatically
     if (sameString(table, userDbTableName))
 	firstUseAge = 365;
 
-    int day = sqlQuickNum(conn, NOSQLINJ "select dayofweek(now())");
+    sqlSafef(query,sizeof(query), "select dayofweek(now())");
+    int day = sqlQuickNum(conn, query);
 
     // These old records take a long time to go through, 5k sessionDb to 55k userDb old recs to look at,
     //  and typically produce only a few hundred deletions.

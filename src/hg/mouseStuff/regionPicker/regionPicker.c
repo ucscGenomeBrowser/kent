@@ -608,7 +608,9 @@ double sum = 0;
 char *limitFile = optionVal("chromLimit", NULL);
 
 /* Read in chromosome info from database. */
-sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom,size from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(cl);

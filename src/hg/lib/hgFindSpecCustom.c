@@ -500,7 +500,7 @@ struct hgFindSpec *hgFindSpecGetSpecs(char *db, boolean shortCircuit)
  * searchPriority. */
 {
 char where[64];
-sqlSafefFrag(where, sizeof(where), "shortCircuit = %d", shortCircuit);
+sqlSafef(where, sizeof(where), "shortCircuit = %d", shortCircuit);
 struct hgFindSpec *hfsList = loadFindSpecs(db, where);
 slSort(&hfsList, hgFindSpecPriCmp);
 return(hfsList);

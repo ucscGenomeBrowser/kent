@@ -825,15 +825,15 @@ return txiList;
 static void txiInfoAppendIdList(struct dyString *query, struct txInfo *txiList)
 /* Append a paren-enclosed list of quoted transcript IDs to query. */
 {
-dyStringAppendC(query, '(');
+sqlDyStringPrintf(query, "(");
 struct txInfo *txi;
 for (txi = txiList;  txi != NULL;  txi = txi->next)
     {
     if (txi != txiList)
-        dyStringAppend(query, ", ");
-    dyStringPrintf(query, "'%s'", txi->psl->qName);
+        sqlDyStringPrintf(query, ", ");
+    sqlDyStringPrintf(query, "'%s'", txi->psl->qName);
     }
-dyStringAppendC(query, ')');
+sqlDyStringPrintf(query, ")");
 }
 
 static void txInfoAddCdsFromQuery(struct hash *txiHash, struct sqlConnection *conn, char *query)
@@ -862,12 +862,19 @@ if (!trackHubDatabase(database) && hDbHasNcbiRefSeq(database))
     {
     struct sqlConnection *conn = hAllocConn(database);
     struct hash *txiHash = hashNew(0);
-    char *extraWhere = NULL;
+    char extraWhere[1024];
+    char *extra = NULL;
     if (sameString(gTdb->track, "ncbiRefSeqCurated"))
-        extraWhere = "qName not like 'X%'";
+	{
+        sqlSafef(extraWhere, sizeof extraWhere, "qName not like 'X%%'");
+	extra = extraWhere;
+	}
     else if (sameString(gTdb->track, "ncbiRefSeqPredicted"))
-        extraWhere = "qName like 'X%'";
-    txiList = txInfoInitFromPsl(conn, "ncbiRefSeqPsl", extraWhere, &txiHash);
+	{
+        sqlSafef(extraWhere, sizeof extraWhere, "qName like 'X%%'");
+	extra = extraWhere;
+	}
+    txiList = txInfoInitFromPsl(conn, "ncbiRefSeqPsl", extra, &txiHash);
     if (txiList)
         {
         // Now get CDS for each psl/txi:

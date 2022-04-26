@@ -279,7 +279,7 @@ if (isEmpty(chrom))
     for ( ; ci && itemsDone < maxItemsOutput; ci = ci->next )
 	{
 	jsonWriteListStart(jw, ci->chrom);	/* starting a chrom output */
-	freeDyString(&query);
+	dyStringFree(&query);
 	query = dyStringNew(64);
 	if (hti && hti->isSplit) /* when split, make up split chr name */
 	    {
@@ -311,10 +311,10 @@ else
     }
 if (reachedMaxItems)
     {
-    downloadUrl = newDyString(128);
+    downloadUrl = dyStringNew(128);
     dyStringPrintf(downloadUrl, "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/%s.txt.gz", db, splitSqlTable);
     }
-freeDyString(&query);
+dyStringFree(&query);
 }	/*  static void tableDataOutput(char *db, struct trackDb *tdb, ... ) */
 
 static unsigned bbiDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,

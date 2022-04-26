@@ -106,11 +106,11 @@ void affy10KSaveToDb(struct sqlConnection *conn, struct affy10K *el, char *table
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,%u)", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->affyId);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

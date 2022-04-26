@@ -70,8 +70,9 @@ static void checkGbCdnaInfoStrKeys(struct sqlConnection* conn)
  * the number of rows in the table, some of the ids are wrong.
  */
 {
-static char *joinSql =
-    NOSQLINJ "SELECT count(*) FROM "
+char query[1024];
+sqlSafef(query, sizeof query, 
+    "SELECT count(*) FROM "
     "gbCdnaInfo,author,cds,cell,description,development,geneName,"
     "keyword,library,mrnaClone,organism,productName,sex,"
     "source,tissue "
@@ -81,9 +82,10 @@ static char *joinSql =
     "AND gbCdnaInfo.keyword=keyword.id AND gbCdnaInfo.library=library.id "
     "AND gbCdnaInfo.mrnaClone=mrnaClone.id AND gbCdnaInfo.organism=organism.id "
     "AND gbCdnaInfo.productName=productName.id AND gbCdnaInfo.sex=sex.id "
-    "AND gbCdnaInfo.source=source.id AND gbCdnaInfo.tissue=tissue.id";
-unsigned numJoinRows = sqlQuickNum(conn, joinSql);
-unsigned numTotalRows = sqlQuickNum(conn, NOSQLINJ "SELECT count(*) FROM gbCdnaInfo");
+    "AND gbCdnaInfo.source=source.id AND gbCdnaInfo.tissue=tissue.id");
+unsigned numJoinRows = sqlQuickNum(conn, query);
+sqlSafef(query, sizeof query, "SELECT count(*) FROM gbCdnaInfo");
+unsigned numTotalRows = sqlQuickNum(conn, query);
 
 if (numJoinRows != numTotalRows)
     gbError("number of rows in gbCdnaInfo join with string tables does (%u) "

@@ -407,7 +407,7 @@ static char *getDbList(struct trackHub *tHub, int *pCount)
 /* calculate dbList for hubStatus table from trackHub */
 {
 struct hashEl *hel;
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 struct hashCookie cookie = hashFirst(tHub->genomeHash);
 int dbCount = 0;
 while ((hel = hashNext(&cookie)) != NULL)
@@ -774,7 +774,7 @@ if (trackHub != NULL)
             memCheckPoint(); // we want to know how much memory is used to build the tdbList
             }
 
-        struct dyString *incFiles = newDyString(4096);
+        struct dyString *incFiles = dyStringNew(4096);
         tdbList = trackHubTracksForGenome(trackHub, hubGenome, incFiles);
         tdbList = trackDbLinkUpGenerations(tdbList);
         tdbList = trackDbPolishAfterLinkup(tdbList, database);

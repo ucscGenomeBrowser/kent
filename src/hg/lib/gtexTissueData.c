@@ -55,11 +55,11 @@ void gtexTissueDataSaveToDb(struct sqlConnection *conn, struct gtexTissueData *e
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%g,%g,%g,%g,%g)", 
 	tableName,  el->geneId,  el->tissue,  el->min,  el->q1,  el->median,  el->q3,  el->max);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct gtexTissueData *gtexTissueDataLoad(char **row)

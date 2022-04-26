@@ -986,7 +986,7 @@ char chrom[32];
 char post[64];
 char fullName[128];
 
-strcpy(query, NOSQLINJ "SHOW TABLES");
+sqlSafef(query, sizeof query, "SHOW TABLES");
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
     {
@@ -1663,8 +1663,8 @@ char *constrainFields(char *tableId)
  * for a WHERE clause) to q. */
 {
 struct cgiVar *current;
-struct dyString *freeClause = newDyString(512);
-struct dyString *andClause = newDyString(512);
+struct dyString *freeClause = dyStringNew(512);
+struct dyString *andClause = dyStringNew(512);
 struct dyString *clause;
 char *fieldName;
 char *rawQuery;
@@ -1747,8 +1747,8 @@ else
     dyStringAppend(freeClause, andClause->string);
     }
 ret = cloneString(freeClause->string);
-freeDyString(&freeClause);
-freeDyString(&andClause);
+dyStringFree(&freeClause);
+dyStringFree(&andClause);
 return ret;
 }
 
@@ -1968,7 +1968,7 @@ if ((constraints != NULL) && (constraints[0] != 0) &&
     {
     struct sqlConnection *conn = hAllocOrConnect(db);
     struct sqlResult *sr;
-    struct dyString *query = newDyString(512);
+    struct dyString *query = dyStringNew(512);
     // Null query will cause errAbort if there's a syntax error, no-op if OK.
     sqlDyStringPrintf(query, "SELECT 1 FROM %s WHERE 0 AND %s",
 		   fullTblName, constraints);
@@ -2958,7 +2958,7 @@ char *track = getTrackName();
 struct slName *tableList = hSplitTableNames(track);
 struct slName *tPtr = NULL;
 struct sqlResult *sr = NULL;
-struct dyString *query = newDyString(256);
+struct dyString *query = dyStringNew(256);
 char **row = NULL;
 char *table = getTableName();
 int count = 0;
@@ -3152,8 +3152,8 @@ void doTabSeparated(boolean allFields)
 struct slName *chromList, *chromPtr;
 struct sqlConnection *conn;
 struct sqlResult *sr;
-struct dyString *query = newDyString(512);
-struct dyString *fieldSpec = newDyString(256);
+struct dyString *query = dyStringNew(512);
+struct dyString *fieldSpec = dyStringNew(256);
 struct hTableInfo *hti = NULL;
 char *table = getTableName();
 char *db = getTableDb();
@@ -4068,7 +4068,7 @@ void doGetStatsNonpositional()
 /* Print out statistics about nonpositional query results. */
 {
 struct sqlConnection *conn;
-struct dyString *query = newDyString(256);
+struct dyString *query = dyStringNew(256);
 char *constraints;
 char *table = getTableName();
 char *db = getTableDb();
@@ -4110,9 +4110,9 @@ else
     printf("No constraints selected on fields of %s.<P>\n", table);
 
 dyStringClear(query);
-sqlDyStringPrintf(query, "select count(*) from %s%s%-s", table,
-	       (constraints ? " where "   : ""),
-	       (constraints ? constraints : ""));
+sqlDyStringPrintf(query, "select count(*) from %s", table);
+if (constraints)
+    sqlDyStringPrintf(query, " where %-s", constraints);
 conn = hAllocOrConnect(db);
 numRows = sqlQuickNum(conn, query->string);
 hFreeOrDisconnect(&conn);
@@ -4803,7 +4803,7 @@ void doGetHistogram()
 {
 struct sqlConnection *conn;
 struct sqlResult *sr;
-struct dyString *query = newDyString(256);
+struct dyString *query = dyStringNew(256);
 struct hash *freqHash = newHash(16);
 struct hashEl *els, *el;
 struct slName *chromList, *chromPtr;

@@ -126,7 +126,7 @@ char *expandAllele(char *startAllele)
 /* if syntax error detected, log to errorFile and return startAllele */
 /* only called if at least one expansion is required */
 {
-struct dyString *newAllele = newDyString(1024);
+struct dyString *newAllele = dyStringNew(1024);
 /* copy startAllele into oldAllele, which we consume as we go */
 char *oldAllele = cloneString(startAllele);
 char *leftFlank = NULL;

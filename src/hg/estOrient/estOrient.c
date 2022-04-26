@@ -125,7 +125,9 @@ if (chrom != NULL)
 else
     {
     rowOff = (sqlFieldIndex(conn, "estOrientInfo", "bin") < 0) ? 0 : 1;
-    sr = sqlGetResult(conn, NOSQLINJ "select * from estOrientInfo where (intronOrientation != 0)");
+    char query[1024];
+    sqlSafef(query, sizeof query, "select * from estOrientInfo where (intronOrientation != 0)");
+    sr = sqlGetResult(conn, query);
     }
 
 while ((row = sqlNextRow(sr)) != NULL)

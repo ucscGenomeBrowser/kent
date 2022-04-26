@@ -317,7 +317,9 @@ struct sqlResult *sr;
 char **row;
 struct region *region, *regionList = NULL;
 
-sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom,size from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(region);
@@ -369,7 +371,9 @@ struct sqlResult *sr;
 char **row;
 struct region *list = NULL, *region;
 
-sr = sqlGetResult(conn, NOSQLINJ "select chrom,chromStart,chromEnd,name from encodeRegions order by name desc");
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom,chromStart,chromEnd,name from encodeRegions order by name desc");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(region);
@@ -498,11 +502,11 @@ if (isPositional)
 else
     {
     struct dyString *query = dyStringNew(0);
-    sqlDyStringPrintf(query, "select %-s from %s", sqlCkIl(fields), table);
+    sqlCkIl(fieldsSafe,fields)
+    sqlDyStringPrintf(query, "select %-s from %s", fieldsSafe, table);
     if (extraWhere)
          {
-	 dyStringAppend(query, " where ");
-	 dyStringAppend(query, extraWhere);
+	 sqlDyStringPrintf(query, " where %-s", extraWhere);
 	 }
     sr = sqlGetResult(conn, query->string);
     dyStringFree(&query);
@@ -677,8 +681,9 @@ if (sqlTableExists(conn, "chromInfo"))
     {
     char chromName[64];
     struct hTableInfo *hti;
-    sqlQuickQuery(conn, NOSQLINJ "select chrom from chromInfo limit 1",
-	chromName, sizeof(chromName));
+    char query[1024];
+    sqlSafef(query, sizeof query, "select chrom from chromInfo limit 1");
+    sqlQuickQuery(conn, query, chromName, sizeof(chromName));
     hti = hFindTableInfo(db, chromName, table);
     if (hti != NULL)
 	{
@@ -843,11 +848,11 @@ void addWhereClause(struct dyString *query, boolean *gotWhere)
 {
 if (*gotWhere)
     {
-    dyStringAppend(query, " and ");
+    sqlDyStringPrintf(query, " and ");
     }
 else
     {
-    dyStringAppend(query, " where ");
+    sqlDyStringPrintf(query, " where ");
     *gotWhere = TRUE;
     }
 }
@@ -1004,7 +1009,7 @@ void doTabOutDb( char *db, char *dbVarName, char *table, char *tableVarName,
 struct region *regionList = getRegions();
 struct region *region;
 struct hTableInfo *hti = NULL;
-struct dyString *fieldSpec = newDyString(256);
+struct dyString *fieldSpec = dyStringNew(256);
 struct hash *idHash = NULL;
 int outCount = 0;
 boolean isPositional;
@@ -1023,7 +1028,7 @@ showItemRgb=bedItemRgb(tdb);        /* should we expect itemRgb instead of "rese
 /* If they didn't pass in a field list assume they want all fields. */
 if (fields != NULL)
     {
-    dyStringAppend(fieldSpec, sqlCkIl(fields));
+    dyStringAppend(fieldSpec, fields);
     fieldCount = countChars(fields, ',') + 1;
     }
 else
@@ -1045,7 +1050,7 @@ if (idField != NULL)
         if (isEmpty(identifierFilter))
             {
             dyStringAppendC(fieldSpec, ',');
-            dyStringAppend(fieldSpec, sqlCkId(idField));
+            dyStringAppend(fieldSpec, idField);
             }
         }
     }
@@ -1343,23 +1348,24 @@ void doMetaData(struct sqlConnection *conn)
 /* Get meta data for a database. */
 {
 puts("Content-Type:text/plain\n");
-char *query = "";
+char query[1024];
+sqlSafef(query, sizeof query, "%s", ""); 
 if (cartVarExists(cart, hgtaMetaStatus))
     {
     printf("Table status for database %s\n", database);
-    query = NOSQLINJ "SHOW TABLE STATUS";
+    sqlSafef(query, sizeof query, "SHOW TABLE STATUS");
     }
 else if (cartVarExists(cart, hgtaMetaVersion))
     {
-    query = NOSQLINJ "SELECT @@VERSION";
+    sqlSafef(query, sizeof query, "SELECT @@VERSION");
     }
 else if (cartVarExists(cart, hgtaMetaDatabases))
     {
-    query = NOSQLINJ "SHOW DATABASES";
+    sqlSafef(query, sizeof query, "SHOW DATABASES");
     }
 else if (cartVarExists(cart, hgtaMetaTables))
     {
-    query = NOSQLINJ "SHOW TABLES";
+    sqlSafef(query, sizeof query, "SHOW TABLES");
     }
 struct sqlResult *sr;
 char **row;

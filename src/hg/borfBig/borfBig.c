@@ -98,7 +98,7 @@ char *tmpOrf = optionVal("tmpOrf", cloneString(rTempName("/tmp", "borf", ".out")
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
 struct dnaSeq seq;
-struct dyString *cmd = newDyString(256);
+struct dyString *cmd = dyStringNew(256);
 ZeroVar(&seq);
 
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))

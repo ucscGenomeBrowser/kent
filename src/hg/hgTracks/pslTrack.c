@@ -349,7 +349,7 @@ safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->track);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 if (startsWith("chr",optionChrStr))
     {
-    safef(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
+    sqlSafef(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
     sr = hRangeQuery(conn, tg->table, chromName, start, end, extraWhere, &rowOffset);
     }
 else

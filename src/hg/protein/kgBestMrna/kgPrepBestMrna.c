@@ -152,9 +152,9 @@ while (fgets(line, 1000, IN) != NULL)
     printf(">%s\n", proteinID);
     fflush(stdout);
 
-    sqlSafefFrag(cond_str, sizeof cond_str, "val='%s'", proteinID);
+    sqlSafef(cond_str, sizeof cond_str, "val='%s'", proteinID);
     accession = sqlGetField(spDB, "displayId","acc", cond_str);
-    sqlSafefFrag(cond_str, sizeof cond_str, "acc='%s'", accession);
+    sqlSafef(cond_str, sizeof cond_str, "acc='%s'", accession);
     aaSeq = sqlGetField(spDB, "protein","val", cond_str);
 	
     if (aaSeq == NULL)
@@ -205,7 +205,7 @@ while (fgets(line, 1000, IN) != NULL)
 	strcpy(mrnaNames[imrna], mrnaID);
 
 	printf("%s\t%s\n", proteinID, mrnaID);fflush(stdout);
-	sqlSafefFrag(cond_str, sizeof cond_str, "name='%s'", mrnaID);
+	sqlSafef(cond_str, sizeof cond_str, "name='%s'", mrnaID);
     	mrnaSeq = sqlGetField(gbTempDB,"refMrna","seq", cond_str);
 	fprintf(mrnaOut, ">%s\n%s\n", mrnaID, mrnaSeq);
 	row2 = sqlNextRow(sr2);

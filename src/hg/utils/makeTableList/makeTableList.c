@@ -187,7 +187,9 @@ if(all)
     else
         conn = hConnectCentral();
 
-    sr = sqlGetResult(conn, NOSQLINJ "select name from dbDb where active=1");
+    char query[1024];
+    sqlSafef(query, sizeof query, "select name from dbDb where active=1");
+    sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
         printf("Found db %s\n", row[0]);

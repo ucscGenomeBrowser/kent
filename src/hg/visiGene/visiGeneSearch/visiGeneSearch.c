@@ -79,7 +79,7 @@ searcher->tree = rbTreeNew(visiMatchCmpImageId);
 return searcher;
 }
 
-static void visiSearcherFree(struct visiSearcher **pSearcher)
+void visiSearcherFree(struct visiSearcher **pSearcher)
 /* Free up memory associated with *pSearcher */
 {
 struct visiSearcher *searcher = *pSearcher;
@@ -206,17 +206,13 @@ static void visiGeneMatchMultiWord(struct visiSearcher *searcher,
 {
 struct slName *word;
 struct dyString *query = dyStringNew(0);
-struct sqlResult *sr;
-char **row;
 
 for (word = wordList; word != NULL;  )
     {
     struct slName *nameList, *name;
     int maxWordsUsed = 0;
     dyStringClear(query);
-    sqlDyStringPrintf(query, "select name from %s where name like \"", table);
-    dyStringAppend(query, word->name);
-    dyStringAppend(query, "%\"");
+    sqlDyStringPrintf(query, "select name from %s where name like '%s%%'", table, word->name);
     nameList = sqlQuickList(conn, query->string);
     if (nameList != NULL)
 	{
@@ -262,7 +258,6 @@ static void addImagesMatchingName(struct visiSearcher *searcher,
  * searcher with a weight of one.  Use dy for scratch space for
  * the query. */
 {
-int contributorId;
 
 dyStringClear(dy);
 sqlDyStringPrintf(dy, 
@@ -296,17 +291,13 @@ static void visiGeneMatchContributor(struct visiSearcher *searcher,
 {
 struct slName *word;
 struct dyString *query = dyStringNew(0);
-struct sqlResult *sr;
-char **row;
 
 for (word = wordList; word != NULL;  )
     {
     struct slName *nameList, *name;
     int maxWordsUsed = 0;
     dyStringClear(query);
-    sqlDyStringPrintf(query, "select name from contributor where name like \"");
-    dyStringAppend(query, word->name);
-    dyStringAppend(query, " %\"");
+    sqlDyStringPrintf(query, "select name from contributor where name like '%s%%'", word->name);
     nameList = sqlQuickList(conn, query->string);
     if (nameList != NULL)
 	{
@@ -351,7 +342,7 @@ struct slName *word;
 for (word = wordList; word != NULL; word = word->next)
     {
     char *sqlPat = sqlLikeFromWild(word->name);
-    struct slInt *imageList, *image;
+    struct slInt *imageList;
     if (sqlWildcardIn(sqlPat))
 	 imageList = visiGeneSelectNamed(conn, sqlPat, vgsLike);
     else
@@ -397,7 +388,8 @@ sqlDyStringPrintf(dy,
     "select image.id from bodyPart,specimen,image "
     "where bodyPart.name = \"%s\" "
     "and bodyPart.id = specimen.bodyPart "
-    "and specimen.id = image.specimen");
+    "and specimen.id = image.specimen"
+   , bodyPart);
 addImagesMatchingQuery(searcher, conn, dy->string);
 }
 
@@ -419,8 +411,6 @@ void addImagesMatchingStage(struct visiSearcher *searcher,
 {
 struct dyString *dy = dyStringNew(0);
 char *maxAge;
-struct sqlResult *sr;
-char **row;
 
 dyStringClear(dy);
 sqlDyStringPrintf(dy, 
@@ -434,16 +424,16 @@ dyStringClear(dy);
 sqlDyStringPrintf(dy, "select image.id from specimen,image ");
 dyStringPrintf(dy, "where specimen.age >= %s ", minAge);
 if (maxAge != NULL)
-    dyStringPrintf(dy, "and specimen.age < %s ", maxAge);
-dyStringPrintf(dy, "and specimen.taxon = %d ", taxon);
-dyStringPrintf(dy, "and specimen.id = image.specimen");
+    sqlDyStringPrintf(dy, "and specimen.age < %s ", maxAge);
+sqlDyStringPrintf(dy, "and specimen.taxon = %d ", taxon);
+sqlDyStringPrintf(dy, "and specimen.id = image.specimen");
 addImagesMatchingQuery(searcher, conn, dy->string);
 
 dyStringFree(&dy);
 }
 
 
-static void visiGeneMatchStage(struct visiSearcher *searcher,
+void visiGeneMatchStage(struct visiSearcher *searcher,
 	struct sqlConnection *conn, struct slName *wordList)
 /* Add images matching Theiler or other developmental stage */
 {
@@ -472,7 +462,7 @@ for (word = wordList; word != NULL && word->next != NULL; word = word->next)
 	dyStringClear(dy);
 	sqlDyStringPrintf(dy, "select age from lifeStage where name = \"%s\" ", 
 		specificStage);
-	dyStringPrintf(dy, "and lifeStageScheme = %d\n", schemeId);
+	sqlDyStringPrintf(dy, "and lifeStageScheme = %d\n", schemeId);
 	minAge = sqlQuickString(conn, dy->string);
 	if (minAge != NULL)
 	    addImagesMatchingStage(searcher, conn, schemeId, taxon, minAge);
@@ -502,7 +492,9 @@ static void visiGeneMatchYear(struct visiSearcher *searcher,
 /* Fold in matches to a year. */
 {
 struct slName *word;
-char *now = sqlQuickString(conn, NOSQLINJ "select now()");
+char query[1024];
+sqlSafef(query, sizeof query, "select now()");
+char *now = sqlQuickString(conn, query);
 int currentYear = atoi(now);
 int maxYear = currentYear+1;	/* May be slightly ahead of publication */
 int minYear = 1988;	/* Oldest record in Jackson Labs database. */

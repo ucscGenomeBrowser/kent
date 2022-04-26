@@ -116,7 +116,7 @@ void cutterSaveToDb(struct sqlConnection *conn, struct cutter *el, char *tableNa
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *scizsArray, *companiesArray, *refsArray;
 scizsArray = sqlStringArrayToString(el->scizs, el->numSciz);
 companiesArray = sqlCharArrayToString(el->companies, el->numCompanies);
@@ -124,7 +124,7 @@ refsArray = sqlUnsignedArrayToString(el->refs, el->numRefs);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,%d,%u,%u,%u,'%s',%u,'%s',%u,'%s')", 
 	tableName,  el->name,  el->size,  el->matchSize,  el->seq,  el->cut,  el->overhang,  el->palindromic,  el->semicolon,  el->numSciz,  scizsArray ,  el->numCompanies,  companiesArray ,  el->numRefs,  refsArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&scizsArray);
 freez(&companiesArray);
 freez(&refsArray);

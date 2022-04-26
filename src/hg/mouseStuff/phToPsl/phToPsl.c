@@ -248,8 +248,8 @@ boolean convertOneAli(struct lineFile *lf, char *qName, char *tName,
 char c, *line, *parts[16];
 int partCount;
 int qStart, tStart;
-struct dyString *q = newDyString(4096);
-struct dyString *t = newDyString(4096);
+struct dyString *q = dyStringNew(4096);
+struct dyString *t = dyStringNew(4096);
 
 /* Grab first line and extract starting position from it. */
 if (!lineFileNext(lf, &line, NULL))
@@ -305,8 +305,8 @@ aliStringToPsl(lf, qName, tName, q->string, t->string, qSize, tSize,
 	q->stringSize, qStart, tStart, f);
 
 /* Clean up time. */
-freeDyString(&q);
-freeDyString(&t);
+dyStringFree(&q);
+dyStringFree(&t);
 return TRUE;
 }
 

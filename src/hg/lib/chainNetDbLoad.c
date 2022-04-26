@@ -305,7 +305,7 @@ char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct chain *chain;
 char query[256];
-struct dyString *dy = newDyString(128);
+struct dyString *dy = dyStringNew(128);
 
 /* Load chain header. */
 if (!hFindSplitTable(database, chrom, track, table, sizeof table, &hasBin))
@@ -336,7 +336,7 @@ sr = sqlGetResult(conn, dy->string);
 chainLinkAddResult(sr, hasBin, chain);
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
-freeDyString(&dy);
+dyStringFree(&dy);
 return chain;
 }
 

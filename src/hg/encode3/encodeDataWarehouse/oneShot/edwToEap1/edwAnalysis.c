@@ -60,11 +60,11 @@ void edwAnalysisJobSaveToDb(struct sqlConnection *conn, struct edwAnalysisJob *e
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d,%d,'%s')", 
 	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->pid,  el->cpusRequested,  el->parasolId);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct edwAnalysisJob *edwAnalysisJobLoad(char **row)
@@ -242,11 +242,11 @@ void edwAnalysisSoftwareSaveToDb(struct sqlConnection *conn, struct edwAnalysisS
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s')", 
 	tableName,  el->id,  el->name,  el->version,  el->md5);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct edwAnalysisSoftware *edwAnalysisSoftwareLoad(char **row)
@@ -392,13 +392,13 @@ void edwAnalysisStepSaveToDb(struct sqlConnection *conn, struct edwAnalysisStep 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *softwareArray;
 softwareArray = sqlStringArrayToString(el->software, el->softwareCount);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%d,'%s',%d)", 
 	tableName,  el->id,  el->name,  el->softwareCount,  softwareArray ,  el->cpusRequested);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&softwareArray);
 }
 
@@ -573,7 +573,7 @@ void edwAnalysisRunSaveToDb(struct sqlConnection *conn, struct edwAnalysisRun *e
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *inputFileIdsArray, *inputTypesArray, *outputNamesInTempDirArray, *outputFormatsArray, *outputTypesArray, *createFileIdsArray;
 inputFileIdsArray = sqlUnsignedArrayToString(el->inputFileIds, el->inputFileCount);
 inputTypesArray = sqlStringArrayToString(el->inputTypes, el->inputFileCount);
@@ -584,7 +584,7 @@ createFileIdsArray = sqlUnsignedArrayToString(el->createFileIds, el->createCount
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s','%s',%u,%u,'%s','%s',%u,%u,'%s','%s','%s','%s','%s',%d,%u,'%s')", 
 	tableName,  el->id,  el->jobId,  el->experiment,  el->analysisStep,  el->configuration,  el->tempDir,  el->firstInputId,  el->inputFileCount,  inputFileIdsArray ,  inputTypesArray ,  el->assemblyId,  el->outputFileCount,  outputNamesInTempDirArray ,  outputFormatsArray ,  outputTypesArray ,  el->jsonResult,  el->uuid,  el->createStatus,  el->createCount,  createFileIdsArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&inputFileIdsArray);
 freez(&inputTypesArray);
 freez(&outputNamesInTempDirArray);

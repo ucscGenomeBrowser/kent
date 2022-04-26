@@ -309,20 +309,21 @@ bool isStrictSearch = FALSE;
 char *modifiedSearchTerms = modifyTermsForHubSearch(cleanSearchTerms, isStrictSearch);
 struct hubSearchText *hubSearchResultsList = NULL;
 struct dyString *query = dyStringNew(100);
-char *noLongText = NULL;
-
-if (!checkLongText)
-    noLongText = cloneString("textLength = 'Short'");
-else
-    noLongText = cloneString("");
 
 sqlDyStringPrintf(query, "select * from %s where ", hubSearchTableName);
-// caller has manually escaped extra, so safe to dyStringPrintf:
 if (isNotEmpty(extra))
-    dyStringPrintf(query, "%s %s", extra,
-        (isNotEmpty(noLongText) || isNotEmpty(modifiedSearchTerms)) ? "and ": "");
-if (isNotEmpty(noLongText))
-    dyStringPrintf(query, "%s %s", noLongText, isNotEmpty(modifiedSearchTerms) ? "and " : "");
+    {
+    sqlDyStringPrintf(query, "%-s ", extra);
+    if (!checkLongText || isNotEmpty(modifiedSearchTerms))
+        sqlDyStringPrintf(query, "and ");
+    }
+if (!checkLongText)
+    {
+    sqlDyStringPrintf(query, "textLength = 'Short'"); 
+    if (isNotEmpty(modifiedSearchTerms))
+       sqlDyStringPrintf(query, "and ");
+    }
+
 if (isNotEmpty(modifiedSearchTerms))
     {
     sqlDyStringPrintf(query, "match(text) against ('%s' in boolean mode)"

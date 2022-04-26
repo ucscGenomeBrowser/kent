@@ -1583,16 +1583,16 @@ struct sqlResult *sr = NULL;
 char **row;
 struct linkedFeatures *lf;
 struct snakeFeature *sf;
-struct dyString *query = newDyString(1024);
-char *force = "";
-
-if (isSplit)
-    force = "force index (bin)";
+struct dyString *query = dyStringNew(1024);
 
 if (chainId == -1)
+    {
     sqlDyStringPrintf(query, 
-	"select chainId,tStart,tEnd,qStart from %sLink %-s where ",
-	fullName, force);
+	"select chainId,tStart,tEnd,qStart from %sLink ", fullName);
+    if (isSplit)
+	sqlDyStringPrintf(query,"force index (bin) ");
+    sqlDyStringPrintf(query, "where ",
+    }
 else
     sqlDyStringPrintf(query, 
 	"select chainId, tStart,tEnd,qStart from %sLink where chainId=%d and ",
@@ -1600,7 +1600,7 @@ else
 if (!isSplit)
     sqlDyStringPrintf(query, "tName='%s' and ", chromName);
 hAddBinToQuery(start, end, query);
-dyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
+sqlDyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
 sr = sqlGetResult(conn, query->string);
 
 /* Loop through making up simple features and adding them
@@ -1770,7 +1770,7 @@ ourEnd = 500000000;
 //ourEnd = winEnd;
 if (startsWith("chr",optionChrStr)) 
     {
-    safef(extraWhere, sizeof(extraWhere), 
+    sqlSafef(extraWhere, sizeof(extraWhere), 
             "qName = \"%s\" and score > %d",optionChrStr, 
             chainCart->scoreFilter);
     sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
@@ -1780,14 +1780,14 @@ else
     {
     if (chainCart->scoreFilter > 0)
         {
-        safef(extraWhere, sizeof(extraWhere), 
+        sqlSafef(extraWhere, sizeof(extraWhere), 
                 "score > \"%d\"",chainCart->scoreFilter);
         sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
                 extraWhere, &rowOffset);
         }
     else
         {
-        safef(extraWhere, sizeof(extraWhere), " ");
+        sqlSafef(extraWhere, sizeof(extraWhere), " ");
         sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
                 NULL, &rowOffset);
         }

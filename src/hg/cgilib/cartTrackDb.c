@@ -251,7 +251,9 @@ if (! trackHubDatabase(db))
         struct sqlResult *sr = NULL;
         char **row = NULL;
         acHash = newHash(0);
-        sr = sqlGetResult(conn, NOSQLINJ "select name,host from tableAccessControl");
+	char query[1024];
+	sqlSafef(query, sizeof query, "select name,host from tableAccessControl");
+        sr = sqlGetResult(conn, query);
         while ((row = sqlNextRow(sr)) != NULL)
             acHashAddOneTable(acHash, row[0], chopAtFirstDot(row[1]), FALSE);
         sqlFreeResult(&sr);

@@ -354,7 +354,7 @@ regmatch_t match[1];
 int err = regcomp(&re, regEx, flags);
 if(err)
     errAbort("regcomp failed; err: %d", err);
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 size_t len = strlen(str);
 size_t offset = 0;
 while(offset < len && !regexec(&re, str + offset, 1, match, 0))
@@ -629,7 +629,7 @@ void jsonErrPrintf(struct dyString *ds, char *format, ...)
 va_list args;
 va_start(args, format);
 dyStringPrintf(ds, "{\"error\": \"");
-struct dyString *buf = newDyString(1000);
+struct dyString *buf = dyStringNew(1000);
 dyStringVaPrintf(buf, format, args);
 dyStringAppend(ds, jsonStringEscape(dyStringCannibalize(&buf)));
 dyStringPrintf(ds, "\"}");

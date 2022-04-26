@@ -1403,7 +1403,7 @@ void cdwValidFileUpdateDb(struct sqlConnection *conn, struct cdwValidFile *el, l
 /* Save cdwValidFile as a row to the table specified by tableName, replacing existing record at 
  * id. */
 {
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 sqlDyStringPrintf(dy, "update cdwValidFile set ");
 // omit id and licensePlate fields - one autoupdates and the other depends on this
 // also omit fileId which also really can't change.
@@ -1433,7 +1433,7 @@ sqlDyStringPrintf(dy, " lane='%s'", el->lane);
 #endif
 sqlDyStringPrintf(dy, " where id=%lld\n", (long long)id);
 sqlUpdate(conn, dy->string);
-freeDyString(&dy);
+dyStringFree(&dy);
 }
 
 char *cdwLookupTag(struct cgiParsedVars *list, char *tag)

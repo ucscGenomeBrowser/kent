@@ -45,13 +45,15 @@ if (sqlTableExists(conn, "chromInfo"))
     errAbort("%s looks like a genome database, has chromInfo, aborting", 
     	database);
 
-sqlRemakeTable(conn, "tableDescriptions",
-   NOSQLINJ "CREATE TABLE tableDescriptions (\n"
+char query[1024];
+sqlSafef(query, sizeof query, 
+   "CREATE TABLE tableDescriptions (\n"
    "  tableName varchar(255) not null,\n"
    "  autoSqlDef longblob not null,\n"
    "  gbdAnchor varchar(255) not null,\n"
    "  PRIMARY KEY(tableName(32))\n"
    ")" );
+sqlRemakeTable(conn, "tableDescriptions", query);
 
 while (lineFileNextReal(lf, &line))
     {

@@ -89,7 +89,7 @@ void altGraphSaveToDb(struct sqlConnection *conn, struct altGraph *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *vTypesArray, *vPositionsArray, *edgeStartsArray, *edgeEndsArray, *mrnaRefsArray;
 vTypesArray = sqlUbyteArrayToString(el->vTypes, el->vertexCount);
 vPositionsArray = sqlSignedArrayToString(el->vPositions, el->vertexCount);
@@ -99,7 +99,7 @@ mrnaRefsArray = sqlStringArrayToString(el->mrnaRefs, el->mrnaRefCount);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%d,%d,'%s',%u,'%s','%s',%u,'%s','%s',%d,'%s')", 
 	tableName,  el->id,  el->tName,  el->tStart,  el->tEnd,  el->strand,  el->vertexCount,  vTypesArray ,  vPositionsArray ,  el->edgeCount,  edgeStartsArray ,  edgeEndsArray ,  el->mrnaRefCount,  mrnaRefsArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&vTypesArray);
 freez(&vPositionsArray);
 freez(&edgeStartsArray);

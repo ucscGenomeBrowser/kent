@@ -561,11 +561,11 @@ sqlDyStringPrintf(q, "select edwValidFile.*,edwFile.*,eapOutput.* "
 		  , assembly);
 for (ee = eeList; ee != NULL; ee = ee->next)
     {
-    dyStringPrintf(q, "'%s'", ee->accession);
+    sqlDyStringPrintf(q, "'%s'", ee->accession);
     if (ee->next != NULL)
-        dyStringAppendC(q, ',');
+        sqlDyStringPrintf(q, ",");
     }
-dyStringAppendC(q, ')');
+sqlDyStringPrintf(q, ")");
 
 /* Loop through this making up vFiles that ultimately are attached to replicates. */
 int vCount = 0;

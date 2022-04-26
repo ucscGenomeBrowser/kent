@@ -308,11 +308,11 @@ void genotypeSaveToDb(struct sqlConnection *conn, struct genotype *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%d,'%c','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->rsId,  el->SNPalleles,  el->chrom,  el->chromStart,  el->strand,  el->assembly,  el->center,  el->protLSID,  el->assayLSID,  el->panelLSID,  el->NA06985,  el->NA06991,  el->NA06993,  el->NA06993_dup,  el->NA06994,  el->NA07000,  el->NA07019,  el->NA07022,  el->NA07029,  el->NA07034,  el->NA07048,  el->NA07055,  el->NA07056,  el->NA07345,  el->NA07348,  el->NA07357,  el->NA10830,  el->NA10831,  el->NA10835,  el->NA10838,  el->NA10839,  el->NA10846,  el->NA10847,  el->NA10851,  el->NA10854,  el->NA10855,  el->NA10856,  el->NA10857,  el->NA10859,  el->NA10860,  el->NA10861,  el->NA10863,  el->NA11829,  el->NA11830,  el->NA11831,  el->NA11832,  el->NA11839,  el->NA11840,  el->NA11881,  el->NA11882,  el->NA11992,  el->NA11993,  el->NA11993_dup,  el->NA11994,  el->NA11995,  el->NA12003,  el->NA12003_dup,  el->NA12004,  el->NA12005,  el->NA12006,  el->NA12043,  el->NA12044,  el->NA12056,  el->NA12057,  el->NA12144,  el->NA12145,  el->NA12146,  el->NA12154,  el->NA12155,  el->NA12156,  el->NA12156_dup,  el->NA12234,  el->NA12236,  el->NA12239,  el->NA12248,  el->NA12248_dup,  el->NA12249,  el->NA12264,  el->NA12707,  el->NA12716,  el->NA12717,  el->NA12740,  el->NA12750,  el->NA12751,  el->NA12752,  el->NA12753,  el->NA12760,  el->NA12761,  el->NA12762,  el->NA12763,  el->NA12801,  el->NA12802,  el->NA12812,  el->NA12813,  el->NA12814,  el->NA12815,  el->NA12864,  el->NA12865,  el->NA12872,  el->NA12873,  el->NA12874,  el->NA12875,  el->NA12878,  el->NA12891,  el->NA12892);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

@@ -621,7 +621,7 @@ if (proxyUrl)
     {
     if (sameOk(log_proxy,"on"))
 	verbose(1, "CONNECT %s:%d HTTP/1.0 via %s:%d\n", hostName, port, connectHost,connectPort);
-    struct dyString *dy = newDyString(512);
+    struct dyString *dy = dyStringNew(512);
     dyStringPrintf(dy, "CONNECT %s:%d HTTP/1.0\r\n", hostName, port);
     setAuthorization(pxy, "Proxy-Authorization", dy);
     dyStringAppend(dy, "\r\n");

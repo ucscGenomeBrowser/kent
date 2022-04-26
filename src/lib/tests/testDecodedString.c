@@ -42,7 +42,7 @@ if (argc < 3)
     usage();
 int i;
 char *type = argv[1];
-struct dyString *cmdArgs = newDyString(0);
+struct dyString *cmdArgs = dyStringNew(0);
 for (i = 2; i < argc; ++i)
     {
     if (i > 2)
@@ -77,6 +77,6 @@ else if (sameString(type,"url"))
     urlDecode(dupe);
     verbose(1, "url decoded to: '%s'\n", dupe);
     }
-freeDyString(&cmdArgs);
+dyStringFree(&cmdArgs);
 return 0;
 }

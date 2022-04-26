@@ -267,10 +267,10 @@ int maxOut = bigFileMaxOutput();
 // Include the header, absolutely necessary for VCF parsing.
 boolean printedHeader = FALSE;
 // Temporary storage for row-ification:
-struct dyString *dyAlt = newDyString(1024);
-struct dyString *dyFilter = newDyString(1024);
-struct dyString *dyInfo = newDyString(1024);
-struct dyString *dyGt = newDyString(1024);
+struct dyString *dyAlt = dyStringNew(1024);
+struct dyString *dyFilter = dyStringNew(1024);
+struct dyString *dyInfo = dyStringNew(1024);
+struct dyString *dyGt = dyStringNew(1024);
 struct vcfRecord *rec;
 for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
@@ -363,10 +363,10 @@ struct lm *lm = lmInit(0);
 char *row[VCFDATALINE_NUM_COLS];
 char numBuf[VCF_NUM_BUF_SIZE];
 // Temporary storage for row-ification:
-struct dyString *dyAlt = newDyString(1024);
-struct dyString *dyFilter = newDyString(1024);
-struct dyString *dyInfo = newDyString(1024);
-struct dyString *dyGt = newDyString(1024);
+struct dyString *dyAlt = dyStringNew(1024);
+struct dyString *dyFilter = dyStringNew(1024);
+struct dyString *dyInfo = dyStringNew(1024);
+struct dyString *dyGt = dyStringNew(1024);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {

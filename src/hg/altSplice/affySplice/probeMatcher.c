@@ -136,7 +136,7 @@ struct affyProbe *affyProbe=NULL, *affyProbeList=NULL;
    have to get everything and sort it out afterwards. */
 if(type == ggSJ)
     {
-    sqlSafefFrag(where, sizeof(where), " chromStart >= %d and chromEnd <= %d and blockCount = 2 ", 
+    sqlSafef(where, sizeof(where), " chromStart >= %d and chromEnd <= %d and blockCount = 2 ", 
 	  chromStart-25, chromEnd+25);
     table = junctionTable;
     sr = hRangeQuery(conn, table, ag->tName, chromStart, chromEnd,

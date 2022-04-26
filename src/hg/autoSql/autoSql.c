@@ -1011,17 +1011,17 @@ void dynamicSaveToDb(struct asObject *table, FILE *f, FILE *hFile)
 {
 char *tableName = table->name;
 struct asColumn *col;
-struct dyString *colInsert = newDyString(1024);           /* code to associate columns with printf format characters the insert statement */
-struct dyString *stringDeclarations = newDyString(1024);  /* code to declare necessary strings */
-struct dyString *stringFrees = newDyString(1024);         /* code to free necessary strings */
-struct dyString *update = newDyString(1024);              /* code to do the update statement itself */
-struct dyString *stringArrays = newDyString(1024);        /* code to convert arrays to strings */
+struct dyString *colInsert = dyStringNew(1024);           /* code to associate columns with printf format characters the insert statement */
+struct dyString *stringDeclarations = dyStringNew(1024);  /* code to declare necessary strings */
+struct dyString *stringFrees = dyStringNew(1024);         /* code to free necessary strings */
+struct dyString *update = dyStringNew(1024);              /* code to do the update statement itself */
+struct dyString *stringArrays = dyStringNew(1024);        /* code to convert arrays to strings */
 boolean hasArray = FALSE;
 dynamicSaveToDbPrintPrototype(tableName, hFile, TRUE);
 fprintf(hFile, "\n");
 dynamicSaveToDbPrintPrototype(tableName, f, FALSE);
 fprintf(f, "{\n");
-fprintf(f, "struct dyString *update = newDyString(updateSize);\n");
+fprintf(f, "struct dyString *update = dyStringNew(updateSize);\n");
 dyStringPrintf(update, "sqlDyStringPrintf(update, \"insert into %%s values ( ");
 dyStringPrintf(stringDeclarations, "char ");
 for (col = table->columnList; col != NULL; col = col->next)
@@ -1118,7 +1118,7 @@ fprintf(f, "%s", update->string);
 fprintf(f, ")\", \n\ttableName, ");
 fprintf(f, "%s);\n", colInsert->string);
 fprintf(f, "sqlUpdate(conn, update->string);\n");
-fprintf(f, "freeDyString(&update);\n");
+fprintf(f, "dyStringFree(&update);\n");
 if(hasArray)
     {
     fprintf(f, "%s", stringFrees->string);

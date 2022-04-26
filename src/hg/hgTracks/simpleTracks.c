@@ -877,7 +877,7 @@ struct dyString *uiStateUrlPart(struct track *toggleGroup)
  * format.  If toggleGroup is non-null the visibility of that
  * track will be toggled in the string. */
 {
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 
 dyStringPrintf(dy, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 if (toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
@@ -1056,7 +1056,7 @@ if (theImgBox && curImgTrack)
         width -= (fullInsideX+1 - x);
         if (width <= 1)
             {
-            freeDyString(&ui);
+            dyStringFree(&ui);
             return;
             }
         x = fullInsideX+1;
@@ -1066,7 +1066,7 @@ if (theImgBox && curImgTrack)
         width -= (x+width) - fullInsideWidth + 1;
         if (width <= 1)
             {
-            freeDyString(&ui);
+            dyStringFree(&ui);
             return;
             }
         }
@@ -1088,8 +1088,8 @@ else
         mapStatusMessage("%s", message);
     hPrintf("%s>\n", dyStringContents(id));
     }
-freeDyString(&ui);
-freeDyString(&id);
+dyStringFree(&ui);
+dyStringFree(&id);
 }
 
 void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
@@ -1127,7 +1127,7 @@ static struct dyString *dy = NULL;
 
 if (dy == NULL)
     {
-    dy = newDyString(128);
+    dy = dyStringNew(128);
     dyStringPrintf(dy, "%s?%s", hgcName(), cartSidUrlString(cart));
     }
 return dy->string;
@@ -1205,7 +1205,7 @@ if (x < xEnd)
     freeMem(encodedItem);
     freeMem(encodedTrack);
     }
-freeDyString(&id);
+dyStringFree(&id);
 }
 
 void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height,
@@ -1948,7 +1948,9 @@ else if (sameString("Disagree", cartString(cart, "gvDisclaimer")))
     return;
     }
 /* load as linked list once, outside of loop */
-srcList = gvSrcLoadByQuery(conn, NOSQLINJ "select * from hgFixed.gvSrc");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from hgFixed.gvSrc");
+srcList = gvSrcLoadByQuery(conn, query);
 /* load part need from gv table, outside of loop (load in hash?) */
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -3133,7 +3135,7 @@ char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColu
 if (scoreColumn == NULL)
     scoreColumn = "score";
 
-struct dyString *extraWhere = newDyString(128);
+struct dyString *extraWhere = dyStringNew(128);
 boolean and = FALSE;
 // gets trackDb 'filterBy' clause, which may filter by 'score', 'name', etc
 extraWhere = dyAddFilterByClause(cart,tdb,extraWhere,NULL,&and);
@@ -3169,9 +3171,9 @@ if ((scoreColumn != NULL) && (cartVarExistsAnyLevel(cart, tg->tdb, FALSE, SCORE_
     if (scoreFilterClause != NULL)
         {
         if (moreWhere)
-            safef(extraWhere, sizeof(extraWhere), "%s and %s", scoreFilterClause, moreWhere);
+            sqlSafef(extraWhere, sizeof(extraWhere), "%-s and %-s", scoreFilterClause, moreWhere);
         else
-            safef(extraWhere, sizeof(extraWhere), "%s", scoreFilterClause);
+            sqlSafef(extraWhere, sizeof(extraWhere), "%-s", scoreFilterClause);
         freeMem(scoreFilterClause);
         sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, extraWhere, &rowOffset);
         }
@@ -5221,7 +5223,7 @@ lfs->orientation = orientFromChar(lfsbed->strand[0]);
 for (i = 0; i < lfsbed->lfCount; i++)
     {
     AllocVar(lf);
-    sqlSafefFrag(rest, sizeof rest, "qName = '%s'", lfsbed->lfNames[i]);
+    sqlSafef(rest, sizeof rest, "qName = '%s'", lfsbed->lfNames[i]);
 
     // use psl table from trackDb, if specified there
     char *pslTable = lfsbed->pslTable;
@@ -5361,7 +5363,7 @@ if (needJoin)
 	}
     if ((freqLow > 0.0) || (freqHi < 1.0))
 	{
-	    dyStringPrintf(query,
+	    sqlDyStringPrintf(query,
 		"polyGenotype.alleleFrequency>=\"%.1f\" and "
 		    "polyGenotype.alleleFrequency<=\"%.1f\" and ",
 			freqLow, freqHi);
@@ -5403,14 +5405,14 @@ option = cartCgiUsualString(cart, dbRIP_DISEASE, DISEASE_DEFAULT);
 if (differentString(option,DISEASE_DEFAULT))
     {
     if (sameWord(option,"no"))
-	dyStringPrintf(query, " and disease=\"NA\"");
+	sqlDyStringPrintf(query, " and disease=\"NA\"");
     else
-	dyStringPrintf(query, " and disease!=\"NA\"");
+	sqlDyStringPrintf(query, " and disease!=\"NA\"");
     }
 
 sqlDyStringPrintf(query, " group by %s.name", tg->table);
 
-sr = sqlGetResult(conn, dyStringCannibalize(&query));
+sr = sqlGetResult(conn, query->string);
 rowOffset=1;
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -5422,6 +5424,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 slSort(&itemList, bedCmp);
 tg->items = itemList;
+dyStringFree(&query);
 }
 
 static void atomDrawSimpleAt(struct track *tg, void *item,
@@ -5671,8 +5674,9 @@ if(nmdTrackFilter)
 if (tg->itemAttrTbl != NULL)
     itemAttrTblLoad(tg->itemAttrTbl, conn, chrom, start, end);
 
-char *noncodingClause = (hideNoncoding ? "cdsStart != cdsEnd" : NULL);
-gpr = genePredReaderRangeQuery(conn, table, chrom, start, end, noncodingClause);
+char noncodingClause[12024];
+sqlSafef(noncodingClause, sizeof noncodingClause, "cdsStart != cdsEnd");
+gpr = genePredReaderRangeQuery(conn, table, chrom, start, end, hideNoncoding ? noncodingClause : NULL);
 while ((gp = genePredReaderNext(gpr)) != NULL)
     {
     if (doNmd && genePredNmdTarget(gp))
@@ -6047,7 +6051,7 @@ if (hTableExists(database, "kgXref"))
         struct dyString *name = dyStringNew(SMALLDYBUF);
         if (useGeneSymbol)
             {
-            sqlSafefFrag(cond_str, sizeof cond_str, "kgID='%s'", lf->name);
+            sqlSafef(cond_str, sizeof cond_str, "kgID='%s'", lf->name);
             geneSymbol = sqlGetField("hg17", "kgXref", "geneSymbol", cond_str);
             if (geneSymbol != NULL)
                 {
@@ -6062,7 +6066,7 @@ if (hTableExists(database, "kgXref"))
 	    }
         if (useProtDisplayId)
             {
-	    sqlSafefFrag(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+	    sqlSafef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
             protDisplayId = sqlGetField("hg17", "kgXref", "spDisplayID", cond_str);
             dyStringAppend(name, protDisplayId);
 	    }
@@ -6212,7 +6216,7 @@ if (isBigGenePred || hTableExists(database, "kgXref"))
                 }
             else
                 {
-                sqlSafefFrag(cond_str, sizeof cond_str,"kgID='%s'", lf->name);
+                sqlSafef(cond_str, sizeof cond_str,"kgID='%s'", lf->name);
                 geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
                 }
             if (geneSymbol != NULL)
@@ -6235,7 +6239,7 @@ if (isBigGenePred || hTableExists(database, "kgXref"))
                     gencodeId = lf->name;
                 else
                     {
-                    sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
+                    sqlSafef(cond_str, sizeof(cond_str), "name='%s'", lf->name);
                     gencodeId = sqlGetField(database, "knownGene", "alignID", cond_str);
                     }
                 }
@@ -6247,7 +6251,7 @@ if (isBigGenePred || hTableExists(database, "kgXref"))
             else labelStarted = TRUE;
             if (isGencode2)
                 {
-                sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
+                sqlSafef(cond_str, sizeof(cond_str), "name='%s'", lf->name);
                 char *ucId = sqlGetField(database, "knownGene", "alignID", cond_str);
                 dyStringAppend(name, ucId);
                 }
@@ -6270,7 +6274,7 @@ if (isBigGenePred || hTableExists(database, "kgXref"))
                     }
                 else
                     {
-                    sqlSafefFrag(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+                    sqlSafef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
                     protDisplayId = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
                     dyStringAppend(name, protDisplayId);
                     }
@@ -6496,7 +6500,7 @@ lightest.b = (1*normal->b + 2*255) / 3;
 col = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
 
 /* set color first according to RefSeq status (if there is a corresponding RefSeq) */
-sqlSafefFrag(cond_str, sizeof cond_str, "name='%s' ", lf->name);
+sqlSafef(cond_str, sizeof cond_str, "name='%s' ", lf->name);
 refAcc = sqlGetField(database, "refGene", "name", cond_str);
 if (refAcc != NULL)
     {
@@ -6521,11 +6525,11 @@ if (refAcc != NULL)
     }
 
 /* set to dark blue if there is a corresponding Swiss-Prot protein */
-sqlSafefFrag(cond_str, sizeof cond_str, "name='%s'", lf->name);
+sqlSafef(cond_str, sizeof cond_str, "name='%s'", lf->name);
 proteinID= sqlGetField(database, "knownGene", "proteinID", cond_str);
 if (proteinID != NULL && protDbName != NULL)
     {
-    sqlSafefFrag(cond_str, sizeof cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
+    sqlSafef(cond_str, sizeof cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
     ans= sqlGetField(protDbName, "spXref3", "displayID", cond_str);
     if (ans != NULL)
         {
@@ -6536,7 +6540,7 @@ if (proteinID != NULL && protDbName != NULL)
 /* if a corresponding PDB entry exists, set it to black */
 if (protDbName != NULL)
     {
-    sqlSafefFrag(cond_str, sizeof cond_str, "sp='%s'", proteinID);
+    sqlSafef(cond_str, sizeof cond_str, "sp='%s'", proteinID);
     pdbID= sqlGetField(protDbName, "pdbSP", "pdb", cond_str);
     }
 
@@ -6807,7 +6811,7 @@ if (startsWithNoCase("chr", bed->chrom))
 	BLUE:	If the entry is a duplication (mean ratio > 0)
 	GREY:	If the entry was not provided with a mean ratio value (or it's 0)
 */
-sqlSafefFrag(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
+sqlSafef(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
 if (decipherId != NULL)
     {
@@ -6901,7 +6905,7 @@ if (startsWithNoCase("chr", bed->chrom))
     LIGHT GRAY: If the entry is likely or definitely benign
 */
 
-sqlSafefFrag(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
+sqlSafef(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
 decipherId = sqlGetField(database, "decipherSnvs", "name", cond_str);
 
 if (decipherId != NULL)
@@ -7012,7 +7016,7 @@ if (color)
 	char cond_str[256];
 	char linkTable[256];
 	safef(linkTable, sizeof(linkTable), "%sLink", tg->table);
-	sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", tg->itemName(tg, bed));
+	sqlSafef(cond_str, sizeof(cond_str), "name='%s'", tg->itemName(tg, bed));
         char *s = sqlGetField(database, linkTable, "description", cond_str);
 	hFreeConn(&conn);
 	if (s == NULL)
@@ -8753,12 +8757,12 @@ char *rgdGeneItemName(struct track *tg, void *item)
 {
 static char name[32];
 struct sqlConnection *conn = hAllocConn(database);
-struct dyString *ds = newDyString(256);
+struct dyString *ds = dyStringNew(256);
 struct linkedFeatures *lf = item;
 
 sqlDyStringPrintf(ds, "select name from rgdGeneLink where refSeq = '%s'", lf->name);
 sqlQuickQuery(conn, ds->string, name, sizeof(name));
-freeDyString(&ds);
+dyStringFree(&ds);
 hFreeConn(&conn);
 return name;
 }
@@ -9601,7 +9605,7 @@ conn = hAllocConn(database);
 hColor = hvGfxFindColorIx(hvg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 
 name = tg->itemName(tg, item);
-sqlSafefFrag(condStr, sizeof condStr, "name='%s'", name);
+sqlSafef(condStr, sizeof condStr, "name='%s'", name);
 rnaType = sqlGetField(database, "wgRna", "type", condStr);
 if (sameWord(rnaType, "miRna"))   color = MG_RED;
 if (sameWord(rnaType, "HAcaBox")) color = hColor;
@@ -10717,6 +10721,7 @@ struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
 struct cgh cghRecord;
+char where[256];
 
 /* Set up the shades of colors */
 if (!exprBedColorsMade)
@@ -10733,7 +10738,9 @@ if (isFull)
 	y += lineHeight;
 	hashAdd(hash, cghi->class, cghi);
 	}
-    sr = hRangeQuery(conn, "cgh", chromName, winStart, winEnd, "type = 2", &rowOffset);
+    
+    sqlSafef(where, sizeof where, "type = 2");
+    sr = hRangeQuery(conn, "cgh", chromName, winStart, winEnd, where, &rowOffset);
     /* sr = hRangeQuery(conn, "cgh", chromName, winStart, winEnd, "type = 3", &rowOffset); */
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -10754,7 +10761,8 @@ if (isFull)
     }
 else
     {
-    sr = hRangeQuery(conn, "cgh", chromName, winStart, winEnd, "type = 1", &rowOffset);
+    sqlSafef(where, sizeof where, "type = 1");
+    sr = hRangeQuery(conn, "cgh", chromName, winStart, winEnd, where, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	cghStaticLoad(row+rowOffset, &cghRecord);
@@ -11212,7 +11220,7 @@ if (cmpl)
     {
     char *list[8];
     int i;
-    struct dyString *ds = newDyString(255);
+    struct dyString *ds = dyStringNew(255);
     i = chopByChar(copy, '/', list, myItem->alleleCount);
     for (i=0; i < myItem->alleleCount; i++)
         {
@@ -11224,13 +11232,13 @@ if (cmpl)
             dyStringPrintf(ds, "%s", "/");
         }
     name = cloneString(ds->string);
-    freeDyString(&ds);
+    dyStringFree(&ds);
     }
 else if (revCmplDisp)
     {
     char *list[8];
     int i;
-    struct dyString *ds = newDyString(255);
+    struct dyString *ds = dyStringNew(255);
     i = chopByChar(copy, '/', list, myItem->alleleCount);
     for (i=0; i < myItem->alleleCount; i++)
         {
@@ -11240,7 +11248,7 @@ else if (revCmplDisp)
             dyStringPrintf(ds, "%s", "/");
         }
     name = cloneString(ds->string);
-    freeDyString(&ds);
+    dyStringFree(&ds);
     }
 /* if no changes needed return bed name */
 if (name == NULL)
@@ -11477,7 +11485,7 @@ char *nameCopy = cloneString(itemName); /* so chopper doesn't mess original */
 char *cntCopy = cloneString(el->alleleFreq);
 char *all[8];
 char *freq[8];
-struct dyString *ds = newDyString(255);
+struct dyString *ds = dyStringNew(255);
 int i = 0;
 chopByChar(nameCopy, '/', all, el->alleleCount);
 if (differentString(el->alleleFreq, ""))
@@ -11491,7 +11499,7 @@ for (i=0; i < el->alleleCount; i++)
     }
 mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
                   mapItemName, ds->string, directUrl, withHgsid, NULL);
-freeDyString(&ds);
+dyStringFree(&ds);
 }
 
 void pgSnpLeftLabels(struct track *tg, int seqStart, int seqEnd,
@@ -13717,7 +13725,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 int scoreMin = 0;
 int scoreMax = 99999;
 
-sqlSafefFrag(where, ArraySize(where), "db='%s'", database);
+sqlSafef(where, ArraySize(where), "db='%s'", database);
 
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -14477,7 +14485,7 @@ struct trackDb *subTracks = tdb->subtracks;
 tdb->subtracks = NULL;
 tdb->type = "mathWig";
 
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 if (sameString("add", aggregateFunc))
     dyStringPrintf(dy, "+ ");

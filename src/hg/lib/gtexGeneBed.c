@@ -41,13 +41,13 @@ void gtexGeneBedSaveToDb(struct sqlConnection *conn, struct gtexGeneBed *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *expScoresArray;
 expScoresArray = sqlFloatArrayToString(el->expScores, el->expCount);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s',%u,'%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->geneId,  el->geneType,  el->expCount,  expScoresArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&expScoresArray);
 }
 

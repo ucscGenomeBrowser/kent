@@ -138,11 +138,11 @@ void dbRIPSaveToDb(struct sqlConnection *conn, struct dbRIP *el, char *tableName
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%s,'%s',%s,'%s','%s',%g,%d,%d,'%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->originalId,  el->forwardPrimer,  el->reversePrimer,  el->polyClass,  el->polyFamily,  el->polySubfamily,  el->polySeq,  el->polySource,  el->reference,  el->ascertainingMethod,  el->remarks,  el->tm,  el->filledSize,  el->emptySize,  el->disease,  el->genoRegion);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

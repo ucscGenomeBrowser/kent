@@ -430,8 +430,8 @@ if (hubName != NULL)
     curGroup = hashFindVal(groupHash, hubName);
 
 jsInlineF("var collectionData = []; ");
-struct dyString *dyNames = newDyString(1024);
-struct dyString *dyLabels = newDyString(1024);
+struct dyString *dyNames = dyStringNew(1024);
+struct dyString *dyLabels = dyStringNew(1024);
 jsInlineF("var collectionNames = [];");
 jsInlineF("var collectionLabels = [];");
 if (curGroup != NULL)
@@ -471,7 +471,7 @@ jsInlineF("%s", dyNames->string);
 jsInlineF("%s", dyLabels->string);
 
 jsInlineF("var trackData = []; ");
-struct dyString *rootChildren = newDyString(512);
+struct dyString *rootChildren = dyStringNew(512);
 addVisibleTracks(groupHash, rootChildren, cart, trackList);
 for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
     {
@@ -571,10 +571,9 @@ webEndGb();
 static char *getSqlBigWig(struct sqlConnection *conn, char *db, struct trackDb *tdb)
 // figure out the bigWig for native tables
 {
-char buffer[4096];
-
-safef(buffer, sizeof buffer, "NOSQLINJ select fileName from %s", tdb->table);
-return sqlQuickString(conn, buffer);
+char query[1024];
+sqlSafef(query, sizeof query, "select fileName from %s", tdb->table);
+return sqlQuickString(conn, query);
 }
 
 void dumpTdbAndParents(struct dyString *dy, struct trackDb *tdb, struct hash *existHash, struct hash *wantHash)
@@ -610,7 +609,7 @@ hel = hashLookup(tdb->settingsHash, "track");
 if (hel == NULL)
     errAbort("can't find track variable in tdb");
 
-dy = newDyString(200);
+dy = dyStringNew(200);
 dyStringPrintf(dy, "track %s\n", trackHubSkipHubName((char *)hel->val));
 hashStore(existHash, "track");
 

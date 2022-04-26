@@ -239,19 +239,25 @@ if (!keep)
 static void addExtraIndices(struct sqlConnection *conn)
 /* add extra indices to speed up ccdsMkTables */
 {
-static char *adds[] =
-    {
-    NOSQLINJ "ALTER TABLE Groups ADD INDEX (tax_id);",
-    NOSQLINJ "ALTER TABLE GroupVersions ADD INDEX (group_version_uid);",
-    NOSQLINJ "ALTER TABLE GroupVersions ADD INDEX (ccds_status_val_uid);",
-    NOSQLINJ "ALTER TABLE GroupVersions ADD INDEX (ncbi_build_number);",
-    NOSQLINJ "ALTER TABLE GroupVersions ADD INDEX (first_ncbi_build_version);",
-    NOSQLINJ "ALTER TABLE GroupVersions ADD INDEX (last_ncbi_build_version);",
-    NULL
-    };
-int i;
-for (i = 0; adds[i] != NULL; i++)
-    sqlUpdate(conn, adds[i]);
+char query[1024];
+sqlSafef(query, sizeof query, 
+    "ALTER TABLE Groups ADD INDEX (tax_id);");
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof query, 
+    "ALTER TABLE GroupVersions ADD INDEX (group_version_uid);");
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof query, 
+    "ALTER TABLE GroupVersions ADD INDEX (ccds_status_val_uid);");
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof query, 
+    "ALTER TABLE GroupVersions ADD INDEX (ncbi_build_number);");
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof query, 
+    "ALTER TABLE GroupVersions ADD INDEX (first_ncbi_build_version);");
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof query, 
+    "ALTER TABLE GroupVersions ADD INDEX (last_ncbi_build_version);");
+sqlUpdate(conn, query);
 
 }
 

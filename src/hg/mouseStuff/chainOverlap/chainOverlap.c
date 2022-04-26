@@ -45,7 +45,7 @@ void chainOverlap(char *chainName)
 struct lineFile *lf = lineFileOpen(chainName, TRUE);
 int lastChainId = -1;
 struct seqPair *spList = NULL, *sp;
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 struct hash *chainHash = newHash(0);  
 struct chain *chain, *chainList = NULL;
 int count;

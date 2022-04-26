@@ -24,8 +24,8 @@ static struct optionSpec options[] = {
 
 static void writeFile(FILE *f, struct hash *superHash, char *version)
 {
-struct dyString *varDeclare = newDyString(4096);
-struct dyString *editFunc = newDyString(4096);
+struct dyString *varDeclare = dyStringNew(4096);
+struct dyString *editFunc = dyStringNew(4096);
 
 dyStringPrintf(varDeclare,
 "#include \"common.h\"\n"

@@ -120,8 +120,9 @@ FILE *outF = mustOpen(outFileName, "w");
 struct sqlConnection *conn = hAllocConn(db);
 
 /* loop over all gene symbols in GAD */	
-struct slName *geneSymbols = sqlQuickList(conn,
-			       NOSQLINJ "select distinct geneSymbol from gadAll where association='Y'");
+char query[1024];
+sqlSafef(query, sizeof query, "select distinct geneSymbol from gadAll where association='Y'");
+struct slName *geneSymbols = sqlQuickList(conn, query);
 struct slName *symbol;
 int kcCount = 0, rgCount = 0, kaCount = 0, gcCount = 0, missingCount = 0;
 for (symbol = geneSymbols;  symbol != NULL;  symbol = symbol->next)

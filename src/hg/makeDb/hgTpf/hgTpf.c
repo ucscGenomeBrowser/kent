@@ -23,7 +23,13 @@ errAbort(
   );
 }
 
-char *create = NOSQLINJ "CREATE TABLE tilingPath (\n"
+void loadDatabase(char *database, char *fileName)
+/* Load database from tab separated file. */
+{
+struct sqlConnection *conn = sqlConnect(database);
+char query[1024];
+sqlSafef(query, sizeof query, 
+"CREATE TABLE tilingPath (\n"
     "chrom varchar(255) not null,	# Chromosome name: chr1, chr2, etc.\n"
     "accession varchar(255) not null,	# Clone accession or ? or GAP\n"
     "clone varchar(255) not null,	# Clone name in BAC library\n"
@@ -31,16 +37,8 @@ char *create = NOSQLINJ "CREATE TABLE tilingPath (\n"
     "chromIx int not null,	# Number of clone in tiling path starting chrom start\n"
               "#Indices\n"
     "INDEX(accession(12))\n"
-")";
-
-
-void loadDatabase(char *database, char *fileName)
-/* Load database from tab separated file. */
-{
-struct sqlConnection *conn = sqlConnect(database);
-char query[1024];
-
-sqlRemakeTable(conn, "tilingPath", create);
+")");
+sqlRemakeTable(conn, "tilingPath", query);
 sqlSafef(query, sizeof query, "load data local infile '%s' into table tilingPath",
     fileName);
 sqlUpdate(conn, query);

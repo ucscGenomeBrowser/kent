@@ -56,11 +56,11 @@ void genarkSaveToDb(struct sqlConnection *conn, struct genark *el, char *tableNa
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s',%d)", 
 	tableName,  el->gcAccession,  el->hubUrl,  el->asmName,  el->scientificName,  el->commonName,  el->taxId);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct genark *genarkLoad(char **row)

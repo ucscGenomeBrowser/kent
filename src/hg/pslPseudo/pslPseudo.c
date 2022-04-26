@@ -537,8 +537,8 @@ struct axt *pslToAxt(struct psl *psl, struct hash *qHash, struct hash *tHash,
 static char *tName = NULL, *qName = NULL;
 static struct dnaSeq *tSeq = NULL, *qSeq = NULL;
 static struct slName *mrna;
-struct dyString *q = newDyString(16*1024);
-struct dyString *t = newDyString(16*1024);
+struct dyString *q = dyStringNew(16*1024);
+struct dyString *t = dyStringNew(16*1024);
 int blockIx;
 int qs, ts ;
 int lastQ = 0, lastT = 0, size;
@@ -2108,8 +2108,8 @@ void pseudoFeaturesCalc(struct psl *psl, struct psl *bestPsl, int maxExons, int 
 /* calculate features of retroGene */
 {
 struct pseudoGeneLink *pg = NULL;
-struct dyString *iString = newDyString(16*1024);
-struct dyString *reason = newDyString(255);
+struct dyString *iString = dyStringNew(16*1024);
+struct dyString *reason = dyStringNew(255);
 struct genePred *gp = NULL, *kg = NULL, *mgc = NULL;
 int milliMinPseudo = 1000*minAliPseudo;
 //int conservedIntrons = 0;    

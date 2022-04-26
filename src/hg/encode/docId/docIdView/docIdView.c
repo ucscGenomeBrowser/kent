@@ -100,13 +100,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<td>%s</td> ",   docIdSub->submitDate);
     printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "dataType"));
     printf("<td>%s</td> ",  cellFromMetaData);
-    struct dyString *str = newDyString(100);
+    struct dyString *str = dyStringNew(100);
     addValue(str,  mdbObjFindValue(mdbObj, "antibody"));
     addValue(str,  mdbObjFindValue(mdbObj, "treatment"));
     addValue(str,  mdbObjFindValue(mdbObj, "rnaExtract"));
     addValue(str,  mdbObjFindValue(mdbObj, "localization"));
     printf("<td>%s<a href=docIdView?docId=%s&db=%s&meta=\"\"> ...</a></td>", str->string,buffer, database);
-    freeDyString(&str);
+    dyStringFree(&str);
         
 //    printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "view"));
     printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "type"));

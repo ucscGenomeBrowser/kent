@@ -189,7 +189,7 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    file, lf->lineIx, wordsRead);
 
     char where[10 * 1024];
-    sqlSafefFrag(where, sizeof where, 
+    sqlSafef(where, sizeof where, 
 	"name = '%s' and chrom='%s' and txStart = %d and txEnd = %d",
 	words[3], words[0], sqlUnsigned(words[1]), sqlUnsigned(words[2]));
 

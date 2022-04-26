@@ -515,7 +515,7 @@ char *hgTracksPathAndSettings()
 static struct dyString *dy = NULL;
 if (dy == NULL)
     {
-    dy = newDyString(128);
+    dy = dyStringNew(128);
     dyStringPrintf(dy, "%s?%s", hgTracksName(), cartSidUrlString(cart));
     }
 return dy->string;
@@ -527,7 +527,7 @@ char *hgcPathAndSettings()
 static struct dyString *dy = NULL;
 if (dy == NULL)
     {
-    dy = newDyString(128);
+    dy = dyStringNew(128);
     dyStringPrintf(dy, "%s?%s", hgcName(), cartSidUrlString(cart));
     }
 return dy->string;
@@ -2286,11 +2286,11 @@ for (axt = axtList; axt != NULL; axt = axt->next)
     /* loop thru one base at a time */
     while (sizeLeft > 0)
         {
-        struct dyString *dyT = newDyString(1024);
-        struct dyString *dyQ = newDyString(1024);
-        struct dyString *dyQprot = newDyString(1024);
-        struct dyString *dyTprot = newDyString(1024);
-        struct dyString *exonTag = newDyString(1024);
+        struct dyString *dyT = dyStringNew(1024);
+        struct dyString *dyQ = dyStringNew(1024);
+        struct dyString *dyQprot = dyStringNew(1024);
+        struct dyString *dyTprot = dyStringNew(1024);
+        struct dyString *exonTag = dyStringNew(1024);
         oneSize = sizeLeft;
         if (oneSize > lineSize)
             oneSize = lineSize;
@@ -2671,10 +2671,10 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         sizeLeft -= oneSize;
         q += oneSize;
         t += oneSize;
-        freeDyString(&dyT);
-        freeDyString(&dyQ);
-        freeDyString(&dyQprot);
-        freeDyString(&dyTprot);
+        dyStringFree(&dyT);
+        dyStringFree(&dyQ);
+        dyStringFree(&dyQprot);
+        dyStringFree(&dyTprot);
         }
     }
 }
@@ -2852,7 +2852,7 @@ char *classTable = trackDbSetting(tdb, GENEPRED_CLASS_TBL);
 
 if (!hFindSplitTable(database, seqName, rootTable, table, sizeof table, NULL))
     errAbort("showGenePos track %s not found", rootTable);
-sqlSafefFrag(query, sizeof(query), "name = \"%s\"", name);
+sqlSafef(query, sizeof(query), "name = \"%s\"", name);
 gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
@@ -4226,7 +4226,7 @@ struct sqlResult *sr = NULL;
 char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed5FloatScore *b5;
-struct dyString *query = newDyString(512);
+struct dyString *query = dyStringNew(512);
 char **row;
 boolean firstTime = TRUE;
 int start = cartInt(cart, "o");
@@ -4269,7 +4269,7 @@ struct sqlResult *sr = NULL;
 char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed6FloatScore *b6 = NULL;
-struct dyString *query = newDyString(512);
+struct dyString *query = dyStringNew(512);
 char **row;
 boolean firstTime = TRUE;
 int start = cartInt(cart, "o");
@@ -5335,10 +5335,8 @@ else
 	char buf[256];
 	if ((hti->nameField[0] != 0) && (item[0] != 0))
 	    {
-	    char *quotedItem = makeQuotedString(item, '\'');
-	    safef(buf, sizeof(buf), "%s = %s", hti->nameField, quotedItem);
+	    sqlSafef(buf, sizeof(buf), "%s = '%s'", hti->nameField, item);
 	    where = buf;
-	    freeMem(quotedItem);
 	    }
 	itemCount = hgSeqItemsInRange(database, tbl, seqName, start, end, where);
 	}
@@ -6109,7 +6107,7 @@ printf("<B>Warning:<span style='color:red;'> %s %s %s</span></B><BR>\n", acc, ms
 static void printRnaSpecs(struct trackDb *tdb, char *acc, struct psl *psl)
 /* Print auxiliarry info on RNA. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlConnection *conn2= hAllocConn(database);
 struct sqlResult *sr;
@@ -6284,7 +6282,7 @@ if (end != 0 && differentString(chrom,"0") && isNotEmpty(chrom))
 
 gbWarnFree(&gbWarn);
 sqlFreeResult(&sr);
-freeDyString(&dy);
+dyStringFree(&dy);
 hFreeConn(&conn);
 hFreeConn(&conn2);
 }
@@ -9391,7 +9389,6 @@ void htcDnaNearGene( char *geneName)
 cartWebStart(cart, database, "%s", geneName);
 char *table    = cartString(cart, "o");
 int itemCount;
-char *quotedItem = makeQuotedString(geneName, '\'');
 puts("<PRE>");
 struct trackDb *tdb = NULL;
 
@@ -9416,14 +9413,13 @@ else
     else
         {
         char constraints[256];
-        safef(constraints, sizeof(constraints), "name = %s", quotedItem);
+        sqlSafef(constraints, sizeof(constraints), "name = '%s'", geneName);
         itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
         }
     }
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
 puts("</PRE>");
-freeMem(quotedItem);
 }
 
 void htcTrackHtml(struct trackDb *tdb)
@@ -9668,7 +9664,7 @@ if (hTableExists(database, "ensemblSource"))
     ensemblSource = sqlQuickString(conn, query);
     }
 
-sqlSafefFrag(query, sizeof(query), "name = \"%s\"", itemName);
+sqlSafef(query, sizeof(query), "name = \"%s\"", itemName);
 struct genePred *gpList = genePredReaderLoadQuery(conn, "ensGene", query);
 if (gpList && gpList->name2)
     {
@@ -9696,7 +9692,7 @@ printf("%s</A><br>", itemName);
 
 if (hTableExists(database, "superfamily"))
     {
-    sqlSafefFrag(cond_str, sizeof(cond_str), "transcript_name='%s'", shortItemName);
+    sqlSafef(cond_str, sizeof(cond_str), "transcript_name='%s'", shortItemName);
 
     /* This is necessary, Ensembl kept changing their gene_xref table definition and content.*/
     proteinID = NULL;
@@ -9704,7 +9700,7 @@ if (hTableExists(database, "superfamily"))
     if (hTableExists(database, "ensemblXref3"))
         {
         /* use ensemblXref3 for Ensembl data release after ensembl34d */
-        sqlSafefFrag(cond_str3, sizeof(cond_str3), "transcript='%s'", shortItemName);
+        sqlSafef(cond_str3, sizeof(cond_str3), "transcript='%s'", shortItemName);
         ensPep = sqlGetField(database, "ensemblXref3", "protein", cond_str3);
 	if (ensPep != NULL) proteinID = ensPep;
 	}
@@ -9773,7 +9769,7 @@ if (hTableExists(database, "superfamily"))
         }
 /* superfamily does not update with ensGene updates, stop printing an
 	invalid URL */
-    sqlSafefFrag(cond_str, "name='%s'", shortItemName);
+    sqlSafef(cond_str, "name='%s'", shortItemName);
     char *ans = sqlGetField(conn, database, "superfamily", "name", cond_str);
     if (ans != NULL)
 	{
@@ -9794,7 +9790,7 @@ if (hTableExists(database, "ensGtp") && (proteinID == NULL))
     {
     /* shortItemName removes version number but sometimes the ensGtp */
     /* table has a transcript with version number so exact match not used */
-    sqlSafefFrag(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
+    sqlSafef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
     proteinID=sqlGetField(database, "ensGtp","protein",cond_str2);
     if (proteinID != NULL)
         {
@@ -9885,7 +9881,7 @@ else if (isVega)
 
 boolean nonCoding = FALSE;
 char query[512];
-sqlSafefFrag(query, sizeof(query), "name = \"%s\"", itemName);
+sqlSafef(query, sizeof(query), "name = \"%s\"", itemName);
 struct genePred *gpList = genePredReaderLoadQuery(conn, tdb->table, query);
 if (gpList && (gpList->cdsStart == gpList->cdsEnd))
     nonCoding = TRUE;
@@ -9895,9 +9891,9 @@ if ((isEnsembl && hasEnsGtp) || (isVega && hasVegaGtp))
     {
     /* shortItemName removes version number but sometimes the ensGtp */
     /* table has a transcript with version number so exact match not used */
-    sqlSafefFrag(cond_str, sizeof(cond_str), "transcript like '%s%%'", shortItemName);
+    sqlSafef(cond_str, sizeof(cond_str), "transcript like '%s%%'", shortItemName);
     geneID=sqlGetField(database, gtpTable,"gene",cond_str);
-    sqlSafefFrag(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
+    sqlSafef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
     proteinID=sqlGetField(database, gtpTable,"protein",cond_str2);
     }
 
@@ -9954,7 +9950,7 @@ if (archive == NULL)
 	}
     }
 printEnsemblCustomUrl(tdb, itemForUrl, item == itemForUrl, archive);
-sqlSafefFrag(condStr, sizeof condStr, "name='%s'", item);
+sqlSafef(condStr, sizeof condStr, "name='%s'", item);
 
 struct sqlConnection *conn = hAllocConn(database);
 
@@ -10008,7 +10004,7 @@ if (hTableExists(database, "ensInfo"))
     }
 
 /* skip the rest if this gene is not in ensGene */
-sqlSafefFrag(condStr, sizeof condStr, "name='%s'", item);
+sqlSafef(condStr, sizeof condStr, "name='%s'", item);
 if (sqlGetField(database, tdb->table, "name", condStr) != NULL)
     {
     if (wordCount > 0)
@@ -10110,7 +10106,7 @@ genericHeader(tdb, item);
 printSuperfamilyCustomUrl(tdb, itemForUrl, item == itemForUrl);
 if (hTableExists(database, "ensGeneXref"))
     {
-    sqlSafefFrag(query, sizeof query, "translation_name='%s'", item);
+    sqlSafef(query, sizeof query, "translation_name='%s'", item);
     transcript = sqlGetField(database, "ensGeneXref", "transcript_name", query);
 
     sqlSafef(query, sizeof query,
@@ -10129,7 +10125,7 @@ if (hTableExists(database, "ensGeneXref"))
     }
 if (hTableExists(database, "ensemblXref3"))
     {
-    sqlSafefFrag(query, sizeof query, "protein='%s'", item);
+    sqlSafef(query, sizeof query, "protein='%s'", item);
     transcript = sqlGetField(database, "ensemblXref3", "transcript", query);
 
     sqlSafef(query, sizeof query,
@@ -11235,7 +11231,7 @@ if (url != NULL && url[0] != 0)
     printf("%s</A></B>", itemName);
     */
 
-    struct dyString *symQuery = newDyString(1024);
+    struct dyString *symQuery = dyStringNew(1024);
     sqlDyStringPrintf(symQuery, "SELECT approvedSymbol from omimGeneMap2 where omimId=%s", itemName);
     char *approvSym = sqlQuickString(conn, symQuery->string);
     if (approvSym) {
@@ -11780,7 +11776,7 @@ printf("<H3>Sequence ID: %s", id);
 printf("</H3>\n");
 
 /* display subject ID */
-sqlSafefFrag(cond_str, sizeof cond_str, "dnaSeqId='%s'", id);
+sqlSafef(cond_str, sizeof cond_str, "dnaSeqId='%s'", id);
 subjId = sqlGetField(database,"gsIdXref", "subjId", cond_str);
 printf("<H3>Subject ID: ");
 printf("<A HREF=\"../cgi-bin/gsidSubj?hgs_subj=%s\">", subjId);
@@ -12964,10 +12960,10 @@ printf("\" TARGET=_blank>%s</A><BR>\n", itemName);
 
 printf("<B>3D Structure Prediction (PDB file):</B> ");
 gotPDBFile = 0;
-sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", itemName);
+sqlSafef(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", itemName);
 if (sqlGetField(database, "protHomolog", "proteinID", cond_str) != NULL)
     {
-    sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s'", itemName);
+    sqlSafef(cond_str, sizeof(cond_str), "proteinID='%s'", itemName);
     predFN = sqlGetField(database, "protPredFile", "predFileName", cond_str);
     if (predFN != NULL)
 	{
@@ -13140,7 +13136,7 @@ void pseudoPrintPos(struct psl *pseudoList, struct pseudoGeneLink *pg, char *ali
 /*    print details of pseudogene record */
 {
 char query[256];
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char pfamDesc[128], *pdb;
 char chainTable[64];
 char chainTable_chrom[64];
@@ -13312,7 +13308,7 @@ if (hTableExists(database, "all_mrna"))
                                hChromSize(database, pg->gChrom)-(pg->gEnd),
                                hChromSize(database, pg->gChrom)-(pg->gStart));
                 }
-            dyStringAppend(dy, " order by qStart");
+            sqlDyStringPrintf(dy, " order by qStart");
             sr = sqlGetResult(conn, dy->string);
             while ((row = sqlNextRow(sr)) != NULL)
                 {
@@ -13402,7 +13398,7 @@ genericHeader(tdb, acc);
 cartWebStart(cart, database, "%s", acc);
 
 
-sqlSafefFrag(where, sizeof(where), "name = '%s'", acc);
+sqlSafef(where, sizeof(where), "name = '%s'", acc);
 sr = hRangeQuery(conn, tableName, chrom, start, end, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -14515,7 +14511,7 @@ if (!parseRange(range, retSeq, retStart, retEnd))
 struct psl *loadPslAt(char *track, char *qName, int qStart, int qEnd, char *tName, int tStart, int tEnd)
 /* Load a specific psl */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 struct sqlConnection *conn = hAllocConn(database);
 char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
@@ -14538,7 +14534,7 @@ if (row == NULL)
     errAbort("Couldn't loadPslAt %s:%d-%d", tName, tStart, tEnd);
 psl = pslLoad(row + hasBin);
 sqlFreeResult(&sr);
-freeDyString(&dy);
+dyStringFree(&dy);
 hFreeConn(&conn);
 return psl;
 }
@@ -14758,7 +14754,7 @@ struct chain *getChainFromRange(char *chainTable, char *chrom, int chromStart, i
 /* get a list of chains for a range */
 {
 char chainTable_chrom[256];
-struct dyString *dy = newDyString(128);
+struct dyString *dy = dyStringNew(128);
 struct chain *chainList = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 safef(chainTable_chrom, 256, "%s_%s",chrom, chainTable);
@@ -14772,8 +14768,8 @@ if (hTableExists(database, chainTable_chrom) )
     sqlDyStringPrintf(dy, "select id, score, qStart, qEnd, qStrand, qSize from %s where ",
                    chainTable_chrom);
     hAddBinToQuery(chromStart, chromEnd, dy);
-    dyStringPrintf(dy, "tEnd > %d and tStart < %d ", chromStart,chromEnd);
-    dyStringAppend(dy, " order by qStart");
+    sqlDyStringPrintf(dy, "tEnd > %d and tStart < %d ", chromStart,chromEnd);
+    sqlDyStringPrintf(dy, " order by qStart");
     sr = sqlGetResult(conn, dy->string);
 
     while ((row = sqlNextRow(sr)) != NULL)
@@ -15880,7 +15876,7 @@ safef(title, sizeof title, "STS Marker %s", marker);
 cartWebStart(cart, database, "%s", title);
 
 /* Find the instance of the object in the bed table */
-sqlSafefFrag(query, sizeof(query), "name = '%s'", marker);
+sqlSafef(query, sizeof(query), "name = '%s'", marker);
 sr = hRangeQuery(conn, table, seqName, start, end, query, &hasBin);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -15951,7 +15947,7 @@ if (row != NULL)
 	safef(stsClone, sizeof stsClone, "%d_%s_clone", infoRow->identNo, infoRow->name);
 
 	/* find sts in primer alignment info */
-        sqlSafefFrag(query, sizeof(query), "qName = '%s'", stsPrimer);
+        sqlSafef(query, sizeof(query), "qName = '%s'", stsPrimer);
 	sr1 = hRangeQuery(conn1, "all_sts_primer", seqName, start, end, query,
 			  &hasBin);
 	i = 0;
@@ -15976,7 +15972,7 @@ if (row != NULL)
 	stsInfoRatFree(&infoRow);
 
 	/* Find sts in clone sequece alignment info */
-        sqlSafefFrag(query1, sizeof(query1), "qName = '%s'", stsClone);
+        sqlSafef(query1, sizeof(query1), "qName = '%s'", stsClone);
 	sr2 = hRangeQuery(conn1, "all_sts_primer", seqName, start, end, query1,
 			  &hasBin);
 	i = 0;
@@ -16010,7 +16006,7 @@ if (row != NULL)
 	sqlFreeResult(&sr);
 	printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
 	printf("<TABLE>\n");
-	sqlSafefFrag(query, sizeof(query), "name = '%s'", marker);
+	sqlSafef(query, sizeof(query), "name = '%s'", marker);
 	sr = hRangeQuery(conn, table, seqName, start, end, query, &hasBin);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -17021,9 +17017,9 @@ boolean gotVar = FALSE;
 boolean leftFlankTrimmed = FALSE;
 boolean rightFlankTrimmed = FALSE;
 
-struct dyString *seqDbSnp5 = newDyString(512);
-struct dyString *seqDbSnp3 = newDyString(512);
-struct dyString *seqDbSnpTemp = newDyString(512);
+struct dyString *seqDbSnp5 = dyStringNew(512);
+struct dyString *seqDbSnp3 = dyStringNew(512);
+struct dyString *seqDbSnpTemp = dyStringNew(512);
 
 char *leftFlank = NULL;
 char *rightFlank = NULL;
@@ -19609,7 +19605,7 @@ boolean first = TRUE;
 genericHeader(tdb, item);
 safef(aliasTable, sizeof(aliasTable), "%sInfo", tdb->table);
 safef(phenoTable, sizeof(phenoTable), "jaxAllelePheno");
-sqlSafefFrag(query, sizeof(query), "name = \"%s\"", item);
+sqlSafef(query, sizeof(query), "name = \"%s\"", item);
 sr = hRangeQuery(conn, tdb->table, seqName, winStart, winEnd, query, &hasBin);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -19708,7 +19704,7 @@ if ((selectedPheno = strstr(item, " source=")) != NULL)
 genericHeader(tdb, item);
 safef(aliasTable, sizeof(aliasTable), "%sAlias", tdb->table);
 safef(phenoTable, sizeof(phenoTable), "jaxAllelePheno");
-sqlSafefFrag(query, sizeof(query), "name = \"%s\"", item);
+sqlSafef(query, sizeof(query), "name = \"%s\"", item);
 sr = hRangeQuery(conn, tdb->table, seqName, winStart, winEnd, query,
 		 &hasBin);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -19825,7 +19821,7 @@ safef(aliasTable, sizeof(aliasTable), "%sAlias", tdb->table);
 gotAlias = hTableExists(database, aliasTable);
 if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
     errAbort("track %s not found", tdb->table);
-sqlSafefFrag(query, sizeof(query), "name = \"%s\"", item);
+sqlSafef(query, sizeof(query), "name = \"%s\"", item);
 gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
@@ -20496,7 +20492,7 @@ cartWebStart(cart, database, "%s", tdb->longLabel);
 if (cgiVarExists("o"))
     {
     struct genomicSuperDups dup;
-    struct dyString *query = newDyString(512);
+    struct dyString *query = dyStringNew(512);
     struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
@@ -20520,8 +20516,8 @@ if (cgiVarExists("o"))
     if (rowOffset > 0)
 	hAddBinToQuery(start, end, query);
     if (dupId >= 0)
-	dyStringPrintf(query, "uid = %d and ", dupId);
-    dyStringPrintf(query, "chromStart = %d and otherStart = %d",
+	sqlDyStringPrintf(query, "uid = %d and ", dupId);
+    sqlDyStringPrintf(query, "chromStart = %d and otherStart = %d",
 		   start, oStart);
     sr = sqlGetResult(conn, query->string);
     while ((row = sqlNextRow(sr)))
@@ -21143,7 +21139,7 @@ struct sage *loadSageData(char *table, struct bed* bedList)
 /* load the sage data by constructing a query based on the qNames of the bedList */
 {
 struct sqlConnection *sc = NULL;
-struct dyString *query = newDyString(2048);
+struct dyString *query = dyStringNew(2048);
 struct sage *sgList = NULL, *sg=NULL;
 struct bed *bed=NULL;
 char **row;
@@ -21158,11 +21154,11 @@ for(bed=bedList;bed!=NULL;bed=bed->next)
     {
     if (count++)
         {
-        dyStringPrintf(query," or uni=%d ", atoi(bed->name + 3 ));
+        sqlDyStringPrintf(query," or uni=%d ", atoi(bed->name + 3 ));
         }
     else
 	{
-	dyStringPrintf(query," uni=%d ", atoi(bed->name + 3));
+	sqlDyStringPrintf(query," uni=%d ", atoi(bed->name + 3));
 	}
     }
 sr = sqlGetResult(sc,query->string);
@@ -21174,7 +21170,7 @@ while((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&sc);
 slReverse(&sgList);
-freeDyString(&query);
+dyStringFree(&query);
 return sgList;
 }
 
@@ -21981,7 +21977,6 @@ else
     {
     if (ct->dbTrack)
 	{
-	char where[512];
 	int rowOffset;
 	char **row;
 	struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
@@ -21989,13 +21984,14 @@ else
 	int start = cartInt(cart, "o");
 	int end = cartInt(cart, "t");
 
-	sqlSafefFrag(where, sizeof(where), "chromStart = '%d' and chromEnd = '%d'", start, end);
+	struct dyString *where = sqlDyStringCreate("chromStart = '%d' and chromEnd = '%d'", start, end);
 	if (ct->fieldCount >= 4)
 	    {
-	    sqlSafefAppend(where, sizeof(where), " and name = '%s'", itemName);
+	    sqlDyStringPrintf(where, " and name = '%s'", itemName);
 	    }
 	sr = hRangeQuery(conn, ct->dbTableName, seqName, start, end,
-                     where, &rowOffset);
+                     dyStringContents(where), &rowOffset);
+        dyStringFree(&where);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    bedFree(&bed);
@@ -22414,7 +22410,7 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, item);
 genericBedClick(conn, tdb, item, start, 4);
-safef(extra, sizeof(extra), "chromStart = %d", start);
+sqlSafef(extra, sizeof(extra), "chromStart = %d", start);
 sr = hRangeQuery(conn, tdb->table, seqName, winStart, winEnd, extra,
 		 &rowOffset);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -22547,7 +22543,7 @@ struct sqlResult *sr;
 char **row;
 char *scaffoldName;
 int scaffoldStart, scaffoldEnd;
-struct dyString *itemUrl = newDyString(128), *d;
+struct dyString *itemUrl = dyStringNew(128), *d;
 char *old = "_";
 char *new = "";
 char *pat = "fold";
@@ -23355,7 +23351,9 @@ struct cutter *cutters = NULL;
 struct slName *ret = NULL;
 
 conn = hAllocConn("hgFixed");
-cutters = cutterLoadByQuery(conn, NOSQLINJ "select * from cutters");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from cutters");
+cutters = cutterLoadByQuery(conn, query);
 ret = findIsoligamers(myEnzyme, cutters);
 hFreeConn(&conn);
 cutterFreeList(&cutters);
@@ -23948,7 +23946,7 @@ struct sqlConnection *conn;
 genericHeader(tdb, itemName);
 
 conn = hAllocConn(database);
-sqlSafefFrag(condStr, sizeof condStr, "interProId='%s'", itemName);
+sqlSafef(condStr, sizeof condStr, "interProId='%s'", itemName);
 desc = sqlGetField("proteome", "interProXref", "description", condStr);
 
 printf("<B>Item:</B> %s <BR>\n", itemName);

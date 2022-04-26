@@ -18,20 +18,16 @@ struct dyString
     long stringSize;		/* Size of string. */
     };
 
+#define dyStringNew newDyString
+
 struct dyString *newDyString(long initialBufSize);
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
 
-#define dyStringNew newDyString
-
-void freeDyString(struct dyString **pDs);
+void dyStringFree(struct dyString **pDs);
 /* Free up dynamic string. */
 
-#define dyStringFree(a) freeDyString(a);
-
-void freeDyStringList(struct dyString **pDs);
+void dyStringListFree(struct dyString **pDs);
 /* Free up a list of dynamic strings */
-
-#define dyStringFreeList(a) freeDyStringList(a);
 
 void dyStringAppend(struct dyString *ds, char *string);
 /* Append zero terminated string to end of dyString. */

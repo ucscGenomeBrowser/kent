@@ -96,7 +96,7 @@ if (labelSeparator == NULL)
 char *restFields[256];
 if (bb->rest != NULL)
     chopTabs(cloneString(bb->rest), restFields);
-struct dyString *dy = newDyString(128);
+struct dyString *dy = dyStringNew(128);
 boolean firstTime = TRUE;
 struct slInt *labelInt = labelColumns;
 for(; labelInt; labelInt = labelInt->next)

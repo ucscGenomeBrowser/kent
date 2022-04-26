@@ -283,7 +283,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 void createExpTable(struct sqlConnection *conn, char *table)
 /* Create empty experiment table. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", table);
 dyStringAppend(dy, 
 "    id int unsigned not null,	# internal id of experiment\n"
@@ -304,7 +304,7 @@ dyStringFree(&dy);
 void createGeneTable(struct sqlConnection *conn, char *table)
 /* Create empty gene expression table. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", table);
 dyStringAppend(dy,
    " name varchar(255) not null, # Name of gene\n"

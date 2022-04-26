@@ -90,7 +90,7 @@ while (row2 != NULL)
 	chp = strstr(protAcc, "-");
 	if (chp == NULL)
 	    {
-            sqlSafefFrag(condStr, sizeof(condStr), "acc='%s'", protAcc);
+            sqlSafef(condStr, sizeof(condStr), "acc='%s'", protAcc);
 	    isCurated = sqlGetField(spDb, "info", "isCurated", condStr);
 	    if (sameWord(isCurated, "1"))
 	    	{

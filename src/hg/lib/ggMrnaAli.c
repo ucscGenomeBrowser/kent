@@ -85,11 +85,11 @@ void ggMrnaBlockSaveToDb(struct sqlConnection *conn, struct ggMrnaBlock *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %d,%d,%d,%d)", 
 	tableName,  el->qStart,  el->qEnd,  el->tStart,  el->tEnd);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -226,11 +226,11 @@ void ggMrnaAliSaveToDb(struct sqlConnection *conn, struct ggMrnaAli *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%d,%d,'%s','%s',%d,%d,%u,%d,%d,%d,%d, NULL )", 
 	tableName,  el->tName,  el->tStart,  el->tEnd,  el->strand,  el->qName,  el->qStart,  el->qEnd,  el->baseCount,  el->orientation,  el->hasIntrons,  el->milliScore,  el->blockCount);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

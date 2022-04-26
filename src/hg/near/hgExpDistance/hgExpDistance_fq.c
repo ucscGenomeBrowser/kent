@@ -78,7 +78,7 @@ static char *createString = "CREATE TABLE %s (\n"
 "    target varchar(255) not null,	# Name of target sequence\n"
 "    distance float not null	# Distance in expression space\n"
 ")\n";
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);

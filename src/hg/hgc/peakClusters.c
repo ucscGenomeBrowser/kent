@@ -129,16 +129,23 @@ static void queryInputTrackTable(struct dyString *query, char *inputTrackTable,
                                 struct slName *fieldList)
 /* Construct query in dyString to return contents of inputTrackTable ordered appropriately */
 {
-struct dyString *fields = dyStringNew(0);
-struct slName *field;
 sqlDyStringPrintf(query, "select tableName ");
+struct slName *field;
 for (field = fieldList; field != NULL; field = field->next)
-    sqlDyStringPrintfFrag(fields, ",%s", field->name);
-sqlDyStringPrintf(query, "%-s from %s", fields->string, inputTrackTable);
+    {
+    sqlDyStringPrintf(query, ",%s", field->name);
+    }
+sqlDyStringPrintf(query, " from %s", inputTrackTable);
 if (fieldList != NULL)
-    // skip leading comma
-    dyStringPrintf(query, " order by %s", fields->string+1);
-dyStringFree(&fields);
+    {
+    sqlDyStringPrintf(query, " order by ");
+    for (field = fieldList; field != NULL; field = field->next)
+	{
+	sqlDyStringPrintf(query, "%s", field->name);
+	if (field->next) 
+	    sqlDyStringPrintf(query, ",");
+	}
+    }
 }
 
 static struct hash *getVocabHash(char *fileName)
@@ -381,10 +388,12 @@ if (cluster != NULL)
         {
 	struct slName *fieldList = stringToSlNames(inputTableFieldDisplay);
 	char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
+	char queryTblSafe[1024];
+	sqlSafef(queryTblSafe, sizeof queryTblSafe, "%s", inputTrackTable);
 
 	/* Print out some information about the cluster overall. */
 	printf("<B>Items in Cluster:</B> %s of %d<BR>\n", cluster->name, 
-	    sqlRowCount(conn, sqlCheckIdentifier(inputTrackTable)));
+	    sqlRowCount(conn, queryTblSafe));
 	printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
 	printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
 
@@ -447,7 +456,7 @@ if (motifTable != NULL && sqlTableExists(conn, motifTable))
         }
     for (mn = motifNames; mn != NULL; mn = mn->next)
         {
-        sqlSafefFrag(where, sizeof(where), "name='%s' order by score desc limit 1", mn->name);
+        sqlSafef(where, sizeof(where), "name='%s' order by score desc limit 1", mn->name);
         sr = hRangeQuery(conn, motifTable, cluster->chrom, cluster->chromStart,
                      cluster->chromEnd, where, &rowOffset);
         if ((row = sqlNextRow(sr)) != NULL)
@@ -497,7 +506,7 @@ void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item,
 /* Display detailed info about a cluster of TFBS peaks from other tracks. */
 {
 char extraWhere[256];
-safef(extraWhere, sizeof extraWhere, "name='%s'", item);
+sqlSafef(extraWhere, sizeof extraWhere, "name='%s'", item);
 int rowOffset;
 struct sqlResult *sr = hRangeQuery(conn, tdb->table, seqName, start, end, extraWhere, &rowOffset);
 char **row = sqlNextRow(sr);

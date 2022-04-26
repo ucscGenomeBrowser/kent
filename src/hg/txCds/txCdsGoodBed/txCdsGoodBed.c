@@ -124,9 +124,10 @@ if (!sqlTableExists(conn, statusTable))
     errAbort("table %s doesn't exist in %s", statusTable, database);
 FILE *fBed = mustOpen(outBed, "w");
 FILE *fCds = mustOpen(outCds, "w");
-char *query =
-   NOSQLINJ "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds "
-   "from refGene r,refSeqStatus s where r.name=s.mrnaAcc and s.status='Reviewed'";
+char query[1024];
+sqlSafef(query, sizeof query, 
+   "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds "
+   "from refGene r,refSeqStatus s where r.name=s.mrnaAcc and s.status='Reviewed'");
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 double randScale = 1.0/RAND_MAX;

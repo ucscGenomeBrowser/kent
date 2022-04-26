@@ -249,7 +249,7 @@ char *genome = NULL;
 if (hub)
     genome = hub->genomeList->name;
 
-struct dyString *extraDyFlags = newDyString(128);
+struct dyString *extraDyFlags = dyStringNew(128);
 if (debug)
     dyStringAppend(extraDyFlags, ";debug=1");
 if (jsonOutputArrays)
@@ -300,7 +300,7 @@ else
 static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
     long chromCount, long itemCount, char *genome, char *errorString)
 {
-struct dyString *extraDyFlags = newDyString(128);
+struct dyString *extraDyFlags = dyStringNew(128);
 if (debug)
     dyStringAppend(extraDyFlags, ";debug=1");
 if (jsonOutputArrays)
@@ -504,7 +504,7 @@ if (tdb->subtracks)
             char *bigDataUrl = trackDbSetting(tdbEl, "bigDataUrl");
             char *longName = NULL;
             unsigned longSize = 0;
-            struct dyString *errors = newDyString(1024);
+            struct dyString *errors = dyStringNew(1024);
             (void) bbiBriefMeasure(tdbEl->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors, &longName, &longSize);
             chromSize = longSize;
             chromName = longName;
@@ -605,7 +605,7 @@ hashCountTrack(tdb, countTracks);
 long chromCount = 0;
 long itemCount = 0;
 
-struct dyString *errors = newDyString(1024);
+struct dyString *errors = dyStringNew(1024);
 
 /* if given a chromSize, it belongs to a UCSC db and this is *not* an
  *   assembly hub, otherwise, look up a chrom and size in the bbi file
@@ -1244,7 +1244,7 @@ char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 char *db = cgiOptionalString("genome");
 char *hubUrl = cgiOptionalString("hubUrl");
-struct dyString *errorMsg = newDyString(128);
+struct dyString *errorMsg = dyStringNew(128);
 
 if (isEmpty(hubUrl) && isNotEmpty(db))
     {

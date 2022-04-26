@@ -338,7 +338,7 @@ char *cgiServerNamePort()
 {
 char *port = cgiServerPort();
 char *name = cgiServerName();
-struct dyString *result = newDyString(256);
+struct dyString *result = dyStringNew(256);
 char *defaultPort = "80";
 if (cgiServerHttpsIsOn())
     defaultPort = "443";
@@ -547,7 +547,7 @@ static void cgiParseMultipart(struct hash **retHash, struct cgiVar **retList)
 {
 char h[1024];  /* hold mime header line */
 char *s = NULL, *ct = NULL;
-struct dyString *dy = newDyString(256);
+struct dyString *dy = dyStringNew(256);
 struct mimeBuf *mb = NULL;
 struct mimePart *mp = NULL;
 char **env = NULL;
@@ -587,7 +587,7 @@ mb = initMimeBuf(STDIN_FILENO);
 //fprintf(stderr,"got past initMimeBuf(STDIN_FILENO)\n");
 //fflush(stderr);
 mp = parseMultiParts(mb, cloneString(dy->string)); /* The Alternate Header will get freed */
-freeDyString(&dy);
+dyStringFree(&dy);
 if(!mp->multi) /* expecting multipart child parts */
     errAbort("Malformatted multipart-form.");
 
@@ -2458,7 +2458,7 @@ hashAddSaveName(inputHash, varName, var, &var->name);
 struct dyString *cgiUrlString()
 /* Get URL-formatted that expresses current CGI variable state. */
 {
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 struct cgiVar *cv;
 char *e;
 

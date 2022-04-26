@@ -146,7 +146,9 @@ struct sqlResult *sr;
 char **row;
 char *prevChrom = NULL;
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from gap order by chrom");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from gap order by chrom");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct agpGap gap;
@@ -218,8 +220,11 @@ struct sqlResult *sr;
 char **row;
 char *prevChrom = NULL;
 
-sr = sqlGetResult(conn, NOSQLINJ "select chrom,chromStart,chromEnd from simpleRepeat"
+char query[1024];
+sqlSafef(query, sizeof query, 
+"select chrom,chromStart,chromEnd from simpleRepeat"
 		  " order by chrom,chromStart");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (prevChrom == NULL)
@@ -330,9 +335,11 @@ struct rbTree *newTree = rbTreeNewDetailed(simpleRangeCmp, qLm, newstack);
 char *prevChrom = NULL;
 struct simpleRange *prevRange = NULL, *prevNewRange = NULL;
 
-sr = sqlGetResult(conn,
-    NOSQLINJ "select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk "
+char query[1024];
+sqlSafef(query, sizeof query, 
+    "select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk "
     "order by genoName,genoStart");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct simpleRange *range;
@@ -658,7 +665,9 @@ else if (sqlTableExists(qConn, "ancientRepeat"))
 else
     errAbort("Can't find ancientRepeat table in %s or %s",
 	     sqlGetDatabase(tConn), sqlGetDatabase(qConn));
-sr = sqlGetResult(conn, NOSQLINJ "select name,family,class from ancientRepeat");
+char query[1024];
+sqlSafef(query, sizeof query, "select name,family,class from ancientRepeat");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sprintf(key, "%s.%s.%s", row[0], row[1], row[2]);
@@ -677,7 +686,9 @@ char **row;
 struct chrom *chromList = NULL, *chrom;
 struct hash *hash = hashNew(8);
 
-sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom,size from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(chrom);

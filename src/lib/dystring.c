@@ -19,7 +19,7 @@ ds->bufSize = initialBufSize;
 return ds;
 }
 
-void freeDyString(struct dyString **pDs)
+void dyStringFree(struct dyString **pDs)
 /* Free up dynamic string. */
 {
 struct dyString *ds;
@@ -27,6 +27,26 @@ if ((ds = *pDs) != NULL)
     {
     freeMem(ds->string);
     freez(pDs);
+    }
+}
+
+static void checkNOSQLINJ(struct dyString *ds)
+/* Check if we are manipulating a special SQL source code string
+ * and abort with stackdump if so. This is forbidden for SQL Injection security. */
+{
+if (startsWith("NOSQLINJ ", ds->string))
+    {
+    char *dump = getenv("noSqlInj_dumpStack");
+    if (!(dump && sameString(dump, "off")))  // dump unless set to off
+	dumpStack("dyString functions are not allowed for SQL source code. Use sqlDy safe functions instead.\n");
+    char *level = getenv("noSqlInj_level");
+    if (!level) level = "abort"; // Default
+    if (sameString(level, "abort"))
+	errAbort("dyString is not allowed. use sqlDy functions that are safe instead.");
+    if (sameString(level, "warn"))
+	warn("dyString is not allowed. use sqlDy functions that are safe instead.");
+    if (sameString(level, "logOnly"))
+	fprintf(stderr, "dyString is not allowed. use sqlDy functions that are safe instead.");
     }
 }
 
@@ -43,14 +63,14 @@ freez(pDy);
 return s;
 }
 
-void freeDyStringList(struct dyString **pDs)
+void dyStringListFree(struct dyString **pDs)
 /* free up a list of dyStrings */
 {
 struct dyString *ds, *next;
 for(ds = *pDs; ds != NULL; ds = next)
     {
     next = ds->next;
-    freeDyString(&ds);
+    dyStringFree(&ds);
     }
 *pDs = NULL;
 }
@@ -87,6 +107,7 @@ buf = ds->string;
 memcpy(buf+oldSize, string, stringSize);
 ds->stringSize = newSize;
 buf[newSize] = 0;
+checkNOSQLINJ(ds);
 }
 
 char dyStringAppendC(struct dyString *ds, char c)
@@ -120,9 +141,10 @@ void dyStringAppend(struct dyString *ds, char *string)
 /* Append zero terminated string to end of dyString. */
 {
 dyStringAppendN(ds, string, strlen(string));
+checkNOSQLINJ(ds);
 }
 
-void dyStringAppendEscapeQuotes(struct dyString *dy, char *string,
+void dyStringAppendEscapeQuotes(struct dyString *ds, char *string,
 	char quot, char esc)
 /* Append escaped-for-quotation version of string to dy. */
 {
@@ -131,9 +153,10 @@ char *s = string;
 while ((c = *s++) != 0)
      {
      if (c == quot)
-         dyStringAppendC(dy, esc);
-     dyStringAppendC(dy, c);
+         dyStringAppendC(ds, esc);
+     dyStringAppendC(ds, c);
      }
+checkNOSQLINJ(ds);
 }
 
 void dyStringVaPrintf(struct dyString *ds, char *format, va_list args)
@@ -175,17 +198,19 @@ va_list args;
 va_start(args, format);
 dyStringVaPrintf(ds, format, args);
 va_end(args);
+checkNOSQLINJ(ds);
 }
 
 struct dyString *dyStringCreate(char *format, ...)
 /*  Create a dyString with a printf style initial content */
 {
 int len = strlen(format) * 3;
-struct dyString *ds = newDyString(len);
+struct dyString *ds = dyStringNew(len);
 va_list args;
 va_start(args, format);
 dyStringVaPrintf(ds, format, args);
 va_end(args);
+checkNOSQLINJ(ds);
 return ds;
 }
 
@@ -194,7 +219,7 @@ struct dyString * dyStringSub(char *orig, char *in, char *out)
  * with out. */
 {
 long inLen = strlen(in), outLen = strlen(out), origLen = strlen(orig);
-struct dyString *dy = newDyString(origLen + 2*outLen);
+struct dyString *ds = dyStringNew(origLen + 2*outLen);
 char *s, *e;
 
 if (orig == NULL) return NULL;
@@ -204,17 +229,18 @@ for (s = orig; ;)
     if (e == NULL)
 	{
         e = orig + origLen;
-	dyStringAppendN(dy, s, e - s);
+	dyStringAppendN(ds, s, e - s);
 	break;
 	}
     else
         {
-	dyStringAppendN(dy, s, e - s);
-	dyStringAppendN(dy, out, outLen);
+	dyStringAppendN(ds, s, e - s);
+	dyStringAppendN(ds, out, outLen);
 	s = e + inLen;
 	}
     }
-return dy;
+checkNOSQLINJ(ds);
+return ds;
 }
 
 void dyStringResize(struct dyString *ds, long newSize)
@@ -232,19 +258,20 @@ ds->string[newSize] = '\0';
 ds->stringSize = newSize;
 }
 
-void dyStringQuoteString(struct dyString *dy, char quotChar, char *text)
+void dyStringQuoteString(struct dyString *ds, char quotChar, char *text)
 /* Append quotChar-quoted text (with any internal occurrences of quotChar
  * \-escaped) onto end of dy. */
 {
 char c;
 
-dyStringAppendC(dy, quotChar);
+dyStringAppendC(ds, quotChar);
 while ((c = *text++) != 0)
     {
     if (c == quotChar || c == '\\')
-        dyStringAppendC(dy, '\\');
-    dyStringAppendC(dy, c);
+        dyStringAppendC(ds, '\\');
+    dyStringAppendC(ds, c);
     }
-dyStringAppendC(dy, quotChar);
+dyStringAppendC(ds, quotChar);
+checkNOSQLINJ(ds);
 }
 

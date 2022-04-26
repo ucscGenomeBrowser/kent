@@ -88,7 +88,7 @@ char fullTabName[512], chromTabName[512];
 char fullTable[128], chromTable[128];
 char *inFile;
 int i;
-struct dyString *query = newDyString(2048);
+struct dyString *query = dyStringNew(2048);
 
 /* Loop through each waba file grabbing sequence into
  * memory, then sort. */
@@ -174,7 +174,7 @@ printf("Done!\n");
 // remove(fullTabName);
 // remove(chromTabName);
 sqlDisconnect(&conn);
-freeDyString(&query);
+dyStringFree(&query);
 }
 
 

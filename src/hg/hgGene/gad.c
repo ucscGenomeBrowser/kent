@@ -28,7 +28,7 @@ if (sqlTableExists(conn, "gadAll") == TRUE)
     geneSymbol = sqlQuickString(conn, query);
     if (geneSymbol != NULL) return(TRUE);
 /*
-    sqlSafefFrag(condStr, sizeof(condStr), 
+    sqlSafef(condStr, sizeof(condStr), 
     "k.kgId='%s' and k.geneSymbol = g.geneSymbol", geneId);
     geneSymbol = sqlGetField(database, "kgXref k, gadAll g", "k.geneSymbol", condStr);
 */

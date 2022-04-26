@@ -124,7 +124,7 @@ while ((hel = hashNext(&cookie)) != NULL)
         }
 
     char group[4096];
-    struct dyString *dy = newDyString(100);
+    struct dyString *dy = dyStringNew(100);
 
     safef(group, sizeof group, "expOrder_%s", hel->name);
     qsort(sums, numRows, sizeof(struct trackSum ), sumCompare);

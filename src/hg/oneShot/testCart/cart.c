@@ -128,7 +128,7 @@ static void updateOne(struct sqlConnection *conn,
 	char *table, struct cartDb *cdb, char *contents, int contentSize)
 /* Update cdb in database. */
 {
-struct dyString *dy = newDyString(4096);
+struct dyString *dy = dyStringNew(4096);
 sqlDyStringPrintf(dy, "UPDATE %s SET contents='", table);
 sqlDyAppendEscaped(dy, contents);
 sqlDyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
@@ -141,7 +141,7 @@ static void saveState(struct cart *cart)
 /* Save out state to permanent storage in both user and session db. */
 {
 struct sqlConnection *conn = sqlConnect("hgcentral");
-struct dyString *encoded = newDyString(4096);
+struct dyString *encoded = dyStringNew(4096);
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 boolean firstTime = TRUE;
 char *s = NULL;

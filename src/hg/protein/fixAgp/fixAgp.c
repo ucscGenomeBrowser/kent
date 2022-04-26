@@ -61,7 +61,7 @@ while (fgets(line, 1000, inf) != NULL)
     {
     sscanf(line, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
     	   contig, start, end, num, code, id, oStart, oEnd, strnd);
-    sqlSafefFrag(condStr, sizeof condStr, "ctg_acc='%s'", contig);
+    sqlSafef(condStr, sizeof condStr, "ctg_acc='%s'", contig);
     chrStart =  sqlGetField(database, "seq_contig", "chr_start", condStr);
     if (!sameWord(oldContig, contig)) 
     	{

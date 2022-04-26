@@ -25,7 +25,7 @@ static char *expCellVal(struct genePos *gp,
 /* Create a comma-separated string of expression values. */
 {
 int i;
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 int valCount;
 float *vals = NULL;
 char *result;

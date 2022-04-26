@@ -720,7 +720,7 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	    {
 	    if (doCt)
 		{
-		struct dyString *wigSettings = newDyString(0);
+		struct dyString *wigSettings = dyStringNew(0);
 		ctNew->tdb->priority = priority;
 		ctNew->tdb->colorR = colorR;
 		ctNew->tdb->colorG = colorB;

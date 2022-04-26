@@ -938,7 +938,7 @@ else
 
 if (minString != NULL || maxString != NULL)
     {
-    struct dyString *dy = newDyString(512);
+    struct dyString *dy = dyStringNew(512);
     sqlDyStringPrintf(dy, "select %s from %s where", col->keyField, col->table);
     sqlDyStringPrintf(dy, " %s='%s'", col->curGeneField, name);
     if (minString)
@@ -990,7 +990,7 @@ char *minString = advFilterVal(col, "min");
 char *maxString = advFilterVal(col, "max");
 if (minString != NULL || maxString != NULL)
     {
-    struct dyString *dy = newDyString(512);
+    struct dyString *dy = dyStringNew(512);
     sqlDyStringPrintf(dy, "select %s from %s where ", col->keyField, col->table);
     if (minString && maxString)
        sqlDyStringPrintf(dy, "%s >= %s and %s <= %s",

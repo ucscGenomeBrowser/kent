@@ -1796,7 +1796,7 @@ if((minEdgeNum = optionInt("minEdgeNum", 0)) > 0)
     warn("minEdgeNum is: %d", minEdgeNum);
 if(speciesSpecificRoot != NULL)
     {
-    struct dyString *toOpen = newDyString(strlen(speciesSpecificRoot) + 10);
+    struct dyString *toOpen = dyStringNew(strlen(speciesSpecificRoot) + 10);
     warn("Doing species specific splicing.");
     speciesSpecific = TRUE;
     dyStringClear(toOpen);

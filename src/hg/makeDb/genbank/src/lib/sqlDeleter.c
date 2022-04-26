@@ -22,11 +22,6 @@
 #define DIRECT_MAX 50000  /* maximum number to directly delete */
 
 static char* GB_DELETE_TMP = "gbDelete_tmp";
-static char* createGbDeleteTmp = 
-NOSQLINJ "CREATE TABLE gbDelete_tmp ("
-"   acc varchar(20) not null primary key,"
-"   unique(acc)"
-")"; 
 #endif
 
 struct sqlDeleter* sqlDeleterNew(char* tmpDir, boolean verbEnabled)
@@ -129,7 +124,12 @@ if (sd->accLoader != NULL)
     {
     /* build table, free to indicate it's completed */
     assert(!sd->deletesDone);
-    sqlRemakeTable(conn, GB_DELETE_TMP, createGbDeleteTmp);
+    sqlSafef(query, sizeof query, 
+    "CREATE TABLE gbDelete_tmp ("
+    "   acc varchar(20) not null primary key,"
+    "   unique(acc)"
+    ")"); 
+    sqlRemakeTable(conn, GB_DELETE_TMP, query);
     sqlUpdaterCommit(sd->accLoader, conn);
     sqlUpdaterFree(&sd->accLoader);
     }

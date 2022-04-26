@@ -120,7 +120,7 @@ while (row != NULL)
   
     if ((float)match/(float)protSize > 0.3)
     	{
-        sqlSafefFrag(cond_str, sizeof cond_str, "acc='%s'", mrnaAcc);
+        sqlSafef(cond_str, sizeof cond_str, "acc='%s'", mrnaAcc);
         mrnaDate = sqlGetField(genomeReadOnly, "gbCdnaInfo", "moddate", condStr);
 	if (mrnaDate != NULL)
 	{

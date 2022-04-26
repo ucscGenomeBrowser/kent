@@ -159,7 +159,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	char *org;
 	char *revComp = "";
 	char strand = mc->strand;
-	struct dyString *dy = newDyString(512);
+	struct dyString *dy = dyStringNew(512);
 #ifdef REVERSESTRAND
 	if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
 	    strand = (strand == '+') ? '-' : '+';
@@ -229,7 +229,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		    {
 		    int s = mc->start;
 		    int e = s + mc->rightLen;
-		    struct dyString *dy = newDyString(512);
+		    struct dyString *dy = dyStringNew(512);
 
 		    if (mc->strand == '-')
 			reverseIntRange(&s, &e, mc->srcSize);

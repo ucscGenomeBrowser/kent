@@ -86,16 +86,17 @@ void createTable()
 /* create a ContigLocusIdFilter table */
 {
 struct sqlConnection *conn = hAllocConn();
-char *createString =
-NOSQLINJ "CREATE TABLE ContigLocusIdFilter (\n"
+char query[1024];
+sqlSafef(query, sizeof query, 
+"CREATE TABLE ContigLocusIdFilter (\n"
 "    snp_id int(11) not null,       \n"
 "    ctg_id int(11) not null,       \n"
 "    fxn_class tinyint(4) not null,       \n"
 "    mrna_acc varchar(15),\n"
 "    protein_acc varchar(15)\n"
-");\n";
+");\n");
 
-sqlRemakeTable(conn, "ContigLocusIdFilter", createString);
+sqlRemakeTable(conn, "ContigLocusIdFilter", query);
 }
 
 

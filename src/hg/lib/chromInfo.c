@@ -174,7 +174,11 @@ struct chromInfo *ret = NULL;
 unsigned totalSize = 0;
 /* do the query */
 if (!name || sameWord(name, "all"))
-    sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
+    {
+    char query[1024];
+    sqlSafef(query, sizeof query, "select * from chromInfo");
+    sr = sqlGetResult(conn, query);
+    }
 else
     {
     char select[256];

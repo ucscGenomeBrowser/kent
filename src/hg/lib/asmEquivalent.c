@@ -63,11 +63,11 @@ void asmEquivalentSaveToDb(struct sqlConnection *conn, struct asmEquivalent *el,
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',(null),(null),%lld,%lld,%lld)",
 	tableName,  el->source,  el->destination,  el->sourceAuthority,  el->destinationAuthority,  el->matchCount,  el->sourceCount,  el->destinationCount);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct asmEquivalent *asmEquivalentLoad(char **row)

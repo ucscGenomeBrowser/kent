@@ -85,21 +85,25 @@ void hashComplexTables(struct sqlConnection *conn)
 {
 struct sqlResult *sr;
 char **row;
+char query[1024];
 
 probeHash = hashSizedForTable(conn, "probe");
-sr = sqlGetResult(conn, NOSQLINJ "select * from probe");
+sqlSafef(query, sizeof query, "select * from probe");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
      hashAdd(probeHash, row[0], probeLoad(row));
 sqlFreeResult(&sr);
 
 geneHash = hashSizedForTable(conn, "gene");
-sr = sqlGetResult(conn, NOSQLINJ "select * from gene");
+sqlSafef(query, sizeof query, "select * from gene");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
      hashAdd(geneHash, row[0], geneLoad(row));
 sqlFreeResult(&sr);
 
 imageProbeHash = hashSizedForTable(conn, "imageProbe");
-sr = sqlGetResult(conn, NOSQLINJ "select * from imageProbe");
+sqlSafef(query, sizeof query, "select * from imageProbe");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
      hashAdd(imageProbeHash, row[1], imageProbeLoad(row)); /* Key on image, not id. */
 sqlFreeResult(&sr);
@@ -108,6 +112,7 @@ sqlFreeResult(&sr);
 void makeKnownGeneHashes(int knownDbCount, char **knownDbs)
 /* Create hashes containing info on known genes. */
 {
+char query[1024];
 int i;
 knownTextHash = hashNew(18);
 uniProtToKnown = hashNew(18);
@@ -123,8 +128,8 @@ for (i=0; i<knownDbCount; i += 1)
     struct sqlResult *sr;
     char **row;
 
-
-    sr = sqlGetResult(conn, NOSQLINJ "select kgID,geneSymbol,spID,spDisplayID,refseq,description from kgXref");
+    sqlSafef(query, sizeof query, "select kgID,geneSymbol,spID,spDisplayID,refseq,description from kgXref");
+    sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	char *kgID = cloneString(row[0]);
@@ -138,7 +143,8 @@ for (i=0; i<knownDbCount; i += 1)
 	}
     sqlFreeResult(&sr);
 
-    sr = sqlGetResult(conn, NOSQLINJ "select kgID,alias from kgAlias");
+    sqlSafef(query, sizeof query, "select kgID,alias from kgAlias");
+    sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	char *upc = cloneString(row[0]);
@@ -147,7 +153,8 @@ for (i=0; i<knownDbCount; i += 1)
 	}
     sqlFreeResult(&sr);
 
-    sr = sqlGetResult(conn, NOSQLINJ "select kgID,alias from kgProtAlias");
+    sqlSafef(query, sizeof query, "select kgID,alias from kgProtAlias");
+    sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	char *upc = cloneString(row[0]);
@@ -270,8 +277,9 @@ verbose(2, "hashComplexTables\n");
 hashComplexTables(conn);
 verbose(2, "makeKnownGeneHashes\n");
 makeKnownGeneHashes(knownDbCount, knownDbs);
-sr = sqlGetResult(imageConn, 
-    NOSQLINJ "select id from image");
+char query[1024];
+sqlSafef(query, sizeof query, "select id from image");
+sr = sqlGetResult(imageConn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     verbose(3, "imageText on %s\n", row[0]);

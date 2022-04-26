@@ -1470,7 +1470,7 @@ else if (sf)
     mrnaS = sf->qStart;
 if(mrnaS >= 0)
     {
-    struct dyString *dyMrnaSeq = newDyString(256);
+    struct dyString *dyMrnaSeq = dyStringNew(256);
     char mrnaBases[4];
     char genomicCodon[2];
     char mrnaCodon[2]; 

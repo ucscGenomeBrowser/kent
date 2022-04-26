@@ -442,69 +442,69 @@ if (init == NULL && taxon == 0 && contributors == NULL &&
 if (contributors)
     {
     sqlDyStringPrintf(dy, "select image.id from ");
-    dyStringAppend(dy, "image,imageFile,submissionSet,submissionContributor,contributor");
+    sqlDyStringPrintf(dy, "image,imageFile,submissionSet,submissionContributor,contributor");
     }
 else
     {
     sqlDyStringPrintf(dy, "select id from image");
     }
-dyStringAppend(dy, " where");
+sqlDyStringPrintf(dy, " where");
 if (taxon != 0)
     {
-    dyStringPrintf(dy, " taxon=%d", taxon);
+    sqlDyStringPrintf(dy, " taxon=%d", taxon);
     needAnd = TRUE;
     }
 if (startAge > 0.0 || !startIsEmbryo)
     {
-    if (needAnd) dyStringAppend(dy, " and");
+    if (needAnd) sqlDyStringPrintf(dy, " and");
     if (startIsEmbryo)
-        dyStringPrintf(dy, " (image.age >= %f or !image.isEmbryo)", startAge);
+        sqlDyStringPrintf(dy, " (image.age >= %f or !image.isEmbryo)", startAge);
     else
-        dyStringPrintf(dy, " (image.age >= %f and !image.isEmbryo)", startAge);
+        sqlDyStringPrintf(dy, " (image.age >= %f and !image.isEmbryo)", startAge);
     needAnd = TRUE;
     }
 if (endAge < genePixMaxAge || endIsEmbryo)
     {
-    if (needAnd) dyStringAppend(dy, " and");
+    if (needAnd) sqlDyStringPrintf(dy, " and");
     if (endIsEmbryo)
-        dyStringPrintf(dy, " (image.age < %f and image.isEmbryo)", endAge);
+        sqlDyStringPrintf(dy, " (image.age < %f and image.isEmbryo)", endAge);
     else
-        dyStringPrintf(dy, " (image.age < %f or image.isEmbryo)", endAge);
+        sqlDyStringPrintf(dy, " (image.age < %f or image.isEmbryo)", endAge);
     needAnd = TRUE;
     }
 if (init != NULL)
     {
-    if (needAnd) dyStringAppend(dy, " and ");
-    dyStringAppend(dy, "(");
+    if (needAnd) sqlDyStringPrintf(dy, " and ");
+    qlDyStringPrintf(dy, "(");
     for (el = init; el != NULL; el = el->next)
         {
-	dyStringPrintf(dy, "image.id = %d", el->val);
+	sqlDyStringPrintf(dy, "image.id = %d", el->val);
 	if (el->next != NULL)
-	    dyStringAppend(dy, " or ");
+	    sqlDyStringPrintf(dy, " or ");
 	}
-    dyStringAppend(dy, ")");
+    sqlDyStringPrintf(dy, ")");
     needAnd = TRUE;
     }
 if (contributors != NULL)
     {
     struct slName *con;
-    if (needAnd) dyStringAppend(dy, " and");
-    dyStringAppend(dy, " (");
+    if (needAnd) qlDyStringPrintf(dy, " and");
+    sqlDyStringPrintf(dy, " (");
     for (con = contributors; con != NULL; con = con->next)
         {
-	dyStringPrintf(dy, "contributor.name");
+	sqlDyStringPrintf(dy, "contributor.name");
 	appendMatchHow(dy, con->name, how);
 	if (con->next != NULL)
-	    dyStringAppend(dy, " or ");
+	    sqlDyStringPrintf(dy, " or ");
 	}
-    dyStringAppend(dy, ")");
+    sqlDyStringPrintf(dy, ")");
 
-    dyStringAppend(dy, " and contributor.id = submissionContributor.contributor");
-    dyStringAppend(dy, " and submissionContributor.submissionSet = submissionSet.id");
-    dyStringAppend(dy, " and submissionSet.id = imageFile.submissionSet");
-    dyStringAppend(dy, " and imageFile.id = image.imageFile");
+    sqlDyStringPrintf(dy, " and contributor.id = submissionContributor.contributor");
+    sqlDyStringPrintf(dy, " and submissionContributor.submissionSet = submissionSet.id");
+    sqlDyStringPrintf(dy, " and submissionSet.id = imageFile.submissionSet");
+    sqlDyStringPrintf(dy, " and imageFile.id = image.imageFile");
     }
-sr = sqlGetResult(conn, dy->string);
+sr = sqlGetResult(conn, dyStringContents(dy));
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = slIntNew(sqlUnsigned(row[0]));
@@ -512,6 +512,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&imageList);
+dyStringFree(&dy);
 return imageList;
 }
 

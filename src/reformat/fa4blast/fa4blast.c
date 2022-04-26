@@ -27,7 +27,7 @@ DNA *dna;
 int inSize, outSize;
 int dnaOff;
 char *seqName;
-struct dyString *subSeqName = newDyString(512);
+struct dyString *subSeqName = dyStringNew(512);
 int maxSize = 100000;
 
 if (argc < 3)

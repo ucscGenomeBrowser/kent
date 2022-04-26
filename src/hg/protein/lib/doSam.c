@@ -14,7 +14,7 @@ struct sqlConnection *conn2 = hAllocConn(database);
 char condStr[256];
 char *sgdId;
 
-sqlSafefFrag(condStr, sizeof condStr, "proteinId='%s'", protId);
+sqlSafef(condStr, sizeof condStr, "proteinId='%s'", protId);
 sgdId = sqlGetField(database, "sgdGene", "name", condStr);
 hFreeConn(&conn2);
 return(sgdId);
@@ -70,7 +70,7 @@ if (sameWord(database, "sacCer1"))
     
 if (itemName == NULL) return;
 
-sqlSafefFrag(condStr, sizeof condStr, "proteinId='%s'", itemName);
+sqlSafef(condStr, sizeof condStr, "proteinId='%s'", itemName);
 samSubDir = sqlGetField(database, "samSubdir", "subdir", condStr);
 if (samSubDir == NULL) return;
 

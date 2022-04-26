@@ -49,7 +49,9 @@ if (slCount(kgXrefFields) != KGXREF_NUM_COLS)
     }
 slFreeList(kgXrefFields);
 
-struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select * from kgXref");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from kgXref");
+struct sqlResult *sr = sqlGetResult(conn, query);
 struct kgXref *kgList = NULL, *kg;
 char **row;
 struct hash *uniqHash = hashNew(18);
@@ -161,14 +163,14 @@ if (refSeqHash != NULL)
     fprintf(f, "\t%s", s);
     }
 
-safef(query, sizeof(query),
-    "NOSQLINJ select commentVal.val from comment,commentVal "
+sqlSafef(query, sizeof(query),
+    "select commentVal.val from comment,commentVal "
     "where comment.acc='%s' and comment.commentVal=commentVal.id"
     , spAcc);
 addText(query, spConn, f);
 
-safef(query, sizeof(query),
-    "NOSQLINJ select term.name from goaPart,term "
+sqlSafef(query, sizeof(query),
+    "select term.name from goaPart,term "
     "where goaPart.dbObjectId='%s' "
     "and goaPart.goId=term.acc"
     , spAcc);

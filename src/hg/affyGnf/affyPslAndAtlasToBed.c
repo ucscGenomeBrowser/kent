@@ -180,7 +180,7 @@ struct hash *createBedHash(struct bed *bedList)
 {
 struct hash *bedHash = newHash(5);
 struct bed *bed = NULL;
-struct dyString *ds = newDyString(1024);
+struct dyString *ds = dyStringNew(1024);
 char *name = NULL;
 for(bed = bedList; bed != NULL; bed = bed->next)
     {

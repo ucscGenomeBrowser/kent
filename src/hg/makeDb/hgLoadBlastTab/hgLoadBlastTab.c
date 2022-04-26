@@ -41,7 +41,9 @@ static struct optionSpec options[] = {
 void blastTabTableCreate(struct sqlConnection *conn, char *tableName)
 /* Create a scored-ref table with the given name. */
 {
-static char *createString = "CREATE TABLE %s (\n"
+struct dyString *dy = dyStringNew(1024);
+sqlDyStringPrintf(dy,
+"CREATE TABLE %s (\n"
 "    query varchar(255) not null,	# Name of query sequence\n"
 "    target varchar(255) not null,	# Name of target sequence\n"
 "    identity float not null,	# Percent identity\n"
@@ -56,9 +58,7 @@ static char *createString = "CREATE TABLE %s (\n"
 "    bitScore double not null,	# Bit score\n"
 "              #Indices\n"
 "    INDEX(query)\n"
-")\n";
-struct dyString *dy = newDyString(1024);
-sqlDyStringPrintf(dy, createString, tableName);
+")\n", tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }

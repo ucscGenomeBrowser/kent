@@ -115,10 +115,11 @@ struct hash *knownToRefSeqHash = newHash(18);
 struct hash *knownToGeneHash = newHash(18);
 struct slName *knownList = NULL, *known;
 struct hash *dupeHash = newHash(17);
+char query[1024];
 
 /* Go through and make up hashes of images keyed by various fields. */
-sr = sqlGetResult(iConn, 
-	NOSQLINJ "select id,priority,gene,locusLink,refSeq,genbank from image");
+sqlSafef(query, sizeof query, "select id,priority,gene,locusLink,refSeq,genbank from image");
+sr = sqlGetResult(iConn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int id = sqlUnsigned(row[0]);
@@ -132,7 +133,8 @@ uglyf("Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSeqImag
 sqlFreeResult(&sr);
 
 /* Build up list of known genes. */
-sr = sqlGetResult(hConn, NOSQLINJ "select name from knownGene");
+sqlSafef(query, sizeof query, "select name from knownGene");
+sr = sqlGetResult(hConn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];

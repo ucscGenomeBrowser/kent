@@ -94,7 +94,7 @@ else
     column -= 1;
 char *row[1024*4];
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 FILE *f = mustOpen(outFile, "w");
 int rowCount;
 while ((rowCount = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)

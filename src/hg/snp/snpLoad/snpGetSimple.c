@@ -144,7 +144,7 @@ char *createString =
 "    observed varchar(255)\n"
 ");\n";
 
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);

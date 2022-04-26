@@ -38,7 +38,9 @@ struct hash *uniqHash = newHash(0);
 
 hSetDb(database);
 printf("Scanning database\n");
-sr = sqlGetResult(conn, NOSQLINJ "select acc,type,direction from mrna");
+char query[1024];
+sqlSafef(query, sizeof query, "select acc,type,direction from mrna");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (sameString(row[1], "EST") && sameString(row[2], "3"))

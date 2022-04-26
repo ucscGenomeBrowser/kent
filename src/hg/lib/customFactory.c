@@ -340,7 +340,7 @@ static struct pipeline *bedLoaderPipe(struct customTrack *track)
  * -customTrackLoader turns on options: -noNameIx -noHistory -ignoreEmpty
  *	-allowStartEqualEnd -allowNegativeScores -verbose=0
  */
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 int index = 3; /* verify this references the first NULL as cmd1[index] */
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
 	"-lineLimit=50000000", NULL, NULL, NULL, NULL, NULL, NULL, NULL};
@@ -351,9 +351,9 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 if(startsWithWord("bedGraph", track->dbTrackType))
     {
     /* we currently assume that last field is the bedGraph field. */
@@ -379,7 +379,7 @@ return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
 void pipelineFailExit(struct customTrack *track)
 /* show up to three lines of error message to stderr and errAbort */
 {
-struct dyString *errDy = newDyString(0);
+struct dyString *errDy = dyStringNew(0);
 struct lineFile *lf;
 char *line;
 int i;
@@ -760,7 +760,7 @@ static struct pipeline *encodePeakLoaderPipe(struct customTrack *track)
  *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
  *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-sqlTable=loader/encodePeak.sql",
                 "-renameSqlTable", "-trimSqlTable", "-notItemRgb",
                 NULL, NULL, NULL, NULL, NULL, NULL};
@@ -772,7 +772,7 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&tmpDy);
 cmd1[index++] = CUSTOM_TRASH;
@@ -923,7 +923,7 @@ static struct pipeline *bedDetailLoaderPipe(struct customTrack *track)
  *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
 
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 //bed size can vary
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-tab", "-noBin",
 	"-sqlTable=loader/bedDetail.sql", "-renameSqlTable", "-trimSqlTable", "-bedDetail", NULL, NULL, NULL, NULL, NULL, NULL};
@@ -935,7 +935,7 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&tmpDy);
 cmd1[index++] = CUSTOM_TRASH;
@@ -1129,7 +1129,7 @@ static struct pipeline *pgSnpLoaderPipe(struct customTrack *track)
  *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
  *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
 	"-sqlTable=loader/pgSnp.sql", "-renameSqlTable", "-trimSqlTable", "-notItemRgb", NULL, NULL, NULL, NULL, NULL, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
@@ -1140,7 +1140,7 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&tmpDy);
 cmd1[index++] = CUSTOM_TRASH;
@@ -1365,16 +1365,16 @@ char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", NULL,
                 NULL, NULL, NULL, NULL, NULL, NULL};
 
 char *schemaFile = "barChartBed.sql";
-struct dyString *ds = newDyString(0);
+struct dyString *ds = dyStringNew(0);
 dyStringPrintf(ds, "-sqlTable=loader/%s", schemaFile);
 cmd1[2] = dyStringCannibalize(&ds);
 
 int index = 7;
-ds = newDyString(0);
+ds = dyStringNew(0);
 dyStringPrintf(ds, "-tmpDir=%s", tmpDir);
 cmd1[index++] = dyStringCannibalize(&ds);
 
-ds = newDyString(0);
+ds = dyStringNew(0);
 dyStringPrintf(ds, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&ds);
 
@@ -1554,16 +1554,16 @@ char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", NULL,
                 NULL, NULL, NULL, NULL, NULL, NULL};
 
 char *schemaFile = "interact.sql";
-struct dyString *ds = newDyString(0);
+struct dyString *ds = dyStringNew(0);
 dyStringPrintf(ds, "-sqlTable=loader/%s", schemaFile);
 cmd1[2] = dyStringCannibalize(&ds);
 
 int index = 6;
-ds = newDyString(0);
+ds = dyStringNew(0);
 dyStringPrintf(ds, "-tmpDir=%s", tmpDir);
 cmd1[index++] = dyStringCannibalize(&ds);
 
-ds = newDyString(0);
+ds = dyStringNew(0);
 dyStringPrintf(ds, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&ds);
 
@@ -2201,7 +2201,7 @@ static void mafLoaderBuildTab(struct customTrack *track, char *mafFile)
 {
 customFactorySetupDbTrack(track);
 
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 char *cmd1[] = {"loader/hgLoadMaf", "-verbose=0", "-custom",  NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 char **cmds[] = {cmd1, NULL};
@@ -2215,13 +2215,13 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-loadFile=%s", mafFile);
-cmd1[4] = dyStringCannibalize(&tmpDy);  tmpDy = newDyString(0);
+cmd1[4] = dyStringCannibalize(&tmpDy);  tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-refDb=%s", track->genomeDb);
-cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxNameLen=%d", track->maxChromName);
-cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-defPos=%s", tn.forCgi);
 cmd1[7] = dyStringCannibalize(&tmpDy);
 cmd1[8] = CUSTOM_TRASH;
@@ -2351,7 +2351,7 @@ static struct pipeline *wigLoaderPipe(struct customTrack *track)
  *	    -maxChromNameLength=${nameLength} -chromInfoDb=${database} \
  *	    -pathPrefix=[.|/] ${db} ${table} stdin
  */
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 char *cmd1[] = {"loader/wigEncode", "-verbose=0", "-wibSizeLimit=300000000",
 	"stdin", "stdout", NULL, NULL};
 char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", "-noHistory", NULL, NULL,
@@ -2366,9 +2366,9 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
-cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 // hgLoadWiggle doesn't know about assembly hubs so disable size check
 if (trackHubDatabase(track->genomeDb))
     {

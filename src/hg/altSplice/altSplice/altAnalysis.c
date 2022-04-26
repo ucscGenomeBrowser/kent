@@ -731,7 +731,7 @@ edgeIx++;
 
 /* Package up the evidence, tissues, etc. */
 slReverse(&agLoc->evidence);
-dy = newDyString(ag->mrnaRefCount*36);
+dy = dyStringNew(ag->mrnaRefCount*36);
 agLoc->mrnaRefCount = ag->mrnaRefCount;
 for(i=0; i<ag->mrnaRefCount; i++)
     dyStringPrintf(dy, "%s,", ag->mrnaRefs[i]);
@@ -870,7 +870,7 @@ edgeIx++;
 
 /* Package up the evidence, tissues, etc. */
 slReverse(&agLoc->evidence);
-dy = newDyString(ag->mrnaRefCount*36);
+dy = dyStringNew(ag->mrnaRefCount*36);
 agLoc->mrnaRefCount = ag->mrnaRefCount;
 for(i=0; i<ag->mrnaRefCount; i++)
     dyStringPrintf(dy, "%s,", ag->mrnaRefs[i]);
@@ -1004,7 +1004,7 @@ slAddHead(&agLoc->evidence, evLoc);
 
 slReverse(&agLoc->evidence);
 
-dy = newDyString(ag->mrnaRefCount*36);
+dy = dyStringNew(ag->mrnaRefCount*36);
 agLoc->mrnaRefCount = ag->mrnaRefCount;
 for(i=0; i<ag->mrnaRefCount; i++)
     dyStringPrintf(dy, "%s,", ag->mrnaRefs[i]);
@@ -1553,7 +1553,7 @@ fprintf(htmlOut, "<html><head><title>Human Alt Splicing Conserved in Mouse</titl
 void openBedFiles(char *prefix)
 /* Opend all of the bed files with the prefix. */
 {
-struct dyString *name = newDyString(strlen(prefix)+20);
+struct dyString *name = dyStringNew(strlen(prefix)+20);
 
 dyStringClear(name);
 dyStringPrintf(name, "%s.upstream.bed", prefix);

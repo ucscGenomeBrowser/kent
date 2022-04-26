@@ -239,7 +239,7 @@ void updateGeneList()
 {
 char *sep = "";
 struct slName *sn = geneNames;
-struct dyString *geneList=newDyString(512);
+struct dyString *geneList=dyStringNew(512);
 while(sn)
     {
     dyStringPrintf(geneList,"%s%s",sep,sn->name);
@@ -247,7 +247,7 @@ while(sn)
     sn=sn->next;
     }
 cartSetString(cart, "ring_geneList", geneList->string);
-freeDyString(&geneList);
+dyStringFree(&geneList);
 }
 
 struct bdgpGeneInfo *bdgpGeneInfoLoadByQuery(struct sqlConnection *conn, char *query)
@@ -277,7 +277,7 @@ void getGeneAliasesFromTable(char* table)
 /* read all the gene aliases from database, return bdgpGeneInfo-list */
 {
 struct bdgpGeneInfo *result = NULL, *this=NULL;
-struct dyString *query=newDyString(512);
+struct dyString *query=dyStringNew(512);
 char *sep = "where";
 struct slName *sn = geneNames;
 sqlDyStringPrintf(query,"select * from %s",table);
@@ -309,14 +309,14 @@ for(this=result;this;this=this->next)
 // Mysterious crashes if I free this list:
 //bdgpGeneInfoFreeList(&result);
 hFreeConn(&conn);
-freeDyString(&query);
+dyStringFree(&query);
 }
 
 struct interaction *getGenesFromTable(char* table)
 /* read all the gene interactions from database, returns interaction-list */
 {
 struct interaction *result = NULL;
-struct dyString *query=newDyString(512);
+struct dyString *query=dyStringNew(512);
 char *sep = "where";
 struct slName *sn = geneNames;
 getGeneAliasesFromTable("bdgpGeneInfo"); /* load aliases into hash */
@@ -357,7 +357,7 @@ while(sn)
 struct sqlConnection* conn = hAllocConn();
 result = interactionLoadByQuery(conn, query->string);
 hFreeConn(&conn);
-freeDyString(&query);
+dyStringFree(&query);
 return result;
 }
 

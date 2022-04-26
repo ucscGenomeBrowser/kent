@@ -52,7 +52,9 @@ int err = regcomp(&re, regExp, REG_NOSUB|REG_EXTENDED);
 if (err < 0)
    errAbort("regcomp failed code %d", err);
 struct sqlConnection *conn = sqlConnect(database);
-struct slName *table, *tableList = sqlQuickList(conn, NOSQLINJ "show tables");
+char query[1024];
+sqlSafef(query, sizeof query, "show tables");
+struct slName *table, *tableList = sqlQuickList(conn, query);
 FILE *f = mustOpen(output, "w");
 for (table = tableList; table != NULL; table = table->next)
     {

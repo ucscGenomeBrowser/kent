@@ -55,15 +55,6 @@ while (lineFileNext(lf, &line, &lineSize))
 lineFileClose(&lf);
 }
 
-/* #Protein homologies behind Softberry genes */
-char *createTable = NOSQLINJ "CREATE TABLE softberryHom (\n"
-    "name varchar(255) not null,	# Softberry gene name\n"
-    "giString varchar(255) not null,	# String with Genbank gi and accession\n"
-    "description longblob not null,	# Freeform (except for no tabs) description\n"
-              "#Indices\n"
-    "PRIMARY KEY(name)\n"
-")\n";
-
 void hgSoftberryHom(char *database, int fileCount, char *files[])
 /* hgSoftberryHom - Make table storing Softberry protein homology information. */
 {
@@ -73,7 +64,7 @@ char *table = "softberryHom";
 char *tabFileName = "softberryHom.tab";
 FILE *f = mustOpen(tabFileName, "w");
 struct sqlConnection *conn = NULL;
-struct dyString *ds = newDyString(2048);
+struct dyString *ds = dyStringNew(2048);
 
 for (i=0; i<fileCount; ++i)
     {
@@ -87,7 +78,19 @@ carefulClose(&f);
  * already in it, and fill it up from tab file. */
 conn = sqlConnect(database);
 printf("Loading %s table\n", table);
-sqlMaybeMakeTable(conn, table, createTable);
+/* #Protein homologies behind Softberry genes */
+dyStringClear(ds);
+sqlDyStringPrintf(ds, 
+"CREATE TABLE softberryHom (\n"
+    "name varchar(255) not null,	# Softberry gene name\n"
+    "giString varchar(255) not null,	# String with Genbank gi and accession\n"
+    "description longblob not null,	# Freeform (except for no tabs) description\n"
+              "#Indices\n"
+    "PRIMARY KEY(name)\n"
+")\n");
+
+sqlMaybeMakeTable(conn, table, ds->string);
+dyStringClear(ds);
 sqlDyStringPrintf(ds, "DELETE from %s", table);
 sqlUpdate(conn, ds->string);
 dyStringClear(ds);

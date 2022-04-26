@@ -62,7 +62,9 @@ char **row;
 
 ret = newHash(0);
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = chromInfoLoad(row);
@@ -192,7 +194,7 @@ int newSize = 0;
 
 for (el = list; el != NULL; el = el->next)
 {
-    dy = newDyString(256);
+    dy = dyStringNew(256);
     strcpy(snpName, el->name);
     stripString(snpName, "rs");
 
@@ -223,7 +225,7 @@ for (el = list; el != NULL; el = el->next)
     dyStringResize(dy, newSize);
     el->func = cloneString(dy->string);
     sqlFreeResult(&sr);
-    freeDyString(&dy);
+    dyStringFree(&dy);
     }
 hFreeConn(&conn);
 }

@@ -161,7 +161,7 @@ return lf;
 
 static char *encodePeakFilter(char *trackName, struct trackDb *tdb, boolean isCustom)
 {
-struct dyString *extraWhere = newDyString(128);
+struct dyString *extraWhere = dyStringNew(128);
 boolean and = FALSE;
 extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000","score",&and);
 extraWhere = dyAddFilterAsDouble(cart,tdb,extraWhere,SIGNAL_FILTER,NULL,"signalValue",&and);

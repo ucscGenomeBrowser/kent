@@ -46,7 +46,7 @@ if (terms != NULL)
     struct sqlConnection *conn = sqlConnect(col->protDb);
     char query[256];
     struct sqlResult *sr;
-    struct dyString *dy = newDyString(1024);
+    struct dyString *dy = dyStringNew(1024);
     char **row;
     boolean orLogic = advFilterOrLogic(col, "logic", TRUE);
     struct slName *term, *termList = stringToSlNames(terms);

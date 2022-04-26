@@ -73,7 +73,7 @@ char **row;
 
 sqlDyStringPrintf(query, "select * from %s", table);
 if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
+    sqlDyStringPrintf(query, " where %-s", where);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {

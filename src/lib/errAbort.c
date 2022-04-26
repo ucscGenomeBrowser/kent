@@ -99,7 +99,7 @@ void warnWithBackTrace(char *format, ...)
 {
 va_list args;
 va_start(args, format);
-struct dyString *dy = newDyString(255);
+struct dyString *dy = dyStringNew(255);
 dyStringAppend(dy, format);
 
 #define STACK_LIMIT 20

@@ -4,6 +4,10 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
+//something odd about the directory includes for compiling require adding the mysql subdir to the path for mysql.h
+#include <mysql/mysql.h>   
+#include "options.h"
+#include "dystring.h"
 #include "jksql.h"
 
 void usage()
@@ -30,6 +34,10 @@ int main(int argc, char *argv[])
 if (argc != 3)
     usage();
 
+// since we have not gotten a db connection yet,
+// apparently we have to call this to avoid a segfault.
+mysql_library_init(0, 0, 0);
+
 char *theType = argv[1];
 char *value   = argv[2];
 
@@ -39,14 +47,15 @@ if (sameString(theType,"ID"))
     }
 else if (sameString(theType,"IL"))
     {
-    printf("SELECT %s FROM table;\n", sqlCheckIdentifiersList(value));  // typically a comma-separated list of table or field names.
+    sqlCkIl(valueSafe, value)
+    printf("%s\n", valueSafe);  // typically a comma-separated list of table or field names.
     }
 else if (sameString(theType,"ES"))
     {
     struct dyString *dy = dyStringNew(0);
     sqlDyStringPrintf(dy, "INSERT INTO TABLE VALUES ('");
     sqlDyAppendEscaped(dy, value);  // typically used when there are unusual characters that need escaping.
-    dyStringAppend(dy, "');");
+    sqlDyStringPrintf(dy, "');");
     printf("%s\n", dy->string);
     }
 else if (sameString(theType,"EE"))
@@ -55,12 +64,12 @@ else if (sameString(theType,"EE"))
     sqlDyStringPrintf(dy, "INSERT INTO TABLE VALUES ('");
     sqlDyAppendEscaped(dy, value);  // typically used when there are unusual characters that need escaping.
     sqlDyAppendEscaped(dy, "\x1a\n\r\\\'\"");  // typically used when there are unusual characters that need escaping.
-    dyStringAppend(dy, "');");
+    sqlDyStringPrintf(dy, "');");
     printf("%s\n", dy->string);
     }
 else if (sameString(theType,"XX")) // test sqlSafef
     {
-    char query[1024];
+    char query[1024];   // quoted %-s is not allowed anymore since it was poorly defined and useless.
     //sqlSafef(query, sizeof query, "SELECT * FROM %s where field = '%s'", value, "value");
     sqlSafef(query, sizeof query, "SELECT * FROM %s where field = '%s'", "table", value);
     //sqlSafef(query, sizeof query, "SELECT * FROM %s where id=%d and field like '%%%s'", "table", 3, value);
@@ -71,7 +80,7 @@ else if (sameString(theType,"XX")) // test sqlSafef
     }
 else if (sameString(theType,"XY")) // test sqlDyStringPrintf
     {
-    struct dyString *dy = dyStringNew(200);
+    struct dyString *dy = dyStringNew(200);  // no quoted %-s anymore, deemed useless and forbidden.
     //sqlDyStringPrintf(dy, "SELECT * FROM %s where field = '%s'", value, "value");
     sqlDyStringPrintf(dy, "SELECT * FROM %s where field = '%s'", "table", value);
     //sqlDyStringPrintf(dy, " AND field2 = '%s'", value);  // make sure appending works without duplicating the NOSQLINJ prefix

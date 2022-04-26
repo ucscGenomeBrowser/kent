@@ -26,7 +26,7 @@ struct dyString *makeSeqList(char *seqdata, char* path)
 {
 FILE *infile, *outfile;
 char *line, *token;
-struct dyString *seqlist = newDyString(128);
+struct dyString *seqlist = dyStringNew(128);
 infile = mustOpen(seqdata, "r");
     if(path != NULL)
         dyStringAppend(seqlist, path);
@@ -52,9 +52,9 @@ int main(int argc, char** argv)
 FILE *fafile, *seqfile;
 char *temp1, *temp2;
 struct dyString *seqlist, *faname, *seqname, *path;
-faname = newDyString(128);
-seqname = newDyString(128);
-path = newDyString(128);
+faname = dyStringNew(128);
+seqname = dyStringNew(128);
+path = dyStringNew(128);
 usage(argv);
     if(argv[3] != NULL)
         {
@@ -82,9 +82,9 @@ seqfile = mustOpen(seqlist->string, "r");
          dyStringClear(seqname);
          }
 carefulClose(&fafile);
-freeDyString(&seqlist);
-freeDyString(&faname);
-freeDyString(&seqname);
+dyStringFree(&seqlist);
+dyStringFree(&faname);
+dyStringFree(&seqname);
 return 0;
 }
 

@@ -1252,17 +1252,17 @@ else
     /* Create SQL where clause that will load up just the
      * summaries for the species that we are including. */
     conn = hAllocConn(database);
-    dyStringAppend(where, "src in (");
+    sqlDyStringPrintf(where, "src in (");
     for (mi = miList; mi != NULL; mi = mi->next)
         {
         if (!isPairwiseItem(mi))
             /* exclude non-species items (e.g. conservation wiggle */
             continue;
-        dyStringPrintf(where, "'%s'", mi->db);
+        sqlDyStringPrintf(where, "'%s'", mi->db);
         if (mi->next != NULL)
-            dyStringAppend(where, ",");
+            sqlDyStringPrintf(where, ",");
         }
-    dyStringAppend(where, ")");
+    sqlDyStringPrintf(where, ")");
     /* check for empty where clause */
     if (!sameString(where->string,"src in ()"))
         whereClause = where->string;
@@ -2365,7 +2365,7 @@ for(offset=startSub2*2; (offset < alignLineLength) && (offset < winBaseCount + s
     x2 = ((offset - startSub2 * 2)+1) * width/winBaseCount - 1;
     if (insertCounts[offset] != 0)
 	{
-	struct dyString *label = newDyString(20);
+	struct dyString *label = dyStringNew(20);
 	int haveRoomFor = (width/winBaseCount)/tl.mWidth;
 
 	/* calculate number of AAs instead of bases if it is wigMafProt */
@@ -2445,19 +2445,19 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
 
 	if (sameString("codonDefault", codonTransMode))
 	    {
-	    safef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
+	    sqlSafef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
 
 	    found = TRUE;
 	    }
 	else if (sameString("codonFrameDef", codonTransMode))
 	    {
-	    safef(extra, sizeof(extra), "src='%s'",mi->db);
+	    sqlSafef(extra, sizeof(extra), "src='%s'",mi->db);
 
 	    found = FALSE;
 	    }
 	else if (sameString("codonFrameNone", codonTransMode))
 	    {
-	    safef(extra, sizeof(extra), "src='%s'",mi->db);
+	    sqlSafef(extra, sizeof(extra), "src='%s'",mi->db);
 
 	    found = TRUE;
 	    }
@@ -2532,7 +2532,7 @@ tryagain:
 	if (!found)
 	    {
 	    /* try the default species */
-	    safef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
+	    sqlSafef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
 
 	    found = TRUE; /* don't try again */
 	    goto tryagain;
@@ -2755,7 +2755,7 @@ for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
 
     //  Manufacture and initialize wiggle subtrack, both tdb and track
     struct trackDb *wigTdb = CloneVar(tdb);
-    wigType = newDyString(64);
+    wigType = dyStringNew(64);
     dyStringPrintf(wigType, "type wig ");
     for (i = 1; i < wordCount; i++)
         dyStringPrintf(wigType, "%s ", words[i]);

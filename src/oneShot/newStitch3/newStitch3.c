@@ -525,7 +525,7 @@ void newStitch3(char *axtFile, char *output)
 /* newStitch3 - Another stitching experiment - with kd-trees.. */
 {
 struct hash *pairHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 struct lineFile *lf = lineFileOpen(axtFile, TRUE);
 struct axt *axt;
 struct seqPair *spList = NULL, *sp;

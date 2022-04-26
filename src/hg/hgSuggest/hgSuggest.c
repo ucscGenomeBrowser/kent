@@ -20,7 +20,7 @@
 void suggestGene(char *database, char *table, char *prefix)
 /* Print out a Javascript list of objects describing genes that start with prefix. */
 {
-struct dyString *str = newDyString(10000);
+struct dyString *str = dyStringNew(10000);
 dyStringPrintf(str, "[\n");
 
 int exact = cgiOptionalInt("exact", 0);

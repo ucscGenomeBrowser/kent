@@ -637,7 +637,7 @@ if (optionExists("prerun"))
     }
 else
     {
-    struct dyString *dy = newDyString(1024);
+    struct dyString *dy = dyStringNew(1024);
     char tempFa[512], tempGs[512];
     char dir1[256], root1[128], ext1[64];
     int myPid = (int)getpid();

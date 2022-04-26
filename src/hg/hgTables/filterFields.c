@@ -1511,35 +1511,35 @@ for (var = varList; var != NULL; var = var->next)
 	    boolean neg = sameString(ddVal, ddOpMenu[1]);
 	    char *fieldType = getSqlType(conn, explicitDbTable, field);
 	    boolean needOr = FALSE;
-	    if (needAnd) dyStringAppend(dy, " and ");
+	    if (needAnd) sqlDyStringPrintf(dy, " and ");
 	    needAnd = TRUE;
-	    if (neg) dyStringAppend(dy, "not ");
+	    if (neg) sqlDyStringPrintf(dy, "not ");
 	    boolean composite = (slCount(patList) > 1);
-	    if (composite || neg) dyStringAppendC(dy, '(');
+	    if (composite || neg) sqlDyStringPrintf(dy, "(");
 	    struct slName *pat;
 	    for (pat = patList;  pat != NULL;  pat = pat->next)
 		{
 		char *sqlPat = sqlLikeFromWild(pat->name);
 		if (needOr)
-		    dyStringAppend(dy, " OR ");
+		    sqlDyStringPrintf(dy, " OR ");
 		needOr = TRUE;
 		if (isSqlSetType(fieldType))
 		    {
-		    sqlDyStringPrintfFrag(dy, "FIND_IN_SET('%s', %s.%s)>0 ",
+		    sqlDyStringPrintf(dy, "FIND_IN_SET('%s', %s.%s)>0 ",
 				   sqlPat, explicitDbTable , field);
 		    }
 		else
 		    {
-		    sqlDyStringPrintfFrag(dy, "%s.%s ", explicitDbTable, field);
+		    sqlDyStringPrintf(dy, "%s.%s ", explicitDbTable, field);
 		    if (sqlWildcardIn(sqlPat))
-			dyStringAppend(dy, "like ");
+			sqlDyStringPrintf(dy, "like ");
 		    else
-			dyStringAppend(dy, "= ");
+			sqlDyStringPrintf(dy, "= ");
 		    sqlDyStringPrintf(dy, "'%s'", sqlPat);
 		    }
 		freez(&sqlPat);
 		}
-	    if (composite || neg) dyStringAppendC(dy, ')');
+	    if (composite || neg) sqlDyStringPrintf(dy, ")");
 	    }
 	}
     else if (sameString(type, filterCmpVar))
@@ -1549,7 +1549,7 @@ for (var = varList; var != NULL; var = var->next)
 	char *cmpVal = cartString(cart, var->name);
 	if (cmpReal(pat, cmpVal))
 	    {
-	    if (needAnd) dyStringAppend(dy, " and ");
+	    if (needAnd) sqlDyStringPrintf(dy, " and ");
 	    needAnd = TRUE;
 	    if (sameString(cmpVal, "in range"))
 	        {
@@ -1563,13 +1563,13 @@ for (var = varList; var != NULL; var = var->next)
 		if (strchr(pat, '.')) /* Assume floating point */
 		    {
 		    double a = atof(words[0]), b = atof(words[1]);
-		    sqlDyStringPrintfFrag(dy, "%s.%s >= %f && %s.%s <= %f",
+		    sqlDyStringPrintf(dy, "%s.%s >= %f && %s.%s <= %f",
 		    	explicitDbTable, field, a, explicitDbTable, field, b);
 		    }
 		else
 		    {
 		    int a = atoi(words[0]), b = atoi(words[1]);
-		    sqlDyStringPrintfFrag(dy, "%s.%s >= %d && %s.%s <= %d",
+		    sqlDyStringPrintf(dy, "%s.%s >= %d && %s.%s <= %d",
 		    	explicitDbTable, field, a, explicitDbTable, field, b);
 		    }
 		freez(&dupe);
@@ -1577,11 +1577,11 @@ for (var = varList; var != NULL; var = var->next)
 	    else
 	        {
 		// cmpVal has been checked already above in cmpReal for legal values.
-		sqlDyStringPrintfFrag(dy, "%s.%s %-s ", explicitDbTable, field, cmpVal);
+		sqlDyStringPrintf(dy, "%s.%s %-s ", explicitDbTable, field, cmpVal);
 		if (strchr(pat, '.'))	/* Assume floating point. */
-		    dyStringPrintf(dy, "%f", atof(pat));
+		    sqlDyStringPrintf(dy, "%f", atof(pat));
 		else
-		    dyStringPrintf(dy, "%d", atoi(pat));
+		    sqlDyStringPrintf(dy, "%d", atoi(pat));
 		}
 	    }
 	}
@@ -1596,7 +1596,7 @@ for (var = varList; var != NULL; var = var->next)
     query = trimSpaces(cartOptionalString(cart, varName));
     if (query != NULL && query[0] != 0)
         {
-	if (needAnd) dyStringPrintf(dy, " %s ", logic);
+	if (needAnd) sqlDyStringPrintf(dy, " %s ", logic);
 	sqlSanityCheckWhere(query, dy);
 	}
     }
@@ -1612,7 +1612,7 @@ if (dy->stringSize == 0)
 else
     {
     if (isNotEmpty(extraClause))
-	dyStringPrintf(dy, " and %s", extraClause);
+	sqlDyStringPrintf(dy, " and %-s", extraClause);
     return dyStringCannibalize(&dy);
     }
 }

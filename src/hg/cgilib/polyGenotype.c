@@ -110,11 +110,11 @@ void polyGenotypeSaveToDb(struct sqlConnection *conn, struct polyGenotype *el, c
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%d,%d,%d,%d,%g,%g)", 
 	tableName,  el->name,  el->ethnicGroup,  el->plusPlus,  el->plusMinus,  el->minusMinus,  el->sampleSize,  el->alleleFrequency,  el->unbiasedHeterozygosity);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

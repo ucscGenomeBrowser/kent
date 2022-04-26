@@ -24,13 +24,6 @@
 
 /* Name of table */
 char* EXT_FILE_TBL = "gbExtFile";
-static char* createSql =
-NOSQLINJ "create table gbExtFile ("
-  "id int unsigned not null primary key,"  /* Unique ID. */
-  "path varchar(255) not null,"   /* Full path. Ends in '/' if a dir. */
-  "size bigint unsigned not null,"            /* Size of file (checked) */
-                   /* Extra indices. */
-  "index (path))";
 
 static void checkEntry(struct extFile *ef)
 /* check if an entry matches the actual file */
@@ -73,6 +66,7 @@ if (id != 0)
 struct extFileTbl *extFileTblLoad(struct sqlConnection *conn)
 /* Load the file table from the database, creating table if it doesn't exist */
 {
+char query[1024];
 char **row;
 struct extFileTbl *eft;
 struct sqlResult *sr;
@@ -82,11 +76,21 @@ eft->pathHash = newHash(0);
 eft->idHash = newHash(0);
 
 if (!sqlTableExists(conn, EXT_FILE_TBL))
-    sqlRemakeTable(conn, EXT_FILE_TBL, createSql);
+    {
+    sqlSafef(query, sizeof query, 
+    "create table gbExtFile ("
+    "id int unsigned not null primary key,"  /* Unique ID. */
+    "path varchar(255) not null,"   /* Full path. Ends in '/' if a dir. */
+    "size bigint unsigned not null,"            /* Size of file (checked) */
+		   /* Extra indices. */
+    "index (path))");
+    sqlRemakeTable(conn, EXT_FILE_TBL, query);
+    }
 else
     {
     /* table exists, read existing entries */
-    sr = sqlGetResult(conn,NOSQLINJ "SELECT id,path,size FROM gbExtFile");
+    sqlSafef(query, sizeof query, "SELECT id,path,size FROM gbExtFile");
+    sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         parseRow(eft, row);
     sqlFreeResult(&sr);
@@ -201,14 +205,16 @@ if (eft != NULL)
 static struct slName* getUnusedIds(struct sqlConnection *conn)
 /* generate a list of extFile ids that are not referenced in the seq table. */
 {
+char query[1024];
 struct slName *idList = NULL;
 if (sqlTableExists(conn, EXT_FILE_TBL))
     {
     char **row;
-    struct sqlResult *sr
-        = sqlGetResult(conn, NOSQLINJ "SELECT gbExtFile.id FROM gbExtFile "
+    sqlSafef(query, sizeof query, 
+    "SELECT gbExtFile.id FROM gbExtFile "
                        "LEFT JOIN gbSeq on (gbSeq.gbExtFile = gbExtFile.id)"
                        "WHERE (gbSeq.gbExtFile IS NULL);");
+    struct sqlResult *sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
         struct slName *id = slNameNew(row[0]);

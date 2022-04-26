@@ -48,7 +48,7 @@ struct dnaMotif *dnaMotifLoadNamed(struct sqlConnection *conn,
  * motif. */
 {
 char where[256];
-sqlSafefFrag(where, sizeof(where), "name='%s'", name);
+sqlSafef(where, sizeof(where), "name='%s'", name);
 return dnaMotifLoadWhere(conn, table, where);
 }
 

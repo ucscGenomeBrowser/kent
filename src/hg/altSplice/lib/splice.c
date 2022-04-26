@@ -337,7 +337,7 @@ int *verts = path->vertices;
 int *vPos = splice->vPositions;
 unsigned char *vTypes = splice->vTypes;
 int i = 0;
-struct dyString *buff = newDyString(256);
+struct dyString *buff = dyStringNew(256);
 
 AllocVar(bed);
 bed->chrom = cloneString(splice->tName);

@@ -219,7 +219,7 @@ char **row;
 
 sqlDyStringPrintf(query, "select * from %s", table);
 if (where != NULL)
-    dyStringPrintf(query, " where %-s", where); // the where clause must be checked by caller for sqli
+    sqlDyStringPrintf(query, " where %-s", where); // the where clause must be checked by caller for sqli
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {

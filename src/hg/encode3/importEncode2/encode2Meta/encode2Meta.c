@@ -409,7 +409,9 @@ verbose(1, "%d files in %s\n", miHash->elCount, manifestIn);
 
 /* Load up encodeExp info. */
 struct sqlConnection *expConn = sqlConnect(expDb);
-struct encodeExp *expList = encodeExpLoadByQuery(expConn, NOSQLINJ "select * from encodeExp");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from encodeExp");
+struct encodeExp *expList = encodeExpLoadByQuery(expConn, query);
 sqlDisconnect(&expConn);
 verbose(1, "%d experiments in encodeExp\n", slCount(expList));
 

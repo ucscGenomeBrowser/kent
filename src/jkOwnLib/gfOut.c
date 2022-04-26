@@ -248,7 +248,7 @@ static void saveAxtBundle(char *chromName, int chromSize, int chromOffset,
 struct axtData *ad = out->data;
 struct ffAli *sAli, *eAli, *ff, *rt, *eFf = NULL;
 struct axt *axt;
-struct dyString *q = newDyString(1024), *t = newDyString(1024);
+struct dyString *q = dyStringNew(1024), *t = dyStringNew(1024);
 struct axtBundle *gab;
 struct trans3 *t3List = NULL;
 

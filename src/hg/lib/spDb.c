@@ -470,9 +470,9 @@ sqlDyStringPrintf(dy,
 sqlDyStringPrintf(dy, 
         "where acc = '%s'", acc);
 if (classId != 0)
-    dyStringPrintf(dy, " and featureClass=%d", classId);
+    sqlDyStringPrintf(dy, " and featureClass=%d", classId);
 if (typeId != 0)
-    dyStringPrintf(dy, " and featureType=%d", typeId);
+    sqlDyStringPrintf(dy, " and featureType=%d", typeId);
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -621,7 +621,7 @@ if (conn==NULL)
     if (conn == NULL) return NULL;
     }
     
-sqlSafefFrag(condStr, sizeof(condStr), "oldDisplayId='%s'", oldSpDisplayId);
+sqlSafef(condStr, sizeof(condStr), "oldDisplayId='%s'", oldSpDisplayId);
 newSpDisplayId = sqlGetField(PROTEOME_DB_NAME, "spOldNew", "newDisplayId", condStr);
     
 return(newSpDisplayId);
@@ -640,7 +640,7 @@ if (conn==NULL)
     if (conn == NULL) return NULL;
     }
 
-sqlSafefFrag(condStr, sizeof(condStr), "newDisplayId='%s'", newSpDisplayId);
+sqlSafef(condStr, sizeof(condStr), "newDisplayId='%s'", newSpDisplayId);
 oldSpDisplayId = sqlGetField(PROTEOME_DB_NAME, "spOldNew", "oldDisplayId", condStr);
     
 return(oldSpDisplayId);

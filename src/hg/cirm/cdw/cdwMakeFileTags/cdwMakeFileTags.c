@@ -126,7 +126,7 @@ do
 	dyStringClear(groupList);
 	lastFileId = fileId;
 	}
-    dyStringPrintf(groupList, "%u", groupId);
+    sqlDyStringPrintf(groupList, "%u", groupId);
     }
 while (fileId != -2);
 sqlFreeResult(&sr);
@@ -196,7 +196,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct slName *fNames = sqlFieldNames(conn, fullTable);
 sqlDisconnect(&conn);
 
-struct dyString *dy = newDyString(128);
+struct dyString *dy = dyStringNew(128);
 char *fieldNames[128];
 char *tempFileTableFields = cloneString(facetFieldsCsv);
 int fieldCount = chopString(tempFileTableFields, ",", fieldNames, ArraySize(fieldNames));
@@ -297,7 +297,8 @@ facetFieldsCsv = facetFieldFilter(facetFieldsCsv, database, fullTable);
 
 verbose(2, "making %s table for faceting\n", facetTable);
 struct dyString *facetCreate = dyStringNew(0);
-sqlDyStringPrintf(facetCreate, "create table %s as select %-s from %s", facetTable, sqlCkIl(facetFieldsCsv), fullTable);
+sqlCkIl(facetFieldsCsvSafe,facetFieldsCsv)
+sqlDyStringPrintf(facetCreate, "create table %s as select %-s from %s", facetTable, facetFieldsCsvSafe, fullTable);
 sqlRemakeTable(conn, facetTable, facetCreate->string);
 dyStringFree(&facetCreate);
 

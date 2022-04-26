@@ -96,7 +96,7 @@ while (fgets(line, 1000, inf) != NULL)
 	    spID = strdup(chp1);
 	
 	    /* get corresponding display ID from spXref3 table	*/
-	    sqlSafefFrag(cond_str, "accession = '%s'", spID);
+	    sqlSafef(cond_str, "accession = '%s'", spID);
             answer = sqlGetField(conn, proteinDB, "spXref3", "displayID", cond_str);
             if (answer != NULL)
                 {
@@ -136,7 +136,7 @@ while (fgets(line, 1000, inf) != NULL)
 	spID = strdup(chp1);
 			
 	/* get display ID from spXref3 table */
-	sqlSafefFrag(cond_str, "accession = '%s'", spID);
+	sqlSafef(cond_str, "accession = '%s'", spID);
         answer = sqlGetField(conn, proteinDB, "spXref3", "displayID", cond_str);
         if (answer != NULL)
             {

@@ -33,60 +33,6 @@ errAbort(
   "   hgKgMrna rn3Temp mrna.fa mrna.ra tight_mrna.psl loc2ref mrnaPep.fa mim2loc proteins070403\n");
 }
 
-char *refLinkTableDef = 
-NOSQLINJ "CREATE TABLE refLink (\n"
-"    name varchar(255) not null,        # Name displayed in UI\n"
-"    product varchar(255) not null, 	# Name of protein product\n"
-"    mrnaAcc varchar(255) not null,	# mRNA accession\n"
-"    protAcc varchar(255) not null,	# protein accession\n"
-"    geneName int unsigned not null,	# pointer to geneName table\n"
-"    prodName int unsigned not null,	# pointer to product name table\n"
-"    locusLinkId int unsigned not null,	# Locus Link ID\n"
-"    omimId int unsigned not null,	# Locus Link ID\n"
-"              #Indices\n"
-"    PRIMARY KEY(mrnaAcc(12)),\n"
-"    index(name(10)),\n"
-"    index(protAcc(10)),\n"
-"    index(locusLinkId),\n"
-"    index(omimId),\n"
-"    index(prodName),\n"
-"    index(geneName)\n"
-")";
-
-char *refGeneTableDef = 
-NOSQLINJ "CREATE TABLE refGene ( \n"
-"   name varchar(255) not null,	# mrna accession of gene \n"
-"   chrom varchar(255) not null,	# Chromosome name \n"
-"   strand char(1) not null,	# + or - for strand \n"
-"   txStart int unsigned not null,	# Transcription start position \n"
-"   txEnd int unsigned not null,	# Transcription end position \n"
-"   cdsStart int unsigned not null,	# Coding region start \n"
-"   cdsEnd int unsigned not null,	# Coding region end \n"
-"   exonCount int unsigned not null,	# Number of exons \n"
-"   exonStarts longblob not null,	# Exon start positions \n"
-"   exonEnds longblob not null,	# Exon end positions \n"
-          "   #Indices \n"
-"   INDEX(name(10)), \n"
-"   INDEX(chrom(12),txStart), \n"
-"   INDEX(chrom(12),txEnd) \n"
-")";
-
-char *refPepTableDef =
-NOSQLINJ "CREATE TABLE refPep (\n"
-"    name varchar(255) not null,        # Accession of sequence\n"
-"    seq longblob not null,     # Peptide sequence\n"
-"              #Indices\n"
-"    PRIMARY KEY(name(32))\n"
-")\n";
-
-char *refMrnaTableDef =
-NOSQLINJ "CREATE TABLE refMrna (\n"
-"    name varchar(255) not null,        # Accession of sequence\n"
-"    seq longblob not null,     	# Nucleotide sequence\n"
-"              #Indices\n"
-"    PRIMARY KEY(name(32))\n"
-")\n";
-
 struct hash *loadNameTable(struct sqlConnection *conn, 
     char *tableName, int hashSize)
 /* Create a hash and load it up from table. */
@@ -351,16 +297,74 @@ FILE *refMrnaTab = hgCreateTabFile(".", "refMrna");
 struct exon *exonList = NULL, *exon;
 char *answer;
 char cond_str[200];
+char query[1024];
 
+sqlSafef(query, sizeof query, 
+"CREATE TABLE refLink (\n"
+"    name varchar(255) not null,        # Name displayed in UI\n"
+"    product varchar(255) not null, 	# Name of protein product\n"
+"    mrnaAcc varchar(255) not null,	# mRNA accession\n"
+"    protAcc varchar(255) not null,	# protein accession\n"
+"    geneName int unsigned not null,	# pointer to geneName table\n"
+"    prodName int unsigned not null,	# pointer to product name table\n"
+"    locusLinkId int unsigned not null,	# Locus Link ID\n"
+"    omimId int unsigned not null,	# Locus Link ID\n"
+"              #Indices\n"
+"    PRIMARY KEY(mrnaAcc(12)),\n"
+"    index(name(10)),\n"
+"    index(protAcc(10)),\n"
+"    index(locusLinkId),\n"
+"    index(omimId),\n"
+"    index(prodName),\n"
+"    index(geneName)\n"
+")");
 /* Make refLink and other tables table if they don't exist already. */
-sqlMaybeMakeTable(conn, "refLink", refLinkTableDef);
-sqlUpdate(conn, NOSQLINJ "delete from refLink");
-sqlMaybeMakeTable(conn, "refGene", refGeneTableDef);
-sqlUpdate(conn, NOSQLINJ "delete from refGene");
-sqlMaybeMakeTable(conn, "refPep", refPepTableDef);
-sqlUpdate(conn, NOSQLINJ "delete from refPep");
-sqlMaybeMakeTable(conn, "refMrna", refMrnaTableDef);
-sqlUpdate(conn, NOSQLINJ "delete from refMrna");
+sqlMaybeMakeTable(conn, "refLink", query);
+sqlSafef(query, sizeof query, "delete from refLink");
+sqlUpdate(conn, query);
+
+sqlSafef(query, sizeof query, 
+"CREATE TABLE refGene ( \n"
+"   name varchar(255) not null,	# mrna accession of gene \n"
+"   chrom varchar(255) not null,	# Chromosome name \n"
+"   strand char(1) not null,	# + or - for strand \n"
+"   txStart int unsigned not null,	# Transcription start position \n"
+"   txEnd int unsigned not null,	# Transcription end position \n"
+"   cdsStart int unsigned not null,	# Coding region start \n"
+"   cdsEnd int unsigned not null,	# Coding region end \n"
+"   exonCount int unsigned not null,	# Number of exons \n"
+"   exonStarts longblob not null,	# Exon start positions \n"
+"   exonEnds longblob not null,	# Exon end positions \n"
+          "   #Indices \n"
+"   INDEX(name(10)), \n"
+"   INDEX(chrom(12),txStart), \n"
+"   INDEX(chrom(12),txEnd) \n"
+")");
+sqlMaybeMakeTable(conn, "refGene", query);
+sqlSafef(query, sizeof query, "delete from refGene");
+sqlUpdate(conn, query);
+
+sqlSafef(query, sizeof query, 
+"CREATE TABLE refPep (\n"
+"    name varchar(255) not null,        # Accession of sequence\n"
+"    seq longblob not null,     # Peptide sequence\n"
+"              #Indices\n"
+"    PRIMARY KEY(name(32))\n"
+")\n");
+sqlMaybeMakeTable(conn, "refPep", query);
+sqlSafef(query, sizeof query, "delete from refPep");
+sqlUpdate(conn, query);
+
+sqlSafef(query, sizeof query, 
+"CREATE TABLE refMrna (\n"
+"    name varchar(255) not null,        # Accession of sequence\n"
+"    seq longblob not null,     	# Nucleotide sequence\n"
+"              #Indices\n"
+"    PRIMARY KEY(name(32))\n"
+")\n");
+sqlMaybeMakeTable(conn, "refMrna", query);
+sqlSafef(query, sizeof query, "delete from refMrna");
+sqlUpdate(conn, query);
 
 /* Scan through locus link to omim ID file and put in hash. */
     {
@@ -481,7 +485,7 @@ while ((psl = pslNext(lf)) != NULL)
 	dotOut();
 	}
    
-    sqlSafefFrag(cond_str, sizeof cond_str, "extAC='%s'", psl->qName);
+    sqlSafef(cond_str, sizeof cond_str, "extAC='%s'", psl->qName);
     answer = sqlGetField(proteinDB, "spXref2", "displayID", cond_str);
 	       
     if (answer == NULL)

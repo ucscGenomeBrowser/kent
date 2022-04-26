@@ -107,7 +107,7 @@ for (j=0; j<20; j++)
     aaResCnt[j] = 0;
        
     /* get cutoff threshold value pairs */
-    sqlSafefFrag(cond_str, sizeof(cond_str), "AA='%c'", aaAlphabet[j]);
+    sqlSafef(cond_str, sizeof(cond_str), "AA='%c'", aaAlphabet[j]);
     answer = sqlGetField(database, "pbAnomLimit", "pctLow", cond_str);
     pctLow[j] = (double)(atof(answer));
     answer = sqlGetField(database, "pbAnomLimit", "pctHi", cond_str);
@@ -921,7 +921,7 @@ while (row2 != NULL)
 	    if (sfId[j] == atoi(sfID)) goto skip;
 	    }
 	
-	sqlSafefFrag(cond_str, sizeof(cond_str), "id=%s;", sfID);
+	sqlSafef(cond_str, sizeof(cond_str), "id=%s;", sfID);
     	sfDesc = sqlGetField(protDbName, "sfDes", "description", cond_str);
 
 
@@ -1002,11 +1002,11 @@ conn2 = hAllocConn(database);
 if (hTableExists(database, "ensemblXref3")) 
     {	
     /* use ensemblXref3 for Ensembl data release after ensembl34d */
-    sqlSafefFrag(cond_str, sizeof(cond_str), "tremblAcc='%s'", proteinID);
+    sqlSafef(cond_str, sizeof(cond_str), "tremblAcc='%s'", proteinID);
     ensPep = sqlGetField(database, "ensemblXref3", "protein", cond_str);
     if (ensPep == NULL)
 	{
-   	sqlSafefFrag(cond_str, sizeof(cond_str), "swissAcc='%s'", proteinID);
+   	sqlSafef(cond_str, sizeof(cond_str), "swissAcc='%s'", proteinID);
    	ensPep = sqlGetField(database, "ensemblXref3", "protein", cond_str);
 	if (ensPep == NULL) return(0);
 	}
@@ -1018,7 +1018,7 @@ else
     
     /* two steps query needed because the recent Ensembl gene_xref 11/2003 table does not have 
        valid translation_name */
-    sqlSafefFrag(cond_str, sizeof(cond_str), "external_name='%s'", protDisplayID);
+    sqlSafef(cond_str, sizeof(cond_str), "external_name='%s'", protDisplayID);
     transcriptName = sqlGetField(database, "ensGeneXref", "transcript_name", cond_str);
     if (transcriptName == NULL)
         {
@@ -1026,7 +1026,7 @@ else
         }
     else
         {
-        sqlSafefFrag(cond_str, sizeof(cond_str), "transcript_name='%s';", transcriptName);
+        sqlSafef(cond_str, sizeof(cond_str), "transcript_name='%s';", transcriptName);
         ensPep = sqlGetField(database, "ensTranscript", "translation_name", cond_str);
         if (ensPep == NULL) 
 	    {
@@ -1053,7 +1053,7 @@ while (row != NULL)
     sfID     = row[5];
     /* sfDesc   = row[6]; */
     /* !!! the recent Suprefamily sfAssign table does not have valid sf description */
-    sqlSafefFrag(cond_str, sizeof(cond_str), "id=%s;", sfID);
+    sqlSafef(cond_str, sizeof(cond_str), "id=%s;", sfID);
     sfDesc = sqlGetField(database, "sfDes", "description", cond_str);
 
     /* !!! refine logic here later to be defensive against illegal syntax */
@@ -1450,11 +1450,11 @@ if (mrnaID != NULL)
     if (kgVersion == KG_III)
     	{
 	doExonTrack = FALSE;
-	sqlSafefFrag(cond_str, sizeof(cond_str), "spId='%s'", proteinID);
+	sqlSafef(cond_str, sizeof(cond_str), "spId='%s'", proteinID);
         kgId = sqlGetField(database, "kgXref", "kgId", cond_str);
 	if (kgId != NULL)
 	    {
-	    sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", kgId);
+	    sqlSafef(cond_str, sizeof(cond_str), "name='%s'", kgId);
             kgPep = sqlGetField(database, "knownGenePep", "seq", cond_str);
       	    //printf("<pre><br>%s", kgPep);fflush(stdout);
 	    if (kgPep != NULL)
@@ -1464,7 +1464,7 @@ if (mrnaID != NULL)
 		    protDbDate = strstr(protDbName, "proteins") + strlen("proteins");
 		    safef(uniProtDbName, sizeof(uniProtDbName),"sp%s", protDbDate);
 		
-		    sqlSafefFrag(cond_str, sizeof(cond_str), "acc='%s'", proteinID);
+		    sqlSafef(cond_str, sizeof(cond_str), "acc='%s'", proteinID);
             	    protPep = sqlGetField(uniProtDbName, "protein", "val", cond_str);
             	    //printf("<br>%s\n", protPep);fflush(stdout);
             	    if (protPep != NULL)
@@ -1472,7 +1472,7 @@ if (mrnaID != NULL)
 			if (sameWord(kgPep, protPep))
 			    {
 			    //printf("<br>MATCH!\n");fflush(stdout);
-		    	    sqlSafefFrag(cond_str, sizeof(cond_str), "qName='%s'", kgId);
+		    	    sqlSafef(cond_str, sizeof(cond_str), "qName='%s'", kgId);
             	    	    answer = sqlGetField(database, kgProtMapTableName, 
 			    			 "qName", cond_str);
             	    	    if (answer != NULL)

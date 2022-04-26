@@ -175,7 +175,7 @@ struct dyString *genomeRangeTreeToString(struct genomeRangeTree *tree)
 struct hashEl *chrom, *chromList = hashElListHash(tree->hash);
 slSort(&chromList, hashElCmp); /* alpha sort on chrom */
 dyStringFree(&tmpTreeToString);
-tmpTreeToString = newDyString(0);
+tmpTreeToString = dyStringNew(0);
 dyStringAppend(tmpTreeToString, "[tree");
 for (chrom = chromList ; chrom ; chrom = chrom->next)
     {

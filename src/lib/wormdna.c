@@ -702,7 +702,7 @@ DNA *dna;
 int i;
 struct gdfDataPoint *pt = NULL;
 struct wormGdfCache *gdfCache;
-struct dyString *dy = newDyString(1000);
+struct dyString *dy = dyStringNew(1000);
 /* Translate biologist type name to cosmid.N name */
 if (wormIsGeneName(name))
     {

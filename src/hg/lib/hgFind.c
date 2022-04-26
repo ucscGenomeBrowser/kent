@@ -661,7 +661,7 @@ static struct dyString *dy = NULL;
 static char *s = NULL;
 if (dy == NULL)
     {
-    dy = newDyString(64);
+    dy = dyStringNew(64);
     if (cart != NULL)
 	dyStringPrintf(dy, "%s=%s", cartSessionVarName(), cartSessionId(cart));
     s = dy->string;
@@ -1020,7 +1020,7 @@ static void addPslResultToHgp(struct cart *cart, struct hgPositions *hgp, char *
 if (pslList == NULL)
     return;
 struct hgPosTable *table;
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 struct psl *psl;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
 char *ui = getUiUrl(cart);
@@ -1060,7 +1060,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     slAddHead(&table->posList, pos);
     }
 slReverse(&table->posList);
-freeDyString(&dy);
+dyStringFree(&dy);
 }
 
 static boolean findMrnaPos(struct cart *cart, char *db, char *acc,  struct hgPositions *hgp)
@@ -1249,7 +1249,6 @@ struct hash *hash = newHash(0);
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
-char query[256];
 char *field;
 int i;
 
@@ -1276,13 +1275,14 @@ for (i = 0;
          idEl = idEl->next)
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
-	sqlSafef(query, sizeof(query),
+	struct dyString *query = sqlDyStringCreate(
 	      "select acc, organism from %s where %s = '%s' "
 	      " and type = 'mRNA'", gbCdnaInfoTable, skipDb(field), idEl->name);
         // limit results to avoid CGI timeouts (#11626).
         if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
-            sqlSafefAppend(query, sizeof(query), " limit %d", limitResults);
-	sr = sqlGetResult(conn, query);
+            sqlDyStringPrintf(query, " limit %d", limitResults);
+	sr = sqlGetResult(conn, dyStringContents(query));
+        dyStringFree(&query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    char *acc = row[0];
@@ -1358,7 +1358,7 @@ static int addMrnaPositionTable(char *db, struct hgPositions *hgp,
 struct hgPosTable *table = NULL;
 struct slName *el = NULL;
 struct slName *elToFree = NULL;
-struct dyString *dy = newDyString(256);
+struct dyString *dy = dyStringNew(256);
 char *ui = getUiUrl(cart);
 int organismID = hOrganismID(hgp->database);   /* id from mrna organism table */
 int alignCount = 0;
@@ -1491,7 +1491,7 @@ if (alignCount > 0)
         }
     freeMem(organism);
     }
-freeDyString(&dy);
+dyStringFree(&dy);
 return alignCount;
 }
 
@@ -1637,7 +1637,7 @@ static boolean findRefGenes(char *db, struct hgFindSpec *hfs, char *spec,
 /* Look up refSeq genes in table. */
 {
 struct sqlConnection *conn = hAllocConn(db);
-struct dyString *ds = newDyString(256);
+struct dyString *ds = dyStringNew(256);
 struct refLink *rlList = NULL, *rl;
 boolean gotRefLink = sqlTableExists(conn, refLinkTable);
 boolean found = FALSE;
@@ -1705,7 +1705,7 @@ if (rlList != NULL)
             }
 
         hashAdd(hash, rl->mrnaAcc, rl);
-        sqlSafefFrag(where, sizeof where, "name = '%s'", rl->mrnaAcc);
+        sqlSafef(where, sizeof where, "name = '%s'", rl->mrnaAcc);
         gpr = genePredReaderQuery(conn, hfs->searchTable, where);
 	while ((gp = genePredReaderNext(gpr)) != NULL)
 	    {
@@ -1740,7 +1740,7 @@ if (rlList != NULL)
     refLinkFreeList(&rlList);
     freeHash(&hash);
     }
-freeDyString(&ds);
+dyStringFree(&ds);
 hFreeConn(&conn);
 return(found);
 }
@@ -1766,7 +1766,7 @@ static void findTigrGenes(char *db, char *spec, struct hgPositions *hgp)
 {
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
-struct dyString *ds = newDyString(256);
+struct dyString *ds = dyStringNew(256);
 char **row;
 struct hgPosTable *table = NULL;
 struct hgPos *pos;
@@ -1826,7 +1826,7 @@ if (tigrList != NULL)
     tigrCmrGeneFreeList(&tigrList);
     freeHash(&hash);
     }
-freeDyString(&ds);
+dyStringFree(&ds);
 hFreeConn(&conn);
 }
 
@@ -1846,7 +1846,7 @@ struct hgPos *pos = NULL;
 if (!hTableExists(db, tableName))
     return FALSE;
 conn = hAllocConn(db);
-query = newDyString(256);
+query = dyStringNew(256);
 sqlDyStringPrintf(query,
 	      "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'",
 	      tableName, pattern);
@@ -1859,9 +1859,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (table == NULL)
 	    {
 	    AllocVar(table);
-	    dyStringClear(query);
-	    dyStringPrintf(query, "%s Gene Predictions", tableName);
-	    table->description = cloneString(query->string);
+	    struct dyString *desc = dyStringNew(256);
+	    dyStringPrintf(desc, "%s Gene Predictions", tableName);
+	    table->description = dyStringCannibalize(&desc);
 	    table->name = cloneString(tableName);
 	    slAddHead(&hgp->tableList, table);
 	    }
@@ -1877,7 +1877,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 if (table != NULL)
     slReverse(&table->posList);
-freeDyString(&query);
+dyStringFree(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return ok;
@@ -1951,7 +1951,7 @@ if (hTableExists(db, "sgdGene"))
 	struct hgPos *pos;
 	for (pos = table->posList; pos != NULL; pos = pos->next)
 	    {
-	    struct dyString *dy = newDyString(1024);
+	    struct dyString *dy = dyStringNew(1024);
 	    if (gotNames)
 		{
 		sqlSafef(query, sizeof(query),
@@ -2387,20 +2387,27 @@ struct sqlResult *sr = NULL;
 char **row;
 boolean isFuzzy = sameWord(hfs->searchMethod, "fuzzy");
 
-// TODO wonder if we could re-work this better to get to upstream sql creation and 
+// TODO we could re-work this better to get to upstream sql creation and 
 //  then be able to avoid this complexity:?
 // hfs->refTable sometimes contains a comma-separated table list
-// but we do not have control over the original sql since it is in trackDb.ra 
+// in trackDb.ra and hgFindSpec table.
 
 // example from human/hg19/trackDb.ra
 // xrefTable kgXref, ucscRetroInfo5
 // xrefQuery select ucscRetroInfo5.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID
 
+// NOTE this also goes into hgFindSpec table as hti fields hfs->xrefTable and hfs->xrefQuery.
+// hfs->xrefTable is sometimes a comma-separated list of fields
+//  xrefTable = [hgFixed.refLink, ucscRetroInfo8]
+
 struct dyString *dy = dyStringNew(256);
-dyStringAppend(dy, NOSQLINJ "");
-// in particular, if we could get to the upstream and change the first %s to %-s for the param corresponding to xrefTable, 
-// that would be nice.
-dyStringPrintf(dy, hfs->xrefQuery, sqlCkIl(hfs->xrefTable), sqlEscapeString(term)); // keep this sqlEscape
+sqlCkIl(xrefTableSafe, hfs->xrefTable)
+// Replace the %s with %-s if it has not already been done in the upstream source .ra files
+// it would be better to do this upstream in .ra and hgFindSpec
+char *update = replaceChars(hfs->xrefQuery, " from %s ", " from %-s ");  // this patches older values that still need it.
+sqlDyStringPrintf(dy, update, xrefTableSafe, term);
+freeMem(update);
+
 sr = sqlGetResult(conn, dy->string);
 dyStringFree(&dy);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -2468,11 +2475,11 @@ if (hgp->tableList != NULL &&
 for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
     {
     // we do not have control over the original sql since it comes from trackDb.ra or elsewhere?
-    char query[2048];
-    sqlSafef(query, sizeof(query), hfs->query, tPtr->name, term);
+    struct dyString *query = sqlDyStringCreate(hfs->query, tPtr->name, term);
     if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
-        sqlSafefAppend(query, sizeof(query), " limit %d", limitResults);
-    sr = sqlGetResult(conn, query);
+        sqlDyStringPrintf(query, " limit %d", limitResults);
+    sr = sqlGetResult(conn, dyStringContents(query));
+    dyStringFree(&query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	if(table == NULL)
@@ -3065,7 +3072,7 @@ else if (!matchesHgvs(cart, db, term, hgp))
     if (cart != NULL)
         {
         if(hgpMatchNames == NULL)
-            hgpMatchNames = newDyString(256);
+            hgpMatchNames = dyStringNew(256);
         dyStringClear(hgpMatchNames);
         int matchCount = 0;
         for(hgpItem = hgp; hgpItem != NULL; hgpItem = hgpItem->next)

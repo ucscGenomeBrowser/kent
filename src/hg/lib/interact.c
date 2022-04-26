@@ -67,11 +67,11 @@ void interactSaveToDb(struct sqlConnection *conn, struct interact *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,%g,'%s',%u,'%s',%u,%u,'%s','%s','%s',%u,%u,'%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->value,  el->exp,  el->color,  el->sourceChrom,  el->sourceStart,  el->sourceEnd,  el->sourceName,  el->sourceStrand,  el->targetChrom,  el->targetStart,  el->targetEnd,  el->targetName,  el->targetStrand);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct interact *interactLoad(char **row)

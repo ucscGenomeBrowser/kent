@@ -1927,8 +1927,9 @@ printf("<br><b>Label:</b> ");
 labelMakeCheckBox(cart, tdb, "gene", "gene symbol", TRUE);
 labelMakeCheckBox(cart, tdb, "acc", "accession", TRUE);
 struct sqlConnection *conn = hAllocConn(database);
-boolean omimAvail = sqlQuickNum(conn,
-                                NOSQLINJ"select 1 from ncbiRefSeqLink where omimId != 0 limit 1");
+char query[1024];
+sqlSafef(query, sizeof query, "select 1 from ncbiRefSeqLink where omimId != 0 limit 1");
+boolean omimAvail = sqlQuickNum(conn, query);
 if (omimAvail)
     {
     char sym[32];

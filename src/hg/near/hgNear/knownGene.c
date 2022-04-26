@@ -212,11 +212,11 @@ struct genePos *knownPosAll(struct sqlConnection *conn)
 /* Get all positions in knownGene table. */
 {
 char query[1024];
-// just for side-effect of adding NOSQLINJ prefix
+// These sql querys are safe since it is from an .ra file on disk.
 if (showOnlyCanonical())
-    sqlSafef(query, sizeof query, "%-s", genomeSetting("allGeneQuery"));       
+    sqlSafef(query, sizeof query, genomeSetting("allGeneQuery"),NULL);       
 else
-    sqlSafef(query, sizeof query, "%-s", genomeSetting("allTranscriptQuery"));
+    sqlSafef(query, sizeof query, genomeSetting("allTranscriptQuery"),NULL);
 return genePosFromQuery(conn, query, FALSE);
 }
 
@@ -232,8 +232,7 @@ struct genePos *knownPosFirst(struct sqlConnection *conn)
 /* Get first gene in known gene table. */
 {
 char query[1024];
-// just for side-effect of adding NOSQLINJ prefix
-sqlSafef(query, sizeof query, "%-s", genomeSetting("allGeneQuery"));       
+sqlSafef(query, sizeof query, genomeSetting("allGeneQuery"), NULL); 
 struct genePos *gp = genePosFromQuery(conn, query, TRUE);
 return gp;
 }

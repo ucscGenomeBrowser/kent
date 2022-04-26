@@ -21,7 +21,7 @@ struct gtexEqtlCluster *eqtls = NULL, *eqtl;
 char **row;
 int offset;
 char where[512];
-sqlSafefFrag(where, sizeof(where), "target='%s'", gene);
+sqlSafef(where, sizeof(where), "target='%s'", gene);
 struct sqlResult *sr = hRangeQuery(conn, table, chrom, start, end, where, &offset); 
 while ((row = sqlNextRow(sr)) != NULL)
     {

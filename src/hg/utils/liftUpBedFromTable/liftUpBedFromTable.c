@@ -75,7 +75,7 @@ struct bedPlus *newBp;
 AllocVar(newBp);
 if (bedWordCount > 0)
     {
-    struct dyString *ds = newDyString(0);
+    struct dyString *ds = dyStringNew(0);
     int i;
     newBp->bed = bedLoadN(row, bedWordCount);
     for (i = bedWordCount; i < wordCount; i++)

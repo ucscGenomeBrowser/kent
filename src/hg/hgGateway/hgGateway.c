@@ -267,10 +267,11 @@ struct sqlConnection *conn = hConnectCentral();
 // may be used for different assemblies of the same species.  Using defaultDb means that
 // we send a taxId consistent with the taxId of the assembly that we'll change to when
 // the species is selected from the tree.
-char *query = NOSQLINJ "select dbDb.genome, taxId, dbDb.name from dbDb, defaultDb "
+struct dyString *query = sqlDyStringCreate(
+    "select dbDb.genome, taxId, dbDb.name from dbDb, defaultDb "
     "where defaultDb.name = dbDb.name and active = 1 "
-    "and taxId > 1;"; // filter out experimental hgwdev-only stuff with invalid taxIds
-struct sqlResult *sr = sqlGetResult(conn, query);
+    "and taxId > 1;"); // filter out experimental hgwdev-only stuff with invalid taxIds
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -283,6 +284,7 @@ hDisconnectCentral(&conn);
 jsonWriteObjectEnd(jw);
 dyStringAppend(dy, jw->dy->string);
 jsonWriteFree(&jw);
+dyStringFree(&query);
 }
 
 static void doMainPage()
@@ -790,12 +792,12 @@ while ((hel = hashNext(&cookie)) != NULL)
     if (isFirst)
         isFirst = FALSE;
     else
-        dyStringAppend(query, ", ");
-    dyStringPrintf(query, "'%s'", hel->name);
+        sqlDyStringPrintf(query, ", ");
+    sqlDyStringPrintf(query, "'%s'", hel->name);
     }
-dyStringAppendC(query, ')');
+sqlDyStringPrintf(query, ")");
 struct sqlConnection *conn = hConnectCentral();
-struct sqlResult *sr = sqlGetResult(conn, query->string);
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -826,6 +828,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&aHubMatchList);
 hDisconnectCentral(&conn);
+dyStringFree(&query);
 return aHubMatchList;
 }
 

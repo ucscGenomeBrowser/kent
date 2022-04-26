@@ -318,12 +318,11 @@ void updateBigTextField(struct sqlConnection *conn, char *table,
 /* Generate sql code to update a big text field that may include
  * newlines and stuff. */
 {
-struct dyString *dy = newDyString(4096);
-sqlDyStringPrintf(dy, "update %s set %s=", table, textField);
-dyStringQuoteString(dy, '"', textVal);
-dyStringPrintf(dy, " where %s = '%s'", whereField, whereVal);
+struct dyString *dy = dyStringNew(4096);
+sqlDyStringPrintf(dy, "update %s set %s='%s'", table, textField, textVal);
+sqlDyStringPrintf(dy, " where %s = '%s'", whereField, whereVal);
 sqlUpdate(conn, dy->string);
-freeDyString(&dy);
+dyStringFree(&dy);
 }
 
 char *substituteTrackName(char *create, char *tableName)
@@ -350,7 +349,7 @@ if(rear == NULL)
 front += 5;
 *front = '\0';
 
-sqlSafef(newCreate, length , "%-s %s %-s", create, tableName, rear);
+safef(newCreate, length , "%s %s %s", create, tableName, rear);
 return cloneString(newCreate);
 }
 
@@ -883,7 +882,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 /* Update database */
     {
     char *create, *end;
-    char query[256];
+    char query[2048];
     struct sqlConnection *conn = sqlConnect(database);
 
     /* Load in table definition. */
@@ -892,7 +891,8 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
     create = substituteTrackName(create, trackDbName);
     end = create + strlen(create)-1;
     if (*end == ';') *end = 0;
-    sqlRemakeTable(conn, trackDbName, create);
+    sqlSafef(query, sizeof(query), create, NULL);
+    sqlRemakeTable(conn, trackDbName, query);
 
     /* Load in regular fields. */
     sqlSafef(query, sizeof(query), "load data local infile '%s' into table %s", tab, trackDbName);
@@ -936,7 +936,8 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	    }
 	}
 
-    sqlUpdate(conn, NOSQLINJ "flush tables");
+    sqlSafef(query, sizeof(query), "flush tables");
+    sqlUpdate(conn, query);
     sqlDisconnect(&conn);
     verbose(1, "Loaded database %s\n", database);
     }

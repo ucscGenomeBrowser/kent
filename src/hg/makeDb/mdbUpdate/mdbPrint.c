@@ -188,8 +188,8 @@ if (updExpId)
 
 // For each passed in obj, write an mdbUpdate statement
 struct mdbObj *mdbObj = NULL;
-struct dyString *thisSelection = newDyString(256);
-struct dyString *lastSelection = newDyString(256);
+struct dyString *thisSelection = dyStringNew(256);
+struct dyString *lastSelection = dyStringNew(256);
 for (mdbObj=*mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next)
     {
     if (mdbObj->obj == NULL || mdbObj->deleteThis)

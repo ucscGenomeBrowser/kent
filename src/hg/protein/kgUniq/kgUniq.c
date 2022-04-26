@@ -123,13 +123,13 @@ while (fgets(line_in, 500, inf) != NULL)
     if (sameString(oldInfo, newInfo))
 	{
 	isDuplicate = 1;
- 	sqlSafefFrag(condStr, sizeof(condStr), "acc='%s'", proteinStr);
+ 	sqlSafef(condStr, sizeof(condStr), "acc='%s'", proteinStr);
         displayID = sqlGetField(uniProtDb, "displayId", "val", condStr);	
 	if (displayID == NULL) 
 	    {
 	    printf("!!! %s not found\n", proteinStr);fflush(stdout);
 	    }
- 	sqlSafefFrag(condStr, sizeof(condStr), "acc='%s'", oldProteinStr);
+ 	sqlSafef(condStr, sizeof(condStr), "acc='%s'", oldProteinStr);
         oldDisplayID = sqlGetField(uniProtDb, "displayId", "val", condStr);	
 	if (oldDisplayID == NULL) 
 	    {
@@ -162,7 +162,7 @@ while (fgets(line_in, 500, inf) != NULL)
 		printf("\n??? %s\t%s\n", proteinStr, row2[10]);fflush(stdout);
 		}
 		
- 	    sqlSafefFrag(condStr, sizeof(condStr), "acc='%s'", proteinStr);
+ 	    sqlSafef(condStr, sizeof(condStr), "acc='%s'", proteinStr);
             displayID = sqlGetField(uniProtDb, "displayId", "val", condStr);	
 	    if (displayID == NULL) 
 	    	{

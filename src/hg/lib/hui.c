@@ -3967,7 +3967,7 @@ if (filterBy->slChoices == NULL)  // no settings in cart, initialize from trackD
     filterBy->slChoices = slNameListFromCommaEscaped(setting);
     }
 
-struct dyString *dy = newDyString(128);
+struct dyString *dy = dyStringNew(128);
 dyStringPrintf(dy, "%s.%s.%s", name, "filterBy", filterBy->column);
 filterBy->htmlName = dy->string;
 
@@ -4107,22 +4107,22 @@ static char *filterByClauseStd(filterBy_t *filterBy)
 // returns the SQL where clause for a single filterBy struct in the standard cases
 {
 int count = slCount(filterBy->slChoices);
-struct dyString *dyClause = newDyString(256);
-dyStringAppend(dyClause, sqlCkId(filterBy->column));
+struct dyString *dyClause = dyStringNew(256);
+sqlDyStringPrintf(dyClause, "%s", filterBy->column);
 if (count == 1)
-    dyStringPrintf(dyClause, " = ");
+    sqlDyStringPrintf(dyClause, " = ");
 else
-    dyStringPrintf(dyClause, " in (");
+    sqlDyStringPrintf(dyClause, " in (");
 
 struct slName *slChoice = NULL;
 boolean first = TRUE;
 for (slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
     {
     if (!first)
-	dyStringAppend(dyClause, ",");
+	sqlDyStringPrintf(dyClause, ",");
     first = FALSE;
     if (filterBy->useIndex)
-	dyStringAppend(dyClause, slChoice->name); // a number converted to a string
+	sqlDyStringPrintf(dyClause, "%d",atoi(slChoice->name));  // a number converted to a string
     else
 	sqlDyStringPrintf(dyClause, "\"%s\"",slChoice->name);
     }
@@ -4132,7 +4132,7 @@ if (dyStringLen(dyClause) == 0)
     return NULL;
     }
 if (count > 1)
-    dyStringPrintf(dyClause, ")");
+    sqlDyStringPrintf(dyClause, ")");
 
 return dyStringCannibalize(&dyClause);
 }
@@ -4170,8 +4170,8 @@ for (;filterBy != NULL; filterBy = filterBy->next)
     if (clause != NULL)
 	{
 	if (*and)
-	    dyStringPrintf(extraWhere, " AND ");
-	dyStringAppend(extraWhere, clause);
+	    sqlDyStringPrintf(extraWhere, " AND ");
+	sqlDyStringPrintf(extraWhere,"%-s", clause);
 	freeMem(clause);
 	*and = TRUE;
 	}
@@ -4183,7 +4183,7 @@ return extraWhere;
 char *filterBySetClause(filterBy_t *filterBySet)
 // returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs
 {
-struct dyString *dyClause = newDyString(256);
+struct dyString *dyClause = dyStringNew(256);
 boolean notFirst = FALSE;
 filterBy_t *filterBy = NULL;
 
@@ -4193,8 +4193,8 @@ for (filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     if (clause != NULL)
 	{
 	if (notFirst)
-	    dyStringPrintf(dyClause, " AND ");
-	dyStringAppend(dyClause, clause);
+	    sqlDyStringPrintf(dyClause, " AND ");
+	sqlDyStringPrintf(dyClause,"%-s", clause);
 	freeMem(clause);
 	notFirst = TRUE;
 	}
@@ -5084,7 +5084,7 @@ static void printSubtrackTableBody(struct trackDb *parentTdb, struct slRef *subt
 sortOrder_t *sortOrder = settings->sortOrder;
 boolean useDragAndDrop = settings->useDragAndDrop;
 boolean restrictions = settings->restrictions;
-struct dyString *dyHtml = newDyString(SMALLBUF);
+struct dyString *dyHtml = dyStringNew(SMALLBUF);
 char buffer[SMALLBUF];
 char id[SMALLBUF];
 char *db = cartString(cart, "db");
@@ -5399,7 +5399,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
 // End of the table
 puts("</TBODY>");
-dyStringFree(&dyHtml)
+dyStringFree(&dyHtml);
 membersForAllSubGroupsFree(parentTdb,&membersForAll);
 }
 
@@ -5418,7 +5418,7 @@ static void printSubtrackTable(struct trackDb *parentTdb, struct slRef *subtrack
 {
 // Print table tag
 printf("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0'");
-struct dyString *dyHtml = newDyString(SMALLBUF);
+struct dyString *dyHtml = dyStringNew(SMALLBUF);
 if (settings->sortOrder != NULL)
     dyStringPrintf(dyHtml, "sortable");
 if (settings->useDragAndDrop)
@@ -5436,7 +5436,7 @@ if (dyStringLen(dyHtml) > 0)
 else
     settings->bgColorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
 puts("'>");
-dyStringFree(&dyHtml)
+dyStringFree(&dyHtml);
 
 // save count of subtracks for use by footer code
 int subCount = slCount(subtrackRefList);
@@ -7037,12 +7037,20 @@ if (setting || sameWord(filter,NO_SCORE_FILTER))
          // Assumes max==NO_VALUE or max==maxLimit is no filter!
         {
         if (max == NO_VALUE || (maxLimit != NO_VALUE && maxLimit == max))
-            dyStringPrintf(extraWhere, "%s(%s >= %d)", (*and?" and ":""),field,min);  // min only
+	    {
+	    if (*and) sqlDyStringPrintf(extraWhere, " and ");
+            sqlDyStringPrintf(extraWhere, "(%s >= %d)", field, min);  // min only
+	    }
         else if (min == NO_VALUE || (minLimit != NO_VALUE && minLimit == min))
-            dyStringPrintf(extraWhere, "%s(%s <= %d)", (*and?" and ":""),field,max);  // max only
+	    {
+	    if (*and) sqlDyStringPrintf(extraWhere, " and ");
+            sqlDyStringPrintf(extraWhere, "(%s <= %d)", field, max);  // max only
+	    }
         else
-            dyStringPrintf(extraWhere, "%s(%s BETWEEN %d and %d)", (*and?" and ":""), // both
-                           field,min,max);
+	    {
+	    if (*and) sqlDyStringPrintf(extraWhere, " and ");
+            sqlDyStringPrintf(extraWhere, "(%s BETWEEN %d and %d)", field, min, max); // both
+	    }
         *and=TRUE;
         }
     }
@@ -7111,12 +7119,20 @@ if (setting)
          // Assumes max==NO_VALUE or max==maxLimit is no filter!
         {
         if ((int)max == NO_VALUE || ((int)maxLimit != NO_VALUE && maxLimit == max))
-            dyStringPrintf(extraWhere, "%s(%s >= %g)", (*and?" and ":""),field,min);  // min only
+	    {
+	    if (*and) sqlDyStringPrintf(extraWhere, " and ");
+            sqlDyStringPrintf(extraWhere, "(%s >= %g)", field, min);  // min only
+	    }
         else if ((int)min == NO_VALUE || ((int)minLimit != NO_VALUE && minLimit == min))
-            dyStringPrintf(extraWhere, "%s(%s <= %g)", (*and?" and ":""),field,max);  // max only
+	    {
+	    if (*and) sqlDyStringPrintf(extraWhere, " and ");
+            sqlDyStringPrintf(extraWhere, "(%s <= %g)", field, max);  // max only
+	    }
         else
-            dyStringPrintf(extraWhere, "%s(%s BETWEEN %g and %g)", (*and?" and ":""), // both
-                           field,min,max);
+	    {
+	    if (*and) sqlDyStringPrintf(extraWhere, " and ");
+            sqlDyStringPrintf(extraWhere, "(%s BETWEEN %g and %g)", field,min,max); // both
+	    }
         *and=TRUE;
         }
     }
@@ -9724,7 +9740,7 @@ static struct dyString *subMultiField(char *pattern, int fieldCount,
 /* Substitute $in with out values in pattern */
 {
 int i;
-struct dyString *s = newDyString(256), *d = NULL;
+struct dyString *s = dyStringNew(256), *d = NULL;
 dyStringAppend(s, pattern);
 for (i=0; i<fieldCount; ++i)
     {
@@ -9775,7 +9791,7 @@ static struct dyString *subMulti(char *orig, int subCount,
 /* Perform multiple substitions on orig. */
 {
 int i;
-struct dyString *s = newDyString(256), *d = NULL;
+struct dyString *s = dyStringNew(256), *d = NULL;
 
 dyStringAppend(s, orig);
 for (i=0; i<subCount; ++i)
@@ -9890,7 +9906,7 @@ outs[12] = taxId;
 uUrl = subMulti(url, ArraySize(ins), ins, outs);
 outs[0] = eItem;
 eUrl = subMulti(url, ArraySize(ins), ins, outs);
-freeDyString(&uUrl);
+dyStringFree(&uUrl);
 freeMem(eItem);
 freeMem(scName);
 

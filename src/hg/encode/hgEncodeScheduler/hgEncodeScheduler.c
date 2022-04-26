@@ -40,20 +40,21 @@ errAbort(
 void initRunning(struct sqlConnection *conn)
 /* create running table if not exist */
 {
-char sql[512] = 
-NOSQLINJ "create table running ("
+char query[512]; 
+
+if (sqlTableExists(conn,"running"))
+    return;
+sqlSafef(query, sizeof query, 
+"create table running ("
 "  pid int(10) unsigned,"
 "  project int(10) unsigned,"
 "  jobType varchar(255),"
 "  startTime int(10),"
 "  timeOut int(10),"
 "  commandLine varchar(255)"
-")";
+")");
 
-if (sqlTableExists(conn,"running"))
-    return;
-
-sqlUpdate(conn, sql);
+sqlUpdate(conn, query);
 
 }
 

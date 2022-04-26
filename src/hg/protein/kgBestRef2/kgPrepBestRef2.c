@@ -127,7 +127,7 @@ while (fgets(line, 1000, IN) != NULL)
     sscanf(line, "%s", proteinID);
     printf(">%s\n", proteinID);
 
-    sqlSafefFrag(cond_str, sizeof cond_str, "acc='%s'", proteinID);
+    sqlSafef(cond_str, sizeof cond_str, "acc='%s'", proteinID);
     aaSeq = sqlGetField(spDB, "protein","val", cond_str);
 
     if (aaSeq == NULL)

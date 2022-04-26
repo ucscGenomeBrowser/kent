@@ -812,7 +812,7 @@ static int saveCartAsSession(struct sqlConnection *conn, char *encUserName, char
 struct sqlResult *sr = NULL;
 struct dyString *dy = dyStringNew(16 * 1024);
 char **row;
-char *firstUse = "now()";
+char *firstUse = NULL;
 int useCount = INITIAL_USE_COUNT;
 char firstUseBuf[32];
 char *settings = "";
@@ -856,15 +856,15 @@ sqlUpdate(conn, dy->string);
 
 dyStringClear(dy);
 sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
-dyStringAppend(dy, "(userName, sessionName, contents, shared, "
+sqlDyStringPrintf(dy, "(userName, sessionName, contents, shared, "
                "firstUse, lastUse, useCount");
 if (gotSettings)
-    dyStringAppend(dy, ", settings");
-dyStringAppend(dy, ") VALUES (");
-sqlDyStringPrintfFrag(dy, "'%s', '%s', ", encUserName, encSessionName);
-dyStringAppend(dy, "'");
+    sqlDyStringPrintf(dy, ", settings");
+sqlDyStringPrintf(dy, ") VALUES (");
+sqlDyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
+sqlDyStringPrintf(dy, "'");
 cleanHgSessionFromCart(cart);
-struct dyString *encoded = newDyString(4096);
+struct dyString *encoded = dyStringNew(4096);
 cartEncodeState(cart, encoded);
 
 // Now add all the default visibilities to output.
@@ -872,12 +872,16 @@ outDefaultTracks(cart, encoded);
 
 sqlDyAppendEscaped(dy, encoded->string);
 dyStringFree(&encoded);
-dyStringAppend(dy, "', ");
-dyStringPrintf(dy, "%d, ", sharingLevel);
-dyStringPrintf(dy, "%s, now(), %d", firstUse, useCount);
+sqlDyStringPrintf(dy, "', ");
+sqlDyStringPrintf(dy, "%d, ", sharingLevel);
+if (firstUse)
+    sqlDyStringPrintf(dy, "'%s', ", firstUse);
+else
+    sqlDyStringPrintf(dy, "now(), ");
+sqlDyStringPrintf(dy, "now(), %d", useCount);
 if (gotSettings)
-    sqlDyStringPrintfFrag(dy, ", '%s'", settings);
-dyStringPrintf(dy, ");");
+    sqlDyStringPrintf(dy, ", '%s'", settings);
+sqlDyStringPrintf(dy, ")");
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 

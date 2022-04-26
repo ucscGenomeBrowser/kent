@@ -83,7 +83,9 @@ for (jp = routeList;  jp != NULL;  jp = jpNext)
         {
         char dbTable[PATH_LEN];
         joinerDtfToSqlTableString(jp->b, db, dbTable, sizeof(dbTable));
-        uint rowCountB = sqlRowCount(conn, dbTable);
+	char queryTblSafe[1024];
+	sqlSafef(queryTblSafe, sizeof queryTblSafe, "%s", dbTable);
+        uint rowCountB = sqlRowCount(conn, queryTblSafe);
         boolean relatedMuchBigger = mainTableRowCount + 10000000 < rowCountB;
         if (mysqlFasterForMainTable || relatedMuchBigger)
             useSql = TRUE;

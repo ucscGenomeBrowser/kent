@@ -118,7 +118,7 @@ struct hash *hash = newHash(20);
 struct sqlResult *sr;
 char **row;
 int count = 0;
-struct dyString *query = newDyString(512);
+struct dyString *query = dyStringNew(512);
 
 sqlDyStringPrintf(query, "select mrna.acc from mrna,library "
 		   "where mrna.library = library.id "
@@ -241,8 +241,8 @@ void outputOne(char *database, struct psl *psl, struct binKeeper *bk, FILE *f)
 {
 struct dnaSeq *estSeq = hExtSeq(database, psl->qName);
 struct dnaSeq *genoSeq = hChromSeq(database, psl->tName, psl->tStart, psl->tEnd);
-struct dyString *q = newDyString(2*psl->qSize);
-struct dyString *t = newDyString(2*psl->qSize);
+struct dyString *q = dyStringNew(2*psl->qSize);
+struct dyString *t = dyStringNew(2*psl->qSize);
 int qSize = psl->qSize;
 int tSize = psl->tSize;
 static struct axt axt;
@@ -306,8 +306,8 @@ if (isSpliced(mbList, genoSeq, genoOffset))
 
 /* Clean up time. */
 slFreeList(&mbList);
-freeDyString(&q);
-freeDyString(&t);
+dyStringFree(&q);
+dyStringFree(&t);
 freeDnaSeq(&estSeq);
 freeDnaSeq(&genoSeq);
 }

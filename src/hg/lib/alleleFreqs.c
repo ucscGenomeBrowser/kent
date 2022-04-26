@@ -130,11 +130,11 @@ void alleleFreqsSaveToDb(struct sqlConnection *conn, struct alleleFreqs *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%c','%s','%s','%s','%s','%s','%c',%d,%f,'%c',%d,%f,%d)", 
 	tableName,  el->rsId,  el->chrom,  el->chromStart,  el->strand,  el->assembly,  el->center,  el->protLSID,  el->assayLSID,  el->panelLSID,  el->majAllele,  el->majCount,  el->majFreq,  el->minAllele,  el->minCount,  el->minFreq,  el->total);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

@@ -60,7 +60,7 @@ static void transformToCanonical(struct searchResult *list,
 	struct sqlConnection *conn)
 /* Transform search results to canonical versions.  */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *cannon = genomeSetting("canonicalTable");
 char *isoform = genomeSetting("isoformTable");
 struct sqlResult *sr;
@@ -234,7 +234,7 @@ static char *transcriptToCanonical(struct sqlConnection *conn, char *transcript)
 /* Translate transcript to canonical ID if possible, otherwise just return 
  * a copy of transcript. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *cannon = genomeSetting("canonicalTable");
 char *isoform = genomeSetting("isoformTable");
 char buf[128];

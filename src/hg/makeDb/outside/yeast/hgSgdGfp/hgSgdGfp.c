@@ -28,21 +28,24 @@ static struct optionSpec options[] = {
 void createLocTable(struct sqlConnection *conn, char *tableName)
 /* Create our name/value table, dropping if it already exists. */
 {
-sqlRemakeTable(conn, tableName, 
-NOSQLINJ "CREATE TABLE  sgdLocalization (\n"
+char query[1024];
+sqlSafef(query, sizeof query, 
+"CREATE TABLE  sgdLocalization (\n"
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
 "              #Indices\n"
 "    INDEX(name(10)),\n"
 "    INDEX(value(16))\n"
 ")\n");
+sqlRemakeTable(conn, tableName, query);
 }
 
 void createAbTable(struct sqlConnection *conn, char *tableName)
 /* Create abundance table, dropping if it already exists. */
 {
-sqlRemakeTable(conn, tableName,
-NOSQLINJ "CREATE TABLE sgdAbundance (\n"
+char query[1024];
+sqlSafef(query, sizeof query, 
+"CREATE TABLE sgdAbundance (\n"
 "    name varchar(10) not null, # ORF name in sgdGene table\n"
 "    abundance float not null,  # Absolute abundance from 41 to 1590000\n"
 "    error varchar(10) not null,        # Error - either a floating point number or blank\n"
@@ -50,6 +53,7 @@ NOSQLINJ "CREATE TABLE sgdAbundance (\n"
 "    PRIMARY KEY(name)\n"
 ")\n"
 );
+sqlRemakeTable(conn, tableName, query);
 }
 
 

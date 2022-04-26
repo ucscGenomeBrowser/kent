@@ -75,15 +75,15 @@ if (sqlTableExists(conn, tableName))
 	    {
 	    sqlDyStringPrintf(dy, 
 	       "select name from %s.knownToVisiGene ", genomeDb);
-	    dyStringAppend(dy,
+	    sqlDyStringPrintf(dy,
 	       "where value in(");
 	    for (image = imageList; image != NULL; image = image->next)
 		{
 		sqlDyStringPrintf(dy, "'%s'", image->name);
 		if (image->next != NULL)
-		    dyStringAppendC(dy, ',');
+		    sqlDyStringPrintf(dy, ",");
 		}
-	    dyStringAppend(dy, ")");
+	    sqlDyStringPrintf(dy, ")");
 	    slFreeList(&imageList);
 	    }
 	}

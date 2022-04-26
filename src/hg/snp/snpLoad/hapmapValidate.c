@@ -355,7 +355,7 @@ if (!hTableExists(argv[2]))
 
 errorFileHandle = mustOpen("hapmapValidate.error", "w");
 complexFileHandle = mustOpen("hapmapValidate.complex", "w");
-dynamicObserved = newDyString(32);
+dynamicObserved = dyStringNew(32);
 hapmapValidate(argv[2]);
 carefulClose(&errorFileHandle);
 carefulClose(&complexFileHandle);

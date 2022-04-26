@@ -82,7 +82,7 @@ got = chopByChar(copy, '/', dirNames, ArraySize(dirNames));
 for (i = 0; i < got; i++) 
     {
     int j;
-    struct dyString *ds = newDyString(64);
+    struct dyString *ds = dyStringNew(64);
     for (j = i; j < got; j++)
         {
 	dyStringAppend(ds, dirNames[j]);

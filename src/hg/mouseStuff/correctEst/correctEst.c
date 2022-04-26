@@ -99,7 +99,7 @@ void correctOne(struct dnaSeq *est, struct psl *psl, char *nibDir,
 {
 struct dnaSeq *geno = readCachedNib(nibHash, nibDir, psl->tName, 
 	psl->tStart, psl->tEnd - psl->tStart);
-struct dyString *t = newDyString(est->size+20);
+struct dyString *t = dyStringNew(est->size+20);
 int qSize = psl->qSize;
 int tSize = psl->tSize;
 int qLastEnd = 0;
@@ -148,7 +148,7 @@ faWriteNext(f, est->name, t->string, t->stringSize);
 
 /* Clean up time. */
 slFreeList(&mbList);
-freeDyString(&t);
+dyStringFree(&t);
 freeDnaSeq(&geno);
 }
 

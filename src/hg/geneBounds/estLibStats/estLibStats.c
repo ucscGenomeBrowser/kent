@@ -144,7 +144,9 @@ char liId[256];
 char **row;
 struct nameId *library, *author;
 
-sr = sqlGetResult(conn, NOSQLINJ "select acc,library,author,direction from mrna where type = 'EST'");
+char query[1024];
+sqlSafef(query, sizeof query, "select acc,library,author,direction from mrna where type = 'EST'");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     library = hashMustFindVal(libHash, row[1]);
@@ -308,7 +310,9 @@ struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr = NULL;
 char **row;
 
-sr = sqlGetResult(conn, NOSQLINJ "select acc,size,gb_date from seq");
+char query[1024];
+sqlSafef(query, sizeof query, "select acc,size,gb_date from seq");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *acc = row[0];

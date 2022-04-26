@@ -479,12 +479,9 @@ struct dyString *extra = dyStringNew(0);
 if (nameList)
     {
     struct slName *tmp = NULL;
-    char escapedInput[512];
     for (tmp = nameList; tmp != NULL; tmp = tmp->next)
         {
-        // escape user input manually:
-        sqlSafefFrag(escapedInput, sizeof(escapedInput), "%s", tmp->name);
-        dyStringPrintf(extra, "label like '%%%s%%'", escapedInput);
+        dyStringPrintf(extra, "label like '%%%s%%'", tmp->name);
         if (tmp->next)
             dyStringPrintf(extra, " and ");
         }

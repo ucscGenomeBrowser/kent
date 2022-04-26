@@ -821,10 +821,13 @@ struct dyString *query = dyStringNew(0);
 struct dyString *where = dyStringNew(0);
 struct slName *field, *fieldList = commaSepToSlNames(fields);
 boolean gotWhere = FALSE;
-sqlDyStringPrintf(query, "select %-s from %-s", sqlCkIl(fields), sqlCkIl(from));
+sqlCkIl(fieldsSafe,fields)
+sqlCkIl(fromSafe,from)
+
+sqlDyStringPrintf(query, "select %-s from %-s", fieldsSafe, fromSafe);
 if (!isEmpty(initialWhere))
     {
-    sqlDyStringPrintfFrag(where, " where ");
+    sqlDyStringPrintf(where, " where ");
     sqlSanityCheckWhere(initialWhere, where);
     gotWhere = TRUE;
     }
@@ -996,7 +999,8 @@ if (visibleFacetList)
 else
     {
     /* Figure out size of query result */
-    struct dyString *countQuery = sqlDyStringCreate("select count(*) from %-s", sqlCkIl(from));
+    sqlCkIl(fromSafe,from)
+    struct dyString *countQuery = sqlDyStringCreate("select count(*) from %-s", fromSafe);
     sqlDyStringPrintf(countQuery, "%-s", where->string);   // trust
     context.tableSize = sqlQuickNum(conn, countQuery->string);
     dyStringFree(&countQuery);

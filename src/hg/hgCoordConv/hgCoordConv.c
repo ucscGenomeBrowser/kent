@@ -207,7 +207,7 @@ dbDbFreeList(&dbList);
 void appendWarningMsg(char *warning)
 /* keep track of error messages for the user */
 {
-struct dyString *warn = newDyString(1024);
+struct dyString *warn = dyStringNew(1024);
 dyStringPrintf(warn, "%s", warning);
 slAddHead(&webWarning, warn);
 }
@@ -252,7 +252,7 @@ struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr;
 char **row;
 char *ret = NULL;
-struct dyString *dy = newDyString(128);
+struct dyString *dy = dyStringNew(128);
 
 if (database != NULL)
     sqlDyStringPrintf(dy,"select description from dbDb where name = '%s' and (genome like '%s' "
@@ -267,7 +267,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     ret = cloneString(row[0]);
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
-freeDyString(&dy);
+dyStringFree(&dy);
 return ret;
 }
 
@@ -318,7 +318,7 @@ if ((  newGenome == NULL
 
 if( origGenome != NULL && sameString(origGenome, newGenome))
     {
-    struct dyString *warning = newDyString(1024);
+    struct dyString *warning = dyStringNew(1024);
     dyStringPrintf(warning, "Did you really want to convert from %s to %s (the same genome)?",
                    ccFreezeDbConversion(origGenome, NULL, organism), \
                    ccFreezeDbConversion(newGenome, NULL, organism));

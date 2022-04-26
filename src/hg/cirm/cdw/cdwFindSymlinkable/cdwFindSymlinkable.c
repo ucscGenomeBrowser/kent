@@ -161,9 +161,8 @@ void cdwFindSymlinkable()
 /* Find files that have not been symlinked to cdw/ yet to save space. */
 {
 struct sqlConnection *conn = cdwConnectReadWrite();
-char query[512];
 
-sqlSafef(query, sizeof(query), "select id from cdwSubmit");
+struct dyString *query = sqlDyStringCreate("select id from cdwSubmit");
 
 // optional filtering
 if (idList && submitDirFilter)
@@ -171,7 +170,7 @@ if (idList && submitDirFilter)
 
 if (idList)
     {
-    sqlSafefAppend(query, sizeof(query), " where id in (");
+    sqlDyStringPrintf(query, " where id in (");
     unsigned *idArray = NULL; 
     int idCount = 0;
     sqlUnsignedDynamicArray(idList, &idArray, &idCount);
@@ -179,10 +178,10 @@ if (idList)
     for (i=0; i < idCount; ++i)
 	{
 	if (i > 0)
-	    sqlSafefAppend(query, sizeof(query), ",");
-	sqlSafefAppend(query, sizeof(query), "%d", idArray[i]);
+	    sqlDyStringPrintf(query, ",");
+	sqlDyStringPrintf(query, "%d", idArray[i]);
 	}
-    sqlSafefAppend(query, sizeof(query), ")");
+    sqlDyStringPrintf(query, ")");
     freeMem(idArray);
     }
 
@@ -193,10 +192,11 @@ if (submitDirFilter)
     int submitDirId = sqlQuickNum(conn, query2);
     if (submitDirId <= 0)
 	errAbort("%s not found", submitDirFilter);
-    sqlSafefAppend(query, sizeof(query), " where submitDirId = %d", submitDirId);
+    sqlDyStringPrintf(query, " where submitDirId = %d", submitDirId);
     }
 
-struct slInt *submitIdList = sqlQuickNumList(conn, query);
+struct slInt *submitIdList = sqlQuickNumList(conn, dyStringContents(query));
+dyStringFree(&query);
 verbose(1, "%d submits\n", slCount(submitIdList));
 
 if (inodeReport)
@@ -229,8 +229,9 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
     verbose(1, "submitDir url=%s\n", ed->url);
 
     verbose(1, "files:\n");
-    sqlSafef(query, sizeof(query), "select id from cdwFile where submitId=%d", sel->val);
-    struct slInt *fileIdList = sqlQuickNumList(conn, query);
+    char query3[1024];
+    sqlSafef(query3, sizeof(query3), "select id from cdwFile where submitId=%d", sel->val);
+    struct slInt *fileIdList = sqlQuickNumList(conn, query3);
     verbose(1, "%d files in submission\n", slCount(fileIdList));
     struct slInt *el;
     for (el = fileIdList; el != NULL; el = el->next)

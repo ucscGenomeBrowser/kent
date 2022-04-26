@@ -79,13 +79,13 @@ for (index = tbf->indexList; index != NULL; index = index->next)
 	unsigned char md5Result[MD5_DIGEST_LENGTH];
 	MD5((unsigned char *)seq->dna, strlen(seq->dna), md5Result);
 	int i;
-	struct dyString *ds = newDyString(MD5_DIGEST_LENGTH);
+	struct dyString *ds = dyStringNew(MD5_DIGEST_LENGTH);
 	for(i = 0; i < MD5_DIGEST_LENGTH; i++)
 	    {
 	    dyStringPrintf(ds, "%02x", md5Result[i]);
 	    }
 	fprintf(keyListFile, "%s\t%s\n", ds->string, index->name);
-	freeDyString(&ds);
+	dyStringFree(&ds);
 	}
     freeDnaSeq(&seq);
     }

@@ -22,22 +22,6 @@ errAbort(
   );
 }
 
-char createString[] = NOSQLINJ "CREATE TABLE softPromoter (\n"
-    "chrom varchar(255) not null,	# Human chromosome or FPC contig\n"
-    "chromStart int unsigned not null,	# Start position in chromosome\n"
-    "chromEnd int unsigned not null,	# End position in chromosome\n"
-    "name varchar(255) not null,	# As displayed in browser\n"
-    "score int unsigned not null,	# Score from 0 to 1000\n"
-    "type varchar(255) not null,	# TATA+ or TATAless currently\n"
-    "origScore float not null,	# Score in original file, not scaled\n"
-    "origName varchar(255) not null,	# Name in original file\n"
-    "blockString varchar(255) not null,	# From original file.  \n"
-              "#Indices\n"
-    "INDEX(chrom(12),chromStart),\n"
-    "INDEX(chrom(12),chromEnd),\n"
-    "INDEX(name(12))\n"
-")\n";
-
 char *simplifyName(char *softName)
 /* Convert softberry name to something ok to see in browser */
 {
@@ -102,8 +86,26 @@ struct sqlConnection *conn = sqlConnect(database);
 char query[256];
 
 printf("Loading %s from %s\n", database, fileName);
-sqlMaybeMakeTable(conn, "softPromoter", createString);
-sqlUpdate(conn, NOSQLINJ "delete from softPromoter");
+sqlSafef(query, sizeof query, 
+"CREATE TABLE softPromoter (\n"
+    "chrom varchar(255) not null,	# Human chromosome or FPC contig\n"
+    "chromStart int unsigned not null,	# Start position in chromosome\n"
+    "chromEnd int unsigned not null,	# End position in chromosome\n"
+    "name varchar(255) not null,	# As displayed in browser\n"
+    "score int unsigned not null,	# Score from 0 to 1000\n"
+    "type varchar(255) not null,	# TATA+ or TATAless currently\n"
+    "origScore float not null,	# Score in original file, not scaled\n"
+    "origName varchar(255) not null,	# Name in original file\n"
+    "blockString varchar(255) not null,	# From original file.  \n"
+              "#Indices\n"
+    "INDEX(chrom(12),chromStart),\n"
+    "INDEX(chrom(12),chromEnd),\n"
+    "INDEX(name(12))\n"
+")\n");
+
+sqlMaybeMakeTable(conn, "softPromoter", query);
+sqlSafef(query, sizeof query, "delete from softPromoter");
+sqlUpdate(conn, query);
 sqlSafef(query, sizeof query, "load data local infile '%s' into table softPromoter", fileName);
 sqlUpdate(conn, query);
 sqlDisconnect(&conn);

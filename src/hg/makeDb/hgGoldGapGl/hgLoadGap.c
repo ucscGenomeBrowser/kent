@@ -124,7 +124,7 @@ fclose(tabFile);
 
 if (! noLoad)
     {
-    struct dyString *ds = newDyString(2048);
+    struct dyString *ds = dyStringNew(2048);
     if (unsplit)
 	sqlDyStringPrintf(ds,  createGapUnsplit, gapTableName,
 		maxChromNameSize, maxChromNameSize);
@@ -136,7 +136,7 @@ if (! noLoad)
 	  tabFileName, gapTableName);
     sqlUpdate(conn, query);
     remove(tabFileName);
-    freeDyString(&ds);
+    dyStringFree(&ds);
     }
 }
 

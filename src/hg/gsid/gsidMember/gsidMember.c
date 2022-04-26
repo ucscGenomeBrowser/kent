@@ -153,9 +153,12 @@ char **row;
 
 FILE *out = mustOpen("../conf/passwords", "w");
 
-sr = sqlGetResult(conn,
-NOSQLINJ "select email,password from members where activated='Y'"
+char query[1024];
+sqlSafef(query, sizeof query, 
+"select email,password from members where activated='Y'"
 " and (expireDate='' or (current_date() < expireDate))");
+
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     fprintf(out,"%s:%s\n",row[0],row[1]);
@@ -197,8 +200,9 @@ boolean isFirstField = dy->stringSize == 0;
 if (isFirstField)
     sqlDyStringPrintf(dy,"insert into transactions set ");
 
-sqlDyStringPrintf(dy,"%-s%s='%s'",
-    isFirstField ? "" : ", ",
+if (!isFirstField)
+    sqlDyStringPrintf(dy,",");
+sqlDyStringPrintf(dy,"%s='%s'",
     varName,
     cgiUsualString(varName,""));
 struct cgiVar *this = NULL;
@@ -228,7 +232,7 @@ void processIpn(struct sqlConnection *conn)
 /* save the ipn post variables received to the log regardless */
 struct cgiVar *this=NULL, *cgiVars = cgiVarList();
 FILE *f=mustOpen("ipn.log","a");
-struct dyString *dy=newDyString(256);
+struct dyString *dy=dyStringNew(256);
 struct dyString *dyVerify = NULL;
 char *paypalServer = cfgOption("paypalServer");
 dyStringAppend(dy,"../cgi-bin/webscr?cmd=_notify-validate");
@@ -338,7 +342,7 @@ appendSqlField(dy,"charset",cgiVars);
 appendSqlField(dy,"custom",cgiVars);
 appendSqlField(dy,"notify_version",cgiVars);
 appendSqlField(dy,"verify_sign",cgiVars);
-struct dyString *dyOther=newDyString(256);
+struct dyString *dyOther=dyStringNew(256);
 /* catchall for fields we did not anticipate, or future fields */
 for(this=cgiVars;this;this=this->next)
     {
@@ -477,7 +481,9 @@ hPrintf("<h1>Members</h1>");
 hPrintf("<table>");
 hPrintf("<th>email</th><th>password</th>");
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from members");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from members");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hPrintf("<tr><td>%s</td><td>%s</td></tr>",row[0],row[1]);
@@ -1130,7 +1136,8 @@ if (checkPwd(password,m->password))
 
 
     /* add payment button if needed */
-    char *currentDate=sqlQuickString(conn, NOSQLINJ "select current_date()");
+    sqlSafef(query, sizeof query, "select current_date()");
+    char *currentDate=sqlQuickString(conn, query);
     if (!sameString(m->activated,"Y") || strcmp(currentDate,m->expireDate)>0)
 	{
 	drawPaymentButton(conn, m->type);

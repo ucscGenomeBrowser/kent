@@ -48,8 +48,9 @@ struct hash *ccdsStatusValLoad(struct sqlConnection *conn)
  * status name to uid.  Names are loaded both as-is and lower-case */
 {
 struct hash *statusVals = hashNew(0);
-struct sqlResult *sr = sqlGetResult(conn, 
-                                    NOSQLINJ "SELECT ccds_status_val_uid, ccds_status FROM CcdsStatusVals");
+char query[1024];
+sqlSafef(query, sizeof query, "SELECT ccds_status_val_uid, ccds_status FROM CcdsStatusVals");
+struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {

@@ -210,7 +210,9 @@ struct sqlResult *sr;
 char **row;
 int count = 0;
 
-sr = sqlGetResult(conn, NOSQLINJ "select LLid, MGIid from MGIid");
+char query[1024];
+sqlSafef(query, sizeof query, "select LLid, MGIid from MGIid");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *jaxId = cloneString(row[1]);
@@ -308,7 +310,9 @@ struct sqlResult *sr;
 char **row;
 
 /* Using ensembl fillFirstColumnHash(diseaseFile, diseaseHash); */
-sr = sqlGetResult(conn, NOSQLINJ "select mrnaAcc,locusLinkId from refLink");
+char query[1024];
+sqlSafef(query, sizeof query, "select mrnaAcc,locusLinkId from refLink");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *acc = row[0];

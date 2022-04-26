@@ -56,7 +56,7 @@ subString = cloneString(observed);
 subString = subString + 2;
 reverseComplement(subString, strlen(subString));
 
-myDy = newDyString(1024);
+myDy = dyStringNew(1024);
 dyStringAppend(myDy, "-/");
 dyStringAppend(myDy, subString);
 

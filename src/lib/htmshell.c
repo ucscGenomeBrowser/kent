@@ -51,7 +51,7 @@ va_list argscp;
 va_copy(argscp, args);
 char warning[1024];
 
-struct dyString *ds = newDyString(1024);
+struct dyString *ds = dyStringNew(1024);
 vaHtmlDyStringPrintf(ds, format, args);
 int n = ds->stringSize;
 int nLimit = sizeof(warning) - 1;
@@ -60,7 +60,7 @@ if (ds->stringSize > nLimit)
 safencpy(warning, sizeof warning, ds->string, n);
 if (ds->stringSize > nLimit)
     strcpy(warning+n-5,"[...]");  // indicated trucation
-freeDyString(&ds);
+dyStringFree(&ds);
 
 fprintf(stdout, "%s\n", warning);
 /* write warning/error message to stderr so they get logged. */
@@ -659,7 +659,7 @@ htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
 char warning[1024];
 
 // html-encode arguments to fight XSS
-struct dyString *ds = newDyString(1024);
+struct dyString *ds = dyStringNew(1024);
 vaHtmlDyStringPrintf(ds, format, args);
 int n = ds->stringSize;
 int nLimit = sizeof(warning) - 1;
@@ -668,7 +668,7 @@ if (ds->stringSize > nLimit)
 safencpy(warning, sizeof warning, ds->string, n);
 if (ds->stringSize > nLimit)
     strcpy(warning+n-5,"[...]"); // show truncation
-freeDyString(&ds);
+dyStringFree(&ds);
 
 // Replace newlines with BR tag
 char *warningBR = htmlWarnEncode(warning); 
@@ -1612,10 +1612,10 @@ va_end(args);
 void vaHtmlFprintf(FILE *f, char *format, va_list args)
 /* fprintf using html encoding types */
 {
-struct dyString *ds = newDyString(1024);
+struct dyString *ds = dyStringNew(1024);
 vaHtmlDyStringPrintf(ds, format, args);
 fputs(ds->string, f);  // does not append newline
-freeDyString(&ds);
+dyStringFree(&ds);
 }
 
 

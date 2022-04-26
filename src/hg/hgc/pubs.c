@@ -271,26 +271,26 @@ static char *makeSqlMarkerList(void)
 /* return list of sections from cgi vars, format like "'abstract','header'" */
 {
 int secCount = sizeof(pubsSecNames)/sizeof(char *);
-struct slName *names = NULL;
+struct dyString *dy = dyStringNew(1024);
 int i;
+int found = 0;
 for (i=0; i<secCount; i++) 
-{
+    {
     // add ' around name and add to list
     char *secName = pubsSecNames[i];
     if (cgiOptionalInt(secName, pubsSecChecked[i]))
-    {
-        char nameBuf[100];
-        safef(nameBuf, sizeof(nameBuf), "'%s'", secName);
-        slAddHead(&names, slNameNew(nameBuf));
+	{
+	if (i != 0)
+	    sqlDyStringPrintf(dy, ",");
+        sqlDyStringPrintf(dy, "'%s'", secName);
+	++found;
+	}
     }
-}
 
-if (names==0)
+if (found==0)
     errAbort("You need to specify at least one article section.");
 
-char *nameListString = slNameListToString(names, ',');
-slNameFree(names);
-return nameListString;
+return dyStringCannibalize(&dy);
 }
 
 
@@ -302,12 +302,13 @@ static struct sqlResult *queryMarkerRows(struct sqlConnection *conn, char *marke
 {
 char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
-//sqlUpdate(conn, NOSQLINJ "SET SESSION group_concat_max_len = 100000");
+//sqlSafef(query, sizeof query, "SET SESSION group_concat_max_len = 100000");
+//sqlUpdate(conn, query);
  
 char artFilterSql[4000];
 artFilterSql[0] = 0;
 if (isNotEmpty(artExtIdFilter))
-    safef(artFilterSql, sizeof(artFilterSql), " AND extId='%s' ", artExtIdFilter);
+    sqlSafef(artFilterSql, sizeof(artFilterSql), " AND extId='%s' ", artExtIdFilter);
 
 // no need to check for illegal characters in sectionList
 sqlSafef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, year, "  

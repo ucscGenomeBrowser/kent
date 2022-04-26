@@ -144,7 +144,7 @@ static char *createString =
 "    INDEX(chrom(%d),chromEnd)\n"
 #endif /* OLD */
 ")\n";
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 sqlDyStringPrintf(dy, createString, tableName, indexSize, indexSize, indexSize);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);

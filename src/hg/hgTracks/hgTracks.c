@@ -416,7 +416,7 @@ else
     hPrintf("HREF=\"%s?complement_%s=%d", hgTracksName(), database,
             !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE));
     hPrintf("&%s\"", ui->string);
-    freeDyString(&ui);
+    dyStringFree(&ui);
     if (message != NULL)
         mapStatusMessage("%s", message);
     hPrintf(">\n");
@@ -2110,7 +2110,7 @@ for (track = trackList; track != NULL; track = track->next)
 static void logTrackVisibilities (char *hgsid, struct track *trackList, char *position)
 /* log visibile tracks and hgsid */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 // build up dyString
 logTrackList(dy, trackList);
@@ -3632,7 +3632,7 @@ virtRegionList = NULL;
 struct sqlResult *sr;
 char **row;
 int rowOffset = 0;
-char query[256];
+struct dyString *query = NULL;
 int padding = emPadding;
 if (sameString(virtModeType, "geneMostly"))
     padding = gmPadding;
@@ -3641,46 +3641,49 @@ struct hash *kcHash = NULL;
 if (knownCanonical) // filter out alt splicing variants
     {
     // load up hash of canonical transcriptIds
-    sqlSafef(query, sizeof(query), "select transcript from %s"
+    query = sqlDyStringCreate("select transcript from %s"
 	//" where chrom not like '%%_hap_%%' and chrom not like '%%_random'"
 	, knownCanonical);
     if (virtualSingleChrom())
-	sqlSafefAppend(query, sizeof(query), " where chrom='%s'", chromName);
+	sqlDyStringPrintf(query, " where chrom='%s'", chromName);
     kcHash = newHash(10);
-    sr = sqlGetResult(conn, query);
+    sr = sqlGetResult(conn, dyStringContents(query));
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	hashAdd(kcHash, row[0], NULL);
 	}
     sqlFreeResult(&sr);
+    dyStringFree(&query);
     }
 // knownToTag basic hash
 struct hash *ktHash = NULL;
 if (knownToTag) // filter out all but Basic
     {
     // load up hash of canonical transcriptIds
-    sqlSafef(query, sizeof(query), "select name from %s where value='basic'", knownToTag);
+    query = sqlDyStringCreate("select name from %s where value='basic'", knownToTag);
     ktHash = newHash(10);
-    sr = sqlGetResult(conn, query);
+    sr = sqlGetResult(conn, dyStringContents(query));
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	hashAdd(ktHash, row[0], NULL);
 	}
     sqlFreeResult(&sr);
+    dyStringFree(&query);
     }
 setEMGeneTrack();
 if (!emGeneTable)
     errAbort("Unexpected error, emGeneTable=NULL in initVirtRegionsFromEMGeneTableExons");
 if (hIsBinned(database, emGeneTable)) // skip first bin column if any
     ++rowOffset;
-sqlSafef(query, sizeof(query), "select * from %s", emGeneTable);
+query = sqlDyStringCreate("select * from %s", emGeneTable);
 if (virtualSingleChrom())
-    sqlSafefAppend(query, sizeof(query), " where chrom='%s'", chromName);
+    sqlDyStringPrintf(query, " where chrom='%s'", chromName);
 // TODO GALT may have to change this to in-memory sorting?
 // refGene is out of order because of genbank continuous loading
 // also, using where chrom= causes it to use indexes which disturb order returned.
-sqlSafefAppend(query, sizeof(query), " order by chrom, txStart");
-sr = sqlGetResult(conn, query);
+sqlDyStringPrintf(query, " order by chrom, txStart");
+sr = sqlGetResult(conn, dyStringContents(query));
+dyStringFree(&query);
 
 char chrom[256] = "";
 int start = -1;
@@ -3937,11 +3940,13 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int winCount = 0;
-char *query =
-NOSQLINJ "select chrom, size from chromInfo"
-" where chrom     like 'chr%'"
-" and   chrom not like '%_random'"
-" and   chrom not like 'chrUn%'";
+char query[1024];
+sqlSafef(query, sizeof query,
+"select chrom, size from chromInfo"
+" where chrom     like 'chr%%'"
+" and   chrom not like '%%_random'"
+" and   chrom not like 'chrUn%%'"
+);
 // allow alternate haplotypes for now
 //" and   chrom not like '%_hap%'"
 //" and   chrom not like '%_alt'"
@@ -7995,7 +8000,7 @@ cgiDecodeFull(cartString, curSessCart, MAX_SESSION_LEN);
 char *curSessVisTracks = cgiTrackVisString(curSessCart);
 
 // get track-related vars from current cart
-struct dyString *dsCgiVars = newDyString(0);
+struct dyString *dsCgiVars = dyStringNew(0);
 cartEncodeState(cart, dsCgiVars);
 outDefaultTracks(cart, dsCgiVars);
 char *this = dyStringCannibalize(&dsCgiVars);
@@ -8201,7 +8206,7 @@ for (track = trackList; track != NULL; track = track->next)
 
 if (cartUsualBoolean(cart, "dumpTracks", FALSE))
     {
-    struct dyString *dy = newDyString(1024);
+    struct dyString *dy = dyStringNew(1024);
     logTrackList(dy, trackList);
 
     printf("Content-type: text/html\n\n");
@@ -8448,8 +8453,8 @@ printTrackInitJavascript(trackList);
    but required b/c we have two different navigation forms on this page, but
    we want open/close changes in the bottom form to be submitted even if the user
    submits via the top form. */
-struct dyString *trackGroupsHidden1 = newDyString(1000);
-struct dyString *trackGroupsHidden2 = newDyString(1000);
+struct dyString *trackGroupsHidden1 = dyStringNew(1000);
+struct dyString *trackGroupsHidden2 = dyStringNew(1000);
 for (group = groupList; group != NULL; group = group->next)
     {
     if (group->trackList != NULL)
@@ -8736,8 +8741,8 @@ if (!hideControls)
         hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" id=\"TrackForm\" METHOD=\"POST\">\n\n",
                 hgTracksName());
 	    hPrintf("%s", trackGroupsHidden2->string);
-	    freeDyString(&trackGroupsHidden1);
-	    freeDyString(&trackGroupsHidden2);
+	    dyStringFree(&trackGroupsHidden1);
+	    dyStringFree(&trackGroupsHidden2);
 	if (!psOutput) cartSaveSession(cart);   /* Put up hgsid= as hidden variable. */
 	hPrintf("<CENTER>");
 	}
@@ -10314,12 +10319,14 @@ char msg1[512], msg2[512];
 int seqCount = 0;
 boolean truncating;
 
-seqCount = sqlQuickNum(conn, NOSQLINJ "select count(*) from chromInfo");
+sqlSafef(query, sizeof query, "select count(*) from chromInfo");
+seqCount = sqlQuickNum(conn, query);
 truncating = (limit > 0) && (seqCount > limit);
 
 if (!truncating)
     {
-    sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo order by size desc");
+    sqlSafef(query, sizeof query, "select chrom,size from chromInfo order by size desc");
+    sr = sqlGetResult(conn, query);
     }
 else
     {

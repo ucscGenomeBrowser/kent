@@ -44,7 +44,7 @@ struct hash *readInfoFile(char *fileName)
 struct hash *infoHash = newHash(0);
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *type, *val;
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 struct sanger22extra *sx = NULL;
 
 while (lineFileNext(lf, &line, NULL))
@@ -158,7 +158,7 @@ void loadIntoDatabase(char *database, char *createString, char *table, char *tab
 /* Load tabbed file into database table. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct dyString *ds = newDyString(2048);
+struct dyString *ds = dyStringNew(2048);
 dyStringPrintf(ds, createString, table);
 sqlRemakeTable(conn, table, ds->string);
 dyStringClear(ds);
@@ -166,7 +166,7 @@ sqlDyStringPrintf(ds,
    "LOAD data local infile '%s' into table %s", tabName, table);
 sqlUpdate(conn, ds->string);
 sqlDisconnect(&conn);
-freeDyString(&ds);
+dyStringFree(&ds);
 }
 
 void hgSanger20(char *database, char *gffFile, char *infoFile)

@@ -44,95 +44,6 @@
   "         'rRNA', 'scRNA', 'snRNA', 'snoRNA', 'ss-DNA', 'ss-RNA', 'ss-snoRNA', 'tRNA',"\
   "         'cRNA', 'ss-cRNA', 'ds-cRNA', 'ms-rRNA') not null,\n"
 
-static char* gbCdnaInfoCreate =
-/* This keeps track of mRNA. */
-NOSQLINJ "create table gbCdnaInfo ("
-  "id int unsigned not null primary key,"         /* Id, same as seq ID. */
-  "acc char(12) not null,"                        /* Genbank accession. */
-  "version smallint unsigned not null,"           /* Genbank version. */
-  "moddate date not null,"                        /* last modified date. */
-  "type enum('EST','mRNA') not null,"             /* Full length or EST. */
-  "direction enum('5','3','0') not null,"         /* Read direction. */
-  "source int unsigned not null,"                 /* Ref in source table. */
-  "organism int unsigned not null,"               /* Ref in organism table. */
-  "library int unsigned not null,"                /* Ref in library table. */
-  "mrnaClone int unsigned not null,"              /* Ref in clone table. */
-  "sex int unsigned not null,"                    /* Ref in sex table. */
-  "tissue int unsigned not null,"                 /* Ref in tissue table. */
-  "development int unsigned not null,"            /* Ref in development table. */
-  "cell int unsigned not null,"                   /* Ref in cell table. */
-  "cds int unsigned not null,"                    /* Ref in CDS table. */
-  "keyword int unsigned not null,"                /* Ref in key table. */
-  "description int unsigned not null,"            /* Ref in description table. */
-  "geneName int unsigned not null,"               /* Ref in geneName table. */
-  "productName int unsigned not null,"            /* Ref in productName table. */
-  "author int unsigned not null,"                 /* Ref in author table. */
-  "gi int unsigned not null,"                     /* NCBI GI number. */
-  molEnumDef
-  /* Extra indices. */
-  "unique(acc),"
-  "index(type),"
-  "index(library),"
-  "index(mrnaClone),"
-  "index(tissue),"
-  "index(development),"
-  "index(cell),"
-  "index(keyword),"
-  "index(description),"
-  "index(geneName),"
-  "index(productName),"
-  "index(author))";
-
-static char* refSeqStatusCreate = 
-NOSQLINJ "CREATE TABLE refSeqStatus ("
-"    mrnaAcc varchar(255) not null,"
-"    status enum('Unknown', 'Reviewed', 'Validated', 'Provisional', 'Predicted', 'Inferred') not null,"
-molEnumDef
-"    PRIMARY KEY(mrnaAcc))";
-
-static char* refLinkCreate = 
-NOSQLINJ "CREATE TABLE refLink (\n"
-"    name varchar(255) not null,        # Name displayed in UI\n"
-"    product varchar(255) not null,     # Name of protein product\n"
-"    mrnaAcc varchar(255) not null,     # mRNA accession\n"
-"    protAcc varchar(255) not null,     # protein accession\n"
-"    geneName int unsigned not null,    # pointer to geneName table\n"
-"    prodName int unsigned not null,    # pointer to productName table\n"
-"    locusLinkId int unsigned not null, # Locus Link ID\n"
-"    omimId int unsigned not null,      # OMIM ID\n"
-"    #Indices\n"
-"    PRIMARY KEY(mrnaAcc),\n"
-"    index(name(10)),\n"
-"    index(protAcc(10)),\n"
-"    index(locusLinkId),\n"
-"    index(omimId),\n"
-"    index(prodName),\n"
-"    index(geneName)\n"
-")";
-
-/*
- * Summary table is sparse, only created for refSeqs that have Summary:
- * or COMPLETENESS: in comment.
- * Mapping of COMPLETENESS:
- *    Complete5End       = complete on the 5' end.
- *    Complete3End       = complete on the 3' end.
- *    FullLength         = full length.
- *    IncompleteBothEnds = incomplete on both ends.
- *    Incomplete5End     = incomplete on the 5' end.
- *    Incomplete3End     = incomplete on the 3' end.
- *    Partial            = not full length.
- *    Unknown            = unknown
- */
-static char* refSeqSummaryCreate = 
-NOSQLINJ "CREATE TABLE refSeqSummary ("
-"  mrnaAcc varchar(255) not null,"
-"  completeness enum('Unknown', 'Complete5End', "
-"    'Complete3End', 'FullLength', 'IncompleteBothEnds',"
-"    'Incomplete5End', 'Incomplete3End', 'Partial') not null,"
-"  summary text not null,"
-"  PRIMARY KEY(mrnaAcc))";
-
-
 /* list of the names of the id to string tables */
 static char *raFieldTables[] =
     {
@@ -153,27 +64,6 @@ static char *raFieldTables[] =
     NULL
     };
 
-
-/* SQL to create gbMiscDiff table */
-static char* gbMiscDiffCreate = 
-NOSQLINJ "CREATE TABLE gbMiscDiff (\n"
-"    acc char(12) not null,\n"
-"    mrnaStart int not null,\n"
-"    mrnaEnd int not null,\n"
-"    notes longtext,\n"
-"    gene varchar(255),\n"
-"    replacement varchar(255),\n"
-"    index(acc)\n"
-");\n";
-
-
-/* SQL to create gbWarn table */
-static char* gbWarnCreate = 
-NOSQLINJ "CREATE TABLE gbWarn ("
-"    acc char(12) not null,"
-"    reason enum(\"athRage\", \"orestes\") not null,"
-"    PRIMARY KEY(acc)"
-");";
 
 
 /* global configuration */
@@ -231,6 +121,7 @@ void gbMetaDataInit(struct sqlConnection *conn, unsigned srcDb,
                     char *tmpDir)
 /* initialize for parsing metadata */
 {
+char query[1024];
 gOptions = options;
 gSrcDb = srcDb;
 gGbdbGenBank[0] = '\0';
@@ -245,7 +136,46 @@ if (imageCloneTbl == NULL)
 
 if (!sqlTableExists(conn, "gbCdnaInfo"))
     {
-    sqlUpdate(conn, gbCdnaInfoCreate);
+    sqlSafef(query, sizeof query, 
+    /* This keeps track of mRNA. */
+    "create table gbCdnaInfo ("
+    "id int unsigned not null primary key,"         /* Id, same as seq ID. */
+    "acc char(12) not null,"                        /* Genbank accession. */
+    "version smallint unsigned not null,"           /* Genbank version. */
+    "moddate date not null,"                        /* last modified date. */
+    "type enum('EST','mRNA') not null,"             /* Full length or EST. */
+    "direction enum('5','3','0') not null,"         /* Read direction. */
+    "source int unsigned not null,"                 /* Ref in source table. */
+    "organism int unsigned not null,"               /* Ref in organism table. */
+    "library int unsigned not null,"                /* Ref in library table. */
+    "mrnaClone int unsigned not null,"              /* Ref in clone table. */
+    "sex int unsigned not null,"                    /* Ref in sex table. */
+    "tissue int unsigned not null,"                 /* Ref in tissue table. */
+    "development int unsigned not null,"            /* Ref in development table. */
+    "cell int unsigned not null,"                   /* Ref in cell table. */
+    "cds int unsigned not null,"                    /* Ref in CDS table. */
+    "keyword int unsigned not null,"                /* Ref in key table. */
+    "description int unsigned not null,"            /* Ref in description table. */
+    "geneName int unsigned not null,"               /* Ref in geneName table. */
+    "productName int unsigned not null,"            /* Ref in productName table. */
+    "author int unsigned not null,"                 /* Ref in author table. */
+    "gi int unsigned not null,"                     /* NCBI GI number. */
+    molEnumDef
+    /* Extra indices. */
+    "unique(acc),"
+    "index(type),"
+    "index(library),"
+    "index(mrnaClone),"
+    "index(tissue),"
+    "index(development),"
+    "index(cell),"
+    "index(keyword),"
+    "index(description),"
+    "index(geneName),"
+    "index(productName),"
+    "index(author))");
+
+    sqlUpdate(conn, query);
     haveGi = TRUE;
     haveMol = TRUE;
     }
@@ -260,9 +190,33 @@ else
 setGeneTblFlags(conn, options);
 
 if (!sqlTableExists(conn, "gbMiscDiff"))
-    sqlUpdate(conn, gbMiscDiffCreate);
+    {
+    /* SQL to create gbMiscDiff table */
+    sqlSafef(query, sizeof query, 
+    "CREATE TABLE gbMiscDiff (\n"
+    "    acc char(12) not null,\n"
+    "    mrnaStart int not null,\n"
+    "    mrnaEnd int not null,\n"
+    "    notes longtext,\n"
+    "    gene varchar(255),\n"
+    "    replacement varchar(255),\n"
+    "    index(acc)\n"
+    ");\n");
+
+    sqlUpdate(conn, query);
+    }
 if (!sqlTableExists(conn, "gbWarn"))
-    sqlUpdate(conn, gbWarnCreate);
+    {
+    /* SQL to create gbWarn table */
+    sqlSafef(query, sizeof query, 
+    "CREATE TABLE gbWarn ("
+    "    acc char(12) not null,"
+    "    reason enum(\"athRage\", \"orestes\") not null,"
+    "    PRIMARY KEY(acc)"
+    ");");
+
+    sqlUpdate(conn, query);
+    }
 
 if (gbCdnaInfoUpd == NULL)
     gbCdnaInfoUpd = sqlUpdaterNew("gbCdnaInfo", gTmpDir, (gbVerbose >= 4), &allUpdaters);
@@ -270,10 +224,17 @@ if (gbCdnaInfoUpd == NULL)
 if (gSrcDb == GB_REFSEQ)
     {
     if (!sqlTableExists(conn, "refSeqStatus"))
-        {
-        sqlUpdate(conn, refSeqStatusCreate);
-        haveRsMol = TRUE;
-        }
+	{
+	sqlSafef(query, sizeof query, 
+	"CREATE TABLE refSeqStatus ("
+	"mrnaAcc varchar(255) not null,"
+	"status enum('Unknown', 'Reviewed', 'Validated', 'Provisional', 'Predicted', 'Inferred') not null,"
+	molEnumDef
+	"PRIMARY KEY(mrnaAcc))");
+
+	sqlUpdate(conn, query);
+	haveRsMol = TRUE;
+	}
     else
         {
         haveRsMol = sqlFieldIndex(conn, "refSeqStatus", "mol") >= 0;
@@ -282,12 +243,57 @@ if (gSrcDb == GB_REFSEQ)
         refSeqStatusUpd = sqlUpdaterNew("refSeqStatus", gTmpDir, (gbVerbose >= 4),
                                         &allUpdaters);
     if (!sqlTableExists(conn, "refSeqSummary"))
-        sqlUpdate(conn, refSeqSummaryCreate);
+	{
+	/*
+	* Summary table is sparse, only created for refSeqs that have Summary:
+	* or COMPLETENESS: in comment.
+	* Mapping of COMPLETENESS:
+	*    Complete5End       = complete on the 5' end.
+	*    Complete3End       = complete on the 3' end.
+	*    FullLength         = full length.
+	*    IncompleteBothEnds = incomplete on both ends.
+	*    Incomplete5End     = incomplete on the 5' end.
+	*    Incomplete3End     = incomplete on the 3' end.
+	*    Partial            = not full length.
+	*    Unknown            = unknown
+	*/
+	sqlSafef(query, sizeof query, 
+	"CREATE TABLE refSeqSummary ("
+	"  mrnaAcc varchar(255) not null,"
+	"  completeness enum('Unknown', 'Complete5End', "
+	"    'Complete3End', 'FullLength', 'IncompleteBothEnds',"
+	"    'Incomplete5End', 'Incomplete3End', 'Partial') not null,"
+	"  summary text not null,"
+	"  PRIMARY KEY(mrnaAcc))");
+	sqlUpdate(conn, query);
+	}
     if (refSeqSummaryUpd == NULL)
         refSeqSummaryUpd = sqlUpdaterNew("refSeqSummary", gTmpDir, (gbVerbose >= 4),
                                          &allUpdaters);
     if (!sqlTableExists(conn, "refLink"))
-        sqlUpdate(conn, refLinkCreate);
+	{
+	sqlSafef(query, sizeof query, 
+	"  CREATE TABLE refLink (\n"
+	"    name varchar(255) not null,        # Name displayed in UI\n"
+	"    product varchar(255) not null,     # Name of protein product\n"
+	"    mrnaAcc varchar(255) not null,     # mRNA accession\n"
+	"    protAcc varchar(255) not null,     # protein accession\n"
+	"    geneName int unsigned not null,    # pointer to geneName table\n"
+	"    prodName int unsigned not null,    # pointer to productName table\n"
+	"    locusLinkId int unsigned not null, # Locus Link ID\n"
+	"    omimId int unsigned not null,      # OMIM ID\n"
+	"    #Indices\n"
+	"    PRIMARY KEY(mrnaAcc),\n"
+	"    index(name(10)),\n"
+	"    index(protAcc(10)),\n"
+	"    index(locusLinkId),\n"
+	"    index(omimId),\n"
+	"    index(prodName),\n"
+	"    index(geneName)\n"
+	")");
+
+	sqlUpdate(conn, query);
+	}
     if (refLinkUpd == NULL)
         refLinkUpd = sqlUpdaterNew("refLink", gTmpDir, (gbVerbose >= 4),
                                    &allUpdaters);

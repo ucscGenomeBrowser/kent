@@ -113,11 +113,11 @@ void pgSnpSaveToDb(struct sqlConnection *conn, struct pgSnp *el, char *tableName
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%d,'%s','%s')",
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->alleleCount,  el->alleleFreq,  el->alleleScores);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -252,7 +252,7 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
         /* more than 1 codon? */
         while (rv->regEnd > rv->cdEnd)
             rv->cdEnd += 3;
-        struct dyString *seq = newDyString(1024);
+        struct dyString *seq = dyStringNew(1024);
         /* check prev exon, chrom order not cds order */
         if (rv->cdStart < codStart && posStrand)
             {

@@ -67,7 +67,7 @@ while (row2 != NULL)
     displayId = acc;
     
     /* duplicate the following info from its parent protein */
-    sqlSafefFrag(cond_str, sizeof cond_str, "accession='%s'", parAcc);
+    sqlSafef(cond_str, sizeof cond_str, "accession='%s'", parAcc);
     division   = sqlGetField(proteinsDB, "spXref3", "division", cond_str);
     hugoSymbol = sqlGetField(proteinsDB, "spXref3", "hugoSymbol", cond_str);
     hugoDesc   = sqlGetField(proteinsDB, "spXref3", "hugoDesc", cond_str);

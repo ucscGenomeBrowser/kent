@@ -411,7 +411,6 @@ char **row;
 int rowOffset;
 struct wiggle wiggle;
 struct wigItem *wiList = NULL;
-char *whereNULL = NULL;
 int itemsLoaded = 0;
 struct hash *spans = NULL;	/* Spans encountered during load */
 /*	Check our scale from the global variables that exist in
@@ -421,8 +420,6 @@ struct hash *spans = NULL;	/* Spans encountered during load */
  *	level exists.
  */
 int basesPerPixel = (int)((double)(winEnd - winStart)/(double)insideWidth);
-char *span1K = "Span >= 1000 limit 1";
-char *spanOver1K = "Span >= 1000";
 char whereSpan[SMALLBUF];
 int spanMinimum = 1;
 char *dbTableName = NULL;
@@ -470,7 +467,7 @@ spanMinimum = max(1,
 	minSpan(conn, dbTableName, chromName, winStart, winEnd, cart, tdb));
 
 itemsLoaded = 0;
-sqlSafefFrag(whereSpan, sizeof(whereSpan), "span=%d limit 1", spanMinimum);
+sqlSafef(whereSpan, sizeof(whereSpan), "span=%d limit 1", spanMinimum);
 
 sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
     whereSpan, &rowOffset);
@@ -490,8 +487,9 @@ if (itemsLoaded < 1)
 itemsLoaded = 0;
 if (basesPerPixel >= 1000)
     {
+    sqlSafef(whereSpan, sizeof(whereSpan), "Span >= 1000 limit 1");
     sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
-	span1K, &rowOffset);
+	whereSpan, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	    ++itemsLoaded;
     sqlFreeResult(&sr);
@@ -508,13 +506,14 @@ if (basesPerPixel >= 1000)
  * would simplify drawing logic. */
 if (itemsLoaded)
     {
+    sqlSafef(whereSpan, sizeof(whereSpan), "Span >= 1000");
     sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
-	     spanOver1K, &rowOffset);
+	     whereSpan, &rowOffset);
     }
 else
     {
     sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
-	whereNULL, &rowOffset);
+	NULL, &rowOffset);
     }
 
 /*	Allocate trackSpans one time only	*/

@@ -149,7 +149,7 @@ int productSize = out->rPos - out->fPos;
 char *dna = cloneStringZ(out->dna, productSize);
 char *rrPrimer = cloneString(out->rPrimer);
 char *ffPrimer = cloneString(out->fPrimer);
-struct dyString *faLabel = newDyString(0);
+struct dyString *faLabel = dyStringNew(0);
 char *name = out->name;
 
 /* Create fasta header with position, possibly empty name, and upper cased primers with position optionally hyperlinked. */
@@ -183,7 +183,7 @@ faWriteNext(f, faLabel->string, dna, productSize);
 freez(&dna);
 freez(&rrPrimer);
 freez(&ffPrimer);
-dyStringFree(&faLabel)
+dyStringFree(&faLabel);
 }
 
 static int countMatch(char *a, char *b, int size)

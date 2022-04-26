@@ -70,17 +70,17 @@ return FALSE;
 
 static void compareSession(struct session *session, char *machine1, char *machine2, char *pngDir, FILE *logF)
 {
-struct dyString *outFile1 = newDyString(50);
+struct dyString *outFile1 = dyStringNew(50);
 dyStringPrintf(outFile1, "%s/%s_%s.%s.png", pngDir, session->userName, session->sessionName, machine1);
-struct dyString *dyUrl1 = newDyString(50);
+struct dyString *dyUrl1 = dyStringNew(50);
 dyStringPrintf(dyUrl1, URL_TEMPLATE,  machine1, session->userName, session->sessionName, outFile1->string);
 
 system(dyUrl1->string);
 sleep(1);
 
-struct dyString *outFile2 = newDyString(50);
+struct dyString *outFile2 = dyStringNew(50);
 dyStringPrintf(outFile2, "%s/%s_%s.%s.png", pngDir, session->userName, session->sessionName, machine2);
-struct dyString *dyUrl2 = newDyString(50);
+struct dyString *dyUrl2 = dyStringNew(50);
 dyStringPrintf(dyUrl2, URL_TEMPLATE,  machine1, session->userName, session->sessionName, outFile2->string);
 
 system(dyUrl2->string);

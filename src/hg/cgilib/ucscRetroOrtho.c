@@ -51,11 +51,11 @@ void ucscRetroOrthoSaveToDb(struct sqlConnection *conn, struct ucscRetroOrtho *e
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%d)", 
 	tableName,  el->name,  el->db,  el->overlap);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

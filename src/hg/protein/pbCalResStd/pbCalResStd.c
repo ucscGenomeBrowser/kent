@@ -157,12 +157,12 @@ for (j=0; j<MAXRES; j++)
 while (row2 != NULL)
     {
     protDisplayId = row2[0];   
-    sqlSafefFrag(cond_str, sizeof(cond_str),  "val='%s'", protDisplayId);
+    sqlSafef(cond_str, sizeof(cond_str),  "val='%s'", protDisplayId);
     accession = sqlGetField(proteinDatabaseName, "displayId", "acc", cond_str);
 
     if (accession == NULL)
 	{
-        sqlSafefFrag(cond_str, sizeof(cond_str),  "acc='%s'", protDisplayId);
+        sqlSafef(cond_str, sizeof(cond_str),  "acc='%s'", protDisplayId);
     	accession = sqlGetField(proteinDatabaseName, "displayId", "acc", cond_str);
 	if (accession == NULL)
 	    {
@@ -171,7 +171,7 @@ while (row2 != NULL)
 	    }
 	}
     
-    sqlSafefFrag(cond_str, sizeof(cond_str),  "accession='%s'", accession);
+    sqlSafef(cond_str, sizeof(cond_str),  "accession='%s'", accession);
     answer = sqlGetField("proteins040115", "spXref2", "biodatabaseID", cond_str);
     if (answer == NULL)
 	{
@@ -184,7 +184,7 @@ while (row2 != NULL)
 	goto skip;
 	}
     
-    sqlSafefFrag(cond_str, sizeof(cond_str),  "acc='%s'", accession);
+    sqlSafef(cond_str, sizeof(cond_str),  "acc='%s'", accession);
     aaSeq = sqlGetField(proteinDatabaseName, "protein", "val", cond_str);
     if (aaSeq == NULL)
 	{

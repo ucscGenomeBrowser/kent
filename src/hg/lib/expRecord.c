@@ -79,13 +79,13 @@ void expRecordSaveToDb(struct sqlConnection *conn, struct expRecord *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *extrasArray;
 extrasArray = sqlStringArrayToString(el->extras, el->numExtras);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s',%u,'%s')", 
 	tableName,  el->id,  el->name,  el->description,  el->url,  el->ref,  el->credit,  el->numExtras,  extrasArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&extrasArray);
 }
 

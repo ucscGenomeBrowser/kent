@@ -98,14 +98,14 @@ void mouseAPSetEventMapSaveToDb(struct sqlConnection *conn, struct mouseAPSetEve
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *incPSetsArray, *genePSetsArray;
 incPSetsArray = sqlStringArrayToString(el->incPSets, el->incCount);
 genePSetsArray = sqlStringArrayToString(el->genePSets, el->geneCount);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%u,'%s',%u,'%s')", 
 	tableName,  el->geneName,  el->skipPSet,  el->incCount,  incPSetsArray ,  el->geneCount,  genePSetsArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&incPSetsArray);
 freez(&genePSetsArray);
 }

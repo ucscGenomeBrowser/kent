@@ -111,7 +111,12 @@ struct slName *getTableNames(struct sqlConnection *conn)
 /* Return a list of names of tables that have not been excluded by 
  * command line options. */
 {
-char *query = hoursOld ? NOSQLINJ "show table status" : "NOSQLINJ show tables";
+char query[1024];
+if (hoursOld) 
+    sqlSafef(query, sizeof query, "show table status");
+else 
+    sqlSafef(query, sizeof query, "show tables");
+
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct slName *tableList = NULL;
 char **row = NULL;
@@ -474,7 +479,7 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 	    {
 	    if (isNotEmpty(hti->chromField))
 		{
-		struct dyString *bigQuery = newDyString(1024);
+		struct dyString *bigQuery = dyStringNew(1024);
 		dyStringClear(bigQuery);
 		sqlDyStringPrintf(bigQuery, "select count(*) from %s where ",
 			       table);
@@ -484,7 +489,7 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 		    sqlDyStringPrintf(bigQuery, "%s != '%s' ",
 				   hti->chromField, chromPtr->name);
 		    if (chromPtr->next != NULL)
-			dyStringAppend(bigQuery, "AND ");
+			sqlDyStringPrintf(bigQuery, "AND ");
 		    }
 		gotError |= reportErrors(BAD_CHROM, table,
 					 sqlQuickNum(conn, bigQuery->string));
@@ -510,7 +515,9 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
             {
             // For scaffold-based databases, compare the number of rows with chrom found in
             // chromInfo to the number of rows -- if not the same, then some rows have bad chrom.
-            int rowCount = sqlRowCount(conn, table);
+	    char queryTblSafe[1024];
+	    sqlSafef(queryTblSafe, sizeof queryTblSafe, "%s", table);
+            int rowCount = sqlRowCount(conn, queryTblSafe);
             char query[2048];
             sqlSafef(query, sizeof(query), "select count(*) from %s, chromInfo "
                      "where %s.%s = chromInfo.chrom", table, table, hti->chromField);
@@ -529,7 +536,7 @@ void processExcludes(char *exclude)
 /* Combine alwaysExclude and command like -exclude arg (if given), and 
  * process into a list.  If it contains "genbank", add genbankExclude. */
 {
-struct dyString *allExcludes = newDyString(512);
+struct dyString *allExcludes = dyStringNew(512);
 char *patterns[128];
 int numPats = 0, i = 0;
 

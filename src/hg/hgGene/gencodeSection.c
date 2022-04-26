@@ -55,7 +55,7 @@ static char *hgTracksPathAndSettings()
 static struct dyString *dy = NULL;
 if (dy == NULL)
     {
-    dy = newDyString(128);
+    dy = dyStringNew(128);
     dyStringPrintf(dy, "%s?%s", hgTracksName(), cartSidUrlString(cart));
     }
 return dy->string;
@@ -172,7 +172,7 @@ static struct genePred *transAnnoLoad(struct sqlConnection *conn, struct trackDb
 {
 // must check chrom due to PAR
 char where[256];
-sqlSafefFrag(where, sizeof(where), "(chrom = \"%s\") and (name = \"%s\")", curGeneChrom, gencodeId);
+sqlSafef(where, sizeof(where), "(chrom = \"%s\") and (name = \"%s\")", curGeneChrom, gencodeId);
 struct genePred *transAnno = genePredReaderLoadQuery(conn, tdb->table, where);
 slSort(&transAnno, transAnnoCmp);
 return transAnno;
@@ -202,7 +202,7 @@ static void getGeneBounds(struct trackDb *tdb, struct sqlConnection *conn, struc
 {
 // must check chrom due to PAR
 char where[256];
-sqlSafefFrag(where, sizeof(where), "(chrom = \"%s\") and (name2 = \"%s\")", curGeneChrom, transAnno->name2);
+sqlSafef(where, sizeof(where), "(chrom = \"%s\") and (name2 = \"%s\")", curGeneChrom, transAnno->name2);
 struct genePred *geneAnnos = genePredReaderLoadQuery(conn, tdb->table, where);
 struct genePred *geneAnno;
 *geneChromStart = transAnno->txStart;
@@ -359,7 +359,7 @@ static bool geneHasApprisTranscripts(struct trackDb *tdb, struct sqlConnection *
 /* check if any transcript in a gene has an APPRIS tags */
 {
 char query[1024];
-sqlSafefFrag(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "%s tag where tag.tag like 'appris%%' and transcriptId in "
       "(select transcriptId from %s where geneId='%s')",
       getGencodeTable(tdb, "gencodeTag"),

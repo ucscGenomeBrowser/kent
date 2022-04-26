@@ -362,7 +362,7 @@ mp = cgiParseMultipart(STDIN_FILENO, stdout, optionExists("autoBoundary"));
 freeMimeParts(&mp);
 
 hashFree(&cidHash);
-freeDyString(&dy);
+dyStringFree(&dy);
 return 0;
 }
 

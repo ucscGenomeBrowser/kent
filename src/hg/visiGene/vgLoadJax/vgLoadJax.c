@@ -62,7 +62,9 @@ return sqlQuickString(conn, s);
 struct slName *jaxSpecList(struct sqlConnection *conn)
 /* Get list of specimen id's. */
 {
-return sqlQuickList(conn, NOSQLINJ "select _Specimen_key from GXD_Specimen");
+char query[1024];
+sqlSafef(query, sizeof query, "select _Specimen_key from GXD_Specimen");
+return sqlQuickList(conn, query);
 }
 
 void dumpRow(char **row, int size)
@@ -182,7 +184,7 @@ if (key > 0)
 	, genotypeKey);
     sr = sqlGetResultVerbose(conn, query->string);
     while ((row = sqlNextRow(sr)) != NULL)
-	dyStringPrintf(geno, "%s:%s,", row[0], row[1]);
+	sqlDyStringPrintf(geno, "%s:%s,", row[0], row[1]);
     sqlFreeResult(&sr);
     genotype = dyStringCannibalize(&geno);
 
@@ -904,7 +906,9 @@ void submitToDir(struct sqlConnection *conn, struct sqlConnection *conn2, struct
  * each submission set.   Returns outDir. */
 {
 struct dyString *query = dyStringNew(0);
-struct slName *ref, *refList = sqlQuickList(conn, NOSQLINJ "select distinct(_Refs_key) from GXD_Assay");
+dyStringClear(query);
+sqlDyStringPrintf(query, "select distinct(_Refs_key) from GXD_Assay");
+struct slName *ref, *refList = sqlQuickList(conn, query->string);
 int refCount = 0;
 
 makeDir(outDir);

@@ -1200,7 +1200,7 @@ if (optionExists("settings"))
 
 // hgHubConnect specific option for generating a jstree of the hub errors
 checkOptions->htmlOut = optionExists("htmlOut");
-struct dyString *errors = newDyString(1024);
+struct dyString *errors = dyStringNew(1024);
 if (trackHubCheck(argv[1], checkOptions, errors) || checkOptions->htmlOut)
     {
     if (checkOptions->htmlOut) // just dump errors string to stdout

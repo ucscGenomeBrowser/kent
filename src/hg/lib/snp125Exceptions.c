@@ -146,15 +146,15 @@ fputc(lastSep,f);
 void snp125ExceptionsTableCreate(struct sqlConnection *conn)
 /* create a snp125Exceptions table */
 {
-char *createString =
-NOSQLINJ "CREATE TABLE snp125Exceptions (\n"
+char query[1024];
+sqlSafef(query, sizeof query, 
+"CREATE TABLE snp125Exceptions (\n"
 "    chrom varchar(15) not null,\n"
 "    chromStart int(10) unsigned not null,\n"
 "    chromEnd int(10) unsigned not null,\n"
 "    name varchar(15) not null,\n"
 "    exception varchar(64) not null \n"
+")\n");
 
-")\n";
-
-sqlRemakeTable(conn, "snp125Exceptions", createString);
+sqlRemakeTable(conn, "snp125Exceptions", query);
 }

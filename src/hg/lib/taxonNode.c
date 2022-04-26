@@ -120,11 +120,11 @@ void taxonNodeSaveToDb(struct sqlConnection *conn, struct taxonNode *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,%u,%u,%u,%u,%u,%u,%u,'%s')", 
 	tableName,  el->taxon,  el->parent,  el->rank,  el->emblcode,  el->division,  el->inheritedDiv,  el->geneticCode,  el->inheritedGC,  el->mitoGeneticCode,  el->inheritedMitoGC,  el->GenBankHidden,  el->notSequenced,  el->comments);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

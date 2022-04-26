@@ -123,7 +123,7 @@ void doGreatTopLevel()
 struct dyString *name = getRequestName();
 
 htmlOpen("Send BED data to GREAT as %s", dyStringContents(name));
-freeDyString(&name);
+dyStringFree(&name);
 verifyGreatAssemblies();
 startGreatForm();
 cgiMakeHiddenVar(hgtaDoTopSubmit, "get output");
@@ -183,9 +183,9 @@ else
 
 hPrintf("<b>GREAT</b> is processing BED data from \"%s\"...please wait.\n", dyStringContents(requestName));
 hWrites(dyStringContents(greatRequest));
-freeDyString(&greatRequest);
-freeDyString(&requestName);
-freeDyString(&requestURL);
+dyStringFree(&greatRequest);
+dyStringFree(&requestName);
+dyStringFree(&requestURL);
 }
 
 void doGetGreatOutput(void (*dispatch)())

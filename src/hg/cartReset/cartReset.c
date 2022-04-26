@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
-struct dyString *headText = newDyString(512);
+struct dyString *headText = dyStringNew(512);
 destination = cgiUsualString("destination", defaultDestination);
 // Only allow relative URL that does not contain space or quote characters.
 if (strstr(destination, "//") // absolute URL

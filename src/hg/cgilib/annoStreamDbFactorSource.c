@@ -146,7 +146,10 @@ static void getExperimentData(struct annoStreamDbFactorSource *self, char *db,
  * to experiment attributes cellType and treatment. */
 {
 struct sqlConnection *conn = hAllocConn(db);
-self->expCount = sqlRowCount(conn, sourceTable);
+
+char queryTblSafe[1024];
+sqlSafef(queryTblSafe, sizeof queryTblSafe, "%s", sourceTable);
+self->expCount = sqlRowCount(conn, queryTblSafe);
 AllocArray(self->expCellType, self->expCount);
 AllocArray(self->expTreatment, self->expCount);
 struct dyString *query = sqlDyStringCreate("select id, cellType, treatment "

@@ -103,7 +103,7 @@ char *createString =
 "    allele blob\n"
 ");\n";
 
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
 sqlDyStringPrintf(dy, createString, tableName);

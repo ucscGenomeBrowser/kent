@@ -120,11 +120,11 @@ void affyAllExonProbeSaveToDb(struct sqlConnection *conn, struct affyAllExonProb
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,'%s',%u,%u,'%s',%u,%u,%u,'%s','%s',%u,%u)", 
 	tableName,  el->name,  el->numIndependentProbes,  el->exonClusterId,  el->numNonOverlapProbes,  el->probeCount,  el->transcriptClustId,  el->probesetType,  el->numXHybeProbe,  el->psrId,  el->level,  el->evidence,  el->bounded,  el->cds);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

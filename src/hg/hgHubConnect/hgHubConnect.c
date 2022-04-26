@@ -124,8 +124,8 @@ return string;
 static void printGenomeList(char *hubUrl, struct slName *genomes, int row, boolean withLink)
 /* print supported assembly names from sl list */
 {
-struct dyString *dyHtml = newDyString(1024);
-struct dyString *dyShortHtml = newDyString(1024);
+struct dyString *dyHtml = dyStringNew(1024);
+struct dyString *dyShortHtml = dyStringNew(1024);
 
 // create two strings: one shortened to GENLISTWIDTH characters
 // and another one with all genomes

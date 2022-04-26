@@ -184,7 +184,7 @@ char *where = NULL;
 if (gene)
     {
     struct dyString *ds = dyStringNew(0);
-    sqlDyStringPrintfFrag(ds, "%s = '%s'", GTEX_EQTL_GENE_FIELD, gene); 
+    sqlDyStringPrintf(ds, "%s = '%s'", GTEX_EQTL_GENE_FIELD, gene); 
     where = dyStringCannibalize(&ds);
     isFiltered = TRUE;
     }

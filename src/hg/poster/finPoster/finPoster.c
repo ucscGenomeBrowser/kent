@@ -144,7 +144,7 @@ void makeResolvedDupes(struct hash *hash, struct resolvedDup **retList)
 {
 struct lineFile *lf = lineFileMayOpen(bestDupFile, TRUE);
 char *row[3], *parts[4];
-int wordCount, partCount;
+int partCount;
 struct resolvedDup *rd, *rdList = NULL;
 
 if (lf == NULL)
@@ -407,7 +407,6 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 
 for (node = geneList->head; !dlEnd(node); node = node->next)
     {
-    int len;
     char *name;
     kg = node->val;
 
@@ -486,7 +485,6 @@ void getRnaGenes(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, 
 char **row;
 int rowOffset;
 struct sqlResult *sr = hChromQuery(conn, "rnaGene", chrom, NULL, &rowOffset);
-char query[256];
 struct rnaGene el;
 int r,g,b;
 
@@ -577,7 +575,6 @@ void netBinKeeperFree(struct binKeeper **pBk)
 /* Get rid of net bin keeper. */
 {
 struct binKeeper *bk = *pBk;
-struct binKeeperCookie *pos;
 int bin;
 
 if (bk == NULL)
@@ -661,8 +658,8 @@ int rowOffset;
 struct sqlResult *sr = hChromQuery(conn, track, chrom, NULL, &rowOffset);
 char **row;
 struct psl *psl;
-int lastEnd = -BIGNUM;
-int sepDistance = 20000;
+//int lastEnd = -BIGNUM;
+//int sepDistance = 20000;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1214,7 +1211,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     int start = atoi(row[0]);
     int end = atoi(row[1]);
-    char *label = NULL;
     if (sameString(row[2], "telo"))
 	printTab(f, cg, chrom, start, end, 
 		    "repTelomere", "box", 50, 50, 250, ".");
@@ -1724,7 +1720,9 @@ struct hash *hash = newHash(16);
 struct sqlResult *sr;
 char **row;
 
-sr = sqlGetResult(conn, NOSQLINJ "select value from knownToEnsembl");
+char query[1024];
+sqlSafef(query, sizeof query, "select value from knownToEnsembl");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hashAdd(hash, row[0], NULL);
@@ -1740,7 +1738,6 @@ int i;
 struct sqlConnection *conn = sqlConnect(database);
 struct hash *dupHash = newHash(0);
 struct hash *resolvedDupHash = newHash(8);
-struct resolvedDup *rdList = NULL;
 struct hash *diseaseHash = makeSecondColumnHash(diseaseFile);
 struct hash *orthoHash = makeFirstColumnHash(orthoFile);
 struct hash *weedHash = makeFirstColumnHash(weedFile);

@@ -111,7 +111,7 @@ struct hash *emblRecord(struct lineFile *lf)
 {
 struct hash *hash = NULL;
 char type[16];
-struct dyString *val = newDyString(256);
+struct dyString *val = dyStringNew(256);
 boolean gotEnd = FALSE;
 
 while (emblLineGroup(lf, type, val))

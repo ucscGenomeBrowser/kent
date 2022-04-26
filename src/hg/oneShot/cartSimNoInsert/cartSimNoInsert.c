@@ -68,8 +68,11 @@ int iterations = sqlUnsigned(iterationString);
 
 /* Figure out size of tables. */
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
-int userDbSize = sqlQuickNum(conn, NOSQLINJ "select count(*) from userDb");
-int sessionDbSize = sqlQuickNum(conn, NOSQLINJ "select count(*) from sessionDb");
+char query2[1024];
+sqlSafef(query2, sizeof query2, "select count(*) from userDb");
+int userDbSize = sqlQuickNum(conn, query2);
+sqlSafef(query2, sizeof query2, "select count(*) from sessionDb");
+int sessionDbSize = sqlQuickNum(conn, query2);
 int sampleSize = min(userDbSize, sessionDbSize);
 int maxSampleSize = 8*1024;
 sampleSize = min(sampleSize, maxSampleSize);

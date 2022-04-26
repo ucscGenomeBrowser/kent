@@ -53,11 +53,11 @@ void gtexInfoSaveToDb(struct sqlConnection *conn, struct gtexInfo *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%g,%g)", 
 	tableName,  el->version,  el->releaseDate,  el->maxScore,  el->maxMedianScore);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct gtexInfo *gtexInfoLoad(char **row)

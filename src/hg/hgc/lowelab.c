@@ -583,7 +583,7 @@ printf("<tr><td>\n");
 
 if (!hFindSplitTable(database, seqName, table, tableName, sizeof tableName, &hasBin))
     errAbort("track %s not found", table);
-sqlSafefFrag(query, sizeof(query), "name = \"%s\"", item);
+sqlSafef(query, sizeof(query), "name = \"%s\"", item);
 gpList = genePredReaderLoadQuery(conn, tableName, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
 {

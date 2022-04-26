@@ -399,7 +399,7 @@ if (page == NULL)
 
 /* Set up filter for all genes in list. */
     {
-    struct dyString *dy = newDyString(0);
+    struct dyString *dy = dyStringNew(0);
     int geneCount = slCount(geneList);
     for (gene = geneList; gene != NULL; gene = gene->next)
 	dyStringPrintf(dy, "%s ", gene->name);
@@ -420,7 +420,7 @@ if (page == NULL)
 
 /* Set up filter for wildcard in list. */
     {
-    struct dyString *dy = newDyString(0);
+    struct dyString *dy = dyStringNew(0);
     char len = strlen(geneList->name);
     dyStringAppendN(dy, geneList->name, len-1);
     dyStringAppendC(dy, '*');
@@ -925,7 +925,7 @@ if (!geneList)
 struct htmlPage *dbPage;
 
 //debug
-    struct dyString *dy = newDyString(0);
+    struct dyString *dy = dyStringNew(0);
     struct slName *gene;
     //char *dna = NULL;
     //HGID retId = 0;

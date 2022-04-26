@@ -78,18 +78,6 @@ while (lineFileNext(lf, &line, &lineSize))
 lineFileClose(&lf);
 }
 
-char *createCtgPos =
-NOSQLINJ "CREATE TABLE ctgPos (\n"
-"   contig varchar(255) not null,	# Name of contig\n"
-"   size int unsigned not null,	# Size of contig\n"
-"   chrom varchar(255) not null,	# Chromosome name\n"
-"   chromStart int unsigned not null,	# Start in chromosome\n"
-"   chromEnd int unsigned not null,	# End in chromosome\n"
-"             #Indices\n"
-"   PRIMARY KEY(contig),\n"
-"   UNIQUE(chrom(16),chromStart)\n"
-")\n";
-
 void saveCtgPos(struct ctgPos *ctgList, char *database)
 /* Save ctgList to database. */
 {
@@ -97,7 +85,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct ctgPos *ctg;
 char *tabFileName = "ctgPos.tab";
 FILE *f;
-struct dyString *ds = newDyString(2048);
+struct dyString *ds = dyStringNew(2048);
 
 /* Create tab file from ctg list. */
 printf("Creating tab file\n");
@@ -109,8 +97,23 @@ fclose(f);
 /* Create table if it doesn't exist, delete whatever is
  * already in it, and fill it up from tab file. */
 printf("Loading ctgPos table\n");
-sqlMaybeMakeTable(conn, "ctgPos", createCtgPos);
-sqlUpdate(conn, NOSQLINJ "DELETE from ctgPos");
+
+char query[1024];
+sqlSafef(query, sizeof query, 
+"CREATE TABLE ctgPos (\n"
+"   contig varchar(255) not null,	# Name of contig\n"
+"   size int unsigned not null,	# Size of contig\n"
+"   chrom varchar(255) not null,	# Chromosome name\n"
+"   chromStart int unsigned not null,	# Start in chromosome\n"
+"   chromEnd int unsigned not null,	# End in chromosome\n"
+"             #Indices\n"
+"   PRIMARY KEY(contig),\n"
+"   UNIQUE(chrom(16),chromStart)\n"
+")\n");
+
+sqlMaybeMakeTable(conn, "ctgPos", query);
+sqlSafef(query, sizeof query, "DELETE from ctgPos");
+sqlUpdate(conn, query);
 sqlDyStringPrintf(ds, "LOAD data local infile '%s' into table ctgPos", 
     tabFileName);
 sqlUpdate(conn, ds->string);

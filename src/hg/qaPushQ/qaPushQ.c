@@ -490,7 +490,7 @@ char colName[256];
 char sep[2]="";
 struct dyString * s = NULL;
 
-s = newDyString(2048);  /* need room */
+s = dyStringNew(2048);  /* need room */
 numColumns=0;
 while(parseList(showColumns,',',i,colName,sizeof(colName)))
     {
@@ -505,7 +505,7 @@ while(parseList(showColumns,',',i,colName,sizeof(colName)))
     i++;
     }
 showColumns = cloneString(s->string);
-freeDyString(&s);
+dyStringFree(&s);
 
 }
 
@@ -1372,7 +1372,7 @@ void pushQUpdate(struct sqlConnection *conn, struct pushQ *el, char *tableName, 
  * "autosql's features include" --> "autosql\'s features include"
  * before inserting into database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 
 /* had to split this up because dyStringPrintf only up to 4000 chars at one time */
 sqlDyStringPrintf(update,
@@ -1398,7 +1398,7 @@ sqlDyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces
                        el->releaseLog, el->featureBits, el->releaseLogUrl, el->importance, el->qid	);
 
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 void getCgiData(bool *isOK, bool isPtr, void *ptr, int size, char *name)
@@ -2133,7 +2133,7 @@ void saveMyUser()
 {
 char *tbl = "users";
 struct dyString * query = NULL;
-query = newDyString(2048);
+query = dyStringNew(2048);
 if ((qaUser == NULL) || (sameString(qaUser,"")))
     {
     return;
@@ -2142,7 +2142,7 @@ sqlDyStringPrintf(query,
     "update %s set contents = '?showColumns=%s?org=%s?month=%s?oldRandState=%s' where user = '%s'",
     tbl, showColumns, pushQtbl, month, oldRandState, myUser.user);
 sqlUpdate(conn, query->string);
-freeDyString(&query);
+dyStringFree(&query);
 }
 
 
@@ -2160,7 +2160,7 @@ char tempVal   [256] = "";
 char tempAfter [256] = "";
 char tempSwap  [256] = "";
 struct dyString * s = NULL;
-s = newDyString(2048);  /* need room */
+s = dyStringNew(2048);  /* need room */
 
 safef(target, sizeof(target), "%s", cgiString("col"));
 
@@ -2208,7 +2208,7 @@ while(TRUE)
     }
 
 showColumns = cloneString(s->string);
-freeDyString(&s);
+dyStringFree(&s);
 
 showColumns[strlen(showColumns)-1]=0;  /* chop off trailing comma */
 
@@ -2274,7 +2274,7 @@ char *colName = NULL;
 char templist[512];
 char tempe[64];
 
-s = newDyString(2048);  /* need room */
+s = dyStringNew(2048);  /* need room */
 
 colName = cgiString("colName");
 
@@ -2289,7 +2289,7 @@ if (strstr(templist,tempe)==NULL)  /* make sure not already in list */
     showColumns = cloneString(s->string);
     }
 
-freeDyString(&s);
+dyStringFree(&s);
 
 doDisplay();
 }
@@ -3309,10 +3309,12 @@ char now[256];
 int m=0,d=0;
 int topCount=0;
 
-char *encodeClause = "";
+char encodeClause[1024];
+
+sqlSafef(encodeClause, sizeof encodeClause, "%s", "");
 
 if (isEncode)
-    encodeClause = " and releaseLog like '%ENCODE%'";
+    sqlSafef(encodeClause, sizeof encodeClause, " and releaseLog like '%%ENCODE%%'");
 
 ZeroVar(&dbDbTemp);
 
@@ -3426,7 +3428,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	char* dbs = cloneString(row[1]);
 	char dbsComma[1024];
 	char dbsSpace[1024];
-	struct dyString* dbList = newDyString(1024);
+	struct dyString* dbList = dyStringNew(1024);
 	int j = 0, jj = 0;
 	char* sep = "";
 	boolean found = FALSE;
@@ -3472,7 +3474,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 
 	freez(&dbs);
-	freeDyString(&dbList);
+	dyStringFree(&dbList);
 
 	if (topCount>=10)
 	    break;

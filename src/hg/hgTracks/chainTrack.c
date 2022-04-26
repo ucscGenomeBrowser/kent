@@ -92,16 +92,17 @@ struct sqlResult *sr = NULL;
 char **row;
 struct linkedFeatures *lf;
 struct simpleFeature *sf;
-struct dyString *query = newDyString(1024);
-char *force = "";
-
-if (isSplit)
-    force = "force index (bin)";
+struct dyString *query = dyStringNew(1024);
 
 if (chainId == NULL)
+    {
     sqlDyStringPrintf(query,
-	"select chainId,tStart,tEnd,qStart from %sLink %-s where ",
-	fullName, force);
+	"select chainId,tStart,tEnd,qStart from %sLink ",
+	fullName);
+    if (isSplit)
+	sqlDyStringPrintf(query,"force index (bin) ");
+    sqlDyStringPrintf(query,"where "); 
+    }
 else
     sqlDyStringPrintf(query,
 	"select chainId, tStart,tEnd,qStart from %sLink where chainId=%s and ",
@@ -109,7 +110,7 @@ else
 if (!isSplit)
     sqlDyStringPrintf(query, "tName='%s' and ", chromName);
 hAddBinToQuery(start, end, query);
-dyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
+sqlDyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
 sr = sqlGetResult(conn, query->string);
 
 /* Loop through making up simple features and adding them
@@ -423,7 +424,7 @@ optionChrStr = skipLeadingSpaces(cartUsualStringClosestToHome(cart, tg->tdb,
 
 if (strlen(optionChrStr) > 0 && differentWord("All",optionChrStr))
     {
-    safef(extraWhere, sizeof(extraWhere),
+    sqlSafef(extraWhere, sizeof(extraWhere),
             "qName = \"%s\" and score > %d",optionChrStr,
             chainCart->scoreFilter);
     sr = hRangeQuery(conn, table, chromName, winStart, winEnd,
@@ -433,14 +434,13 @@ else
     {
     if (chainCart->scoreFilter > 0)
         {
-        safef(extraWhere, sizeof(extraWhere),
+        sqlSafef(extraWhere, sizeof(extraWhere),
                 "score > \"%d\"",chainCart->scoreFilter);
         sr = hRangeQuery(conn, table, chromName, winStart, winEnd,
                 extraWhere, &rowOffset);
         }
     else
         {
-        safef(extraWhere, sizeof(extraWhere), " ");
         sr = hRangeQuery(conn, table, chromName, winStart, winEnd,
                 NULL, &rowOffset);
         }

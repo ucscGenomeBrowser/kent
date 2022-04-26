@@ -183,15 +183,15 @@ sqlDyStringPrintf(query, "select ");
 for (i=0; i<ArraySize(flatFields); ++i)
     {
     if (i != 0)
-       dyStringAppendC(query, ',');
+       sqlDyStringPrintf(query, ",");
     sqlDyStringPrintf(query, "%s", flatFields[i]);
     }
 for (i=0; i<ArraySize(starFields); ++i)
     {
-    dyStringAppendC(query, ',');
+    sqlDyStringPrintf(query, ",");
     sqlDyStringPrintf(query, "%s", starFields[i]);
     }
-dyStringPrintf(query, " from %s%s", tablePrefix, "experiment");
+sqlDyStringPrintf(query, " from %s%s", tablePrefix, "experiment");
 
 struct sqlResult *sr = sqlGetResult(conn, query->string);
 char **row;

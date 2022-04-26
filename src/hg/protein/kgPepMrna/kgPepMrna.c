@@ -67,16 +67,16 @@ while (row2 != NULL)
     kgID      = row2[0];
     proteinID = row2[1];
     
-    sqlSafefFrag(cond_str, sizeof cond_str, "val = '%s';", proteinID);
+    sqlSafef(cond_str, sizeof cond_str, "val = '%s';", proteinID);
     protAcc = sqlGetField(spDbName, "displayId", "acc", cond_str);
     if (protAcc != NULL)
     	{
-    	sqlSafefFrag(cond_str, sizeof cond_str, "acc = '%s';", protAcc);
+    	sqlSafef(cond_str, sizeof cond_str, "acc = '%s';", protAcc);
     	seq = sqlGetField(spDbName, "protein", "val", cond_str);
 	}
     else
     	{
-    	sqlSafefFrag(cond_str, sizeof cond_str, "acc = '%s';", proteinID);
+    	sqlSafef(cond_str, sizeof cond_str, "acc = '%s';", proteinID);
     	seq = sqlGetField(spDbName, "varProtein", "val", cond_str);
     	if (seq == NULL)
     	    {
@@ -88,7 +88,7 @@ while (row2 != NULL)
         
     fprintf(o1, "%s\t%s\n", kgID, seq);fflush(o1);
 
-    sqlSafefFrag(cond_str, sizeof cond_str, "name = '%s';", kgID);
+    sqlSafef(cond_str, sizeof cond_str, "name = '%s';", kgID);
         
     seq = sqlGetField(tempKgDb, "mrnaSeq", "seq", cond_str);
     if (seq != NULL)

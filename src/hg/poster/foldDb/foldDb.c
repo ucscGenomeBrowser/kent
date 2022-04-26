@@ -1383,7 +1383,9 @@ char query[256];
 char geneName[256];
 
 printf("Looking for duplicated HUGO genes:\n");
-sr = sqlGetResult(conn, NOSQLINJ "select name from genieKnown");
+char query[1024];
+sqlSafef(query, sizeof query, "select name from genieKnown");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     txId = newSlName(row[0]);

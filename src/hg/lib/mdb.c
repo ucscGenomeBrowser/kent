@@ -56,11 +56,11 @@ void mdbSaveToDb(struct sqlConnection *conn, struct mdb *el, char *tableName, in
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s set obj='%s', var='%s', val='%s'",
                tableName,  el->obj,  el->var,  el->val);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -927,7 +927,7 @@ char *sqlCreate =
 if (sqlTableExists(conn,tblName))
     verbose(2, "Table '%s' already exists.  It will be recreated.\n",tblName);
 
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 sqlDyStringPrintf(dy, sqlCreate, tblName);
 verbose(2, "Requesting table creation:\n%s;\n", dyStringContents(dy));
 if (!testOnly)
@@ -1046,7 +1046,7 @@ for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
         {
         if (mdbObj->vars == NULL) // deletes all
             {
-            sqlSafefFrag(query, sizeof(query),"%s where obj = '%s'", tableName, mdbObj->obj);
+            sqlSafef(query, sizeof(query),"%s where obj = '%s'", tableName, mdbObj->obj);
             int delCnt = sqlRowCount(conn,query);
 
             if (delCnt>0)
@@ -1082,7 +1082,7 @@ for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
         }
     else if (replace)  // If replace then clear out deadwood before inserting new vars
         {
-        sqlSafefFrag(query, sizeof(query),"%s where obj = '%s'", tableName, mdbObj->obj);
+        sqlSafef(query, sizeof(query),"%s where obj = '%s'", tableName, mdbObj->obj);
         int delCnt = sqlRowCount(conn,query);
 
         if (delCnt>0)
@@ -1191,50 +1191,63 @@ if (table == NULL)
 else if (!sqlTableExists(conn,table))
     return NULL;
 
-struct dyString *dy = newDyString(4096);
+struct dyString *dy = dyStringNew(4096);
 sqlDyStringPrintf(dy, "select obj,var,val from %s", table);
 if (mdbObj != NULL && mdbObj->obj != NULL)
     {
-    sqlDyStringPrintf(dy, " where obj %-s '%s'",
-                   (strchr(mdbObj->obj,'%') ? "like" : "="), mdbObj->obj);
+    sqlDyStringPrintf(dy, " where obj ");
+    if (strchr(mdbObj->obj,'%')) 
+	sqlDyStringPrintf(dy, "like");
+    else
+	sqlDyStringPrintf(dy, "=");
+    sqlDyStringPrintf(dy, " '%s'", mdbObj->obj);
 
     struct mdbVar *mdbVar;
     for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (mdbVar==mdbObj->vars)
-            dyStringPrintf(dy, " and (");
+            sqlDyStringPrintf(dy, " and (");
         else
-            dyStringPrintf(dy, " or ");
+            sqlDyStringPrintf(dy, " or ");
         if (mdbVar->var != NULL)
             {
             if (mdbVar->val != NULL)
-                dyStringPrintf(dy, "(");
-            sqlDyStringPrintf(dy, "var %-s '%s'",
-                           (strchr(mdbVar->var,'%') ? "like" : "="), mdbVar->var);
+                sqlDyStringPrintf(dy, "(");
+            sqlDyStringPrintf(dy, "var ");
+            if (strchr(mdbVar->var,'%'))
+                sqlDyStringPrintf(dy, "like");
+            else
+                sqlDyStringPrintf(dy, "=");
+            sqlDyStringPrintf(dy,"'%s'",mdbVar->var);
             }
         if (mdbVar->val != NULL)
             {
             if (mdbVar->var != NULL)
-                dyStringPrintf(dy, " and ");
-            sqlDyStringPrintf(dy, "val %-s '%s'",
-                           (strchr(mdbVar->val,'%') ? "like" : "="), mdbVar->val);
+                sqlDyStringPrintf(dy, " and ");
+            sqlDyStringPrintf(dy, "val ");
+            if (strchr(mdbVar->val,'%'))
+                sqlDyStringPrintf(dy, "like");
+            else
+                sqlDyStringPrintf(dy, "=");
+            sqlDyStringPrintf(dy,"'%s'",mdbVar->val);
             if (mdbVar->var != NULL)
-                dyStringPrintf(dy, ")");
+                sqlDyStringPrintf(dy, ")");
             }
         if (mdbVar->var == NULL && mdbVar->val)
             errAbort("mdbObjQuery has empty mdbVar struct.\n");
         buildHash = FALSE;  // too few variables
         }
     if (mdbObj->vars != NULL)
-        dyStringPrintf(dy, ")");
+        sqlDyStringPrintf(dy, ")");
     }
 verbose(2, "Requesting mdbObjQuery query:\n\t%s;\n",dyStringContents(dy));
 
-struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
+struct mdb *mdb = mdbLoadByQuery(conn, dyStringContents(dy));
 slSort(&mdb,mdbCmp);  // Use internal sort instead of ORDER BY because of mysql inefficiency
 struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,buildHash);
 verbose(3, "Returned %d object(s) with %d var(s).\n",
         mdbObjCount(mdbObjs,TRUE),mdbObjCount(mdbObjs,FALSE));
+dyStringFree(&dy);
 return mdbObjs;
 }
 
@@ -1263,28 +1276,35 @@ if (table == NULL)
 else if (!sqlTableExists(conn,table))
     return NULL;
 
-struct dyString *dy = newDyString(4096);
+struct dyString *dy = dyStringNew(4096);
 sqlDyStringPrintf(dy, "select obj,var,val from %s", table);
 
 struct mdbByVar *rootVar;
 for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
     {
     if (rootVar==mdbByVars)
-        dyStringPrintf(dy, " where (var ");
+        sqlDyStringPrintf(dy, " where (var ");
     else
-        dyStringPrintf(dy, " OR (var ");
+        sqlDyStringPrintf(dy, " OR (var ");
 
     if (rootVar->notEqual && rootVar->vals == NULL)
-        dyStringPrintf(dy, "%s", strchr(rootVar->var,'%') ? "NOT " : "!");
-                                        // one of: "NOT LIKE". "!=" or "NOT EXISTS"
+	{
+	if (strchr(rootVar->var,'%'))
+	    sqlDyStringPrintf(dy, "NOT");
+	else
+	    sqlDyStringPrintf(dy, "!");
+	}
 
     if (rootVar->vals != NULL && rootVar->vals->val != NULL && strlen(rootVar->vals->val) > 0)
         {
-        sqlDyStringPrintf(dy, "%-s '%s'",
-                       (strchr(rootVar->var,'%') ? "like" : "="), rootVar->var);
+        if (strchr(rootVar->var,'%'))
+	    sqlDyStringPrintf(dy, "like");
+	else
+	    sqlDyStringPrintf(dy, "=");
+        sqlDyStringPrintf(dy, " '%s'", rootVar->var);
         }
     else
-        dyStringPrintf(dy, "EXISTS");
+        sqlDyStringPrintf(dy, "EXISTS");
 
     struct mdbLimbVal *limbVal;
     boolean multiVals = FALSE;
@@ -1295,30 +1315,38 @@ for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
 
         if (!multiVals)
             {
-            dyStringPrintf(dy, " and val ");
+            sqlDyStringPrintf(dy, " and val ");
             if (rootVar->notEqual)
-                dyStringPrintf(dy, "%s", strchr(limbVal->val,'%') ? "NOT " : "!");
+		{
+		if (strchr(limbVal->val,'%'))
+		    sqlDyStringPrintf(dy, "NOT");
+		else
+		    sqlDyStringPrintf(dy, "!");
+		}
             if (limbVal->next == NULL) // only one val
                 {
-                sqlDyStringPrintf(dy, "%-s '%s'",
-                    (strchr(limbVal->val,'%')?"like":"="), limbVal->val);
+		if (strchr(limbVal->val,'%'))
+		    sqlDyStringPrintf(dy, "like");
+		else
+		    sqlDyStringPrintf(dy, "=");
+                sqlDyStringPrintf(dy, " '%s'", limbVal->val);
                 break;
                 }
             else
-                dyStringPrintf(dy, "in (");
+                sqlDyStringPrintf(dy, "in (");
             multiVals=TRUE;
             }
         else
-            dyStringPrintf(dy, ",");
+            sqlDyStringPrintf(dy, ",");
         sqlDyStringPrintf(dy, "'%s'", limbVal->val);
         }
     if (multiVals)
-        dyStringPrintf(dy, ")");
-    dyStringPrintf(dy, ")");
+        sqlDyStringPrintf(dy, ")");
+    sqlDyStringPrintf(dy, ")");
     }
 verbose(2, "Requesting mdbByVarsQuery query:\n\t%s;\n",dyStringContents(dy));
 
-struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
+struct mdb *mdb = mdbLoadByQuery(conn, dyStringContents(dy));
 verbose(3, "rows (vars) returned: %d\n",slCount(mdb));
 slSort(&mdb,mdbVarValCmp);  // Use internal sort instead of ORDER BY because of mysql inefficiency
 struct mdbByVar *mdbByVarsFromMem = mdbByVarsLoadFromMemory(&mdb,TRUE);
@@ -1326,6 +1354,7 @@ verbose(3, "Returned %d vars(s) with %d val(s) with %d object(s).\n",
         mdbByVarCount(mdbByVarsFromMem,TRUE,FALSE),
         mdbByVarCount(mdbByVarsFromMem,FALSE,TRUE ),
         mdbByVarCount(mdbByVarsFromMem,FALSE,FALSE));
+dyStringFree(&dy);
 return mdbByVarsFromMem;
 }
 
@@ -1388,7 +1417,7 @@ if (table == NULL)
 else if (!sqlTableExists(conn,table))
     return NULL;
 
-struct dyString *dy = newDyString(4096);
+struct dyString *dy = dyStringNew(4096);
 sqlDyStringPrintf(dy, "SELECT T1.obj,T1.var,T1.val FROM %s T1", table);
 
 struct mdbByVar *rootVar;
@@ -1401,18 +1430,27 @@ for (rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
     // If you want objects where var='cell' does not exist, then we need the tricky and inscrutable
     // LEFT JOIN metaDb T2 ON T2.obj = T1.obj AND T2.var = 'cell' WHERE T2.obj is NULL
     if (!hasVal && rootVar->notEqual)
-        dyStringAppend(dy, " LEFT");
+        sqlDyStringPrintf(dy, " LEFT");
 
     sqlDyStringPrintf(dy, " JOIN %s T%d ON T%d.obj = T1.obj AND T%d.var ",table,tix,tix,tix);
 
     // var = 'x' || var != 'x' || var LIKE 'x%' || var NOT LIKE 'x%'
     if (hasVal && rootVar->notEqual && rootVar->vals == NULL)
-        dyStringAppend(dy, (varWild ? "NOT " : "!"));
-    sqlDyStringPrintf(dy, "%-s '%s'",(varWild ? "LIKE" : "="), rootVar->var);
+	{
+	if (varWild)
+	    sqlDyStringPrintf(dy, "NOT ");
+	else
+	    sqlDyStringPrintf(dy, "!");
+	}
+    if (varWild)
+	sqlDyStringPrintf(dy, "LIKE");
+    else
+	sqlDyStringPrintf(dy, "=");
+    sqlDyStringPrintf(dy, " '%s'", rootVar->var);
 
     // Finish the tricky and inscrutable LEFT JOIN / WHERE NULL
     if (!hasVal && rootVar->notEqual)
-        dyStringPrintf(dy, " WHERE T%d.obj IS NULL",tix);
+        sqlDyStringPrintf(dy, " WHERE T%d.obj IS NULL",tix);
 
     // Now 1 or more vals.  First some booleans
     struct mdbLimbVal *limbVal;
@@ -1431,17 +1469,17 @@ for (rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
         if (limbVal==rootVar->vals) // First val
             {
             if (wilds && multiVals)
-                dyStringAppend(dy, " AND ("); // starts AND (val LIKE 'd%' or ...)
+                sqlDyStringPrintf(dy, " AND ("); // starts AND (val LIKE 'd%' or ...)
             else
-                dyStringAppend(dy, " AND ");  // starts AND val = 'a' || AND val IN ('a','b'...)
-            dyStringPrintf(dy, "T%d.val ",tix);
+                sqlDyStringPrintf(dy, " AND ");  // starts AND val = 'a' || AND val IN ('a','b'...)
+            sqlDyStringPrintf(dy, "T%d.val ",tix);
             }
         else                      // successive vals
             {
             if (wilds && multiVals)
-                dyStringPrintf(dy, " or T%d.val ",tix); // continues LIKE 'd%'
+                sqlDyStringPrintf(dy, " or T%d.val ",tix); // continues LIKE 'd%'
             else
-                dyStringAppend(dy, ",");                // continues IN ('a'
+                sqlDyStringPrintf(dy, ",");                // continues IN ('a'
             }
 
         if (limbVal==rootVar->vals   // First val
@@ -1449,22 +1487,37 @@ for (rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
             {
             boolean valWild = (strchr(limbVal->val,'%') != NULL);
             if (rootVar->notEqual)
-                dyStringAppend(dy, (valWild || limbVal->next)?"NOT ":"!");
-            dyStringAppend(dy,     (valWild ? "LIKE " : (!multiVals || wilds ? "= " : "IN (")));
+		{
+                if (valWild || limbVal->next)
+		    sqlDyStringPrintf(dy, "NOT ");
+		else
+		    sqlDyStringPrintf(dy, "!");
+		}
+	    if (valWild)
+		sqlDyStringPrintf(dy, "LIKE ");
+	    else
+		{
+	       	if (!multiVals || wilds) 
+		    sqlDyStringPrintf(dy, "= ");
+		else
+		    sqlDyStringPrintf(dy, "IN (");
+		}
+
             }
         sqlDyStringPrintf(dy, "'%s'", limbVal->val);
         }
     if (multiVals)
-        dyStringPrintf(dy, ")"); // closes IN ('a','b','c') || AND (val LIKE 'd%' or val LIKE 'e%')
+        sqlDyStringPrintf(dy, ")"); // closes IN ('a','b','c') || AND (val LIKE 'd%' or val LIKE 'e%')
     }
 verbose(2, "Requesting mdbObjsQueryByVars query:\n\t%s;\n",dyStringContents(dy));
 
-struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
+struct mdb *mdb = mdbLoadByQuery(conn, dyStringContents(dy));
 verbose(3, "rows (vars) returned: %d\n",slCount(mdb));
 slSort(&mdb,mdbCmp);  // Use internal sort instead of ORDER BY because of mysql inefficiency
 struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,TRUE);
 verbose(3, "Returned %d object(s) with %d var(s).\n",
         mdbObjCount(mdbObjs,TRUE),mdbObjCount(mdbObjs,FALSE));
+dyStringFree(&dy);
 return mdbObjs;
 }
 
@@ -3346,12 +3399,12 @@ if (var != NULL || val != NULL)
 if (var != NULL)
     sqlDyStringPrintf(dyQuery,"l2.var = '%s'", var);
 if (var != NULL && val != NULL)
-    dyStringAppend(dyQuery," and ");
+    sqlDyStringPrintf(dyQuery," and ");
 if (val != NULL)
     {
-    dyStringAppend(dyQuery,"l2.val ");
+    sqlDyStringPrintf(dyQuery,"l2.val ");
     if (sameString(op, "in"))
-        dyStringPrintf(dyQuery,"in (%s)", val);
+        sqlDyStringPrintf(dyQuery,"in (%-s)", val);
                               // Note, must be a formatted string already: 'a','b','c' or  1,2,3
     else if (sameString(op, "contains") || sameString(op, "like"))
         sqlDyStringPrintf(dyQuery,"like '%%%s%%'", val);
@@ -3362,11 +3415,11 @@ if (val != NULL)
     }
 verbose(2, "Requesting mdbObjSearch query:\n\t%s;\n",dyStringContents(dyQuery));
 
-struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dyQuery));
+struct mdb *mdb = mdbLoadByQuery(conn, dyStringContents(dyQuery));
 verbose(3, "rows (vars) returned: %d\n",slCount(mdb));
 slSort(&mdb,mdbCmp);  // Use internal sort instead of ORDER BY because of mysql inefficiency
 struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,TRUE);
-
+dyStringFree(&dyQuery);
 return mdbObjs;
 }
 
@@ -3503,8 +3556,9 @@ mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName, letter, hasTableNam
 // Need to append 'where' AFTER qualifying joins!
 sqlDyStringPrintf(dyQuery, " where %c.var='%s'", letter,var);
 
-retVal = sqlQuickList(conn, dyStringCannibalize(&dyQuery));
+retVal = sqlQuickList(conn, dyStringContents(dyQuery));
 slNameSortCase(&retVal);
+dyStringFree(&dyQuery);
 return retVal;
 }
 

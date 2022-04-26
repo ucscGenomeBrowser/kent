@@ -160,7 +160,7 @@ cgiMakeButton(us->formVar, "cancel");
 /* Put up additional controls if have saved settings already. */
 if (list != NULL)
     {
-    struct dyString *js = newDyString(0);
+    struct dyString *js = dyStringNew(0);
 
     htmlHorizontalLine();
     slSort(&list, hashElCmp);

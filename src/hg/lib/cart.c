@@ -65,7 +65,7 @@ void cartHubWarn(char *format, va_list args)
 char warning[1024];
 vsnprintf(warning,sizeof(warning),format, args);
 if (hubWarnDy == NULL)
-    hubWarnDy = newDyString(100);
+    hubWarnDy = dyStringNew(100);
 dyStringPrintf(hubWarnDy, "%s\n", warning);
 }
 
@@ -233,12 +233,12 @@ else
     struct dyString *where = dyStringNew(256);
     char *sessionKey = NULL;	    
     unsigned int id = cartDbParseId(secureId, &sessionKey);
-    sqlDyStringPrintfFrag(where, "id = %u", id);
+    sqlDyStringPrintf(where, "id = %u", id);
     if (cartDbUseSessionKey())
 	{
 	if (!sessionKey)
 	    sessionKey = "";
-	sqlDyStringPrintfFrag(where, " and sessionKey='%s'", sessionKey);
+	sqlDyStringPrintf(where, " and sessionKey='%s'", sessionKey);
 	}
     cdb = cartDbLoadWhere(conn, table, where->string);
     dyStringFree(&where);
@@ -1445,7 +1445,7 @@ static void updateOne(struct sqlConnection *conn,
 	char *table, struct cartDb *cdb, char *contents, int contentSize)
 /* Update cdb in database. */
 {
-struct dyString *dy = newDyString(4096);
+struct dyString *dy = dyStringNew(4096);
 sqlDyStringPrintf(dy, "UPDATE %s SET contents='", table);
 sqlDyAppendEscaped(dy, contents);
 sqlDyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
@@ -1485,7 +1485,7 @@ static void saveState(struct cart *cart)
 /* Save out state to permanent storage in both user and session db. */
 {
 struct sqlConnection *conn = cartDefaultConnector();
-struct dyString *encoded = newDyString(4096);
+struct dyString *encoded = dyStringNew(4096);
 
 /* Make up encoded string holding all variables. */
 cartEncodeState(cart, encoded);
@@ -2297,6 +2297,15 @@ if (noProxy)
 char *logProxy = cfgOption("logProxy");
 if (logProxy)
     setenv("log_proxy", logProxy, TRUE);
+
+/* noSqlInj settings so they are accessible in src/lib too */
+char *noSqlInj_level = cfgOption("noSqlInj.level");
+if (noSqlInj_level)
+    setenv("noSqlInj_level", noSqlInj_level, TRUE);
+char *noSqlInj_dumpStack = cfgOption("noSqlInj.dumpStack");
+if (noSqlInj_dumpStack)
+    setenv("noSqlInj_dumpStack", noSqlInj_dumpStack, TRUE);
+
 
 // if ignoreCookie is on the URL, don't check for cookies
 char *hguid = NULL;
@@ -3563,7 +3572,7 @@ void cartSetDbPosition(struct cart *cart, char *database, struct cart *lastDbPos
 {
 char dbPosKey[256];
 safef(dbPosKey, sizeof dbPosKey, "position.%s", database);
-struct dyString *dbPosValue = newDyString(4096);
+struct dyString *dbPosValue = dyStringNew(4096);
 cartEncodeState(lastDbPosCart, dbPosValue);
 cartSetString(cart, dbPosKey, dbPosValue->string);
 }

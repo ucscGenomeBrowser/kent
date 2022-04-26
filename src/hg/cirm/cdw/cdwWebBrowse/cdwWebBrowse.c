@@ -831,7 +831,7 @@ if (!isEmpty(searchString))
  * if any. */
 struct dyString *where = dyStringNew(0);
 if (!isEmpty(initialWhere))
-    sqlDyStringPrintfFrag(where, "(%-s)", initialWhere); // trust
+    sqlDyStringPrintf(where, "(%-s)", initialWhere); // trust
 if (securityColumnsInTable)
     {
     if (user)
@@ -847,7 +847,7 @@ if (securityColumnsInTable)
 	    char **row;
 	    if (!isEmpty(where->string))
 		sqlDyStringPrintf(where, " and ");
-	    sqlDyStringPrintfFrag(where, "(allAccess > 0");
+	    sqlDyStringPrintf(where, "(allAccess > 0");
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
 		int groupId = sqlUnsigned(row[0]);
@@ -861,7 +861,7 @@ if (securityColumnsInTable)
 	{
 	if (!isEmpty(where->string))
 	    sqlDyStringPrintf(where, " and ");
-	sqlDyStringPrintfFrag(where, "allAccess > 0");
+	sqlDyStringPrintf(where, "allAccess > 0");
 	}
     }
 
@@ -870,7 +870,7 @@ if (efList
     {
     if (!isEmpty(where->string))
 	sqlDyStringPrintf(where, " and ");
-    sqlDyStringPrintfFrag(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
+    sqlDyStringPrintf(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
     for (ef = efList; ef != NULL; ef = ef->next)
 	{
 	if (searchPassTree == NULL || securityColumnsInTable || intValTreeFind(searchPassTree, ef->id) != NULL)
@@ -915,7 +915,7 @@ for (sff = selectedList; sff; sff=sff->next)
     {
     if (slCount(sff->valList)>0)
 	{
-	sqlDyStringPrintfFrag(facetedWhere, " and ");  // use Frag to prevent NOSQLINJ tag
+	sqlDyStringPrintf(facetedWhere, " and ");  // use Frag to prevent NOSQLINJ tag
 	sqlDyStringPrintf(facetedWhere, "ifnull(%s,'n/a') in (", sff->fieldName);
 	struct facetVal *el;
 	for (el=sff->valList; el; el=el->next)
@@ -924,7 +924,7 @@ for (sff = selectedList; sff; sff=sff->next)
 	    if (el->next)
 		sqlDyStringPrintf(facetedWhere, ",");
 	    }
-	sqlDyStringPrintfFrag(facetedWhere, ")");
+	sqlDyStringPrintf(facetedWhere, ")");
 	}
     }
 
@@ -1614,14 +1614,14 @@ struct slName *returnedFieldList = wildExpandList(allFieldList, rql->fieldList, 
 struct dyString *sqlQuery = dyStringNew(0);
 sqlDyStringPrintf(sqlQuery, "select ");
 struct slName *l = returnedFieldList;
-sqlDyStringPrintfFrag(sqlQuery, "%s", l->name);
+sqlDyStringPrintf(sqlQuery, "%s", l->name);
 l = l->next;
 while (l != NULL)
     {
-    sqlDyStringPrintfFrag(sqlQuery, ",%s", l->name);
+    sqlDyStringPrintf(sqlQuery, ",%s", l->name);
     l = l->next;
     }
-sqlDyStringPrintfFrag(sqlQuery, " from cdwFileTags");
+sqlDyStringPrintf(sqlQuery, " from cdwFileTags");
 
 int whereClauseStarted = 0;
 if (!isEmpty(where))
@@ -1629,7 +1629,7 @@ if (!isEmpty(where))
     // Can't use sqlDyString functions due to the possible presence of valid wildcards, but
     // the while clause has already been validated by passing through the more restrictive
     // rql parser anyway.
-    dyStringPrintf(sqlQuery, " where %s", rqlParseToSqlWhereClause(rql->whereClause, FALSE));
+    sqlDyStringPrintf(sqlQuery, " where %-s", rqlParseToSqlWhereClause(rql->whereClause, FALSE));
     whereClauseStarted = 1;
     }
 
@@ -1639,12 +1639,12 @@ if ((user == NULL) || (!user->isAdmin))
     {
     if (whereClauseStarted == 0)
         {
-        dyStringPrintf(sqlQuery, " where ");
+        sqlDyStringPrintf(sqlQuery, " where ");
         whereClauseStarted = 1;
         }
     else
-        dyStringPrintf(sqlQuery, " and ");
-    sqlDyStringPrintfFrag(sqlQuery, "(allAccess = 1");
+        sqlDyStringPrintf(sqlQuery, " and ");
+    sqlDyStringPrintf(sqlQuery, "(allAccess = 1");
     if (user != NULL)
         {
         // Handle group-based access for this user
@@ -1653,14 +1653,14 @@ if ((user == NULL) || (!user->isAdmin))
         sr = sqlGetResult(conn, groupQuery->string);
         while ((row = sqlNextRow(sr)) != NULL)
             {
-            sqlDyStringPrintfFrag(sqlQuery, " or find_in_set(\"%s\", groupIds) > 0", row[0]);
+            sqlDyStringPrintf(sqlQuery, " or find_in_set(\"%s\", groupIds) > 0", row[0]);
             }
         sqlFreeResult(&sr);
         }
-    sqlDyStringPrintfFrag(sqlQuery, ")");
+    sqlDyStringPrintf(sqlQuery, ")");
     }
 // limit
-sqlDyStringPrintfFrag(sqlQuery, " limit %d", limit);
+sqlDyStringPrintf(sqlQuery, " limit %d", limit);
 
 // Now to actually fetch the data!
 sr = sqlGetResult(conn, sqlQuery->string);
@@ -2295,7 +2295,7 @@ struct sqlConnection *conn = sqlConnect(cdwDatabase);
 struct slName *fNames = sqlFieldNames(conn, getCdwTableSetting("cdwFileFacets"));
 sqlDisconnect(&conn);
 
-struct dyString *dy = newDyString(128);
+struct dyString *dy = dyStringNew(128);
 char *fieldNames[128];
 char *tempFileTableFields = cloneString(fileTableFields);
 int fieldCount = chopString(tempFileTableFields, ",", fieldNames, ArraySize(fieldNames));

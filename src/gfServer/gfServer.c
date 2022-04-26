@@ -396,7 +396,7 @@ char buf[256];
 struct gfClump *clumps[3], *clump;
 int isRc, frame;
 char strand;
-struct dyString *dy  = newDyString(1024);
+struct dyString *dy  = dyStringNew(1024);
 struct gfHit *hit;
 int clumpCount = 0, hitCount = 0, oneHit;
 struct lm *lm = lmInit(0);
@@ -434,7 +434,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
     }
 if (clumpCount == 0)
     ++missCount;
-freeDyString(&dy);
+dyStringFree(&dy);
 lmCleanup(&lm);
 logDebug("%lu %d clumps, %d hits", clock1000(), clumpCount, hitCount);
 }
@@ -448,7 +448,7 @@ struct gfClump *clumps[3][3], *clump;
 int isRc, qFrame, tFrame;
 char strand;
 struct trans3 *t3 = trans3New(seq);
-struct dyString *dy  = newDyString(1024);
+struct dyString *dy  = dyStringNew(1024);
 struct gfHit *hit;
 int clumpCount = 0, hitCount = 0, oneCount;
 

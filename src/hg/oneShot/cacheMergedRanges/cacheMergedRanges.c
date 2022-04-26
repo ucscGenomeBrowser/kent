@@ -285,7 +285,9 @@ struct sqlResult *sr = NULL;
 struct hash *chromTrees = NULL;
 int startMs = 0, endMs = 0, totalMs = 0;
 
-sqlUpdate(conn, NOSQLINJ "reset query cache");
+char query2[1024];
+sqlSafef(query, sizeof query2, "reset query cache");
+sqlUpdate(conn, query2);
 startMs = clock1000();
 sr = sqlGetResult(conn, query);
 endMs = clock1000();
@@ -319,7 +321,9 @@ struct sqlResult *sr = NULL;
 struct hash *chromTrees = NULL;
 int startMs = 0, endMs = 0, totalMs = 0;
 
-sqlUpdate(conn, NOSQLINJ "reset query cache");
+char query2[1024];
+sqlSafef(query2, sizeof query2, "reset query cache");
+sqlUpdate(conn, query2);
 startMs = clock1000();
 sr = sqlGetResult(conn, query);
 endMs = clock1000();
@@ -398,7 +402,9 @@ struct sqlResult *sr = NULL;
 struct hash *chromTrees = NULL;
 int startMs = 0, endMs = 0, totalMs = 0;
 
-sqlUpdate(conn, NOSQLINJ "reset query cache");
+char query2[1024];
+sqlSafef(query2, sizeof query2, "reset query cache");
+sqlUpdate(conn, query2);
 startMs = clock1000();
 sr = sqlGetResult(conn, query);
 endMs = clock1000();

@@ -17,10 +17,10 @@ char **row;
 struct sqlResult *sr;
 sqlDyStringPrintf(dy, "select ");
 if (distinct)
-    dyStringAppend(dy, "distinct ");
+    sqlDyStringPrintf(dy, "distinct ");
 sqlDyStringPrintf(dy, "%s", column);
 if (returnIds)
-    dyStringAppend(dy, ",libId");
+    sqlDyStringPrintf(dy, ",libId");
 sqlDyStringPrintf(dy, " from cgapSageLib order by %s", column);
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)

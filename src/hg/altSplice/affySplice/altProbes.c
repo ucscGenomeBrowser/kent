@@ -2363,7 +2363,7 @@ for (altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
 	    useDb = newDb;
 	}
 /* overlapPercent = percentIntronBasesOverlappingCons(chrom, chromStart,chromEnd); */
-    buff = newDyString(256);
+    buff = dyStringNew(256);
 
 /*     if(brainSpPSetOut != NULL)  */
 /*      { */
@@ -2954,7 +2954,7 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
         {
         struct bed *endsBed = NULL;
 	struct bed *upExonBed = NULL, *downExonBed = NULL;
-	struct dyString *dna = newDyString(2*upSeq->size+5);
+	struct dyString *dna = dyStringNew(2*upSeq->size+5);
 	char *tmp = NULL;
 	dyStringPrintf(dna, "%sNNN%s", upSeq->dna, downSeq->dna);
 	if(lifted)
@@ -3585,7 +3585,7 @@ int *verts = NULL;
 int vC = path->vCount;
 int *vPos = splice->vPositions;
 unsigned char *vTypes = splice->vTypes;
-struct dyString *name = newDyString(128);
+struct dyString *name = dyStringNew(128);
 for(vertIx = 0; vertIx < vC - 1; vertIx++)
     {
     if(isHardExon(vTypes, vertIx, vertIx+1))
@@ -3908,7 +3908,7 @@ void initBrainSpecific()
 {
 struct bindSite *bs = NULL;
 char *prefix = optionVal("brainSpecific", NULL);
-struct dyString *file = newDyString(strlen(prefix)+10);
+struct dyString *file = dyStringNew(strlen(prefix)+10);
 char *useDb = newDb;
 brainSpecificStrict = optionExists("brainSpecificStrict");
 brainSpecificValues = newValuesMat(400,15);
@@ -4010,7 +4010,7 @@ char *outputRatioStats = optionVal("outputRatioStats", NULL);
 struct dyString *buff = NULL;
 assert(outputRatioStats);
 assert(intenM);
-buff = newDyString(strlen(outputRatioStats)+30);
+buff = dyStringNew(strlen(outputRatioStats)+30);
 ratioStatOut = mustOpen(outputRatioStats, "w");
 
 dyStringClear(buff);
@@ -4282,7 +4282,7 @@ boolean testPathContains(struct unitTest *test)
 {
 struct splice *ndr2 = ndr2CassTest();
 struct path *skipPath = NULL, *incPath = NULL;
-struct dyString *error = newDyString(128);
+struct dyString *error = dyStringNew(128);
 boolean result = TRUE, currentResult = TRUE;
 skipPath = ndr2->paths;
 incPath = ndr2->paths->next;
@@ -4349,7 +4349,7 @@ struct bed *bedList = ndr2BedTest(), *bed = NULL;
 /* 1 include, 2 skip, 3 include, 4 gene. */
 struct path *skipPath = NULL, *incPath = NULL;
 boolean result = TRUE;
-struct dyString *error = newDyString(128);
+struct dyString *error = dyStringNew(128);
 skipPath = ndr2->paths;
 incPath = ndr2->paths->next;
 
@@ -4458,7 +4458,7 @@ boolean testAltPathProbesExpressed(struct unitTest *test)
 /* Test to see if presense abs software is calling. */
 {
 struct altEvent *event = setupNdr2AltEvent();
-struct dyString *error = newDyString(128);
+struct dyString *error = dyStringNew(128);
 double expression = 0;
 boolean result = TRUE;
 useMaxProbeSet = TRUE;
@@ -4498,7 +4498,7 @@ boolean testExpressionRatio(struct unitTest *test)
 /* Test to see if the ratios are calculated properly for expresionRatio() */
 {
 struct altEvent *event = setupNdr2AltEvent();
-struct dyString *error = newDyString(128);
+struct dyString *error = dyStringNew(128);
 double expression = 0;
 boolean result = TRUE;
 boolean current = FALSE;
@@ -4659,7 +4659,7 @@ void initCassetteBedsOut()
 struct dyString *buff = NULL;
 char *prefix = optionVal("cassetteBeds", NULL);
 assert(prefix);
-buff = newDyString(strlen(prefix)+20);
+buff = dyStringNew(strlen(prefix)+20);
 
 dyStringClear(buff);
 dyStringPrintf(buff, "%s.altExpressed.bed", prefix);

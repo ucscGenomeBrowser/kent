@@ -324,7 +324,7 @@ struct seqPair *readAxtBlocks(char *fileName, struct hash *pairHash, FILE *f)
 /* Read in axt file and parse blocks into pairHash */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 struct axt *axt;
 struct seqPair *spList = NULL, *sp;
 
@@ -359,7 +359,7 @@ struct seqPair *readPslBlocks(char *fileName, struct hash *pairHash, FILE *f)
 {
 struct seqPair *spList = NULL, *sp;
 struct lineFile *lf = pslFileOpenWithUniqueMeta(fileName, f);
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 struct psl *psl;
 
 while ((psl = pslNext(lf)) != NULL)

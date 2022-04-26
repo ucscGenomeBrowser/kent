@@ -116,7 +116,7 @@ void sequenceTablePrint(struct section *section, struct sqlConnection *conn,
 /* Print the sequence table. */
 {
 char *table = genomeSetting("knownGene");
-struct dyString *query = newDyString(0);
+struct dyString *query = dyStringNew(0);
 char **row;
 struct sqlResult *sr;
 char *chrom;
@@ -148,7 +148,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     hFreeConn(&conn2);
     }
 sqlFreeResult(&sr);
-freeDyString(&query);
+dyStringFree(&query);
 }
 
 struct section *sequenceSection(struct sqlConnection *conn,

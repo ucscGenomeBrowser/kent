@@ -104,11 +104,11 @@ void cnpSharpSampleSaveToDb(struct sqlConnection *conn, struct cnpSharpSample *e
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%u,%g,'%s')", 
 	tableName,  el->bac,  el->sample,  el->batch,  el->value,  el->gender);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cnpSharpSample *cnpSharpSampleCommaIn(char **pS, struct cnpSharpSample *ret)

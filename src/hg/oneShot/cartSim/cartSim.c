@@ -344,7 +344,9 @@ void cartSimulate(char *host, char *user, char *password, char *database)
 {
 /* Figure out size of tables. */
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
-int userDbSize = sqlQuickNum(conn, NOSQLINJ "select count(*) from userDb");
+char query[1024];
+sqlSafef(query, sizeof query, "select count(*) from userDb");
+int userDbSize = sqlQuickNum(conn, query);
 if (userDbSize == 0)
     errAbort("%s.%s table is empty", database, userTable);
 int maxSampleSize = 1024*1024;
@@ -446,15 +448,15 @@ if (target < initialCount)
 	if (++i > target)
 	   {
 	   if (addComma)
-	       dyStringAppendC(query, ',');
+	       sqlDyStringPrintf(query, ",");
 	   else
 	       addComma = TRUE;
-	   dyStringPrintf(query, "'%s'", row[0]);
+	   sqlDyStringPrintf(query, "'%s'", row[0]);
 	   }
 	}
-    dyStringPrintf(query, ")");
+    sqlDyStringPrintf(query, ")");
     sqlFreeResult(&sr);
-    uglyTime("made delete query %d chars", query->stringSize);
+    uglyTime("made delete query %ld chars", query->stringSize);
 
     /* Excute deletion */
     sqlUpdate(conn, query->string);
