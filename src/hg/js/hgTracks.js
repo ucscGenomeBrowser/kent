@@ -4469,7 +4469,7 @@ var imageV2 = {
                 var oldChrom  = genomePos.getOriginalPos().split(':')[0];
                 if (newChrom === oldChrom) {
                     imageV2.markAsDirtyPage();
-                    imageV2.navigateInPlace("position=" + newPos, null, false);
+                    imageV2.navigateInPlace("position=" + encodeURIComponent(newPos), null, false);
                     window.scrollTo(0,0);
                     return false;
                 }

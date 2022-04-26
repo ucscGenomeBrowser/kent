@@ -41,7 +41,7 @@ include gtexEqtl.ra
 include liftOver.ra
 include exomeProbesets.ra
 include chm13LiftOver.ra
-include reMap.ra alpha,beta
+include reMap.ra
 
 track miRnaAtlas
 compositeTrack on

@@ -10,6 +10,7 @@
 # originally Obtain GRCh37 from T2T Globus: team-liftover/v1_nflo/grch38-chm13v2.chain
 
 # 2022-04-09 updated due to discovery that chrM was missing
+# 2022-04-19 it was discover that chains render oddly due to the lack of chain ids.  Use chainMergeSort
 # obtain updated chains from 
 
   cp /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/trackData/hgLiftOver/hg38-chm13v2.over.chain.gz .

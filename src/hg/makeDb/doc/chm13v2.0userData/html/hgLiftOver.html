@@ -9,8 +9,9 @@
   and HG002 paternal. (HG002 is one of the first <a
       href="https://humanpangenome.org/hg002/" target=_blank> Human Pangenome
   Reference Consortium (HPRC) assemblies</a> and both haplotypes
-  are available for this genome.)</p> <p>
+  are available for this genome.)</p>
 
+<p>
   The approaches of the two pipelines are different: T2T used the minimap2
   aligner which outputs long alignments that do not require "chaining" of
   alignments into longer ones, then removed alignments that go to other
@@ -18,7 +19,7 @@
   (corrections to the assembly) and unplaced contig sequences. UCSC used the
   lastz aligner with their chains/net pipeline (see below), and from these kept
   all possible liftOver alignments, without a chromosome or sequence type
-  filter.</p> <p>
+  filter.</p>
 
 <p>
   This means that the T2T alignments are tuned for high specificity, where

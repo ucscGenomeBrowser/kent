@@ -4,14 +4,13 @@ shortLabel Human liftOver
 longLabel LiftOver alignments from CHM13 to hg19/hg38 and HG002 with two different pipelines
 visibility hide
 type bigChain hg38
-group compGeno
-priority 0.1
+group map
 html html/GCA_009914755.4_T2T-CHM13v2.0.hgLiftOver.html
 
     track t2tHg38LiftOver
     parent hgLiftOver
     shortLabel T2T hg38 liftOver
-    longLabel T2T GRCh38/hg38 v1_nfLO liftOver alignments: minimap2, no haps/alts, only same chrom
+    longLabel T2T GRCh38/hg38 liftOver alignments: minimap2, no haps/alts, only same chrom
     type bigChain hg38
     color 120,20,0
     visibility dense
@@ -22,7 +21,7 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.hgLiftOver.html
     track t2tHg19LiftOver
     parent hgLiftOver
     shortLabel T2T hg19 liftOver
-    longLabel T2T GRCh37/hg19 v1_nfLO liftOver alignments: minimap2, no haps/alts, only same chrom
+    longLabel T2T GRCh37/hg19 liftOver alignments: minimap2, no haps/alts, only same chrom
     type bigChain hg19
     color 120,20,0
     visibility dense
