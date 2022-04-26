@@ -1320,6 +1320,9 @@ cat evaSnps4.bed | awk '{print $10}' | sed -e "s/,/\n/g" | sort | uniq -c | sort
 
 ##############################################################################
 # canFam3 EVA SNPs (European Variation Archive) (DONE 2022-03-21 - b0b)
+# NOTE:  superceded by Lou's pipeline for consistency.
+#   doc'd for multiple assemblies at: evaSnp3.txt
+#
 # adding VAI annotations
 # redoing the track after talking with Lou and standardinzing on data fields after VAI step
 
@@ -2046,13 +2049,5 @@ cat variantColors | grep . | awk '{print $1","}'
 
 # drop old filter lines (no longer using RS_VALIDATED field
 filterValues.valid No,Yes
-
-
-
-
-
-
-
-
 
 ##############################################################################
