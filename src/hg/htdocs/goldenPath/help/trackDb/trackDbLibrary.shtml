@@ -5274,6 +5274,22 @@ and is particularly useful for tracks with large numbers of categories.
     </P>
 </DIV>
 
+<DIV class="barChartBarPadding"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartBarPadding &lt;num&gt;</code></div>
+    <P>Sets the minimum pixel width between bars to &lt;num&gt; pixels. Typically, this padding is
+    a dynamic calculation dependent on the current window size, the width of the item, and the number of bars for the
+    item. If present, the maximum of this setting and the dynamically calculated padding is used for the display.
+    </P>
+</DIV>
+
+<DIV class="barChartBarMinWidth"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartBarMinWidth &lt;num&gt;</code></div>
+    <P>Sets the minimum pixel width of the bars in the chart to &lt;num&gt; pixels. Typically, this width is
+    a dynamic calculation dependent on the current window size, the width of the item, and the number of bars for the
+    item. If present, the maximum of this setting and the dynamically calculated width is used for the display.
+    </P>
+</DIV>
+
 
 <DIV class="bigBarChart_example"><span class="types bigBarChart"></span>
 <div class="format"><B>Example of a bigBarChart track</B></div>
