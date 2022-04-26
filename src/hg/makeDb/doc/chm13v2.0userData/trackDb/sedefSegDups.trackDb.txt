@@ -1,7 +1,7 @@
 track sedefSegDups
 shortLabel SEDEF Segmental Dups
 longLabel SEDEF Segmental Duplications
-priority 10
+priority 100
 group varRep
 type bigBed 9 35
 visibility hide

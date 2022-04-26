@@ -309,6 +309,20 @@ for f in *.wig ; do wigToBigWig -clip $f ../ucscChromNames/t2t-chm13-v2.0.sizes 
 pigz *.wig
 
 ================================================================
+* sgdpCopyNumber (2022-04-25 markd)
+----------------------------------------------------------------
+SGDP copy number estimates
+Mitchell R. Vollger, William Harvey
+
+https://eichlerlab.gs.washington.edu/help/mvollger/share/tracks/t2t-chm13-v2.0/SGDP_CN/hub.txt
+https://eichlerlab.gs.washington.edu/help/mvollger/share/tracks/t2t-chm13-v2.0/SGDP_CN/trackDb.t2t-chm13-v2.0.txt
+https://eichlerlab.gs.washington.edu/help/mvollger/share/tracks/t2t-chm13-v2.0/SGDP_CN/bigbed/description.html
+
+download the 348 bigBeds in trackDb from 
+  https://eichlerlab.gs.washington.edu/help/mvollger/share/tracks/t2t-chm13-v2.0/SGDP_CN/bigbed/
+
+
+================================================================
 pending:
 
 - ensembl:

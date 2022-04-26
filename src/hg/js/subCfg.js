@@ -746,7 +746,7 @@ var subCfg = { // subtrack config module.
 
     cfgToggle: function (wrench,subtrack)
     { // Opens/closes subtrack cfg dialog, populating if empty
-        var cfg = normed($("div#div_cfg_"+subtrack));
+        var cfg = normed($(document.getElementById("div_cfg_"+subtrack)));
         if (!cfg) {
             warn("DEBUG: Can't find div_cfg_"+subtrack);
             return false;
