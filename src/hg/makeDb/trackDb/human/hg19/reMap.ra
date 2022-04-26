@@ -6,7 +6,7 @@ visibility hide
 html ../reMap
 group regulation
 noScoreFilter on
-pennantIcon New red ../goldenPath/newsarch.html "Released Apr. 2022"
+pennantIcon New red ../goldenPath/newsarch.html "Released Apr. 26, 2022"
 compositeTrack on
 
     track ReMapTFs
