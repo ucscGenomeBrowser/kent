@@ -115,36 +115,44 @@ target="_blank">current_ids.vcf.gz</a> files corresponding to the proper assembl
 <p>
 Chromosome names were converted to UCSC-style, a few problematic variants were removed,
 and the variants passed through the
-<a target="_blank" href="/cgi-bin/hgVai">Variant Annotation Integrator</a> in order to
+<a target="_blank" href="/cgi-bin/hgVai">Variant Annotation Integrator</a> to
 predict consequence. For every organism the ncbiRefSeqCurated gene models were used to
 predict the consequences, except for mm39 which used the ncbiRefSeqSelect models.</p>
 <p>
 Variants were then colored according to their predicted consequence in the following fashion:
 <ul>
-<li><b><font color=red>Protein-altering variants and splice site variants</font></b> 
+<li><b><font color=red>Protein-altering variants</font></b> and 
+  <b><font color=red> splice site variants</font></b> 
 - exon_loss_variant, frameshift_variant, 
 inframe_deletion, inframe_insertion, initiator_codon_variant, missense_variant, 
 splice_acceptor_variant, splice_donor_variant, splice_region_variant, stop_gained, 
 stop_lost, coding_sequence_variant, transcript_ablation</li>
-<li><b><font color=green>Synonymous codon variants</font></b> 
+<li><b><font color=green>Synonymous codon variants</font></b>
 - synonymous_variant, stop_retained_variant</li>
-<li><b><font color=blue>Non-coding transcript or Untranslated Region (UTR) variants</font></b> 
-- 5_prime_UTR_variant, 
+<li><b><font color=blue>Non-coding transcript </font></b> or
+    <b><font color=blue>Untranslated Region (UTR) variants</font></b>
+- 5_prime_UTR_variant,
 3_prime_UTR_variant, complex_transcript_variant, non_coding_transcript_exon_variant</li>
-<li><b>Intergenic and intronic variants</b> - upstream_gene_variant, downstream_gene_variant, 
+<li><b>Intergenic and intronic variants</b> - upstream_gene_variant, downstream_gene_variant,
 intron_variant, intergenic_variant, NMD_transcript_variant, no_sequence_alteration</li></ul>
 </p>
 
 <p>
 Sequence Ontology (&quot;<a href="http://www.sequenceontology.org/browser/current_release"
 target="_blank">SO</a>:&quot;)
-terms were converted to the variant classes, then the files were converted to BED, 
+terms were converted to the variant classes, then the files were converted to BED,
 and then bigBed format.
 </p>
 <p>
 No functional annotations were provided by the EVA (e.g., missense, nonsense, etc).
 These were computed using UCSC's Variant Annotation Integrator (Hinrichs, et al., 2016).
-For complete documentation of the processing of these tracks, read the 
+Amino-acid substitutions for missense variants are based
+on RefSeq alignments of mRNA transcripts, which do not always match the amino acids
+predicted from translating the genomic sequence.  Therefore, in some instances, the
+variant and the genomic nucleotide and associated amino acid may be reversed.
+E.g., a Pro > Arg change from the perspective of the mRNA would be Arg > Pro from
+the persepective the genomic sequence.
+For complete documentation of the processing of these tracks, read the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/evaSnp3.txt">
 EVA Release 3 MakeDoc</a>.</p>
 
@@ -172,7 +180,7 @@ The tool can also be used to obtain only features within a given range, e.g.
 
 <h2>Credits</h2>
 <p>
-This track was produced from the <a target="_blank" href="https://www.ebi.ac.uk/eva/">European 
+This track was produced from the <a target="_blank" href="https://www.ebi.ac.uk/eva/">European
 Variation Archive release 3</a> data. Consequences were predicted using UCSC's Variant Annotation
 Integrator and NCBI's RefSeq gene models. 
 </p>
