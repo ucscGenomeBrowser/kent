@@ -14,7 +14,9 @@ Track types include:
 
 <h2>Methods</h2>
 <p>
-Prior to mapping, reads originating from a single library were combined. Reads were mapped with Bowtie2 (v2.4.1) as paired-end with the arguments “--no-discordant --no-mixed --very-sensitive --no-unal --omit-sec-seq --xeq --reorder”. Alignments were filtered using SAMtools (v1.10) using the arguments “-F 1804 -f 2 -q 2” to remove unmapped or single end mapped reads and those with a mapping quality score less than 2. PCR duplicates were identified and removed with the Picard tools “mark duplicates” command (v2.22.1) and the arguments “VALIDATION_STRINGENCY=LENIENT ASSUME_SORT_ORDER=queryname REMOVE_DUPLICATES = true”.
+  Prior to mapping, reads originating from a single library were combined. Reads were mapped with Bowtie2 (v2.4.1) as paired-end with the arguments
+  &quot;--no-discordant --no-mixed --very-sensitive --no-unal --omit-sec-seq --xeq --reorder&quot;.
+  Alignments were filtered using SAMtools (v1.10) using the arguments &quot;-F 1804 -f 2 -q 2&quot; to remove unmapped or single end mapped reads and those with a mapping quality score less than 2. PCR duplicates were identified and removed with the Picard tools &quot;mark duplicates&quot; command (v2.22.1) and the arguments &quot;VALIDATION_STRINGENCY=LENIENT ASSUME_SORT_ORDER=queryname REMOVE_DUPLICATES = true&quot;.
 </p>
 <p>
 Alignments were then filtered for the presence of unique k-mers. Specifically, for each alignment, reference sequences aligned with template ends were compared to a database of minimum unique k-mer lengths. The size of the k-mers in the k-mer filtering step are dependent on the length of the mapped reference sequence. Alignments were discarded if no
