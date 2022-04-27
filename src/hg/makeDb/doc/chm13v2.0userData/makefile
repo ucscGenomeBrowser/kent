@@ -19,7 +19,7 @@ userTrackDbFile = ${asmBuildDir}/${asmId}.userTrackDb.txt
 
 tracks = proseq rnaseq cytoBandMapped sedefSegDups rdnaModel catLiftOffGenesV1 hgLiftOver \
          censat hgUnique clinVar20220313 gwasSNPs2022-03-08 dbSNP155 microsatellites \
-         sgdpCopyNumber
+         sgdpCopyNumber encode
 
 # snakes needs chromAlias fix:
 # hgCactus
