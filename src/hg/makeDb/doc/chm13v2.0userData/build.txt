@@ -321,6 +321,17 @@ https://eichlerlab.gs.washington.edu/help/mvollger/share/tracks/t2t-chm13-v2.0/S
 download the 348 bigBeds in trackDb from 
   https://eichlerlab.gs.washington.edu/help/mvollger/share/tracks/t2t-chm13-v2.0/SGDP_CN/bigbed/
 
+================================================================
+* encode (2022-04-26 markd)
+----------------------------------------------------------------
+Michael Sauria
+in hub https://bx.bio.jhu.edu/track-hubs/T2T/hub.txt
+pull from https://bx.bio.jhu.edu/track-hubs/T2T/chm13v2.0/encode/
+
+
+	ENCODE	ENCODE pileups	Ready: See hub.txt	Michael Sauria			https://bx.bio.jhu.edu/track-hubs/T2T/hub.txt	H
+		ENCODE macs2 peaks		Michael Sauria				H
+		ENCODE macs2 LO peaks		Michael Sauria				H
 
 ================================================================
 pending:
