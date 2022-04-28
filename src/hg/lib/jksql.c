@@ -4263,7 +4263,7 @@ return sz;
 /* --------------------------- */
 
 
-void vaSqlDyStringPrintfExt(struct dyString *ds, char *format, va_list args)
+void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
  * NOSLQINJ tag is added to beginning if it is a new empty string. */
@@ -4302,15 +4302,6 @@ while (TRUE)
         break;
         }
     }
-}
-
-void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args)
-/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
- * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string.
- * Appends to existing string. */
-{
-vaSqlDyStringPrintfExt(ds, format, args);
 }
 
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
