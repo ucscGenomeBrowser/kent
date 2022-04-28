@@ -19,7 +19,7 @@ userTrackDbFile = ${asmBuildDir}/${asmId}.userTrackDb.txt
 
 tracks = proseq rnaseq cytoBandMapped sedefSegDups rdnaModel catLiftOffGenesV1 hgLiftOver \
          censat hgUnique clinVar20220313 gwasSNPs2022-03-08 dbSNP155 microsatellites \
-         sgdpCopyNumber encode
+         sgdpCopyNumber encode t2tRepeatMasker
 
 # snakes needs chromAlias fix:
 # hgCactus
@@ -54,6 +54,10 @@ ${bbiBuildDir}/${asmId}.%:
 htmlInstall: ${tracksWithHtml:%=${htmlStageDir}/${asmId}.%.html}
 
 ${htmlStageDir}/${asmId}.%.html: html/%.html
+	@mkdir -p $(dir $@)
+	cp -f $< $@
+
+${htmlStageDir}/%.png: html/%.png
 	@mkdir -p $(dir $@)
 	cp -f $< $@
 
