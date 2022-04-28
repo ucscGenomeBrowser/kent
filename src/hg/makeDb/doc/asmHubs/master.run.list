@@ -1766,6 +1766,7 @@
 ./runBuild GCF_019207475.1 GCF_019207475.1_ASM1920747v1 fungi Ogataea_angusta
 ./runBuild GCF_019232065.1 GCF_019232065.1_USGS_Curo_1.0 birds Centrocercus_urophasianus
 ./runBuild GCF_019238085.1 GCF_019238085.1_USGS_WTPT01 birds Lagopus_leucura
+./runBuild GCF_019279795.1 GCF_019279795.1_PAN1.0 vertebrate Protopterus_annectens
 ./runBuild GCF_019320065.1 GCF_019320065.1_ASM1932006v1 mammals Cervus_canadensis
 ./runBuild GCF_019321695.1 GCF_019321695.1_ASM1932169v1 fungi Diaporthe_batatas
 ./runBuild GCF_019393635.1 GCF_019393635.1_mDroGli1.pri mammals Dromiciops_gliroides

@@ -10,15 +10,15 @@ hosts non-human variants.
 
 <h2>Interpreting and Configuring the Graphical Display</h2>
 <p>
-  Variants are shown as single tick marks at most zoom levels.
-  When viewing the track at or near base-level resolution, the displayed
-  width of the SNP variant corresponds to the width of the variant in the
-  reference sequence. Insertions are indicated by a single tick mark displayed
-  between two nucleotides, single nucleotide polymorphisms are displayed as the
-  width of a single base, and multiple nucleotide variants are represented by a
-  block that spans two or more bases. The display is set to automatically collapse to 
-  dense visibility when there are more than 100k variants in the window. 
-  When the window size is more than 250k bp, the display is switched to density graph mode.
+Variants are shown as single tick marks at most zoom levels.
+When viewing the track at or near base-level resolution, the displayed
+width of the SNP variant corresponds to the width of the variant in the
+reference sequence. Insertions are indicated by a single tick mark displayed
+between two nucleotides, single nucleotide polymorphisms are displayed as the
+width of a single base, and multiple nucleotide variants are represented by a
+block that spans two or more bases. The display is set to automatically collapse to 
+dense visibility when there are more than 100k variants in the window. 
+When the window size is more than 250k bp, the display is switched to density graph mode.
 </p>
 
 <h3>Searching, details, and filtering</h3>
@@ -28,11 +28,11 @@ the variant identifier (rsID) or the genomic coordinates into the Position/Searc
 Browser.</p>
 
 <p>
-  A click on an item in the graphical display displays a page with data about
-  that variant.  Data fields include the Reference and Alternate Alleles, the
-  class of the variant as reported by EVA, the source of the data, the amino acid
-  change, if any, and the functional class as determined by UCSC's Variant Annotation
-  Integrator.
+A click on an item in the graphical display displays a page with data about
+that variant.  Data fields include the Reference and Alternate Alleles, the
+class of the variant as reported by EVA, the source of the data, the amino acid
+change, if any, and the functional class as determined by UCSC's Variant Annotation
+Integrator.
 </p>
 
 <p>Variants can be filtered using the track controls to show subsets of the 
@@ -115,36 +115,44 @@ target="_blank">current_ids.vcf.gz</a> files corresponding to the proper assembl
 <p>
 Chromosome names were converted to UCSC-style, a few problematic variants were removed,
 and the variants passed through the
-<a target="_blank" href="/cgi-bin/hgVai">Variant Annotation Integrator</a> in order to
+<a target="_blank" href="/cgi-bin/hgVai">Variant Annotation Integrator</a> to
 predict consequence. For every organism the ncbiRefSeqCurated gene models were used to
 predict the consequences, except for mm39 which used the ncbiRefSeqSelect models.</p>
 <p>
 Variants were then colored according to their predicted consequence in the following fashion:
 <ul>
-<li><b><font color=red>Protein-altering variants and splice site variants</font></b> 
+<li><b><font color=red>Protein-altering variants</font></b> and 
+  <b><font color=red> splice site variants</font></b> 
 - exon_loss_variant, frameshift_variant, 
 inframe_deletion, inframe_insertion, initiator_codon_variant, missense_variant, 
 splice_acceptor_variant, splice_donor_variant, splice_region_variant, stop_gained, 
 stop_lost, coding_sequence_variant, transcript_ablation</li>
-<li><b><font color=green>Synonymous codon variants</font></b> 
+<li><b><font color=green>Synonymous codon variants</font></b>
 - synonymous_variant, stop_retained_variant</li>
-<li><b><font color=blue>Non-coding transcript or Untranslated Region (UTR) variants</font></b> 
-- 5_prime_UTR_variant, 
+<li><b><font color=blue>Non-coding transcript </font></b> or
+    <b><font color=blue>Untranslated Region (UTR) variants</font></b>
+- 5_prime_UTR_variant,
 3_prime_UTR_variant, complex_transcript_variant, non_coding_transcript_exon_variant</li>
-<li><b>Intergenic and intronic variants</b> - upstream_gene_variant, downstream_gene_variant, 
+<li><b>Intergenic and intronic variants</b> - upstream_gene_variant, downstream_gene_variant,
 intron_variant, intergenic_variant, NMD_transcript_variant, no_sequence_alteration</li></ul>
 </p>
 
 <p>
 Sequence Ontology (&quot;<a href="http://www.sequenceontology.org/browser/current_release"
 target="_blank">SO</a>:&quot;)
-terms were converted to the variant classes, then the files were converted to BED, 
+terms were converted to the variant classes, then the files were converted to BED,
 and then bigBed format.
 </p>
 <p>
 No functional annotations were provided by the EVA (e.g., missense, nonsense, etc).
 These were computed using UCSC's Variant Annotation Integrator (Hinrichs, et al., 2016).
-For complete documentation of the processing of these tracks, read the 
+Amino-acid substitutions for missense variants are based
+on RefSeq alignments of mRNA transcripts, which do not always match the amino acids
+predicted from translating the genomic sequence.  Therefore, in some instances, the
+variant and the genomic nucleotide and associated amino acid may be reversed.
+E.g., a Pro > Arg change from the perspective of the mRNA would be Arg > Pro from
+the persepective the genomic sequence.
+For complete documentation of the processing of these tracks, read the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/evaSnp3.txt">
 EVA Release 3 MakeDoc</a>.</p>
 
@@ -172,7 +180,7 @@ The tool can also be used to obtain only features within a given range, e.g.
 
 <h2>Credits</h2>
 <p>
-This track was produced from the <a target="_blank" href="https://www.ebi.ac.uk/eva/">European 
+This track was produced from the <a target="_blank" href="https://www.ebi.ac.uk/eva/">European
 Variation Archive release 3</a> data. Consequences were predicted using UCSC's Variant Annotation
 Integrator and NCBI's RefSeq gene models. 
 </p>

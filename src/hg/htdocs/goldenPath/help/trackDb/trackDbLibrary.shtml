@@ -5274,8 +5274,8 @@ and is particularly useful for tracks with large numbers of categories.
     </P>
 </DIV>
 
-<DIV class="barChartBarPadding"><span class="types bigBarChart"></span>
-<div class="format"><code>barChartBarPadding &lt;num&gt;</code></div>
+<DIV class="barChartBarMinPadding"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartBarMinPadding &lt;num&gt;</code></div>
     <P>Sets the minimum pixel width between bars to &lt;num&gt; pixels. Typically, this padding is
     a dynamic calculation dependent on the current window size, the width of the item, and the number of bars for the
     item. If present, the maximum of this setting and the dynamically calculated padding is used for the display.
