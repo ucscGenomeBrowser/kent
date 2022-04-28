@@ -1,0 +1,83 @@
+track repeatMasker
+compositeTrack on
+shortLabel RepeatMasker
+longLabel Repeating Elements by RepeatMasker
+group varRep
+visibility hide
+type bigBed 6 +
+colorByStrand 50,50,150 150,50,50
+maxWindowToDraw 10000000
+spectrum on
+html html/GCA_009914755.4_T2T-CHM13v2.0.repeatMasker
+
+    track repeatMaskerSINE
+    parent repeatMasker
+    shortLabel SINE
+    longLabel SINE Repeating Elements by RepeatMasker
+    type bigBed 6 +
+    priority 1
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rmsk.SINE.bb
+
+    track repeatMaskerLINE
+    parent repeatMasker
+    shortLabel LINE
+    longLabel LINE Repeating Elements by RepeatMasker
+    type bigBed 6 +
+    priority 2
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rmsk.LINE.bb
+
+    track repeatMaskerLTR
+    parent repeatMasker
+    shortLabel LTR
+    longLabel LTR Repeating Elements by RepeatMasker
+    type bigBed 6 +
+    priority 3
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rmsk.LTR.bb
+
+    track repeatMaskerDNA
+    parent repeatMasker
+    shortLabel DNA
+    longLabel DNA Repeating Elements by RepeatMasker
+    type bigBed 6 +
+    priority 4
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rmsk.DNA.bb
+
+    track repeatMaskerSimple
+    parent repeatMasker
+    shortLabel Simple
+    longLabel Simple Repeating Elements by RepeatMasker
+    type bigBed 6 +
+    priority 5
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rmsk.Simple.bb
+
+    track repeatMaskerLowComplexity
+    parent repeatMasker
+    shortLabel Low Complexity
+    longLabel Low Complexity Repeating Elements by RepeatMasker
+    type bigBed 6 +
+    priority 6
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rmsk.Low_complexity.bb
+
+    track repeatMaskerSatellite
+    parent repeatMasker
+    shortLabel Satellite
+    longLabel Satellite Repeating Elements by RepeatMasker
+    type bigBed 6 +
+    priority 7
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rmsk.Satellite.bb
+
+    track repeatMaskerRNA
+    parent repeatMasker
+    shortLabel RNA
+    longLabel RNA Repeating Elements by RepeatMasker
+    type bigBed 6 +
+    priority 8
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rmsk.RNA.bb
+
+    track repeatMaskerOther
+    parent repeatMasker
+    shortLabel Other
+    longLabel Other Repeating Elements by RepeatMasker
+    type bigBed 6 +
+    priority 9
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.rmsk.Other.bb

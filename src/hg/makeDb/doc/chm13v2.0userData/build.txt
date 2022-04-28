@@ -143,14 +143,13 @@ globus: /team-liftover/v1_nflo/with_chrM/
     mv hg19_chrMT-chm13v2.chain  hg19_chrMT-chm13v2.over.no-id.chain
 
 # add chain ids and score
-    chainMergeSort chm13v2-hg19_chrM.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg19/hg19.2bit chm13v2-hg19_chrM.over.chain     
-    chainMergeSort chm13v2-hg19_chrMT.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg19/hg19.2bit chm13v2-hg19_chrMT.over.chain    
-    chainMergeSort chm13v2-hg38.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg38/hg38.2bit chm13v2-hg38.over.chain
+    chainMergeSort chm13v2-hg19_chrM.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg19/hg19.2bit chm13v2-hg19_chrM.over.chain &
+    chainMergeSort chm13v2-hg19_chrMT.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg19/hg19.2bit chm13v2-hg19_chrMT.over.chain &
+    chainMergeSort chm13v2-hg38.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg38/hg38.2bit chm13v2-hg38.over.chain &
 
-    chainMergeSort hg19_chrM-chm13v2.over.no-id.chain | chainScore stdin /hive/data/genomes/hg19/hg19.2bit ../ucscChromNames/t2t-chm13-v2.0.2bit hg19_chrM-chm13v2.over.chain     
-    chainMergeSort hg19_chrMT-chm13v2.over.no-id.chain  | chainScore stdin /hive/data/genomes/hg19/hg19.2bit ../ucscChromNames/t2t-chm13-v2.0.2bit  hg19_chrMT-chm13v2.over.chain    
-
-    chainMergeSort hg38-chm13v2.over.no-id.chain         > hg38-chm13v2.over.chain          
+    chainMergeSort hg19_chrM-chm13v2.over.no-id.chain | chainScore stdin /hive/data/genomes/hg19/hg19.2bit ../ucscChromNames/t2t-chm13-v2.0.2bit hg19_chrM-chm13v2.over.chain &
+    chainMergeSort hg19_chrMT-chm13v2.over.no-id.chain | chainScore stdin /hive/data/genomes/hg19/hg19.2bit ../ucscChromNames/t2t-chm13-v2.0.2bit  hg19_chrMT-chm13v2.over.chain &
+    chainMergeSort hg38-chm13v2.over.no-id.chain | chainScore stdin /hive/data/genomes/hg38/hg38.2bit ../ucscChromNames/t2t-chm13-v2.0.2bit hg38-chm13v2.over.chain &
 
 
 # create hg19 chains that combine chrM and chrMT for use in browser.
@@ -327,11 +326,49 @@ download the 348 bigBeds in trackDb from
 Michael Sauria
 in hub https://bx.bio.jhu.edu/track-hubs/T2T/hub.txt
 pull from https://bx.bio.jhu.edu/track-hubs/T2T/chm13v2.0/encode/
+================================================================
+* t2tRepeatMasker (2022-04-25 markd)
+----------------------------------------------------------------
+Savannah Hoyt, Jessica Storer, Robert Hubley
+http://www.repeatmasker.org/~rhubley/forMark.tar.gz
+
+    chm13v2.0_RMSK_ALIGN.bb
+    chm13v2.0_RMSK.bb
+    combo.align.gz
+    combo.out.gz
+    notebook
+
+Original version was missing chrY in bigBed (find in out and align), got new one from:
+
+http://www.repeatmasker.org/~rhubley/forMark2.tar.gz
+
+rename these
+    mv chm13v2.0_RMSK_ALIGN.bb  chm13v2.0_rmsk.align.bb
+    mv chm13v2.0_RMSK.bb        chm13v2.0_rmsk.bb
+    mv combo.align.gz           chm13v2.0_rmsk.align.gz
+    mv combo.out.gz             chm13v2.0_rmsk.out.gz
+
+Track documentation was received from Savannah and updated from DFAM public
+hub documentation.  Download images from DFAM hub, base64 encode them and
+insert in html/t2tRepeatMasker.html with src="data:image/png;base64,...".
+This makes page independent of location installed.
 
 
-	ENCODE	ENCODE pileups	Ready: See hub.txt	Michael Sauria			https://bx.bio.jhu.edu/track-hubs/T2T/hub.txt	H
-		ENCODE macs2 peaks		Michael Sauria				H
-		ENCODE macs2 LO peaks		Michael Sauria				H
+# notes from Robert on how tracks were created:
+    # Build trackHub tsv files from the combo* files:
+    /home/rhubley/projects/RepeatMasker/util/rmToTrackHub2.pl \
+      -out combo.out \
+      -align combo.align
+
+    # Sort tsv files
+    sort -k1,1 -k2,2n  combo.join.tsv >  combo.join.tsv.sorted
+    sort -k1,1 -k2,2n  combo.align.tsv >  combo.align.tsv.sorted
+
+    # Convert to bigRmskBed and bigRmskAlignBed files
+    /usr/local/ucscTools/bedToBigBed -tab -as=bigRmskAlignBed.as -type=bed3+14  combo.align.tsv.sorted chrom.sizes chm13v2.0_RMSK_ALIGN.bb
+    /usr/local/ucscTools/bedToBigBed -tab -as=bigRmskBed.as -type=bed9+5 combo.join.tsv.sorted chrom.sizes chm13v2.0_RMSK.bb
+
+
 
 ================================================================
 pending:
@@ -366,6 +403,15 @@ pending:
 
 * RepeatMasker
   Savannah Hoyt/Jessica Storer	https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/chm13v2.0_RepeatMasker_4.1.2p1.out	H
+
+  Robert Hubley
+  I have generated trackhub files for the T2T TE track based on the
+  results of Jessica's and Savannah's latest RepeatMasker runs ( 4/14/22 with
+  v5 of the TE library ).  See the notebook file for details of the
+  construction.  Please let me know if you have any questions.
+
+  http://www.repeatmasker.org/~rhubley/forMark.tar.gz
+
 
 * ENCODE
   ENCODE pileups	Present in v1.0 and v2.0	Michael Sauria	/team-epigenetics/032522_chm13v2.0_encode/coverage/*.bw	H
