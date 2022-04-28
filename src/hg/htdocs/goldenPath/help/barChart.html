@@ -416,7 +416,7 @@ enables a merge button inside of the faceted selections. It is particularly usef
 there are many bars and many facets to condense a related group, such as tissue source.</p>
 <p>
 Below is an example track using these settings on source data for a
-<a href="../cgi-bin/hgTracks?db=hg38&hideTracks=1&tabulaSapiensTissueCellType=pack&tabulaSapiens=show"
+<a href="/cgi-bin/hgTracks?db=hg38&hideTracks=1&tabulaSapiensTissueCellType=pack&tabulaSapiens=show"
 target="_blank">Tabula Sapiens single cell RNA data from many tissues</a> track.  This excerpt
 of settings from that track allows experimenting to see these settings in action, and to be
 loaded by going to the My Data, Custom Tracks page.</p>
@@ -427,7 +427,10 @@ track type=bigBarChart  name="ex Tabula Sapiens" description="A bigBarChart usin
 Once loaded, click into an item to see the details page, in this case for the gene ACE2
 at the default position in hg38. On the details page, rather than a static bar chart
 image, there is a dynamic interactive selection screen with checkbox facets to narrow down
-the display. Click the first two &quot;merge&quot; buttons next to
+the display. Adding <code>barChartMerge on</code> enables the display of the &quot;merge&quot;
+button, and <code>barChartFacets tissue,cell_class,cell_type</code> sources information in
+<code>barChartStatsUrl ...tissue_cell_type.facets</code> to enable the facet options.
+To interact with this example, click the first two &quot;merge&quot; buttons next to
 &quot;tissue&quot; and &quot;cell_class.&quot;</p>
 <div class="text-center">
   <img src="../../images/barChartFacets1.png" alt="Example1 of Facets on barCharts" width="700">
@@ -445,7 +448,11 @@ chart will expand with tissue clusters.</p>
   <img src="../../images/barChartFacets3.png" alt="Example3 of Facets on barCharts" width="700">
 </div>
 <p>
-In these ways the new barChartFacets, barChartStatsUrl, and barChartMerge settings allow users
+In these ways the new 
+<a href="trackDb/trackDbHub.html#barChartFacets" target="_blank">barChartFacets</a>,
+<a href="trackDb/trackDbHub.html#barChartStatsUrl" target="_blank">barChartStatsUrl</a>,
+and <a href="trackDb/trackDbHub.html#barChartMerge" target="_blank">barChartMerge</a>
+settings allow users
 to explore the barChart data on the individual details page more closely. One can use the facets
 to further select certain types and also click the columns (val/count/cluster) to arrange
 by numerical value or alphabetical name.</p>
