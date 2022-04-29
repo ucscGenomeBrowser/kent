@@ -118,6 +118,60 @@ released <a href="#033122">Tabula Sapiens</a> expression tracks.
 </p>
 END PREPPED FOR RELEASE -->
 
+<a name="050222"></a>
+<h2>May 2, 2022 &nbsp;&nbsp; New Track Hub bigBarChart display and selection features</h2>
+<p>
+We are pleased to announce new settings to support the display of bigBarChart data in Track Hubs.
+<a href="help/hgTrackHubHelp.html#Intro">Track Hubs</a> are web-accessible directories of
+genomic data that can be viewed on the UCSC Genome Browser. Track Hubs allow a lab to share and
+host all their genomic data (<a href="help/bam.html">BAMs</a>, <a href="help/vcf.html">VCFs</a>,
+etc.) via a single Genome Browser link. The <a href="help/barChart.html">bigBarChart</a>
+track format displays a bar graph of category-specific values over genomic regions and is
+useful for displaying gene expression across a spectrum of tissues or other datasets where
+it is desirable to compare a set of related variables over specific genomic regions.</p>
+<p>
+Two new settings <a href="help/trackDb/trackDbHub.html#barChartBarMinWidth">barChartBarMinWidth</a>
+and <a href="help/trackDb/trackDbHub.html#barChartBarMinPadding">barChartBarMinPadding</a>
+allow customizing the width and padding between bars as can be seen in these two example
+tracks using these settings on the same source data.</p>
+<div class="text-center">
+  <img src="../images/barChartPadWidth_1.png" alt="barChartBarMinPadding/MinWidth ex" width="700">
+</div>
+<p>
+See this example with more details on the <a target="_blank"
+href="help/barChart.html#example5">bigBarChart help page</a>.</p>
+<p>
+Another set of new <a href="help/barChart.html#example6">bigBarChart</a> track
+settings aid in the selection of bar charts on the details page:
+<a href="help/trackDb/trackDbHub.html#barChartFacets" target="_blank">barChartFacets</a>,
+<a href="help/trackDb/trackDbHub.html#barChartStatsUrl" target="_blank">barChartStatsUrl</a>,
+and <a href="help/trackDb/trackDbHub.html#barChartMerge" target="_blank">barChartMerge</a>.</p>
+<div class="text-center">
+  <img src="../images/barChartFacets1.png" alt="barChartBarMinPadding/MinWidth ex" width="700">
+</div>
+<p>
+These new settings allow users to explore the bigBarChart data on the individual details page more
+closely. By presenting a button to &quot;merge&quot; or &quot;unmerge&quot; categories of data
+organized by groups such as &quot;tissue,&quot; &quot;cell_class,&quot; and &quot;cell_type&quot;
+the data can be compacted. Also, the column headers can be clicked (cluster/count/val) to
+reorder the displayed data by numerical value or alphabetical name. By using the facet checkboxes
+a more narrow set of specific cell types can be selected, such as just &quot;macrophage&quot;
+where the &quot;unmerge&quot; button can then expand the details on tissues, as seen in the below image.</p>
+<div class="text-center">
+  <img src="../images/barChartFacets3.png" alt="barChartBarMinPadding/MinWidth ex" width="700">
+</div>
+<p>
+After making selections, a &quot;Return to Genome Browser&quot; link on the details page allows
+a user to return to the main view. Only the bars that were just selected by the facet selections
+will then be displayed.</p>
+<div class="text-center">
+  <img src="../images/barChartFacets4.png" alt="barChartBarMinPadding/MinWidth ex" width="700">
+</div>
+<p>
+Track Hub developers wishing to use these new bigBarChart facet selection options can see
+this example illustrating these new settings on the <a target="_blank"
+href="help/barChart.html#example6">bigBarChart help page</a>.</p>
+
 <a name="042622"></a>
 <h2>Apr. 26, 2022 &nbsp;&nbsp; ReMap Atlas of Regulatory Regions for human, mouse, and drosophila</h2>
 <p>
