@@ -672,12 +672,6 @@ __attribute__((format(printf, 3, 4)))
 #endif
 ;
 
-void vaSqlDyStringPrintfExt(struct dyString *ds, char *format, va_list args);
-/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
- * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string.
- * Appends to existing string. */
-
 void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args);
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  

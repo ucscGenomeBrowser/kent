@@ -3046,7 +3046,7 @@ type bigBed 9 +
 group varRep
 visibility dense
 itemRgb on
-mouseOver $ucscClass $aaChange
+mouseOver $ref>$alt $ucscClass $aaChange
 bigDataUrl /gbdb/$D/bbi/evaSnp.bb
 url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
 filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration

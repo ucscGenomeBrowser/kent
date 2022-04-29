@@ -9,7 +9,7 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas+global&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility pack
     shortLabel Heart HCA Cells
@@ -35,7 +35,7 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas+global&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Region
@@ -56,7 +56,7 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas    
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas+global&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Age
@@ -77,7 +77,7 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas+global&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA State
@@ -100,7 +100,7 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas+global&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Donor
@@ -121,7 +121,7 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas+global&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Sex
@@ -142,7 +142,7 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas+global&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Source
@@ -163,7 +163,7 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas+global&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Sample
@@ -199,7 +199,7 @@ group singleCell
     parent heartCellAtlas
     html heartCellAtlas
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=heart-cell-atlas&gene=$$
+    url https://cells.ucsc.edu/?ds=heart-cell-atlas+global&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Heart HCA Version

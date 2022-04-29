@@ -9,7 +9,7 @@ pennantIcon New red ../goldenPath/newsarch.html#020922 "Released Feb. 9, 2022"
 
 include wgEncodeGencodeV19.ra
 include wgEncodeGencodeV20.ra
-include wgEncodeGencodeV21.ra alpha
+include wgEncodeGencodeV21.ra
 include wgEncodeGencodeV22.ra
 include wgEncodeGencodeV23.ra
 include wgEncodeGencodeV24.ra
@@ -28,4 +28,5 @@ include wgEncodeGencodeV36.ra
 include wgEncodeGencodeV37.ra
 include wgEncodeGencodeV38.ra
 include wgEncodeGencodeV39.ra
+include wgEncodeGencodeV40.ra
 
