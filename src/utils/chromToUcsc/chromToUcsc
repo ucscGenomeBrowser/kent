@@ -38,7 +38,7 @@ def parseArgs():
     By default, this script expects the chromosome name in the first field.
     The default works for BED, bedGraph, GTF, wiggle, VCF.
     For the following file formats, you will need to set the -k option to these values manually:
-    genePred: 2 -- PSL: 10 (target) or 14 (query) -- chain: 2 (target) or 7 (query) -- SAM: 2
+    genePred: 2 -- PSL: 10 (query) or 14 (target) -- chain: 2 (target) or 7 (query) -- SAM: 2
     (If a line starts with @ (SAM format), -k is automatically set to 2.)
     """)
 
