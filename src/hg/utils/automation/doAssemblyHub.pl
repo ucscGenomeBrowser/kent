@@ -1464,6 +1464,9 @@ if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   touch -r \$asmId.masked.2bit \$asmId.masked.faSize.txt
   bptForTwoBit \$asmId.masked.2bit \$asmId.masked.2bit.bpt
   touch -r \$asmId.masked.2bit \$asmId.masked.2bit.bpt
+  twoBitToFa \$asmId.masked.2bit stdout | gzip -c > \$asmId.fa.gz
+  touch -r \$asmId.masked.2bit \$asmId.fa.gz
+  cp -p \$asmId.fa.gz ../../\$asmId.fa.gz
   cp -p \$asmId.masked.faSize.txt ../../\$asmId.faSize.txt
   cp -p \$asmId.masked.2bit.bpt ../../\$asmId.2bit.bpt
   size=`grep -w bases \$asmId.masked.faSize.txt | cut -d' ' -f1`

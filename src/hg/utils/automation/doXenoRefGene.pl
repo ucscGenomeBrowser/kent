@@ -271,7 +271,7 @@ _EOF_
 } # doFilterPsl
 
 #########################################################################
-# * step: make gp [workhorse]
+# * step: make gp [dbHost]
 sub doMakeGp {
   my $runDir = $buildDir;
   &HgAutomate::mustMkdir($runDir);
@@ -288,7 +288,7 @@ sub doMakeGp {
   }
 
   my $whatItDoes = "Makes bigGenePred.bb file from filterPsl output.";
-  my $bossScript = newBash HgRemoteScript("$runDir/makeGp.bash", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/makeGp.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_

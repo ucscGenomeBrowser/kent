@@ -347,6 +347,12 @@ rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeq.ixx
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.bb $buildDir/bbi/${asmId}.ncbiRefSeq.bb
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ix $buildDir/ixIxx/${asmId}.ncbiRefSeq.ix
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ixx $buildDir/ixIxx/${asmId}.ncbiRefSeq.ixx
+if [ -s ${buildDir}/trackData/ncbiRefSeq/${asmId}*.ncbiRefSeq.gtf.gz ]; then
+    mkdir -p $buildDir/genes
+    rm -f ${buildDir}/genes/${asmId}.ncbiRefSeq.gtf.gz
+    gtfFile=`ls ${buildDir}/trackData/ncbiRefSeq/${asmId}*.ncbiRefSeq.gtf.gz|tail -1|sed -e 's#.*/##;'`
+    ln -s ../trackData/ncbiRefSeq/${gtfFile} ${buildDir}/genes/${asmId}.ncbiRefSeq.gtf.gz
+fi
 
   export dataVersion="html/ncbiRefSeqVersion.txt"
   if [ -s ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt ]; then
