@@ -5105,6 +5105,28 @@ reached.
     </p>
 </div>
 
+<div class="hicDistanceMin"><span class="types hic"></span>
+<div class="format"><code>hicDistanceMin &lt;integer&gt;</code></div>
+    <p>Hi-C tracks have a setting that controls the minimum interaction distance
+in nucleotides for the heatmap.  If a portion of the heatmap represents an interaction
+closer than the value of the minimum distance setting, that portion of the heatmap simply
+isn't drawn.  This setting, hicDistanceMin, controls the default value for that
+minimum (without this setting, the default is 0).  A value of 0 means that no filter
+is applied.
+    </p>
+</div>
+
+<div class="hicDistanceMax"><span class="types hic"></span>
+<div class="format"><code>hicDistanceMax &lt;integer&gt;</code></div>
+    <p>Hi-C tracks have a setting that controls the maximum interaction distance
+in nucleotides for the heatmap.  If a portion of the heatmap represents an interaction
+farther than the value of the maximum distance setting, that portion of the heatmap simply
+isn't drawn.  This setting, hicDistanceMax, controls the default value for that
+maximum (without this setting, the default is 0).  A value of 0 means that no filter
+is applied.
+    </p>
+</div>
+
 <DIV class="hic_example"><span class="types hic"></span>
 <div class="format"><B>Example of a hic track</B></div>
     <pre>
