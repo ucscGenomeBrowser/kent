@@ -1206,14 +1206,12 @@ struct wigMouseOver *mouseOverData = getMouseOverData(tg, preDraw, width, xOff, 
 
 double xIncr = (double)width / numBases;
 unsigned baseNum;
-int lastX = xOff;
 for(baseNum = 0; baseNum < numBases; baseNum++)
     {
-    int x1 = baseNum * xIncr;
+    int x1 = ceil(baseNum * xIncr);
     int x = x1 + xOff;
-    int width = x - lastX;
+    int width = xIncr;
     int base = seq->dna[baseNum];
-    lastX = x;
     int preDrawIndex = x1 + preDrawZero;
     struct preDrawElement *p = &preDraw[preDrawIndex];
 
@@ -1290,20 +1288,20 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                     color = MG_BROWN;
                 else if (base == 'g')
                     color = MG_BLUE;
-                //if (abs(dataValue) > 0.1) // I have no idea why this check is here, so I'll leave it in just in case I'm just being forgetful
+                if (height != 0)
                     {
                     if (dataValue < 0)
                         {
                         // useful for debug, fills a box where letter goes
                         // hvGfxBox(hvg, x, yOff+graphUpperLimit * scaleFactor, width, -height, MG_BLACK);
-                        hvGfxTextInBox(hvg, x, yOff+graphUpperLimit * scaleFactor, width - 1, dataValue * scaleFactor,
+                        hvGfxTextInBox(hvg, x, yOff+graphUpperLimit * scaleFactor, width - 1, height,
                             color, font, string);
                         }
                     else
                         {
                         // useful for debug, fills a box where letter goes
                         // hvGfxBox(hvg, x, yOff-height+graphUpperLimit * scaleFactor, width, height, MG_BLACK);
-                        hvGfxTextInBox(hvg, x, yOff-height+graphUpperLimit * scaleFactor, width - 1, dataValue * scaleFactor,
+                        hvGfxTextInBox(hvg, x, yOff-height+graphUpperLimit * scaleFactor, width - 1, height,
                             color, font, string);
                         }
                     }

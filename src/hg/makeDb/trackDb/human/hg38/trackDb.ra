@@ -33,7 +33,6 @@ include toothKrivanek.ra
 include hippocampusAyhan.ra
 include brainDevRegions.ra
 include t2t.ra alpha
-include hprc.ra alpha
 
 include gtexEqtl.ra
 
@@ -820,3 +819,5 @@ pennantIcon New red ../goldenPath/newsarch.html#041522 "Released Apr. 15, 2022"
 
 track decipherSnvs override
 pennantIcon New red ../goldenPath/newsarch.html#041522 "Released Apr. 15, 2022"
+
+include hprcChain.ra

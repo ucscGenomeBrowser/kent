@@ -33,7 +33,6 @@ printf '
 <!--#include virtual="$ROOT/inc/gbFooterHardcoded.html"-->
 <script type="text/javascript" src="<!--#echo var="ROOT" -->/js/sorttable.js"></script>
 <script type="text/javascript" src="<!--#echo var="ROOT" -->/js/analytics.js"></script>
-
 </body></html>
 '
 }
@@ -153,7 +152,7 @@ foreach my $hubSet (@checkList) {
 my $hubCount = 0;
 
 printf "<table class='sortable' border='1'>\n";
-printf "<thead>\n";
+printf "<thead><tr>\n";
 printf "  <th>hub&nbsp;gateway</th>\n";
 printf "  <th>description</th>\n";
 printf "</tr></thead><tbody>\n";
@@ -185,6 +184,10 @@ printf "</p>\n";
 
 printf "<p>\n";
 printf "Please note, the <em>invertebrate</em> category contains more than just <em>invertebrate</em> animals.  Until these clades are sorted out, with extra categories created, you will also find parasites, protozoa, and other single celled eukaryotes in the <em>invertebrate</em> grouping.\n";
+printf "</p>\n";
+
+printf "<p>\n";
+printf "Please use the <a href='https://genome.ucsc.edu/assemblyRequest.html' target=_blank>Assembly Request</a> page to find and request GenBank assemblies that have not yet been included in the collections here.\n";
 printf "</p>\n";
 
 endHtml;

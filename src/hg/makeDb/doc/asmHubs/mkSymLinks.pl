@@ -104,6 +104,7 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/${accessionId}.chromAlias.bb"`;
   `rm -f "${destDir}/${accessionId}_assembly_report.txt"`;
   `rm -f "${destDir}/${accessionId}.repeatMasker.out.gz"`;
+  `rm -f "${destDir}/${accessionId}.repeatMasker.version.txt"`;
   `rm -f "${destDir}/${accessionId}.userTrackDb.txt"`;
   `rm -f "${destDir}/trackDb.txt"`;
   `rm -f "${destDir}/genomes.txt"`;
@@ -126,9 +127,17 @@ foreach my $asmId (@orderList) {
    }
 #  `ln -s ${buildDir}/html/*.png "${destDir}/genomes/${asmId}/html/"`;
   `ln -s "${buildDir}/trackData/addMask/${asmId}.masked.2bit" "${destDir}/${accessionId}.2bit"` if (-s "${buildDir}/trackData/addMask/${asmId}.masked.2bit");
-  `ln -s "${buildDir}/${asmId}.fa.gz" "${destDir}/${accessionId}.fa.gz"` if (-s "${buildDir}/${asmId}.fa.gz");
+   if (-s "${buildDir}/${asmId}.fa.gz") {
+      `ln -s "${buildDir}/${asmId}.fa.gz" "${destDir}/${accessionId}.fa.gz"`;
+   } else {
+      printf STDERR "# missing ${asmId}.fa.gz\n";
+   }
   `ln -s "${buildDir}/${asmId}.chrNames.fa.gz" "${destDir}/${accessionId}.chrNames.fa.gz"` if (-s "${buildDir}/${asmId}.chrNames.fa.gz");
-  `ln -s "${buildDir}/trackData/addMask/${asmId}.masked.2bit.bpt" "${destDir}/${accessionId}.2bit.bpt"` if (-s "${buildDir}/trackData/addMask/${asmId}.masked.2bit.bpt");
+   if (-s "${buildDir}/trackData/addMask/${asmId}.masked.2bit.bpt") {
+      `ln -s "${buildDir}/trackData/addMask/${asmId}.masked.2bit.bpt" "${destDir}/${accessionId}.2bit.bpt"`;
+   } else {
+      printf STDERR "# missing ${asmId}.masked.2bit.bpt\n";
+   }
   `ln -s "${buildDir}/${asmId}.chrNames.2bit" "${destDir}/${accessionId}.chrNames.2bit"` if (-s "${buildDir}/${asmId}.chrNames.2bit");
    if (-s "${buildDir}/${accessionId}.untrans.gfidx") {
       if (-s "${buildDir}/${accessionId}.trans.gfidx") {
@@ -141,6 +150,7 @@ foreach my $asmId (@orderList) {
   `ln -s "${buildDir}/${asmId}.chromAlias.txt" "${destDir}/${accessionId}.chromAlias.txt"` if (-s "${buildDir}/${asmId}.chromAlias.txt");
   `ln -s "${buildDir}/${asmId}.chromAlias.bb" "${destDir}/${accessionId}.chromAlias.bb"` if (-s "${buildDir}/${asmId}.chromAlias.bb");
   `ln -s "${buildDir}/${asmId}.repeatMasker.out.gz" "${destDir}/${accessionId}.repeatMasker.out.gz"` if (-s "${buildDir}/${asmId}.repeatMasker.out.gz");
+  `ln -s "${buildDir}/${asmId}.repeatMasker.version.txt" "${destDir}/${accessionId}.repeatMasker.version.txt"` if (-s "${buildDir}/${asmId}.repeatMasker.version.txt");
   `ln -s "${buildDir}/download/${asmId}_assembly_report.txt" "${destDir}/${accessionId}_assembly_report.txt"` if (-s "${buildDir}/download/${asmId}_assembly_report.txt");
   # trackDb.txt still needed for use by top-level genomes.txt file
   `ln -s "${buildDir}/${asmId}.trackDb.txt" "${destDir}/trackDb.txt"` if (-s "${buildDir}/${asmId}.trackDb.txt");

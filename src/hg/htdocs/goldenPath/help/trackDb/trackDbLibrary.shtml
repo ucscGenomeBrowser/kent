@@ -307,9 +307,9 @@
     The path of this file name is relative to the path of the trackDb file, or it
     can be a full URL. It is also possible to have the &quot.html&quot; suffix implied,
     for instance just have <code>html explainFile</code>. To further simplify trackDb,
-    if there is an html file with the same name as the <code>track nameOfTrack</code>
-    the html line does not even need to be declared if <code>nameOfTrack.html</code>
-    exists in the same location as the trackDb file.</p>
+    if there is a file, <code>nameOfTrack.html</code>, in the same directory as the
+    trackDb matching the name of the track, <code>track nameOfTrack</code>,
+    then the html file does not need to be declared.
     <p>To be consistent with standard Genome Browser track descriptions, html for tracks
     should contain several sections as seen below. Here is a link to an 
     <a href="../examples/hubExamples/templatePage.html" 
@@ -325,7 +325,7 @@
     or the significance of scores if generated in a special fashion.</p>
     <p><b>Credits</b></p>
     <P class="indent1">This section helps people find the contacts
-    for questions about the data, please include an email or laboratory web page.</p>
+    for questions about the data. Please include an email or laboratory web page.</p>
     <p><b>References</b></p>
     <P class="indent1">Relevant publications regarding the data.</p>
     </div>
@@ -5248,6 +5248,8 @@ and is particularly useful for tracks with large numbers of categories.
     which is useful for selecting which bars out of a large number to display.  It works
     with the barChartStatsUrl.  The comma-separated list of columns refer to column names
     in the tab-separated-value file specified by barChartStatsUrl.
+    See an example with images of barChartFacets on the <a target="_blank"
+    href="../barChart.html#example6">barChart help page</a>.
     </P>
 </DIV>
 
@@ -5262,7 +5264,8 @@ and is particularly useful for tracks with large numbers of categories.
     The <i>count</i> column is required, and contains the number of samples represented in the bar. 
     Other columns can contain additional data associated with each bar. Typically these are used
     in coordination with the barChartsFacets tag to specify metadata such as cell types or
-    tissue of origin.
+    tissue of origin. See an example with images of barChartStatsUrl on the <a target="_blank"
+    href="../barChart.html#example6">barChart help page</a>.
     </P>
 </DIV>
 
@@ -5270,16 +5273,18 @@ and is particularly useful for tracks with large numbers of categories.
 <div class="format"><code>barChartMerge on</code></div>
     <P>This setting enables the <i>merge</i> button inside of the faceted selections.  It
     is particularly useful when there are many bars and many facets. It allows bars that differ 
-    only in that one facet to be merged together.
+    only in that one facet to be merged together. See an example with images of barChartMerge on the
+    <a target="_blank" href="../barChart.html#example6">barChart help page</a>.
     </P>
 </DIV>
 
-<DIV class="barChartBarPadding"><span class="types bigBarChart"></span>
-<div class="format"><code>barChartBarPadding &lt;num&gt;</code></div>
+<DIV class="barChartBarMinPadding"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartBarMinPadding &lt;num&gt;</code></div>
     <P>Sets the minimum pixel width between bars to &lt;num&gt; pixels. Typically, this padding is
     a dynamic calculation dependent on the current window size, the width of the item, and the number of bars for the
     item. If present, the maximum of this setting and the dynamically calculated padding is used for the display.
-    </P>
+    See an example with images of barChartBarMinPadding on the <a target="_blank"
+    href="../barChart.html#example5">barChart help page</a>.</p>
 </DIV>
 
 <DIV class="barChartBarMinWidth"><span class="types bigBarChart"></span>
@@ -5287,6 +5292,8 @@ and is particularly useful for tracks with large numbers of categories.
     <P>Sets the minimum pixel width of the bars in the chart to &lt;num&gt; pixels. Typically, this width is
     a dynamic calculation dependent on the current window size, the width of the item, and the number of bars for the
     item. If present, the maximum of this setting and the dynamically calculated width is used for the display.
+    See an example with images of barChartBarMinWidth on the <a target="_blank"
+    href="../barChart.html#example5">barChart help page</a>.
     </P>
 </DIV>
 

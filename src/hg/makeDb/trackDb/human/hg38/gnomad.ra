@@ -5,6 +5,7 @@ track gnomadVariants
 superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
+pennantIcon Updated red ../goldenPath/newsarch.html#050322 "Mutation Constraint track released at UCSC May 3, 2022"
 group varRep
 html gnomadV3_1_1
 
@@ -115,6 +116,7 @@ html gnomadV3_1_1
     detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
 
 track gnomadConstraint
+pennantIcon New red ../goldenPath/newsarch.html#050322 "Released at UCSC May 3, 2022"
 parent gnomadVariants on
 shortLabel gnomAD Mut Constraint
 longLabel Genome Aggregation Database (gnomAD) Genome Mutational Constraint

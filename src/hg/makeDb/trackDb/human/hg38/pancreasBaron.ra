@@ -9,7 +9,7 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
-    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    url https://cells.ucsc.edu/?ds=human-pancreas&gene=$$
     urlLabel View on the UCSC Cell Browser: 
     visibility pack
     shortLabel Pancreas Cells
@@ -30,7 +30,7 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
-    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    url https://cells.ucsc.edu/?ds=human-pancreas&gene=$$
     urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Details
@@ -50,7 +50,7 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
-    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    url https://cells.ucsc.edu/?ds=human-pancreas&gene=$$
     urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Batch
@@ -75,7 +75,7 @@ group singleCell
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
-    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    url https://cells.ucsc.edu/?ds=human-pancreas&gene=$$
     urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Donor
