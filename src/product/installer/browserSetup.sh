@@ -1488,6 +1488,9 @@ function installBrowser ()
         # don't download RNAplot, it's a 32bit binary that won't work anywhere anymore but at UCSC
         # this means that hgGene cannot show RNA structures but that's not a big issue
         $RSYNC -avzP --exclude=RNAplot $HGDOWNLOAD::cgi-bin/ $CGIBINDIR/
+        # now add the binaries for dot and RNAplot 
+        $RSYNC -avzP $HGDOWNLOAD::genome/admin/exe/external.x86_64/RNAplot $CGIBINDIR/
+        $RSYNC -avzP $HGDOWNLOAD::genome/admin/exe/external.x86_64/loader/dot_static $CGIBINDIR/loader/
     fi
 
     # download the html docs, exclude some big files on OSX
