@@ -30,7 +30,6 @@ wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV39
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV39
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV39
 wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV39
-pennantIcon New red ../goldenPath/newsarch.html#020922 "Released Feb. 9, 2022"
 
     track wgEncodeGencodeV39ViewGenes
     shortLabel Genes
