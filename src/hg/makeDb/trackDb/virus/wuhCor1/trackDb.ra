@@ -454,7 +454,7 @@ vcfDoQual off
 vcfDoFilter off
 geneTrack ncbiGeneBGP
 group varRep
-visibility squish
+visibility hide
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
 release alpha
