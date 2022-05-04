@@ -619,9 +619,9 @@ searchMethod fuzzy
 padding 5
 
 track resist
-pennantIcon New red ../goldenPath/newsarch.html#022522 "Released Feb. 25, 2022"
-shortLabel Drug Resistance
-longLabel Mutations that confer drug resistance collected by Paul Gordon, Calgary
+pennantIcon Updated red ../goldenPath/newsarch.html#022522 "Updated May 3, 2022"
+shortLabel Drug Resistance Mutations
+longLabel Mutations that confer drug resistance 
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/resist/resist.bb
 itemRgb on
