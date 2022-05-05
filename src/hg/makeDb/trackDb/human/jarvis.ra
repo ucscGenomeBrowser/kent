@@ -13,3 +13,4 @@ maxWindowToDraw 10000000
 mouseOverFunction noAverage
 maxHeightPixels 8:40:100
 release alpha
+html constraintSuper

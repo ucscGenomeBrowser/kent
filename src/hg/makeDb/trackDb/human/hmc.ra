@@ -1,6 +1,6 @@
 track hmc
 shortLabel HMC
-longLabel Homologous Missense Constraint
+longLabel HMC - Homologous Missense Constraint Score
 type bigWig
 compositeTrack on
 parent constraintSuper

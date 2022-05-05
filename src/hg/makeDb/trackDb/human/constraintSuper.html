@@ -1,13 +1,15 @@
 <h2>Description</h2>
 
 <p>
-This container track includes various subtracks showing the results of
-constraint prediction algorithms that try to find regions of negative
-selection, where variations likely have functional impact. These algorithms do
-not use multi-species alignments to derive constraint, but use primarily human
-variation, usually from variants collected by gnomAD (see the gnomAD V2 or V3
-tracks on hg19 and hg38)
-or TOPMED (contained in our dbSNP tracks and available as a filter).
+The "Constraint scores" container track includes several subtracks showing the results of
+constraint prediction algorithms. These try to find regions of negative
+selection, where variations likely have functional impact. The algorithms do
+not use multi-species alignments to derive evolutionary constraint, but use
+primarily human variation, usually from variants collected by gnomAD (see the
+gnomAD V2 or V3 tracks on hg19 and hg38) or TOPMED (contained in our dbSNP
+tracks and available as a filter). Another constraint score, gnomAD
+constraint, is not part of this container but can be found in the hg38 gnomAD
+track.
 
 The algorithms covered here are:
 <ol>
@@ -38,13 +40,15 @@ The algorithms covered here are:
 <h2>Methods</h2>
 
 <p>
-<b>HMC:</b> 
+<b>HMC:</b> Scores were downloaded and converted to .bedGraph files with a custom Python script. The bedGraph files were then converted to bigWig files, as documented in our <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" target=_blank>makeDoc</a> hg19 build log.<br>
+<b>Jarvis:</b> Scores were downloaded and converted to a single bigWig file. See <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" target=_blank>hg19 makeDoc</a> and  <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/jarvis.txt" target=_blank>hg38 makeDoc</a>
+
 </p>
 
 <h2>Credits</h2>
 
 <p>
-Thanks to Jean-Madeleine Desainteagathe (APHP Paris, France) for suggesting the HMC track and to Xialei Zhang for providing the HMC data file.
+Thanks to Jean-Madeleine Desainteagathe (APHP Paris, France) for suggesting the Jarvis, MTR, HMC tracks. Thanks to Xialei Zhang for providing the HMC data file and to Dimitrios Vitsios for helping clean up the hg38 Jarvis files. 
 </p>
 
 <h2>References</h2>

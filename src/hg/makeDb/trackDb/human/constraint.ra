@@ -1,6 +1,6 @@
 track constraintSuper
 shortLabel Constraint scores
-longLabel Constraint scores (how should we call these?)
+longLabel Human constraint scores
 superTrack on hide
 type bed
 visibility hide
