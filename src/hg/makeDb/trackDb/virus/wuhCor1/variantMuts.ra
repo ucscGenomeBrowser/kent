@@ -16,7 +16,7 @@ group varRep
 allButtonPair on
 dataVersion Sequences downloaded September 10, 2021, update on Dec 2, 2021 and May 4, 2022
 visibility dense
-#pennantIcon Updated red ../goldenPath/newsarch.html#120321 "Track updated May 4, 2022"
+pennantIcon Updated red ../goldenPath/newsarch.html "Omicron BA.4 and BA.5 added May, 2022"
 html variantMuts
 
 # Amino acid tracks
