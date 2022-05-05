@@ -4781,7 +4781,7 @@ pennantIcon Deprecated red /goldenPath/newsarch.html#093020b "Track no longer up
         visibility dense
         priority 1
         type bigBed 9 +
-        bigDataUrl /gbdb/hg19/doseSensitivity/clinGenHaploInsufficiency.bb
+        bigDataUrl /gbdb/$D/doseSensitivity/clinGenHaploInsufficiency.bb
         mouseOverField mouseOver
         subGroups view=dose class=path level=cur
 
@@ -4792,7 +4792,7 @@ pennantIcon Deprecated red /goldenPath/newsarch.html#093020b "Track no longer up
         visibility dense
         priority 2
         type bigBed 9 +
-        bigDataUrl /gbdb/hg19/doseSensitivity/clinGenTriploSensitivity.bb
+        bigDataUrl /gbdb/$D/doseSensitivity/clinGenTriploSensitivity.bb
         mouseOverField mouseOver
         subGroups view=dose class=path level=cur
 
@@ -5438,7 +5438,7 @@ group covid
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
-multiRegionsBedUrl /gbdb/hg19/covidMuts/covidMuts.regions.bed
+multiRegionsBedUrl /gbdb/$D/covidMuts/covidMuts.regions.bed
  
 track orphadata
 bigDataUrl /gbdb/$D/bbi/orphanet/orphadata.bb
