@@ -149,7 +149,7 @@ html variantMuts
         longLabel Omicron BA.4 amino acid mutations from 573 GISAID sequences (May 4, 2022)
         url https://outbreak.info/situation-reports?pango=BA.4
         urlLabel BA.4 Situation Report at outbreak.info
-        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.4_prot.bb
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.4_aa.bb
         color 219,40,35
         priority 12
 
@@ -160,7 +160,7 @@ html variantMuts
         longLabel Omicron BA.5 amino acid mutations from 287 GISAID sequences (May 4, 2022)
         url https://outbreak.info/situation-reports?pango=BA.5
         urlLabel BA.5 Situation Report at outbreak.info
-        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.5_prot.bb
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.5_aa.bb
         color 219,40,35
         priority 13
 
