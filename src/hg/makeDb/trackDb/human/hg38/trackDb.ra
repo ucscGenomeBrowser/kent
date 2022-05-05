@@ -25,7 +25,7 @@ include ileumWang.ra
 include colonWang.ra
 include rectumWang.ra
 include placentaVentoTormo.ra 
-include singleCellMerged.ra alpha,beta
+include singleCellMerged.ra
 #include lungMadissoon.ra
 #include spleenMadissoon.ra
 include tabulaSapiens.ra
