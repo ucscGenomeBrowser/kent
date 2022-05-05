@@ -506,7 +506,6 @@ type bigBed
 skipEmptyFields on
 group map
 dataVersion v8 (2021-10-27)
-pennantIcon Updated red ../goldenPath/newsarch.html "Updated Nov. 11, 2021"
 
     track problematicSitesMask
     shortLabel Mask
