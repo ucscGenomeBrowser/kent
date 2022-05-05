@@ -3651,7 +3651,8 @@ There are no extra options that can appear on the type hic line.
     display gene codon translation.  The reading frame may differ
     between species.  By providing the reading frames information in a
     separate table, the user can choose which frame to use when
-    viewing the data. For bigMaf the value is expected to be a bigBed, for wigMaf it should be a table.</P> 
+    viewing the data. For bigMaf the value is expected to be a bigBed, for wigMaf it should be a table.
+    Read about <a href="../bigMaf.html#frames_summary">bigMaf supporting files</a> on the help page.</p>
     <P><B>Example:</B></P>
     <pre>   frames myCodonFrames</pre>
     <pre>   frames myCodonFrames.bb</pre>
@@ -3779,7 +3780,8 @@ There are no extra options that can appear on the type hic line.
     bigBed containing that information. The summary
     view is used when the browser display is zoomed out to contain a million
     or more basepairs.  A summary table is created from a multiple alignment MAF
-    file using the utility <code>hgLoadMafSummary</code>.  For bigMaf, the value is assumed to be bigBed. </P>
+    file using the utility <code>hgLoadMafSummary</code>.  For bigMaf, the value is assumed to be bigBed,
+    Read about <a href="../bigMaf.html#frames_summary">bigMaf supporting files</a> on the help page.</p>
     <P><B>Example:</B></P>
     <pre>   summary hg17Maf8waySummary</pre>
 </DIV>
