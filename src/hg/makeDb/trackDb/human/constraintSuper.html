@@ -13,16 +13,6 @@ track.
 
 The algorithms covered here are:
 <ol>
-    <li><b><a href="https://www.cardiodb.org/hmc/" target="_blank">
-    HMC - Homologous Missense Constraint</a></b>:
-    Homologous Missense Constraint (HMC) is a amino acid level measure
-    of genetic intolerance of missense variants within human populations.
-    For all assessable amino-acid positions in Pfam domains, the number of
-    missense substitutions directly observed in gnomAD (Observed) was counted
-    and compared to the expected value under a neutral evolution
-    model (Expected). The upper limit of a 95% confidence interval for the
-    Observed/Expected ratio is defined as the HMC score.
-
     <li><b><a href="https://github.com/astrazeneca-cgr-publications/jarvis" target="_blank">
     JARVIS - "Junk" Annotation genome-wide Residual Variation Intolerance Score</a></b>: 
     First scan the entire genome with a
@@ -34,6 +24,18 @@ The algorithms covered here are:
     annotations with a multi-module deep learning framework to infer
     pathogenicity of noncoding regions that still remains naïve to existing
     phylogenetic conservation metrics
+
+    <li><b><a href="https://www.cardiodb.org/hmc/" target="_blank">
+    HMC - Homologous Missense Constraint</a></b>:
+    Homologous Missense Constraint (HMC) is a amino acid level measure
+    of genetic intolerance of missense variants within human populations.
+    For all assessable amino-acid positions in Pfam domains, the number of
+    missense substitutions directly observed in gnomAD (Observed) was counted
+    and compared to the expected value under a neutral evolution
+    model (Expected). The upper limit of a 95% confidence interval for the
+    Observed/Expected ratio is defined as the HMC score. Missense variants
+    disrupting the amino-acid positions with HMC&lt;0.8 are predicted to be
+    likely deleterious
 
 </ol>
 
