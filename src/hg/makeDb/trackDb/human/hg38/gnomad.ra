@@ -119,7 +119,7 @@ track gnomadConstraint
 pennantIcon New red ../goldenPath/newsarch.html#050322 "Released at UCSC May 3, 2022"
 parent gnomadVariants on
 shortLabel gnomAD Mut Constraint
-longLabel Genome Aggregation Database (gnomAD) Genome Mutational Constraint
+longLabel Genome Aggregation Database (gnomAD) Genome Mutational Constraint (includes chrX)
 bigDataUrl /gbdb/hg38/gnomAD/mutConstraint/mutConstraint.bw
 type bigWig
 altColor 0,150,0
