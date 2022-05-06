@@ -10,12 +10,10 @@ def readPerChrom(db):
     lastChrom = None
     lastPos = None
 
-    #for line in gzip.open("whole_genome_SNVs.tsv.gz"):
     currChrom = None
-    chromData = {"A":{}, "C":{}, "T":{}, "G":{}}
+    chromData = {}
     isHg19 = (db=="hg19")
     for line in subprocess.Popen(['zcat', "hmc_wst_uniquevar_outputforshare_v2.txt.gz"], stdout=subprocess.PIPE, encoding="ascii").stdout:
-        #print(line)
         if line.startswith("chr\t"):
             continue
         row = line.rstrip("\n").split("\t")
@@ -27,14 +25,9 @@ def readPerChrom(db):
             currChrom = chrom
 
         if chrom != currChrom:
-            #print("change of chrom: old %s, new %s" % (currChrom, chrom))
             yield currChrom, chromData
-            chromData = {"A":{}, "C":{}, "T":{}, "G":{}}
+            chromData = {}
             currChrom = chrom
-
-            # XX
-            #chrom = None
-            #break
 
         if isHg19:
             pos = int(row[1])
@@ -45,43 +38,27 @@ def readPerChrom(db):
             pos = int(pos)
 
         score = float(row[-1])
-
         maxScore = score
+
+        # this is only necessary for hg38 - lifting leads to duplicates
         if pos in chromData:
             maxScore = max(chromData[pos], score)
-            print("duplicate value at position, using max: ", pos, score, maxScore)
+            if maxScore != score:
+                print("duplicate value at position, using max: ", pos, score, maxScore)
 
-        #print("adding %f at %d in %s" % (maxScore, pos, chrom))
-        chromData[alt][pos] = maxScore
+        chromData[pos] = maxScore
     
     if chrom is not None:
         yield chrom, chromData
 
-#def iterStretches(nuclData):
 def main():
-    #j." yield chrom, pos, nuclValues from nuclData which is "
-    #j.pos = 
-    outFhs = {
-        "A" : open("a.wig", "w"),
-        "C" : open("c.wig", "w"),
-        "T" : open("t.wig", "w"),
-        "G" : open("g.wig", "w")
-     }
+    ofh = open("hmc.wig", "w")
 
     db = sys.argv[1]
 
     for chrom, chromData in readPerChrom(db):
-        #print("read %s" % chrom)
-        for nucl, nuclData in chromData.items():
-            #print("nucleotide: %s" % (nucl))
-            #print("to array and sort %s" % chrom)
-            nuclData = list(nuclData.items())
-            nuclData.sort()
+        for pos, val in chromData.items():
+            ofh.write("%s\t%d\t%d\t%f\n" % (chrom, pos-1, pos, val))
 
-            ofh = outFhs[nucl]
-            #print("write %s" % chrom)
-            for pos, val in nuclData:
-                ofh.write("%s\t%d\t%d\t%f\n" % (chrom, pos-1, pos, val))
-
-    print("wrote wigs")
+    print("wrote hmc.wig")
 main()

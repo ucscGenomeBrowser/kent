@@ -34829,10 +34829,7 @@ bedGraphToBigWig jarvis.bed ../chrom.sizes jarvis.bw
 # HMC constraint scores, Max Fri Apr  8 08:30:49 PDT 2022
 # downloaded V2 from https://zenodo.org/record/6392153#.Yk8KeflBzIU)
 python ~/kent/src/hg/makeDb/scripts/hmc/hmcToWig.py hg19
-wigToBigWig a.bedGraph ../../chrom.sizes a.bw &
-wigToBigWig c.bedGraph ../../chrom.sizes c.bw &
-wigToBigWig g.bedGraph ../../chrom.sizes g.bw &
-wigToBigWig t.bedGraph ../../chrom.sizes t.bw &
+bedGraphToBigWig hmc.wig ../../chrom.sizes hmc.bw
 
 #############################################################################
 # ReMap refs #28960 (2022-04-12 Gerardo)

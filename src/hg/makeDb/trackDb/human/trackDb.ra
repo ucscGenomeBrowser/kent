@@ -41,7 +41,7 @@ include cadd.ra
 include revel.ra
 
 # constraint scores
-include constraint.ra
+include constraintSuper.ra alpha
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
