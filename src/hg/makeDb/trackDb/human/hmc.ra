@@ -1,6 +1,6 @@
 track hmc
 shortLabel HMC
-longLabel HMC - Homologous Missense Constraint Score
+longLabel HMC - Homologous Missense Constraint Score on PFAM domains
 type bigWig
 parent constraintSuper
 visibility dense
@@ -15,3 +15,4 @@ viewLimits 0:2
 viewLimitsMax 0:2
 yLineMark 0.8
 yLineOnOff on
+priority 2
