@@ -252,23 +252,23 @@ to assembly hubs</a>.
 <h6>How do I attach a track hub to an assembly hub?</h6>
 <p>
 It is possible to attach a track hub to an assembly hub via the URL using a combination of the
-<code>hubUrl=</code> and <code>genome=</code> URL parameters. For exmaple, using the following
+<code>hubUrl=</code> and <code>genome=</code> URL parameters. For example, using the following
 assembly hub and track hub:
 </p>
 <pre>
 <b>Arabidopsis thaliana assembly hub</b>
-https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt
+https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/hub.txt
 </pre>
 <pre>
 <b>ReMap2020 Reg. Atlas track hub</b>
-https://genome-test.gi.ucsc.edu/~braney/myHub/remap.txt
+https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubRemap/remap.txt
 </pre>
 <p>
 The combination of the two hubs, along with <code>genome=araTha1</code>, allows for the creation of
 the following URL that can load both hubs on the Genome Browser.
 </p>
 <pre>
-<a href="/cgi-bin/hgTracks?genome=araTha1&hubUrl=https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&hubUrl=https://genome-test.gi.ucsc.edu/~braney/myHub/remap.txt" target="_blank">https://genome.ucsc.edu/cgi-bin/hgTracks?genome=araTha1&hubUrl=https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&hubUrl=https://genome-test.gi.ucsc.edu/~braney/myHub/remap.txt</a>
+<a href="/cgi-bin/hgTracks?genome=araTha1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/hub.txt&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubRemap/remap.txt" target="_blank">https://genome.ucsc.edu/cgi-bin/hgTracks?genome=araTha1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/hub.txt&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubRemap/remap.txt</a>
 </pre>
 
 <a name="genArkTrackHub"></a>
@@ -279,7 +279,7 @@ When creating a track hub for a GenArk assembly, there is no need to do any atta
 assembly hub itself via the <code>hubUrl=</code> URL parameter. GenArk hubs will automatically
 attach themselves if the track hub mentions the GCA_ or GCF_ name identifier of the assembly hub.
 Simply load the track hub on the Genome Browser, and the assembly hub will automatically appear. For
-example, the following <a href="https://genome-test.gi.ucsc.edu/~jairo/trackHubs/genArkTrackHub/hub.txt"
+example, the following <a href="https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGenArkExample/genArkTrackHub/hub.txt"
 target="_blank">example track hub</a> will load an additional track for the pig (GCA_002844635.1)
 GenArk assembly.
 </p>
@@ -289,7 +289,7 @@ To create a link to the track hub that references a GenArk assembly, the
 following example:
 </p>
 <pre>
-<a href="/cgi-bin/hgTracks?genome=GCA_002844635.1&hubUrl=https://genome-test.gi.ucsc.edu/~jairo/trackHubs/genArkTrackHub/hub.txt" target="_blank">https://genome.ucsc.edu/cgi-bin/hgTracks?genome=GCA_002844635.1&hubUrl=https://genome-test.gi.ucsc.edu/~jairo/trackHubs/genArkTrackHub/hub.txt</a>
+<a href="/cgi-bin/hgTracks?genome=GCA_002844635.1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGenArkExample/genArkTrackHub/hub.txt" target="_blank">https://genome.ucsc.edu/cgi-bin/hgTracks?genome=GCA_002844635.1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGenArkExample/genArkTrackHub/hub.txt</a>
 </pre>
 <p>
 You can also read a blog post,
