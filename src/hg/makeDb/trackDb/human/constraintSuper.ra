@@ -11,4 +11,5 @@ color 100,0,160
 include jarvis.ra
 # HMC scores
 include hmc.ra
-
+# MTR scores
+include mtr.ra

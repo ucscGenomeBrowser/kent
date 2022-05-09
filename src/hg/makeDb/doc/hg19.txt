@@ -34849,3 +34849,18 @@ cd ~/kent/src/hg/makeDb/trackDb
 curl https://remap.univ-amu.fr/storage/public/hubReMap2022/hg19/trackDb.txt > human/hg19/reMap.ra
 vi human/hg19/reMap.ra
 vi human/hg19/trackDb.ra
+
+#############################################################################
+# MTR scores refs #29152 (2022-05-9 Lou)
+mkdir /hive/data/outside/mtr
+cd /hive/data/outside/mtr
+wget http://biosig.unimelb.edu.au/mtr-viewer/static/mtrtable_2.0_ens95.txt.gz
+gunzip mtrtable_2.0_ens95.txt.gz
+chromToUcsc --get hg19
+chromToUcsc -i mtrtable_2.0_ens95.txt -i mtrUcsc.txt -a hg19.chromAlias.tsv
+~/kent/src/hg/makeDb/scripts/mtr/buildMTRbedTrack.py
+~/kent/src/hg/makeDb/scripts/mtr/buildMTRwigTracks.py
+fetchChromSizes hg19 > chrom.sizes
+bedToBigBed -type=bed9+10 -tab -as=mtr.as mtr2.bed chrom.sizes mtr2.bb
+ln -s /hive/data/outside/mtr2.bb /gbdb/hg19/bbi/
+ln -s /hive/data/outside/*.bw /gbdb/hg19/bbi/
