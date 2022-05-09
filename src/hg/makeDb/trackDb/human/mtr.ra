@@ -3,7 +3,7 @@ shortLabel MTR All Data
 longLabel MTR -  Missense Tolerance Ratio Scores all annotations
 parent constraintSuper
 visibility hide
-type bigBed 9 + 9
+type bigBed 9 + 10
 itemRgb on
 mouseOver $ref>$alt $MTR ${MTR_centile}
 bigDataUrl /gbdb/$D/bbi/mtr2.bb
