@@ -270,8 +270,12 @@ my $genArkCatchup = 0;
 ### catch up for any missed genArk hubs
 # accession<tab>assembly<tab>scientific name<tab>common name<tab>taxonId
 foreach my $asmIdKey (sort keys %genArkAsm) {
-  next if (defined($sciName{$asmIdKey}));
-  next if (defined($comName{$asmIdKey}));
+  if (defined($sciName{$asmIdKey})) {
+    next;
+  }
+  if (defined($comName{$asmIdKey})) {
+    next;
+  }
   my @a = split('\t', $genArkAsm{$asmIdKey});
   $a[2] =~ s/_/ /g;
   $sciName{$asmIdKey} = $a[2];
@@ -355,9 +359,11 @@ my $warningNoDate = 0;
 
 my %skipPartialGenome;	# key is asmId, value is sciName for 'partial' status
 
+my $genomeReports = "/hive/data/outside/ncbi/genomes/reports";
+
 # obtain scientific name and asmId from assembly_summary files
 printf STDERR "### reading genbank and refseq assembly_summary\n";
-open (FH, "grep -v '^#' /hive/data/outside/ncbi/genomes/reports/assembly_summary_genbank.txt /hive/data/outside/ncbi/genomes/reports/assembly_summary_refseq.txt|cut -f8,14,20|") or die "can not read the assembly_summary files";
+open (FH, "grep -v '^#' $genomeReports/assembly_summary_genbank.txt $genomeReports/assembly_summary_refseq.txt $genomeReports/assembly_summary_genbank_historical.txt $genomeReports/assembly_summary_refseq_historical.txt|cut -f8,14,20|") or die "can not read the assembly_summary files";
 while (my $line = <FH>) {
   chomp $line;
   # asmId will be derived from the ftpPath
@@ -550,13 +556,15 @@ my %genArkClade;	# key is asmId, value is clade
 
 my $shouldBeGenArk = 0;
 my $shouldBeUcsc = 0;
+my %usedGenArk;	# key is asmId, value is count seen in *.today files
 
 foreach my $clade (@clades) {
   my $cladeCount = 0;
   my $goodToGoCount = 0;
   my $refSeq = "${NA}/all.refseq.${clade}.today";
   my $genBank = "${NA}/all.genbank.${clade}.today";
-  open (FH, "sort ${refSeq} ${genBank}|") or die "can not read $refSeq or $genBank";
+  my $asmHubTsv = "~/kent/src/hg/makeDb/doc/${clade}AsmHub/${clade}.orderList.tsv";
+  open (FH, "cut -f1 ${refSeq} ${genBank} ${asmHubTsv}|sort -u|") or die "can not read $refSeq or $genBank or $asmHubTsv";
   while (my $asmId = <FH>) {
      chomp $asmId;
      $asmId =~ s/\.]/_/g;
@@ -570,8 +578,14 @@ foreach my $clade (@clades) {
      $asmId =~ s/__/_/g;
      ++$shouldBeGenArk if (defined($genArkAsm{$asmId}));
      ++$shouldBeUcsc if (defined($rrGcaGcfList{$asmId}));
-     next if (defined ($skipPartialGenome{$asmId}));
-     next if (defined ($asmSuppressed{$asmId}));
+     if (defined ($skipPartialGenome{$asmId})) {
+       printf STDERR "# skipping genArk %s because skipPartialGenome\n", $asmId if (defined($genArkAsm{$asmId}));
+       next;
+     }
+     if (defined ($asmSuppressed{$asmId})) {
+       printf STDERR "# skipping genArk %s because asmSuppressed\n", $asmId if (defined($genArkAsm{$asmId}));
+       next;
+     }
      next if (defined ($alreadyDone{$asmId}));
      # something wrong with these two
 # GCA_900609255.1_Draft_mitochondrial_genome_of_wild_rice_W1683
@@ -612,6 +626,7 @@ printf STDERR "# ACK metaInfo: %s '%s'\n", $asmId, $metaInfo{$asmId};
      }
      my $cPtr = $cladeToGo{$clade};
      push (@$cPtr, $asmId);
+     $usedGenArk{$asmId} += 1 if (defined($genArkAsm{$asmId}));
      ++$acceptedAsmIds;
      ++$goodToGoCount;
      ++$ncbiSpeciesUsed if ( defined($sciNames{$asmId}) && defined($ncbiSpeciesRecorded{$sciNames{$asmId}}) && (1 == $ncbiSpeciesRecorded{$sciNames{$asmId}}) );
@@ -645,6 +660,7 @@ printf STDERR "# ACK metaInfo: %s '%s'\n", $aId, $metaInfo{$aId};
                # always accept those even if it goes beyond the limit
                if ( ($ncbiSpeciesRecorded{$sciNames{$aId}} <= $sciNameDisplayLimit) || defined($sciName{$aId}) ) {
                  push (@$cPtr, $aId);
+                 $usedGenArk{$aId} += 1 if (defined($genArkAsm{$aId}));
                  ++$acceptedAsmIds;
                  ++$goodToGoCount;
                  ++$cladeCounts{$clade};
@@ -664,6 +680,14 @@ printf STDERR "# checkedAsmIds: %d, acceptedAsmIds: %d, notInGoodToGo: %d\n", $c
 printf STDERR "# total good to go %s, maxDupAsmCount: %s\n", commify($totalGoodToGo), commify($maxDupAsm);;
 
 printf STDERR "# should be GenArk: %s\n", commify($shouldBeGenArk);
+printf STDERR "# had originally %s assemblies from GenArk UCSC_GI.assemblyHubList.txt\n", commify($genArkCount);
+foreach my $genArkAsmId (sort keys %genArkAsm) {
+  if (defined($usedGenArk{$genArkAsmId})) {
+    printf STDERR "# used genArk %s %s\n", $genArkAsmId, $genArkAsm{$genArkAsmId};
+  } else {
+    printf STDERR "# missed genArk %s %s\n", $genArkAsmId, $genArkAsm{$genArkAsmId};
+  }
+}
 printf STDERR "# should be UCSC RR %s\n", commify($shouldBeUcsc);
 
 printf "<hr>\n";
@@ -916,7 +940,7 @@ foreach my $clade (@clades) {
   my $buildDir = "/hive/data/outside/ncbi/genomes/$gcX/$d0/$d1/$d2/$asmId";
   my $asmRpt = "$buildDir/${asmId}_assembly_report.txt";
   my $asmFna = "$buildDir/${asmId}_genomic.fna.gz";
-  my $browserUrl = sprintf("https://genome.ucsc.edu/h/%s", $accessionId);
+  my $browserUrl = sprintf("/h/%s", $accessionId);
   my $arkDownload = sprintf("https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s/%s/%s/", $gcX, $d0, $d1, $d2, $accessionId);
   my $destDir = "/hive/data/outside/ncbi/genomes/sizes/$gcX/$d0/$d1/$d2";
   my $chromInfo = "/hive/data/outside/ncbi/genomes/sizes/$gcX/$d0/$d1/$d2/${asmId}.chromInfo.txt";
@@ -1014,7 +1038,7 @@ foreach my $clade (@clades) {
   my $ucscDb = "";
   $ucscDb = "/" . $rrGcaGcfList{$asmId} if (defined($rrGcaGcfList{$asmId}));
   if (length($ucscDb)) {
-     $browserUrl = sprintf("https://genome.ucsc.edu/cgi-bin/hgTracks?db=%s", $rrGcaGcfList{$asmId});
+     $browserUrl = sprintf("/cgi-bin/hgTracks?db=%s", $rrGcaGcfList{$asmId});
   }
 
   printf PC "%d", $asmCountInTable;	# start a line output to clade.tableData.tsv
