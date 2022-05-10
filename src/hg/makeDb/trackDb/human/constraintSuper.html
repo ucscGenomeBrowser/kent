@@ -22,8 +22,9 @@ The algorithms covered here are:
     genome-wide residual variation intolerance score (gwRVIS). Then combine
     gwRVIS, primary genomic sequence context, and additional genomic
     annotations with a multi-module deep learning framework to infer
-    pathogenicity of noncoding regions that still remains naïve to existing
-    phylogenetic conservation metrics
+    pathogenicity of noncoding regions that still remains naive to existing
+    phylogenetic conservation metrics. The higher the score, the more deleterious
+    is the prediction.
 
     <li><b><a href="https://www.cardiodb.org/hmc/" target="_blank">
     HMC - Homologous Missense Constraint</a></b>:
@@ -53,11 +54,19 @@ For HMC, the highly-constrained cutoff 0.8 is indicated with a line.
 
 <h2>Methods</h2>
 
-<p>
-<b>HMC:</b> Scores were downloaded and converted to .bedGraph files with a custom Python script. The bedGraph files were then converted to bigWig files, as documented in our <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" target=_blank>makeDoc</a> hg19 build log.<br>
-<b>Jarvis:</b> Scores were downloaded and converted to a single bigWig file. See <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" target=_blank>hg19 makeDoc</a> and  <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/jarvis.txt" target=_blank>hg38 makeDoc</a>
 
-</p>
+<p>
+<b>Jarvis:</b> Scores were downloaded and converted to a single bigWig file.
+See <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" target=_blank>hg19 makeDoc</a> and
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/jarvis.txt" target=_blank>hg38 makeDoc</a>.
+
+<br>
+
+<b>HMC:</b> Scores were downloaded and converted to .bedGraph files with a
+custom Python script. The bedGraph files were then converted to bigWig files,
+as documented in our <a
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt"
+target=_blank>makeDoc</a> hg19 build log.  </p>
 
 <h2>Credits</h2>
 
@@ -73,3 +82,13 @@ Xiaolei Zhang, Pantazis I. Theotokis, Nicholas Li, the SHaRe Investigators, Caro
 Genetic constraint at single amino acid resolution improves missense variant prioritisation and gene discovery</a>.
 <em>Medrxiv</em> 2022.02.16.22271023
 </p>
+<p>
+Vitsios D, Dhindsa RS, Middleton L, Gussow AB, Petrovski S.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33686085" target="_blank">
+    Prioritizing non-coding regions based on human genomic constraint and sequence context with deep
+    learning</a>.
+<em>Nat Commun</em>. 2021 Mar 8;12(1):1504.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33686085" target="_blank">33686085</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7940646/" target="_blank">PMC7940646</a>
+</p>
+
