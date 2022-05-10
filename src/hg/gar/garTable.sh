@@ -35,9 +35,9 @@ printf "<h1>Genome assembly search and request</h1>\n"
 printf "<h2>What is the Genome Browser?</h2>\n"
 
 printf "<div id='canNotFindDiv' class='pullDownMenu'>\n"
-printf "  <span id='canNotFindAnchor'>Can't find your assembly? &#9660;</span'>\n"
+printf "  <span id='canNotFindAnchor'>Can't find your assembly? &#9660;</span>\n"
 printf "  <div class='pullDownMenuContent'>\n"
-printf "   <button id='specificRequest' type='button' onclick='gar.openModal(this)' name='specific'><label>%s Press here to request an unlisted assembly %s</label></button>\n", "${rightHandPointer}" "${leftHandPointer}"
+printf "   <label><button id='specificRequest' type='button' onclick='gar.openModal(this)' name='specific'>%s Press here to request an unlisted assembly %s</button></label>\n", "${rightHandPointer}" "${leftHandPointer}"
 printf "  </div>\n"
 printf "</div>\n"
 

@@ -579,12 +579,10 @@ foreach my $clade (@clades) {
      ++$shouldBeGenArk if (defined($genArkAsm{$asmId}));
      ++$shouldBeUcsc if (defined($rrGcaGcfList{$asmId}));
      if (defined ($skipPartialGenome{$asmId})) {
-       printf STDERR "# skipping genArk %s because skipPartialGenome\n", $asmId if (defined($genArkAsm{$asmId}));
-       next;
+       next if (!defined($genArkAsm{$asmId}));
      }
      if (defined ($asmSuppressed{$asmId})) {
-       printf STDERR "# skipping genArk %s because asmSuppressed\n", $asmId if (defined($genArkAsm{$asmId}));
-       next;
+       next if (!defined($genArkAsm{$asmId}));
      }
      next if (defined ($alreadyDone{$asmId}));
      # something wrong with these two
@@ -753,14 +751,14 @@ printf "<div class='pullDownMenu'>\n";
 printf "  <span id='speciesSelectAnchor'>choose clades to view/hide &#9660;</span>\n";
 printf "  <div class='pullDownMenuContent'>\n";
 printf "  <ul id='checkBoxSpeciesSelect'>\n";
-printf "    <li><label><input class='showAll' type='checkbox' onchange='gar.visCheckBox(this)' id='allCheckBox' value='all' checked><span class='showAllLabel'> show all</span></label></li>\n";
+printf "    <li><label><input class='showAll' type='checkbox' onchange='gar.visCheckBox(this)' id='allCheckBox0' value='all' checked><span class='showAllLabel'> show all</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='primatesCheckBox' value='primates' checked><span id='primatesLabel'> primates</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='mammalsCheckBox' value='mammals' checked><span id='mammalsLabel'> mammals</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='birdsCheckBox' value='birds' checked><span id='birdsLabel'> birds</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='fishCheckBox' value='fish' checked><span id='fishLabel'> fish</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='vertebrateCheckBox' value='vertebrate' checked><span id='vertebrateLabel'> vertebrate</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='invertebratesCheckBox' value='invertebrates' checked><span id='invertebratesLabel'> invertebrates</span></label></li>\n";
-printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='plantsCheckBox' value='plants' checked><span id='plantsLabel'> plants<span></label></li>\n";
+printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='plantsCheckBox' value='plants' checked><span id='plantsLabel'> plants</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='fungiCheckBox' value='fungi' checked><span id='fungiLabel'> fungi</span></label></li>\n";
 printf "  </ul>\n";
 printf "  </div>\n";
@@ -770,7 +768,7 @@ printf "<div style='width: 260px;' class='pullDownMenu'>\n";
 printf "  <span style='text-align: center;' id='assemblyTypeAnchor'>select assembly type to display &#9660;</span>\n";
 printf "  <div class='pullDownMenuContent'>\n";
 printf "  <ul id='checkBoxAssemblyType'>\n";
-printf "    <li><label><input class='showAll' type='checkbox' onchange='gar.visCheckBox(this)' id='allCheckBox' value='all' checked><span class='showAllLabel'> show all</span></label></li>\n";
+printf "    <li><label><input class='showAll' type='checkbox' onchange='gar.visCheckBox(this)' id='allCheckBox1' value='all' checked><span class='showAllLabel'> show all</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='gakCheckBox' value='gak' checked><span id='gakLabel'> Existing browser</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='garCheckBox' value='gar' checked><span id='garLabel'> Request browser</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='gcaCheckBox' value='gca' checked><span id='gcaLabel'> GCA/GenBank</span></label></li>\n";
@@ -816,11 +814,11 @@ printf "<h2 style='display: none;' id='counterDisplay'>%s total assemblies : use
 ##############################################################################
 ##  begin single table output, start the table and the header
 ##
-## table starts out as display: hide and will be reset to 'table' after
+## table starts out as display: none and will be reset to 'table' after
 ## page load.  Saves a lot of time for Chrome browsers, however the page
 ## is still not usable until much time later.
 ##############################################################################
-printf "<table style='display: hide;' class='sortable borderOne cladeTable' id='dataTable'>\n";
+printf "<table style='display: none;' class='sortable borderOne cladeTable' id='dataTable'>\n";
 
 printf "<colgroup id='colDefinitions'>\n";
 printf "<col id='viewReq' span='1' class=colGViewReq>\n";
@@ -1080,7 +1078,7 @@ foreach my $clade (@clades) {
      if ($asmCountInTable > 500) {
        printf "<tr%s%s style='display:none;'>", $rowClass, $statusClass;
      } else {
-       printf "<tr%s%s'>", $rowClass, $statusClass;
+       printf "<tr%s%s>", $rowClass, $statusClass;
      }
   } else {
      if ($asmCountInTable > 500) {
@@ -1190,7 +1188,7 @@ foreach my $clade (@clades) {
     printf "<td style='display:none; text-align:left;'><a href='https://www.ncbi.nlm.nih.gov/biosample/?term=%s' target=_blank>%s</a></td>", $bioSample, $bioSample;
     printf PC "\t%s", $bioSample;	# output to clade.tableData.txt
   } else {
-    printf "<td style='display:none; text-align=left;'>&nbsp;</td>";
+    printf "<td style='display:none; text-align:left;'>&nbsp;</td>";
     printf PC "\t%s", "n/a";	# output to clade.tableData.txt
   }
 
@@ -1200,7 +1198,7 @@ foreach my $clade (@clades) {
     printf PC "\t%s", $bioProject;	# output to clade.tableData.txt
 
   } else {
-    printf "<td style='display:none; text-align=left;'>&nbsp;</td>";
+    printf "<td style='display:none; text-align:left;'>&nbsp;</td>";
     printf PC "\t%s", "n/a";	# output to clade.tableData.txt
   }
 
