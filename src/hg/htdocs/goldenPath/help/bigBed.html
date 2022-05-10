@@ -291,7 +291,11 @@ improper input.</p>
   information. For example, if you run the <code>bedToBigBed</code> utility with the option 
   <code>-extraIndex=name</code>, you will be able to search on the &quot;name&quot; field by adding 
   the line <code>searchIndex name</code> to the stanza about your bigBed in the hub's 
-  <em>trackDb.txt</em> file.</li>
+  <em>trackDb.txt</em> file. While searchIndex expects a search string with an exact match in the
+  index, another setting for Track Hubs, <a href="trackDb/trackDbHub.html#searchTrix">searchTrix</a>
+  allows for a fast look-up of free text associated with a list of identifiers, when a
+  <code>searchIndex</code> has also been created. See a <a href="hubQuickStartSearch.html">Searchable
+  Track Hub Quick Start Guide</a> here.</li>
   <li>
   Extra fields can contain text for labels or for display with mouseover (if the BED
   &quot;name&quot; field is needed for something that is not the label). See the trackDb settings 
