@@ -1,0 +1,17 @@
+#!/bin/bash -ex
+
+user=$1
+trackDb=$2
+db=$3
+
+hubParent=/gbdb/$db/hubs
+hubDir=$hubParent/$user
+
+if test -d $hubParent
+then
+    #rm -rf $hubDir
+
+    trackDbToTxt $db $trackDb $hubDir
+    cat $hubParent/hubAndGenome.txt $hubDir/trackDb.txt > $hubDir/hub.txt
+fi
+
