@@ -680,6 +680,7 @@ while ((ra = raNextRecord(lf)) != NULL)
 	}
     el->settingsHash = ra;
     hashAdd(ra, "hubName", hub->shortLabel);
+    el->chromAuthority = hashFindVal(ra, "chromAuthority");
     }
 
 /* Clean up and go home. */

@@ -234,6 +234,7 @@ struct cart *lastDbPosCart = NULL;   /* store settings for use in lastDbPos and 
 char *organism;                 /* Name of organism we're working on. */
 char *database;			/* Name of database we're using. */
 char *chromName;		/* Name of chromosome sequence . */
+char *displayChromName;		/* Name of chromosome sequence to display . */
 int winStart;                   /* Start of window in sequence. */
 int winEnd;                     /* End of window in sequence. */
 char *position = NULL;          /* Name of position. */

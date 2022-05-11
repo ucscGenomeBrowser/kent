@@ -74,4 +74,9 @@ char *chromAliasFindNative(char *name);
 struct slName *chromAliasFindAliases(char *seqName);
 /* Get the list of aliases for this sequence name. */
 
+char *chromAliasFindSingleAlias(char *seqName, char *authority);
+/* Find the aliases for a given seqName from a given authority. */
+
+char *chromAliasGetDisplayChrom(char *db, struct cart *cart, char *seqName);
+/* Return the sequence name to display based on the database and cart. */
 #endif /* CHROMALIAS_H */
