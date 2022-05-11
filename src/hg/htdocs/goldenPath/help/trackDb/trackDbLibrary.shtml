@@ -2002,7 +2002,9 @@ There are no extra options that can appear on the type hic line.
 <div class="format"><code>searchTrix &lt;url/relativePath&gt;</code></div>
     <P> Specifies the URL to a TRIX file that maps free text to
     a set of indices that are assumed to have indicies in the associated
-    bigBed file.  See <A HREF="../trix.html">HERE</A> for instructions on how to build a TRIX file.
+    bigBed file. See <a href="../trix.html">here</a> for instructions on how
+    to build a TRIX file and a <a href="../hubQuickStartSearch.html">Searchable
+    Track Hub Quick Start Guide</a> here.</li>
     <P><B>Example:</B></P>
     <pre>   searchTrix url or relative path </pre>
 </DIV>
