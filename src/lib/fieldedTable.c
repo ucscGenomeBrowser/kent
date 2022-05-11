@@ -254,10 +254,12 @@ struct fieldedTable *fieldedTableAttach(struct lineFile  *lf,  char *requiredFie
  * should be NULL for most purposes.  */
 {
 struct fieldedTable *table = fieldedTableReadTabHeader(lf, requiredFields, requiredCount);
-char *row[table->fieldCount];
-while (lineFileNextRowTab(lf, row, table->fieldCount))
+char numColumns = table->fieldCount + 1;  // + 1 so we'll see lines that are too long
+char *row[numColumns];
+int wordsRead;
+while ((wordsRead = lineFileChopNextTab(lf, row, numColumns)) != 0)
     {
-    fieldedTableAdd(table, row, table->fieldCount, lf->lineIx);
+    fieldedTableAdd(table, row, wordsRead, lf->lineIx);
     }
 return table;
 }
