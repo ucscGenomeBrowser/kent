@@ -170,11 +170,14 @@ struct version
     };
 
 int versionCmp(const void *va, const void *vb)
-/* Compare to sort based on query start. */
+/* Compare to sort so most recent version comes last. */
 {
 const struct version *a = *((struct version **)va);
 const struct version *b = *((struct version **)vb);
-return strcmp(a->ucscDb, b->ucscDb);
+int diff = cmpStringsWithEmbeddedNumbers(a->ucscDb, b->ucscDb);
+if (diff == 0)
+   diff = cmpStringsWithEmbeddedNumbers(a->name, b->name);
+return diff;
 }
 
 boolean isSortedByDb(struct version *list)
@@ -188,7 +191,7 @@ for (;;)
     struct version *next = prev->next;
     if (next == NULL)
         return TRUE;
-    if (versionCmp(&prev, &next) < 0)
+    if (strcmp(prev->ucscDb, next->ucscDb) < 0)
         return FALSE;
     prev = next;
     }
@@ -341,6 +344,7 @@ for (gsvt = gsvtList; gsvt!=NULL; gsvt = gsvt->next)
     hashAdd(version->idHash, gsvt->gene, gsvt);
     hashAdd(version->symHash, gsvt->symbol, gsvt);
     }
+slSort(&versionList, versionCmp);
 slReverse(&versionList);
 verbose(1, "examining %d versions of gencode and refseq\n", versionHash->elCount);
 
