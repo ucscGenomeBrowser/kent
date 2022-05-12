@@ -723,16 +723,16 @@ if(doIdeo)
     if (virtMode)
 	{
     	if (!sameString(virtModeShortDescr,""))
-    	    safef(title, sizeof(title), "%s (%s)", chromName, virtModeShortDescr);
+    	    safef(title, sizeof(title), "%s (%s)", displayChromName, virtModeShortDescr);
 	else
-    	    safef(title, sizeof(title), "%s (%s)", chromName, virtModeType);
+    	    safef(title, sizeof(title), "%s (%s)", displayChromName, virtModeType);
 	}
     else if (isEmpty(startBand))
-        safef(title, sizeof(title), "%s", chromName);
+        safef(title, sizeof(title), "%s", displayChromName);
     else if (sameString(startBand, endBand))
-        safef(title, sizeof(title), "%s (%s)", chromName, startBand);
+        safef(title, sizeof(title), "%s (%s)", displayChromName, startBand);
     else
-        safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
+        safef(title, sizeof(title), "%s (%s-%s)", displayChromName, startBand, endBand);
     textWidth = mgFontStringWidth(font, title);
     hvGfxTextCentered(hvg, 2, gfxBorder, textWidth, ideoTrack->height, MG_BLACK, font, title);
     // cytoBandDrawAt() clips x based on insideX+insideWidth,
@@ -3902,6 +3902,7 @@ currentWindow = window;
 organism  = window->organism;
 database  = window->database;
 chromName = window->chromName;
+displayChromName = chromAliasGetDisplayChrom(database, cart, window->chromName);
 winStart  = window->winStart;
 winEnd    = window->winEnd;
 insideX   = window->insideX;
@@ -5277,7 +5278,7 @@ if (withLeftLabels)
         if (baseShowRuler)
             {
             char rulerLabel[SMALLBUF];
-            char *shortChromName = cloneString(chromName);
+            char *shortChromName = cloneString(displayChromName );
             safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
             int labelWidth = mgFontStringWidth(font,rulerLabel);
             while ((labelWidth > 0) && (labelWidth > leftLabelWidth))
@@ -9490,6 +9491,7 @@ boolean resolved = TRUE;
 struct dyString *dyWarn = dyStringNew(0);
 boolean noShort = (cartOptionalString(cart, "noShort") != NULL);
 hgp = hgFindSearch(cart, pPosition, &chromName, &winStart, &winEnd, hgTracksName(), dyWarn);
+displayChromName = chromAliasGetDisplayChrom(database, cart, chromName);
 if (isNotEmpty(dyWarn->string))
     {
     if (noShort) // we're on the second pass of the search
@@ -9554,6 +9556,7 @@ if (!dash)
 *colon = 0;
 *dash = 0;
 chromName = cloneString(vPos);
+displayChromName = chromAliasGetDisplayChrom(database, cart, chromName);
 winStart = atol(colon+1) - 1;
 winEnd = atol(dash+1);
 }
@@ -9898,7 +9901,7 @@ else
 if (virtMode)
     virtChromName = MULTI_REGION_CHROM;
 else
-    virtChromName = chromName;
+    virtChromName = displayChromName;
 
 virtWinBaseCount = virtWinEnd - virtWinStart;
 
