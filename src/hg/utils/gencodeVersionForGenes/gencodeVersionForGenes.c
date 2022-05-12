@@ -244,6 +244,7 @@ struct hash *combinedDbHash(struct version *versionList, char *targetDb, boolean
  * from oldest to most recent */
 {
 struct hash *combinedHash = hashNew(0);
+struct hash *geneVerHash = hashNew(0);
 struct version *v;
 for (v = versionList; v != NULL; v = v->next)
     {
@@ -253,8 +254,22 @@ for (v = versionList; v != NULL; v = v->next)
     struct hashEl *hel;
     struct hashCookie cookie = hashFirst(verHash);
     while ((hel = hashNext(&cookie)) != NULL)
-	hashAdd(combinedHash, hel->name, hel->val);
+	{
+	/* If this is the version where we have first seen this gene, then
+	 * add it. */
+	struct version *geneVer = hashFindVal(geneVerHash, hel->name);
+	if (geneVer == NULL)
+	    {
+	    geneVer = v;
+	    hashAdd(geneVerHash, hel->name, geneVer);
+	    }
+	if (geneVer == v)
+	    {
+	    hashAdd(combinedHash, hel->name, hel->val);
+	    }
+	}
     }
+hashFree(&geneVerHash);
 return combinedHash;
 }
 
@@ -310,7 +325,8 @@ verbose(2, "dottedCount %d, undottedCount %d, isUndotted %d\n",
 struct hash *versionHash = hashNew(0);
 for (gsvt = gsvtList; gsvt!=NULL; gsvt = gsvt->next)
     {
-    char *versionString = gsvt->gencodeVersion;
+    char versionString[256];
+    safef(versionString, sizeof(versionString), "%s %s", gsvt->ucscDb, gsvt->gencodeVersion);
     struct version *version = hashFindVal(versionHash, versionString);
     if (version == NULL)
         {
@@ -318,7 +334,8 @@ for (gsvt = gsvtList; gsvt!=NULL; gsvt = gsvt->next)
 	version->idHash = hashNew(0);
 	version->symHash = hashNew(0);
 	version->ucscDb = cloneString(gsvt->ucscDb);
-	hashAddSaveName(versionHash, versionString, version, &version->name);
+	version->name = cloneString(gsvt->gencodeVersion);
+	hashAdd(versionHash, versionString, version);
 	slAddHead(&versionList, version);
 	}
     hashAdd(version->idHash, gsvt->gene, gsvt);
@@ -401,13 +418,19 @@ if (bedOut != NULL)
     struct slName *gene;
     for (gene = geneList; gene != NULL; gene = gene->next)
         {
-	struct gsvt *gsvt = hashFindVal(gsvtHash, gene->name);
-	if (gsvt != NULL)
+	/* There may actually be more than one mapping of the same gene, especially
+	 * if we're using symbols.   So output each mapping, not just the first. */
+	struct hashEl *hel;
+        for (hel = hashLookup(gsvtHash, gene->name); hel != NULL; hel = hashLookupNext(hel))
 	    {
-	    if (bestIsSym)
-		saveGsvtAsBed(gsvt, gene->name, gsvt->gene, f);
-	    else
-		saveGsvtAsBed(gsvt, gene->name, gsvt->symbol, f);
+	    struct gsvt *gsvt = hel->val;
+	    if (gsvt != NULL)
+		{
+		if (bestIsSym)
+		    saveGsvtAsBed(gsvt, gene->name, gsvt->gene, f);
+		else
+		    saveGsvtAsBed(gsvt, gene->name, gsvt->symbol, f);
+		}
 	    }
 	}
     carefulClose(&f);
