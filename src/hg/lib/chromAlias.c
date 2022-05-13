@@ -228,7 +228,7 @@ for(row = aliasTable->rowList; row; row = row->next)
     char *native = row->row[0];
 
     unsigned field;
-    for(field=1; field< aliasTable->fieldCount; field++)
+    for(field=0; field < aliasTable->fieldCount; field++)
         {
         char *alias = row->row[field];
         char *source = aliasTable->fields[field];
@@ -261,6 +261,14 @@ static void chromAliasSetupBb(char *database, char *bbFile)
 /* Look for a chromAlias bigBed file and open it. */
 {
 chromAliasGlobals.bbi = bigBedFileOpen(bbFile);
+struct slName *fieldNames = bbFieldNames(chromAliasGlobals.bbi);
+chromAliasGlobals.fieldCount = slCount(fieldNames) - chromAliasGlobals.bbi->definedFieldCount;
+AllocArray(chromAliasGlobals.fields, chromAliasGlobals.fieldCount);
+int ii;
+for(ii=0; ii < chromAliasGlobals.bbi->definedFieldCount; ii++, fieldNames = fieldNames->next)
+    ;
+for(ii=0; ii < chromAliasGlobals.fieldCount; ii++, fieldNames = fieldNames->next)
+    chromAliasGlobals.fields[ii] = fieldNames->name;
 chromAliasGlobals.bptList = bbiAliasOpenExtra(chromAliasGlobals.bbi);
 chromAliasGlobals.lm = lmInit(0);
 }
@@ -452,7 +460,7 @@ struct slName *aliases = chromAliasFindAliases(seqName);
 if (aliases == NULL)
     return cloneString(seqName);
 
-unsigned fieldNum = 1;
+unsigned fieldNum = 0;
 for(; fieldNum < chromAliasGlobals.fieldCount; fieldNum++)
     {
     if (sameString(authority, chromAliasGlobals.fields[fieldNum]))
@@ -463,7 +471,7 @@ if (fieldNum >= chromAliasGlobals.fieldCount)
     return cloneString(seqName);
 
 
-unsigned count = 1;
+unsigned count = 0;
 for(; aliases && count < fieldNum; count++,aliases = aliases->next)
     ;
 if (!isEmpty(aliases->name))
