@@ -1,6 +1,6 @@
 track wgEncodeGencodeV39
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V39
 longLabel All GENCODE annotations from V39 (Ensembl 105)
 group genes

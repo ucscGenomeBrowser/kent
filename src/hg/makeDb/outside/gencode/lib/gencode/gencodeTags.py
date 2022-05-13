@@ -79,6 +79,8 @@ class GencodeTag(SymEnum):
     TAGENE = auto()
     stop_codon_readthrough = auto()
     Ensembl_canonical = auto()
+    readthrough_gene = auto()
+    artefactual_duplication = auto()
 
 
 gencodeTagNotFullCds = frozenset([GencodeTag.cds_start_NF,

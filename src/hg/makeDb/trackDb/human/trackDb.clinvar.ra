@@ -27,7 +27,7 @@ scoreLabel ClinVar Star-Rating (0-4)
         filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,UNK|unknown
         filterType._originCode multiple
         filterLabel._originCode Alelle Origin
-        filterValues._allTypeCode SNV|single nucleotide variant - SNV,INS|insertion - INS,DEL|deletion - DEL,INDEL|insertion-deletion - INDEL,dupl|duplication - DUPL,OTH|other - OTH
+        filterValues._allTypeCode SUBST|single nucleotide variant - SUBST,STRUCT|translocation and fusion - STRUCT,LOSS|deletion and copy loss - LOSS,GAIN|duplication and copy gain - GAIN,INS|indel and insertion - INS,INV|inversion - INV,SEQALT|undetermined - SEQALT,SEQLEN|repeat change - SEQLEN
         filterType._allTypeCode multiple
         filter._varLen 0
         filterByRange._varLen on
@@ -53,7 +53,7 @@ scoreLabel ClinVar Star-Rating (0-4)
         filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
         filterType._originCode multiple
         filterLabel._originCode Alelle Origin
-        filterValues._allTypeCode INS|insertion - INS,DEL|deletion - DEL,INDEL|insertion-deletion - INDEL,dupl|duplication - DUPL,OTH|other - OTH
+        filterValues._allTypeCode SUBST|single nucleotide variant - SUBST,STRUCT|translocation and fusion - STRUCT,LOSS|deletion and copy loss - LOSS,GAIN|duplication and copy gain - GAIN,INS|indel and insertion - INS,INV|inversion - INV,SEQALT|undetermined - SEQALT,SEQLEN|repeat change - SEQLEN
         filterType._allTypeCode multiple
         filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
         filterType._clinSignCode multiple

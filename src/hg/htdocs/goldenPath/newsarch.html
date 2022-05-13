@@ -52,6 +52,42 @@
 <!-- ============= 2022 archived news ============= -->
 <a name="2022"></a>
 
+<a name="051122"></a>
+<h2>May 11, 2022 &nbsp;&nbsp; New GENCODE gene tracks: Human V40 (hg19/hg38) - Mouse M29
+(mm39)</h2>
+<p>
+We are pleased to announce new GENCODE Gene annotation tracks, which correspond
+to <a href="https://www.ensembl.info/2022/04/12/ensembl-106-has-been-released/"
+target="_blank">Ensembl 106</a>, for three assemblies: <a target="_blank"
+href="../../cgi-bin/hgTrackUi?db=hg19&c=chr21&g=wgEncodeGencodeV40lift37">hg19/GRCh37</a>,
+<a target="_blank" href="../../cgi-bin/hgTrackUi?db=hg38&c=chr1&g=wgEncodeGencodeV40">hg38/GRCh38</a>,
+and <a target="_blank" href="../../cgi-bin/hgTrackUi?db=mm39&c=chr12&g=wgEncodeGencodeVM29">mm39/GRCm39</a>.
+For human, the GENCODE V40 annotations were mapped to hg38/GRCh38 and then back-mapped
+to the hg19/GRCh37 assembly. For all three assemblies, the gene sets contain the following
+tracks:</p>
+<ul>
+  <li>Basic - a subset of the <em>Comprehensive set</em>.</li>
+  <li>Comprehensive - all GENCODE coding and non-coding transcript annotations, including
+      polymorphic pseudogenes. This includes both manual and automatic annotations.</li>
+  <li>Pseudogenes - all annotations except polymorphic pseudogenes.</li></ul>
+<p>
+The hg38 and mm39 assemblies also include the following tracks that are not available on hg19:
+</p>
+<ul>
+  <li>2-way Pseudogenes - pseudogenes predicted by both the Yale Pseudopipe and UCSC
+      Retrofinder pipelines.</li>
+  <li>PolyA - polyA signals and sites manually annotated on the genome based on transcribed
+      evidence (ESTs and cDNAs) of 3' end of transcripts containing at least 3 A's not matching the
+      genome.</li></ul>
+<p>
+Details on each release can be found on the <a target="_blank"
+href="https://www.gencodegenes.org/">GENCODE site</a>. This includes <a target="_blank"
+href="https://www.gencodegenes.org/human/stats.html">statistics on each release</a>.
+<p>We would like to thank the <a target="_blank"
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these
+annotations. We would also like to thank Mark Diekhans and Lou Nassar for the development and
+release of these tracks.</p>
+
 <a name="050522"></a>
 <h2>May 5, 2022 &nbsp;&nbsp; Merged Cell Expression on hg38</h2>
 <p>
@@ -138,10 +174,10 @@ tracks.
 <p>
 We have just released the <b>GnomAD Genomes Mutation Constraint</b> track on the human GRCh38/hg38
 genome assembly. This track's data is based on GnomAD v3.1.2 and shows 
-relative frequency of variation in 1 kilobase windows across the entire genome. 
+relative frequency of variation in one kilobase windows across the entire genome. 
 This quantifies population occurrence of disruptive variation caused by purifying natural 
 selection, similar to negative selection on loss-of-function (LoF) for genes, but 
-calculated for non-coding regions too. View the complete set of GnomAD tracks and read more on the 
+calculated for non-coding regions, too. View the complete set of GnomAD tracks and read more on the 
 <a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadVariants">GnomAD description page</a>.  
 
 <a name="050222"></a>

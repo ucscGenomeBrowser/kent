@@ -1,0 +1,95 @@
+##############################################################################
+# LASTZ D. melanogaster Dm6 vs. D. pseudoobscura Dp3 (DONE - 2022-04-22 - Gerardo)
+
+# should be able to run this from anywhere, this time it was run from:
+    cd kent/src/hg/utils/automation
+
+  time (~/kent/src/hg/utils/automation/pairLastz.sh \
+        dm6 dp3 other other) \
+           > dm6.dp3_20220422.log 2>&1 &
+  # check the total time
+grep -w real  dm6.dp3_20220422.log | tail -1 | sed -e 's/^/    # /;'
+    # real      35m30.881s
+##############################################################################
+# LASTZ D. melanogaster Dm6 vs. D. pseudoobscura Dp3
+#    (DONE - 2022-04-22 - Gerardo)
+
+    mkdir /hive/data/genomes/dm6/bed/lastzDp3.2022-04-22
+    cd /hive/data/genomes/dm6/bed/lastzDp3.2022-04-22
+
+    printf '# D. pseudoobscura Dp3 vs. D. melanogaster Dm6
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: D. melanogaster  dm6
+SEQ1_DIR=/hive/data/genomes/dm6/dm6.2bit
+SEQ1_LEN=/hive/data/genomes/dm6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: D. pseudoobscura  dp3
+SEQ2_DIR=/hive/data/genomes/dp3/dp3.2bit
+SEQ2_LEN=/hive/data/genomes/dp3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/dm6/bed/lastzDp3.2022-04-22
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	17m17.531s
+
+    sed -e 's/^/    # /;' fb.dm6.chainDp3Link.txt
+    # 76846431 bases of 142573024 (53.900%) in intersection
+    sed -e 's/^/    # /;' fb.dm6.chainSynDp3Link.txt
+    # 68520128 bases of 142573024 (48.060%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        dm6 dp3) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	6m6.187s
+
+    sed -e 's/^/    # /;' fb.dm6.chainRBest.Dp3.txt
+    # 74465237 bases of 142573024 (52.230%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/dp3/bed/blastz.dm6.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/dm6/bed/lastzDp3.2022-04-22/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	4m56.014s
+
+    sed -e 's/^/    # /;' fb.dp3.chainDm6Link.txt
+    # 77597252 bases of 134584124 (57.657%) in intersection
+    sed -e 's/^/    # /;' fb.dp3.chainSynDm6Link.txt
+    # 71073398 bases of 134584124 (52.810%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+    \
+   dp3 dm6) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	7m10.767s
+
+    sed -e 's/^/    # /;' fb.dp3.chainRBest.Dm6.txt
+    # 74511442 bases of 134584124 (55.364%) in intersection
+
+##############################################################################
+
+real	35m30.881s
+user	0m1.225s
+sys	0m0.802s
