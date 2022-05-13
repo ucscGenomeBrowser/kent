@@ -31,8 +31,8 @@ MAILTO=lrnassar@ucsc.edu
 #Update check
 0 5 1 */3 * mail -s "OMIM/GWAS CHECK - DID DBSNP UPDATE?" lrnassar@ucsc.edu < /cluster/home/chmalee/crontabs/dbSnpCheck.txt
 
-#DECIPHER
-#11 4 * * * /hive/data/outside/otto/decipher/decipherWrapper.sh
+#DECIPHER - Reactivated 5/13/2022 by Lou
+11 4 * * * /hive/data/outside/otto/decipher/decipherWrapper.sh
 
 #GWAS Catalog
 41 4 * * 3  /hive/data/outside/otto/gwas/gwasWrapper.sh
