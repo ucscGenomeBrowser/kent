@@ -25,6 +25,8 @@ bamColorMode bam
 bamGrayMode bam
 bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
+barChartBarMinWidth barChart bigBarChart
+barChartBarMinPadding barChart bigBarChart
 barChartColors barChart bigBarChart
 barChartCategoryUrl barChart bigBarChart
 barChartFacets barChart bigBarChart

@@ -1076,7 +1076,7 @@ for (region = regionList; region != NULL; region = region->next)
         // because identifierFilter can get enormous (like 126kB for 12,500 rsIDs).
         char *filterNoIds = filterClause(dbVarName, tableVarName, region->chrom, NULL);
         if (filterNoIds != NULL)
-            hOrFPrintf(f, "#filter: %s\n", filterNoIds);
+            hOrFPrintf(f, "#filter: %s\n", filterNoIds+NOSQLINJ_SIZE);
         hOrFPrintf(f, "#");
         if (showItemRgb)
             {

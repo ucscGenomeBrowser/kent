@@ -775,14 +775,21 @@ int expCount = bed->expCount;
 struct barChartCategory *categ;
 int barCount = filteredCategoryCount(extras), barsDrawn = 0;
 double invCount = 1.0/barCount;
-char *userSettingMinBarWidth = trackDbSetting(tg->tdb, BAR_CHART_USER_BAR_MIN_WIDTH);
-int userMinBarWidth = 0;
-if (userSettingMinBarWidth)
-    userMinBarWidth = sqlUnsigned(userSettingMinBarWidth);
+
 for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=categ->next)
     {
     if (!filterCategory(extras, categ->name))
         continue;
+
+    int cStart = barsDrawn * graphWidth * invCount;
+    int cEnd = (barsDrawn+1) * graphWidth * invCount;
+    // note - removed userMinBarWidth here, as it's already been imposed in the initial barWidth calculation.
+    // Stretch mode only ever extends bars, not shrinks them, so the minimum doesn't need to be re-imposed here.
+    barWidth = cEnd - cStart - extras->padding;
+    // stop before going off the right edge
+    if (x1 + barWidth > x0 + graphWidth)
+        break;
+
     struct rgbColor fillColor = extras->colors[i];
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = bed->expScores[i];
@@ -790,28 +797,17 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
                                         extras->maxHeight, extras->doLogTransform);
     boolean isClipped = (!extras->doLogTransform && expScore > extras->maxViewLimit);
     int barTop = yZero - height + 1;
+
     if (extras->padding == 0 || sameString(colorScheme, BAR_CHART_COLORS_USER))
-        {
-        int cStart = barsDrawn * graphWidth * invCount;
-        int cEnd = (barsDrawn+1) * graphWidth * invCount;
-        if (i >= 1)
-            x1 += barWidth + extras->padding;
-        barWidth = max(userMinBarWidth, cEnd - cStart - extras->padding);
-        if (x1 + barWidth > x0 + graphWidth)
-            break;
         hvGfxBox(hvg, x1, barTop, barWidth, height, fillColorIx);
-        if (isClipped)
-            hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
-        barsDrawn += 1;
-        }
     else
-        {
         hvGfxOutlinedBox(hvg, x1, barTop, barWidth, height, fillColorIx, lineColorIx);
-        // mark clipped bar with magenta tip
-        if (isClipped)
-            hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
-        x1 = x1 + barWidth + extras->padding;
-        }
+
+    // mark clipped bar with magenta tip
+    if (isClipped)
+        hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
+    x1 += barWidth + extras->padding;
+    barsDrawn += 1;
     }
 }
 
@@ -907,10 +903,6 @@ int graphWidth = chartWidth(tg, itemInfo);
 int barCount = filteredCategoryCount(extras);
 
 char label[256];
-char *userSettingMinBarWidth= trackDbSetting(tg->tdb, BAR_CHART_USER_BAR_MIN_WIDTH);
-int userMinBarWidth = 0;
-if (userSettingMinBarWidth)
-    userMinBarWidth = sqlUnsigned(userSettingMinBarWidth);
 if (barCount <= graphWidth) // Don't create map boxes if less than one pixel per bar
     {
     // add maps to category bars
@@ -929,12 +921,13 @@ if (barCount <= graphWidth) // Don't create map boxes if less than one pixel per
         int cStart = barsDrawn * graphWidth * invCount;
         barsDrawn += 1;
         int cEnd = barsDrawn * graphWidth * invCount;
-        width = max(userMinBarWidth, max(1, cEnd - cStart));
+        width = max(1, cEnd - cStart);
+        int boxWidth = min(1, width - extras->padding); // forcing min 1 shouldn't ever actually happen, I think
         double expScore = bed->expScores[i];
         int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
                                             extras->maxHeight, extras->doLogTransform);
         height = min(height+extraAtTop, extras->maxHeight);
-        mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, width, height,
+        mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, boxWidth, height,
                             tg->track, mapItemName, chartMapText(tg, categ, expScore));
         }
     safef(label, sizeof(label), 
@@ -942,6 +935,8 @@ if (barCount <= graphWidth) // Don't create map boxes if less than one pixel per
 	itemName);
     }
 else
+    // We should never get here; chartWidth always returns a value where at least one pixel
+    // of width is allocated to every category being drawn
     safef(label, sizeof(label), 
 	    "%s - zoom in to resolve individual bars or click for details", 
 	    itemName);
