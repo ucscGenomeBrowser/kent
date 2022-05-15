@@ -1040,7 +1040,7 @@ cd kent/src/hg/makeDb/trackDb
     pushd ~/kent/src/hg/makeDb/trackDb
     ../outside/gencode/bin/gencodeGenerateTrackDbs hg38 41 107 'June 2022'
 
-    # edit human/hg38/trackDb.gencode.ra to add new .ra file include, as alpha
+    # edit human/hg38/trackDb.gencode.ra to add new .ra file include as alpha
 
     # edit all.joiner to add ~/tmp/gencodeV41.joiner
 

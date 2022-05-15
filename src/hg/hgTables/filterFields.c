@@ -667,6 +667,7 @@ char *logOpMenu[] =
 };
 int logOpMenuSize = 2;
 
+// If you change this operator list, be sure to update the secureCmpOp() function too.
 char *cmpOpMenu[] =
 {
     "ignored",
@@ -1280,6 +1281,27 @@ static boolean cmpReal(char *pat, char *cmpOp)
 return isNotEmpty(pat) && stringArrayIx(cmpOp, cmpOpMenu, cmpOpMenuSize) > 0;
 }
 
+static void secureCmpOp(struct dyString *dy, char *cmpOp)
+/* Add SQL opterator securely. */
+{
+//  "in range"  handled separately.
+if (sameString(cmpOp, "<"))
+    sqlDyStringPrintf(dy, "<");
+else if (sameString(cmpOp, "<="))
+    sqlDyStringPrintf(dy, "<=");
+else if (sameString(cmpOp, "="))
+    sqlDyStringPrintf(dy, "=");
+else if (sameString(cmpOp, "!="))
+    sqlDyStringPrintf(dy, "!=");
+else if (sameString(cmpOp, ">="))
+    sqlDyStringPrintf(dy, ">=");
+else if (sameString(cmpOp, ">="))
+    sqlDyStringPrintf(dy, ">=");
+else if (sameString(cmpOp, ">"))
+    sqlDyStringPrintf(dy, ">");
+sqlDyStringPrintf(dy, " ");
+}
+
 static boolean filteredOrLinked(char *db, char *table)
 /* Return TRUE if this table is the table to be filtered or if it is to be
  * linked with that table, and is not disabled due to region==genome and 'tableBrowser noGenome'. */
@@ -1577,7 +1599,8 @@ for (var = varList; var != NULL; var = var->next)
 	    else
 	        {
 		// cmpVal has been checked already above in cmpReal for legal values.
-		sqlDyStringPrintf(dy, "%s.%s %-s ", explicitDbTable, field, cmpVal);
+		sqlDyStringPrintf(dy, "%s.%s ", explicitDbTable, field);
+		secureCmpOp(dy, cmpVal);
 		if (strchr(pat, '.'))	/* Assume floating point. */
 		    sqlDyStringPrintf(dy, "%f", atof(pat));
 		else

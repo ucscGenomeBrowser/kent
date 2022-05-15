@@ -814,7 +814,6 @@ struct dyString *dy = dyStringNew(16 * 1024);
 char **row;
 char *firstUse = NULL;
 int useCount = INITIAL_USE_COUNT;
-char firstUseBuf[32];
 char *settings = "";
 
 boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
@@ -832,8 +831,7 @@ else
 sr = sqlGetResult(conn, dy->string);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    safef(firstUseBuf, sizeof(firstUseBuf), "'%s'", row[0]);
-    firstUse = firstUseBuf;
+    firstUse = cloneString(row[0]);
     useCount = atoi(row[1]) + 1;
     if (gotSettings)
         {
