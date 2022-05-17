@@ -777,7 +777,8 @@ struct aHubMatch *aHubMatchList = NULL;
 struct hash *localDbs = hashNew(0);
 struct dbDb *dbDb;
 for (dbDb = dbDbList;  dbDb != NULL;  dbDb = dbDb->next)
-    hashStore(localDbs, dbDb->name);
+    if (!sameString(dbDb->nibPath, "genark"))
+        hashStore(localDbs, dbDb->name);
 struct hash *dbLabel = NULL;
 struct hash *hubToDb = unpackHubDbUrlList(hubDbUrlList, &dbLabel);
 // Build up a query to find shortLabel and dbList for each hubUrl.
