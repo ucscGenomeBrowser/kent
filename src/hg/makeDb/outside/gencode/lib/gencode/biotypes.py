@@ -69,6 +69,9 @@ class BioType(SymEnum):
     unprocessed_pseudogene = auto()
     vaultRNA = auto()
     vault_RNA = auto()
+    protein_coding_LoF = auto()
+    artifact = auto()
+    artefactual_duplication = auto()
 
 
 GencodeFunction = SymEnum("GencodeFunction", ("pseudo", "coding", "nonCoding", "problem"))
@@ -85,7 +88,8 @@ bioTypesCoding = frozenset([BioType.IG_C_gene,
                             BioType.TR_D_gene,
                             BioType.TR_J_gene,
                             BioType.TR_V_gene,
-                            BioType.non_stop_decay])
+                            BioType.non_stop_decay,
+                            BioType.protein_coding_LoF])
 bioTypesNonCoding = frozenset([BioType.antisense,
                                BioType.lincRNA,
                                BioType.lncRNA,
@@ -109,8 +113,6 @@ bioTypesNonCoding = frozenset([BioType.antisense,
                                BioType.vaultRNA,
                                BioType.vault_RNA,
                                BioType.bidirectional_promoter_lncRNA])
-bioTypesOther = frozenset([BioType.retained_intron,
-                           BioType.TEC])
 bioTypesPseudo = frozenset([BioType.IG_J_pseudogene,
                             BioType.IG_pseudogene,
                             BioType.IG_V_pseudogene,
@@ -133,7 +135,9 @@ bioTypesPseudo = frozenset([BioType.IG_J_pseudogene,
 bioTypesProblem = frozenset([BioType.retained_intron,
                              BioType.TEC,
                              BioType.disrupted_domain,
-                             BioType.ambiguous_orf])
+                             BioType.ambiguous_orf,
+                             BioType.artifact,
+                             BioType.artefactual_duplication])
 
 assert((bioTypesCoding | bioTypesNonCoding | bioTypesProblem | bioTypesPseudo) == frozenset(BioType))
 
