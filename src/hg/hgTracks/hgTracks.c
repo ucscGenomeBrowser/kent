@@ -9203,6 +9203,10 @@ if (sameString(database, "wuhCor1"))
          "</p>");
     }
 
+// add hidden link as a trap for web spiders, for log analysis one day to get an idea what the spider IPs 
+// are
+hPrintf("<a href='/notExist.html' style='display:none'>Invisible link</a>");
+
 hPrintf("</CENTER>\n");
 
 #ifdef SLOW
