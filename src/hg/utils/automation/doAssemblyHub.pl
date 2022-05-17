@@ -1038,7 +1038,7 @@ export asmId=$asmId
 
 bigBedToBed -header \${asmId}.chromAlias.bb test.chromAlias.bed
 \$HOME/kent/src/hg/utils/automation/aliasBedToCt.pl \\
-  test.chromAlias.bed .
+  test.chromAlias.bed \${asmId}.chromAlias.bb .
 
 # verify each sequence name has an alias
 export sizeCount=`grep -c . ../../\${asmId}.chrom.sizes`

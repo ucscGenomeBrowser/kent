@@ -6,21 +6,23 @@ use File::Temp qw/ tempfile tempdir /;
 
 my $argc = scalar(@ARGV);
 
-if ($argc != 2) {
-  printf STDERR "usage: ./bedToCt.pl chromAlias.bed resultDir\n";
+if ($argc != 3) {
+  printf STDERR "usage: ./aliasBedToCt.pl chromAlias.bed chromAlias.bb resultDir\n";
   printf STDERR "reads the chromAlias.bed file, writes several files\n";
   printf STDERR "into the resultDir one file for each name scheme\n";
+  printf STDERR "uses the given chromAlias.bb for chromSizes to bedToBigBed\n";
   exit 255;
 }
 
 my $bedFile = shift;
+my $aliasBb = shift;
 my $resultDir = shift;
 printf STDERR "# chromAlias input: %s\n", $bedFile;
+printf STDERR "# chromAlias.bb input: %s\n", $aliasBb;
 printf STDERR "# results to: %s/\n", $resultDir;
 
 my @sourceNames;	# the name label
 my @outFiles;	# reference to open file handle for each source name
-my @sizeFiles;  # corresponding file handle for chrom.sizes for each source
 
 open (FH, "<$bedFile") or die "can not read $bedFile";
 my $headerLine = <FH>;
@@ -28,13 +30,10 @@ chomp $headerLine;
 my @a = split('\t', $headerLine);
 for (my $i = 3; $i < scalar(@a); ++$i) {
   my $outFile = sprintf("%s/%s.ct.txt", $resultDir, $a[$i]);
-  my $sizeFile = sprintf("%s/%s.sizes.txt", $resultDir, $a[$i]);
   open (my $fh, '>', $outFile) or die "can not write to $outFile";
-  open (my $sz, '>', $sizeFile) or die "can not write to $sizeFile";
   printf STDERR "# %s\t%s\n", $a[$i], $outFile;
   push @sourceNames, $a[$i];
   push @outFiles, $fh;
-  push @sizeFiles, $sz;
   printf $fh "track name='%s chrNames' description='chrom alias test with \"%s\" name scheme' type=bed visibility=pack\n", $a[$i], $a[$i];
 }
 chomp $headerLine;
@@ -44,12 +43,10 @@ while (my $line = <FH>) {
   for (my $i = 0; $i < scalar(@sourceNames); ++$i) {
      my %nameDone;
      my $fh = $outFiles[$i];
-     my $sz = $sizeFiles[$i];
      if (length($a[3+$i])) {
        $nameDone{$a[3+$i]} = 1;
        $nameDone{$a[0]} = 1;
        printf $fh "%s\t%d\t%d\t%s", $a[3+$i], $a[1], $a[2], $a[0];
-       printf $sz "%s\t%d\n", $a[3+$i], $a[2];
        for (my $j = 3; $j < scalar(@a); ++$j) {
           next if (defined($nameDone{$a[$j]}));
           if ($j != 3+$i) {
@@ -67,16 +64,14 @@ close (FH);
 
 for (my $i = 0; $i < scalar(@outFiles); ++$i) {
   close ($outFiles[$i]);
-  close ($sizeFiles[$i]);
 }
 
 my $tmpFile = "/dev/shm/chromAliasTest.$$.bed";
 foreach my $source (@sourceNames) {
-  my $sizeFile = sprintf("%s/%s.sizes.txt", $resultDir, $source);
   my $ctFile = sprintf("%s/%s.ct.txt", $resultDir, $source);
   my $bbFile = sprintf("%s/%s.bb", $resultDir, $source);
   print `grep -v "^track" $ctFile | sort > $tmpFile`;
-  print `bedToBigBed $tmpFile $sizeFile $bbFile`;
+  print `bedToBigBed -sizesIsBb $tmpFile $aliasBb $bbFile`;
 }
 print `rm -f $tmpFile`;
 
