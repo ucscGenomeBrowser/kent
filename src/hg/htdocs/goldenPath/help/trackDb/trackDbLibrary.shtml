@@ -2620,6 +2620,15 @@ There are no extra options that can appear on the type hic line.
     <pre>   transformFunc LOG</pre>
 </DIV>
 
+<DIV class="logo"><span class="types bigWig"></span>
+<div class="format"><code>logo on</code></div>
+    <P>The signal can be graphed as reference base nucleotide letters with their heights equal to the
+    signal value within the bigWig track. If not sufficiently zoomed in, the bigWig will
+    revert to bars instead of letters by default.</P>
+    <P><B>Example:</B></P>
+    <pre>   logo on</pre>
+</DIV>
+
 <DIV class="mouseOverFunction"><span class="types wig bigWig bedGraph"></span>
 <div class="format"><code>mouseOverFunction &lt;noAverage&gt;</code></div>
     <P>Limit mouse over value display to only display the fundamental values
