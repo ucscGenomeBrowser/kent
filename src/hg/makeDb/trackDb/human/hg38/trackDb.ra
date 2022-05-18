@@ -824,6 +824,7 @@ include hprcChain.ra
 
 
 track michaelMaf
+release alpha
 shortLabel Michae's Big MAF
 longLabel Michael Alignment
 bigDataUrl http://genome.senckenberg.de/data/hg38/bigMaf.bb
