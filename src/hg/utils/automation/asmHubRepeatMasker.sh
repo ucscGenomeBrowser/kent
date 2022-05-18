@@ -28,6 +28,9 @@ export RepeatMaskerPath="/hive/data/staging/data/RepeatMasker210401"
 if [ -d "${destDir}" ]; then
   cd "${destDir}"
   
+  if [ ! -s "${faAlign}" ]; then
+     faAlign="${faAlign}.gz"
+  fi
   # align file only exists when RM has been run locally, not for NCBI version
   if [ -s "${faAlign}" ]; then
   $RepeatMaskerPath/util/rmToTrackHub.pl -out "${rmOutFile}" -align "${faAlign}"
