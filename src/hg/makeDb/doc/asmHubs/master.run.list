@@ -18,6 +18,7 @@
 ./runBuild GCA_000283155.1 GCA_000283155.1_CerSimSim1.0 mammals Ceratotherium_simum_simum
 ./runBuild GCA_000292845.1 GCA_000292845.1_OchPri3.0 mammals Ochotona_princeps
 ./runBuild GCA_000296755.1 GCA_000296755.1_EriEur2.0 mammals Erinaceus_europaeus
+./runBuild GCA_000297895.2 GCA_000297895.2_ASM29789v2 invertebrates Crassostrea_gigas
 ./runBuild GCA_000298735.2 GCA_000298735.2_Oar_v4.0 mammals Ovis_aries
 ./runBuild GCA_000311805.2 GCA_000311805.2_CB1 mammals Camelus_ferus
 ./runBuild GCA_000340355.2 GCA_000340355.2_Leishmania_braziliensis_M2903-1.0.6 invertebrate Leishmania_braziliensis
