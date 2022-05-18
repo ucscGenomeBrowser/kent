@@ -224,6 +224,7 @@ sub doCluster {
   print $fh <<_EOF_
 #!/bin/csh -ef
 
+set path = (/cluster/software/bin \$path)
 $RepeatMasker $RepeatMaskerEngine $repeatLib /dev/null
 _EOF_
   ;
@@ -233,6 +234,8 @@ _EOF_
   $fh = &HgAutomate::mustOpen(">$runDir/RMRun.csh");
   print $fh <<_EOF_
 #!/bin/csh -ef
+
+set path = (/cluster/software/bin \$path)
 
 set finalOut = \$1
 
@@ -570,17 +573,17 @@ sub doMask {
 
   my $whatItDoes = "It makes a masked .2bit in this build directory.";
   my $workhorse = &HgAutomate::chooseWorkhorse();
-  my $bossScript = new HgRemoteScript("$runDir/doMask.csh", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/doMask.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-twoBitMask $unmaskedSeq $db.sorted.fa.out $db.rmsk$updateTable.2bit
-twoBitToFa $db.rmsk$updateTable.2bit stdout | faSize stdin > faSize.rmsk$updateTable.txt
+export db=$db
+twoBitMask $unmaskedSeq \$db.sorted.fa.out \$db.rmsk$updateTable.2bit
+twoBitToFa \$db.rmsk$updateTable.2bit stdout | faSize stdin > faSize.rmsk$updateTable.txt &
 _EOF_
   );
   $bossScript->execute();
 } # doMask
-
 
 #########################################################################
 # * step: install [dbHost, maybe fileServer]
@@ -602,9 +605,22 @@ sub doInstall {
   $bossScript->add(<<_EOF_
 export db=$db
 
+# ensure sort functions properly despite kluster node environment
+export LC_COLLATE=C
+
 hgLoadOut -table=rmsk$updateTable $split \$db \$db.sorted.fa.out
 hgLoadOut -verbose=2 -tabFile=\$db.rmsk$updateTable.tab -table=rmsk$updateTable -nosplit \$db \$db.sorted.fa.out 2> \$db.bad.records.txt
 # construct bbi files for assembly hub
+$RepeatMaskerPath/util/rmToTrackHub.pl -out \$db.sorted.fa.out -align \$db.fa.align
+# in place same file sort using the -o output option
+sort -k1,1 -k2,2n -o \$db.fa.align.tsv \$db.fa.align.tsv &
+sort -k1,1 -k2,2n -o \$db.sorted.fa.join.tsv \$db.sorted.fa.join.tsv
+wait
+bedToBigBed -tab -as=\$HOME/kent/src/hg/lib/bigRmskAlignBed.as -type=bed3+14 \\
+  \$db.fa.align.tsv ../../chrom.sizes \$db.rmsk.align.bb &
+bedToBigBed -tab -as=\$HOME/kent/src/hg/lib/bigRmskBed.as -type=bed9+5 \\
+  \$db.sorted.fa.join.tsv ../../chrom.sizes \$db.rmsk.bb
+wait
 rm -fr classBed classBbi rmskClass
 mkdir classBed classBbi rmskClass
 sort -k12,12 \$db.rmsk$updateTable.tab \\
@@ -688,12 +704,13 @@ _EOF_
     $whatItDoes =
 "It splits $db.sorted.fa.out into per-chromosome files in chromosome directories\n" .
 "where makeDownload.pl will expect to find them.\n";
-    my $bossScript = new HgRemoteScript("$runDir/doSplit.csh", $fileServer,
+    my $bossScript = newBash HgRemoteScript("$runDir/doSplit.bash", $fileServer,
 					$runDir, $whatItDoes);
     $bossScript->add(<<_EOF_
-head -3 $db.sorted.fa.out > /tmp/rmskHead.txt
-tail -n +4 $db.sorted.fa.out \\
-| splitFileByColumn -col=5 stdin /cluster/data/$db -chromDirs \\
+export db=$db
+head -3 \$db.sorted.fa.out > /tmp/rmskHead.txt
+tail -n +4 \$db.sorted.fa.out \\
+| splitFileByColumn -col=5 stdin /cluster/data/\$db -chromDirs \\
     -ending=.fa.out -head=/tmp/rmskHead.txt
 _EOF_
     );

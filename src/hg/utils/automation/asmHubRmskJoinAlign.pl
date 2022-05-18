@@ -1,19 +1,95 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
+use AsmHub;
+use File::Basename;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 2) {
+  printf STDERR "usage: asmHubRmskJoinAlign.pl asmId buildDir > asmId.repeatMasker.html\n";
+  printf STDERR "where asmId is the assembly identifier,\n";
+  printf STDERR "expecting to find buildDir/html/asmId.names.tab naming file for this assembly,\n";
+  printf STDERR "and buildDir/trackData/repeatMasker/asmId.rmsk.class.profile counts of rmsk categories.\n";
+  exit 255;
+}
+
+my $asmId = shift;
+my $buildDir = shift;
+my $namesFile = "$buildDir/html/$asmId.names.tab";
+my $rmskClassProfile = "$buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt";
+my $rmskVersion = "$buildDir/$asmId.repeatMasker.version.txt";
+
+my $errOut = 0;
+if ( ! -s $rmskClassProfile ) {
+  printf STDERR "ERROR: can not find rmsk class profile file:\n\t'%s'\n", $rmskClassProfile;
+  $errOut = 255;
+}
+
+if ( ! -s $namesFile ) {
+  printf STDERR "ERROR: can not find rmsk class profile file:\n\t'%s'\n", $rmskClassProfile;
+  $errOut = 255;
+}
+
+if ($errOut) {
+  exit $errOut;
+}
+
+my $em = "<em>";
+my $noEm = "</em>";
+my $assemblyDate = `grep -v "^#" $namesFile | cut -f9`;
+chomp $assemblyDate;
+my $ncbiAssemblyId = `grep -v "^#" $namesFile | cut -f10`;
+chomp $ncbiAssemblyId;
+my $organism = `grep -v "^#" $namesFile | cut -f5`;
+chomp $organism;
+
+print <<_EOF_
 <h2>Description</h2>
-Repetitive genomic elements including Transposable Element (TE) families, Satellite, Short Tandem Repeats,
-and low complexity DNA as annotated by RepeatMasker.  These tracks were constructed with the NCBI BLAST-derived search engine RMBlast and Dfam 3.3
-database (plus T2T-CHM13-derived entries submitted to the Dfam 3.6 data
-release in April 2022, and HG002 chrY-derived entries not yet submitted).
 <p>
-Individual tracks are identified using the three main components of the analysis, the version of RepeatMasker,
-the search engine used, and finally the repeat library version.
+This track shows the Repeat Masker annotations on the $assemblyDate $em${organism}$noEm/$asmId genome assembly.
+</p>
 
-<UL>
-<LI>RepeatMasker version April 01 2021 open-4.1.2-p1</LI>
-<LI>Search Engine: RMBlast (-e ncbi) [ 2.10.0+ (March 2020) ]</LI>
-<LI>RepeatMasker Database: Dfam_3.3 (plus T2T-CHM13-derived entries submitted to the Dfam 3.6 data release in April 2022, and HG002 chrY-derived entries not yet submitted)</LI>
-</UL>
+<p>
+This track was created by using Arian Smit's
+<a href="http://www.repeatmasker.org/" target="_blank">RepeatMasker</a>
+program, which screens DNA sequences
+for interspersed repeats and low complexity DNA sequences. The program
+outputs a detailed annotation of the repeats that are present in the
+query sequence (represented by this track), as well as a modified version
+of the query sequence in which all the annotated repeats have been masked
+(generally available on the
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html"
+target=_blank>Downloads</a> page). RepeatMasker uses the
+<a href="http://www.girinst.org/repbase/update/index.html"
+target=_blank>Repbase Update</a> library of repeats from the
+<a href="http://www.girinst.org/" target=_blank>Genetic 
+Information Research Institute</a> (GIRI).
+Repbase Update is described in Jurka (2000) in the References section below.</p>
+_EOF_
+;
 
+if ( -s "$rmskVersion" ) {
 
+print <<_EOF_
+<h2>RepeatMasker and libraries version</h2>
+<p>
+<pre>
+_EOF_
+;
+print `cat $rmskVersion`;
+print <<_EOF_
+</pre>
+</p>
+_EOF_
+;
+
+}
+
+print <<_EOF_
 <h2>Display Conventions and Configuration</h2>
 <h4>Context Sensitive Zooming</h4>
 <p>
@@ -43,7 +119,7 @@ This family label may be optionally turned off in the track configuration.
 <img height="94" width="1092" src="/images/rmskPack.jpg">
 <br>
 <br>
-The pack display mode may also be configured to resemble the original UCSC repeat track.  In this visualization 
+The pack display mode may also be configured to resemble the original UCSC repeat track.  In this visualization
 repeat features are grouped by classes (see below), and displayed on seperate track lines.  The repeat ranges are
 denoted as grayscale boxes, reflecting both the size of the repeat and
 the amount of base mismatch, base deletion, and base insertion associated with a repeat element.
@@ -55,7 +131,7 @@ The higher the combined number of these, the lighter the shading.
 </p>
 <h4>Full Mode Visualization</h4>
 <p>
-In the most detailed visualization repeats are displayed as chevron boxes, indicating the size and orientation of 
+In the most detailed visualization repeats are displayed as chevron boxes, indicating the size and orientation of
 the repeat.  The interior grayscale shading represents the divergence of the repeat (see above) while the outline color
 represents the class of the repeat. Dotted lines above the repeat and extending left or right
 indicate the length of unaligned repeat model sequence and provide context for where a repeat fragment originates in its
@@ -420,71 +496,76 @@ either the &quot;?&quot; will be removed or the classification will be changed.<
 The RepeatMasker (<a href="www.repeatmasker.org">www.repeatmasker.org</a>) tool was used to generate the datasets found on this track hub.  
 </p>
 
+<h2>Class profiles</h2>
+<p>
+<ul>
+_EOF_
+   ;
+
+open (FH, "grep classBed $rmskClassProfile | sed -e 's/^  *//; s#$asmId.rmsk.##; s#classBed/##; s#.bed##;'|sort -rn|") or die "can not grep $rmskClassProfile";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($count, $class) = split('\s+', $line);
+  printf "<li>%s - %s</li>\n", &AsmHub::commify($count), $class;
+}
+close (FH);
+printf "</ul>\n</p>\n<h2>Detail class profiles</h2>\n<p>\n<ul>\n";
+open (FH, "grep rmskClass $rmskClassProfile | sed -e 's/^  *//; s#rmskClass/##; s#.tab##;'|sort -rn|") or die "can not grep $rmskClassProfile";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($count, $class) = split('\s+', $line);
+  printf "<li>%s - %s</li>\n", &AsmHub::commify($count), $class;
+}
+close (FH);
+
+print <<_EOF_
+</ul>
+</p>
+<h2>Credits</h2>
+
+<p>
+Thanks to Arian Smit, Robert Hubley and GIRI for providing the tools and
+repeat libraries used to generate this track.
+</p>
+
 <h2>References</h2>
 
 <p>
-Smit AFA, Hubley R, Green P. <em>RepeatMasker Open-3.0</em>.
+Smit AFA, Hubley R, Green P. ${em}RepeatMasker Open-3.0${noEm}.
 <a href="http://www.repeatmasker.org" target="_blank">
 http://www.repeatmasker.org</a>. 1996-2010.
 </p>
 
 <p>
-For the discovery of the additional T2T-CHM13-derived repeats included in this track, as well as the methods (and scripts) for masking the assembly with these T2T-CHM13-derived repeats and previously known repeats:
-</p>
-
-<p>
-Hoyt SJ, et al.
-<a href="https://www.science.org/doi/10.1126/science.abk3112" target="_blank">
-From telomere to telomere: the transcriptional and epigenetic state of human repeat elements</a>.
-<em>bioRxiv</em>. 2022 Apr 1.
-</p>
- 
-<p>
-Hoyt SJ, et al.
-<a href="https://zenodo.org/record/5537106" target="_blank">
-From telomere to telomere: the transcriptional and epigenetic state of human repeat elements analysis code: T2T-CHM13</a>.
-<em>bioRxiv</em>. 2022 Apr 1.   
-</p>
-
-<p>
-Dfam is described in:
-</p>
-<p>
-Wheeler TJ, Clements J, Eddy SR, Hubley R, Jones TA, Jurka J, Smit AF, Finn RD.
-<a href="https://academic.oup.com/nar/article/41/D1/D70/1073076/Dfam-a-database-of-repetitive-DNA-
-based-on-profile" target="_blank">
-Dfam: a database of repetitive DNA based on profile hidden Markov models</a>.
-<em>Nucleic Acids Res</em>. 2013 Jan;41(Database issue):D70-82.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23203985" target="_blank">23203985</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531169/" target="_blank">PMC3531169</a>
-</p>
-
-<p>
 Repbase Update is described in:
 </p>
+
 <p>
 Jurka J.
-<a href="https://www.sciencedirect.com/science/article/pii/S016895250002093X" target="_blank">
+<a href="http://www.sciencedirect.com/science/article/pii/S016895250002093X" target="_blank">
 Repbase Update: a database and an electronic journal of repetitive elements</a>.
-<em>Trends Genet</em>. 2000 Sep;16(9):418-420.
+${em}Trends Genet${noEm}. 2000 Sep;16(9):418-420.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/10973072" target="_blank">10973072</a>
 </p>
 
 <p>
 For a discussion of repeats in mammalian genomes, see:
 </p>
+
 <p>
 Smit AF.
-<a href="https://www.sciencedirect.com/science/article/pii/S0959437X99000313" target="_blank">
+<a href="http://www.sciencedirect.com/science/article/pii/S0959437X99000313" target="_blank">
 Interspersed repeats and other mementos of transposable elements in mammalian genomes</a>.
-<em>Curr Opin Genet Dev</em>. 1999 Dec;9(6):657-63.
+${em}Curr Opin Genet Dev${noEm}. 1999 Dec;9(6):657-63.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/10607616" target="_blank">10607616</a>
 </p>
 
 <p>
 Smit AF.
-<a href="https://www.sciencedirect.com/science/article/pii/S0959437X9680030X" target="_blank">
+<a href="http://www.sciencedirect.com/science/article/pii/S0959437X9680030X" target="_blank">
 The origin of interspersed repeats in the human genome</a>.
-<em>Curr Opin Genet Dev</em>. 1996 Dec;6(6):743-8.
+${em}Curr Opin Genet Dev${noEm}. 1996 Dec;6(6):743-8.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/8994846" target="_blank">8994846</a>
 </p>
+_EOF_
+   ;

@@ -6,6 +6,9 @@
 # fail on any error:
 set -beEu -o pipefail
 
+# ensure sort functions properly despite kluster node environment
+export LC_COLLATE=C
+
 if [ $# -ne 3 ]; then
   printf "%s\n" "usage: asmHubRepeatMasker.sh <asmId> <pathTo/*fa.out.gz> <destinationDir/>" 1>&2
   exit 255
@@ -13,15 +16,36 @@ fi
 
 export dateStamp=`date "+%FT%T %s"`
 
-# /hive/data/outside/ncbi/genomes/genbank/vertebrate_mammalian/Equus_caballus/latest_assembly_versions/GCA_000002305.1_EquCab2.0/GCA_000002305.1_EquCab2.0_rm.out.gz
-# /hive/data/inside/ncbi/genomes/genbank/vertebrate_mammalian/Equus_caballus/latest_assembly_versions/GCA_000002305.1_EquCab2.0
-
 export asmId=$1
 export rmOutFile=$2
 export destDir=$3
 
+export chrSizes="../../$asmId.chrom.sizes"
+# assume this file name pattern
+export faAlign=`echo "${rmOutFile}" | sed -e 's/sorted.fa.out/fa.align/; s/.gz//;'`
+export RepeatMaskerPath="/hive/data/staging/data/RepeatMasker210401"
+
 if [ -d "${destDir}" ]; then
   cd "${destDir}"
+  
+  # align file only exists when RM has been run locally, not for NCBI version
+  if [ -s "${faAlign}" ]; then
+  $RepeatMaskerPath/util/rmToTrackHub.pl -out "${rmOutFile}" -align "${faAlign}"
+    # in place same file sort using the -o output option
+    sort -k1,1 -k2,2n -o "${asmId}.fa.align.tsv" "${asmId}.fa.align.tsv" &
+    sort -k1,1 -k2,2n -o "${asmId}.sorted.fa.join.tsv" "${asmId}.sorted.fa.join.tsv"
+    wait
+    bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskAlignBed.as \
+      -type=bed3+14 "${asmId}.fa.align.tsv" "${chrSizes}" \
+        "${asmId}.rmsk.align.bb" &
+    bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskBed.as -type=bed9+5 \
+      "${asmId}.sorted.fa.join.tsv" "${chrSizes}" \
+        "${asmId}.rmsk.bb"
+    wait
+    gzip "${asmId}.fa.align.tsv" &
+    gzip "${asmId}.sorted.fa.join.tsv"
+    wait
+  fi
   rm -fr classBed rmskClass ${asmId}.rmsk.tab bbi/*.rmsk.*.bb \
        bbi/*.rmsk.*.bb
   mkdir classBed rmskClass
@@ -49,7 +73,7 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
        $HOME/kent/src/hg/utils/automation/rmskBed6+10.pl rmskClass/${T}*.tab \
         | sort -k1,1 -k2,2n > classBed/${asmId}.rmsk.${T}.bed
        bedToBigBed -tab -type=bed6+10 -as=$HOME/kent/src/hg/lib/rmskBed6+10.as \
-         classBed/${asmId}.rmsk.${T}.bed ../../$asmId.chrom.sizes \
+         classBed/${asmId}.rmsk.${T}.bed "${chrSizes}" \
            bbi/${asmId}.rmsk.${T}.bb
     fi
   done
@@ -61,7 +85,7 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
     $HOME/kent/src/hg/utils/automation/rmskBed6+10.pl rmskClass/*RNA.tab \
        | sort -k1,1 -k2,2n > classBed/${asmId}.rmsk.RNA.bed
     bedToBigBed -tab -type=bed6+10 -as=$HOME/kent/src/hg/lib/rmskBed6+10.as \
-       classBed/${asmId}.rmsk.RNA.bed ../../$asmId.chrom.sizes \
+       classBed/${asmId}.rmsk.RNA.bed "${chrSizes}" \
           bbi/${asmId}.rmsk.RNA.bb
   fi
   dateStamp=`date "+%FT%T %s"`
@@ -74,7 +98,7 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
     $HOME/kent/src/hg/utils/automation/rmskBed6+10.pl `ls rmskClass/*.tab | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" | sed -e 's/^/"/; s/$/"/;'|xargs echo` \
         | sort -k1,1 -k2,2n > classBed/${asmId}.rmsk.Other.bed
     bedToBigBed -tab -type=bed6+10 -as=$HOME/kent/src/hg/lib/rmskBed6+10.as \
-      classBed/${asmId}.rmsk.Other.bed ../../$asmId.chrom.sizes \
+      classBed/${asmId}.rmsk.Other.bed "${chrSizes}" \
         bbi/${asmId}.rmsk.Other.bb
   fi
 

@@ -461,7 +461,7 @@ sub readAltPlacement($$) {
     my $acc = $alt_scaf_acc;
     $alt_scaf_acc = $acc;
     my $ucscName = $acc;
-    if ($ucscNames) {
+    if (1 == 1 || $ucscNames) {
       $alt_scaf_acc =~ s/\./v/;
       $ucscName = sprintf("chr%s_%s_alt", $parent_name, $alt_scaf_acc);
       if ( $prim_asm_name ne "Primary Assembly" ) {
@@ -1038,7 +1038,7 @@ export asmId=$asmId
 
 bigBedToBed -header \${asmId}.chromAlias.bb test.chromAlias.bed
 \$HOME/kent/src/hg/utils/automation/aliasBedToCt.pl \\
-  test.chromAlias.bed .
+  test.chromAlias.bed \${asmId}.chromAlias.bb .
 
 # verify each sequence name has an alias
 export sizeCount=`grep -c . ../../\${asmId}.chrom.sizes`
@@ -1080,9 +1080,9 @@ sub doGatewayPage {
   my $speciesNoBlank = $species;
   $speciesNoBlank =~ s/ /_/g;
   if ( -s "$runDir/../photo/$speciesNoBlank.jpg" ) {
-     $photoJpg = "../photo/\${species}.jpg";
+     $photoJpg = "../photo/${speciesNoBlank}.jpg";
      $photoCredit = "../photo/photoCredits.txt";
-     $photoLink = "rm -f \${species}.jpg; ln -s ../photo/\${species}.jpg ."
+     $photoLink = "rm -f ${speciesNoBlank}.jpg; ln -s ../photo/${speciesNoBlank}.jpg ."
   } else {
      printf STDERR "# gatewayPage: warning: no photograph available\n";
   }
