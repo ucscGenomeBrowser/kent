@@ -205,6 +205,8 @@ fi
 if [ "${newRmsk}" -eq 2 ]; then
   rm -f $buildDir/bbi/${asmId}.rmsk.align.bb
   rm -f $buildDir/bbi/${asmId}.rmsk.bb
+  rm -f $buildDir/${asmId}.fa.align.tsv.gz
+  rm -f $buildDir/${asmId}.fa.join.tsv.gz
   ln -s ../trackData/repeatMasker/${asmId}.rmsk.align.bb $buildDir/bbi/${asmId}.rmsk.align.bb
   ln -s ../trackData/repeatMasker/${asmId}.rmsk.bb $buildDir/bbi/${asmId}.rmsk.bb
   ln -s trackData/repeatMasker/${asmId}.fa.align.tsv.gz $buildDir/${asmId}.fa.align.tsv.gz
@@ -221,7 +223,7 @@ xrefDataUrl bbi/%s.rmsk.align.bb
 html html/%s.repeatMasker\n\n" "${asmId}" "${asmId}" "${asmId}"
 $scriptDir/asmHubRmskJoinAlign.pl $asmId $buildDir > $buildDir/html/$asmId.repeatMasker.html
 
-else
+else	#	if [ "${newRmsk}" -eq 2 ]; then
 
 printf "track repeatMasker
 compositeTrack on
@@ -235,9 +237,7 @@ maxWindowToDraw 10000000
 spectrum on
 html html/%s.repeatMasker\n\n" "${asmId}"
 $scriptDir/asmHubRmsk.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt > $buildDir/html/$asmId.repeatMasker.html
-fi
 
-fi      #       if [ "${rmskCount}" -gt 0 ]; then
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.SINE.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.SINE.bb
@@ -346,6 +346,9 @@ printf "    track repeatMaskerOther
     priority 9
     bigDataUrl bbi/%s.rmsk.Other.bb\n\n" "${asmId}"
 fi
+
+fi	#	if [ "${newRmsk}" -eq 2 ]; then
+fi      #       if [ "${newRmsk}" -eq 2 -o "${rmskCount}" -gt 0 ]; then
 
 if [ -s ${buildDir}/trackData/simpleRepeat/simpleRepeat.bb ]; then
 rm -f $buildDir/bbi/${asmId}.simpleRepeat.bb
