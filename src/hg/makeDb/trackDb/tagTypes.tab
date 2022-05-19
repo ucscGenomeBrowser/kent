@@ -273,6 +273,7 @@ linkIdInName bed bigBed
 labelFields big*
 labelOnFeature bed bigBed
 labelSeparator bigBed bigPsl bigGenePred
+logo bigWig
 lollipopField bigBed bigLolly
 lollyField bigBed bigLolly
 lollyMaxSize bigBed bigLolly

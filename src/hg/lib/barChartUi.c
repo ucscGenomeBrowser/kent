@@ -453,7 +453,7 @@ puts("&nbsp;&nbsp;");
 barChartUiViewLimits(cart, track, tdb);
 
 char *facets = trackDbSetting(tdb, "barChartFacets");
-char *statsFile = trackDbRequiredSetting(tdb, "barChartStatsUrl");
+char *statsFile = hReplaceGbdb(trackDbRequiredSetting(tdb, "barChartStatsUrl"));
 
 /* Write html to make white background */
 hInsideStyleToWhite();
