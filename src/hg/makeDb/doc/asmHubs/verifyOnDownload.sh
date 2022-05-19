@@ -19,6 +19,8 @@ export orderList=$2
 export successCount=0
 export doneCount=0
 
+export minTrackCount=12
+
 export dbHost="localhost"
 export hubSource="hgdownload-test.gi.ucsc.edu"
 if [ "${host}" = "apibeta.soe.ucsc.edu" ]; then
@@ -36,11 +38,11 @@ do
   trackCount=`curl -L "https://$host/list/tracks?genome=$genome;trackLeavesOnly=1;hubUrl=https://$hubSource/hubs/${dirPath}/hub.txt" \
       2> /dev/null | python -mjson.tool | egrep ": {$" \
        | tr -d '"' | sed -e 's/^ \+//; s/ {//;' | xargs echo | wc -w`
-  if [ "${trackCount}" -gt 14 ]; then
+  if [ "${trackCount}" -gt "${minTrackCount}" ]; then
     ((successCount=successCount+1))
     printf "%03d\t%s\t%d tracks:\t" "${doneCount}" "${genome}" "${trackCount}"
   else
-    printf "%03d\t%s\t%d (error < 15) tracks:\t" "${doneCount}" "${genome}" "${trackCount}"
+    printf "%03d\t%s\t%d (error <= %d) tracks:\t" "${doneCount}" "${genome}" "${trackCount}" "${minTrackCount}"
   fi
   curl -L "https://$host/list/hubGenomes?hubUrl=https://$hubSource/hubs/${dirPath}/hub.txt" 2> /dev/null \
      | python -mjson.tool | egrep "organism\":|description\":" | sed -e "s/'/_/g;" \
@@ -53,11 +55,11 @@ do
            2> /dev/null | python -mjson.tool | egrep ": {$" \
                | egrep -v '"'$db'":' | tr -d '"' \
                  | sed -e 's/^ \+//; s/ {//;' | xargs echo | wc -w`
-  if [ "${trackCount}" -gt 14 ]; then
+  if [ "${trackCount}" -gt "${minTrackCount}" ]; then
     ((successCount=successCount+1))
     printf "%03d\t%s\t%d tracks:\t" "${doneCount}" "${db}" "${trackCount}"
   else
-    printf "%03d\t%s\t%d (error < 15) tracks:\t" "${doneCount}" "${db}" "${trackCount}"
+    printf "%03d\t%s\t%d (error < %d) tracks:\t" "${doneCount}" "${db}" "${trackCount}" "${minTrackCount}"
   fi
 hgsql -N -e "select organism,description,\",\",scientificName from dbDb where name=\"$db\";" hgcentraltest | tr "'" '_' | xargs echo | sed -e 's/ ,/,/;'
        ;;
