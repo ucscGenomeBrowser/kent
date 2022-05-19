@@ -5831,7 +5831,7 @@ boolean knownGencodePseudoFilter(struct track *tg, void *item)
 struct linkedFeatures *lf = item;
 char buffer[1024];
 
-safef(buffer, sizeof buffer, "kgId=\"%s\" and transcriptClass=\"pseudo\"", lf->name);
+sqlSafef(buffer, sizeof buffer, "kgId=\"%s\" and transcriptClass=\"pseudo\"", lf->name);
 char *class = sqlGetField(database, "knownAttrs", "transcriptClass", buffer);
 
 if (class != NULL)
@@ -5844,7 +5844,7 @@ boolean knownGencodeClassFilter(struct track *tg, void *item)
 struct linkedFeatures *lf = item;
 char buffer[1024];
 
-safef(buffer, sizeof buffer, "name=\"%s\" and value=\"basic\"", lf->name);
+sqlSafef(buffer, sizeof buffer, "name=\"%s\" and value=\"basic\"", lf->name);
 char *class = sqlGetField(database, "knownToTag", "value", buffer);
 
 if (class != NULL)
