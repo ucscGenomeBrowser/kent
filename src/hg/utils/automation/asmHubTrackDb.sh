@@ -188,7 +188,7 @@ fi	#	if [ "${gapOverlapCount}" -gt 0 -o "${tanDupCount}" -gt 0 ]
 export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb 2> /dev/null | wc -l) || true`
 export newRmsk=`(ls $buildDir/trackData/repeatMasker/${asmId}.rmsk.align.bb $buildDir/trackData/repeatMasker/${asmId}.rmsk.bb 2> /dev/null | wc -l) || true`
 
-if [ "${newRmsk}" -eq 2 -o "${rmskCount}" -gt 0 ]; then
+if [ "${newRmsk}" -gt 0 -o "${rmskCount}" -gt 0 ]; then
 
 if [ ! -s "$buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.gz" ]; then
   printf "ERROR: can not find trackData/repeatMasker/$asmId.sorted.fa.out.gz\n" 1>&2
@@ -202,14 +202,16 @@ if [ -s "$buildDir/trackData/repeatMasker/versionInfo.txt" ]; then
    ln -s trackData/repeatMasker/versionInfo.txt "$buildDir/${asmId}.repeatMasker.version.txt"
 fi
 
-if [ "${newRmsk}" -eq 2 ]; then
+if [ "${newRmsk}" -gt 0 ]; then
   rm -f $buildDir/bbi/${asmId}.rmsk.align.bb
   rm -f $buildDir/bbi/${asmId}.rmsk.bb
   rm -f $buildDir/${asmId}.fa.align.tsv.gz
   rm -f $buildDir/${asmId}.fa.join.tsv.gz
-  ln -s ../trackData/repeatMasker/${asmId}.rmsk.align.bb $buildDir/bbi/${asmId}.rmsk.align.bb
+  if [ -s "$buildDir/bbi/${asmId}.rmsk.align.bb" ]; then
+    ln -s ../trackData/repeatMasker/${asmId}.rmsk.align.bb $buildDir/bbi/${asmId}.rmsk.align.bb
+    ln -s trackData/repeatMasker/${asmId}.fa.align.tsv.gz $buildDir/${asmId}.fa.align.tsv.gz
+  fi
   ln -s ../trackData/repeatMasker/${asmId}.rmsk.bb $buildDir/bbi/${asmId}.rmsk.bb
-  ln -s trackData/repeatMasker/${asmId}.fa.align.tsv.gz $buildDir/${asmId}.fa.align.tsv.gz
   ln -s trackData/repeatMasker/${asmId}.sorted.fa.join.tsv.gz $buildDir/${asmId}.fa.join.tsv.gz
 
 printf "track repeatMasker
@@ -218,9 +220,11 @@ longLabel RepeatMasker Repetitive Elements
 type bigRmsk 9 +
 visibility pack
 group varRep
-bigDataUrl bbi/%s.rmsk.bb
-xrefDataUrl bbi/%s.rmsk.align.bb
-html html/%s.repeatMasker\n\n" "${asmId}" "${asmId}" "${asmId}"
+bigDataUrl bbi/%s.rmsk.bb\n" "${asmId}"
+if [ -s "$buildDir/bbi/${asmId}.rmsk.align.bb" ]; then
+printf "xrefDataUrl bbi/%s.rmsk.align.bb\n" "${asmId}"
+fi
+printf "html html/%s.repeatMasker\n\n" "${asmId}"
 $scriptDir/asmHubRmskJoinAlign.pl $asmId $buildDir > $buildDir/html/$asmId.repeatMasker.html
 
 else	#	if [ "${newRmsk}" -eq 2 ]; then

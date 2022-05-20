@@ -690,7 +690,7 @@ for (cr = tg->items; cr != NULL; cr = cr->next)
     int idx = 0;
     for (idx = 0; idx < cr->blockCount; idx++)
         {
-        if (cr->blockRelStarts[idx] > 0)
+        if (cr->blockRelStarts[idx] >= 0)
             {
             int blockStart = cr->chromStart + cr->blockRelStarts[idx];
             int blockEnd =
@@ -734,7 +734,7 @@ for (cr = tg->items; cr != NULL; cr = cr->next)
     int idx = 0;
     for (idx = 0; idx < cr->blockCount; idx++)
         {
-        if (cr->blockRelStarts[idx] > 0)
+        if (cr->blockRelStarts[idx] >= 0)
             {
             int blockStart = cr->chromStart + cr->blockRelStarts[idx];
             int blockEnd = cr->chromStart + cr->blockRelStarts[idx] +
