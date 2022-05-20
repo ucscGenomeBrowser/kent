@@ -564,7 +564,9 @@ if ( classHashBR == NULL )
         AllocVar(cr);
         cr->className = rptClassNames[i];
         cr->layoutLevel = i;
-        cr->color = rmskJoinedClassColors[i];
+        unsigned int colorInt = rmskJoinedClassColors[i];
+        cr->color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8)
+& 0xff),((colorInt >> 0) & 0xff));
         hashAdd(classHashBR, rptClasses[i], cr);
         }
     }
