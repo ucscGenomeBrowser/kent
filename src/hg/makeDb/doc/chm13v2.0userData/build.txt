@@ -10,7 +10,7 @@ T2T CHM13 track spreadsheet
 
 staging URL
    https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
-   https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?hubUrl=https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=hub_24696_GCA_009914755.4
+   https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?hubUrl=https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=GCA_009914755.4
 
    https://hgwdev.gi.ucsc.edu/h/GCA_009914755.4 [doesn't work]
 
