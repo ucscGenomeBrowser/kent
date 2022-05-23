@@ -1684,7 +1684,7 @@ noInherit on
 #include jkExperiments.ra
 
 track genotypeArrays
-shortLabel SNP/CNV Arrays
+shortLabel Array Probsets
 longLabel Microarray Probesets
 compositeTrack on
 group varRep
