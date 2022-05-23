@@ -3,7 +3,7 @@ include ../../../../inc/common.mk
 
 hubCheck = ${DESTBINDIR}/hubCheck
 
-test:: one two errors supertrackChild genomesErrors badType
+test:: one two errors supertrackChild genomesErrors badType badSubgroups
 	${MAKE} clean
 
 one:	mkout
@@ -29,6 +29,10 @@ genomesErrors: mkout
 badType: mkout
 	-${hubCheck} input/badType.txt > output/badType.output.txt 2>/dev/null
 	diff expected/badType.output.txt output/badType.output.txt
+
+badSubgroups: mkout
+	-${hubCheck} input/badSubGroups.txt > output/badSubGroups.output.txt 2>/dev/null
+	diff expected/badSubGroups.output.txt output/badSubGroups.output.txt
 
 mkout::
 	@mkdir -p output

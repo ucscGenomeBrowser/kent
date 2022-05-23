@@ -675,6 +675,16 @@ if (errCatchStart(errCatch))
                     }
                 }
             }
+
+        // check that the subtrack does not have any bogus subgroups that don't exist in the parent
+        for (i = 0; i < membership->count; i++)
+            {
+            char *subgroupName = membership->subgroups[i];
+            if (!subgroupingExists(tdb->parent, subgroupName))
+                {
+                errAbort("subtrack \"%s\" has a subgroup \"%s\" not defined at parent level", subtrackName, subgroupName);
+                }
+            }
         }
     }
 errCatchEnd(errCatch);
