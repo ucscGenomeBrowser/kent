@@ -34586,18 +34586,18 @@ miRNA
 
 ##############################################################################
 # Add Revel track, Max, Thu Apr 15 03:33:49 PDT 2021
-cd /hive/data/genomes/hg19/bed/revel
-aria2c https://rothsj06.u.hpc.mssm.edu/revel_grch38_all_chromosomes.csv.zip
-unzip revel_grch38_all_chromosomes.csv.zip
-# make sure that no weird chroms and no weird multi-nucleotide changes
-cat revel_grch38_all_chromosomes.csv  | tr ',' '\t' | cut -f5 | grep -v alt | awk '{print length($1)}' | uniq > lens.tmp &
-cut -d, revel_grch38_all_chromosomes.csv -f1 | uniq | sort | uniq -c > chroms.tmp &
-pigz revel_grch38_all_chromosomes.csv
-time python revelToWig.py revel_grch38_all_chromosomes.csv.gz hg19
+# UPDATE: Adding overlap track after request from NHS, Max, Mon May 23 07:50:02 PDT 2022
+# There was a new REVEL release with transcript IDs! Obviously no one told us
+wget https://rothsj06.u.hpc.mssm.edu/revel-v1.3_all_chromosomes.zip
+unzip *.zip
+python ~/kent/src/hg/makeDb/revel/revelToWig.py revel_with_transcript_ids hg19 
 wigToBigWig t.wig ../../chrom.sizes t.bw &
 wigToBigWig c.wig ../../chrom.sizes c.bw  &
 wigToBigWig a.wig ../../chrom.sizes a.bw &
 wigToBigWig g.wig ../../chrom.sizes g.bw &
+bedSort overlap.bed overlap.bed
+bedToBigBed overlap.bed -as=~/kent/src/hg/makeDb/revel/revel.as ../../../chrom.sizes overlap.bb -tab -type=bed8+
+
 ##############################################################################
 # LASTZ human/hg19 Gorilla/gorGor6 - (DONE - 2021-06-28 - Gerardo)
     mkdir /hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28/
