@@ -1,0 +1,109 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+import datetime
+from datetime import date
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("usage: %prog [options] filename")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    filename = args[0]
+    maxDays = int(args[1])
+    #if options.test:
+        #logging.debug("test is set")
+        #f = open(options.file, "r")
+    #gene	site	seqs	from	to	p	alpha	beta	T_int	T_total
+    #ORF3a	43	351	2019-12-01	2020-02-29	0.0263366	12.2782	0	0.121592	0.314228
+    genes = [
+     ["leader",265],
+     ["nsp2",805],
+     ["nsp3",2719],
+     ["nsp4",8554],
+     ["3C",10054],
+     ["nsp6",10972],
+     ["nsp7",11842],
+     ["nsp8",12091],
+     ["nsp9",12685],
+     ["nsp10",13024],
+     ["RdRp",13441],
+     ["helicase",16236],
+     ["exonuclease",18039],
+     ["endornase",19620],
+     ["methyltransferase",20658],
+     ["S",21562],
+     ["ORF3a",25392],
+     ["E",26244],
+     ["M",26523],
+     ["ORF6",27201],
+     ["ORF7a",27393],
+     ["ORF8",27893],
+     ["N",28273],
+    ]
+    geneToPos = dict(genes)
+
+    posSelFh = open("pos.bed", "w")
+    negSelFh = open("neg.bed", "w")
+
+    for line in open(filename):
+        if line.startswith("gene"):
+            continue
+        row = line.rstrip("\n").split("\t")
+        gene, site, seqs, fromDateStr, toDateStr, p, alpha, beta, tint, ttotal = row
+        nucPos = geneToPos[gene]
+        site = int(site)
+        start = nucPos+(site*3)
+        chrom = "NC_045512v2"
+        alpha = float(alpha)
+        beta = float(beta)
+        p = float(p)
+        fromDate = date.fromisoformat(fromDateStr)
+        toDate = date.fromisoformat(toDateStr)
+
+        delta = datetime.date.today() - fromDate
+        if delta.days > maxDays:
+            #print("too long ago: %s" % fromDate)
+            continue
+        if p > 0.01:
+            continue
+        # dn=alpha, ds=beta
+        # dn < ds = pos
+        # ds < dn = neg
+        if alpha < beta:
+            ofh = posSelFh
+        if beta < alpha:
+            ofh = negSelFh
+
+        bed = (chrom, str(start), str(start+3), "", "0", ".", str(start), str(start+3), str(seqs), str(alpha), str(beta), str(p))
+        ofh.write("\t".join(bed))
+        ofh.write("\n")
+
+    print("wrote pos.bed and neg.bed")
+
+main()
+

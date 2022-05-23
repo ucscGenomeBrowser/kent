@@ -1,1 +1,13 @@
+# For the original V1, I just
 # downloaded all files from  http://public.gi.ucsc.edu/~jferna10/COVID/Sergei_Pond/bigbeds/
+# Sergei Pond said that these data are completely useless now the virus has evolved too much
+# So redoing here:
+# Mon May 23 03:46:34 PDT 2022
+cd /hive/data/genomes/wuhCor1/bed/pond
+wget https://raw.githubusercontent.com/spond/SARS-CoV-2-variation/master/windowed-sites-fel-current.json
+csvToTab windowed-sites-fel-current.json > current.tsv
+python ~/kent/src/hg/makeDb/scripts/pondToBed current.tsv 300
+bedSort pos.bed pos.bed
+bedSort neg.bed neg.bed
+bedToBigBed pos.bed ../../../chrom.sizes pos.bb -tab -as=bed8Attrs.as -type=bed8+
+bedToBigBed neg.bed ../../../chrom.sizes neg.bb -tab -as=bed8Attrs.as -type=bed8+
