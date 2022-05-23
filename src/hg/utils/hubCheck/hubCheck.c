@@ -761,6 +761,38 @@ else if (tdb->subtracks != NULL)
     }
 }
 
+boolean checkTypeLine(struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors, struct trackHubCheckOptions *options)
+{
+boolean retVal = FALSE;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    char *type = trackDbRequiredSetting(tdb, "type");
+    char *splitType[4];
+    int numWords = chopByWhite(cloneString(type), splitType, sizeof(splitType));
+    if (sameString(splitType[0], "bigBed"))
+        {
+        if (numWords > 1 && (strchr(splitType[1], '+') || strchr(splitType[1], '.')))
+            {
+            errAbort("error in type line \"%s\" for track \"%s\". "
+                "A space is needed after the \"+\" or \".\" character.", type, tdb->track);
+            }
+        if (numWords > 2 && (!sameString(splitType[2], "+") && !sameString(splitType[2], ".")))
+            {
+            errAbort("error in type line \"%s\" for track \"%s\". "
+                "Only \"+\" or \".\" is allowed after bigBed numFields setting.", type, tdb->track);
+            }
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
+    retVal = TRUE;
+    }
+return retVal;
+}
+
 int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb,
                         struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check track settings and optionally, files */
@@ -827,8 +859,17 @@ if (errCatchStart(errCatch))
     if (tdbIsSubtrack(tdb))
         retVal |= hubCheckSubtrackSettings(genome, tdb, errors, options);
 
-    if (options->checkFiles)
+    // check that type line is syntactically correct regardless of
+    // if we actually want to check the data file itself
+    boolean foundTypeError = checkTypeLine(genome, tdb, errors, options);
+
+    // No point in checking the data file if the type setting is incorrect,
+    // since hubCheckBigDataUrl will error out early with a less clear message
+    // if the type line is messed up. This has the added benefit of providing
+    // consistent messaging on command line interface vs web interface
+    if (!foundTypeError && options->checkFiles)
         hubCheckBigDataUrl(hub, genome, tdb);
+
     if (!sameString(tdb->track, "cytoBandIdeo"))
         {
         trackHubAddDescription(genome->trackDbFile, tdb);

@@ -1,0 +1,44 @@
+hub testHub
+shortLabel Bad Type
+longLabel Bad Type Setting Examples
+genomesFile badType.txt
+email email
+
+genome badType
+trackDb badType.txt
+
+track badTypePlus
+type bigBed 6+
+longLabel Bad Type Setting, No Space after numFields
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.assembly.bb
+shortLabel Bad Type Setting
+
+track badTypePlusMore
+type bigBed 6 +3
+longLabel Bad Type Setting, after numFields
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.assembly.bb
+shortLabel Bad Type Setting
+
+track badTypeDot
+type bigBed 6.
+longLabel Bad Type Setting, No Space after numFields
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.assembly.bb
+shortLabel Bad Type Setting
+
+track goodTypePlus
+type bigBed 6 +
+longLabel Good Type Setting, Space after numFields
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.assembly.bb
+shortLabel Good Type Setting
+
+track goodTypeDot
+type bigBed 6 .
+longLabel Good Type Setting, Space after numFields
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.assembly.bb
+shortLabel Good Type Setting
+
+track baddTypBogus
+type bigBed 6 %
+longLabel Bad Type Setting, Bogus character after numFields
+bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.assembly.bb
+shortLabel Bad Type Setting

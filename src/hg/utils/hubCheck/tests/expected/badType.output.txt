@@ -1,0 +1,12 @@
+Found 11 problems:
+error in type line "bigBed 6 %" for track "baddTypBogus". Only "+" or "." is allowed after bigBed numFields setting.
+error in type line "bigBed 6 +3" for track "badTypePlusMore". Only "+" or "." is allowed after bigBed numFields setting.
+error in type line "bigBed 6+" for track "badTypePlus". A space is needed after the "+" or "." character.
+error in type line "bigBed 6." for track "badTypeDot". A space is needed after the "+" or "." character.
+warning: missing description page for track: 'badTypeDot'
+warning: missing description page for track: 'badTypePlus'
+warning: missing description page for track: 'badTypePlusMore'
+warning: missing description page for track: 'baddTypBogus'
+warning: missing description page for track: 'goodTypeDot'
+warning: missing description page for track: 'goodTypePlus'
+warning: missing hub overview description page (descriptionUrl setting)
