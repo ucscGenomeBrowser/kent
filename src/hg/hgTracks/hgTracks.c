@@ -10147,16 +10147,32 @@ cgiTableRowEnd();
 }
 
 static char *chrAliases(struct slName *names, char *sequenceName)
-/* lookup the sequenceName in the aliasHash and return csv string
- * of alias names
+/* names is already a list of aliases, return csv string
+ * of alias names and avoid reproducing the sequenceName
  */
 {
+/* to avoid duplicate names in the returned list, remember them */
+struct hash *nameHash = newHashExt(8, TRUE);	/* TRUE == on stack memory */
 if (NULL == names)
     return NULL;
+if (isNotEmpty(sequenceName))
+    hashAddInt(nameHash, sequenceName, 1);
 struct dyString *returned = dyStringNew(512);
-dyStringPrintf(returned, "%s", names->name);
-for(names = names->next; names; names = names->next)
-    dyStringPrintf(returned, ", %s",names->name);
+int wordCount = 0;
+for( ; names; names = names->next)
+    {
+    if (hashLookup(nameHash, names->name) != NULL)
+	continue;
+    if (isNotEmpty(names->name))
+	{
+	if (wordCount)
+	    dyStringPrintf(returned, ", %s",names->name);
+        else
+	    dyStringPrintf(returned, "%s", names->name);
+	++wordCount;
+	hashAddInt(nameHash, names->name, 1);
+	}
+    }
 return dyStringCannibalize(&returned);
 }
 
