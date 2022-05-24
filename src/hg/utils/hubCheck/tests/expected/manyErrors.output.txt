@@ -1,4 +1,4 @@
-Found 49 problems:
+Found 50 problems:
 
 Couldn't open https://bad.url.txt/missing.bb
 Host bad.url.txt not found --> Name or service not known
@@ -10,6 +10,7 @@ container multiWig H2A_Z_MultiWig_ImputedComp has only one subtrack. multiWigs m
 missing 'subgroups' setting for subtrack RegBuildOverview
 netConnect() failed
 state3 not a member of sortOrder subgroup view
+subtrack "repeatMaskerSINE_" has a subgroup "noGroup" not defined at parent level
 subtrack track2 not a member of subgroup sub1
 warning: missing description page for track: 'BuildOverview'
 warning: missing description page for track: 'H2A_Z_MultiWig_ImputedComp'

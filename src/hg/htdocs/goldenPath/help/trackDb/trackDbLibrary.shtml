@@ -976,7 +976,7 @@
 
     <P><B>Example:</B></P>
     <pre>
-    mouseOver variant $name/$chrom:$chromStart value $score
+    mouseOver variant $name/$chrom:${chromStart} value $score
     </pre>
 </DIV>
 
