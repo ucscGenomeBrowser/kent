@@ -275,7 +275,7 @@ struct dyString *dy = dyStringNew(0);
 sqlDyStringPrintf(dy, "select * from targetDb where db = '%s' ", db);
 if (isNotEmpty(name))
     sqlDyStringPrintf(dy, "and name = '%s' ", name);
-dyStringAppend(dy, "order by priority");
+sqlDyStringPrintf(dy, "order by priority");
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
