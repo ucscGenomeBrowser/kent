@@ -84,14 +84,14 @@ static void gencodeQueryBeginSubWhere(struct gencodeQuery *gencodeQuery)
 /* begin adding new where sub-clause */
 {
 if (dyStringLen(gencodeQuery->where) > 0)
-    dyStringAppend(gencodeQuery->where, " and ");
-dyStringAppend(gencodeQuery->where, "(");
+    sqlDyStringPrintf(gencodeQuery->where, " and ");
+sqlDyStringPrintf(gencodeQuery->where, "(");
 }
 
 static void gencodeQueryEndSubWhere(struct gencodeQuery *gencodeQuery)
 /* finish adding new where sub-clause */
 {
-dyStringAppend(gencodeQuery->where, ")");
+sqlDyStringPrintf(gencodeQuery->where, ")");
 }
 
 static struct genePred *gencodeQueryGenePred(struct gencodeQuery *gencodeQuery,
@@ -148,15 +148,15 @@ static void filterByMethodChoiceQuery(char *choice, struct gencodeQuery *gencode
  *    mt_genbank_import             automatic, automatic only
  */
 if (sameString(choice, "manual"))
-    dyStringAppend(gencodeQuery->where, "(transSrc.source like \"%havana%\")");
+    sqlDyStringPrintf(gencodeQuery->where, "(transSrc.source like \"%%havana%%\")");
 else if (sameString(choice, "automatic"))
-    dyStringAppend(gencodeQuery->where, "((transSrc.source like \"%ensembl%\") or (transSrc.source not like \"%havana%\"))");
+    sqlDyStringPrintf(gencodeQuery->where, "((transSrc.source like \"%%ensembl%%\") or (transSrc.source not like \"%%havana%%\"))");
 else if (sameString(choice, "manual_only"))
-    dyStringAppend(gencodeQuery->where, "((transSrc.source like \"%havana%\") and (transSrc.source not like \"%ensembl%\"))");
+    sqlDyStringPrintf(gencodeQuery->where, "((transSrc.source like \"%%havana%%\") and (transSrc.source not like \"%%ensembl%%\"))");
 else if (sameString(choice, "automatic_only"))
-    dyStringAppend(gencodeQuery->where, "(transSrc.source not like \"%havana%\")");
+    sqlDyStringPrintf(gencodeQuery->where, "(transSrc.source not like \"%%havana%%\")");
 else if (sameString(choice, "manual_and_automatic"))
-    dyStringAppend(gencodeQuery->where, "((transSrc.source like \"%havana%\") and (transSrc.source like \"%ensembl%\"))");
+    sqlDyStringPrintf(gencodeQuery->where, "((transSrc.source like \"%%havana%%\") and (transSrc.source like \"%%ensembl%%\"))");
 else
     errAbort("BUG: filterByMethodChoiceQuery missing choice: \"%s\"", choice);
 }
@@ -168,7 +168,7 @@ struct slName *choice = NULL;
 for (choice = filterBy->slChoices; choice != NULL; choice = choice->next)
     {
     if (choice != filterBy->slChoices)
-        dyStringAppend(gencodeQuery->where, " or ");
+        sqlDyStringPrintf(gencodeQuery->where, " or ");
     filterByMethodChoiceQuery(choice->name, gencodeQuery);
     }
 }
@@ -186,7 +186,7 @@ static void filterBySupportLevelChoiceQuery(char *choice, struct gencodeQuery *g
 /* add SQL expression GENCODE support choice. */
 {
 /* table is numeric (silly me), and string is tsl1..tsl5 or tslNA */
-dyStringPrintf(gencodeQuery->where, "(supLevel.level = %s)", tslSymToNumStr(choice));
+sqlDyStringPrintf(gencodeQuery->where, "(supLevel.level = %d)", atoi(tslSymToNumStr(choice)));
 }
 
 static void filterBySupportLevelChoicesQuery(filterBy_t *filterBy, struct gencodeQuery *gencodeQuery)
@@ -196,7 +196,7 @@ struct slName *choice = NULL;
 for (choice = filterBy->slChoices; choice != NULL; choice = choice->next)
     {
     if (choice != filterBy->slChoices)
-        dyStringAppend(gencodeQuery->where, " or ");
+        sqlDyStringPrintf(gencodeQuery->where, " or ");
     filterBySupportLevelChoiceQuery(choice->name, gencodeQuery);
     }
 }
@@ -213,7 +213,7 @@ gencodeQueryEndSubWhere(gencodeQuery);
 static void filterByTagChoiceQuery(char *choice, struct gencodeQuery *gencodeQuery)
 /* add SQL expression GENCODE tag choice. */
 {
-dyStringPrintf(gencodeQuery->where, "(tag.tag = \"%s\")", choice);
+sqlDyStringPrintf(gencodeQuery->where, "(tag.tag = \"%s\")", choice);
 }
 
 static void filterByTagChoicesQuery(filterBy_t *filterBy, struct gencodeQuery *gencodeQuery)
@@ -223,7 +223,7 @@ struct slName *choice = NULL;
 for (choice = filterBy->slChoices; choice != NULL; choice = choice->next)
     {
     if (choice != filterBy->slChoices)
-        dyStringAppend(gencodeQuery->where, " or ");
+        sqlDyStringPrintf(gencodeQuery->where, " or ");
     filterByTagChoiceQuery(choice->name, gencodeQuery);
     }
 }
@@ -321,9 +321,8 @@ static struct sqlResult *executeQuery(struct sqlConnection *conn, struct gencode
 /* execute the actual SQL query */
 {
 struct dyString *query = dyStringNew(0);
-sqlCkIl(fieldsSafe,dyStringContents(gencodeQuery->fields))
 sqlDyStringPrintf(query, "select %-s from %-s where %-s", 
-    fieldsSafe, dyStringContents(gencodeQuery->from), dyStringContents(gencodeQuery->where));
+    dyStringContents(gencodeQuery->fields), dyStringContents(gencodeQuery->from), dyStringContents(gencodeQuery->where));
 struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
 dyStringFree(&query);
 return sr;
@@ -356,15 +355,13 @@ static void geneQueryAddGenePredCols(struct track *tg,
                                      struct gencodeQuery *gencodeQuery)
 /* add genePred columns to query */
 {
-static char *genePredFields = "g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds";
-static char *genePredXFields = ", g.score, g.name2, g.cdsStartStat, g.cdsEndStat, g.exonFrames";
 gencodeQuery->isGenePredX = annotIsGenePredExt(tg);
-dyStringAppend(gencodeQuery->fields, genePredFields);
+sqlDyStringPrintf(gencodeQuery->fields, "g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds");
 gencodeQuery->genePredNumColumns = GENEPRED_NUM_COLS;
 
 if (gencodeQuery->isGenePredX)
     {
-    dyStringAppend(gencodeQuery->fields, genePredXFields);
+    sqlDyStringPrintf(gencodeQuery->fields, ", g.score, g.name2, g.cdsStartStat, g.cdsEndStat, g.exonFrames");
     gencodeQuery->genePredNumColumns = GENEPREDX_NUM_COLS;
     }
 }
@@ -373,15 +370,13 @@ static void geneQueryAddAttrsCols(struct track *tg,
                                   struct gencodeQuery *gencodeQuery)
 /* add attributes columns to query */
 {
-char *attrsBaseFields = "attrs.geneId, attrs.geneName, attrs.geneType, attrs.geneStatus, attrs.transcriptId, attrs.transcriptName, attrs.transcriptType, attrs.transcriptStatus, attrs.havanaGeneId, attrs.havanaTranscriptId, attrs.ccdsId, attrs.level, attrs.transcriptClass";
-char *attrsExtraFields = ", attrs.proteinId";
 
-dyStringAppend(gencodeQuery->fields, ", ");
-dyStringAppend(gencodeQuery->fields, attrsBaseFields);
+sqlDyStringPrintf(gencodeQuery->fields, ", ");
+sqlDyStringPrintf(gencodeQuery->fields, "attrs.geneId, attrs.geneName, attrs.geneType, attrs.geneStatus, attrs.transcriptId, attrs.transcriptName, attrs.transcriptType, attrs.transcriptStatus, attrs.havanaGeneId, attrs.havanaTranscriptId, attrs.ccdsId, attrs.level, attrs.transcriptClass");
 gencodeQuery->attrsNumColumns = WGENCODEGENCODEATTRS_NO_PROTEIN_ID_NUM_COLS;
 if (attrsHasProteinId(tg))
     {
-    dyStringAppend(gencodeQuery->fields, attrsExtraFields);
+    sqlDyStringPrintf(gencodeQuery->fields, ", attrs.proteinId");
     gencodeQuery->attrsNumColumns = WGENCODEGENCODEATTRS_NUM_COLS;
     }
 gencodeQuery->joinAttrs = TRUE;
@@ -405,7 +400,7 @@ static struct gencodeQuery *highlightQueryConstruct(struct track *tg)
  * and only getting ids */
 {
 struct gencodeQuery *gencodeQuery = gencodeQueryNew();
-dyStringAppend(gencodeQuery->fields, "g.name");
+sqlDyStringPrintf(gencodeQuery->fields, "g.name");
 
 addQueryCommon(tg, highlightBySetGet, gencodeQuery);
 return gencodeQuery;
