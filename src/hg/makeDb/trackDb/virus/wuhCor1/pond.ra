@@ -1,17 +1,18 @@
 track pond
-shortLabel Natural Selection
+shortLabel Nat. Selection (Pond)
 longLabel Natural selection analysis from Sergei Pond's research group
 visibility hide
 type bigBed 8 +
 priority 1
 compositeTrack on       
 group varRep
-spectrum on
+#spectrum on
 exonArrows off
 filter.p 0:0.00001
 filterByRange.p on
 filterLimits.p 0:0.01
 filterLabel.p p-Value range to filter
+maxItems 1000000
         
         track Negative_Selection
         parent pond
