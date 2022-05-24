@@ -13,6 +13,8 @@
 #include "hex.h"
 #include "jsHelper.h"
 #include <openssl/sha.h>
+#include "bigBed.h"
+#include "chromAlias.h"
 
 #include "interact.h"
 #include "interactUi.h"
@@ -76,7 +78,7 @@ static struct interactPlusRow *getInteractsFromFile(char *file, char *chrom, int
                                                         char *name, char *foot)
 /* Retrieve interact items at this position from big file */
 {
-struct bbiFile *bbi = bigBedFileOpen(file);
+struct bbiFile *bbi = bigBedFileOpenAlias(file, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 struct interactPlusRow *iprs = NULL;
