@@ -781,9 +781,9 @@ html ../panelApp
     filterValues.confidenceLevel 3,2,1,0
     html ../panelApp
 
-track snpCnvArrays
-shortLabel SNP/CNV Arrays
-longLabel SNP/CNV Microarray Probeset Targets
+track genotypeArrays
+shortLabel Array Probsets
+longLabel Microarray Probesets
 type bigBed 4
 visibility hide
 group varRep
@@ -791,7 +791,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Released Mar. 2022"
 compositeTrack on
 
     track genetiSureCytoCghSnp
-    parent snpCnvArrays on
+    parent genotypeArrays on
     shortLabel Agilent GenetiSure Cyto CGH+SNP
     longLabel Agilent GenetiSure Cyto CGH+SNP 4x180K 085591 20200302
     type bigBed 4
@@ -799,7 +799,7 @@ compositeTrack on
     bigDataUrl /gbdb/hg38/snpCnvArrays/agilent/hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.bb
 
     track genetiSureCytoCgh4x180
-    parent snpCnvArrays on
+    parent genotypeArrays on
     shortLabel Agilent GenetiSure Cyto CGH 4x180K
     longLabel Agilent GenetiSure Cyto CGH 4x180K 085589 20200302
     type bigBed 4
@@ -807,7 +807,7 @@ compositeTrack on
     bigDataUrl /gbdb/hg38/snpCnvArrays/agilent/hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.bb
 
     track genetiSureCytoCghSnp8x60
-    parent snpCnvArrays on
+    parent genotypeArrays on
     shortLabel Agilent GenetiSure Cyto CGH 8x60
     longLabel Agilent GenetiSure Cyto CGH 8x60K 085590 20200302
     type bigBed 4
