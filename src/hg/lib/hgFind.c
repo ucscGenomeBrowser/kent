@@ -2159,7 +2159,7 @@ for (i = 0;  i < termCount;  i++)
         break;
     }
 if (retChromName)
-    *retChromName = (chrom == NULL) ? NULL : chromAliasFindNative(chrom);
+    *retChromName = chrom;
 if (retWinStart)
     *retWinStart  = start;
 if (retWinEnd)
