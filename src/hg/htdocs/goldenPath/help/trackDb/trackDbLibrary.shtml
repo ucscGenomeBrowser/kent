@@ -4028,10 +4028,10 @@ There are no extra options that can appear on the type hic line.
     corresponding trackDb statements:<br>
     <br>
     trackDb line:
-    <pre>extraDetailsTable _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example</pre>
+    <pre>extraTableFields _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example</pre>
     the two columns from the bigBed (or external file):<br>
     <pre>_jsonField1	tableField2
-{key:val, key1: val1, key2: val2}	key|val;key1|val1;key2:val2
+{key:val, key1: val1, key2: val2}	key|val;key1|val1;key2|val2
     </pre>
     And when clicking on an item in the browser, the following would be displayed:<br>
     <table class='bedExtraTbl'>
