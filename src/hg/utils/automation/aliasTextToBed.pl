@@ -99,7 +99,7 @@ close (AS);
 
 printf STDERR "# indexNames: '%s'\n", $indexNames;
 
-open (BD, ">$opt_aliasBed") or die "can not write to $opt_aliasBed";
+open (BD, "|sort -k1,1 -k2,2n>$opt_aliasBed") or die "can not write to $opt_aliasBed";
 
 while (my $line = <FH>) {
   chomp $line;

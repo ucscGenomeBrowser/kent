@@ -25,6 +25,8 @@ bamColorMode bam
 bamGrayMode bam
 bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
+barChartBarMinWidth barChart bigBarChart
+barChartBarMinPadding barChart bigBarChart
 barChartColors barChart bigBarChart
 barChartCategoryUrl barChart bigBarChart
 barChartFacets barChart bigBarChart
@@ -271,6 +273,7 @@ linkIdInName bed bigBed
 labelFields big*
 labelOnFeature bed bigBed
 labelSeparator bigBed bigPsl bigGenePred
+logo bigWig
 lollipopField bigBed bigLolly
 lollyField bigBed bigLolly
 lollyMaxSize bigBed bigLolly
@@ -324,7 +327,7 @@ noColorTag bam
 noInherit *
 nonBedFieldsLabel bigBed
 noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl interact bigInteract
-noParentConfig bed bigBed bigLolly
+noParentConfig bed bigBed bigLolly bigWig
 notNCBI bed
 noGenomeReason *
 normalization hic

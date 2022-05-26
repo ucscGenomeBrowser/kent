@@ -343,3 +343,23 @@ done
 
 
 #########################################################################
+BA.4 and 5, based on files created by Angie (not sure how they were made)
+Max, Wed May  4 06:47:30 PDT 2022
+
+mkdir /hive/data/genomes/wuhCor1/bed/strains/2022-05-04
+cd mkdir /hive/data/genomes/wuhCor1/bed/strains/2022-05-04
+
+conda activate ~angie/miniconda3/envs/sarscov2lineages
+ln -s ~angie/github/sarscov2lineages .
+
+./sarscov2lineages/lineageVariants.params.sh -c 50 -s 0.8 -i 0.7 -v BA.5.2022-05-03.fa sarscov2lineages/NC_045512.fa
+./sarscov2lineages/lineageVariants.params.sh -c 50 -s 0.8 -i 0.7 -v BA.4.2022-05-03.fa sarscov2lineages/NC_045512.fa
+
+for lineage in BA.4 BA.5; do
+for suffix in nuc aa; do
+    sed -re 's/NC_045512\.2/NC_045512v2/' ${lineage}*_$suffix.bed > ${lineage}_$suffix.bed
+    bedToBigBed -type=bed4 ${lineage}_$suffix.bed /hive/data/genomes/wuhCor1/chrom.sizes \
+       ${lineage}_$suffix.bb
+    ln -sf `pwd`/${lineage}_$suffix.bb /gbdb/wuhCor1/strainMuts/
+done
+done

@@ -1,59 +1,18 @@
 track hmc
 shortLabel HMC
-longLabel Homologous Missense Constraint
+longLabel HMC - Homologous Missense Constraint Score on PFAM domains
 type bigWig
-compositeTrack on
 parent constraintSuper
 visibility dense
 #maxWindowToQuery 500000
 color 0,130,0
-altColor 130,0,0
 html constraintSuper
 maxWindowToDraw 10000000
 mouseOverFunction noAverage
-
-        track hmcA
-        shortLabel Mutation: A
-        longLabel HMC Score: Mutation is A
-        type bigWig
-        parent hmc on
-        visibility dense
-        bigDataUrl /gbdb/$D/hmc/a.bw
-        maxHeightPixels 128:20:8
-        viewLimits 0:2
-        viewLimitsMax 0:2
-
-        track hmcC
-        shortLabel Mutation: C
-        longLabel HMC Score: Mutation is C
-        type bigWig
-        parent hmc on
-        visibility dense
-        bigDataUrl /gbdb/$D/hmc/c.bw
-        maxHeightPixels 128:20:8
-        viewLimits 0:2
-        viewLimitsMax 0:2
-
-        track hmcG
-        shortLabel Mutation: G
-        longLabel HMC Score: Mutation is G
-        type bigWig
-        parent hmc on
-        visibility dense
-        bigDataUrl /gbdb/$D/hmc/g.bw
-        maxHeightPixels 128:20:8
-        viewLimits 0:2
-        viewLimitsMax 0:2
-
-        track hmcT
-        shortLabel Mutation: T
-        longLabel HMC Score: Mutation is T
-        type bigWig
-        parent hmc on
-        visibility dense
-        bigDataUrl /gbdb/$D/hmc/t.bw
-        maxHeightPixels 128:20:8
-        viewLimits 0:2
-        viewLimitsMax 0:2
-
-
+bigDataUrl /gbdb/$D/hmc/hmc.bw
+maxHeightPixels 128:30:8
+viewLimits 0:2
+viewLimitsMax 0:2
+yLineMark 0.8
+yLineOnOff on
+priority 2

@@ -1210,7 +1210,7 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
     {
     int x1 = ceil(baseNum * xIncr);
     int x = x1 + xOff;
-    int width = xIncr;
+    int baseWidth = xIncr;
     int base = seq->dna[baseNum];
     int preDrawIndex = x1 + preDrawZero;
     struct preDrawElement *p = &preDraw[preDrawIndex];
@@ -1274,6 +1274,16 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                 if (boxTop == h)
                     boxTop = h - 1;
 
+                if (tg->tdb->parent && startsWith("multiWig", trackDbSetting(tg->tdb->parent,"container")))
+                    {
+                    switch(numTrack)
+                        {
+                        case 3: base='a';break;
+                        case 2: base='c';break;
+                        case 1: base='g';break;
+                        case 0: base='t';break;
+                        }
+                    }
                 char string[2];
                 string[0] = toupper(base);
                 string[1] = 0;
@@ -1292,16 +1302,12 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                     {
                     if (dataValue < 0)
                         {
-                        // useful for debug, fills a box where letter goes
-                        // hvGfxBox(hvg, x, yOff+graphUpperLimit * scaleFactor, width, -height, MG_BLACK);
-                        hvGfxTextInBox(hvg, x, yOff+graphUpperLimit * scaleFactor, width - 1, height,
+                        hvGfxTextInBox(hvg, x, yOff+boxTop, baseWidth - 1, -boxHeight,
                             color, font, string);
                         }
                     else
                         {
-                        // useful for debug, fills a box where letter goes
-                        // hvGfxBox(hvg, x, yOff-height+graphUpperLimit * scaleFactor, width, height, MG_BLACK);
-                        hvGfxTextInBox(hvg, x, yOff-height+graphUpperLimit * scaleFactor, width - 1, height,
+                        hvGfxTextInBox(hvg, x, yOff+boxTop, baseWidth - 1, boxHeight,
                             color, font, string);
                         }
                     }

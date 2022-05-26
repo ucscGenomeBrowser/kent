@@ -59,7 +59,7 @@ if (f == NULL)
 /* Print out field names. */
 if (joined->filter)
     {
-    fprintf(f, "#filter: %s\n", joined->filter->string);
+    fprintf(f, "#filter: %s\n", joined->filter->string+NOSQLINJ_SIZE);
     }
 fprintf(f, "#");
 for (field = joined->fieldList; field != NULL; field = field->next)
@@ -622,8 +622,8 @@ if (filterNoIds != NULL)
     if (joined->filter == NULL)
 	joined->filter = dyStringNew(0);
     else
-	dyStringAppend(joined->filter, " AND ");
-    dyStringAppend(joined->filter, filterNoIds);
+	sqlDyStringPrintf(joined->filter, " AND ");
+    sqlDyStringPrintf(joined->filter, "%-s", filterNoIds);
     if (!isFirst)
 	{
         needUpdateFilter = TRUE;

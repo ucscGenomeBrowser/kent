@@ -4,11 +4,8 @@ longLabel REVEL Pathegenicity Score for single-base coding mutations (zoom for e
 type bigWig
 compositeTrack on
 visibility hide
-maxWindowToQuery 500000
 group phenDis
 color 150,80,200
-maxWindowToDraw 10000000
-mouseOverFunction noAverage
 dataVersion /gbdb/$D/revel/version.txt
 
         track revelA
@@ -21,6 +18,9 @@ dataVersion /gbdb/$D/revel/version.txt
         maxHeightPixels 128:20:8
         viewLimits 0:1.0
         viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
 
         track revelC
         shortLabel Mutation: C
@@ -32,6 +32,9 @@ dataVersion /gbdb/$D/revel/version.txt
         maxHeightPixels 128:20:8
         viewLimits 0:1.0
         viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
 
         track revelG
         shortLabel Mutation: G
@@ -43,6 +46,9 @@ dataVersion /gbdb/$D/revel/version.txt
         maxHeightPixels 128:20:8
         viewLimits 0:1.0
         viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
 
         track revelT
         shortLabel Mutation: T
@@ -54,4 +60,18 @@ dataVersion /gbdb/$D/revel/version.txt
         maxHeightPixels 128:20:8
         viewLimits 0:1.0
         viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+
+        track overlaps
+        shortLabel Overlaps
+        longLabel Revel: Positions with >2 scores due to overlapping transcripts (mouseover for details)
+        type bigBed 8 +
+        parent revel on
+        visibility dense
+        bigDataUrl /gbdb/$D/revel/overlap.bb
+        url https://www.ensembl.org/homo_sapiens/Transcript/Summary?t=$<transcriptId>&db=core
+        urlLabel Link to Ensembl Transcript View
+        mouseOver REVEL score=${revelScore} for transcripts: ${transcriptId}
 

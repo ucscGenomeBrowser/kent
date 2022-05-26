@@ -57,6 +57,17 @@ Full commands with parameters used were:
 </code></pre>
 
 <p>
+The above process does not add chain ids or scores.  The UCSC utilities
+<code>chainMergeSort</code> and <code>chainScore</code> are used to update the
+chains:
+
+<pre><code>
+    chainMergeSort out.chain | chainScore stdin chm13v2.0.2bit hg38.2bit chm13v2.0-hg38.chain
+    chainMergeSort out_inverted.chain | chainScore stdin hg38.2bit chm13v2.0.2bit hg38-chm13v2.0.chain
+</code></pre>
+</p>
+
+<p>
 <a target="_blank" href="https://mrvollger.github.io/rustybam/#align-once">Rustybam trim-paf</a>
 uses dynamic programming and the CIGAR string to find an optimal
 splitting point between overlapping alignments in the query sequence. It

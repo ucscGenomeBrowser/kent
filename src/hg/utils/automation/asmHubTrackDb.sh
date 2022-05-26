@@ -186,8 +186,9 @@ fi	#	if [ "${gapOverlapCount}" -gt 0 -o "${tanDupCount}" -gt 0 ]
 
 # see if there are repeatMasker bb files
 export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb 2> /dev/null | wc -l) || true`
+export newRmsk=`(ls $buildDir/trackData/repeatMasker/${asmId}.rmsk.align.bb $buildDir/trackData/repeatMasker/${asmId}.rmsk.bb 2> /dev/null | wc -l) || true`
 
-if [ "${rmskCount}" -gt 0 ]; then
+if [ "${newRmsk}" -gt 0 -o "${rmskCount}" -gt 0 ]; then
 
 if [ ! -s "$buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.gz" ]; then
   printf "ERROR: can not find trackData/repeatMasker/$asmId.sorted.fa.out.gz\n" 1>&2
@@ -196,6 +197,37 @@ fi
 
 rm -f $buildDir/$asmId.repeatMasker.out.gz
 ln -s trackData/repeatMasker/$asmId.sorted.fa.out.gz $buildDir/$asmId.repeatMasker.out.gz
+if [ -s "$buildDir/trackData/repeatMasker/versionInfo.txt" ]; then
+   rm -f "$buildDir/${asmId}.repeatMasker.version.txt"
+   ln -s trackData/repeatMasker/versionInfo.txt "$buildDir/${asmId}.repeatMasker.version.txt"
+fi
+
+if [ "${newRmsk}" -gt 0 ]; then
+  rm -f $buildDir/bbi/${asmId}.rmsk.align.bb
+  rm -f $buildDir/bbi/${asmId}.rmsk.bb
+  rm -f $buildDir/${asmId}.fa.align.tsv.gz
+  rm -f $buildDir/${asmId}.fa.join.tsv.gz
+  if [ -s "$buildDir/bbi/${asmId}.rmsk.align.bb" ]; then
+    ln -s ../trackData/repeatMasker/${asmId}.rmsk.align.bb $buildDir/bbi/${asmId}.rmsk.align.bb
+    ln -s trackData/repeatMasker/${asmId}.fa.align.tsv.gz $buildDir/${asmId}.fa.align.tsv.gz
+  fi
+  ln -s ../trackData/repeatMasker/${asmId}.rmsk.bb $buildDir/bbi/${asmId}.rmsk.bb
+  ln -s trackData/repeatMasker/${asmId}.sorted.fa.join.tsv.gz $buildDir/${asmId}.fa.join.tsv.gz
+
+printf "track repeatMasker
+shortLabel RepeatMasker
+longLabel RepeatMasker Repetitive Elements
+type bigRmsk 9 +
+visibility pack
+group varRep
+bigDataUrl bbi/%s.rmsk.bb\n" "${asmId}"
+if [ -s "$buildDir/bbi/${asmId}.rmsk.align.bb" ]; then
+printf "xrefDataUrl bbi/%s.rmsk.align.bb\n" "${asmId}"
+fi
+printf "html html/%s.repeatMasker\n\n" "${asmId}"
+$scriptDir/asmHubRmskJoinAlign.pl $asmId $buildDir > $buildDir/html/$asmId.repeatMasker.html
+
+else	#	if [ "${newRmsk}" -eq 2 ]; then
 
 printf "track repeatMasker
 compositeTrack on
@@ -209,7 +241,7 @@ maxWindowToDraw 10000000
 spectrum on
 html html/%s.repeatMasker\n\n" "${asmId}"
 $scriptDir/asmHubRmsk.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt > $buildDir/html/$asmId.repeatMasker.html
-fi      #       if [ "${rmskCount}" -gt 0 ]; then
+
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.SINE.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.SINE.bb
@@ -319,6 +351,9 @@ printf "    track repeatMaskerOther
     bigDataUrl bbi/%s.rmsk.Other.bb\n\n" "${asmId}"
 fi
 
+fi	#	if [ "${newRmsk}" -eq 2 ]; then
+fi      #       if [ "${newRmsk}" -eq 2 -o "${rmskCount}" -gt 0 ]; then
+
 if [ -s ${buildDir}/trackData/simpleRepeat/simpleRepeat.bb ]; then
 rm -f $buildDir/bbi/${asmId}.simpleRepeat.bb
 ln -s ../trackData/simpleRepeat/simpleRepeat.bb $buildDir/bbi/${asmId}.simpleRepeat.bb
@@ -347,6 +382,12 @@ rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeq.ixx
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.bb $buildDir/bbi/${asmId}.ncbiRefSeq.bb
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ix $buildDir/ixIxx/${asmId}.ncbiRefSeq.ix
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ixx $buildDir/ixIxx/${asmId}.ncbiRefSeq.ixx
+if [ -s ${buildDir}/trackData/ncbiRefSeq/${asmId}*.ncbiRefSeq.gtf.gz ]; then
+    mkdir -p $buildDir/genes
+    rm -f ${buildDir}/genes/${asmId}.ncbiRefSeq.gtf.gz
+    gtfFile=`ls ${buildDir}/trackData/ncbiRefSeq/${asmId}*.ncbiRefSeq.gtf.gz|tail -1|sed -e 's#.*/##;'`
+    ln -s ../trackData/ncbiRefSeq/${gtfFile} ${buildDir}/genes/${asmId}.ncbiRefSeq.gtf.gz
+fi
 
   export dataVersion="html/ncbiRefSeqVersion.txt"
   if [ -s ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt ]; then

@@ -217,6 +217,9 @@ time (bedToBigBed -type=bed9+15 -tab -as=genomes.as -extraIndex=name,rsId,_displ
 # Max Tue Apr  5 04:14:40 PDT 2022 - adding mutation constraint subtrack
 cd /hive/data/genomes/hg38/bed/gnomad/constraint
 # Downloaded BED file from https://www.biorxiv.org/content/10.1101/2022.03.20.485034v1.supplementary-material
+# got chrX scores from konrad.j.karczewski@gmail.com because they feel unsure about them
+cat Supplementary_Data_2.bed constraint_z_genome_1kb_chrx.bed > mutConstraint.bed
+bedSort mutConstraint.bed mutConstraint.bed
 bedGraphToBigWig *.bed ../../../chrom.sizes mutConstraint.bw
 
 

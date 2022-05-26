@@ -29,13 +29,18 @@ the reference below)
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-There are four subtracks for this track: one for every nucleotide showing
+There are five subtracks for this track:
+<ul>
+<li>
+<p>Four subtracks, one for every nucleotide showing
 a score for the mutation represented by a mutation from the reference to that
 nucleotide. All subtracks show the REVEL ensemble score on mouseover, representing
-each of the possible &#126;9 billion SNVs in the genome. The score is an aggregation 
-of the outputs of the 13 tools.  
+each of the possible &#126;9 billion SNVs in the genome. In rare cases, two scores
+are output for a genome position. This happens when there are two transcripts with
+different splicing patterns and since some input scores for REVEL take into account
+the sequence context, the same mutation can get two different scores. In these cases,
+only the maximum score is shown in the four per-nucleotide subtracks.
 </p>
-
 <p>
 For single nucleotide variants (SNV), at every
 genome position, there are three values per position, one for every possible
@@ -44,6 +49,28 @@ the reference allele, e.g. A to A, is always set to zero, "0.0". REVEL only
 takes into account amino acid changes, so a nucleotide change that results in no
 amino acid change (synonymous) also receives the score "0.0".
 </p>
+
+<li>
+<p>One subtrack for duplicated scores. For the rare cases where multiple scores are possible
+for a position, this track contains &gt; 2 graphical features for each affected
+genome position.  Each feature is labeled with the mutation (A, C, T or G).
+The transcript ID and resulting score for this transcript is shown when
+hovering the mouse over the feature. For the large majority of the genome, 
+this subtrack has no features, because REVEL output only a single score 
+per nucleotide.
+</p>
+<p>
+Note that in most diagnostic assays, variants are called using WGS
+pipelines, not RNA-seq. As a result, variants are originally located on the
+genome, not on transcripts, and a choice of the transcript is possibly made by
+a variant calling software using a heuristic. In addition, clinically, in the
+field, some transcripts have been agreed as more relevant for a disease, e.g.
+because only certain transcripts may be expressed in the relevant tissue. So
+the choice of the most relevant transcript may be a question of manual
+curation standards rather than a result of the assay.
+</p>
+</ul>
+
 <p>
 When using this track, zoom in until you can see every basepair at the
 top of the display. Otherwise, there are several nucleotides per pixel under 

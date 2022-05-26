@@ -1,6 +1,6 @@
 track constraintSuper
 shortLabel Constraint scores
-longLabel Constraint scores (how should we call these?)
+longLabel Human constraint scores
 superTrack on hide
 type bed
 visibility hide
@@ -11,4 +11,5 @@ color 100,0,160
 include jarvis.ra
 # HMC scores
 include hmc.ra
-
+# MTR scores
+include mtr.ra

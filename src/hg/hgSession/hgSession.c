@@ -814,7 +814,6 @@ struct dyString *dy = dyStringNew(16 * 1024);
 char **row;
 char *firstUse = NULL;
 int useCount = INITIAL_USE_COUNT;
-char firstUseBuf[32];
 char *settings = "";
 
 boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
@@ -832,8 +831,7 @@ else
 sr = sqlGetResult(conn, dy->string);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    safef(firstUseBuf, sizeof(firstUseBuf), "'%s'", row[0]);
-    firstUse = firstUseBuf;
+    firstUse = cloneString(row[0]);
     useCount = atoi(row[1]) + 1;
     if (gotSettings)
         {
@@ -898,6 +896,9 @@ if (userName == NULL)
     return "Unable to save session -- please log in and try again.";
 struct dyString *dyMessage = dyStringNew(2048);
 char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
+if (isEmpty(sessionName))
+    return "Error: Unable to save a session without a name.  Please add one and try again.";
+
 char *encSessionName = cgiEncodeFull(sessionName);
 boolean shareSession = cartBoolean(cart, hgsNewSessionShare);
 char *encUserName = cgiEncodeFull(userName);
@@ -1673,7 +1674,10 @@ char *doReSaveSession(char *userName, char *actionVar)
 if (userName == NULL)
     return "Unable to re-save session -- please log in and try again.";
 struct sqlConnection *conn = hConnectCentral();
-char *sessionName = cloneString(cartString(cart, hgsNewSessionName));
+char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
+if (isEmpty(sessionName))
+    return "Error: Unable to save a session without a name.  Please add one and try again.";
+
 char *encUserName = cgiEncodeFull(userName);
 char *encSessionName = cgiEncodeFull(sessionName);
 int sharingLevel = getSharingLevel(conn, encUserName, encSessionName);

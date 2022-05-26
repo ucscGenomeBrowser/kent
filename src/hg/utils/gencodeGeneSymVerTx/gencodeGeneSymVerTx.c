@@ -410,9 +410,10 @@ for (v = versionList; v != NULL; v = v->next)
     struct gene *gene;
     for (gene = v->geneList; gene != NULL; gene = gene->next)
         {
-	struct genePred *gp = hashFindVal(v->gpHash, gene->bestTx->name);
-	if (gp != NULL)
+	struct hashEl *hel;
+	for (hel = hashLookup(v->gpHash, gene->bestTx->name); hel!=NULL; hel = hashLookupNext(hel))
 	    {
+	    struct genePred *gp = hel->val;
 	    fprintf(f, "%s\t%s\t%s\t%s\t",   
 		gene->name, gene->symbol, v->name, v->ucscDb);
 	    /* Print scalar bed fields. */

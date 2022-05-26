@@ -34586,18 +34586,18 @@ miRNA
 
 ##############################################################################
 # Add Revel track, Max, Thu Apr 15 03:33:49 PDT 2021
-cd /hive/data/genomes/hg19/bed/revel
-aria2c https://rothsj06.u.hpc.mssm.edu/revel_grch38_all_chromosomes.csv.zip
-unzip revel_grch38_all_chromosomes.csv.zip
-# make sure that no weird chroms and no weird multi-nucleotide changes
-cat revel_grch38_all_chromosomes.csv  | tr ',' '\t' | cut -f5 | grep -v alt | awk '{print length($1)}' | uniq > lens.tmp &
-cut -d, revel_grch38_all_chromosomes.csv -f1 | uniq | sort | uniq -c > chroms.tmp &
-pigz revel_grch38_all_chromosomes.csv
-time python revelToWig.py revel_grch38_all_chromosomes.csv.gz hg19
+# UPDATE: Adding overlap track after request from NHS, Max, Mon May 23 07:50:02 PDT 2022
+# There was a new REVEL release with transcript IDs! Obviously no one told us
+wget https://rothsj06.u.hpc.mssm.edu/revel-v1.3_all_chromosomes.zip
+unzip *.zip
+python ~/kent/src/hg/makeDb/revel/revelToWig.py revel_with_transcript_ids hg19 
 wigToBigWig t.wig ../../chrom.sizes t.bw &
 wigToBigWig c.wig ../../chrom.sizes c.bw  &
 wigToBigWig a.wig ../../chrom.sizes a.bw &
 wigToBigWig g.wig ../../chrom.sizes g.bw &
+bedSort overlap.bed overlap.bed
+bedToBigBed overlap.bed -as=~/kent/src/hg/makeDb/revel/revel.as ../../../chrom.sizes overlap.bb -tab -type=bed8+
+
 ##############################################################################
 # LASTZ human/hg19 Gorilla/gorGor6 - (DONE - 2021-06-28 - Gerardo)
     mkdir /hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28/
@@ -34829,10 +34829,7 @@ bedGraphToBigWig jarvis.bed ../chrom.sizes jarvis.bw
 # HMC constraint scores, Max Fri Apr  8 08:30:49 PDT 2022
 # downloaded V2 from https://zenodo.org/record/6392153#.Yk8KeflBzIU)
 python ~/kent/src/hg/makeDb/scripts/hmc/hmcToWig.py hg19
-wigToBigWig a.bedGraph ../../chrom.sizes a.bw &
-wigToBigWig c.bedGraph ../../chrom.sizes c.bw &
-wigToBigWig g.bedGraph ../../chrom.sizes g.bw &
-wigToBigWig t.bedGraph ../../chrom.sizes t.bw &
+bedGraphToBigWig hmc.wig ../../chrom.sizes hmc.bw
 
 #############################################################################
 # ReMap refs #28960 (2022-04-12 Gerardo)
@@ -34852,3 +34849,18 @@ cd ~/kent/src/hg/makeDb/trackDb
 curl https://remap.univ-amu.fr/storage/public/hubReMap2022/hg19/trackDb.txt > human/hg19/reMap.ra
 vi human/hg19/reMap.ra
 vi human/hg19/trackDb.ra
+
+#############################################################################
+# MTR scores refs #29152 (2022-05-9 Lou)
+mkdir /hive/data/outside/mtr
+cd /hive/data/outside/mtr
+wget http://biosig.unimelb.edu.au/mtr-viewer/static/mtrtable_2.0_ens95.txt.gz
+gunzip mtrtable_2.0_ens95.txt.gz
+chromToUcsc --get hg19
+chromToUcsc -i mtrtable_2.0_ens95.txt -i mtrUcsc.txt -a hg19.chromAlias.tsv
+~/kent/src/hg/makeDb/scripts/mtr/buildMTRbedTrack.py
+~/kent/src/hg/makeDb/scripts/mtr/buildMTRwigTracks.py
+fetchChromSizes hg19 > chrom.sizes
+bedToBigBed -type=bed9+10 -tab -as=mtr.as mtr2.bed chrom.sizes mtr2.bb
+ln -s /hive/data/outside/mtr2.bb /gbdb/hg19/bbi/
+ln -s /hive/data/outside/*.bw /gbdb/hg19/bbi/

@@ -2,10 +2,10 @@
 
 track variantMuts
 shortLabel Variants of Concern
-longLabel  Mutations in Variants of Concern (VOC), Interest (VOI), or Under Monitoring (VUM) from GISAID sequences
+longLabel  Mutations in Variants of Concern (VOC), Interest (VOI), or Under Monitoring (VUM) (configure to show more lineages)
 compositeTrack on
 subGroup1 mutation Mutations AA=Amino_Acid NUC=Nucleotide
-subGroup2 variant Variants A_B117=Alpha B_B1351=Beta C_P1=Gamma D_B16172=Delta L_C37=Lambda M_B1621=Mu E_B1429=Epsilon E_B1525=Eta I_B1526=Iota K_B16171=Kappa J_B11529=Omicron
+subGroup2 variant Variants A_B117=Alpha B_B1351=Beta C_P1=Gamma D_B16172=Delta L_C37=Lambda M_B1621=Mu E_B1429=Epsilon E_B1525=Eta I_B1526=Iota K_B16171=Kappa J_B11529=Omicron J_BA4=Omicron_BA.4 J_BA5=Omicron_BA.5
 subGroup3 designation Designation VOC=VOC VOI=VOI VUM=VUM
 sortOrder designation=+ variant=+ mutation=+
 bedNameLabel Mutation
@@ -14,9 +14,9 @@ darkerLabels on
 noScoreFilter on
 group varRep
 allButtonPair on
-dataVersion Sequences downloaded September 10, 2021, update on Dec 2, 2021
+dataVersion Sequences downloaded September 10, 2021, update on Dec 2, 2021 and May 4, 2022
 visibility dense
-pennantIcon Updated red ../goldenPath/newsarch.html#120321 "Track updated Dec 3, 2021"
+pennantIcon Updated red ../goldenPath/newsarch.html "Omicron BA.4 and BA.5 added May, 2022"
 html variantMuts
 
 # Amino acid tracks
@@ -142,6 +142,28 @@ html variantMuts
         color 219,40,35
         priority 11
 
+        track variantAaMuts_BA_4
+        parent variantMuts on
+        subGroups variant=J_BA4 mutation=AA designation=VOC
+        shortLabel Omicron BA.4 AA Muts 
+        longLabel Omicron BA.4 amino acid mutations from 573 GISAID sequences (May 4, 2022)
+        url https://outbreak.info/situation-reports?pango=BA.4
+        urlLabel BA.4 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.4_aa.bb
+        color 219,40,35
+        priority 12
+
+        track variantAaMuts_BA_5
+        parent variantMuts on
+        subGroups variant=J_BA5 mutation=AA designation=VOC
+        shortLabel Omicron BA.5 AA Muts 
+        longLabel Omicron BA.5 amino acid mutations from 287 GISAID sequences (May 4, 2022)
+        url https://outbreak.info/situation-reports?pango=BA.5
+        urlLabel BA.5 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.5_aa.bb
+        color 219,40,35
+        priority 13
+
 # Nucleotide tracks
 
         track variantNucMutsV2_B_1_1_7
@@ -153,7 +175,7 @@ html variantMuts
         url https://outbreak.info/situation-reports?pango=B.1.1.7
         urlLabel B.1.1.7 Situation Report at outbreak.info
         color 63,76,203
-        priority 11
+        priority 111
 
         track variantNucMutsV2_B_1_351
         parent variantMuts off
@@ -164,7 +186,7 @@ html variantMuts
         url https://outbreak.info/situation-reports?pango=B.1.351
         urlLabel B.1.351 Situation Report at outbreak.info
         color 73,42,181
-        priority 12
+        priority 112
 
         track variantNucMutsV2_P_1
         parent variantMuts off
@@ -175,7 +197,7 @@ html variantMuts
         url https://outbreak.info/situation-reports?pango=P.1
         urlLabel P.1 Situation Report at outbreak.info
         color 66,113,206
-        priority 13
+        priority 113
 
         track variantNucMutsV2_B_1_617_2
         parent variantMuts off
@@ -186,7 +208,7 @@ html variantMuts
         url https://outbreak.info/situation-reports?pango=B.1.617.2
         urlLabel B.1.617.2 Situation Report at outbreak.info
         color 76,143,192
-        priority 14
+        priority 114
 
         track variantNucMutsV2_C_37
         parent variantMuts off
@@ -197,7 +219,7 @@ html variantMuts
         url https://outbreak.info/situation-reports?pango=C.37
         urlLabel C.37 Situation Report at outbreak.info
         color 230,128,51
-        priority 15
+        priority 115
 
         track variantNucMutsV2_B_1_621
         parent variantMuts off
@@ -208,7 +230,7 @@ html variantMuts
         url https://outbreak.info/situation-reports?pango=B.1.621
         urlLabel B.1.621 Situation Report at outbreak.info
         color 226,86,43
-        priority 16
+        priority 116
 
         track variantNucMutsV2_B_1_429
         parent variantMuts off
@@ -219,7 +241,7 @@ html variantMuts
         url https://outbreak.info/situation-reports?pango=B.1.429
         urlLabel B.1.429 Situation Report at outbreak.info
         color 160,190,89
-        priority 17
+        priority 117
 
         track variantNucMutsV2_B_1_525
         parent variantMuts off
@@ -230,7 +252,7 @@ html variantMuts
         url https://outbreak.info/situation-reports?pango=B.1.525
         urlLabel B.1.525 Situation Report at outbreak.info
         color 187,188,73
-        priority 18
+        priority 118
 
         track variantNucMutsV2_B_1_526
         parent variantMuts off
@@ -241,7 +263,7 @@ html variantMuts
         url https://outbreak.info/situation-reports?pango=B.1.526
         urlLabel B.1.526 Situation Report at outbreak.info
         color 225,159,58
-        priority 19
+        priority 119
 
         track variantNucMutsV2_B_1_617_1
         parent variantMuts off
@@ -252,10 +274,10 @@ html variantMuts
         url https://outbreak.info/situation-reports?pango=B.1.617.1
         urlLabel B.1.617.1 Situation Report at outbreak.info
         color 133,186,111
-        priority 20
+        priority 120
 
         track variantNucMuts_B_1_1_529
-        parent variantMuts off
+        parent variantMuts on
         subGroups variant=J_B11529 mutation=NUC designation=VOC
         shortLabel Omicron Nuc Muts 
         longLabel Omicron VOC (B.1.1.529 SA Nov-2021) nucleotide mutations identifed from GISAID sequences (Nov 2021)
@@ -263,4 +285,26 @@ html variantMuts
         urlLabel B.1.1.529 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_nuc.bb
         color 219,40,35
-        priority 21
+        priority 121
+
+        track variantNucMuts_BA_4
+        parent variantMuts on
+        subGroups variant=J_BA4 mutation=NUC designation=VOC
+        shortLabel Omicron BA.4 Nuc Muts 
+        longLabel Omicron VOC (BA.4) nucleotide mutations identifed from 573 GISAID sequences (May 2022)
+        url https://outbreak.info/situation-reports?pango=BA.4
+        urlLabel BA.4 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.4_nuc.bb
+        color 219,40,35
+        priority 122
+
+        track variantNucMuts_BA_5
+        parent variantMuts on
+        subGroups variant=J_BA5 mutation=NUC designation=VOC
+        shortLabel Omicron BA.5 Nuc Muts 
+        longLabel Omicron VOC (BA.5) nucleotide mutations identifed from 287 GISAID sequences (May 2022)
+        url https://outbreak.info/situation-reports?pango=BA.5
+        urlLabel BA.5 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.5_nuc.bb
+        color 219,40,35
+        priority 123

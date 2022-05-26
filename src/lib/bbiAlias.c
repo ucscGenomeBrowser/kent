@@ -23,6 +23,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	}
     }
 
+slReverse(&list);
 return list;
 }
 

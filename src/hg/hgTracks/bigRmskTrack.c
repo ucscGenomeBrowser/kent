@@ -564,7 +564,9 @@ if ( classHashBR == NULL )
         AllocVar(cr);
         cr->className = rptClassNames[i];
         cr->layoutLevel = i;
-        cr->color = rmskJoinedClassColors[i];
+        unsigned int colorInt = rmskJoinedClassColors[i];
+        cr->color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8)
+& 0xff),((colorInt >> 0) & 0xff));
         hashAdd(classHashBR, rptClasses[i], cr);
         }
     }
@@ -690,7 +692,7 @@ for (cr = tg->items; cr != NULL; cr = cr->next)
     int idx = 0;
     for (idx = 0; idx < cr->blockCount; idx++)
         {
-        if (cr->blockRelStarts[idx] > 0)
+        if (cr->blockRelStarts[idx] >= 0)
             {
             int blockStart = cr->chromStart + cr->blockRelStarts[idx];
             int blockEnd =
@@ -734,7 +736,7 @@ for (cr = tg->items; cr != NULL; cr = cr->next)
     int idx = 0;
     for (idx = 0; idx < cr->blockCount; idx++)
         {
-        if (cr->blockRelStarts[idx] > 0)
+        if (cr->blockRelStarts[idx] >= 0)
             {
             int blockStart = cr->chromStart + cr->blockRelStarts[idx];
             int blockEnd = cr->chromStart + cr->blockRelStarts[idx] +

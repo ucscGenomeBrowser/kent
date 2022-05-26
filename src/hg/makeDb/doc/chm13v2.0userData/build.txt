@@ -10,7 +10,7 @@ T2T CHM13 track spreadsheet
 
 staging URL
    https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
-   https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?hubUrl=https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=hub_24696_GCA_009914755.4
+   https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?hubUrl=https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=GCA_009914755.4
 
    https://hgwdev.gi.ucsc.edu/h/GCA_009914755.4 [doesn't work]
 
@@ -368,6 +368,12 @@ This makes page independent of location installed.
     /usr/local/ucscTools/bedToBigBed -tab -as=bigRmskAlignBed.as -type=bed3+14  combo.align.tsv.sorted chrom.sizes chm13v2.0_RMSK_ALIGN.bb
     /usr/local/ucscTools/bedToBigBed -tab -as=bigRmskBed.as -type=bed9+5 combo.join.tsv.sorted chrom.sizes chm13v2.0_RMSK.bb
 
+2022-05-23
+# due to the number of problems with the bigRmsk code, we are temporarily converting it to
+# a bigBed and added colors.
+
+  cd /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/trackData/t2tRepeatMasker
+  bigBedToBed chm13v2.0_rmsk.align.bb stdout |  awk -f addItemRgb.awk >chm13v2.0_rmsk.align.rgb.bed
 
 
 ================================================================

@@ -1,0 +1,66 @@
+# make chains out of the PAF files from Erik Garrison
+
+mkdir /cluster/data/hg38/bed/hprcChain
+
+# get PAF files from Erik Garrison <erik.garrison@gmail.com>
+wget "https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/scratch/2021_11_16_pggb_wgg.88/untangle/pggb.wgg.88.all.vs.chm13.untangle-m10000-s0-j0.paf.gz"
+wget https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/scratch/2021_11_16_pggb_wgg.88/untangle/pggb.wgg.88.all.vs.grch38.untangle-m10000-s0-j0.paf.gz
+
+
+gunzip *.gz
+paf2chain -i pggb.wgg.88.all.vs.chm13.untangle-m10000-s0-j0.paf > pggb.wgg.88.all.vs.chm13.untangle-m10000-s0-j0.chain
+paf2chain -i pggb.wgg.88.all.vs.grch38.untangle-m10000-s0-j0.paf > pggb.wgg.88.all.vs.grch38.untangle-m10000-s0-j0.chain
+
+cat << __EOF__ > makeBigChain
+source=../../$1
+reference=$2
+other=$3
+twoBitDir=../../2bits
+other2bit=`echo $other | tr '#' '.'`.2bit
+
+mkdir -p $reference/$other
+cd $reference/$other
+echo cd $reference/$other
+awk -v other=$other '/^chain/ {if (index($8,other)) doPrint=1; else doPrint=0;} {if (doPrint) print} ' $source | sed "s/$other#//" | sed "s/$reference#//" > $other.chain
+chainToAxt $other.chain $twoBitDir/$reference.2bit $twoBitDir/$other2bit /tmp/$reference.$other.axt
+axtChain -linearGap=loose /tmp/$reference.$other.axt $twoBitDir/$reference.2bit $twoBitDir/$other2bit $other.re.chain
+rm /tmp/$reference.$other.axt
+hgLoadChain -noBin -test $reference bigChain $other.re.chain
+sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > $other.re.bigChain
+bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab $other.re.bigChain ../../sizes/$reference.chrom.sizes bigChain.bb
+awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n > bigChain.bigLink
+bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab bigChain.bigLink ../../sizes/$reference.chrom.sizes bigChain.link.bb 
+__EOF__
+
+chmod +x makeBigChain
+
+for ass in chm13 grch38
+do
+source=pggb.wgg.88.all.vs.$ass.untangle-m10000-s0-j0.chain 
+#awk '/^chain/ {print $8}' $source | sed 's/#.*//' | sort -u > $ass.other.txt
+awk '/^chain/ {print $8}' $source | tr '#' ' ' | awk '{if (NF == 2) {print $1} else {print $1 "#" $2}}' | sort -u >   $ass.other.txt
+for other in `cat $ass.other.txt`
+do
+echo makeBigChain $source $ass $other
+done
+done > jobs
+
+para create jobs
+
+cd grch38
+for i in *; do  for j in $i/*link.bb; do  ln -s `pwd`/$j /gbdb/hg38/hprcChain/$i.link.bb; done;done
+for i in *; do  for j in $i/*n.bb; do  ln -s `pwd`/$j /gbdb/hg38/hprcChain/$i.bb; done;done
+
+
+cat << __EOF__ > trackDb.header.ra
+track hprcChain
+compositeTrack on
+shortLabel HPRC Chains
+longLabel HPRC Chains
+type bed 3
+__EOF__
+
+cp trackDb.header.ra $HOME/kent/src/hg/makeDb/trackDb/human/hg38/hprcChain.ra
+
+for i in *; do echo track "$i"Chain; echo "type bigChain"; echo "bigDataUrl /gbdb/hg38/hprcChain/$i.bb";  echo "linkDataUrl /gbdb/hg38/hprcChain/$i.link.bb"; echo shortLabel $i;echo longLabel $i; echo subTrack hprcChain; echo ""; done >> $HOME/kent/src/hg/makeDb/trackDb/human/hg38/hprcChain.ra
+

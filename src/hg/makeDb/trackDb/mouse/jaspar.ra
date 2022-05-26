@@ -5,7 +5,6 @@ longLabel JASPAR Transcription Factor Binding Site Database
 group regulation
 visibility hide
 type bigBed 6 .
-pennantIcon New red ../goldenPath/newsarch.html#010522 "Released Jan. 6, 2022"
 url http://jaspar.genereg.net/search?q=$$&collection=all&tax_group=all&tax_id=all&type=all&class=all&family=all&version=all
 urlLabel View on JASPAR:
 filter.score 400

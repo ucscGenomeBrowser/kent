@@ -8,6 +8,7 @@ group regulation
 noScoreFilter on
 pennantIcon New red ../goldenPath/newsarch.html#042622 "Released Apr. 26, 2022"
 compositeTrack on
+noParentConfig on
 
     track ReMapTFs
     parent ReMap on

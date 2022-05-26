@@ -35,9 +35,9 @@ printf "<h1>Genome assembly search and request</h1>\n"
 printf "<h2>What is the Genome Browser?</h2>\n"
 
 printf "<div id='canNotFindDiv' class='pullDownMenu'>\n"
-printf "  <span id='canNotFindAnchor'>Can't find your assembly? &#9660;</span'>\n"
+printf "  <span id='canNotFindAnchor'>Can't find your assembly? &#9660;</span>\n"
 printf "  <div class='pullDownMenuContent'>\n"
-printf "   <button id='specificRequest' type='button' onclick='gar.openModal(this)' name='specific'><label>%s Press here to request an unlisted assembly %s</label></button>\n", "${rightHandPointer}" "${leftHandPointer}"
+printf "   <label><button id='specificRequest' type='button' onclick='gar.openModal(this)' name='specific'>%s Press here to request an unlisted assembly %s</button></label>\n", "${rightHandPointer}" "${leftHandPointer}"
 printf "  </div>\n"
 printf "</div>\n"
 
@@ -63,8 +63,9 @@ pages.
 immediate viewing, and assemblies that are not currently available but can
 be requested.
 </p>
-<p>We are working on adding a search function to this page. Until then, please use the &quot;find&quot; feature of your Browser (commonly CTRL+F).
-<button onclick='gar.showAll(true)'>(turn on all items for search)</button>
+<p>We are working on adding a search function to this page.  To search this page:
+<button onclick='gar.showAll(true)'>Click this to turn on all items for search.</button>
+Use the &quot;find&quot; feature of your Browser (commonly CTRL+F).
 </p>
 <p>After searching the page, if you do not find the assembly you are
 interested in, you may request it using the <em>&quot;Can't find your assembly?&quot;</em>

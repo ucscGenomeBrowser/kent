@@ -680,6 +680,7 @@ while ((ra = raNextRecord(lf)) != NULL)
 	}
     el->settingsHash = ra;
     hashAdd(ra, "hubName", hub->shortLabel);
+    el->chromAuthority = hashFindVal(ra, "chromAuthority");
     }
 
 /* Clean up and go home. */
@@ -1273,8 +1274,8 @@ if (trackHubDatabase(db))
     struct trackHubGenome *genome = trackHubGetGenome(db);
     tdbList = trackHubTracksForGenome(genome->trackHub, genome, NULL);
     }
-else
-    tdbList = hubCollectTracks(db, NULL);
+
+tdbList = slCat(tdbList, hubCollectTracks(db, NULL));
 
 findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
 }

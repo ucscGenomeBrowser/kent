@@ -25,7 +25,10 @@ index.</p>
 <p>
 See <a href="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format" 
 target="_blank">this wiki page</a> for help in selecting the graphing track data format that is most
-appropriate for your type of data.</p>
+appropriate for your type of data. To see an example of turning a text-based bedDetail custom track
+into the <code>bigBed</code> format, see this
+<a href="https://genome-blog.soe.ucsc.edu/blog/2021/08/03/how-make-a-bigbed-file-part-1/"
+target="_blank">How to make a bigBed file</a> blog post.</p>
 <p>
 Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory:
 approximately 25% more RAM than the uncompressed BED input file.</p>
@@ -288,7 +291,11 @@ improper input.</p>
   information. For example, if you run the <code>bedToBigBed</code> utility with the option 
   <code>-extraIndex=name</code>, you will be able to search on the &quot;name&quot; field by adding 
   the line <code>searchIndex name</code> to the stanza about your bigBed in the hub's 
-  <em>trackDb.txt</em> file.</li>
+  <em>trackDb.txt</em> file. While searchIndex expects a search string with an exact match in the
+  index, another setting for Track Hubs, <a href="trackDb/trackDbHub.html#searchTrix">searchTrix</a>
+  allows for a fast look-up of free text associated with a list of identifiers, when a
+  <code>searchIndex</code> has also been created. See a <a href="hubQuickStartSearch.html">Searchable
+  Track Hub Quick Start Guide</a> here.</li>
   <li>
   Extra fields can contain text for labels or for display with mouseover (if the BED
   &quot;name&quot; field is needed for something that is not the label). See the trackDb settings 

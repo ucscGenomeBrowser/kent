@@ -453,7 +453,9 @@ for (td = tdbList; td != NULL; td = td->next)
         if (htmlName == NULL)
             htmlName = td->track;
 	safef(fileName, sizeof(fileName), "%s/%s.html", dirName, htmlName);
-	if (fileExists(fileName))
+	if (!fileExists(fileName))
+            safef(fileName, sizeof(fileName), "%s/%s", dirName, htmlName);
+	if (fileExists(fileName) && !isDirectory(fileName))
             {
 	    td->html = readHtmlRecursive(fileName, database, td);
             // Check for note ASCII characters at higher levels of verboseness.

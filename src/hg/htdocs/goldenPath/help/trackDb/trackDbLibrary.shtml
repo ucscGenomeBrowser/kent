@@ -307,9 +307,9 @@
     The path of this file name is relative to the path of the trackDb file, or it
     can be a full URL. It is also possible to have the &quot.html&quot; suffix implied,
     for instance just have <code>html explainFile</code>. To further simplify trackDb,
-    if there is an html file with the same name as the <code>track nameOfTrack</code>
-    the html line does not even need to be declared if <code>nameOfTrack.html</code>
-    exists in the same location as the trackDb file.</p>
+    if there is a file, <code>nameOfTrack.html</code>, in the same directory as the
+    trackDb matching the name of the track, <code>track nameOfTrack</code>,
+    then the html file does not need to be declared.
     <p>To be consistent with standard Genome Browser track descriptions, html for tracks
     should contain several sections as seen below. Here is a link to an 
     <a href="../examples/hubExamples/templatePage.html" 
@@ -325,7 +325,7 @@
     or the significance of scores if generated in a special fashion.</p>
     <p><b>Credits</b></p>
     <P class="indent1">This section helps people find the contacts
-    for questions about the data, please include an email or laboratory web page.</p>
+    for questions about the data. Please include an email or laboratory web page.</p>
     <p><b>References</b></p>
     <P class="indent1">Relevant publications regarding the data.</p>
     </div>
@@ -976,7 +976,7 @@
 
     <P><B>Example:</B></P>
     <pre>
-    mouseOver variant $name/$chrom:$chromStart value $score
+    mouseOver variant $name/$chrom:${chromStart} value $score
     </pre>
 </DIV>
 
@@ -2002,7 +2002,9 @@ There are no extra options that can appear on the type hic line.
 <div class="format"><code>searchTrix &lt;url/relativePath&gt;</code></div>
     <P> Specifies the URL to a TRIX file that maps free text to
     a set of indices that are assumed to have indicies in the associated
-    bigBed file.  See <A HREF="../trix.html">HERE</A> for instructions on how to build a TRIX file.
+    bigBed file. See <a href="../trix.html">here</a> for instructions on how
+    to build a TRIX file and a <a href="../hubQuickStartSearch.html">Searchable
+    Track Hub Quick Start Guide</a> here.</li>
     <P><B>Example:</B></P>
     <pre>   searchTrix url or relative path </pre>
 </DIV>
@@ -2616,6 +2618,16 @@ There are no extra options that can appear on the type hic line.
     can be presented in log scale with this user-configurable setting. Default: NONE.</P>
     <P><B>Example:</B></P>
     <pre>   transformFunc LOG</pre>
+</DIV>
+
+<DIV class="logo"><span class="types bigWig"></span>
+<div class="format"><code>logo on</code></div>
+    <P>The signal can be graphed as reference base nucleotide letters with their heights equal to the
+    signal value within the bigWig track. If not sufficiently zoomed in, the bigWig will
+    revert to bars instead of letters by default. See a working example of the <code>logo</code>
+    dynseq display on the <a href="../bigWig.html#Ex4" target="_blank">bigWig<a> help page.</p>
+    <P><B>Example:</B></P>
+    <pre>   logo on</pre>
 </DIV>
 
 <DIV class="mouseOverFunction"><span class="types wig bigWig bedGraph"></span>
@@ -3651,7 +3663,8 @@ There are no extra options that can appear on the type hic line.
     display gene codon translation.  The reading frame may differ
     between species.  By providing the reading frames information in a
     separate table, the user can choose which frame to use when
-    viewing the data. For bigMaf the value is expected to be a bigBed, for wigMaf it should be a table.</P> 
+    viewing the data. For bigMaf the value is expected to be a bigBed, for wigMaf it should be a table.
+    Read about <a href="../bigMaf.html#frames_summary">bigMaf supporting files</a> on the help page.</p>
     <P><B>Example:</B></P>
     <pre>   frames myCodonFrames</pre>
     <pre>   frames myCodonFrames.bb</pre>
@@ -3779,7 +3792,8 @@ There are no extra options that can appear on the type hic line.
     bigBed containing that information. The summary
     view is used when the browser display is zoomed out to contain a million
     or more basepairs.  A summary table is created from a multiple alignment MAF
-    file using the utility <code>hgLoadMafSummary</code>.  For bigMaf, the value is assumed to be bigBed. </P>
+    file using the utility <code>hgLoadMafSummary</code>.  For bigMaf, the value is assumed to be bigBed,
+    Read about <a href="../bigMaf.html#frames_summary">bigMaf supporting files</a> on the help page.</p>
     <P><B>Example:</B></P>
     <pre>   summary hg17Maf8waySummary</pre>
 </DIV>
@@ -4014,10 +4028,10 @@ There are no extra options that can appear on the type hic line.
     corresponding trackDb statements:<br>
     <br>
     trackDb line:
-    <pre>extraDetailsTable _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example</pre>
+    <pre>extraTableFields _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example</pre>
     the two columns from the bigBed (or external file):<br>
     <pre>_jsonField1	tableField2
-{key:val, key1: val1, key2: val2}	key|val;key1|val1;key2:val2
+{key:val, key1: val1, key2: val2}	key|val;key1|val1;key2|val2
     </pre>
     And when clicking on an item in the browser, the following would be displayed:<br>
     <table class='bedExtraTbl'>
@@ -5102,6 +5116,28 @@ intensity.  At some point, however, maximum color saturation is reached and high
 interaction scores don't change the color any further.  This setting determines
 what the default score is for the point at which that maximum color saturation is
 reached.
+    </p>
+</div>
+
+<div class="hicDistanceMin"><span class="types hic"></span>
+<div class="format"><code>hicDistanceMin &lt;integer&gt;</code></div>
+    <p>Hi-C tracks have a setting that controls the minimum interaction distance
+in nucleotides for the heatmap.  If a portion of the heatmap represents an interaction
+closer than the value of the minimum distance setting, that portion of the heatmap simply
+isn't drawn.  This setting, hicDistanceMin, controls the default value for that
+minimum (without this setting, the default is 0).  A value of 0 means that no filter
+is applied.
+    </p>
+</div>
+
+<div class="hicDistanceMax"><span class="types hic"></span>
+<div class="format"><code>hicDistanceMax &lt;integer&gt;</code></div>
+    <p>Hi-C tracks have a setting that controls the maximum interaction distance
+in nucleotides for the heatmap.  If a portion of the heatmap represents an interaction
+farther than the value of the maximum distance setting, that portion of the heatmap simply
+isn't drawn.  This setting, hicDistanceMax, controls the default value for that
+maximum (without this setting, the default is 0).  A value of 0 means that no filter
+is applied.
     </p>
 </div>
 

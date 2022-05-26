@@ -10,7 +10,6 @@ var gar = {
     modalWrapper: document.getElementById("modalWrapper"),
     modalWindow: document.getElementById("modalWindow"),
     modalForm: document.getElementById("modalFeedback"),
-    queryString: '',
     // and a query object with keys arg name and value the paired tag
     urlParams: null,
     submitButton: document.getElementById("submitButton"),
@@ -21,7 +20,6 @@ var gar = {
     comment: document.getElementById("comment"),
     sciName: document.getElementById("formSciName"),
     onLoadTime: new Date(),
-    garEndTime: new Date(),
     // recent improvement has reduced this to a single table, no longer
     // split up by clades
     cladeTableList: document.getElementsByClassName("cladeTable"),
@@ -40,10 +38,6 @@ var gar = {
     millis: function() {
       var d = new Date();
       return d.getTime();
-    },
-
-    tableLegend: function(e) {
-      alert(e.innerText);
     },
 
     // Given a table cell c, set it to visible/hidden based on 'tf'
@@ -81,12 +75,6 @@ var gar = {
         var labelText = document.getElementById(labelId).innerText;
         gar.checkBoxLabels.set(cbId, labelText);
       }
-//      gar.columnNames.forEach(function(value, key) {
-//         alert(key + " : " + value);
-//      });
-//      for (var [key, value] of gar.columnNames.entries()) {
-//         alert(key + " : " + value);
-//      }
       gar.measureTiming = gar.urlParams.has('measureTiming');
       // If there are any URL arguments to the page see if any of them
       // are column names
@@ -119,13 +107,6 @@ var gar = {
               ++colsOn;
               if ("IUCN" === arg) { iucnRequested = true; }
             }
-/*  could look at val here when present to turn on/off
-            if (val) {
-              alert(checkBoxId + " yes val col: '" + arg + "' val: '" + val + "' n: '" + n + "'");
-            } else {
-              alert(checkBoxId + " no val col: '" + arg + "' val: '" + val + "' n: '" + n + "'");
-            }
-*/
           }
         });
 if ( (colsOn === 1) && iucnRequested ) {
@@ -176,8 +157,8 @@ if ( (colsOn === 1) && iucnRequested ) {
     },
 
     // foreach table, for each row in the table, count visible rows
-    countVisibleRows: function(et) {
-//      var t0 = gar.millis();
+    // optionally, show timing given a t0 start time
+    countVisibleRows: function(t0) {
       var viewReqCol = gar.columnNames.get('viewReq');
       var asmIdCol = gar.columnNames.get('asmId');
       var iucnCol = gar.columnNames.get('IUCN');
@@ -244,16 +225,11 @@ if ( (colsOn === 1) && iucnRequested ) {
          var labelText = gar.checkBoxLabels.get(name);
          if (labelEl) {
             labelEl.innerText = labelText + " (" + visibleCount.toLocaleString() + "/" + hiddenCount.toLocaleString() + ")";
-//         } else {
-// alert("no element for label '" + labelId + "'");
          }
       });
       var showAllList = document.getElementsByClassName('showAll');
-//      var thisEt = gar.millis() - t0;
-      var thisEt = et;
+      var thisEt = gar.millis() - t0;
       if (visRows > 0) {
-//        var pageEt = gar.garEndTime.getTime() - window.garStartTime.getTime();
-//        perfDisplay.innerHTML = "countRows  " + gar.garEndTime.getTime() + " - " + window.garStartTime.getTime() + " = page load time " + pageEt + " millis : DOMContentLoaded: " + gar.onLoadTime.getTime();
         if (gar.measureTiming) {
           counterDisplay.innerHTML = "showing " + visRows.toLocaleString() + " assemblies, " + notVis.toLocaleString() + " hidden : process time: " + thisEt + " millis";
         } else {
@@ -288,7 +264,7 @@ if ( (colsOn === 1) && iucnRequested ) {
           showAllLabelList[i].innerHTML = " show all (" + visRows.toLocaleString() + "/" + notVis.toLocaleString() + ")";
         }
       }
-    },
+    },	//	countVisibleRows: function(t0)
 
     // given a column number n, and true/false in tf
     // set that column visibility
@@ -308,11 +284,12 @@ if ( (colsOn === 1) && iucnRequested ) {
     // can find the column number from columnNames Map object
     resetColumnVis: function(e) {
       var t0 = gar.millis();
+      gar.waitCursor();
       var n = gar.columnNames.get(e.value);
       var tf = e.checked;       // true - turn column on, false - turn off
       gar.setColumnNvis(n, tf);
-      var et = gar.millis() - t0;
-      gar.countVisibleRows(et);
+      gar.countVisibleRows(t0);
+      setTimeout(gar.defaultCursor, 2000);
     },
 
     hideTable: function(tableName) {
@@ -331,6 +308,7 @@ if ( (colsOn === 1) && iucnRequested ) {
     // foreach table, for each row in the table, show row
     showAll: function(offOn) {
       var t0 = gar.millis();
+      gar.waitCursor();
       for (var i = 0; i < gar.cladeTableList.length; i++) {
         for (var j = 0; j < gar.cladeTableList[i].rows.length; j++) {
           var rowId = gar.cladeTableList[i].rows[j];
@@ -349,9 +327,9 @@ if ( (colsOn === 1) && iucnRequested ) {
        * checkboxes - AND the checkBox 'hideShow' check boxes depending upon
        * the counts for that category.
        */
-      var et = gar.millis() - t0;
-      gar.countVisibleRows(et);
-    },
+      gar.countVisibleRows(t0);
+      setTimeout(gar.defaultCursor, 2000);
+    },	//	showAll: function(offOn)
 
     // given one of: garList gakList gcaList gcfList, work through
     //   all the elements to change vis
@@ -359,6 +337,7 @@ if ( (colsOn === 1) && iucnRequested ) {
     // offOn - false turn off, true turn on
     resetListVis: function(list, offOn) {
       var t0 = gar.millis();
+      gar.waitCursor();
       for (var i = 0; i < list.length; i++) {
          var rowId = list[i];
          if (offOn) {   // true, turn on the row
@@ -367,8 +346,8 @@ if ( (colsOn === 1) && iucnRequested ) {
            rowId.style.display = "none";
          }
       }
-      var et = gar.millis() - t0;
-      gar.countVisibleRows(et);
+      gar.countVisibleRows(t0);
+      setTimeout(gar.defaultCursor, 2000);
     },
 
     // a check box function is working, do not allow any of
@@ -440,9 +419,6 @@ if ( (colsOn === 1) && iucnRequested ) {
     xmlhttp.onreadystatechange = function() {
          if (4 === this.readyState && 200 === this.status) {
             gar.submitButton.value = "request completed";
-//            gar.submitButton.disabled = true;
-//            garStatus.innerHTML = "OK: <a href='" + url + "' target=_blank>" + url + "</a>";
-//            alert("SUCCESS: '" + url + "'");
          } else {
             if (4 === this.readyState && 404 === this.status) {
                gar.failedRequest(url);
@@ -451,7 +427,6 @@ if ( (colsOn === 1) && iucnRequested ) {
        };
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
-//    alert("SENT: '" + url + "'");
 
     },  //      sendRequest: function(name, email. asmId)
 
@@ -585,9 +560,6 @@ if ( (colsOn === 1) && iucnRequested ) {
 
   modalInit: function() {
     gar.onLoadTime = new Date();
-//    var pageEt = gar.garEndTime.getTime() - window.garStartTime.getTime();
-    var domReady = gar.onLoadTime.getTime() - gar.garEndTime.getTime();
-//    perfDisplay.innerHTML = "modalInit " + gar.garEndTime.getTime() + " - " + window.garStartTime.getTime() + " = page load time " + pageEt + " millis : DOMContentLoaded: " + gar.onLoadTime.getTime() + " - " + gar.garEndTime.getTime() + " = " + domReady + " domReady millis";
     if(document.addEventListener) {
 //      document.getElementById("modalOpen").addEventListener("click", gar.openModal, false);
       document.getElementById("modalClose").addEventListener("click", gar.closeModal, false);
@@ -605,7 +577,6 @@ if ( (colsOn === 1) && iucnRequested ) {
   // Please acknowledge use of this code by including this header.
 
   checkForm: function(e) {
- // alert("button.value: '" + gar.submitButton.value + "'");
     if (gar.submitButton.value === "request completed") {
        if (e.preventDefault) {
          e.preventDefault();
@@ -677,10 +648,21 @@ if ( (colsOn === 1) && iucnRequested ) {
       document.getElementById('loadingStripes').style.display = "none";
   },	// unhide tables
 
+  waitCursor: function() {
+    document.body.style.cursor = 'wait';
+    setTimeout(null,0);
+  },
+
+  defaultCursor: function() {
+    document.body.style.cursor = 'default';
+    setTimeout(null,0);
+  },
+
 };      //      var gar
 
   if(document.addEventListener) {
     var t0 = gar.millis();
+    gar.waitCursor();
     // allow semi colon separators as well as ampersand
     var queryString = window.location.search.replaceAll(";", "&");
     gar.urlParams = new URLSearchParams(queryString);
@@ -688,15 +670,19 @@ if ( (colsOn === 1) && iucnRequested ) {
     document.addEventListener("DOMContentLoaded", gar.modalInit, false);
     gar.discoverColumnsCheckboxes();
     gar.unhideTables();
-    var et = gar.millis() - t0;
-    gar.garEndTime = new Date();
-    gar.countVisibleRows(et);
-  } else {
+    gar.countVisibleRows(t0);
+    setTimeout(gar.defaultCursor, 2000);
+  } else {	// IE8 support, only has attachEvent(), not addEventListener()
     var t0 = gar.millis();
+    gar.waitCursor();
+    // allow semi colon separators as well as ampersand
+    var queryString = window.location.search.replaceAll(";", "&");
+    gar.urlParams = new URLSearchParams(queryString);
+    document.getElementById("modalFeedback").addEventListener("submit", gar.checkForm, false);
     document.getElementById("modalFeedback").attachEvent("onsubmit", gar.checkForm);
     window.attachEvent("onload", gar.modalInit);
     gar.discoverColumnsCheckboxes();
     gar.unhideTables();
-    var et = gar.millis() - t0;
-    gar.countVisibleRows(et);
+    gar.countVisibleRows(t0);
+    setTimeout(gar.defaultCursor, 2000);
   }

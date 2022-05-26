@@ -69,6 +69,7 @@ struct trackHubGenome
     char *description;       /* description, also called freeze name */
     struct trackHub *trackHub; /* associated track hub */
     unsigned orderKey;   /* the orderKey for changing the order from the order in the file */
+    char *chromAuthority;     /* what authority should be used to display sequence names */
     };
 
 void trackHubClose(struct trackHub **pHub);
