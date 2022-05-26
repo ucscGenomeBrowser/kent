@@ -1274,8 +1274,8 @@ if (trackHubDatabase(db))
     struct trackHubGenome *genome = trackHubGetGenome(db);
     tdbList = trackHubTracksForGenome(genome->trackHub, genome, NULL);
     }
-else
-    tdbList = hubCollectTracks(db, NULL);
+
+tdbList = slCat(tdbList, hubCollectTracks(db, NULL));
 
 findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
 }
