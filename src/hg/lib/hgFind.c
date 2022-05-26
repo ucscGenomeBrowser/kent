@@ -2159,7 +2159,7 @@ for (i = 0;  i < termCount;  i++)
         break;
     }
 if (retChromName)
-    *retChromName = chrom;
+    *retChromName = (chrom == NULL) ? chrom : hgOfficialChromName(db, chrom);
 if (retWinStart)
     *retWinStart  = start;
 if (retWinEnd)
