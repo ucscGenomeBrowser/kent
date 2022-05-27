@@ -8,7 +8,7 @@ itemRgb on
 mouseOver $ref>$alt $MTR ${MTR_centile}
 bigDataUrl /gbdb/$D/bbi/mtr2.bb
 html constraintSuper
-filter.MTR_centile 0.0001:25
+filter.MTR_centile 0.001:25
 filterByRange.MTR_centile on
 filterLimits.MTR_centile 0:100
 filterLabel.MTR_centile MTR Score percentile
