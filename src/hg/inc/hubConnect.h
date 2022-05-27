@@ -10,6 +10,9 @@
 #ifndef HUBCONNECT_H
 #define HUBCONNECT_H
 
+#define hubCuratedPrefix "hub:"
+/* Prefix to hub path in dbDb.nibPath */
+
 #define defaultHubPublicTableName "hubPublic"
 /* Name of our table with list of public hubs. read only */
 

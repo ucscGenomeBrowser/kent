@@ -968,10 +968,51 @@ hDisconnectCentral(&conn);
 return added;
 }
 
+char *dbOveride;  // communicate with the web front end if we load a hub to support db cgivar. */
+
+static char * lookForCuratedHubs(struct cart *cart, char *db,  char *curatedHubPrefix)
+/* Check to see if db is a curated hub which will require the hub to be attached. 
+ * The variable curatedHubPrefix has the release to use (alpha, beta, public, or a user name ) */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[4096];
+sqlSafef(query, sizeof query, "SELECT nibPath from %s where name = '%s' AND nibPath like '%s%%'",
+          dbDbTable(), db, hubCuratedPrefix);
+
+char *dir = sqlQuickString(conn, query);
+if (!isEmpty(dir))
+    {
+    char *path = &dir[sizeof hubCuratedPrefix - 1];
+    char url[4096];
+    safef(url, sizeof url, "%s/%s/hub.txt", path, curatedHubPrefix);
+
+    struct hubConnectStatus *status = getAndSetHubStatus( cart, url, TRUE);
+
+    if (status)
+        {
+        char buffer[4096];
+        safef(buffer, sizeof buffer, "hub_%d_%s", status->id, db);
+        dbOveride = cloneString(buffer);
+
+        return cloneString(buffer);
+        }
+    }
+return NULL;
+}
+
+
 char *hubConnectLoadHubs(struct cart *cart)
 /* load the track data hubs.  Set a static global to remember them */
 {
+char *newCuratedHub = NULL;
+char *dbSpec = cartOptionalString(cart, "db");
+char *curatedHubPrefix = cfgOption("curatedHubPrefix");
+if (curatedHubPrefix && (dbSpec != NULL) ) 
+    newCuratedHub = lookForCuratedHubs(cart, dbSpec, curatedHubPrefix);
+
 char *newDatabase = checkForNew( cart);
+if (newCuratedHub)
+    newDatabase = newCuratedHub;
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart);
 

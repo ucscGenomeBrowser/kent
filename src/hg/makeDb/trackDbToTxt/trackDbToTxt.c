@@ -40,6 +40,7 @@ if (!isEmpty(tdb->html))
     FILE *htmlF = mustOpen(htmlName, "w");
 
     fputs(tdb->html, htmlF);
+    fprintf(f, "html %s.html\n", tdb->track);
     fclose(htmlF);
     }
 
@@ -48,7 +49,8 @@ struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
     {
     if (differentString(hel->name, "track")
-        && differentString(hel->name, "type"))
+        && differentString(hel->name, "type")
+        && differentString(hel->name, "html"))
         {
         fprintf(f, "%s %s\n", hel->name, (char *)hel->val);
         }

@@ -217,11 +217,12 @@ USERTABLE = $(shell echo ${USER} | sed -e 's/-/_/g')
 update: ${DBS:%=%_update}
 	${MKDIR} ${CGI_BIN}-${USER}/encode
 %_update:
-	./loadTracks -addVersion ${EXTRA} trackDb_${USERTABLE} hgFindSpec_${USERTABLE} $*
+	./loadTracks -noHtmlCheck -strict -addVersion ${EXTRA} trackDb_${USERTABLE} hgFindSpec_${USERTABLE} $*
 	./checkMetaDb alpha metaDb_${USERTABLE} $*
 	# now build the relatedTracks table for each db
 	./buildRelatedTracks relatedTrack_${USERTABLE} $*
 	rm -rf /dev/shm/trackDbCache/$*.trackDb_${USERTABLE}
+	./maybeBuildHub  ${USER} trackDb_${USERTABLE} $*
 
 #  if you want to test track search tool with your own trix file
 #	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb_${USERTABLE}.{ixx,ix}}
@@ -237,7 +238,7 @@ alpha: clean
 alpha_all: ${DBS:%=%_alpha}
 
 %_alpha:
-	./loadTracks -addVersion ${EXTRA} -release=alpha trackDb hgFindSpec $*
+	./loadTracks -noHtmlCheck -strict -addVersion ${EXTRA} -release=alpha trackDb hgFindSpec $*
 	./checkMetaDb alpha metaDb $*
 	rm -f ${HIVE_TRIX}/$*_trackDb.{ixx,ix}
 	HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/alpha/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
@@ -245,6 +246,7 @@ alpha_all: ${DBS:%=%_alpha}
 	# now build the relatedTracks table for each db
 	./buildRelatedTracks relatedTrack $*
 	rm -rf /dev/shm/trackDbCache/$*.trackDb
+	./maybeBuildHub  alpha trackDb $*
 
 onbeta:	/cluster/home/${USER}/.hg.conf.beta
 
@@ -275,6 +277,7 @@ beta_all: ${DBS:%=%_beta}
 	# now build the relatedTracks table for each db
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./buildRelatedTracks relatedTrack $*
 	-ssh  ${BETA_MACHINE} rm -rf /dev/shm/trackDbCache/$*.trackDb
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ./maybeBuildHub  beta trackDb $*
 
 publicTest: onbeta clean
 	${MAKE} publicTest_all
@@ -301,6 +304,7 @@ public_all: ${DBS:%=%_public}
 	# now build the relatedTracks table for each db
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./buildRelatedTracks relatedTrack_public $*
 	-ssh  ${BETA_MACHINE} rm -rf /dev/shm/trackDbCache/$*.trackDb_public
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ./maybeBuildHub  public trackDb_public $*
 
 # this will fail if we are not in a beta checkout:
 checkbeta:

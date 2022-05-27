@@ -55,6 +55,7 @@ errAbort(
   "            -  and settings hash to stderr while loading everything.\n"
   "  -gbdbList - list of files to confirm existance of bigDataUrl files\n"
   "  -addVersion - add cartVersion pseudo-table\n"
+  "  -noHtmlCheck - don't check for HTML even if strict is set\n"
   );
 }
 
@@ -65,6 +66,7 @@ static struct optionSpec optionSpecs[] = {
     {"settings", OPTION_BOOLEAN},
     {"gbdbList", OPTION_STRING},
     {"addVersion", OPTION_BOOLEAN},
+    {"noHtmlCheck", OPTION_BOOLEAN},
     {NULL,      0}
 };
 
@@ -75,6 +77,7 @@ static char *release = "alpha";
 static char *gbdbList = NULL;
 static struct hash *gbdbHash = NULL;
 static boolean addVersion = FALSE;
+static boolean noHtmlCheck = FALSE;
 
 // release tags
 #define RELEASE_ALPHA  (1 << 0)
@@ -907,7 +910,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	{
         if (isEmpty(td->html))
 	    {
-	    if (strict && !trackDbLocalSetting(td, "parent") && !trackDbLocalSetting(td, "superTrack") &&
+	    if (strict && !noHtmlCheck && !trackDbLocalSetting(td, "parent") && !trackDbLocalSetting(td, "superTrack") &&
 	        !sameString(td->track,"cytoBandIdeo"))
 		{
 		fprintf(stderr, "Warning: html missing for %s %s %s '%s'\n",org, database, td->track, td->shortLabel);
@@ -989,6 +992,7 @@ release = optionVal("release", release);
 releaseBit = getReleaseBit(release);
 gbdbList = optionVal("gbdbList", gbdbList);
 addVersion = optionExists("addVersion");
+noHtmlCheck = optionExists("noHtmlCheck");
 
 if (gbdbList)
     gbdbHash = hashLines(gbdbList);

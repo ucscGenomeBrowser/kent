@@ -5,13 +5,13 @@ from collections import OrderedDict
 mtrFile = open("/hive/data/outside/mtr/mtrUcsc.txt",'r')
 outFile = open("/hive/data/outside/mtr/mtr2.bed",'w')
 
-#Items in the top 25centile = red, middle 50 = black, lower 25 = green, and no score = blue
+#Items in the bottom 25centile = red, middle 50 = black, top 25 = green, and no score = blue
 def assignRGBcolorByMTRcentile(mtrCentile):
     """Assign color based on mtr percentile"""
     
-    if float(mtrCentile) > .75:
+    if float(mtrCentile) < 25:
         itemRgb = '255,0,0'
-    elif float(mtrCentile) < .25:
+    elif float(mtrCentile) > 75:
         itemRgb = '0,128,0'
     else:
         itemRgb = '0,0,0'
