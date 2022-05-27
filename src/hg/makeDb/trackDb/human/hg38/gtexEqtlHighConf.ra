@@ -68,3 +68,4 @@ visibility hide
     #noParentConfig on
     showCfg on
     maxItems 1000000
+    release alpha
