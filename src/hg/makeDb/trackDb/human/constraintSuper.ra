@@ -5,7 +5,6 @@ superTrack on hide
 type bed
 visibility hide
 group phenDis
-color 100,0,160
 
 # Jarvis scores
 include jarvis.ra
