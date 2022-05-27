@@ -15,15 +15,15 @@ def writeOutToWig(positionDic,fileNames):
         for base, fileName in zip(['A','C','T','G'], fileNames):
             if prevPos == False or int(currentPos)-1 != int(prevPos):
                 fileName.write("fixedStep chrom=%s start=%s step=1 span=1\n" % (positionDic[key]['chr'],currentPos))
-                if positionDic[key][base] == [] or max(positionDic[key][base]) == '':
+                if positionDic[key][base] == [] or min(positionDic[key][base]) == '':
                     fileName.write('0\n')
                 else:
-                    fileName.write(str(max(positionDic[key][base]))+"\n")
+                    fileName.write(str(min(positionDic[key][base]))+"\n")
             else:
-                if positionDic[key][base] == [] or max(positionDic[key][base]) == '':
+                if positionDic[key][base] == [] or min(positionDic[key][base]) == '':
                     fileName.write('0\n')
                 else:
-                    fileName.write(str(max(positionDic[key][base]))+"\n")                    
+                    fileName.write(str(min(positionDic[key][base]))+"\n")                    
         prevPos = currentPos
 
 for line in mtrFile:
