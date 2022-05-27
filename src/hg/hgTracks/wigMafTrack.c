@@ -1088,17 +1088,17 @@ if (snpTable == NULL)
 /* Create SQL where clause that will load up just the
  * beds for the species that we are including. */
 conn = hAllocConn(database);
-dyStringAppend(where, "name in (");
+sqlDyStringPrintf(where, "name in (");
 for (mi = miList; mi != NULL; mi = mi->next)
     {
     if (!isPairwiseItem(mi))
 	/* exclude non-species items (e.g. conservation wiggle */
 	continue;
-    dyStringPrintf(where, "'%s'", mi->db);
+    sqlDyStringPrintf(where, "'%s'", mi->db);
     if (mi->next != NULL)
-	dyStringAppend(where, ",");
+	sqlDyStringPrintf(where, ",");
     }
-dyStringAppend(where, ")");
+sqlDyStringPrintf(where, ")");
 /* check for empty where clause */
 if (!sameString(where->string,"name in ()"))
     whereClause = where->string;
