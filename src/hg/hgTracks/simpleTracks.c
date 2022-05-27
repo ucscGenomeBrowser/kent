@@ -5267,7 +5267,7 @@ int optionScore = cartUsualInt(cart, optionScoreStr, 0);
 if (optionScore > 0)
     {
     char extraWhere[128];
-    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
+    sqlSafef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
     sr = hOrderedRangeQuery(conn, table, chromName, start, end,
 	extraWhere, &rowOffset);
     }

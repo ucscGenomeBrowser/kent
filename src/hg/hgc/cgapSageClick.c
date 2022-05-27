@@ -26,7 +26,7 @@ int rowOffset;
 char extraWhere[128];
 if (tagName == NULL)
     errAbort("Missing tag sequence in click for cgapSage track.");
-safef(extraWhere, sizeof(extraWhere), "name=\'%s\'", tagName);
+sqlSafef(extraWhere, sizeof(extraWhere), "name=\'%s\'", tagName);
 sr = hOrderedRangeQuery(conn, tdb->table, chrom, start, end,
 			extraWhere, &rowOffset);
 row = sqlNextRow(sr);
