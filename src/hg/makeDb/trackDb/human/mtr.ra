@@ -8,7 +8,7 @@ itemRgb on
 mouseOver $ref>$alt $MTR ${MTR_centile}
 bigDataUrl /gbdb/$D/bbi/mtr2.bb
 html constraintSuper
-filter.MTR_centile 75:100
+filter.MTR_centile 0.0001:25
 filterByRange.MTR_centile on
 filterLimits.MTR_centile 0:100
 filterLabel.MTR_centile MTR Score percentile
@@ -26,15 +26,17 @@ longLabel MTR - Missense Tolerance Ratio Scores by base
 type bigWig
 compositeTrack on
 parent constraintSuper
-visibility dense
+visibility full
 maxWindowToQuery 500000
 group phenDis
 color 124,39,175
 maxWindowToDraw 10000000
 mouseOverFunction noAverage
 html constraintSuper
-viewLimits 1:1.56
+viewLimits 0:1.1
 viewLimitsMax 0:1.56
+yLineMark 0.8
+yLineOnOff on
 autoScale group
 priority 9.2
 
@@ -43,7 +45,7 @@ priority 9.2
         longLabel MTR Score: Mutation is A
         type bigWig
         parent mtrScores on
-        visibility dense
+        visibility full
         bigDataUrl /gbdb/$D/mtr/a.bw
         maxHeightPixels 128:30:8
 
@@ -52,7 +54,7 @@ priority 9.2
         longLabel MTR Score: Mutation is C
         type bigWig
         parent mtrScores on
-        visibility dense
+        visibility full
         bigDataUrl /gbdb/$D/mtr/c.bw
         maxHeightPixels 128:30:8
 
@@ -61,7 +63,7 @@ priority 9.2
         longLabel MTR Score: Mutation is G
         type bigWig
         parent mtrScores on
-        visibility dense
+        visibility full
         bigDataUrl /gbdb/$D/mtr/g.bw
         maxHeightPixels 128:30:8
 
@@ -70,6 +72,6 @@ priority 9.2
         longLabel MTR Score: Mutation is T
         type bigWig
         parent mtrScores on
-        visibility dense
+        visibility full
         bigDataUrl /gbdb/$D/mtr/t.bw
         maxHeightPixels 128:30:8
