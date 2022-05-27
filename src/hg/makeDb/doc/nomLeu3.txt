@@ -967,3 +967,46 @@ http://genome.crg.es/genepredictions/N.leucogenys/nomLeu3/geneid_v1.4/nomLeu3.ge
 #    enrich 64.00x
 
 ##########################################################################
+# ncbiRefSeq (DONE - 2022-05-26 Hiram)
+
+    mkdir /hive/data/genomes/nomLeu3/bed/ncbiRefSeq.2022-05-26
+    cd /hive/data/genomes/nomLeu3/bed/ncbiRefSeq.2022-05-26
+
+    time( /cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -stop=process \
+       -buildDir=`pwd` GCF_000146795.2_Nleu_3.0 nomLeu3) \
+          > process.log 2>&1
+    # real    3m37.260s
+
+    time( /cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -continue=load \
+       -buildDir=`pwd` GCF_000146795.2_Nleu_3.0 nomLeu3) \
+          > load.log 2>&1
+    # real    0m30.847s
+
+    sed -e 's/^/    # /;' fb.ncbiRefSeq.nomLeu3.txt
+    # 62471660 bases of 2756609047 (2.266%) in intersection
+
+    # add: include ../../refSeqComposite.ra alpha
+    # to the gibbon/nomLeu3/trackDb.ra to turn on the track in the browser
+
+    # nomLeu3 doesn't have refGene, measure against xenoRefGene
+    featureBits -enrichment nomLeu3 xenoRefGene ncbiRefSeq
+ # xenoRefGene 2.683%, ncbiRefSeq 2.266%, both 1.927%, cover 71.82%, enrich 31.69x
+
+    featureBits -enrichment nomLeu3 ncbiRefSeq xenoRefGene
+ # ncbiRefSeq 2.266%, xenoRefGene 2.683%, both 1.927%, cover 85.04%, enrich 31.69x
+
+    featureBits -enrichment nomLeu3 ncbiRefSeqCurated xenoRefGene
+ # ncbiRefSeqCurated 0.002%, xenoRefGene 2.683%, both 0.002%, cover 82.59%, enrich 30.78x
+
+    featureBits -enrichment nomLeu3 xenoRefGene ncbiRefSeqCurated
+ # xenoRefGene 2.683%, ncbiRefSeqCurated 0.002%, both 0.002%, cover 0.06%, enrich 30.78x
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2022-05-26 - Hiram)
+    mkdir /hive/data/genomes/nomLeu3/bed/cytoBand
+    cd /hive/data/genomes/nomLeu3/bed/cytoBand
+    makeCytoBandIdeo.csh nomLeu3
+
+#############################################################################

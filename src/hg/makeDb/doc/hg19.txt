@@ -34861,6 +34861,10 @@ chromToUcsc -i mtrtable_2.0_ens95.txt -i mtrUcsc.txt -a hg19.chromAlias.tsv
 ~/kent/src/hg/makeDb/scripts/mtr/buildMTRbedTrack.py
 ~/kent/src/hg/makeDb/scripts/mtr/buildMTRwigTracks.py
 fetchChromSizes hg19 > chrom.sizes
+wigToBigWig a.wig chrom.sizes a.bw
+wigToBigWig c.wig chrom.sizes c.bw
+wigToBigWig t.wig chrom.sizes t.bw
+wigToBigWig g.wig chrom.sizes g.bw
 bedToBigBed -type=bed9+10 -tab -as=mtr.as mtr2.bed chrom.sizes mtr2.bb
 ln -s /hive/data/outside/mtr2.bb /gbdb/hg19/bbi/
 ln -s /hive/data/outside/*.bw /gbdb/hg19/bbi/
