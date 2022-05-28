@@ -1019,8 +1019,6 @@ if (!(isWig||isBedGr||isBam||isVcf||isLongTabix||isHic))
     hPrintf(" Free-form query: ");
     name = filterFieldVarName(db, rootTable, "", filterRawQueryVar);
     char *val = cartUsualString(cart, name, "");
-    // escape double quotes to avoid HTML parse trouble in the text input.
-    val = htmlEncode(val);
     cgiMakeTextVar(name, val, 50);
     hPrintf("</TD></TR></TABLE>\n");
     }
@@ -1620,7 +1618,14 @@ for (var = varList; var != NULL; var = var->next)
     if (query != NULL && query[0] != 0)
         {
 	if (needAnd) sqlDyStringPrintf(dy, " %s ", logic);
-	sqlSanityCheckWhere(query, dy);
+	struct dyString *dyTemp = dyStringNew(0);
+	sqlSanityCheckWhere(query, dyTemp);
+
+	char trustedBuf[dyTemp->stringSize+NOSQLINJ_SIZE+1];
+        safef(trustedBuf, sizeof trustedBuf, NOSQLINJ "%s", dyTemp->string);  // TRUST
+
+	sqlDyStringPrintf(dy, "%-s", trustedBuf);
+	dyStringFree(&dyTemp);
 	}
     }
 
