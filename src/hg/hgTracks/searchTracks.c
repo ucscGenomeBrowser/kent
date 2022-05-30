@@ -481,9 +481,9 @@ if (nameList)
     struct slName *tmp = NULL;
     for (tmp = nameList; tmp != NULL; tmp = tmp->next)
         {
-        dyStringPrintf(extra, "label like '%%%s%%'", tmp->name);
+        sqlDyStringPrintf(extra, "label like '%%%s%%'", tmp->name);
         if (tmp->next)
-            dyStringPrintf(extra, " and ");
+            sqlDyStringPrintf(extra, " and ");
         }
     }
 

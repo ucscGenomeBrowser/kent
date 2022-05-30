@@ -50,55 +50,61 @@ The algorithms covered here are:
 
 <h2>Display Conventions and Configuration</h2>
 
+<h3>JARVIS</h3>
 <p>
-Shown are the scores as a signal ("wiggle") track, with one score per genome position.
-Mouse over the bars to see the exact values. 
-</p>
+JARVIS scores are the scores as a signal ("wiggle") track, with one score per genome position.
+Mousing over the bars displays the exact values. The scores were downloaded and converted to a single bigWig file.
+See <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" target=_blank>hg19 makeDoc</a> and
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/jarvis.txt" target=_blank>hg38 makeDoc</a>.</p>
 
+<h3>HMC</h3>
 <p>
-For HMC, the highly-constrained cutoff 0.8 is indicated with a line.
-</p>
+HMC scores are displayed as a signal ("wiggle") track, with one score per genome position.
+Mousing over the bars displays the exact values. The highly-constrained cutoff
+of 0.8 is indicated with a line.</p>
+<p>
+The HMC scores were downloaded and converted to .bedGraph files with a
+custom Python script. The bedGraph files were then converted to bigWig files,
+as documented in our <a
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt"
+target=_blank>makeDoc</a> hg19 build log.</p>
 
 <h3>MTR</h3>
 <p>
 MTR data can be found on two tracks, <b>MTR All data</b> and <b>MTR Scores</b>. In the
-<b>MTR Scores</b> track the data has been converted into 4 separate signal tracks 
-representing each base pair mutation, with the highest possible score represented when
-multiple transcripts overlap. It is recommended that the data be explored using
+<b>MTR Scores</b> track the data has been converted into 4 separate signal tracks
+representing each base pair mutation, with the lowest possible score represented when
+multiple transcripts overlap. A horizontal line is drawn on the 0.8 score line
+to roughly represent the 25th percentile, meaning the items below may be of particular
+interest. It is recommended that the data be explored using
 this version of the track, as it condenses the information substatially while
 retaining the magnitude of the data.</p>
 
 <p>Any specific point mutations of interest can then be researched in the <b>
-MTR All data</b> track. This track contains all of the information from 
+MTR All data</b> track. This track contains all of the information from
 <a href="http://biosig.unimelb.edu.au/mtr-viewer/downloads" target="_blank">
 MTRV2</a> including more than 3 possible scores per base when transcripts overlap.
 A mouse-over on this track shows the ref and alt allele, as well as the MTR score
 and the MTR score percentile. Filters are available for MTR score, False Discovery Rate
-(FDR), MTR percentile, and variant consequence. Items in the track are colored according
+(FDR), MTR percentile, and variant consequence. By default, only items in the bottom
+25 percentile are shown. Items in the track are colored according
 to their MTR percentile:</p>
 <ul>
-<li><b><font color=red>Red items</font></b> MTR percentiles over 75
-<li><b><font color=black>Black items</font></b> MTR percentiles between 50 and 75
-<li><b><font color=green>Green items</font></b> MTR percentiles below 25
+<li><b><font color=green>Green items</font></b> MTR percentiles over 75
+<li><b><font color=black>Black items</font></b> MTR percentiles between 25 and 75
+<li><b><font color=red>Red items</font></b> MTR percentiles below 25
 <li><b><font color=blue>Blue items</font></b> No MTR score
 </ul>
-
-
 <p>
-<b>Jarvis:</b> Scores were downloaded and converted to a single bigWig file.
-See <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" target=_blank>hg19 makeDoc</a> and
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/jarvis.txt" target=_blank>hg38 makeDoc</a>.
-<br>
-
-<b>HMC:</b> Scores were downloaded and converted to .bedGraph files with a
-custom Python script. The bedGraph files were then converted to bigWig files,
-as documented in our <a
-href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt"
-target=_blank>makeDoc</a> hg19 build log.  </p>
-By default, only scores with an MTR percentile over 75 are shown.</p>
-
-<p>
-By default, only scores with an MTR percentile over 75 are shown.</p>
+<b>Interpretation:</b> Regions with low MTR scores were seen to be enriched with
+pathogenic variants. For example, ClinVar pathogenic variants were seen to
+have an average score of 0.77 whereas ClinVar benign variants had an average score
+of 0.92. Further validation using the FATHMM cancer-associated training dataset saw
+that scores less than 0.5 contained 8.6% of the pathogenic variants while only containing
+0.9% of neutral variants. In summary, lower scores are more likely to represent
+pathogenic variants whereas higher scores could be pathogenic, but have a higher chance
+to be a false positive. For more information see the <a target="_blank"
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6602522/">MTR-Viewer publication</a>.</p>
 
 <h2>Methods</h2>
 

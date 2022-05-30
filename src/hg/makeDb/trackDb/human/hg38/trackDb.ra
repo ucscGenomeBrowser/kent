@@ -34,7 +34,7 @@ include hippocampusAyhan.ra
 include brainDevRegions.ra
 include t2t.ra alpha
 
-include gtexEqtl.ra
+include gtexEqtlHighConf.ra
 
 include liftOver.ra
 include exomeProbesets.ra
