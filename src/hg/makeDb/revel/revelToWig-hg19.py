@@ -4,7 +4,7 @@ from collections import defaultdict
 # based on caddToWig.py in kent/src/hg/makeDb/cadd
 # two arguments: input filename and db (one of: hg19, hg38)
 
-def inputLineChunk(fname, db):
+def inputLineChunk(fname, db, bedFh):
     " yield all values at consecutive positions as a tuple (chrom, pos, list of (nucl, phred value)) "
     # chr,hg19_pos,grch38_pos,ref,alt,aaref,aaalt,REVEL
     values = []
@@ -26,9 +26,9 @@ def inputLineChunk(fname, db):
     for line in ifh:
         if line.startswith("chr"):
             continue
-        row = line.rstrip("\n").split(",")[:8]
+        row = line.rstrip("\n").split(",")
 
-        chrom, hg19Pos, hg38Pos, ref, alt, aaRef, aaAlt, revel = row
+        chrom, hg19Pos, hg38Pos, ref, alt, aaRef, aaAlt, revel, transId = row
         if doHg19:
             pos = hg19Pos
         else:
@@ -58,6 +58,7 @@ def inputLineChunk(fname, db):
             yield firstChrom, firstPos, values
             firstPos, firstChrom = pos, chrom
             values = []
+            transIds = {}
 
             if chrom != lastChrom:
                 lastPos = None
@@ -65,9 +66,28 @@ def inputLineChunk(fname, db):
 
         if lastPos is None or pos-lastPos > 0:
             values.append([0.0,0.0,0.0,0.0])
+            transIds = {}
 
         nuclIdx = "ACGT".find(alt)
+
+        oldVal = values[-1][nuclIdx]
+        if oldVal != 0.0 and oldVal != revel:
+            # OK, we know that we have two values at this position for this alt allele now
+            # so we write the original transcriptId and the current one to the BED file
+            start = int(hg19Pos)-1
+            bed = (chrom, start, start+1, alt, "0", ".", start, start+1, transIds[(alt, oldVal)], oldVal)
+            bed = [str(x) for x in bed]
+            bedFh.write("\t".join(bed))
+            bedFh.write("\n")
+            bed = (chrom, start, start+1, alt, "0", ".", start, start+1, transId, revel)
+            bed = [str(x) for x in bed]
+            bedFh.write("\t".join(bed))
+            bedFh.write("\n")
+            # and only keep the maximum in the bigWig
+            revel = max(oldVal, revel)
+
         values[-1][nuclIdx] = revel
+        transIds[(alt, revel)] = transId
 
         lastPos = pos
         lastChrom = chrom
@@ -84,7 +104,9 @@ outFhs = {
         "G" : open("g.wig", "w")
         }
 
-for chrom, pos, nuclValues in inputLineChunk(fname, db):
+bedFh = open("overlap.bed", "w")
+
+for chrom, pos, nuclValues in inputLineChunk(fname, db, bedFh):
     if len(nuclValues)==0:
         continue
 

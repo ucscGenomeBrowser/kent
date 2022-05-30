@@ -4,7 +4,11 @@ from collections import defaultdict
 import numpy as np
 
 # based on revelToWig.py in kent/src/hg/makeDb/scripts/revel/
-# three arguments: chrom.sizes, input filename and db (one of: hg19, hg38)
+# two arguments: chrom.sizes and input filename 
+
+# Yes, the hg19 and hg38 scripts should be merged into one, but I didn't want to mess with the
+# hg19 one when it was done, so there are two scripts now. There are hardly ever updates to REVEL
+# so this hack may be fine for now.
 
 def parseChromSizes(chromSizesFname):
     chromSizes = {}
@@ -15,6 +19,7 @@ def parseChromSizes(chromSizesFname):
     return chromSizes
 
 def initValues(chromSizes, chrom):
+    " return a list of four float arrays with chromSize length and initialized to -1"
     print('init arrays for chrom %s' % chrom)
     arrs = []
     for n in range(0, 4):
@@ -28,6 +33,7 @@ def inputLineChunk(fname, chromSizes):
     " read all values for one chrom and return as four arrays, -1 means 'no value'"
     # chr,hg19_pos,grch38_pos,ref,alt,aaref,aaalt,REVEL
     values = []
+    prevTransIds = {}
 
     if fname.endswith(".gz"):
         ifh = subprocess.Popen(['zcat', fname], stdout=subprocess.PIPE, encoding="ascii").stdout
@@ -39,9 +45,10 @@ def inputLineChunk(fname, chromSizes):
     for line in ifh:
         if line.startswith("chr"):
             continue
-        row = line.rstrip("\n").split(",")[:8]
+        row = line.rstrip("\n").split(",")
 
-        chrom, hg19Pos, hg38Pos, ref, alt, aaRef, aaAlt, revel = row
+        chrom, hg19Pos, hg38Pos, ref, alt, aaRef, aaAlt, revel, transId = row
+        transId = transId.replace(";", ",") # hgc outlink code uses , as separator
         pos = hg38Pos
         if pos==".":
             continue
@@ -55,9 +62,31 @@ def inputLineChunk(fname, chromSizes):
             yield lastChrom, chromValues
             lastChrom = chrom
             chromValues = initValues(chromSizes, "chr"+chrom)
+            prevTransIds = {}
 
         nuclIdx = "ACGT".find(alt)
+
+        #chromValues[nuclIdx][pos] = revel
+        oldVal = chromValues[nuclIdx][pos]
+        if oldVal != -1 and oldVal != revel:
+            # OK, we know that we have two values at this position for this alt allele now
+            # so we write the original transcriptId and the current one to the BED file
+            start = pos
+            chrom = "chr"+chrom
+            bed = (chrom, start, start+1, ref+">"+alt, "0", ".", start, start+1, prevTransIds[(alt, oldVal)], oldVal)
+            bed = [str(x) for x in bed]
+            bedFh.write("\t".join(bed))
+            bedFh.write("\n")
+            bed = (chrom, start, start+1, ref+">"+alt, "0", ".", start, start+1, transId, revel)
+            bed = [str(x) for x in bed]
+            bedFh.write("\t".join(bed))
+            bedFh.write("\n")
+            # and only keep the maximum in the bigWig
+            revel = max(oldVal, revel)
+
         chromValues[nuclIdx][pos] = revel
+        prevTransIds[(alt, revel)] = transId
+
 
     # last line of file
     yield chrom, chromValues
@@ -73,6 +102,8 @@ outFhs = {
         }
 
 chromSizes = parseChromSizes(chromSizesFname)
+
+bedFh = open("overlap.bed", "w")
 
 for chrom, nuclValues in inputLineChunk(fname, chromSizes):
     if len(nuclValues)==0:
