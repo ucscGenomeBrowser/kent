@@ -34588,6 +34588,7 @@ miRNA
 # Add Revel track, Max, Thu Apr 15 03:33:49 PDT 2021
 # UPDATE: Adding overlap track after request from NHS, Max, Mon May 23 07:50:02 PDT 2022
 # There was a new REVEL release with transcript IDs! Obviously no one told us
+cd /hive/data/genomes/hg19/bed/revel
 wget https://rothsj06.u.hpc.mssm.edu/revel-v1.3_all_chromosomes.zip
 unzip *.zip
 python ~/kent/src/hg/makeDb/revel/revelToWig.py revel_with_transcript_ids hg19 
