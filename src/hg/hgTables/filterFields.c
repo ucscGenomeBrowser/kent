@@ -1618,14 +1618,7 @@ for (var = varList; var != NULL; var = var->next)
     if (query != NULL && query[0] != 0)
         {
 	if (needAnd) sqlDyStringPrintf(dy, " %s ", logic);
-	struct dyString *dyTemp = dyStringNew(0);
-	sqlSanityCheckWhere(query, dyTemp);
-
-	char trustedBuf[dyTemp->stringSize+NOSQLINJ_SIZE+1];
-        safef(trustedBuf, sizeof trustedBuf, NOSQLINJ "%s", dyTemp->string);  // TRUST
-
-	sqlDyStringPrintf(dy, "%-s", trustedBuf);
-	dyStringFree(&dyTemp);
+	sqlSanityCheckWhere(query, dy);
 	}
     }
 

@@ -828,16 +828,7 @@ sqlDyStringPrintf(query, "select %-s from %-s", fieldsSafe, fromSafe);
 if (!isEmpty(initialWhere))
     {
     sqlDyStringPrintf(where, " where ");
-
-    struct dyString *dyTemp = dyStringNew(0);
-    sqlSanityCheckWhere(initialWhere, dyTemp);
-
-    char trustedBuf[dyTemp->stringSize+NOSQLINJ_SIZE+1];
-    safef(trustedBuf, sizeof trustedBuf, NOSQLINJ "%s", dyTemp->string);  // TRUST
-
-    sqlDyStringPrintf(where, "%-s", trustedBuf);
-    dyStringFree(&dyTemp);
-
+    sqlSanityCheckWhere(initialWhere, where);
     gotWhere = TRUE;
     }
 
