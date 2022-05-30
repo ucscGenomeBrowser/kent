@@ -9,9 +9,9 @@ the deleteriousness of each nucleotide change in the genome.
 REVEL is an ensemble method for predicting the pathogenicity of missense variants 
 based on a combination of scores from 13 individual tools: MutPred, FATHMM v2.3, 
 VEST 3.0, PolyPhen-2, SIFT, PROVEAN, MutationAssessor, MutationTaster, LRT, GERP++, 
-SiPhy, phyloP, and phastCons.  REVEL was trained using recently discovered pathogenic 
+SiPhy, phyloP, and phastCons. REVEL was trained using recently discovered pathogenic 
 and rare neutral missense variants, excluding those previously used to train its 
-constituent tools.  The REVEL score for an individual missense variant can range 
+constituent tools. The REVEL score for an individual missense variant can range 
 from 0 to 1, with higher scores reflecting greater likelihood that the variant is 
 disease-causing. 
 </p>
@@ -51,13 +51,20 @@ amino acid change (synonymous) also receives the score "0.0".
 </p>
 
 <li>
-<p>One subtrack for duplicated scores. For the rare cases where multiple scores are possible
-for a position, this track contains &gt; 2 graphical features for each affected
-genome position.  Each feature is labeled with the mutation (A, C, T or G).
-The transcript ID and resulting score for this transcript is shown when
-hovering the mouse over the feature. For the large majority of the genome, 
-this subtrack has no features, because REVEL output only a single score 
-per nucleotide.
+<p>One subtrack for duplicated scores. There are rare cases where multiple scores are possible
+at a genome position, due to multiple, overlapping transcripts. For example, if there are 
+two transcript and one covers only half on an exon, then the first amino acids
+of this exon will get two different REVEL scores, since some of the underlying 
+scores (polyPhen, for example), take into account the amino acid sequence context, and 
+this context is different, depending on the transcript.
+For these cases, the last subtrack contains at least two
+graphical features, for each affected genome position. Each feature is labeled
+with the mutation (A, C, T or G) and the transcript IDs and resulting score for
+this transcript is shown when hovering the mouse over the feature or clicking
+it. For the large majority of the genome, this subtrack has no features,
+because REVEL usually output only a single score per nucleotide, as the most
+genome positions the transcript-derived amino acid sequence context is 
+identical.
 </p>
 <p>
 Note that in most diagnostic assays, variants are called using WGS
@@ -66,8 +73,8 @@ genome, not on transcripts, and a choice of the transcript is possibly made by
 a variant calling software using a heuristic. In addition, clinically, in the
 field, some transcripts have been agreed as more relevant for a disease, e.g.
 because only certain transcripts may be expressed in the relevant tissue. So
-the choice of the most relevant transcript may be a question of manual
-curation standards rather than a result of the assay.
+the choice of the most relevant transcript, and as such the REVEL score, may be
+a question of manual curation standards rather than a result of the variant itself.
 </p>
 </ul>
 
