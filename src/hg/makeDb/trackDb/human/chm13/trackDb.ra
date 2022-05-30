@@ -9,7 +9,7 @@ bigDataUrl  /gbdb/chm13/bbi/GCA_009914755.4_T2T-CHM13v2.0.assembly.bb
 type bigBed 6
 html html/GCA_009914755.4_T2T-CHM13v2.0.assembly
 searchIndex name
-searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.assembly.ix
+searchTrix  /gbdb/chm13/ixIxx/GCA_009914755.4_T2T-CHM13v2.0.assembly.ix
 url https://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel NCBI Nucleotide database
 group map
@@ -84,7 +84,7 @@ type bigGenePred
 bigDataUrl  /gbdb/chm13/bbi/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene.bb
 labelFields name,geneName,geneName2
 searchIndex name
-searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene.ix
+searchTrix  /gbdb/chm13/ixIxx/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene.ix
 html html/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene
 
 track GCA_009914755.4_T2T-CHM13v2.0ChainNet
@@ -523,7 +523,7 @@ priority 2
         type bigGenePred
         labelFields name,geneName,geneName2
         searchIndex name
-        searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeq.ix
+        searchTrix  /gbdb/chm13/ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeq.ix
         bigDataUrl  /gbdb/chm13/bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeq.bb
         longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, NP_* or YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
@@ -539,7 +539,7 @@ priority 2
         type bigGenePred
         labelFields name,geneName,geneName2
         searchIndex name
-        searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqCurated.ix
+        searchTrix  /gbdb/chm13/ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqCurated.ix
         idXref ncbiRefSeqLink mrnaAcc name
         bigDataUrl  /gbdb/chm13/bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqCurated.bb
         baseColorUseCds given
@@ -554,7 +554,7 @@ priority 2
         type bigGenePred
         labelFields name,geneName,geneName2
         searchIndex name
-        searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqPredicted.ix
+        searchTrix  /gbdb/chm13/ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqPredicted.ix
         idXref ncbiRefSeqLink mrnaAcc name
         bigDataUrl  /gbdb/chm13/bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqPredicted.bb
         baseColorUseCds given
@@ -568,7 +568,7 @@ priority 2
         longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
         priority 4
         searchIndex name
-        searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqOther.ix
+        searchTrix  /gbdb/chm13/ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqOther.ix
         bigDataUrl  /gbdb/chm13/bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqOther.bb
         type bigBed 12 +
         labelFields gene
@@ -816,7 +816,6 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.hgLiftOver.html
 
     track ucscHg38LiftOver
     parent hgLiftOver
-    #shortLabel hg38 loChain
     shortLabel UCSC hg38 liftOver
     longLabel UCSC hg38 liftOver Alignments: lastz, all chroms/patches and haps/alts/fixes
     type bigChain hg38
@@ -4470,9 +4469,7 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.sgdpCopyNumber.html
 
 track T2T_Encode
 shortLabel T2T Encode
-html encode/encode_description.html
 longLabel T2T Encode Reanalysis
-group regulation
 compositeTrack on
 subGroup1 cell Cell_Line \
   22Rv1=22Rv1 \
@@ -4505,10 +4502,10 @@ subGroup3 view View \
   LOpeaks=Macs2_hg38_LO_Peaks
 dimensions dimX=cell dimY=ab
 sortOrder cell=+ ab=+ view=+
-#group regulation
+group regulation
 visibility hide
 type bed 3
-#html html/GCA_009914755.4_T2T-CHM13v2.0.encode.html
+html html/GCA_009914755.4_T2T-CHM13v2.0.encode.html
 
   track T2T_Encode_Coverage
   shortLabel Encode Coverage
