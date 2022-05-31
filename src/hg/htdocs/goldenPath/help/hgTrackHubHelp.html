@@ -481,11 +481,11 @@ file should start with a '#' and have the field names for each column, one of th
 If this genomes.txt file is for an assembly that does not have native support in the browser, the 
 following fields must also be present:</p>
 <p>
-<em>twoBitPath</em> - refers to the .2bit file containing the sequence for this assembly. Typically 
+<em id="twoBitPath">twoBitPath</em> - refers to the .2bit file containing the sequence for this assembly. Typically
 this file is constructed from the original fasta files for the sequence using the kent program 
 faToTwoBit. See <a href="twoBit.html">here</a> for instructions on how to build a 2bit file.</p> 
 <p>
-<em>groups</em> - a file which defines the track groups on this Genome Browser. Track groups are the
+<em id="groups">groups</em> - a file which defines the track groups on this Genome Browser. Track groups are the
 sections of related tracks grouped together under the primary genome browser graphics display image.
 The groups.txt file defines the grouping of track controls under the primary Genome Browser image 
 display. The example referenced here has the usual definitions as found in the UCSC Genome Browser.
@@ -500,25 +500,26 @@ group. The label is displayed on the genome browser as the title of this group o
 The priority orders this track group with the other track groups. The defaultIsClosed determines if 
 this track group is expanded or closed by default. Values to use are 0 or 1.</p>
 <p>
-<em>description</em> - will be displayed for user information on the gateway page and most title 
+<em id="description">description</em> - will be displayed for user information on the gateway page and most title
 pages of this genome assembly browser. It is the name displayed in the assembly pull-down menu on 
 the browser gateway page.</p>
 <p>
-<em>organism</em> - the string which is displayed along with the description on most title pages in the Genome Browser. Adjust your names in organism and description until they are appropriate. This 
+<em id="organism">organism</em> - the string which is displayed along with the description on most title pages
+in the Genome Browser. Adjust your names in organism and description until they are appropriate. This
 organism name is the name that appears in the genome pull-down menu on the browser gateway page.</p>
 <p>
-<em>defaultPos</em> - specifies the default position the genome browser will open when a user first 
-views this assembly. This is usually selected to highlight a popular gene or region of interest in 
+<em id="scientificName">scientificName</em> - specifies the scientific name for the assembly.</p>
+<p>
+<em id="defaultPos">defaultPos</em> - specifies the default position the genome browser will open when a user first
+views this assembly. This is usually selected to highlight a popular gene or region of interest in
 the genome assembly.</p>
 <p>
 <em>orderKey </em> - used with other genome definitions at this hub to order the pull-down menu 
 ordering the genome pull-down menu.</p>
 <p>
-<em>htmlPath</em> - refers to an html file that is used on the gateway page to display information 
-about the assembly.</p>
-<p>
-<strong><em>Example 3:</em></strong> Sample genomes.txt file defining attributes for the hub shown 
-in <em>Example 1</em>.</p>
+<em id="htmlPath">htmlPath</em> - refers to an html file that is used on the gateway page to display
+information for a novel assembly.</p>
+<h6 id="example_genomes.txt">Example genomes.txt including a newOrg1 assembly</h6>
 <pre><code><strong>genome</strong> hg18
 <strong>trackDb</strong> hg18/trackDb.txt
 <br>
@@ -543,7 +544,7 @@ track data in the hub. The subdirectory names must have a 1:1 correspondence wit
 defined by the <em>genome</em> tags in the genomes.txt file.</p>
 <hr>
 <p>
-<strong>Step 7. Create the trackDb.txt files</strong><br>
+<strong id="trackDb.txt">Step 7. Create the trackDb.txt files</strong><br>
 The trackDb.txt file, which is based on the Genome Browser .ra format, is the most complicated of 
 the text files in the hub directory. It contains a stanza for each of the data files for the given 
 assembly that defines display and configuration properties for the track. If the tracks are grouped 
