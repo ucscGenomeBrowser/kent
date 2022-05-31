@@ -4122,17 +4122,21 @@ while (i < formatLen)
 			sqlCheckIdentifier(s);
 		    else  
 			{
-			if (!startsWith(NOSQLINJ, s))
+			if (startsWith(NOSQLINJ, s))
+			    {
+			    // wipe out the prefix by removing from the input string s
+			    int strLen = strlen(s);
+			    memmove(s, s+NOSQLINJ_SIZE, strLen - NOSQLINJ_SIZE + 1);
+			    AllocVar(restoreSafeStr);
+			    restoreSafeStr->s = s;
+			    restoreSafeStr->strLen = strLen;
+			    slAddHead(&restoreSafeStrList, restoreSafeStr);
+			    }
+			else
 			    {
 			    sqlCheckError("Internal Error: Input to %%-s should be created with safe functions.");
+			    // will continue here if non-abort level chosen.
 			    }
-                        // wipe out the prefix by removing from the input string s
-			int strLen = strlen(s);
-			memmove(s, s+NOSQLINJ_SIZE, strLen - NOSQLINJ_SIZE + 1);
-			AllocVar(restoreSafeStr);
-                        restoreSafeStr->s = s;
-                        restoreSafeStr->strLen = strLen;
-			slAddHead(&restoreSafeStrList, restoreSafeStr);
 			}
 		    }
 		else
