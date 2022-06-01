@@ -514,7 +514,7 @@ genericHeader(tdb, itemName);
 genericBedClick(conn, tdb, itemName, start, 6);
 
 /* get the rnaSecStr and maf from db */
-sprintf(extraWhere, "chromStart = %d and name = '%s'", start, itemName);
+sqlSafef(extraWhere, sizeof extraWhere, "chromStart = %d and name = '%s'", start, itemName);
 sr   = hExtendedChromQuery(conn, table, seqName, extraWhere,  FALSE, NULL, &rowOffset);
 row  = sqlNextRow(sr);
 if (hasConf)
