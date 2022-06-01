@@ -889,12 +889,15 @@
     the URLs in double quotes.  The default label for the identifier is the field
     description in the .as file (all text after the # mark). 
     </P> 
+    <P>The field can contain multiple values, separated by ","., multiple links will then be
+    created.
+    </P>
     <P>
-    If the field contains a "|" symbol, the part before the symbol is used to
-    replace the $$ wildcard and the part after it as the label. This is similar
+    If an of the comma-seperated values contains a "|" symbol, the part before the symbol is used to
+    replace the $$ wildcard and the part after it is used as the label. This is similar
     to how Wikipedia markup encodes links. In the example below, a value for the
-    field pmid of "115330|Doe, J. et al" would create a link with the URL
-    https://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J. et al" .
+    field pmid of "115330|Doe, J et al" would create a link with the URL
+    https://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J et al" .
     </P>
 
     <P><B>Example:</B></P>
