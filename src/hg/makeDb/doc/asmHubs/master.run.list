@@ -328,6 +328,7 @@
 ./runBuild GCA_014839835.1 GCA_014839835.1_bDryPub1.pri birds Dryobates_pubescens
 ./runBuild GCA_014905235.2 GCA_014905235.2_Bmori_2016v1.0 invertebrates Bombyx_mori
 ./runBuild GCA_015220805.1 GCA_015220805.1_bPogPus1.pri birds Pogoniulus_pusillus
+./runBuild GCA_015227675.2 GCA_015227675.2_mRatBN7.2 mammals Rattus_norvegicus
 ./runBuild GCA_015227805.2 GCA_015227805.2_bHirRus1.pri.v2 birds Hirundo_rustica
 ./runBuild GCA_015244455.1 GCA_015244455.1_mRatBN7.1_alternate_haplotype mammals Rattus_norvegicus
 ./runBuild GCA_015443085.1 GCA_015443085.1_Saanen_v1 mammals Capra_hircus
