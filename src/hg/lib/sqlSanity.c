@@ -56,7 +56,7 @@ for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
     else if (tokPtr->type == kxtOr)
 	sqlDyStringPrintf(clause, "OR");
     else if (tokPtr->type == kxtNot)
-	sqlDyStringPrintf(clause, "NOT");
+	sqlDyStringPrintf(clause, "!");
     else if (tokPtr->type == kxtAdd)
 	sqlDyStringPrintf(clause, "+");
     else if (tokPtr->type == kxtSub)
