@@ -123,6 +123,31 @@
     target="_blank">blog post.</a></p>
 </DIV>
 
+<h3 id=assembly_hubs>Assembly Hubs</h3>
+<p>This page does not describe the settings unique to Assembly Hubs.
+Track Hubs can display novel genomes, through a type of hub called an
+<a href="../hgTrackHubHelp.html#Assembly" target="_blank">Assembly Hub</a>.
+This page focuses on the settings found in the <a target="_blank"
+href="../hgTrackHubHelp.html#trackDb.txt"><code>trackDb.txt</code></a> file used in
+both Track Hubs and Assembly Hubs. The <a href="../hgTrackHubHelp.html#example_genomes.txt"
+target="_blank"><code>genomes.txt</code></a> file for an Assembly Hub involves
+many additional settings not described on this page, such as
+<a href="../hgTrackHubHelp.html#twoBitPath" target="_blank"><code>twoBitPath</code></a> and
+<a href="../hgTrackHubHelp.html#defaultPos" target="_blank"><code>defaultPos</code></a> to
+identify the location of the sequence for the novel assembly and what default position to
+display. The <code>genomes.txt</code> file in Assembly Hubs also requires display information
+such as <a href="../hgTrackHubHelp.html#organism" target="_blank"><code>organism</code></a>,
+<a href="../hgTrackHubHelp.html#scientificName" target="_blank"><code>scientificName</code></a>,
+<a href="../hgTrackHubHelp.html#description" target="_blank"><code>description</code></a>,
+and <a href="../hgTrackHubHelp.html#htmlPath" target="_blank"><code>htmlPath</code></a> to
+label the novel assembly on the gateway page. A special <a href="../hgTrackHubHelp.html#groups"
+target="_blank"><code>groups</code></a> setting in Assembly Hubs points to a separate text
+document that defines track groups under the main image (such as the first &quot;Mapping and
+Sequencing&quot; group found on almost all Browsers). Read the <a target="_blank"
+href="../hgTrackHubHelp.html#genomes.txt">&quot;Create the genomes.txt file&quot;</a> section
+of the Track Hub User Guide for more information, and see examples in the <a target="_blank"
+href="../hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs<a>.</p>
+
 <P>The remainder of this document is divided into the following sections and should be
 used as a ready reference.</P>
 <IMG class='toggle all' />&nbsp;<I>Expand/close descriptions of settings
@@ -919,7 +944,7 @@ are described below along with settings specific to their types.</P>
     </TD></TR>
     <TR VALIGN=TOP><TD class="logo">
         <A name="logo"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">logo on</code></div>
+        <div class="format"><code class="level-new">logo on</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="windowingFunction">
         <A name="windowingFunction"></A><IMG class='toggle detail'>
