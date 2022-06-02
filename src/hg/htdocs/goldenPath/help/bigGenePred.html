@@ -61,10 +61,12 @@ is pulled in when the <code>bedToBigBed</code> utility is run with the
     string geneType;    	"Gene type"
     )  </code></pre>
 
-<p>The fields cdsStartStat and cdsEndStat can have the values ('none','unk','incmpl','cmpl'). However, the values are not used for our display and can not be 
-used to subset for coding or non-coding genes. For most purposes, to get more information about a transcript, other tables will need to be used e.g. in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, where xx is the Gencode Version number.
-</p>
-
+<p>The fields cdsStartStat and cdsEndStat can have the values ('none','unk','incmpl','cmpl'). However,
+the values are not used for our display and can not be used to subset for coding or non-coding genes.
+For most purposes, to get more information about a transcript, other tables will need to be used e.g.
+in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, where xx is the Gencode Version number.
+See this <a href="../../FAQ/FAQgenes.html#coding" target="_blank">coding/non-coding genes FAQ</a>
+for more information.</p>
 <p>
 The following bed12+8 is an example of a <a href="examples/bigGenePred.txt">pre-bigGenePred text file
 </a>.</p>

@@ -972,7 +972,11 @@ Variations of the genePred format are listed below.</p>
 <p>
 If you would like to obtain browser data in GFF (GTF) format, please refer to 
 <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format" 
-target="_blank">Genes in gtf or gff format</a> on the Wiki.</p>
+target="_blank">Genes in gtf or gff format</a> on the Wiki. There is also a
+format of genePred called <a href="../goldenPath/help/bigGenePred.html"
+target="_blank">bigGenePred</a>, a version of <a href="../goldenPath/help/bigBed.html"
+target="_blank">bigBed</a>, which enables custom tracks to display codon numbers
+and amino acids when zoomed in to the base level.</p>
 
 <a name=GenePredictions></a>
 <p><strong>Gene Predictions</strong></p>
@@ -1021,9 +1025,12 @@ genePredExt format.</p>
     lstring exonFrames; 	"Exon frame offsets {0,1,2}"
     )
 </code></pre>
-<p>The fields cdsStartStat and cdsEndStat can have the values ('none','unk','incmpl','cmpl'). However, the values are not used for our display and can not be 
-used to subset for coding or non-coding genes. For most purposes, to get more information about a transcript, other tables will need to be used e.g. in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, where xx is the Gencode Version number.
-</p>
+<p>The fields cdsStartStat and cdsEndStat can have the values ('none','unk','incmpl','cmpl'). However,
+the values are not used for our display and can not be used to subset for coding or non-coding
+genes. For most purposes, to get more information about a transcript, other tables will need to
+be used e.g. in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, where xx is the
+Gencode Version number. See this <a href="../../FAQ/FAQgenes.html#coding"
+target="_blank">coding/non-coding genes FAQ</a> for more information.</p>
 
 <a name=RefFlat></a>
 <p><strong>Gene Predictions and RefSeq Genes with Gene Names</strong></p>
