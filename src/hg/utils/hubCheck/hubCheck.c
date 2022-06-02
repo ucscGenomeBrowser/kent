@@ -659,7 +659,7 @@ if (errCatchStart(errCatch))
                 {
                 char *col = sortOrder->column[i];
                 if ( (!sameString(col, SUBTRACK_COLOR_SUBGROUP)) && (membership == NULL || stringArrayIx(col, membership->subgroups, membership->count) == -1))
-                    errAbort("%s not a member of sortOrder subgroup %s", subtrackName, col);
+                    warn("%s not a member of sortOrder subgroup %s", subtrackName, col);
                 }
             }
 
@@ -671,7 +671,7 @@ if (errCatchStart(errCatch))
                 char *subgroupName = membersForAll->members[i]->groupTag;
                 if (stringArrayIx(subgroupName, membership->subgroups, membership->count) == -1)
                     {
-                    errAbort("subtrack %s not a member of subgroup %s", subtrackName, subgroupName);
+                    warn("subtrack %s not a member of subgroup %s", subtrackName, subgroupName);
                     }
                 }
             }
@@ -682,13 +682,13 @@ if (errCatchStart(errCatch))
             char *subgroupName = membership->subgroups[i];
             if (!subgroupingExists(tdb->parent, subgroupName))
                 {
-                errAbort("subtrack \"%s\" has a subgroup \"%s\" not defined at parent level", subtrackName, subgroupName);
+                warn("subtrack \"%s\" has a subgroup \"%s\" not defined at parent level", subtrackName, subgroupName);
                 }
             }
         }
     }
 errCatchEnd(errCatch);
-if (errCatch->gotError)
+if (errCatch->gotError || errCatch->gotWarning)
     {
     retVal = 1;
     trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);

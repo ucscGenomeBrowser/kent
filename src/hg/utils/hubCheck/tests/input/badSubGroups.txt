@@ -16,7 +16,7 @@ type bigBed 3 +
 track state1
 shortLabel state1shortLabel
 longLabel state1LongLabel
-subGroups view=SuperEnhancers bogus=BOGUS
+subGroups view=SuperEnhancers bogus=BOGUS bogus2=BOGUS2
 type bigBed 3 +
 bigDataUrl http://genome-test.gi.ucsc.edu/~chmalee/hubValidate/plants/cshl2013/araTha1/CS13-12383_25state_dense_Gateway_SuperEnhancers.bigBed
 parent subgroupsComp
