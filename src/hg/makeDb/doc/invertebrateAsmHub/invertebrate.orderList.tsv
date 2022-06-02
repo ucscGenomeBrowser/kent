@@ -167,7 +167,7 @@ GCF_000236305.1_Drho_2.0	fly D.rhopaloa
 GCF_018152115.1_ASM1815211v1	fly D.rhopaloa
 GCF_016746245.1_Prin_Dsan_1.0	fly D.santomea
 GCF_016746245.2_Prin_Dsan_1.1	fly D.santomea
-GCF_004382195.1_ASM438219v1	fly D.sechellia
+GCF_004382195.2_ASM438219v2	fly D.sechellia (sech25 v2 2019 UC Irvine)
 GCF_002093755.1_Dser1.0	fly D.serrata
 GCF_016746395.1_Prin_Dsim_3.0	fly D.simulans
 GCF_016746395.2_Prin_Dsim_3.1	fly D.simulans
@@ -289,6 +289,7 @@ GCA_905404285.1_ilEraDefo1.1	mottled umber moth
 GCF_000355655.1_DendPond_male_1.0	mountain pine beetle
 GCF_000004555.1_ASM455v1	nematode C.briggsae
 GCF_000004555.2_CB4	nematode C.briggsae
+GCA_003052745.1_Sp34_v7	nematode C.inopinata
 GCF_000149515.1_ASM14951v1	nematode C.remanei
 GCF_000507365.1_N_americanus_v1	nematode N.americanus
 GCF_001040885.1_S_ratti_ED321	nematode S.ratti
