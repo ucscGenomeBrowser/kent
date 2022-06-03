@@ -76,7 +76,7 @@ foreach my $asmId (@orderList) {
     next;
   }
   ++$buildDone;
-  printf STDERR "# %03d symlinks %s %s\n", $buildDone, $accessionId, $asmId;
+  printf STDERR "# %03d symlinks %s %s\n", $buildDone, $asmId, $commonName{$asmId};
 #  printf STDERR "%s\n", $buildDir;
 #  printf STDERR "%s\n", $destDir;
   if ( ! -d "${destDir}" ) {
