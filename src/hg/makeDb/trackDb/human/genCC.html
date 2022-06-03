@@ -7,7 +7,7 @@ The GenCC provides information pertaining to the validity of gene-disease relati
 with a current focus on Mendelian diseases. Curated gene-disease relationships are submitted 
 by GenCC member organizations that currently provide online resources (e.g. ClinGen, DECIPHER, 
 Orphanet, etc.), as well as diagnostic laboratories that have committed to sharing their internal 
-curated gene-level knowledge (e.g. Ambry, Illumina, Invitae, etc.).</p>
+curated gene-level knowledge (e.g. Ambry Genetics, Illumina, Invitae, etc.).</p>
 <p>
 The GenCC aims to clarify overlap between gene curation efforts and develop
 consistent terminology for validity, allelic requirement and mechanism
@@ -22,18 +22,17 @@ Each item displayed represents a submission to the GenCC database. The displayed
 name is a combination of the gene symbol and the disease's original submission ID. 
 This submission ID is either the OMIM#, MONDO# or Orphanet#. Clicking
 on any item will display the complete meta data for that item, including
-linkouts to the GenCC, NCBI, Ensembl, HGNC, genecards, pombase (MONDO),
-and Human Phenotype Ontology (HP). Mousing over any item will display the
+linkouts to the GenCC, NCBI, Ensembl, HGNC, GeneCards, Pombase (MONDO),
+and Human Phenotype Ontology (HPO). Mousing over any item will display the
 associated disease for that submission.</p>
 
 <p>
 Items are colored based on the GenCC classification, or validation, of the
 evidence in the color scheme seen in the table below. 
-For more information on this process see the <a target="_blank"
+For more information on this process, see the <a target="_blank"
 href="https://thegencc.org/faq.html#validity-termsdelphi-survey">GenCC
 validity terms FAQ</a>. A filter for the track is also available
 to display a subset of the items based on their classification.</p>
-<p>
 
 <p>
 <table cellpadding='2'>
@@ -53,15 +52,15 @@ to display a subset of the items based on their classification.</p>
 </p>
 
 <p>
-<b>Limitations:</b> Most entries include both NM_ accessions as well as ESNT and ENSG identifiers.
+<b>Limitations:</b> Most entries include both NM_ accessions as well as ENST and ENSG identifiers.
 From the original file, which contains no coordinates, two genes were not mapped
 to the hg38 genome, SLCO1B7 and ATXN8. This results in two fewer items part
-of this track which can be found in the GenCC database. For hg19 one additional
-gene was not mapped, KCNJ18. In addition to this the GenCC data in the Genome
+of this track which can be found in the GenCC database. For hg19, one additional
+gene was not mapped, KCNJ18. In addition to this, the GenCC data in the Genome
 Browser does not include OMIM data due to licensing restrictions. For more
-information see the Methods section below.</p>
+information, see the Methods section below.</p>
 
-<h2>Data access</h2>
+<h2>Data Access</h2>
 <p>
 The source data can be explored in <a target="_blank" href="https://search.thegencc.org/">
 GenCC database</a>. The source files can also be found on the <a target="_blank"
@@ -87,7 +86,6 @@ The tools can also be used to obtain features confined to a given range, e.g.,
 <tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/genCC.bb stdout</tt></p>
 
 <h2>Methods</h2>
-
 <p>
 The data were downloaded from the <a target="_blank" 
 href="https://search.thegencc.org/download">GenCC downloads page</a> in tsv format. Manual
