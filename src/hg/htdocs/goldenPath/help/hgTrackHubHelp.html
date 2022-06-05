@@ -418,32 +418,39 @@ that define properties of the track hub:</p>
 <strong>email</strong> <em>email_address</em>
 <strong>descriptionUrl</strong> <em>descriptionUrl</em> </code></pre>
 <p>
-<em>hub</em> - a single-word name of the directory containing the track hub files. Not displayed to 
+<em id="hub">hub</em>
+- a single-word name of the directory containing the track hub files. Not displayed to
 hub users. This must be the first line in the hub.txt file.</p>
 <p>
-<em>shortLabel</em> - the short name for the track hub. Suggested maximum length is 17 characters.  
+<em id="shortLabel">shortLabel</em>
+- the short name for the track hub. Suggested maximum length is 17 characters.
 Displayed as the hub name on the Track Hubs page and the track group name on the browser tracks 
 page.</p>
 <p>
-<em>longLabel</em> - a longer descriptive label for the track hub. Suggested maximum length is 80 
+<em id="longLabel">longLabel</em>
+- a longer descriptive label for the track hub. Suggested maximum length is 80
 characters.  Displayed in the description field on the Track Hubs page.</p>
 <p>
-<em>genomesFile</em> - the relative path of the genomes.txt file, which contains the list of genome 
+<em id="genomesFile">genomesFile</em>
+- the relative path of the genomes.txt file, which contains the list of genome
 assemblies covered by the track data and the names of their associated configuration files. By 
 convention the genomes.txt file is located in the same directory as the hub.txt file.</p>
 <p>
-<em>email</em> - the contact to whom questions regarding the track hub should be directed.</p>
+<em id="email">email</em>
+- the contact to whom questions regarding the track hub should be directed.</p>
 <p>
-<em>descriptionUrl</em> - URL to HTML page with a description of the hub's contents. This can be
+<em id="descriptionUrl">descriptionUrl</em>
+- URL to HTML page with a description of the hub's contents. This can be
 relative to the directory which holds hub.txt. This file is assumed to be HTML, and if the hub is a 
 UCSC public hub, this HTML will be crawled nightly by UCSC to build an index with which public hubs 
 can be searched. If present, clicks on the shortLabel will open this HTML in a new tab. This field 
 is optional.</p>
 <p>
-<em>useOneFile on</em> - only use this setting if your hub is only displaying one genome and
+<em id="useOneFile">useOneFile on</em>
+- only use this setting if your hub is only displaying one genome and
 if you wish to put all information into only one file: hub.txt. This setting allows you
 to put the text lines of <a target="_blank" href="#genomes.txt"><code>genomes.txt</code></a>
-and<a target="_blank" href="#trackDb.txt"><code>trackDb.txt</code></a> all into the singular
+and <a target="_blank" href="#trackDb.txt"><code>trackDb.txt</code></a> all into the singular
 <a target="_blank" href="#hub.txt"><code>hub.txt</code></a>file. To learn more about
 this setting click  <b><a target="_blank" href="hgTracksHelp.html#UseOneFile"><code>useOneFile on</code></a></b>
 and see a <a href="examples/hubExamples/hubUseOneFile/singleFileHubExample.txt"
