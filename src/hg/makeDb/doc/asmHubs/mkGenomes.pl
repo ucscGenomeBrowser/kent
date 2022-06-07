@@ -79,7 +79,7 @@ sub singleFileHub($$$$$$$$$$$) {
     printf $fh "twoBitPath %s.2bit\n", $accessionId;
     printf $fh "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
     printf $fh "chromSizes %s.chrom.sizes.txt\n", $accessionId;
-    if ( (0 == 1) && -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+    if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
       printf $fh "chromAliasBb %s.chromAlias.bb\n", $accessionId;
     } else {
       printf $fh "chromAlias %s.chromAlias.txt\n", $accessionId;
@@ -206,7 +206,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
 
   # wait until code gets out for v429 release before using chromAlias.bb
   # for the chromInfoPage display of hgTracks
-  if ( (0 == 1) &&  -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+  if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
     printf "chromAliasBb ../%s/%s/%s.chromAlias.bb\n", $accessionDir, $accessionId, $accessionId;
   } else {
     printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
@@ -268,7 +268,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf GF "twoBitPath %s.2bit\n", $accessionId;
   printf GF "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
   printf GF "chromSizes %s.chrom.sizes.txt\n", $accessionId;
-  if ( (0 == 1) && -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+  if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
     printf GF "chromAliasBb %s.chromAlias.bb\n", $accessionId;
   } else {
     printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;

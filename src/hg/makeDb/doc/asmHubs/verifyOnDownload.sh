@@ -27,6 +27,8 @@ if [ "${host}" = "apibeta.soe.ucsc.edu" ]; then
   hubSource="hgdownload.soe.ucsc.edu"
 fi
 
+export totalTrackCount=0
+
 for dirPath in `~/kent/src/hg/makeDb/doc/asmHubs/mkSendList.pl "${orderList}"`
 do
   ((doneCount=doneCount+1))
@@ -44,6 +46,7 @@ do
   else
     printf "%03d\t%s\t%d (error <= %d) tracks:\t" "${doneCount}" "${genome}" "${trackCount}" "${minTrackCount}"
   fi
+  totalTrackCount=`echo $totalTrackCount $trackCount | awk '{print $1+$2}'`
   curl -L "https://$host/list/hubGenomes?hubUrl=https://$hubSource/hubs/${dirPath}/hub.txt" 2> /dev/null \
      | python -mjson.tool | egrep "organism\":|description\":" | sed -e "s/'/_/g;" \
        | tr -d '"'  | xargs echo \
@@ -61,10 +64,11 @@ do
   else
     printf "%03d\t%s\t%d (error < %d) tracks:\t" "${doneCount}" "${db}" "${trackCount}" "${minTrackCount}"
   fi
+  totalTrackCount=`echo $totalTrackCount $trackCount | awk '{print $1+$2}'`
 hgsql -N -e "select organism,description,\",\",scientificName from dbDb where name=\"$db\";" hgcentraltest | tr "'" '_' | xargs echo | sed -e 's/ ,/,/;'
        ;;
   esac
 
 done
 export failCount=`echo $doneCount $successCount | awk '{printf "%d", $1-$2}'`
-printf "# checked %3d hubs, %3d success, %3d fail\n" "${doneCount}" "${successCount}" "${failCount}"
+printf "# checked %3d hubs, %3d success, %3d fail, total tracks: %d\n" "${doneCount}" "${successCount}" "${failCount}" "${totalTrackCount}"
