@@ -814,12 +814,25 @@ compositeTrack on
     visibility pack
     bigDataUrl /gbdb/hg38/snpCnvArrays/agilent/hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bb
 
-    track illumina
+    track snpArrayIllumina850k
     parent genotypeArrays on
     shortLabel Illumina 850k
     longLabel Illumina 850k EPIC Methylation Array
     type bigBed 6
     bigDataUrl /gbdb/hg38/bbi/illumina/epic850K.bb
+    visibility pack
+    urls refGeneAccession="https://www.ncbi.nlm.nih.gov/nuccore/$$" rsID="https://www.ncbi.nlm.nih.gov/snp/?term=$$"
+    colorByStrand 255,0,0 0,0,255
+    html genotypeArrays
+    pennantIcon New red
+    release alpha
+
+    track snpArrayIllumina450k
+    parent genotypeArrays on
+    shortLabel Illumina 450k
+    longLabel Illumina 450k Methylation Array
+    type bigBed 6
+    bigDataUrl /gbdb/hg38/bbi/illumina/illumina450K.bb
     visibility pack
     urls refGeneAccession="https://www.ncbi.nlm.nih.gov/nuccore/$$" rsID="https://www.ncbi.nlm.nih.gov/snp/?term=$$"
     colorByStrand 255,0,0 0,0,255
