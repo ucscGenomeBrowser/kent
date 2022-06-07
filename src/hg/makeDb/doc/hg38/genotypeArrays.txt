@@ -48,7 +48,7 @@ grep -f 450K.only EPIC.hg38.final.bed > 450k.final.bed &
 
 # Creating the bigBeds
 bedToBigBed -tab -type=bed6+6 -as=epic.as EPIC.hg38.final.bed hg38.chrom.sizes EPIC.bb
-bedToBigBed -tab -type=bed6+6 -as=epic.as 450k.final.bed hg38.chrom.sizes 450k.bb
+bedToBigBed -tab -type=bed6+6 -as=450k.as 450k.final.bed hg38.chrom.sizes 450k.bb
 
 # Moving the data into /hive and creating symlinks in /gbdb
 cp EPIC.bb /hive/data/genomes/hg38/bed/illumina/epic850K.bb
