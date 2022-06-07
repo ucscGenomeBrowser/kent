@@ -7,20 +7,24 @@ selection, where variations likely have functional impact. The algorithms do
 not use multi-species alignments to derive evolutionary constraint, but use
 primarily human variation, usually from variants collected by gnomAD (see the
 gnomAD V2 or V3 tracks on hg19 and hg38) or TOPMED (contained in our dbSNP
-tracks and available as a filter). Another constraint score, gnomAD
+tracks and available as a filter). 
+</p>
+
+<p>Note that another important constraint score, gnomAD
 constraint, is not part of this container but can be found in the hg38 gnomAD
 track.
+</p>
 
-The algorithms covered here are:
+The algorithms included in this track are:
 <ol>
     <li><b><a href="https://github.com/astrazeneca-cgr-publications/jarvis" target="_blank">
     JARVIS - "Junk" Annotation genome-wide Residual Variation Intolerance Score</a></b>: 
-    First scan the entire genome with a
+    This algorithm first scans the entire genome with a
     sliding-window approach (using a 1-nucleotide step), recording the number of
     all TOPMED variants and common variants, irrespective of their predicted effect,
     within each window, to eventually calculate a single-nucleotide resolution
-    genome-wide residual variation intolerance score (gwRVIS). Then combine
-    gwRVIS, primary genomic sequence context, and additional genomic
+    genome-wide residual variation intolerance score (gwRVIS). In a second step, it combines
+    this gwRVIS score, primary genomic sequence context, and additional genomic
     annotations with a multi-module deep learning framework to infer
     pathogenicity of noncoding regions that still remains naive to existing
     phylogenetic conservation metrics. The higher the score, the more deleterious
@@ -52,7 +56,7 @@ The algorithms covered here are:
 
 <h3>JARVIS</h3>
 <p>
-JARVIS scores are the scores as a signal ("wiggle") track, with one score per genome position.
+JARVIS scores are shown as a signal ("wiggle") track, with one score per genome position.
 Mousing over the bars displays the exact values. The scores were downloaded and converted to a single bigWig file.
 See <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" target=_blank>hg19 makeDoc</a> and
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/jarvis.txt" target=_blank>hg38 makeDoc</a>.</p>
@@ -73,11 +77,13 @@ target=_blank>makeDoc</a> hg19 build log.</p>
 <p>
 MTR data can be found on two tracks, <b>MTR All data</b> and <b>MTR Scores</b>. In the
 <b>MTR Scores</b> track the data has been converted into 4 separate signal tracks
-representing each base pair mutation, with the lowest possible score represented when
-multiple transcripts overlap. A horizontal line is drawn on the 0.8 score line
+representing each base pair mutation, with the lowest possible score shown when
+multiple transcripts overlap at a position. Overlaps can happen since this score
+is derived from transcripts and multiple transcripts can overlap. 
+A horizontal line is drawn on the 0.8 score line
 to roughly represent the 25th percentile, meaning the items below may be of particular
 interest. It is recommended that the data be explored using
-this version of the track, as it condenses the information substatially while
+this version of the track, as it condenses the information substantially while
 retaining the magnitude of the data.</p>
 
 <p>Any specific point mutations of interest can then be researched in the <b>
@@ -135,8 +141,9 @@ See the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg
 <h2>Credits</h2>
 
 <p>
-Thanks to Jean-Madeleine Desainteagathe (APHP Paris, France) for suggesting the Jarvis, MTR, HMC tracks. Thanks to Xialei Zhang for providing the HMC data file and to Dimitrios Vitsios for helping clean up the hg38 Jarvis files. 
-</p>
+Thanks to Jean-Madeleine Desainteagathe (APHP Paris, France) for suggesting the
+Jarvis, MTR, HMC tracks. Thanks to Xialei Zhang for providing the HMC data file
+and to Dimitrios Vitsios for helping clean up the hg38 Jarvis files.  </p>
 
 <h2>References</h2>
 
