@@ -301,7 +301,9 @@
 <div class="format"><code>html</code></div>
     <P class="isRequired">Required: No</P>
     <p>To help users understand your data we request you provide
-    a web page that explains what your Track Hub is presenting.</p>
+    a web page that explains what your Track Hub is presenting.
+    Adding an html page for your Track Hub is also useful so you
+    can instruct people on how to cite your data.</p>
     <p>Use the <code>html path/to/explain.html</code> to specify the file
     that contains the complete description of a track in HTML format.
     The path of this file name is relative to the path of the trackDb file, or it
