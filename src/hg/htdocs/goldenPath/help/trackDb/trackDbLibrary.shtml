@@ -885,20 +885,20 @@
     bigBed fields as explained in example 3 of the <a href="/goldenPath/help/bigBed.html#Ex3">bigBed documentation</a>.
     The field names from your .as file are the field names referenced in this statement.
     The urls in this statement support the same wildcards as the <A
-    onclick="jumpTo(this)" HREF="#">url</A> statement.  Make sure to enclose
+    onclick="jumpTo(this)" href="#url">url</a> statement.  Make sure to enclose
     the URLs in double quotes.  The default label for the identifier is the field
     description in the .as file (all text after the # mark). 
     </P> 
-    <P>The field can contain multiple values, separated by ","., multiple links will then be
-    created.
-    </P>
-    <P>
-    If an of the comma-seperated values contains a "|" symbol, the part before the symbol is used to
-    replace the $$ wildcard and the part after it is used as the label. This is similar
-    to how Wikipedia markup encodes links. In the example below, a value for the
-    field pmid of "115330|Doe, J et al" would create a link with the URL
-    https://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J et al" .
-    </P>
+    <p>The field can contain multiple values, separated by a comma "," where multiple links
+    will then be created on each item. For instance, a &quot;pmid&quot; field with an
+    entry &quot;11932250,34718705&quot; would create two links.</p>
+    <p>
+    If an entry of comma-separated values contains a &quot;|&quot; symbol, the part before the
+    pipe symbol is used to replace the $$ wildcard and the part after it is used as the label,
+    as opposed to the default label description in the .as file. This pipe substitution
+    is similar to how Wikipedia markup encodes links. In the example below, a value for the
+    field pmid of &quot;11932250|W James Kent&quot; would create a link with the URL
+    https://www.ncbi.nlm.nih.gov/pubmed/11932250 and the label &quot;W James Kent&quot;.</p>
 
     <P><B>Example:</B></P>
     <pre>

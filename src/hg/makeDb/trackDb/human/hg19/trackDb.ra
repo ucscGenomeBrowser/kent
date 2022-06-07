@@ -1911,6 +1911,24 @@ type bed 3 .
     type bed 6 +
     priority 23
 
+    track snpArrayIllumina450k
+    parent genotypeArrays
+    shortLabel Illumina 450k
+    longLabel Illumina 450k Methylation Array
+    type bigBed 4
+    priority 24
+    bigDataUrl /gbdb/hg19/bbi/illumina/illumina450K.bb
+    release alpha
+
+    track snpArrayIllumina850k
+    parent genotypeArrays
+    shortLabel Illumina 850k
+    longLabel Illumina 850k EPIC Methylation Array
+    type bigBed 4
+    priority 25
+    bigDataUrl /gbdb/hg19/bbi/illumina/epic850K.bb
+    release alpha
+
 track tfbsConsSites
 shortLabel TFBS Conserved
 longLabel HMR Conserved Transcription Factor Binding Sites

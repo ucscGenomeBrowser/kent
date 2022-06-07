@@ -34869,3 +34869,27 @@ wigToBigWig g.wig chrom.sizes g.bw
 bedToBigBed -type=bed9+10 -tab -as=mtr.as mtr2.bed chrom.sizes mtr2.bb
 ln -s /hive/data/outside/mtr2.bb /gbdb/hg19/bbi/
 ln -s /hive/data/outside/*.bw /gbdb/hg19/bbi/
+
+#############################################################################
+# Illumina Infinium Microarrays - May 2022 - Jairo
+# 
+
+# Download the custom tracks using the Table Browser
+Illumina_450k.bed
+Illumina_EPIC.bed
+
+# Sorting the bed files
+sort -k1,1 -k2,2n Illumina_450k.bed > illumina_450k.bed.sorted
+sort -k1,1 -k2,2n Illumina_EPIC.bed > illumina_EPIC.bed.sorted
+
+# creating a bigBed from the bed files
+wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes
+bedToBigBed -type=bed4 illumina_450k.bed.sorted hg19.chrom.sizes illumina_450k.hg19.bb
+bedToBigBed -type=bed4 illumina_EPIC.bed.sorted hg19.chrom.sizes illumina_EPIC.hg19.bb
+
+# Moving data into /hive and creating symlinks in /gbdb
+cp illumina_450k.hg19.bb /hive/data/genomes/hg19/bed/illumina/illumina_450K.bb
+cp illumina_EPIC.hg19.bb /hive/data/genomes/hg19/bed/illumina/illumina_EPIC_850K.bb
+
+ln -s /hive/data/genomes/hg19/bed/illumina/illumina_450K.bb /gbdb/hg19/bbi/illumina/ilumina450K.bb
+ln -s /hive/data/genomes/hg19/bed/illumina/illumina_EPIC_850K.bb /gbdb/hg19/bbi/illumina/epic850K.bb

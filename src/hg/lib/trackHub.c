@@ -1268,16 +1268,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp)
 /* Look for term in track hubs.  Update hgp if found */
 {
-struct trackDb *tdbList = NULL;
-if (trackHubDatabase(db))
-    {
-    struct trackHubGenome *genome = trackHubGetGenome(db);
-    tdbList = trackHubTracksForGenome(genome->trackHub, genome, NULL);
-    }
-
-tdbList = slCat(tdbList, hubCollectTracks(db, NULL));
-
-findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
+findBigBedPosInTdbList(cart, db, hubCollectTracks(db, NULL), term, hgp, NULL);
 }
 
 static void parseBlatPcrParams(char *database, char *type, char *setting,
