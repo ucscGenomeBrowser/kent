@@ -146,7 +146,7 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
     {
     if (tdb->subtracks)
         {
-        found = findBigBedPosInTdbList(cart, db, tdbList->subtracks, term, hgp, hfs) || found;
+        found = findBigBedPosInTdbList(cart, db, tdb->subtracks, term, hgp, hfs) || found;
         continue;
         }
     if (startsWith("bigWig", tdb->type) || !startsWith("big", tdb->type))
