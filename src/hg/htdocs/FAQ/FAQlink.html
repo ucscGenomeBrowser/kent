@@ -246,7 +246,47 @@ href="../goldenPath/help/hgTrackHubHelp.html">track hub user guide</a>,
 or the <a href=../goldenPath/help/hubQuickStartAssembly.html>quick start guide
 to assembly hubs</a>.
 </p>
-
+<h6 id="hubClear">Use <code>hubClear=</code> to remove hubs at the same location</h6>
+<p>
+Another feature one can use in place of <code>hubUrl=</code> is
+<code>hubClear=</code>, which will load a hub while simultaneously disconnecting
+or clearing, hubs located at the same location. For example, adding
+<code>hubClear=http://university.edu/lab/folder/hub10.txt</code> would connect the
+referenced hub10.txt while simultaneously disconnecting any hubs that might be
+displayed from  the same <code>http://university.edu/lab/folder/</code> directory
+(for example, hub1.txt, hub2.txt, etc.). This feature can be useful for dynamically
+generated hubs that might collect in the browser otherwise.
+</p>
+<h6>Additional hub connection parameters</h6>
+<p>
+Alongside <code>hubUrl</code> and <code>hubClear</code> there are other parameters
+you can add to either if you wished, for instance, to attach an assembly hub and
+display the Gateway page, while also sharing your contact email.</p>
+<ul>
+<li id="hgHubConnect.remakeTrackHub"><code>hgHubConnect.remakeTrackHub=on</code>
+acts to connect when pointed to /hgHubConnect</li>
+<li id="hgHub_do_firstDb"><code>hgHub_do_firstDb=1</code>
+uses the first database in genomes.txt</li>
+<li id="hgHub_do_redirect"><code>hgHub_do_redirect=on</code>
+redirects the attached hub to the Gateway page</li>
+</ul>
+<p>
+By pointing the URL to <code>/cgi-bin/hgHubConnect</code> the hub would be connected to
+and then redirect to the Gateway page to display the page in <code>genomes.txt</code> defined
+by the <code>htmlPath ../newOrg.html</code> line. Here is an example:</p>
+<pre><code><a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt"
+target="_blank">http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&<strong>hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</strong></a></code>
+</pre>
+<h6 id="genome">Use <code>genome=</code> for assembly hubs</h6>
+<p>
+There is also another way to connect an assembly hub using the <code>genome=</code> to arrive at
+the Gateway page if you know the genome in <code>genomes.txt</code> that you wish to display.
+For instance, the below link skips the redirection step, where your
+<code>hub.txt</code> contact email gets displayed, by pointing to the
+<code>/cgi-bin/hgGateway</code> page:</p>
+<pre><code><a href="http://genome.ucsc.edu/cgi-bin/hgGateway?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt"
+target="_blank"><strong>http://genome.ucsc.edu/cgi-bin/hgGateway?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</strong></a> </code></pre>
+ 
 <a name="trackHubLoading"></a>
 <h3>Attaching a track hub to an assembly hub</h3>
 <h6>How do I attach a track hub to an assembly hub?</h6>
