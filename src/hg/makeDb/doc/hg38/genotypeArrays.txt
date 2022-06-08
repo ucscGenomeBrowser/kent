@@ -39,9 +39,22 @@ sort -k1,1 -k2,2n EPIC.hg38.clean > EPIC.hg38.final.bed
 # Replace spaces with tabs
 sed -i 's/ /\t/g' EPIC.hg38.final.bed 
 
-# Creating the bigBed
+# Create a list of possible 450K sites
+cat infinium-methylationepic-v-1-0-b5-manifest-file.csv | awk -F'\t' '{ print $1,$24 }' > possible450K.sites
+# Get the list of 450K sites by name
+grep "TRUE" possible450K.sites | awk -F' ' '{ print $1 }' > 450K.only
+# Filter out the sites from the 850K bed file
+grep -f 450K.only EPIC.hg38.final.bed > 450k.final.bed &
+
+# Creating the bigBeds
 bedToBigBed -tab -type=bed6+6 -as=epic.as EPIC.hg38.final.bed hg38.chrom.sizes EPIC.bb
+bedToBigBed -tab -type=bed6+6 -as=450k.as 450k.final.bed hg38.chrom.sizes 450k.bb
 
 # Moving the data into /hive and creating symlinks in /gbdb
 cp EPIC.bb /hive/data/genomes/hg38/bed/illumina/epic850K.bb
+cp 450k.bb /hive/data/genomes/hg38/bed/illumina/illumina450K.bb
+
 ln -s /hive/data/genomes/hg38/bed/illumina/epic850K.bb /gbdb/hg38/bbi/illumina/epic850K.bb
+ln -s /hive/data/genomes/hg38/bed/illumina/illumina450K.bb /gbdb/hg38/bbi/illumina/illumina450K.bb
+
+#############################################################################
