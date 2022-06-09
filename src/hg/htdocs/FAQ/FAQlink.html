@@ -69,11 +69,18 @@ For instructions on creating a saved session, go to the
 <a href="../goldenPath/help/hgSessionHelp.html#Create" target ="_blank">session user guide</a>.
 If you want to specify track settings in a URL directly, please read the section on 
 <a href="#trackViz">setting track visibility via URL</a> for a complete description. </p>
-
+<h6> Loading sessions on other tools</h6>
 <p>
 Or if you prefer the older style, which allows you to link to different tools, you may use the 
-following format:</p>
-<p><code>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=&lt;userName&gt;&amp;gS_otherUserSessionName=&lt;sessionName&gt;</code></p>
+following parameters:</p>
+<ul>
+  <li id="hgS_otherUserName"><code>hgS_otherUserName=&lt;userName&gt</code></li>
+  <li id="hgS_otherUserSessionName"><code>hgS_otherUserSessionName=&lt;sessionName&gt;</code></li>
+  <li id="hgS_doOtherUser"><code>hgS_doOtherUser=submit</code></li>
+</ul>
+<p>
+Here is an example:</p>
+<p><code>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=&lt;userName&gt;&amp;hgS_otherUserSessionName=&lt;sessionName&gt;</code></p>
 <p>
 This longer format has the flexibility of replacing &quot;hgTracks&quot; with different tool names to share 
 saved settings on the Table Browser (hgTables), Variant Annotation Integrator (hgVai), or Data 
@@ -87,6 +94,13 @@ characters separating different parameters like so: </p>
 <p><code><a href=http://genome.ucsc.edu/s/view/clinicalzoom?textSize=18>http://genome.ucsc.edu/s/view/clinicalzoom?textSize=18</a></code></p>
 <p>Both formats require an ampersand between each additional parameter, seen in the longer format like so:</p>
 <p><code><a href=http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18</a></code></p>
+<p>
+Another option for sessions is to download the file and host it in an external location and load it with
+<code id="hgS_doLoadUrl">hgS_doLoadUrl=submit</code> and
+<code id="hgS_loadUrlName">hgS_loadUrlName=&lt;URL&gt;</code> allowing you to externally maintain your session,
+or update it as you wish. Here is an example:</p>
+<p><code><a href="https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.stopCodons">
+https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.stopCodons</a></code></p>
 
 <a name="link2"></a>
 <h2>Linking to the Browser at a specific position, or default position</h2>
