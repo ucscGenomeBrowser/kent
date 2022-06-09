@@ -89,7 +89,7 @@ if (argc == 6)	/* Batch */
 else if (argc == 7) /* One primer pair */
     {
     AllocVar(inList);
-    inList->name = clName;
+    inList->name = cloneString(clName);
     inList->fPrimer = cloneString(argv[4]);
     inList->rPrimer = cloneString(argv[5]);
     outFile = argv[6];
