@@ -10,7 +10,7 @@ dataVersion /gbdb/$D/revel/version.txt
 
         track revelA
         shortLabel Mutation: A
-        longLabel Revel: Mutation is A
+        longLabel REVEL: Mutation is A
         type bigWig
         parent revel on
         visibility dense
@@ -24,7 +24,7 @@ dataVersion /gbdb/$D/revel/version.txt
 
         track revelC
         shortLabel Mutation: C
-        longLabel Revel: Mutation is C
+        longLabel REVEL: Mutation is C
         type bigWig
         parent revel on
         visibility dense
@@ -38,7 +38,7 @@ dataVersion /gbdb/$D/revel/version.txt
 
         track revelG
         shortLabel Mutation: G
-        longLabel Revel: Mutation is G
+        longLabel REVEL: Mutation is G
         type bigWig
         parent revel on
         visibility dense
@@ -52,7 +52,7 @@ dataVersion /gbdb/$D/revel/version.txt
 
         track revelT
         shortLabel Mutation: T
-        longLabel Revel: Mutation is T
+        longLabel REVEL: Mutation is T
         type bigWig
         parent revel on
         visibility dense
@@ -66,7 +66,7 @@ dataVersion /gbdb/$D/revel/version.txt
 
         track overlaps
         shortLabel Overlaps
-        longLabel Revel: Positions with >1 score due to overlapping transcripts (mouseover for details)
+        longLabel REVEL: Positions with >1 score due to overlapping transcripts (mouseover for details)
         type bigBed 8 +
         parent revel on
         visibility dense
