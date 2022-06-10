@@ -112,12 +112,12 @@ the <code>db=</code> and <code>position=</code> parameters.</p>
 <p>
 Where:</p>
 <ul>
-  <li>
+  <li id="db">
   <code>db</code> - designates a specific genome assembly. For example, <code>db=hg19</code> 
   refers to the Feb. 2009 human genome release. For a list of db parameter values that 
   correspond to UCSC assemblies, see the <a href="FAQreleases.html#release1">list of UCSC 
   releases</a>.</li>
-  <li><code>position</code> - can be any search term for the genome specified, including
+  <li id="position"><code>position</code> - can be any search term for the genome specified, including
   a position range or a gene identifier. This often takes the form of
   <code>position=chr1:35000-40000</code>.</li>
 </ul>
@@ -145,10 +145,10 @@ but you can always zoom in or out with <code>hgt.out1=submit</code> or <code>hgt
 The numbers 1 through 4 zoom in or out corresponding to the buttons above the track window.
 The following lists the zoom levels of each number, applicable to zooming in or out:</p>
 <ul>
-<li><code>hgt.out1=submit</code> zooms out 1.5x</li>
-<li><code>hgt.out2=submit</code> zooms out 3x</li>
-<li><code>hgt.out3=submit</code> zooms out 10x</li>
-<li><code>hgt.out4=submit</code> zooms out 100x</li>
+<li id="hgt.out1"><code>hgt.out1=submit</code> zooms out 1.5x</li>
+<li id="hgt.out2"><code>hgt.out2=submit</code> zooms out 3x</li>
+<li id="hgt.out3"><code>hgt.out3=submit</code> zooms out 10x</li>
+<li id="hgt.out4"><code>hgt.out4=submit</code> zooms out 100x</li>
 </ul>
 <p>
 The following link is an example which leads to the variant NM_00257:c.1208G&gt;T and zooms 
@@ -166,14 +166,14 @@ each linked by the "&amp;" sign, similar to position parameters. For more inform
 the <a href="../goldenPath/help/customTrack.html#optParams" target ="_blank">optional URL 
 parameters</a> section of the Custom Tracks User's Guide.</p>
 <ul>
-<li><code>hideTracks=1</code> - hides all tracks</li>
+<li id="hideTracks"><code>hideTracks=1</code> - hides all tracks</li>
 <li><code>&lt;trackName&gt;=hide|dense|pack|full</code> - sets specified track or subtrack to a
 chosen visibility</li>
-<li><code>textSize=&lt;number&gt;</code> - sets browser text size to either 6, 8, 10, 12, 14, 18,
+<li id="textSize"><code>textSize=&lt;number&gt;</code> - sets browser text size to either 6, 8, 10, 12, 14, 18,
 24, or 34. Default is a textSize of 12.</li>
 <li><code>&lt;trackName&gt;.heightPer=&lt;###&gt;</code> - sets a bigWig track's height to a 
 particular number of pixels (between 20-100)</li>
-<li><code>ignoreCookie=1</code> - removes pre-existing user settings like track selection, custom
+<li id="ignoreCookie"><code>ignoreCookie=1</code> - removes pre-existing user settings like track selection, custom
 tracks, and track hubs</li>
 </ul>
 <p>
