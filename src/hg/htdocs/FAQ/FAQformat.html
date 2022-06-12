@@ -1029,10 +1029,11 @@ genePredExt format.</p>
     lstring exonFrames; 	"Exon frame offsets {0,1,2}"
     )
 </code></pre>
-<p>The fields cdsStartStat and cdsEndStat can have the values ('none','unk','incmpl','cmpl'). However,
-the values are not used for our display and can not be used to subset for coding or non-coding
-genes. For most purposes, to get more information about a transcript, other tables will need to
-be used e.g. in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, where xx is the
+<p>The fields cdsStartStat and cdsEndStat can have the following values: 'none' = none,
+'unk' = unknown, 'incmpl' = incomplete, and 'cmpl' = complete. However, the values are not used for
+our display and cannot be used to identify which genes are coding or non-coding. For most purposes,
+to get more information about a transcript, other tables will need to be used.
+For instance, in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, where xx is the
 Gencode Version number. See this <a href="../../FAQ/FAQgenes.html#coding"
 target="_blank">coding/non-coding genes FAQ</a> for more information.</p>
 
