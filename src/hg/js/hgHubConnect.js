@@ -105,6 +105,28 @@ $(document).ready(function() {
             $('input[name="hubSearchButton"]').focus().click(); // clicks db filter button
         }
     });
+    $('.pasteIcon').bind('click', function(e) {
+        // the genome=hg19-part is stored in the <A> element two elements before
+        var link = e.target.parentElement.previousSibling.previousSibling;
+        var href = link.href;
+        var genomeArg = href.split("&")[1];
+
+        // the url is in the <input> element just before the SVG
+        var copyText = e.target.parentElement.previousSibling;
+        var myBaseUrl = copyText.baseURI.split('?')[0];
+        var hgTracksUrl = myBaseUrl.replace("hgHubConnect", "hgTracks");
+        var oldVal = copyText.value;
+        copyText.value = hgTracksUrl+"?hubUrl="+copyText.value+"&"+genomeArg;
+        copyText.type = 'text';
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+        document.execCommand('copy');
+        alert("Copied the URL " + copyText.value + " to the clipboard");
+        copyText.value = oldVal;
+        copyText.type = 'hidden';
+        //navigator.clipboard.writeText(copyText.value);
+    });
+
 });
 
 var hubSearchTree = (function() {
