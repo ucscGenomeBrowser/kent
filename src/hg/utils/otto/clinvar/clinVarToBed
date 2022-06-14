@@ -747,6 +747,11 @@ for line in ifh:
 
     if chromAcc=="NT_187513.1":
         chrom = "chrUn_KI270742v1"
+    elif chromAcc=="NT_167222.1":
+        chrom = "chrUn_gl000228"
+    elif chrom=="Un":
+        print("Unknown fix/alt/patch chrom, please adapt clinVarToBed")
+        sys.exit(1)
     else:
         chrom = "chr"+chrom
 

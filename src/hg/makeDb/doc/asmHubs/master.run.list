@@ -271,6 +271,7 @@
 ./runBuild GCA_009769605.1 GCA_009769605.1_bBucAby1.pri birds Bucorvus_abyssinicus
 ./runBuild GCA_009769625.1 GCA_009769625.1_bCygOlo1.pri birds Cygnus_olor
 ./runBuild GCA_009769695.1 GCA_009769695.1_rThaEle1.alt vertebrate Thamnophis_elegans
+./runBuild GCA_009806435.2_UM_NZW_1.0 GCA_009806435.2_UM_NZW_1.0 mammals Oryctolagus_cuniculus
 ./runBuild GCA_009819485.1 GCA_009819485.1_bCarCri1.alt birds Cariama_cristata
 ./runBuild GCA_009819505.1 GCA_009819505.1_bCatUst1.alt birds Catharus_ustulatus
 ./runBuild GCA_009819545.1 GCA_009819545.1_rLacAgi1.alt vertebrate Lacerta_agilis
@@ -1424,6 +1425,7 @@
 ./runBuild GCF_004379255.1 GCF_004379255.1_SspV2 plants Salvia_splendens
 ./runBuild GCF_004382145.1 GCF_004382145.1_ASM438214v1 invertebrate Drosophila_mauritiana
 ./runBuild GCF_004382195.1 GCF_004382195.1_ASM438219v1 invertebrate Drosophila_sechellia
+./runBuild GCF_004382195.2 GCF_004382195.2_ASM438219v2 invertebrates Drosophila_sechellia
 ./runBuild GCF_004634155.1 GCF_004634155.1_Eluc_v4 vertebrate_other Esox_lucius
 ./runBuild GCF_004664715.1 GCF_004664715.1_Pero_0.1 vertebrate_mammalian Peromyscus_leucopus
 ./runBuild GCF_004664715.2 GCF_004664715.2_UCI_PerLeu_2.1 mammals Peromyscus_leucopus
@@ -1635,6 +1637,7 @@
 ./runBuild GCF_014570535.1 GCF_014570535.1_YNU_ManJav_2.0 mammals Manis_javanica
 ./runBuild GCF_014570555.1 GCF_014570555.1_YNU_ManPten_2.0 mammals Manis_pentadactyla
 ./runBuild GCF_014595645.1 GCF_014595645.1_ASM1459564v1 fungi Diaporthe_citri
+./runBuild GCF_014621545.1 GCF_014621545.1_ASM1462154v1 viral Monkeypox_virus
 ./runBuild GCF_014633375.1 GCF_014633375.1_OchPri4.0 mammals Ochotona_princeps
 ./runBuild GCF_014743375.2 GCF_014743375.2_RU_Dsub_v1.1 invertebrate Drosophila_subpulchrella
 ./runBuild GCF_014754425.2 GCF_014754425.2_SCBI_Odam_1.1 mammals Oryx_dammah

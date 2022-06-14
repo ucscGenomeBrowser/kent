@@ -7,6 +7,30 @@
 
 var debug = false;
 
+function copyToClipboard(ev) {
+    /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon. 
+     * The attribute data-target of this element is the ID of the element that contains the text to copy. 
+     * see C function printCopyToClipboardButton(iconId, targetId);
+     * */
+     
+    var targetId = ev.target.getAttribute("data-target");
+    var textEl = document.getElementById(targetId);
+    var text = textEl.innerText;
+
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    alert("Copied text "+text+" to clipboard.");
+}
+
 function cfgPageOnVisChange(ev) {
     /* configuration page event listener when user changes visibility in dropdown */
     if (ev.target.value === 'hide')
