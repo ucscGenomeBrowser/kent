@@ -1187,6 +1187,7 @@ static struct wigMouseOver *logoPreDrawContainer(struct preDrawContainer *preDra
     int xOff, int yOff, double graphUpperLimit, double graphLowerLimit,
     double graphRange, enum trackVisibility vis, struct wigCartOptions *wigCart, int seqStart, int seqEnd)
 {
+boolean baseCmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
 struct preDrawElement *preDraw = preDrawContainer->preDraw;
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
 //struct wigMouseOver *mouseOverData = NULL;
@@ -1278,10 +1279,10 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                     {
                     switch(numTrack)
                         {
-                        case 3: base='a';break;
-                        case 2: base='c';break;
-                        case 1: base='g';break;
-                        case 0: base='t';break;
+                        case 3: if (baseCmpl) base='t'; else base='a';break;
+                        case 2: if (baseCmpl) base='g'; else base='c';break;
+                        case 1: if (baseCmpl) base='c'; else base='g';break;
+                        case 0: if (baseCmpl) base='a'; else base='t';break;
                         }
                     }
                 char string[2];
