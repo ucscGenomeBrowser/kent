@@ -328,8 +328,10 @@ query output.
 <p>
 If you have a list of genomic positions and want to retrieve information
 about their properties, you can use the <code>Define Regions</code> button to input
-multiple positions to query a chosen table. In this example, you want to determine
-the dbSNP rsID names for your list of positions.
+multiple positions to query a chosen table. <b>Please note</b>, any items in the table that overlap
+with the defined regions will be included in the Table Browser output. In this example, you want to
+determine the dbSNP rsID names for your list of positions.
+</p>
 
 <p><strong>Step 1. Select genome assembly and track</strong></br>
 To determine dbSNP rsIDs we will be using Human genome hg38 and dbSNP153.</p>
@@ -581,10 +583,11 @@ the two sets of methods. For more information about the individual combination o
 <p> 
 <strong>Step 5. (optional) Select the complement options</strong><br> 
 <!-- FIX ME -->
-Check the box in front of one or both tables to complement the feature data in the The complement options allow you to invert the set of positions covered by one or both tables. For example, if you 
-choose to complement the primary track, any position covered by the that track's features will be 
-considered <em>not</em> covered, and vice versa. This option provides more flexibility in comparing 
-track positions.</p> 
+Check the box in front of one or both tables to complement the feature data. The complement options
+allow you to invert the set of positions covered by one or both tables. For example, if you
+choose to complement the primary track, any position covered by the that track's features will be
+considered <em>not</em> covered, and vice versa. This option provides more flexibility in comparing
+track positions.</p>
 <p> 
 <strong>Step 6. Click the <code>Submit</code> button to apply the intersection</strong><br> 
 Once an intersection has been created on a table, it will persist for the duration of the Table 
