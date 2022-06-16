@@ -1,4 +1,3 @@
-
 track multiz100Logo
 container multiWig
 noInherit on
@@ -18,7 +17,7 @@ visibility hide
         type bigWig -10 10
 	priority 1
 	bigDataUrl /gbdb/hg38/multiz100way/logo/multiz100Logo.A.bw
-	color 255,255,0
+	color 255,0,0
 
 	track multiz100LogoC
 	shortLabel multiz100LogoC
@@ -27,7 +26,7 @@ visibility hide
         type bigWig -10 10
 	priority 2
 	bigDataUrl /gbdb/hg38/multiz100way/logo/multiz100Logo.C.bw
-	color 255, 0,255
+	color 160, 0,160
 
 	track multiz100LogoG
 	shortLabel multiz100LogoG
@@ -36,6 +35,7 @@ visibility hide
         type bigWig -10 10
 	priority 3
 	bigDataUrl /gbdb/hg38/multiz100way/logo/multiz100Logo.G.bw
+	color 0, 0,255
 
 	track multiz100LogoT
 	shortLabel multiz100LogoT
@@ -44,5 +44,5 @@ visibility hide
         type bigWig -10 10
 	priority 4
 	bigDataUrl /gbdb/hg38/multiz100way/logo/multiz100Logo.T.bw
-	color  0,255,255
+	color  0,255,0
 
