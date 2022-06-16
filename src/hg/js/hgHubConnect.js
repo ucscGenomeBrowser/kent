@@ -117,14 +117,14 @@ $(document).ready(function() {
         var hgTracksUrl = myBaseUrl.replace("hgHubConnect", "hgTracks");
         var oldVal = copyText.value;
         copyText.value = hgTracksUrl+"?hubUrl="+copyText.value+"&"+genomeArg;
+        copyText.style.display = 'none';
         copyText.type = 'text';
         copyText.select();
         copyText.setSelectionRange(0, 99999); /* For mobile devices */
         document.execCommand('copy');
+        copyText.type = 'hidden';
         alert("Copied the URL " + copyText.value + " to the clipboard");
         copyText.value = oldVal;
-        copyText.type = 'hidden';
-        //navigator.clipboard.writeText(copyText.value);
     });
 
 });

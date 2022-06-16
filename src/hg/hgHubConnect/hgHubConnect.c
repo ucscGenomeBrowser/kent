@@ -290,7 +290,14 @@ puts("<p>Enter hub URLs below to connect hubs. Hubs connected this way are not a
 if (unlistedHubCount == 0)
     {
     // nothing to see here
-    printf("<tr><td>No Unlisted Track Hubs</td></tr>");
+    printf("<tr><td style='text-align:left'>No connected track or assembly hubs.<p>To connect a hub:"
+            "<li>Enter its URL into the input box above and click 'Add Hub'. "
+            "<li>Alternatively, you can go to the 'Public Hubs' tab on this page and connect one "
+            "of the hubs that were submitted to us. "
+            "<li>Another way to connect to hubs is via a direct connection link copied using the copy icon, shown on this page, when a hub is connected. "
+            "<li>You can also connect to hub by following a short link to a saved session, created though the menu "
+            "'My Data &gt; My Sessions', if the Genome Browser had connected hubs when the session was saved."
+            "</ul></td></tr>");
     printf("</thead></table>");
     puts("</FORM>");      // return from within DIV and FROM is probably not a good idea
     puts("</div></div>"); // tabSection and .unlistedHubs
