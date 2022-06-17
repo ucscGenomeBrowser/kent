@@ -2406,3 +2406,38 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# sequence logo
+    mkdir /hive/data/genomes/hg38/bed/multiz30way/logo
+    cd /hive/data/genomes/hg38/bed/multiz30way/logo
+    mkdir wigs bw 
+
+    ls ../maf/* | awk '{printf "./makeWig.sh %s ../consPhyloP/all/phyloP30way.bw ../../../chrom.sizes\n", $1}' > jobs
+
+    cat << '_EOF_' > makeWig.sh
+maf=$1
+scale=$2
+chromSizes=$3
+outRoot=`basename $1 .maf`
+mafCounts -scale=$scale $maf wigs/$outRoot
+for i in A C G T
+do
+    wigToBigWig -keepAllChromosomes -fixedSummaries wigs/$outRoot.$i.wig $chromSizes bw/$outRoot.$i.bw
+done
+'_EOF_'
+
+    chmod +x makeWig.sh
+
+    ssh ku "cd /hive/data/genomes/hg38/bed/multiz30way/logo; para make jobs"
+
+    for i in A C G T
+    do
+        bigWigCat multiz30Logo.$i.bw bw/*.$i.bw &
+    done
+
+    wait
+
+    for i in A C G T
+    do
+        ln -s `pwd`/multiz30Logo.$i.bw /gbdb/hg38/multiz30way/
+    done
+
