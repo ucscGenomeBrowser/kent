@@ -8,7 +8,7 @@ geneUrl ../cgi-bin/hgGene?org=Mouse&hgg_gene=%s&hgg_chrom=none
 sorterUrl ../cgi-bin/hgNear?org=Mouse&near_search=%s
 
 name zebrafish
-db danRer10
+db danRer11
 
 name drosophila
 db dm6
