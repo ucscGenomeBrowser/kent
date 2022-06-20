@@ -1753,6 +1753,128 @@ priority 0.8
         color 100,100,100
         priority 5
 
+track dbSnp155Composite
+compositeTrack on
+shortLabel dbSNP 155
+longLabel Short Genetic Variants from dbSNP release 155
+type bed 3
+group varRep
+visibility pack
+url https://www.ncbi.nlm.nih.gov/snp/$$
+urlLabel dbSNP: 
+subGroup1 view Views variants=Variants errs=Mapping_Errors
+priority 0.8
+
+    track dbSnp155ViewVariants
+    view variants
+    parent dbSnp155Composite
+    shortLabel Variants
+    visibility dense
+    type bigDbSnp
+    detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp155Details.tab.gz
+    freqSourceOrder 1000Genomes,dbGaP_PopFreq,TOPMED,KOREAN,SGDP_PRJ,Qatari,NorthernSweden,Siberian,TWINSUK,TOMMO,ALSPAC,GENOME_DK,GnomAD,GoNL,Estonian,Vietnamese,Korea1K,HapMap,PRJEB36033,HGDP_Stanford,Daghestan,PAGE_STUDY,Chileans,MGP,PRJEB37584,GoESP,ExAC,GnomAD_exomes,FINRISK,PharmGKB,PRJEB37766
+    classFilterValues snv,mnv,ins,del,delins,identity
+    classFilterType multipleListOr
+    showCfg on
+    ucscNotesFilterValues \
+        altIsAmbiguous|Alternate allele contains IUPAC ambiguous base(s),\
+        classMismatch|Variant class/type is inconsistent with allele sizes,\
+        clinvar|Present in ClinVar,\
+        clinvarBenign|ClinVar significance of benign and/or likely benign,\
+        clinvarConflicting|ClinVar includes both benign and pathogenic reports,\
+        clinvarPathogenic|ClinVar significance of pathogenic and/or likely pathogenic,\
+        clusterError|Overlaps a variant with the same type/class and position,\
+        commonAll|MAF >= 1% in all projects that report frequencies,\
+        commonSome|MAF >= 1% in at least one project that reports frequencies,\
+        diffMajor|Different projects report different major alleles,\
+        freqIncomplete|Frequency reported with incomplete allele data,\
+        freqIsAmbiguous|Frequency reported for allele with IUPAC ambiguous base(s),\
+        freqNotMapped|Frequency reported on different assembly but not mapped by dbSNP,\
+        freqNotRefAlt|Reference genome allele is not major allele in at least one project,\
+        multiMap|Variant is placed in more than one genomic position,\
+        otherMapErr|Another mapping of this variant has illegal coords (indel mapping error?),\
+        overlapDiffClass|Variant overlaps other variant(s) of different type/class,\
+        overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,\
+        rareAll|MAF < 1% in all projects that report frequencies (or no frequency data),\
+        rareSome|MAF < 1% in at least one project that reports frequencies,\
+        refIsAmbiguous|Reference genome allele contains IUPAC ambiguous base(s),\
+        refIsMinor|Reference genome allele is minor allele in at least one project that reports frequencies,\
+        refIsRare|Reference genome allele frequency is <1% in at least one project,\
+        refIsSingleton|Reference genome frequency is 0 in all projects that report frequencies,\
+        refMismatch|Reference allele mismatches reference genome sequence,\
+        revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
+#'
+    ucscNotesFilterType multipleListOr
+    maxFuncImpactFilterLabel Greatest functional impact on gene
+    maxFuncImpactFilterValues 0|(not annotated),\
+        0865|frameshift,\
+        1587|stop_gained,\
+        1574|splice_acceptor_variant,\
+        1575|splice_donor_variant,\
+        1821|inframe_insertion,\
+        1583|missense_variant,\
+        1590|terminator_codon_variant,\
+        1819|synonymous_variant,\
+        1580|coding_sequence_variant,\
+        1623|5_prime_UTR_variant,\
+        1624|3_prime_UTR_variant,\
+        1619|nc_transcript_variant,\
+        2|genic_upstream_transcript_variant,\
+        1986|upstream_transcript_variant,\
+        2152|genic_downstream_transcript_variant,\
+        1987|downstream_transcript_variant,\
+        1627|intron_variant
+    maxFuncImpactFilterType multipleListOr
+
+        track dbSnp155Common
+        parent dbSnp155ViewVariants on
+        subGroups view=variants
+        shortLabel Common dbSNP(155)
+        longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 155
+        bigDataUrl /gbdb/$D/snp/dbSnp155Common.bb
+        priority 1
+
+        track dbSnp155ClinVar
+        parent dbSnp155ViewVariants off
+        subGroups view=variants
+        shortLabel ClinVar dbSNP(155)
+        longLabel Short Genetic Variants from dbSNP Release 155 Included in ClinVar
+        bigDataUrl /gbdb/$D/snp/dbSnp155ClinVar.bb
+        priority 2
+
+        track dbSnp155Mult
+        parent dbSnp155ViewVariants off
+        subGroups view=variants
+        shortLabel Mult. dbSNP(155)
+        longLabel Short Genetic Variants from dbSNP Release 155 that Map to Multiple Genomic Loci
+        bigDataUrl /gbdb/$D/snp/dbSnp155Mult.bb
+        priority 3
+
+        track dbSnp155
+        parent dbSnp155ViewVariants off
+        subGroups view=variants
+        shortLabel All dbSNP(155)
+        longLabel All Short Genetic Variants from dbSNP Release 155
+        bigDataUrl /gbdb/$D/snp/dbSnp155.bb
+        maxWindowToDraw 1000000
+        priority 4
+
+    track dbSnp155ViewErrs
+    parent dbSnp155Composite
+    view errs
+    shortLabel Mapping Errors
+    visibility dense
+
+        track dbSnp155BadCoords
+        parent dbSnp155ViewErrs off
+        subGroups view=errs
+        shortLabel Map Err dbSnp(155)
+        longLabel Mappings with Inconsistent Coordinates from dbSNP 155
+        bigDataUrl /gbdb/$D/snp/dbSnp155BadCoords.bb
+        type bigBed 4
+        color 100,100,100
+        priority 5
+
 track hgdpGeo
 shortLabel HGDP Allele Freq
 longLabel Human Genome Diversity Project SNP Population Allele Frequencies
@@ -5397,6 +5519,46 @@ searchPriority 12.9453
 padding 100
 
 searchTable dbSnp153BadCoords
+searchMethod exact
+searchType bigBed
+#semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9454
+padding 100
+
+searchTable dbSnp155Common
+searchMethod exact
+searchType bigBed
+#semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9450
+padding 100
+
+searchTable dbSnp155ClinVar
+searchMethod exact
+searchType bigBed
+#semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9451
+padding 100
+
+searchTable dbSnp155
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9452
+padding 100
+
+searchTable dbSnp155Mult
+searchMethod exact
+searchType bigBed
+#semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9453
+padding 100
+
+searchTable dbSnp155BadCoords
 searchMethod exact
 searchType bigBed
 #semiShortCircuit 1

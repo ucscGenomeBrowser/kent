@@ -132,6 +132,7 @@ struct alObs
     char *allele;   // Variant allele sequence
     int obsCount;   // Number of chromosomes on which allele was observed by a project
     int totalCount; // Number of chromosomes on which project observed some allele of this variant
+    int studyVersion; // Version of this study, there can be multiple for each allele.
     };
 
 struct sharedProps
@@ -325,6 +326,7 @@ struct spdiBed *spdiB = parseSpdis(spdiRef, source, lm);
 obs->allele = spdiB->ins;
 obs->obsCount = jsonQueryInt(obsEl, "alObs", "allele_count", -1, lm);
 obs->totalCount = jsonQueryInt(obsEl, "alObs", "total_count", -1, lm);
+obs->studyVersion = jsonQueryInt(obsEl, "alObs", "study_version", -1, lm);
 if (obs->obsCount < 0)
     errAbort("parseAlObs: allele_count not reported for %s (ins_seq %s)",
              source, obs->allele);
@@ -380,6 +382,57 @@ for (ix = 0;  ix < props->freqSourceCount;  ix++)
         slAddHead(&props->freqSourceSpdis[ix], spdiB);
         slAddHead(&props->freqSourceObs[ix], obs);
         }
+    }
+}
+
+static void stripOldStudyVersions(struct sharedProps *props, char *rsId)
+/* After frequency allele observations have been sorted into per-project lists,
+ * make sure the alleles look like [ACGT]+ and the reported total_counts are consistent.
+ * The sum of obsCounts may be less than total_count (no-calls), but not greater. */
+{
+int ix;
+for (ix = 0;  ix < props->freqSourceCount;  ix++)
+    {
+    int maxStudyVersion = 0;
+    boolean multipleVersions = FALSE;
+    struct alObs *obsList = props->freqSourceObs[ix], *obs;
+    for (obs = obsList;  obs != NULL;  obs = obs->next)
+        {
+	if (obs == obsList)
+	    {
+	    maxStudyVersion = obs->studyVersion;
+	    }
+        else
+	    {
+	    if (obs->studyVersion > maxStudyVersion)
+		{
+		maxStudyVersion = obs->studyVersion;
+		multipleVersions = TRUE;
+		}
+	    else if (obs->studyVersion != maxStudyVersion)
+		{
+		multipleVersions = TRUE;
+		}
+	    }
+        }
+    if (multipleVersions)
+	{
+	struct alObs *newObsList = NULL;
+	struct alObs *nextObs = NULL;
+	struct spdiBed *spdiBList = props->freqSourceSpdis[ix], *spdiB, *nextSpdiB, *newSpdiBList = NULL;
+        for (obs = obsList, spdiB = spdiBList;  obs != NULL; obs = nextObs, spdiB = nextSpdiB)
+	    {
+	    nextObs = obs->next;
+	    nextSpdiB = spdiB->next;
+	    if (obs->studyVersion == maxStudyVersion)
+		{
+		slAddHead(&newObsList, obs);
+		slAddHead(&newSpdiBList, spdiB);
+		}
+	    }
+	props->freqSourceObs[ix]   = newObsList;
+	props->freqSourceSpdis[ix] = newSpdiBList;
+	}
     }
 }
 
@@ -480,6 +533,7 @@ if (obsList != NULL)
             slReverse(&props->freqSourceObs[ix]);
             }
         addMissingRefAllele(props, rsId, lm);
+        stripOldStudyVersions(props, rsId);
         checkFreqSourceObs(props, rsId);
         props->biggestSourceIx = biggestSourceIx;
         }

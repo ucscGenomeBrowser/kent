@@ -365,7 +365,7 @@ int bbiWriteZoomLevels(
 {
 /* Write out first zoomed section while storing in memory next zoom level. */
 assert(resTryCount > 0);
-int maxReducedSize = dataSize/2;
+bits64 maxReducedSize = dataSize/2;
 int initialReduction = 0, initialReducedCount = 0;
 
 /* Figure out initialReduction for zoom - one that is maxReducedSize or less. */
