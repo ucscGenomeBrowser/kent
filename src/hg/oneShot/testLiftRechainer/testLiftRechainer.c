@@ -228,6 +228,22 @@ struct chainPart
     int tStart, tEnd;
     };
 
+#ifdef DEBUG
+void showBacks(struct dlList *list, FILE *f)
+/* Show backwards pointers of all chains on list */
+{
+struct dlNode *el;
+for (el = list->head; !dlEnd(el); el = el->next)
+    {
+    struct rechain *rechain = el->val;
+    fprintf(f, "backs for %d:\n", rechainId(rechain));
+    struct crossover *cross;
+    for (cross = rechain->crossList; cross != NULL; cross = cross->next)
+       fprintf(f, "\t%d to %d\n", cross->tPos, rechainId(cross->rechain));
+    }
+}
+#endif /* DEBUG */
+
 void rechainOneTarget(struct chainTarget *target, struct dnaSeq *tSeq, struct hash *qSeqHash,
     struct hash *qRcSeqHash, FILE *f)
 /* Do rechaining on a single target */
@@ -369,15 +385,17 @@ for (rechain = bestChain; rechain != NULL; )
     {
     // uglyf("rechain id %d tEnd %d\n", rechainId(rechain), tEnd);
     struct rechain *prev = NULL;
-    struct crossover *cross;
+    struct crossover *cross, *nextCross = NULL;
     int tStart = 0;
-    for (cross = rechain->crossList; cross != NULL; cross = cross->next)
+    for (cross = rechain->crossList; cross != NULL; cross = nextCross)
         {
+	nextCross = cross->next;
 	// uglyf("  crossing back to chain %d at %d\n", rechainId(cross->rechain), cross->tPos);
-	if (cross->tPos < tEnd && cross->rechain != rechain)
+	if (cross->tPos <= tEnd)
 	    {
 	    tStart = cross->tPos;
-	    prev = cross->rechain;
+	    if (nextCross != NULL)
+		prev = nextCross->rechain;
 	    rechain->crossList = cross;
 	    break;
 	    }
@@ -390,7 +408,7 @@ for (rechain = bestChain; rechain != NULL; )
 	part->tStart = tStart;
 	part->tEnd = tEnd;
 	slAddHead(&partList, part);
-	uglyf("chainId %d (%d-%d) qSeq (%s:%d-%d) [%s:%d-%d] %d\n", chain->id, chain->tStart, chain->tEnd, chain->qName, chain->qStart, chain->qEnd, chain->tName, tStart, tEnd, tEnd-tStart);
+	// uglyf("chainId %d (%d-%d) qSeq (%s:%d-%d) [%s:%d-%d] %d\n", chain->id, chain->tStart, chain->tEnd, chain->qName, chain->qStart, chain->qEnd, chain->tName, tStart, tEnd, tEnd-tStart);
 	}
     rechain = prev;
     tEnd = tStart;
@@ -441,6 +459,7 @@ for (target = targetList; target != NULL; target = target->next)
     rechainOneTarget(target, tSeq, qSeqHash, qRcSeqHash, f);
     dnaSeqFree(&tSeq);
     }
+
 carefulClose(&f);
 }
 
