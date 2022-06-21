@@ -357,7 +357,7 @@ for (tPos=0; tPos < tSize; ++tPos)
     }
 
 verbose(2, "qRcSeqHash has %d elements\n", qRcSeqHash->elCount);
-verbose(1, "%d chains on active list, %d on archive list\n", 
+verbose(2, "%d chains on active list, %d on archive list\n", 
     dlCount(activeList), dlCount(archiveList));
 
 
@@ -368,12 +368,12 @@ long long bestScore = -BIGNUM;
 for (el = activeList->head; !dlEnd(el); el = el->next)
     {
     struct rechain *rechain = el->val;
+    verbose(2, "active %d: score %lld last from %d\n", rechainId(rechain), rechain->score, 
+	rechainId(rechain->crossList->rechain));
     if (rechain->score > bestScore)
         {
 	bestChain = rechain;
 	bestScore = rechain->score;
-    verbose(1, "active %d: score %lld cross %d last from %d\n", rechainId(rechain), rechain->score, 
-	slCount(rechain->crossList), rechainId(rechain->crossList->rechain));
 	}
     }
 
@@ -383,14 +383,12 @@ struct rechain *rechain;
 int tEnd = tSeq->size;
 for (rechain = bestChain; rechain != NULL; )
     {
-    // uglyf("rechain id %d tEnd %d\n", rechainId(rechain), tEnd);
     struct rechain *prev = NULL;
     struct crossover *cross, *nextCross = NULL;
     int tStart = 0;
     for (cross = rechain->crossList; cross != NULL; cross = nextCross)
         {
 	nextCross = cross->next;
-	// uglyf("  crossing back to chain %d at %d\n", rechainId(cross->rechain), cross->tPos);
 	if (cross->tPos <= tEnd)
 	    {
 	    tStart = cross->tPos;
@@ -408,16 +406,17 @@ for (rechain = bestChain; rechain != NULL; )
 	part->tStart = tStart;
 	part->tEnd = tEnd;
 	slAddHead(&partList, part);
-	// uglyf("chainId %d (%d-%d) qSeq (%s:%d-%d) [%s:%d-%d] %d\n", chain->id, chain->tStart, chain->tEnd, chain->qName, chain->qStart, chain->qEnd, chain->tName, tStart, tEnd, tEnd-tStart);
 	}
     rechain = prev;
     tEnd = tStart;
     }
+verbose(1, "  score %lld in %d parts\n", bestScore, slCount(partList));
 for (part = partList; part != NULL; part = part->next)
     {
     struct chain *chainToFree = NULL, *subchain;
     chainSubsetOnT(part->chain, part->tStart, part->tEnd, &subchain,  &chainToFree);
-    chainWrite(subchain, f);
+    if (subchain != NULL)
+	chainWrite(subchain, f);
     chainFree(&chainToFree);
     }
 slFreeList(&partList);
@@ -455,7 +454,8 @@ for (target = targetList; target != NULL; target = target->next)
     {
     int tSize = hashIntVal(tSizeHash, target->name);
     struct dnaSeq *tSeq = twoBitReadSeqFragLower(targetTwoBit, target->name, 0, tSize);
-    verbose(1, "Read %d bases in %s\n", tSeq->size, target->name);
+    verbose(1, "%s has %d bases and %d chains\n", 
+	target->name, tSeq->size, slCount(target->chainList));
     rechainOneTarget(target, tSeq, qSeqHash, qRcSeqHash, f);
     dnaSeqFree(&tSeq);
     }
