@@ -115,6 +115,7 @@ DBS = \
 	hetBac1 \
 	hetGla1 hetGla2 \
 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Patch10 hg38Patch7 hg38Patch9 hg38Patch11 \
+	hs1 \
 	latCha1 \
 	loaLoa1 \
 	loxAfr1 loxAfr2 loxAfr3 \
