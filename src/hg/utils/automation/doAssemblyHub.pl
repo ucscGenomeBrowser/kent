@@ -1314,9 +1314,9 @@ if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
     bedIntersect -minCoverage=0.0000000014 \$asmId.allGaps.bed \$asmId.gap.bed \\
       \$asmId.verify.annotated.gap.bed
     gapTrackCoverage=`awk '{print \$3-\$2}' \$asmId.gap.bed \\
-      | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+      | ave stdin | grep "^total" | awk '{print \$NF}' | sed -e 's/.000000//;'`
     intersectCoverage=`ave -col=5 \$asmId.verify.annotated.gap.bed \\
-      | grep "^total" | sed -e 's/.000000//;'`
+      | grep "^total" | awk '{print \$NF}' | sed -e 's/.000000//;'`
     if [ \$gapTrackCoverage -ne \$intersectCoverage ]; then
       printf "ERROR: 'all' gaps does not include gap track coverage\\n" 1>&2
       printf "gapTrackCoverage: \$gapTrackCoverage != \$intersectCoverage intersection\\n" 1>&2
@@ -1331,9 +1331,9 @@ if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
   #   sum of both sizes should equal genome size
   both=`cat \$asmId.NOT.allGaps.bed \$asmId.allGaps.bed \\
     | awk '{print \$3-\$2}' | ave stdin | grep "^total" \\
-    | sed -e 's/.000000//;'`
+      | awk '{print \$NF}' | sed -e 's/.000000//;'`
   genomeSize=`ave -col=2 ../../\$asmId.chrom.sizes | grep "^total" \\
-    | sed -e 's/.000000//;'`
+    | awk '{print \$NF}' | sed -e 's/.000000//;'`
   if [ \$genomeSize -ne \$both ]; then
      printf "ERROR: bedInvert.pl did not function correctly on allGaps.bed\n" 1>&2
      printf "genomeSize: \$genomeSize != \$both both gaps data\n" 1>&2
@@ -1344,7 +1344,7 @@ if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
   # again, verify bedInvert is working correctly, sum of both == genomeSize
   both=`cat \$asmId.NOT.gap.bed \$asmId.gap.bed \\
     | awk '{print \$3-\$2}' | ave stdin | grep "^total" \\
-    | sed -e 's/.000000//;'`
+      | awk '{print \$NF}' | sed -e 's/.000000//;'`
   if [ \$genomeSize -ne \$both ]; then
      printf "ERROR: bedInvert did not function correctly on gap.bed\n" 1>&2
      printf "genomeSize: \$genomeSize != \$both both gaps data\n" 1>&2
@@ -1355,9 +1355,9 @@ if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
   # verify the intersect functioned correctly
   # sum of new gaps plus gap track should equal all gaps
   allGapCoverage=`awk '{print \$3-\$2}' \$asmId.allGaps.bed \\
-     | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+     | ave stdin | grep "^total" | awk '{print \$NF}' | sed -e 's/.000000//;'`
   both=`cat \$asmId.notAnnotated.gap.bed \$asmId.gap.bed \\
-    | awk '{print \$3-\$2}' | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+    | awk '{print \$3-\$2}' | ave stdin | grep "^total" | awk '{print \$NF}' | sed -e 's/.000000//;'`
   if [ \$allGapCoverage -ne \$both ]; then
      printf "ERROR: bedIntersect to identify new gaps did not function correctly\n" 1>&2
      printf "allGaps: \$allGapCoverage != \$both (new + gap track)\n" 1>&2
