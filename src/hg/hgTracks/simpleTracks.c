@@ -3970,7 +3970,6 @@ if (vis != tvDense)
 				 indelShowQueryInsert, indelShowPolyA);
     baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
 			  mrnaSeq, psl, winStart, drawOpt);
-    baseColorDrawCleanup(lf, &mrnaSeq, &psl);
     }
 }
 

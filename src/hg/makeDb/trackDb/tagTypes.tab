@@ -340,6 +340,7 @@ orangDb bed
 origAssembly *
 origTrackLine customTracks
 otherDb *
+otherTwoBitUrl *
 otherDbTable bed
 otherOrg netAlign chain bigChain
 otherSpecies halSnake
