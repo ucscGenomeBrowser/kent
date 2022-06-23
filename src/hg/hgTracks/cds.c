@@ -1065,7 +1065,7 @@ else
     }
 if (mrnaSeq != NULL && doUpper)
     touppers(mrnaSeq->dna);
-if (doRc)
+if (mrnaSeq != NULL && doRc)
     reverseComplement(mrnaSeq->dna, mrnaSeq->size);
 return mrnaSeq;
 }
