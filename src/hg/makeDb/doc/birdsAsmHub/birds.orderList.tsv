@@ -23,7 +23,7 @@ GCF_000691845.1_ASM69184v1	carmine bee-eater
 GCF_000002315.6_GRCg6a	chicken
 GCF_003342845.1_notPer1	Chilean tinamou
 GCF_000747805.1_ChaPel_1.0	chimney swift
-GCF_000700745.1_ASM70074v1	chuck-will's-widow
+GCF_000700745.2_ASM70074v2	chuck-will's-widow (BGI_N321 v2 2014)
 GCF_000247815.1_FicAlb1.5	collared flycatcher
 GCF_007115625.1_cibio_Scana_2019	common canary
 GCA_017976375.1_bCucCan1.pri	common cuckoo (VGP 2021)
@@ -53,7 +53,7 @@ GCA_001870855.1_T_cupido_pinnatus_GPC_3440_v1	greater prairie chicken
 GCA_003343005.1_rheAme1	greater rhea
 GCF_019232065.1_USGS_Curo_1.0	greater sage-grouse
 GCA_016647715.1_ASM1664771v1	green peafowl
-GCA_020740725.1_bCorHaw1.pri.cur	hawaiian crow
+GCF_020740725.1_bCorHaw1.pri.cur	Hawaiian crow (VGP 2021 refseq)
 GCF_002078875.1_NumMel1.0	helmeted guineafowl
 GCF_000692075.1_ASM69207v1	hoatzin
 GCF_000738735.5_ASM73873v5	hooded crow (2021)
@@ -101,12 +101,14 @@ GCF_000690715.1_ASM69071v1	speckled mousebird
 GCF_000690775.1_ASM69077v1	sunbittern
 GCA_020746105.1_bTroSur1.pri.cur	Suruca trogon
 GCF_009819885.2_bCatUst1.pri.v2	Swainson's thrush
+GCF_002166845.1_GooseV1.0	swan goose (Sichuan white goose 2017)
 GCA_013030995.1_ASM1303099v1	swan goose (Tianfu 2020)
 GCF_000971095.1_AnsCyg_PRJNA183603_v1.0	swan goose (Zhedong 2015)
 GCF_000331425.1_PseHum1.0	Tibetan ground-tit
 GCF_000146605.3_Turkey_5.1	turkey
 GCA_905368555.1_MGAL_WU_HG_1.0	turkey (WU_HG_1 2021)
 GCA_020745705.1_bHemCom1.pri.cur	whiskered treeswift
+GCF_016700215.2_bGalGal1.pat.whiteleghornlayer.GRCg7w	white leghorn layer paternal (VGP 2021)
 GCF_015832195.1_Motacilla_alba_V1.0_pri	white wagtail
 GCF_003945725.1_ASM394572v1	white-ruffed manakin
 GCF_017590055.1_ASM1759005v1	white-rumped snowfinch

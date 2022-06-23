@@ -28,7 +28,7 @@ function copyToClipboard(ev) {
     textArea.select();
     document.execCommand('copy');
     document.body.removeChild(textArea);
-    alert("Copied text "+text+" to clipboard.");
+    ev.target.innerHTML = 'Copied';
 }
 
 function cfgPageOnVisChange(ev) {
