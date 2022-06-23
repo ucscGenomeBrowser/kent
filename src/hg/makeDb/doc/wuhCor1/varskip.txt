@@ -1,0 +1,7 @@
+# Max, inspired by post on SPHERES channel https://cspheres.slack.com/archives/C010Q9WCZJT/p1638136424068600, Mon Jun 20 02:04:18 PDT 2022
+wget https://raw.githubusercontent.com/nebiolabs/VarSkip/raw/main/neb_vsl1a.primer.bed
+wget https://raw.githubusercontent.com/nebiolabs/VarSkip/main/neb_vss2a.primer.bed
+wget https://raw.githubusercontent.com/nebiolabs/VarSkip/main/neb_vss2b.primer.bed
+wget https://raw.githubusercontent.com/nebiolabs/VarSkip/main/neb_vss1a.primer.bed
+sed -i 's/NC_045512.2/NC_045512v2/g' *.bed
+for i in *.bed; do bedToBigBed $i ../../chrom.sizes `basename $i .bed`.bb; done

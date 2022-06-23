@@ -618,7 +618,7 @@ searchMethod fuzzy
 padding 5
 
 track resist
-pennantIcon Updated red ../goldenPath/newsarch.html#022522 "Updated May 3, 2022"
+pennantIcon Updated red ../goldenPath/newsarch.html#022522 "Updated June 20, 2022"
 shortLabel Drug Resistance Mutations
 longLabel Mutations that confer drug resistance 
 type bigBed 9 +
@@ -631,7 +631,6 @@ noScoreFilter on
 group varRep
 
 track resistPred
-pennantIcon New red ../goldenPath/newsarch.html#030422 "Released Mar. 4, 2022"
 shortLabel Predicted Resistance
 longLabel Mutations that may confer drug resistance - from Coronavirus3d.org (label: count of GISAID sequences with mutation, Feb 2022)
 type bigBed 9 +
@@ -662,6 +661,7 @@ include abEscape.ra
 include bloom.ra
 include variantMuts.ra
 include galaxyEna.ra
+include varskip.ra
 
 include vaccines.ra
 include mutCons.ra

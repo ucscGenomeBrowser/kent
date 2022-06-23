@@ -121,7 +121,7 @@ return string;
 }
 
 #define GENLISTWIDTH 40
-static void printGenomeList(char *hubUrl, struct slName *genomes, int row, boolean withLink)
+static void printGenomeList(char *hubUrl, struct slName *genomes, int row, boolean withLink, boolean withPaste)
 /* print supported assembly names from sl list */
 {
 struct dyString *dyHtml = dyStringNew(1024);
@@ -143,9 +143,18 @@ for(; genome; genome = genome->next)
     if (charCount == 0 || (charCount+strlen(trimmedName)<=GENLISTWIDTH))
         { 
         if (withLink)
+            {
             dyStringPrintf(dyShortHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, shortName);
+            // https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
+            if (withPaste)
+                {
+                dyStringPrintf(dyShortHtml,"<input type='hidden' value='%s'>" , hubUrl);
+                dyStringAppend(dyShortHtml, "<svg title='click to copy genome browser hub connection URL to clipboard, for sharing with others' class='pasteIcon' style='margin-left: 6px; cursor: pointer; vertical-align:baseline; width:0.8em' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><!-- Font Awesome Pro 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) --><path d='M128 184c0-30.879 25.122-56 56-56h136V56c0-13.255-10.745-24-24-24h-80.61C204.306 12.89 183.637 0 160 0s-44.306 12.89-55.39 32H24C10.745 32 0 42.745 0 56v336c0 13.255 10.745 24 24 24h104V184zm32-144c13.255 0 24 10.745 24 24s-10.745 24-24 24-24-10.745-24-24 10.745-24 24-24zm184 248h104v200c0 13.255-10.745 24-24 24H184c-13.255 0-24-10.745-24-24V184c0-13.255 10.745-24 24-24h136v104c0 13.2 10.8 24 24 24zm104-38.059V256h-96v-96h6.059a24 24 0 0 1 16.97 7.029l65.941 65.941a24.002 24.002 0 0 1 7.03 16.971z'/></svg>");
+                }
+            }
         else
             dyStringPrintf(dyShortHtml,"%s" , shortName);
+
         dyStringPrintf(dyShortHtml,", ");
         }
     freeMem(shortName); 
@@ -214,7 +223,7 @@ for(; genomes; genomes = genomes->next)
     slAddHead(&list, el);
     }
 slReverse(&list);
-printGenomeList(thub->url, list, row, withLink);
+printGenomeList(thub->url, list, row, withLink, TRUE);
 }
 
 
@@ -258,12 +267,8 @@ struct hubConnectStatus *hub, *nextHub;
 for(hub = hubList; hub; hub = nextHub)
     {
     nextHub = hub->next;
-    // if url is not in publicHash, it's unlisted */
-    if (!((publicHash != NULL) && hashLookup(publicHash, hub->hubUrl)))
-	{
-	unlistedHubCount++;
-	slAddHead(&unlistedHubList, hub);
-	}
+    unlistedHubCount++;
+    slAddHead(&unlistedHubList, hub);
     }
 
 hubList = NULL;  // hubList no longer valid
@@ -285,7 +290,14 @@ puts("<p>Enter hub URLs below to connect hubs. Hubs connected this way are not a
 if (unlistedHubCount == 0)
     {
     // nothing to see here
-    printf("<tr><td>No Unlisted Track Hubs</td></tr>");
+    printf("<tr><td style='text-align:left'>No connected track or assembly hubs.<p>To connect a hub:"
+            "<li>Enter its URL into the input box above and click 'Add Hub'. "
+            "<li>Alternatively, you can go to the 'Public Hubs' tab on this page and connect one "
+            "of the hubs that were submitted to us. "
+            "<li>Another way to connect to hubs is via a direct connection link copied using the copy icon, shown on this page, when a hub is connected. "
+            "<li>You can also connect to hub by following a short link to a saved session, created though the menu "
+            "'My Data &gt; My Sessions', if the Genome Browser had connected hubs when the session was saved."
+            "</ul></td></tr>");
     printf("</thead></table>");
     puts("</FORM>");      // return from within DIV and FROM is probably not a good idea
     puts("</div></div>"); // tabSection and .unlistedHubs
@@ -298,7 +310,7 @@ puts(
 	"<th>Display</th> "
 	"<th>Hub Name</th> "
 	"<th>Description</th> "
-	"<th>Assemblies<span class='assemblyClickNote'>Click to connect and browse directly</span></th> "
+	"<th>Assemblies<span class='assemblyClickNote'>Click to connect and browse directly. Click copy icon to copy URL to clipboard for sharing.</span></th> "
     "</tr>\n"
     "</thead>\n");
 
@@ -644,7 +656,7 @@ else
     ourCellEnd();
     }
 
-printGenomeList(hubInfo->hubUrl, dbListNames, count, hubHasNoError); 
+printGenomeList(hubInfo->hubUrl, dbListNames, count, hubHasNoError, FALSE);  
 printf("</tr>\n");
 }
 
@@ -1636,7 +1648,7 @@ puts("</FORM>");
 // we have three tabs for the public and unlisted hubs and hub development
 printf("<div id=\"tabs\">"
        "<ul> <li><a class=\"defaultDesc\" href=\"#publicHubs\">Public Hubs</a></li>"
-       "<li><a class=\"defaultDesc\" href=\"#unlistedHubs\">My Hubs</a></li> ");
+       "<li><a class=\"defaultDesc\" href=\"#unlistedHubs\">Connected Hubs</a></li> ");
 if (cfgOptionBooleanDefault("hgHubConnect.validateHub", TRUE))
     printf("<li><a class=\"hubDeveloperDesc\" href=\"#hubDeveloper\">Hub Development</a></li>");
 printf("</ul> ");

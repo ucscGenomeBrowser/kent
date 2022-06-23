@@ -331,7 +331,7 @@ for (;;)
     for (resTry = 0; resTry < resTryCount; ++resTry)
         {
 	bits32 resEnd = resEnds[resTry];
-	if (start >= resEnd)
+	if (start >= resEnd && resEnd < usage->size)
 	    {
 	    resSizes[resTry] += 1;
 	    resEnds[resTry] = resEnd = start + resScales[resTry];

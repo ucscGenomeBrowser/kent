@@ -1,6 +1,6 @@
 track gtexEqtlHighConf
 shortLabel GTEx cis-eQTLs
-longLabel GTEx High-Confidence cis-eQTLs from CAVIAR
+longLabel GTEx High-Confidence cis-eQTLs from CAVIAR (not chrX)
 visibility hide
 type bigInteract
 bigDataUrl /gbdb/hg38/gtex/eQtl/gtexEqtlsCaviarHighConf.interact.bb
@@ -28,7 +28,7 @@ visibility hide
 
     track gtexEqtlCaviar
     shortLabel GTEx CAVIAR eQTLs
-    longLabel GTEx High-Confidence cis-eQTLs from CAVIAR
+    longLabel GTEx High-Confidence cis-eQTLs from CAVIAR (no chrX)
     parent gtexEqtlHighConf
     visibility pack
     type bigBed 12 +
@@ -49,7 +49,7 @@ visibility hide
 
     track gtexEqtlDapg
     shortLabel GTEx DAP-G eQTLs
-    longLabel GTEx High-Confidence cis-eQTLs from DAP-G
+    longLabel GTEx High-Confidence cis-eQTLs from DAP-G (no chrX)
     visibility pack
     parent gtexEqtlHighConf off
     type bigBed 12 +

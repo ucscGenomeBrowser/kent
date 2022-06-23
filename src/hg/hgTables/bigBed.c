@@ -26,6 +26,7 @@
 #include "hgTables.h"
 #include "trackHub.h"
 #include "chromAlias.h"
+#include "bPlusTree.h"
 
 
 boolean isBigBed(char *database, char *table, struct trackDb *parent,
@@ -265,9 +266,16 @@ if (bpt) // if we have an index it means we're whole genome and don't need to fi
     struct bigBedInterval *ivList = bigBedMultiNameQuery(bbi, bpt, fieldIx, names, count, lm);
     char chromBuf[4096];
     struct bigBedInterval *interval, *prevInterval = NULL;
+    char * displayChromName = NULL;
     for (interval = ivList; interval != NULL; prevInterval = interval, interval = interval->next)
         {       
-        bigBedIntervalToRowLookupChrom(interval, prevInterval, bbi, chromBuf, sizeof chromBuf, startBuf, endBuf, row, bbi->fieldCount);
+        int lastChromId = (prevInterval == NULL ? -1 : prevInterval->chromId);
+        if (interval->chromId != lastChromId)
+            {
+            bptStringKeyAtPos(bbi->chromBpt, interval->chromId, chromBuf, sizeof chromBuf);
+            displayChromName = chromAliasGetDisplayChrom(database, cart, hgOfficialChromName(database, chromBuf));
+            }
+        bigBedIntervalToRow(interval, displayChromName, startBuf, endBuf, row, bbi->fieldCount);
         if (asFilterOnRow(filter, row))
             {
             int i;
@@ -294,9 +302,10 @@ else
         struct lm *lm = lmInit(0);
         struct bigBedInterval *iv, *ivList = bigBedIntervalQuery(bbi, region->chrom,
             region->start, region->end, 0, lm);
+        char * displayChromName = chromAliasGetDisplayChrom(database, cart, region->chrom);
         for (iv = ivList; iv != NULL; iv = iv->next)
             {
-            bigBedIntervalToRow(iv, region->chrom, startBuf, endBuf, row, bbi->fieldCount);
+            bigBedIntervalToRow(iv, displayChromName, startBuf, endBuf, row, bbi->fieldCount);
             if (asFilterOnRow(filter, row))
                 {
                 if ((idHash != NULL) && (hashLookup(idHash, row[3]) == NULL))

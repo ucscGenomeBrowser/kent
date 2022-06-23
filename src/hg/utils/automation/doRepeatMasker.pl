@@ -579,7 +579,7 @@ sub doMask {
   $bossScript->add(<<_EOF_
 export db=$db
 twoBitMask $unmaskedSeq \$db.sorted.fa.out \$db.rmsk$updateTable.2bit
-twoBitToFa \$db.rmsk$updateTable.2bit stdout | faSize stdin > faSize.rmsk$updateTable.txt &
+twoBitToFa \$db.rmsk$updateTable.2bit stdout | faSize stdin > faSize.rmsk$updateTable.txt
 _EOF_
   );
   $bossScript->execute();
