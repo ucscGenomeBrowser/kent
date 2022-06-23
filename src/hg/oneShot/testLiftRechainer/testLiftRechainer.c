@@ -11,6 +11,8 @@
 #include "obscure.h"
 #include "dnaseq.h"
 
+boolean noAlt = FALSE, sameChrom = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -20,12 +22,15 @@ errAbort(
   "usage:\n"
   "   testLiftRechainer in.chain target.2bit query.2bit out.chain\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -noAlt - don't include chains involving _alt or _fix chromosome fragments\n"
+  "   -sameChrom - only include chains from same chromosome\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"noAlt", OPTION_BOOLEAN},
+   {"sameChrom", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -35,7 +40,14 @@ struct chainTarget
     struct chainTarget *next;
     char *name;	    /* Target sequence name */
     struct chain *chainList;	    /* Sorted by tStart */
+    struct chain *bigChain;	    /* Biggest scoring chain on list */
     };
+
+boolean isAltName(char *name)
+/* Return true if ends with _alt or _fix */
+{
+return endsWith(name, "_alt") || endsWith(name, "_fix");
+}
 
 struct chainTarget *readChainTargets(char *fileName, struct hash *tHash, struct hash *qHash)
 /* Return list of chainTargets read from file.  Returned hash will be keyed by
@@ -48,6 +60,8 @@ struct chainTarget *targetList = NULL, *target;
 struct chain *chain;
 while ((chain = chainRead(lf)) != NULL)
     {
+    if (noAlt && (isAltName(chain->qName) || isAltName(chain->tName)))
+        continue;
     char *tName = chain->tName;
     target = hashFindVal(hash, tName);
     if (target == NULL)
@@ -62,6 +76,8 @@ while ((chain = chainRead(lf)) != NULL)
     if (hashLookup(qHash, chain->qName) == NULL)
 	 errAbort("Query sequence %s is in chain but not target.2bit", chain->qName);
     slAddHead(&target->chainList, chain);
+    if (target->bigChain == NULL || chain->score > target->bigChain->score)
+        target->bigChain = chain;
     }
 
 /* Sort chains within all targets */
@@ -279,21 +295,24 @@ for (tPos=0; tPos < tSize; ++tPos)
     /* Add new chains to active list */
     while (chain != NULL && chain->tStart == tPos)
 	{
-	if (bestChain == NULL)
+	if (!sameChrom || sameString(chain->qName, target->bigChain->qName))
 	    {
-	    struct dlNode *el;
-	    for (el = activeList->head; !dlEnd(el); el = el->next)
+	    if (bestChain == NULL)
 		{
-		struct rechain *rechain = el->val;
-		if (rechain->score > bestScore)
+		struct dlNode *el;
+		for (el = activeList->head; !dlEnd(el); el = el->next)
 		    {
-		    bestScore = rechain->score;
-		    bestChain = rechain;
+		    struct rechain *rechain = el->val;
+		    if (rechain->score > bestScore)
+			{
+			bestScore = rechain->score;
+			bestChain = rechain;
+			}
 		    }
 		}
-	    }
 
-	addNewRechain(chain, tSeq, qSeqHash, qRcSeqHash, bestChain, bestScore, activeList);
+	    addNewRechain(chain, tSeq, qSeqHash, qRcSeqHash, bestChain, bestScore, activeList);
+	    }
 	chain = chain->next;
 	}
 
@@ -454,8 +473,8 @@ for (target = targetList; target != NULL; target = target->next)
     {
     int tSize = hashIntVal(tSizeHash, target->name);
     struct dnaSeq *tSeq = twoBitReadSeqFragLower(targetTwoBit, target->name, 0, tSize);
-    verbose(1, "%s has %d bases and %d chains\n", 
-	target->name, tSeq->size, slCount(target->chainList));
+    verbose(1, "%s has %d bases and %d chains, biggest going to %s\n", 
+	target->name, tSeq->size, slCount(target->chainList), target->bigChain->qName);
     rechainOneTarget(target, tSeq, qSeqHash, qRcSeqHash, f);
     dnaSeqFree(&tSeq);
     }
@@ -469,6 +488,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
+noAlt = optionExists("noAlt");
+sameChrom = optionExists("sameChrom");
 testLiftRechainer(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
