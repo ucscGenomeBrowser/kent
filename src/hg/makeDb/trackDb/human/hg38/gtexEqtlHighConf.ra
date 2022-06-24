@@ -45,7 +45,8 @@ visibility hide
     noParentConfig on
     showCfg on
     release alpha
-    maxItems 1000000
+    maxItems 100000
+    mergeSpannedItems on
 
     track gtexEqtlDapg
     shortLabel GTEx DAP-G eQTLs
@@ -67,5 +68,6 @@ visibility hide
     itemRgb on
     #noParentConfig on
     showCfg on
-    maxItems 1000000
+    maxItems 100000
     release alpha
+    mergeSpannedItems on
