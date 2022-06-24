@@ -40,7 +40,7 @@ visibility hide
     filterLabel.geneName Gene Symbol
     filterText.geneName *
     mouseOver $name; CPP: $cpp
-    urls eqtlName="https://gtexportal.org/home/snp/$$" geneName="https://gtexportal.org/home/locusBrowserPage/$$" eqtlPos="hgTracks?db=$D&position=$$" genePos="hgTracks?db=$D&position=$$"
+    urls eqtlName="https://gtexportal.org/home/snp/$$" geneName="https://gtexportal.org/home/locusBrowserPage/$$" eqtlPos="hgTracks?db=$D&position=$$" genePos="hgTracks?db=$D&position=$$" geneId="https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$$"
     itemRgb on
     noParentConfig on
     showCfg on
@@ -63,7 +63,7 @@ visibility hide
     filterLabel.geneName Gene Symbol
     filterText.geneName *
     mouseOver $name; SNP PIP: $pip; Cluster PIP: $clusterPip
-    urls eqtlName="https://gtexportal.org/home/snp/$$" geneName="https://gtexportal.org/home/locusBrowserPage/$$" eqtlPos="hgTracks?db=$D&position=$$" genePos="hgTracks?db=$D&position=$$"
+    urls eqtlName="https://gtexportal.org/home/snp/$$" geneName="https://gtexportal.org/home/locusBrowserPage/$$" eqtlPos="hgTracks?db=$D&position=$$" genePos="hgTracks?db=$D&position=$$" geneId="https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$$"
     itemRgb on
     #noParentConfig on
     showCfg on
