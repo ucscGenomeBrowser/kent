@@ -2,6 +2,7 @@ GCF_001190045.1_Vigan1.1	adzuki bean
 GCF_000442705.1_EG5	African oil palm
 GCF_004799145.1_ASM479914v1	algarrobo blanco
 GCF_902201215.1_ALMONDv2	almond
+GCF_022539505.1_APGP_CSIRO_Lrig_0.1	monocots annual ryegrass (FL_2022 2022)
 GCF_002114115.1_ASM211411v1	apple
 GCF_014843425.1_RJC1_Hi-C	Barbados nut
 GCF_000219495.3_MedtrA17_4.0	barrel medic (2014)
@@ -18,6 +19,7 @@ GCF_000710875.1_Pepper_Zunla_1_Ref_v1.0	capsicum
 GCF_001625215.1_ASM162521v1	carrot
 GCF_001659605.2_M.esculenta_v8	cassava (v8 AM560-2 2021 DOE)
 GCF_000151685.1_JCVI_RCG_1.1	castor bean
+GCF_023119035.1_UniMelb_Shisp_WGS_1.0	eudicots chia (TCC Black 2014 2022)
 GCF_000331145.1_ASM33114v1	chickpea
 GCF_002994745.2_RchiOBHm-V2	China rose (Old Blush v2 2019)
 GCF_000315295.1_Pbr_v1.0	Chinese white pear
@@ -42,6 +44,7 @@ GCF_904849725.1_MorexV3_pseudomolecules_assembly	domesticated barley
 GCF_002303985.1_Duzib1.0	durian
 GCF_008831285.1_ASM883128v1	East African water lily
 GCF_001411555.2_Walnut_2.0	English walnut
+GCF_002878395.1_UCD10Xv1.1	eudicots bell pepper (UCD-10X-F1 2018)
 GCF_004785595.1_Jm3101_v1.0	eudicots J.microcarpa x regia (UCDavis 2019)
 GCF_004379255.1_SspV2	eudicots S.splendens huo1 (BFU 2021)
 GCF_000495115.1_PopEup_1.0	Euphrates poplar
@@ -66,12 +69,13 @@ GCF_000214015.3_version_140606	green algae O.tauri RCC4221
 GCF_000143455.1_v1.0	green algae V.carteri Eve
 GCF_005286985.1_Setaria_viridis_v2.0	green foxtail
 GCF_002211085.1_PHallii_v3.1	Hall's panicgrass
+GCF_907164915.1_dImpGla2.1	eudicots Himalayan balsam
 GCF_010389155.1_C_canadensis_v1	horseweed
 GCF_003935025.1_Abrus_2018	Indian licorice
 GCF_000346735.1_P.mume_V1.0	Japanese apricot
 GCF_001879475.1_Asagao_1.1	Japanese morning glory
 GCF_001433935.1_IRGSP-1.0	Japanese rice
-GCF_002870075.2_Lsat_Salinas_v7	lettuce (Salinas v2 2020)
+GCF_002870075.3_Lsat_Salinas_v8	eudicots lettuce (Salinas v8 2020)
 GCF_000004255.2_v.1.0	lyrate rockcress
 GCF_013358625.1_SCU_Mint_v3	macadamia nut
 GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0	maize
@@ -91,7 +95,8 @@ GCF_000150535.2_Papaya1.0	papaya
 GCF_000346465.2_Prunus_persica_NCBIv2	peach
 GCF_003086295.2_arahy.Tifrunner.gnm1.KYV3	peanut
 GCF_018687715.1_C.illinoinensisPawnee_v1	pecan
-GCF_000340665.1_C.cajan_V1.0	pigeon pea
+GCF_000327365.2_Graimondii2_0v2	eudicots Peruvian cotton
+GCF_000340665.2_C.cajan_V1.1	pigeon pea (v2 2016 BGI)
 GCF_001540865.1_ASM154086v1	pineapple
 GCF_000375325.1_Caprub1_0	pink shepherd's-purse
 GCF_008641045.1_PisVer_v2	pistachio
@@ -100,6 +105,8 @@ GCF_000226075.1_SolTub_3.0	potato
 GCF_001683475.1_ASM168347v1	quinoa
 GCF_000801105.1_Rs1.0	radish
 GCF_000686985.2_Bra_napus_v2.0	rape
+GCF_020283565.1_ARS_RC_1.1	eudicots red clover (HEN17-A07 2021)
+GCF_018835915.1_ASM1883591v1	eudicots rice bean (VRB-3 Himshakti 2021)
 GCF_004353265.1_EGFV_Vit.rip_1.0	riverbank grape
 GCF_016545825.1_ASM1654582v1	rose gum (2021)
 GCF_000612305.1_Egrandis1_0	rose gum (BRASUZ1 2014)
@@ -109,7 +116,8 @@ GCF_000365185.1_Chinese_Lotus_1.1	sacred lotus
 GCF_000478725.1_Eutsalg1_0	saltwater cress
 GCF_900635055.1_Sole10x-PRISCAF	scented satinash
 GCF_000512975.1_S_indicum_v1.0	sesame
-GCF_900635035.1_Rarg10x-PRISCAF	silver malletwood
+GCF_900635035.1_Rarg10x-PRISCAF	silver malletwood (14919 2019)
+GCF_020921035.1_ASM2092103v1	silver malletwood (NSW1041297 2021)
 GCF_005239225.1_ASM523922v1	silver poplar
 GCF_000003195.3_Sorghum_bicolor_NCBIv3	sorghum
 GCF_000004515.6_Glycine_max_v4.0	soybean (US DOE JGI-PGF v2 2021)
@@ -133,7 +141,7 @@ GCF_009727055.1_ASM972705v1	wax gourd
 GCF_009730915.1_TDr96_F1_v2_PseudoChromosome.rev07_lg8_w22_25.fasta	white yam
 GCF_000695525.1_BOL	wild cabbage
 GCF_002168275.1_ASM216827v2	wild Colombian cocoa
-GCF_002162155.1_WEW_v2.0	wild emmer wheat (Zavitan)
+GCF_002162155.2_WEW_v2.1	wild emmer wheat (Zavitan Atlit2015 v2.1 2019)
 GCF_000313855.2_ASM31385v2	wild Malaysian banana
 GCF_002742605.1_O_europaea_v1	wild olive
 GCF_000817695.2_Aradu1.1	wild peanut A.duranensis
