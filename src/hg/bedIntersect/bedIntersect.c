@@ -2,6 +2,7 @@
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
+#include <limits.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -72,7 +73,7 @@ while (lineFileNextRow(lf, row, expectedCols))
     struct hashEl *hel = hashLookup(hash, row[0]);
     if (hel == NULL)
        {
-       bk = binKeeperNew(0, 1024*1024*1024);
+       bk = binKeeperNew(0, INT_MAX);
        hel = hashAdd(hash, row[0], bk);
        }
     bk = hel->val;
