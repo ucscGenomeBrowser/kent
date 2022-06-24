@@ -18,7 +18,7 @@ release beta,public
 
 track gtexEqtlHighConf
 compositeTrack off
-shortLabel GTEx cis-eTQLs
+shortLabel GTEx cis-eQTLs
 longLabel GTEx fine-mapped cis-eQTLs
 release alpha
 group regulation
