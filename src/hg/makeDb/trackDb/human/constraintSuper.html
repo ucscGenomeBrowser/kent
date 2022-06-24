@@ -87,11 +87,12 @@ HMC scores are displayed as a signal ("wiggle") track, with one score per genome
 Mousing over the bars displays the exact values. The highly-constrained cutoff
 of 0.8 is indicated with a line.</p>
 <p>
-The HMC scores were downloaded and converted to .bedGraph files with a
-custom Python script. The bedGraph files were then converted to bigWig files,
-as documented in our <a
-href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt"
-target=_blank>makeDoc</a> hg19 build log.</p>
+<b>Interpretation:</b> 
+A protein residue with HMC score &lt;1 indicates that missense variants affecting
+the homologous residues are significantly under negative selection (P-value &lt;
+0.05) and likely to be deleterious. A more stringent score threshold of HMC&lt;0.8
+is recommended to prioritize predicted disease-associated variants.
+</p>
 
 <h3>MTR</h3>
 <p>

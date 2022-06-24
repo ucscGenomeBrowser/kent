@@ -182,10 +182,6 @@ void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
  * end of the query, and 1-pixel wide green (instead of purple) when a query 
  * insertion at the end is a valid poly-A tail. */
 
-void baseColorDrawCleanup(struct linkedFeatures *lf, struct dnaSeq **pMrnaSeq,
-			  struct psl **pPsl);
-/* Free structures allocated just for base/cds coloring. */
-
 
 struct simpleFeature *baseColorCodonsFromDna(int frame, int chromStart,
 					     int chromEnd, struct dnaSeq *seq,

@@ -25,6 +25,7 @@ errAbort(
   "    -geneNames=geneNames  geneNames is a three column file with id's mapping to two gene names\n"
   "    -colors=colors        colors is a four column file with id's mapping to r,g,b\n"
   "    -cds=cds              cds is a five column file with id's mapping to cds status codes and exonFrames (see knownCds.as)\n"
+  "    -geneType=geneType              geneType is a two column file with id's mapping to geneType\n"
   );
 }
 
@@ -49,6 +50,7 @@ struct hash *colorsHash = NULL;
 struct hash *scoreHash = NULL;
 struct hash *geneHash = NULL;
 struct hash *cdsHash = NULL;
+struct hash *geneTypeHash = NULL;
 boolean isKnown;
 
 /* Command line validation table. */
@@ -58,6 +60,7 @@ static struct optionSpec options[] = {
    {"geneNames", OPTION_STRING},
    {"colors", OPTION_STRING},
    {"cds", OPTION_STRING},
+   {"geneType", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -143,6 +146,8 @@ if (geneHash)
     }
 
 bgp.geneType = NULL;
+if (geneTypeHash)
+    bgp.geneType = hashFindVal(geneTypeHash, gp->name);
 
 bigGenePredOutput(&bgp, fp, '\t', '\n');
 }
@@ -240,6 +245,10 @@ isKnown = optionExists("known");
 char *scoreFile = optionVal("score", NULL);
 if (scoreFile != NULL)
     scoreHash = hashTwoColumnFile(scoreFile);
+
+char *geneTypeFile = optionVal("geneType", NULL);
+if (geneTypeFile != NULL)
+    geneTypeHash = hashTwoColumnFile(geneTypeFile);
 
 char *geneNames = optionVal("geneNames", NULL);
 if (geneNames != NULL)

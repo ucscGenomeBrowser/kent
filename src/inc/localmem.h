@@ -64,6 +64,9 @@ char *lmCloneSomeWord(struct lm *lm, const char *line, int wordIx);
 struct slName *lmSlName(struct lm *lm, const char *name);
 /* Return slName in memory. */
 
+struct slRef *lmSlRef(struct lm *lm, void *val);
+/* Return a new slRef pointing to val in local memory */
+
 #define lmAllocVar(lm, pt) (pt = lmAlloc(lm, sizeof(*pt)));
 /* Shortcut to allocating a single variable in local mem and
  * assigning pointer to it. */

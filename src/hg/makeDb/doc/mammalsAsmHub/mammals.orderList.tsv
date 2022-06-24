@@ -102,7 +102,7 @@ GCA_004027575.1_CriGam_v1_BIUU	Gambian giant pouched rat
 GCF_018350155.1_O.geoffroyi_Oge1_pat1.0	Geoffroy's cat
 GCA_004026745.1_MyrTri_v1_BIUU	giant anteater
 GCA_004024605.1_PteBra_v1_BIUU	giant otter
-GCF_002007445.1_ASM200744v2	giant panda
+GCF_002007445.2_ASM200744v3	giant panda (Jingjing v3 2020)
 GCF_001704415.1_ARS1	goat (San Clemente 2016 USDA refseq)
 GCA_004027895.1_AllBul_v1_BIUU	Gobi jerboa
 GCF_017639785.1_BCM_Maur_2.0	golden hamster (Baylor 2021)
@@ -110,6 +110,7 @@ GCF_000349665.1_MesAur1.0	golden hamster (Broad 2013 refseq)
 GCA_004024945.1_UroGra_v1_BIUU	gracile shrew mole
 GCF_012393455.1_Tufts_HGry_1.1	gray seal
 GCF_000002295.2_MonDom5	gray short-tailed opossum
+GCF_902686445.1_mSciCar1.2	gray squirrel
 GCF_001890085.1_ASM189008v1	great roundleaf bat (ML-2016 2016 refseq)
 GCA_004026585.1_NocLep_v1_BIUU	greater bulldog bat
 GCA_004025085.1_ThrSwi_v1_BIUU	Greater cane rat

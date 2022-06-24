@@ -249,6 +249,15 @@ strcpy(n->name, name);
 return n;
 }
 
+struct slRef *lmSlRef(struct lm *lm, void *val)
+/* Return a new slRef pointing to val in local memory */
+{
+struct slRef *ref;
+lmAllocVar(lm, ref);
+ref->val = val;
+return ref;
+}
+
 char **lmCloneRowExt(struct lm *lm, char **row, int rowOutSize, int rowInSize)
 /* Allocate an array of strings with rowOutSize elements.  Clone the first rowInSize elements
  * of row into the new array, leaving others NULL if rowOutSize is greater than rowInSize.

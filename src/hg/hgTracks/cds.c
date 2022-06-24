@@ -945,12 +945,54 @@ if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
 return hDnaSeqGet(database, name, words[1], words[2]);
 }
 
+
+static struct dnaSeq *fetchCachedTwoBitSeq(char *url, char *seqName, boolean doRc)
+/* fetch a sequence from a 2bit.  Caches open two bit files and sequence in 
+ * both forward and reverse strand */
+{
+/* Init static url hash */
+static struct hash *urlHash = NULL;  // hash of open files
+if (urlHash == NULL)
+    urlHash = hashNew(0);
+
+/* Get cache for a particular two bit URL */
+struct twoBitCache
+/* An open two bit file and a hash of sequences in it */
+    {
+    struct twoBitFile *tbf;
+    struct hash *seqHash;
+    struct hash *rcSeqHash;
+    };
+struct twoBitCache *cache = hashFindVal(urlHash, url);
+if (cache == NULL)
+    {
+    AllocVar(cache);
+    cache->tbf = twoBitOpen(url);
+    cache->seqHash = hashNew(0);
+    cache->rcSeqHash = hashNew(0);
+    hashAdd(urlHash, url, cache);
+    }
+struct hash *seqHash = (doRc ? cache->rcSeqHash : cache->seqHash);
+struct dnaSeq *seq = hashFindVal(seqHash, seqName);
+
+if (seq == NULL)
+    {
+    seq = twoBitReadSeqFrag(cache->tbf, seqName, 0, 0);
+    touppers(seq->dna);
+    if (doRc)
+        reverseComplement(seq->dna, seq->size);
+    hashAdd(seqHash, seqName, seq);
+    }
+return seq;
+}
+
 static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf,
-				       char *tableName, struct track *tg)
+				       char *tableName, struct track *tg, boolean doRc)
 /* Look up the sequence in genbank tables (hGenBankGetMrna also searches 
  * seq if it can't find it in GB tables) or user's blat sequence, 
  * uppercase and return it if we find it, return NULL if we don't find it. */
 {
+boolean doUpper = TRUE;
 struct dnaSeq *mrnaSeq = NULL;
 char *name = getItemDataName(tg, lf->name);
 if (sameString(tableName,"refGene") || sameString(tableName,"refSeqAli"))
@@ -995,6 +1037,15 @@ else
         struct lrg *lrg = lf->original;
         mrnaSeq = lrgReconstructSequence(lrg, database);
         }
+    else if (sameString("2bit", seqSource))
+        {
+	char *url = trackDbSetting(tg->tdb, "otherTwoBitUrl");
+	if (url == NULL)
+	    errAbort("missing otherTwoBitUrl in baseColorUseSequence 2bit trackDb setting");
+	mrnaSeq = fetchCachedTwoBitSeq(url, name, doRc);
+	doRc = FALSE;	    // Handled it already
+	doUpper = FALSE;    // Handled it already
+	}
     else if (startsWith("table ", seqSource))
         {
         char *table = seqSource;
@@ -1011,9 +1062,11 @@ else
         }
     else
         mrnaSeq = hGenBankGetMrna(database, name, NULL);
-}
-if (mrnaSeq != NULL)
+    }
+if (mrnaSeq != NULL && doUpper)
     touppers(mrnaSeq->dna);
+if (mrnaSeq != NULL && doRc)
+    reverseComplement(mrnaSeq->dna, mrnaSeq->size);
 return mrnaSeq;
 }
 
@@ -1961,18 +2014,12 @@ if (drawOpt == baseColorDrawItemBases ||
     drawOpt == baseColorDrawDiffCodons ||
     indelShowPolyA)
     {
-    *retMrnaSeq = maybeGetSeqUpper(lf, tg->table, tg);
-    if (*retMrnaSeq != NULL && *retPsl != NULL) // we have both sequence and PSL
-	{
-        if ((*retMrnaSeq)->size != (*retPsl)->qSize)
-            errAbort("baseColorDrawSetup: %s: mRNA size (%d) != psl qSize (%d)",
-                     (*retPsl)->qName, (*retMrnaSeq)->size, (*retPsl)->qSize);
-	if ((*retPsl)->strand[0] == '-' || (*retPsl)->strand[1] == '-')
-	    reverseComplement((*retMrnaSeq)->dna, strlen((*retMrnaSeq)->dna));
-	}
+    struct psl *psl = *retPsl;
+    boolean doRc = (psl != NULL && (psl->strand[0] == '-' || psl->strand[1] == '-'));
+    *retMrnaSeq = maybeGetSeqUpper(lf, tg->table, tg, doRc);
     // if no sequence, no base color drawing
     // Note: we could have sequence but no PSL (eg, tagAlign format)
-    else if (*retMrnaSeq == NULL) 
+    if (*retMrnaSeq == NULL) 
 	return baseColorDrawOff;
     }
 
@@ -2007,17 +2054,6 @@ for (sf = sfList; sf != NULL; sf = sf->next)
     }
 }
 
-
-void baseColorDrawCleanup(struct linkedFeatures *lf, struct dnaSeq **pMrnaSeq,
-			  struct psl **pPsl)
-/* Free structures allocated just for base/cds coloring. */
-{
-// We could free lf->original here (either genePredFree or pslFree, depending
-// on the type -- but save time by skipping that.  Maybe we should save time
-// by skipping this free too:
-if (pMrnaSeq != NULL)
-    dnaSeqFree(pMrnaSeq);
-}
 
 void baseColorSetCdsBounds(struct linkedFeatures *lf, struct psl *psl,
                            struct track *tg)
