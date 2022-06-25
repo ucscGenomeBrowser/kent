@@ -17,6 +17,7 @@ Guide to Searchable track hubs</a>.</p>
 To complete the steps below you must first download the <code>ixIxx</code> utility. For more 
 information on downloading our command line utilities, see these 
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">instructions</a>.</p>
+<h3 id="ex1">Example 1</h3>
 <p>
 To create a Trix index, follow these steps:
 <ol>
@@ -29,6 +30,24 @@ To create a Trix index, follow these steps:
   Run the <code>ixIxx</code> program on your text file.<br>
   <pre><code>    ixIxx input.txt myTrix.ix myTrix.ixx</code></pre></li>
 </ol>
+<h3 id="ex2">Example 2</h3>
+<ol>
+  <li>
+  If you have a bigBed track with unique gene names such as
+  <code>SIRT1, BRCA1, TP53</code> in the fourth name
+  column, and you built the bigBed using the option of
+  <code>-extraIndex=name</code> to index the name field you can create an
+  input.txt such as the following that associates the bigBed name with other
+  identifiers people might search for or with shorter spellings of the names:
+  <pre>
+    SIRT1 sirt1 sir sirt SIR SIRT Sirtuin SIR2-Like ENSG00000096717 NM_012238
+    BRCA1 brca1 brca brc BRC BRCA breast cancer 1 ENSG00000012048 NM_007300
+    TP53 tp53 tp5 TP5 Tumor Protein P53 ENSG00000141510 NM_001126112</pre></li>
+  <li>
+  You would then run the <code>ixIxx</code> program on your text file.<br>
+  <pre><code>    ixIxx input.txt myTrix.ix myTrix.ixx</code></pre></li>
+</ol>
+
 <h3 id="resources">Resources and examples</h3>
 <p>
 If you want to use your Trix index in a track hub, see the <code>searchTrix</code> setting in the 

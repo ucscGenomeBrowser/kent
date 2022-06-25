@@ -14,13 +14,13 @@ filterText.geneName *
 #urls eqtlName="https://www.ncbi.nlm.nih.gov/snp/$$" geneName="https://gtexportal.org/home/locusBrowserPage/$$"
 group regulation
 interactDirectional offsetTarget
-release beta,public
+release public
 
 track gtexEqtlHighConf
 compositeTrack off
 shortLabel GTEx cis-eQTLs
 longLabel GTEx fine-mapped cis-eQTLs
-release alpha
+release alpha,beta
 group regulation
 type bigBed
 itemRgb on
@@ -40,12 +40,13 @@ visibility hide
     filterLabel.geneName Gene Symbol
     filterText.geneName *
     mouseOver $name; CPP: $cpp
-    urls eqtlName="https://gtexportal.org/home/snp/$$" geneName="https://gtexportal.org/home/locusBrowserPage/$$" eqtlPos="hgTracks?db=$D&position=$$" genePos="hgTracks?db=$D&position=$$"
+    urls eqtlName="https://gtexportal.org/home/snp/$$" geneName="https://gtexportal.org/home/locusBrowserPage/$$" eqtlPos="hgTracks?db=$D&position=$$" genePos="hgTracks?db=$D&position=$$" geneId="https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$$"
     itemRgb on
     noParentConfig on
     showCfg on
-    release alpha
-    maxItems 1000000
+    release alpha,beta
+    maxItems 100000
+    mergeSpannedItems on
 
     track gtexEqtlDapg
     shortLabel GTEx DAP-G eQTLs
@@ -63,9 +64,10 @@ visibility hide
     filterLabel.geneName Gene Symbol
     filterText.geneName *
     mouseOver $name; SNP PIP: $pip; Cluster PIP: $clusterPip
-    urls eqtlName="https://gtexportal.org/home/snp/$$" geneName="https://gtexportal.org/home/locusBrowserPage/$$" eqtlPos="hgTracks?db=$D&position=$$" genePos="hgTracks?db=$D&position=$$"
+    urls eqtlName="https://gtexportal.org/home/snp/$$" geneName="https://gtexportal.org/home/locusBrowserPage/$$" eqtlPos="hgTracks?db=$D&position=$$" genePos="hgTracks?db=$D&position=$$" geneId="https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$$"
     itemRgb on
     #noParentConfig on
     showCfg on
-    maxItems 1000000
-    release alpha
+    maxItems 100000
+    release alpha,beta
+    mergeSpannedItems on
