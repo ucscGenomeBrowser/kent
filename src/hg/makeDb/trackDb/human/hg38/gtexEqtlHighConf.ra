@@ -14,13 +14,13 @@ filterText.geneName *
 #urls eqtlName="https://www.ncbi.nlm.nih.gov/snp/$$" geneName="https://gtexportal.org/home/locusBrowserPage/$$"
 group regulation
 interactDirectional offsetTarget
-release beta,public
+release public
 
 track gtexEqtlHighConf
 compositeTrack off
 shortLabel GTEx cis-eQTLs
 longLabel GTEx fine-mapped cis-eQTLs
-release alpha
+release alpha,beta
 group regulation
 type bigBed
 itemRgb on
@@ -44,7 +44,7 @@ visibility hide
     itemRgb on
     noParentConfig on
     showCfg on
-    release alpha
+    release alpha,beta
     maxItems 100000
     mergeSpannedItems on
 
@@ -69,5 +69,5 @@ visibility hide
     #noParentConfig on
     showCfg on
     maxItems 100000
-    release alpha
+    release alpha,beta
     mergeSpannedItems on
