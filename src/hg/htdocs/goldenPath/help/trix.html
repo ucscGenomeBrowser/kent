@@ -44,9 +44,14 @@ To create a Trix index, follow these steps:
     BRCA1 brca1 brca brc BRC BRCA breast cancer 1 ENSG00000012048 NM_007300
     TP53 tp53 tp5 TP5 Tumor Protein P53 ENSG00000141510 NM_001126112</pre></li>
   <li>
-  You would then run the <code>ixIxx</code> program on your text file.<br>
+  You would then run the <code>ixIxx</code> program on your text file,
+  taking into account the length of your longest word.<br>
   <pre><code>    ixIxx input.txt myTrix.ix myTrix.ixx</code></pre></li>
 </ol>
+<p>
+The <code>ixIxx</code> utility has a default of 31 characters for words. If you build an input.txt
+with longer words, such as very long accessions, you neeed to add the option <code>-maxWordLength=N</code>
+to override the default and expand it to the size you are using for the longest words in your index.</p>
 
 <h3 id="resources">Resources and examples</h3>
 <p>
