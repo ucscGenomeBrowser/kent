@@ -122,7 +122,8 @@ hgLoadSqlTab -notOnServer $tempDb kg${PREV_GENCODE_VERSION}ToKg${GENCODE_VERSION
 
 
 hgsql $tempDb -Ne "select kgId, geneSymbol, spID from kgXref" > geneNames.txt
-genePredToBigGenePred -colors=colors.txt -geneNames=geneNames.txt -known -cds=knownCds.tab   knownGene.gp  stdout | sort -k1,1 -k2,2n >  gencodeAnnot$GENCODE_VERSION.bgpInput
+hgsql $db -Ne "select transcriptId, geneType from wgEncodeGencodeAttrs$GENCODE_VERSION" | sort > geneType.txt
+genePredToBigGenePred -geneType=geneType.txt -colors=colors.txt -geneNames=geneNames.txt -known -cds=knownCds.tab   knownGene.gp  stdout | sort -k1,1 -k2,2n >  gencodeAnnot$GENCODE_VERSION.bgpInput
 
 # build bigGenePred
 tawk '{print $4,$0}' gencodeAnnot$GENCODE_VERSION.bgpInput | sort > join1

@@ -28,7 +28,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "mafCounts - count the number of A,T,C,G in a maf and output four wiggles\n"
+  "mafCounts - count the number of A,T,C,G in a maf and output four wiggles with values that sum to one\n"
   "usage:\n"
   "   mafCounts mafIn wigPrefix\n"
   "WARNING:  requires a maf with only a single target sequence\n"
@@ -42,15 +42,18 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-unsigned char letterBox[256];
-unsigned ourBufSize =  256 *1024;
+unsigned char letterBox[256];  // to make ASCII values to indices
+unsigned ourBufSize =  256 *1024;   // this is the max size of a maf block
+
+#define NUMBER_OF_NUCS   4
 
 void mafCounts(char *mafIn, char *wigPrefix)
 /* mafCounts - count A,C,T,G */
 {
 int jj;
-char buffer[4096];
-FILE *f[4];
+char buffer[4096];  // holds a relatively short filename
+FILE *f[NUMBER_OF_NUCS]; // one file for each different nucleotide
+
 safef(buffer, sizeof buffer, "%s.A.wig", wigPrefix);
 f[0] = mustOpen(buffer, "w");
 safef(buffer, sizeof buffer, "%s.C.wig", wigPrefix);
@@ -62,7 +65,7 @@ f[3] = mustOpen(buffer, "w");
 struct mafAli *maf;
 struct mafFile *mf = mafOpen(mafIn);
 
-unsigned *counts = needLargeMem(4 * ourBufSize * sizeof(unsigned));
+unsigned *counts = needLargeMem(NUMBER_OF_NUCS * ourBufSize * sizeof(unsigned));   // this array keeps the counts of each of the 4 possible nucleotides
 int last = -1;
 double *values = NULL;
 char *lastChrom = NULL;
@@ -76,12 +79,15 @@ for(; (maf = mafNext(mf)) != NULL;)
         errAbort("ourBufSize not big enough for %d\n", seqLen);
     unsigned blockStart = comp->start;
 
+    // if this block is not contiguos with the last one, we need to start a new wig span
     if (blockStart != last)
         {
         char *chrom = strchr(comp->src, '.');
         *chrom++ = 0;
-        for(jj = 0; jj < 4; jj++)
+        for(jj = 0; jj < NUMBER_OF_NUCS; jj++)
 	    fprintf(f[jj], "fixedStep chrom=%s start=%d step=1\n", chrom, blockStart + 1);
+
+        // if we're scaling and we're on a new chrom, grab the scale values from the bigWig
         if (scaleBbi && !sameOk(lastChrom, chrom))
             {
             bigWigValsOnChromFetchData(scaleVals, chrom, scaleBbi);
@@ -89,9 +95,14 @@ for(; (maf = mafNext(mf)) != NULL;)
             lastChrom = cloneString(chrom);
             }
         }
+    // keep track of where this block ends
     last = blockStart + seqLen;
     int ii;
-    memset(counts, 0, 4 * ourBufSize * sizeof(unsigned));
+
+    // for each maf block we reset the counts of each type of nucleotide to zero
+    memset(counts, 0, NUMBER_OF_NUCS * ourBufSize * sizeof(unsigned));
+
+    // now go through each component of the maf block and count the nucs
     for(; comp; comp = comp->next)
         {
         char *str = comp->text;
@@ -104,6 +115,8 @@ for(; (maf = mafNext(mf)) != NULL;)
                 counts[(nucToIndex - 1) * ourBufSize + ii]++;
             }
         }
+
+    // now we normalize and scale if asked.
     char *str = maf->components->text;
     unsigned scaleOffset = 0;
     for(ii = 0; ii < seqLen; ii++, str++)
@@ -116,13 +129,13 @@ for(; (maf = mafNext(mf)) != NULL;)
 
         scaleOffset++;
 	double total = 0;
-        for(jj = 0; jj < 4; jj++)
+        for(jj = 0; jj < NUMBER_OF_NUCS; jj++)
             {
             unsigned offset = jj * ourBufSize + ii;
             total += counts[offset];
             }
 
-        for(jj = 0; jj < 4; jj++)
+        for(jj = 0; jj < NUMBER_OF_NUCS; jj++)
             {
             unsigned offset = jj * ourBufSize + ii;
             double value = counts[offset]/total;

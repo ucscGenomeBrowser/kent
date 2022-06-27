@@ -82,10 +82,13 @@ while (my $line = <FH>) {
     }
 }
 # might be final gap on last chrom mentioned
-my $chromEnd = $chromSizes{$chr};
-$size = $chromEnd - $end;
-$chromDone{$chr} = 1;
-printf "%s\t%d\t%d\t%d\n", $chr, $end, $chromEnd, $size if ($size > 0);;
+# might be an empty input file, no lines read, never set chr
+if (length($chr)) {
+ my $chromEnd = $chromSizes{$chr};
+ $size = $chromEnd - $end;
+ $chromDone{$chr} = 1;
+ printf "%s\t%d\t%d\t%d\n", $chr, $end, $chromEnd, $size if ($size > 0);;
+}
 close (FH);
 
 # output gaps on chroms never mentioned yet, they had no elements
