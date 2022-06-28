@@ -2,14 +2,11 @@
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
+#include <limits.h>
 #include "common.h"
 #include "chromBins.h"
 #include "binRange.h"
 #include "hash.h"
-
-
-/* Sized hold a very larger chromosome. */
-static const int MAX_CHROM_SIZE = 1000000000;
 
 struct chromBins *chromBinsNew(chromBinsFreeFunc *freeFunc)
 /* create a new chromBins object */
@@ -70,7 +67,7 @@ if (create)
     {
     struct hashEl *hel = hashStore(chromBins->chromTbl, chrom);
     if (hel->val == NULL)
-        hel->val = binKeeperNew(0, MAX_CHROM_SIZE);
+        hel->val = binKeeperNew(0, INT_MAX);
     return (struct binKeeper*)hel->val;
     }
 else

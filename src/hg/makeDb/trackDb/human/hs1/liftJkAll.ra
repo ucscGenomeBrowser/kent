@@ -1,0 +1,54 @@
+track liftJkAll
+type bigPsl
+group map
+bigDataUrl /gbdb/hs1/liftJkAll/liftJkAll.bigPsl
+shortLabel liftJkAll
+longLabel JK lifts from hg38 including alts
+visibility hide
+indelQueryInsert on
+indelDoubleInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault diffBases
+baseColorUseSequence 2bit 
+#otherTwoBitUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit
+otherTwoBitUrl /gbdb/hg38/hg38.2bit
+color 0,0,100
+
+track liftJkChrom
+type bigPsl
+group map
+bigDataUrl /gbdb/hs1/liftJkAll/liftJkChrom.bigPsl
+shortLabel liftJkChrom
+longLabel JK lifts from hg38 no alts only same chromosome
+visibility hide
+indelQueryInsert on
+indelDoubleInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault diffBases
+baseColorUseSequence 2bit 
+otherTwoBitUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit
+color 0,0,100
+
+track liftMinimap
+type bigPsl
+group map
+bigDataUrl /gbdb/hs1/liftJkAll/liftMinimap.bigPsl
+shortLabel liftMinimap
+longLabel Minimap lifts from hg38 no alts only same chromosome
+visibility hide
+indelQueryInsert on
+indelDoubleInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault diffBases
+baseColorUseSequence 2bit 
+otherTwoBitUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit
+color 0,0,100

@@ -123,7 +123,7 @@ $(document).ready(function() {
         copyText.setSelectionRange(0, 99999); /* For mobile devices */
         document.execCommand('copy');
         copyText.type = 'hidden';
-        alert("Copied the URL " + copyText.value + " to the clipboard");
+        alert("Copied URL to clipboard: " + copyText.value);
         copyText.value = oldVal;
     });
 
