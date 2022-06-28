@@ -6,6 +6,7 @@ group regulation
 type bigBed
 itemRgb on
 visibility hide
+pennantIcon New red ../goldenPath/newsarch.html#062822 "Released Jun. 28, 2022"
 
     track gtexEqtlCaviar
     shortLabel GTEx CAVIAR eQTLs
