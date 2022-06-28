@@ -269,6 +269,7 @@
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
+#define MAX_DISPLAY_QUERY_SEQ_SIZE 5000000  // Big enough for HLA alts
 
 struct cart *cart;	/* User's settings. */
 char *seqName;		/* Name of sequence we're working on. */
@@ -3236,6 +3237,37 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 printf("</TT></PRE>\n");
 }
 
+struct twoBitFile *getTwoBitFileFromUrlInSettings(struct trackDb *tdb, char *settingName)
+/* Assume settingName is a URL to a two bit file and try and return it */
+{
+struct twoBitFile *tbf = NULL;
+char *url = trackDbSetting(tdb, settingName);
+if (url != NULL)
+   tbf = twoBitOpen(url);
+return tbf;
+}
+
+struct twoBitFile *getOtherTwoBitUrl(struct trackDb *tdb)
+/* Return open two bit file if otherTwoBitUrl setting is present */
+{
+return getTwoBitFileFromUrlInSettings(tdb, "otherTwoBitUrl");
+}
+
+struct psl *getPslAndSeq(struct trackDb *tdb, char *chromName, struct bigBedInterval *bb, 
+    unsigned seqTypeField, DNA **retSeq, char **retCdsStr)
+/* Read in psl and query sequence out of a bbiInverval on a give chromosome */
+{
+struct psl *psl= pslFromBigPsl(chromName, bb, seqTypeField, retSeq, retCdsStr);
+DNA *dna = *retSeq;
+if (dna == NULL)
+    {
+    struct twoBitFile *otherTbf = getOtherTwoBitUrl(tdb);
+    struct dnaSeq *seq = twoBitReadSeqFrag(otherTbf, psl->qName, 0, 0);
+    *retSeq = dna = seq->dna;
+    }
+return psl;
+}
+
 void genericBigPslClick(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, int end)
 /* Handle click in big psl track. */
@@ -3245,6 +3277,7 @@ char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
 int ivStart = start, ivEnd = end;
+
 if (start == end)
     {  
     // item is an insertion; expand the search range from 0 bases to 2 so we catch it:
@@ -3325,7 +3358,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (showEvery || sameString(bedRow[3], item))
 	{
         char *cdsStr, *seq;
-        struct psl *psl= pslFromBigPsl(chromName, bb, seqTypeField, &seq, &cdsStr);
+        struct psl *psl= getPslAndSeq(tdb, chromName, bb, seqTypeField, &seq, &cdsStr);
         slAddHead(&pslList, psl);
 
         // we're assuming that if there are multiple psl's with the same id that
@@ -3344,11 +3377,14 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                 puts("</LI>\n");
                 }
 
-            puts("<LI>\n");
-            hgcAnchorSomewhere("htcBigPslSequence", item, tdb->track, seqName);
-            printf("Query Sequence</A> \n");
-            puts("</LI>\n");
-            printf("</UL>\n");
+	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE)
+		{
+		puts("<LI>\n");
+		hgcAnchorSomewhere("htcBigPslSequence", item, tdb->track, seqName);
+		printf("Query Sequence</A> \n");
+		puts("</LI>\n");
+		printf("</UL>\n");
+		}
             }
 	}
     }
@@ -3500,6 +3536,25 @@ if (html != NULL && html[0] != 0)
 hPrintf("<BR>\n");
 }
 
+struct chain *chainLoadItemInRange(struct trackDb *tdb, char *item)
+/* Load up parts of chain that intersect seqName:winStart-winEnd */
+{
+struct chain *chain = NULL;
+int id = sqlUnsigned(item);
+if (startsWith("big", tdb->type))
+    {
+    char *fileName = trackDbSetting(tdb, "bigDataUrl");
+    char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
+    chain = chainLoadIdRangeHub(database, fileName, linkFileName, seqName, winStart, winEnd, id);
+    }
+else
+    {
+    chain = chainLoadIdRange(database, tdb->table, seqName, winStart, winEnd, id);
+    }
+return chain;
+}
+
+
 void qChainRangePlusStrand(struct chain *chain, int *retQs, int *retQe)
 /* Return range of bases covered by chain on q side on the plus
  * strand. */
@@ -3597,10 +3652,26 @@ if (subChain != NULL && otherOrg != NULL)
 chainFree(&toFree);
 }
 
+struct dnaSeq *otherChromSeq(struct twoBitFile *otherTbf, char *otherDb, 
+    char *otherChrom, int otherStart, int otherEnd)
+/* This fetches sequence from tdb->otherTwoBitUrl if available,  if not
+ * tries to find it via otherDb */
+{
+if (otherTbf != NULL)
+    {
+    return twoBitReadSeqFrag(otherTbf, otherChrom, otherStart, otherEnd);
+    }
+else
+    {
+    return hChromSeq(otherDb, otherChrom, otherStart, otherEnd);
+    }
+}
+
 void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
                        char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
 {
+struct twoBitFile *otherTbf = getOtherTwoBitUrl(tdb);
 char *thisOrg = hOrganism(database);
 char *otherOrg = NULL;
 struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
@@ -3626,12 +3697,9 @@ if (otherOrg == NULL)
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
 
+chain = chainLoadItemInRange(tdb, item);
 if (startsWith("big", tdb->type))
     {
-    char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-    char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
-    chain = chainLoadIdRangeHub(database, fileName, linkFileName, seqName, winStart, winEnd, atoi(item));
-
     if (!otherIsActive) // if this isn't a native database, check to see if it's a hub
         {
         struct trackHubGenome *genome = trackHubGetGenomeUndecorated(otherDb);
@@ -3641,10 +3709,6 @@ if (startsWith("big", tdb->type))
             otherDb = genome->name;
             }
         }
-    }
-else
-    {
-    chain = chainLoadIdRange(database, tdb->table, seqName, winStart, winEnd, atoi(item));
     }
 
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
@@ -3682,7 +3746,7 @@ else if (otherIsActive && subChain != chain)
 
     if (subChain->qStrand == '-')
         reverseIntRange(&qStart, &qEnd, subChain->qSize);
-    qSeq = hChromSeq(otherDb, subChain->qName, qStart, qEnd);
+    qSeq = otherChromSeq(otherTbf, otherDb, subChain->qName, qStart, qEnd);
     if (subChain->qStrand == '-')
         reverseComplement(qSeq->dna, qSeq->size);
     subChain->score = chainCalcScoreSubChain(subChain, scoreScheme, gapCalc,
@@ -3763,7 +3827,9 @@ chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
 /* server (or in other cases) if there is a database with a chromInfo table, */
 /* the sequences are available and there is an entry added to dbDb for */
 /* the otherDb. */
-if (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) && chromSeqFileExists(otherDb, chain->qName))
+if (otherTbf != NULL || 
+    (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) 
+     && chromSeqFileExists(otherDb, chain->qName)))
     {
     if (chainWinSize < 1000000)
         {
@@ -4720,10 +4786,6 @@ hFreeConn(&conn);
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info */
 {
-#ifdef OLD /* Called now by cartWebStart... */
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("utils.js",NULL);
-#endif /* OLD */
 genericClickHandlerPlus(tdb, item, itemForUrl, NULL);
 }
 
@@ -4890,6 +4952,29 @@ for (ct=ctList;  ct != NULL;  ct=ct->next)
 
 slReverse(&tdbList);
 return(tdbList);
+}
+
+static struct trackDb *getCustomTrackTdb(char *table)
+/* Find the trackDb structure for a custom track table. */
+{
+struct customTrack *ctList = getCtList();
+struct customTrack *ct = NULL;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (sameString(table, ct->tdb->track))
+	return  ct->tdb;
+return NULL;
+}
+
+struct trackDb *getTdbForTrackName(char *trackName)
+/* Given a track name (which may have ct_ or hub_ prepended), tdb */
+{
+assert(trackHash != NULL);
+if (isCustomTrack(trackName))
+    return getCustomTrackTdb(trackName);
+else if (isHubTrack(trackName))
+    return hubConnectAddHubForTrackAndFindTdb( database, trackName, NULL, trackHash);
+else
+    return hashMustFindVal(trackHash, trackName);
 }
 
 
@@ -6329,12 +6414,15 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	    safef(otherString, sizeof(otherString), "%d&aliTable=%s", psl->tStart, tableName);
             printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
-	    hgcAnchorWindow(hgcCommand, qName, psl->tStart, psl->tEnd,  otherString, psl->tName);
-	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d</A>",
+	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE) // Only anchor if small enough 
+		hgcAnchorWindow(hgcCommand, qName, psl->tStart, psl->tEnd, otherString, psl->tName);
+	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d",
 		   psl->match + psl->misMatch + psl->repMatch,
 		   100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
 		   skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
 		   psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
+	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE)
+	        printf("</A>");
 	    printf("\n");
 	    }
 	}
@@ -6359,6 +6447,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	&& !(startsWith("user", tableName) && pslIsProtein(psl))
 	&& psl->tStart == startFirst
         && sameString(psl->tName, seqName)
+	&& psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE
 	)
 	{
         char otherString[512];
@@ -7739,7 +7828,7 @@ if (bb == NULL)
     errAbort("item %s not found in range %s:%d-%d in bigBed %s (%s)",
              acc, chrom, start, end, tdb->table, fileName);
 unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-psl = pslFromBigPsl(seqName, bb, seqTypeField, &seq, &cdsString);
+psl = getPslAndSeq(tdb, seqName, bb, seqTypeField, &seq, &cdsString);
 if (cdsString)
     genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
@@ -7800,7 +7889,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	}
     }
 unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-wholePsl = pslFromBigPsl(seqName, bb, seqTypeField, &seq, &cdsString);
+wholePsl = getPslAndSeq(tdb, seqName, bb, seqTypeField, &seq, &cdsString);
 
 if (seq == NULL)
     {
@@ -8073,14 +8162,13 @@ void htcChainAli(char *item)
 {
 struct chain *chain;
 struct psl *fatPsl, *psl = NULL;
-int id = atoi(item);
 char *track = cartString(cart, "o");
-char *type = trackTypeInfo(track);
+struct trackDb *tdb = getTdbForTrackName(track);
+char *type = cloneString(tdb->type);
 char *typeWords[2];
 char *otherDb = NULL, *org = NULL, *otherOrg = NULL;
 struct dnaSeq *qSeq = NULL;
 char name[128];
-
 
 /* Figure out other database. */
 if (chopLine(type, typeWords) < ArraySize(typeWords))
@@ -8094,7 +8182,7 @@ org = hOrganism(database);
 
 /* Load up subset of chain and convert it to part of psl
  * that just fits inside of window. */
-chain = chainLoadIdRange(database, track, seqName, winStart, winEnd, id);
+chain = chainLoadItemInRange(tdb, item);
 if (chain->blockList == NULL)
     {
     printf("None of chain is actually in the window");
@@ -8107,15 +8195,25 @@ chainFree(&chain);
 psl = pslTrimToTargetRange(fatPsl, winStart, winEnd);
 pslFree(&fatPsl);
 
+struct twoBitFile *otherTbf = getOtherTwoBitUrl(tdb);
 if (sameWord(otherDb, "seq"))
     {
     qSeq = hExtSeqPart(database, psl->qName, psl->qStart, psl->qEnd);
     safef(name, sizeof name, "%s", psl->qName);
     }
-else
+else if (otherDb != NULL)
     {
     qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
     safef(name, sizeof name, "%s.%s", otherOrg, psl->qName);
+    }
+else if (otherTbf != NULL)
+    {
+    qSeq = twoBitReadSeqFragLower(otherTbf, psl->qName, psl->qStart, psl->qEnd);
+    safef(name, sizeof name, "%s", psl->qName);
+    }
+if (qSeq == NULL)
+    {
+    errAbort("Can't find query sequence in htcChainAli");
     }
 char title[1024];
 safef(title, sizeof title, "%s %s vs %s %s ",
@@ -8129,7 +8227,6 @@ void htcChainTransAli(char *item)
 {
 struct chain *chain;
 struct psl *fatPsl, *psl = NULL;
-int id = atoi(item);
 char *track = cartString(cart, "o");
 char *type = trackTypeInfo(track);
 char *typeWords[2];
@@ -8151,7 +8248,8 @@ org = hOrganism(database);
 
 /* Load up subset of chain and convert it to part of psl
  * that just fits inside of window. */
-chain = chainLoadIdRange(database, track, seqName, winStart, winEnd, id);
+struct trackDb *tdb = getTdbForTrackName(track);
+chain = chainLoadItemInRange(tdb, item);
 if (chain->blockList == NULL)
     {
     printf("None of chain is actually in the window");
@@ -8889,17 +8987,6 @@ lmCleanup(&lm);
 return gpList;
 }
 
-static struct trackDb *getCustomTrackTdb(char *table)
-/* Find the trackDb structure for a custom track table. */
-{
-struct customTrack *ctList = getCtList();
-struct customTrack *ct = NULL;
-for (ct = ctList; ct != NULL; ct = ct->next)
-    if (sameString(table, ct->tdb->track))
-	return  ct->tdb;
-return NULL;
-}
-
 static struct genePred *getGenePredForPosition(char *table, char *geneName)
 /* Build a genePred list for the given table and gene name. */
 {
@@ -9008,7 +9095,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (sameString(bedRow[3], acc))
 	{
         char *cdsStr, *seq;
-        pslFromBigPsl(chromName, bb, seqTypeField, &seq, &cdsStr);
+	getPslAndSeq(tdb, chromName, bb, seqTypeField, &seq, &cdsStr);
 
         if (translate)
             {
@@ -14750,6 +14837,7 @@ if (!(strcmp(otherName,"human")
     }
 }
 
+#ifdef OLD
 struct chain *getChainFromRange(char *chainTable, char *chrom, int chromStart, int chromEnd)
 /* get a list of chains for a range */
 {
@@ -14801,6 +14889,7 @@ if (hTableExists(database, chainTable_chrom) )
     }
 return chainList;
 }
+#endif /* OLD */
 
 void htcPseudoGene(char *htcCommand, char *item)
 /* Interface for selecting & displaying alignments from axtInfo
