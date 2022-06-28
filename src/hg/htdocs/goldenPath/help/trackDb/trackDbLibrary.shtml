@@ -1878,7 +1878,7 @@ There are no extra options that can appear on the type hic line.
 <div class="format"><code>maxWindowCoverage &lt;integer&gt;</code></div>
     <p>When too many individual bed items might be shown in the Browser image
     (such as might occur when a large region of a chromosome is viewed),
-    <code>maxWindowCoverage</code> will switch the track into density covergage plot when
+    <code>maxWindowCoverage</code> will switch the track into density coverage plot when
     the window contains more than the specified number of bases.</p>
     <P><B>Example:</B></P>
     <pre>   maxWindowCoverage 10000000</pre>
