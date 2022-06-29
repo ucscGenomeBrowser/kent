@@ -639,6 +639,12 @@ you may also replace a section of the reference genome with an alternate haploty
 order to view annotations upstream and downstream of the sequence. For more information about the 
 multi-region feature see the <a href="./multiRegionHelp.html">multi-region help</a> page.</p>
 
+<div class="text-center">
+  <a href ="/cgi-bin/hgTracks?hgTracksConfigPage=configure">
+    <img src="../../images/configureMenu.png" alt="Configuration menu options" width="700">
+  </a>
+</div>
+
 <h3>Changing the width of the annotation track window</h3>
 <p>
 The first time the annotation track window is displayed, or after the Genome Browser has been reset,
@@ -666,18 +672,6 @@ href="/cgi-bin/hgTracks?hgTracksConfigPage=configure"><em>Configure</em></a>.
 Once you have made your selection, which can also include <em>style</em> click <em>submit</em>.
 The text size is set to &quot;12&quot; and &quot;Helvetica&quot; by default.</p>
 
-<h3>Hiding the annotation track labels</h3>
-<p>
-The track and element labels displayed above and to the left of the tracks in the annotation tracks 
-image may be hidden from view by unchecking the <em>Display track descriptions above each track</em>
-and <em>Display labels to the left of items in tracks</em> boxes, respectively, on the Track 
-Configuration page.</p>
-
-<h3>Hiding the display grid on the annotation tracks image</h3>
-<p>
-The light blue vertical guidelines on the annotation tracks image may be removed by unchecking the 
-<em>Show light blue vertical guidelines</em> box on the Track Configuration page.</p>
-
 <h3>Hiding the chromosome ideogram</h3>
 <p>
 The chromosome ideogram, located just above the annotation tracks image, provides a graphical 
@@ -686,7 +680,19 @@ centromere, and an indication of the region currently displayed in the annotatio
 hide the ideogram, uncheck the <em>Display chromosome ideogram above main graphic</em> box on the 
 Tracks Configuration page.</p>
 
-<h3>Enabling item and exon navigation</h3>
+<h3>Hiding the light blue vertical guidelines</h3>
+<p>
+The light blue vertical guidelines on the annotation tracks image may be removed by unchecking the
+<em>Show light blue vertical guidelines</em> box on the Track Configuration page.</p>
+
+<h3>Hiding the annotation track labels and description</h3>
+<p>
+The track and element labels displayed above and to the left of the tracks in the annotation tracks
+image may be hidden from view by unchecking the <em>Display track descriptions above each track</em>
+and <em>Display labels to the left of items in tracks</em> boxes, respectively, on the Track
+Configuration page.</p>
+
+<h3 id="nextItem">Enabling next/previous item and exon navigation</h3>
 <p>
 When the <em>Next/previous item navigation</em> configuration option is toggled on, on the Track 
 Configuration page,  gray double-headed arrows display in the Genome Browser tracks image on both 
@@ -699,40 +705,55 @@ window to the next exon in the indicated direction, unless the image window inte
 which case the window shifts to the edge of the current exon. If the image window happens to be 
 within a 5' or 3' UTR, then clicking the arrows shifts the image window towards the start or end of 
 the next coding region, not the end of the exon.</p>
+<div class="text-center">
+  <a href ="/cgi-bin/hgTracks?db=hg38&position=chr10:67,881,992-67,890,592&hideTracks=1&knownGene=pack&omimAvSnp=pack&nextItemArrows=1">
+  <img src="../../images/nextItem.png" alt="Ex. white/gray arrows for next/previous exon/item" width="700"></a>
+  <p class="gbsCaption text-center">Gray arrows jump to the next item,
+  while white arrows advance to the next exon.</p>
+</div>
 
 <a name="RIGHT_CLICK_NAV"></a>
-<h3>Enabling the right-click navigation feature</h3>
+<h3>Using the right-click navigation feature</h3>
 <p>
 Several of the common display and navigation operations offered on the Genome Browser tracks page 
 may be quickly accessed by right-clicking on a feature on the tracks image and selecting an option 
-from the displayed popup menu. Depending on context, the right-click feature allows the user
+from the displayed popup menu.</p>
+<div class="text-center">
+  <a href ="/cgi-bin/hgTracks?db=hg38&position=chr21%3A31657975-31667213&hgt.reset=1&hgFind.matches=ENST00000270142.11&knownGene.show.noncoding=0&knownGene.show.spliceVariants=0">
+  <img src="../../images/right_click_example.png" alt="Example right-click to highlight a gene" width="700">
+  </a>
+</div>
+<p>
+Depending on context, the right-click feature allows the user
 to:</p>
+
 <ul>
   <li>
   change the track display mode</li>
   <li>
   zoom in or out to the exact position coordinates of the feature</li>
   <li>
-  open the &quot;Get DNA&quot; window at the feature's coordinates</li>
+  highlight the feature</li>
+  <li>
+  open the &quot;Get DNA for...&quot; link for the feature's coordinates</li>
   <li>
   display details about the feature </li>
   <li>
-  open a popup window to configure the track's display</li>
+  open a popup window to configure the track's display of the feature</li>
   <li>
   display the entire tracks image in a separate window for inclusion in spreadsheets or other 
-  documents. (Note that the Genome Browser &quot;PDF/PS&quot; described below can also be used to 
-  generate a high-quality annotation tracks image suitable for printing.)</li>
+  documents. The Genome Browser <a href="#print">PDF/PS</a> option under the View menu
+  can also be used to generate a high-quality annotation tracks image suitable for printing.</li>
 </ul>
 <p>
-To use the right-click feature, make sure the <em>Enable advanced javascript features</em> option on
-the Track Configuration page is checked, and configure your internet browser to allow the display of
+To use the right-click feature, make sure your internet browser allows the display of
 popup windows from genome.ucsc.edu. When enabled, the right-click navigation feature replaces the 
 default contextual popup menu typically displayed by the Internet browser when a user right-clicks 
 on the tracks image. A few combinations of the Mozilla Firefox browser on Mac OS do not support the
 right-click menu functionality using secondary click; in these instances, ctrl+left-click must be 
 used to display the menu.</p> 
 
-<h3>Printing a copy of the annotation track window</h3>
+<h3 id="print">Printing a copy of the annotation track window</h3>
 <p>
 The Genome Browser provides a mechanism for saving a copy of the currently displayed annotation 
 tracks image to a file that can be printed or edited. Images saved in PostScript format can be 

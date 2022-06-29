@@ -65,10 +65,7 @@ sub readMainCluster(); # forward declaration to keep code order
 	  'hostCount' => 32, },
       'hgwdev' =>
         { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
-	  'hostCount' => 32, },
-      'newdev' =>
-        { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
-	  'hostCount' => 32, },
+	  'hostCount' => 64, },
     );
 
 my %obsoleteCluster =

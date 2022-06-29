@@ -1878,7 +1878,7 @@ There are no extra options that can appear on the type hic line.
 <div class="format"><code>maxWindowCoverage &lt;integer&gt;</code></div>
     <p>When too many individual bed items might be shown in the Browser image
     (such as might occur when a large region of a chromosome is viewed),
-    <code>maxWindowCoverage</code> will switch the track into density covergage plot when
+    <code>maxWindowCoverage</code> will switch the track into density coverage plot when
     the window contains more than the specified number of bases.</p>
     <P><B>Example:</B></P>
     <pre>   maxWindowCoverage 10000000</pre>
@@ -4001,6 +4001,7 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="extraDetailsTable"><span class="types bigBed"></span>
 <div class="format"><code>extraDetailsTable &lt;url/relativePath&gt;</code></div>
+    <p>This setting was renamed June 2022. Please use <a href="#detailsStaticTable">detailsStaticTable</a> instead.</p>
     <p>
     Provides a template to a tab separated text file where $&lt;fieldName&gt;
     strings will be substituted for data in the bigBed and displayed as an HTML
@@ -4012,12 +4013,13 @@ There are no extra options that can appear on the type hic line.
     <p>
     Note that the same size table is displayed for every item of the bigBed, even
     if there is missing data in that field for a particular item. For variable
-    size tables, please see <a href="#extraTableFields">extraTableFields</a>.
+    size tables, please see <a href="#detailsDynamicTable">detailsDynamicTable</a>.
     </p>
 </DIV>
 
 <DIV class="extraTableFields"><span class="types bigBed"></span>
 <div class="format"><code>extraTableFields &lt;fieldName1|table title,fieldName2|table title,...&gt;</code></div>
+    <p>This setting was renamed June 2022. Please use <a href="#detailsDynamicTable">detailsDynamicTable</a> instead.</p>
     <p>
     Tells the system that the data in &lt;fieldName1,...&gt; contains an <em>encoded</em> table
     that should be turned into a standard HTML table on the details page for that item. If
@@ -4034,6 +4036,89 @@ There are no extra options that can appear on the type hic line.
     <br>
     trackDb line:
     <pre>extraTableFields _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example</pre>
+    the two columns from the bigBed (or external file):<br>
+    <pre>_jsonField1	tableField2
+{key:val, key1: val1, key2: val2}	key|val;key1|val1;key2|val2
+    </pre>
+    And when clicking on an item in the browser, the following would be displayed:<br>
+    <table class='bedExtraTbl'>
+        <tr><td>JSON Title Example</td><td>
+            <table class='bedExtraTbl'>
+                <tr><td>key</td><td>val</td>
+                <tr><td>key1</td><td>val1</td>
+                <tr><td>key2</td><td>val2</td>
+            </table></td></tr>
+        <tr><td>NON-JSON Title Example</td><td>
+            <table class='bedExtraTbl'>
+                <tr><td>key</td><td>val</td>
+                <tr><td>key1</td><td>val1</td>
+                <tr><td>key2</td><td>val2</td>
+            </table></td></tr>
+    </table>
+    Note that the number of columns and rows is variable per item, meaning some items
+    can have different sized tables than other items, contrasting with the extraDetailsTable
+    statement, which enforces the same table size per item. For instance, in the above
+    example, a 3 rows by 2 columns table is created for each field, but if our JSON was
+    instead:
+<pre>{"transcript1": {annot1: val1, annot2: val2}, "transcript2": {annot3: val3}}</pre>
+    then the following nested table would be shown on the details page:
+    <table class='bedExtraTbl'>
+        <tr><td>JSON Title Example</td><td>
+            <table class='jsonTable'>
+                <tr>
+                  <td>transcript1</td><td>
+                    <table class='jsonTable'>
+                        <tr><td>annot1</td><td>val1</td></tr>
+                        <tr><td>annot2</td><td>val2</td></tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td>transcript2</td><td>
+                    <table class='jsonTable'>
+                        <tr><td>annot3</td><td>val3</td></tr>
+                    </table>
+                  </td>
+                </tr>
+            </table></td></tr>
+    </table>
+    </p>
+</DIV>
+<DIV class="detailsStaticTable"><span class="types bigBed"></span>
+<div class="format"><code>detailsStaticTable &lt;url/relativePath&gt;</code></div>
+    <p>
+    Provides a template to a tab separated text file where $&lt;fieldName&gt;
+    strings will be substituted for data in the bigBed and displayed as an HTML
+    table. For an example of this, please see the following text file:
+    <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt">http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt</a>, where
+    the strings such as &quot;${AC_afr}&quot; will be substituted for the data in that
+    field for the particular item from the bigBed.
+    </p>
+    <p>
+    Note that the same size table is displayed for every item of the bigBed, even
+    if there is missing data in that field for a particular item. For variable
+    size tables, please see <a href="#detailsDynamicTable">detailsDynamicTable</a>.
+    </p>
+</DIV>
+
+<DIV class="detailsDynamicTable"><span class="types bigBed"></span>
+<div class="format"><code>detailsDynamicTable &lt;fieldName1|table title,fieldName2|table title,...&gt;</code></div>
+    <p>
+    Tells the system that the data in &lt;fieldName1,...&gt; contains an <em>encoded</em> table
+    that should be turned into a standard HTML table on the details page for that item. If
+    the &lt;fieldName&gt; starts with &quot;_json&quot; or &quot;json&quot;, then the system
+    expects the data in &lt;fieldName&gt; to be valid JSON. If the field name starts with
+    anything else, then the table is formatted using &quot;|&quot; and &quot;;&quot; as field
+    and new row separators. The &quot;table title&quot; part of the statment is optional, if
+    present it will be used as the title for the table, if not, then the title will be taken
+    from the autoSql description of the field name, or if there is no autoSql because the data
+    is from an external file, then the field name will be used.
+
+    <p>An example of both formats is shown below, along with the
+    corresponding trackDb statements:<br>
+    <br>
+    trackDb line:
+    <pre>detailsDynamicTable _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example</pre>
     the two columns from the bigBed (or external file):<br>
     <pre>_jsonField1	tableField2
 {key:val, key1: val1, key2: val2}	key|val;key1|val1;key2|val2

@@ -87,11 +87,12 @@ HMC scores are displayed as a signal ("wiggle") track, with one score per genome
 Mousing over the bars displays the exact values. The highly-constrained cutoff
 of 0.8 is indicated with a line.</p>
 <p>
-The HMC scores were downloaded and converted to .bedGraph files with a
-custom Python script. The bedGraph files were then converted to bigWig files,
-as documented in our <a
-href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt"
-target=_blank>makeDoc</a> hg19 build log.</p>
+<b>Interpretation:</b> 
+A protein residue with HMC score &lt;1 indicates that missense variants affecting
+the homologous residues are significantly under negative selection (P-value &lt;
+0.05) and likely to be deleterious. A more stringent score threshold of HMC&lt;0.8
+is recommended to prioritize predicted disease-associated variants.
+</p>
 
 <h3>MTR</h3>
 <p>
@@ -160,6 +161,35 @@ at each base pair and 4 tracks built out of these values representing each mutat
 <p>
 See the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg
 /makeDb/doc/hg19.txt" target=_blank>hg19 makeDoc</a> entry on MTR for more info.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../hgTables">Table Browser</a>, or
+the <a href="../hgIntegrator">Data Integrator</a>. For automated access, this track, like all
+others, is available via our <a href="../goldenPath/help/api.html">API</a>.  However, for bulk
+processing, it is recommended to download the dataset.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored at UCSC in bigWig and bigBed
+files that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/" target="_blank">our download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tools <tt>bigWigToWig</tt>
+or <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tools can also be used to obtain features confined to a given range, e.g.,
+<br>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/hmc/hmc.bw stdout</tt>
+<br>
+</p>
+
+<p>
+Please refer to our
+<a HREF="../FAQ/FAQdownloads.html#download36" target=_blank>Data Access FAQ</a>
+for more information.
+</p>
+
 
 <h2>Credits</h2>
 

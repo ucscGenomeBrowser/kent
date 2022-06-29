@@ -1,0 +1,41 @@
+<h2>Description</h2>
+
+<p> This track shows the primers for the 
+<a href="https://www.neb.com/products/e7626-nebnext-artic-sars-cov-2-rt-pcr-module#Product%20Information" target="_blank">NEB VarSkip</a> v1 and v2 sequencing primers.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Genomic locations of primers are highlighted. For primer tracks, the
+"full" visibility mode is often more suitable than the "pack" or "squish" display modes.</p>
+
+<h2>Methods</h2>
+<p>
+Primer sequences were downloaded from the 
+<a href="https://github.com/nebiolabs/VarSkip" target="_blank">NEB GitHub repository</a> and converted to bigBed.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables">Table Browser</a> or combined with other datasets in the
+<a href="hgIntegrator">Data Integrator</a> tool.
+For automated analysis, the genome annotation is stored in
+a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/artic.bb">the download server</a>.</p>
+<p>
+Annotations can
+be converted from binary to ASCII text by our command-line tool bigBedToBed.
+Instructions for downloading this command can be found on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">utilities page</a>.
+The tool can also be used to obtain features within a given range without downloading the file,
+for example:</p>
+<code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/artic.bb -chrom=NC_045512v2 -start=0 -end=29902 stdout</code>
+<p>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+

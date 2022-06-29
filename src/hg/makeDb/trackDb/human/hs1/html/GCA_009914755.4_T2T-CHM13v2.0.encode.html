@@ -1,0 +1,41 @@
+<h2>Description</h2>
+<p>
+These tracks represent a reanalysis of <a href="https://www.encodeproject.org/">ENCODE</a> data against the T2T chm13 genome. All ChIP-seq experiments with pair-end data and read lengths of 100bp or greater are included.
+</p>
+<p>
+Track types include:
+<ul>
+	<li>Coverage pileups of mapped and filtered reads</li>
+	<li>Enrichment of mapped reads relative to a control</li>
+	<li>ChIP-seq peaks as called by MACS2</li>
+	<li>ChIP-seq peaks as called by MACS2 in GRCh38 and lifted over to chm13</li>
+</ul>
+</p>
+
+<h2>Methods</h2>
+<p>
+  Prior to mapping, reads originating from a single library were combined. Reads were mapped with Bowtie2 (v2.4.1) as paired-end with the arguments
+  &quot;--no-discordant --no-mixed --very-sensitive --no-unal --omit-sec-seq --xeq --reorder&quot;.
+  Alignments were filtered using SAMtools (v1.10) using the arguments &quot;-F 1804 -f 2 -q 2&quot; to remove unmapped or single end mapped reads and those with a mapping quality score less than 2. PCR duplicates were identified and removed with the Picard tools &quot;mark duplicates&quot; command (v2.22.1) and the arguments &quot;VALIDATION_STRINGENCY=LENIENT ASSUME_SORT_ORDER=queryname REMOVE_DUPLICATES = true&quot;.
+</p>
+<p>
+Alignments were then filtered for the presence of unique k-mers. Specifically, for each alignment, reference sequences aligned with template ends were compared to a database of minimum unique k-mer lengths. The size of the k-mers in the k-mer filtering step are dependent on the length of the mapped reference sequence. Alignments were discarded if no
+unique k-mers occurred in either end of the read. The minimum unique k-mer length database was generated using scripts found <a href="https://www.github.com/msauria/MinUniqueKmer">here</a>. Alignments from replicates were then pooled.
+</p>
+<p>
+Bigwig coverage tracks were created using deepTools bamCoverage (v3.4.3) with a bin size of 1bp and default for all other parameters. Enrichment tracks were created using deepTools bamCompare with a bin size of 50bp, a pseudo-count of 1, and excluding bins with zero counts in both target and control tracks.
+</p>
+<p>
+Peak calls were made using MACS2 (v2.2.7.1) with default parameters and estimated genome sizes 3.03e9 and 2.79e9 for chm13 and GRCh38, respectively. GRCh38 peak calls were lifted over to chm13 using the UCSC liftOver utility, the chain file created by the T2T consortium, and the parameter "-minMatch=0.2".
+</p>
+
+<h2>Credits</h2>
+<p>
+Data were processed by Michael Sauria at Johns Hopkins University. For inquiries, please
+contact us at the following address: <a href="mailto:msauria@jhu.edu">msauria@jhu.edu</a>
+</p>
+
+<h2>References</h2>
+<p>
+Gershman A, Sauria MEG, Guitart X, Vollger MR, Hook PW, Hoyt SJ, Jain M, Shumate A, Razaghi R, Koren S, Altemose N, Caldas GV, Logsdon GA, Rhie A, Eichler EE, Schatz MC, O'Neill RJ, Phillippy AM, Miga KH, Timp W. <a href="https://www.science.org/doi/10.1126/science.abj5089">Epigenetic patterns in a complete human genome.</a> <em>Science</em>. 2022 Apr;376(6588):eabj5089. doi: 10.1126/science.abj5089. Epub 2022 Apr 1. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/35357915/">35357915</a>.
+</p>
