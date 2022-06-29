@@ -164,7 +164,6 @@ html gnomadV3_1_1
         longLabel gnomAD Predicted Missense Constraint Metrics By Gene (Z-scores)
         type bigBed 12 +
         mouseOverField _mouseOver
-        itemRgb on
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByGene.bb
         url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
@@ -198,7 +197,6 @@ html gnomadV3_1_1
         longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores)
         type bigBed 12 +
         mouseOverField _mouseOver
-        itemRgb on
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.bb
         url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
