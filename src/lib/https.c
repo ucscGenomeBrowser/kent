@@ -517,10 +517,6 @@ int fd=0;
 
 // https_cert_check env var can be abort warn or none.
 
-char *proxyUrl = https_proxy;
-
-if (noProxy)
-    proxyUrl = NULL;
 char *connectHost;
 int connectPort;
 
@@ -529,7 +525,12 @@ BIO *sbio=NULL;  // ssl bio
 SSL_CTX *ctx;
 SSL *ssl;
 
-openSslInit();
+openSslInit();   // call early since it initializes vars from env vars in a thread-safe way.
+
+char *proxyUrl = https_proxy;
+
+if (noProxy)
+    proxyUrl = NULL;
 
 ctx = SSL_CTX_new(SSLv23_client_method());
 
