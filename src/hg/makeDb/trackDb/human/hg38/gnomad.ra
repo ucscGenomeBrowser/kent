@@ -5,7 +5,7 @@ track gnomadVariants
 superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
-pennantIcon Updated red ../goldenPath/newsarch.html#050322 "Mutation Constraint track released at UCSC May 3, 2022"
+pennantIcon Updated red ../goldenPath/newsarch.html#063022 "Released Jun. 30, 2022"
 group varRep
 html gnomadV3_1_1
 
@@ -139,7 +139,7 @@ html gnomadV3_1_1
     type bigBed 12
     labelFields name,geneName
     visibility hide
-    pennantIcon New red ../goldenPath/newsarch.html#0000 "Released Xxx x, 2022"
+    pennantIcon New red ../goldenPath/newsarch.html#063022 "Released Jun. 30, 2022"
 
         track pliByGene
         shortLabel Gene LoF
@@ -164,7 +164,6 @@ html gnomadV3_1_1
         longLabel gnomAD Predicted Missense Constraint Metrics By Gene (Z-scores)
         type bigBed 12 +
         mouseOverField _mouseOver
-        itemRgb on
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByGene.bb
         url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
@@ -198,7 +197,6 @@ html gnomadV3_1_1
         longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores)
         type bigBed 12 +
         mouseOverField _mouseOver
-        itemRgb on
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.bb
         url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
