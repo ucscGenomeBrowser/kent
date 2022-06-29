@@ -6447,7 +6447,6 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	&& !(startsWith("user", tableName) && pslIsProtein(psl))
 	&& psl->tStart == startFirst
         && sameString(psl->tName, seqName)
-	&& psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE
 	)
 	{
         char otherString[512];
@@ -7542,7 +7541,7 @@ freeDnaSeq(&tSeq);
 return blockCount;
 }
 
-struct ffAli *pslToFfAliAndSequence(struct psl *psl, struct dnaSeq *qSeq,
+static struct ffAli *pslToFfAliAndSequence(struct psl *psl, struct dnaSeq *qSeq,
 				    boolean *retIsRc, struct dnaSeq **retSeq,
 				    int *retTStart)
 /* Given psl, dig up target sequence and convert to ffAli.
@@ -7581,6 +7580,19 @@ if (psl->strand[0] == '-')
 return pslToFfAli(psl, qSeq, dnaSeq, tRcAdjustedStart);
 }
 
+static void ffStartEndQ(char *qDna, struct ffAli *ff, int *retStartQ, int *retEndQ)
+/* Return query start and end */
+{
+if (ff == NULL)
+    *retStartQ = *retEndQ = 0;
+else
+    {
+    struct ffAli *right = ffRightmost(ff);
+    *retStartQ = ff->nStart - qDna;
+    *retEndQ = right->nEnd - qDna;
+    }
+}
+
 int showPartialDnaAlignment(struct psl *wholePsl,
 			    struct dnaSeq *rnaSeq, FILE *body,
 			    int cdsS, int cdsE, boolean restrictToWindow)
@@ -7588,35 +7600,8 @@ int showPartialDnaAlignment(struct psl *wholePsl,
  * if restrictToWindow then display the part of the alignment in the current
  * browser window. */
 {
-struct dnaSeq *dnaSeq;
-int wholeTStart;
-int partTStart = wholePsl->tStart, partTEnd = wholePsl->tEnd;
-DNA *rna;
-int rnaSize;
-boolean isRc = FALSE;
-struct ffAli *wholeFfAli;
-int blockCount;
-
-/* Get RNA sequence and convert psl to ffAli.  */
-rna = rnaSeq->dna;
-rnaSize = rnaSeq->size;
-
-/* Don't forget -- this may change wholePsl! */
-wholeFfAli = pslToFfAliAndSequence(wholePsl, rnaSeq, &isRc, &dnaSeq,
-				   &wholeTStart);
-
-if (restrictToWindow)
-    {
-    partTStart = max(wholePsl->tStart, winStart);
-    partTEnd = min(wholePsl->tEnd, winEnd);
-    }
-
-/* Write body heading info. */
-fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
-	wholePsl->qName, wholePsl->tName, partTStart+1, partTEnd);
-fprintf(body, "Click on links in the frame to the left to navigate through "
-	"the alignment.\n");
-
+/* Do a consistency check between rnaSeq and psl*/
+int rnaSize = rnaSeq->size;
 if (rnaSize != wholePsl->qSize)
     {
     fprintf(body, "<p><b>Cannot display alignment. Size of rna %s is %d has changed since alignment was performed when it was %d.\n",
@@ -7624,8 +7609,48 @@ if (rnaSize != wholePsl->qSize)
     return 0;
     }
 
-blockCount = ffShAliPart(body, wholeFfAli, wholePsl->qName,
-                         rna, rnaSize, 0,
+/* Possibly just do smaller subset that is within window. */
+struct psl *psl = wholePsl;
+if (restrictToWindow)
+    {
+    psl = pslTrimToTargetRange(wholePsl, winStart, winEnd);
+    if (psl == NULL)
+       fprintf(body, "<p>No alignment of %s within browser window.", wholePsl->qName);
+    }
+
+struct dnaSeq *dnaSeq;
+int wholeTStart;
+int partTStart = psl->tStart, partTEnd = psl->tEnd;
+DNA *rna = rnaSeq->dna;
+boolean isRc = FALSE;
+struct ffAli *ffAli;
+int blockCount;
+
+/* Don't forget -- this may change psl if on reverse strand! */
+ffAli = pslToFfAliAndSequence(psl, rnaSeq, &isRc, &dnaSeq,
+				   &wholeTStart);
+
+int rnaStart = 0;
+int rnaEnd = rnaSize;
+
+if (restrictToWindow)
+    {
+    /* Find start/end in ffAli, which is clipped to target from PSL and maybe RC'd */
+    ffStartEndQ(rna, ffAli, &rnaStart, &rnaEnd);
+
+    /* Add 100 bases either side if possible */
+    if (rnaStart >= 100) rnaStart -= 100;
+    if (rnaEnd + 100 <= rnaSize) rnaEnd += 100;
+    }
+
+/* Write body heading info. */
+fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
+	psl->qName, psl->tName, partTStart+1, partTEnd);
+fprintf(body, "Click on links in the frame to the left to navigate through "
+	"the alignment.\n");
+
+blockCount = ffShAliPart(body, ffAli, wholePsl->qName,
+                         rna + rnaStart, rnaEnd - rnaStart, rnaStart,
 			 dnaSeq->name, dnaSeq->dna, dnaSeq->size,
 			 wholeTStart, 8, FALSE, isRc,
 			 FALSE, TRUE, TRUE, TRUE, TRUE,
