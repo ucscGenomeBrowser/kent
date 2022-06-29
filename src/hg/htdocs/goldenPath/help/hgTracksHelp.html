@@ -639,6 +639,12 @@ you may also replace a section of the reference genome with an alternate haploty
 order to view annotations upstream and downstream of the sequence. For more information about the 
 multi-region feature see the <a href="./multiRegionHelp.html">multi-region help</a> page.</p>
 
+<div class="text-center">
+  <a href ="/cgi-bin/hgTracks?hgTracksConfigPage=configure">
+    <img src="../../images/configureMenu.png" alt="Configuration menu options" width="700">
+  </a>
+</div>
+
 <h3>Changing the width of the annotation track window</h3>
 <p>
 The first time the annotation track window is displayed, or after the Genome Browser has been reset,
@@ -666,18 +672,6 @@ href="/cgi-bin/hgTracks?hgTracksConfigPage=configure"><em>Configure</em></a>.
 Once you have made your selection, which can also include <em>style</em> click <em>submit</em>.
 The text size is set to &quot;12&quot; and &quot;Helvetica&quot; by default.</p>
 
-<h3>Hiding the annotation track labels</h3>
-<p>
-The track and element labels displayed above and to the left of the tracks in the annotation tracks 
-image may be hidden from view by unchecking the <em>Display track descriptions above each track</em>
-and <em>Display labels to the left of items in tracks</em> boxes, respectively, on the Track 
-Configuration page.</p>
-
-<h3>Hiding the display grid on the annotation tracks image</h3>
-<p>
-The light blue vertical guidelines on the annotation tracks image may be removed by unchecking the 
-<em>Show light blue vertical guidelines</em> box on the Track Configuration page.</p>
-
 <h3>Hiding the chromosome ideogram</h3>
 <p>
 The chromosome ideogram, located just above the annotation tracks image, provides a graphical 
@@ -686,7 +680,19 @@ centromere, and an indication of the region currently displayed in the annotatio
 hide the ideogram, uncheck the <em>Display chromosome ideogram above main graphic</em> box on the 
 Tracks Configuration page.</p>
 
-<h3>Enabling item and exon navigation</h3>
+<h3>Hiding the light blue vertical guidelines</h3>
+<p>
+The light blue vertical guidelines on the annotation tracks image may be removed by unchecking the
+<em>Show light blue vertical guidelines</em> box on the Track Configuration page.</p>
+
+<h3>Hiding the annotation track labels and description</h3>
+<p>
+The track and element labels displayed above and to the left of the tracks in the annotation tracks
+image may be hidden from view by unchecking the <em>Display track descriptions above each track</em>
+and <em>Display labels to the left of items in tracks</em> boxes, respectively, on the Track
+Configuration page.</p>
+
+<h3 id="nextItem">Enabling next/previous item and exon navigation</h3>
 <p>
 When the <em>Next/previous item navigation</em> configuration option is toggled on, on the Track 
 Configuration page,  gray double-headed arrows display in the Genome Browser tracks image on both 
@@ -699,6 +705,12 @@ window to the next exon in the indicated direction, unless the image window inte
 which case the window shifts to the edge of the current exon. If the image window happens to be 
 within a 5' or 3' UTR, then clicking the arrows shifts the image window towards the start or end of 
 the next coding region, not the end of the exon.</p>
+<div class="text-center">
+  <a href ="/cgi-bin/hgTracks?db=hg38&position=chr10:67,881,992-67,890,592&hideTracks=1&knownGene=pack&omimAvSnp=pack&nextItemArrows=1">
+  <img src="../../images/nextItem.png" alt="Ex. white/gray arrows for next/previous exon/item" width="700"></a>
+  <p class="gbsCaption text-center">Gray arrows jump to the next item,
+  while white arrows advance to the next exon.</p>
+</div>
 
 <a name="RIGHT_CLICK_NAV"></a>
 <h3>Using the right-click navigation feature</h3>
