@@ -34893,3 +34893,26 @@ cp illumina_EPIC.hg19.bb /hive/data/genomes/hg19/bed/illumina/illumina_EPIC_850K
 
 ln -s /hive/data/genomes/hg19/bed/illumina/illumina_450K.bb /gbdb/hg19/bbi/illumina/ilumina450K.bb
 ln -s /hive/data/genomes/hg19/bed/illumina/illumina_EPIC_850K.bb /gbdb/hg19/bbi/illumina/epic850K.bb
+
+#############################################################################
+# MetaDome refs #23883 (2022-06-29 Lou)
+
+mkdir /hive/data/genomes/hg19/bed/metaDome/
+cd /hive/data/genomes/hg19/bed/metaDome/
+#scp the data to the dir provided by author via email
+
+#create .as file for bigBed
+#table metaDome
+#"MetaDome constraint metrics"
+#(
+#string  chrom;          "Reference sequence chromosome or scaffold"
+#uint    chromStart;     "Start position of feature on chromosome"
+#uint    chromEnd;       "End position of feature on chromosome"
+#string  name;           "Combination of chrom+chromStart"
+#float    score;         "MetaDome tolerance score"
+#char[1] strand;         "+ or - for strand"
+#float    spID;          "Coverage score of homologous positions"
+#)
+
+fetchChromSizes hg19 > hg19.chrom.sizes
+python3 ~/kent/src/hg/makeDb/scripts/metaDome/buildMetaDomeTracks.py
