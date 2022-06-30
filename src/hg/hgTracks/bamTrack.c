@@ -687,7 +687,7 @@ if (vis != tvDense)
      * zoomed way out, this must be done in a separate pass after exons are
      * drawn so that exons sharing the pixel don't overdraw differences. */
     if ((indelShowQueryInsert || indelShowPolyA) && psl)
-	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer, qSeq, qOffset, psl, winStart,
+	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer, qSeq, qOffset, psl, font, winStart,
 				 drawOpt, indelShowQueryInsert, indelShowPolyA);
     baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer, qSeq, qOffset, psl, winStart, drawOpt);
     }

@@ -459,6 +459,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     AllocVar(lf);
     lf->start = lf->tallStart = chain.tStart;
     lf->end = lf->tallEnd = chain.tEnd;
+    lf->qSize = chain.qSize;
     lf->grayIx = maxShade;
     if (chainCart->chainColor == chainColorScoreColors)
 	{

@@ -3965,12 +3965,12 @@ if (vis != tvDense)
     /* If highlighting differences between aligned sequence and genome when
      * zoomed way out, this must be done in a separate pass after exons are
      * drawn so that exons sharing the pixel don't overdraw differences. */
-    if (indelShowQueryInsert || indelShowPolyA)
-	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer,
-				 qSeq, qOffset, psl, winStart, drawOpt,
-				 indelShowQueryInsert, indelShowPolyA);
     baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
 			  qSeq, qOffset, psl, winStart, drawOpt);
+    if (indelShowQueryInsert || indelShowPolyA)
+	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer,
+				 qSeq, qOffset, psl, font, winStart, drawOpt,
+				 indelShowQueryInsert, indelShowPolyA);
     }
 }
 

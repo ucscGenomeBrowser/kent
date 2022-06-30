@@ -351,8 +351,24 @@ if ((chromStart < lf->tallStart) || (chromStart > lf->tallEnd))
     thisY += height/4;
     thisHeight = height - height/2;
     }
-hvGfxLine(hvg, thisX, thisY, thisX, thisY+thisHeight, color);
+hvGfxBox(hvg, thisX-2, thisY, 4, thisHeight, color);
 }
+
+static void drawMidSize(struct linkedFeatures *lf, struct hvGfx *hvg,
+                         int chromStart, int xOff, int y,
+			 int height, double scale, Color color, MgFont *font, int size)
+/* Draw a short string encoding size around chromStart */
+/* Draw a 1-pixel wide vertical line at the given chromosomal coord.
+ * The line is 0 bases wide (chromStart==chromEnd) but that doesn't
+ * matter if we're zoomed out to >1base/pixel, so this is OK for diffs
+ * when zoomed way out and for insertion points at any scale. */
+{
+char sizeString[32];
+safef(sizeString, sizeof(sizeString), "%d", size);
+drawScaledBoxLabel(hvg,  chromStart-1, chromStart+1, 
+    scale, xOff, y, height, color, font, sizeString);
+}
+
 
 
 static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
@@ -1801,7 +1817,7 @@ void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
 			      struct hvGfx *hvg, int xOff,
 			      int y, double scale, int heightPer,
 			      struct dnaSeq *qSeq, int qOffset, struct psl *psl,
-			      int winStart, enum baseColorDrawOpt drawOpt,
+			      MgFont *font, int winStart, enum baseColorDrawOpt drawOpt,
 			      boolean indelShowQInsert, boolean indelShowPolyA)
 /* If applicable, draw 1-pixel wide orange lines for query insertions in the
  * middle of the query, 1-pixel wide blue lines for query insertions at the 
@@ -1830,7 +1846,9 @@ if (indelShowPolyA && qSeq)
 		s = psl->tSize - psl->tStarts[0] - 1;
 	    else
 		s = psl->tStarts[0];
-	    drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
+	    // drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
+	    //             cdsColor[CDS_POLY_A]);
+	    drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
 			 cdsColor[CDS_POLY_A]);
 	    gotPolyAStart = TRUE;
 	    }
@@ -1848,8 +1866,10 @@ if (indelShowPolyA && qSeq)
 	    if (polyTSize > 0 && (polyTSize + 3) >= rcQStart)
 		{
 		s = psl->tStart;
-		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-			     cdsColor[CDS_POLY_A]);
+	//	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
+	//		     cdsColor[CDS_POLY_A]);
+	        drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
+			 cdsColor[CDS_POLY_A]);
 		gotPolyAEnd = TRUE;
 		}
 	    }
@@ -1864,8 +1884,11 @@ if (indelShowPolyA && qSeq)
 		  (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]))))
 		{
 		s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
-		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-			     cdsColor[CDS_POLY_A]);
+	//	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
+	//		     cdsColor[CDS_POLY_A]);
+	        drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
+			 cdsColor[CDS_POLY_A]);
+		gotPolyAEnd = TRUE;
 		gotPolyAEnd = TRUE;
 		}
 	    }
@@ -1898,8 +1921,9 @@ if (indelShowQInsert)
 		/* Insert in query only -- draw vertical orange line. */
 		s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[i] - 1) :
 					      psl->tStarts[i];
-		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-			     cdsColor[CDS_QUERY_INSERTION]);
+		Color color = cdsColor[CDS_QUERY_INSERTION];
+		drawMidSize(lf, hvg, s, xOff, y, heightPer, scale,
+			     color, font, qBlkStart - qPrevBlkEnd);
 		}
 	    }
 	/* Note: if qBlkStart < qPrevBlkEnd, then we have overlap on query,
@@ -1998,7 +2022,7 @@ AllocVar(psl);
 psl->strand[0] = (lf->orientation < 0 ? '-' : '+');
 
 psl->qName = cloneString(qName);
-psl->qSize = qEnd;  // Might need fixup 
+psl->qSize = lf->qSize;
 psl->qStart = qStart;
 psl->qEnd = qEnd;
 

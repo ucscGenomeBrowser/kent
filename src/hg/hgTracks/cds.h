@@ -176,7 +176,7 @@ void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
 			      struct hvGfx *hvg, int xOff,
 			      int y, double scale, int heightPer,
 			      struct dnaSeq *qSeq, int qOffset, struct psl *psl,
-			      int winStart, enum baseColorDrawOpt drawOpt,
+			      MgFont *font, int winStart, enum baseColorDrawOpt drawOpt,
 			      boolean indelShowQInsert, boolean indelShowPolyA);
 /* If applicable, draw 1-pixel wide orange lines for query insertions in the
  * middle of the query, 1-pixel wide purple lines for query insertions at the 
