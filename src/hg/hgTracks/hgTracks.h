@@ -405,6 +405,7 @@ struct linkedFeatures
 #endif
     boolean isBigGenePred;
     char *label;                        /* Label for bigBeds. */
+    int qSize;				/* Query size for chain/bigChain */
     };
 
 struct linkedFeaturesSeries
