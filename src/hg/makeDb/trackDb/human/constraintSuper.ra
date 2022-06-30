@@ -10,5 +10,7 @@ group phenDis
 include jarvis.ra
 # HMC scores
 include hmc.ra
+# MetaDome scores
+include metaDome.ra
 # MTR scores
 include mtr.ra

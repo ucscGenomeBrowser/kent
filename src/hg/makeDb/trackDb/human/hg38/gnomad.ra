@@ -5,7 +5,7 @@ track gnomadVariants
 superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
-pennantIcon Updated red ../goldenPath/newsarch.html#050322 "Mutation Constraint track released at UCSC May 3, 2022"
+pennantIcon Updated red ../goldenPath/newsarch.html#063022 "Released Jun. 30, 2022"
 group varRep
 html gnomadV3_1_1
 
@@ -139,7 +139,7 @@ html gnomadV3_1_1
     type bigBed 12
     labelFields name,geneName
     visibility hide
-    pennantIcon New red ../goldenPath/newsarch.html#0000 "Released Xxx x, 2022"
+    pennantIcon New red ../goldenPath/newsarch.html#063022 "Released Jun. 30, 2022"
 
         track pliByGene
         shortLabel Gene LoF
