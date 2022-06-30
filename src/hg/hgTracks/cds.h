@@ -131,6 +131,7 @@ return (tg->drawItems == linkedFeaturesDraw || tg->drawItems == linkedFeaturesAv
 	tg->drawItems == linkedFeaturesAverageDenseOrientEst ||
 	tg->drawItems == linkedFeaturesSeriesDraw ||
 	tg->drawItems == bamLinkedFeaturesDraw ||
+	tg->drawItems == chainDraw ||
 	tg->drawItems == bamLinkedFeaturesSeriesDraw);
 
 }
@@ -143,7 +144,7 @@ void baseColorInitTrack(struct hvGfx *hvg, struct track *tg);
 
 enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
 			struct linkedFeatures *lf,
-			struct dnaSeq **retMrnaSeq, struct psl **retPsl);
+			struct dnaSeq **retMrnaSeq, int *retMrnaOffset, struct psl **retPsl);
 /* Returns the CDS coloring option, allocates colors if necessary, and 
  * returns the sequence and psl record for the given item if applicable. 
  * Note: even if base coloring is not enabled, this will return psl and 
@@ -154,7 +155,7 @@ enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
 void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
         int grayIx, struct hvGfx *hvg, int xOff, int y,
         double scale, MgFont *font, int s, int e, int heightPer,
-        boolean zoomedToCodonLevel, struct dnaSeq *mrnaSeq, struct simpleFeature *sf, struct psl *psl,
+        boolean zoomedToCodonLevel, struct dnaSeq *qSeq, int qOffset, struct simpleFeature *sf, struct psl *psl,
 	enum baseColorDrawOpt drawOpt,
         int maxPixels, int winStart, Color originalColor);
 /*draw a box that is colored by the bases inside it and its
@@ -164,7 +165,7 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
 void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
 			   struct hvGfx *hvg, int xOff,
 			   int y, double scale, int heightPer,
-			   struct dnaSeq *mrnaSeq, struct psl *psl,
+			   struct dnaSeq *qSeq, int qOffset, struct psl *psl,
 			   int winStart, enum baseColorDrawOpt drawOpt);
 /* If we're drawing different bases/codons, and zoomed out past base/codon 
  * level, draw 1-pixel wide red lines only where bases/codons differ from 
@@ -174,7 +175,7 @@ void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
 void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
 			      struct hvGfx *hvg, int xOff,
 			      int y, double scale, int heightPer,
-			      struct dnaSeq *mrnaSeq, struct psl *psl,
+			      struct dnaSeq *qSeq, int qOffset, struct psl *psl,
 			      int winStart, enum baseColorDrawOpt drawOpt,
 			      boolean indelShowQInsert, boolean indelShowPolyA);
 /* If applicable, draw 1-pixel wide orange lines for query insertions in the
