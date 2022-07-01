@@ -34938,3 +34938,36 @@ cd /hive/data/genomes/hg19/bed/metaDome/
 
 fetchChromSizes hg19 > hg19.chrom.sizes
 python3 ~/kent/src/hg/makeDb/scripts/metaDome/buildMetaDomeTracks.py
+
+#############################################################################
+# Illumina CytoSNP-850K Probe Array - June 2022- Jairo
+# 
+unzip cytosnp-850k-v1-2-ns550-d1-manifest-file-csv.zip
+
+# Rename the file
+mv CytoSNP-850Kv1-2_NS550_D1\ CSV.csv cytosnp-850k-hg19.csv
+
+# Removing the header from the csv file
+vi cytosnp-850k-hg19.csv
+
+# Replace commas with tabs
+sed -i 's/,/\t/g' cytosnp-850k-hg19.csv
+
+# Get the neccessary columns in a bed format
+cat cytosnp-850k-hg19.csv | awk -F'\t' -vOFS='\t' '{ print "chr"$10,$11-1,$11,$1,0,$21,$3,$2,$4,$5,$6,$7,$8,$12,$14,$15,$16,$17,$18,$19,$20 }' > cytoSnp.bed
+
+# Sort the bed file
+sort -k1,1 -k2,2n cytoSnp.bed > cytoSnp.bed.sorted
+
+# Remove unsupported chromosomes
+cat cytoSnp.bed.sorted | grep -vw "chr\|chr0\|chrXY" > cytoSnp.bed.final
+
+
+# Create the bigBed
+bedToBigBed -tab -type=bed6+15 -as=../cytoSNP.as cytoSnp.bed.final http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes cytoSnp.bb
+
+# Move the bigBed into /hive and create symlinks to /gbdb
+cp cytoSnp.bb /hive/data/genomes/hg19/bed/cytoSnp/cytoSnp850k.bb
+ln -s /hive/data/genomes/hg19/bed/cytoSnp/cytoSnp850k.bb /gbdb/hg19/bbi/cytoSnp/cytoSnp850k.bb
+
+#############################################################################

@@ -58,3 +58,33 @@ ln -s /hive/data/genomes/hg38/bed/illumina/epic850K.bb /gbdb/hg38/bbi/illumina/e
 ln -s /hive/data/genomes/hg38/bed/illumina/illumina450K.bb /gbdb/hg38/bbi/illumina/illumina450K.bb
 
 #############################################################################
+# Illumina CytoSNP-850K Probe array - June 2022 - Jairo
+# 
+wget https://webdata.illumina.com/downloads/productfiles/cytosnp-850k/v1-2/cytosnp-850k-v1-2-ns550-d2-manifest-file-csv.zip
+
+# Unzip the file
+unzip cytosnp-850k-v1-2-ns550-d2-manifest-file-csv.zip 
+
+# Rename
+mv CytoSNP-850Kv1-2_NS550_D2\ CSV.csv cytosnp-850k-hg38.csv
+
+# Removing the header from the csv file
+vi cytosnp-850k-hg38.csv
+
+# Replace commas with tabs
+sed -i 's/,/\t/g' cytosnp-850k-hg38.csv 
+
+# Get necessary fields
+cat cytosnp-850k-hg38.csv | awk -F'\t' -vOFS='\t' '{ print "chr"$10,$11-1,$11,$1,0,$21,$3,$2,$4,$5,$6,$7,$8,$12,$14,$15,$16,$17,$18,$19,$20 }' > cytoSnp.bed 
+
+# Sorting the file
+sort -k1,1 -k2,2n cytoSnp.bed > cytoSnp.bed.sorted
+
+# Create the bigbed
+bedToBigBed -tab -type=bed6+15 -as=../cytoSNP.as cytoSnp.bed.final http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes cytoSnp.bb
+
+# Move the bigBed into /hive and create symlinks to /gbdb
+cp cytoSnp.bb /hive/data/genomes/hg38/bed/cytoSnp/cytoSnp850k.bb
+ln -s /hive/data/genomes/hg38/bed/cytoSnp/cytoSnp850k.bb /gbdb/hg38/bbi/cytoSnp/cytoSnp850k.bb
+
+#############################################################################
