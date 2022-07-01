@@ -28486,6 +28486,7 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 _EOF_
 #########################################################################
 # LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 10/25/19 angie)
+# THIS IS NOW AN OTTO JOB !
 # Redmine #13359, #24285 -- otto-mate To Do #17877
 # previously done 7/7/14, 9/9/16, 5/30/18
     screen -S lrg -t lrg
@@ -28519,8 +28520,11 @@ _EOF_
 #   888 lrg.bed
 
     # Load LRG regions:
+    #bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
+    #-tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+    # adding ncbi acc field to search, ML #29689, Max July 1st 2022
     bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
-      -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+         -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name,ncbiAcc
     ln -sf `pwd`/lrg.bb /gbdb/hg19/bbi/lrg.bb
     hgBbiDbLink hg19 lrg /gbdb/hg19/bbi/lrg.bb
 
@@ -33678,6 +33682,24 @@ cd /gbdb/hg19/bbi/special;
 for i in /hive/data/genomes/hg19/bed/specialRegions/bb/filter*.bb;  do ln -s $i; done
 bedSort orig/hg19-blacklist.v2.bed orig/hg19-blacklist.v2.bed
 bedToBigBed orig/hg19-blacklist.v2.bed /hive/data/genomes/hg19/chrom.sizes  bb/encBlacklist.bb -tab
+
+# a few special regions and manual regions - extract a few from NCBI and chromInfo first
+
+hgsql hg19 -e 'select * from chromInfo' | grep chrUn | cut -f-2 |tawk '{$3=$2; $2=0; $4="unplaced"; $5="ChrUn contains clone contigs that cannot be confidently placed on a specific chromosome."; $6="none"; print}' > chrUn.bed
+hgsql hg19 -e 'select * from chromInfo' | grep fixed | cut -f-2 |tawk '{$3=$2; $2=0; $4="fix"; $5="The chr_fix chromosomes, such as chr1_KN538361v1_fix, are fix patches currently available for the hg19 and hg38 assemblies that represent changes to the existing sequence. These are generally error corrections (such as base changes, component replacements/updates, switch point updates or tiling path changes) or assembly improvements (such as extension of sequence into gaps). These fix patch scaffold sequences are given chromosome context through alignments to the corresponding chromosome regions."; $6="none"; print}' > chrFix.bed
+hgsql hg19 -e 'select * from chromInfo' | grep alt | cut -f-2 |tawk '{$3=$2; $2=0; $4="alt"; $5="The chr_alt chromosomes, such as chr5_KI270794v1_alt, are alternative sequences that differ from the reference genome currently available for a few assemblies including danRer11, hg19, and hg38. These are regions of the genome that exhibit sufficient variability to prevent adequate representation by a single sequence. UCSC labels these haplotype sequences by appending "_alt" to their names. These alternative loci scaffolds (such as KI270794.1 in the hg38 assembly, referenced as chr5_KI270794v1_alt in the browser), are mapped to the genome and provide suppemental genomic information on these variable locations. To find the regions these alternate sequences correspond to in the genome you may use the Alt Haplotypes track if one is available."; $6="none"; print}'  > chrAlt.bed
+hgsql hg19 -e 'select * from chromInfo' | grep chrUn | cut -f-2 |tawk '{$3=$2; $2=0; $4="unplaced"; $5="ChrUn contains clone contigs that cannot be confidently placed on a specific chromosome."; $6="none"; print}' > chrUn.bed 
+bigBedToBed /gbdb/hg19/ncbiRefSeq/ncbiRefSeqOther.bb stdout  | less | grep -v pseudo | grep -v "T cell" -i  | grep -v tRNA | grep -v immuno | grep -v constant | grep -v miR | grep -v UGT1A | cut -f1-4,18 | tawk '{$5=$5" HGNC ID:"$4" This is a cluster of many very similar genes based on the <b>NCBI RefSeq Other</b> Track"; $4="cluster"; print}' > chrClusters.bed
+
+# manual.bed was manually typed up, based on what I know from textbooks, from email from HGNC and reading Wikipedia
+
+# put these together
+cat manual.bed chr*.bed | sort -k1,1 -k2,2n | tawk '{desc=$5; desc2=$6; $5="0"; $6="+"; $7=$2; $8=$3; $9="0,0,0"; $10=desc; $11=desc2; print}' > all.bed 
+bedToBigBed all.bed /hive/data/genomes/hg19/chrom.sizes comments.bb -tab -as=manual.as -type=bed9+ -extraIndex=name
+
+cut -f4,10 all.bed > notes.txt
+ixIxx notes.txt notes.ix notes.ixx
+
 
 #############################################################################
 # GTEx V8 (April 2020) Kate

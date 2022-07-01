@@ -618,9 +618,9 @@ searchMethod fuzzy
 padding 5
 
 track resist
-pennantIcon Updated red ../goldenPath/newsarch.html#022522 "Updated June 20, 2022"
+pennantIcon Updated red ../goldenPath/newsarch.html#022522 "Updated July 1, 2022"
 shortLabel Drug Resistance Mutations
-longLabel Mutations that confer drug resistance 
+longLabel Mutations that confer drug resistance (Anna Nieviadomska, BV-BRC)
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/resist/resist.bb
 itemRgb on
@@ -629,6 +629,7 @@ urls urls=$$
 mouseOver $comments
 noScoreFilter on
 group varRep
+visibility dense
 
 track resistPred
 shortLabel Predicted Resistance
