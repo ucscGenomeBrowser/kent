@@ -1814,6 +1814,19 @@ type bed 3 .
     bigDataUrl /gbdb/hg19/bbi/illumina/epic850K.bb
     release alpha
 
+    track snpArrayCytoSnp850k
+    parent genotypeArrays on
+    shortLabel CytoSNP 850k
+    longLabel Illumina 850k CytoSNP Array
+    type bigBed 6+15
+    bigDataUrl /gbdb/hg19/bbi/cytoSnp/cytoSnp850k.bb
+    visibility pack
+    urls rsID="https://www.ncbi.nlm.nih.gov/snp/?term=$$"
+    colorByStrand 255,0,0 0,0,255
+    html genotypeArrays
+    pennantIcon New red
+    release alpha
+
 track tfbsConsSites
 shortLabel TFBS Conserved
 longLabel HMR Conserved Transcription Factor Binding Sites
