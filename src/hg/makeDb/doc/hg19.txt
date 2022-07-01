@@ -28486,6 +28486,7 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 _EOF_
 #########################################################################
 # LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 10/25/19 angie)
+# THIS IS NOW AN OTTO JOB !
 # Redmine #13359, #24285 -- otto-mate To Do #17877
 # previously done 7/7/14, 9/9/16, 5/30/18
     screen -S lrg -t lrg
@@ -28519,8 +28520,11 @@ _EOF_
 #   888 lrg.bed
 
     # Load LRG regions:
+    #bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
+    #-tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+    # adding ncbi acc field to search, ML #29689, Max July 1st 2022
     bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
-      -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+         -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name,ncbiAcc
     ln -sf `pwd`/lrg.bb /gbdb/hg19/bbi/lrg.bb
     hgBbiDbLink hg19 lrg /gbdb/hg19/bbi/lrg.bb
 

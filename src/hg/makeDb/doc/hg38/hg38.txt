@@ -3648,6 +3648,7 @@ _EOF_
 # LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 10/25/19 angie)
 # Redmine #13359, #24285 -- otto-mate To Do #17877
 # previously done 7/7/14, 9/9/16, 5/30/18
+# THIS IS NOW AN OTTO JOB !!
     set today = `date +%Y_%m_%d`
     mkdir -p /hive/data/genomes/hg38/bed/lrg/$today
     cd /hive/data/genomes/hg38/bed/lrg/$today
@@ -3686,8 +3687,12 @@ _EOF_
     #	Gene name
 
     # Load LRG regions:
+    #bedToBigBed lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.bb \
+    #-tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+    # after ML #29689, added ncbiAcc field, Max, July 1, 2022
+    # changed to:
     bedToBigBed lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.bb \
-      -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+    -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name,ncbiAcc
     ln -sf `pwd`/lrg.bb /gbdb/hg38/bbi/lrg.bb
     hgBbiDbLink hg38 lrg /gbdb/hg38/bbi/lrg.bb
 
