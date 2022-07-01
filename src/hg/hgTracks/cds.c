@@ -343,6 +343,7 @@ static void drawVertLine(struct linkedFeatures *lf, struct hvGfx *hvg,
 {
 int thisX = round((double)(chromStart-winStart)*scale) + xOff;
 int thisY = y;
+height -= 1;
 int thisHeight = height;
 if ((chromStart < lf->tallStart) || (chromStart > lf->tallEnd))
     {
@@ -353,8 +354,10 @@ if ((chromStart < lf->tallStart) || (chromStart > lf->tallEnd))
     }
 hvGfxBox(hvg, thisX-2, thisY, 4, thisHeight, color);
 }
+#ifdef UNUSED
+#endif /* UNUSED */
 
-static void drawMidSize(struct linkedFeatures *lf, struct hvGfx *hvg,
+static void drawMidNumber(struct linkedFeatures *lf, struct hvGfx *hvg,
                          int chromStart, int xOff, int y,
 			 int height, double scale, Color color, MgFont *font, int size)
 /* Draw a short string encoding size around chromStart */
@@ -413,7 +416,6 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	    for (i=0; i < (e - s); i++)
 		{
 		if (qSeq->dna[mrnaS+i-qOffset] != winDna[s-winStart+i])
-		    // drawVertLine(lf, hvg, s+i, xOff, y+1, heightPer-2, scale, c);
 		    drawScaledBox(hvg,  s+i, s+i+1, scale, xOff, y+1, heightPer-2, c);
 		}
 	    }
@@ -1846,8 +1848,6 @@ if (indelShowPolyA && qSeq)
 		s = psl->tSize - psl->tStarts[0] - 1;
 	    else
 		s = psl->tStarts[0];
-	    // drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-	    //             cdsColor[CDS_POLY_A]);
 	    drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
 			 cdsColor[CDS_POLY_A]);
 	    gotPolyAStart = TRUE;
@@ -1866,8 +1866,6 @@ if (indelShowPolyA && qSeq)
 	    if (polyTSize > 0 && (polyTSize + 3) >= rcQStart)
 		{
 		s = psl->tStart;
-	//	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-	//		     cdsColor[CDS_POLY_A]);
 	        drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
 			 cdsColor[CDS_POLY_A]);
 		gotPolyAEnd = TRUE;
@@ -1884,8 +1882,6 @@ if (indelShowPolyA && qSeq)
 		  (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]))))
 		{
 		s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
-	//	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-	//		     cdsColor[CDS_POLY_A]);
 	        drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
 			 cdsColor[CDS_POLY_A]);
 		gotPolyAEnd = TRUE;
@@ -1897,14 +1893,16 @@ if (indelShowPolyA && qSeq)
 
 if (indelShowQInsert)
     {
-    if (psl->qStarts[0] != 0 && !gotPolyAStart)
+    int qStart = psl->qStarts[0];
+    if (qStart != 0 && !gotPolyAStart)
 	{
 	/* Insert at beginning of query -- draw vertical blue line 
 	 * unless it's polyA. */
 	s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[0] - 1) :
 				      psl->tStarts[0];
-	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
+        Color color = cdsColor[CDS_QUERY_INSERTION_AT_END];
+	drawVertLine(lf, hvg, s, xOff, y, heightPer, scale, color);
+	drawMidNumber(lf, hvg, s, xOff, y, heightPer, scale, color, font, qStart);
 	}
     for (i = 1;  i < psl->blockCount;  i++)
 	{
@@ -1922,8 +1920,8 @@ if (indelShowQInsert)
 		s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[i] - 1) :
 					      psl->tStarts[i];
 		Color color = cdsColor[CDS_QUERY_INSERTION];
-		drawMidSize(lf, hvg, s, xOff, y, heightPer, scale,
-			     color, font, qBlkStart - qPrevBlkEnd);
+		drawMidNumber(lf, hvg, s, xOff, y, heightPer, scale, color, 
+		    font, qBlkStart - qPrevBlkEnd);
 		}
 	    }
 	/* Note: if qBlkStart < qPrevBlkEnd, then we have overlap on query,
@@ -1932,16 +1930,17 @@ if (indelShowQInsert)
 	 * think this is the place to do it.  Should be caught by 
 	 * pre-screening table data for block coords that overlap. */
 	}
-    if (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk] != psl->qSize &&
-	!gotPolyAEnd)
+    int missingAtEnd = psl->qSize - (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]);
+    if (missingAtEnd != 0 && !gotPolyAEnd)
 	{
 	/* Insert at end of query -- draw vertical blue line unless it's 
 	 * all polyA. */
-	s = (psl->strand[1] == '-') ?
+	s = (psl->strand[1] == '-') ? 
 	    (psl->tSize - (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk])) :
 	    (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk]);
-	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
+        Color color = cdsColor[CDS_QUERY_INSERTION_AT_END];
+	drawVertLine(lf, hvg, s, xOff, y, heightPer, scale, color);
+	drawMidNumber(lf, hvg, s, xOff, y, heightPer, scale, color, font, missingAtEnd);
 	}
     }
 }
@@ -2106,7 +2105,7 @@ if (indelShowQueryInsert || indelShowPolyA || drawOpt > baseColorDrawOff)
 	psl = lrgToPsl(lf->original, hChromSize(database, chromName));
 	needPsl = TRUE;
 	}
-    else if (startsWith("psl", type) || sameString("bigPsl", type))
+    else if (startsWith("psl", type) || sameString("bigPsl", type) || startsWithWord("bam", type))
 	{
 	psl = (struct psl *)(lf->original);
 	needPsl = TRUE;
